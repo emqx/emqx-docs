@@ -7,31 +7,24 @@
 emqttd消息服务器简介
 --------------------
 
-emqttd是采用Erlang语言开发的MQTT消息服务器。Erlang/OTP是非常出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是非常轻量的(Lightweight)、发布订阅模式(PubSub)的物联网移动互联网消息协议。
+emqttd(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是非常出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是非常轻量的(Lightweight)、发布订阅模式(PubSub)的物联网移动互联网消息协议。
 
-emqttd
+emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)的消息路由。emqttd设计不同于传统的企业消息服务器(例如JMS, AMQP)，企业消息服务器主要处理少量连接下高吞吐(Throughput)的消息。
 
+emqttd消息服务器设计目标与应用场景：
 
-emqttd is a massively scalable and clusterable MQTT V3.1/V3.1.1 broker written in Erlang/OTP. emqttd support both MQTT V3.1/V3.1.1 protocol specification with extended features.
+1. 稳定承载大量的客户端连接。单服务器节点支持50万到100万的MQTT连接。
 
-emqttd could connect Sensor, Mobile, Web Browser and Application Server with asynchronous PUB/SUB MQTT messsages.
+2. 分布集群的多节点间，快速低延时的消息路由，单集群支持1000万规模的路由。
 
+3. 消息服务器内插件扩展，可以扩展定制多种认证方式、高效存储消息到后端数据库。
 
-
-
-emqttd is aimed to provide a solid, enterprise grade, extensible open-source MQTT broker for IoT, M2M and Mobile applications that need to support ten millions of concurrent MQTT clients.
-
-Easy to install
-Massively scalable
-Easy to extend
-Solid stable
+4. 多协议支持，除完整支持MQTT V3.1.1协议，扩展支持WebSocket、Stomp、CoAP或私有TCP协议。
 
 
+--------------------------
 
-
-eMQTT是采用Erlang/OTP开发，基于MQTT协议的,发布订阅模式(Publish/Subscribe)模式消息服务器。
-
-TODO: 发布订阅图。转移到index.rst???
+--------------------------
 
 --------------------------
 五分钟下载启动emqttd

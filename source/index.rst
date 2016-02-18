@@ -37,6 +37,7 @@ emqttd项目文档目录:
    design
    tune
    apps
+   faq
    erlang
    mqtt
    coap
