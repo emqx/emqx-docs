@@ -7,19 +7,15 @@
 emqttd - 开源MQTT消息服务器
 ===========================
 
-emqttd(Erlang MQTT Broker)是Erlang/OTP语言平台开发，支持大规模连接与分布式集群，发布订阅模式的开源MQTT消息服务器。
+emqttd(Erlang MQTT Broker)是基于Erlang/OTP语言平台开发，支持大规模连接与分布式集群， 发布订阅模式的开源MQTT消息服务器。
 
-
-.. image:: ./_static/images/pubsub_concept.png
-
-
-emqttd完整支持MQTT V3.1/V3.1.1版本协议规范，并扩展支持WebSocket、Stomp、CoAP、MQTT-SN或私有TCP协议。emqttd消息服务器架构支持单节点100万连接与多节点复制集群:
+emqttd完整支持MQTT V3.1/V3.1.1版本协议规范，并扩展支持WebSocket、Stomp、CoAP、MQTT-SN或私有TCP协议。emqttd消息服务器架构支持单节点100万连接与多节点分布集群:
 
 
 .. image:: ./_static/images/emqtt.png
 
 
-emqttd项目为大规模客户端连接(C1000K+)的移动推送、移动即时消息、物联网、车联网、智能硬件等应用，提供一个完全开放源码、安装部署简便、企业级稳定可靠、容易扩展定制的MQTT消息服务器。
+emqttd项目为大规模客户端连接(C1000K+)的移动推送、移动消息、物联网、车联网、智能硬件等应用，提供一个完全开放源码、安装部署简便、企业级稳定可靠、容易扩展定制的MQTT消息服务器。
 
 
 .. NOTE:: MQTT-SN，CoAP协议计划在1.x版本支持。
@@ -30,17 +26,20 @@ emqttd项目文档目录:
 .. toctree::
    :maxdepth: 3
 
-   overview
+   getstarted
    install
    config
+   cluster
+   bridge
    guide
    commands
    plugins
    design
    tune
-   products
+   apps
    erlang
    mqtt
+   coap
 
 emqttd项目支持与联系:
 
