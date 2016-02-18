@@ -3,16 +3,13 @@
 快速开始(Get Started)
 =====================
 
-
 --------------------
 emqttd消息服务器简介
 --------------------
 
 emqttd(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是非常出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是非常轻量的(Lightweight)、发布订阅模式(PubSub)的物联网移动互联网消息协议。
 
-
 emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)的消息路由。emqttd设计不同于传统的企业消息服务器(例如JMS, AMQP)，企业消息服务器主要处理少量连接下高吞吐(Throughput)的消息。
-
 
 emqttd消息服务器设计目标与应用场景：
 
@@ -35,15 +32,15 @@ MQTT发布者与订阅者之间通过"主题"(Topic)进行消息路由，主题(
 
     sensor/1/temperature
 
-    chat/room/roomId
+    chat/room/subject
 
-    presence/user/uid
+    presence/user/feng
 
     sensor/1/#
 
     sensor/+/temperature
 
-    drivers/uber/inbox
+    uber/drivers/joe/inbox
 
 MQTT主题(Topic)支持'+', '#'的通配符，'+'通配一个层级，'#'通配多个层级(必须在末尾)。
 
@@ -51,26 +48,53 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
 
 .. NOTE:: 
     
-    初使用MQTT协议的用户，通常会向通配符的'过滤主题'发布广播消息，MQTT协议不支持这种模式。需要从订阅侧设计广播主题(Topic)，
-    例如Android推送，向所有广州的用户，推送某类本地消息，客户端获得GIS位置后，可订阅'news/location/guangzhou'的主题。
+    初使用MQTT协议的用户，通常会向通配符的'过滤主题'发布广播消息，MQTT协议不支持这种模式，需要从订阅侧设计广播主题(Topic)。
+    例如Android推送，向所有广州用户，推送某类本地消息。客户端获得GIS位置后，可订阅'news/location/guangzhou'的主题。
 
 
 --------------------------
 五分钟下载启动emqttd
 --------------------------
 
+emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
+
+下载地址: http://emqtt.io/downloads
+
+程序包下载后，可直接解压启动运行，例如Mac平台:
+
+.. code:: console
+
+    unzip emqttd-macosx-0.16.0-beta-20160216.zip && cd emqttd
+
+    # 启动emqttd
+    ./bin/emqttd start
+
+    # 检查运行状态
+    ./bin/emqttd_ctl status
+
+    # 停止emqttd
+    ./bin/emqttd stop
+
+emqttd消息服务默认采用匿名认证，启动后MQTT客户端可连接1883端口，启动运行日志输出在log/目录。
+
 
 --------------------------
-Dashboard
+Web管理控制台(Dashboard)
 --------------------------
+
+emqttd消息服务器启动后，会默认加载Dashboard插件。用户可通过Web控制台，查看服务器的状态、统计数据、
+客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
+
+控制台地址: http://127.0.0.1:18083，默认用户: admin，密码：public
+
+.. image:: ./_static/images/dashboard.png
 
 
 ------------------------
 emqttd消息服务器功能列表
 ------------------------
 
-
-完整的MQTT V3.1/V3.1.1 协议规范支持
+* 完整的MQTT V3.1/V3.1.1 协议规范支持
 
 保持简单架构，专注接入层与消息路由
 
@@ -132,7 +156,7 @@ emqttd项目的开发历史
 
 
 --------------------
-emqtt其他开源库
+emqtt开源客户端库
 --------------------
 
 eSockd：通用的Erlang TCP服务端框架
