@@ -1,7 +1,7 @@
 
-==============
-Erlang/OTP介绍
-==============
+==================
+Erlang/OTP平台介绍
+=================
 
 eMQTT消息服务器完全基于Erlang/OTP语言平台开发，Erlang/OTP是非常出色的软实时(Soft-Realtime)低延时(Low-Latency)的语言平台，非常适合消息服务器的开发:
 
