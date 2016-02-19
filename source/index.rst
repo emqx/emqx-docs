@@ -24,7 +24,7 @@ emqttd项目为大规模客户端连接(C1000K+)的移动推送、移动消息�
 emqttd项目文档目录:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    getstarted
    install
