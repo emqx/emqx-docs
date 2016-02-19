@@ -1,3 +1,6 @@
+
+.. _commands:
+
 ===============
 管理命令行(CLI)
 ===============
@@ -9,13 +12,12 @@ emqttd消息服务器提供了'./bin/emqttd_ctl'的管理命令行。
 status命令
 ----------
 
-查询eMQTT消息服务器运行状态::
+查询emqttd消息服务器运行状态::
     
     $ ./bin/emqttd_ctl status
 
     Node 'emqttd@127.0.0.1' is started
-    emqttd 0.15.0 is running
-
+    emqttd 0.16.0 is running
 
 broker命令
 ----------
@@ -23,7 +25,7 @@ broker命令
 broker命令查询服务器基本信息，启动时间，统计数据与性能数据。
 
 +----------------+-----------------------------------------------+
-| broker         | 查询eMQTT消息服务器描述、版本、启动时间       |
+| broker         | 查询emqttd消息服务器描述、版本、启动时间      |
 +----------------+-----------------------------------------------+
 | broker pubsub  | 查询核心的Erlang PubSub进程状态(调试)         |
 +----------------+-----------------------------------------------+
@@ -33,7 +35,7 @@ broker命令查询服务器基本信息，启动时间，统计数据与性能�
 | broker metrics | 查询MQTT报文(Packet)、消息(Message)收发统计   |
 +----------------+-----------------------------------------------+
 
-查询eMQTT消息服务器基本信息包括版本、启动时间等::
+查询emqttd消息服务器基本信息包括版本、启动时间等::
 
     $ ./bin/emqttd_ctl broker
 
@@ -99,11 +101,22 @@ broker命令查询服务器基本信息，启动时间，统计数据与性能�
     packets/unsuback        : 0
     packets/unsubscribe     : 0
 
-
 cluster命令
-----------
+-----------
 
-cluster命令集群多个eMQTT节点。例如本机集群两个eMQTT节点:
+cluster命令集群多个emqttd消息服务器节点(进程):
+
++-----------------------+---------------------+
+| cluster join <Node>   | 加入集群            |
++-----------------------+---------------------+
+| cluster leave         | 离开集群            |
++-----------------------+---------------------+
+| cluster remove <Node> | 从集群删除节点      |
++-----------------------+---------------------+
+| cluster status        | 查询集群状态        |
++-----------------------+---------------------+
+
+cluster命令集群本机两个emqttd节点示例:
 
 +-----------+---------------------+-------------+
 | 目录      | 节点名              | MQTT端口    |
@@ -123,13 +136,16 @@ cluster命令集群多个eMQTT节点。例如本机集群两个eMQTT节点:
 
 emqttd2节点与emqttd1集群，emqttd2目录下:: 
 
-    ./bin/emqttd_ctl cluster emqttd1@127.0.0.1
+    $ ./bin/emqttd_ctl cluster join emqttd1@127.0.0.1
+
+    Join the cluster successfully.
+    Cluster status: [{running_nodes,['emqttd1@127.0.0.1','emqttd2@127.0.0.1']}]
 
 任意节点目录下查询集群状态::
 
-    ./bin/emqttd_ctl cluster
+    $ ./bin/emqttd_ctl cluster status
 
-    cluster nodes: ['emqttd2@127.0.0.1','emqttd1@127.0.0.1']
+    Cluster status: [{running_nodes,['emqttd2@127.0.0.1','emqttd1@127.0.0.1']}]
 
 集群消息路由测试::
 
@@ -139,14 +155,19 @@ emqttd2节点与emqttd1集群，emqttd2目录下::
     # emqttd2节点上向x发布消息
     mosquitto_pub -t x -q 1 -p 2883 -m hello
 
+emqttd2节点离开集群::
 
-.. NOTE:: cluster命令将在1.0版本重新设计，增加解除集群功能。
+    cd emqttd2 && ./bin/emqttd_ctl cluster leave
+
+emqttd1节点下删除emqttd2::
+
+    cd emqttd1 && ./bin/emqttd_ctl cluster remove emqttd2@127.0.0.1
 
 
 clients命令
 -----------
 
-clients命令查询管理eMQTT消息服务器连接的客户端。
+clients命令查询连接的MQTT客户端。
 
 +-------------------------+-----------------------------+
 | clients list            | 查询全部客户端连接          |
@@ -186,11 +207,10 @@ clients命令查询管理eMQTT消息服务器连接的客户端。
 | connected_at | 客户端连接时间              |
 +--------------+-----------------------------+
 
-
 sessions命令
 -----------
 
-sessions命令查询管理eMQTT消息服务器的会话。eMQTT会为每个连接创建会话，clean_session标记true，创建临时(transient)会话；clean_session标记为false，创建持久会话(persistent)。
+sessions命令查询MQTT连接会话。emqttd消息服务器会为每个连接创建会话，clean_session标记true，创建临时(transient)会话；clean_session标记为false，创建持久会话(persistent)。
 
 +--------------------------+-----------------------------+
 | sessions list            | 查询全部会话                |
@@ -249,11 +269,10 @@ sessions命令查询管理eMQTT消息服务器的会话。eMQTT会为每个连�
 | created_at        | 会话创建时间戳                     |
 +-------------------+------------------------------------+
 
-
 topics命令
 -----------
 
-topics命令查询eMQTT消息服务器当前的主题(Topic)表。
+topics命令查询emqttd消息服务器当前的主题(Topic)表。
 
 'topics list'查询全部主题(Topic)::
 
@@ -274,7 +293,7 @@ topics命令查询eMQTT消息服务器当前的主题(Topic)表。
 subscriptions命令
 -----------------
 
-subscriptions命令查询管理eMQTT消息服务器的订阅(Subscription)表。
+subscriptions命令查询消息服务器的订阅(Subscription)表。
 
 +--------------------------------------------+-------------------------+
 | subscriptions list                         | 查询全部订阅            |
@@ -312,28 +331,29 @@ subscriptions命令查询管理eMQTT消息服务器的订阅(Subscription)表。
 
 
 plugins命令
-----------
+-----------
 
-plugins命令用于加载、卸载、查询插件应用。eMQTT消息服务器通过插件扩展认证、功能定制，插件置于plugins/目录下。
+plugins命令用于加载、卸载、查询插件应用。emqttd消息服务器通过插件扩展认证、定制功能，插件置于plugins/目录下。
 
 +---------------------------+-------------------------+
 | plugins list              | 列出全部插件(Plugin)    |
 +---------------------------+-------------------------+
 | plugins load <Plugin>     | 加载插件(Plugin)        |
 +---------------------------+-------------------------+
-| plugins list              | 卸载插件(Plugin)        |
+| plugins unload <Plugin>   | 卸载插件(Plugin)        |
 +---------------------------+-------------------------+
 
 列出插件::
 
     $ ./bin/emqttd_ctl plugins list
 
-    Plugin(emqttd_dashboard, version=0.14.0, description=emqttd web dashboard, active=true)
-    Plugin(emqttd_plugin_mysql, version=0.15.0, description=emqttd Authentication/ACL with MySQL, active=false)
-    Plugin(emqttd_plugin_pgsql, version=0.15.0, description=emqttd PostgreSQL Plugin, active=false)
-    Plugin(emqttd_plugin_template, version=0.13.0, description=emqttd plugin template, active=false)
-    Plugin(emqttd_recon, version=0.14, description=emqttd recon plugin, active=false)
-    Plugin(emqttd_stomp, version=0.14.0, description=Stomp Protocol Plugin for emqttd broker, active=false)
+    Plugin(emqttd_dashboard, version=0.16.0, description=emqttd web dashboard, active=true)
+    Plugin(emqttd_plugin_mysql, version=0.16.0, description=emqttd Authentication/ACL with MySQL, active=false)
+    Plugin(emqttd_plugin_pgsql, version=0.16.0, description=emqttd PostgreSQL Plugin, active=false)
+    Plugin(emqttd_plugin_redis, version=0.16.0, description=emqttd Redis Plugin, active=false)
+    Plugin(emqttd_plugin_template, version=0.16.0, description=emqttd plugin template, active=false)
+    Plugin(emqttd_recon, version=0.16.0, description=emqttd recon plugin, active=false)
+    Plugin(emqttd_stomp, version=0.16.0, description=Stomp Protocol Plugin for emqttd broker, active=false)
 
 插件属性:
 
@@ -362,7 +382,7 @@ plugins命令用于加载、卸载、查询插件应用。eMQTT消息服务器�
 bridges命令
 ----------
 
-bridges命令用于在多台eMQTT服务器节点间创建桥接。
+bridges命令用于在多台emqttd服务器节点间创建桥接。
 
 +----------------------------------------+---------------------------+
 | bridges list                           | 查询全部桥接              |
@@ -557,7 +577,6 @@ listener参数说明:
 +-----------------+-----------------------------------+
 | shutdown_count  | Socket关闭原因统计                |
 +-----------------+-----------------------------------+
-
 
 mnesia命令
 ----------
