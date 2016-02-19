@@ -1,18 +1,18 @@
 
+.. _configuration:
+
 ======================
 配置说明(Configuration)
 ======================
 
-.. _config:
-
-eMQTT消息服务器通过etc/目录下配置文件进行设置，主要配置文件包括:
+emqttd消息服务器通过etc/目录下配置文件进行设置，主要配置文件包括:
 
 +-------------------+-----------------------------------+
 | 配置文件          | 说明                              |
 +-------------------+-----------------------------------+
 | etc/vm.args       | Erlang 虚拟机的参数设置           |
 +-------------------+-----------------------------------+
-| etc/app.config    | eMQTT消息服务器参数设置           |
+| etc/emqttd.config | emqttd消息服务器参数设置          |
 +-------------------+-----------------------------------+
 | etc/acl.config    | ACL(访问控制规则)设置             |
 +-------------------+-----------------------------------+
@@ -85,9 +85,9 @@ etc/vm.args文件设置Erlang虚拟机参数::
 etc/vm.args中两个最重要的参数:
 
 +-------+----------------------------------------------------------------------------------------------+
-| +P    | Erlang虚拟机允许的最大进程数，eMQTT一个连接会消耗2个Erlang进程，所以参数值 > 最大连接数 * 2。| 
+| +P    | Erlang虚拟机允许的最大进程数，一个MQTT连接会消耗2个Erlang进程，所以参数值 > 最大连接数 * 2   | 
 +-------+----------------------------------------------------------------------------------------------+
-| +Q    | Erlang虚拟机允许的最大Port数量，eMQTT一个连接消耗1个Port，所以参数值 > 最大连接数。          |
+| +Q    | Erlang虚拟机允许的最大Port数量，一个MQTT连接消耗1个Port，所以参数值 > 最大连接数             |
 +-------+----------------------------------------------------------------------------------------------+
 
 etc/vm.args设置Erlang节点名、节点间通信Cookie::
@@ -103,13 +103,15 @@ etc/vm.args设置Erlang节点名、节点间通信Cookie::
     所有互相通信的Erlang节点(进程)间通过一个共用的Cookie进行安全认证。
 
 
---------------
-etc/app.config
---------------
+------------------
+etc/emqttd.config
+------------------
 
-etc/app.config是eMQTT消息服务器的核心配置文件。Erlang程序由多个应用(application)组成，每个应用(application)有自身的环境参数，启动时候通过etc/app.config文件加载。
+etc/emqttd.config是消息服务器的核心配置文件。Erlang程序由多个应用(application)组成，每个应用(application)有自身的环境参数，
 
-etc/app.config文件采用的是Erlang数据格式，kernel, sasl, emqttd是Erlang应用(application)名称，'[]'内是应用的环境参数列表。
+启动时候通过etc/emqttd.config文件加载。
+
+etc/emqttd.config文件采用的是Erlang数据格式，kernel, sasl, emqttd是Erlang应用(application)名称，'[]'内是应用的环境参数列表。
 
 .. code:: erlang
 
@@ -128,7 +130,7 @@ etc/app.config文件采用的是Erlang数据格式，kernel, sasl, emqttd是Erla
      ]}
     ].
 
-app.config格式简要说明:
+emqttd.config格式简要说明:
 
 1. [ ] : 列表，逗号分隔元素
 
@@ -138,9 +140,9 @@ app.config格式简要说明:
 
 
 日志级别设置
---------------
+-------------
 
-eMQTT消息服务器日志由lager应用(application)提供，日志相关设置在lager应用段落::
+emqttd消息服务器日志由lager应用(application)提供，日志相关设置在lager应用段落::
 
   {lager, [
     ...
@@ -170,12 +172,12 @@ eMQTT消息服务器日志由lager应用(application)提供，日志相关设置
         ]}
     ]}
 
-.. WARNING:: 过多日志打印严重影响服务器性能，产品环境下建议开启error日志。
+.. WARNING:: 过多日志打印严重影响服务器性能，产品环境下建议开启error级别日志。
 
 消息服务器参数配置
 ------------------
 
-eMQTT消息服务器参数设置在emqttd应用段落，包括用户认证与访问控制设置，MQTT协议、会话、队列设置，扩展模块设置，TCP服务监听器设置::
+emqttd消息服务器参数设置在emqttd应用段落，包括用户认证与访问控制设置，MQTT协议、会话、队列设置，扩展模块设置，TCP服务监听器设置::
 
  {emqttd, [
     %% 用户认证与访问控制设置
@@ -213,13 +215,13 @@ eMQTT消息服务器参数设置在emqttd应用段落，包括用户认证与访
 access用户认证设置
 ------------------
 
-eMQTT消息服务器认证由一系列认证模块(module)或插件(plugin)提供，系统默认支持用户名、ClientID、LDAP、匿名(anonymouse)认证模块::
+emqttd消息服务器认证由一系列认证模块(module)或插件(plugin)提供，系统默认支持用户名、ClientID、LDAP、匿名(anonymouse)认证模块::
 
     %% Authetication. Anonymous Default
     {auth, [
         %% Authentication with username, password
         %% Add users: ./bin/emqttd_ctl users add Username Password
-        %% {username, [{test, "public"}]},
+        %% {username, [{"test", "public"}]},
         
         %% Authentication with clientid
         % {clientid, [{password, no}, {file, "etc/clients.config"}]},
@@ -249,7 +251,7 @@ eMQTT消息服务器认证由一系列认证模块(module)或插件(plugin)提�
                      \|/                       \|/                       \|/
                 allow | deny              allow | deny              allow | deny
  
-.. NOTE:: eMQTT消息服务器还提供了MySQL、PostgreSQL、Redis、MongoDB认证插件，
+.. NOTE:: emqttd消息服务器还提供了MySQL、PostgreSQL、Redis、MongoDB认证插件，
           认证插件加载后认证模块失效。
 
 
@@ -266,7 +268,7 @@ eMQTT消息服务器认证由一系列认证模块(module)或插件(plugin)提�
 
     [{test1, "passwd1"}, {test2, "passwd2"}]
 
-2. 通过emqttd_ctl管理命令行添加用户::
+2. 通过'./bin/emqttd_ctl'管理命令行添加用户::
 
    $ ./bin/emqttd_ctl users add <Username> <Password>
 
@@ -300,6 +302,7 @@ LDAP认证
            {"keyfile", "ssl.key"}]}
     ]},
 
+
 匿名认证
 ........
 
@@ -311,7 +314,7 @@ LDAP认证
 access用户访问控制(ACL)
 -----------------------
 
-eMQTT消息服务器支持基于etc/acl.config文件或MySQL、PostgreSQL插件的访问控制规则。
+emqttd消息服务器支持基于etc/acl.config文件或MySQL、PostgreSQL插件的访问控制规则。
 
 默认开启基于etc/acl.config文件的访问控制::
 
@@ -337,10 +340,15 @@ etc/acl.config默认访问规则设置::
 
 .. NOTE:: 默认规则只允许本机用户订阅'$SYS/#'与'#'
 
+emqttd消息服务器接收到MQTT客户端发布(PUBLISH)或订阅(SUBSCRIBE)请求时，会逐条匹配ACL访问控制规则，
+
+直到匹配成功返回allow或deny。
+
+
 MQTT报文(Packet)尺寸与ClientID长度限制
 --------------------------------------
 
-packet段落设置最大报文尺寸、最大客户端ID长度::
+'packet'段落设置最大报文尺寸、最大客户端ID长度::
 
     {packet, [
 
@@ -351,20 +359,22 @@ packet段落设置最大报文尺寸、最大客户端ID长度::
         {max_packet_size,  65536}
     ]},
 
+
 MQTT客户端(Client)连接闲置时间
 ------------------------------
 
-client段落设置客户端最大允许闲置时间(Socket连接建立，但未发送CONNECT报文)::
+'client'段落设置客户端最大允许闲置时间(Socket连接建立，但未发送CONNECT报文)::
 
     {client, [
         %% 单位: 秒
         {idle_timeout, 10}
     ]},
 
+
 MQTT会话(Session)参数设置
 -------------------------
 
-session段落设置MQTT会话参数::
+'session'段落设置MQTT会话参数::
 
     {session, [
         %% Max number of QoS 1 and 2 messages that can be “in flight” at one time.
@@ -408,7 +418,7 @@ session段落设置MQTT会话参数::
 MQTT会话消息队列(MQueue)设置
 ----------------------------
 
-eMQTT消息服务器会话默认通过队列缓存Qos1/Qos2消息:
+emqttd消息服务器会话通过队列缓存Qos1/Qos2消息:
 
 1. 持久会话(Session)的离线消息
 
@@ -417,35 +427,46 @@ eMQTT消息服务器会话默认通过队列缓存Qos1/Qos2消息:
 队列参数设置::
 
     {queue, [
-        %% 队列长度
-        {max_length, 100},
+        %% simple | priority
+        {type, simple},
 
-        %% Low-water mark
+        %% Topic Priority: 0~255, Default is 0
+        %% {priority, [{"topic/1", 10}, {"topic/2", 8}]},
+
+        %% Max queue length. Enqueued messages when persistent client disconnected,
+        %% or inflight window is full.
+        {max_length, infinity},
+
+        %% Low-water mark of queued messages
         {low_watermark, 0.2},
 
-        %% High-water mark
+        %% High-water mark of queued messages
         {high_watermark, 0.6},
 
-        %% 是否缓存Qos0消息
+        %% Queue Qos0 messages?
         {queue_qos0, true}
     ]}
 
 队列参数说明:
 
-+----------------------+--------------------------------+
-| max_length           | 队列长度                       |
-+----------------------+--------------------------------+
-| low_watermark        | 解除告警水位线                 |
-+----------------------+--------------------------------+
-| high_watermark       | 队列满告警水位线               |
-+----------------------+--------------------------------+
-| queue_qos0           | 是否缓存QoS0消息               |  
-+----------------------+--------------------------------+
++----------------------+---------------------------------------------------+
+| type                 | 队列类型。simple: 简单队列，priority: 优先级队列  |
++----------------------+---------------------------------------------------+
+| priority             | 主题(Topic)队列优先级设置                         |
++----------------------+---------------------------------------------------+
+| max_length           | 队列长度, infinity表示不限制                      |
++----------------------+---------------------------------------------------+
+| low_watermark        | 解除告警水位线                                    |
++----------------------+---------------------------------------------------+
+| high_watermark       | 队列满告警水位线                                  |
++----------------------+---------------------------------------------------+
+| queue_qos0           | 是否缓存QoS0消息                                  |
++----------------------+---------------------------------------------------+
 
 broker消息服务器参数
 --------------------
 
-broker段落设置消息服务器内部模块参数。
+'broker'段落设置消息服务器内部模块参数。
 
 sys_interval设置系统发布$SYS消息周期::
 
@@ -484,7 +505,7 @@ broker pubsub路由设置
         %% PubSub Erlang进程池
         {pool_size, 8},
         
-        %% 订阅表类型，ram: 内存, disc: 磁盘, false: 不保存
+        %% 订阅存储类型，ram: 内存, disc: 磁盘, false: 不保存
         {subscription, ram},
 
         %% 路由老化时间
@@ -508,7 +529,7 @@ broker bridge桥接参数
 modules扩展模块设置
 -----------------------
 
-eMQTT消息服务器支持简单的扩展模块，用于定制服务器功能。默认支持presence、subscription、rewrite模块。
+emqtt消息服务器支持简单的扩展模块，用于定制服务器功能。默认支持presence、subscription、rewrite模块。
 
 'presence'扩展模块会向$SYS主题(Topic)发布客户端上下线消息::
 
@@ -533,7 +554,7 @@ eMQTT消息服务器支持简单的扩展模块，用于定制服务器功能。
         %% Rewrite rules
         %% {rewrite, [{file, "etc/rewrite.config"}]}
 
-关于扩展模块详细介绍，请参考<用户指南>文档。TODO: 引用...
+关于扩展模块详细介绍，请参考<用户指南>文档。
 
 plugins插件目录设置
 -------------------
@@ -552,9 +573,9 @@ plugins插件目录设置
 listeners监听器设置
 -----------------------
 
-eMQTT消息服务器开启的MQTT协议、HTTP协议服务端，可通过listener设置TCP服务端口、最大允许连接数等参数。
+emqttd消息服务器开启的MQTT协议、HTTP协议服务端，可通过listener设置TCP服务端口、最大允许连接数等参数。
 
-eMQTT消息服务器默认开启的TCP服务端口包括:
+emqttd消息服务器默认开启的TCP服务端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT协议端口                      |
@@ -669,7 +690,7 @@ listener参数说明:
 etc/acl.config
 --------------
 
-eMQTT消息服务器默认访问控制规则配置在etc/acl.config文件。
+emqttd消息服务器默认访问控制规则配置在etc/acl.config文件。
 
 访问控制规则采用Erlang元组格式，访问控制模块逐条匹配规则::
 
