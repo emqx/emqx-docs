@@ -9,9 +9,9 @@ emqttd消息服务器可跨平台运行在Linux、FreeBSD、Mac OS X或Windows�
 
     产品部署建议Linux、FreeBSD服务器，不推荐Windows服务器。
 
-----------
-程序包下载
-----------
+----------------
+emqttd程序包下载
+----------------
 
 emqttd消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
 
