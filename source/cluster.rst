@@ -76,16 +76,13 @@ Erlang节点Cookie设置::
 emqttd消息服务器分布集群设计
 ----------------------------
 
-原理
-----
-
 emqttd消息服务器集群是基于Erlang/OTP分布式设计: 同一集群不同节点的MQTT连接客户端，可以相互发布订阅消息路由。
 
 集群原理可简述为下述两条规则:
 
-1. MQTT客户端订阅主题时，所在节点处理成功会广播通知其他节点：某个主题(Topic)被我这个节点订阅。
+1. MQTT客户端订阅主题时，所在节点处理成功会广播通知其他节点：某个主题(Topic)被本节点订阅。
 
-2. MQTT客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并转发消息到相关节点。
+2. MQTT客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
 
 
 emqttd消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
@@ -94,18 +91,35 @@ emqttd消息服务器同一集群的所有节点，都会复制一份主题(Topi
     topic2 -> node3
     topic3 -> node2, node4
 
+主题树(Topic Trie)与路由表
+--------------------------
+
+emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表，例如下述订阅关系:
+
++----------------+----------------+------------------------------
+|    客户端       |  节点          |  订阅主题                  |
++----------------+----------------+------------------------------
+|   |  |  |
++----------------+----------------+------------------------------
+|   |  |  |
++----------------+----------------+------------------------------
+|   |  |  |
++----------------+----------------+------------------------------
+|   |  |  |
++----------------+----------------+------------------------------
+
+最终会生成如下主题树(Topic Trie)和路由表，并复制到全部节点::
 
 
-设计
-----
 
 
+2. Topic trie tree will be copied to every clusterd node.
+
+
+订阅(Subscription)与消息派发
+----------------------------
 
 ## Cluster Design
-
-1. One 'disc_copies' node and many 'ram_copies' nodes.
-
-   2. Topic trie tree will be copied to every clusterd node.
 
    3. Subscribers to topic will be stored in each node and will not be copied.
 
@@ -118,7 +132,10 @@ emqttd消息服务器同一集群的所有节点，都会复制一份主题(Topi
    2. As soon as a client on a node subscribes to a topic it becomes known within the cluster. If one of the clients somewhere in the cluster is publishing to this topic, the message will be delivered to its subscriber no matter to which cluster node it is connected.
 
    ....
+   TODO: 时序图
 
+
+----------------------------
 ## Cluster Architecture
 
 ![Cluster Design](http://emqtt.io/static/img/Cluster.png)
@@ -173,9 +190,9 @@ mqtt_retained]
    Cluster will copy topic trie tree between nodes, Bridge will not.
 
 
-------------------------
-集群设置与管理
-------------------------
+--------------
+集群配置与管理
+--------------
 
 ## Overview
 
@@ -245,15 +262,9 @@ And then check clustered status on any host:
 ```
 
 
-
-------------------------
-一致性Hash与DHT
-------------------------
-
-
-------------------------
-集群实践模式
-------------------------
+---------
+集群实践
+---------
 
 平行模式
 
@@ -261,8 +272,12 @@ And then check clustered status on any host:
 
 
 ------------------------
-注意事项-netsplit
+注意事项: NetSplit
 ------------------------
 
+
+------------------------
+一致性Hash与DHT
+------------------------
 
 
