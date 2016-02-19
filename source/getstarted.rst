@@ -1,6 +1,6 @@
 
 =====================
-快速开始(Get Started)
+开始使用(Get Started)
 =====================
 
 --------------------
@@ -267,15 +267,20 @@ emqttd/etc/emqttd.config::
 emqtt开源MQTT客户端项目
 --------------------------
 
-GitHub: http://github.com/emqtt
+GitHub: https://github.com/emqtt
 
-+-----------------+----------------------+
-| emqttc          | Erlang MQTT客户端库  |
-+-----------------+----------------------+
-| emqtt_benchmark | MQTT连接测试工具     |
-+-----------------+----------------------+
-| CocoaMQTT       | Swift语言MQTT客户端库|
-+-----------------+----------------------+
-| QMQTT           | QT框架MQTT客户端库   |
-+-----------------+----------------------+
++--------------------+----------------------+
+| `emqttc`_          | Erlang MQTT客户端库  |
++--------------------+----------------------+
+| `emqtt_benchmark`_ | MQTT连接测试工具     |
++--------------------+----------------------+
+| `CocoaMQTT`_       | Swift语言MQTT客户端库|
++--------------------+----------------------+
+| `QMQTT`_           | QT框架MQTT客户端库   |
++--------------------+----------------------+
+
+.. _emqttc: https://github.com/emqtt/emqttc
+.. _emqtt_benchmark: https://github.com/emqtt/emqtt_benchmark
+.. _CocoaMQTT: https://github.com/emqtt/CocoaMQTT
+.. _QMQTT: https://github.com/emqtt/qmqtt
 
