@@ -7,9 +7,9 @@
 emqttd消息服务器简介
 --------------------
 
-emqttd(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是轻量的(Lightweight)、发布订阅模式(PubSub)的物联网移动互联网消息协议。
+emqttd(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是轻量的(Lightweight)、发布订阅模式(PubSub)的物联网消息协议。
 
-emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)的消息路由。 emqttd消息服务器设计目标与应用场景：
+emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)的消息路由:
 
 1. 稳定承载大规模的MQTT客户端连接，单服务器节点支持50万到100万连接。
 
@@ -46,8 +46,8 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
 
 .. NOTE:: 
     
-    初接触MQTT协议的用户，通常会向通配符的'过滤主题'发布广播消息，MQTT协议不支持这种模式，需要从订阅侧设计广播主题(Topic)。
-    例如Android推送，向所有广州用户，推送某类本地消息。客户端获得GIS位置后，可订阅'news/location/guangzhou'的主题。
+    初接触MQTT协议的用户，通常会向通配符的'过滤主题'发布广播消息，MQTT协议不支持这种模式，需从订阅侧设计广播主题(Topic)。
+    例如Android推送，向所有广州用户，推送某类本地消息，客户端获得GIS位置后，可订阅'news/city/guangzhou'的主题。
 
 
 --------------------------
@@ -107,8 +107,8 @@ emqttd消息服务器功能列表
 * LDAP认证
 * Redis、MySQL、PostgreSQL认证集成
 * 浏览器Cookie认证 
-* 基于客户端Id、IP地址、用户名的访问控制(ACL)
-* 多服务器节点分布集群(Cluster)
+* 基于客户端ID、IP地址、用户名的访问控制(ACL)
+* 多服务器节点集群(Cluster)
 * 多服务器节点桥接(Bridge)
 * mosquitto桥接支持
 * Stomp协议支持
@@ -120,8 +120,8 @@ emqttd消息服务器功能列表
 emqttd扩展模块与插件列表
 ------------------------
 
-扩展模块
---------
+扩展模块(Module)
+----------------
 
 +-------------------------+-----------------------------------+
 | emqttd_auth_clientid    | ClientId认证                      |
@@ -132,7 +132,7 @@ emqttd扩展模块与插件列表
 +-------------------------+-----------------------------------+
 | emqttd_mod_presence     | 客户端上下线状态消息发布          |
 +-------------------------+-----------------------------------+
-| emqttd_mod_subscription | 客户端上线自动订阅                |
+| emqttd_mod_subscription | 客户端上线自动主题订阅            |
 +-------------------------+-----------------------------------+
 | emqttd_mod_rewrite      | 重写客户端订阅主题(Topic)         |
 +-------------------------+-----------------------------------+
@@ -156,8 +156,8 @@ emqttd扩展模块与插件列表
         %% Publish messages when client connected or disconnected
         {presence, [{qos, 0}]}
 
-扩展插件
---------
+扩展插件(Plugin)
+----------------
 
 +-------------------------+-----------------------------------+
 | emqttd_plugin_template  | 插件模版与演示代码                |
@@ -185,38 +185,41 @@ emqttd扩展模块与插件列表
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_pgsql
 
-------------------
-100万连接测试说明
-------------------
+--------------------
+100万线连接测试说明
+--------------------
 
 .. NOTE::
 
-    emqttd消息服务器默认设置，当前版本允许最大并发连接是512，因为大部分操作系统'ulimit -n'限制为1024。
+    emqttd消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统'ulimit -n'限制为1024。
 
-emqttd消息服务器当前版本，并发连接的压力测试到130万线，8核心/32G内存的CentOS云服务器。
+emqttd消息服务器当前版本，连接压力测试到130万线，8核心/32G内存的CentOS云服务器。
 
 操作系统内核参数、TCP协议栈参数、Erlang虚拟机参数、emqttd最大允许连接数设置简述如下：
 
 Linux操作系统参数
 -----------------
 
-# 2M - 系统所有进程可打开的文件数量
-sysctl -w fs.file-max=2097152
-sysctl -w fs.nr_open=2097152
+# 2M - 系统所有进程可打开的文件数量::
 
-# 1M - 系统允许当前进程打开的文件数量
-ulimit -n 1048576
+    sysctl -w fs.file-max=2097152
+    sysctl -w fs.nr_open=2097152
+
+# 1M - 系统允许当前进程打开的文件数量::
+
+    ulimit -n 1048576
 
 TCP协议栈参数
 -------------
 
-# backlog - Socket监听队列长度
-sysctl -w net.core.somaxconn=65536
+# backlog - Socket监听队列长度::
+
+    sysctl -w net.core.somaxconn=65536
 
 Erlang虚拟机参数
 -----------------
 
-emqttd/etc/vm.args设置::
+emqttd/etc/vm.args::
 
     ## max process numbers
     +P 2097152
@@ -232,7 +235,7 @@ emqttd/etc/vm.args设置::
 emqttd最大允许连接数
 ---------------------
 
-emqttd/etc/emqttd.config设置::
+emqttd/etc/emqttd.config::
 
         {mqtt, 1883, [
             %% Size of acceptor pool
@@ -261,7 +264,7 @@ emqttd/etc/emqttd.config设置::
 
 
 --------------------------
-emqtt项目开源MQTT客户端库
+emqtt开源MQTT客户端项目
 --------------------------
 
 GitHub: http://github.com/emqtt
