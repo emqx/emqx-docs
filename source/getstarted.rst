@@ -7,19 +7,17 @@
 emqttd消息服务器简介
 --------------------
 
-emqttd(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是非常出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是非常轻量的(Lightweight)、发布订阅模式(PubSub)的物联网移动互联网消息协议。
+emqttd(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是轻量的(Lightweight)、发布订阅模式(PubSub)的物联网移动互联网消息协议。
 
-emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)的消息路由。emqttd设计不同于传统的企业消息服务器(例如JMS, AMQP)，企业消息服务器主要处理少量连接下高吞吐(Throughput)的消息。
+emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)的消息路由。 emqttd消息服务器设计目标与应用场景：
 
-emqttd消息服务器设计目标与应用场景：
+1. 稳定承载大规模的MQTT客户端连接，单服务器节点支持50万到100万连接。
 
-1. 稳定承载大规模的客户端MQTT连接，单服务器节点支持50万到100万连接。
+2. 分布式节点集群，快速低延时的消息路由，单集群支持1000万规模的路由。
 
-2. 分布式集群多节点，快速低延时的消息路由，单集群支持1000万规模的路由。
+3. 消息服务器扩展，可定制多种认证方式、高效存储消息到后端数据库。
 
-3. 消息服务器内插件扩展，可扩展定制多种认证方式、高效存储消息到后端数据库。
-
-4. 完整支持MQTT V3.1.1协议，扩展支持WebSocket、Stomp、CoAP或私有TCP等多协议。
+4. 完整支持MQTT V3.1.1协议，扩展支持WebSocket、CoAP或私有TCP等多协议。
 
 
 --------------------
@@ -82,8 +80,8 @@ emqttd消息服务默认采用匿名认证，启动后MQTT客户端可连接1883
 Web管理控制台(Dashboard)
 --------------------------
 
-emqttd消息服务器启动后，会默认加载Dashboard插件。用户可通过Web控制台，查看服务器的状态、统计数据、
-客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
+emqttd消息服务器启动后，会默认加载Dashboard插件，启动Web管理控制台。用户可通过Web控制台，
+查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
 
 控制台地址: http://127.0.0.1:18083，默认用户: admin，密码：public
 
@@ -94,78 +92,179 @@ emqttd消息服务器启动后，会默认加载Dashboard插件。用户可通�
 emqttd消息服务器功能列表
 ------------------------
 
-* 完整的MQTT V3.1/V3.1.1 协议规范支持
+* 完整的MQTT V3.1/V3.1.1协议规范支持
+* QoS0, QoS1, QoS2消息支持
+* 持久会话与离线消息支持
+* Retained消息支持
+* Last Will消息支持
+* TCP/SSL连接支持
+* MQTT/WebSocket(SSL)支持
+* HTTP消息发布接口支持
+* $SYS/#系统主题支持
+* 客户端在线状态查询与订阅支持
+* 客户端ID或IP地址认证支持
+* 用户名密码认证支持
+* LDAP认证
+* Redis、MySQL、PostgreSQL认证集成
+* 浏览器Cookie认证 
+* 基于客户端Id、IP地址、用户名的访问控制(ACL)
+* 多服务器节点分布集群(Cluster)
+* 多服务器节点桥接(Bridge)
+* mosquitto桥接支持
+* Stomp协议支持
+* Stomp/SockJS支持
+* 通过Paho兼容性测试
 
-保持简单架构，专注接入层与消息路由
-
-Scalable, Scalable, Massively Scalable…
-
-支持插件方式扩展认证与ACL，定制Push、移动IM、物联网等应用
-
-MQTT, HTTP Publish, WebSocket, Stomp, SockJS，CoAP多协议接口
-
-Full MQTT V3.1/V3.1.1 protocol specification support
-QoS0, QoS1, QoS2 Publish and Subscribe
-Session Management and Offline Messages
-Retained Messages Support
-Last Will Message Support
-TCP/SSL Connection Support
-MQTT Over Websocket(SSL) Support
-HTTP Publish API Support
-$SYS/brokers/# Support
-Client Authentication with clientId, ipaddress
-Client Authentication with username, password.
-Client ACL control with ipaddress, clientid, username.
-Cluster brokers on several servers.
-Bridge brokers locally or remotely
-500K+ concurrent clients connections per server
-Extensible architecture with Hooks, Modules and Plugins
-Passed eclipse paho interoperability tests
 
 ------------------------
-emqttd项目扩展模块与插件
+emqttd扩展模块与插件列表
 ------------------------
 
-emqttd_auth_clientid - Authentication with ClientIds
-emqttd_auth_username - Authentication with Username and Password
-emqttd_auth_ldap - Authentication with LDAP
-emqttd_mod_presence - Publish presence message to $SYS topics when client connected or disconnected
-emqttd_mod_autosub - Subscribe topics when client connected
-emqttd_mod_rewrite - Topics rewrite like HTTP rewrite module
+扩展模块
+--------
 
-emqttd_plugin_template - Plugin template and demo
-emqttd_dashboard - Web Dashboard
-emqttd_plugin_mysql - Authentication with MySQL
-emqttd_plugin_pgsql - Authentication with PostgreSQL
-emqttd_plugin_kafka - Publish MQTT Messages to Kafka
-emqttd_plugin_redis - Redis Plugin
-emqttd_plugin_mongo - MongoDB Plugin
-emqttd_stomp - Stomp Protocol Plugin
-emqttd_sockjs - SockJS(Stomp) Plugin
-emqttd_recon - Recon Plugin
++-------------------------+-----------------------------------+
+| emqttd_auth_clientid    | ClientId认证                      |
++-------------------------+-----------------------------------+
+| emqttd_auth_username    | 用户名密码认证                    |
++-------------------------+-----------------------------------+
+| emqttd_auth_ldap        | LDAP认证                          |
++-------------------------+-----------------------------------+
+| emqttd_mod_presence     | 客户端上下线状态消息发布          |
++-------------------------+-----------------------------------+
+| emqttd_mod_subscription | 客户端上线自动订阅                |
++-------------------------+-----------------------------------+
+| emqttd_mod_rewrite      | 重写客户端订阅主题(Topic)         |
++-------------------------+-----------------------------------+
 
+扩展模块通过'etc/emqttd.config'配置文件的auth, modules段落启用。
 
------------------
+例如启用用户名密码认证::
+
+    {access, [
+        %% Authetication. Anonymous Default
+        {auth, [
+            %% Authentication with username, password
+            {username, []},
+
+            ...
+
+启用客户端状态发布模块::
+
+    {modules, [
+        %% Client presence management module.
+        %% Publish messages when client connected or disconnected
+        {presence, [{qos, 0}]}
+
+扩展插件
+--------
+
++-------------------------+-----------------------------------+
+| emqttd_plugin_template  | 插件模版与演示代码                |
++-------------------------+-----------------------------------+
+| emqttd_dashboard        | Web管理控制台，默认加载           |
++-------------------------+-----------------------------------+
+| emqttd_plugin_mysql     | MySQL认证插件                     |
++-------------------------+-----------------------------------+
+| emqttd_plugin_pgsql     | PostgreSQL认证插件                |
++-------------------------+-----------------------------------+
+| emqttd_plugin_redis     | Redis认证插件                     |
++-------------------------+-----------------------------------+
+| emqttd_plugin_mongo     | MongoDB认证插件                   |
++-------------------------+-----------------------------------+
+| emqttd_stomp            | Stomp协议插件                     |
++-------------------------+-----------------------------------+
+| emqttd_sockjs           | SockJS插件                        |
++-------------------------+-----------------------------------+
+| emqttd_recon            | Recon优化调测插件                 |
++-------------------------+-----------------------------------+
+
+扩展插件通过'bin/emqttd_ctl'管理命令行，加载启动运行。
+
+例如启用PostgreSQL认证插件::
+
+    ./bin/emqttd_ctl plugins load emqttd_plugin_pgsql
+
+------------------
 100万连接测试说明
+------------------
+
+.. NOTE::
+
+    emqttd消息服务器默认设置，当前版本允许最大并发连接是512，因为大部分操作系统'ulimit -n'限制为1024。
+
+emqttd消息服务器当前版本，并发连接的压力测试到130万线，8核心/32G内存的CentOS云服务器。
+
+操作系统内核参数、TCP协议栈参数、Erlang虚拟机参数、emqttd最大允许连接数设置简述如下：
+
+Linux操作系统参数
 -----------------
 
+# 2M - 系统所有进程可打开的文件数量
+sysctl -w fs.file-max=2097152
+sysctl -w fs.nr_open=2097152
 
---------------------
-emqttd项目的开发历史
---------------------
+# 1M - 系统允许当前进程打开的文件数量
+ulimit -n 1048576
+
+TCP协议栈参数
+-------------
+
+# backlog - Socket监听队列长度
+sysctl -w net.core.somaxconn=65536
+
+Erlang虚拟机参数
+-----------------
+
+emqttd/etc/vm.args设置::
+
+    ## max process numbers
+    +P 2097152
+
+    ## Sets the maximum number of simultaneously existing ports for this system
+    +Q 1048576
+
+    ## Increase number of concurrent ports/sockets
+    -env ERL_MAX_PORTS 1048576
+
+    -env ERTS_MAX_PORTS 1048576
+
+emqttd最大允许连接数
+---------------------
+
+emqttd/etc/emqttd.config设置::
+
+        {mqtt, 1883, [
+            %% Size of acceptor pool
+            {acceptors, 64},
+
+            %% Maximum number of concurrent clients
+            {max_clients, 1000000},
+
+            %% Socket Access Control
+            {access, [{allow, all}]},
+
+            %% Connection Options
+            {connopts, [
+                %% Rate Limit. Format is 'burst, rate', Unit is KB/Sec
+                %% {rate_limit, "100,10"} %% 100K burst, 10K rate
+            ]},
+            ...
 
 
---------------------
-emqtt开源客户端库
---------------------
+--------------------------
+emqtt项目开源MQTT客户端库
+--------------------------
 
-eSockd：通用的Erlang TCP服务端框架
+GitHub: http://github.com/emqtt
 
-emqttc：Erlang MQTT客户端库
-
-emqtt_benchmark：MQTT连接测试工具
-
-CocoaMQTT：Swift语言MQTT客户端库
-
-QMQTT：QT框架MQTT客户端库
++-----------------+----------------------+
+| emqttc          | Erlang MQTT客户端库  |
++-----------------+----------------------+
+| emqtt_benchmark | MQTT连接测试工具     |
++-----------------+----------------------+
+| CocoaMQTT       | Swift语言MQTT客户端库|
++-----------------+----------------------+
+| QMQTT           | QT框架MQTT客户端库   |
++-----------------+----------------------+
 
