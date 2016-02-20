@@ -259,7 +259,7 @@ emqttd/etc/emqttd.config::
 测试客户端设置
 --------------
 
-测试客户端在一个接口上，最大只能创建65000连接::
+测试客户端在一个接口上，最多只能创建65000连接::
 
     sysctl -w net.ipv4.ip_local_port_range="500 65535"
     echo 1000000 > /proc/sys/fs/nr_open

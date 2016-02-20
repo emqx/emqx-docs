@@ -72,18 +72,15 @@ Erlang节点Cookie设置::
 本节内容来自: http://erlang.org/doc/reference_manual/distributed.html
 
 
-----------------------------
-emqttd消息服务器分布集群设计
-----------------------------
+------------------
+emqttd分布集群设计
+------------------
 
-emqttd消息服务器集群是基于Erlang/OTP分布式设计: 同一集群不同节点的MQTT连接客户端，可以相互发布订阅消息路由。
+emqttd消息服务器集群基于Erlang/OTP分布式设计，集群原理可简述为下述两条规则:
 
-集群原理可简述为下述两条规则:
-
-1. MQTT客户端订阅主题时，所在节点处理成功会广播通知其他节点：某个主题(Topic)被本节点订阅。
+1. MQTT客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
 
 2. MQTT客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
-
 
 emqttd消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
 
@@ -91,193 +88,173 @@ emqttd消息服务器同一集群的所有节点，都会复制一份主题(Topi
     topic2 -> node3
     topic3 -> node2, node4
 
-主题树(Topic Trie)与路由表
---------------------------
 
-emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表，例如下述订阅关系:
+主题树(Topic Trie)与路由表(Route Table)
+---------------------------------------
 
-+----------------+----------------+------------------------------
-|    客户端       |  节点          |  订阅主题                  |
-+----------------+----------------+------------------------------
-|   |  |  |
-+----------------+----------------+------------------------------
-|   |  |  |
-+----------------+----------------+------------------------------
-|   |  |  |
-+----------------+----------------+------------------------------
-|   |  |  |
-+----------------+----------------+------------------------------
+emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
 
-最终会生成如下主题树(Topic Trie)和路由表，并复制到全部节点::
+例如下述主题订阅关系:
 
++----------------+-------------+-----------------------------
+| 客户端         | 节点        |  订阅主题                  |
++----------------+-------------+-----------------------------
+| client1        | node1       | t/+/x, t/+/y               |
++----------------+-------------+-----------------------------
+| client2        | node2       | t/#                        |
++----------------+-------------+-----------------------------
+| client3        | node3       | t/+/x, t/a                 |
++----------------+-------------+-----------------------------
 
+最终会生成如下主题树(Topic Trie)和路由表(Route Table)，并复制到全部节点::
 
-
-2. Topic trie tree will be copied to every clusterd node.
+    -----------------------------
+    |             t             |
+    |            / \            |
+    |           +   #           |
+    |         /  \              |
+    |       x      y            |
+    -----------------------------
+    | t/+/x -> node1, node3     |
+    | t/+/y -> node1            |
+    | t/#   -> node2            |
+    | t/a   -> node3            |
+    -----------------------------
 
 
 订阅(Subscription)与消息派发
 ----------------------------
 
-## Cluster Design
+客户端到主题(Topic)的订阅(Subscription)关系，只保存在客户端所在节点，用于本节点内的派发消息到客户端。
 
-   3. Subscribers to topic will be stored in each node and will not be copied.
+例如client1向主题't/a'发布消息，消息在节点间的路由与派发流程::
 
-   ## Cluster Strategy
+    title: Message Route and Deliver
 
-   TODO:...
+    client1->node1: Publish[t/a]
+    node1-->node2: Route[t/#]
+    node1-->node3: Route[t/a]
+    node2-->client2: Deliver[t/#]
+    node3-->client3: Deliver[t/a]
 
-   1. A message only gets forwarded to other cluster nodes if a cluster node is interested in it. this reduces the network traffic tremendously, because it prevents nodes from forwarding unnecessary messages.
-
-   2. As soon as a client on a node subscribes to a topic it becomes known within the cluster. If one of the clients somewhere in the cluster is publishing to this topic, the message will be delivered to its subscriber no matter to which cluster node it is connected.
-
-   ....
-   TODO: 时序图
-
-
-----------------------------
-## Cluster Architecture
-
-![Cluster Design](http://emqtt.io/static/img/Cluster.png)
-## Cluster Command
-
-```sh
-./bin/emqttd_ctl cluster DiscNode
-```
-
-## Mnesia Example
-
-```
-(emqttd3@127.0.0.1)3> mnesia:info().
----> Processes holding locks <---
----> Processes waiting for locks <---
----> Participant transactions <---
----> Coordinator transactions <---
----> Uncertain transactions <---
----> Active tables <---
-mqtt_retained : with 6 records occupying 221 words of mem
-topic_subscriber: with 0 records occupying 305 words of mem
-topic_trie_node: with 129 records occupying 3195 words of mem
-topic_trie : with 128 records occupying 3986 words of mem
-topic : with 93 records occupying 1797 words of mem
-schema : with 6 records occupying 1081 words of mem
-===> System info in version "4.12.4", debug level = none <===
-opt_disc. Directory "/Users/erylee/Projects/emqttd/rel/emqttd3/data/mnesia" is NOT used.
-use fallback at restart = false
-running db nodes = ['emqttd2@127.0.0.1','emqttd@127.0.0.1','emqttd3@127.0.0.1']
-stopped db nodes = []
-master node tables = []
-remote = []
-ram_copies = [mqtt_retained,schema,topic,topic_subscriber,topic_trie,
-topic_trie_node]
-disc_copies = []
-disc_only_copies = []
-[{'emqttd2@127.0.0.1',ram_copies},
-{'emqttd3@127.0.0.1',ram_copies},
-{'emqttd@127.0.0.1',disc_copies}] = [schema]
-[{'emqttd2@127.0.0.1',ram_copies},
-{'emqttd3@127.0.0.1',ram_copies},
-{'emqttd@127.0.0.1',ram_copies}] = [topic,topic_trie,topic_trie_node,
-mqtt_retained]
-[{'emqttd3@127.0.0.1',ram_copies}] = [topic_subscriber]
-44 transactions committed, 5 aborted, 0 restarted, 0 logged to disc
-   0 held locks, 0 in queue; 0 local transactions, 0 remote
-   0 transactions waits for other nodes: []
-   ```
-
-   ## Cluster vs Bridge
-
-   Cluster will copy topic trie tree between nodes, Bridge will not.
+.. image:: _static/images/route.png
 
 
---------------
-集群配置与管理
---------------
+--------------------
+emqttd集群设置与管理
+--------------------
 
-## Overview
+假设部署两台服务器集群:
 
-Suppose we cluster two nodes on hosts:
++================+===========+======================
+| 节点           | 主机名    |       IP地址        |
++================+===========+======================
+| emqttd@host1   | host1     | 192.168.1.10        |
++----------------+-----------+----------------------
+| emqttd@host2   | host2     | 192.168.1.20        |
++----------------+-----------+----------------------
 
-Node | Host   | IpAddress  
------|--------|-------------
-node1(disc_copy)| host1 | 192.168.0.10
-node2(ram_copy) | host2  | 192.168.0.20
+emqttd@host1节点设置
+--------------------
 
-## Configure and start 'node1'
+emqttd/etc/vm.args::
 
-configure 'etc/vm.args':
+    -name emqttd@host1
 
-```
--name emqttd@192.168.0.10
-```
+    或
 
-or
-```
--name emqttd@host1
-```
+    -name emqttd@192.168.0.10
 
-If host1, host2 added to /etc/hosts of OS.
+.. WARN::
 
-Then start node1:
-
-```sh
-./bin/emqttd start
-```
-
-**Notice that 'data/mnesia/*' should be removed before you start the broker with different node name.**
-
-## Configure and start 'node2'
-
-Configure 'etc/vm.args':
-
-```
--name emqttd@192.168.0.20
-```
-
-or
-```
--name emqttd@host2
-```
-
-Then start node2:
-
-```sh
-./bin/emqttd start
-```
-
-## Cluster two nodes
-
-Run './bin/emqttd_ctl cluster' on host2:
-
-```sh
-./bin/emqttd_ctl cluster emqttd@192.168.0.10
-```
-
-## Check cluster status
-
-And then check clustered status on any host:
-
-```sh
-./bin/emqttd_ctl cluster
-```
+    节点启动加入集群后，节点名称不能变更。
 
 
----------
-集群实践
----------
+emqttd@host1节点设置
+---------------------
 
-平行模式
+emqttd/etc/vm.args::
 
-前后端模式
+    -name emqttd@host2
+
+    或
+
+    -name emqttd@192.168.0.20
 
 
-------------------------
+节点加入集群
+------------
+
+启动两台节点后，emqttd@host2上执行::
+
+    $ ./bin/emqttd_ctl cluster join emqttd@host1
+
+    Join the cluster successfully.
+    Cluster status: [{running_nodes,['emqttd@host1','emqttd@host2']}]
+
+或者，emqttd@host1上执行::
+
+    $ ./bin/emqttd_ctl cluster join emqttd@host2
+
+    Join the cluster successfully.
+    Cluster status: [{running_nodes,['emqttd@host1','emqttd@host2']}]
+
+任意节点上查询集群状态::
+
+    $ ./bin/emqttd_ctl cluster status
+
+    Cluster status: [{running_nodes,['emqttd@host1','emqttd@host2']}]
+
+
+节点退出集群
+------------
+
+节点退出集群，两种方式:
+
+1. leave: 本节点退出集群
+
+2. remove: 从集群删除其他节点
+
+emqttd@host2退出集群::
+    
+    $ ./bin/emqttd_ctl cluster leave
+
+emqttd@host1节点上，从集群删除emqttd@host2节点::
+
+    $ ./bin/emqttd_ctl cluster remove emqttd@host2
+
+--------------------
+跨节点会话(Session)
+--------------------
+
+emqttd消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点。
+
+例如负载均衡的两台集群节点:node1与node2，同一MQTT客户端先连接node1，node1节点会创建持久会话；客户端断线重连到node2时，MQTT的连接在node2节点，会话仍在node1节点::
+
+                                      node1
+                                   -----------
+                               |-->| session |
+                               |   -----------
+                 node2         |
+              --------------   |
+     client-->| connection |<--|
+              --------------
+
+
+------------------
 注意事项: NetSplit
-------------------------
+------------------
+
+emqttd消息服务器集群不支持跨IDC部署，集群设计上默认不自动处理NetSplit，如集群节点间发生NetSplit，需手工启动相关节点。
+
+.. NOTE::
+    
+    NetSplit是指节点间互相认为对方宕机。
 
 
 ------------------------
 一致性Hash与DHT
 ------------------------
 
+NoSQL数据库领域分布式设计，大多会采用一致性Hash或DHT。emqttd消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性Hash、DHT或Shard方式切分路由表。
 
