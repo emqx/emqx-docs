@@ -1,138 +1,63 @@
-===================
+
+.. _bridge:
+
+==================
 分布式桥接(Bridge)
-===================
+==================
 
-------------
-emqttd间桥接
-------------
+----------------
+emqttd节点间桥接
+----------------
 
-## Overview
+emqttd消息服务器支持多节点桥接互联模式::
 
-One or more emqttd brokers could be bridged together. Bridge forward PUBLISH message from one broker node to another.
+                  ---------                     ---------                     ---------
+    Publisher --> | node1 | --Bridge Forward--> | node2 | --Bridge Forward--> | node3 | --> Subscriber
+                  ---------                     ---------                     ---------
 
-Clustered nodes will share/copy the same topics tree, but bridge nodes will not.
+节点间桥接与集群不同，不复制主题树与路由表，只按桥接规则转发MQTT消息。
 
-## Architecture
+emqttd节点桥接配置
+------------------
 
-Pub -----> Broker1 --- Bridge Forward--> Broker2 -- Bridge Forward --> Broker3 -> Sub
+假设在本机创建两个emqttd节点，并创建一条桥接转发全部传感器(sensor)主题消息:
 
-## User Guide
++---------+---------------------+----------+
+| 目录    | 节点                | MQTT端口 |
++---------+---------------------+----------+
+| emqttd1 | emqttd1@127.0.0.1   | 1883     |
++---------+---------------------+----------+
+| emqttd2 | emqttd2@127.0.0.1   | 2883     |
++---------+---------------------+----------+
 
-For example, two brokers:
+启动emqttd1, emqttd2节点::
 
-Name    | Node              | MQTT Port 
---------|------------------ |-----------
-emqttd1 | emqttd1@127.0.0.1 | 1883
-emqttd2 | emqttd2@127.0.0.1 | 2883
+    cd emqttd1/ && ./bin/emqttd start
+    cd emqttd2/ && ./bin/emqttd start
 
+emqttd1节点上创建到emqttd2桥接::
 
-Create a bridge from emqttd1 to emqttd2, follow steps:
+    $ ./bin/emqttd_ctl bridges start emqttd2@127.0.0.1 sensor/#
 
-### 1. Start brokers
+    bridge is started.
+    
+    $ ./bin/emqttd_ctl bridges list
 
-```
-cd emqttd1/ && ./bin/emqttd start
-cd emqttd2/ && ./bin/emqttd start
-```
+    bridge: emqttd1@127.0.0.1--sensor/#-->emqttd2@127.0.0.1
 
-### 2. Create bridge on emqttd1
+测试emqttd1--sensor/#-->emqttd2的桥接::
 
-```
-cd emqttd1/ && ./bin/emqttd_ctl bridges start emqttd2@127.0.0.1 topic/# qos=2,prefix=abc/,suffix=/xyz
-```
+    #emqttd2节点上
 
-Print if successfully:
+    mosquitto_sub -t sensor/# -p 2883 -d
 
-```
-bridge is started."
-```
+    #emqttd1节点上
 
-Show bridges:
+    mosquitto_pub -t sensor/1/temperature -m "37.5" -d 
 
-```
-./bin/emqttd_ctl bridges list
-```
+删除桥接::
 
-### 3. Subscribe on emqttd2
-
-```
-mosquitto_sub -p 2883 -t topic/# -q 2 -d
-```
-
-### 4. Publish on emqttd1
-
-```
-mosquitto_pub -p 1883 -t topic/1 -m hello -q 1
-```
-
-## Admin Commands
-
-```sh
-#query bridges
-./bin/emqttd_ctl bridges list
-
-#start bridge                       
-./bin/emqttd_ctl bridges start <Node> <Topic>
-
-#start bridge with options
-./bin/emqttd_ctl bridges start <Node> <Topic> <Options>
-
-#stop bridge  
-./bin/emqttd_ctl bridges stop <Node> <Topic>
-```
-
-<Options>: 
-
-```
-Options:
-qos     = 0 | 1 | 2
-prefix  = string
-suffix  = string
-queue   = integer
-Example:
-qos=2,prefix=abc/,suffix=/yxz,queue=1000
-```
-
-## API
-
-```erlang
-emqttd_bridge_sup:start_bridge(Node, SubTopic)
-
-emqttd_bridge_sup:start_bridge(Node, SubTopic, Options)
-```
-
-## Options
-
-```
--type option()  :: {max_queue_len, pos_integer()} |
-{qos, mqtt_qos()} |
-{topic_suffix, binary()} |
-{topic_prefix, binary()} |
-{ping_down_interval, pos_integer()}.
-```
-
-Option        |     Type        |  Description
---------------|-----------------|---------------
-max_queue_len | pos_integer()   | max cache queue length(TODO: still not work)
-qos           | mqtt_qos()      | reset qos
-topic_suffix  | binary()        | topic suffix when forwarding message
-topic_prefix  | binary()        | topic prefix when forwarding message 
-ping_down_interval | pos_integer() | ping interval when bridge node down
-
-1. cache messages when bridged node down?
-2. shutdown bridge when remote down?
-3. auto reconnect with remote node?
-4. RemoteTopicPrefix??? 
-
-
-## TODO: Round Robbin Bridge??
-
---->Bridge Group --> Bridge ->
---> Bridge ->
---> Bridge ->
---> Bridge ->
-.......
-
+    ./bin/emqttd_ctl bridges stop emqttd2@127.0.0.1 sensor/#
 
 
 -------------
