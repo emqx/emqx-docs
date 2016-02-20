@@ -106,7 +106,7 @@ emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)�
 | client3        | node3       | t/+/x, t/a                 |
 +----------------+-------------+----------------------------+
 
-最终会生成如下主题树(Topic Trie)和路由表(Route Table)，并复制到全部节点::
+最终会生成如下主题树(Topic Trie)和路由表(Route Table)::
 
     --------------------------
     |             t          |
@@ -125,7 +125,7 @@ emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)�
 订阅(Subscription)与消息派发
 ----------------------------
 
-客户端的主题订阅(Subscription)关系，只保存在客户端所在节点，用于本节点内的派发消息到客户端。
+客户端的主题订阅(Subscription)关系，只保存在客户端所在节点，用于本节点内派发消息到客户端。
 
 例如client1向主题't/a'发布消息，消息在节点间的路由与派发流程::
 
@@ -165,9 +165,7 @@ emqttd/etc/vm.args::
 
     -name emqttd@192.168.0.10
 
-.. WARN::
-
-    节点启动加入集群后，节点名称不能变更。
+.. WARNING:: 节点启动加入集群后，节点名称不能变更。
 
 
 emqttd@host1节点设置
@@ -192,7 +190,7 @@ emqttd/etc/vm.args::
     Join the cluster successfully.
     Cluster status: [{running_nodes,['emqttd@host1','emqttd@host2']}]
 
-或者，emqttd@host1上执行::
+或，emqttd@host1上执行::
 
     $ ./bin/emqttd_ctl cluster join emqttd@host2
 
@@ -215,11 +213,11 @@ emqttd/etc/vm.args::
 
 2. remove: 从集群删除其他节点
 
-emqttd@host2退出集群::
+emqttd@host2主动退出集群::
     
     $ ./bin/emqttd_ctl cluster leave
 
-emqttd@host1节点上，从集群删除emqttd@host2节点::
+或emqttd@host1节点上，从集群删除emqttd@host2节点::
 
     $ ./bin/emqttd_ctl cluster remove emqttd@host2
 
@@ -229,7 +227,7 @@ emqttd@host1节点上，从集群删除emqttd@host2节点::
 
 emqttd消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点。
 
-例如负载均衡的两台集群节点:node1与node2，同一MQTT客户端先连接node1，node1节点会创建持久会话；客户端断线重连到node2时，MQTT的连接在node2节点，会话仍在node1节点::
+例如负载均衡的两台集群节点:node1与node2，同一MQTT客户端先连接node1，node1节点会创建持久会话；客户端断线重连到node2时，MQTT的连接在node2节点，持久会话仍在node1节点::
 
                                       node1
                                    -----------
@@ -249,7 +247,7 @@ emqttd消息服务器集群不支持跨IDC部署，集群设计上默认不自�
 
 .. NOTE::
     
-    NetSplit是指节点间互相认为对方宕机。
+    NetSplit是指节点运行正常但因网络断开互相认为对方宕机。
 
 
 ------------------------
