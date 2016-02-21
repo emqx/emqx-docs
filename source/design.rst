@@ -3,39 +3,26 @@
 架构设计(Design Guide)
 ======================
 
-
-
 ----------------------
-概念模型(Concept)
+系统架构(Architecture)
 ----------------------
 
-PubSub
+概念模型
+----------------------
 
-Topic Trie
+Nodes, Topic Trie, PubSub
 
 .. image:: _static/images/concept.png
 
+设计原则
 ----------------------
-设计
-----------------------
-
-
-不认可传统MQ消息服务器的设计，必须分离内存与磁盘。例如Kafka完全基于磁盘，或完全基于内存。
-
-拥抱软实时、低延时、高并发Erlang/OTP平台！
-
-
+软实时、低延时、高并发Erlang/OTP平台！
 连接与路由分层
 分离Flow平面与控制平面
 避免过度设计，充分利用Erlang/OTP平台
 
-----------------------
-集群设计
-----------------------
 
-
-----------------------
-设计分层
+系统分层
 ----------------------
 
 连接层(Socket, Client, Protocol)
@@ -52,9 +39,14 @@ Topic Trie
 
 Erlang相关的设计建议?
 
+发布订阅时序图
+----------------------
+
 --------------------------------------------
-设计-连接层(Socket, Client, Protocol)
+连接层设计(Socket, Client, Protocol)
 --------------------------------------------
+
+Socket、Client、Protocol处理
 
 eSockd - General Non-blocking TCP/SSL Socket Server
 
@@ -88,9 +80,11 @@ Parser Fun
 
 Serializer Fun
 
+Listeners列表
+
 
 --------------------------------------------
-设计-会话层(Session)
+会话层设计(Session)
 --------------------------------------------
 
 会话层处理MQTT协议PUBLISH/SUBSCRIBE消息交互流程
@@ -118,6 +112,11 @@ Qos0/1/2消息接收与下发，消息超时重传，离线消息保存
 
 如果消息队列满，先丢弃Qos0消息，或者丢弃最早进入队列的消息
 
+Qos
+--------------------------------------------
+
+Qos0, 1, 2
+
 PacketId 与 MessageId
 --------------------------------------------
 
@@ -140,7 +139,7 @@ Erlang进程PID: 编码为4字节
 
 
 --------------------------------------------
-设计-路由层(Router, PubSub)
+路由层设计(Router, PubSub, Trie)
 --------------------------------------------
 
 字典树(Trie)匹配路由
@@ -154,7 +153,7 @@ Session消息送达与重传
 TODO: PubSub 图片
 
 --------------------------------------------
-设计-分布层(Distributed)
+分布集群设计(Distributed)
 --------------------------------------------
 
 Topic Trie, Topic Table分布图
@@ -171,8 +170,11 @@ Pub --> Broker1 --- Bridge Forward--> Broker2 -- Bridge Forward --> Broker3 --> 
 
 
 --------------------------------------------
-设计－认证与ACL
+认证与ACL设计
 --------------------------------------------
+
+emqttd_access_control
+----------------------
 
 认证方式
 ------------------
@@ -203,14 +205,41 @@ Redis(TODO)
 
 
 --------------------------------------------
-设计- 钩子(Hook)与插件(Plugin)
+钩子(Hook)与插件(Plugin)设计
 --------------------------------------------
 
-钩子(Hooks)
+钩子(Hooks) API
+---------------
+
+.. code:: erlang
+
+    -export([hook/3, unhook/2, foreach_hooks/2, foldl_hooks/3]).
+
+Hook::
+
+    -spec hook(Hook :: atom(), Name :: any(), MFA :: mfa()) -> ok | {error, any()}.
+    hook(Hook, Name, MFA) ->
+
+Unhook::
+
+    -spec unhook(Hook :: atom(), Name :: any()) -> ok | {error, any()}.
+    unhook(Hook, Name) ->
+
+Foreach Hooks::
+
+    -spec foreach_hooks(Hook :: atom(), Args :: list()) -> any().
+    foreach_hooks(Hook, Args) ->
+
+Foldl Hooks::
+
+    -spec foldl_hooks(Hook :: atom(), Args :: list(), Acc0 :: any()) -> any().
+    foldl_hooks(Hook, Args, Acc0) ->
+        ...
 
 Hooks设计(https://github.com/emqtt/emqttd/wiki/Hooks%20Design)
 
-插件(Plugins)
+插件(Plugins) API
+------------------
 
 插件通过钩子、模块注册等方式，扩展定制eMQTT消息服务器。
 
@@ -223,35 +252,58 @@ emqttd_stomp - Stomp Protocol Plugin
 emqttd_sockjs - SockJS(Stomp) Plugin
 emqttd_recon - Recon Plugin
 
+
+.. code:: erlang
+
+    %% Load all active plugins after broker started
+    emqttd_plugins:load() 
+
+    %% Load new plugin
+    emqttd_plugins:load(Name)
+
+    %% Unload all active plugins before broker stopped
+    emqttd_plugins:unload()
+
+    %% Unload a plugin
+    emqttd_plugins:unload(Name)
+
+
+端到端消息发布(Pub)与确认(Ack)
+------------------------------
+
+Could use 'message.publish', 'message.acked' hooks to implement end-to-end message pub/ack::
+
+ PktId <-- --> MsgId <-- --> MsgId <-- --> PktId
+      |<--- Qos --->|<---PubSub--->|<-- Qos -->|
+
+
 --------------------------------------------
-设计- Event 与 broker pubsub
+Event 与 broker pubsub设计
 --------------------------------------------
 
 事件，broker:subscribe, broker:pubsub
 
 
-
 --------------------------------------------
-设计- Pool 进程池
---------------------------------------------
-
-
---------------------------------------------
-设计- Erlang设计相关建议
+Pool进程池设计
 --------------------------------------------
 
-使用Pool, Pool, Pool… and GProc(github.com/uwiger/gproc)
 
-异步，异步，异步消息...同步用于负载保护
+--------------------------------------------
+Erlang设计相关建议
+--------------------------------------------
 
-避免进程Mailbox累积消息，负载高的进程可以使用gen_server2
+1. 使用Pool, Pool, Pool… and GProc(github.com/uwiger/gproc)
 
-避免过度使用gen_server2, erlang:demonitor(MRef, [flush])不能工作, RabbitMQ 3.5.x之前hibernate有问题(https://github.com/rabbitmq/rabbitmq-server/pull/269)
+2. 异步，异步，异步消息...同步用于负载保护
 
-服务器Socket连接、会话进程必须Hibernate
-多使用Binary数据，避免进程间内存复制
+3. 避免进程Mailbox累积消息，负载高的进程可以使用gen_server2
 
-使用ETS, ETS, ETS…Message Passing Vs ETS
+4. 服务器Socket连接、会话进程必须Hibernate
+
+5. 多使用Binary数据，避免进程间内存复制
+
+6. 使用ETS, ETS, ETS…Message Passing Vs ETS
 
 避免ETS select, match without key
 
@@ -267,8 +319,5 @@ emqttd_recon - Recon Plugin
 
     erlang:system_monitor监控long_schedule, long_gc, busy_port, busy_dis_port
     etop查看msg_q, memory, reductions, runtime…
-
-GUID
-----
 
 
