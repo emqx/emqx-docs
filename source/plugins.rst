@@ -1,15 +1,18 @@
+
+.. _plugins:
+
 =================
 扩展插件(Plugins)
 =================
 
-eMQTT消息服务器通过钩子(Hooks)与发布订阅(PubSub)机制，支持快速方便的扩展插件开发。
+emqttd消息服务器通过钩子(Hooks)与发布订阅(PubSub)机制，支持用户开发插件扩展消息服务器功能。
 
-eMQTT项目开发维护的插件包括:
+emqtt项目组开发维护的插件包括:
 
-+------------------------+---------------------------+
++========================+===========================+
 | 插件                   | 说明                      |
 +========================+===========================+
-| emqttd_dashboard       | Dashboard插件             |
+| emqttd_dashboard       | Web控制台插件(默认加载)   |
 +------------------------+---------------------------+
 | emqttd_plugin_mysql    | MySQL认证/访问控制        |
 +------------------------+---------------------------+
@@ -26,17 +29,52 @@ eMQTT项目开发维护的插件包括:
 | emqttd_plugin_template | 插件开发模版              |
 +------------------------+---------------------------+
 
+------------------------------------
+emqttd_plugin_template: 插件开发模版
+------------------------------------
+
+emqttd插件实际是一个Erlang应用，带自身的配置文件'etc/plugin.config"，置于'emqttd/plugins'目录下。
+
+plugins/emqttd_plugin_template是一个模版插件，典型目录结构:
+
++========================+===========================+
+| 目录/文件              | 说明                      |
++========================+===========================+
+| etc/plugin.config      | 插件配置文件              |
++------------------------+---------------------------+
+| ebin/                  | 插件程序文件目录          |
++------------------------+---------------------------+
+
+加载、卸载插件
+--------------
+
+管理命令行'./bin/emqttd_ctl'加载卸载插件。
+
+加载插件::
+
+    ./bin/emqttd_ctl plugins load <PluginName>
+
+卸载插件::
+
+    ./bin/emqttd_ctl plugins unload <PluginName>
+
+查询插件::
+
+    ./bin/emqttd_ctl plugins list
+
+
 -------------------------------
 emqttd_dashboard: Dashboard插件
 -------------------------------
 
-eMQTT消息服务器的Web管理控制台。插件项目地址: https://github.com/emqtt/emqttd_dashboard
+emqttd消息服务器的Web管理控制台。插件项目地址: https://github.com/emqtt/emqttd_dashboard
 
-eMQTT消息服务器默认加载Dashboard插件。URL地址: http://localhost:18083 ，缺省用户名/密码: admin/public 。
+emqttd消息服务器默认加载Dashboard插件。URL地址: http://localhost:18083 ，缺省用户名/密码: admin/public。
 
-Dashboard插件可查询eMQTT消息服务基本信息、统计数据、度量数据，查询系统全部客户端连接(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
+Dashboard插件可查询emqttd基本信息、统计数据、度量数据，查询系统客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
 
 .. image:: _static/images/dashboard.png
+
 
 Dashboard插件设置
 -----------------
@@ -57,16 +95,17 @@ plugins/emqttd_dashboard/etc/plugin.config::
       ]}
     ].
 
+
 -------------------------------------------
 emqttd_plugin_mysql: MySQL认证/访问控制插件
 -------------------------------------------
 
-MySQL用户表/ACL表认证鉴权MQTT客户端。
+MySQL认证/访问控制插件，基于MySQL库表认证鉴权。
 
-MySQL库表
---------
+MQTT用户表
+----------
 
-MQTT用户表::
+.. code:: sql
 
     CREATE TABLE `mqtt_user` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -78,9 +117,12 @@ MQTT用户表::
       UNIQUE KEY `mqtt_username` (`username`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-.. NOTE:: This is a demo table. You could authenticate with any user table.
+.. NOTE:: MySQL插件可以使用系统自有的MQTT用户表，通过'authquery'配置查询语句。
 
-MQTT访问控制表::
+MQTT访问控制表
+--------------
+
+.. code:: sql
 
     CREATE TABLE `mqtt_acl` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -92,7 +134,6 @@ MQTT访问控制表::
       `topic` varchar(100) NOT NULL DEFAULT '' COMMENT 'Topic Filter',
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 配置插件
 --------
@@ -106,7 +147,6 @@ plugins/emqttd_plugin_mysql/etc/plugin.config::
         {mysql_pool, [
             %% ecpool options
             {pool_size, 4},
-            {pool_type, random},
             {auto_reconnect, 3},
 
             %% mysql options
@@ -147,27 +187,28 @@ plugins/emqttd_plugin_mysql/etc/plugin.config::
 ./bin/emqttd_ctl plugins load emqttd_plugin_mysql
 
 
-
 ------------------------------------------------
 emqttd_plugin_pgsql: PostgreSQL认证/访问控制插件
 ------------------------------------------------
 
-PgSQL库表
----------
+PostgreSQL认证/访问控制插件，基于PostgreSQL库表认证鉴权。
 
+MQTT用户表
+----------
 
-Notice: This is a demo table. You could authenticate with any user table.
-
-MQTT用户表::
+.. code:: sql
 
     CREATE TABLE mqtt_user (
       id SERIAL primary key,
       username character varying(100),
       password character varying(100),
       salt character varying(40)
-    ) 
+    );
 
-MQTT访问控制表::
+MQTT访问控制表
+--------------
+
+.. code:: sql
 
     CREATE TABLE mqtt_acl (
       id SERIAL primary key,
@@ -177,7 +218,7 @@ MQTT访问控制表::
       clientid character varying(100),
       access  integer,
       topic character varying(100)
-    ) 
+    );
 
     INSERT INTO mqtt_acl (id, allow, ipaddr, username, clientid, access, topic)
     VALUES
@@ -248,40 +289,71 @@ plugins/emqttd_plugin_pgsql/etc/plugin.config::
 emqttd_plugin_redis: Redis认证/访问控制插件
 --------------------------------------------
 
+配置插件
+--------
 
+plugins/emqttd_plugin_redis/etc/plugin.config::
 
---------------------------------
-emqttd_plugin_template: 插件模版
---------------------------------
+    [
+      {emqttd_plugin_redis, [
+
+        {eredis_pool, [
+          %% ecpool options
+          {pool_size, 8},
+          {auto_reconnect, 2},
+
+          %% eredis options
+          {host, "127.0.0.1"},
+          {port, 6379},
+          {database, 0},
+          {password, ""}
+        ]},
+
+        %% HMGET mqtt_user:%u password
+        {authcmd, ["HGET", "mqtt_user:%u", "password"]},
+
+        %% Password hash algorithm: plain, md5, sha, sha256, pbkdf2?
+        {password_hash, sha256},
+
+        %% SMEMBERS mqtt_acl:%u
+        {aclcmd, ["SMEMBERS", "mqtt_acl:%u"]},
+
+        %% If no rules matched, return...
+        {acl_nomatch, deny},
+
+        %% Store subscriptions to redis when SUBSCRIBE packets received.
+        {subcmd, ["HMSET", "mqtt_subs:%u"]},
+
+        %% Load Subscriptions form Redis when client connected.
+        {loadsub, ["HGETALL", "mqtt_subs:%u"]},
+
+        %% Remove subscriptions from redis when UNSUBSCRIBE packets received.
+        {unsubcmd, ["HDEL", "mqtt_subs:%u"]}
+
+      ]}
+    ].
+
+加载插件
+--------
+
+.. code:: console
+
+    ./bin/emqttd_ctl plugins load emqttd_plugin_redis
+
 
 -----------------------------
 emqttd_stomp: Stomp协议插件
 -----------------------------
 
-The plugin adds STOMP 1.0/1.1/1.2 protocol support to the emqttd broker.
+Stomp协议插件。支持STOMP 1.0/1.1/1.2协议客户端连接emqttd，发布订阅MQTT消息。
 
-The STOMP clients could pub/sub with the MQTT topics, and talk with the MQTT clients!
-
-Build
------
-
-    Git submodule the plugin to 'emqttd/plugins' folder.
-
-    ```
-    git submodule add https://github.com/emqtt/emqttd_stomp.git plugins/emqttd_stomp
-
-    make && make dist
-
-    ```
-
-Configure
+配置插件
 ----------
 
-**The default port is 61613.**
+.. NOTE:: Stomp协议端口: 61613
 
-Plugin config file: etc/plugin.config.
+plugins/emqttd_stomp/etc/plugin.config::
 
-    ```erlang
     [
       {emqttd_stomp, [
 
@@ -308,33 +380,24 @@ Plugin config file: etc/plugin.config.
 
       ]}
     ].
-    ```
 
-Load
-----
+加载插件
+--------
+
+.. code::
 
     ./bin/emqttd_ctl plugins load emqttd_stomp
-
 
 --------------------------------
 emqttd_sockjs: Stomp/Sockjs插件
 --------------------------------
 
-Build
-------
+配置插件
+--------
 
-Notice that the emqttd_stomp plugin is required.
+.. NOTE:: 缺省端口: 61616
 
-Git submodule to emqttd/plugins folder after the emqttd_stomp plugin installed.
-
-git submodule add https://github.com/emqtt/emqttd_sockjs.git plugins/emqttd_sockjs
-
-make && make dist
-
-Configure
-----------
-
-Default port is 61616::
+.. code:: erlang
 
     [
       {emqttd_sockjs, [
@@ -346,13 +409,17 @@ Default port is 61616::
       ]}
     ].
 
-Load
+加载插件
+--------
+
+.. NOTE:: 需先加载emqttd_stomp插件
 
     ./bin/emqttd_ctl plugins load emqttd_stomp
 
     ./bin/emqttd_ctl plugins load emqttd_sockjs
 
-Demo
+插件演示页面
+------------
 
     http://localhost:61616/index.html
 
@@ -361,35 +428,158 @@ Demo
 emqttd_recon: Recon性能调试插件  
 --------------------------------
 
+emqttd_recon插件集成recon性能调测库，'./bin/emqttd_ctl'命令行注册recon命令。
 
-Recon debug/optimize plugin
+加载插件
+--------
 
-## Load
+.. code:: console
 
-```
-./bin/emqttd_ctl plugins load emqttd_recon
-```
+    ./bin/emqttd_ctl plugins load emqttd_recon
 
-## Commands
+recon命令
+---------
 
-```
-./bin/emqttd_ctl recon
+.. code:: console
 
-recon memory                            #recon_alloc:memory/2
-recon allocated                         #recon_alloc:memory(allocated_types, current|max)
-recon bin_leak                          #recon:bin_leak(100)
-recon node_stats                        #recon:node_stats(10, 1000)
-recon remote_load Mod                   #recon:remote_load(Mod)
-```
+    ./bin/emqttd_ctl recon
 
-------------------------------------
-emqttd_plugin_template: 插件开发模版
-------------------------------------
+    recon memory                 #recon_alloc:memory/2
+    recon allocated              #recon_alloc:memory(allocated_types, current|max)
+    recon bin_leak               #recon:bin_leak(100)
+    recon node_stats             #recon:node_stats(10, 1000)
+    recon remote_load Mod        #recon:remote_load(Mod)
+
+-------------------------
+emqttd消息服务器插件开发
+-------------------------
+
+创建插件项目
+------------
+
+github下载emqttd源码库，plugins/目录下创建插件应用。
+
+模版代码请参考: emqttd_plugin_templage
+
 
 注册认证/访问控制模块
------------------------------
+----------------------
+
+认证演示模块 - emqttd_auth_demo.erl
+
+.. code:: erlang
+
+    -module(emqttd_auth_demo).
+
+    -behaviour(emqttd_auth_mod).
+
+    -include("../../../include/emqttd.hrl").
+
+    -export([init/1, check/3, description/0]).
+
+    init(Opts) -> {ok, Opts}.
+
+    check(#mqtt_client{client_id = ClientId, username = Username}, Password, _Opts) ->
+        io:format("Auth Demo: clientId=~p, username=~p, password=~p~n",
+                  [ClientId, Username, Password]),
+        ok.
+
+    description() -> "Demo Auth Module".
+
+访问控制演示模块 - emqttd_acl_demo.erl
+
+.. code:: erlang
+
+    -module(emqttd_acl_demo).
+
+    -include("../../../include/emqttd.hrl").
+
+    %% ACL callbacks
+    -export([init/1, check_acl/2, reload_acl/1, description/0]).
+
+    init(Opts) ->
+        {ok, Opts}.
+
+    check_acl({Client, PubSub, Topic}, Opts) ->
+        io:format("ACL Demo: ~p ~p ~p~n", [Client, PubSub, Topic]),
+        allow.
+
+    reload_acl(_Opts) ->
+        ok.
+
+    description() -> "ACL Module Demo".
+
+注册认证、访问控制模块 - emqttd_plugin_template_app.erl
+
+.. code:: erlang
+
+    ok = emqttd_access_control:register_mod(auth, emqttd_auth_demo, []),
+    ok = emqttd_access_control:register_mod(acl, emqttd_acl_demo, []),
+
 
 注册扩展钩子(Hooks)
------------------------------
+--------------------
+
+通过钩子(Hook)扩展客户端上下线、主题订阅、消息收发。
+
+emqttd_plugin_template.erl::
+
+    %% Called when the plugin application start
+    load(Env) ->
+
+        emqttd_broker:hook('client.connected', {?MODULE, on_client_connected},
+                           {?MODULE, on_client_connected, [Env]}),
+
+        emqttd_broker:hook('client.disconnected', {?MODULE, on_client_disconnected},
+                           {?MODULE, on_client_disconnected, [Env]}),
+
+        emqttd_broker:hook('client.subscribe', {?MODULE, on_client_subscribe},
+                           {?MODULE, on_client_subscribe, [Env]}),
+
+        emqttd_broker:hook('client.subscribe.after', {?MODULE, on_client_subscribe_after},
+                           {?MODULE, on_client_subscribe_after, [Env]}),
+
+        emqttd_broker:hook('client.unsubscribe', {?MODULE, on_client_unsubscribe},
+                           {?MODULE, on_client_unsubscribe, [Env]}),
+
+        emqttd_broker:hook('message.publish', {?MODULE, on_message_publish},
+                           {?MODULE, on_message_publish, [Env]}),
+
+        emqttd_broker:hook('message.acked', {?MODULE, on_message_acked},
+                           {?MODULE, on_message_acked, [Env]}).
+
+扩展钩子(Hook)::
+
+TODO::
+
+
+注册扩展命令行
+--------------------
+
+扩展命令行演示模块 - emqttd_cli_demo.erl
+
+.. code:: erlang
+
+    -module(emqttd_cli_demo).
+
+    -include("../../../include/emqttd_cli.hrl").
+
+    -export([cmd/1]).
+
+    cmd(["arg1", "arg2"]) ->
+        ?PRINT_MSG("ok");
+
+    cmd(_) ->
+        ?USAGE([{"cmd arg1 arg2",  "cmd demo"}]).
+
+注册命令行模块 - emqttd_plugin_template_app.erl
+
+.. code:: erlang
+
+    emqttd_ctl:register_cmd(cmd, {emqttd_cli_demo, cmd}, []).
+
+插件加载后，'./bin/emqttd_ctl'新增命令行::
+
+    ./bin/emqttd_ctl cmd arg1 arg2
 
 

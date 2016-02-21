@@ -9,7 +9,7 @@
 emqttd节点间桥接
 ----------------
 
-emqttd消息服务器支持多节点桥接互联模式::
+emqttd消息服务器支持多节点桥接模式互联::
 
                   ---------                     ---------                     ---------
     Publisher --> | node1 | --Bridge Forward--> | node2 | --Bridge Forward--> | node3 | --> Subscriber
