@@ -49,7 +49,7 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
 .. NOTE:: 
     
     初接触MQTT协议的用户，通常会向通配符的'过滤主题'发布广播消息，MQTT协议不支持这种模式，需从订阅侧设计广播主题(Topic)。
-    例如Android推送，向所有广州用户，推送某类本地消息，客户端获得GIS位置后，可订阅'news/city/guangzhou'的主题。
+    例如Android推送，向所有广州用户，推送某类本地消息，客户端获得GIS位置后，可订阅'news/city/guangzhou'主题。
 
 
 --------------------------
@@ -77,6 +77,15 @@ emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS 
 
 emqttd消息服务默认采用匿名认证，启动后MQTT客户端可连接1883端口，启动运行日志输出在log/目录。
 
+---------------
+源码编译emqttd
+---------------
+
+.. code:: console
+
+    git clone https://github.com/emqtt/emqttd.git
+
+    cd emqttd && make && make dist
 
 --------------------------
 Web管理控制台(Dashboard)
