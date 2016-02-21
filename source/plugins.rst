@@ -117,7 +117,7 @@ MQTT用户表
       UNIQUE KEY `mqtt_username` (`username`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-.. NOTE:: MySQL插件可以使用系统自有的MQTT用户表，通过'authquery'配置查询语句。
+.. NOTE:: MySQL插件可使用系统自有的用户表，通过'authquery'配置查询语句。
 
 MQTT访问控制表
 --------------
@@ -414,6 +414,8 @@ emqttd_sockjs: Stomp/Sockjs插件
 
 .. NOTE:: 需先加载emqttd_stomp插件
 
+.. code:: console
+
     ./bin/emqttd_ctl plugins load emqttd_stomp
 
     ./bin/emqttd_ctl plugins load emqttd_sockjs
@@ -451,7 +453,7 @@ recon命令
     recon remote_load Mod        #recon:remote_load(Mod)
 
 -------------------------
-emqttd消息服务器插件开发
+emqttd插件开发
 -------------------------
 
 创建插件项目
@@ -520,7 +522,7 @@ github下载emqttd源码库，plugins/目录下创建插件应用。
 注册扩展钩子(Hooks)
 --------------------
 
-通过钩子(Hook)扩展客户端上下线、主题订阅、消息收发。
+通过钩子(Hook)处理客户端上下线、主题订阅、消息收发。
 
 emqttd_plugin_template.erl::
 
