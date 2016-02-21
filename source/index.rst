@@ -31,16 +31,8 @@ emqttd项目文档目录:
    config
    cluster
    bridge
-   guide
    commands
    plugins
-   design
-   tune
-   apps
-   faq
-   erlang
-   mqtt
-   coap
 
 emqttd项目支持与联系:
 
