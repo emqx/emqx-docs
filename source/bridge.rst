@@ -64,14 +64,39 @@ emqttd1节点上创建到emqttd2桥接::
 mosquitto桥接
 -------------
 
+mosquitto可以普通MQTT连接方式，桥接到emqttd消息服务器::
 
+                 -------------             -----------------
+    Sensor ----> | mosquitto | --Bridge--> |               |
+                 -------------             |    emqttd     |
+                 -------------             |    Cluster    |
+    Sensor ----> | mosquitto | --Bridge--> |               |
+                 -------------             -----------------
 
+mosquitto.conf
+--------------
 
--------------
+本机2883端口启动emqttd消息服务器，1883端口启动mosquitto并创建桥接。
+
+mosquitto.conf配置::
+
+    connection emqttd
+    address 127.0.0.1:2883
+    topic sensor/# out 2
+
+    # Set the version of the MQTT protocol to use with for this bridge. Can be one
+    # of mqttv31 or mqttv311. Defaults to mqttv31.
+    bridge_protocol_version mqttv311
+
+--------
 rsmb桥接
--------------
+--------
 
+本机2883端口启动emqttd消息服务器，1883端口启动rsmb并创建桥接。
 
+broker.cfg桥接配置::
 
-
+    connection emqttd
+    addresses 127.0.0.1:2883
+    topic sensor/#
 
