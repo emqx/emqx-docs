@@ -13,6 +13,8 @@ PubSub
 
 Topic Trie
 
+.. image:: _static/images/concept.png
+
 ----------------------
 设计
 ----------------------
