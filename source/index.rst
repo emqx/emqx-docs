@@ -9,7 +9,7 @@ emqttd - 开源MQTT消息服务器
 
 emqttd(Erlang MQTT Broker)是基于Erlang/OTP语言平台开发，支持大规模连接和分布式集群， 发布订阅模式的开源MQTT消息服务器。
 
-emqttd完整支持MQTT V3.1/V3.1.1版本协议规范，并扩展支持WebSocket、Stomp、CoAP、MQTT-SN或私有TCP协议。emqttd消息服务器架构上支持单节点100万连接与多节点分布集群:
+emqttd完整支持MQTT V3.1/V3.1.1版本协议规范，并扩展支持WebSocket、Stomp、CoAP、MQTT-SN或私有TCP协议。emqttd消息服务器支持单节点100万连接与多节点分布式集群:
 
 
 .. image:: ./_static/images/emqtt.png
