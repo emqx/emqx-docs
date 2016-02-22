@@ -244,7 +244,7 @@ emqttd占用的上述端口，可通过etc/emqttd.config配置文件的listeners
 
 18083端口是Web管理控制占用，该端口由emqttd_dashboard插件启用。
 
-控制台URL: http:://localhost:18083/ ，默认的登陆用户名: admin, 密码: public。
+控制台URL: http:://localhost:18083/ ，默认登录用户名: admin, 密码: public。
 
 
 --------
