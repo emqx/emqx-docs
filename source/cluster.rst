@@ -168,7 +168,7 @@ emqttd/etc/vm.args::
 .. WARNING:: 节点启动加入集群后，节点名称不能变更。
 
 
-emqttd@host1节点设置
+emqttd@host2节点设置
 ---------------------
 
 emqttd/etc/vm.args::
