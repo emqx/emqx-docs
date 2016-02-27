@@ -3,9 +3,9 @@
 测试调优(Tune Guide)
 ====================
 
-emqttd消息服务器当前版本MQTT连接压力测试到130万连接，在一台12核心、32G内存的CentOS服务器上。
+emqttd消息服务器当前版本MQTT连接压力测试到130万，在一台12核心、32G内存的CentOS服务器上。
 
-100万连接测试所需的Linux内核参数，网络协议栈参数，Erlang虚拟机参数，emqttd消息服务器调优设置如下:
+100万连接测试所需的Linux内核参数，网络协议栈参数，Erlang虚拟机参数，emqttd消息服务器参数设置如下:
 
 -----------------
 Linux操作系统参数
@@ -18,7 +18,7 @@ Linux操作系统参数
     sysctl -w fs.nr_open=2097152
     echo 2097152 > /proc/sys/fs/nr_open
 
-当前用户/进程允许打开文件句柄数::
+允许当前会话/进程打开文件句柄数::
 
     ulimit -n 1048576
 
@@ -49,7 +49,7 @@ TCP协议栈网络参数
 
 可用知名端口范围::
 
-    sysctl -w net.ipv4.ip_local_port_range=2000 65535
+    sysctl -w net.ipv4.ip_local_port_range=1000 65535
 
 TCP Socket读写Buffer设置::
 
