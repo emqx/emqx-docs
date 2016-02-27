@@ -33,6 +33,7 @@ emqttd项目文档目录:
    bridge
    commands
    plugins
+   tune
 
 emqttd项目支持与联系:
 
