@@ -1,13 +1,13 @@
 
 .. _guide:
 
-====================
-用户手册(User Guide)
-====================
+========
+用户指南
+========
 
-----------
-客户端认证
-----------
+----
+认证
+----
 
 emqttd消息服务器支持按ClientID、用户名/密码、IP地址、HTTP Cookie认证MQTT客户端。认证机制由一系列扩展模块与认证插件实现，认证插件包括MySQL、PostgreSQL、Redis与Mongodb。
 
@@ -119,8 +119,8 @@ emqttd消息服务器默认采用匿名认证，允许任何客户端登录::
 
     {anonymous, []}
 
-MySQL认证插件
-------------
+MySQL插件认证
+-------------
 
 通过MySQL数据库表认证，可创建如下的'mqtt_user'表::
 
@@ -159,7 +159,7 @@ emqttd_plugin_mysql/etc/plugin.config配置'authquery', 'password_hash'::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_mysql
 
-PostgreSQL认证插件
+PostgreSQL插件认证
 ------------------
 
 通过PostgreSQL数据库表认证，可创建如下的'mqtt_user'表::
@@ -194,8 +194,8 @@ emqttd_plugin_pgsql/etc/plugin.config配置'authquery'、'password_hash'::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_pgsql
 
-Redis
------
+Redis插件认证
+-------------
 
 Redis认证。MQTT用户记录存储在Redis Hash, 键值: "mqtt_user:<Username>"
 
@@ -221,9 +221,9 @@ emqttd_plugin_redis/etc/plugin.config设置'authcmd'、'password_hash'::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_redis
 
----------------
-客户端访问控制
----------------
+-------------
+访问控制(ACL)
+-------------
 
 emqttd消息服务器通过ACL(Access Control List)实现MQTT客户端访问控制。
 
@@ -241,8 +241,8 @@ MQTT客户端发起订阅/发布请求时，emqttd消息服务器的访问控制
                  \|/                    \|/                    \|/
             allow | deny           allow | deny           allow | deny
 
-Internal - 访问控制
--------------------
+Internal访问控制
+----------------
 
 emqttd消息服务器默认的访问控制，由一个'internal'模块实现，etc/emqttd.config中配置::
 
@@ -266,7 +266,7 @@ ACL规则通过etc/acl.config配置，emqttd启动时加载到ETS内存表::
     {allow, all}.
 
 
-MySQL插件-访问控制
+MySQL插件访问控制
 ------------------
 
 MySQL插件访问控制，通过mqtt_acl表定义ACL规则::
@@ -308,7 +308,7 @@ emqttd_plugin_mysql/etc/plugin.config配置'aclquery'与'acl_nomatch'::
       ]}
     ].
 
-PostgreSQL插件-访问控制
+PostgreSQL插件访问控制
 -----------------------
 
 PostgreSQL插件访问控制，通过mqtt_acl表定义ACL规则::
@@ -352,7 +352,7 @@ emqttd_plugin_pgsql/etc/plugin.config设置'aclquery'与'acl_nomatch'::
       ]}
     ].
 
-Redis插件-访问控制
+Redis插件访问控制
 ------------------
 
 Redis List存储一个MQTT客户端的访问控制规则，键值: "mqtt_acl:<Username>"，List存储: 存储"publish <Topic>", "subscribe <Topic>" 或 "pubsub <Topic>".
@@ -375,9 +375,9 @@ emqttd_plugin_redis/etc/plugin.config配置'aclcmd'与'acl_nomatch'::
       ]}
     ].
 
---------------------
-MQTT协议发布订阅模式
---------------------
+----------------
+MQTT协议发布订阅
+----------------
 
 MQTT是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器::
 
@@ -580,8 +580,8 @@ $SYS主题前缀: $SYS/brokers/${node}/clients/
         ts:     1432648486
     }
 
-Statistics - 统计数据消息
--------------------------
+Statistics - 系统统计消息
+--------------------------
 
 系统主题前缀: $SYS/brokers/${node}/stats/
 
@@ -629,8 +629,8 @@ Topics - 主题统计
 | topics/max          | Max number of topics                        |
 +---------------------+---------------------------------------------+
 
-Metrics-收发报文消息统计
-------------------------
+Metrics-收发流量/报文/消息统计
+------------------------------
 
 系统主题(Topic)前缀: $SYS/brokers/${node}/metrics/
 
@@ -725,9 +725,9 @@ Sysmon-系统监控
 | busy_dist_port   | Dist Port忙警告    |
 +------------------+--------------------+
 
--------------------------------
-主题(Topic)或客户端(Client)追踪
--------------------------------
+----
+追踪
+----
 
 emqttd消息服务器支持追踪来自某个客户端(Client)的全部报文，或者发布到某个主题(Topic)的全部消息。
 
