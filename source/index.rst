@@ -31,6 +31,7 @@ emqttd项目文档目录:
    config
    cluster
    bridge
+   guide
    commands
    plugins
    tune
