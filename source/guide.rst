@@ -221,9 +221,9 @@ emqttd_plugin_redis/etc/plugin.config设置'authcmd'、'password_hash'::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_redis
 
---------
-访问控制
---------
+---------------
+客户端访问控制
+---------------
 
 emqttd消息服务器通过ACL(Access Control List)实现MQTT客户端访问控制。
 
@@ -241,8 +241,8 @@ MQTT客户端发起订阅/发布请求时，emqttd消息服务器的访问控制
                  \|/                    \|/                    \|/
             allow | deny           allow | deny           allow | deny
 
-Internal访问控制模块
---------------------
+Internal - 访问控制
+-------------------
 
 emqttd消息服务器默认的访问控制，由一个'internal'模块实现，etc/emqttd.config中配置::
 
