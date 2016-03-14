@@ -505,8 +505,8 @@ broker pubsub路由设置
         %% PubSub Erlang进程池
         {pool_size, 8},
         
-        %% 订阅存储类型，ram: 内存, disc: 磁盘, false: 不保存
-        {subscription, ram},
+        %% 订阅存储类型，true: 存储, false: 不存储
+        {subscription, true},
 
         %% 路由老化时间
         {route_aging, 5}
