@@ -1,18 +1,15 @@
 
-============
-MQTT协议详解
-============
+.. _mqtt:
 
-.. todo:: MQTT 介绍文档10篇
+========
+MQTT协议
+========
 
-.. toctree::
-    :maxdepth: 2
+------------------------
+MQTT轻量发布订阅消息协议
+------------------------
 
-    overview
-
----------------------------------
-MQTT协议 - 轻量PubSub消息服务协议
----------------------------------
+MQTT是轻量发布订阅模式消息协议
 
 MQTT V3.1/V3.1.1协议规范(IBM)
 
@@ -20,42 +17,17 @@ MQTT V3.1/V3.1.1协议规范(IBM)
 
 基于Topic消息路由(Topic based Subscription Model)
 
-QoS 0,1,2 Messages
-
-Transient, Persistent Sessions
-
-Last Will, Retained Message
-
-KeepAlive and Two Bytes Heartbeat
-
-MQTT Over WebSocket
-
-
 MQTT PubSub模式介绍
+
+---------------------------
+MQTT基于主题(Topic)消息路由
+---------------------------
+
+基于主题(Topic)进行消息路由。
 
 publish a/b/c
 
 subscribe a/b/#
-
-
---------------------------------
-MQTT协议报文格式
---------------------------------
-
-
-CONNECT 发起连接    CONNACK 连接回执
-
-PUBLISH 发布消息    PUBACK  发布回执
-
-PUBREC  QoS2消息回执    PUBREL  QoS消息释放
-
-PUBCOMP QoS2消息完成    DISCONNECT  断开连接
-
-SUBSCRIBE   订阅Topic   SUBACK  订阅回执
-
-UNSUBSCRIBE 取消订阅    UNSUBACK    取消订阅回执
-
-PINGREQ PING请求    PINGRESP    PING响应
 
 --------------------------------
 MQTT Topic Name, Filter
@@ -73,6 +45,26 @@ Subscribe Topic Filter:
 “sensor/+/temperature”
 “$SYS/broker/metrics/#”
 
+------------------------
+MQTT V3.1.1协议报文格式
+------------------------
+
+
+CONNECT 发起连接    CONNACK 连接回执
+
+PUBLISH 发布消息    PUBACK  发布回执
+
+PUBREC  QoS2消息回执    PUBREL  QoS消息释放
+
+PUBCOMP QoS2消息完成    DISCONNECT  断开连接
+
+SUBSCRIBE   订阅Topic   SUBACK  订阅回执
+
+UNSUBSCRIBE 取消订阅    UNSUBACK    取消订阅回执
+
+PINGREQ PING请求    PINGRESP    PING响应
+
+
 --------------------------------
 MQTT消息QoS
 --------------------------------
@@ -83,6 +75,8 @@ Qos1,
 
 Qos2
 
+
+QoS 0,1,2 Messages
 
 --------------------------------
 MQTT连接会话(Session)
@@ -96,6 +90,9 @@ Persistent Session
 
 Offline Message
 
+
+Transient, Persistent Sessions
+
 --------------------------------
 MQTT连接保活心跳
 --------------------------------
@@ -103,14 +100,18 @@ MQTT连接保活心跳
 CONNECT报文KeepAlive参数
 PINGREQ 2字节心跳报文
 XMPP KeepAlive???
+KeepAlive and Two Bytes Heartbeat
 
 --------------------------------
-MQTT协议-Last Will, Retained Message
+MQTT协议-Last Will Message
 --------------------------------
 
 Last Will
-Retained Message
 
+-------------------------
+MQTT协议-Retained Message
+-------------------------
+Retained Message
 
 --------------------------------
 MQTT协议-WebSocket连接
@@ -126,27 +127,7 @@ IE Sucks?
 
 Better than Socket.IO?
 
---------------------------------
-MQTT应用-Mobile, IoT, M2M…
---------------------------------
-
-Android Push
-
-Mobile Chat(Facebook Messenger)
-
-物联网(IoT, M2M)、智能硬件、车联网...
-
-行业市场(电力、石油、能源…)
-
-
---------------------------------
-MQTT与XMPP协议对比
---------------------------------
-
-轻量、简单
-
-路由方式灵活，比如群组聊天
-
+MQTT Over WebSocket
 
 ----------------
 MQTT协议客户端库
@@ -159,4 +140,34 @@ CocoaMQTT：Swift语言MQTT客户端库
 QMQTT：QT框架MQTT客户端库
 
 按功能介绍
+
+--------------------------------
+MQTT与XMPP协议对比
+--------------------------------
+
+轻量、简单
+
+路由方式灵活，比如群组聊天
+
+Throughput capacity: less overhead, more lightweight
+
+Binary vs plain text
+
+QoS in place (Fire-and-forget, At-least-once and Exactly-once)
+
+Pub/Sub in place (XMPP requires extension XEP- 0060)
+
+No need for an XML parser
+
+--------------------------------
+MQTT应用-Mobile, IoT, M2M…
+--------------------------------
+
+Android Push
+
+Mobile Chat(Facebook Messenger)
+
+物联网(IoT, M2M)、智能硬件、车联网...
+
+行业市场(电力、石油、能源…)
 

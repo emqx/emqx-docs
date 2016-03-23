@@ -8,43 +8,49 @@
 ----------------------
 
 概念模型
-----------------------
+--------
 
-Nodes, Topic Trie, PubSub
+emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器((MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按MQTT的主题树(Topic Trie)发布订阅模式路由消息:
 
 .. image:: _static/images/concept.png
 
 设计原则
-----------------------
-软实时、低延时、高并发Erlang/OTP平台！
-连接与路由分层
-分离Flow平面与控制平面
-避免过度设计，充分利用Erlang/OTP平台
+--------
 
+1. emqttd消息服务器核心解决的问题：处理海量的并发MQTT连接与消息路由。
+2. 充分利用Erlang/OTP平台软实时、低延时、高并发、分布容错的优势。
+3. 连接(Connection)、会话(Session)、路由(Router)、集群(Cluster)分层。
+4. 分离消息路由平面(Flow Plane)与控制管理平面(Control Plane)。
+5. 通过后端关系数据库或NoSQL实现MQTT数据持久化、分布与容灾备份。
 
 系统分层
-----------------------
+--------
 
-连接层(Socket, Client, Protocol)
+1. 连接层(Connection Layer)
+   
+   (Socket, Client, Protocol)
 
-会话层(Global Session)
+2. 会话层(Session Layer)
+   
+3. 路由层(Route Layer)
+   
+   Router, PubSub)
 
-路由层(Router, PubSub)
+4. 分布层(Distributed Layer)
+   
+   (Topic Trie树, Route Table表)
 
-分布层(Trie树, Topic表)
+5. 认证与访问控制(ACL)
 
-认证与访问控制(ACL)
+6. 钩子(Hooks)与插件(Plugins)
 
-钩子(Hooks)与插件(Plugins)
-
-Erlang相关的设计建议?
 
 发布订阅时序图
-----------------------
+--------------
 
---------------------------------------------
+------------------------------------
 连接层设计(Socket, Client, Protocol)
---------------------------------------------
+------------------------------------
 
 Socket、Client、Protocol处理
 
@@ -83,9 +89,9 @@ Serializer Fun
 Listeners列表
 
 
---------------------------------------------
-会话层设计(Session)
---------------------------------------------
+-------------------------
+会话层设计(Session Layer)
+-------------------------
 
 会话层处理MQTT协议PUBLISH/SUBSCRIBE消息交互流程
 
@@ -138,9 +144,9 @@ Erlang进程PID: 编码为4字节
 进程内部序列号: 2字节的进程内部序列号
 
 
---------------------------------------------
-路由层设计(Router, PubSub, Trie)
---------------------------------------------
+----------------------------------
+路由层设计(Server, PubSub, Router)
+----------------------------------
 
 字典树(Trie)匹配路由
 
@@ -152,9 +158,9 @@ Session消息送达与重传
 
 TODO: PubSub 图片
 
---------------------------------------------
-分布集群设计(Distributed)
---------------------------------------------
+-------------------------------
+分布集群设计(Distributed Layer)
+-------------------------------
 
 Topic Trie, Topic Table分布图
 
@@ -169,9 +175,9 @@ Pub --> Broker1 --- Bridge Forward--> Broker2 -- Bridge Forward --> Broker3 --> 
 桥接节点间只消息转发，不复制Mnesia数据库
 
 
---------------------------------------------
-认证与ACL设计
---------------------------------------------
+-----------------------
+认证与访问控制(ACL)设计
+-----------------------
 
 emqttd_access_control
 ----------------------
@@ -204,9 +210,9 @@ PostgreSQL
 Redis(TODO)
 
 
---------------------------------------------
+----------------------------
 钩子(Hook)与插件(Plugin)设计
---------------------------------------------
+----------------------------
 
 钩子(Hooks) API
 ---------------
@@ -237,6 +243,9 @@ Foldl Hooks::
         ...
 
 Hooks设计(https://github.com/emqtt/emqttd/wiki/Hooks%20Design)
+
+比如端到端的消息处理...
+
 
 插件(Plugins) API
 ------------------
@@ -271,31 +280,21 @@ emqttd_recon - Recon Plugin
 端到端消息发布(Pub)与确认(Ack)
 ------------------------------
 
+
 Could use 'message.publish', 'message.acked' hooks to implement end-to-end message pub/ack::
 
  PktId <-- --> MsgId <-- --> MsgId <-- --> PktId
       |<--- Qos --->|<---PubSub--->|<-- Qos -->|
 
 
---------------------------------------------
-Event 与 broker pubsub设计
---------------------------------------------
 
-事件，broker:subscribe, broker:pubsub
+--------------
+Erlang设计相关
+--------------
 
+1. 使用Pool, Pool, Pool... 推荐GProc库(github.com/uwiger/gproc)
 
---------------------------------------------
-Pool进程池设计
---------------------------------------------
-
-
---------------------------------------------
-Erlang设计相关建议
---------------------------------------------
-
-1. 使用Pool, Pool, Pool… and GProc(github.com/uwiger/gproc)
-
-2. 异步，异步，异步消息...同步用于负载保护
+2. 异步，异步，异步消息...连接层到路由层异步消息，同步请求用于负载保护
 
 3. 避免进程Mailbox累积消息，负载高的进程可以使用gen_server2
 
@@ -303,21 +302,16 @@ Erlang设计相关建议
 
 5. 多使用Binary数据，避免进程间内存复制
 
-6. 使用ETS, ETS, ETS…Message Passing Vs ETS
+6. 使用ETS, ETS, ETS...Message Passing Vs ETS
 
-避免ETS select, match without key
+7. 避免ETS表非键值字段select, match
 
-避免大量数据读写ETS, 使用lookup_element, update_counter…
+8. 避免大量数据ETS读写, 每次ETS读写会复制内存，可使用lookup_element, update_counter
 
-适当开启ETS表{write_concurrency, true}
+9. 适当开启ETS表{write_concurrency, true}
 
-保护Mnesia Transaction，避免overload
+10. 保护Mnesia数据库事务，尽量减少事务数量，避免事务过载(overload)
 
-避免Mnesia index_read, match, select
-
-监控::
-
-    erlang:system_monitor监控long_schedule, long_gc, busy_port, busy_dis_port
-    etop查看msg_q, memory, reductions, runtime…
+11. 避免Mnesia数据表索引，和非键值字段match, select
 
 
