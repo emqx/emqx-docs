@@ -7,46 +7,44 @@
 前言
 ----
 
-emqttd消息服务器经过两年开发，开发方式像摇滚乐专辑的制作。最初由一些即兴创作的部分(单曲)组成，但最终整体上体现了某种程度的正交(Orthogonality)和一致性(Consistency)。
+emqttd消息服务器经过两年时间开发，开发方式有点像摇滚乐专辑的制作。最初由一些即兴创作的部分组成，但最终整体上体现了某种程度的正交(Orthogonality)和一致性(Consistency)。
 
-emqttd消息服务器1.0版本在某些细节上仍是粗糙的，但在架构上做出了正确的选择和设计，如果现在重新设计一遍整个系统，它最终很可能还是目前的样子。
-
-emqttd1.0版本的设计选择带来的一个好的结果是：emqttd可能是开源领域唯一一个，几乎不需要用户做太多努力，就可以支持到100万连接的MQTT服务器。坏的结果是：我们无法向用户提供百万连接优化的商业服务。
+emqttd消息服务器1.0版本在部分细节上仍是粗糙的，但在架构上做出了正确的选择和设计。1.0版本设计带来的一个好的结果是：emqttd可能是开源领域唯一一个，几乎不需要用户做太多努力，就可以支持到100万连接的MQTT服务器。坏的结果是：我们无法向用户提供百万连接优化的商业服务。
 
 100万连接
 ---------
 
 多核心服务器和现代操作系统内核层面，可以很轻松支持到100万TCP连接，核心问题是应用层面如何处理业务瓶颈。
 
-emqttd消息服务器在业务和应用层面，解决了承载100万连接的各类瓶颈问题。
-
-连接测试需设置操作系统内核、TCP协议栈、Erlang虚拟机参数: http://docs.emqtt.cn/zh_CN/latest/tune.html
+emqttd消息服务器在业务和应用层面，解决了承载100万连接的各类瓶颈问题。100万连接测试的操作系统内核、TCP协议栈、Erlang虚拟机参数: http://docs.emqtt.cn/zh_CN/latest/tune.html
 
 全异步架构
 ----------
 
-emqttd消息服务器是基于Erlang/OTP平台的全异步的架构：异步TCP连接处理、异步主题(Topic)订阅、异步消息发布，只有在资源负载限制部分采用同步设计，比如TCP连接创建和Mnesia数据库事务执行。
+emqttd消息服务器是基于Erlang/OTP平台的全异步的架构：异步TCP连接处理、异步主题(Topic)订阅、异步消息发布。只有在资源负载限制部分采用同步设计，比如TCP连接创建和Mnesia数据库事务执行。
 
 一条MQTT消息从发布者(Publisher)到订阅者(Subscriber)，在emqttd消息服务器内部异步流过一系列Erlang进程的Mailbox::
 
-                      --------------          ---------------          --------------
-    Publisher --Msg-->| Pub Client | --Msg--> | Sub Session | --Msg--> | Sub Client | --Msg--> Subscriber
-                      --------------          ---------------          --------------
+                     --------------          ---------------          --------------
+    Publisher--Msg-->| Pub Client | --Msg--> | Sub Session | --Msg--> | Sub Client | --Msg-->Subscriber
+                     --------------          ---------------          --------------
 
 消息持久化
 ----------
 
-emqttd1.0版本没有实现服务器内部的消息持久化，这是一个架构设计选择。首先，emqttd解决的核心问题是连接与路由；其次，我们认为内置持久化会是个错误设计。
+emqttd1.0版本没有实现服务器内部的消息持久化，这是一个架构设计选择。首先，emqttd解决的核心问题是连接与路由；其次，我们认为内置持久化是个错误设计。
 
 传统内置消息持久化的MQ服务器，比如广泛使用的JMS服务器ActiveMQ，几乎每个大版本都在重新设计持久化的部分。内置消息持久化设计上有两个问题:
 
-1. 如何平衡内存与磁盘使用？消息路由基于内存，消息存储又是基于磁盘的。
+1. 如何平衡内存与磁盘使用？消息路由基于内存，消息存储又是基于磁盘。
 
 2. 多节点分布式架构下，如何放置Queue？如何复制Queue？
 
-Kafka在上述问题上，做出了正确的设计。它本身是一个完全基于磁盘的分布式commit log，但可以作为消息服务器使用:)
+Kafka在上述问题上，做出了正确的设计，一个完全基于磁盘分布式commit log的消息服务器。
 
-emqttd2.0版本会将会通过对接外部存储，例如Redis、Kafka、Cassandra、PostgreSQL，实现多种方式的消息持久化。设计上分离消息路由与消息存储职责后，数据复制或容灾备份甚至应用集成，都可以在数据层面实现。
+emqttd2.0版本通过对接外部存储，例如Redis、Kafka、Cassandra、PostgreSQL，实现多种方式的消息持久化。
+
+设计上分离消息路由与消息存储职责后，数据复制或容灾备份甚至应用集成，可以在数据层面实现。
 
 NetSplit问题
 ------------
@@ -59,20 +57,6 @@ NetSplit故障发生时，emqttd消息服务器的log/emqttd_error.log日志，�
 
 emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动化处理。所以emqttd1.0版本设计选择是，集群不会自动化处理NetSplit，需要人工重启部分节点。
 
-应用场景测试
-------------
-
-MQTT是一个设计得非常出色的传输层协议，在移动消息、物联网、车联网、智能硬件甚至能源勘探等领域有着广泛的应用。 例如1个字节报头、2个字节心跳、消息QoS支持等设计，非常适合在低带宽、不可靠网络、嵌入式设备上应用。但不同的应用场景有不同的系统要求，用户使用emqttd消息服务器前，可以按自己的应用场景进行测试。
-
-消息推送: 广播问题
-
-即时消息: 收发确认
-
-智能硬件: latency、
-
-物联网数据采集: 吞吐
-
-
 ----------------------
 系统架构(Architecture)
 ----------------------
@@ -80,7 +64,7 @@ MQTT是一个设计得非常出色的传输层协议，在移动消息、物联�
 概念模型
 --------
 
-emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器((MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按MQTT的主题树(Topic Trie)发布订阅模式路由消息:
+emqttd消息服务器概念上像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器((MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按MQTT的主题树(Topic Trie)发布订阅模式在集群节点间路由消息:
 
 .. image:: _static/images/concept.png
 
@@ -90,167 +74,203 @@ emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 1. emqttd消息服务器核心解决的问题：处理海量的并发MQTT连接与消息路由。
 2. 充分利用Erlang/OTP平台软实时、低延时、高并发、分布容错的优势。
 3. 连接(Connection)、会话(Session)、路由(Router)、集群(Cluster)分层。
-4. 分离消息路由平面(Flow Plane)与控制管理平面(Control Plane)。
-5. 通过后端数据库或NoSQL实现数据持久化、分布与容灾备份。
+4. 消息路由平面(Flow Plane)与控制管理平面(Control Plane)分离。
+5. 支持后端数据库或NoSQL实现数据持久化、容灾备份与应用集成。
 
 系统分层
 --------
 
-1. 连接层(Connection Layer)
+1. 连接层(Connection Layer)： 负责TCP连接处理、MQTT协议编解码。
+
+2. 会话层(Session Layer)：处理MQTT协议发布订阅消息交互流程。
    
-   (Socket, Client, Protocol)
-
-2. 会话层(Session Layer)
+3. 路由层(Route Layer)：节点内路由MQTT消息。
    
-3. 路由层(Route Layer)
+4. 分布层(Distributed Layer)：分布节点间路由MQTT消息。
    
-   Router, PubSub)
+5. 认证与访问控制(ACL)：连接层支持可定制的认证与访问控制模块。
 
-4. 分布层(Distributed Layer)
-   
-   (Topic Trie树, Route Table表)
-
-5. 认证与访问控制(ACL)
-
-6. 钩子(Hooks)与插件(Plugins)
-
-
-发布订阅时序图
---------------
+6. 钩子(Hooks)与插件(Plugins)：系统每层提供可扩展的钩子，支持用户插件方式扩展服务器。
 
 ------------------------------------
 连接层设计(Socket, Client, Protocol)
 ------------------------------------
 
-Socket、Client、Protocol处理
+连接层主要负责服务端Socket处理与MQTT协议编解码：
 
-eSockd - General Non-blocking TCP/SSL Socket Server
-
-Acceptor Pool and Asynchronous TCP Accept
-
-Max Connection Management
-
-Leaky Bucket Rate Limiting
-
-KeepAlive Timer
-
-Parser and Serializer
-
-Protocol Packets Processor
-
-TCP/SSL Connection Support
-
-MQTT Over WebSocket(SSL) Support
-
-HTTP Publish API Support
-
-Stomp, SockJS Support
-
-Private TCP Protocol
-
-全异步TCP收发::
-
-    图片 
-
-Parser Fun
-
-Serializer Fun
-
-Listeners列表
-
+1. 基于eSockd框架的异步TCP服务端
+2. TCP Acceptor池与异步TCP Accept
+3. TCP/SSL, WebSocket/SSL连接支持
+4. 最大连接数限制
+5. 基于IP地址访问控制
+6. 基于Leaky Bucket的流控
+7. MQTT协议编解码
+8. MQTT协议心跳检测
+9. MQTT协议报文处理
 
 -------------------------
 会话层设计(Session Layer)
 -------------------------
 
-会话层处理MQTT协议PUBLISH/SUBSCRIBE消息交互流程
+会话层负责处理MQTT协议发布订阅(Publish/Subscribe)业务交互流程：
 
-Qos0/1/2消息接收与下发，消息超时重传，离线消息保存
+1. 缓存MQTT客户端的全部订阅(Subscription)，并终结QoS
 
-飞行窗口(Inflight Window)，下发消息的顺序保证
+2. 处理Qos0/1/2消息接收与下发，消息超时重传，离线消息保存
 
-缓存MQTT客户端的全部订阅(Subscription)，并终结QoS
+3. 飞行窗口(Inflight Window)，下发消息的顺序保证
 
-服务器发送到客户端的，已发送未确认的Qos1/2消息
+4. 保存服务器发送到客户端的，已发送未确认的Qos1/2消息
 
-客户端发送到服务端，未接收到PUBREL的QoS2消息
+5. 保存客户端发送到服务端，未接收到PUBREL的QoS2消息
 
-客户端离线时，持久会话保存离线的Qos1/2消息
+6. 客户端离线时，保存持久会话的离线Qos1/2消息
 
-消息队列
---------------------------------------------
+消息队列(Queue)和飞行窗口(Inflight Window)
+------------------------------------------
 
-消息队列(Message Queue)和飞行窗口(Inflight Window)
+会话层通过一个内存消息队列和飞行窗口处理下发消息::
 
-飞行窗口(Inflight Window)保存当前正在发送未确认的Qos1/2消息。窗口值越大，吞吐越高；窗口值越小，消息顺序越严格
+       |<----------------- Max Len ----------------->|
+       -----------------------------------------------
+ IN -> |      Messages Queue   |  Inflight Window    | -> Out
+       -----------------------------------------------
+                               |<---   Win Size  --->|
 
-当客户端离线或者飞行窗口(Inflight Window)满时，消息缓存到队列
+飞行窗口(Inflight Window)保存当前正在发送未确认的Qos1/2消息。窗口值越大，吞吐越高；窗口值越小，消息顺序越严格。
 
-如果消息队列满，先丢弃Qos0消息，或者丢弃最早进入队列的消息
+当客户端离线或者飞行窗口(Inflight Window)满时，消息缓存到队列。如果消息队列满，先丢弃Qos0消息，或丢弃最早进入队列的消息。
 
-Qos
---------------------------------------------
+报文Id(PacketId)与消息ID(MessageId)
+-----------------------------------
 
-Qos0, 1, 2
-
-PacketId 与 MessageId
---------------------------------------------
-
-PacketId 客户端到服务端的Packet收发与确认
-
-MessageId 全局唯一的、时间序列的消息ID，分配给每一条Qos1/2消息，用于端到端的消息处理
-
-Guid
---------------------------------------------
+MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务器的报文收发与确认。MQTT发布报文(PUBLISH)进入消息服务器后，转换为一个MQTT消息并分配全局唯一的128bits消息ID(MessageId)。
 
 全局唯一时间序列消息ID结构：
 
-64bits时间戳: erlang:system_time if Erlang >= R18, otherwise os:timestamp
+1. 64bits时间戳: erlang:system_time if Erlang >= R18, otherwise os:timestamp
+2. Erlang节点ID: 编码为2字节
+3. Erlang进程PID: 编码为4字节
+4. 进程内部序列号: 2字节的进程内部序列号
 
-Erlang节点ID: 编码为2字节
+端到端消息发布订阅(Pub/Ack)过程中，发布报文、报文ID与报文QoS终结在会话层，由唯一ID标识的MQTT消息在节点间路由::
 
-Erlang进程PID: 编码为4字节
-
-进程内部序列号: 2字节的进程内部序列号
-
+    PktId <-- Session --> MsgId <-- Router --> MsgId <-- Session --> PktId
 
 ----------------------------------
 路由层设计(Server, PubSub, Router)
 ----------------------------------
 
-字典树(Trie)匹配路由
+路由层维护订阅者(subscriber)与订阅关系表(subscription)，并在本节点发布订阅模式派发(Dispatch)消息::
 
-Topic表读取分布节点
+.. image:: _static/images/dispatch.png
 
-Router进行消息路由分发
-
-Session消息送达与重传
-
-TODO: PubSub 图片
+消息派发到会话(Session)后，由会话负责发起消息送达的QoS流程。
 
 -------------------------------
 分布集群设计(Distributed Layer)
 -------------------------------
 
-Topic Trie, Topic Table分布图
+分布层维护全局主题树(Topic Trie)与路由表(Route Table)。主题树由通配主题构成，路由表映射主题到节点::
 
-水平扩展??? 10台以上集群
+    --------------------------
+    |             t          |
+    |            / \         |
+    |           +   #        |
+    |         /  \           |
+    |       x      y         |
+    --------------------------
+    | t/+/x -> node1, node3  |
+    | t/+/y -> node1         |
+    | t/#   -> node2         |
+    | t/a   -> node3         |
+    --------------------------
 
-集群(Cluster)
-Mnesia数据库复制实现集群：一个disco_copies节点，多个ram_copies节点
-订阅关系(Subscriptions)、本地路由表分别保存在各自节点
-Topic Trie树、Topic->Node映射表多节点复制
-桥接(Bridge)
-Pub --> Broker1 --- Bridge Forward--> Broker2 -- Bridge Forward --> Broker3 --> Sub
-桥接节点间只消息转发，不复制Mnesia数据库
-
+路由层通过匹配主题树(Topic Trie)和查找路由表(Route Table)，在集群的节点间转发路由MQTT消息。
 
 -----------------------
 认证与访问控制(ACL)设计
 -----------------------
 
-emqttd_access_control
-----------------------
+emqttd消息服务器通过注册扩展模块方式，支持用户多种认证方式与访问控制。
+
+认证(Authentication)
+--------------------
+
+emqttd_auth_mod定义认证模块Behavihour::
+
+    -module(emqttd_auth_mod).
+
+    -ifdef(use_specs).
+
+    -callback init(AuthOpts :: list()) -> {ok, State :: any()}.
+
+    -callback check(Client, Password, State) -> ok | ignore | {error, string()} when
+        Client    :: mqtt_client(),
+        Password  :: binary(),
+        State     :: any().
+
+    -callback description() -> string().
+
+    -else.
+
+    -export([behaviour_info/1]).
+
+    behaviour_info(callbacks) ->
+        [{init, 1}, {check, 3}, {description, 0}];
+    behaviour_info(_Other) ->
+        undefined.
+
+    -endif.
+
+认证模块实现emqttd_auth_mod回调函数，系统默认实现模块包括:
+
++----------------------+--------------------------------+
+| 模块                 | 认证方式                       |
++----------------------+--------------------------------+
+| emqttd_auth_username | 用户名密码认证                 |
++----------------------+--------------------------------+
+| emqttd_auth_clientid | ClientID认证                   |
++----------------------+--------------------------------+
+| emqttd_auth_ldap     | LDAP认证                       |
++----------------------+--------------------------------+
+| emqttd_auth_anonymous | 匿名认证 |    
++----------------------+--------------------------------+
+
+访问控制(ACL)
+-------------
+
+emqttd_acl_mod模块定义访问控制Behavihour::
+
+    -module(emqttd_acl_mod).
+
+    -include("emqttd.hrl").
+
+    -ifdef(use_specs).
+
+    -callback init(AclOpts :: list()) -> {ok, State :: any()}.
+
+    -callback check_acl({Client, PubSub, Topic}, State :: any()) -> allow | deny | ignore when
+        Client   :: mqtt_client(),
+        PubSub   :: pubsub(),
+        Topic    :: binary().
+
+    -callback reload_acl(State :: any()) -> ok | {error, any()}.
+
+    -callback description() -> string().
+
+    -else.
+
+    -export([behaviour_info/1]).
+
+    behaviour_info(callbacks) ->
+        [{init, 1}, {check_acl, 2}, {reload_acl, 1}, {description, 0}];
+    behaviour_info(_Other) ->
+        undefined.
+
+    -endif.
+
+
 
 认证方式
 ------------------
@@ -345,16 +365,6 @@ emqttd_recon - Recon Plugin
 
     %% Unload a plugin
     emqttd_plugins:unload(Name)
-
-
-端到端消息发布(Pub)与确认(Ack)
-------------------------------
-
-
-Could use 'message.publish', 'message.acked' hooks to implement end-to-end message pub/ack::
-
- PktId <-- --> MsgId <-- --> MsgId <-- --> PktId
-      |<--- Qos --->|<---PubSub--->|<-- Qos -->|
 
 
 
