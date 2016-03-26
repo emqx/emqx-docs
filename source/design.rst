@@ -9,7 +9,7 @@
 
 emqttd消息服务器经过两年时间开发，开发方式有点像摇滚乐专辑的制作。最初由一些即兴创作的部分组成，但最终整体上体现了某种程度的正交(Orthogonality)和一致性(Consistency)。
 
-emqttd消息服务器1.0版本在部分细节上仍是粗糙的，但在架构上做出了正确的选择和设计。1.0版本设计带来的一个好的结果是：emqttd可能是开源领域唯一一个，几乎不需要用户做太多努力，就可以支持到100万连接的MQTT服务器。坏的结果是：我们无法向用户提供百万连接优化的商业服务。
+emqttd消息服务器1.0版本在部分细节上仍是粗糙的，但在架构上做出了正确的选择和设计。目前设计带来的一个好的结果是：emqttd可能是开源领域唯一一个，几乎不需要用户做太多努力，就可以支持到100万连接的MQTT服务器。坏的结果是：我们无法向用户提供百万连接优化的商业服务。
 
 100万连接
 ---------
@@ -40,7 +40,7 @@ emqttd1.0版本没有实现服务器内部的消息持久化，这是一个架�
 
 2. 多节点分布式架构下，如何放置Queue？如何复制Queue？
 
-Kafka在上述问题上，做出了正确的设计，一个完全基于磁盘分布式commit log的消息服务器。
+Kafka在上述问题上，做出了正确的设计：一个完全基于磁盘分布式commit log的消息服务器。
 
 emqttd2.0版本通过对接外部存储，例如Redis、Kafka、Cassandra、PostgreSQL，实现多种方式的消息持久化。
 
@@ -55,7 +55,7 @@ NetSplit故障发生时，emqttd消息服务器的log/emqttd_error.log日志，�
 
     Mnesia inconsistent_database event: running_partitioned_network, emqttd@host
 
-emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动化处理。所以emqttd1.0版本设计选择是，集群不会自动化处理NetSplit，需要人工重启部分节点。
+emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动化处理。所以emqttd1.0版本设计选择是，集群不自动化处理NetSplit，需要人工重启部分节点。
 
 ----------------------
 系统架构(Architecture)
@@ -300,12 +300,105 @@ PostgreSQL
 Redis(TODO)
 
 
-----------------------------
-钩子(Hook)与插件(Plugin)设计
-----------------------------
+--------------
+钩子(Hook)设计
+--------------
 
-钩子(Hooks) API
+钩子(Hook)定义
+--------------
+
+通过钩子(Hook)处理客户端上下线、主题订阅、消息收发:
+
++------------------------+----------------------------------+
+| 名称                   | 说明                             |
++------------------------+----------------------------------+
+| client.connected       | 客户端上线                       |
++------------------------+----------------------------------+
+| client.subscribe       | 客户端订阅主题前                 |
++------------------------+----------------------------------+
+| client.subscribe.after | 客户端订阅主题后                 |
++------------------------+----------------------------------+
+| client.unsubscribe     | 客户端取消订阅主题               |
++------------------------+----------------------------------+
+| message.publish        | MQTT消息发布                     |
++------------------------+----------------------------------+
+| message.delivered      | MQTT消息送达                     |
++------------------------+----------------------------------+
+| message.acked          | MQTT消息回执                     |
++------------------------+----------------------------------+
+| client.disconnected    | 客户端连接断开                   |
++----------------------- +----------------------------------+
+
+职责链设计模式(Chain-of-responsibility): https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
+
+执行钩子时，会传入参数列表，和一个Accumulator?::
+
+    run(HookPoint, Args, Acc)
+
+                     --------  ok | {ok, NewAcc}   --------  ok | {ok, NewAcc}    --------
+     (Args, Acc) --> | Fun1 | -------------------> | Fun2 | --------------------> | Fun3 | --> {ok, Acc} | {stop, Acc}
+                     --------                      --------                       --------
+                        |
+                    {stop, NewAcc}
+
+
+当事件发生时，Broker通过钩子，执行一系列回调函数(Callback)。每个回调函数可以返回:
+
++-----------------+--------------------+
+| 返回            | 说明               |
++-----------------+--------------------+
+| ok              | 继续执行           |
++-----------------+--------------------+
+| {ok, NewAcc}    | 继续执行并返回结果 |
++-----------------+--------------------+
+| stop            | 停止执行           |
++-----------------+--------------------+
+| {stop, NewAcc}  | 停止执行并返回结果 |
++-----------------+--------------------+
+
+
+钩子(Hook) API
 ---------------
+
+emqttd_hook模块:
+
+HOOK API:
+
+.. code:: erlang
+
+    -module(emqttd_hook).
+
+    %% Hooks API
+    -export([add/3, add/4, delete/2, run/3, lookup/1]).
+
+    -spec(add(atom(), function(), list(any())) -> ok).
+
+    -spec(add(atom(), function(), list(any()), integer()) -> ok).
+
+    -spec(delete(atom(), function()) -> ok).
+
+    -spec(run(atom(), list(any()), any()) -> any()).
+
+    -spec(lookup(atom()) -> [#callback{}]).
+
+emqttd模块wrap API:
+
+.. code:: erlang
+
+    -module(emqttd).
+
+    %% Hooks API
+    -export([hook/4, hook/3, unhook/2, run_hooks/3]).
+
+    -spec(hook(atom(), function(), list(any())) -> ok | {error, any()}).
+
+    -spec(hook(atom(), function(), list(any()), integer()) -> ok | {error, any()}).
+
+    -spec(unhook(atom(), function()) -> ok | {error, any()}).
+
+    -spec(run_hooks(atom(), list(any()), any()) -> {ok | stop, any()}).
+
+
 
 .. code:: erlang
 
@@ -332,53 +425,76 @@ Foldl Hooks::
     foldl_hooks(Hook, Args, Acc0) ->
         ...
 
-Hooks设计(https://github.com/emqtt/emqttd/wiki/Hooks%20Design)
+端到端的消息处理
+----------------
 
-比如端到端的消息处理...
+.. code::
 
+    -module(emqttd_plugin_template).
 
-插件(Plugins) API
-------------------
+    -export([load/1, unload/0]).
+    
+    -export([on_message_publish/2, on_message_delivered/3, on_message_acked/3]).
 
-插件通过钩子、模块注册等方式，扩展定制eMQTT消息服务器。
+    load(Env) ->
+        emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
+        emqttd:hook('message.delivered', fun ?MODULE:on_message_delivered/3, [Env]),
+        emqttd:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]).
 
-emqttd_plugin_template - Plugin template and demo
-emqttd_dashboard - Web Dashboard
-emqttd_plugin_mysql - Authentication with MySQL
-emqttd_plugin_pgsql - Authentication with PostgreSQL
-emqttd_plugin_redis - Redis Plugin
-emqttd_stomp - Stomp Protocol Plugin
-emqttd_sockjs - SockJS(Stomp) Plugin
-emqttd_recon - Recon Plugin
+    on_message_publish(Message, _Env) ->
+        io:format("publish ~s~n", [emqttd_message:format(Message)]),
+        {ok, Message}.
 
+    on_message_delivered(ClientId, Message, _Env) ->
+        io:format("delivered to client ~s: ~s~n", [ClientId, emqttd_message:format(Message)]),
+        {ok, Message}.
 
-.. code:: erlang
+    on_message_acked(ClientId, Message, _Env) ->
+        io:format("client ~s acked: ~s~n", [ClientId, emqttd_message:format(Message)]),
+        {ok, Message}.
 
-    %% Load all active plugins after broker started
-    emqttd_plugins:load() 
+    unload() ->
+        emqttd:unhook('message.publish', fun ?MODULE:on_message_publish/2),
+        emqttd:unhook('message.acked', fun ?MODULE:on_message_acked/3),
+        emqttd:unhook('message.delivered', fun ?MODULE:on_message_delivered/3).
 
-    %% Load new plugin
-    emqttd_plugins:load(Name)
+-----------------
+插件(Plugin)设计
+-----------------
 
-    %% Unload all active plugins before broker stopped
-    emqttd_plugins:unload()
+插件是一个普通的Erlang应用，放置在emqttd/plugins目录可以被动态加载。插件可以通过注册扩展模块方式集成不同的认证访问控制，或通过钩子(Hook)机制扩展服务器功能。
 
-    %% Unload a plugin
-    emqttd_plugins:unload(Name)
+插件机制由emqttd_plugins模块实现，提供加载卸载插件API::
 
+    -module(emqttd_plugins).
 
+    -export([load/1, unload/1]).
+
+    %% @doc Load One Plugin
+    load(atom()) -> ok | {error, any()}.
+
+    %% @doc UnLoad One Plugin
+    unload(atom()) -> ok | {error, any()}.
+
+用户通过'./bin/emqttd_ctl'命令行加载卸载插件::
+
+    ./bin/emqttd_ctl plugins load emqttd_plugin_redis
+
+    ./bin/emqttd_ctl plugins unload emqttd_plugin_redis
+
+用户可以参考模版插件: http://github.com/emqtt/emqttd_plugin_template
 
 --------------
 Erlang设计相关
 --------------
 
-1. 使用Pool, Pool, Pool... 推荐GProc库(github.com/uwiger/gproc)
+1. 使用Pool, Pool, Pool... 推荐GProc库: https://github.com/uwiger/gproc
 
 2. 异步，异步，异步消息...连接层到路由层异步消息，同步请求用于负载保护
 
 3. 避免进程Mailbox累积消息，负载高的进程可以使用gen_server2
 
-4. 服务器Socket连接、会话进程必须Hibernate
+4. 消息流经的Socket连接、会话进程必须Hibernate，主动回收binary句柄
 
 5. 多使用Binary数据，避免进程间内存复制
 
@@ -393,5 +509,4 @@ Erlang设计相关
 10. 保护Mnesia数据库事务，尽量减少事务数量，避免事务过载(overload)
 
 11. 避免Mnesia数据表索引，和非键值字段match, select
-
 
