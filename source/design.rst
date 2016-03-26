@@ -29,9 +29,9 @@ emqttd消息服务器是基于Erlang/OTP平台的全异步的架构：异步TCP�
 
 一条MQTT消息从发布者(Publisher)到订阅者(Subscriber)，在emqttd消息服务器内部异步流过一系列Erlang进程Mailbox::
 
-                      --------------          ---------------          --------------
-    Publisher --Msg-->| Pub Client | --Msg--> | Sub Session | --Msg--> | Sub Client | --Msg--> Subscriber
-                      --------------          ---------------          --------------
+                      ----------          -----------          ----------
+    Publisher --Msg-->| Client | --Msg--> | Session | --Msg--> | Client | --Msg--> Subscriber
+                      ----------          -----------          ----------
 
 消息持久化
 ----------
@@ -59,7 +59,7 @@ NetSplit故障发生时，emqttd消息服务器的log/emqttd_error.log日志，�
 
     Mnesia inconsistent_database event: running_partitioned_network, emqttd@host
 
-emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动化处理。所以emqttd1.0版本设计选择是，集群不自动化处理NetSplit，需要人工重启部分节点。
+emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动处理。所以emqttd1.0版本设计选择是，集群不自动化处理NetSplit，需要人工重启部分节点。
 
 .. _design_architecture:
 
@@ -108,11 +108,11 @@ emqttd消息服务器概念上像一台网络路由器(Router)或交换机(Switc
 
 连接层处理服务端Socket连接与MQTT协议编解码：
 
-1. 基于eSockd框架的异步TCP服务端
+1. 基于`eSockd`_框架的异步TCP服务端
 2. TCP Acceptor池与异步TCP Accept
 3. TCP/SSL, WebSocket/SSL连接支持
-4. 最大连接数限制
-5. 基于IP地址访问控制
+4. 最大并发连接数限制
+5. 基于IP地址(CIDR)访问控制
 6. 基于Leaky Bucket的流控
 7. MQTT协议编解码
 8. MQTT协议心跳检测
@@ -175,7 +175,7 @@ MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务�
 
 .. image:: _static/images/dispatch.png
 
-消息派发到会话(Session)后，由会话负责按不同Qos送达消息。
+消息派发到会话(Session)后，由会话负责按不同QoS送达消息。
 
 -------------------------------
 分布集群设计(Distributed Layer)
@@ -183,18 +183,18 @@ MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务�
 
 分布层维护全局主题树(Topic Trie)与路由表(Route Table)。主题树由通配主题构成，路由表映射主题到节点::
 
-    --------------------------
-    |             t          |
-    |            / \         |
-    |           +   #        |
-    |         /  \           |
-    |       x      y         |
-    --------------------------
-    | t/+/x -> node1, node3  |
-    | t/+/y -> node1         |
-    | t/#   -> node2         |
-    | t/a   -> node3         |
-    --------------------------
+    -------------------------
+    |            t          |
+    |           / \         |
+    |          +   #        |
+    |        /  \           |
+    |      x      y         |
+    -------------------------
+    | t/+/x -> node1, node3 |
+    | t/+/y -> node1        |
+    | t/#   -> node2        |
+    | t/a   -> node3        |
+    -------------------------
 
 路由层通过匹配主题树(Topic Trie)和查找路由表(Route Table)，在集群的节点间转发路由MQTT消息:
 
@@ -323,7 +323,7 @@ emqttd_acl_internal模块实现缺省的基于etc/acl.config文件配置的访�
 钩子(Hook)定义
 --------------
 
-通过钩子(Hook)处理客户端上下线、主题订阅、消息收发:
+emqttd消息服务器在客户端上下线、主题订阅、消息收发位置设计了扩展钩子(Hook):
 
 +------------------------+----------------------------------+
 | 名称                   | 说明                             |
@@ -345,20 +345,15 @@ emqttd_acl_internal模块实现缺省的基于etc/acl.config文件配置的访�
 | client.disconnected    | 客户端连接断开                   |
 +----------------------- +----------------------------------+
 
-职责链设计模式(Chain-of-responsibility): https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
+钩子(Hook)采用职责链设计模式(`Chain-of-responsibility_pattern`_)，扩展模块或插件向钩子注册回调函数，系统在MQTT客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数::
 
-执行钩子时，会传入参数列表，和一个Accumulator?::
+                     --------  ok | {ok, NewAcc}   --------  ok | {ok, NewAcc}   --------
+     (Args, Acc) --> | Fun1 | -------------------> | Fun2 | -------------------> | Fun3 | --> {ok, Acc} | {stop, Acc}
+                     --------                      --------                      --------
+                        |                             |                             |
+                   stop | {stop, NewAcc}         stop | {stop, NewAcc}         stop | {stop, NewAcc}
 
-    run(HookPoint, Args, Acc)
-
-                     --------  ok | {ok, NewAcc}   --------  ok | {ok, NewAcc}    --------
-     (Args, Acc) --> | Fun1 | -------------------> | Fun2 | --------------------> | Fun3 | --> {ok, Acc} | {stop, Acc}
-                     --------                      --------                       --------
-                        |
-                    {stop, NewAcc}
-
-
-当事件发生时，Broker通过钩子，执行一系列回调函数(Callback)。每个回调函数可以返回:
+不同钩子的回调函数输入参数不同，用户可参考插件模版的`emqttd_plugin_template`_模块，每个回调可以返回:
 
 +-----------------+--------------------+
 | 返回            | 说明               |
@@ -372,13 +367,26 @@ emqttd_acl_internal模块实现缺省的基于etc/acl.config文件配置的访�
 | {stop, NewAcc}  | 停止执行并返回结果 |
 +-----------------+--------------------+
 
+钩子(Hook)实现
+--------------
 
-钩子(Hook) API
----------------
+emqttd模块封装了Hook接口:
 
-emqttd_hook模块:
+.. code:: erlang
 
-HOOK API:
+    -module(emqttd).
+
+    %% Hooks API
+    -export([hook/4, hook/3, unhook/2, run_hooks/3]).
+    hook(Hook :: atom(), Callback :: function(), InitArgs :: list(any())) -> ok | {error, any()}.
+
+    hook(Hook :: atom(), Callback :: function(), InitArgs :: list(any()), Priority :: integer()) -> ok | {error, any()}.
+
+    unhook(Hook :: atom(), Callback :: function()) -> ok | {error, any()}.
+
+    run_hooks(Hook :: atom(), Args :: list(any()), Acc :: any()) -> {ok | stop, any()}.
+
+emqttd_hook模块实现Hook机制:
 
 .. code:: erlang
 
@@ -387,64 +395,22 @@ HOOK API:
     %% Hooks API
     -export([add/3, add/4, delete/2, run/3, lookup/1]).
 
-    -spec(add(atom(), function(), list(any())) -> ok).
+    add(atom(), function(), list(any())) -> ok.
 
-    -spec(add(atom(), function(), list(any()), integer()) -> ok).
+    add(atom(), function(), list(any()), integer()) -> ok.
 
-    -spec(delete(atom(), function()) -> ok).
+    delete(atom(), function()) -> ok.
 
-    -spec(run(atom(), list(any()), any()) -> any()).
+    run(atom(), list(any()), any()) -> any().
 
-    -spec(lookup(atom()) -> [#callback{}]).
+    lookup(atom()) -> [#callback{}].
 
-emqttd模块wrap API:
+钩子(Hook)使用
+--------------
 
-.. code:: erlang
-
-    -module(emqttd).
-
-    %% Hooks API
-    -export([hook/4, hook/3, unhook/2, run_hooks/3]).
-
-    -spec(hook(atom(), function(), list(any())) -> ok | {error, any()}).
-
-    -spec(hook(atom(), function(), list(any()), integer()) -> ok | {error, any()}).
-
-    -spec(unhook(atom(), function()) -> ok | {error, any()}).
-
-    -spec(run_hooks(atom(), list(any()), any()) -> {ok | stop, any()}).
-
-
+`emqttd_plugin_template`_ 提供了全部钩子的使用事例，例如端到端的消息处理:
 
 .. code:: erlang
-
-    -export([hook/3, unhook/2, foreach_hooks/2, foldl_hooks/3]).
-
-Hook::
-
-    -spec hook(Hook :: atom(), Name :: any(), MFA :: mfa()) -> ok | {error, any()}.
-    hook(Hook, Name, MFA) ->
-
-Unhook::
-
-    -spec unhook(Hook :: atom(), Name :: any()) -> ok | {error, any()}.
-    unhook(Hook, Name) ->
-
-Foreach Hooks::
-
-    -spec foreach_hooks(Hook :: atom(), Args :: list()) -> any().
-    foreach_hooks(Hook, Args) ->
-
-Foldl Hooks::
-
-    -spec foldl_hooks(Hook :: atom(), Args :: list(), Acc0 :: any()) -> any().
-    foldl_hooks(Hook, Args, Acc0) ->
-        ...
-
-端到端的消息处理
-----------------
-
-.. code::
 
     -module(emqttd_plugin_template).
 
@@ -474,31 +440,31 @@ Foldl Hooks::
         emqttd:unhook('message.acked', fun ?MODULE:on_message_acked/3),
         emqttd:unhook('message.delivered', fun ?MODULE:on_message_delivered/3).
 
------------------
+----------------
 插件(Plugin)设计
------------------
+----------------
 
-插件是一个普通的Erlang应用，放置在emqttd/plugins目录可以被动态加载。插件可以通过注册扩展模块方式集成不同的认证访问控制，或通过钩子(Hook)机制扩展服务器功能。
+插件是一个普通的Erlang应用，放置在emqttd/plugins目录可以被动态加载。插件主要通过钩子(Hook)机制扩展服务器功能，或通过扩展模块方式集成认证访问控制。
 
-插件机制由emqttd_plugins模块实现，提供加载卸载插件API::
+emqttd_plugins模块实现插件机制，提供加载卸载插件API::
 
     -module(emqttd_plugins).
 
     -export([load/1, unload/1]).
 
     %% @doc Load One Plugin
-    load(atom()) -> ok | {error, any()}.
+    load(PluginName :: atom()) -> ok | {error, any()}.
 
     %% @doc UnLoad One Plugin
-    unload(atom()) -> ok | {error, any()}.
+    unload(PluginName :: atom()) -> ok | {error, any()}.
 
-用户通过'./bin/emqttd_ctl'命令行加载卸载插件::
+用户可通过'./bin/emqttd_ctl'命令行加载卸载插件::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_redis
 
     ./bin/emqttd_ctl plugins unload emqttd_plugin_redis
 
-用户可以参考模版插件: http://github.com/emqtt/emqttd_plugin_template
+开发者请参考模版插件: http://github.com/emqtt/emqttd_plugin_template
 
 --------------
 Erlang设计相关
@@ -525,4 +491,9 @@ Erlang设计相关
 10. 保护Mnesia数据库事务，尽量减少事务数量，避免事务过载(overload)
 
 11. 避免Mnesia数据表索引，和非键值字段match, select
+
+
+.. _eSockd: https://github.com/emqtt/esockd
+.. _Chain-of-responsibility_pattern: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
+.. _emqttd_plugin_template: https://github.com/emqtt/emqttd_plugin_template/blob/master/src/emqttd_plugin_template.erl
 
