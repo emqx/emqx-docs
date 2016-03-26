@@ -11,12 +11,12 @@
 前言
 ----
 
-emqttd消息服务器1.0版本经过两年时间开发，开发方式有点像摇滚乐专辑的制作，最初从0.1版本由一些即兴创作的部分组成，但最终每个层面的架构设计上做出了正确的选择，整体上体现了某种程度的正交(Orthogonality)和一致性(Consistency)。emqttd 1.0可能是目前开源领域唯一一个，几乎不需要用户做太多努力就可支持100万连接的MQTT服务器。
+emqttd消息服务器1.0版本经过两年时间开发，开发方式有点像摇滚乐专辑的制作，最初从0.1版本由一些即兴创作的部分组成，但最终每个层面的架构设计上做出了正确的选择，整体上体现了某种程度的正交(Orthogonality)和一致性(Consistency)。emqttd 1.0可能是目前开源领域唯一一个，几乎不需要用户做太多努力就可以支持到100万连接的MQTT服务器。
 
 100万连接
 ---------
 
-多核服务器和现代操作系统内核层面，可以很轻松支持到100万TCP连接，核心问题是应用层面如何处理业务瓶颈。
+多核服务器和现代操作系统内核层面，可以很轻松支持100万TCP连接，核心问题是应用层面如何处理业务瓶颈。
 
 emqttd消息服务器在业务和应用层面，解决了承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP协议栈、Erlang虚拟机参数: http://docs.emqtt.cn/zh_CN/latest/tune.html
 
@@ -38,20 +38,20 @@ emqttd1.0版本不支持服务器内部消息持久化，这是一个架构设�
 
 传统内置消息持久化的MQ服务器，比如广泛使用的JMS服务器ActiveMQ，几乎每个大版本都在重新设计持久化部分。内置消息持久化在设计上有两个问题:
 
-1. 如何平衡内存与磁盘使用？消息路由基于内存，消息存储又是基于磁盘。
+1. 如何平衡内存与磁盘使用？消息路由基于内存，消息存储是基于磁盘。
 
-2. 多节点分布集群架构下，如何放置Queue？如何复制Queue的消息？
+2. 多服务器分布集群架构下，如何放置Queue？如何复制Queue的消息？
 
 Kafka在上述问题上，做出了正确的设计：一个完全基于磁盘分布式commit log的消息服务器。
 
-emqttd2.0版本通过对接外部存储，例如Redis、Kafka、Cassandra、PostgreSQL，实现多种方式的消息持久化。
+emqttd2.0版本计划通过外部存储，例如Redis、Kafka、Cassandra、PostgreSQL，实现多种方式的消息持久化。
 
-设计上分离消息路由与消息存储职责后，数据复制或容灾备份甚至应用集成，可以在数据层面灵活实现。
+设计上分离消息路由与消息存储职责后，数据复制容灾备份甚至应用集成，可以在数据层面灵活实现。
 
 NetSplit问题
 ------------
 
-emqttd消息服务器集群，基于Mnesia数据库设计。NetSplit发生时，节点间状态是：Erlang节点间可以连通，互相询问自己是否宕机，对方回答你已经宕机:(
+emqttd1.0消息服务器集群，基于Mnesia数据库设计。NetSplit发生时，节点间状态是：Erlang节点间可以连通，互相询问自己是否宕机，对方回答你已经宕机:(
 
 NetSplit故障发生时，emqttd消息服务器的log/emqttd_error.log日志，会打印critical级别日志::
 
@@ -68,14 +68,14 @@ emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦
 概念模型
 --------
 
-emqttd消息服务器概念上像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器(MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按主题树(Topic Trie)发布订阅模式在集群节点间路由MQTT消息:
+emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器(MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按主题树(Topic Trie)发布订阅模式在集群节点间路由MQTT消息:
 
 .. image:: _static/images/concept.png
 
 设计原则
 --------
 
-1. emqttd消息服务器核心解决的问题：处理海量的并发MQTT连接与消息路由。
+1. emqttd消息服务器核心解决的问题：处理海量的并发MQTT连接与路由消息。
 
 2. 充分利用Erlang/OTP平台软实时、低延时、高并发、分布容错的优势。
 
@@ -92,13 +92,13 @@ emqttd消息服务器概念上像一台网络路由器(Router)或交换机(Switc
 
 2. 会话层(Session Layer)：处理MQTT协议发布订阅消息交互流程。
    
-3. 路由层(Route Layer)：节点内路由MQTT消息。
+3. 路由层(Route Layer)：节点内路由派发MQTT消息。
    
 4. 分布层(Distributed Layer)：分布节点间路由MQTT消息。
    
-5. 认证与访问控制(ACL)：连接层支持可定制的认证与访问控制模块。
+5. 认证与访问控制(ACL)：连接层支持可扩展的认证与访问控制模块。
 
-6. 钩子(Hooks)与插件(Plugins)：系统每层提供可扩展的钩子，支持用户插件方式扩展服务器。
+6. 钩子(Hooks)与插件(Plugins)：系统每层提供可扩展的钩子，支持插件方式扩展服务器。
 
 ------------------------------------
 连接层设计(Socket, Client, Protocol)
@@ -106,7 +106,7 @@ emqttd消息服务器概念上像一台网络路由器(Router)或交换机(Switc
 
 连接层处理服务端Socket连接与MQTT协议编解码：
 
-1. 基于`eSockd`_框架的异步TCP服务端
+1. 基于 `eSockd`_ 框架的异步TCP服务端
 2. TCP Acceptor池与异步TCP Accept
 3. TCP/SSL, WebSocket/SSL连接支持
 4. 最大并发连接数限制
@@ -124,7 +124,7 @@ emqttd消息服务器概念上像一台网络路由器(Router)或交换机(Switc
 
 1. 缓存MQTT客户端的全部订阅(Subscription)，并终结订阅QoS
 
-2. 处理Qos0/1/2消息接收与下发，消息超时重传，离线消息保存
+2. 处理Qos0/1/2消息接收与下发，消息超时重传与离线消息保存
 
 3. 飞行窗口(Inflight Window)，下发消息吞吐控制与顺序保证
 
@@ -147,12 +147,12 @@ emqttd消息服务器概念上像一台网络路由器(Router)或交换机(Switc
 
 飞行窗口(Inflight Window)保存当前正在发送未确认的Qos1/2消息。窗口值越大，吞吐越高；窗口值越小，消息顺序越严格。
 
-当客户端离线或者飞行窗口(Inflight Window)满时，消息缓存到队列。如果消息队列满，先丢弃Qos0消息，或丢弃最早进入队列的消息。
+当客户端离线或者飞行窗口(Inflight Window)满时，消息缓存到队列。如果消息队列满，先丢弃Qos0消息或最早进入队列的消息。
 
 报文Id(PacketId)与消息ID(MessageId)
 -----------------------------------
 
-MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务器的报文收发与确认。MQTT发布报文(PUBLISH)进入消息服务器后，转换为一个MQTT消息并分配128bits消息ID(MessageId)。
+MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务器的报文收发与确认。MQTT发布报文(PUBLISH)进入消息服务器后，转换为一个消息对象并分配128bits消息ID(MessageId)。
 
 全局唯一时间序列消息ID结构：
 
@@ -161,7 +161,7 @@ MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务�
 3. Erlang进程PID: 编码为4字节
 4. 进程内部序列号: 2字节的进程内部序列号
 
-端到端消息发布订阅(Pub/Ack)过程中，发布报文、报文ID与报文QoS终结在会话层，由唯一ID标识的MQTT消息在节点间路由::
+端到端消息发布订阅(Pub/Sub)过程中，发布报文ID与报文QoS终结在会话层，由唯一ID标识的MQTT消息对象在节点间路由::
 
     PktId <-- Session --> MsgId <-- Router --> MsgId <-- Session --> PktId
 
@@ -175,9 +175,9 @@ MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务�
 
 消息派发到会话(Session)后，由会话负责按不同QoS送达消息。
 
--------------------------------
-分布集群设计(Distributed Layer)
--------------------------------
+-----------------------------
+分布层设计(Distributed Layer)
+-----------------------------
 
 分布层维护全局主题树(Topic Trie)与路由表(Route Table)。主题树由通配主题构成，路由表映射主题到节点::
 
@@ -194,7 +194,7 @@ MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务�
     | t/a   -> node3        |
     -------------------------
 
-路由层通过匹配主题树(Topic Trie)和查找路由表(Route Table)，在集群的节点间转发路由MQTT消息:
+分布层通过匹配主题树(Topic Trie)和查找路由表(Route Table)，在集群的节点间转发路由MQTT消息:
 
 .. image:: _static/images/route.png
 
@@ -204,7 +204,7 @@ MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务�
 认证与访问控制(ACL)设计
 -----------------------
 
-emqttd消息服务器支持可扩展的认证与访问控制，由emqttd_access_control、emqttd_auth_mod和emqttd_acl_mod实现。
+emqttd消息服务器支持可扩展的认证与访问控制，由emqttd_access_control、emqttd_auth_mod和emqttd_acl_mod模块实现。
 
 emqttd_access_control模块提供了注册认证扩展接口::
 
@@ -241,7 +241,7 @@ emqttd_auth_mod定义认证扩展模块Behavihour::
 
     -endif.
 
-emqttd消息服务器实现的认证模块包括:
+emqttd消息服务器自身实现的认证模块包括:
 
 +-----------------------+--------------------------------+
 | 模块                  | 认证方式                       |
@@ -288,7 +288,7 @@ emqttd_acl_mod模块定义访问控制Behavihour::
 
     -endif.
 
-emqttd_acl_internal模块实现缺省的基于etc/acl.config文件配置的访问控制::
+emqttd_acl_internal模块实现缺省的基于etc/acl.config文件的访问控制::
 
     %%%-----------------------------------------------------------------------------
     %%%
@@ -328,7 +328,7 @@ emqttd_acl_internal模块实现缺省的基于etc/acl.config文件配置的访�
 emqttd消息服务器在客户端上下线、主题订阅、消息收发位置设计了扩展钩子(Hook):
 
 +------------------------+----------------------------------+
-| 名称                   | 说明                             |
+| 钩子                   | 说明                             |
 +========================+==================================+
 | client.connected       | 客户端上线                       |
 +------------------------+----------------------------------+
@@ -347,7 +347,7 @@ emqttd消息服务器在客户端上下线、主题订阅、消息收发位置�
 | client.disconnected    | 客户端连接断开                   |
 +------------------------+----------------------------------+
 
-钩子(Hook)采用职责链设计模式(`Chain-of-responsibility_pattern`_)，扩展模块或插件向钩子注册回调函数，系统在MQTT客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数::
+钩子(Hook)采用职责链设计模式(`Chain-of-responsibility_pattern`_)，扩展模块或插件向钩子注册回调函数，系统在客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数::
 
                      --------  ok | {ok, NewAcc}   --------  ok | {ok, NewAcc}   --------
      (Args, Acc) --> | Fun1 | -------------------> | Fun2 | -------------------> | Fun3 | --> {ok, Acc} | {stop, Acc}
@@ -357,17 +357,17 @@ emqttd消息服务器在客户端上下线、主题订阅、消息收发位置�
 
 不同钩子的回调函数输入参数不同，用户可参考插件模版的 `emqttd_plugin_template`_ 模块，每个回调函数应该返回:
 
-+-----------------+--------------------+
-| 返回            | 说明               |
-+-----------------+--------------------+
-| ok              | 继续执行           |
-+-----------------+--------------------+
-| {ok, NewAcc}    | 继续执行并返回结果 |
-+-----------------+--------------------+
-| stop            | 停止执行           |
-+-----------------+--------------------+
-| {stop, NewAcc}  | 停止执行并返回结果 |
-+-----------------+--------------------+
++-----------------+------------------------+
+| 返回            | 说明                   |
++=================+========================+
+| ok              | 继续执行               |
++-----------------+------------------------+
+| {ok, NewAcc}    | 返回累积参数继续执行   |
++-----------------+------------------------+
+| stop            | 停止执行               |
++-----------------+------------------------+
+| {stop, NewAcc}  | 返回累积参数停止执行   |
++-----------------+------------------------+
 
 钩子(Hook)实现
 --------------
@@ -397,15 +397,15 @@ emqttd_hook模块实现Hook机制:
     %% Hooks API
     -export([add/3, add/4, delete/2, run/3, lookup/1]).
 
-    add(atom(), function(), list(any())) -> ok.
+    add(HookPoint :: atom(), Callback :: function(), InitArgs :: list(any())) -> ok.
 
-    add(atom(), function(), list(any()), integer()) -> ok.
+    add(HookPoint :: atom(), Callback :: function(), InitArgs :: list(any()), Priority :: integer()) -> ok.
 
-    delete(atom(), function()) -> ok.
+    delete(HookPoint :: atom(), Callback :: function()) -> ok.
 
-    run(atom(), list(any()), any()) -> any().
+    run(HookPoint :: atom(), Args :: list(any()), Acc :: any()) -> any().
 
-    lookup(atom()) -> [#callback{}].
+    lookup(HookPoint :: atom()) -> [#callback{}].
 
 钩子(Hook)使用
 --------------
@@ -448,7 +448,7 @@ emqttd_hook模块实现Hook机制:
 插件(Plugin)设计
 ----------------
 
-插件是一个普通的Erlang应用，放置在emqttd/plugins目录可以被动态加载。插件主要通过钩子(Hook)机制扩展服务器功能，或通过扩展模块方式集成认证访问控制。
+插件是一个普通的Erlang应用(Application)，放置在emqttd/plugins目录可以被动态加载。插件主要通过钩子(Hook)机制扩展服务器功能，或通过注册扩展模块方式集成认证访问控制。
 
 emqttd_plugins模块实现插件机制，提供加载卸载插件API::
 
@@ -456,10 +456,10 @@ emqttd_plugins模块实现插件机制，提供加载卸载插件API::
 
     -export([load/1, unload/1]).
 
-    %% @doc Load One Plugin
+    %% @doc Load a Plugin
     load(PluginName :: atom()) -> ok | {error, any()}.
 
-    %% @doc UnLoad One Plugin
+    %% @doc UnLoad a Plugin
     unload(PluginName :: atom()) -> ok | {error, any()}.
 
 用户可通过'./bin/emqttd_ctl'命令行加载卸载插件::
