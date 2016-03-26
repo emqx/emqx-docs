@@ -13,7 +13,9 @@
 
 emqttd消息服务器经过两年时间开发，开发方式有点像摇滚乐专辑的制作。最初由一些即兴创作的部分组成，但最终整体上体现了某种程度的正交(Orthogonality)和一致性(Consistency)。
 
-emqttd消息服务器1.0版本在部分细节上仍是粗糙的，但在架构上做出了正确的选择和设计。目前设计带来的一个好的结果是：emqttd可能是开源领域唯一一个，几乎不需要用户做太多努力，就可以支持到100万连接的MQTT服务器。坏的结果是：我们无法向用户提供百万连接优化的商业服务。
+emqttd消息服务器1.0版本在部分细节上仍是粗糙的，但在架构上做出了正确的选择和设计。emqttd从0.1版本诞生以来，几乎在连接、会话、路由、分布每个分层上，根据用户反馈和测试重新编码设计三遍以上，最后接近的设计来自愈少的可选择性。
+
+目前设计带来的一个好的结果是：emqttd可能是开源领域唯一一个，几乎不需要用户做太多努力，就可以支持到100万连接的MQTT服务器。坏的结果是：我们无法向用户提供百万连接优化的商业服务。
 
 100万连接
 ---------
@@ -200,6 +202,8 @@ MQTT协议定义了一个16bit的报文ID(PacketId)，用于客户端到服务�
 
 .. image:: _static/images/route.png
 
+.. _design_auth_acl:
+
 -----------------------
 认证与访问控制(ACL)设计
 -----------------------
@@ -315,6 +319,8 @@ emqttd_acl_internal模块实现缺省的基于etc/acl.config文件配置的访�
     {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
 
     {allow, all}.
+
+.. _design_hook:
 
 --------------
 钩子(Hook)设计
@@ -440,6 +446,8 @@ emqttd_hook模块实现Hook机制:
         emqttd:unhook('message.acked', fun ?MODULE:on_message_acked/3),
         emqttd:unhook('message.delivered', fun ?MODULE:on_message_delivered/3).
 
+.. _design_plugin:
+
 ----------------
 插件(Plugin)设计
 ----------------
@@ -466,6 +474,8 @@ emqttd_plugins模块实现插件机制，提供加载卸载插件API::
 
 开发者请参考模版插件: http://github.com/emqtt/emqttd_plugin_template
 
+.. _design_erlang:
+
 --------------
 Erlang设计相关
 --------------
@@ -491,7 +501,6 @@ Erlang设计相关
 10. 保护Mnesia数据库事务，尽量减少事务数量，避免事务过载(overload)
 
 11. 避免Mnesia数据表索引，和非键值字段match, select
-
 
 .. _eSockd: https://github.com/emqtt/esockd
 .. _Chain-of-responsibility_pattern: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
