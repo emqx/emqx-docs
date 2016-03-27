@@ -528,48 +528,36 @@ emqttd_plugin_template.erl::
 
     %% Called when the plugin application start
     load(Env) ->
-
-        emqttd_broker:hook('client.connected', {?MODULE, on_client_connected},
-                           {?MODULE, on_client_connected, [Env]}),
-
-        emqttd_broker:hook('client.disconnected', {?MODULE, on_client_disconnected},
-                           {?MODULE, on_client_disconnected, [Env]}),
-
-        emqttd_broker:hook('client.subscribe', {?MODULE, on_client_subscribe},
-                           {?MODULE, on_client_subscribe, [Env]}),
-
-        emqttd_broker:hook('client.subscribe.after', {?MODULE, on_client_subscribe_after},
-                           {?MODULE, on_client_subscribe_after, [Env]}),
-
-        emqttd_broker:hook('client.unsubscribe', {?MODULE, on_client_unsubscribe},
-                           {?MODULE, on_client_unsubscribe, [Env]}),
-
-        emqttd_broker:hook('message.publish', {?MODULE, on_message_publish},
-                           {?MODULE, on_message_publish, [Env]}),
-
-        emqttd_broker:hook('message.acked', {?MODULE, on_message_acked},
-                           {?MODULE, on_message_acked, [Env]}).
+        emqttd:hook('client.connected', fun ?MODULE:on_client_connected/3, [Env]),
+        emqttd:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
+        emqttd:hook('client.subscribe', fun ?MODULE:on_client_subscribe/3, [Env]),
+        emqttd:hook('client.subscribe.after', fun ?MODULE:on_client_subscribe_after/3, [Env]),
+        emqttd:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/3, [Env]),
+        emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
+        emqttd:hook('message.delivered', fun ?MODULE:on_message_delivered/3, [Env]),
+        emqttd:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]).
 
 扩展钩子(Hook):
 
-+------------------------+-------------+----------------------------------+
-| 名称                   | 类型        | 说明                             |
-+------------------------+-------------+----------------------------------+
-| client.connected       | foreach     | 客户端上线                       |
-+------------------------+-------------+----------------------------------+
-| client.subscribe       | foldl       | 客户端订阅主题前                 |
-+------------------------+-------------+----------------------------------+
-| client.subscribe.after | foreach     | 客户端订阅主题后                 |
-+------------------------+-------------+----------------------------------+
-| client.unsubscribe     | foldl       | 客户端取消订阅主题               |
-+------------------------+-------------+----------------------------------+
-| message.publish        | foldl       | MQTT消息发布                     |
-+------------------------+-------------+----------------------------------+
-| message.acked          | foreach     | MQTT消息送达确认                 |
-+------------------------+-------------+----------------------------------+
-| client.disconnected    | foreach     | 客户端连接断开                   |
-+----------------------- +-------------+----------------------------------+
-
++------------------------+----------------------------------+
+| 钩子                   | 说明                             |
++========================+==================================+
+| client.connected       | 客户端上线                       |
++------------------------+----------------------------------+
+| client.subscribe       | 客户端订阅主题前                 |
++------------------------+----------------------------------+
+| client.subscribe.after | 客户端订阅主题后                 |
++------------------------+----------------------------------+
+| client.unsubscribe     | 客户端取消订阅主题               |
++------------------------+----------------------------------+
+| message.publish        | MQTT消息发布                     |
++------------------------+----------------------------------+
+| message.delivered      | MQTT消息送达                     |
++------------------------+----------------------------------+
+| message.acked          | MQTT消息回执                     |
++------------------------+----------------------------------+
+| client.disconnected    | 客户端连接断开                   |
++------------------------+----------------------------------+
 
 注册扩展命令行
 --------------------
