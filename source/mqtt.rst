@@ -212,7 +212,7 @@ MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保
 
 客户端在无报文发送时，按KeepAlive周期定时发送2字节的PINGREQ心跳报文，服务端收到PINGREQ报文后，回复2字节的PINGRESP报文。
 
-服务端在1.5个心跳周期内，既没有收到客户端发布订阅报文，也没有收到PINGREQ心跳报文时，主动按心跳超时断开TCP连接。
+服务端在1.5个心跳周期内，既没有收到客户端发布订阅报文，也没有收到PINGREQ心跳报文时，主动心跳超时断开客户端TCP连接。
 
 .. NOTE:: emqttd消息服务器默认按最长2.5心跳周期超时设计。
 
@@ -220,7 +220,7 @@ MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保
 MQTT遗愿消息(Last Will)
 -----------------------
 
-MQTT客户端到服务器端的CONNECT请求时，可以设置是否发送遗愿消息(Will Message)标志，和遗愿消息主题(Topic)与内容(Payload)。
+MQTT客户端向服务器端CONNECT请求时，可以设置是否发送遗愿消息(Will Message)标志，和遗愿消息主题(Topic)与内容(Payload)。
 
 MQTT客户端异常下线时(客户端断开前未向服务器发送DISCONNECT消息)，MQTT消息服务器会发布遗愿消息。
 
@@ -228,7 +228,7 @@ MQTT客户端异常下线时(客户端断开前未向服务器发送DISCONNECT�
 MQTT保留消息(Retained Message)
 ------------------------------
 
-MQTT客户端向服务器发布(PUBLISH)消息时，可以设置保留消息(Retained Message)标志。保留消息(Retained Message)会驻留在消息服务器，后来的订阅者订阅主题时仍可以收到该消息。
+MQTT客户端向服务器发布(PUBLISH)消息时，可以设置保留消息(Retained Message)标志。保留消息(Retained Message)会驻留在消息服务器，后来的订阅者订阅主题时仍可以接收该消息。
 
 例如mosquitto命令行发布一条保留消息到主题'a/b/c'::
 
@@ -290,13 +290,13 @@ MQTT与XMPP协议对比
 
 MQTT协议设计简单轻量、路由灵活，将在移动互联网物联网消息领域，全面取代PC时代的XMPP协议:
 
-1. MQTT协议只一个字节固定报头，两个字节心跳，报文体积小编解码容易。XMPP协议基于繁重的XML，报文体积大交互繁琐。
+1. MQTT协议只一个字节固定报头，两个字节心跳，报文体积小编解码容易。XMPP协议基于繁重的XML，报文体积大且交互繁琐。
 
-2. MQTT协议基于主题(Topic)的发布订阅模式消息路由，相比XMPP基于JID的点对点消息路由更为灵活。
+2. MQTT协议基于主题(Topic)发布订阅模式消息路由，相比XMPP基于JID的点对点消息路由更为灵活。
 
 3. MQTT协议未定义报文内容格式，可以承载JSON、二进制等不同类型报文。XMPP协议采用XML承载报文，二进制必须Base64编码等处理。
 
-4. MQTT协议支持消息发送确认和QoS保证，XMPP主协议并未定义类似机制。MQTT协议有更好的消息可靠性保证。
+4. MQTT协议支持消息收发确认和QoS保证，XMPP主协议并未定义类似机制。MQTT协议有更好的消息可靠性保证。
 
 .. _emqttc: https://github.com/emqtt/emqttc
 .. _CocoaMQTT: https://github.com/emqtt/CocoaMQTT
