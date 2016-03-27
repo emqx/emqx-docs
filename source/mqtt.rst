@@ -71,13 +71,16 @@ MQTT协议基于主题(Topic)进行消息路由，主题(Topic)类似URL路径�
     '+': 表示通配一个层级，例如a/+，匹配a/x, a/y
     '#': 表示通配多个层级，例如a/#，匹配a/x, a/b/c/d
 
-订阅者与发布者之间通过主题(Topic)匹配方式路由消息。
+订阅者与发布者之间通过主题(Topic)匹配方式路由消息，例如采用mosquitto命令行订阅发布消息::
 
-.. NOTE:: 订阅者可以订阅含通配符主题过滤消息，但发布者不允许向含通配符主题发布消息。
+    mosquitto_sub -t a/b/+ -q 1
+    mosquitto_pub -t a/b/c -m hello -q 1
 
------------------------
-MQTT V3.1.1协议报文格式
------------------------
+.. NOTE:: 订阅者可以订阅含通配符主题，但发布者不允许向含通配符主题发布消息。
+
+-------------------
+MQTT V3.1.1协议报文
+-------------------
 
 报文结构
 --------
@@ -95,9 +98,9 @@ MQTT V3.1.1协议报文格式
 
 +----------+-----+-----+-----+-----+-----+-----+-----+-----+
 | Bit      |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
-+----------+-----------------------+-----+-----------+-----+
-| byte1    |   MQTT Packet type    | Dup |    QoS    | Ret |
-+----------+-----------------------------------------------+
++----------+-----+-----+-----+-----+-----+-----+-----+-----+
+| byte1    |   MQTT Packet type    |         Flags         |
++----------+-----------------------+-----------------------+
 | byte2... |   Remaining Length                            |
 +----------+-----------------------------------------------+
 
@@ -121,7 +124,7 @@ MQTT V3.1.1协议报文格式
 +-------------+---------+----------------------+
 | PUBCOMP     | 7       | QoS2消息完成         |
 +-------------+---------+----------------------+
-| SUBSCRIBE   | 8       | 订阅主题(Topic)      |
+| SUBSCRIBE   | 8       | 订阅主题             |
 +-------------+---------+----------------------+
 | SUBACK      | 9       | 订阅回执             |
 +-------------+---------+----------------------+
@@ -146,9 +149,9 @@ PINGREQ/PINGRESP心跳
 
 客户端在无报文发送时，按保活周期(KeepAlive)定时向服务端发送PINGREQ心跳报文，服务端响应PINGRESP报文。PINGREQ/PINGRESP报文均2个字节。
 
----------------
-MQTT发布消息QoS
----------------
+-----------
+MQTT消息QoS
+-----------
 
 MQTT发布消息QoS保证不是端到端的，是客户端与服务器之间的。订阅者收到MQTT消息的QoS级别，最终取决于发布消息的QoS和主题订阅的QoS。
 
@@ -193,92 +196,143 @@ Qos2消息发布订阅
 MQTT会话(Clean Session)
 -----------------------
 
-Clean Session Flag
+MQTT客户端向服务器发起CONNECT请求时，可以通过'Clean Session'标志设置会话。
 
-Transient Session
+'Clean Session'设置为0，表示创建一个持久会话，在客户端断开连接时，会话仍然保持并保存离线消息，直到会话超时注销。
 
-Persistent Session
+'Clean Session'设置为1，表示创建一个新的临时会话，在客户端断开时，会话自动销毁。
 
-Offline Message
-
-
-Transient, Persistent Sessions
-
---------------------------------
+----------------
 MQTT连接保活心跳
---------------------------------
+----------------
 
-CONNECT报文KeepAlive参数
-PINGREQ 2字节心跳报文
-XMPP KeepAlive???
-KeepAlive and Two Bytes Heartbeat
+MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保活周期。
 
---------------------------------
-MQTT协议-Last Will Message
---------------------------------
+客户端在无报文发送时，按KeepAlive周期定时发送2字节的PINGREQ心跳报文，服务端收到PINGREQ报文后，回复2字节的PINGRESP报文。
 
-Last Will
+服务端在1.5个心跳周期内，既没有收到客户端发布订阅报文，也没有收到PINGREQ心跳报文时，主动按心跳超时断开TCP连接。
 
--------------------------
-MQTT协议-Retained Message
--------------------------
-Retained Message
+.. NOTE:: emqttd消息服务器默认按最长2.5心跳周期超时设计。
 
---------------------------------
-MQTT协议-WebSocket连接
---------------------------------
+-----------------------
+MQTT遗愿消息(Last Will)
+-----------------------
 
-Binary mode frame over WebSocket
+MQTT客户端到服务器端的CONNECT请求时，可以设置是否发送遗愿消息(Will Message)标志，和遗愿消息主题(Topic)与内容(Payload)。
 
-PubSub on Web Browser
+MQTT客户端异常下线时(客户端断开前未向服务器发送DISCONNECT消息)，MQTT消息服务器会发布遗愿消息。
 
-Firefox, Safari, Chrome, Opera…
+------------------------------
+MQTT保留消息(Retained Message)
+------------------------------
 
-IE Sucks?
+MQTT客户端向服务器发布(PUBLISH)消息时，可以设置保留消息(Retained Message)标志。保留消息(Retained Message)会驻留在消息服务器，后来的订阅者订阅主题时仍可以收到该消息。
 
-Better than Socket.IO?
+例如mosquitto命令行发布一条保留消息到主题'a/b/c'::
 
-MQTT Over WebSocket
+    mosquitto_pub -r -q 1 -t a/b/c -m 'hello'
+
+之后连接上来的MQTT客户端订阅主题'a/b/c'时候，仍可收到该消息::
+
+    $ mosquitto_sub -t a/b/c -q 1
+    hello
+
+保留消息(Retained Message)有两种清除方式:
+
+1. 客户端向有保留消息的主题发布一个空消息::
+
+    mosquitto_pub -r -q 1 -t a/b/c -m '' 
+
+2. 消息服务器设置保留消息的超期时间。
+
+------------------
+MQTT WebSocket连接
+------------------
+
+MQTT协议除支持TCP传输层外，还支持WebSocket作为传输层。通过WebSocket浏览器可以直连MQTT消息服务器，发布订阅模式与其他MQTT客户端通信。
+
+MQTT协议的WebSocket连接，必须采用binary模式，并携带子协议Header::
+
+    Sec-WebSocket-Protocol: mqttv3.1 或 mqttv3.1.1
 
 ----------------
 MQTT协议客户端库
 ----------------
 
-TODO: 客户端库table...
+emqtt客户端库
+-------------
 
-CocoaMQTT：Swift语言MQTT客户端库
+emqtt项目组: https://github.com/emqtt
 
-QMQTT：QT框架MQTT客户端库
++--------------------+----------------------+
+| `emqttc`_          | Erlang MQTT客户端库  |
++--------------------+----------------------+
+| `CocoaMQTT`_       | Swift语言MQTT客户端库|
++--------------------+----------------------+
+| `QMQTT`_           | QT框架MQTT客户端库   |
++--------------------+----------------------+
 
-按功能介绍
+Eclipse Paho客户端库
+--------------------
 
---------------------------------
+Paho官网: 
+
++--------------------+----------------------+
+| | | 
++--------------------+----------------------+
+| | | 
++--------------------+----------------------+
+| | | 
++--------------------+----------------------+
+| | | 
++--------------------+----------------------+
+| | | 
++--------------------+----------------------+
+| | | 
++--------------------+----------------------+
+
+mqtt.org客户端库列表
+--------------------
+
+mqtt.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
+
+------------------
 MQTT与XMPP协议对比
---------------------------------
+------------------
 
-轻量、简单
+MQTT协议设计简单轻量、路由灵活，将在移动互联网物联网消息领域，全面取代PC时代的XMPP协议:
 
-路由方式灵活，比如群组聊天
+1. MQTT协议只一个字节固定报头，两个字节心跳，报文体积小编解码容易。XMPP协议基于繁重的XML，报文体积大交互繁琐。
 
-Throughput capacity: less overhead, more lightweight
+2. MQTT协议基于主题(Topic)的发布订阅模式消息路由，相比XMPP基于JID的点对点消息路由更为灵活。
 
-Binary vs plain text
+3. MQTT协议未定义报文内容格式，可以承载JSON、二进制等不同类型报文。XMPP协议采用XML承载报文，二进制必须Base64编码等处理。
 
-QoS in place (Fire-and-forget, At-least-once and Exactly-once)
+4. MQTT协议支持消息发送确认和QoS保证，XMPP主协议并未定义类似机制。MQTT协议有更好的消息可靠性保证。
 
-Pub/Sub in place (XMPP requires extension XEP- 0060)
+-------------------------
+MQTT应用-物联网移动互联网
+-------------------------
 
-No need for an XML parser
+1. Android消息推送
 
---------------------------------
-MQTT应用-Mobile, IoT, M2M…
---------------------------------
+2. 移动即时消息，例如Facebook Messenger
 
-Android Push
+3. 智能硬件、智能家具、智能电器
 
-Mobile Chat(Facebook Messenger)
+4. 物联网M2M通信
+   
+5. 物联网大数据采集
 
-物联网(IoT, M2M)、智能硬件、车联网...
+6. 车联网，电动车、站、桩数据采集
 
-行业市场(电力、石油、能源…)
+7. 智慧城市、智慧医疗、远程教育
+
+8. 电力、石油与能源等行业市场
+
+
+.. _emqttc: https://github.com/emqtt/emqttc
+.. _CocoaMQTT: https://github.com/emqtt/CocoaMQTT
+.. _QMQTT: https://github.com/emqtt/qmqtt
+
 
