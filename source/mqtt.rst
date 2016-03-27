@@ -69,11 +69,13 @@ MQTT协议基于主题(Topic)进行消息路由，主题(Topic)类似URL路径�
 主题(Topic)通过'/'分割层级，支持'+', '#'通配符::
 
     '+': 表示通配一个层级，例如a/+，匹配a/x, a/y
+
     '#': 表示通配多个层级，例如a/#，匹配a/x, a/b/c/d
 
-订阅者与发布者之间通过主题(Topic)匹配方式路由消息，例如采用mosquitto命令行订阅发布消息::
+订阅者与发布者之间通过主题路由消息进行通信，例如采用mosquitto命令行发布订阅消息::
 
     mosquitto_sub -t a/b/+ -q 1
+
     mosquitto_pub -t a/b/c -m hello -q 1
 
 .. NOTE:: 订阅者可以订阅含通配符主题，但发布者不允许向含通配符主题发布消息。
@@ -142,7 +144,7 @@ MQTT V3.1.1协议报文
 PUBLISH发布消息
 ---------------
 
-PUBLISH报文承载客户端服务器双向的发布消息。 PUBACK报文用于接收端确认QoS1报文，PUBREC/PUBREL/PUBCOMP报文用于QoS2消息流程。
+PUBLISH报文承载客户端与服务器间双向的发布消息。 PUBACK报文用于接收端确认QoS1报文，PUBREC/PUBREL/PUBCOMP报文用于QoS2消息流程。
 
 PINGREQ/PINGRESP心跳
 --------------------
