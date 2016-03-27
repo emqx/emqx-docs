@@ -320,19 +320,17 @@ MQTT应用-物联网移动互联网
 
 3. 智能硬件、智能家具、智能电器
 
-4. 物联网M2M通信
+4. 物联网M2M消息
    
 5. 物联网大数据采集
 
-6. 车联网，电动车、站、桩数据采集
+6. 车联网，电动车、站桩数据采集
 
 7. 智慧城市、智慧医疗、远程教育
 
 8. 电力、石油与能源等行业市场
 
-
 .. _emqttc: https://github.com/emqtt/emqttc
 .. _CocoaMQTT: https://github.com/emqtt/CocoaMQTT
 .. _QMQTT: https://github.com/emqtt/qmqtt
-
 
