@@ -11,6 +11,8 @@ emqttd消息服务器可跨平台运行在Linux、FreeBSD、Mac OS X或Windows�
 
     产品部署建议Linux、FreeBSD服务器，不推荐Windows服务器。
 
+.. _install_download:
+
 ----------------
 emqttd程序包下载
 ----------------
@@ -35,6 +37,7 @@ emqttd消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X�
 
 安装包命名由平台、版本、时间组成，例如: emqttd-centos64-0.16.0-beta-20160216.zip
 
+.. _install_on_linux:
 
 ---------------
 Linux服务器安装
@@ -111,6 +114,7 @@ emqttd消息服务器提供了状态监控URL::
 
     ./bin/emqttd stop
 
+.. _install_on_freebsd:
 
 -----------------
 FreeBSD服务器安装
@@ -120,6 +124,7 @@ FreeBSD程序包下载: http://emqtt.io/downloads/freebsd
 
 FreeBSD平台安装过程与Linux相同。
 
+.. _install_on_mac:
 
 ----------------
 Mac OS X系统安装
@@ -141,6 +146,7 @@ Mac下开发调试MQTT应用，可直接下载安装:  http://emqtt.io/downloads
 
 emqttd在Mac平台下安装启动过程与Linux相同。
 
+.. _install_on_windows:
 
 -----------------
 Windows服务器安装
@@ -178,6 +184,7 @@ emqttd服务卸载::
 
 .. WARNING:: Windows上管理命令行'./bin/emqttd_ctl'无法使用。日志文件或状态URL: http://localhost:8083/status 查询当前状态。
  
+.. _build_from_source:
 
 ------------
 源码编译安装
@@ -209,6 +216,7 @@ Ubuntu平台可通过apt-get命令安装，CentOS/RedHat平台可通过yum命令
 
     cd rel/emqttd && ./bin/emqttd console
 
+.. _tcp_ports:
 
 ---------------
 TCP服务端口占用
@@ -250,6 +258,7 @@ emqttd占用的上述端口，可通过etc/emqttd.config配置文件的listeners
 
 控制台URL: http:://localhost:18083/ ，默认登录用户名: admin, 密码: public。
 
+.. _quick_setup:
 
 --------
 快速设置
@@ -294,6 +303,8 @@ etc/emqttd.config文件listeners段落设置最大允许连接数:
         ]},
 
 emqttd消息服务器详细设置，请参见文档: :ref:`config`
+
+.. _init_d_emqttd:
 
 -------------------
 /etc/init.d/emqttd
