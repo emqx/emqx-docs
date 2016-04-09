@@ -58,7 +58,7 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
 
 emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
 
-下载地址: http://emqtt.io/downloads
+下载地址: http://emqtt.com/downloads
 
 程序包下载后，可直接解压启动运行，例如Mac平台:
 

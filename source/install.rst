@@ -19,20 +19,20 @@ emqttd程序包下载
 
 emqttd消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
 
-下载地址: http://emqtt.io/downloads
+下载地址: http://emqtt.com/downloads
 
 +-----------+-----------------------------------+
-| Debian    | http://emqtt.io/downloads/debian  |
+| Debian    | http://emqtt.com/downloads/debian  |
 +-----------+-----------------------------------+
-| Ubuntu    | http://emqtt.io/downloads/ubuntu  |
+| Ubuntu    | http://emqtt.com/downloads/ubuntu  |
 +-----------+-----------------------------------+
-| CentOS    | http://emqtt.io/downloads/centos  |
+| CentOS    | http://emqtt.com/downloads/centos  |
 +-----------+-----------------------------------+
-| FreeBSD   | http://emqtt.io/downloads/freebsd |
+| FreeBSD   | http://emqtt.com/downloads/freebsd |
 +-----------+-----------------------------------+
-| Mac OS X  | http://emqtt.io/downloads/macosx  |
+| Mac OS X  | http://emqtt.com/downloads/macosx  |
 +-----------+-----------------------------------+
-| Windows   | http://emqtt.io/downloads/windows |
+| Windows   | http://emqtt.com/downloads/windows |
 +-----------+-----------------------------------+
 
 安装包命名由平台、版本、时间组成，例如: emqttd-centos64-0.16.0-beta-20160216.zip
@@ -43,7 +43,7 @@ emqttd消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X�
 Linux服务器安装
 ---------------
 
-CentOS平台为例，下载安装包解压: http://emqtt.io/downloads/centos
+CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/centos
 
 .. code:: console
 
@@ -120,7 +120,7 @@ emqttd消息服务器提供了状态监控URL::
 FreeBSD服务器安装
 -----------------
 
-FreeBSD程序包下载: http://emqtt.io/downloads/freebsd
+FreeBSD程序包下载: http://emqtt.com/downloads/freebsd
 
 FreeBSD平台安装过程与Linux相同。
 
@@ -130,7 +130,7 @@ FreeBSD平台安装过程与Linux相同。
 Mac OS X系统安装
 ----------------
 
-Mac下开发调试MQTT应用，可直接下载安装:  http://emqtt.io/downloads/macosx
+Mac下开发调试MQTT应用，可直接下载安装:  http://emqtt.com/downloads/macosx
 
 配置文件'etc/emqttd.config' lager段落打开info日志，控制台可以查看收发MQTT报文详细:
 
@@ -152,7 +152,7 @@ emqttd在Mac平台下安装启动过程与Linux相同。
 Windows服务器安装
 -----------------
 
-Windows平台程序包下载: http://emqtt.io/downloads/windows
+Windows平台程序包下载: http://emqtt.com/downloads/windows
 
 程序包下载解压后，打开Windows命令行窗口，cd到程序目录。
 
