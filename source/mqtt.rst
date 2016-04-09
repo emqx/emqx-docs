@@ -12,7 +12,7 @@ MQTT轻量发布订阅消息协议
 概览
 ----
 
-MQTT是一个轻量的发布订阅模式的消息传输协议，专门针对低带宽和不稳定网络环境的物联网应用设计。
+MQTT是一个轻量的发布订阅模式消息传输协议，专门针对低带宽和不稳定网络环境的物联网应用设计。
 
 MQTT官网: http://mqtt.org
 
@@ -50,6 +50,8 @@ MQTT协议广泛应用于物联网、移动互联网、智能硬件、车联网�
 
 7. 电力、石油与能源等行业市场
 
+.. _mqtt_topic:
+
 ---------------------------
 MQTT基于主题(Topic)消息路由
 ---------------------------
@@ -79,6 +81,8 @@ MQTT协议基于主题(Topic)进行消息路由，主题(Topic)类似URL路径�
     mosquitto_pub -t a/b/c -m hello -q 1
 
 .. NOTE:: 订阅者可以订阅含通配符主题，但发布者不允许向含通配符主题发布消息。
+
+.. _mqtt_protocol:
 
 -------------------
 MQTT V3.1.1协议报文
@@ -151,6 +155,8 @@ PINGREQ/PINGRESP心跳
 
 客户端在无报文发送时，按保活周期(KeepAlive)定时向服务端发送PINGREQ心跳报文，服务端响应PINGRESP报文。PINGREQ/PINGRESP报文均2个字节。
 
+.. _mqtt_qos:
+
 -----------
 MQTT消息QoS
 -----------
@@ -194,6 +200,8 @@ Qos2消息发布订阅
 
 .. image:: _static/images/qos2_seq.png
 
+.. _mqtt_clean_session:
+
 -----------------------
 MQTT会话(Clean Session)
 -----------------------
@@ -203,6 +211,8 @@ MQTT客户端向服务器发起CONNECT请求时，可以通过'Clean Session'标
 'Clean Session'设置为0，表示创建一个持久会话，在客户端断开连接时，会话仍然保持并保存离线消息，直到会话超时注销。
 
 'Clean Session'设置为1，表示创建一个新的临时会话，在客户端断开时，会话自动销毁。
+
+.. _mqtt_keepalive:
 
 ----------------
 MQTT连接保活心跳
@@ -216,13 +226,17 @@ MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保
 
 .. NOTE:: emqttd消息服务器默认按最长2.5心跳周期超时设计。
 
------------------------
-MQTT遗愿消息(Last Will)
------------------------
+.. _mqtt_willmsg:
+
+--------------------------
+MQTT遗愿消息(Will Message)
+--------------------------
 
 MQTT客户端向服务器端CONNECT请求时，可以设置是否发送遗愿消息(Will Message)标志，和遗愿消息主题(Topic)与内容(Payload)。
 
 MQTT客户端异常下线时(客户端断开前未向服务器发送DISCONNECT消息)，MQTT消息服务器会发布遗愿消息。
+
+.. _mqtt_retained_msg:
 
 ------------------------------
 MQTT保留消息(Retained Message)
@@ -247,6 +261,8 @@ MQTT客户端向服务器发布(PUBLISH)消息时，可以设置保留消息(Ret
 
 2. 消息服务器设置保留消息的超期时间。
 
+.. _mqtt_websocket:
+
 ------------------
 MQTT WebSocket连接
 ------------------
@@ -256,6 +272,8 @@ MQTT协议除支持TCP传输层外，还支持WebSocket作为传输层。通过W
 MQTT协议的WebSocket连接，必须采用binary模式，并携带子协议Header::
 
     Sec-WebSocket-Protocol: mqttv3.1 或 mqttv3.1.1
+
+.. _mqtt_client_libraries:
 
 ----------------
 MQTT协议客户端库
@@ -283,6 +301,8 @@ mqtt.org官网客户端库
 --------------------
 
 mqtt.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
+
+.. _mqtt_vs_xmpp:
 
 ------------------
 MQTT与XMPP协议对比
