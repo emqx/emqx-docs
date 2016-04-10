@@ -36,7 +36,7 @@ emqttd项目文档目录:
    commands
    plugins
    tune
-   releases
+   changes
    mqtt
 
 emqttd项目支持与联系:
