@@ -74,7 +74,8 @@ Upgrade Dashboard, Redis, Stomp and Template Plugins
 
 *发布日期: 2016-02-16*
 
-#### Highlights
+Highlights
+----------
 
 Licensed under the Apache License, Version 2.0 Now.
 
@@ -92,13 +93,15 @@ Improve the design of Trie and Route, only the wildcard topics stored in Trie.
 
 Common Test to replace EUnit.
 
-#### Enhancements
+Enhancements
+------------
 
 mqtt_message record: add 'sender' field (#440)
 
 refactor the emqttd, emqttd_time, emqttd_opts, emqttd_node modules.
 
-#### BugFix
+Bugfix
+------
 
 noproc error when call to gen_server2:call(false, {add_route,Topic,<0.685.0>}, infinity) (#446)
 
@@ -112,7 +115,8 @@ Changed the license of all plugins.
 
 *发布日期: 2016-01-31*
 
-#### Highlights
+Highlights
+----------
 
 Optimize for Push Application, 500K+ Subscribers to a Topic.
 
@@ -122,7 +126,8 @@ Priority Message Queue for Persistent Session (#432)
 
 Add Redis, MongoDB Plugins (#417)
 
-#### Enhancements
+Enhancements
+------------
 
 Username/Password Authentication: Support to configure default users (#428)
 
@@ -134,13 +139,15 @@ emqttd_auth_mod: add passwd_hash/2 function
 
 priority_queue: add plen/2, out/2 functions
 
-#### BugFix
+Bugfix
+------
 
 Fix dequeue/1 of emqttd_bridge...
 
 Add emqttd:seed_now/0 function
 
-#### Plugins
+Plugins
+-------
 
 emqttd_plubin_mysql: Changed mysql driver to mysql-otp
 
@@ -166,13 +173,15 @@ Improve: fix spec errors found by dialyzer
 
 *发布日期: 2015-12-18*
 
-#### Highlights
+Highlights
+----------
 
 Scaling to 1.3 Million Concurrent MQTT Connections on a 12 Core, 32G CentOS server.
 
 New PubSub, Router Design (#402). Prepare for scaling to 10 millions on one cluster.
 
-#### Enhancements
+Enhancements
+------------
 
 Improve the gproc_pool usage with a general emqttd_pool_sup
 
@@ -196,13 +205,15 @@ Subscriptions persistence (#344)
 
 emqttd_ctl: 'subscriptions' command to force clients to subscribe some topics (#361)
 
-#### Bugfix
+Bugfix
+------
 
 emqttd_sm: spec of lookup_session/1 is not right BUG (#411)
 
 Observer application should be removed from reltool.config for 'wx' app is not available (#410)
 
-#### Benchmark
+Benchmark
+---------
 
 1.3 million concurrent MQTT connections on a 12 Core, 32G CentOS Server, consume about 15G Memory and 200% CPU.
 
@@ -228,7 +239,8 @@ BugFix: emqttd_plugin_pgsql - error using same query with latest update plugin (
 
 *发布日期: 2015-11-08*
 
-#### Highlights
+Highlights
+----------
 
 Rate Limiting based on [Token Bucket](https://en.wikipedia.org/wiki/Token_bucket) and [Leaky Bucket](https://en.wikipedia.org/wiki/Leaky_bucket#The_Leaky_Bucket_Algorithm_as_a_Meter) Algorithm
 
@@ -236,7 +248,8 @@ Upgrade eSockd and MochiWeb libraries to support Parameterized Connection Module
 
 Improve emqttd_client to support fully asynchronous socket networking
 
-#### Enhancements
+Enhancements
+------------
 
 Protocol Compliant - Session Present Flag (#163)
 
@@ -250,7 +263,8 @@ emqttd_client.erl to handle 'inet_async', 'inet_reply' properly (#360)
 
 Refator the [client/session management design](https://github.com/emqtt/emqttd/blob/master/doc/design/ClientSession.md)
 
-#### Bugfix
+Bugfix
+------
 
 Cannot kick transient client out when clientId collision (#357)
 
@@ -258,7 +272,8 @@ Fix the order of emqttd_app:start_server/1 (#367)
 
 emqttd_session:subscribe/2 will crash (#374)
 
-#### Benchmark
+Benchmark
+---------
 
 [benchmark for 0.13.0 release](https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release)
 
@@ -320,7 +335,8 @@ Benchmark: About 900K concurrent connections established on a 20Core, 32G CentOS
 
 *发布日期: 2015-10-08*
 
-#### Highlights
+Highlights
+----------
 
 Enhance the **emqttd_ctl** module to allow plugins to register new commands (#256)
 
@@ -334,7 +350,8 @@ Add **'./bin/emqttd_top'** command(like etop) to show the top 'msg_q', 'reductio
 
 'rel/files/emqttd.config.development' for development deployment
 
-#### Enhancements
+Enhancements
+------------
 
 Qos1/2 messages will not be dropped under unstable mobile network (#264)
 
@@ -346,11 +363,13 @@ Qos1/2 messages will not be dropped under unstable mobile network (#264)
 
 How to monitor large 'message_queue_len' (#283)
 
-#### Bugfix
+Bugfix
+------
 
 Behaviour emqttd_auth_mod is missing init callback (#318)
 
-#### Benchmark
+Benchmark
+---------
 
 Write a new [benchmark tool](https://github.com/emqtt/emqtt_benchmark) to benchmark this release
 
