@@ -228,9 +228,9 @@ MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保
 
 .. _mqtt_willmsg:
 
---------------------------
-MQTT遗愿消息(Will Message)
---------------------------
+-----------------------
+MQTT遗愿消息(Last Will)
+-----------------------
 
 MQTT客户端向服务器端CONNECT请求时，可以设置是否发送遗愿消息(Will Message)标志，和遗愿消息主题(Topic)与内容(Payload)。
 
