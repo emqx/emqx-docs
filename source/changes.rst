@@ -3,6 +3,58 @@
 版本发布
 ========
 
+-----------------
+1.0 (七英里) 版本
+-----------------
+
+*发布日期: 2016-04-13*
+
+*版本别名: 七英里(The Seven Mile Journey)*
+
+经过两年开发，五十个版本迭代，我们正式发布1.0(七英里)版本，和完整的中英文项目文档。1.0版本基本实现了设计目标: 承载来自移动互联网或物联网终端的大量并发MQTT连接，并实现在大数量的终端间快速低延时(Low-Latency)消息路由。
+
+1. 完整支持MQTT V3.1.1协议，扩展支持WebSocket、Stomp或私有TCP等多协议。
+
+2. 稳定承载大规模的MQTT客户端连接，单服务器节点支持50万到100万连接。
+
+2. 分布式节点集群，快速低延时的消息路由，单集群支持1000万规模的路由。
+
+3. 消息服务器内扩展，支持定制多种认证方式、高效存储消息到后端数据库。
+
+问题与改进
+----------
+
+1.0版本主要发布完整项目文档，相比0.17.1版本很少代码变更:
+
+Possible race condition using emqttd_cm (#486)
+
+Improve the design of retained message expiration (#503)
+
+Should not expire the retained messages from $SYS/# topics (#500)
+
+项目文档
+--------
+
+1.0 版本中文文档: http://emqtt.com/docs/ 或 http://docs.emqtt.cn
+
+1.0 版本英文文档: http://emqtt.io/docs 或 http://docs.emqtt.com/
+
+官方站点
+--------
+
+中文站点: http://emqtt.com
+
+英文站点: http://emqtt.io/
+
+致谢
+----
+
+贡献者(GitHub帐户): @callbay @lsxredrain @hejin1026 @desoulter @turtleDeng @Hades32 @huangdan @phanimahesh @dvliman @Prots @joaohf
+
+公司: 开源中国，鲁能电力，太极计算机，电信天翼云直播，研色科技，杭州华思
+
+乐队: 七英里(The Seven Mile Journey)，腰乐队，万能青年旅店
+
 ----------------
 0.17.1-beta 版本
 ----------------
