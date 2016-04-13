@@ -55,9 +55,11 @@ Should not expire the retained messages from $SYS/# topics (#500)
 致谢
 ----
 
+爱立信与Erlang/OTP语言平台团队(http://www.erlang.org/)!
+
 贡献者(GitHub帐户): @callbay @lsxredrain @hejin1026 @desoulter @turtleDeng @Hades32 @huangdan @phanimahesh @dvliman @Prots @joaohf
 
-公司: 开源中国，爱立信，鲁能电力，太极计算机，电信天翼云直播，研色科技，杭州华思
+公司: 开源中国，鲁能电力，太极计算机，电信天翼云直播，研色科技，杭州华思
 
 乐队: 七英里(The Seven Mile Journey)，腰乐队，万能青年旅店
 
