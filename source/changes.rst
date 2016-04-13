@@ -1,7 +1,11 @@
 
+.. _changes:
+
 ========
 版本发布
 ========
+
+.. _release_1.0:
 
 -----------------
 1.0 (七英里) 版本
@@ -57,6 +61,7 @@ Should not expire the retained messages from $SYS/# topics (#500)
 
 乐队: 七英里(The Seven Mile Journey)，腰乐队，万能青年旅店
 
+
 ----------------
 0.17.1-beta 版本
 ----------------
@@ -72,6 +77,7 @@ Dashboard
 ---------
 
 Code Review and improve the design of Dashboard.
+
 
 ----------------
 0.17.0-beta 版本
@@ -122,6 +128,7 @@ Plugins
 
 Upgrade Dashboard, Redis, Stomp and Template Plugins
 
+
 ----------------
 0.16.0-beta 版本
 ----------------
@@ -162,6 +169,7 @@ noproc error when call to gen_server2:call(false, {add_route,Topic,<0.685.0>}, i
 #### Plugins
 
 Changed the license of all plugins.
+
 
 ----------------
 0.15.0-beta 版本
@@ -211,6 +219,7 @@ emqttd_plugin_redis: First release
 
 emqttd_plugin_mongo: First release
 
+
 ----------------
 0.14.1-beta 版本
 ----------------
@@ -220,6 +229,7 @@ emqttd_plugin_mongo: First release
 Bugfix: emqttd_ws_client.erl: Unexpected Info: {'EXIT',<0.27792.18>,{shutdown,destroy}} (#413)
 
 Improve: fix spec errors found by dialyzer
+
 
 ----------------
 0.14.0-beta 版本
