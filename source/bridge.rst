@@ -5,6 +5,8 @@
 分布桥接
 ========
 
+.. _bridge_emqttd:
+
 ----------------
 emqttd节点间桥接
 ----------------
@@ -30,12 +32,16 @@ emqttd节点桥接配置
 | emqttd2 | emqttd2@127.0.0.1   | 2883     |
 +---------+---------------------+----------+
 
-启动emqttd1, emqttd2节点::
+启动emqttd1, emqttd2节点:
+
+.. code-block:: bash
 
     cd emqttd1/ && ./bin/emqttd start
     cd emqttd2/ && ./bin/emqttd start
 
-emqttd1节点上创建到emqttd2桥接::
+emqttd1节点上创建到emqttd2桥接:
+
+.. code-block:: bash
 
     $ ./bin/emqttd_ctl bridges start emqttd2@127.0.0.1 sensor/#
 
@@ -45,7 +51,9 @@ emqttd1节点上创建到emqttd2桥接::
 
     bridge: emqttd1@127.0.0.1--sensor/#-->emqttd2@127.0.0.1
 
-测试emqttd1--sensor/#-->emqttd2的桥接::
+测试emqttd1--sensor/#-->emqttd2的桥接:
+
+.. code-block:: bash
 
     #emqttd2节点上
 
@@ -55,10 +63,13 @@ emqttd1节点上创建到emqttd2桥接::
 
     mosquitto_pub -t sensor/1/temperature -m "37.5" -d
 
-删除桥接::
+删除桥接:
+
+.. code-block:: bash
 
     ./bin/emqttd_ctl bridges stop emqttd2@127.0.0.1 sensor/#
 
+.. _bridge_mosquitto:
 
 -------------
 mosquitto桥接
@@ -87,6 +98,8 @@ mosquitto.conf配置::
     # Set the version of the MQTT protocol to use with for this bridge. Can be one
     # of mqttv31 or mqttv311. Defaults to mqttv31.
     bridge_protocol_version mqttv311
+
+.. _bridge_rsmb:
 
 --------
 rsmb桥接
