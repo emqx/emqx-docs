@@ -427,7 +427,7 @@ emqttd_sockjs: Stomp/Sockjs插件
 
 
 --------------------------------
-emqttd_recon: Recon性能调试插件  
+emqttd_recon: Recon性能调试插件
 --------------------------------
 
 emqttd_recon插件集成recon性能调测库，'./bin/emqttd_ctl'命令行注册recon命令。

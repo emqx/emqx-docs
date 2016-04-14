@@ -40,7 +40,7 @@ emqttd1节点上创建到emqttd2桥接::
     $ ./bin/emqttd_ctl bridges start emqttd2@127.0.0.1 sensor/#
 
     bridge is started.
-    
+
     $ ./bin/emqttd_ctl bridges list
 
     bridge: emqttd1@127.0.0.1--sensor/#-->emqttd2@127.0.0.1
@@ -53,7 +53,7 @@ emqttd1节点上创建到emqttd2桥接::
 
     #emqttd1节点上
 
-    mosquitto_pub -t sensor/1/temperature -m "37.5" -d 
+    mosquitto_pub -t sensor/1/temperature -m "37.5" -d
 
 删除桥接::
 

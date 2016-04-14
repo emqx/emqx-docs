@@ -91,11 +91,11 @@ emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 1. 连接层(Connection Layer)： 负责TCP连接处理、MQTT协议编解码。
 
 2. 会话层(Session Layer)：处理MQTT协议发布订阅消息交互流程。
-   
+
 3. 路由层(Route Layer)：节点内路由派发MQTT消息。
-   
+
 4. 分布层(Distributed Layer)：分布节点间路由MQTT消息。
-   
+
 5. 认证与访问控制(ACL)：连接层支持可扩展的认证与访问控制模块。
 
 6. 钩子(Hooks)与插件(Plugins)：系统每层提供可扩展的钩子，支持插件方式扩展服务器。
@@ -417,7 +417,7 @@ emqttd_hook模块实现Hook机制:
     -module(emqttd_plugin_template).
 
     -export([load/1, unload/0]).
-    
+
     -export([on_message_publish/2, on_message_delivered/3, on_message_acked/3]).
 
     load(Env) ->

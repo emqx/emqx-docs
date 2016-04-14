@@ -14,7 +14,7 @@ status命令
 ----------
 
 查询emqttd消息服务器运行状态::
-    
+
     $ ./bin/emqttd_ctl status
 
     Node 'emqttd@127.0.0.1' is started
@@ -143,7 +143,7 @@ cluster命令集群本机两个emqttd节点示例:
 
     cd emqttd2 && ./bin/emqttd start
 
-emqttd2节点与emqttd1集群，emqttd2目录下:: 
+emqttd2节点与emqttd1集群，emqttd2目录下::
 
     $ ./bin/emqttd_ctl cluster join emqttd1@127.0.0.1
 
@@ -220,7 +220,7 @@ clients show <ClientId>
 
 clients kick <ClientId>
 -----------------------
-        
+
 根据ClientId踢出客户端::
 
     ./bin/emqttd_ctl clients kick "clientid"
@@ -450,7 +450,7 @@ plugins list
 +-------------+-----------------+
 | description | 插件描述        |
 +-------------+-----------------+
-| active      | 是否已加载      | 
+| active      | 是否已加载      |
 +-------------+-----------------+
 
 load <Plugin>
@@ -499,7 +499,7 @@ Publisher --> | node1 | --Bridge Forward--> | node2 | --> Subscriber
     $ ./bin/emqttd_ctl bridges start emqttd2@127.0.0.1 sensor/#
 
     bridge is started.
-    
+
     $ ./bin/emqttd_ctl bridges list
 
     bridge: emqttd1@127.0.0.1--sensor/#-->emqttd2@127.0.0.1
@@ -512,7 +512,7 @@ Publisher --> | node1 | --Bridge Forward--> | node2 | --> Subscriber
 
     #emqttd1节点上
 
-    mosquitto_pub -t sensor/1/temperature -m "37.5" -d 
+    mosquitto_pub -t sensor/1/temperature -m "37.5" -d
 
 bridge options
 --------------
@@ -638,7 +638,7 @@ trace client <ClientId> off
 关闭Client追踪::
 
     $ ./bin/emqttd_ctl trace client clientid off
-    
+
     stop to trace client clientid successfully.
 
 trace topic <Topic> <LogFile>

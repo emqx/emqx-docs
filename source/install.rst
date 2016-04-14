@@ -106,7 +106,7 @@ emqttd消息服务器进程状态查询:
     Node 'emqttd@127.0.0.1' is started
     emqttd 0.16.0 is running
 
-emqttd消息服务器提供了状态监控URL:: 
+emqttd消息服务器提供了状态监控URL::
 
     http://localhost:8083/status
 
@@ -157,7 +157,7 @@ Windows平台程序包下载: http://emqtt.com/downloads/windows
 程序包下载解压后，打开Windows命令行窗口，cd到程序目录。
 
 控制台模式启动::
- 
+
     .\bin\emqttd console
 
 如启动成功，会弹出控制台窗口。
@@ -165,7 +165,7 @@ Windows平台程序包下载: http://emqtt.com/downloads/windows
 关闭控制台窗口，停止emqttd进程，准备注册Windows服务。
 
 emqttd注册为Windows服务::
-    
+
     .\bin\emqttd install
 
 emqttd服务启动::
@@ -183,7 +183,7 @@ emqttd服务卸载::
 .. NOTE:: 可通过Windows服务管理控制台进行启停。
 
 .. WARNING:: Windows上管理命令行'./bin/emqttd_ctl'无法使用。日志文件或状态URL: http://localhost:8083/status 查询当前状态。
- 
+
 .. _build_from_source:
 
 ------------

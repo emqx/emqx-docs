@@ -113,7 +113,7 @@ OTP(Open Telecom Platform)
      one_for_one
      rest_for_one
      simple_one_for_one
-     
+
 应用(Applications)
 
     TREE IMAGE

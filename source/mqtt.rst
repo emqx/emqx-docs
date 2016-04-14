@@ -257,7 +257,7 @@ MQTT客户端向服务器发布(PUBLISH)消息时，可以设置保留消息(Ret
 
 1. 客户端向有保留消息的主题发布一个空消息::
 
-    mosquitto_pub -r -q 1 -t a/b/c -m '' 
+    mosquitto_pub -r -q 1 -t a/b/c -m ''
 
 2. 消息服务器设置保留消息的超期时间。
 

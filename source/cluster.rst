@@ -214,7 +214,7 @@ emqttd/etc/vm.args::
 2. remove: 从集群删除其他节点
 
 emqttd@host2主动退出集群::
-    
+
     $ ./bin/emqttd_ctl cluster leave
 
 或emqttd@host1节点上，从集群删除emqttd@host2节点::
@@ -260,7 +260,7 @@ emqttd消息服务器集群模式下，MQTT连接的持久会话(Session)跨节�
 emqttd消息服务器集群需要稳定网络连接以避免发生NetSplit故障。集群设计上默认不自动处理NetSplit，如集群节点间发生NetSplit，需手工重启某个分片上的相关节点。
 
 .. NOTE::
-    
+
     NetSplit是指节点运行正常但因网络断开互相认为对方宕机。
 
 
