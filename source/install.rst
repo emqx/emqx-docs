@@ -45,19 +45,19 @@ Linux服务器安装
 
 CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/centos
 
-.. code:: console
+.. code-block:: bash
 
     unzip emqttd-centos64-0.16.0-beta-20160216.zip
 
 控制台调试模式启动，检查emqttd是否可正常启动:
 
-.. code:: console
+.. code-block:: bash
 
     cd emqttd && ./bin/emqttd console
 
 emqttd消息服务器如启动正常，控制台输出:
 
-.. code:: console
+.. code-block:: bash
 
     starting emqttd on node 'emqttd@127.0.0.1'
     emqttd ctl is starting...[done]
@@ -86,7 +86,7 @@ emqttd消息服务器如启动正常，控制台输出:
 
 CTRL+c关闭控制台。守护进程模式启动:
 
-.. code:: console
+.. code-block:: bash
 
     ./bin/emqttd start
 
@@ -94,13 +94,13 @@ CTRL+c关闭控制台。守护进程模式启动:
 
 emqttd消息服务器进程状态查询:
 
-.. code:: console
+.. code-block:: bash
 
     ./bin/emqttd_ctl status
 
 正常运行状态，查询命令返回:
 
-.. code:: console
+.. code-block:: bash
 
     $ ./bin/emqttd_ctl status
     Node 'emqttd@127.0.0.1' is started
@@ -200,7 +200,7 @@ Ubuntu平台可通过apt-get命令安装，CentOS/RedHat平台可通过yum命令
 
 编译环境准备好之后，clone代码开始编译:
 
-.. code:: console
+.. code-block:: bash
 
     git clone https://github.com/emqtt/emqttd.git
 

@@ -62,7 +62,7 @@ emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS 
 
 程序包下载后，可直接解压启动运行，例如Mac平台:
 
-.. code:: console
+.. code-block:: bash
 
     unzip emqttd-macosx-0.16.0-beta-20160216.zip && cd emqttd
 
@@ -81,7 +81,7 @@ emqttd消息服务默认采用匿名认证，启动后MQTT客户端可连接1883
 源码编译emqttd
 ---------------
 
-.. code:: console
+.. code-block:: bash
 
     git clone https://github.com/emqtt/emqttd.git
 

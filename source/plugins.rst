@@ -336,7 +336,7 @@ plugins/emqttd_plugin_redis/etc/plugin.config::
 加载插件
 --------
 
-.. code:: console
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_redis
 
@@ -414,7 +414,7 @@ emqttd_sockjs: Stomp/Sockjs插件
 
 .. NOTE:: 需先加载emqttd_stomp插件
 
-.. code:: console
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emqttd_stomp
 
@@ -435,14 +435,14 @@ emqttd_recon插件集成recon性能调测库，'./bin/emqttd_ctl'命令行注册
 加载插件
 --------
 
-.. code:: console
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emqttd_recon
 
 recon命令
 ---------
 
-.. code:: console
+.. code-block:: bash
 
     ./bin/emqttd_ctl recon
 
