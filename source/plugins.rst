@@ -341,9 +341,9 @@ plugins/emqttd_plugin_redis/etc/plugin.config::
     ./bin/emqttd_ctl plugins load emqttd_plugin_redis
 
 
------------------------------
+---------------------------
 emqttd_stomp: Stomp协议插件
------------------------------
+---------------------------
 
 Stomp协议插件。支持STOMP 1.0/1.1/1.2协议客户端连接emqttd，发布订阅MQTT消息。
 
@@ -388,16 +388,16 @@ plugins/emqttd_stomp/etc/plugin.config::
 
     ./bin/emqttd_ctl plugins load emqttd_stomp
 
---------------------------------
+-------------------------------
 emqttd_sockjs: Stomp/Sockjs插件
---------------------------------
+-------------------------------
 
 配置插件
 --------
 
 .. NOTE:: 缺省端口: 61616
 
-.. code:: erlang
+.. code-block:: erlang
 
     [
       {emqttd_sockjs, [
@@ -425,10 +425,9 @@ emqttd_sockjs: Stomp/Sockjs插件
 
     http://localhost:61616/index.html
 
-
---------------------------------
+-------------------------------
 emqttd_recon: Recon性能调试插件
---------------------------------
+-------------------------------
 
 emqttd_recon插件集成recon性能调测库，'./bin/emqttd_ctl'命令行注册recon命令。
 
@@ -452,9 +451,9 @@ recon命令
     recon node_stats             #recon:node_stats(10, 1000)
     recon remote_load Mod        #recon:remote_load(Mod)
 
--------------------------
+--------------
 emqttd插件开发
--------------------------
+--------------
 
 创建插件项目
 ------------
@@ -469,7 +468,7 @@ github下载emqttd源码库，plugins/目录下创建插件应用。
 
 认证演示模块 - emqttd_auth_demo.erl
 
-.. code:: erlang
+.. code-block:: erlang
 
     -module(emqttd_auth_demo).
 
@@ -490,7 +489,7 @@ github下载emqttd源码库，plugins/目录下创建插件应用。
 
 访问控制演示模块 - emqttd_acl_demo.erl
 
-.. code:: erlang
+.. code-block:: erlang
 
     -module(emqttd_acl_demo).
 
@@ -513,7 +512,7 @@ github下载emqttd源码库，plugins/目录下创建插件应用。
 
 注册认证、访问控制模块 - emqttd_plugin_template_app.erl
 
-.. code:: erlang
+.. code-block:: erlang
 
     ok = emqttd_access_control:register_mod(auth, emqttd_auth_demo, []),
     ok = emqttd_access_control:register_mod(acl, emqttd_acl_demo, []),
@@ -560,11 +559,11 @@ emqttd_plugin_template.erl::
 +------------------------+----------------------------------+
 
 注册扩展命令行
---------------------
+--------------
 
 扩展命令行演示模块 - emqttd_cli_demo.erl
 
-.. code:: erlang
+.. code-block:: erlang
 
     -module(emqttd_cli_demo).
 
@@ -580,7 +579,7 @@ emqttd_plugin_template.erl::
 
 注册命令行模块 - emqttd_plugin_template_app.erl
 
-.. code:: erlang
+.. code-block:: erlang
 
     emqttd_ctl:register_cmd(cmd, {emqttd_cli_demo, cmd}, []).
 

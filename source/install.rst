@@ -11,8 +11,6 @@ emqttd消息服务器可跨平台运行在Linux、FreeBSD、Mac OS X或Windows�
 
     产品部署建议Linux、FreeBSD服务器，不推荐Windows服务器。
 
-.. _install_download:
-
 ----------------
 emqttd程序包下载
 ----------------
@@ -134,7 +132,7 @@ Mac下开发调试MQTT应用，可直接下载安装:  http://emqtt.com/download
 
 配置文件'etc/emqttd.config' lager段落打开info日志，控制台可以查看收发MQTT报文详细:
 
-.. code:: erlang
+.. code-block:: erlang
 
     {lager, [
         ...
@@ -236,7 +234,7 @@ emqttd消息服务器默认占用的TCP端口包括:
 
 emqttd占用的上述端口，可通过etc/emqttd.config配置文件的listeners段落设置:
 
-.. code:: erlang
+.. code-block:: erlang
 
     {listeners, [
         {mqtt, 1883, [
@@ -288,7 +286,7 @@ etc/vm.args中两个重要的启动参数:
 
 etc/emqttd.config文件listeners段落设置最大允许连接数:
 
-.. code:: erlang
+.. code-block:: erlang
 
     {listeners, [
         {mqtt, 1883, [

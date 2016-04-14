@@ -5,6 +5,8 @@
 用户指南
 ========
 
+.. _authentication:
+
 ----
 认证
 ----
@@ -99,7 +101,7 @@ etc/clients.config添加客户端ID::
 LDAP认证
 --------
 
-.. code:: erlang
+.. code-block:: erlang
 
     {ldap, [
        {servers, ["localhost"]},
@@ -220,6 +222,8 @@ emqttd_plugin_redis/etc/plugin.config设置'authcmd'、'password_hash'::
 启用插件::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_redis
+
+.. _acl:
 
 -------------
 访问控制(ACL)
@@ -724,6 +728,8 @@ Sysmon-系统监控
 +------------------+--------------------+
 | busy_dist_port   | Dist Port忙警告    |
 +------------------+--------------------+
+
+.. _trace:
 
 ----
 追踪

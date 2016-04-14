@@ -113,7 +113,7 @@ etc/emqttd.config是消息服务器的核心配置文件。Erlang程序由多个
 
 etc/emqttd.config文件采用的是Erlang数据格式，kernel, sasl, emqttd是Erlang应用(application)名称，'[]'内是应用的环境参数列表。
 
-.. code:: erlang
+.. code-block:: erlang
 
     [{kernel, [
         {start_timer, true},
@@ -258,7 +258,7 @@ emqttd消息服务器认证由一系列认证模块(module)或插件(plugin)提�
 用户名密码认证
 ..............
 
-.. code:: erlang
+.. code-block:: erlang
 
     {username, [{test1, "passwd1"}, {test2, "passwd2"}]},
 
@@ -275,7 +275,7 @@ emqttd消息服务器认证由一系列认证模块(module)或插件(plugin)提�
 ClientID认证
 ............
 
-.. code:: erlang
+.. code-block:: erlang
 
     {clientid, [{password, no}, {file, "etc/clients.config"}]},
 
@@ -289,7 +289,7 @@ etc/clients.config文件中添加ClientID::
 LDAP认证
 ........
 
-.. code:: erlang
+.. code-block:: erlang
 
     {ldap, [
        {servers, ["localhost"]},
@@ -559,7 +559,7 @@ emqtt消息服务器支持简单的扩展模块，用于定制服务器功能。
 plugins插件目录设置
 -------------------
 
-.. code:: erlang
+.. code-block:: erlang
 
     {plugins, [
         %% Plugin App Library Dir
@@ -585,7 +585,7 @@ emqttd消息服务器默认开启的TCP服务端口包括:
 | 8083      | MQTT(WebSocket), HTTP API端口     |
 +-----------+-----------------------------------+
 
-.. code:: erlang
+.. code-block:: erlang
 
     {listeners, [
 

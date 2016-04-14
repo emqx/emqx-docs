@@ -5,7 +5,7 @@
 架构设计
 ========
 
-.. _design_intro:
+.. _intro:
 
 ----
 前言
@@ -59,7 +59,7 @@ NetSplit故障发生时，emqttd消息服务器的log/emqttd_error.log日志，�
 
 emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动处理。所以emqttd1.0版本设计选择是，集群不自动化处理NetSplit，需要人工重启部分节点。
 
-.. _design_architecture:
+.. _architecture:
 
 --------
 系统架构
@@ -100,6 +100,8 @@ emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 
 6. 钩子(Hooks)与插件(Plugins)：系统每层提供可扩展的钩子，支持插件方式扩展服务器。
 
+.. _connection_layer:
+
 ----------
 连接层设计
 ----------
@@ -115,6 +117,8 @@ emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 7. MQTT协议编解码
 8. MQTT协议心跳检测
 9. MQTT协议报文处理
+
+.. _session_layer:
 
 ----------
 会话层设计
@@ -165,6 +169,8 @@ MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务�
 
     PktId <-- Session --> MsgId <-- Router --> MsgId <-- Session --> PktId
 
+.. _route_layer:
+
 ----------
 路由层设计
 ----------
@@ -174,6 +180,8 @@ MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务�
 .. image:: _static/images/dispatch.png
 
 消息派发到会话(Session)后，由会话负责按不同QoS送达消息。
+
+.. _distributed_layer:
 
 ----------
 分布层设计
@@ -198,7 +206,7 @@ MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务�
 
 .. image:: _static/images/route.png
 
-.. _design_auth_acl:
+.. _auth_acl:
 
 ------------------
 认证与访问控制设计
@@ -316,7 +324,7 @@ emqttd_acl_internal模块实现缺省的基于etc/acl.config文件的访问控�
 
     {allow, all}.
 
-.. _design_hook:
+.. _hook:
 
 --------------
 钩子(Hook)设计
@@ -374,7 +382,7 @@ emqttd消息服务器在客户端上下线、主题订阅、消息收发位置�
 
 emqttd模块封装了Hook接口:
 
-.. code:: erlang
+.. code-block:: erlang
 
     -module(emqttd).
 
@@ -390,7 +398,7 @@ emqttd模块封装了Hook接口:
 
 emqttd_hook模块实现Hook机制:
 
-.. code:: erlang
+.. code-block:: erlang
 
     -module(emqttd_hook).
 
@@ -412,7 +420,7 @@ emqttd_hook模块实现Hook机制:
 
 `emqttd_plugin_template`_ 提供了全部钩子的使用示例，例如端到端的消息处理回调:
 
-.. code:: erlang
+.. code-block:: erlang
 
     -module(emqttd_plugin_template).
 
@@ -442,7 +450,7 @@ emqttd_hook模块实现Hook机制:
         emqttd:unhook('message.acked', fun ?MODULE:on_message_acked/3),
         emqttd:unhook('message.delivered', fun ?MODULE:on_message_delivered/3).
 
-.. _design_plugin:
+.. _plugin:
 
 ----------------
 插件(Plugin)设计
@@ -470,7 +478,7 @@ emqttd_plugins模块实现插件机制，提供加载卸载插件API::
 
 开发者请参考模版插件: http://github.com/emqtt/emqttd_plugin_template
 
-.. _design_erlang:
+.. _erlang:
 
 --------------
 Erlang设计相关
