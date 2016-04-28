@@ -383,9 +383,9 @@ emqttd_plugin_redis/etc/plugin.config配置'aclcmd'与'acl_nomatch'::
 MQTT发布订阅
 -------------
 
-MQTT是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器::
+MQTT是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器:
 
-.. image:: _static/images/pubsub_concept.png
+.. image:: ./_static/images/pubsub_concept.png
 
 emqttd消息服务器安装启动后，任何设备或终端的MQTT客户端，可通过MQTT协议连接到emqttd，发布订阅消息方式互通。
 

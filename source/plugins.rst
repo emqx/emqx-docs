@@ -73,7 +73,7 @@ emqttd消息服务器默认加载Dashboard插件。URL地址: http://localhost:1
 
 Dashboard插件可查询emqttd基本信息、统计数据、度量数据，查询系统客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
 
-.. image:: _static/images/dashboard.png
+.. image:: ./_static/images/dashboard.png
 
 
 Dashboard插件设置

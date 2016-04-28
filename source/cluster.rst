@@ -140,7 +140,7 @@ emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)�
     node2-->client2: Deliver[t/#]
     node3-->client3: Deliver[t/a]
 
-.. image:: _static/images/route.png
+.. image:: ./_static/images/route.png
 
 ------------------
 emqttd集群设置管理

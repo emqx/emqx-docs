@@ -70,7 +70,7 @@ emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦
 
 emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器(MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按主题树(Topic Trie)发布订阅模式在集群节点间路由MQTT消息:
 
-.. image:: _static/images/concept.png
+.. image:: ./_static/images/concept.png
 
 设计原则
 --------
@@ -177,7 +177,7 @@ MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务�
 
 路由层维护订阅者(subscriber)与订阅关系表(subscription)，并在本节点发布订阅模式派发(Dispatch)消息:
 
-.. image:: _static/images/dispatch.png
+.. image:: ./_static/images/dispatch.png
 
 消息派发到会话(Session)后，由会话负责按不同QoS送达消息。
 
@@ -204,7 +204,7 @@ MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务�
 
 分布层通过匹配主题树(Topic Trie)和查找路由表(Route Table)，在集群的节点间转发路由MQTT消息:
 
-.. image:: _static/images/route.png
+.. image:: ./_static/images/route.png
 
 .. _auth_acl:
 
