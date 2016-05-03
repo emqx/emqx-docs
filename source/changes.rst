@@ -5,6 +5,20 @@
 版本发布
 ========
 
+.. _release_1.0.2:
+
+----------
+1.0.2 版本
+----------
+
+*发布日期: 2016-05-04*
+
+Issue#534 - './bin/emqttd_ctl vm' - add 'port/count', 'port/limit' statistics
+
+Issue#535 - emqttd_client should be terminated properly even if exception happened when sending data
+
+PR#519 - The erlang '-name' requires the fully qualified host name
+
 .. _release_1.0.1:
 
 ----------
