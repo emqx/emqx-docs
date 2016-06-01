@@ -64,7 +64,7 @@ emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS 
 
 .. code-block:: bash
 
-    unzip emqttd-macosx-0.16.0-beta-20160216.zip && cd emqttd
+    unzip emqttd-macosx-1.1-beta-20160601.zip && cd emqttd
 
     # 启动emqttd
     ./bin/emqttd start
@@ -116,7 +116,7 @@ emqttd消息服务器功能列表
 * 客户端ID或IP地址认证支持
 * 用户名密码认证支持
 * LDAP认证
-* Redis、MySQL、PostgreSQL认证集成
+* Redis、MySQL、PostgreSQL、HTTP认证集成
 * 浏览器Cookie认证
 * 基于客户端ID、IP地址、用户名的访问控制(ACL)
 * 多服务器节点集群(Cluster)
@@ -170,25 +170,27 @@ emqttd扩展模块与插件列表
 扩展插件(Plugin)
 ----------------
 
-+-------------------------+-----------------------------------+
-| emqttd_plugin_template  | 插件模版与演示代码                |
-+-------------------------+-----------------------------------+
-| emqttd_dashboard        | Web管理控制台，默认加载           |
-+-------------------------+-----------------------------------+
-| emqttd_plugin_mysql     | MySQL认证插件                     |
-+-------------------------+-----------------------------------+
-| emqttd_plugin_pgsql     | PostgreSQL认证插件                |
-+-------------------------+-----------------------------------+
-| emqttd_plugin_redis     | Redis认证插件                     |
-+-------------------------+-----------------------------------+
-| emqttd_plugin_mongo     | MongoDB认证插件                   |
-+-------------------------+-----------------------------------+
-| emqttd_stomp            | Stomp协议插件                     |
-+-------------------------+-----------------------------------+
-| emqttd_sockjs           | SockJS插件                        |
-+-------------------------+-----------------------------------+
-| emqttd_recon            | Recon优化调测插件                 |
-+-------------------------+-----------------------------------+
++----------------------------+-----------------------------------+
+| `emqttd_plugin_template`_  | 插件模版与演示代码                |
++----------------------------+-----------------------------------+
+| `emqttd_dashboard`_        | Web管理控制台，默认加载           |
++----------------------------+-----------------------------------+
+| `emqttd_auth_http`_        | HTTP认证插件                      |
++----------------------------+-----------------------------------+
+| `emqttd_plugin_mysql`_     | MySQL认证插件                     |
++----------------------------+-----------------------------------+
+| `emqttd_plugin_pgsql`_     | PostgreSQL认证插件                |
++----------------------------+-----------------------------------+
+| `emqttd_plugin_redis`_     | Redis认证插件                     |
++----------------------------+-----------------------------------+
+| `emqttd_plugin_mongo`_     | MongoDB认证插件                   |
++----------------------------+-----------------------------------+
+| `emqttd_stomp`_            | Stomp协议插件                     |
++----------------------------+-----------------------------------+
+| `emqttd_sockjs`_           | SockJS插件                        |
++----------------------------+-----------------------------------+
+| `emqttd_recon`_            | Recon优化调测插件                 |
++----------------------------+-----------------------------------+
 
 扩展插件通过'bin/emqttd_ctl'管理命令行，加载启动运行。
 
@@ -309,3 +311,14 @@ GitHub: https://github.com/emqtt
 .. _CocoaMQTT: https://github.com/emqtt/CocoaMQTT
 .. _QMQTT: https://github.com/emqtt/qmqtt
 
+
+.. _emqttd_plugin_template: https://github.com/emqtt/emqttd_plugin_template
+.. _emqttd_dashboard:       https://github.com/emqtt/emqttd_dashboard
+.. _emqttd_auth_http:       https://github.com/emqtt/emqttd_auth_http
+.. _emqttd_plugin_mysql:    https://github.com/emqtt/emqttd_plugin_mysql
+.. _emqttd_plugin_pgsql:    https://github.com/emqtt/emqttd_plugin_pgsql
+.. _emqttd_plugin_redis:    https://github.com/emqtt/emqttd_plugin_redis
+.. _emqttd_plugin_mongo:    https://github.com/emqtt/emqttd_plugin_mongo
+.. _emqttd_stomp:           https://github.com/emqtt/emqttd_stomp
+.. _emqttd_sockjs:          https://github.com/emqtt/emqttd_sockjs
+.. _emqttd_recon:           https://github.com/emqtt/emqttd_recon

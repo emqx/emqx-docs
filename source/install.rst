@@ -45,7 +45,7 @@ CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/centos
 
 .. code-block:: bash
 
-    unzip emqttd-centos64-0.16.0-beta-20160216.zip
+    unzip emqttd-centos64-1.1-beta-20160601.zip
 
 控制台调试模式启动，检查emqttd是否可正常启动:
 
@@ -78,7 +78,7 @@ emqttd消息服务器如启动正常，控制台输出:
     mqtt listen on 0.0.0.0:1883 with 16 acceptors.
     mqtts listen on 0.0.0.0:8883 with 4 acceptors.
     http listen on 0.0.0.0:8083 with 4 acceptors.
-    Erlang MQTT Broker 0.16.0 is running now
+    Erlang MQTT Broker 1.1 is running now
     Eshell V6.4  (abort with ^G)
     (emqttd@127.0.0.1)1>
 
@@ -102,7 +102,7 @@ emqttd消息服务器进程状态查询:
 
     $ ./bin/emqttd_ctl status
     Node 'emqttd@127.0.0.1' is started
-    emqttd 0.16.0 is running
+    emqttd 1.1 is running
 
 emqttd消息服务器提供了状态监控URL::
 
@@ -277,6 +277,8 @@ etc/vm.args中两个重要的启动参数:
 +-------+------------------------------------------------------------------+
 | +Q    | Erlang虚拟机允许的最大Port数量，emqttd一个连接消耗1个Port        |
 +-------+------------------------------------------------------------------+
+
+.. NOTE:: Erlang的Port非TCP端口，可以理解为文件句柄。
 
 +P 参数值 > 最大允许连接数 * 2
 

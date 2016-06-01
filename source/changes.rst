@@ -43,7 +43,7 @@ WebSocket连接页面支持Clean Session, Qos, Retained参数设置 (emqttd_dash
 
 Changing dashboard credentials for username authentication (emqttd_dashboard#56)
 
-新增'./bin/emqttd_ctl admins'管理命令，支持通过命令行重新设置admin的密码
+新增'./bin/emqttd_ctl admins'管理命令，支持通过命令行重新设置admin密码
 
 HTTP认证插件
 ------------

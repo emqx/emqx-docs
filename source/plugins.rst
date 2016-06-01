@@ -9,25 +9,31 @@ emqttd消息服务器通过模块注册和钩子(Hooks)机制，支持用户开�
 
 emqtt项目组开发维护的插件包括:
 
-+------------------------+---------------------------+
-| 插件                   | 说明                      |
-+========================+===========================+
-| emqttd_dashboard       | Web控制台插件(默认加载)   |
-+------------------------+---------------------------+
-| emqttd_plugin_mysql    | MySQL认证/访问控制        |
-+------------------------+---------------------------+
-| emqttd_plugin_pgsql    | PostgreSQL认证/访问控制   |
-+------------------------+---------------------------+
-| emqttd_plugin_redis    | Redis认证/访问控制        |
-+------------------------+---------------------------+
-| emqttd_stomp           | Stomp协议支持             |
-+------------------------+---------------------------+
-| emqttd_sockjs          | Stomp over SockJS协议支持 |
-+------------------------+---------------------------+
-| emqttd_recon           | Recon性能调试             |
-+------------------------+---------------------------+
-| emqttd_plugin_template | 插件开发模版              |
-+------------------------+---------------------------+
++---------------------------+---------------------------+
+| 插件                      | 说明                      |
++===========================+===========================+
+| `emqttd_dashboard`_       | Web控制台插件(默认加载)   |
++---------------------------+---------------------------+
+| `emqttd_auth_http`_       | HTTP认证/访问控制         |
++---------------------------+---------------------------+
+| `emqttd_plugin_mysql`_    | MySQL认证/访问控制        |
++----------------------------+---------------------------+
+| `emqttd_plugin_pgsql`_    | PostgreSQL认证/访问控制   |
++---------------------------+---------------------------+
+| `emqttd_plugin_redis`_    | Redis认证/访问控制        |
++---------------------------+---------------------------+
+| `emqttd_plugin_mongo`_    | MongoDB认证/访问控制      |
++---------------------------+---------------------------+
+| `emqttd_stomp`_           | Stomp协议支持             |
++---------------------------+---------------------------+
+| `emqttd_sockjs`_          | Stomp over SockJS协议支持 |
++---------------------------+---------------------------+
+| `emqttd_recon`_           | Recon性能调试             |
++---------------------------+---------------------------+
+| `emqttd_reloader`_        | Reloader代码热加载插件    |
++---------------------------+---------------------------+
+| `emqttd_plugin_template`_ | 插件开发模版              |
++---------------------------+---------------------------+
 
 ------------------------------------
 emqttd_plugin_template: 插件开发模版
@@ -83,10 +89,6 @@ plugins/emqttd_dashboard/etc/plugin.config::
 
     [
       {emqttd_dashboard, [
-        {default_admin, [
-          {login, "admin"},
-          {password, "public"}
-        ]},
         {listener,
           {emqttd_dashboard, 18083, [
             {acceptors, 4},
@@ -95,12 +97,80 @@ plugins/emqttd_dashboard/etc/plugin.config::
       ]}
     ].
 
+---------------------------------------
+emqttd_auth_http: HTTP认证/访问控制插件
+---------------------------------------
+
+HTTP认证/访问控制插件: https://github.com/emqtt/emqttd_auth_http
+
+.. NOTE:: 1.1版本支持
+
+配置插件
+--------
+
+plugins/emqttd_auth_http/etc/plugin.config:
+
+.. code:: erlang
+
+    [
+
+      {emqttd_auth_http, [
+
+        %% Variables: %u = username, %c = clientid, %a = ipaddress, %t = topic
+
+        {super_req, [
+          {method, post},
+          {url, "http://localhost:8080/mqtt/superuser"},
+          {params, [
+            {username, "%u"},
+            {clientid, "%c"}
+          ]}
+        ]},
+
+        {auth_req, [
+          {method, post},
+          {url, "http://localhost:8080/mqtt/auth"},
+          {params, [
+            {clientid, "%c"},
+            {username, "%u"},
+            {password, "%P"}
+          ]}
+        ]},
+
+        %% 'access' parameter: sub = 1, pub = 2
+
+        {acl_req, [
+          {method, post},
+          {url, "http://localhost:8080/mqtt/acl"},
+          {params, [
+            {access,   "%A"},
+            {username, "%u"},
+            {clientid, "%c"},
+            {ipaddr,   "%a"},
+            {topic,    "%t"}
+          ]}
+        ]}
+      ]}
+
+    ].
+
+HTTP API
+--------
+
+认证/ACL成功，API返回200
+
+认证/ACL失败，API返回4xx
+
+加载插件
+--------
+
+./bin/emqttd_ctl plugins load emqttd_auth_http
 
 -------------------------------------------
 emqttd_plugin_mysql: MySQL认证/访问控制插件
 -------------------------------------------
 
-MySQL认证/访问控制插件，基于MySQL库表认证鉴权。
+MySQL认证/访问控制插件，基于MySQL库表认证鉴权: https://github.com/emqtt/emqttd_plugin_mysql
 
 MQTT用户表
 ----------
@@ -112,6 +182,7 @@ MQTT用户表
       `username` varchar(100) DEFAULT NULL,
       `password` varchar(100) DEFAULT NULL,
       `salt` varchar(20) DEFAULT NULL,
+      `is_superuser` tinyint(1) DEFAULT 0,
       `created` datetime DEFAULT NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `mqtt_username` (`username`)
@@ -135,18 +206,29 @@ MQTT访问控制表
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+    INSERT INTO `mqtt_acl` (`id`, `allow`, `ipaddr`, `username`, `clientid`, `access`, `topic`)
+    VALUES
+        (1,1,NULL,'$all',NULL,2,'#'),
+        (2,0,NULL,'$all',NULL,1,'$SYS/#'),
+        (3,0,NULL,'$all',NULL,1,'eq #'),
+        (5,1,'127.0.0.1',NULL,NULL,2,'$SYS/#'),
+        (6,1,'127.0.0.1',NULL,NULL,2,'#'),
+        (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
+
 配置插件
 --------
 
-plugins/emqttd_plugin_mysql/etc/plugin.config::
+plugins/emqttd_plugin_mysql/etc/plugin.config:
+
+.. code:: erlang
 
     [
 
-    {emqttd_plugin_mysql, [
+      {emqttd_plugin_mysql, [
 
         {mysql_pool, [
             %% ecpool options
-            {pool_size, 4},
+            {pool_size, 8},
             {auto_reconnect, 3},
 
             %% mysql options
@@ -158,10 +240,15 @@ plugins/emqttd_plugin_mysql/etc/plugin.config::
             {encoding, utf8}
         ]},
 
-        %% select password only
+        %% Variables: %u = username, %c = clientid, %a = ipaddress
+
+        %% Superuser Query
+        {superquery, "select is_superuser from mqtt_user where username = '%u' limit 1"},
+
+        %% Authentication Query: select password only
         {authquery, "select password from mqtt_user where username = '%u' limit 1"},
 
-        %% hash algorithm: md5, sha, sha256, pbkdf2?
+        %% hash algorithm: plain, md5, sha, sha256, pbkdf2?
         {password_hash, sha256},
 
         %% select password with salt
@@ -173,12 +260,15 @@ plugins/emqttd_plugin_mysql/etc/plugin.config::
         %% sha256 with salt suffix
         %% {password_hash, {sha256, salt}},
 
-        %% comment this query, the acl will be disabled
-        {aclquery, "select * from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'"},
+        %% '%a' = ipaddress, '%u' = username, '%c' = clientid
+        %% Comment this query, the acl will be disabled
+        {aclquery, "select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'"},
 
-        %% If no rules matched, return...
+        %% If no ACL rules matched, return...
         {acl_nomatch, allow}
-    ]}
+
+      ]}
+
     ].
 
 加载插件
@@ -186,12 +276,11 @@ plugins/emqttd_plugin_mysql/etc/plugin.config::
 
 ./bin/emqttd_ctl plugins load emqttd_plugin_mysql
 
-
 ------------------------------------------------
 emqttd_plugin_pgsql: PostgreSQL认证/访问控制插件
 ------------------------------------------------
 
-PostgreSQL认证/访问控制插件，基于PostgreSQL库表认证鉴权。
+PostgreSQL认证/访问控制插件，基于PostgreSQL库表认证鉴权: https://github.com/emqtt/emqttd_plugin_pgsql
 
 MQTT用户表
 ----------
@@ -200,6 +289,7 @@ MQTT用户表
 
     CREATE TABLE mqtt_user (
       id SERIAL primary key,
+      is_superuser boolean,
       username character varying(100),
       password character varying(100),
       salt character varying(40)
@@ -233,30 +323,38 @@ MQTT访问控制表
 配置插件
 --------
 
-plugins/emqttd_plugin_pgsql/etc/plugin.config::
+plugins/emqttd_plugin_pgsql/etc/plugin.config:
+
+.. code:: erlang
 
     [
 
       {emqttd_plugin_pgsql, [
 
         {pgsql_pool, [
-          %% ecpool options
-          {pool_size, 4},
-          {auto_reconnect, 3},
+            %% ecpool options
+            {pool_size, 8},
+            {auto_reconnect, 3},
 
-          %% pgsql options
-          {host, "localhost"},
-          {port, 5432},
-          {username, "feng"},
-          {password, ""},
-          {database, "mqtt"},
-          {encoding,  utf8}
+            %% pgsql options
+            {host, "localhost"},
+            {port, 5432},
+            {ssl, false},
+            {username, "feng"},
+            {password, ""},
+            {database, "mqtt"},
+            {encoding,  utf8}
         ]},
 
-        %% select password only
+        %% Variables: %u = username, %c = clientid, %a = ipaddress
+
+        %% Superuser Query
+        {superquery, "select is_superuser from mqtt_user where username = '%u' limit 1"},
+
+        %% Authentication Query: select password only
         {authquery, "select password from mqtt_user where username = '%u' limit 1"},
 
-        %% hash algorithm: md5, sha, sha256, pbkdf2?
+        %% hash algorithm: plain, md5, sha, sha256, pbkdf2?
         {password_hash, sha256},
 
         %% select password with salt
@@ -277,17 +375,18 @@ plugins/emqttd_plugin_pgsql/etc/plugin.config::
       ]}
     ].
 
-
 加载插件
 --------
 
-.. code:: shell
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_pgsql
 
---------------------------------------------
+-------------------------------------------
 emqttd_plugin_redis: Redis认证/访问控制插件
---------------------------------------------
+-------------------------------------------
+
+基于Redis认证/访问控制: https://github.com/emqtt/emqttd_plugin_redis
 
 配置插件
 --------
@@ -309,6 +408,11 @@ plugins/emqttd_plugin_redis/etc/plugin.config::
           {password, ""}
         ]},
 
+        %% Variables: %u = username, %c = clientid
+
+        %% HMGET mqtt_user:%u is_superuser
+        {supercmd, ["HGET", "mqtt_user:%u", "is_superuser"]},
+        
         %% HMGET mqtt_user:%u password
         {authcmd, ["HGET", "mqtt_user:%u", "password"]},
 
@@ -321,17 +425,36 @@ plugins/emqttd_plugin_redis/etc/plugin.config::
         %% If no rules matched, return...
         {acl_nomatch, deny},
 
-        %% Store subscriptions to redis when SUBSCRIBE packets received.
-        {subcmd, ["HMSET", "mqtt_subs:%u"]},
-
         %% Load Subscriptions form Redis when client connected.
-        {loadsub, ["HGETALL", "mqtt_subs:%u"]},
-
-        %% Remove subscriptions from redis when UNSUBSCRIBE packets received.
-        {unsubcmd, ["HDEL", "mqtt_subs:%u"]}
-
+        {subcmd, ["HGETALL", "mqtt_subs:%u"]}
       ]}
     ].
+
+用户Hash
+--------
+
+默认基于用户Hash认证::
+
+    HSET mqtt_user:<username> is_superuser 1
+    HSET mqtt_user:<username> password "passwd"
+
+ACL规则SET
+----------
+
+默认采用SET存储ACL规则::
+
+    SADD mqtt_acl:<username> "publish topic1"
+    SADD mqtt_acl:<username> "subscribe topic2"
+    SADD mqtt_acl:<username> "pubsub topic3"
+
+订阅Hash
+--------
+
+插件还支持Redis中创建MQTT订阅。当MQTT客户端连接成功，会自动从Redis加载订阅::
+
+    HSET mqtt_subs:<username> topic1 0
+    HSET mqtt_subs:<username> topic2 1
+    HSET mqtt_subs:<username> topic3 2
 
 加载插件
 --------
@@ -340,6 +463,115 @@ plugins/emqttd_plugin_redis/etc/plugin.config::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_redis
 
+---------------------------------------------
+emqttd_plugin_mongo: MongoDB认证/访问控制插件
+---------------------------------------------
+
+基于MongoDB认证/访问控制: https://github.com/emqtt/emqttd_plugin_mongo
+
+配置插件
+--------
+
+plugins/emqttd_plugin_mongo/etc/plugin.config::
+
+    [
+      {emqttd_plugin_mongo, [
+
+        {mongo_pool, [
+          {pool_size, 8},
+          {auto_reconnect, 3},
+
+          %% Mongodb Driver Opts
+          {host, "localhost"},
+          {port, 27017},
+          %% {login, ""},
+          %% {password, ""},
+          {database, "mqtt"}
+        ]},
+
+        %% Variables: %u = username, %c = clientid
+
+        %% Superuser Query
+        {superquery, [
+          {collection, "mqtt_user"},
+          {super_field, "is_superuser"},
+          {selector, {"username", "%u"}}
+        ]},
+
+        %% Authentication Query
+        {authquery, [
+          {collection, "mqtt_user"},
+          {password_field, "password"},
+          %% Hash Algorithm: plain, md5, sha, sha256, pbkdf2?
+          {password_hash, sha256},
+          {selector, {"username", "%u"}}
+        ]},
+
+        %% ACL Query: "%u" = username, "%c" = clientid
+        {aclquery, [
+          {collection, "mqtt_acl"},
+          {selector, {"username", "%u"}}
+        ]},
+
+        %% If no ACL rules matched, return...
+        {acl_nomatch, deny}
+
+      ]}
+    ].
+
+MongoDB数据库
+-------------
+
+.. code-block::
+
+    use mqtt
+    db.createCollection("mqtt_user")
+    db.createCollection("mqtt_acl")
+    db.mqtt_user.ensureIndex({"username":1})
+
+.. NOTE:: 数据库、集合名称可自定义
+
+用户集合(User Collection)
+-------------------------
+
+.. code-block:: json
+
+    {
+        username: "user",
+        password: "password hash",
+        is_superuser: boolean (true, false),
+        created: "datetime"
+    }
+
+示例::
+
+    db.mqtt_user.insert({username: "test", password: "password hash", is_superuser: false})
+    db.mqtt_user:insert({username: "root", is_superuser: true})
+
+ACL集合(ACL Collection)
+------------------------
+
+.. code-block:: json
+
+    {
+        username: "username",
+        clientid: "clientid",
+        publish: ["topic1", "topic2", ...],
+        subscribe: ["subtop1", "subtop2", ...],
+        pubsub: ["topic/#", "topic1", ...]
+    }
+
+示例::
+
+    db.mqtt_acl.insert({username: "test", publish: ["t/1", "t/2"], subscribe: ["user/%u", "client/%c"]})
+    db.mqtt_acl.insert({username: "admin", pubsub: ["#"]})
+
+加载插件
+--------
+
+.. code-block:: bash
+
+    ./bin/emqttd_ctl plugins load emqttd_plugin_mongo
 
 ---------------------------
 emqttd_stomp: Stomp协议插件
@@ -348,7 +580,7 @@ emqttd_stomp: Stomp协议插件
 Stomp协议插件。支持STOMP 1.0/1.1/1.2协议客户端连接emqttd，发布订阅MQTT消息。
 
 配置插件
-----------
+--------
 
 .. NOTE:: Stomp协议端口: 61613
 
@@ -450,6 +682,30 @@ recon命令
     recon bin_leak               #recon:bin_leak(100)
     recon node_stats             #recon:node_stats(10, 1000)
     recon remote_load Mod        #recon:remote_load(Mod)
+
+-------------------------------
+emqttd_reloader: 代码热加载插件
+-------------------------------
+
+用于开发调试的代码热升级插件。加载该插件后，emqttd会自动热升级更新代码。
+
+.. NOTE:: 产品部署环境不建议使用该插件
+
+加载插件
+--------
+
+.. code-block:: bash
+
+    ./bin/emqttd_ctl plugins load emqttd_reloader
+
+reload命令
+---------
+
+.. code-block:: bash
+
+    ./bin/emqttd_ctl reload
+
+    reload <Module>             # Reload a Module
 
 --------------
 emqttd插件开发
@@ -587,4 +843,17 @@ emqttd_plugin_template.erl::
 
     ./bin/emqttd_ctl cmd arg1 arg2
 
+
+.. _emqttd_dashboard:       https://github.com/emqtt/emqttd_dashboard
+.. _emqttd_auth_http:       https://github.com/emqtt/emqttd_auth_http
+.. _emqttd_plugin_mysql:    https://github.com/emqtt/emqttd_plugin_mysql
+.. _emqttd_plugin_pgsql:    https://github.com/emqtt/emqttd_plugin_pgsql
+.. _emqttd_plugin_redis:    https://github.com/emqtt/emqttd_plugin_redis
+.. _emqttd_plugin_mongo:    https://github.com/emqtt/emqttd_plugin_mongo
+.. _emqttd_stomp:           https://github.com/emqtt/emqttd_stomp
+.. _emqttd_sockjs:          https://github.com/emqtt/emqttd_sockjs
+.. _emqttd_recon:           https://github.com/emqtt/emqttd_recon
+.. _emqttd_reloader:        https://github.com/emqtt/emqttd_reloader
+.. _emqttd_plugin_template: https://github.com/emqtt/emqttd_plugin_template
+.. _recon:                  http://ferd.github.io/recon/
 

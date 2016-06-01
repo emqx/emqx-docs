@@ -716,4 +716,41 @@ mnesia命令
 
 查询mnesia数据库系统状态。
 
+----------
+admins命令
+----------
+
+Dashboard插件会自动注册admins命令，用于创建、删除管理员账号，重置管理员密码。
+
++------------------------------------+-----------------------------+
+| admins add <Username> <Password>   | 创建admin账号               |
++------------------------------------+-----------------------------+
+| admins passwd <Username> <Password>| 重置admin密码               |
++------------------------------------+-----------------------------+
+| admins del <Username>              | 删除admin账号               |
++------------------------------------+-----------------------------+
+
+admins add
+----------
+
+创建admin账户::
+
+    $ ./bin/emqttd_ctl admins add root public
+    ok
+
+admins passwd
+-------------
+
+重置admin账户密码::
+
+    $ ./bin/emqttd_ctl admins passwd root private
+    ok
+
+admins del
+----------
+
+删除admin账户::
+
+    $ ./bin/emqttd_ctl admins del root
+    ok
 
