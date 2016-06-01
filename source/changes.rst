@@ -5,6 +5,87 @@
 版本发布
 ========
 
+.. _release_1.1:
+
+--------
+1.1 版本
+--------
+
+*发布日期: 2016-06-01*
+
+1.1版本升级eSockd库到4.0，支持IPv6与监听特定IP地址。新增MongoDB认证插件、HTTP认证插件与Reloader插件。升级MySQL、PostgreSQL、Redis认证插件，采用参数化查询避免SQL注入，并支持超级用户(superuser)认证。
+
+问题与改进
+----------
+
+Allow human-friendly IP addresses (PR#395)
+
+File operation error: emfile (#445)
+
+emqttd_plugin_mongo not found in emqttd (#489)
+
+emqttd_plugin_mongo Error While Loading in emqttd (#505)
+
+Feature request: HTTP Authentication (#541)
+
+Compatible with the Qos0 PUBREL packet (#575)
+
+Bugfix: function_clause exception occurs when registering a duplicated authentication module (#542)
+
+Bugfix: ./emqttd_top msg_q result: {"init terminating in do_boot",{undef,[{etop,start,[],[]},{init,start_it,1,[]},{init,start_em,1,[]}]}} (#557)
+
+Dashboard插件
+-------------
+
+WebSocket连接页面支持Clean Session, Qos, Retained参数设置 (emqttd_dashboard#52)
+
+升级eSockd库到4.0版本，Overview页面显示OTP版本 (emqttd_dashboard#61)
+
+Changing dashboard credentials for username authentication (emqttd_dashboard#56)
+
+新增'./bin/emqttd_ctl admins'管理命令，支持通过命令行重新设置admin的密码
+
+HTTP认证插件
+------------
+
+支持通过HTTP API认证/鉴权MQTT客户端: https://github.com/emqtt/emqttd_auth_http
+
+MongoDB认证插件
+---------------
+
+升级Erlang Mongodb驱动到v1.0.0 (emqttd_plugin_mongo#1)
+
+支持超级用户认证
+
+支持基于MongoDB的ACL (emqttd_plugin_mongo#3)
+
+MySQL认证插件
+------------
+
+支持超级用户认证
+
+采用参数化查询避免SQL注入
+
+Postgre认证插件
+---------------
+
+支持超级用户认证
+
+采用参数化查询避免SQL注入
+
+Redis认证插件
+-------------
+
+支持超级用户认证
+
+支持ClientId认证/ACL (emqttd_plugin_redis#4)
+
+Reloader插件
+------------
+
+开发调试代码热升级插件: https://github.com/emqtt/emqttd_reloader
+
+
 .. _release_1.0.2:
 
 ----------
