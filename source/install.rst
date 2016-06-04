@@ -1,9 +1,9 @@
 
 .. _install:
 
-========
-安装部署
-========
+======================
+安装部署(Installation)
+======================
 
 emqttd消息服务器可跨平台运行在Linux、FreeBSD、Mac OS X或Windows服务器上。
 
