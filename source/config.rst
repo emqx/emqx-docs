@@ -393,8 +393,8 @@ MQTT会话(Session)参数设置
         %% Statistics Collection Interval(seconds)
         {collect_interval, 20},
 
-        %% Expired after 2 days
-        {expired_after, 48}
+        %% Expired after 2 day (unit: minute)
+        {expired_after, 2880}
 
     ]},
 
@@ -412,7 +412,7 @@ MQTT会话(Session)参数设置
 +----------------------+----------------------------------------------------------+
 | collect_interval     | 采集会话统计数据间隔，默认0表示关闭统计                  |
 +----------------------+----------------------------------------------------------+
-| expired_after        | 持久会话到期时间，从客户端断开算起，单位：小时           |
+| expired_after        | 持久会话到期时间，从客户端断开算起，单位：分钟           |
 +----------------------+----------------------------------------------------------+
 
 MQTT会话消息队列(MQueue)设置
