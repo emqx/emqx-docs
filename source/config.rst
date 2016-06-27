@@ -348,7 +348,7 @@ emqttd消息服务器接收到MQTT客户端发布(PUBLISH)或订阅(SUBSCRIBE)�
 MQTT报文(Packet)尺寸与ClientID长度限制
 --------------------------------------
 
-'packet'段落设置最大报文尺寸、最大客户端ID长度::
+``packet`` 段落设置最大报文尺寸、最大客户端ID长度::
 
     {packet, [
 
