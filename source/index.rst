@@ -37,6 +37,7 @@ emqttd项目文档目录:
    plugins
    tune
    changes
+   upgrade
    mqtt
 
 emqttd项目支持与联系:
