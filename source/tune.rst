@@ -72,8 +72,10 @@ TCP连接追踪设置::
 TIME-WAIT Socket最大数量、回收与重用设置::
 
     net.ipv4.tcp_max_tw_buckets=1048576
-    net.ipv4.tcp_tw_recycle = 1
-    net.ipv4.tcp_tw_reuse = 1
+
+    # 注意: 不建议开启該设置，NAT模式下可能引起连接RST
+    # net.ipv4.tcp_tw_recycle = 1
+    # net.ipv4.tcp_tw_reuse = 1
 
 FIN-WAIT-2 Socket超时设置::
 
