@@ -449,7 +449,7 @@ emqttd_plugin_mysql/etc/plugin.config配置'aclquery'与'acl_nomatch'::
         ...
 
         %% comment this query, the acl will be disabled
-        {aclquery, "select * from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'"},
+        {aclquery, "select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'"},
 
         %% If no rules matched, return...
         {acl_nomatch, allow}
@@ -624,6 +624,8 @@ MQTT(SSL) TCP监听器，缺省端口8883::
             ]}
         ]},
 
+.. _http_publish:
+
 ------------
 HTTP发布接口
 ------------
@@ -687,6 +689,8 @@ emqttd通过内嵌的HTTP服务器，实现MQTT WebSocket与HTTP发布接口，e
         ]}
     ]}
 
+.. _sys_topic:
+
 -------------
 $SYS-系统主题
 -------------
@@ -707,6 +711,8 @@ $SYS系统消息发布周期，通过etc/emqttd.config配置::
         %% System interval of publishing broker $SYS messages
         {sys_interval, 60},
 
+.. _sys_brokers:
+
 服务器版本、启动时间与描述消息
 ------------------------------
 
@@ -723,6 +729,8 @@ $SYS系统消息发布周期，通过etc/emqttd.config配置::
 +--------------------------------+-----------------------+
 | $SYS/brokers/${node}/sysdescr  | emqttd描述            |
 +--------------------------------+-----------------------+
+
+.. _sys_clients:
 
 MQTT客户端上下线状态消息
 ------------------------
@@ -757,6 +765,8 @@ $SYS主题前缀: $SYS/brokers/${node}/clients/
         reason: normal,
         ts:     1432648486
     }
+
+.. _sys_stats:
 
 Statistics - 系统统计消息
 --------------------------
@@ -871,6 +881,8 @@ MQTT消息收发统计
 | messages/dropped         | 丢弃消息总数                                |
 +--------------------------+---------------------------------------------+
 
+.. _sys_alarms:
+
 Alarms-系统告警
 ---------------
 
@@ -883,6 +895,8 @@ Alarms-系统告警
 +------------------+------------------+
 | ${alarmId}/clear | 清除告警         |
 +------------------+------------------+
+
+.. _sys_sysmon:
 
 Sysmon-系统监控
 ---------------
