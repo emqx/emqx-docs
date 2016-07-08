@@ -5,6 +5,8 @@
 开始使用(GetStarted)
 ====================
 
+.. _intro:
+
 --------------------
 emqttd消息服务器简介
 --------------------
@@ -21,6 +23,7 @@ emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，�
 
 4. 完整支持MQTT V3.1.1协议，扩展支持WebSocket、CoAP或私有TCP等多协议。
 
+.. _mqtt_pubsub:
 
 --------------------
 MQTT发布订阅模式简述
@@ -51,6 +54,7 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
     初接触MQTT协议的用户，通常会向通配符的'过滤主题'发布广播消息，MQTT协议不支持这种模式，需从订阅侧设计广播主题(Topic)。
     例如Android推送，向所有广州用户，推送某类本地消息，客户端获得GIS位置后，可订阅'news/city/guangzhou'主题。
 
+.. _quick_start:
 
 --------------------------
 五分钟下载启动emqttd
@@ -77,6 +81,8 @@ emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS 
 
 emqttd消息服务默认采用匿名认证，启动后MQTT客户端可连接1883端口，启动运行日志输出在log/目录。
 
+.. _compile:
+
 ---------------
 源码编译emqttd
 ---------------
@@ -86,6 +92,8 @@ emqttd消息服务默认采用匿名认证，启动后MQTT客户端可连接1883
     git clone https://github.com/emqtt/emqttd.git
 
     cd emqttd && make && make dist
+
+.. _dashboard:
 
 --------------------------
 Web管理控制台(Dashboard)
@@ -98,6 +106,7 @@ emqttd消息服务器启动后，会默认加载Dashboard插件，启动Web管�
 
 .. image:: ./_static/images/dashboard.png
 
+.. _features:
 
 ------------------------
 emqttd消息服务器功能列表
@@ -126,6 +135,7 @@ emqttd消息服务器功能列表
 * Stomp/SockJS支持
 * 通过Paho兼容性测试
 
+.. _plugins:
 
 ------------------------
 emqttd扩展模块与插件列表
@@ -197,6 +207,8 @@ emqttd扩展模块与插件列表
 例如启用PostgreSQL认证插件::
 
     ./bin/emqttd_ctl plugins load emqttd_plugin_pgsql
+
+.. _c1000k:
 
 --------------------
 100万线连接测试说明
@@ -290,6 +302,8 @@ MQTT是一个设计得非常出色的传输层协议，在移动消息、物联�
 
 4. 物联网数据采集: 并发连接与吞吐测试。
 
+.. _mqtt_clients:
+
 -----------------------
 emqtt开源MQTT客户端项目
 -----------------------
@@ -311,7 +325,6 @@ GitHub: https://github.com/emqtt
 .. _CocoaMQTT: https://github.com/emqtt/CocoaMQTT
 .. _QMQTT: https://github.com/emqtt/qmqtt
 
-
 .. _emqttd_plugin_template: https://github.com/emqtt/emqttd_plugin_template
 .. _emqttd_dashboard:       https://github.com/emqtt/emqttd_dashboard
 .. _emqttd_auth_http:       https://github.com/emqtt/emqttd_auth_http
@@ -322,3 +335,4 @@ GitHub: https://github.com/emqtt
 .. _emqttd_stomp:           https://github.com/emqtt/emqttd_stomp
 .. _emqttd_sockjs:          https://github.com/emqtt/emqttd_sockjs
 .. _emqttd_recon:           https://github.com/emqtt/emqttd_recon
+
