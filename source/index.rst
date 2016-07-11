@@ -28,6 +28,7 @@ emqttd项目文档目录:
 
    getstarted
    install
+   image
    config
    cluster
    bridge
