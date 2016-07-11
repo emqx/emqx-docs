@@ -71,9 +71,8 @@ EMQTT手工启停
 
 .. code::
 
-systemctl start emqttd
-
-systemctl stop emqttd
+    systemctl start emqttd
+    systemctl stop emqttd
 
 .. _青云: https://www.qingcloud.com
 
