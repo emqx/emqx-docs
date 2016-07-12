@@ -298,8 +298,8 @@ LDAP认证
        {user_dn, "uid=$u,ou=People,dc=example,dc=com"},
        {ssl, fasle},
        {sslopts, [
-           {"certfile", "ssl.crt"},
-           {"keyfile", "ssl.key"}]}
+           {certfile, "ssl.crt"},
+           {keyfile, "ssl.key"}]}
     ]},
 
 
