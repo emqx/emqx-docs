@@ -5,6 +5,22 @@
 版本发布(Changes)
 =================
 
+.. _release_1.1.3:
+
+----------
+1.1.3 版本
+----------
+
+*发布日期: 2016-08-19*
+
+Support './bin/emqttd_ctl users list' CLI (#621)
+
+Cannot publish payloads with a size of the order 64K using WebSockets (#643)
+
+Optimize the procedures that retrieve the Broker version and Borker description in the tick timer (PR#627)
+
+Fix SSL certfile, keyfile config (#651)
+
 .. _release_1.1.2:
 
 ----------
