@@ -5,17 +5,15 @@
 安装部署(Installation)
 ======================
 
-emqttd消息服务器可跨平台运行在Linux、FreeBSD、Mac OS X或Windows服务器上。
+EMQ 2.0消息服务器可跨平台运行在Linux、FreeBSD、Mac OS X或Windows服务器上。
 
-.. NOTE::
+.. NOTE:: 产品部署建议Linux、FreeBSD服务器，不推荐Windows服务器。
 
-    产品部署建议Linux、FreeBSD服务器，不推荐Windows服务器。
+-----------------
+EMQ 2.0程序包下载
+-----------------
 
-----------------
-emqttd程序包下载
-----------------
-
-emqttd消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
+EMQ 2.0消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
 
 下载地址: http://emqtt.com/downloads
 
@@ -33,7 +31,7 @@ emqttd消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X�
 | Windows   | http://emqtt.com/downloads/latest/windows |
 +-----------+-------------------------------------------+
 
-安装包命名由平台、版本、时间组成，例如: emqttd-centos64-0.16.0-beta-20160216.zip
+安装包命名由平台、版本、时间组成，例如: emqttd-centos64-2.0-beta1-20160830.zip
 
 .. _install_on_linux:
 
@@ -45,15 +43,15 @@ CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/latest/ce
 
 .. code-block:: bash
 
-    unzip emqttd-centos64-1.1-beta-20160601.zip
+    unzip emqttd-centos64-2.0-beta1-20160830.zip
 
-控制台调试模式启动，检查emqttd是否可正常启动:
+控制台调试模式启动，检查EMQ是否可正常启动:
 
 .. code-block:: bash
 
     cd emqttd && ./bin/emqttd console
 
-emqttd消息服务器如启动正常，控制台输出:
+EMQ消息服务器如启动正常，控制台输出:
 
 .. code-block:: bash
 
@@ -78,7 +76,7 @@ emqttd消息服务器如启动正常，控制台输出:
     mqtt listen on 0.0.0.0:1883 with 16 acceptors.
     mqtts listen on 0.0.0.0:8883 with 4 acceptors.
     http listen on 0.0.0.0:8083 with 4 acceptors.
-    Erlang MQTT Broker 1.1 is running now
+    Erlang MQTT Broker 2.0 is running now
     Eshell V6.4  (abort with ^G)
     (emqttd@127.0.0.1)1>
 
@@ -90,7 +88,7 @@ CTRL+c关闭控制台。守护进程模式启动:
 
 启动日志输出在log/emqttd_sasl.log文件。
 
-emqttd消息服务器进程状态查询:
+EMQ消息服务器进程状态查询:
 
 .. code-block:: bash
 
@@ -102,7 +100,7 @@ emqttd消息服务器进程状态查询:
 
     $ ./bin/emqttd_ctl status
     Node 'emqttd@127.0.0.1' is started
-    emqttd 1.1 is running
+    emqttd 2.0 is running
 
 emqttd消息服务器提供了状态监控URL::
 
@@ -130,7 +128,7 @@ Mac OS X系统安装
 
 Mac下开发调试MQTT应用，可直接下载安装: http://emqtt.com/downloads/latest/macosx
 
-配置文件'etc/emqttd.config' lager段落打开info日志，控制台可以查看收发MQTT报文详细:
+配置文件'releases/2.0/sys.config' lager段落打开info日志，控制台可以查看收发MQTT报文详细:
 
 .. code-block:: erlang
 
@@ -142,7 +140,7 @@ Mac下开发调试MQTT应用，可直接下载安装: http://emqtt.com/downloads
         ]}
     ]},
 
-emqttd在Mac平台下安装启动过程与Linux相同。
+EMQ在Mac平台下安装启动过程与Linux相同。
 
 .. _install_on_windows:
 
@@ -162,19 +160,19 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows
 
 关闭控制台窗口，停止emqttd进程，准备注册Windows服务。
 
-emqttd注册为Windows服务::
+EMQ注册为Windows服务::
 
     .\bin\emqttd install
 
-emqttd服务启动::
+EMQ服务启动::
 
     .\bin\emqttd start
 
-emqttd服务停止::
+EMQ服务停止::
 
     .\bin\emqttd stop
 
-emqttd服务卸载::
+EMQ服务卸载::
 
     .\bin\emqttd uninstall
 
@@ -188,7 +186,7 @@ emqttd服务卸载::
 源码编译安装
 ------------
 
-emqttd消息服务器基于Erlang/OTP平台开发，项目托管的GitHub管理维护，源码编译依赖Erlang环境和git客户端。
+EMQ消息服务器基于Erlang/OTP平台开发，项目托管的GitHub管理维护，源码编译依赖Erlang环境和git客户端。
 
 Erlang安装: http://www.erlang.org/
 
@@ -200,11 +198,11 @@ Ubuntu平台可通过apt-get命令安装，CentOS/RedHat平台可通过yum命令
 
 .. code-block:: bash
 
-    git clone https://github.com/emqtt/emqttd.git
+    git clone https://github.com/emqtt/emqttd-relx.git
 
-    cd emqttd
+    cd emqttd-relx && make
 
-    make && make dist
+    cd _rel/emqttd && ./bin/emqttd console
 
 编译成功后，可执行程序包在目录::
 
@@ -220,7 +218,7 @@ Ubuntu平台可通过apt-get命令安装，CentOS/RedHat平台可通过yum命令
 TCP服务端口占用
 ---------------
 
-emqttd消息服务器默认占用的TCP端口包括:
+EMQ 2.0消息服务器默认占用的TCP端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT协议端口                      |
@@ -232,23 +230,25 @@ emqttd消息服务器默认占用的TCP端口包括:
 | 18083     | Dashboard管理控制台端口           |
 +-----------+-----------------------------------+
 
-emqttd占用的上述端口，可通过etc/emqttd.config配置文件的listeners段落设置:
+EMQ占用的上述端口，可通过etc/emqttd.conf配置文件的'Listeners'段落设置:
 
 .. code-block:: erlang
 
-    {listeners, [
-        {mqtt, 1883, [
-            ...
-        ]},
+    %% Plain MQTT
+    {listener, mqtt, 1883, [
+        ...
+    ]}.
 
-        {mqtts, 8883, [
-            ...
-        ]},
-        %% HTTP and WebSocket Listener
-        {http, 8083, [
-            ...
-        ]}
-    ]},
+    %% MQTT/SSL
+    {listener, mqtts, 8883, [
+        ...
+    ]}.
+    
+    %% HTTP and WebSocket Listener
+    {listener, http, 8083, [
+        ...
+    ]}.
+
 
 通过注释或删除相关段落，可禁用相关TCP服务启动。
 
@@ -262,12 +262,12 @@ emqttd占用的上述端口，可通过etc/emqttd.config配置文件的listeners
 快速设置
 --------
 
-emqttd消息服务器主要配置文件:
+EMQ消息服务器主要配置文件:
 
 +-------------------+-----------------------------------+
 | etc/vm.args       | Erlang VM的启动参数设置           |
 +-------------------+-----------------------------------+
-| etc/emqttd.config | emqttd消息服务器参数设置          |
+| etc/emqttd.conf   | EMQ消息服务器参数设置             |
 +-------------------+-----------------------------------+
 
 etc/vm.args中两个重要的启动参数:
@@ -286,23 +286,37 @@ etc/vm.args中两个重要的启动参数:
 
 .. WARNING:: 实际连接数量超过Erlang虚拟机参数设置，会引起emqttd消息服务器宕机!
 
-etc/emqttd.config文件listeners段落设置最大允许连接数:
+etc/emqttd.conf文件'Listeners`段落设置最大允许连接数:
 
 .. code-block:: erlang
 
-    {listeners, [
-        {mqtt, 1883, [
-            %% TCP Acceptor池设置
-            {acceptors, 16},
+    %% Plain MQTT
+    {listener, mqtt, 1883, [
 
-            %% 最大允许连接数设置
-            {max_clients, 8192},
+        %% Size of acceptor pool
+        {acceptors, 16},
 
-            ...
+        %% Maximum number of concurrent clients
+        {max_clients, 8192},
 
-        ]},
+        ...
 
-emqttd消息服务器详细设置，请参见文档: :ref:`config`
+    ]}.
+
+    %% MQTT/SSL
+    {listener, mqtts, 8883, [
+
+        %% Size of acceptor pool
+        {acceptors, 4},
+
+        %% Maximum number of concurrent clients
+        {max_clients, 512},
+
+        ...
+
+    ]}.
+
+EMQ 2.0消息服务器详细设置，请参见文档: :ref:`config`
 
 .. _init_d_emqttd:
 
