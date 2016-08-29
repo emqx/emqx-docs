@@ -7,13 +7,13 @@
 
 .. _intro:
 
---------------------
-emqttd消息服务器简介
---------------------
+------------------
+EMQ 消息服务器简介
+------------------
 
-emqttd(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是轻量的(Lightweight)、发布订阅模式(PubSub)的物联网消息协议。
+EMQ(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是轻量的(Lightweight)、发布订阅模式(PubSub)的物联网消息协议。
 
-emqttd设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)消息路由:
+EMQ项目设计目标是承载移动终端或物联网终端大量的MQTT连接，并实现在大量终端间快速低延时(Low-Latency)消息路由:
 
 1. 稳定承载大规模的MQTT客户端连接，单服务器节点支持50万到100万连接。
 
@@ -56,11 +56,11 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
 
 .. _quick_start:
 
---------------------------
-五分钟下载启动emqttd
---------------------------
+-----------------
+五分钟下载启动EMQ
+-----------------
 
-emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
+EMQ 2.0消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS X、Windows平台的程序包。
 
 下载地址: http://emqtt.com/downloads
 
@@ -68,7 +68,7 @@ emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS 
 
 .. code-block:: bash
 
-    unzip emqttd-macosx-1.1-beta-20160601.zip && cd emqttd
+    unzip emqttd-macosx-2.0-beta1-20160830.zip && cd emqttd
 
     # 启动emqttd
     ./bin/emqttd start
@@ -79,27 +79,29 @@ emqttd消息服务器每个版本，会发布Ubuntu、CentOS、FreeBSD、Mac OS 
     # 停止emqttd
     ./bin/emqttd stop
 
-emqttd消息服务默认采用匿名认证，启动后MQTT客户端可连接1883端口，启动运行日志输出在log/目录。
+EMQ 消息服务默认采用匿名认证，启动后MQTT客户端可连接1883端口，启动运行日志输出在log/目录。
 
 .. _compile:
 
 ---------------
-源码编译emqttd
+源码编译EMQ 2.0
 ---------------
 
 .. code-block:: bash
 
-    git clone https://github.com/emqtt/emqttd.git
+    git clone https://github.com/emqtt/emqttd-relx.git
 
-    cd emqttd && make && make dist
+    cd emqttd-relx && make
+
+    cd _rel/emqttd && ./bin/emqttd console
 
 .. _dashboard:
 
---------------------------
+------------------------
 Web管理控制台(Dashboard)
---------------------------
+------------------------
 
-emqttd消息服务器启动后，会默认加载Dashboard插件，启动Web管理控制台。用户可通过Web控制台，
+EMQ 消息服务器启动后，会默认加载Dashboard插件，启动Web管理控制台。用户可通过Web控制台，
 查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
 
 控制台地址: http://127.0.0.1:18083，默认用户: admin，密码：public
@@ -108,9 +110,9 @@ emqttd消息服务器启动后，会默认加载Dashboard插件，启动Web管�
 
 .. _features:
 
-------------------------
-emqttd消息服务器功能列表
-------------------------
+-------------------------
+EMQ 2.0消息服务器功能列表
+-------------------------
 
 * 完整的MQTT V3.1/V3.1.1协议规范支持
 * QoS0, QoS1, QoS2消息支持
@@ -125,31 +127,37 @@ emqttd消息服务器功能列表
 * 客户端ID或IP地址认证支持
 * 用户名密码认证支持
 * LDAP认证
-* Redis、MySQL、PostgreSQL、HTTP认证集成
+* Redis、MySQL、PostgreSQL、MongoDB、HTTP认证集成
 * 浏览器Cookie认证
 * 基于客户端ID、IP地址、用户名的访问控制(ACL)
 * 多服务器节点集群(Cluster)
 * 多服务器节点桥接(Bridge)
 * mosquitto桥接支持
 * Stomp协议支持
+* MQTT-SN协议支持
+* CoAP协议支持
 * Stomp/SockJS支持
 * 通过Paho兼容性测试
 
 .. _plugins:
 
-------------------------
-emqttd扩展模块与插件列表
-------------------------
+-------------------------
+EMQ 2.0扩展模块与插件列表
+-------------------------
 
 扩展模块(Module)
 ----------------
 
 +-------------------------+-----------------------------------+
+| emqttd_auth_anonymous   | 匿名认证                          |
++-------------------------+-----------------------------------+
 | emqttd_auth_clientid    | ClientId认证                      |
 +-------------------------+-----------------------------------+
 | emqttd_auth_username    | 用户名密码认证                    |
 +-------------------------+-----------------------------------+
-| emqttd_auth_ldap        | LDAP认证                          |
+| emqttd_acl_anonymous    | 匿名鉴权模块                      |
++-------------------------+-----------------------------------+
+| emqttd_acl_internal     | 配置文件鉴权模块                  |
 +-------------------------+-----------------------------------+
 | emqttd_mod_presence     | 客户端上下线状态消息发布          |
 +-------------------------+-----------------------------------+
@@ -158,24 +166,26 @@ emqttd扩展模块与插件列表
 | emqttd_mod_rewrite      | 重写客户端订阅主题(Topic)         |
 +-------------------------+-----------------------------------+
 
-扩展模块通过'etc/emqttd.config'配置文件的auth, modules段落启用。
+扩展模块通过'etc/emqttd.conf'配置文件的Authentication, ACL, Modules段落启用。
 
 例如启用用户名密码认证::
 
-    {access, [
-        %% Authetication. Anonymous Default
-        {auth, [
-            %% Authentication with username, password
-            {username, []},
+    %%--------------------------------------------------------------------
+    %% Authentication
+    %%--------------------------------------------------------------------
 
-            ...
+    %% Authentication with username, password
+    {auth, username, [{passwd, "etc/modules/passwd.conf"}]}.
 
 启用客户端状态发布模块::
 
-    {modules, [
-        %% Client presence management module.
-        %% Publish messages when client connected or disconnected
-        {presence, [{qos, 0}]}
+    %%--------------------------------------------------------------------
+    %% Modules
+    %%--------------------------------------------------------------------
+
+    %% Client presence management module. Publish presence messages when 
+    %% client connected or disconnected.
+    {module, presence, [{qos, 0}]}.
 
 扩展插件(Plugin)
 ----------------
@@ -185,15 +195,17 @@ emqttd扩展模块与插件列表
 +----------------------------+-----------------------------------+
 | `emqttd_dashboard`_        | Web管理控制台，默认加载           |
 +----------------------------+-----------------------------------+
+| `emqttd_auth_ldap`_        | LDAP认证插件                      |
++----------------------------+-----------------------------------+
 | `emqttd_auth_http`_        | HTTP认证插件                      |
 +----------------------------+-----------------------------------+
-| `emqttd_plugin_mysql`_     | MySQL认证插件                     |
+| `emqttd_auth_mysql`_       | MySQL认证插件                     |
 +----------------------------+-----------------------------------+
-| `emqttd_plugin_pgsql`_     | PostgreSQL认证插件                |
+| `emqttd_auth_pgsql`_       | PostgreSQL认证插件                |
 +----------------------------+-----------------------------------+
-| `emqttd_plugin_redis`_     | Redis认证插件                     |
+| `emqttd_auth_redis`_       | Redis认证插件                     |
 +----------------------------+-----------------------------------+
-| `emqttd_plugin_mongo`_     | MongoDB认证插件                   |
+| `emqttd_auth_mongo`_       | MongoDB认证插件                   |
 +----------------------------+-----------------------------------+
 | `emqttd_stomp`_            | Stomp协议插件                     |
 +----------------------------+-----------------------------------+
@@ -201,24 +213,26 @@ emqttd扩展模块与插件列表
 +----------------------------+-----------------------------------+
 | `emqttd_recon`_            | Recon优化调测插件                 |
 +----------------------------+-----------------------------------+
+| `emqttd_reloader`_         | 热升级插件                        |
++----------------------------+-----------------------------------+
 
 扩展插件通过'bin/emqttd_ctl'管理命令行，加载启动运行。
 
 例如启用PostgreSQL认证插件::
 
-    ./bin/emqttd_ctl plugins load emqttd_plugin_pgsql
+    ./bin/emqttd_ctl plugins load emqttd_auth_pgsql
 
 .. _c1000k:
 
---------------------
+-------------------
 100万线连接测试说明
---------------------
+-------------------
 
 .. NOTE::
 
-    emqttd消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统'ulimit -n'限制为1024。
+    EMQ 2.0消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统'ulimit -n'限制为1024。
 
-emqttd消息服务器当前版本，连接压力测试到130万线，8核心/32G内存的CentOS云服务器。
+EMQ 消息服务器1.0版本，连接压力测试到130万线，8核心/32G内存的CentOS云服务器。
 
 操作系统内核参数、TCP协议栈参数、Erlang虚拟机参数、emqttd最大允许连接数设置简述如下：
 
@@ -257,27 +271,21 @@ emqttd/etc/vm.args::
 
     -env ERTS_MAX_PORTS 1048576
 
-emqttd最大允许连接数
----------------------
+EMQ 最大允许连接数
+------------------
 
-emqttd/etc/emqttd.config::
+emqttd/etc/emqttd.conf::
 
-        {mqtt, 1883, [
-            %% Size of acceptor pool
-            {acceptors, 64},
+    %% Plain MQTT
+    {listener, mqtt, 1883, [
+        %% Size of acceptor pool
+        {acceptors, 64},
 
-            %% Maximum number of concurrent clients
-            {max_clients, 1000000},
+        %% Maximum number of concurrent clients
+        {max_clients, 1000000},
 
-            %% Socket Access Control
-            {access, [{allow, all}]},
-
-            %% Connection Options
-            {connopts, [
-                %% Rate Limit. Format is 'burst, rate', Unit is KB/Sec
-                %% {rate_limit, "100,10"} %% 100K burst, 10K rate
-            ]},
-            ...
+        ...
+    ]}.
 
 测试客户端设置
 --------------
@@ -327,12 +335,15 @@ GitHub: https://github.com/emqtt
 
 .. _emqttd_plugin_template: https://github.com/emqtt/emqttd_plugin_template
 .. _emqttd_dashboard:       https://github.com/emqtt/emqttd_dashboard
+.. _emqttd_auth_ldap:       https://github.com/emqtt/emqttd_auth_ldap
 .. _emqttd_auth_http:       https://github.com/emqtt/emqttd_auth_http
-.. _emqttd_plugin_mysql:    https://github.com/emqtt/emqttd_plugin_mysql
-.. _emqttd_plugin_pgsql:    https://github.com/emqtt/emqttd_plugin_pgsql
-.. _emqttd_plugin_redis:    https://github.com/emqtt/emqttd_plugin_redis
-.. _emqttd_plugin_mongo:    https://github.com/emqtt/emqttd_plugin_mongo
+.. _emqttd_auth_mysql:      https://github.com/emqtt/emqttd_plugin_mysql
+.. _emqttd_auth_pgsql:      https://github.com/emqtt/emqttd_plugin_pgsql
+.. _emqttd_auth_redis:      https://github.com/emqtt/emqttd_plugin_redis
+.. _emqttd_auth_mongo:      https://github.com/emqtt/emqttd_plugin_mongo
+.. _emqttd_reloader:        https://github.com/emqtt/emqttd_reloader
 .. _emqttd_stomp:           https://github.com/emqtt/emqttd_stomp
 .. _emqttd_sockjs:          https://github.com/emqtt/emqttd_sockjs
 .. _emqttd_recon:           https://github.com/emqtt/emqttd_recon
+.. _emqttd_sn:              https://github.com/emqtt/emqttd_sn
 
