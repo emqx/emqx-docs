@@ -43,9 +43,9 @@ EMQ 2.0版本提供的插件包括:
 emqttd_plugin_template: 插件开发模版
 ------------------------------------
 
-EMQ插件实际是一个普通的Erlang应用，带自身的配置文件'etc/${PluginName}.conf"。
+EMQ插件实际是一个普通的Erlang应用，插件配置文件: 'etc/${PluginName}.conf"。
 
-emqttd_plugin_template是一个模版插件，插件应用在lib/emqttd_plugin_template-2.0目录下，配置文件: etc/plugins/emqttd_plugin_templat.conf
+emqttd_plugin_template是一个模版插件，编译发布在lib/emqttd_plugin_template-2.0目录，配置文件: etc/plugins/emqttd_plugin_templat.conf
 
 加载、卸载插件
 --------------
@@ -759,7 +759,7 @@ github clone emqttd_plugin_template插件模版库，参考插件模版创建新
 
     -behaviour(emqttd_auth_mod).
 
-    -include("../../../include/emqttd.hrl").
+    -include_lib("emqttd/include/emqttd.hrl").
 
     -export([init/1, check/3, description/0]).
 
@@ -778,7 +778,7 @@ github clone emqttd_plugin_template插件模版库，参考插件模版创建新
 
     -module(emqttd_acl_demo).
 
-    -include("../../../include/emqttd.hrl").
+    -include_lib("emqttd/include/emqttd.hrl").
 
     %% ACL callbacks
     -export([init/1, check_acl/2, reload_acl/1, description/0]).
@@ -852,7 +852,7 @@ emqttd_plugin_template.erl::
 
     -module(emqttd_cli_demo).
 
-    -include("../../../include/emqttd_cli.hrl").
+    -include_lib("emqttd/include/emqttd_cli.hrl").
 
     -export([cmd/1]).
 
