@@ -5,6 +5,143 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0_beta1:
+
+-------------------------
+2.0-beta1 版本 (西湖以西)
+-------------------------
+
+*发布日期: 2016-08-29*
+
+*版本别名: 西湖以西(West of West Lake)*
+
+EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目结构、发布方式、配置文件格式，以奠定项目长期演进的基础。
+
+.. NOTE:: 1.x版本产品部署用户请勿升级到该版本，2.0正式版本发布前会有API变更！
+
+项目简称 - EMQ 
+--------------
+
+项目简称变更为EMQ(Erlang/Enterprise/Elastic MQTT Broker)，E含义Erlang/OTP平台、企业(Enterprise)、弹性(Elastic)。
+
+改进项目发布方式
+----------------
+
+2.0 版本采用预览版(Preview Release) + 候选版本(Release Candidate)版本方式迭代发布，2.0版本将陆续发布beta1, beta2, beta3, rc1, rc2等迭代，直到2.0正式版本发布。
+
+分离应用与发布项目
+------------------
+
+2.0 版本分离发布(Release)为独立项目: `_emqttd_relx`_ ，以解决1.0版本的插件(plugins)与emqttd应用编译依赖问题。
+
+源码编译请clone `_emqttd_relx`_::
+
+    git clone https://github.com/emqtt/emqttd-relx.git
+
+    cd emqttd-relx && make
+
+    cd _rel/emqttd && ./bin/emqttd console
+
+erlang.mk与relx
+---------------
+
+2.0 版本发布项目 `_emqttd_relx`_ 采用 `erlang.mk`_ 和 `relx`_ 编译发布工具替换1.x版本使用的rebar。原因: https://erlang.mk/guide/why.html
+
+Git分支结构
+-----------
+
++------------+-------------------------------------------+
+| stable     | 1.x 稳定版本分支                          |
++------------+-------------------------------------------+
+| master     | 2.x 主版本分支                            |
++------------+-------------------------------------------+
+| emq10      | 1.x 版本开发分支                          |
++------------+-------------------------------------------+
+| emq20      | 2.x 版本开发分支                          |
++------------+-------------------------------------------+
+| emq30      | 3.x 版本开发分支                          |
++------------+-------------------------------------------+
+| issue#{id} | Issue修复分支                             |
++------------+-------------------------------------------+
+   
+
+etc/emqtt.conf配置文件
+----------------------
+
+2.0 版本改进了项目配置文件格式，采用rebar.config、relx.config类似格式，提高配置文件的可读性。
+
+etc/emqttd.conf配置示例::
+
+    %% Max ClientId Length Allowed.
+    {mqtt_max_clientid_len, 512}.
+
+    %% Max Packet Size Allowed, 64K by default.
+    {mqtt_max_packet_size, 65536}.
+
+    %% Client Idle Timeout.
+    {mqtt_client_idle_timeout, 30}. % Second
+
+MQTT-SN协议支持
+---------------
+
+2.0-beta1版本正式发布 `emqttd_sn`_ 项目支持MQTT-SN协议，插件加载方式启用emqttd_sn项目，MQTT-SN默认UDP端口: 1884::
+
+    ./bin/emqttd_ctl plugins load emqttd_sn
+ 
+改进插件架构
+------------
+
+2.0 版本从emqttd项目删除plugins/目录，插件作为一个普通的Erlang应用直接编译到lib目录，插件配置文件统一放置在etc/plugins/目录中::
+
+  ▾ etc/
+    ▸ modules/
+    ▾ plugins/
+        emqtt_coap.conf
+        emqttd.conf
+        emqttd_auth_http.conf
+        emqttd_auth_mongo.conf
+        emqttd_auth_mysql.conf
+        emqttd_auth_pgsql.conf
+        emqttd_auth_redis.conf
+        emqttd_coap.conf
+        emqttd_dashboard.conf
+        emqttd_plugin_template.conf
+        emqttd_recon.conf
+        emqttd_reloader.conf
+        emqttd_sn.conf
+        emqttd_stomp.conf
+
+2.0 版本项目文档
+----------------
+
+2.0 版本中文文档: http://emqtt.com/docs/v2/ 或 http://docs.emqtt.cn/zh_CN/emq20
+
+2.0 版本英文文档: http://emqtt.io/docs/v2/ 或 http://docs.emqtt.com/
+
+Improve the design of PubSub and Router:
+
+.. images:: _static/images/publish.png
+
+0. new architecture
+
+1. erlang.mk
+
+2. sysctl
+
+3. monitor/control plane
+
+4. various backends
+
+5. cli and getopt
+
+6. hooks and pubsub
+
+7. New Trie design
+
+8. net_kernel distributed design
+
+9. Network partitions
+
 .. _release_1.1.3:
 
 ----------
@@ -1443,4 +1580,10 @@ Bugfix: send will msg when network error
 *发布日期: 2012-09-21*
 
 The first public release.
+
+
+.. _relx_:          https://github.com/erlware/relx
+.. _erlang.mk_:     https://erlang.mk
+.. _emqttd_relx:    https://github.com/emqtt/emqttd-relx
+.. _emqttd_sn:      http://github.com/emqtt/emqttd_sn
 
