@@ -8,16 +8,16 @@
 .. _release_2.0_beta1:
 
 -------------------------
-2.0-beta1 版本 (西湖以西)
+2.0-beta1 (西湖以西) 版本
 -------------------------
 
 *发布日期: 2016-08-29*
 
 *版本别名: 西湖以西(West of West Lake)*
 
-EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目结构、发布方式、配置文件格式，以奠定项目长期演进的基础。
+EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目结构、发布方式、Git分支结构以及配置文件格式，以奠定EMQ消息服务器项目长期演进基础。
 
-.. NOTE:: 1.x版本产品部署用户请勿升级到该版本，2.0正式版本发布前会有API变更！
+.. NOTE:: 1.x版本产品部署用户请勿升级到该版本，2.0正式版本发布前会有API变更。
 
 项目简称 - EMQ 
 --------------
@@ -32,9 +32,9 @@ EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目�
 分离应用与发布项目
 ------------------
 
-2.0 版本分离发布(Release)为独立项目: `_emqttd_relx`_ ，以解决1.0版本的插件(plugins)与emqttd应用编译依赖问题。
+2.0 版本分离发布(Release)为独立项目: `emqttd_relx`_ ，以解决1.0版本的插件(plugins)与emqttd应用编译依赖问题。
 
-源码编译请clone `_emqttd_relx`_::
+源码编译请clone `emqttd_relx`_::
 
     git clone https://github.com/emqtt/emqttd-relx.git
 
@@ -45,7 +45,7 @@ EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目�
 erlang.mk与relx
 ---------------
 
-2.0 版本发布项目 `_emqttd_relx`_ 采用 `erlang.mk`_ 和 `relx`_ 编译发布工具替换1.x版本使用的rebar。原因: https://erlang.mk/guide/why.html
+2.0 版本发布项目 `emqttd_relx`_ 采用 `erlang.mk`_ 和 `relx`_ 编译发布工具替换1.x版本使用的rebar。原因: https://erlang.mk/guide/why.html
 
 Git分支结构
 -----------
@@ -118,29 +118,10 @@ MQTT-SN协议支持
 
 2.0 版本英文文档: http://emqtt.io/docs/v2/ 或 http://docs.emqtt.com/
 
-Improve the design of PubSub and Router:
+改进发布订阅流程
+----------------
 
 .. images:: _static/images/publish.png
-
-0. new architecture
-
-1. erlang.mk
-
-2. sysctl
-
-3. monitor/control plane
-
-4. various backends
-
-5. cli and getopt
-
-6. hooks and pubsub
-
-7. New Trie design
-
-8. net_kernel distributed design
-
-9. Network partitions
 
 .. _release_1.1.3:
 
