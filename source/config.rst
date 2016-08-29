@@ -5,6 +5,10 @@
 配置说明(Configuration)
 =======================
 
+------------
+主要配置文件
+------------
+
 EMQ 2.0消息服务器通过etc/目录下配置文件进行设置，主要配置文件包括:
 
 +-------------------+-----------------------------------+
@@ -15,9 +19,9 @@ EMQ 2.0消息服务器通过etc/目录下配置文件进行设置，主要配置
 | etc/emqttd.conf   | EMQ 2.0消息服务器配置文件         |
 +-------------------+-----------------------------------+
 
-------------
-插件配置文件
-------------
+----------------
+扩展插件配置文件
+----------------
 
 EMQ 2.0全部插件配置文件，在etc/plugins/目录:
 
@@ -67,9 +71,9 @@ EMQ 2.0扩展模块配置文件，在etc/modules/目录，在etc/emqttd.conf中�
 | etc/ssl/*                  | SSL证书设置                       |
 +-----------------------------+----------------------------------+
 
------------------------------
-Erlang虚拟机参数(etc/vm.args)
------------------------------
+----------------
+Erlang虚拟机参数
+----------------
 
 etc/vm.args文件设置Erlang虚拟机参数::
 
@@ -182,9 +186,9 @@ EMQ消息服务器日志由lager应用(application)提供，日志相关设置�
 
 .. WARNING:: 过多日志打印严重影响服务器性能，产品环境下建议开启error级别日志。
 
------------------------------------
-EMQ 消息服务器配置(etc/emqttd.conf)
------------------------------------
+------------------
+EMQ 消息服务器配置
+------------------
 
 etc/emqttd.conf是EMQ消息服务器的核心配置文件，配置文件采用的是Erlang数据格式:
 
@@ -262,7 +266,7 @@ ClientID认证
     %% Authentication with clientId
     {auth, clientid, [{config, "etc/modules/client.conf"}, {password, no}]}.
 
-etc/modules/clients.config文件中添加ClientID::
+etc/modules/clients.conf文件中添加ClientID::
 
     "testclientid0".
     {"testclientid1", "127.0.0.1"}.
@@ -533,7 +537,7 @@ Subscription模块配置
 Rewrite模块配置
 ...............
 
-'rewrite'扩展模块支持重写主题(Topic)路径, 重写规则定义在etc/rewrite.config文件:
+'rewrite'扩展模块支持重写主题(Topic)路径, 重写规则定义在etc/rewrite.conf文件:
 
 .. code:: erlang
 

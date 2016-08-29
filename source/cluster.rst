@@ -76,17 +76,17 @@ Erlang节点Cookie设置::
 
 .. _cluster_emqttd:
 
-------------------
-emqttd分布集群设计
-------------------
+-------------------
+EMQ 2.0分布集群设计
+-------------------
 
-emqttd消息服务器集群基于Erlang/OTP分布式设计，集群原理可简述为下述两条规则:
+EMQ消息服务器集群基于Erlang/OTP分布式设计，集群原理可简述为下述两条规则:
 
 1. MQTT客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
 
 2. MQTT客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
 
-emqttd消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
+EMQ消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
 
     topic1 -> node1, node2
     topic2 -> node3
@@ -95,7 +95,7 @@ emqttd消息服务器同一集群的所有节点，都会复制一份主题(Topi
 主题树(Topic Trie)与路由表(Route Table)
 ---------------------------------------
 
-emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
+EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
 
 例如下述主题订阅关系:
 
@@ -143,7 +143,7 @@ emqttd消息服务器每个集群节点，都保存一份主题树(Topic Trie)�
 .. image:: ./_static/images/route.png
 
 ------------------
-emqttd集群设置管理
+EMQ 2.0集群设置管理
 ------------------
 
 假设部署两台服务器s1.emqtt.io, s2.emqtt.io上部署集群:
@@ -231,7 +231,7 @@ emqttd@s2.emqtt.io主动退出集群::
 跨节点会话(Session)
 -------------------
 
-emqttd消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点。
+EMQ消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点。
 
 例如负载均衡的两台集群节点:node1与node2，同一MQTT客户端先连接node1，node1节点会创建持久会话；客户端断线重连到node2时，MQTT的连接在node2节点，持久会话仍在node1节点::
 
@@ -252,7 +252,7 @@ emqttd消息服务器集群模式下，MQTT连接的持久会话(Session)跨节�
 
 如果集群节点间存在防火墙，防火墙需要开启4369端口和一个TCP端口段。4369由epmd端口映射服务使用，TCP端口段用于节点间建立连接与通信。
 
-防火墙设置后，emqttd需要配置相同的端口段，etc/emqttd.config文件::
+防火墙设置后，emqttd需要配置相同的端口段，etc/emqttd.conf文件::
 
     [{kernel, [
         ...
@@ -267,11 +267,9 @@ emqttd消息服务器集群模式下，MQTT连接的持久会话(Session)跨节�
 注意事项: NetSplit
 ------------------
 
-emqttd消息服务器集群需要稳定网络连接以避免发生NetSplit故障。集群设计上默认不自动处理NetSplit，如集群节点间发生NetSplit，需手工重启某个分片上的相关节点。
+EMQ消息服务器集群需要稳定网络连接以避免发生NetSplit故障。集群设计上默认不自动处理NetSplit，如集群节点间发生NetSplit，需手工重启某个分片上的相关节点。
 
-.. NOTE::
-
-    NetSplit是指节点运行正常但因网络断开互相认为对方宕机。
+.. NOTE:: NetSplit是指节点运行正常但因网络断开互相认为对方宕机。EMQ 2.1版本将支持NetSplit自动恢复。
 
 .. _cluster_hash:
 
@@ -279,5 +277,5 @@ emqttd消息服务器集群需要稳定网络连接以避免发生NetSplit故障
 一致性Hash与DHT
 ---------------
 
-NoSQL数据库领域分布式设计，大多会采用一致性Hash或DHT。emqttd消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性Hash、DHT或Shard方式切分路由表。
+NoSQL数据库领域分布式设计，大多会采用一致性Hash或DHT。EMQ消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性Hash、DHT或Shard方式切分路由表。
 

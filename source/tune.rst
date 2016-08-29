@@ -3,7 +3,7 @@
 测试调优(Tune Guide)
 ====================
 
-emqttd消息服务器当前版本MQTT连接压力测试到130万，在一台12核心、32G内存的CentOS服务器上。
+EMQ消息服务器1.x版本MQTT连接压力测试到130万，在一台12核心、32G内存的CentOS服务器上。
 
 100万连接测试所需的Linux内核参数，网络协议栈参数，Erlang虚拟机参数，emqttd消息服务器参数设置如下:
 
@@ -104,13 +104,14 @@ Erlang虚拟机参数
     ## Tweak GC to run more often
     -env ERL_FULLSWEEP_AFTER 1000
 
---------------------
-emqttd消息服务器参数
---------------------
+-----------------
+EMQ消息服务器参数
+-----------------
 
-设置TCP监听器的Acceptor池大小，最大允许连接数。配置文件emqttd/etc/emqttd.config::
+设置TCP监听器的Acceptor池大小，最大允许连接数。配置文件emqttd/etc/emqttd.conf::
 
-    {mqtt, 1883, [
+    %% Plain MQTT
+    {listener, mqtt, 1883, [
         %% Size of acceptor pool
         {acceptors, 64},
 

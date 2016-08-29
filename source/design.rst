@@ -11,19 +11,28 @@
 前言
 ----
 
-emqttd消息服务器1.0版本经过两年时间开发，开发方式有点像摇滚乐专辑的制作，最初从0.1版本一些即兴创作的部分开始，但最终在各层架构设计上做出了正确的选择，整体上体现了某种程度的正交(Orthogonality)和一致性(Consistency)。emqttd 1.0可能是目前开源领域唯一一个，几乎不需要用户做太多努力就可以支持到100万连接的MQTT服务器。
+EMQ 2.0消息服务器设计，在1.x版本的基础上，首先分离了前端协议(FrontEnd)与后端集成(Backend)，其次分离了消息路由平面(Flow Plane)与监控管理平面(Monitor/Control Plane)。EMQ 2.0消息服务器将在1.x版本支持100万MQTT连接的基础上，向可管理可监控坚如磐石的稳定性方向迭代演进::
+
+              Control Plane
+           --------------------
+              |            |
+  FrontEnd -> | Flow Plane | -> BackEnd
+              |            |
+            Session      Router
+           ---------------------
+               Monitor Plane
 
 100万连接
 ---------
 
 多核服务器和现代操作系统内核层面，可以很轻松支持100万TCP连接，核心问题是应用层面如何处理业务瓶颈。
 
-emqttd消息服务器在业务和应用层面，解决了承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP协议栈、Erlang虚拟机参数: http://docs.emqtt.cn/zh_CN/latest/tune.html
+EMQ消息服务器在业务和应用层面，解决了承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP协议栈、Erlang虚拟机参数: http://docs.emqtt.cn/zh_CN/latest/tune.html
 
 全异步架构
 ----------
 
-emqttd消息服务器是基于Erlang/OTP平台的全异步的架构：异步TCP连接处理、异步主题(Topic)订阅、异步消息发布。只有在资源负载限制部分采用同步设计，比如TCP连接创建和Mnesia数据库事务执行。
+EMQ消息服务器是基于Erlang/OTP平台的全异步的架构：异步TCP连接处理、异步主题(Topic)订阅、异步消息发布。只有在资源负载限制部分采用同步设计，比如TCP连接创建和Mnesia数据库事务执行。
 
 一条MQTT消息从发布者(Publisher)到订阅者(Subscriber)，在emqttd消息服务器内部异步流过一系列Erlang进程Mailbox::
 
@@ -34,7 +43,7 @@ emqttd消息服务器是基于Erlang/OTP平台的全异步的架构：异步TCP�
 消息持久化
 ----------
 
-emqttd1.0版本不支持服务器内部消息持久化，这是一个架构设计选择。首先，emqttd解决的核心问题是连接与路由；其次，我们认为内置持久化是个错误设计。
+EMQ 1.0版本不支持服务器内部消息持久化，这是一个架构设计选择。首先，EMQ解决的核心问题是连接与路由；其次，我们认为内置持久化是个错误设计。
 
 传统内置消息持久化的MQ服务器，比如广泛使用的JMS服务器ActiveMQ，几乎每个大版本都在重新设计持久化部分。内置消息持久化在设计上有两个问题:
 
@@ -44,20 +53,20 @@ emqttd1.0版本不支持服务器内部消息持久化，这是一个架构设�
 
 Kafka在上述问题上，做出了正确的设计：一个完全基于磁盘分布式commit log的消息服务器。
 
-emqttd2.0版本计划通过外部存储，例如Redis、Kafka、Cassandra、PostgreSQL，实现多种方式的消息持久化。
+EMQ 2.0版本将发布Plus平台产品，支持消息持久化到Redis、Kafka、Cassandra、PostgreSQL等数据库。
 
 设计上分离消息路由与消息存储职责后，数据复制容灾备份甚至应用集成，可以在数据层面灵活实现。
 
 NetSplit问题
 ------------
 
-emqttd1.0消息服务器集群，基于Mnesia数据库设计。NetSplit发生时，节点间状态是：Erlang节点间可以连通，互相询问自己是否宕机，对方回答你已经宕机:(
+EMQ 1.0消息服务器集群，基于Mnesia数据库设计。NetSplit发生时，节点间状态是：Erlang节点间可以连通，互相询问自己是否宕机，对方回答你已经宕机:(
 
 NetSplit故障发生时，emqttd消息服务器的log/emqttd_error.log日志，会打印critical级别日志::
 
     Mnesia inconsistent_database event: running_partitioned_network, emqttd@host
 
-emqttd集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动处理。所以emqttd1.0版本设计选择是，集群不自动化处理NetSplit，需要人工重启部分节点。
+EMQ集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发生又很难自动处理。所以emqttd1.0版本设计选择是，集群不自动化处理NetSplit，需要人工重启部分节点。
 
 .. _architecture:
 
@@ -212,7 +221,7 @@ MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务�
 认证与访问控制设计
 ------------------
 
-emqttd消息服务器支持可扩展的认证与访问控制，由emqttd_access_control、emqttd_auth_mod和emqttd_acl_mod模块实现。
+EMQ消息服务器支持可扩展的认证与访问控制，由emqttd_access_control、emqttd_auth_mod和emqttd_acl_mod模块实现。
 
 emqttd_access_control模块提供了注册认证扩展接口::
 
@@ -257,8 +266,6 @@ emqttd消息服务器自身实现的认证模块包括:
 | emqttd_auth_username  | 用户名密码认证                 |
 +-----------------------+--------------------------------+
 | emqttd_auth_clientid  | ClientID认证                   |
-+-----------------------+--------------------------------+
-| emqttd_auth_ldap      | LDAP认证                       |
 +-----------------------+--------------------------------+
 | emqttd_auth_anonymous | 匿名认证                       |
 +-----------------------+--------------------------------+
@@ -333,7 +340,7 @@ emqttd_acl_internal模块实现缺省的基于etc/acl.config文件的访问控�
 钩子(Hook)定义
 --------------
 
-emqttd消息服务器在客户端上下线、主题订阅、消息收发位置设计了扩展钩子(Hook):
+EMQ消息服务器在客户端上下线、主题订阅、消息收发位置设计了扩展钩子(Hook):
 
 +------------------------+----------------------------------+
 | 钩子                   | 说明                             |
