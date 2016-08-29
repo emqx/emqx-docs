@@ -7,9 +7,9 @@
 
 .. _release_2.0_beta1:
 
--------------------------
-2.0-beta1 (西湖以西) 版本
--------------------------
+-----------------------------
+EMQ 2.0-beta1 (西湖以西) 版本
+-----------------------------
 
 *发布日期: 2016-08-29*
 
@@ -24,15 +24,15 @@ EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目�
 
 项目简称变更为EMQ(Erlang/Enterprise/Elastic MQTT Broker)，E含义Erlang/OTP平台、企业(Enterprise)、弹性(Elastic)。
 
-改进项目发布方式
-----------------
+项目发布方式
+------------
 
-2.0 版本采用预览版(Preview Release) + 候选版本(Release Candidate)版本方式迭代发布，2.0版本将陆续发布beta1, beta2, beta3, rc1, rc2等迭代，直到2.0正式版本发布。
+2.0 版本后采用预览版(Preview Release) + 候选版本(Release Candidate)版本方式迭代发布，2.0版本将陆续发布beta1, beta2, beta3, rc1, rc2等迭代，直到2.0正式版本发布。
 
-分离应用与发布项目
-------------------
+应用与发布项目
+--------------
 
-2.0 版本分离发布(Release)为独立项目: `emqttd_relx`_ ，以解决1.0版本的插件(plugins)与emqttd应用编译依赖问题。
+2.0 版本后 `emqttd`_ 项目只包括消息服务器应用源码，分离发布(rel)为独立项目: `emqttd_relx`_ ，以解决1.0版本的插件(plugins)与emqttd应用编译依赖问题。
 
 源码编译请clone `emqttd_relx`_::
 
@@ -63,12 +63,11 @@ Git分支结构
 +------------+-------------------------------------------+
 | issue#{id} | Issue修复分支                             |
 +------------+-------------------------------------------+
-   
 
 etc/emqtt.conf配置文件
 ----------------------
 
-2.0 版本改进了项目配置文件格式，采用rebar.config、relx.config类似格式，提高配置文件的可读性。
+2.0 版本改进项目配置文件格式，采用rebar.config、relx.config类似格式，提高配置文件的可读性和可编辑性。
 
 etc/emqttd.conf配置示例::
 
@@ -91,25 +90,26 @@ MQTT-SN协议支持
 改进插件架构
 ------------
 
-2.0 版本从emqttd项目删除plugins/目录，插件作为一个普通的Erlang应用直接编译到lib目录，插件配置文件统一放置在etc/plugins/目录中::
+2.0 版本从emqttd项目删除plugins/目录，插件作为一个普通的Erlang应用，直接依赖(deps)方式在编译到lib目录，插件配置文件统一放置在etc/plugins/目录中::
 
-  ▾ etc/
-    ▸ modules/
-    ▾ plugins/
-        emqtt_coap.conf
-        emqttd.conf
-        emqttd_auth_http.conf
-        emqttd_auth_mongo.conf
-        emqttd_auth_mysql.conf
-        emqttd_auth_pgsql.conf
-        emqttd_auth_redis.conf
-        emqttd_coap.conf
-        emqttd_dashboard.conf
-        emqttd_plugin_template.conf
-        emqttd_recon.conf
-        emqttd_reloader.conf
-        emqttd_sn.conf
-        emqttd_stomp.conf
+    ▾ emqttd-relx/
+      ▾ etc/
+        ▸ modules/
+        ▾ plugins/
+            emqtt_coap.conf
+            emqttd.conf
+            emqttd_auth_http.conf
+            emqttd_auth_mongo.conf
+            emqttd_auth_mysql.conf
+            emqttd_auth_pgsql.conf
+            emqttd_auth_redis.conf
+            emqttd_coap.conf
+            emqttd_dashboard.conf
+            emqttd_plugin_template.conf
+            emqttd_recon.conf
+            emqttd_reloader.conf
+            emqttd_sn.conf
+            emqttd_stomp.conf
 
 2.0 版本项目文档
 ----------------
