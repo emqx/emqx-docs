@@ -29,8 +29,8 @@ EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目�
 
 2.0 版本后采用预览版(Preview Release) + 候选版本(Release Candidate)版本方式迭代发布，2.0版本将陆续发布beta1, beta2, beta3, rc1, rc2等迭代，直到2.0正式版本发布。
 
-应用与发布项目
---------------
+应用与发布
+----------
 
 2.0 版本后 `emqttd`_ 项目只包括消息服务器应用源码，分离发布(rel)为独立项目: `emqttd_relx`_ ，以解决1.0版本的插件(plugins)与emqttd应用编译依赖问题。
 
@@ -118,10 +118,10 @@ MQTT-SN协议支持
 
 2.0 版本英文文档: http://emqtt.io/docs/v2/ 或 http://docs.emqtt.com/
 
-改进发布订阅流程
-----------------
+发布订阅流程
+------------
 
-.. images:: _static/images/publish.png
+.. image:: ./_static/images/publish.png
 
 .. _release_1.1.3:
 
@@ -1562,9 +1562,9 @@ Bugfix: send will msg when network error
 
 The first public release.
 
-
-.. _relx_:          https://github.com/erlware/relx
 .. _erlang.mk_:     https://erlang.mk
+.. _relx_:          https://github.com/erlware/relx
+.. _emqttd_:        https://github.com/emqtt/emqttd
 .. _emqttd_relx:    https://github.com/emqtt/emqttd-relx
 .. _emqttd_sn:      http://github.com/emqtt/emqttd_sn
 
