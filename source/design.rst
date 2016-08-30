@@ -77,7 +77,7 @@ EMQ集群部署在同一IDC网络下，NetSplit发生的几率很低，一旦发
 概念模型
 --------
 
-emqttd消息服务器概念上更像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器(MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按主题树(Topic Trie)发布订阅模式在集群节点间路由MQTT消息:
+EMQ消息服务器概念上更像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息服务器(MQ)。相比网络路由器按IP地址或MPLS标签路由报文，emqttd按主题树(Topic Trie)发布订阅模式在集群节点间路由MQTT消息:
 
 .. image:: ./_static/images/concept.png
 
