@@ -101,7 +101,7 @@ LDAP认证插件配置
 
 etc/plugins/emqttd_auth_ldap.conf:
 
-.. code:: erlang
+.. code-block:: erlang
 
     {ldap, [
         {servers, ["localhost"]},
@@ -133,7 +133,7 @@ HTTP认证插件配置
 
 etc/plugins/emqttd_auth_http.conf:
 
-.. code:: erlang
+.. code-block:: erlang
 
     %% Variables: %u = username, %c = clientid, %a = ipaddress, %t = topic
 
@@ -333,7 +333,7 @@ Postgre MQTT访问控制表
 
 etc/plugins/emqttd_plugin_pgsql.conf:
 
-.. code:: erlang
+.. code-block:: erlang
 
     {pgsql_pool, [
       %% pool options
@@ -393,7 +393,7 @@ emqttd_auth_redis: Redis认证/访问控制插件
 配置Redis认证鉴权插件
 ---------------------
 
-etc/plugins/emqttd_plugin_redis.conf::
+etc/plugins/emqttd_auth_redis.conf::
 
     {redis_pool, [
       %% pool options
@@ -599,7 +599,7 @@ Stomp协议插件。支持STOMP 1.0/1.1/1.2协议客户端连接emqttd，发布�
 
 etc/plugins/emqttd_stomp.conf:
 
-.. code:: erlang
+.. code-block:: erlang
 
     {default_user, [
         {login,    "guest"},
