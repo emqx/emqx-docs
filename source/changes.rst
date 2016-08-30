@@ -7,11 +7,11 @@
 
 .. _release_2.0_beta1:
 
------------------------------
-EMQ 2.0-beta1 (西湖以西) 版本
------------------------------
+-------------------------
+2.0-beta1 (西湖以西) 版本
+-------------------------
 
-*发布日期: 2016-08-29*
+*发布日期: 2016-08-30*
 
 *版本别名: 西湖以西(West of West Lake)*
 
@@ -114,9 +114,9 @@ MQTT-SN协议支持
 2.0 版本项目文档
 ----------------
 
-2.0 版本中文文档: http://emqtt.com/docs/v2/ 或 http://docs.emqtt.cn/zh_CN/emq20
+2.0 版本中文文档: http://emqtt.com/docs/v2/index.html 或 http://docs.emqtt.cn/zh_CN/emq20
 
-2.0 版本英文文档: http://emqtt.io/docs/v2/ 或 http://docs.emqtt.com/
+2.0 版本英文文档: http://emqtt.io/docs/v2/index.html 或 http://docs.emqtt.com/
 
 发布订阅流程
 ------------
