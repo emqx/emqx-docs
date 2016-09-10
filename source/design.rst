@@ -349,9 +349,11 @@ EMQ消息服务器在客户端上下线、主题订阅、消息收发位置设�
 +------------------------+----------------------------------+
 | client.subscribe       | 客户端订阅主题前                 |
 +------------------------+----------------------------------+
-| client.subscribe.after | 客户端订阅主题后                 |
-+------------------------+----------------------------------+
 | client.unsubscribe     | 客户端取消订阅主题               |
++------------------------+----------------------------------+
+| session.subscribed     | 客户端订阅主题后                 |
++------------------------+----------------------------------+
+| session.unsubscribed   | 客户端取消订阅主题后             |
 +------------------------+----------------------------------+
 | message.publish        | MQTT消息发布                     |
 +------------------------+----------------------------------+
@@ -433,29 +435,29 @@ emqttd_hook模块实现Hook机制:
 
     -export([load/1, unload/0]).
 
-    -export([on_message_publish/2, on_message_delivered/3, on_message_acked/3]).
+    -export([on_message_publish/2, on_message_delivered/4, on_message_acked/4]).
 
     load(Env) ->
         emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
-        emqttd:hook('message.delivered', fun ?MODULE:on_message_delivered/3, [Env]),
-        emqttd:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]).
+        emqttd:hook('message.delivered', fun ?MODULE:on_message_delivered/4, [Env]),
+        emqttd:hook('message.acked', fun ?MODULE:on_message_acked/4, [Env]).
 
     on_message_publish(Message, _Env) ->
         io:format("publish ~s~n", [emqttd_message:format(Message)]),
         {ok, Message}.
 
-    on_message_delivered(ClientId, Message, _Env) ->
+    on_message_delivered(ClientId, _Username, Message, _Env) ->
         io:format("delivered to client ~s: ~s~n", [ClientId, emqttd_message:format(Message)]),
         {ok, Message}.
 
-    on_message_acked(ClientId, Message, _Env) ->
+    on_message_acked(ClientId, _Username, Message, _Env) ->
         io:format("client ~s acked: ~s~n", [ClientId, emqttd_message:format(Message)]),
         {ok, Message}.
 
     unload() ->
         emqttd:unhook('message.publish', fun ?MODULE:on_message_publish/2),
-        emqttd:unhook('message.acked', fun ?MODULE:on_message_acked/3),
-        emqttd:unhook('message.delivered', fun ?MODULE:on_message_delivered/3).
+        emqttd:unhook('message.acked', fun ?MODULE:on_message_acked/4),
+        emqttd:unhook('message.delivered', fun ?MODULE:on_message_delivered/4).
 
 .. _plugin:
 
