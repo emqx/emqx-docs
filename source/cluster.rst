@@ -163,7 +163,7 @@ EMQ 2.0集群设置管理
 emqttd@s1.emqtt.io节点设置
 --------------------------
 
-emqttd/etc/vm.args::
+emqttd/releases/2.0/vm.args::
 
     -name emqttd@s1.emqtt.io
 
@@ -176,7 +176,7 @@ emqttd/etc/vm.args::
 emqttd@s2.emqtt.io节点设置
 --------------------------
 
-emqttd/etc/vm.args::
+emqttd/releases/2.0/vm.args::
 
     -name emqttd@s2.emqtt.io
 

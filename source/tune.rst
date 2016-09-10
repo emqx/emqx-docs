@@ -85,7 +85,7 @@ FIN-WAIT-2 Socket超时设置::
 Erlang虚拟机参数
 ----------------
 
-优化设置Erlang虚拟机启动参数，配置文件emqttd/etc/vm.args file::
+优化设置Erlang虚拟机启动参数，配置文件emqttd/releases/2.0/vm.args file::
 
     ## max process numbers
     +P 2097152

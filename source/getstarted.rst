@@ -258,9 +258,9 @@ TCP协议栈参数
     sysctl -w net.core.somaxconn=65536
 
 Erlang虚拟机参数
------------------
+----------------
 
-emqttd/etc/vm.args::
+emqttd/releases/2.0/vm.args::
 
     ## max process numbers
     +P 2097152
