@@ -31,7 +31,7 @@ EMQ 2.0消息服务器每个版本会发布Ubuntu、CentOS、FreeBSD、Mac OS X�
 | Windows   | http://emqtt.com/downloads/latest/windows |
 +-----------+-------------------------------------------+
 
-安装包命名由平台、版本、时间组成，例如: emqttd-centos64-2.0-beta1-20160830.zip
+安装包命名由平台、版本、时间组成，例如: emqttd-macosx-v2.0-beta.2-20160910.zip 
 
 .. _install_on_linux:
 
@@ -43,7 +43,7 @@ CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/latest/ce
 
 .. code-block:: bash
 
-    unzip emqttd-centos64-2.0-beta1-20160830.zip
+    unzip emqttd-macosx-v2.0-beta.2-20160910.zip
 
 控制台调试模式启动，检查EMQ是否可正常启动:
 
