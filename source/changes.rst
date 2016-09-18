@@ -5,6 +5,36 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0_beta.3:
+
+---------------
+2.0-beta.3 版本
+---------------
+
+*发布日期: 2016-09-18*
+
+共享订阅(Shared Subscription)
+-----------------------------
+
+Shared Suscriptions (#639, #416)::
+
+    mosquitto_sub -t '$queue/topic'
+    mosquitto_sub -t '$share/group/topic'
+
+本地订阅(Local Subscription)
+----------------------------
+
+Local Subscriptions that will not create global routes::
+
+    mosquitto_sub -t '$local/topic'
+
+问题修复
+--------
+
+Error on Loading `emqttd_auth_http` (#691)
+
+Remove 'emqttd' application from dependencies (emqttd_coap PR#3)
+
 .. _release_2.0_beta.2:
 
 ---------------
