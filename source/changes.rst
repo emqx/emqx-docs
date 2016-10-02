@@ -5,6 +5,27 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0_rc.1:
+
+-------------
+2.0-rc.1 版本
+-------------
+
+*发布日期: 2016-10-03*
+
+1. 超级用户认证成功后，发布订阅时不进行ACL鉴权 (#696)
+
+2. MQTT客户端认证失败后，EMQ服务器主动关闭TCP连接 (#707)
+
+3. 改进插件管理设计，新增插件无需修改rel/sys.config配置
+
+4. 改进全部插件Makefile的emqttd依赖::
+
+    BUILD_DEPS = emqttd
+    dep_emqttd = git https://github.com/emqtt/emqttd emq20
+
+5. 重新设计Redis插件的ACL鉴权模块
+
 .. _release_2.0_beta.3:
 
 ---------------
