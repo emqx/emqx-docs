@@ -1,6 +1,6 @@
 
-EMQ 2.0项目中文文档
-===================
+*EMQ* 2.0中文文档
+=================
 
 http://emqtt.com/docs 或 http://docs.emqtt.cn/
 
