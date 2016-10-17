@@ -7,9 +7,9 @@
 
 .. _intro:
 
-------------------
-EMQ 消息服务器简介
-------------------
+--------------------
+*EMQ* 消息服务器简介
+--------------------
 
 EMQ(Erlang MQTT Broker)是采用Erlang语言开发的开源MQTT消息服务器。Erlang/OTP是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed)的语言平台。MQTT是轻量的(Lightweight)、发布订阅模式(PubSub)的物联网消息协议。
 
