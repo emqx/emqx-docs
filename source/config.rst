@@ -5,9 +5,9 @@
 配置说明(Configuration)
 =======================
 
-------------
-EMQ 配置文件
-------------
+----------------
+EMQ 2.0 配置文件
+----------------
 
 *EMQ* 2.0消息服务器通过etc/目录下配置文件进行设置，主要配置文件包括:
 
@@ -21,9 +21,13 @@ EMQ 配置文件
 | etc/plugins/\*.conf        | EMQ 2.0各类插件配置文件           |
 +----------------------------+-----------------------------------+
 
-*EMQ* 配置文件方式到2.0-rc.2版本为止经过三次调整，主要为了满足用户配置便捷型，同时又不影响插件开发者社区。
+---------------
+EMQ配置变更历史
+---------------
 
-1. EMQ 1.x版本采用Erlang原生配置文件格式etc/emqttd.config, 内容类似::
+截止2.0-rc.2版本为止，*EMQ*配置文件方式经过三次调整。主要为了既满足用户配置便捷性，同时又不影响插件开发者。
+
+1. EMQ 1.x版本采用Erlang原生配置文件格式etc/emqttd.config::
 
     {emqttd, [
       %% Authentication and Authorization
@@ -36,44 +40,76 @@ EMQ 配置文件
             %% Authentication with clientid
             %{clientid, [{password, no}, {file, "etc/clients.config"}]},
 
-TODO: 格式问题说明...
+Erlang原生的配置格式多层级嵌套，对非Erlang开发者的用户很不友好。
 
-2. EMQ 2.0-beta.x版本采用简化了的原生Erlang格式，类似rebar.config或relex.config::
+2. EMQ 2.0-beta.x版本简化了原生Erlang配置文件，采用类似rebar.config或relex.config格式::
 
-TODO: 格式例子和问题说明
+    %% Max ClientId Length Allowed.
+    {mqtt_max_clientid_len, 512}.
 
-3. EMQ 2.0-rc.x正式版采用了类似sysctl的`k = v`通用格式，并在系统启动时翻译成Erlang原生配置格式。
+    %% Max Packet Size Allowed, 64K by default.
+    {mqtt_max_packet_size, 65536}.
 
-TODO: 格式例子和改进声明...
+    %% Client Idle Timeout.
+    {mqtt_client_idle_timeout, 30}. % Second
 
-------------
-EMQ 环境变量
-------------
+简化后的Erlang原生配置格式方便用户配置，但插件开发者不得不依赖gen_conf库，而不是通过appliaton:get_env进行配置解析。
 
-*EMQ* 2.0还支持操作系统变量:
+3. EMQ 2.0-rc.x正式版集成了cuttlefish库，采用了类似sysctl的`k = v`通用格式，并在系统启动时翻译成Erlang原生配置格式::
 
-```
-$EMQ_NODE_NAME" ] && EMQ_NODE_NAME=emqttd@127.0.0.1
-$EMQ_NODE_COOKIE" ] && EMQ_NODE_COOKIE=emq_dist_cookie
-$EMQ_MAX_PORTS" ] && EMQ_MAX_PORTS=65536
-$EMQ_TCP_PORT" ] && EMQ_TCP_PORT=1883
-$EMQ_SSL_PORT" ] && EMQ_SSL_PORT=8883
-$EMQ_HTTP_PORT" ] && EMQ_HTTP_PORT=8083
-$EMQ_HTTPS_PORT" ] && EMQ_HTTPS_PORT=8084
-```
-export EMQ_TCP_PORT=2883 && ./bin/emqttd start
+    ## Node name
+    node.name = emqttd@127.0.0.1
+    ...
+    ## Max ClientId Length Allowed.
+    mqtt.max_clientid_len = 1024
+    ...
+
+EMQ 2.0启动时的配置文件处理流程::
+
+    ----------------------                                          2.0/schema/*.schema      -------------------
+    | etc/emq.conf       |                   -----------------              \|/              | data/app.config |
+    |       +            | --> mergeconf --> | data/app.conf | -->  cuttlefish generate  --> |                 |
+    | etc/plugins/*.conf |                   -----------------                               | data/vm.args    |
+    ----------------------                                                                   -------------------
+
+----------------
+EMQ 2.0 环境变量
+----------------
+
+*EMQ* 2.0支持的操作系统环境变量:
+
++-------------------+----------------------------------------+
+| EMQ_NODE_NAME     | Erlang节点名称，例如: emqttd@127.0.0.1 |
++-------------------+----------------------------------------+
+| EMQ_NODE_COOKIE   | Erlang分布式节点通信Cookie             |
++-------------------+----------------------------------------+
+| EMQ_MAX_PORTS     | Erlang虚拟机最大允许打开文件/Socket数  |
++-------------------+----------------------------------------+
+| EMQ_TCP_PORT      | MQTT TCP监听端口，默认: 1883           |
++-------------------+----------------------------------------+
+| EMQ_SSL_PORT      | MQTT SSL监听端口，默认: 8883           |
++-------------------+----------------------------------------+
+| EMQ_HTTP_PORT     | HTTP/WebSocket监听端口，默认: 8083     |
++-------------------+----------------------------------------+
+| EMQ_HTTPS_PORT    | HTTPS/WebSocket 监听端口，默认: 8084   |
++-------------------+----------------------------------------+
 
 ---------------
 EMQ节点与Cookie
 ---------------
 
-.. code::
+Erlang节点名称、分布式节点间通信Cookie::
 
     ## Node name
     node.name = emqttd@127.0.0.1
 
     ## Cookie for distributed node
     node.cookie = emq_dist_cookie
+
+.. NOTE::
+
+    Erlang/OTP平台应用多由分布的Erlang节点(进程)组成，每个Erlang节点(进程)需指配一个节点名，用于节点间通信互访。
+    所有互相通信的Erlang节点(进程)间通过一个共用的Cookie进行安全认证。
 
 ----------------
 Erlang虚拟机参数
@@ -116,25 +152,13 @@ Erlang虚拟机参数
     ## node.dist_listen_min = 6000
     ## node.dist_listen_max = 6999
 
-Erlang虚拟机参数说明:
+Erlang虚拟机主要参数说明:
 
-+-------+----------------------------------------------------------------------------------------------+
-| +P    | Erlang虚拟机允许的最大进程数，一个MQTT连接会消耗2个Erlang进程，所以参数值 > 最大连接数 * 2   |
-+-------+----------------------------------------------------------------------------------------------+
-| +Q    | Erlang虚拟机允许的最大Port数量，一个MQTT连接消耗1个Port，所以参数值 > 最大连接数             |
-+-------+----------------------------------------------------------------------------------------------+
-
-releases/2.0/vm.args设置Erlang节点名、节点间通信Cookie::
-
-    -name emqttd@127.0.0.1
-
-    ## Cookie for distributed erlang
-    -setcookie emqttdsecretcookie
-
-.. NOTE::
-
-    Erlang/OTP平台应用多由分布的Erlang节点(进程)组成，每个Erlang节点(进程)需指配一个节点名，用于节点间通信互访。
-    所有互相通信的Erlang节点(进程)间通过一个共用的Cookie进行安全认证。
++--------------------+----------------------------------------------------------------------------------------------+
+| node.process_limit | Erlang虚拟机允许的最大进程数，一个MQTT连接会消耗2个Erlang进程，所以参数值 > 最大连接数 * 2   |
++--------------------+----------------------------------------------------------------------------------------------+
+| node.max_ports     | Erlang虚拟机允许的最大Port数量，一个MQTT连接消耗1个Port，所以参数值 > 最大连接数             |
++--------------------+----------------------------------------------------------------------------------------------+
 
 ---------------
 console日志配置
@@ -171,80 +195,9 @@ crash日志配置
 
     log.crash.file = log/crash.log
 
-EMQ消息服务器日志由lager应用(application)提供，日志相关设置在releases/2.0/sys.config文件的lager应用段落::
-
-  {lager, [
-    ...
-  ]},
-
-产品环境下默认只开启error日志，日志输出到logs/emqttd_error.log文件。'handlers'段落启用其他级别日志::
-
-    {handlers, [
-        {lager_console_backend, info},
-
-        {lager_file_backend, [
-            {formatter_config, [time, " ", pid, " [",severity,"] ", message, "\n"]},
-            {file, "log/emqttd_info.log"},
-            {level, info},
-            {size, 104857600},
-            {date, "$D0"},
-            {count, 30}
-        ]},
-
-        {lager_file_backend, [
-            {formatter_config, [time, " ", pid, " [",severity,"] ", message, "\n"]},
-            {file, "log/emqttd_error.log"},
-            {level, error},
-            {size, 104857600},
-            {date, "$D0"},
-            {count, 30}
-        ]}
-    ]}
-
-.. WARNING:: 过多日志打印严重影响服务器性能，产品环境下建议开启error级别日志。
-
-------------------
-MQTT 协议参数配置
-------------------
-
-------------------
-MQTT 匿名认证
-------------------
-
-------------------
-MQTT 默认ACL文件
-------------------
-
-------------------
-MQTT 会话参数设置
-------------------
-
-------------------
-MQTT 队列参数设置
-------------------
-
-------------------
-MQTT Listener设置
-------------------
-
-------------------
-EMQ 桥接参数设置
-------------------
-
-------------------
-EMQ 插件目录设置
-------------------
-
-
---------------------
-etc/emq.conf配置文件
---------------------
-
-2.0-rc.2版本重新设计了全部配置文件格式，采用类似sysctl "K = V"的通用格式，原vm.args与emqttd.conf合并为单一配置: etc/emq.conf。
-
-----------------
-ClientId最大长度
-----------------
+---------------------
+MQTT ClientId最大长度
+---------------------
 
 .. code::
 
@@ -270,7 +223,7 @@ MQTT客户端连接闲置时间
     mqtt.client_idle_timeout = 30
 
 ------------
-允许匿名认证
+开启匿名认证
 ------------
 
 默认开启，允许任意客户端登录::
@@ -282,7 +235,7 @@ MQTT客户端连接闲置时间
 默认访问控制(ACL)文件
 ---------------------
 
-*EMQ* 消息服务器支持基于etc/acl.conf文件或MySQL、PostgreSQL插件的访问控制规则。
+*EMQ* 支持基于etc/acl.conf文件或MySQL、PostgreSQL插件的访问控制规则。
 
 .. code::
 
@@ -302,7 +255,6 @@ etc/acl.conf访问控制规则定义::
                 match                  match                  match
                  \|/                    \|/                    \|/
             allow | deny           allow | deny           allow | deny
-
 
 etc/acl.conf默认访问规则设置::
 
@@ -429,9 +381,6 @@ broker_sys_interval设置系统发布$SYS消息周期::
 
 .. code::
 
-    ## System Interval of publishing broker $SYS Messages
-    mqtt.broker.sys_interval = 60
-
     ## PubSub Pool Size. Default should be scheduler numbers.
     mqtt.pubsub.pool_size = 8
 
@@ -474,9 +423,7 @@ Modules - 扩展模块
 启用Retainer模块
 ----------------
 
-Retainer模块用于持久化MQTT Retained消息。
-
-.. code::
+Retainer模块用于持久化MQTT Retained消息::
 
     ## Enable retainer module
     mqtt.module.retainer = on
@@ -524,7 +471,7 @@ Retainer模块用于持久化MQTT Retained消息。
 Listener监听器参数
 ------------------
 
-*EMQ* 消息服务器默认开启的MQTT协议、MQTT/SSL、MQTT/WS协议服务端，可通过mqtt.listener.*设置端口、最大允许连接数等参数。
+*EMQ* 消息服务器支持MQTT协议、MQTT/SSL、MQTT/WS协议服务端，可通过mqtt.listener.*设置端口、最大允许连接数等参数。
 
 *EMQ* 2.0消息服务器默认开启的TCP服务端口包括:
 
@@ -683,7 +630,7 @@ Erlang虚拟机监控设置
 +----------------------------------------+-----------------------------------+
 | etc/plugins/emq_reloader.conf          | 热加载插件配置                    |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_sn.conf                | MQTT-SN协议服务器配置             |
+| etc/plugins/emq_sn.conf                | MQTT-SN协议插件配置             |
 +----------------------------------------+-----------------------------------+
 | etc/plugins/emq_stomp.conf             | Stomp协议插件配置                 |
 +----------------------------------------+-----------------------------------+
