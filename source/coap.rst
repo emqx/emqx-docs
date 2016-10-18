@@ -1,4 +1,6 @@
 
+.. _coap:
+
 ============
 CoAP协议介绍
 ============
@@ -7,5 +9,5 @@ CoAP协议介绍
 
 .. toctree::
     :maxdepth: 2
-
     overview
+

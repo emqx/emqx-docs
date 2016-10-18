@@ -85,48 +85,24 @@ FIN-WAIT-2 Socket超时设置::
 Erlang虚拟机参数
 ----------------
 
-优化设置Erlang虚拟机启动参数，配置文件emqttd/releases/2.0/vm.args file::
+优化设置Erlang虚拟机启动参数，配置文件emqttd/etc/emq.conf::
 
-    ## max process numbers
-    +P 2097152
+    ## Erlang Process Limit
+    node.process_limit = 2097152
 
     ## Sets the maximum number of simultaneously existing ports for this system
-    +Q 1048576
-
-    ## Increase number of concurrent ports/sockets, deprecated in R17
-    -env ERL_MAX_PORTS 1048576
-
-    -env ERTS_MAX_PORTS 1048576
-
-    ## Mnesia and SSL will create temporary ets tables.
-    -env ERL_MAX_ETS_TABLES 1024
-
-    ## Tweak GC to run more often
-    -env ERL_FULLSWEEP_AFTER 1000
+    node.max_ports = 1048576
 
 -----------------
 EMQ消息服务器参数
 -----------------
 
-设置TCP监听器的Acceptor池大小，最大允许连接数。配置文件emqttd/etc/emqttd.conf::
+设置TCP监听器的Acceptor池大小，最大允许连接数。配置文件emqttd/etc/emq.conf::
 
-    %% Plain MQTT
-    {listener, mqtt, 1883, [
-        %% Size of acceptor pool
-        {acceptors, 64},
-
-        %% Maximum number of concurrent clients
-        {max_clients, 1000000},
-
-        %% Socket Access Control
-        {access, [{allow, all}]},
-
-        %% Connection Options
-        {connopts, [
-            %% Rate Limit. Format is 'burst, rate', Unit is KB/Sec
-            %% {rate_limit, "100,10"} %% 100K burst, 10K rate
-        ]},
-        ...
+    ## TCP Listener
+    mqtt.listener.tcp = 1883
+    mqtt.listener.tcp.acceptors = 64
+    mqtt.listener.tcp.max_clients = 1000000
 
 --------------
 测试客户端设置
@@ -142,5 +118,4 @@ emqtt_benchmark
 ---------------
 
 并发连接测试工具: http://github.com/emqtt/emqtt_benchmark
-
 
