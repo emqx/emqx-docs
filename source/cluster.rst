@@ -124,7 +124,6 @@ EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
     | t/a   -> node3         |
     --------------------------
 
-
 订阅(Subscription)与消息派发
 ----------------------------
 
@@ -142,9 +141,9 @@ EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
 
 .. image:: ./_static/images/route.png
 
-------------------
-EMQ 2.0集群设置管理
-------------------
+-------------------
+EMQ 2.0集群配置管理
+-------------------
 
 假设部署两台服务器s1.emqtt.io, s2.emqtt.io上部署集群:
 
@@ -170,6 +169,10 @@ emqttd/etc/emq.conf::
     或
 
     node.name = emqttd@192.168.0.10
+
+也可通过环境变量::
+
+    export EMQ_NODE_NAME=emqttd@s1.emqtt.io && ./bin/emqttd start
 
 .. WARNING:: 节点启动加入集群后，节点名称不能变更。
 

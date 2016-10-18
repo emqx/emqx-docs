@@ -5,7 +5,37 @@
 版本发布(Changes)
 =================
 
-.. _release_2.0_rc.1:
+.. _release_2.0_rc.2:
+
+-------------
+2.0-rc.2 版本
+-------------
+
+*发布日期: 2016-10-18*
+
+1. 集成cuttlefish库，支持'K = V'通用配置文件格式，重构EMQ与全部插件配置文件::
+
+    node.name = emqttd@127.0.0.1
+
+    ...
+
+    mqtt.listener.tcp = 1883
+
+    ...
+
+2. 支持操作系统环境变量。启动时通过环境变量设置EMQ节点名称、Cookie以及TCP端口号::
+
+    EMQ_NODE_NAME
+    EMQ_NODE_COOKIE
+    EMQ_MAX_PORTS
+    EMQ_TCP_PORT
+    EMQ_SSL_PORT
+    EMQ_HTTP_PORT
+    EMQ_HTTPS_PORT
+
+3. 重构认证模块、ACL模块与扩展模块，更新全部插件项目名称以及配置文件。
+
+TODO: issues closed.
 
 -------------
 2.0-rc.1 版本

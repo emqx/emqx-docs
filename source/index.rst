@@ -33,6 +33,7 @@ TODO: 2.0-rc.1图片更新.
    cluster
    bridge
    guide
+   advanced
    design
    commands
    plugins
