@@ -27,7 +27,9 @@ EMQ 配置变更历史
 
 *EMQ* 配置文件方式经过三次调整。主要为了方便用户与插件开发者使用。
 
-1. EMQ 1.x版本采用Erlang原生配置文件格式etc/emqttd.config::
+1. EMQ 1.x版本采用Erlang原生配置文件格式etc/emqttd.config:
+
+.. code-block:: erlang
 
     {emqttd, [
       %% Authentication and Authorization
@@ -42,7 +44,9 @@ EMQ 配置变更历史
 
 Erlang的原生配置格式多层级嵌套，对非Erlang开发者的用户很不友好。
 
-2. EMQ 2.0-beta.x版本简化了原生Erlang配置文件，采用类似rebar.config或relx.config格式::
+2. EMQ 2.0-beta.x版本简化了原生Erlang配置文件，采用类似rebar.config或relx.config格式:
+
+.. code-block:: properties
 
     %% Max ClientId Length Allowed.
     {mqtt_max_clientid_len, 512}.
@@ -55,7 +59,9 @@ Erlang的原生配置格式多层级嵌套，对非Erlang开发者的用户很�
 
 简化后的Erlang原生配置格式方便用户配置，但插件开发者不得不依赖gen_conf库，而不是通过appliaton:get_env读取配置参数。
 
-3. EMQ 2.0-rc.2正式版集成了cuttlefish库，采用了类似sysctl的`k = v`通用格式，并在系统启动时翻译成Erlang原生配置格式::
+3. EMQ 2.0-rc.2正式版集成了cuttlefish库，采用了类似sysctl的`k = v`通用格式，并在系统启动时翻译成Erlang原生配置格式:
+
+.. code-block:: properties
 
     ## Node name
     node.name = emqttd@127.0.0.1
@@ -96,7 +102,9 @@ EMQ 2.0 环境变量
 EMQ节点与Cookie
 ---------------
 
-Erlang节点名称、分布式节点间通信Cookie::
+Erlang节点名称、分布式节点间通信Cookie:
+
+.. code-block:: properties
 
     ## Node name
     node.name = emqttd@127.0.0.1
@@ -113,7 +121,7 @@ Erlang节点名称、分布式节点间通信Cookie::
 Erlang虚拟机参数
 ----------------
 
-.. code::
+.. code-block:: properties
 
     ## SMP support: enable, auto, disable
     node.smp = auto
@@ -162,7 +170,7 @@ Erlang虚拟机主要参数说明:
 console日志配置
 ---------------
 
-.. code::
+.. code-block:: properties
 
     ## Console log. Enum: off, file, console, both
     log.console = console
@@ -177,7 +185,7 @@ console日志配置
 error日志配置
 -------------
 
-.. code::
+.. code-block:: properties
 
     ## Error log file
     log.error.file = log/error.log
@@ -186,7 +194,7 @@ error日志配置
 crash日志配置
 -------------
 
-.. code::
+.. code-block:: properties
 
     ## Enable the crash log. Enum: on, off
     log.crash = on
@@ -197,7 +205,7 @@ crash日志配置
 MQTT ClientId最大长度
 ---------------------
 
-.. code::
+.. code-block:: properties
 
     ## Max ClientId Length Allowed.
     mqtt.max_clientid_len = 1024
@@ -206,7 +214,7 @@ MQTT ClientId最大长度
 MQTT最大报文尺寸
 ----------------
 
-.. code::
+.. code-block:: properties
 
     ## Max Packet Size Allowed, 64K by default.
     mqtt.max_packet_size = 64KB
@@ -215,7 +223,9 @@ MQTT最大报文尺寸
 MQTT客户端连接闲置时间
 ----------------------
 
-设置MQTT客户端最大允许闲置时间(Socket连接建立，但未收到CONNECT报文)::
+设置MQTT客户端最大允许闲置时间(Socket连接建立，但未收到CONNECT报文):
+
+.. code-block:: properties
 
     ## Client Idle Timeout (Second)
     mqtt.client_idle_timeout = 30
@@ -224,7 +234,9 @@ MQTT客户端连接闲置时间
 开启匿名认证
 ------------
 
-默认开启，允许任意客户端登录::
+默认开启，允许任意客户端登录:
+
+.. code-block:: properties
 
     ## Allow Anonymous authentication
     mqtt.allow_anonymous = true
@@ -235,7 +247,7 @@ MQTT客户端连接闲置时间
 
 *EMQ* 支持基于etc/acl.conf文件或MySQL、PostgreSQL等插件的访问控制规则。
 
-.. code::
+.. code-block:: properties
 
     ## Default ACL File
     mqtt.acl_file = etc/acl.conf
@@ -254,7 +266,9 @@ etc/acl.conf访问控制规则定义::
                  \|/                    \|/                    \|/
             allow | deny           allow | deny           allow | deny
 
-etc/acl.conf默认访问规则设置::
+etc/acl.conf默认访问规则设置:
+
+.. code-block:: erlang
 
     %% 允许'dashboard'用户订阅 '$SYS/#'
     {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
@@ -276,7 +290,7 @@ etc/acl.conf默认访问规则设置::
 MQTT会话(Session)参数设置
 -------------------------
 
-.. code::
+.. code-block:: properties
 
     ## Max number of QoS 1 and 2 messages that can be “inflight” at one time.
     ## 0 means no limit
@@ -327,7 +341,9 @@ EMQ消息服务器会话通过队列缓存Qos1/Qos2消息:
 
 2. 飞行窗口满而延迟下发的消息
 
-队列参数设置::
+队列参数设置:
+
+.. code-block:: properties
 
     ## Type: simple | priority
     mqtt.queue.type = simple
@@ -377,7 +393,7 @@ broker_sys_interval设置系统发布$SYS消息周期::
 发布订阅(PubSub)参数设置
 ------------------------
 
-.. code::
+.. code-block:: properties
 
     ## PubSub Pool Size. Default should be scheduler numbers.
     mqtt.pubsub.pool_size = 8
@@ -391,7 +407,7 @@ broker_sys_interval设置系统发布$SYS消息周期::
 桥接(bridge)参数设置
 --------------------
 
-.. code::
+.. code-block:: properties
 
     ## Bridge Queue Size
     mqtt.bridge.max_queue_len = 10000
@@ -403,7 +419,7 @@ broker_sys_interval设置系统发布$SYS消息周期::
 Plugins插件etc目录设置
 ----------------------
 
-.. code::
+.. code-block:: properties
 
     ## Dir of plugins' config
     mqtt.plugins.etc_dir = etc/plugins/
@@ -421,7 +437,9 @@ Modules - 扩展模块
 启用Retainer模块
 ----------------
 
-Retainer模块用于持久化MQTT Retained消息::
+Retainer模块用于持久化MQTT Retained消息:
+
+.. code-block:: properties
 
     ## Enable retainer module
     mqtt.module.retainer = on
@@ -465,11 +483,11 @@ Subscription扩展模块支持客户端上线时，自动订阅或恢复订阅�
 
     mqtt.module.subscription.topics = $client/%c=1,$user/%u=1
 
-------------------
-Listener监听器参数
-------------------
+----------------------
+MQTT Listeners参数说明
+----------------------
 
-*EMQ* 消息服务器支持MQTT协议、MQTT/SSL、MQTT/WS协议服务端，可通过mqtt.listener.*设置端口、最大允许连接数等参数。
+*EMQ* 消息服务器支持MQTT、MQTT/SSL、MQTT/WS协议服务端，可通过mqtt.listener.*设置端口、最大允许连接数等参数。
 
 *EMQ* 2.0消息服务器默认开启的TCP服务端口包括:
 
@@ -495,7 +513,7 @@ Listener参数说明:
 MQTT(TCP)监听器 - 1883
 ----------------------
 
-.. code-block:: erlang
+.. code-block:: properties
 
     ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
     mqtt.listener.tcp = 1883
@@ -520,7 +538,7 @@ MQTT(TCP)监听器 - 1883
 MQTT(SSL)监听器 - 8883
 ----------------------
 
-.. code-block::
+.. code-block:: properties
 
     ## SSL Listener: 8883, 127.0.0.1:8883, ::1:8883
     mqtt.listener.ssl = 8883
@@ -546,7 +564,7 @@ MQTT(SSL)监听器 - 8883
 MQTT(WebSocket)监听器 - 8083
 ----------------------------
 
-.. code-block::
+.. code-block:: properties
 
     ## HTTP and WebSocket Listener
     mqtt.listener.http = 8083
@@ -557,7 +575,7 @@ MQTT(WebSocket)监听器 - 8083
 MQTT(WebSocket/SSL)监听器 - 8084
 --------------------------------
 
-.. code-block::
+.. code-block:: properties
 
     ## HTTP(SSL) Listener
     mqtt.listener.https = 8084
@@ -575,10 +593,9 @@ MQTT(WebSocket/SSL)监听器 - 8084
 Erlang虚拟机监控设置
 --------------------
 
-.. code::
+.. code-block:: properties
 
     ## Long GC, don't monitor in production mode for:
-    ## https://github.com/erlang/otp/blob/feb45017da36be78d4c5784d758ede619fa7bfd3/erts/emulator/beam/erl_gc.c#L421
     sysmon.long_gc = false
 
     ## Long Schedule(ms)
