@@ -113,7 +113,7 @@ Erlang节点名称、分布式节点间通信Cookie::
 Erlang虚拟机参数
 ----------------
 
-.. code-block:: config
+.. code::
 
     ## SMP support: enable, auto, disable
     node.smp = auto
@@ -233,7 +233,7 @@ MQTT客户端连接闲置时间
 默认访问控制(ACL)文件
 ---------------------
 
-*EMQ* 支持基于etc/acl.conf文件或MySQL、PostgreSQL插件的访问控制规则。
+*EMQ* 支持基于etc/acl.conf文件或MySQL、PostgreSQL等插件的访问控制规则。
 
 .. code::
 
@@ -442,9 +442,9 @@ Retainer模块用于持久化MQTT Retained消息::
 启用Presence模块
 ----------------
 
-'presence'扩展模块会向$SYS主题(Topic)发布客户端上下线消息:
+Presence扩展模块会向$SYS主题(Topic)发布客户端上下线消息:
 
-.. code::
+.. code-block:: properties
 
     ## Enable presence module
     ## Publish presence messages when client connected or disconnected.
@@ -456,9 +456,9 @@ Retainer模块用于持久化MQTT Retained消息::
 启用Subscription模块
 --------------------
 
-'subscription'扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic):
+Subscription扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic):
 
-.. code::
+.. code-block:: properties
 
     # Enable subscription module
     mqtt.module.subscription = on
