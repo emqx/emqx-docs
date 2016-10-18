@@ -5,7 +5,7 @@
 管理命令(CLI)
 =============
 
-EMQ消息服务器提供了'./bin/emqttd_ctl'的管理命令行。
+*EMQ* 消息服务器提供了'./bin/emqttd_ctl'的管理命令行。
 
 .. WARNING:: 限制: Windows平台无法使用。
 
@@ -18,7 +18,7 @@ status命令
     $ ./bin/emqttd_ctl status
 
     Node 'emqttd@127.0.0.1' is started
-    emqttd 0.16.0 is running
+    emqttd 2.0 is running
 
 ----------
 broker命令
@@ -42,9 +42,9 @@ broker命令查询服务器基本信息，启动时间，统计数据与性能�
     $ ./bin/emqttd_ctl broker
 
     sysdescr  : Erlang MQTT Broker
-    version   : 0.15.0
-    uptime    : 1 hours, 25 minutes, 24 seconds
-    datetime  : 2016-01-16 13:17:32
+    version   : 2.0
+    uptime    : 25 seconds
+    datetime  : 2016-10-18 10:42:10
 
 broker stats
 ------------
@@ -376,15 +376,6 @@ subscriptions list
     mosqsub/91042-airlee.lo -> t/y:1
     mosqsub/90475-airlee.lo -> t/+/x:2
 
-subscriptions list static
--------------------------
-
-查询全部静态订阅::
-
-    $ ./bin/emqttd_ctl subscriptions list static
-
-    clientid -> new_topic:1
-
 subscriptions show <ClientId>
 -----------------------------
 
@@ -438,9 +429,9 @@ load <Plugin>
 
 加载插件::
 
-    $ ./bin/emqttd_ctl plugins load emqttd_recon
+    $ ./bin/emqttd_ctl plugins load emq_recon
 
-    Start apps: [recon,emqttd_recon]
+    Start apps: [recon,emq_recon]
     Plugin emqttd_recon loaded successfully.
 
 unload <Plugin>
@@ -448,9 +439,9 @@ unload <Plugin>
 
 卸载插件::
 
-    $ ./bin/emqttd_ctl plugins unload emqttd_recon
+    $ ./bin/emqttd_ctl plugins unload emq_recon
 
-    Plugin emqttd_recon unloaded successfully.
+    Plugin emq_recon unloaded successfully.
 
 -----------
 bridges命令
@@ -657,23 +648,23 @@ listeners命令用于查询开启的TCP服务监听器::
 
     $ ./bin/emqttd_ctl listeners
 
-    listener on http:8083
+    listener on mqtt:ws:8083
       acceptors       : 4
       max_clients     : 64
       current_clients : 0
       shutdown_count  : []
-    listener on mqtts:8883
+    listener on mqtt:ssl:8883
       acceptors       : 4
       max_clients     : 512
       current_clients : 0
       shutdown_count  : []
-    listener on mqtt:1883
-      acceptors       : 16
-      max_clients     : 8192
+    listener on mqtt:tcp:1883
+      acceptors       : 8
+      max_clients     : 1024
       current_clients : 1
-      shutdown_count  : [{closed,1}]
-    listener on http:18083
-      acceptors       : 4
+      shutdown_count  : [{closed,2}]
+    listener on dashboard:http:18083
+      acceptors       : 2
       max_clients     : 512
       current_clients : 0
       shutdown_count  : []

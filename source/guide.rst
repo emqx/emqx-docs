@@ -7,6 +7,23 @@
 
 .. _authentication:
 
+
+MQTT认证模块设置
+----------------
+
+EMQ消息服务器认证由一系列认证模块(module)或插件(plugin)提供，系统默认支持用户名、ClientID、匿名(anonymouse)认证模块。
+
+系统默认采用匿名认证(anonymous)，通过删除注释可开启其他认证方式。同时开启的多个认证模块组成认证链::
+
+               ----------------           ----------------           ------------
+    Client --> | Username认证 | -ignore-> | ClientID认证 | -ignore-> | 匿名认证 |
+               ----------------           ----------------           ------------
+                      |                         |                         |
+                     \|/                       \|/                       \|/
+                allow | deny              allow | deny              allow | deny
+
+.. NOTE:: EMQ 2.0消息服务器还提供了MySQL、PostgreSQL、Redis、MongoDB、HTTP、LDAP认证插件，认证插件加载后认证模块失效。
+
 ------------------------
 认证配置(Authentication)
 ------------------------

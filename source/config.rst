@@ -18,7 +18,7 @@ EMQ 配置文件
 +----------------------------+-----------------------------------+
 | etc/acl.conf               | EMQ 2.0默认ACL配置文件            |
 +----------------------------+-----------------------------------+
-| etc/plugins/\*.conf        | EMQ 2.0插件配置文件               |
+| etc/plugins/\*.conf        | EMQ 2.0各类插件配置文件           |
 +----------------------------+-----------------------------------+
 
 *EMQ* 配置文件方式到2.0-rc.2版本为止经过三次调整，主要为了满足用户配置便捷型，同时又不影响插件开发者社区。
@@ -63,70 +63,60 @@ $EMQ_HTTPS_PORT" ] && EMQ_HTTPS_PORT=8084
 ```
 export EMQ_TCP_PORT=2883 && ./bin/emqttd start
 
-----------------
-EMQ 节点与Cookie
-----------------
+---------------
+EMQ节点与Cookie
+---------------
+
+.. code::
+
+    ## Node name
+    node.name = emqttd@127.0.0.1
+
+    ## Cookie for distributed node
+    node.cookie = emq_dist_cookie
 
 ----------------
 Erlang虚拟机参数
 ----------------
 
-releases/2.0/vm.args文件设置Erlang虚拟机参数::
+.. code::
 
-    ##-------------------------------------------------------------------------
-    ## Name of the node
-    ##-------------------------------------------------------------------------
-    -name emqttd@127.0.0.1
+    ## SMP support: enable, auto, disable
+    node.smp = auto
 
-    ## Cookie for distributed erlang
-    -setcookie emqttdsecretcookie
+    ## Enable kernel poll
+    node.kernel_poll = on
 
-    ##-------------------------------------------------------------------------
-    ## Flags
-    ##-------------------------------------------------------------------------
+    ## async thread pool
+    node.async_threads = 32
 
-    ## Heartbeat management; auto-restarts VM if it dies or becomes unresponsive
-    ## (Disabled by default..use with caution!)
-    ##-heart
-    -smp true
-
-    ## Enable kernel poll and a few async threads
-    +K true
-
-    ## 12 threads/core.
-    +A 48
-
-    ## max process numbers
-    +P 8192
+    ## Erlang Process Limit
+    node.process_limit = 256000
 
     ## Sets the maximum number of simultaneously existing ports for this system
-    +Q 8192
+    node.max_ports = 65536
 
-    ## max atom number
-    ## +t
+    ## Set the distribution buffer busy limit (dist_buf_busy_limit)
+    node.dist_buffer_size = 32MB
 
-    ## Set the distribution buffer busy limit (dist_buf_busy_limit) in kilobytes.
-    ## Valid range is 1-2097151. Default is 1024.
-    ## +zdbbl 8192
-
-    ## CPU Schedulers
-    ## +sbt db
-
-    ##-------------------------------------------------------------------------
-    ## Env
-    ##-------------------------------------------------------------------------
-
-    ## Increase number of concurrent ports/sockets, deprecated in R17
-    -env ERL_MAX_PORTS 8192
-
-    -env ERTS_MAX_PORTS 8192
-
-    -env ERL_MAX_ETS_TABLES 1024
+    ## Max ETS Tables.
+    ## Note that mnesia and SSL will create temporary ets tables.
+    node.max_ets_tables = 256000
 
     ## Tweak GC to run more often
-    -env ERL_FULLSWEEP_AFTER 1000
+    node.fullsweep_after = 1000
 
-releases/2.0/vm.args中两个最重要的参数:
+    ## Crash dump
+    node.crash_dump = log/crash.dump
+
+    ## Distributed node ticktime
+    node.dist_net_ticktime = 60
+
+    ## Distributed node port range
+    ## node.dist_listen_min = 6000
+    ## node.dist_listen_max = 6999
+
+Erlang虚拟机参数说明:
 
 +-------+----------------------------------------------------------------------------------------------+
 | +P    | Erlang虚拟机允许的最大进程数，一个MQTT连接会消耗2个Erlang进程，所以参数值 > 最大连接数 * 2   |
@@ -146,9 +136,40 @@ releases/2.0/vm.args设置Erlang节点名、节点间通信Cookie::
     Erlang/OTP平台应用多由分布的Erlang节点(进程)组成，每个Erlang节点(进程)需指配一个节点名，用于节点间通信互访。
     所有互相通信的Erlang节点(进程)间通过一个共用的Cookie进行安全认证。
 
------------------
-日志级别配置
------------------
+---------------
+console日志配置
+---------------
+
+.. code::
+
+    ## Console log. Enum: off, file, console, both
+    log.console = console
+
+    ## Console log level. Enum: debug, info, notice, warning, error, critical, alert, emergency
+    log.console.level = error
+
+    ## Console log file
+    ## log.console.file = log/console.log
+
+-------------
+error日志配置
+-------------
+
+.. code::
+
+    ## Error log file
+    log.error.file = log/error.log
+
+-------------
+crash日志配置
+-------------
+
+.. code::
+
+    ## Enable the crash log. Enum: on, off
+    log.crash = on
+
+    log.crash.file = log/crash.log
 
 EMQ消息服务器日志由lager应用(application)提供，日志相关设置在releases/2.0/sys.config文件的lager应用段落::
 
@@ -214,116 +235,61 @@ EMQ 桥接参数设置
 EMQ 插件目录设置
 ------------------
 
-------------------
-EMQ 服务器心跳设置
-------------------
 
+--------------------
+etc/emq.conf配置文件
+--------------------
 
-------------------
-EMQ 消息服务器配置
-------------------
+2.0-rc.2版本重新设计了全部配置文件格式，采用类似sysctl "K = V"的通用格式，原vm.args与emqttd.conf合并为单一配置: etc/emq.conf。
 
-etc/emqttd.conf是EMQ消息服务器的核心配置文件，配置文件采用的是Erlang数据格式:
-
-1. [ ] : 列表，逗号分隔元素
-
-2. { } : 元组，配置元组一般两个元素{Env, Value}
-
-3. %%  : 注释
-
-MQTT协议参数设置
+----------------
+ClientId最大长度
 ----------------
 
-ClientId最大长度
-................
+.. code::
 
-%% Max ClientId Length Allowed.
-{mqtt_max_clientid_len, 512}.
+    ## Max ClientId Length Allowed.
+    mqtt.max_clientid_len = 1024
 
+----------------
 MQTT最大报文尺寸
-................
+----------------
 
-.. code:: erlang
+.. code::
 
-    %% Max Packet Size Allowed, 64K by default.
-    {mqtt_max_packet_size, 65536}.
+    ## Max Packet Size Allowed, 64K by default.
+    mqtt.max_packet_size = 64KB
 
+----------------------
 MQTT客户端连接闲置时间
-......................
+----------------------
 
 设置MQTT客户端最大允许闲置时间(Socket连接建立，但未收到CONNECT报文)::
 
-    %% Client Idle Timeout.
-    {mqtt_client_idle_timeout, 30}. % Second
+    ## Client Idle Timeout (Second)
+    mqtt.client_idle_timeout = 30
 
-MQTT认证模块设置
-----------------
-
-EMQ消息服务器认证由一系列认证模块(module)或插件(plugin)提供，系统默认支持用户名、ClientID、匿名(anonymouse)认证模块。
-
-系统默认采用匿名认证(anonymous)，通过删除注释可开启其他认证方式。同时开启的多个认证模块组成认证链::
-
-               ----------------           ----------------           ------------
-    Client --> | Username认证 | -ignore-> | ClientID认证 | -ignore-> | 匿名认证 |
-               ----------------           ----------------           ------------
-                      |                         |                         |
-                     \|/                       \|/                       \|/
-                allow | deny              allow | deny              allow | deny
-
-.. NOTE:: EMQ 2.0消息服务器还提供了MySQL、PostgreSQL、Redis、MongoDB、HTTP、LDAP认证插件，认证插件加载后认证模块失效。
-
-用户名密码认证
-..............
-
-.. code-block:: erlang
-
-    %% Authentication with username, password
-    {auth, username, [{passwd, "etc/modules/passwd.conf"}]}.
-
-两种方式添加用户:
-
-1. 直接在etc/modules/passwd.conf中明文配置默认用户::
-
-    {"user1", "passwd1"}.
-    {"user2", "passwd2"}.
-
-2. 通过'./bin/emqttd_ctl'管理命令行添加用户::
-
-   $ ./bin/emqttd_ctl users add <Username> <Password>
-
-ClientID认证
-............
-
-.. code-block:: erlang
-
-    %% Authentication with clientId
-    {auth, clientid, [{config, "etc/modules/client.conf"}, {password, no}]}.
-
-etc/modules/clients.conf文件中添加ClientID::
-
-    "testclientid0".
-    {"testclientid1", "127.0.0.1"}.
-    {"testclientid2", "192.168.0.1/24"}.
-
-匿名认证
-........
+------------
+允许匿名认证
+------------
 
 默认开启，允许任意客户端登录::
 
-    %% Anonymous: Allow all
-    {auth, anonymous, []}.
+    ## Allow Anonymous authentication
+    mqtt.allow_anonymous = true
 
-用户访问控制(ACL)设置
+---------------------
+默认访问控制(ACL)文件
 ---------------------
 
-EMQ消息服务器支持基于etc/modules/acl.conf文件或MySQL、PostgreSQL插件的访问控制规则。
+*EMQ* 消息服务器支持基于etc/acl.conf文件或MySQL、PostgreSQL插件的访问控制规则。
 
-默认开启基于etc/modules/acl.conf文件的访问控制::
+.. code::
 
-    %% Internal ACL config
-    {acl, internal, [{config, "etc/modules/acl.conf"}, {nomatch, allow}]}.
+    ## Default ACL File
+    mqtt.acl_file = etc/acl.conf
 
-etc/modules/acl.conf访问控制规则定义::
+etc/acl.conf访问控制规则定义::
 
     允许|拒绝  用户|IP地址|ClientID  发布|订阅  主题列表
 
@@ -338,7 +304,7 @@ etc/modules/acl.conf访问控制规则定义::
             allow | deny           allow | deny           allow | deny
 
 
-etc/modules/acl.conf默认访问规则设置::
+etc/acl.conf默认访问规则设置::
 
     %% 允许'dashboard'用户订阅 '$SYS/#'
     {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
@@ -354,81 +320,54 @@ etc/modules/acl.conf默认访问规则设置::
 
 .. NOTE:: 默认规则只允许本机用户订阅'$SYS/#'与'#'
 
-EMQ消息服务器接收到MQTT客户端发布(PUBLISH)或订阅(SUBSCRIBE)请求时，会逐条匹配ACL访问控制规则，直到匹配成功返回allow或deny。
+*EMQ* 消息服务器接收到MQTT客户端发布(PUBLISH)或订阅(SUBSCRIBE)请求时，会逐条匹配ACL访问控制规则，直到匹配成功返回allow或deny。
 
-Broker参数设置
---------------
-
-broker_sys_interval设置系统发布$SYS消息周期::
-
-    {broker_sys_interval, 60}.
-
-Retained消息设置
-----------------
-
-Retained消息超期时间
-..................
-
-.. code:: erlang
-
-    %% Expired after seconds, never expired if 0
-    {retained_expired_after, 0}.
-
-最大存储Retained消息数量
-........................
-
-.. code:: erlang
-
-    %% Max number of retained messages
-    {retained_max_message_num, 100000}.
-
-Retained消息最大报文尺寸
-........................
-
-.. code:: erlang
-
-    %% Max Payload Size of retained message
-    {retained_max_playload_size, 65536}.
-
+-------------------------
 MQTT会话(Session)参数设置
 -------------------------
 
-.. code:: erlang
+.. code::
 
-    %% Max number of QoS 1 and 2 messages that can be “inflight” at one time.
-    %% 0 means no limit
-    {session_max_inflight, 100}.
+    ## Max number of QoS 1 and 2 messages that can be “inflight” at one time.
+    ## 0 means no limit
+    mqtt.session.max_inflight = 100
 
-    %% Retry interval for redelivering QoS1/2 messages.
-    {session_unack_retry_interval, 60}.
+    ## Retry interval for redelivering QoS1/2 messages.
+    mqtt.session.retry_interval = 60
 
-    %% Awaiting PUBREL Timeout
-    {session_await_rel_timeout, 20}.
+    ## Awaiting PUBREL Timeout
+    mqtt.session.await_rel_timeout = 20
 
-    %% Max Packets that Awaiting PUBREL, 0 means no limit
-    {session_max_awaiting_rel, 0}.
+    ## Max Packets that Awaiting PUBREL, 0 means no limit
+    mqtt.session.max_awaiting_rel = 0
 
-    %% Statistics Collection Interval(seconds)
-    {session_collect_interval, 0}.
+    ## Statistics Collection Interval(seconds)
+    mqtt.session.collect_interval = 0
 
-    %% Expired after 2 day (unit: minute)
-    {session_expired_after, 2880}.
+    ## Expired after 1 day:
+    ## w - week
+    ## d - day
+    ## h - hour
+    ## m - minute
+    ## s - second
+    mqtt.session.expired_after = 1d
 
-+------------------------------+----------------------------------------------------------+
-| session_max_inflight         | 飞行窗口。最大允许同时下发的Qos1/2报文数，0表示没有限制。|
-|                              | 窗口值越大，吞吐越高；窗口值越小，消息顺序越严格         |
-+------------------------------+----------------------------------------------------------+
-| session_unack_retry_interval | 下发QoS1/2消息未收到PUBACK响应的重试间隔                 |
-+------------------------------+----------------------------------------------------------+
-| session_await_rel_timeout    | 收到QoS2消息，等待PUBREL报文超时时间                     |
-+------------------------------+----------------------------------------------------------+
-| session_max_awaiting_rel     | 最大等待PUBREL的QoS2报文数                               |
-+------------------------------+----------------------------------------------------------+
-| session_collect_interval     | 采集会话统计数据间隔，默认0表示关闭统计                  |
-+------------------------------+----------------------------------------------------------+
-| session_expired_after        | 持久会话到期时间，从客户端断开算起，单位：分钟           |
-+------------------------------+----------------------------------------------------------+
++---------------------------+----------------------------------------------------------+
+| session.max_inflight      | 飞行窗口。最大允许同时下发的Qos1/2报文数，0表示没有限制。|
+|                           | 窗口值越大，吞吐越高；窗口值越小，消息顺序越严格         |
++---------------------------+----------------------------------------------------------+
+| session.retry_interval    | 下发QoS1/2消息未收到PUBACK响应的重试间隔                 |
++---------------------------+----------------------------------------------------------+
+| session.await_rel_timeout | 收到QoS2消息，等待PUBREL报文超时时间                     |
++---------------------------+----------------------------------------------------------+
+| session.max_awaiting_rel  | 最大等待PUBREL的QoS2报文数                               |
++---------------------------+----------------------------------------------------------+
+| session.collect_interval  | 采集会话统计数据间隔，默认0表示关闭统计                  |
++---------------------------+----------------------------------------------------------+
+| session.expired_after     | 持久会话到期时间，从客户端断开算起，单位：分钟           |
++---------------------------+----------------------------------------------------------+
 
+------------------------
 MQTT消息队列(MQueue)设置
 ------------------------
 
@@ -440,160 +379,154 @@ EMQ消息服务器会话通过队列缓存Qos1/Qos2消息:
 
 队列参数设置::
 
-    %% Type: simple | priority
-    {queue_type, simple}.
+    ## Type: simple | priority
+    mqtt.queue.type = simple
 
-    %% Topic Priority: 0~255, Default is 0
-    %% {queue_priority, [{"topic/1", 10}, {"topic/2", 8}]}.
+    ## Topic Priority: 0~255, Default is 0
+    ## mqtt.queue.priority = topic/1=10,topic/2=8
 
-    %% Max queue length. Enqueued messages when persistent client disconnected,
-    %% or inflight window is full.
-    {queue_max_length, infinity}.
+    ## Max queue length. Enqueued messages when persistent client disconnected,
+    ## or inflight window is full.
+    mqtt.queue.max_length = infinity
 
-    %% Low-water mark of queued messages
-    {queue_low_watermark, 0.2}.
+    ## Low-water mark of queued messages
+    mqtt.queue.low_watermark = 20%
 
-    %% High-water mark of queued messages
-    {queue_high_watermark, 0.6}.
+    ## High-water mark of queued messages
+    mqtt.queue.high_watermark = 60%
 
-    %% Queue Qos0 messages?
-    {queue_qos0, true}.
+    ## Queue Qos0 messages?
+    mqtt.queue.qos0 = true
 
 队列参数说明:
 
 +----------------------+---------------------------------------------------+
-| queue_type           | 队列类型。simple: 简单队列，priority: 优先级队列  |
+| queue.type           | 队列类型。simple: 简单队列，priority: 优先级队列  |
 +----------------------+---------------------------------------------------+
-| queue_priority       | 主题(Topic)队列优先级设置                         |
+| queue.priority       | 主题(Topic)队列优先级设置                         |
 +----------------------+---------------------------------------------------+
-| queue_max_length     | 队列长度, infinity表示不限制                      |
+| queue.max_length     | 队列长度, infinity表示不限制                      |
 +----------------------+---------------------------------------------------+
-| queue_low_watermark  | 解除告警水位线                                    |
+| queue.low_watermark  | 解除告警水位线                                    |
 +----------------------+---------------------------------------------------+
-| queue_high_watermark | 队列满告警水位线                                  |
+| queue.high_watermark | 队列满告警水位线                                  |
 +----------------------+---------------------------------------------------+
-| queue_qos0           | 是否缓存QoS0消息                                  |
+| queue.qos0           | 是否缓存QoS0消息                                  |
 +----------------------+---------------------------------------------------+
 
+--------------
+Broker参数设置
+--------------
+
+broker_sys_interval设置系统发布$SYS消息周期::
+
+    ## System Interval of publishing broker $SYS Messages
+    mqtt.broker.sys_interval = 60
+
+------------------------
 发布订阅(PubSub)参数设置
 ------------------------
 
-PubSub进程池
-............
+.. code::
 
-.. code:: erlang
+    ## System Interval of publishing broker $SYS Messages
+    mqtt.broker.sys_interval = 60
 
-    %% PubSub Pool Size. Default should be scheduler numbers.
-    {pubsub_pool_size, 8}.
+    ## PubSub Pool Size. Default should be scheduler numbers.
+    mqtt.pubsub.pool_size = 8
 
-ClientId订阅
-............
+    mqtt.pubsub.by_clientid = true
 
-MQTT会话通过ClientId订阅。
+    ## Subscribe Asynchronously
+    mqtt.pubsub.async = true
 
-.. code:: erlang
+--------------------
+桥接(bridge)参数设置
+--------------------
 
-    {pubsub_by_clientid, true}.
+.. code::
 
-是否异步订阅
-............
+    ## Bridge Queue Size
+    mqtt.bridge.max_queue_len = 10000
 
-.. code:: erlang
+    ## Ping Interval of bridge node. Unit: Second
+    mqtt.bridge.ping_down_interval = 1
 
-    %% Subscribe Asynchronously
-    {pubsub_async, true}.
+----------------------
+Plugins插件etc目录设置
+----------------------
 
-EMQ桥接(bridge)参数设置
------------------------
+.. code::
 
-桥接最大缓存报文数
-..................
+    ## Dir of plugins' config
+    mqtt.plugins.etc_dir = etc/plugins/
 
-.. code:: erlang
+    ## File to store loaded plugin names.
+    mqtt.plugins.loaded_file = data/loaded_plugins
 
-    %% TODO: Bridge Queue Size
-    {bridge_max_queue_len, 10000}.
+------------------
+Modules - 扩展模块
+------------------
 
-桥接节点宕机检测周期
-....................
+*EMQ* 消息服务器支持简单的扩展模块，用于定制服务器功能。默认支持retainer, presence、subscription模块。
 
-.. code:: erlang
+----------------
+启用Retainer模块
+----------------
 
-    %% Ping Interval of bridge node
-    {bridge_ping_down_interval, 1}. % second
+Retainer模块用于持久化MQTT Retained消息。
 
-Plugins插件目录设置
--------------------
+.. code::
 
-插件配置文件目录
-................
+    ## Enable retainer module
+    mqtt.module.retainer = on
 
-.. code:: erlang
+    ## disc: disc_copies, ram: ram_copies
+    mqtt.module.retainer.storage_type = ram
 
-    %% Dir of plugins' config
-    {plugins_etc_dir, "etc/plugins/"}.
+    ## Max number of retained messages
+    mqtt.module.retainer.max_message_num = 100000
 
-已加载插件存储文件
-.................
+    ## Max Payload Size of retained message
+    mqtt.module.retainer.max_payload_size = 64KB
 
-.. code:: erlang
+    ## Expired after seconds, never expired if 0
+    mqtt.module.retainer.expired_after = 0
 
-    %% File to store loaded plugin names.
-    {plugins_loaded_file, "data/loaded_plugins"}.
-
-Modules扩展模块设置
--------------------
-
-EMQ消息服务器支持简单的扩展模块，用于定制服务器功能。默认支持presence、subscription、rewrite模块。
-
-Presence模块设置
-................
+----------------
+启用Presence模块
+----------------
 
 'presence'扩展模块会向$SYS主题(Topic)发布客户端上下线消息:
 
-.. code:: erlang
+.. code::
 
-    %% Client presence management module. Publish presence messages when 
-    %% client connected or disconnected.
-    {module, presence, [{qos, 0}]}.
+    ## Enable presence module
+    ## Publish presence messages when client connected or disconnected.
+    mqtt.module.presence = on
 
-Subscription模块配置
-....................
+    mqtt.module.presence.qos = 0
 
-'subscription'扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic)::
+--------------------
+启用Subscription模块
+--------------------
 
-.. code:: erlang
+'subscription'扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic):
 
-    %% Subscribe topics automatically when client connected
-    {module, subscription, [{"$client/$c", 1}]}.
+.. code::
 
-Rewrite模块配置
-...............
+    # Enable subscription module
+    mqtt.module.subscription = on
 
-'rewrite'扩展模块支持重写主题(Topic)路径, 重写规则定义在etc/rewrite.conf文件:
+    mqtt.module.subscription.topics = $client/%c=1,$user/%u=1
 
-.. code:: erlang
-
-    %% [Rewrite](https://github.com/emqtt/emqttd/wiki/Rewrite)
-    {module, rewrite, [{config, "etc/modules/rewrite.conf"}]}.
-
-etc/modules/rewrite.conf扩展模块的规则配置文件，示例配置::
-
-    {topic, "x/#", [
-        {rewrite, "^x/y/(.+)$", "z/y/$1"},
-        {rewrite, "^x/(.+)$", "y/$1"}
-    ]}.
-
-    {topic, "y/+/z/#", [
-        {rewrite, "^y/(.+)/z/(.+)$", "y/z/$2"}
-    ]}.
-
-Listener监听器设置
+------------------
+Listener监听器参数
 ------------------
 
-EMQ消息服务器开启的MQTT协议、HTTP协议服务端，可通过listener设置TCP服务端口、最大允许连接数等参数。
+*EMQ* 消息服务器默认开启的MQTT协议、MQTT/SSL、MQTT/WS协议服务端，可通过mqtt.listener.*设置端口、最大允许连接数等参数。
 
-EMQ 2.0消息服务器默认开启的TCP服务端口包括:
+*EMQ* 2.0消息服务器默认开启的TCP服务端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT协议端口                      |
@@ -603,164 +536,155 @@ EMQ 2.0消息服务器默认开启的TCP服务端口包括:
 | 8083      | MQTT(WebSocket), HTTP API端口     |
 +-----------+-----------------------------------+
 
-listener参数说明:
+Listener参数说明:
 
-+-------------+-----------------------------------------------------------+
-| acceptors   | TCP Acceptor池                                            |
-+-------------+-----------------------------------------------------------+
-| max_clients | 最大允许TCP连接数                                         |
-+-------------+-----------------------------------------------------------+
-| access      | 允许访问的IP地址段设置，例如: [{allow, "192.168.1.0/24"}] |
-+-------------+-----------------------------------------------------------+
-| connopts    | 连接限速配置，例如限速10KB/秒: {rate_limit, "100,10"}     |
-+-------------+-----------------------------------------------------------+
-| sockopts    | Socket参数设置                                            |
-+-------------+-----------------------------------------------------------+
++-----------------------------+----------------------------------------------+
+| mqtt.listener.*.acceptors   | TCP Acceptor池                               |
++-----------------------------+----------------------------------------------+
+| mqtt.listener.*.max_clients | 最大允许TCP连接数                            |
++-----------------------------+----------------------------------------------+
+| mqtt.listener.*.rate_limit  | 连接限速配置，例如限速10KB/秒:  "100,10"     |
++-----------------------------+----------------------------------------------+
 
-1883 - MQTT协议端口
-...................
+----------------------
+MQTT(TCP)监听器 - 1883
+----------------------
 
 .. code-block:: erlang
 
-    %% Plain MQTT
-    {listener, mqtt, 1883, [
-        %% Size of acceptor pool
-        {acceptors, 16},
+    ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
+    mqtt.listener.tcp = 1883
 
-        %% Maximum number of concurrent clients
-        {max_clients, 512},
+    ## Size of acceptor pool
+    mqtt.listener.tcp.acceptors = 8
 
-        %% Mount point prefix
-        %% {mount_point, "prefix/"},
+    ## Maximum number of concurrent clients
+    mqtt.listener.tcp.max_clients = 1024
 
-        %% Socket Access Control
-        {access, [{allow, all}]},
+    ## Rate Limit. Format is 'burst,rate', Unit is KB/Sec
+    ## mqtt.listener.tcp.rate_limit = 100,10
 
-        %% Connection Options
-        {connopts, [
-            %% Rate Limit. Format is 'burst, rate', Unit is KB/Sec
-            %% {rate_limit, "100,10"} %% 100K burst, 10K rate
-        ]},
+    ## TCP Socket Options
+    mqtt.listener.tcp.backlog = 1024
+    ## mqtt.listener.tcp.recbuf = 4096
+    ## mqtt.listener.tcp.sndbuf = 4096
+    ## mqtt.listener.tcp.buffer = 4096
+    ## mqtt.listener.tcp.nodelay = true
 
-        %% Socket Options
-        {sockopts, [
-            %Set buffer if hight thoughtput
-            %{recbuf, 4096},
-            %{sndbuf, 4096},
-            %{buffer, 4096},
-            %{nodelay, true},
-            {backlog, 1024}
-        ]}
-    ]}.
+----------------------
+MQTT(SSL)监听器 - 8883
+----------------------
 
-8883 - MQTT(SSL)端口
-.....................
+.. code-block::
 
-.. code-block:: erlang
+    ## SSL Listener: 8883, 127.0.0.1:8883, ::1:8883
+    mqtt.listener.ssl = 8883
 
-    %% MQTT/SSL
-    {listener, mqtts, 8883, [
-        %% Size of acceptor pool
-        {acceptors, 4},
+    ## Size of acceptor pool
+    mqtt.listener.ssl.acceptors = 4
 
-        %% Maximum number of concurrent clients
-        {max_clients, 512},
+    ## Maximum number of concurrent clients
+    mqtt.listener.ssl.max_clients = 512
 
-        %% Mount point prefix
-        %% {mount_point, "secure/"},
+    ## Rate Limit. Format is 'burst,rate', Unit is KB/Sec
+    ## mqtt.listener.ssl.rate_limit = 100,10
 
-        %% Socket Access Control
-        {access, [{allow, all}]},
+    ## SSL Options
+    mqtt.listener.ssl.handshake_timeout = 15
+    mqtt.listener.ssl.keyfile = etc/certs/key.pem
+    mqtt.listener.ssl.certfile = etc/certs/cert.pem
+    mqtt.listener.ssl.cacertfile = etc/certs/cacert.pem
+    ## mqtt.listener.ssl.verify = verify_peer
+    ## mqtt.listener.ssl.failed_if_no_peer_cert = true
 
-        %% SSL certificate and key files
-        {ssl, [{certfile, "etc/ssl/ssl.crt"},
-               {keyfile,  "etc/ssl/ssl.key"}]},
+----------------------------
+MQTT(WebSocket)监听器 - 8083
+----------------------------
 
-        %% Socket Options
-        {sockopts, [
-            {backlog, 1024}
-            %{buffer, 4096},
-        ]}
-    ]}.
+.. code-block::
 
-8083 - MQTT(WebSocket)端口
-..........................
+    ## HTTP and WebSocket Listener
+    mqtt.listener.http = 8083
+    mqtt.listener.http.acceptors = 4
+    mqtt.listener.http.max_clients = 64
 
-.. code-block:: erlang
+--------------------------------
+MQTT(WebSocket/SSL)监听器 - 8084
+--------------------------------
 
-    %% HTTP and WebSocket Listener
-    {listener, http, 8083, [
-        %% Size of acceptor pool
-        {acceptors, 4},
+.. code-block::
 
-        %% Maximum number of concurrent clients
-        {max_clients, 64},
-
-        %% Socket Access Control
-        {access, [{allow, all}]},
-
-        %% Socket Options
-        {sockopts, [
-            {backlog, 1024}
-            %{buffer, 4096},
-        ]}
-    ]}.
+    ## HTTP(SSL) Listener
+    mqtt.listener.https = 8084
+    mqtt.listener.https.acceptors = 4
+    mqtt.listener.https.max_clients = 64
+    mqtt.listener.https.handshake_timeout = 10
+    mqtt.listener.https.certfile = etc/certs/cert.pem
+    mqtt.listener.https.keyfile = etc/certs/key.pem
+    mqtt.listener.https.cacertfile = etc/certs/cacert.pem
+    ## 开启双向认证
+    ## mqtt.listener.https.verify = verify_peer
+    ## mqtt.listener.https.failed_if_no_peer_cert = true
 
 --------------------
 Erlang虚拟机监控设置
 --------------------
 
-.. code:: erlang
+.. code::
 
-    %% Long GC, don't monitor in production mode for:
-    %% https://github.com/erlang/otp/blob/feb45017da36be78d4c5784d758ede619fa7bfd3/erts/emulator/beam/erl_gc.c#L421
+    ## Long GC, don't monitor in production mode for:
+    ## https://github.com/erlang/otp/blob/feb45017da36be78d4c5784d758ede619fa7bfd3/erts/emulator/beam/erl_gc.c#L421
+    sysmon.long_gc = false
 
-    {sysmon_long_gc, false}.
+    ## Long Schedule(ms)
+    sysmon.long_schedule = 240
 
-    %% Long Schedule(ms)
-    {sysmon_long_schedule, 240}.
+    ## 8M words. 32MB on 32-bit VM, 64MB on 64-bit VM.
+    sysmon.large_heap = 8MB
 
-    %% 8M words. 32MB on 32-bit VM, 64MB on 64-bit VM.
-    %% 8 * 1024 * 1024
-    {sysmon_large_heap, 8388608}.
+    ## Busy Port
+    sysmon.busy_port = false
 
-    %% Busy Port
-    {sysmon_busy_port, false}.
-
-    %% Busy Dist Port
-    {sysmon_busy_dist_port, true}.
+    ## Busy Dist Port
+    sysmon.busy_dist_port = true
 
 ----------------
 扩展插件配置文件
 ----------------
 
-EMQ 2.0全部插件配置文件，在etc/plugins/目录:
+*EMQ* 2.0全部插件配置文件，在etc/plugins/目录:
 
 +----------------------------------------+-----------------------------------+
 | 配置文件                               | 说明                              |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_auth_http.conf      | HTTP认证插件配置                  |
+| etc/plugins/emq_auth_username.conf     | 用户名、密码认证插件              |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_auth_mongo.conf     | MongoDB认证插件配置               |
+| etc/plugins/emq_auth_clientid.conf     | ClientId认证插件                  |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_auth_mysql.conf     | MySQL认证插件配置                 |
+| etc/plugins/emq_auth_http.conf         | HTTP认证插件配置                  |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_auth_pgsql.conf     | Postgre认证插件配置               |
+| etc/plugins/emq_auth_mongo.conf        | MongoDB认证插件配置               |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_auth_redis.conf     | Redis认证插件配置                 |
+| etc/plugins/emq_auth_mysql.conf        | MySQL认证插件配置                 |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_coap.conf           | CoAP协议服务器配置                |
+| etc/plugins/emq_auth_pgsql.conf        | Postgre认证插件配置               |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_dashboard.conf      | Dashboard控制台插件配置           |
+| etc/plugins/emq_auth_redis.conf        | Redis认证插件配置                 |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_plugin_template.conf| 示例插件模版                      |
+| etc/plugins/emq_coap.conf              | CoAP协议服务器配置                |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_recon.conf          | Recon调试插件配置                 |
+| etc/plugins/emq_dashboard.conf         | Dashboard控制台插件配置           |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_reloader.conf       | 热加载插件配置                    |
+| etc/plugins/emq_mod_rewrite.conf       | 主题(Topic)重写插件配置           |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_sn.conf             | MQTT-SN协议服务器配置             |
+| etc/plugins/emq_plugin_template.conf   | 示例插件模版                      |
 +----------------------------------------+-----------------------------------+
-| etc/plugins/emq_stomp.conf          | Stomp协议插件配置                 |
+| etc/plugins/emq_recon.conf             | Recon调试插件配置                 |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_reloader.conf          | 热加载插件配置                    |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_sn.conf                | MQTT-SN协议服务器配置             |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_stomp.conf             | Stomp协议插件配置                 |
 +----------------------------------------+-----------------------------------+
 

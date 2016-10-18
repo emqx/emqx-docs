@@ -39,6 +39,41 @@ EMQ 2.0版本提供的插件包括:
 | `emqttd_plugin_template`_ | 插件开发模版              |
 +---------------------------+---------------------------+
 
+ClientID认证
+............
+
+.. code-block:: erlang
+
+    %% Authentication with clientId
+    {auth, clientid, [{config, "etc/modules/client.conf"}, {password, no}]}.
+
+etc/modules/clients.conf文件中添加ClientID::
+
+    "testclientid0".
+    {"testclientid1", "127.0.0.1"}.
+    {"testclientid2", "192.168.0.1/24"}.
+
+用户名密码认证
+..............
+
+.. code-block:: erlang
+
+    %% Authentication with username, password
+    {auth, username, [{passwd, "etc/modules/passwd.conf"}]}.
+
+两种方式添加用户:
+
+1. 直接在etc/modules/passwd.conf中明文配置默认用户::
+
+    {"user1", "passwd1"}.
+    {"user2", "passwd2"}.
+
+2. 通过'./bin/emqttd_ctl'管理命令行添加用户::
+
+   $ ./bin/emqttd_ctl users add <Username> <Password>
+
+
+
 ------------------------------------
 emqttd_plugin_template: 插件开发模版
 ------------------------------------
@@ -892,4 +927,27 @@ emqttd_plugin_template.erl::
 .. _emqttd_reloader:        https://github.com/emqtt/emqttd_reloader
 .. _emqttd_plugin_template: https://github.com/emqtt/emqttd_plugin_template
 .. _recon:                  http://ferd.github.io/recon/
+
+
+Rewrite模块配置
+...............
+
+'rewrite'扩展模块支持重写主题(Topic)路径, 重写规则定义在etc/rewrite.conf文件:
+
+.. code:: erlang
+
+    %% [Rewrite](https://github.com/emqtt/emqttd/wiki/Rewrite)
+    {module, rewrite, [{config, "etc/modules/rewrite.conf"}]}.
+
+etc/modules/rewrite.conf扩展模块的规则配置文件，示例配置::
+
+    {topic, "x/#", [
+        {rewrite, "^x/y/(.+)$", "z/y/$1"},
+        {rewrite, "^x/(.+)$", "y/$1"}
+    ]}.
+
+    {topic, "y/+/z/#", [
+        {rewrite, "^y/(.+)/z/(.+)$", "y/z/$2"}
+    ]}.
+
 
