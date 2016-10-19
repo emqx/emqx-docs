@@ -124,7 +124,6 @@ EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
     | t/a   -> node3         |
     --------------------------
 
-
 订阅(Subscription)与消息派发
 ----------------------------
 
@@ -142,9 +141,9 @@ EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
 
 .. image:: ./_static/images/route.png
 
-------------------
-EMQ 2.0集群设置管理
-------------------
+-------------------
+EMQ 2.0集群配置管理
+-------------------
 
 假设部署两台服务器s1.emqtt.io, s2.emqtt.io上部署集群:
 
@@ -163,27 +162,30 @@ EMQ 2.0集群设置管理
 emqttd@s1.emqtt.io节点设置
 --------------------------
 
-emqttd/releases/2.0/vm.args::
+emqttd/etc/emq.conf::
 
-    -name emqttd@s1.emqtt.io
+    node.name = emqttd@s1.emqtt.io
 
     或
 
-    -name emqttd@192.168.0.10
+    node.name = emqttd@192.168.0.10
+
+也可通过环境变量::
+
+    export EMQ_NODE_NAME=emqttd@s1.emqtt.io && ./bin/emqttd start
 
 .. WARNING:: 节点启动加入集群后，节点名称不能变更。
 
 emqttd@s2.emqtt.io节点设置
 --------------------------
 
-emqttd/releases/2.0/vm.args::
+emqttd/etc/emq.conf::
 
-    -name emqttd@s2.emqtt.io
+    node.name = emqttd@s2.emqtt.io
 
     或
 
-    -name emqttd@192.168.0.20
-
+    node.name = emqttd@192.168.0.20
 
 节点加入集群
 ------------
@@ -252,14 +254,11 @@ EMQ消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点�
 
 如果集群节点间存在防火墙，防火墙需要开启4369端口和一个TCP端口段。4369由epmd端口映射服务使用，TCP端口段用于节点间建立连接与通信。
 
-防火墙设置后，emqttd需要配置相同的端口段，etc/emqttd.conf文件::
+防火墙设置后，EMQ 需要配置相同的端口段，emqttd/etc/emq.conf文件::
 
-    [{kernel, [
-        ...
-        {inet_dist_listen_min, 20000},
-        {inet_dist_listen_max, 21000}
-     ]},
-     ...
+    ## Distributed node port range
+    node.dist_listen_min = 6000
+    node.dist_listen_max = 6999
 
 .. _cluster_netsplit:
 

@@ -11,7 +11,7 @@
 EMQ节点间桥接
 -------------
 
-EMQ消息服务器支持多节点桥接模式互联::
+*EMQ* 消息服务器支持多节点桥接模式互联::
 
                   ---------                     ---------                     ---------
     Publisher --> | node1 | --Bridge Forward--> | node2 | --Bridge Forward--> | node3 | --> Subscriber
