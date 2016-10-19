@@ -221,7 +221,7 @@ MQTT协议定义了一个16bits的报文ID(PacketId)，用于客户端到服务�
 认证与访问控制设计
 ------------------
 
-EMQ消息服务器支持可扩展的认证与访问控制，由emqttd_access_control、emqttd_auth_mod和emqttd_acl_mod模块实现。
+*EMQ* 消息服务器支持可扩展的认证与访问控制，由emqttd_access_control、emqttd_auth_mod和emqttd_acl_mod模块实现。
 
 emqttd_access_control模块提供了注册认证扩展接口::
 
