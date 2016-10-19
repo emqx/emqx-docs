@@ -68,7 +68,7 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
 
 .. code-block:: bash
 
-    unzip emqttd-macosx-v2.0-rc.2-20161018.zip && cd emqttd
+    unzip emqttd-macosx-v2.0-rc.2-20161019.zip && cd emqttd
 
     # 启动emqttd
     ./bin/emqttd start

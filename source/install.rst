@@ -33,7 +33,7 @@
 | Docker    | http://emqtt.com/downloads/latest/docker  |
 +-----------+-------------------------------------------+
 
-安装包命名由平台、版本、时间组成，例如: emqttd-macosx-v2.0-rc.2-20161018.zip
+安装包命名由平台、版本、时间组成，例如: emqttd-macosx-v2.0-rc.2-20161019.zip
 
 .. _install_on_linux:
 
@@ -45,7 +45,7 @@ CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/latest/ce
 
 .. code-block:: bash
 
-    unzip emqttd-macosx-v2.0-rc.2-20161018.zip
+    unzip emqttd-macosx-v2.0-rc.2-20161019.zip
 
 控制台调试模式启动，检查EMQ 是否可正常启动:
 
