@@ -85,7 +85,9 @@ FIN-WAIT-2 Socket超时设置::
 Erlang虚拟机参数
 ----------------
 
-优化设置Erlang虚拟机启动参数，配置文件emqttd/etc/emq.conf::
+优化设置Erlang虚拟机启动参数，配置文件emqttd/etc/emq.conf:
+
+.. code-block:: properties
 
     ## Erlang Process Limit
     node.process_limit = 2097152
@@ -97,7 +99,9 @@ Erlang虚拟机参数
 EMQ消息服务器参数
 -----------------
 
-设置TCP监听器的Acceptor池大小，最大允许连接数。配置文件emqttd/etc/emq.conf::
+设置TCP监听器的Acceptor池大小，最大允许连接数。配置文件emqttd/etc/emq.conf:
+
+.. code-block:: properties
 
     ## TCP Listener
     mqtt.listener.tcp = 1883

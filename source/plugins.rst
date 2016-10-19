@@ -47,9 +47,9 @@
 | `emq_plugin_template`_    | 插件开发模版              |
 +---------------------------+---------------------------+
 
-----------------
-ClientID认证插件
-----------------
+------------------------------------
+emq_auth_clientid - ClientID认证插件
+------------------------------------
 
 EMQ 2.0-rc.2版本将ClientId认证模块改为独立插件: https://github.com/emqtt/emq_auth_clientid
 
@@ -73,8 +73,9 @@ etc/plugins/emq_auth_clientid.conf:
 
     ./bin/emqttd_ctl plugins load emq_auth_clientid
 
-用户名密码认证插件
-------------------
+-------------------------------------
+emq_auth_username - 用户名密码认证插件
+-------------------------------------
 
 EMQ 2.0-rc.2版本将用户名认证模块改为独立插件: https://github.com/emqtt/emq_auth_username
 

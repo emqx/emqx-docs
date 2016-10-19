@@ -235,7 +235,7 @@ TCP服务端口占用
 
 *EMQ* 2.0占用的上述端口，可通过etc/emq.conf配置文件的'Listeners'段落设置:
 
-.. code-block:: erlang
+.. code-block:: properties
 
     ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
     mqtt.listener.tcp = 1883
@@ -284,7 +284,7 @@ node.max_ports = 参数值 > 最大允许连接数
 
 etc/emq.conf配置文件的'Listeners`段落设置最大允许连接数:
 
-.. code-block:: erlang
+.. code-block:: properties
 
     mqtt.listener.tcp = 1883
 

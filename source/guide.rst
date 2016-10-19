@@ -287,7 +287,9 @@ etc/plugins/emq_auth_redis.conf设置'super_cmd'、'auth_cmd'、'password_hash':
     ## Superuser Query Command
     auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 
-启用Redis认证插件::
+启用Redis认证插件:
+
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_auth_redis
 
@@ -400,7 +402,7 @@ HTTP插件访问控制
 
 HTTP API实现访问控制: https://github.com/emqtt/emqttd_auth_http
 
-启用HTTP认证插件后，配置etc/plugins/emq_auth_http.conf:
+配置etc/plugins/emq_auth_http.conf, 启用HTTP认证插件后:
 
 .. code-block:: properties
 
@@ -439,7 +441,9 @@ MySQL插件访问控制，通过mqtt_acl表定义ACL规则:
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
-etc/plugins/emq_auth_mysql.conf配置'acl_query'与'acl_nomatch'::
+etc/plugins/emq_auth_mysql.conf配置'acl_query'与'acl_nomatch':
+
+.. code-block:: properties
 
     ## ACL Query Command
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
@@ -451,7 +455,9 @@ etc/plugins/emq_auth_mysql.conf配置'acl_query'与'acl_nomatch'::
 Postgre插件访问控制
 -------------------
 
-PostgreSQL插件访问控制，通过mqtt_acl表定义ACL规则::
+PostgreSQL插件访问控制，通过mqtt_acl表定义ACL规则:
+
+.. code-block:: sql
 
     CREATE TABLE mqtt_acl (
       id SERIAL primary key,
@@ -472,7 +478,9 @@ PostgreSQL插件访问控制，通过mqtt_acl表定义ACL规则::
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
-etc/plugins/emq_auth_pgsql.conf设置'acl_query'与'acl_nomatch'::
+etc/plugins/emq_auth_pgsql.conf设置'acl_query'与'acl_nomatch':
+
+.. code-block:: properties
 
     ## ACL Query. Comment this query, the acl will be disabled.
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
@@ -490,7 +498,9 @@ Redis Hash存储一个MQTT客户端的访问控制规则::
     HSET mqtt_acl:<username> topic2 2
     HSET mqtt_acl:<username> topic3 3
 
-etc/plugins/emq_auth_redis.conf配置'acl_cmd'与'acl_nomatch'::
+etc/plugins/emq_auth_redis.conf配置'acl_cmd'与'acl_nomatch':
+
+.. code-block:: properties
 
     ## ACL Query Command
     auth.redis.acl_cmd = HGETALL mqtt_acl:%u
@@ -517,7 +527,9 @@ MongoDB数据库创建'mqtt_acl'集合::
     db.mqtt_acl.insert({username: "test", publish: ["t/1", "t/2"], subscribe: ["user/%u", "client/%c"]})
     db.mqtt_acl.insert({username: "admin", pubsub: ["#"]})
 
-etc/plugins/emq_auth_mongo.conf配置'acl_query'与'acl_nomatch'::
+etc/plugins/emq_auth_mongo.conf配置'acl_query'与'acl_nomatch':
+
+.. code-block:: properties
 
     ## acl_query
     auth.mongo.acl_query.collection = mqtt_user

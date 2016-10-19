@@ -392,7 +392,9 @@ EMQ消息服务器会话通过队列缓存Qos1/Qos2消息:
 Broker参数设置
 --------------
 
-broker_sys_interval设置系统发布$SYS消息周期::
+broker_sys_interval设置系统发布$SYS消息周期:
+
+.. code-block:: properties
 
     ## System Interval of publishing broker $SYS Messages
     mqtt.broker.sys_interval = 60

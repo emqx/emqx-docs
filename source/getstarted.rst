@@ -257,7 +257,9 @@ TCP协议栈参数
 Erlang虚拟机参数
 ----------------
 
-emqttd/etc/emq.conf::
+emqttd/etc/emq.conf:
+
+.. code-block:: properties
 
     ## Erlang Process Limit
     node.process_limit = 2097152
