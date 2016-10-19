@@ -69,7 +69,7 @@ etc/plugins/emq_auth_clientid.conf:
 加载ClientId认证插件
 --------------------
 
-.. code-block:: console
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_auth_clientid
 
@@ -104,7 +104,7 @@ etc/plugins/emq_auth_username.conf:
 加载用户名认证插件
 ------------------
 
-.. code-block:: console
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_auth_username
 
@@ -114,7 +114,7 @@ emq_plugin_template: 插件开发模版
 
 EMQ插件实际是一个普通的Erlang应用，插件配置文件: 'etc/${PluginName}.conf|config"。
 
-emq_plugin_template是一个模版插件，编译发布在lib/emq_plugin_template-2.0目录，配置文件: etc/plugins/emq_plugin_templat.config
+emq_plugin_template是模版插件，编译发布在lib/emq_plugin_template-2.0目录，配置文件: etc/plugins/emq_plugin_templat.config
 
 加载、卸载插件
 --------------
@@ -181,7 +181,7 @@ LDAP认证插件配置
 
 etc/plugins/emq_auth_ldap.conf:
 
-.. code-block:: propeties
+.. code-block:: properties
 
     auth.ldap.servers = 127.0.0.1
 
@@ -251,7 +251,7 @@ MySQL认证/访问控制插件，基于MySQL库表认证鉴权: https://github.c
 MQTT用户表
 ----------
 
-.. code:: sql
+.. code-block:: sql
 
     CREATE TABLE `mqtt_user` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -269,7 +269,7 @@ MQTT用户表
 MQTT访问控制表
 --------------
 
-.. code:: sql
+.. code-block:: sql
 
     CREATE TABLE `mqtt_acl` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -296,7 +296,7 @@ MQTT访问控制表
 
 etc/plugins/emq_plugin_mysql.conf:
 
-.. code-block:: propeties
+.. code-block:: properties
 
     ## Mysql Server
     auth.mysql.server = 127.0.0.1:3306
@@ -576,7 +576,7 @@ MongoDB数据库
 MongoDB 用户集合(User Collection)
 ---------------------------------
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         username: "user",
@@ -593,7 +593,7 @@ MongoDB 用户集合(User Collection)
 MongoDB ACL集合(ACL Collection)
 -------------------------------
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         username: "username",
@@ -840,7 +840,7 @@ emq_reloader: 代码热加载插件
 
 etc/plugins/emq_reloader.conf:
 
-.. code-block:: erlang
+.. code-block:: properties
 
   reloader.interval = 60
 
@@ -874,11 +874,11 @@ EMQ 2.0插件开发
 注册认证/访问控制模块
 ---------------------
 
-认证演示模块 - emqttd_auth_demo.erl
+认证演示模块 - emq_auth_demo.erl
 
 .. code-block:: erlang
 
-    -module(emqttd_auth_demo).
+    -module(emq_auth_demo).
 
     -behaviour(emqttd_auth_mod).
 
@@ -899,7 +899,7 @@ EMQ 2.0插件开发
 
 .. code-block:: erlang
 
-    -module(emqttd_acl_demo).
+    -module(emq_acl_demo).
 
     -include_lib("emqttd/include/emqttd.hrl").
 
@@ -1018,7 +1018,7 @@ emq_plugin_template.erl::
 
     plugin_name.key = value
 
-.. NOTE:: `k = v`格式配置需要插件开发者创建priv/plugin_name.schema的映射文件。
+.. NOTE:: `k = v`格式配置需要插件开发者创建priv/plugin_name.schema映射文件。
  
 编译发布插件
 ------------
