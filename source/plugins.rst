@@ -211,7 +211,7 @@ HTTP认证插件配置
 
 etc/plugins/emq_auth_http.conf:
 
-.. code-block:: erlang
+.. code-block:: properties
 
     ## Variables: %u = username, %c = clientid, %a = ipaddress, %P = password, %t = topic
 
@@ -296,7 +296,7 @@ MQTT访问控制表
 
 etc/plugins/emq_plugin_mysql.conf:
 
-.. code:: propeties
+.. code-block:: propeties
 
     ## Mysql Server
     auth.mysql.server = 127.0.0.1:3306
@@ -344,7 +344,7 @@ Postgre认证/访问控制插件，基于PostgreSQL库表认证鉴权: https://g
 Postgre MQTT用户表
 ------------------
 
-.. code:: sql
+.. code-block:: sql
 
     CREATE TABLE mqtt_user (
       id SERIAL primary key,
@@ -357,7 +357,7 @@ Postgre MQTT用户表
 Postgre MQTT访问控制表
 ----------------------
 
-.. code:: sql
+.. code-block:: sql
 
     CREATE TABLE mqtt_acl (
       id SERIAL primary key,
@@ -383,7 +383,7 @@ Postgre MQTT访问控制表
 
 etc/plugins/emq_plugin_pgsql.conf:
 
-.. code-block:: erlang
+.. code-block:: properties
 
     ## Postgre Server
     auth.pgsql.server = 127.0.0.1:5432
@@ -439,7 +439,9 @@ emq_auth_redis: Redis认证/访问控制插件
 配置Redis认证鉴权插件
 ---------------------
 
-etc/plugins/emq_auth_redis.conf::
+etc/plugins/emq_auth_redis.conf:
+
+.. code-block:: properties
 
     ## Redis Server
     auth.redis.server = 127.0.0.1:6379
@@ -516,7 +518,9 @@ emq_auth_mongo: MongoDB认证/访问控制插件
 配置MongoDB认证鉴权插件
 -----------------------
 
-etc/plugins/emq_plugin_mongo.conf::
+etc/plugins/emq_plugin_mongo.conf:
+
+.. code-block:: properties
 
     ## Mongo Server
     auth.mongo.server = 127.0.0.1:27017
@@ -560,7 +564,7 @@ etc/plugins/emq_plugin_mongo.conf::
 MongoDB数据库
 -------------
 
-.. code-block::
+.. code-block:: mongodb
 
     use mqtt
     db.createCollection("mqtt_user")
@@ -738,7 +742,7 @@ etc/plugins/emq_stomp.conf:
 加载Stomp插件
 -------------
 
-.. code::
+.. code:: bash
 
     ./bin/emqttd_ctl plugins load emq_stomp
 
@@ -865,7 +869,7 @@ EMQ 2.0插件开发
 创建插件项目
 ------------
 
-github clone emqttd_plugin_template插件模版库，参考插件模版创建新的插件应用项目。
+参考`emq_plugin_template`_ 插件模版创建新的插件项目。
 
 注册认证/访问控制模块
 ---------------------
@@ -992,6 +996,51 @@ emq_plugin_template.erl::
 插件加载后，'./bin/emqttd_ctl'新增命令行::
 
     ./bin/emqttd_ctl cmd arg1 arg2
+
+插件配置文件
+------------
+
+插件自带配置文件放置在etc/${plugin_name}.conf|config，EMQ支持两种插件配置格式:
+
+1. ${plugin_name}.config，Erlang原生配置文件格式:
+
+.. code-block:: erlang
+
+    [
+      {plugin_name, [
+        {key, value}
+      ]}
+    ].
+
+2. ${plugin_name}.conf, sysctl的`k = v`通用格式:
+
+.. code-block:: properties
+
+    plugin_name.key = value
+
+.. NOTE:: `k = v`格式配置需要插件开发者创建priv/plugin_name.schema的映射文件。
+ 
+编译发布插件
+------------
+
+1. clone emqttd-relx项目:
+
+.. code-block:: bash
+
+    git clone https://github.com/emqtt/emqttd-relx.git
+
+2. Makefile增加`DEPS`:
+
+.. code-block:: makefile
+
+    DEPS += plugin_name
+    dep_plugin_name = git url_of_plugin
+
+3. relx.config中release段落添加:
+
+.. code-block:: erlang
+
+    {plugin_name, load},
 
 .. _emq_dashboard:       https://github.com/emqtt/emqttd_dashboard
 .. _emq_auth_clientid:   https://github.com/emqtt/emq_auth_clientid

@@ -22,7 +22,7 @@ MQTT认证设置
                      \|/                       \|/                       \|/
                 allow | deny              allow | deny              allow | deny
 
-.. NOTE:: EMQ 2.0消息服务器还提供了MySQL、PostgreSQL、Redis、MongoDB、HTTP、LDAP认证插件，认证插件加载后认证模块失效。
+.. NOTE:: EMQ 2.0消息服务器还提供了MySQL、PostgreSQL、Redis、MongoDB、HTTP、LDAP认证插件。
 
 ------------
 开启匿名认证
@@ -63,7 +63,9 @@ EMQ 2.0版本提供的认证插件包括:
 
 基于MQTT登录用户名(username)、密码(password)认证。
 
-etc/plugins/emq_auth_username.conf中配置默认用户::
+etc/plugins/emq_auth_username.conf中配置默认用户:
+
+.. code-block:: properties
 
     auth.username.$name=$password
 
@@ -83,7 +85,9 @@ ClientId认证
 
 基于MQTT客户端ID(ClientId)认证。
 
-etc/plugins/emq_auth_clientid.conf::
+etc/plugins/emq_auth_clientid.conf:
+
+.. code-block:: properties
 
     auth.clientid.$id=$password
 
@@ -97,7 +101,9 @@ etc/plugins/emq_auth_clientid.conf::
 LDAP插件认证
 ------------
 
-etc/plugins/emq_auth_ldap.conf配置LDAP参数::
+etc/plugins/emq_auth_ldap.conf配置LDAP参数:
+
+.. code-block:: properties
 
     auth.ldap.servers = 127.0.0.1
 
@@ -139,7 +145,9 @@ etc/plugins/emq_auth_http.conf配置'super_req', 'auth_req':
 MySQL插件认证
 -------------
 
-通过MySQL数据库表认证，可创建如下的'mqtt_user'表::
+通过MySQL数据库表认证，可创建如下的'mqtt_user'表:
+
+.. code-block:: sql
 
     CREATE TABLE `mqtt_user` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -152,7 +160,9 @@ MySQL插件认证
       UNIQUE KEY `mqtt_username` (`username`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-etc/plugins/emq_auth_mysql.conf配置'super_query', 'auth_query', 'password_hash'::
+etc/plugins/emq_auth_mysql.conf配置'super_query', 'auth_query', 'password_hash':
+
+.. code-block:: properties
 
     ## Mysql Server
     auth.mysql.server = 127.0.0.1:3306
@@ -190,7 +200,9 @@ etc/plugins/emq_auth_mysql.conf配置'super_query', 'auth_query', 'password_hash
 Postgre插件认证
 ---------------
 
-通过PostgreSQL数据库表认证，可创建如下的'mqtt_user'表::
+通过PostgreSQL数据库表认证，可创建如下的'mqtt_user'表:
+
+.. code-block:: sql 
 
     CREATE TABLE mqtt_user (
       id SERIAL primary key,
@@ -200,7 +212,9 @@ Postgre插件认证
       salt character varying(40)
     );
 
-etc/plugins/emq_auth_pgsql.conf配置'auth_query'、'password_hash'::
+etc/plugins/emq_auth_pgsql.conf配置'auth_query'、'password_hash':
+
+.. code-block:: properties
 
     ## Postgre Server
     auth.pgsql.server = 127.0.0.1:5432
@@ -234,7 +248,9 @@ etc/plugins/emq_auth_pgsql.conf配置'auth_query'、'password_hash'::
     ## Superuser Query
     auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 
-启用Postgre认证插件::
+启用Postgre认证插件:
+
+.. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_auth_pgsql
 
@@ -244,7 +260,9 @@ Redis插件认证
 
 Redis认证。MQTT用户记录存储在Redis Hash, 键值: "mqtt_user:<Username>"
 
-etc/plugins/emq_auth_redis.conf设置'super_cmd'、'auth_cmd'、'password_hash'::
+etc/plugins/emq_auth_redis.conf设置'super_cmd'、'auth_cmd'、'password_hash':
+
+.. code-block:: properties
 
     ## Redis Server
     auth.redis.server = 127.0.0.1:6379
