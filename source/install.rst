@@ -183,6 +183,38 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows
 
 .. WARNING:: Windows上管理命令行'./bin/emqttd_ctl'无法使用。日志文件或状态URL: http://localhost:8083/status 查询当前状态。
 
+.. _install_docker:
+
+--------------
+Docker镜像安装
+--------------
+
+*EMQ* 2.0 Docker镜像下载: http://emqtt.com/downloads/latest/docker
+
+解压emqttd-docker镜像包::
+
+    unzip emqttd-docker-v2.0-rc.2-20161019.zip
+
+加载镜像::
+
+    docker load < emqttd-docker-v2.0-rc.2-20161019
+
+启动容器::
+
+    docker run -itd --net='host' --name emq20 emqttd-docker-v2.0-rc.2-20161019
+
+进入docker控制台::
+
+    docker exec -it emq20 /bin/bash
+
+停止容器::
+
+    docker stop emq20
+
+开启容器::
+
+    docker start emq20
+
 .. _build_from_source:
 
 ------------
