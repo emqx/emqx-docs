@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'EMQ 2.0-百万级开源MQTT消息服务器'
+project = u'EMQ - 百万级开源MQTT消息服务器'
 copyright = u'2016, 李枫, eMQTT.IO'
 
 # The version info for the project you're documenting, acts as replacement for
