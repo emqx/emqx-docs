@@ -437,59 +437,6 @@ Plugins插件配置目录设置
     ## File to store loaded plugin names.
     mqtt.plugins.loaded_file = data/loaded_plugins
 
-------------------
-Modules - 扩展模块
-------------------
-
-*EMQ* 消息服务器支持简单的扩展模块，用于定制服务器功能。默认支持retainer, presence、subscription模块。
-
-启用Retainer模块
-----------------
-
-Retainer模块用于持久化MQTT Retained消息:
-
-.. code-block:: properties
-
-    ## Enable retainer module
-    mqtt.module.retainer = on
-
-    ## disc: disc_copies, ram: ram_copies
-    mqtt.module.retainer.storage_type = ram
-
-    ## Max number of retained messages
-    mqtt.module.retainer.max_message_num = 100000
-
-    ## Max Payload Size of retained message
-    mqtt.module.retainer.max_payload_size = 64KB
-
-    ## Expired after seconds, never expired if 0
-    mqtt.module.retainer.expired_after = 0
-
-启用Presence模块
-----------------
-
-Presence扩展模块会向$SYS主题(Topic)发布客户端上下线消息:
-
-.. code-block:: properties
-
-    ## Enable presence module
-    ## Publish presence messages when client connected or disconnected.
-    mqtt.module.presence = on
-
-    mqtt.module.presence.qos = 0
-
-启用Subscription模块
---------------------
-
-Subscription扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic):
-
-.. code-block:: properties
-
-    # Enable subscription module
-    mqtt.module.subscription = on
-
-    mqtt.module.subscription.topics = $client/%c=1,$user/%u=1
-
 ----------------------
 MQTT Listeners参数说明
 ----------------------
@@ -625,6 +572,12 @@ Erlang虚拟机监控设置
 
 +----------------------------------------+-----------------------------------+
 | 配置文件                               | 说明                              |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_mod_presence           | 客户端上下线状态消息发布          |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_mod_retainer           | Retain消息存储插件                |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_mod_subscription       | 客户端上线自动主题订阅            |
 +----------------------------------------+-----------------------------------+
 | etc/plugins/emq_auth_username.conf     | 用户名、密码认证插件              |
 +----------------------------------------+-----------------------------------+

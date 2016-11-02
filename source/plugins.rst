@@ -32,6 +32,12 @@
 +---------------------------+---------------------------+
 | `emq_mod_rewrite`_        | 重写主题(Topic)插件       |
 +---------------------------+---------------------------+
+| `emq_mod_retainer`_       | Retain消息存储模块        |
++---------------------------+---------------------------+
+| `emq_mod_presence`_       | 客户端上下线状态消息发布  |
++---------------------------+---------------------------+
+| `emq_mod_subscription`_   | 客户端上线自动主题订阅    |
++---------------------------+---------------------------+
 | `emq_coap`_               | CoAP协议支持              |
 +---------------------------+---------------------------+
 | `emq_sn`_                 | MQTT-SN协议支持           |
@@ -616,6 +622,90 @@ MongoDB ACL集合(ACL Collection)
 
     ./bin/emqttd_ctl plugins load emq_auth_mongo
 
+---------------------------------
+emq_mod_presence Presence模块插件
+---------------------------------
+
+2.0-rc.3版本将Presence模块改为独立插件，Presence模块会向$SYS主题(Topic)发布客户端上下线消息。
+
+配置Presence模块
+----------------
+
+etc/plugins/emq_mod_presence.conf:
+
+.. code-block:: properties
+
+    ## Enable presence module
+    ## Values: on | off
+    module.presence = on
+
+    module.presence.qos = 0
+
+加载Presence模块
+----------------
+
+Presence模块默认加载。
+
+---------------------------------
+emq_mod_retainer Retainer模块插件
+---------------------------------
+
+2.0-rc.3版本将Retainer模块改为独立插件， Retainer模块负责持久化MQTT Retained消息。
+
+配置Retainer模块
+----------------
+
+etc/plugins/emq_mod_retainer.conf:
+
+.. code-block:: properties
+
+    ## disc: disc_copies, ram: ram_copies
+    module.retainer.storage_type = ram
+
+    ## Max number of retained messages
+    module.retainer.max_message_num = 100000
+
+    ## Max Payload Size of retained message
+    module.retainer.max_payload_size = 64KB
+
+    ## Expired after seconds, never expired if 0
+    module.retainer.expired_after = 0
+
+加载Retainer模块
+----------------
+
+Retainer模块默认加载。
+
+-------------------------------------
+emq_mod_subscription 自动订阅模块插件
+-------------------------------------
+
+2.0-rc.3版本将Subscription模块改为独立插件，Subscription扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic)。
+
+配置Subscription模块
+--------------------
+
+etc/plugins/emq_mod_subscription.conf:
+
+.. code-block:: properties
+
+    ## Subscribe the Topics automatically when client connected
+    module.subscription.1.topic = $client/%c
+    ## Qos of the subscription: 0 | 1 | 2
+    module.subscription.1.qos = 1
+
+    ##module.subscription.2.topic = $user/%u
+    ##module.subscription.2.qos = 1
+
+    ## Load static subscriptions from backend storage
+    ## Values: on | off
+    module.subscription.backend = on
+
+加载Subscription模块
+--------------------
+
+Subscription模块默认加载。
+
 --------------------------
 emq_mod_rewrite主题重写插件
 --------------------------
@@ -1044,6 +1134,9 @@ emq_plugin_template.erl::
     {plugin_name, load},
 
 .. _emq_dashboard:       https://github.com/emqtt/emqttd_dashboard
+.. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
+.. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
+.. _emq_mod_subscription: https://github.com/emqtt/emq_mod_subscription
 .. _emq_auth_clientid:   https://github.com/emqtt/emq_auth_clientid
 .. _emq_auth_username:   https://github.com/emqtt/emq_auth_username
 .. _emq_auth_ldap:       https://github.com/emqtt/emq_auth_ldap
