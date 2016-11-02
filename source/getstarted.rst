@@ -143,46 +143,20 @@ Web管理控制台(Dashboard)
 
 .. _plugins:
 
----------------------------
-*EMQ* 2.0扩展模块与插件列表
----------------------------
+---------------------
+*EMQ* 2.0扩展插件列表
+---------------------
 
-扩展模块(Module)
-----------------
-
-+-------------------------+-----------------------------------+
-| emqttd_mod_retainer     | Retain消息存储模块                |
-+-------------------------+-----------------------------------+
-| emqttd_mod_presence     | 客户端上下线状态消息发布          |
-+-------------------------+-----------------------------------+
-| emqttd_mod_subscription | 客户端上线自动主题订阅            |
-+-------------------------+-----------------------------------+
-
-扩展模块通过'etc/emq.conf'配置文件的Modules段落启用。
-
-启用客户端状态发布模块、订阅自动加载模块::
-
-    ##-------------------------------------------------------------------
-    ## MQTT Modules
-    ##-------------------------------------------------------------------
-
-    ## Enable presence module
-    mqtt.module.presence = on
-
-    mqtt.module.presence.qos = 0
-
-    ## Enable subscription module
-    mqtt.module.subscription = on
-
-    mqtt.module.subscription.topics = $client/%c=1,$user/%u=1
-
-扩展插件(Plugin)
-----------------
-
-*EMQ* 2.0支持丰富的扩展插件，包括控制台、多种认证方式、多种接入协议等:
+*EMQ* 2.0支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
 
 +----------------------------+-----------------------------------+
 | `emq_plugin_template`_     | 插件模版与演示代码                |
++----------------------------+-----------------------------------+
+| `emq_mod_retainer`_        | Retain消息存储模块                |
++----------------------------+-----------------------------------+
+| `emq_mod_presence`_        | 客户端上下线状态消息发布          |
++----------------------------+-----------------------------------+
+| `emq_mod_subscription`_    | 客户端上线自动主题订阅            |
 +----------------------------+-----------------------------------+
 | `emq_dashboard`_           | Web管理控制台，默认加载           |
 +----------------------------+-----------------------------------+
@@ -330,6 +304,9 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 .. _QMQTT: https://github.com/emqtt/qmqtt
 
 .. _emq_plugin_template: https://github.com/emqtt/emq_plugin_template
+.. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
+.. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
+.. _emq_mod_subscription: https://github.com/emqtt/emq_mod_subscription
 .. _emq_dashboard:       https://github.com/emqtt/emq_dashboard
 .. _emq_mod_rewrite:     https://github.com/emqtt/emq_mod_rewrite
 .. _emq_auth_clientid:   https://github.com/emqtt/emq_auth_clientid

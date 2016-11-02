@@ -5,6 +5,34 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0_rc.3:
+
+-------------
+2.0-rc.3 版本
+-------------
+
+*发布日期: 2016-11-01*
+
+1. 将Presence、Retainer、Subscription三个扩展模块改为独立插件:
+
++----------------------------+-----------------------------------+
+| `emq_mod_retainer`_        | Retain消息存储模块                |
++----------------------------+-----------------------------------+
+| `emq_mod_presence`_        | 客户端上下线状态消息发布          |
++----------------------------+-----------------------------------+
+| `emq_mod_subscription`_    | 客户端上线自动主题订阅            |
++----------------------------+-----------------------------------+
+
+2. 更新EMQ自带的自签名SSL证书，修复SSL双向认证配置文件错误
+
+3. Bugfix: Fixed a typo (#716)
+
+4. Bugfix: emqttd_http can not use emq_auth_http? #739
+
+5. Bugfix: emq_auth_redis cannot use hostname as server address (#741)
+
+6. 升级Redis, MySQL, Postgre, MongoDB插件，支持主机名或域名配置
+
 .. _release_2.0_rc.2:
 
 -------------
@@ -1681,4 +1709,8 @@ The first public release.
 .. _emqttd_:        https://github.com/emqtt/emqttd
 .. _emqttd_relx:    https://github.com/emqtt/emqttd-relx
 .. _emqttd_sn:      http://github.com/emqtt/emqttd_sn
+
+.. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
+.. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
+.. _emq_mod_subscription: https://github.com/emqtt/emq_mod_subscription
 
