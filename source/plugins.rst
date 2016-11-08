@@ -173,7 +173,7 @@ etc/plugins/emq_dashboard.conf:
     ## dashboard.listener.https.keyfile = etc/certs/key.pem
     ## dashboard.listener.https.cacertfile = etc/certs/cacert.pem
     ## dashboard.listener.https.verify = verify_peer
-    ## dashboard.listener.https.failed_if_no_peer_cert = true
+    ## dashboard.listener.https.fail_if_no_peer_cert = true
 
 ---------------------------
 emq_auth_ldap: LDAP认证插件
