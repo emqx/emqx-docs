@@ -510,7 +510,8 @@ MQTT(SSL)监听器 - 8883
     mqtt.listener.ssl.handshake_timeout = 15
     mqtt.listener.ssl.keyfile = etc/certs/key.pem
     mqtt.listener.ssl.certfile = etc/certs/cert.pem
-    mqtt.listener.ssl.cacertfile = etc/certs/cacert.pem
+    ## 开启双向认证
+    ## mqtt.listener.ssl.cacertfile = etc/certs/cacert.pem
     ## mqtt.listener.ssl.verify = verify_peer
     ## mqtt.listener.ssl.fail_if_no_peer_cert = true
 
@@ -535,11 +536,12 @@ MQTT(WebSocket/SSL)监听器 - 8084
     mqtt.listener.https = 8084
     mqtt.listener.https.acceptors = 4
     mqtt.listener.https.max_clients = 64
-    mqtt.listener.https.handshake_timeout = 10
+    ## SSL Options
+    mqtt.listener.https.handshake_timeout = 15
     mqtt.listener.https.certfile = etc/certs/cert.pem
     mqtt.listener.https.keyfile = etc/certs/key.pem
-    mqtt.listener.https.cacertfile = etc/certs/cacert.pem
     ## 开启双向认证
+    ## mqtt.listener.https.cacertfile = etc/certs/cacert.pem
     ## mqtt.listener.https.verify = verify_peer
     ## mqtt.listener.https.fail_if_no_peer_cert = true
 
