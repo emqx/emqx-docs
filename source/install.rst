@@ -203,10 +203,6 @@ Docker镜像安装
 
     docker run -itd --net='host' --name emq20 emqttd-docker-v2.0-rc.2-20161019
 
-进入docker控制台::
-
-    docker exec -it emq20 /bin/bash
-
 停止容器::
 
     docker stop emq20
@@ -214,6 +210,10 @@ Docker镜像安装
 开启容器::
 
     docker start emq20
+
+进入Docker控制台::
+
+    docker exec -it emq20 /bin/bash
 
 .. _build_from_source:
 
