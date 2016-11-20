@@ -914,8 +914,8 @@ EMQ消息服务器支持追踪来自某个客户端(Client)的全部报文，或
 .. _emq_auth_username: https://github.com/emqtt/emq_auth_username
 .. _emq_auth_ldap:     https://github.com/emqtt/emq_auth_ldap
 .. _emq_auth_http:     https://github.com/emqtt/emq_auth_http
-.. _emq_auth_mysql:    https://github.com/emqtt/emq_plugin_mysql
-.. _emq_auth_pgsql:    https://github.com/emqtt/emq_plugin_pgsql
-.. _emq_auth_redis:    https://github.com/emqtt/emq_plugin_redis
-.. _emq_auth_mongo:    https://github.com/emqtt/emq_plugin_mongo
+.. _emq_auth_mysql:    https://github.com/emqtt/emq_auth_mysql
+.. _emq_auth_pgsql:    https://github.com/emqtt/emq_auth_pgsql
+.. _emq_auth_redis:    https://github.com/emqtt/emq_auth_redis
+.. _emq_auth_mongo:    https://github.com/emqtt/emq_auth_mongo
 
