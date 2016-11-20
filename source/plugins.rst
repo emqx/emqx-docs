@@ -301,7 +301,7 @@ MQTT访问控制表
 配置MySQL认证鉴权插件
 ---------------------
 
-etc/plugins/emq_plugin_mysql.conf:
+etc/plugins/emq_auth_mysql.conf:
 
 .. code-block:: properties
 
@@ -388,7 +388,7 @@ Postgre MQTT访问控制表
 配置Postgre认证鉴权插件
 -----------------------
 
-etc/plugins/emq_plugin_pgsql.conf:
+etc/plugins/emq_auth_pgsql.conf:
 
 .. code-block:: properties
 
@@ -525,7 +525,7 @@ emq_auth_mongo: MongoDB认证/访问控制插件
 配置MongoDB认证鉴权插件
 -----------------------
 
-etc/plugins/emq_plugin_mongo.conf:
+etc/plugins/emq_auth_mongo.conf:
 
 .. code-block:: properties
 
