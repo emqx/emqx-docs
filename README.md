@@ -18,7 +18,7 @@
   * [Linux服务器安装](http://docs.emqtt.cn/zh_CN/latest/install.html#linux)
   * [FreeBSD服务器安装](http://docs.emqtt.cn/zh_CN/latest/install.html#freebsd)
   * [Mac OS X系统安装](http://docs.emqtt.cn/zh_CN/latest/install.html#mac-os-x)
-  * [Windows服务器安装](http://docs.emqtt.cn/zh_cn/latest/install.html#windows)
+  * [Windows服务器安装](http://docs.emqtt.cn/zh_CN/latest/install.html#windows)
   * [Docker镜像安装](http://docs.emqtt.cn/zh_CN/latest/install.html#docker)
   * [源码编译安装](http://docs.emqtt.cn/zh_CN/latest/install.html#build-from-source)
   * [TCP服务端口占用](http://docs.emqtt.cn/zh_CN/latest/install.html#tcp)
