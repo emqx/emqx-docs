@@ -2,8 +2,6 @@
 《*EMQ* 2.0中文文档》
 =====================
 
-http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
-
 * **[开始使用(GetStarted)](http://docs.emqtt.cn/zh_CN/latest/getstarted.html)**
   * [*EMQ* 2.0 消息服务器简介](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#emq-2-0)
   * [MQTT发布订阅模式简述](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt)
@@ -154,12 +152,20 @@ http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
   * [EMQ消息服务器参数](http://docs.emqtt.cn/zh_CN/latest/tune.html#emq)
   * [测试客户端设置](http://docs.emqtt.cn/zh_CN/latest/tune.html#id1)
 
+支持与联系
+==========
 
 公司:    http://emqtt.com 
+
 微信:    emqttd                         
+
 微博:    http://weibo.com/emqtt         
+
 Twitter: @emqtt                         
+
 作者:    李枫 <feng@emqtt.io> 
+
+http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
 
 ![weixin](https://github.com/emqtt/docs_zh/blob/master/source/_static/images/weixin.jpg)
 
