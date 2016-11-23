@@ -22,8 +22,8 @@ http://emqtt.com/docs/v2 或 http://docs.emqtt.cn/
 联系
 ----
 
-公司:       | http://emqtt.com               
 ------------|-------------------------
+公司:       | http://emqtt.com               
 项目:       | https://github.com/emqtt       
 微信:       | emqttd                         
 微博:       | http://weibo.com/emqtt         
