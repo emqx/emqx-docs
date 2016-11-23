@@ -1,8 +1,8 @@
 
 《*EMQ* 2.0中文文档》
-====================
+=====================
 
-http://emqtt.com/docs/v2 或 http://docs.emqtt.cn/
+http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
 
 内容
 ----
@@ -18,17 +18,62 @@ http://emqtt.com/docs/v2 或 http://docs.emqtt.cn/
   * [100万线连接测试说明](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#c1000k)
   * [开源MQTT客户端项目](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt-clients)
 
+* **[安装部署(Installation)](http://docs.emqtt.cn/zh_CN/latest/install.html)**
+  * [EMQ 2.0程序包下载](http://docs.emqtt.cn/zh_CN/latest/install.html#emq-2-0)
+  * [Linux服务器安装](http://docs.emqtt.cn/zh_CN/latest/install.html#linux)
+  * [FreeBSD服务器安装](http://docs.emqtt.cn/zh_CN/latest/install.html#freebsd)
+  * [Mac OS X系统安装](http://docs.emqtt.cn/zh_CN/latest/install.html#mac-os-x)
+  * [Windows服务器安装](http://docs.emqtt.cn/zh_cn/latest/install.html#windows)
+  * [Docker镜像安装](http://docs.emqtt.cn/zh_CN/latest/install.html#docker)
+  * [源码编译安装](http://docs.emqtt.cn/zh_CN/latest/install.html#build-from-source)
+  * [TCP服务端口占用](http://docs.emqtt.cn/zh_CN/latest/install.html#tcp)
+  * [快速设置](http://docs.emqtt.cn/zh_CN/latest/install.html#quick-setup)
+  * [/etc/init.d/emqttd](http://docs.emqtt.cn/zh_CN/latest/install.html#etc-init-d-emqttd)
+
+* **[青云映像(Image)](http://docs.emqtt.cn/zh_CN/latest/image.html)**
+
+* **[](http://docs.emqtt.cn/zh_CN/latest/)**
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+
+* **[](http://docs.emqtt.cn/zh_CN/latest/)**
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+
+* **[](http://docs.emqtt.cn/zh_CN/latest/)**
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+
+* **[](http://docs.emqtt.cn/zh_CN/latest/)**
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+
+* **[](http://docs.emqtt.cn/zh_CN/latest/)**
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
+  * [](http://docs.emqtt.cn/zh_CN/latest/)
 
 联系
 ----
-            |
-------------|-------------------------
-公司:       | http://emqtt.com               
-项目:       | https://github.com/emqtt       
+
+公司:       | http://emqtt.com 
+----------- | ------------------------
 微信:       | emqttd                         
 微博:       | http://weibo.com/emqtt         
 Twitter:    | @emqtt                         
-作者:       | 李枫 <feng@emqtt.io>           
+作者:       | 李枫 <feng@emqtt.io> 
 
 微信
 ----
