@@ -1114,11 +1114,11 @@ emq_plugin_template.erl::
 编译发布插件
 ------------
 
-1. clone emqttd-relx项目:
+1. clone emq-relx项目:
 
 .. code-block:: bash
 
-    git clone https://github.com/emqtt/emqttd-relx.git
+    git clone https://github.com/emqtt/emq-relx.git
 
 2. Makefile增加`DEPS`:
 

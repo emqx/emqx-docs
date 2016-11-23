@@ -233,9 +233,9 @@ Ubuntu平台可通过apt-get命令安装，CentOS/RedHat平台可通过yum命令
 
 .. code-block:: bash
 
-    git clone https://github.com/emqtt/emqttd-relx.git
+    git clone https://github.com/emqtt/emq-relx.git
 
-    cd emqttd-relx && make
+    cd emq-relx && make
 
     cd _rel/emqttd && ./bin/emqttd console
 
