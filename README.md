@@ -167,8 +167,5 @@ http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
 Twitter:    | @emqtt                         
 作者:       | 李枫 <feng@emqtt.io> 
 
-微信
-----
-
 ![weixin](https://github.com/emqtt/docs_zh/blob/master/source/_static/images/weixin.jpg)
 
