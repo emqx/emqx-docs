@@ -7,9 +7,9 @@
 
 .. _release_2.0:
 
---------------------
-2.0 正式版(西湖以西)
---------------------
+---------------------
+2.0 正式版 "西湖以西"
+---------------------
 
 *发布日期: 2016-11-24*
 
@@ -50,7 +50,7 @@ EMQ-2.0版本正式发布！EMQ-1.0版本产品环境下已支持900K并发连�
 erlang.mk与relx
 ---------------
 
-2.0版本分离 `emqttd`_ 主项目和发布项目 `emqttd_relx`_, 采用 `erlang.mk`_ 和 `relx`_  编译发布工具替换1.x版本使用的rebar，项目可以跨平台在Linux/Unix/Windows系统下编译。
+2.0版本分离 `emqttd`_ 主项目和发布项目 `emq-relx`_, 采用 `erlang.mk`_ 和 `relx`_  编译发布工具替换1.x版本使用的rebar，项目可以跨平台在Linux/Unix/Windows系统下编译。
 
 CoAP协议支持
 ------------
@@ -1872,7 +1872,7 @@ The first public release.
 .. _emqttd:               https://github.com/emqtt/emqttd
 .. _emqttd_relx:          https://github.com/emqtt/emqttd-relx
 .. _emqttd_sn:            http://github.com/emqtt/emqttd_sn
-.. _emq_relx:             https://github.com/emqtt/emq-relx
+.. _emq-relx:             https://github.com/emqtt/emq-relx
 .. _emq_dashboard:        https://github.com/emqtt/emqttd_dashboard
 .. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
 .. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
