@@ -1867,12 +1867,12 @@ Bugfix: send will msg when network error
 
 The first public release.
 
-.. _erlang.mk_:     https://erlang.mk
-.. _relx_:          https://github.com/erlware/relx
-.. _emqttd_:        https://github.com/emqtt/emqttd
-.. _emqttd_relx:    https://github.com/emqtt/emqttd-relx
-.. _emqttd_sn:      http://github.com/emqtt/emqttd_sn
-
+.. _erlang.mk:            https://erlang.mk
+.. _relx:                 https://github.com/erlware/relx
+.. _emqttd:               https://github.com/emqtt/emqttd
+.. _emqttd_relx:          https://github.com/emqtt/emqttd-relx
+.. _emqttd_sn:            http://github.com/emqtt/emqttd_sn
+.. _emq_relx:             https://github.com/emqtt/emq-relx
 .. _emq_dashboard:        https://github.com/emqtt/emqttd_dashboard
 .. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
 .. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
