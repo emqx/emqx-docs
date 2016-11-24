@@ -15,9 +15,17 @@
 
 *版本别名: 西湖以西(West of West Lake)*
 
-EMQ-2.0版本正式发布！EMQ-1.x版本单节点产品环境下已支持900K并发连接，EMQ-2.0版本重构了整个项目架构，支持用户更友好的配置文件，支持共享订阅(Shared Subscription)、本地订阅(Local Subscription)等高级功能，支持CoAP(RFC 7252)、MQTT-SN协议和网关。EMQ-2.0版本增加了扩展钩子与认证插件，支持与大部分数据库或NoSQL的认证集成。
+EMQ-2.0版本正式发布！EMQ-1.0版本产品环境下已支持900K并发连接，EMQ-2.0版本重构了整个项目架构并正式支持共享订阅功能:
 
-EMQ-2.0版本支持全平台编译部署，支持Linux/Unix/Windows以及ARM平台网关，支持Docker镜像制作。
+1. 支持共享订阅(Shared Subscription)与本地订阅(Local Subscription)，解决MQTT协议负载平衡消费问题；
+
+2. 支持CoAP(RFC 7252)、MQTT-SN协议和网关，支持CoAP、MQTT-SN客户端与MQTT客户端互通；
+
+3. 重构配置文件格式与加载方式，支持用户友好的'K = V'文件格式，支持操作系统环境变量；
+  
+4. 增加了扩展钩子和大量的认证插件，支持与大部分数据库或NoSQL的认证集成；
+
+5. 支持全平台编译部署，Linux/Unix/Windows以及ARM平台网关，支持Docker镜像制作。
 
 共享订阅(Shared Subscription)
 -----------------------------
