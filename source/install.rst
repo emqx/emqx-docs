@@ -17,23 +17,33 @@
 
 下载地址: http://emqtt.com/downloads
 
-+-----------+-------------------------------------------+
-| Debian    | http://emqtt.com/downloads/latest/debian  |
-+-----------+-------------------------------------------+
-| Ubuntu    | http://emqtt.com/downloads/latest/ubuntu  |
-+-----------+-------------------------------------------+
-| CentOS    | http://emqtt.com/downloads/latest/centos  |
-+-----------+-------------------------------------------+
-| FreeBSD   | http://emqtt.com/downloads/latest/freebsd |
-+-----------+-------------------------------------------+
-| Mac OS X  | http://emqtt.com/downloads/latest/macosx  |
-+-----------+-------------------------------------------+
-| Windows   | http://emqtt.com/downloads/latest/windows |
-+-----------+-------------------------------------------+
-| Docker    | http://emqtt.com/downloads/latest/docker  |
-+-----------+-------------------------------------------+
++-------------+-----------------------------------------------+
+| Debian      | http://emqtt.com/downloads/latest/debian      |
++-------------+-----------------------------------------------+
+| Ubuntu12.04 | http://emqtt.com/downloads/latest/ubuntu12_04 |
++-------------+-----------------------------------------------+
+| Ubuntu14.04 | http://emqtt.com/downloads/latest/ubuntu14_04 |
++-------------+-----------------------------------------------+
+| Ubuntu16.04 | http://emqtt.com/downloads/latest/ubuntu16_04 |
++-------------+-----------------------------------------------+
+| CentOS7     | http://emqtt.com/downloads/latest/centos7     |
++-------------+-----------------------------------------------+
+| Debian7     | http://emqtt.com/downloads/latest/debian7     |
++-------------+-----------------------------------------------+
+| Debian8     | http://emqtt.com/downloads/latest/debian7     |
++-------------+-----------------------------------------------+
+| FreeBSD     | http://emqtt.com/downloads/latest/freebsd     |
++-------------+-----------------------------------------------+
+| Windows7    | http://emqtt.com/downloads/latest/windows7    |
++-------------+-----------------------------------------------+
+| Windows10   | http://emqtt.com/downloads/latest/windows10   |
++-------------+-----------------------------------------------+
+| Mac OS X    | http://emqtt.com/downloads/latest/macosx      |
++-------------+-----------------------------------------------+
+| Docker      | http://emqtt.com/downloads/latest/docker      |
++-------------+-----------------------------------------------+
 
-安装包命名由平台、版本、时间组成，例如: emqttd-macosx-v2.0-rc.2-20161019.zip
+安装包命名由平台、版本组成，例如: emqttd-macosx-v2.0.zip
 
 .. _install_on_linux:
 
@@ -41,13 +51,13 @@
 Linux服务器安装
 ---------------
 
-CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/latest/centos
+CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/latest/centos7
 
 .. code-block:: bash
 
-    unzip emqttd-macosx-v2.0-rc.2-20161019.zip
+    unzip emqttd-centos7-v2.0.zip
 
-控制台调试模式启动，检查EMQ 是否可正常启动:
+控制台调试模式启动，检查*EMQ*是否可正常启动:
 
 .. code-block:: bash
 
@@ -163,6 +173,8 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows
 
 关闭控制台窗口，停止emqttd进程，准备注册Windows服务。
 
+.. WARNING:: EMQ-2.0暂不支持服务注册!
+
 *EMQ* 注册为Windows服务::
 
     .\bin\emqttd install
@@ -179,10 +191,6 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows
 
     .\bin\emqttd uninstall
 
-.. NOTE:: 可通过Windows服务管理控制台进行启停。
-
-.. WARNING:: Windows上管理命令行'./bin/emqttd_ctl'无法使用。日志文件或状态URL: http://localhost:8083/status 查询当前状态。
-
 .. _install_docker:
 
 --------------
@@ -193,15 +201,15 @@ Docker镜像安装
 
 解压emqttd-docker镜像包::
 
-    unzip emqttd-docker-v2.0-rc.2-20161019.zip
+    unzip emqttd-docker-v2.0.zip
 
 加载镜像::
 
-    docker load < emqttd-docker-v2.0-rc.2-20161019
+    docker load < emqttd-docker-v2.0
 
 启动容器::
 
-    docker run -itd --net='host' --name emq20 emqttd-docker-v2.0-rc.2-20161019
+    docker run -itd --net='host' --name emq20 emqttd-docker-v2.0
 
 停止容器::
 
