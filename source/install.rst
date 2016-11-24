@@ -173,6 +173,8 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows
 
 关闭控制台窗口，停止emqttd进程，准备注册Windows服务。
 
+.. WARNING:: EMQ-2.0暂不支持服务注册!
+
 *EMQ* 注册为Windows服务::
 
     .\bin\emqttd install
@@ -188,10 +190,6 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows
 *EMQ* 服务卸载::
 
     .\bin\emqttd uninstall
-
-.. NOTE:: 可通过Windows服务管理控制台进行启停。
-
-.. WARNING:: Windows上管理命令行'./bin/emqttd_ctl'无法使用。日志文件或状态URL: http://localhost:8083/status 查询当前状态。
 
 .. _install_docker:
 

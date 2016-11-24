@@ -50,22 +50,26 @@ EMQ-2.0版本正式发布！EMQ-1.0版本产品环境下已支持900K并发连�
 erlang.mk与relx
 ---------------
 
-2.0 版本分离 `emqttd`_ 主项目和发布项目 `emqttd_relx`_, 采用 `erlang.mk`_ 和 `relx`_ 编译发布工具替换1.x版本使用的rebar，项目可以跨平台在Linux/Unix/Windows编译。
+2.0版本分离 `emqttd`_ 主项目和发布项目 `emqttd_relx`_, 采用 `erlang.mk`_ 和 `relx`_  编译发布工具替换1.x版本使用的rebar，项目可以跨平台在Linux/Unix/Windows编译。
 
 CoAP协议支持
 ------------
 
-2.0 版本支持CoAP协议(RFC7252)，支持CoAP网关与MQTT客户端互通。CoAP插件: https://github.com/emqtt/emq_coap
+2.0版本支持CoAP协议(RFC7252)，支持CoAP网关与MQTT客户端互通。
+
+CoAP插件: https://github.com/emqtt/emq_coap
 
 MQTT-SN协议支持
 ---------------
 
-2.0 版本支持MQTT-SN协议，支持MQTT-SN网关与MQTT客户端互通。MQTT-SN插件: https://github.com/emqtt/emq_sn
+2.0版本支持MQTT-SN协议，支持MQTT-SN网关与MQTT客户端互通。
+
+MQTT-SN插件: https://github.com/emqtt/emq_sn
 
 'K = V'格式配置文件
 -------------------
 
-EMQ-2.0版本支持更友好的'K = V'格式配置文件etc/emq.conf::
+2.0版本支持用户友好的'K = V'格式配置文件etc/emq.conf::
 
     node.name = emqttd@127.0.0.1
 
@@ -78,7 +82,7 @@ EMQ-2.0版本支持更友好的'K = V'格式配置文件etc/emq.conf::
 操作系统环境变量
 ----------------
 
-2.0 支持操作系统环境变量。启动时通过环境变量设置EMQ节点名称、安全Cookie以及TCP端口号::
+2.0版本支持操作系统环境变量。启动时通过环境变量设置EMQ节点名称、安全Cookie以及TCP端口号::
 
     EMQ_NODE_NAME=emqttd@127.0.0.1
     EMQ_NODE_COOKIE=emq_dist_cookie
@@ -92,6 +96,11 @@ Docker镜像支持
 --------------
 
 EMQ-2.0版本支持Docker镜像制作，Dockerfile开源在: https://github.com/emqtt/emq_docker
+
+Windows平台支持
+---------------
+
+2.0版本完整支持Windows平台的编译、发布与运行，支持Windows平台下的'emqttd_ctl'控制命令，支持在Windows节点间的集群。
 
 问题与改进
 ----------
@@ -109,7 +118,7 @@ EMQ-2.0版本支持Docker镜像制作，Dockerfile开源在: https://github.com/
 扩展插件
 --------
 
-EMQ-2.0版本发布的扩展插件列表:
+2.0版本发布的认证与扩展插件列表:
 
 +---------------------------+---------------------------+
 | 插件                      | 说明                      |
