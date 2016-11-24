@@ -89,9 +89,9 @@ MQTT消息发布者(Publisher)只能向特定'名称主题'(不支持通配符)�
 
 .. code-block:: bash
 
-    git clone https://github.com/emqtt/emqttd-relx.git
+    git clone https://github.com/emqtt/emq-relx.git
 
-    cd emqttd-relx && make
+    cd emq-relx && make
 
     cd _rel/emqttd && ./bin/emqttd console
 
