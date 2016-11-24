@@ -5,6 +5,152 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0:
+
+--------------------
+2.0 正式版(西湖以西)
+--------------------
+
+*发布日期: 2016-11-24*
+
+*版本别名: 西湖以西(West of West Lake)*
+
+EMQ-2.0版本正式发布！EMQ-1.x版本单节点产品环境下已支持900K并发连接，EMQ-2.0版本重构了整个项目架构，支持用户更友好的配置文件，支持共享订阅(Shared Subscription)、本地订阅(Local Subscription)等高级功能，支持CoAP(RFC 7252)、MQTT-SN协议和网关。EMQ-2.0版本增加了扩展钩子与认证插件，支持与大部分数据库或NoSQL的认证集成。
+
+EMQ-2.0版本支持全平台编译部署，支持Linux/Unix/Windows以及ARM平台网关，支持Docker镜像制作。
+
+共享订阅(Shared Subscription)
+-----------------------------
+
+共享订阅(Shared Subscription)支持在多订阅者间采用分组负载平衡方式派发消息::
+
+                                ---------
+                                |       | --Msg1--> Subscriber1
+    Publisher--Msg1,Msg2,Msg3-->|  EMQ  | --Msg2--> Subscriber2
+                                |       | --Msg3--> Subscriber3
+                                ---------
+
+使用方式: 订阅者在主题(Topic)前增加'$queue'或'$share/<group>/'前缀。
+
+本地订阅(Local Subscription)
+----------------------------
+
+本地订阅(Local Subscription)只在本节点创建订阅与路由表，不会在集群节点间广播全局路由，非常适合物联网数据采集应用。
+
+使用方式: 订阅者在主题(Topic)前增加'$local/'前缀。
+
+erlang.mk与relx
+---------------
+
+2.0 版本分离 `emqttd`_ 主项目和发布项目 `emqttd_relx`_, 采用 `erlang.mk`_ 和 `relx`_ 编译发布工具替换1.x版本使用的rebar，项目可以跨平台在Linux/Unix/Windows编译。
+
+CoAP协议支持
+------------
+
+2.0 版本支持CoAP协议(RFC7252)，支持CoAP网关与MQTT客户端互通。CoAP插件: https://github.com/emqtt/emq_coap
+
+MQTT-SN协议支持
+---------------
+
+2.0 版本支持MQTT-SN协议，支持MQTT-SN网关与MQTT客户端互通。MQTT-SN插件: https://github.com/emqtt/emq_sn
+
+'K = V'格式配置文件
+-------------------
+
+EMQ-2.0版本支持更友好的'K = V'格式配置文件etc/emq.conf::
+
+    node.name = emqttd@127.0.0.1
+
+    ...
+
+    mqtt.listener.tcp = 1883
+
+    ...
+
+操作系统环境变量
+----------------
+
+2.0 支持操作系统环境变量。启动时通过环境变量设置EMQ节点名称、安全Cookie以及TCP端口号::
+
+    EMQ_NODE_NAME=emqttd@127.0.0.1
+    EMQ_NODE_COOKIE=emq_dist_cookie
+    EMQ_MAX_PORTS=65536
+    EMQ_TCP_PORT=1883
+    EMQ_SSL_PORT=8883
+    EMQ_HTTP_PORT=8083
+    EMQ_HTTPS_PORT=8084
+
+Docker镜像支持
+--------------
+
+EMQ-2.0版本支持Docker镜像制作，Dockerfile开源在: https://github.com/emqtt/emq_docker
+
+问题与改进
+----------
+
+#764: add mqtt.cache_acl option
+
+#667: Configuring emqttd from environment variables
+
+#722: `mqtt/superuser` calls two times `emqtt_auth_http`
+
+#754: "-heart" option for EMQ 2.0
+
+#741: emq_auth_redis cannot use hostname as server address
+
+扩展插件
+--------
+
+EMQ-2.0版本发布的扩展插件列表:
+
++---------------------------+---------------------------+
+| 插件                      | 说明                      |
++===========================+===========================+
+| `emq_dashboard`_          | Web控制台插件(默认加载)   |
++---------------------------+---------------------------+
+| `emq_auth_clientid`_      | ClientId认证插件          |
++---------------------------+---------------------------+
+| `emq_auth_username`_      | 用户名、密码认证插件      |
++---------------------------+---------------------------+
+| `emq_auth_ldap`_          | LDAP认证/访问控制         |
++---------------------------+---------------------------+
+| `emq_auth_http`_          | HTTP认证/访问控制         |
++---------------------------+---------------------------+
+| `emq_auth_mysql`_         | MySQL认证/访问控制        |
++---------------------------+---------------------------+
+| `emq_auth_pgsql`_         | PostgreSQL认证/访问控制   |
++---------------------------+---------------------------+
+| `emq_auth_redis`_         | Redis认证/访问控制        |
++---------------------------+---------------------------+
+| `emq_auth_mongo`_         | MongoDB认证/访问控制      |
++---------------------------+---------------------------+
+| `emq_mod_rewrite`_        | 重写主题(Topic)插件       |
++---------------------------+---------------------------+
+| `emq_mod_retainer`_       | Retain消息存储模块        |
++---------------------------+---------------------------+
+| `emq_mod_presence`_       | 客户端上下线状态消息发布  |
++---------------------------+---------------------------+
+| `emq_mod_subscription`_   | 客户端上线自动主题订阅    |
++---------------------------+---------------------------+
+| `emq_coap`_               | CoAP协议支持              |
++---------------------------+---------------------------+
+| `emq_sn`_                 | MQTT-SN协议支持           |
++---------------------------+---------------------------+
+| `emq_stomp`_              | Stomp协议支持             |
++---------------------------+---------------------------+
+| `emq_sockjs`_             | Stomp over SockJS协议支持 |
++---------------------------+---------------------------+
+| `emq_recon`_              | Recon性能调试             |
++---------------------------+---------------------------+
+| `emq_reloader`_           | Reloader代码热加载插件    |
++---------------------------+---------------------------+
+| `emq_plugin_template`_    | 插件开发模版              |
++---------------------------+---------------------------+
+
+-------------
+2.0-rc.3 版本
+-------------
+
 .. _release_2.0_rc.3:
 
 -------------
@@ -1710,7 +1856,25 @@ The first public release.
 .. _emqttd_relx:    https://github.com/emqtt/emqttd-relx
 .. _emqttd_sn:      http://github.com/emqtt/emqttd_sn
 
+.. _emq_dashboard:        https://github.com/emqtt/emqttd_dashboard
 .. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
 .. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
 .. _emq_mod_subscription: https://github.com/emqtt/emq_mod_subscription
+.. _emq_auth_clientid:    https://github.com/emqtt/emq_auth_clientid
+.. _emq_auth_username:    https://github.com/emqtt/emq_auth_username
+.. _emq_auth_ldap:        https://github.com/emqtt/emq_auth_ldap
+.. _emq_auth_http:        https://github.com/emqtt/emq_auth_http
+.. _emq_auth_mysql:       https://github.com/emqtt/emq_auth_mysql
+.. _emq_auth_pgsql:       https://github.com/emqtt/emq_auth_pgsql
+.. _emq_auth_redis:       https://github.com/emqtt/emq_auth_redis
+.. _emq_auth_mongo:       https://github.com/emqtt/emq_auth_mongo
+.. _emq_mod_rewrite:      https://github.com/emqtt/emq_mod_rewrite
+.. _emq_sn:               https://github.com/emqtt/emq_sn
+.. _emq_coap:             https://github.com/emqtt/emq_coap
+.. _emq_stomp:            https://github.com/emqtt/emq_stomp
+.. _emq_sockjs:           https://github.com/emqtt/emq_sockjs
+.. _emq_recon:            https://github.com/emqtt/emq_recon
+.. _emq_reloader:         https://github.com/emqtt/emq_reloader
+.. _emq_plugin_template:  https://github.com/emqtt/emq_plugin_template
+.. _recon:                http://ferd.github.io/recon/
 

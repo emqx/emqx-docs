@@ -14,7 +14,7 @@ EMQ节点间桥接
 *EMQ* 消息服务器支持多节点桥接模式互联::
 
                   ---------                     ---------                     ---------
-    Publisher --> | node1 | --Bridge Forward--> | node2 | --Bridge Forward--> | node3 | --> Subscriber
+    Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
                   ---------                     ---------                     ---------
 
 节点间桥接与集群不同，不复制主题树与路由表，只按桥接规则转发MQTT消息。
@@ -79,7 +79,7 @@ mosquitto可以普通MQTT连接方式，桥接到emqttd消息服务器::
 
                  -------------             -----------------
     Sensor ----> | mosquitto | --Bridge--> |               |
-                 -------------             |    emqttd     |
+                 -------------             |      EMQ      |
                  -------------             |    Cluster    |
     Sensor ----> | mosquitto | --Bridge--> |               |
                  -------------             -----------------
