@@ -50,7 +50,7 @@ EMQ-2.0版本正式发布！EMQ-1.0版本产品环境下已支持900K并发连�
 erlang.mk与relx
 ---------------
 
-2.0版本分离 `emqttd`_ 主项目和发布项目 `emqttd_relx`_, 采用 `erlang.mk`_ 和 `relx`_  编译发布工具替换1.x版本使用的rebar，项目可以跨平台在Linux/Unix/Windows编译。
+2.0版本分离 `emqttd`_ 主项目和发布项目 `emqttd_relx`_, 采用 `erlang.mk`_ 和 `relx`_  编译发布工具替换1.x版本使用的rebar，项目可以跨平台在Linux/Unix/Windows系统下编译。
 
 CoAP协议支持
 ------------
