@@ -151,7 +151,7 @@ Mac下开发调试MQTT应用，可直接下载安装: http://emqtt.com/downloads
 Windows服务器安装
 -----------------
 
-Windows平台程序包下载: http://emqtt.com/downloads/latest/windows
+Windows平台程序包下载: http://emqtt.com/downloads/latest/windows10
 
 程序包下载解压后，打开Windows命令行窗口，cd到程序目录。
 
