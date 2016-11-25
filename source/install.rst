@@ -167,29 +167,29 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows10
 
 控制台模式启动::
 
-    .\bin\emqttd console
+    bin/emqttd console
 
 如启动成功，会弹出控制台窗口。
 
 关闭控制台窗口，停止emqttd进程，准备注册Windows服务。
 
-.. WARNING:: EMQ-2.0暂不支持服务注册!
+.. WARNING:: EMQ-2.0暂不支持服务注册
 
 *EMQ* 注册为Windows服务::
 
-    .\bin\emqttd install
+    bin/emqttd install
 
 *EMQ* 服务启动::
 
-    .\bin\emqttd start
+    bin/emqttd start
 
 *EMQ* 服务停止::
 
-    .\bin\emqttd stop
+    bin/emqttd stop
 
 *EMQ* 服务卸载::
 
-    .\bin\emqttd uninstall
+    bin/emqttd uninstall
 
 .. _install_docker:
 
