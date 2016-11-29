@@ -13,29 +13,19 @@
 
 *发布日期: 2016-11-30*
 
-问题与改进
-----------
+emqttd#781: 更新项目README到2.0版本
 
-emq_dashboard
-emq_auth_clientid
-emq_auth_username
-emq_auth_ldap
-emq_auth_http
-emq_auth_mysql
-emq_auth_pgsql
-emq_auth_redis
-emq_auth_mongo
-emq_mod_rewrite
-emq_mod_retainer
-emq_mod_presence
-emq_mod_subscription
-emq_coap
-emq_sn
-emq_stomp
-emq_sockjs
-emq_recon
-emq_reloader
-emq_plugin_template
+emq_dashboard#84: 显示节点集群状态
+
+emq_dashboard#79: 集群节点采用disc_copies存储mqtt_admin表
+
+emq_auth_clientid: 集群节点采用disc_copies存储mqtt_auth_clientid表
+
+emq_auth_username: 集群节点采用disc_copies存储mqtt_auth_username表
+
+emq_mod_subscription#3: 删除emq_mod_subscription表与module.subscription.backend配置
+
+emq_plugin_template#5: 插件停止时注销认证/ACL模块
 
 .. _release_2.0:
 
