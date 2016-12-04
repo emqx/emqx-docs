@@ -66,11 +66,16 @@ etc/plugins/emq_auth_clientid.conf:
 
 .. code-block:: properties
 
-    ## auth.client.$clientid = $password
+    ##auth.client.$N.clientid = clientid
+    ##auth.client.$N.password = passwd
+
     ## Examples
-    ## auth.client.id = passwd
-    ## auth.client.dev:devid = passwd2
-    ## auth.client.app:appid = passwd2
+    ##auth.client.1.clientid = id
+    ##auth.client.1.password = passwd
+    ##auth.client.2.clientid = dev:devid
+    ##auth.client.2.password = passwd2
+    ##auth.client.3.clientid = app:appid
+    ##auth.client.3.password = passwd3
 
 加载ClientId认证插件
 --------------------
@@ -92,11 +97,14 @@ etc/plugins/emq_auth_username.conf:
 
 .. code-block:: properties
 
-    ##auth.username.$name=$password
+    ##auth.user.$N.username = admin
+    ##auth.user.$N.password = public
 
     ## Examples:
-    ##auth.username.admin=public
-    ##auth.username.feng@emqtt.io=public
+    ##auth.user.1.username = admin
+    ##auth.user.1.password = public
+    ##auth.user.2.username = feng@emqtt.io
+    ##auth.user.2.password = public
 
 两种方式添加用户:
 
