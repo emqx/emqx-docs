@@ -5,6 +5,22 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0.2:
+
+----------
+2.0.2 版本
+----------
+
+*发布日期: 2016-12-05*
+
+emqttd#787: Stop plugins before the broker stopped, clean routes when a node down
+
+emqttd#790: Unable to start emqttd service if username/password contains special characters
+
+emq-auth-clientid#4: Improve the configuration of emq_auth_clientid.conf to resolve emqttd#790
+
+emq-auth-username#4: Improve the configuration of emq_auth_username.conf to resolve emqttd#790
+
 .. _release_2.0.1:
 
 ----------
