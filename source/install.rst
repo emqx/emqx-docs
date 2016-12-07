@@ -34,7 +34,7 @@
 +-------------+-----------------------------------------------+
 | FreeBSD     | http://emqtt.com/downloads/latest/freebsd     |
 +-------------+-----------------------------------------------+
-| Windows7    | http://emqtt.com/downloads/latest/windows7    |
+| Windows7    | http://emqtt.com/downloads/latest/indows7    |
 +-------------+-----------------------------------------------+
 | Windows10   | http://emqtt.com/downloads/latest/windows10   |
 +-------------+-----------------------------------------------+
@@ -167,7 +167,7 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows10
 
 控制台模式启动::
 
-    bin/emqttd console
+    bin\emqttd console
 
 如启动成功，会弹出控制台窗口。
 
@@ -177,19 +177,19 @@ Windows平台程序包下载: http://emqtt.com/downloads/latest/windows10
 
 *EMQ* 注册为Windows服务::
 
-    bin/emqttd install
+    bin\emqttd install
 
 *EMQ* 服务启动::
 
-    bin/emqttd start
+    bin\emqttd start
 
 *EMQ* 服务停止::
 
-    bin/emqttd stop
+    bin\emqttd stop
 
 *EMQ* 服务卸载::
 
-    bin/emqttd uninstall
+    bin\emqttd uninstall
 
 .. _install_docker:
 
