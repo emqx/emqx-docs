@@ -57,7 +57,7 @@ CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/latest/ce
 
     unzip emqttd-centos7-v2.0.zip
 
-控制台调试模式启动，检查*EMQ*是否可正常启动:
+控制台调试模式启动，检查 *EMQ* 是否可正常启动:
 
 .. code-block:: bash
 
