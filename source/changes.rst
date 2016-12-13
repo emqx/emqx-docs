@@ -5,6 +5,30 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0.3:
+
+----------
+2.0.3 版本
+----------
+
+*发布日期: 2016-12-12*
+
+emqttd#7965: Unable to forbidden tcp lisener
+
+emqttd#814: Cannot remove a 'DOWN' node from the cluster
+
+emqttd#813: Change parameters order
+
+emqttd#795: Fix metrics of websocket connections
+
+emq-dashboard#88: Rename the default topic from “/World” to “world”
+
+emq-dashboard#86: Lookup all online clients
+
+emq-dashboard#85: Comment the default listener port
+
+emq-mod-retainer#3: Retained messages get lost after EMQTT broker restart.
+
 .. _release_2.0.2:
 
 ----------
