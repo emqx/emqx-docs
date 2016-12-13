@@ -13,7 +13,7 @@
 
 *发布日期: 2016-12-12*
 
-emqttd#7965: Unable to forbidden tcp lisener
+emqttd#796: Unable to forbidden tcp lisener
 
 emqttd#814: Cannot remove a 'DOWN' node from the cluster
 
