@@ -230,7 +230,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'EMQ.tex', u'EMQ - 百万级分布式开源MQTT消息服务器',
+  ('index', 'EMQ.tex', u'EMQ - 百万级开源MQTT消息服务器',
    u'李枫 <feng@emqtt.io>', 'manual'),
 ]
 
