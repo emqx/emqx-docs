@@ -5,6 +5,18 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0.4:
+
+----------
+2.0.4 版本
+----------
+
+emqttd#822: Test cases for SSL connections
+
+emqttd#818: trap_exit to link WebSocket process
+
+emqttd#799: Can't publish via HTTPS
+
 .. _release_2.0.3:
 
 ----------
