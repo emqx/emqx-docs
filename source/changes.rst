@@ -5,11 +5,27 @@
 版本发布(Changes)
 =================
 
+.. _release_2.0.5:
+
+----------
+2.0.5 版本
+----------
+
+*发布日期: 2016-12-24*
+
+emq-auth-http#9: Disable ACL support
+
+emq-auth-mongo#29: Disable ACL support
+
+emq-auth-mongo#30: {datatype, flag}
+
 .. _release_2.0.4:
 
 ----------
 2.0.4 版本
 ----------
+
+*发布日期: 2016-12-16*
 
 emqttd#822: Test cases for SSL connections
 
