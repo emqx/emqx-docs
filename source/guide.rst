@@ -1,9 +1,9 @@
 
 .. _guide:
 
-====================
-用户指南(User Guide)
-====================
+========
+用户指南
+========
 
 .. _authentication:
 
@@ -67,7 +67,8 @@ etc/plugins/emq_auth_username.conf中配置默认用户:
 
 .. code-block:: properties
 
-    auth.username.$name=$password
+    auth.user.$N.username = admin
+    auth.user.$N.password = public
 
 启用`emq_auth_username`_插件:
 
@@ -89,7 +90,8 @@ etc/plugins/emq_auth_clientid.conf:
 
 .. code-block:: properties
 
-    auth.clientid.$id=$password
+    auth.client.$N.clientid = clientid
+    auth.client.$N.password = passwd
 
 启用`emq_auth_clientid`_插件:
 
