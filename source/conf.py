@@ -231,7 +231,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'EMQ.tex', u'EMQ - 百万级开源MQTT消息服务器',
-   u'李枫 <feng@emqtt.io>', 'manual'),
+   u'杭州小莉科技有限公司 <contact@emqtt.io>', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
