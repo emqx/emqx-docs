@@ -261,7 +261,7 @@ HTTP认证/鉴权API
 emq_auth_mysql: MySQL认证/访问控制插件
 --------------------------------------
 
-MySQL认证/访问控制插件，基于MySQL库表认证鉴权: https://github.com/emqtt/emq_plugin_mysql
+MySQL认证/访问控制插件，基于MySQL库表认证鉴权: https://github.com/emqtt/emq-auth-mysql
 
 MQTT用户表
 ----------
