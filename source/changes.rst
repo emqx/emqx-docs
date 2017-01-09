@@ -19,6 +19,8 @@ esockd#41: Fast close the TCP socket if ssl:ssl_accept failed
 
 emq-relx#15: The EMQ 2.0 broker cannot run on Windows.
 
+emq-auth-mongo#31: Mongodb ACL Cannot work?
+
 .. _release_2.0.5:
 
 ----------
