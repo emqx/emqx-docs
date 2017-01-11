@@ -5,6 +5,18 @@
 版本发布
 ========
 
+.. _release_2.0.7:
+
+----------
+2.0.7 版本
+----------
+
+*发布日期: 2017-01-20*
+
+emq-auth-http#9: Update the priv/emq_auth_http.schema, `cuttlefish:unset()` if no super_req, acl_req config
+
+emq-auth-mongo#31: Use `cuttlefish:unset()` for commented ACL/super config
+
 .. _release_2.0.6:
 
 ----------
