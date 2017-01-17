@@ -221,7 +221,7 @@ Docker镜像安装
 
 进入Docker控制台::
 
-    docker exec -it emq20 /bin/bash
+    docker exec -it emq20 /bin/sh
 
 .. _build_from_source:
 
