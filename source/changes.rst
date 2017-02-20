@@ -20,9 +20,9 @@ Client, Session统计信息
 
 支持对单个Client、Session进程进行统计，etc/emq.conf配置文件中设置'enable_stats'开启::
 
-    mqtt.client.enable_stats = off
+    mqtt.client.enable_stats = 60s
 
-    mqtt.session.enable_stats = off
+    mqtt.session.enable_stats = 60s
 
 新增missed统计指标
 ------------------
@@ -53,7 +53,7 @@ Tune QoS支持
 
 支持订阅端升级QoS，etc/emq.conf配置项::
 
-    mqtt.session.upgrade_qos = off
+    mqtt.session.upgrade_qos = on
 
 'acl reload'管理命令
 --------------------
@@ -81,9 +81,7 @@ Dashboard插件
 ------------
 
 Overview页面增加missed相关统计指标。
-
 Client页面增加SendMsg、RecvMsg统计指标。
-
 Session页面增加DeliverMsg、EnqueueMsg指标。
 
 recon插件
