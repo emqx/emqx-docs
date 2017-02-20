@@ -7,52 +7,94 @@
 
 .. _release_2.1:
 
---------
-2.1 版本
---------
+------------
+2.1-beta 版本
+-------------
 
 *发布日期: 2017-02-18*
 
-1. Session/Inflight 设计改进，降低高消息吞吐情况下的CPU占用
-2. 支持对Client, Session的统计
+EMQ v2.1-beta版本正式发布，改进Session/Inflight窗口设计，一个定时器负责全部Inflight QoS1/2消息重传，大幅降低高消息吞吐情况下的CPU占用。
 
-@emqplus   Rename the emqttd_time APIs         a59d5bb
-@emqplus  Bump version to 2.1         61a54b4
-@emqplus Add inflight module and test suite          0810052
-@emqplus    Add emqttd_misc module          0bc071d
-@emqplus   Add 'syslog' config and update client, session config           a52754d
-@emqplus  Update copyright, format record, add 'AUTH' packet type for MQTT 5.0            4df2a71
-@emqplus Rename 'emqttd_hook' module to 'emqttd_hooks'           cae247b
-@emqplus    Update copyright and change the format of -type, -callback          9e0b2ed
-@emqplus   Change the message timestamp to 'os:timestamp()'            0019fb2
-@emqplus  Upgrade parse/2 function            796d5df
-@emqplus Rename now_to_secs, now_to_ms functions         640c928
-@emqplus    Update copyright and format code            d93caa7
-@emqplus   Update copyright and format code            1222746
-@emqplus  Move the 'MQTT_SOCKOPTS' macro to include/emqttd_protocol.hrl           dbcd79f
-@emqplus Improve the module and support statistics           23e49c3
-@emqplus    Improve the module and support statistics           90ff296
-@emqplus   Change the 'Env'            a54076c
-@emqplus  Update copyright info and format code           5a49196
-@emqplus Add 'local_session/0 function, change reg_session/3 unreg_session/1 f…  …           2021667
-@emqplus    Remove the 'DOWN' client from emqttd_stats          6b22fb0
-@emqplus   add 'packets/puback/missed', 'packets/pubrec/missed', 'packets/pubrel…  …           a5ac32b
-@emqplus  Add dropped/1 function          67566ca
-@emqplus Update protocol_name/1, type_name/1 functions for MQTT 5            bbbfafb
-@emqplus    Update protocol_name/1, type_name/1 functions for MQTT 5            d5ac9f0
-@emqplus   Change the restart strategy of the top supervisor           d91e49a
-@emqplus  Support client, session stats           fa8882b
-@emqplus Update copyright info           78c8856
-@emqplus    Upgrade copyright info          d69d769
-@emqplus   Replace 'size/1' with 'byte_size/1', serialize to output iolist         45a379f
-@emqplus  Rename emqttd_hook to emqttd_hooks          a345b36
-@emqplus Improve the session design, support tune_qos, enable_stats          bad855b
-@emqplus    Update rebar.config         a5ba86f
-@emqplus   Fix format of CT_SUITES         fde1f92
-@emqplus  Merge pull request #902 from emqtt/develop  …           e385556
-@turtleDeng  emqttd_hook -> emqttd_hooks, syslog         5419266
-@emqplus    Merge pull request #903 from emqtt/develop  …           269cef2
-@emqplus   Fix the error caused by emqttd:env/1
+Client, Session统计信息
+-----------------------
+
+支持对单个Client、Session进程进行统计，etc/emq.conf配置文件中设置'enable_stats'开启::
+
+    mqtt.client.enable_stats = off
+
+    mqtt.session.enable_stats = off
+
+新增missed统计指标
+------------------
+
+EMQ收到客户端PUBACK、PUBREC、PUBREL、PUBCOMP报文，但在Inflight窗口无法找到对应消息时，计入missed统计指标::
+
+    packets/puback/missed
+
+    packets/pubrec/missed
+
+    packets/pubrel/missed
+
+    packets/pubcomp/missed
+
+Syslog日志集成
+--------------
+
+支持输出EMQ日志到Syslog，etc/emq.config配置项::
+
+    ## Syslog. Enum: on, off
+    log.syslog = on
+
+    ##  syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
+    log.syslog.level = error
+
+Tune QoS支持
+------------
+
+支持订阅端升级QoS，etc/emq.conf配置项::
+
+    mqtt.session.upgrade_qos = off
+
+'acl reload'管理命令
+--------------------
+
+Reload acl.conf without restarting emqttd service (#885)
+
+配置项变更
+----------
+
+1. 变更 mqtt.client_idle_timeout 为 mqtt.client.idle_timeout
+2. 新增 mqtt.client.enable_stats 配置项
+3. 新增 mqtt.session.upgrade_qos 配置项
+4. 删除 mqtt.session.collect_interval 配置项
+5. 新增 mqtt.session.enable_stats 配置项
+6. 变更 mqtt.session.expired_after 为 mqtt.session.expiry_interval
+
+合并扩展模块到emq_modules项目
+-----------------------------
+
+合并emq_mod_presence, emq_mod_subscription, emq_mod_rewrite到emq_modules项目
+
+变更emq_mod_retainer为emq_retainer项目
+
+Dashboard插件
+------------
+
+Overview页面增加missed相关统计指标。
+
+Client页面增加SendMsg、RecvMsg统计指标。
+
+Session页面增加DeliverMsg、EnqueueMsg指标。
+
+recon插件
+---------
+
+变更recon.gc_interval配置项类型为duration
+
+reloader插件
+------------
+
+变更reloader.interval配置项类型为duration
 
 .. _release_2.0.7:
 

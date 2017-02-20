@@ -206,6 +206,17 @@ crash日志
 
     log.crash.file = log/crash.log
 
+syslog日志
+----------
+
+.. code-block:: properties
+
+    ## Syslog. Enum: on, off
+    log.syslog = on
+
+    ##  syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
+    log.syslog.level = error
+
 -----------------
 MQTT 协议参数配置
 -----------------
@@ -234,7 +245,16 @@ MQTT最大报文尺寸
 .. code-block:: properties
 
     ## Client Idle Timeout (Second)
-    mqtt.client_idle_timeout = 30
+    mqtt.client.idle_timeout = 30
+
+启用客户端连接统计
+------------------
+
+.. code-block:: properties
+
+    ## Enable client Stats: seconds or off
+    ## s - second
+    mqtt.client.enable_stats = off
 
 -----------------
 匿名认证与ACL文件
@@ -300,21 +320,25 @@ MQTT会话参数设置
 
 .. code-block:: properties
 
+    ## Upgrade QoS?
+    mqtt.session.upgrade_qos = off
+
     ## Max number of QoS 1 and 2 messages that can be “inflight” at one time.
     ## 0 means no limit
-    mqtt.session.max_inflight = 100
+    mqtt.session.max_inflight = 32
 
-    ## Retry interval for redelivering QoS1/2 messages.
-    mqtt.session.retry_interval = 60
-
-    ## Awaiting PUBREL Timeout
-    mqtt.session.await_rel_timeout = 20
+    ## Retry Interval for redelivering QoS1/2 messages.
+    mqtt.session.retry_interval = 20s
 
     ## Max Packets that Awaiting PUBREL, 0 means no limit
-    mqtt.session.max_awaiting_rel = 0
+    mqtt.session.max_awaiting_rel = 100
 
-    ## Statistics Collection Interval(seconds)
-    mqtt.session.collect_interval = 0
+    ## Awaiting PUBREL Timeout
+    mqtt.session.await_rel_timeout = 20s
+
+    ## Enable Statistics at the Interval(seconds)
+    ## s - second
+    mqtt.session.enable_stats = off
 
     ## Expired after 1 day:
     ## w - week
@@ -322,8 +346,10 @@ MQTT会话参数设置
     ## h - hour
     ## m - minute
     ## s - second
-    mqtt.session.expired_after = 1d
+    mqtt.session.expiry_interval = 2h
 
++---------------------------+----------------------------------------------------------+
+| session.upgrade_qos       | 是否根据订阅升级QoS级别                                  |
 +---------------------------+----------------------------------------------------------+
 | session.max_inflight      | 飞行窗口。最大允许同时下发的Qos1/2报文数，0表示没有限制。|
 |                           | 窗口值越大，吞吐越高；窗口值越小，消息顺序越严格         |
@@ -334,9 +360,9 @@ MQTT会话参数设置
 +---------------------------+----------------------------------------------------------+
 | session.max_awaiting_rel  | 最大等待PUBREL的QoS2报文数                               |
 +---------------------------+----------------------------------------------------------+
-| session.collect_interval  | 采集会话统计数据间隔，默认0表示关闭统计                  |
+| session.enable_stats      | 是否启用Session统计，off表示关闭，30s表示30秒采集一次    |
 +---------------------------+----------------------------------------------------------+
-| session.expired_after     | 持久会话到期时间，从客户端断开算起，单位：分钟           |
+| session.expiry_interval   | 持久会话到期时间，从客户端断开算起，单位：分钟           |
 +---------------------------+----------------------------------------------------------+
 
 --------------------
