@@ -5,6 +5,95 @@
 版本发布
 ========
 
+.. _release_2.1:
+
+-------------
+2.1-beta 版本
+-------------
+
+*发布日期: 2017-02-18*
+
+EMQ v2.1-beta版本正式发布，改进Session/Inflight窗口设计，一个定时器负责全部Inflight QoS1/2消息重传，大幅降低高消息吞吐情况下的CPU占用。
+
+Client, Session统计信息
+-----------------------
+
+支持对单个Client、Session进程进行统计，etc/emq.conf配置文件中设置'enable_stats'开启::
+
+    mqtt.client.enable_stats = 60s
+
+    mqtt.session.enable_stats = 60s
+
+新增missed统计指标
+------------------
+
+EMQ收到客户端PUBACK、PUBREC、PUBREL、PUBCOMP报文，但在Inflight窗口无法找到对应消息时，计入missed统计指标::
+
+    packets/puback/missed
+
+    packets/pubrec/missed
+
+    packets/pubrel/missed
+
+    packets/pubcomp/missed
+
+Syslog日志集成
+--------------
+
+支持输出EMQ日志到Syslog，etc/emq.config配置项::
+
+    ## Syslog. Enum: on, off
+    log.syslog = on
+
+    ##  syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
+    log.syslog.level = error
+
+Tune QoS支持
+------------
+
+支持订阅端升级QoS，etc/emq.conf配置项::
+
+    mqtt.session.upgrade_qos = on
+
+'acl reload'管理命令
+--------------------
+
+Reload acl.conf without restarting emqttd service (#885)
+
+配置项变更
+----------
+
+1. 变更 mqtt.client_idle_timeout 为 mqtt.client.idle_timeout
+2. 新增 mqtt.client.enable_stats 配置项
+3. 新增 mqtt.session.upgrade_qos 配置项
+4. 删除 mqtt.session.collect_interval 配置项
+5. 新增 mqtt.session.enable_stats 配置项
+6. 变更 mqtt.session.expired_after 为 mqtt.session.expiry_interval
+
+合并扩展模块到emq_modules项目
+-----------------------------
+
+合并emq_mod_presence, emq_mod_subscription, emq_mod_rewrite到emq_modules项目
+
+变更emq_mod_retainer为emq_retainer项目
+
+Dashboard插件
+------------
+
+Overview页面增加missed相关统计指标。
+Client页面增加SendMsg、RecvMsg统计指标。
+Session页面增加DeliverMsg、EnqueueMsg指标。
+
+recon插件
+---------
+
+变更recon.gc_interval配置项类型为duration
+
+reloader插件
+------------
+
+变更reloader.interval配置项类型为duration
+
 .. _release_2.0.7:
 
 ----------

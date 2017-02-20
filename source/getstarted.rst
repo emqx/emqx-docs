@@ -152,15 +152,11 @@ Web管理控制台(Dashboard)
 +----------------------------+-----------------------------------+
 | `emq_plugin_template`_     | 插件模版与演示代码                |
 +----------------------------+-----------------------------------+
-| `emq_mod_retainer`_        | Retain消息存储模块                |
+| `emq_retainer`_            | Retain消息存储插件                |
 +----------------------------+-----------------------------------+
-| `emq_mod_presence`_        | 客户端上下线状态消息发布          |
-+----------------------------+-----------------------------------+
-| `emq_mod_subscription`_    | 客户端上线自动主题订阅            |
+| `emq_mod_modules`_         | Presence, Subscription扩展模块插件|
 +----------------------------+-----------------------------------+
 | `emq_dashboard`_           | Web管理控制台，默认加载           |
-+----------------------------+-----------------------------------+
-| `emq_mod_rewrite`_         | 重写发布订阅主题(Topic)插件       |
 +----------------------------+-----------------------------------+
 | `emq_auth_clientid`_       | ClientId、密码认证插件            |
 +----------------------------+-----------------------------------+
@@ -188,7 +184,7 @@ Web管理控制台(Dashboard)
 +----------------------------+-----------------------------------+
 | `emq_reloader`_            | 热升级插件(开发调试)              |
 +----------------------------+-----------------------------------+
-| `emq_sockjs`_              | SockJS插件()                      |
+| `emq_sockjs`_              | SockJS插件(废弃)                  |
 +----------------------------+-----------------------------------+
 
 扩展插件通过'bin/emqttd_ctl'管理命令行，或Dashboard控制台加载启用。例如启用PostgreSQL认证插件::
@@ -304,8 +300,9 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 .. _QMQTT:           https://github.com/emqtt/qmqtt
 
 .. _emq_plugin_template:  https://github.com/emqtt/emq_plugin_template
+.. _emq_retainer:         https://github.com/emqtt/emq_retainer
 .. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
-.. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
+.. _emq_modules:          https://github.com/emqtt/emq_modules
 .. _emq_mod_subscription: https://github.com/emqtt/emq_mod_subscription
 .. _emq_dashboard:        https://github.com/emqtt/emq_dashboard
 .. _emq_mod_rewrite:      https://github.com/emqtt/emq_mod_rewrite

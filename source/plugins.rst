@@ -30,13 +30,9 @@
 +---------------------------+---------------------------+
 | `emq_auth_mongo`_         | MongoDB认证/访问控制      |
 +---------------------------+---------------------------+
-| `emq_mod_rewrite`_        | 重写主题(Topic)插件       |
+| `emq_modules`_            | 扩展模块插件              |
 +---------------------------+---------------------------+
-| `emq_mod_retainer`_       | Retain消息存储模块        |
-+---------------------------+---------------------------+
-| `emq_mod_presence`_       | 客户端上下线状态消息发布  |
-+---------------------------+---------------------------+
-| `emq_mod_subscription`_   | 客户端上线自动主题订阅    |
+| `emq_retainer`_           | Retain消息存储模块        |
 +---------------------------+---------------------------+
 | `emq_coap`_               | CoAP协议支持              |
 +---------------------------+---------------------------+
@@ -52,6 +48,40 @@
 +---------------------------+---------------------------+
 | `emq_plugin_template`_    | 插件开发模版              |
 +---------------------------+---------------------------+
+
+-----------------------------
+emq_retainer Retainer模块插件
+-----------------------------
+
+2.1-beta版本将emq_mod_retainer模块更名为emq_retainer模块，Retainer模块负责持久化MQTT Retained消息。
+
+配置Retainer模块
+----------------
+
+etc/plugins/emq_retainer.conf:
+
+.. code-block:: properties
+
+    ## disc: disc_copies, ram: ram_copies
+    ## Notice: retainer's storage_type on each node in a cluster must be the same!
+    retainer.storage_type = disc
+
+    ## Max number of retained messages
+    retainer.max_message_num = 1000000
+
+    ## Max Payload Size of retained message
+    retainer.max_payload_size = 64KB
+
+    ## Expiry interval. Never expired if 0
+    ## h - hour
+    ## m - minute
+    ## s - second
+    retainer.expiry_interval = 0
+
+加载Retainer模块
+----------------
+
+Retainer模块默认加载。
 
 ------------------------------------
 emq_auth_clientid - ClientID认证插件
@@ -630,11 +660,64 @@ MongoDB ACL集合(ACL Collection)
 
     ./bin/emqttd_ctl plugins load emq_auth_mongo
 
+------------------------
+emq_modules 扩展模块插件
+------------------------
+
+2.1版本将全部扩展模块项目(emq_mod_presence, emq_mod_subscription, emq_mod_rewrite)合并为一个emq_modules项目。
+
+配置Modules插件
+---------------
+
+.. code-block:: properties
+
+    ##--------------------------------------------------------------------
+    ## Presence Module
+    ##--------------------------------------------------------------------
+
+    ## Enable Presence, Values: on | off
+    module.presence = on
+
+    module.presence.qos = 1
+
+    ##--------------------------------------------------------------------
+    ## Subscription Module
+    ##--------------------------------------------------------------------
+
+    ## Enable Subscription, Values: on | off
+    module.subscription = on
+
+    ## Subscribe the Topics automatically when client connected
+    module.subscription.1.topic = $client/%c
+    ## Qos of the subscription: 0 | 1 | 2
+    module.subscription.1.qos = 1
+
+    ## module.subscription.2.topic = $user/%u
+    ## module.subscription.2.qos = 1
+
+    ##--------------------------------------------------------------------
+    ## Rewrite Module
+    ##--------------------------------------------------------------------
+
+    ## Enable Rewrite, Values: on | off
+    module.rewrite = off
+
+    ## {rewrite, Topic, Re, Dest}
+    ## module.rewrite.rule.1 = "x/# ^x/y/(.+)$ z/y/$1"
+    ## module.rewrite.rule.2 = "y/+/z/# ^y/(.+)/z/(.+)$ y/z/$2"
+
+加载Modules插件
+---------------
+
+Modules插件默认加载。
+
 ---------------------------------
 emq_mod_presence Presence模块插件
 ---------------------------------
 
 2.0-rc.3版本将Presence模块改为独立插件，Presence模块会向$SYS主题(Topic)发布客户端上下线消息。
+
+.. WARNING:: 2.1版本该插件已并入emq_modules项目
 
 配置Presence模块
 ----------------
@@ -654,46 +737,20 @@ etc/plugins/emq_mod_presence.conf:
 
 Presence模块默认加载。
 
----------------------------------
-emq_mod_retainer Retainer模块插件
----------------------------------
-
-2.0-rc.3版本将Retainer模块改为独立插件， Retainer模块负责持久化MQTT Retained消息。
-
-配置Retainer模块
-----------------
-
-etc/plugins/emq_mod_retainer.conf:
-
-.. code-block:: properties
-
-    ## disc: disc_copies, ram: ram_copies
-    module.retainer.storage_type = ram
-
-    ## Max number of retained messages
-    module.retainer.max_message_num = 100000
-
-    ## Max Payload Size of retained message
-    module.retainer.max_payload_size = 64KB
-
-    ## Expired after seconds, never expired if 0
-    module.retainer.expired_after = 0
-
-加载Retainer模块
-----------------
-
-Retainer模块默认加载。
-
 -------------------------------------
 emq_mod_subscription 自动订阅模块插件
 -------------------------------------
 
 2.0-rc.3版本将Subscription模块改为独立插件，Subscription扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic)。
 
+.. WARNING:: 2.1版本该插件已并入emq_modules项目
+
 配置Subscription模块
 --------------------
 
 etc/plugins/emq_mod_subscription.conf:
+
+.. WARNING:: 2.1版本该插件已并入emq_modules项目
 
 .. code-block:: properties
 
@@ -719,6 +776,8 @@ emq_mod_rewrite主题重写插件
 --------------------------
 
 2.0-rc.2版本将rewrite模块改为独立插件，rewrite插件支持重写发布订阅的主题(Topic)。
+
+.. WARNING:: 2.1版本该插件已并入emq_modules项目
 
 配置Rewrite插件
 ---------------
