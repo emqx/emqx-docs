@@ -252,9 +252,16 @@ MQTT最大报文尺寸
 
 .. code-block:: properties
 
-    ## Enable client Stats: seconds or off
-    ## s - second
+    ## Enable client Stats: on | off
     mqtt.client.enable_stats = off
+
+强制GC设置
+----------
+
+.. code-block:: properties
+
+    ## Force GC: integer. Value 0 disabled the Force GC.
+    mqtt.conn.force_gc_count = 100
 
 -----------------
 匿名认证与ACL文件
@@ -336,8 +343,7 @@ MQTT会话参数设置
     ## Awaiting PUBREL Timeout
     mqtt.session.await_rel_timeout = 20s
 
-    ## Enable Statistics at the Interval(seconds)
-    ## s - second
+    ## Enable Statistics: on | off
     mqtt.session.enable_stats = off
 
     ## Expired after 1 day:

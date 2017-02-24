@@ -5,6 +5,39 @@
 版本发布
 ========
 
+-----------------
+2.1.0-beta.1 版本
+-----------------
+
+*发布日期: 2017-02-24*
+
+*EMQ* 2.1.0-beta.1版本发布。
+
+.. WARNING:: 2.1.x版本源码编译需要Erlang/OTP R19+
+
+EMQ正式采用 `Semantic Versioning 2.0.0<http://semver.org>`_ 规范创建发布版本号，按'Tick-Tock'方式按月发布迭代版本。奇数版本问题修复与性能改进，偶数版本架构改进和新功能布。
+
+GC优化
+------
+
+1. WebSocket、Client、Session进程空置一段时间后自动Hibernate与GC。
+
+2. 新增'mqtt.conn.force_gc_count'配置，Client、Session进程处理一定数量消息后强制GC。
+
+3. 大幅降低WebSocket、Client、Session进程fullsweep_after设置，强制进程深度GC。
+
+API改进
+-------
+
+Hooks API支持注册带Tag的回调函数，解决相同模块函数多次Hook注册问题。
+
+问题修复
+--------
+
+emqttd#916: Add 'mqtt_msg_from()' type
+
+emq-auth-http#15: ACL endpoint isnt called
+
 .. _release_2.1:
 
 -------------
