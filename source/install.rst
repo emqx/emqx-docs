@@ -209,7 +209,7 @@ Docker镜像安装
 
 启动容器::
 
-    docker run -itd --net='host' --name emq20 emqttd-docker-v2.0
+    docker run -tid --name emq20 -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqttd-docker-v2.0
 
 停止容器::
 
