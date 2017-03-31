@@ -19,6 +19,8 @@ Kickout the conflict WebSocket connection (emqttd#963)
 
 Correct licence in app.src (emqttd#958)
 
+SSL options to connect to pgsql (emq-auth-pgsql#41)
+
 .. _release_2.1.0-rc.1:
 
 ---------------
