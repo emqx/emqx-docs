@@ -11,7 +11,7 @@
 2.1.0-rc.2 版本
 ---------------
 
-*发布日期: 2017-02-31*
+*发布日期: 2017-03-31*
 
 Support pbkdf2 hash (emq-auth-mongo#46)
 
@@ -25,7 +25,7 @@ Correct licence in app.src (emqttd#958)
 2.1.0-rc.1 版本
 ---------------
 
-*发布日期: 2017-02-24*
+*发布日期: 2017-03-24*
 
 EMQ fails to start if run under a different linux user than that which first ran it (emqttd#842)
 
@@ -47,7 +47,7 @@ Change the default storage_type to 'ram' (emq-retainer#13)
 2.1.0-beta.2 版本
 -----------------
 
-*发布日期: 2017-02-13*
+*发布日期: 2017-03-13*
 
 Cannot find AwaitingAck (emqttd#597)
 
