@@ -5,6 +5,38 @@
 版本发布
 ========
 
+.. _release_2.1.1:
+
+----------
+2.1.1 版本
+----------
+
+*发布日期: 2017-04-14*
+
+Localhost:8083/status returns 404 when AWS LB check the health of EMQ (emqttd#984)
+
+Https listener not working in 2.1.0 as in 2.0.7 (emq-dashboard#105)
+
+Fix mqtt-sn Gateway not working (emq-sn#12)
+
+Upgrade emq-sn Plugin (emq-sn#11)
+
+Upgrade emq-coap Plugin (emq-coap#21)
+
+.. _release_2.1.0:
+
+----------
+2.1.0 版本
+----------
+
+*发布日期: 2017-04-07*
+
+The stable release of 2.1 version.
+
+Trouble with auth.mysql.acl_query (emq-auth-mysql#38)
+
+Filter the empty fields in ACL table (emq-auth-mysql#39)
+
 .. _release_2.1.0-rc.2:
 
 ---------------
