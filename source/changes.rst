@@ -5,6 +5,22 @@
 版本发布
 ========
 
+.. _release_2.1.2:
+
+-------------
+Version 2.1.2
+-------------
+
+*Release Data: 2017-04-21*
+
+Fix `emqttd_ctl sessions list` CLI
+
+Newline character in emq.conf causing error;(emqttd#1000)
+
+Fix crash caused by duplicated PUBREC packet (emqttd#1004)
+
+Unload  the 'session.created' and 'session.teminated' hooks (emq-plugin-template)
+
 .. _release_2.1.1:
 
 ----------
