@@ -31,7 +31,7 @@ emqttd Linux RPM程序包:
 | CentOS7     | http://emqtt.com/downloads/latest/centos7-rpm     |
 +-------------+---------------------------------------------------+
 
-安装包命名由平台、版本组成，例如: emqttd-macosx-v2.0.rpm
+安装包命名由平台、版本、操纵系统位数组成，例如: emqttd-centos7-v2.0_x86_64.rpm
 
 CentOS、RedHat操作系统下，推荐RPM包安装。RPM包安装后可通过操作系统，直接管理启停EMQTTD服务。
 
@@ -51,7 +51,7 @@ RPM安装
 配置文件
 --------
 
-EMQ X配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQTTD配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------
@@ -90,6 +90,8 @@ emqttd Linux DEB程序包:
 | Debian8     | http://emqtt.com/downloads/latest/debian7-deb     |
 +-------------+---------------------------------------------------+
 
+安装包命名由平台、版本、操纵系统位数组成，例如: emqttd-debian7-v2.0_amd64.deb
+
 Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过操作系统，直接管理启停EMQTTD服务。
 
 .. code-block:: console
@@ -105,7 +107,7 @@ Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过�
 配置文件
 --------
 
-EMQ X配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQTTD配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------
