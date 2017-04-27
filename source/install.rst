@@ -17,14 +17,129 @@
 
 下载地址: http://emqtt.com/downloads
 
-+-------------+-----------------------------------------------+
-| Debian      | http://emqtt.com/downloads/latest/debian      |
+.. _install_rpm:
+
+---------
+RPM包安装
+---------
+
+emqttd Linux RPM程序包:
+
++-------------+---------------------------------------------------+
+| CentOS6.8   | http://emqtt.com/downloads/latest/centos6-rpm     |
++-------------+---------------------------------------------------+
+| CentOS7     | http://emqtt.com/downloads/latest/centos7-rpm     |
++-------------+---------------------------------------------------+
+
+安装包命名由平台、版本组成，例如: emqttd-macosx-v2.0.rpm
+
+CentOS、RedHat操作系统下，推荐RPM包安装。RPM包安装后可通过操作系统，直接管理启停EMQTTD服务。
+
+RPM安装
+-------
+
+.. code-block:: console
+
+    rpm -ivh --force emqttd-centos6.8-v2.0-1.el6.x86_64.rpm
+
+.. NOTE:: Erlang/OTP R19依赖lksctp-tools库
+
+.. code-block:: console
+
+    yum install lksctp-tools
+
+配置文件
+--------
+
+EMQ X配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+
+日志文件
+--------
+
+日志文件目录: /var/log/emqttd
+
+数据文件
+--------
+
+数据文件目录：/var/lib/emqttd/
+
+启动停止
+--------
+
+.. code-block:: console
+
+    service emqttd start|stop|restart
+
+.. _install_deb:
+
+---------
+DEB包安装
+---------
+
+emqttd Linux DEB程序包:
+
++-------------+---------------------------------------------------+
+| Ubuntu12.04 | http://emqtt.com/downloads/latest/ubuntu12_04-deb |
++-------------+---------------------------------------------------+
+| Ubuntu14.04 | http://emqtt.com/downloads/latest/ubuntu14_04-deb |
++-------------+---------------------------------------------------+
+| Ubuntu16.04 | http://emqtt.com/downloads/latest/ubuntu16_04-deb |
++-------------+---------------------------------------------------+
+| Debian7     | http://emqtt.com/downloads/latest/debian7-deb     |
++-------------+---------------------------------------------------+
+| Debian8     | http://emqtt.com/downloads/latest/debian7-deb     |
++-------------+---------------------------------------------------+
+
+Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过操作系统，直接管理启停EMQTTD服务。
+
+.. code-block:: console
+
+    sudo dpkg -i emqttd-ubuntu16.04_v2.0_amd64.deb
+
+.. NOTE:: Erlang/OTP R19依赖lksctp-tools库
+
+.. code-block:: console
+
+    apt-get install lksctp-tools
+
+配置文件
+--------
+
+EMQ X配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+
+日志文件
+--------
+
+日志文件目录: /var/log/emqttd
+
+数据文件
+--------
+
+数据文件目录：/var/lib/emqttd/
+
+启动停止
+--------
+
+.. code-block:: console
+
+    service emqttd start|stop|restart
+
+.. _install_on_linux:
+
+---------------
+Linux通用包安装
+---------------
+
+emqttd Linux通用程序包:
+
 +-------------+-----------------------------------------------+
 | Ubuntu12.04 | http://emqtt.com/downloads/latest/ubuntu12_04 |
 +-------------+-----------------------------------------------+
 | Ubuntu14.04 | http://emqtt.com/downloads/latest/ubuntu14_04 |
 +-------------+-----------------------------------------------+
 | Ubuntu16.04 | http://emqtt.com/downloads/latest/ubuntu16_04 |
++-------------+-----------------------------------------------+
+| CentOS6.8   | http://emqtt.com/downloads/latest/centos6     |
 +-------------+-----------------------------------------------+
 | CentOS7     | http://emqtt.com/downloads/latest/centos7     |
 +-------------+-----------------------------------------------+
@@ -34,24 +149,10 @@
 +-------------+-----------------------------------------------+
 | FreeBSD     | http://emqtt.com/downloads/latest/freebsd     |
 +-------------+-----------------------------------------------+
-| Windows7    | http://emqtt.com/downloads/latest/indows7    |
-+-------------+-----------------------------------------------+
-| Windows10   | http://emqtt.com/downloads/latest/windows10   |
-+-------------+-----------------------------------------------+
-| Mac OS X    | http://emqtt.com/downloads/latest/macosx      |
-+-------------+-----------------------------------------------+
-| Docker      | http://emqtt.com/downloads/latest/docker      |
-+-------------+-----------------------------------------------+
 
 安装包命名由平台、版本组成，例如: emqttd-macosx-v2.0.zip
 
-.. _install_on_linux:
-
----------------
-Linux服务器安装
----------------
-
-CentOS平台为例，下载安装包解压: http://emqtt.com/downloads/latest/centos7
+CentOS平台为例，下载安装过程:
 
 .. code-block:: bash
 
@@ -333,67 +434,6 @@ etc/emq.conf配置文件的'Listeners`段落设置最大允许连接数:
     mqtt.listener.tcp.max_clients = 1024
 
 *EMQ* 2.0消息服务器详细设置，请参见文档: :ref:`config`
-
-.. _init_d_emqttd:
-
--------------------
-/etc/init.d/emqttd
--------------------
-
-.. code:: shell
-
-    #!/bin/sh
-    #
-    # emqttd       Startup script for emqttd.
-    #
-    # chkconfig: 2345 90 10
-    # description: emqttd is mqtt broker.
-
-    # source function library
-    . /etc/rc.d/init.d/functions
-
-    # export HOME=/root
-
-    start() {
-        echo "starting emqttd..."
-        cd /opt/emqttd && ./bin/emqttd start
-    }
-
-    stop() {
-        echo "stopping emqttd..."
-        cd /opt/emqttd && ./bin/emqttd stop
-    }
-
-    restart() {
-        stop
-        start
-    }
-
-    case "$1" in
-        start)
-            start
-            ;;
-        stop)
-            stop
-            ;;
-        restart)
-            restart
-            ;;
-        *)
-            echo $"Usage: $0 {start|stop}"
-            RETVAL=2
-    esac
-
-
-chkconfig::
-
-    chmod +x /etc/init.d/emqttd
-    chkconfig --add emqttd
-    chkconfig --list
-
-boot test::
-
-    service emqttd start
 
 .. NOTE::
 
