@@ -13,13 +13,13 @@
 
 *发布日期: 2017-05-05*
 
-*EMQ* 2.2-beta.1版本正式发布！EMQ按'Tick-Tock'方式迭代发布版本，2.2版本主要发布新功能包括:
+*EMQ* 2.2-beta.1版本正式发布！EMQ2.2 版本发布主要新功能包括:
 
 1. 支持MQTT协议多监听器配置，支持HAProxy的Proxy Protocol V1/V2
 2. 新增Web Hook插件(emq-web-hook)、Lua Hook插件(emq-lua-hook)
 
-MQTT协议多监听器配置
---------------------
+MQTT协议监听器配置
+------------------
 
 一个EMQ节点可配置多个MQTT协议监听端口，例如下述配置external, internal监听器，分别用于设备连接与内部通信::
 
@@ -29,7 +29,7 @@ MQTT协议多监听器配置
     -- External SSL 8883-->  |     |
                              -------
 
-2.2 版本etc/emq.conf监听器配置方式::
+EMQ 2.2 版本etc/emq.conf监听器配置方式::
 
     listener.tcp.${name}= 127.0.0.1:2883
 
@@ -40,7 +40,7 @@ MQTT协议多监听器配置
 Proxy Protocol V1/2支持
 -----------------------
 
-EMQ 集群通常部署在负载均衡器(LB)后面，典型架构如下::
+EMQ 集群通常部署在负载均衡器(LB)后面，典型架构::
 
                   -----
                   |   |
@@ -66,12 +66,12 @@ Web Hook插件
 Lua Hook插件
 ------------
 
-新增Lua Hook插件: `emq-lua-hook`_ ，支持Lua脚本注册EMQ的扩展钩子来开发插件。
+新增Lua Hook插件: `emq-lua-hook`_ ，支持Lua脚本注册EMQ扩展钩子来开发插件。
 
 改进认证链设计
 --------------
 
-2.2 版本改进认证链设计，当认证模块返回ignore(例如用户名不存在等情况下)，认证请求将继续转发后面认证模块::
+EMQ 2.2 版本改进认证链设计，当前认证模块返回ignore(例如用户名不存在等情况下)，认证请求将继续转发后面认证模块::
 
                -------------           ------------           -------------
     Client --> | Redis认证 | -ignore-> | HTTP认证 | -ignore-> | MySQL认证 |
@@ -83,7 +83,7 @@ Lua Hook插件
 支持bcrypt密码Hash
 ------------------
 
-2.2 版本支持bcrypt密码Hash方式，例如Redis认证插件配置::
+EMQ 2.2 版本支持bcrypt密码Hash方式，例如Redis认证插件配置::
 
     auth.redis.password_hash = bcrypt
 
