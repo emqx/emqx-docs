@@ -5,6 +5,98 @@
 版本发布
 ========
 
+.. _release_2.2-beta.1:
+
+---------------
+2.2-beta.1 版本
+---------------
+
+*发布日期: 2017-05-05*
+
+*EMQ* 2.2-beta.1版本正式发布！EMQ按'Tick-Tock'方式迭代发布版本，2.2版本主要发布新功能包括:
+
+1. 支持MQTT协议多监听器配置，支持HAProxy的Proxy Protocol V1/V2
+2. 新增Web Hook插件(emq-web-hook)、Lua Hook插件(emq-lua-hook)
+
+MQTT协议多监听器配置
+--------------------
+
+一个EMQ节点可配置多个MQTT协议监听端口，例如下述配置external, internal监听器，分别用于设备连接与内部通信::
+
+                             -------
+    -- External TCP 1883 --> |     |
+                             | EMQ | -- Internal TCP 2883 --> Service
+    -- External SSL 8883-->  |     |
+                             -------
+
+2.2 版本etc/emq.conf监听器配置方式::
+
+    listener.tcp.${name}= 127.0.0.1:2883
+
+    listener.tcp.${name}.acceptors = 16
+
+    listener.tcp.${name}.max_clients = 102400
+
+Proxy Protocol V1/2支持
+-----------------------
+
+EMQ 集群通常部署在负载均衡器(LB)后面，典型架构如下::
+
+                  -----
+                  |   |
+                  | L | --TCP 1883--> EMQ
+    --SSL 8883--> |   |                |
+                  | B | --TCP 1883--> EMQ
+                  |   |
+                  -----
+
+HAProxy、NGINX等常用的负载均衡器(LB)，一般通过Proxy Protocol协议传递TCP连接源地址、源端口给EMQ。
+
+EMQ 2.2 版本的监听器开启Proxy Protocol支持::
+
+    ## Proxy Protocol V1/2
+    ## listener.tcp.${name}.proxy_protocol = on
+    ## listener.tcp.${name}.proxy_protocol_timeout = 3s
+
+Web Hook插件
+------------
+
+新增WebHook插件: `emq-web-hook`_ ，支持在MQTT客户端上下线、消息发布订阅时触发WebHook回调。
+
+Lua Hook插件
+------------
+
+新增Lua Hook插件: `emq-lua-hook`_ ，支持Lua脚本注册EMQ的扩展钩子来开发插件。
+
+改进认证链设计
+--------------
+
+2.2 版本改进认证链设计，当认证模块返回ignore(例如用户名不存在等情况下)，认证请求将继续转发后面认证模块::
+
+               -------------           ------------           -------------
+    Client --> | Redis认证 | -ignore-> | HTTP认证 | -ignore-> | MySQL认证 |
+               -------------           ------------           -------------
+                     |                       |                       |
+                    \|/                     \|/                     \|/
+               allow | deny            allow | deny            allow | deny
+
+支持bcrypt密码Hash
+------------------
+
+2.2 版本支持bcrypt密码Hash方式，例如Redis认证插件配置::
+
+    auth.redis.password_hash = bcrypt
+
+etc/emq.conf配置变更
+--------------------
+
+'mqtt.queue.*' 配置变更为 'mqtt.mqueue.*'
+
+emq-dashboard
+--------------
+
+WebSocket页面支持Unsubscribe
+
 .. _release_2.1.2:
 
 ----------
@@ -2251,6 +2343,8 @@ The first public release.
 .. _emq_auth_redis:       https://github.com/emqtt/emq_auth_redis
 .. _emq_auth_mongo:       https://github.com/emqtt/emq_auth_mongo
 .. _emq_mod_rewrite:      https://github.com/emqtt/emq_mod_rewrite
+.. _emq-web-hook:         https://github.com/emqtt/emq_web_hook
+.. _emq-lua-hook:         https://github.com/emqtt/emq_lua_hook
 .. _emq_sn:               https://github.com/emqtt/emq_sn
 .. _emq_coap:             https://github.com/emqtt/emq_coap
 .. _emq_stomp:            https://github.com/emqtt/emq_stomp
