@@ -2343,8 +2343,8 @@ The first public release.
 .. _emq_auth_redis:       https://github.com/emqtt/emq_auth_redis
 .. _emq_auth_mongo:       https://github.com/emqtt/emq_auth_mongo
 .. _emq_mod_rewrite:      https://github.com/emqtt/emq_mod_rewrite
-.. _emq-web-hook:         https://github.com/emqtt/emq_web_hook
-.. _emq-lua-hook:         https://github.com/emqtt/emq_lua_hook
+.. _emq-web-hook:         https://github.com/emqtt/emq-web-hook
+.. _emq-lua-hook:         https://github.com/emqtt/emq-lua-hook
 .. _emq_sn:               https://github.com/emqtt/emq_sn
 .. _emq_coap:             https://github.com/emqtt/emq_coap
 .. _emq_stomp:            https://github.com/emqtt/emq_stomp

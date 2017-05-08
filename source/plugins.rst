@@ -1217,8 +1217,8 @@ emq_plugin_template.erl::
 .. _emq_auth_redis:       https://github.com/emqtt/emq_auth_redis
 .. _emq_auth_mongo:       https://github.com/emqtt/emq_auth_mongo
 .. _emq_mod_rewrite:      https://github.com/emqtt/emq_mod_rewrite
-.. _emq_web_hook:         https://github.com/emqtt/emq_web_hook
-.. _emq_lua_hook:         https://github.com/emqtt/emq_lua_hook
+.. _emq_web_hook:         https://github.com/emqtt/emq-web-hook
+.. _emq_lua_hook:         https://github.com/emqtt/emq-lua-hook
 .. _emq_sn:               https://github.com/emqtt/emq_sn
 .. _emq_coap:             https://github.com/emqtt/emq_coap
 .. _emq_stomp:            https://github.com/emqtt/emq_stomp
