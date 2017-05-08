@@ -79,24 +79,24 @@ EMQ 2.0启动时配置文件处理流程::
     ----------------------                                                                   -------------------
 
 ----------------
-EMQ 2.0 环境变量
+EMQ 2.2 环境变量
 ----------------
 
-+-------------------+----------------------------------------+
-| EMQ_NODE_NAME     | Erlang节点名称，例如: emqttd@127.0.0.1 |
-+-------------------+----------------------------------------+
-| EMQ_NODE_COOKIE   | Erlang分布式节点通信Cookie             |
-+-------------------+----------------------------------------+
-| EMQ_MAX_PORTS     | Erlang虚拟机最大允许打开文件/Socket数  |
-+-------------------+----------------------------------------+
-| EMQ_TCP_PORT      | MQTT TCP监听端口，默认: 1883           |
-+-------------------+----------------------------------------+
-| EMQ_SSL_PORT      | MQTT SSL监听端口，默认: 8883           |
-+-------------------+----------------------------------------+
-| EMQ_HTTP_PORT     | HTTP/WebSocket监听端口，默认: 8083     |
-+-------------------+----------------------------------------+
-| EMQ_HTTPS_PORT    | HTTPS/WebSocket 监听端口，默认: 8084   |
-+-------------------+----------------------------------------+
++-------------------+------------------------------------------+
+| EMQ_NODE_NAME     | Erlang节点名称，例如: emqttd@127.0.0.1   |
++-------------------+------------------------------------------+
+| EMQ_NODE_COOKIE   | Erlang分布式节点通信Cookie               |
++-------------------+------------------------------------------+
+| EMQ_MAX_PORTS     | Erlang虚拟机最大允许打开文件/Socket数    |
++-------------------+------------------------------------------+
+| EMQ_TCP_PORT      | MQTT TCP监听端口，默认: 1883             |
++-------------------+------------------------------------------+
+| EMQ_SSL_PORT      | MQTT SSL监听端口，默认: 8883             |
++-------------------+------------------------------------------+
+| EMQ_WS_PORT       | MQTT/WebSocket监听端口，默认: 8083       |
++-------------------+------------------------------------------+
+| EMQ_WSS_PORT      | MQTT/WebSocket/SSL 监听端口，默认: 8084  |
++-------------------+------------------------------------------+
 
 ---------------
 EMQ节点与Cookie
@@ -386,39 +386,39 @@ EMQ消息服务器会话通过队列缓存Qos1/Qos2消息:
 .. code-block:: properties
 
     ## Type: simple | priority
-    mqtt.queue.type = simple
+    mqtt.mqueue.type = simple
 
     ## Topic Priority: 0~255, Default is 0
-    ## mqtt.queue.priority = topic/1=10,topic/2=8
+    ## mqtt.mqueue.priority = topic/1=10,topic/2=8
 
     ## Max queue length. Enqueued messages when persistent client disconnected,
-    ## or inflight window is full.
-    mqtt.queue.max_length = infinity
+    ## or inflight window is full. 0 means no limit.
+    mqtt.mqueue.max_length = 0
 
     ## Low-water mark of queued messages
-    mqtt.queue.low_watermark = 20%
+    mqtt.mqueue.low_watermark = 20%
 
     ## High-water mark of queued messages
-    mqtt.queue.high_watermark = 60%
+    mqtt.mqueue.high_watermark = 60%
 
     ## Queue Qos0 messages?
-    mqtt.queue.qos0 = true
+    mqtt.mqueue.store_qos0 = true
 
 队列参数说明:
 
-+----------------------+---------------------------------------------------+
-| queue.type           | 队列类型。simple: 简单队列，priority: 优先级队列  |
-+----------------------+---------------------------------------------------+
-| queue.priority       | 主题(Topic)队列优先级设置                         |
-+----------------------+---------------------------------------------------+
-| queue.max_length     | 队列长度, infinity表示不限制                      |
-+----------------------+---------------------------------------------------+
-| queue.low_watermark  | 解除告警水位线                                    |
-+----------------------+---------------------------------------------------+
-| queue.high_watermark | 队列满告警水位线                                  |
-+----------------------+---------------------------------------------------+
-| queue.qos0           | 是否缓存QoS0消息                                  |
-+----------------------+---------------------------------------------------+
++-----------------------+---------------------------------------------------+
+| mqueue.type           | 队列类型。simple: 简单队列，priority: 优先级队列  |
++-----------------------+---------------------------------------------------+
+| mqueue.priority       | 主题(Topic)队列优先级设置                         |
++-----------------------+---------------------------------------------------+
+| mqueue.max_length     | 队列长度, infinity表示不限制                      |
++-----------------------+---------------------------------------------------+
+| mqueue.low_watermark  | 解除告警水位线                                    |
++-----------------------+---------------------------------------------------+
+| mqueue.high_watermark | 队列满告警水位线                                  |
++-----------------------+---------------------------------------------------+
+| mqueue.qos0           | 是否缓存QoS0消息                                  |
++-----------------------+---------------------------------------------------+
 
 --------------
 Broker参数设置
@@ -473,109 +473,186 @@ Plugins插件配置目录设置
 MQTT Listeners参数说明
 ----------------------
 
-*EMQ* 消息服务器支持MQTT、MQTT/SSL、MQTT/WS协议服务端，可通过mqtt.listener.*设置端口、最大允许连接数等参数。
+*EMQ* 消息服务器支持MQTT、MQTT/SSL、MQTT/WS协议服务端，可通过listener.tcp|ssl|ws|wss|.*设置端口、最大允许连接数等参数。
 
-*EMQ* 2.0消息服务器默认开启的TCP服务端口包括:
+*EMQ* 2.2消息服务器默认开启的TCP服务端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT协议端口                      |
 +-----------+-----------------------------------+
-| 8883      | MQTT(SSL)端口                     |
+| 8883      | MQTT/SSL端口                      |
 +-----------+-----------------------------------+
-| 8083      | MQTT(WebSocket), HTTP API端口     |
+| 8083      | MQTT/WebSocket端口                |
++-----------+-----------------------------------+
+| 8084      | MQTT/WebSocket/SSL端口            |
 +-----------+-----------------------------------+
 
 Listener参数说明:
 
-+-----------------------------+----------------------------------------------+
-| mqtt.listener.*.acceptors   | TCP Acceptor池                               |
-+-----------------------------+----------------------------------------------+
-| mqtt.listener.*.max_clients | 最大允许TCP连接数                            |
-+-----------------------------+----------------------------------------------+
-| mqtt.listener.*.rate_limit  | 连接限速配置，例如限速10KB/秒:  "100,10"     |
-+-----------------------------+----------------------------------------------+
++----------------------------------+------------------------------------------+
+| listener.tcp.${name}.acceptors   | TCP Acceptor池                           |
++----------------------------------+------------------------------------------+
+| listener.tcp.${name}.max_clients | 最大允许TCP连接数                        |
++----------------------------------+------------------------------------------+
+| listener.tcp.${name}.rate_limit  | 连接限速配置，例如限速10KB/秒:  "100,10" |
++----------------------------------+------------------------------------------+
 
-----------------------
-MQTT(TCP)监听器 - 1883
-----------------------
+---------------------
+MQTT/TCP监听器 - 1883
+---------------------
+
+EMQ 2.2版本支持配置多个MQTT协议监听器，例如配置external、internal两个监听器:
 
 .. code-block:: properties
 
-    ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
-    mqtt.listener.tcp = 1883
+    ##--------------------------------------------------------------------
+    ## External TCP Listener
+
+    ## External TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
+    listener.tcp.external = 0.0.0.0:1883
 
     ## Size of acceptor pool
-    mqtt.listener.tcp.acceptors = 8
+    listener.tcp.external.acceptors = 16
 
     ## Maximum number of concurrent clients
-    mqtt.listener.tcp.max_clients = 1024
+    listener.tcp.external.max_clients = 102400
+
+    #listener.tcp.external.mountpoint = external/
 
     ## Rate Limit. Format is 'burst,rate', Unit is KB/Sec
-    ## mqtt.listener.tcp.rate_limit = 100,10
+    #listener.tcp.external.rate_limit = 100,10
+
+    #listener.tcp.external.access.1 = allow 192.168.0.0/24
+
+    listener.tcp.external.access.2 = allow all
+
+    ## Proxy Protocol V1/2
+    ## listener.tcp.external.proxy_protocol = on
+    ## listener.tcp.external.proxy_protocol_timeout = 3s
 
     ## TCP Socket Options
-    mqtt.listener.tcp.backlog = 1024
-    ## mqtt.listener.tcp.recbuf = 4096
-    ## mqtt.listener.tcp.sndbuf = 4096
-    ## mqtt.listener.tcp.buffer = 4096
-    ## mqtt.listener.tcp.nodelay = true
+    listener.tcp.external.backlog = 1024
 
-----------------------
-MQTT(SSL)监听器 - 8883
-----------------------
+    #listener.tcp.external.recbuf = 4KB
 
-.. code-block:: properties
+    #listener.tcp.external.sndbuf = 4KB
 
-    ## SSL Listener: 8883, 127.0.0.1:8883, ::1:8883
-    mqtt.listener.ssl = 8883
+    listener.tcp.external.buffer = 4KB
+
+    listener.tcp.external.nodelay = true
+
+    ##--------------------------------------------------------------------
+    ## Internal TCP Listener
+
+    ## Internal TCP Listener: 11883, 127.0.0.1:11883, ::1:11883
+    listener.tcp.internal = 127.0.0.1:11883
 
     ## Size of acceptor pool
-    mqtt.listener.ssl.acceptors = 4
+    listener.tcp.internal.acceptors = 16
 
     ## Maximum number of concurrent clients
-    mqtt.listener.ssl.max_clients = 512
+    listener.tcp.internal.max_clients = 102400
+
+    #listener.tcp.external.mountpoint = internal/
 
     ## Rate Limit. Format is 'burst,rate', Unit is KB/Sec
-    ## mqtt.listener.ssl.rate_limit = 100,10
+    ## listener.tcp.internal.rate_limit = 1000,100
 
-    ## SSL Options
-    mqtt.listener.ssl.handshake_timeout = 15
-    mqtt.listener.ssl.keyfile = etc/certs/key.pem
-    mqtt.listener.ssl.certfile = etc/certs/cert.pem
-    ## 开启双向认证
-    ## mqtt.listener.ssl.cacertfile = etc/certs/cacert.pem
-    ## mqtt.listener.ssl.verify = verify_peer
-    ## mqtt.listener.ssl.fail_if_no_peer_cert = true
+    ## TCP Socket Options
+    listener.tcp.internal.backlog = 512
 
-----------------------------
-MQTT(WebSocket)监听器 - 8083
-----------------------------
+    listener.tcp.internal.tune_buffer = on
 
-.. code-block:: properties
+    listener.tcp.internal.buffer = 1MB
 
-    ## HTTP and WebSocket Listener
-    mqtt.listener.http = 8083
-    mqtt.listener.http.acceptors = 4
-    mqtt.listener.http.max_clients = 64
+    listener.tcp.internal.recbuf = 4KB
 
---------------------------------
-MQTT(WebSocket/SSL)监听器 - 8084
---------------------------------
+    listener.tcp.internal.sndbuf = 1MB
+
+    listener.tcp.internal.nodelay = true
+
+---------------------
+MQTT/SSL监听器 - 8883
+---------------------
 
 .. code-block:: properties
 
-    ## HTTP(SSL) Listener
-    mqtt.listener.https = 8084
-    mqtt.listener.https.acceptors = 4
-    mqtt.listener.https.max_clients = 64
+    ##--------------------------------------------------------------------
+    ## External SSL Listener
+    listener.ssl.external = 8883
+
+    ## Size of acceptor pool
+    listener.ssl.external.acceptors = 16
+
+    ## Maximum number of concurrent clients
+    listener.ssl.external.max_clients = 1024
+
+    ## listener.ssl.external.mountpoint = inbound/
+
+    ## Rate Limit. Format is 'burst,rate', Unit is KB/Sec
+    ## listener.ssl.external.rate_limit = 100,10
+
+    ## Proxy Protocol V1/2
+    ## listener.ssl.external.proxy_protocol = on
+    ## listener.ssl.external.proxy_protocol_timeout = 3s
+
+    listener.ssl.external.access.1 = allow all
+
     ## SSL Options
-    mqtt.listener.https.handshake_timeout = 15
-    mqtt.listener.https.certfile = etc/certs/cert.pem
-    mqtt.listener.https.keyfile = etc/certs/key.pem
+    mqtt.listener.ssl.external.handshake_timeout = 15
+    mqtt.listener.ssl.external.keyfile = etc/certs/key.pem
+    mqtt.listener.ssl.external.certfile = etc/certs/cert.pem
     ## 开启双向认证
-    ## mqtt.listener.https.cacertfile = etc/certs/cacert.pem
-    ## mqtt.listener.https.verify = verify_peer
-    ## mqtt.listener.https.fail_if_no_peer_cert = true
+    ## mqtt.listener.ssl.external.cacertfile = etc/certs/cacert.pem
+    ## mqtt.listener.ssl.external.verify = verify_peer
+    ## mqtt.listener.ssl.external.fail_if_no_peer_cert = true
+
+---------------------------
+MQTT/WebSocket监听器 - 8083
+---------------------------
+
+.. code-block:: properties
+
+    ##--------------------------------------------------------------------
+    ## External MQTT/WebSocket Listener
+
+    listener.ws.external = 8083
+
+    listener.ws.external.acceptors = 4
+
+    listener.ws.external.max_clients = 64
+
+    listener.ws.external.access.1 = allow all
+
+-------------------------------
+MQTT/WebSocket/SSL监听器 - 8084
+-------------------------------
+
+.. code-block:: properties
+
+    ##--------------------------------------------------------------------
+    ## External MQTT/WebSocket/SSL Listener
+
+    listener.wss.external = 8084
+
+    listener.wss.external.acceptors = 4
+
+    listener.wss.external.max_clients = 64
+
+    listener.wss.external.access.1 = allow all
+
+    ## SSL Options
+    listener.wss.external.handshake_timeout = 15s
+
+    listener.wss.external.keyfile = {{ platform_etc_dir }}/certs/key.pem
+
+    listener.wss.external.certfile = {{ platform_etc_dir }}/certs/cert.pem
+
+    ## listener.wss.external.cacertfile = {{ platform_etc_dir }}/certs/cacert.pem
+
+    ## listener.wss.external.verify = verify_peer
+
+    ## listener.wss.external.fail_if_no_peer_cert = true
 
 --------------------
 Erlang虚拟机监控设置
@@ -602,7 +679,7 @@ Erlang虚拟机监控设置
 扩展插件配置文件
 ----------------
 
-*EMQ* 2.0插件配置文件，全部在etc/plugins/目录:
+*EMQ* 2.2插件配置文件，全部在etc/plugins/目录:
 
 +----------------------------------------+-----------------------------------+
 | 配置文件                               | 说明                              |
@@ -626,6 +703,10 @@ Erlang虚拟机监控设置
 | etc/plugins/emq_auth_pgsql.conf        | Postgre认证插件配置               |
 +----------------------------------------+-----------------------------------+
 | etc/plugins/emq_auth_redis.conf        | Redis认证插件配置                 |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_web_hook.conf          | Web Hook 插件配置                 |
++----------------------------------------+-----------------------------------+
+| etc/plugins/emq_lua_hook.conf          | Lua Hook 插件配置                 |
 +----------------------------------------+-----------------------------------+
 | etc/plugins/emq_coap.conf              | CoAP协议服务器配置                |
 +----------------------------------------+-----------------------------------+
