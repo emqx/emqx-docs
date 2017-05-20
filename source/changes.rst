@@ -5,6 +5,27 @@
 版本发布
 ========
 
+.. _release_2.2-beta.2:
+
+---------------
+2.2-beta.2 版本
+---------------
+
+*发布日期: 2017-05-20*
+
+问题与改进
+----------
+1. emqttd#1041:Assign username and password to MQTT-SN's CONNECT message
+2. emqttd#1045:Allow for Content-Type:application/json in HTTP Publish API
+
+配置项变更
+----------
+新增websocket_protocol_header配置项
+
+新增插件
+----------
+新增elixir插件: `emq-elixir-plugin`_ ，支持elixir语言注册EMQ扩展钩子来开发插件。
+
 .. _release_2.2-beta.1:
 
 ---------------
@@ -2353,4 +2374,4 @@ The first public release.
 .. _emq_reloader:         https://github.com/emqtt/emq_reloader
 .. _emq_plugin_template:  https://github.com/emqtt/emq_plugin_template
 .. _recon:                http://ferd.github.io/recon/
-
+.. _emq-elixir-plugin:    https://github.com/emqtt/emq-elixir-plugin
