@@ -33,14 +33,14 @@ emqttd Linux RPM程序包:
 
 安装包命名由平台、版本、操纵系统位数组成，例如: emqttd-centos7-v2.0_x86_64.rpm
 
-CentOS、RedHat操作系统下，推荐RPM包安装。RPM包安装后可通过操作系统，直接管理启停EMQTTD服务。
+CentOS、RedHat操作系统下，推荐RPM包安装。RPM包安装后可通过操作系统，直接管理启停EMQ服务。
 
 RPM安装
 -------
 
 .. code-block:: console
 
-    rpm -ivh --force emqttd-centos6.8-v2.0-1.el6.x86_64.rpm
+    rpm -ivh --force emqttd-centos7-v2.1.2-1.el7.centos.x86_64.rpm
 
 .. NOTE:: Erlang/OTP R19依赖lksctp-tools库
 
@@ -51,7 +51,7 @@ RPM安装
 配置文件
 --------
 
-EMQTTD配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQ配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------
@@ -92,7 +92,7 @@ emqttd Linux DEB程序包:
 
 安装包命名由平台、版本、操纵系统位数组成，例如: emqttd-debian7-v2.0_amd64.deb
 
-Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过操作系统，直接管理启停EMQTTD服务。
+Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过操作系统，直接管理启停EMQ服务。
 
 .. code-block:: console
 
@@ -107,7 +107,7 @@ Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过�
 配置文件
 --------
 
-EMQTTD配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQ配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------

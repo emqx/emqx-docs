@@ -5,6 +5,51 @@
 版本发布
 ========
 
+.. _release_2.2-beta.2:
+
+---------------
+2.2-beta.2 版本
+---------------
+
+*发布日期: 2017-05-20*
+
+问题与改进
+----------
+
+Add a 'websocket_protocol_header' option to handle WebSocket connection from WeChat (emqttd#1060)
+
+Assign username and password to MQTT-SN's CONNECT message (emqttd#1041)
+
+Allow for Content-Type:application/json in HTTP Publish API (emqttd#1045)
+
+emqttd_http.erl:data conversion (emqttd#1059)
+
+Seperate emq_sn from emqttd (emq-sn#24)
+
+Check St0's type, making it easier to debug crash problems (emq-lua-hook#6)
+
+Fix error: load xxx.lua (emq-lua-hook#8)
+
+Leave luerl alone as a rebar project (emq-lue-hook#9)
+
+Display websocket data in reverse order (emq-dashboard#118)
+
+priv/www/assets/js/dashboard.js:Fixed a typo (emq-dashboard#118)
+
+Update README
+--------------
+
+Update README of emq-auth-pgsql: add the 'ssl_opts' configuration (emq-auth-pgsql#56)
+
+Update README of emq-auth-mysql: fix the 'passwd_hash' typo (emq-auth-mysql#54)
+
+Update README of emq-auth-mongo: change 'aclquery' to 'acl_query' (emq-auth-mongo#63)
+
+Elixir Plugin
+-------------
+
+Add a new plugin `emq-elixir-plugin`_ to support Elixir language.
+
 .. _release_2.2-beta.1:
 
 ---------------
@@ -2353,4 +2398,4 @@ The first public release.
 .. _emq_reloader:         https://github.com/emqtt/emq_reloader
 .. _emq_plugin_template:  https://github.com/emqtt/emq_plugin_template
 .. _recon:                http://ferd.github.io/recon/
-
+.. _emq-elixir-plugin:    https://github.com/emqtt/emq-elixir-plugin
