@@ -15,28 +15,32 @@
 
 问题与改进
 ----------
-1. Assign username and password to MQTT-SN's CONNECT message(emqttd#1041)
-2. Allow for Content-Type:application/json in HTTP Publish API(emqttd#1045)
-3. emqttd_http.erl:data conversion(emqttd#1059)
-4. Seperate emq_sn from emqttd(emq-sn#24)
-5. Check St0's type, making it easier to debug crash problems(emq-lua-hook#6)
-6. Fix error: load xxx.lua(emq-lua-hook#8)
-7. Leave luerl alone as a rebar project(emq-lue-hook#9)
-8. Display websocket data in reverse order(emq-dashboard#118)
-9. priv/www/assets/js/dashboard.js:Fixed a typo(emq-dashboard#118)
+
+1. Assign username and password to MQTT-SN's CONNECT message (emqttd#1041)
+2. Allow for Content-Type:application/json in HTTP Publish API (emqttd#1045)
+3. emqttd_http.erl:data conversion (emqttd#1059)
+4. Seperate emq_sn from emqttd (emq-sn#24)
+5. Check St0's type, making it easier to debug crash problems (emq-lua-hook#6)
+6. Fix error: load xxx.lua (emq-lua-hook#8)
+7. Leave luerl alone as a rebar project (emq-lue-hook#9)
+8. Display websocket data in reverse order (emq-dashboard#118)
+9. priv/www/assets/js/dashboard.js:Fixed a typo (emq-dashboard#118)
 
 配置项变更
 ----------
-新增websocket_protocol_header配置项
+
+新增websocket_protocol_header配置项，支持微信小程序WebSocket连接EMQ。
 
 README更新
 ----------
-1. Update README to add the 'ssl_opts'(emq-auth-pgsql#56)
-2. Update README to fix the 'passwd_hash' typo(emq-auth-mysql#54)
-3. Update README to 'acl_query' (emq-auth-mongo#63)
+
+1. Update README of emq-auth-pgsql: add the 'ssl_opts' configuration (emq-auth-pgsql#56)
+2. Update README of emq-auth-mysql: fix the 'passwd_hash' typo (emq-auth-mysql#54)
+3. Update README of emq-auth-mongo: change 'aclquery' to 'acl_query' (emq-auth-mongo#63)
 
 新增插件
-----------
+--------
+
 新增elixir插件: `emq-elixir-plugin`_ ，支持elixir语言注册EMQ扩展钩子来开发插件。
 
 .. _release_2.2-beta.1:
