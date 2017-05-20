@@ -16,32 +16,39 @@
 问题与改进
 ----------
 
-1. Assign username and password to MQTT-SN's CONNECT message (emqttd#1041)
-2. Allow for Content-Type:application/json in HTTP Publish API (emqttd#1045)
-3. emqttd_http.erl:data conversion (emqttd#1059)
-4. Seperate emq_sn from emqttd (emq-sn#24)
-5. Check St0's type, making it easier to debug crash problems (emq-lua-hook#6)
-6. Fix error: load xxx.lua (emq-lua-hook#8)
-7. Leave luerl alone as a rebar project (emq-lue-hook#9)
-8. Display websocket data in reverse order (emq-dashboard#118)
-9. priv/www/assets/js/dashboard.js:Fixed a typo (emq-dashboard#118)
+Add a 'websocket_protocol_header' option to handle WebSocket connection from WeChat (emqttd#1060)
 
-配置项变更
-----------
+Assign username and password to MQTT-SN's CONNECT message (emqttd#1041)
 
-新增websocket_protocol_header配置项，支持微信小程序WebSocket连接EMQ。
+Allow for Content-Type:application/json in HTTP Publish API (emqttd#1045)
 
-README更新
-----------
+emqttd_http.erl:data conversion (emqttd#1059)
 
-1. Update README of emq-auth-pgsql: add the 'ssl_opts' configuration (emq-auth-pgsql#56)
-2. Update README of emq-auth-mysql: fix the 'passwd_hash' typo (emq-auth-mysql#54)
-3. Update README of emq-auth-mongo: change 'aclquery' to 'acl_query' (emq-auth-mongo#63)
+Seperate emq_sn from emqttd (emq-sn#24)
 
-新增插件
---------
+Check St0's type, making it easier to debug crash problems (emq-lua-hook#6)
 
-新增elixir插件: `emq-elixir-plugin`_ ，支持elixir语言注册EMQ扩展钩子来开发插件。
+Fix error: load xxx.lua (emq-lua-hook#8)
+
+Leave luerl alone as a rebar project (emq-lue-hook#9)
+
+Display websocket data in reverse order (emq-dashboard#118)
+
+priv/www/assets/js/dashboard.js:Fixed a typo (emq-dashboard#118)
+
+Update README
+--------------
+
+Update README of emq-auth-pgsql: add the 'ssl_opts' configuration (emq-auth-pgsql#56)
+
+Update README of emq-auth-mysql: fix the 'passwd_hash' typo (emq-auth-mysql#54)
+
+Update README of emq-auth-mongo: change 'aclquery' to 'acl_query' (emq-auth-mongo#63)
+
+Elixir Plugin
+-------------
+
+Add a new plugin `emq-elixir-plugin`_ to support Elixir language.
 
 .. _release_2.2-beta.1:
 
