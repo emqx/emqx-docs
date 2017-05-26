@@ -358,6 +358,37 @@ Ubuntu平台可通过apt-get命令安装，CentOS/RedHat平台可通过yum命令
 
     cd _rel/emqttd && ./bin/emqttd console
 
+-------------------
+Windows源码编译安装
+-------------------
+Erlang安装: http://www.erlang.org/
+
+MSYS2安装: http://www.msys2.org/
+
+MSYS2安装完成后，根据MSYS2中的pacman包管理工具安装Git、Make工具软件:
+
+.. code-block:: bash
+
+    pacman -S git make
+
+编译环境准备之后，clone代码开始编译:
+
+.. code-block:: bash
+
+    git clone -b windows https://github.com/emqtt/emqttd-relx.git
+
+    cd emqttd-relx && make
+
+    cd _rel/emqttd && ./bin/emqttd console
+
+编译成功后，可执行程序包在目录::
+
+    _rel/emqttd
+
+控制台启动编译的emqttd程序包::
+
+    cd _rel/emqttd && ./bin/emqttd console
+
 .. _tcp_ports:
 
 ---------------
