@@ -5,6 +5,44 @@
 版本发布
 ========
 
+.. _release_2.2-beta.3:
+
+---------------
+2.2-beta.3 版本
+---------------
+
+*发布日期: 2017-05-27*
+
+问题与改进
+----------
+
+Call emit_stats when force GC (emqttd#1071)
+
+Update the default value of 'mqtt.mqueue.max_length' to 1000 (emqttd#1074)
+
+Update emq-auth-mongo READEME (emq-auth-mongo#66)
+
+Update default password field (emq-auth-mongo#67)
+
+Upgrade the mongodb library to v3.0.3
+
+Remove ‘check password===undefined && userName!== undefined’ (emq-dashboard#120)
+
+emq_auth_redis插件
+------------------
+
+认证支持HGET查询
+
+emq_auth_mongo插件
+------------------
+
+支持mongodb集群、Replica Set
+
+文档更新
+--------
+
+更新Windows源码编译安装
+
 .. _release_2.2-beta.2:
 
 ---------------
