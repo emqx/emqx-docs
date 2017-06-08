@@ -41,6 +41,7 @@ TODO: 2.0-rc.1图片更新.
    changes
    upgrade
    mqtt
+   mqtt-sn
 
 EMQ项目支持与联系:
 
