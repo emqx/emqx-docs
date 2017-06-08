@@ -39,9 +39,13 @@ File: etc/emq_sn.conf
 
 
     mqtt.sn.port = 1884
+    
     mqtt.sn.advertise_duration = 900
+    
     mqtt.sn.gateway_id = 1
+    
     mqtt.sn.username = mqtt_sn_user
+    
     mqtt.sn.password = abc
 
 +-----------------------------+-------------------------------------------------------------------------+
@@ -60,7 +64,7 @@ File: etc/emq_sn.conf
 启动emq-sn
 ----------------
 
-    ./bin/emqx_ctl plugins load emqx_sn
+    ./bin/emqttd_ctl plugins load emq_sn
     
 
 ===============
