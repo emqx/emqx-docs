@@ -277,8 +277,6 @@ etc/plugins/emq_auth_http.conf:
     auth.http.acl_req.method = get
     auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t
 
-    auth.http.acl_nomatch = deny
-
 HTTP认证/鉴权API
 ----------------
 
@@ -306,7 +304,7 @@ MQTT用户表
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
       `username` varchar(100) DEFAULT NULL,
       `password` varchar(100) DEFAULT NULL,
-      `salt` varchar(20) DEFAULT NULL,
+      `salt` varchar(35) DEFAULT NULL,
       `is_superuser` tinyint(1) DEFAULT 0,
       `created` datetime DEFAULT NULL,
       PRIMARY KEY (`id`),
@@ -375,9 +373,6 @@ etc/plugins/emq_auth_mysql.conf:
 
     ## ACL Query Command
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
-
-    ## ACL nomatch
-    auth.mysql.acl_nomatch = deny
 
 加载MySQL认证鉴权插件
 ---------------------
@@ -469,9 +464,6 @@ etc/plugins/emq_auth_pgsql.conf:
     ## ACL Query. Comment this query, the acl will be disabled.
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
-    ## If no rules matched, return...
-    auth.pgsql.acl_nomatch = deny
-
 加载Postgre认证鉴权插件
 -----------------------
 
@@ -517,9 +509,6 @@ etc/plugins/emq_auth_redis.conf:
 
     ## ACL Query Command
     auth.redis.acl_cmd = HGETALL mqtt_acl:%u
-
-    ## ACL nomatch
-    auth.redis.acl_nomatch = deny
 
 Redis 用户Hash
 --------------
@@ -606,9 +595,6 @@ etc/plugins/emq_auth_mongo.conf:
     auth.mongo.acl_query.collection = mqtt_user
 
     auth.mongo.acl_query.selector = username=%u
-
-    ## acl_nomatch
-    auth.mongo.acl_nomatch = deny
 
 MongoDB数据库
 -------------
