@@ -51,7 +51,7 @@ RPM安装
 配置文件
 --------
 
-EMQ配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQ配置文件: /etc/emqttd/emq.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------
@@ -68,7 +68,7 @@ EMQ配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugi
 
 .. code-block:: console
 
-    service emqttd start|stop|restart
+    systemctl start|stop|restart emqttd.service
 
 .. _install_deb:
 
@@ -107,7 +107,7 @@ Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过�
 配置文件
 --------
 
-EMQ配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQ配置文件: /etc/emqttd/emq.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------
@@ -402,7 +402,9 @@ TCP服务端口占用
 +-----------+-----------------------------------+
 | 8883      | MQTT(SSL)端口                     |
 +-----------+-----------------------------------+
-| 8083      | MQTT(WebSocket), HTTP API端口     |
+| 8083      | MQTT(WebSocket)                   |
++-----------+-----------------------------------+
+| 8080      | HTTP API端口                      |
 +-----------+-----------------------------------+
 | 18083     | Dashboard管理控制台端口           |
 +-----------+-----------------------------------+

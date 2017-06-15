@@ -284,6 +284,9 @@ MQTT最大报文尺寸
 
 .. code-block:: properties
 
+    ## ACL nomatch
+    mqtt.acl_nomatch = allow
+
     ## Default ACL File
     mqtt.acl_file = etc/acl.conf
 
@@ -484,6 +487,8 @@ MQTT Listeners参数说明
 +-----------+-----------------------------------+
 | 8083      | MQTT/WebSocket端口                |
 +-----------+-----------------------------------+
+| 8080      | HTTP API端口                      |
++-----------+-----------------------------------+
 | 8084      | MQTT/WebSocket/SSL端口            |
 +-----------+-----------------------------------+
 
@@ -653,6 +658,23 @@ MQTT/WebSocket/SSL监听器 - 8084
     ## listener.wss.external.verify = verify_peer
 
     ## listener.wss.external.fail_if_no_peer_cert = true
+
+---------------------
+HTTP API监听器 - 8080
+---------------------
+
+.. code-block:: properties
+
+    ##--------------------------------------------------------------------
+    ## HTTP Management API Listener
+
+    listener.api.mgmt = 127.0.0.1:8080
+
+    listener.api.mgmt.acceptors = 4
+
+    listener.api.mgmt.max_clients = 64
+
+    listener.api.mgmt.access.1 = allow all
 
 --------------------
 Erlang虚拟机监控设置

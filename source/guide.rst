@@ -125,6 +125,8 @@ etc/plugins/emq_auth_ldap.conf配置LDAP参数:
 HTTP插件认证
 ------------
 
+.. NOTE:: 开启HTTP认证插件后，会终结认证链
+
 etc/plugins/emq_auth_http.conf配置'super_req', 'auth_req':
 
 .. code-block:: properties
@@ -379,6 +381,9 @@ MQTT客户端发起订阅/发布请求时，EMQ消息服务器的访问控制模
 
 .. code-block:: properties
 
+    ## ACL nomatch
+    mqtt.acl_nomatch = allow
+
     ## Default ACL File
     mqtt.acl_file = etc/acl.conf
 
@@ -401,6 +406,8 @@ ACL规则定义在etc/acl.conf，EMQ启动时加载到内存:
 ----------------
 HTTP插件访问控制
 ----------------
+
+.. NOTE:: 开启HTTP插件后，会终结ACL链
 
 HTTP API实现访问控制: https://github.com/emqtt/emq_auth_http
 
@@ -594,13 +601,13 @@ HTTP发布接口
 
 *EMQ* 消息服务器提供了一个HTTP发布接口，应用服务器或Web服务器可通过该接口发布MQTT消息::
 
-    HTTP POST http://host:8083/mqtt/publish
+    HTTP POST http://host:8080/mqtt/publish
 
 Web服务器例如PHP/Java/Python/NodeJS或Ruby on Rails，可通过HTTP POST请求发布MQTT消息:
 
 .. code-block:: bash
 
-    curl -v --basic -u user:passwd -d "qos=1&retain=0&topic=/a/b/c&message=hello from http..." -k http://localhost:8083/mqtt/publish
+    curl -v --basic -u user:passwd -d "qos=1&retain=0&topic=/a/b/c&message=hello from http..." -k http://localhost:8080/mqtt/publish
 
 HTTP接口参数:
 
@@ -636,7 +643,7 @@ Dashboard插件提供了一个MQTT WebSocket连接的测试页面::
 
     http://127.0.0.1:18083/websocket.html
 
-*EMQ* 通过内嵌的HTTP服务器，实现MQTT WebSocket与HTTP发布接口，etc/emq.conf设置:
+*EMQ* 通过内嵌的HTTP服务器，实现MQTT WebSocket，etc/emq.conf设置:
 
 .. code-block:: properties
 

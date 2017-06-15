@@ -5,6 +5,31 @@
 版本发布
 ========
 
+.. _release_2.2-rc.1:
+
+-------------
+2.2-rc.1 版本
+-------------
+
+*发布日期: 2017-06-14*
+
+问题与改进
+----------
+
+Add a new listener for HTTP REST API (emqttd#1094)
+
+Fix the race condition issue caused by unregister_session/1 (emqttd#1096)
+
+Fix the issue that we cannot remove a down node from the cluster (emqttd#1100)
+
+Passed org.eclipse.paho.mqtt_sn.testing/interoperability tests (emq_sn#29)
+
+Fixed the issue that send http request and return non-200 status code, but AUTH/ACL result is denied (emq-auth-http#33)
+
+Fixed the issue that fail to stop listener (emq_stomp#24)
+
+Support using systemctl to manage emqttd service on CentOS
+
 .. _release_2.2-beta.3:
 
 ---------------
