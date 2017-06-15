@@ -659,9 +659,9 @@ MQTT/WebSocket/SSL监听器 - 8084
 
     ## listener.wss.external.fail_if_no_peer_cert = true
 
--------------------------------
+---------------------
 HTTP API监听器 - 8080
--------------------------------
+---------------------
 
 .. code-block:: properties
 

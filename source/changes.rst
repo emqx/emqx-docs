@@ -7,9 +7,9 @@
 
 .. _release_2.2-rc.1:
 
----------------
+-------------
 2.2-rc.1 版本
----------------
+-------------
 
 *发布日期: 2017-06-14*
 
@@ -28,7 +28,7 @@ Fixed the issue that send http request and return non-200 status code, but AUTH/
 
 Fixed the issue that fail to stop listener (emq_stomp#24)
 
-Support using systemctl to manage emqttd service in centos
+Support using systemctl to manage emqttd service on CentOS
 
 .. _release_2.2-beta.3:
 
