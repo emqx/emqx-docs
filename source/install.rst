@@ -51,7 +51,7 @@ RPM安装
 配置文件
 --------
 
-EMQ配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQ配置文件: /etc/emqttd/emq.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------
@@ -107,7 +107,7 @@ Debian、Ubuntu操作系统下，推荐DEB包安装。DEB包安装后可通过�
 配置文件
 --------
 
-EMQ配置文件: /etc/emqttd/emqttd.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
+EMQ配置文件: /etc/emqttd/emq.conf，插件配置文件: /etc/emqttd/plugins/\*.conf。
 
 日志文件
 --------
