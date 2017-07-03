@@ -5,6 +5,27 @@
 版本发布
 ========
 
+.. _release_2.2-rc.2:
+
+-------------
+2.2-rc.2 版本
+-------------
+
+*发布日期: 2017-07-03*
+
+.. WARNING:: 2.2-rc.2版本源码编译需要Erlang/OTP R19.3+
+
+问题与改进
+----------
+
+Compatible with Erlang/OTP R20 (emq-relx#77)
+
+CoAP gateway plugin supports coap-style publish & subscribe pattern. (emq_coap#33)
+
+MQTT-SN gateway plugin supports sleeping device (emq_sn#32)
+
+Upgrade esockd and mochiweb libraries to support restarting a listener
+
 .. _release_2.2-rc.1:
 
 -------------
