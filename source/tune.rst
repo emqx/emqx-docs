@@ -29,6 +29,10 @@ Linux操作系统参数
 
     fs.file-max = 1048576
 
+/etc/systemd/system.conf设置服务最大文件句柄数::
+
+    DefaultLimitNOFILE=1048576
+
 /etc/security/limits.conf
 -------------------------
 
