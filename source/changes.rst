@@ -5,6 +5,30 @@
 版本发布
 ========
 
+.. _release_2.2.0:
+
+----------
+2.2.0 版本
+----------
+
+*发布日期: 2017-07-08*
+
+问题与改进
+----------
+
+The stable release of 2.2 version.
+
+Feature: add restart/close ctl commands (emqttd#1135)
+
+Bugfix: correct error exit code from emqttd_ctl (emqttd#1133)
+
+Bugfix: spec errors found by dialyzer (emqttd#1136)
+
+Bugfix: exceptions from rpc:call/4 (emq-dashboard#128)
+
+Bugfix: topic has been percent-decoded by gen-coap, no conversion needed (emq-coap#43)
+
+
 .. _release_2.2-rc.2:
 
 -------------
