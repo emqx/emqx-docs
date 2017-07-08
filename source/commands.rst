@@ -449,9 +449,9 @@ bridges命令
 
 bridges命令用于在多台EMQ服务器节点间创建桥接::
 
-              ---------                     ---------
-Publisher --> | node1 | --Bridge Forward--> | node2 | --> Subscriber
-              ---------                     ---------
+                  ---------                     ---------
+    Publisher --> | node1 | --Bridge Forward--> | node2 | --> Subscriber
+                  ---------                     ---------
 
 +----------------------------------------+---------------------------+
 | bridges list                           | 查询全部桥接              |
@@ -648,21 +648,36 @@ listeners命令用于查询开启的TCP服务监听器::
 
     $ ./bin/emqttd_ctl listeners
 
-    listener on mqtt:ws:8083
+    listener on mqtt:api:127.0.0.1:8080
+      acceptors       : 4
+      max_clients     : 64
+      current_clients : 0
+      shutdown_count  : []
+    listener on mqtt:wss:8084
       acceptors       : 4
       max_clients     : 64
       current_clients : 0
       shutdown_count  : []
     listener on mqtt:ssl:8883
-      acceptors       : 4
-      max_clients     : 512
+      acceptors       : 16
+      max_clients     : 1024
       current_clients : 0
       shutdown_count  : []
-    listener on mqtt:tcp:1883
-      acceptors       : 8
-      max_clients     : 1024
-      current_clients : 1
-      shutdown_count  : [{closed,2}]
+    listener on mqtt:ws:8083
+      acceptors       : 4
+      max_clients     : 64
+      current_clients : 0
+      shutdown_count  : []
+    listener on mqtt:tcp:0.0.0.0:1883
+      acceptors       : 16
+      max_clients     : 102400
+      current_clients : 0
+      shutdown_count  : []
+    listener on mqtt:tcp:127.0.0.1:11883
+      acceptors       : 16
+      max_clients     : 102400
+      current_clients : 0
+      shutdown_count  : []
     listener on dashboard:http:18083
       acceptors       : 2
       max_clients     : 512
@@ -680,6 +695,16 @@ listener参数说明:
 +-----------------+-----------------------------------+
 | shutdown_count  | Socket关闭原因统计                |
 +-----------------+-----------------------------------+
+
+重启监听端口::
+
+    $ ./bin/emqttd_ctl listeners restart mqtt:tcp 0.0.0.0:1883
+    Restart mqtt:tcp listener on 0.0.0.0:1883 successfully.
+
+停止监听端口::
+
+    $ ./bin/emqttd_ctl listeners stop mqtt:tcp 0.0.0.0:1883
+    Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
 
 ----------
 mnesia命令
