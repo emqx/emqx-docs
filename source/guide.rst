@@ -572,26 +572,26 @@ MQTT V3.1.1版本协议规范: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-
 .. code-block:: properties
 
     ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
-    mqtt.listener.tcp = 1883
+    listener.tcp.external = 1883
 
     ## Size of acceptor pool
-    mqtt.listener.tcp.acceptors = 8
+    listener.tcp.external.acceptors = 8
 
     ## Maximum number of concurrent clients
-    mqtt.listener.tcp.max_clients = 1024
+    listener.tcp.external.max_clients = 1024
 
 MQTT(SSL) TCP监听器，缺省端口8883:
 
 .. code-block:: properties
 
     ## SSL Listener: 8883, 127.0.0.1:8883, ::1:8883
-    mqtt.listener.ssl = 8883
+    listener.ssl.external = 8883
 
     ## Size of acceptor pool
-    mqtt.listener.ssl.acceptors = 4
+    listener.ssl.external.acceptors = 4
 
     ## Maximum number of concurrent clients
-    mqtt.listener.ssl.max_clients = 512
+    listener.ssl.external.max_clients = 512
 
 .. _http_publish:
 

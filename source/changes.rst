@@ -5,6 +5,28 @@
 版本发布
 ========
 
+.. _release_2.2.0:
+
+----------------------
+2.2 正式版 "Nostalgia"
+----------------------
+
+*发布日期: 2017-07-08*
+
+*版本别名: Nostalgia*
+
+EMQ-2.2.0版本正式发布！EMQ R2.2版本完整支持CoAP(RFC 7252)、MQTT-SN协议，支持Web Hook、Lua Hook、Proxy Protocol V2，支持Elixir语言插件开发。
+
+Feature: Add 'listeners restart/stop' CLI command (emqttd#1135)
+
+Bugfix: Exit Code from emqttd_ctl (emqttd#1133)
+
+Bugfix: Fix spec errors found by dialyzer (emqttd#1136)
+
+Bugfix: Catch exceptions thrown from rpc:call/4 (emq-dashboard#128)
+
+Bugfix: Topic has been decoded by gen-coap, no conversion needed (emq-coap#43)
+
 .. _release_2.2-rc.2:
 
 -------------
@@ -153,7 +175,7 @@ MQTT协议监听器配置
 一个EMQ节点可配置多个MQTT协议监听端口，例如下述配置external, internal监听器，分别用于设备连接与内部通信::
 
                              -------
-    -- External TCP 1883 --> |     |
+    -- Ex，支持Web Hook、Lua Hook、ernal TCP 1883 --> |     |
                              | EMQ | -- Internal TCP 2883 --> Service
     -- External SSL 8883-->  |     |
                              -------
