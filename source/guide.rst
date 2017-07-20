@@ -647,10 +647,10 @@ Dashboard插件提供了一个MQTT WebSocket连接的测试页面::
 
 .. code-block:: properties
 
-    ## HTTP and WebSocket Listener
-    mqtt.listener.http = 8083
-    mqtt.listener.http.acceptors = 4
-    mqtt.listener.http.max_clients = 64
+    ## MQTT/WebSocket Listener
+    listener.ws.external = 8083
+    listener.ws.external.acceptors = 4
+    listener.ws.external.max_clients = 64
 
 .. _sys_topic:
 

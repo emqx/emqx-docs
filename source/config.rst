@@ -604,13 +604,13 @@ MQTT/SSL监听器 - 8883
     listener.ssl.external.access.1 = allow all
 
     ## SSL Options
-    mqtt.listener.ssl.external.handshake_timeout = 15
-    mqtt.listener.ssl.external.keyfile = etc/certs/key.pem
-    mqtt.listener.ssl.external.certfile = etc/certs/cert.pem
+    listener.ssl.external.handshake_timeout = 15
+    listener.ssl.external.keyfile = etc/certs/key.pem
+    listener.ssl.external.certfile = etc/certs/cert.pem
     ## 开启双向认证
-    ## mqtt.listener.ssl.external.cacertfile = etc/certs/cacert.pem
-    ## mqtt.listener.ssl.external.verify = verify_peer
-    ## mqtt.listener.ssl.external.fail_if_no_peer_cert = true
+    ## listener.ssl.external.cacertfile = etc/certs/cacert.pem
+    ## listener.ssl.external.verify = verify_peer
+    ## listener.ssl.external.fail_if_no_peer_cert = true
 
 ---------------------------
 MQTT/WebSocket监听器 - 8083

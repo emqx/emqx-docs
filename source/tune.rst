@@ -108,9 +108,9 @@ EMQ消息服务器参数
 .. code-block:: properties
 
     ## TCP Listener
-    mqtt.listener.tcp = 1883
-    mqtt.listener.tcp.acceptors = 64
-    mqtt.listener.tcp.max_clients = 1000000
+    listener.tcp.external = 0.0.0.0:1883
+    listener.tcp.external.acceptors = 64
+    listener.tcp.external.max_clients = 1000000
 
 --------------
 测试客户端设置
