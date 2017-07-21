@@ -243,10 +243,10 @@ EMQ 最大允许连接数
 emqttd/etc/emq.conf 'listeners'段落::
 
     ## Size of acceptor pool
-    mqtt.listener.tcp.acceptors = 64
+    listener.tcp.acceptors = 64
 
     ## Maximum number of concurrent clients
-    mqtt.listener.tcp.max_clients = 1000000
+    listener.tcp.max_clients = 1000000
 
 测试客户端设置
 --------------

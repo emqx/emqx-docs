@@ -414,13 +414,16 @@ TCP服务端口占用
 .. code-block:: properties
 
     ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
-    mqtt.listener.tcp = 1883
+    listener.tcp.external = 0.0.0.0:1883
 
     ## SSL Listener: 8883, 127.0.0.1:8883, ::1:8883
-    mqtt.listener.ssl = 8883
+    listener.ssl.external = 8883
     
-    ## HTTP and WebSocket Listener
-    mqtt.listener.http = 8083
+    ## External MQTT/WebSocket Listener
+    listener.ws.external = 8083
+    
+    ## HTTP Management API Listener
+    listener.api.mgmt = 127.0.0.1:8080
 
 通过注释或删除相关段落，可禁用相关TCP服务启动。
 
@@ -462,11 +465,11 @@ etc/emq.conf配置文件的'Listeners`段落设置最大允许连接数:
 
 .. code-block:: properties
 
-    mqtt.listener.tcp = 1883
+    listener.tcp.external = 0.0.0.0:1883
+    
+    listener.tcp.external.acceptors = 8
 
-    mqtt.listener.tcp.acceptors = 8
-
-    mqtt.listener.tcp.max_clients = 1024
+    listener.tcp.external.max_clients = 1024
 
 *EMQ* 2.0消息服务器详细设置，请参见文档: :ref:`config`
 
