@@ -5,15 +5,16 @@
 LWM2M协议
 =========
 
-LWM2M是由Open Mobile Alliance(OMA)定义的一套适用于物联网的协议，它提供了设备管理和通讯的功能。协议可以在[这里](http://www.openmobilealliance.org/wp/)下载。
+LWM2M是由Open Mobile Alliance(OMA)定义的一套适用于物联网的协议，它提供了设备管理和通讯的功能。协议可以在http://www.openmobilealliance.org/wp/下载。
 
 LWM2M使用coap作为底层的传输协议，承载在UDP或者SMS上。
 
 LWM2M定义了两种服务器
+
 - 一种是LWM2M BOOTSTRAP SERVER，emq-lwm2m插件并未实现该服务器的功能。
 - 一种是LWM2M SERVER，emq-lwm2m实现该服务器在UDP上的功能，SMS并没有实现。
 
-LWM2M把设备上的服务抽象为Object和Resource, 在XML文件中定义各种Object的属性和功能。可以在[这里](http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html)找到XML的各种定义。
+LWM2M把设备上的服务抽象为Object和Resource, 在XML文件中定义各种Object的属性和功能。可以在http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html找到XML的各种定义。
 
 -------------
 EMQ-LWM2M插件
