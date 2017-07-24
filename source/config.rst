@@ -98,9 +98,170 @@ EMQ 2.2 环境变量
 | EMQ_WSS_PORT      | MQTT/WebSocket/SSL 监听端口，默认: 8084  |
 +-------------------+------------------------------------------+
 
----------------
-EMQ节点与Cookie
----------------
+------------
+EMQ 集群设置
+------------
+
+集群名称
+--------
+
+.. code-block:: properties
+
+    ## Cluster name
+    cluster.name = emqcl
+
+自动发现策略
+-------------
+
+.. code-block:: properties
+
+    ## Cluster discovery strategy: manual | static | mcast | dns | etcd | k8s
+    cluster.discovery = manual
+
+启用集群自愈
+-------------
+
+.. code-block:: properties
+
+    ## Cluster Autoheal: on | off
+    cluster.autoheal = on
+
+节点自动清除
+------------
+
+自动清除宕机节点:
+
+.. code-block:: properties
+
+    ## Clean down node of the cluster
+    cluster.autoclean = 5m
+
+----------------
+EMQ 集群自动发现
+----------------
+
+EMQ R2.3版本支持多种策略的节点自动发现与集群:
+
++-----------------+---------------------------+
+| 策略            | 说明                      |
++=================+===========================+
+| manual          | 手工命令创建集群          |
++-----------------+---------------------------+
+| static          | 静态节点列表自动集群      |
++-----------------+---------------------------+
+| mcast           | UDP组播方式自动集群       |
++-----------------+---------------------------+
+| dns             | DNS A记录自动集群         |
++-----------------+---------------------------+
+| etcd            | 通过etcd自动集群          |
++-----------------+---------------------------+
+| k8s             | Kubernetes服务自动集群    |
++-----------------+---------------------------+
+
+manual手动创建集群
+------------------
+
+默认配置为手动创建集群，节点通过'./bin/emqttd_ctl join <Node>'命令加入:
+
+.. code-block:: properties
+
+    cluster.discovery = manual
+
+基于static节点列表自动集群
+--------------------------
+
+配置固定的节点列表，自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = static
+
+    ##--------------------------------------------------------------------
+    ## Cluster with static node list
+
+    cluster.static.seeds = emq1@127.0.0.1,ekka2@127.0.0.1
+
+基于mcast组播自动集群
+---------------------
+
+基于UDP组播自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = mcast
+
+    ##--------------------------------------------------------------------
+    ## Cluster with multicast
+
+    cluster.mcast.addr = 239.192.0.1
+
+    cluster.mcast.ports = 4369,4370
+
+    cluster.mcast.iface = 0.0.0.0
+
+    cluster.mcast.ttl = 255
+
+    cluster.mcast.loop = on
+
+基于DNS A记录自动集群
+---------------------
+
+基于DNS A记录自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = dns
+
+    ##--------------------------------------------------------------------
+    ## Cluster with DNS
+
+    cluster.dns.name = localhost
+
+    cluster.dns.app  = ekka
+
+基于etcd自动集群
+----------------
+
+基于 `etcd`_ 自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = etcd
+
+    ##--------------------------------------------------------------------
+    ## Cluster with Etcd
+
+    cluster.etcd.server = http://127.0.0.1:2379
+
+    cluster.etcd.prefix = emqcl
+
+    cluster.etcd.node_ttl = 1m
+
+基于Kubernetes自动集群
+----------------------
+
+`Kubernetes`_ 下自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = k8s
+
+    ##--------------------------------------------------------------------
+    ## Cluster with k8s
+
+    cluster.k8s.apiserver = http://10.110.111.204:8080
+
+    cluster.k8s.service_name = ekka
+
+    ## Address Type: ip | dns
+    cluster.k8s.address_type = ip
+
+    ## The Erlang application name
+    cluster.k8s.app_name = ekka
+
+----------------
+EMQ 节点与Cookie
+----------------
 
 Erlang节点名称、分布式节点间通信Cookie:
 

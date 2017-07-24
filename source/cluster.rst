@@ -5,8 +5,6 @@
 分布集群
 ========
 
-.. _cluster_erlang:
-
 --------------------
 Erlang/OTP分布式编程
 --------------------
@@ -77,7 +75,7 @@ Erlang节点Cookie设置::
 .. _cluster_emqttd:
 
 -------------------
-EMQ 2.0分布集群设计
+EMQ R2 分布集群设计
 -------------------
 
 EMQ消息服务器集群基于Erlang/OTP分布式设计，集群原理可简述为下述两条规则:
@@ -141,74 +139,74 @@ EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
 
 .. image:: ./_static/images/route.png
 
--------------------
-EMQ 2.0集群配置管理
--------------------
+----------------
+手工配置管理集群
+-----------------
 
 假设部署两台服务器s1.emqtt.io, s2.emqtt.io上部署集群:
 
-+-------------------------+-----------------+---------------------+
-| 节点名                  | 主机名(FQDN)    |    IP地址           |
-+-------------------------+-----------------+---------------------+
-| emqttd@s1.emqtt.io 或   | s1.emqtt.io     | 192.168.0.10        |
-| emqttd@192.168.0.10     |                 |                     |
-+-------------------------+-----------------+---------------------+
-| emqttd@s2.emqtt.io 或   | s2.emqtt.io     | 192.168.0.20        |
-| emqttd@192.168.0.20     |                 |                     |
-+-------------------------+-----------------+---------------------+
++----------------------+-----------------+---------------------+
+| 节点名               | 主机名(FQDN)    |    IP地址           |
++----------------------+-----------------+---------------------+
+| emq@s1.emqtt.io 或   | s1.emqtt.io     | 192.168.0.10        |
+| emq@192.168.0.10     |                 |                     |
++----------------------+-----------------+---------------------+
+| emq@s2.emqtt.io 或   | s2.emqtt.io     | 192.168.0.20        |
+| emq@192.168.0.20     |                 |                     |
++----------------------+-----------------+---------------------+
 
 .. WARNING:: 节点名格式: Name@Host, Host必须是IP地址或FQDN(主机名.域名)
 
-emqttd@s1.emqtt.io节点设置
---------------------------
+emq@s1.emqtt.io节点设置
+-----------------------
 
 emqttd/etc/emq.conf::
 
-    node.name = emqttd@s1.emqtt.io
+    node.name = emq@s1.emqtt.io
 
     或
 
-    node.name = emqttd@192.168.0.10
+    node.name = emq@192.168.0.10
 
 也可通过环境变量::
 
-    export EMQ_NODE_NAME=emqttd@s1.emqtt.io && ./bin/emqttd start
+    export EMQ_NODE_NAME=emq@s1.emqtt.io && ./bin/emqttd start
 
 .. WARNING:: 节点启动加入集群后，节点名称不能变更。
 
-emqttd@s2.emqtt.io节点设置
---------------------------
+emq@s2.emqtt.io节点设置
+-----------------------
 
 emqttd/etc/emq.conf::
 
-    node.name = emqttd@s2.emqtt.io
+    node.name = emq@s2.emqtt.io
 
     或
 
-    node.name = emqttd@192.168.0.20
+    node.name = emq@192.168.0.20
 
 节点加入集群
 ------------
 
-启动两台节点后，emqttd@s2.emqtt.io上执行::
+启动两台节点后，emq@s2.emqtt.io上执行::
 
-    $ ./bin/emqttd_ctl cluster join emqttd@s1.emqtt.io
-
-    Join the cluster successfully.
-    Cluster status: [{running_nodes,['emqttd@s1.emqtt.io','emqttd@s2.emqtt.io']}]
-
-或，emqttd@s1.emqtt.io上执行::
-
-    $ ./bin/emqttd_ctl cluster join emqttd@s2.emqtt.io
+    $ ./bin/emqttd_ctl cluster join emq@s1.emqtt.io
 
     Join the cluster successfully.
-    Cluster status: [{running_nodes,['emqttd@s1.emqtt.io','emqttd@s2.emqtt.io']}]
+    Cluster status: [{running_nodes,['emq@s1.emqtt.io','emq@s2.emqtt.io']}]
+
+或，emq@s1.emqtt.io上执行::
+
+    $ ./bin/emqttd_ctl cluster join emq@s2.emqtt.io
+
+    Join the cluster successfully.
+    Cluster status: [{running_nodes,['emq@s1.emqtt.io','emq@s2.emqtt.io']}]
 
 任意节点上查询集群状态::
 
     $ ./bin/emqttd_ctl cluster status
 
-    Cluster status: [{running_nodes,['emqttd@s1.emqtt.io','emqttd@s2.emqtt.io']}]
+    Cluster status: [{running_nodes,['emq@s1.emqtt.io','emq@s2.emqtt.io']}]
 
 节点退出集群
 ------------
@@ -219,13 +217,174 @@ emqttd/etc/emq.conf::
 
 2. remove: 从集群删除其他节点
 
-emqttd@s2.emqtt.io主动退出集群::
+emq@s2.emqtt.io主动退出集群::
 
     $ ./bin/emqttd_ctl cluster leave
 
-或emqttd@s1.emqtt.io节点上，从集群删除emqttd@s2.emqtt.io节点::
+或emq@s1.emqtt.io节点上，从集群删除emq@s2.emqtt.io节点::
 
-    $ ./bin/emqttd_ctl cluster remove emqttd@s2.emqtt.io
+    $ ./bin/emqttd_ctl cluster remove emq@s2.emqtt.io
+
+.. _autodiscovery:
+
+------------------
+节点发现与自动集群
+------------------
+
+EMQ R2.3版本支持基于Ekka库的集群自动发现(Autocluster)。Ekka是为Erlang/OTP应用开发的集群管理库，支持Erlang节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
+
+EMQ R2.3支持多种策略节点自动发现与集群:
+
++-----------------+---------------------------+
+| 策略            | 说明                      |
++=================+===========================+
+| manual          | 手工命令创建集群          |
++-----------------+---------------------------+
+| static          | 静态节点列表自动集群      |
++-----------------+---------------------------+
+| mcast           | UDP组播方式自动集群       |
++-----------------+---------------------------+
+| dns             | DNS A记录自动集群         |
++-----------------+---------------------------+
+| etcd            | 通过etcd自动集群          |
++-----------------+---------------------------+
+| k8s             | Kubernetes服务自动集群    |
++-----------------+---------------------------+
+
+manual手动创建集群
+------------------
+
+默认配置为手动创建集群，节点通过'./bin/emqttd_ctl join <Node>'命令加入:
+
+.. code-block:: properties
+
+    cluster.discovery = manual
+
+基于static节点列表自动集群
+--------------------------
+
+配置固定的节点列表，自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = static
+
+    ##--------------------------------------------------------------------
+    ## Cluster with static node list
+
+    cluster.static.seeds = emq1@127.0.0.1,ekka2@127.0.0.1
+
+基于mcast组播自动集群
+---------------------
+
+基于UDP组播自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = mcast
+
+    ##--------------------------------------------------------------------
+    ## Cluster with multicast
+
+    cluster.mcast.addr = 239.192.0.1
+
+    cluster.mcast.ports = 4369,4370
+
+    cluster.mcast.iface = 0.0.0.0
+
+    cluster.mcast.ttl = 255
+
+    cluster.mcast.loop = on
+
+基于DNS A记录自动集群
+---------------------
+
+基于DNS A记录自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = dns
+
+    ##--------------------------------------------------------------------
+    ## Cluster with DNS
+
+    cluster.dns.name = localhost
+
+    cluster.dns.app  = ekka
+
+基于etcd自动集群
+----------------
+
+基于 `etcd`_ 自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = etcd
+
+    ##--------------------------------------------------------------------
+    ## Cluster with Etcd
+
+    cluster.etcd.server = http://127.0.0.1:2379
+
+    cluster.etcd.prefix = emqcl
+
+    cluster.etcd.node_ttl = 1m
+
+基于Kubernetes自动集群
+----------------------
+
+`Kubernetes`_ 下自动发现并创建集群:
+
+.. code-block:: properties
+
+    cluster.discovery = k8s
+
+    ##--------------------------------------------------------------------
+    ## Cluster with k8s
+
+    cluster.k8s.apiserver = http://10.110.111.204:8080
+
+    cluster.k8s.service_name = ekka
+
+    ## Address Type: ip | dns
+    cluster.k8s.address_type = ip
+
+    ## The Erlang application name
+    cluster.k8s.app_name = ekka
+
+.. _cluster_netsplit:
+
+------------------
+集群脑裂与自动愈合
+------------------
+
+EMQ R2.3版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
+
+.. code-block:: properties
+
+    cluster.autoheal = on
+
+集群脑裂自动恢复流程:
+
+1. 节点收到Mnesia库的'inconsistent_database'事件3秒后进行集群脑裂确认；
+
+2. 节点确认集群脑裂发生后，向Leader节点(集群中最早启动节点)上报脑裂消息；
+
+3. Leader节点延迟一段时间后，在全部节点在线状态下创建脑裂视图(SplitView)；
+
+4. Leader节点在多数派(majority)分区选择集群自愈的Coordinator节点；
+
+5. Coordinator节点重启少数派(minority)分区节点恢复集群。
+
+----------------
+集群节点自动清除
+----------------
+
+EMQ R2.3版本支持从集群自动删除宕机节点(Autoclean):
+
+.. code-block:: properties
+
+    cluster.autoclean = 5m
 
 .. _cluster_session:
 
@@ -257,18 +416,8 @@ EMQ消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点�
 防火墙设置后，EMQ 需要配置相同的端口段，emqttd/etc/emq.conf文件::
 
     ## Distributed node port range
-    node.dist_listen_min = 6000
-    node.dist_listen_max = 6999
-
-.. _cluster_netsplit:
-
-------------------
-注意事项: NetSplit
-------------------
-
-EMQ消息服务器集群需要稳定网络连接以避免发生NetSplit故障。集群设计上默认不自动处理NetSplit，如集群节点间发生NetSplit，需手工重启某个分片上的相关节点。
-
-.. NOTE:: NetSplit是指节点运行正常但因网络断开互相认为对方宕机。EMQ 2.1版本将支持NetSplit自动恢复。
+    node.dist_listen_min = 6369
+    node.dist_listen_max = 7369
 
 .. _cluster_hash:
 
@@ -277,4 +426,7 @@ EMQ消息服务器集群需要稳定网络连接以避免发生NetSplit故障。
 ---------------
 
 NoSQL数据库领域分布式设计，大多会采用一致性Hash或DHT。EMQ消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性Hash、DHT或Shard方式切分路由表。
+
+.. _etcd:        https://coreos.com/etcd/
+.. _Kubernetes:  https://kubernetes.io/
 
