@@ -42,6 +42,7 @@ TODO: 2.0-rc.1图片更新.
    upgrade
    mqtt
    mqtt-sn
+   lwm2m
 
 EMQ项目支持与联系:
 
