@@ -233,7 +233,7 @@ emq@s2.emqtt.io主动退出集群::
 
 EMQ R2.3版本支持基于Ekka库的集群自动发现(Autocluster)。Ekka是为Erlang/OTP应用开发的集群管理库，支持Erlang节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
 
-EMQ R2.3支持多种策略节点自动发现与集群:
+EMQ R2.3支持多种策略自动发现节点创建集群:
 
 +-----------------+---------------------------+
 | 策略            | 说明                      |
