@@ -5,6 +5,61 @@
 版本发布
 ========
 
+.. _release_2.3-beta.2:
+
+---------------
+2.3-beta.2 版本
+---------------
+*发布日期: 2017-08-12*
+EMQ R2.3-beta.2版本发布！该版本支持热修改配置变量, 目前支持修改配置变量的插件有:
+
+- emq-stomp
+- emq-coap
+- emq-sn
+- emq-lwm2m
+- emq-dashboard
+- emq-retainer
+- emq-recon
+- emq-web-hook
+- emq-auth-jwt
+- emq-auth-http
+- emq-auth-mongo
+- emq-auth-mysql
+- emq-auth-pgsql
+- emq-auth-redis
+
+emqttd (emqttd#1200):
+---------------------
+
+1.Add http management APIs.
+
+2.Add ClientId parameter into the auth on HTTP Publish.
+
+3.Allow configuring keepalive backoff.
+
+4.Remove the fullsweep_after option.
+
+5.Authorize HTTP Publish API with clientId.
+
+emq-sn Plugin (emq-sn#49):
+--------------------------
+
+1.Support CONNECT message in connected/wait_for_will_topic/wait_for_will_msg states.
+
+2.Clean registered topic for a restarted client.
+
+3.Bug fix of not clearing buffered PUBLISH messages received during asleep state as those messages are sent to client when client wakes up.
+
+emq-auth-ldap Plugin  (emq-auth-ldap#21)：
+-----------------------------------------
+
+Refactor emq-auth-ldap code.
+
+emq-coap Plugin (emq-coap#51)：
+------------------------------
+
+Support coap pubsub feature of draft-ietf-core-coap-pubsub.
+
 .. _release_2.3-beta.1:
 
 ---------------
