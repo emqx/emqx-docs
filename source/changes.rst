@@ -10,8 +10,12 @@
 ---------------
 2.3-beta.2 版本
 ---------------
+
 *发布日期: 2017-08-12*
-EMQ R2.3-beta.2版本发布！该版本支持热修改配置变量, 目前支持修改配置变量的插件有:
+
+EMQ R2.3-beta.2版本发布！该版本新增HTTP管理API，支持配置Keepalive检测周期，支持配置参数热更新。
+
+目前支持配置热更新的插件有:
 
 - emq-stomp
 - emq-coap
@@ -28,37 +32,39 @@ EMQ R2.3-beta.2版本发布！该版本支持热修改配置变量, 目前支持
 - emq-auth-pgsql
 - emq-auth-redis
 
-emqttd (emqttd#1200):
----------------------
+.. NOTE:: 为支持命令行更新配置参数，部分认证插件参数值采用','替代了空格分隔符。
 
-1.Add http management APIs.
+Enhancements
+------------
 
-2.Add ClientId parameter into the auth on HTTP Publish.
+1. Add more HTTP management APIs.
 
-3.Allow configuring keepalive backoff.
+2. Add ClientId parameter for HTTP Publish API.
 
-4.Remove the fullsweep_after option.
+3. Allow configuring keepalive backoff.
 
-5.Authorize HTTP Publish API with clientId.
+4. Remove the fullsweep_after option to lower CPU usage.
 
-emq-sn Plugin (emq-sn#49):
---------------------------
+5. Authorize HTTP Publish API with clientId.
 
-1.Support CONNECT message in connected/wait_for_will_topic/wait_for_will_msg states.
+emq-sn Plugin (emq-sn#49)
+-------------------------
 
-2.Clean registered topic for a restarted client.
+1. Support CONNECT message in connected/wait_for_will_topic/wait_for_will_msg states.
 
-3.Bug fix of not clearing buffered PUBLISH messages received during asleep state as those messages are sent to client when client wakes up.
+2. Clean registered topic for a restarted client.
 
-emq-auth-ldap Plugin  (emq-auth-ldap#21)：
------------------------------------------
+3. Bug fix of not clearing buffered PUBLISH messages received during asleep state as those messages are sent to client when client wakes up.
 
-Refactor emq-auth-ldap code.
+emq-auth-ldap Plugin (emq-auth-ldap#21)
+---------------------------------------
 
-emq-coap Plugin (emq-coap#51)：
-------------------------------
+Improve the design LDAP authentication Refactor emq-auth-ldap code.
 
-Support coap pubsub feature of draft-ietf-core-coap-pubsub.
+emq-coap Plugin (emq-coap#51)
+-----------------------------
+
+Support CoAP PubSub Specification(https://www.ietf.org/id/draft-ietf-core-coap-pubsub-02.txt)
 
 .. _release_2.3-beta.1:
 
