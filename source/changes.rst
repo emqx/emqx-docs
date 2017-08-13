@@ -37,7 +37,7 @@ EMQ R2.3-beta.2版本发布！该版本新增HTTP管理API，支持配置Keepali
 Enhancements
 ------------
 
-1. Add more HTTP management APIs.
+1. Introduce new HTTP management API.
 
 2. Add ClientId parameter for HTTP Publish API.
 
@@ -59,12 +59,12 @@ emq-sn Plugin (emq-sn#49)
 emq-auth-ldap Plugin (emq-auth-ldap#21)
 ---------------------------------------
 
-Improve the design LDAP authentication Refactor emq-auth-ldap code.
+Improve the design LDAP authentication.
 
 emq-coap Plugin (emq-coap#51)
 -----------------------------
 
-Support CoAP PubSub Specification(https://www.ietf.org/id/draft-ietf-core-coap-pubsub-02.txt)
+Support CoAP PubSub Specification (https://www.ietf.org/id/draft-ietf-core-coap-pubsub-02.txt)
 
 .. _release_2.3-beta.1:
 
