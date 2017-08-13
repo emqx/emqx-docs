@@ -37,6 +37,7 @@ TODO: 2.0-rc.1图片更新.
    design
    commands
    plugins
+   rest
    tune
    changes
    upgrade
