@@ -27,6 +27,7 @@ TODO: 2.0-rc.1图片更新.
    :maxdepth: 2
 
    getstarted
+   deploy
    install
    image
    config
