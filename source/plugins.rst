@@ -1191,6 +1191,8 @@ emq_plugin_template.erl::
     {plugin_name, load},
 
 .. _emq_dashboard:        https://github.com/emqtt/emqttd_dashboard
+.. _emq_modules:          https://github.com/emqtt/emq-modules
+.. _emq_retainer:         https://github.com/emqtt/emq-retainer
 .. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
 .. _emq_mod_presence:     https://github.com/emqtt/emq_mod_presence
 .. _emq_mod_subscription: https://github.com/emqtt/emq_mod_subscription
