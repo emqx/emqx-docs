@@ -625,11 +625,13 @@ HTTP接口参数:
 | message | 消息           |
 +---------+----------------+
 
-.. NOTE:: 
+.. NOTE::
 
-    HTTP接口采用Basic认证
+    HTTP 发布接口采用Basic认证
 
-    v2.3-beta.2版本迁移至REST APT, http://emqtt.com/docs/v2/rest.html#messages
+.. NOTE::
+
+    该接口在v2.3-beta.2版本变更为: 'api/v2/mqtt/publish', 详见文档: :doc:`/rest`
 
 ------------------
 MQTT WebSocket连接
