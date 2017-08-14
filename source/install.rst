@@ -2,7 +2,7 @@
 .. _install:
 
 ========
-安装部署
+程序安装
 ========
 
 *EMQ* 2.0消息服务器可跨平台运行在Linux、FreeBSD、Mac OS X或Windows服务器上。
