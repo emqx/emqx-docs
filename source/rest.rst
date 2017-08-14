@@ -859,64 +859,66 @@ API定义::
 
     {
         "code": 0,
-        "result": [
-            {
-                "protocol": "mqtt:api",
-                "listen": "127.0.0.1:8080",
-                "acceptors": 4,
-                "max_clients": 64,
-                "current_clients": 1,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:wss",
-                "listen": "8084",
-                "acceptors": 4,
-                "max_clients": 64,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:ssl",
-                "listen": "8883",
-                "acceptors": 16,
-                "max_clients": 1024,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:ws",
-                "listen": "8083",
-                "acceptors": 4,
-                "max_clients": 64,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:tcp",
-                "listen": "0.0.0.0:1883",
-                "acceptors": 16,
-                "max_clients": 102400,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:tcp",
-                "listen": "127.0.0.1:11883",
-                "acceptors": 16,
-                "max_clients": 102400,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "dashboard:http",
-                "listen": "18083",
-                "acceptors": 2,
-                "max_clients": 512,
-                "current_clients": 0,
-                "shutdown_count": []
-            }
-        ]
+        "result": {
+            "emq@127.0.0.1": [
+                {
+                    "protocol": "dashboard:http",
+                    "listen": "18083",
+                    "acceptors": 2,
+                    "max_clients": 512,
+                    "current_clients": 0,
+                    "shutdown_count": []
+                },
+                {
+                    "protocol": "mqtt:tcp",
+                    "listen": "127.0.0.1:11883",
+                    "acceptors": 16,
+                    "max_clients": 102400,
+                    "current_clients": 0,
+                    "shutdown_count": []
+                },
+                {
+                    "protocol": "mqtt:tcp",
+                    "listen": "0.0.0.0:1883",
+                    "acceptors": 16,
+                    "max_clients": 102400,
+                    "current_clients": 0,
+                    "shutdown_count": []
+                },
+                {
+                    "protocol": "mqtt:ws",
+                    "listen": "8083",
+                    "acceptors": 4,
+                    "max_clients": 64,
+                    "current_clients": 0,
+                    "shutdown_count": []
+                },
+                {
+                    "protocol": "mqtt:ssl",
+                    "listen": "8883",
+                    "acceptors": 16,
+                    "max_clients": 1024,
+                    "current_clients": 0,
+                    "shutdown_count": []
+                },
+                {
+                    "protocol": "mqtt:wss",
+                    "listen": "8084",
+                    "acceptors": 4,
+                    "max_clients": 64,
+                    "current_clients": 0,
+                    "shutdown_count": []
+                },
+                {
+                    "protocol": "mqtt:api",
+                    "listen": "127.0.0.1:8080",
+                    "acceptors": 4,
+                    "max_clients": 64,
+                    "current_clients": 1,
+                    "shutdown_count": []
+                }
+            ]
+        }
     }
 
 获取指定节点的监听器列表
