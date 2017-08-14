@@ -23,7 +23,7 @@ REST API采用HTTP Basic认证(Authentication):
 
 .. code-block:: bash
 
-    curl -v --basic -u <user>:<passwd> -k http://localhost:8080/api/v2/nodes/emqx@127.0.0.1/clients
+    curl -v --basic -u <user>:<passwd> -k http://localhost:8080/api/v2/nodes/emq@127.0.0.1/clients
 
 ----------
 集群与节点
@@ -49,11 +49,11 @@ API定义::
         "result":
         [
             {
-                "name": "emqx@127.0.0.1",
-                "version": "2.1.1",
-                "sysdescr": "EMQ X",
+                "name": "emq@127.0.0.1",
+                "version": "2.3",
+                "sysdescr": "EMQ",
                 "uptime": "1 hours, 17 minutes, 1 seconds",
-                "datetime": "2017-04-14 14 (tel:2017041414):11:38",
+                "datetime": "2017-04-14 14:11:38",
                 "otp_release": "R19/8.3",
                 "node_status": "Running"
             }
@@ -69,7 +69,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/management/nodes/emqx@127.0.0.1
+    GET api/v2/management/nodes/emq@127.0.0.1
 
 返回数据:
 
@@ -79,10 +79,10 @@ API定义::
         "code": 0,
         "result":
         {
-            "version": "2.1.1",
+            "version": "2.3",
             "sysdescr": "EMQ X",
             "uptime": "1 hours, 17 minutes, 18 seconds",
-            "datetime": "2017-04-14 14 (tel:2017041414):11:55",
+            "datetime": "2017-04-14 14:11:55",
             "otp_release": "R19/8.3",
             "node_status": "Running"
         }
@@ -108,7 +108,7 @@ API定义::
         "result":
         [
             {
-                "name": "emqx@127.0.0.1",
+                "name": "emq@127.0.0.1",
                 "otp_release": "R19/8.3",
                 "memory_total": "69.19M",
                 "memory_used": "49.28M",
@@ -133,7 +133,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/monitoring/nodes/emqx@127.0.0.1
+    GET api/v2/monitoring/nodes/emq@127.0.0.1
 
 返回数据:
 
@@ -143,7 +143,7 @@ API定义::
         "code": 0,
         "result":
         {
-            "name": "emqx@127.0.0.1",
+            "name": "emq@127.0.0.1",
             "otp_release": "R19/8.3",
             "memory_total": "69.19M",
             "memory_used": "49.24M",
@@ -175,7 +175,7 @@ API定义::
 
 请求示例::
 
-    api/v2/nodes/emqx@127.0.0.1/clients?curr_page=1&page_size=20
+    api/v2/nodes/emq@127.0.0.1/clients?curr_page=1&page_size=20
 
 返回数据:
 
@@ -214,7 +214,7 @@ API定义::
  
 请求示例::
 
-    GET api/v2/nodes/emqx@127.0.0.1/clients/C_1492145414740
+    GET api/v2/nodes/emq@127.0.0.1/clients/C_1492145414740
 
 返回数据:
 
@@ -289,7 +289,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/nodes/emqx@127.0.0.1/sessions?curr_page=1&page_size=20
+    GET api/v2/nodes/emq@127.0.0.1/sessions?curr_page=1&page_size=20
 
 返回数据:
 
@@ -330,7 +330,7 @@ API定义::
  
 请求示例::
 
-    GET api/v2/nodes/emqx@127.0.0.1/sessions/C_1492145414740
+    GET api/v2/nodes/emq@127.0.0.1/sessions/C_1492145414740
 
 返回数据:
 
@@ -412,7 +412,7 @@ API定义::
  
 请求示例::
 
-    GET api/v2/nodes/emqx@127.0.0.1/subscriptions?curr_page=1&page_size=20
+    GET api/v2/nodes/emq@127.0.0.1/subscriptions?curr_page=1&page_size=20
 
 返回数据:
 
@@ -446,7 +446,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/nodes/emqx@127.0.0.1/subscriptions/C_1492145414740
+    GET api/v2/nodes/emq@127.0.0.1/subscriptions/C_1492145414740
 
 返回数据:
 
@@ -533,7 +533,7 @@ API定义::
             [
                 {
                     "topic": "$client/C_1492145414740",
-                    "node": "emqx@127.0.0.1"
+                    "node": "emq@127.0.0.1"
                 }
             ]
         }
@@ -562,7 +562,7 @@ API定义::
             [
                 {
                     "topic": "test_topic",
-                    "node": "emqx@127.0.0.1"
+                    "node": "emq@127.0.0.1"
                 }
             ]
         }
@@ -679,7 +679,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/nodes/emqx@127.0.0.1/plugins
+    GET api/v2/nodes/emq@127.0.0.1/plugins
 
 返回数据:
 
@@ -687,136 +687,136 @@ API定义::
 
     {
         "code": 0,
-        "result":
-        [
+        "result": [
             {
-                "name": "emqx_auth_clientid",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication with ClientId/Password",
+                "name": "emq_auth_clientid",
+                "version": "2.3",
+                "description": "Authentication with ClientId/Password",
                 "active": false
             },
             {
-                "name": "emqx_auth_eems",
-                "version": "1.0",
-                "description": "EMQ X Authentication/ACL with eems",
+                "name": "emq_auth_http",
+                "version": "2.3",
+                "description": "Authentication/ACL with HTTP API",
                 "active": false
             },
             {
-                "name": "emqx_auth_http",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication/ACL with HTTP API",
+                "name": "emq_auth_jwt",
+                "version": "2.3",
+                "description": "Authentication with jwt",
+                "active": false
+            }, 
+            {
+                "name": "emq_auth_ldap",
+                "version": "2.3",
+                "description": "Authentication/ACL with LDAP",
                 "active": false
             },
             {
-                "name": "emqx_auth_ldap",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication/ACL with LDAP",
+                "name": "emq_auth_mongo",
+                "version": "2.3",
+                "description": "Authentication/ACL with MongoDB",
                 "active": false
             },
             {
-                "name": "emqx_auth_mongo",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication/ACL with MongoDB",
+                "name": "emq_auth_mysql",
+                "version": "2.3",
+                "description": "Authentication/ACL with MySQL",
                 "active": false
             },
             {
-                "name": "emqx_auth_mysql",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication/ACL with MySQL",
+                "name": "emq_auth_pgsql",
+                "version": "2.3",
+                "description": "Authentication/ACL with PostgreSQL",
                 "active": false
             },
             {
-                "name": "emqx_auth_pgsql",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication/ACL with PostgreSQL",
+                "name": "emq_auth_redis",
+                "version": "2.3",
+                "description": "Authentication/ACL with Redis",
                 "active": false
             },
             {
-                "name": "emqx_auth_redis",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication/ACL with Redis",
+                "name": "emq_auth_username",
+                "version": "2.3",
+                "description": "Authentication with Username/Password",
                 "active": false
             },
             {
-                "name": "emqx_auth_username",
-                "version": "2.1.1",
-                "description": "EMQ X Authentication with Username/Password",
+                "name": "emq_coap",
+                "version": "2.3",
+                "description": "CoAP Gateway",
                 "active": false
             },
             {
-                "name": "emqx_backend_cassa",
-                "version": "2.1.1",
-                "description": "EMQ X Cassandra Backend",
-                "active": false
-            },
-            {
-                "name": "emqx_backend_mongo",
-                "version": "2.1.1",
-                "description": "EMQ X Mongodb Backend",
-                "active": false
-            },
-            {
-                "name": "emqx_backend_mysql",
-                "version": "2.1.0",
-                "description": "EMQ X MySQL Backend",
-                "active": false
-            },
-            {
-                "name": "emqx_backend_pgsql",
-                "version": "2.1.1",
-                "description": "EMQ X PostgreSQL Backend",
-                "active": false
-            },
-            {
-                "name": "emqx_backend_redis",
-                "version": "2.1.1",
-                "description": "EMQ X Redis Backend",
-                "active": false
-            },
-            {
-                "name": "emqx_bridge_kafka",
-                "version": "2.1.1",
-                "description": "EMQ X Kafka Bridge",
-                "active": false
-            },
-            {
-                "name": "emqx_bridge_rabbit",
-                "version": "2.1.1",
-                "description": "EMQ X Bridge RabbitMQ",
-                "active": false
-            },
-            {
-                "name": "emqx_dashboard",
-                "version": "2.1.1",
-                "description": "EMQ X Dashboard",
+                "name": "emq_dashboard",
+                "version": "2.3",
+                "description": "EMQ Web Dashboard",
                 "active": true
             },
             {
-                "name": "emqx_modules",
-                "version": "2.1.1",
-                "description": "EMQ X Modules",
+                "name": "emq_lua_hook",
+                "version": "2.3",
+                "description": "EMQ hooks in lua",
+                "active": false
+            },
+            {
+                "name": "emq_lwm2m",
+                "version": "0.1",
+                "description": "LWM2M Gateway",
+                "active": false
+            },
+            {
+                "name": "emq_modules",
+                "version": "2.3",
+                "description": "EMQ Modules",
                 "active": true
             },
             {
-                "name": "emqx_recon",
-                "version": "2.1.1",
+                "name": "emq_plugin_template",
+                "version": "2.3",
+                "description": "EMQ Plugin Template",
+                "active": false
+            },
+            {
+                "name": "emq_recon",
+                "version": "2.3",
                 "description": "Recon Plugin",
                 "active": true
             },
             {
-                "name": "emqx_reloader",
-                "version": "2.1.1",
+                "name": "emq_reloader",
+                "version": "2.3",
                 "description": "Reloader Plugin",
                 "active": false
             },
             {
-                "name": "emqx_retainer",
-                "version": "2.1.1",
-                "description": "EMQ X Retainer",
+                "name": "emq_retainer",
+                "version": "2.3",
+                "description": "EMQ Retainer",
                 "active": true
+            },
+            {
+                "name": "emq_sn",
+                "version": "2.3",
+                "description": "MQTT-SN Gateway",
+                "active": false
+            },
+            {
+                "name": "emq_stomp",
+                "version": "2.3",
+                "description": "Stomp Protocol Plugin",
+                "active": false
+            },
+            {
+                "name": "emq_web_hook",
+                "version": "2.3",
+                "description": "EMQ Webhook Plugin",
+                "active": false
             }
         ]
     }
+
 
 开启/关闭节点的指定插件
 -----------------------
@@ -831,7 +831,7 @@ API定义::
 
 请求示例::
 
-    PUT api/v2/nodes/emqx@127.0.0.1/plugins/emqx_recon
+    PUT api/v2/nodes/emq@127.0.0.1/plugins/emqx_recon
 
 返回数据:
 
@@ -859,10 +859,16 @@ API定义::
 
     {
         "code": 0,
-        "result":
-        {
-            "emqx@127.0.0.1":
-            [
+        "result": {
+            "emq@127.0.0.1": [
+                {
+                    "protocol": "dashboard:http",
+                    "listen": "18083",
+                    "acceptors": 2,
+                    "max_clients": 512,
+                    "current_clients": 0,
+                    "shutdown_count": []
+                },
                 {
                     "protocol": "mqtt:tcp",
                     "listen": "127.0.0.1:11883",
@@ -884,14 +890,14 @@ API定义::
                     "listen": "8083",
                     "acceptors": 4,
                     "max_clients": 64,
-                    "current_clients": 1,
+                    "current_clients": 0,
                     "shutdown_count": []
                 },
                 {
                     "protocol": "mqtt:ssl",
                     "listen": "8883",
                     "acceptors": 16,
-                    "max_clients": 102400,
+                    "max_clients": 1024,
                     "current_clients": 0,
                     "shutdown_count": []
                 },
@@ -901,6 +907,14 @@ API定义::
                     "acceptors": 4,
                     "max_clients": 64,
                     "current_clients": 0,
+                    "shutdown_count": []
+                },
+                {
+                    "protocol": "mqtt:api",
+                    "listen": "127.0.0.1:8080",
+                    "acceptors": 4,
+                    "max_clients": 64,
+                    "current_clients": 1,
                     "shutdown_count": []
                 }
             ]
@@ -916,7 +930,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/monitoring/listeners/emqx@127.0.0.1
+    GET api/v2/monitoring/listeners/emq@127.0.0.1
 
 返回数据:
 
@@ -924,8 +938,15 @@ API定义::
 
     {
         "code": 0,
-        "result":
-        [
+        "result": [
+            {
+                "protocol": "mqtt:api",
+                "listen": "127.0.0.1:8080",
+                "acceptors": 4,
+                "max_clients": 64,
+                "current_clients": 1,
+                "shutdown_count": []
+            },
             {
                 "protocol": "mqtt:wss",
                 "listen": "8084",
@@ -938,7 +959,7 @@ API定义::
                 "protocol": "mqtt:ssl",
                 "listen": "8883",
                 "acceptors": 16,
-                "max_clients": 102400,
+                "max_clients": 1024,
                 "current_clients": 0,
                 "shutdown_count": []
             },
@@ -947,7 +968,7 @@ API定义::
                 "listen": "8083",
                 "acceptors": 4,
                 "max_clients": 64,
-                "current_clients": 1,
+                "current_clients": 0,
                 "shutdown_count": []
             },
             {
@@ -963,6 +984,14 @@ API定义::
                 "listen": "127.0.0.1:11883",
                 "acceptors": 16,
                 "max_clients": 102400,
+                "current_clients": 0,
+                "shutdown_count": []
+            },
+            {
+                "protocol": "dashboard:http",
+                "listen": "18083",
+                "acceptors": 2,
+                "max_clients": 512,
                 "current_clients": 0,
                 "shutdown_count": []
             }
@@ -987,7 +1016,7 @@ API定义::
     {
         "code": 0,
         "result": {
-            "emqx@127.0.0.1":
+            "emq@127.0.0.1":
             {
                 "packets/disconnect":0,
                 "messages/dropped":0,
@@ -1019,7 +1048,6 @@ API定义::
                 "messages/qos0/received":0,
                 "packets/subscribe":0,
                 "packets/pubrel/sent":0,
-                "messages/forward":0,
                 "messages/qos2/sent":0,
                 "packets/received":0,
                 "packets/pubrel/received":0,
@@ -1041,7 +1069,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/monitoring/metrics/emqx@127.0.0.1
+    GET api/v2/monitoring/metrics/emq@127.0.0.1
 
 返回数据:
 
@@ -1080,7 +1108,6 @@ API定义::
             "messages/qos0/received":0,
             "packets/subscribe":0,
             "packets/pubrel/sent":0,
-            "messages/forward":0,
             "messages/qos2/sent":0,
             "packets/received":0,
             "packets/pubrel/received":0,
@@ -1114,7 +1141,7 @@ API定义::
     {
         "code": 0,
         "result": {
-            "emqx@127.0.0.1":
+            "emq@127.0.0.1":
             {
                 "clients/count":0,
                 "clients/max":0,
@@ -1143,7 +1170,7 @@ API定义::
 
 请求示例::
 
-    GET api/v2/monitoring/stats/emqx@127.0.0.1
+    GET api/v2/monitoring/stats/emq@127.0.0.1
 
 返回数据:
 
@@ -1167,181 +1194,6 @@ API定义::
             "topics/count":0,
             "topics/max":0
         }
-    }
-
-------------
-用户(Users)
-------------
-
-新增用户
---------
-
-API定义::
-
-    POST /api/v2/users/
-
-请求参数:
-
-.. code-block:: json
-
-    {
-        "username": "admin",
-        "password": "public",
-        "email"   : "admin@emqtt.io",
-        "role"    : "administrator",
-        "remark"  : "admin"
-    }
-
-请求示例::
-
-    POST /api/v2/users/
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-查询用户列表
-------------
-
-API定义::
-
-    GET /api/v2/users/
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": [
-            {
-                "username": "admin",
-                "email": "admin@emqtt.io",
-                "role": "administrator",
-                "remark": "administrator",
-                "created_at": "2017-04-07 10:30:01"
-            },
-            {
-                "username": "root",
-                "email": "admin@emqtt.io",
-                "role": "administrator",
-                "remark": "123",
-                "created_at": "2017-04-14 13:51:43"
-            }
-        ]
-    }
-
-
-查询指定用户
-------------
-
-API定义::
-
-    GET /api/v2/users/{username}
-
-请求示例::
-
-    GET /api/v2/users/admin
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": {
-            "username"  : "root",
-            "email"     : "admin@emqtt.io",
-            "role"      : "administrator",
-            "remark"    : "123",
-            "created_at": "2017-04-14 13:51:43"
-        }
-    }
-
-更新用户
---------
-
-API定义::
-
-    PUT /api/v2/users/{username}
-
-请求参数:
-
-.. code-block:: json
-
-    {
-        "email"   : "admin@emqtt.io",
-        "role"    : "administrator",
-        "remark"  : "admin"
-    }
-
-请求示例::
-
-    PUT /api/v2/users/admin
-
-返回数据:
-
-.. code-block:: json
-    
-    {
-        "code": 0,
-        "result": []
-    }
-
-删除用户
---------
-
-API定义::
-
-    DELETE /api/v2/users/{username}
-
-请求示例::
-
-    DELETE /api/v2/users/test
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-修改用户密码
-------------
-
-API定义::
-
-    PUT /api/v2/users/change_pwd
-
-请求参数:
-
-.. code-block:: json
-
-    {
-        "username"   : "root",
-        "old_pwd"    : "xxxxxx",
-        "new_pwd"    : "xxxxxx",
-        "confirm_pwd": "xxxxxx"
-    }
-
-请求示例::
-
-    PUT api/v2/mqtt/users/change_pwd
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
     }
 
 ----------
