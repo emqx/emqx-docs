@@ -1,9 +1,9 @@
 
 .. _rest_api:
 
-========
-REST API
-========
+======================
+管理监控API (REST API)
+======================
 
 用户可以通过REST API查询MQTT客户端连接(Clients)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
 
