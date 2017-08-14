@@ -11,7 +11,7 @@
 本地订阅 (Local Subscription)
 -----------------------------
 
-本地订阅(Local Subscription)只在本节点创建订阅与路由表，不会在集群节点间广播全局路由，非常适合物联网数据采集应用:
+本地订阅(Local Subscription) 只在本节点创建订阅与路由表，不会在集群节点间广播全局路由，非常适合物联网数据采集应用:
 
 .. code-block:: shell
 
@@ -19,7 +19,7 @@
 
     mosquitto_pub -t 'topic'
 
-使用方式: 订阅者在主题(Topic)前增加'$local/'前缀。
+使用方式: 订阅者在主题(Topic)前增加 '$local/' 前缀。
 
 ------------------------------
 共享订阅 (Shared Subscription)

@@ -5,21 +5,21 @@
 管理监控API (REST API)
 ======================
 
-用户可以通过REST API查询MQTT客户端连接(Clients)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
+用户可以通过 REST API 查询 MQTT 客户端连接(Clients)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
 
--------
-URL地址
--------
+--------
+URL 地址
+--------
 
-REST APIs访问URL地址::
+REST API 访问 URL 地址::
 
     http(s)://host:8080/api/v2/
 
----------
-Basic认证
----------
+----------
+Basic 认证
+----------
 
-REST API采用HTTP Basic认证(Authentication):
+REST API 采用 HTTP Basic 认证(Authentication):
 
 .. code-block:: bash
 
@@ -32,7 +32,7 @@ REST API采用HTTP Basic认证(Authentication):
 获取全部节点的基本信息
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/management/nodes
 
@@ -63,7 +63,7 @@ API定义::
 获取指定节点的基本信息
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/management/nodes/{node_name}
 
@@ -91,7 +91,7 @@ API定义::
 获取全部节点的监控数据
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/nodes
 
@@ -127,7 +127,7 @@ API定义::
 获取指定节点的监控数据
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/nodes/{node_name}
 
@@ -165,7 +165,7 @@ API定义::
 获取指定节点的客户端连接列表
 ----------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/clients
  

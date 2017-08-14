@@ -5,13 +5,13 @@
 分布集群 (Clustering)
 =====================
 
---------------------
-Erlang/OTP分布式编程
---------------------
+---------------------
+Erlang/OTP 分布式编程
+---------------------
 
-Erlang/OTP最初是爱立信为开发电信设备系统设计的编程语言平台，电信设备(路由器、接入网关、...)典型设计是通过背板连接主控板卡与多块业务板卡的分布式系统。
+Erlang/OTP 最初是爱立信为开发电信设备系统设计的编程语言平台，电信设备(路由器、接入网关、...)典型设计是通过背板连接主控板卡与多块业务板卡的分布式系统。
 
-Erlang/OTP语言平台的分布式程序，由分布互联的Erlang运行系统组成，每个Erlang运行系统被称为节点(Node)，节点(Node)间通过TCP互联，消息传递的方式通信::
+Erlang/OTP 语言平台的分布式程序，由分布互联的 Erlang 运行系统组成，每个 Erlang 运行系统被称为节点(Node)，节点(Node) 间通过 TCP 互联，消息传递的方式通信::
 
     ---------         ---------
     | Node1 | --------| Node2 |
@@ -28,7 +28,7 @@ Erlang/OTP语言平台的分布式程序，由分布互联的Erlang运行系统�
 节点(Node)
 ----------
 
-Erlang节点由唯一的节点名称标识，节点间通过名称进行通信寻址。 例如在本机启动四个Erlang节点，节点名称分别为:
+Erlang 节点由唯一的节点名称标识，节点间通过名称进行通信寻址。 例如在本机启动四个 Erlang 节点，节点名称分别为:
 
 .. code:: shell
 
@@ -37,7 +37,7 @@ Erlang节点由唯一的节点名称标识，节点间通过名称进行通信�
     erl -name node3@127.0.0.1
     erl -name node4@127.0.0.1
 
-node1@127.0.0.1控制台下建立与其他节点的连接::
+node1@127.0.0.1 控制台下建立与其他节点的连接::
 
     (node1@127.0.0.1)1> net_kernel:connect_node('node2@127.0.0.1').
     true
@@ -51,7 +51,7 @@ node1@127.0.0.1控制台下建立与其他节点的连接::
 epmd
 ----
 
-epmd(Erlang Port Mapper Daemon) - Erlang端口映射服务程序，在Erlang节点运行主机上自启动，负责映射节点名称到通信TCP端口号::
+epmd(Erlang Port Mapper Daemon) - Erlang 端口映射服务程序，在 Erlang 节点运行主机上自启动，负责映射节点名称到通信 TCP 端口号::
 
     (node1@127.0.0.1)6> net_adm:names().
     {ok,[{"node1",62740},
@@ -62,9 +62,9 @@ epmd(Erlang Port Mapper Daemon) - Erlang端口映射服务程序，在Erlang节�
 安全
 ----
 
-Erlang节点间通过一个相同的cookie进行互连认证。
+Erlang 节点间通过一个相同的 cookie 进行互连认证。
 
-Erlang节点Cookie设置::
+Erlang 节点 Cookie 设置::
 
     1. $HOME/.erlang.cookie文件
 
@@ -78,13 +78,13 @@ Erlang节点Cookie设置::
 EMQ R2 分布集群设计
 -------------------
 
-EMQ消息服务器集群基于Erlang/OTP分布式设计，集群原理可简述为下述两条规则:
+EMQ 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
 
-1. MQTT客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
+1. MQTT 客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
 
-2. MQTT客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
+2. MQTT 客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
 
-EMQ消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
+EMQ 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
 
     topic1 -> node1, node2
     topic2 -> node3
@@ -93,7 +93,7 @@ EMQ消息服务器同一集群的所有节点，都会复制一份主题(Topic) 
 主题树(Topic Trie)与路由表(Route Table)
 ---------------------------------------
 
-EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
+EMQ 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
 
 例如下述主题订阅关系:
 
@@ -143,10 +143,10 @@ EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
 手工配置管理集群
 -----------------
 
-假设部署两台服务器s1.emqtt.io, s2.emqtt.io上部署集群:
+假设部署两台服务器 s1.emqtt.io, s2.emqtt.io 上部署集群:
 
 +----------------------+-----------------+---------------------+
-| 节点名               | 主机名(FQDN)    |    IP地址           |
+| 节点名               | 主机名(FQDN)    |    IP 地址          |
 +----------------------+-----------------+---------------------+
 | emq@s1.emqtt.io 或   | s1.emqtt.io     | 192.168.0.10        |
 | emq@192.168.0.10     |                 |                     |
@@ -157,8 +157,8 @@ EMQ消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
 
 .. WARNING:: 节点名格式: Name@Host, Host必须是IP地址或FQDN(主机名.域名)
 
-emq@s1.emqtt.io节点设置
------------------------
+emq@s1.emqtt.io 节点设置
+------------------------
 
 emqttd/etc/emq.conf::
 
@@ -174,8 +174,8 @@ emqttd/etc/emq.conf::
 
 .. WARNING:: 节点启动加入集群后，节点名称不能变更。
 
-emq@s2.emqtt.io节点设置
------------------------
+emq@s2.emqtt.io 节点设置
+------------------------
 
 emqttd/etc/emq.conf::
 
@@ -188,14 +188,14 @@ emqttd/etc/emq.conf::
 节点加入集群
 ------------
 
-启动两台节点后，emq@s2.emqtt.io上执行::
+启动两台节点后，emq@s2.emqtt.io 上执行::
 
     $ ./bin/emqttd_ctl cluster join emq@s1.emqtt.io
 
     Join the cluster successfully.
     Cluster status: [{running_nodes,['emq@s1.emqtt.io','emq@s2.emqtt.io']}]
 
-或，emq@s1.emqtt.io上执行::
+或，emq@s1.emqtt.io 上执行::
 
     $ ./bin/emqttd_ctl cluster join emq@s2.emqtt.io
 
@@ -217,11 +217,11 @@ emqttd/etc/emq.conf::
 
 2. remove: 从集群删除其他节点
 
-emq@s2.emqtt.io主动退出集群::
+emq@s2.emqtt.io 主动退出集群::
 
     $ ./bin/emqttd_ctl cluster leave
 
-或emq@s1.emqtt.io节点上，从集群删除emq@s2.emqtt.io节点::
+或 emq@s1.emqtt.io 节点上，从集群删除 emq@s2.emqtt.io 节点::
 
     $ ./bin/emqttd_ctl cluster remove emq@s2.emqtt.io
 
@@ -231,9 +231,9 @@ emq@s2.emqtt.io主动退出集群::
 节点发现与自动集群
 ------------------
 
-EMQ R2.3版本支持基于Ekka库的集群自动发现(Autocluster)。Ekka是为Erlang/OTP应用开发的集群管理库，支持Erlang节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
+EMQ R2.3 版本支持基于 Ekka 库的集群自动发现(Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
 
-EMQ R2.3支持多种策略自动发现节点创建集群:
+EMQ R2.3 支持多种策略自动发现节点创建集群:
 
 +-----------------+---------------------------+
 | 策略            | 说明                      |
@@ -242,26 +242,26 @@ EMQ R2.3支持多种策略自动发现节点创建集群:
 +-----------------+---------------------------+
 | static          | 静态节点列表自动集群      |
 +-----------------+---------------------------+
-| mcast           | UDP组播方式自动集群       |
+| mcast           | UDP 组播方式自动集群      |
 +-----------------+---------------------------+
-| dns             | DNS A记录自动集群         |
+| dns             | DNS A 记录自动集群        |
 +-----------------+---------------------------+
-| etcd            | 通过etcd自动集群          |
+| etcd            | 通过 etcd 自动集群        |
 +-----------------+---------------------------+
-| k8s             | Kubernetes服务自动集群    |
+| k8s             | Kubernetes 服务自动集群   |
 +-----------------+---------------------------+
 
-manual手动创建集群
-------------------
+manual 手动创建集群
+-------------------
 
-默认配置为手动创建集群，节点通过'./bin/emqttd_ctl join <Node>'命令加入:
+默认配置为手动创建集群，节点通过 `./bin/emqttd_ctl join <Node>` 命令加入:
 
 .. code-block:: properties
 
     cluster.discovery = manual
 
-基于static节点列表自动集群
---------------------------
+基于 static 节点列表自动集群
+----------------------------
 
 配置固定的节点列表，自动发现并创建集群:
 
@@ -274,10 +274,10 @@ manual手动创建集群
 
     cluster.static.seeds = emq1@127.0.0.1,ekka2@127.0.0.1
 
-基于mcast组播自动集群
----------------------
+基于 mcast 组播自动集群
+-----------------------
 
-基于UDP组播自动发现并创建集群:
+基于 UDP 组播自动发现并创建集群:
 
 .. code-block:: properties
 
@@ -296,10 +296,10 @@ manual手动创建集群
 
     cluster.mcast.loop = on
 
-基于DNS A记录自动集群
----------------------
+基于 DNS A 记录自动集群
+-----------------------
 
-基于DNS A记录自动发现并创建集群:
+基于 DNS A 记录自动发现并创建集群:
 
 .. code-block:: properties
 
@@ -312,8 +312,8 @@ manual手动创建集群
 
     cluster.dns.app  = ekka
 
-基于etcd自动集群
-----------------
+基于 etcd 自动集群
+------------------
 
 基于 `etcd`_ 自动发现并创建集群:
 
@@ -330,8 +330,8 @@ manual手动创建集群
 
     cluster.etcd.node_ttl = 1m
 
-基于Kubernetes自动集群
-----------------------
+基于 Kubernetes 自动集群
+------------------------
 
 `Kubernetes`_ 下自动发现并创建集群:
 
@@ -358,7 +358,7 @@ manual手动创建集群
 集群脑裂与自动愈合
 ------------------
 
-EMQ R2.3版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
+EMQ R2.3 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
 
 .. code-block:: properties
 
@@ -366,21 +366,21 @@ EMQ R2.3版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
 
 集群脑裂自动恢复流程:
 
-1. 节点收到Mnesia库的'inconsistent_database'事件3秒后进行集群脑裂确认；
+1. 节点收到 Mnesia库 的 `inconsistent_database` 事件3秒后进行集群脑裂确认；
 
-2. 节点确认集群脑裂发生后，向Leader节点(集群中最早启动节点)上报脑裂消息；
+2. 节点确认集群脑裂发生后，向 Leader 节点(集群中最早启动节点)上报脑裂消息；
 
-3. Leader节点延迟一段时间后，在全部节点在线状态下创建脑裂视图(SplitView)；
+3. Leader 节点延迟一段时间后，在全部节点在线状态下创建脑裂视图(SplitView)；
 
-4. Leader节点在多数派(majority)分区选择集群自愈的Coordinator节点；
+4. Leader 节点在多数派(majority)分区选择集群自愈的 Coordinator 节点；
 
-5. Coordinator节点重启少数派(minority)分区节点恢复集群。
+5. Coordinator 节点重启少数派(minority)分区节点恢复集群。
 
 ----------------
 集群节点自动清除
 ----------------
 
-EMQ R2.3版本支持从集群自动删除宕机节点(Autoclean):
+EMQ R2.3 版本支持从集群自动删除宕机节点(Autoclean):
 
 .. code-block:: properties
 
@@ -392,9 +392,9 @@ EMQ R2.3版本支持从集群自动删除宕机节点(Autoclean):
 跨节点会话(Session)
 -------------------
 
-EMQ消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点。
+EMQ 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节点。
 
-例如负载均衡的两台集群节点:node1与node2，同一MQTT客户端先连接node1，node1节点会创建持久会话；客户端断线重连到node2时，MQTT的连接在node2节点，持久会话仍在node1节点::
+例如负载均衡的两台集群节点: node1 与 node2，同一 MQTT 客户端先连接 node1，node1 节点会创建持久会话；客户端断线重连到 node2 时，MQTT 的连接在 node2 节点，持久会话仍在 node1 节点::
 
                                       node1
                                    -----------
@@ -411,9 +411,9 @@ EMQ消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点�
 防火墙设置
 ----------
 
-如果集群节点间存在防火墙，防火墙需要开启4369端口和一个TCP端口段。4369由epmd端口映射服务使用，TCP端口段用于节点间建立连接与通信。
+如果集群节点间存在防火墙，防火墙需要开启 4369 端口和一个 TCP 端口段。4369 由 epmd 端口映射服务使用，TCP 端口段用于节点间建立连接与通信。
 
-防火墙设置后，EMQ 需要配置相同的端口段，emqttd/etc/emq.conf文件::
+防火墙设置后，EMQ 需要配置相同的端口段，emqttd/etc/emq.conf 文件::
 
     ## Distributed node port range
     node.dist_listen_min = 6369
@@ -421,11 +421,11 @@ EMQ消息服务器集群模式下，MQTT连接的持久会话(Session)跨节点�
 
 .. _cluster_hash:
 
----------------
-一致性Hash与DHT
----------------
+------------------
+一致性 Hash 与 DHT
+------------------
 
-NoSQL数据库领域分布式设计，大多会采用一致性Hash或DHT。EMQ消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性Hash、DHT或Shard方式切分路由表。
+NoSQL 数据库领域分布式设计，大多会采用一致性 Hash 或 DHT。EMQ 消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性 Hash、DHT 或 Shard 方式切分路由表。
 
 .. _etcd:        https://coreos.com/etcd/
 .. _Kubernetes:  https://kubernetes.io/

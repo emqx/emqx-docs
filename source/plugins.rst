@@ -7,60 +7,60 @@
 
 *EMQ* 消息服务器通过模块注册和钩子(Hooks)机制，支持用户开发扩展插件定制服务器认证鉴权与业务功能。
 
-*EMQ* 2.0版本官方提供的插件包括:
+*EMQ* 2.0 版本官方提供的插件包括:
 
 +---------------------------+---------------------------+
 | 插件                      | 说明                      |
 +===========================+===========================+
-| `emq_dashboard`_          | Web控制台插件(默认加载)   |
+| `emq_dashboard`_          | Web 控制台插件(默认加载)  |
 +---------------------------+---------------------------+
-| `emq_auth_clientid`_      | ClientId认证插件          |
+| `emq_auth_clientid`_      | ClientId 认证插件         |
 +---------------------------+---------------------------+
 | `emq_auth_username`_      | 用户名、密码认证插件      |
 +---------------------------+---------------------------+
-| `emq_auth_ldap`_          | LDAP认证/访问控制         |
+| `emq_auth_ldap`_          | LDAP 认证/访问控制        |
 +---------------------------+---------------------------+
-| `emq_auth_http`_          | HTTP认证/访问控制         |
+| `emq_auth_http`_          | HTTP 认证/访问控制        |
 +---------------------------+---------------------------+
-| `emq_auth_mysql`_         | MySQL认证/访问控制        |
+| `emq_auth_mysql`_         | MySQL 认证/访问控制       |
 +---------------------------+---------------------------+
-| `emq_auth_pgsql`_         | PostgreSQL认证/访问控制   |
+| `emq_auth_pgsql`_         | PostgreSQ L认证/访问控制  |
 +---------------------------+---------------------------+
-| `emq_auth_redis`_         | Redis认证/访问控制        |
+| `emq_auth_redis`_         | Redis 认证/访问控制       |
 +---------------------------+---------------------------+
-| `emq_web_hook`_           | Web Hook插件              |
+| `emq_web_hook`_           | Web Hook 插件             |
 +---------------------------+---------------------------+
-| `emq_lua_hook`_           | Lua Hook插件              |
+| `emq_lua_hook`_           | Lua Hook 插件             |
 +---------------------------+---------------------------+
-| `emq_auth_mongo`_         | MongoDB认证/访问控制      |
+| `emq_auth_mongo`_         | MongoDB 认证/访问控制     |
 +---------------------------+---------------------------+
 | `emq_modules`_            | 扩展模块插件              |
 +---------------------------+---------------------------+
-| `emq_retainer`_           | Retain消息存储模块        |
+| `emq_retainer`_           | Retain 消息存储模块       |
 +---------------------------+---------------------------+
-| `emq_coap`_               | CoAP协议支持              |
+| `emq_coap`_               | CoAP 协议支持             |
 +---------------------------+---------------------------+
-| `emq_sn`_                 | MQTT-SN协议支持           |
+| `emq_sn`_                 | MQTT-SN 协议支持          |
 +---------------------------+---------------------------+
-| `emq_stomp`_              | Stomp协议支持             |
+| `emq_stomp`_              | Stomp 协议支持            |
 +---------------------------+---------------------------+
-| `emq_sockjs`_             | Stomp over SockJS协议支持 |
+| `emq_sockjs`_             | Stomp/SockJS 协议支持     |
 +---------------------------+---------------------------+
-| `emq_recon`_              | Recon性能调试             |
+| `emq_recon`_              | Recon 性能调试            |
 +---------------------------+---------------------------+
-| `emq_reloader`_           | Reloader代码热加载插件    |
+| `emq_reloader`_           | Reloader 代码热加载插件   |
 +---------------------------+---------------------------+
 | `emq_plugin_template`_    | 插件开发模版              |
 +---------------------------+---------------------------+
 
------------------------------
-emq_retainer Retainer模块插件
------------------------------
+------------------------------
+emq_retainer Retainer 模块插件
+------------------------------
 
-2.1-beta版本将emq_mod_retainer模块更名为emq_retainer模块，Retainer模块负责持久化MQTT Retained消息。
+2.1-beta 版本将 emq_mod_retainer 模块更名为 emq_retainer 模块，Retainer 模块负责持久化 MQTT Retained 消息。
 
-配置Retainer模块
-----------------
+配置 Retainer 模块
+------------------
 
 etc/plugins/emq_retainer.conf:
 
@@ -82,19 +82,19 @@ etc/plugins/emq_retainer.conf:
     ## s - second
     retainer.expiry_interval = 0
 
-加载Retainer模块
-----------------
+加载 Retainer 模块
+------------------
 
-Retainer模块默认加载。
+Retainer 模块默认加载。
 
-------------------------------------
-emq_auth_clientid - ClientID认证插件
-------------------------------------
+-------------------------------------
+emq_auth_clientid - ClientID 认证插件
+-------------------------------------
 
-EMQ 2.0-rc.2版本将ClientId认证模块改为独立插件: https://github.com/emqtt/emq_auth_clientid
+EMQ 2.0-rc.2 版本将 ClientId 认证模块改为独立插件: https://github.com/emqtt/emq_auth_clientid
 
-ClientID认证配置
-----------------
+ClientID 认证配置
+-----------------
 
 etc/plugins/emq_auth_clientid.conf:
 
@@ -111,8 +111,8 @@ etc/plugins/emq_auth_clientid.conf:
     ##auth.client.3.clientid = app:appid
     ##auth.client.3.password = passwd3
 
-加载ClientId认证插件
---------------------
+加载 ClientId 认证插件
+----------------------
 
 .. code-block:: bash
 
@@ -122,7 +122,7 @@ etc/plugins/emq_auth_clientid.conf:
 emq_auth_username - 用户名密码认证插件
 -------------------------------------
 
-EMQ 2.0-rc.2版本将用户名认证模块改为独立插件: https://github.com/emqtt/emq_auth_username
+EMQ 2.0-rc.2 版本将用户名认证模块改为独立插件: https://github.com/emqtt/emq_auth_username
 
 用户名认证配置
 --------------
@@ -142,11 +142,11 @@ etc/plugins/emq_auth_username.conf:
 
 两种方式添加用户:
 
-1. 直接在etc/plugins/emq_auth_username.conf中明文配置默认用户例如::
+1. 直接在 etc/plugins/emq_auth_username.conf 中明文配置默认用户例如::
 
     auth.username.test = public
 
-2. 通过'./bin/emqttd_ctl'管理命令行添加用户::
+2. 通过 './bin/emqttd_ctl' 管理命令行添加用户::
 
    $ ./bin/emqttd_ctl users add <Username> <Password>
 
@@ -161,14 +161,14 @@ etc/plugins/emq_auth_username.conf:
 emq_plugin_template: 插件开发模版
 ---------------------------------
 
-EMQ插件实际是一个普通的Erlang应用，插件配置文件: 'etc/${PluginName}.conf|config"。
+EMQ 插件实际是一个普通的 Erlang 应用，插件配置文件: 'etc/${PluginName}.conf|config"。
 
-emq_plugin_template是模版插件，编译发布在lib/emq_plugin_template-2.0目录，配置文件: etc/plugins/emq_plugin_templat.config
+emq_plugin_template 是模版插件，编译发布在 lib/emq_plugin_template-2.0 目录，配置文件: etc/plugins/emq_plugin_templat.config
 
 加载、卸载插件
 --------------
 
-管理命令行'./bin/emqttd_ctl'加载卸载插件。
+管理命令行 './bin/emqttd_ctl' 加载卸载插件。
 
 加载插件::
 
@@ -182,20 +182,20 @@ emq_plugin_template是模版插件，编译发布在lib/emq_plugin_template-2.0�
 
     ./bin/emqttd_ctl plugins list
 
-----------------------------
-emq_dashboard: Dashboard插件
-----------------------------
+-----------------------------
+emq_dashboard: Dashboard 插件
+-----------------------------
 
-*EMQ* 消息服务器的Web管理控制台。插件项目地址: https://github.com/emqtt/emqttd_dashboard
+*EMQ* 消息服务器的 Web 管理控制台。插件项目地址: https://github.com/emqtt/emqttd_dashboard
 
-*EMQ* 消息服务器默认加载Dashboard插件。URL地址: http://localhost:18083 ，缺省用户名/密码: admin/public。
+*EMQ* 消息服务器默认加载 Dashboard 插件。URL 地址: http://localhost:18083 ，缺省用户名/密码: admin/public。
 
-Dashboard插件可查询EMQ消息服务器基本信息、统计数据、度量数据，查询系统客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
+Dashboard 插件可查询 EMQ 消息服务器基本信息、统计数据、度量数据，查询系统客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
 
 .. image:: ./_static/images/dashboard.png
 
-Dashboard插件设置
------------------
+Dashboard 插件设置
+------------------
 
 etc/plugins/emq_dashboard.conf:
 
@@ -217,16 +217,16 @@ etc/plugins/emq_dashboard.conf:
     ## dashboard.listener.https.verify = verify_peer
     ## dashboard.listener.https.fail_if_no_peer_cert = true
 
----------------------------
-emq_auth_ldap: LDAP认证插件
----------------------------
+----------------------------
+emq_auth_ldap: LDAP 认证插件
+----------------------------
 
-LDAP认证插件: https://github.com/emqtt/emq_auth_ldap
+LDAP 认证插件: https://github.com/emqtt/emq_auth_ldap
 
-.. NOTE:: 2.0-beta1版本支持
+.. NOTE:: 2.0-beta1 版本支持
 
-LDAP认证插件配置
-----------------
+LDAP 认证插件配置
+-----------------
 
 etc/plugins/emq_auth_ldap.conf:
 
@@ -242,21 +242,21 @@ etc/plugins/emq_auth_ldap.conf:
 
     auth.ldap.ssl = false
 
-LDAP认证插件加载
-----------------
+LDAP 认证插件加载
+-----------------
 
 ./bin/emqttd_ctl plugins load emq_auth_ldap
 
-------------------------------------
-emq_auth_http: HTTP认证/访问控制插件
-------------------------------------
+-------------------------------------
+emq_auth_http: HTTP 认证/访问控制插件
+-------------------------------------
 
-HTTP认证/访问控制插件: https://github.com/emqtt/emq_auth_http
+HTTP 认证/访问控制插件: https://github.com/emqtt/emq_auth_http
 
 .. NOTE:: 1.1版本支持
 
-HTTP认证插件配置
-----------------
+HTTP 认证插件配置
+-----------------
 
 etc/plugins/emq_auth_http.conf:
 
@@ -277,26 +277,26 @@ etc/plugins/emq_auth_http.conf:
     auth.http.acl_req.method = get
     auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t
 
-HTTP认证/鉴权API
-----------------
+HTTP 认证/鉴权 API
+------------------
 
-认证/ACL成功，API返回200
+认证/ACL 成功，API 返回200
 
-认证/ACL失败，API返回4xx
+认证/ACL 失败，API 返回4xx
 
-加载HTTP认证插件
-----------------
+加载 HTTP 认证插件
+------------------
 
 ./bin/emqttd_ctl plugins load emq_auth_http
 
---------------------------------------
-emq_auth_mysql: MySQL认证/访问控制插件
---------------------------------------
+---------------------------------------
+emq_auth_mysql: MySQL 认证/访问控制插件
+---------------------------------------
 
-MySQL认证/访问控制插件，基于MySQL库表认证鉴权: https://github.com/emqtt/emq-auth-mysql
+MySQL 认证/访问控制插件，基于 MySQL 库表认证鉴权: https://github.com/emqtt/emq-auth-mysql
 
-MQTT用户表
-----------
+MQTT 用户表
+-----------
 
 .. code-block:: sql
 
@@ -311,10 +311,10 @@ MQTT用户表
       UNIQUE KEY `mqtt_username` (`username`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-.. NOTE:: MySQL插件可使用系统自有的用户表，通过'authquery'配置查询语句。
+.. NOTE:: MySQL 插件可使用系统自有的用户表，通过 'authquery' 配置查询语句。
 
-MQTT访问控制表
---------------
+MQTT 访问控制表
+---------------
 
 .. code-block:: sql
 
@@ -338,8 +338,8 @@ MQTT访问控制表
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
-配置MySQL认证鉴权插件
----------------------
+配置 MySQL 认证鉴权插件
+-----------------------
 
 etc/plugins/emq_auth_mysql.conf:
 
@@ -374,19 +374,19 @@ etc/plugins/emq_auth_mysql.conf:
     ## ACL Query Command
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
-加载MySQL认证鉴权插件
----------------------
+加载 MySQL 认证鉴权插件
+-----------------------
 
 ./bin/emqttd_ctl plugins load emq_auth_mysql
 
-----------------------------------------
-emq_auth_pgsql: Postgre认证/访问控制插件
-----------------------------------------
+-----------------------------------------
+emq_auth_pgsql: Postgre 认证/访问控制插件
+-----------------------------------------
 
-Postgre认证/访问控制插件，基于PostgreSQL库表认证鉴权: https://github.com/emqtt/emqttd_plugin_pgsql
+Postgre 认证/访问控制插件，基于 PostgreSQL 库表认证鉴权: https://github.com/emqtt/emqttd_plugin_pgsql
 
-Postgre MQTT用户表
-------------------
+Postgre MQTT 用户表
+-------------------
 
 .. code-block:: sql
 
@@ -398,8 +398,8 @@ Postgre MQTT用户表
       salt character varying(40)
     );
 
-Postgre MQTT访问控制表
-----------------------
+Postgre MQTT 访问控制表
+-----------------------
 
 .. code-block:: sql
 
@@ -422,8 +422,8 @@ Postgre MQTT访问控制表
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
-配置Postgre认证鉴权插件
------------------------
+配置 Postgre 认证鉴权插件
+-------------------------
 
 etc/plugins/emq_auth_pgsql.conf:
 
@@ -464,21 +464,21 @@ etc/plugins/emq_auth_pgsql.conf:
     ## ACL Query. Comment this query, the acl will be disabled.
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
-加载Postgre认证鉴权插件
------------------------
+加载 Postgre 认证鉴权插件
+-------------------------
 
 .. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_auth_pgsql
 
---------------------------------------
-emq_auth_redis: Redis认证/访问控制插件
---------------------------------------
+---------------------------------------
+emq_auth_redis: Redis 认证/访问控制插件
+---------------------------------------
 
-基于Redis认证/访问控制: https://github.com/emqtt/emqttd_plugin_redis
+基于 Redis 认证/访问控制: https://github.com/emqtt/emqttd_plugin_redis
 
-配置Redis认证鉴权插件
----------------------
+配置 Redis 认证鉴权插件
+-----------------------
 
 etc/plugins/emq_auth_redis.conf:
 
@@ -510,18 +510,18 @@ etc/plugins/emq_auth_redis.conf:
     ## ACL Query Command
     auth.redis.acl_cmd = HGETALL mqtt_acl:%u
 
-Redis 用户Hash
---------------
+Redis 用户 Hash
+---------------
 
-默认基于用户Hash认证::
+默认基于用户 Hash 认证::
 
     HSET mqtt_user:<username> is_superuser 1
     HSET mqtt_user:<username> password "passwd"
 
-Redis ACL规则Hash
------------------
+Redis ACL 规则 Hash
+-------------------
 
-默认采用Hash存储ACL规则::
+默认采用 Hash 存储 ACL 规则::
 
     HSET mqtt_acl:<username> topic1 1
     HSET mqtt_acl:<username> topic2 2
@@ -529,32 +529,32 @@ Redis ACL规则Hash
 
 .. NOTE:: 1: subscribe, 2: publish, 3: pubsub
 
-Redis 订阅Hash
----------------
+Redis 订阅 Hash
+----------------
 
-插件还支持Redis中创建MQTT订阅。当MQTT客户端连接成功，会自动从Redis加载订阅::
+插件还支持 Redis 中创建 MQTT 订阅。当 MQTT 客户端连接成功，会自动从 Redis 加载订阅::
 
     HSET mqtt_sub:<username> topic1 0
     HSET mqtt_sub:<username> topic2 1
     HSET mqtt_sub:<username> topic3 2
 
-.. WARNING:: 2.0-rc.2版本已将订阅加载迁移至EMQPlus产品的emqplus_backend_redis插件。
+.. WARNING:: 2.0-rc.2 版本已将订阅加载迁移至 EMQX 产品的emqx_backend_redis插件。
 
-加载Redis认证鉴权插件
----------------------
+加载 Redis 认证鉴权插件
+-----------------------
 
 .. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_auth_redis
 
-----------------------------------------
-emq_auth_mongo: MongoDB认证/访问控制插件
-----------------------------------------
+-----------------------------------------
+emq_auth_mongo: MongoDB 认证/访问控制插件
+-----------------------------------------
 
-基于MongoDB认证/访问控制: https://github.com/emqtt/emqttd_plugin_mongo
+基于 MongoDB 认证/访问控制: https://github.com/emqtt/emqttd_plugin_mongo
 
-配置MongoDB认证鉴权插件
------------------------
+配置 MongoDB 认证鉴权插件
+-------------------------
 
 etc/plugins/emq_auth_mongo.conf:
 
@@ -596,8 +596,8 @@ etc/plugins/emq_auth_mongo.conf:
 
     auth.mongo.acl_query.selector = username=%u
 
-MongoDB数据库
--------------
+MongoDB 数据库
+--------------
 
 .. code-block:: mongodb
 
@@ -625,8 +625,8 @@ MongoDB 用户集合(User Collection)
     db.mqtt_user.insert({username: "test", password: "password hash", is_superuser: false})
     db.mqtt_user:insert({username: "root", is_superuser: true})
 
-MongoDB ACL集合(ACL Collection)
--------------------------------
+MongoDB ACL 集合(ACL Collection)
+--------------------------------
 
 .. code-block:: javascript
 
@@ -643,8 +643,8 @@ MongoDB ACL集合(ACL Collection)
     db.mqtt_acl.insert({username: "test", publish: ["t/1", "t/2"], subscribe: ["user/%u", "client/%c"]})
     db.mqtt_acl.insert({username: "admin", pubsub: ["#"]})
 
-加载Mognodb认证插件
--------------------
+加载 Mognodb 认证插件
+---------------------
 
 .. code-block:: bash
 
@@ -654,10 +654,10 @@ MongoDB ACL集合(ACL Collection)
 emq_modules 扩展模块插件
 ------------------------
 
-2.1版本将全部扩展模块项目(emq_mod_presence, emq_mod_subscription, emq_mod_rewrite)合并为一个emq_modules项目。
+2.1 版本将全部扩展模块项目(emq_mod_presence, emq_mod_subscription, emq_mod_rewrite)合并为一个 emq_modules 项目。
 
-配置Modules插件
----------------
+配置 Modules 插件
+-----------------
 
 .. code-block:: properties
 
@@ -696,21 +696,21 @@ emq_modules 扩展模块插件
     ## module.rewrite.rule.1 = "x/# ^x/y/(.+)$ z/y/$1"
     ## module.rewrite.rule.2 = "y/+/z/# ^y/(.+)/z/(.+)$ y/z/$2"
 
-加载Modules插件
----------------
+加载 Modules 插件
+-----------------
 
-Modules插件默认加载。
+Modules 插件默认加载。
 
----------------------------------
-emq_mod_presence Presence模块插件
----------------------------------
+----------------------------------
+emq_mod_presence Presence 模块插件
+----------------------------------
 
-2.0-rc.3版本将Presence模块改为独立插件，Presence模块会向$SYS主题(Topic)发布客户端上下线消息。
+2.0-rc.3 版本将 Presence 模块改为独立插件，Presence 模块会向 $SYS 主题(Topic)发布客户端上下线消息。
 
-.. WARNING:: 2.1版本该插件已并入emq_modules项目
+.. WARNING:: 2.1 版本该插件已并入 emq_modules 项目
 
-配置Presence模块
-----------------
+配置 Presence 模块
+------------------
 
 etc/plugins/emq_mod_presence.conf:
 
@@ -722,25 +722,25 @@ etc/plugins/emq_mod_presence.conf:
 
     module.presence.qos = 0
 
-加载Presence模块
-----------------
+加载 Presence 模块
+------------------
 
-Presence模块默认加载。
+Presence 模块默认加载。
 
 -------------------------------------
 emq_mod_subscription 自动订阅模块插件
 -------------------------------------
 
-2.0-rc.3版本将Subscription模块改为独立插件，Subscription扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic)。
+2.0-rc.3 版本将 Subscription 模块改为独立插件，Subscription 扩展模块支持客户端上线时，自动订阅或恢复订阅某些主题(Topic)。
 
-.. WARNING:: 2.1版本该插件已并入emq_modules项目
+.. WARNING:: 2.1 版本该插件已并入 emq_modules 项目
 
-配置Subscription模块
---------------------
+配置 Subscription 模块
+---------------------
 
 etc/plugins/emq_mod_subscription.conf:
 
-.. WARNING:: 2.1版本该插件已并入emq_modules项目
+.. WARNING:: 2.1 版本该插件已并入 emq_modules 项目
 
 .. code-block:: properties
 
@@ -756,21 +756,21 @@ etc/plugins/emq_mod_subscription.conf:
     ## Values: on | off
     module.subscription.backend = on
 
-加载Subscription模块
---------------------
+加载 Subscription 模块
+----------------------
 
-Subscription模块默认加载。
+Subscription 模块默认加载。
 
---------------------------
-emq_mod_rewrite主题重写插件
---------------------------
+----------------------------
+emq_mod_rewrite 主题重写插件
+----------------------------
 
-2.0-rc.2版本将rewrite模块改为独立插件，rewrite插件支持重写发布订阅的主题(Topic)。
+2.0-rc.2 版本将 rewrite 模块改为独立插件，rewrite 插件支持重写发布订阅的主题(Topic)。
 
-.. WARNING:: 2.1版本该插件已并入emq_modules项目
+.. WARNING:: 2.1版本该插件已并入 emq_modules 项目
 
-配置Rewrite插件
----------------
+配置 Rewrite 插件
+-----------------
 
 etc/plugins/emq_mod_rewrite.conf:
 
@@ -789,21 +789,21 @@ etc/plugins/emq_mod_rewrite.conf:
     ]}
   ].
 
-加载Rewrite插件
----------------
+加载 Rewrite 插件
+-----------------
 
 .. code:: bash
 
     ./bin/emqttd_ctl plugins load emq_mod_rewrite
 
-----------------------
-emq_coap: CoAP协议插件
-----------------------
+-----------------------
+emq_coap: CoAP 协议插件
+-----------------------
 
-CoAP协议插件，支持RFC 7252规范。
+CoAP 协议插件，支持 RFC 7252 规范。
 
-配置CoAP协议插件
-----------------
+配置 CoAP 协议插件
+------------------
 
 .. code-block:: properties
 
@@ -813,15 +813,15 @@ CoAP协议插件，支持RFC 7252规范。
 
   coap.handler.mqtt = emq_coap_gateway
 
-加载CoAP协议插件
-----------------
+加载 CoAP 协议插件
+------------------
 
 .. code:: bash
 
     ./bin/emqttd_ctl plugins load emq_coap
 
-libcoap客户端
--------------
+libcoap 客户端
+--------------
 
 .. code:: bash
 
@@ -830,16 +830,16 @@ libcoap客户端
   % coap client publish message
   coap-client -m post -e "qos=0&retain=0&message=payload&topic=hello" coap://localhost/mqtt
 
------------------------
-emq_sn: MQTT-SN协议插件
------------------------
+-------------------------
+emq_sn: MQTT-SN 协议插件
+-------------------------
 
-MQTT-SN协议插件，支持MQTT-SN网关模式。
+MQTT-SN 协议插件，支持 MQTT-SN 网关模式。
 
-配置MQTT-SN协议插件
--------------------
+配置 MQTT-SN 协议插件
+---------------------
 
-.. NOTE:: 默认MQTT-SN协议UDP端口: 1884
+.. NOTE:: 默认 MQTT-SN 协议 UDP 端口: 1884
 
 etc/plugins/emq_sn.conf:
 
@@ -847,23 +847,23 @@ etc/plugins/emq_sn.conf:
 
     mqtt.sn.port = 1884
 
-加载MQTT-SN协议插件
-------------------
+加载 MQTT-SN 协议插件
+---------------------
 
 .. code::
 
     ./bin/emqttd_ctl plugins load emq_sn
 
-------------------------
-emq_stomp: Stomp协议插件
-------------------------
+--------------------------
+emq_stomp: Stomp 协议插件
+--------------------------
 
-Stomp协议插件。支持STOMP 1.0/1.1/1.2协议客户端连接emqttd，发布订阅MQTT消息。
+Stomp 协议插件。支持 STOMP 1.0/1.1/1.2 协议客户端连接 EMQ，发布订阅 MQTT 消息。
 
 配置插件
 --------
 
-.. NOTE:: Stomp协议端口: 61613
+.. NOTE:: Stomp 协议端口: 61613
 
 etc/plugins/emq_stomp.conf:
 
@@ -887,21 +887,21 @@ etc/plugins/emq_stomp.conf:
 
     stomp.listener.max_clients = 512
 
-加载Stomp插件
--------------
+加载 Stomp 插件
+---------------
 
 .. code:: bash
 
     ./bin/emqttd_ctl plugins load emq_stomp
 
-----------------------------
-emq_sockjs: Stomp/Sockjs插件
-----------------------------
+-----------------------------
+emq_sockjs: Stomp/Sockjs 插件
+-----------------------------
 
-.. WARNING:: 2.0版本不再维护SockJS插件
+.. WARNING:: 2.0 版本不再维护 SockJS 插件
 
-配置SockJS插件
---------------
+配置 SockJS 插件
+----------------
 
 etc/plugins/emq_sockjs.config:
 
@@ -927,8 +927,8 @@ etc/plugins/emq_sockjs.config:
     ]}
   ].
 
-加载SockJS插件
---------------
+加载 SockJS 插件
+----------------
 
 .. code-block:: bash
 
@@ -939,14 +939,14 @@ etc/plugins/emq_sockjs.config:
 
     http://localhost:61616/index.html
 
-----------------------------
-emq_recon: Recon性能调试插件
-----------------------------
+-----------------------------
+emq_recon: Recon 性能调试插件
+-----------------------------
 
-emq_recon插件集成recon性能调测库，'./bin/emqttd_ctl'命令行注册recon命令。
+emq_recon 插件集成 recon 性能调测库，'./bin/emqttd_ctl' 命令行注册 recon 命令。
 
-配置Recon插件
-------------
+配置 Recon 插件
+---------------
 
 etc/plugins/emq_recon.conf:
 
@@ -955,15 +955,15 @@ etc/plugins/emq_recon.conf:
     %% Garbage Collection: 10 minutes
     recon.gc_interval = 600
 
-加载Recon插件
--------------
+加载 Recon 插件
+---------------
 
 .. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_recon
 
-recon插件命令
--------------
+recon 插件命令
+---------------
 
 .. code-block:: bash
 
@@ -979,12 +979,12 @@ recon插件命令
 emq_reloader: 代码热加载插件
 ----------------------------
 
-用于开发调试的代码热升级插件。加载该插件后，emqttd会自动热升级更新代码。
+用于开发调试的代码热升级插件。加载该插件后，EMQ 会自动热升级更新代码。
 
 .. NOTE:: 产品部署环境不建议使用该插件
 
-配置Reloader插件
-----------------
+配置 Reloader 插件
+------------------
 
 etc/plugins/emq_reloader.conf:
 
@@ -994,15 +994,15 @@ etc/plugins/emq_reloader.conf:
 
   reloader.logfile = log/reloader.log
 
-加载Reloader插件
-----------------
+加载 Reloader 插件
+------------------
 
 .. code-block:: bash
 
     ./bin/emqttd_ctl plugins load emq_reloader
 
-Reloader插件命令
-----------------
+Reloader 插件命令
+-----------------
 
 .. code-block:: bash
 
@@ -1010,14 +1010,14 @@ Reloader插件命令
 
     reload <Module>             # Reload a Module
 
----------------
-EMQ 2.0插件开发
----------------
+----------------
+EMQ 2.0 插件开发
+----------------
 
 创建插件项目
 ------------
 
-参考`emq_plugin_template`_ 插件模版创建新的插件项目。
+参考 `emq_plugin_template`_ 插件模版创建新的插件项目。
 
 注册认证/访问控制模块
 ---------------------
@@ -1107,11 +1107,11 @@ emq_plugin_template.erl::
 +------------------------+----------------------------------+
 | session.unsubscribed   | 客户端取消订阅主题后             |
 +------------------------+----------------------------------+
-| message.publish        | MQTT消息发布                     |
+| message.publish        | MQTT 消息发布                    |
 +------------------------+----------------------------------+
-| message.delivered      | MQTT消息送达                     |
+| message.delivered      | MQTT 消息送达                    |
 +------------------------+----------------------------------+
-| message.acked          | MQTT消息回执                     |
+| message.acked          | MQTT 消息回执                    |
 +------------------------+----------------------------------+
 | client.disconnected    | 客户端连接断开                   |
 +------------------------+----------------------------------+
@@ -1148,9 +1148,9 @@ emq_plugin_template.erl::
 插件配置文件
 ------------
 
-插件自带配置文件放置在etc/${plugin_name}.conf|config，EMQ支持两种插件配置格式:
+插件自带配置文件放置在 etc/${plugin_name}.conf|config，EMQ 支持两种插件配置格式:
 
-1. ${plugin_name}.config，Erlang原生配置文件格式:
+1. ${plugin_name}.config，Erlang 原生配置文件格式:
 
 .. code-block:: erlang
 
@@ -1160,31 +1160,31 @@ emq_plugin_template.erl::
       ]}
     ].
 
-2. ${plugin_name}.conf, sysctl的`k = v`通用格式:
+2. ${plugin_name}.conf, sysctl 的 `k = v` 通用格式:
 
 .. code-block:: properties
 
     plugin_name.key = value
 
-.. NOTE:: `k = v`格式配置需要插件开发者创建priv/plugin_name.schema映射文件。
+.. NOTE:: `k = v` 格式配置需要插件开发者创建 priv/plugin_name.schema 映射文件。
  
 编译发布插件
 ------------
 
-1. clone emq-relx项目:
+1. clone emq-relx 项目:
 
 .. code-block:: bash
 
     git clone https://github.com/emqtt/emq-relx.git
 
-2. Makefile增加`DEPS`:
+2. Makefile 增加 `DEPS`:
 
 .. code-block:: makefile
 
     DEPS += plugin_name
     dep_plugin_name = git url_of_plugin
 
-3. relx.config中release段落添加:
+3. relx.config 中 release 段落添加:
 
 .. code-block:: erlang
 
