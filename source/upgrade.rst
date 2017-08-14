@@ -13,9 +13,9 @@
 
 升级流程:
 
-1. 下载解压2.0.3版本到新安装目录，例如/opt/emqttd-2.0.3/；
+1. 下载解压2.0.3版本到新安装目录，例如 /opt/emqttd-2.0.3/；
 
-2. 旧版本的'etc/'配置文件、'data/'数据文件覆盖到新版目录；
+2. 旧版本的 'etc/' 配置文件、'data/' 数据文件覆盖到新版目录；
 
 3. 停止旧版本，启动新版。
 
@@ -29,13 +29,13 @@
 
 升级流程:
 
-1. 下载解压2.0版本到新安装目录，例如/opt/emqttd-2.0/
+1. 下载解压2.0版本到新安装目录，例如 /opt/emqttd-2.0/
 
-2. 参考旧版本etc/vm.args、etc/emqttd.config，配置2.0版本的etc/emq.conf
+2. 参考旧版本 etc/vm.args、etc/emqttd.config，配置2.0版本的 etc/emq.conf
 
-3. 重新配置插件etc/plugins/${your-plugin}.conf
+3. 重新配置插件 etc/plugins/${your-plugin}.conf
 
-4. 编辑插件加载文件data/loaded_plugins
+4. 编辑插件加载文件 data/loaded_plugins
 
 5. 停止旧版本，启动新版。
 
@@ -53,9 +53,9 @@
 
 升级流程:
 
-1. 下载解压1.1.2版本到新安装目录，例如/opt/emqttd_112；
+1. 下载解压1.1.2版本到新安装目录，例如 /opt/emqttd_112；
 
-2. 旧版本的'etc/'配置文件、'data/'数据文件覆盖到新版目录；
+2. 旧版本的 'etc/' 配置文件、'data/' 数据文件覆盖到新版目录；
 
 3. 如果有加载插件，将旧版插件配置文件覆盖到新版；
 

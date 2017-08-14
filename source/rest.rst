@@ -208,7 +208,7 @@ API 定义::
 获取节点指定客户端连接的信息
 ----------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/clients/{clientid}
  
@@ -241,7 +241,7 @@ API定义::
 获取集群内指定客户端的信息
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/clients/{clientid}
  
@@ -279,7 +279,7 @@ API定义::
 获取指定节点的会话列表
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/sessions
  
@@ -324,7 +324,7 @@ API定义::
 获取节点上指定客户端的会话信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/sessions/{clientid}
  
@@ -361,7 +361,7 @@ API定义::
 获取集群内指定客户端的会话信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/sessions/{clientid}
  
@@ -402,7 +402,7 @@ API定义::
 获取某个节点上的订阅列表
 ------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/subscriptions
 
@@ -440,7 +440,7 @@ API定义::
 获取节点上指定客户端的订阅信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/subscriptions/{clientid}
 
@@ -470,7 +470,7 @@ API定义::
 获取集群内指定客户端的订阅信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/subscriptions/{clientid}
 
@@ -505,7 +505,7 @@ API定义::
 获取集群路由表
 --------------
 
-API定义::
+API 定义::
 
     GET api/v2/routes
 
@@ -542,7 +542,7 @@ API定义::
 获取集群内指定主题的路由信息
 ----------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/routes/{topic}
 
@@ -576,7 +576,7 @@ API定义::
 发布消息
 --------
 
-API定义::
+API 定义::
 
     POST api/v2/mqtt/publish
 
@@ -592,7 +592,7 @@ API定义::
         "client_id": "C_1492145414740"
     }
 
-.. NOTE:: topic参数必填，其他参数可选。payload默认值空字符串，qos为0，retain为false，client_id为'http'。
+.. NOTE:: topic 参数必填，其他参数可选。payload 默认值空字符串，qos 为 0，retain 为 false，client_id 为 'http'。
 
 请求示例::
 
@@ -610,7 +610,7 @@ API定义::
 创建订阅
 --------
 
-API定义::
+API 定义::
 
     POST api/v2/mqtt/subscribe
 
@@ -640,7 +640,7 @@ API定义::
 取消订阅
 --------
 
-API定义::
+API 定义::
 
     POST api/v2/mqtt/unsubscribe
 
@@ -673,7 +673,7 @@ API定义::
 获取节点的插件列表
 ------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/plugins
 
@@ -821,7 +821,7 @@ API定义::
 开启/关闭节点的指定插件
 -----------------------
 
-API定义::
+API 定义::
 
     PUT /api/v2/nodes/{node_name}/plugins/{name}
 
@@ -849,7 +849,7 @@ API定义::
 获取集群节点的监听器列表
 ------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/listeners
 
@@ -924,7 +924,7 @@ API定义::
 获取指定节点的监听器列表
 ------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/listeners/{node_name}
 
@@ -1005,7 +1005,7 @@ API定义::
 获取全部节点的收发报文统计
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/metrics/
 
@@ -1063,7 +1063,7 @@ API定义::
 获取指定节点的收发报文统计
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/metrics/{node_name}
 
@@ -1126,7 +1126,7 @@ API定义::
 获取全部节点的连接会话统计
 ---------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/stats
 
@@ -1164,7 +1164,7 @@ API定义::
 获取指定节点的连接会话统计
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/stats/{node_name}
 
@@ -1231,3 +1231,4 @@ API定义::
 +-------+-----------------------------------------+
 | 113   | 新密码和确认密码不一致                  |
 +-------+-----------------------------------------+
+
