@@ -272,6 +272,54 @@ API 定义::
     }
 
 
+断开集群内指定客户端连接
+------------------
+
+API定义::
+
+    DELETE api/v2/clients/{clientid}
+
+请求示例::
+
+    DELETE api/v2/clients/C_1492145414740
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+清除集群内指定客户端的ACL缓存
+--------------------------
+
+API定义::
+
+    DELETE api/v2/clean_acl_cache/{clientid}
+
+请求参数:
+
+.. code-block:: json
+
+    {
+        "topic": "test"
+    }
+
+请求示例::
+
+    DELETE api/v2/clean_acl_cache/C_1492145414740
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
 --------------
 会话(Sessions)
 --------------
@@ -1196,6 +1244,181 @@ API 定义::
         }
     }
 
+------
+热配置
+------
+
+获取全部节点的可修改配置项
+--------------------------
+
+API定义::
+
+    GET api/v2/nodes/{node_name}/configs
+
+请求示例::
+
+    GET api/v2/nodes/emq@127.0.0.1/configs
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": {
+            "emq@127.0.0.1": [
+                {
+                    "key": "log.console.level",
+                    "value": "error",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.acl_file",
+                    "value": "etc/acl.conf",
+                    "datatpye": "string",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.acl_nomatch",
+                    "value": "allow",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.allow_anonymous",
+                    "value": "true",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.broker.sys_interval",
+                    "value": "60",
+                    "datatpye": "integer",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.cache_acl",
+                    "value": "true",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                }
+            ]
+        }
+    }
+
+获取指定节点的可修改配置项
+--------------------------
+
+API定义::
+
+    GET api/v2/nodes/{node_name}/configs
+
+请求示例::
+
+    GET api/v2/nodes/emq@127.0.0.1/configs
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": [
+            {
+                "key": "log.console.level",
+                "value": "error",
+                "datatpye": "enum",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.acl_file",
+                "value": "etc/acl.conf",
+                "datatpye": "string",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.acl_nomatch",
+                "value": "allow",
+                "datatpye": "enum",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.allow_anonymous",
+                "value": "true",
+                "datatpye": "enum",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.broker.sys_interval",
+                "value": "60",
+                "datatpye": "integer",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.cache_acl",
+                "value": "true",
+                "datatpye": "enum",
+                "app": "emqttd"
+            }
+        ]
+    }
+
+修改全部节点的配置项
+--------------------
+
+API定义::
+
+    PUT /api/v2/configs
+
+请求参数::
+
+    {
+        "key"   : "mqtt.allow_anonymous",
+        "value" : "false"
+     }
+
+请求示例::
+
+    PUT /api/v2/configs
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+修改指定节点的配置项
+--------------------
+
+API定义::
+
+    PUT /api/v2/nodes/{node_name}/configs/{app_name}
+
+请求参数::
+
+    {
+        "key"   : "mqtt.allow_anonymous",
+        "value" : "false"
+     }
+
+请求示例::
+
+    PUT /api/v2/nodes/emq@127.0.0.1/configs/emqttd
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+
 ----------
 返回错误码
 ----------
@@ -1229,6 +1452,3 @@ API 定义::
 +-------+-----------------------------------------+
 | 112   | 用户不在线                              |
 +-------+-----------------------------------------+
-| 113   | 新密码和确认密码不一致                  |
-+-------+-----------------------------------------+
-
