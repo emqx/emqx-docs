@@ -1369,7 +1369,7 @@ API定义::
 
 API定义::
 
-    PUT /api/v2/configs
+    PUT /api/v2/configs/{app_name}
 
 请求参数::
 
@@ -1380,7 +1380,7 @@ API定义::
 
 请求示例::
 
-    PUT /api/v2/configs
+    PUT /api/v2/configs/emqttd
 
 返回数据:
 
