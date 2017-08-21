@@ -5,6 +5,39 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3-beta.3:
+
+---------------
+2.3-beta.3 版本
+---------------
+
+*发布日期: 2017-08-21*
+
+Enhancements
+------------
+
+Add HTTP API for hot configuration.
+
+Bugfix
+------
+
+1. Fixed parse 'auth.mysql.password_hash' error for hot configuration (emq-auth-mysql#68)
+
+2. Fixed set 'auth.pgsql.server' error for hot configuration (emq-auth-pgsql#67)
+
+3. Fixed set 'auth.redis.server' and 'auth.redis.password_hash' error for hot configuration (emq-auth-redis#47)
+
+4. Fixed the issue that When deleting retained message subscribed clients not notified (emqttd#1207)
+
+5. Fixed emqttd for hot configuring:
+
+- mqtt.websocket_protocol_header = on
+- mqtt.mqueue.low_watermark = 20%
+- mqtt.mqueue.high_watermark = 60%
+- mqtt.client.idle_timeout = 30s
+- mqtt.client.enable_stats = off
+
+
 .. _release_2.3-beta.2:
 
 ---------------
@@ -21,7 +54,6 @@ EMQ R2.3-beta.2 版本发布！该版本新增 HTTP 管理 API，支持配置 Ke
 - emq-coap
 - emq-sn
 - emq-lwm2m
-- emq-dashboard
 - emq-retainer
 - emq-recon
 - emq-web-hook
