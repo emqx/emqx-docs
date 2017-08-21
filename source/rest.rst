@@ -5,21 +5,21 @@
 管理监控API (REST API)
 ======================
 
-用户可以通过REST API查询MQTT客户端连接(Clients)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
+用户可以通过 REST API 查询 MQTT 客户端连接(Clients)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
 
--------
-URL地址
--------
+--------
+URL 地址
+--------
 
-REST APIs访问URL地址::
+REST API 访问 URL 地址::
 
     http(s)://host:8080/api/v2/
 
----------
-Basic认证
----------
+----------
+Basic 认证
+----------
 
-REST API采用HTTP Basic认证(Authentication):
+REST API 采用 HTTP Basic 认证(Authentication):
 
 .. code-block:: bash
 
@@ -32,7 +32,7 @@ REST API采用HTTP Basic认证(Authentication):
 获取全部节点的基本信息
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/management/nodes
 
@@ -63,7 +63,7 @@ API定义::
 获取指定节点的基本信息
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/management/nodes/{node_name}
 
@@ -91,7 +91,7 @@ API定义::
 获取全部节点的监控数据
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/nodes
 
@@ -127,7 +127,7 @@ API定义::
 获取指定节点的监控数据
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/nodes/{node_name}
 
@@ -165,7 +165,7 @@ API定义::
 获取指定节点的客户端连接列表
 ----------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/clients
  
@@ -208,7 +208,7 @@ API定义::
 获取节点指定客户端连接的信息
 ----------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/clients/{clientid}
  
@@ -241,7 +241,7 @@ API定义::
 获取集群内指定客户端的信息
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/clients/{clientid}
  
@@ -272,6 +272,54 @@ API定义::
     }
 
 
+断开集群内指定客户端连接
+------------------
+
+API定义::
+
+    DELETE api/v2/clients/{clientid}
+
+请求示例::
+
+    DELETE api/v2/clients/C_1492145414740
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+清除集群内指定客户端的ACL缓存
+--------------------------
+
+API定义::
+
+    DELETE api/v2/clean_acl_cache/{clientid}
+
+请求参数:
+
+.. code-block:: json
+
+    {
+        "topic": "test"
+    }
+
+请求示例::
+
+    DELETE api/v2/clean_acl_cache/C_1492145414740
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
 --------------
 会话(Sessions)
 --------------
@@ -279,7 +327,7 @@ API定义::
 获取指定节点的会话列表
 ----------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/sessions
  
@@ -324,7 +372,7 @@ API定义::
 获取节点上指定客户端的会话信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/sessions/{clientid}
  
@@ -361,7 +409,7 @@ API定义::
 获取集群内指定客户端的会话信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/sessions/{clientid}
  
@@ -402,7 +450,7 @@ API定义::
 获取某个节点上的订阅列表
 ------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/subscriptions
 
@@ -440,7 +488,7 @@ API定义::
 获取节点上指定客户端的订阅信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/subscriptions/{clientid}
 
@@ -470,7 +518,7 @@ API定义::
 获取集群内指定客户端的订阅信息
 ------------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/subscriptions/{clientid}
 
@@ -505,7 +553,7 @@ API定义::
 获取集群路由表
 --------------
 
-API定义::
+API 定义::
 
     GET api/v2/routes
 
@@ -542,7 +590,7 @@ API定义::
 获取集群内指定主题的路由信息
 ----------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/routes/{topic}
 
@@ -576,7 +624,7 @@ API定义::
 发布消息
 --------
 
-API定义::
+API 定义::
 
     POST api/v2/mqtt/publish
 
@@ -592,7 +640,7 @@ API定义::
         "client_id": "C_1492145414740"
     }
 
-.. NOTE:: topic参数必填，其他参数可选。payload默认值空字符串，qos为0，retain为false，client_id为'http'。
+.. NOTE:: topic 参数必填，其他参数可选。payload 默认值空字符串，qos 为 0，retain 为 false，client_id 为 'http'。
 
 请求示例::
 
@@ -610,7 +658,7 @@ API定义::
 创建订阅
 --------
 
-API定义::
+API 定义::
 
     POST api/v2/mqtt/subscribe
 
@@ -640,7 +688,7 @@ API定义::
 取消订阅
 --------
 
-API定义::
+API 定义::
 
     POST api/v2/mqtt/unsubscribe
 
@@ -673,7 +721,7 @@ API定义::
 获取节点的插件列表
 ------------------
 
-API定义::
+API 定义::
 
     GET api/v2/nodes/{node_name}/plugins
 
@@ -821,7 +869,7 @@ API定义::
 开启/关闭节点的指定插件
 -----------------------
 
-API定义::
+API 定义::
 
     PUT /api/v2/nodes/{node_name}/plugins/{name}
 
@@ -849,7 +897,7 @@ API定义::
 获取集群节点的监听器列表
 ------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/listeners
 
@@ -924,7 +972,7 @@ API定义::
 获取指定节点的监听器列表
 ------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/listeners/{node_name}
 
@@ -1005,7 +1053,7 @@ API定义::
 获取全部节点的收发报文统计
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/metrics/
 
@@ -1063,7 +1111,7 @@ API定义::
 获取指定节点的收发报文统计
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/metrics/{node_name}
 
@@ -1126,7 +1174,7 @@ API定义::
 获取全部节点的连接会话统计
 ---------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/stats
 
@@ -1164,7 +1212,7 @@ API定义::
 获取指定节点的连接会话统计
 --------------------------
 
-API定义::
+API 定义::
 
     GET api/v2/monitoring/stats/{node_name}
 
@@ -1195,6 +1243,181 @@ API定义::
             "topics/max":0
         }
     }
+
+------
+热配置
+------
+
+获取全部节点的可修改配置项
+--------------------------
+
+API定义::
+
+    GET api/v2/nodes/{node_name}/configs
+
+请求示例::
+
+    GET api/v2/nodes/emq@127.0.0.1/configs
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": {
+            "emq@127.0.0.1": [
+                {
+                    "key": "log.console.level",
+                    "value": "error",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.acl_file",
+                    "value": "etc/acl.conf",
+                    "datatpye": "string",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.acl_nomatch",
+                    "value": "allow",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.allow_anonymous",
+                    "value": "true",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.broker.sys_interval",
+                    "value": "60",
+                    "datatpye": "integer",
+                    "app": "emqttd"
+                },
+                {
+                    "key": "mqtt.cache_acl",
+                    "value": "true",
+                    "datatpye": "enum",
+                    "app": "emqttd"
+                }
+            ]
+        }
+    }
+
+获取指定节点的可修改配置项
+--------------------------
+
+API定义::
+
+    GET api/v2/nodes/{node_name}/configs
+
+请求示例::
+
+    GET api/v2/nodes/emq@127.0.0.1/configs
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": [
+            {
+                "key": "log.console.level",
+                "value": "error",
+                "datatpye": "enum",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.acl_file",
+                "value": "etc/acl.conf",
+                "datatpye": "string",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.acl_nomatch",
+                "value": "allow",
+                "datatpye": "enum",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.allow_anonymous",
+                "value": "true",
+                "datatpye": "enum",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.broker.sys_interval",
+                "value": "60",
+                "datatpye": "integer",
+                "app": "emqttd"
+            },
+            {
+                "key": "mqtt.cache_acl",
+                "value": "true",
+                "datatpye": "enum",
+                "app": "emqttd"
+            }
+        ]
+    }
+
+修改全部节点的配置项
+--------------------
+
+API定义::
+
+    PUT /api/v2/configs
+
+请求参数::
+
+    {
+        "key"   : "mqtt.allow_anonymous",
+        "value" : "false"
+     }
+
+请求示例::
+
+    PUT /api/v2/configs
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+修改指定节点的配置项
+--------------------
+
+API定义::
+
+    PUT /api/v2/nodes/{node_name}/configs/{app_name}
+
+请求参数::
+
+    {
+        "key"   : "mqtt.allow_anonymous",
+        "value" : "false"
+     }
+
+请求示例::
+
+    PUT /api/v2/nodes/emq@127.0.0.1/configs/emqttd
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
 
 ----------
 返回错误码
@@ -1228,6 +1451,4 @@ API定义::
 | 111   | 插件已经卸载，不能重复卸载              |
 +-------+-----------------------------------------+
 | 112   | 用户不在线                              |
-+-------+-----------------------------------------+
-| 113   | 新密码和确认密码不一致                  |
 +-------+-----------------------------------------+

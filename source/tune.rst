@@ -3,13 +3,13 @@
 测试调优 (Tuning Guide)
 =======================
 
-*EMQ* 消息服务器1.x版本MQTT连接压力测试到130万，在一台8核心、32G内存的CentOS服务器上。
+*EMQ* 消息服务器1.x版本 MQTT 连接压力测试到130万，在一台8核心、32G内存的 CentOS 服务器上。
 
-100万连接测试所需的Linux内核参数，网络协议栈参数，Erlang虚拟机参数，emqttd消息服务器参数设置如下:
+100万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数，EMQ 消息服务器参数设置如下:
 
------------------
-Linux操作系统参数
------------------
+-------------------
+Linux 操作系统参数
+-------------------
 
 系统全局允许分配的最大文件句柄数::
 
@@ -25,27 +25,27 @@ Linux操作系统参数
 /etc/sysctl.conf
 ----------------
 
-持久化'fs.file-max'设置到/etc/sysctl.conf文件::
+持久化 'fs.file-max' 设置到 /etc/sysctl.conf 文件::
 
     fs.file-max = 1048576
 
-/etc/systemd/system.conf设置服务最大文件句柄数::
+/etc/systemd/system.conf 设置服务最大文件句柄数::
 
     DefaultLimitNOFILE=1048576
 
 /etc/security/limits.conf
 -------------------------
 
-/etc/security/limits.conf持久化设置允许用户/进程打开文件句柄数::
+/etc/security/limits.conf 持久化设置允许用户/进程打开文件句柄数::
 
     *      soft   nofile      1048576
     *      hard   nofile      1048576
 
------------------
-TCP协议栈网络参数
------------------
+-------------------
+TCP 协议栈网络参数
+-------------------
 
-并发连接backlog设置::
+并发连接 backlog 设置::
 
     sysctl -w net.core.somaxconn=32768
     sysctl -w net.ipv4.tcp_max_syn_backlog=16384
@@ -55,7 +55,7 @@ TCP协议栈网络参数
 
     sysctl -w net.ipv4.ip_local_port_range='1000 65535'
 
-TCP Socket读写Buffer设置::
+TCP Socket 读写 Buffer 设置::
 
     sysctl -w net.core.rmem_default=262144
     sysctl -w net.core.wmem_default=262144
@@ -67,13 +67,13 @@ TCP Socket读写Buffer设置::
     sysctl -w net.ipv4.tcp_rmem='1024 4096 16777216'
     sysctl -w net.ipv4.tcp_wmem='1024 4096 16777216'
 
-TCP连接追踪设置::
+TCP 连接追踪设置::
 
     sysctl -w net.nf_conntrack_max=1000000
     sysctl -w net.netfilter.nf_conntrack_max=1000000
     sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 
-TIME-WAIT Socket最大数量、回收与重用设置::
+TIME-WAIT Socket 最大数量、回收与重用设置::
 
     net.ipv4.tcp_max_tw_buckets=1048576
 
@@ -81,15 +81,15 @@ TIME-WAIT Socket最大数量、回收与重用设置::
     # net.ipv4.tcp_tw_recycle = 1
     # net.ipv4.tcp_tw_reuse = 1
 
-FIN-WAIT-2 Socket超时设置::
+FIN-WAIT-2 Socket 超时设置::
 
     net.ipv4.tcp_fin_timeout = 15
 
-----------------
-Erlang虚拟机参数
-----------------
+------------------
+Erlang 虚拟机参数
+------------------
 
-优化设置Erlang虚拟机启动参数，配置文件emqttd/etc/emq.conf:
+优化设置 Erlang 虚拟机启动参数，配置文件 emqttd/etc/emq.conf:
 
 .. code-block:: properties
 
@@ -99,11 +99,11 @@ Erlang虚拟机参数
     ## Sets the maximum number of simultaneously existing ports for this system
     node.max_ports = 1048576
 
------------------
-EMQ消息服务器参数
------------------
+------------------
+EMQ 消息服务器参数
+------------------
 
-设置TCP监听器的Acceptor池大小，最大允许连接数。配置文件emqttd/etc/emq.conf:
+设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。配置文件 emqttd/etc/emq.conf:
 
 .. code-block:: properties
 
