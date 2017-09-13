@@ -68,15 +68,15 @@ Add HTTP API for hot configuration.
 Bugfix
 ------
 
-1. Fixed parse 'auth.mysql.password_hash' error for hot configuration (emq-auth-mysql#68)
+1. Parse 'auth.mysql.password_hash' error when hot configuration reload (emq-auth-mysql#68)
 
-2. Fixed set 'auth.pgsql.server' error for hot configuration (emq-auth-pgsql#67)
+2. Set 'auth.pgsql.server' error when hot configuration reload (emq-auth-pgsql#67)
 
-3. Fixed set 'auth.redis.server' and 'auth.redis.password_hash' error for hot configuration (emq-auth-redis#47)
+3. Set 'auth.redis.server' and 'auth.redis.password_hash' error when hot configuration reload (emq-auth-redis#47)
 
-4. Fixed the issue that When deleting retained message subscribed clients not notified (emqttd#1207)
+4. Fixed the issue that when deleting retained message subscribed clients are not notified (emqttd#1207)
 
-5. Fixed emqttd for hot configuring:
+5. Support more parameters for hot configuration reload:
 
 - mqtt.websocket_protocol_header = on
 - mqtt.mqueue.low_watermark = 20%
