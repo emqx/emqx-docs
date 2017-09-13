@@ -13,31 +13,34 @@
 
 *发布日期: 2017-09-13*
 
-emqttd
+Highlights
+-----------
+
+Released a new sexy dashboard.
+
+Add more RESTful APIs for manangement and monitoring.
+
+Configuring the broker through CLI or API without having to restart.
+
+Bugfix
 -------
 
-1. Add more RESTful APIs for manangement and monitoring.
+Job for emqttd.service failed because the control process exited with error code. (emqttd#1238)
 
-2. Configuring the broker through CLI or API without having to restart.
+Travis-CI Build Failing (emqttd#1221)
 
-3. Job for emqttd.service failed because the control process exited with error code. (emqttd#1238)
+Https listener of Dashboard plugin won't work (emqttd#1220)
 
-4. Travis-CI Build Failing (emqttd#1221)
-
-5. Https listener of Dashboard plugin won't work (emqttd#1220)
-
-6. Service not starting on Debian 8 Jessie (emqttd#1228)
+Service not starting on Debian 8 Jessie (emqttd#1228)
 
 emq-dashboard
 -------------
 
-1. Release a new sexy dashboard!
+1. Support switching to other clustered node.
 
-2. Support switch to other clustered node.
+2. Configure and reboot the plugins on the dashboard.
 
-3. Support configure and reboot the plugins on the dashboard.
-
-4. A login page to replace the basic authentication popup window.
+3. A login page to replace the basic authentication popup window.
 
 emq-coap
 ---------
