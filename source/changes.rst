@@ -5,6 +5,53 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3-beta.4:
+
+---------------
+2.3-beta.4 版本
+---------------
+
+*发布日期: 2017-09-13*
+
+emqttd
+-------
+
+1. Add more RESTful APIs for manangement and monitoring.
+
+2. Configuring the broker through CLI or API without having to restart.
+
+3. Job for emqttd.service failed because the control process exited with error code. (emqttd#1238)
+
+4. Travis-CI Build Failing (emqttd#1221)
+
+5. Https listener of Dashboard plugin won't work (emqttd#1220)
+
+6. Service not starting on Debian 8 Jessie (emqttd#1228)
+
+emq-dashboard
+-------------
+
+1. Release a new sexy dashboard!
+
+2. Support switch to other clustered node.
+
+3. Support configure and reboot the plugins on the dashboard.
+
+4. A login page to replace the basic authentication popup window.
+
+emq-coap
+---------
+
+1.Try to clarify the relationship between coap and mqtt in EMQ. (emq-coap#54).
+
+2.Fix crashes in coap concurrent test(gen-coap#3).
+
+---------------
+2.3-beta.3 版本
+---------------
+
+*发布日期: 2017-08-21*
+
 .. _release_2.3-beta.3:
 
 ---------------
@@ -36,7 +83,6 @@ Bugfix
 - mqtt.mqueue.high_watermark = 60%
 - mqtt.client.idle_timeout = 30s
 - mqtt.client.enable_stats = off
-
 
 .. _release_2.3-beta.2:
 
