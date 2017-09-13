@@ -5,6 +5,88 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3-beta.4:
+
+---------------
+2.3-beta.4 版本
+---------------
+
+*发布日期: 2017-09-13*
+
+Highlights
+-----------
+
+Released a new sexy dashboard.
+
+Add more RESTful APIs for manangement and monitoring.
+
+Configuring the broker through CLI or API without having to restart.
+
+Bugfix
+-------
+
+Job for emqttd.service failed because the control process exited with error code. (emqttd#1238)
+
+Travis-CI Build Failing (emqttd#1221)
+
+Https listener of Dashboard plugin won't work (emqttd#1220)
+
+Service not starting on Debian 8 Jessie (emqttd#1228)
+
+emq-dashboard
+-------------
+
+1. Support switching to other clustered node.
+
+2. Configure and reboot the plugins on the dashboard.
+
+3. A login page to replace the basic authentication popup window.
+
+emq-coap
+---------
+
+1.Try to clarify the relationship between coap and mqtt in EMQ. (emq-coap#54).
+
+2.Fix crashes in coap concurrent test(gen-coap#3).
+
+---------------
+2.3-beta.3 版本
+---------------
+
+*发布日期: 2017-08-21*
+
+.. _release_2.3-beta.3:
+
+---------------
+2.3-beta.3 版本
+---------------
+
+*发布日期: 2017-08-21*
+
+Enhancements
+------------
+
+Add HTTP API for hot configuration.
+
+Bugfix
+------
+
+1. Parse 'auth.mysql.password_hash' error when hot configuration reload (emq-auth-mysql#68)
+
+2. Set 'auth.pgsql.server' error when hot configuration reload (emq-auth-pgsql#67)
+
+3. Set 'auth.redis.server' and 'auth.redis.password_hash' error when hot configuration reload (emq-auth-redis#47)
+
+4. Fixed the issue that when deleting retained message subscribed clients are not notified (emqttd#1207)
+
+5. Support more parameters for hot configuration reload:
+
+- mqtt.websocket_protocol_header = on
+- mqtt.mqueue.low_watermark = 20%
+- mqtt.mqueue.high_watermark = 60%
+- mqtt.client.idle_timeout = 30s
+- mqtt.client.enable_stats = off
+
 .. _release_2.3-beta.2:
 
 ---------------
@@ -21,7 +103,6 @@ EMQ R2.3-beta.2 版本发布！该版本新增 HTTP 管理 API，支持配置 Ke
 - emq-coap
 - emq-sn
 - emq-lwm2m
-- emq-dashboard
 - emq-retainer
 - emq-recon
 - emq-web-hook

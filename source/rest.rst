@@ -297,7 +297,7 @@ API定义::
 
 API定义::
 
-    DELETE api/v2/clean_acl_cache/{clientid}
+    DELETE api/v2/clients/{clientid}/clean_acl_cache
 
 请求参数:
 
@@ -309,7 +309,7 @@ API定义::
 
 请求示例::
 
-    DELETE api/v2/clean_acl_cache/C_1492145414740
+    DELETE api/v2/clients/C_1492145414740/clean_acl_cache
 
 返回数据:
 
@@ -1369,7 +1369,7 @@ API定义::
 
 API定义::
 
-    PUT /api/v2/configs
+    PUT /api/v2/configs/{app_name}
 
 请求参数::
 
@@ -1380,7 +1380,7 @@ API定义::
 
 请求示例::
 
-    PUT /api/v2/configs
+    PUT /api/v2/configs/emqttd
 
 返回数据:
 
@@ -1418,6 +1418,274 @@ API定义::
         "result": []
     }
 
+获取指定节点的制定插件的配置项
+--------------------------
+
+API定义::
+
+    GET api/v2/nodes/{node_name}/plugin_configs/{plugin_name}
+
+请求示例::
+
+    GET api/v2/nodes/emq@127.0.0.1/plugin_configs/emq_auth_http
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": [
+            {
+                "key": "auth.http.auth_req",
+                "value": "http://127.0.0.1:8080/mqtt/auth",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.auth_req.method",
+                "value": "post",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.auth_req.params",
+                "value": "clientid=%c,username=%u,password=%P",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.super_req",
+                "value": "http://127.0.0.1:8080/mqtt/superuser",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.super_req.method",
+                "value": "post",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.super_req.params",
+                "value": "clientid=%c,username=%u",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.acl_req",
+                "value": "http://127.0.0.1:8080/mqtt/acl",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.acl_req.method",
+                "value": "get",
+                "desc": "",
+                "required": true
+            },
+            {
+                "key": "auth.http.acl_req.params",
+                "value": "access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t",
+                "desc": "",
+                "required": true
+            }
+        ]
+    }
+
+修改指定节点的制定插件的配置项
+--------------------------
+
+API定义::
+
+    PUT api/v2/nodes/{node_name}/plugin_configs/{plugin_name}
+
+请求参数::
+
+    {
+        "auth.http.auth_req.method": "get",
+        "auth.http.auth_req": "http://127.0.0.1:8080/mqtt/auth",
+        "auth.http.auth_req.params": "clientid=%c,username=%u,password=%P",
+        "auth.http.acl_req.method": "get",
+        "auth.http.acl_req": "http://127.0.0.1:8080/mqtt/acl",
+        "auth.http.acl_req.params": "access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t",
+        "auth.http.super_req.method": "post",
+        "auth.http.super_req.params": "clientid=%c,username=%u",
+        "auth.http.super_req": "http://127.0.0.1:8080/mqtt/superuser"
+    }
+
+请求示例::
+
+    PUT api/v2/nodes/emq@127.0.0.1/plugin_configs/emq_auth_http
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+--------
+用户管理
+--------
+
+获取管理用户列表
+--------------
+
+API定义::
+
+    GET api/v2/users
+
+请求示例::
+
+    GET api/v2/users
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": [
+            {
+                "username": "admin",
+                "tags": "administrator"
+            }
+        ]
+    }
+
+添加管理用户
+----------
+
+API定义::
+
+    POST api/v2/users
+
+请求参数::
+
+    {
+        "username": "test_user",
+        "password": "password",
+        "tag": "user"
+    }
+
+请求示例::
+
+    POST api/v2/users
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+修改管理用户信息
+--------------
+
+API定义::
+
+    PUT api/v2/users/{username}
+
+请求参数::
+
+    {
+        "tag": "admin"
+    }
+
+请求示例::
+
+    PUT api/v2/users/test_user
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+删除管理用户
+-----------
+
+API定义::
+
+    DELETE api/v2/users/{username}
+
+请求参数::
+
+
+请求示例::
+
+    DELETE api/v2/users/test_user
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+认证管理用户
+-----------
+
+API定义::
+
+    DELETE api/v2/auth
+
+请求参数::
+
+    {
+        "username": "test_user",
+        "password": "password"
+    }
+
+请求示例::
+
+    DELETE api/v2/auth
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
+
+修改管理用户密码
+--------------
+
+API定义::
+
+    DELETE api/v2/change_pwd/{username}
+
+请求参数::
+
+    {
+        "password": "newpassword",
+        "oldpassword": "password"
+    }
+
+请求示例::
+
+    DELETE api/v2/change_pwd/test_user
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "code": 0,
+        "result": []
+    }
 
 ----------
 返回错误码
@@ -1451,4 +1719,8 @@ API定义::
 | 111   | 插件已经卸载，不能重复卸载              |
 +-------+-----------------------------------------+
 | 112   | 用户不在线                              |
++-------+-----------------------------------------+
+| 113   | 用户已经存在                            |
++-------+-----------------------------------------+
+| 114   | 旧密码错误                              |
 +-------+-----------------------------------------+
