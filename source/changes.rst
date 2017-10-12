@@ -16,21 +16,21 @@
 Bugfix
 ______
 
-Fix the issue that Will message published event clients are invalided (emqttd#1230)
+Fixed the issue that invalid clients can publish will message. (emqttd#1230)
 
-Fixed Dashboard shows no stats data (emqttd#1263)
+Fixed Dashboard showing no stats data (emqttd#1263)
 
-Fixed rare broken EMQ build procedure (emqttd#1284)
+Fixed a rare occurred building failure (emqttd#1284)
 
 Support Persistence Logs for longer time (emqttd#1275)
 
-Fixed for users APIs (emqttd#1289)
+Fix for users APIs (emqttd#1289)
 
 Changed passwd_hash/2 function's return type (emqttd#1289)
 
 emq-dashboard Plugin (emq-dashboard#154)
 ----------------------------------------
-Improve the Dashboard Interface of Monitoring/Management/Tools.
+Improved the Dashboard Interface of Monitoring/Management/Tools.
 
 Allow switching dashboard themes.
 
