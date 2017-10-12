@@ -219,7 +219,7 @@ CTRL+c 关闭控制台。守护进程模式启动:
 
 *EMQ* 消息服务器提供了状态监控 URL ::
 
-    http://localhost:8083/status
+    http://localhost:8080/status
 
 停止服务器::
 
