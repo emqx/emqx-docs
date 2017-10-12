@@ -345,25 +345,24 @@ API 定义::
 
     {
         "code": 0,
-        "result":
-        {
+        "result": {
             "current_page": 1,
             "page_size": 20,
             "total_num": 1,
             "total_page": 1,
-            "objects":
-            [
+            "objects": [
                 {
                     "client_id": "C_1492145414740",
                     "clean_sess": true,
-                    "max_inflight": "undefined",
-                    "inflight_queue": "undefined",
-                    "message_queue": "undefined",
-                    "message_dropped": "undefined",
-                    "awaiting_rel": "undefined",
-                    "awaiting_ack": "undefined",
-                    "awaiting_comp": "undefined",
-                    "created_at": "2017-04-14 13:35:15"
+                    "subscriptions": 1,
+                    "max_inflight": 32,
+                    "inflight_len": 0,
+                    "mqueue_len": 0,
+                    "mqueue_dropped": 0,
+                    "awaiting_rel_len": 0,
+                    "deliver_msg": 0,
+                    "enqueue_msg": 0,
+                    "created_at": "2017-10-12 22:32:49"
                 }
             ]
         }
@@ -386,21 +385,20 @@ API 定义::
 
     {
         "code": 0,
-        "result":
-        {
-            "objects":
-            [
+        "result": {
+            "objects": [
                 {
                     "client_id": "C_1492145414740",
                     "clean_sess": true,
-                    "max_inflight": "undefined",
-                    "inflight_queue": "undefined",
-                    "message_queue": "undefined",
-                    "message_dropped": "undefined",
-                    "awaiting_rel": "undefined",
-                    "awaiting_ack": "undefined",
-                    "awaiting_comp": "undefined",
-                    "created_at": "2017-04-14 13:35:15"
+                    "subscriptions": 1,
+                    "max_inflight": 32,
+                    "inflight_len": 0,
+                    "mqueue_len": 0,
+                    "mqueue_dropped": 0,
+                    "awaiting_rel_len": 0,
+                    "deliver_msg": 0,
+                    "enqueue_msg": 0,
+                    "created_at": "2017-10-12 22:32:49"
                 }
             ]
         }
