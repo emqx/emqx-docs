@@ -154,7 +154,7 @@ Web 管理控制台(Dashboard)
 +----------------------------+-------------------------------------+
 | `emq_retainer`_            | Retain 消息存储插件                 |
 +----------------------------+-------------------------------------+
-| `emq_mod_modules`_         | Presence, Subscription 扩展模块插件 |
+| `emq_modules`_             | Presence, Subscription 扩展模块插件 |
 +----------------------------+-------------------------------------+
 | `emq_dashboard`_           | Web 管理控制台，默认加载            |
 +----------------------------+-------------------------------------+
@@ -243,10 +243,10 @@ EMQ 最大允许连接数
 emqttd/etc/emq.conf 'listeners'段落::
 
     ## Size of acceptor pool
-    listener.tcp.acceptors = 64
+    listener.tcp.external.acceptors = 64
 
     ## Maximum number of concurrent clients
-    listener.tcp.max_clients = 1000000
+    listener.tcp.external.max_clients = 1000000
 
 测试客户端设置
 --------------
