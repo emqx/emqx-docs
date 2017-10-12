@@ -5,6 +5,37 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3-rc.1:
+
+---------------
+2.3-rc.1 版本
+---------------
+
+*发布日期: 2017-10-12*
+
+Bugfix
+______
+
+Fix the issue that Will message published event clients are invalided (emqttd#1230)
+
+Fixed Dashboard shows no stats data (emqttd#1263)
+
+Fixed rare broken EMQ build procedure (emqttd#1284)
+
+Support Persistence Logs for longer time (emqttd#1275)
+
+Fixed for users APIs (emqttd#1289)
+
+Changed passwd_hash/2 function's return type (emqttd#1289)
+
+emq-dashboard Plugin (emq-dashboard#154)
+----------------------------------------
+Improve the Dashboard Interface of Monitoring/Management/Tools.
+
+Allow switching dashboard themes.
+
+Supoort both EN and CN languages.
+
 .. _release_2.3-beta.4:
 
 ---------------
