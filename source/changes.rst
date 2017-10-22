@@ -16,16 +16,16 @@
 Bugfix
 ______
 
-Fixed CLI Commands:trace. (emqttd#1306)
+Change the default logging level of `trace` CLI. (emqttd#1306)
 
 emq-dashboard Plugin (emq-dashboard#164)
 ----------------------------------------
 
-Fixed Dashboard Interface of Mangagement->Plugins's Filters.
+Fix the 'Status' filters of plugins's management.
 
-Fixed Delete User Redirection.
+Fix the URL Redirection when deleting an user.
 
-Browser compatibility fix for IE,Safari,360.
+Compatible with IE,Safari,360 Browsers.
 
 .. _release_2.3-rc.1:
 
