@@ -1566,7 +1566,7 @@ API定义::
     {
         "username": "test_user",
         "password": "password",
-        "tag": "user"
+        "tags": "user"
     }
 
 请求示例::
@@ -1592,7 +1592,7 @@ API定义::
 请求参数::
 
     {
-        "tag": "admin"
+        "tags": "admin"
     }
 
 请求示例::

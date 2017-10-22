@@ -5,11 +5,33 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3-rc.2:
+
+-------------
+2.3-rc.2 版本
+-------------
+
+*发布日期: 2017-10-22*
+
+Bugfix
+______
+
+Change the default logging level of `trace` CLI. (emqttd#1306)
+
+emq-dashboard Plugin (emq-dashboard#164)
+----------------------------------------
+
+Fix the 'Status' filters of plugins's management.
+
+Fix the URL Redirection when deleting an user.
+
+Compatible with IE,Safari,360 Browsers.
+
 .. _release_2.3-rc.1:
 
----------------
+-------------
 2.3-rc.1 版本
----------------
+-------------
 
 *发布日期: 2017-10-12*
 
