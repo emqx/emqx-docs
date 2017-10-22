@@ -5,11 +5,33 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3-rc.2:
+
+-------------
+2.3-rc.2 版本
+-------------
+
+*发布日期: 2017-10-22*
+
+Bugfix
+______
+
+Fixed CLI Commands:trace. (emqttd#1306)
+
+emq-dashboard Plugin (emq-dashboard#164)
+----------------------------------------
+
+Fixed Dashboard Interface of Mangagement->Plugins's Filters.
+
+Fixed Delete User Redirection.
+
+Browser compatibility fix for IE,Safari,360.
+
 .. _release_2.3-rc.1:
 
----------------
+-------------
 2.3-rc.1 版本
----------------
+-------------
 
 *发布日期: 2017-10-12*
 
