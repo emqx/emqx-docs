@@ -420,8 +420,6 @@ HTTP API 实现访问控制: https://github.com/emqtt/emq_auth_http
     auth.http.acl_req.method = get
     auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t
 
-    auth.http.acl_nomatch = deny
-
 ------------------
 MySQL 插件访问控制
 ------------------
@@ -457,9 +455,6 @@ etc/plugins/emq_auth_mysql.conf 配置 'acl_query' 与 'acl_nomatch':
     ## ACL Query Command
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
-    ## ACL nomatch
-    auth.mysql.acl_nomatch = deny
-
 --------------------
 Postgre 插件访问控制
 --------------------
@@ -494,9 +489,6 @@ etc/plugins/emq_auth_pgsql.conf 设置 'acl_query' 与 'acl_nomatch':
     ## ACL Query. Comment this query, the acl will be disabled.
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
-    ## If no rules matched, return...
-    auth.pgsql.acl_nomatch = deny
-
 ------------------
 Redis 插件访问控制
 ------------------
@@ -513,9 +505,6 @@ etc/plugins/emq_auth_redis.conf 配置 'acl_cmd' 与 'acl_nomatch':
 
     ## ACL Query Command
     auth.redis.acl_cmd = HGETALL mqtt_acl:%u
-
-    ## ACL nomatch
-    auth.redis.acl_nomatch = deny
 
 --------------------
 MongoDB 插件访问控制
@@ -544,9 +533,6 @@ etc/plugins/emq_auth_mongo.conf 配置 'acl_query' 与 'acl_nomatch':
     auth.mongo.acl_query.collection = mqtt_user
 
     auth.mongo.acl_query.selector = username=%u
-
-    ## acl_nomatch
-    auth.mongo.acl_nomatch = deny
 
 -------------
 MQTT 发布订阅
