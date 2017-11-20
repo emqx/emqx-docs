@@ -5,6 +5,52 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.0:
+
+-------------
+2.3.0 版本
+-------------
+
+*发布日期: 2017-11-20*
+
+*EMQ* 2.3.0版本正式发布，改进了pubsub设计，更新EMQ 自带的自签名SSL证书。
+
+Bugfix
+______
+
+Fix the issue that Retained message is not sent for Subscribe to existing topic.(emttd#1314)
+
+Fix the issue that The DUP flag MUST be set to 0 for all QoS 0 messages.(emqttd#1319)
+
+Improve the pubsub design and fix the race-condition issue.(emqttd#PR1342)
+
+1. Remove the 'mqtt.pubsub.by_clientid' option
+
+2. Refactor the subscription_list function
+
+3. Update openssl pem file
+
+emq-dashboard Plugin (emq-dashboard#PR174)
+------------------------------------------
+
+Upgrade the 'subscriptions' RESTfule API.
+
+Improved the auth failure log. (emq-dashboard#59)
+
+emq-coap Plugin (emq-coap#PR61)
+-------------------------------
+
+Replace coap_client with er_coap_client.
+
+Add the .well-known locations introduction.
+
+Refine the coap_discover method.
+
+emq-web-hook Plugin
+-------------------
+
+Fixed the emq_web_hook plugin getting username from client.connected hook.(emq-web-hook#19)
+
 .. _release_2.3-rc.2:
 
 -------------
