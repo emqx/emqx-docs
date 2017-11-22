@@ -18,9 +18,9 @@
 Bugfix
 ______
 
-Fix the issue that Retained message is not sent for Subscribe to existing topic.(emttd#1314)
+Fixed the issue that Retained message is not sent for Subscribe to existing topic.(emttd#1314)
 
-Fix the issue that The DUP flag MUST be set to 0 for all QoS 0 messages.(emqttd#1319)
+Fixed the issue that The DUP flag MUST be set to 0 for all QoS 0 messages.(emqttd#1319)
 
 Improve the pubsub design and fix the race-condition issue.(emqttd#PR1342)
 
@@ -30,19 +30,32 @@ Improve the pubsub design and fix the race-condition issue.(emqttd#PR1342)
 
 3. Update openssl pem file
 
+4. Format the 'trie_node' record
+
+5. Fixed the function spec: '{error, any()}' -> '{error, term()}'
+
+6. Fixed the 'subscriptions add <ClientId> <Topic> <Qos>' CLI
+
+7. Fixed the 'subscriptions' CLI
+
+8. Update the 'api/v2/subscriptions' API
+
+9. Show local route in the 'Routes Interface'
+
+
 emq-dashboard Plugin (emq-dashboard#PR174)
 ------------------------------------------
 
 Upgrade the 'subscriptions' RESTfule API.
 
-Improved the auth failure log. (emq-dashboard#59)
+Improved the auth failure log.(emq-dashboard#59)
 
 emq-coap Plugin (emq-coap#PR61)
 -------------------------------
 
 Replace coap_client with er_coap_client.
 
-Add the .well-known locations introduction.
+Fixed: correct the output format of coap_discover() to enable ".well-known/core".
 
 Refine the coap_discover method.
 
@@ -50,6 +63,18 @@ emq-web-hook Plugin
 -------------------
 
 Fixed the emq_web_hook plugin getting username from client.connected hook.(emq-web-hook#19)
+
+emq-auth-jwt Plugin(emq-auth-jwt#PR15)
+--------------------------------------
+
+Added test case for emq_auth_jwt.
+
+Fixed jwt:decode/2 functions's return type.
+
+emq-auth-mongo Plugin(emq-auth-mongo#PR92)
+------------------------------------------
+
+update default MongoDB server configuration.
 
 .. _release_2.3-rc.2:
 
