@@ -18,9 +18,9 @@
 Bugfix
 ______
 
-Fix the issue that Retained message is not sent for Subscribe to existing topic. (emqttd#1314)
+Fixed the issue that Retained message is not sent for Subscribe to existing topic. (emqttd#1314)
 
-Fix the issue that The DUP flag MUST be set to 0 for all QoS 0 messages. (emqttd#1319)
+Fixed the issue that The DUP flag MUST be set to 0 for all QoS 0 messages.(emqttd#1319)
 
 Improve the pubsub design and fix the race-condition issue. (emqttd#PR1342)
 
@@ -38,7 +38,7 @@ emq-coap Plugin (emq-coap#PR61)
 
 Replace coap_client with er_coap_client.
 
-Add the .well-known locations introduction.
+Fixed: correct the output format of coap_discover() to enable ".well-known/core".
 
 Refactor the coap_discover method.
 
@@ -47,11 +47,22 @@ emq-relx
 
 Upgrade the `bin/nodetool` script to fix the `rpcterms` command.
 
-
 emq-web-hook Plugin
 -------------------
 
 Fixed the emq_web_hook plugin getting username from client.connected hook. (emq-web-hook#19)
+
+emq-auth-jwt Plugin(emq-auth-jwt#PR15)
+--------------------------------------
+
+Added test cases for emq_auth_jwt.
+
+Fixed jwt:decode/2 functions's return type.
+
+emq-auth-mongo Plugin(emq-auth-mongo#PR92)
+------------------------------------------
+
+Update the default MongoDB server configuration.
 
 .. _release_2.3-rc.2:
 
