@@ -7,20 +7,20 @@
 
 .. _release_2.3.0:
 
-----------
-2.3.0 版本
-----------
+----------------------------
+2.3.0 版本 "Passenger's Log"
+----------------------------
 
 *发布日期: 2017-11-20*
 
-*EMQ* 2.3.0 版本正式发布，改进了 PubSub 设计与消息路由性能，更新 EMQ 自带的自签名 SSL 证书，改进 Dashboard 界面与 API 设计。
+EMQ 2.3.0 版本正式发布，改进了 PubSub 设计与消息路由性能，更新 EMQ 自带的自签名 SSL 证书，改进 Dashboard 界面与 API 设计。
 
-Bugfix
-______
+Bugfix and Enhancements
+------------------------
 
 Fixed the issue that Retained message is not sent for Subscribe to existing topic. (emqttd#1314)
 
-Fixed the issue that The DUP flag MUST be set to 0 for all QoS 0 messages.(emqttd#1319)
+Fixed the issue that The DUP flag MUST be set to 0 for all QoS0 messages.(emqttd#1319)
 
 Improve the pubsub design and fix the race-condition issue. (emqttd#PR1342)
 
@@ -29,14 +29,14 @@ Crash on macOS High Sierra (emqttd#1297)
 emq-dashboard Plugin (emq-dashboard#PR174)
 ------------------------------------------
 
-Upgrade the 'subscriptions' RESTful API.
+Upgraded the 'subscriptions' RESTful API.
 
-Improve the auth failure log. (emq-dashboard#59)
+Improvement of the auth failure log. (emq-dashboard#59)
 
 emq-coap Plugin (emq-coap#PR61)
 -------------------------------
 
-Replace coap_client with er_coap_client.
+Replaced coap_client with er_coap_client.
 
 Fixed: correct the output format of coap_discover() to enable ".well-known/core".
 
@@ -45,7 +45,7 @@ Refactor the coap_discover method.
 emq-relx
 --------
 
-Upgrade the `bin/nodetool` script to fix the `rpcterms` command.
+Upgraded the `bin/nodetool` script to fix the `rpcterms` command.
 
 emq-web-hook Plugin
 -------------------
@@ -62,7 +62,7 @@ Fixed jwt:decode/2 functions's return type.
 emq-auth-mongo Plugin(emq-auth-mongo#PR92)
 ------------------------------------------
 
-Update the default MongoDB server configuration.
+Updated the default MongoDB server configuration.
 
 .. _release_2.3-rc.2:
 
