@@ -5,6 +5,65 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.0:
+
+----------------------------
+2.3.0 版本 "Passenger's Log"
+----------------------------
+
+*发布日期: 2017-11-20*
+
+EMQ 2.3.0 版本正式发布，改进了 PubSub 设计与消息路由性能，更新 EMQ 自带的自签名 SSL 证书，改进 Dashboard 界面与 API 设计。
+
+Bugfix and Enhancements
+------------------------
+
+Fixed the issue that Retained message is not sent for Subscribe to existing topic. (emqttd#1314)
+
+Fixed the issue that The DUP flag MUST be set to 0 for all QoS0 messages.(emqttd#1319)
+
+Improve the pubsub design and fix the race-condition issue. (emqttd#PR1342)
+
+Crash on macOS High Sierra (emqttd#1297)
+
+emq-dashboard Plugin (emq-dashboard#PR174)
+------------------------------------------
+
+Upgraded the 'subscriptions' RESTful API.
+
+Improvement of the auth failure log. (emq-dashboard#59)
+
+emq-coap Plugin (emq-coap#PR61)
+-------------------------------
+
+Replaced coap_client with er_coap_client.
+
+Fixed: correct the output format of coap_discover() to enable ".well-known/core".
+
+Refactor the coap_discover method.
+
+emq-relx
+--------
+
+Upgraded the `bin/nodetool` script to fix the `rpcterms` command.
+
+emq-web-hook Plugin
+-------------------
+
+Fixed the emq_web_hook plugin getting username from client.connected hook. (emq-web-hook#19)
+
+emq-auth-jwt Plugin(emq-auth-jwt#PR15)
+--------------------------------------
+
+Added test cases for emq_auth_jwt.
+
+Fixed jwt:decode/2 functions's return type.
+
+emq-auth-mongo Plugin(emq-auth-mongo#PR92)
+------------------------------------------
+
+Updated the default MongoDB server configuration.
+
 .. _release_2.3-rc.2:
 
 -------------
