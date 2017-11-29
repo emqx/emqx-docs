@@ -297,7 +297,7 @@ API定义::
 
 API定义::
 
-    DELETE api/v2/clients/{clientid}/clean_acl_cache
+    PUT api/v2/clients/{clientid}/clean_acl_cache
 
 请求参数:
 
@@ -309,7 +309,7 @@ API定义::
 
 请求示例::
 
-    DELETE api/v2/clients/C_1492145414740/clean_acl_cache
+    PUT api/v2/clients/C_1492145414740/clean_acl_cache
 
 返回数据:
 
@@ -1416,7 +1416,7 @@ API定义::
         "result": []
     }
 
-获取指定节点的制定插件的配置项
+获取指定节点的指定插件的配置项
 --------------------------
 
 API定义::
@@ -1491,7 +1491,7 @@ API定义::
         ]
     }
 
-修改指定节点的制定插件的配置项
+修改指定节点的指定插件的配置项
 --------------------------
 
 API定义::
