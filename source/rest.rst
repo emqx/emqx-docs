@@ -1636,7 +1636,7 @@ API定义::
 
 API定义::
 
-    DELETE api/v2/auth
+    POST api/v2/auth
 
 请求参数::
 
@@ -1647,7 +1647,7 @@ API定义::
 
 请求示例::
 
-    DELETE api/v2/auth
+    POST api/v2/auth
 
 返回数据:
 
@@ -1663,7 +1663,7 @@ API定义::
 
 API定义::
 
-    DELETE api/v2/change_pwd/{username}
+    PUT api/v2/change_pwd/{username}
 
 请求参数::
 
@@ -1674,7 +1674,7 @@ API定义::
 
 请求示例::
 
-    DELETE api/v2/change_pwd/test_user
+    PUT api/v2/change_pwd/test_user
 
 返回数据:
 
