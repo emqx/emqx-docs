@@ -5,6 +5,78 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.1:
+
+----------
+2.3.1 版本
+----------
+
+*发布日期: 2017-12-3*
+
+Bugfix and Enhancements
+-----------------------
+
+Change the default value of 'mqtt.session.enable_stats'
+
+Remove the unnecessary transactions to optimize session management.
+
+Should not exit arbitrarily if clientid conflicts in mnesia.
+
+Update the topic's statistics.
+
+##### Fixed the issue that The DUP flag MUST be set to 0 for all QoS0 messages.(emqttd#1319)
+
+Fixed the 'no function clause' exception.(emqttd#1293)
+
+Fixed the retained flags should be propagated for bridge.(emqttd#1293)
+
+Fixed the management API should listen on 0.0.0:8080.(emqttd#1353)
+
+Fast close the invalid websocket in init/1 function.
+
+Fixed erlang:demonitor/1 the reference when erasing the monitor.(emqttd#1340)
+
+emq_retaine(PR#38)
+------------------
+
+Don't clean the retain flag after the retained message is stored
+
+Add three CLIs for the retainer plugin
+
+Replace dirty_select/2 with dirty_all_keys/1
+
+Replace lists:join/2 with lists:foreach/2
+
+emq_dashboard(PR#185)
+---------------------
+
+refactor(priv/www): frontend routing adjustment
+
+emq_modules(PR#26)
+------------------
+
+Turn off the by default
+
+mochiweb(PR#9)
+--------------
+
+Merge the latest master branch of mochi/mochiweb.
+
+Improve the Req:get(peername) to support x-forwarded-for and x-remote-port.
+
+emq_sn(PR#55)
+-------------
+
+Add an intergration test case to test sleeping device.
+
+Do not send will topic if client is kicked out.
+
+Prevent crash information in log when emq_sn_gateway get timeout, since it is a possible procedure.
+
+emq-relx
+--------
+support node cookie value with '=' characters
+
 .. _release_2.3.0:
 
 ----------------------------
