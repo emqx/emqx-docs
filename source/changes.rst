@@ -5,6 +5,71 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.1:
+
+----------
+2.3.1 版本
+----------
+
+*发布日期: 2017-12-03*
+
+Bugfix and Enhancements
+-----------------------
+
+Remove the unnecessary transactions to optimize session management.
+
+Should not exit arbitrarily when clientid conflicts in mnesia.
+
+Change the default value of 'mqtt.session.enable_stats' to 'on'.
+
+The DUP flag should be set to 0 for all QoS0 messages. (emqttd#1319)
+
+Fix the 'no function clause' exception. (emqttd#1293)
+
+The retained flags should be propagated for bridge. (emqttd#1293)
+
+The management API should listen on 0.0.0.0:8080. (emqttd#1353)
+
+Fast close the invalid websocket in init/1 function.
+
+erlang:demonitor/1 the reference when erasing a monitor. (emqttd#1340)
+
+emq-retainer
+------------
+
+Don't clean the retain flag after the retained message is stored.
+
+Add three CLIs for the retainer plugin. (emq-retainer#38)
+
+emq-dashboard
+-------------
+
+Refactor(priv/www): improve the `routing` page. (emq-dashboard#185)
+
+emq-modules
+-----------
+
+Turn off the `subscription` module by default. (emq-modules#26)
+
+emq-sn
+------
+
+Add an intergration test case for sleeping device.
+
+Do not send will topic if client is kicked out.
+
+Prevent crash information in log when emq_sn_gateway getting timeout, since it is a possible procedure.
+
+emq-relx
+--------
+
+Support node cookie value with `=` characters. (emq-relx#146)
+
+mochiweb
+--------
+
+Improve Req:get(peername) funciton to support `x-forwarded-for` and `x-remote-port`. (emqtt/mochiweb#9)
+
 .. _release_2.3.0:
 
 ----------------------------
@@ -18,9 +83,9 @@ EMQ 2.3.0 版本正式发布，改进了 PubSub 设计与消息路由性能，�
 Bugfix and Enhancements
 ------------------------
 
-Fixed the issue that Retained message is not sent for Subscribe to existing topic. (emqttd#1314)
+Fix the issue that Retained message is not sent for Subscribe to existing topic. (emqttd#1314)
 
-Fixed the issue that The DUP flag MUST be set to 0 for all QoS0 messages.(emqttd#1319)
+Fix the issue that The DUP flag MUST be set to 0 for all QoS0 messages.(emqttd#1319)
 
 Improve the pubsub design and fix the race-condition issue. (emqttd#PR1342)
 
@@ -38,7 +103,7 @@ emq-coap Plugin (emq-coap#PR61)
 
 Replaced coap_client with er_coap_client.
 
-Fixed: correct the output format of coap_discover() to enable ".well-known/core".
+Fix: correct the output format of coap_discover() to enable ".well-known/core".
 
 Refactor the coap_discover method.
 
@@ -50,14 +115,14 @@ Upgraded the `bin/nodetool` script to fix the `rpcterms` command.
 emq-web-hook Plugin
 -------------------
 
-Fixed the emq_web_hook plugin getting username from client.connected hook. (emq-web-hook#19)
+Fix the emq_web_hook plugin getting username from client.connected hook. (emq-web-hook#19)
 
 emq-auth-jwt Plugin(emq-auth-jwt#PR15)
 --------------------------------------
 
 Added test cases for emq_auth_jwt.
 
-Fixed jwt:decode/2 functions's return type.
+Fix jwt:decode/2 functions's return type.
 
 emq-auth-mongo Plugin(emq-auth-mongo#PR92)
 ------------------------------------------
@@ -97,11 +162,11 @@ Compatible with IE,Safari,360 Browsers.
 Bugfix
 ______
 
-Fixed the issue that invalid clients can publish will message. (emqttd#1230)
+Fix the issue that invalid clients can publish will message. (emqttd#1230)
 
-Fixed Dashboard showing no stats data (emqttd#1263)
+Fix Dashboard showing no stats data (emqttd#1263)
 
-Fixed a rare occurred building failure (emqttd#1284)
+Fix a rare occurred building failure (emqttd#1284)
 
 Support Persistence Logs for longer time (emqttd#1275)
 
@@ -189,7 +254,7 @@ Bugfix
 
 3. Set 'auth.redis.server' and 'auth.redis.password_hash' error when hot configuration reload (emq-auth-redis#47)
 
-4. Fixed the issue that when deleting retained message subscribed clients are not notified (emqttd#1207)
+4. Fix the issue that when deleting retained message subscribed clients are not notified (emqttd#1207)
 
 5. Support more parameters for hot configuration reload:
 
@@ -407,9 +472,9 @@ Fix the issue that we cannot remove a down node from the cluster (emqttd#1100)
 
 Passed org.eclipse.paho.mqtt_sn.testing/interoperability tests (emq_sn#29)
 
-Fixed the issue that send http request and return non-200 status code, but AUTH/ACL result is denied (emq-auth-http#33)
+Fix the issue that send http request and return non-200 status code, but AUTH/ACL result is denied (emq-auth-http#33)
 
-Fixed the issue that fail to stop listener (emq_stomp#24)
+Fix the issue that fail to stop listener (emq_stomp#24)
 
 Support using systemctl to manage emqttd service on CentOS
 

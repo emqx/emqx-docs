@@ -1251,11 +1251,11 @@ API 定义::
 
 API定义::
 
-    GET api/v2/nodes/{node_name}/configs
+    GET api/v2/configs
 
 请求示例::
 
-    GET api/v2/nodes/emq@127.0.0.1/configs
+    GET api/v2/configs
 
 返回数据:
 
