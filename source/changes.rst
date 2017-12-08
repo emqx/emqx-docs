@@ -28,7 +28,7 @@ Fix the 'no function clause' exception. (emqttd#1293)
 
 The retained flags should be propagated for bridge. (emqttd#1293)
 
-The management API should listen on 0.0.0:8080. (emqttd#1353)
+The management API should listen on 0.0.0.0:8080. (emqttd#1353)
 
 Fast close the invalid websocket in init/1 function.
 
