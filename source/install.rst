@@ -40,7 +40,7 @@ RPM 安装
 
 .. code-block:: console
 
-    rpm -ivh --force emqttd-centos7-v2.1.2-1.el7.centos.x86_64.rpm
+    rpm -ivh emqttd-centos7-v2.1.2-1.el7.centos.x86_64.rpm
 
 .. NOTE:: Erlang/OTP R19 依赖 lksctp-tools 库
 
