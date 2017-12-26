@@ -5,6 +5,63 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.2:
+
+----------
+2.3.2 版本
+----------
+
+*发布日期: 2017-12-26*
+
+Bugfix and Enhancements
+-----------------------
+
+Add proxy_protocol, proxy_protocol_timeout options for ws/wss.
+
+Upgrade the esockd library to v5.2.
+
+Esockd(PR#38)
+-------------
+
+Add 'send_timeout', 'send_timeout_close' options.
+
+Add esockd_util module.
+
+Rename port_command/2 function to async_send/2.
+
+Test esockd_transport:async_send/2 function.
+
+Improve the parser of proxy protocol v2.
+
+Add haproxy configuration doc.
+
+Use CN as DN for PP2 will not pass subejct.
+
+update copyright and add peer_cert_subject/1, peer_cert_common_name/1 functions.
+
+emq-auth-mysql
+--------------
+Update depends on emqtt/mysql-otp.
+
+Fixed the issue that Cannot connect to MySQL 5.7 (#67).
+
+emq-relx(PR#152)
+----------------
+
+Fix mergeconf/3 appending line break error.
+
+emq-sn(PR#152)
+--------------
+
+Fix crash in emq_sn_gateway:transform() function which handles SUBACK. (PR#57)
+
+Define macro SN_RC_MQTT_FAILURE. (PR#59)
+
+emq-web-hook(PR#30)
+-------------------
+
+Filter auth_failure client disconnected hook.
+
 .. _release_2.3.1:
 
 ----------
