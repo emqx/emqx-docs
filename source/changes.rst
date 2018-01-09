@@ -18,7 +18,7 @@ Bugfix and Enhancements
 
 Add a full documentation for `emq.conf` and plugins.
 
-Repaire a dead link in README - missing emq-lwm2m. (#1430)
+Repair a dead link in README - missing emq-lwm2m. (#1430)
 
 Subscriber with wildcard topic does not receive retained messages with sub topic has $ sign (#1398)
 
@@ -55,7 +55,7 @@ Support ARM Platform (#12)
 Bugfix and Enhancements
 -----------------------
 
-Support for X.509 certificate based authentication (#1388)
+Support X.509 certificate based authentication (#1388)
 
 Add proxy_protocol, proxy_protocol_timeout options for ws/wss listener.
 
