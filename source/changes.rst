@@ -5,6 +5,45 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.3:
+
+----------
+2.3.3 版本
+----------
+
+*发布日期: 2018-01-08*
+
+Bugfix and Enhancements
+-----------------------
+
+Add a full documentation for `emq.conf` and plugins.
+
+Repaire a dead link in README - missing emq-lwm2m. (#1430)
+
+Subscriber with wildcard topic does not receive retained messages with sub topic has $ sign (#1398)
+
+Web Interface with NGINX Reverse Proxy not working. (#953)
+
+emq-dashboard
+-------------
+
+Add `dashboard.default_user.login`, `dashboard.default_user.password` options to support configuring default admin.
+
+emq-modules
+-----------
+
+The emq-modules rewrite config is not right. (#35)
+
+emq-docker
+----------
+
+Upgrade alpine to 3.7 (#31)
+
+emq-packages
+------------
+
+Support ARM Platform (#12)
+
 .. _release_2.3.2:
 
 ----------
@@ -16,51 +55,56 @@
 Bugfix and Enhancements
 -----------------------
 
-Add proxy_protocol, proxy_protocol_timeout options for ws/wss.
+Support for X.509 certificate based authentication (#1388)
+
+Add proxy_protocol, proxy_protocol_timeout options for ws/wss listener.
+
+Cluster discovery etcd nodes key must be created manually. (#1402)
+
+Will read an incorrect password at the last line of emq_auth_username.conf (#1372)
+
+How can i use SSL/TLS certificate based client authentication? (#794)
 
 Upgrade the esockd library to v5.2.
 
-Esockd(PR#38)
--------------
-
-Add 'send_timeout', 'send_timeout_close' options.
-
-Add esockd_util module.
-
-Rename port_command/2 function to async_send/2.
-
-Test esockd_transport:async_send/2 function.
+esockd
+------
 
 Improve the parser of proxy protocol v2.
 
-Add haproxy configuration doc.
-
 Use CN as DN for PP2 will not pass subejct.
 
-update copyright and add peer_cert_subject/1, peer_cert_common_name/1 functions.
+Add 'send_timeout', 'send_timeout_close' options.
+
+Rename esockd_transport:port_command/2 function to async_send/2.
+
+Add test case for esockd_transport:async_send/2 function.
+
+Add esockd_transport:peer_cert_subject/1, peer_cert_common_name/1 functions.
 
 emq-auth-mysql
 --------------
+
 Update depends on emqtt/mysql-otp.
 
 Fixed the issue that Cannot connect to MySQL 5.7 (#67).
 
-emq-relx(PR#152)
-----------------
+emq-relx
+--------
 
-Fix mergeconf/3 appending line break error.
+Fix mergeconf/3 appending line break error. (#152)
 
-emq-sn(PR#152)
---------------
+emq-sn
+------
 
-Fix crash in emq_sn_gateway:transform() function which handles SUBACK. (PR#57)
+Fix crash in emq_sn_gateway:transform() function which handles SUBACK. (#57)
 
-Define macro SN_RC_MQTT_FAILURE. (PR#59)
+Define macro SN_RC_MQTT_FAILURE. (#59)
 
-emq-web-hook(PR#30)
--------------------
+emq-web-hook
+------------
 
-Filter auth_failure client disconnected hook.
+Filter auth_failure client for disconnected hook. (#30)
 
 .. _release_2.3.1:
 
