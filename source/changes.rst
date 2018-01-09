@@ -5,6 +5,107 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.3:
+
+----------
+2.3.3 版本
+----------
+
+*发布日期: 2018-01-08*
+
+Bugfix and Enhancements
+-----------------------
+
+Add a full documentation for `emq.conf` and plugins.
+
+Repair a dead link in README - missing emq-lwm2m. (#1430)
+
+Subscriber with wildcard topic does not receive retained messages with sub topic has $ sign (#1398)
+
+Web Interface with NGINX Reverse Proxy not working. (#953)
+
+emq-dashboard
+-------------
+
+Add `dashboard.default_user.login`, `dashboard.default_user.password` options to support configuring default admin.
+
+emq-modules
+-----------
+
+The emq-modules rewrite config is not right. (#35)
+
+emq-docker
+----------
+
+Upgrade alpine to 3.7 (#31)
+
+emq-packages
+------------
+
+Support ARM Platform (#12)
+
+.. _release_2.3.2:
+
+----------
+2.3.2 版本
+----------
+
+*发布日期: 2017-12-26*
+
+Bugfix and Enhancements
+-----------------------
+
+Support X.509 certificate based authentication (#1388)
+
+Add proxy_protocol, proxy_protocol_timeout options for ws/wss listener.
+
+Cluster discovery etcd nodes key must be created manually. (#1402)
+
+Will read an incorrect password at the last line of emq_auth_username.conf (#1372)
+
+How can i use SSL/TLS certificate based client authentication? (#794)
+
+Upgrade the esockd library to v5.2.
+
+esockd
+------
+
+Improve the parser of proxy protocol v2.
+
+Use CN as DN for PP2 will not pass subejct.
+
+Add 'send_timeout', 'send_timeout_close' options.
+
+Rename esockd_transport:port_command/2 function to async_send/2.
+
+Add test case for esockd_transport:async_send/2 function.
+
+Add esockd_transport:peer_cert_subject/1, peer_cert_common_name/1 functions.
+
+emq-auth-mysql
+--------------
+
+Update depends on emqtt/mysql-otp.
+
+Fixed the issue that Cannot connect to MySQL 5.7 (#67).
+
+emq-relx
+--------
+
+Fix mergeconf/3 appending line break error. (#152)
+
+emq-sn
+------
+
+Fix crash in emq_sn_gateway:transform() function which handles SUBACK. (#57)
+
+Define macro SN_RC_MQTT_FAILURE. (#59)
+
+emq-web-hook
+------------
+
+Filter auth_failure client for disconnected hook. (#30)
+
 .. _release_2.3.1:
 
 ----------
