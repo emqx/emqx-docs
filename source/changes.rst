@@ -63,7 +63,7 @@ Cluster discovery etcd nodes key must be created manually. (#1402)
 
 Will read an incorrect password at the last line of emq_auth_username.conf (#1372)
 
-How can i use SSL/TLS certificate based client authentication? (#794)
+How can I use SSL/TLS certificate based client authentication? (#794)
 
 Upgrade the esockd library to v5.2.
 
@@ -71,8 +71,6 @@ esockd
 ------
 
 Improve the parser of proxy protocol v2.
-
-Use CN as DN for PP2 will not pass subejct.
 
 Add 'send_timeout', 'send_timeout_close' options.
 
@@ -155,7 +153,7 @@ Turn off the `subscription` module by default. (emq-modules#26)
 emq-sn
 ------
 
-Add an intergration test case for sleeping device.
+Add an integration test case for sleeping device.
 
 Do not send will topic if client is kicked out.
 
