@@ -210,7 +210,7 @@ etc/plugins/emq_dashboard.conf:
     ## dashboard.listener.https = 18084
     ## dashboard.listener.https.acceptors = 2
     ## dashboard.listener.https.max_clients = 512
-    ## dashboard.listener.https.handshake_timeout = 15
+    ## dashboard.listener.https.handshake_timeout = 15s
     ## dashboard.listener.https.certfile = etc/certs/cert.pem
     ## dashboard.listener.https.keyfile = etc/certs/key.pem
     ## dashboard.listener.https.cacertfile = etc/certs/cacert.pem
