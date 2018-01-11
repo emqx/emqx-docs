@@ -593,7 +593,7 @@ broker_sys_interval 设置系统发布 $SYS 消息周期:
 .. code-block:: properties
 
     ## System Interval of publishing broker $SYS Messages
-    mqtt.broker.sys_interval = 60
+    mqtt.broker.sys_interval = 60s
 
 ------------------------
 发布订阅(PubSub)参数设置
@@ -619,7 +619,7 @@ broker_sys_interval 设置系统发布 $SYS 消息周期:
     mqtt.bridge.max_queue_len = 10000
 
     ## Ping Interval of bridge node. Unit: Second
-    mqtt.bridge.ping_down_interval = 1
+    mqtt.bridge.ping_down_interval = 1s
 
 -------------------------
 插件(Plugin) 配置目录设置
