@@ -5,6 +5,34 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.4:
+
+----------
+2.3.4 版本
+----------
+
+*发布日期: 2018-01-29*
+
+Bugfix and Enhancements
+-----------------------
+
+Feature: Forward real client IP using a reverse proxy for websocket (#1335)
+
+Feature: EMQ node.name with link local ipv6 address not responding to ping (#1460)
+
+Feature: Add PROTO_DIST_ARG flag to support clustering via IPv6 address. (#1460)
+
+Bugfix: retain bit is not set when publishing to clients (when it should be set). (#1461)
+
+Bugfix: Can't search topic on web dashboard (#1473)
+
+emq-sn
+------
+
+Bugfix: CONNACK is not always sent to the client (emq-sn#67)
+
+Bugfix: Setting the port to ::1:2000 causes error (emq-sn#66)
+
 .. _release_2.3.3:
 
 ----------
