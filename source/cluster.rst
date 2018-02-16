@@ -72,6 +72,30 @@ Erlang 节点 Cookie 设置::
 
 本节内容来自: http://erlang.org/doc/reference_manual/distributed.html
 
+连接
+----
+
+Erlang 集群节点可通过 TCPv4, TCPv6 或 TLS 方式连接，EMQ 2.3.5+ 版本支持在`etc/emq.conf` 中配置连接方式:
+
+.. code-block:: properties
+
+    ## Specify the erlang distributed protocol.
+    ##
+    ## Value: Enum
+    ##  - inet_tcp: the default; handles TCP streams with IPv4 addressing.
+    ##  - inet6_tcp: handles TCP with IPv6 addressing.
+    ##  - inet_tls: using TLS for Erlang Distribution.
+    ##
+    ## vm.args: -proto_dist inet_tcp
+    node.proto_dist = inet_tcp
+
+    ## Specify SSL Options in the file if using SSL for Erlang Distribution.
+    ##
+    ## Value: File
+    ##
+    ## vm.args: -ssl_dist_optfile <File>
+    ## node.ssl_dist_optfile = {{ platform_etc_dir }}/ssl_dist.conf
+
 .. _cluster_emqttd:
 
 -------------------
