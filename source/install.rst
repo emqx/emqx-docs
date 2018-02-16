@@ -334,6 +334,8 @@ Docker 镜像安装
 
 *EMQ* 消息服务器基于 Erlang/OTP 平台开发，项目托管的 GitHub 管理维护，源码编译依赖 Erlang 环境和 git 客户端。
 
+.. NOTE:: EMQ R2.3+ 依赖 Erlang R20+ 版本
+
 Erlang 安装: http://www.erlang.org/
 
 Git 客户端: http://www.git-scm.com/
