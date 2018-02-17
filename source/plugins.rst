@@ -66,7 +66,7 @@ etc/plugins/emq_retainer.conf:
 
 .. code-block:: properties
 
-    ## disc: disc_copies, ram: ram_copies
+    ## ram: ram_copies, disc_only: disc_copies, disc: both memory and disc 
     ## Notice: retainer's storage_type on each node in a cluster must be the same!
     retainer.storage_type = disc
 
@@ -86,6 +86,8 @@ etc/plugins/emq_retainer.conf:
 ------------------
 
 Retainer 模块默认加载。
+
+retainer模块的默认storage_type是ram, 当服务器重启时, retained messaage会全部丢失. 如果不想在重启时丢失消息, 需要把storage_type改成`disc`或`disc_only`. 需要注意的是, 每次修改storage_type之后, 需要删除data/mnesia/*, 并且重启服务器, 否则新的storage_type无法生效.
 
 -------------------------------------
 emq_auth_clientid - ClientID 认证插件
