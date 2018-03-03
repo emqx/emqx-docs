@@ -8,6 +8,34 @@
 .. _release_2.3.4:
 
 ----------
+2.3.5 版本
+----------
+
+*发布日期: 2018-03-03*
+
+Bugfix and Enhancements
+-----------------------
+
+Feature: Add etc/ssl_dist.conf file for erlang SSL distribution (emq-relx#178)
+
+Feature: Add node.ssl_dist_optfile option and etc/ssl_dist.conf file (#1512)
+
+Feature: Support for TLS for Erlang Distribution (#1512)
+
+Improve: Tune off the tune_buffer for external MQTT connections (#1512)
+
+emq-sn
+------
+
+Clean registered topics if mqtt-sn client send a 2nd CONNECT in connected state (#76)
+
+Upgrade the esockd library to v5.2.1 (#76)
+
+emq-auth-http
+-------------
+Remove 'password' param for ACL and superuser requests (#66)
+
+----------
 2.3.4 版本
 ----------
 
