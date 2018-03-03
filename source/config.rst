@@ -278,6 +278,31 @@ Erlang 节点名称、分布式节点间通信 Cookie:
     Erlang/OTP 平台应用多由分布的 Erlang 节点(进程)组成，每个 Erlang 节点(进程)需指配一个节点名，用于节点间通信互访。
     所有互相通信的 Erlang 节点(进程)间通过一个共用的 Cookie 进行安全认证。
 
+----------------
+EMQ 节点连接方式
+----------------
+
+EMQ 节点基于 Erlang/OTP 平台的 TCPv4, TCPv6 或 TLS 协议连接:
+
+.. code-block:: properties
+
+    ## Specify the erlang distributed protocol.
+    ##
+    ## Value: Enum
+    ##  - inet_tcp: the default; handles TCP streams with IPv4 addressing.
+    ##  - inet6_tcp: handles TCP with IPv6 addressing.
+    ##  - inet_tls: using TLS for Erlang Distribution.
+    ##
+    ## vm.args: -proto_dist inet_tcp
+    node.proto_dist = inet_tcp
+
+    ## Specify SSL Options in the file if using SSL for Erlang Distribution.
+    ##
+    ## Value: File
+    ##
+    ## vm.args: -ssl_dist_optfile <File>
+    ## node.ssl_dist_optfile = {{ platform_etc_dir }}/ssl_dist.conf
+
 -----------------
 Erlang 虚拟机参数
 -----------------
