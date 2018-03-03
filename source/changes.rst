@@ -34,7 +34,7 @@ Upgrade the esockd library to v5.2.1 (#76)
 emq-auth-http
 -------------
 
-Remove 'password' param for ACL and superuser requests (#66)
+Remove 'password' param from ACL and superuser requests (#66)
 
 ----------
 2.3.4 版本
