@@ -20,9 +20,9 @@ Feature: Add etc/ssl_dist.conf file for erlang SSL distribution (emq-relx#178)
 
 Feature: Add node.ssl_dist_optfile option and etc/ssl_dist.conf file (#1512)
 
-Feature: Support for TLS for Erlang Distribution (#1512)
+Feature: Support Erlang Distribution over TLS (#1512)
 
-Improve: Tune off the tune_buffer for external MQTT connections (#1512)
+Improve: Tune off the 'tune_buffer' option for external MQTT connections (#1512)
 
 emq-sn
 ------
@@ -33,6 +33,7 @@ Upgrade the esockd library to v5.2.1 (#76)
 
 emq-auth-http
 -------------
+
 Remove 'password' param for ACL and superuser requests (#66)
 
 ----------
