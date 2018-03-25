@@ -4,8 +4,28 @@
 ==================
 版本发布 (Changes)
 ==================
+.. _release_2.3.6:
 
-.. _release_2.3.4:
+----------
+2.3.6 版本
+----------
+
+*发布日期: 2018-03-25*
+
+Bugfix and Enhancements
+-----------------------
+Improve: LWT message checking the ACL (#1524)
+
+emq-auth-jwt
+------------
+
+Ignore not a JWT Token password, Improve testcases (#32)
+
+emq-retainer
+------------
+Bugfix: Retain msgs should not be sent to existing subscriptions (#1529)
+
+.. _release_2.3.5:
 
 ----------
 2.3.5 版本
