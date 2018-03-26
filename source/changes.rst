@@ -5,7 +5,27 @@
 版本发布 (Changes)
 ==================
 
-.. _release_2.3.4:
+.. _release_2.3.6:
+
+----------
+2.3.6 版本
+----------
+
+*发布日期: 2018-03-25*
+
+Bugfix and Enhancements
+-----------------------
+
+Security: LWT message checking the ACL (#1524)
+
+Bugfix: Retain msgs should not be sent to existing subscriptions (#1529)
+
+emq-auth-jwt
+------------
+
+Validate JWT token using a expired field (#29)
+
+.. _release_2.3.5:
 
 ----------
 2.3.5 版本
