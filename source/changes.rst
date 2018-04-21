@@ -16,24 +16,24 @@
 Bugfix and Enhancements
 -----------------------
 
-Bugfix: fixed spec of function setstats/3
+Bugfix: fixed spec of function setstats/3 (#1575)
 
-Bugfix: clean dead persistent session on connect
+Bugfix: clean dead persistent session on connect (#1575)
 
-Bugfix: dup flag not set when re-deliver
+Bugfix: dup flag not set when re-deliver (#1575)
 
-Bugfix: Upgrade the lager_console_backend config
+Bugfix: Upgrade the lager_console_backend config (#1575)
 
-Improve: Support set k8s namespace
+Improve: Support set k8s namespace (#1575)
 
-Upgrade the ekka library to v0.2.3
+Upgrade the ekka library to v0.2.3 (#1575)
 
-Improve: move PIPE_DIR dir from /tmp/${WHOAMI}_erl_pipes/$NAME/ to /$RUNNER_DATA_DIR/${WHOAMI}_erl_pipes/$NAME/
+Improve: move PIPE_DIR dir from /tmp/${WHOAMI}_erl_pipes/$NAME/ to /$RUNNER_DATA_DIR/${WHOAMI}_erl_pipes/$NAME/ (emq-relx#188)
 
 emq-auth-http
 -------------
 
-Improve: Retry 3 times when httpc:request occurred socket_closed_remotely error.
+Improve: Retry 3 times when httpc:request occurred socket_closed_remotely error (emq-auth-http#70)
 
 .. _release_2.3.6:
 
