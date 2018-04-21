@@ -5,6 +5,36 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.7:
+
+----------
+2.3.7 版本
+----------
+
+*发布日期: 2018-04-22*
+
+Bugfix and Enhancements
+-----------------------
+
+Bugfix: fixed spec of function setstats/3
+
+Bugfix: clean dead persistent session on connect
+
+Bugfix: dup flag not set when re-deliver
+
+Bugfix: Upgrade the lager_console_backend config
+
+Improve: Support set k8s namespace
+
+Upgrade the ekka library to v0.2.3
+
+Improve: move PIPE_DIR dir from /tmp/${WHOAMI}_erl_pipes/$NAME/ to /$RUNNER_DATA_DIR/${WHOAMI}_erl_pipes/$NAME/
+
+emq-auth-http
+-------------
+
+Improve: Retry 3 times when httpc:request occurred socket_closed_remotely error.
+
 .. _release_2.3.6:
 
 ----------
