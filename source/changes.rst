@@ -5,6 +5,27 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.8:
+
+----------
+2.3.8 版本
+----------
+
+*发布日期: 2018-05-11*
+
+Bugfix and Enhancements
+-----------------------
+Bugfix: unregister users CLI when unload emq_auth_username (#1588)
+
+Bugfix: Should be an info level when change CleanSession (#1590)
+
+Bugfix: emqttd_ctl crashed when emq_auth_usename doesn't exist (#1588)
+
+emq-auth-mongo
+--------------
+
+Improve: Support authentication database (authSource) (#116)
+
 .. _release_2.3.7:
 
 ----------
