@@ -5,6 +5,24 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.9:
+
+----------
+2.3.9 版本
+----------
+
+*发布日期: 2018-05-20*
+
+Bugfix and Enhancements
+-----------------------
+Bugfix: check params for REST publish API (#1599)
+
+Upgrade the mongodb library to v3.0.5
+
+esockd
+------
+Bugfix: proxy protocol - set to binary socket mode (#78)
+
 .. _release_2.3.8:
 
 ----------
