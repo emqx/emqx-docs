@@ -15,13 +15,15 @@
 
 Bugfix and Enhancements
 -----------------------
+
 Bugfix: check params for REST publish API (#1599)
 
 Upgrade the mongodb library to v3.0.5
 
 esockd
 ------
-Bugfix: proxy protocol - set to binary socket mode (#78)
+
+Bugfix: proxy protocol - set socket to binary mode (#78)
 
 .. _release_2.3.8:
 
@@ -33,6 +35,7 @@ Bugfix: proxy protocol - set to binary socket mode (#78)
 
 Bugfix and Enhancements
 -----------------------
+
 Bugfix: unregister users CLI when unload emq_auth_username (#1588)
 
 Bugfix: Should be an info level when change CleanSession (#1590)
