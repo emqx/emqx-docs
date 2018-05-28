@@ -5,6 +5,48 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.9:
+
+----------
+2.3.9 版本
+----------
+
+*发布日期: 2018-05-20*
+
+Bugfix and Enhancements
+-----------------------
+
+Bugfix: check params for REST publish API (#1599)
+
+Upgrade the mongodb library to v3.0.5
+
+esockd
+------
+
+Bugfix: proxy protocol - set socket to binary mode (#78)
+
+.. _release_2.3.8:
+
+----------
+2.3.8 版本
+----------
+
+*发布日期: 2018-05-11*
+
+Bugfix and Enhancements
+-----------------------
+
+Bugfix: unregister users CLI when unload emq_auth_username (#1588)
+
+Bugfix: Should be an info level when change CleanSession (#1590)
+
+Bugfix: emqttd_ctl crashed when emq_auth_usename doesn't exist (#1588)
+
+emq-auth-mongo
+--------------
+
+Improve: Support authentication database (authSource) (#116)
+
 .. _release_2.3.7:
 
 ----------
