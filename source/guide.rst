@@ -125,8 +125,6 @@ etc/plugins/emq_auth_ldap.conf 配置 LDAP 参数:
 HTTP 插件认证
 -------------
 
-.. NOTE:: 开启 HTTP 认证插件后，会终结认证链
-
 etc/plugins/emq_auth_http.conf 配置 'super_req', 'auth_req':
 
 .. code-block:: properties
@@ -406,8 +404,6 @@ ACL 规则定义在 etc/acl.conf，EMQ 启动时加载到内存:
 -----------------
 HTTP 插件访问控制
 -----------------
-
-.. NOTE:: 开启 HTTP 插件后，会终结 ACL 链
 
 HTTP API 实现访问控制: https://github.com/emqtt/emq_auth_http
 

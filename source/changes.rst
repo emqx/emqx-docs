@@ -5,6 +5,25 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.10:
+
+----------
+2.3.10 版本
+----------
+
+*发布日期: 2018-06-27*
+
+Bugfix and Enhancements
+-----------------------
+
+esockd
+------
+Upgrade the esockd library to v5.2.2
+
+emq-auth-http
+-------------
+ignore auth on ignore in body, allows for chaining methods
+
 .. _release_2.3.9:
 
 ----------
