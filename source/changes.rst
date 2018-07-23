@@ -5,6 +5,33 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.11:
+
+-----------
+2.3.11 版本
+-----------
+
+*发布日期: 2018-07-23*
+
+Bugfix and Enhancements
+-----------------------
+
+Fix bugs about rest api which getting config lists cause errors.
+
+Support to start listeners when emqttd is running.
+
+Specify a fixed tag for the dependency Library.
+
+emq-auth-jwt
+------------
+Fix token verification with jwerl.
+
+emq-auth-mongo
+--------------
+Support $all in acl query. (emq-auth-mongo#123)
+
+Support both clientid and username in query. (emq-auth-mongo#123)
+
 .. _release_2.3.10:
 
 -----------
