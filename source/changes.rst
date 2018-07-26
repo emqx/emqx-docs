@@ -5,6 +5,35 @@
 版本发布 (Changes)
 ==================
 
+.. _release_2.3.11:
+
+-----------
+2.3.11 版本
+-----------
+
+*发布日期: 2018-07-23*
+
+Bugfix and Enhancements
+-----------------------
+
+Fix the getting config REST API which throws exceptions.
+
+Support to restart listeners when emqttd is running.
+
+Specify a fixed tag for the dependency libraries.
+
+emq-auth-jwt
+------------
+
+Fix token verification with jwerl 1.0.0
+
+emq-auth-mongo
+--------------
+
+Support $all variable in ACL query. (emq-auth-mongo#123)
+
+Support both clientid and username variables in all queries. (emq-auth-mongo#123)
+
 .. _release_2.3.10:
 
 -----------
@@ -1300,7 +1329,7 @@ EMQ-2.0版本正式发布！EMQ-1.0版本产品环境下已支持900K并发连�
 2. 支持CoAP(RFC 7252)、MQTT-SN协议和网关，支持CoAP、MQTT-SN客户端与MQTT客户端互通；
 
 3. 重构配置文件格式与加载方式，支持用户友好的'K = V'文件格式，支持操作系统环境变量；
-  
+
 4. 增加了扩展钩子和大量的认证插件，支持与大部分数据库或NoSQL的认证集成；
 
 5. 支持全平台编译部署，Linux/Unix/Windows以及ARM平台网关，支持Docker镜像制作。
@@ -1602,7 +1631,7 @@ EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ 2.0版本改进了项目�
 
 .. NOTE:: 1.x版本产品部署用户请勿升级到该版本，2.0正式版本发布前会有API变更。
 
-项目简称 - EMQ 
+项目简称 - EMQ
 --------------
 
 项目简称变更为EMQ(Erlang/Enterprise/Elastic MQTT Broker)，E含义Erlang/OTP平台、企业(Enterprise)、弹性(Elastic)。
@@ -1669,7 +1698,7 @@ MQTT-SN协议支持
 2.0-beta1版本正式发布 `emqttd_sn`_ 项目支持MQTT-SN协议，插件加载方式启用emqttd_sn项目，MQTT-SN默认UDP端口: 1884::
 
     ./bin/emqttd_ctl plugins load emqttd_sn
- 
+
 改进插件架构
 ------------
 
@@ -2447,7 +2476,7 @@ Improve: There are two many "MQueue(~s) drop ~s" logs if the message queue of se
 
 Improve: gen_server2(from RabbitMQ) to improve emqttd_session, emqttd_pubsub
 
-Improve: Makefile to build plugins 
+Improve: Makefile to build plugins
 
 Bugfix: emqttd_broker:unhook/2 cannot work (#238)
 
@@ -2483,7 +2512,7 @@ Bugfix: issue #206 - Cannot bridge two nodes
 
 *发布日期: 2015-07-18*
 
-Improve: issue #196 - Add New Hook 'client.subscribe.after' 
+Improve: issue #196 - Add New Hook 'client.subscribe.after'
 
 .. _release_0.9.1:
 
@@ -2495,7 +2524,7 @@ Improve: issue #196 - Add New Hook 'client.subscribe.after'
 
 Bugfix: issue #189 - MQTT over WebSocket(SSL) cannot work?
 
-Bugfix: issue #193 - 'client.ack' hook should be renamed to 'message.acked', and called by emqttd_broker:foreach_hooks 
+Bugfix: issue #193 - 'client.ack' hook should be renamed to 'message.acked', and called by emqttd_broker:foreach_hooks
 
 .. _release_0.9.0:
 
@@ -2693,7 +2722,7 @@ Bugfix: fix errors found by dialyzer
 
 [MQTT over WebSocket(SSL)](https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket) Now!
 
-[Plugin Achitecture](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) based on OTP application 
+[Plugin Achitecture](https://github.com/emqtt/emqttd/wiki/Plugin%20Design) based on OTP application
 
 [Trace MQTT Packets or Messages](https://github.com/emqtt/emqttd/wiki/Trace%20Design) to log files
 
@@ -2703,7 +2732,7 @@ Feature: issue #49, #105 - Plugin Architecture Support
 
 Feature: issue #93 - Trace API Design
 
-Improve: issue #109 - emqttd_broker should add subscribe, notify API 
+Improve: issue #109 - emqttd_broker should add subscribe, notify API
 
 Improve: update README.md to add 'Goals', 'Contributors' chapters
 
@@ -2712,7 +2741,7 @@ Change: rename etc/app.config to etc/emqttd.config
 Change: etc/emqttd.config changed
 
 Bugfix: critical issue #54 - error when resume session!
- 
+
 Bugfix: issue #118 - error report when UNSUBSCRIBE with no topics
 
 Bugfix: issue #117 - sys_interval = 0 config cannot work
@@ -2729,7 +2758,7 @@ Bugfix: issue #96 - "make clean" cannot work
 
 *发布日期: 2015-04-24*
 
-Bugfix: critical issue #54, #104, #106 - error when resume session 
+Bugfix: critical issue #54, #104, #106 - error when resume session
 
 Improve: add emqttd_cm_sup module, and use 'hash' gproc_pool to register/unregister client ids
 
@@ -2777,11 +2806,11 @@ Feature: issues#47 - authentication, authorization support
 
 Feature: issues#92 - merge emqttd_acl and emqttd_auth to emqttd_access_control
 
-Feature: emqttd_acl_mod, emqttd_auth_mod behaviour to extend ACL, authentication 
+Feature: emqttd_acl_mod, emqttd_auth_mod behaviour to extend ACL, authentication
 
 Feature: issues#85 - lager:info to log subscribe, unsubscribe actions
 
-Feature: issues#77 - authentication with clientid, ipaddress 
+Feature: issues#77 - authentication with clientid, ipaddress
 
 Improve: issues#90 - fix lager_file_backend log format, and rotate 10 log files
 
@@ -3027,7 +3056,7 @@ Feature: retain messages, add emqtt_server module
 
 Feature: MQTT 3.1.1 null client_id support
 
-Bugfix: keepalive timeout to send will message 
+Bugfix: keepalive timeout to send will message
 
 Improve: overlapping subscription support
 
@@ -3049,7 +3078,7 @@ Closed Issues: #22, #24, #27, #28, #29, #30, #31, #32, #33, #34, #36, #37, #38, 
 
 pull request 26: Use binaries for topic paths and fix wildcard topics
 
-emqtt_pubsub.erl: fix wildcard topic match bug caused by binary topic in 0.2.0 
+emqtt_pubsub.erl: fix wildcard topic match bug caused by binary topic in 0.2.0
 
 Makefile: deps -> get-deps
 
@@ -3081,8 +3110,8 @@ support HTTP to publish message
 
 *发布日期: 2013-01-05*
 
-Bugfix: remove QOS_1 match when handle PUBREL request 
- 
+Bugfix: remove QOS_1 match when handle PUBREL request
+
 Bugfix: reverse word in emqtt_topic:words/1 function
 
 .. _release_0.1.4:
