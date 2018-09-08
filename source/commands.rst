@@ -428,14 +428,16 @@ subscriptions add <ClientId> <Topic> <QoS>
 
 手动添加静态订阅::
 
-    $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' 't/y:1' 0
+    $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
+
+    ok
 
 subscriptions del <ClientId> <Topic> 
 -----------------------------
 
 手动删除静态订阅::
 
-    $ ./bin/emqx_ctl subscriptions del 'mosqsub/90475-airlee.lo' 't/+/x:2'
+    $ ./bin/emqx_ctl subscriptions del 'mosqsub/90475-airlee.lo' '/world'
 
     ok
 
