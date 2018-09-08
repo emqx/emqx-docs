@@ -159,8 +159,6 @@ Web 管理控制台(Dashboard)
 +----------------------------+-------------------------------------+
 | `emqx_retainer`_           | Retain 消息存储插件                 |
 +----------------------------+-------------------------------------+
-| `emqx_modules`_            | Presence, Subscription 扩展模块插件 |
-+----------------------------+-------------------------------------+
 | `emqx_dashboard`_          | Web 管理控制台，默认加载            |
 +----------------------------+-------------------------------------+
 | `emqx_auth_clientid`_      | ClientId、密码认证插件              |
@@ -188,8 +186,6 @@ Web 管理控制台(Dashboard)
 | `emqx_recon`_              | Recon 优化调测插件                  |
 +----------------------------+-------------------------------------+
 | `emqx_reloader`_           | 热升级插件(开发调试)                |
-+----------------------------+-------------------------------------+
-| `emqx_sockjs`_             | SockJS 插件(废弃)                   |
 +----------------------------+-------------------------------------+
 |`emqx_delayed_publish`_     | 延时发布消息                        |
 +----------------------------+-------------------------------------+
@@ -308,11 +304,7 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 
 .. _emq_plugin_template:  https://github.com/emqx/emqx_plugin_template
 .. _emq_retainer:         https://github.com/emqx/emqx_retainer
-.. _emq_mod_retainer:     https://github.com/emqx/emqx_mod_retainer
-.. _emq_modules:          https://github.com/emqx/emqx_modules
-.. _emq_mod_subscription: https://github.com/emqx/emqx_mod_subscription
 .. _emq_dashboard:        https://github.com/emqx/emqx_dashboard
-.. _emq_mod_rewrite:      https://github.com/emqx/emqx_mod_rewrite
 .. _emq_auth_clientid:    https://github.com/emqx/emqx_auth_clientid
 .. _emq_auth_username:    https://github.com/emqx/emqx_auth_username
 .. _emq_auth_ldap:        https://github.com/emqx/emqx_auth_ldap
@@ -323,7 +315,6 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 .. _emq_auth_mongo:       https://github.com/emqx/emqx_auth_mongo
 .. _emq_reloader:         https://github.com/emqx/emqx_reloader
 .. _emq_stomp:            https://github.com/emqx/emqx_stomp
-.. _emq_sockjs:           https://github.com/emqx/emqx_sockjs
 .. _emq_recon:            https://github.com/emqx/emqx_recon
 .. _emq_sn:               https://github.com/emqx/emqx_sn
 .. _emq_coap:             https://github.com/emqx/emqx_coap
