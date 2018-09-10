@@ -5,6 +5,47 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-Beta.2:
+
+---------------------
+EMQ X 3.0-Beta.2 版本
+---------------------
+
+*发布日期: 2018-09-10*
+
+功能改进和问题修复
+----------------
+功能改进: 支持 MQTT 5.0 里的 'subscription options'
+
+功能改进: 增加对 MQTT 5.0 里的 'Topic-Alias' 的校验
+
+功能改进: 增加 'banned' 功能的 restful API
+
+功能改进: 改进 emqx_zone
+
+功能改进: 改进 hooks 的设计
+
+功能改进: 为单元测试生成配置文件
+
+功能改进: 将模块 'emqx_mqtt_properties' 重命名为 'emqx_mqtt_props'
+
+问题修复: 解决了一个 'Will Delay Interval' 属性的处理错误
+
+问题修复: 解决了一个 'Reserved' 标志位的处理错误
+
+emqx-delayed-publish
+----------------------
+功能改进: 改进代码
+
+minirest
+---------
+功能改进: 回调函数里，同时传递 query 参数和 body 参数
+
+emqx-rel
+---------
+功能改进: 编译时让不支持的 OTP-20 及更老版本快速退出
+
+
 .. _release_3.0-Beta.1:
 
 ---------------------
