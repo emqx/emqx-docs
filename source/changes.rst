@@ -15,9 +15,9 @@ EMQ X 3.0-Beta.2 版本
 
 功能改进和问题修复
 ----------------
-功能改进: 支持 MQTT 5.0 里的 'subscription options'
+功能改进: 支持 MQTT 5.0 'subscription options'
 
-功能改进: 增加对 MQTT 5.0 里的 'Topic-Alias' 的校验
+功能改进: 增加对 MQTT 5.0 'Topic-Alias' 的校验
 
 功能改进: 增加 'banned' 功能的 restful API
 
