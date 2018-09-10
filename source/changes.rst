@@ -5,6 +5,96 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-Beta.2:
+
+---------------------
+EMQ X 3.0-Beta.2 版本
+---------------------
+
+*发布日期: 2018-09-10*
+
+EMQ X 3.0-Beta.2 版本主要包含了对 MQTT 5.0 新特性的改进，以及问题修复
+
+EMQ X 主工程
+-------------
+
+功能改进: 
+
+- 支持 MQTT 5.0 'subscription options'
+
+  GitHub issues: 
+  `emqx/emqx#1788 <https://github.com/emqx/emqx/pull/1788>`_, 
+  `emqx/emqx-retainer#58 <https://github.com/emqx/emqx-retainer/pull/58>`_, 
+  `emqx/emqx#1803 <https://github.com/emqx/emqx/pull/1803>`_
+
+- 增加对 MQTT 5.0 'Topic-Alias' 的校验
+
+  GitHub issues: 
+  `emqx/emqx#1789 <https://github.com/emqx/emqx/pull/1789>`_, 
+  `emqx/emqx#1802 <https://github.com/emqx/emqx/pull/1802>`_
+
+- 改进 hooks 的设计
+  
+  GitHub issue: `emqx/emqx#1790 <https://github.com/emqx/emqx/pull/1790>`_
+
+- 将模块 'emqx_mqtt_properties' 重命名为 'emqx_mqtt_props'
+
+  GitHub issue: `emqx/emqx#1791 <https://github.com/emqx/emqx/pull/1791>`_
+
+- 改进 emqx_zone
+
+  GitHub issue: `emqx/emqx#1795 <https://github.com/emqx/emqx/pull/1795>`_
+
+问题修复: 
+
+- 修复了 'Will Delay Interval' 属性处理错误
+
+  GitHub issues: 
+  `emqx/emqx#1800 <https://github.com/emqx/emqx/pull/1800>`_, 
+  `emqx/emqx-delayed-publish#3 <https://github.com/emqx/emqx-delayed-publish/pull/3>`_
+
+- 修复了 'Reserved' 标志位的处理错误
+
+  GitHub issue: `emqx/emqx#1783 <https://github.com/emqx/emqx/pull/1783>`_ 
+
+- 为单元测试生成配置文件
+
+  GitHub issue: `emqx/emqx#1794 <https://github.com/emqx/emqx/pull/1794>`_
+  
+emqx-management (插件)
+----------------------
+
+功能改进: 
+
+- 增加 'banned' 功能的 restful API
+  
+  GitHub issue: `emqx/emqx-management#6 <https://github.com/emqx/emqx-management/pull/6>`_
+
+emqx-delayed-publish (插件)
+---------------------------
+
+功能改进:
+
+- 重构代码
+  
+  GitHub issue: `emqx/emqx-delayed-publish#4 <https://github.com/emqx/emqx-delayed-publish/pull/4>`_
+
+minirest (依赖工程)
+------------------
+功能改进: 
+
+- 回调函数里，同时传递 query 参数和 body 参数
+  
+  GitHub issue: `emqx/minirest#4 <https://github.com/emqx/minirest/pull/4>`_
+
+emqx-rel (编译工程)
+------------------
+功能改进: 
+
+- 编译时检查 OTP 版本
+
+  GitHub issue: `emqx/emqx-rel#217 <https://github.com/emqx/emqx-rel/pull/217>`_
+
 .. _release_3.0-Beta.1:
 
 ---------------------
