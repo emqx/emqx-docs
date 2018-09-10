@@ -175,6 +175,32 @@ etc/plugins/emqx_auth_http.conf 配置 'super_req', 'auth_req':
 
     ./bin/emqx_ctl plugins load emqx_auth_http
 
+------------
+JWT 插件认证
+------------
+
+etc/plugins/emqx_auth_jwt.conf 配置 'secret', 'pubkey':
+
+.. code-block:: properties
+
+    ##--------------------------------------------------------------------
+    ## JWT Auth Plugin
+    ##--------------------------------------------------------------------
+
+    ## HMAC Hash Secret.
+    ##
+    ## Value: String
+    auth.jwt.secret = emqxsecret
+
+    ## RSA or ECDSA public key file.
+    ##
+    ## Value: File
+    ## auth.jwt.pubkey = etc/certs/jwt_public_key.pem
+
+启用 JWT 认证插件::
+
+    ./bin/emqx_ctl plugins load emqx_auth_jwt
+
 --------------
 MySQL 插件认证
 --------------
@@ -1140,4 +1166,4 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，
 .. _emqx_auth_pgsql:    https://github.com/emqtt/emq_auth_pgsql
 .. _emqx_auth_redis:    https://github.com/emqtt/emq_auth_redis
 .. _emqx_auth_mongo:    https://github.com/emqtt/emq_auth_mongo
-
+.. _emqx_auth_jwt:      https://github.com/emqtt/emq-auth-jwt
