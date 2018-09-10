@@ -41,10 +41,6 @@ EMQ X 主工程
 
   GitHub issue: `emqx/emqx#1791 <https://github.com/emqx/emqx/pull/1791>`_
 
-- 为单元测试生成配置文件
-
-  GitHub issue: `emqx/emqx#1794 <https://github.com/emqx/emqx/pull/1794>`_
-
 - 改进 emqx_zone
 
   GitHub issue: `emqx/emqx#1795 <https://github.com/emqx/emqx/pull/1795>`_
@@ -61,6 +57,10 @@ EMQ X 主工程
 
   GitHub issue: `emqx/emqx#1783 <https://github.com/emqx/emqx/pull/1783>`_ 
 
+- 为单元测试生成配置文件
+
+  GitHub issue: `emqx/emqx#1794 <https://github.com/emqx/emqx/pull/1794>`_
+  
 emqx-management (插件)
 ----------------------
 
