@@ -63,7 +63,6 @@ EMQ X 3.0 版本提供的认证插件包括:
 +----------------------------+---------------------------+
 
 
-
 --------------
 用户名密码认证
 --------------
@@ -231,10 +230,10 @@ etc/plugins/emqx_auth_mysql.conf 配置 'super_query', 'auth_query', 'password_h
     auth.mysql.pool = 8
 
     ## Mysql Username
-    ## auth.mysql.username = 
+    ## auth.mysql.username =
 
     ## Mysql Password
-    ## auth.mysql.password = 
+    ## auth.mysql.password =
 
     ## Mysql Database
     auth.mysql.database = mqtt
@@ -277,7 +276,7 @@ Postgre 插件认证
 
 通过 PostgreSQL 数据库表认证，可创建如下的 'mqtt_user' 表:
 
-.. code-block:: sql 
+.. code-block:: sql
 
     CREATE TABLE mqtt_user (
       id SERIAL primary key,
@@ -298,7 +297,7 @@ etc/plugins/emqx_auth_pgsql.conf 配置 'auth_query'、'password_hash':
 
     auth.pgsql.username = root
 
-    #auth.pgsql.password = 
+    #auth.pgsql.password =
 
     auth.pgsql.database = mqtt
 
@@ -1167,3 +1166,4 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，
 .. _emqx_auth_redis:    https://github.com/emqtt/emq_auth_redis
 .. _emqx_auth_mongo:    https://github.com/emqtt/emq_auth_mongo
 .. _emqx_auth_jwt:      https://github.com/emqtt/emq-auth-jwt
+

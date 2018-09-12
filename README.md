@@ -1,20 +1,20 @@
 
-《*EMQ* 3.0中文文档》
-=====================
+《*EMQ X* R3.0 中文文档》
+========================
 
 * **[开始使用(GetStarted)](http://docs.emqtt.cn/zh_CN/latest/getstarted.html)**
-  * [*EMQ X* 3.0 消息服务器简介](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#emq-3-0)
-  * [MQTT发布订阅模式简述](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt)
+  * [*EMQ X* R3.0 消息服务器简介](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#emq-3-0)
+  * [MQTT 发布订阅模式简述](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt)
   * [五分钟下载启动EMQ](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#emq)
-  * [源码编译EMQ X 3.0](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#compile)
-  * [Web管理控制台(Dashboard)](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#web-dashboard)
-  * [*EMQ X* 3.0消息服务器功能列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#features)
-  * [*EMQ X* 3.0扩展插件列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#plugins)
+  * [源码编译EMQ X R3.0](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#compile)
+  * [Web 管理控制台(Dashboard)](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#web-dashboard)
+  * [*EMQ X* R3.0消息服务器功能列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#features)
+  * [*EMQ X* R3.0扩展插件列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#plugins)
   * [100万线连接测试说明](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#c1000k)
-  * [开源MQTT客户端项目](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt-clients)
+  * [开源 MQTT 客户端项目](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt-clients)
 
 * **[程序安装(Installation)](http://docs.emqtt.cn/zh_CN/latest/install.html)**
-  * [*EMQ* 3.0程序包下载](http://docs.emqtt.cn/zh_CN/latest/install.html#emq-3-0)
+  * [*EMQ X* R3.0 程序包下载](http://docs.emqtt.cn/zh_CN/latest/install.html#emq-3-0)
   * [RPM 包安装](http://docs.emqtt.cn/zh_CN/latest/install.html#rpm)
   * [DEB 包安装](http://docs.emqtt.cn/zh_CN/latest/install.html#deb)
   * [Linux服务器安装](http://docs.emqtt.cn/zh_CN/latest/install.html#linux)
@@ -26,23 +26,21 @@
   * [TCP服务端口占用](http://docs.emqtt.cn/zh_CN/latest/install.html#tcp)
   * [快速设置](http://docs.emqtt.cn/zh_CN/latest/install.html#quick-setup)
 
-* **[青云映像(Image)](http://docs.emqtt.cn/zh_CN/latest/image.html)**
-
 * **[配置说明(Configuration)](http://docs.emqtt.cn/zh_CN/latest/config.html)**
-  * [*EMQ* 3.0 配置文件](http://docs.emqtt.cn/zh_CN/latest/config.html#emq-2-0)
+  * [*EMQ X* R3.0 配置文件](http://docs.emqtt.cn/zh_CN/latest/config.html#emqx-r3-0)
   * [*EMQ* 配置变更历史](http://docs.emqtt.cn/zh_CN/latest/config.html#emq)
-  * [*EMQ* 3.0 环境变量](http://docs.emqtt.cn/zh_CN/latest/config.html#id2)
-  * [*EMQ* 集群设置](http://docs.emqtt.cn/zh_CN/latest/config.html#id3) 
-  * [*EMQ* 集群自动发现](http://docs.emqtt.cn/zh_CN/latest/config.html#id8) 
-  * [*EMQ* 节点与Cookie](http://docs.emqtt.cn/zh_CN/latest/config.html#emqcookie)
-  * [*EMQ* 节点连接方式](http://docs.emqtt.cn/zh_CN/latest/config.html#id9)
+  * [*EMQ X* R3.0 环境变量](http://docs.emqtt.cn/zh_CN/latest/config.html#id2)
+  * [*EMQ X* 集群设置](http://docs.emqtt.cn/zh_CN/latest/config.html#id3)
+  * [*EMQ X* 集群自动发现](http://docs.emqtt.cn/zh_CN/latest/config.html#id8)
+  * [*EMQ X* 节点与Cookie](http://docs.emqtt.cn/zh_CN/latest/config.html#emqcookie)
+  * [*EMQ X* 节点连接方式](http://docs.emqtt.cn/zh_CN/latest/config.html#id9)
   * [Erlang虚拟机参数](http://docs.emqtt.cn/zh_CN/latest/config.html#erlang)
   * [RPC参数配置](http://docs.emqtt.cn/zh_CN/latest/config.html#rpc)
   * [日志参数配置](http://docs.emqtt.cn/zh_CN/latest/config.html#id3)
   * [匿名认证与ACL文件](http://docs.emqtt.cn/zh_CN/latest/config.html#acl)
   * [MQTT 协议参数配置](http://docs.emqtt.cn/zh_CN/latest/config.html#mqtt)
-  * [Zones 参数配置](http://docs.emqtt.cn/zh_CN/latest/config.html#zones)  
-  * [MQTT Listeners参数说明](http://docs.emqtt.cn/zh_CN/latest/config.html#mqtt-listeners)
+  * [MQTT Zones 参数配置](http://docs.emqtt.cn/zh_CN/latest/config.html#zones)
+  * [MQTT Listeners 参数说明](http://docs.emqtt.cn/zh_CN/latest/config.html#mqtt-listeners)
   * [MQTT(TCP)监听器 - 1883](http://docs.emqtt.cn/zh_CN/latest/config.html#mqtt-tcp-1883)
   * [MQTT(SSL)监听器 - 8883](http://docs.emqtt.cn/zh_CN/latest/config.html#mqtt-ssl-8883)
   * [MQTT(WebSocket)监听器 - 8083](http://docs.emqtt.cn/zh_CN/latest/config.html#mqtt-websocket-8083)
@@ -50,7 +48,7 @@
   * [Bridges 桥接](http://docs.emqtt.cn/zh_CN/latest/config.html#bridges)
   * [Modules 模块](http://docs.emqtt.cn/zh_CN/latest/config.html#modules)
   * [扩展插件配置文件 ](http://docs.emqtt.cn/zh_CN/latest/config.html#id11)
-  * [Broker 消息中间件](http://docs.emqtt.cn/zh_CN/latest/config.html#id22)
+  * [Broker 参数设置](http://docs.emqtt.cn/zh_CN/latest/config.html#id22)
   * [Erlang虚拟机监控设置](http://docs.emqtt.cn/zh_CN/latest/config.html#id10)
 
 * **[分布集群(Cluster)](http://docs.emqtt.cn/zh_CN/latest/cluster.html)**
@@ -92,7 +90,6 @@
   * [追踪](http://docs.emqtt.cn/zh_CN/latest/guide.html#trace)
 
 * **[高级特性 (Advanced)](http://docs.emqtt.cn/zh_CN/latest/advanced.html)**
-  * [本地订阅(Local Subscription)](http://docs.emqtt.cn/zh_CN/latest/advanced.html#local-subscription)
   * [共享订阅(Shared Subscription)](http://docs.emqtt.cn/zh_CN/latest/advanced.html#shared-subscription)
 
 * **[架构设计(Design)](http://docs.emqtt.cn/zh_CN/latest/design.html)**
@@ -155,17 +152,17 @@
 支持与联系
 ==========
 
-公司:    http://emqtt.com 
+公司:    http://emqtt.com
 
-微信:    emqttd                         
+微信:    emqttd
 
-微博:    http://weibo.com/emqtt         
+微博:    http://weibo.com/emqtt
 
-Twitter: @emqtt                         
+Twitter: @emqtt
 
-作者:    李枫 <feng@emqtt.io> 
+联系:    contact@emqx.io <feng@emqtt.io>
 
-http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
+http://emqtt.com/docs/v3 | http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
 
 ![weixin](https://github.com/emqtt/docs_zh/blob/master/source/_static/images/weixin.jpg)
 
