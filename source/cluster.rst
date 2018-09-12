@@ -75,7 +75,7 @@ Erlang 节点 Cookie 设置::
 连接
 ----
 
-Erlang 集群节点可通过 TCPv4, TCPv6 或 TLS 方式连接，EMQ 2.3.5+ 版本支持在`etc/emq.conf` 中配置连接方式:
+Erlang 集群节点可通过 TCPv4, TCPv6 或 TLS 方式连接，EMQ X 3.0 版本支持在`etc/emqx.conf` 中配置连接方式:
 
 .. code-block:: properties
 
@@ -96,13 +96,13 @@ Erlang 集群节点可通过 TCPv4, TCPv6 或 TLS 方式连接，EMQ 2.3.5+ 版�
     ## vm.args: -ssl_dist_optfile <File>
     ## node.ssl_dist_optfile = {{ platform_etc_dir }}/ssl_dist.conf
 
-.. _cluster_emqttd:
+.. _cluster_emqx:
 
 -------------------
-EMQ R2 分布集群设计
+EMQ X 分布集群设计
 -------------------
 
-EMQ 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
+*EMQ X* 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
 
 1. MQTT 客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
 
@@ -117,7 +117,7 @@ EMQ 消息服务器同一集群的所有节点，都会复制一份主题(Topic)
 主题树(Topic Trie)与路由表(Route Table)
 ---------------------------------------
 
-EMQ 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
+EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
 
 例如下述主题订阅关系:
 
@@ -167,26 +167,26 @@ EMQ 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和�
 手工配置管理集群
 -----------------
 
-假设部署两台服务器 s1.emqtt.io, s2.emqtt.io 上部署集群:
+假设部署两台服务器 s1.emqx.io, s2.emqx.io 上部署集群:
 
 +----------------------+-----------------+---------------------+
 | 节点名               | 主机名(FQDN)    |    IP 地址          |
 +----------------------+-----------------+---------------------+
-| emq@s1.emqtt.io 或   | s1.emqtt.io     | 192.168.0.10        |
+| emq@s1.emqx.io 或    | s1.emqx.io      | 192.168.0.10        |
 | emq@192.168.0.10     |                 |                     |
 +----------------------+-----------------+---------------------+
-| emq@s2.emqtt.io 或   | s2.emqtt.io     | 192.168.0.20        |
+| emq@s2.emqx.io 或    | s2.emqx.io      | 192.168.0.20        |
 | emq@192.168.0.20     |                 |                     |
 +----------------------+-----------------+---------------------+
 
 .. WARNING:: 节点名格式: Name@Host, Host必须是IP地址或FQDN(主机名.域名)
 
-emq@s1.emqtt.io 节点设置
+emq@s1.emqx.io 节点设置
 ------------------------
 
-emqttd/etc/emq.conf::
+emqx/etc/emqx.conf::
 
-    node.name = emq@s1.emqtt.io
+    node.name = emq@s1.emqx.io
 
     或
 
@@ -194,16 +194,16 @@ emqttd/etc/emq.conf::
 
 也可通过环境变量::
 
-    export EMQ_NODE_NAME=emq@s1.emqtt.io && ./bin/emqttd start
+    export EMQ_NODE_NAME=emq@s1.emqx.io && ./bin/emqx start
 
 .. WARNING:: 节点启动加入集群后，节点名称不能变更。
 
-emq@s2.emqtt.io 节点设置
+emq@s2.emqx.io 节点设置
 ------------------------
 
-emqttd/etc/emq.conf::
+emqx/etc/emqx.conf::
 
-    node.name = emq@s2.emqtt.io
+    node.name = emq@s2.emqx.io
 
     或
 
@@ -212,25 +212,25 @@ emqttd/etc/emq.conf::
 节点加入集群
 ------------
 
-启动两台节点后，emq@s2.emqtt.io 上执行::
+启动两台节点后，emq@s2.emqx.io 上执行::
 
-    $ ./bin/emqttd_ctl cluster join emq@s1.emqtt.io
-
-    Join the cluster successfully.
-    Cluster status: [{running_nodes,['emq@s1.emqtt.io','emq@s2.emqtt.io']}]
-
-或，emq@s1.emqtt.io 上执行::
-
-    $ ./bin/emqttd_ctl cluster join emq@s2.emqtt.io
+    $ ./bin/emqx_ctl cluster join emq@s1.emqx.io
 
     Join the cluster successfully.
-    Cluster status: [{running_nodes,['emq@s1.emqtt.io','emq@s2.emqtt.io']}]
+    Cluster status: [{running_nodes,['emq@s1.emqx.io','emq@s2.emqx.io']}]
+
+或，emq@s1.emqx.io 上执行::
+
+    $ ./bin/emqx_ctl cluster join emq@s2.emqx.io
+
+    Join the cluster successfully.
+    Cluster status: [{running_nodes,['emq@s1.emqx.io','emq@s2.emqx.io']}]
 
 任意节点上查询集群状态::
 
-    $ ./bin/emqttd_ctl cluster status
+    $ ./bin/emqx_ctl cluster status
 
-    Cluster status: [{running_nodes,['emq@s1.emqtt.io','emq@s2.emqtt.io']}]
+    Cluster status: [{running_nodes,['emq@s1.emqx.io','emq@s2.emqx.io']}]
 
 节点退出集群
 ------------
@@ -241,13 +241,13 @@ emqttd/etc/emq.conf::
 
 2. remove: 从集群删除其他节点
 
-emq@s2.emqtt.io 主动退出集群::
+emq@s2.emqx.io 主动退出集群::
 
-    $ ./bin/emqttd_ctl cluster leave
+    $ ./bin/emqx_ctl cluster leave
 
-或 emq@s1.emqtt.io 节点上，从集群删除 emq@s2.emqtt.io 节点::
+或 emq@s1.emqx.io 节点上，从集群删除 emq@s2.emqx.io 节点::
 
-    $ ./bin/emqttd_ctl cluster remove emq@s2.emqtt.io
+    $ ./bin/emqx_ctl cluster remove emq@s2.emqx.io
 
 .. _autodiscovery:
 
@@ -255,9 +255,9 @@ emq@s2.emqtt.io 主动退出集群::
 节点发现与自动集群
 ------------------
 
-EMQ R2.3 版本支持基于 Ekka 库的集群自动发现(Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
+EMQ X 3.0 版本支持基于 Ekka 库的集群自动发现(Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
 
-EMQ R2.3 支持多种策略自动发现节点创建集群:
+EMQ X 3.0 支持多种策略自动发现节点创建集群:
 
 +-----------------+---------------------------+
 | 策略            | 说明                      |
@@ -278,7 +278,7 @@ EMQ R2.3 支持多种策略自动发现节点创建集群:
 manual 手动创建集群
 -------------------
 
-默认配置为手动创建集群，节点通过 `./bin/emqttd_ctl join <Node>` 命令加入:
+默认配置为手动创建集群，节点通过 `./bin/emqx_ctl join <Node>` 命令加入:
 
 .. code-block:: properties
 
@@ -382,7 +382,7 @@ manual 手动创建集群
 集群脑裂与自动愈合
 ------------------
 
-EMQ R2.3 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
+*EMQ X* R3.0 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
 
 .. code-block:: properties
 
@@ -404,7 +404,7 @@ EMQ R2.3 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
 集群节点自动清除
 ----------------
 
-EMQ R2.3 版本支持从集群自动删除宕机节点(Autoclean):
+*EMQ X* R3.0 版本支持从集群自动删除宕机节点(Autoclean):
 
 .. code-block:: properties
 
@@ -416,7 +416,7 @@ EMQ R2.3 版本支持从集群自动删除宕机节点(Autoclean):
 跨节点会话(Session)
 -------------------
 
-EMQ 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节点。
+*EMQ X* 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节点。
 
 例如负载均衡的两台集群节点: node1 与 node2，同一 MQTT 客户端先连接 node1，node1 节点会创建持久会话；客户端断线重连到 node2 时，MQTT 的连接在 node2 节点，持久会话仍在 node1 节点::
 
@@ -437,7 +437,7 @@ EMQ 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节�
 
 如果集群节点间存在防火墙，防火墙需要开启 4369 端口和一个 TCP 端口段。4369 由 epmd 端口映射服务使用，TCP 端口段用于节点间建立连接与通信。
 
-防火墙设置后，EMQ 需要配置相同的端口段，emqttd/etc/emq.conf 文件::
+防火墙设置后，EMQ 需要配置相同的端口段，emqx/etc/emqx.conf 文件::
 
     ## Distributed node port range
     node.dist_listen_min = 6369
@@ -445,11 +445,12 @@ EMQ 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节�
 
 .. _cluster_hash:
 
-------------------
-一致性 Hash 与 DHT
-------------------
-
-NoSQL 数据库领域分布式设计，大多会采用一致性 Hash 或 DHT。EMQ 消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性 Hash、DHT 或 Shard 方式切分路由表。
+..
+ ------------------
+ 一致性 Hash 与 DHT
+ ------------------
+..
+ NoSQL 数据库领域分布式设计，大多会采用一致性 Hash 或 DHT。EMQ 消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性 Hash、DHT 或 Shard 方式切分路由表。
 
 .. _etcd:        https://coreos.com/etcd/
 .. _Kubernetes:  https://kubernetes.io/

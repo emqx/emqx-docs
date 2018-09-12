@@ -3,9 +3,9 @@
 测试调优 (Tuning Guide)
 =======================
 
-*EMQ* 消息服务器1.x版本 MQTT 连接压力测试到130万，在一台8核心、32G内存的 CentOS 服务器上。
+*EMQ X* 消息服务器1.x版本 MQTT 连接压力测试到130万，在一台8核心、32G内存的 CentOS 服务器上。
 
-100万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数，EMQ 消息服务器参数设置如下:
+100万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， *EMQ X* 消息服务器参数设置如下:
 
 -------------------
 Linux 操作系统参数
@@ -41,9 +41,9 @@ Linux 操作系统参数
     *      soft   nofile      1048576
     *      hard   nofile      1048576
 
--------------------
+------------------
 TCP 协议栈网络参数
--------------------
+------------------
 
 并发连接 backlog 设置::
 
@@ -89,7 +89,7 @@ FIN-WAIT-2 Socket 超时设置::
 Erlang 虚拟机参数
 ------------------
 
-优化设置 Erlang 虚拟机启动参数，配置文件 emqttd/etc/emq.conf:
+优化设置 Erlang 虚拟机启动参数，配置文件 emqx/etc/emqx.conf:
 
 .. code-block:: properties
 
@@ -99,18 +99,18 @@ Erlang 虚拟机参数
     ## Sets the maximum number of simultaneously existing ports for this system
     node.max_ports = 1048576
 
-------------------
-EMQ 消息服务器参数
-------------------
+--------------------
+EMQ X 消息服务器参数
+--------------------
 
-设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。配置文件 emqttd/etc/emq.conf:
+设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。配置文件 emqx/etc/emqx.conf:
 
 .. code-block:: properties
 
     ## TCP Listener
     listener.tcp.external = 0.0.0.0:1883
     listener.tcp.external.acceptors = 64
-    listener.tcp.external.max_clients = 1000000
+    listener.tcp.external.max_connections = 1000000
 
 --------------
 测试客户端设置

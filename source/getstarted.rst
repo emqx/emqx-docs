@@ -7,13 +7,13 @@
 
 .. _intro:
 
-------------------------
-*EMQ* 2.0 消息服务器简介
-------------------------
+---------------------------
+*EMQ X* R3.0 消息服务器简介
+---------------------------
 
-*EMQ* (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 平台开发的开源物联网 MQTT 消息服务器。Erlang/OTP 是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed) 的语言平台。MQTT 是轻量的(Lightweight)、发布订阅模式(PubSub) 的物联网消息协议。
+*EMQ X* (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 平台开发的开源物联网 MQTT 消息服务器。Erlang/OTP 是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed) 的语言平台。MQTT 是轻量的(Lightweight)、发布订阅模式(PubSub) 的物联网消息协议。
 
-*EMQ* 项目设计目标是承载移动终端或物联网终端海量 MQTT 连接，并实现在海量物联网设备间快速低延时消息路由:
+*EMQ X* 项目设计目标是承载移动终端或物联网终端海量 MQTT 连接，并实现在海量物联网设备间快速低延时消息路由:
 
 1. 稳定承载大规模的 MQTT 客户端连接，单服务器节点支持50万到100万连接。
 
@@ -60,7 +60,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 五分钟下载启动 EMQ
 ------------------
 
-*EMQ* 2.0 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
+*EMQ X* R3.0 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
 
 下载地址: http://emqtt.com/downloads
 
@@ -68,32 +68,32 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 
 .. code-block:: bash
 
-    unzip emqttd-macosx-v2.0.zip && cd emqttd
+    unzip emqx-macosx-v3.0.zip && cd emqx
 
-    # 启动emqttd
-    ./bin/emqttd start
+    # 启动emqx
+    ./bin/emqx start
 
     # 检查运行状态
-    ./bin/emqttd_ctl status
+    ./bin/emqx_ctl status
 
-    # 停止emqttd
-    ./bin/emqttd stop
+    # 停止emqx
+    ./bin/emqx stop
 
-*EMQ* 消息服务默认允许匿名认证，启动后 MQTT 客户端可连接1883端口，启动运行日志输出在 log/ 目录。
+*EMQ X* 消息服务默认允许匿名认证，启动后 MQTT 客户端可连接1883端口，启动运行日志输出在 log/ 目录。
 
 .. _compile:
 
-----------------
-源码编译EMQ 2.0
-----------------
+------------------
+源码编译EMQ X R3.0
+------------------
 
 .. code-block:: bash
 
-    git clone https://github.com/emqtt/emq-relx.git
+    git clone https://github.com/emqx/emqx-rel.git
 
-    cd emq-relx && make
+    cd emqx-rel && make
 
-    cd _rel/emqttd && ./bin/emqttd console
+    cd _rel/emqx && ./bin/emqx console
 
 .. _dashboard:
 
@@ -101,7 +101,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 Web 管理控制台(Dashboard)
 -------------------------
 
-*EMQ* 消息服务器启动后，会默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、插件(Plugin)。
+*EMQ X* 消息服务器启动后，会默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、插件(Plugin)。
 
 控制台地址: http://127.0.0.1:18083，默认用户: admin，密码：public
 
@@ -109,11 +109,11 @@ Web 管理控制台(Dashboard)
 
 .. _features:
 
-----------------------------
-*EMQ* 2.0 消息服务器功能列表
-----------------------------
+-------------------------------
+*EMQ X* R3.0 消息服务器功能列表
+-------------------------------
 
-* 完整的 MQTT V3.1/V3.1.1 协议规范支持
+* 完整的 MQTT V3.1/V3.1.1 及V5.0协议规范支持
 * QoS0, QoS1, QoS2 消息支持
 * 持久会话与离线消息支持
 * Retained 消息支持
@@ -130,6 +130,11 @@ Web 管理控制台(Dashboard)
 * 浏览器 Cookie 认证
 * 基于客户端 ID、IP 地址、用户名的访问控制(ACL)
 * 多服务器节点集群(Cluster)
+* 自动集群
+* 集群分片自动愈合
+* 消息速率限制
+* 连接速率限制
+* 按分区配置节点
 * 多服务器节点桥接(Bridge)
 * mosquitto 桥接支持
 * Stomp 协议支持
@@ -137,59 +142,57 @@ Web 管理控制台(Dashboard)
 * CoAP 协议支持
 * Stomp/SockJS 支持
 * 通过 Paho 兼容性测试
-* 2.0新功能: 本地订阅($local/topic)
-* 2.0新功能: 共享订阅($share/<group>/topic)
-* 2.0新功能: sysctl 类似 k = v 格式配置文件
+* 本地订阅($local/topic)
+* 共享订阅($share/<group>/topic)
+* sysctl 类似 k = v 格式配置文件
 
 .. _plugins:
 
-----------------------
-*EMQ* 2.0 扩展插件列表
-----------------------
+-------------------------
+*EMQ X* R3.0 扩展插件列表
+-------------------------
 
-*EMQ* 2.0 支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
+*EMQ X* R3.0 支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
 
 +----------------------------+-------------------------------------+
-| `emq_plugin_template`_     | 插件模版与演示代码                  |
+| `emqx_plugin_template`_    | 插件模版与演示代码                  |
 +----------------------------+-------------------------------------+
-| `emq_retainer`_            | Retain 消息存储插件                 |
+| `emqx_retainer`_           | Retain 消息存储插件                 |
 +----------------------------+-------------------------------------+
-| `emq_modules`_             | Presence, Subscription 扩展模块插件 |
+| `emqx_dashboard`_          | Web 管理控制台，默认加载            |
 +----------------------------+-------------------------------------+
-| `emq_dashboard`_           | Web 管理控制台，默认加载            |
+| `emqx_auth_clientid`_      | ClientId、密码认证插件              |
 +----------------------------+-------------------------------------+
-| `emq_auth_clientid`_       | ClientId、密码认证插件              |
+| `emqx_auth_username`_      | 用户名、密码认证插件                |
 +----------------------------+-------------------------------------+
-| `emq_auth_username`_       | 用户名、密码认证插件                |
+| `emqx_auth_ldap`_          | LDAP 认证插件                       |
 +----------------------------+-------------------------------------+
-| `emq_auth_ldap`_           | LDAP 认证插件                       |
+| `emqx_auth_http`_          | HTTP 认证插件                       |
 +----------------------------+-------------------------------------+
-| `emq_auth_http`_           | HTTP 认证插件                       |
+| `emqx_auth_mysql`_         | MySQL 认证插件                      |
 +----------------------------+-------------------------------------+
-| `emq_auth_mysql`_          | MySQL 认证插件                      |
+| `emqx_auth_pgsql`_         | PostgreSQL 认证插件                 |
 +----------------------------+-------------------------------------+
-| `emq_auth_pgsql`_          | PostgreSQL 认证插件                 |
+| `emqx_auth_redis`_         | Redis 认证插件                      |
 +----------------------------+-------------------------------------+
-| `emq_auth_redis`_          | Redis 认证插件                      |
+| `emqx_auth_mongo`_         | MongoDB 认证插件                    |
 +----------------------------+-------------------------------------+
-| `emq_auth_mongo`_          | MongoDB 认证插件                    |
+| `emqx_sn`_                 | MQTT-SN 协议插件                    |
 +----------------------------+-------------------------------------+
-| `emq_sn`_                  | MQTT-SN 协议插件                    |
+| `emqx_coap`_               | CoAP 协议插件                       |
 +----------------------------+-------------------------------------+
-| `emq_coap`_                | CoAP 协议插件                       |
+| `emqx_stomp`_              | Stomp 协议插件                      |
 +----------------------------+-------------------------------------+
-| `emq_stomp`_               | Stomp 协议插件                      |
+| `emqx_recon`_              | Recon 优化调测插件                  |
 +----------------------------+-------------------------------------+
-| `emq_recon`_               | Recon 优化调测插件                  |
+| `emqx_reloader`_           | 热升级插件(开发调试)                |
 +----------------------------+-------------------------------------+
-| `emq_reloader`_            | 热升级插件(开发调试)                |
-+----------------------------+-------------------------------------+
-| `emq_sockjs`_              | SockJS 插件(废弃)                   |
+|`emqx_delayed_publish`_     | 延时发布消息                        |
 +----------------------------+-------------------------------------+
 
-扩展插件通过 'bin/emqttd_ctl' 管理命令行，或 Dashboard 控制台加载启用。例如启用 PostgreSQL 认证插件::
+扩展插件通过 'bin/emqx_ctl' 管理命令行，或 Dashboard 控制台加载启用。例如启用 PostgreSQL 认证插件::
 
-    ./bin/emqttd_ctl plugins load emq_auth_pgsql
+    ./bin/emqx_ctl plugins load emqx_auth_pgsql
 
 .. _c1000k:
 
@@ -199,9 +202,9 @@ Web 管理控制台(Dashboard)
 
 .. NOTE::
 
-    *EMQ* 2.0 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
+    *EMQ X* R3.0 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
 
-*EMQ* 消息服务器1.1.3版本，连接压力测试到130万线，8核心/32G内存的 CentOS 云服务器。
+*EMQ X* R3.0 消息服务器1.1.3版本，连接压力测试到130万线，8核心/32G内存的 CentOS 云服务器。
 
 操作系统内核参数、TCP 协议栈参数、Erlang 虚拟机参数、EMQ 最大允许连接数设置简述如下：
 
@@ -237,10 +240,10 @@ emqttd/etc/emq.conf:
     ## Sets the maximum number of simultaneously existing ports for this system
     node.max_ports = 1048576
 
-EMQ 最大允许连接数
-------------------
+EMQ X 最大允许连接数
+--------------------
 
-emqttd/etc/emq.conf 'listeners'段落::
+emqx/etc/emqx.conf 'listeners'段落::
 
     ## Size of acceptor pool
     listener.tcp.external.acceptors = 64
@@ -299,25 +302,21 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 .. _CocoaMQTT:       https://github.com/emqtt/CocoaMQTT
 .. _QMQTT:           https://github.com/emqtt/qmqtt
 
-.. _emq_plugin_template:  https://github.com/emqtt/emq_plugin_template
-.. _emq_retainer:         https://github.com/emqtt/emq_retainer
-.. _emq_mod_retainer:     https://github.com/emqtt/emq_mod_retainer
-.. _emq_modules:          https://github.com/emqtt/emq_modules
-.. _emq_mod_subscription: https://github.com/emqtt/emq_mod_subscription
-.. _emq_dashboard:        https://github.com/emqtt/emq_dashboard
-.. _emq_mod_rewrite:      https://github.com/emqtt/emq_mod_rewrite
-.. _emq_auth_clientid:    https://github.com/emqtt/emq_auth_clientid
-.. _emq_auth_username:    https://github.com/emqtt/emq_auth_username
-.. _emq_auth_ldap:        https://github.com/emqtt/emq_auth_ldap
-.. _emq_auth_http:        https://github.com/emqtt/emq_auth_http
-.. _emq_auth_mysql:       https://github.com/emqtt/emq_auth_mysql
-.. _emq_auth_pgsql:       https://github.com/emqtt/emq_auth_pgsql
-.. _emq_auth_redis:       https://github.com/emqtt/emq_auth_redis
-.. _emq_auth_mongo:       https://github.com/emqtt/emq_auth_mongo
-.. _emq_reloader:         https://github.com/emqtt/emq_reloader
-.. _emq_stomp:            https://github.com/emqtt/emq_stomp
-.. _emq_sockjs:           https://github.com/emqtt/emq_sockjs
-.. _emq_recon:            https://github.com/emqtt/emq_recon
-.. _emq_sn:               https://github.com/emqtt/emq_sn
-.. _emq_coap:             https://github.com/emqtt/emq_coap
+.. _emqx_plugin_template:  https://github.com/emqx/emqx_plugin_template
+.. _emqx_retainer:         https://github.com/emqx/emqx_retainer
+.. _emqx_dashboard:        https://github.com/emqx/emqx_dashboard
+.. _emqx_auth_clientid:    https://github.com/emqx/emqx_auth_clientid
+.. _emqx_auth_username:    https://github.com/emqx/emqx_auth_username
+.. _emqx_auth_ldap:        https://github.com/emqx/emqx_auth_ldap
+.. _emqx_auth_http:        https://github.com/emqx/emqx_auth_http
+.. _emqx_auth_mysql:       https://github.com/emqx/emqx_auth_mysql
+.. _emqx_auth_pgsql:       https://github.com/emqx/emqx_auth_pgsql
+.. _emqx_auth_redis:       https://github.com/emqx/emqx_auth_redis
+.. _emqx_auth_mongo:       https://github.com/emqx/emqx_auth_mongo
+.. _emqx_reloader:         https://github.com/emqx/emqx_reloader
+.. _emqx_stomp:            https://github.com/emqx/emqx_stomp
+.. _emqx_recon:            https://github.com/emqx/emqx_recon
+.. _emqx_sn:               https://github.com/emqx/emqx_sn
+.. _emqx_coap:             https://github.com/emqx/emqx_coap
+.. _emqx_delayed_publish:  https://github.com/emqx/emqx_delayed_publish
 

@@ -11,7 +11,7 @@
 MQTT 认证设置
 -------------
 
-*EMQ* 消息服务器认证由一系列认证插件(Plugin)提供，系统支持按用户名密码、ClientID 或匿名认证。
+*EMQ X* 消息服务器认证由一系列认证插件(Plugin)提供，系统支持按用户名密码、ClientID 或匿名认证。
 
 系统默认开启匿名认证(anonymous)，通过加载认证插件可开启的多个认证模块组成认证链::
 
@@ -22,40 +22,46 @@ MQTT 认证设置
                      \|/                       \|/                       \|/
                 allow | deny              allow | deny              allow | deny
 
-.. NOTE:: EMQ 2.0 消息服务器还提供了 MySQL、PostgreSQL、Redis、MongoDB、HTTP、LDAP 认证插件。
+.. NOTE:: EMQ X 消息服务器提供 MySQL、PostgreSQL、Redis、MongoDB、HTTP、LDAP 认证插件。
 
 ------------
 开启匿名认证
 ------------
 
-etc/emq.conf 配置启用匿名认证:
+etc/emqx.conf 配置启用匿名认证:
 
 .. code-block:: properties
 
-    ## Allow Anonymous authentication
-    mqtt.allow_anonymous = true
+    ## Allow anonymous authentication by default if no auth plugins loaded.
+    ## Notice: Disable the option in production deployment!
+    ##
+    ## Value: true | false
+    allow_anonymous = true
 
-EMQ 2.0 版本提供的认证插件包括:
+EMQ X 3.0 版本提供的认证插件包括:
 
-+---------------------------+---------------------------+
-| 插件                      | 说明                      |
-+===========================+===========================+
-| `emq_auth_clientid`_      | ClientId 认证/鉴权插件    |
-+---------------------------+---------------------------+
-| `emq_auth_username`_      | 用户名密码认证/鉴权插件   |
-+---------------------------+---------------------------+
-| `emq_auth_ldap`_          | LDAP 认证/鉴权插件        |
-+---------------------------+---------------------------+
-| `emq_auth_http`_          | HTTP 认证/鉴权插件        |
-+---------------------------+---------------------------+
-| `emq_auth_mysql`_         | MySQ L认证/鉴权插件       |
-+---------------------------+---------------------------+
-| `emq_auth_pgsql`_         | Postgre 认证/鉴权插件     |
-+---------------------------+---------------------------+
-| `emq_auth_redis`_         | Redis 认证/鉴权插件       |
-+---------------------------+---------------------------+
-| `emq_auth_mongo`_         | MongoDB 认证/鉴权插件     |
-+---------------------------+---------------------------+
++----------------------------+---------------------------+
+| 插件                       | 说明                      |
++============================+===========================+
+| `emqx_auth_clientid`_      | ClientId 认证/鉴权插件    |
++----------------------------+---------------------------+
+| `emqx_auth_username`_      | 用户名密码认证/鉴权插件   |
++----------------------------+---------------------------+
+| `emqx_auth_ldap`_          | LDAP 认证/鉴权插件        |
++----------------------------+---------------------------+
+| `emqx_auth_http`_          | HTTP 认证/鉴权插件        |
++----------------------------+---------------------------+
+| `emqx_auth_mysql`_         | MySQ L认证/鉴权插件       |
++----------------------------+---------------------------+
+| `emqx_auth_pgsql`_         | Postgre 认证/鉴权插件     |
++----------------------------+---------------------------+
+| `emqx_auth_redis`_         | Redis 认证/鉴权插件       |
++----------------------------+---------------------------+
+| `emqx_auth_mongo`_         | MongoDB 认证/鉴权插件     |
++----------------------------+---------------------------+
+| `emqx_auth_jwt`_           | JWT 认证/鉴权插件         |
++----------------------------+---------------------------+
+
 
 --------------
 用户名密码认证
@@ -63,22 +69,22 @@ EMQ 2.0 版本提供的认证插件包括:
 
 基于 MQTT 登录用户名(username)、密码(password)认证。
 
-etc/plugins/emq_auth_username.conf 中配置默认用户:
+etc/plugins/emqx_auth_username.conf 中配置默认用户:
 
 .. code-block:: properties
 
     auth.user.$N.username = admin
     auth.user.$N.password = public
 
-启用 `emq_auth_username`_ 插件:
+启用 `emqx_auth_username`_ 插件:
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl plugins load emq_auth_username
+    ./bin/emqx_ctl plugins load emqx_auth_username
 
-使用 `./bin/emqttd_ctl users` 命令添加用户::
+使用 `./bin/emqx_ctl users` 命令添加用户::
 
-   $ ./bin/emqttd_ctl users add <Username> <Password>
+   $ ./bin/emqx_ctl users add <Username> <Password>
 
 -------------
 ClientId 认证
@@ -86,46 +92,71 @@ ClientId 认证
 
 基于 MQTT 客户端 ID 认证。
 
-etc/plugins/emq_auth_clientid.conf:
+etc/plugins/emqx_auth_clientid.conf:
 
 .. code-block:: properties
 
     auth.client.$N.clientid = clientid
     auth.client.$N.password = passwd
 
-启用 `emq_auth_clientid`_ 插件:
+启用 `emqx_auth_clientid`_ 插件:
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl plugins load emq_auth_clientid
+    ./bin/emqx_ctl plugins load emqx_auth_clientid
 
 -------------
 LDAP 插件认证
 -------------
 
-etc/plugins/emq_auth_ldap.conf 配置 LDAP 参数:
+etc/plugins/emqx_auth_ldap.conf 配置 LDAP 参数:
 
 .. code-block:: properties
 
+    ## LDAP server list, seperated by ','.
+    ## Value: String
     auth.ldap.servers = 127.0.0.1
 
+    ## LDAP server port.
+    ## Value: Port
     auth.ldap.port = 389
 
+    ## LDAP Bind DN.
+    ## Value: DN
+    auth.ldap.bind_dn = cn=root,dc=emqtt,dc=com
+
+    ## LDAP Bind Password.
+    ## Value: String
+    auth.ldap.bind_password = public
+
+    ## LDAP query timeout.
+    ## Value: Number
     auth.ldap.timeout = 30
 
-    auth.ldap.user_dn = uid=%u,ou=People,dc=example,dc=com
+    ## Authentication DN.
+    ##  -%u: username
+    ##  -%c: clientid
+    ##
+    ## Value: DN
+    auth.ldap.auth_dn = cn=%u,ou=auth,dc=emqtt,dc=com
 
+    ## Password hash.
+    ## Value: plain | md5 | sha | sha256
+    auth.ldap.password_hash = sha256
+
+    ## Whether to enable SSL.
+    ## Value: true | false
     auth.ldap.ssl = false
 
 启用 LDAP 认证插件::
 
-    ./bin/emqttd_ctl plugins load emq_auth_ldap
+    ./bin/emqx_ctl plugins load emqx_auth_ldap
 
 -------------
 HTTP 插件认证
 -------------
 
-etc/plugins/emq_auth_http.conf 配置 'super_req', 'auth_req':
+etc/plugins/emqx_auth_http.conf 配置 'super_req', 'auth_req':
 
 .. code-block:: properties
 
@@ -141,7 +172,33 @@ etc/plugins/emq_auth_http.conf 配置 'super_req', 'auth_req':
 
 启用 HTTP 认证插件::
 
-    ./bin/emqttd_ctl plugins load emq_auth_http
+    ./bin/emqx_ctl plugins load emqx_auth_http
+
+------------
+JWT 插件认证
+------------
+
+etc/plugins/emqx_auth_jwt.conf 配置 'secret', 'pubkey':
+
+.. code-block:: properties
+
+    ##--------------------------------------------------------------------
+    ## JWT Auth Plugin
+    ##--------------------------------------------------------------------
+
+    ## HMAC Hash Secret.
+    ##
+    ## Value: String
+    auth.jwt.secret = emqxsecret
+
+    ## RSA or ECDSA public key file.
+    ##
+    ## Value: File
+    ## auth.jwt.pubkey = etc/certs/jwt_public_key.pem
+
+启用 JWT 认证插件::
+
+    ./bin/emqx_ctl plugins load emqx_auth_jwt
 
 --------------
 MySQL 插件认证
@@ -162,7 +219,7 @@ MySQL 插件认证
       UNIQUE KEY `mqtt_username` (`username`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-etc/plugins/emq_auth_mysql.conf 配置 'super_query', 'auth_query', 'password_hash':
+etc/plugins/emqx_auth_mysql.conf 配置 'super_query', 'auth_query', 'password_hash':
 
 .. code-block:: properties
 
@@ -173,10 +230,10 @@ etc/plugins/emq_auth_mysql.conf 配置 'super_query', 'auth_query', 'password_ha
     auth.mysql.pool = 8
 
     ## Mysql Username
-    ## auth.mysql.username = 
+    ## auth.mysql.username =
 
     ## Mysql Password
-    ## auth.mysql.password = 
+    ## auth.mysql.password =
 
     ## Mysql Database
     auth.mysql.database = mqtt
@@ -186,8 +243,23 @@ etc/plugins/emq_auth_mysql.conf 配置 'super_query', 'auth_query', 'password_ha
     ## Authentication Query: select password only
     auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
-    ## Password hash: plain, md5, sha, sha256, pbkdf2
+    ## Password hash.
+    ##
+    ## Value: plain | md5 | sha | sha256 | bcrypt
     auth.mysql.password_hash = sha256
+
+    ## sha256 with salt prefix
+    ## auth.mysql.password_hash = salt,sha256
+
+    ## bcrypt with salt only prefix
+    ## auth.mysql.password_hash = salt,bcrypt
+
+    ## sha256 with salt suffix
+    ## auth.mysql.password_hash = sha256,salt
+
+    ## pbkdf2 with macfun iterations dklen
+    ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
+    ## auth.mysql.password_hash = pbkdf2,sha256,1000,20
 
     ## %% Superuser Query
     auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
@@ -196,7 +268,7 @@ etc/plugins/emq_auth_mysql.conf 配置 'super_query', 'auth_query', 'password_ha
 
 启用 MySQL 认证插件::
 
-    ./bin/emqttd_ctl plugins load emq_auth_mysql
+    ./bin/emqx_ctl plugins load emqx_auth_mysql
 
 ----------------
 Postgre 插件认证
@@ -204,7 +276,7 @@ Postgre 插件认证
 
 通过 PostgreSQL 数据库表认证，可创建如下的 'mqtt_user' 表:
 
-.. code-block:: sql 
+.. code-block:: sql
 
     CREATE TABLE mqtt_user (
       id SERIAL primary key,
@@ -214,7 +286,7 @@ Postgre 插件认证
       salt character varying(40)
     );
 
-etc/plugins/emq_auth_pgsql.conf 配置 'auth_query'、'password_hash':
+etc/plugins/emqx_auth_pgsql.conf 配置 'auth_query'、'password_hash':
 
 .. code-block:: properties
 
@@ -225,7 +297,7 @@ etc/plugins/emq_auth_pgsql.conf 配置 'auth_query'、'password_hash':
 
     auth.pgsql.username = root
 
-    #auth.pgsql.password = 
+    #auth.pgsql.password =
 
     auth.pgsql.database = mqtt
 
@@ -238,7 +310,7 @@ etc/plugins/emq_auth_pgsql.conf 配置 'auth_query'、'password_hash':
     ## Authentication Query: select password only
     auth.pgsql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
-    ## Password hash: plain, md5, sha, sha256, pbkdf2
+    ## Password hash: plain, md5, sha, sha256, pbkdf2, bcrypt
     auth.pgsql.password_hash = sha256
 
     ## sha256 with salt prefix
@@ -247,6 +319,13 @@ etc/plugins/emq_auth_pgsql.conf 配置 'auth_query'、'password_hash':
     ## sha256 with salt suffix
     ## auth.pgsql.password_hash = sha256 salt
 
+    ## bcrypt with salt prefix
+    ## auth.pgsql.password_hash = salt,bcrypt
+
+    ## pbkdf2 with macfun iterations dklen
+    ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
+    ## auth.pgsql.password_hash = pbkdf2,sha256,1000,20
+
     ## Superuser Query
     auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 
@@ -254,7 +333,7 @@ etc/plugins/emq_auth_pgsql.conf 配置 'auth_query'、'password_hash':
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl plugins load emq_auth_pgsql
+    ./bin/emqx_ctl plugins load emqx_auth_pgsql
 
 --------------
 Redis 插件认证
@@ -262,29 +341,56 @@ Redis 插件认证
 
 Redis 认证。MQTT 用户记录存储在 Redis Hash, 键值: "mqtt_user:<Username>"
 
-etc/plugins/emq_auth_redis.conf 设置 'super_cmd'、'auth_cmd'、'password_hash':
+etc/plugins/emqx_auth_redis.conf 设置 'super_cmd'、'auth_cmd'、'password_hash':
 
 .. code-block:: properties
 
-    ## Redis Server
-    auth.redis.server = 127.0.0.1:6379
+    ## Redis server address.
+    ##
+    ## Value: Port | IP:Port
+    ##
+    ## Redis Server: 6379, 127.0.0.1:6379, localhost:6379, Redis Sentinel: 127.0.0.1:26379
 
-    ## Redis Pool Size
+    ## Redis sentinel cluster name.
+    ##
+    ## Value: String
+    ## auth.redis.sentinel = mymaster
+
+    ## Redis pool size.
+    ##
+    ## Value: Number
     auth.redis.pool = 8
 
-    ## Redis Database
+    ## Redis database no.
+    ##
+    ## Value: Number
     auth.redis.database = 0
 
-    ## Redis Password
+    ## Redis password.
+    ##
+    ## Value: String
     ## auth.redis.password =
 
     ## Variables: %u = username, %c = clientid
 
     ## Authentication Query Command
-    auth.redis.auth_cmd = HGET mqtt_user:%u password
+    auth.redis.auth_cmd = HMGET mqtt_user:%u password
 
-    ## Password hash: plain, md5, sha, sha256, pbkdf2
+    ## Password hash: plain, md5, sha, sha256, pbkdf2, bcrypt
     auth.redis.password_hash = sha256
+
+    ## sha256 with salt prefix
+    ## auth.redis.password_hash = salt,sha256
+
+    ## sha256 with salt suffix
+    ## auth.redis.password_hash = sha256,salt
+
+    ## bcrypt with salt prefix
+    ## auth.redis.password_hash = salt,bcrypt
+
+    ## pbkdf2 with macfun iterations dklen
+    ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
+    ## auth.redis.password_hash = pbkdf2,sha256,1000,20
 
     ## Superuser Query Command
     auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
@@ -293,7 +399,7 @@ etc/plugins/emq_auth_redis.conf 设置 'super_cmd'、'auth_cmd'、'password_hash
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl plugins load emq_auth_redis
+    ./bin/emqx_ctl plugins load emqx_auth_redis
 
 ----------------
 MongoDB 插件认证
@@ -308,21 +414,45 @@ MongoDB 插件认证
         created: "datetime"
     }
 
-etc/plugins/emq_auth_mongo.conf 设置 'super_query'、'auth_query':
+etc/plugins/emqx_auth_mongo.conf 设置 'super_query'、'auth_query':
 
 .. code-block:: properties
 
-    ## Mongo Server
+    ## MongoDB Topology Type.
+    ##
+    ## Value: single | unknown | sharded | rs
+    auth.mongo.type = single
+
+    ## The set name if type is rs.
+    ##
+    ## Value: String
+    ## auth.mongo.rs_set_name =
+
+    ## MongoDB server list.
+    ##
+    ## Value: String
+    ##
+    ## Examples: 127.0.0.1:27017,127.0.0.2:27017...
     auth.mongo.server = 127.0.0.1:27017
 
     ## Mongo Pool Size
     auth.mongo.pool = 8
 
-    ## Mongo User
-    ## auth.mongo.user = 
+    ## MongoDB login user.
+    ##
+    ## Value: String
+    ## auth.mongo.login =
 
-    ## Mongo Password
-    ## auth.mongo.password = 
+    ## MongoDB password.
+    ##
+    ## Value: String
+    ## auth.mongo.password =
+
+    ## MongoDB AuthSource
+    ##
+    ## Value: String
+    ## Default: mqtt
+    ## auth.mongo.auth_source = admin
 
     ## Mongo Database
     auth.mongo.database = mqtt
@@ -337,6 +467,9 @@ etc/plugins/emq_auth_mongo.conf 设置 'super_query'、'auth_query':
     auth.mongo.auth_query.selector = username=%u
 
     ## super_query
+    ## Enable superuser query.
+    auth.mongo.super_query = on
+
     auth.mongo.super_query.collection = mqtt_user
 
     auth.mongo.super_query.super_field = is_superuser
@@ -347,7 +480,7 @@ etc/plugins/emq_auth_mongo.conf 设置 'super_query'、'auth_query':
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl plugins load emq_auth_mongo
+    ./bin/emqx_ctl plugins load emqx_auth_mongo
 
 .. _acl:
 
@@ -355,13 +488,13 @@ etc/plugins/emq_auth_mongo.conf 设置 'super_query'、'auth_query':
 访问控制(ACL)
 -------------
 
-*EMQ* 消息服务器通过 ACL(Access Control List) 实现 MQTT 客户端访问控制。
+*EMQ X* 消息服务器通过 ACL(Access Control List) 实现 MQTT 客户端访问控制。
 
 ACL 访问控制规则定义::
 
     允许(Allow)|拒绝(Deny) 谁(Who) 订阅(Subscribe)|发布(Publish) 主题列表(Topics)
 
-MQTT 客户端发起订阅/发布请求时，EMQ 消息服务器的访问控制模块，会逐条匹配 ACL 规则，直到匹配成功为止::
+MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控制模块，会逐条匹配 ACL 规则，直到匹配成功为止::
 
               ---------              ---------              ---------
     Client -> | Rule1 | --nomatch--> | Rule2 | --nomatch--> | Rule3 | --> Default
@@ -375,17 +508,21 @@ MQTT 客户端发起订阅/发布请求时，EMQ 消息服务器的访问控制�
 默认访问控制设置
 ----------------
 
-*EMQ* 消息服务器默认访问控制，在 etc/emq.conf 中设置:
+*EMQ X* 消息服务器默认访问控制，在 etc/emqx.conf 中设置:
 
 .. code-block:: properties
 
-    ## ACL nomatch
-    mqtt.acl_nomatch = allow
+    ## Allow or deny if no ACL rules matched.
+    ##
+    ## Value: allow | deny
+    acl_nomatch = allow
 
-    ## Default ACL File
-    mqtt.acl_file = etc/acl.conf
+    ## Default ACL File.
+    ##
+    ## Value: File Name
+    acl_file = etc/acl.conf
 
-ACL 规则定义在 etc/acl.conf，EMQ 启动时加载到内存:
+ACL 规则定义在 etc/acl.conf，EMQ X 启动时加载到内存:
 
 .. code-block:: erlang
 
@@ -407,7 +544,7 @@ HTTP 插件访问控制
 
 HTTP API 实现访问控制: https://github.com/emqtt/emq_auth_http
 
-配置 etc/plugins/emq_auth_http.conf, 启用 HTTP 认证插件后:
+配置 etc/plugins/emqx_auth_http.conf, 启用 HTTP 认证插件后:
 
 .. code-block:: properties
 
@@ -444,11 +581,15 @@ MySQL 插件访问控制，通过 mqtt_acl 表定义 ACL 规则:
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
-etc/plugins/emq_auth_mysql.conf 配置 'acl_query' 与 'acl_nomatch':
+etc/plugins/emqx_auth_mysql.conf 配置 'acl_query' 与 'acl_nomatch':
 
 .. code-block:: properties
 
     ## ACL Query Command
+    ## Variables:
+    ##  - %a: ipaddr
+    ##  - %u: username
+    ##  - %c: clientid
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
 --------------------
@@ -478,11 +619,15 @@ PostgreSQL 插件访问控制，通过 mqtt_acl 表定义 ACL 规则:
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
-etc/plugins/emq_auth_pgsql.conf 设置 'acl_query' 与 'acl_nomatch':
+etc/plugins/emqx_auth_pgsql.conf 设置 'acl_query' 与 'acl_nomatch':
 
 .. code-block:: properties
 
     ## ACL Query. Comment this query, the acl will be disabled.
+    ## Variables:
+    ##  - %a: ipaddress
+    ##  - %u: username
+    ##  - %c: clientid
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
 ------------------
@@ -495,7 +640,7 @@ Redis Hash 存储一个 MQTT 客户端的访问控制规则::
     HSET mqtt_acl:<username> topic2 2
     HSET mqtt_acl:<username> topic3 3
 
-etc/plugins/emq_auth_redis.conf 配置 'acl_cmd' 与 'acl_nomatch':
+etc/plugins/emqx_auth_redis.conf 配置 'acl_cmd' 与 'acl_nomatch':
 
 .. code-block:: properties
 
@@ -521,7 +666,7 @@ MongoDB 数据库创建 `mqtt_acl` 集合::
     db.mqtt_acl.insert({username: "test", publish: ["t/1", "t/2"], subscribe: ["user/%u", "client/%c"]})
     db.mqtt_acl.insert({username: "admin", pubsub: ["#"]})
 
-etc/plugins/emq_auth_mongo.conf 配置 'acl_query' 与 'acl_nomatch':
+etc/plugins/emqx_auth_mongo.conf 配置 'acl_query' 与 'acl_nomatch':
 
 .. code-block:: properties
 
@@ -538,7 +683,7 @@ MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息
 
 .. image:: ./_static/images/pubsub_concept.png
 
-*EMQ* 消息服务器安装启动后，任何设备或终端的 MQTT 客户端，可通过 MQTT 协议连接到服务器，发布订阅消息方式互通。
+*EMQ X* 消息服务器安装启动后，任何设备或终端的 MQTT 客户端，可通过 MQTT 协议连接到服务器，发布订阅消息方式互通。
 
 MQTT 协议客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 
@@ -547,20 +692,24 @@ MQTT 协议客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
     mosquitto_sub -t topic -q 2
     mosquitto_pub -t topic -q 1 -m "Hello, MQTT!"
 
-MQTT V3.1.1 版本协议规范: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
+MQTT V5.0 版本协议规范: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
 
-*EMQ* 消息服务器的 MQTT 协议 TCP 监听器，可在 etc/emq.conf 文件中设置:
+*EMQ X* 消息服务器的 MQTT 协议 TCP 监听器，可在 etc/emqx.conf 文件中设置:
 
 .. code-block:: properties
 
     ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
-    listener.tcp.external = 1883
+    listener.tcp.external = 0.0.0.0:1883
 
     ## Size of acceptor pool
     listener.tcp.external.acceptors = 8
 
     ## Maximum number of concurrent clients
-    listener.tcp.external.max_clients = 1024
+    listener.tcp.external.max_connections = 1024000
+    ## Maximum external connections per second.
+    ##
+    ## Value: Number
+    listener.tcp.external.max_conn_rate = 1000
 
 MQTT/SSL 监听器，缺省端口8883:
 
@@ -570,10 +719,15 @@ MQTT/SSL 监听器，缺省端口8883:
     listener.ssl.external = 8883
 
     ## Size of acceptor pool
-    listener.ssl.external.acceptors = 4
+    listener.ssl.external.acceptors = 16
 
     ## Maximum number of concurrent clients
-    listener.ssl.external.max_clients = 512
+    listener.ssl.external.max_connections = 102400
+
+    ## Maximum MQTT/SSL connections per second.
+    ##
+    ## Value: Number
+    listener.ssl.external.max_conn_rate = 500
 
 .. _http_publish:
 
@@ -581,7 +735,7 @@ MQTT/SSL 监听器，缺省端口8883:
 HTTP 发布接口
 -------------
 
-*EMQ* 消息服务器提供了一个 HTTP 发布接口，应用服务器或 Web 服务器可通过该接口发布 MQTT 消息::
+*EMQ X* 消息服务器提供了一个 HTTP 发布接口，应用服务器或 Web 服务器可通过该接口发布 MQTT 消息::
 
     HTTP POST http://host:8080/mqtt/publish
 
@@ -589,23 +743,23 @@ Web 服务器例如 PHP/Java/Python/NodeJS 或 Ruby on Rails，可通过 HTTP PO
 
 .. code-block:: bash
 
-    curl -v --basic -u user:passwd -d "qos=1&retain=0&topic=/a/b/c&message=hello from http..." -k http://localhost:8080/mqtt/publish
+    curl -v --basic -u user:passwd -H "Content-Type: application/json" -d '{"qos":1, "retain": false, "topic":"world", "payload":"test" , "client_id": "C_1492145414740"}'  -k http://localhost:8080/api/v3/mqtt/publish
 
 HTTP 接口参数:
 
-+---------+------------------+
-| 参数    | 说明             |
-+=========+==================+
-| client  | MQTT 客户端 ID   |
-+---------+------------------+
-| qos     | QoS: 0 | 1 | 2   |
-+---------+------------------+
-| retain  | Retain: 0 | 1    |
-+---------+------------------+
-| topic   | 主题(Topic)      |
-+---------+------------------+
-| message | 消息             |
-+---------+------------------+
++---------+----------------------+
+| 参数    | 说明                 |
++=========+======================+
+| client  | MQTT 客户端 ID       |
++---------+----------------------+
+| qos     | QoS: 0 | 1 | 2       |
++---------+----------------------+
+| retain  | Retain: true | false |
++---------+----------------------+
+| topic   | 主题(Topic)          |
++---------+----------------------+
+| message | 消息载荷             |
++---------+----------------------+
 
 .. NOTE::
 
@@ -613,13 +767,13 @@ HTTP 接口参数:
 
 .. NOTE::
 
-    该接口在 v2.3-beta.2 版本变更为: 'api/v2/mqtt/publish', 详见文档: :doc:`/rest`
+    该接口在 v3.0-beta.1 版本变更为: 'api/v3/mqtt/publish', 详见文档: :doc:`/rest`
 
 -------------------
 MQTT WebSocket 连接
 -------------------
 
-*EMQ* 消息服务器支持 MQTT WebSocket 连接，Web 浏览器可直接通过 MQTT 协议连接服务器:
+*EMQ X* 消息服务器支持 MQTT WebSocket 连接，Web 浏览器可直接通过 MQTT 协议连接服务器:
 
 +-------------------------+----------------------------+
 | WebSocket URI:          | ws(s)://host:8083/mqtt     |
@@ -631,14 +785,22 @@ Dashboard 插件提供了一个 MQTT WebSocket 连接的测试页面::
 
     http://127.0.0.1:18083/websocket.html
 
-*EMQ* 通过内嵌的 HTTP 服务器，实现 MQTT/WebSocket，etc/emq.conf 设置:
+*EMQ X* 通过内嵌的 HTTP 服务器，实现 MQTT/WebSocket，etc/emqx.conf 设置:
 
 .. code-block:: properties
 
     ## MQTT/WebSocket Listener
     listener.ws.external = 8083
     listener.ws.external.acceptors = 4
-    listener.ws.external.max_clients = 64
+    ## Maximum number of concurrent MQTT/WebSocket connections.
+    ##
+    ## Value: Number
+    listener.ws.external.max_connections = 102400
+
+    ## Maximum MQTT/WebSocket connections per second.
+    ##
+    ## Value: Number
+    listener.ws.external.max_conn_rate = 1000
 
 .. _sys_topic:
 
@@ -646,7 +808,7 @@ Dashboard 插件提供了一个 MQTT WebSocket 连接的测试页面::
 $SYS-系统主题
 -------------
 
-*EMQ* 消息服务器周期性发布自身运行状态、MQTT 协议统计、客户端上下线状态到 `$SYS/` 开头系统主题。
+*EMQ X* 消息服务器周期性发布自身运行状态、MQTT 协议统计、客户端上下线状态到 `$SYS/` 开头系统主题。
 
 $SYS 主题路径以 "$SYS/brokers/{node}/" 开头，'${node}' 是 Erlang 节点名称::
 
@@ -656,12 +818,15 @@ $SYS 主题路径以 "$SYS/brokers/{node}/" 开头，'${node}' 是 Erlang 节点
 
 .. NOTE:: 默认只允许 localhost 的 MQTT 客户端订阅 $SYS 主题，可通过 etc/acl.config 修改访问控制规则。
 
-$SYS 系统消息发布周期，通过 etc/emq.conf 配置:
+$SYS 系统消息发布周期，通过 etc/emqx.conf 配置:
 
 .. code-block:: properties
 
-    ## System Interval of publishing broker $SYS Messages
-    mqtt.broker.sys_interval = 60
+    ## System interval of publishing $SYS messages.
+    ##
+    ## Value: Duration
+    ## Default: 1m, 1 minute
+    broker.sys_interval = 1m
 
 .. _sys_brokers:
 
@@ -705,10 +870,13 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 .. code-block:: json
 
     {
-        ipaddress: "127.0.0.1",
-        username:  "test",
-        session:   false,
-        protocol:  3,
+        clientid:    "test"
+        username:    "test",
+        ipaddress:   "127.0.0.1",
+        clean_start: true,
+        proto_ver:   4,
+        proto_name:  "MQTT",
+        keepalive:   60,
         connack:   0,
         ts:        1432648482
     }
@@ -718,8 +886,10 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 .. code-block:: json
 
     {
-        reason: normal,
-        ts:     1432648486
+        clientid:   "test"
+        username:   "test",
+        reason:     "normal",
+        ts:         1432648486
     }
 
 .. _sys_stats:
@@ -735,32 +905,44 @@ Clients - 客户端统计
 +---------------------+---------------------------------------------+
 | 主题(Topic)         | 说明                                        |
 +---------------------+---------------------------------------------+
-| clients/count       | 当前客户端总数                              |
+| connections/count   | 当前客户端总数                              |
 +---------------------+---------------------------------------------+
-| clients/max         | 最大客户端数量                              |
+| connections/max     | 最大客户端数量                              |
 +---------------------+---------------------------------------------+
 
 Sessions - 会话统计
 ...................
 
-+---------------------+---------------------------------------------+
-| 主题(Topic)         | 说明                                        |
-+---------------------+---------------------------------------------+
-| sessions/count      | 当前会话总数                                |
-+---------------------+---------------------------------------------+
-| sessions/max        | 最大会话数量                                |
-+---------------------+---------------------------------------------+
++-----------------------------+---------------------------------------------+
+| 主题(Topic)                 | 说明                                        |
++-----------------------------+---------------------------------------------+
+| sessions/count              | 当前会话总数                                |
++-----------------------------+---------------------------------------------+
+| sessions/max                | 最大会话数量                                |
++-----------------------------+---------------------------------------------+
+| sessions/persistent/count   | 当前持久会话总数                            |
++-----------------------------+---------------------------------------------+
+| sessions/persistent/max     | 最大持久会话数量                            |
++-----------------------------+---------------------------------------------+
 
 Subscriptions - 订阅统计
 ........................
 
-+---------------------+---------------------------------------------+
-| 主题(Topic)         | 说明                                        |
-+---------------------+---------------------------------------------+
-| subscriptions/count | 当前订阅总数                                |
-+---------------------+---------------------------------------------+
-| subscriptions/max   | 最大订阅数量                                |
-+---------------------+---------------------------------------------+
++---------------------------------+---------------------------------------------+
+| 主题(Topic)                     | 说明                                        |
++---------------------------------+---------------------------------------------+
+| subscriptions/shared/max        | 当前共享订阅最大数量                        |
++---------------------------------+---------------------------------------------+
+| subscriptions/max               | 最大订阅数量                                |
++---------------------------------+---------------------------------------------+
+| subscribers/max                 | 最大订阅者总数                              |
++---------------------------------+---------------------------------------------+
+| subscriptions/shared/count      | 当前共享订阅总数                            |
++---------------------------------+---------------------------------------------+
+| subscriptions/count             | 当前订阅总数                                |
++---------------------------------+---------------------------------------------+
+| subscribers/count               | 当前订阅者数量                              |
++---------------------------------+---------------------------------------------+
 
 Topics - 主题统计
 ................
@@ -768,9 +950,31 @@ Topics - 主题统计
 +---------------------+---------------------------------------------+
 | 主题(Topic)         | 说明                                        |
 +---------------------+---------------------------------------------+
-| topics/count        | 当前 Topic 总数(跨节点)                     |
+| topics/count        | 当前 Topic 总数                             |
 +---------------------+---------------------------------------------+
-| topics/max          | Max number of topics                        |
+| topics/max          | 最大 Topic 数量                             |
++---------------------+---------------------------------------------+
+
+Retained - 保留标志统计
+.......................
+
++---------------------+---------------------------------------------+
+| 主题(Topic)         | 说明                                        |
++---------------------+---------------------------------------------+
+| retained/count      | 当前 Retained 总数                          |
++---------------------+---------------------------------------------+
+| retained/max        | 最大 Retained 数量                          |
++---------------------+---------------------------------------------+
+
+Routes - 路由统计
+.................
+
++---------------------+---------------------------------------------+
+| 主题(Topic)         | 说明                                        |
++---------------------+---------------------------------------------+
+| routes/count        | 当前 Routes 总数                            |
++---------------------+---------------------------------------------+
+| routes/max          | 最大 Routes 数量                            |
 +---------------------+---------------------------------------------+
 
 Metrics - 收发流量/报文/消息统计
@@ -807,6 +1011,30 @@ MQTT报文收发统计
 +--------------------------+---------------------------------------------+
 | packets/publish/sent     | 累计发送 MQTT PUBLISH 报文                  |
 +--------------------------+---------------------------------------------+
+| packets/puback/received  | 累计接收 MQTT PUBACK 报文                   |
++--------------------------+---------------------------------------------+
+| packets/puback/sent      | 累计发送 MQTT PUBACK 报文                   |
++--------------------------+---------------------------------------------+
+| packets/puback/missed    | 累计丢失 MQTT PUBACK 报文                   |
++--------------------------+---------------------------------------------+
+| packets/pubrec/received  | 累计接收 MQTT PUBREC 报文                   |
++--------------------------+---------------------------------------------+
+| packets/pubrec/sent      | 累计发送 MQTT PUBREC 报文                   |
++--------------------------+---------------------------------------------+
+| packets/pubrec/missed    | 累计丢失 MQTT PUBREC 报文                   |
++--------------------------+---------------------------------------------+
+| packets/pubrel/received  | 累计接收 MQTT PUBREL 报文                   |
++--------------------------+---------------------------------------------+
+| packets/pubrel/sent      | 累计发送 MQTT PUBREL 报文                   |
++--------------------------+---------------------------------------------+
+| packets/pubrel/missed    | 累计丢失 MQTT PUBREL 报文                   |
++--------------------------+---------------------------------------------+
+| packets/pubcomp/received | 累计接收 MQTT PUBCOMP 报文                  |
++--------------------------+---------------------------------------------+
+| packets/pubcomp/sent     | 累计发送 MQTT PUBCOMP 报文                  |
++--------------------------+---------------------------------------------+
+| packets/pubcomp/missed   | 累计丢失 MQTT PUBCOMP 报文                  |
++--------------------------+---------------------------------------------+
 | packets/subscribe        | 累计接收 MQTT SUBSCRIBE 报文                |
 +--------------------------+---------------------------------------------+
 | packets/suback           | 累计发送 MQTT SUBACK 报文                   |
@@ -821,6 +1049,8 @@ MQTT报文收发统计
 +--------------------------+---------------------------------------------+
 | packets/disconnect       | 累计接收 MQTT DISCONNECT 报文               |
 +--------------------------+---------------------------------------------+
+| packets/auth             | 累计接收Auth 报文                           |
++--------------------------+---------------------------------------------+
 
 MQTT 消息收发统计
 ..................
@@ -832,9 +1062,29 @@ MQTT 消息收发统计
 +--------------------------+---------------------------------------------+
 | messages/sent            | 累计发送消息                                |
 +--------------------------+---------------------------------------------+
+| messages/expired         | 累计发送消息                                |
++--------------------------+---------------------------------------------+
 | messages/retained        | Retained 消息总数                           |
 +--------------------------+---------------------------------------------+
 | messages/dropped         | 丢弃消息总数                                |
++--------------------------+---------------------------------------------+
+| messages/forward         | 节点转发消息总数                            |
++--------------------------+---------------------------------------------+
+| messages/qos0/received   | 累计接受QoS0消息                            |
++--------------------------+---------------------------------------------+
+| messages/qos0/sent       | 累计发送QoS0消息                            |
++--------------------------+---------------------------------------------+
+| messages/qos1/received   | 累计接受QoS1消息                            |
++--------------------------+---------------------------------------------+
+| messages/qos1/sent       | 累计发送QoS1消息                            |
++--------------------------+---------------------------------------------+
+| messages/qos2/received   | 累计接受QoS2消息                            |
++--------------------------+---------------------------------------------+
+| messages/qos2/sent       | 累计发送QoS2消息                            |
++--------------------------+---------------------------------------------+
+| messages/qos2/expired    | QoS2过期消息总数                            |
++--------------------------+---------------------------------------------+
+| messages/qos2/dropped    | QoS2丢弃消息总数                            |
 +--------------------------+---------------------------------------------+
 
 .. _sys_alarms:
@@ -879,40 +1129,41 @@ Sysmon - 系统监控
 追踪
 ----
 
-EMQ 消息服务器支持追踪来自某个客户端(Client)的全部报文，或者发布到某个主题(Topic)的全部消息。
+EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，或者发布到某个主题(Topic)的全部消息。
 
 追踪客户端(Client):
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl trace client "clientid" "trace_clientid.log"
+    ./bin/emqx_ctl trace client "clientid" "trace_clientid.log"
 
 追踪主题(Topic):
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl trace topic "topic" "trace_topic.log"
+    ./bin/emqx_ctl trace topic "topic" "trace_topic.log"
 
 查询追踪:
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl trace list
+    ./bin/emqx_ctl trace list
 
 停止追踪:
 
 .. code-block:: bash
 
-    ./bin/emqttd_ctl trace client "clientid" off
+    ./bin/emqx_ctl trace client "clientid" off
 
-    ./bin/emqttd_ctl trace topic "topic" off
+    ./bin/emqx_ctl trace topic "topic" off
 
-.. _emq_auth_clientid: https://github.com/emqtt/emq_auth_clientid
-.. _emq_auth_username: https://github.com/emqtt/emq_auth_username
-.. _emq_auth_ldap:     https://github.com/emqtt/emq_auth_ldap
-.. _emq_auth_http:     https://github.com/emqtt/emq_auth_http
-.. _emq_auth_mysql:    https://github.com/emqtt/emq_auth_mysql
-.. _emq_auth_pgsql:    https://github.com/emqtt/emq_auth_pgsql
-.. _emq_auth_redis:    https://github.com/emqtt/emq_auth_redis
-.. _emq_auth_mongo:    https://github.com/emqtt/emq_auth_mongo
+.. _emqx_auth_clientid: https://github.com/emqtt/emq_auth_clientid
+.. _emqx_auth_username: https://github.com/emqtt/emq_auth_username
+.. _emqx_auth_ldap:     https://github.com/emqtt/emq_auth_ldap
+.. _emqx_auth_http:     https://github.com/emqtt/emq_auth_http
+.. _emqx_auth_mysql:    https://github.com/emqtt/emq_auth_mysql
+.. _emqx_auth_pgsql:    https://github.com/emqtt/emq_auth_pgsql
+.. _emqx_auth_redis:    https://github.com/emqtt/emq_auth_redis
+.. _emqx_auth_mongo:    https://github.com/emqtt/emq_auth_mongo
+.. _emqx_auth_jwt:      https://github.com/emqtt/emq-auth-jwt
 

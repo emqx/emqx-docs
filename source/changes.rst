@@ -5,6 +5,242 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-Beta.2:
+
+---------------------
+EMQ X 3.0-Beta.2 版本
+---------------------
+
+*发布日期: 2018-09-10*
+
+EMQ X 3.0-Beta.2 版本主要包含了对 MQTT 5.0 新特性的改进，以及问题修复。
+
+EMQ X Core
+----------
+
+功能改进:
+
+- 支持 MQTT 5.0 'subscription options'
+
+  GitHub issues:
+  `emqx/emqx#1788 <https://github.com/emqx/emqx/pull/1788>`_,
+  `emqx/emqx-retainer#58 <https://github.com/emqx/emqx-retainer/pull/58>`_,
+  `emqx/emqx#1803 <https://github.com/emqx/emqx/pull/1803>`_
+
+- 增加对 MQTT 5.0 'Topic-Alias' 的校验
+
+  GitHub issues:
+  `emqx/emqx#1789 <https://github.com/emqx/emqx/pull/1789>`_,
+  `emqx/emqx#1802 <https://github.com/emqx/emqx/pull/1802>`_
+
+- 改进 hooks 的设计
+
+  GitHub issue: `emqx/emqx#1790 <https://github.com/emqx/emqx/pull/1790>`_
+
+- 将模块 'emqx_mqtt_properties' 重命名为 'emqx_mqtt_props'
+
+  GitHub issue: `emqx/emqx#1791 <https://github.com/emqx/emqx/pull/1791>`_
+
+- 改进 emqx_zone
+
+  GitHub issue: `emqx/emqx#1795 <https://github.com/emqx/emqx/pull/1795>`_
+
+问题修复:
+
+- 修复了 'Will Delay Interval' 属性处理错误
+
+  GitHub issues:
+  `emqx/emqx#1800 <https://github.com/emqx/emqx/pull/1800>`_,
+  `emqx/emqx-delayed-publish#3 <https://github.com/emqx/emqx-delayed-publish/pull/3>`_
+
+- 修复了 'Reserved' 标志位的处理错误
+
+  GitHub issue: `emqx/emqx#1783 <https://github.com/emqx/emqx/pull/1783>`_
+
+- 为单元测试生成配置文件
+
+  GitHub issue: `emqx/emqx#1794 <https://github.com/emqx/emqx/pull/1794>`_
+
+emqx-management (插件)
+----------------------
+
+功能改进:
+
+- 增加 'banned' 功能的 restful API
+
+  GitHub issue: `emqx/emqx-management#6 <https://github.com/emqx/emqx-management/pull/6>`_
+
+emqx-delayed-publish (插件)
+---------------------------
+
+功能改进:
+
+- 重构代码
+
+  GitHub issue: `emqx/emqx-delayed-publish#4 <https://github.com/emqx/emqx-delayed-publish/pull/4>`_
+
+minirest (依赖工程)
+------------------
+
+功能改进:
+
+- 回调函数里，同时传递 query 参数和 body 参数
+
+  GitHub issue: `emqx/minirest#4 <https://github.com/emqx/minirest/pull/4>`_
+
+emqx-rel (编译工程)
+------------------
+
+功能改进:
+
+- 编译时检查 OTP 版本
+
+  GitHub issue: `emqx/emqx-rel#217 <https://github.com/emqx/emqx-rel/pull/217>`_
+
+.. _release_3.0-Beta.1:
+
+---------------------
+EMQ X 3.0-Beta.1 版本
+---------------------
+
+*发布日期: 2018-09-02*
+版本别名: The Promise of Tomorrow
+
+3.0-beta.1 版本正式发布。兼容 MQTT-3.1.1 协议的同时， 完整支持 MQTT-5.0 协议。
+此外还增加了很多实用的功能特性，重构了核心组件，提升了系统的伸缩性和扩展能力。
+
+全面支持 MQTT-5.0
+-----------------------
+
+EMQX 3.0 版本实现了大多数的 MQTT-5.0 特性，主要的 MQTT-5.0 新特性一览:
+
+- 增加了新的 MQTT 控制报文类型: AUTH
+
+  MQTT-5.0 里新增加了一个 AUTH 类型的报文，用来实现相对复杂的认证交互流程。
+
+- Session 过期机制
+
+  之前版本的 "Clean session flag" 现在拆分成了两个字段: "Clean Start Flag"，"Session Expiry Interval"。
+
+- Message 过期机制
+
+  MQTT-5.0 里，在发布消息时允许设置一个消息过期时间。
+
+- 所有的 ACK 都可携带 Reason Code
+
+  MQTT-5.0 里，所有的回复报文都包含 Reason Code 字段。现在终端可以知道一个请求失败的原因了。
+
+- 所有的 ACK 都可携带 Reason String
+
+  除了 Reason Code 之外，所有的回复报文都可包含一个 Reason String。
+
+- Server 端主动断开
+
+  MQTT-5.0 里，Server 端可以主动断开一个连接了。
+
+- Payload format and content type
+
+  MQTT-5.0 里发消息的时候，可以指定 Payload 类型和一个 MIME 风格的 content type。
+
+- Request/Response 模式
+
+  增加了几个 property，来规范使用 MQTT 协议做 Request/Response 模式的交互。
+
+- 共享订阅
+
+  EMQ X 2.x 支持单节点的共享订阅。 现在 EMQ X 3.0 支持了整个集群范围内的共享订阅。
+
+- 订阅 ID
+
+  有了这个订阅 ID，终端可以获知某条消息是由哪个订阅来的。
+
+- Topic 别名
+
+  Topic 现在可以有一个整型的别名，这可以降低 MQTT 由于长 Topic 导致的网络交互损耗。
+
+- 用户自定义的 User properties
+
+  MQTT-5.0 里，多数报文都可以携带 User properties。
+
+- 报文大小限制
+
+  EMQ X 2.x 里可以配置 Broker 端的最大报文限制，过大的报文会被丢弃，然后 Broker 会将连接断开。MQTT-5.0 里，通过 CONNECT/CONNECT ACK 报文，客户端和 Broker 端都可以指定最大报文限制。
+
+- 可选的 Server 端能力通知 (TODO)
+
+  Broker 端可以定义不支持的特性，并将其通知给终端。
+
+- 订阅选项
+
+  MQTT-5.0 提供了一些订阅选项，主要是为了桥接的应用。 比如 nolocal，和 retained 消息处理相关的选项。
+
+- Will delay
+
+  MQTT-5.0 允许指定一个时延，定义从连接断开到遗嘱消息被发送出去之前的延时。这样可以避免在短暂的网络断开和波动时发出遗嘱消息。
+
+- Broker 端的保活设置
+
+  MQTT-5.0 里，Broker 端可以指定一个期望终端使用的保活时间。
+
+- Assigned ClientID
+
+  MQTT-5.0 里，如果 ClientID 是 Broker 分配的，服务端需要返回这个 ClientID 给终端。
+
+- Server reference
+
+  MQTT-5.0 里，Broker 可以指定一个另外一个 Broker 让终端使用。可以用来做连接重定向。
+
+
+集群架构演进
+-----------------------
+EQMX 3.0 引入了伸缩性较强的 RPC 机制，现在单集群可以支持千万级别的并发连接:
+
+::
+
+     --------               --------
+    |  EMQX  |<--- MQTT--->|  EMQX  |
+    |--------|             |--------|
+    |  Ekka  |<----RPC---->|  Ekka  |
+    |--------|             |--------|
+    | Mnesia |<--Cluster-->| Mnesia |
+    |--------|             |--------|
+    | Kernel |<----TCP---->| Kernel |
+     --------               --------
+
+- 引入 Ekka 以实现集群的自动建立和自动恢复。目前支持以下几种集群建立方式:
+  - manual: 手动加入集群;
+  - static: 使用预置的节点列表自动组建集群;
+  - mcast:  使用广播自动建立集群;
+  - dns:  使用 DNS A 记录自动建立集群;
+  - etcd: 使用 etcd 自动建立集群;
+  - k8s:  使用 k8s 自动建立集群。
+
+消息速率限制
+-----------------------
+3.0 引入了消息速率限制，以增加 Broker 的可靠性。在 MQTT TCP 或 SSL 监听器配置里，可以配置:
+
+- 并发连接数量: max_clients
+
+- 连接速率限制: max_conn_rate
+
+- 连接流量限制: rate_limit
+
+- 发布速率限制: max_publish_rate
+
+Feature improvements and Bug Fixes
+-----------------------
+- 更新了 esockd;
+- 改用 cowboy 以提升 HTTP 连接的性能;
+- 重构了 ACL 缓存机制;
+- 增加本地和远程 MQTT 桥接功能;
+- 配置文件引入 "zone" 的概念，不同的 "zone" 可以使用不同的配置;
+- 重构了 session 模块，减少了节点间的内存拷贝，提升了节点间通信效率;
+- 改进了 OpenLDAP 的 Access Control;
+- 增加了延时发布功能;
+- 增加了支持 Prometheus 的新的监控和统计功能;
+- 改进了 hook 机制。
+
+
 .. _release_2.3.11:
 
 -----------
