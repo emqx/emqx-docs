@@ -9,7 +9,7 @@
 EMQ X R3.0 配置文件
 --------------------
 
-*EMQ X* X R3.0 消息服务器通过 etc/ 目录下配置文件进行设置，主要配置文件包括:
+*EMQ X* R3.0 消息服务器通过 etc/ 目录下配置文件进行设置，主要配置文件包括:
 
 +----------------------------+--------------------------------------+
 | 配置文件                   | 说明                                 |
@@ -642,9 +642,9 @@ Topic Alias 最大数量
     ## Topic priorities, Default is 0
     ## mqtt.mqueue_priorities = topic/1=10,topic/2=8
 
------------------
-Zones 参数设置
------------------
+--------------------
+MQTT Zones 参数配置
+--------------------
 
 *EMQ X* 支持基于 Zone 的 Listeners 监听器组，根据不同的 Zone 定义不同的 Options 。
 
@@ -796,7 +796,7 @@ MQTT Listeners 参数说明
 
 *EMQ* X* 消息服务器支持 MQTT、MQTT/SSL、MQTT/WS 协议服务端，可通过 `listener.tcp|ssl|ws|wss|.*` 设置端口、最大允许连接数等参数。
 
-*EMQ X* 3.0 消息服务器默认开启的 TCP 服务端口包括:
+*EMQ X* R3.0 消息服务器默认开启的 TCP 服务端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT 协议端口                     |
@@ -828,7 +828,7 @@ Listener 参数说明:
 MQTT/TCP 监听器 - 1883
 ----------------------
 
-*EMQ X* 3.0 版本支持配置多个 MQTT 协议监听器，例如配置 external、internal 两个监听器:
+*EMQ X* R3.0 版本支持配置多个 MQTT 协议监听器，例如配置 external、internal 两个监听器:
 
 .. code-block:: properties
 
@@ -1104,7 +1104,7 @@ MQTT/WebSocket/SSL 监听器 - 8084
 Bridges 桥接
 --------------
 
-*EMQ X* 3.0 支持与其它 MQTT Server 桥接，发送或者接收消息，Bridge 通过对 bridge.$name.type 参数设置，对于消息来进行发送与接收。
+*EMQ X* R3.0 支持与其它 MQTT Server 桥接，发送或者接收消息，Bridge 通过对 bridge.$name.type 参数设置，对于消息来进行发送与接收。
 
 Bridge 模块进出规则由 type 控制::
 
@@ -1117,7 +1117,7 @@ Bridge 模块进出规则由 type 控制::
                    MQTT/TLS
 
 
-*EMQ* 3.0 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $name 都是可以换成相应的名称。
+*EMQ X* R3.0 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $name 都是可以换成相应的名称。
 也可以新增自定义name的 bridge.$name.xxxx 。
 
 Bridges to edge 参数设置
@@ -1269,7 +1269,7 @@ Bridges to cloud 参数设置
 Modules 模块
 --------------
 
-*EMQ X* 3.0 支持模块扩展，默认三个模块，分别为上下线消息状态发布模块、代理订阅模块、主题(Topic)重写模块。
+*EMQ X* R3.0 支持模块扩展，默认三个模块，分别为上下线消息状态发布模块、代理订阅模块、主题(Topic)重写模块。
 
 上下线消息状态发布模块
 ----------------------
@@ -1327,7 +1327,7 @@ Modules 模块
     ## File to store loaded plugin names
     plugins.expand_plugins_dir = plugins/
 
-*EMQ X* 3.0 插件配置文件，默认在 etc/plugins/ 目录，可修改 plugins.etc_dir 来调整目录:
+*EMQ X* R3.0 插件配置文件，默认在 etc/plugins/ 目录，可修改 plugins.etc_dir 来调整目录:
 
 +----------------------------------------+-----------------------------------+
 | 配置文件                               | 说明                              |

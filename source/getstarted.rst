@@ -7,9 +7,9 @@
 
 .. _intro:
 
-------------------------
-*EMQ X* 3.0 消息服务器简介
-------------------------
+---------------------------
+*EMQ X* R3.0 消息服务器简介
+---------------------------
 
 *EMQ X* (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 平台开发的开源物联网 MQTT 消息服务器。Erlang/OTP 是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed) 的语言平台。MQTT 是轻量的(Lightweight)、发布订阅模式(PubSub) 的物联网消息协议。
 
@@ -60,7 +60,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 五分钟下载启动 EMQ
 ------------------
 
-*EMQ X* 3.0 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
+*EMQ X* R3.0 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
 
 下载地址: http://emqtt.com/downloads
 
@@ -83,9 +83,9 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 
 .. _compile:
 
-----------------
-源码编译EMQ X 3.0
-----------------
+------------------
+源码编译EMQ X R3.0
+------------------
 
 .. code-block:: bash
 
@@ -101,7 +101,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 Web 管理控制台(Dashboard)
 -------------------------
 
-*EMQ* 消息服务器启动后，会默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、插件(Plugin)。
+*EMQ X* 消息服务器启动后，会默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、插件(Plugin)。
 
 控制台地址: http://127.0.0.1:18083，默认用户: admin，密码：public
 
@@ -109,9 +109,9 @@ Web 管理控制台(Dashboard)
 
 .. _features:
 
-----------------------------
-*EMQ X* 3.0 消息服务器功能列表
-----------------------------
+-------------------------------
+*EMQ X* R3.0 消息服务器功能列表
+-------------------------------
 
 * 完整的 MQTT V3.1/V3.1.1 及V5.0协议规范支持
 * QoS0, QoS1, QoS2 消息支持
@@ -148,11 +148,11 @@ Web 管理控制台(Dashboard)
 
 .. _plugins:
 
-----------------------
-*EMQ X* 3.0 扩展插件列表
-----------------------
+-------------------------
+*EMQ X* R3.0 扩展插件列表
+-------------------------
 
-*EMQ X* 3.0 支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
+*EMQ X* R3.0 支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
 
 +----------------------------+-------------------------------------+
 | `emqx_plugin_template`_    | 插件模版与演示代码                  |
@@ -202,9 +202,9 @@ Web 管理控制台(Dashboard)
 
 .. NOTE::
 
-    *EMQ X* 3.0 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
+    *EMQ X* R3.0 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
 
-*EMQ X* 消息服务器1.1.3版本，连接压力测试到130万线，8核心/32G内存的 CentOS 云服务器。
+*EMQ X* R3.0 消息服务器1.1.3版本，连接压力测试到130万线，8核心/32G内存的 CentOS 云服务器。
 
 操作系统内核参数、TCP 协议栈参数、Erlang 虚拟机参数、EMQ 最大允许连接数设置简述如下：
 
@@ -240,8 +240,8 @@ emqttd/etc/emq.conf:
     ## Sets the maximum number of simultaneously existing ports for this system
     node.max_ports = 1048576
 
-EMQ 最大允许连接数
-------------------
+EMQ X 最大允许连接数
+--------------------
 
 emqx/etc/emqx.conf 'listeners'段落::
 
@@ -302,20 +302,21 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 .. _CocoaMQTT:       https://github.com/emqtt/CocoaMQTT
 .. _QMQTT:           https://github.com/emqtt/qmqtt
 
-.. _emq_plugin_template:  https://github.com/emqx/emqx_plugin_template
-.. _emq_retainer:         https://github.com/emqx/emqx_retainer
-.. _emq_dashboard:        https://github.com/emqx/emqx_dashboard
-.. _emq_auth_clientid:    https://github.com/emqx/emqx_auth_clientid
-.. _emq_auth_username:    https://github.com/emqx/emqx_auth_username
-.. _emq_auth_ldap:        https://github.com/emqx/emqx_auth_ldap
-.. _emq_auth_http:        https://github.com/emqx/emqx_auth_http
-.. _emq_auth_mysql:       https://github.com/emqx/emqx_auth_mysql
-.. _emq_auth_pgsql:       https://github.com/emqx/emqx_auth_pgsql
-.. _emq_auth_redis:       https://github.com/emqx/emqx_auth_redis
-.. _emq_auth_mongo:       https://github.com/emqx/emqx_auth_mongo
-.. _emq_reloader:         https://github.com/emqx/emqx_reloader
-.. _emq_stomp:            https://github.com/emqx/emqx_stomp
-.. _emq_recon:            https://github.com/emqx/emqx_recon
-.. _emq_sn:               https://github.com/emqx/emqx_sn
-.. _emq_coap:             https://github.com/emqx/emqx_coap
-.. _emq_delayed_publish:  https://github.com/emqx/emqx_delayed_publish
+.. _emqx_plugin_template:  https://github.com/emqx/emqx_plugin_template
+.. _emqx_retainer:         https://github.com/emqx/emqx_retainer
+.. _emqx_dashboard:        https://github.com/emqx/emqx_dashboard
+.. _emqx_auth_clientid:    https://github.com/emqx/emqx_auth_clientid
+.. _emqx_auth_username:    https://github.com/emqx/emqx_auth_username
+.. _emqx_auth_ldap:        https://github.com/emqx/emqx_auth_ldap
+.. _emqx_auth_http:        https://github.com/emqx/emqx_auth_http
+.. _emqx_auth_mysql:       https://github.com/emqx/emqx_auth_mysql
+.. _emqx_auth_pgsql:       https://github.com/emqx/emqx_auth_pgsql
+.. _emqx_auth_redis:       https://github.com/emqx/emqx_auth_redis
+.. _emqx_auth_mongo:       https://github.com/emqx/emqx_auth_mongo
+.. _emqx_reloader:         https://github.com/emqx/emqx_reloader
+.. _emqx_stomp:            https://github.com/emqx/emqx_stomp
+.. _emqx_recon:            https://github.com/emqx/emqx_recon
+.. _emqx_sn:               https://github.com/emqx/emqx_sn
+.. _emqx_coap:             https://github.com/emqx/emqx_coap
+.. _emqx_delayed_publish:  https://github.com/emqx/emqx_delayed_publish
+

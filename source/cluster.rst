@@ -102,7 +102,7 @@ Erlang 集群节点可通过 TCPv4, TCPv6 或 TLS 方式连接，EMQ X 3.0 版�
 EMQ X 分布集群设计
 -------------------
 
-EMQ X 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
+*EMQ X* 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
 
 1. MQTT 客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
 
@@ -117,7 +117,7 @@ EMQ 消息服务器同一集群的所有节点，都会复制一份主题(Topic)
 主题树(Topic Trie)与路由表(Route Table)
 ---------------------------------------
 
-EMQ 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
+EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
 
 例如下述主题订阅关系:
 
@@ -382,7 +382,7 @@ manual 手动创建集群
 集群脑裂与自动愈合
 ------------------
 
-EMQ X 3.0 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
+*EMQ X* R3.0 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
 
 .. code-block:: properties
 
@@ -404,7 +404,7 @@ EMQ X 3.0 版本正式支持集群脑裂自动恢复(Network Partition Autoheal)
 集群节点自动清除
 ----------------
 
-EMQ X 3.0 版本支持从集群自动删除宕机节点(Autoclean):
+*EMQ X* R3.0 版本支持从集群自动删除宕机节点(Autoclean):
 
 .. code-block:: properties
 
@@ -416,7 +416,7 @@ EMQ X 3.0 版本支持从集群自动删除宕机节点(Autoclean):
 跨节点会话(Session)
 -------------------
 
-EMQ 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节点。
+*EMQ X* 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节点。
 
 例如负载均衡的两台集群节点: node1 与 node2，同一 MQTT 客户端先连接 node1，node1 节点会创建持久会话；客户端断线重连到 node2 时，MQTT 的连接在 node2 节点，持久会话仍在 node1 节点::
 
@@ -454,3 +454,4 @@ EMQ 消息服务器集群模式下，MQTT 连接的持久会话(Session)跨节�
 
 .. _etcd:        https://coreos.com/etcd/
 .. _Kubernetes:  https://kubernetes.io/
+

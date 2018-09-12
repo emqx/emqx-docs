@@ -5,9 +5,9 @@
 扩展插件 (Plugins)
 ==================
 
-*EMQX* 消息服务器通过模块注册和钩子(Hooks)机制，支持用户开发扩展插件定制服务器认证鉴权与业务功能。
+*EMQ X* 消息服务器通过模块注册和钩子(Hooks)机制，支持用户开发扩展插件定制服务器认证鉴权与业务功能。
 
-*EMQX* 3.0 版本官方提供的插件包括:
+*EMQ X* 3.0 版本官方提供的插件包括:
 
 +---------------------------+---------------------------+
 | 插件                      | 说明                      |
@@ -157,7 +157,7 @@ etc/plugins/emqx_auth_username.conf:
 emqx_plugin_template: 插件开发模版
 ---------------------------------
 
-EMQ 插件实际是一个普通的 Erlang 应用，插件配置文件: 'etc/${PluginName}.conf|config"。
+*EMQ X* 插件实际是一个普通的 Erlang 应用，插件配置文件: 'etc/${PluginName}.conf|config"。
 
 emqx_plugin_template 是模版插件，编译发布在 lib/emq_plugin_template-2.0 目录，配置文件: etc/plugins/emqx_plugin_templat.config
 
@@ -186,7 +186,7 @@ emqx_dashboard: Dashboard 插件
 
 *EMQ* 消息服务器默认加载 Dashboard 插件。URL 地址: http://localhost:18083 ，缺省用户名/密码: admin/public。
 
-Dashboard 插件可查询 EMQ 消息服务器基本信息、统计数据、度量数据，查询系统客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
+Dashboard 插件可查询 *EMQ X* 消息服务器基本信息、统计数据、度量数据，查询系统客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
 
 .. image:: ./_static/images/dashboard.png
 
@@ -534,8 +534,6 @@ Redis 订阅 Hash
     HSET mqtt_sub:<username> topic2 1
     HSET mqtt_sub:<username> topic3 2
 
-.. WARNING:: 2.0-rc.2 版本已将订阅加载迁移至 EMQX 产品的emqx_backend_redis插件。
-
 加载 Redis 认证鉴权插件
 -----------------------
 
@@ -646,9 +644,9 @@ MongoDB ACL 集合(ACL Collection)
 
     ./bin/emqx_ctl plugins load emqx_auth_mongo
 
------------------------
+------------------------
 emqx_coap: CoAP 协议插件
------------------------
+------------------------
 
 CoAP 协议插件，支持 RFC 7252 规范。
 
@@ -816,9 +814,9 @@ Reloader 插件命令
 
     reload <Module>             # Reload a Module
 
-----------------
-EMQ 3.0 插件开发
-----------------
+-------------------
+EMQ X R3.0 插件开发
+-------------------
 
 创建插件项目
 ------------
@@ -828,34 +826,33 @@ EMQ 3.0 插件开发
 注册认证/访问控制模块
 ---------------------
 
-认证演示模块 - emq_auth_demo.erl
+认证演示模块 - emqx_auth_demo.erl
 
 .. code-block:: erlang
 
-    -module(emq_auth_demo).
+    -module(emqx_auth_demo).
 
-    -behaviour(emqttd_auth_mod).
+    -behaviour(emqx_auth_mod).
 
-    -include_lib("emqttd/include/emqttd.hrl").
+    -include_lib("emqx/include/emqx.hrl").
 
     -export([init/1, check/3, description/0]).
 
     init(Opts) -> {ok, Opts}.
 
-    check(#mqtt_client{client_id = ClientId, username = Username}, Password, _Opts) ->
-        io:format("Auth Demo: clientId=~p, username=~p, password=~p~n",
-                  [ClientId, Username, Password]),
+    check(#{client_id := ClientId, username := Username}, Password, _Opts) ->
+        io:format("Auth Demo: clientId=~p, username=~p, password=~p~n", [ClientId, Username, Password]),
         ok.
 
-    description() -> "Demo Auth Module".
+    description() -> "Auth Demo Module".
 
-访问控制演示模块 - emqttd_acl_demo.erl
+访问控制演示模块 - emqx_acl_demo.erl
 
 .. code-block:: erlang
 
-    -module(emq_acl_demo).
+    -module(emqx_acl_demo).
 
-    -include_lib("emqttd/include/emqttd.hrl").
+    -include_lib("emqx/include/emqx.hrl").
 
     %% ACL callbacks
     -export([init/1, check_acl/2, reload_acl/1, description/0]).
@@ -863,40 +860,46 @@ EMQ 3.0 插件开发
     init(Opts) ->
         {ok, Opts}.
 
-    check_acl({Client, PubSub, Topic}, Opts) ->
-        io:format("ACL Demo: ~p ~p ~p~n", [Client, PubSub, Topic]),
+    check_acl({Credentials, PubSub, Topic}, _Opts) ->
+        io:format("ACL Demo: ~p ~p ~p~n", [Credentials, PubSub, Topic]),
         allow.
 
     reload_acl(_Opts) ->
         ok.
 
-    description() -> "ACL Module Demo".
+    description() -> "ACL Demo Module".
 
-注册认证、访问控制模块 - emq_plugin_template_app.erl
+注册认证、访问控制模块 - emqx_plugin_template_app.erl
 
 .. code-block:: erlang
 
-    ok = emqttd_access_control:register_mod(auth, emq_auth_demo, []),
-    ok = emqttd_access_control:register_mod(acl, emq_acl_demo, []),
+    ok = emqx_access_control:register_mod(auth, emqx_auth_demo, []),
+    ok = emqx_access_control:register_mod(acl, emqx_acl_demo, []),
 
 注册扩展钩子(Hooks)
 --------------------
 
 通过钩子(Hook)处理客户端上下线、主题订阅、消息收发。
 
-emq_plugin_template.erl::
+emqx_plugin_template.erl::
 
     %% Called when the plugin application start
     load(Env) ->
-        emqttd:hook('client.connected', fun ?MODULE:on_client_connected/3, [Env]),
-        emqttd:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
-        emqttd:hook('client.subscribe', fun ?MODULE:on_client_subscribe/4, [Env]),
-        emqttd:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/4, [Env]),
-        emqttd:hook('session.subscribed', fun ?MODULE:on_session_subscribed/4, [Env]),
-        emqttd:hook('session.unsubscribed', fun ?MODULE:on_session_unsubscribe/4, [Env]),
-        emqttd:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
-        emqttd:hook('message.delivered', fun ?MODULE:on_message_delivered/4, [Env]),
-        emqttd:hook('message.acked', fun ?MODULE:on_message_acked/4, [Env]).
+        %% Hook with function
+        emqx:hook('client.connected',    fun ?MODULE:on_client_connected/4, [Env]),
+        emqx:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
+        %% Hook with MFA
+        emqx:hook('client.subscribe',    {?MODULE, on_client_subscribe, [Env]}),
+        emqx:hook('client.unsubscribe',  {?MODULE, on_client_unsubscribe, [Env]}),
+        emqx:hook('session.created',     {?MODULE, on_session_created, [Env]}),
+        emqx:hook('session.resumed',     {?MODULE, on_session_resumed, [Env]}),
+        emqx:hook('session.subscribed',  {?MODULE, on_session_subscribed, [Env]}),
+        emqx:hook('session.unsubscribed',{?MODULE, on_session_unsubscribed, [Env]}),
+        emqx:hook('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
+        emqx:hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
+        emqx:hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
+        emqx:hook('message.acked',       {?MODULE, on_message_acked, [Env]}),
+        emqx:hook('message.dropped',     {?MODULE on_message_dropped, [Env]}).
 
 扩展钩子(Hook):
 
@@ -905,13 +908,21 @@ emq_plugin_template.erl::
 +========================+==================================+
 | client.connected       | 客户端上线                       |
 +------------------------+----------------------------------+
-| client.subscribe       | 客户端订阅主题前                 |
+| client.disconnected    | 客户端连接断开                   |
 +------------------------+----------------------------------+
-| session.subscribed     | 客户端订阅主题后                 |
+| client.subscribe       | 客户端订阅主题                   |
 +------------------------+----------------------------------+
 | client.unsubscribe     | 客户端取消订阅主题               |
 +------------------------+----------------------------------+
-| session.unsubscribed   | 客户端取消订阅主题后             |
+| session.created        | 会话创建                         |
++------------------------+----------------------------------+
+| session.resumed        | 会话恢复                         |
++------------------------+----------------------------------+
+| session.subscribed     | 会话订阅主题后                   |
++------------------------+----------------------------------+
+| session.unsubscribed   | 会话取消订阅主题后               |
++------------------------+----------------------------------+
+| session.terminated     | 会话终止                         |
 +------------------------+----------------------------------+
 | message.publish        | MQTT 消息发布                    |
 +------------------------+----------------------------------+
@@ -919,33 +930,31 @@ emq_plugin_template.erl::
 +------------------------+----------------------------------+
 | message.acked          | MQTT 消息回执                    |
 +------------------------+----------------------------------+
-| client.disconnected    | 客户端连接断开                   |
+| message.dropped        | MQTT 消息丢弃                    |
 +------------------------+----------------------------------+
 
 注册扩展命令行
 --------------
 
-扩展命令行演示模块 - emq_cli_demo.erl
+扩展命令行演示模块 - emqx_cli_demo.erl
 
 .. code-block:: erlang
 
-    -module(emq_cli_demo).
-
-    -include_lib("emqttd/include/emqttd_cli.hrl").
+    -module(emqx_cli_demo).
 
     -export([cmd/1]).
 
     cmd(["arg1", "arg2"]) ->
-        ?PRINT_MSG("ok");
+        emqx_cli:print("ok");
 
     cmd(_) ->
-        ?USAGE([{"cmd arg1 arg2",  "cmd demo"}]).
+        emqx_cli:usage([{"cmd arg1 arg2", "cmd demo"}]).
 
-注册命令行模块 - emq_plugin_template_app.erl
+注册命令行模块 - emqx_plugin_template_app.erl
 
 .. code-block:: erlang
 
-    emqx_ctl:register_cmd(cmd, {emq_cli_demo, cmd}, []).
+    ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 
 插件加载后，'./bin/emqx_ctl'新增命令行::
 
@@ -954,7 +963,7 @@ emq_plugin_template.erl::
 插件配置文件
 ------------
 
-插件自带配置文件放置在 etc/${plugin_name}.conf|config，EMQ 支持两种插件配置格式:
+插件自带配置文件放置在 etc/${plugin_name}.conf|config， *EMQ X* 支持两种插件配置格式:
 
 1. ${plugin_name}.config，Erlang 原生配置文件格式:
 
@@ -1014,4 +1023,5 @@ emq_plugin_template.erl::
 .. _emqx_recon:            https://github.com/emqx/emqx-recon
 .. _emqx_reloader:         https://github.com/emqx/emqx-reloader
 .. _emqx_plugin_template:  https://github.com/emqx/emqx-plugin-template
-.. _recon:                http://ferd.github.io/recon/
+.. _recon:                 http://ferd.github.io/recon/
+
