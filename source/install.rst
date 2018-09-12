@@ -368,7 +368,7 @@ MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 
 
 .. code-block:: bash
 
-    git clone -b windows https://github.com/emqx/emqx-rel.git
+    git clone -b win30 https://github.com/emqx/emqx-rel.git
 
     cd emqx-relx && make
 
