@@ -7,627 +7,1019 @@
 
 用户可以通过 REST API 查询 MQTT 客户端连接(Clients)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
 
---------
+----------
 URL 地址
---------
+---------
 
-REST API 访问 URL 地址::
+REST API 访问URL地址::
 
-    http(s)://host:8080/api/v2/
+    http(s)://host:8080/api/v3/
 
-----------
+-----------
 Basic 认证
-----------
+-----------
 
-REST API 采用 HTTP Basic 认证(Authentication):
+REST API 采用 HTTP Basic 认证(Authentication), 使用 Dashboard 中创建的 AppID 和 AppSecret 进行认证:
 
 .. code-block:: bash
 
-    curl -v --basic -u <user>:<passwd> -k http://localhost:8080/api/v2/nodes/emq@127.0.0.1/clients
+    curl -v --basic -u <appid>:<appsecret> -k http://localhost:8080/api/v3/brokers
+
+----------
+API 信息
+----------
+
+获取当前 REST API 列表
+----------------------
+
+
+
+API 定义::
+
+    GET api/v3/
+
+
+请求示例::
+
+    GET api/v3/
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "name": "list_brokers",
+            "method": "GET",
+            "path": "/brokers/",
+            "descr": "A list of brokers in the cluster"
+      },
+      {
+            "name": "list_connections",
+            "method": "GET",
+            "path": "/connections/",
+            "descr": "A list of connections in the cluster"
+      },
+      {
+            "name": "list_node_connections",
+            "method": "GET",
+            "path": "nodes/:node/connections/",
+            "descr": "A list of connections on a node"
+      },
+      {
+            "name": "list_listeners",
+            "method": "GET",
+            "path": "/listeners/",
+            "descr": "A list of listeners in the cluster"
+      },
+      {
+            "name": "list_node_listeners",
+            "method": "GET",
+            "path": "/nodes/:node/listeners",
+            "descr": "A list of listeners on the node"
+      },
+      {
+            "name": "list_node_metrics",
+            "method": "GET",
+            "path": "/nodes/:node/metrics/",
+            "descr": "A list of metrics of a node"
+      },
+      {
+            "name": "list_all_metrics",
+            "method": "GET",
+            "path": "/metrics/",
+            "descr": "A list of metrics of all nodes in the cluster"
+      },
+      {
+            "name": "list_nodes",
+            "method": "GET",
+            "path": "/nodes/",
+            "descr": "A list of nodes in the cluster"
+      },
+      {
+            "name": "list_sessions",
+            "method": "GET",
+            "path": "/sessions/",
+            "descr": "A list of sessions in the cluster"
+      },
+      {
+            "name": "list_node_sessions",
+            "method": "GET",
+            "path": "nodes/:node/sessions/",
+            "descr": "A list of sessions on a node"
+      },
+      {
+            "name": "lookup_node_stats",
+            "method": "GET",
+            "path": "/nodes/:node/stats/",
+            "descr": "A list of stats of a node"
+      },
+      {
+            "name": "list_stats",
+            "method": "GET",
+            "path": "/stats/",
+            "descr": "A list of stats of all nodes in the cluster"
+      },
+      {
+            "name": "list_subscriptions",
+            "method": "GET",
+            "path": "/subscriptions/",
+            "descr": "A list of subscriptions in the cluster"
+      },
+      {
+            "name": "lookup_client_subscriptions",
+            "method": "GET",
+            "path": "/subscriptions/:clientid",
+            "descr": "A list of subscriptions of a client"
+      },
+      {
+            "name": "lookup_client_subscriptions_with_node",
+            "method": "GET",
+            "path": "/nodes/:node/subscriptions/:clientid",
+            "descr": "A list of subscriptions of a client on the node"
+      },
+      {
+            "name": "list_node_subscriptions",
+            "method": "GET",
+            "path": "/nodes/:node/subscriptions/",
+            "descr": "A list of subscriptions on a node"
+      },
+      {
+            "name": "add_app",
+            "method": "POST",
+            "path": "/apps/",
+            "descr": "Add Application"
+      },
+      {
+            "name": "auth_user",
+            "method": "POST",
+            "path": "/auth",
+            "descr": "Authenticate an user"
+      },
+      {
+            "name": "change_pwd",
+            "method": "PUT",
+            "path": "/change_pwd/:username",
+            "descr": "Change password for an user"
+      },
+      {
+            "name": "clean_acl_cache",
+            "method": "DELETE",
+            "path": "/connections/:clientid/acl/:topic",
+            "descr": "Clean ACL cache of a connection"
+      },
+      {
+            "name": "create_user",
+            "method": "POST",
+            "path": "/users/",
+            "descr": "Create an user"
+      },
+      {
+            "name": "create_banned",
+            "method": "POST",
+            "path": "/banned/",
+            "descr": "Create banned"
+      },
+      {
+            "name": "del_app",
+            "method": "DELETE",
+            "path": "/apps/:appid",
+            "descr": "Delete Application"
+      },
+      {
+            "name": "delete_user",
+            "method": "DELETE",
+            "path": "/users/:name",
+            "descr": "Delete an user"
+      },
+      {
+            "name": "delete_banned",
+            "method": "DELETE",
+            "path": "/banned/:who",
+            "descr": "Delete banned"
+      },
+      {
+            "name": "get_all_configs",
+            "method": "GET",
+            "path": "/configs/",
+            "descr": "Get all configs"
+      },
+      {
+            "name": "get_all_configs",
+            "method": "GET",
+            "path": "/nodes/:node/configs/",
+            "descr": "Get all configs of a node"
+      },
+      {
+            "name": "get_broker",
+            "method": "GET",
+            "path": "/brokers/:node",
+            "descr": "Get broker info of a node"
+      },
+      {
+            "name": "get_plugin_configs",
+            "method": "GET",
+            "path": "/nodes/:node/plugin_configs/:plugin",
+            "descr": "Get configurations of a plugin on the node"
+      },
+      {
+            "name": "kickout_connection",
+            "method": "DELETE",
+            "path": "/connections/:clientid",
+            "descr": "Kick out a connection"
+      },
+      {
+            "name": "list_apps",
+            "method": "GET",
+            "path": "/apps/",
+            "descr": "List Applications"
+      },
+      {
+            "name": "list_node_alarms",
+            "method": "GET",
+            "path": "/alarms/:node",
+            "descr": "List alarms of a node"
+      },
+      {
+            "name": "list_all_alarms",
+            "method": "GET",
+            "path": "/alarms/",
+            "descr": "List all alarms"
+      },
+      {
+            "name": "list_all_plugins",
+            "method": "GET",
+            "path": "/plugins/",
+            "descr": "List all plugins in the cluster"
+      },
+      {
+            "name": "list_node_plugins",
+            "method": "GET",
+            "path": "/nodes/:node/plugins/",
+            "descr": "List all plugins on a node"
+      },
+      {
+            "name": "list_banned",
+            "method": "GET",
+            "path": "/banned/",
+            "descr": "List banned"
+      },
+      {
+            "name": "list_routes",
+            "method": "GET",
+            "path": "/routes/",
+            "descr": "List routes"
+      },
+      {
+            "name": "list_users",
+            "method": "GET",
+            "path": "/users/",
+            "descr": "List users"
+      },
+      {
+            "name": "load_plugin",
+            "method": "PUT",
+            "path": "/nodes/:node/plugins/:plugin/load",
+            "descr": "Load a plugin"
+      },
+      {
+            "name": "lookup_app",
+            "method": "GET",
+            "path": "/apps/:appid",
+            "descr": "Lookup Application"
+      },
+      {
+            "name": "lookup_connections",
+            "method": "GET",
+            "path": "/connections/:clientid",
+            "descr": "Lookup a connection in the cluster"
+      },
+      {
+            "name": "lookup_node_connections",
+            "method": "GET",
+            "path": "nodes/:node/connections/:clientid",
+            "descr": "Lookup a connection on node"
+      },
+      {
+            "name": "get_node",
+            "method": "GET",
+            "path": "/nodes/:node",
+            "descr": "Lookup a node in the cluster"
+      },
+      {
+            "name": "lookup_session",
+            "method": "GET",
+            "path": "/sessions/:clientid",
+            "descr": "Lookup a session in the cluster"
+      },
+      {
+            "name": "lookup_node_session",
+            "method": "GET",
+            "path": "nodes/:node/sessions/:clientid",
+            "descr": "Lookup a session on the node"
+      },
+      {
+            "name": "lookup_routes",
+            "method": "GET",
+            "path": "/routes/:topic",
+            "descr": "Lookup routes to a topic"
+      },
+      {
+            "name": "mqtt_publish",
+            "method": "POST",
+            "path": "/mqtt/publish",
+            "descr": "Publish a MQTT message"
+      },
+      {
+            "name": "mqtt_subscribe",
+            "method": "POST",
+            "path": "/mqtt/subscribe",
+            "descr": "Subscribe a topic"
+      },
+      {
+            "name": "unload_plugin",
+            "method": "PUT",
+            "path": "/nodes/:node/plugins/:plugin/unload",
+            "descr": "Unload a plugin"
+      },
+      {
+            "name": "mqtt_unsubscribe",
+            "method": "POST",
+            "path": "/mqtt/unsubscribe",
+            "descr": "Unsubscribe a topic"
+      },
+      {
+            "name": "update_app",
+            "method": "PUT",
+            "path": "/apps/:appid",
+            "descr": "Update Application"
+      },
+      {
+            "name": "update_user",
+            "method": "PUT",
+            "path": "/users/:name",
+            "descr": "Update an user"
+      },
+      {
+            "name": "update_config",
+            "method": "PUT",
+            "path": "/configs/:app",
+            "descr": "Update config of an application in the cluster"
+      },
+      {
+            "name": "update_node_config",
+            "method": "PUT",
+            "path": "/nodes/:node/configs/:app",
+            "descr": "Update config of an application on a node"
+      },
+      {
+            "name": "update_plugin_configs",
+            "method": "PUT",
+            "path": "/nodes/:node/plugin_configs/:plugin",
+            "descr": "Update configurations of a plugin on the node"
+      }
+    ]
+
+
+
+
 
 ----------
 集群与节点
 ----------
 
-获取全部节点的基本信息
+获取集群基本信息
 ----------------------
+
+
 
 API 定义::
 
-    GET api/v2/management/nodes
+    GET api/v3/brokers/
+
 
 请求示例::
 
-    GET api/v2/management/nodes
+    GET api/v3/brokers/
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "datetime": "2018-09-12 10:42:57",
+            "node": "emqx@127.0.0.1",
+            "node_status": "Running",
+            "otp_release": "R21/10.0.5",
+            "sysdescr": "EMQ X Broker",
+            "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
+            "version": "3.0"
+      }
+    ]
+
+
+
+
+
+获取节点基本信息
+----------------------
+
+
+
+API 定义::
+
+    GET api/v3/brokers/${node}
+
+
+请求示例::
+
+    GET api/v3/brokers/emqx@127.0.0.1
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-    	"code": 0,
-    	"result": [
-    		{
-    			"name": "emq@127.0.0.1",
-    			"version": "2.3.10",
-    			"sysdescr": "Erlang MQTT Broker",
-    			"uptime": "3 minutes, 32 seconds",
-    			"datetime": "2018-06-29 09:03:52",
-    			"otp_release": "R20/9.3.3",
-    			"node_status": "Running"
-    		}
-    	]
+      "datetime": "2018-09-12 10:42:57",
+      "node_status": "Running",
+      "otp_release": "R21/10.0.5",
+      "sysdescr": "EMQ X Broker",
+      "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
+      "version": "3.0"
     }
 
-获取指定节点的基本信息
+
+
+
+获取集群监控数据
 ----------------------
+
+
 
 API 定义::
 
-    GET api/v2/management/nodes/{node_name}
+    GET api/v3/nodes/
+
 
 请求示例::
 
-    GET api/v2/management/nodes/emq@127.0.0.1
+    GET api/v3/nodes/
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "connections": 2,
+            "load1": "2.75",
+            "load15": "2.87",
+            "load5": "2.57",
+            "max_fds": 7168,
+            "memory_total": "76.45M",
+            "memory_used": "59.48M",
+            "name": "emqx@127.0.0.1",
+            "node": "emqx@127.0.0.1",
+            "node_status": "Running",
+            "otp_release": "R21/10.0.5",
+            "process_available": 262144,
+            "process_used": 331,
+            "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
+            "version": "3.0"
+      }
+    ]
+
+
+
+
+获取节点监控数据
+----------------------
+
+
+
+API 定义::
+
+    GET api/v3/nodes/${node}
+
+
+请求示例::
+
+    GET api/v3/nodes/emqx@127.0.0.1
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-    	"code": 0,
-    	"result": {
-    		"version": "2.3.10",
-    		"sysdescr": "Erlang MQTT Broker",
-    		"uptime": "5 minutes, 12 seconds",
-    		"datetime": "2018-06-29 09:05:32",
-    		"otp_release": "R20/9.3.3",
-    		"node_status": "Running"
-    	}
+      "connections": 2,
+      "load1": "2.75",
+      "load15": "2.87",
+      "load5": "2.57",
+      "max_fds": 7168,
+      "memory_total": 80162816,
+      "memory_used": 62254160,
+      "name": "emqx@127.0.0.1",
+      "node_status": "Running",
+      "otp_release": "R21/10.0.5",
+      "process_available": 262144,
+      "process_used": 331,
+      "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
+      "version": "3.0"
     }
 
-获取全部节点的监控数据
-----------------------
 
-API 定义::
 
-    GET api/v2/monitoring/nodes
-
-请求示例::
-
-    GET api/v2/monitoring/nodes
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": [
-    		{
-    			"name": "emq@127.0.0.1",
-    			"otp_release": "R20/9.3.3",
-    			"memory_total": "72.94M",
-    			"memory_used": "50.55M",
-    			"process_available": 262144,
-    			"process_used": 324,
-    			"max_fds": 7168,
-    			"clients": 0,
-    			"node_status": "Running",
-    			"load1": "1.65",
-    			"load5": "1.93",
-    			"load15": "2.01"
-    		}
-    	]
-    }
-
-获取指定节点的监控数据
-----------------------
-
-API 定义::
-
-    GET api/v2/monitoring/nodes/{node_name}
-
-请求示例::
-
-    GET api/v2/monitoring/nodes/emq@127.0.0.1
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": {
-    		"name": "emq@127.0.0.1",
-    		"otp_release": "R20/9.3.3",
-    		"memory_total": "73.69M",
-    		"memory_used": "50.12M",
-    		"process_available": 262144,
-    		"process_used": 324,
-    		"max_fds": 7168,
-    		"clients": 0,
-    		"node_status": "Running",
-    		"load1": "1.88",
-    		"load5": "1.99",
-    		"load15": "2.02"
-    	}
-    }
 
 -------------------
-客户端连接(Clients)
+连接信息(Connections)
 -------------------
 
-获取指定节点的客户端连接列表
+获取集群连接信息
 ----------------------------
+
+
 
 API 定义::
 
-    GET api/v2/nodes/{node_name}/clients
- 
-请求参数:: 
+    GET api/v3/connections/
 
-    curr_page={page_no}&page_size={page_size}
 
 请求示例::
 
-    api/v2/nodes/emq@127.0.0.1/clients?curr_page=1&page_size=20
+    GET api/v3/connections/?_page=1&_limit=10000
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-    	"code": 0,
-    	"result": {
-    		"current_page": 1,
-    		"page_size": 20,
-    		"total_num": 1,
-    		"total_page": 1,
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"username": "undefined",
-    				"ipaddress": "127.0.0.1",
-    				"port": 58459,
-    				"clean_sess": true,
-    				"proto_ver": 4,
-    				"keepalive": 60,
-    				"connected_at": "2018-06-29 09:15:25"
-    			}
-    		]
-    	}
+      "items": [
+            {
+                  "clean_start": true,
+                  "client_id": "emqx-api-test:v1",
+                  "connected_at": "2018-09-12 10:42:57",
+                  "ipaddress": "127.0.0.1",
+                  "is_bridge": false,
+                  "is_super": false,
+                  "keepalive": 60,
+                  "mountpoint": "undefined",
+                  "node": "emqx@127.0.0.1",
+                  "peercert": "nossl",
+                  "port": 64594,
+                  "proto_name": "MQTT",
+                  "proto_ver": 4,
+                  "username": "emqx-api-test:v1",
+                  "will_topic": "undefined",
+                  "zone": "external"
+            },
+            {
+                  "clean_start": true,
+                  "client_id": "mqttjs_406e3f9a",
+                  "connected_at": "2018-09-12 10:42:57",
+                  "ipaddress": "127.0.0.1",
+                  "is_bridge": false,
+                  "is_super": false,
+                  "keepalive": 60,
+                  "mountpoint": "undefined",
+                  "node": "emqx@127.0.0.1",
+                  "peercert": "nossl",
+                  "port": 64593,
+                  "proto_name": "MQTT",
+                  "proto_ver": 4,
+                  "username": "undefined",
+                  "will_topic": "undefined",
+                  "zone": "external"
+            }
+      ],
+      "meta": {
+            "count": 2,
+            "limit": 10000,
+            "page": 1
+      }
     }
 
-获取节点指定客户端连接的信息
+
+
+
+
+获取节点连接信息
 ----------------------------
+
+
 
 API 定义::
 
-    GET api/v2/nodes/{node_name}/clients/{clientid}
- 
+    GET api/v3/nodes/${node}/connections/
+
+
 请求示例::
 
-    GET api/v2/nodes/emq@127.0.0.1/clients/mqttjs_722b4d845f
+    GET api/v3/nodes/emqx@127.0.0.1/connections/?_page=1&_limit=10000
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-    	"code": 0,
-    	"result": {
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"username": "undefined",
-    				"ipaddress": "127.0.0.1",
-    				"port": 58459,
-    				"clean_sess": true,
-    				"proto_ver": 4,
-    				"keepalive": 60,
-    				"connected_at": "2018-06-29 09:15:25"
-    			}
-    		]
-    	}
+      "items": [
+            {
+                  "clean_start": true,
+                  "client_id": "emqx-api-test:v1",
+                  "connected_at": "2018-09-12 10:42:57",
+                  "ipaddress": "127.0.0.1",
+                  "is_bridge": false,
+                  "is_super": false,
+                  "keepalive": 60,
+                  "mountpoint": "undefined",
+                  "node": "emqx@127.0.0.1",
+                  "peercert": "nossl",
+                  "port": 64594,
+                  "proto_name": "MQTT",
+                  "proto_ver": 4,
+                  "username": "emqx-api-test:v1",
+                  "will_topic": "undefined",
+                  "zone": "external"
+            },
+            {
+                  "clean_start": true,
+                  "client_id": "mqttjs_406e3f9a",
+                  "connected_at": "2018-09-12 10:42:57",
+                  "ipaddress": "127.0.0.1",
+                  "is_bridge": false,
+                  "is_super": false,
+                  "keepalive": 60,
+                  "mountpoint": "undefined",
+                  "node": "emqx@127.0.0.1",
+                  "peercert": "nossl",
+                  "port": 64593,
+                  "proto_name": "MQTT",
+                  "proto_ver": 4,
+                  "username": "undefined",
+                  "will_topic": "undefined",
+                  "zone": "external"
+            }
+      ],
+      "meta": {
+            "count": 2,
+            "limit": 10000,
+            "page": 1
+      }
     }
 
-获取集群内指定客户端的信息
+
+
+
+
+
+获取集群指定连接信息
 --------------------------
 
+
+
 API 定义::
 
-    GET api/v2/clients/{clientid}
- 
+    GET api/v3/connections/${clientid}
+
+
 请求示例::
 
-    GET api/v2/clients/mqttjs_722b4d845f
+    GET api/v3/connections/emqx-api-test:v1
+
 
 返回数据:
 
 .. code-block:: json
 
-    {
-    	"code": 0,
-    	"result": {
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"username": "undefined",
-    				"ipaddress": "127.0.0.1",
-    				"port": 58459,
-    				"clean_sess": true,
-    				"proto_ver": 4,
-    				"keepalive": 60,
-    				"connected_at": "2018-06-29 09:15:25"
-    			}
-    		]
-    	}
-    }
+    [
+      {
+            "clean_start": true,
+            "client_id": "emqx-api-test:v1",
+            "connected_at": "2018-09-12 10:42:57",
+            "ipaddress": "127.0.0.1",
+            "is_bridge": false,
+            "is_super": false,
+            "keepalive": 60,
+            "mountpoint": "undefined",
+            "node": "emqx@127.0.0.1",
+            "peercert": "nossl",
+            "port": 64594,
+            "proto_name": "MQTT",
+            "proto_ver": 4,
+            "username": "emqx-api-test:v1",
+            "will_topic": "undefined",
+            "zone": "external"
+      }
+    ]
 
 
-断开集群内指定客户端连接
+
+
+
+获取节点指定连接信息
+----------------------------
+
+
+
+API 定义::
+
+    GET api/v3/nodes/${node}/connections/${clientid}
+
+
+请求示例::
+
+    GET api/v3/nodes/emqx@127.0.0.1/connections/emqx-api-test:v1
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "clean_start": true,
+            "client_id": "emqx-api-test:v1",
+            "connected_at": "2018-09-12 10:42:57",
+            "ipaddress": "127.0.0.1",
+            "is_bridge": false,
+            "is_super": false,
+            "keepalive": 60,
+            "mountpoint": "undefined",
+            "node": "emqx@127.0.0.1",
+            "peercert": "nossl",
+            "port": 64594,
+            "proto_name": "MQTT",
+            "proto_ver": 4,
+            "username": "emqx-api-test:v1",
+            "will_topic": "undefined",
+            "zone": "external"
+      }
+    ]
+
+
+
+
+
+
+断开指定连接
 ------------------
 
-API定义::
 
-    DELETE api/v2/clients/{clientid}
+
+API 定义::
+
+    DELETE api/v3/connections/${clientid}
+
 
 请求示例::
 
-    DELETE api/v2/clients/mqttjs_722b4d845f
+    DELETE api/v3/connections/emqx-api-test:v1
+
 
 返回数据:
 
 .. code-block:: json
 
-    {
-        "code": 0,
-        "result": []
-    }
+"ok"
 
-清除集群内指定客户端的ACL缓存
---------------------------
 
-API定义::
 
-    PUT api/v2/clients/{clientid}/clean_acl_cache
 
-请求参数:
 
-.. code-block:: json
-
-    {
-        "topic": "test"
-    }
-
-请求示例::
-
-    PUT api/v2/clients/mqttjs_722b4d845f/clean_acl_cache
-    
-    请求的 json 参数:
-    {
-        "topic": "test"
-    }
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
 
 --------------
 会话(Sessions)
 --------------
 
-获取指定节点的会话列表
+获取集群会话信息
+------------------------------
+
+
+
+API 定义::
+
+    GET api/v3/sessions/
+
+
+请求示例::
+
+    GET api/v3/sessions/?_page=1&_limit=10000
+
+
+返回数据:
+
+.. code-block:: json
+
+    {
+      "items": [
+            {
+                  "awaiting_rel_len": 0,
+                  "binding": "local",
+                  "clean_start": true,
+                  "client_id": "emqx-api-test:v1",
+                  "created_at": "2018-09-12 10:42:57",
+                  "deliver_msg": 0,
+                  "enqueue_msg": 0,
+                  "expiry_interval": 7200,
+                  "heap_size": 376,
+                  "inflight_len": 0,
+                  "mailbox_len": 0,
+                  "max_awaiting_rel": 100,
+                  "max_inflight": 32,
+                  "max_mqueue": 1000,
+                  "max_subscriptions": 0,
+                  "mqueue_dropped": 0,
+                  "mqueue_len": 0,
+                  "node": "emqx@127.0.0.1",
+                  "reductions": 203,
+                  "subscriptions_count": 0,
+                  "username": "emqx-api-test:v1"
+            },
+            {
+                  "awaiting_rel_len": 0,
+                  "binding": "local",
+                  "clean_start": true,
+                  "client_id": "mqttjs_406e3f9a",
+                  "created_at": "2018-09-12 10:42:57",
+                  "deliver_msg": 0,
+                  "enqueue_msg": 0,
+                  "expiry_interval": 7200,
+                  "heap_size": 233,
+                  "inflight_len": 0,
+                  "mailbox_len": 0,
+                  "max_awaiting_rel": 100,
+                  "max_inflight": 32,
+                  "max_mqueue": 1000,
+                  "max_subscriptions": 0,
+                  "mqueue_dropped": 0,
+                  "mqueue_len": 0,
+                  "node": "emqx@127.0.0.1",
+                  "reductions": 188,
+                  "subscriptions_count": 0,
+                  "username": "undefined"
+            }
+      ],
+      "meta": {
+            "count": 2,
+            "limit": 10000,
+            "page": 1
+      }
+    }
+
+
+
+
+
+获取集群指定会话信息
+------------------------------
+
+
+
+API 定义::
+
+    GET api/v3/sessions/${clientid}
+
+
+请求示例::
+
+    GET api/v3/sessions/emqx-api-test:v1
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "awaiting_rel_len": 0,
+            "binding": "local",
+            "clean_start": true,
+            "client_id": "emqx-api-test:v1",
+            "created_at": "2018-09-12 10:42:57",
+            "deliver_msg": 0,
+            "enqueue_msg": 0,
+            "expiry_interval": 7200,
+            "heap_size": 376,
+            "inflight_len": 0,
+            "mailbox_len": 0,
+            "max_awaiting_rel": 100,
+            "max_inflight": 32,
+            "max_mqueue": 1000,
+            "max_subscriptions": 0,
+            "mqueue_dropped": 0,
+            "mqueue_len": 0,
+            "node": "emqx@127.0.0.1",
+            "reductions": 203,
+            "subscriptions_count": 0,
+            "username": "emqx-api-test:v1"
+      }
+    ]
+
+
+
+
+
+获取节点会话信息
 ----------------------
 
+
+
 API 定义::
 
-    GET api/v2/nodes/{node_name}/sessions
- 
-请求参数::
+    GET api/v3/nodes/${node}/sessions/
 
-    curr_page={page_no}&page_size={page_size}
 
 请求示例::
 
-    GET api/v2/nodes/emq@127.0.0.1/sessions?curr_page=1&page_size=20
+    GET api/v3/nodes/emqx@127.0.0.1/sessions/?_page=1&_limit=10000
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-    	"code": 0,
-    	"result": {
-    		"current_page": 1,
-    		"page_size": 20,
-    		"total_num": 1,
-    		"total_page": 1,
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"clean_sess": true,
-    				"subscriptions": 0,
-    				"max_inflight": 32,
-    				"inflight_len": 0,
-    				"mqueue_len": 0,
-    				"mqueue_dropped": 0,
-    				"awaiting_rel_len": 0,
-    				"deliver_msg": 0,
-    				"enqueue_msg": 0,
-    				"created_at": "2018-06-29 10:05:13"
-    			}
-    		]
-    	}
+      "items": [
+            {
+                  "awaiting_rel_len": 0,
+                  "binding": "local",
+                  "clean_start": true,
+                  "client_id": "emqx-api-test:v1",
+                  "created_at": "2018-09-12 10:42:57",
+                  "deliver_msg": 0,
+                  "enqueue_msg": 0,
+                  "expiry_interval": 7200,
+                  "heap_size": 376,
+                  "inflight_len": 0,
+                  "mailbox_len": 0,
+                  "max_awaiting_rel": 100,
+                  "max_inflight": 32,
+                  "max_mqueue": 1000,
+                  "max_subscriptions": 0,
+                  "mqueue_dropped": 0,
+                  "mqueue_len": 0,
+                  "node": "emqx@127.0.0.1",
+                  "reductions": 203,
+                  "subscriptions_count": 0,
+                  "username": "emqx-api-test:v1"
+            },
+            {
+                  "awaiting_rel_len": 0,
+                  "binding": "local",
+                  "clean_start": true,
+                  "client_id": "mqttjs_406e3f9a",
+                  "created_at": "2018-09-12 10:42:57",
+                  "deliver_msg": 0,
+                  "enqueue_msg": 0,
+                  "expiry_interval": 7200,
+                  "heap_size": 233,
+                  "inflight_len": 0,
+                  "mailbox_len": 0,
+                  "max_awaiting_rel": 100,
+                  "max_inflight": 32,
+                  "max_mqueue": 1000,
+                  "max_subscriptions": 0,
+                  "mqueue_dropped": 0,
+                  "mqueue_len": 0,
+                  "node": "emqx@127.0.0.1",
+                  "reductions": 188,
+                  "subscriptions_count": 0,
+                  "username": "undefined"
+            }
+      ],
+      "meta": {
+            "count": 2,
+            "limit": 10000,
+            "page": 1
+      }
     }
 
-获取节点上指定客户端的会话信息
+
+
+
+
+
+获取节点指定会话信息
 ------------------------------
 
-API 定义::
 
-    GET api/v2/nodes/{node_name}/sessions/{clientid}
- 
-请求示例::
-
-    GET api/v2/nodes/emq@127.0.0.1/sessions/mqttjs_722b4d845f
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": {
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"clean_sess": true,
-    				"subscriptions": 0,
-    				"max_inflight": 32,
-    				"inflight_len": 0,
-    				"mqueue_len": 0,
-    				"mqueue_dropped": 0,
-    				"awaiting_rel_len": 0,
-    				"deliver_msg": 0,
-    				"enqueue_msg": 0,
-    				"created_at": "2018-06-29 10:05:13"
-    			}
-    		]
-    	}
-    }
-
-获取集群内指定客户端的会话信息
-------------------------------
 
 API 定义::
 
-    GET api/v2/sessions/{clientid}
- 
-请求示例::
+    GET api/v3/nodes/${node}/sessions/${clientid}
 
-    GET api/v2/sessions/mqttjs_722b4d845f
-
-返回数据:
-
-.. code-block:: json
-    {
-    	"code": 0,
-    	"result": {
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"clean_sess": true,
-    				"subscriptions": 0,
-    				"max_inflight": 32,
-    				"inflight_len": 0,
-    				"mqueue_len": 0,
-    				"mqueue_dropped": 0,
-    				"awaiting_rel_len": 0,
-    				"deliver_msg": 0,
-    				"enqueue_msg": 0,
-    				"created_at": "2018-06-29 10:05:13"
-    			}
-    		]
-    	}
-    }
-
--------------------
-订阅(Subscriptions)
--------------------
-
-获取某个节点上的订阅列表
-------------------------
-
-API 定义::
-
-    GET api/v2/nodes/{node_name}/subscriptions
-
-请求参数::
-
-    curr_page={page_no}&page_size={page_size}
- 
-请求示例::
-
-    GET api/v2/nodes/emq@127.0.0.1/subscriptions?curr_page=1&page_size=20
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": {
-    		"current_page": 1,
-    		"page_size": 20,
-    		"total_num": 1,
-    		"total_page": 1,
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"topic": "/World",
-    				"qos": 0
-    			}
-    		]
-    	}
-    }
-
-获取节点上指定客户端的订阅信息
-------------------------------
-
-API 定义::
-
-    GET api/v2/nodes/{node_name}/subscriptions/{clientid}
 
 请求示例::
 
-    GET api/v2/nodes/emq@127.0.0.1/subscriptions/mqttjs_722b4d845f
+    GET api/v3/nodes/emqx@127.0.0.1/sessions/emqx-api-test:v1
 
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": {
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"topic": "/World",
-    				"qos": 0
-    			}
-    		]
-    	}
-    }
-
-获取集群内指定客户端的订阅信息
-------------------------------
-
-API 定义::
-
-    GET api/v2/subscriptions/{clientid}
-
-请求示例::
-
-    GET api/v2/subscriptions/mqttjs_722b4d845f
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": {
-    		"objects": [
-    			{
-    				"client_id": "mqttjs_722b4d845f",
-    				"topic": "/World",
-    				"qos": 0
-    			}
-    		]
-    	}
-    }
-
-------------
-路由(Routes)
-------------
-
-获取集群路由表
---------------
-
-API 定义::
-
-    GET api/v2/routes
-
-请求参数::
-
-    curr_page={page_no}&page_size={page_size}
-
-请求示例::
-
-    GET api/v2/routes?curr_page=1&page_size=20
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": {
-    		"current_page": 1,
-    		"page_size": 20,
-    		"total_num": 1,
-    		"total_page": 1,
-    		"objects": [
-    			{
-    				"topic": "/World",
-    				"node": "emq@127.0.0.1"
-    			}
-    		]
-    	}
-    }
-
-获取集群内指定主题的路由信息
-----------------------------
-
-API 定义::
-
-    GET api/v2/routes/{topic}
-
-请求示例::
-
-    GET api/v2/routes//World
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": {
-    		"objects": [
-    			{
-    				"topic": "/World",
-    				"node": "emq@127.0.0.1"
-    			}
-    		]
-    	}
-    }
-
-----------
-发布/订阅
-----------
-
-发布消息
---------
-
-API 定义::
-
-    POST api/v2/mqtt/publish
-
-请求参数:
-
-.. code-block:: json
-
-    {
-    	"topic" : "/World",
-    	"payload": "hello",
-    	"qos": 0,
-    	"retain" : false,
-    	"client_id": "mqttjs_722b4d845f"
-    }
-
-.. NOTE:: topic 参数必填，其他参数可选。payload 默认值空字符串，qos 默认为 0，retain 默认为 false，client_id 默认为 'http'。
-
-请求示例::
-
-    POST api/v2/mqtt/publish
 
     请求参数 json:
     {
@@ -642,71 +1034,375 @@ API 定义::
 
 .. code-block:: json
 
+    [
+      {
+            "awaiting_rel_len": 0,
+            "binding": "local",
+            "clean_start": true,
+            "client_id": "emqx-api-test:v1",
+            "created_at": "2018-09-12 10:42:57",
+            "deliver_msg": 0,
+            "enqueue_msg": 0,
+            "expiry_interval": 7200,
+            "heap_size": 376,
+            "inflight_len": 0,
+            "mailbox_len": 0,
+            "max_awaiting_rel": 100,
+            "max_inflight": 32,
+            "max_mqueue": 1000,
+            "max_subscriptions": 0,
+            "mqueue_dropped": 0,
+            "mqueue_len": 0,
+            "node": "emqx@127.0.0.1",
+            "reductions": 203,
+            "subscriptions_count": 0,
+            "username": "emqx-api-test:v1"
+      }
+    ]
+
+
+
+
+
+
+
+-------------------
+订阅(Subscriptions)
+-------------------
+
+
+获取集群订阅信息
+------------------------
+
+
+
+API 定义::
+
+    GET api/v3/subscriptions/
+
+
+请求示例::
+
+    GET api/v3/subscriptions/?_page=1&_limit=10000
+
+
+返回数据:
+
+.. code-block:: json
+
     {
-        "code": 0,
-        "result": []
+      "items": [
+            {
+                  "client_id": "emqx-api-test:v1",
+                  "node": "emqx@127.0.0.1",
+                  "qos": 0,
+                  "topic": "/test"
+            },
+            {
+                  "client_id": "mqttjs_406e3f9a",
+                  "node": "emqx@127.0.0.1",
+                  "qos": 0,
+                  "topic": "/test"
+            }
+      ],
+      "meta": {
+            "count": 2,
+            "limit": 10000,
+            "page": 1
+      }
     }
+
+
+
+
+
+获取集群指定连接订阅信息
+------------------------
+
+
+
+API 定义::
+
+    GET api/v3/subscriptions/${clientid}
+
+
+请求示例::
+
+    GET api/v3/subscriptions/emqx-api-test:v1
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "client_id": "emqx-api-test:v1",
+            "node": "emqx@127.0.0.1",
+            "qos": 0,
+            "topic": "/test"
+      }
+    ]
+
+
+
+
+
+获取节点订阅信息
+------------------------------
+
+
+
+API 定义::
+
+    GET api/v3/nodes/${node}/subscriptions/
+
+
+请求示例::
+
+    GET api/v3/nodes/emqx@127.0.0.1/subscriptions/?_page=1&_limit=10000
+
+
+返回数据:
+
+.. code-block:: json
+
+    {
+      "items": [
+            {
+                  "client_id": "emqx-api-test:v1",
+                  "node": "emqx@127.0.0.1",
+                  "qos": 0,
+                  "topic": "/test"
+            },
+            {
+                  "client_id": "mqttjs_406e3f9a",
+                  "node": "emqx@127.0.0.1",
+                  "qos": 0,
+                  "topic": "/test"
+            }
+      ],
+      "meta": {
+            "count": 2,
+            "limit": 10000,
+            "page": 1
+      }
+    }
+
+
+
+
+获取节点指定连接订阅信息
+------------------------------
+
+
+API 定义::
+
+    GET api/v3/nodes/${node}/subscriptions/${clientid}
+
+
+请求示例::
+
+    GET api/v3/nodes/emqx@127.0.0.1/subscriptions/emqx-api-test:v1
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "client_id": "emqx-api-test:v1",
+            "node": "emqx@127.0.0.1",
+            "qos": 0,
+            "topic": "/test"
+      }
+    ]
+
+
+
+
+------------
+路由(Routes)
+------------
+
+获取集群路由表
+--------------
+
+
+
+API 定义::
+
+    GET api/v3/nodes/
+
+
+请求示例::
+
+    GET api/v3/nodes/
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "connections": 2,
+            "load1": "2.75",
+            "load15": "2.87",
+            "load5": "2.57",
+            "max_fds": 7168,
+            "memory_total": "76.45M",
+            "memory_used": "59.48M",
+            "name": "emqx@127.0.0.1",
+            "node": "emqx@127.0.0.1",
+            "node_status": "Running",
+            "otp_release": "R21/10.0.5",
+            "process_available": 262144,
+            "process_used": 331,
+            "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
+            "version": "3.0"
+      }
+    ]
+
+
+
+
+
+获取集群指定主题的路由信息
+----------------------------
+
+
+
+API 定义::
+
+    GET api/v3/routes/${topic}
+
+
+请求示例::
+
+    GET api/v3/routes//test
+
+
+返回数据:
+
+.. code-block:: json
+
+    []
+
+
+
+
+
+
+------------------
+发布/订阅/取消订阅
+------------------
+
+发布消息
+--------
+
+
+
+API 定义::
+
+    POST api/v3/mqtt/publish
+
+请求参数:
+
+.. code-block:: json
+
+    {
+      "topic": "test_topic",
+      "payload": "hello",
+      "qos": 1,
+      "retain": false,
+      "client_id": "mqttjs_ab9069449e"
+    }
+
+      
+
+请求示例::
+
+    POST api/v3/mqtt/publish
+
+
+返回数据:
+
+.. code-block:: json
+
+    {
+      "code": 0
+    }
+
+
+
+
 
 创建订阅
 --------
 
+
+
 API 定义::
 
-    POST api/v2/mqtt/subscribe
+    POST api/v3/mqtt/subscribe
 
 请求参数:
 
 .. code-block:: json
 
     {
-        "topic"    : "/World",
-        "qos"      : 0,
-        "client_id": "mqttjs_722b4d845f"
+      "topic": "test_topic",
+      "qos": 1,
+      "client_id": "mqttjs_ab9069449e"
     }
+
+      
 
 请求示例::
 
-    POST api/v2/mqtt/subscribe
-    请求参数 json:
-    {
-	      "topic" : "/World",
-	      "qos": 0,
-    	  "client_id": "mqttjs_722b4d845f"
-    }
+    POST api/v3/mqtt/subscribe
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-        "code": 0,
-        "result": []
+      "code": 112
     }
+
+
+
+
 
 取消订阅
 --------
 
+
+
 API 定义::
 
-    POST api/v2/mqtt/unsubscribe
+    POST api/v3/mqtt/unsubscribe
 
 请求参数:
 
 .. code-block:: json
 
     {
-	      "topic" : "/World",
-    	  "client_id": "mqttjs_722b4d845f"
+      "topic": "test_topic",
+      "payload": "hello",
+      "qos": 1,
+      "retain": false,
+      "client_id": "mqttjs_ab9069449e"
     }
+
+      
 
 请求示例::
 
-    POST api/v2/mqtt/unsubscribe
-    请求参数 json:
-    {
-	      "topic" : "/World",
-    	  "client_id": "mqttjs_722b4d845f"
-    }
+    POST api/v3/mqtt/unsubscribe
 
 
 返回数据:
@@ -714,1011 +1410,1008 @@ API 定义::
 .. code-block:: json
 
     {
-        "code": 0,
-        "result": []
+      "code": 112
     }
+
+
+
 
 -------------
 插件(Plugins)
 -------------
 
-获取节点的插件列表
+获取集群插件列表
 ------------------
 
+
+
 API 定义::
 
-    GET api/v2/nodes/{node_name}/plugins
+    GET api/v3/plugins/
+
 
 请求示例::
 
-    GET api/v2/nodes/emq@127.0.0.1/plugins
+    GET api/v3/plugins/
+
 
 返回数据:
 
 .. code-block:: json
 
-    {
-    	"code": 0,
-    	"result": [
-    		{
-    			"name": "emq_auth_clientid",
-    			"version": "2.3.10",
-    			"description": "Authentication with ClientId/Password",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_http",
-    			"version": "2.3.10",
-    			"description": "Authentication/ACL with HTTP API",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_jwt",
-    			"version": "2.3.10",
-    			"description": "Authentication with JWT",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_ldap",
-    			"version": "2.3.10",
-    			"description": "Authentication/ACL with LDAP",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_mongo",
-    			"version": "2.3.10",
-    			"description": "Authentication/ACL with MongoDB",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_mysql",
-    			"version": "2.3.10",
-    			"description": "Authentication/ACL with MySQL",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_pgsql",
-    			"version": "2.3.10",
-    			"description": "Authentication/ACL with PostgreSQL",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_redis",
-    			"version": "2.3.10",
-    			"description": "Authentication/ACL with Redis",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_auth_username",
-    			"version": "2.3.10",
-    			"description": "Authentication with Username/Password",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_coap",
-    			"version": "2.3.10",
-    			"description": "CoAP Gateway",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_dashboard",
-    			"version": "2.3.10",
-    			"description": "EMQ Web Dashboard",
-    			"active": true
-    		},
-    		{
-    			"name": "emq_lua_hook",
-    			"version": "2.3.10",
-    			"description": "EMQ Hooks in lua",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_modules",
-    			"version": "2.3.10",
-    			"description": "EMQ Modules",
-    			"active": true
-    		},
-    		{
-    			"name": "emq_plugin_template",
-    			"version": "2.3.10",
-    			"description": "EMQ Plugin Template",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_recon",
-    			"version": "2.3.10",
-    			"description": "Recon Plugin",
-    			"active": true
-    		},
-    		{
-    			"name": "emq_reloader",
-    			"version": "2.3.10",
-    			"description": "Reloader Plugin",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_retainer",
-    			"version": "2.3.10",
-    			"description": "EMQ Retainer",
-    			"active": true
-    		},
-    		{
-    			"name": "emq_sn",
-    			"version": "2.3.10",
-    			"description": "MQTT-SN Gateway",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_stomp",
-    			"version": "2.3.10",
-    			"description": "Stomp Protocol Plugin",
-    			"active": false
-    		},
-    		{
-    			"name": "emq_web_hook",
-    			"version": "2.3.10",
-    			"description": "EMQ Webhook Plugin",
-    			"active": false
-    		}
-    	]
-    }
+    [
+      {
+            "node": "emqx@127.0.0.1",
+            "plugins": [
+                  {
+                        "name": "emqx_auth_clientid",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication with ClientId/Password",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_http",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication/ACL with HTTP API",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_jwt",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication with JWT",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_ldap",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication/ACL with LDAP",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_mongo",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication/ACL with MongoDB",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_mysql",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication/ACL with MySQL",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_pgsql",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication/ACL with PostgreSQL",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_redis",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication/ACL with Redis",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_auth_username",
+                        "version": "3.0",
+                        "description": "EMQ X Authentication with Username/Password",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_coap",
+                        "version": "3.0",
+                        "description": "EMQ X CoAP Gateway",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_dashboard",
+                        "version": "3.0",
+                        "description": "EMQ X Web Dashboard",
+                        "active": true
+                  },
+                  {
+                        "name": "emqx_delayed_publish",
+                        "version": "3.0",
+                        "description": "EMQ X Delayed Publish",
+                        "active": true
+                  },
+                  {
+                        "name": "emqx_lwm2m",
+                        "version": "3.0",
+                        "description": "EMQ X LwM2M Gateway",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_management",
+                        "version": "3.0",
+                        "description": "EMQ X Management API and CLI",
+                        "active": true
+                  },
+                  {
+                        "name": "emqx_plugin_template",
+                        "version": "3.0",
+                        "description": "EMQ X Plugin Template",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_recon",
+                        "version": "3.0",
+                        "description": "EMQ X Recon Plugin",
+                        "active": true
+                  },
+                  {
+                        "name": "emqx_reloader",
+                        "version": "3.0",
+                        "description": "EMQ X Reloader Plugin",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_retainer",
+                        "version": "3.0",
+                        "description": "EMQ X Retainer",
+                        "active": true
+                  },
+                  {
+                        "name": "emqx_sn",
+                        "version": "3.0",
+                        "description": "EMQ X MQTT-SN Gateway",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_statsd",
+                        "version": "3.0",
+                        "description": "Statsd for EMQ X",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_stomp",
+                        "version": "3.0",
+                        "description": "EMQ X Stomp Protocol Plugin",
+                        "active": false
+                  },
+                  {
+                        "name": "emqx_web_hook",
+                        "version": "3.0",
+                        "description": "EMQ X Webhook Plugin",
+                        "active": false
+                  }
+            ]
+      }
+    ]
 
-开启/关闭节点的指定插件
+
+
+
+
+获取节点插件列表
+------------------
+
+
+
+API 定义::
+
+    GET api/v3/nodes/${node}/plugins/
+
+
+请求示例::
+
+    GET api/v3/nodes/emqx@127.0.0.1/plugins/
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "name": "emqx_auth_clientid",
+            "version": "3.0",
+            "description": "EMQ X Authentication with ClientId/Password",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_http",
+            "version": "3.0",
+            "description": "EMQ X Authentication/ACL with HTTP API",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_jwt",
+            "version": "3.0",
+            "description": "EMQ X Authentication with JWT",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_ldap",
+            "version": "3.0",
+            "description": "EMQ X Authentication/ACL with LDAP",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_mongo",
+            "version": "3.0",
+            "description": "EMQ X Authentication/ACL with MongoDB",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_mysql",
+            "version": "3.0",
+            "description": "EMQ X Authentication/ACL with MySQL",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_pgsql",
+            "version": "3.0",
+            "description": "EMQ X Authentication/ACL with PostgreSQL",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_redis",
+            "version": "3.0",
+            "description": "EMQ X Authentication/ACL with Redis",
+            "active": false
+      },
+      {
+            "name": "emqx_auth_username",
+            "version": "3.0",
+            "description": "EMQ X Authentication with Username/Password",
+            "active": false
+      },
+      {
+            "name": "emqx_coap",
+            "version": "3.0",
+            "description": "EMQ X CoAP Gateway",
+            "active": false
+      },
+      {
+            "name": "emqx_dashboard",
+            "version": "3.0",
+            "description": "EMQ X Web Dashboard",
+            "active": true
+      },
+      {
+            "name": "emqx_delayed_publish",
+            "version": "3.0",
+            "description": "EMQ X Delayed Publish",
+            "active": true
+      },
+      {
+            "name": "emqx_lwm2m",
+            "version": "3.0",
+            "description": "EMQ X LwM2M Gateway",
+            "active": false
+      },
+      {
+            "name": "emqx_management",
+            "version": "3.0",
+            "description": "EMQ X Management API and CLI",
+            "active": true
+      },
+      {
+            "name": "emqx_plugin_template",
+            "version": "3.0",
+            "description": "EMQ X Plugin Template",
+            "active": false
+      },
+      {
+            "name": "emqx_recon",
+            "version": "3.0",
+            "description": "EMQ X Recon Plugin",
+            "active": true
+      },
+      {
+            "name": "emqx_reloader",
+            "version": "3.0",
+            "description": "EMQ X Reloader Plugin",
+            "active": false
+      },
+      {
+            "name": "emqx_retainer",
+            "version": "3.0",
+            "description": "EMQ X Retainer",
+            "active": true
+      },
+      {
+            "name": "emqx_sn",
+            "version": "3.0",
+            "description": "EMQ X MQTT-SN Gateway",
+            "active": false
+      },
+      {
+            "name": "emqx_statsd",
+            "version": "3.0",
+            "description": "Statsd for EMQ X",
+            "active": false
+      },
+      {
+            "name": "emqx_stomp",
+            "version": "3.0",
+            "description": "EMQ X Stomp Protocol Plugin",
+            "active": false
+      },
+      {
+            "name": "emqx_web_hook",
+            "version": "3.0",
+            "description": "EMQ X Webhook Plugin",
+            "active": false
+      }
+    ]
+
+
+
+
+
+启用节点指定插件
 -----------------------
 
+
+
 API 定义::
 
-    PUT /api/v2/nodes/{node_name}/plugins/{name}
+    PUT api/v3/nodes/${node}/plugins/${plugin}/load
 
-请求参数::
-
-    {"active": true | false}
 
 请求示例::
 
-    PUT api/v2/nodes/emq@127.0.0.1/plugins/emq_recon
-    json请求参数:
-    {
-    	"active": true
-    }
+    PUT api/v3/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/load
+
 
 返回数据:
 
 .. code-block:: json
 
-    {
-        "code": 0,
-        "result": []
-    }
+"ok"
+
+
+
+
+
+关闭节点指定插件
+-----------------------
+
+
+
+API 定义::
+
+    PUT api/v3/nodes/${node}/plugins/${plugin}/unload
+
+
+请求示例::
+
+    PUT api/v3/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/unload
+
+
+返回数据:
+
+.. code-block:: json
+
+"ok"
+
+
+
+
 
 ------------------
 监听器(Listeners)
 ------------------
 
-获取集群节点的监听器列表
+获取集群监听器列表
 ------------------------
+
+
 
 API 定义::
 
-    GET api/v2/monitoring/listeners
+    GET api/v3/listeners/
 
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": {
-            "emq@127.0.0.1": [
-                {
-                    "protocol": "dashboard:http",
-                    "listen": "18083",
-                    "acceptors": 2,
-                    "max_clients": 512,
-                    "current_clients": 0,
-                    "shutdown_count": []
-                },
-                {
-                    "protocol": "mqtt:tcp",
-                    "listen": "127.0.0.1:11883",
-                    "acceptors": 16,
-                    "max_clients": 102400,
-                    "current_clients": 0,
-                    "shutdown_count": []
-                },
-                {
-                    "protocol": "mqtt:tcp",
-                    "listen": "0.0.0.0:1883",
-                    "acceptors": 16,
-                    "max_clients": 102400,
-                    "current_clients": 0,
-                    "shutdown_count": []
-                },
-                {
-                    "protocol": "mqtt:ws",
-                    "listen": "8083",
-                    "acceptors": 4,
-                    "max_clients": 64,
-                    "current_clients": 0,
-                    "shutdown_count": []
-                },
-                {
-                    "protocol": "mqtt:ssl",
-                    "listen": "8883",
-                    "acceptors": 16,
-                    "max_clients": 1024,
-                    "current_clients": 0,
-                    "shutdown_count": []
-                },
-                {
-                    "protocol": "mqtt:wss",
-                    "listen": "8084",
-                    "acceptors": 4,
-                    "max_clients": 64,
-                    "current_clients": 0,
-                    "shutdown_count": []
-                },
-                {
-                    "protocol": "mqtt:api",
-                    "listen": "127.0.0.1:8080",
-                    "acceptors": 4,
-                    "max_clients": 64,
-                    "current_clients": 1,
-                    "shutdown_count": []
-                }
-            ]
-        }
-    }
-
-获取指定节点的监听器列表
-------------------------
-
-API 定义::
-
-    GET api/v2/monitoring/listeners/{node_name}
 
 请求示例::
 
-    GET api/v2/monitoring/listeners/emq@127.0.0.1
+    GET api/v3/listeners/
+
 
 返回数据:
 
 .. code-block:: json
 
-    {
-        "code": 0,
-        "result": [
-            {
-                "protocol": "mqtt:api",
-                "listen": "127.0.0.1:8080",
-                "acceptors": 4,
-                "max_clients": 64,
-                "current_clients": 1,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:wss",
-                "listen": "8084",
-                "acceptors": 4,
-                "max_clients": 64,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:ssl",
-                "listen": "8883",
-                "acceptors": 16,
-                "max_clients": 1024,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:ws",
-                "listen": "8083",
-                "acceptors": 4,
-                "max_clients": 64,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:tcp",
-                "listen": "0.0.0.0:1883",
-                "acceptors": 16,
-                "max_clients": 102400,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "mqtt:tcp",
-                "listen": "127.0.0.1:11883",
-                "acceptors": 16,
-                "max_clients": 102400,
-                "current_clients": 0,
-                "shutdown_count": []
-            },
-            {
-                "protocol": "dashboard:http",
-                "listen": "18083",
-                "acceptors": 2,
-                "max_clients": 512,
-                "current_clients": 0,
-                "shutdown_count": []
+    [
+      {
+            "listeners": [
+                  {
+                        "acceptors": 16,
+                        "current_conns": 0,
+                        "listen_on": "8883",
+                        "max_conns": 102400,
+                        "protocol": "mqtt:ssl",
+                        "shutdown_count": []
+                  },
+                  {
+                        "acceptors": 8,
+                        "current_conns": 2,
+                        "listen_on": "0.0.0.0:1883",
+                        "max_conns": 1024000,
+                        "protocol": "mqtt:tcp",
+                        "shutdown_count": {
+                              "closed": 2,
+                              "kicked": 1
+                        }
+                  },
+                  {
+                        "acceptors": 4,
+                        "current_conns": 0,
+                        "listen_on": "127.0.0.1:11883",
+                        "max_conns": 10240000,
+                        "protocol": "mqtt:tcp",
+                        "shutdown_count": []
+                  },
+                  {
+                        "acceptors": 4,
+                        "current_conns": 1,
+                        "listen_on": "18083",
+                        "max_conns": 512,
+                        "protocol": "http:dashboard",
+                        "shutdown_count": []
+                  },
+                  {
+                        "acceptors": 2,
+                        "current_conns": 0,
+                        "listen_on": "8080",
+                        "max_conns": 512,
+                        "protocol": "http:management",
+                        "shutdown_count": []
+                  },
+                  {
+                        "acceptors": 4,
+                        "current_conns": 0,
+                        "listen_on": "8083",
+                        "max_conns": 102400,
+                        "protocol": "mqtt:ws",
+                        "shutdown_count": []
+                  },
+                  {
+                        "acceptors": 4,
+                        "current_conns": 0,
+                        "listen_on": "8084",
+                        "max_conns": 16,
+                        "protocol": "mqtt:wss",
+                        "shutdown_count": []
+                  }
+            ],
+            "node": "emqx@127.0.0.1"
+      }
+    ]
+
+
+
+
+
+获取节点监听器列表
+------------------------
+
+
+
+API 定义::
+
+    GET api/v3/nodes/${node}/listeners
+
+
+请求示例::
+
+    GET api/v3/nodes/emqx@127.0.0.1/listeners
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "acceptors": 16,
+            "current_conns": 0,
+            "listen_on": "8883",
+            "max_conns": 102400,
+            "protocol": "mqtt:ssl",
+            "shutdown_count": []
+      },
+      {
+            "acceptors": 8,
+            "current_conns": 2,
+            "listen_on": "0.0.0.0:1883",
+            "max_conns": 1024000,
+            "protocol": "mqtt:tcp",
+            "shutdown_count": {
+                  "closed": 2,
+                  "kicked": 1
             }
-        ]
-    }
+      },
+      {
+            "acceptors": 4,
+            "current_conns": 0,
+            "listen_on": "127.0.0.1:11883",
+            "max_conns": 10240000,
+            "protocol": "mqtt:tcp",
+            "shutdown_count": []
+      },
+      {
+            "acceptors": 4,
+            "current_conns": 1,
+            "listen_on": "18083",
+            "max_conns": 512,
+            "protocol": "http:dashboard",
+            "shutdown_count": []
+      },
+      {
+            "acceptors": 2,
+            "current_conns": 0,
+            "listen_on": "8080",
+            "max_conns": 512,
+            "protocol": "http:management",
+            "shutdown_count": []
+      },
+      {
+            "acceptors": 4,
+            "current_conns": 0,
+            "listen_on": "8083",
+            "max_conns": 102400,
+            "protocol": "mqtt:ws",
+            "shutdown_count": []
+      },
+      {
+            "acceptors": 4,
+            "current_conns": 0,
+            "listen_on": "8084",
+            "max_conns": 16,
+            "protocol": "mqtt:wss",
+            "shutdown_count": []
+      }
+    ]
+
+
+
 
 ------------
 收发报文统计
 ------------
 
-获取全部节点的收发报文统计
+获取集群收发报文统计
 --------------------------
+
+
 
 API 定义::
 
-    GET api/v2/monitoring/metrics/
+    GET api/v3/metrics/
 
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": {
-            "packets/disconnect":0,
-            "messages/dropped":0,
-            "messages/qos2/received":0,
-            "packets/suback":0,
-            "packets/pubcomp/received":0,
-            "packets/unsuback":0,
-            "packets/pingresp":0,
-            "packets/puback/missed":0,
-            "packets/pingreq":0,
-            "messages/retained":3,
-            "packets/sent":0,
-            "messages/qos2/dropped":0,
-            "packets/unsubscribe":0,
-            "packets/pubrec/missed":0,
-            "packets/connack":0,
-            "packets/pubrec/sent":0,
-            "packets/publish/received":0,
-            "packets/pubcomp/sent":0,
-            "bytes/received":0,
-            "packets/connect":0,
-            "packets/puback/received":0,
-            "messages/sent":0,
-            "packets/publish/sent":0,
-            "bytes/sent":0,
-            "packets/pubrel/missed":0,
-            "packets/puback/sent":0,
-            "messages/qos0/received":0,
-            "packets/subscribe":0,
-            "packets/pubrel/sent":0,
-            "messages/qos2/sent":0,
-            "packets/received":0,
-            "packets/pubrel/received":0,
-            "messages/qos1/received":0,
-            "messages/qos1/sent":0,
-            "packets/pubrec/received":0,
-            "packets/pubcomp/missed":0,
-            "messages/qos0/sent":0
-        }
-    }
-
-获取指定节点的收发报文统计
---------------------------
-
-API 定义::
-
-    GET api/v2/monitoring/metrics/{node_name}
 
 请求示例::
 
-    GET api/v2/monitoring/metrics/emq@127.0.0.1
+    GET api/v3/metrics/
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "node": "emqx@127.0.0.1",
+            "metrics": {
+                  "bytes/received": 342,
+                  "packets/pubrel/sent": 0,
+                  "packets/pubcomp/missed": 0,
+                  "packets/sent": 13,
+                  "packets/pubrel/received": 0,
+                  "messages/qos1/received": 0,
+                  "packets/publish/received": 2,
+                  "packets/auth": 0,
+                  "messages/qos0/received": 2,
+                  "packets/pubcomp/received": 0,
+                  "packets/unsuback": 0,
+                  "packets/pubrec/missed": 0,
+                  "messages/qos1/sent": 0,
+                  "messages/qos2/sent": 0,
+                  "bytes/sent": 116,
+                  "messages/received": 2,
+                  "messages/dropped": 1,
+                  "messages/qos2/received": 0,
+                  "packets/connect": 5,
+                  "messages/qos0/sent": 4,
+                  "packets/disconnect/received": 0,
+                  "packets/pubrec/sent": 0,
+                  "packets/publish/sent": 4,
+                  "packets/pubrec/received": 0,
+                  "packets/received": 11,
+                  "packets/unsubscribe": 0,
+                  "packets/subscribe": 4,
+                  "packets/disconnect/sent": 0,
+                  "packets/pingresp": 0,
+                  "messages/qos2/dropped": 0,
+                  "packets/puback/missed": 0,
+                  "packets/pingreq": 0,
+                  "packets/connack": 5,
+                  "packets/pubrel/missed": 0,
+                  "messages/sent": 4,
+                  "packets/suback": 4,
+                  "messages/retained": 3,
+                  "packets/puback/sent": 0,
+                  "packets/puback/received": 0,
+                  "messages/qos2/expired": 0,
+                  "messages/forward": 0,
+                  "messages/expired": 0,
+                  "packets/pubcomp/sent": 0
+            }
+      }
+    ]
+
+
+
+
+获取节点收发报文统计
+--------------------------
+
+
+
+API 定义::
+
+    GET api/v3/nodes/${node}/metrics/
+
+
+请求示例::
+
+    GET api/v3/nodes/emqx@127.0.0.1/metrics/
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-        "code": 0,
-        "result": {
-            "packets/disconnect":0,
-            "messages/dropped":0,
-            "messages/qos2/received":0,
-            "packets/suback":0,
-            "packets/pubcomp/received":0,
-            "packets/unsuback":0,
-            "packets/pingresp":0,
-            "packets/puback/missed":0,
-            "packets/pingreq":0,
-            "messages/retained":3,
-            "packets/sent":0,
-            "messages/qos2/dropped":0,
-            "packets/unsubscribe":0,
-            "packets/pubrec/missed":0,
-            "packets/connack":0,
-            "messages/received":0,
-            "packets/pubrec/sent":0,
-            "packets/publish/received":0,
-            "packets/pubcomp/sent":0,
-            "bytes/received":0,
-            "packets/connect":0,
-            "packets/puback/received":0,
-            "messages/sent":0,
-            "packets/publish/sent":0,
-            "bytes/sent":0,
-            "packets/pubrel/missed":0,
-            "packets/puback/sent":0,
-            "messages/qos0/received":0,
-            "packets/subscribe":0,
-            "packets/pubrel/sent":0,
-            "messages/qos2/sent":0,
-            "packets/received":0,
-            "packets/pubrel/received":0,
-            "messages/qos1/received":0,
-            "messages/qos1/sent":0,
-            "packets/pubrec/received":0,
-            "packets/pubcomp/missed":0,
-            "messages/qos0/sent":0
-        }
+      "bytes/received": 342,
+      "packets/pubrel/sent": 0,
+      "packets/pubcomp/missed": 0,
+      "packets/sent": 13,
+      "packets/pubrel/received": 0,
+      "messages/qos1/received": 0,
+      "packets/publish/received": 2,
+      "packets/auth": 0,
+      "messages/qos0/received": 2,
+      "packets/pubcomp/received": 0,
+      "packets/unsuback": 0,
+      "packets/pubrec/missed": 0,
+      "messages/qos1/sent": 0,
+      "messages/qos2/sent": 0,
+      "bytes/sent": 116,
+      "messages/received": 2,
+      "messages/dropped": 1,
+      "messages/qos2/received": 0,
+      "packets/connect": 5,
+      "messages/qos0/sent": 4,
+      "packets/disconnect/received": 0,
+      "packets/pubrec/sent": 0,
+      "packets/publish/sent": 4,
+      "packets/pubrec/received": 0,
+      "packets/received": 11,
+      "packets/unsubscribe": 0,
+      "packets/subscribe": 4,
+      "packets/disconnect/sent": 0,
+      "packets/pingresp": 0,
+      "messages/qos2/dropped": 0,
+      "packets/puback/missed": 0,
+      "packets/pingreq": 0,
+      "packets/connack": 5,
+      "packets/pubrel/missed": 0,
+      "messages/sent": 4,
+      "packets/suback": 4,
+      "messages/retained": 3,
+      "packets/puback/sent": 0,
+      "packets/puback/received": 0,
+      "messages/qos2/expired": 0,
+      "messages/forward": 0,
+      "messages/expired": 0,
+      "packets/pubcomp/sent": 0
     }
+
+
+
+
 
 -------------
 连接会话统计
 -------------
 
-获取全部节点的连接会话统计
+获取集群连接会话统计
 ---------------------------
 
-API 定义::
 
-    GET api/v2/monitoring/stats
-
-请求示例::
-
-    GET api/v2/monitoring/stats
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": [
-    		{
-    			"emq@127.0.0.1": {
-    				"clients/count": 0,
-    				"clients/max": 0,
-    				"retained/count": 3,
-    				"retained/max": 3,
-    				"routes/count": 0,
-    				"routes/max": 0,
-    				"sessions/count": 0,
-    				"sessions/max": 0,
-    				"subscribers/count": 0,
-    				"subscribers/max": 0,
-    				"subscriptions/count": 0,
-    				"subscriptions/max": 0,
-    				"topics/count": 0,
-    				"topics/max": 0
-    			}
-    		}
-    	]
-    }
-
-获取指定节点的连接会话统计
---------------------------
 
 API 定义::
 
-    GET api/v2/monitoring/stats/{node_name}
+    GET api/v3/stats/
+
 
 请求示例::
 
-    GET api/v2/monitoring/stats/emq@127.0.0.1
+    GET api/v3/stats/
+
 
 返回数据:
 
 .. code-block:: json
 
-   {
-   	 "code": 0,
-   	 "result": {
-       "clients/count": 0,
-       "clients/max": 0,
-       "retained/count": 3,
-       "retained/max": 3,
-       "routes/count": 0,
-       "routes/max": 0,
-       "sessions/count": 0,
-       "sessions/max": 0,
-       "subscribers/count": 0,
-       "subscribers/max": 0,
-       "subscriptions/count": 0,
-       "subscriptions/max": 0,
-       "topics/count": 0,
-       "topics/max": 0
-   	 }
-   }
+    [
+      {
+            "node": "emqx@127.0.0.1",
+            "subscriptions/shared/max": 0,
+            "subscriptions/max": 2,
+            "subscribers/max": 2,
+            "topics/count": 0,
+            "subscriptions/count": 0,
+            "topics/max": 1,
+            "sessions/persistent/max": 2,
+            "connections/max": 2,
+            "subscriptions/shared/count": 0,
+            "sessions/persistent/count": 0,
+            "retained/count": 3,
+            "routes/count": 0,
+            "sessions/count": 0,
+            "retained/max": 3,
+            "sessions/max": 2,
+            "routes/max": 1,
+            "subscribers/count": 0,
+            "connections/count": 0
+      }
+    ]
 
-------
-热配置
-------
 
-获取全部节点的可修改配置项
+
+
+获取节点连接会话统计
 --------------------------
 
-API定义::
 
-    GET api/v2/configs
+
+API 定义::
+
+    GET api/v3/nodes/${node}/stats/
+
 
 请求示例::
 
-    GET api/v2/configs
+    GET api/v3/nodes/emqx@127.0.0.1/stats/
+
 
 返回数据:
 
 .. code-block:: json
 
     {
-        "code": 0,
-        "result": {
-            "emq@127.0.0.1": [
-                {
-                    "key": "log.console.level",
-                    "value": "error",
-                    "datatpye": "enum",
-                    "app": "emqttd"
-                },
-                {
-                    "key": "mqtt.acl_file",
-                    "value": "etc/acl.conf",
-                    "datatpye": "string",
-                    "app": "emqttd"
-                },
-                {
-                    "key": "mqtt.acl_nomatch",
-                    "value": "allow",
-                    "datatpye": "enum",
-                    "app": "emqttd"
-                },
-                {
-                    "key": "mqtt.allow_anonymous",
-                    "value": "true",
-                    "datatpye": "enum",
-                    "app": "emqttd"
-                },
-                {
-                    "key": "mqtt.broker.sys_interval",
-                    "value": "60",
-                    "datatpye": "integer",
-                    "app": "emqttd"
-                },
-                {
-                    "key": "mqtt.cache_acl",
-                    "value": "true",
-                    "datatpye": "enum",
-                    "app": "emqttd"
-                }
-            ]
-        }
+      "subscriptions/shared/max": 0,
+      "subscriptions/max": 2,
+      "subscribers/max": 2,
+      "topics/count": 0,
+      "subscriptions/count": 0,
+      "topics/max": 1,
+      "sessions/persistent/max": 2,
+      "connections/max": 2,
+      "subscriptions/shared/count": 0,
+      "sessions/persistent/count": 0,
+      "retained/count": 3,
+      "routes/count": 0,
+      "sessions/count": 0,
+      "retained/max": 3,
+      "sessions/max": 2,
+      "routes/max": 1,
+      "subscribers/count": 0,
+      "connections/count": 0
     }
 
-获取指定节点的可修改配置项
---------------------------
 
-API定义::
 
-    GET api/v2/nodes/{node_name}/configs
 
-请求示例::
 
-    GET api/v2/nodes/emq@127.0.0.1/configs
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": [
-            {
-                "key": "log.console.level",
-                "value": "error",
-                "datatpye": "enum",
-                "app": "emqttd"
-            },
-            {
-                "key": "mqtt.acl_file",
-                "value": "etc/acl.conf",
-                "datatpye": "string",
-                "app": "emqttd"
-            },
-            {
-                "key": "mqtt.acl_nomatch",
-                "value": "allow",
-                "datatpye": "enum",
-                "app": "emqttd"
-            },
-            {
-                "key": "mqtt.allow_anonymous",
-                "value": "true",
-                "datatpye": "enum",
-                "app": "emqttd"
-            },
-            {
-                "key": "mqtt.broker.sys_interval",
-                "value": "60",
-                "datatpye": "integer",
-                "app": "emqttd"
-            },
-            {
-                "key": "mqtt.cache_acl",
-                "value": "true",
-                "datatpye": "enum",
-                "app": "emqttd"
-            }
-        ]
-    }
-
-修改全部节点的配置项
---------------------
-
-API定义::
-
-    PUT /api/v2/configs/{app_name}
-
-请求参数::
-
-    {
-        "key"   : "mqtt.allow_anonymous",
-        "value" : "false"
-    }
-
-请求示例::
-
-    PUT /api/v2/configs/emqttd
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-修改指定节点的配置项
---------------------
-
-API定义::
-
-    PUT /api/v2/nodes/{node_name}/configs/{app_name}
-
-请求参数::
-
-    {
-        "key"   : "mqtt.allow_anonymous",
-        "value" : "false"
-     }
-
-请求示例::
-
-    PUT /api/v2/nodes/emq@127.0.0.1/configs/emqttd
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-获取指定节点的指定插件的配置项
---------------------------
-
-API定义::
-
-    GET api/v2/nodes/{node_name}/plugin_configs/{plugin_name}
-
-请求示例::
-
-    GET api/v2/nodes/emq@127.0.0.1/plugin_configs/emq_auth_http
-
-返回数据:
-
-.. code-block:: json
-
-    {
-    	"code": 0,
-    	"result": [
-    		{
-    			"key": "auth.http.auth_req",
-    			"value": "http://127.0.0.1:8080/mqtt/auth",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.auth_req.method",
-    			"value": "post",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.auth_req.params",
-    			"value": "clientid=%c,username=%u,password=%P",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.super_req",
-    			"value": "http://127.0.0.1:8080/mqtt/superuser",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.super_req.method",
-    			"value": "post",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.super_req.params",
-    			"value": "clientid=%c,username=%u",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.acl_req",
-    			"value": "http://127.0.0.1:8080/mqtt/acl",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.acl_req.method",
-    			"value": "get",
-    			"desc": "",
-    			"required": true
-    		},
-    		{
-    			"key": "auth.http.acl_req.params",
-    			"value": "access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t",
-    			"desc": "",
-    			"required": true
-    		}
-    	]
-    }
-
-修改指定节点的指定插件的配置项
---------------------------
-
-API定义::
-
-    PUT api/v2/nodes/{node_name}/plugin_configs/{plugin_name}
-
-请求参数::
-
-    {
-        "auth.http.auth_req.method": "get",
-        "auth.http.auth_req": "http://127.0.0.1:8080/mqtt/auth",
-        "auth.http.auth_req.params": "clientid=%c,username=%u,password=%P",
-        "auth.http.acl_req.method": "get",
-        "auth.http.acl_req": "http://127.0.0.1:8080/mqtt/acl",
-        "auth.http.acl_req.params": "access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t",
-        "auth.http.super_req.method": "post",
-        "auth.http.super_req.params": "clientid=%c,username=%u",
-        "auth.http.super_req": "http://127.0.0.1:8080/mqtt/superuser"
-    }
-
-请求示例::
-
-    PUT api/v2/nodes/emq@127.0.0.1/plugin_configs/emq_auth_http
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
---------
-用户管理
---------
-
-获取管理用户列表
---------------
-
-API定义::
-
-    GET api/v2/users
-
-请求示例::
-
-    GET api/v2/users
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": [
-            {
-                "username": "admin",
-                "tags": "administrator"
-            }
-        ]
-    }
-
-添加管理用户
-----------
-
-API定义::
-
-    POST api/v2/users
-
-请求参数::
-
-    {
-        "username": "test_user",
-        "password": "password",
-        "tags": "user"
-    }
-
-请求示例::
-
-    POST api/v2/users
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-修改管理用户信息
---------------
-
-API定义::
-
-    PUT api/v2/users/{username}
-
-请求参数::
-
-    {
-        "tags": "admin"
-    }
-
-请求示例::
-
-    PUT api/v2/users/test_user
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-删除管理用户
------------
-
-API定义::
-
-    DELETE api/v2/users/{username}
-
-请求参数::
-
-
-请求示例::
-
-    DELETE api/v2/users/test_user
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-认证管理用户
------------
-
-API定义::
-
-    POST api/v2/auth
-
-请求参数::
-
-    {
-        "username": "test_user",
-        "password": "password"
-    }
-
-请求示例::
-
-    POST api/v2/auth
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
-
-修改管理用户密码
---------------
-
-API定义::
-
-    PUT api/v2/change_pwd/{username}
-
-请求参数::
-
-    {
-        "new_pwd": "newpassword",
-        "old_pwd": "password"
-    }
-
-请求示例::
-
-    PUT api/v2/change_pwd/test_user
-
-返回数据:
-
-.. code-block:: json
-
-    {
-        "code": 0,
-        "result": []
-    }
 
 ----------
-返回错误码
+告警信息
 ----------
 
-+-------+-----------------------------------------+
-| 错误码| 备注                                    |
-+=======+=========================================+
-| 0     | 成功                                    |
-+-------+-----------------------------------------+
-| 101   | badrpc                                  |
-+-------+-----------------------------------------+
-| 102   | 未知错误                                |
-+-------+-----------------------------------------+
-| 103   | 用户名密码错误                          |
-+-------+-----------------------------------------+
-| 104   | 用户名密码不能为空                      |
-+-------+-----------------------------------------+
-| 105   | 删除的用户不存在                        |
-+-------+-----------------------------------------+
-| 106   | admin用户不能删除                       |
-+-------+-----------------------------------------+
-| 107   | 请求参数缺失                            |
-+-------+-----------------------------------------+
-| 108   | 请求参数类型错误                        |
-+-------+-----------------------------------------+
-| 109   | 请求参数不是json类型                    |
-+-------+-----------------------------------------+
-| 110   | 插件已经加载，不能重复加载              |
-+-------+-----------------------------------------+
-| 111   | 插件已经卸载，不能重复卸载              |
-+-------+-----------------------------------------+
-| 112   | 用户不在线                              |
-+-------+-----------------------------------------+
-| 113   | 用户已经存在                            |
-+-------+-----------------------------------------+
-| 114   | 旧密码错误                              |
-+-------+-----------------------------------------+
+获取集群告警信息
+---------------------------
+
+
+
+API 定义::
+
+    GET api/v3/alarms/${node}
+
+
+请求示例::
+
+    GET api/v3/alarms/emqx@127.0.0.1
+
+
+返回数据:
+
+.. code-block:: json
+
+    []
+
+
+
+
+获取节点告警信息
+--------------------------
+
+
+
+API 定义::
+
+    GET api/v3/alarms/
+
+
+请求示例::
+
+    GET api/v3/alarms/
+
+
+返回数据:
+
+.. code-block:: json
+
+    [
+      {
+            "alarms": [],
+            "node": "emqx@127.0.0.1"
+      }
+    ]
+
+
+
+
+
+
+----------
+黑名单
+----------
+
+获取黑名单列表
+---------------------------
+
+
+
+API 定义::
+
+    GET api/v3/banned/
+
+
+请求示例::
+
+    GET api/v3/banned/?_page=1&_limit=10000
+
+
+返回数据:
+
+.. code-block:: json
+
+    {
+      "items": [],
+      "meta": {
+            "count": 0,
+            "limit": 10000,
+            "page": 1
+      }
+    }
+
+
+
+
+创建黑名单
+--------------------------
+
+
+
+API 定义::
+
+    POST api/v3/banned/
+
+请求参数:
+
+.. code-block:: json
+
+    {
+      "who": "clientId/username/ipAddress",
+      "as": "client_id",
+      "reason": "banned the clientId",
+      "desc": "normal banned",
+      "until": 1536146187
+    }
+
+      
+
+请求示例::
+
+    POST api/v3/banned/
+
+
+返回数据:
+
+.. code-block:: json
+
+    {
+      "who": "clientId/username/ipAddress",
+      "as": "client_id",
+      "reason": "banned the clientId",
+      "desc": "normal banned",
+      "until": 1536146187
+    }
+
+
+
+
+删除指定黑名单
+--------------------------
+
+
+
+API 定义::
+
+    DELETE api/v3/banned/${who}?as=${as}
+
+
+请求示例::
+
+    DELETE api/v3/banned/${who}?as=${as}
+
+
+返回数据:
+
+.. code-block:: json
+
+"ok"
+
+
+
+
+
+
+----------------
+错误信息与数据分页
+----------------
+
+HTTP状态码大于500时响应携带错误信息返回
+---------------------------------
+
+错误示例::
+
+    PUT api/v3/nodes/emqx@127.0.0.1/plugins/emqx_recon/load
+
+返回数据:
+
+.. code-block:: json
+
+    {
+        "message": "already_started"
+    }
+
+
+分页参数与分页信息
+---------------
+
+请求示例中使用了 ?_page=1&_limit=10000 参数的接口均支持分页::
+
+    _page: 当前页码
+    _limit: 分页大小
+
+
+返回数据:
+
+.. code-block:: json    
+
+    {
+      "items": [],
+      "meta": {
+          "page": 1,
+          "limit": 10000,
+          "count": 2
+      }
+    }
+
