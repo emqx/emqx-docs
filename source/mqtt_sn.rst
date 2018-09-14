@@ -24,15 +24,15 @@ MQTT-SN 的网络中有网关这种设备，它负责把 MQTT-SN 转换成 MQTT�
 MQTT-SN 还支持设备的睡眠功能，如果设备进入睡眠状态，无法接收 UDP 数据，网关将把下行的 PUBLISH 消息缓存起来，直到设备苏醒后再传送。
 
 ---------------
-EMQ-SN 网关插件
+EMQX-SN 网关插件
 ---------------
 
-EMQ-SN 是 EMQ 的一个网关插件，实现了 MQTT-SN 的大部分功能，它相当于一个在云端的 MQTT-SN 网关，直接和 EMQ Broker 相连。
+EMQX-SN 是 EMQ X 的一个网关插件，实现了 MQTT-SN 的大部分功能，它相当于一个在云端的 MQTT-SN 网关，直接和 EMQ X Broker 相连。
 
 配置参数
 --------
 
-File: etc/plugins/emq_sn.conf::
+File: etc/plugins/emqx_sn.conf::
 
     mqtt.sn.port = 1884
     
@@ -56,12 +56,12 @@ File: etc/plugins/emq_sn.conf::
 | mqtt.sn.password            | 这也是可选的参数, 和 username 一起使用                                    |
 +-----------------------------+-------------------------------------------------------------------------+
 
-启动emq-sn
+启动emqx-sn
 ----------
 
 .. code-block::
 
-    ./bin/emqttd_ctl plugins load emq_sn
+    ./bin/emqx_ctl plugins load emqx_sn
 
 -----------------
 MQTT-SN 客户端库
