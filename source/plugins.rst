@@ -133,7 +133,7 @@ etc/plugins/emqx_auth_username.conf:
     ## Examples:
     ##auth.user.1.username = admin
     ##auth.user.1.password = public
-    ##auth.user.2.username = feng@emqtt.io
+    ##auth.user.2.username = feng@emqx.io
     ##auth.user.2.password = public
 
 两种方式添加用户:
@@ -653,13 +653,15 @@ CoAP 协议插件，支持 RFC 7252 规范。
 配置 CoAP 协议插件
 ------------------
 
+etc/plugins/emqx_coap.conf:
+
 .. code-block:: properties
 
-    coap.server = 5683
+    coap.port = 5683
 
-    coap.prefix.mqtt = mqtt
+    coap.keepalive = 120s
 
-    coap.handler.mqtt = emq_coap_gateway
+    coap.enable_stats = off
 
 加载 CoAP 协议插件
 ------------------
@@ -986,7 +988,7 @@ emqx_plugin_template.erl::
 编译发布插件
 ------------
 
-1. clone emqx-relx 项目:
+1. clone emqx-rel 项目:
 
 .. code-block:: bash
 
