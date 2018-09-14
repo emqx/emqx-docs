@@ -16,18 +16,12 @@ $SYS/#系统主题默认只允许本机订阅，访问控制规则设置在etc/a
 
     {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
 
-Q2. emqttd消息服务器适用于什么项目
-----------------------------------
+Q2. EMQ X 消息服务器是如何管理Topic的，Topic的数量是否影响其性能
+----------------------------------------------------------------
 
-物联网、移动互联网,不适合做企业内部MQ
+Topic在 EMQ X 内部有两种数据结构:
 
-
-Q3. EMQ X 是如何管理topic的，topic的数量是否会影响emq的性能
------------------------------------------------------------
-
-Topic在EMQ内部两种数据结构:
-
-- Trie字典表，保存通配符topic
+- Trie字典表，保存通配符Topic
 - KV保存无通配符Topic
 数量一般不会影响消息时延
 
@@ -35,28 +29,28 @@ Q4. 企业版的定制开发是怎么扩展的
 --------------------------------
 
 企业版本包括Backend存储、Bridge桥接两种扩展:
-- Bridge桥接支持Broker内部:比如直接转发EMQ消息到Kafka
-- 外部采用Phython等脚本开发，做简单的数据处理分析
+- EMQ X Backend 对订阅关系、设备状态、MQTT消息进行存储，持久化至数据库（Redis、MySQL、PostgreSQL、MongoDB、Cassandra）
+- EMQ X Bridge 将 MQTT 消息桥接至消息队列（Kafka、RabbitMQ）
 
-Q5. 开源版本和商业版本有些什么区别？
------------------------------------
+Q5. 开源版本和商业版本有些什么区别
+----------------------------------
 
-- 架构进行了优化，采用Scalable RPC框架: 企业版改进了分布节点间的通信机制，分离 Erlang 自身的集群通道与 EMQ 的数据通道，大幅提高集群节点间的消息吞吐与集群稳定性
-- 增加支持Fastlane订阅：大幅提高消息路由效率，更适合物联网传感器数据采集类应用
+- 架构进行了优化，采用 Scalable RPC 框架: 企业版改进了分布节点间的通信机制，分离 Erlang 自身的集群通道与 EMQ X 消息服务器的数据通道，大幅提高集群节点间的消息吞吐与集群稳定性
+- 增加支持 Fastlane 订阅：大幅提高消息路由效率，更适合物联网传感器数据采集类应用
 - 增加支持代理订阅：支持由 Broker 代理客户端进行订阅，大幅减少客户到 Broker 的订阅报文交互
-- 支持数据持久化：支持同EMQ Bridge服务套件配合对订阅关系、设备状态、MQTT消息进行存储，持久化至数据库（Redis、MySQl、PostgreSQL、MongoDB、Cassandra）及消息中间（Kafka、RabbitMQ）
+- 支持数据持久化：支持同 EMQ X Bridge 服务套件配合对订阅关系、设备状态、 MQTT 消息进行存储，持久化至数据库（Redis、MySQl、PostgreSQL、MongoDB、Cassandra）及消息中间（Kafka、RabbitMQ）
 - 提供定制开发服务：按客户需求进行定制开发
 
 Q6. 社区版本可以单机支持百万链接，集群支持千万链接吗？有什么限制吗
 ------------------------------------------------------------------
 
-没有限制，但链接叠加业务，还是有非常多工作,首先要把EMQ扩展为连接平台，然后扩展为业务平台
+没有限制，但链接叠加业务，还是有非常多工作，首先要把 EMQ X 消息服务器 扩展为连接平台，然后扩展为业务平台
 
 Q7. 如何从服务器知道某一条消息是否被客户端成功接收
 --------------------------------------------------
 A:
     - 把emqx.conf中的log.console.level和log.syslog.level改成info
-    - 重新启动EMQ X服务器
+    - 重新启动 EMQ X 消息服务器
     - 查看log/erlang.log, 搜索关键字”SEND”和”RECV”, 看PacketId是否匹配
 B:
     在linux机器上使用tcpdump抓取tcp log
@@ -72,30 +66,30 @@ Q1. 在PC上有推荐使用的mqtt客户端工具吗
 
 - **mqtt.fx**
 
-下载地址http://www.jensd.de/apps/mqttfx 连接EMQ X的端口号是1883。mqtt.fx是用java编写的, 有windows, ios, linux的版本.
-注意: 因为mqtt.fx需要使用java8, 但java8已经不支持windows xp, 所以在xp上会出现异常. 请使用其他工具, 比如emqtt dashboard websocket.
+下载地址 http://www.jensd.de/apps/mqttfx 连接 EMQ X 消息服务器的端口号是1883。mqtt.fx是用 Java 编写的, 有 Windows, IOS, Linux的版本.
+注意: 因为mqtt.fx需要使用 Java8, 但 Java8 已经不支持 Windows XP, 所以在 XP 上会出现异常. 请使用其他工具, 比如EMQ X Dashboard Websocket.
 
 - **mqtt.spy**
 
-下载地址https://github.com/eclipse/paho.mqtt-spy/wiki/Downloads连接EMQ的端口号是1883。mqtt-spy也依赖于java8, 在windows xp下无法使用.
+下载地址 https://github.com/eclipse/paho.mqtt-spy/wiki/Downloads 连接 EMQ X 消息服务器的端口号是1883。mqtt-spy也依赖于Java8, 在 Windows XP 下无法使用.
 
 - **EMQ X Dashboard Websocket**
 
-EMQ X 的dashboard中有一个websocket页面, 这是一个mqtt的网页客户端, 可以连接mqtt borker的websocket端口, 比如q.emqtt.com的8083端口(不能使用1883端口)
+EMQ X 消息服务器Dashboard内置 Websocket 客户端测试页面,可连接 Mqtt Borker的 Websocket 端口, 比如q.emqtt.com的8083端口(不能使用1883端口)
 注意: 低版本的浏览器不能正常支持该功能, 至少要求IE10, Firefox11, Chrome16, Safari6
 
 - **HiveMQ websocket**
 
-http://www.hivemq.com/demos/websocket-client 这也是网页版的mqtt客户端, 对浏览器的版本也有要求, 请参看上面EMQTT DASHBOARD WEBSOCKET的注意事项. 连接EMQ的端口号8083(不能使用1883端口)
+链接地址 http://www.hivemq.com/demos/websocket-client 网页版 Mqtt 客户端, 对浏览器版本要求, 请参阅 EMQ X DASHBOARD WEBSOCKET 注意事项. 连接 EMQ X 消息服务器端口号8083(不能使用1883端口)
 
 --------------
 安装、启动问题
 --------------
 
-Q1. EMQ X stop 之后，还有一个epmd -daemon进程，如果不杀掉这个进程，直接start，会有问题吗
----------------------------------------------------------------------------------------
+Q1. EMQ X 消息服务器 stop 之后，还有一个epmd -daemon进程，如果不杀掉这个进程，直接start，会有问题吗
+---------------------------------------------------------------------------------------------------
 
-不会有问题，epmd是Erlang里的Erlang Port Mapper Daemon
+不会有问题，epmd是 Erlang 里的 Erlang Port Mapper Daemon
 
 Q2. Windows 启动报错
 --------------------
@@ -109,9 +103,9 @@ Q2. Windows 启动报错
 
 Q1. 启动emqx_auth_mysql认证连接时，插件启动失败
 -----------------------------------------------
-- 如果是远程连接mysql，先检查通信端口防火墙
-- 如果返回econnrefused，检查配置文件etc/emqx_auth_mysql.conf，连接信息
-- 如果返回的timeout，检查mysql参数是否限制了单节点连接，尝试将文件配置etc/emqx_auth_mysql.conf中auth.mysql.pool=1
+- 如是远程连接mysql，先检查通信端口防火墙
+- 如返回econnrefused，检查配置文件etc/emqx_auth_mysql.conf，连接信息
+- 如返回的timeout，检查mysql参数是否限制了单节点连接，尝试将文件配置etc/emqx_auth_mysql.conf中auth.mysql.pool=1
 
 ----
 集群
@@ -122,22 +116,22 @@ Q1. 支持公网集群吗？
 
 集群不支持跨公网
 
-Q2. EMQ X 集群几台机器比较好
-----------------------------
+Q2. EMQ X 消息服务器集群几台机器比较好
+--------------------------------------
 
 集群2，3，5集群性能达到最优，2: 双备 3、5: 集群脑裂时需选择majority分区
 
-Q3. 怎么对EMQ做集群搭建？
-------------------------
+Q3. 怎么对 EMQ X 消息服务器做集群搭建
+-------------------------------------
 
 参读官网文档，分布集群章节(http://emqtt.com/docs/v2/cluster.html)
 
-----------
-EMQ X 配置
-----------
+--------------------
+EMQ X 消息服务器配置
+--------------------
 
-Q1. EMQ X默认占用的端口有哪些，可修改吗
----------------------------------------
+Q1. EMQ X 消息服务器默认占用的端口有哪些，可修改吗
+--------------------------------------------------
 
 - 1883  MQTT协议端口        可修改
 - 8883  MQTT/SSL端口        可修改
@@ -146,8 +140,9 @@ Q1. EMQ X默认占用的端口有哪些，可修改吗
 - 18083 EMQ X Dashboard     可修改
 端口可以修改，可以参读官网文档，配置说明中mqtt-listeners参数说明章节
 
-Q2：EMQ X 启动6369端口作用
---------------------------
+Q2：EMQ X 消息服务器启动6369端口作用
+------------------------------------
+
 集群节点控制通道，在etc/emq.conf文件中:
 
 ## Distributed node port range
@@ -171,9 +166,9 @@ Q2. 连接测试中的响应时间，是指创建连接到连接成功的时间�
 Q3. 吞吐量测试中，没有丢包数量的统计。 请问下，是否有这个结果的统计
 -------------------------------------------------------------------
 
-吞吐测试在青云北京三区主要测试EMQ每秒处理消息数量，没有丢包率的指标。在EMQ处理能力之内，QoS0消息内网一般不会丢包，QoS1/2消息支持回执与重传可以避免丢包。
+吞吐测试在青云北京三区主要测试 EMQ X 每秒处理消息数量，没有丢包率的指标。在 EMQ X 处理能力之内，QoS0消息内网一般不会丢包，QoS1/2消息支持回执与重传可以避免丢包。
 
-Q4. 吞吐量测试中，topic的数量是怎么设计的呢
+Q4. 吞吐量测试中，Topic的数量是怎么设计的呢
 -------------------------------------------
 
 吞吐测试是先创建10万线背景连接和20万Topic。
