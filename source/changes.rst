@@ -5,6 +5,167 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-Beta.3:
+
+---------------
+3.0-Beta.3 版本
+---------------
+
+*发布日期: 2018-09-22*
+
+EMQ X 3.0-beta.3版本发布，该版本新增共享订阅派发策略功能，改进GC策略、桥接设计:
+
+功能改进
+--------
+
+- 修复 travis 构建
+
+  GitHub issues:
+  `emqx/emqx#1818 <https://github.com/emqx/emqx/pull/1818>`_,
+
+- 更新模块emqx_mqueue.erl文档说明
+
+  GitHub issues:
+  `emqx/emqx#1815 <https://github.com/emqx/emqx/pull/1815>`_,
+
+- 新增共享订阅派发策略
+
+  GitHub issues:
+  `emqx/emqx#1823 <https://github.com/emqx/emqx/pull/1823>`_,
+
+- 修复emqx_pool模块参数错误
+
+  GitHub issues:
+  `emqx/emqx#1827 <https://github.com/emqx/emqx/pull/1827>`_,
+
+- 新增强制shutdown策略
+
+  GitHub issues:
+  `emqx/emqx#1836 <https://github.com/emqx/emqx/pull/1836>`_,
+
+- 改进KeepAlive检测算法
+
+  GitHub issues:
+  `emqx/emqx#1839 <https://github.com/emqx/emqx/pull/1839>`_,
+
+- 修复跨节点消息投递
+
+  GitHub issues:
+  `emqx/emqx#1846 <https://github.com/emqx/emqx/pull/1846>`_,
+
+- 改进Bridge设计
+
+  GitHub issues:
+  `emqx/emqx#1849 <https://github.com/emqx/emqx/pull/1849>`_,
+
+- 改进force_gc_policy配置
+
+  GitHub issues:
+  `emqx/emqx#1851 <https://github.com/emqx/emqx/pull/1851>`_,
+
+- 修复Maximum-QoS选项值
+
+  GitHub issues:
+  `emqx/emqx#1852 <https://github.com/emqx/emqx/pull/1852>`_,
+
+- 升级依赖库esockd至v5.4.1
+
+  GitHub issues:
+  `emqx/emqx#1858 <https://github.com/emqx/emqx/pull/1858>`_,
+
+问题修复
+--------
+
+- 订阅API，主题属性支持通配符
+
+  GitHub issues:
+  `emqx/emqx#1706 <https://github.com/emqx/emqx/issues/1706>`_,
+
+- WebSocket 连接新增Path配置
+
+  GitHub issues:
+  `emqx/emqx#1809 <https://github.com/emqx/emqx/issues/1809>`_,
+
+- 修复报文尺寸过大导致block问题
+
+  GitHub issues:
+  `emqx/emqx#1811 <https://github.com/emqx/emqx/issues/1811>`_,
+
+- 新增函数check_expiry
+
+  GitHub issues:
+  `emqx/emqx#1813 <https://github.com/emqx/emqx/issues/1813>`_,
+
+- 修复DISCONNECT报文Session Expiry Interval不起作用
+
+  GitHub issues:
+  `emqx/emqx#1833 <https://github.com/emqx/emqx/issues/1833>`_,
+
+- 修复DISCONNECT报文Max Session Expiry Interval不起作用
+
+  GitHub issues:
+  `emqx/emqx#1834 <https://github.com/emqx/emqx/issues/1834>`_,
+
+emqx-management
+---------------
+
+- 改进Bridge CTL命令
+
+- 修复函数调用emqx_mgmt_cli:print() crash问题
+
+- 修复emqx_mgmt:subscribe函数'function_clause'错误
+
+  GitHub issues:
+  `emqx/emqx-management#1815 <https://github.com/emqx/emqx-management/pull/7>`_,
+
+emqx-web-hook
+-------------
+
+修复加载emqx_web_hook错误
+
+emqx-dashboard
+--------------
+
+- 修复 Dashboard -> OverView 中disconnect统计数据显示
+
+- 在 Dashboard -> Websocket 新增WebSocket Path参数
+
+  GitHub issues:
+  `emqx/emqx-dashboard#5 <https://github.com/emqx/emqx-dashboard/pull/5>`_,
+
+emqx-retainer
+-------------
+
+- Retained 消息新增TTL
+
+  GitHub issues:
+  `emqx/emqx-retainer#52 <https://github.com/emqx/emqx-retainer/issues/52>`_,
+
+emqx-coap
+---------
+
+- 新增emqx_coap插件
+
+  GitHub issues:
+  `emqx/emqx-coap#5 <https://github.com/emqx/emqx-coap/pull/86>`_,
+  `emqx/gen-coap#5 <https://github.com/emqx/gen_coap/pull/8>`_,
+
+emqx-docker
+-----------
+
+- 优化Dockerfile
+
+  GitHub issues:
+  `emqx/emqx-docker#5 <https://github.com/emqx/emqx-docker/pull/71>`_,
+
+esockd
+------
+
+- 改进esockd_connection_sup模块设计
+
+  GitHub issues:
+  `emqx/esockd#86 <https://github.com/emqx/esockd/pull/86>`_,
+
 .. _release_3.0-Beta.2:
 
 ---------------
