@@ -5,6 +5,105 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-Beta.4:
+
+---------------
+3.0-Beta.4 版本
+---------------
+
+*发布日期: 2018-09-29*
+
+功能改进
+--------
+
+- 为进程自定义max_heap_size
+
+  GitHub issues:
+  `emqx/emqx#1855 <https://github.com/emqx/emqx/pull/1855>`_,
+
+- 改进 Topic 别名Maximum、连接Receive Maximum
+
+  GitHub issues:
+  `emqx/emqx#1873 <https://github.com/emqx/emqx/pull/1873>`_,
+
+- 修复共享订阅 sticky 策略 pick ID 方式
+
+  GitHub issues:
+  `emqx/emqx#1871 <https://github.com/emqx/emqx/pull/1871>`_,
+
+- Zone新增 Mountpoint 配置
+
+  GitHub issues:
+  `emqx/emqx#1869 <https://github.com/emqx/emqx/pull/1869>`_,
+
+- 修复make app.config错误
+
+  GitHub issues:
+  `emqx/emqx#1868 <https://github.com/emqx/emqx/pull/1868>`_,
+
+- 修复Hooks参数错误
+
+  GitHub issues:
+  `emqx/emqx#1866 <https://github.com/emqx/emqx/pull/1866>`_,
+
+- 改进 travis 构建支持rebar3 xref
+
+  GitHub issues:
+  `emqx/emqx#1861 <https://github.com/emqx/emqx/pull/1861>`_,
+
+- 升级依赖库esockd至v5.4.2
+
+  GitHub issues:
+  `emqx/emqx#1875 <https://github.com/emqx/emqx/pull/1875>`_,
+
+- 升级依赖库 erlang-bcrypt 至0.5.1
+
+  GitHub issues:
+  `emqx/emqx-passwd#3 <https://github.com/emqx/emqx-passwd/pull/3>`_,
+
+emqx-delayed-publish
+--------------------
+
+- 修复消息延时发布
+
+  GitHub issues:
+  `emqx/emqx-delayed-publish#5 <https://github.com/emqx/emqx-delayed-publish/pull/5>`_,
+
+emqx-passwd
+-----------
+
+- 改进check_pass方式，供各类认证插件调用
+
+  GitHub issues:
+  `emqx/emqx-passwd#3 <https://github.com/emqx/emqx-passwd/pull/3>`_,
+
+bcrypt
+------
+
+- 改进bcrypt验证方式
+
+  GitHub issues:
+  `emqx/erlang-bcrypt#1 <https://github.com/emqx/erlang-bcrypt/pull/1>`_,
+
+esockd
+------
+
+- 新增 DTLS PSK样例
+
+  GitHub issues:
+  `emqx/esockd#88 <https://github.com/emqx/esockd/pull/88>`_,
+
+- 修复 DTLS 启动失败
+
+  GitHub issues:
+  `emqx/esockd#89 <https://github.com/emqx/esockd/pull/89>`_,
+
+- 改进ssl启动方式
+
+  GitHub issues:
+  `emqx/esockd#90 <https://github.com/emqx/esockd/pull/90>`_,
+
+
 .. _release_3.0-Beta.3:
 
 ---------------
