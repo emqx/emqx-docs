@@ -13,15 +13,17 @@
 
 *发布日期: 2018-09-29*
 
+EMQ X 3.0-beta.4 版本发布，该版本改进连接 Shutdown 策略，改进共享订阅 sticky 策略，修复 Delayed Publish 问题：
+
 功能改进
 --------
 
-- 为进程自定义max_heap_size
+- 为进程自定义 max_heap_size
 
   GitHub issues:
   `emqx/emqx#1855 <https://github.com/emqx/emqx/pull/1855>`_,
 
-- 改进 Topic 别名Maximum、连接Receive Maximum
+- 改进 Topic 别名 Maximum、连接 Receive Maximum
 
   GitHub issues:
   `emqx/emqx#1873 <https://github.com/emqx/emqx/pull/1873>`_,
@@ -31,27 +33,27 @@
   GitHub issues:
   `emqx/emqx#1871 <https://github.com/emqx/emqx/pull/1871>`_,
 
-- Zone新增 Mountpoint 配置
+- 为 Zone 新增 Mountpoint 配置
 
   GitHub issues:
   `emqx/emqx#1869 <https://github.com/emqx/emqx/pull/1869>`_,
 
-- 修复make app.config错误
+- 修复make app.config 错误
 
   GitHub issues:
   `emqx/emqx#1868 <https://github.com/emqx/emqx/pull/1868>`_,
 
-- 修复Hooks参数错误
+- 修复 Hooks 回调参数错误
 
   GitHub issues:
   `emqx/emqx#1866 <https://github.com/emqx/emqx/pull/1866>`_,
 
-- 改进 travis 构建支持rebar3 xref
+- 改进 travis 构建支持 rebar3 xref
 
   GitHub issues:
   `emqx/emqx#1861 <https://github.com/emqx/emqx/pull/1861>`_,
 
-- 升级依赖库esockd至v5.4.2
+- 升级依赖库 esockd 至 v5.4.2
 
   GitHub issues:
   `emqx/emqx#1875 <https://github.com/emqx/emqx/pull/1875>`_,
@@ -72,7 +74,7 @@ emqx-delayed-publish
 emqx-passwd
 -----------
 
-- 改进check_pass方式，供各类认证插件调用
+- 改进 check_pass 方式，供各类认证插件调用
 
   GitHub issues:
   `emqx/emqx-passwd#3 <https://github.com/emqx/emqx-passwd/pull/3>`_,
@@ -80,7 +82,7 @@ emqx-passwd
 bcrypt
 ------
 
-- 改进bcrypt验证方式
+- 改进 bcrypt 验证方式
 
   GitHub issues:
   `emqx/erlang-bcrypt#1 <https://github.com/emqx/erlang-bcrypt/pull/1>`_,
@@ -88,7 +90,7 @@ bcrypt
 esockd
 ------
 
-- 新增 DTLS PSK样例
+- 新增 DTLS PSK 样例
 
   GitHub issues:
   `emqx/esockd#88 <https://github.com/emqx/esockd/pull/88>`_,
@@ -98,7 +100,7 @@ esockd
   GitHub issues:
   `emqx/esockd#89 <https://github.com/emqx/esockd/pull/89>`_,
 
-- 改进ssl启动方式
+- 改进 SSL 启动方式
 
   GitHub issues:
   `emqx/esockd#90 <https://github.com/emqx/esockd/pull/90>`_,
