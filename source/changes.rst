@@ -5,6 +5,67 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-rc.1:
+
+---------------
+3.0-rc.1 版本
+---------------
+
+*发布日期: 2018-10-20*
+
+EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M 插件，修复 `PUBLISH` 验证问题:
+
+功能改进
+--------
+
+- 为 `CONNECT` & `CONNACK` 报文添加 `request` & `response` 支持
+
+  Github PR:
+  `emqx/emqx#1819 https://github.com/emqx/emqx/pull/1819`_,
+
+- 为未认证的订阅添加警告信息
+
+  Gihub PR:
+
+  `emqx/emqx#1878 https://github.com/emqx/emqx/pull/1878`_,
+
+- 增加 `emqx_hooks` 的测试覆盖率, 为 `emqx_mod_sup` 模块增加测试用例
+
+  Gihub PR:
+
+  `emqx/emqx#1892 https://github.com/emqx/emqx/pull/1892/`_,
+
+问题修复
+-------
+
+- 更新 ACL 文档链接
+
+  Github PR:
+  `emqx/emqx#1899 https://github.com/emqx/emqx/pull/1899`_,
+
+- 修复验证 PUBLISH 报文时的匹配问题
+
+  Github PR:
+  `emqx/emqx#1888 https://github.com/emqx/emqx/pull/1888`_,
+
+- 修复某些情况下不返回 `Reason Code` 给 client 的 BUG
+
+  Github PR:
+  `emqx/emqx#1819 https://github.com/emqx/emqx/pull/1819`_,
+
+- 修复 `emqx_client` 模块中的兼容性问题
+
+  Github PR:
+  `emqx/emqx#1819 https://github.com/emqx/emqx/pull/1819`_,
+
+emqx-lwm2m
+----------
+
+- 更新 `LwM2M` 插件以适配 `EMQ X 3.0`
+
+  Github PR:
+  `emqx/emqx-lwm2m#3 https://github.com/emqx/emqx-lwm2m/pull/3`_
+
 .. _release_3.0-Beta.4:
 
 ---------------
