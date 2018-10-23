@@ -25,13 +25,13 @@ EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M
 
 - 为未认证的订阅添加警告信息
 
-  Gihub PR:
+  Github PR:
 
   `emqx/emqx#1878 https://github.com/emqx/emqx/pull/1878`_,
 
 - 增加 `emqx_hooks` 的测试覆盖率, 为 `emqx_mod_sup` 模块增加测试用例
 
-  Gihub PR:
+  Github PR:
 
   `emqx/emqx#1892 https://github.com/emqx/emqx/pull/1892/`_,
 
