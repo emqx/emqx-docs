@@ -5,6 +5,43 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-rc.2:
+
+---------------
+3.0-rc.2 版本
+---------------
+
+*发布日期: 2018-10-27*
+
+EMQ X 3.0-rc.2版本发布，该版本改进 `Will Message` 发布机制，新增支持使用 `ssl` 证书作为 `MQTT` 用户名:
+
+功能改进
+--------
+
+- 改进 `Will Message` 发布机制，增加取消发布处理
+
+  Github PR:
+  `emqx/emqx#1889 <https://github.com/emqx/emqx/pull/1889>`_,
+
+- 新增支持使用 `ssl` 证书作为 `MQTT` 用户名
+
+  Github PR:
+  `emqx/emqx#1913 <https://github.com/emqx/emqx/pull/1913>`_,
+
+- 提升代码测试覆盖率
+
+  Github PR:
+  `emqx/emqx#1921 <https://github.com/emqx/emqx/pull/1921>`_,
+
+
+问题修复
+-------
+
+- 修复 `emqx_broker:subscribed` 函数 'bad argument' 错误
+
+  Github PR:
+  `emqx/emqx#1921 <https://github.com/emqx/emqx/pull/1921>`_,
+
 .. _release_3.0-rc.1:
 
 ---------------
@@ -21,19 +58,19 @@ EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M
 - 为 `CONNECT` & `CONNACK` 报文添加 `request` & `response` 支持
 
   Github PR:
-  `emqx/emqx#1819 https://github.com/emqx/emqx/pull/1819`_,
+  `emqx/emqx#1819 <https://github.com/emqx/emqx/pull/1819>`_,
 
 - 为未认证的订阅添加警告信息
 
   Github PR:
 
-  `emqx/emqx#1878 https://github.com/emqx/emqx/pull/1878`_,
+  `emqx/emqx#1878 <https://github.com/emqx/emqx/pull/1878>`_,
 
 - 增加 `emqx_hooks` 的测试覆盖率, 为 `emqx_mod_sup` 模块增加测试用例
 
   Github PR:
 
-  `emqx/emqx#1892 https://github.com/emqx/emqx/pull/1892/`_,
+  `emqx/emqx#1892 <https://github.com/emqx/emqx/pull/1892>`_,
 
 问题修复
 -------
@@ -41,22 +78,22 @@ EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M
 - 更新 ACL 文档链接
 
   Github PR:
-  `emqx/emqx#1899 https://github.com/emqx/emqx/pull/1899`_,
+  `emqx/emqx#1899 <https://github.com/emqx/emqx/pull/1899>`_,
 
 - 修复验证 PUBLISH 报文时的匹配问题
 
   Github PR:
-  `emqx/emqx#1888 https://github.com/emqx/emqx/pull/1888`_,
+  `emqx/emqx#1888 <https://github.com/emqx/emqx/pull/1888>`_,
 
 - 修复某些情况下不返回 `Reason Code` 给 client 的 BUG
 
   Github PR:
-  `emqx/emqx#1819 https://github.com/emqx/emqx/pull/1819`_,
+  `emqx/emqx#1819 <https://github.com/emqx/emqx/pull/1819>`_,
 
 - 修复 `emqx_client` 模块中的兼容性问题
 
   Github PR:
-  `emqx/emqx#1819 https://github.com/emqx/emqx/pull/1819`_,
+  `emqx/emqx#1819 <https://github.com/emqx/emqx/pull/1819>`_,
 
 emqx-lwm2m
 ----------
@@ -64,7 +101,7 @@ emqx-lwm2m
 - 更新 `LwM2M` 插件以适配 `EMQ X 3.0`
 
   Github PR:
-  `emqx/emqx-lwm2m#3 https://github.com/emqx/emqx-lwm2m/pull/3`_
+  `emqx/emqx-lwm2m#3 <https://github.com/emqx/emqx-lwm2m/pull/3>`_
 
 .. _release_3.0-Beta.4:
 
