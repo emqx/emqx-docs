@@ -5,6 +5,117 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-rc.3:
+
+---------------
+3.0-rc.3 版本
+---------------
+
+*发布日期: 2018-11-10*
+
+EMQ X 3.0-rc.3版本发布，该版本重构 `emqx_mqueue` 代码，支持 `MQTT-SN`, `CoAP` 与 `STOMP` 协议:
+
+功能改进
+--------
+
+- 将 `QOS$i` 替换为 `QOS_$i`
+
+  Github PR:
+  `emqx/emqx#1948 <https://github.com/emqx/emqx/pull/1948>`_,
+
+- 更新配置文件中 `ACL cache` 的描述信息
+
+  Github PR:
+  `emqx/emqx#1950 <https://github.com/emqx/emqx/pull/1950>`_,
+
+- 重构 `emqx_mqueue` 代码
+
+  Github PR:
+  `emqx/emqx#1926 <https://github.com/emqx/emqx/pull/1926>`_,
+
+- `lager` 替换为 `OTP logger`
+
+  Github PR:
+  `emqx/emqx#1898 <https://github.com/emqx/emqx/pull/1898>`_,
+
+问题修复
+-------
+
+- 修复重复订阅时的 'badarg' 错误
+
+  Github PR:
+  `emqx/emqx#1943 <https://github.com/emqx/emqx/pull/1943>`_,
+
+- 修复 `emqx_message:format` 函数 'badarg' 错误
+
+  Github PR:
+  `emqx/emqx#1954 <https://github.com/emqx/emqx/pull/1954>`_,
+
+- 修复 `MQTT bridge` 无法使用 `TLS` 连接的问题
+
+  Github PR:
+  `emqx/emqx#1949 <https://github.com/emqx/emqx/pull/1949>`_,
+
+emqx-stomp
+----------
+
+功能改进:
+
+- 增强 `receipt` 报文支持，增加测试用例
+
+  GitHub PR:
+  `emqx/emqx-stomp#53 <https://github.com/emqx/emqx-stomp/pull/53>`_
+
+emqx-sn
+-------
+
+功能改进:
+
+- 增强对 `MQTT-SN` 协议的支持
+
+  GitHub PR:
+  `emqx/emqx-sn#90 <https://github.com/emqx/emqx-sn/pull/90>`_
+
+emqx-lua-hook
+-------------
+
+问题修复:
+
+- 修复 `emqx-lua-hook` 无法正常使用的问题
+
+  Github PR:
+  `emqx/emqx-lua-hook#41 <https://github.com/emqx/emqx-lua-hook/pull/41>`_
+
+emqx-statsd
+-----------
+
+功能改进:
+
+- 增加统计指标
+
+  Github PR:
+  `emqx/emqx-statsd#4 <https://github.com/emqx/emqx-statsd/pull/4>`_
+
+emqx-dashboard
+--------------
+
+功能改进:
+
+- 增加 `qos2/forward` 指标
+
+  Github PR:
+  `emqx/emqx-dashboard#7 <https://github.com/emqx/emqx-dashboard/pull/7>`_
+
+emqx-auth-pgsql
+---------------
+
+问题修复:
+
+- 修复并发量大时 `emqx-auth-pgsql` 出错的问题
+
+  Github PR:
+  `emqx/emqx-auth-pgsql#94 <https://github.com/emqx/emqx-auth-pgsql/pull/94>`_
+
 .. _release_3.0-rc.2:
 
 ---------------
