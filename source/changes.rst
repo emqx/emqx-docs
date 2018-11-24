@@ -13,7 +13,7 @@
 
 *发布日期: 2018-11-24*
 
-EMQ X 3.0-rc.4版本发布，该版本改进日志功能，增强 `Rebar3` 支持:
+EMQ X 3.0-rc.4版本发布，该版本改进日志功能，部分项目支持 `Rebar3` 构建:
 
 功能改进
 --------
@@ -78,7 +78,7 @@ emqx-coap
 
 问题修复:
 
-- 修复 `sendfun` 的错误使用
+- 修复 `sendfun` 参数错误的问题
 
   Github PR:
   `emqx/emqx-coap#89 <https://github.com/emqx/emqx-coap/pull/89>`_
@@ -88,7 +88,7 @@ emqx-management
 
 问题修复:
 
-- 修复集群模式下查找连接的 `REST API` 不稳定的问题
+- 修复集群模式下通过 `REST API` 查找连接不稳定的问题
 
   Github PR:
   `emqx/emqx-management#11 <https://github.com/emqx/emqx-management/pull/11>`_
