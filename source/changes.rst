@@ -5,6 +5,149 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-rc.4:
+
+---------------
+3.0-rc.4 版本
+---------------
+
+*发布日期: 2018-11-24*
+
+EMQ X 3.0-rc.4版本发布，该版本改进日志功能，增强 `Rebar3` 支持，提高构建速度:
+
+功能改进
+--------
+
+- 为使用 `MQTT v3.1.1`的客户端提供避免 `loop delivery` 的功能
+
+  Github PR:
+  `emqx/emqx#1964 <https://github.com/emqx/emqx/pull/1964>`_,
+
+- 支持使用 `username` 代替 `client_id`，默认不开启
+
+  Github PR:
+  `emqx/emqx#1961 <https://github.com/emqx/emqx/pull/1961>`_,
+
+- 默认日志类型为 `both`
+
+  Github PR:
+  `emqx/emqx#1979 <https://github.com/emqx/emqx/pull/1979>`_,
+
+- 添加控制日志等级的命令行接口
+
+  Github PR:
+  `emqx/emqx#1977 <https://github.com/emqx/emqx/pull/1977>`_,
+
+- 改进 log tracer 的命令行接口
+
+  Github PR:
+  `emqx/emqx#1973 <https://github.com/emqx/emqx/pull/1973>`_,
+
+- 日志惰性求值
+
+  Github PR:
+  `emqx/emqx#1960 <https://github.com/emqx/emqx/pull/1960>`_,
+
+问题修复
+-------
+
+- 修复用户属性的类型验证
+
+  Github PR:
+  `emqx/emqx#1969 <https://github.com/emqx/emqx/pull/1969>`_,
+
+- 修复 `max_topic_alias` 配置项的错误描述
+
+  Github PR:
+  `emqx/emqx#1962 <https://github.com/emqx/emqx/pull/1962>`_,
+
+- 当 `client_id` 为空时，将 `proc meta-data` 设置为服务端生成的 `client_id`
+
+  Github PR:
+  `emqx/emqx#1980 <https://github.com/emqx/emqx/pull/1980>`_,
+
+emqx-coap
+---------
+
+功能改进:
+
+- 支持 Rebar3
+
+  GitHub PR:
+  `emqx/emqx-coap#89 <https://github.com/emqx/emqx-coap/pull/89>`_
+
+问题修复:
+
+- 修复 `sendfun` 的错误使用
+
+  Github PR:
+  `emqx/emqx-coap#89 <https://github.com/emqx/emqx-coap/pull/89>`_
+
+emqx-management
+---------------
+
+问题修复:
+
+- 修复集群模式下查找连接的 `REST API` 不稳定的问题
+
+  Github PR:
+  `emqx/emqx-management#11 <https://github.com/emqx/emqx-management/pull/11>`_
+
+emqx-lwm2m
+----------
+
+问题修复:
+
+- 修复 `update` 报文的处理问题
+
+  Github PR:
+  `emqx/emqx-lwm2m#8 <https://github.com/emqx/emqx-lwm2m/pull/8>`_,
+
+ekka
+----
+
+问题修复:
+
+- 修复分布式锁的错误判断
+
+  Github PR:
+  `emqx/ekka#39 <https://github.com/emqx/ekka/pull/39>`_
+
+minirest
+--------
+
+功能改进:
+
+- 支持Rebar3
+
+  Github PR:
+  `emqx/minirest#6 <https://github.com/emqx/minirest/pull/6>`_
+
+cuttlefish
+----------
+
+问题修复:
+
+- 将 `cuttlefish` 的日志输出到 `std_error`
+
+  Github PR:
+  `emqx/cuttlefish#4 <https://github.com/emqx/cuttlefish/pull/4>`_,
+
+emqx-rel
+--------
+
+功能改进:
+
+- 构建时更新 `cuttlefish`
+
+  Github PR:
+  `emqx/emqx-rel#253 <https://github.com/emqx/emqx-rel/pull/253>`_,
+
+- 默认不启用 `delay_publish` 插件
+
+  Github PR:
+  `emqx/emqx-rel#251 <https://github.com/emqx/emqx-rel/pull/251>`_,
+
 .. _release_3.0-rc.3:
 
 ---------------
