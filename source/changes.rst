@@ -43,7 +43,7 @@ EMQ X 3.0-rc.4版本发布，该版本改进日志功能，部分项目支持 `R
   Github PR:
   `emqx/emqx#1973 <https://github.com/emqx/emqx/pull/1973>`_,
 
-- 日志惰性求值
+- 优化日志性能
 
   Github PR:
   `emqx/emqx#1960 <https://github.com/emqx/emqx/pull/1960>`_,
