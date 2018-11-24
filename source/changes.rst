@@ -93,16 +93,6 @@ emqx-management
   Github PR:
   `emqx/emqx-management#11 <https://github.com/emqx/emqx-management/pull/11>`_
 
-emqx-lwm2m
-----------
-
-问题修复:
-
-- 修复 `update` 报文的处理问题
-
-  Github PR:
-  `emqx/emqx-lwm2m#8 <https://github.com/emqx/emqx-lwm2m/pull/8>`_,
-
 ekka
 ----
 
