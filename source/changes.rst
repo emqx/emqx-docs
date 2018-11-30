@@ -5,6 +5,79 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0-rc.5:
+
+---------------
+3.0-rc.5 版本
+---------------
+
+*发布日期: 2018-11-30*
+
+EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复错误:
+
+功能改进
+--------
+
+- 减小依赖大小
+
+  Github PR:
+  `emqx/emqx#1981 <https://github.com/emqx/emqx/pull/1981>`_,
+
+- 支持 `metrics` 的批量提交
+
+  Github PR:
+  `emqx/emqx#2001 <https://github.com/emqx/emqx/pull/2001>`__
+
+问题修复
+-------
+
+- 修复 `emqx_router` 中的 'function_clause' 错误
+
+  Github PR:
+  `emqx/emqx#1998 <https://github.com/emqx/emqx/pull/1998>`_,
+
+- 启动过程中移除 `simple` 日志句柄
+
+  Github PR:
+  `emqx/emqx#2000 <https://github.com/emqx/emqx/pull/2000>`_,
+
+emqx-passwd
+-----------
+
+功能改进:
+
+- 支持 Rebar3
+
+  GitHub PR:
+  `emqx/emqx-passwd#6 <https://github.com/emqx/emqx-passwd/pull/6>`_
+
+emqx-web-hook
+-------------
+
+功能改进:
+
+- 支持 Rebar3
+
+  GitHub PR:
+  `emqx/emqx-web-hook#77 <https://github.com/emqx/emqx-web-hook/pull/77>`_
+
+问题修复:
+
+- 修复 `emqx-web-hook` 发送 `HTTP` 请求时未携带 `username` 和 `clientid` 的错误
+
+  GitHub PR:
+  `emqx/emqx-web-hook#77 <https://github.com/emqx/emqx-web-hook/pull/77>`__
+
+emqx-dashboard
+--------------
+
+问题修复:
+
+- 修复火狐浏览器无法拷贝应用信息的问题
+
+  Github PR:
+  `emqx/emqx-dashboard#12 <https://github.com/emqx/emqx-dashboard/pull/12>`_
+
 .. _release_3.0-rc.4:
 
 ---------------
