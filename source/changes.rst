@@ -28,6 +28,11 @@ EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复�
   Github PR:
   `emqx/emqx#2001 <https://github.com/emqx/emqx/pull/2001>`__
 
+- 修复 `mnesia/ets` 的并行读写性能
+
+  Github PR:
+  `emqx/emqx#2006 <https://github.com/emqx/emqx/pull/2006>`__
+
 问题修复
 -------
 
@@ -40,6 +45,11 @@ EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复�
 
   Github PR:
   `emqx/emqx#2000 <https://github.com/emqx/emqx/pull/2000>`_,
+
+- 修复 `emqx_reason_codes` 模块可能出现参数异常的问题
+
+  Github PR:
+  `emqx/emqx#2008 <https://github.com/emqx/emqx/pull/2008>`__
 
 emqx-passwd
 -----------
