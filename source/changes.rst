@@ -88,6 +88,16 @@ emqx-dashboard
   Github PR:
   `emqx/emqx-dashboard#12 <https://github.com/emqx/emqx-dashboard/pull/12>`_
 
+emqx-management
+---------------
+
+问题修复:
+
+- 修复 `clients` 的 `CLI` 错误
+
+  Github PR:
+  `emqx/emqx-management#16 <https://github.com/emqx/emqx-management/pull/16>`_
+
 .. _release_3.0-rc.4:
 
 ---------------
