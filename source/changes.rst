@@ -5,6 +5,99 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0.0:
+
+---------------
+3.0.0 版本
+---------------
+
+*发布日期: 2018-12-22*
+
+EMQ X 3.0.0版本发布，我们在这个版本中重新设计了订阅的 ETS 表，并且通过重构模块和调节 erlang 虚拟机参数提升了 EMQ 性能
+
+功能改进
+--------
+
+- 将虚拟机参数移动到单独的 vm.args 文件
+
+  Github PR:
+  `emqx/emqx#2033 <https://github.com/emqx/emqx/pull/2033>`_,
+  `emqx/emqx#2057 <https://github.com/emqx/emqx/pull/2057>`_,
+  `emqx/emqx#2070 <https://github.com/emqx/emqx/pull/2070>`_,
+
+- 为遗嘱消息主题增加格式校验和 ACL 访问控制检查
+
+  Github PR:
+  `emqx/emqx#2075 <https://github.com/emqx/emqx/pull/2075>`_,
+
+- 增加 ACL 访问控制检查返回拒绝时是否断开客户端连接的配置选项
+
+  Github PR:
+  `emqx/emqx#2059 <https://github.com/emqx/emqx/pull/2059>`_,
+
+- 重构 session 监控树
+
+  Github PR:
+  `emqx/emqx#2077 <https://github.com/emqx/emqx/pull/2077>`_,
+
+- 增加 'active_n' 选项以优化 `emqx_connection` 的 CPU 占用率
+
+  Github PR:
+  `emqx/emqx#2060 <https://github.com/emqx/emqx/pull/2060>`_,
+
+- 增加订阅表分片机制
+
+  Github PR:
+  `emqx/emqx#2044 <https://github.com/emqx/emqx/pull/2044>`_,
+
+- 重构 'emqx_gc' 模块
+
+  Github PR:
+  `emqx/emqx#2090 <https://github.com/emqx/emqx/pull/2090>`_
+
+问题修复
+-------
+
+- 修复 `Topic Alias Maximum` 的错误实现
+
+  Github PR:
+  `emqx/emqx#2074 <https://github.com/emqx/emqx/pull/2074>`_,
+
+- 修复部分情况下不会发送遗嘱消息的错误
+
+  Github PR:
+  `emqx/emqx#2068 <https://github.com/emqx/emqx/pull/2068>`_
+
+emqx-auth-ldap
+--------------
+
+功能改进:
+
+- 更好的设计
+
+  GitHub PR:
+  `emqx/emqx-auth-ldap#46 <https://github.com/emqx/emqx-auth-ldap/pull/46>`_
+
+emqx-lua-hook
+-------------
+
+问题修复:
+
+- 修复测试用例
+
+  GitHub PR:
+  `emqx/emqx-lua-hook#45 <https://github.com/emqx/emqx-lua-hook/pull/45>`_
+
+emqx-management
+---------------
+
+功能改进:
+
+- 为 `REST API` 增加测试用例，并规范返回的响应格式
+
+  Github PR:
+  `emqx/emqx-management#21 <https://github.com/emqx/emqx-management/pull/21>`_
+
 .. _release_3.0-rc.5:
 
 ---------------
@@ -26,12 +119,12 @@ EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复�
 - 支持 `metrics` 的批量提交
 
   Github PR:
-  `emqx/emqx#2001 <https://github.com/emqx/emqx/pull/2001>`__
+  `emqx/emqx#2001 <https://github.com/emqx/emqx/pull/2001>`_,
 
 - 优化 `mnesia/ets` 的并行读写性能
 
   Github PR:
-  `emqx/emqx#2006 <https://github.com/emqx/emqx/pull/2006>`__
+  `emqx/emqx#2006 <https://github.com/emqx/emqx/pull/2006>`_
 
 问题修复
 -------
@@ -49,7 +142,7 @@ EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复�
 - 修复 `emqx_reason_codes` 模块可能出现参数异常的问题
 
   Github PR:
-  `emqx/emqx#2008 <https://github.com/emqx/emqx/pull/2008>`__
+  `emqx/emqx#2008 <https://github.com/emqx/emqx/pull/2008>`_
 
 emqx-passwd
 -----------
@@ -76,7 +169,7 @@ emqx-web-hook
 - 修复 `emqx-web-hook` 发送 `HTTP` 请求时未携带 `username` 和 `clientid` 的错误
 
   GitHub PR:
-  `emqx/emqx-web-hook#77 <https://github.com/emqx/emqx-web-hook/pull/77>`__
+  `emqx/emqx-web-hook#77 <https://github.com/emqx/emqx-web-hook/pull/77>`_
 
 emqx-dashboard
 --------------
