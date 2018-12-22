@@ -13,7 +13,7 @@
 
 *发布日期: 2018-12-22*
 
-EMQ X 3.0.0版本发布，我们在这个版本中重新设计了订阅的 ETS 表，并且通过重构模块和调节 erlang 虚拟机参数提升了 EMQ 性能
+EMQ X 3.0.0版本发布，重新设计了订阅的 ETS 表，通过重构模块和调节 erlang 虚拟机参数提升了 EMQ 性能
 
 功能改进
 --------
@@ -25,12 +25,12 @@ EMQ X 3.0.0版本发布，我们在这个版本中重新设计了订阅的 ETS �
   `emqx/emqx#2057 <https://github.com/emqx/emqx/pull/2057>`_,
   `emqx/emqx#2070 <https://github.com/emqx/emqx/pull/2070>`_,
 
-- 为遗嘱消息主题增加格式校验和 ACL 访问控制检查
+- 为遗嘱消息主题增加格式校验和 ACL 检查
 
   Github PR:
   `emqx/emqx#2075 <https://github.com/emqx/emqx/pull/2075>`_,
 
-- 增加 ACL 访问控制检查返回拒绝时是否断开客户端连接的配置选项
+- 增加 ACL 检查返回拒绝时是否断开客户端连接的配置选项
 
   Github PR:
   `emqx/emqx#2059 <https://github.com/emqx/emqx/pull/2059>`_,
