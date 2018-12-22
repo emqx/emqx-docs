@@ -13,7 +13,7 @@
 
 *发布日期: 2018-12-22*
 
-EMQ X 3.0.0版本发布，重新设计了订阅的 ETS 表，通过重构模块和调节 erlang 虚拟机参数提升了 EMQ 性能
+EMQ X 3.0.0版本，重新设计了订阅的 ETS 表，通过重构模块和调节 erlang 虚拟机参数提升了 EMQ 性能
 
 功能改进
 --------
@@ -41,6 +41,11 @@ EMQ X 3.0.0版本发布，重新设计了订阅的 ETS 表，通过重构模块�
   `emqx/emqx#2077 <https://github.com/emqx/emqx/pull/2077>`_,
 
 - 增加 'active_n' 选项以优化 `emqx_connection` 的 CPU 占用率
+
+  Github PR:
+  `emqx/emqx#2060 <https://github.com/emqx/emqx/pull/2060>`_,
+
+- 支持客户端批量下线
 
   Github PR:
   `emqx/emqx#2060 <https://github.com/emqx/emqx/pull/2060>`_,
