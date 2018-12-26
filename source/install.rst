@@ -40,8 +40,7 @@ RPM 安装
 
 .. code-block:: console
 
-    rpm -ivh emqx-centos7-v2.1.2-1.el7.centos.x86_64.rpm
-
+    rpm -ivh emqx-centos7-v3.0-beta.2.zip 
 配置文件
 --------
 
@@ -92,7 +91,7 @@ Debian、Ubuntu 操作系统下，推荐 DEB 包安装。DEB 包安装后可通�
 
 .. code-block:: console
 
-    sudo dpkg -i emqx-ubuntu16.04_v3.0_amd64.deb
+    sudo dpkg -i emqx-ubuntu16.04-v3.0-beta.2_amd64.deb 
 
 配置文件
 --------
