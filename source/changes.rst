@@ -13,12 +13,12 @@
 
 *发布日期: 2018-01-25*
 
-EMQ X 3.0.1 版本，
+EMQ X 3.0.1 版本，主要包含改进和错误修复。
 
 功能改进
 --------
 
-- 增加 +L 虚拟机参数以减少内存
+- 为 emqx edge 增加 +L 虚拟机参数以减少内存
 
   Github PR:
   `emqx/emqx#2110 <https://github.com/emqx/emqx/pull/2110>`_
@@ -28,7 +28,7 @@ EMQ X 3.0.1 版本，
   Github PR:
   `emqx/emqx#2115 <https://github.com/emqx/emqx/pull/2115>`_
 
-- 支持 bridge 消息持久化，并重构 bridge 代码
+- 重构 bridge 代码; 支持 bridge 消息持久化
 
   Github PR:
   `emqx/emqx#2160 <https://github.com/emqx/emqx/pull/2160>`_,
@@ -47,7 +47,7 @@ EMQ X 3.0.1 版本，
   Github PR:
   `emqx/emqx#2137 <https://github.com/emqx/emqx/pull/2137>`_
 
-- 改进 pool 的设计
+- 改进 'emqx_pool' 模块的设计
 
   Github PR:
   `emqx/emqx#2138 <https://github.com/emqx/emqx/pull/2138>`_
@@ -57,15 +57,10 @@ EMQ X 3.0.1 版本，
   Github PR:
   `emqx/emqx#2144 <https://github.com/emqx/emqx/pull/2144>`_
 
-- 支持重启 emqx 以使新配置生效
+- 支持重启 emqx 时重新生成配置
 
   Github PR:
   `emqx/emqx#2175 <https://github.com/emqx/emqx/pull/2175>`_
-
-- 为 'emqx_sys_mon' 模块增加测试用例
-
-  Github PR:
-  `emqx/emqx#2150 <https://github.com/emqx/emqx/pull/2150>`_
 
 问题修复
 --------
@@ -115,7 +110,7 @@ emqx-management
 
 功能改进:
 
-- 增加 'plugins reload <Name>' CLI 命令，支持重载插件以使新配置生效
+- 增加 'plugins reload <Name>' CLI 命令，支持重载插件时重新生成配置
 
   Github PR:
   `emqx/emqx-management#30 <https://github.com/emqx/emqx-management/pull/30>`_
