@@ -5,6 +5,126 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.0.1:
+
+---------------
+3.0.1 版本
+---------------
+
+*发布日期: 2018-01-25*
+
+EMQ X 3.0.1 版本，主要包含改进和错误修复。
+
+功能改进
+--------
+
+- 为 emqx edge 增加 +L 虚拟机参数以减少内存
+
+  Github PR:
+  `emqx/emqx#2110 <https://github.com/emqx/emqx/pull/2110>`_
+
+- 简化修改日志输出等级的命令
+
+  Github PR:
+  `emqx/emqx#2115 <https://github.com/emqx/emqx/pull/2115>`_
+
+- 重构 bridge 代码; 支持 bridge 消息持久化
+
+  Github PR:
+  `emqx/emqx#2160 <https://github.com/emqx/emqx/pull/2160>`_,
+  `emqx/emqx#2117 <https://github.com/emqx/emqx/pull/2117>`_,
+  `emqx/emqx#2113 <https://github.com/emqx/emqx/pull/2113>`_,
+  `emqx/emqx#2108 <https://github.com/emqx/emqx/pull/2108>`_,
+  `emqx/emqx#2053 <https://github.com/emqx/emqx/pull/2053>`_
+
+- 优化路由匹配
+
+  Github PR:
+  `emqx/emqx#2124 <https://github.com/emqx/emqx/pull/2124>`_
+
+- 改进 'emqx_client' 模块设计
+
+  Github PR:
+  `emqx/emqx#2137 <https://github.com/emqx/emqx/pull/2137>`_
+
+- 改进 'emqx_pool' 模块的设计
+
+  Github PR:
+  `emqx/emqx#2138 <https://github.com/emqx/emqx/pull/2138>`_
+
+- 改进共享订阅调度实现
+
+  Github PR:
+  `emqx/emqx#2144 <https://github.com/emqx/emqx/pull/2144>`_
+
+- 支持重启 emqx 时重新生成配置
+
+  Github PR:
+  `emqx/emqx#2175 <https://github.com/emqx/emqx/pull/2175>`_
+
+问题修复
+--------
+
+- 修复对端关闭连接时崩溃的问题
+
+  Github PR:
+  `emqx/emqx#2074 <https://github.com/emqx/emqx/pull/2074>`_
+
+- 修复客户端正常断开连接时依旧发送遗嘱消息的问题
+
+  Github PR:
+  `emqx/emqx#2156 <https://github.com/emqx/emqx/pull/2156>`_
+
+emqx-lwm2m
+----------
+
+问题修复:
+
+- 移除认证功能
+
+  GitHub PR:
+  `emqx/emqx-lwm2m#14 <https://github.com/emqx/emqx-lwm2m/pull/14>`_
+
+emqx-auth-username
+-------------------
+
+问题修复:
+
+- 支持可选的加密模式
+
+  GitHub PR:
+  `emqx/emqx-auth-usernmae#64 <https://github.com/emqx/emqx-auth-username/pull/64>`_
+
+emqx-auth-clientid
+------------------
+
+功能改进:
+
+- 支持可选的加密模式
+
+  GitHub PR:
+  `emqx/emqx-auth-clientid#52 <https://github.com/emqx/emqx-auth-username/pull/52>`_
+
+emqx-management
+---------------
+
+功能改进:
+
+- 增加 'plugins reload <Name>' CLI 命令，支持重载插件时重新生成配置
+
+  Github PR:
+  `emqx/emqx-management#30 <https://github.com/emqx/emqx-management/pull/30>`_
+
+mysql-otp
+---------
+
+功能改进:
+
+- 支持 MySQL 8
+
+  GitHub PR:
+  `emqx/mysql-otp#1 <https://github.com/emqx/mysql-otp/pull/1>`_
+
 .. _release_3.0.0:
 
 ---------------
