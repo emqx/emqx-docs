@@ -23,7 +23,7 @@ EMQ X 3.0.1 版本，主要包含改进和错误修复。
   Github PR:
   `emqx/emqx#2110 <https://github.com/emqx/emqx/pull/2110>`_
 
-- 不再需要通过多条命令来设置输出日志等级
+- 简化修改日志输出等级的命令
 
   Github PR:
   `emqx/emqx#2115 <https://github.com/emqx/emqx/pull/2115>`_
