@@ -13,7 +13,7 @@
 
 *发布日期: 2018-01-25*
 
-EMQ X 3.0.1 版本，主要包含改进和错误修复。
+EMQ X 3.0.1 版本发布。此版本主要包含功能改进和错误修复。
 
 功能改进
 --------
@@ -114,16 +114,6 @@ emqx-management
 
   Github PR:
   `emqx/emqx-management#30 <https://github.com/emqx/emqx-management/pull/30>`_
-
-mysql-otp
----------
-
-功能改进:
-
-- 支持 MySQL 8
-
-  GitHub PR:
-  `emqx/mysql-otp#1 <https://github.com/emqx/mysql-otp/pull/1>`_
 
 .. _release_3.0.0:
 
