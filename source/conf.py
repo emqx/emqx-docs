@@ -275,7 +275,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'EMQ X', u'EMQ X Documentation',
-   u'杭州映云科技有限公司 <contact@emqtt.io>', 'EMQ X', 'One line description of project.',
+   u'杭州映云科技有限公司 <contact@emqx.io>', 'EMQ X', 'One line description of project.',
    'Miscellaneous'),
 ]
 
