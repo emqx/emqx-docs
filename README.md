@@ -7,5 +7,5 @@ http://emqtt.com/docs 或 http://docs.emqtt.cn/
 作者
 ----
 
-李枫 <feng@emqtt.io>
+李枫 <feng@emqx.io>
 
