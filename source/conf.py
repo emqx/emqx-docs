@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'EMQ - 百万级开源MQTT消息服务器'
-copyright = u'2016-2017, 李枫, 杭州映云科技有限公司'
+copyright = u'2016-2019, 李枫, 杭州映云科技有限公司'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -231,7 +231,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'EMQ.tex', u'EMQ - 百万级开源MQTT消息服务器',
-   u'杭州映云科技有限公司 <contact@emqtt.io>', 'manual'),
+   u'杭州映云科技有限公司 <contact@emqx.io>', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -261,7 +261,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'emqtt', u'EMQ 2.2 Documentation',
-     [u'李枫 <feng@emqtt.io>'], 1)
+     [u'李枫 <feng@emqx.io>'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -275,7 +275,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'EMQ', u'EMQ Documentation',
-   u'杭州映云科技有限公司 <contact@emqtt.io>', 'EMQ', 'One line description of project.',
+   u'杭州映云科技有限公司 <contact@emqx.io>', 'EMQ', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -296,9 +296,9 @@ texinfo_documents = [
 
 # Bibliographic Dublin Core info.
 epub_title = u'Erlang MQTT Broker'
-epub_author = u'Feng Lee <feng@emqtt.io>'
-epub_publisher = u'Feng Lee <feng@emqtt.io>'
-epub_copyright = u'20160-2017, Feng Lee <feng@emqtt.io>'
+epub_author = u'Feng Lee <feng@emqx.io>'
+epub_publisher = u'Feng Lee <feng@emqx.io>'
+epub_copyright = u'2016-2019, Feng Lee <feng@emqx.io>'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'EMQ'

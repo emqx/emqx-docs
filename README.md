@@ -163,7 +163,7 @@
 
 Twitter: @emqtt                         
 
-作者:    李枫 <feng@emqtt.io> 
+作者:    李枫 <feng@emqx.io> 
 
 http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
 
