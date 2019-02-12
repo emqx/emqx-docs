@@ -160,7 +160,7 @@
 
 Twitter: @emqtt
 
-联系:    contact@emqx.io <feng@emqtt.io>
+联系:    contact@emqx.io <feng@emqx.io>
 
 http://emqtt.com/docs/v3 | http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
 
