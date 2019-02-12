@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'EMQ X - 百万级开源 MQTT 消息服务器'
-copyright = u'2016-2018, 李枫, 杭州映云科技有限公司'
+copyright = u'2016-2019, 李枫, 杭州映云科技有限公司'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -298,7 +298,7 @@ texinfo_documents = [
 epub_title = u'EMQ X Broker'
 epub_author = u'Feng Lee <feng@emqx.io>'
 epub_publisher = u'Feng Lee <feng@emqx.io>'
-epub_copyright = u'2016-2018, Feng Lee <feng@emqx.io>'
+epub_copyright = u'2016-2019, Feng Lee <feng@emqx.io>'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'EMQX'
