@@ -202,14 +202,14 @@ Should not expire the retained messages from $SYS/# topics (#500)
 
 1.0 版本中文文档: http://emqtt.com/docs/ 或 http://docs.emqtt.cn
 
-1.0 版本英文文档: http://emqtt.io/docs 或 http://docs.emqtt.com/
+1.0 版本英文文档: https://developer.emqx.io/docs/emq/v1/en/index.html 或 http://docs.emqtt.com/
 
 官方站点
 --------
 
 中文站点: http://emqtt.com
 
-英文站点: http://emqtt.io/
+英文站点: http://emqx.io/
 
 致谢
 ----
