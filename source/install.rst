@@ -26,9 +26,9 @@ RPM 包安装
 EMQ X Linux RPM 程序包:
 
 +-------------+---------------------------------------------------+
-| CentOS6.8   | http://emqtt.com/downloads/latest/centos6-rpm     |
+| CentOS6.8   | https://www.emqx.io/downloads/v3/latest/emqx-centos6.rpm     |
 +-------------+---------------------------------------------------+
-| CentOS7     | http://emqtt.com/downloads/latest/centos7-rpm     |
+| CentOS7     | https://www.emqx.io/downloads/v3/latest/emqx-centos7.rpm     |
 +-------------+---------------------------------------------------+
 
 安装包命名由平台、版本、操纵系统位数组成，例如: emqx-centos7-v3.0_x86_64.rpm
@@ -72,17 +72,17 @@ DEB 包安装
 EMQ X Linux DEB 程序包:
 
 +-------------+---------------------------------------------------+
-| Ubuntu12.04 | http://emqtt.com/downloads/latest/ubuntu12_04-deb |
+| Ubuntu12.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu12.04.deb |
 +-------------+---------------------------------------------------+
-| Ubuntu14.04 | http://emqtt.com/downloads/latest/ubuntu14_04-deb |
+| Ubuntu14.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu14.04.deb |
 +-------------+---------------------------------------------------+
-| Ubuntu16.04 | http://emqtt.com/downloads/latest/ubuntu16_04-deb |
+| Ubuntu16.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu16.04.deb |
 +-------------+---------------------------------------------------+
-| Ubuntu18.04 | http://emqtt.com/downloads/latest/ubuntu18_04-deb |
+| Ubuntu18.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu18.04.deb |
 +-------------+---------------------------------------------------+
-| Debian7     | http://emqtt.com/downloads/latest/debian7-deb     |
+| Debian7     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.deb     |
 +-------------+---------------------------------------------------+
-| Debian8     | http://emqtt.com/downloads/latest/debian7-deb     |
+| Debian8     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.deb     |
 +-------------+---------------------------------------------------+
 
 安装包命名由平台、版本、操纵系统位数组成，例如: emqx-debian7-v3.0_amd64.deb
@@ -124,23 +124,23 @@ Linux 通用包安装
 *EMQ X* Linux 通用程序包:
 
 +-------------+-----------------------------------------------+
-| Ubuntu12.04 | http://emqtt.com/downloads/latest/ubuntu12_04 |
+| Ubuntu12.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu12_04.zip |
 +-------------+-----------------------------------------------+
-| Ubuntu14.04 | http://emqtt.com/downloads/latest/ubuntu14_04 |
+| Ubuntu14.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu14_04.zip |
 +-------------+-----------------------------------------------+
-| Ubuntu16.04 | http://emqtt.com/downloads/latest/ubuntu16_04 |
+| Ubuntu16.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu16_04.zip |
 +-------------+-----------------------------------------------+
-| Ubuntu18.04 | http://emqtt.com/downloads/latest/ubuntu18_04 |
+| Ubuntu18.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu18_04.zip |
 +-------------+-----------------------------------------------+
-| CentOS6.8   | http://emqtt.com/downloads/latest/centos6     |
+| CentOS6.8   | https://www.emqx.io/downloads/v3/latest/emqx-centos6.zip     |
 +-------------+-----------------------------------------------+
-| CentOS7     | http://emqtt.com/downloads/latest/centos7     |
+| CentOS7     | https://www.emqx.io/downloads/v3/latest/emqx-centos7.zip     |
 +-------------+-----------------------------------------------+
-| Debian7     | http://emqtt.com/downloads/latest/debian7     |
+| Debian7     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.zip     |
 +-------------+-----------------------------------------------+
-| Debian8     | http://emqtt.com/downloads/latest/debian7     |
+| Debian8     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.zip     |
 +-------------+-----------------------------------------------+
-| FreeBSD     | http://emqtt.com/downloads/latest/freebsd     |
+| FreeBSD     | https://www.emqx.io/downloads/v3/latest/emqx-freebsd.zip     |
 +-------------+-----------------------------------------------+
 
 安装包命名由平台、版本组成，例如: emqx-macosx-v3.0.zip
@@ -222,7 +222,7 @@ CTRL+C 关闭控制台。守护进程模式启动:
 FreeBSD 服务器安装
 ------------------
 
-*EMQ X* FreeBSD 程序包下载: http://emqtt.com/downloads/latest/freebsd
+*EMQ X* FreeBSD 程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-freebsd.zip
 
 FreeBSD 平台安装过程与Linux相同。
 
@@ -232,7 +232,7 @@ FreeBSD 平台安装过程与Linux相同。
 Mac OS X 系统安装
 -----------------
 
-Mac 下开发调试 MQTT 应用，可直接下载安装: http://emqtt.com/downloads/latest/macosx
+Mac 下开发调试 MQTT 应用，可直接下载安装: https://www.emqx.io/downloads/v3/latest/emqx-macosx.zip
 
 配置文件 'etc/emqx.conf' log 段落打开 debug 日志，控制台可以查看收发 MQTT 报文详细:
 
@@ -255,7 +255,7 @@ Mac 下开发调试 MQTT 应用，可直接下载安装: http://emqtt.com/downlo
 Windows 服务器安装
 ------------------
 
-Windows 平台程序包下载: http://emqtt.com/downloads/latest/windows10
+Windows 平台程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-windows10.zip
 
 程序包下载解压后，打开 Windows 命令行窗口，cd 到程序目录。
 
@@ -291,7 +291,7 @@ Windows 平台程序包下载: http://emqtt.com/downloads/latest/windows10
 Docker 镜像安装
 ---------------
 
-*EMQ X* 3.0 Docker 镜像下载: http://emqtt.com/downloads/latest/docker
+*EMQ X* 3.0 Docker 镜像下载: https://www.emqx.io/downloads/v3/latest/emqx-docker.zip
 
 解压 emqx-docker 镜像包::
 
