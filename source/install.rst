@@ -15,7 +15,7 @@
 
 *EMQ* 2.0 消息服务器每个版本会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
 
-下载地址: http://emqtt.com/downloads
+下载地址: https://www.emqx.io/downloads
 
 .. _install_rpm:
 
@@ -26,9 +26,9 @@ RPM 包安装
 EMQ Linux RPM 程序包:
 
 +-------------+---------------------------------------------------+
-| CentOS6.8   | http://emqtt.com/downloads/latest/centos6-rpm     |
+| CentOS6.8   | https://www.emqx.io/downloads/v2/latest/emqttd-centos6.rpm     |
 +-------------+---------------------------------------------------+
-| CentOS7     | http://emqtt.com/downloads/latest/centos7-rpm     |
+| CentOS7     | https://www.emqx.io/downloads/v2/latest/emqttd-centos7.rpm     |
 +-------------+---------------------------------------------------+
 
 安装包命名由平台、版本、操纵系统位数组成，例如: emqttd-centos7-v2.0_x86_64.rpm
@@ -79,15 +79,15 @@ DEB 包安装
 EMQ Linux DEB 程序包:
 
 +-------------+---------------------------------------------------+
-| Ubuntu12.04 | http://emqtt.com/downloads/latest/ubuntu12_04-deb |
+| Ubuntu12.04 | https://www.emqx.io/downloads/v2/latest/emqttd-ubuntu12.04.deb |
 +-------------+---------------------------------------------------+
-| Ubuntu14.04 | http://emqtt.com/downloads/latest/ubuntu14_04-deb |
+| Ubuntu14.04 | https://www.emqx.io/downloads/v2/latest/emqttd-ubuntu14.04.deb |
 +-------------+---------------------------------------------------+
-| Ubuntu16.04 | http://emqtt.com/downloads/latest/ubuntu16_04-deb |
+| Ubuntu16.04 | https://www.emqx.io/downloads/v2/latest/emqttd-ubuntu16.04.deb |
 +-------------+---------------------------------------------------+
-| Debian7     | http://emqtt.com/downloads/latest/debian7-deb     |
+| Debian7     | https://www.emqx.io/downloads/v2/latest/emqttd-debian7.deb     |
 +-------------+---------------------------------------------------+
-| Debian8     | http://emqtt.com/downloads/latest/debian7-deb     |
+| Debian8     | https://www.emqx.io/downloads/v2/latest/emqttd-debian7.deb     |
 +-------------+---------------------------------------------------+
 
 安装包命名由平台、版本、操纵系统位数组成，例如: emqttd-debian7-v2.0_amd64.deb
@@ -135,21 +135,21 @@ Linux 通用包安装
 EMQ Linux 通用程序包:
 
 +-------------+-----------------------------------------------+
-| Ubuntu12.04 | http://emqtt.com/downloads/latest/ubuntu12_04 |
+| Ubuntu12.04 | https://www.emqx.io/downloads/v2/latest/emqtt-ubuntu12.04.zip |
 +-------------+-----------------------------------------------+
-| Ubuntu14.04 | http://emqtt.com/downloads/latest/ubuntu14_04 |
+| Ubuntu14.04 | https://www.emqx.io/downloads/v2/latest/emqtt-ubuntu14.04.zip |
 +-------------+-----------------------------------------------+
-| Ubuntu16.04 | http://emqtt.com/downloads/latest/ubuntu16_04 |
+| Ubuntu16.04 | https://www.emqx.io/downloads/v2/latest/emqtt-ubuntu16.04.zip |
 +-------------+-----------------------------------------------+
-| CentOS6.8   | http://emqtt.com/downloads/latest/centos6     |
+| CentOS6.8   | https://www.emqx.io/downloads/v2/latest/emqtt-centos6.zip     |
 +-------------+-----------------------------------------------+
-| CentOS7     | http://emqtt.com/downloads/latest/centos7     |
+| CentOS7     | https://www.emqx.io/downloads/v2/latest/emqtt-centos7.zip     |
 +-------------+-----------------------------------------------+
-| Debian7     | http://emqtt.com/downloads/latest/debian7     |
+| Debian7     | https://www.emqx.io/downloads/v2/latest/emqtt-debian7.zip     |
 +-------------+-----------------------------------------------+
-| Debian8     | http://emqtt.com/downloads/latest/debian7     |
+| Debian8     | https://www.emqx.io/downloads/v2/latest/emqtt-debian8.zip     |
 +-------------+-----------------------------------------------+
-| FreeBSD     | http://emqtt.com/downloads/latest/freebsd     |
+| FreeBSD     | https://www.emqx.io/downloads/v2/latest/emqtt-freebsd.zip     |
 +-------------+-----------------------------------------------+
 
 安装包命名由平台、版本组成，例如: emqttd-macosx-v2.0.zip
@@ -231,7 +231,7 @@ CTRL+c 关闭控制台。守护进程模式启动:
 FreeBSD 服务器安装
 ------------------
 
-EMQ FreeBSD 程序包下载: http://emqtt.com/downloads/latest/freebsd
+EMQ FreeBSD 程序包下载: https://www.emqx.io/downloads/v2/latest/emqttd-freebsd.zip
 
 FreeBSD 平台安装过程与Linux相同。
 
@@ -241,7 +241,7 @@ FreeBSD 平台安装过程与Linux相同。
 Mac OS X 系统安装
 -----------------
 
-Mac 下开发调试 MQTT 应用，可直接下载安装: http://emqtt.com/downloads/latest/macosx
+Mac 下开发调试 MQTT 应用，可直接下载安装: https://www.emqx.io/downloads/v2/latest/emqttd-macosx.zip
 
 配置文件 'etc/emq.conf' log 段落打开 debug 日志，控制台可以查看收发 MQTT 报文详细:
 
@@ -264,7 +264,7 @@ Mac 下开发调试 MQTT 应用，可直接下载安装: http://emqtt.com/downlo
 Windows 服务器安装
 ------------------
 
-Windows 平台程序包下载: http://emqtt.com/downloads/latest/windows10
+Windows 平台程序包下载: https://www.emqx.io/downloads/v2/latest/emqttd-windows10.zip
 
 程序包下载解压后，打开 Windows 命令行窗口，cd 到程序目录。
 
@@ -300,7 +300,7 @@ Windows 平台程序包下载: http://emqtt.com/downloads/latest/windows10
 Docker 镜像安装
 ---------------
 
-*EMQ* 2.0 Docker 镜像下载: http://emqtt.com/downloads/latest/docker
+*EMQ* 2.0 Docker 镜像下载: https://www.emqx.io/downloads/v2/latest/emqttd-docker.zip
 
 解压 emqttd-docker 镜像包::
 
