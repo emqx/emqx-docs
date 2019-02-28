@@ -5,6 +5,79 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1-beta.1:
+
+---------------
+3.1-beta.1 版本
+---------------
+
+*发布日期: 2018-02-28*
+
+EMQ X 3.1-beta.1 版本发布。此版本主要针对功能改进，包括引入全新的 Bridge，支持消息批量发送，支持 redis 集群等。
+
+功能改进
+--------
+
+- 引入新的 Bridge 实现，支持 EMQ Broker 节点间桥接和 MQTT 协议间桥接
+
+  Github PR:
+  `emqx/emqx#2199 <https://github.com/emqx/emqx/pull/2199>`_
+
+- 支持消息批量发送
+
+  Github PR:
+  `emqx/emqx#2253 <https://github.com/emqx/emqx/pull/2253>`_
+
+- 使用 gen_statem behaviour 改进 `emqx_connection` 模块
+
+  Github PR:
+  `emqx/emqx#2235 <https://github.com/emqx/emqx/pull/2235>`_
+
+- 新增资源监控，优化告警处理
+
+  Github PR:
+  `emqx/emqx#2266 <https://github.com/emqx/emqx/pull/2266>`_
+
+emqx-auth-redis
+---------------
+
+功能改进:
+
+- 支持 redis 集群
+
+  Github PR:
+  `emqx/emqx-auth-redis#93 <https://github.com/emqx/emqx-auth-redis/pull/93>`_
+
+emqx-dashboard
+--------------
+
+功能改进:
+
+- 为 `emqx_dashboard_cli` 模块增加测试用例
+
+  Github PR:
+  `emqx/emqx-dashboard#34 <https://github.com/emqx/emqx-dashboard/pull/34>`_
+
+emqx-auth-username
+------------------
+
+功能改进:
+
+- 增加新的 CLI 以更新 username
+
+  Github PR:
+  `emqx/emqx-auth-username#74 <https://github.com/emqx/emqx-auth-username/pull/74>`_
+
+emqx-auth-clientid
+------------------
+
+功能改进:
+
+- 增加新的 CLI 以更新 clientid
+
+  Github PR:
+  `emqx/emqx-auth-clientid#59 <https://github.com/emqx/emqx-auth-clientid/pull/59>`_
+
 .. _release_3.0.1:
 
 ---------------
