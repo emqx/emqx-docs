@@ -3090,7 +3090,7 @@ Should not expire the retained messages from $SYS/# topics (#500)
 
 中文站点: http://emqtt.com
 
-英文站点: http://emqx.io/
+英文站点: https://www.emqx.io/
 
 致谢
 ----
