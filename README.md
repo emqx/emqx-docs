@@ -162,7 +162,7 @@ Twitter: @emqtt
 
 联系:    contact@emqx.io <feng@emqx.io>
 
-http://emqtt.com/docs/v3 | http://emqtt.com/docs/v2 | http://docs.emqtt.cn/
+http://www.emqtt.com/docs/v3/index.html | http://www.emqtt.com/docs/v2/index.html | http://docs.emqtt.cn/
 
 ![weixin](https://github.com/emqtt/docs_zh/blob/master/source/_static/images/weixin.jpg)
 
