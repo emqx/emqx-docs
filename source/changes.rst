@@ -5,13 +5,151 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1-beta.2:
+
+---------------
+3.1-beta.2 版本
+---------------
+
+*发布日期: 2019-03-16*
+
+EMQ X 3.1-beta.2 版本发布。此版本改动主要包括重新设计 hooks, 支持 TLS/PSK 和修复 gen_rpc 的一些问题等。
+
+功能改进
+--------
+
+- 优化 emqx hooks
+
+  Github PR:
+  `emqx/emqx#2309 <https://github.com/emqx/emqx/pull/2309>`_
+
+- 支持 TLS/DTLS PSK
+
+  Github PR:
+  `emqx/emqx#2297 <https://github.com/emqx/emqx/pull/2297>`_
+
+- 将 Request/Response 从 emqx client 分离
+
+  Github PR:
+  `emqx/emqx#2293 <https://github.com/emqx/emqx/pull/2293>`_
+
+错误修复:
+
+- 修复某些情况下集群转发消息时 Broker 可能崩溃的问题
+
+  Github issues:
+  `emqx/emqx#2290 <https://github.com/emqx/emqx/issues/2290>`_
+
+  Github PR:
+  `emqx/emqx#2320 <https://github.com/emqx/emqx/pull/2320>`_
+
+- 在 Broker 卸载插件并退出前卸载 `emqx_alarm_handler`
+
+  Github PR:
+  `emqx/emqx#2316 <https://github.com/emqx/emqx/pull/2316>`_
+
+- 修复一个与 emqx bridge 相关的错误
+
+  Github issues:
+  `emqx/emqx#2312 <https://github.com/emqx/emqx/issues/2312>`_
+
+  Github PR:
+  `emqx/emqx#2313 <https://github.com/emqx/emqx/pull/2313>`_
+
+- 终结 inflight full error
+
+  Github PR:
+  `emqx/emqx#2281 <https://github.com/emqx/emqx/pull/2281>`_
+
+emqx-management (plugin)
+------------------------
+
+功能增强:
+
+- 增加默认的 secret 配置
+
+  Github PR:
+  `emqx/emqx-management#58 <https://github.com/emqx/emqx-management/pull/58>`_
+
+- 修复插件尚未启动时无法 reload 的问题
+
+  Github PR:
+  `emqx/emqx-management#59 <https://github.com/emqx/emqx-management/pull/59>`_
+
+- 插件相关的 HTTP API 由插件各自实现
+
+  Github PR:
+  `emqx/emqx-management#57 <https://github.com/emqx/emqx-management/pull/57>`_
+
+- 修复查询 io/max_fds 返回 undefined 的问题
+
+  Github issues:
+  `emqx/emqx-management#2222 <https://github.com/emqx/emqx-management/issues/2222>`__
+
+  Github PR:
+  `emqx/emqx-management#54 <https://github.com/emqx/emqx-management/pull/54>`_
+
+emqx-auth-jwt (plugin)
+----------------------
+
+功能增强:
+
+- 优化 JWT 认证插件
+
+  Github PR:
+  `emqx/emqx-auth-jwt#63 <https://github.com/emqx/emqx-auth-jwt/pull/63>`_
+
+emqx-auth-usernmae (plugin)
+---------------------------
+
+功能增强:
+
+- 增加 CURD HTTP API 以管理用户名密码
+
+  Github PR:
+  `emqx/emqx-auth-username#82 <https://github.com/emqx/emqx-auth-username/pull/82>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+错误修复:
+
+- 修复格式化消息时的错误
+
+  Github issues:
+  `emqx/emqx-web-hook#93 <https://github.com/emqx/emqx-web-hook/issues/93>`_
+
+  Github PR:
+  `emqx/emqx-web-hook#96 <https://github.com/emqx/emqx-web-hook/pull/96>`_
+
+
+minirest (deps)
+---------------
+
+错误修复:
+
+- 过滤未启动插件的 HTTP API
+
+  Github PR:
+  `emqx/minirest#12 <https://github.com/emqx/minirest/pull/12>`_
+
+gen_rpc (deps)
+--------------
+
+错误修复:
+
+- 修复 'gen_rpc' 的 raw socket flags
+
+  Github PR:
+  `emqx/gen_rpc#5 <https://github.com/emqx/gen_rpc/pull/5>`_
+
 .. _release_3.1-beta.1:
 
 ---------------
 3.1-beta.1 版本
 ---------------
 
-*发布日期: 2018-02-28*
+*发布日期: 2019-02-28*
 
 EMQ X 3.1-beta.1 版本发布。此版本主要针对功能改进，包括引入全新的 Bridge，支持消息批量发送，支持 redis 集群等。
 
@@ -84,7 +222,7 @@ emqx-auth-clientid
 3.0.1 版本
 ---------------
 
-*发布日期: 2018-01-25*
+*发布日期: 2019-01-25*
 
 EMQ X 3.0.1 版本发布。此版本主要包含功能改进和错误修复。
 
