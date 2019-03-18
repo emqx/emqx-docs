@@ -109,6 +109,20 @@ emqx-auth-usernmae (plugin)
   Github PR:
   `emqx/emqx-auth-username#82 <https://github.com/emqx/emqx-auth-username/pull/82>`_
 
+emqx-web-hook (plugin)
+----------------------
+
+错误修复:
+
+- 修复格式化消息时的错误
+
+  Github issues:
+  `emqx/emqx-web-hook#93 <https://github.com/emqx/emqx-web-hook/issues/93>`_
+
+  Github PR:
+  `emqx/emqx-web-hook#96 <https://github.com/emqx/emqx-web-hook/pull/96>`_
+
+
 minirest (deps)
 ---------------
 
@@ -117,7 +131,7 @@ minirest (deps)
 - 过滤未启动插件的 HTTP API
 
   Github PR:
-  `emqx/minirest#12 <https://github.com/emqx/minirest/12>`_
+  `emqx/minirest#12 <https://github.com/emqx/minirest/pull/12>`_
 
 gen_rpc (deps)
 --------------
