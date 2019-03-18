@@ -20,7 +20,7 @@ EMQ X 3.1-beta.2 版本发布。此版本改动主要包括重新设计 hooks, �
 
 - 优化 emqx hooks
 
-  ithub PR:
+  Github PR:
   `emqx/emqx#2309 <https://github.com/emqx/emqx/pull/2309>`_
 
 - 支持 TLS/DTLS PSK
