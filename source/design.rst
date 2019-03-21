@@ -29,7 +29,7 @@
 
 多核服务器和现代操作系统内核层面，可以很轻松支持100万 TCP 连接，核心问题是应用层面如何处理业务瓶颈。
 
-EMQ 消息服务器在业务和应用层面，解决了承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang 虚拟机参数: http://docs.emqx.cn/zh_CN/latest/tune.html
+EMQ 消息服务器在业务和应用层面，解决了承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang 虚拟机参数: http://docs.emqtt.cn/zh_CN/latest/tune.html
 
 全异步架构
 ----------
@@ -496,7 +496,7 @@ emqx_plugins 模块实现插件机制，提供加载卸载插件 API ::
 
     ./bin/emqx_ctl plugins unload emq_auth_redis
 
-开发者请参考模版插件: http://github.com/emqtt/emqx_plugin_template
+开发者请参考模版插件: http://github.com/emqx/emqx_plugin_template
 
 -----------------
 Mnesia/ETS 表设计
@@ -568,7 +568,7 @@ Erlang 设计相关
 
 11. 避免 Mnesia 数据表索引，和非键值字段 match, select
 
-.. _eSockd: https://github.com/emqtt/esockd
+.. _eSockd: https://github.com/emqx/esockd
 .. _Chain-of-responsibility_pattern: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
-.. _emq_plugin_template: https://github.com/emqtt/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl
+.. _emq_plugin_template: https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl
 
