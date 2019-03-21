@@ -327,11 +327,11 @@ emqx 模块封装了 Hook 接口:
 钩子(Hook)使用
 --------------
 
-`emq_plugin_template`_ 提供了全部钩子的使用示例，例如端到端的消息处理回调:
+`emqx_plugin_template`_ 提供了全部钩子的使用示例，例如端到端的消息处理回调:
 
 .. code-block:: erlang
 
-    -module(emq_plugin_template).
+    -module(emqx_plugin_template).
 
     -export([load/1, unload/0]).
 
@@ -451,23 +451,23 @@ The ACLResult 要么是 ``allow``，要么是 ``deny``.
 +-----------------------+--------------------------------+
 | Plugin                | Authentication                 |
 +-----------------------+--------------------------------+
-| emq_auth_username     | Username and Password          |
+| emqx_auth_username     | Username and Password          |
 +-----------------------+--------------------------------+
-| emq_auth_clientid     | ClientID and Password          |
+| emqx_auth_clientid     | ClientID and Password          |
 +-----------------------+--------------------------------+
-| emq_auth_ldap         | LDAP                           |
+| emqx_auth_ldap         | LDAP                           |
 +-----------------------+--------------------------------+
-| emq_auth_http         | HTTP API                       |
+| emqx_auth_http         | HTTP API                       |
 +-----------------------+--------------------------------+
-| emq_auth_mysql        | MySQL                          |
+| emqx_auth_mysql        | MySQL                          |
 +-----------------------+--------------------------------+
-| emq_auth_pgsql        | PostgreSQL                     |
+| emqx_auth_pgsql        | PostgreSQL                     |
 +-----------------------+--------------------------------+
-| emq_auth_redis        | Redis                          |
+| emqx_auth_redis        | Redis                          |
 +-----------------------+--------------------------------+
-| emq_auth_mongo        | MongoDB                        |
+| emqx_auth_mongo        | MongoDB                        |
 +-----------------------+--------------------------------+
-| emq_auth_jwt          | JWT                            |
+| emqx_auth_jwt          | JWT                            |
 +-----------------------+--------------------------------+
 
 .. _plugin:
@@ -492,9 +492,9 @@ emqx_plugins 模块实现插件机制，提供加载卸载插件 API ::
 
 用户可通过 `./bin/emqx_ctl` 命令行加载卸载插件::
 
-    ./bin/emqx_ctl plugins load emq_auth_redis
+    ./bin/emqx_ctl plugins load emqx_auth_redis
 
-    ./bin/emqx_ctl plugins unload emq_auth_redis
+    ./bin/emqx_ctl plugins unload emqx_auth_redis
 
 开发者请参考模版插件: http://github.com/emqx/emqx_plugin_template
 
@@ -570,5 +570,5 @@ Erlang 设计相关
 
 .. _eSockd: https://github.com/emqx/esockd
 .. _Chain-of-responsibility_pattern: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
-.. _emq_plugin_template: https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl
+.. _emqx_plugin_template: https://github.com/emqx/emqx_plugin_template/blob/master/src/emqx_plugin_template.erl
 
