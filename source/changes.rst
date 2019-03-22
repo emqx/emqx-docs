@@ -59,6 +59,16 @@ emqx-lua-hook (plugin)
   Github PR:
   `emqx/emqx-lua-hook#63 <https://github.com/emqx/emqx-lua-hook/pull/63>`_
 
+emqx-auth-mysql (plugin)
+------------------------
+
+问题修复:
+
+- 修复 ACL 功能无法使用的问题
+
+  Github PR:
+  `emqx/emqx-auth-mysql#130 <https://github.com/emqx/emqx-auth-mysql/pull/130>`_
+
 .. _release_3.1-beta.2:
 
 ---------------
