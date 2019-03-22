@@ -5,6 +5,60 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1-beta.3:
+
+---------------
+3.1-beta.3 版本
+---------------
+
+*发布日期: 2019-03-22*
+
+EMQ X 3.1-beta.3 版本发布。此版本改动主要包括引入规则引擎，增强插件发现机制，和修复一些问题等。
+
+功能改进:
+
+- 增强插件发现机制
+
+  Github PR:
+  `emqx/emqx#2339 <https://github.com/emqx/emqx/pull/2339>`_
+
+问题修复:
+
+- 修复重复清除告警的错误
+
+  Github PR:
+  `emqx/emqx#2332 <https://github.com/emqx/emqx/pull/2332>`_
+
+- 修复粘包解析失败的问题
+
+  Github PR:
+  `emqx/emqx#2333 <https://github.com/emqx/emqx/pull/2333>`_
+
+- 正确设置 PUBLISH 文件中的 DUP 标识
+
+  Github PR:
+  `emqx/emqx#2337 <https://github.com/emqx/emqx/pull/2337>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 实现规则引擎原型
+
+  Github Repository:
+  `emqx/emqx-rule-engine <https://github.com/emqx/emqx-rule-engine>`_
+
+emqx-lua-hook (plugin)
+----------------------
+
+功能增强:
+
+- 增加认证与 ACL 的 hook
+
+  Github PR:
+  `emqx/emqx-lua-hook#63 <https://github.com/emqx/emqx-lua-hook/pull/63>`_
+
 .. _release_3.1-beta.2:
 
 ---------------
@@ -15,8 +69,7 @@
 
 EMQ X 3.1-beta.2 版本发布。此版本改动主要包括重新设计 hooks, 支持 TLS/PSK 和修复 gen_rpc 的一些问题等。
 
-功能改进
---------
+功能改进:
 
 - 优化 emqx hooks
 
@@ -153,8 +206,7 @@ gen_rpc (deps)
 
 EMQ X 3.1-beta.1 版本发布。此版本主要针对功能改进，包括引入全新的 Bridge，支持消息批量发送，支持 redis 集群等。
 
-功能改进
---------
+功能改进:
 
 - 引入新的 Bridge 实现，支持 EMQ Broker 节点间桥接和 MQTT 协议间桥接
 
@@ -226,8 +278,7 @@ emqx-auth-clientid
 
 EMQ X 3.0.1 版本发布。此版本主要包含功能改进和错误修复。
 
-功能改进
---------
+功能改进:
 
 - 为 emqx edge 增加 +L 虚拟机参数以减少内存
 
@@ -273,8 +324,7 @@ EMQ X 3.0.1 版本发布。此版本主要包含功能改进和错误修复。
   Github PR:
   `emqx/emqx#2175 <https://github.com/emqx/emqx/pull/2175>`_
 
-问题修复
---------
+问题修复:
 
 - 修复对端关闭连接时崩溃的问题
 
@@ -336,8 +386,7 @@ emqx-management
 
 EMQ X 3.0.0版本，重新设计了订阅的 ETS 表，通过重构模块和调节 erlang 虚拟机参数提升了 EMQ 性能
 
-功能改进
---------
+功能改进:
 
 - 将虚拟机参数移动到单独的 vm.args 文件
 
@@ -381,8 +430,7 @@ EMQ X 3.0.0版本，重新设计了订阅的 ETS 表，通过重构模块和调�
   Github PR:
   `emqx/emqx#2090 <https://github.com/emqx/emqx/pull/2090>`_
 
-问题修复
---------
+问题修复:
 
 - 修复 `Topic Alias Maximum` 的错误实现
 
@@ -434,8 +482,7 @@ emqx-management
 
 EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复错误:
 
-功能改进
---------
+功能改进:
 
 - 减小依赖大小
 
@@ -452,8 +499,7 @@ EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复�
   Github PR:
   `emqx/emqx#2006 <https://github.com/emqx/emqx/pull/2006>`_
 
-问题修复
---------
+问题修复:
 
 - 修复 `emqx_router` 中的 'function_clause' 错误
 
@@ -527,8 +573,7 @@ emqx-management
 
 EMQ X 3.0-rc.4版本发布，该版本改进日志功能，部分项目支持 `Rebar3` 构建:
 
-功能改进
---------
+功能改进:
 
 - 为使用 `MQTT v3.1.1`的客户端提供避免 `loop delivery` 的功能
 
@@ -560,8 +605,7 @@ EMQ X 3.0-rc.4版本发布，该版本改进日志功能，部分项目支持 `R
   Github PR:
   `emqx/emqx#1960 <https://github.com/emqx/emqx/pull/1960>`_
 
-问题修复
---------
+问题修复:
 
 - 修复用户属性的类型验证
 
@@ -660,8 +704,7 @@ emqx-rel
 
 EMQ X 3.0-rc.3版本发布，该版本重构 `emqx_mqueue` 代码，支持 `MQTT-SN`, `CoAP` 与 `STOMP` 协议:
 
-功能改进
---------
+功能改进:
 
 - 将 `QOS$i` 替换为 `QOS_$i`
 
@@ -683,8 +726,7 @@ EMQ X 3.0-rc.3版本发布，该版本重构 `emqx_mqueue` 代码，支持 `MQTT
   Github PR:
   `emqx/emqx#1898 <https://github.com/emqx/emqx/pull/1898>`_
 
-问题修复
---------
+问题修复:
 
 - 修复重复订阅时的 'badarg' 错误
 
@@ -771,8 +813,7 @@ emqx-auth-pgsql
 
 EMQ X 3.0-rc.2版本发布，该版本改进 `Will Message` 发布机制，新增支持使用 `ssl` 证书作为 `MQTT` 用户名:
 
-功能改进
---------
+功能改进:
 
 - 改进 `Will Message` 发布机制，增加取消发布处理
 
@@ -789,9 +830,7 @@ EMQ X 3.0-rc.2版本发布，该版本改进 `Will Message` 发布机制，新�
   Github PR:
   `emqx/emqx#1921 <https://github.com/emqx/emqx/pull/1921>`_
 
-
-问题修复
---------
+问题修复:
 
 - 修复 `emqx_broker:subscribed` 函数 'bad argument' 错误
 
@@ -808,8 +847,7 @@ EMQ X 3.0-rc.2版本发布，该版本改进 `Will Message` 发布机制，新�
 
 EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M 插件，修复 `PUBLISH` 验证问题:
 
-功能改进
---------
+功能改进:
 
 - 为 `CONNECT` & `CONNACK` 报文添加 `request` & `response` 支持
 
@@ -828,8 +866,7 @@ EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M
 
   `emqx/emqx#1892 <https://github.com/emqx/emqx/pull/1892>`_
 
-问题修复
---------
+问题修复:
 
 - 更新 ACL 文档链接
 
@@ -869,8 +906,7 @@ emqx-lwm2m
 
 EMQ X 3.0-beta.4 版本发布，该版本改进连接 Shutdown 策略，改进共享订阅 sticky 策略，修复 Delayed Publish 问题：
 
-功能改进
---------
+功能改进:
 
 - 为进程自定义 max_heap_size
 
@@ -970,8 +1006,7 @@ esockd
 
 EMQ X 3.0-beta.3版本发布，该版本新增共享订阅派发策略功能，改进GC策略、桥接设计:
 
-功能改进
---------
+功能改进:
 
 - 修复 travis 构建
 
@@ -1028,8 +1063,7 @@ EMQ X 3.0-beta.3版本发布，该版本新增共享订阅派发策略功能，�
   GitHub issues:
   `emqx/emqx#1858 <https://github.com/emqx/emqx/pull/1858>`_
 
-问题修复
---------
+问题修复:
 
 - 订阅API，主题属性支持通配符
 
