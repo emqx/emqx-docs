@@ -18,9 +18,15 @@
 +---------------------------+---------------------------+
 | `emqx_auth_username`_     | 用户名、密码认证插件      |
 +---------------------------+---------------------------+
+| `emqx_auth_jwt`_          | JWT 认证/访问控制         |
++---------------------------+---------------------------+
+| `emqx_psk_file`_          | PSK 支持                  |
++---------------------------+---------------------------+
 | `emqx_auth_ldap`_         | LDAP 认证/访问控制        |
 +---------------------------+---------------------------+
 | `emqx_auth_http`_         | HTTP 认证/访问控制        |
++---------------------------+---------------------------+
+| `emqx_auth_mongo`_        | MongoDB 认证/访问控制     |
 +---------------------------+---------------------------+
 | `emqx_auth_mysql`_        | MySQL 认证/访问控制       |
 +---------------------------+---------------------------+
@@ -32,11 +38,13 @@
 +---------------------------+---------------------------+
 | `emqx_lua_hook`_          | Lua Hook 插件             |
 +---------------------------+---------------------------+
-| `emqx_auth_mongo`_        | MongoDB 认证/访问控制     |
-+---------------------------+---------------------------+
 | `emqx_retainer`_          | Retain 消息存储模块       |
 +---------------------------+---------------------------+
+| `emqx_delayed_publish`_   | 客户端延时发布消息支持    |
++---------------------------+---------------------------+
 | `emqx_coap`_              | CoAP 协议支持             |
++---------------------------+---------------------------+
+| `emqx_lwm2m`_             | LwM2M 协议支持            |
 +---------------------------+---------------------------+
 | `emqx_sn`_                | MQTT-SN 协议支持          |
 +---------------------------+---------------------------+
@@ -49,153 +57,71 @@
 | `emqx_plugin_template`_   | 插件开发模版              |
 +---------------------------+---------------------------+
 
-------------------------------
-emqx_retainer Retainer 模块插件
-------------------------------
+其中插件的加载有三种方式：
+1. 默认加载
+2. CLI 启停插件
+3. Dashboard 启停插件
 
-2.1-beta 版本将 emq_mod_retainer 模块更名为 emq_retainer 模块，Retainer 模块负责持久化 MQTT Retained 消息。
+开启默认加载
+------------
+如需在系统启动时就默认启动某插件，则直接在 `data/loaded_plugins` 配置入需要启动的插件，例如默认开启的加载的插件有：
 
-配置 Retainer 模块
-------------------
+.. code:: erlang
+    emqx_management.
+    emqx_rule_engine.
+    emqx_recon.
+    emqx_retainer.
+    emqx_dashboard.
 
-etc/plugins/emqx_retainer.conf:
+CLI 启停插件
+-----------
+所谓的 CLI 在 *EMQ X* 中特指 ./bin/emqx_ctl 命令行工具。在运行过程中，我们可以通过 CLI 命令的方式查看可用的插件列表、和启停某插件
 
-.. code-block:: properties
+.. code:: bash
+    ## 显示所有可用的插件列表
+    ./bin/emqx_ctl plugins list
 
-    ## disc: disc_copies, ram: ram_copies
-    ## Notice: retainer's storage_type on each node in a cluster must be the same!
-    retainer.storage_type = disc
-
-    ## Max number of retained messages
-    retainer.max_message_num = 1000000
-
-    ## Max Payload Size of retained message
-    retainer.max_payload_size = 64KB
-
-    ## Expiry interval. Never expired if 0
-    ## h - hour
-    ## m - minute
-    ## s - second
-    retainer.expiry_interval = 0
-
-加载 Retainer 模块
-------------------
-
-Retainer 模块默认加载。
-
--------------------------------------
-emqx_auth_clientid - ClientID 认证插件
--------------------------------------
-
-EMQ 2.0-rc.2 版本将 ClientId 认证模块改为独立插件: https://github.com/emqx/emqx-auth-clientid
-
-ClientID 认证配置
------------------
-
-etc/plugins/emqx_auth_clientid.conf:
-
-.. code-block:: properties
-
-    ##auth.client.$N.clientid = clientid
-    ##auth.client.$N.password = passwd
-
-    ## Examples
-    ##auth.client.1.clientid = id
-    ##auth.client.1.password = passwd
-    ##auth.client.2.clientid = dev:devid
-    ##auth.client.2.password = passwd2
-    ##auth.client.3.clientid = app:appid
-    ##auth.client.3.password = passwd3
-
-加载 ClientId 认证插件
-----------------------
-
-.. code-block:: bash
-
-    ./bin/emqx_ctl plugins load emqx_auth_clientid
-
--------------------------------------
-emqx_auth_username - 用户名密码认证插件
--------------------------------------
-
-EMQ 2.0-rc.2 版本将用户名认证模块改为独立插件: https://github.com/emqx/emqx-auth-username
-
-用户名认证配置
---------------
-
-etc/plugins/emqx_auth_username.conf:
-
-.. code-block:: properties
-
-    ##auth.user.$N.username = admin
-    ##auth.user.$N.password = public
-
-    ## Examples:
-    ##auth.user.1.username = admin
-    ##auth.user.1.password = public
-    ##auth.user.2.username = feng@emqx.io
-    ##auth.user.2.password = public
-
-两种方式添加用户:
-
-1. 直接在 etc/plugins/emqx_auth_username.conf 中明文配置默认用户例如::
-
-    auth.username.test = public
-
-2. 通过 './bin/emqx_ctl' 管理命令行添加用户::
-
-   $ ./bin/emqx_ctl users add <Username> <Password>
-
-加载用户名认证插件
-------------------
-
-.. code-block:: bash
-
+    ## 加载某插件
     ./bin/emqx_ctl plugins load emqx_auth_username
 
----------------------------------
-emqx_plugin_template: 插件开发模版
----------------------------------
+    ## 卸载某插件
+    ./bin/emqx_ctl plugins unload emqx_auth_username
 
-*EMQ X* 插件实际是一个普通的 Erlang 应用，插件配置文件: 'etc/${PluginName}.conf|config"。
+    ## 重新加载某插件
+    ./bin/emqx_ctl plugins reload emqx_auth_username
 
-emqx_plugin_template 是模版插件，编译发布在 lib/emq_plugin_template-2.0 目录，配置文件: etc/plugins/emqx_plugin_templat.config
 
-加载、卸载插件
---------------
+Dashboard 启停插件
+-----------------
+除上述俩种方式以外，如果 *EMQ X* 开启了 Dashbord 的插件(默认开启) 还可以直接通过 Dashboard 启停、或者配置插件
 
-管理命令行 './bin/emqx_ctl' 加载卸载插件。
-
-加载插件::
-
-    ./bin/emqx_ctl plugins load <PluginName>
-
-卸载插件::
-
-    ./bin/emqx_ctl plugins unload <PluginName>
-
-查询插件::
-
-    ./bin/emqx_ctl plugins list
 
 -----------------------------
 emqx_dashboard: Dashboard 插件
 -----------------------------
 
-*EMQ* 消息服务器的 Web 管理控制台。插件项目地址: https://github.com/emqx/emqx-dashboard
+`emqx_dashboard`_ 是 *EMQ X* 消息服务器的 Web 管理控制台, 该插件默认开启。当 *EMQ X* 启动成功后，可访问 http://localhost:18083 进行查看，默认用户名/密码: admin/public。
 
-*EMQ* 消息服务器默认加载 Dashboard 插件。URL 地址: http://localhost:18083 ，缺省用户名/密码: admin/public。
-
-Dashboard 插件可查询 *EMQ X* 消息服务器基本信息、统计数据、度量数据，查询系统客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)。
+Dashboard 插件可查询 *EMQ X* 消息服务器基本信息、统计数据、负载情况，查询当前客户端列表(Connections)、会话(Sessions)、路由表(Topics)、订阅关系(Subscriptions) 等详细信息。
 
 .. image:: ./_static/images/dashboard.png
+
+除此之外，Dashboard 默认提供了一系列的 REST API 供前端调用。其详情可以参考 Dashboard -> HTTP API 部分
+
 
 Dashboard 插件设置
 ------------------
 
 etc/plugins/emqx_dashboard.conf:
 
-.. code-block:: properties
+.. code:: properties
+
+    ## Dashboard API Providers
+    dashboard.api.providers = emqx_management,emqx_dashboard
+
+    ## Default user's login username/password.
+    dashboard.default_user.login = admin
+    dashboard.default_user.password = public
 
     ## HTTP Listener
     dashboard.listener.http = 18083
@@ -213,20 +139,136 @@ etc/plugins/emqx_dashboard.conf:
     ## dashboard.listener.https.verify = verify_peer
     ## dashboard.listener.https.fail_if_no_peer_cert = true
 
-----------------------------
+
+-------------------------------------
+emqx_auth_clientid - ClientID 认证插件
+-------------------------------------
+
+在 *EMQ X* 中所有有 `_auth_` 关键字的插件其主要职责有：
+1. *连接认证*: 控制某客户端是否具有连接 EMQ X 的权限
+2. *访问控制*: 控制某客户端是否具有 PUBLISH/SUBSCIRBE 操作的权限
+
+`emqx_auth_clientid`_ 目前只包含 *连接认证* 功能不包括 *访问控制* 。他会允许满足其配置中 clientid 成功登录。其中值得注意的是 `password` 以明文的方式给出，在存储入系统时会按照配置的 hash  算法加密后存入。客户端在连接时应该携带对应的密文进行连接。
+
+此外, 该插件还支持 REST API 和 CLI 用于在运行时管理。
+
+.. NOTE:: 3.1 开始支持 REST API 管理 clientid
+
+ClientID 认证配置
+-----------------
+
+etc/plugins/emqx_auth_clientid.conf:
+
+.. code:: properties
+
+    ##auth.client.$N.clientid = clientid
+    ##auth.client.$N.password = passwd
+
+    ## Examples
+    ##auth.client.1.clientid = id
+    ##auth.client.1.password = passwd
+    ##auth.client.2.clientid = dev:devid
+    ##auth.client.2.password = passwd2
+    ##auth.client.3.clientid = app:appid
+    ##auth.client.3.password = passwd3
+
+    ## Password hash
+    ## Value: plain | md5 | sha | sha256
+    auth.client.password_hash = sha256
+
+
+-------------------------------------
+emqx_auth_username - 用户名密码认证插件
+-------------------------------------
+
+`emqx_auth_username`_ 目前只包含 *连接认证* 功能。其逻辑与 emqx_auth_clientid 相似，只不过其关心的是 username。
+
+同样的，username 也支持 CLI 和 REST API 在运行时动态的管理。
+
+.. NOTE:: 3.1 开始支持 REST API 管理 username
+
+用户名认证配置
+--------------
+
+etc/plugins/emqx_auth_username.conf:
+
+.. code:: properties
+
+    ##auth.user.$N.username = admin
+    ##auth.user.$N.password = public
+
+    ## Examples:
+    ##auth.user.1.username = admin
+    ##auth.user.1.password = public
+    ##auth.user.2.username = feng@emqx.io
+    ##auth.user.2.password = public
+
+    ## Password hash.
+    ##
+    ## Value: plain | md5 | sha | sha256
+    auth.user.password_hash = sha256
+
+-------------------------------------
+emqx_auth_jwt: JWT认证插件
+-------------------------------------
+
+`emqx_auth_jwt`_ 支持基于 `JWT`_ 的方式，对连接的客户端进行认证，仅包括 *连接认证* 功能。它会解析并校验 Token 的合理性和时效、满足则允许连接
+
+JWT 认证配置
+-------------
+
+etc/plugins/emqx_auth_jwt.conf
+
+.. code:: properties
+
+    ## HMAC Hash Secret.
+    ##
+    ## Value: String
+    auth.jwt.secret = emqxsecret
+
+    ## From where the JWT string can be got
+    ##
+    ## Value: username | password
+    ## Default: password
+    auth.jwt.from = password
+
+    ## RSA or ECDSA public key file.
+    ##
+    ## Value: File
+    ## auth.jwt.pubkey = etc/certs/jwt_public_key.pem
+
+
+---------------------------
+emqx_psk_file: PSK 认证插件
+---------------------------
+
+`emqx_psk_file`_ 插件主要提供了 PSK 支持。其目的是用于在客户端建立 DTLS 连接时，使用 PSK 方式达到 *连接认证* 的功能
+
+
+配置 PSK 认证插件
+-----------------
+
+etc/plugins/emqx_psk_file.conf:
+
+.. code:: properties
+
+    psk.file.path = {{ platform_etc_dir }}/psk.txt
+    psk.file.delimiter = :
+
+
+-----------------------------
 emqx_auth_ldap: LDAP 认证插件
-----------------------------
+-----------------------------
 
-LDAP 认证插件: https://github.com/emqx/emqx-auth-ldap
+`emqx_auth_ldap`_ 支持通过访问 `LDAP`_ 服务的方式，来实现控制客户端的接入。目前仅支持 *连接认证*
 
-.. NOTE:: 2.0-beta1 版本支持
 
 LDAP 认证插件配置
 -----------------
 
 etc/plugins/emqx_auth_ldap.conf:
 
-.. code-block:: properties
+.. code:: properties
 
     auth.ldap.servers = 127.0.0.1
 
@@ -238,29 +280,40 @@ etc/plugins/emqx_auth_ldap.conf:
 
     auth.ldap.ssl = false
 
-LDAP 认证插件加载
------------------
 
-./bin/emqx_ctl plugins load emqx_auth_ldap
-
--------------------------------------
+--------------------------------------
 emqx_auth_http: HTTP 认证/访问控制插件
--------------------------------------
+--------------------------------------
 
-HTTP 认证/访问控制插件: https://github.com/emqx/emqx-auth-http
+`emqx_auth_http`_ 插件实现 *连接认证* 与 *访问控制* 的功能。它会将每个请求发送到指定的 HTTP 服务，通过其返回值来判断是否具有具体操作的权限。
 
-.. NOTE:: 1.1版本支持
+该插件总共支持三个请求分别为：
+    1. 'auth.http.auth_req': 连接认证
+    2. 'auth.http.super_req': 判断是否为超级用户
+    3. 'auth.http.acl_req': 访问控制权限查询
+
+特别的是每个请求的参数，都支持使用真实的客户端的 username, IP 地址等进行自定义。
+
+.. NOTE:: 其中在 3.1 版本中新增的 %cn %dn 的支持
+
 
 HTTP 认证插件配置
 -----------------
 
 etc/plugins/emqx_auth_http.conf:
 
-.. code-block:: properties
+.. code:: properties
 
-    ## Variables: %u = username, %c = clientid, %a = ipaddress, %P = password, %t = topic
-
+    ## Variables:
+    ##  - %u: username
+    ##  - %c: clientid
+    ##  - %a: ipaddress
+    ##  - %P: password
+    ##  - %cn: common name of client TLS cert
+    ##  - %dn: subject of client TLS cert
     auth.http.auth_req = http://127.0.0.1:8080/mqtt/auth
+
+    ## Value: post | get | put
     auth.http.auth_req.method = post
     auth.http.auth_req.params = clientid=%c,username=%u,password=%P
 
@@ -268,33 +321,72 @@ etc/plugins/emqx_auth_http.conf:
     auth.http.super_req.method = post
     auth.http.super_req.params = clientid=%c,username=%u
 
-    ## 'access' parameter: sub = 1, pub = 2
+    ## Variables:
+    ##  - %A: 1 | 2, 1 = sub, 2 = pub
+    ##  - %u: username
+    ##  - %c: clientid
+    ##  - %a: ipaddress
+    ##  - %t: topic
     auth.http.acl_req = http://127.0.0.1:8080/mqtt/acl
     auth.http.acl_req.method = get
     auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t
 
-HTTP 认证/鉴权 API
+
+HTTP API 返回值处理
 ------------------
 
-认证/ACL 成功，API 返回200
+*连接认证*:
 
-认证/ACL 失败，API 返回4xx
+.. code:: bash
 
-加载 HTTP 认证插件
-------------------
+    ## 认证成功
+    HTTP Status Code: 200
 
-./bin/emqx_ctl plugins load emqx_auth_http
+    ## 忽略此次认证
+    HTTP Status Code: 200
+    Body: ignore
+
+    ## 认证失败
+    HTTP Status Code: Except 200
+
+*超级用户*:
+
+.. code:: bash
+
+    ## 确认为超级用户
+    HTTP Status Code: 200
+
+    ## 非超级用户
+    HTTP Status Code: Except 200
+
+*访问控制*:
+
+.. code:: bash
+
+    ## 允许PUBLISH/SUBSCRIBE：
+    HTTP Status Code: 200
+
+    ## 忽略此次鉴权:
+    HTTP Status Code: 200
+    Body: ignore
+
+    ## 拒绝该次PUBLISH/SUBSCRIBE:
+    HTTP Status Code: Except 200
+
 
 ---------------------------------------
 emqx_auth_mysql: MySQL 认证/访问控制插件
 ---------------------------------------
 
-MySQL 认证/访问控制插件，基于 MySQL 库表认证鉴权: https://github.com/emqx/emqx-auth-mysql
+`emqx_auth_mysql`_ 支持访问 MySQL 来完成 *连接认证* *访问控制* 等功能。要完成这些功能，我们需要对 MySQL 创建俩张表其格式如下：
+
+.. note:: 3.1 版本新增 %cn %dn 支持
+
 
 MQTT 用户表
 -----------
 
-.. code-block:: sql
+.. code:: sql
 
     CREATE TABLE `mqtt_user` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -307,12 +399,13 @@ MQTT 用户表
       UNIQUE KEY `mqtt_username` (`username`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-.. NOTE:: MySQL 插件可使用系统自有的用户表，通过 'authquery' 配置查询语句。
+.. NOTE:: 插件同样支持使用已有系统的表，通过 'authquery' 配置查询语句即可。
+
 
 MQTT 访问控制表
 ---------------
 
-.. code-block:: sql
+.. code:: sql
 
     CREATE TABLE `mqtt_acl` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -334,12 +427,13 @@ MQTT 访问控制表
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
+
 配置 MySQL 认证鉴权插件
 -----------------------
 
 etc/plugins/emqx_auth_mysql.conf:
 
-.. code-block:: properties
+.. code:: properties
 
     ## Mysql Server
     auth.mysql.server = 127.0.0.1:3306
@@ -356,8 +450,11 @@ etc/plugins/emqx_auth_mysql.conf:
     ## Mysql Database
     auth.mysql.database = mqtt
 
-    ## Variables: %u = username, %c = clientid
-
+    ## Variables:
+    ##  - %u: username
+    ##  - %c: clientid
+    ##  - %cn: common name of client TLS cert
+    ##  - %dn: subject of client TLS cert
     ## Authentication Query: select password only
     auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
@@ -370,21 +467,37 @@ etc/plugins/emqx_auth_mysql.conf:
     ## ACL Query Command
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
-加载 MySQL 认证鉴权插件
------------------------
+此外，为防止密码域过于简单而带来安全的隐患问题，该插件还支持密码加盐操作：
 
-./bin/emqx_ctl plugins load emqx_auth_mysql
+.. code:: properties
 
------------------------------------------
-emqx_auth_pgsql: Postgre 认证/访问控制插件
------------------------------------------
+    ## sha256 with salt prefix
+    ## auth.mysql.password_hash = salt,sha256
 
-Postgre 认证/访问控制插件，基于 PostgreSQL 库表认证鉴权: https://github.com/emqx/emqx-auth-pgsql
+    ## bcrypt with salt only prefix
+    ## auth.mysql.password_hash = salt,bcrypt
+
+    ## sha256 with salt suffix
+    ## auth.mysql.password_hash = sha256,salt
+
+    ## pbkdf2 with macfun iterations dklen
+    ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
+    ## auth.mysql.password_hash = pbkdf2,sha256,1000,20
+
+
+---------------------------------
+emqx_auth_pgsql: Postgre 认证插件
+---------------------------------
+
+`emqx_auth_pgsql`_ 支持访问 Postgre 来完成 *连接认证* *访问控制* 等功能。同样需要定义俩张表如下:
+
+.. note:: 3.1 版本新增 %cn %dn 支持
+
 
 Postgre MQTT 用户表
 -------------------
 
-.. code-block:: sql
+.. code:: sql
 
     CREATE TABLE mqtt_user (
       id SERIAL primary key,
@@ -394,10 +507,11 @@ Postgre MQTT 用户表
       salt character varying(40)
     );
 
+
 Postgre MQTT 访问控制表
 -----------------------
 
-.. code-block:: sql
+.. code:: sql
 
     CREATE TABLE mqtt_acl (
       id SERIAL primary key,
@@ -418,93 +532,176 @@ Postgre MQTT 访问控制表
         (6,1,'127.0.0.1',NULL,NULL,2,'#'),
         (7,1,NULL,'dashboard',NULL,1,'$SYS/#');
 
+
 配置 Postgre 认证鉴权插件
 -------------------------
 
 etc/plugins/emqx_auth_pgsql.conf:
 
-.. code-block:: properties
+.. code:: properties
 
-    ## Postgre Server
+    ## PostgreSQL server configurations.
     auth.pgsql.server = 127.0.0.1:5432
 
     auth.pgsql.pool = 8
 
     auth.pgsql.username = root
 
-    #auth.pgsql.password =
+    ## auth.pgsql.password =
 
     auth.pgsql.database = mqtt
 
     auth.pgsql.encoding = utf8
 
-    auth.pgsql.ssl = false
-
-    ## Variables: %u = username, %c = clientid, %a = ipaddress
-
-    ## Authentication Query: select password only
+    ## Authentication query.
+    ##
+    ## Value: SQL
+    ##
+    ## Variables:
+    ##  - %u: username
+    ##  - %c: clientid
+    ##  - %cn: common name of client TLS cert
+    ##  - %dn: subject of client TLS cert
+    ##
     auth.pgsql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
-    ## Password hash: plain, md5, sha, sha256, pbkdf2
+    ## Value: plain | md5 | sha | sha256 | bcrypt
     auth.pgsql.password_hash = sha256
 
-    ## sha256 with salt prefix
-    ## auth.pgsql.password_hash = salt sha256
-
-    ## sha256 with salt suffix
-    ## auth.pgsql.password_hash = sha256 salt
-
-    ## Superuser Query
+    ## Superuser query. The Variables is same with Authentication query
     auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 
-    ## ACL Query. Comment this query, the acl will be disabled.
+    ## ACL query. Comment this query, the ACL will be disabled.
+    ##
+    ## Variables:
+    ##  - %a: ipaddress
+    ##  - %u: username
+    ##  - %c: clientid
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
-加载 Postgre 认证鉴权插件
--------------------------
+同样的 password_hash 可以配置为更为安全的模式:
 
-.. code-block:: bash
+.. code:: properties
 
-    ./bin/emqx_ctl plugins load emqx_auth_pgsql
+    ## sha256 with salt prefix
+    ## auth.pgsql.password_hash = salt,sha256
 
----------------------------------------
-emqx_auth_redis: Redis 认证/访问控制插件
----------------------------------------
+    ## sha256 with salt suffix
+    ## auth.pgsql.password_hash = sha256,salt
 
-基于 Redis 认证/访问控制: https://github.com/emqx/emqx-auth-redis
+    ## bcrypt with salt prefix
+    ## auth.pgsql.password_hash = salt,bcrypt
 
-配置 Redis 认证鉴权插件
------------------------
+    ## pbkdf2 with macfun iterations dklen
+    ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
+    ## auth.pgsql.password_hash = pbkdf2,sha256,1000,20
+
+开启以下配置，则可支持 TLS 连接到 Postgre:
+
+.. code:: properties
+
+    ## Whether to enable SSL connection.
+    ##
+    ## Value: true | false
+    auth.pgsql.ssl = false
+
+    ## SSL keyfile.
+    ##
+    ## Value: File
+    ## auth.pgsql.ssl_opts.keyfile =
+
+    ## SSL certfile.
+    ##
+    ## Value: File
+    ## auth.pgsql.ssl_opts.certfile =
+
+    ## SSL cacertfile.
+    ##
+    ## Value: File
+    ## auth.pgsql.ssl_opts.cacertfile =
+
+
+-------------------------------
+emqx_auth_redis: Redis 认证插件
+-------------------------------
+
+`emqx_auth_redis`_ 通过访问 Redis 数据以实现 *连接认证* 和 *访问控制* 的功能。
+
+.. note:: 3.1 版本新增 %cn %dn 支持
+
+
+配置 Redis 认证插件
+-------------------
 
 etc/plugins/emqx_auth_redis.conf:
 
-.. code-block:: properties
+.. code:: properties
 
-    ## Redis Server
+    ## Redis server configurations
+
+    ## Redis Server cluster type
+    ## Value: single | sentinel | cluster
+    auth.redis.type = single
+
+    ## Redis server address.
+    ##
+    ## Single Redis Server: 127.0.0.1:6379, localhost:6379
+    ## Redis Sentinel: 127.0.0.1:26379,127.0.0.2:26379,127.0.0.3:26379
+    ## Redis Cluster: 127.0.0.1:6379,127.0.0.2:6379,127.0.0.3:6379
     auth.redis.server = 127.0.0.1:6379
 
-    ## Redis Pool Size
+    ## Redis sentinel cluster name.
+    ## auth.redis.sentinel = mymaster
+
+    ## Redis pool size.
     auth.redis.pool = 8
 
-    ## Redis Database
+    ## Redis database no.
     auth.redis.database = 0
 
-    ## Redis Password
+    ## Redis password.
     ## auth.redis.password =
 
-    ## Variables: %u = username, %c = clientid
+    ## Query command configurations
 
-    ## Authentication Query Command
-    auth.redis.auth_cmd = HGET mqtt_user:%u password
+    ## Authentication query command.
+    ## Variables:
+    ##  - %u: username
+    ##  - %c: clientid
+    ##  - %cn: common name of client TLS cert
+    ##  - %dn: subject of client TLS cert
+    auth.redis.auth_cmd = HMGET mqtt_user:%u password
 
-    ## Password hash: plain, md5, sha, sha256, pbkdf2
-    auth.redis.password_hash = sha256
+    ## Password hash.
+    ## Value: plain | md5 | sha | sha256 | bcrypt
+    auth.redis.password_hash = plain
 
-    ## Superuser Query Command
+    ## Superuser query command. The variables is same with Authentication query.
     auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 
-    ## ACL Query Command
+    ## ACL query command.
+    ## Variables:
+    ##  - %u: username
+    ##  - %c: clientid
     auth.redis.acl_cmd = HGETALL mqtt_acl:%u
+
+同样，该插件支持更安全的密码格式：
+
+.. code:: properties
+
+    ## sha256 with salt prefix
+    ## auth.redis.password_hash = salt,sha256
+
+    ## sha256 with salt suffix
+    ## auth.redis.password_hash = sha256,salt
+
+    ## bcrypt with salt prefix
+    ## auth.redis.password_hash = salt,bcrypt
+
+    ## pbkdf2 with macfun iterations dklen
+    ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
+    ## auth.redis.password_hash = pbkdf2,sha256,1000,20
+
 
 Redis 用户 Hash
 ---------------
@@ -513,6 +710,8 @@ Redis 用户 Hash
 
     HSET mqtt_user:<username> is_superuser 1
     HSET mqtt_user:<username> password "passwd"
+    HSET mqtt_user:<username> salt "salt"
+
 
 Redis ACL 规则 Hash
 -------------------
@@ -525,75 +724,75 @@ Redis ACL 规则 Hash
 
 .. NOTE:: 1: subscribe, 2: publish, 3: pubsub
 
-Redis 订阅 Hash
-----------------
 
-插件还支持 Redis 中创建 MQTT 订阅。当 MQTT 客户端连接成功，会自动从 Redis 加载订阅::
+---------------------------------
+emqx_auth_mongo: MongoDB 认证插件
+---------------------------------
 
-    HSET mqtt_sub:<username> topic1 0
-    HSET mqtt_sub:<username> topic2 1
-    HSET mqtt_sub:<username> topic3 2
+`emqx_auth_mongo`_ 基于 MongoDB 实现 *连接认证* 和 *访问控制* 的功能
 
-加载 Redis 认证鉴权插件
------------------------
+.. note:: 3.1 版本新增 %cn %dn 支持
 
-.. code-block:: bash
 
-    ./bin/emqx_ctl plugins load emqx_auth_redis
-
------------------------------------------
-emqx_auth_mongo: MongoDB 认证/访问控制插件
------------------------------------------
-
-基于 MongoDB 认证/访问控制: https://github.com/emqx/emqx-auth-mongo
-
-配置 MongoDB 认证鉴权插件
--------------------------
+配置 MongoDB 认证插件
+---------------------
 
 etc/plugins/emqx_auth_mongo.conf:
 
-.. code-block:: properties
+.. code:: properties
 
-    ## Mongo Server
+    ## MongonDB server configurations
+
+    ## MongoDB Topology Type.
+    ## Value: single | unknown | sharded | rs
+    auth.mongo.type = single
+
+    ## The set name if type is rs.
+    ## auth.mongo.rs_set_name =
+
+    ## MongoDB server list.
     auth.mongo.server = 127.0.0.1:27017
 
-    ## Mongo Pool Size
     auth.mongo.pool = 8
-
-    ## Mongo User
-    ## auth.mongo.user =
-
-    ## Mongo Password
+    ## auth.mongo.login =
     ## auth.mongo.password =
-
-    ## Mongo Database
+    ## auth.mongo.auth_source = admin
     auth.mongo.database = mqtt
 
-    ## auth_query
+    ## Query commands
+
+    ## Authentication query.
     auth.mongo.auth_query.collection = mqtt_user
-
     auth.mongo.auth_query.password_field = password
-
     auth.mongo.auth_query.password_hash = sha256
 
+    ## Authentication Selector.
+    ## Variables:
+    ##  - %u: username
+    ##  - %c: clientid
+    ##  - %cn: common name of client TLS cert
+    ##  - %dn: subject of client TLS cert
     auth.mongo.auth_query.selector = username=%u
 
-    ## super_query
+    ## Enable superuser query.
+    auth.mongo.super_query = on
     auth.mongo.super_query.collection = mqtt_user
-
     auth.mongo.super_query.super_field = is_superuser
 
+    ## The authentication variables can be used here
     auth.mongo.super_query.selector = username=%u
 
-    ## acl_query
-    auth.mongo.acl_query.collection = mqtt_user
+    ## Enable ACL query.
+    auth.mongo.acl_query = on
+    auth.mongo.acl_query.collection = mqtt_acl
 
     auth.mongo.acl_query.selector = username=%u
+
 
 MongoDB 数据库
 --------------
 
-.. code-block:: mongodb
+.. code:: mongodb
 
     use mqtt
     db.createCollection("mqtt_user")
@@ -602,10 +801,10 @@ MongoDB 数据库
 
 .. NOTE:: 数据库、集合名称可自定义
 
-MongoDB 用户集合(User Collection)
----------------------------------
+MongoDB 用户集合
+----------------
 
-.. code-block:: javascript
+.. code:: javascript
 
     {
         username: "user",
@@ -619,10 +818,10 @@ MongoDB 用户集合(User Collection)
     db.mqtt_user.insert({username: "test", password: "password hash", is_superuser: false})
     db.mqtt_user:insert({username: "root", is_superuser: true})
 
-MongoDB ACL 集合(ACL Collection)
---------------------------------
+MongoDB ACL 集合
+----------------
 
-.. code-block:: javascript
+.. code:: javascript
 
     {
         username: "username",
@@ -637,25 +836,81 @@ MongoDB ACL 集合(ACL Collection)
     db.mqtt_acl.insert({username: "test", publish: ["t/1", "t/2"], subscribe: ["user/%u", "client/%c"]})
     db.mqtt_acl.insert({username: "admin", pubsub: ["#"]})
 
-加载 Mognodb 认证插件
----------------------
+---------------------------
+emqx_web_hook: WebHook 插件
+---------------------------
 
-.. code-block:: bash
+`emqx_web_hook`_ 插件与上述的插件不同，它可以将所有 *EMQ X* 的事件，及消息都发送到指定的 HTTP 服务器。该插件也并不关心 HTTP 服务器的返回。
 
-    ./bin/emqx_ctl plugins load emqx_auth_mongo
+
+配置 WebHook 插件
+-----------------
+
+etc/plugins/emqx_web_hook.conf
+
+.. code:: properties
+
+    ## The events/message callback URL
+    web.hook.api.url = http://127.0.0.1:8080
+
+-----------------------
+emqx_lua_hook: Lua 插件
+-----------------------
+
+`emqx_lua_hook`_ 插件与 `emqx_web_hook`_ 插件类似，它将所有的事件和消息都发送到指定文件的 Lua 函数上。其具体使用参见其 README
+
+
+----------------------------
+emqx_retainer: Retainer 插件
+----------------------------
+
+`emqx_retainer`_ 该插件设置为默认启动，为 *EMQ X* 提供 PUBLISH 的 Retained 类型的消息支持。它会将所有主题的 Retained 消息存储在集群的数据库中，并待有客户端订阅该主题的时候将该消息投递出去。
+
+
+配置 Retainer 插件
+------------------
+
+etc/plugins/emqx_retainer.conf:
+
+.. code:: properties
+
+    ## Where to store the retained messages.
+    ##  - ram: memory only
+    ##  - disc: both memory and disc
+    ##  - disc_only: disc only
+    retainer.storage_type = ram
+
+    retainer.max_retained_messages = 0
+
+    ## Maximum retained message size.
+    retainer.max_payload_size = 1MB
+
+    ## Expiry interval of the retained messages. Never expire if the value is 0.
+    ## Value: Duration
+    ##  - h: hour
+    ##  - m: minute
+    ##  - s: second
+    retainer.expiry_interval = 0
+
+
+------------------------------------------
+emqx_delayed_publish: Delayed Publish 插件
+------------------------------------------
+
+`emqx_delayed_publish`_ 提供了 *EMQ X* 支持延迟发送某条消息的功能。客户端使用特殊主题 '$delayed/<seconds>/t' 发布消息到 *EMQ X* 。那么 *EMQ X* 将在 <seconds> 后向主题 't' 发布该消息。
 
 ------------------------
 emqx_coap: CoAP 协议插件
 ------------------------
 
-CoAP 协议插件，支持 RFC 7252 规范。
+`emqx_coap`_ 提供 CoAP 协议的支持，支持 RFC 7252 规范。
 
 配置 CoAP 协议插件
 ------------------
 
 etc/plugins/emqx_coap.conf:
 
-.. code-block:: properties
+.. code:: properties
 
     coap.port = 5683
 
@@ -663,15 +918,19 @@ etc/plugins/emqx_coap.conf:
 
     coap.enable_stats = off
 
-加载 CoAP 协议插件
-------------------
+若开启以下俩个配置，则可以支持 DTLS:
 
-.. code:: bash
+.. code:: properties
 
-    ./bin/emqx_ctl plugins load emqx_coap
+    coap.keyfile = {{ platform_etc_dir }}/certs/key.pem
 
-libcoap 客户端
+    coap.certfile = {{ platform_etc_dir }}/certs/cert.pem
+
+
+测试 CoAP 插件
 --------------
+
+我们可以通过安装 `libcoap`_ 来测试 *EMQ X* 对CoAP 协议的支持情况
 
 .. code:: bash
 
@@ -680,44 +939,97 @@ libcoap 客户端
     % coap client publish message
     coap-client -m post -e "qos=0&retain=0&message=payload&topic=hello" coap://localhost/mqtt
 
--------------------------
-emqx_sn: MQTT-SN 协议插件
--------------------------
 
-MQTT-SN 协议插件，支持 MQTT-SN 网关模式。
+--------------------------
+emqx_lwm2m: LwM2M 协议插件
+--------------------------
+
+`emqx_lwm2m`_ 提供了对 LwM2M 协议的支持。
+
+
+配置 LwM2M 插件
+-------------------
+
+etc/plugins/emqx_lwm2m.conf:
+
+.. code:: properties
+
+    lwm2m.port = 5683
+
+    lwm2m.lifetime_min = 1s
+    lwm2m.lifetime_max = 86400s
+
+    # The time window for Q Mode, indicating that after how long time
+    #   the downlink commands sent to the client will be cached.
+    #lwm2m.qmode_time_window = 22
+
+    # Is this LwM2M Gateway behind a coaproxy?
+    #lwm2m.lb = coaproxy
+
+    #lwm2m.auto_observe = off
+
+    # The topic subscribed by the lwm2m client after it is connected
+    # Placeholders supported:
+    #    '%e': Endpoint Name
+    #    '%a': IP Address
+    lwm2m.topics.command = lwm2m/%e/dn/#
+
+    # The topic to which the lwm2m client's response is published
+    lwm2m.topics.response = lwm2m/%e/up/resp
+
+    # The topic to which the lwm2m client's notify message is published
+    lwm2m.topics.notify = lwm2m/%e/up/notify
+
+    # The topic to which the lwm2m client's register message is published
+    lwm2m.topics.register = lwm2m/%e/up/resp
+
+    # The topic to which the lwm2m client's update message is published
+    lwm2m.topics.update = lwm2m/%e/up/resp
+
+    # Dir where the object definition files can be found
+    lwm2m.xml_dir =  {{ platform_etc_dir }}/lwm2m_xml
+
+同样可以通过以下配置打开 DTLS 支持：
+
+.. code:: properties
+
+    # Cert and Key file for DTLS
+    lwm2m.certfile = {{ platform_etc_dir }}/certs/cert.pem
+    lwm2m.keyfile = {{ platform_etc_dir }}/certs/key.pem
+
+
+--------------------------
+emqx_sn:  MQTT-SN 协议插件
+--------------------------
+
+`emqx_sn`_ 插件提供了 `MQTT-SN`_ 协议的支持。
+
 
 配置 MQTT-SN 协议插件
 ---------------------
 
-.. NOTE:: 默认 MQTT-SN 协议 UDP 端口: 1884
-
 etc/plugins/emqx_sn.conf:
 
-.. code-block:: properties
+.. code:: properties
 
     mqtt.sn.port = 1884
 
-加载 MQTT-SN 协议插件
----------------------
-
-.. code::
-
-    ./bin/emqx_ctl plugins load emqx_sn
 
 --------------------------
 emqx_stomp: Stomp 协议插件
 --------------------------
 
-Stomp 协议插件。支持 STOMP 1.0/1.1/1.2 协议客户端连接 EMQ，发布订阅 MQTT 消息。
+`emqx_stomp`_ 提供了 Stomp 协议的支持。支持 STOMP 1.0/1.1/1.2 协议客户端连接 EMQ，发布订阅 MQTT 消息。
 
-配置插件
---------
+
+配置 Stomp 插件
+---------------
 
 .. NOTE:: Stomp 协议端口: 61613
 
 etc/plugins/emqx_stomp.conf:
 
-.. code-block:: properties
+.. code:: properties
 
     stomp.default_user.login = guest
 
@@ -737,41 +1049,14 @@ etc/plugins/emqx_stomp.conf:
 
     stomp.listener.max_clients = 512
 
-加载 Stomp 插件
----------------
+
+------------------------------
+emqx_recon: Recon 性能调试插件
+------------------------------
+
+`emqx_recon`_ 插件集成了 recon 性能调测库，可用于查看当前系统的一些状态信息，例如：
 
 .. code:: bash
-
-    ./bin/emqx_ctl plugins load emqx_stomp
-
-
------------------------------
-emqx_recon: Recon 性能调试插件
------------------------------
-
-emqx_recon 插件集成 recon 性能调测库，'./bin/emqx_ctl' 命令行注册 recon 命令。
-
-配置 Recon 插件
----------------
-
-etc/plugins/emqx_recon.conf:
-
-.. code-block:: properties
-
-    %% Garbage Collection: 10 minutes
-    recon.gc_interval = 600
-
-加载 Recon 插件
----------------
-
-.. code-block:: bash
-
-    ./bin/emqx_ctl plugins load emqx_recon
-
-recon 插件命令
----------------
-
-.. code-block:: bash
 
     ./bin/emqx_ctl recon
 
@@ -781,40 +1066,53 @@ recon 插件命令
     recon node_stats             #recon:node_stats(10, 1000)
     recon remote_load Mod        #recon:remote_load(Mod)
 
-----------------------------
-emqx_reloader: 代码热加载插件
-----------------------------
 
-用于开发调试的代码热升级插件。加载该插件后，EMQ 会自动热升级更新代码。
+配置 Recon 插件
+---------------
+
+etc/plugins/emqx_recon.conf:
+
+.. code:: properties
+
+    %% Garbage Collection: 10 minutes
+    recon.gc_interval = 600
+
+
+-----------------------------
+emqx_reloader: 代码热加载插件
+-----------------------------
+
+`emqx_reloader`_ 用于开发调试的代码热升级插件。加载该插件后 *EMQ X* 会根据配置的时间间隔自动热升级更新代码。
+
+同时，也提供了 CLI 命令来指定 reload 某一个模块:
+
+.. code:: bash
+
+    ./bin/emqx_ctl reload <Module>
 
 .. NOTE:: 产品部署环境不建议使用该插件
+
 
 配置 Reloader 插件
 ------------------
 
 etc/plugins/emqx_reloader.conf:
 
-.. code-block:: properties
+.. code:: properties
 
     reloader.interval = 60
 
     reloader.logfile = log/reloader.log
 
-加载 Reloader 插件
-------------------
 
-.. code-block:: bash
+----------------------------------
+emqx_plugin_template: 插件开发模版
+----------------------------------
 
-    ./bin/emqx_ctl plugins load emqx_reloader
+`emqx_plugin_template`_ 是一个 *EMQ X* 插件模板，在功能上并无任何意义。
 
-Reloader 插件命令
------------------
+在想要定制一个新的插件时，可以查看该插件的代码和结构，以更快的开发一个标准的 *EMQ X* 插件。插件实际是一个普通的 Erlang Application，其配置文件应置于: 'etc/${PluginName}.config' 下
 
-.. code-block:: bash
-
-    ./bin/emqx_ctl reload
-
-    reload <Module>             # Reload a Module
 
 -------------------
 EMQ X R3.0 插件开发
@@ -825,24 +1123,26 @@ EMQ X R3.0 插件开发
 
 参考 `emqx_plugin_template`_ 插件模版创建新的插件项目。
 
-注册认证/访问控制模块
+.. NOTE:: 在 <plugin name>_app.erl 文件中必须加上标签 '-emqx_plugin(?MODULE).' 以表明这是一个 EMQ X 的插件
+
+
+创建认证/访问控制模块
 ---------------------
 
 认证演示模块 - emqx_auth_demo.erl
 
-.. code-block:: erlang
+.. code:: erlang
 
     -module(emqx_auth_demo).
 
-    -behaviour(emqx_auth_mod).
-
-    -include_lib("emqx/include/emqx.hrl").
-
-    -export([init/1, check/3, description/0]).
+    -export([ init/1
+            , check/2
+            , description/0
+            ]).
 
     init(Opts) -> {ok, Opts}.
 
-    check(#{client_id := ClientId, username := Username}, Password, _Opts) ->
+    check(_Credentials = #{client_id := ClientId, username := Username, password := Password}, _State) ->
         io:format("Auth Demo: clientId=~p, username=~p, password=~p~n", [ClientId, Username, Password]),
         ok.
 
@@ -850,64 +1150,76 @@ EMQ X R3.0 插件开发
 
 访问控制演示模块 - emqx_acl_demo.erl
 
-.. code-block:: erlang
+.. code:: erlang
 
     -module(emqx_acl_demo).
 
     -include_lib("emqx/include/emqx.hrl").
 
     %% ACL callbacks
-    -export([init/1, check_acl/2, reload_acl/1, description/0]).
+    -export([ init/1
+            , check_acl/5
+            , reload_acl/1
+            , description/0
+            ]).
 
     init(Opts) ->
         {ok, Opts}.
 
-    check_acl({Credentials, PubSub, Topic}, _Opts) ->
+    check_acl({Credentials, PubSub, _NoMatchAction, Topic}, _State) ->
         io:format("ACL Demo: ~p ~p ~p~n", [Credentials, PubSub, Topic]),
         allow.
 
-    reload_acl(_Opts) ->
+    reload_acl(_State) ->
         ok.
 
     description() -> "ACL Demo Module".
 
 注册认证、访问控制模块 - emqx_plugin_template_app.erl
 
-.. code-block:: erlang
+.. code:: erlang
 
-    ok = emqx_access_control:register_mod(auth, emqx_auth_demo, []),
-    ok = emqx_access_control:register_mod(acl, emqx_acl_demo, []),
+    ok = emqx:hook('client.authenticate', fun emqx_auth_demo:check/2, []),
+    ok = emqx:hook('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
 
-注册扩展钩子(Hooks)
---------------------
+
+注册钩子(Hooks)
+----------------
 
 通过钩子(Hook)处理客户端上下线、主题订阅、消息收发。
 
-emqx_plugin_template.erl::
+emqx_plugin_template.erl:
+
+.. code:: erlang
 
     %% Called when the plugin application start
     load(Env) ->
-        %% Hook with function
-        emqx:hook('client.connected',    fun ?MODULE:on_client_connected/4, [Env]),
+        emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/2, [Env]),
+        emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]),
+        emqx:hook('client.connected', fun ?MODULE:on_client_connected/4, [Env]),
         emqx:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
-        %% Hook with MFA
-        emqx:hook('client.subscribe',    {?MODULE, on_client_subscribe, [Env]}),
-        emqx:hook('client.unsubscribe',  {?MODULE, on_client_unsubscribe, [Env]}),
-        emqx:hook('session.created',     {?MODULE, on_session_created, [Env]}),
-        emqx:hook('session.resumed',     {?MODULE, on_session_resumed, [Env]}),
-        emqx:hook('session.subscribed',  {?MODULE, on_session_subscribed, [Env]}),
-        emqx:hook('session.unsubscribed',{?MODULE, on_session_unsubscribed, [Env]}),
-        emqx:hook('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
-        emqx:hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
-        emqx:hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
-        emqx:hook('message.acked',       {?MODULE, on_message_acked, [Env]}),
-        emqx:hook('message.dropped',     {?MODULE on_message_dropped, [Env]}).
+        emqx:hook('client.subscribe', fun ?MODULE:on_client_subscribe/3, [Env]),
+        emqx:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/3, [Env]),
+        emqx:hook('session.created', fun ?MODULE:on_session_created/3, [Env]),
+        emqx:hook('session.resumed', fun ?MODULE:on_session_resumed/3, [Env]),
+        emqx:hook('session.subscribed', fun ?MODULE:on_session_subscribed/4, [Env]),
+        emqx:hook('session.unsubscribed', fun ?MODULE:on_session_unsubscribed/4, [Env]),
+        emqx:hook('session.terminated', fun ?MODULE:on_session_terminated/3, [Env]),
+        emqx:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
+        emqx:hook('message.deliver', fun ?MODULE:on_message_deliver/3, [Env]),
+        emqx:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]),
+        emqx:hook('message.dropped', fun ?MODULE:on_message_dropped/3, [Env]).
 
-扩展钩子(Hook):
+
+所有可用钩子(Hook)说明:
 
 +------------------------+----------------------------------+
 | 钩子                   | 说明                             |
 +========================+==================================+
+| client.authenticate    | 连接认证                         |
++------------------------+----------------------------------+
+| client.check_acl       | ACL 校验                         |
++------------------------+----------------------------------+
 | client.connected       | 客户端上线                       |
 +------------------------+----------------------------------+
 | client.disconnected    | 客户端连接断开                   |
@@ -928,19 +1240,20 @@ emqx_plugin_template.erl::
 +------------------------+----------------------------------+
 | message.publish        | MQTT 消息发布                    |
 +------------------------+----------------------------------+
-| message.delivered      | MQTT 消息送达                    |
+| message.deliver        | MQTT 消息进行投递                |
 +------------------------+----------------------------------+
 | message.acked          | MQTT 消息回执                    |
 +------------------------+----------------------------------+
 | message.dropped        | MQTT 消息丢弃                    |
 +------------------------+----------------------------------+
 
-注册扩展命令行
---------------
+
+注册CLI命令
+-----------
 
 扩展命令行演示模块 - emqx_cli_demo.erl
 
-.. code-block:: erlang
+.. code:: erlang
 
     -module(emqx_cli_demo).
 
@@ -954,13 +1267,14 @@ emqx_plugin_template.erl::
 
 注册命令行模块 - emqx_plugin_template_app.erl
 
-.. code-block:: erlang
+.. code:: erlang
 
     ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 
 插件加载后，'./bin/emqx_ctl'新增命令行::
 
     ./bin/emqx_ctl cmd arg1 arg2
+
 
 插件配置文件
 ------------
@@ -969,7 +1283,7 @@ emqx_plugin_template.erl::
 
 1. ${plugin_name}.config，Erlang 原生配置文件格式:
 
-.. code-block:: erlang
+.. code:: erlang
 
     [
       {plugin_name, [
@@ -979,36 +1293,38 @@ emqx_plugin_template.erl::
 
 2. ${plugin_name}.conf, sysctl 的 `k = v` 通用格式:
 
-.. code-block:: properties
+.. code:: properties
 
     plugin_name.key = value
 
 .. NOTE:: `k = v` 格式配置需要插件开发者创建 priv/plugin_name.schema 映射文件。
+
 
 编译发布插件
 ------------
 
 1. clone emqx-rel 项目:
 
-.. code-block:: bash
+.. code:: bash
 
     git clone https://github.com/emqx/emqx-rel.git
 
 2. Makefile 增加 `DEPS`:
 
-.. code-block:: makefile
+.. code:: makefile
 
     DEPS += plugin_name
     dep_plugin_name = git url_of_plugin
 
 3. relx.config 中 release 段落添加:
 
-.. code-block:: erlang
+.. code:: erlang
 
     {plugin_name, load},
 
 .. _emqx_dashboard:        https://github.com/emqx/emqx-dashboard
 .. _emqx_retainer:         https://github.com/emqx/emqx-retainer
+.. _emqx_delayed_publish:  https://github.com/emqx/emqx-delayed-publish
 .. _emqx_auth_clientid:    https://github.com/emqx/emqx-auth-clientid
 .. _emqx_auth_username:    https://github.com/emqx/emqx-auth-username
 .. _emqx_auth_ldap:        https://github.com/emqx/emqx-auth-ldap
@@ -1017,13 +1333,20 @@ emqx_plugin_template.erl::
 .. _emqx_auth_pgsql:       https://github.com/emqx/emqx-auth-pgsql
 .. _emqx_auth_redis:       https://github.com/emqx/emqx-auth-redis
 .. _emqx_auth_mongo:       https://github.com/emqx/emqx-auth-mongo
+.. _emqx_auth_jwt:         https://github.com/emqx/emqx-auth-jwt
 .. _emqx_web_hook:         https://github.com/emqx/emqx-web-hook
 .. _emqx_lua_hook:         https://github.com/emqx/emqx-lua-hook
 .. _emqx_sn:               https://github.com/emqx/emqx-sn
 .. _emqx_coap:             https://github.com/emqx/emqx-coap
+.. _emqx_lwm2m:            https://github.com/emqx/emqx-lwm2m
 .. _emqx_stomp:            https://github.com/emqx/emqx-stomp
 .. _emqx_recon:            https://github.com/emqx/emqx-recon
 .. _emqx_reloader:         https://github.com/emqx/emqx-reloader
+.. _emqx_psk_file:         https://github.com/emqx/emqx-psk-file
 .. _emqx_plugin_template:  https://github.com/emqx/emqx-plugin-template
 .. _recon:                 http://ferd.github.io/recon/
+.. _LDAP:                  https://ldap.com
+.. _JWT:                   https://jwt.io
+.. _libcoap:               https://github.com/obgm/libcoap
+.. _MQTT-SN:               https://github.com/emqx/emqx-sn
 
