@@ -47,7 +47,7 @@ EMQ X 节点 RPC 桥接配置
     ## Mountpoint of the bridge.
     ##
     ## Value: String
-    bridge.emqx.mountpoint = bridge/aws/${node}/
+    bridge.emqx.mountpoint = bridge/emqx/${node}/
 
     ## Forward message topics
     ##
@@ -219,7 +219,7 @@ EMQ X 节点 MQTT 桥接配置
 
 MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接所需要用到字段，除此之
 外，与 RPC 桥接只能将本地消息转发到远程不同，MQTT 桥接不仅可以将远程的消息同步到
-本地主题上，还可以将断开桥接时从将要转发的消息缓存到本地上去，当连接恢复时再把消
+本地主题上，还可以将断开桥接时还在转发的消息缓存到本地上去，当连接恢复时再把消
 息发布到远程节点上去。与缓存消息有关的配置项都是以 bridge.$(Bridgename).queue 开
 头。而与同步远程节点主题有关的配置项则都以 bridge.$(Bridgename).subscription 开
 头。
