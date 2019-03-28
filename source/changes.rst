@@ -5,18 +5,218 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1-beta.3:
+
+---------------
+3.1-beta.3 版本
+---------------
+
+*发布日期: 2019-03-22*
+
+EMQ X 3.1-beta.3 版本发布。此版本改动主要包括引入规则引擎，增强插件发现机制，和修复一些问题等。
+
+功能改进:
+
+- 增强插件发现机制
+
+  Github PR:
+  `emqx/emqx#2339 <https://github.com/emqx/emqx/pull/2339>`_
+
+问题修复:
+
+- 修复重复清除告警的错误
+
+  Github PR:
+  `emqx/emqx#2332 <https://github.com/emqx/emqx/pull/2332>`_
+
+- 修复粘包解析失败的问题
+
+  Github PR:
+  `emqx/emqx#2333 <https://github.com/emqx/emqx/pull/2333>`_
+
+- 正确设置 PUBLISH 文件中的 DUP 标识
+
+  Github PR:
+  `emqx/emqx#2337 <https://github.com/emqx/emqx/pull/2337>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 实现规则引擎原型
+
+  Github Repository:
+  `emqx/emqx-rule-engine <https://github.com/emqx/emqx-rule-engine>`_
+
+emqx-lua-hook (plugin)
+----------------------
+
+功能增强:
+
+- 增加认证与 ACL 的 hook
+
+  Github PR:
+  `emqx/emqx-lua-hook#63 <https://github.com/emqx/emqx-lua-hook/pull/63>`_
+
+emqx-auth-mysql (plugin)
+------------------------
+
+问题修复:
+
+- 修复 ACL 功能无法使用的问题
+
+  Github PR:
+  `emqx/emqx-auth-mysql#130 <https://github.com/emqx/emqx-auth-mysql/pull/130>`_
+
+.. _release_3.1-beta.2:
+
+---------------
+3.1-beta.2 版本
+---------------
+
+*发布日期: 2019-03-16*
+
+EMQ X 3.1-beta.2 版本发布。此版本改动主要包括重新设计 hooks, 支持 TLS/PSK 和修复 gen_rpc 的一些问题等。
+
+功能改进:
+
+- 优化 emqx hooks
+
+  Github PR:
+  `emqx/emqx#2309 <https://github.com/emqx/emqx/pull/2309>`_
+
+- 支持 TLS/DTLS PSK
+
+  Github PR:
+  `emqx/emqx#2297 <https://github.com/emqx/emqx/pull/2297>`_
+
+- 将 Request/Response 从 emqx client 分离
+
+  Github PR:
+  `emqx/emqx#2293 <https://github.com/emqx/emqx/pull/2293>`_
+
+错误修复:
+
+- 修复某些情况下集群转发消息时 Broker 可能崩溃的问题
+
+  Github issues:
+  `emqx/emqx#2290 <https://github.com/emqx/emqx/issues/2290>`_
+
+  Github PR:
+  `emqx/emqx#2320 <https://github.com/emqx/emqx/pull/2320>`_
+
+- 在 Broker 卸载插件并退出前卸载 `emqx_alarm_handler`
+
+  Github PR:
+  `emqx/emqx#2316 <https://github.com/emqx/emqx/pull/2316>`_
+
+- 修复一个与 emqx bridge 相关的错误
+
+  Github issues:
+  `emqx/emqx#2312 <https://github.com/emqx/emqx/issues/2312>`_
+
+  Github PR:
+  `emqx/emqx#2313 <https://github.com/emqx/emqx/pull/2313>`_
+
+- 终结 inflight full error
+
+  Github PR:
+  `emqx/emqx#2281 <https://github.com/emqx/emqx/pull/2281>`_
+
+emqx-management (plugin)
+------------------------
+
+功能增强:
+
+- 增加默认的 secret 配置
+
+  Github PR:
+  `emqx/emqx-management#58 <https://github.com/emqx/emqx-management/pull/58>`_
+
+- 修复插件尚未启动时无法 reload 的问题
+
+  Github PR:
+  `emqx/emqx-management#59 <https://github.com/emqx/emqx-management/pull/59>`_
+
+- 插件相关的 HTTP API 由插件各自实现
+
+  Github PR:
+  `emqx/emqx-management#57 <https://github.com/emqx/emqx-management/pull/57>`_
+
+- 修复查询 io/max_fds 返回 undefined 的问题
+
+  Github issues:
+  `emqx/emqx-management#2222 <https://github.com/emqx/emqx-management/issues/2222>`__
+
+  Github PR:
+  `emqx/emqx-management#54 <https://github.com/emqx/emqx-management/pull/54>`_
+
+emqx-auth-jwt (plugin)
+----------------------
+
+功能增强:
+
+- 优化 JWT 认证插件
+
+  Github PR:
+  `emqx/emqx-auth-jwt#63 <https://github.com/emqx/emqx-auth-jwt/pull/63>`_
+
+emqx-auth-usernmae (plugin)
+---------------------------
+
+功能增强:
+
+- 增加 CURD HTTP API 以管理用户名密码
+
+  Github PR:
+  `emqx/emqx-auth-username#82 <https://github.com/emqx/emqx-auth-username/pull/82>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+错误修复:
+
+- 修复格式化消息时的错误
+
+  Github issues:
+  `emqx/emqx-web-hook#93 <https://github.com/emqx/emqx-web-hook/issues/93>`_
+
+  Github PR:
+  `emqx/emqx-web-hook#96 <https://github.com/emqx/emqx-web-hook/pull/96>`_
+
+
+minirest (deps)
+---------------
+
+错误修复:
+
+- 过滤未启动插件的 HTTP API
+
+  Github PR:
+  `emqx/minirest#12 <https://github.com/emqx/minirest/pull/12>`_
+
+gen_rpc (deps)
+--------------
+
+错误修复:
+
+- 修复 'gen_rpc' 的 raw socket flags
+
+  Github PR:
+  `emqx/gen_rpc#5 <https://github.com/emqx/gen_rpc/pull/5>`_
+
 .. _release_3.1-beta.1:
 
 ---------------
 3.1-beta.1 版本
 ---------------
 
-*发布日期: 2018-02-28*
+*发布日期: 2019-02-28*
 
 EMQ X 3.1-beta.1 版本发布。此版本主要针对功能改进，包括引入全新的 Bridge，支持消息批量发送，支持 redis 集群等。
 
-功能改进
---------
+功能改进:
 
 - 引入新的 Bridge 实现，支持 EMQ Broker 节点间桥接和 MQTT 协议间桥接
 
@@ -84,12 +284,11 @@ emqx-auth-clientid
 3.0.1 版本
 ---------------
 
-*发布日期: 2018-01-25*
+*发布日期: 2019-01-25*
 
 EMQ X 3.0.1 版本发布。此版本主要包含功能改进和错误修复。
 
-功能改进
---------
+功能改进:
 
 - 为 emqx edge 增加 +L 虚拟机参数以减少内存
 
@@ -135,8 +334,7 @@ EMQ X 3.0.1 版本发布。此版本主要包含功能改进和错误修复。
   Github PR:
   `emqx/emqx#2175 <https://github.com/emqx/emqx/pull/2175>`_
 
-问题修复
---------
+问题修复:
 
 - 修复对端关闭连接时崩溃的问题
 
@@ -198,8 +396,7 @@ emqx-management
 
 EMQ X 3.0.0版本，重新设计了订阅的 ETS 表，通过重构模块和调节 erlang 虚拟机参数提升了 EMQ 性能
 
-功能改进
---------
+功能改进:
 
 - 将虚拟机参数移动到单独的 vm.args 文件
 
@@ -243,8 +440,7 @@ EMQ X 3.0.0版本，重新设计了订阅的 ETS 表，通过重构模块和调�
   Github PR:
   `emqx/emqx#2090 <https://github.com/emqx/emqx/pull/2090>`_
 
-问题修复
---------
+问题修复:
 
 - 修复 `Topic Alias Maximum` 的错误实现
 
@@ -296,8 +492,7 @@ emqx-management
 
 EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复错误:
 
-功能改进
---------
+功能改进:
 
 - 减小依赖大小
 
@@ -314,8 +509,7 @@ EMQ X 3.0-rc.5版本发布，该版本支持 `metrics` 的批量提交和修复�
   Github PR:
   `emqx/emqx#2006 <https://github.com/emqx/emqx/pull/2006>`_
 
-问题修复
---------
+问题修复:
 
 - 修复 `emqx_router` 中的 'function_clause' 错误
 
@@ -389,8 +583,7 @@ emqx-management
 
 EMQ X 3.0-rc.4版本发布，该版本改进日志功能，部分项目支持 `Rebar3` 构建:
 
-功能改进
---------
+功能改进:
 
 - 为使用 `MQTT v3.1.1`的客户端提供避免 `loop delivery` 的功能
 
@@ -422,8 +615,7 @@ EMQ X 3.0-rc.4版本发布，该版本改进日志功能，部分项目支持 `R
   Github PR:
   `emqx/emqx#1960 <https://github.com/emqx/emqx/pull/1960>`_
 
-问题修复
---------
+问题修复:
 
 - 修复用户属性的类型验证
 
@@ -522,8 +714,7 @@ emqx-rel
 
 EMQ X 3.0-rc.3版本发布，该版本重构 `emqx_mqueue` 代码，支持 `MQTT-SN`, `CoAP` 与 `STOMP` 协议:
 
-功能改进
---------
+功能改进:
 
 - 将 `QOS$i` 替换为 `QOS_$i`
 
@@ -545,8 +736,7 @@ EMQ X 3.0-rc.3版本发布，该版本重构 `emqx_mqueue` 代码，支持 `MQTT
   Github PR:
   `emqx/emqx#1898 <https://github.com/emqx/emqx/pull/1898>`_
 
-问题修复
---------
+问题修复:
 
 - 修复重复订阅时的 'badarg' 错误
 
@@ -633,8 +823,7 @@ emqx-auth-pgsql
 
 EMQ X 3.0-rc.2版本发布，该版本改进 `Will Message` 发布机制，新增支持使用 `ssl` 证书作为 `MQTT` 用户名:
 
-功能改进
---------
+功能改进:
 
 - 改进 `Will Message` 发布机制，增加取消发布处理
 
@@ -651,9 +840,7 @@ EMQ X 3.0-rc.2版本发布，该版本改进 `Will Message` 发布机制，新�
   Github PR:
   `emqx/emqx#1921 <https://github.com/emqx/emqx/pull/1921>`_
 
-
-问题修复
---------
+问题修复:
 
 - 修复 `emqx_broker:subscribed` 函数 'bad argument' 错误
 
@@ -670,8 +857,7 @@ EMQ X 3.0-rc.2版本发布，该版本改进 `Will Message` 发布机制，新�
 
 EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M 插件，修复 `PUBLISH` 验证问题:
 
-功能改进
---------
+功能改进:
 
 - 为 `CONNECT` & `CONNACK` 报文添加 `request` & `response` 支持
 
@@ -690,8 +876,7 @@ EMQ X 3.0-rc.1版本发布，该版本新增 `request` & `response` 以及 LwM2M
 
   `emqx/emqx#1892 <https://github.com/emqx/emqx/pull/1892>`_
 
-问题修复
---------
+问题修复:
 
 - 更新 ACL 文档链接
 
@@ -731,8 +916,7 @@ emqx-lwm2m
 
 EMQ X 3.0-beta.4 版本发布，该版本改进连接 Shutdown 策略，改进共享订阅 sticky 策略，修复 Delayed Publish 问题：
 
-功能改进
---------
+功能改进:
 
 - 为进程自定义 max_heap_size
 
@@ -832,8 +1016,7 @@ esockd
 
 EMQ X 3.0-beta.3版本发布，该版本新增共享订阅派发策略功能，改进GC策略、桥接设计:
 
-功能改进
---------
+功能改进:
 
 - 修复 travis 构建
 
@@ -890,8 +1073,7 @@ EMQ X 3.0-beta.3版本发布，该版本新增共享订阅派发策略功能，�
   GitHub issues:
   `emqx/emqx#1858 <https://github.com/emqx/emqx/pull/1858>`_
 
-问题修复
---------
+问题修复:
 
 - 订阅API，主题属性支持通配符
 

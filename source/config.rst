@@ -251,6 +251,12 @@ manual 手动创建集群
 
     cluster.etcd.node_ttl = 1m
 
+    cluster.etcd.ssl.keyfile = etc/certs/client-key.pem
+
+    cluster.etcd.ssl.certfile = etc/certs/client.pem
+
+    cluster.etcd.ssl.cacertfile = etc/certs/ca.pem
+
 基于 Kubernetes 自动集群
 ------------------------
 
@@ -887,53 +893,6 @@ MQTT/TCP 监听器 - 1883
 
     ## The SO_REUSEADDR flag for TCP listener
     listener.tcp.external.reuseaddr = true
-
-    ##--------------------------------------------------------------------
-    ## Internal TCP Listener
-
-    ## Internal TCP Listener: 11883, 127.0.0.1:11883, ::1:11883
-    listener.tcp.internal = 127.0.0.1:11883
-
-    ## Size of acceptor pool
-    listener.tcp.internal.acceptors = 16
-
-    ## The acceptor pool for internal MQTT/TCP listener
-    listener.tcp.internal.acceptors = 4
-
-    ## Maximum number of concurrent clients
-    listener.tcp.internal.max_connections = 10240000
-
-    ## Maximum internal connections per second
-    listener.tcp.internal.max_conn_rate = 1000
-
-    ## Zone of the internal MQTT/TCP listener belonged to
-    listener.tcp.internal.zone = internal
-
-    #listener.tcp.internal.mountpoint = internal/
-
-    ## Rate Limit. Format is 'burst,rate', Unit is Bps
-    ## listener.tcp.internal.rate_limit = 1000000,2000000
-
-    ## TCP Socket Options
-    listener.tcp.internal.backlog = 512
-
-    ## The TCP send timeout for internal MQTT connections
-    listener.tcp.internal.send_timeout = 5s
-
-    ## Close the MQTT/TCP connection if send timeout
-    listener.tcp.external.send_timeout_close = on
-
-    ## listener.tcp.internal.recbuf = 16KB
-
-    ## listener.tcp.internal.sndbuf = 16KB
-
-    ## listener.tcp.internal.buffer = 16KB
-
-    ## listener.tcp.internal.tune_buffer = off
-
-    listener.tcp.internal.nodelay = false
-
-    listener.tcp.internal.reuseaddr = true
 
 ----------------------
 MQTT/SSL 监听器 - 8883
