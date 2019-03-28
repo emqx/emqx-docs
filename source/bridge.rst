@@ -11,7 +11,7 @@
 EMQ X 节点间桥接
 ----------------
 
-EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息转发，不支持订阅桥接
+EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息转发，不支持订阅
 远程节点的主题去同步数据，MQTT 桥接同时支持转发和通过订阅数据同步两种方式。
 
 节点间桥接与集群不同，不复制主题树与路由表，只按桥接规则转发 MQTT 消息。
@@ -23,7 +23,7 @@ EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息�
                   ---------                     ---------                     ---------
 
 EMQ X 节点 RPC 桥接配置
------------------------
+---------------------------
 
 假设在本机创建两个 EMQ 节点，并创建一条桥接转发全部传感器(sensor)主题消息:
 
@@ -35,7 +35,7 @@ EMQ X 节点 RPC 桥接配置
 | emqx2   | emqx2@127.0.0.1     | 2883      |
 +---------+---------------------+-----------+
 
-如果是将匹配 topic1/# 和 topic2/# 主题的消息从 emqx1 节点转发到 emqx2 节点，只需在 emqx1
+如果是将匹配 sensor/# 主题的消息从 emqx1 节点转发到 emqx2 节点，只需在 emqx1
 节点做出如下配置::
 
     ## Bridge address: node name for local bridge, host:port for remote.
@@ -53,7 +53,7 @@ EMQ X 节点 RPC 桥接配置
     ##
     ## Value: String
     ## Example: topic1/#,topic2/#
-    bridge.emqx.forwards = topic1/#,topic2/#
+    bridge.emqx.forwards = sensor/#
 
 如果是 RPC 桥接，只需要将配置项的 bridge.emqx.address = 127.0.0.1:2883 改为
 bridge.emqx.address = emqx2@127.0.0.1
@@ -74,7 +74,7 @@ EMQ X 节点 MQTT 桥接配置
     ## The ClientId of a remote bridge.
     ##
     ## Value: String
-    bridge.emqx.client_id = bridge_aws
+    bridge.emqx.client_id = bridge_emq
 
     ## The Clean start flag of a remote bridge.
     ##
@@ -104,7 +104,7 @@ EMQ X 节点 MQTT 桥接配置
     ##
     ## Value: String
     ## Example: topic1/#,topic2/#
-    bridge.emqx.forwards = topic1/#,topic2/#
+    bridge.emqx.forwards = sensor1/#,sensor2/#
 
     ## Bribge to remote server via SSL.
     ##
@@ -210,7 +210,7 @@ EMQ X 节点 MQTT 桥接配置
     ## replayq works in a mem-only manner.
     ##
     ## Value: String
-    bridge.emqx.queue.replayq_dir = {{ platform_data_dir }}/emqx_aws_bridge/
+    bridge.emqx.queue.replayq_dir = {{ platform_data_dir }}/emqx_emqx_bridge/
 
     ## Replayq segment size
     ##
@@ -293,7 +293,7 @@ MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接�
 
 .. code-block:: bash
 
-    $ ./_rel/emqx/bin/emqx_ctl bridges add-subscription aws cmd/topic3 1
+    $ ./_rel/emqx/bin/emqx_ctl bridges add-subscription emqx cmd/topic3 1
     Add-subscription topic successfully.
 
 给指定 bridge 删除订阅主题
