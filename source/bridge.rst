@@ -238,38 +238,72 @@ MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接�
     bridges subscriptions <Name>                    # Show a bridge subscriptions topic
     bridges add-subscription <Name> <Topic> <Qos>   # Add bridge subscriptions topic
 
+列出 bridge
+
+.. code-block:: bash
+
     $ ./bin/emqx_ctl bridges list
     name: emqx     status: Stopped
+
+启动指定 bridge
+
+.. code-block:: bash
 
     $ ./bin/emqx_ctl bridges start emqx
     Start bridge successfully.
 
+停止指定 bridge
+
+.. code-block:: bash
+
     $ ./bin/emqx_ctl bridges stop emqx
     Stop bridge successfully.
+
+列出指定 bridge 的转发主题
+
+.. code-block:: bash
 
     $ ./bin/emqx_ctl bridges forwards emqx
     topic:   topic1/#
     topic:   topic2/#
-    
+
+给指定 bridge 添加转发主题
+
+.. code-block:: bash
+
     $ ./bin/emqx_ctl bridges add-forwards emqx topic3/#
     Add-forward topic successfully.
 
+给指定 bridge 删除转发主题
+
+.. code-block:: bash
+
     $ ./bin/emqx_ctl bridges del-forwards emqx topic3/#
     Del-forward topic successfully.
+
+列出指定 bridge 的订阅
+
+.. code-block:: bash
 
     $ ./bin/emqx_ctl bridges subscriptions emqx
     topic: cmd/topic1, qos: 1
     topic: cmd/topic2, qos: 1
 
+给指定 bridge 添加订阅主题
+
+.. code-block:: bash
+
     $ ./_rel/emqx/bin/emqx_ctl bridges add-subscription aws cmd/topic3 1
     Add-subscription topic successfully.
+
+给指定 bridge 删除订阅主题
+
+.. code-block:: bash
 
     $ ./_rel/emqx/bin/emqx_ctl bridges del-subscription aws cmd/topic3
     Del-subscription topic successfully.
 
 .. _bridge_mosquitto:
-
-
 
 --------------
 mosquitto 桥接
