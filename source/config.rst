@@ -339,9 +339,6 @@ Erlang 虚拟机参数
     ## Comment the line to disable
     ## node.heartbeat = on
 
-    ## Enable kernel poll
-    node.kernel_poll = on
-
     ## async thread pool
     node.async_threads = 32
 
@@ -363,6 +360,12 @@ Erlang 虚拟机参数
 
     ## Crash dump
     node.crash_dump = log/crash.dump
+
+    ## Specify the erlang distributed protocol.
+    node.proto_dist = inet_tcp
+
+    ## Specify SSL Options in the file if using SSL for Erlang Distribution.
+    ## node.ssl_dist_optfile = etc/ssl_dist.conf
 
     ## Distributed node ticktime
     node.dist_net_ticktime = 60
@@ -1369,18 +1372,54 @@ Erlang 虚拟机监控设置
 
 .. code-block:: properties
 
-    ## Long GC, don't monitor in production mode for:
+    ## Enable Long GC monitoring.
     sysmon.long_gc = false
 
-    ## Long Schedule(ms)
+    ## Enable Long Schedule(ms) monitoring.
     sysmon.long_schedule = 240
 
-    ## 8M words. 32MB on 32-bit VM, 64MB on 64-bit VM.
+    ## Enable Large Heap monitoring.
     sysmon.large_heap = 8MB
 
-    ## Busy Port
+    ## Enable Busy Port monitoring.
     sysmon.busy_port = false
 
-    ## Busy Dist Port
+    ## Enable Busy Dist Port monitoring.
     sysmon.busy_dist_port = true
+
+    ## The time interval for the periodic cpu check
+    ## Default: 60s
+    os_mon.cpu_check_interval = 60s
+
+    ## The threshold, as percentage of system cpu
+    ## for how much system cpu can be used before the corresponding alarm is set.
+    os_mon.cpu_high_watermark = 80%
+
+    ## The threshold, as percentage of system cpu
+    ## for how much system cpu can be used before the corresponding alarm is clear.
+    os_mon.cpu_low_watermark = 60%
+
+    ## The time interval for the periodic memory check
+    os_mon.mem_check_interval = 60s
+
+    ## The threshold, as percentage of system memory
+    ## for how much system memory can be allocated before the corresponding alarm is set.
+    os_mon.sysmem_high_watermark = 70%
+
+    ## The threshold, as percentage of system memory
+    ## for how much system memory can be allocated by one Erlang process before the corresponding alarm is set.
+    os_mon.procmem_high_watermark = 5%
+
+    ## The time interval for the periodic process limit check
+    vm_mon.check_interval = 30s
+
+    ## The threshold, as percentage of processes,
+    ## for how many processes can simultaneously exist
+    ## at the local node before the corresponding alarm is set.
+    vm_mon.process_high_watermark = 80%
+
+    ## The threshold, as percentage of processes,
+    ## for how many processes can simultaneously
+    ## exist at the local node before the corresponding alarm is clear.
+    vm_mon.process_low_watermark = 60%
 
