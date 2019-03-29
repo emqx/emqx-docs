@@ -58,13 +58,14 @@
 +---------------------------+---------------------------+
 
 其中插件的加载有三种方式：
+
 1. 默认加载
 2. CLI 启停插件
 3. Dashboard 启停插件
 
 开启默认加载
 ------------
-如需在系统启动时就默认启动某插件，则直接在 `data/loaded_plugins` 配置入需要启动的插件，例如默认开启的加载的插件有：
+如需在系统启动时就默认启动某插件，则直接在 ``data/loaded_plugins`` 配置入需要启动的插件，例如默认开启的加载的插件有：
 
 .. code:: erlang
     emqx_management.
@@ -74,8 +75,8 @@
     emqx_dashboard.
 
 CLI 启停插件
------------
-所谓的 CLI 在 *EMQ X* 中特指 ./bin/emqx_ctl 命令行工具。在运行过程中，我们可以通过 CLI 命令的方式查看可用的插件列表、和启停某插件
+------------
+所谓的 CLI 在 *EMQ X* 中特指 ``./bin/emqx_ctl`` 命令行工具。在运行过程中，我们可以通过 CLI 命令的方式查看可用的插件列表、和启停某插件
 
 .. code:: bash
     ## 显示所有可用的插件列表
@@ -92,13 +93,13 @@ CLI 启停插件
 
 
 Dashboard 启停插件
------------------
+------------------
 除上述俩种方式以外，如果 *EMQ X* 开启了 Dashbord 的插件(默认开启) 还可以直接通过 Dashboard 启停、或者配置插件
 
 
------------------------------
+------------------------------
 emqx_dashboard: Dashboard 插件
------------------------------
+------------------------------
 
 `emqx_dashboard`_ 是 *EMQ X* 消息服务器的 Web 管理控制台, 该插件默认开启。当 *EMQ X* 启动成功后，可访问 http://localhost:18083 进行查看，默认用户名/密码: admin/public。
 
@@ -106,7 +107,7 @@ Dashboard 插件可查询 *EMQ X* 消息服务器基本信息、统计数据、�
 
 .. image:: ./_static/images/dashboard.png
 
-除此之外，Dashboard 默认提供了一系列的 REST API 供前端调用。其详情可以参考 Dashboard -> HTTP API 部分
+除此之外，Dashboard 默认提供了一系列的 REST API 供前端调用。其详情可以参考 ``Dashboard -> HTTP API`` 部分
 
 
 Dashboard 插件设置
@@ -140,15 +141,16 @@ etc/plugins/emqx_dashboard.conf:
     ## dashboard.listener.https.fail_if_no_peer_cert = true
 
 
--------------------------------------
+--------------------------------------
 emqx_auth_clientid - ClientID 认证插件
--------------------------------------
+--------------------------------------
 
-在 *EMQ X* 中所有有 `_auth_` 关键字的插件其主要职责有：
-1. *连接认证*: 控制某客户端是否具有连接 EMQ X 的权限
-2. *访问控制*: 控制某客户端是否具有 PUBLISH/SUBSCIRBE 操作的权限
+在 *EMQ X* 中所有有 ``_auth_`` 关键字的插件其主要职责有：
 
-`emqx_auth_clientid`_ 目前只包含 *连接认证* 功能不包括 *访问控制* 。他会允许满足其配置中 clientid 成功登录。其中值得注意的是 `password` 以明文的方式给出，在存储入系统时会按照配置的 hash  算法加密后存入。客户端在连接时应该携带对应的密文进行连接。
+1. **连接认证**: 控制某客户端是否具有连接 EMQ X 的权限
+2. **访问控制**: 控制某客户端是否具有 PUBLISH/SUBSCIRBE 操作的权限
+
+`emqx_auth_clientid`_ 目前只包含 **连接认证** 功能不包括 **访问控制** 。他会允许满足其配置中 ``clientid`` 成功登录。其中值得注意的是 ``password`` 以明文的方式给出，在存储入系统时会按照配置的 hash 算法加密后存入。客户端在连接时应该携带对应的密文进行连接。
 
 此外, 该插件还支持 REST API 和 CLI 用于在运行时管理。
 
@@ -177,11 +179,11 @@ etc/plugins/emqx_auth_clientid.conf:
     auth.client.password_hash = sha256
 
 
--------------------------------------
+---------------------------------------
 emqx_auth_username - 用户名密码认证插件
--------------------------------------
+---------------------------------------
 
-`emqx_auth_username`_ 目前只包含 *连接认证* 功能。其逻辑与 emqx_auth_clientid 相似，只不过其关心的是 username。
+`emqx_auth_username`_ 目前只包含 **连接认证** 功能。其逻辑与 ``emqx_auth_clientid`` 相似，只不过其关心的是 ``username``
 
 同样的，username 也支持 CLI 和 REST API 在运行时动态的管理。
 
@@ -208,11 +210,11 @@ etc/plugins/emqx_auth_username.conf:
     ## Value: plain | md5 | sha | sha256
     auth.user.password_hash = sha256
 
--------------------------------------
+---------------------------
 emqx_auth_jwt: JWT认证插件
--------------------------------------
+---------------------------
 
-`emqx_auth_jwt`_ 支持基于 `JWT`_ 的方式，对连接的客户端进行认证，仅包括 *连接认证* 功能。它会解析并校验 Token 的合理性和时效、满足则允许连接
+`emqx_auth_jwt`_ 支持基于 `JWT`_ 的方式，对连接的客户端进行认证，仅包括 **连接认证** 功能。它会解析并校验 Token 的合理性和时效、满足则允许连接
 
 JWT 认证配置
 -------------
@@ -242,7 +244,7 @@ etc/plugins/emqx_auth_jwt.conf
 emqx_psk_file: PSK 认证插件
 ---------------------------
 
-`emqx_psk_file`_ 插件主要提供了 PSK 支持。其目的是用于在客户端建立 DTLS 连接时，使用 PSK 方式达到 *连接认证* 的功能
+`emqx_psk_file`_ 插件主要提供了 PSK 支持。其目的是用于在客户端建立 TLS/DTLS 连接时，使用 PSK 方式达到 **连接认证** 的功能
 
 
 配置 PSK 认证插件
@@ -260,7 +262,7 @@ etc/plugins/emqx_psk_file.conf:
 emqx_auth_ldap: LDAP 认证插件
 -----------------------------
 
-`emqx_auth_ldap`_ 支持通过访问 `LDAP`_ 服务的方式，来实现控制客户端的接入。目前仅支持 *连接认证*
+`emqx_auth_ldap`_ 支持通过访问 `LDAP`_ 服务的方式，来实现控制客户端的接入。目前仅支持 **连接认证**
 
 
 LDAP 认证插件配置
@@ -285,12 +287,13 @@ etc/plugins/emqx_auth_ldap.conf:
 emqx_auth_http: HTTP 认证/访问控制插件
 --------------------------------------
 
-`emqx_auth_http`_ 插件实现 *连接认证* 与 *访问控制* 的功能。它会将每个请求发送到指定的 HTTP 服务，通过其返回值来判断是否具有具体操作的权限。
+`emqx_auth_http`_ 插件实现 **连接认证** 与 **访问控制** 的功能。它会将每个请求发送到指定的 HTTP 服务，通过其返回值来判断是否具有具体操作的权限。
 
 该插件总共支持三个请求分别为：
-    1. 'auth.http.auth_req': 连接认证
-    2. 'auth.http.super_req': 判断是否为超级用户
-    3. 'auth.http.acl_req': 访问控制权限查询
+
+1. **auth.http.auth_req**: 连接认证
+2. **auth.http.super_req**: 判断是否为超级用户
+3. **auth.http.acl_req**: 访问控制权限查询
 
 特别的是每个请求的参数，都支持使用真实的客户端的 username, IP 地址等进行自定义。
 
@@ -335,7 +338,7 @@ etc/plugins/emqx_auth_http.conf:
 HTTP API 返回值处理
 ------------------
 
-*连接认证*:
+**连接认证**:
 
 .. code:: bash
 
@@ -359,7 +362,7 @@ HTTP API 返回值处理
     ## 非超级用户
     HTTP Status Code: Except 200
 
-*访问控制*:
+**访问控制**:
 
 .. code:: bash
 
@@ -378,7 +381,7 @@ HTTP API 返回值处理
 emqx_auth_mysql: MySQL 认证/访问控制插件
 ---------------------------------------
 
-`emqx_auth_mysql`_ 支持访问 MySQL 来完成 *连接认证* *访问控制* 等功能。要完成这些功能，我们需要对 MySQL 创建俩张表其格式如下：
+`emqx_auth_mysql`_ 支持访问 MySQL 来完成 **连接认证** **访问控制** 等功能。要完成这些功能，我们需要对 MySQL 创建俩张表其格式如下：
 
 .. note:: 3.1 版本新增 %cn %dn 支持
 
@@ -399,7 +402,7 @@ MQTT 用户表
       UNIQUE KEY `mqtt_username` (`username`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-.. NOTE:: 插件同样支持使用已有系统的表，通过 'authquery' 配置查询语句即可。
+.. NOTE:: 插件同样支持使用已有系统的表，通过 ``authquery`` 配置查询语句即可。
 
 
 MQTT 访问控制表
@@ -489,7 +492,7 @@ etc/plugins/emqx_auth_mysql.conf:
 emqx_auth_pgsql: Postgre 认证插件
 ---------------------------------
 
-`emqx_auth_pgsql`_ 支持访问 Postgre 来完成 *连接认证* *访问控制* 等功能。同样需要定义俩张表如下:
+`emqx_auth_pgsql`_ 支持访问 Postgre 来完成 **连接认证** **访问控制** 等功能。同样需要定义俩张表如下:
 
 .. note:: 3.1 版本新增 %cn %dn 支持
 
@@ -625,7 +628,7 @@ etc/plugins/emqx_auth_pgsql.conf:
 emqx_auth_redis: Redis 认证插件
 -------------------------------
 
-`emqx_auth_redis`_ 通过访问 Redis 数据以实现 *连接认证* 和 *访问控制* 的功能。
+`emqx_auth_redis`_ 通过访问 Redis 数据以实现 **连接认证** 和 **访问控制** 的功能。
 
 .. note:: 3.1 版本新增 %cn %dn 支持
 
@@ -704,7 +707,7 @@ etc/plugins/emqx_auth_redis.conf:
 
 
 Redis 用户 Hash
----------------
+----------------
 
 默认基于用户 Hash 认证::
 
@@ -714,7 +717,7 @@ Redis 用户 Hash
 
 
 Redis ACL 规则 Hash
--------------------
+--------------------
 
 默认采用 Hash 存储 ACL 规则::
 
@@ -729,7 +732,7 @@ Redis ACL 规则 Hash
 emqx_auth_mongo: MongoDB 认证插件
 ---------------------------------
 
-`emqx_auth_mongo`_ 基于 MongoDB 实现 *连接认证* 和 *访问控制* 的功能
+`emqx_auth_mongo`_ 基于 MongoDB 实现 **连接认证** 和 **访问控制** 的功能
 
 .. note:: 3.1 版本新增 %cn %dn 支持
 
@@ -897,7 +900,7 @@ etc/plugins/emqx_retainer.conf:
 emqx_delayed_publish: Delayed Publish 插件
 ------------------------------------------
 
-`emqx_delayed_publish`_ 提供了 *EMQ X* 支持延迟发送某条消息的功能。客户端使用特殊主题 '$delayed/<seconds>/t' 发布消息到 *EMQ X* 。那么 *EMQ X* 将在 <seconds> 后向主题 't' 发布该消息。
+`emqx_delayed_publish`_ 提供了 *EMQ X* 支持延迟发送某条消息的功能。客户端使用特殊主题 ``$delayed/<seconds>/t`` 发布消息到 *EMQ X* 。那么 *EMQ X* 将在 ``<seconds>`` 后向主题 ``t`` 发布该消息。
 
 ------------------------
 emqx_coap: CoAP 协议插件
@@ -1111,7 +1114,7 @@ emqx_plugin_template: 插件开发模版
 
 `emqx_plugin_template`_ 是一个 *EMQ X* 插件模板，在功能上并无任何意义。
 
-在想要定制一个新的插件时，可以查看该插件的代码和结构，以更快的开发一个标准的 *EMQ X* 插件。插件实际是一个普通的 Erlang Application，其配置文件应置于: 'etc/${PluginName}.config' 下
+在想要定制一个新的插件时，可以查看该插件的代码和结构，以更快的开发一个标准的 *EMQ X* 插件。插件实际是一个普通的 ``Erlang Application``，其配置文件应置于: ``etc/${PluginName}.config`` 下
 
 
 -------------------
@@ -1123,7 +1126,7 @@ EMQ X R3.0 插件开发
 
 参考 `emqx_plugin_template`_ 插件模版创建新的插件项目。
 
-.. NOTE:: 在 <plugin name>_app.erl 文件中必须加上标签 '-emqx_plugin(?MODULE).' 以表明这是一个 EMQ X 的插件
+.. NOTE:: 在 ``<plugin name>_app.erl`` 文件中必须加上标签 ``-emqx_plugin(?MODULE).`` 以表明这是一个 EMQ X 的插件
 
 
 创建认证/访问控制模块
@@ -1279,9 +1282,9 @@ emqx_plugin_template.erl:
 插件配置文件
 ------------
 
-插件自带配置文件放置在 etc/${plugin_name}.conf|config， *EMQ X* 支持两种插件配置格式:
+插件自带配置文件放置在 ``etc/${plugin_name}.conf|config`` *EMQ X* 支持两种插件配置格式:
 
-1. ${plugin_name}.config，Erlang 原生配置文件格式:
+1. ``${plugin_name}.config`` Erlang 原生配置文件格式:
 
 .. code:: erlang
 
@@ -1291,13 +1294,13 @@ emqx_plugin_template.erl:
       ]}
     ].
 
-2. ${plugin_name}.conf, sysctl 的 `k = v` 通用格式:
+2. ``${plugin_name}.conf`` sysctl 的 ``k = v`` 通用格式:
 
 .. code:: properties
 
     plugin_name.key = value
 
-.. NOTE:: `k = v` 格式配置需要插件开发者创建 priv/plugin_name.schema 映射文件。
+.. NOTE:: ``k = v`` 格式配置需要插件开发者创建 ``priv/plugin_name.schema`` 映射文件。
 
 
 编译发布插件
