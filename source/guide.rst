@@ -542,7 +542,7 @@ ACL 规则定义在 etc/acl.conf，EMQ X 启动时加载到内存:
 HTTP 插件访问控制
 -----------------
 
-HTTP API 实现访问控制: https://github.com/emqtt/emq_auth_http
+HTTP API 实现访问控制: https://github.com/emqx/emqx-auth-http
 
 配置 etc/plugins/emqx_auth_http.conf, 启用 HTTP 认证插件后:
 
@@ -812,9 +812,9 @@ $SYS-系统主题
 
 $SYS 主题路径以 "$SYS/brokers/{node}/" 开头，'${node}' 是 Erlang 节点名称::
 
-    $SYS/brokers/emqttd@127.0.0.1/version
+    $SYS/brokers/emqx@127.0.0.1/version
 
-    $SYS/brokers/emqttd@host2/uptime
+    $SYS/brokers/emqx@host2/uptime
 
 .. NOTE:: 默认只允许 localhost 的 MQTT 客户端订阅 $SYS 主题，可通过 etc/acl.config 修改访问控制规则。
 
@@ -1135,13 +1135,13 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，
 
 .. code-block:: bash
 
-    ./bin/emqx_ctl trace client "clientid" "trace_clientid.log"
+    ./bin/emqx_ctl trace client "clientid" "trace_clientid.log" debug
 
 追踪主题(Topic):
 
 .. code-block:: bash
 
-    ./bin/emqx_ctl trace topic "topic" "trace_topic.log"
+    ./bin/emqx_ctl trace topic "topic" "trace_topic.log" debug
 
 查询追踪:
 
@@ -1153,17 +1153,17 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，
 
 .. code-block:: bash
 
-    ./bin/emqx_ctl trace client "clientid" off
+    ./bin/emqx_ctl trace stop client "clientid"
 
-    ./bin/emqx_ctl trace topic "topic" off
+    ./bin/emqx_ctl trace stop topic "topic"
 
-.. _emqx_auth_clientid: https://github.com/emqtt/emq_auth_clientid
-.. _emqx_auth_username: https://github.com/emqtt/emq_auth_username
-.. _emqx_auth_ldap:     https://github.com/emqtt/emq_auth_ldap
-.. _emqx_auth_http:     https://github.com/emqtt/emq_auth_http
-.. _emqx_auth_mysql:    https://github.com/emqtt/emq_auth_mysql
-.. _emqx_auth_pgsql:    https://github.com/emqtt/emq_auth_pgsql
-.. _emqx_auth_redis:    https://github.com/emqtt/emq_auth_redis
-.. _emqx_auth_mongo:    https://github.com/emqtt/emq_auth_mongo
-.. _emqx_auth_jwt:      https://github.com/emqtt/emq-auth-jwt
+.. _emqx_auth_clientid: https://github.com/emqx/emqx-auth-clientid
+.. _emqx_auth_username: https://github.com/emqx/emqx-auth-username
+.. _emqx_auth_ldap:     https://github.com/emqx/emqx-auth-ldap
+.. _emqx_auth_http:     https://github.com/emqx/emqx-auth-http
+.. _emqx_auth_mysql:    https://github.com/emqx/emqx-auth-mysql
+.. _emqx_auth_pgsql:    https://github.com/emqx/emqx-auth-pgsql
+.. _emqx_auth_redis:    https://github.com/emqx/emqx-auth-redis
+.. _emqx_auth_mongo:    https://github.com/emqx/emqx-auth-mongo
+.. _emqx_auth_jwt:      https://github.com/emqx/emqx-auth-jwt
 
