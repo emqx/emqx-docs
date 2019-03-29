@@ -423,79 +423,61 @@ RPC 参数配置
 日志参数配置
 ------------
 
+设置写到终端或写到文件
+-------------------
+
 .. code-block:: properties
 
-    ## Sets the log dir.
+    ## Where to emit the logs.
+    log.to = both
+
+配置日志写到什么地方，可用的选项有：
+
+- off: 完全关闭日志
+- file: 只写到文件
+- console: 只写到终端(erlang shell)
+- both: 同时写到终端(erlang shell) 和文件
+
+日志级别
+-------
+
+.. code-block:: properties
+
+    ## The log severity level.
+    log.level = error
+
+设置全局的日志级别，包括 primary logger level，以及所有到文件和终端的 logger handlers 的日志级别。
+
+可以使用 :ref:`command_log` 为每个 logger handler 设置日志级别。
+
+日志文件配置
+----------
+
+.. code-block:: properties
+
+    ## The dir for log files.
     log.dir = log
 
-console 日志
-------------
+    ## The log filename for logs of level specified in "log.level".
+    log.file = emqx.log
 
-.. code-block:: properties
+    ## Maximum size of each log file.
+    ## Default: 10M
+    ## Supported Unit: KB | MB | G
+    log.rotation.size = 10MB
 
-    ## Console log. Enum: off, file, console, both
-    log.console = console
+    ## Maximum rotation count of log files.
+    ## Default: 5
+    log.rotation.count = 5
 
-    ## Console log level. Enum: debug, info, notice, warning, error, critical, alert, emergency
-    log.console.level = error
+配置额外的 file logger handlers
+------------------------------
 
-    ## Console log file
-    ## log.console.file = log/console.log
+可以通过配置额外的 file logger handlers，将某个级别的日志写到单独的文件。
 
-    ## Maximum file size for console log
-    ## log.console.size = 10485760
+举例，下面的配置将所有的大于等于 info 级别的日志额外写到 info.log 文件中::
 
-    ## The rotation count for console log
-    ## log.console.count = 5
-
-info 日志
-----------
-
-.. code-block:: properties
-
-    ## Info log file
-    ## log.info.file = log/info.log
-
-    ## Maximum file size for info log
-    ## log.info.size = 10485760
-
-    ## The rotation count for info log
-    ## log.info.count = 5
-
-error 日志
-----------
-
-.. code-block:: properties
-
-    ## Error log file
-    log.error.file = log/error.log
-
-    ## Maximum file size for error log
-    log.error.size = 10485760
-
-    ## The rotation count for error log
-    log.error.count = 5
-
-crash 日志
-----------
-
-.. code-block:: properties
-
-    ## Enable the crash log. Enum: on, off
-    log.crash = on
-
-    log.crash.file = log/crash.log
-
-syslog 日志
------------
-
-.. code-block:: properties
-
-    ## Syslog. Enum: on, off
-    log.syslog = on
-
-    ## Syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
-    log.syslog.level = error
+    log.info.file = info.log
 
 -------------------
 匿名认证与 ACL 文件
