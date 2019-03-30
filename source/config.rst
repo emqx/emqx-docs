@@ -1061,7 +1061,7 @@ Bridge 模块进出规则由 type 控制::
                    MQTT/TLS
 
 
-*EMQ X* R3.0 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $ name 都是可以换成相应的名称。
+*EMQ X* R3.0 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $name 都是可以换成相应的名称。
 也可以新增自定义name的 bridge.$name.xxxx 。
 
 Bridges 参数设置
