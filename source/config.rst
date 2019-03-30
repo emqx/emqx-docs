@@ -1064,150 +1064,170 @@ Bridge 模块进出规则由 type 控制::
 *EMQ X* R3.0 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $name 都是可以换成相应的名称。
 也可以新增自定义name的 bridge.$name.xxxx 。
 
-Bridges to edge 参数设置
+Bridges 参数设置
 --------------------------
 
 .. code-block:: properties
 
-    ##--------------------------------------------------------------------
-    ## Bridge type,Enum: out, in
-    bridge.edge.type = in
-
-    ## Bridge address: host:port
-    bridge.edge.address = 127.0.0.1:1883
-
-    ## Protocol version of the bridge
+    ## Bridge address: node name for local bridge, host:port for remote.
+    ##
+    ## Value: String
+    ## Example: emqx@127.0.0.1,  127.0.0.1:1883
+    bridge.aws.address = 127.0.0.1:1883
+     
+    ## Protocol version of the bridge.
+    ##
     ## Value: Enum
-    ## - mqtt5
-    ## - mqtt4
-    ## - mqtt3
-    bridge.edge.proto_ver = mqtt4
-
-    ## The ClientId of a remote bridge
-    bridge.edge.client_id = bridge_edge
-
-    ## The Clean start flag of a remote bridge
-    bridge.edge.clean_start = false
-
-    ## The username for a remote bridge
-    bridge.edge.username = user
-
-    ## The password for a remote bridge
-    bridge.edge.password = passwd
-
-    ## Mountpoint of the bridge
-    ## bridge.edge.mountpoint = bridge/edge/
-
-    ## Ping interval of a down bridge
-    bridge.edge.keepalive = 10s
-
-    ## Subscriptions of the bridge topic
-    bridge.edge.subscription.1.topic = #
-
-    ## Subscriptions of the bridge qos
-    bridge.edge.subscription.1.qos = 1
-
-    ## The pending message queue of a bridge
-    bridge.edge.max_pending_messages = 10000
-
-    ## Start type of the bridge
-    bridge.edge.start_type = manual
-
-    ## Bridge reconnect count
-    bridge.edge.reconnect_count = 10
-
-    ## Bridge reconnect time
-    bridge.edge.reconnect_time = 30s
-
-    ## PEM-encoded CA certificates of the bridge
-    ## bridge.edge.cacertfile = cacert.pem
-
-    ## SSL Certfile of the bridge
-    ## bridge.edge.certfile = cert.pem
-
-    ## SSL Keyfile of the bridge
-    ## bridge.edge.keyfile = key.pem
-
-    ## SSL Ciphers used by the bridge
-    ## bridge.edge.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
-
-    ## TLS versions used by the bridge
-    ## bridge.edge.tls_versions = tlsv1.2,tlsv1.1,tlsv1
-
-
-Bridges to cloud 参数设置
---------------------------
-
-.. code-block:: properties
-
-    ##--------------------------------------------------------------------
-    ## Bridge type, Enum: out, in
-    bridge.cloud.type = out
-
-    ## Bridge address: host:port
-    bridge.cloud.address = 127.0.0.1:1883
-
-    ## Protocol version of the bridge
-    ## Value: Enum
-    ## - mqtt5
-    ## - mqtt4
-    ## - mqtt3
-    bridge.cloud.proto_ver = mqtt4
-
-    ## The ClientId of a remote bridge
-    bridge.cloud.client_id = bridge_cloud
-
-    ## The Clean start flag of a remote bridge
-    bridge.cloud.clean_start = false
-
-    ## The username for a remote bridge
-    bridge.cloud.username = user
-
-    ## The password for a remote bridge
-    bridge.cloud.password = passwd
-
-    ## Mountpoint of the bridge
-    bridge.cloud.mountpoint = bridge/edge/${node}/
-
-    ## Ping interval of a down bridge
-    bridge.cloud.keepalive = 10s
-
+    ## - mqttv5
+    ## - mqttv4
+    ## - mqttv3
+    bridge.aws.proto_ver = mqttv4
+     
+    ## The ClientId of a remote bridge.
+    ##
+    ## Value: String
+    bridge.aws.client_id = bridge_aws
+     
+    ## The Clean start flag of a remote bridge.
+    ##
+    ## Value: boolean
+    ## Default: true
+    ##
+    ## NOTE: Some IoT platforms require clean_start
+    ##       must be set to 'true'
+    bridge.aws.clean_start = true
+     
+    ## The username for a remote bridge.
+    ##
+    ## Value: String
+    bridge.aws.username = user
+     
+    ## The password for a remote bridge.
+    ##
+    ## Value: String
+    bridge.aws.password = passwd
+     
+    ## Mountpoint of the bridge.
+    ##
+    ## Value: String
+    bridge.aws.mountpoint = bridge/aws/${node}/
+     
     ## Forward message topics
-    bridge.cloud.forward_rule = #
-
-    ## Subscriptions of the bridge
-    bridge.cloud.subscription.1.topic = $share/cmd/topic1
-    bridge.cloud.subscription.1.qos = 1
-
-    ## Bridge store message type, Enum: memory, disk
-    bridge.cloud.store_type = memory
-
-    ## The pending message queue of a bridge
-    bridge.cloud.max_pending_messages = 10000
-
-    ## Start type of the bridge, Enum: manual, auto
-    bridge.cloud.start_type = manual
-
-    ## Bridge reconnect count
-    bridge.cloud.reconnect_count = 10
-
-    ## Bridge reconnect time
-    bridge.cloud.reconnect_time = 30s
-
-    ## PEM-encoded CA certificates of the bridge
-    ## bridge.cloud.cacertfile = cacert.pem
-
-    ## SSL Certfile of the bridge
-    ## bridge.cloud.certfile = cert.pem
-
-    ## SSL Keyfile of the bridge
-    ## bridge.cloud.keyfile = key.pem
-
-    ## SSL Ciphers used by the bridge
-    ## bridge.cloud.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
-
-    ## TLS versions used by the bridge
-    ## bridge.cloud.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+    ##
+    ## Value: String
+    ## Example: topic1/#,topic2/#
+    bridge.aws.forwards = topic1/#,topic2/#
+     
+    ## Bribge to remote server via SSL.
+    ##
+    ## Value: on | off
+    bridge.aws.ssl = off
+     
+    ## PEM-encoded CA certificates of the bridge.
+    ##
+    ## Value: File
+    bridge.aws.cacertfile = {{ platform_etc_dir }}/certs/cacert.pem
+     
+    ## Client SSL Certfile of the bridge.
+    ##
+    ## Value: File
+    bridge.aws.certfile = {{ platform_etc_dir }}/certs/client-cert.pem
+     
+    ## Client SSL Keyfile of the bridge.
+    ##
+    ## Value: File
+    bridge.aws.keyfile = {{ platform_etc_dir }}/certs/client-key.pem
+     
+    ## SSL Ciphers used by the bridge.
+    ##
+    ## Value: String
+    #bridge.aws.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
+     
+    ## Ciphers for TLS PSK.
+    ## Note that 'listener.ssl.external.ciphers' and 'listener.ssl.external.psk_ciphers' cannot
+    ## be configured at the same time.
+    ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
+    #bridge.aws.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+     
+    ## Ping interval of a down bridge.
+    ##
+    ## Value: Duration
+    ## Default: 10 seconds
+    bridge.aws.keepalive = 60s
+     
+    ## TLS versions used by the bridge.
+    ##
+    ## Value: String
+    bridge.aws.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+     
+    ## Subscriptions of the bridge topic.
+    ##
+    ## Value: String
+    bridge.aws.subscription.1.topic = cmd/topic1
+     
+    ## Subscriptions of the bridge qos.
+    ##
+    ## Value: Number
+    bridge.aws.subscription.1.qos = 1
+     
+    ## Subscriptions of the bridge topic.
+    ##
+    ## Value: String
+    bridge.aws.subscription.2.topic = cmd/topic2
+     
+    ## Subscriptions of the bridge qos.
+    ##
+    ## Value: Number
+    bridge.aws.subscription.2.qos = 1
+     
+    ## Start type of the bridge.
+    ##
+    ## Value: enum
+    ## manual
+    ## auto
+    bridge.aws.start_type = manual
+     
+    ## Bridge reconnect time.
+    ##
+    ## Value: Duration
+    ## Default: 30 seconds
+    bridge.aws.reconnect_interval = 30s
+     
+    ## Retry interval for bridge QoS1 message delivering.
+    ##
+    ## Value: Duration
+    bridge.aws.retry_interval = 20s
+     
+    ## Inflight size.
+    ##
+    ## Value: Integer
+    bridge.aws.max_inflight_batches = 32
+     
+    ## Max number of messages to collect in a batch for
+    ## each send call towards emqx_bridge_connect
+    ##
+    ## Value: Integer
+    ## default: 32
+    bridge.aws.queue.batch_count_limit = 32
+     
+    ## Max number of bytes to collect in a batch for each
+    ## send call towards emqx_bridge_connect
+    ##
+    ## Value: Bytesize
+    ## default: 1000M
+    bridge.aws.queue.batch_bytes_limit = 1000MB
+     
+    ## Base directory for replayq to store messages on disk
+    ## If this config entry is missing or set to undefined,
+    ## replayq works in a mem-only manner.
+    ##
+    ## Value: String
+    bridge.aws.queue.replayq_dir = {{ platform_data_dir }}/emqx_aws_bridge/
+     
+    ## Replayq segment size
+    ##
+    ## Value: Bytesize
+    bridge.aws.queue.replayq_seg_bytes = 10MB
 
 --------------
 Modules 模块
