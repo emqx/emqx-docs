@@ -271,9 +271,9 @@ $SYS-系统主题
 
 $SYS 主题路径以 ``$SYS/brokers/{node}/`` 开头。 ``{node}`` 是指产生该 事件/消息 所在的节点名称，例如::
 
-    $SYS/brokers/emqttd@127.0.0.1/version
+    $SYS/brokers/emqx@127.0.0.1/version
 
-    $SYS/brokers/emqttd@host2/uptime
+    $SYS/brokers/emqx@host2/uptime
 
 .. NOTE:: 默认只允许 localhost 的 MQTT 客户端订阅 $SYS 主题，可通过 etc/acl.config 修改访问控制规则。
 
@@ -595,13 +595,13 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，
 
 .. code:: bash
 
-    ./bin/emqx_ctl trace client "clientid" "trace_clientid.log"
+    ./bin/emqx_ctl trace client "clientid" "trace_clientid.log" debug
 
 追踪主题(Topic):
 
 .. code:: bash
 
-    ./bin/emqx_ctl trace topic "topic" "trace_topic.log"
+    ./bin/emqx_ctl trace topic "topic" "trace_topic.log" debug
 
 查询追踪:
 
@@ -613,19 +613,18 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，
 
 .. code:: bash
 
-    ./bin/emqx_ctl trace client "clientid" off
+    ./bin/emqx_ctl trace stop client "clientid"
 
-    ./bin/emqx_ctl trace topic "topic" off
+    ./bin/emqx_ctl trace stop topic "topic"
 
-.. _emqx_auth_clientid:     https://github.com/emqtt/emq_auth_clientid
-.. _emqx_auth_username:     https://github.com/emqtt/emq_auth_username
-.. _emqx_auth_ldap:         https://github.com/emqtt/emq_auth_ldap
-.. _emqx_auth_http:         https://github.com/emqtt/emq_auth_http
-.. _emqx_auth_mysql:        https://github.com/emqtt/emq_auth_mysql
-.. _emqx_auth_pgsql:        https://github.com/emqtt/emq_auth_pgsql
-.. _emqx_auth_redis:        https://github.com/emqtt/emq_auth_redis
-.. _emqx_auth_mongo:        https://github.com/emqtt/emq_auth_mongo
-.. _emqx_auth_jwt:          https://github.com/emqtt/emq-auth-jwt
-.. _emqx_psk_file:          https://github.com/emqtt/emq-psk-file
-.. _`扩展插件 (Plugins)`:   https://developer.emqx.io/docs/emq/v3/cn/plugins.html
+.. _emqx_auth_clientid: https://github.com/emqx/emqx-auth-clientid
+.. _emqx_auth_username: https://github.com/emqx/emqx-auth-username
+.. _emqx_auth_ldap:     https://github.com/emqx/emqx-auth-ldap
+.. _emqx_auth_http:     https://github.com/emqx/emqx-auth-http
+.. _emqx_auth_mysql:    https://github.com/emqx/emqx-auth-mysql
+.. _emqx_auth_pgsql:    https://github.com/emqx/emqx-auth-pgsql
+.. _emqx_auth_redis:    https://github.com/emqx/emqx-auth-redis
+.. _emqx_auth_mongo:    https://github.com/emqx/emqx-auth-mongo
+.. _emqx_auth_jwt:      https://github.com/emqx/emqx-auth-jwt
+.. _emqx_psk_file:      https://github.com/emqx/emqx-psk-file
 

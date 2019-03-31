@@ -251,6 +251,12 @@ manual 手动创建集群
 
     cluster.etcd.node_ttl = 1m
 
+    cluster.etcd.ssl.keyfile = etc/certs/client-key.pem
+
+    cluster.etcd.ssl.certfile = etc/certs/client.pem
+
+    cluster.etcd.ssl.cacertfile = etc/certs/ca.pem
+
 基于 Kubernetes 自动集群
 ------------------------
 
@@ -333,9 +339,6 @@ Erlang 虚拟机参数
     ## Comment the line to disable
     ## node.heartbeat = on
 
-    ## Enable kernel poll
-    node.kernel_poll = on
-
     ## async thread pool
     node.async_threads = 32
 
@@ -357,6 +360,12 @@ Erlang 虚拟机参数
 
     ## Crash dump
     node.crash_dump = log/crash.dump
+
+    ## Specify the erlang distributed protocol.
+    node.proto_dist = inet_tcp
+
+    ## Specify SSL Options in the file if using SSL for Erlang Distribution.
+    ## node.ssl_dist_optfile = etc/ssl_dist.conf
 
     ## Distributed node ticktime
     node.dist_net_ticktime = 60
@@ -414,79 +423,61 @@ RPC 参数配置
 日志参数配置
 ------------
 
+设置写到终端或写到文件
+-------------------
+
 .. code-block:: properties
 
-    ## Sets the log dir.
+    ## Where to emit the logs.
+    log.to = both
+
+配置日志写到什么地方，可用的选项有：
+
+- off: 完全关闭日志
+- file: 只写到文件
+- console: 只写到终端(erlang shell)
+- both: 同时写到终端(erlang shell) 和文件
+
+日志级别
+-------
+
+.. code-block:: properties
+
+    ## The log severity level.
+    log.level = error
+
+设置全局的日志级别，包括 primary logger level，以及所有到文件和终端的 logger handlers 的日志级别。
+
+可以使用 :ref:`command_log` 为每个 logger handler 设置日志级别。
+
+日志文件配置
+----------
+
+.. code-block:: properties
+
+    ## The dir for log files.
     log.dir = log
 
-console 日志
-------------
+    ## The log filename for logs of level specified in "log.level".
+    log.file = emqx.log
 
-.. code-block:: properties
+    ## Maximum size of each log file.
+    ## Default: 10M
+    ## Supported Unit: KB | MB | G
+    log.rotation.size = 10MB
 
-    ## Console log. Enum: off, file, console, both
-    log.console = console
+    ## Maximum rotation count of log files.
+    ## Default: 5
+    log.rotation.count = 5
 
-    ## Console log level. Enum: debug, info, notice, warning, error, critical, alert, emergency
-    log.console.level = error
+配置额外的 file logger handlers
+------------------------------
 
-    ## Console log file
-    ## log.console.file = log/console.log
+可以通过配置额外的 file logger handlers，将某个级别的日志写到单独的文件。
 
-    ## Maximum file size for console log
-    ## log.console.size = 10485760
+举例，下面的配置将所有的大于等于 info 级别的日志额外写到 info.log 文件中::
 
-    ## The rotation count for console log
-    ## log.console.count = 5
-
-info 日志
-----------
-
-.. code-block:: properties
-
-    ## Info log file
-    ## log.info.file = log/info.log
-
-    ## Maximum file size for info log
-    ## log.info.size = 10485760
-
-    ## The rotation count for info log
-    ## log.info.count = 5
-
-error 日志
-----------
-
-.. code-block:: properties
-
-    ## Error log file
-    log.error.file = log/error.log
-
-    ## Maximum file size for error log
-    log.error.size = 10485760
-
-    ## The rotation count for error log
-    log.error.count = 5
-
-crash 日志
-----------
-
-.. code-block:: properties
-
-    ## Enable the crash log. Enum: on, off
-    log.crash = on
-
-    log.crash.file = log/crash.log
-
-syslog 日志
------------
-
-.. code-block:: properties
-
-    ## Syslog. Enum: on, off
-    log.syslog = on
-
-    ## Syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
-    log.syslog.level = error
+    log.info.file = info.log
 
 -------------------
 匿名认证与 ACL 文件
@@ -888,53 +879,6 @@ MQTT/TCP 监听器 - 1883
     ## The SO_REUSEADDR flag for TCP listener
     listener.tcp.external.reuseaddr = true
 
-    ##--------------------------------------------------------------------
-    ## Internal TCP Listener
-
-    ## Internal TCP Listener: 11883, 127.0.0.1:11883, ::1:11883
-    listener.tcp.internal = 127.0.0.1:11883
-
-    ## Size of acceptor pool
-    listener.tcp.internal.acceptors = 16
-
-    ## The acceptor pool for internal MQTT/TCP listener
-    listener.tcp.internal.acceptors = 4
-
-    ## Maximum number of concurrent clients
-    listener.tcp.internal.max_connections = 10240000
-
-    ## Maximum internal connections per second
-    listener.tcp.internal.max_conn_rate = 1000
-
-    ## Zone of the internal MQTT/TCP listener belonged to
-    listener.tcp.internal.zone = internal
-
-    #listener.tcp.internal.mountpoint = internal/
-
-    ## Rate Limit. Format is 'burst,rate', Unit is Bps
-    ## listener.tcp.internal.rate_limit = 1000000,2000000
-
-    ## TCP Socket Options
-    listener.tcp.internal.backlog = 512
-
-    ## The TCP send timeout for internal MQTT connections
-    listener.tcp.internal.send_timeout = 5s
-
-    ## Close the MQTT/TCP connection if send timeout
-    listener.tcp.external.send_timeout_close = on
-
-    ## listener.tcp.internal.recbuf = 16KB
-
-    ## listener.tcp.internal.sndbuf = 16KB
-
-    ## listener.tcp.internal.buffer = 16KB
-
-    ## listener.tcp.internal.tune_buffer = off
-
-    listener.tcp.internal.nodelay = false
-
-    listener.tcp.internal.reuseaddr = true
-
 ----------------------
 MQTT/SSL 监听器 - 8883
 ----------------------
@@ -1120,150 +1064,170 @@ Bridge 模块进出规则由 type 控制::
 *EMQ X* R3.0 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $name 都是可以换成相应的名称。
 也可以新增自定义name的 bridge.$name.xxxx 。
 
-Bridges to edge 参数设置
+Bridges 参数设置
 --------------------------
 
 .. code-block:: properties
 
-    ##--------------------------------------------------------------------
-    ## Bridge type,Enum: out, in
-    bridge.edge.type = in
-
-    ## Bridge address: host:port
-    bridge.edge.address = 127.0.0.1:1883
-
-    ## Protocol version of the bridge
+    ## Bridge address: node name for local bridge, host:port for remote.
+    ##
+    ## Value: String
+    ## Example: emqx@127.0.0.1,  127.0.0.1:1883
+    bridge.aws.address = 127.0.0.1:1883
+     
+    ## Protocol version of the bridge.
+    ##
     ## Value: Enum
-    ## - mqtt5
-    ## - mqtt4
-    ## - mqtt3
-    bridge.edge.proto_ver = mqtt4
-
-    ## The ClientId of a remote bridge
-    bridge.edge.client_id = bridge_edge
-
-    ## The Clean start flag of a remote bridge
-    bridge.edge.clean_start = false
-
-    ## The username for a remote bridge
-    bridge.edge.username = user
-
-    ## The password for a remote bridge
-    bridge.edge.password = passwd
-
-    ## Mountpoint of the bridge
-    ## bridge.edge.mountpoint = bridge/edge/
-
-    ## Ping interval of a down bridge
-    bridge.edge.keepalive = 10s
-
-    ## Subscriptions of the bridge topic
-    bridge.edge.subscription.1.topic = #
-
-    ## Subscriptions of the bridge qos
-    bridge.edge.subscription.1.qos = 1
-
-    ## The pending message queue of a bridge
-    bridge.edge.max_pending_messages = 10000
-
-    ## Start type of the bridge
-    bridge.edge.start_type = manual
-
-    ## Bridge reconnect count
-    bridge.edge.reconnect_count = 10
-
-    ## Bridge reconnect time
-    bridge.edge.reconnect_time = 30s
-
-    ## PEM-encoded CA certificates of the bridge
-    ## bridge.edge.cacertfile = cacert.pem
-
-    ## SSL Certfile of the bridge
-    ## bridge.edge.certfile = cert.pem
-
-    ## SSL Keyfile of the bridge
-    ## bridge.edge.keyfile = key.pem
-
-    ## SSL Ciphers used by the bridge
-    ## bridge.edge.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
-
-    ## TLS versions used by the bridge
-    ## bridge.edge.tls_versions = tlsv1.2,tlsv1.1,tlsv1
-
-
-Bridges to cloud 参数设置
---------------------------
-
-.. code-block:: properties
-
-    ##--------------------------------------------------------------------
-    ## Bridge type, Enum: out, in
-    bridge.cloud.type = out
-
-    ## Bridge address: host:port
-    bridge.cloud.address = 127.0.0.1:1883
-
-    ## Protocol version of the bridge
-    ## Value: Enum
-    ## - mqtt5
-    ## - mqtt4
-    ## - mqtt3
-    bridge.cloud.proto_ver = mqtt4
-
-    ## The ClientId of a remote bridge
-    bridge.cloud.client_id = bridge_cloud
-
-    ## The Clean start flag of a remote bridge
-    bridge.cloud.clean_start = false
-
-    ## The username for a remote bridge
-    bridge.cloud.username = user
-
-    ## The password for a remote bridge
-    bridge.cloud.password = passwd
-
-    ## Mountpoint of the bridge
-    bridge.cloud.mountpoint = bridge/edge/${node}/
-
-    ## Ping interval of a down bridge
-    bridge.cloud.keepalive = 10s
-
+    ## - mqttv5
+    ## - mqttv4
+    ## - mqttv3
+    bridge.aws.proto_ver = mqttv4
+     
+    ## The ClientId of a remote bridge.
+    ##
+    ## Value: String
+    bridge.aws.client_id = bridge_aws
+     
+    ## The Clean start flag of a remote bridge.
+    ##
+    ## Value: boolean
+    ## Default: true
+    ##
+    ## NOTE: Some IoT platforms require clean_start
+    ##       must be set to 'true'
+    bridge.aws.clean_start = true
+     
+    ## The username for a remote bridge.
+    ##
+    ## Value: String
+    bridge.aws.username = user
+     
+    ## The password for a remote bridge.
+    ##
+    ## Value: String
+    bridge.aws.password = passwd
+     
+    ## Mountpoint of the bridge.
+    ##
+    ## Value: String
+    bridge.aws.mountpoint = bridge/aws/${node}/
+     
     ## Forward message topics
-    bridge.cloud.forward_rule = #
-
-    ## Subscriptions of the bridge
-    bridge.cloud.subscription.1.topic = $share/cmd/topic1
-    bridge.cloud.subscription.1.qos = 1
-
-    ## Bridge store message type, Enum: memory, disk
-    bridge.cloud.store_type = memory
-
-    ## The pending message queue of a bridge
-    bridge.cloud.max_pending_messages = 10000
-
-    ## Start type of the bridge, Enum: manual, auto
-    bridge.cloud.start_type = manual
-
-    ## Bridge reconnect count
-    bridge.cloud.reconnect_count = 10
-
-    ## Bridge reconnect time
-    bridge.cloud.reconnect_time = 30s
-
-    ## PEM-encoded CA certificates of the bridge
-    ## bridge.cloud.cacertfile = cacert.pem
-
-    ## SSL Certfile of the bridge
-    ## bridge.cloud.certfile = cert.pem
-
-    ## SSL Keyfile of the bridge
-    ## bridge.cloud.keyfile = key.pem
-
-    ## SSL Ciphers used by the bridge
-    ## bridge.cloud.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
-
-    ## TLS versions used by the bridge
-    ## bridge.cloud.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+    ##
+    ## Value: String
+    ## Example: topic1/#,topic2/#
+    bridge.aws.forwards = topic1/#,topic2/#
+     
+    ## Bribge to remote server via SSL.
+    ##
+    ## Value: on | off
+    bridge.aws.ssl = off
+     
+    ## PEM-encoded CA certificates of the bridge.
+    ##
+    ## Value: File
+    bridge.aws.cacertfile = {{ platform_etc_dir }}/certs/cacert.pem
+     
+    ## Client SSL Certfile of the bridge.
+    ##
+    ## Value: File
+    bridge.aws.certfile = {{ platform_etc_dir }}/certs/client-cert.pem
+     
+    ## Client SSL Keyfile of the bridge.
+    ##
+    ## Value: File
+    bridge.aws.keyfile = {{ platform_etc_dir }}/certs/client-key.pem
+     
+    ## SSL Ciphers used by the bridge.
+    ##
+    ## Value: String
+    #bridge.aws.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
+     
+    ## Ciphers for TLS PSK.
+    ## Note that 'listener.ssl.external.ciphers' and 'listener.ssl.external.psk_ciphers' cannot
+    ## be configured at the same time.
+    ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
+    #bridge.aws.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+     
+    ## Ping interval of a down bridge.
+    ##
+    ## Value: Duration
+    ## Default: 10 seconds
+    bridge.aws.keepalive = 60s
+     
+    ## TLS versions used by the bridge.
+    ##
+    ## Value: String
+    bridge.aws.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+     
+    ## Subscriptions of the bridge topic.
+    ##
+    ## Value: String
+    bridge.aws.subscription.1.topic = cmd/topic1
+     
+    ## Subscriptions of the bridge qos.
+    ##
+    ## Value: Number
+    bridge.aws.subscription.1.qos = 1
+     
+    ## Subscriptions of the bridge topic.
+    ##
+    ## Value: String
+    bridge.aws.subscription.2.topic = cmd/topic2
+     
+    ## Subscriptions of the bridge qos.
+    ##
+    ## Value: Number
+    bridge.aws.subscription.2.qos = 1
+     
+    ## Start type of the bridge.
+    ##
+    ## Value: enum
+    ## manual
+    ## auto
+    bridge.aws.start_type = manual
+     
+    ## Bridge reconnect time.
+    ##
+    ## Value: Duration
+    ## Default: 30 seconds
+    bridge.aws.reconnect_interval = 30s
+     
+    ## Retry interval for bridge QoS1 message delivering.
+    ##
+    ## Value: Duration
+    bridge.aws.retry_interval = 20s
+     
+    ## Inflight size.
+    ##
+    ## Value: Integer
+    bridge.aws.max_inflight_batches = 32
+     
+    ## Max number of messages to collect in a batch for
+    ## each send call towards emqx_bridge_connect
+    ##
+    ## Value: Integer
+    ## default: 32
+    bridge.aws.queue.batch_count_limit = 32
+     
+    ## Max number of bytes to collect in a batch for each
+    ## send call towards emqx_bridge_connect
+    ##
+    ## Value: Bytesize
+    ## default: 1000M
+    bridge.aws.queue.batch_bytes_limit = 1000MB
+     
+    ## Base directory for replayq to store messages on disk
+    ## If this config entry is missing or set to undefined,
+    ## replayq works in a mem-only manner.
+    ##
+    ## Value: String
+    bridge.aws.queue.replayq_dir = {{ platform_data_dir }}/emqx_aws_bridge/
+     
+    ## Replayq segment size
+    ##
+    ## Value: Bytesize
+    bridge.aws.queue.replayq_seg_bytes = 10MB
 
 --------------
 Modules 模块
@@ -1410,18 +1374,54 @@ Erlang 虚拟机监控设置
 
 .. code-block:: properties
 
-    ## Long GC, don't monitor in production mode for:
+    ## Enable Long GC monitoring.
     sysmon.long_gc = false
 
-    ## Long Schedule(ms)
+    ## Enable Long Schedule(ms) monitoring.
     sysmon.long_schedule = 240
 
-    ## 8M words. 32MB on 32-bit VM, 64MB on 64-bit VM.
+    ## Enable Large Heap monitoring.
     sysmon.large_heap = 8MB
 
-    ## Busy Port
+    ## Enable Busy Port monitoring.
     sysmon.busy_port = false
 
-    ## Busy Dist Port
+    ## Enable Busy Dist Port monitoring.
     sysmon.busy_dist_port = true
+
+    ## The time interval for the periodic cpu check
+    ## Default: 60s
+    os_mon.cpu_check_interval = 60s
+
+    ## The threshold, as percentage of system cpu
+    ## for how much system cpu can be used before the corresponding alarm is set.
+    os_mon.cpu_high_watermark = 80%
+
+    ## The threshold, as percentage of system cpu
+    ## for how much system cpu can be used before the corresponding alarm is clear.
+    os_mon.cpu_low_watermark = 60%
+
+    ## The time interval for the periodic memory check
+    os_mon.mem_check_interval = 60s
+
+    ## The threshold, as percentage of system memory
+    ## for how much system memory can be allocated before the corresponding alarm is set.
+    os_mon.sysmem_high_watermark = 70%
+
+    ## The threshold, as percentage of system memory
+    ## for how much system memory can be allocated by one Erlang process before the corresponding alarm is set.
+    os_mon.procmem_high_watermark = 5%
+
+    ## The time interval for the periodic process limit check
+    vm_mon.check_interval = 30s
+
+    ## The threshold, as percentage of processes,
+    ## for how many processes can simultaneously exist
+    ## at the local node before the corresponding alarm is set.
+    vm_mon.process_high_watermark = 80%
+
+    ## The threshold, as percentage of processes,
+    ## for how many processes can simultaneously
+    ## exist at the local node before the corresponding alarm is clear.
+    vm_mon.process_low_watermark = 60%
 
