@@ -22,7 +22,7 @@ EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息�
     Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
                   ---------                     ---------                     ---------
 
-EMQ X 节点 RPC 桥接配置
+EMQ X 节点桥接配置
 ---------------------------
 
 假设在本机创建两个 EMQ 节点，并创建一条桥接转发全部传感器(sensor)主题消息:
@@ -30,9 +30,9 @@ EMQ X 节点 RPC 桥接配置
 +---------+---------------------+-----------+
 | 目录    | 节点                | MQTT 端口 |
 +---------+---------------------+-----------+
-| emqx1   | emqx1@127.0.0.1     | 1883      |
+| emqx1   | emqx1@192.168.1.1   | 1883      |
 +---------+---------------------+-----------+
-| emqx2   | emqx2@127.0.0.1     | 2883      |
+| emqx2   | emqx2@192.168.1.2   | 1883      |
 +---------+---------------------+-----------+
 
 如果是将匹配 sensor/# 主题的消息从 emqx1 节点转发到 emqx2 节点，只需在 emqx1
@@ -42,26 +42,95 @@ EMQ X 节点 RPC 桥接配置
     ##
     ## Value: String
     ## Example: emqx@127.0.0.1,  127.0.0.1:1883
-    bridge.emqx.address = 127.0.0.1:2883
+    bridge.emqx2.address = emqx2@192.168.1.2
+    
+在上述配置中，emqx2 是 bridge 名字, 不同的 bridge 以 bridge 名字来区分，比如说桥接到
+ AWS 上的 bridge 的配置可以写成::
 
-    ## Mountpoint of the bridge.
-    ##
-    ## Value: String
-    bridge.emqx.mountpoint = bridge/emqx/${node}/
+    bridge.aws.address = 192.168.1.2:1883
+
+如果桥接方式是 RPC，那么 `bridge.emqx2.address` 那一项应该填 `emqx2@192.168.1.2`。
+如果桥接方式是 MQTT，那么 `bridge.emqx2.address` 那一项应该填 `192.168.1.2:1883`。
+
+bridge 配置中的 forwards 指定的是 topic，所谓的 forwards 是指转发到本地节点指定 topic 上
+的消息都会被转发到远程节点上，比如说下面的配置::
 
     ## Forward message topics
     ##
     ## Value: String
     ## Example: topic1/#,topic2/#
-    bridge.emqx.forwards = sensor/#
+    bridge.aws.forwards = sensor1/#,sensor2/#
+    
+本地 emqx 接收到匹配主题 `sersor1/#`，`sensor2/#` 的消息都会转发到远程aws 上。
 
-如果是 RPC 桥接，只需要将配置项的 bridge.emqx.address = 127.0.0.1:2883 改为
-bridge.emqx.address = emqx2@127.0.0.1
+bridge 配置中的 mountpoint 字面意思是挂载点，该配置选项是配合 forwards 使用的，mountpoint
+的配置配置如下::
+  
+    ## Mountpoint of the bridge.
+    ##
+    ## Value: String
+    bridge.emqx2.mountpoint = bridge/emqx2/${node}/
+
+如果转发到本地的消息的主题是 `sensor1/hello`, 如果转发到远程的主题将会挂载到
+`bridge/emqx2/emqx@192.168.1.1/sensor1/hello` 上。
+
+emqx 的 bridge 有消息缓存机制，其目的是当 bridge 断开（如网络连接不稳定的情况）
+时将 forwards 主题的消息缓存到本地的磁盘队列上，当桥接恢复时，把消息重新转发到
+远程的 aws 或 emqx 节点上。关于缓存队列的配置如下::
+
+    ## Max number of messages to collect in a batch for
+    ## each send call towards emqx_bridge_connect
+    ##
+    ## Value: Integer
+    ## default: 32
+    bridge.aws.queue.batch_count_limit = 32
+    
+    ## Max number of bytes to collect in a batch for each
+    ## send call towards emqx_bridge_connect
+    ##
+    ## Value: Bytesize
+    ## default: 1000M
+    bridge.aws.queue.batch_bytes_limit = 1000MB
+    
+    ## Base directory for replayq to store messages on disk
+    ## If this config entry is missing or set to undefined,
+    ## replayq works in a mem-only manner.
+    ##
+    ## Value: String
+    bridge.aws.queue.replayq_dir = data/emqx_aws_bridge/
+    
+    ## Replayq segment size
+    ##
+    ## Value: Bytesize
+    bridge.aws.queue.replayq_seg_bytes = 10MB
+
+`bridge.aws.queue.batch_count_limit` 和 `bridge.aws.queue.batch_bytes_limit` 都
+是负责 bridge 内部队列消息的批量发送的配置选项，这里用户可以不必关心这两个参数，
+通常情况下，使用默认参数配置就能满足需求。
+
+`bridge.aws.queue.replayq_dir` 是用来指定 bridge 存储队列的路径的配置参数。
+
+`bridge.aws.queue.replayq_seg_bytes` 是用来指定缓存在磁盘上的消息队列的最大单个文
+件的大小，如果消息队列大小超出指定值的话，会创建新的文件来存储消息队列。
 
 EMQ X 节点 MQTT 桥接配置
 -----------------------
 
-有些配置项只对 mqtt 桥接起作用。比如::
+前面提到过 emqx bridge 的桥接 有两种：RPC 和 MQTT。相比 MQTT 桥接，RPC 桥接的局限性要更多
+，比如：emqx 的 RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步
+到本地节点上；而且 RPC 桥接只能将两个 emqx 桥接在一起，无法桥接 emqx 到其他的 mqtt broker
+上，emqx 3.0 正式引入了 mqtt bridge，使 emqx 具备了桥接任意 mqtt broker 的能力，同时由于
+ mqtt 协议本身的特性，mqtt bridge 还可以订阅远程 mqtt broker 的主题，将远程 mqtt broker 的
+消息同步到本地。
+
+其原理是在 emqx broker 中开启一个 emqx_client 的 erlang 进程，去连接远程的 mqtt broker，因
+此在 mqtt bridge 的配置中，需要去填一些 mqtt 连接所必须用到的字段::
+
+    ## Bridge address: node name for local bridge, host:port for remote.
+    ##
+    ## Value: String
+    ## Example: emqx@127.0.0.1,  127.0.0.1:1883
+    bridge.emqx.address = 192.168.1.2:1883
 
     ## Protocol version of the bridge.
     ##
@@ -94,17 +163,6 @@ EMQ X 节点 MQTT 桥接配置
     ##
     ## Value: String
     bridge.emqx.password = passwd
-
-    ## Mountpoint of the bridge.
-    ##
-    ## Value: String
-    bridge.emqx.mountpoint = bridge/aws/${node}/
-
-    ## Forward message topics
-    ##
-    ## Value: String
-    ## Example: topic1/#,topic2/#
-    bridge.emqx.forwards = sensor1/#,sensor2/#
 
     ## Bribge to remote server via SSL.
     ##
@@ -168,13 +226,6 @@ EMQ X 节点 MQTT 桥接配置
     ## Value: Number
     bridge.emqx.subscription.2.qos = 1
 
-    ## Start type of the bridge.
-    ##
-    ## Value: enum
-    ## manual
-    ## auto
-    bridge.emqx.start_type = manual
-
     ## Bridge reconnect time.
     ##
     ## Value: Duration
@@ -191,40 +242,25 @@ EMQ X 节点 MQTT 桥接配置
     ## Value: Integer
     bridge.emqx.max_inflight_batches = 32
 
-    ## Max number of messages to collect in a batch for
-    ## each send call towards emqx_bridge_connect
+emqx bridge 的启动方式有两种，一种是自动启动 bridge，一种是手动启动 brid    
+
+
+如果要创建多个 bridge，那么只要复制默认的 bridge 配置再拷贝到现有 bridge 配置中，
+修改 bridge 名字，再在原有配置基础上做一些修改就可以了。
+
+在配置完成后，还可以通过 CLI 的方式去操作 bridge。如果用户在配置文件中指定 bridge
+的启动方式是自动::
+  
+    ## Start type of the bridge.
     ##
-    ## Value: Integer
-    ## default: 32
-    bridge.emqx.queue.batch_count_limit = 32
+    ## Value: enum
+    ## manual
+    ## auto
+    bridge.emqx.start_type = auto
 
-    ## Max number of bytes to collect in a batch for each
-    ## send call towards emqx_bridge_connect
-    ##
-    ## Value: Bytesize
-    ## default: 1000M
-    bridge.emqx.queue.batch_bytes_limit = 1000MB
+那么无需手动 `emqx_ctl bridges start emqx` 即可启动桥接。
 
-    ## Base directory for replayq to store messages on disk
-    ## If this config entry is missing or set to undefined,
-    ## replayq works in a mem-only manner.
-    ##
-    ## Value: String
-    bridge.emqx.queue.replayq_dir = {{ platform_data_dir }}/emqx_emqx_bridge/
-
-    ## Replayq segment size
-    ##
-    ## Value: Bytesize
-    bridge.emqx.queue.replayq_seg_bytes = 10MB
-
-MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接所需要用到字段，除此之
-外，与 RPC 桥接只能将本地消息转发到远程不同，MQTT 桥接不仅可以将远程的消息同步到
-本地主题上，还可以将断开桥接时还在转发的消息缓存到本地上去，当连接恢复时再把消
-息发布到远程节点上去。与缓存消息有关的配置项都是以 bridge.$(Bridgename).queue 开
-头。而与同步远程节点主题有关的配置项则都以 bridge.$(Bridgename).subscription 开
-头。
-
-除了配置文件的方式，还可以通过 CLI 的方式去操作 bridge.
+下面是桥接的基本 CLI 命令:
 
 .. code-block:: bash
 
