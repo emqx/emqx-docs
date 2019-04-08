@@ -11,8 +11,7 @@ EMQ X 节点间桥接
 ----------------
 
 EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息转发，不支持订阅
-远程节点的主题去同步数据；MQTT 桥接同时支持转发和通过订阅主题来实现数据同步
-两种方式。
+远程节点的主题去同步数据；MQTT 桥接同时支持转发和通过订阅主题来实现数据同步两种方式。
 
 节点间桥接与集群不同，不复制主题树与路由表，只按桥接规则转发 MQTT 消息。
 
@@ -59,15 +58,13 @@ emqx2 节点的 `sensor1/#` ，`sensor2/#` 主题上。
 
 forwards 用于指定主题，转发到本地节点指定 forwards 上的消息都会被转发到远程节点上。
 
-mountpoint 用于指定主题前缀，该配置选项须配合 forwards 使用，如果转发到本地
-消息的主题是 `sensor1/hello`, 转发到远程的消息的主题会变为
-`bridge/emqx2/emqx@192.168.1.1/sensor1/hello` 。
+mountpoint 用于指定主题前缀，该配置选项须配合 forwards 使用，如果转发到本地消息的主题是
+`sensor1/hello`, 转发到远程的消息的主题会变为 `bridge/emqx2/emqx@192.168.1.1/sensor1/hello` 。
 
 
 RPC 桥接的局限性：
 
-1. emqx 的 RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步
-到本地节点上；
+1. emqx 的 RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步到本地节点上；
 
 2. RPC 桥接只能将两个 emqx 桥接在一起，无法桥接 emqx 到其他的 mqtt broker 上。
 
@@ -79,8 +76,7 @@ EMQ X 节点 MQTT 桥接配置
 -----------------------
 
 EMQ X MQTT 桥接是通过在 emqx broker 上开启一个 emqx_client 的进程，该 emqx_client
-会连接远程的 mqtt broker，因此在 mqtt bridge 的配置中，需要去设置 mqtt 连接
-所必须用到的字段::
+会连接远程的 mqtt broker，因此在 mqtt bridge 的配置中，需要去设置 mqtt 连接所必须用到的字段::
 
     ## 桥接地址： 写成节点名则用于 rpc 桥接，写成 host:port 用于 mqtt 连接
     ##
@@ -229,14 +225,14 @@ emqx 的 bridge 有消息缓存机制，缓存机制同时适用于 RPC 桥接�
     ## 值: 字节
     bridge.emqx2.queue.replayq_seg_bytes = 10MB
 
-`bridge.emqx2.queue.batch_count_limit` 和 `bridge.emqx2.queue.batch_bytes_limit` 都
-是负责 bridge 内部队列消息的批量发送的配置选项，用户不必关心这两个参数，
+`bridge.emqx2.queue.batch_count_limit` 和 `bridge.emqx2.queue.batch_bytes_limit`
+都是负责 bridge 内部队列消息的批量发送的配置选项，用户不必关心这两个参数，
 通常情况下，使用默认参数配置就能满足需求。
 
 `bridge.emqx2.queue.replayq_dir` 是用于指定 bridge 存储队列的路径的配置参数。
 
-`bridge.emqx2.queue.replayq_seg_bytes` 是用于指定缓存在磁盘上的消息队列的最大单个文
-件的大小，如果消息队列大小超出指定值的话，会创建新的文件来存储消息队列。
+`bridge.emqx2.queue.replayq_seg_bytes` 是用于指定缓存在磁盘上的消息队列的最大单个文件的大小，
+如果消息队列大小超出指定值的话，会创建新的文件来存储消息队列。
 
 EMQ X 桥接的命令行使用
 -----------------------
