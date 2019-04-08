@@ -797,7 +797,7 @@ log primary-level
 
     debug
 
-log primary-lelvel <Level>
+log primary-level <Level>
 --------------------------
 
 设置主日志等级::
@@ -844,10 +844,16 @@ trace 命令用于追踪某个客户端或 Topic，打印日志信息到文件�
 | trace stop topic <Topic>                       | 关闭 Topic 追踪                                |
 +------------------------------------------------+------------------------------------------------+
 
+.. note:: 使用 trace 之前，需要将主日志等级(primary logger level) 设置成足够低的值。为提高系统运行性能，默认的主日志等级是 error。
+
 trace start client <ClientId> <File> [<Level>]
 ----------------------------------------------
 
 开启 Client 追踪::
+
+    $ ./bin/emqx_ctl log primary-level debug
+
+    debug
 
     $ ./bin/emqx_ctl trace start client clientid log/clientid_trace.log
 
@@ -870,6 +876,10 @@ trace start topic <Topic> <File> [<Level>]
 ------------------------------------------
 
 开启 Topic 追踪::
+
+    $ ./bin/emqx_ctl log primary-level debug
+
+    debug
 
     $ ./bin/emqx_ctl trace start topic topic log/topic_trace.log
 
