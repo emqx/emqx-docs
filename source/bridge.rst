@@ -49,11 +49,11 @@ EMQ X 节点桥接配置
 
     bridge.aws.address = 192.168.1.2:1883
 
-如果桥接方式是 RPC，那么 `bridge.emqx2.address` 那一项应该填 `emqx2@192.168.1.2`。
-如果桥接方式是 MQTT，那么 `bridge.emqx2.address` 那一项应该填 `192.168.1.2:1883`。
+如果桥接方式是 RPC，`bridge.emqx2.address` 需要配置为 `emqx2@192.168.1.2`。
+如果桥接方式是 MQTT，`bridge.emqx2.address` 需要配置为 `192.168.1.2:1883`。
 
-bridge 配置中的 forwards 指定的是 topic，所谓的 forwards 是指转发到本地节点指定 topic 上
-的消息都会被转发到远程节点上，比如说下面的配置::
+bridge 配置中的 forwards 指定的是主题，转发到本地节点指定 forwards 上的消息都会被转发
+到远程节点上，比如下面的配置::
 
     ## Forward message topics
     ##
@@ -61,21 +61,22 @@ bridge 配置中的 forwards 指定的是 topic，所谓的 forwards 是指转�
     ## Example: topic1/#,topic2/#
     bridge.aws.forwards = sensor1/#,sensor2/#
     
-本地 emqx 接收到匹配主题 `sersor1/#`，`sensor2/#` 的消息都会转发到远程aws 上。
+本地 emqx 接收到匹配主题 `sersor1/#`，`sensor2/#` 的消息都会转发到远程 aws 上的 `sersor1/#`，
+`sensor2/#` 主题上。
 
-bridge 配置中的 mountpoint 字面意思是挂载点，该配置选项是配合 forwards 使用的，mountpoint
-的配置配置如下::
+bridge 配置中的 mountpoint 用来配置主题前缀，该配置选项是配合 forwards 使用的，mountpoint
+的基本配置如下::
   
     ## Mountpoint of the bridge.
     ##
     ## Value: String
     bridge.emqx2.mountpoint = bridge/emqx2/${node}/
 
-如果转发到本地的消息的主题是 `sensor1/hello`, 如果转发到远程的主题将会挂载到
-`bridge/emqx2/emqx@192.168.1.1/sensor1/hello` 上。
+如果转发到本地的消息的主题是 `sensor1/hello`, 那么转发到远程的主题将会挂载到
+`bridge/emqx2/emqx@192.168.1.1/sensor1/hello` 主题上。
 
-emqx 的 bridge 有消息缓存机制，其目的是当 bridge 断开（如网络连接不稳定的情况）
-时将 forwards 主题的消息缓存到本地的磁盘队列上，当桥接恢复时，把消息重新转发到
+emqx 的 bridge 有消息缓存机制，当 bridge 断开（如网络连接不稳定的情况）时可以将
+forwards 主题的消息缓存到本地的磁盘队列上，当桥接恢复时，再把消息重新转发到
 远程的 aws 或 emqx 节点上。关于缓存队列的配置如下::
 
     ## Max number of messages to collect in a batch for
@@ -244,12 +245,11 @@ EMQ X 节点 MQTT 桥接配置
 
 emqx bridge 的启动方式有两种，一种是自动启动 bridge，一种是手动启动 brid    
 
-
-如果要创建多个 bridge，那么只要复制默认的 bridge 配置再拷贝到现有 bridge 配置中，
+如果要创建多个 bridge，只要复制默认的 bridge 配置再拷贝到现有 bridge 配置中，
 修改 bridge 名字，再在原有配置基础上做一些修改就可以了。
 
-在配置完成后，还可以通过 CLI 的方式去操作 bridge。如果用户在配置文件中指定 bridge
-的启动方式是自动::
+在配置完成后，可以通过 CLI 的方式去操作 bridge。如果用户在配置文件中指定 bridge
+的启动方式是 `manual` ::
   
     ## Start type of the bridge.
     ##
@@ -258,7 +258,8 @@ emqx bridge 的启动方式有两种，一种是自动启动 bridge，一种是�
     ## auto
     bridge.emqx.start_type = auto
 
-那么无需手动 `emqx_ctl bridges start emqx` 即可启动桥接。
+需要手动 `emqx_ctl bridges start emqx` 来启动桥接。如果 `start_type` 是 auto，
+不需要 CLI 就可以自动启动桥接。
 
 下面是桥接的基本 CLI 命令:
 
