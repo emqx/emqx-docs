@@ -102,12 +102,12 @@ emqx-rel
 - 修复 Windows 环境下 EMQ X 需要启动两次的问题
 
   Github Commit:
-  `emqx/emqx-rel#726597d9c16769a6428507e7eb8ac9d56f35f28b <https://github.com/emqx/emqx-rel/commit/726597d9c16769a6428507e7eb8ac9d56f35f28b>`_
+  `emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508 <https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508>`_
 
 - 修复 Windows 环境下 EMQ X 安装路径含有中文或空格时无法启动的问题
 
   Github Commit:
-  `emqx/emqx-rel#ed50d8ba93e92eb44ec275f19228dd369c0ce7f <https://github.com/emqx/emqx-rel/commit/9ed50d8ba93e92eb44ec275f19228dd369c0ce7f>`_
+  `emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508 <https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508>`_
 
 .. _release_3.1-beta.3:
 
