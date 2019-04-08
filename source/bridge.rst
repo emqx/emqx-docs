@@ -1,4 +1,3 @@
-
 .. _bridge:
 
 =================
@@ -12,7 +11,8 @@ EMQ X 节点间桥接
 ----------------
 
 EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息转发，不支持订阅
-远程节点的主题去同步数据，MQTT 桥接同时支持转发和通过订阅数据同步两种方式。
+远程节点的主题去同步数据；MQTT 桥接同时支持转发和通过订阅主题来实现数据同步
+两种方式。
 
 节点间桥接与集群不同，不复制主题树与路由表，只按桥接规则转发 MQTT 消息。
 
@@ -22,7 +22,7 @@ EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息�
     Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
                   ---------                     ---------                     ---------
 
-假设在本机创建两个 EMQ 节点，并创建一条桥接转发全部传感器(sensor)主题消息:
+假设在本机创建两个 EMQ X 节点，并创建一条桥接转发全部传感器(sensor)主题消息:
 
 +---------+---------------------+-----------+
 | 目录    | 节点                | MQTT 端口 |
@@ -32,46 +32,44 @@ EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息�
 | emqx2   | emqx2@192.168.1.2   | 1883      |
 +---------+---------------------+-----------+
 
-
 EMQ X 节点 RPC 桥接配置
 ---------------------------
 
 以下是 RPC 桥接的基本配置::
 
-    ## Bridge address: node name for local bridge, host:port for remote.
+    ## 桥接地址： 写成节点名则用于 rpc 桥接，写成 host:port 用于 mqtt 连接
     ##
-    ## Value: String
-    ## Example: emqx@127.0.0.1,  127.0.0.1:1883
+    ## 值: 字符串
+    ## 示例: emqx@127.0.0.1,  127.0.0.1:1883
     bridge.emqx2.address = emqx2@192.168.1.2
     
-    ## Forward message topics
+    ## 转发消息的主题
     ##
-    ## Value: String
-    ## Example: topic1/#,topic2/#
+    ## 值: 字符串
+    ## 示例: topic1/#,topic2/#
     bridge.emqx2.forwards = sensor1/#,sensor2/#
 
-    ## Mountpoint of the bridge.
+    ## 桥接的 mountpoint(挂载点)
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.mountpoint = bridge/emqx2/${node}/
 
-本地 emqx 接收到匹配主题 `sersor1/#`，`sensor2/#` 的消息都会转发到远程 aws 上的 `sersor1/#` ，
-`sensor2/#` 主题上。
+本地 emqx1 节点接收到的消息如果匹配主题 `sersor1/#`，`sensor2/#`，这些消息会被转发到远程
+emqx2 节点的 `sensor1/#` ，`sensor2/#` 主题上。
 
-bridge 配置中的 forwards 指定的是主题，转发到本地节点指定 forwards 上的消息都会被转发
-到远程节点上。
+forwards 用于指定主题，转发到本地节点指定 forwards 上的消息都会被转发到远程节点上。
 
-bridge 配置中的 mountpoint 用于指定主题前缀，该配置选项须配合 forwards 使用，如果转发到本地
+mountpoint 用于指定主题前缀，该配置选项须配合 forwards 使用，如果转发到本地
 消息的主题是 `sensor1/hello`, 转发到远程的消息的主题会变为
 `bridge/emqx2/emqx@192.168.1.1/sensor1/hello` 。
 
 
 RPC 桥接的局限性：
+
 1. emqx 的 RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步
 到本地节点上；
 
 2. RPC 桥接只能将两个 emqx 桥接在一起，无法桥接 emqx 到其他的 mqtt broker 上。
-
 
 emqx 3.0 正式引入了 mqtt bridge，使 emqx 可以桥接任意 mqtt broker ，同时由于
  mqtt 协议本身的特性， emqx 可以通过 mqtt bridge 去订阅远程 mqtt broker 的主题，
@@ -80,124 +78,124 @@ emqx 3.0 正式引入了 mqtt bridge，使 emqx 可以桥接任意 mqtt broker �
 EMQ X 节点 MQTT 桥接配置
 -----------------------
 
-EMQ X MQTT 桥接的原理是在 emqx broker 中开启一个 emqx_client 的 erlang 进程
-去连接远程的 mqtt broker，因此在 mqtt bridge 的配置中，需要去设置一些 mqtt 连接
+EMQ X MQTT 桥接是通过在 emqx broker 上开启一个 emqx_client 的进程，该 emqx_client
+会连接远程的 mqtt broker，因此在 mqtt bridge 的配置中，需要去设置 mqtt 连接
 所必须用到的字段::
 
-    ## Bridge address: node name for local bridge, host:port for remote.
+    ## 桥接地址： 写成节点名则用于 rpc 桥接，写成 host:port 用于 mqtt 连接
     ##
-    ## Value: String
-    ## Example: emqx@127.0.0.1,  127.0.0.1:1883
+    ## 值: 字符串
+    ## 示例: emqx@127.0.0.1,  127.0.0.1:1883
     bridge.emqx2.address = 192.168.1.2:1883
 
-    ## Protocol version of the bridge.
+    ## 桥接的协议版本
     ##
-    ## Value: Enum
+    ## 值: 枚举
     ## - mqttv5
     ## - mqttv4
     ## - mqttv3
     bridge.emqx2.proto_ver = mqttv4
 
-    ## The ClientId of a remote bridge.
+    ## 用于 mqtt 桥接的 client_id
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.client_id = bridge_emq
 
-    ## The Clean start flag of a remote bridge.
+    ## 用于 mqtt 桥接的 clean_start 字段
     ##
-    ## Value: boolean
-    ## Default: true
+    ## 值: 布尔
+    ## 默认: true
     ##
-    ## NOTE: Some IoT platforms require clean_start
-    ##       must be set to 'true'
+    ## 注意: 有些 IOT 平台需要将 clean_start 值设成 `true`
     bridge.emqx2.clean_start = true
 
-    ## The username for a remote bridge.
+    ## 用于 mqtt 桥接的 username 字段
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.username = user
 
-    ## The password for a remote bridge.
+    ## 用于 mqtt 桥接的 password 字段
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.password = passwd
 
-    ## Bribge to remote server via SSL.
+    ## 是否通过 ssl 来连接远程服务器
     ##
-    ## Value: on | off
+    ## 值: on | off
     bridge.emqx2.ssl = off
 
-    ## PEM-encoded CA certificates of the bridge.
+    ## 用于桥接的 PEM 编码的 CA 证书
     ##
-    ## Value: File
+    ## 值: 文件
     bridge.emqx2.cacertfile = etc/certs/cacert.pem
 
-    ## Client SSL Certfile of the bridge.
+    ## 用于桥接的客户端的 SSL 证书
     ##
-    ## Value: File
+    ## 值: 文件
     bridge.emqx2.certfile = etc/certs/client-cert.pem
 
-    ## Client SSL Keyfile of the bridge.
+    ## 用于桥接的客户端的 SSL 密钥文件
     ##
-    ## Value: File
+    ## 值: 文件
     bridge.emqx2.keyfile = etc/certs/client-key.pem
 
-    ## SSL Ciphers used by the bridge.
+    ## 用于桥接的 SSL 密码
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
 
-    ## Ciphers for TLS PSK.
-    ## Note that 'listener.ssl.external.ciphers' and 'listener.ssl.external.psk_ciphers' cannot
-    ## be configured at the same time.
+    ## 用于 TLS PSK 的密码
+    ## 注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers'
+    ## 不能同时配置
+    ##
     ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
     bridge.emqx2.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
 
-    ## Ping interval of a down bridge.
+    ## 桥接的心跳间隔
     ##
-    ## Value: Duration
-    ## Default: 10 seconds
+    ## 值: 时间间隔
+    ## 默认: 10 秒
     bridge.emqx2.keepalive = 60s
 
-    ## TLS versions used by the bridge.
+    ## 桥接使用的 TLS 版本
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.tls_versions = tlsv1.2,tlsv1.1,tlsv1
 
-    ## Subscriptions of the bridge topic.
+    ## 用于桥接的订阅主题
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.subscription.1.topic = cmd/topic1
 
-    ## Subscriptions of the bridge qos.
+    ## 用于桥接的订阅 qos
     ##
-    ## Value: Number
+    ## 值: 数字
     bridge.emqx2.subscription.1.qos = 1
 
-    ## Subscriptions of the bridge topic.
+    ## 用于桥接的订阅主题
     ##
-    ## Value: String
+    ## 值: 字符串
     bridge.emqx2.subscription.2.topic = cmd/topic2
 
-    ## Subscriptions of the bridge qos.
+    ## 用于桥接的订阅 qos
     ##
-    ## Value: Number
+    ## 值: 数字
     bridge.emqx2.subscription.2.qos = 1
 
-    ## Bridge reconnect time.
+    ## 桥接的重连间隔
     ##
-    ## Value: Duration
-    ## Default: 30 seconds
+    ## 值: 时间间隔
+    ## 默认: 30秒
     bridge.emqx2.reconnect_interval = 30s
 
-    ## Retry interval for bridge QoS1 message delivering.
+    ## QoS1 消息的重传间隔
     ##
-    ## Value: Duration
+    ## 值: 时间间隔
     bridge.emqx2.retry_interval = 20s
 
-    ## Inflight size.
+    ## Inflight 大小.
     ##
-    ## Value: Integer
+    ## 值: 整形
     bridge.emqx2.max_inflight_batches = 32
 
 EMQ X 桥接缓存配置
@@ -208,30 +206,27 @@ emqx 的 bridge 有消息缓存机制，缓存机制同时适用于 RPC 桥接�
 到本地的磁盘队列上。等到桥接恢复时，再把消息重新转发到远程节点上。关于缓
 存队列的配置如下::
 
-    ## Max number of messages to collect in a batch for
-    ## each send call towards emqx_bridge_connect
+    ## emqx_bridge 内部用于 batch 的消息数量
     ##
-    ## Value: Integer
-    ## default: 32
+    ## 值: 整形
+    ## 默认: 32
     bridge.emqx2.queue.batch_count_limit = 32
-    
-    ## Max number of bytes to collect in a batch for each
-    ## send call towards emqx_bridge_connect
+
+    ## emqx_bridge 内部用于 batch 的消息字节数
     ##
-    ## Value: Bytesize
-    ## default: 1000M
+    ## 值: 字节
+    ## 默认: 1000M
     bridge.emqx2.queue.batch_bytes_limit = 1000MB
-    
-    ## Base directory for replayq to store messages on disk
-    ## If this config entry is missing or set to undefined,
-    ## replayq works in a mem-only manner.
+
+    ## 放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq
+    ## 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上。
     ##
-    ## Value: String
-    bridge.emqx2.queue.replayq_dir = data/emqx_aws_bridge/
+    ## 值: 字符串
+    bridge.emqx2.queue.replayq_dir = data/emqx_emqx2_bridge/
     
-    ## Replayq segment size
+    ## Replayq 数据段大小
     ##
-    ## Value: Bytesize
+    ## 值: 字节
     bridge.emqx2.queue.replayq_seg_bytes = 10MB
 
 `bridge.emqx2.queue.batch_count_limit` 和 `bridge.emqx2.queue.batch_bytes_limit` 都
