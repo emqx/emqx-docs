@@ -1,4 +1,3 @@
-
 .. _bridge:
 
 =================
@@ -12,219 +11,243 @@ EMQ X 节点间桥接
 ----------------
 
 EMQ X 支持 RPC 桥接与 MQTT 桥接两种方式。RPC 桥接只支持消息转发，不支持订阅
-远程节点的主题去同步数据，MQTT 桥接同时支持转发和通过订阅数据同步两种方式。
+远程节点的主题去同步数据；MQTT 桥接同时支持转发和通过订阅主题来实现数据同步两种方式。
 
-节点间桥接与集群不同，不复制主题树与路由表，只按桥接规则转发 MQTT 消息。
+节点间桥接与集群不同之处：桥接不会复制主题树与路由表，只根据桥接规则转发 MQTT 消息。
 
 *EMQ X* 消息服务器支持多节点桥接模式互联::
 
                   ---------                     ---------                     ---------
-    Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
+                  Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
                   ---------                     ---------                     ---------
 
-EMQ X 节点 RPC 桥接配置
----------------------------
-
-假设在本机创建两个 EMQ 节点，并创建一条桥接转发全部传感器(sensor)主题消息:
+假设在本机创建两个 EMQ X 节点，并创建一条桥接并转发传感器(sensor)主题消息:
 
 +---------+---------------------+-----------+
 | 目录    | 节点                | MQTT 端口 |
 +---------+---------------------+-----------+
-| emqx1   | emqx1@127.0.0.1     | 1883      |
+| emqx1   | emqx1@192.168.1.1   | 1883      |
 +---------+---------------------+-----------+
-| emqx2   | emqx2@127.0.0.1     | 2883      |
+| emqx2   | emqx2@192.168.1.2   | 1883      |
 +---------+---------------------+-----------+
 
-如果是将匹配 sensor/# 主题的消息从 emqx1 节点转发到 emqx2 节点，只需在 emqx1
-节点做出如下配置::
+*EMQ X* 支持基于 name 的 bridge，根据不同的 name 区分不同的bridge。在需要创建多个 bridge 时，新增自定义name的 bridge.\$name ，复制相关的默认配置（比如bridge.$name.address）并修改其$name。
 
-    ## Bridge address: node name for local bridge, host:port for remote.
+EMQ X 节点 RPC 桥接配置
+---------------------------
+
+以下是 RPC 桥接的基本配置，最简单的 RPC 桥接只需要配置以下三项就可以了::
+
+    ## 桥接地址： 使用节点名（nodename@host）则用于 rpc 桥接，使用 host:port 用于 mqtt 连接
     ##
-    ## Value: String
-    ## Example: emqx@127.0.0.1,  127.0.0.1:1883
-    bridge.emqx.address = 127.0.0.1:2883
-
-    ## Mountpoint of the bridge.
+    ## 值: 字符串
+    ## 示例: emqx@127.0.0.1,  127.0.0.1:1883
+    bridge.emqx2.address = emqx2@192.168.1.2
+    
+    ## 转发消息的主题
     ##
-    ## Value: String
-    bridge.emqx.mountpoint = bridge/emqx/${node}/
+    ## 值: 字符串
+    ## 示例: topic1/#,topic2/#
+    bridge.emqx2.forwards = sensor1/#,sensor2/#
 
-    ## Forward message topics
+    ## 桥接的 mountpoint(挂载点)
     ##
-    ## Value: String
-    ## Example: topic1/#,topic2/#
-    bridge.emqx.forwards = sensor/#
+    ## 值: 字符串
+    bridge.emqx2.mountpoint = bridge/emqx2/${node}/
 
-如果是 RPC 桥接，只需要将配置项的 bridge.emqx.address = 127.0.0.1:2883 改为
-bridge.emqx.address = emqx2@127.0.0.1
+本地 emqx1 节点接收到的消息如果匹配主题 `sersor1/#`，`sensor2/#`，这些消息会被转发到远程
+emqx2 节点的 `sensor1/#` ，`sensor2/#` 主题上。
+
+forwards 用于指定主题，转发到本地节点指定 forwards 上的消息都会被转发到远程节点上。
+
+mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
+`sensor1/hello` 的消息, 到达远程节点时主题为 `bridge/emqx2/emqx@192.168.1.1/sensor1/hello` 。
+
+RPC 桥接的局限性：
+
+1. emqx 的 RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步到本地节点上；
+
+2. RPC 桥接只能将两个 emqx 桥接在一起，无法桥接 emqx 到其他的 mqtt broker 上。
+
 
 EMQ X 节点 MQTT 桥接配置
 -----------------------
 
-有些配置项只对 mqtt 桥接起作用。比如::
+emqx 3.0 正式引入了 mqtt bridge，使 emqx 可以桥接任意 mqtt broker ，同时由于
+ mqtt 协议本身的特性， emqx 可以通过 mqtt bridge 去订阅远程 mqtt broker 的主题，
+再将远程 mqtt broker 的消息同步到本地。
 
-    ## Protocol version of the bridge.
+EMQ X MQTT 的桥接原理: 通过在 emqx broker 上开启一个 emqx_client 的进程，Client 进程
+会连接远程的 mqtt broker，因此在 mqtt bridge 的配置中，需要去设置 emqx 作为 client
+连接时所必须用到的字段::
+
+    ## 桥接地址： 写成节点名则用于 rpc 桥接，写成 host:port 用于 mqtt 连接
     ##
-    ## Value: Enum
+    ## 值: 字符串
+    ## 示例: emqx@127.0.0.1,  127.0.0.1:1883
+    bridge.emqx2.address = 192.168.1.2:1883
+
+    ## 桥接的协议版本
+    ##
+    ## 值: 枚举
     ## - mqttv5
     ## - mqttv4
     ## - mqttv3
-    bridge.emqx.proto_ver = mqttv4
+    bridge.emqx2.proto_ver = mqttv4
 
-    ## The ClientId of a remote bridge.
+    ## 用于 mqtt 桥接的 client_id
     ##
-    ## Value: String
-    bridge.emqx.client_id = bridge_emq
+    ## 值: 字符串
+    bridge.emqx2.client_id = bridge_emq
 
-    ## The Clean start flag of a remote bridge.
+    ## 用于 mqtt 桥接的 clean_start 字段
     ##
-    ## Value: boolean
-    ## Default: true
+    ## 值: 布尔
+    ## 默认: true
     ##
-    ## NOTE: Some IoT platforms require clean_start
-    ##       must be set to 'true'
-    bridge.emqx.clean_start = true
+    ## 注意: 有些 IOT 平台需要将 clean_start 值设成 `true`
+    bridge.emqx2.clean_start = true
 
-    ## The username for a remote bridge.
+    ## 用于 mqtt 桥接的 username 字段
     ##
-    ## Value: String
-    bridge.emqx.username = user
+    ## 值: 字符串
+    bridge.emqx2.username = user
 
-    ## The password for a remote bridge.
+    ## 用于 mqtt 桥接的 password 字段
     ##
-    ## Value: String
-    bridge.emqx.password = passwd
+    ## 值: 字符串
+    bridge.emqx2.password = passwd
 
-    ## Mountpoint of the bridge.
+    ## 是否通过 ssl 来连接远程服务器
     ##
-    ## Value: String
-    bridge.emqx.mountpoint = bridge/aws/${node}/
+    ## 值: on | off
+    bridge.emqx2.ssl = off
 
-    ## Forward message topics
+    ## 用于桥接的 PEM 编码的 CA 证书
     ##
-    ## Value: String
-    ## Example: topic1/#,topic2/#
-    bridge.emqx.forwards = sensor1/#,sensor2/#
+    ## 值: 文件
+    bridge.emqx2.cacertfile = etc/certs/cacert.pem
 
-    ## Bribge to remote server via SSL.
+    ## 用于桥接的客户端的 SSL 证书
     ##
-    ## Value: on | off
-    bridge.emqx.ssl = off
+    ## 值: 文件
+    bridge.emqx2.certfile = etc/certs/client-cert.pem
 
-    ## PEM-encoded CA certificates of the bridge.
+    ## 用于桥接的客户端的 SSL 密钥文件
     ##
-    ## Value: File
-    bridge.emqx.cacertfile = {{ platform_etc_dir }}/certs/cacert.pem
+    ## 值: 文件
+    bridge.emqx2.keyfile = etc/certs/client-key.pem
 
-    ## Client SSL Certfile of the bridge.
+    ## 用于桥接的 SSL 密码
     ##
-    ## Value: File
-    bridge.emqx.certfile = {{ platform_etc_dir }}/certs/client-cert.pem
+    ## 值: 字符串
+    bridge.emqx2.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
 
-    ## Client SSL Keyfile of the bridge.
+    ## 用于 TLS PSK 的密码
+    ## 注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers'
+    ## 不能同时配置
     ##
-    ## Value: File
-    bridge.emqx.keyfile = {{ platform_etc_dir }}/certs/client-key.pem
-
-    ## SSL Ciphers used by the bridge.
-    ##
-    ## Value: String
-    bridge.emqx.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
-
-    ## Ciphers for TLS PSK.
-    ## Note that 'listener.ssl.external.ciphers' and 'listener.ssl.external.psk_ciphers' cannot
-    ## be configured at the same time.
     ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
-    bridge.emqx.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+    bridge.emqx2.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
 
-    ## Ping interval of a down bridge.
+    ## 桥接的心跳间隔
     ##
-    ## Value: Duration
-    ## Default: 10 seconds
-    bridge.emqx.keepalive = 60s
+    ## 值: 时间间隔
+    ## 默认: 10 秒
+    bridge.emqx2.keepalive = 60s
 
-    ## TLS versions used by the bridge.
+    ## 桥接使用的 TLS 版本
     ##
-    ## Value: String
-    bridge.emqx.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+    ## 值: 字符串
+    bridge.emqx2.tls_versions = tlsv1.2,tlsv1.1,tlsv1
 
-    ## Subscriptions of the bridge topic.
+    ## 转发消息的主题
     ##
-    ## Value: String
-    bridge.emqx.subscription.1.topic = cmd/topic1
+    ## 值: 字符串
+    ## 示例: topic1/#,topic2/#
+    bridge.emqx2.forwards = sensor1/#,sensor2/#
 
-    ## Subscriptions of the bridge qos.
+    ## 桥接的 mountpoint(挂载点)
     ##
-    ## Value: Number
-    bridge.emqx.subscription.1.qos = 1
+    ## 值: 字符串
+    bridge.emqx2.mountpoint = bridge/emqx2/${node}/
 
-    ## Subscriptions of the bridge topic.
+    ## 用于桥接的订阅主题
     ##
-    ## Value: String
-    bridge.emqx.subscription.2.topic = cmd/topic2
+    ## 值: 字符串
+    bridge.emqx2.subscription.1.topic = cmd/topic1
 
-    ## Subscriptions of the bridge qos.
+    ## 用于桥接的订阅 qos
     ##
-    ## Value: Number
-    bridge.emqx.subscription.2.qos = 1
+    ## 值: 数字
+    bridge.emqx2.subscription.1.qos = 1
 
-    ## Start type of the bridge.
+    ## 用于桥接的订阅主题
     ##
-    ## Value: enum
-    ## manual
-    ## auto
-    bridge.emqx.start_type = manual
+    ## 值: 字符串
+    bridge.emqx2.subscription.2.topic = cmd/topic2
 
-    ## Bridge reconnect time.
+    ## 用于桥接的订阅 qos
     ##
-    ## Value: Duration
-    ## Default: 30 seconds
-    bridge.emqx.reconnect_interval = 30s
+    ## 值: 数字
+    bridge.emqx2.subscription.2.qos = 1
 
-    ## Retry interval for bridge QoS1 message delivering.
+    ## 桥接的重连间隔
     ##
-    ## Value: Duration
-    bridge.emqx.retry_interval = 20s
+    ## 值: 时间间隔
+    ## 默认: 30秒
+    bridge.emqx2.reconnect_interval = 30s
 
-    ## Inflight size.
+    ## QoS1 消息的重传间隔
     ##
-    ## Value: Integer
-    bridge.emqx.max_inflight_batches = 32
+    ## 值: 时间间隔
+    bridge.emqx2.retry_interval = 20s
 
-    ## Max number of messages to collect in a batch for
-    ## each send call towards emqx_bridge_connect
+    ## Inflight 大小.
     ##
-    ## Value: Integer
-    ## default: 32
-    bridge.emqx.queue.batch_count_limit = 32
+    ## 值: 整型
+    bridge.emqx2.max_inflight_batches = 32
 
-    ## Max number of bytes to collect in a batch for each
-    ## send call towards emqx_bridge_connect
+EMQ X 桥接缓存配置
+-----------------------
+
+EMQ X 的 bridge 拥有消息缓存机制，缓存机制同时适用于 RPC 桥接和 MQTT 桥接，
+当 bridge 断开（如网络连接不稳定的情况）时，可将 forwards 主题的消息缓存
+到本地的磁盘队列上。等到桥接恢复时，再把消息重新转发到远程节点上。关于缓
+存队列的配置如下::
+
+    ## emqx_bridge 内部用于 batch 的消息数量
     ##
-    ## Value: Bytesize
-    ## default: 1000M
-    bridge.emqx.queue.batch_bytes_limit = 1000MB
+    ## 值: 整型
+    ## 默认: 32
+    bridge.emqx2.queue.batch_count_limit = 32
 
-    ## Base directory for replayq to store messages on disk
-    ## If this config entry is missing or set to undefined,
-    ## replayq works in a mem-only manner.
+    ## emqx_bridge 内部用于 batch 的消息字节数
     ##
-    ## Value: String
-    bridge.emqx.queue.replayq_dir = {{ platform_data_dir }}/emqx_emqx_bridge/
+    ## 值: 字节
+    ## 默认: 1000M
+    bridge.emqx2.queue.batch_bytes_limit = 1000MB
 
-    ## Replayq segment size
+    ## 放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq
+    ## 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上。
     ##
-    ## Value: Bytesize
-    bridge.emqx.queue.replayq_seg_bytes = 10MB
+    ## 值: 字符串
+    bridge.emqx2.queue.replayq_dir = data/emqx_emqx2_bridge/
+    
+    ## Replayq 数据段大小
+    ##
+    ## 值: 字节
+    bridge.emqx2.queue.replayq_seg_bytes = 10MB
 
-MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接所需要用到字段，除此之
-外，与 RPC 桥接只能将本地消息转发到远程不同，MQTT 桥接不仅可以将远程的消息同步到
-本地主题上，还可以将断开桥接时还在转发的消息缓存到本地上去，当连接恢复时再把消
-息发布到远程节点上去。与缓存消息有关的配置项都是以 bridge.$(Bridgename).queue 开
-头。而与同步远程节点主题有关的配置项则都以 bridge.$(Bridgename).subscription 开
-头。
+`bridge.emqx2.queue.replayq_dir` 是用于指定 bridge 存储队列的路径的配置参数。
 
-除了配置文件的方式，还可以通过 CLI 的方式去操作 bridge.
+`bridge.emqx2.queue.replayq_seg_bytes` 是用于指定缓存在磁盘上的消息队列的最大单个文件的大小，
+如果消息队列大小超出指定值的话，会创建新的文件来存储消息队列。
+
+EMQ X 桥接的命令行使用
+-----------------------
+
+桥接 CLI 命令:
 
 .. code-block:: bash
 
@@ -238,7 +261,7 @@ MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接�
     bridges subscriptions <Name>                    # Show a bridge subscriptions topic
     bridges add-subscription <Name> <Topic> <Qos>   # Add bridge subscriptions topic
 
-列出 bridge
+列出全部 bridge 状态
 
 .. code-block:: bash
 
@@ -267,14 +290,14 @@ MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接�
     topic:   topic1/#
     topic:   topic2/#
 
-给指定 bridge 添加转发主题
+添加指定 bridge 的转发主题
 
 .. code-block:: bash
 
     $ ./bin/emqx_ctl bridges add-forwards emqx topic3/#
     Add-forward topic successfully.
 
-给指定 bridge 删除转发主题
+删除指定 bridge 的转发主题
 
 .. code-block:: bash
 
@@ -289,19 +312,22 @@ MQTT 桥接相比 RPC 桥接要更灵活，以上配置很多都是 MQTT 连接�
     topic: cmd/topic1, qos: 1
     topic: cmd/topic2, qos: 1
 
-给指定 bridge 添加订阅主题
+添加指定 bridge 的订阅主题
 
 .. code-block:: bash
 
     $ ./_rel/emqx/bin/emqx_ctl bridges add-subscription emqx cmd/topic3 1
     Add-subscription topic successfully.
 
-给指定 bridge 删除订阅主题
+删除指定 bridge 的订阅主题
 
 .. code-block:: bash
 
     $ ./_rel/emqx/bin/emqx_ctl bridges del-subscription aws cmd/topic3
     Del-subscription topic successfully.
+
+注: 如果有创建多个 bridge 的需求，需要复制默认的 bridge 配置，再拷贝到 emqx.conf 中，
+根据需求重命名 bridge.${name}.config 中的 name 即可。
 
 .. _bridge_mosquitto:
 
@@ -321,12 +347,12 @@ mosquitto 可以普通 MQTT 连接方式，桥接到 emqx 消息服务器::
 mosquitto.conf
 --------------
 
-本机 2883 端口启动 emqx 消息服务器，1883 端口启动 mosquitto 并创建桥接。
+本机 （192.168.1.1）1883 端口启动 emqx 进程，远端服务器（192.168.1.2）1883 端口启动 mosquitto 并创建桥接。
 
 mosquitto.conf 配置::
 
     connection emqx
-    address 127.0.0.1:2883
+    address 192.168.1.1:1883
     topic sensor/# out 2
 
     # Set the version of the MQTT protocol to use with for this bridge. Can be one
@@ -339,10 +365,10 @@ mosquitto.conf 配置::
 rsmb 桥接
 ---------
 
-本机 2883 端口启动 emqx 消息服务器，1883 端口启动 rsmb 并创建桥接。
+本机（192.168.1.1）1883 端口启动 emqx 消息服务器，远端服务器（192.168.1.2）1883 端口启动 rsmb 并创建桥接。
 
 broker.cfg 桥接配置::
 
     connection emqx
-    addresses 127.0.0.1:2883
+    addresses 192.168.1.1:1883
     topic sensor/#
