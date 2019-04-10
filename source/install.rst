@@ -40,7 +40,8 @@ RPM 安装
 
 .. code-block:: console
 
-    rpm -ivh emqx-centos7-v3.0-beta.2.zip 
+    rpm -ivh emqx-centos7-v3.0-beta.2.x86_64.rpm
+
 配置文件
 --------
 
