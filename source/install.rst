@@ -15,7 +15,7 @@
 
 *EMQ X* R3.0 消息服务器每个版本会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
 
-下载地址: http://emqtt.com/downloads
+下载地址: https://www.emqx.io/downloads
 
 .. _install_rpm:
 
@@ -338,9 +338,9 @@ Ubuntu 平台可通过 apt-get 命令安装，CentOS/RedHat 平台可通过 yum 
 
 .. code-block:: bash
 
-    git clone -b emqx30 https://github.com/emqx/emqx-rel.git
+    git clone https://github.com/emqx/emqx-rel.git
 
-    cd emq-relx && make
+    cd emqx-relx && make
 
     cd _rel/emqx && ./bin/emqx console
 
@@ -422,7 +422,7 @@ TCP 服务端口占用
 
 通过注释或删除相关段落，可禁用相关 TCP 服务启动。
 
-18083 端口是 Web 管理控制占用，该端口由 `emq_dashboard`_ 插件启用。
+18083 端口是 Web 管理控制占用，该端口由 `emqx_dashboard`_ 插件启用。
 
 控制台 URL: http:://localhost:18083/ ，默认登录用户名: admin, 密码: public。
 

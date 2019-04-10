@@ -5,6 +5,110 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1-rc.1:
+
+-------------
+3.1-rc.1 版本
+-------------
+
+*发布日期: 2019-04-04*
+
+EMQ X 3.1-rc.1 版本发布。此版本改动主要包括规则引擎增强、错误修复、稳定性增强等
+
+功能改进:
+
+- 支持压缩 WebSocket 消息
+
+  Github PR:
+  `emqx/emqx#2356 <https://github.com/emqx/emqx/pull/2356>`_
+
+- `etcd` 集群支持 SSL 连接
+
+  Github PR:
+  `emqx/emqx#2367 <https://github.com/emqx/emqx/pull/2367>`_
+
+- 支持 Websocket 的 proxy protocol
+
+  Github PR:
+  `emqx/emqx#2372 <https://github.com/emqx/emqx/pull/2372>`_
+
+问题修复:
+
+- 修复 monitor 模块中的错误逻辑
+
+  Github PR:
+  `emqx/emqx#2353 <https://github.com/emqx/emqx/pull/2353>`_
+
+- 修复 `allow_anonymous` 功能不符合预期的问题
+
+  Github PR:
+  `emqx/emqx#2355 <https://github.com/emqx/emqx/pull/2355>`_
+
+- 修复 `session` 进程中无法一次性接收多个消息的问题
+
+  Github PR:
+  `emqx/emqx#2373 <https://github.com/emqx/emqx/pull/2373>`_
+
+- 修复 `message.dropped` 的 hook 在某些情况下不会被触发的问题
+
+  Github PR:
+  `emqx/emqx#2399 <https://github.com/emqx/emqx/pull/2399>`_
+
+emqx-auth-http (plugin)
+-----------------------
+
+功能增强:
+
+- 支持从 SSL 双向连接中取出 Subject Name 与 Common Name 用于认证
+
+  Github PR:
+  `emqx/emqx-auth-http#113 <https://github.com/emqx/emqx-auth-http/pull/113>`_
+
+emqx-auth-clientid (plugin)
+---------------------------
+
+功能增强:
+
+- 支持通过 REST API 操作 ClientId
+
+  Github PR:
+  `emqx/emqx-auth-clientid#78 <https://github.com/emqx/emqx-auth-clientid/pull/78>`_
+
+emqx-auth-jwt (plugin)
+----------------------
+
+功能增强:
+
+- 支持验证指定的 claims 字段
+
+  Github PR:
+  `emqx/emqx-auth-jwt#69 <https://github.com/emqx/emqx-auth-jwt/pull/69>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 增强规则引擎
+
+  Github Repository:
+  `emqx/emqx-rule-engine <https://github.com/emqx/emqx-rule-engine>`_
+
+emqx-rel
+--------
+
+错误修复:
+
+- 修复 Windows 环境下 EMQ X 需要启动两次的问题
+
+  Github Commit:
+  `emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508 <https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508>`_
+
+- 修复 Windows 环境下 EMQ X 安装路径含有中文或空格时无法启动的问题
+
+  Github Commit:
+  `emqx/emqx-rel#75de3441db9bf03d489609dcbb340a74de263508 <https://github.com/emqx/emqx-rel/commit/75de3441db9bf03d489609dcbb340a74de263508>`_
+
 .. _release_3.1-beta.3:
 
 ---------------
