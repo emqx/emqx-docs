@@ -989,10 +989,45 @@ listeners stop <Proto> <Port>
 规则引擎(rule engine) 命令
 ----------------------------
 
-规则引擎用于配置消息或事件的业务规则，比如: "将所有发送至用户 'Steven' 的消息存储到名为 'chatlog_steven' MySQL 表"。
+规则引擎用于配置消息或事件的业务规则。规则引擎相关的概念包括: 规则(rule)、动作(rule-action)、资源类型(resource-type) 和 资源(resource)。
 
-规则引擎相关的概念包括: 规则(rule)、动作(rule-action)、资源类型(resource-type) 和 资源(resource)。
-上面的例子里，规则是: "所有发送至用户 'Steven' 的消息"; 动作是: "存储到名为 'chatlog_steven' MySQL 表"; 资源类型是: MySQL; 资源是: "user=root, password='abc', host=127.0.0.1 的 MySQL 连接"。
+使用 CLI 创建规则举例
+---------------------
+
+假设创建一个规则: "将所有发送自 client-id='Steven' 的消息，转发到地址为 'http://host-name/chats' 的 Web 服务器"。
+
+规则的筛选条件为: "发送自 client-id='Steven' 的 PUBLISH 消息中的 payload 字段"; 动作是: "转发到地址为 'http://host-name/chats' 的 Web 服务器"; 资源类型是: WebHook;
+资源是: "到 url='http://host-name/chats' 的 WebHook 连接资源"。
+
+要创建这个规则，需要首先使用 WebHook 类型创建一个资源，并配置资源参数为 {"url": "http://host-name/chats"}::
+
+    ## 启动提供了 'web_hook' 资源类型的 emqx_web_hook 插件
+    $ ./bin/emqx_ctl plugins load emqx_web_hook
+
+    ## 列出当前所有可用的资源类型，确保 'web_hook' 类型已存在
+    $ ./bin/emqx_ctl resource-types list
+
+    resource_type(name=web_hook, provider=emqx_web_hook, params=#{}, on_create={emqx_web_hook_actions,on_resource_create}, description=WebHook Resource)
+
+    ## 使用类型 'web_hook' 以及配置 '{"url": "http://host-name/chats"}' 创建一个新的资源
+    $ ./bin/emqx_ctl resources create 'webhook1' 'web_hook' '{"url": "http://host-name/chats"}' 'web hook resource to chats server'
+
+    Resource web_hook:webhook1 created
+
+然后创建规则，并选择规则的动作为 'emqx_web_hook:forward_action'，配置规则的筛选条件为 "SELECT payload FROM \"#\" where from='Steven' "。其中 "#" 为 topic 的通配符::
+
+    ## 列出当前所有可用的动作，确保 'emqx_web_hook:forward_action' 动作已存在
+    $ ./bin/emqx_ctl rule-actions list
+
+    action(name=emqx_web_hook:forward_action, app=emqx_web_hook, params=#{url => string}, description=Republish a MQTT message)
+
+    ## 创建名为 steven_msg_to_http 的规则，选用 'emqx_web_hook:forward_action' 动作，并制定动作的资源为刚创建的 "web_hook:webhook1"
+    $ ./bin/emqx_ctl rules create 'steven_msg_to_http' 'message.publish' 'SELECT payload FROM "#" where user=Steven' '{"emqx_web_hook:forward_action": {"$resource": "web_hook:webhook1"}}' "Forward msgs from clientid=Steven to webhook"
+
+    {"emqx_web_hook:forward_action": {"$resource": "web_hook:webhook1"}}' "Forward msgs from clientid=Steven to webhook"
+    Rule steven_msg_to_http:1554891331990205283 created
+
+现在使用 MQTT client 连接 emqx broker, client-id = Steven。然后发送任意消息到任意主题，规则 steven_msg_to_http:1554891331990205283 就会被触发。
 
 ----------
 rules 命令
@@ -1014,18 +1049,18 @@ rules create
 创建一个新的规则::
 
     Usage:
-    ./bin/emqx_ctl rules create <Name> <Hook> <SQL> <ActionName> <ActionParams> <Description>
+    ./bin/emqx_ctl rules create <Name> <Hook> <SQL> <Actions> <Description>
 
     举例，创建一个测试规则，简单打印所有发送到 't1' 主题的消息内容:
-    $ ./bin/emqx_ctl rules create 'inspect' 'message.publish' "select * from t1" "default:debug_action" "{\"a\": 1}" "Rule for debug"
+    $ ./bin/emqx_ctl rules create 'inspect' 'message.publish' "select * from t1" '{"default:debug_action": {"a": 1}}' "Rule for debug"
 
     Rule inspect:1554716647418533372 created
 
-上面的例子添加了一个名为 inspect 的规则，message.publish 表明此规则作用在 'PUBLISH' 消息上; "select * from t1" 是规则的细节，用 SQL 语句表达，意思是选取 topic 为 't1' 的消息体中的'所有'信息; 'default:debug_action' 是动作名，这是一个系统内置的动作，其功能是打印消息或事件到控制台; "{\"a\": 1}" 是动作的初始参数，必须为 JSON 格式; "Rule for debug" 是本规则的一个描述。系统创建好了规则之后，返回了规则的 ID。
+上面的例子添加了一个名为 inspect 的规则，message.publish 表明此规则作用在 'PUBLISH' 消息上; "select * from t1" 是规则的细节，用 SQL 语句表达，意思是选取主题为 't1' 的消息体中的所有可用字段; 'default:debug_action' 是动作名，这是一个系统内置的动作，其功能是打印消息或事件到控制台; "{\"a\": 1}" 是动作的初始参数，格式必须为 JSON Object; "Rule for debug" 是本规则的一个描述。系统创建好了规则之后，返回了规则的 ID。
 
-然后如果有发到主题 't1' 的消息，"default:debug_action" 动作被触发，emqx 控制台会打印出消息的内容::
+接下来当有 "hello" 消息发到主题 't1' 时，"default:debug_action" 动作被触发，emqx 控制台会打印出消息的内容::
 
-    ➜  tail -f log/erlang.log.1
+    $ tail -f log/erlang.log.1
 
     (emqx@127.0.0.1)1> Action input data: #{flags => #{dup => false,retain => false},
                         from => <<"clientId-E7EYzGa6HK">>,
@@ -1034,7 +1069,7 @@ rules create
                             peername => {{127,0,0,1},49972},
                             username => undefined},
                         id => <<0,5,134,2,237,35,98,166,244,67,0,0,6,167,0,1>>,
-                        payload => <<"11">>,qos => 0,
+                        payload => <<"hello">>,qos => 0,
                         timestamp => {1554,722010,129063},
                         topic => <<"t1">>}
     Action init params: #{<<"a">> => 1}
@@ -1117,21 +1152,26 @@ resources create
 ----------------
 创建一个新的资源::
 
-    [TO-DO]
+    $ ./bin/emqx_ctl resources create 'test-res' 'debug_resource_type' '{"a":1}' 'test resource'
+
+    Resource debug_resource_type:test-res created
 
 resources list
 --------------
 
 列出当前所有的资源::
 
-    ./bin/emqx_ctl resources list
+    $ ./bin/emqx_ctl resources list
+
+    resource(debug_resource_type:test-res, type=debug_resource_type, config=#{<<"a">> => 1}, attrs=undefined, description=test-rule)
 
 resources show
 --------------
 
-展示当前所有的资源::
+查询资源::
 
-    ./bin/emqx_ctl resources show 'resource:mysql:1554716647418533372'
+    $ ./bin/emqx_ctl resources show 'debug_resource_type:test-res'
+    resource(debug_resource_type:test-res, type=debug_resource_type, config=#{<<"a">> => 1}, attrs=undefined, description=test resource)
 
 -------------------
 resource-types 命令
@@ -1159,7 +1199,7 @@ resource-types show
 
 查询资源类型::
 
-    ./bin/emqx_ctl resource-types show default_resource
+    $ ./bin/emqx_ctl resource-types show default_resource
 
     resource_type(name=default_resource, provider=emqx_rule_engine, params=#{}, on_create={emqx_rule_actions,on_resource_create}, description=Default resource)
 
