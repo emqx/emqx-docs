@@ -87,11 +87,11 @@ EMQ 节点集群使用的 TCP 端口:
 
 3. 私有网络内创建两台 EMQ 主机，例如:
 
-    +-------+-------------+
-    | emq1  | 192.168.0.2 |
-    +-------+-------------+
-    | emq2  | 192.168.0.3 |
-    +-------+-------------+
+    +--------+-------------+
+    | emqx1  | 192.168.0.2 |
+    +--------+-------------+
+    | emqx2  | 192.168.0.3 |
+    +--------+-------------+
 
 4. 安装并集群 EMQ 主机，具体配置请参考安装集群章节。
 
@@ -117,11 +117,11 @@ EMQ 节点集群使用的 TCP 端口:
 
 3. 私有网络内创建两台 EMQ 主机，指定上面创建的 VPC 网络,例如:
 
-    +-------+-------------+
-    | emq1  | 192.168.0.2 |
-    +-------+-------------+
-    | emq2  | 192.168.0.3 |
-    +-------+-------------+
+    +--------+-------------+
+    | emqx1  | 192.168.0.2 |
+    +--------+-------------+
+    | emqx2  | 192.168.0.3 |
+    +--------+-------------+
 
 4. 在安全组中，开放 MQTT 服务的 TCP 端口，比如1883, 8883。
 
@@ -169,30 +169,30 @@ HAProxy 作为 LB 部署 EMQ 集群，并终结 SSL 连接:
 
 1. 创建 EMQ 集群节点，例如:
 
-+-------+-------------+
-| 节点  | IP 地址     |
-+=======+=============+
-| emq1  | 192.168.0.2 |
-+-------+-------------+
-| emq2  | 192.168.0.3 |
-+-------+-------------+
++--------+-------------+
+| 节点   | IP 地址     |
++========+=============+
+| emqx1  | 192.168.0.2 |
++--------+-------------+
+| emqx2  | 192.168.0.3 |
++--------+-------------+
 
 2. 配置 /etc/haproxy/haproxy.cfg，示例::
 
     listen mqtt-ssl
-        bind *:8883 ssl crt /etc/ssl/emqttd/emq.pem no-sslv3
+        bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
         mode tcp
         maxconn 50000
         timeout client 600s
-        default_backend emq_cluster
+        default_backend emqx_cluster
 
-    backend emq_cluster
+    backend emqx_cluster
         mode tcp
         balance source
         timeout server 50s
         timeout check 5000
-        server emq1 192.168.0.2:1883 check inter 10000 fall 2 rise 5 weight 1
-        server emq2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
+        server emqx1 192.168.0.2:1883 check inter 10000 fall 2 rise 5 weight 1
+        server emqx2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
         source 0.0.0.0 usesrc clientip
 
 NGINX Plus -> EMQ 集群
@@ -204,13 +204,13 @@ NGINX Plus 产品作为 EMQ 集群 LB，并终结 SSL 连接:
 
 2. 创建 EMQ 节点集群，例如: 
 
-+-------+-------------+
-| 节点  | IP 地址     |
-+=======+=============+
-| emq1  | 192.168.0.2 |
-+-------+-------------+
-| emq2  | 192.168.0.3 |
-+-------+-------------+
++--------+-------------+
+| 节点   | IP 地址     |
++========+=============+
+| emqx1  | 192.168.0.2 |
++--------+-------------+
+| emqx2  | 192.168.0.3 |
++--------+-------------+
 
 3. 配置 /etc/nginx/nginx.conf，示例::
 
@@ -230,8 +230,8 @@ NGINX Plus 产品作为 EMQ 集群 LB，并终结 SSL 连接:
             proxy_pass stream_backend;
             proxy_buffer_size 4k;
             ssl_handshake_timeout 15s;
-            ssl_certificate     /etc/emqttd/certs/cert.pem;
-            ssl_certificate_key /etc/emqttd/certs/key.pem;
+            ssl_certificate     /etc/emqx/certs/cert.pem;
+            ssl_certificate_key /etc/emqx/certs/key.pem;
         }
     }
 
