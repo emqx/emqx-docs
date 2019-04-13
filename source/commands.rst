@@ -1007,10 +1007,10 @@ listeners stop <Proto> <Port>
     ## 列出当前所有可用的资源类型，确保 'web_hook' 类型已存在
     $ ./bin/emqx_ctl resource-types list
 
-    resource_type(name=web_hook, provider=emqx_web_hook, params=#{}, on_create={emqx_web_hook_actions,on_resource_create}, description=WebHook Resource)
+    resource_type(name='web_hook', provider='emqx_web_hook', params=#{}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
 
     ## 使用类型 'web_hook' 以及配置 '{"url": "http://host-name/chats"}' 创建一个新的资源
-    $ ./bin/emqx_ctl resources create 'webhook1' 'web_hook' '{"url": "http://host-name/chats"}' 'web hook resource to chats server'
+    $ ./bin/emqx_ctl resources create 'webhook1' 'web_hook' '{"url": "http://host-name/chats"}'
 
     Resource web_hook:webhook1 created
 
@@ -1019,9 +1019,9 @@ listeners stop <Proto> <Port>
     ## 列出当前所有可用的动作，确保 'emqx_web_hook:forward_action' 动作已存在
     $ ./bin/emqx_ctl rule-actions list
 
-    action(name=emqx_web_hook:forward_action, app=emqx_web_hook, params=#{url => string}, description=Republish a MQTT message)
+    action(name='emqx_web_hook:forward_action', app='emqx_web_hook', params=#{url => string}, description='Republish a MQTT message')
 
-    ## 创建名为 steven_msg_to_http 的规则，选用 'emqx_web_hook:forward_action' 动作，并制定动作的资源为刚创建的 "web_hook:webhook1"
+    ## 创建名为 steven_msg_to_http 的规则，选用 'emqx_web_hook:forward_action' 动作，并指定动作的资源为刚创建的 "web_hook:webhook1"
     $ ./bin/emqx_ctl rules create 'steven_msg_to_http' 'message.publish' 'SELECT payload FROM "#" where user=Steven' '{"emqx_web_hook:forward_action": {"$resource": "web_hook:webhook1"}}' "Forward msgs from clientid=Steven to webhook"
 
     {"emqx_web_hook:forward_action": {"$resource": "web_hook:webhook1"}}' "Forward msgs from clientid=Steven to webhook"
@@ -1083,21 +1083,21 @@ rules list
 
     $ ./bin/emqx_ctl rules list
 
-    rule(inspect:1554716647418533372, name=inspect, for=message.publish, rawsql=select * from t1, actions=['default:debug_action'], enabled=true, description=Rule for debug)
+    rule(id='inspect:1554716647418533372', name='inspect', for='message.publish', rawsql='select * from t1', actions=[{"name":"default:debug_action", "params":{}}], enabled=true, description='Rule for debug')
 
 rules show
 ----------
 
-查询某个规则::
+查询规则::
 
     $ ./bin/emqx_ctl rules show 'inspect:1554716647418533372'
 
-    rule(inspect:1554716647418533372, name=inspect, for=message.publish, rawsql=select * from t1, actions=['default:debug_action'], enabled=true, description=Rule for debug)
+    rule(id='inspect:1554716647418533372', name='inspect', for='message.publish', rawsql='select * from t1', actions=[{"name":"default:debug_action", "params":{}}], enabled=true, description='Rule for debug')
 
 rules delete
 ------------
 
-删除某个规则::
+删除规则::
 
     $ ./bin/emqx_ctl rules delete 'inspect:1554716647418533372'
 
@@ -1122,7 +1122,7 @@ rule-actions show
 
     $ ./bin/emqx_ctl rule-actions show 'default:debug_action'
 
-    action(name=default:debug_action, app=emqx_rule_engine, params=#{}, description=Debug Action)
+    action(name='default:debug_action', app='emqx_rule_engine', params=#{}, description='Debug Action')
 
 rule-actions list
 -----------------
@@ -1131,8 +1131,8 @@ rule-actions list
 
     $ ./bin/emqx_ctl rule-actions list
 
-    action(name=default:debug_action, app=emqx_rule_engine, params=#{}, description=Debug Action)
-    action(name=default:republish_message, app=emqx_rule_engine, params=#{from => topic,to => topic}, description=Republish a MQTT message)
+    action(name='default:debug_action', app='emqx_rule_engine', params=#{}, description='Debug Action')
+    action(name='default:republish_message', app='emqx_rule_engine', params=#{from => topic,to => topic}, description='Republish a MQTT message')
 
 上面列出的两个都是系统内置动作，第一个动作是打印消息内容，第二个动作是重新发布某个消息到另外一个topic。
 
@@ -1140,19 +1140,21 @@ rule-actions list
 resources 命令
 ----------------
 
-+-----------------------------+--------------------+
-| resources create            | Create a resource  |
-+-----------------------------+--------------------+
-| resources list              | List all resources |
-+-----------------------------+--------------------+
-| resources show <ResourceId> | Show a resource    |
-+-----------------------------+--------------------+
++------------------------------------+--------------------+
+| resources create                   | Create a resource  |
++------------------------------------+--------------------+
+| resources list [-t <ResourceType>] | List all resources |
++------------------------------------+--------------------+
+| resources show <ResourceId>        | Show a resource    |
++------------------------------------+--------------------+
+| resources delete <ResourceId>      | Delete a resource  |
++------------------------------------+--------------------+
 
 resources create
 ----------------
 创建一个新的资源::
 
-    $ ./bin/emqx_ctl resources create 'test-res' 'debug_resource_type' '{"a":1}' 'test resource'
+    $ ./bin/emqx_ctl resources create 'test-res' 'debug_resource_type' '{"a":1}' -d 'test resource'
 
     Resource debug_resource_type:test-res created
 
@@ -1163,7 +1165,16 @@ resources list
 
     $ ./bin/emqx_ctl resources list
 
-    resource(debug_resource_type:test-res, type=debug_resource_type, config=#{<<"a">> => 1}, attrs=undefined, description=test-rule)
+    resource(id='debug_resource_type:test-res', type='debug_resource_type', config=#{<<"a">> => 1}, attrs=undefined, description='test-rule')
+
+resources list by type
+----------------------
+
+列出当前所有的资源::
+
+    $ ./bin/emqx_ctl resources list --type 'debug_resource_type'
+
+    resource(id='debug_resource_type:test-res', type='debug_resource_type', config=#{<<"a">> => 1}, attrs=undefined, description='test-rule')
 
 resources show
 --------------
@@ -1171,7 +1182,17 @@ resources show
 查询资源::
 
     $ ./bin/emqx_ctl resources show 'debug_resource_type:test-res'
-    resource(debug_resource_type:test-res, type=debug_resource_type, config=#{<<"a">> => 1}, attrs=undefined, description=test resource)
+
+    resource(id='debug_resource_type:test-res', type='debug_resource_type', config=#{<<"a">> => 1}, attrs=undefined, description='test resource')
+
+resources delete
+----------------
+
+删除资源::
+
+    $ ./bin/emqx_ctl resources delete 'debug_resource_type:test-res'
+
+    ok
 
 -------------------
 resource-types 命令
@@ -1192,7 +1213,7 @@ resource-types list
 
     ./bin/emqx_ctl resource-types list
 
-    resource_type(name=default_resource, provider=emqx_rule_engine, params=#{}, on_create={emqx_rule_actions,on_resource_create}, description=Default resource)
+    resource_type(name='default_resource', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='Default resource')
 
 resource-types show
 -------------------
@@ -1201,7 +1222,7 @@ resource-types show
 
     $ ./bin/emqx_ctl resource-types show default_resource
 
-    resource_type(name=default_resource, provider=emqx_rule_engine, params=#{}, on_create={emqx_rule_actions,on_resource_create}, description=Default resource)
+    resource_type(name='default_resource', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='Default resource')
 
 ----------
 recon 命令
