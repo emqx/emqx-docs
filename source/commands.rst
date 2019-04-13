@@ -214,11 +214,11 @@ cluster 命令集群本机两个 *EMQ X* 节点示例:
 
 启动 emqx1 ::
 
-    cd emqx1 && ./bin/emqx start
+    $ cd emqx1 && ./bin/emqx start
 
 启动 emqx2 ::
 
-    cd emqx2 && ./bin/emqx start
+    $ cd emqx2 && ./bin/emqx start
 
 emqx2 节点与 emqx1 集群，emqx2 目录下::
 
@@ -236,18 +236,18 @@ emqx2 节点与 emqx1 集群，emqx2 目录下::
 集群消息路由测试::
 
     # emqx1节点上订阅x
-    mosquitto_sub -t x -q 1 -p 1883
+    $ mosquitto_sub -t x -q 1 -p 1883
 
     # emqx2节点上向x发布消息
-    mosquitto_pub -t x -q 1 -p 2883 -m hello
+    $ mosquitto_pub -t x -q 1 -p 2883 -m hello
 
 emqx2 节点离开集群::
 
-    cd emqx2 && ./bin/emqx_ctl cluster leave
+    $ cd emqx2 && ./bin/emqx_ctl cluster leave
 
 emqx1 节点下删除 emqx2::
 
-    cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
+    $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
 --------
 acl 命令
@@ -299,7 +299,7 @@ clients show <ClientId>
 
 根据 ClientId 查询客户端::
 
-    ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
+    $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 
     Connection(mosqsub/43832-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
 
@@ -308,7 +308,7 @@ clients kick <ClientId>
 
 根据 ClientId 踢出客户端::
 
-    ./bin/emqx_ctl clients kick "clientid"
+    $ ./bin/emqx_ctl clients kick "clientid"
 
 -------------
 sessions 命令
