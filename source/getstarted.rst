@@ -206,13 +206,9 @@ Web 管理控制台(Dashboard)
 100万线连接测试说明
 -------------------
 
-.. NOTE::
+*EMQ X* R3.0 在单机 8核/32G内存的 CentOS 云服务器，能够测试到 130万 的客户端连接数，
 
-    *EMQ X* R3.0 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
-
-*EMQ X* R3.0 消息服务器1.1.3版本，连接压力测试到130万线，8核心/32G内存的 CentOS 云服务器。
-
-操作系统内核参数、TCP 协议栈参数、Erlang 虚拟机参数、EMQ 最大允许连接数设置简述如下：
+为此，操作系统内核参数、TCP 协议栈参数、Erlang 虚拟机参数、EMQ X 相关配置应该进行如下的调优
 
 Linux 操作系统参数
 ------------------
@@ -226,6 +222,11 @@ Linux 操作系统参数
 
     ulimit -n 1048576
 
+.. NOTE::
+
+    *EMQ X* R3.0 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
+
+
 TCP 协议栈参数
 --------------
 
@@ -236,7 +237,7 @@ TCP 协议栈参数
 Erlang 虚拟机参数
 -----------------
 
-emqttd/etc/emq.conf:
+emqx/etc/emqx.conf:
 
 .. code-block:: properties
 
@@ -249,13 +250,13 @@ emqttd/etc/emq.conf:
 EMQ X 最大允许连接数
 --------------------
 
-emqx/etc/emqx.conf 'listeners'段落::
+emqx/etc/emqx.conf ``listeners`` 段落::
 
-    ## Size of acceptor pool
+    ## The acceptor pool for external MQTT/TCP listener
     listener.tcp.external.acceptors = 64
 
-    ## Maximum number of concurrent clients
-    listener.tcp.external.max_clients = 1000000
+    ## Maximum number of concurrent MQTT/TCP connections.
+    listener.tcp.external.max_connections = 1000000
 
 测试客户端设置
 --------------
@@ -271,7 +272,7 @@ emqx/etc/emqx.conf 'listeners'段落::
 
 MQTT 是一个设计得非常出色的传输层协议，在移动消息、物联网、车联网、智能硬件甚至能源勘探等领域有着广泛的应用。1个字节报头、2个字节心跳、消息 QoS 支持等设计，非常适合在低带宽、不可靠网络、嵌入式设备上应用。
 
-不同的应用有不同的系统要求，用户使用emqttd消息服务器前，可以按自己的应用场景进行测试，而不是简单的连接压力测试:
+不同的应用有不同的系统要求，用户使用 *EMQ X* 消息服务器前，可以按自己的应用场景进行测试，而不是简单的连接压力测试:
 
 1. Android 消息推送: 推送消息广播测试。
 
