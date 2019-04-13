@@ -152,11 +152,11 @@ emqx_auth_clientid - ClientID 认证插件
 1. **连接认证**: 控制某客户端是否具有连接 EMQ X 的权限
 2. **访问控制**: 控制某客户端是否具有 PUBLISH/SUBSCIRBE 操作的权限
 
-`emqx_auth_clientid`_ 目前只包含 **连接认证** 功能不包括 **访问控制** 。他会允许满足其配置中 ``clientid`` 成功登录。其中值得注意的是 ``password`` 以明文的方式给出，在存储入系统时会按照配置的 hash 算法加密后存入。客户端在连接时应该携带对应的密文进行连接。
+`emqx_auth_clientid`_ 目前只包含 **连接认证** 功能不包括 **访问控制** 。他会允许满足其配置中 ``clientid`` 成功登录。其中值得注意的是 ``password`` 以明文的方式进行添加记录，在存储入系统时会按照配置的 hash 算法加密后存入。客户端在连接时应该携带对应的密文进行连接。
 
 此外, 该插件还支持 REST API 和 CLI 用于在运行时管理。
 
-.. NOTE:: 3.1 开始支持 REST API 管理 clientid
+.. NOTE:: 3.1 开始支持 REST API 管理 clientid，并移除配置文件中添加默认 clientid 的功能
 
 ClientID 认证配置
 :::::::::::::::::
@@ -164,17 +164,6 @@ ClientID 认证配置
 etc/plugins/emqx_auth_clientid.conf:
 
 .. code:: properties
-
-    ##auth.client.$N.clientid = clientid
-    ##auth.client.$N.password = passwd
-
-    ## Examples
-    ##auth.client.1.clientid = id
-    ##auth.client.1.password = passwd
-    ##auth.client.2.clientid = dev:devid
-    ##auth.client.2.password = passwd2
-    ##auth.client.3.clientid = app:appid
-    ##auth.client.3.password = passwd3
 
     ## Password hash
     ## Value: plain | md5 | sha | sha256
@@ -188,7 +177,7 @@ emqx_auth_username: 用户名密码认证插件
 
 同样的，username 也支持 CLI 和 REST API 在运行时动态的管理。
 
-.. NOTE:: 3.1 开始支持 REST API 管理 username
+.. NOTE:: 3.1 开始支持 REST API 管理 username，并移除配置文件中添加默认 username 的功能
 
 用户名认证配置
 ::::::::::::::
@@ -196,15 +185,6 @@ emqx_auth_username: 用户名密码认证插件
 etc/plugins/emqx_auth_username.conf:
 
 .. code:: properties
-
-    ##auth.user.$N.username = admin
-    ##auth.user.$N.password = public
-
-    ## Examples:
-    ##auth.user.1.username = admin
-    ##auth.user.1.password = public
-    ##auth.user.2.username = feng@emqx.io
-    ##auth.user.2.password = public
 
     ## Password hash.
     ##
