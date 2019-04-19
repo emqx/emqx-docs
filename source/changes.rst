@@ -22,9 +22,14 @@ EMQ X 3.1-rc.3 版本发布。此版本改动主要包括规则引擎增强、�
   Github PR:
   `emqx/emqx#2438 <https://github.com/emqx/emqx/pull/2438>`_
 
+- 支持配置日志输出长度
+
+  Github PR:
+  `emqx/emqx#2461 <https://github.com/emqx/emqx/pull/2461>`_
+
 问题修复:
 
-- 修复 ``emqx_client`` 没有为 CONNECT 报文正确设置 Keep Alive 字段的问题
+- 修复 ``emqx_client`` 没有正确设置 CONNECT 报文 Keep Alive 字段的问题
 
   Github PR:
   `emqx/emqx#2443 <https://github.com/emqx/emqx/pull/2443>`_
