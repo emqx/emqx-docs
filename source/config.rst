@@ -27,11 +27,11 @@ EMQ 配置变更历史
 
 为方便用户与插件开发者使用，*EMQ* 配置文件经过四次调整。
 
-1. EMQ 1.x 版本采用 Erlang 原生配置文件格式 etc/emqttd.config:
+1. EMQ 1.x 版本采用 Erlang 原生配置文件格式 etc/emqx.config:
 
 .. code-block:: erlang
 
-    {emqttd, [
+    {emqx, [
       %% Authentication and Authorization
       {access, [
         %% Authetication. Anonymous Default
@@ -64,22 +64,22 @@ Erlang 的原生配置格式多层级嵌套，对非 Erlang 开发者的用户�
 .. code-block:: properties
 
     ## Node name
-    node.name = emqttd@127.0.0.1
+    node.name = emqx@127.0.0.1
     ...
     ## Max ClientId Length Allowed.
     mqtt.max_clientid_len = 1024
     ...
 
-4. EMQ 3.0-beta1 测试版正式更名 emqttd 为 emqx ，配置名称与配置信息进行相关变化:
+4. EMQ 3.0-beta1 测试版正式更名 emqx 为 emqx ，配置名称与配置信息进行相关变化:
 
 .. code-block:: properties
 
     ## Profile
-    etc/emqttd.config  ==》 etc/emqx.config
+    etc/emqx.config  ==》 etc/emqx.config
 
     ## Node name
     原先:
-    node.name = emqttd@127.0.0.1
+    node.name = emqx@127.0.0.1
     现在:
     node.name = emqx@127.0.0.1
 
@@ -550,6 +550,26 @@ etc/acl.conf 默认访问规则设置:
 *EMQ X* 消息服务器接收到 MQTT 客户端发布(PUBLISH)或订阅(SUBSCRIBE)请求时，会逐条匹配 ACL 访问控制规则，直到匹配成功返回 allow 或 deny。
 
 -----------------
+FLAPPING 参数配置
+-----------------
+
+FLAPPING 清理间隔
+-----------------
+
+.. code-block:: properties
+
+    ## The cleanning interval for flapping
+    ##
+    ## Value: Duration
+    ## -d: day
+    ## -h: hour
+    ## -m: minute
+    ## -s: second
+    ##
+    ## Default: 1h, 1 hour
+    ## flapping_clean_interval = 1h
+
+-----------------
 MQTT 协议参数配置
 -----------------
 
@@ -746,6 +766,30 @@ External Zone 参数设置
     ## Enable enqueue Qos0 messages
     zone.external.mqueue_store_qos0 = true
 
+    ## Whether to turn on flapping detect
+    ##
+    ## Value: on | off
+    zone.external.enable_flapping_detect = off
+
+    ## The times of state change per min, specifying the threshold which is used to
+    ## detect if the connection starts flapping
+    ##
+    ## Value: number
+    zone.external.flapping_threshold = 10, 1m
+
+    ## Flapping expiry interval for connections.
+    ## This config entry is used to determine when the connection
+    ## will be unbanned.
+    ##
+    ## Value: Duration
+    ## -d: day
+    ## -h: hour
+    ## -m: minute
+    ## -s: second
+    ##
+    ## Default: 1h, 1 hour
+    zone.external.flapping_expiry_interval = 1h
+
 Internal Zone 参数设置
 ------------------------
 
@@ -780,6 +824,30 @@ Internal Zone 参数设置
 
     ## Enable enqueue Qos0 messages
     zone.internal.mqueue_store_qos0 = true
+
+    ## Whether to turn on flapping detect
+    ##
+    ## Value: on | off
+    zone.internal.enable_flapping_detect = off
+
+    ## The times of state change per min, specifying the threshold which is used to
+    ## detect if the connection starts flapping
+    ##
+    ## Value: number
+    zone.internal.flapping_threshold = 10, 1m
+
+    ## Flapping expiry interval for connections.
+    ## This config entry is used to determine when the connection
+    ## will be unbanned.
+    ##
+    ## Value: Duration
+    ## -d: day
+    ## -h: hour
+    ## -m: minute
+    ## -s: second
+    ##
+    ## Default: 1h, 1 hour
+    zone.internal.flapping_expiry_interval = 1h
 
 -----------------------
 MQTT Listeners 参数说明
