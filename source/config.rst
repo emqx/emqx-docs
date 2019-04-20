@@ -27,11 +27,11 @@ EMQ 配置变更历史
 
 为方便用户与插件开发者使用，*EMQ* 配置文件经过四次调整。
 
-1. EMQ 1.x 版本采用 Erlang 原生配置文件格式 etc/emqx.config:
+1. EMQ 1.x 版本采用 Erlang 原生配置文件格式 etc/emqttd.config:
 
 .. code-block:: erlang
 
-    {emqx, [
+    {emqttd, [
       %% Authentication and Authorization
       {access, [
         %% Authetication. Anonymous Default
@@ -64,13 +64,13 @@ Erlang 的原生配置格式多层级嵌套，对非 Erlang 开发者的用户�
 .. code-block:: properties
 
     ## Node name
-    node.name = emqx@127.0.0.1
+    node.name = emqttd@127.0.0.1
     ...
     ## Max ClientId Length Allowed.
     mqtt.max_clientid_len = 1024
     ...
 
-4. EMQ 3.0-beta1 测试版正式更名 emqx 为 emqx ，配置名称与配置信息进行相关变化:
+4. EMQ 3.0-beta1 测试版正式更名 emqttd 为 emqx ，配置名称与配置信息进行相关变化:
 
 .. code-block:: properties
 
