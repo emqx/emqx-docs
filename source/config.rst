@@ -64,7 +64,7 @@ Erlang 的原生配置格式多层级嵌套，对非 Erlang 开发者的用户�
 .. code-block:: properties
 
     ## Node name
-    node.name = emqttd@127.0.0.1
+    node.name = emq@127.0.0.1
     ...
     ## Max ClientId Length Allowed.
     mqtt.max_clientid_len = 1024
@@ -75,11 +75,11 @@ Erlang 的原生配置格式多层级嵌套，对非 Erlang 开发者的用户�
 .. code-block:: properties
 
     ## Profile
-    etc/emqx.config  ==》 etc/emqx.config
+    etc/emq.config  ==> etc/emqx.config
 
     ## Node name
     原先:
-    node.name = emqx@127.0.0.1
+    node.name = emq@127.0.0.1
     现在:
     node.name = emqx@127.0.0.1
 
