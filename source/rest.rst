@@ -415,13 +415,13 @@ API 定义::
     "code": 0,
     "data": [
       {
-        "datetime": "2018-09-12 10:42:57",
+        "datetime": "2019-04-22 15:19:59",
         "node": "emqx@127.0.0.1",
         "node_status": "Running",
         "otp_release": "R21/10.0.5",
         "sysdescr": "EMQ X Broker",
         "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
-        "version": "3.0"
+        "version": "v3.1.0"
       }
     ]
   }
@@ -457,7 +457,7 @@ API 定义::
       "otp_release": "R21/10.0.5",
       "sysdescr": "EMQ X Broker",
       "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
-      "version": "3.0"
+      "version": "v3.1.0"
     }
   }
 
@@ -501,7 +501,7 @@ API 定义::
         "process_available": 262144,
         "process_used": 331,
         "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
-        "version": "3.0"
+        "version": "v3.1.0"
       }
     ]
   }
@@ -544,7 +544,7 @@ API 定义::
       "process_available": 262144,
       "process_used": 331,
       "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
-      "version": "3.0"
+      "version": "v3.1.0"
     }
   }
 
@@ -1300,7 +1300,7 @@ API 定义::
         "process_available": 262144,
         "process_used": 331,
         "uptime": "1 days,18 hours, 45 minutes, 1 seconds",
-        "version": "3.0"
+        "version": "v3.1.0"
       }
     ]
   }    
@@ -1490,133 +1490,151 @@ API 定义::
         "plugins": [
           {
             "name": "emqx_auth_clientid",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication with ClientId/Password",
             "active": false
           },
           {
             "name": "emqx_auth_http",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication/ACL with HTTP API",
             "active": false
           },
           {
             "name": "emqx_auth_jwt",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication with JWT",
             "active": false
           },
           {
             "name": "emqx_auth_ldap",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication/ACL with LDAP",
             "active": false
           },
           {
             "name": "emqx_auth_mongo",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication/ACL with MongoDB",
             "active": false
           },
           {
             "name": "emqx_auth_mysql",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication/ACL with MySQL",
             "active": false
           },
           {
             "name": "emqx_auth_pgsql",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication/ACL with PostgreSQL",
             "active": false
           },
           {
             "name": "emqx_auth_redis",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Authentication/ACL with Redis",
             "active": false
           },
           {
             "name": "emqx_auth_username",
-            "version": "3.0",
-            "description": "EMQ X Authentication with Username/Password",
+            "version": "v3.1.0",
+            "description": "EMQ X Authentication with Username and Password",
             "active": false
           },
           {
             "name": "emqx_coap",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X CoAP Gateway",
             "active": false
           },
           {
             "name": "emqx_dashboard",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Web Dashboard",
             "active": true
           },
           {
             "name": "emqx_delayed_publish",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Delayed Publish",
-            "active": true
+            "active": false
+          },
+          {
+            "name": "emqx_lua_hook",
+            "version": "v3.1.0",
+            "description": "EMQ X Lua Hooks",
+            "active": false
           },
           {
             "name": "emqx_lwm2m",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X LwM2M Gateway",
             "active": false
           },
           {
             "name": "emqx_management",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Management API and CLI",
             "active": true
           },
           {
             "name": "emqx_plugin_template",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Plugin Template",
             "active": false
           },
           {
+            "name": "emqx_psk_file",
+            "version": "v3.1.0",
+            "description": "EMQX PSK Plugin from File",
+            "active": false
+          },
+          {
             "name": "emqx_recon",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Recon Plugin",
             "active": true
           },
           {
             "name": "emqx_reloader",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Reloader Plugin",
             "active": false
           },
           {
             "name": "emqx_retainer",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Retainer",
             "active": true
           },
           {
+            "name": "emqx_rule_engine",
+            "version": "v3.1.0",
+            "description": "EMQ X Rule Engine",
+            "active": true
+          },
+          {
             "name": "emqx_sn",
-            "version": "3.0",
-            "description": "EMQ X MQTT-SN Gateway",
+            "version": "v3.1.0",
+            "description": "EMQ X MQTT SN Plugin",
             "active": false
           },
           {
             "name": "emqx_statsd",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "Statsd for EMQ X",
             "active": false
           },
           {
             "name": "emqx_stomp",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Stomp Protocol Plugin",
             "active": false
           },
           {
             "name": "emqx_web_hook",
-            "version": "3.0",
+            "version": "v3.1.0",
             "description": "EMQ X Webhook Plugin",
             "active": false
           }
@@ -1649,138 +1667,156 @@ API 定义::
 .. code-block:: json
 
   {
-    "code": 0, 
+    "code": 0,
     "data": [
       {
-        "name": "emqx_auth_clientid", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication with ClientId/Password", 
+        "name": "emqx_auth_clientid",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication with ClientId/Password",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_http", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication/ACL with HTTP API", 
+        "name": "emqx_auth_http",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication/ACL with HTTP API",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_jwt", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication with JWT", 
+        "name": "emqx_auth_jwt",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication with JWT",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_ldap", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication/ACL with LDAP", 
+        "name": "emqx_auth_ldap",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication/ACL with LDAP",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_mongo", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication/ACL with MongoDB", 
+        "name": "emqx_auth_mongo",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication/ACL with MongoDB",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_mysql", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication/ACL with MySQL", 
+        "name": "emqx_auth_mysql",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication/ACL with MySQL",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_pgsql", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication/ACL with PostgreSQL", 
+        "name": "emqx_auth_pgsql",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication/ACL with PostgreSQL",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_redis", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication/ACL with Redis", 
+        "name": "emqx_auth_redis",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication/ACL with Redis",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_auth_username", 
-        "version": "3.0", 
-        "description": "EMQ X Authentication with Username/Password", 
+        "name": "emqx_auth_username",
+        "version": "v3.1.0",
+        "description": "EMQ X Authentication with Username and Password",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_coap", 
-        "version": "3.0", 
-        "description": "EMQ X CoAP Gateway", 
+        "name": "emqx_coap",
+        "version": "v3.1.0",
+        "description": "EMQ X CoAP Gateway",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_dashboard", 
-        "version": "3.0", 
-        "description": "EMQ X Web Dashboard", 
+        "name": "emqx_dashboard",
+        "version": "v3.1.0",
+        "description": "EMQ X Web Dashboard",
         "active": true
-      }, 
+      },
       {
-        "name": "emqx_delayed_publish", 
-        "version": "3.0", 
-        "description": "EMQ X Delayed Publish", 
+        "name": "emqx_delayed_publish",
+        "version": "v3.1.0",
+        "description": "EMQ X Delayed Publish",
+        "active": false
+      },
+      {
+        "name": "emqx_lua_hook",
+        "version": "v3.1.0",
+        "description": "EMQ X Lua Hooks",
+        "active": false
+      },
+      {
+        "name": "emqx_lwm2m",
+        "version": "v3.1.0",
+        "description": "EMQ X LwM2M Gateway",
+        "active": false
+      },
+      {
+        "name": "emqx_management",
+        "version": "v3.1.0",
+        "description": "EMQ X Management API and CLI",
         "active": true
-      }, 
+      },
       {
-        "name": "emqx_lwm2m", 
-        "version": "3.0", 
-        "description": "EMQ X LwM2M Gateway", 
+        "name": "emqx_plugin_template",
+        "version": "v3.1.0",
+        "description": "EMQ X Plugin Template",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_management", 
-        "version": "3.0", 
-        "description": "EMQ X Management API and CLI", 
+        "name": "emqx_psk_file",
+        "version": "v3.1.0",
+        "description": "EMQX PSK Plugin from File",
+        "active": false
+      },
+      {
+        "name": "emqx_recon",
+        "version": "v3.1.0",
+        "description": "EMQ X Recon Plugin",
         "active": true
-      }, 
+      },
       {
-        "name": "emqx_plugin_template", 
-        "version": "3.0", 
-        "description": "EMQ X Plugin Template", 
+        "name": "emqx_reloader",
+        "version": "v3.1.0",
+        "description": "EMQ X Reloader Plugin",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_recon", 
-        "version": "3.0", 
-        "description": "EMQ X Recon Plugin", 
+        "name": "emqx_retainer",
+        "version": "v3.1.0",
+        "description": "EMQ X Retainer",
         "active": true
-      }, 
+      },
       {
-        "name": "emqx_reloader", 
-        "version": "3.0", 
-        "description": "EMQ X Reloader Plugin", 
-        "active": false
-      }, 
-      {
-        "name": "emqx_retainer", 
-        "version": "3.0", 
-        "description": "EMQ X Retainer", 
+        "name": "emqx_rule_engine",
+        "version": "v3.1.0",
+        "description": "EMQ X Rule Engine",
         "active": true
-      }, 
+      },
       {
-        "name": "emqx_sn", 
-        "version": "3.0", 
-        "description": "EMQ X MQTT-SN Gateway", 
+        "name": "emqx_sn",
+        "version": "v3.1.0",
+        "description": "EMQ X MQTT SN Plugin",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_statsd", 
-        "version": "3.0", 
-        "description": "Statsd for EMQ X", 
+        "name": "emqx_statsd",
+        "version": "v3.1.0",
+        "description": "Statsd for EMQ X",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_stomp", 
-        "version": "3.0", 
-        "description": "EMQ X Stomp Protocol Plugin", 
+        "name": "emqx_stomp",
+        "version": "v3.1.0",
+        "description": "EMQ X Stomp Protocol Plugin",
         "active": false
-      }, 
+      },
       {
-        "name": "emqx_web_hook", 
-        "version": "3.0", 
-        "description": "EMQ X Webhook Plugin", 
+        "name": "emqx_web_hook",
+        "version": "v3.1.0",
+        "description": "EMQ X Webhook Plugin",
         "active": false
       }
     ]

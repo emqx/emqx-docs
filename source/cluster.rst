@@ -75,7 +75,7 @@ Erlang 节点 Cookie 设置::
 连接
 ----
 
-Erlang 集群节点可通过 TCPv4, TCPv6 或 TLS 方式连接，EMQ X 3.0 版本支持在`etc/emqx.conf` 中配置连接方式:
+Erlang 集群节点可通过 TCPv4, TCPv6 或 TLS 方式连接，EMQ X 3.1 版本支持在`etc/emqx.conf` 中配置连接方式:
 
 .. code-block:: properties
 
@@ -255,9 +255,9 @@ emq@s2.emqx.io 主动退出集群::
 节点发现与自动集群
 ------------------
 
-EMQ X 3.0 版本支持基于 Ekka 库的集群自动发现(Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
+EMQ X 3.1 版本支持基于 Ekka 库的集群自动发现(Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现(Discovery)、自动集群(Autocluster)、脑裂自动愈合(Network Partition Autoheal)、自动删除宕机节点(Autoclean)。
 
-EMQ X 3.0 支持多种策略自动发现节点创建集群:
+EMQ X 3.1 支持多种策略自动发现节点创建集群:
 
 +-----------------+---------------------------+
 | 策略            | 说明                      |
@@ -382,7 +382,7 @@ manual 手动创建集群
 集群脑裂与自动愈合
 ------------------
 
-*EMQ X* R3.0 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
+*EMQ X* R3.1 版本正式支持集群脑裂自动恢复(Network Partition Autoheal):
 
 .. code-block:: properties
 
@@ -404,7 +404,7 @@ manual 手动创建集群
 集群节点自动清除
 ----------------
 
-*EMQ X* R3.0 版本支持从集群自动删除宕机节点(Autoclean):
+*EMQ X* R3.1 版本支持从集群自动删除宕机节点(Autoclean):
 
 .. code-block:: properties
 
