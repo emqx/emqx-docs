@@ -41,6 +41,8 @@
 +---------------------------+---------------------------+
 | `emqx_retainer`_          | Retain 消息存储模块       |
 +---------------------------+---------------------------+
+| `emqx_rule_engine`_       | 规则引擎                  |
++---------------------------+---------------------------+
 | `emqx_delayed_publish`_   | 客户端延时发布消息支持    |
 +---------------------------+---------------------------+
 | `emqx_coap`_              | CoAP 协议支持             |
@@ -63,6 +65,7 @@
 1. 默认加载
 2. CLI 启停插件
 3. Dashboard 启停插件
+4. 调用管理API 启停插件
 
 **开启默认加载**
 
@@ -119,9 +122,6 @@ Dashboard 插件设置
 etc/plugins/emqx_dashboard.conf:
 
 .. code:: properties
-
-    ## Dashboard API Providers
-    dashboard.api.providers = emqx_management,emqx_dashboard
 
     ## Default user's login username/password.
     dashboard.default_user.login = admin

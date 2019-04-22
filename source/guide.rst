@@ -196,7 +196,7 @@ HTTP 发布接口
 
 *EMQ X* 消息服务器提供了一个 HTTP 发布接口，应用服务器或 Web 服务器可通过该接口发布 MQTT 消息::
 
-    HTTP POST http://host:8080/mqtt/publish
+    HTTP POST http://host:8080/api/v3/mqtt/publish
 
 Web 服务器例如 PHP/Java/Python/NodeJS 或 Ruby on Rails，可通过 HTTP POST 请求发布 MQTT 消息:
 
