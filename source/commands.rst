@@ -214,11 +214,11 @@ cluster 命令集群本机两个 *EMQ X* 节点示例:
 
 启动 emqx1 ::
 
-    cd emqx1 && ./bin/emqx start
+    $ cd emqx1 && ./bin/emqx start
 
 启动 emqx2 ::
 
-    cd emqx2 && ./bin/emqx start
+    $ cd emqx2 && ./bin/emqx start
 
 emqx2 节点与 emqx1 集群，emqx2 目录下::
 
@@ -236,18 +236,18 @@ emqx2 节点与 emqx1 集群，emqx2 目录下::
 集群消息路由测试::
 
     # emqx1节点上订阅x
-    mosquitto_sub -t x -q 1 -p 1883
+    $ mosquitto_sub -t x -q 1 -p 1883
 
     # emqx2节点上向x发布消息
-    mosquitto_pub -t x -q 1 -p 2883 -m hello
+    $ mosquitto_pub -t x -q 1 -p 2883 -m hello
 
 emqx2 节点离开集群::
 
-    cd emqx2 && ./bin/emqx_ctl cluster leave
+    $ cd emqx2 && ./bin/emqx_ctl cluster leave
 
 emqx1 节点下删除 emqx2::
 
-    cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
+    $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
 --------
 acl 命令
@@ -299,7 +299,7 @@ clients show <ClientId>
 
 根据 ClientId 查询客户端::
 
-    ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
+    $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 
     Connection(mosqsub/43832-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
 
@@ -308,7 +308,7 @@ clients kick <ClientId>
 
 根据 ClientId 踢出客户端::
 
-    ./bin/emqx_ctl clients kick "clientid"
+    $ ./bin/emqx_ctl clients kick "clientid"
 
 -------------
 sessions 命令
@@ -986,6 +986,245 @@ listeners stop <Proto> <Port>
     $ ./bin/emqx_ctl listeners stop mqtt:tcp 0.0.0.0:1883
 
     Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
+
+----------------------------
+规则引擎(rule engine) 命令
+----------------------------
+
+规则引擎用于配置消息或事件的业务规则。规则引擎相关的概念包括: 规则(rule)、动作(rule-action)、资源类型(resource-type) 和 资源(resource)。
+
+使用 CLI 创建规则举例
+---------------------
+
+假设创建一个规则: "将所有发送自 client-id='Steven' 的消息，转发到地址为 'http://host-name/chats' 的 Web 服务器"。
+
+规则的筛选条件为: "发送自 client-id='Steven' 的 PUBLISH 消息中的 payload 字段"; 动作是: "转发到地址为 'http://host-name/chats' 的 Web 服务器"; 资源类型是: WebHook;
+资源是: "到 url='http://host-name/chats' 的 WebHook 连接资源"。
+
+要创建这个规则，需要首先使用 WebHook 类型创建一个资源，并配置资源参数为 {"url": "http://host-name/chats"}::
+
+    ## 启动提供了 'web_hook' 资源类型的 emqx_web_hook 插件
+    $ ./bin/emqx_ctl plugins load emqx_web_hook
+
+    ## 列出当前所有可用的资源类型，确保 'web_hook' 类型已存在
+    $ ./bin/emqx_ctl resource-types list
+
+    resource_type(name='web_hook', provider='emqx_web_hook', params=#{}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
+
+    ## 使用类型 'web_hook' 以及配置 '{"url": "http://host-name/chats"}' 创建一个新的资源
+    $ ./bin/emqx_ctl resources create 'webhook1' 'web_hook' '{"url": "http://host-name/chats"}'
+
+    Resource web_hook:webhook1 created
+
+然后创建规则，并选择规则的动作为 'emqx_web_hook:forward_action'，配置规则的筛选条件为 "SELECT payload FROM \"#\" where from='Steven' "。其中 "#" 为 topic 的通配符::
+
+    ## 列出当前所有可用的动作，确保 'emqx_web_hook:forward_action' 动作已存在
+    $ ./bin/emqx_ctl rule-actions list
+
+    action(name='emqx_web_hook:forward_action', app='emqx_web_hook', params=#{url => string}, description='Republish a MQTT message')
+
+    ## 创建名为 steven_msg_to_http 的规则，选用 'emqx_web_hook:forward_action' 动作，并指定动作的资源为刚创建的 "web_hook:webhook1"
+    $ ./bin/emqx_ctl rules create 'steven_msg_to_http' 'message.publish' 'SELECT payload FROM "#" where user=Steven' '{"emqx_web_hook:forward_action": {"$resource": "web_hook:webhook1"}}' "Forward msgs from clientid=Steven to webhook"
+
+    {"emqx_web_hook:forward_action": {"$resource": "web_hook:webhook1"}}' "Forward msgs from clientid=Steven to webhook"
+    Rule steven_msg_to_http:1554891331990205283 created
+
+现在使用 MQTT client 连接 emqx broker, client-id = Steven。然后发送任意消息到任意主题，规则 steven_msg_to_http:1554891331990205283 就会被触发。
+
+----------
+rules 命令
+----------
+
++-----------------------+----------------+
+| rules list            | List all rules |
++-----------------------+----------------+
+| rules show <RuleId>   | Show a rule    |
++-----------------------+----------------+
+| rules create          | Create a rule  |
++-----------------------+----------------+
+| rules delete <RuleId> | Delete a rule  |
++-----------------------+----------------+
+
+rules create
+------------
+
+创建一个新的规则::
+
+    Usage:
+    ./bin/emqx_ctl rules create <Name> <Hook> <SQL> <Actions> <Description>
+
+    举例，创建一个测试规则，简单打印所有发送到 't1' 主题的消息内容:
+    $ ./bin/emqx_ctl rules create 'inspect' 'message.publish' "select * from t1" '{"default:debug_action": {"a": 1}}' "Rule for debug"
+
+    Rule inspect:1554716647418533372 created
+
+上面的例子添加了一个名为 inspect 的规则，message.publish 表明此规则作用在 'PUBLISH' 消息上; "select * from t1" 是规则的细节，用 SQL 语句表达，意思是选取主题为 't1' 的消息体中的所有可用字段; 'default:debug_action' 是动作名，这是一个系统内置的动作，其功能是打印消息或事件到控制台; "{\"a\": 1}" 是动作的初始参数，格式必须为 JSON Object; "Rule for debug" 是本规则的一个描述。系统创建好了规则之后，返回了规则的 ID。
+
+接下来当有 "hello" 消息发到主题 't1' 时，"default:debug_action" 动作被触发，emqx 控制台会打印出消息的内容::
+
+    $ tail -f log/erlang.log.1
+
+    (emqx@127.0.0.1)1> Action input data: #{flags => #{dup => false,retain => false},
+                        from => <<"clientId-E7EYzGa6HK">>,
+                        headers =>
+                            #{allow_publish => true,
+                            peername => {{127,0,0,1},49972},
+                            username => undefined},
+                        id => <<0,5,134,2,237,35,98,166,244,67,0,0,6,167,0,1>>,
+                        payload => <<"hello">>,qos => 0,
+                        timestamp => {1554,722010,129063},
+                        topic => <<"t1">>}
+    Action init params: #{<<"a">> => 1}
+
+.. note:: 一个规则由系统生成的规则 ID 标识。所以重复添加规则会生成新的 ID 不同的规则。
+
+rules list
+----------
+
+列出当前所有的规则::
+
+    $ ./bin/emqx_ctl rules list
+
+    rule(id='inspect:1554716647418533372', name='inspect', for='message.publish', rawsql='select * from t1', actions=[{"name":"default:debug_action", "params":{}}], enabled=true, description='Rule for debug')
+
+rules show
+----------
+
+查询规则::
+
+    $ ./bin/emqx_ctl rules show 'inspect:1554716647418533372'
+
+    rule(id='inspect:1554716647418533372', name='inspect', for='message.publish', rawsql='select * from t1', actions=[{"name":"default:debug_action", "params":{}}], enabled=true, description='Rule for debug')
+
+rules delete
+------------
+
+删除规则::
+
+    $ ./bin/emqx_ctl rules delete 'inspect:1554716647418533372'
+
+    ok
+
+------------------
+rule-actions 命令
+------------------
+
++------------------------------+--------------------+
+| rule-actions list            | List all actions   |
++------------------------------+--------------------+
+| rule-actions show <ActionId> | Show a rule action |
++------------------------------+--------------------+
+
+动作可以由 emqx 内置(称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI 命令添加或删除。
+
+rule-actions show
+-----------------
+
+查询动作::
+
+    $ ./bin/emqx_ctl rule-actions show 'default:debug_action'
+
+    action(name='default:debug_action', app='emqx_rule_engine', params=#{}, description='Debug Action')
+
+rule-actions list
+-----------------
+
+列出当前的所有动作::
+
+    $ ./bin/emqx_ctl rule-actions list
+
+    action(name='default:debug_action', app='emqx_rule_engine', params=#{}, description='Debug Action')
+    action(name='default:republish_message', app='emqx_rule_engine', params=#{from => topic,to => topic}, description='Republish a MQTT message')
+
+上面列出的两个都是系统内置动作，第一个动作是打印消息内容，第二个动作是重新发布某个消息到另外一个topic。
+
+----------------
+resources 命令
+----------------
+
++------------------------------------+--------------------+
+| resources create                   | Create a resource  |
++------------------------------------+--------------------+
+| resources list [-t <ResourceType>] | List all resources |
++------------------------------------+--------------------+
+| resources show <ResourceId>        | Show a resource    |
++------------------------------------+--------------------+
+| resources delete <ResourceId>      | Delete a resource  |
++------------------------------------+--------------------+
+
+resources create
+----------------
+创建一个新的资源::
+
+    $ ./bin/emqx_ctl resources create 'test-res' 'debug_resource_type' '{"a":1}' -d 'test resource'
+
+    Resource debug_resource_type:test-res created
+
+resources list
+--------------
+
+列出当前所有的资源::
+
+    $ ./bin/emqx_ctl resources list
+
+    resource(id='debug_resource_type:test-res', type='debug_resource_type', config=#{<<"a">> => 1}, attrs=undefined, description='test-rule')
+
+resources list by type
+----------------------
+
+列出当前所有的资源::
+
+    $ ./bin/emqx_ctl resources list --type 'debug_resource_type'
+
+    resource(id='debug_resource_type:test-res', type='debug_resource_type', config=#{<<"a">> => 1}, attrs=undefined, description='test-rule')
+
+resources show
+--------------
+
+查询资源::
+
+    $ ./bin/emqx_ctl resources show 'debug_resource_type:test-res'
+
+    resource(id='debug_resource_type:test-res', type='debug_resource_type', config=#{<<"a">> => 1}, attrs=undefined, description='test resource')
+
+resources delete
+----------------
+
+删除资源::
+
+    $ ./bin/emqx_ctl resources delete 'debug_resource_type:test-res'
+
+    ok
+
+-------------------
+resource-types 命令
+-------------------
+
++----------------------------+-------------------------+
+| resource-types list        | List all resource-types |
++----------------------------+-------------------------+
+| resource-types show <Type> | Show a resource-type    |
++----------------------------+-------------------------+
+
+资源类型可以由 emqx 内置(称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI 命令添加或删除。
+
+resource-types list
+-------------------
+
+列出当前所有的资源类型::
+
+    ./bin/emqx_ctl resource-types list
+
+    resource_type(name='default_resource', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='Default resource')
+
+resource-types show
+-------------------
+
+查询资源类型::
+
+    $ ./bin/emqx_ctl resource-types show default_resource
+
+    resource_type(name='default_resource', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='Default resource')
 
 ----------
 recon 命令
