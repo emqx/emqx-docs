@@ -829,13 +829,13 @@ Internal Zone 参数设置
     ##
     ## Value: on | off
     zone.internal.enable_flapping_detect = off
-    
+
     ## The times of state change per min, specifying the threshold which is used to
     ## detect if the connection starts flapping
     ##
     ## Value: number
     zone.internal.flapping_threshold = 10, 1m
-    
+
     ## Flapping expiry interval for connections.
     ## This config entry is used to determine when the connection
     ## will be unbanned.
@@ -1492,4 +1492,3 @@ Erlang 虚拟机监控设置
     ## for how many processes can simultaneously
     ## exist at the local node before the corresponding alarm is clear.
     vm_mon.process_low_watermark = 60%
-
