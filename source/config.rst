@@ -788,7 +788,7 @@ External Zone 参数设置
     ## -s: second
     ##
     ## Default: 1h, 1 hour
-    zone.external.flapping_expiry_interval = 1h
+    zone.external.flapping_banned_expiry_interval = 1h
 
 Internal Zone 参数设置
 ------------------------
@@ -847,7 +847,7 @@ Internal Zone 参数设置
     ## -s: second
     ##
     ## Default: 1h, 1 hour
-    zone.internal.flapping_expiry_interval = 1h
+    zone.internal.flapping_banned_expiry_interval = 1h
 
 -----------------------
 MQTT Listeners 参数说明
@@ -1492,4 +1492,3 @@ Erlang 虚拟机监控设置
     ## for how many processes can simultaneously
     ## exist at the local node before the corresponding alarm is clear.
     vm_mon.process_low_watermark = 60%
-
