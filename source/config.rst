@@ -788,7 +788,7 @@ External Zone 参数设置
     ## -s: second
     ##
     ## Default: 1h, 1 hour
-    zone.external.flapping_expiry_interval = 1h
+    zone.external.flapping_banned_expiry_interval = 1h
 
 Internal Zone 参数设置
 ------------------------
@@ -829,13 +829,13 @@ Internal Zone 参数设置
     ##
     ## Value: on | off
     zone.internal.enable_flapping_detect = off
-
+    
     ## The times of state change per min, specifying the threshold which is used to
     ## detect if the connection starts flapping
     ##
     ## Value: number
     zone.internal.flapping_threshold = 10, 1m
-
+    
     ## Flapping expiry interval for connections.
     ## This config entry is used to determine when the connection
     ## will be unbanned.
@@ -847,7 +847,7 @@ Internal Zone 参数设置
     ## -s: second
     ##
     ## Default: 1h, 1 hour
-    zone.internal.flapping_expiry_interval = 1h
+    zone.internal.flapping_banned_expiry_interval = 1h
 
 -----------------------
 MQTT Listeners 参数说明
