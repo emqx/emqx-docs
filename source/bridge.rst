@@ -42,7 +42,7 @@ EMQ X 节点 RPC 桥接配置
     ## 值: 字符串
     ## 示例: emqx@127.0.0.1,  127.0.0.1:1883
     bridge.emqx2.address = emqx2@192.168.1.2
-    
+
     ## 转发消息的主题
     ##
     ## 值: 字符串
@@ -68,7 +68,7 @@ RPC 桥接的局限性：
 
 
 EMQ X 节点 MQTT 桥接配置
------------------------
+------------------------
 
 emqx 3.0 正式引入了 mqtt bridge，使 emqx 可以桥接任意 mqtt broker ，同时由于 mqtt 协议本身的特性， emqx 可以通过 mqtt bridge 去订阅远程 mqtt broker 的主题，再将远程 mqtt broker 的消息同步到本地。
 

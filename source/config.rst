@@ -236,7 +236,7 @@ manual 手动创建集群
 基于 etcd 自动集群
 ------------------
 
-基于 `etcd`_ 自动发现并创建集群:
+基于 `etcd` 自动发现并创建集群:
 
 .. code-block:: properties
 
@@ -260,7 +260,7 @@ manual 手动创建集群
 基于 Kubernetes 自动集群
 ------------------------
 
-`Kubernetes`_ 下自动发现并创建集群:
+`Kubernetes` 下自动发现并创建集群:
 
 .. code-block:: properties
 
@@ -424,7 +424,7 @@ RPC 参数配置
 ------------
 
 设置写到终端或写到文件
--------------------
+----------------------
 
 .. code-block:: properties
 
@@ -439,7 +439,7 @@ RPC 参数配置
 - both: 同时写到终端(erlang shell) 和文件
 
 日志级别
--------
+--------
 
 .. code-block:: properties
 
@@ -451,7 +451,7 @@ RPC 参数配置
 可以使用 :ref:`command_log` 为每个 logger handler 设置日志级别。
 
 日志文件配置
-----------
+------------
 
 .. code-block:: properties
 
@@ -471,7 +471,7 @@ RPC 参数配置
     log.rotation.count = 5
 
 配置额外的 file logger handlers
-------------------------------
+--------------------------------
 
 可以通过配置额外的 file logger handlers，将某个级别的日志写到单独的文件。
 

@@ -1312,6 +1312,7 @@ emqx_plugin_template.erl:
 .. _emqx_reloader:         https://github.com/emqx/emqx-reloader
 .. _emqx_psk_file:         https://github.com/emqx/emqx-psk-file
 .. _emqx_plugin_template:  https://github.com/emqx/emqx-plugin-template
+.. _emqx_rule_engine:      https://github.com/emqx/emqx-rule-engine
 .. _recon:                 http://ferd.github.io/recon/
 .. _LDAP:                  https://ldap.com
 .. _JWT:                   https://jwt.io
