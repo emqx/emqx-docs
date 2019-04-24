@@ -326,4 +326,5 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 .. _emqx_sn:               https://github.com/emqx/emqx_sn
 .. _emqx_coap:             https://github.com/emqx/emqx_coap
 .. _emqx_delayed_publish:  https://github.com/emqx/emqx_delayed_publish
-
+.. _emqx_psk_file:         https://github.com/emqx/emqx-psk-file
+.. _emqx_rule_engine:      https://github.com/emqx/emqx-rule-engine

@@ -368,7 +368,7 @@ emqx 模块封装了 Hook 接口:
 *EMQ* 消息服务器支持可扩展的认证与访问控制，通过挂载 ``client.authenticate`` and ``client.check_acl`` 两个钩子实现。
 
 编写鉴权钩子回调函数
------------------
+--------------------
 
 挂载回调函数到 ``client.authenticate`` 钩子:
 
@@ -397,7 +397,7 @@ emqx 模块封装了 Hook 接口:
     }
 
 编写 ACL 钩子回调函数
--------------------
+----------------------
 
 挂载回调函数到 ``client.authenticate`` 钩子:
 
@@ -451,23 +451,23 @@ The ACLResult 要么是 ``allow``，要么是 ``deny``.
 +-----------------------+--------------------------------+
 | Plugin                | Authentication                 |
 +-----------------------+--------------------------------+
-| emqx_auth_username     | Username and Password          |
+| emqx_auth_username    | Username and Password          |
 +-----------------------+--------------------------------+
-| emqx_auth_clientid     | ClientID and Password          |
+| emqx_auth_clientid    | ClientID and Password          |
 +-----------------------+--------------------------------+
-| emqx_auth_ldap         | LDAP                           |
+| emqx_auth_ldap        | LDAP                           |
 +-----------------------+--------------------------------+
-| emqx_auth_http         | HTTP API                       |
+| emqx_auth_http        | HTTP API                       |
 +-----------------------+--------------------------------+
-| emqx_auth_mysql        | MySQL                          |
+| emqx_auth_mysql       | MySQL                          |
 +-----------------------+--------------------------------+
-| emqx_auth_pgsql        | PostgreSQL                     |
+| emqx_auth_pgsql       | PostgreSQL                     |
 +-----------------------+--------------------------------+
-| emqx_auth_redis        | Redis                          |
+| emqx_auth_redis       | Redis                          |
 +-----------------------+--------------------------------+
-| emqx_auth_mongo        | MongoDB                        |
+| emqx_auth_mongo       | MongoDB                        |
 +-----------------------+--------------------------------+
-| emqx_auth_jwt          | JWT                            |
+| emqx_auth_jwt         | JWT                            |
 +-----------------------+--------------------------------+
 
 .. _plugin:

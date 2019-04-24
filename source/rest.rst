@@ -7,7 +7,7 @@
 
 用户可以通过 REST API 查询 MQTT 客户端连接(Clients)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
 
-----------
+---------
 URL 地址
 ---------
 
@@ -551,9 +551,9 @@ API 定义::
 
 
 
--------------------
+---------------------
 连接信息(Connections)
--------------------
+---------------------
 
 获取集群连接信息
 ----------------------------
@@ -1049,13 +1049,16 @@ API 定义::
     GET api/v3/nodes/emqx@127.0.0.1/sessions/emqx-api-test:v1
 
 
-    请求参数 json:
+请求参数:
+
+.. code-block:: json
+
   {
-    "topic" : "/World",
+    "topic": "test_topic",
     "payload": "hello",
-    "qos": 0,
-	"retain" : false,
-  	"client_id": "mqttjs_722b4d845f"
+    "qos": 1,
+    "retain": false,
+    "client_id": "mqttjs_ab9069449e"
   }
 
 返回数据:
@@ -1303,7 +1306,7 @@ API 定义::
         "version": "v3.1.0"
       }
     ]
-  }    
+  }
 
 
 
@@ -1362,7 +1365,7 @@ API 定义::
     "retain": false,
     "client_id": "mqttjs_ab9069449e"
   }
-      
+
 
 请求示例::
 
@@ -1400,7 +1403,7 @@ API 定义::
     "client_id": "mqttjs_ab9069449e"
   }
 
-      
+
 
 请求示例::
 
@@ -1440,7 +1443,7 @@ API 定义::
     "retain": false,
     "client_id": "mqttjs_ab9069449e"
   }
-      
+
 
 请求示例::
 
@@ -1904,70 +1907,70 @@ API 定义::
 .. code-block:: json
 
   {
-    "code": 0, 
+    "code": 0,
     "data": [
       {
         "listeners": [
           {
-            "acceptors": 16, 
-            "current_conns": 0, 
-            "listen_on": "8883", 
-            "max_conns": 102400, 
-            "protocol": "mqtt:ssl", 
+            "acceptors": 16,
+            "current_conns": 0,
+            "listen_on": "8883",
+            "max_conns": 102400,
+            "protocol": "mqtt:ssl",
             "shutdown_count": [ ]
-          }, 
+          },
           {
-            "acceptors": 8, 
-            "current_conns": 2, 
-            "listen_on": "0.0.0.0:1883", 
-            "max_conns": 1024000, 
-            "protocol": "mqtt:tcp", 
+            "acceptors": 8,
+            "current_conns": 2,
+            "listen_on": "0.0.0.0:1883",
+            "max_conns": 1024000,
+            "protocol": "mqtt:tcp",
             "shutdown_count": {
-              "closed": 2, 
+              "closed": 2,
               "kicked": 1
             }
-          }, 
+          },
           {
-            "acceptors": 4, 
-            "current_conns": 0, 
-            "listen_on": "127.0.0.1:11883", 
-            "max_conns": 10240000, 
-            "protocol": "mqtt:tcp", 
+            "acceptors": 4,
+            "current_conns": 0,
+            "listen_on": "127.0.0.1:11883",
+            "max_conns": 10240000,
+            "protocol": "mqtt:tcp",
             "shutdown_count": [ ]
-          }, 
+          },
           {
-            "acceptors": 4, 
-            "current_conns": 1, 
-            "listen_on": "18083", 
-            "max_conns": 512, 
-            "protocol": "http:dashboard", 
+            "acceptors": 4,
+            "current_conns": 1,
+            "listen_on": "18083",
+            "max_conns": 512,
+            "protocol": "http:dashboard",
             "shutdown_count": [ ]
-          }, 
+          },
           {
-            "acceptors": 2, 
-            "current_conns": 0, 
-            "listen_on": "8080", 
-            "max_conns": 512, 
-            "protocol": "http:management", 
+            "acceptors": 2,
+            "current_conns": 0,
+            "listen_on": "8080",
+            "max_conns": 512,
+            "protocol": "http:management",
             "shutdown_count": [ ]
-          }, 
+          },
           {
-            "acceptors": 4, 
-            "current_conns": 0, 
-            "listen_on": "8083", 
-            "max_conns": 102400, 
-            "protocol": "mqtt:ws", 
+            "acceptors": 4,
+            "current_conns": 0,
+            "listen_on": "8083",
+            "max_conns": 102400,
+            "protocol": "mqtt:ws",
             "shutdown_count": [ ]
-          }, 
+          },
           {
-            "acceptors": 4, 
-            "current_conns": 0, 
-            "listen_on": "8084", 
-            "max_conns": 16, 
-            "protocol": "mqtt:wss", 
+            "acceptors": 4,
+            "current_conns": 0,
+            "listen_on": "8084",
+            "max_conns": 16,
+            "protocol": "mqtt:wss",
             "shutdown_count": [ ]
           }
-        ], 
+        ],
         "node": "emqx@127.0.0.1"
       }
     ]
@@ -1997,70 +2000,70 @@ API 定义::
 .. code-block:: json
 
   {
-    "code": 0, 
+    "code": 0,
     "data": [
       {
-        "acceptors": 16, 
-        "current_conns": 0, 
-        "listen_on": "8883", 
-        "max_conns": 102400, 
-        "protocol": "mqtt:ssl", 
+        "acceptors": 16,
+        "current_conns": 0,
+        "listen_on": "8883",
+        "max_conns": 102400,
+        "protocol": "mqtt:ssl",
         "shutdown_count": [ ]
-      }, 
+      },
       {
-        "acceptors": 8, 
-        "current_conns": 2, 
-        "listen_on": "0.0.0.0:1883", 
-        "max_conns": 1024000, 
-        "protocol": "mqtt:tcp", 
+        "acceptors": 8,
+        "current_conns": 2,
+        "listen_on": "0.0.0.0:1883",
+        "max_conns": 1024000,
+        "protocol": "mqtt:tcp",
         "shutdown_count": {
-          "closed": 2, 
+          "closed": 2,
           "kicked": 1
         }
-      }, 
+      },
       {
-        "acceptors": 4, 
-        "current_conns": 0, 
-        "listen_on": "127.0.0.1:11883", 
-        "max_conns": 10240000, 
-        "protocol": "mqtt:tcp", 
+        "acceptors": 4,
+        "current_conns": 0,
+        "listen_on": "127.0.0.1:11883",
+        "max_conns": 10240000,
+        "protocol": "mqtt:tcp",
         "shutdown_count": [ ]
-      }, 
+      },
       {
-        "acceptors": 4, 
-        "current_conns": 1, 
-        "listen_on": "18083", 
-        "max_conns": 512, 
-        "protocol": "http:dashboard", 
+        "acceptors": 4,
+        "current_conns": 1,
+        "listen_on": "18083",
+        "max_conns": 512,
+        "protocol": "http:dashboard",
         "shutdown_count": [ ]
-      }, 
+      },
       {
-        "acceptors": 2, 
-        "current_conns": 0, 
-        "listen_on": "8080", 
-        "max_conns": 512, 
-        "protocol": "http:management", 
+        "acceptors": 2,
+        "current_conns": 0,
+        "listen_on": "8080",
+        "max_conns": 512,
+        "protocol": "http:management",
         "shutdown_count": [ ]
-      }, 
+      },
       {
-        "acceptors": 4, 
-        "current_conns": 0, 
-        "listen_on": "8083", 
-        "max_conns": 102400, 
-        "protocol": "mqtt:ws", 
+        "acceptors": 4,
+        "current_conns": 0,
+        "listen_on": "8083",
+        "max_conns": 102400,
+        "protocol": "mqtt:ws",
         "shutdown_count": [ ]
-      }, 
+      },
       {
-        "acceptors": 4, 
-        "current_conns": 0, 
-        "listen_on": "8084", 
-        "max_conns": 16, 
-        "protocol": "mqtt:wss", 
+        "acceptors": 4,
+        "current_conns": 0,
+        "listen_on": "8084",
+        "max_conns": 16,
+        "protocol": "mqtt:wss",
         "shutdown_count": [ ]
       }
     ]
   }
-    
+
 
 
 
@@ -2141,7 +2144,7 @@ API 定义::
       }
     ]
   }
-    
+
 
 
 
@@ -2494,12 +2497,12 @@ API 定义::
 
 
 
-----------------
+------------------
 错误信息与数据分页
-----------------
+------------------
 
-HTTP状态码大于500时响应携带错误信息返回
----------------------------------
+HTTP 状态码大于 500 时响应携带错误信息返回
+-------------------------------------------
 
 错误示例::
 
@@ -2516,7 +2519,7 @@ HTTP状态码大于500时响应携带错误信息返回
 
 
 分页参数与分页信息
----------------
+------------------
 
 请求示例中使用了 ?_page=1&_limit=10000 参数的接口均支持分页::
 
@@ -2526,7 +2529,7 @@ HTTP状态码大于500时响应携带错误信息返回
 
 返回数据:
 
-.. code-block:: json    
+.. code-block:: json
 
   {
     "code": 0,
