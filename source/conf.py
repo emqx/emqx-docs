@@ -260,7 +260,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'emqx', u'EMQ X R3.0 Documentation',
+    ('index', 'emqx', u'EMQ X R3.1 Documentation',
      [u'李枫 <feng@emqx.io>'], 1)
 ]
 

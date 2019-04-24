@@ -8,7 +8,7 @@
 .. _intro:
 
 ---------------------------
-*EMQ X* R3.0 消息服务器简介
+*EMQ X* R3.1 消息服务器简介
 ---------------------------
 
 *EMQ X* (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 平台开发的开源物联网 MQTT 消息服务器。Erlang/OTP 是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed) 的语言平台。MQTT 是轻量的(Lightweight)、发布订阅模式(PubSub) 的物联网消息协议。
@@ -60,7 +60,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 五分钟下载启动 EMQ
 ------------------
 
-*EMQ X* R3.0 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
+*EMQ X* R3.1 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 、openSUSE 平台程序包与 Docker 镜像。
 
 下载地址: http://emqtt.com/downloads
 
@@ -68,7 +68,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 
 .. code-block:: bash
 
-    unzip emqx-macosx-v3.0.zip && cd emqx
+    unzip emqx-macosx-v3.1.0.zip && cd emqx
 
     # 启动emqx
     ./bin/emqx start
@@ -84,7 +84,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 .. _compile:
 
 ------------------
-源码编译EMQ X R3.0
+源码编译EMQ X R3.1
 ------------------
 
 .. code-block:: bash
@@ -110,7 +110,7 @@ Web 管理控制台(Dashboard)
 .. _features:
 
 -------------------------------
-*EMQ X* R3.0 消息服务器功能列表
+*EMQ X* R3.1 消息服务器功能列表
 -------------------------------
 
 * 完整的 MQTT V3.1/V3.1.1 及V5.0协议规范支持
@@ -151,10 +151,10 @@ Web 管理控制台(Dashboard)
 .. _plugins:
 
 -------------------------
-*EMQ X* R3.0 扩展插件列表
+*EMQ X* R3.1 扩展插件列表
 -------------------------
 
-*EMQ X* R3.0 支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
+*EMQ X* R3.1 支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
 
 +-------------------------+--------------------------+
 | `emqx_plugin_template`_ | 插件模版与演示代码       |
@@ -206,7 +206,7 @@ Web 管理控制台(Dashboard)
 100万线连接测试说明
 -------------------
 
-*EMQ X* R3.0 在单机 8核/32G内存的 CentOS 云服务器，能够测试到 130万 的客户端连接数，
+*EMQ X* R3.1 在单机 8核/32G内存的 CentOS 云服务器，能够测试到 130万 的客户端连接数，
 
 为此，操作系统内核参数、TCP 协议栈参数、Erlang 虚拟机参数、EMQ X 相关配置应该进行如下的调优
 
@@ -224,7 +224,7 @@ Linux 操作系统参数
 
 .. NOTE::
 
-    *EMQ X* R3.0 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
+    *EMQ X* R3.1 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
 
 
 TCP 协议栈参数
