@@ -5,6 +5,212 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1-rc.3:
+
+-------------
+3.1-rc.3 版本
+-------------
+
+*发布日期: 2019-04-19*
+
+EMQ X 3.1-rc.3 版本发布。此版本改动主要包括规则引擎增强、错误修复。
+注意: 从此版本开始，新增 OpenSUSE 安装包，并且不再提供 Debian 7 安装包。
+
+功能改进：
+
+- 支持对客户端进行 flapping 检测，以及禁止异常的客户端
+
+  Github PR:
+  `emqx/emqx#2438 <https://github.com/emqx/emqx/pull/2438>`_
+
+- 支持配置日志输出长度
+
+  Github PR:
+  `emqx/emqx#2461 <https://github.com/emqx/emqx/pull/2461>`_
+
+问题修复:
+
+- 修复 ``emqx_client`` 没有正确设置 CONNECT 报文 Keep Alive 字段的问题
+
+  Github PR:
+  `emqx/emqx#2443 <https://github.com/emqx/emqx/pull/2443>`_
+
+emqx-auth-mysql (plugin)
+------------------------
+
+功能改进:
+
+- 支持 proxysql
+
+  Github PR:
+  `emqx/emqx-auth-mysql#134 <https://github.com/emqx/emqx-auth-mysql/pull/134>`_
+
+emqx-statsd (plugin)
+--------------------
+
+问题修复:
+
+- 修复 Windows 兼容性引起的问题
+
+  Github PR:
+  `emqx/emqx-statsd#24 <https://github.com/emqx/emqx-statsd/pull/24>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+功能改进:
+
+- 支持事件 actions
+
+  Github Commit:
+  `emqx/emqx-web-hook#8367e0 <https://github.com/emqx/emqx-web-hook/commit/8367e02f5ccafc7df9600c258348461a67c171bd>`_
+
+- 优化 webhook 资源的 specs
+
+  Github Commit:
+  `emqx/emqx-web-hook#5a1345 <https://github.com/emqx/emqx-web-hook/commit/5a13457d4f823fa80df1c7eab9a8e945ae6a0701>`_
+
+- 支持通过 hook 类型搜索 actions
+
+  Github Commit:
+  `emqx/emqx-web-hook#fb3b1b <https://github.com/emqx/emqx-web-hook/commit/fb3b1ba98ca3f2557a51be98a06537781119132c>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能改进:
+
+- 支持通过资源类型搜索 actions
+
+  Github PR:
+  `emqx/emqx-rule-engine#25 <https://github.com/emqx/emqx-rule-engine/pull/25>`_
+
+- 注册资源提供者更改为加载资源提供者
+
+  Github PR:
+  `emqx/emqx-rule-engine#26 <https://github.com/emqx/emqx-rule-engine/pull/26>`_
+
+- 优化 actions 的输入数据
+
+  Github PR:
+  `emqx/emqx-rule-engine#27 <https://github.com/emqx/emqx-rule-engine/pull/27>`_
+
+emqx-rel
+--------
+
+问题修复:
+
+- 修复修改 log.rotation.size 后启动失败的问题
+
+  Github PR:
+  `emqx/emqx-rel#336 <https://github.com/emqx/emqx-rel/pull/336>`_
+
+.. _release_3.1-rc.2:
+
+-------------
+3.1-rc.2 版本
+-------------
+
+*发布日期: 2019-04-13*
+
+EMQ X 3.1-rc.2 版本发布。此版本改动主要包括规则引擎增强、错误修复。
+
+功能改进:
+
+- 重新设计 `emqx_bridge` 的 `ensure_start` 与 `ensure_stop` API
+
+  Github PR:
+  `emqx/emqx#2423 <https://github.com/emqx/emqx/pull/2423>`_
+
+- 提供 Handler 以扩展 `emqx_bridge`
+
+  Github PR:
+  `emqx/emqx#2414 <https://github.com/emqx/emqx/pull/2414>`_
+
+问题修复:
+
+- 修复 metrics 在某些情况下没有正确更新的问题
+
+  Github PR:
+  `emqx/emqx#2416 <https://github.com/emqx/emqx/pull/2416>`_
+
+- 修复 trace log level 无法生效时没有提示的问题
+
+  Github PR:
+  `emqx/emqx#2408 <https://github.com/emqx/emqx/pull/2408>`_
+
+emqx-auth-http (plugin)
+-----------------------
+
+功能增强:
+
+- 支持用户的 WebServer 回传 Mountpoint
+
+  Github PR:
+  `emqx/emqx-auth-http#116 <https://github.com/emqx/emqx-auth-http/pull/116>`_
+
+emqx-auth-username (plugin)
+---------------------------
+
+功能增强:
+
+- 移除在配置文件中配置默认 username 的功能
+
+  Github PR:
+  `emqx/emqx-auth-username#96 <https://github.com/emqx/emqx-auth-username/pull/96>`_
+
+emqx-auth-clientid (plugin)
+---------------------------
+
+功能增强:
+
+- 移除在配置文件中配置默认 clientid 的功能
+
+  Github PR:
+  `emqx/emqx-auth-clientid#81 <https://github.com/emqx/emqx-auth-clientid/pull/81>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 支持标准 POSIX CLI 格式
+
+  Github PR:
+  `emqx/emqx-rule-engine#23 <https://github.com/emqx/emqx-rule-engine/pull/23>`_
+
+问题修复:
+
+- 修复 HTTP APIs 中的错误
+
+  Github PR:
+  `emqx/emqx-rule-engine#21 <https://github.com/emqx/emqx-rule-engine/pull/21>`_
+
+emqx-packages (plugin)
+----------------------
+
+问题修复:
+
+- 修复 EMQ X 在 CentOS 中开机启动失败的问题
+
+  Github Commit:
+  `emqx/emqx-packages#64760523ea29ca0ad1d85b763f0e8a8e6954db9c <https://github.com/emqx/emqx-packages/commit/64760523ea29ca0ad1d85b763f0e8a8e6954db9c>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 新增 Rule-Engine 前端页面
+
+  Github PR:
+  `emqx/emqx-dashboard#50 <https://github.com/emqx/emqx-dashboard/pull/50>`_
+
+- 支持在集群中统一管理 Dashboard 用户
+
+  Github PR:
+  `emqx/emqx-dashboard#48 <https://github.com/emqx/emqx-dashboard/pull/48>`_
+
 .. _release_3.1-rc.1:
 
 -------------
@@ -13,7 +219,7 @@
 
 *发布日期: 2019-04-04*
 
-EMQ X 3.1-rc.1 版本发布。此版本改动主要包括规则引擎增强、错误修复、稳定性增强等
+EMQ X 3.1-rc.1 版本发布。此版本改动主要包括规则引擎增强、错误修复、稳定性增强等。
 
 功能改进:
 

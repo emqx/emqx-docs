@@ -1,20 +1,20 @@
 
-《*EMQ X* R3.0 中文文档》
+《*EMQ X* R3.1 中文文档》
 ========================
 
 * **[开始使用(GetStarted)](http://docs.emqtt.cn/zh_CN/latest/getstarted.html)**
-  * [*EMQ X* R3.0 消息服务器简介](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#emq-3-0)
+  * [*EMQ X* R3.1 消息服务器简介](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#emq-3-0)
   * [MQTT 发布订阅模式简述](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt)
   * [五分钟下载启动EMQ](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#emq)
-  * [源码编译EMQ X R3.0](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#compile)
+  * [源码编译EMQ X R3.1](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#compile)
   * [Web 管理控制台(Dashboard)](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#web-dashboard)
-  * [*EMQ X* R3.0消息服务器功能列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#features)
-  * [*EMQ X* R3.0扩展插件列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#plugins)
+  * [*EMQ X* R3.1消息服务器功能列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#features)
+  * [*EMQ X* R3.1扩展插件列表](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#plugins)
   * [100万线连接测试说明](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#c1000k)
   * [开源 MQTT 客户端项目](http://docs.emqtt.cn/zh_CN/latest/getstarted.html#mqtt-clients)
 
 * **[程序安装(Installation)](http://docs.emqtt.cn/zh_CN/latest/install.html)**
-  * [*EMQ X* R3.0 程序包下载](http://docs.emqtt.cn/zh_CN/latest/install.html#emq-3-0)
+  * [*EMQ X* R3.1 程序包下载](http://docs.emqtt.cn/zh_CN/latest/install.html#emq-3-0)
   * [RPM 包安装](http://docs.emqtt.cn/zh_CN/latest/install.html#rpm)
   * [DEB 包安装](http://docs.emqtt.cn/zh_CN/latest/install.html#deb)
   * [Linux服务器安装](http://docs.emqtt.cn/zh_CN/latest/install.html#linux)
@@ -27,9 +27,9 @@
   * [快速设置](http://docs.emqtt.cn/zh_CN/latest/install.html#quick-setup)
 
 * **[配置说明(Configuration)](http://docs.emqtt.cn/zh_CN/latest/config.html)**
-  * [*EMQ X* R3.0 配置文件](http://docs.emqtt.cn/zh_CN/latest/config.html#emqx-r3-0)
+  * [*EMQ X* R3.1 配置文件](http://docs.emqtt.cn/zh_CN/latest/config.html#emqx-r3-0)
   * [*EMQ* 配置变更历史](http://docs.emqtt.cn/zh_CN/latest/config.html#emq)
-  * [*EMQ* 3.0 环境变量](http://docs.emqtt.cn/zh_CN/latest/config.html#id2)
+  * [*EMQ* 3.1 环境变量](http://docs.emqtt.cn/zh_CN/latest/config.html#id2)
   * [*EMQ* 集群设置](http://docs.emqtt.cn/zh_CN/latest/config.html#emq-x) 
   * [*EMQ* 集群自动发现](http://docs.emqtt.cn/zh_CN/latest/config.html#id7) 
   * [*EMQ* 节点与Cookie](http://docs.emqtt.cn/zh_CN/latest/config.html#emq-x-cookie)
@@ -140,7 +140,7 @@
   * [emqx_stomp: Stomp协议插件](http://docs.emqtt.cn/zh_CN/latest/plugins.html#emqx-stomp-stomp)
   * [emqx_recon: Recon性能调试插件](http://docs.emqtt.cn/zh_CN/latest/plugins.html#emqx-recon-recon)
   * [emqx_reloader: 代码热加载插件](http://docs.emqtt.cn/zh_CN/latest/plugins.html#emqx-reloader)
-  * [EMQ 3.0插件开发](http://docs.emqtt.cn/zh_CN/latest/plugins.html#emqx-3-0)
+  * [EMQ 3.1插件开发](http://docs.emqtt.cn/zh_CN/latest/plugins.html#emqx-3-0)
 
 * **[测试调优(Tune Guide)](http://docs.emqtt.cn/zh_CN/latest/tune.html)**
   * [Linux操作系统参数](http://docs.emqtt.cn/zh_CN/latest/tune.html#linux)

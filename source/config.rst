@@ -6,19 +6,19 @@
 =========================
 
 --------------------
-EMQ X R3.0 配置文件
+EMQ X R3.1 配置文件
 --------------------
 
-*EMQ X* R3.0 消息服务器通过 etc/ 目录下配置文件进行设置，主要配置文件包括:
+*EMQ X* R3.1 消息服务器通过 etc/ 目录下配置文件进行设置，主要配置文件包括:
 
 +----------------------------+--------------------------------------+
 | 配置文件                   | 说明                                 |
 +----------------------------+--------------------------------------+
-| etc/emqx.conf              | EMQ X R3.0 消息服务器配置文件        |
+| etc/emqx.conf              | EMQ X R3.1 消息服务器配置文件        |
 +----------------------------+--------------------------------------+
-| etc/acl.conf               | EMQ X R3.0 默认ACL规则配置文件       |
+| etc/acl.conf               | EMQ X R3.1 默认ACL规则配置文件       |
 +----------------------------+--------------------------------------+
-| etc/plugins/\*.conf        | EMQ X R3.0 各类插件配置文件          |
+| etc/plugins/\*.conf        | EMQ X R3.1 各类插件配置文件          |
 +----------------------------+--------------------------------------+
 
 ----------------
@@ -64,7 +64,7 @@ Erlang 的原生配置格式多层级嵌套，对非 Erlang 开发者的用户�
 .. code-block:: properties
 
     ## Node name
-    node.name = emqttd@127.0.0.1
+    node.name = emq@127.0.0.1
     ...
     ## Max ClientId Length Allowed.
     mqtt.max_clientid_len = 1024
@@ -75,16 +75,16 @@ Erlang 的原生配置格式多层级嵌套，对非 Erlang 开发者的用户�
 .. code-block:: properties
 
     ## Profile
-    etc/emqttd.config  ==》 etc/emqx.config
+    etc/emq.config  ==> etc/emqx.config
 
     ## Node name
     原先:
-    node.name = emqttd@127.0.0.1
+    node.name = emq@127.0.0.1
     现在:
     node.name = emqx@127.0.0.1
 
 
-EMQ X R3.0 启动时配置文件处理流程::
+EMQ X R3.1 启动时配置文件处理流程::
 
     ----------------------                                          3.0/schema/*.schema      -------------------
     | etc/emqx.conf      |                   -----------------              \|/              | data/app.config |
@@ -93,7 +93,7 @@ EMQ X R3.0 启动时配置文件处理流程::
     ----------------------                                                                   -------------------
 
 -------------------
-EMQ X R3.0 环境变量
+EMQ X R3.1 环境变量
 -------------------
 
 +--------------------+------------------------------------------+
@@ -154,7 +154,7 @@ EMQ X 集群设置
 EMQ X 集群自动发现
 ------------------
 
-EMQ X R3.0 版本支持多种策略的节点自动发现与集群:
+EMQ X R3.1 版本支持多种策略的节点自动发现与集群:
 
 +-----------------+---------------------------+
 | 策略            | 说明                      |
@@ -236,7 +236,7 @@ manual 手动创建集群
 基于 etcd 自动集群
 ------------------
 
-基于 `etcd`_ 自动发现并创建集群:
+基于 `etcd` 自动发现并创建集群:
 
 .. code-block:: properties
 
@@ -260,7 +260,7 @@ manual 手动创建集群
 基于 Kubernetes 自动集群
 ------------------------
 
-`Kubernetes`_ 下自动发现并创建集群:
+`Kubernetes` 下自动发现并创建集群:
 
 .. code-block:: properties
 
@@ -424,7 +424,7 @@ RPC 参数配置
 ------------
 
 设置写到终端或写到文件
--------------------
+----------------------
 
 .. code-block:: properties
 
@@ -439,7 +439,7 @@ RPC 参数配置
 - both: 同时写到终端(erlang shell) 和文件
 
 日志级别
--------
+--------
 
 .. code-block:: properties
 
@@ -451,7 +451,7 @@ RPC 参数配置
 可以使用 :ref:`command_log` 为每个 logger handler 设置日志级别。
 
 日志文件配置
-----------
+------------
 
 .. code-block:: properties
 
@@ -471,7 +471,7 @@ RPC 参数配置
     log.rotation.count = 5
 
 配置额外的 file logger handlers
-------------------------------
+--------------------------------
 
 可以通过配置额外的 file logger handlers，将某个级别的日志写到单独的文件。
 
@@ -548,6 +548,26 @@ etc/acl.conf 默认访问规则设置:
 .. NOTE:: 默认规则只允许本机用户订阅'$SYS/#'与'#'
 
 *EMQ X* 消息服务器接收到 MQTT 客户端发布(PUBLISH)或订阅(SUBSCRIBE)请求时，会逐条匹配 ACL 访问控制规则，直到匹配成功返回 allow 或 deny。
+
+-----------------
+FLAPPING 参数配置
+-----------------
+
+FLAPPING 清理间隔
+-----------------
+
+.. code-block:: properties
+
+    ## The cleanning interval for flapping
+    ##
+    ## Value: Duration
+    ## -d: day
+    ## -h: hour
+    ## -m: minute
+    ## -s: second
+    ##
+    ## Default: 1h, 1 hour
+    ## flapping_clean_interval = 1h
 
 -----------------
 MQTT 协议参数配置
@@ -746,6 +766,30 @@ External Zone 参数设置
     ## Enable enqueue Qos0 messages
     zone.external.mqueue_store_qos0 = true
 
+    ## Whether to turn on flapping detect
+    ##
+    ## Value: on | off
+    zone.external.enable_flapping_detect = off
+
+    ## The times of state change per min, specifying the threshold which is used to
+    ## detect if the connection starts flapping
+    ##
+    ## Value: number
+    zone.external.flapping_threshold = 10, 1m
+
+    ## Flapping expiry interval for connections.
+    ## This config entry is used to determine when the connection
+    ## will be unbanned.
+    ##
+    ## Value: Duration
+    ## -d: day
+    ## -h: hour
+    ## -m: minute
+    ## -s: second
+    ##
+    ## Default: 1h, 1 hour
+    zone.external.flapping_banned_expiry_interval = 1h
+
 Internal Zone 参数设置
 ------------------------
 
@@ -781,13 +825,37 @@ Internal Zone 参数设置
     ## Enable enqueue Qos0 messages
     zone.internal.mqueue_store_qos0 = true
 
+    ## Whether to turn on flapping detect
+    ##
+    ## Value: on | off
+    zone.internal.enable_flapping_detect = off
+
+    ## The times of state change per min, specifying the threshold which is used to
+    ## detect if the connection starts flapping
+    ##
+    ## Value: number
+    zone.internal.flapping_threshold = 10, 1m
+
+    ## Flapping expiry interval for connections.
+    ## This config entry is used to determine when the connection
+    ## will be unbanned.
+    ##
+    ## Value: Duration
+    ## -d: day
+    ## -h: hour
+    ## -m: minute
+    ## -s: second
+    ##
+    ## Default: 1h, 1 hour
+    zone.internal.flapping_banned_expiry_interval = 1h
+
 -----------------------
 MQTT Listeners 参数说明
 -----------------------
 
 *EMQ* X* 消息服务器支持 MQTT、MQTT/SSL、MQTT/WS 协议服务端，可通过 `listener.tcp|ssl|ws|wss|.*` 设置端口、最大允许连接数等参数。
 
-*EMQ X* R3.0 消息服务器默认开启的 TCP 服务端口包括:
+*EMQ X* R3.1 消息服务器默认开启的 TCP 服务端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT 协议端口                     |
@@ -819,7 +887,7 @@ Listener 参数说明:
 MQTT/TCP 监听器 - 1883
 ----------------------
 
-*EMQ X* R3.0 版本支持配置多个 MQTT 协议监听器，例如配置 external、internal 两个监听器:
+*EMQ X* R3.1 版本支持配置多个 MQTT 协议监听器，例如配置 external、internal 两个监听器:
 
 .. code-block:: properties
 
@@ -1048,7 +1116,7 @@ MQTT/WebSocket/SSL 监听器 - 8084
 Bridges 桥接
 --------------
 
-*EMQ X* R3.0 支持与其它 MQTT Server 桥接，发送或者接收消息，Bridge 通过对 bridge.$name.type 参数设置，对于消息来进行发送与接收。
+*EMQ X* R3.1 支持与其它 MQTT Server 桥接，发送或者接收消息，Bridge 通过对 bridge.$name.type 参数设置，对于消息来进行发送与接收。
 
 Bridge 模块进出规则由 type 控制::
 
@@ -1061,7 +1129,7 @@ Bridge 模块进出规则由 type 控制::
                    MQTT/TLS
 
 
-*EMQ X* R3.0 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $name 都是可以换成相应的名称。
+*EMQ X* R3.1 支持 bridge.$name.xxx 替换成相应的 $name 的，这里的 bridge.edge.xxxx 和 bridge.$name.xxxx 中的 $name 都是可以换成相应的名称。
 也可以新增自定义name的 bridge.$name.xxxx 。
 
 Bridges 参数设置
@@ -1233,7 +1301,7 @@ Bridges 参数设置
 Modules 模块
 --------------
 
-*EMQ X* R3.0 支持模块扩展，默认三个模块，分别为上下线消息状态发布模块、代理订阅模块、主题(Topic)重写模块。
+*EMQ X* R3.1 支持模块扩展，默认三个模块，分别为上下线消息状态发布模块、代理订阅模块、主题(Topic)重写模块。
 
 上下线消息状态发布模块
 ----------------------
@@ -1291,7 +1359,7 @@ Modules 模块
     ## File to store loaded plugin names
     plugins.expand_plugins_dir = plugins/
 
-*EMQ X* R3.0 插件配置文件，默认在 etc/plugins/ 目录，可修改 plugins.etc_dir 来调整目录:
+*EMQ X* R3.1 插件配置文件，默认在 etc/plugins/ 目录，可修改 plugins.etc_dir 来调整目录:
 
 +----------------------------------------+-----------------------------------+
 | 配置文件                               | 说明                              |
@@ -1424,4 +1492,3 @@ Erlang 虚拟机监控设置
     ## for how many processes can simultaneously
     ## exist at the local node before the corresponding alarm is clear.
     vm_mon.process_low_watermark = 60%
-
