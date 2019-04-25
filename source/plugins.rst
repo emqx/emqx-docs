@@ -21,8 +21,6 @@
 +---------------------------+---------------------------+
 | `emqx_auth_jwt`_          | JWT 认证/访问控制         |
 +---------------------------+---------------------------+
-| `emqx_psk_file`_          | PSK 支持                  |
-+---------------------------+---------------------------+
 | `emqx_auth_ldap`_         | LDAP 认证/访问控制        |
 +---------------------------+---------------------------+
 | `emqx_auth_http`_         | HTTP 认证/访问控制        |
@@ -34,6 +32,8 @@
 | `emqx_auth_pgsql`_        | PostgreSQ L认证/访问控制  |
 +---------------------------+---------------------------+
 | `emqx_auth_redis`_        | Redis 认证/访问控制       |
++---------------------------+---------------------------+
+| `emqx_psk_file`_          | PSK 支持                  |
 +---------------------------+---------------------------+
 | `emqx_web_hook`_          | Web Hook 插件             |
 +---------------------------+---------------------------+
@@ -101,7 +101,7 @@
 
 **Dashboard 启停插件**
 
-除上述俩种方式以外，如果 *EMQ X* 开启了 Dashbord 的插件(默认开启) 还可以直接通过 Dashboard 启停、或者配置插件
+除上述俩种方式以外，如果 *EMQ X* 开启了 Dashbord 的插件(默认开启) 还可以直接通过访问 ``http://localhost:18083`` 中的插件管理页面启停、或者配置插件
 
 
 emqx_dashboard: Dashboard 插件
@@ -175,7 +175,7 @@ emqx_auth_username: 用户名密码认证插件
 
 `emqx_auth_username`_ 目前只包含 **连接认证** 功能。其逻辑与 ``emqx_auth_clientid`` 相似，只不过其关心的是 ``username``
 
-同样的，username 也支持 CLI 和 REST API 在运行时动态的管理。
+同样的，也支持 CLI 和 REST API 在运行时动态管理 username。
 
 .. NOTE:: 3.1 开始支持 REST API 管理 username，并移除配置文件中添加默认 username 的功能
 
@@ -194,7 +194,7 @@ etc/plugins/emqx_auth_username.conf:
 emqx_auth_jwt: JWT认证插件
 ---------------------------
 
-`emqx_auth_jwt`_ 支持基于 `JWT`_ 的方式，对连接的客户端进行认证，仅包括 **连接认证** 功能。它会解析并校验 Token 的合理性和时效、满足则允许连接
+`emqx_auth_jwt`_ 支持基于 `JWT`_ 的方式，对连接的客户端进行认证，仅包括 **连接认证** 功能。它会解析并校验 Token 的合理性和时效性、满足则允许连接
 
 JWT 认证配置
 ::::::::::::
@@ -218,24 +218,6 @@ etc/plugins/emqx_auth_jwt.conf
     ##
     ## Value: File
     ## auth.jwt.pubkey = etc/certs/jwt_public_key.pem
-
-
-emqx_psk_file: PSK 认证插件
----------------------------
-
-`emqx_psk_file`_ 插件主要提供了 PSK 支持。其目的是用于在客户端建立 TLS/DTLS 连接时，使用 PSK 方式达到 **连接认证** 的功能
-
-
-配置 PSK 认证插件
-:::::::::::::::::
-
-etc/plugins/emqx_psk_file.conf:
-
-.. code:: properties
-
-    psk.file.path = {{ platform_etc_dir }}/psk.txt
-    psk.file.delimiter = :
-
 
 emqx_auth_ldap: LDAP 认证插件
 -----------------------------
@@ -811,6 +793,23 @@ MongoDB ACL 集合
 
     db.mqtt_acl.insert({username: "test", publish: ["t/1", "t/2"], subscribe: ["user/%u", "client/%c"]})
     db.mqtt_acl.insert({username: "admin", pubsub: ["#"]})
+
+
+emqx_psk_file: PSK 认证插件
+---------------------------
+
+`emqx_psk_file`_ 插件主要提供了 PSK 支持。其目的是用于在客户端建立 TLS/DTLS 连接时，使用 PSK 方式达到 **连接认证** 的功能
+
+
+配置 PSK 认证插件
+:::::::::::::::::
+
+etc/plugins/emqx_psk_file.conf:
+
+.. code:: properties
+
+    psk.file.path = {{ platform_etc_dir }}/psk.txt
+    psk.file.delimiter = :
 
 
 emqx_web_hook: WebHook 插件
