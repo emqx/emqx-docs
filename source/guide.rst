@@ -637,33 +637,37 @@ Sysmon - 系统监控
 追踪
 ----
 
-EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，或者发布到某个主题(Topic)的全部消息。
+EMQ X 消息服务器支持追踪来自某个客户端(Client)，或者发布到某个主题(Topic)的全部消息。
 
-追踪客户端(Client):
-
-.. code:: bash
-
-    ./bin/emqx_ctl trace client "clientid" "trace_clientid.log" debug
-
-追踪主题(Topic):
+追踪来自客户端(Client)的消息:
 
 .. code:: bash
 
-    ./bin/emqx_ctl trace topic "topic" "trace_topic.log" debug
+    $ ./bin/emqx_ctl log primary-level debug
+
+    $ ./bin/emqx_ctl trace start client "clientid" "trace_clientid.log" debug
+
+追踪发布到主题(Topic)的消息:
+
+.. code:: bash
+
+    $ ./bin/emqx_ctl log primary-level debug
+
+    $ ./bin/emqx_ctl trace start topic "t/#" "trace_topic.log" debug
 
 查询追踪:
 
 .. code:: bash
 
-    ./bin/emqx_ctl trace list
+    $ ./bin/emqx_ctl trace list
 
 停止追踪:
 
 .. code:: bash
 
-    ./bin/emqx_ctl trace stop client "clientid"
+    $ ./bin/emqx_ctl trace stop client "clientid"
 
-    ./bin/emqx_ctl trace stop topic "topic"
+    $ ./bin/emqx_ctl trace stop topic "topic"
 
 .. _emqx_auth_clientid: https://github.com/emqx/emqx-auth-clientid
 .. _emqx_auth_username: https://github.com/emqx/emqx-auth-username
@@ -675,4 +679,3 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)的全部报文，
 .. _emqx_auth_mongo:    https://github.com/emqx/emqx-auth-mongo
 .. _emqx_auth_jwt:      https://github.com/emqx/emqx-auth-jwt
 .. _emqx_psk_file:      https://github.com/emqx/emqx-psk-file
-
