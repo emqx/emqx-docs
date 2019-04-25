@@ -27,28 +27,28 @@ CentOS
 使用储存库安装EMQ X
 --------------------
 
-1.  安装所需的包。 
+1.  安装所需要的依赖包
 
     .. code-block:: console
 
         $ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
-2.  使用以下命令设置稳定存储库，以centos7为例。
+2.  使用以下命令设置稳定存储库，以centos7为例
 
     .. code-block:: console
 
         $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ce/redhat/centos/7/emqx-ce.repo
 
-3.  安装最新版本的EMQ X，或者转到下一步安装特定版本：
+3.  安装最新版本的EMQ X，或者转到下一步安装特定版本
 
     .. code-block:: console
 
         $ sudo yum install emqx
 
-    如果提示接受GPG密钥，请确认指纹符合fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53，如果符合，则接受该指纹。
+.. NOTE::  如果提示接受GPG密钥，请确认指纹符合fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53，如果符合，则接受该指纹。
 
 
-4.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装：
+4.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装
     
     1.  查询可用版本
 
@@ -60,7 +60,7 @@ CentOS
             emqx.x86_64                     3.0.1-1.el7                        emqx-stable
             emqx.x86_64                     3.0.0-1.el7                        emqx-stable
 
-        返回的列表取决于启用的存储库，并且特定于您的CentOS版本（在此示例中以.el7后缀表示）。
+        返回的列表取决于启用的存储库，并且特定于您的CentOS版本（在此示例中以.el7后缀表示）
 
     2.  使用第二列中的版本字符串安装特定版本，例如3.1.0
 
@@ -73,49 +73,52 @@ CentOS
     .. code-block:: console
 
             $ emqx start
-            emqx 3.1 is started successfully!
+            emqx 3.1.0 is started successfully!
+
             $ emqx_ctl status
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
-从.rpm文件安装安装EMQ X
+使用rpm文件安装EMQ X
 -----------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择您的Centos版本，然后下载要安装的EMQ X版本的.rpm文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择您的Centos版本，然后下载要安装的EMQ X版本的rpm文件。
 
-2.  安装EMQ X，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  安装EMQ X
 
     .. code-block:: console
 
-           $ sudo rpm -ivh /path/to/emqx-centos7-v3.1.0.x86_64.rpm
+           $ sudo rpm -ivh emqx-centos7-v3.1.0.x86_64.rpm
 
 3.  启动EMQ X
 
     .. code-block:: console
 
         $ emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
 
-从.zip文件安装EMQ X
+使用zip文件安装EMQ X
 --------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择您的Centos版本，然后下载要安装的EMQ X版本的.zip文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择您的Centos版本，然后下载要安装的EMQ X版本的zip文件。
 
-2.  解压压缩包，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  解压程序包
 
     .. code-block:: console
 
-       $ unzip /path/to/emqx-centos7-v3.1.0.zip
+       $ unzip emqx-centos7-v3.1.0.zip
 
 3.  启动EMQX
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
@@ -132,7 +135,7 @@ Ubuntu
 使用储存库安装EMQ X
 --------------------
 
-1.  安装所需的包。 
+1.  安装所需要的依赖包
 
     .. code-block:: console
 
@@ -143,7 +146,7 @@ Ubuntu
             gnupg-agent \
             software-properties-common
 
-2.  添加EMQ X的官方GPG密钥：
+2.  添加EMQ X的官方GPG密钥
 
     .. code-block:: console
 
@@ -170,13 +173,13 @@ Ubuntu
             $(lsb_release -cs) \
             stable"
 
-4.  更新apt包索引：
+4.  更新apt包索引
 
     .. code-block:: console
 
         $ sudo apt update
 
-5.  安装最新版本的EMQ X，或者转到下一步安装特定版本：
+5.  安装最新版本的EMQ X，或者转到下一步安装特定版本
 
     .. code-block:: console
 
@@ -184,7 +187,7 @@ Ubuntu
 
     .. NOTE:: 如果您启用了多个EMQ X存储库，则在apt install或apt update命令中未指定版本的情况下将始终安装尽可能高的版本，这可能不适合您的稳定性需求。
 
-6.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装：
+6.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装
     
     1.  查询可用版本
 
@@ -208,49 +211,52 @@ Ubuntu
     .. code-block:: console
 
             $ emqx start
-            emqx 3.1 is started successfully!
+            emqx 3.1.0 is started successfully!
+
             $ emqx_ctl status
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
-从.deb文件安装EMQ X
+使用deb文件安装EMQ X
 -------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择您的Ubuntu版本，然后下载要安装的EMQ X版本的.deb文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择您的Ubuntu版本，然后下载要安装的EMQ X版本的deb文件。
 
-2.  安装EMQ X，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  安装EMQ X
 
     .. code-block:: console
 
-           $ sudo dpkg -i /path/to/emqx-ubuntu18.04-v3.1.0_amd64.deb
+           $ sudo dpkg -i emqx-ubuntu18.04-v3.1.0_amd64.deb
 
 3.  启动EMQ X
 
     .. code-block:: console
 
         $ emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
 
-从.zip文件安装EMQ X
+使用zip文件安装EMQ X
 -------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择您的Ubuntu版本，然后下载要安装的EMQ X版本的.zip文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择您的Ubuntu版本，然后下载要安装的EMQ X版本的zip文件。
 
-2.  解压压缩包，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  解压程序包
 
     .. code-block:: console
 
-       $ unzip /path/to/emqx-ubuntu18.04-v3.1.0.zip
+       $ unzip emqx-ubuntu18.04-v3.1.0.zip
 
 3.  启动EMQX
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
@@ -265,7 +271,7 @@ Debian
 使用储存库安装EMQ X
 --------------------
 
-1.  安装所需的包。 
+1.  安装所需要的依赖包
 
     .. code-block:: console
 
@@ -276,7 +282,7 @@ Debian
             gnupg-agent \
             software-properties-common
 
-2.  添加EMQ X的官方GPG密钥：
+2.  添加EMQ X的官方GPG密钥
 
     .. code-block:: console
 
@@ -303,13 +309,13 @@ Debian
             $(lsb_release -cs) \
             stable"
 
-4.  更新apt包索引：
+4.  更新apt包索引
 
     .. code-block:: console
 
         $ sudo apt update
 
-5.  安装最新版本的EMQ X，或者转到下一步安装特定版本：
+5.  安装最新版本的EMQ X，或者转到下一步安装特定版本
 
     .. code-block:: console
 
@@ -317,7 +323,7 @@ Debian
 
     .. NOTE:: 如果您启用了多个EMQ X存储库，则在apt install或apt update命令中未指定版本的情况下将始终安装尽可能高的版本，这可能不适合您的稳定性需求。
 
-6.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装：
+6.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装
     
     1.  查询可用版本
 
@@ -341,49 +347,52 @@ Debian
     .. code-block:: console
 
             $ emqx start
-            emqx 3.1 is started successfully!
+            emqx 3.1.0 is started successfully!
+
             $ emqx_ctl status
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
-从.deb文件安装EMQ X
+使用deb文件安装EMQ X
 --------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择您的Ubuntu版本，然后下载要安装的EMQ X版本的.deb文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择您的Ubuntu版本，然后下载要安装的EMQ X版本的deb文件。
 
-2.  安装EMQ X，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  安装EMQ X
 
     .. code-block:: console
 
-           $ sudo dpkg -i /path/to/emqx-debian9-v3.1.0_amd64.deb
+           $ sudo dpkg -i emqx-debian9-v3.1.0_amd64.deb
 
 3.  启动EMQ X
 
     .. code-block:: console
 
         $ emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
 
-从.zip文件安装EMQ X
+使用zip文件安装EMQ X
 --------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择您的Debian版本，然后下载要安装的EMQ X版本的.zip文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择您的Debian版本，然后下载要安装的EMQ X版本的zip文件。
 
-2.  解压压缩包，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  解压程序包
 
     .. code-block:: console
 
-       $ unzip /path/to/emqx-debian9-v3.1.0.zip
+       $ unzip emqx-debian9-v3.1.0.zip
 
 3.  启动EMQX
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
@@ -397,7 +406,7 @@ macOS
 使用Homebrew安装
 --------------------
 
-1.  添加EMQ X的 tap。 
+1.  添加EMQ X的 tap
 
     .. code-block:: console
 
@@ -414,28 +423,30 @@ macOS
     .. code-block:: console
 
         $ emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
 
-从.zip文件安装EMQ X
+使用zip文件安装EMQ X
 --------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择EMQ X版本，然后下载要安装的.zip文件。
+1.  通过 `emqx.io`_ 或 `github`_，选择EMQ X版本，然后下载要安装的zip文件。
 
-2.  解压压缩包，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  解压压缩包
 
     .. code-block:: console
 
-       $ unzip /path/to/emqx-macos-v3.1.0.zip
+       $ unzip emqx-macos-v3.1.0.zip
 
 3.  启动EMQX
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
@@ -444,9 +455,13 @@ macOS
 Windows
 ------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择Windows版本，然后下载要安装的.zip文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择Windows版本，然后下载要安装的.zip文件。
 
-2.  解压压缩包。
+2.  解压压缩包
+
+    .. code-block:: console
+
+       $ unzip emqx-windows-v3.1.0.zip
 
 3.  打开 Windows 命令行窗口，cd 到程序目录， 启动EMQX。
 
@@ -477,13 +492,13 @@ openSUSE
 
         $ sudo zypper ar -f -c https://repos.emqx.io/emqx-ce/redhat/opensuse/leap/stable emqx
 
-3.  安装最新版本的EMQ X，或者转到下一步安装特定版本：
+3.  安装最新版本的EMQ X，或者转到下一步安装特定版本
 
     .. code-block:: console
 
         $ sudo zypper in emqx
 
-4.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装：
+4.  要安装特定版本的EMQ X，需要列出可用版本，然后选择并安装
     
     1.  查询可用版本
 
@@ -510,15 +525,16 @@ openSUSE
     .. code-block:: console
 
             $ emqx start
-            emqx 3.1 is started successfully!
+            emqx 3.1.0 is started successfully!
+
             $ emqx_ctl status
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
-从.rpm文件安装EMQ X
+使用rpm文件安装EMQ X
 -------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择opensusu，然后下载要安装的EMQ X版本的.rpm文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择openSUSE，然后下载要安装的EMQ X版本的rpm文件。
 
 2.  安装EMQ X，将下面的路径更改为您下载EMQ X软件包的路径。
 
@@ -531,28 +547,30 @@ openSUSE
     .. code-block:: console
 
         $ emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
 
-从.zip文件安装EMQ X
+使用zip文件安装EMQ X
 --------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择opensuse，然后下载要安装的EMQ X版本的.zip文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择openSUSE，然后下载要安装的EMQ X版本的zip文件。
 
-2.  解压压缩包，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  解压压缩包
 
     .. code-block:: console
 
-       $ unzip /path/to/emqx-opensuse-v3.1.0.zip
+       $ unzip emqx-opensuse-v3.1.0.zip
 
 3.  启动EMQX
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
@@ -563,23 +581,24 @@ FreeBSD
 
 + FreeBSD 12
 
-从.zip文件安EMQ X
+使用zip文件安EMQ X
 ------------------
 
-1.  转到 `emqx.io`_ 或 `github`_，选择FreeBSD，然后下载要安装的EMQ X版本的.zip文件。
+1.  通过 `emqx.io`_ 或 `github`_ 选择FreeBSD，然后下载要安装的EMQ X版本的zip文件。
 
-2.  解压压缩包，将下面的路径更改为您下载EMQ X软件包的路径。
+2.  解压压缩包
 
     .. code-block:: console
 
-       $ unzip /path/to/emqx-freebsd12-v3.1.0.zip
+       $ unzip emqx-freebsd12-v3.1.0.zip
 
 3.  启动EMQX
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
@@ -653,9 +672,11 @@ Ubuntu 平台可通过 apt-get 命令安装，CentOS/RedHat 平台可通过 yum 
 
         $ cd emqx-rel && make
 
-    编译成功后，可执行程序包在目录::
+    编译成功后，可执行程序包在目录
 
-    _rel/emqx
+    .. code-block:: bash
+
+        $ cd _rel/emqx
 
 4.  启动EMQ X
 
@@ -663,7 +684,8 @@ Ubuntu 平台可通过 apt-get 命令安装，CentOS/RedHat 平台可通过 yum 
 
         $ cd emqx-rel/_rel/emqx
         $ ./bin/emqx start
-        emqx 3.1 is started successfully!
+        emqx 3.1.0 is started successfully!
+
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
@@ -676,26 +698,26 @@ Erlang 安装: http://www.erlang.org/
 
 MSYS2 安装: http://www.msys2.org/
 
-MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 Make 工具软件:
+MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 Make 工具软件
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    pacman -S git make
+        pacman -S git make
 
-编译环境准备之后，clone 代码开始编译:
+编译环境准备之后，clone 代码开始编译
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    git clone -b win30 https://github.com/emqx/emqx-rel.git
+        git clone -b win30 https://github.com/emqx/emqx-rel.git
 
-    cd emqx-relx && make
+        cd emqx-relx && make
 
-    cd _rel/emqx && ./bin/emqx console
+        cd _rel/emqx && ./bin/emqx console
 
-编译成功后，可执行程序包在目录::
+编译成功后，可执行程序包在目录_rel/emqx
 
-    _rel/emqx
+控制台启动编译的 EMQ 程序包
 
-控制台启动编译的 EMQ 程序包::
+    .. code-block:: bash
 
     cd _rel/emqx && ./bin/emqx console
