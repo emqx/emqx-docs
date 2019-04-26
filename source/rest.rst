@@ -2541,3 +2541,530 @@ HTTP 状态码大于 500 时响应携带错误信息返回
     }
   }
 
+
+--------------------
+规则引擎(rule engine)
+--------------------
+
+创建规则
+----------
+
+API 定义::
+
+  POST api/v3/rules
+
+参数定义:
+
++-------------+---------------------------------------------------------------+-----------------------+
+| name        | String，规则名字                                                                      |
++-------------+---------------------------------------------------------------+-----------------------+
+| for         | String，Hook 的名字，可以为:                                                          |
+|             | "message.publish"，"client.connected" ... 详见 :ref:`plugins`                         |
++-------------+---------------------------------------------------------------+-----------------------+
+| rawsql      | String，用于筛选和转换原始数据的 SQL 语句                                             |
++-------------+---------------------------------------------------------------+-----------------------+
+| actions     | JSON Array，动作列表                                                                  |
++-------------+---------------------------------------------------------------+-----------------------+
+| description | String，可选，规则描述                                                                |
++-------------+---------------------------------------------------------------+-----------------------+
+|             | name                                                          | String, 动作名字      |
++-------------+---------------------------------------------------------------+-----------------------+
+|             | params                                                        | JSON Object, 动作参数 |
++-------------+---------------------------------------------------------------+-----------------------+
+
+请求参数示例:
+
+.. code-block:: json
+
+  {
+    "name": "test-rule",
+    "for": "message.publish",
+    "rawsql": "select * from \"t/a\"",
+    "actions": [{
+        "name": "built_in:inspect_action",
+        "params": {
+            "a": 1
+        }
+    }],
+    "description": "test-rule"
+  }
+
+返回数据示例:
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": {
+        "actions": [{
+            "name": "built_in:inspect_action",
+            "params": {
+                "$resource": "built_in:test-resource",
+                "a": 1
+            }
+        }],
+        "description": "test-rule",
+        "enabled": true,
+        "for": "message.publish",
+        "id": "test-rule:1556263150688255821",
+        "name": "test-rule",
+        "rawsql": "select * from \"t/a\""
+    }
+  }
+
+查询规则
+----------
+
+API 定义::
+
+  GET api/v3/rules/:id
+
+请求参数示例::
+
+  GET api/v3/rules/test-rule:1556263150688255821
+
+返回数据示例:
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": {
+        "actions": [{
+            "name": "built_in:inspect_action",
+            "params": {
+                "$resource": "built_in:test-resource",
+                "a": 1
+            }
+        }],
+        "description": "test-rule",
+        "enabled": true,
+        "for": "message.publish",
+        "id": "test-rule:1556263150688255821",
+        "name": "test-rule",
+        "rawsql": "select * from \"t/a\""
+    }
+  }
+
+获取当前规则列表
+----------------
+
+API 定义::
+
+  GET api/v3/rules
+
+
+返回数据示例:
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": [{
+        "actions": [{
+            "name": "built_in:inspect_action",
+            "params": {
+                "$resource": "built_in:test-resource",
+                "a": 1
+            }
+        }],
+        "description": "test-rule",
+        "enabled": true,
+        "for": "message.publish",
+        "id": "test-rule:1556263150688255821",
+        "name": "test-rule",
+        "rawsql": "select * from \"t/a\""
+    }]
+  }
+
+
+删除规则
+----------
+
+API 定义::
+
+  DELETE api/v3/rules/:id
+
+请求参数示例::
+
+  DELETE api/v3/rules/test-rule:1556263150688255821
+
+返回数据示例:
+
+.. code-block:: json
+
+  {
+    "code": 0
+  }
+
+
+获取当前动作列表
+----------------
+
+API 定义::
+
+  GET api/v3/actions?for=${hook_type}
+
+返回数据示例::
+
+  GET api/v3/actions
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": [{
+        "app": "emqx_rule_engine",
+        "description": "Republish a MQTT message to a another topic",
+        "for": "message.publish",
+        "name": "built_in:republish_action",
+        "params": {
+            "target_topic": {
+                "description": "Repubilsh the message to which topic",
+                "format": "topic",
+                "required": true,
+                "title": "To Which Topic",
+                "type": "string"
+            }
+        },
+        "type": "built_in"
+    }, {
+        "app": "emqx_web_hook",
+        "description": "Forward Events to Web Server",
+        "for": "$events",
+        "name": "web_hook:event_action",
+        "params": {
+            "$resource": {
+                "description": "Bind a resource to this action",
+                "required": true,
+                "title": "Resource ID",
+                "type": "string"
+            },
+            "template": {
+                "description": "The payload template to be filled with variables before sending messages",
+                "required": false,
+                "schema": {},
+                "title": "Payload Template",
+                "type": "object"
+            }
+        },
+        "type": "web_hook"
+    }, {
+        "app": "emqx_web_hook",
+        "description": "Forward Messages to Web Server",
+        "for": "message.publish",
+        "name": "web_hook:publish_action",
+        "params": {
+            "$resource": {
+                "description": "Bind a resource to this action",
+                "required": true,
+                "title": "Resource ID",
+                "type": "string"
+            }
+        },
+        "type": "web_hook"
+    }, {
+        "app": "emqx_rule_engine",
+        "description": "Inspect the details of action params for debug purpose",
+        "for": "$any",
+        "name": "built_in:inspect_action",
+        "params": {},
+        "type": "built_in"
+    }]
+  }
+
+返回数据示例::
+
+  GET 'api/v3/actions?for=client.connected'
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": [{
+        "app": "emqx_rule_engine",
+        "description": "Inspect the details of action params for debug purpose",
+        "for": "$any",
+        "name": "built_in:inspect_action",
+        "params": {},
+        "type": "built_in"
+    }]
+  }
+
+查询动作
+---------
+
+API 定义::
+
+  GET api/v3/actions/:action_name
+
+返回数据示例::
+
+  GET 'api/v3/actions/built_in:inspect_action'
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": {
+        "app": "emqx_rule_engine",
+        "description": "Inspect the details of action params for debug purpose",
+        "for": "$any",
+        "name": "built_in:inspect_action",
+        "params": {},
+        "type": "built_in"
+    }
+  }
+
+获取当前资源类型列表
+--------------------
+
+API 定义::
+
+  GET api/v3/resource_types
+
+返回数据示例:
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": [{
+        "attrs": "undefined",
+        "config": {
+            "url": "http://host-name/chats"
+        },
+        "description": "forward msgs to host-name/chats",
+        "id": "web_hook:webhook1",
+        "name": "webhook1",
+        "type": "web_hook"
+    }, {
+        "attrs": "undefined",
+        "config": {
+            "a": 1
+        },
+        "description": "test-resource",
+        "id": "built_in:test-resource",
+        "name": "test-resource",
+        "type": "built_in"
+    }]
+  }
+
+查询资源类型
+-------------
+
+API 定义::
+
+  GET api/v3/resource_types/:type
+
+返回数据示例::
+
+  GET api/v3/resource_types/built_in
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": {
+        "description": "The built in resource type for debug purpose",
+        "name": "built_in",
+        "params": {},
+        "provider": "emqx_rule_engine"
+    }
+  }
+
+
+获取某种类型的资源
+--------------------
+
+API 定义::
+
+  GET api/v3/resource_types/:type/resources
+
+返回数据示例::
+
+  GET api/v3/resource_types/built_in/resources
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": [{
+        "attrs": "undefined",
+        "config": {
+            "a": 1
+        },
+        "description": "test-resource",
+        "id": "built_in:test-resource",
+        "name": "test-resource",
+        "type": "built_in"
+    }]
+  }
+
+获取某种类型的动作
+--------------------
+
+API 定义::
+
+  GET api/v3/resource_types/:type/actions
+
+返回数据示例::
+
+  GET api/v3/resource_types/built_in/actions
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": [{
+        "app": "emqx_rule_engine",
+        "description": "Inspect the details of action params for debug purpose",
+        "for": "$any",
+        "name": "built_in:inspect_action",
+        "params": {},
+        "type": "built_in"
+    }, {
+        "app": "emqx_rule_engine",
+        "description": "Republish a MQTT message to a another topic",
+        "for": "message.publish",
+        "name": "built_in:republish_action",
+        "params": {
+            "target_topic": {
+                "description": "Repubilsh the message to which topic",
+                "format": "topic",
+                "required": true,
+                "title": "To Which Topic",
+                "type": "string"
+            }
+        },
+        "type": "built_in"
+    }]
+  }
+
+创建资源
+----------
+
+API 定义::
+
+  POST api/v3/resources
+
+参数定义:
+
++-------------+------------------------+
+| name        | String, 资源名字       |
++-------------+------------------------+
+| type        | String, 资源类型       |
++-------------+------------------------+
+| config      | JSON Object, 资源配置  |
++-------------+------------------------+
+| description | String，可选，规则描述 |
++-------------+------------------------+
+
+参数示例::
+
+  {
+    "name": "test-resource",
+    "type": "built_in",
+    "config": {
+        "a": 1
+    },
+    "description": "test-resource"
+  }
+
+返回数据示例:
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": {
+        "attrs": "undefined",
+        "config": {
+            "a": 1
+        },
+        "description": "test-resource",
+        "id": "built_in:test-resource",
+        "name": "test-resource",
+        "type": "built_in"
+    }
+  }
+
+
+获取资源列表
+------------
+
+API 定义::
+
+  GET api/v3/resources
+
+返回数据示例:
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": [{
+        "attrs": "undefined",
+        "config": {
+            "url": "http://host-name/chats"
+        },
+        "description": "forward msgs to host-name/chats",
+        "id": "web_hook:webhook1",
+        "name": "webhook1",
+        "type": "web_hook"
+    }, {
+        "attrs": "undefined",
+        "config": {
+            "a": 1
+        },
+        "description": "test-resource",
+        "id": "built_in:test-resource",
+        "name": "test-resource",
+        "type": "built_in"
+    }]
+  }
+
+
+查询资源
+----------
+
+API 定义::
+
+  GET api/v3/resources/:resource_id
+
+返回数据示例::
+
+  GET 'api/v3/resources/built_in:test-resource'
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": {
+        "attrs": "undefined",
+        "config": {
+            "a": 1
+        },
+        "description": "test-resource",
+        "id": "built_in:test-resource",
+        "name": "test-resource",
+        "type": "built_in"
+    }
+  }
+
+删除资源
+----------
+
+API 定义::
+
+  DELETE api/v3/resources/:resource_id
+
+返回数据示例::
+
+  DELETE 'api/v3/resources/built_in:test-resource'
+
+.. code-block:: json
+
+  {
+    "code": 0
+  }
