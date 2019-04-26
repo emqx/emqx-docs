@@ -679,3 +679,201 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)，或者发布到
 .. _emqx_auth_mongo:    https://github.com/emqx/emqx-auth-mongo
 .. _emqx_auth_jwt:      https://github.com/emqx/emqx-auth-jwt
 .. _emqx_psk_file:      https://github.com/emqx/emqx-psk-file
+
+.. _rule_engine:
+
+
+规则引擎
+---------
+
+规则引擎用于配置消息或事件的业务规则。
+
+规则引擎相关的概念包括: 规则(rule)、动作(rule-action)、资源类型(resource-type) 和 资源(resource)。
+
+    - 规则 (Rule): 规则由 SQL 语句，和 Action 列表组成。SQL 语句用于筛选和转换原始数据，Action 列表包含一个或多个 Action 的名字及其参数。
+    - 动作 (Action): 动作由 emqx (称为 '内置动作') 或 emqx 插件提供。动作定义了一个针对数据的操作，在规则筛选和转换原始数据之后，对结果执行这个操作。
+      动作可以接受零个或者多个参数；动作可以绑定或不绑定资源。
+      例如 built_in:inspect_action 不需要绑定资源，它只是简单打印数据内容。而 web_hook:publish_action 需要绑定一个 web_hook 类型的资源，此资源中配置了目的 URL。
+    - 资源类型 (Resource Type): 动作由 emqx (称为 '内置资源类型') 或 emqx 插件提供。资源类型是资源的静态定义，描述了此类型资源需要的配置项。
+    - 资源 (Resource): 资源是通过资源类型为模板实例化出来的对象，保存了与资源相关的配置以及数据库连接等。
+
+规则、动作、资源的关系::
+
+    规则: {
+        SQL 语句,
+        动作列表: [
+            {
+                动作名字,
+                动作参数: {
+                    Key: Value
+                },
+                绑定资源: {
+                    资源名字,
+                    资源配置项: {
+                        Key: Value
+                    }
+                }
+            }
+        ]
+    }
+
+规则和动作的钩子 (Hook)
+>>>>>>>>>>>>>>>>>>>>>>>
+
+钩子是指 emqx hook 类型，包括 message.publish, client.subscribe, client.connected 等。详见：:ref:`plugins`。
+
+为使用方便，emqx 定义了几个钩子组的别名，分别表示一组钩子::
+
+    - 消息钩子 ('$messages'): 目前特指 message.publish。
+    - 事件钩子 ('$events'): 不是消息的都是事件。也就是说，事件钩子代表所有不为 message.publish 的钩子
+    - 任意钩子 ('$any'): 代表所有钩子，包括消息钩子和事件钩子
+
+一个规则需要挂载到 emqx 的 某个钩子上，比如，挂载到 message.publish 的规则只能处理 PUBLISH 消息；挂载到 client.connected 上的规则只能处理终端上线消息。这可以在创建规则的时候，通过 'for' 选项指定。
+
+相应的，某个动作可以处理来自一种或多种钩子的消息。这可以在创建规则的时候，通过 'for' 选项指定。
+
+消息规则和事件规则
+>>>>>>>>>>>>>>>>>>>>
+
+挂载了 message.publish 钩子的规则称作``消息规则``，挂载了其他钩子的规则叫做``事件规则``。
+
+目前规则引擎功能主要关注消息规则，支持通过 SQL 语句对消息进行条件筛选、预处理、转换。
+而对于事件规则，目前不支持 SQL 语句，仅提供了简单的事件转发等功能。
+
+规则 SQL 语句
+>>>>>>>>>>>>>>
+
+规则 SQL 语句用于从原始数据中，根据条件筛选出字段，并进行预处理和转换。
+
+规则 SQL 语句示例:
+
+对于 topic 为 "t/a" 的消息，从原始数据筛选出所有字段 ::
+
+    SELECT * FROM "t/a"
+
+对于 topic 能够匹配到 "t/#" 的消息，从原始数据筛选出所有字段 ::
+
+    SELECT * FROM "t/#"
+
+对于 topic 能够匹配到 "t/#" 的消息，从原始数据筛选出 qos，username 和 client_id 字段 ::
+
+    SELECT qos, username, client_id FROM "t/#"
+
+对于 topic 能够匹配到 "t/#" 的消息，从原始数据筛选出 username 字段，并且筛选条件为 username = 'Steven'::
+
+    SELECT username FROM "t/#" WHERE username='Steven'
+
+对于 topic 能够匹配到 "t/#" 的消息，从原始数据的 JSON 消息体(payload) 中筛选出 x 字段，并赋予变量 x 以便在 WHERE 子句中使用。此 SQL 语句可以匹配到消息体 {"x": 1}, 但不能匹配到消息体 {"x": 2} ::
+
+    SELECT payload.x as x FROM "t/#" WHERE x=1
+
+类似于上面的 SQL 语句，但嵌套地提取消息体中的数据，将 {"x": {"y": 1}} 中的 1 提取出来赋值给变量 a::
+
+    SELECT payload.x.y as a FROM "t/#" WHERE a=1
+
+
+消息规则中，SELECT 子句可用的字段有:
+
++-----------+------------------------------------+
+| client_id | ClientID                           |
++-----------+------------------------------------+
+| username  | 用户名                             |
++-----------+------------------------------------+
+| event     | 事件类型，固定为 "message_publish" |
++-----------+------------------------------------+
+| flags     | MQTT 消息的 flags                  |
++-----------+------------------------------------+
+| id        | MQTT 消息 ID                       |
++-----------+------------------------------------+
+| payload   | MQTT 消息体                        |
++-----------+------------------------------------+
+| peername  | 客户端的 IPAddress 和 Port         |
++-----------+------------------------------------+
+| qos       | MQTT 消息的 QoS                    |
++-----------+------------------------------------+
+| timestamp | 时间戳                             |
++-----------+------------------------------------+
+
+.. note:: SQL 语句目前仅用于事件规则。
+
+.. note:: FROM 子句后面接 topic，并且需要用双引号("") 引起来。
+
+.. note:: WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 ('') 引起来。
+
+创建规则举例
+------------
+
+1. 创建 Inspect 规则
+>>>>>>>>>>>>>>>>>>>>>>>
+
+创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容::
+
+    $ ./bin/emqx_ctl rules create \
+      'test1' \
+      'message.publish' \
+      'select * from "t/a"' \
+      '[{"name":"built_in:inspect_action", "params": {"a": 1}}]' \
+      -d 'Rule for debug'
+
+    Rule test1:1556178701774551466 created
+
+接下来当发送 "hello" 消息到主题 't/a' 时，上面创建的 "test1:1556178701774551466" 规则匹配成功，然后 "built_in:inspect_action" 动作被触发，将消息的内容打印到 emqx 控制台::
+
+    $ tail -f log/erlang.log.1
+
+    (emqx@127.0.0.1)1> [built_in:inspect_action]
+        Selected Data: #{client_id => <<"clientId-1111">>,
+                         event => message_publish,
+                         flags => #{dup => false,retain => false},
+                         id => <<"5875619E8E728F442000007050002">>,
+                         payload => <<"hello">>,
+                         peername => <<"127.0.0.1:54333">>,qos => 0,
+                         timestamp => 1556178755184,topic => <<"t/a">>,
+                         username => <<"shawn">>}
+        Envs: #{event => message_publish,
+                flags => #{dup => false,retain => false},
+                from => <<"clientId-1111">>,
+                headers =>
+                    #{allow_publish => true,
+                      peername => {{127,0,0,1},54333},
+                      username => <<"shawn">>},
+                id => <<0,5,135,86,25,232,231,40,244,66,0,0,7,5,0,2>>,
+                payload => <<"hello">>,qos => 0,
+                timestamp => {1556,178755,184441},
+                topic => <<"t/a">>}
+        Action Init Params: #{<<"a">> => 1}
+
+``Selected Data`` 列出的是 SQL 规则筛选后的字段，由于我们用的是 ``select *``，所以这里会列出所有可用的字段。
+``Envs`` 是 Action 内部可以使用的环境变量。
+``Action Init Params`` 是初始化 Action 的时候，传递给 Action 的初始参数。
+
+
+2. 创建 WebHook 规则
+>>>>>>>>>>>>>>>>>>>>>>>
+
+本例创建一个规则："将所有发送自 client-id='Steven' 的消息，转发到地址为 'http://127.0.0.1:9910' 的 Web 服务器"::
+
+    - 规则的筛选条件为: "发送自 client-id='Steven' 的 PUBLISH 消息中的 payload 字段";
+    - 动作是: "转发到地址为 'http://127.0.0.1:9910' 的 Web 服务器";
+    - 资源类型是: WebHook;
+    - 资源是: "到 url='http://127.0.0.1:9910' 的 WebHook 连接资源"。
+
+2.1. 首先使用 WebHook 类型创建一个资源，并配置资源参数 url 为 "http://127.0.0.1:9910"::
+
+    ## 列出当前所有可用的资源类型，确保 'web_hook' 类型已存在
+    $ ./bin/emqx_ctl resource-types list
+
+    ## 使用类型 'web_hook' 创建一个新的资源，并配置 '{"url": "http://127.0.0.1:9910"}'
+    $ ./bin/emqx_ctl resources create 'webhook1' 'web_hook' -c '{"url": "http://127.0.0.1:9910", "headers": {"token":"axfw34y235wrq234t4ersgw4t"}, "method": "POST"}'
+
+    Resource web_hook:webhook1 created
+
+2.2. 然后创建规则，并选择规则的动作为 'web_hook:publish_action'::
+
+    ## 列出当前所有可用的动作，确保 'web_hook:publish_action' 动作已存在
+    $ ./bin/emqx_ctl rule-actions list
+
+    ## 创建名为 steven_msg_to_http 的规则。
+    ./bin/emqx_ctl rules create 'steven_msg_to_http' 'client.publish' "SELECT payload FROM \"#\" where username='Steven'" '[{"name":"web_hook:event_action", "params": {"$resource": "web_hook:webhook1"}]' -d "Forward connected events to webhook"
+
+现在使用 MQTT Client 连接 emqx broker, username 为 "Steven"。然后发送 "hello" 到任意主题，上面创建的规则就会被触发。
