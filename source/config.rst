@@ -450,33 +450,58 @@ Erlang 虚拟机参数
 RPC 参数配置
 ------------
 
+配置 RPC 中服务端使用的 TCP 端口:
+
 .. code-block:: properties
 
-    ## TCP server port for RPC.
     rpc.tcp_server_port = 5369
 
-    ## TCP port for outgoing RPC connections.
+配置 RPC 中客户端使用的 TCP 端口:
+
+.. code-block:: properties
+
     rpc.tcp_client_port = 5369
 
-    ## RCP Client connect timeout.
+配置 RPC 中客户端连接超时时间:
+
+.. code-block:: properties
+
     rpc.connect_timeout = 5s
 
-    ## TCP send timeout of RPC client and server.
+配置 RPC 客户端和服务器发送超时时间:
+
+.. code-block:: properties
+
     rpc.send_timeout = 5s
 
-    ## Authentication timeout
+配置认证超时时间:
+
+.. code-block:: properties
+
     rpc.authentication_timeout = 5s
 
-    ## Default receive timeout for call() functions
+配置 call() 函数的超时时间:
+
+.. code-block:: properties
+
     rpc.call_receive_timeout = 15s
 
-    ## Socket idle keepalive.
-    rpc.socket_keepalive_idle = 900s
+配置 socket 空闲时最大保持连接时间:
 
-    ## TCP Keepalive probes interval.
+.. code-block:: properties
+
+    rpc.socket_keepalive_idle = 900
+
+配置 socket 保活探测间隔:
+
+.. code-block:: properties
+
     rpc.socket_keepalive_interval = 75s
 
-    ## Probes lost to close the connection
+配置关闭连接前心跳探测最大失败次数:
+
+.. code-block:: properties
+
     rpc.socket_keepalive_count = 9
 
 ------------
@@ -491,13 +516,6 @@ RPC 参数配置
 .. code-block:: properties
 
     log.to = both
-
-可选项:
-
-- off: 完全关闭日志
-- file: 只写到文件
-- console: 只写到终端(erlang shell)
-- both: 同时写到终端(erlang shell) 和文件
 
 日志级别
 --------
@@ -559,7 +577,6 @@ RPC 参数配置
 
 .. code-block:: properties
 
-    ## Allow anonymous authentication by default if no auth plugins loaded
     allow_anonymous = true
 
 默认访问控制(ACL)文件
@@ -1997,55 +2014,7 @@ Modules 模块
 
     plugins.loaded_file = data/loaded_plugins
 
-*EMQ X* R3.1 插件配置文件，默认在 etc/plugins/ 目录，可修改 plugins.etc_dir 来调整目录:
-
-+----------------------------------------+-----------------------------------+
-| 配置文件                               | 说明                              |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_delayed_publish.conf  | 消息延迟发布插件                  |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_retainer.conf         | Retain 消息存储插件               |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_management.conf       | 管理插件                          |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_username.conf    | 用户名、密码认证插件              |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_clientid.conf    | ClientId 认证插件                 |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_http.conf        | HTTP 认证插件配置                 |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_mongo.conf       | MongoDB 认证插件配置              |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_mysql.conf       | MySQL 认证插件配置                |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_pgsql.conf       | Postgre 认证插件配置              |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_redis.conf       | Redis 认证插件配置                |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_web_hook.conf         | Web Hook 插件配置                 |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_lwm2m.conf            | Lwm2m 协议插件配置                |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_coap.conf             | CoAP 协议服务器配置               |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_dashboard.conf        | Dashboard 控制台插件配置          |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_recon.conf            | Recon 调试插件配置                |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_reloader.conf         | 热加载插件配置                    |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_sn.conf               | MQTT-SN 协议插件配置              |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_stomp.conf            | Stomp 协议插件配置                |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_statsd.conf           | 统计管理插件配置                  |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_ldap.conf        | Ldap 认证插件配置                 |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_auth_jwt.conf         | Jwt 认证插件配置                  |
-+----------------------------------------+-----------------------------------+
-| etc/plugins/emqx_plugin_template.conf  | 示例插件模版                      |
-+----------------------------------------+-----------------------------------+
+*EMQ X* R3.1 插件配置文件，默认在 etc/plugins/ 目录，可修改 plugins.etc_dir 来调整目录。
 
 ----------------
 Broker 参数设置
