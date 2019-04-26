@@ -21,7 +21,7 @@ EMQ X 节点间桥接
 
 其概念如下图所示:
 
-.. image:: ../_static/images/bridge.png
+.. image:: ./_static/images/bridge.png
 
 此外 *EMQ X* 消息服务器支持多节点桥接模式互联::
 
