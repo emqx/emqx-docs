@@ -13,7 +13,7 @@
 
 *发布日期: 2019-04-26*
 
-EMQ X 3.1.0 版本发布。此版本改动主要包括全面支持规则引擎、引入 storm 模块以支持边缘设备管理、
+EMQ X 3.1.0 版本发布。此版本改动主要包括全面支持规则引擎、引入 storm 模块以支持 edge storm、
 重构 flapping 代码。
 
 功能改进:
@@ -68,7 +68,7 @@ emqx-storm (plugin)
 
 功能改进:
 
-- 支持边缘设备管理
+- 支持 edge storm
 
   Github Repository:
   `emqx/emqx-storm <https://github.com/emqx/emqx-storm>`_
