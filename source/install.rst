@@ -470,7 +470,7 @@ Windows
 
     .. code-block:: console
 
-        cd /path/to/emqx
+        cd emqx/
         bin/emqx start
 
 ----------
@@ -723,4 +723,4 @@ MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 
 
     .. code-block:: bash
 
-    cd _rel/emqx && ./bin/emqx console
+        cd _rel/emqx && ./bin/emqx console

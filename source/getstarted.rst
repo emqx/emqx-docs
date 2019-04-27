@@ -54,59 +54,6 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
     初接触MQTT协议的用户，通常会向通配符的'过滤主题'发布广播消息，MQTT 协议不支持这种模式，需从订阅侧设计广播主题(Topic)。
     例如 Android 推送，向所有广州用户，推送某类本地消息，客户端获得 GIS 位置后，可订阅 'news/city/guangzhou' 主题。
 
-.. _quick_start:
-
-------------------
-五分钟下载启动 EMQ
-------------------
-
-*EMQ X* R3.1 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 、openSUSE 平台程序包与 Docker 镜像。
-
-下载地址: http://emqtt.com/downloads
-
-程序包下载后，可直接解压启动运行，例如 Mac 平台:
-
-.. code-block:: bash
-
-    unzip emqx-macosx-v3.1.0.zip && cd emqx
-
-    # 启动emqx
-    ./bin/emqx start
-
-    # 检查运行状态
-    ./bin/emqx_ctl status
-
-    # 停止emqx
-    ./bin/emqx stop
-
-*EMQ X* 消息服务默认允许匿名认证，启动后 MQTT 客户端可连接1883端口，启动运行日志输出在 log/ 目录。
-
-.. _compile:
-
-------------------
-源码编译EMQ X R3.1
-------------------
-
-.. code-block:: bash
-
-    git clone https://github.com/emqx/emqx-rel.git
-
-    cd emqx-rel && make
-
-    cd _rel/emqx && ./bin/emqx console
-
-.. _dashboard:
-
--------------------------
-Web 管理控制台(Dashboard)
--------------------------
-
-*EMQ X* 消息服务器启动后，会默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、插件(Plugin)。
-
-控制台地址: http://127.0.0.1:18083，默认用户: admin，密码：public
-
-.. image:: ./_static/images/dashboard.png
-
 .. _features:
 
 -------------------------------
@@ -148,139 +95,44 @@ Web 管理控制台(Dashboard)
 * TLS/PSK 支持
 * 规则引擎支持
 
-.. _plugins:
+.. _quick_start:
 
--------------------------
-*EMQ X* R3.1 扩展插件列表
--------------------------
-
-*EMQ X* R3.1 支持丰富的扩展插件，包括控制台、扩展模块、多种认证方式、多种接入协议等:
-
-+-------------------------+--------------------------+
-| `emqx_plugin_template`_ | 插件模版与演示代码       |
-+-------------------------+--------------------------+
-| `emqx_retainer`_        | Retain 消息存储插件      |
-+-------------------------+--------------------------+
-| `emqx_dashboard`_       | Web 管理控制台，默认加载 |
-+-------------------------+--------------------------+
-| `emqx_auth_clientid`_   | ClientId、密码认证插件   |
-+-------------------------+--------------------------+
-| `emqx_auth_username`_   | 用户名、密码认证插件     |
-+-------------------------+--------------------------+
-| `emqx_auth_ldap`_       | LDAP 认证插件            |
-+-------------------------+--------------------------+
-| `emqx_auth_http`_       | HTTP 认证插件            |
-+-------------------------+--------------------------+
-| `emqx_auth_mysql`_      | MySQL 认证插件           |
-+-------------------------+--------------------------+
-| `emqx_auth_pgsql`_      | PostgreSQL 认证插件      |
-+-------------------------+--------------------------+
-| `emqx_auth_redis`_      | Redis 认证插件           |
-+-------------------------+--------------------------+
-| `emqx_auth_mongo`_      | MongoDB 认证插件         |
-+-------------------------+--------------------------+
-| `emqx_sn`_              | MQTT-SN 协议插件         |
-+-------------------------+--------------------------+
-| `emqx_coap`_            | CoAP 协议插件            |
-+-------------------------+--------------------------+
-| `emqx_stomp`_           | Stomp 协议插件           |
-+-------------------------+--------------------------+
-| `emqx_recon`_           | Recon 优化调测插件       |
-+-------------------------+--------------------------+
-| `emqx_reloader`_        | 热升级插件(开发调试)     |
-+-------------------------+--------------------------+
-| `emqx_delayed_publish`_ | 延时发布消息             |
-+-------------------------+--------------------------+
-| `emqx_psk_file`_        | PSK 文件插件             |
-+-------------------------+--------------------------+
-| `emqx_rule_engine`_     | 规则引擎插件             |
-+-------------------------+--------------------------+
-
-扩展插件通过 'bin/emqx_ctl' 管理命令行，或 Dashboard 控制台加载启用。例如启用 PostgreSQL 认证插件::
-
-    ./bin/emqx_ctl plugins load emqx_auth_pgsql
-
-.. _c1000k:
-
--------------------
-100万线连接测试说明
--------------------
-
-*EMQ X* R3.1 在单机 8核/32G内存的 CentOS 云服务器，能够测试到 130万 的客户端连接数，
-
-为此，操作系统内核参数、TCP 协议栈参数、Erlang 虚拟机参数、EMQ X 相关配置应该进行如下的调优
-
-Linux 操作系统参数
+------------------
+五分钟下载启动 EMQ
 ------------------
 
-# 2M - 系统所有进程可打开的文件数量::
+*EMQ X* R3.1 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 、openSUSE 平台程序包与 Docker 镜像。
 
-    sysctl -w fs.file-max=2097152
-    sysctl -w fs.nr_open=2097152
+下载地址: http://emqtt.com/downloads
 
-# 1M - 系统允许当前进程打开的文件数量::
+程序包下载后，可直接解压启动运行，例如 Mac 平台:
 
-    ulimit -n 1048576
+.. code-block:: bash
 
-.. NOTE::
+    unzip emqx-macosx-v3.1.0.zip && cd emqx
 
-    *EMQ X* R3.1 消息服务器默认设置，允许最大客户端连接是512，因为大部分操作系统 'ulimit -n' 限制为1024。
+    # 启动emqx
+    ./bin/emqx start
 
+    # 检查运行状态
+    ./bin/emqx_ctl status
 
-TCP 协议栈参数
---------------
+    # 停止emqx
+    ./bin/emqx stop
 
-# backlog - Socket 监听队列长度::
+*EMQ X* 消息服务默认允许匿名认证，启动后 MQTT 客户端可连接1883端口，启动运行日志输出在 log/ 目录。
 
-    sysctl -w net.core.somaxconn=65536
+.. _dashboard:
 
-Erlang 虚拟机参数
------------------
+-------------------------
+Web 管理控制台(Dashboard)
+-------------------------
 
-emqx/etc/emqx.conf:
+*EMQ X* 消息服务器启动后，会默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、插件(Plugin)。
 
-.. code-block:: properties
+控制台地址: http://127.0.0.1:18083，默认用户: admin，密码：public
 
-    ## Erlang Process Limit
-    node.process_limit = 2097152
-
-    ## Sets the maximum number of simultaneously existing ports for this system
-    node.max_ports = 1048576
-
-EMQ X 最大允许连接数
---------------------
-
-emqx/etc/emqx.conf ``listeners`` 段落::
-
-    ## The acceptor pool for external MQTT/TCP listener
-    listener.tcp.external.acceptors = 64
-
-    ## Maximum number of concurrent MQTT/TCP connections.
-    listener.tcp.external.max_connections = 1000000
-
-测试客户端设置
---------------
-
-测试客户端在一个接口上，最多只能创建65000连接::
-
-    sysctl -w net.ipv4.ip_local_port_range="500 65535"
-
-    echo 1000000 > /proc/sys/fs/nr_open
-
-按应用场景测试
---------------
-
-MQTT 是一个设计得非常出色的传输层协议，在移动消息、物联网、车联网、智能硬件甚至能源勘探等领域有着广泛的应用。1个字节报头、2个字节心跳、消息 QoS 支持等设计，非常适合在低带宽、不可靠网络、嵌入式设备上应用。
-
-不同的应用有不同的系统要求，用户使用 *EMQ X* 消息服务器前，可以按自己的应用场景进行测试，而不是简单的连接压力测试:
-
-1. Android 消息推送: 推送消息广播测试。
-
-2. 移动即时消息应用: 消息收发确认测试。
-
-3. 智能硬件应用: 消息的往返时延测试。
-
-4. 物联网数据采集: 并发连接与吞吐测试。
+.. image:: ./_static/images/dashboard.png
 
 .. _mqtt_clients:
 
@@ -308,23 +160,3 @@ MQTT.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 .. _emqtt_benchmark: https://github.com/emqtt/emqtt_benchmark
 .. _CocoaMQTT:       https://github.com/emqtt/CocoaMQTT
 .. _QMQTT:           https://github.com/emqtt/qmqtt
-
-.. _emqx_plugin_template:  https://github.com/emqx/emqx_plugin_template
-.. _emqx_retainer:         https://github.com/emqx/emqx_retainer
-.. _emqx_dashboard:        https://github.com/emqx/emqx_dashboard
-.. _emqx_auth_clientid:    https://github.com/emqx/emqx_auth_clientid
-.. _emqx_auth_username:    https://github.com/emqx/emqx_auth_username
-.. _emqx_auth_ldap:        https://github.com/emqx/emqx_auth_ldap
-.. _emqx_auth_http:        https://github.com/emqx/emqx_auth_http
-.. _emqx_auth_mysql:       https://github.com/emqx/emqx_auth_mysql
-.. _emqx_auth_pgsql:       https://github.com/emqx/emqx_auth_pgsql
-.. _emqx_auth_redis:       https://github.com/emqx/emqx_auth_redis
-.. _emqx_auth_mongo:       https://github.com/emqx/emqx_auth_mongo
-.. _emqx_reloader:         https://github.com/emqx/emqx_reloader
-.. _emqx_stomp:            https://github.com/emqx/emqx_stomp
-.. _emqx_recon:            https://github.com/emqx/emqx_recon
-.. _emqx_sn:               https://github.com/emqx/emqx_sn
-.. _emqx_coap:             https://github.com/emqx/emqx_coap
-.. _emqx_delayed_publish:  https://github.com/emqx/emqx_delayed_publish
-.. _emqx_psk_file:         https://github.com/emqx/emqx-psk-file
-.. _emqx_rule_engine:      https://github.com/emqx/emqx-rule-engine

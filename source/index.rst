@@ -27,23 +27,17 @@
    :maxdepth: 2
 
    getstarted
-   deploy
    install
-   config
-   cluster
-   bridge
    guide
-   advanced
-   design
-   commands
+   config
    plugins
-   rest
+   design
+   cluster
+   deploy
    tune
    changes
    upgrade
-   mqtt
-   mqtt_sn
-   lwm2m
+   protocol
 
 *EMQ X* 项目支持与联系:
 
