@@ -5,17 +5,17 @@
 程序安装 (Installation)
 =======================
 
-*EMQ X* R3.0 消息服务器可跨平台运行在 Linux、FreeBSD、Mac OS X 或 Windows 服务器上。
+*EMQ* 消息服务器可跨平台运行在 Linux、Mac OS X 或 Windows 服务器上。
 
-.. NOTE:: 产品部署建议 Linux、FreeBSD 服务器，不推荐 Windows 服务器。
+.. NOTE:: 产品部署建议 Linux 不推荐 Windows 服务器。
 
------------------------
-*EMQ X* R3.0 程序包下载
------------------------
+--------------------
+*EMQ* 程序包下载
+--------------------
 
-*EMQ X* R3.0 消息服务器每个版本会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
+*EMQ* 消息服务器每个版本会发布 Ubuntu、CentOS、Mac OS X、Windows 平台程序包与 Docker 镜像。
 
-下载地址: http://emqtt.com/downloads
+下载地址: https://www.emqx.io/downloads
 
 .. _install_rpm:
 
@@ -25,26 +25,25 @@ RPM 包安装
 
 EMQ X Linux RPM 程序包:
 
-+-------------+---------------------------------------------------+
-| CentOS6.8   | https://www.emqx.io/downloads/v3/latest/emqx-centos6.rpm     |
-+-------------+---------------------------------------------------+
-| CentOS7     | https://www.emqx.io/downloads/v3/latest/emqx-centos7.rpm     |
-+-------------+---------------------------------------------------+
-
-安装包命名由平台、版本、操纵系统位数组成，例如: emqx-centos7-v3.0_x86_64.rpm
-
-CentOS、RedHat 操作系统下，推荐 RPM 包安装。RPM 包安装后可通过操作系统，直接管理启停 EMQ X 服务。
+CentOS、RedHat 操作系统下，推荐 RPM 包安装。RPM 包安装后可通过操作系统，直接管理启停 EMQ 服务。
 
 RPM 安装
 --------
 
 .. code-block:: console
 
-    rpm -ivh emqx-centos7-v3.0-beta.2.zip 
+    rpm -ivh emqx-centos7-v2.1.2-1.el7.centos.x86_64.rpm
+
+.. NOTE:: Erlang/OTP R21 依赖 lksctp-tools 库
+
+.. code-block:: console
+
+    yum install lksctp-tools
+
 配置文件
 --------
 
-EMQ X 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/\*.conf。
+EMQ 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/\*.conf。
 
 日志文件
 --------
@@ -69,25 +68,13 @@ EMQ X 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/
 DEB 包安装
 ----------
 
-EMQ X Linux DEB 程序包:
+Debian、Ubuntu 操作系统下，推荐 DEB 包安装。DEB 包安装后可通过操作系统，直接管理启停 EMQ 服务。
 
-+-------------+---------------------------------------------------+
-| Ubuntu12.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu12.04.deb |
-+-------------+---------------------------------------------------+
-| Ubuntu14.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu14.04.deb |
-+-------------+---------------------------------------------------+
-| Ubuntu16.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu16.04.deb |
-+-------------+---------------------------------------------------+
-| Ubuntu18.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu18.04.deb |
-+-------------+---------------------------------------------------+
-| Debian7     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.deb     |
-+-------------+---------------------------------------------------+
-| Debian8     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.deb     |
-+-------------+---------------------------------------------------+
+.. code-block:: console
 
-安装包命名由平台、版本、操纵系统位数组成，例如: emqx-debian7-v3.0_amd64.deb
+    sudo dpkg -i emqx-ubuntu16.04_v3.0_amd64.deb
 
-Debian、Ubuntu 操作系统下，推荐 DEB 包安装。DEB 包安装后可通过操作系统，直接管理启停 EMQ X 服务。
+.. NOTE:: Erlang/OTP R21 依赖lksctp-tools库
 
 .. code-block:: console
 
@@ -96,7 +83,7 @@ Debian、Ubuntu 操作系统下，推荐 DEB 包安装。DEB 包安装后可通�
 配置文件
 --------
 
-EMQ X 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/\*.conf。
+EMQ 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/\*.conf。
 
 日志文件
 --------
@@ -120,30 +107,6 @@ EMQ X 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/
 ----------------
 Linux 通用包安装
 ----------------
-
-*EMQ X* Linux 通用程序包:
-
-+-------------+-----------------------------------------------+
-| Ubuntu12.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu12_04.zip |
-+-------------+-----------------------------------------------+
-| Ubuntu14.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu14_04.zip |
-+-------------+-----------------------------------------------+
-| Ubuntu16.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu16_04.zip |
-+-------------+-----------------------------------------------+
-| Ubuntu18.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu18_04.zip |
-+-------------+-----------------------------------------------+
-| CentOS6.8   | https://www.emqx.io/downloads/v3/latest/emqx-centos6.zip     |
-+-------------+-----------------------------------------------+
-| CentOS7     | https://www.emqx.io/downloads/v3/latest/emqx-centos7.zip     |
-+-------------+-----------------------------------------------+
-| Debian7     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.zip     |
-+-------------+-----------------------------------------------+
-| Debian8     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.zip     |
-+-------------+-----------------------------------------------+
-| FreeBSD     | https://www.emqx.io/downloads/v3/latest/emqx-freebsd.zip     |
-+-------------+-----------------------------------------------+
-
-安装包命名由平台、版本组成，例如: emqx-macosx-v3.0.zip
 
 CentOS 平台为例，下载安装过程:
 
@@ -218,23 +181,12 @@ CTRL+C 关闭控制台。守护进程模式启动:
 
 .. _install_on_freebsd:
 
-------------------
-FreeBSD 服务器安装
-------------------
-
-*EMQ X* FreeBSD 程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-freebsd.zip
-
-FreeBSD 平台安装过程与Linux相同。
-
-.. _install_on_mac:
 
 -----------------
 Mac OS X 系统安装
 -----------------
 
-Mac 下开发调试 MQTT 应用，可直接下载安装: https://www.emqx.io/downloads/v3/latest/emqx-macosx.zip
-
-配置文件 'etc/emqx.conf' log 段落打开 debug 日志，控制台可以查看收发 MQTT 报文详细:
+Mac 下开发调试 MQTT 应用，在配置文件 'etc/emqx.conf' log 段落打开 debug 日志，控制台可以查看收发 MQTT 报文详细:
 
 .. code-block::
 
@@ -255,8 +207,6 @@ Mac 下开发调试 MQTT 应用，可直接下载安装: https://www.emqx.io/dow
 Windows 服务器安装
 ------------------
 
-Windows 平台程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-windows10.zip
-
 程序包下载解压后，打开 Windows 命令行窗口，cd 到程序目录。
 
 控制台模式启动::
@@ -267,7 +217,7 @@ Windows 平台程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-wind
 
 关闭控制台窗口，停止emqx进程，准备注册 Windows 服务。
 
-.. WARNING:: EMQ X R3.0 暂不支持服务注册
+.. WARNING:: EMQ-3.0 暂不支持服务注册
 
 *EMQ X* 注册为 Windows 服务::
 
@@ -291,7 +241,7 @@ Windows 平台程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-wind
 Docker 镜像安装
 ---------------
 
-*EMQ X* 3.0 Docker 镜像下载: https://www.emqx.io/downloads/v3/latest/emqx-docker.zip
+*EMQ* Docker 镜像下载: https://www.emqx.io/downloads
 
 解压 emqx-docker 镜像包::
 
@@ -337,9 +287,9 @@ Ubuntu 平台可通过 apt-get 命令安装，CentOS/RedHat 平台可通过 yum 
 
 .. code-block:: bash
 
-    git clone -b emqx30 https://github.com/emqx/emqx-rel.git
+    git clone https://github.com/emqx/emqx-rel.git
 
-    cd emq-relx && make
+    cd emqx-rel && make
 
     cd _rel/emqx && ./bin/emqx console
 
@@ -369,9 +319,9 @@ MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 
 
 .. code-block:: bash
 
-    git clone -b win30 https://github.com/emqx/emqx-rel.git
+    git clone -b windows https://github.com/emqx/emqx-rel.git
 
-    cd emqx-relx && make
+    cd emqx-rel && make
 
     cd _rel/emqx && ./bin/emqx console
 
@@ -389,7 +339,7 @@ MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 
 TCP 服务端口占用
 ----------------
 
-*EMQ X* R3.0 消息服务器默认占用的 TCP 端口包括:
+*EMQ* 消息服务器默认占用的 TCP 端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT 协议端口                     |
@@ -403,7 +353,7 @@ TCP 服务端口占用
 | 18083     | Dashboard 管理控制台端口          |
 +-----------+-----------------------------------+
 
-*EMQ X* R3.0 占用的上述端口，可通过 etc/emqx.conf 配置文件的 'listener' 段落设置:
+*EMQ* 3.0 占用的上述端口，可通过 etc/emqx.conf 配置文件的 'listener' 段落设置:
 
 .. code-block:: properties
 
@@ -421,7 +371,7 @@ TCP 服务端口占用
 
 通过注释或删除相关段落，可禁用相关 TCP 服务启动。
 
-18083 端口是 Web 管理控制占用，该端口由 `emq_dashboard`_ 插件启用。
+18083端口是 Web 管理控制占用，该端口由 `emqx_dashboard`_ 插件启用。
 
 控制台 URL: http:://localhost:18083/ ，默认登录用户名: admin, 密码: public。
 
@@ -434,7 +384,7 @@ TCP 服务端口占用
 *EMQ X* 消息服务器主要配置文件:
 
 +----------------------+-----------------------------------+
-| etc/emqx.conf        | EMQ 消息服务器参数设置            |
+| etc/emqx.conf         | EMQ 消息服务器参数设置            |
 +----------------------+-----------------------------------+
 | etc/plugins/\*.conf  | EMQ 插件配置文件                  |
 +----------------------+-----------------------------------+
@@ -465,7 +415,7 @@ etc/emqx.conf 配置文件的 `listener` 段落设置最大允许连接数:
 
     listener.tcp.external.max_clients = 1024
 
-*EMQ X* R3.0 消息服务器详细设置，请参见文档: :ref:`config`
+*EMQ* 3.0 消息服务器详细设置，请参见文档: :ref:`config`
 
 .. NOTE::
 
