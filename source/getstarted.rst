@@ -21,7 +21,7 @@
 
 3. 消息服务器内扩展，支持定制多种认证方式、高效存储消息到后端数据库。
 
-4. 完整物联网协议支持，MQTT、MQTT-SN、CoAP、WebSocket 或私有协议支持。
+4. 完整物联网协议支持，MQTT、MQTT-SN、CoAP、LwM2M、WebSocket 或私有协议支持。
 
 .. _mqtt_pubsub:
 
@@ -121,12 +121,6 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
     ./bin/emqx stop
 
 *EMQ X* 消息服务默认允许匿名认证，启动后 MQTT 客户端可连接1883端口，启动运行日志输出在 log/ 目录。
-
-.. _dashboard:
-
--------------------------
-Web 管理控制台(Dashboard)
--------------------------
 
 *EMQ X* 消息服务器启动后，会默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、客户端(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、插件(Plugin)。
 

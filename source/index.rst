@@ -13,8 +13,6 @@
 
 *EMQ X* R3.1 完整支持 MQTT V3.1/V3.1.1/V5.0 版本协议规范，并扩展支持 MQTT-SN 、WebSocket、CoAP、Stomp 或私有 TCP/UDP 协议。*EMQ X* 3.1 消息服务器支持单节点100万连接与多节点分布式集群:
 
-..TODO:: 3.0-rc.1 图片更新.
-
 .. image:: ./_static/images/emqtt.png
 
 *EMQ X* R3.1 为大规模设备连接 (C1000K+) 的物联网、车联网、智能硬件、移动推送、移动消息等应用，提供一个完全开放源码、安装部署简便、企业级稳定可靠、可弹性扩展、易于定制开发的 MQTT 消息服务器。
@@ -31,6 +29,7 @@
    guide
    config
    plugins
+   rest
    design
    cluster
    deploy
