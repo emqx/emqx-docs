@@ -43,7 +43,7 @@
 
 4. EMQ 程序部署在 /opt/emqttd/ 目录，用户可通过配置 etc/emqttd.config 或加载插件方式，开启 HTTP、PostgreSQL、MySQL、Redis、MongoDB 等多种认证方式；
 
-5. EMQ 消息服务器详细配置和使用，请参考文档: http://emqtt.com/docs/
+5. EMQ 消息服务器详细配置和使用，请参考文档: https://developer.emqx.io/docs/broker/v3/cn
 
 本映像由 emqtt.com 与青云共同提供技术支持，用户QQ群组: 196066320
 
