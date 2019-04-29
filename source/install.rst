@@ -17,7 +17,7 @@
 
 下载地址: https://www.emqx.io/downloads
 
-.. _emqx.io: https://www.emqx.io/downloads/emq/broker?osType=Linux
+.. _emqx.io: https://www.emqx.io/downloads/broker?osType=Linux
 .. _github: https://github.com/emqx/emqx/releases
 
 ----------
