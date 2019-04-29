@@ -7,8 +7,6 @@
 架构设计 (Design)
 =================
 
-.. _intro:
-
 ----
 前言
 ----
@@ -381,8 +379,8 @@ emqx 模块封装了 Hook 接口:
       username  => Username,     %% 用户名
       peername  => Peername,     %% 客户端的 IP 地址和端口
       password  => Password,     %% 密码 (可选)
-      result    => Result        %% 鉴权结果，``success`` 表示认证成功,
-                                 %% ``bad_username_or_password`` 或者 ``not_authorized`` 表示失败.
+      result    => Result        %% 鉴权结果，success 表示认证成功,
+                                 %% bad_username_or_password 或者 not_authorized 表示失败.
     }
 
 编写 ACL 钩子回调函数
@@ -403,9 +401,9 @@ emqx 模块封装了 Hook 接口:
 
 AccessType 可以是 ``publish`` 和 ``subscribe`` 之一。
 Topic 是 MQTT topic。
-The ACLResult 要么是 ``allow``，要么是 ``deny``.
+ACLResult 要么是 ``allow``，要么是 ``deny``。
 
-``emqx_mod_acl_internal`` 模块实现了基于 etc/acl.conf 文件的 ACL 机制:
+``emqx_mod_acl_internal`` 模块实现了基于 etc/acl.conf 文件的 ACL 机制，etc/acl.conf 文件的默认内容：
 
 .. code-block:: erlang
 
@@ -435,7 +433,7 @@ The ACLResult 要么是 ``allow``，要么是 ``deny``.
 
     {allow, all}.
 
-由 emqx 组织实现的 鉴权/ACL 插件:
+由 emqx 提供的 Auth/ACL 插件:
 
 +-----------------------+--------------------------------+
 | Plugin                | Authentication                 |
@@ -481,9 +479,9 @@ emqx_plugins 模块实现插件机制，提供加载卸载插件 API ::
 
 用户可通过 `./bin/emqx_ctl` 命令行加载卸载插件::
 
-    ./bin/emqx_ctl plugins load emqx_auth_redis
+    ./bin/emqx_ctl plugins load <plugin name>
 
-    ./bin/emqx_ctl plugins unload emqx_auth_redis
+    ./bin/emqx_ctl plugins unload <plugin name>
 
 开发者请参考模版插件: http://github.com/emqx/emqx_plugin_template
 
@@ -545,7 +543,7 @@ Erlang 设计相关
 
 5. 多使用 Binary 数据，避免进程间内存复制
 
-6. 使用 ETS, ETS, ETS... Message Passing vs ETS
+6. 使用 ETS, ETS, ETS... Message Passing vs. ETS
 
 7. 避免 ETS 表非键值字段 select, match
 
