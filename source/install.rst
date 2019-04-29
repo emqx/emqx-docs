@@ -82,6 +82,14 @@ CentOS
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
+6.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+            # or $ sudo service emqx start
+
+
 使用rpm文件安装EMQ X
 -----------------------
 
@@ -103,6 +111,14 @@ CentOS
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
+
+4.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+            # or $ sudo service emqx start
+
 
 使用zip文件安装EMQ X
 --------------------
@@ -220,8 +236,16 @@ Ubuntu
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
+8.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+            # or $ sudo service emqx start
+
+
 使用deb文件安装EMQ X
--------------------
+-----------------------
 
 1.  通过 `emqx.io`_ 或 `github`_ 选择您的Ubuntu版本，然后下载要安装的EMQ X版本的deb文件。
 
@@ -243,7 +267,7 @@ Ubuntu
         emqx v3.1.0 is running
 
 使用zip文件安装EMQ X
--------------------
+------------------------
 
 1.  通过 `emqx.io`_ 或 `github`_ 选择您的Ubuntu版本，然后下载要安装的EMQ X版本的zip文件。
 
@@ -263,6 +287,14 @@ Ubuntu
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
+
+4.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+            # or $ sudo service emqx start
+
 
 ----------
 Debian
@@ -356,6 +388,14 @@ Debian
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
+8.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+            # or $ sudo service emqx start
+
+
 使用deb文件安装EMQ X
 --------------------
 
@@ -377,6 +417,14 @@ Debian
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
+
+4.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+            # or $ sudo service emqx start
+
 
 使用zip文件安装EMQ X
 --------------------
@@ -534,8 +582,14 @@ openSUSE
             Node 'emqx@127.0.0.1' is started
             emqx v3.1.0 is running
 
+6.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+
 使用rpm文件安装EMQ X
--------------------
+---------------------
 
 1.  通过 `emqx.io`_ 或 `github`_ 选择openSUSE，然后下载要安装的EMQ X版本的rpm文件。
 
@@ -555,6 +609,13 @@ openSUSE
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
         emqx v3.1.0 is running
+
+4.  Service 启动
+
+    .. code-block:: console
+        
+            $ sudo systemctl start emqx
+
 
 使用zip文件安装EMQ X
 --------------------
