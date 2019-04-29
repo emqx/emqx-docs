@@ -5,7 +5,7 @@
 管理命令 (Commands)
 ===================
 
-*EMQ X* 消息服务器提供了 './bin/emqx_ctl' 的管理命令行。
+*EMQ X* 消息服务器提供了 ``./bin/emqx_ctl`` 的管理命令行。
 
 -----------
 status 命令
@@ -16,7 +16,7 @@ status 命令
     $ ./bin/emqx_ctl status
 
     Node 'emqx@127.0.0.1' is started
-    emqx v3.1-beta.3 is running
+    emqx v3.1.0 is running
 
 ---------
 mgmt 命令
@@ -101,14 +101,14 @@ broker 命令查询服务器基本信息，启动时间，统计数据与性能�
     $ ./bin/emqx_ctl broker
 
     sysdescr  : EMQ X Broker
-    version   : v3.1-beta.3
+    version   : v3.1.0
     uptime    : 25 seconds
-    datetime  : 2019-03-29 10:42:10
+    datetime  : 2019-04-29 10:42:10
 
 broker stats
 ------------
 
-查询服务器客户端连接(Connection)、会话(Session)、主题(Topic)、订阅(Subscription)、路由(Route)统计::
+查询服务器客户端连接(Connections)、会话(Sessions)、主题(Topics)、订阅(Subscriptions)、路由(Routes)统计::
 
     $ ./bin/emqx_ctl broker stats
 
@@ -436,7 +436,7 @@ subscriptions show <ClientId>
 subscriptions add <ClientId> <Topic> <QoS>
 ------------------------------------------
 
-手动添加静态订阅::
+手动添加订阅关系::
 
     $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
 
@@ -445,7 +445,7 @@ subscriptions add <ClientId> <Topic> <QoS>
 subscriptions del <ClientId> <Topic>
 ------------------------------------
 
-手动删除静态订阅::
+手动删除订阅关系::
 
     $ ./bin/emqx_ctl subscriptions del 'mosqsub/90475-airlee.lo' '/world'
 
@@ -945,22 +945,22 @@ listeners list
       current_conn    : 2
       shutdown_count  : []
     listener on http:dashboard:18083
-      acceptors       : undefined
+      acceptors       : 2
       max_conns       : 512
       current_conn    : 0
       shutdown_count  : []
     listener on http:management:8080
-      acceptors       : undefined
+      acceptors       : 2
       max_conns       : 512
       current_conn    : 0
       shutdown_count  : []
     listener on mqtt:ws:8083
-      acceptors       : undefined
+      acceptors       : 2
       max_conns       : 102400
       current_conn    : 0
       shutdown_count  : []
     listener on mqtt:wss:8084
-      acceptors       : undefined
+      acceptors       : 2
       max_conns       : 16
       current_conn    : 0
       shutdown_count  : []
@@ -1316,7 +1316,7 @@ retainer 命令
 retainer info
 -------------
 
-显示保留消息的数量：：
+显示保留消息的数量::
 
     $ ./bin/emqx_ctl retainer info
 
