@@ -11,7 +11,7 @@
 
 下载地址: https://www.emqx.io/downloads/broker?osType=Linux
 
-程序包下载后，可直接解压启动运行，例如 Mac 平台:
+程序包下载后，可直接解压启动运行，例如 macOS 平台:
 
 .. code-block:: bash
 
@@ -23,7 +23,7 @@
     # 检查运行状态
     ./bin/emqx_ctl status
 
-*EMQ X* R3.0 消息服务器默认占用的 TCP 端口包括:
+*EMQ X* 消息服务器默认占用的 TCP 端口包括:
 
 +-----------+-----------------------------------+
 | 1883      | MQTT 协议端口                     |
@@ -46,9 +46,9 @@ MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息
 
 .. image:: ./_static/images/pubsub_concept.png
 
-*EMQ X* 启动成功后，任何设备或终端的 MQTT 客户端，可通过 MQTT 协议连接到服务器，通过 PUBLISH/SUBSCRIBE 进行交换消息。
+*EMQ X* 启动后，任何设备或终端可通过 MQTT 协议连接到服务器，通过 **发布(Publish)/订阅(Subscribe)** 进行交换消息。
 
-MQTT 协议客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
+MQTT 客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 
 例如，mosquitto_sub/pub 命令行发布订阅消息::
 
@@ -57,20 +57,20 @@ MQTT 协议客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 
 .. _authentication:
 
-MQTT 认证/访问控制
-------------------
+认证/访问控制
+-------------
 
 **EMQ X** 消息服务器 *连接认证* 和 *访问控制* 由一系列的认证插件(Plugins)提供，他们的命名都符合 ``emqx_auth_<name>`` 的规则。
 
-在 EMQ X 中，这俩个功能分别是指：
+在 EMQ X 中，这两个功能分别是指：
 
-1. **连接认证**: *EMQ X* 会校验每个连接上的客户端是否具有接入系统的权限，若没有则会断开该连接
-2. **访问控制**: *EMQ X* 会校验客户端每个 *发布/订阅(PUBLISH/SUBSCRIBE)* 的权限，以 *拒绝/允许* 此处操作
+1. **连接认证**: *EMQ X* 校验每个连接上的客户端是否具有接入系统的权限，若没有则会断开该连接
+2. **访问控制**: *EMQ X* 校验客户端每个 *发布(Publish)/订阅(Subscribe)* 的权限，以 *允许/拒绝* 相应操作
 
 认证(Authentication)
 >>>>>>>>>>>>>>>>>>>>>
 
-*EMQ X* 消息服务器认证由一系列认证插件(Plugin)提供，系统支持按用户名密码、ClientID 或匿名认证。
+*EMQ X* 消息服务器认证由一系列认证插件(Plugins)提供，系统支持按用户名密码、ClientID 或匿名认证。
 
 系统默认开启匿名认证(Anonymous)，通过加载认证插件可开启的多个认证模块组成认证链::
 
@@ -102,7 +102,7 @@ ACL 访问控制规则定义::
 
     允许(Allow)|拒绝(Deny) 谁(Who) 订阅(Subscribe)|发布(Publish) 主题列表(Topics)
 
-MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控制模块，会逐条匹配 ACL 规则，直到匹配成功为止::
+MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控制模块会逐条匹配 ACL 规则，直到匹配成功为止::
 
               ---------              ---------              ---------
     Client -> | Rule1 | --nomatch--> | Rule2 | --nomatch--> | Rule3 | --> Default
@@ -143,7 +143,7 @@ ACL 规则定义在 etc/acl.conf，EMQ X 启动时加载到内存:
     {allow, all}.
 
 
-EMQ X 3.1 版本提供的认证插件包括:
+EMQ X 提供的认证插件包括:
 
 +----------------------------+---------------------------+
 | 插件                       | 说明                      |
@@ -170,7 +170,7 @@ EMQ X 3.1 版本提供的认证插件包括:
 其中，关于每个认证插件的配置及用法，可参考 `扩展插件 (Plugins) <https://developer.emqx.io/docs/emq/v3/cn/plugins.html>`_ 关于认证部分。
 
 
-.. note:: auth 插件可以同时启动多个。每次检查的时候，按照优先级从高到低依次检查，同一优先级的，先启动的插件先检查。(内置默认的 acl.conf 优先级为-1，各个插件默认为0)
+.. note:: auth 插件可以同时启动多个。每次检查的时候，按照优先级从高到低依次检查，同一优先级的，先启动的插件先检查。
 
 此外 *EMQ X* 还支持使用 **PSK (Pre-shared Key)** 的方式来控制客户端的接入，但它并不是使用的上述的 *连接认证* 链的方式，而是在 SSL 握手期间进行验证。详情参考 `Pre-shared Key <https://en.wikipedia.org/wiki/Pre-shared_key>`_ 和 `emqx_psk_file`_
 
@@ -179,7 +179,7 @@ EMQ X 3.1 版本提供的认证插件包括:
 共享订阅 (Shared Subscription)
 -------------------------------
 
-*EMQ X* R3.1 版本支持集群级别的共享订阅功能。 共享订阅(Shared Subscription)支持在多订阅者间采用多种常用的负载策略派发消息::
+*EMQ X* R3.0 版本开始支持集群级别的共享订阅功能。共享订阅(Shared Subscription)支持多种消息派发策略::
 
                                 ---------
                                 |       | --Msg1--> Subscriber1
@@ -204,7 +204,7 @@ EMQ X 3.1 版本提供的认证插件包括:
     mosquitto_pub -t 'topic' -m msg -q 2
 
 
-目前在 *EMQ X* R3.1 的版本中支持按以下几种策略进行负载共享的消息：
+*EMQ X* 支持按以下几种策略派发消息：
 
 +---------------------------+-------------------------+
 | 策略                      | 说明                    |
@@ -229,13 +229,13 @@ EMQ X 3.1 版本提供的认证插件包括:
 EMQ X 节点间桥接
 >>>>>>>>>>>>>>>>>
 
-所谓 **桥接** 的概念是指 EMQ X 支持将自身某类主题的消息通过某种方式转发到另一个 MQTT Broker
+**桥接** 的概念是 EMQ X 支持将自身某类主题的消息通过某种方式转发到另一个 MQTT Broker。
 
 **桥接** 与 **集群** 的不同在于：桥接不会复制主题树与路由表，只根据桥接规则转发 MQTT 消息。
 
 目前 EMQ X 支持的桥接方式有:
 
-- RPC 桥接：RPC 桥接只支持消息转发，不支持订阅远程节点的主题去同步数据
+- RPC 桥接：RPC 桥接只能在 EMQ X Broker 间使用，且不支持订阅远程节点的主题去同步数据
 - MQTT 桥接：MQTT 桥接同时支持转发和通过订阅主题来实现数据同步两种方式
 
 其概念如下图所示:
@@ -248,7 +248,7 @@ EMQ X 节点间桥接
                   Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
                   ---------                     ---------                     ---------
 
-在 EMQ X 中，通过修改 ``etc/emqx.conf`` 来配置 bridge。EMQ X 会根据不同的 name 来区分不同的 bridge。例如::
+在 EMQ X 中，通过修改 ``etc/emqx.conf`` 来配置 bridge。EMQ X 根据不同的 name 来区分不同的 bridge。例如::
 
     ## Bridge address: node name for local bridge, host:port for remote.
     bridge.aws.address = 127.0.0.1:1883
@@ -258,7 +258,7 @@ EMQ X 节点间桥接
 在需要创建多个 bridge 时，可以先复制其全部的配置项，在通过使用不同的 name 来标示（比如 bridge.$name.address 其中 $name 指代的为 bridge 的名称）
 
 
-接下来俩个小节，表述了如何创建 RPC/MQTT 方式的桥接，并创建一条转发传感器(sensor)主题消息的转发规则。假设在俩台主机上启动了两个 EMQ X 节点：
+接下来两个小节，表述了如何创建 RPC/MQTT 方式的桥接，并创建一条转发传感器(sensor)主题消息的转发规则。假设在两台主机上启动了两个 EMQ X 节点：
 
 +---------+---------------------+-----------+
 | 名称    | 节点                | MQTT 端口 |
@@ -283,46 +283,48 @@ EMQ X 节点 RPC 桥接配置
     ## 桥接的 mountpoint(挂载点)
     bridge.emqx2.mountpoint = bridge/emqx2/${node}/
 
-本地 emqx1 节点接收到的消息如果匹配主题 ``sersor1/#``, ``sensor2/#``, 这些消息会被转发到远程 emqx2 节点的 ``sensor1/#``, ``sensor2/#`` 主题上。
+forwards 用于指定桥接的主题。所有发到 forwards 指定主题上的消息都会被转发到远程节点上。
 
-forwards 用于指定主题，转发到本地节点指定 forwards 上的消息都会被转发到远程节点上。
+mountpoint 用于在转发消息时加上主题前缀。例如，以上配置中，主题为 `sensor1/hello` 的消息，EMQ X 将其转发到对端节点时，会将主题变为 `bridge/emqx2/emqx1@192.168.1.1/sensor1/hello`。
 
-mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为 `sensor1/hello` 的消息, 到达远程节点时主题为 `bridge/emqx2/emqx1@192.168.1.1/sensor1/hello` 。
+RPC 桥接的特点：
 
-RPC 桥接的局限性：
+1. RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步到本地节点上；
 
-1. EMQ X 的 RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步到本地节点上；
+2. RPC 桥接只能将两个 EMQ X 桥接在一起，无法桥接 EMQ X 到其他的 MQTT Broker 上；
 
-2. RPC 桥接只能将两个 EMQ X 桥接在一起，无法桥接 EMQ X 到其他的 MQTT Broker 上。
+3. RPC 桥接不涉及 MQTT 协议编解码，效率高于 MQTT 桥接。
 
 EMQ X 节点 MQTT 桥接配置
 >>>>>>>>>>>>>>>>>>>>>>>>>
 
-EMQ X 3.0 正式引入了 MQTT Bridge，使 EMQ X 可以桥接任意 MQTT Broker ，同时由于 MQTT 协议本身的特性， EMQ X 可以通过 MQTT Bridge 去订阅远程 MQTT Broker 的主题，再将远程 MQTT Broker 的消息同步到本地。
+EMQ X 可以通过 MQTT Bridge 去订阅远程 MQTT Broker 的主题，再将远程 MQTT Broker 的消息同步到本地。
 
-EMQ X 的 MQTT Bridge 原理: 通过在 EMQ X Broker 上创建一个 MQTT 客户端，MQTT 客户端会连接远程的 MQTT Broker，因此在 MQTT Bridge 的配置中，需要去设置 EMQ X Bridge 作为 MQTT 客户端连接时所须要的字段::
+EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broker，因此在 MQTT Bridge 的配置中，需要设置 MQTT 客户端连接时所需要的字段：
 
-    ## 桥接地址： 使用节点名则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
+::
+
+    ## 桥接地址
     bridge.emqx2.address = 192.168.1.2:1883
 
     ## 桥接的协议版本
     ## 枚举值: mqttv3 | mqttv4 | mqttv5
     bridge.emqx2.proto_ver = mqttv4
 
-    ## mqtt 客户端的 client_id
+    ## 客户端的 client_id
     bridge.emqx2.client_id = bridge_emq
 
-    ## mqtt 客户端的 clean_start 字段
+    ## 客户端的 clean_start 字段
     ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
     bridge.emqx2.clean_start = true
 
-    ## mqtt 客户端的 username 字段
+    ## 客户端的 username 字段
     bridge.emqx2.username = user
 
-    ## mqtt 客户端的 password 字段
+    ## 客户端的 password 字段
     bridge.emqx2.password = passwd
 
-    ## mqtt 客户端是否使用 ssl 来连接远程服务器
+    ## 客户端是否使用 ssl 来连接远程服务器
     bridge.emqx2.ssl = off
 
     ## 客户端 SSL 连接的 CA 证书 (PEM格式)
@@ -337,7 +339,7 @@ EMQ X 的 MQTT Bridge 原理: 通过在 EMQ X Broker 上创建一个 MQTT 客户
     ## SSL 加密方式
     bridge.emqx2.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
 
-    ## TLS PSK 的密码
+    ## TLS PSK 的加密套件
     ## 注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers' 不能同时配置
     ##
     ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
@@ -349,29 +351,23 @@ EMQ X 的 MQTT Bridge 原理: 通过在 EMQ X Broker 上创建一个 MQTT 客户
     ## 支持的 TLS 版本
     bridge.emqx2.tls_versions = tlsv1.2,tlsv1.1,tlsv1
 
-    ## 转发消息的主题
+    ## 需要被转发的消息的主题
     bridge.emqx2.forwards = sensor1/#,sensor2/#
 
-    ## 桥接的 mountpoint(挂载点)
+    ## 挂载点(mountpoint)
     bridge.emqx2.mountpoint = bridge/emqx2/${node}/
 
-    ## 用于桥接的订阅主题
+    ## 订阅对端的主题
     bridge.emqx2.subscription.1.topic = cmd/topic1
 
-    ## 用于桥接的订阅 qos
+    ## 订阅对端主题的 QoS
     bridge.emqx2.subscription.1.qos = 1
-
-    ## 用于桥接的订阅主题
-    bridge.emqx2.subscription.2.topic = cmd/topic2
-
-    ## 用于桥接的订阅 qos
-    bridge.emqx2.subscription.2.qos = 1
 
     ## 桥接的重连间隔
     ## 默认: 30秒
     bridge.emqx2.reconnect_interval = 30s
 
-    ## QoS1 消息的重传间隔
+    ## QoS1/QoS2 消息的重传间隔
     bridge.emqx2.retry_interval = 20s
 
     ## Inflight 大小.
@@ -380,7 +376,9 @@ EMQ X 的 MQTT Bridge 原理: 通过在 EMQ X Broker 上创建一个 MQTT 客户
 EMQ X 桥接缓存配置
 >>>>>>>>>>>>>>>>>>
 
-EMQ X 的 Bridge 拥有消息缓存机制，缓存机制同时适用于 RPC 桥接和 MQTT 桥接，当 Bridge 断开（如网络连接不稳定的情况）时，可将 forwards 主题的消息缓存到本地的消息队列上。等到桥接恢复时，再把消息重新转发到远程节点上。关于缓存队列的配置如下::
+EMQ X 的 Bridge 拥有消息缓存机制，缓存机制同时适用于 RPC 桥接和 MQTT 桥接，当 Bridge 断开（如网络连接不稳定的情况）时，可将 forwards 主题的消息缓存到本地的消息队列上。等到桥接恢复时，再把消息重新转发到远程节点上。关于缓存队列的配置如下：
+
+::
 
     ## emqx_bridge 内部用于 batch 的消息数量
     bridge.emqx2.queue.batch_count_limit = 32
@@ -402,7 +400,7 @@ EMQ X 的 Bridge 拥有消息缓存机制，缓存机制同时适用于 RPC 桥�
 EMQ X 桥接的命令行使用
 >>>>>>>>>>>>>>>>>>>>>>
 
-桥接 CLI 命令:
+桥接 CLI 命令：
 
 .. code-block:: bash
 
@@ -449,14 +447,14 @@ EMQ X 桥接的命令行使用
 
 .. code-block:: bash
 
-    $ ./bin/emqx_ctl bridges add-forwards emqx topic3/#
+    $ ./bin/emqx_ctl bridges add-forwards emqx 'topic3/#'
     Add-forward topic successfully.
 
 删除指定 bridge 的转发主题
 
 .. code-block:: bash
 
-    $ ./bin/emqx_ctl bridges del-forwards emqx topic3/#
+    $ ./bin/emqx_ctl bridges del-forwards emqx 'topic3/#'
     Del-forward topic successfully.
 
 列出指定 bridge 的订阅
@@ -471,14 +469,14 @@ EMQ X 桥接的命令行使用
 
 .. code-block:: bash
 
-    $ ./bin/emqx_ctl bridges add-subscription emqx cmd/topic3 1
+    $ ./bin/emqx_ctl bridges add-subscription emqx 'cmd/topic3' 1
     Add-subscription topic successfully.
 
 删除指定 bridge 的订阅主题
 
 .. code-block:: bash
 
-    $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic3
+    $ ./bin/emqx_ctl bridges del-subscription emqx 'cmd/topic3'
     Del-subscription topic successfully.
 
 注: 如果有创建多个 Bridge 的需求，需要复制默认的 Bridge 配置，再拷贝到 emqx.conf 中，根据需求重命名 bridge.${name}.config 中的 name 即可。
@@ -496,7 +494,8 @@ Web 服务器例如 PHP/Java/Python/NodeJS 或 Ruby on Rails，可通过 HTTP PO
 
 .. code:: bash
 
-    curl -v --basic -u user:passwd -H "Content-Type: application/json" -d '{"qos":1, "retain": false, "topic":"world", "payload":"test" , "client_id": "C_1492145414740"}'  -k http://localhost:8080/api/v3/mqtt/publish
+    curl -v --basic -u user:passwd -H "Content-Type: application/json" -d \
+    '{"qos":1, "retain": false, "topic":"world", "payload":"test" , "client_id": "C_1492145414740"}' \-k http://localhost:8080/api/v3/mqtt/publish
 
 HTTP 接口参数:
 
@@ -584,15 +583,13 @@ $SYS 系统消息发布周期，通过 etc/emqx.conf 配置:
 
 $SYS 主题前缀: $SYS/brokers/${node}/clients/
 
-+--------------------------+------------------------------------+
-| 主题(Topic)              | 说明                               |
-+==========================+====================================+
-| ${clientid}/connected    | 上线事件。当某客户端上线时，会发布 |
-|                          | 该消息                             |
-+--------------------------+------------------------------------+
-| ${clientid}/disconnected | 下线事件。当某客户端离线时，会发布 |
-|                          | 该消息                             |
-+--------------------------+------------------------------------+
++--------------------------+------------------------------------------+
+| 主题(Topic)              | 说明                                     |
++==========================+==========================================+
+| ${clientid}/connected    | 上线事件。当某客户端上线时，会发布该消息 |
++--------------------------+------------------------------------------+
+| ${clientid}/disconnected | 下线事件。当某客户端离线时，会发布该消息 |
++--------------------------+------------------------------------------+
 
 'connected' 事件消息的 Payload 可解析成 JSON 格式:
 
@@ -700,7 +697,7 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 | routes/max          | 最大 Routes 数量                            |
 +---------------------+---------------------------------------------+
 
-.. note:: ``topics/count`` 和 ``topics/max`` 与 ``routes/count`` 和 ``routes/max`` 数值上是想等的
+.. note:: ``topics/count`` 和 ``topics/max`` 与 ``routes/count`` 和 ``routes/max`` 数值上是相等的。
 
 收发流量/报文/消息统计
 >>>>>>>>>>>>>>>>>>>>>>
@@ -776,7 +773,7 @@ MQTT报文收发统计
 +-----------------------------+---------------------------------------------+
 | packets/disconnect/sent     | 累计接收 MQTT DISCONNECT 报文               |
 +-----------------------------+---------------------------------------------+
-| packets/auth                | 累计接收Auth 报文                           |
+| packets/auth                | 累计接收 Auth 报文                          |
 +-----------------------------+---------------------------------------------+
 
 MQTT 消息收发统计
@@ -797,21 +794,21 @@ MQTT 消息收发统计
 +--------------------------+---------------------------------------------+
 | messages/forward         | 节点转发消息总数                            |
 +--------------------------+---------------------------------------------+
-| messages/qos0/received   | 累计接受QoS0消息                            |
+| messages/qos0/received   | 累计接受 QoS0 消息                          |
 +--------------------------+---------------------------------------------+
-| messages/qos0/sent       | 累计发送QoS0消息                            |
+| messages/qos0/sent       | 累计发送 QoS0 消息                          |
 +--------------------------+---------------------------------------------+
-| messages/qos1/received   | 累计接受QoS1消息                            |
+| messages/qos1/received   | 累计接受 QoS1 消息                          |
 +--------------------------+---------------------------------------------+
-| messages/qos1/sent       | 累计发送QoS1消息                            |
+| messages/qos1/sent       | 累计发送 QoS1 消息                          |
 +--------------------------+---------------------------------------------+
-| messages/qos2/received   | 累计接受QoS2消息                            |
+| messages/qos2/received   | 累计接受 QoS2 消息                          |
 +--------------------------+---------------------------------------------+
-| messages/qos2/sent       | 累计发送QoS2消息                            |
+| messages/qos2/sent       | 累计发送 QoS2 消息                          |
 +--------------------------+---------------------------------------------+
-| messages/qos2/expired    | QoS2过期消息总数                            |
+| messages/qos2/expired    | QoS2 过期消息总数                           |
 +--------------------------+---------------------------------------------+
-| messages/qos2/dropped    | QoS2丢弃消息总数                            |
+| messages/qos2/dropped    | QoS2 丢弃消息总数                           |
 +--------------------------+---------------------------------------------+
 
 .. _sys_alarms:
@@ -824,9 +821,9 @@ Alarms - 系统告警
 +------------------+------------------+
 | 主题(Topic)      | 说明             |
 +------------------+------------------+
-| ${alarmId}/alert | 新产生告警       |
+| ${alarmId}/alert | 新产生的告警     |
 +------------------+------------------+
-| ${alarmId}/clear | 清除告警         |
+| ${alarmId}/clear | 被清除的告警     |
 +------------------+------------------+
 
 .. _sys_sysmon:
