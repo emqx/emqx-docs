@@ -29,6 +29,7 @@
    guide
    config
    plugins
+   commands
    rest
    design
    cluster
