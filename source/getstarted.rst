@@ -103,7 +103,7 @@ MQTT 消息发布者(Publisher) 只能向特定'名称主题'(不支持通配符
 
 *EMQ X* R3.1 消息服务器每个版本，会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 、openSUSE 平台程序包与 Docker 镜像。
 
-下载地址: http://emqtt.com/downloads
+下载地址: https://www.emqx.io/downloads/broker?osType=Linux
 
 程序包下载后，可直接解压启动运行，例如 Mac 平台:
 
