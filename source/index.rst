@@ -9,15 +9,15 @@
 
 *EMQ X* R3.1 (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 语言平台开发，支持大规模连接和分布式集群，发布订阅模式的开源 MQTT 消息服务器。
 
-.. NOTE:: 3.1 版本开始 emqttd 消息服务器自正式简称为 *EMQ X*
+.. NOTE:: 3.0 版本开始 emqttd 消息服务器自正式更名为 *EMQ X*
 
-*EMQ X* R3.1 完整支持 MQTT V3.1/V3.1.1/V5.0 版本协议规范，并扩展支持 MQTT-SN 、WebSocket、CoAP、Stomp 或私有 TCP/UDP 协议。*EMQ X* 3.1 消息服务器支持单节点100万连接与多节点分布式集群:
-
-.. image:: ./_static/images/emqtt.png
+*EMQ X* R3.1 完整支持 MQTT V3.1/V3.1.1/V5.0 版本协议规范，并扩展支持 MQTT-SN 、WebSocket、CoAP、LwM2M、Stomp 以及私有 TCP/UDP 协议。*EMQ X* 3.1 消息服务器支持单节点100万连接与多节点分布式集群。
 
 *EMQ X* R3.1 为大规模设备连接 (C1000K+) 的物联网、车联网、智能硬件、移动推送、移动消息等应用，提供一个完全开放源码、安装部署简便、企业级稳定可靠、可弹性扩展、易于定制开发的 MQTT 消息服务器。
 
 .. NOTE:: MQTT-SN、CoAP 协议已在2.0-rc.1版本发布，LwM2M、LoRaWan 协议在 3.0 版本发布。
+
+.. image:: ./_static/images/emqtt.png
 
 *EMQ X* R3.1 项目文档目录:
 
