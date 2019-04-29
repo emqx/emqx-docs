@@ -99,8 +99,8 @@
 
 如果 *EMQ X* 开启了 Dashbord 的插件(默认开启) 还可以直接通过访问 ``http://localhost:18083/plugins`` 中的插件管理页面启停、或者配置插件。
 
-emqx_dashboard: Dashboard 插件
-------------------------------
+Dashboard 插件
+-----------------
 
 `emqx_dashboard`_ 是 *EMQ X* 消息服务器的 Web 管理控制台, 该插件默认开启。当 *EMQ X* 启动成功后，可访问 ``http://localhost:18083`` 进行查看，默认用户名/密码: admin/public。
 
@@ -137,8 +137,8 @@ etc/plugins/emqx_dashboard.conf:
     ## dashboard.listener.https.verify = verify_peer
     ## dashboard.listener.https.fail_if_no_peer_cert = true
 
-emqx_auth_clientid - ClientID 认证插件
---------------------------------------
+ClientID 认证插件
+--------------------
 
 `emqx_auth_clientid`_ 目前只支持 **连接认证**，通过 ``clientid`` 和 ``password`` 认证客户端。此插件在存储密码时会按照配置的 hash 算法将明文加密后存入。
 
@@ -155,8 +155,8 @@ etc/plugins/emqx_auth_clientid.conf:
     ## 枚举值: plain | md5 | sha | sha256
     auth.client.password_hash = sha256
 
-emqx_auth_username: 用户名密码认证插件
----------------------------------------
+Username 认证插件
+--------------------
 
 `emqx_auth_username`_ 目前只支持 **连接认证**，通过 ``username`` 和 ``password`` 认证客户端。此插件在存储密码时会按照配置的 hash 算法将明文加密后存入。
 
@@ -173,8 +173,8 @@ etc/plugins/emqx_auth_username.conf:
     ## 枚举值: plain | md5 | sha | sha256
     auth.user.password_hash = sha256
 
-emqx_auth_jwt: JWT 认证插件
----------------------------
+JWT 认证插件
+--------------
 
 `emqx_auth_jwt`_ 支持基于 `JWT`_ 的方式，对连接的客户端进行认证，只支持 **连接认证** 功能。它会解析并校验 Token 的合理性和时效性、满足则允许连接。
 
@@ -195,8 +195,8 @@ etc/plugins/emqx_auth_jwt.conf:
     ## 枚举值: username | password
     auth.jwt.from = password
 
-emqx_auth_ldap: LDAP 认证插件
------------------------------
+LDAP 认证/访问控制插件
+-----------------------
 
 `emqx_auth_ldap`_ 支持访问 `LDAP`_ 实现 **连接认证**、**访问控制** 功能。
 
@@ -240,8 +240,8 @@ etc/plugins/emqx_auth_ldap.conf:
     ## auth.ldap.ssl.fail_if_no_peer_cert = true
 
 
-emqx_auth_http: HTTP 认证/访问控制插件
---------------------------------------
+HTTP 认证/访问控制插件
+------------------------
 
 `emqx_auth_http`_ 插件实现 **连接认证** 与 **访问控制** 的功能。它会将每个请求发送到指定的 HTTP 服务，通过其返回值来判断是否具有操作权限。
 
@@ -330,8 +330,8 @@ HTTP API 返回值处理
     ## 拒绝该次 Publish/Subscribe:
     HTTP Status Code: Except 200
 
-emqx_auth_mysql: MySQL 认证/访问控制插件
-----------------------------------------
+MySQL 认证/访问控制插件
+--------------------------
 
 `emqx_auth_mysql`_ 支持访问 MySQL 实现 **连接认证**、**访问控制** 功能。要实现这些功能，我们需要在 MySQL 中创建两张表，其格式如下：
 
@@ -432,8 +432,8 @@ etc/plugins/emqx_auth_mysql.conf:
 
 .. note:: 3.1 版本新增 %cn %dn 支持。
 
-emqx_auth_pgsql: Postgres 认证插件
-----------------------------------
+Postgres 认证插件
+-------------------
 
 `emqx_auth_pgsql`_ 通过访问 Postgres 实现 **连接认证**、**访问控制** 功能。同样需要定义两张表如下：
 
@@ -544,8 +544,8 @@ etc/plugins/emqx_auth_pgsql.conf:
 
 .. note:: 3.1 版本新增 %cn %dn 支持。
 
-emqx_auth_redis: Redis 认证插件
--------------------------------
+Redis 认证/访问控制插件
+------------------------
 
 `emqx_auth_redis`_ 通过访问 Redis 数据以实现 **连接认证** 和 **访问控制** 的功能。
 
@@ -639,8 +639,8 @@ Redis ACL 规则 Hash
 
 .. NOTE:: 1: subscribe, 2: publish, 3: pubsub
 
-emqx_auth_mongo: MongoDB 认证插件
----------------------------------
+MongoDB 认证/访问控制插件
+---------------------------
 
 `emqx_auth_mongo`_ 通过访问 MongoDB 实现 **连接认证** 和 **访问控制** 功能。
 
@@ -750,8 +750,8 @@ MongoDB ACL 集合
     db.mqtt_acl.insert({username: "test", publish: ["t/1", "t/2"], subscribe: ["user/%u", "client/%c"]})
     db.mqtt_acl.insert({username: "admin", pubsub: ["#"]})
 
-emqx_psk_file: PSK 认证插件
----------------------------
+PSK 认证插件
+--------------
 
 `emqx_psk_file`_ 插件主要提供了 PSK 支持。其目的是用于在客户端建立 TLS/DTLS 连接时，通过 PSK 方式实现 **连接认证** 的功能。
 
@@ -764,8 +764,8 @@ etc/plugins/emqx_psk_file.conf:
 
     psk.file.path = etc/psk.txt
 
-emqx_web_hook: WebHook 插件
----------------------------
+WebHook 插件
+--------------
 
 `emqx_web_hook`_ 插件可以将所有 *EMQ X* 的事件及消息都发送到指定的 HTTP 服务器。
 
@@ -792,13 +792,13 @@ etc/plugins/emqx_web_hook.conf:
     web.hook.rule.message.deliver.1      = {"action": "on_message_deliver"}
     web.hook.rule.message.acked.1        = {"action": "on_message_acked"}
 
-emqx_lua_hook: Lua 插件
------------------------
+Lua 插件
+-----------
 
 `emqx_lua_hook`_ 插件将所有的事件和消息都发送到指定的 Lua 函数上。其具体使用参见其 README。
 
-emqx_retainer: Retainer 插件
-----------------------------
+Retainer 插件
+---------------
 
 `emqx_retainer`_ 该插件设置为默认启动，为 *EMQ X* 提供 Retained 类型的消息支持。它会将所有主题的 Retained 消息存储在集群的数据库中，并待有客户端订阅该主题的时候将该消息投递出去。
 
@@ -825,13 +825,13 @@ etc/plugins/emqx_retainer.conf:
     ## 单位: h 小时; m 分钟; s 秒。如 60m 表示 60 分钟
     retainer.expiry_interval = 0
 
-emqx_delayed_publish: Delayed Publish 插件
-------------------------------------------
+Delayed Publish 插件
+-----------------------
 
 `emqx_delayed_publish`_ 提供了延迟发送消息的功能。当客户端使用特殊主题前缀 ``$delayed/<seconds>/`` 发布消息到 *EMQ X* 时，*EMQ X* 将在 ``<seconds>`` 秒后发布该主题消息。
 
-emqx_coap: CoAP 协议插件
-------------------------
+CoAP 协议插件
+----------------
 
 `emqx_coap`_ 提供对 CoAP 协议(RFC 7252)的支持。
 
@@ -868,8 +868,8 @@ etc/plugins/emqx_coap.conf:
     % coap client publish message
     coap-client -m put -e "qos=0&retain=0&message=payload&topic=hello" coap://localhost/mqtt
 
-emqx_lwm2m: LwM2M 协议插件
---------------------------
+LwM2M 协议插件
+----------------
 
 `emqx_lwm2m`_ 提供对 LwM2M 协议的支持。
 
@@ -926,8 +926,8 @@ etc/plugins/emqx_lwm2m.conf:
     lwm2m.certfile = etc/certs/cert.pem
     lwm2m.keyfile = etc/certs/key.pem
 
-emqx_sn:  MQTT-SN 协议插件
---------------------------
+MQTT-SN 协议插件
+------------------
 
 `emqx_sn`_ 插件提供对 `MQTT-SN`_ 协议的支持。
 
@@ -940,8 +940,8 @@ etc/plugins/emqx_sn.conf:
 
     mqtt.sn.port = 1884
 
-emqx_stomp: Stomp 协议插件
---------------------------
+Stomp 协议插件
+-----------------
 
 `emqx_stomp`_ 提供对 Stomp 协议的支持。支持客户端通过 Stomp 1.0/1.1/1.2 协议连接 EMQ X，发布订阅 MQTT 消息。
 
@@ -972,8 +972,8 @@ etc/plugins/emqx_stomp.conf:
 
     stomp.listener.max_clients = 512
 
-emqx_recon: Recon 性能调试插件
-------------------------------
+Recon 性能调试插件
+-------------------
 
 `emqx_recon`_ 插件集成了 recon 性能调测库，可用于查看当前系统的一些状态信息，例如：
 
@@ -997,8 +997,8 @@ etc/plugins/emqx_recon.conf:
     %% Garbage Collection: 10 minutes
     recon.gc_interval = 600
 
-emqx_reloader: 代码热加载插件
------------------------------
+Reloader 热加载插件
+--------------------
 
 `emqx_reloader`_ 用于开发调试的代码热升级插件。加载该插件后 *EMQ X* 会根据配置的时间间隔自动热升级更新代码。
 
@@ -1021,15 +1021,15 @@ etc/plugins/emqx_reloader.conf:
 
     reloader.logfile = log/reloader.log
 
-emqx_plugin_template: 插件开发模版
-----------------------------------
+插件开发模版
+---------------
 
 `emqx_plugin_template`_ 是一个 *EMQ X* 插件模板，在功能上并无任何意义。
 
 开发者需要自定义插件时，可以查看该插件的代码和结构，以更快地开发一个标准的 *EMQ X* 插件。插件实际是一个普通的 ``Erlang Application``，其配置文件为: ``etc/${PluginName}.config``。
 
 EMQ X R3.1 插件开发
--------------------
+--------------------
 
 创建插件项目
 ::::::::::::
