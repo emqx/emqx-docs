@@ -422,7 +422,7 @@ manual 手动创建集群
 
 如果集群节点间存在防火墙，防火墙需要开启 4369 端口和一个 TCP 端口段。4369 由 epmd 端口映射服务使用，TCP 端口段用于节点间建立连接与通信。
 
-防火墙设置后，EMQ 需要配置相同的端口段，emqx/etc/emqx.conf 文件::
+防火墙设置后，EMQ X 需要配置相同的端口段，emqx/etc/emqx.conf 文件::
 
     ## Distributed node port range
     node.dist_listen_min = 6369
@@ -435,7 +435,7 @@ manual 手动创建集群
  一致性 Hash 与 DHT
  ------------------
 ..
- NoSQL 数据库领域分布式设计，大多会采用一致性 Hash 或 DHT。EMQ 消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性 Hash、DHT 或 Shard 方式切分路由表。
+ NoSQL 数据库领域分布式设计，大多会采用一致性 Hash 或 DHT。EMQ X 消息服务器集群架构可支持千万级的路由，更大级别的集群可采用一致性 Hash、DHT 或 Shard 方式切分路由表。
 
 .. _etcd:        https://coreos.com/etcd/
 .. _Kubernetes:  https://kubernetes.io/

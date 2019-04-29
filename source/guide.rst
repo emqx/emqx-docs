@@ -567,13 +567,13 @@ $SYS 系统消息发布周期，通过 etc/emqx.conf 配置:
 +================================+=======================+
 | $SYS/brokers                   | 集群节点列表          |
 +--------------------------------+-----------------------+
-| $SYS/brokers/${node}/version   | EMQ 服务器版本        |
+| $SYS/brokers/${node}/version   | EMQ X 服务器版本      |
 +--------------------------------+-----------------------+
-| $SYS/brokers/${node}/uptime    | EMQ 服务器启动时间    |
+| $SYS/brokers/${node}/uptime    | EMQ X 服务器启动时间  |
 +--------------------------------+-----------------------+
-| $SYS/brokers/${node}/datetime  | EMQ 服务器时间        |
+| $SYS/brokers/${node}/datetime  | EMQ X 服务器时间      |
 +--------------------------------+-----------------------+
-| $SYS/brokers/${node}/sysdescr  | EMQ 服务器描述        |
+| $SYS/brokers/${node}/sysdescr  | EMQ X 服务器描述      |
 +--------------------------------+-----------------------+
 
 .. _sys_clients:
