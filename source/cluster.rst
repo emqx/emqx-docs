@@ -66,7 +66,7 @@ Erlang 节点间通过一个相同的 cookie 进行互连认证。
 
 Erlang 节点 Cookie 设置::
 
-    1. $HOME/.erlang.cookie文件
+    1. $HOME/.erlang.cookie 文件
 
     2. erl -setcookie <Cookie>
 
@@ -108,7 +108,7 @@ EMQ X 分布集群设计
 
 2. MQTT 客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
 
-EMQ 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
+EMQ X 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如::
 
     topic1 -> node1, node2
     topic2 -> node3
@@ -155,11 +155,11 @@ EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)�
 
     title: Message Route and Deliver
 
-    client1->node1: Publish[t/a]
-    node1-->node2: Route[t/#]
-    node1-->node3: Route[t/a]
-    node2-->client2: Deliver[t/#]
-    node3-->client3: Deliver[t/a]
+    client1 -> node1: Publish[t/a]
+        node1 --> node2: Route[t/#]
+            node2 --> client2: Deliver[t/#]
+        node1 --> node3: Route[t/a]
+            node3 --> client3: Deliver[t/a]
 
 .. image:: ./_static/images/route.png
 
@@ -172,65 +172,65 @@ EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)�
 +----------------------+-----------------+---------------------+
 | 节点名               | 主机名(FQDN)    |    IP 地址          |
 +----------------------+-----------------+---------------------+
-| emq@s1.emqx.io 或    | s1.emqx.io      | 192.168.0.10        |
-| emq@192.168.0.10     |                 |                     |
+| emqx@s1.emqx.io 或   | s1.emqx.io      | 192.168.0.10        |
+| emqx@192.168.0.10    |                 |                     |
 +----------------------+-----------------+---------------------+
-| emq@s2.emqx.io 或    | s2.emqx.io      | 192.168.0.20        |
-| emq@192.168.0.20     |                 |                     |
+| emqx@s2.emqx.io 或   | s2.emqx.io      | 192.168.0.20        |
+| emqx@192.168.0.20    |                 |                     |
 +----------------------+-----------------+---------------------+
 
 .. WARNING:: 节点名格式: Name@Host, Host必须是IP地址或FQDN(主机名.域名)
 
-emq@s1.emqx.io 节点设置
-------------------------
+emqx@s1.emqx.io 节点设置
+-------------------------
 
 emqx/etc/emqx.conf::
 
-    node.name = emq@s1.emqx.io
+    node.name = emqx@s1.emqx.io
 
     或
 
-    node.name = emq@192.168.0.10
+    node.name = emqx@192.168.0.10
 
 也可通过环境变量::
 
-    export EMQ_NODE_NAME=emq@s1.emqx.io && ./bin/emqx start
+    export EMQ_NODE_NAME=emqx@s1.emqx.io && ./bin/emqx start
 
 .. WARNING:: 节点启动加入集群后，节点名称不能变更。
 
-emq@s2.emqx.io 节点设置
+emqx@s2.emqx.io 节点设置
 ------------------------
 
 emqx/etc/emqx.conf::
 
-    node.name = emq@s2.emqx.io
+    node.name = emqx@s2.emqx.io
 
     或
 
-    node.name = emq@192.168.0.20
+    node.name = emqx@192.168.0.20
 
 节点加入集群
 ------------
 
-启动两台节点后，emq@s2.emqx.io 上执行::
+启动两台节点后，emqx@s2.emqx.io 上执行::
 
-    $ ./bin/emqx_ctl cluster join emq@s1.emqx.io
+    $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
 
     Join the cluster successfully.
-    Cluster status: [{running_nodes,['emq@s1.emqx.io','emq@s2.emqx.io']}]
+    Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 或，emq@s1.emqx.io 上执行::
 
-    $ ./bin/emqx_ctl cluster join emq@s2.emqx.io
+    $ ./bin/emqx_ctl cluster join emqx@s2.emqx.io
 
     Join the cluster successfully.
-    Cluster status: [{running_nodes,['emq@s1.emqx.io','emq@s2.emqx.io']}]
+    Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 任意节点上查询集群状态::
 
     $ ./bin/emqx_ctl cluster status
 
-    Cluster status: [{running_nodes,['emq@s1.emqx.io','emq@s2.emqx.io']}]
+    Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 节点退出集群
 ------------
@@ -241,13 +241,13 @@ emqx/etc/emqx.conf::
 
 2. remove: 从集群删除其他节点
 
-emq@s2.emqx.io 主动退出集群::
+emqx@s2.emqx.io 主动退出集群::
 
     $ ./bin/emqx_ctl cluster leave
 
-或 emq@s1.emqx.io 节点上，从集群删除 emq@s2.emqx.io 节点::
+或 emqx@s1.emqx.io 节点上，从集群删除 emqx@s2.emqx.io 节点::
 
-    $ ./bin/emqx_ctl cluster remove emq@s2.emqx.io
+    $ ./bin/emqx_ctl cluster remove emqx@s2.emqx.io
 
 .. _autodiscovery:
 
@@ -390,7 +390,7 @@ manual 手动创建集群
 
 集群脑裂自动恢复流程:
 
-1. 节点收到 Mnesia库 的 `inconsistent_database` 事件3秒后进行集群脑裂确认；
+1. 节点收到 Mnesia 库的 `inconsistent_database` 事件3秒后进行集群脑裂确认；
 
 2. 节点确认集群脑裂发生后，向 Leader 节点(集群中最早启动节点)上报脑裂消息；
 
