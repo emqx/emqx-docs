@@ -65,10 +65,9 @@ Erlang 的原生配置格式多层级嵌套，对非 Erlang 开发者的用户�
 
     ## Node name
     node.name = emq@127.0.0.1
-    ...
+
     ## Max ClientId Length Allowed.
     mqtt.max_clientid_len = 1024
-    ...
 
 4. EMQ X 3.0-beta.1 测试版正式更名 emqttd 为 emqx ，配置名称与配置信息进行相关变化:
 
