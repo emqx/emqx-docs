@@ -13,7 +13,7 @@
 
 *EMQ X* (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 平台开发的开源物联网 MQTT 消息服务器。Erlang/OTP 是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed) 的语言平台。MQTT 是轻量的(Lightweight)、发布订阅模式(PubSub) 的物联网消息协议。
 
-*EMQ X* 面向海量的 移动/物联网/车载 等终端接入，并实现在海量物理网设备间快速低延时的消息路由:
+*EMQ X* 面向海量的 **移动/物联网/车载** 等终端接入，并实现在海量物理网设备间快速低延时的消息路由:
 
 1. 稳定承载大规模的 MQTT 客户端连接，单服务器节点支持百万连接。
 
@@ -75,20 +75,20 @@ MQTT 是基于 **发布(Publish)/订阅(Subscribe)** 模式来进行通信及数
 * 基于客户端 ID、IP 地址、用户名的访问控制(ACL)
 * 多服务器节点集群(Cluster)
 * 支持 manual、mcast、dns、etcd、k8s 等多种集群发现方式
-* 集群分片自动愈合
+* 网络分区自动愈合
 * 消息速率限制
 * 连接速率限制
 * 按分区配置节点
 * 多服务器节点桥接(Bridge)
-* mosquitto 桥接支持
+* MQTT Broker 桥接支持
 * Stomp 协议支持
 * MQTT-SN 协议支持
 * CoAP 协议支持
 * Stomp/SockJS 支持
-* 通过 Paho 兼容性测试
-* 本地订阅($local/topic)
+* 延时 Publish ($delay/topic)
+* Flapping 检测
+* 黑名单支持
 * 共享订阅($share/<group>/topic)
-* sysctl 类似 k = v 格式配置文件
 * TLS/PSK 支持
 * 规则引擎支持
 
@@ -117,7 +117,7 @@ MQTT 是基于 **发布(Publish)/订阅(Subscribe)** 模式来进行通信及数
     # 停止emqx
     ./bin/emqx stop
 
-*EMQ X* 成功启动后，MQTT 客户端可通过 1883 端口接入系统。启动运行日志输出在 log/ 目录。
+*EMQ X* 启动后，MQTT 客户端可通过 1883 端口接入系统。运行日志输出在 log/ 目录。
 
 *EMQ X* 默认加载 Dashboard 插件，启动 Web 管理控制台。用户可通过 Web 控制台，查看服务器运行状态、统计数据、连接(Connections)、会话(Sessions)、主题(Topics)、订阅(Subscriptions)、插件(Plugins)等。
 
