@@ -5,6 +5,74 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1.0:
+
+----------
+3.1.0 版本
+----------
+
+*发布日期: 2019-04-26*
+
+EMQ X 3.1.0 版本发布。此版本改动主要包括全面支持规则引擎、引入 storm 模块以支持 edge storm、
+重构 flapping 代码。
+
+功能改进:
+
+- 添加 emqx_ct_helpers 依赖，并重构测试用例
+
+  Github PR:
+  `emqx/emqx#2480 <https://github.com/emqx/emqx/pull/2480>`_
+
+- 重构 flapping 代码
+
+  Github PR:
+  `emqx/emqx#2476 <https://github.com/emqx/emqx/pull/2476>`_
+
+emqx-management (plugin)
+------------------------
+
+问题修复:
+
+- 修复 listeners acceptors 的值没有正确获取的问题
+
+  Github PR:
+  `emqx/emqx-management#76 <https://github.com/emqx/emqx-management/pull/76>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能改进:
+
+- 支持规则动作参数的验证
+
+  Github PR:
+  `emqx/emqx-rule-engine#b28318 <https://github.com/emqx/emqx-rule-engine/commit/b283184dcbb207e8d58ac308c027a093a4f4ab88>`_
+
+- 删除资源时检查是否存在依赖
+
+  Github PR:
+  `emqx/emqx-rule-engine#fa75b9 <https://github.com/emqx/emqx-rule-engine/commit/fa75b952efb7951bc57242adc8e953dbbba6b2ed>`_
+
+- 从 republish 动作中移除 ``from`` 参数
+
+  Github PR:
+  `emqx/emqx-rule-engine#8721eb <https://github.com/emqx/emqx-rule-engine/commit/8721ebe583d5426f239b5b1f044fe381bf4ea0b7>`_
+
+- 修复了 SQL where 子句不能处理整数的问题
+
+  Github PR:
+  `emqx/emqx-rule-engine#c9c761 <https://github.com/emqx/emqx-rule-engine/commit/c9c7616f86019657861dff408854e9c5238d666b>`_
+
+emqx-storm (plugin)
+-------------------
+
+功能改进:
+
+- 支持 edge storm
+
+  Github Repository:
+  `emqx/emqx-storm <https://github.com/emqx/emqx-storm>`_
+
 .. _release_3.1-rc.3:
 
 -------------
@@ -16,7 +84,7 @@
 EMQ X 3.1-rc.3 版本发布。此版本改动主要包括规则引擎增强、错误修复。
 注意: 从此版本开始，新增 OpenSUSE 安装包，并且不再提供 Debian 7 安装包。
 
-功能改进：
+功能改进:
 
 - 支持对客户端进行 flapping 检测，以及禁止异常的客户端
 

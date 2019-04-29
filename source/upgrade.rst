@@ -5,19 +5,19 @@
 版本升级 (Upgrade)
 ==================
 
-.. _upgrade_3.0:
+.. _upgrade_3.1:
 
 -------------
-升级到3.0版本
+升级到3.1版本
 -------------
 
-.. NOTE:: 3.0版本全新设计了项目架构、配置方式与插件管理方式。2.x与1.x版本升级需要重新配置部署。
+.. NOTE:: 3.1版本全新设计了项目架构、配置方式与插件管理方式。2.x与1.x版本升级需要重新配置部署。
 
 升级流程:
 
-1. 下载解压3.0版本到新安装目录，例如 /opt/emqx-3.0/；
+1. 下载解压3.1版本到新安装目录，例如 /opt/emqx-3.1/；
 
-2. 参考旧版本 etc/vm.args、etc/emqttd.config 或 etc/emq.conf，配置3.0版本的 etc/emqx.conf；
+2. 参考旧版本 etc/vm.args、etc/emqttd.config 或 etc/emq.conf，配置3.1版本的 etc/emqx.conf；
 
 3. 重新配置插件 etc/plugins/${your-plugin}.conf；
 

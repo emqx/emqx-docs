@@ -47,7 +47,7 @@ MQTT Payload 也是一个 json 格式的字符串，更多的细节请参见 emq
 
 File: etc/emqx_lwm2m.conf::
 
-    lwm2m.port = 5783
+    lwm2m.port = 5683
        
     lwm2m.certfile = etc/certs/cert.pem
 
