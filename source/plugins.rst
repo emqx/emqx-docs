@@ -150,7 +150,7 @@ emqx_auth_clientid - ClientID 认证插件
 在 *EMQ X* 中所有有 ``_auth_`` 关键字的插件其主要职责有：
 
 1. **连接认证**: 控制某客户端是否具有连接 EMQ X 的权限
-2. **访问控制**: 控制某客户端是否具有 PUBLISH/SUBSCIRBE 操作的权限
+2. **访问控制**: 控制某客户端是否具有 Publish/Subscribe 操作的权限
 
 `emqx_auth_clientid`_ 目前只包含 **连接认证** 功能不包括 **访问控制** 。他会允许满足其配置中 ``clientid`` 成功登录。其中值得注意的是 ``password`` 以明文的方式进行添加记录，在存储入系统时会按照配置的 hash 算法加密后存入。客户端在连接时应该携带对应的密文进行连接。
 
@@ -318,14 +318,14 @@ HTTP API 返回值处理
 
 .. code:: bash
 
-    ## 允许PUBLISH/SUBSCRIBE：
+    ## 允许 Publish/Subscribe：
     HTTP Status Code: 200
 
     ## 忽略此次鉴权:
     HTTP Status Code: 200
     Body: ignore
 
-    ## 拒绝该次PUBLISH/SUBSCRIBE:
+    ## 拒绝该次 Publish/Subscribe:
     HTTP Status Code: Except 200
 
 
@@ -799,7 +799,7 @@ emqx_lua_hook: Lua 插件
 emqx_retainer: Retainer 插件
 ----------------------------
 
-`emqx_retainer`_ 该插件设置为默认启动，为 *EMQ X* 提供 PUBLISH 的 Retained 类型的消息支持。它会将所有主题的 Retained 消息存储在集群的数据库中，并待有客户端订阅该主题的时候将该消息投递出去。
+`emqx_retainer`_ 该插件设置为默认启动，为 *EMQ X* 提供 Retained 类型的消息支持。它会将所有主题的 Retained 消息存储在集群的数据库中，并待有客户端订阅该主题的时候将该消息投递出去。
 
 
 配置 Retainer 插件
