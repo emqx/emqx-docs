@@ -1,12 +1,61 @@
 
 .. _guide:
 
-
 用户指南 (User Guide)
 ^^^^^^^^^^^^^^^^^^^^^^
 
-.. _authentication:
+.. _start:
 
+程序启动
+---------
+
+下载地址: https://www.emqx.io/downloads/broker?osType=Linux
+
+程序包下载后，可直接解压启动运行，例如 Mac 平台:
+
+.. code-block:: bash
+
+    unzip emqx-macosx-v3.1.0.zip && cd emqx
+
+    # 启动emqx
+    ./bin/emqx start
+
+    # 检查运行状态
+    ./bin/emqx_ctl status
+
+*EMQ X* R3.0 消息服务器默认占用的 TCP 端口包括:
+
++-----------+-----------------------------------+
+| 1883      | MQTT 协议端口                     |
++-----------+-----------------------------------+
+| 8883      | MQTT/SSL 端口                     |
++-----------+-----------------------------------+
+| 8083      | MQTT/WebSocket 端口               |
++-----------+-----------------------------------+
+| 8080      | HTTP API 端口                     |
++-----------+-----------------------------------+
+| 18083     | Dashboard 管理控制台端口          |
++-----------+-----------------------------------+
+
+.. _pubsub:
+
+MQTT 发布订阅
+-------------
+
+MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器，目前支持 MQTT `v3.1.1 <http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html>`_ 和 `v5.0 <http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html>`_:
+
+.. image:: ./_static/images/pubsub_concept.png
+
+*EMQ X* 启动成功后，任何设备或终端的 MQTT 客户端，可通过 MQTT 协议连接到服务器，通过 PUBLISH/SUBSCRIBE 进行交换消息。
+
+MQTT 协议客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
+
+例如，mosquitto_sub/pub 命令行发布订阅消息::
+
+    mosquitto_sub -h 127.0.0.1 -p 1883 -t topic -q 2
+    mosquitto_pub -h 127.0.0.1 -p 1883 -t topic -q 1 -m "Hello, MQTT!"
+
+.. _authentication:
 
 MQTT 认证/访问控制
 ------------------
@@ -18,14 +67,12 @@ MQTT 认证/访问控制
 1. **连接认证**: *EMQ X* 会校验每个连接上的客户端是否具有接入系统的权限，若没有则会断开该连接
 2. **访问控制**: *EMQ X* 会校验客户端每个 *发布/订阅(PUBLISH/SUBSCRIBE)* 的权限，以 *拒绝/允许* 此处操作
 
-
 认证(Authentication)
 >>>>>>>>>>>>>>>>>>>>>
 
 *EMQ X* 消息服务器认证由一系列认证插件(Plugin)提供，系统支持按用户名密码、ClientID 或匿名认证。
 
-
-系统默认开启匿名认证(anonymous)，通过加载认证插件可开启的多个认证模块组成认证链::
+系统默认开启匿名认证(Anonymous)，通过加载认证插件可开启的多个认证模块组成认证链::
 
                ----------------           ----------------           ------------
     Client --> | Username认证 | -ignore-> | ClientID认证 | -ignore-> | 匿名认证 |
@@ -34,19 +81,15 @@ MQTT 认证/访问控制
                      \|/                       \|/                       \|/
                 allow | deny              allow | deny              allow | deny
 
-
 **开启匿名认证**
 
 etc/emqx.conf 配置启用匿名认证:
 
 .. code:: properties
 
-    ## Allow anonymous authentication by default if no auth plugins loaded.
-    ## Notice: Disable the option in production deployment!
-    ##
+    允许匿名访问
     ## Value: true | false
     allow_anonymous = true
-
 
 .. _acl:
 
@@ -69,21 +112,17 @@ MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控�
                  \|/                    \|/                    \|/
             allow | deny           allow | deny           allow | deny
 
-
 **默认访问控制设置**
-
 
 *EMQ X* 消息服务器默认访问控制，在 etc/emqx.conf 中设置:
 
 .. code:: properties
 
-    ## Allow or deny if no ACL rules matched.
-    ##
+    ## 设置所有 ACL 规则都不能匹配时是否允许访问
     ## Value: allow | deny
     acl_nomatch = allow
 
-    ## Default ACL File.
-    ##
+    ## 设置存储 ACL 规则的默认文件
     ## Value: File Name
     acl_file = etc/acl.conf
 
@@ -91,16 +130,16 @@ ACL 规则定义在 etc/acl.conf，EMQ X 启动时加载到内存:
 
 .. code:: erlang
 
-    %% Allow 'dashboard' to subscribe '$SYS/#'
+    %% 允许 'dashboard' 用户订阅 '$SYS/#'
     {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
-    %% Allow clients from localhost to subscribe any topics
+    %% 允许本机用户发布订阅全部主题
     {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
 
-    %% Deny clients to subscribe '$SYS#' and '#'
+    %% 拒绝除本机用户以外的其他用户订阅 '$SYS/#' 与 '#' 主题
     {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
 
-    %% Allow all by default
+    %% 允许上述规则以外的任何情形
     {allow, all}.
 
 
@@ -134,130 +173,6 @@ EMQ X 3.1 版本提供的认证插件包括:
 .. note:: auth 插件可以同时启动多个。每次检查的时候，按照优先级从高到低依次检查，同一优先级的，先启动的插件先检查。(内置默认的 acl.conf 优先级为-1，各个插件默认为0)
 
 此外 *EMQ X* 还支持使用 **PSK (Pre-shared Key)** 的方式来控制客户端的接入，但它并不是使用的上述的 *连接认证* 链的方式，而是在 SSL 握手期间进行验证。详情参考 `Pre-shared Key <https://en.wikipedia.org/wiki/Pre-shared_key>`_ 和 `emqx_psk_file`_
-
-
-MQTT 发布订阅
--------------
-
-MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器，目前支持 MQTT `v3.1.1 <http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html>`_ 和 `v5.0 <http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html>`_:
-
-.. image:: ./_static/images/pubsub_concept.png
-
-*EMQ X* 启动成功后，任何设备或终端的 MQTT 客户端，可通过 MQTT 协议连接到服务器，通过 PUBLISH/SUBSCRIBE 进行交换消息。
-
-MQTT 协议客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
-
-例如，mosquitto_sub/pub 命令行发布订阅消息::
-
-    mosquitto_sub -t topic -q 2
-    mosquitto_pub -t topic -q 1 -m "Hello, MQTT!"
-
-*EMQ X* 对于 MQTT 协议服务所监听的端口等配置，都可在 etc/emqx.conf 文件中设置:
-
-.. code:: properties
-
-    ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
-    listener.tcp.external = 0.0.0.0:1883
-
-    ## Size of acceptor pool
-    listener.tcp.external.acceptors = 8
-
-    ## Maximum number of concurrent clients
-    listener.tcp.external.max_connections = 1024000
-
-    ## Maximum external connections per second.
-    ##
-    ## Value: Number
-    listener.tcp.external.max_conn_rate = 1000
-
-MQTT/SSL 监听器，缺省端口8883:
-
-.. code:: properties
-
-    ## SSL Listener: 8883, 127.0.0.1:8883, ::1:8883
-    listener.ssl.external = 8883
-
-    ## Size of acceptor pool
-    listener.ssl.external.acceptors = 16
-
-    ## Maximum number of concurrent clients
-    listener.ssl.external.max_connections = 102400
-
-    ## Maximum MQTT/SSL connections per second.
-    ##
-    ## Value: Number
-    listener.ssl.external.max_conn_rate = 500
-
-.. _http_publish:
-
-
-HTTP 发布接口
--------------
-
-*EMQ X* 消息服务器提供了一个 HTTP 发布接口，应用服务器或 Web 服务器可通过该接口发布 MQTT 消息::
-
-    HTTP POST http://host:8080/api/v3/mqtt/publish
-
-Web 服务器例如 PHP/Java/Python/NodeJS 或 Ruby on Rails，可通过 HTTP POST 请求发布 MQTT 消息:
-
-.. code:: bash
-
-    curl -v --basic -u user:passwd -H "Content-Type: application/json" -d '{"qos":1, "retain": false, "topic":"world", "payload":"test" , "client_id": "C_1492145414740"}'  -k http://localhost:8080/api/v3/mqtt/publish
-
-HTTP 接口参数:
-
-+----------+----------------------+
-| 参数     | 说明                 |
-+==========+======================+
-| client_id| MQTT 客户端 ID       |
-+----------+----------------------+
-| qos      | QoS: 0 | 1 | 2       |
-+----------+----------------------+
-| retain   | Retain: true | false |
-+----------+----------------------+
-| topic    | 主题(Topic)          |
-+----------+----------------------+
-| payload  | 消息载荷             |
-+----------+----------------------+
-
-.. NOTE::
-
-    HTTP 发布接口采用 `Basic <https://en.wikipedia.org/wiki/Basic_access_authentication>`_ 认证。上例中的 ``user`` 和 ``passwd`` 是来自于 Dashboard 下的 Applications 内的 AppId 和 其密码
-
-
-MQTT WebSocket 连接
--------------------
-
-*EMQ X* 还支持 WebSocket 连接，Web 浏览器可直接通过 WebSocket 连接至服务器:
-
-+-------------------------+----------------------------+
-| WebSocket URI:          | ws(s)://host:8083/mqtt     |
-+-------------------------+----------------------------+
-| Sec-WebSocket-Protocol: | 'mqttv3.1' or 'mqttv3.1.1' |
-+-------------------------+----------------------------+
-
-Dashboard 插件提供了一个 MQTT WebSocket 连接的测试页面::
-
-    http://127.0.0.1:18083/#/websocket
-
-*EMQ X* 通过内嵌的 HTTP 服务器，实现 MQTT/WebSocket，etc/emqx.conf 设置:
-
-.. code:: properties
-
-    ## MQTT/WebSocket Listener
-    listener.ws.external = 8083
-    listener.ws.external.acceptors = 4
-    ## Maximum number of concurrent MQTT/WebSocket connections.
-    ##
-    ## Value: Number
-    listener.ws.external.max_connections = 102400
-
-    ## Maximum MQTT/WebSocket connections per second.
-    ##
-    ## Value: Number
-    listener.ws.external.max_conn_rate = 1000
-
-
 
 .. _shared_sub:
 
@@ -305,6 +220,318 @@ Dashboard 插件提供了一个 MQTT WebSocket 连接的测试页面::
 
 .. note:: 当所有的订阅者都不在线时，仍会挑选一个订阅者，并存至其 Session 的消息队列中
 
+
+.. _bridge:
+
+节点桥接 (Bridge)
+------------------
+
+EMQ X 节点间桥接
+>>>>>>>>>>>>>>>>>
+
+所谓 **桥接** 的概念是指 EMQ X 支持将自身某类主题的消息通过某种方式转发到另一个 MQTT Broker
+
+**桥接** 与 **集群** 的不同在于：桥接不会复制主题树与路由表，只根据桥接规则转发 MQTT 消息。
+
+目前 EMQ X 支持的桥接方式有:
+
+- RPC 桥接：RPC 桥接只支持消息转发，不支持订阅远程节点的主题去同步数据
+- MQTT 桥接：MQTT 桥接同时支持转发和通过订阅主题来实现数据同步两种方式
+
+其概念如下图所示:
+
+.. image:: ./_static/images/bridge.png
+
+此外 *EMQ X* 消息服务器支持多节点桥接模式互联::
+
+                  ---------                     ---------                     ---------
+                  Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
+                  ---------                     ---------                     ---------
+
+在 EMQ X 中，通过修改 ``etc/emqx.conf`` 来配置 bridge。EMQ X 会根据不同的 name 来区分不同的 bridge。例如::
+
+    ## Bridge address: node name for local bridge, host:port for remote.
+    bridge.aws.address = 127.0.0.1:1883
+
+该项配置声明了一个名为 ``aws`` 的 bridge 并指定以 MQTT 的方式桥接到 ``127.0.0.1:1883`` 这台 MQTT 服务器
+
+在需要创建多个 bridge 时，可以先复制其全部的配置项，在通过使用不同的 name 来标示（比如 bridge.$name.address 其中 $name 指代的为 bridge 的名称）
+
+
+接下来俩个小节，表述了如何创建 RPC/MQTT 方式的桥接，并创建一条转发传感器(sensor)主题消息的转发规则。假设在俩台主机上启动了两个 EMQ X 节点：
+
++---------+---------------------+-----------+
+| 名称    | 节点                | MQTT 端口 |
++---------+---------------------+-----------+
+| emqx1   | emqx1@192.168.1.1   | 1883      |
++---------+---------------------+-----------+
+| emqx2   | emqx2@192.168.1.2   | 1883      |
++---------+---------------------+-----------+
+
+
+EMQ X 节点 RPC 桥接配置
+>>>>>>>>>>>>>>>>>>>>>>>
+
+以下是 RPC 桥接的基本配置，最简单的 RPC 桥接只需要配置以下三项就可以了::
+
+    ## 桥接地址： 使用节点名（nodename@host）则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
+    bridge.emqx2.address = emqx2@192.168.1.2
+
+    ## 转发消息的主题
+    bridge.emqx2.forwards = sensor1/#,sensor2/#
+
+    ## 桥接的 mountpoint(挂载点)
+    bridge.emqx2.mountpoint = bridge/emqx2/${node}/
+
+本地 emqx1 节点接收到的消息如果匹配主题 ``sersor1/#``, ``sensor2/#``, 这些消息会被转发到远程 emqx2 节点的 ``sensor1/#``, ``sensor2/#`` 主题上。
+
+forwards 用于指定主题，转发到本地节点指定 forwards 上的消息都会被转发到远程节点上。
+
+mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为 `sensor1/hello` 的消息, 到达远程节点时主题为 `bridge/emqx2/emqx1@192.168.1.1/sensor1/hello` 。
+
+RPC 桥接的局限性：
+
+1. EMQ X 的 RPC 桥接只能将本地的消息转发到远程桥接节点上，无法将远程桥接节点的消息同步到本地节点上；
+
+2. RPC 桥接只能将两个 EMQ X 桥接在一起，无法桥接 EMQ X 到其他的 MQTT Broker 上。
+
+EMQ X 节点 MQTT 桥接配置
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+EMQ X 3.0 正式引入了 MQTT Bridge，使 EMQ X 可以桥接任意 MQTT Broker ，同时由于 MQTT 协议本身的特性， EMQ X 可以通过 MQTT Bridge 去订阅远程 MQTT Broker 的主题，再将远程 MQTT Broker 的消息同步到本地。
+
+EMQ X 的 MQTT Bridge 原理: 通过在 EMQ X Broker 上创建一个 MQTT 客户端，MQTT 客户端会连接远程的 MQTT Broker，因此在 MQTT Bridge 的配置中，需要去设置 EMQ X Bridge 作为 MQTT 客户端连接时所须要的字段::
+
+    ## 桥接地址： 使用节点名则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
+    bridge.emqx2.address = 192.168.1.2:1883
+
+    ## 桥接的协议版本
+    ## 枚举值: mqttv3 | mqttv4 | mqttv5
+    bridge.emqx2.proto_ver = mqttv4
+
+    ## mqtt 客户端的 client_id
+    bridge.emqx2.client_id = bridge_emq
+
+    ## mqtt 客户端的 clean_start 字段
+    ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
+    bridge.emqx2.clean_start = true
+
+    ## mqtt 客户端的 username 字段
+    bridge.emqx2.username = user
+
+    ## mqtt 客户端的 password 字段
+    bridge.emqx2.password = passwd
+
+    ## mqtt 客户端是否使用 ssl 来连接远程服务器
+    bridge.emqx2.ssl = off
+
+    ## 客户端 SSL 连接的 CA 证书 (PEM格式)
+    bridge.emqx2.cacertfile = etc/certs/cacert.pem
+
+    ## 客户端 SSL 连接的 SSL 证书
+    bridge.emqx2.certfile = etc/certs/client-cert.pem
+
+    ## 客户端 SSL 连接的密钥文件
+    bridge.emqx2.keyfile = etc/certs/client-key.pem
+
+    ## SSL 加密方式
+    bridge.emqx2.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
+
+    ## TLS PSK 的密码
+    ## 注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers' 不能同时配置
+    ##
+    ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
+    ## bridge.emqx2.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+
+    ## 客户端的心跳间隔
+    bridge.emqx2.keepalive = 60s
+
+    ## 支持的 TLS 版本
+    bridge.emqx2.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+
+    ## 转发消息的主题
+    bridge.emqx2.forwards = sensor1/#,sensor2/#
+
+    ## 桥接的 mountpoint(挂载点)
+    bridge.emqx2.mountpoint = bridge/emqx2/${node}/
+
+    ## 用于桥接的订阅主题
+    bridge.emqx2.subscription.1.topic = cmd/topic1
+
+    ## 用于桥接的订阅 qos
+    bridge.emqx2.subscription.1.qos = 1
+
+    ## 用于桥接的订阅主题
+    bridge.emqx2.subscription.2.topic = cmd/topic2
+
+    ## 用于桥接的订阅 qos
+    bridge.emqx2.subscription.2.qos = 1
+
+    ## 桥接的重连间隔
+    ## 默认: 30秒
+    bridge.emqx2.reconnect_interval = 30s
+
+    ## QoS1 消息的重传间隔
+    bridge.emqx2.retry_interval = 20s
+
+    ## Inflight 大小.
+    bridge.emqx2.max_inflight_batches = 32
+
+EMQ X 桥接缓存配置
+>>>>>>>>>>>>>>>>>>
+
+EMQ X 的 Bridge 拥有消息缓存机制，缓存机制同时适用于 RPC 桥接和 MQTT 桥接，当 Bridge 断开（如网络连接不稳定的情况）时，可将 forwards 主题的消息缓存到本地的消息队列上。等到桥接恢复时，再把消息重新转发到远程节点上。关于缓存队列的配置如下::
+
+    ## emqx_bridge 内部用于 batch 的消息数量
+    bridge.emqx2.queue.batch_count_limit = 32
+
+    ## emqx_bridge 内部用于 batch 的消息字节数
+    bridge.emqx2.queue.batch_bytes_limit = 1000MB
+
+    ## 放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq
+    ## 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上。
+    bridge.emqx2.queue.replayq_dir = data/emqx_emqx2_bridge/
+
+    ## Replayq 数据段大小
+    bridge.emqx2.queue.replayq_seg_bytes = 10MB
+
+``bridge.emqx2.queue.replayq_dir`` 是用于指定 bridge 存储队列的路径的配置参数。
+
+``bridge.emqx2.queue.replayq_seg_bytes`` 是用于指定缓存在磁盘上的消息队列的最大单个文件的大小，如果消息队列大小超出指定值的话，会创建新的文件来存储消息队列。
+
+EMQ X 桥接的命令行使用
+>>>>>>>>>>>>>>>>>>>>>>
+
+桥接 CLI 命令:
+
+.. code-block:: bash
+
+    $ cd emqx1/ && ./bin/emqx_ctl bridges
+    bridges list                                    # List bridges
+    bridges start <Name>                            # Start a bridge
+    bridges stop <Name>                             # Stop a bridge
+    bridges forwards <Name>                         # Show a bridge forward topic
+    bridges add-forward <Name> <Topic>              # Add bridge forward topic
+    bridges del-forward <Name> <Topic>              # Delete bridge forward topic
+    bridges subscriptions <Name>                    # Show a bridge subscriptions topic
+    bridges add-subscription <Name> <Topic> <Qos>   # Add bridge subscriptions topic
+
+列出全部 bridge 状态
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges list
+    name: emqx     status: Stopped
+
+启动指定 bridge
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges start emqx
+    Start bridge successfully.
+
+停止指定 bridge
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges stop emqx
+    Stop bridge successfully.
+
+列出指定 bridge 的转发主题
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges forwards emqx
+    topic:   topic1/#
+    topic:   topic2/#
+
+添加指定 bridge 的转发主题
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges add-forwards emqx topic3/#
+    Add-forward topic successfully.
+
+删除指定 bridge 的转发主题
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges del-forwards emqx topic3/#
+    Del-forward topic successfully.
+
+列出指定 bridge 的订阅
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges subscriptions emqx
+    topic: cmd/topic1, qos: 1
+    topic: cmd/topic2, qos: 1
+
+添加指定 bridge 的订阅主题
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges add-subscription emqx cmd/topic3 1
+    Add-subscription topic successfully.
+
+删除指定 bridge 的订阅主题
+
+.. code-block:: bash
+
+    $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic3
+    Del-subscription topic successfully.
+
+注: 如果有创建多个 Bridge 的需求，需要复制默认的 Bridge 配置，再拷贝到 emqx.conf 中，根据需求重命名 bridge.${name}.config 中的 name 即可。
+
+.. _http_publish:
+
+HTTP 发布接口
+-------------
+
+*EMQ X* 消息服务器提供了一个 HTTP 发布接口，应用服务器或 Web 服务器可通过该接口发布 MQTT 消息::
+
+    HTTP POST http://host:8080/api/v3/mqtt/publish
+
+Web 服务器例如 PHP/Java/Python/NodeJS 或 Ruby on Rails，可通过 HTTP POST 请求发布 MQTT 消息:
+
+.. code:: bash
+
+    curl -v --basic -u user:passwd -H "Content-Type: application/json" -d '{"qos":1, "retain": false, "topic":"world", "payload":"test" , "client_id": "C_1492145414740"}'  -k http://localhost:8080/api/v3/mqtt/publish
+
+HTTP 接口参数:
+
++----------+----------------------+
+| 参数     | 说明                 |
++==========+======================+
+| client_id| MQTT 客户端 ID       |
++----------+----------------------+
+| qos      | QoS: 0 | 1 | 2       |
++----------+----------------------+
+| retain   | Retain: true | false |
++----------+----------------------+
+| topic    | 主题(Topic)          |
++----------+----------------------+
+| payload  | 消息载荷             |
++----------+----------------------+
+
+.. NOTE::
+
+    HTTP 发布接口采用 `Basic <https://en.wikipedia.org/wiki/Basic_access_authentication>`_ 认证。上例中的 ``user`` 和 ``password`` 是来自于 Dashboard 下的 Applications 内的 AppId 和密码
+
+MQTT WebSocket 连接
+-------------------
+
+*EMQ X* 还支持 WebSocket 连接，Web 浏览器可直接通过 WebSocket 连接至服务器:
+
++-------------------------+----------------------------+
+| WebSocket URI:          | ws(s)://host:8083/mqtt     |
++-------------------------+----------------------------+
+| Sec-WebSocket-Protocol: | 'mqttv3.1' or 'mqttv3.1.1' |
++-------------------------+----------------------------+
+
+Dashboard 插件提供了一个 MQTT WebSocket 连接的测试页面::
+
+    http://127.0.0.1:18083/#/websocket
 
 .. _sys_topic:
 
@@ -395,14 +622,12 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
         "ts":1554047291
     }
 
-
 .. _sys_stats:
 
 系统统计(Statistics)
 >>>>>>>>>>>>>>>>>>>>
 
 系统主题前缀: $SYS/brokers/${node}/stats/
-
 
 客户端统计
 ::::::::::
@@ -414,7 +639,6 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 +---------------------+---------------------------------------------+
 | connections/max     | 最大客户端数量                              |
 +---------------------+---------------------------------------------+
-
 
 会话统计
 ::::::::
@@ -430,7 +654,6 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 +-----------------------------+---------------------------------------------+
 | sessions/persistent/max     | 最大持久会话数量                            |
 +-----------------------------+---------------------------------------------+
-
 
 订阅统计
 ::::::::
@@ -455,7 +678,6 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 | subscriptions/shared/max        | 当前共享订阅总数                            |
 +---------------------------------+---------------------------------------------+
 
-
 主题统计
 ::::::::
 
@@ -466,7 +688,6 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 +---------------------+---------------------------------------------+
 | topics/max          | 最大 Topic 数量                             |
 +---------------------+---------------------------------------------+
-
 
 路由统计
 ::::::::
@@ -480,7 +701,6 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 +---------------------+---------------------------------------------+
 
 .. note:: ``topics/count`` 和 ``topics/max`` 与 ``routes/count`` 和 ``routes/max`` 数值上是想等的
-
 
 收发流量/报文/消息统计
 >>>>>>>>>>>>>>>>>>>>>>
@@ -559,7 +779,6 @@ MQTT报文收发统计
 | packets/auth                | 累计接收Auth 报文                           |
 +-----------------------------+---------------------------------------------+
 
-
 MQTT 消息收发统计
 :::::::::::::::::
 
@@ -633,7 +852,6 @@ Sysmon - 系统监控
 
 .. _trace:
 
-
 追踪
 ----
 
@@ -679,226 +897,3 @@ EMQ X 消息服务器支持追踪来自某个客户端(Client)，或者发布到
 .. _emqx_auth_mongo:    https://github.com/emqx/emqx-auth-mongo
 .. _emqx_auth_jwt:      https://github.com/emqx/emqx-auth-jwt
 .. _emqx_psk_file:      https://github.com/emqx/emqx-psk-file
-
-.. _rule_engine:
-
-
-规则引擎
----------
-
-规则引擎用于配置消息或事件的业务规则。
-
-规则引擎相关的概念包括: 规则(rule)、动作(rule-action)、资源类型(resource-type) 和 资源(resource)。
-
-- 规则 (Rule): 规则由 SQL 语句和动作列表组成。SQL 语句用于筛选和转换原始数据，动作列表包含一个或多个动作的名字及其参数。
-- 动作 (Action): 动作由 emqx (称为 '内置动作') 或 emqx 插件提供。动作定义了一个针对数据的操作，在规则筛选和转换原始数据之后，对结果执行这个操作。动作可以接受零个或者多个参数；动作可以绑定或不绑定资源。例如，built_in:inspect_action 不需要绑定资源，它只是简单打印数据内容。而 web_hook:publish_action 需要绑定一个 web_hook 类型的资源，此资源中配置了目的 URL。
-- 资源类型 (Resource Type): 资源类型由 emqx (称为 '内置资源类型') 或 emqx 插件提供。资源类型是资源的静态定义，描述了此类型资源需要的配置项。
-- 资源 (Resource): 资源是通过资源类型为模板实例化出来的对象，保存了与资源相关的配置以及数据库连接等。
-
-规则、动作、资源的关系::
-
-    规则: {
-        SQL 语句,
-        动作列表: [
-            {
-                动作名字,
-                动作参数: {
-                    Key: Value
-                },
-                绑定资源: {
-                    资源名字,
-                    资源配置项: {
-                        Key: Value
-                    }
-                }
-            }
-        ]
-    }
-
-规则和动作的钩子 (Hook)
->>>>>>>>>>>>>>>>>>>>>>>
-
-钩子(emqx hook) 包括 ``message.publish``, ``client.subscribe``, ``client.connected`` 等。详见：:ref:`plugins`。
-
-为使用方便，emqx 定义了几个别名，分别表示一组钩子::
-
-- 消息钩子 ('$messages'): 目前特指 ``message.publish``。
-- 事件钩子 ('$events'): 不是消息的都是事件。也就是说，事件钩子代表所有不为 message.publish 的钩子
-- 任意钩子 ('$any'): 代表所有钩子，包括消息钩子和事件钩子
-
-一个规则需要挂载到某个钩子上，比如，挂载到 ``message.publish`` 的规则只能处理 PUBLISH 消息；挂载到 ``client.connected`` 上的规则只能处理终端上线事件。这可以在创建规则的时候，通过 ``for`` 字段指定。
-
-相应的，某个动作可以处理来自一种或多种钩子的消息。资源/动作的提供模块在定义动作时，通过 ``for`` 字段指定动作可以处理哪些消息。
-
-消息规则和事件规则
->>>>>>>>>>>>>>>>>>>>
-
-挂载了 ``message.publish`` 钩子的规则称作 ``消息规则`` ，挂载了其他钩子的规则叫做 ``事件规则``。
-
-规则引擎目前主要关注消息规则，支持通过 SQL 语句对消息进行条件筛选、预处理、转换。
-而对于事件规则，目前不支持 SQL 语句，仅提供了简单的事件转发等功能。
-
-规则 SQL 语句
->>>>>>>>>>>>>>
-
-规则 SQL 语句用于从原始数据中，根据条件筛选出字段，并进行预处理和转换。
-
-规则 SQL 语句示例:
-
-对于 topic 为 "t/a" 的消息，从原始数据筛选出所有字段 ::
-
-    SELECT * FROM "t/a"
-
-对于 topic 能够匹配到 "t/#" 的消息，从原始数据筛选出所有字段 ::
-
-    SELECT * FROM "t/#"
-
-对于 topic 能够匹配到 "t/#" 的消息，从原始数据筛选出 qos，username 和 client_id 字段 ::
-
-    SELECT qos, username, client_id FROM "t/#"
-
-对于 topic 能够匹配到 "t/#" 的消息，从原始数据筛选出 username 字段，并且筛选条件为 username = 'Steven'::
-
-    SELECT username FROM "t/#" WHERE username='Steven'
-
-对于 topic 能够匹配到 "t/#" 的消息，从原始数据的 JSON 消息体(payload) 中筛选出 x 字段，并创建别名 x 以便在 WHERE 子句中使用。此 SQL 语句可以匹配到消息体 {"x": 1}, 但不能匹配到消息体 {"x": 2} ::
-
-    SELECT payload.x as x FROM "t/#" WHERE x=1
-
-类似于上面的 SQL 语句，但嵌套地提取消息体中的数据，将 {"x": {"y": 1}} 中的 1 提取出来赋值给别名 a::
-
-    SELECT payload.x.y as a FROM "t/#" WHERE a=1
-
-
-消息规则中，SELECT 子句可用的字段有:
-
-+-----------+------------------------------------+
-| client_id | ClientID                           |
-+-----------+------------------------------------+
-| username  | 用户名                             |
-+-----------+------------------------------------+
-| event     | 事件类型，固定为 "message_publish" |
-+-----------+------------------------------------+
-| flags     | MQTT 消息的 flags                  |
-+-----------+------------------------------------+
-| id        | MQTT 消息 ID                       |
-+-----------+------------------------------------+
-| payload   | MQTT 消息体                        |
-+-----------+------------------------------------+
-| peername  | 客户端的 IPAddress 和 Port         |
-+-----------+------------------------------------+
-| qos       | MQTT 消息的 QoS                    |
-+-----------+------------------------------------+
-| timestamp | 时间戳                             |
-+-----------+------------------------------------+
-
-.. note:: SQL 语句目前仅用于事件规则。
-
-.. note:: FROM 子句后面接 topic，并且需要用双引号("") 引起来。
-
-.. note:: WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 ('') 引起来。
-
-.. note:: SELECT 子句中，若使用 "." 符号对 payload 进行嵌套选择，必须保证 payload 为 JSON 格式。
-
-创建规则举例
-------------
-
-例: 创建 Inspect 规则
->>>>>>>>>>>>>>>>>>>>>>>
-
-创建一个测试规则，当任意发送到 't/a' 主题时执行 ``built_in:inspect_action`` 动作，并打印动作中使用的参数::
-
-    $ ./bin/emqx_ctl rules create \
-      'test1' \
-      'message.publish' \
-      'select * from "t/a"' \
-      '[{"name":"built_in:inspect_action", "params": {"a": 1}}]' \
-      -d 'Rule for debug'
-
-    Rule test1:1556178701774551466 created
-
-接下来当发送 "hello" 消息到主题 't/a' 时，上面创建的 "test1:1556178701774551466" 规则匹配成功，然后 "built_in:inspect_action" 动作被触发，将消息的内容打印到 emqx 控制台::
-
-    $ tail -f log/erlang.log.1
-
-    (emqx@127.0.0.1)1> [built_in:inspect_action]
-        Selected Data: #{client_id => <<"clientId-1111">>,
-                         event => message_publish,
-                         flags => #{dup => false,retain => false},
-                         id => <<"5875619E8E728F442000007050002">>,
-                         payload => <<"hello">>,
-                         peername => <<"127.0.0.1:54333">>,qos => 0,
-                         timestamp => 1556178755184,topic => <<"t/a">>,
-                         username => <<"shawn">>}
-        Envs: #{event => message_publish,
-                flags => #{dup => false,retain => false},
-                from => <<"clientId-1111">>,
-                headers =>
-                    #{allow_publish => true,
-                      peername => {{127,0,0,1},54333},
-                      username => <<"shawn">>},
-                id => <<0,5,135,86,25,232,231,40,244,66,0,0,7,5,0,2>>,
-                payload => <<"hello">>,qos => 0,
-                timestamp => {1556,178755,184441},
-                topic => <<"t/a">>}
-        Action Init Params: #{<<"a">> => 1}
-
-``Selected Data`` 列出的是 SQL 规则筛选后的字段，由于我们用的是 ``select *``，所以这里会列出所有可用的字段。
-``Envs`` 是动作内部可以使用的环境变量。
-``Action Init Params`` 是初始化动作的时候，我们传递给动作的初始参数。
-
-
-例: 创建 WebHook 规则
->>>>>>>>>>>>>>>>>>>>>>>
-
-本例创建一个规则："将所有发送自 client-id='Steven' 的消息，转发到地址为 'http://127.0.0.1:9910' 的 Web 服务器":
-
-- 规则的筛选条件为: "发送自 client-id='Steven' 的 PUBLISH 消息中的 payload 字段";
-- 动作是: "转发到地址为 'http://127.0.0.1:9910' 的 Web 服务器";
-- 资源类型是: WebHook;
-- 资源是: "到 url='http://127.0.0.1:9910' 的 WebHook 连接资源"。
-
-0. 我们使用简单的 nc 命令开启一个 Listening TCP 端口，模拟 HTTP 服务器::
-
-    $ echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l localhost 9910
-
-1. 使用 WebHook 类型创建一个资源，并配置资源参数 url::
-
-    ## 列出当前所有可用的资源类型，确保 'web_hook' 资源类型已存在
-    $ ./bin/emqx_ctl resource-types list
-
-    ## 使用类型 'web_hook' 创建一个新的资源，并配置 "url"="http://127.0.0.1:9910"
-    $ ./bin/emqx_ctl resources create \
-      'webhook1' \
-      'web_hook' \
-      -c '{"url": "http://127.0.0.1:9910", "headers": {"token":"axfw34y235wrq234t4ersgw4t"}, "method": "POST"}'
-
-    Resource web_hook:webhook1 created
-
-2. 然后创建规则，并选择规则的动作为 'web_hook:publish_action'::
-
-    ## 列出当前所有可用的动作，确保 'web_hook:publish_action' 动作已存在
-    $ ./bin/emqx_ctl rule-actions list
-
-    ## 创建名为 steven_msg_to_http 的规则，选择 web_hook:publish_action 动作，
-    ## 并通过"$resource" 参数将 web_hook:webhook1 资源绑定到动作上。
-    $ ./bin/emqx_ctl rules create \
-     'steven_msg_to_http' \
-     'message.publish' \
-     "SELECT username as u, payload FROM \"#\" where u='Steven'" \
-     '[{"name":"web_hook:publish_action", "params": {"$resource":  "web_hook:webhook1"}}]' \
-     -d "Forward publish msgs from steven to webserver"
-
-3. 现在使用 MQTT Client 连接 emqx broker, username 为 "Steven"。然后发送 "hello" 到任意主题，上面创建的规则就会被触发，webserver 收到消息并回复 200 OK::
-
-    $ echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l localhost 9910
-
-    POST / HTTP/1.1
-    content-type: application/json
-    content-length: 32
-    te:
-    host: 127.0.0.1:9910
-    connection: keep-alive
-    token: axfw34y235wrq234t4ersgw4t
-
-    {"payload":"hello","u":"Steven"}
