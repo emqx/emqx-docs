@@ -1293,7 +1293,7 @@ API 定义::
 
 请求示例::
 
-    GET api/v3/routes//t
+    GET api/v3/routes/t
 
 返回数据:
 
@@ -1396,9 +1396,6 @@ API 定义::
 
   {
     "topic": "test_topic",
-    "payload": "hello",
-    "qos": 1,
-    "retain": false,
     "client_id": "mqttjs_ab9069449e"
   }
 
@@ -1498,7 +1495,7 @@ API 定义::
           },
           {
             "name": "emqx_coap",
-            "version": "v3.1-rc.2",
+            "version": "v3.1.0",
             "description": "EMQ X CoAP Gateway",
             "active": false
           },
@@ -1516,13 +1513,13 @@ API 定义::
           },
           {
             "name": "emqx_lua_hook",
-            "version": "v3.1-rc.2",
+            "version": "v3.1.0",
             "description": "EMQ X Lua Hooks",
             "active": false
           },
           {
             "name": "emqx_lwm2m",
-            "version": "v3.1-rc.2",
+            "version": "v3.1.0",
             "description": "EMQ X LwM2M Gateway",
             "active": false
           },
@@ -1546,13 +1543,13 @@ API 定义::
           },
           {
             "name": "emqx_recon",
-            "version": "v3.1-rc.2",
+            "version": "v3.1.0",
             "description": "EMQ X Recon Plugin",
             "active": true
           },
           {
             "name": "emqx_reloader",
-            "version": "v3.1-rc.2",
+            "version": "v3.1.0",
             "description": "EMQ X Reloader Plugin",
             "active": false
           },
@@ -1570,19 +1567,19 @@ API 定义::
           },
           {
             "name": "emqx_sn",
-            "version": "v3.1-rc.3",
+            "version": "v3.1.0",
             "description": "EMQ X MQTT SN Plugin",
             "active": false
           },
           {
             "name": "emqx_statsd",
-            "version": "v3.1-rc.3",
+            "version": "v3.1.0",
             "description": "Statsd for EMQ X",
             "active": false
           },
           {
             "name": "emqx_stomp",
-            "version": "v3.1-rc.2",
+            "version": "v3.1.0",
             "description": "EMQ X Stomp Protocol Plugin",
             "active": false
           },
@@ -1613,6 +1610,7 @@ API 定义::
 返回数据:
 
 .. code:: json
+
   {
     "code": 0,
     "data": [
@@ -1672,7 +1670,7 @@ API 定义::
       },
       {
         "name": "emqx_coap",
-        "version": "v3.1-rc.2",
+        "version": "v3.1.0",
         "description": "EMQ X CoAP Gateway",
         "active": false
       },
@@ -1690,13 +1688,13 @@ API 定义::
       },
       {
         "name": "emqx_lua_hook",
-        "version": "v3.1-rc.2",
+        "version": "v3.1.0",
         "description": "EMQ X Lua Hooks",
         "active": false
       },
       {
         "name": "emqx_lwm2m",
-        "version": "v3.1-rc.2",
+        "version": "v3.1.0",
         "description": "EMQ X LwM2M Gateway",
         "active": false
       },
@@ -1720,13 +1718,13 @@ API 定义::
       },
       {
         "name": "emqx_recon",
-        "version": "v3.1-rc.2",
+        "version": "v3.1.0",
         "description": "EMQ X Recon Plugin",
         "active": true
       },
       {
         "name": "emqx_reloader",
-        "version": "v3.1-rc.2",
+        "version": "v3.1.0",
         "description": "EMQ X Reloader Plugin",
         "active": false
       },
@@ -1744,19 +1742,19 @@ API 定义::
       },
       {
         "name": "emqx_sn",
-        "version": "v3.1-rc.3",
+        "version": "v3.1.0",
         "description": "EMQ X MQTT SN Plugin",
         "active": false
       },
       {
         "name": "emqx_statsd",
-        "version": "v3.1-rc.3",
+        "version": "v3.1.0",
         "description": "Statsd for EMQ X",
         "active": false
       },
       {
         "name": "emqx_stomp",
-        "version": "v3.1-rc.2",
+        "version": "v3.1.0",
         "description": "EMQ X Stomp Protocol Plugin",
         "active": false
       },
@@ -2308,7 +2306,7 @@ API 定义::
 .. code-block:: json
 
   {
-    "who": "clientId/username/ipAddress",
+    "who": "mqttjs_ab9069449e",
     "as": "client_id",
     "reason": "banned the clientId",
     "desc": "normal banned",
@@ -2327,7 +2325,7 @@ API 定义::
   {
     "code": 0,
     "data": {
-      "who": "clientId/username/ipAddress",
+      "who": "mqttjs_ab9069449e",
       "as": "client_id",
       "reason": "banned the clientId",
       "desc": "normal banned",
@@ -2347,7 +2345,7 @@ API 定义::
 
 请求示例::
 
-    DELETE api/v3/banned/${who}?as=${as}
+    DELETE api/v3/banned/mqttjs_ab9069449e?as=client_id
 
 
 返回数据:
@@ -2404,9 +2402,9 @@ HTTP 状态码大于 500 时响应携带错误信息返回
   }
 
 
---------------------
+----------------------
 规则引擎(rule engine)
---------------------
+----------------------
 
 创建规则
 ----------
@@ -2479,7 +2477,7 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/rules/:id
+  GET api/v3/rules/${rule_id}
 
 请求参数示例::
 
@@ -2545,7 +2543,7 @@ API 定义::
 
 API 定义::
 
-  DELETE api/v3/rules/:id
+  DELETE api/v3/rules/${rule_id}
 
 请求参数示例::
 
@@ -2726,7 +2724,7 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resource_types/:type
+  GET api/v3/resource_types/${type}
 
 请求参数示例::
 
@@ -2752,7 +2750,7 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resource_types/:type/resources
+  GET api/v3/resource_types/${type}/resources
 
 请求参数示例::
 
@@ -2782,7 +2780,7 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resource_types/:type/actions
+  GET api/v3/resource_types/${type}/actions
 
 请求参数示例::
 
