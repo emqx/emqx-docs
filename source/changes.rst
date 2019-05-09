@@ -5,6 +5,56 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1.1:
+
+----------
+3.1.1 版本
+----------
+
+*发布日期: 2019-05-10*
+
+EMQ X 3.1.1 版本发布。此版本改动主要包括错误修复、稳定性增强。
+
+功能增强:
+
+- 增大单条日志可打印的最大字符数量
+
+  Github PR:
+  `emqx/emqx#2509 <https://github.com/emqx/emqx/pull/2509>`_
+
+- ``force_shutdown_policy`` 将根据系统位数使用不同的默认值
+
+  Github PR:
+  `emqx/emqx#2515 <https://github.com/emqx/emqx/pull/2515>`_
+
+错误修复:
+
+- 正确地配置和使用 ``long_gc`` 与 ``long_schedule``
+
+  Github PR:
+  `emqx/emqx#2504 <https://github.com/emqx/emqx/pull/2504>`_,
+  `emqx/emqx#2513 <https://github.com/emqx/emqx/pull/2513>`_
+
+- 修复没有更新 ``suboptions/count`` 的问题
+
+  Github PR:
+  `emqx/emqx#2507 <https://github.com/emqx/emqx/pull/2507>`_
+
+emqx-lwm2m (plugin)
+-------------------
+
+错误修复:
+
+- 修复 mountpoint 没有生效的问题
+
+  Github PR:
+  `emqx/emqx-lwm2m#34 <https://github.com/emqx/emqx-lwm2m/pull/34>`_
+
+- 修复消息无法被 ``emqx-web-hook`` 转发的问题
+
+  Github PR:
+  `emqx/emqx-lwm2m#35 <https://github.com/emqx/emqx-lwm2m/pull/35>`_
+
 .. _release_3.1.0:
 
 ----------
