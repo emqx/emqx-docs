@@ -3,7 +3,7 @@
 
 
 协议介绍 (Protocol)
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
 
 MQTT协议
@@ -53,7 +53,7 @@ MQTT协议广泛应用于物联网、移动互联网、智能硬件、车联网�
 .. _mqtt_topic:
 
 MQTT基于主题(Topic)消息路由
-::::::::::::::::::::::::
+::::::::::::::::::::::::::::
 
 MQTT协议基于主题(Topic)进行消息路由，主题(Topic)类似URL路径，例如::
 
@@ -84,10 +84,10 @@ MQTT协议基于主题(Topic)进行消息路由，主题(Topic)类似URL路径�
 .. _mqtt_protocol:
 
 MQTT V3.1.1协议报文
-::::::::::::::::::
+::::::::::::::::::::
 
 报文结构
-'''''''
+'''''''''
 
 +--------------------------------------------------+
 | 固定报头(Fixed header)                           |
@@ -98,7 +98,7 @@ MQTT V3.1.1协议报文
 +--------------------------------------------------+
 
 固定报头
-'''''''
+'''''''''
 
 +----------+-----+-----+-----+-----+-----+-----+-----+-----+
 | Bit      |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
@@ -109,7 +109,7 @@ MQTT V3.1.1协议报文
 +----------+-----------------------------------------------+
 
 报文类型
-'''''''
+'''''''''
 
 +-------------+---------+----------------------+
 | 类型名称    | 类型值  | 报文说明             |
@@ -144,19 +144,19 @@ MQTT V3.1.1协议报文
 +-------------+---------+----------------------+
 
 PUBLISH发布消息
-''''''''''''''
+''''''''''''''''
 
 PUBLISH报文承载客户端与服务器间双向的发布消息。 PUBACK报文用于接收端确认QoS1报文，PUBREC/PUBREL/PUBCOMP报文用于QoS2消息流程。
 
 PINGREQ/PINGRESP心跳
-''''''''''''''''''''
+''''''''''''''''''''''
 
 客户端在无报文发送时，按保活周期(KeepAlive)定时向服务端发送PINGREQ心跳报文，服务端响应PINGRESP报文。PINGREQ/PINGRESP报文均2个字节。
 
 .. _mqtt_qos:
 
 MQTT消息QoS
-:::::::::::
+::::::::::::
 
 MQTT发布消息QoS保证不是端到端的，是客户端与服务器之间的。订阅者收到MQTT消息的QoS级别，最终取决于发布消息的QoS和主题订阅的QoS。
 
@@ -183,24 +183,24 @@ MQTT发布消息QoS保证不是端到端的，是客户端与服务器之间的�
 +---------------+---------------+---------------+
 
 Qos0消息发布订阅
-''''''''''''''
+''''''''''''''''
 
 .. image:: ./_static/images/qos0_seq.png
 
 Qos1消息发布订阅
-''''''''''''''
+''''''''''''''''
 
 .. image:: ./_static/images/qos1_seq.png
 
 Qos2消息发布订阅
-''''''''''''''
+''''''''''''''''
 
 .. image:: ./_static/images/qos2_seq.png
 
 .. _mqtt_clean_session:
 
 MQTT会话(Clean Session)
-:::::::::::::::::::::::
+:::::::::::::::::::::::::
 
 MQTT客户端向服务器发起CONNECT请求时，可以通过'Clean Session'标志设置会话。
 
@@ -211,7 +211,7 @@ MQTT客户端向服务器发起CONNECT请求时，可以通过'Clean Session'标
 .. _mqtt_keepalive:
 
 MQTT连接保活心跳
-:::::::::::::::
+:::::::::::::::::
 
 MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保活周期。
 
@@ -224,7 +224,7 @@ MQTT客户端向服务器发起CONNECT请求时，通过KeepAlive参数设置保
 .. _mqtt_willmsg:
 
 MQTT遗愿消息(Last Will)
-::::::::::::::::::::::
+::::::::::::::::::::::::
 
 MQTT客户端向服务器端CONNECT请求时，可以设置是否发送遗愿消息(Will Message)标志，和遗愿消息主题(Topic)与内容(Payload)。
 
@@ -233,7 +233,7 @@ MQTT客户端异常下线时(客户端断开前未向服务器发送DISCONNECT�
 .. _mqtt_retained_msg:
 
 MQTT保留消息(Retained Message)
-:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::
 
 MQTT客户端向服务器发布(PUBLISH)消息时，可以设置保留消息(Retained Message)标志。保留消息(Retained Message)会驻留在消息服务器，后来的订阅者订阅主题时仍可以接收该消息。
 
@@ -257,7 +257,7 @@ MQTT客户端向服务器发布(PUBLISH)消息时，可以设置保留消息(Ret
 .. _mqtt_websocket:
 
 MQTT WebSocket连接
-::::::::::::::::::
+::::::::::::::::::::
 
 MQTT协议除支持TCP传输层外，还支持WebSocket作为传输层。通过WebSocket浏览器可以直连MQTT消息服务器，发布订阅模式与其他MQTT客户端通信。
 
@@ -269,10 +269,10 @@ MQTT协议的WebSocket连接，必须采用binary模式，并携带子协议Head
 
 
 MQTT协议客户端库
-:::::::::::::::
+:::::::::::::::::
 
 emqtt客户端库
-''''''''''''
+''''''''''''''
 
 emqtt项目组: https://github.com/emqtt
 
@@ -285,19 +285,19 @@ emqtt项目组: https://github.com/emqtt
 +--------------------+----------------------+
 
 Eclipse Paho客户端库
-'''''''''''''''''''
+'''''''''''''''''''''
 
 Paho官网: http://www.eclipse.org/paho/
 
 mqtt.org官网客户端库
-''''''''''''''''''
+''''''''''''''''''''
 
 mqtt.org: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 
 .. _mqtt_vs_xmpp:
 
 MQTT与XMPP协议对比
-:::::::::::::::::
+:::::::::::::::::::
 
 MQTT协议设计简单轻量、路由灵活，将在移动互联网物联网消息领域，全面取代PC时代的XMPP协议:
 
@@ -317,7 +317,7 @@ MQTT-SN 协议是 MQTT 的直系亲属，它使用 UDP 进行通信，标准的�
 MQTT-SN 的官方标准下载地址: http://mqtt.org/new/wp-content/uploads/2009/06/MQTT-SN_spec_v1.2.pdf
 
 MQTT-SN 和 MQTT 的区别
-:::::::::::::::::::::
+:::::::::::::::::::::::
 
 MQTT-SN 的信令和 MQTT 大部分都相同，比如都有 Will, 都有 Connect/Subscribe/Publish 命令.
 
@@ -330,7 +330,7 @@ MQTT-SN 的网络中有网关这种设备，它负责把 MQTT-SN 转换成 MQTT�
 MQTT-SN 还支持设备的睡眠功能，如果设备进入睡眠状态，无法接收 UDP 数据，网关将把下行的 PUBLISH 消息缓存起来，直到设备苏醒后再传送。
 
 EMQX-SN 网关插件
-::::::::::::::::
+::::::::::::::::::
 
 EMQX-SN 是 EMQ X 的一个网关插件，实现了 MQTT-SN 的大部分功能，它相当于一个在云端的 MQTT-SN 网关，直接和 EMQ X Broker 相连。
 
@@ -369,7 +369,7 @@ File: etc/plugins/emqx_sn.conf::
     ./bin/emqx_ctl plugins load emqx_sn
 
 MQTT-SN 客户端库
-:::::::::::::::
+:::::::::::::::::
 
 1. https://github.com/eclipse/paho.mqtt-sn.embedded-c/
 2. https://github.com/ty4tw/MQTT-SN
@@ -446,7 +446,7 @@ File: etc/emqx_lwm2m.conf::
     ./bin/emqx_ctl plugins load emqx_lwm2m
 
 LWM2M 的客户端库
-:::::::::::::::
+:::::::::::::::::
 
 - https://github.com/eclipse/wakaama
 - https://github.com/OpenMobileAlliance/OMA-LWM2M-DevKit 
