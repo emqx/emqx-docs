@@ -740,6 +740,18 @@ TCP 连接建立后等待 MQTT CONNECT 报文的最长时间:
 
     zone.external.enable_stats = on
 
+设置连接/会话进程在接收多少消息或字节后强制进行 GC:
+
+.. code-block:: properties
+
+    zone.external.force_gc_policy = 1000|1MB
+
+设置连接/会话进程可使用的最大消息队列长度和堆大小，超出限制时将强制关闭进程:
+
+.. code-block:: properties
+
+    ## zone.external.force_shutdown_policy = 8000|800MB
+
 MQTT 最大报文尺寸:
 
 .. code-block:: properties
@@ -1998,13 +2010,13 @@ Broker 参数设置
 Erlang 虚拟机监控设置
 ---------------------
 
-是否开启 long_gc 监控以及垃圾回收持续多久时会触发 long_gc 事件:
+是否开启 long_gc 监控以及垃圾回收持续多久时会触发 long_gc 事件，设置为 0 表示不监控此事件:
 
 .. code-block:: properties
 
-    sysmon.long_gc = false
+    sysmon.long_gc = 0
 
-系统中的进程或端口不间断地运行多久时会触发 long_schedule 事件:
+系统中的进程或端口不间断地运行多久时会触发 long_schedule 事件，设置为 0 表示不监控此事件:
 
 .. code-block:: properties
 
