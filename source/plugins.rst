@@ -779,6 +779,11 @@ etc/plugins/emqx_web_hook.conf:
     ## 回调的 Web Server 地址
     web.hook.api.url = http://127.0.0.1:8080
 
+    ## 编码 Payload 字段
+    ## 枚举值: undefined | base64 | base62
+    ## 默认值: undefined (不进行编码)
+    ## web.hook.encode_payload = base64
+
     ## 消息、事件配置
     web.hook.rule.client.connected.1     = {"action": "on_client_connected"}
     web.hook.rule.client.disconnected.1  = {"action": "on_client_disconnected"}
