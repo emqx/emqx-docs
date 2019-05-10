@@ -5,7 +5,7 @@
 管理命令 (Commands)
 ===================
 
-*EMQ X* 消息服务器提供了 './bin/emqx_ctl' 的管理命令行。
+*EMQ X* 消息服务器提供了 ``./bin/emqx_ctl`` 的管理命令行。
 
 -----------
 status 命令
@@ -16,7 +16,7 @@ status 命令
     $ ./bin/emqx_ctl status
 
     Node 'emqx@127.0.0.1' is started
-    emqx 2.0 is running
+    emqx v3.1.0 is running
 
 ---------
 mgmt 命令
@@ -24,17 +24,17 @@ mgmt 命令
 
 mgmt 命令查询应用程序。
 
-+------------------------------+----------------------------+
-| mgmt list                    | 列出应用程序列表           |
-+------------------------------+----------------------------+
-| mgmt insert <AppId> <Name>   | 添加REST API的应用程序     |
-+------------------------------+----------------------------+
-| mgmt update <AppId> <status> | 更新REST API的应用程序     |
-+------------------------------+----------------------------+
-| mgmt lookup <AppId>          | 获取REST API的应用程序详情 |
-+------------------------------+----------------------------+
-| mgmt delete <AppId>          | 删除REST API的应用程序     |
-+------------------------------+----------------------------+
++------------------------------+-----------------------------+
+| mgmt list                    | 列出应用程序列表            |
++------------------------------+-----------------------------+
+| mgmt insert <AppId> <Name>   | 添加 REST API 的应用程序    |
++------------------------------+-----------------------------+
+| mgmt update <AppId> <status> | 更新 REST API 的应用程序    |
++------------------------------+-----------------------------+
+| mgmt lookup <AppId>          | 获取 REST API 的应用程序详情|
++------------------------------+-----------------------------+
+| mgmt delete <AppId>          | 删除 REST API 的应用程序    |
++------------------------------+-----------------------------+
 
 mgmt list
 ---------
@@ -87,47 +87,53 @@ broker 命令
 
 broker 命令查询服务器基本信息，启动时间，统计数据与性能数据。
 
-+----------------+-----------------------------------------------+
-| broker         | 查询 EMQ 消息服务器描述、版本、启动时间       |
-+----------------+-----------------------------------------------+
-| broker pubsub  | 查询核心的 Erlang PubSub 进程状态(调试)       |
-+----------------+-----------------------------------------------+
-| broker stats   | 查询连接(Client)、会话(Session)、主题(Topic)、|
-|                | 订阅(Subscription)、路由(Route)统计信息       |
-+----------------+-----------------------------------------------+
-| broker metrics | 查询 MQTT 报文(Packet)、消息(Message)收发统计 |
-+----------------+-----------------------------------------------+
++----------------+---------------------------------------------------+
+| broker         | 查询 EMQ X 消息服务器描述、版本、启动时间         |
++----------------+---------------------------------------------------+
+| broker stats   | 查询连接(Connection)、会话(Session)、主题(Topic)、|
+|                | 订阅(Subscription)、路由(Route)统计信息           |
++----------------+---------------------------------------------------+
+| broker metrics | 查询 MQTT 报文(Packet)、消息(Message)收发统计     |
++----------------+---------------------------------------------------+
 
 查询 *EMQ X* 消息服务器基本信息包括版本、启动时间等::
 
     $ ./bin/emqx_ctl broker
 
-    sysdescr  : Erlang MQTT Broker
-    version   : 2.0
+    sysdescr  : EMQ X Broker
+    version   : v3.1.0
     uptime    : 25 seconds
-    datetime  : 2016-10-18 10:42:10
+    datetime  : 2019-04-29 10:42:10
 
 broker stats
 ------------
 
-查询服务器客户端连接(Client)、会话(Session)、主题(Topic)、订阅(Subscription)、路由(Route)统计::
+查询服务器客户端连接(Connections)、会话(Sessions)、主题(Topics)、订阅(Subscriptions)、路由(Routes)统计::
 
     $ ./bin/emqx_ctl broker stats
 
-    clients/count       : 1
-    clients/max         : 1
-    queues/count        : 0
-    queues/max          : 0
-    retained/count      : 2
-    retained/max        : 2
-    routes/count        : 2
-    routes/reverse      : 2
-    sessions/count      : 0
-    sessions/max        : 0
-    subscriptions/count : 1
-    subscriptions/max   : 1
-    topics/count        : 54
-    topics/max          : 54
+    actions/max                   : 2
+    connections/count             : 1
+    connections/max               : 1
+    resources/max                 : 0
+    retained/count                : 2
+    retained/max                  : 2
+    routes/count                  : 0
+    routes/max                    : 0
+    rules/max                     : 0
+    sessions/count                : 0
+    sessions/max                  : 0
+    sessions/persistent/count     : 0
+    sessions/persistent/max       : 0
+    suboptions/max                : 0
+    subscribers/count             : 0
+    subscribers/max               : 1
+    subscriptions/count           : 1
+    subscriptions/max             : 0
+    subscriptions/shared/count    : 0
+    subscriptions/shared/max      : 0
+    topics/count                  : 0
+    topics/max                    : 0
 
 broker metrics
 --------------
@@ -136,37 +142,47 @@ broker metrics
 
     $ ./bin/emqx_ctl broker metrics
 
-    bytes/received          : 297
-    bytes/sent              : 40
-    messages/dropped        : 348
+    bytes/received          : 0
+    bytes/sent              : 0
+    messages/dropped        : 0
+    messages/expired        : 0
+    messages/forward        : 0
     messages/qos0/received  : 0
     messages/qos0/sent      : 0
     messages/qos1/received  : 0
     messages/qos1/sent      : 0
+    messages/qos2/dropped   : 0
+    messages/qos2/expired   : 0
     messages/qos2/received  : 0
     messages/qos2/sent      : 0
     messages/received       : 0
-    messages/retained       : 2
+    messages/retained       : 3
     messages/sent           : 0
-    packets/connack         : 5
-    packets/connect         : 5
-    packets/disconnect      : 0
+    packets/auth            : 0
+    packets/connack         : 0
+    packets/connect         : 0
+    packets/disconnect/recei: 0
+    packets/disconnect/sent : 0
     packets/pingreq         : 0
     packets/pingresp        : 0
+    packets/puback/missed   : 0
     packets/puback/received : 0
     packets/puback/sent     : 0
+    packets/pubcomp/missed  : 0
     packets/pubcomp/received: 0
     packets/pubcomp/sent    : 0
     packets/publish/received: 0
     packets/publish/sent    : 0
+    packets/pubrec/missed   : 0
     packets/pubrec/received : 0
     packets/pubrec/sent     : 0
+    packets/pubrel/missed   : 0
     packets/pubrel/received : 0
     packets/pubrel/sent     : 0
-    packets/received        : 9
-    packets/sent            : 9
-    packets/suback          : 4
-    packets/subscribe       : 4
+    packets/received        : 0
+    packets/sent            : 0
+    packets/suback          : 0
+    packets/subscribe       : 0
     packets/unsuback        : 0
     packets/unsubscribe     : 0
 
@@ -198,11 +214,11 @@ cluster 命令集群本机两个 *EMQ X* 节点示例:
 
 启动 emqx1 ::
 
-    cd emqx1 && ./bin/emqx start
+    $ cd emqx1 && ./bin/emqx start
 
 启动 emqx2 ::
 
-    cd emqx2 && ./bin/emqx start
+    $ cd emqx2 && ./bin/emqx start
 
 emqx2 节点与 emqx1 集群，emqx2 目录下::
 
@@ -220,18 +236,26 @@ emqx2 节点与 emqx1 集群，emqx2 目录下::
 集群消息路由测试::
 
     # emqx1节点上订阅x
-    mosquitto_sub -t x -q 1 -p 1883
+    $ mosquitto_sub -t x -q 1 -p 1883
 
     # emqx2节点上向x发布消息
-    mosquitto_pub -t x -q 1 -p 2883 -m hello
+    $ mosquitto_pub -t x -q 1 -p 2883 -m hello
 
 emqx2 节点离开集群::
 
-    cd emqx2 && ./bin/emqx_ctl cluster leave
+    $ cd emqx2 && ./bin/emqx_ctl cluster leave
 
 emqx1 节点下删除 emqx2::
 
-    cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
+    $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
+
+--------
+acl 命令
+--------
+
+重新加载 acl 配置文件::
+
+    $ ./bin/emqx_ctl acl reload
 
 ------------
 clients 命令
@@ -254,14 +278,14 @@ clients list
 
     $ ./bin/emqx_ctl clients list
 
-    Client(mosqsub/43832-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
-    Client(mosqsub/44011-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64961, connected_at=1452929275)
+    Connection(mosqsub/43832-airlee.lo, clean_start=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
+    Connection(mosqsub/44011-airlee.lo, clean_start=true, username=test, peername=127.0.0.1:64961, connected_at=1452929275)
     ...
 
 返回 Client 对象的属性:
 
 +--------------+-----------------------------+
-| clean_sess   | 清除会话标记                |
+| clean_start  | 清除会话标记                |
 +--------------+-----------------------------+
 | username     | 用户名                      |
 +--------------+-----------------------------+
@@ -275,18 +299,16 @@ clients show <ClientId>
 
 根据 ClientId 查询客户端::
 
-    ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
+    $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 
-    Client(mosqsub/43832-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
+    Connection(mosqsub/43832-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
 
 clients kick <ClientId>
 -----------------------
 
 根据 ClientId 踢出客户端::
 
-    ./bin/emqx_ctl clients kick "clientid"
-
-.. _command_sessions::
+    $ ./bin/emqx_ctl clients kick "clientid"
 
 -------------
 sessions 命令
@@ -296,10 +318,6 @@ sessions 命令查询 MQTT 连接会话。 *EMQ X* 消息服务器会为每个�
 
 +--------------------------+-----------------------------+
 | sessions list            | 查询全部会话                |
-+--------------------------+-----------------------------+
-| sessions list persistent | 查询全部持久会话            |
-+--------------------------+-----------------------------+
-| sessions list transient  | 查询全部临时会话            |
 +--------------------------+-----------------------------+
 | sessions show <ClientId> | 根据 ClientID 查询会话      |
 +--------------------------+-----------------------------+
@@ -311,48 +329,34 @@ sessions list
 
     $ ./bin/emqx_ctl sessions list
 
-    Session(clientid, clean_sess=false, max_inflight=100, inflight_queue=0, message_queue=0, message_dropped=0, awaiting_rel=0, awaiting_ack=0, awaiting_comp=0, created_at=1452935508)
-    Session(mosqsub/44101-airlee.lo, clean_sess=true, max_inflight=100, inflight_queue=0, message_queue=0, message_dropped=0, awaiting_rel=0, awaiting_ack=0, awaiting_comp=0, created_at=1452935401)
+    Session(clientid, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760799)
+    Session(mosqsub/44101-airlee.lo, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760314)
 
 返回 Session 对象属性:
 
-+-------------------+----------------------------------------+
-| clean_sess        | false: 持久会话，true: 临时会话        |
-+-------------------+----------------------------------------+
-| max_inflight      | 飞行窗口(最大允许同时下发消息数)       |
-+-------------------+----------------------------------------+
-| inflight_queue    | 当前正在下发的消息数                   |
-+-------------------+----------------------------------------+
-| message_queue     | 当前缓存消息数                         |
-+-------------------+----------------------------------------+
-| message_dropped   | 会话丢掉的消息数                       |
-+-------------------+----------------------------------------+
-| awaiting_rel      | 等待客户端发送 PUBREL 的 QoS2 消息数   |
-+-------------------+----------------------------------------+
-| awaiting_ack      | 等待客户端响应 PUBACK 的 QoS1/2 消息数 |
-+-------------------+----------------------------------------+
-| awaiting_comp     | 等待客户端响应 PUBCOMP 的 QoS2 消息数  |
-+-------------------+----------------------------------------+
-| created_at        | 会话创建时间戳                         |
-+-------------------+----------------------------------------+
-
-sessions list persistent
-------------------------
-
-查询全部持久会话::
-
-    $ ./bin/emqx_ctl sessions list persistent
-
-    Session(clientid, clean_sess=false, max_inflight=100, inflight_queue=0, message_queue=0, message_dropped=0, awaiting_rel=0, awaiting_ack=0, awaiting_comp=0, created_at=1452935508)
-
-sessions list transient
------------------------
-
-查询全部临时会话::
-
-    $ ./bin/emqx_ctl sessions list transient
-
-    Session(mosqsub/44101-airlee.lo, clean_sess=true, max_inflight=100, inflight_queue=0, message_queue=0, message_dropped=0, awaiting_rel=0, awaiting_ack=0, awaiting_comp=0, created_at=1452935401)
++---------------------+------------------------------------------+
+| clean_start         | 建立连接时是否清理相关的会话             |
++---------------------+------------------------------------------+
+| expiry_interval     | 会话过期间隔                             |
++---------------------+------------------------------------------+
+| subscriptions_count | 当前订阅数量                             |
++---------------------+------------------------------------------+
+| max_inflight        | 飞行窗口(最大允许同时下发消息数)         |
++---------------------+------------------------------------------+
+| inflight            | 当前正在下发的消息数                     |
++---------------------+------------------------------------------+
+| mqueue_len          | 当前缓存消息数                           |
++---------------------+------------------------------------------+
+| mqueue_dropped      | 会话丢掉的消息数                         |
++---------------------+------------------------------------------+
+| awaiting_rel        | 等待客户端发送 PUBREL 的 QoS2 消息数     |
++---------------------+------------------------------------------+
+| deliver_msg         | 转发的消息数(包含重传)                   |
++---------------------+------------------------------------------+
+| enqueue_msg         | 缓存过的消息数                           |
++---------------------+------------------------------------------+
+| created_at          | 会话创建时间戳                           |
++---------------------+------------------------------------------+
 
 sessions show <ClientId>
 ------------------------
@@ -361,13 +365,19 @@ sessions show <ClientId>
 
     $ ./bin/emqx_ctl sessions show clientid
 
-    Session(clientid, clean_sess=false, max_inflight=100, inflight_queue=0, message_queue=0, message_dropped=0, awaiting_rel=0, awaiting_ack=0, awaiting_comp=0, created_at=1452935508)
+    Session(clientid, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760799)
 
 -----------
 routes 命令
 -----------
 
 routes 命令查询路由表。
+
++---------------------+---------------------+
+| routes list         | 查询全部路由        |
++---------------------+---------------------+
+| routes show <Topic> | 根据 Topic 查询路由 |
++---------------------+---------------------+
 
 routes list
 -----------
@@ -399,9 +409,9 @@ subscriptions 命令查询消息服务器的订阅(Subscription)表。
 +--------------------------------------------+--------------------------+
 | subscriptions show <ClientId>              | 查询某个 ClientId 的订阅 |
 +--------------------------------------------+--------------------------+
-| subscriptions add <ClientId> <Topic> <QoS> | 手动添加静态订阅          |
+| subscriptions add <ClientId> <Topic> <QoS> | 手动添加静态订阅         |
 +--------------------------------------------+--------------------------+
-| subscriptions del <ClientId> <Topic>       | 手动删除静态订阅          |
+| subscriptions del <ClientId> <Topic>       | 手动删除静态订阅         |
 +--------------------------------------------+--------------------------+
 
 subscriptions list
@@ -424,18 +434,18 @@ subscriptions show <ClientId>
     mosqsub/90475-airlee.lo -> t/+/x:2
 
 subscriptions add <ClientId> <Topic> <QoS>
------------------------------
+------------------------------------------
 
-手动添加静态订阅::
+手动添加订阅关系::
 
     $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
 
     ok
 
 subscriptions del <ClientId> <Topic>
------------------------------
+------------------------------------
 
-手动删除静态订阅::
+手动删除订阅关系::
 
     $ ./bin/emqx_ctl subscriptions del 'mosqsub/90475-airlee.lo' '/world'
 
@@ -454,6 +464,10 @@ plugins 命令用于加载、卸载、查询插件应用。 *EMQ X* 消息服务
 +---------------------------+-------------------------+
 | plugins unload <Plugin>   | 卸载插件(Plugin)        |
 +---------------------------+-------------------------+
+| plugins reload <Plugin>   | 重载插件(Plugin)        |
++---------------------------+-------------------------+
+
+.. note:: 当修改完成某插件的配置文件时，若需要立即生效则需要执行 ``reload`` 命令。因为 ``unload/load`` 命令不会编译新的配置文件
 
 plugins list
 ------------
@@ -462,13 +476,31 @@ plugins list
 
     $ ./bin/emqx_ctl plugins list
 
-    Plugin(emqx_dashboard, version=0.16.0, description=emqx web dashboard, active=true)
-    Plugin(emqx_plugin_mysql, version=0.16.0, description=emqx Authentication/ACL with MySQL, active=false)
-    Plugin(emqx_plugin_pgsql, version=0.16.0, description=emqx PostgreSQL Plugin, active=false)
-    Plugin(emqx_plugin_redis, version=0.16.0, description=emqx Redis Plugin, active=false)
-    Plugin(emqx_plugin_template, version=0.16.0, description=emqx plugin template, active=false)
-    Plugin(emqx_recon, version=0.16.0, description=emqx recon plugin, active=false)
-    Plugin(emqx_stomp, version=0.16.0, description=Stomp Protocol Plugin for emqx broker, active=false)
+    Plugin(emqx_auth_clientid, version=v3.1.0, description=EMQ X Authentication with ClientId/Password, active=false)
+    Plugin(emqx_auth_http, version=v3.1.0, description=EMQ X Authentication/ACL with HTTP API, active=false)
+    Plugin(emqx_auth_jwt, version=v3.1.0, description=EMQ X Authentication with JWT, active=false)
+    Plugin(emqx_auth_ldap, version=v3.1.0, description=EMQ X Authentication/ACL with LDAP, active=false)
+    Plugin(emqx_auth_mongo, version=v3.1.0, description=EMQ X Authentication/ACL with MongoDB, active=false)
+    Plugin(emqx_auth_mysql, version=v3.1.0, description=EMQ X Authentication/ACL with MySQL, active=false)
+    Plugin(emqx_auth_pgsql, version=v3.1.0, description=EMQ X Authentication/ACL with PostgreSQL, active=false)
+    Plugin(emqx_auth_redis, version=v3.1.0, description=EMQ X Authentication/ACL with Redis, active=false)
+    Plugin(emqx_auth_username, version=v3.1.0, description=EMQ X Authentication with Username and Password, active=false)
+    Plugin(emqx_coap, version=v3.1.0, description=EMQ X CoAP Gateway, active=false)
+    Plugin(emqx_dashboard, version=v3.1.0, description=EMQ X Web Dashboard, active=true)
+    Plugin(emqx_delayed_publish, version=v3.1.0, description=EMQ X Delayed Publish, active=false)
+    Plugin(emqx_lua_hook, version=v3.1.0, description=EMQ X Lua Hooks, active=false)
+    Plugin(emqx_lwm2m, version=v3.1.0, description=EMQ X LwM2M Gateway, active=false)
+    Plugin(emqx_management, version=v3.1.0, description=EMQ X Management API and CLI, active=true)
+    Plugin(emqx_plugin_template, version=v3.1.0, description=EMQ X Plugin Template, active=false)
+    Plugin(emqx_psk_file, version=v3.1.0, description=EMQX PSK Plugin from File, active=false)
+    Plugin(emqx_recon, version=v3.1.0, description=EMQ X Recon Plugin, active=true)
+    Plugin(emqx_reloader, version=v3.1.0, description=EMQ X Reloader Plugin, active=false)
+    Plugin(emqx_retainer, version=v3.1.0, description=EMQ X Retainer, active=true)
+    Plugin(emqx_rule_engine, version=v3.1.0, description=EMQ X Rule Engine, active=true)
+    Plugin(emqx_sn, version=v3.1.0, description=EMQ X MQTT SN Plugin, active=false)
+    Plugin(emqx_statsd, version=v3.1.0, description=Statsd for EMQ X, active=false)
+    Plugin(emqx_stomp, version=v3.1.0, description=EMQ X Stomp Protocol Plugin, active=false)
+    Plugin(emqx_web_hook, version=v3.1.0, description=EMQ X Webhook Plugin, active=false)
 
 插件属性:
 
@@ -485,19 +517,28 @@ plugins load <Plugin>
 
 加载插件::
 
-    $ ./bin/emqx_ctl plugins load emq_recon
+    $ ./bin/emqx_ctl plugins load emqx_lua_hook
 
-    Start apps: [recon,emq_recon]
-    Plugin emqx_recon loaded successfully.
+    Start apps: [emqx_lua_hook]
+    Plugin emqx_lua_hook loaded successfully.
 
 plugins unload <Plugin>
 -----------------------
 
 卸载插件::
 
-    $ ./bin/emqx_ctl plugins unload emq_recon
+    $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 
-    Plugin emq_recon unloaded successfully.
+    Plugin emqx_lua_hook unloaded successfully.
+
+plugins reload <Plugin>
+-----------------------
+
+重载插件::
+
+    $ ./bin/emqx_ctl plugins reload emqx_lua_hook
+
+    Plugin emqx_lua_hook reloaded successfully.
 
 ------------
 bridges 命令
@@ -509,13 +550,25 @@ bridges 命令用于在多台 *EMQ X* 服务器节点间创建桥接::
     Publisher --> | node1 | --Bridge Forward--> | node2 | --> Subscriber
                   ---------                     ---------
 
-+--------------------------+---------------------+
-| bridges list             | 查询全部桥接        |
-+--------------------------+---------------------+
-| bridges start <Name>     | 开启一个桥接        |
-+--------------------------+---------------------+
-| bridges stop <Name>      | 停止一个桥接        |
-+--------------------------+---------------------+
++-----------------------------------------------+----------------------------+
+| bridges list                                  | 查询全部桥接               |
++-----------------------------------------------+----------------------------+
+| bridges start <Name>                          | 开启一个桥接               |
++-----------------------------------------------+----------------------------+
+| bridges stop <Name>                           | 停止一个桥接               |
++-----------------------------------------------+----------------------------+
+| bridges forwards <Name>                       | 列出指定 bridge 的转发主题 |
++-----------------------------------------------+----------------------------+
+| bridges add-forward <Name> <Topic>            | 向指定 bridge 添加转发主题 |
++-----------------------------------------------+----------------------------+
+| bridges del-forward <Name> <Topic>            | 从指定 bridge 删除转发主题 |
++-----------------------------------------------+----------------------------+
+| bridges subscriptions <Name>                  | 列出指定 bridge 的订阅主题 |
++-----------------------------------------------+----------------------------+
+| bridges add-subscription <Name> <Topic> <QoS> | 向指定 bridge 添加订阅主题 |
++-----------------------------------------------+----------------------------+
+| bridges del-subscription <Name> <Topic>       | 从指定 bridge 删除订阅主题 |
++-----------------------------------------------+----------------------------+
 
 关于 bridges 的配置项在 emqx/emqx.config文件内。
 
@@ -525,24 +578,80 @@ bridges list
 查询全部桥接::
 
     $ ./bin/emqx_ctl bridges list
-    name: edge     status: Stopped
-    name: cloud     status: Stopped
+
+    name: emqx     status: Stopped
 
 bridges start <Name>
----------------------------
+--------------------
 
 开启一个桥接::
 
-    $ ./bin/emqx_ctl bridges start edge
-    start bridge successfully.
+    $ ./bin/emqx_ctl bridges start emqx
+
+    Start bridge successfully.
 
 bridges stop <Name>
----------------------------
+--------------------
 
 停止一个桥接::
 
-    $ ./bin/emqx_ctl bridges stop edge
-    stop bridge successfully.
+    $ ./bin/emqx_ctl bridges stop emqx
+
+    Stop bridge successfully.
+
+bridges forwards <Name>
+-----------------------
+
+列出指定 bridge 的转发主题::
+
+    $ ./bin/emqx_ctl bridges forwards emqx
+
+    topic:   sensor/#
+
+bridges add-forward <Name> <Topic>
+----------------------------------
+
+向指定 bridge 添加转发主题::
+
+    $ ./bin/emqx_ctl bridges add-forward emqx device_status/#
+
+    Add-forward topic successfully.
+
+bridges del-forward <Name> <Topic>
+----------------------------------
+
+从指定 bridge 删除转发主题::
+
+    $ ./bin/emqx_ctl bridges del-forward emqx device_status/#
+
+    Del-forward topic successfully.
+
+bridges add-subscription <Name> <Topic> <QoS>
+---------------------------------------------
+
+向指定 bridge 添加订阅主题::
+
+    $ ./bin/emqx_ctl bridges add-subscription emqx cmd/topic 1
+
+    Add-subscription topic successfully.
+
+bridges subscriptions <Name>
+----------------------------
+
+列出指定 bridge 的订阅::
+
+    $ ./bin/emqx_ctl bridges subscriptions emqx
+
+    topic: cmd/topic, qos: 1
+
+bridges del-subscription <Name> <Topic>
+---------------------------------------
+
+从指定 bridge 删除订阅主题::
+
+    $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic
+
+    Del-subscription topic successfully.
 
 -------
 vm 命令
@@ -550,19 +659,45 @@ vm 命令
 
 vm 命令用于查询 Erlang 虚拟机负载、内存、进程、IO 信息。
 
-+-------------+-------------------------+
-| vm all      | 查询 VM 全部信息        |
-+-------------+-------------------------+
-| vm load     | 查询 VM 负载            |
-+-------------+-------------------------+
-| vm memory   | 查询 VM 内存            |
-+-------------+-------------------------+
-| vm process  | 查询 VM Erlang 进程数量 |
-+-------------+-------------------------+
-| vm io       | 查询 VM io 最大文件句柄 |
-+-------------+-------------------------+
-| vm ports       | 查询 VM 的端口 |
-+-------------+-------------------------+
++-------------+-----------------------------+
+| vm          | 等同于 vm all               |
++-------------+-----------------------------+
+| vm all      | 查询 VM 全部信息            |
++-------------+-----------------------------+
+| vm load     | 查询 VM 负载                |
++-------------+-----------------------------+
+| vm memory   | 查询 VM 内存                |
++-------------+-----------------------------+
+| vm process  | 查询 VM Erlang 进程数量     |
++-------------+-----------------------------+
+| vm io       | 查询 VM io 最大文件句柄     |
++-------------+-----------------------------+
+| vm ports    | 查询 VM 的端口              |
++-------------+-----------------------------+
+
+vm all
+------
+
+查询 VM 全部信息，包括负载、内存、Erlang 进程数量等::
+
+    cpu/load1               : 4.22
+    cpu/load5               : 3.29
+    cpu/load15              : 3.16
+    memory/total            : 99995208
+    memory/processes        : 38998248
+    memory/processes_used   : 38938520
+    memory/system           : 60996960
+    memory/atom             : 1189073
+    memory/atom_used        : 1173808
+    memory/binary           : 100336
+    memory/code             : 25439961
+    memory/ets              : 7161128
+    process/limit           : 2097152
+    process/count           : 315
+    io/max_fds              : 10240
+    io/active_fds           : 0
+    ports/count             : 18
+    ports/limit             : 1048576
 
 vm load
 -------
@@ -599,8 +734,8 @@ vm process
 
     $ ./bin/emqx_ctl vm process
 
-    process/limit           : 8192
-    process/count           : 221
+    process/limit           : 2097152
+    process/count           : 314
 
 vm io
 -----
@@ -609,18 +744,89 @@ vm io
 
     $ ./bin/emqx_ctl vm io
 
-    io/max_fds              : 2560
-    io/active_fds           : 1
+    io/max_fds              : 10240
+    io/active_fds           : 0
 
 vm ports
------
+--------
 
 查询 VM 的端口::
 
     $ ./bin/emqx_ctl vm ports
 
-    ports/count           : 19
-    ports/limit           : 262144
+    ports/count           : 18
+    ports/limit           : 1048576
+
+-----------
+mnesia 命令
+-----------
+
+查询 mnesia 数据库系统状态。
+
+--------
+log 命令
+--------
+
+log 命令用于设置日志等级。访问 `Documentation of logger <http://erlang.org/doc/apps/kernel/logger_chapter.html>`_ 以获取详细信息
+
++--------------------------------------------+----------------------------------------------------+
+| log set-level <Level>                      | 设置主日志等级和所有 Handlers 日志等级             |
++--------------------------------------------+----------------------------------------------------+
+| log primary-level                          | 查看主日志等级                                     |
++--------------------------------------------+----------------------------------------------------+
+| log primary-lelvel <Level>                 | 设置主日志等级                                     |
++--------------------------------------------+----------------------------------------------------+
+| log handlers list                          | 查看当前安装的所有 Hanlders                        |
++--------------------------------------------+----------------------------------------------------+
+| log handlers set-level <HandlerId> <Level> | 设置指定 Hanlder 的日志等级                        |
++--------------------------------------------+----------------------------------------------------+
+
+log set-level <Level>
+---------------------
+
+设置主日志等级和所有 Handlers 日志等级::
+
+    $ ./bin/emqx_ctl log set-level debug
+
+    debug
+
+log primary-level
+-----------------
+
+查看主日志等级::
+
+    $ ./bin/emqx_ctl log primary-level
+
+    debug
+
+log primary-level <Level>
+--------------------------
+
+设置主日志等级::
+
+    $ ./bin/emqx_ctl log primary-level info
+
+    info
+
+log handlers list
+-----------------
+
+查看当前安装的所有 Hanlders::
+
+    $ ./bin/emqx_ctl log handlers list
+
+    LogHandler(id=emqx_logger_handler, level=debug, destination=unknown)
+    LogHandler(id=file, level=debug, destination=log/emqx.log)
+    LogHandler(id=default, level=debug, destination=console)
+
+log handlers set-level <HandlerId> <Level>
+------------------------------------------
+
+设置指定 Hanlder 的日志等级::
+
+    $ ./bin/emqx_ctl log handlers set-level emqx_logger_handler error
+
+    error
 
 ----------
 trace 命令
@@ -628,54 +834,71 @@ trace 命令
 
 trace 命令用于追踪某个客户端或 Topic，打印日志信息到文件。
 
-+-----------------------------------+-----------------------------------+
-| trace list                        | 查询全部开启的追踪                |
-+-----------------------------------+-----------------------------------+
-| trace client <ClientId> <LogFile> | 开启 Client 追踪，日志到文件      |
-+-----------------------------------+-----------------------------------+
-| trace client <ClientId> off       | 关闭 Client 追踪                  |
-+-----------------------------------+-----------------------------------+
-| trace topic <Topic> <LogFile>     | 开启 Topic 追踪，日志到文件       |
-+-----------------------------------+-----------------------------------+
-| trace topic <Topic> off           | 关闭 Topic 追踪                   |
-+-----------------------------------+-----------------------------------+
++------------------------------------------------+------------------------------------------------+
+| trace list                                     | 查询全部开启的追踪                             |
++------------------------------------------------+------------------------------------------------+
+| trace start client <ClientId> <File> [<Level>] | 开启 Client 追踪，存储指定等级的日志到文件     |
++------------------------------------------------+------------------------------------------------+
+| trace stop client <ClientId>                   | 关闭 Client 追踪                               |
++------------------------------------------------+------------------------------------------------+
+| trace start topic <Topic> <File> [<Level>]     | 开启 Topic 追踪，存储指定等级的日志到文件      |
++------------------------------------------------+------------------------------------------------+
+| trace stop topic <Topic>                       | 关闭 Topic 追踪                                |
++------------------------------------------------+------------------------------------------------+
 
-trace client <ClientId> <LogFile>
----------------------------------
+.. note:: 使用 trace 之前，需要将主日志等级(primary logger level) 设置成足够低的值。为提高系统运行性能，默认的主日志等级是 error。
+
+trace start client <ClientId> <File> [<Level>]
+----------------------------------------------
 
 开启 Client 追踪::
 
-    $ ./bin/emqx_ctl trace client clientid log/clientid_trace.log
+    $ ./bin/emqx_ctl log primary-level debug
 
-    trace client clientid successfully.
+    debug
 
+    $ ./bin/emqx_ctl trace start client clientid log/clientid_trace.log
 
-trace client <ClientId> off
----------------------------
+    trace client clientid successfully
+
+    $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
+
+    trace client_id clientid2 successfully
+
+trace stop client <ClientId>
+----------------------------
 
 关闭 Client 追踪::
 
-    $ ./bin/emqx_ctl trace client clientid off
+    $ ./bin/emqx_ctl trace stop client clientid
 
-    stop to trace client clientid successfully.
+    stop tracing client_id clientid successfully
 
-trace topic <Topic> <LogFile>
------------------------------
+trace start topic <Topic> <File> [<Level>]
+------------------------------------------
 
 开启 Topic 追踪::
 
-    $ ./bin/emqx_ctl trace topic topic log/topic_trace.log
+    $ ./bin/emqx_ctl log primary-level debug
 
-    trace topic topic successfully.
+    debug
 
-trace topic <Topic> off
------------------------
+    $ ./bin/emqx_ctl trace start topic topic log/topic_trace.log
+
+    trace topic topic successfully
+
+    $ ./bin/emqx_ctl trace start topic topic2 log/topic2_trace.log error
+
+    trace topic topic2 successfully
+
+trace stop topic <Topic>
+------------------------
 
 关闭 Topic 追踪::
 
     $ ./bin/emqx_ctl trace topic topic off
 
-    stop to trace topic topic successfully.
+    stop tracing topic topic successfully
 
 trace list
 ----------
@@ -684,8 +907,8 @@ trace list
 
     $ ./bin/emqx_ctl trace list
 
-    trace client clientid -> log/clientid_trace.log
-    trace topic topic -> log/topic_trace.log
+    Trace(client_id=clientid2, level=error, destination="log/clientid2_trace.log")
+    Trace(topic=topic2, level=error, destination="log/topic2_trace.log")
 
 ---------
 listeners
@@ -694,52 +917,52 @@ listeners
 listeners 命令用于查询开启的 TCP 服务监听器
 
 +-----------------------------------+-----------------------------------+
-| listeners                         | 查询开启的 TCP 服务监听器            |
+| listeners                         | 查询开启的 TCP 服务监听器         |
 +-----------------------------------+-----------------------------------+
-| listeners stop <Proto> <Port>     | 停止监听端口                        |
+| listeners stop <Proto> <Port>     | 停止监听端口                      |
 +-----------------------------------+-----------------------------------+
 
 listeners list
-----------
+--------------
 
 查询开启的 TCP 服务监听器::
 
     $ ./bin/emqx_ctl listeners
 
-    listener on mqtt:api:127.0.0.1:8080
-      acceptors       : 4
-      max_clients     : 64
-      current_clients : 0
-      shutdown_count  : []
-    listener on mqtt:wss:8084
-      acceptors       : 4
-      max_clients     : 64
-      current_clients : 0
-      shutdown_count  : []
     listener on mqtt:ssl:8883
       acceptors       : 16
-      max_clients     : 1024
-      current_clients : 0
-      shutdown_count  : []
-    listener on mqtt:ws:8083
-      acceptors       : 4
-      max_clients     : 64
-      current_clients : 0
+      max_conns       : 102400
+      current_conn    : 0
       shutdown_count  : []
     listener on mqtt:tcp:0.0.0.0:1883
-      acceptors       : 16
-      max_clients     : 102400
-      current_clients : 0
+      acceptors       : 8
+      max_conns       : 1024000
+      current_conn    : 0
       shutdown_count  : []
     listener on mqtt:tcp:127.0.0.1:11883
-      acceptors       : 16
-      max_clients     : 102400
-      current_clients : 0
+      acceptors       : 4
+      max_conns       : 1024000
+      current_conn    : 2
       shutdown_count  : []
-    listener on dashboard:http:18083
+    listener on http:dashboard:18083
       acceptors       : 2
-      max_clients     : 512
-      current_clients : 0
+      max_conns       : 512
+      current_conn    : 0
+      shutdown_count  : []
+    listener on http:management:8080
+      acceptors       : 2
+      max_conns       : 512
+      current_conn    : 0
+      shutdown_count  : []
+    listener on mqtt:ws:8083
+      acceptors       : 2
+      max_conns       : 102400
+      current_conn    : 0
+      shutdown_count  : []
+    listener on mqtt:wss:8084
+      acceptors       : 2
+      max_conns       : 16
+      current_conn    : 0
       shutdown_count  : []
 
 listener 参数说明:
@@ -747,9 +970,9 @@ listener 参数说明:
 +-----------------+-----------------------------------+
 | acceptors       | TCP Acceptor 池                   |
 +-----------------+-----------------------------------+
-| max_clients     | 最大允许连接数                    |
+| max_conns       | 最大允许连接数                    |
 +-----------------+-----------------------------------+
-| current_clients | 当前连接数                        |
+| current_conns   | 当前连接数                        |
 +-----------------+-----------------------------------+
 | shutdown_count  | Socket 关闭原因统计               |
 +-----------------+-----------------------------------+
@@ -761,52 +984,363 @@ listeners stop <Proto> <Port>
 停止监听端口::
 
     $ ./bin/emqx_ctl listeners stop mqtt:tcp 0.0.0.0:1883
+
     Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
 
------------
-mnesia 命令
------------
+----------------------------
+规则引擎(rule engine) 命令
+----------------------------
 
-查询 mnesia 数据库系统状态。
+----------
+rules 命令
+----------
+
++-----------------------------------------------------------+----------------+
+| rules list                                                | List all rules |
++-----------------------------------------------------------+----------------+
+| rules show <RuleId>                                       | Show a rule    |
++-----------------------------------------------------------+----------------+
+| rules create <name> <hook> <sql> <actions> [-d [<descr>]] | Create a rule  |
++-----------------------------------------------------------+----------------+
+| rules delete <RuleId>                                     | Delete a rule  |
++-----------------------------------------------------------+----------------+
+
+rules create
+------------
+
+创建一个新的规则::
+
+    ## 创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容
+    $ ./bin/emqx_ctl rules create \
+      'test1' \
+      'message.publish' \
+      'select * from "t/a"' \
+      '[{"name":"built_in:inspect_action", "params": {"a": 1}}]' \
+      -d 'Rule for debug'
+
+    Rule test1:1556242324634254201 created
+
+.. note:: 一个规则由系统生成的规则 ID 标识，所以如果用相同的名字重复添加规则，会生成多个 ID 不同的规则。
+
+rules list
+----------
+
+列出当前所有的规则::
+
+    $ ./bin/emqx_ctl rules list
+
+    rule(id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
+
+rules show
+----------
+
+查询规则::
+
+    ## 查询 RuleID 为 'test1:1556242324634254201' 的规则
+    $ ./bin/emqx_ctl rules show 'test1:1556242324634254201'
+
+    rule(id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
+
+rules delete
+------------
+
+删除规则::
+
+    ## 删除 RuleID 为 'test1:1556242324634254201' 的规则
+    $ ./bin/emqx_ctl rules delete 'test1:1556242324634254201'
+
+    ok
+
+------------------
+rule-actions 命令
+------------------
+
++-----------------------------------------------+--------------------+
+| rule-actions list [-t [<type>]] [-k [<hook>]] | List all actions   |
++-----------------------------------------------+--------------------+
+| rule-actions show <ActionId>                  | Show a rule action |
++-----------------------------------------------+--------------------+
+
+.. note:: 动作可以由 emqx 内置(称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+
+rule-actions show
+-----------------
+
+查询动作::
+
+    ## 查询名为 'built_in:inspect_action' 动作
+    $ ./bin/emqx_ctl rule-actions show 'built_in:inspect_action'
+
+    action(name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
+
+rule-actions list
+-----------------
+
+列出符合条件的动作::
+
+    ## 列出当前所有的动作
+    $ ./bin/emqx_ctl rule-actions list
+
+    action(name='built_in:republish_action', app='emqx_rule_engine', for='message.publish', type='built_in', params=#{target_topic => #{description => <<"Repubilsh the message to which topic">>,format => topic,required => true,title => <<"To Which Topic">>,type => string}}, description='Republish a MQTT message to a another topic')
+    action(name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
+    action(name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
+    action(name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
+
+    ## 列出所有资源类型为 web_hook 的动作
+    $ ./bin/emqx_ctl rule-actions list -t web_hook
+
+    action(name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
+    action(name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
+
+    ## 列出所有 Hook 类型匹配 'client.connected' 的动作
+    $ ./bin/emqx_ctl rule-actions list -k 'client.connected'
+
+    action(name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
+
+----------------
+resources 命令
+----------------
+
++------------------------------------------------------------------------+--------------------+
+| emqx_ctl resources create <name> <type> [-c [<config>]] [-d [<descr>]] | Create a resource  |
++------------------------------------------------------------------------+--------------------+
+| resources list [-t <ResourceType>]                                     | List all resources |
++------------------------------------------------------------------------+--------------------+
+| resources show <ResourceId>                                            | Show a resource    |
++------------------------------------------------------------------------+--------------------+
+| resources delete <ResourceId>                                          | Delete a resource  |
++------------------------------------------------------------------------+--------------------+
+
+resources create
+----------------
+创建一个新的资源::
+
+    $ ./bin/emqx_ctl resources create 'webhook1' 'web_hook' -c '{"url": "http://host-name/chats"}' -d 'forward msgs to host-name/chats'
+
+    Resource web_hook:webhook1 created
+
+resources list
+--------------
+
+列出当前所有的资源::
+
+    $ ./bin/emqx_ctl resources list
+
+    resource(id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
+
+resources list by type
+----------------------
+
+列出当前所有的资源::
+
+    $ ./bin/emqx_ctl resources list --type 'debug_resource_type'
+
+    resource(id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
+
+resources show
+--------------
+
+查询资源::
+
+    $ ./bin/emqx_ctl resources show 'web_hook:webhook1'
+
+    resource(id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
+
+resources delete
+----------------
+
+删除资源::
+
+    $ ./bin/emqx_ctl resources delete 'web_hook:webhook1'
+
+    ok
+
+-------------------
+resource-types 命令
+-------------------
+
++----------------------------+-------------------------+
+| resource-types list        | List all resource-types |
++----------------------------+-------------------------+
+| resource-types show <Type> | Show a resource-type    |
++----------------------------+-------------------------+
+
+.. note:: 资源类型可以由 emqx 内置(称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+
+resource-types list
+-------------------
+
+列出当前所有的资源类型::
+
+    ./bin/emqx_ctl resource-types list
+
+    resource_type(name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
+    resource_type(name='web_hook', provider='emqx_web_hook', params=#{headers => #{default => #{},description => <<"Request Header">>,schema => #{},title => <<"Request Header">>,type => object},method => #{default => <<"POST">>,description => <<"Request Method">>,enum => [<<"PUT">>,<<"POST">>],title => <<"Request Method">>,type => string},url => #{description => <<"Request URL">>,format => url,required => true,title => <<"Request URL">>,type => string}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
+
+resource-types show
+-------------------
+
+查询资源类型::
+
+    $ ./bin/emqx_ctl resource-types show built_in
+
+    resource_type(name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
+
+----------
+recon 命令
+----------
+
++-----------------------+--------------------------------------------------+
+| recon memory          | recon_alloc:memory/2                             |
++-----------------------+--------------------------------------------------+
+| recon allocated       | recon_alloc:memory(allocated_types, current/max) |
++-----------------------+--------------------------------------------------+
+| recon bin_leak        | recon:bin_leak(100)                              |
++-----------------------+--------------------------------------------------+
+| recon node_stats      | recon:node_stats(10, 1000)                       |
++-----------------------+--------------------------------------------------+
+| recon remote_load Mod | recon:remote_load(Mod)                           |
++-----------------------+--------------------------------------------------+
+
+访问 `Documentation for recon <http://ferd.github.io/recon/>`_ 以获取详细信息。
+
+recon memory
+------------
+
+recon_alloc:memory/2::
+
+    $ ./bin/emqx_ctl recon memory
+
+    usage/current       : 0.810331960305788
+    usage/max           : 0.7992495929358717
+    used/current        : 84922296
+    used/max            : 122519208
+    allocated/current   : 104345600
+    allocated/max       : 153292800
+    unused/current      : 19631520
+    unused/max          : 30773592
+
+recon allocated
+---------------
+
+recon_alloc:memory(allocated_types, current/max)::
+
+    $ ./bin/emqx_ctl recon allocated
+
+    binary_alloc/current: 425984
+    driver_alloc/current: 425984
+    eheap_alloc/current : 4063232
+    ets_alloc/current   : 3833856
+    fix_alloc/current   : 1474560
+    ll_alloc/current    : 90439680
+    sl_alloc/current    : 163840
+    std_alloc/current   : 2260992
+    temp_alloc/current  : 655360
+    binary_alloc/max    : 4907008
+    driver_alloc/max    : 425984
+    eheap_alloc/max     : 25538560
+    ets_alloc/max       : 5931008
+    fix_alloc/max       : 1736704
+    ll_alloc/max        : 90439680
+    sl_alloc/max        : 20348928
+    std_alloc/max       : 2260992
+    temp_alloc/max      : 1703936
+
+recon bin_leak
+--------------
+
+recon:bin_leak(100)::
+
+    $ ./bin/emqx_ctl recon bin_leak
+
+    {<10623.1352.0>,-3,
+     [cowboy_clock,
+      {current_function,{gen_server,loop,7}},
+      {initial_call,{proc_lib,init_p,5}}]}
+    {<10623.3865.0>,0,
+     [{current_function,{recon_lib,proc_attrs,2}},
+      {initial_call,{erlang,apply,2}}]}
+    {<10623.3863.0>,0,
+     [{current_function,{dist_util,con_loop,2}},
+      {initial_call,{inet_tcp_dist,do_accept,7}}]}
+      ...
+
+recon node_stats
+----------------
+
+recon:node_stats(10, 1000)::
+
+    $ ./bin/emqx_ctl recon node_stats
+
+    {[{process_count,302},
+      {run_queue,0},
+      {memory_total,88925536},
+      {memory_procs,27999296},
+      {memory_atoms,1182843},
+      {memory_bin,24536},
+      {memory_ets,7163216}],
+     [{bytes_in,62},
+      {bytes_out,458},
+      {gc_count,4},
+      {gc_words_reclaimed,3803},
+      {reductions,3036},
+      {scheduler_usage,[{1,9.473889959272245e-4},
+                        {2,5.085983030767205e-5},
+                        {3,5.3851477624711046e-5},
+                        {4,7.579021269127057e-5},
+                        {5,0.0},
+                        {6,0.0},
+                        {7,0.0},
+                        {8,0.0}]}]}
+    ...
+
+recon remote_load Mod
+---------------------
+
+recon:remote_load(Mod)::
+
+    $ ./bin/emqx_ctl recon remote_load
 
 --------------
 retainer 命令
 --------------
 
-+------------------------------------+-----------------------------+
-| retainer info                       | 显示保留消息的数量         |
-+------------------------------------+-----------------------------+
-| retainer topics                     | 显示保留消息的所有主题     |
-+------------------------------------+-----------------------------+
-| retainer clean                      | 清除所有保留的消息         |
-+------------------------------------+-----------------------------+
++-----------------+------------------------+
+| retainer info   | 显示保留消息的数量     |
++-----------------+------------------------+
+| retainer topics | 显示保留消息的所有主题 |
++-----------------+------------------------+
+| retainer clean  | 清除所有保留的消息     |
++-----------------+------------------------+
 
 retainer info
---------------
+-------------
 
-显示保留消息的数量：：
+显示保留消息的数量::
 
     $ ./bin/emqx_ctl retainer info
+
     retained/total: 3
 
 retainer topics
-----------------
+---------------
 
 显示保留消息的所有主题::
 
     $ ./bin/emqx_ctl retainer topics
+
     $SYS/brokers/emqx@127.0.0.1/version
     $SYS/brokers/emqx@127.0.0.1/sysdescr
     $SYS/brokers
 
 retainer clean
----------------
+--------------
 
 清除所有保留的消息::
 
     $ ./bin/emqx_ctl retainer clean
-    Cleaned 3 retained messages
 
+    Cleaned 3 retained messages
 
 -----------
 admins 命令
@@ -823,11 +1357,12 @@ Dashboard 插件会自动注册 admins 命令，用于创建、删除管理员�
 +------------------------------------------+-----------------------------+
 
 admins add <Username> <Password> <Tags>
-----------
+---------------------------------------
 
 创建 admin 账户::
 
     $ ./bin/emqx_ctl admins add root public test
+
     ok
 
 admins passwd <Username> <Password>
@@ -836,13 +1371,15 @@ admins passwd <Username> <Password>
 重置 admin 账户密码::
 
     $ ./bin/emqx_ctl admins passwd root private
+
     ok
 
 admins del <Username>
------------------------
+---------------------
 
 删除 admin 账户::
 
     $ ./bin/emqx_ctl admins del root
+
     ok
 

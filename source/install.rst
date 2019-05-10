@@ -1,357 +1,785 @@
 
 .. _install:
 
-=======================
 程序安装 (Installation)
-=======================
+^^^^^^^^^^^^^^^^^^^^^^^
 
-*EMQ X* R3.0 消息服务器可跨平台运行在 Linux、FreeBSD、Mac OS X 或 Windows 服务器上。
+*EMQ X* 消息服务器可跨平台运行在 Linux、FreeBSD、macOS、Windows 或 openSUSE 服务器上。
 
-.. NOTE:: 产品部署建议 Linux、FreeBSD 服务器，不推荐 Windows 服务器。
+.. NOTE:: 产品部署建议 Linux 服务器，不推荐 Windows 服务器。
 
+*EMQ X* 程序包下载
 -----------------------
-*EMQ X* R3.0 程序包下载
------------------------
 
-*EMQ X* R3.0 消息服务器每个版本会发布 Ubuntu、CentOS、FreeBSD、Mac OS X、Windows 平台程序包与 Docker 镜像。
+*EMQ X* 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD、macOS、Windows 、openSUSE 平台程序包与 Docker 镜像。
 
-下载地址: http://emqtt.com/downloads
+下载地址: https://www.emqx.io/downloads
 
-.. _install_rpm:
+.. _emqx.io: https://www.emqx.io/downloads/broker?osType=Linux
+.. _github: https://github.com/emqx/emqx/releases
 
-----------
-RPM 包安装
-----------
+CentOS
+------
 
-EMQ X Linux RPM 程序包:
++ CentOS6.X
++ CentOS7.X
 
-+-------------+---------------------------------------------------+
-| CentOS6.8   | https://www.emqx.io/downloads/v3/latest/emqx-centos6.rpm     |
-+-------------+---------------------------------------------------+
-| CentOS7     | https://www.emqx.io/downloads/v3/latest/emqx-centos7.rpm     |
-+-------------+---------------------------------------------------+
+使用储存库安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>
 
-安装包命名由平台、版本、操纵系统位数组成，例如: emqx-centos7-v3.0_x86_64.rpm
+1.  安装所需要的依赖包
 
-CentOS、RedHat 操作系统下，推荐 RPM 包安装。RPM 包安装后可通过操作系统，直接管理启停 EMQ X 服务。
+    .. code-block:: console
 
-RPM 安装
+        $ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+2.  使用以下命令设置稳定存储库，以 CentOS7 为例
+
+    .. code-block:: console
+
+        $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ce/redhat/centos/7/emqx-ce.repo
+
+3.  安装最新版本的 EMQ X
+
+    .. code-block:: console
+
+        $ sudo yum install emqx
+
+    .. NOTE::  如果提示接受 GPG 密钥，请确认密钥符合 fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53，如果符合，则接受该指纹。
+
+
+4.  安装特定版本的 EMQ X
+
+    1.  查询可用版本
+
+        .. code-block:: console
+
+            $ yum list emqx --showduplicates | sort -r
+
+            emqx.x86_64                     3.1.0-1.el7                        emqx-stable
+            emqx.x86_64                     3.0.1-1.el7                        emqx-stable
+            emqx.x86_64                     3.0.0-1.el7                        emqx-stable
+
+    2.  根据第二列中的版本字符串安装特定版本，例如 3.1.0
+
+        .. code-block:: console
+
+            $ sudo yum install emqx-3.1.0
+
+5.  启动 EMQ X
+
+    +   直接启动
+
+        .. code-block:: console
+
+                $ emqx start
+                emqx 3.1.0 is started successfully!
+
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
+
+    +   systemctl 启动
+
+        .. code-block:: console
+
+                $ sudo systemctl start emqx
+
+    +   service 启动
+
+        .. code-block:: console
+
+                $ sudo service emqx start
+
+使用 rpm 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
+
+1.  通过 `emqx.io`_ 或 `github`_ 选择 CentOS 版本，然后下载要安装的 EMQ X 版本的 rpm 包。
+
+2.  安装 EMQ X
+
+    .. code-block:: console
+
+           $ sudo rpm -ivh emqx-centos7-v3.1.0.x86_64.rpm
+
+3.  启动 EMQ X
+
+    +   直接启动
+
+        .. code-block:: console
+
+                $ emqx start
+                emqx 3.1.0 is started successfully!
+
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
+
+    +   systemctl 启动
+
+        .. code-block:: console
+
+                $ sudo systemctl start emqx
+
+    +   service 启动
+
+        .. code-block:: console
+
+                $ sudo service emqx start
+
+使用 zip 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
+
+1.  通过 `emqx.io`_ 或 `github`_ 选择 Centos 版本，然后下载要安装的 EMQ X 版本的 zip 包。
+
+2.  解压程序包
+
+    .. code-block:: console
+
+       $ unzip emqx-centos7-v3.1.0.zip
+
+3.  启动 EMQ X
+
+    .. code-block:: console
+
+        $ ./bin/emqx start
+        emqx 3.1.0 is started successfully!
+
+        $ ./bin/emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
+
+Ubuntu
+------
+
++ Bionic 18.04 (LTS)
++ Xenial 16.04 (LTS)
++ Trusty 14.04 (LTS)
++ Precise 12.04 (LTS)
+
+使用储存库安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>
+
+1.  安装所需要的依赖包
+
+    .. code-block:: console
+
+        $ sudo apt update && sudo apt install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            gnupg-agent \
+            software-properties-common
+
+2.  添加 EMQ X 的官方 GPG 密钥
+
+    .. code-block:: console
+
+        $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
+
+    验证密钥
+
+    .. code-block:: console
+
+        $ sudo apt-key fingerprint 3E640D53
+
+        pub   rsa2048 2019-04-10 [SC]
+            FC84 1BA6 3775 5CA8 487B  1E3C C0B4 0946 3E64 0D53
+        uid           [ unknown] emqx team <support@emqx.io>
+
+3.  使用以下命令设置 stable 存储库。 如果要添加 unstable 存储库，请在以下命令中的单词 stable 之后添加单词 unstable。
+
+    .. code-block:: console
+
+        $ sudo add-apt-repository \
+            "deb [arch=amd64] https://repos.emqx.io/emqx-ce/deb/ubuntu/ \
+            $(lsb_release -cs) \
+            stable"
+
+    .. NOTE:: lsb_release -cs 子命令返回 Ubuntu 发行版的名称，例如 xenial。 有时，在像 Linux Mint 这样的发行版中，您可能需要将 $(lsb_release -cs) 更改为您的父 Ubuntu 发行版。 例如，如果您使用的是 Linux Mint Tessa，则可以使用 bionic。 EMQ X 不对未经测试和不受支持的 Ubuntu 发行版提供任何保证。
+
+4.  更新 apt 包索引
+
+    .. code-block:: console
+
+        $ sudo apt update
+
+5.  安装最新版本的 EMQ X
+
+    .. code-block:: console
+
+        $ sudo apt install emqx
+
+    .. NOTE:: 在启用了多个 EMQ X 仓库的情况下，如果 apt install 和 apt update 命令没有指定版本号，那么会自动安装最新版的 EMQ X。这对于有稳定性需求的用户来说是一个问题。
+
+6.  安装特定版本的 EMQ X
+
+    1.  查询可用版本
+
+        .. code-block:: console
+
+            $ sudo apt-cache madison emqx
+
+            emqx |      3.1.0 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
+            emqx |      3.0.1 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
+            emqx |      3.0.0 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
+
+
+    2.  使用第二列中的版本字符串安装特定版本，例如 3.1.0
+
+        .. code-block:: console
+
+            $ sudo apt install emqx=3.1.0
+
+7.  启动 EMQ X
+
+    +   直接启动
+
+        .. code-block:: console
+
+                $ emqx start
+                emqx 3.1.0 is started successfully!
+
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
+
+    +   systemctl 启动
+
+        .. code-block:: console
+
+                $ sudo systemctl start emqx
+
+    +   service 启动
+
+        .. code-block:: console
+
+                $ sudo service emqx start
+
+使用 deb 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
+
+1.  通过 `emqx.io`_ 或 `github`_ 选择 Ubuntu 版本，然后下载要安装的 EMQ X 版本的 deb 包。
+
+2.  安装 EMQ X
+
+    .. code-block:: console
+
+           $ sudo dpkg -i emqx-ubuntu18.04-v3.1.0_amd64.deb
+
+3.  启动 EMQ X
+
+    +   直接启动
+
+        .. code-block:: console
+
+                $ emqx start
+                emqx 3.1.0 is started successfully!
+
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
+
+    +   systemctl 启动
+
+        .. code-block:: console
+
+                $ sudo systemctl start emqx
+
+    +   service 启动
+
+        .. code-block:: console
+
+                $ sudo service emqx start
+
+使用 zip 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
+
+1.  通过 `emqx.io`_ 或 `github`_ 选择 Ubuntu 版本，然后下载要安装的 EMQ X 版本的 zip 包。
+
+2.  解压程序包
+
+    .. code-block:: console
+
+       $ unzip emqx-ubuntu18.04-v3.1.0.zip
+
+3.  启动 EMQ X
+
+    .. code-block:: console
+
+        $ ./bin/emqx start
+        emqx 3.1.0 is started successfully!
+
+        $ ./bin/emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
+
+Debian
+------
+
++ Stretch (Debian 9)
++ Jessie (Debian 8)
+
+使用储存库安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>
+
+1.  安装所需要的依赖包
+
+    .. code-block:: console
+
+        $ sudo apt update && sudo apt install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            gnupg-agent \
+            software-properties-common
+
+2.  添加 EMQ X 的官方 GPG 密钥
+
+    .. code-block:: console
+
+        $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
+
+    验证密钥
+
+    .. code-block:: console
+
+        $ sudo apt-key fingerprint 3E640D53
+
+        pub   rsa2048 2019-04-10 [SC]
+            FC84 1BA6 3775 5CA8 487B  1E3C C0B4 0946 3E64 0D53
+        uid           [ unknown] emqx team <support@emqx.io>
+
+3.  使用以下命令设置 stable 存储库。 如果要添加 unstable 的存储库，请在以下命令中的单词 stable 之后添加单词 unstable。
+
+    .. code-block:: console
+
+        $ sudo add-apt-repository \
+            "deb [arch=amd64] https://repos.emqx.io/emqx-ce/deb/debian/ \
+            $(lsb_release -cs) \
+            stable"
+
+    .. NOTE:: lsb_release -cs 子命令返回 Debian 发行版的名称，例如 helium。 有时，在像 BunsenLabs Linux 这样的发行版中，您可能需要将 $(lsb_release -cs) 更改为您的父 Debian 发行版。 例如，如果您使用的是 BunsenLabs Linux Helium，则可以使用 stretch。 EMQ X 不对未经测试和不受支持的 Debian 发行版提供任何保证。
+
+4.  更新 apt 包索引
+
+    .. code-block:: console
+
+        $ sudo apt update
+
+5.  安装最新版本的 EMQ X
+
+    .. code-block:: console
+
+        $ sudo apt install emqx
+
+    .. NOTE:: 在启用了多个 EMQ X 仓库的情况下，如果 apt install 和 apt update 命令没有指定版本号，那么会自动安装最新版的 EMQ X。这对于有稳定性需求的用户来说是一个问题。
+
+6.  安装特定版本的 EMQ X
+
+    1.  查询可用版本
+
+        .. code-block:: console
+
+            $ sudo apt-cache madison emqx
+
+            emqx |      3.1.0 | https://repos.emqx.io/emqx-ce/deb/debian stretch/stable amd64 Packages
+            emqx |      3.0.1 | https://repos.emqx.io/emqx-ce/deb/debian stretch/stable amd64 Packages
+            emqx |      3.0.0 | https://repos.emqx.io/emqx-ce/deb/debian stretch/stable amd64 Packages
+
+
+    2.  使用第二列中的版本字符串安装特定版本，例如 3.1.0
+
+        .. code-block:: console
+
+            $ sudo apt install emqx=3.1.0
+
+7.  启动 EMQ X
+
+    +   直接启动
+
+        .. code-block:: console
+
+                $ emqx start
+                emqx 3.1.0 is started successfully!
+
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
+
+    +   systemctl 启动
+
+        .. code-block:: console
+
+                $ sudo systemctl start emqx
+
+    +   service 启动
+
+        .. code-block:: console
+
+                $ sudo service emqx start
+
+使用 deb 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
+
+1.  通过 `emqx.io`_ 或 `github`_ 选择 Debian 版本，然后下载要安装的 EMQ X 版本的 deb 包。
+
+2.  安装 EMQ X
+
+    .. code-block:: console
+
+           $ sudo dpkg -i emqx-debian9-v3.1.0_amd64.deb
+
+3.  启动 EMQ X
+
+    +   直接启动
+
+        .. code-block:: console
+
+                $ emqx start
+                emqx 3.1.0 is started successfully!
+
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
+
+    +   systemctl 启动
+
+        .. code-block:: console
+
+                $ sudo systemctl start emqx
+
+    +   service 启动
+
+        .. code-block:: console
+
+                $ sudo service emqx start
+
+使用 zip 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
+
+1.  通过 `emqx.io`_ 或 `github`_ 选择 Debian 版本，然后下载要安装的 EMQ X 版本的 zip 包。
+
+2.  解压程序包
+
+    .. code-block:: console
+
+       $ unzip emqx-debian9-v3.1.0.zip
+
+3.  启动 EMQ X
+
+    .. code-block:: console
+
+        $ ./bin/emqx start
+        emqx 3.1.0 is started successfully!
+
+        $ ./bin/emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
+
+macOS
+-----
+
+.. _Homebrew: https://brew.sh/
+
+使用 Homebrew 安装
+>>>>>>>>>>>>>>>>>>
+
+1.  添加 EMQ X 的 tap
+
+    .. code-block:: console
+
+        $ brew tap emqx/emqx
+
+2.  安装 EMQ X
+
+    .. code-block:: console
+
+        $ brew install emqx
+
+3.  启动 EMQ X
+
+    .. code-block:: console
+
+        $ emqx start
+        emqx 3.1.0 is started successfully!
+
+        $ emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
+
+使用 zip 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
+
+1.  通过 `emqx.io`_ 或 `github`_，选择 EMQ X 版本，然后下载要安装的 zip 包。
+
+2.  解压压缩包
+
+    .. code-block:: console
+
+       $ unzip emqx-macos-v3.1.0.zip
+
+3.  启动 EMQ X
+
+    .. code-block:: console
+
+        $ ./bin/emqx start
+        emqx 3.1.0 is started successfully!
+
+        $ ./bin/emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
+
+Windows
+-------
+
+1.  通过 `emqx.io`_ 或 `github`_ 选择 Windows 版本，然后下载要安装的 .zip 包。
+
+2.  解压压缩包
+
+3.  打开 Windows 命令行窗口，cd 到程序目录， 启动 EMQ X。
+
+    .. code-block:: console
+
+        cd emqx/bin
+        emqx start
+
+openSUSE
 --------
 
-.. code-block:: console
++ openSUSE leap
 
-    rpm -ivh emqx-centos7-v3.0-beta.2.zip 
-配置文件
---------
+使用储存库安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>
 
-EMQ X 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/\*.conf。
+1.  下载 GPG 公钥并导入。
 
-日志文件
---------
+    .. code-block:: console
 
-日志文件目录: /var/log/emqx
+        $ curl -L -o /tmp/gpg.pub https://repos.emqx.io/gpg.pub
+        $ sudo rpmkeys --import /tmp/gpg.pub
 
-数据文件
---------
+2.  添加储存库地址
 
-数据文件目录：/var/lib/emqx/
+    .. code-block:: console
 
-启动停止
---------
+        $ sudo zypper ar -f -c https://repos.emqx.io/emqx-ce/redhat/opensuse/leap/stable emqx
 
-.. code-block:: console
+3.  安装最新版本的 EMQ X
 
-    systemctl start|stop|restart emqx.service
+    .. code-block:: console
 
-.. _install_deb:
+        $ sudo zypper in emqx
 
-----------
-DEB 包安装
-----------
+4.  安装特定版本的 EMQ X
 
-EMQ X Linux DEB 程序包:
+    1.  查询可用版本
 
-+-------------+---------------------------------------------------+
-| Ubuntu12.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu12.04.deb |
-+-------------+---------------------------------------------------+
-| Ubuntu14.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu14.04.deb |
-+-------------+---------------------------------------------------+
-| Ubuntu16.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu16.04.deb |
-+-------------+---------------------------------------------------+
-| Ubuntu18.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu18.04.deb |
-+-------------+---------------------------------------------------+
-| Debian7     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.deb     |
-+-------------+---------------------------------------------------+
-| Debian8     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.deb     |
-+-------------+---------------------------------------------------+
+        .. code-block:: console
 
-安装包命名由平台、版本、操纵系统位数组成，例如: emqx-debian7-v3.0_amd64.deb
+            $ sudo zypper pa emqx
 
-Debian、Ubuntu 操作系统下，推荐 DEB 包安装。DEB 包安装后可通过操作系统，直接管理启停 EMQ X 服务。
+            Loading repository data...
+            Reading installed packages...
+            S | Repository | Name | Version  | Arch
+            --+------------+------+----------+-------
+              | emqx       | emqx | 3.1.0-1  | x86_64
+              | emqx       | emqx | 3.0.1-1  | x86_64
+              | emqx       | emqx | 3.0.0-1  | x86_64
 
-.. code-block:: console
+    2.  使用 Version 安装特定版本，例如 3.1.0
 
-    sudo dpkg -i emqx-ubuntu16.04-v3.0-beta.2_amd64.deb 
+        .. code-block:: console
 
-配置文件
---------
+            $ sudo zypper in emqx-3.1.0
 
-EMQ X 配置文件: /etc/emqx/emqx.conf，插件配置文件: /etc/emqx/plugins/\*.conf。
+5.  启动 EMQ X
 
-日志文件
---------
+    +   直接启动
 
-日志文件目录: /var/log/emqx
+        .. code-block:: console
 
-数据文件
---------
+                $ emqx start
+                emqx 3.1.0 is started successfully!
 
-数据文件目录：/var/lib/emqx/
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
 
-启动停止
---------
+    +   systemctl 启动
 
-.. code-block:: console
+        .. code-block:: console
 
-    service emqx start|stop|restart
+                $ sudo systemctl start emqx
 
-.. _install_on_linux:
+    +   service 启动
 
-----------------
-Linux 通用包安装
-----------------
+        .. code-block:: console
 
-*EMQ X* Linux 通用程序包:
+                $ sudo service emqx start
 
-+-------------+-----------------------------------------------+
-| Ubuntu12.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu12_04.zip |
-+-------------+-----------------------------------------------+
-| Ubuntu14.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu14_04.zip |
-+-------------+-----------------------------------------------+
-| Ubuntu16.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu16_04.zip |
-+-------------+-----------------------------------------------+
-| Ubuntu18.04 | https://www.emqx.io/downloads/v3/latest/emqx-ubuntu18_04.zip |
-+-------------+-----------------------------------------------+
-| CentOS6.8   | https://www.emqx.io/downloads/v3/latest/emqx-centos6.zip     |
-+-------------+-----------------------------------------------+
-| CentOS7     | https://www.emqx.io/downloads/v3/latest/emqx-centos7.zip     |
-+-------------+-----------------------------------------------+
-| Debian7     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.zip     |
-+-------------+-----------------------------------------------+
-| Debian8     | https://www.emqx.io/downloads/v3/latest/emqx-debian7.zip     |
-+-------------+-----------------------------------------------+
-| FreeBSD     | https://www.emqx.io/downloads/v3/latest/emqx-freebsd.zip     |
-+-------------+-----------------------------------------------+
+使用 rpm 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
 
-安装包命名由平台、版本组成，例如: emqx-macosx-v3.0.zip
+1.  通过 `emqx.io`_ 或 `github`_ 选择 openSUSE，然后下载要安装的 EMQ X 版本的 rpm 包。
 
-CentOS 平台为例，下载安装过程:
+2.  安装 EMQ X，将下面的路径更改为您下载 EMQ X 软件包的路径。
 
-.. code-block:: bash
+    .. code-block:: console
 
-    unzip emqx-centos7-v3.0.zip
+           $ sudo rpm -ivh emqx-opensuse-v3.1.0.x86_64.rpm
 
-控制台调试模式启动，检查 *EMQ X* 是否可正常启动:
+3.  启动 EMQ X
 
-.. code-block:: bash
+    +   直接启动
 
-    cd emqx && ./bin/emqx console
+        .. code-block:: console
 
-*EMQ X* 消息服务器如启动正常，控制台输出:
+                $ emqx start
+                emqx 3.1.0 is started successfully!
 
-.. code-block:: bash
+                $ emqx_ctl status
+                Node 'emqx@127.0.0.1' is started
+                emqx v3.1.0 is running
 
-    starting emqx on node 'emqx@127.0.0.1'
-    emqx ctl is starting...[ok]
-    emqx hook is starting...[ok]
-    emqx router is starting...[ok]
-    emqx pubsub is starting...[ok]
-    emqx stats is starting...[ok]
-    emqx metrics is starting...[ok]
-    emqx pooler is starting...[ok]
-    emqx trace is starting...[ok]
-    emqx client manager is starting...[ok]
-    emqx session manager is starting...[ok]
-    emqx session supervisor is starting...[ok]
-    emqx wsclient supervisor is starting...[ok]
-    emqx broker is starting...[ok]
-    emqx alarm is starting...[ok]
-    emqx mod supervisor is starting...[ok]
-    emqx bridge supervisor is starting...[ok]
-    emqx access control is starting...[ok]
-    emqx system monitor is starting...[ok]
-    dashboard:http listen on 0.0.0.0:18083 with 2 acceptors.
-    mqtt:tcp listen on 0.0.0.0:1883 with 8 acceptors.
-    mqtt:ssl listen on 0.0.0.0:8883 with 4 acceptors.
-    mqtt:ws listen on 0.0.0.0:8083 with 4 acceptors.
-    Erlang MQTT Broker 3.0 is running now
+    +   systemctl 启动
 
-CTRL+C 关闭控制台。守护进程模式启动:
+        .. code-block:: console
 
-.. code-block:: bash
+                $ sudo systemctl start emqx
 
-    ./bin/emqx start
+    +   service 启动
 
-启动错误日志将输出在 log/ 目录。
+        .. code-block:: console
 
-*EMQ X* 消息服务器进程状态查询:
+                $ sudo service emqx start
 
-.. code-block:: bash
+使用 zip 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
 
-    ./bin/emqx_ctl status
+1.  通过 `emqx.io`_ 或 `github`_ 选择 openSUSE，然后下载要安装的 EMQ X 版本的 zip 包。
 
-正常运行状态，查询命令返回:
+2.  解压压缩包
 
-.. code-block:: bash
+    .. code-block:: console
 
-    $ ./bin/emqx_ctl status
-    Node 'emqx@127.0.0.1' is started
-    emqx 3.0 is running
+       $ unzip emqx-opensuse-v3.1.0.zip
 
-*EMQ X* 消息服务器提供了状态监控 URL::
+3.  启动 EMQ X
 
-    http://localhost:8080/status
+    .. code-block:: console
 
-停止服务器::
+        $ ./bin/emqx start
+        emqx 3.1.0 is started successfully!
 
-    ./bin/emqx stop
+        $ ./bin/emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
 
-.. _install_on_freebsd:
+FreeBSD
+-------
 
-------------------
-FreeBSD 服务器安装
-------------------
++ FreeBSD 12
 
-*EMQ X* FreeBSD 程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-freebsd.zip
+使用 zip 包安装 EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>
 
-FreeBSD 平台安装过程与Linux相同。
+1.  通过 `emqx.io`_ 或 `github`_ 选择 FreeBSD，然后下载要安装的 EMQ X 版本的 zip 包。
 
-.. _install_on_mac:
+2.  解压压缩包
 
------------------
-Mac OS X 系统安装
------------------
+    .. code-block:: console
 
-Mac 下开发调试 MQTT 应用，可直接下载安装: https://www.emqx.io/downloads/v3/latest/emqx-macosx.zip
+       $ unzip emqx-freebsd12-v3.1.0.zip
 
-配置文件 'etc/emqx.conf' log 段落打开 debug 日志，控制台可以查看收发 MQTT 报文详细:
+3.  启动 EMQ X
 
-.. code-block::
+    .. code-block:: console
 
-    ## Console log. Enum: off, file, console, both
-    log.console = both
+        $ ./bin/emqx start
+        emqx 3.1.0 is started successfully!
 
-    ## Console log level. Enum: debug, info, notice, warning, error, critical, alert, emergency
-    log.console.level = debug
+        $ ./bin/emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
 
-    ## Console log file
-    log.console.file = log/console.log
+Docker
+------
 
-*EMQ X* 在 Mac 平台下安装启动过程与 Linux 相同。
+.. _Docker Hub: https://hub.docker.com/r/emqx/emqx
+.. _EMQ X Docker: https://github.com/emqx/emqx-docker
 
-.. _install_on_windows:
+1.  获取 docker 镜像
 
-------------------
-Windows 服务器安装
-------------------
+    +   通过 `Docker Hub`_ 获取
 
-Windows 平台程序包下载: https://www.emqx.io/downloads/v3/latest/emqx-windows10.zip
+        .. code-block:: console
 
-程序包下载解压后，打开 Windows 命令行窗口，cd 到程序目录。
+            $ docker pull emqx/emqx:v3.1.0
 
-控制台模式启动::
+    +   通过 `emqx.io`_ 或 `github`_ 手动下载 docker 镜像，并手动加载
 
-    bin\emqx console
+        .. code-block:: console
 
-如启动成功，会弹出控制台窗口。
+            $ wget -O emqx-docker.zip https://www.emqx.io/downloads/v3/latest/emqx-docker.zip
+            $ unzip emqx-docker.zip
+            $ docker load < emqx-docker-v3.1.0
 
-关闭控制台窗口，停止emqx进程，准备注册 Windows 服务。
+2.  启动 docker 容器
 
-.. WARNING:: EMQ X R3.0 暂不支持服务注册
+    .. code-block:: console
 
-*EMQ X* 注册为 Windows 服务::
+        $ docker run -d --name emqx31 -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v3.1.0
 
-    bin\emqx install
+更多关于 EMQ X Docker 的信息请查看 `Docker Hub`_ 或 `EMQ X Docker`_
 
-*EMQ X* 服务启动::
-
-    bin\emqx start
-
-*EMQ X* 服务停止::
-
-    bin\emqx stop
-
-*EMQ X* 服务卸载::
-
-    bin\emqx uninstall
-
-.. _install_docker:
-
----------------
-Docker 镜像安装
----------------
-
-*EMQ X* 3.0 Docker 镜像下载: https://www.emqx.io/downloads/v3/latest/emqx-docker.zip
-
-解压 emqx-docker 镜像包::
-
-    unzip emqx-docker-v3.0.zip
-
-加载镜像::
-
-    docker load < emqx-docker-v3.0
-
-启动容器::
-
-    docker run -tid --name emq30 -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx-docker-v3.0
-
-停止容器::
-
-    docker stop emq30
-
-开启容器::
-
-    docker start emq30
-
-进入 Docker 控制台::
-
-    docker exec -it emq30 /bin/sh
-
-.. _build_from_source:
-
-------------
 源码编译安装
 ------------
 
+环境要求
+>>>>>>>>
+
 *EMQ X* 消息服务器基于 Erlang/OTP 平台开发，项目托管的 GitHub 管理维护，源码编译依赖 Erlang 环境和 git 客户端。
 
-.. NOTE:: EMQ X R3.0 依赖 Erlang R21+ 版本
+.. NOTE:: EMQ X 依赖 Erlang R21.2+ 版本
 
 Erlang 安装: http://www.erlang.org/
 
 Git 客户端: http://www.git-scm.com/
 
-Ubuntu 平台可通过 apt-get 命令安装，CentOS/RedHat 平台可通过 yum 命令安装，Mac 下可通过 brew 包管理命令安装，Windows 下... :(
+编译安装EMQ X
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-编译环境准备好之后，clone 代码开始编译:
+1.  获取源码
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    git clone -b emqx30 https://github.com/emqx/emqx-rel.git
+        $ git clone -b v3.1.0 https://github.com/emqx/emqx-rel.git
 
-    cd emq-relx && make
+2.  设置环境变量
 
-    cd _rel/emqx && ./bin/emqx console
+    .. code-block:: bash
 
-编译成功后，可执行程序包在目录::
+        $ export EMQX_DEPS_DEFAULT_VSN=v3.1.0
 
-    _rel/emqx
+3.  编译
 
-控制台启动编译的 EMQ 程序包::
+    .. code-block:: bash
 
-    cd _rel/emqx && ./bin/emqx console
+        $ cd emqx-rel && make
 
---------------------
+4.  启动 EMQ X
+
+    .. code-block:: bash
+
+        $ cd emqx-rel/_rel/emqx
+        $ ./bin/emqx start
+        emqx 3.1.0 is started successfully!
+
+        $ ./bin/emqx_ctl status
+        Node 'emqx@127.0.0.1' is started
+        emqx v3.1.0 is running
+
 Windows 源码编译安装
 --------------------
 
@@ -359,118 +787,25 @@ Erlang 安装: http://www.erlang.org/
 
 MSYS2 安装: http://www.msys2.org/
 
-MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 Make 工具软件:
+MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 Make 工具软件
 
 .. code-block:: bash
 
-    pacman -S git make
+        pacman -S git make
 
-编译环境准备之后，clone 代码开始编译:
+编译环境准备之后，clone 代码开始编译
 
 .. code-block:: bash
 
-    git clone -b win30 https://github.com/emqx/emqx-rel.git
+        git clone -b win30 https://github.com/emqx/emqx-rel.git
 
-    cd emqx-relx && make
+        cd emqx-relx && make
 
-    cd _rel/emqx && ./bin/emqx console
+        cd _rel/emqx && ./bin/emqx console
 
-编译成功后，可执行程序包在目录::
+控制台启动编译的 EMQ 程序包
 
-    _rel/emqx
+.. code-block:: bash
 
-控制台启动编译的 EMQ 程序包::
-
-    cd _rel/emqx && ./bin/emqx console
-
-.. _tcp_ports:
-
-----------------
-TCP 服务端口占用
-----------------
-
-*EMQ X* R3.0 消息服务器默认占用的 TCP 端口包括:
-
-+-----------+-----------------------------------+
-| 1883      | MQTT 协议端口                     |
-+-----------+-----------------------------------+
-| 8883      | MQTT/SSL 端口                     |
-+-----------+-----------------------------------+
-| 8083      | MQTT/WebSocket 端口               |
-+-----------+-----------------------------------+
-| 8080      | HTTP API 端口                     |
-+-----------+-----------------------------------+
-| 18083     | Dashboard 管理控制台端口          |
-+-----------+-----------------------------------+
-
-*EMQ X* R3.0 占用的上述端口，可通过 etc/emqx.conf 配置文件的 'listener' 段落设置:
-
-.. code-block:: properties
-
-    ## TCP Listener: 1883, 127.0.0.1:1883, ::1:1883
-    listener.tcp.external = 0.0.0.0:1883
-
-    ## SSL Listener: 8883, 127.0.0.1:8883, ::1:8883
-    listener.ssl.external = 8883
-
-    ## External MQTT/WebSocket Listener
-    listener.ws.external = 8083
-
-    ## HTTP Management API Listener
-    listener.api.mgmt = 127.0.0.1:8080
-
-通过注释或删除相关段落，可禁用相关 TCP 服务启动。
-
-18083 端口是 Web 管理控制占用，该端口由 `emq_dashboard`_ 插件启用。
-
-控制台 URL: http:://localhost:18083/ ，默认登录用户名: admin, 密码: public。
-
-.. _quick_setup:
-
---------
-快速设置
---------
-
-*EMQ X* 消息服务器主要配置文件:
-
-+----------------------+-----------------------------------+
-| etc/emqx.conf        | EMQ 消息服务器参数设置            |
-+----------------------+-----------------------------------+
-| etc/plugins/\*.conf  | EMQ 插件配置文件                  |
-+----------------------+-----------------------------------+
-
-etc/emqx.conf 中两个重要的虚拟机启动参数:
-
-+-----------------------+------------------------------------------------------------------+
-| node.process_limit    | Erlang 虚拟机允许的最大进程数，EMQ 一个连接会消耗2个Erlang进程   |
-+-----------------------+------------------------------------------------------------------+
-| node.max_ports        | Erlang 虚拟机允许的最大 Port 数量，EMQ 一个连接消耗1个 Port      |
-+-----------------------+------------------------------------------------------------------+
-
-.. NOTE:: Erlang 的 Port 非 TCP 端口，可以理解为文件句柄。
-
-node.process_limit = 参数值 > 最大允许连接数 * 2
-
-node.max_ports = 参数值 > 最大允许连接数
-
-.. WARNING:: 实际连接数量超过 Erlang 虚拟机参数设置，会引起 EMQ 消息服务器宕机!
-
-etc/emqx.conf 配置文件的 `listener` 段落设置最大允许连接数:
-
-.. code-block:: properties
-
-    listener.tcp.external = 0.0.0.0:1883
-
-    listener.tcp.external.acceptors = 8
-
-    listener.tcp.external.max_clients = 1024
-
-*EMQ X* R3.0 消息服务器详细设置，请参见文档: :ref:`config`
-
-.. NOTE::
-
-    ## erlexec: HOME must be set
-    uncomment '# export HOME=/root' if "HOME must be set" error.
-
-.. _emqx_dashboard: https://github.com/emqx/emqx-dashboard.git
-
+        cd _rel/emqx/bin 
+        emqx console
