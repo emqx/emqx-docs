@@ -380,26 +380,48 @@ MQTT-SN 客户端库
 LWM2M 协议
 ----------
 
-LWM2M 是由 Open Mobile Alliance(OMA) 定义的一套适用于物联网的协议，它提供了设备管理和通讯的功能。协议可以在 `这里 <http://www.openmobilealliance.org/wp/>`_ 下载。
+LwM2M 全称是 Lightweight Machine-To-Machine，是由 Open Mobile Alliance(OMA) 定义的一套适用于物联网的轻量级协议，它提供了设备管理和通讯的功能，尤其适用于资源有限的终端设备。协议可以在 `这里 <http://www.openmobilealliance.org/wp/>`_ 下载。
 
-LWM2M 使用 CoAP 作为底层的传输协议，承载在 UDP 或者 SMS 上。
+LwM2M 基于 REST 架构，使用 CoAP 作为底层的传输协议，承载在 UDP 或者 SMS 上，因而报文结构简单小巧，并且在网络资源有限及无法确保设备始终在线的环境里同样适用。
 
-LWM2M 定义了两种服务器
+LwM2M 最主要的实体包括 LwM2M Server 和 LwM2M Client。
 
-- 一种是 LWM2M BOOTSTRAP SERVER，emqx-lwm2m 插件并未实现该服务器的功能。
-- 一种是 LWM2M SERVER，emqx-lwm2m 实现该服务器在 UDP 上的功能，SMS 并没有实现。
+LwM2M Server 作为服务器，部署在 M2M 服务供应商处或网络服务供应商处。LwM2M 定义了两种服务器
 
-LWM2M 把设备上的服务抽象为 Object 和 Resource, 在 XML 文件中定义各种 Object 的属性和功能。可以在 `这里 <http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html>`_ 找到 XML 的各种定义。
+- 一种是 LwM2M BOOTSTRAP SERVER，emqx-lwm2m 插件并未实现该服务器的功能。
+- 一种是 LwM2M SERVER，emqx-lwm2m 实现该服务器在 UDP 上的功能，SMS 并没有实现。
+
+LwM2M Client 作为客户端，部署在各个 LwM2M 设备上。
+
+在 LwM2M Server 和 LwM2M Client 之间，LwM2M 协议定义了4个接口。
+
+1. 引导接口 Bootstrap：向 LwM2M 客户端提供注册到 LwM2M 服务器的必要信息，例如服务器访问信息、客户端支持的资源信息等。
+2. 客户端注册接口 Client Registration：使 LwM2M 客户端与 LwM2M 服务器互联，将 LwM2M 客户端的相关信息存储在 LwM2M 服务器上。只有完成注册后，LwM2M 客户端与服务器端之间的通信与管理才成为可能。
+3. 设备管理与服务实现接口 Device Management and Service Enablement：该接口的主控方为 LwM2M 服务器，服务器向客户端发送指令，客户端对指令做出回应并将回应消息发送给服务器。
+4. 信息上报接口 Information Reporting：允许 LwM2M 服务器端向客户端订阅资源信息，客户端接收订阅后按照约定的模式向服务器端报告自己的资源变化情况。
+
+LwM2M 把设备上的服务抽象为 Object 和 Resource, 在 XML 文件中定义各种 Object 的属性和功能。可以在 `这里 <http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html>`_ 找到 XML 的各种定义。
+
+LwM2M 协议预定义了8种 Object 来满足基本的需求，分别是：
+
+- Security 安全对象
+- Server 服务器对象
+- Access Control 访问控制对象
+- Device 设备对象
+- Connectivity Monitoring 连通性监控对象
+- Firmware 固件对象
+- Location 位置对象
+- Connectivity Statistics 连通性统计对象
 
 EMQX-LWM2M 插件
 :::::::::::::::
 
-EMQX-LWM2M 是 EMQ X 服务器的一个网关插件，实现了 LWM2M 的大部分功能。MQTT 客户端可以通过 EMQX-LWM2M 访问支持 LWM2M 的设备。设备也可以往 EMQX-LWM2M 上报 notification，为 EMQ X后端的服务采集数据。
+EMQX-LWM2M 是 EMQ X 服务器的一个网关插件，实现了 LwM2M 的大部分功能。MQTT 客户端可以通过 EMQX-LWM2M 访问支持 LwM2M 的设备。设备也可以往 EMQX-LWM2M 上报 notification，为 EMQ X后端的服务采集数据。
 
-MQTT 和 LWM2M的转换
+MQTT 和 LwM2M的转换
 :::::::::::::::::::
 
-从 MQTT 客户端可以发送 Command 给 LWM2M 设备。MQTT 到 LWM2M 的命令使用如下的 topic
+从 MQTT 客户端可以发送 Command 给 LwM2M 设备。MQTT 到 LwM2M 的命令使用如下的 topic
 
 .. code-block::
 
@@ -407,7 +429,7 @@ MQTT 和 LWM2M的转换
 
 其中 MQTT Payload 是一个 json 格式的字符串，指定要发送的命令，更多的细节请参见 emqx-lwm2m 的文档。
 
-LWM2M 设备的回复用如下 topic 传送
+LwM2M 设备的回复用如下 topic 传送
     
 .. code-block::
 
@@ -429,13 +451,13 @@ File: etc/emqx_lwm2m.conf::
     lwm2m.xml_dir =  etc/lwm2m_xml
 
 +-----------------------------+---------------------------------------------------------------------------+
-| lwm2m.port                  | 指定 lwm2m 监听的端口号，为了避免和 emqx-coap 冲突，使用了非标准的5783端口|
+| lwm2m.port                  | 指定 LwM2M 监听的端口号，为了避免和 emqx-coap 冲突，使用了非标准的5783端口|
 +-----------------------------+---------------------------------------------------------------------------+
 | lwm2m.certfile              | DTLS 使用的证书                                                           |
 +-----------------------------+---------------------------------------------------------------------------+
 | lwm2m.keyfile               | DTLS 使用的秘钥                                                           |
 +-----------------------------+---------------------------------------------------------------------------+
-| lwm2m.xml_dir               | 存放 XML 文件的目录，这些 XML 用来定义 LWM2M Object                       |
+| lwm2m.xml_dir               | 存放 XML 文件的目录，这些 XML 用来定义 LwM2M Object                       |
 +-----------------------------+---------------------------------------------------------------------------+
 
 启动 emqx-lwm2m
@@ -445,7 +467,7 @@ File: etc/emqx_lwm2m.conf::
 
     ./bin/emqx_ctl plugins load emqx_lwm2m
 
-LWM2M 的客户端库
+LwM2M 的客户端库
 :::::::::::::::::
 
 - https://github.com/eclipse/wakaama
