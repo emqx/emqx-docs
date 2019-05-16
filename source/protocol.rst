@@ -384,6 +384,8 @@ LwM2M 全称是 Lightweight Machine-To-Machine，是由 Open Mobile Alliance(OMA
 
 LwM2M 基于 REST 架构，使用 CoAP 作为底层的传输协议，承载在 UDP 或者 SMS 上，因而报文结构简单小巧，并且在网络资源有限及无法确保设备始终在线的环境里同样适用。
 
+.. image:: ./_static/images/lwm2m_protocols.png
+
 LwM2M 最主要的实体包括 LwM2M Server 和 LwM2M Client。
 
 LwM2M Server 作为服务器，部署在 M2M 服务供应商处或网络服务供应商处。LwM2M 定义了两种服务器
@@ -399,6 +401,8 @@ LwM2M Client 作为客户端，部署在各个 LwM2M 设备上。
 2. 客户端注册接口 Client Registration：使 LwM2M 客户端与 LwM2M 服务器互联，将 LwM2M 客户端的相关信息存储在 LwM2M 服务器上。只有完成注册后，LwM2M 客户端与服务器端之间的通信与管理才成为可能。
 3. 设备管理与服务实现接口 Device Management and Service Enablement：该接口的主控方为 LwM2M 服务器，服务器向客户端发送指令，客户端对指令做出回应并将回应消息发送给服务器。
 4. 信息上报接口 Information Reporting：允许 LwM2M 服务器端向客户端订阅资源信息，客户端接收订阅后按照约定的模式向服务器端报告自己的资源变化情况。
+
+.. image:: ./_static/images/lwm2m_arch.png
 
 LwM2M 把设备上的服务抽象为 Object 和 Resource, 在 XML 文件中定义各种 Object 的属性和功能。可以在 `这里 <http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html>`_ 找到 XML 的各种定义。
 
