@@ -204,7 +204,9 @@ EMQ X 提供的认证插件包括:
     mosquitto_pub -t 'topic' -m msg -q 2
 
 
-*EMQ X* 支持按以下几种策略派发消息：
+*EMQ X* 通过 `etc/emqx.conf` 中的 `broker.shared_subscription_strategy` 字段配置共享消息的派发策略。
+
+目前支持按以下几种策略派发消息：
 
 +---------------------------+-------------------------+
 | 策略                      | 说明                    |
