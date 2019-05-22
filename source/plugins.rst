@@ -415,6 +415,7 @@ etc/plugins/emqx_auth_mysql.conf:
     auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 
     ## ACL 查询语句
+    ## 注: 可以增加 'ORDER BY' 子句以控制 ACL 规则的生效顺序
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
 此外，为防止密码域过于简单而带来安全的隐患问题，该插件还支持密码加盐操作：
@@ -515,6 +516,7 @@ etc/plugins/emqx_auth_pgsql.conf:
     ##  - %a: ipaddress
     ##  - %u: username
     ##  - %c: clientid
+    ## 注: 可以增加 'ORDER BY' 子句以控制 ACL 规则的生效顺序
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
 同样的 password_hash 可以配置为更为安全的模式：
