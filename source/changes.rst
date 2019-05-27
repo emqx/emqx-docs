@@ -5,6 +5,93 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2-beta.1:
+
+---------------
+3.2-beta.1 版本
+---------------
+
+*发布日期: 2019-05-27*
+
+EMQ X 3.2.beta-1 版本发布。此版本改动主要包括支持 rebar3 构建和增强规则引擎。
+
+功能增强:
+
+- 支持通过 rabar3 构建项目
+
+  Github PR:
+  `emqx/emqx#2475 <https://github.com/emqx/emqx/pull/2475>`_,
+  `emqx/emqx#2510 <https://github.com/emqx/emqx/pull/2510>`_,
+  `emqx/emqx#2518 <https://github.com/emqx/emqx/pull/2518>`_,
+  `emqx/emqx#2521 <https://github.com/emqx/emqx/pull/2521>`_
+
+- SSL 连接支持 `{active, N}` 选项
+
+  Github PR:
+  `emqx/emqx#2531 <https://github.com/emqx/emqx/pull/2531>`_
+
+- 更正匿名访问行为表现
+
+  Github PR:
+  `emqx/emqx#2355 <https://github.com/emqx/emqx/pull/2355>`_
+
+- 提升 zone 的访问速度
+
+  Github PR:
+  `emqx/emqx#2548 <https://github.com/emqx/emqx/pull/2548>`_
+
+错误修复:
+
+- 修复 `emqx_sm` 中的致命错误
+
+  Github PR:
+  `emqx/emqx#2559 <https://github.com/emqx/emqx/pull/2559>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 更好的规则引擎
+
+  Github Repository:
+  `emqx/emqx-rule-engine <https://github.com/emqx/emqx-rule-engine>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+功能增强:
+
+- 增加一个用于编码 payload 字段的选项
+
+  Github PR:
+  `emqx/emqx-web-hook#119 <https://github.com/emqx/emqx-web-hook/pull/119>`_
+
+emqx-auth-http (plugin)
+-----------------------
+
+功能增强:
+
+- HTTP 请求支持更多选项
+
+  Github PR:
+  `emqx/emqx-auth-http#128 <https://github.com/emqx/emqx-auth-http/pull/128>`_
+
+- ACL/AUTH 请求支持更多参数
+
+  Github PR:
+  `emqx/emqx-auth-http#127 <https://github.com/emqx/emqx-auth-http/pull/127>`_
+
+emqx-sn (plugin)
+----------------
+
+错误修复:
+
+- 修复错误的函数调用
+
+  Github PR:
+  `emqx/emqx-sn#118 <https://github.com/emqx/emqx-sn/pull/118>`_
+
 .. _release_3.1.1:
 
 ----------
