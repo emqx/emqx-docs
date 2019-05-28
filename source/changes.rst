@@ -47,6 +47,11 @@ EMQ X 3.2.beta-1 版本发布。此版本改动主要包括支持 rebar3 构建�
   Github PR:
   `emqx/emqx#2559 <https://github.com/emqx/emqx/pull/2559>`_
 
+- 修复发布 MQTT-SN、CoAP 消息时的错误
+
+  Github PR:
+  `emqx/emqx#2556 <https://github.com/emqx/emqx/pull/2556>`_
+
 emqx-rule-engine (plugin)
 -------------------------
 
