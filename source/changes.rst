@@ -5,6 +5,71 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.1.2:
+
+----------
+3.1.2 版本
+----------
+
+*发布日期: 2019-06-06*
+
+EMQ X 3.1.1 版本发布。此版本改动主要包括错误修复、稳定性增强。
+
+EMQ X Core
+----------
+
+Bug fixes:
+
+- 修复 `emqx/emqx: issue #2595 <https://github.com/emqx/emqx/issues/2595>`_
+
+  Github PR:
+  `emqx/emqx#2601 <https://github.com/emqx/emqx/pull/2601>`_
+
+- 修复无法设置日志等级的问题
+
+  Github PR:
+  `emqx/emqx#2600 <https://github.com/emqx/emqx/pull/2600>`_
+
+- 修复返回值不匹配的问题
+
+  Github PR:
+  `emqx/emqx#2560 <https://github.com/emqx/emqx/pull/2560>`_
+
+- 热修复 ``emqx_sn`` 与 ``emqx_coap`` 插件
+
+  Github PR:
+  `emqx/emqx#2556 <https://github.com/emqx/emqx/pull/2556>`_
+
+emqx-coap (plugin)
+------------------
+
+错误修复:
+
+- 修复无法发布消息的问题
+
+  Github PR:
+  `emqx/emqx-coap#120 <https://github.com/emqx/emqx-coap/pull/120>`_
+
+ekka (deps)
+-----------
+
+错误修复:
+
+- 修复导致 ``emqx_sm_locker`` 崩溃的问题
+
+  Github PR:
+  `emqx/ekka#54 <https://github.com/emqx/ekka/pull/54>`_
+
+- 修复 k8s 无法使用 dns 集群的问题
+
+  Github PR:
+  `emqx/ekka#53 <https://github.com/emqx/ekka/pull/53>`_
+
+- 修复 etcd 集群不可用的问题
+
+  Github PR:
+  `emqx/ekka#52 <https://github.com/emqx/ekka/pull/52>`_
+
 .. _release_3.2-beta.1:
 
 ---------------
