@@ -88,26 +88,6 @@ emqx-auth-http (plugin)
   Github PR:
   `emqx/emqx-auth-http#133 <https://github.com/emqx/emqx-auth-http/pull/133>`_
 
-emqx-backend-pgsql (plugin)
----------------------------
-
-功能增强:
-
-- 为规则引擎支持 TimescaleDB
-
-  Github PR:
-  `emqx/emqx-backend-pgsql#44 <https://github.com/emqx/emqx-backend-pgsql/pull/44>`_
-
-emqx-backend-influxdb (plugin)
-------------------------------
-
-功能增强:
-
-- 实现 InfluxDB 的 Backend, 并支持规则引擎
-
-  Github Repository:
-  `emqx/emqx-backend-influxdb <https://github.com/emqx/emqx-backend-influxdb>`_
-
 emqx-docker
 -----------
 
