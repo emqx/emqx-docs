@@ -195,11 +195,6 @@ emqx-auth-http (plugin)
   Github PR:
   `emqx/emqx-auth-http#128 <https://github.com/emqx/emqx-auth-http/pull/128>`_
 
-- ACL/AUTH 请求支持更多参数
-
-  Github PR:
-  `emqx/emqx-auth-http#127 <https://github.com/emqx/emqx-auth-http/pull/127>`_
-
 emqx-sn (plugin)
 ----------------
 
