@@ -5,70 +5,118 @@
 版本发布 (Changes)
 ==================
 
-.. _release_3.1.2:
+.. _release_3.2-beta.2:
 
-----------
-3.1.2 版本
-----------
+---------------
+3.2-beta.2 版本
+---------------
 
 *发布日期: 2019-06-06*
 
-EMQ X 3.1.1 版本发布。此版本改动主要包括错误修复、稳定性增强。
-
-EMQ X Core
-----------
-
-Bug fixes:
-
-- 修复 `emqx/emqx: issue #2595 <https://github.com/emqx/emqx/issues/2595>`_
-
-  Github PR:
-  `emqx/emqx#2601 <https://github.com/emqx/emqx/pull/2601>`_
-
-- 修复无法设置日志等级的问题
-
-  Github PR:
-  `emqx/emqx#2600 <https://github.com/emqx/emqx/pull/2600>`_
-
-- 修复返回值不匹配的问题
-
-  Github PR:
-  `emqx/emqx#2560 <https://github.com/emqx/emqx/pull/2560>`_
-
-- 热修复 ``emqx_sn`` 与 ``emqx_coap`` 插件
-
-  Github PR:
-  `emqx/emqx#2556 <https://github.com/emqx/emqx/pull/2556>`_
-
-emqx-coap (plugin)
-------------------
+EMQ X 3.2-beta.2 版本发布。此版本改动主要包括增强规则引擎和错误修复。
 
 错误修复:
 
-- 修复无法发布消息的问题
+- 修复 `emqx/emqx: issue#2553 <https://github.com/emqx/emqx/issues/2553>`_
 
   Github PR:
-  `emqx/emqx-coap#120 <https://github.com/emqx/emqx-coap/pull/120>`_
+  `emqx/emqx#2596 <https://github.com/emqx/emqx/pull/2596>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 支持在 Dashboard 中测试 SQL 语句
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3e7c4c <https://github.com/emqx/emqx-rule-engine/commit/3e7c4cbe275d8f120ad8efb83fd23ee571d465db>`_
+
+- 预处理 PreparedStatement 以获得更好的性能
+
+  Github Commit:
+  `emqx/emqx-rule-engine#fa3720 <https://github.com/emqx/emqx-rule-engine/commit/fa37205850c6efe9af5f8ca2f230e17c7de2adb4>`_,
+  `emqx/emqx-rule-engine#b00fad <https://github.com/emqx/emqx-rule-engine/commit/b00fad45c283fa2ec3aa57353bbe161960547461>`_
+
+- 规则引擎适配集群
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3da7fe <https://github.com/emqx/emqx-rule-engine/commit/3da7fed60d92c9a994c2aed5f34509c0d0d4eff4>`_,
+  `emqx/emqx-rule-engine#4963b0 <https://github.com/emqx/emqx-rule-engine/commit/4963b0ee3a6114ebe74b48876d25723137df14ad>`_
+
+- Dashboard 可以显示 Resource 状态
+
+  Github Commit:
+  `emqx/emqx-rule-engine#dd9a8d <https://github.com/emqx/emqx-rule-engine/commit/dd9a8d4801f650c1ac888f7420f5497f7d0d6c73>`_,
+  `emqx/emqx-rule-engine#d16224 <https://github.com/emqx/emqx-rule-engine/commit/d162246c0b630e059c21f7b36e50154f3d7832e3>`_,
+  `emqx/emqx-rule-engine#e4574c <https://github.com/emqx/emqx-rule-engine/commit/e4574c9554d7e7d79a8ce55a6c9e4089ee00db79>`_
+
+- 支持通过 Dashboard 重启 Resource
+
+  Github Commit:
+  `emqx/emqx-rule-engine#ccbffd <https://github.com/emqx/emqx-rule-engine/commit/ccbffd7d5db514adf6cd20e8d139e73f80bc1c96>`_
+
+- 支持检查 HTTP 是否可连通
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3feffc <https://github.com/emqx/emqx-rule-engine/commit/3feffcd5a3f0da78725f1208594cea1b3273ec0b>`_
+
+错误修复:
+
+- 修复删除 Resource 前检查依赖发生错误的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3265ff <https://github.com/emqx/emqx-rule-engine/commit/3265ffe10584f0edccc084e6f78ae035ba310c07>`_
+
+- 修复 Resource 无法被销毁的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#58a1ce <https://github.com/emqx/emqx-rule-engine/commit/58a1ce45e1cf96cf05481d8ed076febef0d41976>`_
+
+- 修复 SQL 无法嵌套插入的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#64776a <https://github.com/emqx/emqx-rule-engine/commit/64776aebde1fe48c1038fba3b61f457590ab4408>`_
+
+emqx-auth-http (plugin)
+-----------------------
+
+功能增强:
+
+- 支持 HTTPs
+
+  Github PR:
+  `emqx/emqx-auth-http#133 <https://github.com/emqx/emqx-auth-http/pull/133>`_
+
+emqx-docker
+-----------
+
+错误修复:
+
+- 修复 `emqx/emqx-docker: issue#115 <https://github.com/emqx/emqx-docker/issues/115>`_
+
+  Github Commit:
+  `emqx/emqx-docker#f3c219 <https://github.com/emqx/emqx-docker/commit/f3c21978f5ffefd5d419bc78a1caf1ad71de9c91>`_
+
+emqx-management (plugin)
+------------------------
+
+错误修复:
+
+- 修复重新加载插件失败的问题
+
+  Github PR:
+  `emqx/emqx-management#91 <https://github.com/emqx/emqx-management/pull/91>`_
 
 ekka (deps)
 -----------
 
 错误修复:
 
-- 修复导致 ``emqx_sm_locker`` 崩溃的问题
+- 修复导致 `emqx_sm_locker` 崩溃的问题
 
-  Github PR:
-  `emqx/ekka#54 <https://github.com/emqx/ekka/pull/54>`_
-
-- 修复 k8s 无法使用 dns 集群的问题
-
-  Github PR:
-  `emqx/ekka#53 <https://github.com/emqx/ekka/pull/53>`_
-
-- 修复 etcd 集群不可用的问题
-
-  Github PR:
-  `emqx/ekka#52 <https://github.com/emqx/ekka/pull/52>`_
+  Github Commit:
+  `emqx/ekka#2d5bf2 <https://github.com/emqx/ekka/commit/2d5bf2a1f10d84408e4b35d3e274a49f395056c3>`_
 
 .. _release_3.2-beta.1:
 
@@ -147,11 +195,6 @@ emqx-auth-http (plugin)
   Github PR:
   `emqx/emqx-auth-http#128 <https://github.com/emqx/emqx-auth-http/pull/128>`_
 
-- ACL/AUTH 请求支持更多参数
-
-  Github PR:
-  `emqx/emqx-auth-http#127 <https://github.com/emqx/emqx-auth-http/pull/127>`_
-
 emqx-sn (plugin)
 ----------------
 
@@ -161,6 +204,71 @@ emqx-sn (plugin)
 
   Github PR:
   `emqx/emqx-sn#118 <https://github.com/emqx/emqx-sn/pull/118>`_
+
+.. _release_3.1.2:
+  
+----------
+3.1.2 版本
+----------
+
+*发布日期: 2019-06-06*
+
+EMQ X 3.1.1 版本发布。此版本改动主要包括错误修复、稳定性增强。
+
+EMQ X Core
+----------
+
+Bug fixes:
+
+- 修复 `emqx/emqx: issue #2595 <https://github.com/emqx/emqx/issues/2595>`_
+
+  Github PR:
+  `emqx/emqx#2601 <https://github.com/emqx/emqx/pull/2601>`_
+
+- 修复无法设置日志等级的问题
+
+  Github PR:
+  `emqx/emqx#2600 <https://github.com/emqx/emqx/pull/2600>`_
+
+- 修复返回值不匹配的问题
+
+  Github PR:
+  `emqx/emqx#2560 <https://github.com/emqx/emqx/pull/2560>`_
+
+- 热修复 ``emqx_sn`` 与 ``emqx_coap`` 插件
+
+  Github PR:
+  `emqx/emqx#2556 <https://github.com/emqx/emqx/pull/2556>`_
+
+emqx-coap (plugin)
+------------------
+
+错误修复:
+
+- 修复无法发布消息的问题
+
+  Github PR:
+  `emqx/emqx-coap#120 <https://github.com/emqx/emqx-coap/pull/120>`_
+
+ekka (deps)
+-----------
+
+错误修复:
+
+- 修复导致 ``emqx_sm_locker`` 崩溃的问题
+
+  Github PR:
+  `emqx/ekka#54 <https://github.com/emqx/ekka/pull/54>`_
+
+- 修复 k8s 无法使用 dns 集群的问题
+
+  Github PR:
+  `emqx/ekka#53 <https://github.com/emqx/ekka/pull/53>`_
+
+- 修复 etcd 集群不可用的问题
+
+  Github PR:
+  `emqx/ekka#52 <https://github.com/emqx/ekka/pull/52>`_
 
 .. _release_3.1.1:
 
