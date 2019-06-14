@@ -47,6 +47,16 @@ emqx-rule-engine (plugin)
   Github PR:
   `emqx/emqx-rule-engine#63 <https://github.com/emqx/emqx-rule-engine/pull/63>`_
 
+emqx-management (plugin)
+------------------------
+
+错误修复:
+
+- 修复 CLI 无法踢掉 websocket 连接的问题
+
+  Github PR:
+  `emqx/emqx-management#93 <https://github.com/emqx/emqx-management/pull/93>`_
+
 .. _release_3.2-beta.2:
 
 ---------------
