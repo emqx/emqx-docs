@@ -5,6 +5,58 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2-beta.3:
+
+---------------
+3.2-beta.3 版本
+---------------
+
+*发布日期: 2019-06-14*
+
+EMQ X 3.2-beta.3 版本发布。此版本改动主要包括增强规则引擎和错误修复。
+
+错误修复:
+
+- 修复没有检查 ``Will Retain`` 的问题
+
+  Github PR:
+  `emqx/emqx#2607 <https://github.com/emqx/emqx/pull/2607>`_
+
+- 修复 `emqx/emqx: issue#2591 <https://github.com/emqx/emqx/issues/2591>`_
+
+  Github PR:
+  `emqx/emqx#2615 <https://github.com/emqx/emqx/pull/2615>`_
+
+- 默认情况下删除日志记录的字符限制
+
+  Github PR:
+  `emqx/emqx#2617 <https://github.com/emqx/emqx/pull/2617>`_
+
+- 修复无法处理分裂的 TCP 报文的问题
+
+  Github PR:
+  `emqx/emqx#2611 <https://github.com/emqx/emqx/pull/2611>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 支持规则命中次数等 Metrics 统计
+
+  Github PR:
+  `emqx/emqx-rule-engine#63 <https://github.com/emqx/emqx-rule-engine/pull/63>`_
+
+emqx-management (plugin)
+------------------------
+
+错误修复:
+
+- 修复 CLI 无法踢掉 websocket 连接的问题
+
+  Github PR:
+  `emqx/emqx-management#93 <https://github.com/emqx/emqx-management/pull/93>`_
+
 .. _release_3.2-beta.2:
 
 ---------------
