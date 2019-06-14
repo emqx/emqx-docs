@@ -27,6 +27,11 @@ EMQ X 3.2-beta.3 版本发布。此版本改动主要包括增强规则引擎和
   Github PR:
   `emqx/emqx#2615 <https://github.com/emqx/emqx/pull/2615>`_
 
+- 默认情况下删除日志记录的字符限制
+
+  Github PR:
+  `emqx/emqx#2617 <https://github.com/emqx/emqx/pull/2617>`_
+
 emqx-bridge-kafka (plugin)
 --------------------------
 
