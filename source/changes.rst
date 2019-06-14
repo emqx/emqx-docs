@@ -32,15 +32,10 @@ EMQ X 3.2-beta.3 版本发布。此版本改动主要包括增强规则引擎和
   Github PR:
   `emqx/emqx#2617 <https://github.com/emqx/emqx/pull/2617>`_
 
-emqx-bridge-kafka (plugin)
---------------------------
-
-错误修复:
-
-- 修复连接测试功能未生效的问题
+- 修复无法处理分裂的 TCP 报文的问题
 
   Github PR:
-  `emqx/emqx-bridge-kafka#57 <https://github.com/emqx/emqx-bridge-kafka/pull/57>`_
+  `emqx/emqx#2611 <https://github.com/emqx/emqx/pull/2611>`_
 
 emqx-rule-engine (plugin)
 -------------------------
