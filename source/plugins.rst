@@ -253,7 +253,7 @@ HTTP 认证/访问控制插件
 
 每个请求的参数都支持使用真实的客户端的 Username, IP 地址等进行自定义。
 
-.. NOTE:: 其中在 3.1 版本中新增的 %cn %dn 的支持。
+.. NOTE:: 其中在 3.1 版本中新增的 %C %d 的支持。
 
 HTTP 认证插件配置
 :::::::::::::::::
@@ -262,13 +262,33 @@ etc/plugins/emqx_auth_http.conf:
 
 .. code:: properties
 
+    ## http 请求超时时间, 0 为不设置超时
+    ## auth.http.request.timeout = 0
+
+    ## http 建立 tcp 连接的超时时间, 默认与 'request.timeout' 一致
+    ## auth.http.request.connect_timout = 0
+
+    ## http 请求最大重试次数
+    auth.http.request.retry_times = 3
+
+    ## http 重试间隔
+    auth.http.request.retry_interval = 1s
+
+    ## 重试间隔的退避指数, 实际值 = `interval * backoff ^ times`
+    auth.http.request.retry_backoff = 2.0
+
+    ## https 证书配置
+    ## auth.http.ssl.cacertfile = {{ platform_etc_dir }}/certs/ca.pem
+    ## auth.http.ssl.certfile = {{ platform_etc_dir }}/certs/client-cert.pem
+    ## auth.http.ssl.keyfile = {{ platform_etc_dir }}/certs/client-key.pem
+
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
     ##  - %a: ipaddress
     ##  - %P: password
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.http.auth_req = http://127.0.0.1:8080/mqtt/auth
 
     ## AUTH 请求的 HTTP 方法和参数配置
@@ -400,11 +420,14 @@ etc/plugins/emqx_auth_mysql.conf:
     ## Mysql 认证用户表名
     auth.mysql.database = mqtt
 
+    ## Mysql 查询超时时间
+    auth.mysql.query_timeout = 5s
+
     ## 可用占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     ## 注: 该条 SQL 必须且仅需查询 `password` 字段
     auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
@@ -431,7 +454,7 @@ etc/plugins/emqx_auth_mysql.conf:
     ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
     ## auth.mysql.password_hash = pbkdf2,sha256,1000,20
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 Postgres 认证插件
 -------------------
@@ -500,8 +523,8 @@ etc/plugins/emqx_auth_pgsql.conf:
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.pgsql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
     ## 加密方式: plain | md5 | sha | sha256 | bcrypt
@@ -544,7 +567,7 @@ etc/plugins/emqx_auth_pgsql.conf:
     ## auth.pgsql.ssl_opts.certfile =
     ## auth.pgsql.ssl_opts.cacertfile =
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 Redis 认证/访问控制插件
 ------------------------
@@ -581,12 +604,15 @@ etc/plugins/emqx_auth_redis.conf:
     ## Redis password.
     ## auth.redis.password =
 
+    ## Redis 查询超时时间
+    auth.redis.query_timeout = 5s
+
     ## 认证查询指令
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.redis.auth_cmd = HMGET mqtt_user:%u password
 
     ## 密码加密方式.
@@ -615,7 +641,7 @@ etc/plugins/emqx_auth_redis.conf:
     ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
     ## auth.redis.password_hash = pbkdf2,sha256,1000,20
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 Redis 用户 Hash
 ::::::::::::::::
@@ -674,6 +700,9 @@ etc/plugins/emqx_auth_mongo.conf:
     ## 认证数据表名
     auth.mongo.database = mqtt
 
+    ## 查询超时时间
+    auth.mongo.query_timeout = 5s
+
     ## 认证查询配置
     auth.mongo.auth_query.collection = mqtt_user
     auth.mongo.auth_query.password_field = password
@@ -683,8 +712,8 @@ etc/plugins/emqx_auth_mongo.conf:
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.mongo.auth_query.selector = username=%u
 
     ## 超级用户查询
@@ -699,7 +728,7 @@ etc/plugins/emqx_auth_mongo.conf:
 
     auth.mongo.acl_query.selector = username=%u
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 MongoDB 数据库
 ::::::::::::::
@@ -855,13 +884,21 @@ etc/plugins/emqx_coap.conf:
 
     coap.enable_stats = off
 
-若开启以下两个配置，则可以支持 DTLS：
+若开启以下配置，则可以支持 DTLS：
 
 .. code:: properties
 
-    coap.keyfile = etc/certs/key.pem
+    ## DTLS 监听端口
+    coap.dtls.port = 5684
 
-    coap.certfile = etc/certs/cert.pem
+    coap.dtls.keyfile = {{ platform_etc_dir }}/certs/key.pem
+
+    coap.dtls.certfile = {{ platform_etc_dir }}/certs/cert.pem
+
+    ## 双向认证相关
+    ## coap.dtls.verify = verify_peer
+    ## coap.dtls.cacertfile = {{ platform_etc_dir }}/certs/cacert.pem
+    ## coap.dtls.fail_if_no_peer_cert = false
 
 测试 CoAP 插件
 ::::::::::::::
