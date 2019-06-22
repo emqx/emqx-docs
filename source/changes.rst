@@ -5,6 +5,166 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2-rc.1:
+
+-------------
+3.2-rc.1 版本
+-------------
+
+*发布日期: 2019-06-22*
+
+EMQ X 3.2-rc.1 版本发布。此版本改动主要包括功能增强与错误修复。
+
+功能增强:
+
+- 支持设置日志前缀
+
+  Github PR:
+  `emqx/emqx#2627 <https://github.com/emqx/emqx/pull/2627>`_
+
+- 提升 connect/disconnect 系统消息中客户端上下线的时间戳精度
+
+  Github PR:
+  `emqx/emqx#2641 <https://github.com/emqx/emqx/pull/2641>`_
+
+- 优化开发流程，支持 ``make run``
+
+  Github PR:
+  `emqx/emqx#2644 <https://github.com/emqx/emqx/pull/2644>`_
+
+错误修复:
+
+- 修复 flapping 模块无法正确读取配置的问题
+
+  Github PR:
+  `emqx/emqx#2628 <https://github.com/emqx/emqx/pull/2628>`_
+
+- 修复 ``cpu_sup:util/0`` 在 Windows 环境不可用导致崩溃的问题
+
+  Github PR:
+  `emqx/emqx#2629 <https://github.com/emqx/emqx/pull/2629>`_
+
+- 修复 `emqx/emqx: issue#2619 <https://github.com/emqx/emqx/issues/2619>`_
+
+  Github PR:
+  `emqx/emqx#2646 <https://github.com/emqx/emqx/pull/2646>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 支持定期获取资源状态并设置告警
+
+  Github PR:
+  `emqx/emqx-rule-engine#67 <https://github.com/emqx/emqx-rule-engine/pull/67>`_
+
+emqx-backend-influxdb (plugin)
+------------------------------
+
+功能增强:
+
+- 支持在模板文件中使用主题通配符
+
+  Github PR:
+  `emqx/emqx-backend-influxdb#9 <https://github.com/emqx/emqx-backend-influxdb/pull/9>`_
+
+emqx-backend-opentsdb (plugin)
+------------------------------
+
+功能增强:
+
+- 支持在模板文件中使用主题通配符
+
+  Github PR:
+  `emqx/emqx-backend-opentsdb#15 <https://github.com/emqx/emqx-backend-opentsdb/pull/15>`_
+
+emqx-sn (plugin)
+----------------
+
+错误修复:
+
+- 修复误判 ``keepalive_timeout`` 的问题
+
+  Github PR:
+  `emqx/emqx-sn#127 <https://github.com/emqx/emqx-sn/pull/127>`_
+
+- 修复没有正确获取 ``idle_timeout`` 的问题
+
+  Github PR:
+  `emqx/emqx-sn#128 <https://github.com/emqx/emqx-sn/pull/128>`_
+
+- 修复测试用例
+
+  Github PR:
+  `emqx/emqx-sn#130 <https://github.com/emqx/emqx-sn/pull/130>`_
+
+emqx-bridge-pulsar (plugin)
+---------------------------
+
+功能增强:
+
+- 实现桥接数据至 Pulsar 的插件
+
+  Github Repository:
+  `emqx/emqx-bridge-pulsar <https://github.com/emqx/emqx-bridge-pulsar>`_
+
+emqx-auth-jwt (plugin)
+-----------------------
+
+错误修复:
+
+- 正确读取 pubkey
+
+  Github PR:
+  `emqx/emqx-auth-jwt#88 <https://github.com/emqx/emqx-auth-jwt/pull/88>`_
+
+gen_influxdb (dependency)
+-------------------------
+
+错误修复:
+
+- 修复无法使用 atom 数据类型的问题
+
+  Github PR:
+  `emqx/gen_influxdb#4 <https://github.com/emqx/gen_influxdb/pull/4>`_
+
+gen_opentsdb (dependency)
+-------------------------
+
+错误修复:
+
+- 修复无法使用 atom 数据类型的问题
+
+  Github PR:
+  `emqx/gen_opentsdb#5 <https://github.com/emqx/gen_opentsdb/pull/5>`_
+
+pulsar-client-erl (dependency)
+------------------------------
+
+功能增强:
+
+- 实现 ``pulsar`` 客户端库
+
+  Github Repository:
+  `emqx/pulsar-client-erl <https://github.com/emqx/pulsar-client-erl>`_
+
+emqx-rel (build-project)
+------------------------
+
+Enhancements:
+
+- 使项目构建更加智能和健壮
+
+  GitHub PR:
+  `emqx/emqx-rel#375 <https://github.com/emqx/emqx-rel/pull/375>`_,
+  `emqx/emqx-rel#376 <https://github.com/emqx/emqx-rel/pull/376>`_
+
+- 修复 Windows 服务注册问题
+
+  GitHub PR:
+  `emqx/emqx-rel#375 <https://github.com/emqx/emqx-rel/pull/378>`_
+
 .. _release_3.2-beta.3:
 
 ---------------
