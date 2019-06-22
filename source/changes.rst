@@ -59,26 +59,6 @@ emqx-rule-engine (plugin)
   Github PR:
   `emqx/emqx-rule-engine#67 <https://github.com/emqx/emqx-rule-engine/pull/67>`_
 
-emqx-backend-influxdb (plugin)
-------------------------------
-
-功能增强:
-
-- 支持在模板文件中使用主题通配符
-
-  Github PR:
-  `emqx/emqx-backend-influxdb#9 <https://github.com/emqx/emqx-backend-influxdb/pull/9>`_
-
-emqx-backend-opentsdb (plugin)
-------------------------------
-
-功能增强:
-
-- 支持在模板文件中使用主题通配符
-
-  Github PR:
-  `emqx/emqx-backend-opentsdb#15 <https://github.com/emqx/emqx-backend-opentsdb/pull/15>`_
-
 emqx-sn (plugin)
 ----------------
 
@@ -99,16 +79,6 @@ emqx-sn (plugin)
   Github PR:
   `emqx/emqx-sn#130 <https://github.com/emqx/emqx-sn/pull/130>`_
 
-emqx-bridge-pulsar (plugin)
----------------------------
-
-功能增强:
-
-- 实现桥接数据至 Pulsar 的插件
-
-  Github Repository:
-  `emqx/emqx-bridge-pulsar <https://github.com/emqx/emqx-bridge-pulsar>`_
-
 emqx-auth-jwt (plugin)
 -----------------------
 
@@ -118,36 +88,6 @@ emqx-auth-jwt (plugin)
 
   Github PR:
   `emqx/emqx-auth-jwt#88 <https://github.com/emqx/emqx-auth-jwt/pull/88>`_
-
-gen_influxdb (dependency)
--------------------------
-
-错误修复:
-
-- 修复无法使用 atom 数据类型的问题
-
-  Github PR:
-  `emqx/gen_influxdb#4 <https://github.com/emqx/gen_influxdb/pull/4>`_
-
-gen_opentsdb (dependency)
--------------------------
-
-错误修复:
-
-- 修复无法使用 atom 数据类型的问题
-
-  Github PR:
-  `emqx/gen_opentsdb#5 <https://github.com/emqx/gen_opentsdb/pull/5>`_
-
-pulsar-client-erl (dependency)
-------------------------------
-
-功能增强:
-
-- 实现 ``pulsar`` 客户端库
-
-  Github Repository:
-  `emqx/pulsar-client-erl <https://github.com/emqx/pulsar-client-erl>`_
 
 emqx-rel (build-project)
 ------------------------
