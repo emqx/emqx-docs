@@ -100,11 +100,6 @@ Enhancements:
   `emqx/emqx-rel#375 <https://github.com/emqx/emqx-rel/pull/375>`_,
   `emqx/emqx-rel#376 <https://github.com/emqx/emqx-rel/pull/376>`_
 
-- 修复 Windows 服务注册问题
-
-  GitHub PR:
-  `emqx/emqx-rel#375 <https://github.com/emqx/emqx-rel/pull/378>`_
-
 .. _release_3.2-beta.3:
 
 ---------------
