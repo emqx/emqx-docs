@@ -5,6 +5,83 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2-rc.2:
+
+----------------
+3.2-rc.2 版本
+----------------
+
+*发布日期: 2019-06-29*
+
+EMQ X 3.2-rc.2 版本主要包含了一些问题修复.
+
+功能增强:
+
+- 把默认日志级别改为 **warning**:
+
+  Github PR:
+  `emqx/emqx#2657 <https://github.com/emqx/emqx/pull/2657>`_
+
+- 增加获取历史告警的接口:
+
+  Github PRs:
+  `emqx/emqx#2660 <https://github.com/emqx/emqx/pull/2660>`_
+  `emqx/emqx-management#98 <https://github.com/emqx/emqx-management/pull/98>`_
+
+问题修复:
+
+- 删除残留的 Session 记录:
+
+  Github PR:
+  `emqx/emqx#2655 <https://github.com/emqx/emqx/pull/2655>`_
+
+- 解决批量发送时，消息失序的问题:
+
+  Github PR:
+  `emqx/emqx#2650 <https://github.com/emqx/emqx/pull/2650>`_
+
+  感谢 `tradingtrace <https://github.com/tradingtrace>`_ 的贡献!
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 新增一个动作 "do nothing"
+
+  Github PR:
+  `emqx/emqx-rule-engine#70 <https://github.com/emqx/emqx-rule-engine/pull/70>`_
+
+- 将 ``retain`` flag 的数据类型改为 integer
+
+  Github RP:
+  `emqx/emqx-rule-engine#72 <https://github.com/emqx/emqx-rule-engine/pull/72>`_
+
+问题修复:
+
+- 修复 SQL 中无法使用 ``timestamp`` 关键字作为字段的问题:
+
+  Github PR:
+  `emqx/emqx-rule-engine#71 <https://github.com/emqx/emqx-rule-engine/pull/71>`_
+
+emq-bridge-mqtt (plugin)
+------------------------
+
+- 将 MQTT bridge 从 emqx 项目分离出来作为一个独立的插件:
+
+  Github PR:
+  `emqx/emqx-bridge-mqtt#2 <https://github.com/emqx/emqx-bridge-mqtt/pull/2>`_
+
+emqx-rel (build project)
+------------------------
+
+问题修复:
+
+- 解决 windows 服务注册的问题:
+
+  Github PR:
+  `emqx/emqx-rel#381 <https://github.com/emqx/emqx-rel/pull/381>`_
+
 .. _release_3.2-rc.1:
 
 -------------
