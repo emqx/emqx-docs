@@ -5,6 +5,90 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2-rc.3:
+
+----------------
+3.2-rc.3 版本
+----------------
+
+*发布日期: 2019-07-06*
+
+EMQ X 3.2-rc.3 版本改动主要包括功能增强与错误修复。
+
+错误修复:
+
+- 修复 `emqx/emqx: issue#2635 <https://github.com/emqx/emqx/issues/2635>`_
+
+  Github PR:
+  `emqx/emqx#2663 <https://github.com/emqx/emqx/pull/2663>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+错误修复:
+
+- 修复 ``actions.failure`` 无计数的问题
+
+  Github PR:
+  `emqx/emqx-web-hook#137 <https://github.com/emqx/emqx-web-hook/pull/137>`_
+
+emqx-bridge-mqtt (plugin)
+-------------------------
+
+功能增强:
+
+- 增加桥接模式选项
+
+  Github PR:
+  `emqx/emqx-bridge-mqtt#6 <https://github.com/emqx/emqx-bridge-mqtt/pull/6>`_
+
+- 优化 RPC 消息的应答机制
+- 支持规则引擎下的 MQTT/RPC Bridge 缓存消息到本地磁盘队列
+- 修复规则引擎下的 RPC Bridge 无法桥接远程 EMQ X 节点的问题
+
+  Github PR:
+  `emqx/emqx-bridge-mqtt#7 <https://github.com/emqx/emqx-bridge-mqtt/pull/7>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- Rule 与 Resource 的 API 支持集群
+
+  Github PR:
+  `emqx/emqx-rule-engine#75 <https://github.com/emqx/emqx-rule-engine/pull/75>`_
+
+- 新增返回触发事件的可用字段的 API
+
+  Github PR:
+  `emqx/emqx-rule-engine#74 <https://github.com/emqx/emqx-rule-engine/pull/74>`_,
+  `emqx/emqx-rule-engine#77 <https://github.com/emqx/emqx-rule-engine/pull/77>`_
+
+错误修复:
+
+- 修复获取资源状态超时引起的问题
+
+  Github PR:
+  `emqx/emqx-rule-engine#76 <https://github.com/emqx/emqx-rule-engine/pull/76>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 规则引擎各项指标细分到节点
+
+  Github PR:
+  `emqx/emqx-dashboard#114 <https://github.com/emqx/emqx-dashboard/pull/114>`_
+
+错误修复:
+
+- 修复资源创建的 BUG
+
+  Github PR:
+  `emqx/emqx-dashboard#114 <https://github.com/emqx/emqx-dashboard/pull/114>`_
+
 .. _release_3.2-rc.2:
 
 ----------------
@@ -13,29 +97,29 @@
 
 *发布日期: 2019-06-29*
 
-EMQ X 3.2-rc.2 版本主要包含了一些问题修复.
+EMQ X 3.2-rc.2 版本改动主要包括错误修复。
 
 功能增强:
 
-- 把默认日志级别改为 **warning**:
+- 把默认日志级别改为 **warning**
 
   Github PR:
   `emqx/emqx#2657 <https://github.com/emqx/emqx/pull/2657>`_
 
-- 增加获取历史告警的接口:
+- 增加获取历史告警的接口
 
   Github PRs:
   `emqx/emqx#2660 <https://github.com/emqx/emqx/pull/2660>`_
   `emqx/emqx-management#98 <https://github.com/emqx/emqx-management/pull/98>`_
 
-问题修复:
+错误修复:
 
-- 删除残留的 Session 记录:
+- 删除残留的 Session 记录
 
   Github PR:
   `emqx/emqx#2655 <https://github.com/emqx/emqx/pull/2655>`_
 
-- 解决批量发送时，消息失序的问题:
+- 解决批量发送时，消息失序的问题
 
   Github PR:
   `emqx/emqx#2650 <https://github.com/emqx/emqx/pull/2650>`_
@@ -57,9 +141,9 @@ emqx-rule-engine (plugin)
   Github RP:
   `emqx/emqx-rule-engine#72 <https://github.com/emqx/emqx-rule-engine/pull/72>`_
 
-问题修复:
+错误修复:
 
-- 修复 SQL 中无法使用 ``timestamp`` 关键字作为字段的问题:
+- 修复 SQL 中无法使用 ``timestamp`` 关键字作为字段的问题
 
   Github PR:
   `emqx/emqx-rule-engine#71 <https://github.com/emqx/emqx-rule-engine/pull/71>`_
@@ -67,7 +151,9 @@ emqx-rule-engine (plugin)
 emq-bridge-mqtt (plugin)
 ------------------------
 
-- 将 MQTT bridge 从 emqx 项目分离出来作为一个独立的插件:
+功能增强:
+
+- 将 MQTT bridge 从 emqx 项目分离出来作为一个独立的插件
 
   Github PR:
   `emqx/emqx-bridge-mqtt#2 <https://github.com/emqx/emqx-bridge-mqtt/pull/2>`_
@@ -75,9 +161,9 @@ emq-bridge-mqtt (plugin)
 emqx-rel (build project)
 ------------------------
 
-问题修复:
+错误修复:
 
-- 解决 windows 服务注册的问题:
+- 解决 windows 服务注册的问题
 
   Github PR:
   `emqx/emqx-rel#381 <https://github.com/emqx/emqx-rel/pull/381>`_
