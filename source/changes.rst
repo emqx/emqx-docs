@@ -42,7 +42,10 @@ emqx-bridge-mqtt (plugin)
   Github PR:
   `emqx/emqx-bridge-mqtt#6 <https://github.com/emqx/emqx-bridge-mqtt/pull/6>`_
 
-- 更好的设计
+- 优化 RPC 消息的应答机制
+- 支持规则引擎下的 MQTT/RPC Bridge 缓存消息到本地磁盘队列
+- 禁止规则引擎下的 MQTT/RPC Bridge 记录 Metrics
+- 修复规则引擎下的 RPC Bridge 无法桥接远程 EMQ X 节点的问题
 
   Github PR:
   `emqx/emqx-bridge-mqtt#7 <https://github.com/emqx/emqx-bridge-mqtt/pull/7>`_
@@ -63,6 +66,23 @@ emqx-rule-engine (plugin)
 
   Github PR:
   `emqx/emqx-rule-engine#76 <https://github.com/emqx/emqx-rule-engine/pull/76>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 规则引擎各项指标细分到节点
+
+  Github PR:
+  `emqx/emqx-dashboard#114 <https://github.com/emqx/emqx-dashboard/pull/114>`_
+
+错误修复:
+
+- 修复资源创建的 BUG
+
+  Github PR:
+  `emqx/emqx-dashboard#114 <https://github.com/emqx/emqx-dashboard/pull/114>`_
 
 .. _release_3.2-rc.2:
 
