@@ -44,7 +44,6 @@ emqx-bridge-mqtt (plugin)
 
 - 优化 RPC 消息的应答机制
 - 支持规则引擎下的 MQTT/RPC Bridge 缓存消息到本地磁盘队列
-- 禁止规则引擎下的 MQTT/RPC Bridge 记录 Metrics
 - 修复规则引擎下的 RPC Bridge 无法桥接远程 EMQ X 节点的问题
 
   Github PR:
@@ -59,6 +58,12 @@ emqx-rule-engine (plugin)
 
   Github PR:
   `emqx/emqx-rule-engine#75 <https://github.com/emqx/emqx-rule-engine/pull/75>`_
+
+- 新增返回触发事件的可用字段的 API
+
+  Github PR:
+  `emqx/emqx-rule-engine#74 <https://github.com/emqx/emqx-rule-engine/pull/74>`_,
+  `emqx/emqx-rule-engine#77 <https://github.com/emqx/emqx-rule-engine/pull/77>`_
 
 错误修复:
 
