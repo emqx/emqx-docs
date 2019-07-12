@@ -5,6 +5,621 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.0:
+
+----------
+3.2.0 版本
+----------
+
+*发布日期: 2019-07-12*
+
+EMQ X 3.2.0 版本主要优化和改进了规则引擎。
+
+规则引擎
+--------
+
+改进规则引擎功能和规则管理界面(Dashboard)，支持更多动作。
+
+项目构建
+---------
+
+改用 rebar3 构建项目。
+
+MQTT Broker 桥接
+-----------------
+
+将 MQTT bridge 从 emqx 项目分离出来作为一个独立的插件，并提升了 RPC bridge 的性能。
+
+HTTP 插件
+----------
+
+支持 HTTPs。
+
+集群 (ekka)
+-----------
+
+改善集群稳定性。
+
+其他插件和依赖
+--------------
+
+修复 Windows 服务注册问题。
+
+.. _release_3.2-rc.3:
+
+----------------
+3.2-rc.3 版本
+----------------
+
+*发布日期: 2019-07-06*
+
+EMQ X 3.2-rc.3 版本改动主要包括功能增强与错误修复。
+
+错误修复:
+
+- 修复 `emqx/emqx: issue#2635 <https://github.com/emqx/emqx/issues/2635>`_
+
+  Github PR:
+  `emqx/emqx#2663 <https://github.com/emqx/emqx/pull/2663>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+错误修复:
+
+- 修复 ``actions.failure`` 无计数的问题
+
+  Github PR:
+  `emqx/emqx-web-hook#137 <https://github.com/emqx/emqx-web-hook/pull/137>`_
+
+emqx-bridge-mqtt (plugin)
+-------------------------
+
+功能增强:
+
+- 增加桥接模式选项
+
+  Github PR:
+  `emqx/emqx-bridge-mqtt#6 <https://github.com/emqx/emqx-bridge-mqtt/pull/6>`_
+
+- 优化 RPC 消息的应答机制
+- 支持规则引擎下的 MQTT/RPC Bridge 缓存消息到本地磁盘队列
+- 修复规则引擎下的 RPC Bridge 无法桥接远程 EMQ X 节点的问题
+
+  Github PR:
+  `emqx/emqx-bridge-mqtt#7 <https://github.com/emqx/emqx-bridge-mqtt/pull/7>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- Rule 与 Resource 的 API 支持集群
+
+  Github PR:
+  `emqx/emqx-rule-engine#75 <https://github.com/emqx/emqx-rule-engine/pull/75>`_
+
+- 新增返回触发事件的可用字段的 API
+
+  Github PR:
+  `emqx/emqx-rule-engine#74 <https://github.com/emqx/emqx-rule-engine/pull/74>`_,
+  `emqx/emqx-rule-engine#77 <https://github.com/emqx/emqx-rule-engine/pull/77>`_
+
+错误修复:
+
+- 修复获取资源状态超时引起的问题
+
+  Github PR:
+  `emqx/emqx-rule-engine#76 <https://github.com/emqx/emqx-rule-engine/pull/76>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 规则引擎各项指标细分到节点
+
+  Github PR:
+  `emqx/emqx-dashboard#114 <https://github.com/emqx/emqx-dashboard/pull/114>`_
+
+错误修复:
+
+- 修复资源创建的 BUG
+
+  Github PR:
+  `emqx/emqx-dashboard#114 <https://github.com/emqx/emqx-dashboard/pull/114>`_
+
+.. _release_3.2-rc.2:
+
+----------------
+3.2-rc.2 版本
+----------------
+
+*发布日期: 2019-06-29*
+
+EMQ X 3.2-rc.2 版本改动主要包括错误修复。
+
+功能增强:
+
+- 把默认日志级别改为 **warning**
+
+  Github PR:
+  `emqx/emqx#2657 <https://github.com/emqx/emqx/pull/2657>`_
+
+- 增加获取历史告警的接口
+
+  Github PRs:
+  `emqx/emqx#2660 <https://github.com/emqx/emqx/pull/2660>`_
+  `emqx/emqx-management#98 <https://github.com/emqx/emqx-management/pull/98>`_
+
+错误修复:
+
+- 删除残留的 Session 记录
+
+  Github PR:
+  `emqx/emqx#2655 <https://github.com/emqx/emqx/pull/2655>`_
+
+- 解决批量发送时，消息失序的问题
+
+  Github PR:
+  `emqx/emqx#2650 <https://github.com/emqx/emqx/pull/2650>`_
+
+  感谢 `tradingtrace <https://github.com/tradingtrace>`_ 的贡献!
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 新增一个动作 "do nothing"
+
+  Github PR:
+  `emqx/emqx-rule-engine#70 <https://github.com/emqx/emqx-rule-engine/pull/70>`_
+
+- 将 ``retain`` flag 的数据类型改为 integer
+
+  Github RP:
+  `emqx/emqx-rule-engine#72 <https://github.com/emqx/emqx-rule-engine/pull/72>`_
+
+错误修复:
+
+- 修复 SQL 中无法使用 ``timestamp`` 关键字作为字段的问题
+
+  Github PR:
+  `emqx/emqx-rule-engine#71 <https://github.com/emqx/emqx-rule-engine/pull/71>`_
+
+emq-bridge-mqtt (plugin)
+------------------------
+
+功能增强:
+
+- 将 MQTT bridge 从 emqx 项目分离出来作为一个独立的插件
+
+  Github PR:
+  `emqx/emqx-bridge-mqtt#2 <https://github.com/emqx/emqx-bridge-mqtt/pull/2>`_
+
+emqx-rel (build project)
+------------------------
+
+错误修复:
+
+- 解决 windows 服务注册的问题
+
+  Github PR:
+  `emqx/emqx-rel#381 <https://github.com/emqx/emqx-rel/pull/381>`_
+
+.. _release_3.2-rc.1:
+
+-------------
+3.2-rc.1 版本
+-------------
+
+*发布日期: 2019-06-22*
+
+EMQ X 3.2-rc.1 版本发布。此版本改动主要包括功能增强与错误修复。
+
+功能增强:
+
+- 支持设置日志前缀
+
+  Github PR:
+  `emqx/emqx#2627 <https://github.com/emqx/emqx/pull/2627>`_
+
+- 提升 connect/disconnect 系统消息中客户端上下线的时间戳精度
+
+  Github PR:
+  `emqx/emqx#2641 <https://github.com/emqx/emqx/pull/2641>`_
+
+- 优化开发流程，支持 ``make run``
+
+  Github PR:
+  `emqx/emqx#2644 <https://github.com/emqx/emqx/pull/2644>`_
+
+错误修复:
+
+- 修复 flapping 模块无法正确读取配置的问题
+
+  Github PR:
+  `emqx/emqx#2628 <https://github.com/emqx/emqx/pull/2628>`_
+
+- 修复 ``cpu_sup:util/0`` 在 Windows 环境不可用导致崩溃的问题
+
+  Github PR:
+  `emqx/emqx#2629 <https://github.com/emqx/emqx/pull/2629>`_
+
+- 修复 `emqx/emqx: issue#2619 <https://github.com/emqx/emqx/issues/2619>`_
+
+  Github PR:
+  `emqx/emqx#2646 <https://github.com/emqx/emqx/pull/2646>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 支持定期获取资源状态并设置告警
+
+  Github PR:
+  `emqx/emqx-rule-engine#67 <https://github.com/emqx/emqx-rule-engine/pull/67>`_
+
+emqx-sn (plugin)
+----------------
+
+错误修复:
+
+- 修复误判 ``keepalive_timeout`` 的问题
+
+  Github PR:
+  `emqx/emqx-sn#127 <https://github.com/emqx/emqx-sn/pull/127>`_
+
+- 修复没有正确获取 ``idle_timeout`` 的问题
+
+  Github PR:
+  `emqx/emqx-sn#128 <https://github.com/emqx/emqx-sn/pull/128>`_
+
+- 修复测试用例
+
+  Github PR:
+  `emqx/emqx-sn#130 <https://github.com/emqx/emqx-sn/pull/130>`_
+
+emqx-auth-jwt (plugin)
+-----------------------
+
+错误修复:
+
+- 正确读取 pubkey
+
+  Github PR:
+  `emqx/emqx-auth-jwt#88 <https://github.com/emqx/emqx-auth-jwt/pull/88>`_
+
+emqx-rel (build-project)
+------------------------
+
+Enhancements:
+
+- 使项目构建更加智能和健壮
+
+  GitHub PR:
+  `emqx/emqx-rel#375 <https://github.com/emqx/emqx-rel/pull/375>`_,
+  `emqx/emqx-rel#376 <https://github.com/emqx/emqx-rel/pull/376>`_
+
+.. _release_3.2-beta.3:
+
+---------------
+3.2-beta.3 版本
+---------------
+
+*发布日期: 2019-06-14*
+
+EMQ X 3.2-beta.3 版本发布。此版本改动主要包括增强规则引擎和错误修复。
+
+错误修复:
+
+- 修复没有检查 ``Will Retain`` 的问题
+
+  Github PR:
+  `emqx/emqx#2607 <https://github.com/emqx/emqx/pull/2607>`_
+
+- 修复 `emqx/emqx: issue#2591 <https://github.com/emqx/emqx/issues/2591>`_
+
+  Github PR:
+  `emqx/emqx#2615 <https://github.com/emqx/emqx/pull/2615>`_
+
+- 默认情况下删除日志记录的字符限制
+
+  Github PR:
+  `emqx/emqx#2617 <https://github.com/emqx/emqx/pull/2617>`_
+
+- 修复无法处理分裂的 TCP 报文的问题
+
+  Github PR:
+  `emqx/emqx#2611 <https://github.com/emqx/emqx/pull/2611>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 支持规则命中次数等 Metrics 统计
+
+  Github PR:
+  `emqx/emqx-rule-engine#63 <https://github.com/emqx/emqx-rule-engine/pull/63>`_
+
+emqx-management (plugin)
+------------------------
+
+错误修复:
+
+- 修复 CLI 无法踢掉 websocket 连接的问题
+
+  Github PR:
+  `emqx/emqx-management#93 <https://github.com/emqx/emqx-management/pull/93>`_
+
+.. _release_3.2-beta.2:
+
+---------------
+3.2-beta.2 版本
+---------------
+
+*发布日期: 2019-06-06*
+
+EMQ X 3.2-beta.2 版本发布。此版本改动主要包括增强规则引擎和错误修复。
+
+错误修复:
+
+- 修复 `emqx/emqx: issue#2553 <https://github.com/emqx/emqx/issues/2553>`_
+
+  Github PR:
+  `emqx/emqx#2596 <https://github.com/emqx/emqx/pull/2596>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 支持在 Dashboard 中测试 SQL 语句
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3e7c4c <https://github.com/emqx/emqx-rule-engine/commit/3e7c4cbe275d8f120ad8efb83fd23ee571d465db>`_
+
+- 预处理 PreparedStatement 以获得更好的性能
+
+  Github Commit:
+  `emqx/emqx-rule-engine#fa3720 <https://github.com/emqx/emqx-rule-engine/commit/fa37205850c6efe9af5f8ca2f230e17c7de2adb4>`_,
+  `emqx/emqx-rule-engine#b00fad <https://github.com/emqx/emqx-rule-engine/commit/b00fad45c283fa2ec3aa57353bbe161960547461>`_
+
+- 规则引擎适配集群
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3da7fe <https://github.com/emqx/emqx-rule-engine/commit/3da7fed60d92c9a994c2aed5f34509c0d0d4eff4>`_,
+  `emqx/emqx-rule-engine#4963b0 <https://github.com/emqx/emqx-rule-engine/commit/4963b0ee3a6114ebe74b48876d25723137df14ad>`_
+
+- Dashboard 可以显示 Resource 状态
+
+  Github Commit:
+  `emqx/emqx-rule-engine#dd9a8d <https://github.com/emqx/emqx-rule-engine/commit/dd9a8d4801f650c1ac888f7420f5497f7d0d6c73>`_,
+  `emqx/emqx-rule-engine#d16224 <https://github.com/emqx/emqx-rule-engine/commit/d162246c0b630e059c21f7b36e50154f3d7832e3>`_,
+  `emqx/emqx-rule-engine#e4574c <https://github.com/emqx/emqx-rule-engine/commit/e4574c9554d7e7d79a8ce55a6c9e4089ee00db79>`_
+
+- 支持通过 Dashboard 重启 Resource
+
+  Github Commit:
+  `emqx/emqx-rule-engine#ccbffd <https://github.com/emqx/emqx-rule-engine/commit/ccbffd7d5db514adf6cd20e8d139e73f80bc1c96>`_
+
+- 支持检查 HTTP 是否可连通
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3feffc <https://github.com/emqx/emqx-rule-engine/commit/3feffcd5a3f0da78725f1208594cea1b3273ec0b>`_
+
+错误修复:
+
+- 修复删除 Resource 前检查依赖发生错误的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#3265ff <https://github.com/emqx/emqx-rule-engine/commit/3265ffe10584f0edccc084e6f78ae035ba310c07>`_
+
+- 修复 Resource 无法被销毁的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#58a1ce <https://github.com/emqx/emqx-rule-engine/commit/58a1ce45e1cf96cf05481d8ed076febef0d41976>`_
+
+- 修复 SQL 无法嵌套插入的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#64776a <https://github.com/emqx/emqx-rule-engine/commit/64776aebde1fe48c1038fba3b61f457590ab4408>`_
+
+emqx-auth-http (plugin)
+-----------------------
+
+功能增强:
+
+- 支持 HTTPs
+
+  Github PR:
+  `emqx/emqx-auth-http#133 <https://github.com/emqx/emqx-auth-http/pull/133>`_
+
+emqx-docker
+-----------
+
+错误修复:
+
+- 修复 `emqx/emqx-docker: issue#115 <https://github.com/emqx/emqx-docker/issues/115>`_
+
+  Github Commit:
+  `emqx/emqx-docker#f3c219 <https://github.com/emqx/emqx-docker/commit/f3c21978f5ffefd5d419bc78a1caf1ad71de9c91>`_
+
+emqx-management (plugin)
+------------------------
+
+错误修复:
+
+- 修复重新加载插件失败的问题
+
+  Github PR:
+  `emqx/emqx-management#91 <https://github.com/emqx/emqx-management/pull/91>`_
+
+ekka (deps)
+-----------
+
+错误修复:
+
+- 修复导致 `emqx_sm_locker` 崩溃的问题
+
+  Github Commit:
+  `emqx/ekka#2d5bf2 <https://github.com/emqx/ekka/commit/2d5bf2a1f10d84408e4b35d3e274a49f395056c3>`_
+
+.. _release_3.2-beta.1:
+
+---------------
+3.2-beta.1 版本
+---------------
+
+*发布日期: 2019-05-27*
+
+EMQ X 3.2.beta-1 版本发布。此版本改动主要包括支持 rebar3 构建和增强规则引擎。
+
+功能增强:
+
+- 支持通过 rabar3 构建项目
+
+  Github PR:
+  `emqx/emqx#2475 <https://github.com/emqx/emqx/pull/2475>`_,
+  `emqx/emqx#2510 <https://github.com/emqx/emqx/pull/2510>`_,
+  `emqx/emqx#2518 <https://github.com/emqx/emqx/pull/2518>`_,
+  `emqx/emqx#2521 <https://github.com/emqx/emqx/pull/2521>`_
+
+- SSL 连接支持 `{active, N}` 选项
+
+  Github PR:
+  `emqx/emqx#2531 <https://github.com/emqx/emqx/pull/2531>`_
+
+- 更正匿名访问行为表现
+
+  Github PR:
+  `emqx/emqx#2355 <https://github.com/emqx/emqx/pull/2355>`_
+
+- 提升 zone 的访问速度
+
+  Github PR:
+  `emqx/emqx#2548 <https://github.com/emqx/emqx/pull/2548>`_
+
+错误修复:
+
+- 修复 `emqx_sm` 中的致命错误
+
+  Github PR:
+  `emqx/emqx#2559 <https://github.com/emqx/emqx/pull/2559>`_
+
+- 修复发布 MQTT-SN、CoAP 消息时的错误
+
+  Github PR:
+  `emqx/emqx#2556 <https://github.com/emqx/emqx/pull/2556>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 更好的规则引擎
+
+  Github Repository:
+  `emqx/emqx-rule-engine <https://github.com/emqx/emqx-rule-engine>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+功能增强:
+
+- 增加一个用于编码 payload 字段的选项
+
+  Github PR:
+  `emqx/emqx-web-hook#119 <https://github.com/emqx/emqx-web-hook/pull/119>`_
+
+emqx-auth-http (plugin)
+-----------------------
+
+功能增强:
+
+- HTTP 请求支持更多选项
+
+  Github PR:
+  `emqx/emqx-auth-http#128 <https://github.com/emqx/emqx-auth-http/pull/128>`_
+
+emqx-sn (plugin)
+----------------
+
+错误修复:
+
+- 修复错误的函数调用
+
+  Github PR:
+  `emqx/emqx-sn#118 <https://github.com/emqx/emqx-sn/pull/118>`_
+
+.. _release_3.1.2:
+  
+----------
+3.1.2 版本
+----------
+
+*发布日期: 2019-06-06*
+
+EMQ X 3.1.1 版本发布。此版本改动主要包括错误修复、稳定性增强。
+
+EMQ X Core
+----------
+
+Bug fixes:
+
+- 修复 `emqx/emqx: issue #2595 <https://github.com/emqx/emqx/issues/2595>`_
+
+  Github PR:
+  `emqx/emqx#2601 <https://github.com/emqx/emqx/pull/2601>`_
+
+- 修复无法设置日志等级的问题
+
+  Github PR:
+  `emqx/emqx#2600 <https://github.com/emqx/emqx/pull/2600>`_
+
+- 修复返回值不匹配的问题
+
+  Github PR:
+  `emqx/emqx#2560 <https://github.com/emqx/emqx/pull/2560>`_
+
+- 热修复 ``emqx_sn`` 与 ``emqx_coap`` 插件
+
+  Github PR:
+  `emqx/emqx#2556 <https://github.com/emqx/emqx/pull/2556>`_
+
+emqx-coap (plugin)
+------------------
+
+错误修复:
+
+- 修复无法发布消息的问题
+
+  Github PR:
+  `emqx/emqx-coap#120 <https://github.com/emqx/emqx-coap/pull/120>`_
+
+ekka (deps)
+-----------
+
+错误修复:
+
+- 修复导致 ``emqx_sm_locker`` 崩溃的问题
+
+  Github PR:
+  `emqx/ekka#54 <https://github.com/emqx/ekka/pull/54>`_
+
+- 修复 k8s 无法使用 dns 集群的问题
+
+  Github PR:
+  `emqx/ekka#53 <https://github.com/emqx/ekka/pull/53>`_
+
+- 修复 etcd 集群不可用的问题
+
+  Github PR:
+  `emqx/ekka#52 <https://github.com/emqx/ekka/pull/52>`_
+
 .. _release_3.1.1:
 
 ----------

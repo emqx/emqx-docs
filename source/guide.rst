@@ -15,7 +15,7 @@
 
 .. code-block:: bash
 
-    unzip emqx-macosx-v3.1.0.zip && cd emqx
+    unzip emqx-macosx-v3.2.0.zip && cd emqx
 
     # 启动emqx
     ./bin/emqx start
@@ -613,7 +613,7 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 'disconnected' 事件消息的 Payload 可解析成 JSON 格式:
 
 .. code:: json
-    
+
     {
         "clientid":"id1",
         "username":"u",
@@ -820,13 +820,13 @@ Alarms - 系统告警
 
 系统主题(Topic)前缀: $SYS/brokers/${node}/alarms/
 
-+------------------+------------------+
-| 主题(Topic)      | 说明             |
-+------------------+------------------+
-| ${alarmId}/alert | 新产生的告警     |
-+------------------+------------------+
-| ${alarmId}/clear | 被清除的告警     |
-+------------------+------------------+
++-------------+------------------+
+| 主题(Topic) | 说明             |
++-------------+------------------+
+| alert       | 新产生的告警     |
++-------------+------------------+
+| clear       | 被清除的告警     |
++-------------+------------------+
 
 .. _sys_sysmon:
 
