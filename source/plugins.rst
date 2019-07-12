@@ -41,6 +41,8 @@
 +---------------------------+---------------------------------------+---------------------------+
 | `emqx_rule_engine`_       + etc/plugins/emqx_rule_engine.conf     | 规则引擎                  |
 +---------------------------+---------------------------------------+---------------------------+
+| `emqx_mqtt_bridge`_       + etc/plugins/emqx_mqtt_bridge.conf     | MQTT 消息桥接             |
++---------------------------+---------------------------------------+---------------------------+
 | `emqx_delayed_publish`_   + etc/plugins/emqx_delayed_publish.conf | 客户端延时发布消息支持    |
 +---------------------------+---------------------------------------+---------------------------+
 | `emqx_coap`_              + etc/plugins/emqx_coap.conf            | CoAP 协议支持             |
@@ -1307,6 +1309,7 @@ emqx_plugin_template.erl:
 .. _emqx_psk_file:         https://github.com/emqx/emqx-psk-file
 .. _emqx_plugin_template:  https://github.com/emqx/emqx-plugin-template
 .. _emqx_rule_engine:      https://github.com/emqx/emqx-rule-engine
+.. _emqx_bridge_mqtt:      https://github.com/emqx/emqx-bridge-mqtt
 .. _recon:                 http://ferd.github.io/recon/
 .. _LDAP:                  https://ldap.com
 .. _JWT:                   https://jwt.io
