@@ -188,6 +188,8 @@ EMQ X 桥接的命令行使用
 
 启动 emqx_bridge_mqtt 插件:
 
+.. code-block:: bash
+
     $ cd emqx1/ && ./bin/emqx_ctl plugins load emqx_bridge_mqtt
     ok
 
