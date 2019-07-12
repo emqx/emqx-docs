@@ -785,27 +785,48 @@ Windows 源码编译安装
 
 Erlang 安装: http://www.erlang.org/
 
-MSYS2 安装: http://www.msys2.org/
+scoop 安装: https://scoop.sh/
 
-MSYS2 安装完成后，根据 MSYS2 中的 pacman 包管理工具安装 Git、 Make 工具软件
-
-.. code-block:: bash
-
-        pacman -S git make
-
-编译环境准备之后，clone 代码开始编译
+scoop 安装完成后，使用 scoop 来安装 Git、 Make、curl、erlang
 
 .. code-block:: bash
 
-        git clone -b win30 https://github.com/emqx/emqx-rel.git
+        scoop install git make curl erlang
+
+编译环境准备完成
+
+rebar3 安装:
+
+.. code-block:: bash
+
+        git clone https://github.com/erlang/rebar3.git
+
+        cd rebar3
+
+        bootstrap
+
+rebar3 编译完成后，在 windows 环境变量 PATH 中添加 rebar3 的路径
+
+构建环境准备之后，clone 代码开始构建 emqx
+
+.. code-block:: bash
+
+        git clone https://github.com/emqx/emqx-rel.git
 
         cd emqx-relx && make
 
-        cd _rel/emqx && ./bin/emqx console
+        cd _build/emqx/rel/emqx && ./bin/emqx start
 
 控制台启动编译的 EMQ 程序包
 
 .. code-block:: bash
 
-        cd _rel/emqx/bin 
+        cd _build/emqx/rel/emqx
         emqx console
+
+注册 windows 服务
+
+.. code-block:: bash
+
+        cd _build/emqx/rel/emqx
+        emqx install
