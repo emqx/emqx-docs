@@ -871,7 +871,7 @@ MQTT 消息插件
 
 **桥接** 与 **集群** 的不同在于：桥接不会复制主题树与路由表，只根据桥接规则转发 MQTT 消息。
 
-目前 EMQ X 支持的桥接方式有:
+目前 MQTT 消息插件支持的桥接方式有:
 
 - RPC 桥接：RPC 桥接只能在 EMQ X Broker 间使用，且不支持订阅远程节点的主题去同步数据
 - MQTT 桥接：MQTT 桥接同时支持转发和通过订阅主题来实现数据同步两种方式
@@ -970,7 +970,7 @@ etc/plugins/emqx_bridge_mqtt.conf
 
     ## 放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq
     ## 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上。
-    bridge.mqtt.aws.queue.replayq_dir = data/emqx_emqx2_bridge/
+    bridge.mqtt.aws.queue.replayq_dir = data/emqx_aws_bridge/
 
     ## Replayq 数据段大小
     bridge.mqtt.aws.queue.replayq_seg_bytes = 10MB
