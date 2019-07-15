@@ -60,6 +60,7 @@
 | `emqx_plugin_template`_   + etc/plugins/emqx_plugin_template.conf | 插件开发模版              |
 +---------------------------+---------------------------------------+---------------------------+
 
+
 其中插件的加载有四种方式：
 
 1. 默认加载
@@ -862,6 +863,118 @@ etc/plugins/emqx_retainer.conf:
     ## 过期时间, 0 表示永不过期
     ## 单位: h 小时; m 分钟; s 秒。如 60m 表示 60 分钟
     retainer.expiry_interval = 0
+
+MQTT 消息插件
+---------------
+
+**桥接** 的概念是 EMQ X 支持将自身某类主题的消息通过某种方式转发到另一个 MQTT Broker。
+
+**桥接** 与 **集群** 的不同在于：桥接不会复制主题树与路由表，只根据桥接规则转发 MQTT 消息。
+
+目前 MQTT 消息插件支持的桥接方式有:
+
+- RPC 桥接：RPC 桥接只能在 EMQ X Broker 间使用，且不支持订阅远程节点的主题去同步数据
+- MQTT 桥接：MQTT 桥接同时支持转发和通过订阅主题来实现数据同步两种方式
+
+在 EMQ X 中，通过修改 ``etc/plugins/emqx_bridge_mqtt.conf`` 来配置 bridge。EMQ X 根据不同的 name 来区分不同的 bridge。例如::
+
+    ## 桥接地址： 使用节点名（nodename@host）则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
+    bridge.mqtt.aws.address = 127.0.0.1:1883
+
+该项配置声明了一个名为 ``aws`` 的 bridge 并指定以 MQTT 的方式桥接到 ``127.0.0.1:1883`` 这台 MQTT 服务器
+
+在需要创建多个 bridge 时，可以先复制其全部的配置项，在通过使用不同的 name 来标示（比如 bridge.mqtt.$name.address 其中 $name 指代的为 bridge 的名称）
+
+
+配置 MQTT 消息桥接插件
+::::::::::::::::::::::
+
+etc/plugins/emqx_bridge_mqtt.conf
+
+.. code:: properties
+
+    ## 桥接地址： 使用节点名（nodename@host）则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
+    bridge.mqtt.aws.address = 192.168.1.2:1883
+
+    ## 桥接的协议版本
+    ## 枚举值: mqttv3 | mqttv4 | mqttv5
+    bridge.mqtt.aws.proto_ver = mqttv4
+
+    ## 客户端的 client_id
+    bridge.mqtt.aws.client_id = bridge_emq
+
+    ## 客户端的 clean_start 字段
+    ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
+    bridge.mqtt.aws.clean_start = true
+
+    ## 客户端的 username 字段
+    bridge.mqtt.aws.username = user
+
+    ## 客户端的 password 字段
+    bridge.mqtt.aws.password = passwd
+
+    ## 客户端是否使用 ssl 来连接远程服务器
+    bridge.mqtt.aws.ssl = off
+
+    ## 客户端 SSL 连接的 CA 证书 (PEM格式)
+    bridge.mqtt.aws.cacertfile = etc/certs/cacert.pem
+
+    ## 客户端 SSL 连接的 SSL 证书
+    bridge.mqtt.aws.certfile = etc/certs/client-cert.pem
+
+    ## 客户端 SSL 连接的密钥文件
+    bridge.mqtt.aws.keyfile = etc/certs/client-key.pem
+
+    ## SSL 加密方式
+    bridge.mqtt.aws.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
+
+    ## TLS PSK 的加密套件
+    ## 注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers' 不能同时配置
+    ##
+    ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
+    ## bridge.mqtt.aws.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+
+    ## 客户端的心跳间隔
+    bridge.mqtt.aws.keepalive = 60s
+
+    ## 支持的 TLS 版本
+    bridge.mqtt.aws.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+
+    ## 需要被转发的消息的主题
+    bridge.mqtt.aws.forwards = sensor1/#,sensor2/#
+
+    ## 挂载点(mountpoint)
+    bridge.mqtt.aws.mountpoint = bridge/emqx2/${node}/
+
+    ## 订阅对端的主题
+    bridge.mqtt.aws.subscription.1.topic = cmd/topic1
+
+    ## 订阅对端主题的 QoS
+    bridge.mqtt.aws.subscription.1.qos = 1
+
+    ## 桥接的重连间隔
+    ## 默认: 30秒
+    bridge.mqtt.aws.reconnect_interval = 30s
+
+    ## QoS1/QoS2 消息的重传间隔
+    bridge.mqtt.aws.retry_interval = 20s
+
+    ## Inflight 大小.
+    bridge.mqtt.aws.max_inflight_batches = 32
+
+    ## emqx_bridge 内部用于 batch 的消息数量
+    bridge.mqtt.aws.queue.batch_count_limit = 32
+
+    ## emqx_bridge 内部用于 batch 的消息字节数
+    bridge.mqtt.aws.queue.batch_bytes_limit = 1000MB
+
+    ## 放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq
+    ## 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上。
+    bridge.mqtt.aws.queue.replayq_dir = data/emqx_aws_bridge/
+
+    ## Replayq 数据段大小
+    bridge.mqtt.aws.queue.replayq_seg_bytes = 10MB
+
 
 Delayed Publish 插件
 -----------------------
