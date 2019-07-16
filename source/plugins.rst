@@ -13,6 +13,8 @@
 +===========================+=======================================+===========================+
 | `emqx_dashboard`_         + etc/plugins/emqx_dashbord.conf        | Web 控制台插件(默认加载)  |
 +---------------------------+---------------------------------------+---------------------------+
+| `emqx_management`_        + etc/plugins/emqx_management.conf      | HTTP API 与 CLI 管理插件  |
++---------------------------+---------------------------------------+---------------------------+
 | `emqx_auth_clientid`_     + etc/plugins/emqx_auth_clientid.conf   | ClientId 认证插件         |
 +---------------------------+---------------------------------------+---------------------------+
 | `emqx_auth_username`_     + etc/plugins/emqx_auth_username.conf   | 用户名、密码认证插件      |
@@ -139,6 +141,45 @@ etc/plugins/emqx_dashboard.conf:
     ## dashboard.listener.https.cacertfile = etc/certs/cacert.pem
     ## dashboard.listener.https.verify = verify_peer
     ## dashboard.listener.https.fail_if_no_peer_cert = true
+
+HTTP API 与 CLI 管理插件
+------------------------
+
+`emqx_management`_ 是 *EMQ X* 消息服务器的 HTTP API 与 CLI 管理插件，该插件默认开启。当 *EMQ X* 启动成功后，用户即可通过该插件提供的 HTTP API 与 CLI 进行查询当前客户端列表等操作，详见 :ref:`rest_api` 与 :ref:`commands`。
+
+HTTP API 与 CLI 管理设置
+::::::::::::::::::::::::
+
+etc/plugins/emqx_management.conf:
+
+.. code:: properties
+
+    ## 最多返回多少条数据，用于分页机制
+    management.max_row_limit = 10000
+
+    ## 默认的应用 secret
+    # management.application.default_secret = public
+
+    ## Management HTTP 服务器端口配置
+    management.listener.http = 8080
+    management.listener.http.acceptors = 2
+    management.listener.http.max_clients = 512
+    management.listener.http.backlog = 512
+    management.listener.http.send_timeout = 15s
+    management.listener.http.send_timeout_close = on
+
+    ## Management HTTPS 服务器端口配置
+    ## management.listener.https = 8081
+    ## management.listener.https.acceptors = 2
+    ## management.listener.https.max_clients = 512
+    ## management.listener.https.backlog = 512
+    ## management.listener.https.send_timeout = 15s
+    ## management.listener.https.send_timeout_close = on
+    ## management.listener.https.certfile = etc/certs/cert.pem
+    ## management.listener.https.keyfile = etc/certs/key.pem
+    ## management.listener.https.cacertfile = etc/certs/cacert.pem
+    ## management.listener.https.verify = verify_peer
+    ## management.listener.https.fail_if_no_peer_cert = true
 
 ClientID 认证插件
 --------------------
@@ -1400,6 +1441,7 @@ emqx_plugin_template.erl:
     }
 
 .. _emqx_dashboard:        https://github.com/emqx/emqx-dashboard
+.. _emqx_management:       https://github.com/emqx/emqx-management
 .. _emqx_retainer:         https://github.com/emqx/emqx-retainer
 .. _emqx_delayed_publish:  https://github.com/emqx/emqx-delayed-publish
 .. _emqx_auth_clientid:    https://github.com/emqx/emqx-auth-clientid
