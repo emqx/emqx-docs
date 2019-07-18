@@ -589,15 +589,9 @@ etc/acl.conf 访问控制规则定义::
 
     允许|拒绝  用户|IP地址|ClientID  发布|订阅  主题列表
 
-访问控制规则采用 Erlang 元组格式，访问控制模块逐条匹配规则::
+访问控制规则采用 Erlang 元组格式，访问控制模块逐条匹配规则:
 
-              ---------              ---------              ---------
-    Client -> | Rule1 | --nomatch--> | Rule2 | --nomatch--> | Rule3 | --> Default
-              ---------              ---------              ---------
-                  |                      |                      |
-                match                  match                  match
-                 \|/                    \|/                    \|/
-            allow | deny           allow | deny           allow | deny
+.. image:: _static/images/config_1.png
 
 etc/acl.conf 默认访问规则设置:
 
