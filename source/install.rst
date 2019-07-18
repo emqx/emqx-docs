@@ -754,13 +754,13 @@ Git 客户端: http://www.git-scm.com/
 
     .. code-block:: bash
 
-        $ git clone -b v3.1.0 https://github.com/emqx/emqx-rel.git
+        $ git clone -b v3.2.0 https://github.com/emqx/emqx-rel.git
 
 2.  设置环境变量
 
     .. code-block:: bash
 
-        $ export EMQX_DEPS_DEFAULT_VSN=v3.1.0
+        $ export EMQX_DEPS_DEFAULT_VSN=v3.2.0
 
 3.  编译
 
@@ -774,11 +774,11 @@ Git 客户端: http://www.git-scm.com/
 
         $ cd emqx-rel/_rel/emqx
         $ ./bin/emqx start
-        emqx 3.1.0 is started successfully!
+        emqx v3.2.0 is started successfully!
 
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx 3.2.0 is running
 
 Windows 源码编译安装
 --------------------
@@ -811,7 +811,7 @@ rebar3 编译完成后，在 windows 环境变量 PATH 中添加 rebar3 的路�
 
 .. code-block:: bash
 
-        git clone https://github.com/emqx/emqx-rel.git
+        git clone  -b v3.2.0 https://github.com/emqx/emqx-rel.git
 
         cd emqx-relx && make
 

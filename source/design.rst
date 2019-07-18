@@ -11,16 +11,9 @@
 前言
 ----
 
-*EMQ X* 消息服务器在设计上，首先分离了前端协议(FrontEnd)与后端集成(Backend)，其次分离了消息路由平面(Flow Plane)与监控管理平面(Monitor/Control Plane)::
+*EMQ X* 消息服务器在设计上，首先分离了前端协议(FrontEnd)与后端集成(Backend)，其次分离了消息路由平面(Flow Plane)与监控管理平面(Monitor/Control Plane):
 
-              Control Plane
-           --------------------
-              |            |
-  FrontEnd -> | Flow Plane | -> BackEnd
-              |            |
-            Session      Router
-           ---------------------
-               Monitor Plane
+.. image:: _static/images/design_1.png
 
 100万连接
 ---------
@@ -34,11 +27,9 @@ EMQ X 消息服务器在业务和应用层面，解决了单节点承载100万�
 
 EMQ X 消息服务器是基于 Erlang/OTP 平台的全异步的架构：异步 TCP 连接处理、异步主题(Topic)订阅、异步消息发布。只有在资源负载限制部分采用同步设计，比如 TCP 连接创建和 Mnesia 数据库事务执行。
 
-EMQ X 3.0 版本中，一条 MQTT 消息从发布者(Publisher)到订阅者(Subscriber)，在 EMQ X 消息服务器内部异步流过一系列 Erlang 进程 Mailbox::
+EMQ X 3.0 版本中，一条 MQTT 消息从发布者(Publisher)到订阅者(Subscriber)，在 EMQ X 消息服务器内部异步流过一系列 Erlang 进程 Mailbox:
 
-                      --------------       -----------       --------------
-    Publisher --Msg-->| Connection | ----> | Session | ----> | Connection | --Msg--> Subscriber
-                      --------------       -----------       --------------
+.. image:: _static/images/design_2.png
 
 消息持久化
 ----------
@@ -68,7 +59,7 @@ EMQ X 企业版产品中，可以通过规则引擎或插件的方式，持久�
 
 EMQ X 消息服务器概念上更像一台网络路由器(Router)或交换机(Switch)，而不是传统的企业级消息队列(MQ)。相比网络路由器按 IP 地址或 MPLS 标签路由报文，EMQ X 按主题树(Topic Trie)发布订阅模式在集群节点间路由 MQTT 消息:
 
-.. image:: ./_static/images/concept.png
+.. image:: ./_static/images/design_3.png
 
 设计原则
 --------
@@ -147,13 +138,9 @@ EMQ X 消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 消息队列与飞行窗口
 ------------------
 
-会话层通过一个内存消息队列和飞行窗口处理下发消息 ::
+会话层通过一个内存消息队列和飞行窗口处理下发消息:
 
-          |<----------------- Max Len ----------------->|
-          -----------------------------------------------
-    IN -> |     Messages Queue    |  Inflight Window    | -> Out
-          -----------------------------------------------
-                                  |<---   Win Size  --->|
+.. image:: _static/images/design_4.png
 
 飞行窗口(Inflight Window)保存当前正在发送未确认的 Qos1/2 消息。窗口值越大，吞吐越高；窗口值越小，消息顺序越严格。
 
@@ -164,7 +151,9 @@ EMQ X 消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 
 MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服务器的报文收发与确认。MQTT 发布报文(PUBLISH)进入消息服务器后，转换为一个消息对象并分配 128bits 消息 ID(MessageId)。
 
-全局唯一时间序列消息 ID 结构：
+全局唯一时间序列消息 ID 结构:
+
+.. image:: _static/images/design_5.png
 
 1. 64bits 时间戳: erlang:system_time if Erlang >= R18, otherwise os:timestamp
 
@@ -174,9 +163,9 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 
 4. 进程内部序列号: 2字节的进程内部序列号
 
-端到端消息发布订阅(Pub/Sub)过程中，发布报文 ID 与报文 QoS 终结在会话层，由唯一 ID 标识的 MQTT 消息对象在节点间路由::
+端到端消息发布订阅(Pub/Sub)过程中，发布报文 ID 与报文 QoS 终结在会话层，由唯一 ID 标识的 MQTT 消息对象在节点间路由:
 
-    PktId <-- Session --> MsgId <-- Router --> MsgId <-- Session --> PktId
+.. image:: _static/images/design_6.png
 
 .. _route_layer:
 
@@ -186,7 +175,7 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 
 路由层维护订阅者(subscriber)与订阅关系表(subscription)，并在本节点发布订阅模式派发(Dispatch)消息:
 
-.. image:: ./_static/images/dispatch.png
+.. image:: ./_static/images/design_7.png
 
 消息派发到会话(Session)后，由会话负责按不同 QoS 送达消息。
 
@@ -196,24 +185,13 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 分布层设计
 ----------
 
-分布层维护全局主题树(Topic Trie)与路由表(Route Table)。主题树由通配主题构成，路由表映射主题到节点::
+分布层维护全局主题树(Topic Trie)与路由表(Route Table)。主题树由通配主题构成，路由表映射主题到节点:
 
-    -------------------------
-    |            t          |
-    |           / \         |
-    |          +   #        |
-    |         / \           |
-    |        x   y          |
-    -------------------------
-    | t/+/x -> node1, node3 |
-    | t/+/y -> node1        |
-    | t/#   -> node2        |
-    | t/a   -> node3        |
-    -------------------------
+.. image:: ./_static/images/design_8.png
 
 分布层通过匹配主题树(Topic Trie)和查找路由表(Route Table)，在集群的节点间转发路由 MQTT 消息:
 
-.. image:: ./_static/images/route.png
+.. image:: ./_static/images/design_9.png
 
 .. _hook:
 
@@ -252,13 +230,9 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 | client.disconnected  | 客户端连接断开       |
 +----------------------+----------------------+
 
-钩子(Hook) 采用职责链设计模式(`Chain-of-responsibility_pattern`_)，扩展模块或插件向钩子注册回调函数，系统在客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数::
+钩子(Hook) 采用职责链设计模式(`Chain-of-responsibility_pattern`_)，扩展模块或插件向钩子注册回调函数，系统在客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数:
 
-                     --------  ok | {ok, NewAcc}   --------  ok | {ok, NewAcc}   --------
-     (Args, Acc) --> | Fun1 | -------------------> | Fun2 | -------------------> | Fun3 | --> {ok, Acc} | {stop, Acc}
-                     --------                      --------                      --------
-                        |                             |                             |
-                   stop | {stop, NewAcc}         stop | {stop, NewAcc}         stop | {stop, NewAcc}
+.. image:: ./_static/images/design_10.png
 
 不同钩子的回调函数输入参数不同，用户可参考插件模版的 `emqx_plugin_template`_ 模块，每个回调函数应该返回:
 
