@@ -44,7 +44,7 @@ MQTT 发布订阅
 
 MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器，目前支持 MQTT `v3.1.1 <http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html>`_ 和 `v5.0 <http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html>`_:
 
-.. image:: ./_static/images/pubsub_concept.png
+.. image:: ./_static/images/guide_1.png
 
 *EMQ X* 启动后，任何设备或终端可通过 MQTT 协议连接到服务器，通过 **发布(Publish)/订阅(Subscribe)** 进行交换消息。
 
@@ -72,14 +72,9 @@ MQTT 客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 
 *EMQ X* 消息服务器认证由一系列认证插件(Plugins)提供，系统支持按用户名密码、ClientID 或匿名认证。
 
-系统默认开启匿名认证(Anonymous)，通过加载认证插件可开启的多个认证模块组成认证链::
+系统默认开启匿名认证(Anonymous)，通过加载认证插件可开启的多个认证模块组成认证链:
 
-               ----------------           ----------------           ------------
-    Client --> | Username认证 | -ignore-> | ClientID认证 | -ignore-> | 匿名认证 |
-               ----------------           ----------------           ------------
-                      |                         |                         |
-                     \|/                       \|/                       \|/
-                allow | deny              allow | deny              allow | deny
+.. image:: _static/images/guide_2.png
 
 **开启匿名认证**
 
@@ -102,15 +97,9 @@ ACL 访问控制规则定义::
 
     允许(Allow)|拒绝(Deny) 谁(Who) 订阅(Subscribe)|发布(Publish) 主题列表(Topics)
 
-MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控制模块会逐条匹配 ACL 规则，直到匹配成功为止::
+MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控制模块会逐条匹配 ACL 规则，直到匹配成功为止:
 
-              ---------              ---------              ---------
-    Client -> | Rule1 | --nomatch--> | Rule2 | --nomatch--> | Rule3 | --> Default
-              ---------              ---------              ---------
-                  |                      |                      |
-                match                  match                  match
-                 \|/                    \|/                    \|/
-            allow | deny           allow | deny           allow | deny
+.. image:: _static/images/guide_3.png
 
 **默认访问控制设置**
 
@@ -179,13 +168,9 @@ EMQ X 提供的认证插件包括:
 共享订阅 (Shared Subscription)
 -------------------------------
 
-*EMQ X* R3.0 版本开始支持集群级别的共享订阅功能。共享订阅(Shared Subscription)支持多种消息派发策略::
+*EMQ X* R3.0 版本开始支持集群级别的共享订阅功能。共享订阅(Shared Subscription)支持多种消息派发策略:
 
-                                ---------
-                                |       | --Msg1--> Subscriber1
-    Publisher--Msg1,Msg2,Msg3-->| EMQ X | --Msg2--> Subscriber2
-                                |       | --Msg3--> Subscriber3
-                                ---------
+.. image:: ./_static/images/guide_4.png
 
 共享订阅支持两种使用方式:
 
@@ -244,11 +229,9 @@ EMQ X 节点间桥接
 
 .. image:: ./_static/images/bridge.png
 
-此外 *EMQ X* 消息服务器支持多节点桥接模式互联::
+此外 *EMQ X* 消息服务器支持多节点桥接模式互联:
 
-                  ---------                     ---------                     ---------
-                  Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
-                  ---------                     ---------                     ---------
+.. image:: _static/images/bridges_3.png
 
 在 EMQ X 中，通过修改 ``etc/plugins/emqx_bridge_mqtt.conf`` 来配置 bridge。EMQ X 根据不同的 name 来区分不同的 bridge。例如::
 
