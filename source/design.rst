@@ -140,7 +140,7 @@ EMQ X 消息服务器概念上更像一台网络路由器(Router)或交换机(Sw
 
 会话层通过一个内存消息队列和飞行窗口处理下发消息:
 
-.. image:: _static/images/design_3.png
+.. image:: _static/images/design_4.png
 
 飞行窗口(Inflight Window)保存当前正在发送未确认的 Qos1/2 消息。窗口值越大，吞吐越高；窗口值越小，消息顺序越严格。
 
@@ -153,7 +153,7 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 
 全局唯一时间序列消息 ID 结构:
 
-.. image:: _static/images/design_4.png
+.. image:: _static/images/design_5.png
 
 1. 64bits 时间戳: erlang:system_time if Erlang >= R18, otherwise os:timestamp
 
@@ -165,7 +165,7 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 
 端到端消息发布订阅(Pub/Sub)过程中，发布报文 ID 与报文 QoS 终结在会话层，由唯一 ID 标识的 MQTT 消息对象在节点间路由:
 
-.. image:: _static/images/design_5.png
+.. image:: _static/images/design_6.png
 
 .. _route_layer:
 
@@ -175,7 +175,7 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 
 路由层维护订阅者(subscriber)与订阅关系表(subscription)，并在本节点发布订阅模式派发(Dispatch)消息:
 
-.. image:: ./_static/images/design_6.png
+.. image:: ./_static/images/design_7.png
 
 消息派发到会话(Session)后，由会话负责按不同 QoS 送达消息。
 
@@ -187,11 +187,11 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 
 分布层维护全局主题树(Topic Trie)与路由表(Route Table)。主题树由通配主题构成，路由表映射主题到节点:
 
-.. image:: ./_static/images/design_7.png
+.. image:: ./_static/images/design_8.png
 
 分布层通过匹配主题树(Topic Trie)和查找路由表(Route Table)，在集群的节点间转发路由 MQTT 消息:
 
-.. image:: ./_static/images/design_8.png
+.. image:: ./_static/images/design_9.png
 
 .. _hook:
 
@@ -232,7 +232,7 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 
 钩子(Hook) 采用职责链设计模式(`Chain-of-responsibility_pattern`_)，扩展模块或插件向钩子注册回调函数，系统在客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数:
 
-.. image:: ./_static/images/design_9.png
+.. image:: ./_static/images/design_10.png
 
 不同钩子的回调函数输入参数不同，用户可参考插件模版的 `emqx_plugin_template`_ 模块，每个回调函数应该返回:
 
