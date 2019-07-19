@@ -27,6 +27,11 @@ EMQ X 3.2.1 版本改动主要包括错误修复与性能增强。
   Github PR:
   `emqx/emqx#2699 <https://github.com/emqx/emqx/pull/2699>`_
 
+- 将默认 uptime 心跳时间改为 30s
+
+  Github PR:
+  `emqx/emqx#2696 <https://github.com/emqx/emqx/pull/2696>`_
+
 错误修复:
 
 - 修复 WebSocket 非正常下线时出现 crash 的问题
@@ -78,10 +83,15 @@ emqx-rel (build project)
 
 功能增强:
 
-- Support building ``emqx-rel`` with built-in rebar3
+- 内置 rebar3 脚本
 
   Github PR:
   `emqx/emqx-rel#394 <https://github.com/emqx/emqx-rel/pull/394>`_
+
+- EMQ X Windows 服务延迟启动
+
+  Github PR:
+  `emqx/emqx-rel#395 <https://github.com/emqx/emqx-rel/pull/395>`_
 
 .. _release_3.2.0:
 
