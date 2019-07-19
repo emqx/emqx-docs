@@ -51,7 +51,7 @@ emqx-rule-engine (plugin)
 
 错误修复:
 
-- 修复 Dashboard select payload 失败问题
+- 修复使用 '.' 筛选 payload 字段失败的问题
 
   Github PR:
   `emqx/emqx-rule-engine#83 <https://github.com/emqx/emqx-rule-engine/pull/83>`_
