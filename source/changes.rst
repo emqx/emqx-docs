@@ -39,6 +39,11 @@ EMQ X 3.2.1 版本改动主要包括错误修复与性能增强。
   Github PR:
   `emqx/emqx#2697 <https://github.com/emqx/emqx/pull/2697>`_
 
+- 修复 Session 异常关闭时，ws_channel 仍然在线的问题
+
+  Github PR:
+  `emqx/emqx#2704 <https://github.com/emqx/emqx/pull/2704>`_
+
 emqx-rule-engine (plugin)
 -------------------------
 
