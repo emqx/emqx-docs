@@ -5,6 +5,99 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.1:
+
+----------
+3.2.1 版本
+----------
+
+*发布日期: 2019-07-20*
+
+EMQ X 3.2.1 版本改动主要包括错误修复与性能增强。
+
+功能增强:
+
+- 优化 ``gen_rpc`` 的调用
+
+  Github PR:
+  `emqx/emqx#2694 <https://github.com/emqx/emqx/pull/2694>`_
+
+- 支持使用 hostname 自动发现 k8s 集群
+
+  Github PR:
+  `emqx/emqx#2699 <https://github.com/emqx/emqx/pull/2699>`_
+
+- 将默认 uptime 心跳时间改为 30s
+
+  Github PR:
+  `emqx/emqx#2696 <https://github.com/emqx/emqx/pull/2696>`_
+
+错误修复:
+
+- 修复 WebSocket 非正常下线时出现 crash 的问题
+
+  Github PR:
+  `emqx/emqx#2697 <https://github.com/emqx/emqx/pull/2697>`_
+
+- 修复 Session 异常关闭时，ws_channel 仍然在线的问题
+
+  Github PR:
+  `emqx/emqx#2704 <https://github.com/emqx/emqx/pull/2704>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 增强 republish 动作参数
+
+  Github PR:
+  `emqx/emqx-rule-engine#81 <https://github.com/emqx/emqx-rule-engine/pull/81>`_
+
+错误修复:
+
+- 修复使用 '.' 筛选 payload 字段失败的问题
+
+  Github PR:
+  `emqx/emqx-rule-engine#83 <https://github.com/emqx/emqx-rule-engine/pull/83>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+错误修复:
+
+- 修复 Dashboard 资源列表在 Safari 下渲染错误的问题
+
+  Github PR:
+  `emqx/emqx-dashboard#124 <https://github.com/emqx/emqx-dashboard/pull/124>`_,
+  `emqx/emqx-dashboard#125 <https://github.com/emqx/emqx-dashboard/pull/125>`_,
+  `emqx/emqx-dashboard#126 <https://github.com/emqx/emqx-dashboard/pull/126>`_
+
+emqx-lwm2m (plugin)
+-------------------
+
+功能增强:
+
+- 兼容 LwM2M 1.1 版本客户端登录
+
+  Github Commit:
+  `emqx/emqx-lwm2m#1c03bf <https://github.com/emqx/emqx-lwm2m/commit/1c03bf3b6a9cae7ed52f87ee219e9dd9d8824892>`_
+
+emqx-rel (build project)
+------------------------
+
+功能增强:
+
+- 内置 rebar3 脚本
+
+  Github PR:
+  `emqx/emqx-rel#394 <https://github.com/emqx/emqx-rel/pull/394>`_
+
+- EMQ X Windows 服务延迟启动
+
+  Github PR:
+  `emqx/emqx-rel#395 <https://github.com/emqx/emqx-rel/pull/395>`_
+
 .. _release_3.2.0:
 
 ----------
