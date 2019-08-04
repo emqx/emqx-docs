@@ -439,6 +439,18 @@ Erlang 分布式节点间通信使用 TCP 连接的端口范围:
 RPC 参数配置
 ------------
 
+RPC 模式 (sync | async):
+
+.. code-block:: properties
+
+    rpc.mode = async
+
+RPC async 模式的最大批量消息数:
+
+.. code-block:: properties
+
+    rpc.async_batch_size = 256
+
 RPC 本地监听的 TCP 端口:
 
 .. code-block:: properties
@@ -450,6 +462,12 @@ RPC 对端监听的 TCP 端口:
 .. code-block:: properties
 
     rpc.tcp_client_port = 5369
+
+RPC 的 TCP 连接个数:
+
+.. code-block:: properties
+
+    rpc.tcp_client_num = 32
 
 RPC 连接超时时间:
 
@@ -492,6 +510,24 @@ socket 保活探测间隔:
 .. code-block:: properties
 
     rpc.socket_keepalive_count = 9
+
+RPC 的 TCP 发送缓存大小:
+
+.. code-block:: properties
+
+    rpc.socket_sndbuf = 1MB
+
+RPC 的 TCP 发送缓存大小:
+
+.. code-block:: properties
+
+    rpc.socket_recbuf = 1MB
+
+RPC 的 Socket (用户态)缓存大小:
+
+.. code-block:: properties
+
+    rpc.socket_buffer = 1MB
 
 ------------
 日志参数配置

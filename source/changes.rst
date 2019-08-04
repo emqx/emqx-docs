@@ -5,6 +5,50 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.2:
+
+----------
+3.2.2 版本
+----------
+
+*发布日期: 2019-08-03*
+
+EMQ X 3.2.2 版本改动主要为错误修复。
+
+功能增强:
+
+- 扩展 ``gen_rpc`` 配置
+
+  Github PR:
+  `emqx/emqx#2732 <https://github.com/emqx/emqx/pull/2732>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+错误修复:
+
+- 修复测试 URL 连通性的问题
+
+  Github PR:
+  `emqx/emqx-rule-engine#88 <https://github.com/emqx/emqx-rule-engine/pull/88>`_
+
+emqx-dashboard (plugin)
+------------------------
+
+功能增强:
+
+- 增加帮助页面
+
+ekka (dependency)
+-----------------
+
+错误修复:
+
+- 修复释放锁可能导致崩溃的问题
+
+  Github PR:
+  `emqx/ekka#60 <https://github.com/emqx/ekka/pull/60>`_
+
 .. _release_3.2.1:
 
 ----------
