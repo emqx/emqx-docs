@@ -5,6 +5,43 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.3:
+
+----------
+3.2.3 版本
+----------
+
+*发布日期: 2019-09-16*
+
+EMQ X 3.2.3 版本改动主要为错误修复。
+
+错误修复:
+
+- 修复 emqx 容器运行时 CPU 占用率告警异常的问题
+
+  GitHub Commit:
+  `emqx/emqx#9cdaa7 <https://github.com/emqx/emqx/commit/9cdaa71a66c44d6bfd7606f8e64bc6670f619cdf>`_
+
+- 修复消息过期机制不生效的问题
+
+  Github Commit:
+  `emqx/emqx#31671f <https://github.com/emqx/emqx/commit/31671f5ee5516e04ca6c648679f030b790c84fd9>`_
+
+- 修复占位符在 mountpoint 中不生效的问题
+
+  Github Commit:
+  `emqx/emqx#58ba22 <https://github.com/emqx/emqx/commit/58ba22dfc79ce81ac74fffae60a624d2238585ca>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+错误修复:
+
+- 修复 SSL 无法使用的问题
+
+  Github Commit:
+  `emqx/emqx-dashboard#272a42 <https://github.com/emqx/emqx-dashboard/commit/272a42b5ac7b28f52e5e71fae540e47278fac9d5>`_
+
 .. _release_3.2.2:
 
 ----------
