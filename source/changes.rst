@@ -5,7 +5,43 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0-beta.2:
+
+---------------
+4.0-beta.2 版本
+---------------
+
+*发布日期: 2019-10-12*
+
 .. _release_4.0-beta.1:
+
+EMQ X 4.0-beta.2 版本发布。此版本主要针对错误修复以及继续优化内部模块设计。
+
+错误修复:
+
+- 修复 clean start 选项在 MQTT 客户端使用 Websocket 协议接入时不生效的问题
+
+  Github PR:
+
+- 修复 SSL 握手失败导致崩溃的问题
+
+  Github PR:
+  `emqx/emqx#2963 <https://github.com/emqx/emqx/pull/2963>`_
+
+- 检查 PUBLISH 报文的主题层级
+
+  Github PR:
+  `emqx/emqx#2964 <https://github.com/emqx/emqx/pull/2964>`_
+
+emqtt (plugin)
+--------------
+
+功能增强:
+
+- 提供命令行接口
+
+  Github PR:
+  `emqx/emqtt#91 <https://github.com/emqx/emqtt/pull/91>`_
 
 ---------------
 4.0-beta.1 版本
