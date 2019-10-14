@@ -19,10 +19,6 @@ EMQ X 4.0-beta.2 版本发布。此版本主要针对错误修复以及继续优
 
 错误修复:
 
-- 修复 clean start 选项在 MQTT 客户端使用 Websocket 协议接入时不生效的问题
-
-  Github PR:
-
 - 修复 SSL 握手失败导致崩溃的问题
 
   Github PR:
@@ -42,6 +38,27 @@ emqtt (plugin)
 
   Github PR:
   `emqx/emqtt#91 <https://github.com/emqx/emqtt/pull/91>`_
+
+emqx-sn (plugin)
+----------------
+
+错误修复:
+
+- 适配 MQTT-SN 插件到 4.0 版本
+
+  Github PR:
+  `emqx/emqx-sn#145 <https://github.com/emqx/emqx-sn/pull/145>`_
+
+emqx-coap (plugin)
+------------------
+
+错误修复:
+
+- 适配 CoAP 插件到 4.0 版本
+
+  Github Commit:
+  `emqx/emqx-coap#c7c175 <https://github.com/emqx/emqx-coap/commit/c7c17540c1248dcdd402b41323c23a211e8292fc>`_,
+  `emqx/emqx-coap#9b8ede <https://github.com/emqx/emqx-coap/commit/9b8ede093cfc3b7211663520e496c579c11611f6>`_
 
 ---------------
 4.0-beta.1 版本
