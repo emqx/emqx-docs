@@ -5,7 +5,60 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0-beta.2:
+
+---------------
+4.0-beta.2 版本
+---------------
+
+*发布日期: 2019-10-12*
+
 .. _release_4.0-beta.1:
+
+EMQ X 4.0-beta.2 版本发布。此版本主要针对错误修复以及继续优化内部模块设计。
+
+错误修复:
+
+- 修复 SSL 握手失败导致崩溃的问题
+
+  Github PR:
+  `emqx/emqx#2963 <https://github.com/emqx/emqx/pull/2963>`_
+
+- 检查 PUBLISH 报文的主题层级
+
+  Github PR:
+  `emqx/emqx#2964 <https://github.com/emqx/emqx/pull/2964>`_
+
+emqtt (plugin)
+--------------
+
+功能增强:
+
+- 提供命令行接口
+
+  Github PR:
+  `emqx/emqtt#91 <https://github.com/emqx/emqtt/pull/91>`_
+
+emqx-sn (plugin)
+----------------
+
+错误修复:
+
+- 适配 MQTT-SN 插件到 4.0 版本
+
+  Github PR:
+  `emqx/emqx-sn#145 <https://github.com/emqx/emqx-sn/pull/145>`_
+
+emqx-coap (plugin)
+------------------
+
+错误修复:
+
+- 适配 CoAP 插件到 4.0 版本
+
+  Github Commit:
+  `emqx/emqx-coap#c7c175 <https://github.com/emqx/emqx-coap/commit/c7c17540c1248dcdd402b41323c23a211e8292fc>`_,
+  `emqx/emqx-coap#9b8ede <https://github.com/emqx/emqx-coap/commit/9b8ede093cfc3b7211663520e496c579c11611f6>`_
 
 ---------------
 4.0-beta.1 版本
