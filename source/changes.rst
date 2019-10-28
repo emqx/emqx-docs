@@ -5,6 +5,82 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.4:
+
+----------
+3.2.4 版本
+----------
+
+*发布日期: 2019-10-28*
+
+EMQ X 3.2.4 版本发布。此版本主要为 Dashbaord 和 REST API 添加了 IPv6 支持，并修复了一些错误。
+
+错误修复:
+
+- 修复 `max_subscriptions` 配置不生效的问题
+
+  Github PR:
+  `emqx/emqx#2922 <https://github.com/emqx/emqx/pull/2922>`_
+
+  Github Issue:
+  `emqx/emqx#2908 <https://github.com/emqx/emqx/issues/2908>`_
+
+emqx-auth-mysql (plugin)
+------------------------
+
+错误修复:
+
+- 使用占位符时更安全地取值
+
+  Github PR:
+  `emqx/emqx-auth-mysql#180 <https://github.com/emqx/emqx-auth-mysql/pull/180>`_
+
+  Github Issue:
+  `emqx/emqx#2937 <https://github.com/emqx/emqx/issues/2937>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 支持使用 IPv6 访问 Dashbaord
+
+  Github PR:
+  `emqx/emqx-dashboard#161 <https://github.com/emqx/emqx-dashboard/pull/161>`_
+
+emqx-management (plugin)
+------------------------
+
+功能增强:
+
+- REST API 支持 IPv6
+
+  Github PR:
+  `emqx/emqx-management#134 <https://github.com/emqx/emqx-management/pull/134>`_
+
+emqx-delay-publish (plugin)
+---------------------------
+
+错误修复:
+
+- 修复延迟发布消息失序的问题，感谢 `soldag <https://github.com/soldag>`_ 的贡献
+
+  Github PR:
+  `emqx/emqx-delay-publish#49 <https://github.com/emqx/emqx-delay-publish/pull/49>`_
+
+  Github Issue:
+  `emqx/emqx-delay-publish#15 <https://github.com/emqx/emqx-delay-publish/issues/15>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 优化规则引擎中 JSON Payload 解析语句
+
+  Github Repository:
+  `emqx/emqx-rule-engine <https://github.com/emqx/emqx-rule-engine>`_
+
 .. _release_4.0-beta.2:
 
 ---------------
