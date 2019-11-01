@@ -5,6 +5,68 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0-beta.3:
+
+---------------
+4.0-beta.3 版本
+---------------
+
+*发布日期: 2019-11-01*
+
+EMQ X 4.0-beta.3 版本发布。此版本主要针对错误修复以及测试覆盖率提升。
+
+错误修复:
+
+- 修复跨集群转发时消息失序的问题
+
+  Github PR:
+  `emqx/emqx#3000 <https://github.com/emqx/emqx/pull/3000>`_
+
+emqx-management (plugin)
+------------------------
+
+功能增强:
+
+- REST API 支持 IPv6
+
+  Github PR:
+  `emqx/emqx-management#135 <https://github.com/emqx/emqx-management/pull/135>`_
+
+错误修复:
+
+- 修复转码后的 URI 没有被正确处理的问题
+
+  Github PR:
+  `emqx/emqx-management#137 <https://github.com/emqx/emqx-management/pull/137>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 支持使用 IPv6 访问 Dashbaord
+
+  Github PR:
+  `emqx/emqx-dashboard#162 <https://github.com/emqx/emqx-dashboard/pull/162>`_
+
+emqx-delayed-publish (plugin)
+-----------------------------
+
+错误修复:
+
+- 修复插件在集群环境下只能在一个节点中开启的问题
+
+  Github PR:
+  `emqx/emqx-delay-publish#50 <https://github.com/emqx/emqx-delay-publish/pull/50>`_
+
+- 修复延迟发布消息失序的问题，感谢 `soldag <https://github.com/soldag>`_ 的贡献
+
+  Github PR:
+  `emqx/emqx-delay-publish#49 <https://github.com/emqx/emqx-delay-publish/pull/49>`_
+
+  Github Issue:
+  `emqx/emqx-delay-publish#15 <https://github.com/emqx/emqx-delay-publish/issues/15>`_
+
 .. _release_3.2.4:
 
 ----------
@@ -66,7 +128,7 @@ emqx-delay-publish (plugin)
 - 修复延迟发布消息失序的问题，感谢 `soldag <https://github.com/soldag>`_ 的贡献
 
   Github PR:
-  `emqx/emqx-delay-publish#49 <https://github.com/emqx/emqx-delay-publish/pull/49>`_
+  `emqx/emqx-delay-publish#48 <https://github.com/emqx/emqx-delay-publish/pull/48>`_
 
   Github Issue:
   `emqx/emqx-delay-publish#15 <https://github.com/emqx/emqx-delay-publish/issues/15>`_
