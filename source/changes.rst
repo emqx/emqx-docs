@@ -5,6 +5,71 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.5:
+
+----------
+3.2.5 版本
+----------
+
+*发布日期: 2019-11-15*
+
+EMQ X 3.2.5 版本发布。此版本主要进行了错误修复。
+
+emqx-rule-engine (plugin)
+-------------------------
+
+错误修复:
+
+- 支持 SQL 关键字: FOREACH/DO/INCASE
+
+  Github Commit:
+  `emqx/emqx-rule-engine#a962e3 <https://github.com/emqx/emqx-rule-engine/commit/a962e364cfde9a7f9bbde3d4d6613625b8d00ce7>`_
+
+- 支持 SQL 关键字: CASE/WHEN
+
+  Github Commit:
+  `emqx/emqx-rule-engine#40e68e <https://github.com/emqx/emqx-rule-engine/commit/40e68e9607198613cc93d001488d40b2bfb4f23e>`_
+
+- 支持在 SQL 的 WHERE 子句中比较原子与二进制
+
+  Github Commit:
+  `emqx/emqx-rule-engine#b240cc <https://github.com/emqx/emqx-rule-engine/commit/b240cc0434815bafb5cfcd366692257336d26e8c>`_
+
+- 修复 select 和 foreach 中的列验证失败
+
+  Github Commit:
+  `emqx/emqx-rule-engine#6a1267 <https://github.com/emqx/emqx-rule-engine/commit/6a1267cb1530d00972899ecb3abb7a3220e28175>`_
+
+- 修复重建规则时出现竞争的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#af8967 <https://github.com/emqx/emqx-rule-engine/commit/af8967793d4f554134955c620d9e31b8c3876445>`_
+
+- 修复重发消息时没有确证设置标志的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#60e45c <https://github.com/emqx/emqx-rule-engine/commit/60e45c28596a6cb42437043fbba5509502a3cf41>`_
+
+minirest (plugin)
+-----------------
+
+错误修复:
+
+- 修复日志没有记录错误数据的问题
+
+  Github PR:
+  `emqx/minirest#20 <https://github.com/emqx/minirest/pull/20>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+错误修复:
+
+- 修复错误的匹配
+
+  Github Commit:
+  `emqx/emqx-web-hook#3dd041 <https://github.com/emqx/emqx-web-hook/commit/3dd041afaf39eabe71ab473648d57f4b55735224>`_
+
 .. _release_4.0-beta.3:
 
 ---------------
