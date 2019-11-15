@@ -1097,23 +1097,29 @@ etc/plugins/emqx_lwm2m.conf:
     ## 设备上线后，主动 observe 所有的 objects
     #lwm2m.auto_observe = off
 
+    # 主题挂载点
+    # Placeholders supported:
+    #    '%e': Endpoint Name
+    #    '%a': IP Address
+    lwm2m.mountpoint = lwm2m/%e/
+
     ## client register 成功后主动向 EMQ X 订阅的主题
     ## 占位符:
     ##    '%e': Endpoint Name
     ##    '%a': IP Address
-    lwm2m.topics.command = lwm2m/%e/dn/#
+    lwm2m.topics.command = dn/#
 
     ## client 应答消息(response) 到 EMQ X 的主题
-    lwm2m.topics.response = lwm2m/%e/up/resp
+    lwm2m.topics.response = up/resp
 
     ## client 通知类消息(noify message) 到 EMQ X 的主题
-    lwm2m.topics.notify = lwm2m/%e/up/notify
+    lwm2m.topics.notify = up/notify
 
     ## client 注册类消息(register message) 到 EMQ X 的主题
-    lwm2m.topics.register = lwm2m/%e/up/resp
+    lwm2m.topics.register = up/resp
 
     # client 更新类消息(update message) 到 EMQ X 的主题
-    lwm2m.topics.update = lwm2m/%e/up/resp
+    lwm2m.topics.update = %e/up/resp
 
     # Object 定义的 xml 文件位置
     lwm2m.xml_dir =  etc/lwm2m_xml
