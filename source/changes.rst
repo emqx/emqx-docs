@@ -5,6 +5,309 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.5:
+
+----------
+3.2.5 版本
+----------
+
+*发布日期: 2019-11-15*
+
+EMQ X 3.2.5 版本发布。此版本主要进行了错误修复。
+
+emqx-rule-engine (plugin)
+-------------------------
+
+错误修复:
+
+- 支持 SQL 关键字: FOREACH/DO/INCASE
+
+  Github Commit:
+  `emqx/emqx-rule-engine#a962e3 <https://github.com/emqx/emqx-rule-engine/commit/a962e364cfde9a7f9bbde3d4d6613625b8d00ce7>`_
+
+- 支持 SQL 关键字: CASE/WHEN
+
+  Github Commit:
+  `emqx/emqx-rule-engine#40e68e <https://github.com/emqx/emqx-rule-engine/commit/40e68e9607198613cc93d001488d40b2bfb4f23e>`_
+
+- 支持在 SQL 的 WHERE 子句中比较原子与二进制
+
+  Github Commit:
+  `emqx/emqx-rule-engine#b240cc <https://github.com/emqx/emqx-rule-engine/commit/b240cc0434815bafb5cfcd366692257336d26e8c>`_
+
+- 修复 select 和 foreach 中的列验证失败
+
+  Github Commit:
+  `emqx/emqx-rule-engine#6a1267 <https://github.com/emqx/emqx-rule-engine/commit/6a1267cb1530d00972899ecb3abb7a3220e28175>`_
+
+- 修复重建规则时出现竞争的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#af8967 <https://github.com/emqx/emqx-rule-engine/commit/af8967793d4f554134955c620d9e31b8c3876445>`_
+
+- 修复重发消息时没有确证设置标志的问题
+
+  Github Commit:
+  `emqx/emqx-rule-engine#60e45c <https://github.com/emqx/emqx-rule-engine/commit/60e45c28596a6cb42437043fbba5509502a3cf41>`_
+
+minirest (plugin)
+-----------------
+
+错误修复:
+
+- 修复日志没有记录错误数据的问题
+
+  Github PR:
+  `emqx/minirest#20 <https://github.com/emqx/minirest/pull/20>`_
+
+emqx-web-hook (plugin)
+----------------------
+
+错误修复:
+
+- 修复错误的匹配
+
+  Github Commit:
+  `emqx/emqx-web-hook#3dd041 <https://github.com/emqx/emqx-web-hook/commit/3dd041afaf39eabe71ab473648d57f4b55735224>`_
+
+.. _release_4.0-beta.3:
+
+---------------
+4.0-beta.3 版本
+---------------
+
+*发布日期: 2019-11-01*
+
+EMQ X 4.0-beta.3 版本发布。此版本主要针对错误修复以及测试覆盖率提升。
+
+错误修复:
+
+- 修复跨集群转发时消息失序的问题
+
+  Github PR:
+  `emqx/emqx#3000 <https://github.com/emqx/emqx/pull/3000>`_
+
+emqx-management (plugin)
+------------------------
+
+功能增强:
+
+- REST API 支持 IPv6
+
+  Github PR:
+  `emqx/emqx-management#135 <https://github.com/emqx/emqx-management/pull/135>`_
+
+错误修复:
+
+- 修复转码后的 URI 没有被正确处理的问题
+
+  Github PR:
+  `emqx/emqx-management#137 <https://github.com/emqx/emqx-management/pull/137>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 支持使用 IPv6 访问 Dashbaord
+
+  Github PR:
+  `emqx/emqx-dashboard#162 <https://github.com/emqx/emqx-dashboard/pull/162>`_
+
+emqx-delayed-publish (plugin)
+-----------------------------
+
+错误修复:
+
+- 修复插件在集群环境下只能在一个节点中开启的问题
+
+  Github PR:
+  `emqx/emqx-delay-publish#50 <https://github.com/emqx/emqx-delay-publish/pull/50>`_
+
+- 修复延迟发布消息失序的问题，感谢 `soldag <https://github.com/soldag>`_ 的贡献
+
+  Github PR:
+  `emqx/emqx-delay-publish#49 <https://github.com/emqx/emqx-delay-publish/pull/49>`_
+
+  Github Issue:
+  `emqx/emqx-delay-publish#15 <https://github.com/emqx/emqx-delay-publish/issues/15>`_
+
+.. _release_3.2.4:
+
+----------
+3.2.4 版本
+----------
+
+*发布日期: 2019-10-28*
+
+EMQ X 3.2.4 版本发布。此版本主要为 Dashbaord 和 REST API 添加了 IPv6 支持，并修复了一些错误。
+
+错误修复:
+
+- 修复 `max_subscriptions` 配置不生效的问题
+
+  Github PR:
+  `emqx/emqx#2922 <https://github.com/emqx/emqx/pull/2922>`_
+
+  Github Issue:
+  `emqx/emqx#2908 <https://github.com/emqx/emqx/issues/2908>`_
+
+emqx-auth-mysql (plugin)
+------------------------
+
+错误修复:
+
+- 使用占位符时更安全地取值
+
+  Github PR:
+  `emqx/emqx-auth-mysql#180 <https://github.com/emqx/emqx-auth-mysql/pull/180>`_
+
+  Github Issue:
+  `emqx/emqx#2937 <https://github.com/emqx/emqx/issues/2937>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+功能增强:
+
+- 支持使用 IPv6 访问 Dashbaord
+
+  Github PR:
+  `emqx/emqx-dashboard#161 <https://github.com/emqx/emqx-dashboard/pull/161>`_
+
+emqx-management (plugin)
+------------------------
+
+功能增强:
+
+- REST API 支持 IPv6
+
+  Github PR:
+  `emqx/emqx-management#134 <https://github.com/emqx/emqx-management/pull/134>`_
+
+emqx-delay-publish (plugin)
+---------------------------
+
+错误修复:
+
+- 修复延迟发布消息失序的问题，感谢 `soldag <https://github.com/soldag>`_ 的贡献
+
+  Github PR:
+  `emqx/emqx-delay-publish#48 <https://github.com/emqx/emqx-delay-publish/pull/48>`_
+
+  Github Issue:
+  `emqx/emqx-delay-publish#15 <https://github.com/emqx/emqx-delay-publish/issues/15>`_
+
+emqx-rule-engine (plugin)
+-------------------------
+
+功能增强:
+
+- 优化规则引擎中 JSON Payload 解析语句
+
+  Github Repository:
+  `emqx/emqx-rule-engine <https://github.com/emqx/emqx-rule-engine>`_
+
+.. _release_4.0-beta.2:
+
+---------------
+4.0-beta.2 版本
+---------------
+
+*发布日期: 2019-10-12*
+
+.. _release_4.0-beta.1:
+
+EMQ X 4.0-beta.2 版本发布。此版本主要针对错误修复以及继续优化内部模块设计。
+
+错误修复:
+
+- 修复 SSL 握手失败导致崩溃的问题
+
+  Github PR:
+  `emqx/emqx#2963 <https://github.com/emqx/emqx/pull/2963>`_
+
+- 检查 PUBLISH 报文的主题层级
+
+  Github PR:
+  `emqx/emqx#2964 <https://github.com/emqx/emqx/pull/2964>`_
+
+emqtt (plugin)
+--------------
+
+功能增强:
+
+- 提供命令行接口
+
+  Github PR:
+  `emqx/emqtt#91 <https://github.com/emqx/emqtt/pull/91>`_
+
+emqx-sn (plugin)
+----------------
+
+错误修复:
+
+- 适配 MQTT-SN 插件到 4.0 版本
+
+  Github PR:
+  `emqx/emqx-sn#145 <https://github.com/emqx/emqx-sn/pull/145>`_
+
+emqx-coap (plugin)
+------------------
+
+错误修复:
+
+- 适配 CoAP 插件到 4.0 版本
+
+  Github Commit:
+  `emqx/emqx-coap#c7c175 <https://github.com/emqx/emqx-coap/commit/c7c17540c1248dcdd402b41323c23a211e8292fc>`_,
+  `emqx/emqx-coap#9b8ede <https://github.com/emqx/emqx-coap/commit/9b8ede093cfc3b7211663520e496c579c11611f6>`_
+
+---------------
+4.0-beta.1 版本
+---------------
+
+*发布日期: 2019-09-30*
+
+EMQ X 4.0-beta.1 版本发布。此版本主要针对内部模块进行重新设计，实现吞吐大幅度提升。
+
+.. _release_3.2.3:
+
+----------
+3.2.3 版本
+----------
+
+*发布日期: 2019-09-16*
+
+EMQ X 3.2.3 版本改动主要为错误修复。
+
+错误修复:
+
+- 修复 emqx 容器运行时 CPU 占用率告警异常的问题
+
+  GitHub Commit:
+  `emqx/emqx#9cdaa7 <https://github.com/emqx/emqx/commit/9cdaa71a66c44d6bfd7606f8e64bc6670f619cdf>`_
+
+- 修复消息过期机制不生效的问题
+
+  Github Commit:
+  `emqx/emqx#31671f <https://github.com/emqx/emqx/commit/31671f5ee5516e04ca6c648679f030b790c84fd9>`_
+
+- 修复占位符在 mountpoint 中不生效的问题
+
+  Github Commit:
+  `emqx/emqx#58ba22 <https://github.com/emqx/emqx/commit/58ba22dfc79ce81ac74fffae60a624d2238585ca>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+错误修复:
+
+- 修复 SSL 无法使用的问题
+
+  Github Commit:
+  `emqx/emqx-dashboard#272a42 <https://github.com/emqx/emqx-dashboard/commit/272a42b5ac7b28f52e5e71fae540e47278fac9d5>`_
+
 .. _release_3.2.2:
 
 ----------

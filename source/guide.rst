@@ -156,7 +156,7 @@ EMQ X 提供的认证插件包括:
 | `emqx_auth_mongo`_         | MongoDB 认证/鉴权插件     |
 +----------------------------+---------------------------+
 
-其中，关于每个认证插件的配置及用法，可参考 `扩展插件 (Plugins) <https://developer.emqx.io/docs/emq/v3/cn/plugins.html>`_ 关于认证部分。
+其中，关于每个认证插件的配置及用法，可参考 `扩展插件 (Plugins) <https://docs.emqx.io/broker/v3/cn/plugins.html>`_ 关于认证部分。
 
 
 .. note:: auth 插件可以同时启动多个。每次检查的时候，按照优先级从高到低依次检查，同一优先级的，先启动的插件先检查。
