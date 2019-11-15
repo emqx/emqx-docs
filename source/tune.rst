@@ -75,15 +75,15 @@ TCP 连接追踪设置::
 
 TIME-WAIT Socket 最大数量、回收与重用设置::
 
-    net.ipv4.tcp_max_tw_buckets=1048576
+    sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
 
     # 注意: 不建议开启該设置，NAT模式下可能引起连接RST
-    # net.ipv4.tcp_tw_recycle = 1
-    # net.ipv4.tcp_tw_reuse = 1
+    # sysctl -w net.ipv4.tcp_tw_recycle=1
+    # sysctl -w net.ipv4.tcp_tw_reuse=1
 
 FIN-WAIT-2 Socket 超时设置::
 
-    net.ipv4.tcp_fin_timeout = 15
+    sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ------------------
 Erlang 虚拟机参数
@@ -110,7 +110,7 @@ EMQ X 消息服务器参数
     ## TCP Listener
     listener.tcp.external = 0.0.0.0:1883
     listener.tcp.external.acceptors = 64
-    listener.tcp.external.max_connections = 1000000
+    listener.tcp.external.max_connections = 1024000
 
 --------------
 测试客户端设置

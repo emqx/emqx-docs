@@ -439,6 +439,18 @@ Erlang 分布式节点间通信使用 TCP 连接的端口范围:
 RPC 参数配置
 ------------
 
+RPC 模式 (sync | async):
+
+.. code-block:: properties
+
+    rpc.mode = async
+
+RPC async 模式的最大批量消息数:
+
+.. code-block:: properties
+
+    rpc.async_batch_size = 256
+
 RPC 本地监听的 TCP 端口:
 
 .. code-block:: properties
@@ -450,6 +462,12 @@ RPC 对端监听的 TCP 端口:
 .. code-block:: properties
 
     rpc.tcp_client_port = 5369
+
+RPC 的 TCP 连接个数:
+
+.. code-block:: properties
+
+    rpc.tcp_client_num = 32
 
 RPC 连接超时时间:
 
@@ -492,6 +510,24 @@ socket 保活探测间隔:
 .. code-block:: properties
 
     rpc.socket_keepalive_count = 9
+
+RPC 的 TCP 发送缓存大小:
+
+.. code-block:: properties
+
+    rpc.socket_sndbuf = 1MB
+
+RPC 的 TCP 发送缓存大小:
+
+.. code-block:: properties
+
+    rpc.socket_recbuf = 1MB
+
+RPC 的 Socket (用户态)缓存大小:
+
+.. code-block:: properties
+
+    rpc.socket_buffer = 1MB
 
 ------------
 日志参数配置
@@ -589,15 +625,9 @@ etc/acl.conf 访问控制规则定义::
 
     允许|拒绝  用户|IP地址|ClientID  发布|订阅  主题列表
 
-访问控制规则采用 Erlang 元组格式，访问控制模块逐条匹配规则::
+访问控制规则采用 Erlang 元组格式，访问控制模块逐条匹配规则:
 
-              ---------              ---------              ---------
-    Client -> | Rule1 | --nomatch--> | Rule2 | --nomatch--> | Rule3 | --> Default
-              ---------              ---------              ---------
-                  |                      |                      |
-                match                  match                  match
-                 \|/                    \|/                    \|/
-            allow | deny           allow | deny           allow | deny
+.. image:: _static/images/config_1.png
 
 etc/acl.conf 默认访问规则设置:
 
@@ -991,8 +1021,6 @@ MQTT Listeners 参数说明
 | 8883 | MQTT/TCP SSL 端口            |
 +------+------------------------------+
 | 8083 | MQTT/WebSocket 端口          |
-+------+------------------------------+
-| 8080 | HTTP 管理 API 端口           |
 +------+------------------------------+
 | 8084 | MQTT/WebSocket with SSL 端口 |
 +------+------------------------------+

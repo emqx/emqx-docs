@@ -15,7 +15,7 @@
 
 .. code-block:: bash
 
-    unzip emqx-macosx-v3.1.0.zip && cd emqx
+    unzip emqx-macosx-v3.2.0.zip && cd emqx
 
     # 启动emqx
     ./bin/emqx start
@@ -44,7 +44,7 @@ MQTT 发布订阅
 
 MQTT 是为移动互联网、物联网设计的轻量发布订阅模式的消息服务器，目前支持 MQTT `v3.1.1 <http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html>`_ 和 `v5.0 <http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html>`_:
 
-.. image:: ./_static/images/pubsub_concept.png
+.. image:: ./_static/images/guide_1.png
 
 *EMQ X* 启动后，任何设备或终端可通过 MQTT 协议连接到服务器，通过 **发布(Publish)/订阅(Subscribe)** 进行交换消息。
 
@@ -72,14 +72,9 @@ MQTT 客户端库: https://github.com/mqtt/mqtt.github.io/wiki/libraries
 
 *EMQ X* 消息服务器认证由一系列认证插件(Plugins)提供，系统支持按用户名密码、ClientID 或匿名认证。
 
-系统默认开启匿名认证(Anonymous)，通过加载认证插件可开启的多个认证模块组成认证链::
+系统默认开启匿名认证(Anonymous)，通过加载认证插件可开启的多个认证模块组成认证链:
 
-               ----------------           ----------------           ------------
-    Client --> | Username认证 | -ignore-> | ClientID认证 | -ignore-> | 匿名认证 |
-               ----------------           ----------------           ------------
-                      |                         |                         |
-                     \|/                       \|/                       \|/
-                allow | deny              allow | deny              allow | deny
+.. image:: _static/images/guide_2.png
 
 **开启匿名认证**
 
@@ -102,15 +97,9 @@ ACL 访问控制规则定义::
 
     允许(Allow)|拒绝(Deny) 谁(Who) 订阅(Subscribe)|发布(Publish) 主题列表(Topics)
 
-MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控制模块会逐条匹配 ACL 规则，直到匹配成功为止::
+MQTT 客户端发起订阅/发布请求时，EMQ X 消息服务器的访问控制模块会逐条匹配 ACL 规则，直到匹配成功为止:
 
-              ---------              ---------              ---------
-    Client -> | Rule1 | --nomatch--> | Rule2 | --nomatch--> | Rule3 | --> Default
-              ---------              ---------              ---------
-                  |                      |                      |
-                match                  match                  match
-                 \|/                    \|/                    \|/
-            allow | deny           allow | deny           allow | deny
+.. image:: _static/images/guide_3.png
 
 **默认访问控制设置**
 
@@ -167,7 +156,7 @@ EMQ X 提供的认证插件包括:
 | `emqx_auth_mongo`_         | MongoDB 认证/鉴权插件     |
 +----------------------------+---------------------------+
 
-其中，关于每个认证插件的配置及用法，可参考 `扩展插件 (Plugins) <https://developer.emqx.io/docs/emq/v3/cn/plugins.html>`_ 关于认证部分。
+其中，关于每个认证插件的配置及用法，可参考 `扩展插件 (Plugins) <https://docs.emqx.io/broker/v3/cn/plugins.html>`_ 关于认证部分。
 
 
 .. note:: auth 插件可以同时启动多个。每次检查的时候，按照优先级从高到低依次检查，同一优先级的，先启动的插件先检查。
@@ -179,13 +168,9 @@ EMQ X 提供的认证插件包括:
 共享订阅 (Shared Subscription)
 -------------------------------
 
-*EMQ X* R3.0 版本开始支持集群级别的共享订阅功能。共享订阅(Shared Subscription)支持多种消息派发策略::
+*EMQ X* R3.0 版本开始支持集群级别的共享订阅功能。共享订阅(Shared Subscription)支持多种消息派发策略:
 
-                                ---------
-                                |       | --Msg1--> Subscriber1
-    Publisher--Msg1,Msg2,Msg3-->| EMQ X | --Msg2--> Subscriber2
-                                |       | --Msg3--> Subscriber3
-                                ---------
+.. image:: ./_static/images/guide_4.png
 
 共享订阅支持两种使用方式:
 
@@ -204,7 +189,9 @@ EMQ X 提供的认证插件包括:
     mosquitto_pub -t 'topic' -m msg -q 2
 
 
-*EMQ X* 支持按以下几种策略派发消息：
+*EMQ X* 通过 `etc/emqx.conf` 中的 `broker.shared_subscription_strategy` 字段配置共享消息的派发策略。
+
+目前支持按以下几种策略派发消息：
 
 +---------------------------+-------------------------+
 | 策略                      | 说明                    |
@@ -242,20 +229,18 @@ EMQ X 节点间桥接
 
 .. image:: ./_static/images/bridge.png
 
-此外 *EMQ X* 消息服务器支持多节点桥接模式互联::
+此外 *EMQ X* 消息服务器支持多节点桥接模式互联:
 
-                  ---------                     ---------                     ---------
-                  Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node3 | --> Subscriber
-                  ---------                     ---------                     ---------
+.. image:: _static/images/bridges_3.png
 
-在 EMQ X 中，通过修改 ``etc/emqx.conf`` 来配置 bridge。EMQ X 根据不同的 name 来区分不同的 bridge。例如::
+在 EMQ X 中，通过修改 ``etc/plugins/emqx_bridge_mqtt.conf`` 来配置 bridge。EMQ X 根据不同的 name 来区分不同的 bridge。例如::
 
     ## Bridge address: node name for local bridge, host:port for remote.
-    bridge.aws.address = 127.0.0.1:1883
+    bridge.mqtt.aws.address = 127.0.0.1:1883
 
 该项配置声明了一个名为 ``aws`` 的 bridge 并指定以 MQTT 的方式桥接到 ``127.0.0.1:1883`` 这台 MQTT 服务器
 
-在需要创建多个 bridge 时，可以先复制其全部的配置项，在通过使用不同的 name 来标示（比如 bridge.$name.address 其中 $name 指代的为 bridge 的名称）
+在需要创建多个 bridge 时，可以先复制其全部的配置项，在通过使用不同的 name 来标示（比如 bridge.mqtt.$name.address 其中 $name 指代的为 bridge 的名称）
 
 
 接下来两个小节，表述了如何创建 RPC/MQTT 方式的桥接，并创建一条转发传感器(sensor)主题消息的转发规则。假设在两台主机上启动了两个 EMQ X 节点：
@@ -275,13 +260,13 @@ EMQ X 节点 RPC 桥接配置
 以下是 RPC 桥接的基本配置，最简单的 RPC 桥接只需要配置以下三项就可以了::
 
     ## 桥接地址： 使用节点名（nodename@host）则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
-    bridge.emqx2.address = emqx2@192.168.1.2
+    bridge.mqtt.emqx2.address = emqx2@192.168.1.2
 
     ## 转发消息的主题
-    bridge.emqx2.forwards = sensor1/#,sensor2/#
+    bridge.mqtt.emqx2.forwards = sensor1/#,sensor2/#
 
     ## 桥接的 mountpoint(挂载点)
-    bridge.emqx2.mountpoint = bridge/emqx2/${node}/
+    bridge.mqtt.emqx2.mountpoint = bridge/emqx2/${node}/
 
 forwards 用于指定桥接的主题。所有发到 forwards 指定主题上的消息都会被转发到远程节点上。
 
@@ -305,73 +290,73 @@ EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broke
 ::
 
     ## 桥接地址
-    bridge.emqx2.address = 192.168.1.2:1883
+    bridge.mqtt.emqx2.address = 192.168.1.2:1883
 
     ## 桥接的协议版本
     ## 枚举值: mqttv3 | mqttv4 | mqttv5
-    bridge.emqx2.proto_ver = mqttv4
+    bridge.mqtt.emqx2.proto_ver = mqttv4
 
     ## 客户端的 client_id
-    bridge.emqx2.client_id = bridge_emq
+    bridge.mqtt.emqx2.client_id = bridge_emq
 
     ## 客户端的 clean_start 字段
     ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
-    bridge.emqx2.clean_start = true
+    bridge.mqtt.emqx2.clean_start = true
 
     ## 客户端的 username 字段
-    bridge.emqx2.username = user
+    bridge.mqtt.emqx2.username = user
 
     ## 客户端的 password 字段
-    bridge.emqx2.password = passwd
+    bridge.mqtt.emqx2.password = passwd
 
     ## 客户端是否使用 ssl 来连接远程服务器
-    bridge.emqx2.ssl = off
+    bridge.mqtt.emqx2.ssl = off
 
     ## 客户端 SSL 连接的 CA 证书 (PEM格式)
-    bridge.emqx2.cacertfile = etc/certs/cacert.pem
+    bridge.mqtt.emqx2.cacertfile = etc/certs/cacert.pem
 
     ## 客户端 SSL 连接的 SSL 证书
-    bridge.emqx2.certfile = etc/certs/client-cert.pem
+    bridge.mqtt.emqx2.certfile = etc/certs/client-cert.pem
 
     ## 客户端 SSL 连接的密钥文件
-    bridge.emqx2.keyfile = etc/certs/client-key.pem
+    bridge.mqtt.emqx2.keyfile = etc/certs/client-key.pem
 
     ## SSL 加密方式
-    bridge.emqx2.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
+    bridge.mqtt.emqx2.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
 
     ## TLS PSK 的加密套件
     ## 注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers' 不能同时配置
     ##
     ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
-    ## bridge.emqx2.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+    ## bridge.mqtt.emqx2.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
 
     ## 客户端的心跳间隔
-    bridge.emqx2.keepalive = 60s
+    bridge.mqtt.emqx2.keepalive = 60s
 
     ## 支持的 TLS 版本
-    bridge.emqx2.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+    bridge.mqtt.emqx2.tls_versions = tlsv1.2,tlsv1.1,tlsv1
 
     ## 需要被转发的消息的主题
-    bridge.emqx2.forwards = sensor1/#,sensor2/#
+    bridge.mqtt.emqx2.forwards = sensor1/#,sensor2/#
 
     ## 挂载点(mountpoint)
-    bridge.emqx2.mountpoint = bridge/emqx2/${node}/
+    bridge.mqtt.emqx2.mountpoint = bridge/emqx2/${node}/
 
     ## 订阅对端的主题
-    bridge.emqx2.subscription.1.topic = cmd/topic1
+    bridge.mqtt.emqx2.subscription.1.topic = cmd/topic1
 
     ## 订阅对端主题的 QoS
-    bridge.emqx2.subscription.1.qos = 1
+    bridge.mqtt.emqx2.subscription.1.qos = 1
 
     ## 桥接的重连间隔
     ## 默认: 30秒
-    bridge.emqx2.reconnect_interval = 30s
+    bridge.mqtt.emqx2.reconnect_interval = 30s
 
     ## QoS1/QoS2 消息的重传间隔
-    bridge.emqx2.retry_interval = 20s
+    bridge.mqtt.emqx2.retry_interval = 20s
 
     ## Inflight 大小.
-    bridge.emqx2.max_inflight_batches = 32
+    bridge.mqtt.emqx2.max_inflight_batches = 32
 
 EMQ X 桥接缓存配置
 >>>>>>>>>>>>>>>>>>
@@ -381,24 +366,31 @@ EMQ X 的 Bridge 拥有消息缓存机制，缓存机制同时适用于 RPC 桥�
 ::
 
     ## emqx_bridge 内部用于 batch 的消息数量
-    bridge.emqx2.queue.batch_count_limit = 32
+    bridge.mqtt.emqx2.queue.batch_count_limit = 32
 
     ## emqx_bridge 内部用于 batch 的消息字节数
-    bridge.emqx2.queue.batch_bytes_limit = 1000MB
+    bridge.mqtt.emqx2.queue.batch_bytes_limit = 1000MB
 
     ## 放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq
     ## 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上。
-    bridge.emqx2.queue.replayq_dir = data/emqx_emqx2_bridge/
+    bridge.mqtt.emqx2.queue.replayq_dir = data/emqx_emqx2_bridge/
 
     ## Replayq 数据段大小
-    bridge.emqx2.queue.replayq_seg_bytes = 10MB
+    bridge.mqtt.emqx2.queue.replayq_seg_bytes = 10MB
 
-``bridge.emqx2.queue.replayq_dir`` 是用于指定 bridge 存储队列的路径的配置参数。
+``bridge.mqtt.emqx2.queue.replayq_dir`` 是用于指定 bridge 存储队列的路径的配置参数。
 
-``bridge.emqx2.queue.replayq_seg_bytes`` 是用于指定缓存在磁盘上的消息队列的最大单个文件的大小，如果消息队列大小超出指定值的话，会创建新的文件来存储消息队列。
+``bridge.mqtt.emqx2.queue.replayq_seg_bytes`` 是用于指定缓存在磁盘上的消息队列的最大单个文件的大小，如果消息队列大小超出指定值的话，会创建新的文件来存储消息队列。
 
 EMQ X 桥接的命令行使用
 >>>>>>>>>>>>>>>>>>>>>>
+
+启动 emqx_bridge_mqtt 插件:
+
+.. code-block:: bash
+
+    $ cd emqx1/ && ./bin/emqx_ctl plugins load emqx_bridge_mqtt
+    ok
 
 桥接 CLI 命令：
 
@@ -479,7 +471,7 @@ EMQ X 桥接的命令行使用
     $ ./bin/emqx_ctl bridges del-subscription emqx 'cmd/topic3'
     Del-subscription topic successfully.
 
-注: 如果有创建多个 Bridge 的需求，需要复制默认的 Bridge 配置，再拷贝到 emqx.conf 中，根据需求重命名 bridge.${name}.config 中的 name 即可。
+注: 如果有创建多个 Bridge 的需求，需要复制默认的 Bridge 配置，再拷贝到 emqx_bridge_mqtt.conf 中，根据需求重命名 bridge.mqtt.${name}.config 中的 name 即可。
 
 .. _http_publish:
 
@@ -611,7 +603,7 @@ $SYS 主题前缀: $SYS/brokers/${node}/clients/
 'disconnected' 事件消息的 Payload 可解析成 JSON 格式:
 
 .. code:: json
-    
+
     {
         "clientid":"id1",
         "username":"u",
@@ -818,13 +810,13 @@ Alarms - 系统告警
 
 系统主题(Topic)前缀: $SYS/brokers/${node}/alarms/
 
-+------------------+------------------+
-| 主题(Topic)      | 说明             |
-+------------------+------------------+
-| ${alarmId}/alert | 新产生的告警     |
-+------------------+------------------+
-| ${alarmId}/clear | 被清除的告警     |
-+------------------+------------------+
++-------------+------------------+
+| 主题(Topic) | 说明             |
++-------------+------------------+
+| alert       | 新产生的告警     |
++-------------+------------------+
+| clear       | 被清除的告警     |
++-------------+------------------+
 
 .. _sys_sysmon:
 

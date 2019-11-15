@@ -13,6 +13,8 @@
 +===========================+=======================================+===========================+
 | `emqx_dashboard`_         + etc/plugins/emqx_dashbord.conf        | Web 控制台插件(默认加载)  |
 +---------------------------+---------------------------------------+---------------------------+
+| `emqx_management`_        + etc/plugins/emqx_management.conf      | HTTP API 与 CLI 管理插件  |
++---------------------------+---------------------------------------+---------------------------+
 | `emqx_auth_clientid`_     + etc/plugins/emqx_auth_clientid.conf   | ClientId 认证插件         |
 +---------------------------+---------------------------------------+---------------------------+
 | `emqx_auth_username`_     + etc/plugins/emqx_auth_username.conf   | 用户名、密码认证插件      |
@@ -41,6 +43,8 @@
 +---------------------------+---------------------------------------+---------------------------+
 | `emqx_rule_engine`_       + etc/plugins/emqx_rule_engine.conf     | 规则引擎                  |
 +---------------------------+---------------------------------------+---------------------------+
+| `emqx_bridge_mqtt`_       + etc/plugins/emqx_bridge_mqtt.conf     | MQTT 消息桥接插件         |
++---------------------------+---------------------------------------+---------------------------+
 | `emqx_delayed_publish`_   + etc/plugins/emqx_delayed_publish.conf | 客户端延时发布消息支持    |
 +---------------------------+---------------------------------------+---------------------------+
 | `emqx_coap`_              + etc/plugins/emqx_coap.conf            | CoAP 协议支持             |
@@ -57,6 +61,7 @@
 +---------------------------+---------------------------------------+---------------------------+
 | `emqx_plugin_template`_   + etc/plugins/emqx_plugin_template.conf | 插件开发模版              |
 +---------------------------+---------------------------------------+---------------------------+
+
 
 其中插件的加载有四种方式：
 
@@ -136,6 +141,45 @@ etc/plugins/emqx_dashboard.conf:
     ## dashboard.listener.https.cacertfile = etc/certs/cacert.pem
     ## dashboard.listener.https.verify = verify_peer
     ## dashboard.listener.https.fail_if_no_peer_cert = true
+
+HTTP API 与 CLI 管理插件
+------------------------
+
+`emqx_management`_ 是 *EMQ X* 消息服务器的 HTTP API 与 CLI 管理插件，该插件默认开启。当 *EMQ X* 启动成功后，用户即可通过该插件提供的 HTTP API 与 CLI 进行查询当前客户端列表等操作，详见 :ref:`rest_api` 与 :ref:`commands`。
+
+HTTP API 与 CLI 管理设置
+::::::::::::::::::::::::
+
+etc/plugins/emqx_management.conf:
+
+.. code:: properties
+
+    ## 最多返回多少条数据，用于分页机制
+    management.max_row_limit = 10000
+
+    ## 默认的应用 secret
+    # management.application.default_secret = public
+
+    ## Management HTTP 服务器端口配置
+    management.listener.http = 8080
+    management.listener.http.acceptors = 2
+    management.listener.http.max_clients = 512
+    management.listener.http.backlog = 512
+    management.listener.http.send_timeout = 15s
+    management.listener.http.send_timeout_close = on
+
+    ## Management HTTPS 服务器端口配置
+    ## management.listener.https = 8081
+    ## management.listener.https.acceptors = 2
+    ## management.listener.https.max_clients = 512
+    ## management.listener.https.backlog = 512
+    ## management.listener.https.send_timeout = 15s
+    ## management.listener.https.send_timeout_close = on
+    ## management.listener.https.certfile = etc/certs/cert.pem
+    ## management.listener.https.keyfile = etc/certs/key.pem
+    ## management.listener.https.cacertfile = etc/certs/cacert.pem
+    ## management.listener.https.verify = verify_peer
+    ## management.listener.https.fail_if_no_peer_cert = true
 
 ClientID 认证插件
 --------------------
@@ -253,7 +297,7 @@ HTTP 认证/访问控制插件
 
 每个请求的参数都支持使用真实的客户端的 Username, IP 地址等进行自定义。
 
-.. NOTE:: 其中在 3.1 版本中新增的 %cn %dn 的支持。
+.. NOTE:: 其中在 3.1 版本中新增的 %C %d 的支持。
 
 HTTP 认证插件配置
 :::::::::::::::::
@@ -262,13 +306,33 @@ etc/plugins/emqx_auth_http.conf:
 
 .. code:: properties
 
+    ## http 请求超时时间, 0 为不设置超时
+    ## auth.http.request.timeout = 0
+
+    ## http 建立 tcp 连接的超时时间, 默认与 'request.timeout' 一致
+    ## auth.http.request.connect_timout = 0
+
+    ## http 请求最大重试次数
+    auth.http.request.retry_times = 3
+
+    ## http 重试间隔
+    auth.http.request.retry_interval = 1s
+
+    ## 重试间隔的退避指数, 实际值 = `interval * backoff ^ times`
+    auth.http.request.retry_backoff = 2.0
+
+    ## https 证书配置
+    ## auth.http.ssl.cacertfile = {{ platform_etc_dir }}/certs/ca.pem
+    ## auth.http.ssl.certfile = {{ platform_etc_dir }}/certs/client-cert.pem
+    ## auth.http.ssl.keyfile = {{ platform_etc_dir }}/certs/client-key.pem
+
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
     ##  - %a: ipaddress
     ##  - %P: password
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.http.auth_req = http://127.0.0.1:8080/mqtt/auth
 
     ## AUTH 请求的 HTTP 方法和参数配置
@@ -400,11 +464,14 @@ etc/plugins/emqx_auth_mysql.conf:
     ## Mysql 认证用户表名
     auth.mysql.database = mqtt
 
+    ## Mysql 查询超时时间
+    auth.mysql.query_timeout = 5s
+
     ## 可用占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     ## 注: 该条 SQL 必须且仅需查询 `password` 字段
     auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
@@ -415,6 +482,7 @@ etc/plugins/emqx_auth_mysql.conf:
     auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 
     ## ACL 查询语句
+    ## 注: 可以增加 'ORDER BY' 子句以控制 ACL 规则的生效顺序
     auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
 此外，为防止密码域过于简单而带来安全的隐患问题，该插件还支持密码加盐操作：
@@ -430,7 +498,7 @@ etc/plugins/emqx_auth_mysql.conf:
     ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
     ## auth.mysql.password_hash = pbkdf2,sha256,1000,20
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 Postgres 认证插件
 -------------------
@@ -499,8 +567,8 @@ etc/plugins/emqx_auth_pgsql.conf:
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.pgsql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
     ## 加密方式: plain | md5 | sha | sha256 | bcrypt
@@ -515,6 +583,7 @@ etc/plugins/emqx_auth_pgsql.conf:
     ##  - %a: ipaddress
     ##  - %u: username
     ##  - %c: clientid
+    ## 注: 可以增加 'ORDER BY' 子句以控制 ACL 规则的生效顺序
     auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 
 同样的 password_hash 可以配置为更为安全的模式：
@@ -542,7 +611,7 @@ etc/plugins/emqx_auth_pgsql.conf:
     ## auth.pgsql.ssl_opts.certfile =
     ## auth.pgsql.ssl_opts.cacertfile =
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 Redis 认证/访问控制插件
 ------------------------
@@ -579,12 +648,15 @@ etc/plugins/emqx_auth_redis.conf:
     ## Redis password.
     ## auth.redis.password =
 
+    ## Redis 查询超时时间
+    auth.redis.query_timeout = 5s
+
     ## 认证查询指令
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.redis.auth_cmd = HMGET mqtt_user:%u password
 
     ## 密码加密方式.
@@ -613,7 +685,7 @@ etc/plugins/emqx_auth_redis.conf:
     ## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
     ## auth.redis.password_hash = pbkdf2,sha256,1000,20
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 Redis 用户 Hash
 ::::::::::::::::
@@ -672,6 +744,9 @@ etc/plugins/emqx_auth_mongo.conf:
     ## 认证数据表名
     auth.mongo.database = mqtt
 
+    ## 查询超时时间
+    auth.mongo.query_timeout = 5s
+
     ## 认证查询配置
     auth.mongo.auth_query.collection = mqtt_user
     auth.mongo.auth_query.password_field = password
@@ -681,8 +756,8 @@ etc/plugins/emqx_auth_mongo.conf:
     ## 占位符:
     ##  - %u: username
     ##  - %c: clientid
-    ##  - %cn: common name of client TLS cert
-    ##  - %dn: subject of client TLS cert
+    ##  - %C: common name of client TLS cert
+    ##  - %d: subject of client TLS cert
     auth.mongo.auth_query.selector = username=%u
 
     ## 超级用户查询
@@ -697,7 +772,7 @@ etc/plugins/emqx_auth_mongo.conf:
 
     auth.mongo.acl_query.selector = username=%u
 
-.. note:: 3.1 版本新增 %cn %dn 支持。
+.. note:: 3.1 版本新增 %C %d 支持。
 
 MongoDB 数据库
 ::::::::::::::
@@ -830,6 +905,118 @@ etc/plugins/emqx_retainer.conf:
     ## 单位: h 小时; m 分钟; s 秒。如 60m 表示 60 分钟
     retainer.expiry_interval = 0
 
+MQTT 消息桥接插件
+-----------------
+
+**桥接** 的概念是 EMQ X 支持将自身某类主题的消息通过某种方式转发到另一个 MQTT Broker。
+
+**桥接** 与 **集群** 的不同在于：桥接不会复制主题树与路由表，只根据桥接规则转发 MQTT 消息。
+
+目前 MQTT 消息插件支持的桥接方式有:
+
+- RPC 桥接：RPC 桥接只能在 EMQ X Broker 间使用，且不支持订阅远程节点的主题去同步数据
+- MQTT 桥接：MQTT 桥接同时支持转发和通过订阅主题来实现数据同步两种方式
+
+在 EMQ X 中，通过修改 ``etc/plugins/emqx_bridge_mqtt.conf`` 来配置 bridge。EMQ X 根据不同的 name 来区分不同的 bridge。例如::
+
+    ## 桥接地址： 使用节点名（nodename@host）则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
+    bridge.mqtt.aws.address = 127.0.0.1:1883
+
+该项配置声明了一个名为 ``aws`` 的 bridge 并指定以 MQTT 的方式桥接到 ``127.0.0.1:1883`` 这台 MQTT 服务器
+
+在需要创建多个 bridge 时，可以先复制其全部的配置项，在通过使用不同的 name 来标示（比如 bridge.mqtt.$name.address 其中 $name 指代的为 bridge 的名称）
+
+
+配置 MQTT 消息桥接插件
+::::::::::::::::::::::
+
+etc/plugins/emqx_bridge_mqtt.conf
+
+.. code:: properties
+
+    ## 桥接地址： 使用节点名（nodename@host）则用于 RPC 桥接，使用 host:port 用于 MQTT 连接
+    bridge.mqtt.aws.address = 192.168.1.2:1883
+
+    ## 桥接的协议版本
+    ## 枚举值: mqttv3 | mqttv4 | mqttv5
+    bridge.mqtt.aws.proto_ver = mqttv4
+
+    ## 客户端的 client_id
+    bridge.mqtt.aws.client_id = bridge_emq
+
+    ## 客户端的 clean_start 字段
+    ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
+    bridge.mqtt.aws.clean_start = true
+
+    ## 客户端的 username 字段
+    bridge.mqtt.aws.username = user
+
+    ## 客户端的 password 字段
+    bridge.mqtt.aws.password = passwd
+
+    ## 客户端是否使用 ssl 来连接远程服务器
+    bridge.mqtt.aws.ssl = off
+
+    ## 客户端 SSL 连接的 CA 证书 (PEM格式)
+    bridge.mqtt.aws.cacertfile = etc/certs/cacert.pem
+
+    ## 客户端 SSL 连接的 SSL 证书
+    bridge.mqtt.aws.certfile = etc/certs/client-cert.pem
+
+    ## 客户端 SSL 连接的密钥文件
+    bridge.mqtt.aws.keyfile = etc/certs/client-key.pem
+
+    ## SSL 加密方式
+    bridge.mqtt.aws.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
+
+    ## TLS PSK 的加密套件
+    ## 注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers' 不能同时配置
+    ##
+    ## See 'https://tools.ietf.org/html/rfc4279#section-2'.
+    ## bridge.mqtt.aws.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+
+    ## 客户端的心跳间隔
+    bridge.mqtt.aws.keepalive = 60s
+
+    ## 支持的 TLS 版本
+    bridge.mqtt.aws.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+
+    ## 需要被转发的消息的主题
+    bridge.mqtt.aws.forwards = sensor1/#,sensor2/#
+
+    ## 挂载点(mountpoint)
+    bridge.mqtt.aws.mountpoint = bridge/emqx2/${node}/
+
+    ## 订阅对端的主题
+    bridge.mqtt.aws.subscription.1.topic = cmd/topic1
+
+    ## 订阅对端主题的 QoS
+    bridge.mqtt.aws.subscription.1.qos = 1
+
+    ## 桥接的重连间隔
+    ## 默认: 30秒
+    bridge.mqtt.aws.reconnect_interval = 30s
+
+    ## QoS1/QoS2 消息的重传间隔
+    bridge.mqtt.aws.retry_interval = 20s
+
+    ## Inflight 大小.
+    bridge.mqtt.aws.max_inflight_batches = 32
+
+    ## emqx_bridge 内部用于 batch 的消息数量
+    bridge.mqtt.aws.queue.batch_count_limit = 32
+
+    ## emqx_bridge 内部用于 batch 的消息字节数
+    bridge.mqtt.aws.queue.batch_bytes_limit = 1000MB
+
+    ## 放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq
+    ## 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上。
+    bridge.mqtt.aws.queue.replayq_dir = data/emqx_aws_bridge/
+
+    ## Replayq 数据段大小
+    bridge.mqtt.aws.queue.replayq_seg_bytes = 10MB
+
+
 Delayed Publish 插件
 -----------------------
 
@@ -853,13 +1040,21 @@ etc/plugins/emqx_coap.conf:
 
     coap.enable_stats = off
 
-若开启以下两个配置，则可以支持 DTLS：
+若开启以下配置，则可以支持 DTLS：
 
 .. code:: properties
 
-    coap.keyfile = etc/certs/key.pem
+    ## DTLS 监听端口
+    coap.dtls.port = 5684
 
-    coap.certfile = etc/certs/cert.pem
+    coap.dtls.keyfile = {{ platform_etc_dir }}/certs/key.pem
+
+    coap.dtls.certfile = {{ platform_etc_dir }}/certs/cert.pem
+
+    ## 双向认证相关
+    ## coap.dtls.verify = verify_peer
+    ## coap.dtls.cacertfile = {{ platform_etc_dir }}/certs/cacert.pem
+    ## coap.dtls.fail_if_no_peer_cert = false
 
 测试 CoAP 插件
 ::::::::::::::
@@ -902,23 +1097,29 @@ etc/plugins/emqx_lwm2m.conf:
     ## 设备上线后，主动 observe 所有的 objects
     #lwm2m.auto_observe = off
 
+    # 主题挂载点
+    # Placeholders supported:
+    #    '%e': Endpoint Name
+    #    '%a': IP Address
+    lwm2m.mountpoint = lwm2m/%e/
+
     ## client register 成功后主动向 EMQ X 订阅的主题
     ## 占位符:
     ##    '%e': Endpoint Name
     ##    '%a': IP Address
-    lwm2m.topics.command = lwm2m/%e/dn/#
+    lwm2m.topics.command = dn/#
 
     ## client 应答消息(response) 到 EMQ X 的主题
-    lwm2m.topics.response = lwm2m/%e/up/resp
+    lwm2m.topics.response = up/resp
 
     ## client 通知类消息(noify message) 到 EMQ X 的主题
-    lwm2m.topics.notify = lwm2m/%e/up/notify
+    lwm2m.topics.notify = up/notify
 
     ## client 注册类消息(register message) 到 EMQ X 的主题
-    lwm2m.topics.register = lwm2m/%e/up/resp
+    lwm2m.topics.register = up/resp
 
     # client 更新类消息(update message) 到 EMQ X 的主题
-    lwm2m.topics.update = lwm2m/%e/up/resp
+    lwm2m.topics.update = %e/up/resp
 
     # Object 定义的 xml 文件位置
     lwm2m.xml_dir =  etc/lwm2m_xml
@@ -1033,7 +1234,7 @@ etc/plugins/emqx_reloader.conf:
 
 开发者需要自定义插件时，可以查看该插件的代码和结构，以更快地开发一个标准的 *EMQ X* 插件。插件实际是一个普通的 ``Erlang Application``，其配置文件为: ``etc/${PluginName}.config``。
 
-EMQ X R3.1 插件开发
+EMQ X R3.2 插件开发
 --------------------
 
 创建插件项目
@@ -1219,20 +1420,34 @@ emqx_plugin_template.erl:
 
     git clone https://github.com/emqx/emqx-rel.git
 
-2. Makefile 增加 ``DEPS``：
-
-.. code:: makefile
-
-    DEPS += plugin_name
-    dep_plugin_name = git url_of_plugin
-
-3. relx.config 中 release 段落添加：
+2. rebar.config 添加依赖：
 
 .. code:: erlang
 
-    {plugin_name, load},
+    {deps,
+       [ {plugin_name, {git, "url_of_plugin", {tag, "tag_of_plugin"}}}
+       , ....
+       ....
+       ]
+    }
+
+3. rebar.config 中 relx 段落添加：
+
+.. code:: erlang
+
+    {relx,
+        [...
+        , ...
+        , {release, {emqx, git_describe},
+           [
+             {plugin_name, load},
+           ]
+          }
+        ]
+    }
 
 .. _emqx_dashboard:        https://github.com/emqx/emqx-dashboard
+.. _emqx_management:       https://github.com/emqx/emqx-management
 .. _emqx_retainer:         https://github.com/emqx/emqx-retainer
 .. _emqx_delayed_publish:  https://github.com/emqx/emqx-delayed-publish
 .. _emqx_auth_clientid:    https://github.com/emqx/emqx-auth-clientid
@@ -1255,6 +1470,7 @@ emqx_plugin_template.erl:
 .. _emqx_psk_file:         https://github.com/emqx/emqx-psk-file
 .. _emqx_plugin_template:  https://github.com/emqx/emqx-plugin-template
 .. _emqx_rule_engine:      https://github.com/emqx/emqx-rule-engine
+.. _emqx_bridge_mqtt:      https://github.com/emqx/emqx-bridge-mqtt
 .. _recon:                 http://ferd.github.io/recon/
 .. _LDAP:                  https://ldap.com
 .. _JWT:                   https://jwt.io
