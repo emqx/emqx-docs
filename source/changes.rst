@@ -5,6 +5,76 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0-beta.4:
+
+---------------
+4.0-beta.4 版本
+---------------
+
+*发布日期: 2019-11-18*
+
+emqx (major)
+------------
+
+功能增强:
+
+- 被检测到 flapping 的客户端会被 banned
+
+  Github PR:
+  `emqx/emqx#3033 <https://github.com/emqx/emqx/pull/3033>`_
+
+- 优化 emqx_vm 模块并更新测试用例
+
+  Github PR:
+  `emqx/emqx#3034 <https://github.com/emqx/emqx/pull/3034>`_
+
+emqx-management (plugin)
+------------------------
+
+功能增强:
+
+- 更新 banned API
+
+  Github PR:
+  `emqx/emqx-management#141 <https://github.com/emqx/emqx-management/pull/141>`_
+
+错误修复:
+
+- 修复一些错误的返回值
+
+  Github PR:
+  `emqx/emqx-management#142 <https://github.com/emqx/emqx-management/pull/142>`_
+
+minirest (plugin)
+-----------------
+
+错误修复:
+
+- 添加错误处理并增加日志
+
+  Github PR:
+  `emqx/minirest#20 <https://github.com/emqx/minirest/pull/20>`_
+
+esockd (dependency)
+-------------------
+
+功能增强:
+
+- 调整部分接口并增加测试用例
+
+  Github PR:
+  `emqx/esockd#124 <https://github.com/emqx/esockd/pull/124>`_
+
+ekka (dependency)
+-------------------
+
+功能增强:
+
+- 调整部分接口并增加测试用例
+
+  Github PR:
+  `emqx/ekka#67 <https://github.com/emqx/ekka/pull/67>`_
+
 .. _release_3.2.5:
 
 ----------
