@@ -5,6 +5,31 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.6:
+
+----------
+3.2.6 版本
+----------
+
+*发布日期: 2019-11-23*
+
+EMQ X 3.2.6 版本发布。此版本主要关注功能改进和错误修复。
+
+emqx (major)
+------------
+
+错误修复:
+
+- 修复通过 ``gen_rpc`` 向远程节点转发消息时可能失序的问题
+
+  Github PR:
+  `emqx/emqx#3049 <https://github.com/emqx/emqx/pull/3049>`_
+
+- 修复认证插件崩溃会导致 ``emqx`` 崩溃的问题
+
+  Github PR:
+  `emqx/emqx#3048 <https://github.com/emqx/emqx/pull/3048>`_
+
 .. _release_4.0-beta.4:
 
 ---------------
