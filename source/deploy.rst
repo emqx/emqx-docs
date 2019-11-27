@@ -199,7 +199,6 @@ HAProxy 作为 LB 部署 EMQ X 集群，并终结 SSL 连接:
         timeout check 5000
         server emqx1 192.168.0.2:1883 check inter 10000 fall 2 rise 5 weight 1
         server emqx2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
-        source 0.0.0.0 usesrc clientip
 
 NGINX Plus -> EMQ X 集群
 -------------------------
