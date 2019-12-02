@@ -186,14 +186,22 @@ ClientID 认证插件
 
 `emqx_auth_clientid`_ 目前只支持 **连接认证**，通过 ``clientid`` 和 ``password`` 认证客户端。此插件在存储密码时会按照配置的 hash 算法将明文加密后存入。
 
-.. important:: 从 EMQ X 3.1 开始，仅支持 REST API/CLI 管理 clientid，不再支持通过配置文件添加默认的 clientid。
-
 ClientID 认证配置
 :::::::::::::::::
 
 etc/plugins/emqx_auth_clientid.conf:
 
 .. code:: properties
+
+    ## Default usernames Examples
+    ##auth.client.1.clientid = id
+    ##auth.client.1.password = passwd
+    ##auth.client.2.clientid = dev:devid
+    ##auth.client.2.password = passwd2
+    ##auth.client.3.clientid = app:appid
+    ##auth.client.3.password = passwd3
+    ##auth.client.4.clientid = client~!@#$%^&*()_+
+    ##auth.client.4.password = passwd~!@#$%^&*()_+
 
     ## 密码加密方式
     ## 枚举值: plain | md5 | sha | sha256
@@ -204,14 +212,20 @@ Username 认证插件
 
 `emqx_auth_username`_ 目前只支持 **连接认证**，通过 ``username`` 和 ``password`` 认证客户端。此插件在存储密码时会按照配置的 hash 算法将明文加密后存入。
 
-.. important:: 从 EMQ X 3.1 开始，仅支持 REST API/CLI 管理 username，不再支持通过配置文件添加默认的 username。
-
 用户名认证配置
 ::::::::::::::
 
 etc/plugins/emqx_auth_username.conf:
 
 .. code:: properties
+
+    ## Default usernames Examples:
+    ##auth.user.1.username = admin
+    ##auth.user.1.password = public
+    ##auth.user.2.username = feng@emqtt.io
+    ##auth.user.2.password = public
+    ##auth.user.3.username = name~!@#$%^&*()_+
+    ##auth.user.3.password = pwsswd~!@#$%^&*()_+
 
     ## 密码加密方式
     ## 枚举值: plain | md5 | sha | sha256
