@@ -91,6 +91,15 @@ CentOS
 
                 $ sudo service emqx start
 
+6.  配置文件路径
+
+    + 配置文件路径：``/etc/emqx``
+
+    + 日志文件路径：``/var/log/emqx``
+
+    + 数据文件路径：``/var/lib/emqx``
+
+
 使用 rpm 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
 
@@ -126,6 +135,14 @@ CentOS
         .. code-block:: console
 
                 $ sudo service emqx start
+
+4.  配置文件路径
+
+    + 配置文件路径：``/etc/emqx``
+
+    + 日志文件路径：``/var/log/emqx``
+
+    + 数据文件路径：``/var/lib/emqx``
 
 使用 zip 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
@@ -256,6 +273,14 @@ Ubuntu
 
                 $ sudo service emqx start
 
+8.  配置文件路径
+
+    + 配置文件路径：``/etc/emqx``
+
+    + 日志文件路径：``/var/log/emqx``
+
+    + 数据文件路径：``/var/lib/emqx`
+
 使用 deb 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
 
@@ -291,6 +316,14 @@ Ubuntu
         .. code-block:: console
 
                 $ sudo service emqx start
+
+4.  配置文件路径
+
+    + 配置文件路径：``/etc/emqx``
+
+    + 日志文件路径：``/var/log/emqx``
+
+    + 数据文件路径：``/var/lib/emqx`
 
 使用 zip 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
@@ -419,6 +452,14 @@ Debian
 
                 $ sudo service emqx start
 
+8.  配置文件路径
+
+    + 配置文件路径：``/etc/emqx``
+
+    + 日志文件路径：``/var/log/emqx``
+
+    + 数据文件路径：``/var/lib/emqx`
+
 使用 deb 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
 
@@ -454,6 +495,14 @@ Debian
         .. code-block:: console
 
                 $ sudo service emqx start
+
+4.  配置文件路径
+
+    + 配置文件路径：``/etc/emqx``
+
+    + 日志文件路径：``/var/log/emqx``
+
+    + 数据文件路径：``/var/lib/emqx`
 
 使用 zip 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
@@ -653,6 +702,14 @@ openSUSE
         .. code-block:: console
 
                 $ sudo service emqx start
+
+4.  配置文件路径
+
+    + 配置文件路径：``/etc/emqx``
+
+    + 日志文件路径：``/var/log/emqx``
+
+    + 数据文件路径：``/var/lib/emqx`
 
 使用 zip 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
