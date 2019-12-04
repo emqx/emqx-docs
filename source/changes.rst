@@ -5,6 +5,36 @@
 版本发布 (Changes)
 ==================
 
+.. _release_3.2.7:
+
+----------
+3.2.7 版本
+----------
+
+*发布日期: 2019-12-03*
+
+EMQ X 3.2.7 版本发布。此版本主要重新支持了通过配置文件配置默认的 ``username`` 和 ``clientid``。
+
+emqx-auth-username (plugin)
+----------------------------
+
+功能增强:
+
+- 重新支持了通过配置文件配置默认的 ``username``
+
+  Github PR:
+  `emqx/emqx-auth-username#127 <https://github.com/emqx/emqx-auth-username/pull/127>`_
+
+emqx-auth-clientid (plugin)
+----------------------------
+
+功能增强:
+
+- 重新支持了通过配置文件配置默认的 ``clientid``
+
+  Github PR:
+  `emqx/emqx-auth-clientid#123 <https://github.com/emqx/emqx-auth-clientid/pull/123>`_
+
 .. _release_3.2.6:
 
 ----------
