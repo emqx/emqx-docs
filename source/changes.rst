@@ -5,6 +5,58 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0-rc.1:
+
+-------------
+4.0-rc.1 版本
+-------------
+
+*发布日期: 2019-12-07*
+
+EMQ X 4.0-rc.1 版本发布。此版本主要优化了内部模块和 MQTT 报文处理流程。
+
+emqx
+----
+
+功能增强:
+
+- 优化 MQTT 报文优化逻辑
+
+  Github PR:
+  `emqx/emqx#3079 <https://github.com/emqx/emqx/pull/3079>`_,
+  `emqx/emqx#3082 <https://github.com/emqx/emqx/pull/3082>`_,
+  `emqx/emqx#3083 <https://github.com/emqx/emqx/pull/3083>`_
+
+emqx-auth-username (plugin)
+----------------------------
+
+功能增强:
+
+- 重新支持通过配置文件配置默认的 ``username``
+
+  Github PR:
+  `emqx/emqx-auth-username#126 <https://github.com/emqx/emqx-auth-username/pull/126>`_
+
+emqx-auth-clientid (plugin)
+---------------------------
+
+功能增强:
+
+- 重新支持通过配置文件配置默认的 ``clientid``
+
+  Github PR:
+  `emqx/emqx-auth-clientid#122 <https://github.com/emqx/emqx-auth-clientid/pull/122>`_
+
+emqx-management (plugin)
+-------------------------
+
+功能增强:
+
+- HTTP API 服务器默认监听端口由 8080 改为 8081
+
+  Github PR:
+  `emqx/emqx-management#144 <https://github.com/emqx/emqx-management/pull/144>`_
+
 .. _release_3.2.7:
 
 ----------
