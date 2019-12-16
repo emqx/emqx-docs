@@ -955,8 +955,8 @@ etc/plugins/emqx_bridge_mqtt.conf
     ## 枚举值: mqttv3 | mqttv4 | mqttv5
     bridge.mqtt.aws.proto_ver = mqttv4
 
-    ## 客户端的 client_id
-    bridge.mqtt.aws.client_id = bridge_emq
+    ## 客户端的 clientid
+    bridge.mqtt.aws.clientid = bridge_emq
 
     ## 客户端的 clean_start 字段
     ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
@@ -1274,7 +1274,7 @@ EMQ X R3.2 插件开发
 
     init(Opts) -> {ok, Opts}.
 
-    check(_Credentials = #{client_id := ClientId, username := Username, password := Password}, _State) ->
+    check(_Credentials = #{clientid := ClientId, username := Username, password := Password}, _State) ->
         io:format("Auth Demo: clientId=~p, username=~p, password=~p~n", [ClientId, Username, Password]),
         ok.
 

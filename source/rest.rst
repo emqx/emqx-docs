@@ -731,7 +731,7 @@ API 定义::
     "data": [
       {
         "clean_start": true,
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "conn_mod": "emqx_connection",
         "connected_at": "2019-04-29 11:05:01",
         "heap_size": 2586,
@@ -785,7 +785,7 @@ API 定义::
     "data": [
      {
        "clean_start": true,
-       "client_id": "mosquitto_mqtt",
+       "clientid": "mosquitto_mqtt",
        "conn_mod": "emqx_connection",
        "connected_at": "2019-04-29 11:05:01",
        "heap_size": 610,
@@ -839,7 +839,7 @@ API 定义::
     "data": [
       {
         "clean_start": true,
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "conn_mod": "emqx_connection",
         "connected_at": "2019-04-29 11:05:01",
         "heap_size": 610,
@@ -888,7 +888,7 @@ API 定义::
     "data": [
       {
         "clean_start": true,
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "conn_mod": "emqx_connection",
         "connected_at": "2019-04-29 11:05:01",
         "heap_size": 610,
@@ -962,7 +962,7 @@ API 定义::
         "awaiting_rel_len": 0,
         "binding": "local",
         "clean_start": true,
-        "client_id": "mqttjs_f79fbc5a4b",
+        "clientid": "mqttjs_f79fbc5a4b",
         "created_at": "2019-04-29 11:28:04",
         "deliver_msg": 0,
         "enqueue_msg": 0,
@@ -985,7 +985,7 @@ API 定义::
         "awaiting_rel_len": 0,
         "binding": "local",
         "clean_start": true,
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "created_at": "2019-04-29 11:28:28",
         "deliver_msg": 0,
         "enqueue_msg": 0,
@@ -1034,7 +1034,7 @@ API 定义::
         "awaiting_rel_len": 0,
         "binding": "local",
         "clean_start": true,
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "created_at": "2019-04-29 11:28:28",
         "deliver_msg": 0,
         "enqueue_msg": 0,
@@ -1078,7 +1078,7 @@ API 定义::
         "awaiting_rel_len": 0,
         "binding": "local",
         "clean_start": true,
-        "client_id": "mqttjs_f79fbc5a4b",
+        "clientid": "mqttjs_f79fbc5a4b",
         "created_at": "2019-04-29 11:28:04",
         "deliver_msg": 0,
         "enqueue_msg": 0,
@@ -1101,7 +1101,7 @@ API 定义::
         "awaiting_rel_len": 0,
         "binding": "local",
         "clean_start": true,
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "created_at": "2019-04-29 11:28:28",
         "deliver_msg": 0,
         "enqueue_msg": 0,
@@ -1148,7 +1148,7 @@ API 定义::
     "payload": "hello",
     "qos": 1,
     "retain": false,
-    "client_id": "mqttjs_ab9069449e"
+    "clientid": "mqttjs_ab9069449e"
   }
 
 返回数据:
@@ -1162,7 +1162,7 @@ API 定义::
         "awaiting_rel_len": 0,
         "binding": "local",
         "clean_start": true,
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "created_at": "2018-09-12 10:42:57",
         "deliver_msg": 0,
         "enqueue_msg": 0,
@@ -1207,13 +1207,13 @@ API 定义::
     "code": 0,
     "data": [
       {
-        "client_id": "mqttjs_f79fbc5a4b",
+        "clientid": "mqttjs_f79fbc5a4b",
         "node": "emqx@127.0.0.1",
         "qos": 0,
         "topic": "testtopic/#"
       },
       {
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "node": "emqx@127.0.0.1",
         "qos": 0,
         "topic": "t"
@@ -1245,7 +1245,7 @@ API 定义::
     "code": 0,
     "data": [
       {
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "node": "emqx@127.0.0.1",
         "qos": 0,
         "topic": "t"
@@ -1272,13 +1272,13 @@ API 定义::
     "code": 0,
     "data": [
       {
-        "client_id": "mqttjs_f79fbc5a4b",
+        "clientid": "mqttjs_f79fbc5a4b",
         "node": "emqx@127.0.0.1",
         "qos": 0,
         "topic": "testtopic/#"
       },
       {
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "node": "emqx@127.0.0.1",
         "qos": 0,
         "topic": "t"
@@ -1310,7 +1310,7 @@ API 定义::
     "code": 0,
     "data": [
       {
-        "client_id": "mosquitto_mqtt",
+        "clientid": "mosquitto_mqtt",
         "node": "emqx@127.0.0.1",
         "qos": 0,
         "topic": "t"
@@ -1401,7 +1401,7 @@ API 定义::
     "payload": "hello",
     "qos": 1,
     "retain": false,
-    "client_id": "mqttjs_ab9069449e"
+    "clientid": "mqttjs_ab9069449e"
   }
 
 请求示例::
@@ -1430,7 +1430,7 @@ API 定义::
   {
     "topic": "test_topic",
     "qos": 1,
-    "client_id": "mqttjs_ab9069449e"
+    "clientid": "mqttjs_ab9069449e"
   }
 
 请求示例::
@@ -1458,7 +1458,7 @@ API 定义::
 
   {
     "topic": "test_topic",
-    "client_id": "mqttjs_ab9069449e"
+    "clientid": "mqttjs_ab9069449e"
   }
 
 请求示例::
@@ -2401,7 +2401,7 @@ API 定义::
 
   {
     "who": "mqttjs_ab9069449e",
-    "as": "client_id",
+    "as": "clientid",
     "reason": "banned the clientId",
     "desc": "normal banned",
     "until": 1536146187
@@ -2419,7 +2419,7 @@ API 定义::
     "code": 0,
     "data": {
       "who": "mqttjs_ab9069449e",
-      "as": "client_id",
+      "as": "clientid",
       "reason": "banned the clientId",
       "desc": "normal banned",
       "until": 1536146187
@@ -2435,7 +2435,7 @@ API 定义::
 
 请求示例::
 
-    DELETE api/v3/banned/mqttjs_ab9069449e?as=client_id
+    DELETE api/v3/banned/mqttjs_ab9069449e?as=clientid
 
 返回数据:
 

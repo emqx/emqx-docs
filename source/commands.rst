@@ -278,21 +278,43 @@ clients list
 
     $ ./bin/emqx_ctl clients list
 
-    Connection(mosqsub/43832-airlee.lo, clean_start=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
-    Connection(mosqsub/44011-airlee.lo, clean_start=true, username=test, peername=127.0.0.1:64961, connected_at=1452929275)
+    Client(mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62135, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477947, connected_at=1576477947)
+    Client(mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477950, connected_at=1576477950)
     ...
 
 返回 Client 对象的属性:
 
-+--------------+-----------------------------+
-| clean_start  | 清除会话标记                |
-+--------------+-----------------------------+
-| username     | 用户名                      |
-+--------------+-----------------------------+
-| peername     | 对端 TCP 地址               |
-+--------------+-----------------------------+
-| connected_at | 客户端连接时间              |
-+--------------+-----------------------------+
++-------------------------+------------------------------------------+
+| clean_start             | 清除会话标记                             |
++-------------------------+------------------------------------------+
+| username                | 用户名                                   |
++-------------------------+------------------------------------------+
+| peername                | 客户端 IP 与端口                         |
++-------------------------+------------------------------------------+
+| clean_start             | MQTT Clean Start                         |
++-------------------------+------------------------------------------+
+| keepalive               | MQTT KeepAlive                           |
++-------------------------+------------------------------------------+
+| session_expiry_interval | 会话过期间隔                             |
++-------------------------+------------------------------------------+
+| subscriptions           | 当前订阅数量                             |
++-------------------------+------------------------------------------+
+| inflight                | 当前正在下发的消息数                     |
++-------------------------+------------------------------------------+
+| awaiting_rel            | 等待客户端发送 PUBREL 的 QoS2 消息数     |
++-------------------------+------------------------------------------+
+| delivered_msgs          | EMQ X 向此客户端转发的消息数量(包含重传) |
++-------------------------+------------------------------------------+
+| enqueued_msgs           | 消息队列当前长度                         |
++-------------------------+------------------------------------------+
+| dropped_msgs            | 消息队列达到最大长度后丢弃的消息数量     |
++-------------------------+------------------------------------------+
+| connected               | 是否在线                                 |
++-------------------------+------------------------------------------+
+| created_at              | 会话创建时间                             |
++-------------------------+------------------------------------------+
+| connected_at            | 客户端连接时间                           |
++-------------------------+------------------------------------------+
 
 clients show <ClientId>
 -----------------------
@@ -301,7 +323,7 @@ clients show <ClientId>
 
     $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 
-    Connection(mosqsub/43832-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
+    Client(mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 
 clients kick <ClientId>
 -----------------------
@@ -309,63 +331,6 @@ clients kick <ClientId>
 根据 ClientId 踢出客户端::
 
     $ ./bin/emqx_ctl clients kick "clientid"
-
--------------
-sessions 命令
--------------
-
-sessions 命令查询 MQTT 连接会话。 *EMQ X* 消息服务器会为每个连接创建会话，clean_session 标记 true，创建临时(transient)会话；clean_session 标记为 false，创建持久会话(persistent)。
-
-+--------------------------+-----------------------------+
-| sessions list            | 查询全部会话                |
-+--------------------------+-----------------------------+
-| sessions show <ClientId> | 根据 ClientID 查询会话      |
-+--------------------------+-----------------------------+
-
-sessions list
--------------
-
-查询全部会话::
-
-    $ ./bin/emqx_ctl sessions list
-
-    Session(clientid, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760799)
-    Session(mosqsub/44101-airlee.lo, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760314)
-
-返回 Session 对象属性:
-
-+---------------------+------------------------------------------+
-| clean_start         | 建立连接时是否清理相关的会话             |
-+---------------------+------------------------------------------+
-| expiry_interval     | 会话过期间隔                             |
-+---------------------+------------------------------------------+
-| subscriptions_count | 当前订阅数量                             |
-+---------------------+------------------------------------------+
-| max_inflight        | 飞行窗口(最大允许同时下发消息数)         |
-+---------------------+------------------------------------------+
-| inflight            | 当前正在下发的消息数                     |
-+---------------------+------------------------------------------+
-| mqueue_len          | 当前缓存消息数                           |
-+---------------------+------------------------------------------+
-| mqueue_dropped      | 会话丢掉的消息数                         |
-+---------------------+------------------------------------------+
-| awaiting_rel        | 等待客户端发送 PUBREL 的 QoS2 消息数     |
-+---------------------+------------------------------------------+
-| deliver_msg         | 转发的消息数(包含重传)                   |
-+---------------------+------------------------------------------+
-| enqueue_msg         | 缓存过的消息数                           |
-+---------------------+------------------------------------------+
-| created_at          | 会话创建时间戳                           |
-+---------------------+------------------------------------------+
-
-sessions show <ClientId>
-------------------------
-
-根据 ClientId 查询会话::
-
-    $ ./bin/emqx_ctl sessions show clientid
-
-    Session(clientid, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760799)
 
 -----------
 routes 命令
@@ -859,11 +824,11 @@ trace start client <ClientId> <File> [<Level>]
 
     $ ./bin/emqx_ctl trace start client clientid log/clientid_trace.log
 
-    trace client clientid successfully
+    trace clientid clientid successfully
 
     $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 
-    trace client_id clientid2 successfully
+    trace clientid clientid2 successfully
 
 trace stop client <ClientId>
 ----------------------------
@@ -872,7 +837,7 @@ trace stop client <ClientId>
 
     $ ./bin/emqx_ctl trace stop client clientid
 
-    stop tracing client_id clientid successfully
+    stop tracing clientid clientid successfully
 
 trace start topic <Topic> <File> [<Level>]
 ------------------------------------------
@@ -907,7 +872,7 @@ trace list
 
     $ ./bin/emqx_ctl trace list
 
-    Trace(client_id=clientid2, level=error, destination="log/clientid2_trace.log")
+    Trace(clientid=clientid2, level=error, destination="log/clientid2_trace.log")
     Trace(topic=topic2, level=error, destination="log/topic2_trace.log")
 
 ---------
