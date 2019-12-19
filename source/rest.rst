@@ -2476,6 +2476,24 @@ API 定义::
     "reason": "banned the clientId",
     "until": 1576735035
   }
+ 
+请求示例::
+
+    POST api/v3/banned/
+
+返回数据:
+
+.. code-block:: json
+
+  {
+    "code": 0,
+    "data": {
+      "who": "mqttjs_ab9069449e",
+      "as": "clientid",
+      "reason": "banned the clientId",
+      "until": 1576735035
+    }
+  }
 
 删除指定黑名单
 --------------------------
