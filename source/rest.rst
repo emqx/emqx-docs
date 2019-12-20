@@ -1058,25 +1058,6 @@ API 定义::
     "code": 0
   }
 
-清除指定客户端 ACL 缓存
------------------------
-
-API 定义::
-
-    DELETE api/v3/clients/${clientid}/acl_cache
-
-请求示例::
-
-    DELETE api/v3/clients/mosquitto_mqtt/acl_cache
-
-返回数据:
-
-.. code:: json
-
-  {
-    "code": 0
-  }
-
 获取指定客户端 ACL 缓存
 -----------------------
 
