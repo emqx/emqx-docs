@@ -13,7 +13,7 @@ URL 地址
 
 REST API 访问URL地址::
 
-    http(s)://host:8080/api/v3/
+    http(s)://host:8081/api/v3/
 
 -----------
 Basic 认证
@@ -24,7 +24,7 @@ Basic 认证
 .. code-block:: bash
 
     # 例如：获取当前集群状态
-    curl -v --basic -u <appid>:<appsecret> -k http://localhost:8080/api/v3/brokers
+    curl -v --basic -u <appid>:<appsecret> -k http://localhost:8081/api/v3/brokers
 
 ----------
 API 信息
