@@ -659,14 +659,6 @@ etc/acl.conf 默认访问规则设置:
 
 *EMQ X* 消息服务器接收到 MQTT 客户端发布(Publish)或订阅(Subscribe)请求时，会逐条匹配 ACL 规则，直到匹配成功返回 allow 或 deny。
 
-## Specify the global flapping detect policy.
-## The value is a string composed of flapping threshold, duration and banned interval.
-## 1. threshold: an integer to specfify the disconnected times of a MQTT Client;
-## 2. duration: the time window for flapping detect;
-## 3. banned interval: the banned interval if a flapping is detected.
-##
-## Value: Integer,Duration,Duration
-
 设置 flapping 的检测策略:
 
 .. code-block:: properties
