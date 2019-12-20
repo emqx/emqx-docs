@@ -103,7 +103,7 @@ broker 命令查询服务器基本信息，启动时间，统计数据与性能�
     sysdescr  : EMQ X Broker
     version   : v4.0.0
     uptime    : 25 seconds
-    datetime  : 2019-04-29 10:42:10
+    datetime  : 2019-12-19 14:34:19
 
 broker stats
 ------------
@@ -112,28 +112,32 @@ broker stats
 
     $ ./bin/emqx_ctl broker stats
 
-    actions/max                   : 2
-    connections/count             : 1
-    connections/max               : 1
-    resources/max                 : 0
-    retained/count                : 2
-    retained/max                  : 2
-    routes/count                  : 0
-    routes/max                    : 0
-    rules/max                     : 0
-    sessions/count                : 0
-    sessions/max                  : 0
-    sessions/persistent/count     : 0
-    sessions/persistent/max       : 0
-    suboptions/max                : 0
-    subscribers/count             : 0
-    subscribers/max               : 1
-    subscriptions/count           : 1
-    subscriptions/max             : 0
-    subscriptions/shared/count    : 0
-    subscriptions/shared/max      : 0
-    topics/count                  : 0
-    topics/max                    : 0
+    actions.count                 : 5
+    actions.max                   : 5
+    channels.count                : 2
+    channels.max                  : 2
+    connections.count             : 2
+    connections.max               : 2
+    resources.count               : 0
+    resources.max                 : 0
+    retained.count                : 3
+    retained.max                  : 3
+    routes.count                  : 0
+    routes.max                    : 0
+    rules.count                   : 0
+    rules.max                     : 0
+    sessions.count                : 2
+    sessions.max                  : 2
+    suboptions.count              : 0
+    suboptions.max                : 0
+    subscribers.count             : 0
+    subscribers.max               : 0
+    subscriptions.count           : 0
+    subscriptions.max             : 0
+    subscriptions.shared.count    : 0
+    subscriptions.shared.max      : 0
+    topics.count                  : 0
+    topics.max                    : 0
 
 broker metrics
 --------------
@@ -142,49 +146,64 @@ broker metrics
 
     $ ./bin/emqx_ctl broker metrics
 
-    bytes/received          : 0
-    bytes/sent              : 0
-    messages/dropped        : 0
-    messages/expired        : 0
-    messages/forward        : 0
-    messages/qos0/received  : 0
-    messages/qos0/sent      : 0
-    messages/qos1/received  : 0
-    messages/qos1/sent      : 0
-    messages/qos2/dropped   : 0
-    messages/qos2/expired   : 0
-    messages/qos2/received  : 0
-    messages/qos2/sent      : 0
-    messages/received       : 0
-    messages/retained       : 3
-    messages/sent           : 0
-    packets/auth            : 0
-    packets/connack         : 0
-    packets/connect         : 0
-    packets/disconnect/recei: 0
-    packets/disconnect/sent : 0
-    packets/pingreq         : 0
-    packets/pingresp        : 0
-    packets/puback/missed   : 0
-    packets/puback/received : 0
-    packets/puback/sent     : 0
-    packets/pubcomp/missed  : 0
-    packets/pubcomp/received: 0
-    packets/pubcomp/sent    : 0
-    packets/publish/received: 0
-    packets/publish/sent    : 0
-    packets/pubrec/missed   : 0
-    packets/pubrec/received : 0
-    packets/pubrec/sent     : 0
-    packets/pubrel/missed   : 0
-    packets/pubrel/received : 0
-    packets/pubrel/sent     : 0
-    packets/received        : 0
-    packets/sent            : 0
-    packets/suback          : 0
-    packets/subscribe       : 0
-    packets/unsuback        : 0
-    packets/unsubscribe     : 0
+    actions.failure               : 0
+    actions.success               : 0
+    auth.mqtt.anonymous           : 2
+    bytes.received                : 666
+    bytes.sent                    : 640
+    channel.gc                    : 0
+    messages.dropped              : 0
+    messages.expired              : 0
+    messages.forward              : 0
+    messages.qos0.received        : 0
+    messages.qos0.sent            : 0
+    messages.qos1.received        : 0
+    messages.qos1.sent            : 0
+    messages.qos2.dropped         : 0
+    messages.qos2.expired         : 0
+    messages.qos2.received        : 0
+    messages.qos2.sent            : 0
+    messages.received             : 0
+    messages.retained             : 3
+    messages.sent                 : 0
+    packets.auth.received         : 0
+    packets.auth.sent             : 0
+    packets.connack.auth_error    : 0
+    packets.connack.error         : 0
+    packets.connack.sent          : 2
+    packets.connect.received      : 2
+    packets.disconnect.received   : 0
+    packets.disconnect.sent       : 0
+    packets.pingreq.received      : 0
+    packets.pingresp.sent         : 316
+    packets.puback.missed         : 0
+    packets.puback.received       : 0
+    packets.puback.sent           : 0
+    packets.pubcomp.inuse         : 0
+    packets.pubcomp.missed        : 0
+    packets.pubcomp.received      : 0
+    packets.pubcomp.sent          : 0
+    packets.publish.auth_error    : 0
+    packets.publish.error         : 0
+    packets.publish.received      : 0
+    packets.publish.sent          : 0
+    packets.pubrec.inuse          : 0
+    packets.pubrec.missed         : 0
+    packets.pubrec.received       : 0
+    packets.pubrec.sent           : 0
+    packets.pubrel.missed         : 0
+    packets.pubrel.received       : 0
+    packets.pubrel.sent           : 0
+    packets.received              : 2
+    packets.sent                  : 318
+    packets.suback.sent           : 0
+    packets.subscribe.auth_error  : 0
+    packets.subscribe.error       : 0
+    packets.subscribe.received    : 0
+    packets.unsuback.sent         : 0
+    packets.unsubscribe.error     : 0
+    packets.unsubscribe.received  : 0
+    rules.matched                 : 0
 
 ------------
 cluster 命令
