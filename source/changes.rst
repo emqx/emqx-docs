@@ -7,9 +7,9 @@
 
 .. _release_4.0-rc.3:
 
--------------
+---------------
  4.0-rc.3 版本
--------------
+---------------
 
 *发布日期: 2019-12-21*
 
@@ -56,7 +56,7 @@ emqx-dashboard (plugin)
  - 优化 Overview 页面显示
 
    Github PR:
-   `emqx/emqx-dashboard#179 <https://github.com/emqx/emqx-dashboard/pull/179>`
+   `emqx/emqx-dashboard#179 <https://github.com/emqx/emqx-dashboard/pull/179>`_
 
 
 emqx-management (plugin)
@@ -113,7 +113,7 @@ emqx-bridge-mqtt (plugin)
 
 **进行了以下修复:**
 
- - 修正 keepalive 单位为秒
+ - 修正 Keepalive 单位为秒
 
    Github PR:
    `emqx/emqx-bridge-mqtt#43 <https://github.com/emqx/emqx-bridge-mqtt/pull/43>`_
