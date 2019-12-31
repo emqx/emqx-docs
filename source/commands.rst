@@ -268,6 +268,8 @@ emqx1 节点下删除 emqx2::
 
     $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
+.. note:: 不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
+
 --------
 acl 命令
 --------
