@@ -148,7 +148,6 @@ All of Authentication Plugins
    `emqx/emqx-auth-pgsql#174 <https://github.com/emqx/emqx-auth-pgsql/pull/174>`_,
    `emqx/emqx-auth-redis#144 <https://github.com/emqx/emqx-auth-redis/pull/144>`_
 
-
 .. _release_4.0-rc.2:
 
 -------------

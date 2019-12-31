@@ -121,6 +121,12 @@ EMQ X 集群设置
 
     cluster.name = emqxcl
 
+指定 Erlang 分布式协议:
+
+.. code-block:: properties
+
+    cluster.proto_dist = inet_tcp
+
 集群发现策略：
 
 .. code-block:: properties
@@ -353,7 +359,7 @@ EMQ X 节点连接方式
 .. code-block:: properties
 
     ## 指定 Erlang 分布式通信协议: inet_tcp | inet6_tcp | inet_tls
-    node.proto_dist = inet_tcp
+    cluster.proto_dist = inet_tcp
 
     ## 指定 Erlang 分布式通信 SSL 的参数配置
     ## node.ssl_dist_optfile = etc/ssl_dist.conf
@@ -409,12 +415,6 @@ ETS 表的最大数量。注意，mnesia 和 SSL 将创建临时 ETS 表:
 .. code-block:: properties
 
     node.crash_dump = log/crash.dump
-
-指定 Erlang 分布式协议:
-
-.. code-block:: properties
-
-    node.proto_dist = inet_tcp
 
 Erlang 分布式使用 TLS 时存储 SSL/TLS 选项的文件:
 
@@ -497,7 +497,7 @@ socket 空闲时最大保持连接时间:
 
 .. code-block:: properties
 
-    rpc.socket_keepalive_idle = 900
+    rpc.socket_keepalive_idle = 900s
 
 socket 保活探测间隔:
 
@@ -543,7 +543,7 @@ RPC 的 Socket (用户态)缓存大小:
 
 .. code-block:: properties
 
-    log.level = error
+    log.level = warning
 
 设置 primary logger level，以及所有到文件和终端的 logger handlers 的日志级别。
 
@@ -659,6 +659,16 @@ etc/acl.conf 默认访问规则设置:
 
 *EMQ X* 消息服务器接收到 MQTT 客户端发布(Publish)或订阅(Subscribe)请求时，会逐条匹配 ACL 规则，直到匹配成功返回 allow 或 deny。
 
+设置 flapping 的检测策略:
+
+.. code-block:: properties
+
+    ## flapping_detect_policy = <Threshold>, <Duration>, <Banned Interval>
+    ## <Threshold>: 指定 MQTT 客户端在 <Duration> 时间内能够重复连接的最大次数
+    ## <Duration>: 指定 flapping 检测的时间窗口
+    ## <Banned Interval>: 指定 MQTT 客户端超出连接限制后被禁止登录的时长
+    flapping_detect_policy = 30, 1m, 5m
+
 -----------------
 MQTT 协议参数配置
 -----------------
@@ -719,6 +729,12 @@ Topic Alias 最大数量，0 表示不支持 Topic Alias:
 
 此配置主要为 MQTT v3.1.1 使用，以实现 MQTT 5 中 No Local 的功能。
 
+是否使用严格模式解析 MQTT 报文:
+
+.. code-block:: properties
+
+    mqtt.strict_mode = false
+
 --------------------
 MQTT Zones 参数配置
 --------------------
@@ -752,23 +768,30 @@ TCP 连接建立后等待 MQTT CONNECT 报文的最长时间:
 
     ## zone.external.publish_limit = 10,100
 
-开启黑名单检查:
-
-.. code-block:: properties
-
-    zone.external.enable_ban = on
-
 开启 ACL 检查:
 
 .. code-block:: properties
 
     zone.external.enable_acl = on
 
+开启黑名单检查:
+
+.. code-block:: properties
+
+    zone.external.enable_ban = on
+
 是否统计每个连接的信息:
 
 .. code-block:: properties
 
     zone.external.enable_stats = on
+
+指定没有通过 ACL 检查时的动作:
+
+.. code-block:: properties
+
+    ## 可选值: ignore | disconnect
+    zone.external.acl_deny_action = ignore
 
 设置连接/会话进程在接收多少消息或字节后强制进行 GC:
 
@@ -864,7 +887,7 @@ QoS1/2 消息的重传间隔:
 
 .. code-block:: properties
 
-    zone.external.retry_interval = 20s
+    zone.external.retry_interval = 30s
 
 等待 PUBREL 的 QoS2 消息最大数量(Client -> Broker)，0 表示没有限制:
 
@@ -883,12 +906,6 @@ MQTT v3.1.1 连接中使用的默认会话过期时间:
 .. code-block:: properties
 
     zone.external.session_expiry_interval = 2h
-
-消息队列类型:
-
-.. code-block:: properties
-
-    zone.external.mqueue_type = simple
 
 消息队列最大长度:
 
@@ -914,17 +931,29 @@ MQTT v3.1.1 连接中使用的默认会话过期时间:
 
     zone.external.enable_flapping_detect = off
 
-指定时间内允许状态变化的最大次数:
+挂载点:
 
 .. code-block:: properties
 
-    zone.external.flapping_threshold = 10, 1m
+    ## zone.external.mountpoint = devicebound/
 
-flapping 禁止时间:
+是否使用用户名作为客户端标识符:
 
 .. code-block:: properties
 
-    zone.external.flapping_banned_expiry_interval = 1h
+    zone.external.use_username_as_clientid = false
+
+是否接收自己发布的消息:
+
+.. code-block:: properties
+
+    zone.external.ignore_loop_deliver = false
+
+是否使用严格模式解析 MQTT 报文:
+
+.. code-block:: properties
+
+    zone.external.strict_mode = false
 
 Internal Zone 参数设置
 ------------------------
@@ -946,6 +975,13 @@ Internal Zone 参数设置
 .. code-block:: properties
 
     zone.internal.enable_acl = off
+
+指定没有通过 ACL 检查时的动作:
+
+.. code-block:: properties
+
+    ## 可选值: ignore | disconnect
+    zone.internal.acl_deny_action = ignore
 
 是否支持 MQTT 通配符订阅:
 
@@ -995,17 +1031,29 @@ Internal Zone 参数设置
 
     zone.internal.enable_flapping_detect = off
 
-指定时间内允许状态变化的最大次数:
+挂载点:
 
 .. code-block:: properties
 
-    zone.internal.flapping_threshold = 10, 1m
+    ## zone.internal.mountpoint = devicebound/
 
-flapping 禁止时间:
+是否使用用户名作为客户端标识符:
 
 .. code-block:: properties
 
-    zone.internal.flapping_banned_expiry_interval = 1h
+    zone.internal.use_username_as_clientid = false
+
+是否接收自己发布的消息:
+
+.. code-block:: properties
+
+    zone.internal.ignore_loop_deliver = false
+
+是否使用严格模式解析 MQTT 报文:
+
+.. code-block:: properties
+
+    zone.internal.strict_mode = false
 
 -----------------------
 MQTT Listeners 参数说明
@@ -1075,23 +1123,16 @@ TCP 监听器:
 
     listener.tcp.external.zone = external
 
-挂载点:
-
-.. code-block:: properties
-
-    ## listener.tcp.external.mountpoint = devicebound/
-
 TCP 数据接收速率限制:
 
 .. code-block:: properties
 
-    ## listener.tcp.external.rate_limit = 1024,4096
+    ## 限制每 10s 内只能接收 100KB 数据
+    ## listener.tcp.external.rate_limit = 100KB,10s
 
 访问控制规则:
 
 .. code-block:: properties
-
-    ## listener.tcp.external.access.1 = allow 192.168.0.0/24
 
     listener.tcp.external.access.1 = allow all
 
@@ -1197,29 +1238,29 @@ SSL 监听端口:
 
     listener.ssl.external.max_conn_rate = 500
 
+指定 SSL 的 {active, N} 选项:
+
+.. code-block:: properties
+
+    listener.ssl.external.active_n = 100
+
 监听器使用的 Zone:
 
 .. code-block:: properties
 
     listener.ssl.external.zone = external
 
-挂载点:
+TCP 数据接收速率限制:
 
 .. code-block:: properties
 
-    ## listener.ssl.external.mountpoint = devicebound/
+    ## listener.ssl.external.rate_limit = 100KB,10s
 
 访问控制规则:
 
 .. code-block:: properties
 
     listener.ssl.external.access.1 = allow all
-
-TCP 数据接收速率限制:
-
-.. code-block:: properties
-
-    ## listener.ssl.external.rate_limit = 1024,4096
 
 EMQ X 集群部署在 HAProxy 或 Nginx 时，是否启用代理协议 V1/2:
 
@@ -1287,6 +1328,12 @@ SSL cipher suites:
 
     listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
 
+SSL PSK cipher suites:
+
+.. code-block:: properties
+
+    ## listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+
 是否启动更安全的 renegotiation 机制:
 
 .. code-block:: properties
@@ -1333,7 +1380,7 @@ TCP 发送超时时间:
 
 .. code-block:: properties
 
-    #listener.ssl.external.recbuf = 2KB
+    #listener.ssl.external.recbuf = 4KB
 
 用于 MQTT 连接的 TCP 发送缓冲区(os内核):
 
@@ -1377,6 +1424,12 @@ MQTT/WebSocket 监听端口:
 
     listener.ws.external = 8083
 
+MQTT/WebSocket 端点路径:
+
+.. code-block:: properties
+
+    listener.ws.external.mqtt_path = /mqtt
+
 接收池大小:
 
 .. code-block:: properties
@@ -1399,19 +1452,13 @@ TCP 数据接收速率限制:
 
 .. code-block:: properties
 
-    ## listener.ws.external.rate_limit = 1024,4096
+    ## listener.ws.external.rate_limit = 100KB,10s
 
 监听器使用的 Zone:
 
 .. code-block:: properties
 
     listener.ws.external.zone = external
-
-挂载点:
-
-.. code-block:: properties
-
-    ## listener.ws.external.mountpoint = devicebound/
 
 访问控制规则:
 
@@ -1521,7 +1568,7 @@ Websocket deflate 选项:
 
 .. code-block:: properties
 
-    ## listener.ws.external.idle_timeout = 2h
+    ## listener.ws.external.idle_timeout = 60s
 
 最大报文大小，0 表示没有限制:
 
@@ -1561,19 +1608,13 @@ TCP 数据接收速率限制:
 
 .. code-block:: properties
 
-    ## listener.wss.external.rate_limit = 1024,4096
+    ## listener.wss.external.rate_limit = 100KB,10s
 
 监听器使用的 Zone:
 
 .. code-block:: properties
 
     listener.wss.external.zone = external
-
-挂载点:
-
-.. code-block:: properties
-
-    ## listener.wss.external.mountpoint = devicebound/
 
 访问控制规则:
 
@@ -1749,176 +1790,13 @@ Websocket deflate 选项:
 
 .. code-block:: properties
 
-    ## listener.wss.external.idle_timeout = 2h
+    ## listener.wss.external.idle_timeout = 60s
 
 最大报文大小，0 表示没有限制:
 
 .. code-block:: properties
 
     ## listener.wss.external.max_frame_size = 0
-
---------------
-Bridges 桥接
---------------
-
-Bridges 参数设置
---------------------------
-
-桥接地址，使用节点名用于 rpc 桥接，使用 host:port 用于 mqtt 连接:
-
-.. code-block:: properties
-
-    bridge.aws.address = 127.0.0.1:1883
-
-桥接的协议版本:
-
-.. code-block:: properties
-
-    bridge.aws.proto_ver = mqttv4
-
-客户端的 client_id:
-
-.. code-block:: properties
-
-    bridge.aws.client_id = bridge_aws
-
-客户端的 clean_start 字段:
-
-.. code-block:: properties
-
-    bridge.aws.clean_start = true
-
-客户端的 username 字段:
-
-.. code-block:: properties
-
-    bridge.aws.username = user
-
-客户端的 password 字段:
-
-.. code-block:: properties
-
-    bridge.aws.password = passwd
-
-桥接的挂载点:
-
-.. code-block:: properties
-
-    bridge.aws.mountpoint = bridge/aws/${node}/
-
-要被转发消息的主题:
-
-.. code-block:: properties
-
-    bridge.aws.forwards = topic1/#,topic2/#
-
-客户端是否使用 SSL 来连接远程服务器:
-
-.. code-block:: properties
-
-    bridge.aws.ssl = off
-
-SSL 连接的 CA 证书 (PEM格式)
-
-.. code-block:: properties
-
-    bridge.aws.cacertfile = etc/certs/cacert.pem
-
-SSL 连接的 SSL 证书:
-
-.. code-block:: properties
-
-    bridge.aws.certfile = etc/certs/client-cert.pem
-
-SSL 连接的密钥文件:
-
-.. code-block:: properties
-
-    bridge.aws.keyfile = etc/certs/client-key.pem
-
-SSL 加密套件:
-
-.. code-block:: properties
-
-    #bridge.aws.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384
-
-TLS PSK 的密码:
-
-.. code-block:: properties
-
-    #bridge.aws.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
-
-客户端的心跳间隔:
-
-.. code-block:: properties
-
-    bridge.aws.keepalive = 60s
-
-支持的 TLS 版本:
-
-.. code-block:: properties
-
-    bridge.aws.tls_versions = tlsv1.2,tlsv1.1,tlsv1
-
-桥接的订阅主题:
-
-.. code-block:: properties
-
-    bridge.aws.subscription.1.topic = cmd/topic1
-
-桥接的订阅 qos:
-
-.. code-block:: properties
-
-    bridge.aws.subscription.1.qos = 1
-
-桥接启动类型:
-
-.. code-block:: properties
-
-    bridge.aws.start_type = manual
-
-桥接的重连间隔:
-
-.. code-block:: properties
-
-    bridge.aws.reconnect_interval = 30s
-
-QoS1/2 消息的重传间隔:
-
-.. code-block:: properties
-
-    bridge.aws.retry_interval = 20s
-
-飞行窗口大小:
-
-.. code-block:: properties
-
-    bridge.aws.max_inflight_batches = 32
-
-emqx_bridge 内部用于 batch 的消息数量:
-
-.. code-block:: properties
-
-    bridge.aws.queue.batch_count_limit = 32
-
-emqx_bridge 内部用于 batch 的消息字节数:
-
-.. code-block:: properties
-
-    bridge.aws.queue.batch_bytes_limit = 1000MB
-
-放置 replayq 队列的路径，如果没有在配置中指定该项，那么 replayq 将会以 `mem-only` 的模式运行，消息不会缓存到磁盘上:
-
-.. code-block:: properties
-
-    bridge.aws.queue.replayq_dir = {{ platform_data_dir }}/emqx_aws_bridge/
-
-replayq 数据段大小:
-
-.. code-block:: properties
-
-    bridge.aws.queue.replayq_seg_bytes = 10MB
 
 --------------
 Modules 模块
@@ -2004,6 +1882,12 @@ Broker 参数设置
 
     broker.sys_interval = 1m
 
+系统心跳的发布间隔:
+
+.. code-block:: properties
+
+    broker.sys_heartbeat = 30s
+
 是否全局注册会话:
 
 .. code-block:: properties
@@ -2032,7 +1916,7 @@ Broker 参数设置
 
 .. code-block:: properties
 
-    broker.route_batch_clean = on
+    broker.route_batch_clean = off
 
 ---------------------
 Erlang 虚拟机监控设置

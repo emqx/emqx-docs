@@ -296,8 +296,8 @@ EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broke
     ## 枚举值: mqttv3 | mqttv4 | mqttv5
     bridge.mqtt.emqx2.proto_ver = mqttv4
 
-    ## 客户端的 client_id
-    bridge.mqtt.emqx2.client_id = bridge_emq
+    ## 客户端的 clientid
+    bridge.mqtt.emqx2.clientid = bridge_emq
 
     ## 客户端的 clean_start 字段
     ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
@@ -487,14 +487,14 @@ Web 服务器例如 PHP/Java/Python/NodeJS 或 Ruby on Rails，可通过 HTTP PO
 .. code:: bash
 
     curl -v --basic -u user:passwd -H "Content-Type: application/json" -d \
-    '{"qos":1, "retain": false, "topic":"world", "payload":"test" , "client_id": "C_1492145414740"}' \-k http://localhost:8080/api/v3/mqtt/publish
+    '{"qos":1, "retain": false, "topic":"world", "payload":"test" , "clientid": "C_1492145414740"}' \-k http://localhost:8080/api/v3/mqtt/publish
 
 HTTP 接口参数:
 
 +----------+----------------------+
 | 参数     | 说明                 |
 +==========+======================+
-| client_id| MQTT 客户端 ID       |
+| clientid | MQTT 客户端 ID       |
 +----------+----------------------+
 | qos      | QoS: 0 | 1 | 2       |
 +----------+----------------------+
