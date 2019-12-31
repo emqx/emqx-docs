@@ -5,94 +5,158 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0-rc.4:
+
+-------------
+4.0-rc.4 版本
+-------------
+
+*发布日期: 2019-12-31*
+
+EMQ X 4.0-rc.4 版本现已发布，其中包括以下更改:
+
+emqx
+----
+
+**进行了以下修改:**
+
+- 增加了更多的钩子
+
+  Github PR:
+  `emqx/emqx#3138 <https://github.com/emqx/emqx/pull/3138>`_
+
+- 增加了更多的 metrics
+
+  Github PR:
+  `emqx/emqx#3139 <https://github.com/emqx/emqx/pull/3139>`_,
+  `emqx/emqx#3141 <https://github.com/emqx/emqx/pull/3141>`_
+
+**修复了以下问题:**
+
+- 修复定时器超时消息可能匹配失败的问题
+
+  Github PR:
+  `emqx/emqx#3145 <https://github.com/emqx/emqx/pull/3145>`_
+
+emqx-bridge-mqtt
+----------------
+
+**修复了以下问题:**
+
+- 修复 keepalive 配置项使用了错误的单位的问题
+
+  Github PR:
+  `emqx/emqx-bridge-mqtt#43 <https://github.com/emqx/emqx-bridge-mqtt/pull/43>`_
+
+emqx-management
+---------------
+
+**进行了以下修改:**
+
+- 支持配置默认的 AppID 与 AppSecret
+
+  Github PR:
+  `emqx/emqx-management#153 <https://github.com/emqx/emqx-management/pull/153>`_
+
+- 发布消息的 HTTP API 现以支持 base64 编码后的 payload
+
+  Github PR:
+  `emqx/emqx-management#154 <https://github.com/emqx/emqx-management/pull/154>`_
+
+emqx-auth-http
+--------------
+
+**进行了以下修改:**
+
+- 支持用户自行配置 HTTP 请求头
+
+  Github PR:
+  `emqx/emqx-auth-http#170 <https://github.com/emqx/emqx-auth-http/pull/170>`_
+
 .. _release_4.0-rc.3:
 
----------------
- 4.0-rc.3 版本
----------------
+-------------
+4.0-rc.3 版本
+-------------
 
 *发布日期: 2019-12-21*
 
 EMQ X 4.0-rc.3 版本现已发布，其中包括以下更改:
 
-
 emqx
 ----
 
- **进行了以下修改:**
+**进行了以下修改:**
 
- - 添加更多的 Metrics; 并删除 ``channel.gc``, ``messages.qos2.expired``, ``messages.qos2.dropped``, ``auth.mqtt.anonymous`` 等
+- 添加更多的 Metrics; 并删除 ``channel.gc``, ``messages.qos2.expired``, ``messages.qos2.dropped``, ``auth.mqtt.anonymous`` 等
 
-   Github PR:
-   `emqx/emqx#3128 <https://github.com/emqx/emqx/pull/3128>`_
+  Github PR:
+  `emqx/emqx#3128 <https://github.com/emqx/emqx/pull/3128>`_
 
- - 日志格式支持配置行号
+- 日志格式支持配置行号
 
-   Github PR:
-   `emqx/emqx#3117 <https://github.com/emqx/emqx/pull/3117>`_
+  Github PR:
+  `emqx/emqx#3117 <https://github.com/emqx/emqx/pull/3117>`_
 
- - 为 emqx_connection 增加更多的测试用例
+- 为 emqx_connection 增加更多的测试用例
 
-   Github PR:
-   `emqx/emqx#3116 <https://github.com/emqx/emqx/pull/3116>`_
+  Github PR:
+  `emqx/emqx#3116 <https://github.com/emqx/emqx/pull/3116>`_
 
- - 修复 MQTT/WS 消息乱序的 BUG
+- 修复 MQTT/WS 消息乱序的 BUG
 
-   Github PR:
-   `emqx/emqx#3115 <https://github.com/emqx/emqx/pull/3115>`_
-
+  Github PR:
+  `emqx/emqx#3115 <https://github.com/emqx/emqx/pull/3115>`_
 
 emqx-dashboard (plugin)
 -----------------------
 
 **进行了以下更改:**
 
- - 优化 SQL 编辑器使用体验:
+- 优化 SQL 编辑器使用体验:
 
-   Github PR:
-   `emqx/emqx-dashboard#176 <https://github.com/emqx/emqx-dashboard/pull/176>`_,
-   `emqx/emqx-dashboard#177 <https://github.com/emqx/emqx-dashboard/pull/177>`_
+  Github PR:
+  `emqx/emqx-dashboard#176 <https://github.com/emqx/emqx-dashboard/pull/176>`_,
+  `emqx/emqx-dashboard#177 <https://github.com/emqx/emqx-dashboard/pull/177>`_
 
- - 优化 Overview 页面显示
+- 优化 Overview 页面显示
 
-   Github PR:
-   `emqx/emqx-dashboard#179 <https://github.com/emqx/emqx-dashboard/pull/179>`_
-
+  Github PR:
+  `emqx/emqx-dashboard#179 <https://github.com/emqx/emqx-dashboard/pull/179>`_
 
 emqx-management (plugin)
 ------------------------
 
 **进行了以下更改:**
 
- - 支持返回共享订阅的真实主题
+- 支持返回共享订阅的真实主题
 
-   Github PR:
-   `emqx/emqx-management#151 <https://github.com/emqx/emqx-management/pull/151>`_
+  Github PR:
+  `emqx/emqx-management#151 <https://github.com/emqx/emqx-management/pull/151>`_
 
 **修复了以下问题:**
 
- - 修复无法获取单个主题的多条路由信息的问题
+- 修复无法获取单个主题的多条路由信息的问题
 
-   Github PR:
-   `emqx/emqx-management#150 <https://github.com/emqx/emqx-management/pull/150>`_
-
+  Github PR:
+  `emqx/emqx-management#150 <https://github.com/emqx/emqx-management/pull/150>`_
 
 emqx-coap (plugin)
 -------------------
 
 **修复了以下问题:**
 
- - 修复停止插件后，无法正常启动的问题
+- 修复停止插件后，无法正常启动的问题
 
-   Github PR:
-   `emqx/emqx-coap#151 <https://github.com/emqx/emqx-coap/pull/151>`_
+  Github PR:
+  `emqx/emqx-coap#151 <https://github.com/emqx/emqx-coap/pull/151>`_
 
 emqx-delayed-publish (plugin)
 -----------------------------
 
 **进行了以下更改:**
 
- - 新增 ``messages.delayed`` Metrics 计数
+- 新增 ``messages.delayed`` Metrics 计数
 
   Github PR:
   `emqx/emqx-delayed-publish#55 <https://github.com/emqx/emqx-delayed-publish/pull/55>`_
@@ -102,51 +166,48 @@ emqx-statsd (plugin)
 
 **进行了以下更改:**
 
- - 对新的 Metrics 进行适配
+- 对新的 Metrics 进行适配
 
-   Github PR:
-   `emqx/emqx-statsd#43 <https://github.com/emqx/emqx-statsd/pull/43>`_
-
+  Github PR:
+  `emqx/emqx-statsd#43 <https://github.com/emqx/emqx-statsd/pull/43>`_
 
 emqx-bridge-mqtt (plugin)
 --------------------------
 
 **进行了以下修复:**
 
- - 修正 Keepalive 单位为秒
+- 修正 Keepalive 单位为秒
 
-   Github PR:
-   `emqx/emqx-bridge-mqtt#43 <https://github.com/emqx/emqx-bridge-mqtt/pull/43>`_
-
+  Github PR:
+  `emqx/emqx-bridge-mqtt#43 <https://github.com/emqx/emqx-bridge-mqtt/pull/43>`_
 
 emqx-auth-http (plugin)
 -----------------------
 
 **进行了以下更改:**
 
- - 支持 '%p' 占位符，以获取客户端所连接的端口
+- 支持 '%p' 占位符，以获取客户端所连接的端口
 
-   Github PR:
-   `emqx/emqx-auth-http#167 <https://github.com/emqx/emqx-auth-http/pull/167>`_
-
+  Github PR:
+  `emqx/emqx-auth-http#167 <https://github.com/emqx/emqx-auth-http/pull/167>`_
 
 All of Authentication Plugins
 -----------------------------
 
 **进行了以下更改:**
 
- - 重命名认证成功或失败的计数 Metrics 的前缀为 ``client.auth.``; 重命名 ACL 检查成功或失败的 Metrics 前缀为 ``client.acl.``
+- 重命名认证成功或失败的计数 Metrics 的前缀为 ``client.auth.``; 重命名 ACL 检查成功或失败的 Metrics 前缀为 ``client.acl.``
 
-   Github PR:
-   `emqx/emqx-auth-username#132 <https://github.com/emqx/emqx-auth-username/pull/132>`_,
-   `emqx/emqx-auth-clientid#127 <https://github.com/emqx/emqx-auth-clientid/pull/127>`_,
-   `emqx/emqx-auth-http#168 <https://github.com/emqx/emqx-auth-http/pull/168>`_,
-   `emqx/emqx-auth-jwt#107 <https://github.com/emqx/emqx-auth-jwt/pull/107>`_,
-   `emqx/emqx-auth-ldap#96 <https://github.com/emqx/emqx-auth-ldap/pull/96>`_,
-   `emqx/emqx-auth-mongo#197 <https://github.com/emqx/emqx-auth-mongo/pull/197>`_,
-   `emqx/emqx-auth-mysql#193 <https://github.com/emqx/emqx-auth-mysql/pull/193>`_,
-   `emqx/emqx-auth-pgsql#174 <https://github.com/emqx/emqx-auth-pgsql/pull/174>`_,
-   `emqx/emqx-auth-redis#144 <https://github.com/emqx/emqx-auth-redis/pull/144>`_
+  Github PR:
+  `emqx/emqx-auth-username#132 <https://github.com/emqx/emqx-auth-username/pull/132>`_,
+  `emqx/emqx-auth-clientid#127 <https://github.com/emqx/emqx-auth-clientid/pull/127>`_,
+  `emqx/emqx-auth-http#168 <https://github.com/emqx/emqx-auth-http/pull/168>`_,
+  `emqx/emqx-auth-jwt#107 <https://github.com/emqx/emqx-auth-jwt/pull/107>`_,
+  `emqx/emqx-auth-ldap#96 <https://github.com/emqx/emqx-auth-ldap/pull/96>`_,
+  `emqx/emqx-auth-mongo#197 <https://github.com/emqx/emqx-auth-mongo/pull/197>`_,
+  `emqx/emqx-auth-mysql#193 <https://github.com/emqx/emqx-auth-mysql/pull/193>`_,
+  `emqx/emqx-auth-pgsql#174 <https://github.com/emqx/emqx-auth-pgsql/pull/174>`_,
+  `emqx/emqx-auth-redis#144 <https://github.com/emqx/emqx-auth-redis/pull/144>`_
 
 .. _release_4.0-rc.2:
 
