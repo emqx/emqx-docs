@@ -1274,7 +1274,7 @@ EMQ X R3.2 插件开发
 
     init(Opts) -> {ok, Opts}.
 
-    check(_Credentials = #{clientid := ClientId, username := Username, password := Password}, _State) ->
+    check(_ClientInfo = #{clientid := ClientId, username := Username, password := Password}, _State) ->
         io:format("Auth Demo: clientId=~p, username=~p, password=~p~n", [ClientId, Username, Password]),
         ok.
 
