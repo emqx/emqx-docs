@@ -1298,8 +1298,8 @@ EMQ X R3.2 插件开发
     init(Opts) ->
         {ok, Opts}.
 
-    check_acl({Credentials, PubSub, _NoMatchAction, Topic}, _State) ->
-        io:format("ACL Demo: ~p ~p ~p~n", [Credentials, PubSub, Topic]),
+    check_acl({ClientInfo, PubSub, _NoMatchAction, Topic}, _State) ->
+        io:format("ACL Demo: ~p ~p ~p~n", [ClientInfo, PubSub, Topic]),
         allow.
 
     reload_acl(_State) ->

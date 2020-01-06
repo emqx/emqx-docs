@@ -386,7 +386,7 @@ emqx 模块封装了 Hook 接口:
 
 .. code-block:: erlang
 
-    on_client_check_acl(#{client_id := ClientId}, AccessType, Topic, ACLResult) ->
+    on_client_check_acl(#{client_id := ClientId}, AccessType, Topic, ACLResult, Env) ->
         {ok, allow}.
 
 AccessType: 枚举值; ``publish`` 或  ``subscribe``
