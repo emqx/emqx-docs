@@ -56,15 +56,15 @@ CentOS
 
             $ yum list emqx --showduplicates | sort -r
 
-            emqx.x86_64                     3.1.0-1.el7                        emqx-stable
+            emqx.x86_64                     4.0.0-1.el7                        emqx-stable
             emqx.x86_64                     3.0.1-1.el7                        emqx-stable
             emqx.x86_64                     3.0.0-1.el7                        emqx-stable
 
-    2.  根据第二列中的版本字符串安装特定版本，例如 3.1.0
+    2.  根据第二列中的版本字符串安装特定版本，例如 4.0.0
 
         .. code-block:: console
 
-            $ sudo yum install emqx-3.1.0
+            $ sudo yum install emqx-4.0.0
 
 5.  启动 EMQ X
 
@@ -73,11 +73,11 @@ CentOS
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -109,7 +109,7 @@ CentOS
 
     .. code-block:: console
 
-           $ sudo rpm -ivh emqx-centos7-v3.1.0.x86_64.rpm
+           $ sudo rpm -ivh emqx-centos7-v4.0.0.x86_64.rpm
 
 3.  启动 EMQ X
 
@@ -118,11 +118,11 @@ CentOS
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -153,18 +153,18 @@ CentOS
 
     .. code-block:: console
 
-       $ unzip emqx-centos7-v3.1.0.zip
+       $ unzip emqx-centos7-v4.0.0.zip
 
 3.  启动 EMQ X
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1.0 is started successfully!
+        emqx 4.0.0 is started successfully!
 
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx v4.0.0 is running
 
 Ubuntu
 ------
@@ -237,16 +237,16 @@ Ubuntu
 
             $ sudo apt-cache madison emqx
 
-            emqx |      3.1.0 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
+            emqx |      4.0.0 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
             emqx |      3.0.1 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
             emqx |      3.0.0 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
 
 
-    2.  使用第二列中的版本字符串安装特定版本，例如 3.1.0
+    2.  使用第二列中的版本字符串安装特定版本，例如 4.0.0
 
         .. code-block:: console
 
-            $ sudo apt install emqx=3.1.0
+            $ sudo apt install emqx=4.0.0
 
 7.  启动 EMQ X
 
@@ -255,11 +255,11 @@ Ubuntu
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -290,7 +290,7 @@ Ubuntu
 
     .. code-block:: console
 
-           $ sudo dpkg -i emqx-ubuntu18.04-v3.1.0_amd64.deb
+           $ sudo dpkg -i emqx-ubuntu18.04-v4.0.0_amd64.deb
 
 3.  启动 EMQ X
 
@@ -299,11 +299,11 @@ Ubuntu
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -334,18 +334,18 @@ Ubuntu
 
     .. code-block:: console
 
-       $ unzip emqx-ubuntu18.04-v3.1.0.zip
+       $ unzip emqx-ubuntu18.04-v4.0.0.zip
 
 3.  启动 EMQ X
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1.0 is started successfully!
+        emqx 4.0.0 is started successfully!
 
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx v4.0.0 is running
 
 Debian
 ------
@@ -416,16 +416,16 @@ Debian
 
             $ sudo apt-cache madison emqx
 
-            emqx |      3.1.0 | https://repos.emqx.io/emqx-ce/deb/debian stretch/stable amd64 Packages
+            emqx |      4.0.0 | https://repos.emqx.io/emqx-ce/deb/debian stretch/stable amd64 Packages
             emqx |      3.0.1 | https://repos.emqx.io/emqx-ce/deb/debian stretch/stable amd64 Packages
             emqx |      3.0.0 | https://repos.emqx.io/emqx-ce/deb/debian stretch/stable amd64 Packages
 
 
-    2.  使用第二列中的版本字符串安装特定版本，例如 3.1.0
+    2.  使用第二列中的版本字符串安装特定版本，例如 4.0.0
 
         .. code-block:: console
 
-            $ sudo apt install emqx=3.1.0
+            $ sudo apt install emqx=4.0.0
 
 7.  启动 EMQ X
 
@@ -434,11 +434,11 @@ Debian
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -469,7 +469,7 @@ Debian
 
     .. code-block:: console
 
-           $ sudo dpkg -i emqx-debian9-v3.1.0_amd64.deb
+           $ sudo dpkg -i emqx-debian9-v4.0.0_amd64.deb
 
 3.  启动 EMQ X
 
@@ -478,11 +478,11 @@ Debian
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -513,18 +513,18 @@ Debian
 
     .. code-block:: console
 
-       $ unzip emqx-debian9-v3.1.0.zip
+       $ unzip emqx-debian9-v4.0.0.zip
 
 3.  启动 EMQ X
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1.0 is started successfully!
+        emqx 4.0.0 is started successfully!
 
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx v4.0.0 is running
 
 macOS
 -----
@@ -551,11 +551,11 @@ macOS
     .. code-block:: console
 
         $ emqx start
-        emqx 3.1.0 is started successfully!
+        emqx 4.0.0 is started successfully!
 
         $ emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx v4.0.0 is running
 
 使用 zip 包安装 EMQ X
 >>>>>>>>>>>>>>>>>>>>>>>
@@ -566,18 +566,18 @@ macOS
 
     .. code-block:: console
 
-       $ unzip emqx-macos-v3.1.0.zip
+       $ unzip emqx-macos-v4.0.0.zip
 
 3.  启动 EMQ X
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1.0 is started successfully!
+        emqx 4.0.0 is started successfully!
 
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx v4.0.0 is running
 
 Windows
 -------
@@ -632,15 +632,15 @@ openSUSE
             Reading installed packages...
             S | Repository | Name | Version  | Arch
             --+------------+------+----------+-------
-              | emqx       | emqx | 3.1.0-1  | x86_64
+              | emqx       | emqx | 4.0.0-1  | x86_64
               | emqx       | emqx | 3.0.1-1  | x86_64
               | emqx       | emqx | 3.0.0-1  | x86_64
 
-    2.  使用 Version 安装特定版本，例如 3.1.0
+    2.  使用 Version 安装特定版本，例如 4.0.0
 
         .. code-block:: console
 
-            $ sudo zypper in emqx-3.1.0
+            $ sudo zypper in emqx-4.0.0
 
 5.  启动 EMQ X
 
@@ -649,11 +649,11 @@ openSUSE
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -676,7 +676,7 @@ openSUSE
 
     .. code-block:: console
 
-           $ sudo rpm -ivh emqx-opensuse-v3.1.0.x86_64.rpm
+           $ sudo rpm -ivh emqx-opensuse-v4.0.0.x86_64.rpm
 
 3.  启动 EMQ X
 
@@ -685,11 +685,11 @@ openSUSE
         .. code-block:: console
 
                 $ emqx start
-                emqx 3.1.0 is started successfully!
+                emqx 4.0.0 is started successfully!
 
                 $ emqx_ctl status
                 Node 'emqx@127.0.0.1' is started
-                emqx v3.1.0 is running
+                emqx v4.0.0 is running
 
     +   systemctl 启动
 
@@ -720,18 +720,18 @@ openSUSE
 
     .. code-block:: console
 
-       $ unzip emqx-opensuse-v3.1.0.zip
+       $ unzip emqx-opensuse-v4.0.0.zip
 
 3.  启动 EMQ X
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1.0 is started successfully!
+        emqx 4.0.0 is started successfully!
 
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx v4.0.0 is running
 
 FreeBSD
 -------
@@ -747,18 +747,18 @@ FreeBSD
 
     .. code-block:: console
 
-       $ unzip emqx-freebsd12-v3.1.0.zip
+       $ unzip emqx-freebsd12-v4.0.0.zip
 
 3.  启动 EMQ X
 
     .. code-block:: console
 
         $ ./bin/emqx start
-        emqx 3.1.0 is started successfully!
+        emqx 4.0.0 is started successfully!
 
         $ ./bin/emqx_ctl status
         Node 'emqx@127.0.0.1' is started
-        emqx v3.1.0 is running
+        emqx v4.0.0 is running
 
 Docker
 ------
@@ -772,7 +772,7 @@ Docker
 
         .. code-block:: console
 
-            $ docker pull emqx/emqx:v3.1.0
+            $ docker pull emqx/emqx:v4.0.0
 
     +   通过 `emqx.io`_ 或 `github`_ 手动下载 docker 镜像，并手动加载
 
@@ -780,13 +780,13 @@ Docker
 
             $ wget -O emqx-docker.zip https://www.emqx.io/downloads/v3/latest/emqx-docker.zip
             $ unzip emqx-docker.zip
-            $ docker load < emqx-docker-v3.1.0
+            $ docker load < emqx-docker-v4.0.0
 
 2.  启动 docker 容器
 
     .. code-block:: console
 
-        $ docker run -d --name emqx31 -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v3.1.0
+        $ docker run -d --name emqx31 -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v4.0.0
 
 更多关于 EMQ X Docker 的信息请查看 `Docker Hub`_ 或 `EMQ X Docker`_
 
