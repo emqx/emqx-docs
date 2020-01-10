@@ -116,10 +116,10 @@ REST API 由 ``http(s)://host:8081/api/v3/`` 变更为 ``http(s)://host:8081/api
 
 将 `connections` 概念改为 `clients`，涉及节点与集群相关的 API：
 
-- 获取集群连接列表：`GET /connections` -> `/clients`
-- 获取集群指定连接信息：`GET /connections/:clientid` -> `GET /connections/:clientid`
-- 获取节点连接列表：`GET /nodes/:node/connections` -> `GET /nodes/:node/clients`
-- 获取节点指定连接信息：`GET /nodes/:node/connections/:clientid` -> `GET /nodes/:node/clients/:clientid`
+- 获取集群连接列表：``GET /connections`` -> ``/clients``
+- 获取集群指定连接信息：``GET /connections/:clientid`` -> ``GET /connections/:clientid``
+- 获取节点连接列表：``GET /nodes/:node/connections`` -> ``GET /nodes/:node/clients``
+- 获取节点指定连接信息：``GET /nodes/:node/connections/:clientid`` -> ``GET /nodes/:node/clients/:clientid``
 - 请求/相应数据中的 client_id 字段名称均变为 clientid
 
 同时 API 返回内容有较大变动，变动部分详见 4.0 文档。
@@ -129,10 +129,10 @@ REST API 由 ``http(s)://host:8081/api/v3/`` 变更为 ``http(s)://host:8081/api
 
 4.0 中引入 Channel 概念，将会话 (session) 和客户端 (client) 合二为一，4.0 版本中以下 API 已被 **移除**：
 
-- 获取集群会话列表：`GET /sessions`
-- 获取集群指定客户端会话信息：`GET /sessions/:clientid`
-- 获取节点会话列表：`GET /nodes/:node/sessions`
-- 获取节点指定客户端会话信息：`GET /nodes/:node/sessions/:clientid`
+- 获取集群会话列表：``GET /sessions``
+- 获取集群指定客户端会话信息：``GET /sessions/:clientid``
+- 获取节点会话列表：``GET /nodes/:node/sessions``
+- 获取节点指定客户端会话信息：``GET /nodes/:node/sessions/:clientid``
 
 4.0 以后如需获取会话相关信息，请使用客户端相关 API。
 
@@ -141,8 +141,8 @@ REST API 由 ``http(s)://host:8081/api/v3/`` 变更为 ``http(s)://host:8081/api
 
 插件配置中可能包含敏感信息，同时插件配置不支持持久化为用户使用带来了很大疑惑。考虑到安全问题与实用性问题，我们 **移除** 了插件获取与更改 API。
 
-- 获取插件配置信息：`GET /nodes/:node/plugins/:plugin_name`
-- 更新插件配置：`PUT /nodes/:node/plugins/:plugin_name`
+- 获取插件配置信息：``GET /nodes/:node/plugins/:plugin_name``
+- 更新插件配置：``PUT /nodes/:node/plugins/:plugin_name``
 
 我们计划在 **企业版** 中通过安全规范及配置项本地存储提供解决以上问题，重新提供插件热配置相关的 API 以，**目前企业版本已经支持关键配置的热配置操作**。
 
@@ -178,7 +178,7 @@ SQL 语法变更
 
     ## 3.x 版本
     ## 需要指定事件名称进行处理
-    SELECT * FROM "message.publish" WHERE topic ~= 't/#'
+    SELECT * FROM "message.publish" WHERE topic =~ 't/#'
 
     ## 4.0 及以后版本
     ## 默认处理 message.publish 事件, FROM 后面直接筛选 MQTT 主题
@@ -186,7 +186,7 @@ SQL 语法变更
     SELECT * FROM 't/#'
 
     ## 其他事件通过 事件主题 进行筛选
-    SELECT * FROM "$events/message_acked" where topic ~= 't/#'
+    SELECT * FROM "$events/message_acked" where topic =~ 't/#'
     SELECT * FROM "$events/client_connected"
 
 Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移。
