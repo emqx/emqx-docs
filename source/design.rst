@@ -1,8 +1,6 @@
 
 .. _design:
 
-.. TODO: 3.0 设计
-
 =================
 架构设计 (Design)
 =================
@@ -202,33 +200,50 @@ MQTT 协议定义了一个 16bits 的报文 ID(PacketId)，用于客户端到服
 钩子(Hook)定义
 --------------
 
-*EMQ X* 消息服务器在客户端上下线、主题订阅、消息收发位置设计了扩展钩子(Hook):
+*EMQ X* 在客户端生命周期和会话生命周期，对连接、订阅、消息收发位置设计了扩展钩子(Hook):
 
-+----------------------+----------------------+
-|         钩子         |         说明         |
-+======================+======================+
-| client.authenticate  | 客户端认证           |
-+----------------------+----------------------+
-| client.check_acl     | 客户端 ACL 检查      |
-+----------------------+----------------------+
-| client.connected     | 客户端上线           |
-+----------------------+----------------------+
-| client.subscribe     | 客户端订阅主题前     |
-+----------------------+----------------------+
-| client.unsubscribe   | 客户端取消订阅主题   |
-+----------------------+----------------------+
-| session.subscribed   | 客户端订阅主题后     |
-+----------------------+----------------------+
-| session.unsubscribed | 客户端取消订阅主题后 |
-+----------------------+----------------------+
-| message.publish      | MQTT 消息发布        |
-+----------------------+----------------------+
-| message.deliver      | MQTT 消息投递前      |
-+----------------------+----------------------+
-| message.acked        | MQTT 消息回执        |
-+----------------------+----------------------+
-| client.disconnected  | 客户端连接断开       |
-+----------------------+----------------------+
++------------------------+----------------------------------+
+| 钩子                   | 说明                             |
++========================+==================================+
+| client.connect         | 收到客户端连接报文               |
++------------------------+----------------------------------+
+| client.connack         | 下发连接应答                     |
++------------------------+----------------------------------+
+| client.connected       | 客户端上线                       |
++------------------------+----------------------------------+
+| client.disconnected    | 客户端连接断开                   |
++------------------------+----------------------------------+
+| client.authenticate    | 连接认证                         |
++------------------------+----------------------------------+
+| client.check_acl       | ACL 校验                         |
++------------------------+----------------------------------+
+| client.subscribe       | 客户端订阅主题                   |
++------------------------+----------------------------------+
+| client.unsubscribe     | 客户端取消订阅主题               |
++------------------------+----------------------------------+
+| session.created        | 会话创建                         |
++------------------------+----------------------------------+
+| session.subscribed     | 会话订阅主题后                   |
++------------------------+----------------------------------+
+| session.unsubscribed   | 会话取消订阅主题后               |
++------------------------+----------------------------------+
+| session.resumed        | 会话恢复                         |
++------------------------+----------------------------------+
+| session.discarded      | 会话被删除                       |
++------------------------+----------------------------------+
+| session.takeovered     | 会话被其它节点接管               |
++------------------------+----------------------------------+
+| session.terminated     | 会话终止                         |
++------------------------+----------------------------------+
+| message.publish        | MQTT 消息发布                    |
++------------------------+----------------------------------+
+| message.delivered      | MQTT 消息进行投递                |
++------------------------+----------------------------------+
+| message.acked          | MQTT 消息回执                    |
++------------------------+----------------------------------+
+| message.dropped        | MQTT 消息丢弃                    |
++------------------------+----------------------------------+
+
 
 钩子(Hook) 采用职责链设计模式(`Chain-of-responsibility_pattern`_)，扩展模块或插件向钩子注册回调函数，系统在客户端上下线、主题订阅或消息发布确认时，触发钩子顺序执行回调函数:
 
@@ -296,29 +311,29 @@ emqx 模块封装了 Hook 接口:
 
     -export([load/1, unload/0]).
 
-    -export([on_message_publish/2, on_message_deliver/3, on_message_acked/3]).
+    -export([on_message_publish/2, on_message_delivered/3, on_message_acked/3]).
 
     load(Env) ->
         emqx:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
-        emqx:hook('message.deliver', fun ?MODULE:on_message_deliver/3, [Env]),
+        emqx:hook('message.delivered', fun ?MODULE:on_message_delivered/3, [Env]),
         emqx:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]).
 
     on_message_publish(Message, _Env) ->
         io:format("publish ~s~n", [emqx_message:format(Message)]),
         {ok, Message}.
 
-    on_message_deliver(Credentials, Message, _Env) ->
-        io:format("deliver to client ~s: ~s~n", [Credentials, emqx_message:format(Message)]),
+    on_message_delivered(ClientInfo, Message, _Env) ->
+        io:format("deliver to client ~s: ~s~n", [ClientInfo, emqx_message:format(Message)]),
         {ok, Message}.
 
-    on_message_acked(Credentials, Message, _Env) ->
-        io:format("client ~s acked: ~s~n", [Credentials, emqx_message:format(Message)]),
+    on_message_acked(ClientInfo, Message, _Env) ->
+        io:format("client ~s acked: ~s~n", [ClientInfo, emqx_message:format(Message)]),
         {ok, Message}.
 
     unload() ->
         emqx:unhook('message.publish', fun ?MODULE:on_message_publish/2),
         emqx:unhook('message.acked', fun ?MODULE:on_message_acked/3),
-        emqx:unhook('message.deliver', fun ?MODULE:on_message_deliver/3).
+        emqx:unhook('message.delivered', fun ?MODULE:on_message_delivered/3).
 
 .. _auth_acl:
 
@@ -335,47 +350,46 @@ emqx 模块封装了 Hook 接口:
 
 .. code-block:: erlang
 
-    emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/1, []).
+    Env = some_input_params,
+    emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/3, [Env]).
 
-钩子回调函数必须接受一个 ``Credentials`` 参数，并且返回一个新的 Credentials:
-
-.. code-block:: erlang
-
-    on_client_authenticate(Credentials = #{password := Password}) ->
-        {ok, Credentials#{result => success}}.
-
-``Credentials`` 结构体是一个包含鉴权信息的 map:
+钩子回调函数必须接受三个 *EMQ X* 回调的参数 ``ClientInfo``  ``AuthResult`` 和 ``Env`` 并且返回一个新的 ``AuthResult``.
 
 .. code-block:: erlang
 
-    #{
-      client_id => ClientId,     %% 客户端 ID
-      username  => Username,     %% 用户名
-      peername  => Peername,     %% 客户端的 IP 地址和端口
-      password  => Password,     %% 密码 (可选)
-      result    => Result        %% 鉴权结果，success 表示认证成功,
-                                 %% bad_username_or_password 或者 not_authorized 表示失败.
-    }
+    on_client_authenticate(ClientInfo = #{password := Password}, AuthResult, Env) ->
+        {ok, AuthResult#{result => success}}.
+
+``ClientInfo`` 结构体是一个包含该客户端信息的 map，包括 clientid, username, password 等；具体可查看 ``emqx_types.erl`` 模块的定义。
+``AuthResult`` 结构体是一个用于返回认证结果的 map:
+
+.. code-block:: erlang
+
+    #{is_superuser => IsSuperUser,  %% 布尔值; 是否为超级用户
+      result => Result,             %% 枚举值; success 表示认证成功
+      anonymous => Anonymous        %% 布尔值; 是否为匿名用户
+     }
 
 编写 ACL 钩子回调函数
 ----------------------
 
-挂载回调函数到 ``client.authenticate`` 钩子:
+挂载回调函数到 ``client.check_acl`` 钩子:
 
 .. code-block:: erlang
 
-    emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/4, []).
+    Env = some_input_params,
+    emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]).
 
-回调函数必须可接受 ``Credentials``, ``AccessType``, ``Topic``, ``ACLResult`` 这几个参数， 然后返回一个新的 ACLResult:
+回调函数须接受 ``ClientInfo``, ``AccessType``, ``Topic``, ``ACLResult``, ``Env`` 这几个参数， 然后返回一个新的 ACLResult:
 
 .. code-block:: erlang
 
-    on_client_check_acl(#{client_id := ClientId}, AccessType, Topic, ACLResult) ->
+    on_client_check_acl(#{client_id := ClientId}, AccessType, Topic, ACLResult, Env) ->
         {ok, allow}.
 
-AccessType 可以是 ``publish`` 和 ``subscribe`` 之一。
-Topic 是 MQTT topic。
-ACLResult 要么是 ``allow``，要么是 ``deny``。
+AccessType: 枚举值; ``publish`` 或  ``subscribe``
+Topic: binary 类型; PUBLISH/SUBSCRIBE 报文中的主题字段
+ACLResult: 枚举值； ``allow`` 或 ``deny``
 
 ``emqx_mod_acl_internal`` 模块实现了基于 etc/acl.conf 文件的 ACL 机制，etc/acl.conf 文件的默认内容：
 

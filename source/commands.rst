@@ -16,7 +16,7 @@ status 命令
     $ ./bin/emqx_ctl status
 
     Node 'emqx@127.0.0.1' is started
-    emqx v3.1.0 is running
+    emqx v4.0.0 is running
 
 ---------
 mgmt 命令
@@ -101,9 +101,9 @@ broker 命令查询服务器基本信息，启动时间，统计数据与性能�
     $ ./bin/emqx_ctl broker
 
     sysdescr  : EMQ X Broker
-    version   : v3.1.0
+    version   : v4.0.0
     uptime    : 25 seconds
-    datetime  : 2019-04-29 10:42:10
+    datetime  : 2019-12-19 14:34:19
 
 broker stats
 ------------
@@ -112,28 +112,32 @@ broker stats
 
     $ ./bin/emqx_ctl broker stats
 
-    actions/max                   : 2
-    connections/count             : 1
-    connections/max               : 1
-    resources/max                 : 0
-    retained/count                : 2
-    retained/max                  : 2
-    routes/count                  : 0
-    routes/max                    : 0
-    rules/max                     : 0
-    sessions/count                : 0
-    sessions/max                  : 0
-    sessions/persistent/count     : 0
-    sessions/persistent/max       : 0
-    suboptions/max                : 0
-    subscribers/count             : 0
-    subscribers/max               : 1
-    subscriptions/count           : 1
-    subscriptions/max             : 0
-    subscriptions/shared/count    : 0
-    subscriptions/shared/max      : 0
-    topics/count                  : 0
-    topics/max                    : 0
+    actions.count                 : 5
+    actions.max                   : 5
+    channels.count                : 0
+    channels.max                  : 0
+    connections.count             : 0
+    connections.max               : 0
+    resources.count               : 0
+    resources.max                 : 0
+    retained.count                : 3
+    retained.max                  : 3
+    routes.count                  : 0
+    routes.max                    : 0
+    rules.count                   : 0
+    rules.max                     : 0
+    sessions.count                : 0
+    sessions.max                  : 0
+    suboptions.count              : 0
+    suboptions.max                : 0
+    subscribers.count             : 0
+    subscribers.max               : 0
+    subscriptions.count           : 0
+    subscriptions.max             : 0
+    subscriptions.shared.count    : 0
+    subscriptions.shared.max      : 0
+    topics.count                  : 0
+    topics.max                    : 0
 
 broker metrics
 --------------
@@ -142,49 +146,86 @@ broker metrics
 
     $ ./bin/emqx_ctl broker metrics
 
-    bytes/received          : 0
-    bytes/sent              : 0
-    messages/dropped        : 0
-    messages/expired        : 0
-    messages/forward        : 0
-    messages/qos0/received  : 0
-    messages/qos0/sent      : 0
-    messages/qos1/received  : 0
-    messages/qos1/sent      : 0
-    messages/qos2/dropped   : 0
-    messages/qos2/expired   : 0
-    messages/qos2/received  : 0
-    messages/qos2/sent      : 0
-    messages/received       : 0
-    messages/retained       : 3
-    messages/sent           : 0
-    packets/auth            : 0
-    packets/connack         : 0
-    packets/connect         : 0
-    packets/disconnect/recei: 0
-    packets/disconnect/sent : 0
-    packets/pingreq         : 0
-    packets/pingresp        : 0
-    packets/puback/missed   : 0
-    packets/puback/received : 0
-    packets/puback/sent     : 0
-    packets/pubcomp/missed  : 0
-    packets/pubcomp/received: 0
-    packets/pubcomp/sent    : 0
-    packets/publish/received: 0
-    packets/publish/sent    : 0
-    packets/pubrec/missed   : 0
-    packets/pubrec/received : 0
-    packets/pubrec/sent     : 0
-    packets/pubrel/missed   : 0
-    packets/pubrel/received : 0
-    packets/pubrel/sent     : 0
-    packets/received        : 0
-    packets/sent            : 0
-    packets/suback          : 0
-    packets/subscribe       : 0
-    packets/unsuback        : 0
-    packets/unsubscribe     : 0
+    actions.success               : 0
+    bytes.received                : 0
+    bytes.sent                    : 0
+    client.auth.anonymous         : 0
+    client.authenticate           : 0
+    client.check_acl              : 0
+    client.connack                : 0
+    client.connect                : 0
+    client.connected              : 0
+    client.disconnected           : 0
+    client.subscribe              : 0
+    client.unsubscribe            : 0
+    delivery.dropped              : 0
+    delivery.dropped.expired      : 0
+    delivery.dropped.no_local     : 0
+    delivery.dropped.qos0_msg     : 0
+    delivery.dropped.queue_full   : 0
+    delivery.dropped.too_large    : 0
+    messages.acked                : 0
+    messages.delayed              : 0
+    messages.delivered            : 0
+    messages.dropped              : 0
+    messages.dropped.expired      : 0
+    messages.dropped.no_subscriber: 0
+    messages.forward              : 0
+    messages.publish              : 0
+    messages.qos0.received        : 0
+    messages.qos0.sent            : 0
+    messages.qos1.received        : 0
+    messages.qos1.sent            : 0
+    messages.qos2.received        : 0
+    messages.qos2.sent            : 0
+    messages.received             : 0
+    messages.retained             : 3
+    messages.sent                 : 0
+    packets.auth.received         : 0
+    packets.auth.sent             : 0
+    packets.connack.auth_error    : 0
+    packets.connack.error         : 0
+    packets.connack.sent          : 0
+    packets.connect.received      : 0
+    packets.disconnect.received   : 0
+    packets.disconnect.sent       : 0
+    packets.pingreq.received      : 0
+    packets.pingresp.sent         : 0
+    packets.puback.inuse          : 0
+    packets.puback.missed         : 0
+    packets.puback.received       : 0
+    packets.puback.sent           : 0
+    packets.pubcomp.inuse         : 0
+    packets.pubcomp.missed        : 0
+    packets.pubcomp.received      : 0
+    packets.pubcomp.sent          : 0
+    packets.publish.auth_error    : 0
+    packets.publish.dropped       : 0
+    packets.publish.error         : 0
+    packets.publish.received      : 0
+    packets.publish.sent          : 0
+    packets.pubrec.inuse          : 0
+    packets.pubrec.missed         : 0
+    packets.pubrec.received       : 0
+    packets.pubrec.sent           : 0
+    packets.pubrel.missed         : 0
+    packets.pubrel.received       : 0
+    packets.pubrel.sent           : 0
+    packets.received              : 0
+    packets.sent                  : 0
+    packets.suback.sent           : 0
+    packets.subscribe.auth_error  : 0
+    packets.subscribe.error       : 0
+    packets.subscribe.received    : 0
+    packets.unsuback.sent         : 0
+    packets.unsubscribe.error     : 0
+    packets.unsubscribe.received  : 0
+    rules.matched                 : 0
+    session.created               : 0
+    session.discarded             : 0
+    session.resumed               : 0
+    session.takeovered            : 0
+    session.terminated            : 0
 
 ------------
 cluster 命令
@@ -249,6 +290,8 @@ emqx1 节点下删除 emqx2::
 
     $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
+.. note:: 不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
+
 --------
 acl 命令
 --------
@@ -278,21 +321,41 @@ clients list
 
     $ ./bin/emqx_ctl clients list
 
-    Connection(mosqsub/43832-airlee.lo, clean_start=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
-    Connection(mosqsub/44011-airlee.lo, clean_start=true, username=test, peername=127.0.0.1:64961, connected_at=1452929275)
+    Client(mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62135, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477947, connected_at=1576477947)
+    Client(mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477950, connected_at=1576477950)
     ...
 
 返回 Client 对象的属性:
 
-+--------------+-----------------------------+
-| clean_start  | 清除会话标记                |
-+--------------+-----------------------------+
-| username     | 用户名                      |
-+--------------+-----------------------------+
-| peername     | 对端 TCP 地址               |
-+--------------+-----------------------------+
-| connected_at | 客户端连接时间              |
-+--------------+-----------------------------+
++-------------------------+------------------------------------------+
+| username                | 用户名                                   |
++-------------------------+------------------------------------------+
+| peername                | 客户端 IP 与端口                         |
++-------------------------+------------------------------------------+
+| clean_start             | MQTT Clean Start                         |
++-------------------------+------------------------------------------+
+| keepalive               | MQTT KeepAlive                           |
++-------------------------+------------------------------------------+
+| session_expiry_interval | 会话过期间隔                             |
++-------------------------+------------------------------------------+
+| subscriptions           | 当前订阅数量                             |
++-------------------------+------------------------------------------+
+| inflight                | 当前正在下发的消息数                     |
++-------------------------+------------------------------------------+
+| awaiting_rel            | 等待客户端发送 PUBREL 的 QoS2 消息数     |
++-------------------------+------------------------------------------+
+| delivered_msgs          | EMQ X 向此客户端转发的消息数量(包含重传) |
++-------------------------+------------------------------------------+
+| enqueued_msgs           | 消息队列当前长度                         |
++-------------------------+------------------------------------------+
+| dropped_msgs            | 消息队列达到最大长度后丢弃的消息数量     |
++-------------------------+------------------------------------------+
+| connected               | 是否在线                                 |
++-------------------------+------------------------------------------+
+| created_at              | 会话创建时间                             |
++-------------------------+------------------------------------------+
+| connected_at            | 客户端连接时间                           |
++-------------------------+------------------------------------------+
 
 clients show <ClientId>
 -----------------------
@@ -301,7 +364,7 @@ clients show <ClientId>
 
     $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 
-    Connection(mosqsub/43832-airlee.lo, clean_sess=true, username=test, peername=127.0.0.1:64896, connected_at=1452929113)
+    Client(mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 
 clients kick <ClientId>
 -----------------------
@@ -309,63 +372,6 @@ clients kick <ClientId>
 根据 ClientId 踢出客户端::
 
     $ ./bin/emqx_ctl clients kick "clientid"
-
--------------
-sessions 命令
--------------
-
-sessions 命令查询 MQTT 连接会话。 *EMQ X* 消息服务器会为每个连接创建会话，clean_session 标记 true，创建临时(transient)会话；clean_session 标记为 false，创建持久会话(persistent)。
-
-+--------------------------+-----------------------------+
-| sessions list            | 查询全部会话                |
-+--------------------------+-----------------------------+
-| sessions show <ClientId> | 根据 ClientID 查询会话      |
-+--------------------------+-----------------------------+
-
-sessions list
--------------
-
-查询全部会话::
-
-    $ ./bin/emqx_ctl sessions list
-
-    Session(clientid, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760799)
-    Session(mosqsub/44101-airlee.lo, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760314)
-
-返回 Session 对象属性:
-
-+---------------------+------------------------------------------+
-| clean_start         | 建立连接时是否清理相关的会话             |
-+---------------------+------------------------------------------+
-| expiry_interval     | 会话过期间隔                             |
-+---------------------+------------------------------------------+
-| subscriptions_count | 当前订阅数量                             |
-+---------------------+------------------------------------------+
-| max_inflight        | 飞行窗口(最大允许同时下发消息数)         |
-+---------------------+------------------------------------------+
-| inflight            | 当前正在下发的消息数                     |
-+---------------------+------------------------------------------+
-| mqueue_len          | 当前缓存消息数                           |
-+---------------------+------------------------------------------+
-| mqueue_dropped      | 会话丢掉的消息数                         |
-+---------------------+------------------------------------------+
-| awaiting_rel        | 等待客户端发送 PUBREL 的 QoS2 消息数     |
-+---------------------+------------------------------------------+
-| deliver_msg         | 转发的消息数(包含重传)                   |
-+---------------------+------------------------------------------+
-| enqueue_msg         | 缓存过的消息数                           |
-+---------------------+------------------------------------------+
-| created_at          | 会话创建时间戳                           |
-+---------------------+------------------------------------------+
-
-sessions show <ClientId>
-------------------------
-
-根据 ClientId 查询会话::
-
-    $ ./bin/emqx_ctl sessions show clientid
-
-    Session(clientid, clean_start=true, expiry_interval=0, subscriptions_count=0, max_inflight=32, inflight=0, mqueue_len=0, mqueue_dropped=0, awaiting_rel=0, deliver_msg=0, enqueue_msg=0, created_at=1553760799)
 
 -----------
 routes 命令
@@ -476,31 +482,32 @@ plugins list
 
     $ ./bin/emqx_ctl plugins list
 
-    Plugin(emqx_auth_clientid, version=v3.1.0, description=EMQ X Authentication with ClientId/Password, active=false)
-    Plugin(emqx_auth_http, version=v3.1.0, description=EMQ X Authentication/ACL with HTTP API, active=false)
-    Plugin(emqx_auth_jwt, version=v3.1.0, description=EMQ X Authentication with JWT, active=false)
-    Plugin(emqx_auth_ldap, version=v3.1.0, description=EMQ X Authentication/ACL with LDAP, active=false)
-    Plugin(emqx_auth_mongo, version=v3.1.0, description=EMQ X Authentication/ACL with MongoDB, active=false)
-    Plugin(emqx_auth_mysql, version=v3.1.0, description=EMQ X Authentication/ACL with MySQL, active=false)
-    Plugin(emqx_auth_pgsql, version=v3.1.0, description=EMQ X Authentication/ACL with PostgreSQL, active=false)
-    Plugin(emqx_auth_redis, version=v3.1.0, description=EMQ X Authentication/ACL with Redis, active=false)
-    Plugin(emqx_auth_username, version=v3.1.0, description=EMQ X Authentication with Username and Password, active=false)
-    Plugin(emqx_coap, version=v3.1.0, description=EMQ X CoAP Gateway, active=false)
-    Plugin(emqx_dashboard, version=v3.1.0, description=EMQ X Web Dashboard, active=true)
-    Plugin(emqx_delayed_publish, version=v3.1.0, description=EMQ X Delayed Publish, active=false)
-    Plugin(emqx_lua_hook, version=v3.1.0, description=EMQ X Lua Hooks, active=false)
-    Plugin(emqx_lwm2m, version=v3.1.0, description=EMQ X LwM2M Gateway, active=false)
-    Plugin(emqx_management, version=v3.1.0, description=EMQ X Management API and CLI, active=true)
-    Plugin(emqx_plugin_template, version=v3.1.0, description=EMQ X Plugin Template, active=false)
-    Plugin(emqx_psk_file, version=v3.1.0, description=EMQX PSK Plugin from File, active=false)
-    Plugin(emqx_recon, version=v3.1.0, description=EMQ X Recon Plugin, active=true)
-    Plugin(emqx_reloader, version=v3.1.0, description=EMQ X Reloader Plugin, active=false)
-    Plugin(emqx_retainer, version=v3.1.0, description=EMQ X Retainer, active=true)
-    Plugin(emqx_rule_engine, version=v3.1.0, description=EMQ X Rule Engine, active=true)
-    Plugin(emqx_sn, version=v3.1.0, description=EMQ X MQTT SN Plugin, active=false)
-    Plugin(emqx_statsd, version=v3.1.0, description=Statsd for EMQ X, active=false)
-    Plugin(emqx_stomp, version=v3.1.0, description=EMQ X Stomp Protocol Plugin, active=false)
-    Plugin(emqx_web_hook, version=v3.1.0, description=EMQ X Webhook Plugin, active=false)
+    Plugin(emqx_auth_clientid, version=v4.0.0, description=EMQ X Authentication with ClientId/Password, active=false)
+    Plugin(emqx_auth_http, version=v4.0.0, description=EMQ X Authentication/ACL with HTTP API, active=false)
+    Plugin(emqx_auth_jwt, version=v4.0.0, description=EMQ X Authentication with JWT, active=false)
+    Plugin(emqx_auth_ldap, version=v4.0.0, description=EMQ X Authentication/ACL with LDAP, active=false)
+    Plugin(emqx_auth_mongo, version=v4.0.0, description=EMQ X Authentication/ACL with MongoDB, active=false)
+    Plugin(emqx_auth_mysql, version=v4.0.0, description=EMQ X Authentication/ACL with MySQL, active=false)
+    Plugin(emqx_auth_pgsql, version=v4.0.0, description=EMQ X Authentication/ACL with PostgreSQL, active=false)
+    Plugin(emqx_auth_redis, version=v4.0.0, description=EMQ X Authentication/ACL with Redis, active=false)
+    Plugin(emqx_auth_username, version=v4.0.0, description=EMQ X Authentication with Username and Password, active=false)
+    Plugin(emqx_bridge_mqtt, version=v4.0.0, description=EMQ X Bridge to MQTT Broker, active=false)
+    Plugin(emqx_coap, version=v4.0.0, description=EMQ X CoAP Gateway, active=false)
+    Plugin(emqx_dashboard, version=v4.0.0, description=EMQ X Web Dashboard, active=true)
+    Plugin(emqx_delayed_publish, version=v4.0.0, description=EMQ X Delayed Publish, active=false)
+    Plugin(emqx_lua_hook, version=v4.0.0, description=EMQ X Lua Hooks, active=false)
+    Plugin(emqx_lwm2m, version=v4.0.0, description=EMQ X LwM2M Gateway, active=false)
+    Plugin(emqx_management, version=v4.0.0, description=EMQ X Management API and CLI, active=true)
+    Plugin(emqx_plugin_template, version=v4.0.0, description=EMQ X Plugin Template, active=false)
+    Plugin(emqx_psk_file, version=v4.0.0, description=EMQX PSK Plugin from File, active=false)
+    Plugin(emqx_recon, version=v4.0.0, description=EMQ X Recon Plugin, active=true)
+    Plugin(emqx_reloader, version=v4.0.0, description=EMQ X Reloader Plugin, active=false)
+    Plugin(emqx_retainer, version=v4.0.0, description=EMQ X Retainer, active=true)
+    Plugin(emqx_rule_engine, version=v4.0.0, description=EMQ X Rule Engine, active=true)
+    Plugin(emqx_sn, version=v4.0.0, description=EMQ X MQTT SN Plugin, active=false)
+    Plugin(emqx_statsd, version=v4.0.0, description=Statsd for EMQ X, active=false)
+    Plugin(emqx_stomp, version=v4.0.0, description=EMQ X Stomp Protocol Plugin, active=false)
+    Plugin(emqx_web_hook, version=v4.0.0, description=EMQ X Webhook Plugin, active=false)
 
 插件属性:
 
@@ -519,7 +526,6 @@ plugins load <Plugin>
 
     $ ./bin/emqx_ctl plugins load emqx_lua_hook
 
-    Start apps: [emqx_lua_hook]
     Plugin emqx_lua_hook loaded successfully.
 
 plugins unload <Plugin>
@@ -539,119 +545,6 @@ plugins reload <Plugin>
     $ ./bin/emqx_ctl plugins reload emqx_lua_hook
 
     Plugin emqx_lua_hook reloaded successfully.
-
-------------
-bridges 命令
-------------
-
-bridges 命令用于在多台 *EMQ X* 服务器节点间创建桥接::
-
-                  ---------                     ---------
-    Publisher --> | node1 | --Bridge Forward--> | node2 | --> Subscriber
-                  ---------                     ---------
-
-+-----------------------------------------------+----------------------------+
-| bridges list                                  | 查询全部桥接               |
-+-----------------------------------------------+----------------------------+
-| bridges start <Name>                          | 开启一个桥接               |
-+-----------------------------------------------+----------------------------+
-| bridges stop <Name>                           | 停止一个桥接               |
-+-----------------------------------------------+----------------------------+
-| bridges forwards <Name>                       | 列出指定 bridge 的转发主题 |
-+-----------------------------------------------+----------------------------+
-| bridges add-forward <Name> <Topic>            | 向指定 bridge 添加转发主题 |
-+-----------------------------------------------+----------------------------+
-| bridges del-forward <Name> <Topic>            | 从指定 bridge 删除转发主题 |
-+-----------------------------------------------+----------------------------+
-| bridges subscriptions <Name>                  | 列出指定 bridge 的订阅主题 |
-+-----------------------------------------------+----------------------------+
-| bridges add-subscription <Name> <Topic> <QoS> | 向指定 bridge 添加订阅主题 |
-+-----------------------------------------------+----------------------------+
-| bridges del-subscription <Name> <Topic>       | 从指定 bridge 删除订阅主题 |
-+-----------------------------------------------+----------------------------+
-
-关于 bridges 的配置项在 emqx/emqx.config文件内。
-
-bridges list
--------------
-
-查询全部桥接::
-
-    $ ./bin/emqx_ctl bridges list
-
-    name: emqx     status: Stopped
-
-bridges start <Name>
---------------------
-
-开启一个桥接::
-
-    $ ./bin/emqx_ctl bridges start emqx
-
-    Start bridge successfully.
-
-bridges stop <Name>
---------------------
-
-停止一个桥接::
-
-    $ ./bin/emqx_ctl bridges stop emqx
-
-    Stop bridge successfully.
-
-bridges forwards <Name>
------------------------
-
-列出指定 bridge 的转发主题::
-
-    $ ./bin/emqx_ctl bridges forwards emqx
-
-    topic:   sensor/#
-
-bridges add-forward <Name> <Topic>
-----------------------------------
-
-向指定 bridge 添加转发主题::
-
-    $ ./bin/emqx_ctl bridges add-forward emqx device_status/#
-
-    Add-forward topic successfully.
-
-bridges del-forward <Name> <Topic>
-----------------------------------
-
-从指定 bridge 删除转发主题::
-
-    $ ./bin/emqx_ctl bridges del-forward emqx device_status/#
-
-    Del-forward topic successfully.
-
-bridges add-subscription <Name> <Topic> <QoS>
----------------------------------------------
-
-向指定 bridge 添加订阅主题::
-
-    $ ./bin/emqx_ctl bridges add-subscription emqx cmd/topic 1
-
-    Add-subscription topic successfully.
-
-bridges subscriptions <Name>
-----------------------------
-
-列出指定 bridge 的订阅::
-
-    $ ./bin/emqx_ctl bridges subscriptions emqx
-
-    topic: cmd/topic, qos: 1
-
-bridges del-subscription <Name> <Topic>
----------------------------------------
-
-从指定 bridge 删除订阅主题::
-
-    $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic
-
-    Del-subscription topic successfully.
 
 -------
 vm 命令
@@ -859,11 +752,11 @@ trace start client <ClientId> <File> [<Level>]
 
     $ ./bin/emqx_ctl trace start client clientid log/clientid_trace.log
 
-    trace client clientid successfully
+    trace clientid clientid successfully
 
     $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 
-    trace client_id clientid2 successfully
+    trace clientid clientid2 successfully
 
 trace stop client <ClientId>
 ----------------------------
@@ -872,7 +765,7 @@ trace stop client <ClientId>
 
     $ ./bin/emqx_ctl trace stop client clientid
 
-    stop tracing client_id clientid successfully
+    stop tracing clientid clientid successfully
 
 trace start topic <Topic> <File> [<Level>]
 ------------------------------------------
@@ -907,7 +800,7 @@ trace list
 
     $ ./bin/emqx_ctl trace list
 
-    Trace(client_id=clientid2, level=error, destination="log/clientid2_trace.log")
+    Trace(clientid=clientid2, level=error, destination="log/clientid2_trace.log")
     Trace(topic=topic2, level=error, destination="log/topic2_trace.log")
 
 ---------
@@ -949,7 +842,7 @@ listeners list
       max_conns       : 512
       current_conn    : 0
       shutdown_count  : []
-    listener on http:management:8080
+    listener on http:management:8081
       acceptors       : 2
       max_conns       : 512
       current_conn    : 0
@@ -976,7 +869,6 @@ listener 参数说明:
 +-----------------+-----------------------------------+
 | shutdown_count  | Socket 关闭原因统计               |
 +-----------------+-----------------------------------+
-
 
 listeners stop <Proto> <Port>
 ------------------------------
@@ -1383,3 +1275,63 @@ admins del <Username>
 
     ok
 
+------------
+luahook 命令
+------------
+
++--------------------------+------------------------------------------------------------------------------+
+| luahook load <Script>    | 加载 lua 脚本                                                                |
++--------------------------+------------------------------------------------------------------------------+
+| luahook unload <Script>  | 卸载 lua 脚本                                                                |
++--------------------------+------------------------------------------------------------------------------+
+| luahook reload <Script>  | 重新加载 lua 脚本                                                            |
++--------------------------+------------------------------------------------------------------------------+
+| luahook enable <Script>  | 将名为 <Script>.x 的 lua 脚本重命名为 <Script> 并加载                        |
++--------------------------+------------------------------------------------------------------------------+
+| luahook disable <Script> | 卸载名为 <Script> 的 lua 脚本并重命名为 <Script>.x，以避免下次启动时自动加载 |
++--------------------------+------------------------------------------------------------------------------+
+
+luahook load <Script>
+----------------------
+
+加载 lua 脚本::
+
+    $ ./bin/emqx_ctl luahook load test.lua
+
+    Load "test.lua" successfully
+
+luahook unload <Script>
+------------------------
+
+卸载 lua 脚本::
+
+    $ ./bin/emqx_ctl luahook unload test.lua
+
+    Unload "test.lua" successfully
+
+luahook reload <Script>
+------------------------
+
+重新加载 lua 脚本::
+
+    $ ./bin/emqx_ctl luahook reload test.lua
+
+    Reload "test.lua" successfully
+
+luahook enable <Script>
+------------------------
+
+将名为 <Script>.x 的 lua 脚本重命名为 <Script> 并加载::
+
+    $ ./bin/emqx_ctl luahook enable test.lua
+
+    Enable "test.lua" successfully
+
+luahook disable <Script>
+------------------------
+
+卸载名为 <Script> 的 lua 脚本并重命名为 <Script>.x，以避免下次启动时自动加载::
+
+    $ ./bin/emqx_ctl luahook disable test.lua
+
+    Disable "test.lua" successfully

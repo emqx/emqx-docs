@@ -7,7 +7,7 @@
 *EMQ X* - 百万级开源 MQTT 消息服务器
 ====================================
 
-*EMQ X* R3.2 (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 语言平台开发，支持大规模连接和分布式集群，发布订阅模式的开源 MQTT 消息服务器。
+*EMQ X* (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 语言平台开发，支持大规模连接和分布式集群，发布订阅模式的开源 MQTT 消息服务器。
 
 .. NOTE:: 3.0 版本开始 emqttd 消息服务器自正式更名为 *EMQ X*
 
@@ -19,7 +19,7 @@
 
 .. image:: ./_static/images/emqtt.png
 
-*EMQ X* R3.2 项目文档目录:
+*EMQ X* 项目文档目录:
 
 .. toctree::
    :maxdepth: 2

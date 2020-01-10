@@ -8,7 +8,7 @@
 .. _intro:
 
 ---------------------------
-*EMQ X* R3.2 消息服务器简介
+*EMQ X* 消息服务器简介
 ---------------------------
 
 *EMQ X* (Erlang/Enterprise/Elastic MQTT Broker) 是基于 Erlang/OTP 平台开发的开源物联网 MQTT 消息服务器。Erlang/OTP 是出色的软实时(Soft-Realtime)、低延时(Low-Latency)、分布式(Distributed) 的语言平台。MQTT 是轻量的(Lightweight)、发布订阅模式(PubSub) 的物联网消息协议。
@@ -54,7 +54,7 @@ MQTT 是基于 **发布(Publish)/订阅(Subscribe)** 模式来进行通信及数
 .. _features:
 
 -------------------------------
-*EMQ X* R3.1 消息服务器功能列表
+*EMQ X* 消息服务器功能列表
 -------------------------------
 
 * 完整的 MQTT V3.1/V3.1.1 及V5.0协议规范支持
@@ -106,7 +106,7 @@ MQTT 是基于 **发布(Publish)/订阅(Subscribe)** 模式来进行通信及数
 
 .. code-block:: bash
 
-    unzip emqx-macosx-v3.2.0.zip && cd emqx
+    unzip emqx-macosx-v4.0.0.zip && cd emqx
 
     # 启动emqx
     ./bin/emqx start

@@ -955,8 +955,8 @@ etc/plugins/emqx_bridge_mqtt.conf
     ## 枚举值: mqttv3 | mqttv4 | mqttv5
     bridge.mqtt.aws.proto_ver = mqttv4
 
-    ## 客户端的 client_id
-    bridge.mqtt.aws.client_id = bridge_emq
+    ## 客户端的 clientid
+    bridge.mqtt.aws.clientid = bridge_emq
 
     ## 客户端的 clean_start 字段
     ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
@@ -1248,8 +1248,8 @@ etc/plugins/emqx_reloader.conf:
 
 开发者需要自定义插件时，可以查看该插件的代码和结构，以更快地开发一个标准的 *EMQ X* 插件。插件实际是一个普通的 ``Erlang Application``，其配置文件为: ``etc/${PluginName}.config``。
 
-EMQ X R3.2 插件开发
---------------------
+EMQ X 插件开发
+-----------------
 
 创建插件项目
 ::::::::::::
@@ -1274,7 +1274,7 @@ EMQ X R3.2 插件开发
 
     init(Opts) -> {ok, Opts}.
 
-    check(_Credentials = #{client_id := ClientId, username := Username, password := Password}, _State) ->
+    check(_ClientInfo = #{clientid := ClientId, username := Username, password := Password}, _State) ->
         io:format("Auth Demo: clientId=~p, username=~p, password=~p~n", [ClientId, Username, Password]),
         ok.
 
@@ -1298,8 +1298,8 @@ EMQ X R3.2 插件开发
     init(Opts) ->
         {ok, Opts}.
 
-    check_acl({Credentials, PubSub, _NoMatchAction, Topic}, _State) ->
-        io:format("ACL Demo: ~p ~p ~p~n", [Credentials, PubSub, Topic]),
+    check_acl({ClientInfo, PubSub, _NoMatchAction, Topic}, _State) ->
+        io:format("ACL Demo: ~p ~p ~p~n", [ClientInfo, PubSub, Topic]),
         allow.
 
     reload_acl(_State) ->
@@ -1323,36 +1323,43 @@ emqx_plugin_template.erl:
 
 .. code:: erlang
 
-    %% Called when the plugin application start
-    load(Env) ->
-        emqx:hook('client.authenticate', fun ?MODULE:on_client_authenticate/2, [Env]),
-        emqx:hook('client.check_acl', fun ?MODULE:on_client_check_acl/5, [Env]),
-        emqx:hook('client.connected', fun ?MODULE:on_client_connected/4, [Env]),
-        emqx:hook('client.disconnected', fun ?MODULE:on_client_disconnected/3, [Env]),
-        emqx:hook('client.subscribe', fun ?MODULE:on_client_subscribe/3, [Env]),
-        emqx:hook('client.unsubscribe', fun ?MODULE:on_client_unsubscribe/3, [Env]),
-        emqx:hook('session.created', fun ?MODULE:on_session_created/3, [Env]),
-        emqx:hook('session.resumed', fun ?MODULE:on_session_resumed/3, [Env]),
-        emqx:hook('session.subscribed', fun ?MODULE:on_session_subscribed/4, [Env]),
-        emqx:hook('session.unsubscribed', fun ?MODULE:on_session_unsubscribed/4, [Env]),
-        emqx:hook('session.terminated', fun ?MODULE:on_session_terminated/3, [Env]),
-        emqx:hook('message.publish', fun ?MODULE:on_message_publish/2, [Env]),
-        emqx:hook('message.deliver', fun ?MODULE:on_message_deliver/3, [Env]),
-        emqx:hook('message.acked', fun ?MODULE:on_message_acked/3, [Env]),
-        emqx:hook('message.dropped', fun ?MODULE:on_message_dropped/3, [Env]).
+  load(Env) ->
+      emqx:hook('client.connect',      {?MODULE, on_client_connect, [Env]}),
+      emqx:hook('client.connack',      {?MODULE, on_client_connack, [Env]}),
+      emqx:hook('client.connected',    {?MODULE, on_client_connected, [Env]}),
+      emqx:hook('client.disconnected', {?MODULE, on_client_disconnected, [Env]}),
+      emqx:hook('client.authenticate', {?MODULE, on_client_authenticate, [Env]}),
+      emqx:hook('client.check_acl',    {?MODULE, on_client_check_acl, [Env]}),
+      emqx:hook('client.subscribe',    {?MODULE, on_client_subscribe, [Env]}),
+      emqx:hook('client.unsubscribe',  {?MODULE, on_client_unsubscribe, [Env]}),
+      emqx:hook('session.created',     {?MODULE, on_session_created, [Env]}),
+      emqx:hook('session.subscribed',  {?MODULE, on_session_subscribed, [Env]}),
+      emqx:hook('session.unsubscribed',{?MODULE, on_session_unsubscribed, [Env]}),
+      emqx:hook('session.resumed',     {?MODULE, on_session_resumed, [Env]}),
+      emqx:hook('session.discarded',   {?MODULE, on_session_discarded, [Env]}),
+      emqx:hook('session.takeovered',  {?MODULE, on_session_takeovered, [Env]}),
+      emqx:hook('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
+      emqx:hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
+      emqx:hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
+      emqx:hook('message.acked',       {?MODULE, on_message_acked, [Env]}),
+      emqx:hook('message.dropped',     {?MODULE, on_message_dropped, [Env]}).
 
 所有可用钩子(Hook)说明:
 
 +------------------------+----------------------------------+
 | 钩子                   | 说明                             |
 +========================+==================================+
-| client.authenticate    | 连接认证                         |
+| client.connect         | 收到客户端连接报文               |
 +------------------------+----------------------------------+
-| client.check_acl       | ACL 校验                         |
+| client.connack         | 下发连接应答                     |
 +------------------------+----------------------------------+
 | client.connected       | 客户端上线                       |
 +------------------------+----------------------------------+
 | client.disconnected    | 客户端连接断开                   |
++------------------------+----------------------------------+
+| client.authenticate    | 连接认证                         |
++------------------------+----------------------------------+
+| client.check_acl       | ACL 校验                         |
 +------------------------+----------------------------------+
 | client.subscribe       | 客户端订阅主题                   |
 +------------------------+----------------------------------+
@@ -1360,17 +1367,21 @@ emqx_plugin_template.erl:
 +------------------------+----------------------------------+
 | session.created        | 会话创建                         |
 +------------------------+----------------------------------+
-| session.resumed        | 会话恢复                         |
-+------------------------+----------------------------------+
 | session.subscribed     | 会话订阅主题后                   |
 +------------------------+----------------------------------+
 | session.unsubscribed   | 会话取消订阅主题后               |
++------------------------+----------------------------------+
+| session.resumed        | 会话恢复                         |
++------------------------+----------------------------------+
+| session.discarded      | 会话被删除                       |
++------------------------+----------------------------------+
+| session.takeovered     | 会话被其它节点接管               |
 +------------------------+----------------------------------+
 | session.terminated     | 会话终止                         |
 +------------------------+----------------------------------+
 | message.publish        | MQTT 消息发布                    |
 +------------------------+----------------------------------+
-| message.deliver        | MQTT 消息进行投递                |
+| message.delivered      | MQTT 消息进行投递                |
 +------------------------+----------------------------------+
 | message.acked          | MQTT 消息回执                    |
 +------------------------+----------------------------------+
