@@ -13,7 +13,7 @@ URL 地址
 
 REST API 访问URL地址::
 
-    http(s)://host:8081/api/v3/
+    http(s)://host:8081/api/v4/
 
 -----------
 Basic 认证
@@ -24,7 +24,7 @@ Basic 认证
 .. code-block:: bash
 
     # 例如：获取当前集群状态
-    curl -v --basic -u <appid>:<appsecret> -k http://localhost:8081/api/v3/brokers
+    curl -v --basic -u <appid>:<appsecret> -k http://localhost:8081/api/v4/brokers
 
 ----------
 API 信息
@@ -35,11 +35,11 @@ API 信息
 
 API 定义::
 
-    GET api/v3/
+    GET api/v4/
 
 请求示例::
 
-    GET api/v3/
+    GET api/v4/
 
 返回数据:
 
@@ -552,11 +552,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/brokers/
+    GET api/v4/brokers/
 
 请求示例::
 
-    GET api/v3/brokers/
+    GET api/v4/brokers/
 
 返回数据:
 
@@ -582,11 +582,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/brokers/${node}
+    GET api/v4/brokers/${node}
 
 请求示例::
 
-    GET api/v3/brokers/emqx@127.0.0.1
+    GET api/v4/brokers/emqx@127.0.0.1
 
 返回数据:
 
@@ -609,11 +609,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/
+    GET api/v4/nodes/
 
 请求示例::
 
-    GET api/v3/nodes/
+    GET api/v4/nodes/
 
 返回数据:
 
@@ -647,11 +647,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}
+    GET api/v4/nodes/${node}
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1
+    GET api/v4/nodes/emqx@127.0.0.1
 
 返回数据:
 
@@ -686,11 +686,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/clients
+    GET api/v4/clients
 
 请求示例::
 
-    GET api/v3/clients?_page=1&_limit=10000
+    GET api/v4/clients?_page=1&_limit=10000
 
 返回数据:
 
@@ -749,11 +749,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/clients
+    GET api/v4/nodes/${node}/clients
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/clients?_page=1&_limit=10000
+    GET api/v4/nodes/emqx@127.0.0.1/clients?_page=1&_limit=10000
 
 返回数据:
 
@@ -812,11 +812,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/clients/${clientid}
+    GET api/v4/clients/${clientid}
 
 请求示例::
 
-    GET api/v3/clients/mosquitto_mqtt
+    GET api/v4/clients/mosquitto_mqtt
 
 返回数据:
 
@@ -870,11 +870,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/clients/${clientid}
+    GET api/v4/nodes/${node}/clients/${clientid}
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/clients/mosquitto_mqtt
+    GET api/v4/nodes/emqx@127.0.0.1/clients/mosquitto_mqtt
 
 返回数据:
 
@@ -928,11 +928,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/clients/username/${username}
+    GET api/v4/clients/username/${username}
 
 请求示例::
 
-    GET api/v3/clients/username/test
+    GET api/v4/clients/username/test
 
 返回数据:
 
@@ -986,11 +986,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${nodes}/clients/username/${username}
+    GET api/v4/nodes/${nodes}/clients/username/${username}
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/clients/username/test
+    GET api/v4/nodes/emqx@127.0.0.1/clients/username/test
 
 返回数据:
 
@@ -1044,11 +1044,11 @@ API 定义::
 
 API 定义::
 
-    DELETE api/v3/clients/${clientid}
+    DELETE api/v4/clients/${clientid}
 
 请求示例::
 
-    DELETE api/v3/clients/mosquitto_mqtt
+    DELETE api/v4/clients/mosquitto_mqtt
 
 返回数据:
 
@@ -1063,11 +1063,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/clients/${clientid}/acl_cache
+    GET api/v4/clients/${clientid}/acl_cache
 
 请求示例::
 
-    GET api/v3/clients/mosquitto_mqtt/acl_cache
+    GET api/v4/clients/mosquitto_mqtt/acl_cache
 
 返回数据:
 
@@ -1090,11 +1090,11 @@ API 定义::
 
 API 定义::
 
-    DELETE api/v3/clients/${clientid}/acl_cache
+    DELETE api/v4/clients/${clientid}/acl_cache
 
 请求示例::
 
-    DELETE api/v3/clients/mosquitto_mqtt/acl_cache
+    DELETE api/v4/clients/mosquitto_mqtt/acl_cache
 
 返回数据:
 
@@ -1113,11 +1113,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/subscriptions
+    GET api/v4/subscriptions
 
 请求示例::
 
-    GET api/v3/subscriptions?_page=1&_limit=10000
+    GET api/v4/subscriptions?_page=1&_limit=10000
 
 返回数据:
 
@@ -1151,11 +1151,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/subscriptions/${clientid}
+    GET api/v4/subscriptions/${clientid}
 
 请求示例::
 
-    GET api/v3/subscriptions/mosquitto_mqtt
+    GET api/v4/subscriptions/mosquitto_mqtt
 
 返回数据:
 
@@ -1178,11 +1178,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/subscriptions
+    GET api/v4/nodes/${node}/subscriptions
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/subscriptions?_page=1&_limit=10000
+    GET api/v4/nodes/emqx@127.0.0.1/subscriptions?_page=1&_limit=10000
 
 返回数据:
 
@@ -1216,11 +1216,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/subscriptions/${clientid}
+    GET api/v4/nodes/${node}/subscriptions/${clientid}
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/subscriptions/mosquitto_mqtt
+    GET api/v4/nodes/emqx@127.0.0.1/subscriptions/mosquitto_mqtt
 
 返回数据:
 
@@ -1247,11 +1247,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/routes
+    GET api/v4/routes
 
 请求示例::
 
-    GET api/v3/routes
+    GET api/v4/routes
 
 返回数据:
 
@@ -1281,11 +1281,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/routes/${topic}
+    GET api/v4/routes/${topic}
 
 请求示例::
 
-    GET api/v3/routes/t
+    GET api/v4/routes/t
 
 返回数据:
 
@@ -1310,7 +1310,7 @@ API 定义::
 
 API 定义::
 
-    POST api/v3/mqtt/publish
+    POST api/v4/mqtt/publish
 
 请求参数:
 
@@ -1326,7 +1326,7 @@ API 定义::
 
 请求示例::
 
-    POST api/v3/mqtt/publish
+    POST api/v4/mqtt/publish
 
 返回数据:
 
@@ -1341,7 +1341,7 @@ API 定义::
 
 API 定义::
 
-    POST api/v3/mqtt/subscribe
+    POST api/v4/mqtt/subscribe
 
 请求参数:
 
@@ -1355,7 +1355,7 @@ API 定义::
 
 请求示例::
 
-    POST api/v3/mqtt/subscribe
+    POST api/v4/mqtt/subscribe
 
 返回数据:
 
@@ -1370,7 +1370,7 @@ API 定义::
 
 API 定义::
 
-    POST api/v3/mqtt/unsubscribe
+    POST api/v4/mqtt/unsubscribe
 
 请求参数:
 
@@ -1383,7 +1383,7 @@ API 定义::
 
 请求示例::
 
-    POST api/v3/mqtt/unsubscribe
+    POST api/v4/mqtt/unsubscribe
 
 返回数据:
 
@@ -1402,11 +1402,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/plugins
+    GET api/v4/plugins
 
 请求示例::
 
-    GET api/v3/plugins
+    GET api/v4/plugins
 
 返回数据:
 
@@ -1603,11 +1603,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/plugins/
+    GET api/v4/nodes/${node}/plugins/
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/plugins/
+    GET api/v4/nodes/emqx@127.0.0.1/plugins/
 
 返回数据:
 
@@ -1799,11 +1799,11 @@ API 定义::
 
 API 定义::
 
-    PUT api/v3/nodes/${node}/plugins/${plugin}/load
+    PUT api/v4/nodes/${node}/plugins/${plugin}/load
 
 请求示例::
 
-    PUT api/v3/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/load
+    PUT api/v4/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/load
 
 返回数据:
 
@@ -1818,11 +1818,11 @@ API 定义::
 
 API 定义::
 
-    PUT api/v3/nodes/${node}/plugins/${plugin}/unload
+    PUT api/v4/nodes/${node}/plugins/${plugin}/unload
 
 请求示例::
 
-    PUT api/v3/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/unload
+    PUT api/v4/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/unload
 
 返回数据:
 
@@ -1837,11 +1837,11 @@ API 定义::
 
 API 定义::
 
-    PUT api/v3/nodes/${node}/plugins/${plugin}/reload
+    PUT api/v4/nodes/${node}/plugins/${plugin}/reload
 
 请求示例::
 
-    PUT api/v3/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/reload
+    PUT api/v4/nodes/emqx@127.0.0.1/plugins/emqx_auth_clientid/reload
 
 返回数据:
 
@@ -1860,11 +1860,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/listeners/
+    GET api/v4/listeners/
 
 请求示例::
 
-    GET api/v3/listeners/
+    GET api/v4/listeners/
 
 返回数据:
 
@@ -1945,11 +1945,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/listeners
+    GET api/v4/nodes/${node}/listeners
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/listeners
+    GET api/v4/nodes/emqx@127.0.0.1/listeners
 
 返回数据:
 
@@ -2029,11 +2029,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/metrics/
+    GET api/v4/metrics/
 
 请求示例::
 
-    GET api/v3/metrics/
+    GET api/v4/metrics/
 
 返回数据:
 
@@ -2116,11 +2116,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/metrics/
+    GET api/v4/nodes/${node}/metrics/
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/metrics/
+    GET api/v4/nodes/emqx@127.0.0.1/metrics/
 
 返回数据:
 
@@ -2202,11 +2202,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/stats
+    GET api/v4/stats
 
 请求示例::
 
-    GET api/v3/stats
+    GET api/v4/stats
 
 返回数据:
 
@@ -2254,11 +2254,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/nodes/${node}/stats
+    GET api/v4/nodes/${node}/stats
 
 请求示例::
 
-    GET api/v3/nodes/emqx@127.0.0.1/stats
+    GET api/v4/nodes/emqx@127.0.0.1/stats
 
 返回数据:
 
@@ -2305,11 +2305,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/alarms/present
+    GET api/v4/alarms/present
 
 请求示例::
 
-    GET api/v3/alarms/present
+    GET api/v4/alarms/present
 
 返回数据:
 
@@ -2330,11 +2330,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/alarms/present/${node}
+    GET api/v4/alarms/present/${node}
 
 请求示例::
 
-    GET api/v3/alarms/present/emqx@127.0.0.1
+    GET api/v4/alarms/present/emqx@127.0.0.1
 
 返回数据:
 
@@ -2350,11 +2350,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/alarms/history
+    GET api/v4/alarms/history
 
 请求示例::
 
-    GET api/v3/alarms/history
+    GET api/v4/alarms/history
 
 返回数据:
 
@@ -2381,11 +2381,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/alarms/present/${node}
+    GET api/v4/alarms/present/${node}
 
 请求示例::
 
-    GET api/v3/alarms/present/emqx@127.0.0.1
+    GET api/v4/alarms/present/emqx@127.0.0.1
 
 返回数据:
 
@@ -2411,11 +2411,11 @@ API 定义::
 
 API 定义::
 
-    GET api/v3/banned
+    GET api/v4/banned
 
 请求示例::
 
-    GET api/v3/banned?_page=1&_limit=10000
+    GET api/v4/banned?_page=1&_limit=10000
 
 返回数据:
 
@@ -2445,7 +2445,7 @@ API 定义::
 
 API 定义::
 
-    POST api/v3/banned
+    POST api/v4/banned
 
 请求参数:
 
@@ -2460,7 +2460,7 @@ API 定义::
  
 请求示例::
 
-    POST api/v3/banned/
+    POST api/v4/banned/
 
 返回数据:
 
@@ -2481,11 +2481,11 @@ API 定义::
 
 API 定义::
 
-    DELETE api/v3/banned/${as}/${who}
+    DELETE api/v4/banned/${as}/${who}
 
 请求示例::
 
-    DELETE api/v3/banned/clientid/mqttjs_ab9069449e
+    DELETE api/v4/banned/clientid/mqttjs_ab9069449e
 
 返回数据:
 
@@ -2504,7 +2504,7 @@ HTTP 状态码大于 500 时响应携带错误信息返回
 
 错误示例::
 
-    PUT api/v3/nodes/emqx@127.0.0.1/plugins/emqx_recon/load
+    PUT api/v4/nodes/emqx@127.0.0.1/plugins/emqx_recon/load
 
 返回数据:
 
@@ -2545,7 +2545,7 @@ HTTP 状态码大于 500 时响应携带错误信息返回
 
 API 定义::
 
-  POST api/v3/rules
+  POST api/v4/rules
 
 参数定义:
 
@@ -2611,11 +2611,11 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/rules/${rule_id}
+  GET api/v4/rules/${rule_id}
 
 请求参数示例::
 
-  GET api/v3/rules/test-rule:1556263150688255821
+  GET api/v4/rules/test-rule:1556263150688255821
 
 返回数据示例:
 
@@ -2645,7 +2645,7 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/rules
+  GET api/v4/rules
 
 返回数据示例:
 
@@ -2675,11 +2675,11 @@ API 定义::
 
 API 定义::
 
-  DELETE api/v3/rules/${rule_id}
+  DELETE api/v4/rules/${rule_id}
 
 请求参数示例::
 
-  DELETE api/v3/rules/test-rule:1556263150688255821
+  DELETE api/v4/rules/test-rule:1556263150688255821
 
 返回数据示例:
 
@@ -2694,11 +2694,11 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/actions?for=${hook_type}
+  GET api/v4/actions?for=${hook_type}
 
 请求参示例::
 
-  GET api/v3/actions
+  GET api/v4/actions
 
 返回数据示例:
 
@@ -2768,7 +2768,7 @@ API 定义::
 
 请求参数示例::
 
-  GET api/v3/actions?for=client.connected
+  GET api/v4/actions?for=client.connected
 
 返回数据示例:
 
@@ -2791,11 +2791,11 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/actions/:action_name
+  GET api/v4/actions/:action_name
 
 请求参数示例::
 
-  GET api/v3/actions/built_in:inspect_action
+  GET api/v4/actions/built_in:inspect_action
 
 返回数据示例:
 
@@ -2818,7 +2818,7 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resource_types
+  GET api/v4/resource_types
 
 返回数据示例:
 
@@ -2852,11 +2852,11 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resource_types/${type}
+  GET api/v4/resource_types/${type}
 
 请求参数示例::
 
-  GET api/v3/resource_types/built_in
+  GET api/v4/resource_types/built_in
 
 返回数据示例:
 
@@ -2877,11 +2877,11 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resource_types/${type}/resources
+  GET api/v4/resource_types/${type}/resources
 
 请求参数示例::
 
-  GET api/v3/resource_types/built_in/resources
+  GET api/v4/resource_types/built_in/resources
 
 返回数据示例:
 
@@ -2906,11 +2906,11 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resource_types/${type}/actions
+  GET api/v4/resource_types/${type}/actions
 
 请求参数示例::
 
-  GET api/v3/resource_types/built_in/actions
+  GET api/v4/resource_types/built_in/actions
 
 返回数据示例:
 
@@ -2948,7 +2948,7 @@ API 定义::
 
 API 定义::
 
-  POST api/v3/resources
+  POST api/v4/resources
 
 参数定义:
 
@@ -2996,7 +2996,7 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resources
+  GET api/v4/resources
 
 返回数据示例:
 
@@ -3030,11 +3030,11 @@ API 定义::
 
 API 定义::
 
-  GET api/v3/resources/:resource_id
+  GET api/v4/resources/:resource_id
 
 请求参数示例::
 
-  GET api/v3/resources/built_in:test-resource
+  GET api/v4/resources/built_in:test-resource
 
 返回数据示例:
 
@@ -3059,11 +3059,11 @@ API 定义::
 
 API 定义::
 
-  DELETE api/v3/resources/:resource_id
+  DELETE api/v4/resources/:resource_id
 
 请求参数示例::
 
-  DELETE api/v3/resources/built_in:test-resource
+  DELETE api/v4/resources/built_in:test-resource
 
 返回数据示例:
 
