@@ -1248,8 +1248,8 @@ etc/plugins/emqx_reloader.conf:
 
 开发者需要自定义插件时，可以查看该插件的代码和结构，以更快地开发一个标准的 *EMQ X* 插件。插件实际是一个普通的 ``Erlang Application``，其配置文件为: ``etc/${PluginName}.config``。
 
-EMQ X R3.2 插件开发
---------------------
+EMQ X 插件开发
+-----------------
 
 创建插件项目
 ::::::::::::
