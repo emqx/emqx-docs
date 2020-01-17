@@ -59,6 +59,11 @@ emqx
   Github PR:
   `emqx/emqx#3196 <https://github.com/emqx/emqx/pull/3196>`_
 
+- 修复会话 takeover 时 EMQ X 可能不发送 DISCONNECT 报文的问题
+
+  Github PR:
+  `emqx/emqx#3208 <https://github.com/emqx/emqx/pull/3208>`_
+
 emqx-rule-engine
 ----------------
 
