@@ -5,6 +5,85 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0.1:
+
+----------
+4.0.1 版本
+----------
+
+*发布日期: 2019-01-17*
+
+EMQ X 4.0.1 现已发布。此版本主要进行了错误修复和性能优化。
+
+emqx
+----
+
+**进行了以下修改:**
+
+- `force_shutdown_policy` 默认关闭
+
+  Github PR:
+  `emqx/emqx#3184 <https://github.com/emqx/emqx/pull/3184>`_
+
+- 支持定时全局 GC 并提供配置项
+
+  Github PR:
+  `emqx/emqx#3190 <https://github.com/emqx/emqx/pull/3190>`_
+
+- 优化 ``force_gc_policy`` 的默认配置
+
+  Github PR:
+  `emqx/emqx#3192 <https://github.com/emqx/emqx/pull/3192>`_,
+  `emqx/emqx#3201 <https://github.com/emqx/emqx/pull/3201>`_
+
+- 优化 Erlang VM 参数配置
+
+  Github PR:
+  `emqx/emqx#3195 <https://github.com/emqx/emqx/pull/3195>`_,
+  `emqx/emqx#3197 <https://github.com/emqx/emqx/pull/3197>`_
+
+**修复了以下问题:**
+
+- 修复使用错误的单位导致黑名单功能异常的问题
+
+  Github PR:
+  `emqx/emqx#3188 <https://github.com/emqx/emqx/pull/3188>`_
+
+- 修复对 ``Retain As Publish`` 标志位的处理并且在桥接模式下保持 ``Retain`` 标识位的值
+
+  Github PR:
+  `emqx/emqx#3189 <https://github.com/emqx/emqx/pull/3189>`_
+
+- 修复无法使用多个 Websocket 监听端口的问题
+
+  Github PR:
+  `emqx/emqx#3196 <https://github.com/emqx/emqx/pull/3196>`_
+
+emqx-rule-engine
+----------------
+
+**进行了以下修改:**
+
+- 提供更多操作数组的 SQL 函数
+
+  Github PR:
+  `emqx/emqx-rule-engine#136 <https://github.com/emqx/emqx-rule-engine/pull/136>`_
+
+- 减少未配置任何规则时对性能的影响
+
+  Github PR:
+  `emqx/emqx-rule-engine#138 <https://github.com/emqx/emqx-rule-engine/pull/138>`_
+
+emqx-web-hook
+-------------
+
+**修复了以下问题:**
+
+- 修复参数不匹配导致的崩溃问题
+
+  Github PR:
+  `emqx/emqx-web-hook#167 <https://github.com/emqx/emqx-web-hook/pull/167>`_
+
 .. _release_4.0.0:
 
 ----------
