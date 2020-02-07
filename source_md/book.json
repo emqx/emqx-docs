@@ -1,0 +1,30 @@
+{
+  "plugins": [
+    "-anchor-navigation-ex"
+  ],
+  "pluginsConfig": {
+    "anchor-navigation-ex": {
+      "showLevel": true
+    }
+  },
+  "styles": {
+    "website": "styles/website.css",
+    "ebook": "styles/ebook.css",
+    "pdf": "styles/pdf.css",
+    "mobi": "styles/mobi.css",
+    "epub": "styles/epub.css"
+  },
+  "title": "EMQ X Broker 使用文档",
+  "description": "EMQ X 百万级 MQTT 消息服务器使用文档",
+  "author": "EMQX Team",
+  "language": "zh-hans",
+  "structure": {
+    "readme": "introduction.md"
+  },
+  "links": {
+    "sharing": {
+      "facebook": false,
+      "twitter": "https://twitter.com/emqtt"
+    }
+  }
+}

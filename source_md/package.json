@@ -1,0 +1,17 @@
+{
+  "name": "emqx-docs-cn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "Apache 2.0",
+  "scripts": {
+    "docs": "gitbook serve",
+    "lint": "node _scripts/stylelint.js"
+  },
+  "dependencies": {
+    "dateformat": "^3.0.3",
+    "gitbook-cli": "^2.3.2",
+    "glob": "^7.1.6",
+    "lowdb": "^1.0.0",
+    "pangu": "^4.0.7"
+  }
+}
