@@ -42,7 +42,7 @@ ref: undefined
 在需要创建多个 bridge 时，可以先复制其全部的配置项，在通过使用不同的 name 来标示（比如
 bridge.mqtt.$name.address 其中 $name 指代的为 bridge 的名称）
 
-接下来两个小节，表述了如何创建 RPC/MQTT 方式的桥接，并创建一条转发传感器(sensor)主题消息的转发规则。假设在两台主机上启动了两个
+接下来两个小节，表述了如何创建 RPC/MQTT 方式的桥接，并创建一条转发传感器 (sensor) 主题消息的转发规则。假设在两台主机上启动了两个
 EMQ X 节点：
 
 |       |                     |         |
@@ -61,7 +61,7 @@ EMQ X 节点：
     ## 转发消息的主题
     bridge.mqtt.emqx2.forwards = sensor1/#,sensor2/#
     
-    ## 桥接的 mountpoint(挂载点)
+    ## 桥接的 mountpoint (挂载点)
     bridge.mqtt.emqx2.mountpoint = bridge/emqx2/${node}/
 
 forwards 用于指定桥接的主题。所有发到 forwards 指定主题上的消息都会被转发到远程节点上。
@@ -80,7 +80,7 @@ RPC 桥接的特点：
 
 EMQ X 可以通过 MQTT Bridge 去订阅远程 MQTT Broker 的主题，再将远程 MQTT Broker 的消息同步到本地。
 
-EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broker，因此在 MQTT Bridge
+EMQ X 的 MQTT Bridge 原理：作为 MQTT 客户端连接到远程的 MQTT Broker，因此在 MQTT Bridge
 的配置中，需要设置 MQTT 客户端连接时所需要的字段：
 
     ## 桥接地址
@@ -94,7 +94,7 @@ EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broke
     bridge.mqtt.emqx2.clientid = bridge_emq
     
     ## 客户端的 clean_start 字段
-    ## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
+    ## 注：有些 MQTT Broker 需要将 clean_start 值设成 `true`
     bridge.mqtt.emqx2.clean_start = true
     
     ## 客户端的 username 字段
@@ -106,7 +106,7 @@ EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broke
     ## 客户端是否使用 ssl 来连接远程服务器
     bridge.mqtt.emqx2.ssl = off
     
-    ## 客户端 SSL 连接的 CA 证书 (PEM格式)
+    ## 客户端 SSL 连接的 CA 证书 (PEM 格式)
     bridge.mqtt.emqx2.cacertfile = etc/certs/cacert.pem
     
     ## 客户端 SSL 连接的 SSL 证书
@@ -133,7 +133,7 @@ EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broke
     ## 需要被转发的消息的主题
     bridge.mqtt.emqx2.forwards = sensor1/#,sensor2/#
     
-    ## 挂载点(mountpoint)
+    ## 挂载点 (mountpoint)
     bridge.mqtt.emqx2.mountpoint = bridge/emqx2/${node}/
     
     ## 订阅对端的主题
@@ -143,7 +143,7 @@ EMQ X 的 MQTT Bridge 原理: 作为 MQTT 客户端连接到远程的 MQTT Broke
     bridge.mqtt.emqx2.subscription.1.qos = 1
     
     ## 桥接的重连间隔
-    ## 默认: 30秒
+    ## 默认: 30 秒
     bridge.mqtt.emqx2.reconnect_interval = 30s
     
     ## QoS1/QoS2 消息的重传间隔
@@ -264,5 +264,5 @@ $ ./bin/emqx_ctl bridges del-subscription emqx 'cmd/topic3'
 Del-subscription topic successfully.
 ```
 
-注: 如果有创建多个 Bridge 的需求，需要复制默认的 Bridge 配置，再拷贝到 emqx\_bridge\_mqtt.conf
+注：如果有创建多个 Bridge 的需求，需要复制默认的 Bridge 配置，再拷贝到 emqx\_bridge\_mqtt.conf
 中，根据需求重命名 bridge.mqtt.${name}.config 中的 name 即可。

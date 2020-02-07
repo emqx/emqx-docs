@@ -50,7 +50,7 @@ mgmt 命令查询应用程序。
 
 ### mgmt insert \<AppId\> \<Name\>
 
-添加REST API的应用程序:
+添加 REST API 的应用程序:
 
     $ ./bin/emqx_ctl mgmt insert dbcb6e023370b world
     AppSecret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
@@ -76,7 +76,7 @@ mgmt 命令查询应用程序。
 
 ### mgmt delete \<AppId\>
 
-删除REST API的应用程序:
+删除 REST API 的应用程序:
 
     $ ./bin/emqx_ctl mgmt delete dbcb6e023370b
     ok
@@ -89,8 +89,8 @@ broker
 |                |                                                                        |
 | -------------- | ---------------------------------------------------------------------- |
 | broker         | 查询 EMQ X 消息服务器描述、版本、启动时间                                               |
-| broker stats   | 查询连接(Connection)、会话(Session)、主题(Topic)、 订阅(Subscription)、路由(Route)统计信息 |
-| broker metrics | 查询 MQTT 报文(Packet)、消息(Message)收发统计                                     |
+| broker stats   | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、 订阅 (Subscription)、路由 (Route) 统计信息 |
+| broker metrics | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计                                     |
 
 查询 *EMQ X* 消息服务器基本信息包括版本、启动时间等:
 
@@ -103,7 +103,7 @@ broker
 
 ### broker stats
 
-查询服务器客户端连接(Connections)、会话(Sessions)、主题(Topics)、订阅(Subscriptions)、路由(Routes)统计:
+查询服务器客户端连接 (Connections)、会话 (Sessions)、主题 (Topics)、订阅 (Subscriptions)、路由 (Routes) 统计:
 
     $ ./bin/emqx_ctl broker stats
     
@@ -136,7 +136,7 @@ broker
 
 ### broker metrics
 
-查询服务器流量(Bytes)、MQTT报文(Packets)、消息(Messages)收发统计:
+查询服务器流量 (Bytes)、MQTT 报文 (Packets)、消息 (Messages) 收发统计:
 
     $ ./bin/emqx_ctl broker metrics
     
@@ -223,7 +223,7 @@ broker
 
 ## cluster 命令
 
-cluster 命令集群多个 *EMQ X* 消息服务器节点(进程):
+cluster 命令集群多个 *EMQ X* 消息服务器节点 (进程):
 
 |                              |         |
 | ---------------------------- | ------- |
@@ -263,10 +263,10 @@ emqx2 节点与 emqx1 集群，emqx2 目录下:
 
 集群消息路由测试:
 
-    # emqx1节点上订阅x
+    # emqx1 节点上订阅 x
     $ mosquitto_sub -t x -q 1 -p 1883
     
-    # emqx2节点上向x发布消息
+    # emqx2 节点上向 x 发布消息
     $ mosquitto_pub -t x -q 1 -p 2883 -m hello
 
 emqx2 节点离开集群:
@@ -311,8 +311,8 @@ clients 命令查询连接的 MQTT 客户端。
 
     $ ./bin/emqx_ctl clients list
     
-    Client(mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62135, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477947, connected_at=1576477947)
-    Client(mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477950, connected_at=1576477950)
+    Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62135, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477947, connected_at=1576477947)
+    Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477950, connected_at=1576477950)
     ...
 
 返回 Client 对象的属性:
@@ -327,7 +327,7 @@ clients 命令查询连接的 MQTT 客户端。
 | subscriptions             | 当前订阅数量                    |
 | inflight                  | 当前正在下发的消息数                |
 | awaiting\_rel             | 等待客户端发送 PUBREL 的 QoS2 消息数 |
-| delivered\_msgs           | EMQ X 向此客户端转发的消息数量(包含重传)  |
+| delivered\_msgs           | EMQ X 向此客户端转发的消息数量 (包含重传)  |
 | enqueued\_msgs            | 消息队列当前长度                  |
 | dropped\_msgs             | 消息队列达到最大长度后丢弃的消息数量        |
 | connected                 | 是否在线                      |
@@ -340,7 +340,7 @@ clients 命令查询连接的 MQTT 客户端。
 
     $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
     
-    Client(mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
+    Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 
 ### clients kick \<ClientId\>
 
@@ -376,7 +376,7 @@ routes 命令查询路由表。
 
 ## subscriptions 命令
 
-subscriptions 命令查询消息服务器的订阅(Subscription)表。
+subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 
 |                                                  |                   |
 | ------------------------------------------------ | ----------------- |
@@ -424,10 +424,10 @@ plugins 命令用于加载、卸载、查询插件应用。 *EMQ X* 消息服务
 
 |                           |                |
 | ------------------------- | -------------- |
-| plugins list              | 列出全部插件(Plugin) |
-| plugins load \<Plugin\>   | 加载插件(Plugin)   |
-| plugins unload \<Plugin\> | 卸载插件(Plugin)   |
-| plugins reload \<Plugin\> | 重载插件(Plugin)   |
+| plugins list              | 列出全部插件 (Plugin) |
+| plugins load \<Plugin\>   | 加载插件 (Plugin)   |
+| plugins unload \<Plugin\> | 卸载插件 (Plugin)   |
+| plugins reload \<Plugin\> | 重载插件 (Plugin)   |
 
 <div class="note">
 
@@ -447,32 +447,32 @@ Note
 
     $ ./bin/emqx_ctl plugins list
     
-    Plugin(emqx_auth_clientid, version=v4.0.0, description=EMQ X Authentication with ClientId/Password, active=false)
-    Plugin(emqx_auth_http, version=v4.0.0, description=EMQ X Authentication/ACL with HTTP API, active=false)
-    Plugin(emqx_auth_jwt, version=v4.0.0, description=EMQ X Authentication with JWT, active=false)
-    Plugin(emqx_auth_ldap, version=v4.0.0, description=EMQ X Authentication/ACL with LDAP, active=false)
-    Plugin(emqx_auth_mongo, version=v4.0.0, description=EMQ X Authentication/ACL with MongoDB, active=false)
-    Plugin(emqx_auth_mysql, version=v4.0.0, description=EMQ X Authentication/ACL with MySQL, active=false)
-    Plugin(emqx_auth_pgsql, version=v4.0.0, description=EMQ X Authentication/ACL with PostgreSQL, active=false)
-    Plugin(emqx_auth_redis, version=v4.0.0, description=EMQ X Authentication/ACL with Redis, active=false)
-    Plugin(emqx_auth_username, version=v4.0.0, description=EMQ X Authentication with Username and Password, active=false)
-    Plugin(emqx_bridge_mqtt, version=v4.0.0, description=EMQ X Bridge to MQTT Broker, active=false)
-    Plugin(emqx_coap, version=v4.0.0, description=EMQ X CoAP Gateway, active=false)
-    Plugin(emqx_dashboard, version=v4.0.0, description=EMQ X Web Dashboard, active=true)
-    Plugin(emqx_delayed_publish, version=v4.0.0, description=EMQ X Delayed Publish, active=false)
-    Plugin(emqx_lua_hook, version=v4.0.0, description=EMQ X Lua Hooks, active=false)
-    Plugin(emqx_lwm2m, version=v4.0.0, description=EMQ X LwM2M Gateway, active=false)
-    Plugin(emqx_management, version=v4.0.0, description=EMQ X Management API and CLI, active=true)
-    Plugin(emqx_plugin_template, version=v4.0.0, description=EMQ X Plugin Template, active=false)
-    Plugin(emqx_psk_file, version=v4.0.0, description=EMQX PSK Plugin from File, active=false)
-    Plugin(emqx_recon, version=v4.0.0, description=EMQ X Recon Plugin, active=true)
-    Plugin(emqx_reloader, version=v4.0.0, description=EMQ X Reloader Plugin, active=false)
-    Plugin(emqx_retainer, version=v4.0.0, description=EMQ X Retainer, active=true)
-    Plugin(emqx_rule_engine, version=v4.0.0, description=EMQ X Rule Engine, active=true)
-    Plugin(emqx_sn, version=v4.0.0, description=EMQ X MQTT SN Plugin, active=false)
-    Plugin(emqx_statsd, version=v4.0.0, description=Statsd for EMQ X, active=false)
-    Plugin(emqx_stomp, version=v4.0.0, description=EMQ X Stomp Protocol Plugin, active=false)
-    Plugin(emqx_web_hook, version=v4.0.0, description=EMQ X Webhook Plugin, active=false)
+    Plugin (emqx_auth_clientid, version=v4.0.0, description=EMQ X Authentication with ClientId/Password, active=false)
+    Plugin (emqx_auth_http, version=v4.0.0, description=EMQ X Authentication/ACL with HTTP API, active=false)
+    Plugin (emqx_auth_jwt, version=v4.0.0, description=EMQ X Authentication with JWT, active=false)
+    Plugin (emqx_auth_ldap, version=v4.0.0, description=EMQ X Authentication/ACL with LDAP, active=false)
+    Plugin (emqx_auth_mongo, version=v4.0.0, description=EMQ X Authentication/ACL with MongoDB, active=false)
+    Plugin (emqx_auth_mysql, version=v4.0.0, description=EMQ X Authentication/ACL with MySQL, active=false)
+    Plugin (emqx_auth_pgsql, version=v4.0.0, description=EMQ X Authentication/ACL with PostgreSQL, active=false)
+    Plugin (emqx_auth_redis, version=v4.0.0, description=EMQ X Authentication/ACL with Redis, active=false)
+    Plugin (emqx_auth_username, version=v4.0.0, description=EMQ X Authentication with Username and Password, active=false)
+    Plugin (emqx_bridge_mqtt, version=v4.0.0, description=EMQ X Bridge to MQTT Broker, active=false)
+    Plugin (emqx_coap, version=v4.0.0, description=EMQ X CoAP Gateway, active=false)
+    Plugin (emqx_dashboard, version=v4.0.0, description=EMQ X Web Dashboard, active=true)
+    Plugin (emqx_delayed_publish, version=v4.0.0, description=EMQ X Delayed Publish, active=false)
+    Plugin (emqx_lua_hook, version=v4.0.0, description=EMQ X Lua Hooks, active=false)
+    Plugin (emqx_lwm2m, version=v4.0.0, description=EMQ X LwM2M Gateway, active=false)
+    Plugin (emqx_management, version=v4.0.0, description=EMQ X Management API and CLI, active=true)
+    Plugin (emqx_plugin_template, version=v4.0.0, description=EMQ X Plugin Template, active=false)
+    Plugin (emqx_psk_file, version=v4.0.0, description=EMQX PSK Plugin from File, active=false)
+    Plugin (emqx_recon, version=v4.0.0, description=EMQ X Recon Plugin, active=true)
+    Plugin (emqx_reloader, version=v4.0.0, description=EMQ X Reloader Plugin, active=false)
+    Plugin (emqx_retainer, version=v4.0.0, description=EMQ X Retainer, active=true)
+    Plugin (emqx_rule_engine, version=v4.0.0, description=EMQ X Rule Engine, active=true)
+    Plugin (emqx_sn, version=v4.0.0, description=EMQ X MQTT SN Plugin, active=false)
+    Plugin (emqx_statsd, version=v4.0.0, description=Statsd for EMQ X, active=false)
+    Plugin (emqx_stomp, version=v4.0.0, description=EMQ X Stomp Protocol Plugin, active=false)
+    Plugin (emqx_web_hook, version=v4.0.0, description=EMQ X Webhook Plugin, active=false)
 
 插件属性:
 
@@ -644,9 +644,9 @@ logger](http://erlang.org/doc/apps/kernel/logger_chapter.html)
 
     $ ./bin/emqx_ctl log handlers list
     
-    LogHandler(id=emqx_logger_handler, level=debug, destination=unknown)
-    LogHandler(id=file, level=debug, destination=log/emqx.log)
-    LogHandler(id=default, level=debug, destination=console)
+    LogHandler (id=emqx_logger_handler, level=debug, destination=unknown)
+    LogHandler (id=file, level=debug, destination=log/emqx.log)
+    LogHandler (id=default, level=debug, destination=console)
 
 ### log handlers set-level \<HandlerId\> \<Level\>
 
@@ -677,7 +677,7 @@ Note
 
 </div>
 
-使用 trace 之前，需要将主日志等级(primary logger level) 设置成足够低的值。为提高系统运行性能，默认的主日志等级是
+使用 trace 之前，需要将主日志等级 (primary logger level) 设置成足够低的值。为提高系统运行性能，默认的主日志等级是
 error。
 
 </div>
@@ -736,8 +736,8 @@ error。
 
     $ ./bin/emqx_ctl trace list
     
-    Trace(clientid=clientid2, level=error, destination="log/clientid2_trace.log")
-    Trace(topic=topic2, level=error, destination="log/topic2_trace.log")
+    Trace (clientid=clientid2, level=error, destination="log/clientid2_trace.log")
+    Trace (topic=topic2, level=error, destination="log/topic2_trace.log")
 
 ## listeners
 
@@ -807,7 +807,7 @@ listener 参数说明:
     
     Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
 
-## 规则引擎(rule engine) 命令
+## 规则引擎 (rule engine) 命令
 
 ## rules 命令
 
@@ -850,7 +850,7 @@ Note
 
     $ ./bin/emqx_ctl rules list
     
-    rule(id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
+    rule (id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
 
 ### rules show
 
@@ -859,7 +859,7 @@ Note
     ## 查询 RuleID 为 'test1:1556242324634254201' 的规则
     $ ./bin/emqx_ctl rules show 'test1:1556242324634254201'
     
-    rule(id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
+    rule (id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
 
 ### rules delete
 
@@ -885,7 +885,7 @@ Note
 
 </div>
 
-动作可以由 emqx 内置(称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+动作可以由 emqx 内置 (称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
 
 </div>
 
@@ -896,7 +896,7 @@ Note
     ## 查询名为 'built_in:inspect_action' 动作
     $ ./bin/emqx_ctl rule-actions show 'built_in:inspect_action'
     
-    action(name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
+    action (name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
 
 ### rule-actions list
 
@@ -905,21 +905,21 @@ Note
     ## 列出当前所有的动作
     $ ./bin/emqx_ctl rule-actions list
     
-    action(name='built_in:republish_action', app='emqx_rule_engine', for='message.publish', type='built_in', params=#{target_topic => #{description => <<"Repubilsh the message to which topic">>,format => topic,required => true,title => <<"To Which Topic">>,type => string}}, description='Republish a MQTT message to a another topic')
-    action(name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
-    action(name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
-    action(name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
+    action (name='built_in:republish_action', app='emqx_rule_engine', for='message.publish', type='built_in', params=#{target_topic => #{description => <<"Repubilsh the message to which topic">>,format => topic,required => true,title => <<"To Which Topic">>,type => string}}, description='Republish a MQTT message to a another topic')
+    action (name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
+    action (name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
+    action (name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
     
     ## 列出所有资源类型为 web_hook 的动作
     $ ./bin/emqx_ctl rule-actions list -t web_hook
     
-    action(name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
-    action(name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
+    action (name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
+    action (name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
     
     ## 列出所有 Hook 类型匹配 'client.connected' 的动作
     $ ./bin/emqx_ctl rule-actions list -k 'client.connected'
     
-    action(name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
+    action (name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
 
 ## resources 命令
 
@@ -944,7 +944,7 @@ Note
 
     $ ./bin/emqx_ctl resources list
     
-    resource(id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
+    resource (id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
 
 ### resources list by type
 
@@ -952,7 +952,7 @@ Note
 
     $ ./bin/emqx_ctl resources list --type 'debug_resource_type'
     
-    resource(id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
+    resource (id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
 
 ### resources show
 
@@ -960,7 +960,7 @@ Note
 
     $ ./bin/emqx_ctl resources show 'web_hook:webhook1'
     
-    resource(id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
+    resource (id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
 
 ### resources delete
 
@@ -985,7 +985,7 @@ Note
 
 </div>
 
-资源类型可以由 emqx 内置(称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+资源类型可以由 emqx 内置 (称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
 
 </div>
 
@@ -995,8 +995,8 @@ Note
 
     ./bin/emqx_ctl resource-types list
     
-    resource_type(name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
-    resource_type(name='web_hook', provider='emqx_web_hook', params=#{headers => #{default => #{},description => <<"Request Header">>,schema => #{},title => <<"Request Header">>,type => object},method => #{default => <<"POST">>,description => <<"Request Method">>,enum => [<<"PUT">>,<<"POST">>],title => <<"Request Method">>,type => string},url => #{description => <<"Request URL">>,format => url,required => true,title => <<"Request URL">>,type => string}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
+    resource_type (name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
+    resource_type (name='web_hook', provider='emqx_web_hook', params=#{headers => #{default => #{},description => <<"Request Header">>,schema => #{},title => <<"Request Header">>,type => object},method => #{default => <<"POST">>,description => <<"Request Method">>,enum => [<<"PUT">>,<<"POST">>],title => <<"Request Method">>,type => string},url => #{description => <<"Request URL">>,format => url,required => true,title => <<"Request URL">>,type => string}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
 
 ### resource-types show
 
@@ -1004,17 +1004,17 @@ Note
 
     $ ./bin/emqx_ctl resource-types show built_in
     
-    resource_type(name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
+    resource_type (name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
 
 ## recon 命令
 
 |                        |                                                    |
 | ---------------------- | -------------------------------------------------- |
 | recon memory           | recon\_alloc:memory/2                              |
-| recon allocated        | recon\_alloc:memory(allocated\_types, current/max) |
-| recon bin\_leak        | recon:bin\_leak(100)                               |
-| recon node\_stats      | recon:node\_stats(10, 1000)                        |
-| recon remote\_load Mod | recon:remote\_load(Mod)                            |
+| recon allocated        | recon\_alloc:memory (allocated\_types, current/max) |
+| recon bin\_leak        | recon:bin\_leak (100)                               |
+| recon node\_stats      | recon:node\_stats (10, 1000)                        |
+| recon remote\_load Mod | recon:remote\_load (Mod)                            |
 
 访问 [Documentation for recon](http://ferd.github.io/recon/) 以获取详细信息。
 
@@ -1035,7 +1035,7 @@ recon\_alloc:memory/2:
 
 ### recon allocated
 
-recon\_alloc:memory(allocated\_types, current/max):
+recon\_alloc:memory (allocated\_types, current/max):
 
     $ ./bin/emqx_ctl recon allocated
     
@@ -1060,7 +1060,7 @@ recon\_alloc:memory(allocated\_types, current/max):
 
 ### recon bin\_leak
 
-recon:bin\_leak(100):
+recon:bin\_leak (100):
 
     $ ./bin/emqx_ctl recon bin_leak
     
@@ -1078,7 +1078,7 @@ recon:bin\_leak(100):
 
 ### recon node\_stats
 
-recon:node\_stats(10, 1000):
+recon:node\_stats (10, 1000):
 
     $ ./bin/emqx_ctl recon node_stats
     
@@ -1106,7 +1106,7 @@ recon:node\_stats(10, 1000):
 
 ### recon remote\_load Mod
 
-recon:remote\_load(Mod):
+recon:remote\_load (Mod):
 
     $ ./bin/emqx_ctl recon remote_load
 

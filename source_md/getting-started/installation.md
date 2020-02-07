@@ -884,7 +884,7 @@ Erlang 安装: <http://www.erlang.org/>
 
 Git 客户端: <http://www.git-scm.com/>
 
-### 编译安装EMQ X
+### 编译安装 EMQ X
 
 1.  获取源码
     

@@ -1,8 +1,8 @@
 # 测试调优 (Tuning Guide)
 
-*EMQ X* 消息服务器1.x版本 MQTT 连接压力测试到130万，在一台8核心、32G内存的 CentOS 服务器上。
+*EMQ X* 消息服务器 1.x 版本 MQTT 连接压力测试到 130 万，在一台 8 核心、32G 内存的 CentOS 服务器上。
 
-100万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， *EMQ X* 消息服务器参数设置如下:
+100 万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， *EMQ X* 消息服务器参数设置如下:
 
 ## Linux 操作系统参数
 
@@ -13,7 +13,7 @@
     sysctl -w fs.nr_open=2097152
     echo 2097152 > /proc/sys/fs/nr_open
 
-允许当前会话/进程打开文件句柄数:
+允许当前会话 / 进程打开文件句柄数:
 
     ulimit -n 1048576
 
@@ -29,7 +29,7 @@
 
 ### /etc/security/limits.conf
 
-/etc/security/limits.conf 持久化设置允许用户/进程打开文件句柄数:
+/etc/security/limits.conf 持久化设置允许用户 / 进程打开文件句柄数:
 
     *      soft   nofile      1048576
     *      hard   nofile      1048576
@@ -68,7 +68,7 @@ TIME-WAIT Socket 最大数量、回收与重用设置:
 
     sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
     
-    # 注意: 不建议开启該设置，NAT模式下可能引起连接RST
+    # 注意：不建议开启該设置，NAT 模式下可能引起连接 RST
     # sysctl -w net.ipv4.tcp_tw_recycle=1
     # sysctl -w net.ipv4.tcp_tw_reuse=1
 
@@ -101,7 +101,7 @@ listener.tcp.external.max_connections = 1024000
 
 ## 测试客户端设置
 
-测试客户端服务器在一个接口上，最多只能创建65000连接:
+测试客户端服务器在一个接口上，最多只能创建 65000 连接:
 
     sysctl -w net.ipv4.ip_local_port_range="500 65535"
     echo 1000000 > /proc/sys/fs/nr_open

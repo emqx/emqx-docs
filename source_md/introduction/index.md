@@ -1,6 +1,6 @@
 ---
 # 标题
-title: {{ title }}
+title: {{title}}
 author: {{ author }}
 # 编写日期
 date: {{ date }}

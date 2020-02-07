@@ -19,17 +19,17 @@ ref: undefined
 
 
 用户可以通过 REST API 查询 MQTT
-客户端连接(Connections)、会话(Sessions)、订阅(Subscriptions)和路由(Routes)信息，还可以检索和监控服务器的性能指标和统计数据。
+客户端连接 (Connections)、会话 (Sessions)、订阅 (Subscriptions) 和路由 (Routes) 信息，还可以检索和监控服务器的性能指标和统计数据。
 
 ## URL 地址
 
-REST API 访问URL地址:
+REST API 访问 URL 地址:
 
-    http(s)://host:8081/api/v4/
+    http (s)://host:8081/api/v4/
 
 ## Basic 认证
 
-使用 REST API 必须携带 HTTP Basic 格式的认证(Authentication)信息。因此，需要使用 Dashboard
+使用 REST API 必须携带 HTTP Basic 格式的认证 (Authentication) 信息。因此，需要使用 Dashboard
 中来创建的 AppID 和 AppSecret 进行认证:
 
 ``` sourceCode bash
@@ -269,7 +269,7 @@ API 定义:
       "name": "lookup_node_client_via_username",
       "method": "GET",
       "path": "/nodes/:node/clients/username/:username",
-      "descr": "Lookup a client via username on the node "
+      "descr": "Lookup a client via username on the node"
     },
     {
       "name": "kickout_client",
@@ -679,7 +679,7 @@ API 定义:
 }
 ```
 
-## 客户端信息(Clients)
+## 客户端信息 (Clients)
 
 ### 获取集群客户端信息
 
@@ -1095,7 +1095,7 @@ API 定义:
 }
 ```
 
-## 订阅(Subscriptions)
+## 订阅 (Subscriptions)
 
 ### 获取集群订阅信息
 
@@ -1223,7 +1223,7 @@ API 定义:
 }
 ```
 
-## 路由(Routes)
+## 路由 (Routes)
 
 ### 获取集群路由表
 
@@ -1282,7 +1282,7 @@ API 定义:
 }
 ```
 
-## 发布/订阅/取消订阅
+## 发布 / 订阅 / 取消订阅
 
 ### 发布消息
 
@@ -1369,7 +1369,7 @@ API 定义:
 }
 ```
 
-## 插件(Plugins)
+## 插件 (Plugins)
 
 ### 获取所有节点插件列表
 
@@ -1820,7 +1820,7 @@ API 定义:
 }
 ```
 
-## 监听器(Listeners)
+## 监听器 (Listeners)
 
 ### 获取集群监听器列表
 
@@ -2459,7 +2459,7 @@ API 定义:
 
 ### 分页参数与分页信息
 
-请求示例中使用了 ?\_page=1&\_limit=10000 参数的接口均支持分页:
+请求示例中使用了？\_page=1&\_limit=10000 参数的接口均支持分页:
 
     _page: 当前页码
     _limit: 分页大小
@@ -2478,7 +2478,7 @@ API 定义:
 }
 ```
 
-## 规则引擎(rule engine)
+## 规则引擎 (rule engine)
 
 ### 创建规则
 
@@ -2497,7 +2497,7 @@ API 定义:
 <tbody>
 <tr class="odd">
 <td>name</td>
-<td>String，规则名字</td>
+<td>String，规则名字 </td>
 <td></td>
 </tr>
 <tr class="even">
@@ -2507,12 +2507,12 @@ API 定义:
 </tr>
 <tr class="odd">
 <td>rawsql</td>
-<td>String，用于筛选和转换原始数据的 SQL 语句</td>
+<td>String，用于筛选和转换原始数据的 SQL 语句 </td>
 <td></td>
 </tr>
 <tr class="even">
 <td>actions</td>
-<td>JSON Array，动作列表</td>
+<td>JSON Array，动作列表 </td>
 <td></td>
 </tr>
 <tr class="odd">
@@ -2520,18 +2520,18 @@ API 定义:
 <li></li>
 </ul></td>
 <td>name</td>
-<td>String, 动作名字</td>
+<td>String, 动作名字 </td>
 </tr>
 <tr class="even">
 <td><ul>
 <li></li>
 </ul></td>
 <td>params</td>
-<td>JSON Object, 动作参数</td>
+<td>JSON Object, 动作参数 </td>
 </tr>
 <tr class="odd">
 <td>description</td>
-<td>String，可选，规则描述</td>
+<td>String，可选，规则描述 </td>
 <td></td>
 </tr>
 </tbody>

@@ -8,7 +8,7 @@
 | ------------------- | ----------------- |
 | 配置文件                | 说明                |
 | etc/emqx.conf       | EMQ X 消息服务器配置文件   |
-| etc/acl.conf        | EMQ X 默认ACL规则配置文件 |
+| etc/acl.conf        | EMQ X 默认 ACL 规则配置文件 |
 | etc/plugins/\*.conf | EMQ X 各类插件配置文件    |
 
 ## EMQ X 配置变更历史
@@ -147,7 +147,7 @@ EMQ X 版本支持多种策略的节点自动发现与集群:
 | etcd   | 通过 etcd 自动集群      |
 | k8s    | Kubernetes 服务自动集群 |
 
-**manual 手动创建集群**
+**manual 手动创建集群 **
 
 默认配置为手动创建集群，节点通过 ./bin/emqx\_ctl join \<Node\> 命令加入:
 
@@ -155,7 +155,7 @@ EMQ X 版本支持多种策略的节点自动发现与集群:
 cluster.discovery = manual
 ```
 
-**基于 static 节点列表自动集群**
+** 基于 static 节点列表自动集群 **
 
 集群发现策略为 static:
 
@@ -169,7 +169,7 @@ cluster.discovery = static
 cluster.static.seeds = emqx1@127.0.0.1,emqx2@127.0.0.1
 ```
 
-**基于 mcast 组播自动集群**
+** 基于 mcast 组播自动集群 **
 
 集群发现策略为 mcast:
 
@@ -207,7 +207,7 @@ cluster.mcast.ttl = 255
 cluster.mcast.loop = on
 ```
 
-**基于 DNS A 记录自动集群**
+** 基于 DNS A 记录自动集群 **
 
 集群发现策略为 dns:
 
@@ -227,7 +227,7 @@ cluster.dns.name = localhost
 cluster.dns.app  = emqx
 ```
 
-**基于 etcd 自动集群**
+** 基于 etcd 自动集群 **
 
 集群发现策略为 etcd:
 
@@ -266,13 +266,13 @@ cluster.etcd.ssl.keyfile = etc/certs/client-key.pem
 cluster.etcd.ssl.certfile = etc/certs/client.pem
 ```
 
-包含 PEM 编码的CA证书文件的路径:
+包含 PEM 编码的 CA 证书文件的路径:
 
 ``` sourceCode properties
 cluster.etcd.ssl.cacertfile = etc/certs/ca.pem
 ```
 
-**基于 Kubernetes 自动集群**
+** 基于 Kubernetes 自动集群 **
 
 集群发现策略为 k8s:
 
@@ -332,8 +332,8 @@ Note
 
 </div>
 
-Erlang/OTP 平台应用多由分布的 Erlang 节点(进程)组成，每个 Erlang 节点(进程)需指配一个节点名，用于节点间通信互访。
-所有互相通信的 Erlang 节点(进程)间通过一个共用的 Cookie 进行安全认证。
+Erlang/OTP 平台应用多由分布的 Erlang 节点 (进程) 组成，每个 Erlang 节点 (进程) 需指配一个节点名，用于节点间通信互访。
+所有互相通信的 Erlang 节点 (进程) 间通过一个共用的 Cookie 进行安全认证。
 
 </div>
 
@@ -504,7 +504,7 @@ RPC 的 TCP 发送缓存大小:
 rpc.socket_recbuf = 1MB
 ```
 
-RPC 的 Socket (用户态)缓存大小:
+RPC 的 Socket (用户态) 缓存大小:
 
 ``` sourceCode properties
 rpc.socket_buffer = 1MB
@@ -601,7 +601,7 @@ acl_cache_ttl = 1m
 
 etc/acl.conf 访问控制规则定义:
 
-    允许|拒绝  用户|IP地址|ClientID  发布|订阅  主题列表
+    允许 | 拒绝  用户 | IP 地址 | ClientID  发布 | 订阅  主题列表
 
 访问控制规则采用 Erlang 元组格式，访问控制模块逐条匹配规则:
 
@@ -645,7 +645,7 @@ Note
 
 </div>
 
-*EMQ X* 消息服务器接收到 MQTT 客户端发布(Publish)或订阅(Subscribe)请求时，会逐条匹配 ACL
+*EMQ X* 消息服务器接收到 MQTT 客户端发布 (Publish) 或订阅 (Subscribe) 请求时，会逐条匹配 ACL
 规则，直到匹配成功返回 allow 或 deny。
 
 设置 flapping 的检测策略:
@@ -784,13 +784,13 @@ zone.external.enable_stats = on
 zone.external.acl_deny_action = ignore
 ```
 
-设置连接/会话进程在接收多少消息或字节后强制进行 GC:
+设置连接 / 会话进程在接收多少消息或字节后强制进行 GC:
 
 ``` sourceCode properties
 zone.external.force_gc_policy = 1000|1MB
 ```
 
-设置连接/会话进程可使用的最大消息队列长度和堆大小，超出限制时将强制关闭进程:
+设置连接 / 会话进程可使用的最大消息队列长度和堆大小，超出限制时将强制关闭进程:
 
 ``` sourceCode properties
 ## zone.external.force_shutdown_policy = 8000|800MB
@@ -880,13 +880,13 @@ QoS1/2 消息的重传间隔:
 zone.external.retry_interval = 30s
 ```
 
-等待 PUBREL 的 QoS2 消息最大数量(Client -\> Broker)，0 表示没有限制:
+等待 PUBREL 的 QoS2 消息最大数量 (Client -\> Broker)，0 表示没有限制:
 
 ``` sourceCode properties
 zone.external.max_awaiting_rel = 100
 ```
 
-QoS2 消息(Client -\> Broker)被删除前等待 PUBREL 的最大时间
+QoS2 消息 (Client -\> Broker) 被删除前等待 PUBREL 的最大时间
 
 ``` sourceCode properties
 zone.external.await_rel_timeout = 300s
@@ -997,7 +997,7 @@ zone.internal.max_subscriptions = 0
 zone.internal.max_inflight = 32
 ```
 
-等待 PUBREL 的 QoS2 消息最大数量(Client -\> Broker)，0 表示没有限制:
+等待 PUBREL 的 QoS2 消息最大数量 (Client -\> Broker)，0 表示没有限制:
 
 ``` sourceCode properties
 zone.internal.max_awaiting_rel = 100
@@ -1065,9 +1065,9 @@ Listener 参数说明:
 | ------------------------------------- | --------------------------- |
 | listener.tcp.${name}.acceptors        | TCP Acceptor 池              |
 | listener.tcp.${name}.max\_connections | 最大允许 TCP 连接数                |
-| listener.tcp.${name}.max\_conn\_rate  | 连接限制配置，例如连接1000/秒: "1000"   |
+| listener.tcp.${name}.max\_conn\_rate  | 连接限制配置，例如连接 1000 / 秒: "1000"   |
 | listener.tcp.${name}.zone             | 监听属于哪一个 Zone                |
-| listener.tcp.${name}.rate\_limit      | 连接速率配置，例如限速10B/秒: "100,200" |
+| listener.tcp.${name}.rate\_limit      | 连接速率配置，例如限速 10B / 秒: "100,200" |
 
 ## MQTT/TCP 监听器 - 1883
 
@@ -1152,27 +1152,27 @@ listener.tcp.external.send_timeout = 15s
 listener.tcp.external.send_timeout_close = on
 ```
 
-用于 MQTT 连接的 TCP 接收缓冲区(os内核):
+用于 MQTT 连接的 TCP 接收缓冲区 (os 内核):
 
 ``` sourceCode properties
 #listener.tcp.external.recbuf = 2KB
 ```
 
-用于 MQTT 连接的 TCP 发送缓冲区(os内核):
+用于 MQTT 连接的 TCP 发送缓冲区 (os 内核):
 
 ``` sourceCode properties
 #listener.tcp.external.sndbuf = 2KB
 ```
 
 驱动程序使用的用户级软件缓冲区的大小，不要与选项 sndbuf 和 recbuf 混淆， 它们对应于内核套接字缓冲区。建议使用
-val(buffer) \>= max(val(sndbuf)，val(recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
-或 recbuf 值时，val(buffer) 自动设置为上述最大值:
+val (buffer) \>= max (val (sndbuf)，val (recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
+或 recbuf 值时，val (buffer) 自动设置为上述最大值:
 
 ``` sourceCode properties
 #listener.tcp.external.buffer = 2KB
 ```
 
-是否设置 buffer = max(sndbuf, recbuf):
+是否设置 buffer = max (sndbuf, recbuf):
 
 ``` sourceCode properties
 ## listener.tcp.external.tune_buffer = off
@@ -1356,27 +1356,27 @@ TCP 发送超时时间:
 ## listener.ssl.external.send_timeout_close = on
 ```
 
-用于 MQTT 连接的 TCP 接收缓冲区(os内核):
+用于 MQTT 连接的 TCP 接收缓冲区 (os 内核):
 
 ``` sourceCode properties
 #listener.ssl.external.recbuf = 4KB
 ```
 
-用于 MQTT 连接的 TCP 发送缓冲区(os内核):
+用于 MQTT 连接的 TCP 发送缓冲区 (os 内核):
 
 ``` sourceCode properties
 ## listener.ssl.external.sndbuf = 4KB
 ```
 
 驱动程序使用的用户级软件缓冲区的大小，不要与选项 sndbuf 和 recbuf 混淆， 它们对应于内核套接字缓冲区。建议使用
-val(buffer) \>= max(val(sndbuf)，val(recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
-或 recbuf 值时，val(buffer) 自动设置为上述最大值:
+val (buffer) \>= max (val (sndbuf)，val (recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
+或 recbuf 值时，val (buffer) 自动设置为上述最大值:
 
 ``` sourceCode properties
 ## listener.ssl.external.buffer = 4KB
 ```
 
-是否设置 buffer = max(sndbuf, recbuf):
+是否设置 buffer = max (sndbuf, recbuf):
 
 ``` sourceCode properties
 ## listener.ssl.external.tune_buffer = off
@@ -1492,27 +1492,27 @@ listener.ws.external.send_timeout = 15s
 listener.ws.external.send_timeout_close = on
 ```
 
-用于 MQTT 连接的 TCP 接收缓冲区(os内核):
+用于 MQTT 连接的 TCP 接收缓冲区 (os 内核):
 
 ``` sourceCode properties
 ## listener.ws.external.recbuf = 2KB
 ```
 
-用于 MQTT 连接的 TCP 发送缓冲区(os内核):
+用于 MQTT 连接的 TCP 发送缓冲区 (os 内核):
 
 ``` sourceCode properties
 ## listener.ws.external.sndbuf = 2KB
 ```
 
 驱动程序使用的用户级软件缓冲区的大小，不要与选项 sndbuf 和 recbuf 混淆， 它们对应于内核套接字缓冲区。建议使用
-val(buffer) \>= max(val(sndbuf)，val(recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
-或 recbuf 值时，val(buffer) 自动设置为上述最大值:
+val (buffer) \>= max (val (sndbuf)，val (recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
+或 recbuf 值时，val (buffer) 自动设置为上述最大值:
 
 ``` sourceCode properties
 ## listener.ws.external.buffer = 2KB
 ```
 
-是否设置 buffer = max(sndbuf, recbuf):
+是否设置 buffer = max (sndbuf, recbuf):
 
 ``` sourceCode properties
 ## listener.ws.external.tune_buffer = off
@@ -1719,21 +1719,21 @@ listener.wss.external.send_timeout = 15s
 listener.wss.external.send_timeout_close = on
 ```
 
-用于 MQTT 连接的 TCP 接收缓冲区(os内核):
+用于 MQTT 连接的 TCP 接收缓冲区 (os 内核):
 
 ``` sourceCode properties
 ## listener.wss.external.recbuf = 4KB
 ```
 
-用于 MQTT 连接的 TCP 发送缓冲区(os内核):
+用于 MQTT 连接的 TCP 发送缓冲区 (os 内核):
 
 ``` sourceCode properties
 ## listener.wss.external.sndbuf = 4KB
 ```
 
 驱动程序使用的用户级软件缓冲区的大小，不要与选项 sndbuf 和 recbuf 混淆， 它们对应于内核套接字缓冲区。建议使用
-val(buffer) \>= max(val(sndbuf)，val(recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
-或 recbuf 值时，val(buffer) 自动设置为上述最大值:
+val (buffer) \>= max (val (sndbuf)，val (recbuf)) 来避免不必要的复制带来的性能问题。当设置 sndbuf
+或 recbuf 值时，val (buffer) 自动设置为上述最大值:
 
 ``` sourceCode properties
 ## listener.wss.external.buffer = 4KB
@@ -1777,7 +1777,7 @@ Websocket deflate 选项:
 
 ## Modules 模块
 
-*EMQ X* 支持模块扩展，默认三个模块，分别为上下线消息状态发布模块、代理订阅模块、主题(Topic)重写模块。
+*EMQ X* 支持模块扩展，默认三个模块，分别为上下线消息状态发布模块、代理订阅模块、主题 (Topic) 重写模块。
 
 ### 上下线消息状态发布模块
 
@@ -1805,9 +1805,9 @@ module.subscription = off
 
 ``` sourceCode properties
 ## Subscribe the Topics's qos
-## module.subscription.1.topic = $client/%c
+## module.subscription.1.topic = $client/% c
 ## module.subscription.1.qos = 0
-## module.subscription.2.topic = $user/%u
+## module.subscription.2.topic = $user/% u
 ## module.subscription.2.qos = 1
 ```
 

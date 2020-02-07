@@ -1,6 +1,6 @@
 ---
 # 标题
-title: {{ title }}
+title: {{title}}
 # 编写日期
 date: {{ date }}
 # 作者 Github 名称
