@@ -64,6 +64,16 @@ emqx-auth-redis (plugin)
   Github PR:
   `emqx/emqx-auth-redis#151 <https://github.com/emqx/emqx-auth-redis/pull/151>`_
 
+cowboy (dependency)
+-------------------
+
+**错误修复:**
+
+- 修复某些情况下不会发送遗嘱消息的问题
+
+  Github Commit:
+  `emqx/cowboy#3b6bda <https://github.com/emqx/cowboy/commit/3b6bdaf4f2e3c5b793a0c3cada2c3b74c3d5e885>`_
+
 .. _release_4.0.1:
 
 ----------
