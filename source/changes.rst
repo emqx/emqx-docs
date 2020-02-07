@@ -5,6 +5,65 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0.2:
+
+----------
+4.0.2 版本
+----------
+
+*发布日期: 2019-02-07*
+
+EMQ X 4.0.2 现已发布。此版本主要进行了错误修复和性能优化。
+
+emqx
+----
+
+**功能增强:**
+
+- 提升 Json 编解码性能
+
+  Github PR:
+  `emqx/emqx#3213 <https://github.com/emqx/emqx/pull/3213>`_,
+  `emqx/emqx#3230 <https://github.com/emqx/emqx/pull/3230>`_,
+  `emqx/emqx#3235 <https://github.com/emqx/emqx/pull/3235>`_
+
+- 压缩生成的项目大小
+
+  Github PR:
+  `emqx/emqx#3214 <https://github.com/emqx/emqx/pull/3214>`_
+
+**错误修复:**
+
+- 修复某些情况下没有发送 DISCONNECT 报文的问题
+
+  Github PR:
+  `emqx/emqx#3208 <https://github.com/emqx/emqx/pull/3208>`_
+
+- 修复收到相同 PacketID 的 PUBLISH 报文时会断开连接的问题
+
+  Github PR:
+  `emqx/emqx#3233 <https://github.com/emqx/emqx/pull/3233>`_
+
+emqx-stomp (plugin)
+-------------------
+
+**错误修复:**
+
+- 修复最大连接数限制不生效的问题
+
+  Github PR:
+  `emqx/emqx-stomp#93 <https://github.com/emqx/emqx-stomp/pull/93>`_
+
+emqx-auth-redis (plugin)
+------------------------
+
+**错误修复:**
+
+- 修复内部模块启动失败的问题
+
+  Github PR:
+  `emqx/emqx-auth-redis#151 <https://github.com/emqx/emqx-auth-redis/pull/151>`_
+
 .. _release_4.0.1:
 
 ----------
