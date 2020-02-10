@@ -27,6 +27,7 @@ ref: undefined
 + 配置文件目录: `./etc`
 + 依赖项目录: `./lib`
 + 日志文件: `./log`
++ 启动相关的脚本、schema 文件:: `./releases`
 
 #### 二进制包安装 EMQ X 
 
@@ -36,3 +37,4 @@ ref: undefined
 + 配置文件目录: `/etc/emqx/etc`
 + 依赖项目录: `/usr/lib/emqx/lib`        
 + 日志文件: `/var/log/emqx`
++ 启动相关的脚本、schema 文件: `/usr/lib/emqx/releases`
