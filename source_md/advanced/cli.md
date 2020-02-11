@@ -17,7 +17,6 @@ ref: undefined
 
 # 管理命令 CLI
 
-
 *EMQ X* 消息服务器提供了 `./bin/emqx_ctl` 的管理命令行。
 
 ## status 命令
@@ -33,13 +32,13 @@ ref: undefined
 
 mgmt 命令查询应用程序。
 
-|                                  |                     |
-| -------------------------------- | ------------------- |
-| mgmt list                        | 列出应用程序列表            |
-| mgmt insert \<AppId\> \<Name\>   | 添加 REST API 的应用程序   |
-| mgmt update \<AppId\> \<status\> | 更新 REST API 的应用程序   |
+| 命令                             | 描述                         |
+| -------------------------------- | ---------------------------- |
+| mgmt list                        | 列出应用程序列表             |
+| mgmt insert \<AppId\> \<Name\>   | 添加 REST API 的应用程序     |
+| mgmt update \<AppId\> \<status\> | 更新 REST API 的应用程序     |
 | mgmt lookup \<AppId\>            | 获取 REST API 的应用程序详情 |
-| mgmt delete \<AppId\>            | 删除 REST API 的应用程序   |
+| mgmt delete \<AppId\>            | 删除 REST API 的应用程序     |
 
 ### mgmt list
 
@@ -86,11 +85,11 @@ mgmt 命令查询应用程序。
 broker
 命令查询服务器基本信息，启动时间，统计数据与性能数据。
 
-|                |                                                                        |
-| -------------- | ---------------------------------------------------------------------- |
-| broker         | 查询 EMQ X 消息服务器描述、版本、启动时间                                               |
+| 命令           | 描述                                                         |
+| -------------- | ------------------------------------------------------------ |
+| broker         | 查询 EMQ X 消息服务器描述、版本、启动时间                    |
 | broker stats   | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、 订阅 (Subscription)、路由 (Route) 统计信息 |
-| broker metrics | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计                                     |
+| broker metrics | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计             |
 
 查询 *EMQ X* 消息服务器基本信息包括版本、启动时间等:
 
@@ -225,20 +224,21 @@ broker
 
 cluster 命令集群多个 *EMQ X* 消息服务器节点 (进程):
 
-|                              |         |
-| ---------------------------- | ------- |
-| cluster join \<Node\>        | 加入集群    |
-| cluster leave                | 离开集群    |
+| 命令                         | 描述           |
+| ---------------------------- | -------------- |
+| cluster join \<Node\>        | 加入集群       |
+| cluster leave                | 离开集群       |
 | cluster force-leave \<Node\> | 从集群删除节点 |
-| cluster status               | 查询集群状态  |
+| cluster status               | 查询集群状态   |
 
 cluster 命令集群本机两个 *EMQ X* 节点示例:
 
-|       |                   |         |
-| ----- | ----------------- | ------- |
-| 目录    | 节点名               | MQTT 端口 |
-| emqx1 | <emqx1@127.0.0.1> | 1883    |
-| emqx2 | <emqx2@127.0.0.1> | 2883    |
+> 如果需要在同一台机器上启动两个 *EMQ X* 节点, 需要修改 `etc/emqx.conf` 文件中的 `listener`  以避免端口冲突
+
+| 目录  | 节点名            | MQTT 端口 |
+| ----- | ----------------- | --------- |
+| emqx1 | <emqx1@127.0.0.1> | 1883      |
+| emqx2 | <emqx2@127.0.0.1> | 2883      |
 
 启动 emqx1 :
 
@@ -277,17 +277,7 @@ emqx1 节点下删除 emqx2:
 
     $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
-不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
-
-</div>
+> 不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
 
 ## acl 命令
 
@@ -299,9 +289,9 @@ Note
 
 clients 命令查询连接的 MQTT 客户端。
 
-|                           |                   |
-| ------------------------- | ----------------- |
-| clients list              | 查询全部客户端连接         |
+| 命令                      | 描述                     |
+| ------------------------- | ------------------------ |
+| clients list              | 查询全部客户端连接       |
 | clients show \<ClientId\> | 根据 ClientId 查询客户端 |
 | clients kick \<ClientId\> | 根据 ClientId 踢出客户端 |
 
@@ -317,7 +307,7 @@ clients 命令查询连接的 MQTT 客户端。
 
 返回 Client 对象的属性:
 
-|                           |                           |
+| Name | 描述 |
 | ------------------------- | ------------------------- |
 | username                  | 用户名                       |
 | peername                  | 客户端 IP 与端口                |
@@ -352,8 +342,8 @@ clients 命令查询连接的 MQTT 客户端。
 
 routes 命令查询路由表。
 
-|                       |               |
-| --------------------- | ------------- |
+| 命令                  | 描述                |
+| --------------------- | ------------------- |
 | routes list           | 查询全部路由        |
 | routes show \<Topic\> | 根据 Topic 查询路由 |
 
@@ -378,12 +368,12 @@ routes 命令查询路由表。
 
 subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 
-|                                                  |                   |
-| ------------------------------------------------ | ----------------- |
-| subscriptions list                               | 查询全部订阅            |
+| 命令                                             | 描述                     |
+| ------------------------------------------------ | ------------------------ |
+| subscriptions list                               | 查询全部订阅             |
 | subscriptions show \<ClientId\>                  | 查询某个 ClientId 的订阅 |
-| subscriptions add \<ClientId\> \<Topic\> \<QoS\> | 手动添加静态订阅          |
-| subscriptions del \<ClientId\> \<Topic\>         | 手动删除静态订阅          |
+| subscriptions add \<ClientId\> \<Topic\> \<QoS\> | 手动添加静态订阅         |
+| subscriptions del \<ClientId\> \<Topic\>         | 手动删除静态订阅         |
 
 ### subscriptions list
 
@@ -422,24 +412,14 @@ subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 
 plugins 命令用于加载、卸载、查询插件应用。 *EMQ X* 消息服务器通过插件扩展认证、定制功能，插件置于 plugins/ 目录下。
 
-|                           |                |
+| 命令 | 描述 |
 | ------------------------- | -------------- |
 | plugins list              | 列出全部插件 (Plugin) |
 | plugins load \<Plugin\>   | 加载插件 (Plugin)   |
 | plugins unload \<Plugin\> | 卸载插件 (Plugin)   |
 | plugins reload \<Plugin\> | 重载插件 (Plugin)   |
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
-当修改完成某插件的配置文件时，若需要立即生效则需要执行 `reload` 命令。因为 `unload/load` 命令不会编译新的配置文件
-
-</div>
+> 当修改完成某插件的配置文件时，若需要立即生效则需要执行 `reload` 命令。因为 `unload/load` 命令不会编译新的配置文件
 
 ### plugins list
 
@@ -476,10 +456,10 @@ Note
 
 插件属性:
 
-|             |       |
-| ----------- | ----- |
-| version     | 插件版本  |
-| description | 插件描述  |
+| Name        | 描述       |
+| ----------- | ---------- |
+| version     | 插件版本   |
+| description | 插件描述   |
 | active      | 是否已加载 |
 
 ### plugins load \<Plugin\>
@@ -510,15 +490,15 @@ Note
 
 vm 命令用于查询 Erlang 虚拟机负载、内存、进程、IO 信息。
 
-|            |                   |
-| ---------- | ----------------- |
-| vm         | 等同于 vm all        |
+| 命令       | 描述                    |
+| ---------- | ----------------------- |
+| vm         | 等同于 vm all           |
 | vm all     | 查询 VM 全部信息        |
-| vm load    | 查询 VM 负载          |
-| vm memory  | 查询 VM 内存          |
+| vm load    | 查询 VM 负载            |
+| vm memory  | 查询 VM 内存            |
 | vm process | 查询 VM Erlang 进程数量 |
-| vm io      | 查询 VM io 最大文件句柄   |
-| vm ports   | 查询 VM 的端口         |
+| vm io      | 查询 VM io 最大文件句柄 |
+| vm ports   | 查询 VM 的端口          |
 
 ### vm all
 
@@ -606,13 +586,13 @@ log 命令用于设置日志等级。访问 [Documentation of
 logger](http://erlang.org/doc/apps/kernel/logger_chapter.html)
 以获取详细信息
 
-|                                                |                          |
-| ---------------------------------------------- | ------------------------ |
+| 命令                                           | 描述                                   |
+| ---------------------------------------------- | -------------------------------------- |
 | log set-level \<Level\>                        | 设置主日志等级和所有 Handlers 日志等级 |
-| log primary-level                              | 查看主日志等级                  |
-| log primary-lelvel \<Level\>                   | 设置主日志等级                  |
-| log handlers list                              | 查看当前安装的所有 Hanlders       |
-| log handlers set-level \<HandlerId\> \<Level\> | 设置指定 Hanlder 的日志等级       |
+| log primary-level                              | 查看主日志等级                         |
+| log primary-lelvel \<Level\>                   | 设置主日志等级                         |
+| log handlers list                              | 查看当前安装的所有 Hanlders            |
+| log handlers set-level \<HandlerId\> \<Level\> | 设置指定 Hanlder 的日志等级            |
 
 ### log set-level \<Level\>
 
@@ -661,26 +641,15 @@ logger](http://erlang.org/doc/apps/kernel/logger_chapter.html)
 trace 命令用于追踪某个客户端或
 Topic，打印日志信息到文件。
 
-|                                                        |                           |
-| ------------------------------------------------------ | ------------------------- |
-| trace list                                             | 查询全部开启的追踪                 |
+| 命令                                                   | 描述                                       |
+| ------------------------------------------------------ | ------------------------------------------ |
+| trace list                                             | 查询全部开启的追踪                         |
 | trace start client \<ClientId\> \<File\> \[\<Level\>\] | 开启 Client 追踪，存储指定等级的日志到文件 |
-| trace stop client \<ClientId\>                         | 关闭 Client 追踪              |
+| trace stop client \<ClientId\>                         | 关闭 Client 追踪                           |
 | trace start topic \<Topic\> \<File\> \[\<Level\>\]     | 开启 Topic 追踪，存储指定等级的日志到文件  |
-| trace stop topic \<Topic\>                             | 关闭 Topic 追踪               |
+| trace stop topic \<Topic\>                             | 关闭 Topic 追踪                            |
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
-使用 trace 之前，需要将主日志等级 (primary logger level) 设置成足够低的值。为提高系统运行性能，默认的主日志等级是
-error。
-
-</div>
+> 使用 trace 之前，需要将主日志等级 (primary logger level) 设置成足够低的值。为提高系统运行性能，默认的主日志等级是 error。
 
 ### trace start client \<ClientId\> \<File\> \[\<Level\>\]
 
@@ -743,10 +712,10 @@ error。
 
 listeners 命令用于查询开启的 TCP 服务监听器
 
-|                                   |                 |
-| --------------------------------- | --------------- |
+| 命令                              | 描述                      |
+| --------------------------------- | ------------------------- |
 | listeners                         | 查询开启的 TCP 服务监听器 |
-| listeners stop \<Proto\> \<Port\> | 停止监听端口          |
+| listeners stop \<Proto\> \<Port\> | 停止监听端口              |
 
 ### listeners list
 
@@ -792,12 +761,12 @@ listeners 命令用于查询开启的 TCP 服务监听器
 
 listener 参数说明:
 
-|                 |                |
-| --------------- | -------------- |
-| acceptors       | TCP Acceptor 池 |
-| max\_conns      | 最大允许连接数        |
+| Name            | 描述                |
+| --------------- | ------------------- |
+| acceptors       | TCP Acceptor 池     |
+| max\_conns      | 最大允许连接数      |
 | current\_conns  | 当前连接数          |
-| shutdown\_count | Socket 关闭原因统计  |
+| shutdown\_count | Socket 关闭原因统计 |
 
 ### listeners stop \<Proto\> \<Port\>
 
@@ -811,12 +780,12 @@ listener 参数说明:
 
 ## rules 命令
 
-|                                                                         |                |
-| ----------------------------------------------------------------------- | -------------- |
-| rules list                                                              | List all rules |
-| rules show \<RuleId\>                                                   | Show a rule    |
+| 命令                                                         | 描述           |
+| ------------------------------------------------------------ | -------------- |
+| rules list                                                   | List all rules |
+| rules show \<RuleId\>                                        | Show a rule    |
 | rules create \<name\> \<hook\> \<sql\> \<actions\> \[-d \[\<descr\>\]\] | Create a rule  |
-| rules delete \<RuleId\>                                                 | Delete a rule  |
+| rules delete \<RuleId\>                                      | Delete a rule  |
 
 ### rules create
 
@@ -832,17 +801,7 @@ listener 参数说明:
     
     Rule test1:1556242324634254201 created
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
-一个规则由系统生成的规则 ID 标识，所以如果用相同的名字重复添加规则，会生成多个 ID 不同的规则。
-
-</div>
+> 一个规则由系统生成的规则 ID 标识，所以如果用相同的名字重复添加规则，会生成多个 ID 不同的规则。
 
 ### rules list
 
@@ -872,22 +831,12 @@ Note
 
 ## rule-actions 命令
 
-|                                                           |                    |
+| 命令                                                      | 描述               |
 | --------------------------------------------------------- | ------------------ |
 | rule-actions list \[-t \[\<type\>\]\] \[-k \[\<hook\>\]\] | List all actions   |
 | rule-actions show \<ActionId\>                            | Show a rule action |
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
-动作可以由 emqx 内置 (称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
-
-</div>
+> 动作可以由 emqx 内置 (称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
 
 ### rule-actions show
 
@@ -923,12 +872,12 @@ Note
 
 ## resources 命令
 
-|                                                                                         |                    |
-| --------------------------------------------------------------------------------------- | ------------------ |
+| 命令                                                         | 描述               |
+| ------------------------------------------------------------ | ------------------ |
 | emqx\_ctl resources create \<name\> \<type\> \[-c \[\<config\>\]\] \[-d \[\<descr\>\]\] | Create a resource  |
-| resources list \[-t \<ResourceType\>\]                                                  | List all resources |
-| resources show \<ResourceId\>                                                           | Show a resource    |
-| resources delete \<ResourceId\>                                                         | Delete a resource  |
+| resources list \[-t \<ResourceType\>\]                       | List all resources |
+| resources show \<ResourceId\>                                | Show a resource    |
+| resources delete \<ResourceId\>                              | Delete a resource  |
 
 ### resources create
 
@@ -972,22 +921,12 @@ Note
 
 ## resource-types 命令
 
-|                              |                         |
+| 命令                         | 描述                    |
 | ---------------------------- | ----------------------- |
 | resource-types list          | List all resource-types |
 | resource-types show \<Type\> | Show a resource-type    |
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
-资源类型可以由 emqx 内置 (称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
-
-</div>
+> 资源类型可以由 emqx 内置 (称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
 
 ### resource-types list
 
@@ -1008,9 +947,9 @@ Note
 
 ## recon 命令
 
-|                        |                                                    |
-| ---------------------- | -------------------------------------------------- |
-| recon memory           | recon\_alloc:memory/2                              |
+| 命令                   | 描述                                                |
+| ---------------------- | --------------------------------------------------- |
+| recon memory           | recon\_alloc:memory/2                               |
 | recon allocated        | recon\_alloc:memory (allocated\_types, current/max) |
 | recon bin\_leak        | recon:bin\_leak (100)                               |
 | recon node\_stats      | recon:node\_stats (10, 1000)                        |
@@ -1112,11 +1051,11 @@ recon:remote\_load (Mod):
 
 ## retainer 命令
 
-|                 |             |
-| --------------- | ----------- |
-| retainer info   | 显示保留消息的数量   |
+| 命令            | 描述                   |
+| --------------- | ---------------------- |
+| retainer info   | 显示保留消息的数量     |
 | retainer topics | 显示保留消息的所有主题 |
-| retainer clean  | 清除所有保留的消息   |
+| retainer clean  | 清除所有保留的消息     |
 
 ### retainer info
 
@@ -1148,8 +1087,8 @@ recon:remote\_load (Mod):
 
 Dashboard 插件会自动注册 admins 命令，用于创建、删除管理员账号，重置管理员密码。
 
-|                                               |             |
-| --------------------------------------------- | ----------- |
+| 命令                                          | 描述            |
+| --------------------------------------------- | --------------- |
 | admins add \<Username\> \<Password\> \<Tags\> | 创建 admin 账号 |
 | admins passwd \<Username\> \<Password\>       | 重置 admin 密码 |
 | admins del \<Username\>                       | 删除 admin 账号 |
@@ -1177,53 +1116,3 @@ Dashboard 插件会自动注册 admins 命令，用于创建、删除管理员�
     $ ./bin/emqx_ctl admins del root
     
     ok
-
-## luahook 命令
-
-|                            |                                                         |
-| -------------------------- | ------------------------------------------------------- |
-| luahook load \<Script\>    | 加载 lua 脚本                                               |
-| luahook unload \<Script\>  | 卸载 lua 脚本                                               |
-| luahook reload \<Script\>  | 重新加载 lua 脚本                                             |
-| luahook enable \<Script\>  | 将名为 \<Script\>.x 的 lua 脚本重命名为 \<Script\> 并加载            |
-| luahook disable \<Script\> | 卸载名为 \<Script\> 的 lua 脚本并重命名为 \<Script\>.x，以避免下次启动时自动加载 |
-
-### luahook load \<Script\>
-
-加载 lua 脚本:
-
-    $ ./bin/emqx_ctl luahook load test.lua
-    
-    Load "test.lua" successfully
-
-### luahook unload \<Script\>
-
-卸载 lua 脚本:
-
-    $ ./bin/emqx_ctl luahook unload test.lua
-    
-    Unload "test.lua" successfully
-
-### luahook reload \<Script\>
-
-重新加载 lua 脚本:
-
-    $ ./bin/emqx_ctl luahook reload test.lua
-    
-    Reload "test.lua" successfully
-
-### luahook enable \<Script\>
-
-将名为 \<Script\>.x 的 lua 脚本重命名为 \<Script\> 并加载:
-
-    $ ./bin/emqx_ctl luahook enable test.lua
-    
-    Enable "test.lua" successfully
-
-### luahook disable \<Script\>
-
-卸载名为 \<Script\> 的 lua 脚本并重命名为 \<Script\>.x，以避免下次启动时自动加载:
-
-    $ ./bin/emqx_ctl luahook disable test.lua
-    
-    Disable "test.lua" successfully
