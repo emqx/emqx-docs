@@ -21,7 +21,7 @@ ref: undefined
 
 ## status 命令
 
-查询 *EMQ X* 消息服务器运行状态:
+查询EMQ X 消息服务器运行状态:
 
     $ ./bin/emqx_ctl status
     
@@ -91,7 +91,7 @@ broker
 | broker stats   | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、 订阅 (Subscription)、路由 (Route) 统计信息 |
 | broker metrics | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计             |
 
-查询 *EMQ X* 消息服务器基本信息包括版本、启动时间等:
+查询EMQ X 消息服务器基本信息包括版本、启动时间等:
 
     $ ./bin/emqx_ctl broker
     
@@ -222,7 +222,7 @@ broker
 
 ## cluster 命令
 
-cluster 命令集群多个 *EMQ X* 消息服务器节点 (进程):
+cluster 命令集群多个EMQ X 消息服务器节点 (进程):
 
 | 命令                         | 描述           |
 | ---------------------------- | -------------- |
@@ -231,9 +231,9 @@ cluster 命令集群多个 *EMQ X* 消息服务器节点 (进程):
 | cluster force-leave \<Node\> | 从集群删除节点 |
 | cluster status               | 查询集群状态   |
 
-cluster 命令集群本机两个 *EMQ X* 节点示例:
+cluster 命令集群本机两个EMQ X 节点示例:
 
-> 如果需要在同一台机器上启动两个 *EMQ X* 节点, 需要修改 `etc/emqx.conf` 文件中的 `listener`  以避免端口冲突
+如果需要在同一台机器上启动两个EMQ X 节点, 需要修改 `etc/emqx.conf` 文件中的 `listener` 以避免端口冲突
 
 | 目录  | 节点名            | MQTT 端口 |
 | ----- | ----------------- | --------- |
@@ -248,7 +248,7 @@ cluster 命令集群本机两个 *EMQ X* 节点示例:
 
     $ cd emqx2 && ./bin/emqx start
 
-emqx2 节点与 emqx1 集群，emqx2 目录下:
+emqx2 节点与 emqx1 集群，切换到 emqx2 目录下执行:
 
     $ ./bin/emqx_ctl cluster join emqx1@127.0.0.1
     
@@ -277,7 +277,7 @@ emqx1 节点下删除 emqx2:
 
     $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
-> 不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
+EMQ X 消息服务器不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
 
 ## acl 命令
 
@@ -410,7 +410,7 @@ subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 
 ## plugins 命令
 
-plugins 命令用于加载、卸载、查询插件应用。 *EMQ X* 消息服务器通过插件扩展认证、定制功能，插件置于 plugins/ 目录下。
+plugins 命令用于加载、卸载、查询插件应用。EMQ X 消息服务器通过插件扩展认证、定制功能，插件置于 plugins/ 目录下。
 
 | 命令 | 描述 |
 | ------------------------- | -------------- |
