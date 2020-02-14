@@ -17,12 +17,17 @@ ref: undefined
 
 # 安装
 
+<!-- shell 脚本一键安装(Linux) % start -->
+
 ## shell 脚本一键安装(Linux)
 
 ```bash
 curl https://repos.emqx.io/install_emqx.sh | bash
 ```
 
+<!-- shell 脚本一键安装(Linux) % end -->
+
+<!-- 包管理器安装(Linux) % start -->
 ## 包管理器安装(Linux)
 
 #### Centos
@@ -92,6 +97,18 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         $ sudo service emqx start
         ```
 
+6.  停止 EMQ X
+
+    ```
+    $ emqx stop
+    ok
+    ```
+
+7.  卸载 EMQ X
+
+    ```
+    $ sudo yum remove emqx
+    ```
 
 #### Ubuntu、Debian
 
@@ -196,6 +213,19 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         $ sudo service emqx start
         ```
 
+8.  停止 EMQ X
+
+    ```
+    $ emqx stop
+    ok
+    ```
+
+9.  卸载 EMQ X
+
+    ```
+    $ sudo apt remove emqx
+    ```
+
 #### OpenSUSE
 
 1.  下载 GPG 公钥并导入。
@@ -264,6 +294,22 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         $ sudo service emqx start
         ```
 
+6.  停止 EMQ X
+
+    ```
+    $ emqx stop
+    ok
+    ```
+
+7.  卸载 EMQ X
+
+    ```
+    $ sudo zypper rm emqx
+    ```
+
+<!-- 包管理器安装(Linux) % end -->
+
+<!-- 二进制包安装(Linux) % start -->
 ## 二进制包安装(Linux)
 
 1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或[github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的EMQ X 版本的二进制包。
@@ -306,6 +352,36 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         $ sudo service emqx start
         ```
 
+4.  停止 EMQ X
+
+    ```
+    $ emqx stop
+    ok
+    ```
+
+5.  卸载 EMQ X
+
+    + DEB包:
+
+      ```
+      $ dpkg -r emqx
+      ```
+
+      或
+
+      ```
+      $ dpkg -P emqx
+      ```
+
+    + RPM包:
+
+      ```
+      $ rpm -e emqx
+      ```
+
+<!-- 二进制包安装(Linux) % end -->
+
+<!-- ZIP 压缩包安装(Linux、MaxOS、Windows) % start -->
 ## ZIP 压缩包安装(Linux、MaxOS、Windows)
 
 1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或[github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X 版本的 zip 包。
@@ -327,6 +403,20 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     emqx v4.0.0 is running
     ```
 
+4.  停止 EMQ X
+
+    ```
+    $ ./bin/emqx stop
+    ok
+    ```
+
+5.  卸载 EMQ X
+
+    直接删除 EMQ X 目录即可
+
+<!-- ZIP 压缩包安装(Linux、MaxOS、Windows) % end -->
+
+<!-- Homebrew 安装(MacOS) % start -->
 ## 通过 Homebrew 安装(MacOS)
 
 1.  添加 EMQ X 的 tap
@@ -352,6 +442,22 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     emqx v4.0.0 is running
     ```
 
+4.  停止 EMQ X
+
+    ```
+    $ emqx stop
+    ok
+    ```
+
+5.  卸载 EMQ X
+
+    ```
+    $ brew uninstall emqx
+    ```
+
+<!-- Homebrew 安装(MacOS) % end -->
+
+<!-- 通过Docker 运行(包含简单的docker-compose集群) % start -->
 ## 通过Docker 运行(包含简单的docker-compose集群)
 
 #### 运行单个容器
@@ -459,6 +565,9 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 更多关于 EMQ X Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
+<!-- 通过Docker 运行(包含简单的docker-compose集群) % end -->
+
+<!-- 通过 Helkm 安装并集群(K8S、K3S) % start -->
 ## 通过 Helkm 安装并集群(K8S、K3S)
 
 1. 添加 helm 仓库
@@ -501,6 +610,9 @@ curl https://repos.emqx.io/install_emqx.sh | bash
                     stopped_nodes => []}
   ```
 
+<!-- 通过 Helkm 安装并集群(K8S、K3S) % end -->
+
+<!-- 源码编译安装 % start -->
 ## 源码编译安装
 
 1. 获取源码
@@ -534,4 +646,4 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     emqx v4.0.0 is running
     ```
 
-
+<!-- 源码编译安装 % end -->

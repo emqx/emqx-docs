@@ -17,60 +17,58 @@ ref: undefined
 
 # 启动 EMQ X
 
-#### 直接启动 EMQ X
+## 申请 License
 
+EMQ X Enterprise 需要 License 文件才能正常启动, EMQ X Broker 可以跳过这一步.
+
+1. 访问 `https://emqx.io`,  在 EMQ X Enterprise 下载页面, 点击 **Get FREE Trial License**
+
+    ![](./static/WX20200210-153301@2x.png)
+
+2. 注册登陆并申请 License 文件试用, 下载 License 文件, 并根据说明保存到指定的位置
+
+    ![](./static/WX20200210-153822@2x.png)
+
+3. 如果是正在运行的 EMQ X Enterprise 需要更新 License 文件, 那么可以使用 `emqx_ctl license reload [license 文件所在路径]` 命令直接更新 License 文件, 无需重启 EMQ X 服务.
+
+## 启动 EMQ X
+
++ 后台启动 EMQ X
+
+    ```
+    $ emqx start
+    EMQ X Broker v4.0.0 is started successfully!
+    ```
+
++ systemctl 启动
+
+    ```
+    $ sudo systemctl start emqx
+    EMQ X Broker v4.0.0 is started successfully!
+    ```
+
++ service 启动
+
+    ```
+    $ sudo service emqx start
+    EMQ X Broker v4.0.0 is started successfully!
+    ```
+
+通过 ZIP 压缩包安装的 EMQ X 不支持通过 systemctl 和 service 启动
+
+## 使用 `emqx_ctl` 查看 EMQ X 的状态
+
+EMQ X 正常启动: 
 ```
-$ emqx start
-EMQ X Broker v4.0.0 is started successfully!
-
 $ emqx_ctl status
 Node 'emqx@127.0.0.1' is started
 emqx 4.0.0 is running
 ```
 
-#### 使用控制台启动EMQ X
-
+EMQ X 未能正常启动:
 ```
-$ emqx console
-Starting emqx on node emqx@127.0.0.1
-Start http:management listener on 8081 successfully.
-Start http:dashboard listener on 18083 successfully.
-Start mqtt:tcp listener on 127.0.0.1:11883 successfully.
-Start mqtt:tcp listener on 0.0.0.0:1883 successfully.
-Start mqtt:ws listener on 0.0.0.0:8083 successfully.
-Start mqtt:ssl listener on 0.0.0.0:8883 successfully.
-Start mqtt:wss listener on 0.0.0.0:8084 successfully.
-EMQ X Broker 4.0.0 is running now!
-Eshell V10.3.5.6  (abort with ^G)
-(emqx@127.0.0.1)1>
+$ emqx_ctl status
+Node 'emqx@127.0.0.1' not responding to pings.
 ```
 
-#### 登陆dashboard
-
-浏览器访问 `http://127.0.0.1:18083`, 输入默认的用户名:`admin` 密码: `public`
-
-![](./static/WX20200210-150412@2x.png)
-
-#### 使用 Websocket 订阅和发布消息
-
-在右侧菜单栏中依次选择 **工具** -> **Websocket**,  在 Websocket 界面点击 **连接** .
-
-![](./static/WX20200210-150946@2x.png)
-
-Websocket 界面往下拉, 点击 **订阅** 订阅 `testtopic/#` 主题
-
-![](./static/WX20200210-151132@2x.png)
-
-在 **消息** 界面点击 **发送** 按钮, 向 `testtopic` 主题发送一条内容为 `{ "msg": "Hello, World!" }` 的消息, 发送之后可以在 **发布消息列表** 和 **订阅消息列表** 看到这条消息
-
-![](./static/WX20200210-151343@2x.png)
-
-#### 关闭EMQ X
-
-在命令行执行 `emqx stop` 以关闭 EMQ X
-
-```
-$ emqx stop
-ok
-```
-
+如果 EMQ X 未能正常启动, 可以通过 [目录结构](using-emqx/directory.md) 查看 `logs` 目录下的日志文件, 并参考我们的 [FAQ]([FAQ](faq/index.md#)) 进行排错.
