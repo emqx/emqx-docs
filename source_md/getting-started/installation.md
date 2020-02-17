@@ -17,6 +17,22 @@ ref: undefined
 
 # 安装
 
+EMQ X 目前支持的系统:
+
++ Centos6
++ Centos7
++ OpenSUSE tumbleweed
++ Debian 8
++ Debian 9
++ Debian 10
++ Ubuntu 14.04
++ Ubuntu 16.04
++ Ubuntu 18.04
++ MacOS 10.13
++ MacOS 10.14
++ MacOS 10.15
++ Windows Server 2019
+
 <!-- shell 脚本一键安装(Linux) % start -->
 
 ## shell 脚本一键安装(Linux)
