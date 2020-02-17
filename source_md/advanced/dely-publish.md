@@ -28,7 +28,7 @@ $delayed/{DelayInterval}/{TopicName}
 ```
 
 - `$delayed`: 是一个字符串，它将主题名称标记为延迟主题。
-- `{DelayInterval}`: 指定MQTT消息的延迟秒的延迟间隔， 允许的最大间隔是4294967。
+- `{DelayInterval}`: 指定MQTT消息的延迟秒的延迟间隔，允许的最大间隔是4294967。
 - `{TopicName}`: MQTT消息的主题名称。
 
 例如:
