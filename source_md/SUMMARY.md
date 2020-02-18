@@ -22,7 +22,7 @@
   * [规则引擎](advanced/rule-engine.md)
   * [分布集群](advanced/cluster.md)
   * [消息桥接](advanced/bridge.md)
-  * [插件](advanced/plugins.md)
+  * [钩子和插件](advanced/hooks-and-plugins.md)
   * [WebHook](advanced/webhook.md)
   * [保留消息](advanced/retained.md)
   * [延迟发布](advanced/dely-publish.md)
