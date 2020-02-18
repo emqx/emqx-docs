@@ -143,9 +143,9 @@ date time level client_info module_info msg
 EMQ X 使用了分层的日志系统，在日志级别上，包括全局日志级别 (primary log level)、以及各 log hanlder 的日志级别。
 
 ```
-									[Primary Level]       -- global log level and filters
-		      					 		/ \
-		          [Handler 1]  [Handler 2]  -- log levels and filters at each handler
+     [Primary Level]        -- global log level and filters
+           / \
+[Handler 1]  [Handler 2]    -- log levels and filters at each handler
 ```
 
 log handler 是负责日志处理和输出的工作进程。它由 log handler id 唯一标识，并负有如下任务：
