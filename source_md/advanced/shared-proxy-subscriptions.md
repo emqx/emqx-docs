@@ -17,21 +17,29 @@ ref: undefined
 
 # 代理订阅
 
-EMQ X 的代理订阅功能可以在当客户端连接时，自动订阅主题。
+EMQ X Broker 的代理订阅功能可以在当客户端连接时，自动订阅相关的主题。
 
-启用 EMQ X 的代理订阅需要配置 `etc/emqx.conf` 文件。
+#### 开启代理订阅功能
+
+EMQ X Broker 代理订阅功能默认是关闭的，打开代理订阅功能需要配置 `etc/emqx.conf` 文件，在 `etc/emqx.conf` 文件中查找 `module.subscription` 的配置项，并把它的值设置为 `on`，开启代理订阅功能。
 
 ```
-## Subscription Module
-
-## Enable Subscription Module.
-##
-## Value: on | off
 module.subscription = on
+```
+#### 配置代理订阅规则
 
-## Subscribe the Topics automatically when client connected.
-## Qos of the subscription: 0 | 1 | 2
+EMQ X Broker 的代理订阅规则需要用户自行配置，用户可以自行添加多条代理订阅规则，每条代理订阅规则都需要指定 topic 和 qos，规则的数量没有限制，代理订阅规则的格式如下：
 
+```
+module.subscription.<numbers>.topic = <topic>
+module.subscription.<numbers>.qos = <qos>
+```
+
+举个例子：
+
+在 `etc/emqx.conf` 文件中手动添加代理订阅规则：
+
+```
 module.subscription.1.topic = $client/%c
 module.subscription.1.qos = 1
 
@@ -39,8 +47,8 @@ module.subscription.2.topic = $user/%u
 module.subscription.2.qos = 2
 ```
 
+在代理订阅的配置中，可以使用 `%c` 和 `%u` 两个变量，EMQ X Broker 会把它们解析为来自客户端的 `client_id` 和 `username`
+
 上面的配置决定了当客户端链接的时候，会自动帮客户端订阅 Qos 为 1 的 `$client/<client_id>` 主题和 Qos 为 2 的 `$user/<username>` 主题，配置项中的 `%c` 代表来自客户端连接的 `client_id`，`%u` 代表来自客户端连接的 `username`，`$client` 和 `$user` 均为文本字符串。
 
-举个例子:
-
-当一个 `clientid = testclient`，`username=tester` 的客户端连接 EMQ X 的时候，代理订阅功能会主动帮客户端订阅 `$client/estclient`、`$user/tester` 这两个主题。
+当一个 `clientid = testclient`，`username = tester` 的客户端连接 EMQ X Broker 的时候，代理订阅功能会主动帮客户端订阅 `$client/estclient`、`$user/tester` 这两个主题。

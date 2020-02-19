@@ -17,11 +17,11 @@ ref: undefined
 
 # 延迟发布
 
-EMQ X 可以实现延迟发布消息的功能。
+EMQ X Broker 的 `emqx_delayed_publish` 插件可以实现延迟发布 Publish 报文的功能。
 
 想要实现这个功能需要打开 `emqx_delayed_publish` 插件, 使用 `emqx_ctl plugins load emqx_delayed_publish` 命令开启插件。
 
-插件开启后客户端可以将需要延迟发送的消息发布到 EMQ X。使用特殊样式标识这边是一个需要延迟发布消息。格式是:
+插件开启后客户端可以在需要延迟发布的主题前面加上 `$delayed/{DelayInterval}` 来标识这是一个需要延迟发布消息，就像这样：
 
 ```
 $delayed/{DelayInterval}/{TopicName}

@@ -17,11 +17,11 @@ ref: undefined
 
 # 管理命令 CLI
 
-*EMQ X* 消息服务器提供了 `./bin/emqx_ctl` 的管理命令行。
+EMQ X Broker 提供了 `./bin/emqx_ctl` 的管理命令行。
 
 ## status 命令
 
-查询EMQ X 消息服务器运行状态:
+查询EMQ X Broker 运行状态:
 
     $ ./bin/emqx_ctl status
     
@@ -87,11 +87,11 @@ broker
 
 | 命令           | 描述                                                         |
 | -------------- | ------------------------------------------------------------ |
-| broker         | 查询 EMQ X 消息服务器描述、版本、启动时间                    |
+| broker         | 查询 EMQ X Broker 描述、版本、启动时间                    |
 | broker stats   | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、 订阅 (Subscription)、路由 (Route) 统计信息 |
 | broker metrics | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计             |
 
-查询EMQ X 消息服务器基本信息包括版本、启动时间等:
+查询 EMQ X Broker 基本信息包括版本、启动时间等:
 
     $ ./bin/emqx_ctl broker
     
@@ -222,7 +222,7 @@ broker
 
 ## cluster 命令
 
-cluster 命令集群多个EMQ X 消息服务器节点 (进程):
+cluster 命令集群多个 EMQ X Broker  消息服务器节点 (进程):
 
 | 命令                         | 描述           |
 | ---------------------------- | -------------- |
@@ -233,7 +233,7 @@ cluster 命令集群多个EMQ X 消息服务器节点 (进程):
 
 cluster 命令集群本机两个EMQ X 节点示例:
 
-如果需要在同一台机器上启动两个EMQ X 节点，需要修改 `etc/emqx.conf` 文件中的 `listener` 以避免端口冲突
+如果需要在同一台机器上启动两个 EMQ X Broker 节点，需要修改 `etc/emqx.conf` 文件中的 `listener` 以避免端口冲突
 
 | 目录  | 节点名            | MQTT 端口 |
 | ----- | ----------------- | --------- |
@@ -277,7 +277,7 @@ emqx1 节点下删除 emqx2:
 
     $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
-EMQ X 消息服务器不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
+EMQ X Broker 不支持一个已经在 A 集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致
 
 ## acl 命令
 
@@ -317,7 +317,7 @@ clients 命令查询连接的 MQTT 客户端。
 | subscriptions             | 当前订阅数量                    |
 | inflight                  | 当前正在下发的消息数                |
 | awaiting\_rel             | 等待客户端发送 PUBREL 的 QoS2 消息数 |
-| delivered\_msgs           | EMQ X 向此客户端转发的消息数量 (包含重传)  |
+| delivered\_msgs           | EMQ X Broker 向此客户端转发的消息数量 (包含重传)  |
 | enqueued\_msgs            | 消息队列当前长度                  |
 | dropped\_msgs             | 消息队列达到最大长度后丢弃的消息数量        |
 | connected                 | 是否在线                      |
@@ -410,7 +410,7 @@ subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 
 ## plugins 命令
 
-plugins 命令用于加载、卸载、查询插件应用。EMQ X 消息服务器通过插件扩展认证、定制功能，插件置于 plugins/ 目录下。
+plugins 命令用于加载、卸载、查询插件应用。EMQ X Broker 通过插件扩展认证、定制功能，插件置于 plugins/ 目录下。
 
 | 命令 | 描述 |
 | ------------------------- | -------------- |
