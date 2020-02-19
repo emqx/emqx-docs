@@ -832,6 +832,10 @@ gitbook-cli@^2.3.2:
     tmp "0.0.31"
     user-home "2.0.0"
 
+gitbook-plugin-hints@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/gitbook-plugin-hints/download/gitbook-plugin-hints-1.0.2.tgz#e6589983e3ea84749f16dc631e282fafd45ec39b"
+
 github-url-from-git@~1.4.0:
   version "1.4.0"
   resolved "https://registry.npm.taobao.org/github-url-from-git/download/github-url-from-git-1.4.0.tgz#285e6b520819001bde128674704379e4ff03e0de"

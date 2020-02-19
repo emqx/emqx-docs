@@ -1,6 +1,7 @@
 {
   "plugins": [
-    "-anchor-navigation-ex"
+    "-anchor-navigation-ex",
+    "hints"
   ],
   "pluginsConfig": {
     "anchor-navigation-ex": {

@@ -16,3 +16,5 @@ ref: undefined
 ---
 
 # LDAP 认证
+
+<!-- TODO: 为测试通过，从新宇 auth 文档中取 -->
