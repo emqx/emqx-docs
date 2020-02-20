@@ -98,6 +98,56 @@ allow_anonymous = true
 {% endhint %}
 
 
+## 密码加盐规则与哈希方法
+
+EMQ X 多数认证插件中可以启用哈希方法，数据源中仅保存密码密文，保证数据安全。
+
+启用哈希方法时，用户可以为每个客户端都指定一个 salt（盐）并配置加盐规则，数据库中存储的密码是按照加盐规则与哈希方法处理后的密文。
+
+以 MySQL 认证为例：
+
+**加盐规则与哈希方法配置：**
+
+```bash
+# etc/plugins/emqx_auth_mysql.conf
+
+## 不加盐，仅做哈希处理
+auth.mysql.password_hash = sha256
+
+## salt 前缀：使用 sha256 加密 salt + 密码 拼接的字符串
+auth.mysql.password_hash = salt,sha256
+
+## salt 后缀：使用 sha256 加密 密码 + salt 拼接的字符串
+auth.mysql.password_hash = sha256,salt
+
+## pbkdf2 with macfun iterations dklen
+## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
+## auth.mysql.password_hash = pbkdf2,sha256,1000,20
+```
+<!-- TODO 翻译最后一句 -->
+
+### 如何生成认证信息
+
+1. 为每个客户端分用户名、Client ID、密码以及 salt（盐）等信息
+2. 使用与 MySQL 认证相同加盐规则与哈希方法处理客户端信息得到密文
+3. 将客户端信息写入数据库，客户端的密码应当为密文信息
+
+### EMQ X 身份认证流程
+
+1. 根据配置的认证 SQL 结合客户端传入的信息，查询出密码（密文）和 salt（盐）等认证数据，没有查询结果时，认证将终止并返回 ignore 结果
+2. 根据配置的加盐规则与哈希方法计算得到密文，没有启用哈希方法则跳过此步
+3. 将数据库中存储的密文与当前客户端计算的到的密文进行比对，比对成功则认证通过，否则认证失败
+
+MySQL 认证功能逻辑图：
+
+![image-20200217154254202](_assets/image-20200217154254202.png)
+
+
+{% hint style="info" %} 
+写入数据的加盐规则、哈希方法与对应插件的配置一致时认证才能正常进行。更改哈希方法会造成现有认证数据失效。
+{% endhint %}
+
+
 
 ## 认证链
 

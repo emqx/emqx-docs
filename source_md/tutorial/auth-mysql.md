@@ -93,6 +93,16 @@ auth.mysql.query_timeout = 5s
 ```
 
 
+## 加盐规则与哈希方法
+
+MySQL 认证支持配置[加盐规则与哈希方法](./auth.md#加盐规则与哈希方法)：
+
+```bash
+# etc/plugins/emqx_auth_mysql.conf
+
+auth.mysql.password_hash = sha256
+```
+
 
 ## 认证 SQL（auth_query）
 
@@ -124,62 +134,6 @@ auth.mysql.auth_query = select password from mqtt_user where username = '%u' lim
 {% hint style="info" %} 
 可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
 {% endhint %}
-
-
-
-
-## 密码加盐规则与哈希方法
-
-启用哈希方法时，用户可以为每个客户端都指定一个 salt（盐）并配置加盐规则，数据库中存储的密码是按照加盐规则与哈希方法处理后的密文。
-
-**加盐规则与哈希方法配置：**
-
-```bash
-# etc/plugins/emqx_auth_mysql.conf
-
-##
-
-## 不加盐，仅做哈希处理
-auth.mysql.password_hash = sha256
-
-## salt 前缀：使用 sha256 加密 salt + 密码 拼接的字符串
-auth.mysql.password_hash = salt,sha256
-
-## salt 后缀：使用 sha256 加密 密码 + salt 拼接的字符串
-auth.mysql.password_hash = sha256,salt
-
-## pbkdf2 with macfun iterations dklen
-## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
-## auth.mysql.password_hash = pbkdf2,sha256,1000,20
-```
-<!-- TODO 翻译最后一句 -->
-
-**写入认证数据时，应当执行以下步骤：**
-
-1. 为每个客户端分用户名、Client ID、密码以及 salt（盐）等信息
-2. 使用与 MySQL 认证相同加盐规则与哈希方法处理客户端信息得到密文
-3. 将客户端信息写入数据库，客户端的密码应当为密文信息
-
-
-**进行身份认证时，EMQ X 将执行以下步骤：**
-
-1. 根据配置的认证 SQL 结合客户端传入的信息，查询出密码（密文）和 salt（盐）等认证数据，没有查询结果时，认证将终止并返回 ignore 结果
-2. 根据配置的加盐规则与哈希方法计算得到密文，没有启用哈希方法则跳过此步
-3. 将数据库中存储的密文与当前客户端计算的到的密文进行比对，比对成功则认证通过，否则认证失败
-
-
-
-MySQL 认证功能逻辑图：
-
-![image-20200217154254202](_assets/image-20200217154254202.png)
-
-
-
-{% hint style="info" %} 
-写入数据的加盐规则与哈希方法同对应插件的配置一致时认证才能正常进行。
-{% endhint %}
-
-
 
 
 
