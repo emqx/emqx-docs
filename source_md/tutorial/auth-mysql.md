@@ -136,6 +136,10 @@ auth.mysql.auth_query = select password from mqtt_user where username = '%u' lim
 {% endhint %}
 
 
+## 特殊说明
 
+MySQL 8.0 及以后版本使用了 `caching_sha2_password` 作为默认身份验证插件，受限于客户端驱动你必须将其更改为 `mysql_native_password` 插件：
 
-
+```sql
+ALTER USER 'your_username'@'your_host' IDENTIFIED WITH mysql_native_password BY 'your_password';
+```
