@@ -110,12 +110,12 @@ acl_cache_ttl = 1m
 
 | 名称                | 用途                         |
 | ------------------- | ---------------------------- |
-| [emqx_auth_http ][] | 利用 HTTP 服务检查 ACL       |
+| [emqx_auth_http][]  | 利用 HTTP 服务检查 ACL       |
 | [emqx_auth_mysql][] | 利用 MySQL 服务检查 ACL      |
 | [emqx_auth_mongo][] | 利用 MongoDB 服务检查 ACL    |
 | [emqx_auth_pgsql][] | 利用 PostgreSQL 服务检查 ACL |
 | [emqx_auth_redis][] | 利用 Redis 服务检查 ACL      |
-| [emqx_auth_ldap ][] | 利用 LDAP 服务检查 ACL       |
+| [emqx_auth_ldap][]  | 利用 LDAP 服务检查 ACL       |
 
 
 > 注：这些插件对于规则的存储方式各有差别，具体请实现请查看各个插件的使用手册
