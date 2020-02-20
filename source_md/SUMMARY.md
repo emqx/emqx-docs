@@ -20,6 +20,7 @@
   * [管理监控 API](advanced/rest-api.md)
   * [管理命令 CLI](advanced/cli.md)
   * [规则引擎](advanced/rule-engine.md)
+    * [创建规则举例](advanced/rule-examples.md)
   * [分布集群](advanced/cluster.md)
   * [消息桥接](advanced/bridge.md)
   * [插件](advanced/plugins.md)
