@@ -17,7 +17,7 @@ ref: undefined
 
 # 代理订阅
 
-EMQ X Broker 的代理订阅功能可以在当客户端连接时，自动订阅相关的主题。
+EMQ X Broker 的代理订阅功能可以在客户端连接时，帮助客户端订阅用户配置的主题。
 
 #### 开启代理订阅功能
 
@@ -28,11 +28,11 @@ module.subscription = on
 ```
 #### 配置代理订阅规则
 
-EMQ X Broker 的代理订阅规则需要用户自行配置，用户可以自行添加多条代理订阅规则，每条代理订阅规则都需要指定 topic 和 qos，规则的数量没有限制，代理订阅规则的格式如下：
+当然，仅仅开启并不意味代理订阅已经工作，你还需要配置相应的规则，EMQ X Broker 的代理订阅规则支持用户自行配置，用户可以自行添加多条代理订阅规则，每条代理订阅规则都需要指定 Topic 和 QoS，规则的数量没有限制，代理订阅规则的格式如下：
 
 ```
-module.subscription.<numbers>.topic = <topic>
-module.subscription.<numbers>.qos = <qos>
+module.subscription.<number>.topic = <topic>
+module.subscription.<number>.qos = <qos>
 ```
 
 举个例子：

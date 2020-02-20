@@ -19,13 +19,13 @@ ref: undefined
 
 EMQ X Broker 周期性发布自身运行状态、消息统计、客户端上下线事件到 以 $SYS/ 开头系统主题。
 
-$SYS 主题路径以 $SYS/brokers/{node}/ 开头。 {node} 是指产生该 事件/消息 所在的节点名称，例如:
+$SYS 主题路径以 $SYS/brokers/{node}/ 开头。 {node} 是指产生该 事件 / 消息 所在的节点名称，例如:
 
 ```
 $SYS/brokers/emqx@127.0.0.1/version
 $SYS/brokers/emqx@127.0.0.1/uptime
 ```
-> 默认只允许 localhost 的 MQTT 客户端订阅 $SYS 主题，可通过 etc/acl.config 修改访问控制规则。
+默认只允许 localhost 的 MQTT 客户端订阅 $SYS 主题，可通过 etc/acl.config 修改访问控制规则。
 
 $SYS 系统消息发布周期，通过 etc/emqx.conf 配置:
 
@@ -42,16 +42,16 @@ broker.sys_interval = 1m
 | 主题                          | 说明                 |
 | ----------------------------- | -------------------- |
 | $SYS/brokers                  | 集群节点列表         |
-| $SYS/brokers/\${node}/version  | EMQ X 服务器版本     |
-| $SYS/brokers/\${node}/uptime   | EMQ X 服务器启动时间 |
-| $SYS/brokers/\${node}/datetime | EMQ X 服务器时间     |
-| $SYS/brokers/\${node}/sysdescr | EMQ X 服务器描述     |
+| $SYS/brokers/\${node}/version  | EMQ X Broker 版本     |
+| $SYS/brokers/\${node}/uptime   | EMQ X Broker 运行时间 |
+| $SYS/brokers/\${node}/datetime | EMQ X Broker 系统时间     |
+| $SYS/brokers/\${node}/sysdescr | EMQ X Broker 描述     |
 
 ### 客户端上下线事件
 
 \$SYS 主题前缀: \$SYS/brokers/\${node}/clients/
 
-| 主题(Topic)              | 说明                                     |
+| 主题 (Topic)              | 说明                                     |
 | ------------------------ | ---------------------------------------- |
 | ${clientid}/connected    | 上线事件。当某客户端上线时，会发布该消息 |
 | ${clientid}/disconnected | 下线事件。当某客户端离线时，会发布该消息 |
@@ -83,20 +83,20 @@ broker.sys_interval = 1m
 }
 ```
 
-### 系统统计(Statistics)
+### 系统统计 (Statistics)
 
 系统主题前缀: \$SYS/brokers/\${node}/stats/
 
 #### 客户端统计
 
-| 主题(Topic)       | 说明           |
+| 主题 (Topic)       | 说明           |
 | ----------------- | -------------- |
 | connections/count | 当前客户端总数 |
 | connections/max   | 最大客户端数量 |
 
 #### 会话统计
 
-| 主题(Topic)               | 说明             |
+| 主题 (Topic)               | 说明             |
 | ------------------------- | ---------------- |
 | sessions/count            | 当前会话总数     |
 | sessions/max              | 最大会话数量     |
@@ -105,7 +105,7 @@ broker.sys_interval = 1m
 
 #### 订阅统计
 
-| 主题(Topic)                | 说明             |
+| 主题 (Topic)                | 说明             |
 | -------------------------- | ---------------- |
 | suboptions/count           | 当前订阅选项个数 |
 | suboptions/max             | 最大订阅选项总数 |
@@ -118,34 +118,34 @@ broker.sys_interval = 1m
 
 #### 主题统计
 
-| 主题(Topic)  | 说明            |
+| 主题 (Topic)  | 说明            |
 | ------------ | --------------- |
 | topics/count | 当前 Topic 总数 |
 | topics/max   | 最大 Topic 数量 |
 
 #### 路由统计
 
-| 主题(Topic)  | 说明             |
+| 主题 (Topic)  | 说明             |
 | ------------ | ---------------- |
 | routes/count | 当前 Routes 总数 |
 | routes/max   | 最大 Routes 数量 |
 
-> `topics/count` 和 `topics/max` 与 `routes/count` 和 `routes/max` 数值上是相等的。
+`topics/count` 和 `topics/max` 与 `routes/count` 和 `routes/max` 数值上是相等的。
 
-### 收发流量/报文/消息统计
+### 收发流量 / 报文 / 消息统计
 
-系统主题(Topic)前缀: \$SYS/brokers/\${node}/metrics/
+系统主题 (Topic) 前缀: \$SYS/brokers/\${node}/metrics/
 
 #### 收发流量统计
 
-| 主题(Topic)    | 说明         |
+| 主题 (Topic)    | 说明         |
 | -------------- | ------------ |
 | bytes/received | 累计接收流量 |
 | bytes/sent     | 累计发送流量 |
 
-#### MQTT报文收发统计
+#### MQTT 报文收发统计
 
-| 主题(Topic)                 | 说明                           |
+| 主题 (Topic)                 | 说明                           |
 | --------------------------- | ------------------------------ |
 | packets/received            | 累计接收 MQTT 报文             |
 | packets/sent                | 累计发送 MQTT 报文             |
@@ -177,7 +177,7 @@ broker.sys_interval = 1m
 
 #### MQTT 消息收发统计
 
-| 主题(Topic)            | 说明               |
+| 主题 (Topic)            | 说明               |
 | ---------------------- | ------------------ |
 | messages/received      | 累计接收消息       |
 | messages/sent          | 累计发送消息       |
@@ -196,22 +196,21 @@ broker.sys_interval = 1m
 
 ### Alarms - 系统告警
 
-系统主题(Topic)前缀: \$SYS/brokers/\${node}/alarms/
+系统主题 (Topic) 前缀: \$SYS/brokers/\${node}/alarms/
 
-| 主题(Topic) | 说明         |
+| 主题 (Topic) | 说明         |
 | ----------- | ------------ |
 | alert       | 新产生的告警 |
 | clear       | 被清除的告警 |
 
 ### Sysmon - 系统监控
 
-系统主题(Topic)前缀: $SYS/brokers/\${node}/sysmon/
+系统主题 (Topic) 前缀: $SYS/brokers/\${node}/sysmon/
 
-| 主题(Topic)    | 说明              |
+| 主题 (Topic)    | 说明              |
 | -------------- | ----------------- |
 | long_gc        | GC 时间过长警告   |
 | long_schedule  | 调度时间过长警告  |
 | large_heap     | Heap 内存占用警告 |
 | busy_port      | Port 忙警告       |
 | busy_dist_port | Dist Port 忙警告  |
-

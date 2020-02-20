@@ -17,22 +17,20 @@ ref: undefined
 
 # 延迟发布
 
-EMQ X Broker 的 `emqx_delayed_publish` 插件可以实现延迟发布 Publish 报文的功能。
-
-想要实现这个功能需要打开 `emqx_delayed_publish` 插件, 使用 `emqx_ctl plugins load emqx_delayed_publish` 命令开启插件。
-
-插件开启后客户端可以在需要延迟发布的主题前面加上 `$delayed/{DelayInterval}` 来标识这是一个需要延迟发布消息，就像这样：
+EMQ X Broker 的延迟发布功能可以按照用户配置的时间间隔实现延迟发布 Publish 报文的功能。当客户端使用特殊主题前缀 `$delayed/{DelayInterval}/` 发布消息到 EMQ X Broker 时，EMQ X Broker 将在 `{DelayInterval}` 秒后发布该主题消息。
 
 ```
 $delayed/{DelayInterval}/{TopicName}
 ```
 
-- `$delayed`: 是一个字符串，它将主题名称标记为延迟主题。
-- `{DelayInterval}`: 指定MQTT消息的延迟秒的延迟间隔，允许的最大间隔是4294967。
-- `{TopicName}`: MQTT消息的主题名称。
+- `$delayed`: 使用 `$delay` 作为主题前缀的消息都将被视为需要延迟发布的消息。延迟间隔由下一主题层级中的内容决定。
+- `{DelayInterval}`: 指定 MQTT 消息的延迟秒的延迟间隔，单位是秒，允许的最大间隔是 4294967 秒。
+- `{TopicName}`: MQTT 消息的主题名称。
 
 例如:
 
-- `$delayed/15/x/y`: 15秒后将MQTT消息发布到主题 `x/y`。
-- `$delayed/60//a/b`: 1分钟后将MQTT消息发布到 `/a/b`。
-- `$delayed/3600/$SYS/topic`: 1小时后将MQTT消息发布到 `$SYS/topic`。
+- `$delayed/15/x/y`: 15 秒后将 MQTT 消息发布到主题 `x/y`。
+- `$delayed/60/a/b`: 1 分钟后将 MQTT 消息发布到 `/a/b`。
+- `$delayed/3600/$SYS/topic`: 1 小时后将 MQTT 消息发布到 `$SYS/topic`。
+
+此功能由 `emqx-delay-publish` 插件提供，该插件默认关闭，你需要开启插件后才能使用此功能，开启插件的方法请参见 [插件](advanced/plugins.md)。如果你需要长期使用此功能，那么建议你将插件设置为默认启动，请参见 [目录结构](using-emqx/directory.md)。
