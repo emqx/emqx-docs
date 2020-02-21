@@ -5,6 +5,58 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0.3:
+
+----------
+4.0.3 版本
+----------
+
+*发布日期: 2019-02-21*
+
+EMQ X 4.0.3 现已发布。此版本主要进行了错误修复。
+
+emqx
+----
+
+**功能增强:**
+
+- 添加允许客户端绕过认证插件登录的选项
+
+  Github PR:
+  `emqx/emqx#3253 <https://github.com/emqx/emqx/pull/3253>`_
+
+**错误修复:**
+
+- 修复某些竞争条件下会打印不必要的错误日志的问题
+
+  Github PR:
+  `emqx/emqx#3246 <https://github.com/emqx/emqx/pull/3253>`_
+
+emqx-management (plugin)
+------------------------
+
+**错误修复:**
+
+- 移除不再使用的字段和函数以及修复字段值异常的问题
+
+  Github PR:
+  `emqx/emqx-management#176 <https://github.com/emqx/emqx-management/pull/176>`_
+
+- 修复集群环境下无法获取客户端列表的问题
+
+  Github PR:
+  `emqx/emqx-management#173 <https://github.com/emqx/emqx-management/pull/173>`_
+
+- 修复 HTTPS 监听选项
+
+  Github PR:
+  `emqx/emqx-management#172 <https://github.com/emqx/emqx-management/pull/172>`_
+
+- 修复应用列表的返回格式
+
+  Github PR:
+  `emqx/emqx-management#169 <https://github.com/emqx/emqx-management/pull/169>`_
+
 .. _release_4.0.2:
 
 ----------
