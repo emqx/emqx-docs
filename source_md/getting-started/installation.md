@@ -33,18 +33,18 @@ EMQ X Broker 目前支持的系统:
 + MacOS 10.15
 + Windows Server 2019
 
-<!-- shell 脚本一键安装(Linux) % start -->
+<!-- shell 脚本一键安装 (Linux) % start -->
 
-## shell 脚本一键安装(Linux)
+## shell 脚本一键安装 (Linux)
 
 ```bash
 curl https://repos.emqx.io/install_emqx.sh | bash
 ```
 
-<!-- shell 脚本一键安装(Linux) % end -->
+<!-- shell 脚本一键安装 (Linux) % end -->
 
-<!-- 包管理器安装(Linux) % start -->
-## 包管理器安装(Linux)
+<!-- 包管理器安装 (Linux) % start -->
+## 包管理器安装 (Linux)
 
 #### Centos
 
@@ -165,10 +165,10 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         stable"
     ```
     
-    >lsb\_release -cs 子命令返回发行版的名称，例如 xenial。 有时，在像 Linux Mint
-    >这样的发行版中，您可能需要将 $(lsb\_release -cs) 更改为您的父发行版。
-    >例如，如果您使用的是 Linux Mint Tessa，则可以使用 bionic。 EMQ X Broker
-    >不对未经测试和不受支持的发行版提供任何保证。
+    lsb\_release -cs 子命令返回发行版的名称，例如 xenial。 有时，在像 Linux Mint
+    这样的发行版中，您可能需要将 $(lsb\_release -cs) 更改为您的父发行版。
+    例如，如果您使用的是 Linux Mint Tessa，则可以使用 bionic。 EMQ X Broker
+    不对未经测试和不受支持的发行版提供任何保证。
     
 4.  更新 apt 包索引
   
@@ -182,9 +182,9 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo apt install emqx
     ```
     
-    >在启用了多个 EMQ X Broker 仓库的情况下，如果 apt install 和 apt update
-    >命令没有指定版本号，那么会自动安装最新版的 EMQ
-    >X。这对于有稳定性需求的用户来说是一个问题。
+    在启用了多个 EMQ X Broker 仓库的情况下，如果 apt install 和 apt update
+    命令没有指定版本号，那么会自动安装最新版的 EMQ
+    X Broker。这对于有稳定性需求的用户来说是一个问题。
     
 6.  安装特定版本的 EMQ X Broker
   
@@ -323,22 +323,22 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo zypper rm emqx
     ```
 
-<!-- 包管理器安装(Linux) % end -->
+<!-- 包管理器安装 (Linux) % end -->
 
-<!-- 二进制包安装(Linux) % start -->
-## 二进制包安装(Linux)
+<!-- 二进制包安装 (Linux) % start -->
+## 二进制包安装 (Linux)
 
-1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或[github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X Broker 版本的二进制包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X Broker 版本的二进制包。
   
 2. 安装 EMQ X Broker，将下面的路径更改为您下载 EMQ X Broker 软件包的路径。
 
-    + RPM包:
+    + RPM 包:
 
     	``` shell
     	$ sudo rpm -ivh emqx-cenots7-v4.0.0.x86_64.rpm
     	```
     	
-    + DEB包:
+    + DEB 包:
 
       ```
       $ sudo dpkg -i emqx-ubuntu18.04-v4.0.0_amd64.deb
@@ -377,7 +377,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 5.  卸载 EMQ X Broker
 
-    + DEB包:
+    + DEB 包:
 
       ```
       $ dpkg -r emqx
@@ -389,18 +389,18 @@ curl https://repos.emqx.io/install_emqx.sh | bash
       $ dpkg -P emqx
       ```
 
-    + RPM包:
+    + RPM 包:
 
       ```
       $ rpm -e emqx
       ```
 
-<!-- 二进制包安装(Linux) % end -->
+<!-- 二进制包安装 (Linux) % end -->
 
-<!-- ZIP 压缩包安装(Linux、MaxOS、Windows) % start -->
-## ZIP 压缩包安装(Linux、MaxOS、Windows)
+<!-- ZIP 压缩包安装 (Linux、MaxOS、Windows) % start -->
+## ZIP 压缩包安装 (Linux、MaxOS、Windows)
 
-1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或[github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X Broker 版本的 zip 包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X Broker 版本的 zip 包。
   
 2.  解压程序包
   
@@ -430,10 +430,10 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
     直接删除 EMQ X Broker 目录即可
 
-<!-- ZIP 压缩包安装(Linux、MaxOS、Windows) % end -->
+<!-- ZIP 压缩包安装 (Linux、MaxOS、Windows) % end -->
 
-<!-- Homebrew 安装(MacOS) % start -->
-## 通过 Homebrew 安装(MacOS)
+<!-- Homebrew 安装 (MacOS) % start -->
+## 通过 Homebrew 安装 (MacOS)
 
 1.  添加 EMQ X Broker 的 tap
   
@@ -471,10 +471,10 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ brew uninstall emqx
     ```
 
-<!-- Homebrew 安装(MacOS) % end -->
+<!-- Homebrew 安装 (MacOS) % end -->
 
-<!-- 通过Docker 运行(包含简单的docker-compose集群) % start -->
-## 通过Docker 运行(包含简单的docker-compose集群)
+<!-- 通过 Docker 运行 (包含简单的 docker-compose 集群) % start -->
+## 通过 Docker 运行 (包含简单的 docker-compose 集群)
 
 #### 运行单个容器
 
@@ -486,7 +486,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         $ docker pull emqx/emqx:v4.0.0
         ```
       
-      - 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux)或 [github](https://github.com/emqx/emqx/releases) 下载 docker镜像，并手动加载
+      - 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 下载 docker 镜像，并手动加载
         
         ```
         $ wget -O emqx-docker.zip https://www.emqx.io/downloads/broker/v4.0.0/emqx-docker-v4.0.0-alpine3.10-amd64.zip
@@ -494,7 +494,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         $ docker load < emqx-docker-v4.0.0
         ```
       
-2.  启动 docker容器
+2.  启动 docker 容器
   
     ```
     $ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v4.0.0
@@ -565,7 +565,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
    
    ```
 
-2. 启动docker-compose集群
+2. 启动 docker-compose 集群
 
    ```
    $ docker-compose -p my_emqx up -d
@@ -581,10 +581,10 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 更多关于 EMQ X Broker Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
-<!-- 通过Docker 运行(包含简单的docker-compose集群) % end -->
+<!-- 通过 Docker 运行 (包含简单的 docker-compose 集群) % end -->
 
-<!-- 通过 Helkm 安装并集群(K8S、K3S) % start -->
-## 通过 Helkm 安装并集群(K8S、K3S)
+<!-- 通过 Helkm 安装并集群 (K8S、K3S) % start -->
+## 通过 Helkm 安装并集群 (K8S、K3S)
 
 1. 添加 helm 仓库
 
@@ -626,7 +626,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
                     stopped_nodes => []}
   ```
 
-<!-- 通过 Helkm 安装并集群(K8S、K3S) % end -->
+<!-- 通过 Helkm 安装并集群 (K8S、K3S) % end -->
 
 <!-- 源码编译安装 % start -->
 ## 源码编译安装

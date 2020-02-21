@@ -71,4 +71,4 @@ $ emqx_ctl status
 Node 'emqx@127.0.0.1' not responding to pings。
 ```
 
-如果 EMQ X Broker 未能正常启动，可以通过 [目录结构](using-emqx/directory.md) 查看 `logs` 目录下的日志文件，并参考我们的 [FAQ]([FAQ](faq/index.md#)) 进行排错。
+如果 EMQ X Broker 未能正常启动，可以通过 [目录结构](using-emqx/directory.md) 查看 `logs` 目录下的日志文件，并参考我们的 [FAQ](faq/index.md#) 进行排错。

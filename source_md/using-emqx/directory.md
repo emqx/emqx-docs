@@ -23,7 +23,7 @@ ref: undefined
 
 + 可执行文件目录: `./bin`；
 + 数据文件: `./data`；
-+ Erlang虚拟机文件: `./erts-*`；
++ Erlang 虚拟机文件: `./erts-*`；
 + 配置文件目录: `./etc`；
 + 依赖项目录: `./lib`；
 + 日志文件: `./log`；
@@ -33,7 +33,7 @@ ref: undefined
 
 + 可执行文件目录: `/usr/lib/emqx/bin`；
 + 数据文件: `/var/lib/emqx/data`；
-+ Erlang虚拟机文件: `/usr/lib/emqx/erts-*`；
++ Erlang 虚拟机文件: `/usr/lib/emqx/erts-*`；
 + 配置文件目录: `/etc/emqx/etc`；
 + 依赖项目录: `/usr/lib/emqx/lib`；       
 + 日志文件: `/var/log/emqx`；
@@ -59,7 +59,7 @@ EMQ X Broker 通过 `etc` 目录下配置文件进行设置，主要配置文件
 | 配置文件           | 说明                      |
 | -------------- | ------------------------- |
 | emqx.conf      | EMQ X Broker 配置文件  |
-| acl.conf       | EMQ X Broker 默认ACL规则配置文件 |
+| acl.conf       | EMQ X Broker 默认 ACL 规则配置文件 |
 | plugins/*.conf | EMQ X Broker 各类插件配置文件    |
 | certs          | EMQ X Broker 证书文件           |
 
@@ -112,3 +112,4 @@ EMQ X Broker 通过 `data` 目录储存运行数据，主要的文件包括:
 +  `erlang.log*`
 
     Erlang 运行时产生的日志文件。
+    
