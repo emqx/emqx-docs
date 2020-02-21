@@ -109,9 +109,9 @@ broker
 $ ./bin/emqx_ctl broker
 
 sysdescr  : EMQ X Broker
-version   : v4.0.0
-uptime    : 25 seconds
-datetime  : 2019-12-19 14:34:19
+version   : 4.0.0
+uptime    : 4 minutes, 52 seconds
+datetime  : 2020-02-21 09:39:58
 ```
 
 ### broker stats
@@ -336,8 +336,8 @@ clients 命令查询连接的 MQTT 客户端。
 ```
 $ ./bin/emqx_ctl clients list
     
-Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62135, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477947, connected_at=1576477947)
-Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576477950, connected_at=1576477950)
+Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62135, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1582249657, connected_at=1582249657)
+Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1582249657, connected_at=1582249657, disconnected_at=1582249702)
     ...
 ```
 
@@ -357,8 +357,9 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 | enqueued\_msgs            | 消息队列当前长度                  |
 | dropped\_msgs             | 消息队列达到最大长度后丢弃的消息数量        |
 | connected                 | 是否在线                      |
-| created\_at               | 会话创建时间                    |
-| connected\_at             | 客户端连接时间                   |
+| created\_at               | 会话创建时间戳                |
+| connected\_at             | 客户端连接时间戳                |
+| disconnected_at | 客户端断开连接时间戳（仅当断开连接还保留会话时才会出现） |
 
 ### clients show \<ClientId\>
 
@@ -564,6 +565,8 @@ vm 命令用于查询 Erlang 虚拟机负载、内存、进程、IO 信息。
 
 查询 VM 全部信息，包括负载、内存、Erlang 进程数量等:
 
+    $ ./bin/emqx_ctl vm all
+    
     cpu/load1               : 4.22
     cpu/load5               : 3.29
     cpu/load15              : 3.16
@@ -664,6 +667,8 @@ logger](http://erlang.org/doc/apps/kernel/logger_chapter.html)
 | log handlers list                              | 查看当前安装的所有 Hanlders            |
 | log handlers set-level \<HandlerId\> \<Level\> | 设置指定 Hanlder 的日志等级            |
 
+日志的等级由低到高分别为：`debug | info | notice | warning | error | critical | alert | emergency`，日志等级越低，显示的内容越详细，消耗的系统资源越大。为提高系统运行性能，默认的主日志等级是 error。
+
 ### log set-level \<Level\>
 
 设置主日志等级和所有 Handlers 日志等级:
@@ -729,7 +734,7 @@ Topic，打印日志信息到文件。
 | trace start topic \<Topic\> \<File\> \[\<Level\>\]     | 开启 Topic 追踪，存储指定等级的日志到文件  |
 | trace stop topic \<Topic\>                             | 关闭 Topic 追踪                            |
 
-使用 trace 之前，需要将主日志等级 (primary logger level) 设置成足够低的值。为提高系统运行性能，默认的主日志等级是 error。
+使用 trace 之前，需要将主日志等级 (primary logger level) 设置成足够低的值。
 
 ### trace start client \<ClientId\> \<File\> \[\<Level\>\]
 
@@ -870,322 +875,29 @@ $ ./bin/emqx_ctl listeners stop mqtt:tcp 0.0.0.0:1883
 Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
 ```
 
-## 规则引擎 (rule engine) 命令
-
-## rules 命令
-
-| 命令                                                         | 描述           |
-| ------------------------------------------------------------ | -------------- |
-| rules list                                                   | List all rules |
-| rules show \<RuleId\>                                        | Show a rule    |
-| rules create \<name\> \<hook\> \<sql\> \<actions\> \[-d \[\<descr\>\]\] | Create a rule  |
-| rules delete \<RuleId\>                                      | Delete a rule  |
-
-### rules create
-
-创建一个新的规则:
-
-```
-## 创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容
-$ ./bin/emqx_ctl rules create \
-    'test1' \
-    'message.publish' \
-    'select * from "t/a"' \
-    '[{"name":"built_in:inspect_action", "params": {"a": 1}}]' \
-    -d 'Rule for debug'
-
-Rule test1:1556242324634254201 created
-```
-
-一个规则由系统生成的规则 ID 标识，所以如果用相同的名字重复添加规则，会生成多个 ID 不同的规则。
-
-### rules list
-
-列出当前所有的规则:
-
-```
-$ ./bin/emqx_ctl rules list
-
-rule (id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
-```
-
-### rules show
-
-查询规则:
-
-```
-## 查询 RuleID 为 'test1:1556242324634254201' 的规则
-$ ./bin/emqx_ctl rules show 'test1:1556242324634254201'
-
-rule (id='test1:1556242324634254201', name='test1', for='message.publish', rawsql='select * from "t/a"', actions=[{"name":"built_in:inspect_action","params":{"a":1}}], enabled='true', description='Rule for debug')
-```
-
-### rules delete
-
-删除规则:
-
-```
-## 删除 RuleID 为 'test1:1556242324634254201' 的规则
-$ ./bin/emqx_ctl rules delete 'test1:1556242324634254201'
-
-ok
-```
-
-## rule-actions 命令
-
-| 命令                                                      | 描述               |
-| --------------------------------------------------------- | ------------------ |
-| rule-actions list \[-t \[\<type\>\]\] \[-k \[\<hook\>\]\] | List all actions   |
-| rule-actions show \<ActionId\>                            | Show a rule action |
-
-动作可以由 emqx 内置 (称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
-
-### rule-actions show
-
-查询动作:
-
-```
-## 查询名为 'built_in:inspect_action' 动作
-$ ./bin/emqx_ctl rule-actions show 'built_in:inspect_action'
-
-action (name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
-```
-
-### rule-actions list
-
-列出符合条件的动作:
-
-```
-## 列出当前所有的动作
-$ ./bin/emqx_ctl rule-actions list
-
-action (name='built_in:republish_action', app='emqx_rule_engine', for='message.publish', type='built_in', params=#{target_topic => #{description => <<"Repubilsh the message to which topic">>,format => topic,required => true,title => <<"To Which Topic">>,type => string}}, description='Republish a MQTT message to a another topic')
-action (name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
-action (name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
-action (name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
-
-## 列出所有资源类型为 web_hook 的动作
-$ ./bin/emqx_ctl rule-actions list -t web_hook
-
-action (name='web_hook:event_action', app='emqx_web_hook', for='$events', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string},template => #{description => <<"The payload template to be filled with variables before sending messages">>,required => false,schema => #{},title => <<"Payload Template">>,type => object}}, description='Forward Events to Web Server')
-action (name='web_hook:publish_action', app='emqx_web_hook', for='message.publish', type='web_hook', params=#{'$resource' => #{description => <<"Bind a resource to this action">>,required => true,title => <<"Resource ID">>,type => string}}, description='Forward Messages to Web Server')
-
-## 列出所有 Hook 类型匹配 'client.connected' 的动作
-$ ./bin/emqx_ctl rule-actions list -k 'client.connected'
-
-action (name='built_in:inspect_action', app='emqx_rule_engine', for='$any', type='built_in', params=#{}, description='Inspect the details of action params for debug purpose')
-```
-
-## resources 命令
-
-| 命令                                                         | 描述               |
-| ------------------------------------------------------------ | ------------------ |
-| emqx\_ctl resources create \<name\> \<type\> \[-c \[\<config\>\]\] \[-d \[\<descr\>\]\] | Create a resource  |
-| resources list \[-t \<ResourceType\>\]                       | List all resources |
-| resources show \<ResourceId\>                                | Show a resource    |
-| resources delete \<ResourceId\>                              | Delete a resource  |
-
-### resources create
-
-创建一个新的资源:
-
-```
-$ ./bin/emqx_ctl resources create 'webhook1' 'web_hook' -c '{"url": "http://host-name/chats"}' -d 'forward msgs to host-name/chats'
-
-Resource web_hook:webhook1 created
-```
-
-### resources list
-
-列出当前所有的资源:
-
-```
-$ ./bin/emqx_ctl resources list
-
-resource (id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
-```
-
-### resources list by type
-
-列出当前所有的资源:
-
-```
-$ ./bin/emqx_ctl resources list --type 'debug_resource_type'
-
-resource (id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
-```
-
-### resources show
-
-查询资源:
-
-```
-$ ./bin/emqx_ctl resources show 'web_hook:webhook1'
-
-resource (id='web_hook:webhook1', name='webhook1', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, attrs=undefined, description='forward msgs to host-name/chats')
-```
-
-### resources delete
-
-删除资源:
-
-```
-$ ./bin/emqx_ctl resources delete 'web_hook:webhook1'
-
-ok
-```
-
-## resource-types 命令
-
-| 命令                         | 描述                    |
-| ---------------------------- | ----------------------- |
-| resource-types list          | List all resource-types |
-| resource-types show \<Type\> | Show a resource-type    |
-
-资源类型可以由 emqx 内置 (称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
-
-### resource-types list
-
-列出当前所有的资源类型:
-
-```
-./bin/emqx_ctl resource-types list
-
-resource_type (name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
-resource_type (name='web_hook', provider='emqx_web_hook', params=#{headers => #{default => #{},description => <<"Request Header">>,schema => #{},title => <<"Request Header">>,type => object},method => #{default => <<"POST">>,description => <<"Request Method">>,enum => [<<"PUT">>,<<"POST">>],title => <<"Request Method">>,type => string},url => #{description => <<"Request URL">>,format => url,required => true,title => <<"Request URL">>,type => string}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
-```
-
-### resource-types show
-
-查询资源类型:
-
-```
-$ ./bin/emqx_ctl resource-types show built_in
-
-resource_type (name='built_in', provider='emqx_rule_engine', params=#{}, on_create={emqx_rule_actions,on_resource_create}, description='The built in resource type for debug purpose')
-```
-
 ## recon 命令
 
-| 命令                   | 描述                                                |
-| ---------------------- | --------------------------------------------------- |
-| recon memory           | recon\_alloc:memory/2                               |
-| recon allocated        | recon\_alloc:memory (allocated\_types, current/max) |
-| recon bin\_leak        | recon:bin\_leak (100)                               |
-| recon node\_stats      | recon:node\_stats (10, 1000)                        |
-| recon remote\_load Mod | recon:remote\_load (Mod)                            |
+EMQ X Broker 的 recon 命令是使用 Erlang Recon 库实现的，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
+
+| 命令                    | 描述                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| recon memory            | [recon\_alloc:memory/2](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
+| recon allocated         | [recon\_alloc:memory (allocated\_types, current/max)](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
+| recon bin\_leak         | [recon:bin\_leak (100)](http://ferd.github.io/recon/recon.html#bin_leak-1) |
+| recon node\_stats       | [recon:node\_stats_print(10, 1000)](http://ferd.github.io/recon/recon.html#node_stats_print-2) |
+| recon remote\_load Mod  | [recon:remote\_load (Mod)](http://ferd.github.io/recon/recon.html#remote_load-1) |
+| recon proc_count Attr N | [recon:proc_count(Attr, N)](http://ferd.github.io/recon/recon.html#proc_count-2) |
 
 访问 [Documentation for recon](http://ferd.github.io/recon/) 以获取详细信息。
 
-### recon memory
-
-recon\_alloc:memory/2:
-
-```
-$ ./bin/emqx_ctl recon memory
-
-usage/current       : 0.810331960305788
-usage/max           : 0.7992495929358717
-used/current        : 84922296
-used/max            : 122519208
-allocated/current   : 104345600
-allocated/max       : 153292800
-unused/current      : 19631520
-unused/max          : 30773592
-```
-
-### recon allocated
-
-recon\_alloc:memory (allocated\_types, current/max):
-
-```
-$ ./bin/emqx_ctl recon allocated
-
-binary_alloc/current: 425984
-driver_alloc/current: 425984
-eheap_alloc/current : 4063232
-ets_alloc/current   : 3833856
-fix_alloc/current   : 1474560
-ll_alloc/current    : 90439680
-sl_alloc/current    : 163840
-std_alloc/current   : 2260992
-temp_alloc/current  : 655360
-binary_alloc/max    : 4907008
-driver_alloc/max    : 425984
-eheap_alloc/max     : 25538560
-ets_alloc/max       : 5931008
-fix_alloc/max       : 1736704
-ll_alloc/max        : 90439680
-sl_alloc/max        : 20348928
-std_alloc/max       : 2260992
-temp_alloc/max      : 1703936
-```
-
-### recon bin\_leak
-
-recon:bin\_leak (100):
-
-```
-$ ./bin/emqx_ctl recon bin_leak
-
-{<10623.1352.0>,-3,
-    [cowboy_clock,
-    {current_function,{gen_server,loop,7}},
-    {initial_call,{proc_lib,init_p,5}}]}
-{<10623.3865.0>,0,
-    [{current_function,{recon_lib,proc_attrs,2}},
-    {initial_call,{erlang,apply,2}}]}
-{<10623.3863.0>,0,
-    [{current_function,{dist_util,con_loop,2}},
-    {initial_call,{inet_tcp_dist,do_accept,7}}]}
-    ...
-```
-
-### recon node\_stats
-
-recon:node\_stats (10, 1000):
-
-```
-$ ./bin/emqx_ctl recon node_stats
-
-{[{process_count,302},
-    {run_queue,0},
-    {memory_total,88925536},
-    {memory_procs,27999296},
-    {memory_atoms,1182843},
-    {memory_bin,24536},
-    {memory_ets,7163216}],
-    [{bytes_in,62},
-    {bytes_out,458},
-    {gc_count,4},
-    {gc_words_reclaimed,3803},
-    {reductions,3036},
-    {scheduler_usage,[{1,9.473889959272245e-4},
-                    {2,5.085983030767205e-5},
-                    {3,5.3851477624711046e-5},
-                    {4,7.579021269127057e-5},
-                    {5,0.0},
-                    {6,0.0},
-                    {7,0.0},
-                    {8,0.0}]}]}
-...
-```
-
-### recon remote\_load Mod
-
-recon:remote\_load (Mod):
-
-```
-$ ./bin/emqx_ctl recon remote_load
-```
-
 ## retainer 命令
 
-| 命令            | 描述                   |
-| --------------- | ---------------------- |
-| retainer info   | 显示保留消息的数量     |
-| retainer topics | 显示保留消息的所有主题 |
-| retainer clean  | 清除所有保留的消息     |
+| 命令                     | 描述                         |
+| ------------------------ | ---------------------------- |
+| retainer info            | 显示保留消息的数量           |
+| retainer topics          | 显示保留消息的所有主题       |
+| retainer clean           | 清除所有保留的消息           |
+| retainer clean \<Topic\> | 清除指定的主题下的保留的消息 |
 
 ### retainer info
 
@@ -1217,6 +929,16 @@ $SYS/brokers
 $ ./bin/emqx_ctl retainer clean
 
 Cleaned 3 retained messages
+```
+
+### retainer clean \<Topic\>
+
+清除指定的主题下的保留的消息:
+
+```
+$ ./bin/emqx_ctl retainer clean topic
+
+Cleaned 1 retained messages
 ```
 
 ## admins 命令
@@ -1257,4 +979,178 @@ ok
 $ ./bin/emqx_ctl admins del root
 
 ok
+```
+
+## 规则引擎 (rule engine) 命令
+
+## rules 命令
+
+| 命令                                                         | 描述           |
+| ------------------------------------------------------------ | -------------- |
+| rules list                                                   | 列出当前所有的规则 |
+| rules show \<RuleId\>                                        | 根据 \<RuleId\> 查询规则    |
+| rules create \<sql\> \<actions\> [-d [\<descr\>]] | 创建一个新的规则  |
+| rules delete \<RuleId\>                                      | 根据 \<RuleId\> 删除规则 |
+
+### rules create
+
+创建一个新的规则:
+
+```
+$ ./bin/emqx_ctl rules create \
+'SELECT payload.msg as msg FROM "t/#" WHERE msg = "hello"' \
+'[{"name":"do_nothing"}]'
+
+Rule rule:69b88a68 created
+```
+
+一个规则由系统生成的规则 ID 标识，所以如果用相同的名字重复添加规则，会生成多个 ID 不同的规则。
+
+### rules list
+
+列出当前所有的规则:
+
+```
+$ ./bin/emqx_ctl rules list
+
+rule(id='rule:69b88a68', for='[<<"t/#">>]', rawsql='SELECT payload.msg as msg FROM "t/#" WHERE msg = "hello"', actions=<<"[{\"params\":{},\"name\":\"do_nothing\",\"metrics\":[{\"success\":0,\"node\":\"emqx@127.0.0.1\",\"failed\":0}],\"id\":\"do_nothing_1582266518950603377\"}]">>, metrics=[#{matched => 0,node => 'emqx@127.0.0.1',speed => 0.0,speed_last5m => 0.0,speed_max => 0}], enabled='true', description='')
+```
+
+### rules show
+
+查询规则:
+
+```
+$ ./bin/emqx_ctl rules show 'rule:69b88a68'
+
+rule(id='rule:69b88a68', for='[<<"t/#">>]', rawsql='SELECT payload.msg as msg FROM "t/#" WHERE msg = "hello"', actions=<<"[{\"params\":{},\"name\":\"do_nothing\",\"metrics\":[{\"success\":0,\"node\":\"emqx@127.0.0.1\",\"failed\":0}],\"id\":\"do_nothing_1582266518950603377\"}]">>, metrics=[#{matched => 0,node => 'emqx@127.0.0.1',speed => 0.0,speed_last5m => 0.0,speed_max => 0}], enabled='true', description='')
+```
+
+### rules delete
+
+根据 \<RuleId\> 删除规则:
+
+```
+$  ./bin/emqx_ctl rules delete 'rule:69b88a68'
+
+ok
+```
+
+## rule-actions 命令
+
+| 命令                           | 描述                       |
+| ------------------------------ | -------------------------- |
+| rule-actions list              | 列出当前所有的动作         |
+| rule-actions show \<ActionId\> | 根据 \<ActionId\> 查询动作 |
+
+动作可以由 emqx 内置 (称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+
+### rule-actions list
+
+列出当前所有的动作:
+
+```
+$ ./bin/emqx_ctl rule-actions list
+action(name='do_nothing', app='emqx_rule_engine', for='$any', types=[], title ='Do Nothing (debug)', description='This action does nothing and never fails. It's for debug purpose')
+action(name='republish', app='emqx_rule_engine', for='$any', types=[], title ='Republish', description='Republish a MQTT message to another topic')
+action(name='inspect', app='emqx_rule_engine', for='$any', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
+action(name='data_to_mqtt_broker', app='emqx_bridge_mqtt', for='message.publish', types=[bridge_mqtt,bridge_rpc], title ='Data bridge to MQTT Broker', description='Bridge Data to MQTT Broker')
+action(name='data_to_webserver', app='emqx_web_hook', for='$any', types=[web_hook], title ='Data to Web Server', description='Forward Messages to Web Server')
+```
+
+### rule-actions show \<ActionId\>
+
+查询 \<ActionId\> 动作:
+
+```
+$ ./bin/emqx_ctl rule-actions show do_nothing
+action(name='do_nothing', app='emqx_rule_engine', for='$any', types=[], title ='Do Nothing (debug)', description='This action does nothing and never fails. It's for debug purpose')
+```
+
+## resources 命令
+
+| 命令                                                         | 描述               |
+| ------------------------------------------------------------ | ------------------ |
+| resources create \<type\> [-c [\<config\>]] [-d [\<descr\>]] | 创建一个新的资源  |
+| resources list \[-t \<ResourceType\>\]                       | 查询资源 |
+| resources show \<ResourceId\>                                | 根据 \<ResourceId\> 查询资源    |
+| resources delete \<ResourceId\>                              | 根据 \<ResourceId\> 删除资源  |
+
+### resources create
+
+创建一个新的资源:
+
+```
+$ ./bin/emqx_ctl resources create web_hook -c '{"method": "POST", "url": "http://127.0.0.1:8080/"}' -d 'desc'
+
+Resource resource:adb938ac created
+```
+
+### resources list
+
++   列出当前所有的资源:
+
+    ```
+    $ ./bin/emqx_ctl resources list
+
+    resource(id='resource:adb938ac', type='web_hook', config=#{<<"method">> => <<"POST">>,<<"url">> => <<"http://127.0.0.1:8080/">>}, status=[#{is_alive => false,node => 'emqx@127.0.0.1'}], description='desc')
+    ```
+
++   根据 \<Type\> 查询资源:
+
+    ```
+    $ ./bin/emqx_ctl resources list --type 'web_hook'
+
+    resource(id='resource:adb938ac', type='web_hook', config=#{<<"method">> => <<"POST">>,<<"url">> => <<"http://127.0.0.1:8080/">>}, status=[#{is_alive => false,node => 'emqx@127.0.0.1'}], description='desc')
+    ```
+
+### resources show
+
+查询资源:
+
+```
+$ ./bin/emqx_ctl resources show 'resource:adb938ac'
+
+resource(id='resource:adb938ac', type='web_hook', config=#{<<"method">> => <<"POST">>,<<"url">> => <<"http://127.0.0.1:8080/">>}, status=[#{is_alive => false,node => 'emqx@127.0.0.1'}], description='desc')
+```
+
+### resources delete
+
+删除资源:
+
+```
+$ ./bin/emqx_ctl resources delete 'resource:adb938ac'
+
+ok
+```
+
+## resource-types 命令
+
+| 命令                         | 描述                    |
+| ---------------------------- | ----------------------- |
+| resource-types list          | 查询所有的资源类型 |
+| resource-types show \<Type\> | 根据 \<Type\> 展示资源类型 |
+
+资源类型可以由 emqx 内置 (称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+
+### resource-types list
+
+列出当前所有的资源类型:
+
+```
+$ ./bin/emqx_ctl resource-types list
+
+resource_type(name='bridge_mqtt', provider='emqx_bridge_mqtt', title ='MQTT Bridge', description='MQTT Message Bridge')
+resource_type(name='bridge_rpc', provider='emqx_bridge_mqtt', title ='EMQX Bridge', description='EMQ X RPC Bridge')
+resource_type(name='web_hook', provider='emqx_web_hook', title ='WebHook', description='WebHook')
+```
+
+### resource-types show
+
+查询资源类型:
+
+```
+$ ./bin/emqx_ctl resource-types show web_hook
+
+resource_type(name='web_hook', provider='emqx_web_hook', title ='WebHook', description='WebHook')
 ```
