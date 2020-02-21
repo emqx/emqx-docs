@@ -31,41 +31,6 @@ emqx_auth_mongo 插件同时包含 ACL 功能，可通过注释禁用。
 
 
 
-## 默认表结构
-
-MongoDB 认证默认配置下需要确保数据库中有如下集合：
-
-```json
-{
-  username: "user",
-  password: "password hash",
-  salt: "password salt",
-  is_superuser: false,
-  created: "2020-02-20 12:12:14"
-}
-```
-
-默认配置下示例数据如下：
-
-```bash
-use mqtt
-
-db.mqtt_user.insert({
-  "username": "emqx",
-  "password": "efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7",
-  "salt": ""
-})
-```
-
-启用 MongoDB 认证后，你可以通过用户名： emqx，密码：public 连接。
-
-
-{% hint style="info" %} 
-这是默认配置使用的集合结构，熟悉该插件的使用后你可以使用任何满足条件的集合进行认证。
-{% endhint %}
-
-
-
 要启用 MongoDB 认证，需要在 `etc/plugins/emqx_auth_mongo.conf` 中配置以下内容：
 
 ## MongoDB 连接信息
@@ -132,6 +97,41 @@ auth.mongo.topology.max_overflow = 0
 ## auth.mongo.topology.min_heartbeat_frequency_ms = 1000
 
 ```
+
+
+## 默认表结构
+
+MongoDB 认证默认配置下需要确保数据库中有如下集合：
+
+```json
+{
+  username: "user",
+  password: "password hash",
+  salt: "password salt",
+  is_superuser: false,
+  created: "2020-02-20 12:12:14"
+}
+```
+
+默认配置下示例数据如下：
+
+```bash
+use mqtt
+
+db.mqtt_user.insert({
+  "username": "emqx",
+  "password": "efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7",
+  "salt": ""
+})
+```
+
+启用 MongoDB 认证后，你可以通过用户名： emqx，密码：public 连接。
+
+
+{% hint style="info" %} 
+这是默认配置使用的集合结构，熟悉该插件的使用后你可以使用任何满足条件的集合进行认证。
+{% endhint %}
+
 
 
 ## 加盐规则与哈希方法

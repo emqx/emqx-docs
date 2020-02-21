@@ -34,6 +34,49 @@ emqx_auth_ldap 插件同时包含 ACL 功能，可通过注释禁用。
 
 
 
+## LDAP 配置
+
+要启用 LDAP 认证，需要在 `etc/plugins/emqx_auth_ldap.conf` 中配置以下内容：
+
+```bash
+# etc/plugins/emqx_auth_ldap.conf
+
+auth.ldap.servers = 127.0.0.1
+
+auth.ldap.port = 389
+
+auth.ldap.pool = 8
+
+## ldap 的绑定专有名称(DN)
+auth.ldap.bind_dn = cn=root,dc=emqx,dc=io
+
+## 	ldap 的绑定密码
+auth.ldap.bind_password = public
+
+## ldap 的查询超时时间
+auth.ldap.timeout = 30s
+
+## ldap 的设备专有名
+auth.ldap.device_dn = ou=device,dc=emqx,dc=io
+
+## ldap 的匹配对象类
+auth.ldap.match_objectclass = mqttUser
+
+## ldap 的用户名属性类型
+auth.ldap.username.attributetype = uid
+
+## 	ldap 的密码属性类型
+auth.ldap.password.attributetype = userPassword
+
+## TLS 配置项
+## auth.ldap.ssl.certfile = etc/certs/cert.pem
+## auth.ldap.ssl.keyfile = etc/certs/key.pem
+## auth.ldap.ssl.cacertfile = etc/certs/cacert.pem
+## auth.ldap.ssl.verify = verify_peer
+## auth.ldap.ssl.fail_if_no_peer_cert = true
+```
+
+
 ## LDAP Schema 
 
 需要在 LDAP schema 目录配置数据模型，默认配置下数据模型如下：
@@ -96,46 +139,4 @@ rootdn "cn=root,dc=emqx,dc=io"
 rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 
 directory       /etc/openldap/data
-```
-
-## LDAP 配置
-
-要启用 LDAP 认证，需要在 `etc/plugins/emqx_auth_ldap.conf` 中配置以下内容：
-
-```bash
-# etc/plugins/emqx_auth_ldap.conf
-
-auth.ldap.servers = 127.0.0.1
-
-auth.ldap.port = 389
-
-auth.ldap.pool = 8
-
-## ldap 的绑定专有名称(DN)
-auth.ldap.bind_dn = cn=root,dc=emqx,dc=io
-
-## 	ldap 的绑定密码
-auth.ldap.bind_password = public
-
-## ldap 的查询超时时间
-auth.ldap.timeout = 30s
-
-## ldap 的设备专有名
-auth.ldap.device_dn = ou=device,dc=emqx,dc=io
-
-## ldap 的匹配对象类
-auth.ldap.match_objectclass = mqttUser
-
-## ldap 的用户名属性类型
-auth.ldap.username.attributetype = uid
-
-## 	ldap 的密码属性类型
-auth.ldap.password.attributetype = userPassword
-
-## TLS 配置项
-## auth.ldap.ssl.certfile = etc/certs/cert.pem
-## auth.ldap.ssl.keyfile = etc/certs/key.pem
-## auth.ldap.ssl.cacertfile = etc/certs/cacert.pem
-## auth.ldap.ssl.verify = verify_peer
-## auth.ldap.ssl.fail_if_no_peer_cert = true
 ```

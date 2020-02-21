@@ -30,44 +30,6 @@ emqx_auth_mysql 插件同时包含 ACL 功能，可通过注释禁用。
 {% endhint %}
 
 
-
-## 默认表结构
-
-MySQL 认证默认配置下需要确保数据库中有下表：
-
-```sql
-CREATE TABLE `mqtt_user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) DEFAULT NULL,
-  `password` varchar(100) DEFAULT NULL,
-  `salt` varchar(35) DEFAULT NULL,
-  `is_superuser` tinyint(1) DEFAULT 0,
-  `created` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mqtt_username` (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-```
-
-
-
-默认配置下示例数据如下：
-
-```sql
-INSERT INTO `mqtt_user` ( `username`, `password`, `salt`)
-VALUES
-	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL);
-```
-
-启用 MySQL 认证后，你可以通过用户名： emqx，密码：public 连接。
-
-
-
-{% hint style="info" %} 
-这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行认证。
-{% endhint %}
-
-
-
 要启用 MySQL 认证，需要在 `etc/plugins/emqx_auth_mysql.conf` 中配置以下内容：
 
 ## MySQL 连接信息
@@ -91,6 +53,44 @@ auth.mysql.database = mqtt
 
 auth.mysql.query_timeout = 5s
 ```
+
+
+
+## 默认表结构
+
+MySQL 认证默认配置下需要确保数据库中有下表：
+
+```sql
+CREATE TABLE `mqtt_user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `salt` varchar(35) DEFAULT NULL,
+  `is_superuser` tinyint(1) DEFAULT 0,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mqtt_username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+
+
+默认配置下示例数据如下：
+
+```sql
+INSERT INTO `mqtt_user` ( `username`, `password`, `salt`)
+VALUES
+	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL);
+```
+
+启用 MySQL 认证后，你可以通过用户名： emqx，密码：public 连接。
+
+
+
+{% hint style="info" %} 
+这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行认证。
+{% endhint %}
+
 
 
 ## 加盐规则与哈希方法

@@ -31,6 +31,37 @@ emqx_auth_pgsql 插件同时包含 ACL 功能，可通过注释禁用。
 
 
 
+要启用 PostgreSQL 认证，需要在 `etc/plugins/emqx_auth_pgsql.conf` 中配置以下内容：
+
+## PostgreSQL 连接信息
+
+PostgreSQL 基础连接信息，需要保证集群内所有节点均能访问。
+
+```bash
+# etc/plugins/emqx_auth_pgsql.conf
+
+## 服务器地址
+auth.pgsql.server = 127.0.0.1:5432
+
+## 连接池大小
+auth.pgsql.pool = 8
+
+auth.pgsql.username = root
+
+auth.pgsql.password = public
+
+auth.pgsql.database = mqtt
+
+auth.pgsql.encoding = utf8
+
+## TLS 配置
+## auth.pgsql.ssl = false
+## auth.pgsql.ssl_opts.keyfile =
+## auth.pgsql.ssl_opts.certfile =
+```
+
+
+
 ## 默认表结构
 
 PostgreSQL 认证默认配置下需要确保数据库中有下表：
@@ -63,36 +94,6 @@ VALUES
 这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行认证。
 {% endhint %}
 
-
-
-要启用 PostgreSQL 认证，需要在 `etc/plugins/emqx_auth_pgsql.conf` 中配置以下内容：
-
-## PostgreSQL 连接信息
-
-PostgreSQL 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
-
-## 服务器地址
-auth.pgsql.server = 127.0.0.1:5432
-
-## 连接池大小
-auth.pgsql.pool = 8
-
-auth.pgsql.username = root
-
-auth.pgsql.password = public
-
-auth.pgsql.database = mqtt
-
-auth.pgsql.encoding = utf8
-
-## TLS 配置
-## auth.pgsql.ssl = false
-## auth.pgsql.ssl_opts.keyfile =
-## auth.pgsql.ssl_opts.certfile =
-```
 
 
 ## 加盐规则与哈希方法

@@ -31,6 +31,27 @@ emqx_auth_redis 插件同时包含 ACL 功能，可通过注释禁用。
 
 
 
+
+要启用 Redis 认证，需要在 `etc/plugins/emqx_auth_redis.conf` 中配置以下内容：
+
+## Redis 连接信息
+
+Redis 基础连接信息，需要保证集群内所有节点均能访问。
+
+```bash
+# etc/plugins/emqx_auth_redis.conf
+
+## 服务器地址
+auth.redis.server = 127.0.0.1:6379
+
+## 连接池大小
+auth.redis.pool = 8
+
+auth.redis.database = 0
+
+auth.redis.password = 
+```
+
 ## 默认数据结构
 
 Redis 认证默认配置下使用哈希表存储认证数据，使用 `mqtt_user:` 作为 Redis 键前缀，数据结构如下：
@@ -54,27 +75,6 @@ HMSET mqtt_user:emqx password public salt wivwiv
 这是默认配置使用的数据结构，熟悉该插件的使用后你可以使用任何满足条件的数据结构进行认证。
 {% endhint %}
 
-
-
-要启用 Redis 认证，需要在 `etc/plugins/emqx_auth_redis.conf` 中配置以下内容：
-
-## Redis 连接信息
-
-Redis 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_redis.conf
-
-## 服务器地址
-auth.redis.server = 127.0.0.1:6379
-
-## 连接池大小
-auth.redis.pool = 8
-
-auth.redis.database = 0
-
-auth.redis.password = 
-```
 
 ## 加盐规则与哈希方法
 
