@@ -19,7 +19,7 @@ ref: undefined
 
 PostgreSQL 认证使用外部 PostgreSQL 数据库作为认证数据源，可以存储大量数据，同时方便与外部设备管理系统集成。
 
-认证插件：
+插件：
 
 ```bash
 emqx_auth_pgsql

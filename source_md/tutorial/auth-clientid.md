@@ -21,7 +21,7 @@ Client ID 认证使用配置文件预设客户端Client ID 与密码，支持通
 
 Client ID 认证不依赖外部数据源，使用上足够简单轻量。
 
-认证插件：
+插件：
 
 ```bash
 emqx_auth_clientid

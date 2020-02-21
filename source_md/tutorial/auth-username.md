@@ -21,7 +21,7 @@ ref: undefined
 
 用户名认证不依赖外部数据源，使用上足够简单轻量。
 
-认证插件：
+插件：
 
 ```bash
 emqx_auth_username
