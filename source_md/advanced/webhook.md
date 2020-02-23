@@ -30,9 +30,10 @@ WebHook 的内部实现时基于 [钩子(Hooks)][]，但它更靠近顶层一些
 
 ```
 
-WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X Broker 中的事件给推送出来，而不关心 Web 服务的返回**。
+WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X Broker 中的事件推送给 Web 服务，并不关心 Web 服务的返回**。
 
-在使用 WebHook 时，首先需要知道如何启动、和关闭一个插件；参见：[插件(Plugins)][] 这一章节。
+在使用 WebHook 时，首先需要知道如何启动、和关闭插件；参见：[插件(Plugins)][] 这一章节。
+
 
 ## 配置
 
@@ -43,11 +44,12 @@ WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X Broker 中�
 | api.url            | string | -      | http://127.0.0.1:8080 | 事件需要转发的目的服务器地址 |
 | encode_payload     | enum   | base64<br>base62 | undefined | 对消息类事件中的 Payload 字段进行编码，`undefined` 则表示不编码 |
 
-> 注：`encode_payload` 主要是用于，如果系统中的消息是不可见字符，为了方便在 HTTP 协议中传输，需要给它设置一个编码格式。
+> 注：`encode_payload` 主要是用于消息的 Payload 是不可见字符，为了方便在 HTTP 协议中传输，需要给它设置一个编码格式。
+
 
 ### 转发事件
 
-在 `etc/plugins/emqx_web_hooks.conf` 事件的转发规则格式如下：
+在 `etc/plugins/emqx_web_hooks.conf` 可配置选择需要转发的事件，其配置的格式如下：
 
 ``` properties
 web.hook.rule.<HookPoint>.<Number> = Spec
@@ -57,14 +59,13 @@ web.hook.rule.<HookPoint>.<Number> = Spec
 
 ``` properties
 web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
-
 ```
 
 其中对于 `<HookPoint>` `Number` `Spec` 的配置见下文。
 
 #### HookPoint
 
-`HookPoint` 其含义可参见 [钩子(Hooks)][] 章节。目前仅支持以下事件：
+`HookPoint` 其含义可参见 [钩子(Hooks) - 挂载点](hooks.md#hookpoint) 章节。目前仅支持以下事件：
 
 | 名称                 |
 | -------------------- |
@@ -83,17 +84,16 @@ web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
 
 #### Number
 
-`Number` 仅为一个标识符，为整型的数字，其目的是区分同一事件，不同的转发 `Spec` 的配置情况。
+`Number` 仅为一个标识符，为整型的数字。其目的是为了区分同一事件，使用不同的 `Spec` ，这种情况。
 
 #### Spec
 
-`Spec` 规则的参数配置详情，其值为一个 JSON 字符串，其中可用的 Key/Values 有：
+`Spec` 决定了转发规则的参数配置详情，其值为一个 JSON 字符串，其中可用的 Key 有：
 
-- "action"：字符串；取固定值。
-- "topic"：字符串；表示一个主题过滤器，操作的主题只有与该主题匹配才能触发事件的转发。
+- action：字符串；取固定值。
+- topic：字符串；表示一个主题过滤器，操作的主题只有与该主题匹配才能触发事件的转发。
 
-
-例如，我们配置配置 Webhook 只将 `a/b/c` 和 `foo/#` 主题的消息转发到 Web 服务器上，那边所有的转发规则的配置，应该如下所示：
+例如，我们配置 Webhook 只将 `a/b/c` 和 `foo/#` 主题的消息转发到 Web 服务器上，如下所示：
 
 ``` properties
 web.hook.rule.message.publish.1 = {"action": "on_message_publish", "topic": "a/b/c"}
@@ -103,12 +103,12 @@ web.hook.rule.message.publish.2 = {"action": "on_message_publish", "topic": "foo
 
 这样，`emqx_web_hook` 仅会转发 与 `a/b/c` 和 `foo/#` 匹配的主题上的消息：
 
-- 会转发：`a/b/c`，或 `foo/bar`；
-- 不会转发： `a/b/d` 或其他所有不与以上俩个主题匹配的所有主题
+- 会转发：`a/b/c`，或 `foo/bar`。
+- 不会转发： `a/b/d` 或其他所有不与以上俩个主题匹配的所有主题。
 
 ## Web 服务的实现
 
-`emqx_web_hook` 将所有的事件消息，组成一个 HTTP 请求发送到配置中 `api.url` 的 Web 服务器上。其请求为：
+emqx_web_hook 将所有的事件消息，组成一个 HTTP 请求发送到 `api.url` 所配置的 Web 服务器上。其请求格式为：
 
 ```
 Method: POST
@@ -118,7 +118,7 @@ Body: <JSON>
 
 ```
 
-对于不同的事件 `<Body>` 的内容有所不同，下表列举了各个事件中 Body 的参数列表
+对于不同的事件，`<Body>` 的内容有所不同，下表列举了各个事件中 Body 的参数列表
 
 **client.connect**
 
@@ -247,6 +247,6 @@ opts 包含
 
 
 [emqx_web_hook]: https://github.com/emqx/emqx-web-hook "emqx-web-hook"
-[插件(Plugins)]: #goto-plugins.md
-[钩子(Hooks)]: #goto-hooks.md
+[插件(Plugins)]: plugins.md
+[钩子(Hooks)]: hooks.md
 

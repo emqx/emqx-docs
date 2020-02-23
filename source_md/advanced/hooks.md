@@ -24,14 +24,14 @@ ref: undefined
 简单来讲，该机制目的在于增强软件系统的扩展性、方便与其他三方系统的集成、或者改变其系统原有的默认行为。如：
 
 ![Hooks-In-System](assets/hooks_in_system.png)
-当系统中不存在 **钩子(Hooks)** 模块时，整个事件处理的流程 *从事件(Event)的输入，到处理(Handler)，再到完成后的返回的结果(Result)* 对于系统外部而讲，都是不可见、且无法修改的。
 
-而在这个过程中加入一个可挂载函数的点（一般称这个点为挂载点 - HookPoint），让其允许外部可以挂载多个回调函数，形成一个调用链。最终达到对该事件处理的过程进行扩展和自定义的目的。
+如果去掉 **钩子(Hooks)** 模块，整个事件处理流程 *从 事件(Event) 的输入，到 处理(Handler)，再到完成后的返回 结果(Result)* 对于系统外部而讲，都是不可见、且无法修改的。
 
+而在这个过程中加入一个可挂载函数的点(HookPoint)，允许外部插件挂载多个回调函数，形成一个调用链。达到对内部事件处理过程的扩展和修改。
 
 系统中常用到的认证插件则是按照该逻辑进行实现的。以最简单的 [emqx_auth_username](https://github.com/emqx/emqx-auth-username) 为例：
 
-在只开启 `emqx_auth_username` 认证插件时，且设置[不允许匿名用户登录](#todo)，按照上图对事件的处理逻辑可知，此时认证模块的逻辑为：
+在只开启 `emqx_auth_username` 认证插件，且关闭匿名用户登录时。按照上图对事件的处理逻辑可知，此时认证模块的逻辑为：
 
 1. 收到用户认证请求(Authenticate)
 2. 读取 *是否允许匿名登录* 参数；得到 **拒绝登录**
@@ -52,13 +52,13 @@ ref: undefined
 ```
 
 
-因此，在 EMQ X Broker 中 **钩子(Hooks)** 这种机制极大的方便了系统的扩展。我们不需要修改核心 [emqx](https://github.com/emqx/emqx) 内的代码，仅需要在特定的位置埋下 **挂载点(HookPoint)** ，便能允许各类插件自定义扩展 EMQ X Broker 的各种行为。
+因此，在 EMQ X Broker 中， **钩子(Hooks)** 这种机制极大的方便了系统的扩展。我们不需要修改核心 [emqx](https://github.com/emqx/emqx) 内的代码，仅需要在特定的位置埋下 **挂载点(HookPoint)** ，便能允许外部插件扩展 EMQ X Broker 的各种行为。
 
 而，对于实现者来说仅需要关注：
 
-1. **挂载点(HookPoint)** 的位置；包括其作用、执行的时机、如何挂载和取消挂载
-2. **回调函数** 的实现；包括回调函数的入参个数、作用、数据结构等，及返回值代表的含义
-3. 了解回调函数在 **链** 上执行的机制；包括回调函数执行的顺序，及如何提前终止链的执行
+1. **挂载点(HookPoint)** 的位置；包括其作用、执行的时机、和如何挂载和取消挂载。
+2. **回调函数** 的实现；包括回调函数的入参个数、作用、数据结构等，及返回值代表的含义。
+3. 了解回调函数在 **链** 上执行的机制；包括回调函数执行的顺序，及如何提前终止链的执行。
 
 下面的小节主要是在描述这三类问题。
 
@@ -104,16 +104,16 @@ ref: undefined
 以上，则为关于回调链主要的设计概念，他是钩子上的回调函数如何进行执行的主要逻辑。
 
 
-接下来[挂载点](#todo)，[回调函数](#todo) 两节中，对于钩子的所有操作都是依赖与 [emqx](https://github.com/emqx/emqx) 的提供的 Erlang 代码级的 API。他们是整个钩子逻辑实现的基础。如需寻求：
+接下来 [挂载点](#hookpoint)，[回调函数](#callback) 两节中，对于钩子的所有操作都是依赖于 [emqx](https://github.com/emqx/emqx) 提供的 Erlang 代码级的 API。他们是整个钩子逻辑实现的基础。如需寻求：
 
-- 钩子(Hooks) 和 HTTP 服务器的应用，请查看 [WebHook](#todo) 章节
-- 钩子(Hooks) 和 在与其他语言的应用，请插件 [Multipe-Language-Support](#todo) 章节
-    - 目前仅支持 Lua，请查看 [Lua Hook](#todo) 章节
+- 钩子(Hooks) 和 HTTP 服务器的应用，请查看 [WebHook](webhook.md) 章节
+- 钩子(Hooks) 和 在与其他语言的应用，请插件 [Multipe-Language-Support](multiple-language-support.md) 章节
+    - 目前仅支持 Lua，请查看 [emqx_lua_hook](multiple-language-support.md#lua) 章节
 
-## 挂载点
+## 挂载点 {#hookpoint}
 
 
-EMQ X Broker 以一个客户端在其生命周期内的关键活动为基础，预置了大量的 **挂载点(HookPoint)**。而我们也常称这个挂载点为 **钩子(Hook)** 的 **名称(Name)**，这俩者的含义是完全相同的。
+EMQ X Broker 以一个客户端在其生命周期内的关键活动为基础，预置了大量的 **挂载点(HookPoint)**。而我们也常称这个挂载点为钩子的 **名称(Name)**，这俩者的含义是完全相同的。
 
 目前系统中预置的挂载点有：
 
@@ -125,7 +125,7 @@ EMQ X Broker 以一个客户端在其生命周期内的关键活动为基础，�
 | client.connected     | 成功接入     | 客户端认证完成并成功接入系统后                        |
 | client.disconnected  | 连接断开     | 客户端连接层在准备关闭时                              |
 | client.authenticate  | 连接认证     | 执行完 `client.connect` 后                            |
-| client.check_acl     | ACL 鉴权     | 执行实际 `PUB/SUB` 操作前                             |
+| client.check_acl     | ACL 鉴权     | 执行 `发布/订阅` 操作前                               |
 | client.subscribe     | 订阅主题     | 收到订阅报文后，执行 `client.check_acl` 鉴权前        |
 | client.unsubscribe   | 取消订阅     | 收到取消订阅报文后                                    |
 | session.created      | 会话创建     | `client.connected` 执行完成，且创建新的会话后         |
@@ -164,7 +164,7 @@ emqx:hook(Name, {Module, Function, Args}, Priority).
 emqx:unhook(Name, {Module, Function}).
 ```
 
-## 回调函数
+## 回调函数 {#callback}
 
 
 回调函数的入参及返回值要求，见下表：
@@ -188,12 +188,12 @@ emqx:unhook(Name, {Module, Function}).
 | session.resumed      | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
 | session.discarded    | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
 | session.takeovered   | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        |                     |
-| session.terminated   | `ClientInfo`：客户端信息参数<br/>`Reason`：终止原因 <br>`SessInfo`：会话信息 | -                   |
+| session.terminated   | `ClientInfo`：客户端信息参数<br/>`Reason`：终止原因 <br>`SessInfo`：会话信息 | -   |
 | message.publish      | `Message`：消息对象                                          | 新的 `Message`      |
 | message.delivered    | `ClientInfo`：客户端信息参数<br/>`Message`：消息对象         | 新的 `Message`      |
 | message.acked        | `ClientInfo`：客户端信息参数<br/>`Message`：消息对象         | -                   |
 | message.dropped      | `Message`：消息对象<br>`By`：被谁丢弃<br>`Reason`：丢弃原因  | -                   |
 
 
-具体对于这些钩子的具体应用，可参考 [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
+具体对于这些钩子的应用，参见： [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
 

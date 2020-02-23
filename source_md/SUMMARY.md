@@ -25,6 +25,8 @@
   * [钩子](advanced/hooks.md)
   * [插件](advanced/plugins.md)
   * [WebHook](advanced/webhook.md)
+  * [多语言支持](advanced/multiple-language-support.md)
+  * [消息重传](advanced/retransmission.md)
   * [保留消息](advanced/retained.md)
   * [延迟发布](advanced/dely-publish.md)
   * [共享订阅](advanced/shared-subscriptions.md)

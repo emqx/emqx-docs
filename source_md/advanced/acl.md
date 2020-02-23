@@ -17,30 +17,22 @@ ref: undefined
 
 # 发布订阅 ACL
 
-
-**发布订阅 ACL** 即为对 **发布(PUBLISH)/订阅(SUBSCRIBE)** 操作的 **权限控制**。例如：拒绝用户名为 `Anna` 向 `open/elsa/door` 发布消息。
+**发布订阅 ACL** 指对 **发布(PUBLISH)/订阅(SUBSCRIBE)** 操作的 **权限控制**。例如：拒绝用户名为 `Anna` 向 `open/elsa/door` 发布消息。
 
 EMQ X Broker 默认开启 ACL 检查，并默认允许 *未命中 ACL 规则* 的发布订阅操作，具体配置在 `etc/emqx.conf` 中：
 
-```bash
-## 是否开启 ACL 检查
-## 枚举值: on | off
-enable_acl = on
+|  配置项            | 类型   | 可取值               | 默认值 | 说明               |
+| ------------------ | ------ | -------------------- | ------ | ------------------ |
+| enable_acl         | enum   | on<br>off            | on     | 是否开启 ACL 检查  |
+| acl_nomatch        | enum   | allow<br>deny        | deny   | ACL 未命中时，'拒绝' 或 '允许' PUB/SUB 操作 |
+| acl_deny_action    | enum   | ignore<br>disconnect | ignore | 当 ACL 检查失败后，执行的操作 |
 
-## 若 ACL 未命中，'拒绝' 或 '允许' PUB/SUB 操作
-## 枚举值：allow | deny
-acl_nomatch = allow
 
-## 当 ACL 检查失败后，执行的操作
-## 枚举值：ignore | disconnect
-acl_deny_action = ignore
-```
-
-> 注：在 MQTTv3.1.1 和 v3.1 协议中，Qos0 的发布操作被拒绝后服务器无任何报文错误返回，Qos1 和 Qos2 的发布操作则是无法收到 ACK 报文。这是协议设计的一个缺陷；但在 MQTTv5.0 协议上已经支持，EMQ X Broker 会发送想要的错误报文
+> 注：在 MQTTv3.1.1 和 v3.1 协议中，发布操作被拒绝后服务器无任何报文错误返回，这是协议设计的一个缺陷；但在 MQTTv5.0 协议上已经支持，EMQ X Broker 应答一个相应的错误报文
 
 ## ACL 规则
 
-所有的权限控制，都是由一条条的 **ACL 规则** 组成。其中一条 ACL 规则的 **逻辑格式** 可以写作为：
+ACL 是由一条条的 **ACL 规则** 组成。其 **逻辑格式** 可以写作为：
 
 ```bash
 ## Allow-Deny Who Pub-Sub Topic
@@ -56,55 +48,40 @@ acl_deny_action = ignore
 这些 ACL 规则仅有以下三个来源，按优先级顺序分为：
 
 1. 缓存(ACL Cache)
-2. 按序执行已开启的插件列表中提供 ACL 检查
-3. 默认 ACL
-
+2. 已启用插件中提供 ACL 检查
+3. 内置的 ACL
 
 即，当客户端执行 **发布/订阅** 操作时：
 
 - 优先检查自身当前进程的 **ACL 缓存**
 - 若未命中，则执行插件中提供的 **ACL 检查**
-- 仍未命中，则匹配默认 ACL 规则
+- 仍未命中，则匹配内置的 ACL 规则
 - 仍未命中，则检查 `acl_nomatch` 配置。以该配置的值，作为 ACL 检查的结果返回
 - 其中任何一步命中，则立即返回所命中的检查结果
-
-该执行逻辑可以表述为:
-
-[ACL Desgin](#todo)
 
 
 ### ACL 缓存
 
-EMQ X Broker 默认开启 ACL 缓存，它允许客户端在检查某条 ACL 规则成功后，便将其缓存至自己的进程数据中，以便下次直接使用提高性能。
+EMQ X Broker 默认开启 ACL 缓存功能。它允许客户端在命中某条 ACL 规则后，便将其缓存至自己的进程数据中，以便下次直接使用。
 
-在 `etc/emqx.conf` 中，可配置是否启用 ACL 缓存功能、缓存的最大 ACL 规则条数和缓存失效时间：
+这些配置都包含在 `etc/emqx.conf` 中：
 
-``` properties
-## 是否开启 ACL 缓存
-## 枚举值：on | off
-enable_acl_cache = on
+|  配置项            | 类型     | 可取值    | 默认值 | 说明         |
+| ------------------ | -------- | --------- | ------ | ------------ |
+| enable_acl_cache   | enum     | on<br>off | on     | 是否开启缓存 |
+| acl_cache_max_size | integer  | > 0       | 32     | 最大缓存条数 |
+| acl_cache_ttl      | duration | > 0       | 1m     | 最大缓存时间 |
 
-## The maximum count of ACL entries can be cached for a client.
-##
-## Value: Integer greater than 0
-## Default: 32
-
-## ACL 缓存条数
-acl_cache_max_size = 32
-
-## ACL 缓存时间
-acl_cache_ttl = 1m
-```
 
 #### 清除缓存
 
-在更新 ACL 规则后，某些客户端由于已经存在旧的 ACL 缓存，则无法立即生效。如果想要立即生效，则需要手动清除所有的 ACL 缓存：
+在更新 ACL 规则后，某些客户端由于已经存在缓存，则无法立即生效。若要立即生效，则需手动清除所有的 ACL 缓存：
 
-参见 [管理 API - 清除 ACL 缓存](#todo)
+参见 [管理 API - 清除 ACL 缓存](rest-api.md)
 
 ### 插件中的 ACL 检查
 
-在各类认证插件中，提供了 ACL 检查的支持。当 EMQ X Broker 在缓存中无法命中 ACL 规则后，则会调用已经加载插件里的 ACL 检查函数。
+当缓存中的 ACL 规则未命中后，EMQ X Broker 则会调用已启用插件的 ACL 检查函数。
 
 目前，仅以下插件提供 ACL 检查的功能：
 
@@ -118,9 +95,7 @@ acl_cache_ttl = 1m
 | [emqx_auth_ldap][]  | 利用 LDAP 服务检查 ACL       |
 
 
-> 注：这些插件对于规则的存储方式各有差别，具体请实现请查看各个插件的使用手册
-
-> 注：插件的 ACL 支持实现，依赖于 `client.check_acl` 钩子，关于实现细节可参考 [钩子(Hooks)](#todo)
+> 注：这些插件对于规则的存储方式各有差别，具体请实现请查看各插件的使用手册
 
 [emqx_auth_http]:  https://github.com/emqx/emqx-auth-http  "emqx-auth-http"
 [emqx_auth_mysql]: https://github.com/emqx/emqx-auth-mysql "emqx-auth-mysql"
@@ -132,18 +107,15 @@ acl_cache_ttl = 1m
 
 ### 内置 ACL
 
-EMQ X Broker 内置有默认的 ACL 规则，在缓存和插件中未命中 ACL 后，就会走到内置的 ACL 规则检查。
+EMQ X Broker 内置有默认的 ACL 规则，它是优先级最低规则表，在所有的 ACL 检查完成后，如果仍然为命中则检查内置的 ACL 规则。
 
-内置的 ACL 规则保存在一个配置文件中，由 `etc/emqx.conf` 中的配置决定：
+这些规则都保存在一个配置文件中，由 `etc/emqx.conf` 中的配置决定：
 
-``` properties
-## 默认的 ACL 文件路径
-acl_file = etc/acl.conf
-```
+|  配置项        | 类型     | 可取值    | 默认值       | 说明              |
+| -------------- | -------- | --------- | ------------ | ----------------- |
+| acl_file       | string   | -         | etc/acl.conf | 内置 ACL 文件位置 |
 
-在 `etc/acl.conf` 文件中，其配置格式以 Erlang 配置文件语法的形式给出。
-
-其中包括了：
+该规则文件以 Erlang 语法的格式进行描述：
 
 ``` erlang
 %% 允许 "dashboard" 用户 订阅 "$SYS/#" 主题
@@ -158,7 +130,9 @@ acl_file = etc/acl.conf
 %% 允许其它任意的发布订阅操作
 {allow, all}.
 ```
-可知，内置的 ACL 主要是为了限制用户对系统主题 `$SYS/#` 和全通配主题 `#` 的操作权限
+
+可知，内置的 ACL 主要是为了限制客户端对系统主题 `$SYS/#` 和全通配主题 `#` 的权限。
+
 
 #### acl.conf 编写规则
 
@@ -166,9 +140,8 @@ acl_file = etc/acl.conf
 
 `acl.conf` 的语法规则包含在顶部的注释中，熟悉 Erlang 语法的可直接阅读文件顶部的注释。或参考以下的释义：
 
-- 以 `%%` 表示行注释
-- 每条规则由 4 元组组成，以 `.` 号结束
-
+- 以 `%%` 表示行注释。
+- 每条规则由 4 元组组成，以 `.` 号结束。
 - 元组第一位：表示规则命中成功后，执行权限控制操作，可取值为：
     * `allow`：表示 `允许`
     * `deny`： 表示 `拒绝`
@@ -198,11 +171,11 @@ acl_file = etc/acl.conf
 ./bin/emqx_ctl acl reload
 ```
 
-> 注：`acl.conf` 中应只包含一些简单而通用的规则，使其成为系统基础的 ACL 原则。如果需要支持复杂、大量的 ACL 内容，你应该在 [认证插件](#todo) 中去实现它。
+> 注：`acl.conf` 中应只包含一些简单而通用的规则，使其成为系统基础的 ACL 原则。如果需要支持复杂、大量的 ACL 内容，你应该在 [认证插件](auth.md) 中去实现它。
 
 ## 超级用户
 
-**超级用户** 权限的授予来自于客户端的认证过程，参见 [认证(Autentication)](#todo)
+**超级用户** 权限的授予来自于客户端的认证过程，参见 [认证(Autentication)](auth.md)
 
 超级用户默认具有对所有主题的 PUB/SUB 权限。所以作为超级用户，不会进行 发布订阅的权限检查。
 

@@ -19,9 +19,9 @@ ref: undefined
 
 EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基础的、或各类扩展的功能。
 
-它们依赖于 [emqx](https://github.com/emqx/emqx) 的代码 API 或者 [钩子](#todo) 进行实现其特殊的功能。
+它们依赖于 [emqx](https://github.com/emqx/emqx) 的代码 API 或者 [钩子](hooks.md) 进行实现其特殊的功能。
 
-然后通过打包编译工具 [emqx-rel](https://github.com/emqx/emqx-rel) 与 [emqx](https:://github.com/emqx/emqx) 核心项目一起编译并打包至一个可运行的软件包中。
+然后通过打包编译工具 [emqx-rel](https://github.com/emqx/emqx-rel) 将其与 [emqx](https:://github.com/emqx/emqx) 核心项目一起编译并打包至一个可运行的软件包中。
 
 
 ## 插件列表
@@ -53,14 +53,14 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 | [emqx_sn](https://github.com/emqx/emqx-sn)                           | etc/plugins/emqx_sn.conf              | MQTT-SN 协议支持          |
 | [emqx_stomp](https://github.com/emqx/emqx-stomp)                     | etc/plugins/emqx_stomp.conf           | Stomp 协议支持            |
 | [emqx_recon](https://github.com/emqx/emqx-recon)                     | etc/plugins/emqx_recon.conf           | Recon 性能调试            |
-| [emqx_reloader](https://github.com/emqx/emqx-reloader)               | etc/plugins/emqx_reloader.conf        | Reloader 代码热加载插件   |
+| [emqx_reloader](https://github.com/emqx/emqx-reloader)               | etc/plugins/emqx_reloader.conf        | 代码热加载插件            |
 | [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) | etc/plugins/emqx_plugin_template.conf | 插件开发模版              |
 
 ## 启停插件
 
-目前启动插件有四种：
+目前启动插件有以下四种方式：
 
-1.  EMQ X Broerk 启动时默认加载
+1.  默认加载
 2.  命令行启停插件
 3.  使用 Dashboard 启停插件
 4.  调用管理 API 启停插件
@@ -70,35 +70,21 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 如需在 EMQ X Broker 启动时就默认启动某插件，则直接在 `data/loaded_plugins` 添加需要启动的插件名称。
 
-例如发行包默认需要自动加载的插件有：
+例如，目前 EMQ X Broker 自动加载的插件有：
 
 ``` erlang
-emqx_management.
-emqx_rule_engine.
-emqx_recon.
-emqx_retainer.
-emqx_dashboard.
+{emqx_management, true}.
+{emqx_recon, true}.
+{emqx_retainer, true}.
+{emqx_dashboard, true}.
+{emqx_rule_engine, true}.
+{emqx_bridge_mqtt, false}.
 ```
 
 
 **命令行启停插件**
 
-在 EMQ X Broker 运行过程中，可通过 CLI 命令的方式查看、和启停某插件：
-
-``` bash
-## 显示所有可用的插件列表
-./bin/emqx_ctl plugins list
-
-## 加载某插件
-./bin/emqx_ctl plugins load emqx_auth_username
-
-## 卸载某插件
-./bin/emqx_ctl plugins unload emqx_auth_username
-
-## 重新加载某插件
-./bin/emqx_ctl plugins reload emqx_auth_username
-```
-
+在 EMQ X Broker 运行过程中，可通过 [CLI - Load/Unload Plugin](cli.md#load_plugin) 的方式查看、和启停某插件。
 
 **使用 Dashboard 启停插件**
 
@@ -106,7 +92,7 @@ emqx_dashboard.
 
 **使用管理 API 启停插件**
 
-参见：[管理 API - Load Plugin](#todo)
+在 EMQ X Broker 运行过程中，可通过 [管理 API - Load Plugin](#rest-api.md#load_plugin) 的方式查看、和启停某插件。
 
 
 ## 插件开发
@@ -179,8 +165,7 @@ ok = emqx:hook ('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
 
 ### 挂载钩子
 
-在扩展插件中，可通过挂载钩子来处理客户端上下线、主题订阅、消息收发等事件。
-
+在扩展插件中，可通过挂载 [钩子(Hooks)](hooks.md) 来处理客户端上下线、主题订阅、消息收发等事件。
 
 钩子挂载示例代码 `- emqx_plugin_template.erl`:
 
