@@ -28,13 +28,13 @@ mqtt.acl_nomatch = allow
 mqtt.acl_file = etc/acl.conf
 ```
 
-ACL 访问控制规则定义规则如下:
+ACL 规则定义规则如下:
 
 ```bash
 允许 (Allow)| 拒绝 (Deny)  谁 (Who)  订阅 (Subscribe)| 发布 (Publish)   主题列表 (Topics)
 ```
 
-EMQ X  接收到 MQTT 客户端发布 (PUBLISH) 或订阅 (SUBSCRIBE) 请求时，会逐条匹配 ACL 访问控制规则，直到匹配成功返回 allow 或 deny。
+EMQ X  接收到 MQTT 客户端发布 (PUBLISH) 或订阅 (SUBSCRIBE) 请求时，会逐条匹配 ACL 规则，直到匹配成功返回 allow 或 deny。
 
 - ACL 可以设置超级用户，如果是超级用户客户端，可以进行任意发布 / 订阅操作
 - ACL 控制与认证用的是同一个配置文件 ``plugins/emqx_auth_xxx.conf``，但并不是所有的插件都支持 ACL。

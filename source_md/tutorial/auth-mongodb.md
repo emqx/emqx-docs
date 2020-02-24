@@ -99,7 +99,7 @@ auth.mongo.topology.max_overflow = 0
 ```
 
 
-## 默认表结构
+## 默认数据结构
 
 MongoDB 认证默认配置下需要确保数据库中有如下集合：
 
@@ -121,6 +121,7 @@ use mqtt
 db.mqtt_user.insert({
   "username": "emqx",
   "password": "efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7",
+  "is_superuser": false,
   "salt": ""
 })
 ```

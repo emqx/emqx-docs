@@ -55,7 +55,7 @@ auth.mysql.query_timeout = 5s
 
 ## 默认表结构
 
-MySQL 认证默认配置下需要确保数据库中有以下两张数据表，用于存储认证规则信息：
+MySQL 认证插件默认配置下需要确保数据库中有以下两张数据表，用于存储认证规则信息：
 
 ### 认证/超级用户表
 
@@ -75,7 +75,7 @@ CREATE TABLE `mqtt_user` (
 示例数据：
 
 ```sql
--- 用户信息
+-- 客户端信息
 INSERT INTO `mqtt_user` ( `username`, `password`, `salt`, `is_superuser`)
 VALUES
 	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL, 0);
@@ -144,7 +144,7 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 ```
 
-你可以在认证 SQL 中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在 SQL 中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID

@@ -81,9 +81,9 @@ CREATE TABLE mqtt_user (
 默认配置下示例数据如下：
 
 ```sql
-INSERT INTO mqtt_user (username, password, salt)
+INSERT INTO mqtt_user (username, password, salt, is_superuser)
 VALUES
-	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL);
+	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL, false);
 ```
 
 启用 PostgreSQL 认证后，你可以通过用户名： emqx，密码：public 连接。
