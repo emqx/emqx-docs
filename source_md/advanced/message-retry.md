@@ -104,22 +104,12 @@ Qos2 要求消息只送达一次；所以在实现它时，需要更复杂的流
     * Qos2 的 PUBLISH 报文
     * Qos2 的 PUBREL 报文
 
-> 注：当 EMQ X Broker 作为 PUBLISH 消息的接收端时，它不需要重发操作
+当 EMQ X Broker 作为 PUBLISH 消息的接收端时，它不需要重发操作
+
 
 ### 飞行窗口与最大接收值
 
-EMQ X Broker 并不是一次性把所有的消息都投递给客户端，而是会为每个客户端都分配一个 消息队列(Message Queue) 来存储它需要发送的消息。然后再按顺序发送出去。
-
-如果发送出去的报文，需要接收一个应答，例如 Qos1, Qos2, 则会将该报文存储在 **飞行窗口(Infligh-Window)** 中。
-
-**飞行窗口(Inflight-Window)** 是指已发送，但未收到客户端确认的报文列表，其关系可见下图：
-
-![MQueue & Inflight](assets/mqueue_inflight.png)
-
-飞行窗口用于管理 EMQ X Broker 向客户端投递消息的行为。与其相对应的是 **最大接收值(Max Awaiting Rel)** (MQTTv5 协议中称其为 Receive Maximum )。它表示 EMQ X Broker 作为消息的接收端，允许同时处理 *未完成消息* 的最大条条数。
-
-该参数主要是针对 Qos2 类型的消息，因为作为接收端，它需要存储正在处理的 Qos2 消息，并等待发送端的 PUBLREL 报文来释放这个存储。
-
+其概念的定义和解释参见 [飞行窗口与最大接收值](#todo)。
 
 引入这两个概念的作用是为了理解：
 
