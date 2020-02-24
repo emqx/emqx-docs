@@ -19,27 +19,16 @@ ref: undefined
 
 使用二进制包安装 EMQ X Broker 与使用 ZIP 压缩包安装 EMQ X Broker 的目录路径有所不同，具体如下:
 
-#### 使用 ZIP 压缩包安装 EMQ X Broker
+| 描述                        | 使用 ZIP 压缩包安装 EMQ X Broker | 使用二进制包安装 EMQ X Broker |
+| --------------------------- | -------------------------------- | ----------------------------- |
+| 可执行文件目录              | `./bin`                          | `/usr/lib/emqx/bin`           |
+| 数据文件                    | `./data`                         | `/var/lib/emqx/data`          |
+| Erlang 虚拟机文件           | `./erts-*`                       | `/usr/lib/emqx/erts-*`        |
+| 配置文件目录                | `./etc`                          | `/etc/emqx/etc`               |
+| 依赖项目录                  | `./lib`                          | `/usr/lib/emqx/lib`           |
+| 日志文件                    | `./log`                          | `/var/log/emqx`               |
+| 启动相关的脚本、schema 文件 | `./releases`                     | `/usr/lib/emqx/releases`      |
 
-+ 可执行文件目录: `./bin`；
-+ 数据文件: `./data`；
-+ Erlang 虚拟机文件: `./erts-*`；
-+ 配置文件目录: `./etc`；
-+ 依赖项目录: `./lib`；
-+ 日志文件: `./log`；
-+ 启动相关的脚本、schema 文件:: `./releases`。
-
-#### 二进制包安装 EMQ X Broker 
-
-+ 可执行文件目录: `/usr/lib/emqx/bin`；
-+ 数据文件: `/var/lib/emqx/data`；
-+ Erlang 虚拟机文件: `/usr/lib/emqx/erts-*`；
-+ 配置文件目录: `/etc/emqx/etc`；
-+ 依赖项目录: `/usr/lib/emqx/lib`；       
-+ 日志文件: `/var/log/emqx`；
-+ 启动相关的脚本、schema 文件: `/usr/lib/emqx/releases`。
-
-## 目录结构
 以上目录中，用户经常接触与使用的是 `bin`、`etc`、`data`、`log` 目录。
 
 #### `bin` 目录
@@ -50,7 +39,7 @@ ref: undefined
 
 +   `emqx_ctl`、`emqx_ctl.cmd`
 
-    EMQ X Broker 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](advanced/cli.md) 章节。
+    EMQ X Broker 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](advanced/cli.md)。
 
 #### `etc` 目录
 
@@ -61,21 +50,21 @@ EMQ X Broker 通过 `etc` 目录下配置文件进行设置，主要配置文件
 | emqx.conf      | EMQ X Broker 配置文件  |
 | acl.conf       | EMQ X Broker 默认 ACL 规则配置文件 |
 | plugins/*.conf | EMQ X Broker 各类插件配置文件    |
-| certs          | EMQ X Broker 证书文件           |
+| certs          | EMQ X Broker SSL 证书文件       |
 
-EMQ X Broker 具体的配置内容可以查看 [配置项](configuration/index.md) 章节。
+EMQ X Broker 具体的配置内容可以查看 [配置项](configuration/index.md)。
 
 #### `data` 目录
 
-EMQ X Broker 通过 `data` 目录储存运行数据，主要的文件包括:
+EMQ X Broker 将运行数据存储在 `data` 目录下，主要的文件包括:
 
-+   `config`
++   `configs/app.*.config`
 
     EMQ X Broker 读取 `etc/emqx.conf` 和 `etc/plugins/*.conf` 中的配置后，转换为 Erlang 原生配置文件格式，并在运行时读取其中的配置。
 
 +   `loaded_plugins`
 
-    `loaded_plugins` 文件记录了 EMQ X Broker 启动时默认启动的插件，可以通过编辑此文件配置 EMQ X Broker 插件的默认启动。
+    `loaded_plugins` 文件记录了 EMQ X Broker 默认启动的插件列表，可以修改此文件以增删默认启动的插件。`loaded_plugins` 中启动项格式为 `{<Plugin Name>, <Enabled>}.`，`<Enabled>` 字段为布尔类型，EMQ X Broker 会在启动时根据 `<Enabled>` 的值判断是否需要启动该插件。关于插件的更多内容，请查看 [插件](advanced/plugins.md)。
 
     ```
     $ cat loaded_plugins
@@ -92,24 +81,22 @@ EMQ X Broker 通过 `data` 目录储存运行数据，主要的文件包括:
 
     Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Erlang 的各种数据结构。
 
-    `mnesia` 目录储存了所有 EMQ X Broker 储存到 Mnesia 数据库中的数据，是一个十分重要的目录，`mnesia` 目录的删除将导致 EMQ X Broker 丢掉所有的业务数据。
+    EMQ X Broker 使用 Mnesia 数据库存储自身运行数据，例如历史告警记录、规则引擎已创建的资源列表和规则列表、用于登录 `Dashboard` 的用户表等数据，这些数据都将被存储在 `mnesia` 目录下，因此一旦删除该目录，将导致 EMQ X Broker 丢失所有业务数据。
 
-    `emqx_ctl mnesia` 命令可以查询 EMQ X Broker 运行时 Mnesia 数据库系统状态，具体请查看 [管理命令 CLI](advanced/cli.md) 章节。
+    `emqx_ctl mnesia` 命令可以查询 EMQ X Broker 运行时 Mnesia 数据库系统状态，具体请查看 [管理命令 CLI](advanced/cli.md)。
 
 
 #### `log` 目录
 
 +   `emqx.log.*`
 
-    EMQ X Broker 运行时产生的日志文件的默认储存位置，可以通过编译 `etc/emqx.conf` 文件来完成对日志目录、日志文件名、日志文件最大容量、日志文件的最大文件数量等一系列配置，具体内容可以查看 [配置项](configuration/index.md) 章节。
-
-    EMQ X Broker 在运行时可以通过 `emqx_ctl log` 命令和 `emqx_ctl trace` 命令来实现追踪来自某个客户端，或者发布到某个主题的全部消息，具体请查看 [管理命令 CLI](advanced/cli.md) 章节。
+    EMQ X Broker 运行时产生的日志文件，具体请查看 [日志与追踪](using-emqx/log.md)。
 
 +   `crash.dump`
 
-    EMQ X Broker 器崩溃时转储日志文件位置，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](configuration/index.md) 章节。
+    EMQ X Broker 器崩溃时转储日志文件，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](configuration/index.md)。
 
-+  `erlang.log*`
++  `erlang.log.*`
 
     Erlang 运行时产生的日志文件。
     
