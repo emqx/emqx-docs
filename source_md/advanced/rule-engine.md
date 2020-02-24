@@ -1741,14 +1741,14 @@ API 返回数据示例:
   - 最大命中速度: 规则命中速度的峰值(次/秒)
   - 5分钟平均速度: 5分钟内规则的平均命中速度(次/秒)
 
-### 动作状态和统计指标
+### 动作状态和统计指标 {#action-metrics}
 
 ![image](../assets/action_metrics.png)
 
   - 成功: 动作执行成功次数
   - 失败: 动作执行失败次数
 
-### 资源状态和告警
+### 资源状态和告警 {#resource-metrics}
 
 ![image](../assets/resource_status.png)
 
