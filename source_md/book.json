@@ -1,7 +1,8 @@
 {
   "plugins": [
     "-anchor-navigation-ex",
-    "hints"
+    "hints",
+    "simpletabs"
   ],
   "pluginsConfig": {
     "anchor-navigation-ex": {
@@ -9,11 +10,11 @@
     }
   },
   "styles": {
-    "website": "styles/website.css",
-    "ebook": "styles/ebook.css",
-    "pdf": "styles/pdf.css",
-    "mobi": "styles/mobi.css",
-    "epub": "styles/epub.css"
+    "website": "_styles/website.css",
+    "ebook": "_styles/ebook.css",
+    "pdf": "_styles/pdf.css",
+    "mobi": "_styles/mobi.css",
+    "epub": "_styles/epub.css"
   },
   "title": "EMQ X Broker 使用文档",
   "description": "EMQ X 百万级 MQTT 消息服务器使用文档",

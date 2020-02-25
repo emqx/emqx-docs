@@ -44,7 +44,7 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 **外部数据库**
 
 * [MySQL ACL](./acl-mysql.md)
-* [PostgreSQL ACL](./acl-mysql.md)
+* [PostgreSQL ACL](./acl-postgres.md)
 * [Redis ACL](./acl-redis.md)
 * [MongoDB ACL](./acl-mongodb.md)
 
