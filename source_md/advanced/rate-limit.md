@@ -17,39 +17,25 @@ ref: undefined
 
 # 速率限制 {#rate-limit}
 
-EMQ X 提供对接入速度、消息速度的限制：当同一时刻收到过多连接建立请求的时候，暂停新连接的建立；当消息接收速度超过指定限制的时候，暂停接收消息。
+EMQ X Broker 提供对接入速度、消息速度的限制：当客户端连接请求速度超过指定限制的时候，暂停新连接的建立；当消息接收速度超过指定限制的时候，暂停接收消息。
 
-速率限制是一种 *backpressure* 方案，从入口处避免了系统过载，保证了系统的稳定、可预测的吞吐。速率限制可在 `etc/emqx.conf` 中配置：
+速率限制是一种 *backpressure* 方案，从入口处避免了系统过载，保证了系统的稳定和可预测的吞吐。速率限制可在 `etc/emqx.conf` 中配置：
 
-```
-## Maximum external connections per second.
-##
-## Value: Number
-listener.tcp.external.max_conn_rate = 1000
-
-## Publish limit for the external MQTT connections.
-##
-## Value: Number,Duration
-## Example: 100 messages per 10 seconds.
-## zone.external.publish_limit = 100,10s
-
-## Rate limit for the external MQTT/TCP connections. Format is 'limit,duration'.
-##
-## Value: limit,duration
-## Default: 100KB incoming per 10 seconds.
-## listener.tcp.external.rate_limit = 100KB,10s
-```
+|               配置项                |      类型       | 默认值 |                 描述                 |
+| ----------------------------------- | --------------- | ------ | ------------------------------------ |
+| listener.tcp.external.max_conn_rate | Number          | 1000   | 本节点上允许的最大连接速率 (conn/s)  |
+| zone.external.publish_limit         | Number,Duration | 无限制 | 单连接上允许的最大发布速率 (msg/s)   |
+| listener.tcp.external.max_conn_rate | Size,Duration   | 无限制 | 单连接上允许的最大报文速率 (bytes/s) |
 
 - **max_conn_rate** 是单个 emqx 节点上连接建立的速度限制。`1000` 代表秒最多允许 1000 个客户端接入。
 - **publish_limit** 是单个连接上接收 PUBLISH 报文的速率限制。`100,10s` 代表每个连接上允许收到的最大 PUBLISH 消息速率是每 10 秒 100 个。
-
 - **rate_limit** 是单个连接上接收 TCP数据包的速率限制。`100KB,10s` 代表每个连接上允许收到的最大 TCP 报文速率是每 10 秒 100KB。
 
-`publish_limit` 和 `rate_limit` 提供的都是针对单个连接的限制，EMQ X 目前没有提供全局的消息速率限制。
+`publish_limit` 和 `rate_limit` 提供的都是针对单个连接的限制，EMQ X Broker 目前没有提供全局的消息速率限制。
 
 ## 速率限制原理 {#rate-limit-explanation}
 
-EMQ X 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucket) 算法来对所有的 Rate Limit 来做控制。 令牌桶算法 的逻辑如下图:
+EMQ X Broker 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucket) 算法来对所有的 Rate Limit 来做控制。 令牌桶算法 的逻辑如下图:
 
 ![image-20190604103907875](../assets/token-bucket.jpg)
 
@@ -65,7 +51,7 @@ EMQ X 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucke
 
   容易想到，最大速率 M 为：能在1个单位时间内消耗完满状态令牌桶的速度。而桶中令牌的消耗速度为 M - r，故可知：b / (M - r) = 1，得 M = b + r
 
-### 令牌桶算法在 EMQ X 中的应用{#rate-limit-explanation-in-emqx}
+### 令牌桶算法在 EMQ X Broker 中的应用{#rate-limit-explanation-in-emqx}
 
 当使用如下配置做报文速率限制的时候：
 
@@ -85,10 +71,6 @@ emqx 将使用两个值初始化每个连接的 rate-limit 处理器：
 
 **NOTE:** 为提高系统吞吐，emqx 的接入模块不会一条一条的从 socket 读取报文，而是每次从 socket 读取 N 条报文。rate-limit 检查的时机就是在收到这 N 条报文之后，准备继续收取下个 N 条报文之前。故实际的限制速率不会如算法一样精准。emqx 只提供了一个大概的速率限制。`N` 的值可以在 `etc/emqx.conf` 中配置：
 
-```
-## Specify the {active, N} option for the external MQTT/TCP Socket.
-##
-## Value: Number
-listener.tcp.external.active_n = 100
-```
-
+|             配置项             |  类型  | 默认值 |               描述               |
+| ------------------------------ | ------ | ------ | -------------------------------- |
+| listener.tcp.external.active_n | Number | 100    | emqx 每次从 TCP 栈读取多少条消息 |

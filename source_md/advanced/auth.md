@@ -17,17 +17,17 @@ ref: undefined
 
 # 认证 {#authentication}
 
-认证（认证鉴权）指的是当一个客户端连接到 EMQ X 的时候，通过服务器端的配置来控制客户端连接服务器的权限。EMQ X 的认证支持包括两个层面：
+认证（认证鉴权）指的是当一个客户端连接到 EMQ X Broker 的时候，通过服务器端的配置来控制客户端连接服务器的权限。EMQ X Broker 的认证支持包括两个层面：
 
-- MQTT 协议本身在 CONNECT 报文中指定用户名和密码，EMQ X 以插件形式支持基于 UserName、ClientID、HTTP、JWT、LDAP 及各类数据库如 MongoDB、MySQL、PostgreSQL、Redis 等多种形式的认证。
+- MQTT 协议本身在 CONNECT 报文中指定用户名和密码，EMQ X Broker 以插件形式支持基于 Username、ClientID、HTTP、JWT、LDAP 及各类数据库如 MongoDB、MySQL、PostgreSQL、Redis 等多种形式的认证。
 - 在传输层上，TLS 可以保证使用客户端证书的客户端到服务器的身份验证，并确保服务器向客户端验证服务器证书。也支持基于 PSK 的 TLS/DTLS 认证。
 
 
-## EMQ X 认证与认证链 {#auth-and-auth-chain}
+## EMQ X Broker 认证与认证链 {#auth-and-auth-chain}
 
-EMQ X 认证相关插件名称以 `emqx_auth` 开头。比如 emqx_auth_username 是使用 emqx 内部数据库 mnesia 对用户名做认证的插件，emqx_auth_redis 是使用 redis 数据库对用户名做认证的插件，等。
+EMQ X Broker 认证相关插件名称以 `emqx_auth` 开头。比如 `emqx_auth_username` 是使用 emqx 内部数据库 mnesia 对用户名做认证的插件，emqx_auth_redis 是使用 redis 数据库对用户名做认证的插件，等。
 
-当共同启用多个认证插件时，EMQ X 将按照插件开启先后顺序进行链式认证，一旦认证成功或者失败(插件返回 allow 或者 deny) 就终止认证链并允许客户端接入，如果插件无法认证用户(可能该用户不在数据库里，这时候插件返回 ignore)则转给认证链里的下一个插件，直到最后一个插件。认证链的认证过程如下所示：
+当同时启用多个认证插件时，EMQ X Broker 将按照插件开启先后顺序进行链式认证，一旦认证成功或者失败(插件返回 allow 或者 deny) 就终止认证链并允许客户端接入，如果插件无法认证用户(可能该用户不在数据库里，这时候插件返回 ignore)则转给认证链里的下一个插件，直到最后一个插件。认证链的认证过程如下所示：
 
 ```
                      ignore                       ignore      ignore
@@ -63,7 +63,7 @@ listener.ssl.external.certfile = etc/certs/cert.pem
 listener.ssl.external.cacertfile = etc/certs/cacert.pem
 ```
 
-注意，默认的 etc/certs 目录下面的 key、证书 和 CA 证书是 EMQ X 生成的自签名证书，所以在使用支持 TLS 的客户端测试的时候，需要将上面的 CA 证书 `etc/certs/cacert.pem` 配置到客户端。
+注意，默认的 etc/certs 目录下面的 key.pem、cert.pem 和 cacert.pem 是 EMQ X Broker 生成的自签名证书，所以在使用支持 TLS 的客户端测试的时候，需要将上面的 CA 证书 `etc/certs/cacert.pem` 配置到客户端。
 
 服务端支持的 cipher 列表需要显式指定，默认的列表与 Mozilla 的服务端 cipher 列表一致：
 
@@ -87,7 +87,7 @@ listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3D
 $ emqx_ctl plugins load emqx_psk_file
 ```
 
-PSK 的配置文件在 `etc/psk.txt`，使用冒号`：` 分隔 PSK ID 和 PSK：
+PSK 的配置文件为 `etc/psk.txt`，使用冒号`:` 分隔 PSK ID 和 PSK：
 
 ```
 client1:1234

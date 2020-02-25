@@ -27,7 +27,7 @@ ref: undefined
                                                    [subscriber3] got msg3
 ```
 
-上图中，共享 3 个 subscriber 用共享订阅的方式订阅了同一个主题 `$share/g/topic`，其中`topic` 是它们订阅的真实主题名，而  `$share/g/` 是共享订阅前缀。EMQ X 支持两种格式的共享订阅前缀：
+上图中，共享 3 个 subscriber 用共享订阅的方式订阅了同一个主题 `$share/g/topic`，其中`topic` 是它们订阅的真实主题名，而  `$share/g/` 是共享订阅前缀。EMQ X Broker 支持两种格式的共享订阅前缀：
 
 | 示例            | 前缀        | 真实主题名 |
 | --------------- | ----------- | ---------- |
@@ -73,12 +73,11 @@ group-name 可以为任意字符串，属于同一个群组内部的订阅者将
 
 ### 共享订阅的均衡策略
 
-EMQ X 的共享订阅支持以下几种均衡策略：
+EMQ X Broker 的共享订阅支持以下几种均衡策略：
 
-| Strategy    | Description                             |
-| :---------- | :-------------------------------------- |
-| random      | Random among all shared subscribers     |
-| round_robin | 按照订阅顺序                            |
-| sticky      | 一直发往上次选取的订阅者                |
-| hash        | Hash value of the ClientId of publisher |
-
+|    策略     |           描述           |
+| :---------- | :----------------------- |
+| random      | 在所有                   |
+| round_robin | 按照订阅顺序             |
+| sticky      | 一直发往上次选取的订阅者 |
+| hash        | 发布者 ClientID 的哈希值 |
