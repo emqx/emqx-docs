@@ -29,13 +29,19 @@ etc/acl.conf
 内置 ACL 优先级最低，可以被 ACL 插件覆盖，如需禁用全部注释即可。规则文件更改后需重启 EMQ X 以应用生效。
 {% endhint %}
 
-## 设置 ACL
+## 定义 ACL
 
 内置 ACL 使用 Erlang 语法进行规则定义，规则**从下到上依次覆盖**，定义方式为：
 
 ```bash
 [权限：允许|拒绝] [对象：IP 地址|用户名|Client ID] [动作：发布|订阅|发布订阅] [目标：主题]
 ```
+
+你可以在主题中使用以下占位符，ACL 授权检查时 EMQ X 将自动填充为客户端信息：
+
+- %u：用户名
+- %c：Client ID
+- %a：客户端 IP 地址
 
 默认规则文件：`etc/acl.conf`：
 
@@ -53,8 +59,7 @@ etc/acl.conf
 
 EMQ X 启动时将读取 ACL 文件并将数据加载到内存中，节点上的 ACL 数据会在此阶段同步至集群。
 
-你可以在**目标**主题中使用以下占位符，请求时 EMQ X 将自动填充为客户端信息：
 
-- %u：用户名
-- %c：Client ID
-- %a：客户端 IP 地址
+{% hint style="info" %}
+修改改 ACL 文件后需要使用 `./bin/emqx_ctl acl reload` 命令或重启 EMQ X 以更新规则。
+{% endhint %}
