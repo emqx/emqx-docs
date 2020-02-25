@@ -18,15 +18,15 @@ ref: undefined
 # 规则引擎
 
 
-> 适用版本: **EMQ X v3.1.0+**
+> 适用版本: **EMQ X Broker v3.1.0+**
 
-> 兼容提示: EMQ X v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule_engine.md# 迁移指南) 进行适配。
+> 兼容提示: EMQ X Broker v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule_engine.md# 迁移指南) 进行适配。
 
-EMQ X Rule Engine (以下简称规则引擎) 用于配置 EMQ X 消息流与设备事件的处理、响应规则。规则引擎不仅提供了清晰、灵活的 "配置式" 的业务集成方案，简化了业务开发流程，提升用户易用性，降低业务系统与 EMQ X 的耦合度；也为 EMQ X 的私有功能定制提供了一个更优秀的基础架构。
+EMQ X Broker Rule Engine (以下简称规则引擎) 用于配置 EMQ X Broker 消息流与设备事件的处理、响应规则。规则引擎不仅提供了清晰、灵活的 "配置式" 的业务集成方案，简化了业务开发流程，提升用户易用性，降低业务系统与 EMQ X Broker 的耦合度；也为 EMQ X Broker 的私有功能定制提供了一个更优秀的基础架构。
 
 ![image-20190506171815028](../assets/image-20190506171815028.png)
 
-EMQ X 在 **消息发布或事件触发** 时将触发规则引擎，满足触发条件的规则将执行各自的 SQL 语句筛选并处理消息和事件的上下文信息。
+EMQ X Broker 在 **消息发布或事件触发** 时将触发规则引擎，满足触发条件的规则将执行各自的 SQL 语句筛选并处理消息和事件的上下文信息。
 
 ### 消息发布
 
@@ -46,7 +46,7 @@ SELECT payload.x as x FROM "t/a"
 
 ### 事件触发
 
-规则引擎使用 **$events/** 开头的虚拟主题（**事件主题**）处理 EMQ X 内置事件，内置事件提供更精细的消息控制和客户端动作处理能力，可用在 QoS 1 QoS 2 的消息抵达记录、设备上下线记录等业务中。
+规则引擎使用 **$events/** 开头的虚拟主题（**事件主题**）处理 EMQ X Broker 内置事件，内置事件提供更精细的消息控制和客户端动作处理能力，可用在 QoS 1 QoS 2 的消息抵达记录、设备上下线记录等业务中。
 
 选择客户端连接事件，筛选 Username 为 'emqx' 的设备并获取连接信息：
 
@@ -64,9 +64,7 @@ SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = '
 - 处理规则（SQL）：使用 SELECT 子句 和 WHERE 子句以及内置处理函数， 从上下文信息中过滤和处理数据；
 - 响应动作：如果有处理结果输出，规则将执行相应的动作，如持久化到数据库、重新发布处理后的消息、转发消息到消息队列等。一条规则可以配置多个响应动作。
 
-
-如图所示是一条简单的规则，该条规则用于处理 **消息发布** 时的数据，将全部主题消息的 `msg` 字段，消息 `topic` 、`QoS` 筛选出来，发送到 Web Server 与 /uplink 主题：
-
+如图所示是一条简单的规则，该条规则用于处理 **消息发布** 时的数据，将全部主题消息的 `msg` 字段，消息 `topic` 、`qos` 筛选出来，发送到 Web Server 与 /uplink 主题：
 
 ![image-20190604103907875](../assets/image-20190604103907875.png)
 
@@ -75,8 +73,7 @@ SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = '
 - 动作监听：智慧家庭智能门锁开发中，门锁会因为网络、电源故障、人为破坏等原因离线导致功能异常，使用规则引擎配置监听离线事件向应用服务推送该故障信息，可以在接入层实现第一时间的故障检测的能力；
 - 数据筛选：车辆网的卡车车队管理，车辆传感器采集并上报了大量运行数据，应用平台仅关注车速大于 40 km/h 时的数据，此场景下可以使用规则引擎对消息进行条件过滤，向业务消息队列写入满足条件的数据；
 - 消息路由：智能计费应用中，终端设备通过不同主题区分业务类型，可通过配置规则引擎将计费业务的消息接入计费消息队列并在消息抵达设备端后发送确认通知到业务系统，非计费信息接入其他消息队列，实现业务消息路由配置；
-- 消息编解码：其他公共协议 / 私有 TCP 协议接入、工控行业等应用场景下，可以通过规则引擎的本地处理函数（可在 EMQ X 上定制开发）做二进制 / 特殊格式消息体的编解码工作；亦可通过规则引擎的消息路由将相关消息流向外部计算资源如函数计算进行处理（可由用户自行开发处理逻辑），将消息转为业务易于处理的 JSON 格式，简化项目集成难度、提升应用快速开发交付能力。
-
+- 消息编解码：其他公共协议 / 私有 TCP 协议接入、工控行业等应用场景下，可以通过规则引擎的本地处理函数（可在 EMQ X Broker 上定制开发）做二进制 / 特殊格式消息体的编解码工作；亦可通过规则引擎的消息路由将相关消息流向外部计算资源如函数计算进行处理（可由用户自行开发处理逻辑），将消息转为业务易于处理的 JSON 格式，简化项目集成难度、提升应用快速开发交付能力。
 
 ## 迁移指南
 
@@ -102,9 +99,9 @@ SELECT * FROM "$events/client_connected"
 
 ## 规则引擎组成
 
-使用 EMQ X 的规则引擎可以灵活地处理消息和事件。使用规则引擎可以方便地实现诸如将消息转换成指定格式，然后存入数据库表，或者发送到消息队列等。
+使用 EMQ X Broker 的规则引擎可以灵活地处理消息和事件。使用规则引擎可以方便地实现诸如将消息转换成指定格式，然后存入数据库表，或者发送到消息队列等。
 
-与 EMQ X 规则引擎相关的概念包括: 规则(rule)、动作(action)、资源(resource) 和 资源类型(resource-type)。
+与 EMQ X Broker 规则引擎相关的概念包括: 规则(rule)、动作(action)、资源(resource) 和 资源类型(resource-type)。
 
 规则、动作、资源的关系:
 
@@ -1121,18 +1118,18 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 Dashboard 界面提供了 SQL 语句测试功能，通过给定的 SQL 语句和事件参数，展示 SQL 测试结果。
 
 1.  在创建规则界面，输入 **规则SQL**，并启用 **SQL 测试** 开关:
-  
+
     ![image](../assets/sql-test-1@2x.png)
 
 2.  修改模拟事件的字段，或者使用默认的配置，点击 **测试** 按钮:
-  
+
     ![image](../assets/sql-test-2@2x.png)
 
 3.  SQL 处理后的结果将在 **测试输出** 文本框里展示:
-  
+
     ![image](../assets/sql-test-3@2x.png)
 
-## 规则引擎管理命令和 HTTP API
+## 规则引擎管理命令
 
 ### 规则引擎(rule engine) 命令
 
@@ -1140,7 +1137,7 @@ Dashboard 界面提供了 SQL 语句测试功能，通过给定的 SQL 语句和
 
 | rules list                                             | List all rules |
 | ------------------------------------------------------ | -------------- |
-| rules show  `<RuleId>`                                 | Show a rule    |
+| rules show `<RuleId>`                                 | Show a rule    |
 | emqx_ctl rules create `<sql> <actions> [-d [<descr>]]` | Create a rule  |
 | rules delete `<RuleId>`                                | Delete a rule  |
 
@@ -1302,433 +1299,8 @@ Dashboard 界面提供了 SQL 语句测试功能，通过给定的 SQL 语句和
 查询资源类型:
 
     $ ./bin/emqx_ctl resource-types show backend_mysql
-    
+
     resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
-
-### 规则引擎 HTTP API
-
-#### 规则 API
-
-##### 创建规则
-
-API 定义:
-
-    POST api/v3/rules
-
-参数定义:
-
-<table style="width:88%;">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 61%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>rawsql</td>
-<td>String，用于筛选和转换原始数据的 SQL 语句</td>
-</tr>
-<tr class="even">
-<td>actions</td>
-<td>JSON Array，动作列表</td>
-</tr>
-<tr class="odd">
-<td><ul>
-<li>actions.name</li>
-</ul></td>
-<td>String, 动作名字</td>
-</tr>
-<tr class="even">
-<td><ul>
-<li>actions.params</li>
-</ul></td>
-<td>JSON Object, 动作参数</td>
-</tr>
-<tr class="odd">
-<td>description</td>
-<td>String，可选，规则描述</td>
-</tr>
-</tbody>
-</table>
-
-API 请求示例:
-
-    GET http://localhost:8080/api/v3/rules
-
-API 请求消息体:
-
-``` json
-{
-  "rawsql": "select * from \"t/a\"",
-  "actions": [{
-      "name": "inspect",
-      "params": {
-          "a": 1
-      }
-  }],
-  "description": "test-rule"
-}
-```
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": {
-      "actions": [{
-          "name": "inspect",
-          "params": {
-              "a": 1
-          }
-      }],
-      "description": "test-rule",
-      "enabled": true,
-      "for": "t/a",
-      "id": "rule:34476883",
-      "rawsql": "select * from \"t/a\""
-  }
-}
-```
-
-##### 查询规则
-
-API 定义:
-
-    GET api/v3/rules/:id
-
-API 请求示例:
-
-    GET api/v3/rules/rule:34476883
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": {
-      "actions": [{
-          "name": "inspect",
-          "params": {
-              "a": 1
-          }
-      }],
-      "description": "test-rule",
-      "enabled": true,
-      "for": "t/a",
-      "id": "rule:34476883",
-      "rawsql": "select * from \"t/a\""
-  }
-}
-```
-
-##### 获取当前规则列表
-
-API 定义:
-
-    GET api/v3/rules
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": [{
-      "actions": [{
-          "name": "inspect",
-          "params": {
-              "a": 1
-          }
-      }],
-      "description": "test-rule",
-      "enabled": true,
-      "for": "t/a",
-      "id": "rule:34476883",
-      "rawsql": "select * from \"t/a\""
-  }]
-}
-```
-
-##### 删除规则
-
-API 定义:
-
-    DELETE api/v3/rules/:id
-
-请求参数示例:
-
-    DELETE api/v3/rules/rule:34476883
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0
-}
-```
-
-#### 动作 API
-
-##### 获取当前动作列表
-
-API 定义:
-
-    GET api/v3/actions?for=${hook_type}
-
-API 请求示例:
-
-    GET api/v3/actions
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": [{
-      "app": "emqx_rule_engine",
-      "description": "Republish a MQTT message to another topic",
-      "for": "t/a",
-      "name": "republish",
-      "params": {
-          "target_topic": {
-              "description": "To which topic the message will be republished",
-              "format": "topic",
-              "required": true,
-              "title": "To Which Topic",
-              "type": "string"
-          }
-      },
-      "types": []
-  }]
-}
-```
-
-API 请求示例:
-
-    GET 'api/v3/actions?for=client.connected'
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": [{
-      "app": "emqx_rule_engine",
-      "description": "Inspect the details of action params for debug purpose",
-      "for": "$any",
-      "name": "inspect",
-      "params": {},
-      "types": []
-  }]
-}
-```
-
-##### 查询动作
-
-API 定义:
-
-    GET api/v3/actions/:action_name
-
-API 请求示例:
-
-    GET 'api/v3/actions/inspect'
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": {
-      "app": "emqx_rule_engine",
-      "description": "Inspect the details of action params for debug purpose",
-      "for": "$any",
-      "name": "inspect",
-      "params": {},
-      "types": []
-  }
-}
-```
-
-#### 资源类型 API
-
-##### 获取当前资源类型列表
-
-API 定义:
-
-    GET api/v3/resource_types
-
-返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": [{
-      "config": {
-          "url": "http://host-name/chats"
-      },
-      "description": "forward msgs to host-name/chats",
-      "id": "resource:a7a38187",
-      "type": "web_hook"
-  }]
-}
-```
-
-##### 查询资源类型
-
-API 定义:
-
-    GET api/v3/resource_types/:type
-
-返回数据示例:
-
-    GET api/v3/resource_types/web_hook
-
-``` json
-{
-  "code": 0,
-  "data": {
-      "description": "WebHook",
-      "name": "web_hook",
-      "params": {},
-      "provider": "emqx_web_hook"
-  }
-}
-```
-
-##### 获取某种类型的资源
-
-API 定义:
-
-    GET api/v3/resource_types/:type/resources
-
-API 请求示例:
-
-    GET api/v3/resource_types/web_hook/resources
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": [{
-      "config": {"url":"http://host-name/chats"},
-      "description": "forward msgs to host-name/chats",
-      "id": "resource:6612f20a",
-      "type": "web_hook"
-  }]
-}
-```
-
-#### 资源 API
-
-##### 创建资源
-
-API 定义:
-
-    POST api/v3/resources
-
-API 参数定义:
-
-|             |                        |
-| ----------- | ---------------------- |
-| type        | String, 资源类型       |
-| config      | JSON Object, 资源配置  |
-| description | String，可选，规则描述 |
-
-API 请求参数示例:
-
-    {
-      "type": "web_hook",
-      "config": {
-          "url": "http://127.0.0.1:9910",
-          "headers": {"token":"axfw34y235wrq234t4ersgw4t"},
-          "method": "POST"
-      },
-      "description": "web hook resource-1"
-    }
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": {
-      "config": {
-          "headers":{"token":"axfw34y235wrq234t4ersgw4t"},
-          "method":"POST",
-          "url":"http://127.0.0.1:9910"
-      },
-      "description": "web hook resource-1",
-      "id": "resource:62763e19",
-      "type": "web_hook"
-  }
-}
-```
-
-##### 获取资源列表
-
-API 定义:
-
-    GET api/v3/resources
-
-API 返回数据示例:
-
-``` json
-{
-  "code": 0,
-  "data": [{
-      "config": {
-          "headers":{"token":"axfw34y235wrq234t4ersgw4t"},
-          "method":"POST",
-          "url":"http://127.0.0.1:9910"
-      },
-      "description": "web hook resource-1",
-      "id": "resource:62763e19",
-      "type": "web_hook"
-  }]
-}
-```
-
-##### 查询资源
-
-API 定义:
-
-    GET api/v3/resources/:resource_id
-
-API 返回数据示例:
-
-    GET 'api/v3/resources/resource:62763e19'
-
-``` json
-{
-  "code": 0,
-  "data": {
-      "config": {
-          "headers":{"token":"axfw34y235wrq234t4ersgw4t"},
-          "method":"POST",
-          "url":"http://127.0.0.1:9910"
-      },
-      "description": "web hook resource-1",
-      "id": "resource:62763e19",
-      "type": "web_hook"
-  }
-}
-```
-
-##### 删除资源
-
-API 定义:
-
-    DELETE api/v3/resources/:resource_id
-
-API 返回数据示例:
-
-    DELETE 'api/v3/resources/resource:62763e19'
-
-``` json
-{
-  "code": 0
-}
-```
 
 ## 与规则引擎相关的状态、统计指标和告警
 
