@@ -22,12 +22,11 @@ ref: undefined
 - MQTT 协议本身在 CONNECT 报文中指定用户名和密码，EMQ X Broker 以插件形式支持基于 Username、ClientID、HTTP、JWT、LDAP 及各类数据库如 MongoDB、MySQL、PostgreSQL、Redis 等多种形式的认证。
 - 在传输层上，TLS 可以保证使用客户端证书的客户端到服务器的身份验证，并确保服务器向客户端验证服务器证书。也支持基于 PSK 的 TLS/DTLS 认证。
 
-
 ## EMQ X Broker 认证与认证链 {#auth-and-auth-chain}
 
-EMQ X Broker 认证相关插件名称以 `emqx_auth` 开头。比如 `emqx_auth_username` 是使用 emqx 内部数据库 mnesia 对用户名做认证的插件，emqx_auth_redis 是使用 redis 数据库对用户名做认证的插件，等。
+EMQ X Broker 认证相关插件名称以 `emqx_auth` 开头。比如 `emqx_auth_username` 是使用 emqx 内部数据库 Mnesia 对用户名做认证的插件，`emqx_auth_redis` 是使用 Redis 数据库对用户名做认证的插件。
 
-当同时启用多个认证插件时，EMQ X Broker 将按照插件开启先后顺序进行链式认证，一旦认证成功或者失败(插件返回 allow 或者 deny) 就终止认证链并允许客户端接入，如果插件无法认证用户(可能该用户不在数据库里，这时候插件返回 ignore)则转给认证链里的下一个插件，直到最后一个插件。认证链的认证过程如下所示：
+当同时启用多个认证插件时，EMQ X Broker 将按照插件开启先后顺序进行链式认证，一旦认证成功或者失败(插件返回 allow 或者 deny) 就终止认证链并允许客户端接入，如果插件无法认证用户 (可能该用户不在数据库里，这时候插件返回 ignore) 则转给认证链里的下一个插件，直到最后一个插件。认证链的认证过程如下所示：
 
 ```
                      ignore                       ignore      ignore
@@ -37,9 +36,7 @@ EMQ X Broker 认证相关插件名称以 `emqx_auth` 开头。比如 `emqx_auth_
    allow deny                   allow deny            allow deny        allow   deny
 ```
 
-
-
-当认证链没有被任何插件终结，即所有插件都返回了 ignore，emqx 则会判断是否启用了匿名登录，如启用则允许登录，否则禁止登录。
+当认证链没有被任何插件终结，即所有插件都返回了 ignore，EMQ X Broker 则会判断是否启用了匿名登录，如启用则允许登录，否则禁止登录。
 
 匿名登录默认是启用的，可在 `etc/emqx.conf` 中禁用：
 
@@ -63,7 +60,7 @@ listener.ssl.external.certfile = etc/certs/cert.pem
 listener.ssl.external.cacertfile = etc/certs/cacert.pem
 ```
 
-注意，默认的 etc/certs 目录下面的 key.pem、cert.pem 和 cacert.pem 是 EMQ X Broker 生成的自签名证书，所以在使用支持 TLS 的客户端测试的时候，需要将上面的 CA 证书 `etc/certs/cacert.pem` 配置到客户端。
+注意，默认的 etc/certs 目录下面的 `key.pem`、`cert.pem` 和 `cacert.pem` 是 EMQ X Broker 生成的自签名证书，所以在使用支持 TLS 的客户端测试的时候，需要将上面的 CA 证书 `etc/certs/cacert.pem` 配置到客户端。
 
 服务端支持的 cipher 列表需要显式指定，默认的列表与 Mozilla 的服务端 cipher 列表一致：
 
@@ -93,4 +90,3 @@ PSK 的配置文件为 `etc/psk.txt`，使用冒号`:` 分隔 PSK ID 和 PSK：
 client1:1234
 client2:abcd
 ```
-

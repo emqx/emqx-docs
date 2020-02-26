@@ -21,7 +21,7 @@ Rule rule:803de6db created
 
 上面的 CLI 命令创建了一个 ID 为 'Rule rule:803de6db' 的规则。
 
-参数中前两个为必参数:
+参数中前两个为必选参数:
 
 - SQL 语句: SELECT \* FROM "message.publish" WHERE topic = 't/a'
 - 动作列表: \[{"name":"inspect", "params": {"a": 1}}\]。动作列表是用 JSON Array

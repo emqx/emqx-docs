@@ -1,6 +1,7 @@
 {
   "plugins": [
-    "-anchor-navigation-ex"
+    "-anchor-navigation-ex",
+    "chapter-fold"
   ],
   "pluginsConfig": {
     "anchor-navigation-ex": {
