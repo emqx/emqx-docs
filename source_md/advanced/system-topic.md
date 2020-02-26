@@ -17,23 +17,20 @@ ref: undefined
 
 # $SYS 系统主题
 
-EMQ X Broker 周期性发布自身运行状态、消息统计、客户端上下线事件到 以 $SYS/ 开头系统主题。
+EMQ X Broker 周期性发布自身运行状态、消息统计、客户端上下线事件到 以 `$SYS/` 开头系统主题。
 
-$SYS 主题路径以 $SYS/brokers/{node}/ 开头。 {node} 是指产生该 事件 / 消息 所在的节点名称，例如:
+$SYS 主题路径以 `$SYS/brokers/{node}/` 开头。 `{node}` 是指产生该 `事件 / 消息` 所在的节点名称，例如:
 
 ```
 $SYS/brokers/emqx@127.0.0.1/version
 $SYS/brokers/emqx@127.0.0.1/uptime
 ```
-默认只允许 localhost 的 MQTT 客户端订阅 $SYS 主题，可通过 etc/acl.config 修改访问控制规则。
 
-$SYS 系统消息发布周期，通过 etc/emqx.conf 配置:
+默认只允许本机的 MQTT 客户端订阅 `$SYS` 主题，可通过 `etc/acl.config` 修改访问控制规则。
+
+`$SYS` 系统消息发布周期配置项：
 
 ```
-## System interval of publishing $SYS messages.
-##
-## Value: Duration
-## Default: 1m, 1 minute
 broker.sys_interval = 1m
 ```
 
@@ -49,69 +46,64 @@ broker.sys_interval = 1m
 
 ### 客户端上下线事件
 
-\$SYS 主题前缀: \$SYS/brokers/\${node}/clients/
+`$SYS` 主题前缀: `$SYS/brokers/${node}/clients/`
 
 | 主题 (Topic)              | 说明                                     |
 | ------------------------ | ---------------------------------------- |
-| ${clientid}/connected    | 上线事件。当某客户端上线时，会发布该消息 |
-| ${clientid}/disconnected | 下线事件。当某客户端离线时，会发布该消息 |
+| ${clientid}/connected    | 上线事件。当任意客户端上线时，EMQ X Broker 就会发布该主题的消息 |
+| ${clientid}/disconnected | 下线事件。当任意客户端下线时，EMQ X Broker 就会发布该主题的消息 |
 
-‘connected’ 事件消息的 Payload 可解析成 JSON 格式:
+‘connected’ 事件消息的 Payload 解析成 JSON 格式如下:
 
 ```
 {
-    "clientid":"id1",
-    "username":"u",
+    "username":"undefined",
+    "ts":1582687922392,
+    "sockport":1883,
+    "proto_ver":5,
+    "proto_name":"MQTT",
+    "keepalive":300,
     "ipaddress":"127.0.0.1",
+    "expiry_interval":0,
+    "connected_at":1582687922,
     "connack":0,
-    "ts":1554047291,
-    "proto_ver":3,
-    "proto_name":"MQIsdp",
-    "clean_start":true,
-    "keepalive":60
+    "clientid":"emqtt-8348fe27a87976ad4db3",
+    "clean_start":true
 }
 ```
 
-‘disconnected’ 事件消息的 Payload 可解析成 JSON 格式:
+‘disconnected’ 事件消息的 Payload 解析成 JSON 格式如下:
 
 ```
 {
-    "clientid":"id1",
-    "username":"u",
-    "reason":"normal",
-    "ts":1554047291
+    "username":"undefined",
+    "ts":1582688032203,
+    "reason":"tcp_closed",
+    "disconnected_at":1582688032,
+    "clientid":"emqtt-8348fe27a87976ad4db3"
 }
 ```
 
 ### 系统统计 (Statistics)
 
-系统主题前缀: \$SYS/brokers/\${node}/stats/
+系统主题前缀: `$SYS/brokers/${node}/stats/`
 
 #### 客户端统计
 
 | 主题 (Topic)       | 说明           |
 | ----------------- | -------------- |
 | connections/count | 当前客户端总数 |
-| connections/max   | 最大客户端数量 |
-
-#### 会话统计
-
-| 主题 (Topic)               | 说明             |
-| ------------------------- | ---------------- |
-| sessions/count            | 当前会话总数     |
-| sessions/max              | 最大会话数量     |
-| sessions/persistent/count | 当前持久会话总数 |
-| sessions/persistent/max   | 最大持久会话数量 |
+| connections/max   | 客户端数量历史最大值 |
 
 #### 订阅统计
 
 | 主题 (Topic)                | 说明             |
 | -------------------------- | ---------------- |
 | suboptions/count           | 当前订阅选项个数 |
-| suboptions/max             | 最大订阅选项总数 |
-| subscribers/max            | 最大订阅者总数   |
+| suboptions/max             | 订阅选项总数历史最大值 |
+| subscribers/max            | 订阅者总数历史最大值   |
 | subscribers/count          | 当前订阅者数量   |
-| subscriptions/max          | 最大订阅数量     |
+| subscriptions/max          | 订阅数量历史最大值     |
 | subscriptions/count        | 当前订阅总数     |
 | subscriptions/shared/count | 当前共享订阅个数 |
 | subscriptions/shared/max   | 当前共享订阅总数 |
@@ -121,20 +113,20 @@ broker.sys_interval = 1m
 | 主题 (Topic)  | 说明            |
 | ------------ | --------------- |
 | topics/count | 当前 Topic 总数 |
-| topics/max   | 最大 Topic 数量 |
+| topics/max   | Topic 数量历史最大值 |
 
 #### 路由统计
 
 | 主题 (Topic)  | 说明             |
 | ------------ | ---------------- |
 | routes/count | 当前 Routes 总数 |
-| routes/max   | 最大 Routes 数量 |
+| routes/max   | Routes 数量历史最大值 |
 
 `topics/count` 和 `topics/max` 与 `routes/count` 和 `routes/max` 数值上是相等的。
 
 ### 收发流量 / 报文 / 消息统计
 
-系统主题 (Topic) 前缀: \$SYS/brokers/\${node}/metrics/
+系统主题 (Topic) 前缀: `$SYS/brokers/${node}/metrics/`
 
 #### 收发流量统计
 
@@ -173,7 +165,7 @@ broker.sys_interval = 1m
 | packets/pingresp            | 累计发送 MQTT PINGRESP 报文    |
 | packets/disconnect/received | 累计接收 MQTT DISCONNECT 报文  |
 | packets/disconnect/sent     | 累计接收 MQTT DISCONNECT 报文  |
-| packets/auth                | 累计接收 Auth 报文             |
+| packets/auth                | 累计接收 MQTT Auth 报文             |
 
 #### MQTT 消息收发统计
 
@@ -185,18 +177,18 @@ broker.sys_interval = 1m
 | messages/retained      | Retained 消息总数  |
 | messages/dropped       | 丢弃消息总数       |
 | messages/forward       | 节点转发消息总数   |
-| messages/qos0/received | 累计接受 QoS0 消息 |
-| messages/qos0/sent     | 累计发送 QoS0 消息 |
-| messages/qos1/received | 累计接受 QoS1 消息 |
-| messages/qos1/sent     | 累计发送 QoS1 消息 |
-| messages/qos2/received | 累计接受 QoS2 消息 |
-| messages/qos2/sent     | 累计发送 QoS2 消息 |
-| messages/qos2/expired  | QoS2 过期消息总数  |
-| messages/qos2/dropped  | QoS2 丢弃消息总数  |
+| messages/qos0/received | 累计接收 QoS 0 消息 |
+| messages/qos0/sent     | 累计发送 QoS 0 消息 |
+| messages/qos1/received | 累计接收 QoS 1 消息 |
+| messages/qos1/sent     | 累计发送 QoS 1 消息 |
+| messages/qos2/received | 累计接收 QoS 2 消息 |
+| messages/qos2/sent     | 累计发送 QoS 2 消息 |
+| messages/qos2/expired  | QoS 2 过期消息总数  |
+| messages/qos2/dropped  | QoS 2 丢弃消息总数  |
 
 ### Alarms - 系统告警
 
-系统主题 (Topic) 前缀: \$SYS/brokers/\${node}/alarms/
+系统主题 (Topic) 前缀: `$SYS/brokers/${node}/alarms/`
 
 | 主题 (Topic) | 说明         |
 | ----------- | ------------ |
@@ -205,7 +197,7 @@ broker.sys_interval = 1m
 
 ### Sysmon - 系统监控
 
-系统主题 (Topic) 前缀: $SYS/brokers/\${node}/sysmon/
+系统主题 (Topic) 前缀: `$SYS/brokers/${node}/sysmon/`
 
 | 主题 (Topic)    | 说明              |
 | -------------- | ----------------- |
