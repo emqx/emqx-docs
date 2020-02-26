@@ -64,7 +64,6 @@
 * [架构设计](design/index.md)
 * [SDK & Tools](development/index.md)
   * [客户端库](development/index.md#客户端库)
-  * [性能测试工具](development/benchmark.md)
   * [其他资源](development/resource.md)
 * [FAQ](faq/index.md)
   * [入门概念](faq/index.md#入门概念)
