@@ -21,21 +21,21 @@ ref: undefined
 
 协议中规定了作为通信的双方 **服务端(Broker)** 和 **客户端(Client)** 对于自己发送到对端的 PUBLISH 消息都应满足其 **服务质量(Quality of Service levels)** 的要求。如：
 
-- Qos1：表示 **消息至少送达一次 (At least once delivery)**；即发送端会一直重发该消息，除非收到了对端对该消息的确认。意思是在 MQTT 协议的上层（即业务的应用层）相同的 Qos1 消息可能会收到多次。
+- QoS 1：表示 **消息至少送达一次 (At least once delivery)**；即发送端会一直重发该消息，除非收到了对端对该消息的确认。意思是在 MQTT 协议的上层（即业务的应用层）相同的 QoS 1 消息可能会收到多次。
 
-- Qos2：表示 **消息只送达一次 (Exactly once delivery)**；即该消息在上层仅会接收到一次。
+- QoS 2：表示 **消息只送达一次 (Exactly once delivery)**；即该消息在上层仅会接收到一次。
 
-虽然，Qos1 和 Qos2 的 PUBLISH 报文在 MQTT 协议栈这一层都会发生重传，但请你谨记的是：
+虽然，QoS 1 和 QoS 2 的 PUBLISH 报文在 MQTT 协议栈这一层都会发生重传，但请你谨记的是：
 
-- Qos1 消息发生重传后，在 MQTT 协议栈上层，也会收到这些重发的 PUBLISH 消息。
-- Qos2 消息无论如何重传，最终在 MQTT 协议栈上层，都只会收到一条 PUBLISH 消息
+- QoS 1 消息发生重传后，在 MQTT 协议栈上层，也会收到这些重发的 PUBLISH 消息。
+- QoS 2 消息无论如何重传，最终在 MQTT 协议栈上层，都只会收到一条 PUBLISH 消息
 
 ## 基础配置
 
 有两种场景会导致消息重发：
 
 1. PUBLISH 报文发送给对端后，规定时间内未收到应答。则重发这个报文。
-2. 在保持会话的情况下，客户端重连后；EMQ X Broker 会自动重发  *未应答的消息*，以确保 Qos 流程的正确。
+2. 在保持会话的情况下，客户端重连后；EMQ X Broker 会自动重发  *未应答的消息*，以确保 QoS 流程的正确。
 
 在 `etc/emqx.conf` 中可配置：
 
@@ -52,13 +52,13 @@ ref: undefined
 
 ### 重传的对象
 
-首先，在了解 EMQ X Broker 对于重传机制的设计前，我们需要先确保你已经了解协议中 Qos1 和 Qos2 的传输过程，否则请参见 [MQTTv3.1.1 - Qos1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) 和 [MQTTv3.1.1 - Qos2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)。
+首先，在了解 EMQ X Broker 对于重传机制的设计前，我们需要先确保你已经了解协议中 QoS 1 和 QoS 2 的传输过程，否则请参见 [MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) 和 [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)。
 
-此处，仅作一个简单的回顾，用来说明不同 Qos 下重传的对象有哪些。
+此处，仅作一个简单的回顾，用来说明不同 QoS 下重传的对象有哪些。
 
-#### Qos1
+#### QoS 1
 
-Qos1 要求消息至少送达一次；所以消息在 MQTT 协议层中，可能会不断的重传，直到发送端收到了该消息的确认报文。
+QoS 1 要求消息至少送达一次；所以消息在 MQTT 协议层中，可能会不断的重传，直到发送端收到了该消息的确认报文。
 
 其流程示意图如下：
 
@@ -73,11 +73,11 @@ Qos1 要求消息至少送达一次；所以消息在 MQTT 协议层中，可能
 - 行尾标记为 * 号的，表示发送方在等待确认报文超时后，可能会主动发起重传。
 
 
-可见，**Qos1 消息只需要对 PUBLISH 报文进行重发**
+可见 **QoS 1 消息只需要对 PUBLISH 报文进行重发**
 
-#### Qos2
+#### QoS 2
 
-Qos2 要求消息只送达一次；所以在实现它时，需要更复杂的流程。其流程示意图如下：
+QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的流程。其流程示意图如下：
 
 ```
                PUBLISH
@@ -93,16 +93,16 @@ Qos2 要求消息只送达一次；所以在实现它时，需要更复杂的流
 - 涉及到 4 个报文；共 4 次发送动作，发送端和接收端各 2 次；这 4 个报文都持有相同的 PacketId。
 - 行尾标记为 * 号的，表示发送方在等待确认报文超时后，可能会主动发起重传。
 
-可见，**Qos2 消息需要对 PUBLISH 和 PUBREL 报文进行重发**
+可见 **QoS 2 消息需要对 PUBLISH 和 PUBREL 报文进行重发**
 
 综上：
 
 - **重传动作** 都是由于 **发送端** 报文发送后，在 **规定时间** 内未收到其期待的返回而触发的。
 
 - **重传对象** 仅包含以下三种：
-    * Qos1 的 PUBLISH 报文
-    * Qos2 的 PUBLISH 报文
-    * Qos2 的 PUBREL 报文
+    * QoS 1 的 PUBLISH 报文
+    * QoS 2 的 PUBLISH 报文
+    * QoS 2 的 PUBREL 报文
 
 当 EMQ X Broker 作为 PUBLISH 消息的接收端时，它不需要重发操作
 
@@ -115,15 +115,15 @@ Qos2 要求消息只送达一次；所以在实现它时，需要更复杂的流
 
 1. EMQ X Broker 作为发送端时，再次重发的消息，必然是已存储在 飞行窗口 中的消息
 2. EMQ X Broker 作为接收端时，发送端重发的消息时：
-    - 如 Qos1，EMQ X Broker 则直接回复 PUBACK 进行应答；
-    - 如 Qos2，EMQ X Broker 则会释放，存储在 *最大接收消息* 队列中的 PUBLISH 或者 PUBREL 报文。
+    - 如 QoS 1，EMQ X Broker 则直接回复 PUBACK 进行应答；
+    - 如 QoS 2，EMQ X Broker 则会释放，存储在 *最大接收消息* 队列中的 PUBLISH 或者 PUBREL 报文。
 
 
 ### 消息顺序
 
-当然，以上的概念仅需要了解即可，你最需要关心的是，**消息在被重复发送后，消息顺序出现的变化，尤其是 Qos1 类的消息**。例如：
+当然，以上的概念仅需要了解即可，你最需要关心的是，**消息在被重复发送后，消息顺序出现的变化，尤其是 QoS 1 类的消息**。例如：
 
-假设，当前飞行窗口设置为 2 时，EMQ X Broker 计划向客户端的某主题投递 4 条 Qos 1 的消息。并假设客户端程序、或网络在中间出现过问题，那么整个发送流程会变成：
+假设，当前飞行窗口设置为 2 时，EMQ X Broker 计划向客户端的某主题投递 4 条 QoS 1 的消息。并假设客户端程序、或网络在中间出现过问题，那么整个发送流程会变成：
 
 ```
 #1  [4,3,2,1 || ]   ----->   []
@@ -147,9 +147,9 @@ Qos2 要求消息只送达一次；所以在实现它时，需要更复杂的流
 
 MQTT 协议和 EMQ X Broker 将这个主题认为是 `有序的主题(Ordered Topic)` 参见: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)。
 
-它确保 **相同的主题和 Qos 下，消息是按顺序投递和应答的**。
+它确保 **相同的主题和 QoS 下，消息是按顺序投递和应答的**。
 
-此外，用户如果是严格的关心所有主题下的 Qos1， Qos2 消息都严格有序。那么需设置飞行窗口的大小为 `1`。但代价是会降低该客户端的吞吐。
+此外，用户如果是严格的关心所有主题下的 QoS 1，QoS 2 消息都严格有序。那么需设置飞行窗口的大小为 `1`。但代价是会降低该客户端的吞吐。
 
 ### 相关配置
 
@@ -157,7 +157,7 @@ MQTT 协议和 EMQ X Broker 将这个主题认为是 `有序的主题(Ordered To
 
 | 配置项            | 类型     | 可取值        | 默认值 | 说明                                                    |
 | ----------------- | -------- | ------------- | ------ | ------------------------------------------------------- |
-| mqueue_store_qos0 | bool     | true<br>false | true   | 是否将 Qos0 消息存入消息队列中                          |
+| mqueue_store_qos0 | bool     | true<br>false | true   | 是否将 QoS 0 消息存入消息队列中                          |
 | max_mqueue_len    | integer  | >= 0          | 1000   | 消息队列长度                                            |
 | max_inflight      | integer  | >= 0          | 0      | 飞行窗口大小；默认 `0` 即无限制                         |
 | max_awaiting_rel  | integer  | >= 0          | 0      | 最大接收；默认 `0` 即无限制                             |

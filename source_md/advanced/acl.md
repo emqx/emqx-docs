@@ -82,7 +82,9 @@ ACL 缓存相关的配置都在 `etc/emqx.conf` 中：
 
 ### 插件中的 ACL 规则
 
-当缓存中的 ACL 规则未命中后，EMQ X Broker 会调用已启用插件的 ACL 检查函数。这些 ACL 检查函数会从相应的服务中去查找所能命中的 ACL 规则，例如：从 Redis，MySQL 数据库中等等。
+EMQ X Broker 发行包中的某些认证插件提供了 ACL 检查的功能。
+
+当缓存中的 ACL 规则未命中后，则会执行这些插件提供的 ACL 检查函数。这些 ACL 检查函数会从相应的服务中去查找所能命中的 ACL 规则，例如：从 Redis，MySQL 服务等。
 
 目前，仅以下插件提供 ACL 检查的功能：
 
@@ -166,7 +168,7 @@ EMQ X Broker 内置有默认的 ACL 规则，它是优先级最低规则表，�
     - `{allow, all}`：允许所有操作
     - `{deny, all}`：拒绝所有操作
 
-在修改完成后 `acl.conf` 后，并不会自动加载至 EMQ X Broker 系统。需要手动执行：
+在 `acl.conf` 修改完成后，并不会自动加载至 EMQ X Broker 系统。需要手动执行：
 
 ``` bash
 ./bin/emqx_ctl acl reload

@@ -32,19 +32,19 @@ WebHook 的内部实现是基于 [钩子(Hooks)][]，但它更靠近顶层一些
 
 WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X Broker 中的事件推送给 Web 服务，并不关心 Web 服务的返回**。
 
-在使用 WebHook 时，首先需要知道如何启动和关闭插件；参见：[插件(Plugins)][] 这一章节。
+在使用 WebHook 时，首先需要知道如何启动和关闭插件，参见：[插件(Plugins)][]。
 
 
 ## 配置
 
-`emqx_web_hook` 的配置文件位于 `etc/plugins/emqx_web_hook.conf`。其中
+`emqx_web_hook` 的配置文件位于 `etc/plugins/emqx_web_hook.conf`：
 
 |  配置项            | 类型   | 可取值 | 默认值 | 说明               |
 | ------------------ | ------ | ------ | ------ | ------------------ |
 | api.url            | string | -      | http://127.0.0.1:8080 | 事件需要转发的目的服务器地址 |
 | encode_payload     | enum   | base64<br>base62 | undefined | 对消息类事件中的 Payload 字段进行编码，`undefined` 则表示不编码 |
 
-> 注：`encode_payload` 主要是用于消息的 Payload 是不可见字符，为了方便在 HTTP 协议中传输，需要给它设置一个编码格式。
+`encode_payload` 主要是用于消息的 Payload 是不可见字符，为了方便在 HTTP 协议中传输，需要给它设置一个编码格式。
 
 
 ### 转发事件
@@ -53,12 +53,6 @@ WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X Broker 中�
 
 ``` properties
 web.hook.rule.<HookPoint>.<Number> = <Specification>
-```
-
-例如，需要转发所有的连接事件：
-
-``` properties
-web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
 ```
 
 
@@ -104,7 +98,6 @@ web.hook.rule.message.publish.2 = {"action": "on_message_publish", "topic": "foo
 ```
 
 这样 `emqx_web_hook` 仅会转发与 `a/b/c` 和 `foo/#` 主题匹配的消息。例如 `foo/bar` 等，而不是转发 `a/b/d` 或 `fo/bar`。
-
 
 ## Web 服务的实现
 

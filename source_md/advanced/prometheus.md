@@ -18,19 +18,21 @@ ref: undefined
 
 # Prometheus 监控告警
 
-EMQ X Broker 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，用于将系统的监控数据输出到三方监控系统中。
+EMQ X Broker 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，用于将系统的监控数据输出到第三方的监控系统中。
 
 以 [Prometheus](https://prometheus.io) 为例：
 
 ![Promethues Arch](assets/prometheus_arch.png)
 
-`emqx_statsd` 不支持 Prometheus 的 Pull 操作。它仅将数据推送至 Pushgateway 中，然后再由 Promethues Server 拉取进行存储。
+`emqx_statsd` 支持将数据推送至 Pushgateway 中，然后再由 Promethues Server 拉取进行存储。
+
+注意：`emqx_statsd` 不支持 Prometheus 的 Pull 操作。
 
 ## 配置
 
-`emqx_statsd` 插件内部会启动一个定时器，使其每间隔一段时间便采集 EMQ X Broker 中的监控数据
+`emqx_statsd` 插件内部会启动一个定时器，使其每间隔一段时间便采集 EMQ X Broker 中的监控数据。
 
-`emqx_statsd` 推送的监控数据内容，参见：[Metrics & Stats](metrics.md)
+`emqx_statsd` 推送的监控数据包含的具体字段和含义，参见：[Metrics & Stats](metrics.md)
 
 配置文件位于 `etc/plugins/emqx_statsd.conf`，其中：
 
@@ -41,11 +43,6 @@ EMQ X Broker 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，
 
 ### Grafana 数据模板
 
-`emqx_statsd` 插件提供了 Grafana 的 Dashboard 的模板文件。便于用户快速进行集成使用。
-
-这些模板包含了所有 EMQ X Broker 监控数据的展示。
+`emqx_statsd` 插件提供了 Grafana 的 Dashboard 的模板文件。这些模板包含了所有 EMQ X Broker 监控数据的展示。用户可直接导入到 Grafana 中，进行显示 EMQ X Broker 的监控状态的图标。
 
 模板文件位于：[emqx_statsd/grafana_template](https://github.com/emqx/emqx-statsd/tree/master/grafana_template)。
-
-在配置完成 Prometheus 和 Grafana 的对接后，直接在 Grafana 导入即可使用。
-
