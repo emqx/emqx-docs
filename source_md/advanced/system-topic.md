@@ -175,7 +175,7 @@ broker.sys_interval = 1m
 | ---------------------- | ------------------ |
 | messages/received      | 累计接收消息       |
 | messages/sent          | 累计发送消息       |
-| messages/expired       | 累计发送消息       |
+| messages/expired       | 累计过期消息       |
 | messages/retained      | Retained 消息总数  |
 | messages/dropped       | 丢弃消息总数       |
 | messages/forward       | 节点转发消息总数   |

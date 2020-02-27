@@ -23,10 +23,10 @@ EMQ X Broker 的 [保留消息](advanced/retained.md) 和 [延迟发布](advance
 
 #### 开启主题重写功能
 
-EMQ X Broker 主题重写功能默认是关闭的，可以将 `etc/emqx.conf` 配置文件中的 `module.rewrite` 设置为 `on` 以开启主题重写功能。
+主题重写功能默认关闭，开启此功能需要修改 `etc/emqx.conf` 文件中的 `module.rewrite` 配置项。默认 `off` 表示关闭，如需开启请修改为 `on`。
 
 ```
-module.rewrite = on
+module.rewrite = off
 ```
 
 #### 配置主题重写规则

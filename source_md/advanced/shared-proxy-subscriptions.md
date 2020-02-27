@@ -36,7 +36,7 @@ module.subscription.<number>.topic = <topic>
 module.subscription.<number>.qos = <qos>
 ```
 
-在配置代理订阅的主题时，可以使用 `%c` 和 `%u` 两个占位符，EMQ X Broker 会在订阅前将配置中的 `%c` 和 `%u` 分别替换为客户端的 `Client ID` 和 `Username`，需要注意的是，`%c` 和 `%u` 必须占用一整个主题层级。
+在配置代理订阅的主题时，EMQ X Broker 提供了 `%c` 和 `%u` 两个占位符供用户使用，EMQ X Broker 会在执行代理订阅时将配置中的 `%c` 和 `%u` 分别替换为客户端的 `Client ID` 和 `Username`，需要注意的是，`%c` 和 `%u` 必须占用一整个主题层级。
 
 例如，在 `etc/emqx.conf` 文件中添加以下代理订阅规则：
 
