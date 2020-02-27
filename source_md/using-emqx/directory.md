@@ -74,7 +74,6 @@ EMQ X Broker 将运行数据存储在 `data` 目录下，主要的文件包括:
     {emqx_dashboard,true}.
     {emqx_rule_engine,true}.
     {emqx_bridge_mqtt,false}.
-    {emqx_delayed_publish,true}.
     ```
 
 +   `mnesia`
