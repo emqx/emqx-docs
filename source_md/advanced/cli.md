@@ -93,8 +93,7 @@ ok
 
 ## broker 命令
 
-broker
-命令查询服务器基本信息，启动时间，统计数据与性能数据。
+broker 命令查询服务器基本信息，启动时间，统计数据与性能数据。
 
 | 命令           | 描述                                                         |
 | -------------- | ------------------------------------------------------------ |
@@ -643,9 +642,7 @@ ports/limit           : 1048576
 
 ## log 命令
 
-log 命令用于设置日志等级。访问 [Documentation of
-logger](http://erlang.org/doc/apps/kernel/logger_chapter.html)
-以获取详细信息
+log 命令用于设置日志等级。访问 [Documentation of logger](http://erlang.org/doc/apps/kernel/logger_chapter.html) 以获取详细信息
 
 | 命令                                           | 描述                                   |
 | ---------------------------------------------- | -------------------------------------- |
@@ -778,7 +775,7 @@ Trace (topic=topic2, level=error, destination="log/topic2_trace.log")
 
 ## listeners
 
-listeners 命令用于查询开启的 TCP 服务监听器
+listeners 命令用于查询开启的 TCP 服务监听器。
 
 | 命令                              | 描述                      |
 | --------------------------------- | ------------------------- |
