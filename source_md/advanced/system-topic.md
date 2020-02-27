@@ -17,9 +17,9 @@ ref: undefined
 
 # $SYS 系统主题
 
-EMQ X Broker 周期性发布自身运行状态、消息统计、客户端上下线事件到 以 `$SYS/` 开头系统主题。
+EMQ X Broker 周期性发布自身运行状态、消息统计、客户端上下线事件到以 `$SYS/` 开头系统主题。
 
-$SYS 主题路径以 `$SYS/brokers/{node}/` 开头。 `{node}` 是指产生该 `事件 / 消息` 所在的节点名称，例如:
+$SYS 主题路径以 `$SYS/brokers/{node}/` 开头。`{node}` 是指产生该 `事件 / 消息` 所在的节点名称，例如:
 
 ```
 $SYS/brokers/emqx@127.0.0.1/version
@@ -33,6 +33,8 @@ $SYS/brokers/emqx@127.0.0.1/uptime
 ```
 broker.sys_interval = 1m
 ```
+
+`broker.sys_interval` 的数据类型为 `duration`。
 
 ### 集群状态信息
 
@@ -53,7 +55,7 @@ broker.sys_interval = 1m
 | ${clientid}/connected    | 上线事件。当任意客户端上线时，EMQ X Broker 就会发布该主题的消息 |
 | ${clientid}/disconnected | 下线事件。当任意客户端下线时，EMQ X Broker 就会发布该主题的消息 |
 
-‘connected’ 事件消息的 Payload 解析成 JSON 格式如下:
+`connected` 事件消息的 Payload 解析成 JSON 格式如下:
 
 ```
 {
@@ -72,7 +74,7 @@ broker.sys_interval = 1m
 }
 ```
 
-‘disconnected’ 事件消息的 Payload 解析成 JSON 格式如下:
+`disconnected` 事件消息的 Payload 解析成 JSON 格式如下:
 
 ```
 {
@@ -101,10 +103,10 @@ broker.sys_interval = 1m
 | -------------------------- | ---------------- |
 | suboptions/count           | 当前订阅选项个数 |
 | suboptions/max             | 订阅选项总数历史最大值 |
-| subscribers/max            | 订阅者总数历史最大值   |
 | subscribers/count          | 当前订阅者数量   |
-| subscriptions/max          | 订阅数量历史最大值     |
+| subscribers/max            | 订阅者总数历史最大值   |
 | subscriptions/count        | 当前订阅总数     |
+| subscriptions/max          | 订阅数量历史最大值     |
 | subscriptions/shared/count | 当前共享订阅个数 |
 | subscriptions/shared/max   | 当前共享订阅总数 |
 
@@ -165,7 +167,7 @@ broker.sys_interval = 1m
 | packets/pingresp            | 累计发送 MQTT PINGRESP 报文    |
 | packets/disconnect/received | 累计接收 MQTT DISCONNECT 报文  |
 | packets/disconnect/sent     | 累计接收 MQTT DISCONNECT 报文  |
-| packets/auth                | 累计接收 MQTT Auth 报文             |
+| packets/auth                | 累计接收 MQTT AUTH 报文             |
 
 #### MQTT 消息收发统计
 

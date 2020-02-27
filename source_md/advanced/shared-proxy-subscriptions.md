@@ -36,7 +36,7 @@ module.subscription.<number>.topic = <topic>
 module.subscription.<number>.qos = <qos>
 ```
 
-在代理订阅的配置中，可以使用 `%c` 和 `%u` 两个变量，EMQ X Broker 会把它们解析为来自客户端的 `client_id` 和 `username`
+在配置代理订阅的主题时，可以使用 `%c` 和 `%u` 两个占位符，EMQ X Broker 会在订阅前将配置中的 `%c` 和 `%u` 分别替换为客户端的 `Client ID` 和 `Username`，需要注意的是，`%c` 和 `%u` 必须占用一整个主题层级。
 
 例如，在 `etc/emqx.conf` 文件中添加以下代理订阅规则：
 
@@ -48,6 +48,6 @@ module.subscription.2.topic = $user/%u
 module.subscription.2.qos = 2
 ```
 
-上面的配置决定了当客户端链接的时候，会自动帮客户端订阅 Qos 为 1 的 `$client/<client_id>` 主题和 Qos 为 2 的 `$user/<username>` 主题，配置项中的 `%c` 代表来自客户端连接的 `client_id`，`%u` 代表来自客户端连接的 `username`，`$client` 和 `$user` 均为文本字符串。
+上面的配置决定了当客户端链接的时候，会自动帮客户端订阅 QoS 为 1 的 `$client/<Client ID>` 主题和 QoS 为 2 的 `$user/<Username>` 主题，`$client` 和 `$user` 均为文本字符串。
 
-当一个 `clientid = testclient`，`username = tester` 的客户端连接 EMQ X Broker 的时候，代理订阅功能会主动帮客户端订阅 `$client/estclient`、`$user/tester` 这两个主题。
+举个例子，当一个客户端连接 EMQ X Broker 的时候，假设客户端的 `Client ID` 为 `testclient`，`Username` 为 `tester`，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 QoS 为 1 的 `$client/testclient` 和 QoS 为 2 的 `$user/tester` 这两个主题。

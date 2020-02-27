@@ -17,7 +17,7 @@ ref: undefined
 
 # 延迟发布
 
-EMQ X Broker 的延迟发布功能可以实现按照用户配置的时间间隔延迟发布 PUBLISH 报文的功能。当客户端使用特殊主题前缀 `$delayed/{DelayInteval}` 发布消息到 EMQ X Broker 时， 将触发延迟发布功能。
+EMQ X Broker 的延迟发布功能可以实现按照用户配置的时间间隔延迟发布 PUBLISH 报文的功能。当客户端使用特殊主题前缀 `$delayed/{DelayInteval}` 发布消息到 EMQ X Broker 时，将触发延迟发布功能。
 
 延迟发布主题的具体格式如下：
 

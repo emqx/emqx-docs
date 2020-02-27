@@ -17,7 +17,7 @@ ref: undefined
 
 # 管理命令 CLI
 
-EMQ X Broker 提供了 `./bin/emqx_ctl` 的管理命令行吗，用于用户对 EMQ X Broker 进行管理、配置、查询。
+EMQ X Broker 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQ X Broker 进行管理、配置、查询。
 
 ## status 命令
 
@@ -848,7 +848,7 @@ Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
 
 ## recon 命令
 
-EMQ X Broker 的 recon 命令基于 Erlang Recon 库实现，，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
+EMQ X Broker 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
 
 | 命令                    | 描述                                                         |
 | ----------------------- | ------------------------------------------------------------ |
