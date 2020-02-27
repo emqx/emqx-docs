@@ -18,7 +18,7 @@ ref: undefined
 
 # 多语言支持
 
-EMQ X Broker 发行包中，提供了一些用于多语言支持的 [插件](plugins.md)。它允许你使用其它编程语言来扩展 EMQ X Broker 的行为。其在系统中的架构为：
+EMQ X Broker 发行包中，提供了一些用于多语言支持的 [插件](plugins.md)。它允许你使用其它编程语言来扩展 EMQ X Broker 的行为，其在系统中的架构为：
 
 ![Multiple Language Suppoprt](assets/multiple-lang-arch.png)
 

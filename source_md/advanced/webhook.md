@@ -44,7 +44,7 @@ WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X Broker 中�
 | api.url            | string | -      | http://127.0.0.1:8080 | 事件需要转发的目的服务器地址 |
 | encode_payload     | enum   | base64<br>base62 | undefined | 对消息类事件中的 Payload 字段进行编码，`undefined` 则表示不编码 |
 
-`encode_payload` 主要是用于消息的 Payload 是不可见字符，为了方便在 HTTP 协议中传输，需要给它设置一个编码格式。
+`encode_payload` 用于对消息的 Payload 内容进行编码，然后在进行传输。当消息内容是不可见字符时，为了能够在 HTTP 协议中传输，这是十分有用的。
 
 
 ### 转发事件
@@ -118,7 +118,7 @@ Body: <JSON>        # Body 为 JSON 格式字符串
 | ---------- | ------- | ----- |
 | action     | string  | 事件名称<br>固定为："client_connect" |
 | clientid   | string  | 客户端 ClientId |
-| username   | string  | 客户端 Username，不存在时该值为 "undefiend" |
+| username   | string  | 客户端 Username，不存在时该值为 "undefined" |
 | ipaddress  | string  | 客户端源 IP 地址 |
 | keepalive  | integer | 客户端申请的心跳保活时间 |
 | proto_ver  | integer | 协议版本号 |
@@ -130,7 +130,7 @@ Body: <JSON>        # Body 为 JSON 格式字符串
 | ---------- | ------- | ----- |
 | action     | string  | 事件名称<br>固定为："client_connack" |
 | clientid   | string  | 客户端 ClientId |
-| username   | string  | 客户端 Username，不存在时该值为 "undefiend" |
+| username   | string  | 客户端 Username，不存在时该值为 "undefined" |
 | ipaddress  | string  | 客户端源 IP 地址 |
 | keepalive  | integer | 客户端申请的心跳保活时间 |
 | proto_ver  | integer | 协议版本号 |
@@ -143,7 +143,7 @@ Body: <JSON>        # Body 为 JSON 格式字符串
 | ----------- | ------- | ----- |
 | action      | string  | 事件名称<br>固定为："client_connected" |
 | clientid    | string  | 客户端 ClientId |
-| username    | string  | 客户端 Username，不存在时该值为 "undefiend" |
+| username    | string  | 客户端 Username，不存在时该值为 "undefined" |
 | ipaddress   | string  | 客户端源 IP 地址 |
 | keepalive   | integer | 客户端申请的心跳保活时间 |
 | proto_ver   | integer | 协议版本号 |
@@ -156,7 +156,7 @@ Body: <JSON>        # Body 为 JSON 格式字符串
 | ----------- | ------- | ----- |
 | action      | string  | 事件名称<br>固定为："client_disconnected" |
 | clientid    | string  | 客户端 ClientId |
-| username    | string  | 客户端 Username，不存在时该值为 "undefiend" |
+| username    | string  | 客户端 Username，不存在时该值为 "undefined" |
 | reason      | string  | 错误原因 |
 
 
@@ -166,7 +166,7 @@ Body: <JSON>        # Body 为 JSON 格式字符串
 | ----------- | ------- | ----- |
 | action      | string  | 事件名称<br>固定为："client_subscribe" |
 | clientid    | string  | 客户端 ClientId |
-| username    | string  | 客户端 Username，不存在时该值为 "undefiend" |
+| username    | string  | 客户端 Username，不存在时该值为 "undefined" |
 | topic       | string  | 将订阅的主题 |
 | opts        | json    | 订阅参数 |
 
@@ -183,7 +183,7 @@ opts 包含
 | ----------- | ------- | ----- |
 | action      | string  | 事件名称<br>固定为："client_unsubscribe" |
 | clientid    | string  | 客户端 ClientId |
-| username    | string  | 客户端 Username，不存在时该值为 "undefiend" |
+| username    | string  | 客户端 Username，不存在时该值为 "undefined" |
 | topic       | string  | 取消订阅的主题 |
 
 
@@ -199,7 +199,7 @@ opts 包含
 | -------------- | ------- | ----- |
 | action         | string  | 事件名称<br>固定为："message_publish" |
 | from_client_id | string  | 发布端 ClientId |
-| from_username  | string  | 发布端 Username，不存在时该值为 "undefiend" |
+| from_username  | string  | 发布端 Username，不存在时该值为 "undefined" |
 | topic          | string  | 取消订阅的主题 |
 | qos            | enum    | QoS 等级，可取 `0` `1` `2` |
 | retain         | bool    | 是否为 Retain 消息 |
@@ -213,9 +213,9 @@ opts 包含
 | -------------- | ------- | ----- |
 | action         | string  | 事件名称<br>固定为："message_delivered" |
 | clientid       | string  | 接收端 ClientId |
-| username       | string  | 接收端 Username，不存在时该值为 "undefiend" |
+| username       | string  | 接收端 Username，不存在时该值为 "undefined" |
 | from_client_id | string  | 发布端 ClientId |
-| from_username  | string  | 发布端 Username，不存在时该值为 "undefiend" |
+| from_username  | string  | 发布端 Username，不存在时该值为 "undefined" |
 | topic          | string  | 取消订阅的主题 |
 | qos            | enum    | QoS 等级，可取 `0` `1` `2` |
 | retain         | bool    | 是否为 Retain 消息 |
@@ -230,7 +230,7 @@ opts 包含
 | action         | string  | 事件名称<br>固定为："message_acked" |
 | clientid       | string  | 接收端 ClientId |
 | from_client_id | string  | 发布端 ClientId |
-| from_username  | string  | 发布端 Username，不存在时该值为 "undefiend" |
+| from_username  | string  | 发布端 Username，不存在时该值为 "undefined" |
 | topic          | string  | 取消订阅的主题 |
 | qos            | enum    | QoS 等级，可取 `0` `1` `2` |
 | retain         | bool    | 是否为 Retain 消息 |

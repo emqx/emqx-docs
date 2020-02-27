@@ -25,15 +25,15 @@ ref: undefined
 
 ![Hooks-In-System](assets/hooks_in_system.png)
 
-当系统中不存在 **钩子(Hooks)** 机制时，整个事件处理流程 *从 事件(Event) 的输入，到 处理(Handler)，再到完成后的返回 结果(Result)* 对于系统外部而讲，都是不可见、且无法修改的。
+当系统中不存在 **钩子 (Hooks)** 机制时，整个事件处理流程 *从 事件 (Event) 的输入，到 处理 (Handler)，再到完成后的返回 结果 (Result)* 对于系统外部而讲，都是不可见、且无法修改的。
 
-而在这个过程中加入一个可挂载函数的点(HookPoint)，允许外部插件挂载多个回调函数，形成一个调用链。达到对内部事件处理过程的扩展和修改。
+而在这个过程中加入一个可挂载函数的点 (HookPoint)，允许外部插件挂载多个回调函数，形成一个调用链。达到对内部事件处理过程的扩展和修改。
 
 系统中常用到的认证插件则是按照该逻辑进行实现的。以最简单的 [emqx_auth_username](https://github.com/emqx/emqx-auth-username) 为例：
 
 在只开启 `emqx_auth_username` 认证插件，且关闭匿名用户登录时。按照上图对事件的处理逻辑可知，此时认证模块的逻辑为：
 
-1. 收到用户认证请求(Authenticate)
+1. 收到用户认证请求 (Authenticate)
 2. 读取 *是否允许匿名登录* 参数，得到 **拒绝登录**
 3. 执行 *认证事件的钩子*，即回调到 `emqx_auth_username` 插件中，假设其认为此次登录合法，得到 **允许登录**
 4. 返回 **认证成功**，成功接入系统
@@ -51,24 +51,22 @@ ref: undefined
                 +-----------------+--------------------------+
 ```
 
-因此，在 EMQ X Broker 中，**钩子(Hooks)** 这种机制极大地方便了系统的扩展。我们不需要修改 [emqx](https://github.com/emqx/emqx) 核心代码，仅需要在特定的位置埋下 **挂载点(HookPoint)** ，便能允许外部插件扩展 EMQ X Broker 的各种行为。
+因此，在 EMQ X Broker 中，**钩子 (Hooks)** 这种机制极大地方便了系统的扩展。我们不需要修改 [emqx](https://github.com/emqx/emqx) 核心代码，仅需要在特定的位置埋下 **挂载点 (HookPoint)** ，便能允许外部插件扩展 EMQ X Broker 的各种行为。
 
 对于实现者来说仅需要关注：
 
-1. **挂载点(HookPoint)** 的位置：包括其作用、执行的时机、和如何挂载和取消挂载。
+1. **挂载点 (HookPoint)** 的位置：包括其作用、执行的时机、和如何挂载和取消挂载。
 2. **回调函数** 的实现：包括回调函数的入参个数、作用、数据结构等，及返回值代表的含义。
 3. 了解回调函数在 **链** 上执行的机制：包括回调函数执行的顺序，及如何提前终止链的执行。
 
-如果你是在开发扩展插件中使用钩子，你应该能 **完全地回答这三个问题，且尽量不要在钩子内部使用阻塞函数，这会影响系统的吞吐**
-
-下面的小节主要是在描述这三个问题。
+如果你是在开发扩展插件中使用钩子，你应该能 **完全地明白这三点，且尽量不要在钩子内部使用阻塞函数，这会影响系统的吞吐**。
 
 
 ## 回调链
 
 单个 **挂载点** 上可能会存在多个插件都需要关心该事件并执行相应操作，所以每个 **挂载点** 上都可能会存在多个回调函数。
 
-我们称这种由多个回调函数顺序执行所构成的链为 **回调链(Callback Functions Chain)**。
+我们称这种由多个回调函数顺序执行所构成的链为 **回调链 (Callback Functions Chain)**。
 
 **回调链** 目前按照 [职责链(Chain-of-Responsibility)](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern) 的理念进行实现。为了满足钩子的功能和使用的灵活性，它必须具有以下属性：
 
@@ -100,16 +98,14 @@ ref: undefined
 
 接下来 [挂载点](#hookpoint)，[回调函数](#callback) 两节中，对于钩子的所有操作都是依赖于 [emqx](https://github.com/emqx/emqx) 提供的 Erlang 代码级的 API。他们是整个钩子逻辑实现的基础。如需寻求：
 
-- 钩子(Hooks) 和 HTTP 服务器的应用，请查看 [WebHook](webhook.md) 章节
-- 钩子(Hooks) 和 在与其他语言的应用，请插件 [Multipe-Language-Support](multiple-language-support.md) 章节
-    - 目前仅支持 Lua，请查看 [emqx_lua_hook](multiple-language-support.md#lua) 章节
+- 钩子(Hooks) 和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
+- 钩子(Hooks) 和 在与其他语言的应用，参见： [Multipe-Language-Support](multiple-language-support.md)
+    - 目前仅支持 Lua，参见：[emqx_lua_hook](multiple-language-support.md#lua)
 
 
 ## 挂载点 {#hookpoint}
 
-EMQ X Broker 以一个客户端在其生命周期内的关键活动为基础，预置了大量的 **挂载点(HookPoint)**。而我们也常称这个挂载点为钩子的 **名称(Name)**，这两者的含义是完全相同的。
-
-目前系统中预置的挂载点有：
+EMQ X Broker 以一个客户端在其生命周期内的关键活动为基础，预置了大量的 **挂载点 (HookPoint)**。目前系统中预置的挂载点有：
 
 | 名称                 | 说明         | 执行时机                                              |
 | -------------------- | ------------ | ----------------------------------------------------- |
@@ -136,9 +132,9 @@ EMQ X Broker 以一个客户端在其生命周期内的关键活动为基础，�
 
 注：
 
-- **会话被移除** 是指：当前会话由于客户端前一次使用 `保留会话` 的方式登入，而新的一次使用 `清除会话` 的方式登入。那么旧的会话就会被 EMQ X Broker 给丢弃。
+- **会话被移除** 是指：当客户端以 `清除会话` 的方式登入时，如果服务端中已存在该客户端的会话，那么旧的会话就会被丢弃。
 
-- **会话被接管** 是指：当前会话由于客户端前一次使用 `保留会话` 的方式登入，而新的一次也使用 `保留会话` 的方式登入。那么旧的会话就会被新的连接所接管。
+- **会话被接管** 是指：当客户端以 `保留会话` 的方式登入时，如果服务端中已存在该客户端的会话，那么旧的会话就会被新的连接所接管。
 
 
 ### 挂载与取消挂载
@@ -195,5 +191,5 @@ emqx:unhook(Name, {Module, Function}).
 | message.dropped      | `Message`：消息对象<br>`By`：被谁丢弃<br>`Reason`：丢弃原因  | -                   |
 
 
-具体对于这些钩子的应用，参见： [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
+具体对于这些钩子的应用，参见：[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
 

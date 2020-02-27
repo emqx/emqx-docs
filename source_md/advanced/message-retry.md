@@ -17,9 +17,9 @@ ref: undefined
 
 # 消息重传
 
-消息重传(Message Retransmission) 是属于 MQTT 协议标准规范的一部分。
+消息重传 (Message Retransmission) 是属于 MQTT 协议标准规范的一部分。
 
-协议中规定了作为通信的双方 **服务端(Broker)** 和 **客户端(Client)** 对于自己发送到对端的 PUBLISH 消息都应满足其 **服务质量(Quality of Service levels)** 的要求。如：
+协议中规定了作为通信的双方 **服务端** 和 **客户端** 对于自己发送到对端的 PUBLISH 消息都应满足其 **服务质量 (Quality of Service levels)** 的要求。如：
 
 - QoS 1：表示 **消息至少送达一次 (At least once delivery)**；即发送端会一直重发该消息，除非收到了对端对该消息的确认。意思是在 MQTT 协议的上层（即业务的应用层）相同的 QoS 1 消息可能会收到多次。
 
@@ -113,7 +113,7 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
 
 引入这两个概念的作用是为了理解：
 
-1. EMQ X Broker 作为发送端时，再次重发的消息，必然是已存储在 飞行窗口 中的消息
+1. EMQ X Broker 作为发送端时，再次重发的消息，必然是已存储在飞行窗口中的消息
 2. EMQ X Broker 作为接收端时，发送端重发的消息时：
     - 如 QoS 1，EMQ X Broker 则直接回复 PUBACK 进行应答；
     - 如 QoS 2，EMQ X Broker 则会释放，存储在 *最大接收消息* 队列中的 PUBLISH 或者 PUBREL 报文。
@@ -145,11 +145,12 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
 
 虽然，存在重复的报文消息。但这是完全符合协议的规范的，每个报文第一次出现的位置都是有序的，并且重复收到的报文 `2` `3` 的报文中，会携带一个标识位，表明其为重发报文。
 
-MQTT 协议和 EMQ X Broker 将这个主题认为是 `有序的主题(Ordered Topic)` 参见: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)。
+MQTT 协议和 EMQ X Broker 将这个主题认为是 `有序的主题 (Ordered Topic)` 参见: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)。
 
 它确保 **相同的主题和 QoS 下，消息是按顺序投递和应答的**。
 
-此外，用户如果是严格的关心所有主题下的 QoS 1，QoS 2 消息都严格有序。那么需设置飞行窗口的大小为 `1`。但代价是会降低该客户端的吞吐。
+此外，如果用户期望所有主题下的 QoS 1 与 QoS 2 消息都严格有序，那么需要设置飞行窗口的最大长度为 1，但代价是会降低该客户端的吞吐。
+
 
 ### 相关配置
 

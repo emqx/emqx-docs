@@ -17,14 +17,14 @@ ref: undefined
 
 # 发布订阅 ACL
 
-**发布订阅 ACL** 指对 **发布(PUBLISH)/订阅(SUBSCRIBE)** 操作的 **权限控制**。例如拒绝用户名为 `Anna` 向 `open/elsa/door` 发布消息。
+**发布订阅 ACL** 指对 **发布 (PUBLISH)/订阅 (SUBSCRIBE)** 操作的 **权限控制**。例如拒绝用户名为 `Anna` 向 `open/elsa/door` 发布消息。
 
 EMQ X Broker 默认开启 ACL 检查，并默认 *未命中 ACL 规则时* 允许其完成发布订阅操作，具体配置在 `etc/emqx.conf` 中：
 
 |  配置项            | 类型   | 可取值               | 默认值 | 说明               |
 | ------------------ | ------ | -------------------- | ------ | ------------------ |
 | enable_acl         | enum   | on<br>off            | on     | 是否开启 ACL 检查  |
-| acl_nomatch        | enum   | allow<br>deny        | deny   | ACL 未命中时，'拒绝' 或 '允许' PUB/SUB 操作 |
+| acl_nomatch        | enum   | allow<br>deny        | deny   | ACL 未命中时，'拒绝' 或 '允许' 发布/订阅 操作 |
 | acl_deny_action    | enum   | ignore<br>disconnect | ignore | 当 ACL 检查失败后，执行的操作 |
 
 
@@ -48,7 +48,7 @@ ACL 通常是一组规则的集合，其规则的逻辑格式为：
 
 这些 ACL 规则仅有以下三个来源，按优先级顺序分为：
 
-1. 缓存(ACL Cache) 的 ACL 规则
+1. 缓存 (ACL Cache) 的 ACL 规则
 2. 已启用插件中提供的 ACL 规则
 3. 默认的 ACL 规则
 
@@ -150,8 +150,8 @@ EMQ X Broker 内置有默认的 ACL 规则，它是优先级最低规则表，�
     * `deny`： 表示 `拒绝`
 
 - 元组第二位：表示规则所生效的用户，可使用的格式为：
-    * `{user, "dashboard"}`：表明规则仅对 *用户名(Username)* 为 "dashboard" 的用户生效
-    * `{clientid, "dashboard"}`：表明规则仅对 *客户端标识(ClientId)* 为 "dashboard" 的用户生效
+    * `{user, "dashboard"}`：表明规则仅对 *用户名 (Username)* 为 "dashboard" 的用户生效
+    * `{clientid, "dashboard"}`：表明规则仅对 *客户端标识 (ClientId)* 为 "dashboard" 的用户生效
     * `{ipaddr, "127.0.0.1"}`：表明规则仅对 *源地址* 为 "127.0.0.1" 的用户生效
     * `all`：表明规则对所有的用户都生效
 
@@ -161,7 +161,7 @@ EMQ X Broker 内置有默认的 ACL 规则，它是优先级最低规则表，�
     * `pubsub`：表明规则对 PUBLISH 和 SUBSCRIBE 操作都有效
 
 - 元组第四位：表示规则所限制的主题列表，内容以数组的格式给出，例如：
-    * `"$SYS/#"`：为一个 **主题过滤器(Topic Filter)**；表示规则可命中与 `$SYS/#` 匹配的主题；如：可命中 "$SYS/#"，也可命中 "$SYS/a/b/c"
+    * `"$SYS/#"`：为一个 **主题过滤器 (Topic Filter)**；表示规则可命中与 `$SYS/#` 匹配的主题；如：可命中 "$SYS/#"，也可命中 "$SYS/a/b/c"
     * `{eq, "#"}`：表示字符的全等，规则仅可命中主题为 `#` 的字串，不能命中 `/a/b/c` 等
 
 - 除此之外还存在两条特殊的规则：
@@ -180,5 +180,5 @@ EMQ X Broker 内置有默认的 ACL 规则，它是优先级最低规则表，�
 
 **超级用户** 权限的授予来自于客户端的认证过程，参见 [认证(Autentication)](auth.md)
 
-超级用户默认具有对所有主题的 PUB/SUB 权限。所以作为超级用户，不会进行 发布订阅的权限检查。
+超级用户默认具有对所有主题的 PUBLISH/SUBSCRIBE 权限。所以作为超级用户，不会进行发布订阅的权限检查。
 
