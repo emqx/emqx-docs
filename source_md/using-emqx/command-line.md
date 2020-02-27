@@ -17,7 +17,7 @@ ref: undefined
 
 # 基本命令
 
-使用二进制包安装 EMQ X Broker 与使用 ZIP 压缩包安装 EMQ X Broker  在使用 `emqx` 命令时有所不同，使用二进制包安装时 `emqx` 命令会软连接到 `/usr/bin` 目录下，所以可以直接使用，使用 ZIP 压缩包安装的 EMQ X Broker  需要在使用时指定 `emqx` 的目录，默认在 EMQ X Broker  解压缩后的根目录下，下文以使用二进制包安装 EMQ X Broker 为例:
+EMQ X Broker 提供了 `emqx` 的命令行工具，方便用户对 EMQ X Broker 进行启动、关闭、进入控制台等操作。
 
 +   `emqx start`
 

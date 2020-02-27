@@ -81,9 +81,9 @@ EMQ X Broker 将运行数据存储在 `data` 目录下，主要的文件包括:
 
     Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Erlang 的各种数据结构。
 
-    EMQ X Broker 使用 Mnesia 数据库存储自身运行数据，例如历史告警记录、规则引擎已创建的资源列表和规则列表、用于登录 `Dashboard` 的用户表等数据，这些数据都将被存储在 `mnesia` 目录下，因此一旦删除该目录，将导致 EMQ X Broker 丢失所有业务数据。
+    EMQ X Broker 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规则引擎已创建的资源和规则、Dashbaord 用户信息等数据，这些数据都将被存储在 `mnesia` 目录下，因此一旦删除该目录，将导致 EMQ X Broker 丢失所有业务数据。
 
-    `emqx_ctl mnesia` 命令可以查询 EMQ X Broker 运行时 Mnesia 数据库系统状态，具体请查看 [管理命令 CLI](advanced/cli.md)。
+    可以通过 `emqx_ctl mnesia` 命令查询 EMQ X Broker 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](advanced/cli.md)。
 
 
 #### `log` 目录
@@ -94,7 +94,7 @@ EMQ X Broker 将运行数据存储在 `data` 目录下，主要的文件包括:
 
 +   `crash.dump`
 
-    EMQ X Broker 器崩溃时转储日志文件，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](configuration/index.md)。
+    EMQ X Broker 崩溃时转储日志文件，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](configuration/index.md)。
 
 +  `erlang.log.*`
 

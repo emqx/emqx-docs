@@ -21,7 +21,7 @@ ref: undefined
 
 EMQ X Enterprise 需要 License 文件才能正常启动，EMQ X Broker 可以跳过这一步。
 
-1. 访问 `https://emqx.io`， 在 EMQ X Enterprise 下载页面，点击 **Get FREE Trial License**。
+1. 访问 `https://emqx.io`，在 EMQ X Enterprise 下载页面，点击 **Get FREE Trial License**。
 
     ![](./static/WX20200210-153301@2x.png)
 
@@ -73,4 +73,4 @@ $ emqx_ctl status
 Node 'emqx@127.0.0.1' not responding to pings。
 ```
 
-如果 EMQ X Broker 未能正常启动，可以通过 [目录结构](using-emqx/directory.md) 查看 `logs` 目录下的日志文件，并参考我们的 [FAQ](faq/index.md#) 进行排错。
+如果 EMQ X Broker 未能正常启动，查看 [`logs` 目录](using-emqx/directory.md)下的日志文件，并参考我们的 [FAQ](faq/index.md#) 进行排错。
