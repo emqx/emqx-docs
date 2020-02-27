@@ -31,7 +31,7 @@
   * [$SYS 系统主题](advanced/system-topic.md)
   * [指标监控](advanced/metrics-and-stats.md)
   * [速率限制](advanced/rate-limit.md)
-  * [飞行队列与消息队列](advanced/inflight-queue-and-message-queue.md)
+  * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/message-retry.md)
   * [企业功能](advanced/enterprise.md)
 * [教程指南](tutorial/index.md)

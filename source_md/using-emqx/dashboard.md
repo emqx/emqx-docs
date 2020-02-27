@@ -117,9 +117,9 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 | Created At                         | 会话创建时间                                     |
 | Subscriptions Count                | 当前订阅数量                                     |
 | Maximum Subscriptions Count        | 允许建立的最大订阅数量                           |
-| Inflight Queue Size                | 当前飞行队列大小，请参见 [飞行队列与消息队列](../advanced/inflight-queue-and-message-queue.md#) |
-| Maximum Inflight Queue Size        | 飞行队列最大大小                                 |
-| Message Queue Size                 | 当前消息队列大小，请参见 [飞行队列与消息队列](../advanced/inflight-queue-and-message-queue.md#) |
+| Inflight Window Size                | 当前飞行窗口大小，请参见 [飞行窗口与消息队列](../advanced/inflight-window-and-message-queue.md#) |
+| Maximum Inflight Window Size        | 飞行窗口最大大小                                 |
+| Message Queue Size                 | 当前消息队列大小，请参见 [飞行窗口与消息队列](../advanced/inflight-window-and-message-queue.md#) |
 | Maximum Message Queue Size         | 消息队列最大大小                                 |
 | Uncomfirmed PUBREC Packets         | 未确认的 PUBREC 报文数量                         |
 | Maximum Uncomfirmed PUBREC Packets | 允许存在未确认的 PUBREC 报文的最大数量           |
