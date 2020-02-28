@@ -34,7 +34,7 @@ EMQ X Broker 的配置文件通常以 `.conf` 作为后缀名，你可以在 `et
 - 采用类似 sysctl 的 k = v 通用格式
 - 单个配置项的所有信息都在同一行内，换行意味着创建一个新的配置项
 - 键可以通过 `.` 进行分层，支持按树形结构管理配置项
-- 值的类型可以是 `integer`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
+- 值的类型可以是 `integer`, `fload`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
 - 任何以＃开头的行均被视为注释
 
 **示例：**
@@ -47,7 +47,15 @@ mqtt.max_packet_size = 1MB
 
 **integer**
 
-整型数字。
+整型数据。
+
+**float**
+
+浮点型数据。
+
+**percent**
+
+以 `%` 结尾的百分比数据，最终会被转换为 `float` 类型。
 
 **enum**
 
