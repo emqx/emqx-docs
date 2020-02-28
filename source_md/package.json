@@ -4,14 +4,18 @@
   "main": "index.js",
   "license": "Apache 2.0",
   "scripts": {
-    "docs": "gitbook serve",
+    "init": "npx gitbook install",
+    "docs": "npx gitbook serve",
     "lint": "node _scripts/stylelint.js"
   },
   "dependencies": {
     "dateformat": "^3.0.3",
     "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-hints": "^1.0.2",
+    "gitbook-plugin-simpletabs": "^0.1.1",
     "glob": "^7.1.6",
     "lowdb": "^1.0.0",
-    "pangu": "^4.0.7"
+    "pangu": "^4.0.7",
+    "svgexport": "^0.4.0"
   }
 }

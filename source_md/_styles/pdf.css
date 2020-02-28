@@ -1,0 +1,48 @@
+.development-hardware-warp .hardware-item {
+  width: 150px;
+  height: 175px;
+  align-content: center;
+  text-align: center;
+  /* border: 2px dashed rgba(0, 0, 0, 0.07); */
+  margin: 0 20px 20px 0;
+  text-decoration: none;
+  transition: all .2s ease-in;
+  text-align: center;
+  color: #fff;
+  background-color: #f2f3f7;
+  float: left;
+}
+
+.development-hardware-warp .hardware-item:hover {
+  /* border-color: #34c388; */
+  text-decoration: none;
+  color: #fff;
+}
+
+.development-hardware-warp .hardware-item img {
+  margin: 30px 0 20px 0;
+  width: 60px;
+  height: 60px;
+}
+
+.development-hardware-warp .hardware-item .hardware-name {
+  height: 32px;
+  line-height: 32px;
+  margin-top: 32px;
+  background-color: #343844;
+  cursor: pointer;
+}
+
+.development-hardware-warp .hardware-item .hardware-name:hover {
+  text-decoration: dashed;
+}
+
+.nav-tabs {
+  padding-left: 0 !important;
+}
+.nav-tabs li.active a {
+  border: none !important;
+  border-bottom: 2px solid #4183c4 !important;
+  color: #4183c4 !important;
+  font-weight: 700 !important;
+}
