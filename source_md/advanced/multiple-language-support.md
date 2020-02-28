@@ -22,12 +22,12 @@ EMQ X Broker 发行包中，提供了一些用于多语言支持的 [插件](plu
 
 ![Multiple Language Suppoprt](assets/multiple-lang-arch.png)
 
-- 多语言支持是作为一个插件出现的，它基于 [emqx](https://github.com/emqx/emqx) 核心项目所提供的 [钩子(Hooks)](hooks.md) 特性，拿到 EMQ X Broker 的事件/消息。
+- 多语言支持是作为一个插件出现的，它基于 [emqx](https://github.com/emqx/emqx) 核心项目所提供的 [钩子](hooks.md) 特性，拿到 EMQ X Broker 的事件/消息。
 - 不同的语言环境，需要有不同的语言支持插件。
 - 该支持插件内嵌了该语言运行时的所有环境。
 - 用户仅需要编写该语言的脚本或库文件，供该支持插件调用。
 
-这是实现多语言支持基本逻辑。在使用这类插件时，请保证对 [钩子(Hooks)](hooks.md) 和 [插件(Plugins)](plugins.md) 都有一定的了解。
+这是实现多语言支持基本逻辑。在使用这类插件时，请保证对 [钩子](hooks.md) 和 [插件](plugins.md) 都有一定的了解。
 
 ## Lua {#lua}
 

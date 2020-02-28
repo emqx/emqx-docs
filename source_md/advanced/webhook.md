@@ -17,9 +17,9 @@ ref: undefined
 
 # WebHook
 
-WebHook 是由 [emqx_web_hook][] [插件(Plugins)][] 提供的 **将 EMQ X Broker 中的钩子事件通知到某个 Web 服务** 的功能。
+WebHook 是由 [emqx_web_hook][] [插件][] 提供的 **将 EMQ X Broker 中的钩子事件通知到某个 Web 服务** 的功能。
 
-WebHook 的内部实现是基于 [钩子(Hooks)][]，但它更靠近顶层一些。它通过在钩子上的挂载回调函数，获取到 EMQ X Broker 中的各种事件，并转发至 [emqx_web_hook][] 中配置的 Web 服务器。
+WebHook 的内部实现是基于 [钩子][]，但它更靠近顶层一些。它通过在钩子上的挂载回调函数，获取到 EMQ X Broker 中的各种事件，并转发至 [emqx_web_hook][] 中配置的 Web 服务器。
 
 以 `客户端成功接入(client.connected)` 事件为例，其事件的传递流程如下：
 
@@ -32,7 +32,7 @@ WebHook 的内部实现是基于 [钩子(Hooks)][]，但它更靠近顶层一些
 
 WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X Broker 中的事件推送给 Web 服务，并不关心 Web 服务的返回**。
 
-在使用 WebHook 时，首先需要知道如何启动和关闭插件，参见：[插件(Plugins)][]。
+在使用 WebHook 时，首先需要知道如何启动和关闭插件，参见：[插件][]。
 
 
 ## 配置
@@ -58,22 +58,20 @@ web.hook.rule.<HookPoint>.<Number> = <Specification>
 
 #### HookPoint
 
-`HookPoint` 其含义可参见 [钩子(Hooks) - 挂载点](hooks.md#hookpoint) 章节。目前仅支持以下事件：
+`HookPoint` 其含义可参见 [钩子 - 挂载点](hooks.md#hookpoint) 章节。目前仅支持以下事件：
 
-| 名称                 |
-| -------------------- |
-| client.connect       |
-| client.connack       |
-| client.connected     |
-| client.disconnected  |
-| client.subscribe     |
-| client.unsubscribe   |
-| session.subscribed   |
-| session.unsubscribed |
-| session.terminated   |
-| message.publish      |
-| message.delivered    |
-| message.acked        |
+- client.connect
+- client.connack
+- client.connected
+- client.disconnected
+- client.subscribe
+- client.unsubscribe
+- session.subscribed
+- session.unsubscribed
+- session.terminated
+- message.publish
+- message.delivered
+- message.acked
 
 
 #### Number
@@ -239,6 +237,6 @@ opts 包含
 
 
 [emqx_web_hook]: https://github.com/emqx/emqx-web-hook "emqx-web-hook"
-[插件(Plugins)]: plugins.md
-[钩子(Hooks)]: hooks.md
+[插件]: plugins.md
+[钩子]: hooks.md
 
