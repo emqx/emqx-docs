@@ -942,163 +942,198 @@ $ ./bin/emqx_ctl admins del root
 ok
 ```
 
-## 规则引擎 (rule engine) 命令
+## 规则引擎(rule engine) 命令
 
-## rules 命令
+### rules 命令
 
-| 命令                                                         | 描述           |
-| ------------------------------------------------------------ | -------------- |
-| rules list                                                   | 列出当前所有的规则 |
-| rules show \<RuleId\>                                        | 查询指定 \<RuleId\> 规则    |
-| rules create \<sql\> \<actions\> [-d [\<descr\>]] | 创建一个新的规则  |
-| rules delete \<RuleId\>                                      | 删除指定 \<RuleId\> 规则 |
+| rules list                                             | List all rules |
+| ------------------------------------------------------ | -------------- |
+| rules show `<RuleId>`                                 | Show a rule    |
+| emqx_ctl rules create `<sql> <actions> [-d [<descr>]]` | Create a rule  |
+| rules delete `<RuleId>`                                | Delete a rule  |
 
-### rules create
+#### rules create
 
-创建一个新的规则:
+创建一个新的规则。参数:
 
-```
-$ ./bin/emqx_ctl rules create 'SELECT payload.msg as msg FROM "t/#" WHERE msg = "hello"' '[{"name":"do_nothing"}]'
-Rule rule:69b88a68 created
-```
+- \<sql\>: 规则 SQL
+- \<actions\>: JSON 格式的动作列表
+- \-d \<descr\>: 可选，规则描述信息
 
-一个规则由系统生成的规则 ID 标识，所以如果用相同的名字重复添加规则，会生成多个 ID 不同的规则。
+使用举例:
 
-### rules list
+    ## 创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容
+    $ ./bin/emqx_ctl rules create \
+      'select * from "t/a"' \
+      '[{"name":"inspect", "params": {"a": 1}}]' \
+      -d 'Rule for debug'
+
+    Rule rule:9a6a725d created
+
+上例创建了一个 ID 为 `rule:9a6a725d` 的规则，动作列表里只有一个动作：动作名为 inspect，动作的参数是
+`{"a": 1}`。
+
+#### rules list
 
 列出当前所有的规则:
 
-```
-$ ./bin/emqx_ctl rules list
-rule(id='rule:69b88a68', for='[<<"t/#">>]', rawsql='SELECT payload.msg as msg FROM "t/#" WHERE msg = "hello"', actions=<<"[{\"params\":{},\"name\":\"do_nothing\",\"metrics\":[{\"success\":0,\"node\":\"emqx@127.0.0.1\",\"failed\":0}],\"id\":\"do_nothing_1582266518950603377\"}]">>, metrics=[#{matched => 0,node => 'emqx@127.0.0.1',speed => 0.0,speed_last5m => 0.0,speed_max => 0}], enabled='true', description='')
-```
+    $ ./bin/emqx_ctl rules list
 
-### rules show
+    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+
+#### rules show
 
 查询规则:
 
-```
-$ ./bin/emqx_ctl rules show 'rule:69b88a68'
-rule(id='rule:69b88a68', for='[<<"t/#">>]', rawsql='SELECT payload.msg as msg FROM "t/#" WHERE msg = "hello"', actions=<<"[{\"params\":{},\"name\":\"do_nothing\",\"metrics\":[{\"success\":0,\"node\":\"emqx@127.0.0.1\",\"failed\":0}],\"id\":\"do_nothing_1582266518950603377\"}]">>, metrics=[#{matched => 0,node => 'emqx@127.0.0.1',speed => 0.0,speed_last5m => 0.0,speed_max => 0}], enabled='true', description='')
-```
+    ## 查询 RuleID 为 'rule:9a6a725d' 的规则
+    $ ./bin/emqx_ctl rules show 'rule:9a6a725d'
 
-### rules delete
+    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
 
-根据 \<RuleId\> 删除规则:
+#### rules delete
 
-```
-$ ./bin/emqx_ctl rules delete 'rule:69b88a68'
-ok
-```
+删除规则:
 
-## rule-actions 命令
+    ## 删除 RuleID 为 'rule:9a6a725d' 的规则
+    $ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
 
-| 命令                           | 描述                       |
-| ------------------------------ | -------------------------- |
-| rule-actions list              | 列出当前所有的动作         |
-| rule-actions show \<ActionId\> | 查询指定 \<ActionId\> 动作 |
+    ok
 
-动作可以由 emqx 内置 (称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+### rule-actions 命令
 
-### rule-actions list
+|                                |                    |
+| ------------------------------ | ------------------ |
+| rule-actions show `<ActionId>` | Show a rule action |
 
-列出当前所有的动作:
+**Note: **
 
-```
-$ ./bin/emqx_ctl rule-actions list
-action(name='do_nothing', app='emqx_rule_engine', for='$any', types=[], title ='Do Nothing (debug)', description='This action does nothing and never fails. It's for debug purpose')
-action(name='republish', app='emqx_rule_engine', for='$any', types=[], title ='Republish', description='Republish a MQTT message to another topic')
-action(name='inspect', app='emqx_rule_engine', for='$any', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
-action(name='data_to_mqtt_broker', app='emqx_bridge_mqtt', for='message.publish', types=[bridge_mqtt,bridge_rpc], title ='Data bridge to MQTT Broker', description='Bridge Data to MQTT Broker')
-action(name='data_to_webserver', app='emqx_web_hook', for='$any', types=[web_hook], title ='Data to Web Server', description='Forward Messages to Web Server')
-```
+动作可以由 emqx 内置(称为系统内置动作)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
 
-### rule-actions show \<ActionId\>
+#### rule-actions show
 
-查询 \<ActionId\> 动作:
+查询动作:
 
-```
-$ ./bin/emqx_ctl rule-actions show do_nothing
-action(name='do_nothing', app='emqx_rule_engine', for='$any', types=[], title ='Do Nothing (debug)', description='This action does nothing and never fails. It's for debug purpose')
-```
+    ## 查询名为 'inspect' 的动作
+    $ ./bin/emqx_ctl rule-actions show 'inspect'
 
-## resources 命令
+    action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
 
-| 命令                                                         | 描述               |
-| ------------------------------------------------------------ | ------------------ |
-| resources create \<type\> [-c [\<config\>]] [-d [\<descr\>]] | 创建一个新的资源  |
-| resources list \[-t \<ResourceType\>\]                       | 查询资源 |
-| resources show \<ResourceId\>                                | 查询指定 \<ResourceId\> 资源    |
-| resources delete \<ResourceId\>                              | 删除指定 \<ResourceId\> 资源  |
+#### rule-actions list
 
-### resources create
+列出符合条件的动作:
 
-创建一个新的资源:
+    ## 列出当前所有的动作
+    $ ./bin/emqx_ctl rule-actions list
 
-```
-$ ./bin/emqx_ctl resources create web_hook -c '{"method": "POST", "url": "http://127.0.0.1:8080/"}' -d 'desc'
-Resource resource:adb938ac created
-```
+    action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
+    action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
+    ...
 
-### resources list
+### resources 命令
 
-+   列出当前所有的资源:
+|                                                              |                   |
+| ------------------------------------------------------------ | ----------------- |
+| resources create `<type> [-c [<config>]] [-d [<descr>]]`     | Create a resource |
+| resources list `[-t <ResourceType>]`                       | List resources    |
+| resources show `<ResourceId>`                                | Show a resource   |
+| resources delete `<ResourceId>`                              | Delete a resource |
 
-    ```
+#### resources create
+
+创建一个新的资源，参数:
+
+  - type: 资源类型
+  - \-c config: JSON 格式的配置
+  - \-d descr: 可选，资源的描述
+
+<!-- end list -->
+
+    $ ./bin/emqx_ctl resources create 'web_hook' -c '{"url": "http://host-name/chats"}' -d 'forward msgs to host-name/chats'
+
+    Resource resource:a7a38187 created
+
+#### resources list
+
+列出当前所有的资源:
+
     $ ./bin/emqx_ctl resources list
-    resource(id='resource:adb938ac', type='web_hook', config=#{<<"method">> => <<"POST">>,<<"url">> => <<"http://127.0.0.1:8080/">>}, status=[#{is_alive => false,node => 'emqx@127.0.0.1'}], description='desc')
-    ```
 
-+   查询指定 \<Type\> 资源:
+    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
 
-    ```
-    $ ./bin/emqx_ctl resources list --type 'web_hook'
-    resource(id='resource:adb938ac', type='web_hook', config=#{<<"method">> => <<"POST">>,<<"url">> => <<"http://127.0.0.1:8080/">>}, status=[#{is_alive => false,node => 'emqx@127.0.0.1'}], description='desc')
-    ```
+#### resources list by type
 
-### resources show
+列出当前所有的资源:
+
+    $ ./bin/emqx_ctl resources list --type='web_hook'
+
+    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+
+#### resources show
 
 查询资源:
 
-```
-$ ./bin/emqx_ctl resources show 'resource:adb938ac'
-resource(id='resource:adb938ac', type='web_hook', config=#{<<"method">> => <<"POST">>,<<"url">> => <<"http://127.0.0.1:8080/">>}, status=[#{is_alive => false,node => 'emqx@127.0.0.1'}], description='desc')
-```
+    $ ./bin/emqx_ctl resources show 'resource:a7a38187'
 
-### resources delete
+    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+
+#### resources delete
 
 删除资源:
 
-```
-$ ./bin/emqx_ctl resources delete 'resource:adb938ac'
-ok
-```
+    $ ./bin/emqx_ctl resources delete 'resource:a7a38187'
 
-## resource-types 命令
+    ok
 
-| 命令                         | 描述                    |
+### resource-types 命令
+
+|                              |                         |
 | ---------------------------- | ----------------------- |
-| resource-types list          | 查询所有的资源类型 |
-| resource-types show \<Type\> | 根据 \<Type\> 展示资源类型 |
+| resource-types list          | List all resource-types |
+| resource-types show `<Type>` | Show a resource-type    |
 
-资源类型可以由 emqx 内置 (称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+**Note:**
 
-### resource-types list
+资源类型可以由 emqx 内置(称为系统内置资源类型)，或者由 emqx 插件编写，但不能通过 CLI/API 添加或删除。
+
+#### resource-types list
 
 列出当前所有的资源类型:
 
-```
-$ ./bin/emqx_ctl resource-types list
-resource_type(name='bridge_mqtt', provider='emqx_bridge_mqtt', title ='MQTT Bridge', description='MQTT Message Bridge')
-resource_type(name='bridge_rpc', provider='emqx_bridge_mqtt', title ='EMQX Bridge', description='EMQ X RPC Bridge')
-resource_type(name='web_hook', provider='emqx_web_hook', title ='WebHook', description='WebHook')
-```
+    ./bin/emqx_ctl resource-types list
 
-### resource-types show
+    resource_type(name='backend_mongo_rs', provider='emqx_backend_mongo', title ='MongoDB Replica Set Mode', description='MongoDB Replica Set Mode')
+    resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassandra', description='Cassandra Database')
+    ...
+
+#### resource-types show
 
 查询资源类型:
 
-```
-$ ./bin/emqx_ctl resource-types show web_hook
-resource_type(name='web_hook', provider='emqx_web_hook', title ='WebHook', description='WebHook')
-```
+    $ ./bin/emqx_ctl resource-types show backend_mysql
+
+    resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
+
+## 与规则引擎相关的状态、统计指标和告警
+
+### 规则状态和统计指标
+
+![image](../assets/rule_metrics.png)
+
+- 已命中: 规则命中(规则 SQL 匹配成功)的次数，
+- 命中速度: 规则命中的速度(次/秒)
+- 最大命中速度: 规则命中速度的峰值(次/秒)
+- 5分钟平均速度: 5分钟内规则的平均命中速度(次/秒)
+
+### 动作状态和统计指标 {#action-metrics}
+
+![image](../assets/action_metrics.png)
+
+- 成功: 动作执行成功次数
+- 失败: 动作执行失败次数
+
+### 资源状态和告警 {#resource-metrics}
+
+![image](../assets/resource_status.png)
+
+- 可用: 资源可用
+- 不可用: 资源不可用(比如数据库连接断开)
