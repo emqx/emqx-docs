@@ -36,10 +36,10 @@ mgmt 命令查询应用程序。
 | 命令                             | 描述                         |
 | -------------------------------- | ---------------------------- |
 | mgmt list                        | 列出应用程序列表             |
-| mgmt insert \<AppId\> \<Name\>   | 添加 HTTP API 的应用程序     |
-| mgmt update \<AppId\> \<status\> | 更新 HTTP API 的应用程序     |
-| mgmt lookup \<AppId\>            | 获取 HTTP API 的应用程序详情 |
-| mgmt delete \<AppId\>            | 删除 HTTP API 的应用程序     |
+| mgmt insert `<AppId>` `<Name>`   | 添加 HTTP API 的应用程序     |
+| mgmt update `<AppId>` `<status>` | 更新 HTTP API 的应用程序     |
+| mgmt lookup `<AppId>`            | 获取 HTTP API 的应用程序详情 |
+| mgmt delete `<AppId>`            | 删除 HTTP API 的应用程序     |
 
 ### mgmt list
 
@@ -50,7 +50,7 @@ $ ./bin/emqx_ctl mgmt list
 app_id: 901abdba8eb8c, secret: MjgzMzQ5MjM1MzUzMTc4MjgyMjE3NzU4ODcwMDg0NjQ4OTG, name: hello, desc: , status: true, expired: undefined
 ```
 
-### mgmt insert \<AppId\> \<Name\>
+### mgmt insert `<AppId>` `<Name>`
 
 添加 HTTP API 的应用程序:
 
@@ -59,7 +59,7 @@ $ ./bin/emqx_ctl mgmt insert dbcb6e023370b world
 AppSecret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
 ```
 
-### mgmt update \<AppId\> \<status\>
+### mgmt update `<AppId>` `<status>`
 
 更新 HTTP API 的应用程序:
 
@@ -68,7 +68,7 @@ $ ./bin/emqx_ctl mgmt update dbcb6e023370b stop
 update successfully.
 ```
 
-### mgmt lookup \<AppId\>
+### mgmt lookup `<AppId>`
 
 获取 HTTP API 的应用程序详情:
 
@@ -82,7 +82,7 @@ status: stop
 expired: undefined
 ```
 
-### mgmt delete \<AppId\>
+### mgmt delete `<AppId>`
 
 删除 HTTP API 的应用程序:
 
@@ -239,9 +239,9 @@ cluster 命令可以管理由多个 EMQ X Broker 节点（进程）组成的集�
 
 | 命令                         | 描述           |
 | ---------------------------- | -------------- |
-| cluster join \<Node\>        | 加入集群       |
+| cluster join `<Node>`        | 加入集群       |
 | cluster leave                | 离开集群       |
-| cluster force-leave \<Node\> | 从集群删除节点 |
+| cluster force-leave `<Node>` | 从集群删除节点 |
 | cluster status               | 查询集群状态   |
 
 cluster 命令集群本机两个 EMQ X 节点示例:
@@ -260,7 +260,7 @@ $ cd emqx1 && ./bin/emqx start
 $ cd emqx2 && ./bin/emqx start
 ```
 
-使用 `cluster join \<Node\>` 将两个节点组成集群：
+使用 `cluster join `<Node>`` 将两个节点组成集群：
 
 ```
 $ cd emqx2 && ./bin/emqx_ctl cluster join emqx1@127.0.0.1
@@ -326,8 +326,8 @@ clients 命令查询连接的 MQTT 客户端。
 | 命令                      | 描述                     |
 | ------------------------- | ------------------------ |
 | clients list              | 列出所有客户端连接       |
-| clients show \<ClientId\> | 查询指定 ClientId 的客户端 |
-| clients kick \<ClientId\> | 踢除指定 ClientId 的客户端，连接与会话将一并终结。 |
+| clients show `<ClientId>` | 查询指定 ClientId 的客户端 |
+| clients kick `<ClientId>` | 踢除指定 ClientId 的客户端，连接与会话将一并终结。 |
 
 ### clients list
 
@@ -360,7 +360,7 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 | connected\_at             | 客户端连接时间戳                |
 | disconnected_at | 客户端断开连接时间戳（仅当断开连接还保留会话时才会出现） |
 
-### clients show \<ClientId\>
+### clients show `<ClientId>`
 
 查询指定 ClientId 的客户端:
 
@@ -369,7 +369,7 @@ $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 ```
 
-### clients kick \<ClientId\>
+### clients kick `<ClientId>`
 
 踢除指定 ClientId 的客户端:
 
@@ -387,7 +387,7 @@ EMQ X Broker 中路由是指主题与节点的映射关系，用于在多个节�
 | 命令                  | 描述                |
 | --------------------- | ------------------- |
 | routes list           | 列出所有路由        |
-| routes show \<Topic\> | 查询指定 Topic 的路由 |
+| routes show `<Topic>` | 查询指定 Topic 的路由 |
 
 ### routes list
 
@@ -399,7 +399,7 @@ t2/# -> emqx2@127.0.0.1
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
 
-### routes show \<Topic\>
+### routes show `<Topic>`
 
 查询指定 Topic d的路由:
 
@@ -415,9 +415,9 @@ subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 | 命令                                             | 描述                     |
 | ------------------------------------------------ | ------------------------ |
 | subscriptions list                               | 列出所有订阅             |
-| subscriptions show \<ClientId\>                  | 查询指定 ClientId 客户端的订阅 |
-| subscriptions add \<ClientId\> \<Topic\> \<QoS\> | 手动添加静态订阅         |
-| subscriptions del \<ClientId\> \<Topic\>         | 手动删除静态订阅         |
+| subscriptions show `<ClientId>`                  | 查询指定 ClientId 客户端的订阅 |
+| subscriptions add `<ClientId>` `<Topic>` `<QoS>` | 手动添加静态订阅         |
+| subscriptions del `<ClientId>` `<Topic>`         | 手动删除静态订阅         |
 
 ### subscriptions list
 
@@ -429,7 +429,7 @@ mosqsub/91042-airlee.lo -> t/y:1
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions show \<ClientId\>
+### subscriptions show `<ClientId>`
 
 查询某个 Client 的订阅:
 
@@ -438,7 +438,7 @@ $ ./bin/emqx_ctl subscriptions show 'mosqsub/90475-airlee.lo'
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions add \<ClientId\> \<Topic\> \<QoS\>
+### subscriptions add `<ClientId>` `<Topic>` `<QoS>`
 
 手动添加订阅关系:
 
@@ -447,7 +447,7 @@ $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
 ok
 ```
 
-### subscriptions del \<ClientId\> \<Topic\>
+### subscriptions del `<ClientId>` `<Topic>`
 
 手动删除订阅关系:
 
@@ -463,9 +463,9 @@ plugins 命令用于加载、卸载、查询插件应用。EMQ X Broker 通过�
 | 命令 | 描述 |
 | ------------------------- | -------------- |
 | plugins list              | 列出全部插件 (Plugin) |
-| plugins load \<Plugin\>   | 加载插件 (Plugin)   |
-| plugins unload \<Plugin\> | 卸载插件 (Plugin)   |
-| plugins reload \<Plugin\> | 重载插件 (Plugin)   |
+| plugins load `<Plugin>`   | 加载插件 (Plugin)   |
+| plugins unload `<Plugin>` | 卸载插件 (Plugin)   |
+| plugins reload `<Plugin>` | 重载插件 (Plugin)   |
 
  当配置文件发生更改，如果需要配置立即生效，你可以执行 `emqx_ctl reload <Plugin>` 命令，即使插件在配置修改时并未处于运行状态，你也应当使用此命令而不是 `emqx_ctl load <Plugin>`，因为 `emqx_ctl load <Plugin>` 不会编译新的配置文件。
 
@@ -511,7 +511,7 @@ Plugin (emqx_web_hook, version=v4.0.0, description=EMQ X Webhook Plugin, active=
 | description | 插件描述   |
 | active      | 是否已加载 |
 
-### plugins load \<Plugin\>
+### plugins load `<Plugin>`
 
 加载插件:
 
@@ -520,7 +520,7 @@ $ ./bin/emqx_ctl plugins load emqx_lua_hook
 Plugin emqx_lua_hook loaded successfully.
 ```
 
-### plugins unload \<Plugin\>
+### plugins unload `<Plugin>`
 
 卸载插件:
 
@@ -529,7 +529,7 @@ $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 Plugin emqx_lua_hook unloaded successfully.
 ```
 
-### plugins reload \<Plugin\>
+### plugins reload `<Plugin>`
 
 重载插件:
 
@@ -646,15 +646,15 @@ log 命令用于设置日志等级。访问 [Documentation of logger](http://erl
 
 | 命令                                           | 描述                                   |
 | ---------------------------------------------- | -------------------------------------- |
-| log set-level \<Level\>                        | 设置主日志等级和所有 Handlers 日志等级 |
+| log set-level `<Level>`                        | 设置主日志等级和所有 Handlers 日志等级 |
 | log primary-level                              | 查看主日志等级                         |
-| log primary-lelvel \<Level\>                   | 设置主日志等级                         |
+| log primary-lelvel `<Level>`                   | 设置主日志等级                         |
 | log handlers list                              | 查看当前安装的所有 Hanlders            |
-| log handlers set-level \<HandlerId\> \<Level\> | 设置指定 Hanlder 的日志等级            |
+| log handlers set-level `<HandlerId>` `<Level>` | 设置指定 Hanlder 的日志等级            |
 
 日志的等级由低到高分别为：`debug | info | notice | warning | error | critical | alert | emergency`，日志等级越低，系统输出的日志数量越多，消耗的系统资源越大。为提高系统运行性能，默认的主日志等级是 error。
 
-### log set-level \<Level\>
+### log set-level `<Level>`
 
 设置主日志等级和所有 Handlers 日志等级:
 
@@ -672,7 +672,7 @@ $ ./bin/emqx_ctl log primary-level
 debug
 ```
 
-### log primary-level \<Level\>
+### log primary-level `<Level>`
 
 设置主日志等级:
 
@@ -692,7 +692,7 @@ LogHandler (id=file, level=debug, destination=log/emqx.log)
 LogHandler (id=default, level=debug, destination=console)
 ```
 
-### log handlers set-level \<HandlerId\> \<Level\>
+### log handlers set-level `<HandlerId>` `<Level>`
 
 设置指定 Hanlder 的日志等级:
 
@@ -708,14 +708,14 @@ trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，
 | 命令                                                   | 描述                                       |
 | ------------------------------------------------------ | ------------------------------------------ |
 | trace list                                             | 列出所有开启的追踪                         |
-| trace start client \<ClientId\> \<File\> \[\<Level\>\] | 开启 Client 追踪，存储指定等级的日志到文件 |
-| trace stop client \<ClientId\>                         | 关闭 Client 追踪                           |
-| trace start topic \<Topic\> \<File\> \[\<Level\>\]     | 开启 Topic 追踪，存储指定等级的日志到文件  |
-| trace stop topic \<Topic\>                             | 关闭 Topic 追踪                            |
+| trace start client `<ClientId>` `<File>` \[`<Level>`\] | 开启 Client 追踪，存储指定等级的日志到文件 |
+| trace stop client `<ClientId>`                         | 关闭 Client 追踪                           |
+| trace start topic `<Topic>` `<File>` \[`<Level>`\]     | 开启 Topic 追踪，存储指定等级的日志到文件  |
+| trace stop topic `<Topic>`                             | 关闭 Topic 追踪                            |
 
 使用 trace 之前，需要将主日志等级 (primary logger level) 设置成足够低的值。
 
-### trace start client \<ClientId\> \<File\> \[\<Level\>\]
+### trace start client `<ClientId>` `<File>` \[`<Level>`\]
 
 开启 Client 追踪:
 
@@ -730,7 +730,7 @@ $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 trace clientid clientid2 successfully
 ```
 
-### trace stop client \<ClientId\>
+### trace stop client `<ClientId>`
 
 关闭 Client 追踪:
 
@@ -739,7 +739,7 @@ $ ./bin/emqx_ctl trace stop client clientid
 stop tracing clientid clientid successfully
 ```
 
-### trace start topic \<Topic\> \<File\> \[\<Level\>\]
+### trace start topic `<Topic>` `<File>` \[`<Level>`\]
 
 开启 Topic 追踪:
 
@@ -754,7 +754,7 @@ $ ./bin/emqx_ctl trace start topic topic2 log/topic2_trace.log error
 trace topic topic2 successfully
 ```
 
-### trace stop topic \<Topic\>
+### trace stop topic `<Topic>`
 
 关闭 Topic 追踪:
 
@@ -780,7 +780,7 @@ listeners 命令用于查询开启的 TCP 服务监听器。
 | 命令                              | 描述                      |
 | --------------------------------- | ------------------------- |
 | listeners                         | 查询开启的 TCP 服务监听器 |
-| listeners stop \<Proto\> \<Port\> | 停止监听端口，支持 `mqtt:ssl | mqtt:tcp | http:dashboard | http:management | mqtt:ws | mqtt:wss` 协议   |
+| listeners stop `<Proto>` `<Port>` | 停止监听端口，支持 `mqtt:ssl | mqtt:tcp | http:dashboard | http:management | mqtt:ws | mqtt:wss` 协议   |
 
 ### listeners list
 
@@ -834,7 +834,7 @@ listener 参数说明:
 | current\_conns  | 当前连接数          |
 | shutdown\_count | 连接关闭原因统计 |
 
-### listeners stop \<Proto\> \<Port\>
+### listeners stop `<Proto>` `<Port>`
 
 停止监听端口:
 
@@ -865,7 +865,7 @@ EMQ X Broker 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps
 | retainer info            | 显示保留消息的数量           |
 | retainer topics          | 显示当前存储的保留消息的所有主题       |
 | retainer clean           | 清除所有保留的消息           |
-| retainer clean \<Topic\> | 清除指定的主题下的保留的消息 |
+| retainer clean `<Topic>` | 清除指定的主题下的保留的消息 |
 
 ### retainer info
 
@@ -896,7 +896,7 @@ $ ./bin/emqx_ctl retainer clean
 Cleaned 3 retained messages
 ```
 
-### retainer clean \<Topic\>
+### retainer clean `<Topic>`
 
 清除指定的主题下的保留的消息:
 
@@ -911,11 +911,11 @@ Cleaned 1 retained messages
 
 | 命令                                          | 描述            |
 | --------------------------------------------- | --------------- |
-| admins add \<Username\> \<Password\> \<Tags\> | 创建 admin 账号 |
-| admins passwd \<Username\> \<Password\>       | 重置 admin 密码 |
-| admins del \<Username\>                       | 删除 admin 账号 |
+| admins add `<Username>` `<Password>` `<Tags>` | 创建 admin 账号 |
+| admins passwd `<Username>` `<Password>`       | 重置 admin 密码 |
+| admins del `<Username>`                       | 删除 admin 账号 |
 
-### admins add \<Username\> \<Password\> \<Tags\>
+### admins add `<Username>` `<Password>` `<Tags>`
 
 创建 admin 账户:
 
@@ -924,7 +924,7 @@ $ ./bin/emqx_ctl admins add root public test
 ok
 ```
 
-### admins passwd \<Username\> \<Password\>
+### admins passwd `<Username>` `<Password>`
 
 重置 admin 账户密码:
 
@@ -933,7 +933,7 @@ $ ./bin/emqx_ctl admins passwd root private
 ok
 ```
 
-### admins del \<Username\>
+### admins del `<Username>`
 
 删除 admin 账户:
 
@@ -956,9 +956,9 @@ ok
 
 创建一个新的规则。参数:
 
-- \<sql\>: 规则 SQL
-- \<actions\>: JSON 格式的动作列表
-- \-d \<descr\>: 可选，规则描述信息
+- *`<sql>`*: 规则 SQL
+- *`<actions>`*: JSON 格式的动作列表
+- *`-d <descr>`*: 可选，规则描述信息
 
 使用举例:
 
@@ -1042,11 +1042,9 @@ ok
 
 创建一个新的资源，参数:
 
-  - type: 资源类型
-  - \-c config: JSON 格式的配置
-  - \-d descr: 可选，资源的描述
-
-<!-- end list -->
+- type: 资源类型
+- \-c config: JSON 格式的配置
+- \-d descr: 可选，资源的描述
 
     $ ./bin/emqx_ctl resources create 'web_hook' -c '{"url": "http://host-name/chats"}' -d 'forward msgs to host-name/chats'
 
