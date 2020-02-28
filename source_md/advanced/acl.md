@@ -21,11 +21,11 @@ ref: undefined
 
 EMQ X Broker 默认开启 ACL 检查，并默认 *未命中 ACL 规则时* 允许其完成发布订阅操作，具体配置在 `etc/emqx.conf` 中：
 
-|  配置项            | 类型   | 可取值               | 默认值 | 说明               |
-| ------------------ | ------ | -------------------- | ------ | ------------------ |
-| enable_acl         | enum   | on<br>off            | on     | 是否开启 ACL 检查  |
-| acl_nomatch        | enum   | allow<br>deny        | deny   | ACL 未命中时，'拒绝' 或 '允许' 发布/订阅 操作 |
-| acl_deny_action    | enum   | ignore<br>disconnect | ignore | 当 ACL 检查失败后，执行的操作 |
+|  配置项            | 类型   | 可取值                    | 默认值 | 说明               |
+| ------------------ | ------ | ---------------------- | ------ | ------------------ |
+| enable_acl         | enum   | `on`, `off`            | on     | 是否开启 ACL 检查  |
+| acl_nomatch        | enum   | `allow`, `deny`        | deny   | ACL 未命中时，'拒绝' 或 '允许' 发布/订阅 操作 |
+| acl_deny_action    | enum   | `ignore`, `disconnect` | ignore | 当 ACL 检查失败后，执行的操作 |
 
 
 在 MQTT v3.1 和 v3.1.1 协议中，发布操作被拒绝后服务器无任何报文错误返回，这是协议设计的一个缺陷。但在 MQTT v5.0 协议上已经支持应答一个相应的错误报文。
@@ -66,18 +66,18 @@ EMQ X Broker 默认开启 ACL 缓存功能。它允许客户端在命中某条 A
 
 ACL 缓存相关的配置都在 `etc/emqx.conf` 中：
 
-|  配置项            | 类型     | 可取值    | 默认值 | 说明         |
-| ------------------ | -------- | --------- | ------ | ------------ |
-| enable_acl_cache   | enum     | on<br>off | on     | 是否开启缓存 |
-| acl_cache_max_size | integer  | > 0       | 32     | 最大缓存条数 |
-| acl_cache_ttl      | duration | > 0       | 1m     | 最大缓存时间 |
+|  配置项            | 类型     | 可取值         | 默认值 | 说明         |
+| ------------------ | -------- | ----------- | ------ | ------------ |
+| enable_acl_cache   | enum     | `on`, `off` | on     | 是否开启缓存 |
+| acl_cache_max_size | integer  | > 0         | 32     | 最大缓存条数 |
+| acl_cache_ttl      | duration | > 0         | 1m     | 最大缓存时间 |
 
 
 #### 清除缓存
 
 在更新 ACL 规则后，某些客户端由于已经存在缓存，则无法立即生效。若要立即生效，则需手动清除所有的 ACL 缓存：
 
-参见 [管理 API - 清除 ACL 缓存](rest-api.md)
+参见 [管理 API - 清除 ACL 缓存](http-api.md)
 
 ### 插件中的 ACL 规则
 

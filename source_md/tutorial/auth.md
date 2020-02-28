@@ -39,7 +39,7 @@ EMQ X 支持的认证方式：
 * [用户名认证](./auth-username.md)
 * [Cliend ID 认证](./auth-clientid.md)
 
-使用配置文件与 EMQ X 内置数据库提供认证数据源，通过 REST API 进行管理，足够简单轻量。
+使用配置文件与 EMQ X 内置数据库提供认证数据源，通过 HTTP API 进行管理，足够简单轻量。
 
 
 

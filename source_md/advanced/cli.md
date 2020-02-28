@@ -1,6 +1,6 @@
 ---
 # 标题
-title: 管理命令 CLI
+title: 命令行接口
 # 编写日期
 date: 2020-02-07 17:15:26
 # 作者 Github 名称
@@ -15,7 +15,7 @@ category:
 ref: undefined
 ---
 
-# 管理命令 CLI
+# 命令行接口
 
 EMQ X Broker 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQ X Broker 进行管理、配置、查询。
 

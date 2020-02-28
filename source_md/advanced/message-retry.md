@@ -156,10 +156,10 @@ MQTT 协议和 EMQ X Broker 将这个主题认为是 `有序的主题 (Ordered T
 
 此节列举了上述机制中，用到的所有配置。它们都包含在 `etc/emqx.conf` 中：
 
-| 配置项            | 类型     | 可取值        | 默认值 | 说明                                                    |
-| ----------------- | -------- | ------------- | ------ | ------------------------------------------------------- |
-| mqueue_store_qos0 | bool     | true<br>false | true   | 是否将 QoS 0 消息存入消息队列中                          |
-| max_mqueue_len    | integer  | >= 0          | 1000   | 消息队列长度                                            |
-| max_inflight      | integer  | >= 0          | 0      | 飞行窗口大小；默认 `0` 即无限制                         |
-| max_awaiting_rel  | integer  | >= 0          | 0      | 最大接收；默认 `0` 即无限制                             |
-| await_rel_timeout | durtaion | >  0          | 300s   | `最大接收` 中消息等待释放的最大超时时间；超过则直接丢弃 |
+| 配置项             | 类型     | 可取值            | 默认值 | 说明                                                    |
+| ----------------- | -------- | --------------- | ------ | ------------------------------------------------------- |
+| mqueue_store_qos0 | bool     | `true`, `false` | true   | 是否将 QoS 0 消息存入消息队列中                          |
+| max_mqueue_len    | integer  | >= 0            | 1000   | 消息队列长度                                            |
+| max_inflight      | integer  | >= 0            | 0      | 飞行窗口大小；默认 `0` 即无限制                         |
+| max_awaiting_rel  | integer  | >= 0            | 0      | 最大接收；默认 `0` 即无限制                             |
+| await_rel_timeout | durtaion | >  0            | 300s   | `最大接收` 中消息等待释放的最大超时时间；超过则直接丢弃 |

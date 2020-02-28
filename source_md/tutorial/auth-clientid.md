@@ -17,7 +17,7 @@ ref: undefined
 
 # Client ID 认证
 
-Client ID 认证使用配置文件预设客户端Client ID 与密码，支持通过 REST API 管理认证数据。
+Client ID 认证使用配置文件预设客户端Client ID 与密码，支持通过 HTTP API 管理认证数据。
 
 Client ID 认证不依赖外部数据源，使用上足够简单轻量。
 
@@ -40,7 +40,7 @@ Client ID 认证默认使用 sha256 进行密码哈希加密，可在 `etc/plugi
 auth.client.password_hash = sha256
 ```
 
-配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 REST API 添加的认证数据将以哈希密文存储在 EMQ X 内置数据库中。
+配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQ X 内置数据库中。
 
 
 
@@ -72,7 +72,7 @@ auth.clientid.2.password = public
 
 
 
-## 使用 REST API 管理认证数据
+## 使用 HTTP API 管理认证数据
 
 #### 添加认证数据
 
@@ -174,7 +174,7 @@ DELETE api/v4/auth_clientid/${clientid}
 ```
 
 
-<!-- TODO: 引用 REST API -->
+<!-- TODO: 引用 HTTP API -->
 <!-- {% hint style="info" %}  -->
-<!-- 详见 REST API 详细信息请见 [REST API](../rest_api.md) -->
+<!-- 详见 HTTP API 详细信息请见 [HTTP API](../rest_api.md) -->
 <!-- {% endhint %} -->
