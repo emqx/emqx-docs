@@ -488,4 +488,3 @@ client.publish('emqtt',payload='Hello World',qos=0)
 client.loop_forever()
 
 ```
-
