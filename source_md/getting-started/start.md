@@ -58,7 +58,7 @@ EMQ X Enterprise 需要 License 文件才能正常启动，EMQ X Broker 可以�
 
 通过 ZIP 压缩包安装的 EMQ X Broker 不支持通过 systemctl 和 service 启动。
 
-## 使用 `emqx_ctl status` 查看 EMQ X Broker 的状态
+## 查看 EMQ X Broker 的状态
 
 EMQ X Broker 正常启动: 
 ```
@@ -73,4 +73,4 @@ $ emqx_ctl status
 Node 'emqx@127.0.0.1' not responding to pings。
 ```
 
-如果 EMQ X Broker 未能正常启动，查看 [`logs` 目录](using-emqx/directory.md)下的日志文件，并参考我们的 [FAQ](faq/index.md#) 进行排错。
+你可以查看 [`logs`](using-emqx/directory.md) 下的日志文件并确认是否属于 [常见错误](faq/error.md#)。

@@ -17,9 +17,9 @@ ref: undefined
 
 # 目录结构
 
-使用二进制包安装 EMQ X Broker 与使用 ZIP 压缩包安装 EMQ X Broker 的目录路径有所不同，具体如下:
+不同安装方式得到的 EMQ X Broker 其目录结构会有所不同，具体如下:
 
-| 描述                        | 使用 ZIP 压缩包安装 EMQ X Broker | 使用二进制包安装 EMQ X Broker |
+| 描述                        | 使用 ZIP 压缩包安装                 | 使用二进制包安装                  |
 | --------------------------- | -------------------------------- | ----------------------------- |
 | 可执行文件目录              | `./bin`                          | `/usr/lib/emqx/bin`           |
 | 数据文件                    | `./data`                         | `/var/lib/emqx/data`          |
@@ -93,7 +93,7 @@ EMQ X Broker 将运行数据存储在 `data` 目录下，主要的文件包括:
 
 +   `crash.dump`
 
-    EMQ X Broker 崩溃时转储日志文件，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](configuration/index.md)。
+    EMQ X Broker 的崩溃转储文件，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](configuration/index.md)。
 
 +  `erlang.log.*`
 

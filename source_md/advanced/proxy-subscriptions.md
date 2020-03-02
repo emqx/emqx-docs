@@ -41,13 +41,11 @@ module.subscription.<number>.qos = <qos>
 例如，在 `etc/emqx.conf` 文件中添加以下代理订阅规则：
 
 ```
-module.subscription.1.topic = $client/%c
+module.subscription.1.topic = client/%c
 module.subscription.1.qos = 1
 
-module.subscription.2.topic = $user/%u
+module.subscription.2.topic = user/%u
 module.subscription.2.qos = 2
 ```
 
-上面的配置决定了当客户端链接的时候，会自动帮客户端订阅 QoS 为 1 的 `$client/<Client ID>` 主题和 QoS 为 2 的 `$user/<Username>` 主题，`$client` 和 `$user` 均为文本字符串。
-
-举个例子，当一个客户端连接 EMQ X Broker 的时候，假设客户端的 `Client ID` 为 `testclient`，`Username` 为 `tester`，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 QoS 为 1 的 `$client/testclient` 和 QoS 为 2 的 `$user/tester` 这两个主题。
+当一个客户端连接 EMQ X Broker 的时候，假设客户端的 `Client ID` 为 `testclient`，`Username` 为 `tester`，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 QoS 为 1 的 `client/testclient` 和 QoS 为 2 的 `user/tester` 这两个主题。
