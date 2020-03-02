@@ -53,16 +53,16 @@ EMQ X Broker 的默认日志文件目录在 `./log` (zip包解压安装) 或者 
 
 在文件日志启用的情况下 (log.to = file 或 both)，日志目录下会有如下几种文件:
 
-- **emqx.log.N:** 以 emqx.log 为前缀的文件名为日志文件，包含了 emqx 的所有日志消息。比如 emqx.log.1, emqx.log.2 ... 
+- **emqx.log.N:** 以 emqx.log 为前缀的文件为日志文件，包含了 EMQ X Broker 的所有日志消息。比如 `emqx.log.1`, `emqx.log.2` ...
 - **emqx.log.siz 和 emqx.log.idx:** 用于记录日志滚动信息的系统文件。
-- **run_erl.log:** 以 `emqx start` 方式后台启动 emqx 时，用于记录启动信息的系统文件。
-- **erlang.log.N:** 以 erlang.log 为前缀的文件名为日志文件，是以` emqx start` 方式后台启动 emqx 时，控制台日志的副本文件。比如 erlang.log.1, erlang.log.2 ...
+- **run_erl.log:** 以 `emqx start` 方式后台启动 EMQ X Broker 时，用于记录启动信息的系统文件。
+- **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQ X Broker 时，控制台日志的副本文件。比如 `erlang.log.1`, `erlang.log.2` ...
 
 可在 `emqx.conf` 中修改日志文件的前缀，默认为 `emqx.log`：
 
     log.file = emqx.log
 
-EMQ X Broker 默认在单日志文件超过 10MB 的情况下，滚动日志文件，最多可有 5 个日志文件：第一个日志文件为 emqx.log.1，第二个为 emqx.log.2 ... 当 emqx.log.5 文件也写满 10MB 的时候，覆盖并使用 emqx.log.1，如此循环。文件大小限制和最大日志文件个数可在 `emqx.conf` 中修改：
+EMQ X Broker 默认在单日志文件超过 10MB 的情况下，滚动日志文件，最多可有 5 个日志文件：第 1 个日志文件为 emqx.log.1，第 2 个为 emqx.log.2，并以此类推。当最后一个日志文件也写满 10MB 的时候，将从序号最小的日志的文件开始覆盖。文件大小限制和最大日志文件个数可在 `emqx.conf` 中修改：
 
     log.rotation.size = 10MB
     log.rotation.count = 5
@@ -71,11 +71,11 @@ EMQ X Broker 默认在单日志文件超过 10MB 的情况下，滚动日志文�
 
 如果想把大于或等于某个级别的日志写入到单独的文件，可以在 `emqx.conf` 中配置 `log.<level>.file`：
 
-将 info 及 info 以上的日志单独输出到 info.log.N 文件中：
+将 info 及 info 以上的日志单独输出到 `info.log.N` 文件中：
 
     log.info.file = info.log
 
-将 error 及 error 以上的日志单独输出到 error.log.N 文件中
+将 error 及 error 以上的日志单独输出到 `error.log.N` 文件中
 
     log.error.file = error.log
 
@@ -215,7 +215,7 @@ EMQ X Broker 支持针对 ClientID 或 Topic 过滤日志并输出到文件。�
 
 ### 日志追踪的原理 {#how-log-trace-works}
 
-日志追踪的原理是给 emqx 安装一个新的 log handler，并设置 handler 的过滤条件。在 [日志级别和 log handlers](#log-level-and-log-handlers) 章节，我们讨论过 log handler 的细节。
+日志追踪的原理是给 emqx 安装一个新的 log handler，并设置 handler 的过滤条件。在 [日志级别和 log handlers](#log-level-and-log-handlers) 小节，我们讨论过 log handler 的细节。
 
 比如使用如下命令启用 client 日志追踪：
 

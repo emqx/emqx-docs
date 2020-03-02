@@ -19,9 +19,9 @@ ref: undefined
 
 EMQ X Broker 支持两种桥接方式:
 
-- RPC 桥接: 使用 EMQ X RPC 协议的桥接方式，只能在 EMQ X Broker 间使用
+- RPC 桥接: 使用 Erlang RPC 协议的桥接方式，只能在 EMQ X Broker 间使用
 
-- MQTT 桥接: 使用 MQTT 协议、作为客户端连接到远程 Broker 的桥接方式，可桥接到其他 Broker 或 EMQ Broker
+- MQTT 桥接: 使用 MQTT 协议、作为客户端连接到远程 Broker 的桥接方式，可桥接到其他 MQTT Broker 以及 EMQ X Broker
 
 其概念如下图所示:
 
@@ -42,6 +42,14 @@ EMQ X Broker 根据不同的 name 来区分不同的 bridge。可在 `etc/plugin
 如果该配置的值是另一个 EMQ X Broker 的节点名，则使用 RPC 方式桥接:
 
     bridge.mqtt.emqx2.address = emqx2@57.122.76.34
+
+使用桥接功能需要启动 `emqx_bridge_mqtt` 插件:
+
+    ```bash
+    $ emqx_ctl plugins load emqx_bridge_mqtt
+
+    ok
+    ```
 
 ## RPC 桥接的优缺点 {#rpc-bridge-pros-cons}
 
@@ -127,7 +135,7 @@ Keepalive 设置:
 
     bridge.mqtt.aws.forwards = sensor1/#,sensor2/#
 
-还可指定 QoS1/QoS2 消息的重传间隔以及 MQTT Inflight 大小:
+还可指定 QoS1 与 QoS2 消息的重传间隔以及批量发送报文数:
 
     bridge.mqtt.aws.retry_interval = 20s
     bridge.mqtt.aws.max_inflight_batches = 32
@@ -156,102 +164,3 @@ EMQ X Broker 的 Bridge 拥有消息缓存机制，当 Bridge 连接断开时会
 设置单个缓存文件的大小，如超过则会创建新的文件来存储消息队列:
 
     bridge.mqtt.emqx2.queue.replayq_seg_bytes = 10MB
-
-### EMQ X Broker 桥接的命令行使用 {#emqx-bridge-cli}
-
-启动 `emqx_bridge_mqtt` 插件:
-
-    ```bash
-    $ emqx_ctl plugins load emqx_bridge_mqtt
-
-    ok
-    ```
-
-桥接 CLI 命令:
-
-    ```bash
-    $ emqx_ctl bridges
-    bridges list                                    # List bridges
-    bridges start <Name>                            # Start a bridge
-    bridges stop <Name>                             # Stop a bridge
-    bridges forwards <Name>                         # Show a bridge forward topic
-    bridges add-forward <Name> <Topic>              # Add bridge forward topic
-    bridges del-forward <Name> <Topic>              # Delete bridge forward topic
-    bridges subscriptions <Name>                    # Show a bridge subscriptions topic
-    bridges add-subscription <Name> <Topic> <Qos>   # Add bridge subscriptions topic
-    ```
-
-列出全部 bridge 状态
-
-    ```bash
-    $ emqx_ctl bridges list
-
-    name: emqx
-    status: Stopped
-    ```
-
-启动指定 bridge
-
-    ``` bash
-    $ emqx_ctl bridges start emqx
-
-    Start bridge successfully.
-    ```
-
-停止指定 bridge
-
-    ``` bash
-    $ emqx_ctl bridges stop emqx
-
-    Stop bridge successfully.
-    ```
-
-列出指定 bridge 的转发主题
-
-    ```bash
-    $ emqx_ctl bridges forwards emqx
-
-    topic:   topic1/#
-    topic:   topic2/#
-    ```
-
-添加指定 bridge 的转发主题
-
-    ```bash
-    $ emqx_ctl bridges add-forwards emqx 'topic3/#'
-
-    Add-forward topic successfully.
-    ```
-
-删除指定 bridge 的转发主题
-
-    ```bash
-    $ emqx_ctl bridges del-forwards emqx 'topic3/#'
-
-    Del-forward topic successfully.
-    ```
-
-列出指定 bridge 的订阅
-
-    ```bash
-    $ emqx_ctl bridges subscriptions emqx
-
-    topic: cmd/topic1, qos: 1
-    topic: cmd/topic2, qos: 1
-    ```
-
-添加指定 bridge 的订阅主题
-
-    ```bash
-    $ emqx_ctl bridges add-subscription emqx 'cmd/topic3' 1
-
-    Add-subscription topic successfully.
-    ```
-
-删除指定 bridge 的订阅主题
-
-    ```bash
-    $ emqx_ctl bridges del-subscription emqx 'cmd/topic3'
-
-    Del-subscription topic successfully.
-    ```
