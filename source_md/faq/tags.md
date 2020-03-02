@@ -147,7 +147,7 @@ ref:
 
 
 
-### RESt API
+### HTTP API
 
 - [在服务器端能够直接断开一个 MQTT 连接吗？](use-guide.md#在服务器端能够直接断开一个-mqtt-连接吗？)
 

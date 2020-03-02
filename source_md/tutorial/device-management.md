@@ -17,7 +17,7 @@ ref: undefined
 
 # 设备管理
 
-借助 EMQ X [管理监控 API](../advanced/rest-api.md) 提供的客户端管理及主题订阅、消息发布管理接口以及认证、ACL、WebHook 等插件，能够快速搭建设备与消息的管理系统，构建联网接入平台。
+借助 EMQ X [管理监控 API](../advanced/http-api.md) 提供的客户端管理及主题订阅、消息发布管理接口以及认证、ACL、WebHook 等插件，能够快速搭建设备与消息的管理系统，构建联网接入平台。
 
 
 

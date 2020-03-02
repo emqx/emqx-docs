@@ -92,7 +92,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 **使用管理 API 启停插件**
 
-在 EMQ X Broker 运行过程中，可通过 [管理 API - Load Plugin](#rest-api.md#load_plugin) 的方式查看、和启停某插件。
+在 EMQ X Broker 运行过程中，可通过 [管理监控 API - Load Plugin](#http-api.md#load_plugin) 的方式查看、和启停某插件。
 
 
 ## 插件开发

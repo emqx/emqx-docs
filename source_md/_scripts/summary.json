@@ -79,7 +79,7 @@
       },
       {
         "title": "管理监控 API",
-        "file": "advanced/rest-api.md"
+        "file": "advanced/http-api.md"
       },
       {
         "title": "管理命令 CLI",

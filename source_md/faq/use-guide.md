@@ -180,10 +180,10 @@ EMQ X 企业版支持消息持久化，可以将消息保存到数据库，开�
 
 ### 在服务器端能够直接断开一个 MQTT 连接吗？
 
-**标签:** [*RESt API*](tags.md#rest-api)  [*Dashboard*](tags.md#dashboard)
+**标签:** [*HTTP API*](tags.md#http-api)  [*Dashboard*](tags.md#dashboard)
 
 
-可以的。EMQ X 提供的 REST API 中包含断开 MQTT 连接，该操作在 EMQ X 2.x 和 3.0 的实现方式有所不同：
+可以的。EMQ X 提供的 HTTP API 中包含断开 MQTT 连接，该操作在 EMQ X 2.x 和 3.0 的实现方式有所不同：
 
 - 在 2.x 版本中是由 EMQ X 自定义扩展协议实现的
 - 在 3.0 版本之后按照 MQTT 5.0 协议对从服务器端断开连接的规范要求实现的
@@ -202,7 +202,7 @@ URL：api/[v2|v3]/clients/{clientid}
 }
 ```
 
-REST API 使用方式参考 [管理监控API (REST API)](https://docs.emqx.io/broker/v3/cn/rest.html)
+HTTP API 使用方式参考 [管理监控API (HTTP API)](https://docs.emqx.io/broker/v3/cn/rest.html)
 
 
 
