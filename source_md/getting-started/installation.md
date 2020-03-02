@@ -36,7 +36,7 @@ EMQ X Broker 目前支持的系统:
 {% tabs shell="Shell 脚本安装", packages="包管理器安装", binary="二进制包安装", zip="ZIP 压缩包安装", homebrew="Homebrew 安装", docker="Docker 运行", helm="Helm 安装并集群", build="源码编译安装" %}
 
 {% content "shell" %}
-## shell 脚本一键安装 (Linux)
+## Shell 脚本一键安装 (Linux)
 
 ```bash
 curl https://repos.emqx.io/install_emqx.sh | bash
