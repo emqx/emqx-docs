@@ -97,5 +97,5 @@ EMQ X Broker 将运行数据存储在 `data` 目录下，主要的文件包括:
 
 +  `erlang.log.*`
 
-    以` emqx start` 方式后台启动 EMQ X Broker 时，控制台日志的副本文件。
+    以 `emqx start` 方式后台启动 EMQ X Broker 时，控制台日志的副本文件。
     
