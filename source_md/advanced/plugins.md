@@ -19,7 +19,7 @@ ref: undefined
 
 EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基础的、或各类扩展的功能。
 
-它们依赖于 [emqx](https://github.com/emqx/emqx) 的代码 API 或者 [钩子(Hooks)](hooks.md) 进行实现其特殊的功能。
+它们依赖于 [emqx](https://github.com/emqx/emqx) 的代码 API 或者 [钩子](hooks.md) 进行实现其特殊的功能。
 
 然后通过打包编译工具 [emqx-rel](https://github.com/emqx/emqx-rel) 将其与 [emqx](https:://github.com/emqx/emqx) 核心项目一起编译并打包至一个可运行的软件包中。
 
@@ -101,120 +101,118 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 参考 [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) 插件模版创建新的插件项目。
 
-> 备注： 在 `<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin (?MODULE).` 以表明这是一个 EMQ X Broker 的插件。
+备注：在 `<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQ X Broker 的插件。
 
 
-### 创建认证 / 访问控制模块
+### 创建 认证/访问控制 模块
 
 
-接入认证示例代码 `- emqx_auth_demo.erl`
+接入认证示例代码 - `emqx_auth_demo.erl`：
 
 ``` erlang
--module (emqx_auth_demo).
+-module(emqx_auth_demo).
 
--export ([ init/1
-         , check/2
-         , description/0
-         ]).
+-export([ init/1
+        , check/2
+        , description/0
+        ]).
 
-init (Opts) -> {ok, Opts}.
+init(Opts) -> {ok, Opts}.
 
-check (_ClientInfo = #{clientid := ClientId, username := Username, password := Password}, _State) ->
-    io:format ("Auth Demo: clientId=~p, username=~p, password=~p~n", [ClientId, Username, Password]),
+check(_ClientInfo = #{clientid := ClientId, username := Username, password := Password}, _State) ->
+    io:format("Auth Demo: clientId=~p, username=~p, password=~p~n", [ClientId, Username, Password]),
     ok.
 
-description () -> "Auth Demo Module".
+description() -> "Auth Demo Module".
 ```
 
 
-访问控制示例代码 `- emqx_acl_demo.erl`
+访问控制示例代码 - `emqx_acl_demo.erl`：
 
 ``` erlang
--module (emqx_acl_demo).
+-module(emqx_acl_demo).
 
--include_lib ("emqx/include/emqx.hrl").
+-include_lib("emqx/include/emqx.hrl").
 
 %% ACL callbacks
--export ([ init/1
+-export([ init/1
         , check_acl/5
         , reload_acl/1
         , description/0
         ]).
 
-init (Opts) ->
+init(Opts) ->
     {ok, Opts}.
 
-check_acl ({ClientInfo, PubSub, _NoMatchAction, Topic}, _State) ->
-    io:format ("ACL Demo: ~p ~p ~p~n", [ClientInfo, PubSub, Topic]),
+check_acl({ClientInfo, PubSub, _NoMatchAction, Topic}, _State) ->
+    io:format("ACL Demo: ~p ~p ~p~n", [ClientInfo, PubSub, Topic]),
     allow.
 
-reload_acl (_State) ->
+reload_acl(_State) ->
     ok.
 
-description () -> "ACL Demo Module".
+description() -> "ACL Demo Module".
 ```
 
 
-挂载认证、访问控制钩子示例代码 `- emqx_plugin_template_app.erl`
+挂载认证、访问控制钩子示例代码 - `emqx_plugin_template_app.erl`：
 
 ``` erlang
-ok = emqx:hook ('client.authenticate', fun emqx_auth_demo:check/2, []),
-ok = emqx:hook ('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
+ok = emqx:hook('client.authenticate', fun emqx_auth_demo:check/2, []),
+ok = emqx:hook('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
 ```
 
 
 ### 挂载钩子
 
-在扩展插件中，可通过挂载 [钩子(Hooks)](hooks.md) 来处理客户端上下线、主题订阅、消息收发等事件。
+在扩展插件中，可通过挂载 [钩子](hooks.md) 来处理客户端上下线、主题订阅、消息收发等事件。
 
-钩子挂载示例代码 `- emqx_plugin_template.erl`:
+钩子挂载示例代码 - `emqx_plugin_template.erl`：
 
 ``` erlang
-load (Env) ->
-    emqx:hook ('client.connect',      {?MODULE, on_client_connect, [Env]}),
-    emqx:hook ('client.connack',      {?MODULE, on_client_connack, [Env]}),
-    emqx:hook ('client.connected',    {?MODULE, on_client_connected, [Env]}),
-    emqx:hook ('client.disconnected', {?MODULE, on_client_disconnected, [Env]}),
-    emqx:hook ('client.authenticate', {?MODULE, on_client_authenticate, [Env]}),
-    emqx:hook ('client.check_acl',    {?MODULE, on_client_check_acl, [Env]}),
-    emqx:hook ('client.subscribe',    {?MODULE, on_client_subscribe, [Env]}),
-    emqx:hook ('client.unsubscribe',  {?MODULE, on_client_unsubscribe, [Env]}),
-    emqx:hook ('session.created',     {?MODULE, on_session_created, [Env]}),
-    emqx:hook ('session.subscribed',  {?MODULE, on_session_subscribed, [Env]}),
-    emqx:hook ('session.unsubscribed',{?MODULE, on_session_unsubscribed, [Env]}),
-    emqx:hook ('session.resumed',     {?MODULE, on_session_resumed, [Env]}),
-    emqx:hook ('session.discarded',   {?MODULE, on_session_discarded, [Env]}),
-    emqx:hook ('session.takeovered',  {?MODULE, on_session_takeovered, [Env]}),
-    emqx:hook ('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
-    emqx:hook ('message.publish',     {?MODULE, on_message_publish, [Env]}),
-    emqx:hook ('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
-    emqx:hook ('message.acked',       {?MODULE, on_message_acked, [Env]}),
-    emqx:hook ('message.dropped',     {?MODULE, on_message_dropped, [Env]}).
+load(Env) ->
+    emqx:hook('client.connect',      {?MODULE, on_client_connect, [Env]}),
+    emqx:hook('client.connack',      {?MODULE, on_client_connack, [Env]}),
+    emqx:hook('client.connected',    {?MODULE, on_client_connected, [Env]}),
+    emqx:hook('client.disconnected', {?MODULE, on_client_disconnected, [Env]}),
+    emqx:hook('client.authenticate', {?MODULE, on_client_authenticate, [Env]}),
+    emqx:hook('client.check_acl',    {?MODULE, on_client_check_acl, [Env]}),
+    emqx:hook('client.subscribe',    {?MODULE, on_client_subscribe, [Env]}),
+    emqx:hook('client.unsubscribe',  {?MODULE, on_client_unsubscribe, [Env]}),
+    emqx:hook('session.created',     {?MODULE, on_session_created, [Env]}),
+    emqx:hook('session.subscribed',  {?MODULE, on_session_subscribed, [Env]}),
+    emqx:hook('session.unsubscribed',{?MODULE, on_session_unsubscribed, [Env]}),
+    emqx:hook('session.resumed',     {?MODULE, on_session_resumed, [Env]}),
+    emqx:hook('session.discarded',   {?MODULE, on_session_discarded, [Env]}),
+    emqx:hook('session.takeovered',  {?MODULE, on_session_takeovered, [Env]}),
+    emqx:hook('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
+    emqx:hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
+    emqx:hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),
+    emqx:hook('message.acked',       {?MODULE, on_message_acked, [Env]}),
+    emqx:hook('message.dropped',     {?MODULE, on_message_dropped, [Env]}).
 ```
 
 
 ### 注册 CLI 命令
 
-
-处理命令行命令示例代码 `- emqx_cli_demo.erl`：
+处理命令行命令示例代码 - `emqx_cli_demo.erl`：
 
 ``` erlang
--module (emqx_cli_demo).
+-module(emqx_cli_demo).
 
--export ([cmd/1]).
+-export([cmd/1]).
 
-cmd (["arg1", "arg2"]) ->
+cmd(["arg1", "arg2"]) ->
     emqx_cli:print ("ok");
 
-cmd (_) ->
+cmd(_) ->
     emqx_cli:usage ([{"cmd arg1 arg2", "cmd demo"}]).
 ```
 
-
-注册命令行示例代码 `- emqx_plugin_template_app.erl`：
+注册命令行示例代码 - `emqx_plugin_template_app.erl`：
 
 ``` erlang
-ok = emqx_ctl:register_command (cmd, {emqx_cli_demo, cmd}, []),
+ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 ```
 
 插件加载后，使用`./bin/emqx_ctl` 验证新增的命令行：
@@ -243,7 +241,7 @@ ok = emqx_ctl:register_command (cmd, {emqx_cli_demo, cmd}, []),
     plugin_name.key = value
     ```
 
-> 注：`k = v` 格式配置需要插件开发者创建 `priv/plugin_name.schema` 映射文件。
+注：`k = v` 格式配置需要插件开发者创建 `priv/plugin_name.schema` 映射文件。
 
 
 ### 编译和发布插件

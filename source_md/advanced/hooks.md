@@ -98,8 +98,8 @@ ref: undefined
 
 接下来 [挂载点](#hookpoint)，[回调函数](#callback) 两节中，对于钩子的所有操作都是依赖于 [emqx](https://github.com/emqx/emqx) 提供的 Erlang 代码级的 API。他们是整个钩子逻辑实现的基础。如需寻求：
 
-- 钩子(Hooks) 和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
-- 钩子(Hooks) 和 在与其他语言的应用，参见： [Multipe-Language-Support](multiple-language-support.md)
+- 钩子和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
+- 钩子与其他语言的应用，参见： [Multipe-Language-Support](multiple-language-support.md)
     - 目前仅支持 Lua，参见：[emqx_lua_hook](multiple-language-support.md#lua)
 
 
