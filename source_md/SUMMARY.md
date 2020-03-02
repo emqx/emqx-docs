@@ -5,7 +5,7 @@
 * [开始使用](getting-started/index.md)
   * [安装](getting-started/installation.md)
   * [启动 EMQ X](getting-started/start.md)
-  * [启动 EMQ X Enterprise](getting-started/start-enterprise.md)
+  * [申请与导入 License](getting-started/license.md)
 * [基础功能](using-emqx/index.md)
   * [基本命令](using-emqx/command-line.md)
   * [目录结构](using-emqx/directory.md)
