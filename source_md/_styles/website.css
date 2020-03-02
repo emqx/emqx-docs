@@ -46,3 +46,19 @@
   color: #4183c4 !important;
   font-weight: 700 !important;
 }
+
+.page-footer {
+  clear: both;
+}
+
+.book-summary .summary > li:last-child {
+  display: none;;
+}
+
+.book-summary .summary .divider {
+  display: none;;
+}
+
+.gt-initing {
+  display: none;
+}
