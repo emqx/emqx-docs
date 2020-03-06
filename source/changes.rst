@@ -5,6 +5,73 @@
 版本发布 (Changes)
 ==================
 
+.. _release_4.0.4:
+
+----------
+4.0.4 版本
+----------
+
+*发布日期: 2019-03-06*
+
+EMQ X 4.0.4 现已发布。此版本主要进行了错误修复。
+
+emqx
+----
+
+**错误修复:**
+
+- 修复 ``acl_deny_action`` 配置项不生效的问题
+
+  Github issue:
+  `emqx/emqx#3266 <https://github.com/emqx/emqx/issues/3266>`_
+
+  Github PR:
+  `emqx/emqx#3286 <https://github.com/emqx/emqx/pull/3286>`_
+
+- 修复 ``mountpoint`` 配置项的错误类型
+
+  Github issue:
+  `emqx/emqx#3271 <https://github.com/emqx/emqx/issues/3271>`_
+
+  Github PR:
+  `emqx/emqx#3272 <https://github.com/emqx/emqx/pull/3272>`_
+
+- 修复 ``peer_cert_as_username`` 配置项不生效的问题
+
+  Github issue:
+  `emqx/emqx#3281 <https://github.com/emqx/emqx/issues/3281>`_
+
+  Github PR:
+  `emqx/emqx#3291 <https://github.com/emqx/emqx/pull/3291>`_
+
+- 修复连接正常关闭后仍打印错误日志的问题
+
+  Github PR:
+  `emqx/emqx#3290 <https://github.com/emqx/emqx/pull/3290>`_
+
+emqx-dashboard (plugin)
+-----------------------
+
+**错误修复:**
+
+- 修复 Dashboard 节点下拉列表中显示空白的问题
+
+  Github issue:
+  `emqx/emqx#3278 <https://github.com/emqx/emqx/issues/3278>`_
+
+  Github PR:
+  `emqx/emqx-dashboard#206 <https://github.com/emqx/emqx-dashboard/pull/206>`_
+
+emqx-retainer (plugin)
+----------------------
+
+**错误修复:**
+
+- 保留消息达到最大存储数量后的行为由无法存储任何保留消息更正为可以替换已存在主题的保留消息
+
+  Github PR:
+  `emqx/emqx-retainer#136 <https://github.com/emqx/emqx-retainer/pull/136>`_
+
 .. _release_4.0.3:
 
 ----------
