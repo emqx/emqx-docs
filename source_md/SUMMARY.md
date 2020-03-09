@@ -13,7 +13,8 @@
   * [日志与追踪](using-emqx/log.md)
   * [Dashboard](using-emqx/dashboard.md)
 * 高级功能
-  * [认证](advanced/auth.md)
+  * 认证
+    * [认证](advanced/auth.md)
     * [用户名认证](advanced/auth-username.md)
     * [Cliend ID 认证](advanced/auth-clientid.md)
     * [HTTP 认证](advanced/auth-http.md)
@@ -23,7 +24,8 @@
     * [PostgreSQL 认证](advanced/auth-postgresql.md)
     * [Redis 认证](advanced/auth-redis.md)
     * [MongoDB 认证](advanced/auth-mongodb.md)
-  * [发布订阅 ACL](advanced/acl.md)
+  * 发布订阅 ACL
+    * [发布订阅 ACL](advanced/acl.md)
     * [内置 ACL](advanced/acl-file.md)
     * [HTTP ACL](advanced/acl-http.md)
     * [MySQL ACL](advanced/acl-mysql.md)
@@ -51,7 +53,8 @@
     * [资源](./advanced/http-api.md#endpoint-resources)
   * 规则引擎
     * [规则引擎](advanced/rule-engine.md)
-    * [创建规则举例](advanced/rule-examples.md)
+    * [创建规则](advanced/rule-examples.md)
+    * [规则引擎示例](https://www.emqx.io/cn/blog/category/rule-engine)
   * [分布集群](advanced/cluster.md)
   * [消息桥接](advanced/bridge.md)
   * [钩子](advanced/hooks.md)

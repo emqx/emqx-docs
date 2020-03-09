@@ -19,7 +19,7 @@
     },
     "prism": {
       "css": [
-        "prismjs/themes/prism-coy.css"
+        "prismjs/themes/prism-okaidia.css"
       ]
     },
     "gittalk": {
