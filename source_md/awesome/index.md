@@ -47,8 +47,6 @@ ref:
 - [ActorCloud](https://github.com/emqx/ActorCloud) - 开源一站式物联网平台服务
 - [EMQ MQTT Cloud](https://cloud.emqx.io?spm=docs) - EMQ 公有云服务
 
-[提交投稿](https://github.com/emqx/emqx-docs-cn)
-
 ## 中文教程
 
 暂无，欢迎[提交投稿](https://github.com/emqx/emqx-docs-cn)

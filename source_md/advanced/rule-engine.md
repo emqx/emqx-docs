@@ -18,15 +18,17 @@ ref: undefined
 # 规则引擎
 
 
-> 适用版本: **EMQ X Broker v3.1.0+**
-
-> 兼容提示: EMQ X Broker v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule_engine.md# 迁移指南) 进行适配。
-
 EMQ X Broker Rule Engine (以下简称规则引擎) 用于配置 EMQ X Broker 消息流与设备事件的处理、响应规则。规则引擎不仅提供了清晰、灵活的 "配置式" 的业务集成方案，简化了业务开发流程，提升用户易用性，降低业务系统与 EMQ X Broker 的耦合度；也为 EMQ X Broker 的私有功能定制提供了一个更优秀的基础架构。
 
 ![image-20190506171815028](../assets/image-20190506171815028.jpg)
 
 EMQ X Broker 在 **消息发布或事件触发** 时将触发规则引擎，满足触发条件的规则将执行各自的 SQL 语句筛选并处理消息和事件的上下文信息。
+
+{% hint style="info" %}
+适用版本: **EMQ X Broker v3.1.0+**
+
+兼容提示: EMQ X Broker v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule_engine.md# 迁移指南) 进行适配。
+{% endhint %}
 
 ### 消息发布
 
@@ -95,7 +97,9 @@ SELECT * FROM "$events/message_acked" where topic ~= 't/#'
 SELECT * FROM "$events/client_connected"
 ```
 
-> Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移。
+{% hint style="info" %}
+Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移。
+{% endhint %}
 
 ## 规则引擎组成
 
