@@ -243,7 +243,9 @@ $ emqx_ctl trace start topic 't/#' log/topic_t.log
 trace topic t/# successfully
 ```
 
-**NOTE:** 即使 `emqx.conf` 中，`log.level` 设置为 error，使用消息追踪功能仍然能够打印出某 client 或 topic 的 debug 级别的信息。这在生产环境中非常有用。
+{% hint type="primary" %}
+即使 `emqx.conf` 中，`log.level` 设置为 error，使用消息追踪功能仍然能够打印出某 client 或 topic 的 debug 级别的信息。这在生产环境中非常有用。
+{% endhint %}
 
 ### 日志追踪的原理 {#how-log-trace-works}
 

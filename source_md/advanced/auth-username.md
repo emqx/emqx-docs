@@ -63,7 +63,7 @@ auth.user.2.password = public
 
 <!-- TODO 补充加载规则 -->
 
-{% hint style="waring" %} 
+{% hint style="danger" %} 
 
 预设认证数据在配置文件中使用了明文密码，出于安全性与可维护性考虑应当避免使用该功能。
 
@@ -174,6 +174,3 @@ DELETE api/v4/auth_username/${username}
 
 
 <!-- TODO: 引用 HTTP API -->
-<!-- {% hint style="info" %}  -->
-<!-- 详见 HTTP API 详细信息请见 [HTTP API](../rest_api.md) -->
-<!-- {% endhint %} -->

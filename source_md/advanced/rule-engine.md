@@ -137,7 +137,9 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
 - 资源 (Resource): 资源是通过资源类型为模板实例化出来的对象，保存了与资源相关的配置(比如数据库连接地址和端口、用户名和密码等)。
 - 资源类型 (Resource Type): 资源类型是资源的静态定义，描述了此类型资源需要的配置项。
 
-**NOTE:** 动作和资源类型是由 emqx 或插件的代码提供的，不能通过 API 和 CLI 动态创建。
+{% hint type="primary" %}
+动作和资源类型是由 emqx 或插件的代码提供的，不能通过 API 和 CLI 动态创建。
+{% endhint %}
 
 ## SQL 语句 {#rule-sql}
 
@@ -204,12 +206,12 @@ FROM、SELECT 和 WHERE 子句:
 
     SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
 
-**NOTE: **
-
+{% hint type="primary" %}
 - FROM 子句后面的主题需要用双引号 ``""`` 引起来。
 - WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 ``''`` 引起来。
 - FROM 子句里如有多个主题，需要用逗号 ``","`` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
 - 可以使用使用 ``"."`` 符号对 payload 进行嵌套选择。
+{% endhint %}
 
 ### FROM 子句可用的事件主题 {#rule-sql-syntax}
 
