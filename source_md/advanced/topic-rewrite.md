@@ -19,7 +19,7 @@ ref: undefined
 
 EMQ X Broker 的主题重写功能支持根据用户配置的规则在客户端订阅主题、发布消息、取消订阅的时候将 A 主题重写为 B 主题。
 
-EMQ X Broker 的 [保留消息](advanced/retained.md) 和 [延迟发布](advanced/dely-publish.md) 可以与主题重写配合使用，例如，当用户想使用延迟发布功能，但不方便修改客户端发布的主题时，可以使用主题重写将相关主题重写为延迟发布的主题格式。
+EMQ X Broker 的 [保留消息](advanced/retained.md) 和 [延迟发布](advanced/delay-publish.md) 可以与主题重写配合使用，例如，当用户想使用延迟发布功能，但不方便修改客户端发布的主题时，可以使用主题重写将相关主题重写为延迟发布的主题格式。
 
 #### 开启主题重写功能
 

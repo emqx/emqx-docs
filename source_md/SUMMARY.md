@@ -42,7 +42,7 @@
   * [WebHook](advanced/webhook.md)
   * [保留消息](advanced/retained.md)
   * [共享订阅](advanced/shared-subscriptions.md)
-  * [延迟发布](advanced/dely-publish.md)
+  * [延迟发布](advanced/delay-publish.md)
   * [代理订阅](advanced/proxy-subscriptions.md)
   * [主题重写](advanced/topic-rewrite.md)
   * [黑名单](advanced/blacklist.md)
