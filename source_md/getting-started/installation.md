@@ -615,37 +615,38 @@ curl https://repos.emqx.io/install_emqx.sh | bash
   ```
 
 {% content "build" %}
+
 ## 源码编译安装
 
 1. 获取源码
 
-    ``` sourceCode bash
-    $ git clone -b v4.0.0 https://github.com/emqx/emqx-rel.git
-    ```
+```bash
+$ git clone -b v4.0.0 https://github.com/emqx/emqx-rel.git
+```
 
-2.  设置环境变量
-  
-    ``` sourceCode bash
-    $ export EMQX_DEPS_DEFAULT_VSN=v4.0.0
-    ```
+2. 设置环境变量
 
-3.  编译
-  
-    ``` sourceCode bash
-    $ cd emqx-rel && make
-    ```
+```bash
+$ export EMQX_DEPS_DEFAULT_VSN=v4.0.0
+```
 
-4.  启动 EMQ X Broker
+3. 编译
+
+```bash
+$ cd emqx-rel && make
+```
+
+4. 启动 EMQ X Broker
   
-    ``` sourceCode bash
-    $ cd _build/emqx-rel/_rel/emqx
-    
-    $ ./bin/emqx start
-    emqx 4.0.0 is started successfully!
-    
-    $ ./bin/emqx_ctl status
-    Node 'emqx@127.0.0.1' is started
-    emqx v4.0.0 is running
-    ```
+```bash
+$ cd _build/emqx-rel/_rel/emqx
+
+$ ./bin/emqx start
+emqx 4.0.0 is started successfully!
+
+$ ./bin/emqx_ctl status
+Node 'emqx@127.0.0.1' is started
+emqx v4.0.0 is running
+```
 
 {% endtabs %}

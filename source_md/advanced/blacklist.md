@@ -25,7 +25,7 @@ EMQ X 为用户提供了黑名单功能，用户可以通过相关的 HTTP API �
 
 此功能强制开启并无法关闭，但用户可以在 `emqx.conf` 配置文件中调整触发阈值和封禁时长等配置：
 
-```
+```bash
 flapping_detect_policy = 30, 1m, 5m
 ```
 

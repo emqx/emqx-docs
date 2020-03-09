@@ -8,9 +8,20 @@
     "simple-page-toc",
     "cuav-chapters",
     "edit-link",
-    "gittalk"
+    "gittalk",
+    "scripts"
   ],
   "pluginsConfig": {
+    "scripts": {
+      "files": [
+          "./_js/emqx-docs.js"
+      ]
+    },
+    "prism": {
+      "css": [
+        "prismjs/themes/prism-coy.css"
+      ]
+    },
     "gittalk": {
       "clientID": "3b2217a86bdbdc09d0d8",
       "clientSecret": "aee2b15ea39c494eb80b775513d38791895adb63",

@@ -23,7 +23,7 @@ EMQ X Broker 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQ
 
 查询 EMQ X Broker 运行状态:
 
-```
+```bash
 $ ./bin/emqx_ctl status
 Node 'emqx@127.0.0.1' is started
 emqx v4.0.0 is running
@@ -45,7 +45,7 @@ mgmt 命令查询应用程序。
 
 列出应用程序列表:
 
-```
+```bash
 $ ./bin/emqx_ctl mgmt list
 app_id: 901abdba8eb8c, secret: MjgzMzQ5MjM1MzUzMTc4MjgyMjE3NzU4ODcwMDg0NjQ4OTG, name: hello, desc: , status: true, expired: undefined
 ```
@@ -54,7 +54,7 @@ app_id: 901abdba8eb8c, secret: MjgzMzQ5MjM1MzUzMTc4MjgyMjE3NzU4ODcwMDg0NjQ4OTG, 
 
 添加 HTTP API 的应用程序:
 
-```
+```bash
 $ ./bin/emqx_ctl mgmt insert dbcb6e023370b world
 AppSecret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
 ```
@@ -63,7 +63,7 @@ AppSecret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
 
 更新 HTTP API 的应用程序:
 
-```
+```bash
 $ ./bin/emqx_ctl mgmt update dbcb6e023370b stop
 update successfully.
 ```
@@ -72,7 +72,7 @@ update successfully.
 
 获取 HTTP API 的应用程序详情:
 
-```
+```bash
 $ ./bin/emqx_ctl mgmt lookup dbcb6e023370b
 app_id: dbcb6e023370b
 secret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
@@ -86,7 +86,7 @@ expired: undefined
 
 删除 HTTP API 的应用程序:
 
-```
+```bash
 $ ./bin/emqx_ctl mgmt delete dbcb6e023370b
 ok
 ```
@@ -103,7 +103,7 @@ broker 命令查询服务器基本信息，启动时间，统计数据与性能�
 
 查询 EMQ X Broker 基本信息，包括版本、启动时间等:
 
-```
+```bash
 $ ./bin/emqx_ctl broker
 sysdescr  : EMQ X Broker
 version   : 4.0.0
@@ -115,7 +115,7 @@ datetime  : 2020-02-21 09:39:58
 
 查询服务器客户端连接 (Connections)、主题 (Topics)、订阅 (Subscriptions)、路由 (Routes) 统计:
 
-```
+```bash
 $ ./bin/emqx_ctl broker stats
 actions.count                 : 5
 actions.max                   : 5
@@ -149,7 +149,7 @@ topics.max                    : 0
 
 查询服务器流量 (Bytes)、MQTT 报文 (Packets)、消息 (Messages) 收发统计:
 
-```
+```bash
 $ ./bin/emqx_ctl broker metrics
 actions.success               : 0
 bytes.received                : 0
@@ -250,19 +250,19 @@ cluster 命令可以管理由多个 EMQ X Broker 节点（进程）组成的集�
 
 启动 emqx1 :
 
-```
+```bash
 $ cd emqx1 && ./bin/emqx start
 ```
 
 启动 emqx2 :
 
-```
+```bash
 $ cd emqx2 && ./bin/emqx start
 ```
 
 使用 `cluster join <Node>` 将两个节点组成集群：
 
-```
+```bash
 $ cd emqx2 && ./bin/emqx_ctl cluster join emqx1@127.0.0.1
  
 Join the cluster successfully.
@@ -271,7 +271,7 @@ Cluster status: [{running_nodes,['emqx1@127.0.0.1','emqx2@127.0.0.1']}]
 
 任意节点目录下查询集群状态:
 
-```
+```bash
 $ ./bin/emqx_ctl cluster status
 Cluster status: [{running_nodes,['emqx2@127.0.0.1','emqx1@127.0.0.1']}]
 ```
@@ -279,7 +279,7 @@ Cluster status: [{running_nodes,['emqx2@127.0.0.1','emqx1@127.0.0.1']}]
 集群消息路由测试:
 MQTT 命令行工具使用由 EMQ X 团队开发的 [emqtt](https://github.com/emqx/emqtt/releases) 客户端。
 
-```
+```bash
 # emqx1 节点（1883 端口）订阅主题 x
 $ ./bin/emqtt sub -t x -q 1 -p 1883
 Client emqtt-a7de8fffbe2fbeb2fadb sent CONNECT
@@ -298,13 +298,13 @@ hello
 
 emqx2 节点离开集群:
 
-```
+```bash
 $ cd emqx2 && ./bin/emqx_ctl cluster leave
 ```
 
 强制 emqx2 节点离开集群，需要在集群下的目标节点以外的节点上进行操作:
 
-```
+```bash
 $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 ```
 
@@ -314,7 +314,7 @@ $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
 重新加载 acl 规则:
 
-```
+```bash
 $ ./bin/emqx_ctl acl reload
 ok
 ```
@@ -333,7 +333,7 @@ clients 命令查询连接的 MQTT 客户端。
 
 列出所有客户端连接:
 
-```
+```bash
 $ ./bin/emqx_ctl clients list
 Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62135, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1582249657, connected_at=1582249657)
 Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean_start=true, keepalive=60, session_expiry_interval=0, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1582249657, connected_at=1582249657, disconnected_at=1582249702)
@@ -364,7 +364,7 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 
 查询指定 ClientId 的客户端:
 
-```
+```bash
 $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 ```
@@ -373,7 +373,7 @@ Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean
 
 踢除指定 ClientId 的客户端:
 
-```
+```bash
 $ ./bin/emqx_ctl clients kick "clientid"
 ok
 ```
@@ -393,7 +393,7 @@ EMQ X Broker 中路由是指主题与节点的映射关系，用于在多个节�
 
 列出所有路由:
 
-```
+```bash
 $ ./bin/emqx_ctl routes list
 t2/# -> emqx2@127.0.0.1
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
@@ -403,7 +403,7 @@ t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 
 查询指定 Topic d的路由:
 
-```
+```bash
 $ ./bin/emqx_ctl routes show t/+/x
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
@@ -423,7 +423,7 @@ subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 
 列出所有订阅:
 
-```
+```bash
 $ ./bin/emqx_ctl subscriptions list
 mosqsub/91042-airlee.lo -> t/y:1
 mosqsub/90475-airlee.lo -> t/+/x:2
@@ -433,7 +433,7 @@ mosqsub/90475-airlee.lo -> t/+/x:2
 
 查询某个 Client 的订阅:
 
-```
+```bash
 $ ./bin/emqx_ctl subscriptions show 'mosqsub/90475-airlee.lo'
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
@@ -442,7 +442,7 @@ mosqsub/90475-airlee.lo -> t/+/x:2
 
 手动添加订阅关系:
 
-```
+```bash
 $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
 ok
 ```
@@ -451,7 +451,7 @@ ok
 
 手动删除订阅关系:
 
-```
+```bash
 $ ./bin/emqx_ctl subscriptions del 'mosqsub/90475-airlee.lo' '/world'
 ok
 ```
@@ -473,7 +473,7 @@ plugins 命令用于加载、卸载、查询插件应用。EMQ X Broker 通过�
 
 列出全部插件:
 
-```
+```bash
 $ ./bin/emqx_ctl plugins list
 Plugin (emqx_auth_clientid, version=v4.0.0, description=EMQ X Authentication with ClientId/Password, active=false)
 Plugin (emqx_auth_http, version=v4.0.0, description=EMQ X Authentication/ACL with HTTP API, active=false)
@@ -515,7 +515,7 @@ Plugin (emqx_web_hook, version=v4.0.0, description=EMQ X Webhook Plugin, active=
 
 加载插件:
 
-```
+```bash
 $ ./bin/emqx_ctl plugins load emqx_lua_hook
 Plugin emqx_lua_hook loaded successfully.
 ```
@@ -524,7 +524,7 @@ Plugin emqx_lua_hook loaded successfully.
 
 卸载插件:
 
-```
+```bash
 $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 Plugin emqx_lua_hook unloaded successfully.
 ```
@@ -533,7 +533,7 @@ Plugin emqx_lua_hook unloaded successfully.
 
 重载插件:
 
-```
+```bash
 $ ./bin/emqx_ctl plugins reload emqx_lua_hook
 Plugin emqx_lua_hook reloaded successfully.
 ```
@@ -556,7 +556,7 @@ vm 命令用于查询 Erlang 虚拟机负载、内存、进程、IO 信息。
 
 查询 VM 全部信息，包括负载、内存、Erlang 进程数量等:
 
-```
+```bash
 $ ./bin/emqx_ctl vm all
 cpu/load1               : 4.22
 cpu/load5               : 3.29
@@ -582,7 +582,7 @@ ports/limit             : 1048576
 
 查询 VM 负载:
 
-```
+```bash
 $ ./bin/emqx_ctl vm load
 cpu/load1               : 2.21
 cpu/load5               : 2.60
