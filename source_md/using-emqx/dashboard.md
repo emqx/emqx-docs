@@ -25,10 +25,8 @@ EMQ X Broker 提供了 Dashboard 以方便用户管理设备与监控相关指�
 
 EMQ X Dashboard 功能由 [emqx-dashboard](https://github.com/emqx/emqx-dashboard) 插件实现，该插件默认处于启用状态，它将在 EMQ X Broker 启动时自动加载。如果你希望禁用 Dashboard 功能，你可以将 `data/loaded_plugins`（请参见 [插件](../advanced/plugins.md#)）中的 `{emqx_dashboard, true}` 修改为 `{emqx_dashboard, false}`。
 
-```
-...
+```bash
 {emqx_dashboard, true}.
-...
 ```
 
 ## 查看 Dashboard
@@ -91,7 +89,7 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 我们将客户端详情中的各个字段分为了 **连接**，**会话** 和 **指标** 三类，以下为各字段的说明：
 
-*连接*
+**连接**
 
 | 字段名            | 说明                                                       |
 | ----------------- | ---------------------------------------------------------- |
@@ -108,7 +106,7 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 | Zone              | 指示客户端所使用的配置组                                   |
 | Keepalive         | 保持连接时间，单位：秒                                     |
 
-*会话*
+**会话**
 
 | 字段名                             | 说明                                             |
 | ---------------------------------- | ------------------------------------------------ |
@@ -124,7 +122,7 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 | Uncomfirmed PUBREC Packets         | 未确认的 PUBREC 报文数量                         |
 | Maximum Uncomfirmed PUBREC Packets | 允许存在未确认的 PUBREC 报文的最大数量           |
 
-*指标*
+**指标**
 
 | 字段名                             | 说明                                   |
 | ---------------------------------- | -------------------------------------- |

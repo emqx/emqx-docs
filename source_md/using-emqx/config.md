@@ -39,7 +39,7 @@ EMQ X Broker 的配置文件通常以 `.conf` 作为后缀名，你可以在 `et
 
 **示例：**
 
-```
+```bash
 mqtt.max_packet_size = 1MB
 ```
 
@@ -71,13 +71,13 @@ mqtt.max_packet_size = 1MB
 
 *Yes!*
 
-```
+```bash
 dir = tmp
 ```
 
 *No!!!*
 
-```
+```bash
 dir = "tmp"		
 ```
 
@@ -140,7 +140,7 @@ Listener 配置项的命名规则为 `listener.<Protocol>.<Listener Name>.xxx`�
 
 由于默认配置的存在，我们能够非常快速地展示如何添加新的 Listener，以 TCP Listener 为例，我们只需要在 `emqx.conf` 中添加以下一条配置即可：
 
-```
+```bash
 listener.tcp.example = 12345
 ```
 

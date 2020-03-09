@@ -453,8 +453,8 @@ cli-boxes@^1.0.0:
   resolved "https://registry.npm.taobao.org/cli-boxes/download/cli-boxes-1.0.0.tgz#4fa917c3e59c94a004cd61f8ee509da651687143"
 
 clipboard@^2.0.0:
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/clipboard/download/clipboard-2.0.4.tgz#836dafd66cf0fea5d71ce5d5b0bf6e958009112d"
+  version "2.0.6"
+  resolved "https://registry.npm.taobao.org/clipboard/download/clipboard-2.0.6.tgz#52921296eec0fdf77ead1749421b21c968647376"
   dependencies:
     good-listener "^1.2.2"
     select "^1.1.2"
@@ -1198,6 +1198,13 @@ gitbook-plugin-prism@^2.4.0:
     mkdirp "0.5.1"
     prismjs "^1.15.0"
 
+gitbook-plugin-scripts@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/gitbook-plugin-scripts/download/gitbook-plugin-scripts-1.0.2.tgz#adcf17f51f998c5b2f6a3b3886b74d10e2b004ac"
+  dependencies:
+    lodash "*"
+    tmp "0.0.28"
+
 gitbook-plugin-simple-page-toc@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npm.taobao.org/gitbook-plugin-simple-page-toc/download/gitbook-plugin-simple-page-toc-0.1.2.tgz#8e904c6256cf2ae5e50c0ca5fc9b4475909928bd"
@@ -1817,7 +1824,7 @@ lodash.clonedeep@~4.5.0:
 
 lodash.defaults@^4.0.1:
   version "4.2.0"
-  resolved "https://registry.npm.taobao.org/lodash.defaults/download/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
+  resolved "https://registry.npm.taobao.org/lodash.defaults/download/lodash.defaults-4.2.0.tgz?cache=0&sync_timestamp=1571657646879&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash.defaults%2Fdownload%2Flodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
 
 lodash.filter@^4.4.0:
   version "4.6.0"
@@ -1892,7 +1899,7 @@ lodash.without@~4.4.0:
   version "4.4.0"
   resolved "https://registry.npm.taobao.org/lodash.without/download/lodash.without-4.4.0.tgz#3cd4574a00b67bae373a94b748772640507b7aac"
 
-lodash@4, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.17.14, lodash@^4.17.4:
+lodash@*, lodash@4, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.17.14, lodash@^4.17.4:
   version "4.17.15"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz?cache=0&sync_timestamp=1571657272199&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash%2Fdownload%2Flodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
 
@@ -2695,7 +2702,7 @@ prepend-http@^1.0.1:
 
 prismjs@^1.15.0:
   version "1.19.0"
-  resolved "https://registry.npm.taobao.org/prismjs/download/prismjs-1.19.0.tgz#713afbd45c3baca4b321569f2df39e17e729d4dc"
+  resolved "https://registry.npm.taobao.org/prismjs/download/prismjs-1.19.0.tgz?cache=0&sync_timestamp=1578923018072&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fprismjs%2Fdownload%2Fprismjs-1.19.0.tgz#713afbd45c3baca4b321569f2df39e17e729d4dc"
   optionalDependencies:
     clipboard "^2.0.0"
 
@@ -3455,6 +3462,10 @@ svgexport@^0.4.0:
   version "3.2.4"
   resolved "https://registry.npm.taobao.org/symbol-tree/download/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
 
+syntax-highlighting@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/syntax-highlighting/download/syntax-highlighting-1.0.0.tgz#b8c2cd72f3edde57de85cd6d36dcf880d87b2237"
+
 tar-fs@^1.15.3:
   version "1.16.3"
   resolved "https://registry.npm.taobao.org/tar-fs/download/tar-fs-1.16.3.tgz#966a628841da2c4010406a82167cbd5e0c72d509"
@@ -3512,6 +3523,12 @@ timed-out@^4.0.0:
 tiny-emitter@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/tiny-emitter/download/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+
+tmp@0.0.28:
+  version "0.0.28"
+  resolved "https://registry.npm.taobao.org/tmp/download/tmp-0.0.28.tgz#172735b7f614ea7af39664fa84cf0de4e515d120"
+  dependencies:
+    os-tmpdir "~1.0.1"
 
 tmp@0.0.31:
   version "0.0.31"
