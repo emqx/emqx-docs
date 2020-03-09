@@ -1,17 +1,18 @@
 # SUMMARY
-* [概览]()
+
+* 概览
   * [EMQ X 消息服务器简介](introduction.md)
   * [EMQ X 消息服务器功能列表](introduction/checklist.md)
-* [开始使用]()
+* 开始使用
   * [安装](getting-started/installation.md)
   * [启动 EMQ X](getting-started/start.md)
-* [基础功能]()
+* 基础功能
   * [基本命令](using-emqx/command-line.md)
   * [目录结构](using-emqx/directory.md)
   * [配置说明](using-emqx/config.md)
   * [日志与追踪](using-emqx/log.md)
   * [Dashboard](using-emqx/dashboard.md)
-* [高级功能]()
+* 高级功能
   * [认证](advanced/auth.md)
   * [发布订阅 ACL](advanced/acl.md)
   * [命令行接口](advanced/cli.md)
@@ -33,7 +34,7 @@
     * [动作](./advanced/http-api.md#endpoint-actions)
     * [资源类型](./advanced/http-api.md#endpoint-resource-types)
     * [资源](./advanced/http-api.md#endpoint-resources)
-  * [规则引擎]()
+  * 规则引擎
     * [规则引擎](advanced/rule-engine.md)
     * [创建规则举例](advanced/rule-examples.md)
   * [分布集群](advanced/cluster.md)
@@ -54,7 +55,7 @@
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
   * [企业功能](advanced/enterprise.md)
-* [教程指南]()
+* 教程指南
   * [认证](tutorial/auth.md)
     * [用户名认证](tutorial/auth-username.md)
     * [Cliend ID 认证](tutorial/auth-clientid.md)
@@ -78,10 +79,10 @@
   * [Prometheus 监控告警](advanced/prometheus.md)
   * [性能测试](tutorial/benchmark.md)
 * [架构设计](design/index.md)
-* [SDK & Tools]()
+* SDK & Tools
   * [客户端库](development/client.md)
   * [其他资源](development/resource.md)
-* [FAQ]()
+* FAQ
   * [入门概念](faq/index.md)
   * [使用教程](faq/use-guide.md)
   * [安装部署](faq/deployment.md)

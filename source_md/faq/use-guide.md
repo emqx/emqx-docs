@@ -292,11 +292,11 @@ EMQ X 可以转发消息到标准 MQTT Broker，包括其他 MQTT 实现、公�
 **标签:** [*Mosquitto*](tags.md#mosquitto)  [*桥接*](tags.md#桥接)
 
 
-Mosquitto 可以配置转发消息到 EMQ X，请参考[数据桥接](https://developer.emqx.io/docs/tutorial/zh/bridge/bridge.html)。
+Mosquitto 可以配置转发消息到 EMQ X，请参考[数据桥接](../advanced/bridge.md)。
 
-> EMQ X 桥接相关的使用方式请参照 [EMQ X 桥接](https://docs.emqx.io/tutorial/v3/cn/bridge/bridge.html)
-
-
+{% hint style="info" %}
+> EMQ X 桥接相关的使用方式请参照 [EMQ X 桥接](../advanced/bridge.md)
+{% endhint %}
 
 
 ### 我想跟踪特定消息的发布和订阅过程，应该如何做？
