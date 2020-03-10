@@ -5,7 +5,7 @@ function fixTabs() {
     if (!tag) {
       return
     }
-    tag += '-' + i
+    tag = '#' + tag
     el.setAttribute('href', tag)
    })
 }

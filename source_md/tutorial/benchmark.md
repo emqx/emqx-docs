@@ -82,7 +82,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 例如，我们启动 10 个连接，分别每秒向主题 `t` 发送 100 条 Qos0 消息，其中每个消息体的大小为 `16` 字节大小：
 
-``` bash
+```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
 ```
 
@@ -94,7 +94,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 例如，我们启动 500 个连接，每个都以 Qos0 订阅 `t` 主题：
 
-``` bash
+```bash
 ./emqtt_bench sub -t t -h emqx-server -c 500
 ```
 

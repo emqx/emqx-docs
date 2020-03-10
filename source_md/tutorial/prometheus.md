@@ -22,8 +22,6 @@ EMQ X Broker 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，
 
 以 [Prometheus](https://prometheus.io) 为例：
 
-![Promethues Arch](assets/prometheus_arch.png)
-
 `emqx_statsd` 支持将数据推送至 Pushgateway 中，然后再由 Promethues Server 拉取进行存储。
 
 注意：`emqx_statsd` 不支持 Prometheus 的 Pull 操作。

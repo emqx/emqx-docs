@@ -284,7 +284,7 @@ ref:
 </div>
 
 
-{% content "client" %}
+{% content "clientTools" %}
 
 <div class="development-hardware-warp">
 

@@ -26,7 +26,7 @@ etc/acl.conf
 ```
 
 {% hint style="info" %}
-内置 ACL 优先级最低，可以被 ACL 插件覆盖，如需禁用全部注释即可。规则文件更改后需重启 EMQ X 以应用生效。
+内置 ACL 优先级最低，可以被 ACL 插件覆盖，如需禁用全部注释即可。规则文件更改后需重启 EMQ X Broker 以应用生效。
 {% endhint %}
 
 
@@ -91,7 +91,7 @@ etc/acl.conf
 
 在 `acl.conf` 修改完成后，并不会自动加载至 EMQ X Broker 系统。需要手动执行：
 
-``` bash
+```bash
 ./bin/emqx_ctl acl reload
 ```
 

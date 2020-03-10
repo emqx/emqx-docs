@@ -21,22 +21,26 @@ EMQ X Broker 周期性发布自身运行状态、消息统计、客户端上下�
 
 $SYS 主题路径以 `$SYS/brokers/{node}/` 开头。`{node}` 是指产生该 `事件 / 消息` 所在的节点名称，例如:
 
-```
+```bash
 $SYS/brokers/emqx@127.0.0.1/version
 $SYS/brokers/emqx@127.0.0.1/uptime
 ```
 
-默认只允许本机的 MQTT 客户端订阅 `$SYS` 主题，可通过 `etc/acl.config` 修改访问控制规则。
 
-`$SYS` 系统消息发布周期配置项：
+$SYS 系统消息发布周期配置项：
 
-```
+```bash
 broker.sys_interval = 1m
 ```
 
-`broker.sys_interval` 的数据类型为 `duration`。
+{% hint style="danger" %}
+EMQ X 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [内置 ACL](./acl-file.md) 修改发布订阅 ACL 规则。
 
-### 集群状态信息
+EMQ X Broker 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [Webhook](./webhook.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#endpoint-metrics) 获取。
+{% endhint %}
+
+
+## 集群状态信息
 
 | 主题                          | 说明                 |
 | ----------------------------- | -------------------- |
@@ -46,7 +50,7 @@ broker.sys_interval = 1m
 | $SYS/brokers/\${node}/datetime | EMQ X Broker 系统时间     |
 | $SYS/brokers/\${node}/sysdescr | EMQ X Broker 描述     |
 
-### 客户端上下线事件
+## 客户端上下线事件
 
 `$SYS` 主题前缀: `$SYS/brokers/${node}/clients/`
 
@@ -57,7 +61,7 @@ broker.sys_interval = 1m
 
 `connected` 事件消息的 Payload 解析成 JSON 格式如下:
 
-```
+```bash
 {
     "username":"undefined",
     "ts":1582687922392,
@@ -76,7 +80,7 @@ broker.sys_interval = 1m
 
 `disconnected` 事件消息的 Payload 解析成 JSON 格式如下:
 
-```
+```bash
 {
     "username":"undefined",
     "ts":1582688032203,
@@ -86,7 +90,7 @@ broker.sys_interval = 1m
 }
 ```
 
-### 系统统计 (Statistics)
+## 系统统计 (Statistics)
 
 系统主题前缀: `$SYS/brokers/${node}/stats/`
 
@@ -126,7 +130,7 @@ broker.sys_interval = 1m
 
 `topics/count` 和 `topics/max` 与 `routes/count` 和 `routes/max` 数值上是相等的。
 
-### 收发流量 / 报文 / 消息统计
+## 收发流量 / 报文 / 消息统计
 
 系统主题 (Topic) 前缀: `$SYS/brokers/${node}/metrics/`
 
@@ -188,7 +192,7 @@ broker.sys_interval = 1m
 | messages/qos2/expired  | QoS 2 过期消息总数  |
 | messages/qos2/dropped  | QoS 2 丢弃消息总数  |
 
-### Alarms - 系统告警
+## Alarms - 系统告警
 
 系统主题 (Topic) 前缀: `$SYS/brokers/${node}/alarms/`
 
@@ -197,7 +201,7 @@ broker.sys_interval = 1m
 | alert       | 新产生的告警 |
 | clear       | 被清除的告警 |
 
-### Sysmon - 系统监控
+## Sysmon - 系统监控
 
 系统主题 (Topic) 前缀: `$SYS/brokers/${node}/sysmon/`
 
