@@ -72,7 +72,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 例如，目前 EMQ X Broker 自动加载的插件有：
 
-``` erlang
+```erlang
 {emqx_management, true}.
 {emqx_recon, true}.
 {emqx_retainer, true}.
@@ -101,7 +101,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 参考 [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) 插件模版创建新的插件项目。
 
-备注：在 `<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQ X Broker 的插件。
+备注：在 `\<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQ X Broker 的插件。
 
 
 ### 创建 认证/访问控制 模块
@@ -109,7 +109,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 接入认证示例代码 - `emqx_auth_demo.erl`：
 
-``` erlang
+```erlang
 -module(emqx_auth_demo).
 
 -export([ init/1
@@ -129,7 +129,7 @@ description() -> "Auth Demo Module".
 
 访问控制示例代码 - `emqx_acl_demo.erl`：
 
-``` erlang
+```erlang
 -module(emqx_acl_demo).
 
 -include_lib("emqx/include/emqx.hrl").
@@ -157,7 +157,7 @@ description() -> "ACL Demo Module".
 
 挂载认证、访问控制钩子示例代码 - `emqx_plugin_template_app.erl`：
 
-``` erlang
+```erlang
 ok = emqx:hook('client.authenticate', fun emqx_auth_demo:check/2, []),
 ok = emqx:hook('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
 ```
@@ -169,7 +169,7 @@ ok = emqx:hook('client.check_acl', fun emqx_acl_demo:check_acl/5, []).
 
 钩子挂载示例代码 - `emqx_plugin_template.erl`：
 
-``` erlang
+```erlang
 load(Env) ->
     emqx:hook('client.connect',      {?MODULE, on_client_connect, [Env]}),
     emqx:hook('client.connack',      {?MODULE, on_client_connack, [Env]}),
@@ -197,7 +197,7 @@ load(Env) ->
 
 处理命令行命令示例代码 - `emqx_cli_demo.erl`：
 
-``` erlang
+```erlang
 -module(emqx_cli_demo).
 
 -export([cmd/1]).
@@ -211,13 +211,13 @@ cmd(_) ->
 
 注册命令行示例代码 - `emqx_plugin_template_app.erl`：
 
-``` erlang
+```erlang
 ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 ```
 
 插件加载后，使用`./bin/emqx_ctl` 验证新增的命令行：
 
-``` bash
+```bash
 ./bin/emqx_ctl cmd arg1 arg2
 ```
 
@@ -227,34 +227,34 @@ ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 
 1. Erlang 原生配置文件格式 - `${plugin_name}.config`：
    
-    ```erlang
-    [
-      {plugin_name, [
-        {key, value}
-      ]}
-    ].
-   ```
+```erlang
+[
+    {plugin_name, [
+    {key, value}
+    ]}
+].
+```
    
 2. sysctl 的 `k = v` 通用格式 - `${plugin_name}.conf`：
-   
-    ```erlang
-    plugin_name.key = value
-    ```
+
+```erlang
+plugin_name.key = value
+```
 
 注：`k = v` 格式配置需要插件开发者创建 `priv/plugin_name.schema` 映射文件。
 
 
 ### 编译和发布插件
 
-1. clone emqx-rel 项目：
+clone emqx-rel 项目：
 
-``` bash
+```bash
 git clone https://github.com/emqx/emqx-rel.git
 ```
 
-2. rebar.config 添加依赖：
+rebar.config 添加依赖：
 
-``` erlang
+```erlang
 {deps,
    [ {plugin_name, {git, "url_of_plugin", {tag, "tag_of_plugin"}}}
    , ....
@@ -263,9 +263,9 @@ git clone https://github.com/emqx/emqx-rel.git
 }
 ```
 
-3. rebar.config 中 relx 段落添加：
+rebar.config 中 relx 段落添加：
 
-``` erlang
+```erlang
 {relx,
     [...
     , ...

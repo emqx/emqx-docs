@@ -97,7 +97,7 @@ FIN-WAIT-2 Socket 超时设置:
 
 优化设置 Erlang 虚拟机启动参数，配置文件 emqx/etc/emqx.conf:
 
-``` sourceCode properties
+```bash
 ## Erlang Process Limit
 node.process_limit = 2097152
 
@@ -109,7 +109,7 @@ node.max_ports = 1048576
 
 设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。配置文件 emqx/etc/emqx.conf:
 
-``` sourceCode properties
+```bash
 ## TCP Listener
 listener.tcp.external = 0.0.0.0:1883
 listener.tcp.external.acceptors = 64

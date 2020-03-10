@@ -593,7 +593,7 @@ cpu/load15              : 2.36
 
 查询 VM 内存:
 
-```
+```bash
 $ ./bin/emqx_ctl vm memory
 memory/total            : 23967736
 memory/processes        : 3594216
@@ -610,7 +610,7 @@ memory/ets              : 1082848
 
 查询 Erlang 进程数量及其限制:
 
-```
+```bash
 $ ./bin/emqx_ctl vm process
 process/limit           : 2097152
 process/count           : 314
@@ -620,7 +620,7 @@ process/count           : 314
 
 查询文件描述符数量及其限制:
 
-```
+```bash
 $ ./bin/emqx_ctl vm io
 io/max_fds              : 10240
 io/active_fds           : 0
@@ -630,7 +630,7 @@ io/active_fds           : 0
 
 查询端口占用数量及其限制:
 
-```
+```bash
 $ ./bin/emqx_ctl vm ports
 ports/count           : 18
 ports/limit           : 1048576
@@ -658,7 +658,7 @@ log 命令用于设置日志等级。访问 [Documentation of logger](http://erl
 
 设置主日志等级和所有 Handlers 日志等级:
 
-```
+```bash
 $ ./bin/emqx_ctl log set-level debug
 debug
 ```
@@ -667,7 +667,7 @@ debug
 
 查看主日志等级:
 
-```
+```bash
 $ ./bin/emqx_ctl log primary-level
 debug
 ```
@@ -676,7 +676,7 @@ debug
 
 设置主日志等级:
 
-```
+```bash
 $ ./bin/emqx_ctl log primary-level info
 info
 ```
@@ -685,7 +685,7 @@ info
 
 查看当前安装的所有 Hanlders:
 
-```
+```bash
 $ ./bin/emqx_ctl log handlers list
 LogHandler (id=emqx_logger_handler, level=debug, destination=unknown)
 LogHandler (id=file, level=debug, destination=log/emqx.log)
@@ -696,7 +696,7 @@ LogHandler (id=default, level=debug, destination=console)
 
 设置指定 Hanlder 的日志等级:
 
-```
+```bash
 $ ./bin/emqx_ctl log handlers set-level emqx_logger_handler error
 error
 ```
@@ -717,7 +717,7 @@ trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，
 
 开启 Client 追踪:
 
-```
+```bash
 $ ./bin/emqx_ctl log primary-level debug
 debug
     
@@ -732,7 +732,7 @@ trace clientid clientid2 successfully
 
 关闭 Client 追踪:
 
-```
+```bash
 $ ./bin/emqx_ctl trace stop client clientid
 stop tracing clientid clientid successfully
 ```
@@ -741,7 +741,7 @@ stop tracing clientid clientid successfully
 
 开启 Topic 追踪:
 
-```
+```bash
 $ ./bin/emqx_ctl log primary-level debug
 debug
 
@@ -756,7 +756,7 @@ trace topic topic2 successfully
 
 关闭 Topic 追踪:
 
-```
+```bash
 $ ./bin/emqx_ctl trace topic topic off
 stop tracing topic topic successfully
 ```
@@ -765,7 +765,7 @@ stop tracing topic topic successfully
 
 列出所有开启的追踪:
 
-```
+```bash
 $ ./bin/emqx_ctl trace list
 Trace (clientid=clientid2, level=error, destination="log/clientid2_trace.log")
 Trace (topic=topic2, level=error, destination="log/topic2_trace.log")
@@ -784,7 +784,7 @@ listeners 命令用于查询开启的 TCP 服务监听器。
 
 查询开启的 TCP 服务监听器:
 
-```
+```bash
 $ ./bin/emqx_ctl listeners
 listener on mqtt:ssl:8883
     acceptors       : 16
@@ -836,7 +836,7 @@ listener 参数说明:
 
 停止监听端口:
 
-```
+```bash
 $ ./bin/emqx_ctl listeners stop mqtt:tcp 0.0.0.0:1883
 Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
 ```
@@ -869,7 +869,7 @@ EMQ X Broker 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps
 
 显示保留消息的数量:
 
-```
+```bash
 $ ./bin/emqx_ctl retainer info
 retained/total: 3
 ```
@@ -878,7 +878,7 @@ retained/total: 3
 
 显示当前存储的保留消息的所有主题:
 
-```
+```bash
 $ ./bin/emqx_ctl retainer topics
 $SYS/brokers/emqx@127.0.0.1/version
 $SYS/brokers/emqx@127.0.0.1/sysdescr
@@ -889,7 +889,7 @@ $SYS/brokers
 
 清除所有保留的消息:
 
-```
+```bash
 $ ./bin/emqx_ctl retainer clean
 Cleaned 3 retained messages
 ```
@@ -898,7 +898,7 @@ Cleaned 3 retained messages
 
 清除指定的主题下的保留的消息:
 
-```
+```bash
 $ ./bin/emqx_ctl retainer clean topic
 Cleaned 1 retained messages
 ```
@@ -917,7 +917,7 @@ Cleaned 1 retained messages
 
 创建 admin 账户:
 
-```
+```bash
 $ ./bin/emqx_ctl admins add root public test
 ok
 ```
@@ -926,7 +926,7 @@ ok
 
 重置 admin 账户密码:
 
-```
+```bash
 $ ./bin/emqx_ctl admins passwd root private
 ok
 ```
@@ -935,7 +935,7 @@ ok
 
 删除 admin 账户:
 
-```
+```bash
 $ ./bin/emqx_ctl admins del root
 ok
 ```

@@ -142,3 +142,7 @@ table thead tr:first-child {
 table tr:nth-child(2n) {
   background-color: #fff !important;
 }
+
+p .token.punctuation {
+  color: #333;
+}

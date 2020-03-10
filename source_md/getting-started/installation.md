@@ -330,7 +330,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
     + RPM 包:
 
-    	``` shell
+    	```shell
     	$ sudo rpm -ivh emqx-cenots7-v4.0.0.x86_64.rpm
     	```
     	
@@ -398,7 +398,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
   
 2.  解压程序包
   
-    ``` shell
+    ```shell
     $ unzip emqx-ubuntu18.04-v4.0.0.zip
     ```
 

@@ -19,7 +19,7 @@ ref: undefined
 
 共享订阅是在多个订阅者之间实现负载均衡的订阅方式：
 
-```
+```bash
                                                    [subscriber1] got msg1
              msg1, msg2, msg3                    /
 [publisher]  ---------------->  "$share/g/topic"  -- [subscriber2] got msg2
@@ -34,6 +34,7 @@ ref: undefined
 | $queue/t/1      | $queue/     | t/1        |
 | $shared/abc/t/1 | $shared/abc | t/1        |
 
+
 ### 带群组的共享订阅
 
 以 `$share/<group-name>` 为前缀的共享订阅是带群组的共享订阅：
@@ -47,7 +48,7 @@ group-name 可以为任意字符串，属于同一个群组内部的订阅者将
 - s1，s2，s3 中只有一个会收到 msg1
 - s4，s5 中只有一个会收到 msg1
 
-```
+```bash
                                        [s1]
            msg1                      /
 [emqx]  ------>  "$share/g1/topic"    - [s2] got msg1
@@ -63,7 +64,7 @@ group-name 可以为任意字符串，属于同一个群组内部的订阅者将
 
 以 `$queue/` 为前缀的共享订阅是不带群组的共享订阅。它是 `$share` 订阅的一种特例，相当与所有订阅者都在一个订阅组里面：
 
-```
+```bash
                                        [s1] got msg1
         msg1,msg2,msg3               /
 [emqx]  --------------->  "$queue/topic" - [s2] got msg2
@@ -71,13 +72,28 @@ group-name 可以为任意字符串，属于同一个群组内部的订阅者将
                                        [s3] got msg3
 ```
 
-### 共享订阅的均衡策略
+### 均衡策略与派发 Ack 配置
 
-EMQ X Broker 的共享订阅支持以下几种均衡策略：
+EMQ X Broker 的共享订阅支持均衡策略与派发 Ack 配置：
 
-|    策略     |             描述             |
+```bash
+# etc/emqx.conf
+
+# 均衡策略
+broker.shared_subscription_strategy = random
+
+# 适用于 QoS1 QoS2 消息，启用时在其中一个组离线时，将派发给另一个组
+broker.shared_dispatch_ack_enabled = false
+```
+<!-- TODO 待确认 -->
+
+|  均衡策略    |             描述             |
 | :---------- | :--------------------------- |
 | random      | 在所有订阅者中随机选择       |
 | round_robin | 按照订阅顺序                 |
 | sticky      | 一直发往上次选取的订阅者     |
 | hash        | 按照发布者 ClientID 的哈希值 |
+
+{% hint style="info" %}
+无论是单客户端订阅还是共享订阅都要注意客户端性能与消息接收速率，否则会引发消息堆积、客户端崩溃等错误。
+{% endhint %}

@@ -34,7 +34,7 @@ emqx_auth_http 插件同时包含认证功能，可通过注释禁用。
 
 ## ACL 授权原理
 
-EMQ X 在设备发布、订阅事件中使用当前客户端相关信息作为参数，向用户自定义的认证服务发起请求权限，通过返回的 HTTP **响应状态码** (HTTP statusCode) 来处理 ACL 授权请求。
+EMQ X Broker 在设备发布、订阅事件中使用当前客户端相关信息作为参数，向用户自定义的认证服务发起请求权限，通过返回的 HTTP **响应状态码** (HTTP statusCode) 来处理 ACL 授权请求。
 
  - 无权限：API 返回 4xx 状态码
  - 授权成功：API 返回 200 状态码
@@ -65,7 +65,7 @@ auth.http.request.retry_interval = 1s
 auth.http.request.retry_backoff = 2.0
 ```
 
-进行发布、订阅认证时，EMQ X 将使用当前客户端信息填充并发起用户配置的 ACL 授权查询请求，查询出该客户端在 HTTP 服务器端的授权数据。
+进行发布、订阅认证时，EMQ X Broker 将使用当前客户端信息填充并发起用户配置的 ACL 授权查询请求，查询出该客户端在 HTTP 服务器端的授权数据。
 
 ## superuser 请求
 
@@ -107,7 +107,7 @@ auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,
 
 HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式传递；POST、PUT 请求则将请求参数以普通表单形式提交（content-type 为 x-www-form-urlencoded）。
 
-你可以在认证请求中使用以下占位符，请求时 EMQ X 将自动填充为客户端信息：
+你可以在认证请求中使用以下占位符，请求时 EMQ X Broker 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID

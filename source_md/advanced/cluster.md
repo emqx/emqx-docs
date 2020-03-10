@@ -28,36 +28,46 @@ Erlang/OTP 语言平台的分布式程序，由分布互联的 Erlang 运行时�
 
 Erlang 节点由唯一的节点名称标识，节点名称由 `@` 分隔的两部分组成:
 
-    <name>@<ip-address>
+```bash
+<name>@<ip-address>
+```
 
 节点间通过节点名称进行通信寻址。例如在本机启动四个 shell 终端，然后使用 `-name` 参数分别启动四个 Erlang 节点:
 
-    erl -name node1@127.0.0.1 -setcookie my_nodes
-    erl -name node2@127.0.0.1 -setcookie my_nodes
-    erl -name node3@127.0.0.1 -setcookie my_nodes
-    erl -name node4@127.0.0.1 -setcookie my_nodes
+```bash
+erl -name node1@127.0.0.1 -setcookie my_nodes
+erl -name node2@127.0.0.1 -setcookie my_nodes
+erl -name node3@127.0.0.1 -setcookie my_nodes
+erl -name node4@127.0.0.1 -setcookie my_nodes
+```
 
 使用 `node().` 可查看本节点名，使用 `nodes().` 可查看已与当前节点建立连接的其他节点。我们现在到 'node1@127.0.0.1' 的控制台下，查看当前节点名和已连接的节点:
 
-    (node1@127.0.0.1) 4> node().
-    'node1@127.0.0.1'
+```bash
+(node1@127.0.0.1) 4> node().
+'node1@127.0.0.1'
 
-    (node1@127.0.0.1) 4> nodes().
-    []
+(node1@127.0.0.1) 4> nodes().
+[]
+```
 
 然后我们让 node1 发起与其他节点的连接:
 
-    (node1@127.0.0.1) 1> net_kernel:connect_node('node2@127.0.0.1').
-    true
-    (node1@127.0.0.1) 2> net_kernel:connect_node('node3@127.0.0.1').
-    true
-    (node1@127.0.0.1) 3> net_kernel:connect_node('node4@127.0.0.1').
-    true
+```bash
+(node1@127.0.0.1) 1> net_kernel:connect_node('node2@127.0.0.1').
+true
+(node1@127.0.0.1) 2> net_kernel:connect_node('node3@127.0.0.1').
+true
+(node1@127.0.0.1) 3> net_kernel:connect_node('node4@127.0.0.1').
+true
+```
 
 现在再次可查看已与 node1 建立连接的其他节点:
 
-    (node1@127.0.0.1) 4> nodes().
-    ['node2@127.0.0.1','node3@127.0.0.1','node4@127.0.0.1']
+```bash
+(node1@127.0.0.1) 4> nodes().
+['node2@127.0.0.1','node3@127.0.0.1','node4@127.0.0.1']
+```
 
 可以看到 node2、node3、node4 都已与 node1 建立了分布式连接，四个节点组成了一个集群。注意每当一个新的节点加入集群时，它会与集群中所有的节点都建立一个 TCP 连接。至此，四个节点完成了如下图所示的网状结构:
 
@@ -91,22 +101,26 @@ EMQ X Broker 分布式的基本功能是将消息转发和投递给各节点上�
 
 MQTT 客户端订阅主题时，EMQ X Broker 会维护主题(Topic) -\> 订阅者(Subscriber) 映射的**订阅表**。订阅表只存在于订阅者所在的 EMQ X Broker 节点上，例如:
 
-   node1:
+```bash
+node1:
 
-     topic1 -> client1, client2
-     topic2 -> client3
+    topic1 -> client1, client2
+    topic2 -> client3
 
-   node2:
+node2:
 
-     topic1 -> client4
+    topic1 -> client4
+```
 
 ### 路由表: 主题 - 节点 {#emqx-distribution-routes}
 
 而同一集群的所有节点，都会**复制**一份主题(Topic) -\> 节点(Node) 映射的**路由表**，例如:
 
-    topic1 -> node1, node2
-    topic2 -> node3
-    topic3 -> node2, node4
+```bash
+topic1 -> node1, node2
+topic2 -> node3
+topic3 -> node2, node4
+```
 
 ### 主题树: 带统配符的主题匹配 {#emqx-distribution-trie}
 
@@ -162,7 +176,7 @@ EMQ X 支持多种节点发现策略:
 
 默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join \<Node\> 命令加入:
 
-```
+```bash
 cluster.discovery = manual
 ```
 
@@ -170,7 +184,7 @@ cluster.discovery = manual
 
 配置固定的节点列表，自动发现并创建集群:
 
-```
+```bash
 cluster.discovery = static
 cluster.static.seeds = emqx1@127.0.0.1,emqx2@127.0.0.1
 ```
@@ -179,7 +193,7 @@ cluster.static.seeds = emqx1@127.0.0.1,emqx2@127.0.0.1
 
 基于 UDP 组播自动发现并创建集群:
 
-```
+```bash
 cluster.discovery = mcast
 cluster.mcast.addr = 239.192.0.1
 cluster.mcast.ports = 4369,4370
@@ -192,7 +206,7 @@ cluster.mcast.loop = on
 
 基于 DNS A 记录自动发现并创建集群:
 
-```
+```bash
 cluster.discovery = dns
 cluster.dns.name = localhost
 cluster.dns.app  = ekka
@@ -202,7 +216,7 @@ cluster.dns.app  = ekka
 
 基于 [etcd](https://coreos.com/etcd/) 自动发现并创建集群:
 
-```
+```bash
 cluster.discovery = etcd
 cluster.etcd.server = http://127.0.0.1:2379
 cluster.etcd.prefix = emqcl
@@ -213,7 +227,7 @@ cluster.etcd.node_ttl = 1m
 
 [Kubernetes](https://kubernetes.io/) 下自动发现并创建集群:
 
-```
+```bash
 cluster.discovery = k8s
 cluster.k8s.apiserver = http://10.110.111.204:8080
 cluster.k8s.service_name = ekka
@@ -236,13 +250,17 @@ cluster.k8s.app_name = ekka
 
 emqx/etc/emqx.conf:
 
-    node.name = emqx@s1.emqx.io
-    或
-    node.name = emqx@192.168.0.10
+```bash
+node.name = emqx@s1.emqx.io
+# 或
+node.name = emqx@192.168.0.10
+```
 
 也可通过环境变量:
 
-    export EMQX_NODE_NAME=emqx@s1.emqx.io && ./bin/emqx start
+```bash
+export EMQX_NODE_NAME=emqx@s1.emqx.io && ./bin/emqx start
+```
 
 **注意:** 节点启动加入集群后，节点名称不能变更。
 
@@ -250,31 +268,39 @@ emqx/etc/emqx.conf:
 
 emqx/etc/emqx.conf:
 
-    node.name = emqx@s2.emqx.io
-    或
-    node.name = emqx@192.168.0.20
+```bash
+node.name = emqx@s2.emqx.io
+# 或
+node.name = emqx@192.168.0.20
+```
 
 #### 节点加入集群
 
 启动两台节点后，在 s2.emqx.io 上执行:
 
-    $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
+```bash
+$ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
 
-    Join the cluster successfully.
-    Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
+Join the cluster successfully.
+Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
+```
 
 或者在 s1.emqx.io 上执行:
 
-    $ ./bin/emqx_ctl cluster join emqx@s2.emqx.io
+```bash
+$ ./bin/emqx_ctl cluster join emqx@s2.emqx.io
 
-    Join the cluster successfully.
-    Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
+Join the cluster successfully.
+Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
+```
 
 在任意节点上查询集群状态:
 
-    $ ./bin/emqx_ctl cluster status
+```bash
+$ ./bin/emqx_ctl cluster status
 
-    Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
+Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
+```
 
 #### 退出集群
 
@@ -285,17 +311,21 @@ emqx/etc/emqx.conf:
 
 让 emqx@s2.emqx.io 主动退出集群:
 
-    $ ./bin/emqx_ctl cluster leave
+```bash
+$ ./bin/emqx_ctl cluster leave
+```
 
 或在 s1.emqx.io 上，从集群删除 emqx@s2.emqx.io 节点:
 
-    $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+```bash
+$ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+```
 
 ## 集群脑裂与自动愈合 {#emqx-cluster-autoheal}
 
 *EMQ X* 支持集群脑裂自动恢复(Network Partition Autoheal)，可在 `etc/emqx.conf` 中配置:
 
-```
+```bash
 cluster.autoheal = on
 ```
 
@@ -311,7 +341,7 @@ cluster.autoheal = on
 
 *EMQ X* 支持从集群自动删除宕机节点 (Autoclean)，可在 `etc/emqx.conf` 中配置:
 
-```
+```bash
 cluster.autoclean = 5m
 ```
 
@@ -322,8 +352,8 @@ cluster.autoclean = 5m
 
 防火墙设置后，需要在 `emqx/etc/emqx.conf` 中配置相同的端口段:
 
-```
-    ## Distributed node port range
-    node.dist_listen_min = 6369
-    node.dist_listen_max = 7369
+```bash
+## Distributed node port range
+node.dist_listen_min = 6369
+node.dist_listen_max = 7369
 ```
