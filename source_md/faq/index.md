@@ -193,7 +193,9 @@ WebSocket 是一种在基于 HTTP 协议上支持全双工通讯的协议，通�
 
 以 Redis 数据库为例，代理订阅在 EMQ X 上使用方式请参考 [Redis 实现客户端代理订阅](https://docs.emqx.io/tutorial/v3/cn/backend/redis.html#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%A3%E7%90%86%E8%AE%A2%E9%98%85)
 
-> 注：目前 EMQ X 企业版支持代理订阅。
+{% hint style="info" %}
+注：目前 EMQ X 企业版支持代理订阅。
+{% endhint %}
 
 
 

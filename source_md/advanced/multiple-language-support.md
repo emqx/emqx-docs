@@ -42,7 +42,7 @@ Lua 的支持由 [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) 实现�
 
 以控制消息的发送内容为例，新增文件 `data/script/test.lua`：
 
-``` lua
+```lua
 function on_message_publish(clientid, username, topic, payload, qos, retain)
     return topic, "hello", qos, retain
 end
@@ -63,7 +63,7 @@ end
 
 首先确保 `emqx_lua_hook` 插件已经启动：
 
-``` bash
+```bash
 ./bin/emqx_ctl plugins load emqx_lua_hook
 ```
 
@@ -87,28 +87,28 @@ end
 
 加载指定 Lua 脚本：
 
-``` bash
+```bash
 ## Script：脚本文件名称
 luahook load <Script>
 ```
 
 卸载指定 Lua 脚本：
-``` bash
+```bash
 luahook unload <Script>
 ```
 
 重新加载指定 Lua 脚本：
-``` bash
+```bash
 luahook reload <Script>
 ```
 
 加载指定 Lua 脚本，并设置其跟随 `emqx_lua_hook` 启动时一同启动：
-``` bash
+```bash
 luahook enable <Script>
 ```
 
 卸载指定 Lua 脚本，并取消跟随 `emqx_lua_hook` 一同启动：
-``` bash
+```bash
 luahook disable <Script>
 ```
 

@@ -462,6 +462,7 @@ pip install paho-mqtt
 代码样例：
 
 ```python
+
 import paho.mqtt.client as mqtt
 
 
@@ -486,6 +487,4 @@ client.connect('broker.emqx.io', 1883, 60)
 client.publish('emqtt',payload='Hello World',qos=0)
 
 client.loop_forever()
-
 ```
-

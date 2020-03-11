@@ -173,7 +173,7 @@ db.mqtt_acl.insert({
 
 ## 超级用户查询（super_query）
 
-进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户查询，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询。
+进行 ACL 鉴权时，EMQ X Broker 将使用当前客户端信息填充并执行用户配置的超级用户查询，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询。
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -201,7 +201,7 @@ db.mqtt_user.find({
 })
 ```
 
-你可以在查询条件中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在查询条件中使用以下占位符，执行时 EMQ X Broker 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
@@ -218,7 +218,7 @@ db.mqtt_user.find({
 
 ## ACL 查询（acl_query）
 
-进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户查询，如果没有启用超级用户查询或客户端不是超级用户，则使用 ACL 查询 查询出该客户端在数据库中的 ACL 规则。
+进行 ACL 鉴权时，EMQ X Broker 将使用当前客户端信息填充并执行用户配置的超级用户查询，如果没有启用超级用户查询或客户端不是超级用户，则使用 ACL 查询 查询出该客户端在数据库中的 ACL 规则。
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -261,7 +261,7 @@ db.mqtt_acl.find({
 ```
 
 
-你可以在 ACL 查询中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在 ACL 查询中使用以下占位符，执行时 EMQ X Broker 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID

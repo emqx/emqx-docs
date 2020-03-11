@@ -28,22 +28,21 @@ EMQ X Broker 目前支持的系统:
 + Ubuntu 14.04
 + Ubuntu 16.04
 + Ubuntu 18.04
-+ MacOS 10.13
-+ MacOS 10.14
-+ MacOS 10.15
++ macOS 10.13
++ macOS 10.14
++ macOS 10.15
 + Windows Server 2019
 
-<!-- shell 脚本一键安装 (Linux) % start -->
+{% tabs shell="Shell 脚本安装", packages="包管理器安装", binary="二进制包安装", zip="ZIP 压缩包安装", homebrew="Homebrew 安装", docker="Docker 运行", helm="Helm 安装并集群", build="源码编译安装" %}
 
-## shell 脚本一键安装 (Linux)
+{% content "shell" %}
+## Shell 脚本一键安装 (Linux)
 
 ```bash
 curl https://repos.emqx.io/install_emqx.sh | bash
 ```
 
-<!-- shell 脚本一键安装 (Linux) % end -->
-
-<!-- 包管理器安装 (Linux) % start -->
+{% content "packages" %}
 ## 包管理器安装 (Linux)
 
 #### Centos
@@ -67,8 +66,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo yum install emqx
     ```
     
-    >    如果提示接受 GPG 密钥，请确认密钥符合 fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64
-    >    0d53，如果符合，则接受该指纹。
+    如果提示接受 GPG 密钥，请确认密钥符合 fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53，并接受该指纹。
     
 4.  安装特定版本的 EMQ X Broker
 
@@ -323,9 +321,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo zypper rm emqx
     ```
 
-<!-- 包管理器安装 (Linux) % end -->
-
-<!-- 二进制包安装 (Linux) % start -->
+{% content "binary" %}
 ## 二进制包安装 (Linux)
 
 1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X Broker 版本的二进制包。
@@ -334,7 +330,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
     + RPM 包:
 
-    	``` shell
+    	```shell
     	$ sudo rpm -ivh emqx-cenots7-v4.0.0.x86_64.rpm
     	```
     	
@@ -395,16 +391,14 @@ curl https://repos.emqx.io/install_emqx.sh | bash
       $ rpm -e emqx
       ```
 
-<!-- 二进制包安装 (Linux) % end -->
-
-<!-- ZIP 压缩包安装 (Linux、MaxOS、Windows) % start -->
+{% content "zip" %}
 ## ZIP 压缩包安装 (Linux、MaxOS、Windows)
 
 1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X Broker 版本的 zip 包。
   
 2.  解压程序包
   
-    ``` shell
+    ```shell
     $ unzip emqx-ubuntu18.04-v4.0.0.zip
     ```
 
@@ -430,9 +424,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
     直接删除 EMQ X Broker 目录即可
 
-<!-- ZIP 压缩包安装 (Linux、MaxOS、Windows) % end -->
-
-<!-- Homebrew 安装 (MacOS) % start -->
+{% content "homebrew" %}
 ## 通过 Homebrew 安装 (MacOS)
 
 1.  添加 EMQ X Broker 的 tap
@@ -471,9 +463,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ brew uninstall emqx
     ```
 
-<!-- Homebrew 安装 (MacOS) % end -->
-
-<!-- 通过 Docker 运行 (包含简单的 docker-compose 集群) % start -->
+{% content "docker" %}
 ## 通过 Docker 运行 (包含简单的 docker-compose 集群)
 
 #### 运行单个容器
@@ -581,9 +571,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 更多关于 EMQ X Broker Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
-<!-- 通过 Docker 运行 (包含简单的 docker-compose 集群) % end -->
-
-<!-- 通过 Helkm 安装并集群 (K8S、K3S) % start -->
+{% content "helm" %}
 ## 通过 Helkm 安装并集群 (K8S、K3S)
 
 1. 添加 helm 仓库
@@ -626,40 +614,39 @@ curl https://repos.emqx.io/install_emqx.sh | bash
                     stopped_nodes => []}
   ```
 
-<!-- 通过 Helkm 安装并集群 (K8S、K3S) % end -->
+{% content "build" %}
 
-<!-- 源码编译安装 % start -->
 ## 源码编译安装
 
 1. 获取源码
 
-    ``` sourceCode bash
-    $ git clone -b v4.0.0 https://github.com/emqx/emqx-rel.git
-    ```
+```bash
+$ git clone -b v4.0.0 https://github.com/emqx/emqx-rel.git
+```
 
-2.  设置环境变量
+2. 设置环境变量
+
+```bash
+$ export EMQX_DEPS_DEFAULT_VSN=v4.0.0
+```
+
+3. 编译
+
+```bash
+$ cd emqx-rel && make
+```
+
+4. 启动 EMQ X Broker
   
-    ``` sourceCode bash
-    $ export EMQX_DEPS_DEFAULT_VSN=v4.0.0
-    ```
+```bash
+$ cd _build/emqx-rel/_rel/emqx
 
-3.  编译
-  
-    ``` sourceCode bash
-    $ cd emqx-rel && make
-    ```
+$ ./bin/emqx start
+emqx 4.0.0 is started successfully!
 
-4.  启动 EMQ X Broker
-  
-    ``` sourceCode bash
-    $ cd _build/emqx-rel/_rel/emqx
-    
-    $ ./bin/emqx start
-    emqx 4.0.0 is started successfully!
-    
-    $ ./bin/emqx_ctl status
-    Node 'emqx@127.0.0.1' is started
-    emqx v4.0.0 is running
-    ```
+$ ./bin/emqx_ctl status
+Node 'emqx@127.0.0.1' is started
+emqx v4.0.0 is running
+```
 
-<!-- 源码编译安装 % end -->
+{% endtabs %}

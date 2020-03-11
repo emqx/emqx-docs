@@ -40,7 +40,7 @@ emqx_auth_username
 auth.user.password_hash = sha256
 ```
 
-配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQ X 内置数据库中。
+配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQ X Broker 内置数据库中。
 
 
 ## 预设认证数据
@@ -59,11 +59,11 @@ auth.user.2.username = wivwiv
 auth.user.2.password = public
 ```
 
-插件启动时将读取预设认证数据并加载到 EMQ X 内置数据库中，节点上的认证数据会在此阶段同步至集群中。
+插件启动时将读取预设认证数据并加载到 EMQ X Broker 内置数据库中，节点上的认证数据会在此阶段同步至集群中。
 
 <!-- TODO 补充加载规则 -->
 
-{% hint style="waring" %} 
+{% hint style="danger" %} 
 
 预设认证数据在配置文件中使用了明文密码，出于安全性与可维护性考虑应当避免使用该功能。
 
@@ -174,6 +174,3 @@ DELETE api/v4/auth_username/${username}
 
 
 <!-- TODO: 引用 HTTP API -->
-<!-- {% hint style="info" %}  -->
-<!-- 详见 HTTP API 详细信息请见 [HTTP API](../rest_api.md) -->
-<!-- {% endhint %} -->

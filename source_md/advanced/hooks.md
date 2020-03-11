@@ -130,12 +130,11 @@ EMQ X Broker 以一个客户端在其生命周期内的关键活动为基础，�
 | message.dropped      | 消息丢弃     | 发布出的消息被丢弃后                                  |
 
 
-注：
-
+{% hint style="info" %}
 - **会话被移除** 是指：当客户端以 `清除会话` 的方式登入时，如果服务端中已存在该客户端的会话，那么旧的会话就会被丢弃。
 
 - **会话被接管** 是指：当客户端以 `保留会话` 的方式登入时，如果服务端中已存在该客户端的会话，那么旧的会话就会被新的连接所接管。
-
+{% endhint %}
 
 ### 挂载与取消挂载
 
@@ -143,7 +142,7 @@ EMQ X Broker 提供了 API 进行钩子的挂载与取消挂载的操作。
 
 **挂载**：
 
-``` erlang
+```erlang
 %% Name: 钩子的名称（挂载点）如：'client.authenticate'
 %% {Module, Function, Args}: 回调函数的模块、方法、和附加参数
 %% Priority：优先级，整数; 不提供则默认为 0
@@ -154,7 +153,7 @@ emqx:hook(Name, {Module, Function, Args}, Priority).
 
 **取消挂载**：
 
-``` erlang
+```erlang
 %% Name: 钩子的名称（挂载点）如：'client.authenticate'
 %% {Module, Function}: 回调函数的模块、方法
 emqx:unhook(Name, {Module, Function}).
