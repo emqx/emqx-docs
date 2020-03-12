@@ -17,7 +17,7 @@ ref: undefined
 
 # 性能测试
 
-[emqtt_bench](https://github.com/emqx/emqtt_bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议性能测试工具。
+[emqtt_bench](https://github.com/emqx/emqtt_bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议性能测试工具，如需大规模场景、深度定制化的测试服务推荐使用 EMQ 合作伙伴 [XMeter](https://www.xmeter.net/) 测试服务。
 
 ## 编译安装
 
