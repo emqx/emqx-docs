@@ -1,5 +1,4 @@
-build
-.DS_Store
-*.swp
-*.swo
-.vscode
+node_modules
+_book
+yarn-error.log
+book.pdf

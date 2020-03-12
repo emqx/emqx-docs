@@ -6,7 +6,8 @@
   "scripts": {
     "init": "npx gitbook install",
     "docs": "npx gitbook serve",
-    "lint": "node _scripts/stylelint.js"
+    "lint": "node _scripts/stylelint.js",
+    "html": "npx gitbook build && node _scripts/after_build.js"
   },
   "dependencies": {
     "dateformat": "^3.0.3",

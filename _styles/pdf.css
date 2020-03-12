@@ -146,3 +146,23 @@ table tr:nth-child(2n) {
 p .token.punctuation {
   color: #333;
 }
+
+#gitalk-container {
+  display: none;
+}
+
+.hide-wrap {
+  border-top: 1px solid rgba(0,0,0,.07);
+  margin: 18px auto;
+  padding: 20px 0 0 0;
+}
+
+.hide-wrap button {
+  border: 1px solid #333;
+  background-color: #fff;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px; 
+  font-size: 14px;
+  outline: none;
+}
