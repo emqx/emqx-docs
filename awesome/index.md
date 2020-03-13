@@ -25,31 +25,34 @@ ref:
 
 ## 官方资源
 
-  - [官方网站](https://www.emqx.io?spm=docs)
-  - [官方博客](https://www.emqx.io/cn/blog?spm=docs)
-  - [GitHub Repo](https://github.com/emqx/emqx)
+  - [EMQ 官方网站](https://www.emqx.io?spm=docs)
+  - [EMQ 官方博客](https://www.emqx.io/cn/blog?spm=docs)
+  - [EMQ X GitHub 仓库](https://github.com/emqx/emqx)
 
 ## 社区、讨论、贡献和支持
 
 你可通过以下途径与 EMQ 社区及开发者联系：
 
-  - [EMQX Slack](http://emqx.slack.com)
+  - [EMQ X Slack](http://emqx.slack.com)
   - [Twitter](https://twitter.com/emqtt)
   - [Forum](https://groups.google.com/d/forum/emqtt)
-  - [Blog](https://medium.com/@emqtt)
+  - [Medium](https://medium.com/@emqtt)
   - [Reddit](https://www.reddit.com/r/emqx/)
 
 欢迎你将任何 bug、问题和功能请求提交到 [emqx/emqx](https://github.com/emqx/emqx/issues)。
 
 
-## 使用 EMQ X 的项目
+## 使用 EMQ X Broker 的项目
+
+以下是提交投稿的使用 EMQ X Broker 的开源项目，未提交项目/商业项目不在此列：
 
 - [ActorCloud](https://github.com/emqx/ActorCloud) - 开源一站式物联网平台服务
-- [EMQ MQTT Cloud](https://cloud.emqx.io?spm=docs) - EMQ 公有云服务
 
 ## 中文教程
 
-暂无，欢迎[提交投稿](https://github.com/emqx/emqx-docs-cn)
+EMQ X Broker 系列教程及 Erlang/IoT 相关博客、视频站点，欢迎留言或 [Issues 投稿](https://github.com/emqx/emqx-docs-cn)。
+
+- 暂无
 
 ## MQTT 规范
 

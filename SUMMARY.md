@@ -81,7 +81,13 @@
   * [性能测试](tutorial/benchmark.md)
 * [架构设计](design/index.md)
 * SDK & Tools
-  * [客户端库](development/client.md)
+  * [MQTT 客户端库](development/client.md)
+  * [MQTT C 客户端库](development/c.md)
+  * [MQTT Java 客户端库](development/java.md)
+  * [MQTT Go 客户端库](development/go.md)
+  * [MQTT Erlang 客户端库](development/erlang.md)
+  * [MQTT JavaScript 客户端库](development/javascript.md)
+  * [MQTT Python 客户端库](development/python.md)
   * [其他资源](development/resource.md)
 * FAQ
   * [入门概念](faq/index.md)
