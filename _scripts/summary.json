@@ -1,0 +1,310 @@
+[
+  {
+    "title": "概览",
+    "file": "introduction.md#",
+    "child": [
+      {
+        "title": "EMQ X 消息服务器简介",
+        "file": "introduction.md"
+      },
+      {
+        "title": "EMQ X 消息服务器功能列表",
+        "file": "introduction/checklist.md"
+      }
+    ]
+  },
+  {
+    "title": "开始使用",
+    "file": "getting-started/index.md",
+    "child": [
+      {
+        "title": "安装",
+        "file": "getting-started/installation.md"
+      },
+      {
+        "title": "启动 EMQ X",
+        "file": "getting-started/start.md"
+      },
+      {
+        "title": "启动 EMQ X Enterprise",
+        "file": "getting-started/start-enterprise.md"
+      },
+      {
+        "title": "基本命令",
+        "file": "getting-started/command-line.md"
+      }
+    ]
+  },
+  {
+    "title": "基础功能",
+    "file": "using-emqx/index.md",
+    "child": [
+      {
+        "title": "客户端接入",
+        "file": "using-emqx/client.md"
+      },
+      {
+        "title": "目录结构",
+        "file": "using-emqx/directory.md"
+      },
+      {
+        "title": "配置说明",
+        "file": "using-emqx/config.md"
+      },
+      {
+        "title": "日志与追踪",
+        "file": "using-emqx/log.md"
+      },
+      {
+        "title": "Dashboard 管理界面",
+        "file": "using-emqx/dashboard.md"
+      }
+    ]
+  },
+  {
+    "title": "高级功能",
+    "file": "advanced/index.md",
+    "child": [
+      {
+        "title": "认证",
+        "file": "advanced/auth.md"
+      },
+      {
+        "title": "发布订阅 ACL",
+        "file": "advanced/acl.md"
+      },
+      {
+        "title": "TLS 连接",
+        "file": "advanced/tls.md"
+      },
+      {
+        "title": "管理监控 API",
+        "file": "advanced/http-api.md"
+      },
+      {
+        "title": "管理命令 CLI",
+        "file": "advanced/cli.md"
+      },
+      {
+        "title": "规则引擎",
+        "file": "advanced/rule-engine.md"
+      },
+      {
+        "title": "分布集群",
+        "file": "advanced/cluster.md"
+      },
+      {
+        "title": "消息桥接",
+        "file": "advanced/bridge.md"
+      },
+      {
+        "title": "插件与钩子",
+        "file": "advanced/plugins.md"
+      },
+      {
+        "title": "WebHook",
+        "file": "advanced/webhook.md"
+      },
+      {
+        "title": "保留消息",
+        "file": "advanced/retained.md"
+      },
+      {
+        "title": "延迟发布",
+        "file": "advanced/dely-publish.md"
+      },
+      {
+        "title": "共享订阅",
+        "file": "advanced/shared-subscriptions.md"
+      },
+      {
+        "title": "代理订阅",
+        "file": "advanced/shared-proxy-subscriptions.md"
+      },
+      {
+        "title": "主题重写",
+        "file": "advanced/topic-rewrite.md"
+      },
+      {
+        "title": "速率限制",
+        "file": "advanced/rate-limit.md"
+      },
+      {
+        "title": "消息队列",
+        "file": "advanced/message-queue.md"
+      },
+      {
+        "title": "消息重传",
+        "file": "advanced/message-retry.md"
+      },
+      {
+        "title": "监控告警",
+        "file": "advanced/alarm.md"
+      },
+      {
+        "title": "黑名单",
+        "file": "advanced/ban-list.md"
+      },
+      {
+        "title": "Flapping",
+        "file": "advanced/flapping.md"
+      },
+      {
+        "title": "IPv6",
+        "file": "advanced/ipv6.md"
+      },
+      {
+        "title": "$SYS 系统主题",
+        "file": "advanced/system-topic.md"
+      },
+      {
+        "title": "企业功能",
+        "file": "advanced/enterprise.md"
+      }
+    ]
+  },
+  {
+    "title": "教程指南",
+    "file": "tutorial/index.md",
+    "child": [
+      {
+        "title": "认证",
+        "file": "tutorial/auth.md",
+        "child": [
+          {
+            "title": "用户名认证",
+            "file": "tutorial/auth-username.md"
+          },
+          {
+            "title": "Cliend ID 认证",
+            "file": "tutorial/auth-clientid.md"
+          },
+          {
+            "title": "HTTP 认证",
+            "file": "tutorial/auth-http.md"
+          },
+          {
+            "title": "JWT 认证",
+            "file": "tutorial/auth-jwt.md"
+          },
+          {
+            "title": "LDAP 认证",
+            "file": "tutorial/auth-ldap.md"
+          },
+          {
+            "title": "MySQL/PostgreSQL 认证",
+            "file": "tutorial/auth-mysql-postgresql.md"
+          },
+          {
+            "title": "Redis 认证",
+            "file": "tutorial/auth-redis.md"
+          },
+          {
+            "title": "MongoDB 认证",
+            "file": "tutorial/auth-mongodb.md"
+          }
+        ]
+      },
+      {
+        "title": "发布订阅 ACL",
+        "file": "tutorial/acl.md",
+        "child": [
+          {
+            "title": "HTTP ACL 访问控制",
+            "file": "tutorial/acl-http.md"
+          },
+          {
+            "title": "MySQL/PostgreSQL ACL 访问控制",
+            "file": "tutorial/acl-mysql-postgresql.md"
+          },
+          {
+            "title": "Redis ACL 访问控制",
+            "file": "tutorial/acl-redis.md"
+          },
+          {
+            "title": "MongoDB ACL 访问控制",
+            "file": "tutorial/acl-mongodb.md"
+          }
+        ]
+      },
+      {
+        "title": "设备管理",
+        "file": "tutorial/device-management.md"
+      },
+      {
+        "title": "系统调优",
+        "file": "tutorial/turn.md"
+      },
+      {
+        "title": "生产部署",
+        "file": "tutorial/deploy.md"
+      },
+      {
+        "title": "Prometheus 监控告警",
+        "file": "advanced/prometheus.md"
+      },
+      {
+        "title": "性能测试",
+        "file": "tutorial/benchmark.md"
+      }
+    ]
+  },
+  {
+    "title": "架构设计",
+    "file": "design/index.md",
+    "child": []
+  },
+  {
+    "title": "SDK & Tools",
+    "file": "development/index.md",
+    "child": [
+      {
+        "title": "客户端库",
+        "file": "development/mqtt.md"
+      },
+      {
+        "title": "客户端工具",
+        "file": "development/client.md"
+      },
+      {
+        "title": "性能测试工具",
+        "file": "development/benchmark.md"
+      },
+      {
+        "title": "硬件资源",
+        "file": "development/hardware.md"
+      }
+    ]
+  },
+  {
+    "title": "FAQ",
+    "file": "faq/index.md#",
+    "child": [
+      {
+        "title": "入门概念",
+        "file": "development/index.md"
+      },
+      {
+        "title": "使用教程",
+        "file": "development/use-guide.md"
+      },
+      {
+        "title": "常见错误",
+        "file": "development/error.md"
+      },
+      {
+        "title": "FAQ 标签",
+        "file": "development/tags.md"
+      }
+    ]
+  },
+  {
+    "title": "配置项",
+    "file": "configuration/index.md",
+    "child": []
+  },
+  {
+    "title": "相关资料",
+    "file": "awesome/index.md"
+  }
+]
