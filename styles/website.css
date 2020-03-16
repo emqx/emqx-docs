@@ -40,29 +40,34 @@
   border-bottom: none;
 }
 .nav-tabs li {
-  border-radius: 4px;
-  margin-bottom: 4px;
-  margin-right: 4px;
+  border-radius: 0;
+  margin-bottom: 8px;
+  margin-right: 8px;
+  height: 36px;
+  line-height: 36px;
 }
 
-.nav-tabs a {
+.nav-tabs li a {
   color: #333;
-  border-radius: 4px;
-}
-.nav-tabs li > a {
+  height: 36px;
+  line-height: 16px !important;
+  background: rgba(174, 185, 208, .2);
+  border-radius: 13px !important;
+  color: #34c388 !important;
   border: none !important;
-  border-radius: 4px !important;
+  min-width: 100px;
+  text-align: center;
 }
 
 .nav-tabs li a:hover {
   border: none;
-  color: #000;
-  background-color: #f2f3f7;
+  color: #fff !important;
+  background-color: #34c388;
 }
 
 .nav-tabs li.active a, .nav-tabs li.active a:hover, .nav-tabs li.active a:focus {
   border-radius: 4px;
-  background-color: #000;
+  background-color: #34c388;
   border: none !important;
   color: #fff !important;
 }
@@ -86,6 +91,11 @@
 #gitalk-container {
   clear: both;
 }
+
+/* #gitalk-container .gt-header,  */
+/* #gitalk-container .gt-comments {
+  display: none;
+} */
 
 .alert {
   margin-top: 20px;
@@ -146,7 +156,17 @@ p .token.punctuation {
 }
 
 #gitalk-container {
-  display: none;
+  /* display: none; */
+}
+
+#wrap-btn {
+  float: right;
+  font-size: 14.7px;
+  color: #333;
+  cursor: pointer;
+  margin-right: 10px;
+  user-select: none;
+  margin-top: 1px;
 }
 
 .hide-wrap {
