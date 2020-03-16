@@ -12,6 +12,13 @@
     "scripts"
   ],
   "pluginsConfig": {
+    "styles": {
+      "website": "styles/website.css",
+      "ebook": "styles/ebook.css",
+      "pdf": "styles/pdf.css",
+      "mobi": "styles/mobi.css",
+      "epub": "styles/epub.css"
+    },
     "scripts": {
       "files": [
         "./_js/emqx-docs.js"
@@ -19,7 +26,6 @@
     },
     "prism": {
       "css": [
-        
       ]
     },
     "gittalk": {
@@ -48,13 +54,6 @@
       "modify_label": "The document reversion time: ",
       "modify_format": "YYYY-MM-DD HH:mm:ss"
     }
-  },
-  "styles": {
-    "website": "_styles/website.css",
-    "ebook": "_styles/ebook.css",
-    "pdf": "_styles/pdf.css",
-    "mobi": "_styles/mobi.css",
-    "epub": "_styles/epub.css"
   },
   "title": "EMQ X Broker 使用文档",
   "description": "EMQ X 百万级 MQTT 消息服务器使用文档",
