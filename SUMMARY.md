@@ -79,7 +79,7 @@
   * [生产部署](tutorial/deploy.md)
   * [Prometheus 监控告警](tutorial/prometheus.md)
   * [性能测试](tutorial/benchmark.md)
-* [架构设计](design/index.md)
+* [架构设计](design/design.md)
 * SDK & Tools
   * [MQTT 客户端库](development/client.md)
   * [MQTT C 客户端库](development/c.md)
@@ -90,11 +90,11 @@
   * [MQTT Python 客户端库](development/python.md)
   * [其他资源](development/resource.md)
 * FAQ
-  * [入门概念](faq/index.md)
+  * [入门概念](faq/faq.md)
   * [使用教程](faq/use-guide.md)
   * [安装部署](faq/deployment.md)
   * [常见错误](faq/error.md)
   * [商业服务](faq/enterprise.md)
   * [FAQ 标签](faq/tags.md)
-* [配置项](configuration/index.md)
-* [相关资料](awesome/index.md)
+* [配置项](configuration/configuration.md)
+* [相关资料](awesome/awesome.md)

@@ -14,12 +14,12 @@
   "pluginsConfig": {
     "scripts": {
       "files": [
-          "./_js/emqx-docs.js"
+        "./_js/emqx-docs.js"
       ]
     },
     "prism": {
       "css": [
-        "prismjs/themes/prism-okaidia.css"
+        
       ]
     },
     "gittalk": {
