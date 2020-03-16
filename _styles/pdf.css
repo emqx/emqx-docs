@@ -3,7 +3,6 @@
   height: 175px;
   align-content: center;
   text-align: center;
-  /* border: 2px dashed rgba(0, 0, 0, 0.07); */
   margin: 0 20px 20px 0;
   text-decoration: none;
   transition: all .2s ease-in;
@@ -14,7 +13,6 @@
 }
 
 .development-hardware-warp .hardware-item:hover {
-  /* border-color: #34c388; */
   text-decoration: none;
   color: #fff;
 }
@@ -152,6 +150,7 @@ p .token.punctuation {
 }
 
 .hide-wrap {
+  clear: both;
   border-top: 1px solid rgba(0,0,0,.07);
   margin: 18px auto;
   padding: 20px 0 0 0;
