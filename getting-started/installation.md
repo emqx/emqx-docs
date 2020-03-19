@@ -17,7 +17,7 @@ ref: undefined
 
 # 安装
 
-EMQ X Broker 目前支持的系统:
+EMQ X Broker 目前支持的操作系统:
 
 + Centos6
 + Centos7
@@ -324,7 +324,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 {% content "binary" %}
 ## 二进制包安装 (Linux)
 
-1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X Broker 版本的二进制包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X Broker 版本的二进制包。
   
 2. 安装 EMQ X Broker，将下面的路径更改为您下载 EMQ X Broker 软件包的路径。
 
@@ -394,7 +394,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 {% content "zip" %}
 ## ZIP 压缩包安装 (Linux、MaxOS、Windows)
 
-1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X Broker 版本的 zip 包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X Broker 版本的 zip 包。
   
 2.  解压程序包
   
@@ -476,7 +476,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         $ docker pull emqx/emqx:v4.0.0
         ```
       
-      - 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [github](https://github.com/emqx/emqx/releases) 下载 docker 镜像，并手动加载
+      - 通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 下载 Docker 镜像，并手动加载
         
         ```
         $ wget -O emqx-docker.zip https://www.emqx.io/downloads/broker/v4.0.0/emqx-docker-v4.0.0-alpine3.10-amd64.zip

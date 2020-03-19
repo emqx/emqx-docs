@@ -1,6 +1,6 @@
 ---
 # 标题
-title: 用户名认证
+title: Username 认证
 # 编写日期
 date: 2020-02-07 17:15:26
 # 作者 Github 名称
@@ -15,11 +15,11 @@ category:
 ref: undefined
 ---
 
-# 用户名认证
+# Username 认证
 
-用户名认证使用配置文件预设客户端用户名与密码，支持通过 HTTP API 管理认证数据。
+Username 认证使用配置文件预设客户端用户名与密码，支持通过 HTTP API 管理认证数据。
 
-用户名认证不依赖外部数据源，使用上足够简单轻量。
+Username 认证不依赖外部数据源，使用上足够简单轻量。
 
 插件：
 
@@ -31,7 +31,7 @@ emqx_auth_username
 
 ## 哈希方法
 
-用户名认证默认使用 sha256 进行密码哈希加密，可在 `etc/plugins/emqx_auth_username.conf` 中更改：
+Username 认证默认使用 sha256 进行密码哈希加密，可在 `etc/plugins/emqx_auth_username.conf` 中更改：
 
 ```bash
 # etc/plugins/emqx_auth_username.conf

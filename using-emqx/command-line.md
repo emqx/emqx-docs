@@ -43,4 +43,4 @@ EMQ X Broker 提供了 `emqx` 命令行工具，方便用户对 EMQ X Broker 进
 
     Ping EMQ X Broker。
 
-以上命令为用户常用命令，此外 `emqx` 命令还有一些其他选项为方便开发者使用，普通用户无需关心。
+以上命令为用户常用命令，此外 `emqx` 命令还有一些[其他选项](../advanced/cli.md)为方便开发者使用，普通用户无需关心。

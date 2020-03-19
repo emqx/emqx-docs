@@ -172,9 +172,3 @@ DELETE api/v4/auth_clientid/${clientid}
     "code": 0
 }
 ```
-
-
-<!-- TODO: 引用 HTTP API -->
-<!-- {% hint style="info" %}  -->
-<!-- 详见 HTTP API 详细信息请见 [HTTP API](../rest_api.md) -->
-<!-- {% endhint %} -->

@@ -97,8 +97,8 @@ broker 命令查询服务器基本信息，启动时间，统计数据与性能�
 
 | 命令           | 描述                                                         |
 | -------------- | ------------------------------------------------------------ |
-| `broker        ` | 查询 EMQ X Broker 描述、版本、启动时间                    |
-| `broker stats  ` | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、订阅 (Subscription)、路由 (Route) 统计信息 |
+| `broker` | 查询 EMQ X Broker 描述、版本、启动时间                    |
+| `broker stats` | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、订阅 (Subscription)、路由 (Route) 统计信息 |
 | `broker metrics` | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计             |
 
 查询 EMQ X Broker 基本信息，包括版本、启动时间等:
@@ -713,7 +713,7 @@ trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，
 | `trace start topic <Topic> <File> [<Level>]    ` | 开启 Topic 追踪，存储指定等级的日志到文件  |
 | `trace stop topic <Topic>                      ` | 关闭 Topic 追踪                            |
 
-### trace start client <ClientId> <File> [<Level>]
+### trace start client <ClientId> <File> [ <Level> ]
 
 开启 Client 追踪:
 
@@ -737,7 +737,7 @@ $ ./bin/emqx_ctl trace stop client clientid
 stop tracing clientid clientid successfully
 ```
 
-### trace start topic <Topic> <File> [<Level>]
+### trace start topic <Topic> <File> [ <Level> ]
 
 开启 Topic 追踪:
 

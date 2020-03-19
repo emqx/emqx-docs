@@ -14,8 +14,8 @@
   * [Dashboard](using-emqx/dashboard.md)
 * 高级功能
   * 认证
-    * [认证](advanced/auth.md)
-    * [用户名认证](advanced/auth-username.md)
+    * [认证简介](advanced/auth.md)
+    * [Username 认证](advanced/auth-username.md)
     * [Cliend ID 认证](advanced/auth-clientid.md)
     * [HTTP 认证](advanced/auth-http.md)
     * [JWT 认证](advanced/auth-jwt.md)
@@ -25,7 +25,7 @@
     * [Redis 认证](advanced/auth-redis.md)
     * [MongoDB 认证](advanced/auth-mongodb.md)
   * 发布订阅 ACL
-    * [发布订阅 ACL](advanced/acl.md)
+    * [发布订阅 ACL 简介](advanced/acl.md)
     * [内置 ACL](advanced/acl-file.md)
     * [HTTP ACL](advanced/acl-http.md)
     * [MySQL ACL](advanced/acl-mysql.md)
