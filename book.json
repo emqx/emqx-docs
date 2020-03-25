@@ -55,7 +55,7 @@
       "modify_format": "YYYY-MM-DD HH:mm:ss"
     }
   },
-  "title": "EMQ X Broker 使用文档",
+  "title": "EMQ X 使用文档",
   "description": "EMQ X 百万级 MQTT 消息服务器使用文档",
   "author": "EMQX Team",
   "language": "zh-hans",

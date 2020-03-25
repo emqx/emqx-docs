@@ -79,7 +79,7 @@ Erlang 节点间通过 cookie 进行互连认证。cookie 是一个字符串，�
 
 详见: <http://erlang.org/doc/reference_manual/distributed.html>
 
-### EMQ X Broker 集群协议设置 {#distributed-erlang-protocol}
+### EMQ X 集群协议设置 {#distributed-erlang-protocol}
 
 Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `etc/emqx.conf`
 中配置连接方式:
@@ -89,17 +89,17 @@ Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `
 | cluster.proto_dist | enum | `inet_tcp` | 分布式协议，可选值：<br />  - inet_tcp: 使用 TCP IPv4<br/>  - inet6_tcp: 使用 TCP IPv6<br/>  - inet_tls: 使用 TLS |
 | node.ssl_dist_optfile | 文件路径 | `etc/ssl_dist.conf` | 当 `cluster.proto_dist` 选定为 inet_tls 时，需要配置 `etc/ssl_dist.conf` 文件，指定 TLS 证书等 |
 
-## EMQ X Broker 分布式集群设计 {#emqx-distribution-design}
+## EMQ X 分布式集群设计 {#emqx-distribution-design}
 
-EMQ X Broker 分布式的基本功能是将消息转发和投递给各节点上的订阅者，如下图所示：
+EMQ X 分布式的基本功能是将消息转发和投递给各节点上的订阅者，如下图所示：
 
 ![image](./../assets/design_9.png)
 
-为实现此过程，EMQ X Broker 维护了几个与之相关的数据结构：订阅表，路由表，主题树。
+为实现此过程，EMQ X 维护了几个与之相关的数据结构：订阅表，路由表，主题树。
 
 ### 订阅表: 主题 - 订阅者 {#emqx-distribution-subscribers}
 
-MQTT 客户端订阅主题时，EMQ X Broker 会维护主题(Topic) -\> 订阅者(Subscriber) 映射的**订阅表**。订阅表只存在于订阅者所在的 EMQ X Broker 节点上，例如:
+MQTT 客户端订阅主题时，EMQ X 会维护主题(Topic) -\> 订阅者(Subscriber) 映射的**订阅表**。订阅表只存在于订阅者所在的 EMQ X 节点上，例如:
 
 ```bash
 node1:
@@ -124,7 +124,7 @@ topic3 -> node2, node4
 
 ### 主题树: 带统配符的主题匹配 {#emqx-distribution-trie}
 
-除路由表之外，EMQ X Broker 集群中的每个节点也会维护一份**主题树**(Topic Trie) 的备份。
+除路由表之外，EMQ X 集群中的每个节点也会维护一份**主题树**(Topic Trie) 的备份。
 
 例如下述主题订阅关系:
 
@@ -134,7 +134,7 @@ topic3 -> node2, node4
 | client2 | node2 | t/# |
 | client3 | node3 | t/+/x, t/a |
 
-在所有订阅完成时，EMQ X Broker 中会维护如下主题树 (Topic Trie) 和路由表 (Route Table):
+在所有订阅完成时，EMQ X 中会维护如下主题树 (Topic Trie) 和路由表 (Route Table):
 
 ![image](../assets/cluster_2.png)
 
@@ -153,11 +153,11 @@ topic3 -> node2, node4
 
 ### 数据分片与共享方式 {#emqx-distribution-data-share-shard}
 
-EMQ X Broker 的订阅表在集群中是分片(partitioned)的，而主题树和路由表是共享(replicated)的。
+EMQ X 的订阅表在集群中是分片(partitioned)的，而主题树和路由表是共享(replicated)的。
 
 ## 节点发现与自动集群 {#emqx-service-discovery}
 
-EMQ X Broker 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
+EMQ X 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
 Autoheal)、自动删除宕机节点 (Autoclean)。
 
@@ -237,7 +237,7 @@ cluster.k8s.app_name = ekka
 
 ### 手动(manual) 方式管理集群介绍 {#emqx-service-discovery-manual-tutorial}
 
-假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X Broker 集群:
+假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X 集群:
 
 |                节点名                 | 主机名 (FQDN)  |   IP 地址    |
 | ------------------------------------ | ------------- | ------------ |

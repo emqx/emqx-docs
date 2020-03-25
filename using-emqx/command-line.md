@@ -17,7 +17,7 @@ ref: undefined
 
 # 基本命令
 
-EMQ X Broker 提供了 `emqx` 命令行工具，方便用户对 EMQ X Broker 进行启动、关闭、进入控制台等操作。
+EMQ X 提供了 `emqx` 命令行工具，方便用户对 EMQ X 进行启动、关闭、进入控制台等操作。
 
 +   `emqx start`
 

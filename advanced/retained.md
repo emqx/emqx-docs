@@ -23,11 +23,11 @@ ref: undefined
 
 当客户端建立订阅时，如果服务端存在主题匹配的保留消息，则这些保留消息将被立即发送给该客户端。借助保留消息，新的订阅者能够立即获取最近的状态，而不需要等待无法预期的时间，这在很多场景下非常重要的。
 
-EMQ X Broker 默认开启保留消息的功能，可以在 `etc/emqx.conf` 中修改 `mqtt.retain_available` 为 `false` 以禁用保留消息功能。如果 EMQ X Broker 在保留消息功能被禁用的情况下依然收到了保留消息，那么将返回原因码为 0x9A（不支持保留消息）的 DISCONNECT 报文。
+EMQ X 默认开启保留消息的功能，可以在 `etc/emqx.conf` 中修改 `mqtt.retain_available` 为 `false` 以禁用保留消息功能。如果 EMQ X 在保留消息功能被禁用的情况下依然收到了保留消息，那么将返回原因码为 0x9A（不支持保留消息）的 DISCONNECT 报文。
 
 ## 配置
 
-EMQ X Broker 的保留消息功能是由 `emqx_retainer` 插件实现，该插件默认开启，通过修改 `emqx_retainer` 插件的配置，可以调整 EMQ X Broker 储存保留消息的位置，限制接收保留消息数量和 Payload 最大长度，以及调整保留消息的过期时间。关于 EMQ X Broker 插件的更多信息， 请参见 [插件](advanced/plugins.md)。
+EMQ X 的保留消息功能是由 `emqx_retainer` 插件实现，该插件默认开启，通过修改 `emqx_retainer` 插件的配置，可以调整 EMQ X 储存保留消息的位置，限制接收保留消息数量和 Payload 最大长度，以及调整保留消息的过期时间。关于 EMQ X 插件的更多信息， 请参见 [插件](advanced/plugins.md)。
 
 `emqx_retainer` 插件默认开启，插件的配置路径为 `etc/plugins/emqx_retainer.conf`。
 

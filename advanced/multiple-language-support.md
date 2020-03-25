@@ -18,11 +18,11 @@ ref: undefined
 
 # 多语言支持
 
-EMQ X Broker 发行包中，提供了一些用于多语言支持的 [插件](plugins.md)。它允许你使用其它编程语言来扩展 EMQ X Broker 的行为，其在系统中的架构为：
+EMQ X 发行包中，提供了一些用于多语言支持的 [插件](plugins.md)。它允许你使用其它编程语言来扩展 EMQ X 的行为，其在系统中的架构为：
 
 ![Multiple Language Suppoprt](assets/multiple-lang-arch.png)
 
-- 多语言支持是作为一个插件出现的，它基于 [emqx](https://github.com/emqx/emqx) 核心项目所提供的 [钩子](hooks.md) 特性，拿到 EMQ X Broker 的事件/消息。
+- 多语言支持是作为一个插件出现的，它基于 [emqx](https://github.com/emqx/emqx) 核心项目所提供的 [钩子](hooks.md) 特性，拿到 EMQ X 的事件/消息。
 - 不同的语言环境，需要有不同的语言支持插件。
 - 该支持插件内嵌了该语言运行时的所有环境。
 - 用户仅需要编写该语言的脚本或库文件，供该支持插件调用。
@@ -38,7 +38,7 @@ Lua 的支持由 [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) 实现�
 
 ### 示例
 
-在 EMQ X Broker 发行包中，用户自定义的 Lua 脚本文件应该放在 `data/script/` 中。
+在 EMQ X 发行包中，用户自定义的 Lua 脚本文件应该放在 `data/script/` 中。
 
 以控制消息的发送内容为例，新增文件 `data/script/test.lua`：
 

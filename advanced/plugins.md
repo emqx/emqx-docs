@@ -17,7 +17,7 @@ ref: undefined
 
 # 插件
 
-EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基础的、或各类扩展的功能。
+EMQ X 发行包中，包含了大量的官方插件，提供了一些基础的、或各类扩展的功能。
 
 它们依赖于 [emqx](https://github.com/emqx/emqx) 的代码 API 或者 [钩子](hooks.md) 进行实现其特殊的功能。
 
@@ -26,7 +26,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 ## 插件列表
 
-目前 EMQ X Broker 发行包提供的插件包括：
+目前 EMQ X 发行包提供的插件包括：
 
 | 插件                                                                 | 配置文件                              | 说明                      |
 | -------------------------------------------------------------------- | ------------------------------------- | ------------------------- |
@@ -68,9 +68,9 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 **开启默认加载**
 
-如需在 EMQ X Broker 启动时就默认启动某插件，则直接在 `data/loaded_plugins` 添加需要启动的插件名称。
+如需在 EMQ X 启动时就默认启动某插件，则直接在 `data/loaded_plugins` 添加需要启动的插件名称。
 
-例如，目前 EMQ X Broker 自动加载的插件有：
+例如，目前 EMQ X 自动加载的插件有：
 
 ```erlang
 {emqx_management, true}.
@@ -84,7 +84,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 **命令行启停插件**
 
-在 EMQ X Broker 运行过程中，可通过 [CLI - Load/Unload Plugin](cli.md#load_plugin) 的方式查看、和启停某插件。
+在 EMQ X 运行过程中，可通过 [CLI - Load/Unload Plugin](cli.md#load_plugin) 的方式查看、和启停某插件。
 
 **使用 Dashboard 启停插件**
 
@@ -92,7 +92,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 **使用管理 API 启停插件**
 
-在 EMQ X Broker 运行过程中，可通过 [管理监控 API - Load Plugin](#http-api.md#load_plugin) 的方式查看、和启停某插件。
+在 EMQ X 运行过程中，可通过 [管理监控 API - Load Plugin](#http-api.md#load_plugin) 的方式查看、和启停某插件。
 
 
 ## 插件开发
@@ -101,7 +101,7 @@ EMQ X Broker 发行包中，包含了大量的官方插件，提供了一些基�
 
 参考 [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) 插件模版创建新的插件项目。
 
-备注：在 `\<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQ X Broker 的插件。
+备注：在 `\<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQ X 的插件。
 
 
 ### 创建 认证/访问控制 模块
@@ -223,7 +223,7 @@ ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 
 ### 插件配置文件
 
-插件自带配置文件放置在 `etc/${plugin_name}.conf|config`。 EMQ X Broker 支持两种插件配置格式：
+插件自带配置文件放置在 `etc/${plugin_name}.conf|config`。 EMQ X 支持两种插件配置格式：
 
 1. Erlang 原生配置文件格式 - `${plugin_name}.config`：
    

@@ -20,11 +20,11 @@ ref: undefined
 
 身份认证是大多数应用的重要组成部分，MQTT 协议支持用户名密码认证，启用身份认证能有效阻止非法客户端的连接。
 
-EMQ X Broker 中的认证指的是当一个客户端连接到 EMQ X Broker 的时候，通过服务器端的配置来控制客户端连接服务器的权限。
+EMQ X 中的认证指的是当一个客户端连接到 EMQ X 的时候，通过服务器端的配置来控制客户端连接服务器的权限。
 
-EMQ X Broker 的认证支持包括两个层面：
+EMQ X 的认证支持包括两个层面：
 
-- MQTT 协议本身在 CONNECT 报文中指定用户名和密码，EMQ X Broker 以插件形式支持基于 Username、ClientID、HTTP、JWT、LDAP 及各类数据库如 MongoDB、MySQL、PostgreSQL、Redis 等多种形式的认证。
+- MQTT 协议本身在 CONNECT 报文中指定用户名和密码，EMQ X 以插件形式支持基于 Username、ClientID、HTTP、JWT、LDAP 及各类数据库如 MongoDB、MySQL、PostgreSQL、Redis 等多种形式的认证。
 
 - 在传输层上，TLS 可以保证使用客户端证书的客户端到服务器的身份验证，并确保服务器向客户端验证服务器证书。也支持基于 PSK 的 TLS/DTLS 认证。
 
@@ -196,7 +196,7 @@ listener.ssl.external.certfile = etc/certs/cert.pem
 listener.ssl.external.cacertfile = etc/certs/cacert.pem
 ```
 
-注意，默认的 `etc/certs` 目录下面的 `key.pem`、`cert.pem` 和 `cacert.pem` 是 EMQ X Broker 生成的自签名证书，所以在使用支持 TLS 的客户端测试的时候，需要将上面的 CA 证书 `etc/certs/cacert.pem` 配置到客户端。
+注意，默认的 `etc/certs` 目录下面的 `key.pem`、`cert.pem` 和 `cacert.pem` 是 EMQ X 生成的自签名证书，所以在使用支持 TLS 的客户端测试的时候，需要将上面的 CA 证书 `etc/certs/cacert.pem` 配置到客户端。
 
 服务端支持的 cipher 列表需要显式指定，默认的列表与 Mozilla 的服务端 cipher 列表一致：
 

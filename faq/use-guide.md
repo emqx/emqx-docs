@@ -400,7 +400,7 @@ EMQ X 支持加密连接。在生产环境部署时，推荐的方案是使用�
   Start mqtt:ws listener on 0.0.0.0:8083 successfully.
   Start mqtt:ssl listener on 0.0.0.0:8883 successfully.
   Start mqtt:wss listener on 0.0.0.0:8084 successfully.
-  EMQ X Broker 3.2.1 is running now!
+  EMQ X 3.2.1 is running now!
   "The license certificate is expired!"
   2019-07-23 05:52:51.355 [critical] The license certificate is expired!
   2019-07-23 05:52:51.355 [critical] The license certificate is expired! System shutdown!

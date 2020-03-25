@@ -1,19 +1,19 @@
 # HTTP API {#http-api}
 
-EMQ X Broker 提供了 HTTP API 以实现与外部系统的集成，例如查询客户端信息、发布消息和创建规则等。
+EMQ X 提供了 HTTP API 以实现与外部系统的集成，例如查询客户端信息、发布消息和创建规则等。
 
-EMQ X Broker 的 HTTP API 服务默认监听 8081 端口，可通过 `etc/plugins/emqx_management.conf` 配置文件修改监听端口，或启用 HTTPS 监听。[EMQ X Broker 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0) 以后的所有 API 调用均以 `api/v4` 开头。
+EMQ X 的 HTTP API 服务默认监听 8081 端口，可通过 `etc/plugins/emqx_management.conf` 配置文件修改监听端口，或启用 HTTPS 监听。[EMQ X 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0) 以后的所有 API 调用均以 `api/v4` 开头。
 
 ## 接口安全 {#http-api-security}
 
-EMQ X Broker 的 HTTP API 使用 [Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication) 方式，`id` 和 `password` 须分别填写 AppID 和 AppSecret。
+EMQ X 的 HTTP API 使用 [Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication) 方式，`id` 和 `password` 须分别填写 AppID 和 AppSecret。
 默认的 AppID 和 AppSecret 是：`amdin/public`。你可以在 Dashboard 的左侧菜单栏里，选择 "管理" -> "应用" 来修改和添加 AppID/AppSecret。
 
 ## 响应码 {#codes}
 
 ### HTTP 状态码 (status codes)
 
-EMQ X Broker 接口在调用成功时总是返回 200 OK，响应内容则以 JSON 格式返回。
+EMQ X 接口在调用成功时总是返回 200 OK，响应内容则以 JSON 格式返回。
 
 可能的状态码如下：
 
@@ -27,7 +27,7 @@ EMQ X Broker 接口在调用成功时总是返回 200 OK，响应内容则以 JS
 
 ### 返回码 (result codes)
 
-EMQ X Broker 接口的响应消息体为 JSON 格式，其中总是包含返回码 `code`。
+EMQ X 接口的响应消息体为 JSON 格式，其中总是包含返回码 `code`。
 
 可能的返回码如下：
 
@@ -56,7 +56,7 @@ EMQ X Broker 接口的响应消息体为 JSON 格式，其中总是包含返回�
 
 #### GET /api/v4 {#endpoint-get-api-v4}
 
-返回 EMQ X Broker 支持的所有 Endpoints。
+返回 EMQ X 支持的所有 Endpoints。
 
 **Parameters:** 无
 
@@ -100,10 +100,10 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4"
 | data.datetime    | String    | 当前时间，格式为 "YYYY-MM-DD HH:mm:ss"                       |
 | data.node        | String    | 节点名称                                                     |
 | data.node_status | String    | 节点状态                                                     |
-| data.otp_release | String    | EMQ X Broker 使用的 Erlang/OTP 版本                          |
+| data.otp_release | String    | EMQ X 使用的 Erlang/OTP 版本                          |
 | data.sysdescr    | String    | 软件描述                                                     |
-| data.uptime      | String    | EMQ X Broker 运行时间，格式为 "H hours, m minutes, s seconds" |
-| data.version     | String    | EMQ X Broker 版本                                           |
+| data.uptime      | String    | EMQ X 运行时间，格式为 "H hours, m minutes, s seconds" |
+| data.version     | String    | EMQ X 版本                                           |
 
 **Examples:**
 
@@ -150,11 +150,11 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers/e
 | data.memory_used       | String    | VM 已占用的内存大小                 |
 | data.node              | String    | 节点名称                            |
 | data.node_status       | String    | 节点状态                            |
-| data.otp_release       | String    | EMQ X Broker 使用的 Erlang/OTP 版本 |
+| data.otp_release       | String    | EMQ X 使用的 Erlang/OTP 版本 |
 | data.process_available | Integer   | 可用的进程数量                      |
 | data.process_used      | Integer   | 已占用的进程数量                    |
-| data.uptime            | String    | EMQ X Broker 运行时间               |
-| data.version           | String    | EMQ X Broker 版本                   |
+| data.uptime            | String    | EMQ X 运行时间               |
+| data.version           | String    | EMQ X 版本                   |
 
 **Examples:**
 
@@ -774,7 +774,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/plugins"
 
-{"data":[{"plugins":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Broker Authentication with ClientId/Password","active":false}, ...],"node":"emqx@127.0.0.1"}],"code":0}
+{"data":[{"plugins":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Authentication with ClientId/Password","active":false}, ...],"node":"emqx@127.0.0.1"}],"code":0}
 ```
 
 #### GET /api/v4/nodes/{node}/plugins {#endpoint-nodes-get-plugins}
@@ -800,7 +800,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/plugins"
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/plugins"
 
-{"data":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Broker Authentication with ClientId/Password","active":false}, ...],"code":0}
+{"data":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Authentication with ClientId/Password","active":false}, ...],"code":0}
 ```
 
 #### PUT /api/v4/nodes/{node}/plugins/{plugin}/load {#endpoint-nodes-load-plugin}
@@ -953,8 +953,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | ----------------| --------- | -------------------- |
 | actions.failure                 | Integer   | 规则引擎 action 成功失败次数 |
 | actions.success                 | Integer   | 规则引擎 action 执行失败次数 |
-| bytes.received                  | Integer   | EMQ X Broker 接收的字节数 |
-| bytes.sent                      | Integer   | EMQ X Broker 在此连接上发送的字节数 |
+| bytes.received                  | Integer   | EMQ X 接收的字节数 |
+| bytes.sent                      | Integer   | EMQ X 在此连接上发送的字节数 |
 | client.authenticate             | Integer   | 客户端认证次数 |
 | client.auth.anonymous           | Integer   | 匿名登录的客户端数量 |
 | client.connect                  | Integer   | 客户端连接次数 |
@@ -970,9 +970,9 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | delivery.dropped.expired        | Integer   | 发送时由于消息过期而被丢弃的消息数量 |
 | delivery.dropped.no_local       | Integer   | 发送时由于 `No Local` 订阅选项而被丢弃的消息数量 |
 | delivery.dropped                | Integer   | 发送时丢弃的消息总数 |
-| messages.delayed                | Integer   | EMQ X Broker 存储的延迟发布的消息数量 |
-| messages.delivered              | Integer   | EMQ X Broker 内部转发到订阅进程的消息数量 |
-| messages.dropped                | Integer   | EMQ X Broker 内部转发到订阅进程前丢弃的消息总数 |
+| messages.delayed                | Integer   | EMQ X 存储的延迟发布的消息数量 |
+| messages.delivered              | Integer   | EMQ X 内部转发到订阅进程的消息数量 |
+| messages.dropped                | Integer   | EMQ X 内部转发到订阅进程前丢弃的消息总数 |
 | messages.dropped.expired        | Integer   | 接收时由于消息过期而被丢弃的消息数量 |
 | messages.dropped.no_subscribers | Integer   | 由于没有订阅者而被丢弃的消息数量 |
 | messages.forward                | Integer   | 向其他节点转发的消息数量 |
@@ -985,7 +985,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | messages.qos2.sent              | Integer   | 发送给客户端的 QoS 2 消息数量 |
 | messages.received               | Integer   | 接收来自客户端的消息数量，等于 `messages.qos0.received`，`messages.qos1.received` 与 `messages.qos2.received` 之和 |
 | messages.sent                   | Integer   | 发送给客户端的消息数量，等于 `messages.qos0.sent`，`messages.qos1.sent` 与 `messages.qos2.sent` 之和 |
-| messages.retained               | Integer   | EMQ X Broker 存储的保留消息数量 |
+| messages.retained               | Integer   | EMQ X 存储的保留消息数量 |
 | messages.acked                  | Integer   | 接收的 PUBACK 和 PUBREC 报文数量 |
 | packets.received                | Integer   | 接收的报文数量 |
 | packets.sent                    | Integer   | 发送的报文数量 |

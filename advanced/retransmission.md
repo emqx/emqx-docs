@@ -35,7 +35,7 @@ ref: undefined
 有两种场景会导致消息重发：
 
 1. PUBLISH 报文发送给对端后，规定时间内未收到应答。则重发这个报文。
-2. 在保持会话的情况下，客户端重连后；EMQ X Broker 会自动重发  *未应答的消息*，以确保 QoS 流程的正确。
+2. 在保持会话的情况下，客户端重连后；EMQ X 会自动重发  *未应答的消息*，以确保 QoS 流程的正确。
 
 在 `etc/emqx.conf` 中可配置：
 
@@ -46,13 +46,13 @@ ref: undefined
 
 一般来说，你只需要关心以上内容就足够了。
 
-如需了解更多 EMQ X Broker 在处理 MQTT 协议的重传的细节见以下内容。
+如需了解更多 EMQ X 在处理 MQTT 协议的重传的细节见以下内容。
 
 ## 协议规范与设计
 
 ### 重传的对象
 
-首先，在了解 EMQ X Broker 对于重传机制的设计前，我们需要先确保你已经了解协议中 QoS 1 和 QoS 2 的传输过程，否则请参见 [MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) 和 [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)。
+首先，在了解 EMQ X 对于重传机制的设计前，我们需要先确保你已经了解协议中 QoS 1 和 QoS 2 的传输过程，否则请参见 [MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) 和 [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)。
 
 此处，仅作一个简单的回顾，用来说明不同 QoS 下重传的对象有哪些。
 
@@ -104,7 +104,7 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
     * QoS 2 的 PUBLISH 报文
     * QoS 2 的 PUBREL 报文
 
-当 EMQ X Broker 作为 PUBLISH 消息的接收端时，它不需要重发操作
+当 EMQ X 作为 PUBLISH 消息的接收端时，它不需要重发操作
 
 
 ### 飞行窗口与最大接收值
@@ -113,17 +113,17 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
 
 引入这两个概念的作用是为了理解：
 
-1. EMQ X Broker 作为发送端时，再次重发的消息，必然是已存储在飞行窗口中的消息
-2. EMQ X Broker 作为接收端时，发送端重发的消息时：
-    - 如 QoS 1，EMQ X Broker 则直接回复 PUBACK 进行应答；
-    - 如 QoS 2，EMQ X Broker 则会释放，存储在 *最大接收消息* 队列中的 PUBLISH 或者 PUBREL 报文。
+1. EMQ X 作为发送端时，再次重发的消息，必然是已存储在飞行窗口中的消息
+2. EMQ X 作为接收端时，发送端重发的消息时：
+    - 如 QoS 1，EMQ X 则直接回复 PUBACK 进行应答；
+    - 如 QoS 2，EMQ X 则会释放，存储在 *最大接收消息* 队列中的 PUBLISH 或者 PUBREL 报文。
 
 
 ### 消息顺序
 
 当然，以上的概念仅需要了解即可，你最需要关心的是，**消息在被重复发送后，消息顺序出现的变化，尤其是 QoS 1 类的消息**。例如：
 
-假设，当前飞行窗口设置为 2 时，EMQ X Broker 计划向客户端的某主题投递 4 条 QoS 1 的消息。并假设客户端程序、或网络在中间出现过问题，那么整个发送流程会变成：
+假设，当前飞行窗口设置为 2 时，EMQ X 计划向客户端的某主题投递 4 条 QoS 1 的消息。并假设客户端程序、或网络在中间出现过问题，那么整个发送流程会变成：
 
 ```
 #1  [4,3,2,1 || ]   ----->   []
@@ -134,7 +134,7 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
 #6  [ || ]          ----->   [1, 2, 3, 2, 3, 4]
 ```
 
-流程共 6 个步骤；左边表示 EMQ X Broker 的 消息队列 和 飞行窗口，以 `||` 分割；右侧表示客户端收到的消息顺序，其中每步表示：
+流程共 6 个步骤；左边表示 EMQ X 的 消息队列 和 飞行窗口，以 `||` 分割；右侧表示客户端收到的消息顺序，其中每步表示：
 
 1. Broker 将 4 条消息放入消息队列中。
 2. Broker 依次发送 `1` `2`，并将其放入 **飞行窗口** 中；客户端仅应答消息 `1`；且此时由于客户端发送流出现了问题，无法发送后续应答报文。
@@ -145,7 +145,7 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
 
 虽然，存在重复的报文消息。但这是完全符合协议的规范的，每个报文第一次出现的位置都是有序的，并且重复收到的报文 `2` `3` 的报文中，会携带一个标识位，表明其为重发报文。
 
-MQTT 协议和 EMQ X Broker 将这个主题认为是 `有序的主题 (Ordered Topic)` 参见: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)。
+MQTT 协议和 EMQ X 将这个主题认为是 `有序的主题 (Ordered Topic)` 参见: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)。
 
 它确保 **相同的主题和 QoS 下，消息是按顺序投递和应答的**。
 

@@ -301,7 +301,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ##### 说明
 
-当使用 k8s 方式集群时，指定 Kubernetes 中 EMQ X Broker 的服务名。
+当使用 k8s 方式集群时，指定 Kubernetes 中 EMQ X 的服务名。
 
 <br />
 
@@ -1106,7 +1106,7 @@ ACL 检查失败后，执行的操作。
 
 ##### 说明
 
-是否忽略自己发送的消息。如果忽略，则表明 EMQ X Broker 不会向消息的发送端投递此消息。
+是否忽略自己发送的消息。如果忽略，则表明 EMQ X 不会向消息的发送端投递此消息。
 
 <br />
 
@@ -1335,7 +1335,7 @@ ACL 检查失败后，执行的操作。
 
 ##### 说明
 
-Keepalive 退避指数。EMQ X Broker 如果在 `Keepalive * backoff * 2` 的时间内未收到客户端的任何数据报文，则认为客户端已心跳超时。
+Keepalive 退避指数。EMQ X 如果在 `Keepalive * backoff * 2` 的时间内未收到客户端的任何数据报文，则认为客户端已心跳超时。
 
 <br />
 
@@ -1359,7 +1359,7 @@ Keepalive 退避指数。EMQ X Broker 如果在 `Keepalive * backoff * 2` 的时
 
 ##### 说明
 
-允许 EMQ X Broker 在投递消息时，强制升级消息的 QoS 等级为订阅的 QoS 等级。
+允许 EMQ X 在投递消息时，强制升级消息的 QoS 等级为订阅的 QoS 等级。
 
 <br />
 
@@ -1383,7 +1383,7 @@ Keepalive 退避指数。EMQ X Broker 如果在 `Keepalive * backoff * 2` 的时
 
 ##### 说明
 
-消息重发间隔。EMQ X Broker 在每个间隔检查是否需要进行消息重发。
+消息重发间隔。EMQ X 在每个间隔检查是否需要进行消息重发。
 
 <br />
 
@@ -1395,7 +1395,7 @@ Keepalive 退避指数。EMQ X Broker 如果在 `Keepalive * backoff * 2` 的时
 
 ##### 说明
 
-QoS 2 消息的最大接收窗口，配置 EMQ X Broker 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
+QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
 
 <br />
 
@@ -1499,13 +1499,13 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 ##### 说明
 
-主题挂载点。配置后，所有订阅和发布的主题在 EMQ X Broker 都会为其增加一个前缀。
+主题挂载点。配置后，所有订阅和发布的主题在 EMQ X 都会为其增加一个前缀。
 
 其中可用的占位符有：
 - `%c`：表示客户端的 Client ID。
 - `%u`：表示客户端的 Username。
 
-例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQ X Broker 中路由的主题是 `user/tom/open`。
+例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQ X 中路由的主题是 `user/tom/open`。
 
 <br />
 
@@ -1529,7 +1529,7 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 ##### 说明
 
-是否忽略自己发送的消息。如果忽略，则表明 EMQ X Broker 不会向消息的发送端投递此消息。
+是否忽略自己发送的消息。如果忽略，则表明 EMQ X 不会向消息的发送端投递此消息。
 
 <br />
 
@@ -1669,7 +1669,7 @@ ACL 检查失败后，执行的操作。
 
 ##### 说明
 
-QoS 2 消息的最大接收窗口，配置 EMQ X Broker 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
+QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
 
 <br />
 
@@ -1735,13 +1735,13 @@ QoS 2 消息的最大接收窗口，配置 EMQ X Broker 能够同时处理多少
 
 ##### 说明
 
-主题挂载点。配置后，所有订阅和发布的主题在 EMQ X Broker 都会为其增加一个前缀。
+主题挂载点。配置后，所有订阅和发布的主题在 EMQ X 都会为其增加一个前缀。
 
 其中可用的占位符有：
 - `%c`：表示客户端的 Client ID。
 - `%u`：表示客户端的 Username。
 
-例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQ X Broker 中路由的主题是 `user/tom/open`。
+例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQ X 中路由的主题是 `user/tom/open`。
 
 <br />
 
@@ -1753,7 +1753,7 @@ QoS 2 消息的最大接收窗口，配置 EMQ X Broker 能够同时处理多少
 
 ##### 说明
 
-是否忽略自己发送的消息。如果忽略，则表明 EMQ X Broker 不会向消息的发送端投递此消息。
+是否忽略自己发送的消息。如果忽略，则表明 EMQ X 不会向消息的发送端投递此消息。
 
 <br />
 
@@ -1924,7 +1924,7 @@ listener.tcp.external.access.2 = allow all
 
 ##### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X Broker 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
 
 <br />
 
@@ -2377,7 +2377,7 @@ listener.ssl.external.access.2 = allow all
 
 ##### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X Broker 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
 
 <br />
 
@@ -2692,7 +2692,7 @@ TCP 缓冲区大小 (用户级)。
 
 ##### 说明
 
-WebSocket 的 MQTT 协议路径。因此 EMQ X Broker 的 WebSocket 的地址是： `ws://<ip>:<port>/mqtt`。
+WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws://<ip>:<port>/mqtt`。
 
 <br />
 
@@ -2844,7 +2844,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQ X Broker 的 WebSocket 的地址是
 
 ##### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X Broker 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
 
 <br />
 
@@ -3246,7 +3246,7 @@ listener.wss.external.access.2 = allow all
 
 ##### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X Broker 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
 
 <br />
 
@@ -3887,7 +3887,7 @@ CPU 占用率回落到 `os_mon.cpu_low_watermark` 以下时将清除告警。
 
 ##### 说明
 
-EMQ X Broker 为所有进程分配的内存占系统内存的百分比超过 `os_mon.sysmem_high_watermark` 时将触发告警。
+EMQ X 为所有进程分配的内存占系统内存的百分比超过 `os_mon.sysmem_high_watermark` 时将触发告警。
 
 <br />
 
@@ -3899,7 +3899,7 @@ EMQ X Broker 为所有进程分配的内存占系统内存的百分比超过 `os
 
 ##### 说明
 
-EMQ X Broker 为单个进程分配的内存占系统内存的百分比超过 `os_mon.procmem_high_watermark` 时将触发告警。
+EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.procmem_high_watermark` 时将触发告警。
 
 <br />
 
@@ -5495,7 +5495,7 @@ ACL 查询命令。可用的占位符有：
 ##### 说明
 
 桥接地址，支持两种格式，例如：
-- `emqx@192.168.0.100`：EMQ X Broker 节点名称，它表示将该节点的消息桥接到另外一个 EMQ X 节点。
+- `emqx@192.168.0.100`：EMQ X 节点名称，它表示将该节点的消息桥接到另外一个 EMQ X 节点。
 - `192.168.0.100:1883`：IP 地址和端口，它表示将该节点的消息通过一个 MQTT 连接桥接到另外一个 MQTT 服务器。
 
 <br />
@@ -5597,7 +5597,7 @@ MQTT 桥接客户端的密码。
 ##### 说明
 
 桥接转发规则。例如：
-- `topic1/#, topic2/#`：`emqx_bridge_mqtt` 会将 EMQ X Broker 中所以与 `topic1/#`，`topic2/#` 匹配的主题消息进行转发。
+- `topic1/#, topic2/#`：`emqx_bridge_mqtt` 会将 EMQ X 中所以与 `topic1/#`，`topic2/#` 匹配的主题消息进行转发。
 
 <br />
 
@@ -6960,7 +6960,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ##### 说明
 
-`emqx_sn` 连接至 EMQ X Broker 的用户名。
+`emqx_sn` 连接至 EMQ X 的用户名。
 
 <br />
 
@@ -6972,7 +6972,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ##### 说明
 
-`emqx_sn` 连接至 EMQ X Broker 的密码。
+`emqx_sn` 连接至 EMQ X 的密码。
 
 <br />
 

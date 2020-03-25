@@ -19,7 +19,7 @@ ref: undefined
 
 ## 前言
 
-EMQ X Broker 在设计上，首先分离了前端协议 (FrontEnd) 与后端集成 (Backend)，其次分离了消息路由平面 (Flow
+EMQ X 在设计上，首先分离了前端协议 (FrontEnd) 与后端集成 (Backend)，其次分离了消息路由平面 (Flow
 Plane) 与监控管理平面 (Monitor/Control Plane):
 
 ![image](../assets/design_1.png)
@@ -28,12 +28,12 @@ Plane) 与监控管理平面 (Monitor/Control Plane):
 
 多核服务器和现代操作系统内核层面，可以很轻松支持 100 万 TCP 连接，核心问题是应用层面如何处理业务瓶颈。
 
-EMQ X Broker 在业务和应用层面，解决了单节点承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang
+EMQ X 在业务和应用层面，解决了单节点承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang
 虚拟机参数参见: <http://docs.emqtt.cn/zh_CN/latest/tune.html>。
 
 ### 全异步架构
 
-EMQ X Broker 是基于 Erlang/OTP 平台的全异步的架构：异步 TCP
+EMQ X 是基于 Erlang/OTP 平台的全异步的架构：异步 TCP
 连接处理、异步主题 (Topic) 订阅、异步消息发布。只有在资源负载限制部分采用同步设计，比如
 TCP 连接创建和 Mnesia 数据库事务执行。
 
@@ -65,14 +65,14 @@ Redis、MongoDB、Cassandra、MySQL、PostgreSQL 等数据库，以及 RabbitMQ�
 
 ### 概念模型
 
-EMQ X Broker 概念上更像一台网络路由器 (Router) 或交换机 (Switch)，而不是传统的企业级消息队列 (MQ)。相比网络路由器按
-IP 地址或 MPLS 标签路由报文，EMQ X Broker 按主题树 (Topic Trie) 发布订阅模式在集群节点间路由 MQTT 消息:
+EMQ X 概念上更像一台网络路由器 (Router) 或交换机 (Switch)，而不是传统的企业级消息队列 (MQ)。相比网络路由器按
+IP 地址或 MPLS 标签路由报文，EMQ X 按主题树 (Topic Trie) 发布订阅模式在集群节点间路由 MQTT 消息:
 
 ![image](./../assets/design_3.png)
 
 ### 设计原则
 
-1. EMQ X Broker 核心解决的问题：处理海量的并发 MQTT 连接与路由消息。
+1. EMQ X 核心解决的问题：处理海量的并发 MQTT 连接与路由消息。
 2. 充分利用 Erlang/OTP 平台软实时、低延时、高并发、分布容错的优势。
 3. 连接 (Connection)、会话 (Session)、路由 (Router)、集群 (Cluster) 分层。
 4. 消息路由平面 (Flow Plane) 与控制管理平面 (Control Plane) 分离。
