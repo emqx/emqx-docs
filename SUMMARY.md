@@ -97,4 +97,7 @@
   * [商业服务](faq/enterprise.md)
   * [FAQ 标签](faq/tags.md)
 * [配置项](configuration/configuration.md)
+* 版本发布
+  * [变更日志](changes/changes.md)
+  * [升级指南](changes/upgrade.md)
 * [相关资料](awesome/awesome.md)
