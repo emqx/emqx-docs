@@ -40,7 +40,7 @@ Client ID 认证默认使用 sha256 进行密码哈希加密，可在 `etc/plugi
 auth.client.password_hash = sha256
 ```
 
-配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQ X Broker 内置数据库中。
+配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQ X 内置数据库中。
 
 
 
@@ -60,7 +60,7 @@ auth.clientid.2.clientid = wivwiv_client
 auth.clientid.2.password = public
 ```
 
-插件启动时将读取预设认证数据并加载到 EMQ X Broker 内置数据库中，节点上的认证数据会在此阶段同步至集群中。
+插件启动时将读取预设认证数据并加载到 EMQ X 内置数据库中，节点上的认证数据会在此阶段同步至集群中。
 
 <!-- TODO 补充加载规则 -->
 

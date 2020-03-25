@@ -19,7 +19,7 @@ ref: undefined
 
 ## 控制日志输出 {#log-to}
 
-EMQ X Broker 支持将日志输出到控制台或者日志文件，或者同时使用两者。可在 `emqx.conf` 中配置：
+EMQ X 支持将日志输出到控制台或者日志文件，或者同时使用两者。可在 `emqx.conf` 中配置：
 
     log.to = both
 
@@ -35,13 +35,13 @@ EMQ X Broker 支持将日志输出到控制台或者日志文件，或者同时�
 
 ## 日志级别 {#log-levels}
 
-EMQ X Broker 的日志分 8 个等级 ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt))，由低到高分别为：
+EMQ X 的日志分 8 个等级 ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt))，由低到高分别为：
 
 ```bash
 debug < info < notice < warning < error < critical < alert < emergency
 ```
 
-EMQ X Broker 的默认日志级别为 warning，可在 `emqx.conf` 中修改：
+EMQ X 的默认日志级别为 warning，可在 `emqx.conf` 中修改：
 
 ```bash
 log.level = warning
@@ -51,7 +51,7 @@ log.level = warning
 
 ## 日志文件和日志滚动 {#log-file-and-log-rotation}
 
-EMQ X Broker 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/log/emqx` (二进制包安装)。可在 `emqx.conf` 中配置：
+EMQ X 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/log/emqx` (二进制包安装)。可在 `emqx.conf` 中配置：
 
 ```bash
 log.dir = log
@@ -59,10 +59,10 @@ log.dir = log
 
 在文件日志启用的情况下 (log.to = file 或 both)，日志目录下会有如下几种文件:
 
-- **emqx.log.N:** 以 emqx.log 为前缀的文件为日志文件，包含了 EMQ X Broker 的所有日志消息。比如 `emqx.log.1`, `emqx.log.2` ...
+- **emqx.log.N:** 以 emqx.log 为前缀的文件为日志文件，包含了 EMQ X 的所有日志消息。比如 `emqx.log.1`, `emqx.log.2` ...
 - **emqx.log.siz 和 emqx.log.idx:** 用于记录日志滚动信息的系统文件。
-- **run_erl.log:** 以 `emqx start` 方式后台启动 EMQ X Broker 时，用于记录启动信息的系统文件。
-- **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQ X Broker 时，控制台日志的副本文件。比如 `erlang.log.1`, `erlang.log.2` ...
+- **run_erl.log:** 以 `emqx start` 方式后台启动 EMQ X 时，用于记录启动信息的系统文件。
+- **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQ X 时，控制台日志的副本文件。比如 `erlang.log.1`, `erlang.log.2` ...
 
 可在 `emqx.conf` 中修改日志文件的前缀，默认为 `emqx.log`：
 
@@ -70,7 +70,7 @@ log.dir = log
 log.file = emqx.log
 ```
 
-EMQ X Broker 默认在单日志文件超过 10MB 的情况下，滚动日志文件，最多可有 5 个日志文件：第 1 个日志文件为 emqx.log.1，第 2 个为 emqx.log.2，并以此类推。当最后一个日志文件也写满 10MB 的时候，将从序号最小的日志的文件开始覆盖。文件大小限制和最大日志文件个数可在 `emqx.conf` 中修改：
+EMQ X 默认在单日志文件超过 10MB 的情况下，滚动日志文件，最多可有 5 个日志文件：第 1 个日志文件为 emqx.log.1，第 2 个为 emqx.log.2，并以此类推。当最后一个日志文件也写满 10MB 的时候，将从序号最小的日志的文件开始覆盖。文件大小限制和最大日志文件个数可在 `emqx.conf` 中修改：
 
 ```bash
 log.rotation.size = 10MB
@@ -147,7 +147,7 @@ log.chars_limit = 8192
 
 ## 日志级别和 log handlers {#log-level-and-log-handlers}
 
-EMQ X Broker 使用了分层的日志系统，在日志级别上，包括全局日志级别 (primary log level)、以及各 log hanlder 的日志级别。
+EMQ X 使用了分层的日志系统，在日志级别上，包括全局日志级别 (primary log level)、以及各 log hanlder 的日志级别。
 
 ```bash
      [Primary Level]        -- global log level and filters
@@ -189,7 +189,7 @@ Primary Log Level 相当于一个自来水管道系统的总开关，一旦关�
 
 ## 运行时修改日志级别 {#set-log-level-at-runtime}
 
-你可以使用 EMQ X Broker 的命令行工具 `emqx_ctl` 在运行时修改 emqx 的日志级别：
+你可以使用 EMQ X 的命令行工具 `emqx_ctl` 在运行时修改 emqx 的日志级别：
 
 #### 修改全局日志级别：
 
@@ -217,7 +217,7 @@ $ emqx_ctl log handlers set-level file debug
 
 ## 日志追踪 {#log-trace}
 
-EMQ X Broker 支持针对 ClientID 或 Topic 过滤日志并输出到文件。在使用日志追踪功能之前，必须将 primary log level 设置为 debug：
+EMQ X 支持针对 ClientID 或 Topic 过滤日志并输出到文件。在使用日志追踪功能之前，必须将 primary log level 设置为 debug：
 
 ```bash
 $ emqx_ctl log primary-level debug

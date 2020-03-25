@@ -104,7 +104,7 @@ HSET mqtt_acl:testtopic/2 2
 
 ## 超级用户查询命令（super cmd）
 
-进行 ACL 鉴权时，EMQ X Broker 将使用当前客户端信息填充并执行用户配置的超级用户查询命令，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询命令。
+进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户查询命令，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询命令。
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -112,7 +112,7 @@ HSET mqtt_acl:testtopic/2 2
 auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 ```
 
-你可以在命令中使用以下占位符，执行时 EMQ X Broker 将自动填充为客户端信息：
+你可以在命令中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
@@ -132,7 +132,7 @@ auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 
 ## ACL 查询命令（acl cmd）
 
-进行 ACL 鉴权时，EMQ X Broker 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，如果没有启用超级用户 SQL 或客户端不是超级用户，则使用 ACL 查询命令查询出该客户端在数据库中的 ACL 规则。
+进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，如果没有启用超级用户 SQL 或客户端不是超级用户，则使用 ACL 查询命令查询出该客户端在数据库中的 ACL 规则。
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -140,7 +140,7 @@ auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 auth.redis.acl_cmd = HGETALL mqtt_acl:%u
 ```
 
-你可以在 ACL 查询命令中使用以下占位符，执行时 EMQ X Broker 将自动填充为客户端信息：
+你可以在 ACL 查询命令中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID

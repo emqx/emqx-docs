@@ -17,7 +17,7 @@ ref: undefined
 
 # 安装
 
-EMQ X Broker 目前支持的操作系统:
+EMQ X 目前支持的操作系统:
 
 + Centos6
 + Centos7
@@ -137,7 +137,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
         software-properties-common
     ```
 
-2.  添加 EMQ X Broker 的官方 GPG 密钥
+2.  添加 EMQ X 的官方 GPG 密钥
   
     ```
     $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
@@ -180,7 +180,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo apt install emqx
     ```
     
-    在启用了多个 EMQ X Broker 仓库的情况下，如果 apt install 和 apt update
+    在启用了多个 EMQ X 仓库的情况下，如果 apt install 和 apt update
     命令没有指定版本号，那么会自动安装最新版的 EMQ
     X Broker。这对于有稳定性需求的用户来说是一个问题。
     
@@ -324,9 +324,9 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 {% content "binary" %}
 ## 二进制包安装 (Linux)
 
-1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X Broker 版本的二进制包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X 版本的二进制包。
   
-2. 安装 EMQ X Broker，将下面的路径更改为您下载 EMQ X Broker 软件包的路径。
+2. 安装 EMQ X Broker，将下面的路径更改为您下载 EMQ X 软件包的路径。
 
     + RPM 包:
 
@@ -394,7 +394,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 {% content "zip" %}
 ## ZIP 压缩包安装 (Linux、MaxOS、Windows)
 
-1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X Broker 版本的 zip 包。
+1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X 版本的 zip 包。
   
 2.  解压程序包
   
@@ -422,12 +422,12 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 5.  卸载 EMQ X Broker
 
-    直接删除 EMQ X Broker 目录即可
+    直接删除 EMQ X 目录即可
 
 {% content "homebrew" %}
 ## 通过 Homebrew 安装 (MacOS)
 
-1.  添加 EMQ X Broker 的 tap
+1.  添加 EMQ X 的 tap
   
     ```
     $ brew tap emqx/emqx
@@ -569,7 +569,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
                      stopped_nodes => []}
    ```
 
-更多关于 EMQ X Broker Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
+更多关于 EMQ X Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
 {% content "helm" %}
 ## 通过 Helkm 安装并集群 (K8S、K3S)
@@ -591,13 +591,13 @@ curl https://repos.emqx.io/install_emqx.sh | bash
   emqx/kuiper  0.1.1         0.1.1       A lightweight IoT edge analytic software
   ```
 
-3. 启动 EMQ X Broker 集群
+3. 启动 EMQ X 集群
 
   ```
   $ helm install my-emqx emqx/emqx
   ```
 
-4.  查看 EMQ X Broker 集群情况
+4.  查看 EMQ X 集群情况
 
   ```
   $ kubectl get pods

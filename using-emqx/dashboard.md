@@ -19,11 +19,11 @@ ref: undefined
 
 ## 简介
 
-EMQ X Broker 提供了 Dashboard 以方便用户管理设备与监控相关指标。通过 Dashboard，你可以查看服务器基本信息、负载情况和统计数据，可以查看某个客户端的连接状态等信息甚至断开其连接，也可以动态加载和卸载指定插件。除此之外，EMQ X Dashboard 还提供了规则引擎的可视化操作界面，同时集成了一个简易的 MQTT 客户端工具供用户测试使用。
+EMQ X 提供了 Dashboard 以方便用户管理设备与监控相关指标。通过 Dashboard，你可以查看服务器基本信息、负载情况和统计数据，可以查看某个客户端的连接状态等信息甚至断开其连接，也可以动态加载和卸载指定插件。除此之外，EMQ X Dashboard 还提供了规则引擎的可视化操作界面，同时集成了一个简易的 MQTT 客户端工具供用户测试使用。
 
 ## 启用 Dashboard
 
-EMQ X Dashboard 功能由 [emqx-dashboard](https://github.com/emqx/emqx-dashboard) 插件实现，该插件默认处于启用状态，它将在 EMQ X Broker 启动时自动加载。如果你希望禁用 Dashboard 功能，你可以将 `data/loaded_plugins`（请参见 [插件](../advanced/plugins.md#)）中的 `{emqx_dashboard, true}` 修改为 `{emqx_dashboard, false}`。
+EMQ X Dashboard 功能由 [emqx-dashboard](https://github.com/emqx/emqx-dashboard) 插件实现，该插件默认处于启用状态，它将在 EMQ X 启动时自动加载。如果你希望禁用 Dashboard 功能，你可以将 `data/loaded_plugins`（请参见 [插件](../advanced/plugins.md#)）中的 `{emqx_dashboard, true}` 修改为 `{emqx_dashboard, false}`。
 
 ```bash
 {emqx_dashboard, true}.
@@ -33,7 +33,7 @@ EMQ X Dashboard 功能由 [emqx-dashboard](https://github.com/emqx/emqx-dashboar
 
 EMQ X Dashboard 是一个 Web 应用程序，你可以直接通过浏览器来访问它，无需安装任何其他软件。
 
-当 EMQ X Broker 成功运行在你的本地计算机上且 EMQ X Dashboard 被默认启用时，你可以访问 http://localhost:18083 来查看你的 Dashboard，默认用户名是 `admin`，密码是 `public`。
+当 EMQ X 成功运行在你的本地计算机上且 EMQ X Dashboard 被默认启用时，你可以访问 http://localhost:18083 来查看你的 Dashboard，默认用户名是 `admin`，密码是 `public`。
 
 ## 配置 Dashboard
 
@@ -71,7 +71,7 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 #### Overview
 
-`Overview` 作为 Dashboard 的默认展示页面，提供了 EMQ X Broker 当前节点的详细信息和集群其他节点的关键信息，以帮助用户快速掌握每个节点的状态。
+`Overview` 作为 Dashboard 的默认展示页面，提供了 EMQ X 当前节点的详细信息和集群其他节点的关键信息，以帮助用户快速掌握每个节点的状态。
 
 ![image](../assets/dashboard-overview.png)
 
@@ -147,7 +147,7 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 ### RULE ENGINE
 
-使用 EMQ X Broker 的规则引擎可以灵活地处理消息和事件，例如将消息转换成指定格式后存入数据库表或者重新发送到消息队列等等。为了方便用户更好地使用规则引擎，EMQ X Dashboard 提供了相应的可视化操作页面，您可以点击 `RULE ENGINE` 导航项目来访问这些页面。
+使用 EMQ X 的规则引擎可以灵活地处理消息和事件，例如将消息转换成指定格式后存入数据库表或者重新发送到消息队列等等。为了方便用户更好地使用规则引擎，EMQ X Dashboard 提供了相应的可视化操作页面，您可以点击 `RULE ENGINE` 导航项目来访问这些页面。
 
 鉴于规则引擎的相关概念比较复杂， 涉及到的操作可能会占据相当大的篇幅，考虑到您的阅读体验，我们将通过额外的文档来介绍规则引擎，请参见 [规则引擎](../advanced/rule-engine.md#)。
 
@@ -157,17 +157,17 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 #### Plugins
 
-`Plugins` 页面列举了 EMQ X Broker 能够发现的所有插件，包括 EMQ X 官方插件与您遵循 EMQ X 官方标准自行开发的插件，您可以在此页面查看插件当前的运行状态以及随时启停插件。
+`Plugins` 页面列举了 EMQ X 能够发现的所有插件，包括 EMQ X 官方插件与您遵循 EMQ X 官方标准自行开发的插件，您可以在此页面查看插件当前的运行状态以及随时启停插件。
 
 ![image](../assets/dashboard-plugins.png)
 
-您可以看到，除了 [emqx-dashboard](https://github.com/emqx/emqx-dashboard) 以外，EMQ X Broker 还将默认启动 [emqx-rule-engine](https://github.com/emqx/emqx-rule-engine) 等 4 个插件：
+您可以看到，除了 [emqx-dashboard](https://github.com/emqx/emqx-dashboard) 以外，EMQ X 还将默认启动 [emqx-rule-engine](https://github.com/emqx/emqx-rule-engine) 等 4 个插件：
 
 ![image](../assets/dashboard-running-plugins.png)
 
 #### Applications
 
-`Applications` 页面列举了当前已创建的应用，您可以在此页面进行诸如创建应用、临时禁用或启动某个应用的访问权限等操作。EMQ X Broker 会创建一个 AppID 为 `admin`，AppSecret 为 `publish` 的默认应用方便用户首次访问：
+`Applications` 页面列举了当前已创建的应用，您可以在此页面进行诸如创建应用、临时禁用或启动某个应用的访问权限等操作。EMQ X 会创建一个 AppID 为 `admin`，AppSecret 为 `publish` 的默认应用方便用户首次访问：
 
 ![image](../assets/dashboard-applications.png)
 
@@ -177,10 +177,10 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 | ------------ | ------------------------------------------------------------ |
 | AppID        | 应用标识符，用于区分不同的应用，因此不可重复，在创建应用时 Dashboard 将自动为你生成一个随机的建议应用标识符 |
 | AppName      | 应用名称，可以重复，但为了方便您自己使用，我们不建议使用重复的应用名称 |
-| AppSecret    | 由 EMQ X Broker 分配的应用密钥，可以在应用详情中查看                |
+| AppSecret    | 由 EMQ X 分配的应用密钥，可以在应用详情中查看                |
 | Expired date | 应用的过期时间，默认为永不过期                               |
 | Remark       | 您对应用的描述，方便后期管理                                 |
-| Status       | 应用状态，只有 Allowed 与 Denied 两种，Denied 状态下 EMQ X Broker 将拒绝使用该 AppID 与 App Secret 的 HTTP API 的访问请求 |
+| Status       | 应用状态，只有 Allowed 与 Denied 两种，Denied 状态下 EMQ X 将拒绝使用该 AppID 与 App Secret 的 HTTP API 的访问请求 |
 
 ### TOOLS
 
@@ -194,7 +194,7 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 #### HTTP API
 
-`HTTP API` 页面列举了 EMQ X Broker 目前支持的所有 HTTP API 及其说明：
+`HTTP API` 页面列举了 EMQ X 目前支持的所有 HTTP API 及其说明：
 
 ![image](../assets/dashboard-http-api.png)
 
@@ -214,6 +214,6 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 #### Help
 
-如果您在使用 EMQ X Broker 的过程中遇到了任何问题，我们在 `Help` 页面为您提供了 FAQ 等文档的链接。如果我们现有的文档依然无法解决您的问题，您可以前往我们在 Github 的开源社区咨询我们的技术人员。
+如果您在使用 EMQ X 的过程中遇到了任何问题，我们在 `Help` 页面为您提供了 FAQ 等文档的链接。如果我们现有的文档依然无法解决您的问题，您可以前往我们在 Github 的开源社区咨询我们的技术人员。
 
 ![image](../assets/dashboard-help.png)

@@ -136,7 +136,7 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 
 ## 超级用户 SQL（super_query）
 
-进行 ACL 鉴权时，EMQ X Broker 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL SQL。
+进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL SQL。
 
 ```bash
 # etc/plugins/emqx_auth_mysql.conf
@@ -144,7 +144,7 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 ```
 
-你可以在 SQL 中使用以下占位符，执行时 EMQ X Broker 将自动填充为客户端信息：
+你可以在 SQL 中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
@@ -164,7 +164,7 @@ auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u
 
 ## ACL SQL（acl_query）
 
-进行 ACL 鉴权时，EMQ X Broker 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，如果没有启用超级用户 SQL 或客户端不是超级用户，则使用 ACL SQL 查询出该客户端在数据库中的 ACL 规则。
+进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，如果没有启用超级用户 SQL 或客户端不是超级用户，则使用 ACL SQL 查询出该客户端在数据库中的 ACL 规则。
 
 ```bash
 # etc/plugins/emqx_auth_mysql.conf
@@ -172,7 +172,7 @@ auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u
 auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 ```
 
-你可以在 ACL SQL 中使用以下占位符，执行时 EMQ X Broker 将自动填充为客户端信息：
+你可以在 ACL SQL 中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID

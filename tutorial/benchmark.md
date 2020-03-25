@@ -141,7 +141,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 此处我们以 2 类最典型的场景来验证工具的使用：
 
 1. 连接量：使用 `emqtt_bench` 创建百万连接到 EMQ X Broker。
-2. 吞吐量：使用 `emqtt_bench` 在 EMQ X Broker 中创建出 `10W/s 的 Qos0` 消息吞吐量。
+2. 吞吐量：使用 `emqtt_bench` 在 EMQ X 中创建出 `10W/s 的 Qos0` 消息吞吐量。
 
 ### 机器及部署拓扑图
 
@@ -206,7 +206,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 
 
-在所有连接建立完成后，执行 `./bin/emqx_ctl listeners`，并找到以下的内容， 查看 EMQ X Broker 中连接数的信息：
+在所有连接建立完成后，执行 `./bin/emqx_ctl listeners`，并找到以下的内容， 查看 EMQ X 中连接数的信息：
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883

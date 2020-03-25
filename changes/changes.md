@@ -37,7 +37,7 @@ emqx
   Github issue: [emqx/emqx#3304](https://github.com/emqx/emqx/issues/3304), [emqx/emqx#3315](https://github.com/emqx/emqx/issues/3315)
   Github PR: [emqx/emqx#3321](https://github.com/emqx/emqx/pull/3321)
   
-- 修复了 EMQ X Broker 运行在 Docker 环境中时 CPU 占用率每隔 15 秒异常升高的问题
+- 修复了 EMQ X 运行在 Docker 环境中时 CPU 占用率每隔 15 秒异常升高的问题
 
  Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
   Github PR: [emqx/emqx-rel#462](https://github.com/emqx/emqx-rel/pull/462)

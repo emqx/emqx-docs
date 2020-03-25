@@ -17,11 +17,11 @@ ref: undefined
 
 # 命令行接口
 
-EMQ X Broker 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQ X Broker 进行管理、配置、查询。
+EMQ X 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQ X 进行管理、配置、查询。
 
 ## status 命令
 
-查询 EMQ X Broker 运行状态:
+查询 EMQ X 运行状态:
 
 ```bash
 $ ./bin/emqx_ctl status
@@ -97,11 +97,11 @@ broker 命令查询服务器基本信息，启动时间，统计数据与性能�
 
 | 命令           | 描述                                                         |
 | -------------- | ------------------------------------------------------------ |
-| `broker` | 查询 EMQ X Broker 描述、版本、启动时间                    |
+| `broker` | 查询 EMQ X 描述、版本、启动时间                    |
 | `broker stats` | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、订阅 (Subscription)、路由 (Route) 统计信息 |
 | `broker metrics` | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计             |
 
-查询 EMQ X Broker 基本信息，包括版本、启动时间等:
+查询 EMQ X 基本信息，包括版本、启动时间等:
 
 ```bash
 $ ./bin/emqx_ctl broker
@@ -235,7 +235,7 @@ session.terminated            : 0
 
 ## cluster 命令
 
-cluster 命令可以管理由多个 EMQ X Broker 节点（进程）组成的集群:
+cluster 命令可以管理由多个 EMQ X 节点（进程）组成的集群:
 
 | 命令                         | 描述           |
 | ---------------------------- | -------------- |
@@ -308,7 +308,7 @@ $ cd emqx2 && ./bin/emqx_ctl cluster leave
 $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 ```
 
-注意，EMQ X Broker 不支持一个已经在一个集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致，但支持加入过集群的节点在离开该集群后加入另一个集群。
+注意，EMQ X 不支持一个已经在一个集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致，但支持加入过集群的节点在离开该集群后加入另一个集群。
 
 ## acl 命令
 
@@ -352,7 +352,7 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 | subscriptions             | 当前订阅数量                    |
 | inflight                  | 当前正在下发的 QoS 1 和 QoS 2 的消息总数     |
 | awaiting\_rel             | 等待客户端发送 PUBREL 的 QoS2 消息数 |
-| delivered\_msgs           | EMQ X Broker 向此客户端转发的消息数量 (包含重传)  |
+| delivered\_msgs           | EMQ X 向此客户端转发的消息数量 (包含重传)  |
 | enqueued\_msgs            | 消息队列当前长度                  |
 | dropped\_msgs             | 消息队列达到最大长度后丢弃的消息数量        |
 | connected                 | 是否在线                      |
@@ -382,7 +382,7 @@ ok
 
 routes 命令用于查询路由信息。
 
-EMQ X Broker 中路由是指主题与节点的映射关系，用于在多个节点之间路由消息。
+EMQ X 中路由是指主题与节点的映射关系，用于在多个节点之间路由消息。
 
 | 命令                  | 描述                |
 | --------------------- | ------------------- |
@@ -458,7 +458,7 @@ ok
 
 ## plugins 命令
 
-plugins 命令用于加载、卸载、查询插件应用。EMQ X Broker 通过插件扩展认证、定制功能，插件配置位于 `etc/plugins/` 目录下。
+plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩展认证、定制功能，插件配置位于 `etc/plugins/` 目录下。
 
 | 命令 | 描述 |
 | ------------------------- | -------------- |
@@ -843,7 +843,7 @@ Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
 
 ## recon 命令
 
-EMQ X Broker 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
+EMQ X 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
 
 | 命令                    | 描述                                                         |
 | ----------------------- | ------------------------------------------------------------ |
@@ -1007,7 +1007,7 @@ ok
 
 
 {% hint type="primary" %}
-动作可以由 EMQ X Broker 内置(称为系统内置动作)，或者由 EMQ X Broker 插件编写，但不能通过 CLI/API 添加或删除。
+动作可以由 EMQ X 内置(称为系统内置动作)，或者由 EMQ X 插件编写，但不能通过 CLI/API 添加或删除。
 {% endhint %}
 
 #### rule-actions show
@@ -1089,7 +1089,7 @@ ok
 | resource-types show `<Type>` | Show a resource-type    |
 
 {% hint type="primary" %}
-资源类型可以由 EMQ X Broker 内置(称为系统内置资源类型)，或者由 EMQ X Broker 插件编写，但不能通过 CLI/API 添加或删除。
+资源类型可以由 EMQ X 内置(称为系统内置资源类型)，或者由 EMQ X 插件编写，但不能通过 CLI/API 添加或删除。
 {% endhint %}
 
 #### resource-types list
