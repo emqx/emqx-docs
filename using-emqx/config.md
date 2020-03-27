@@ -27,7 +27,7 @@ EMQ X 的配置文件通常以 `.conf` 作为后缀名，你可以在 `etc` 目�
 | etc/acl.conf       | EMQ X 默认 ACL 规则配置文件 |
 | etc/plugins/*.conf | EMQ X 扩展插件配置文件      |
 
-需要注意的是，通过不同方式安装的 EMQ X Broker，`etc` 目录所处的路径可能不同，具体请参见 [目录结构](directory.md#)。
+需要注意的是，安装方式不同 `etc` 目录所处的路径可能不同，具体请参见 [目录结构](./directory.md#)。
 
 ## 语法规则
 

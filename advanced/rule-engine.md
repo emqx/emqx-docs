@@ -1,6 +1,6 @@
 ---
 # 标题
-title: 规则引擎
+title: 规则引擎示例
 # 编写日期
 date: 2020-02-20 17:46:13
 # 作者 Github 名称
@@ -14,6 +14,7 @@ category:
 # 引用
 ref: undefined
 ---
+
 
 # 规则引擎
 
@@ -995,7 +996,7 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 
 #### 哈希函数
 
-<table style="width:64%;">
+<table style="width:99%;">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 20%" />

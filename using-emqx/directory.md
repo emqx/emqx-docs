@@ -29,17 +29,18 @@ ref: undefined
 | 日志文件                    | `./log`                          | `/var/log/emqx`               |
 | 启动相关的脚本、schema 文件 | `./releases`                     | `/usr/lib/emqx/releases`      |
 
+
 以上目录中，用户经常接触与使用的是 `bin`、`etc`、`data`、`log` 目录。
 
 #### bin 目录
 
 **emqx、emqx.cmd**
 
-EMQ X 的可执行文件，具体使用可以查看 [基本命令](using-emqx/command-line.md)。
+EMQ X 的可执行文件，具体使用可以查看 [基本命令](../using-emqx/command-line.md)。
 
 **emqx_ctl、emqx_ctl.cmd**
 
-EMQ X 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](advanced/cli.md)。
+EMQ X 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](../advanced/cli.md)。
 
 #### etc 目录
 
@@ -51,8 +52,9 @@ EMQ X 通过 `etc` 目录下配置文件进行设置，主要配置文件包括:
 | acl.conf       | EMQ X 默认 ACL 规则配置文件 |
 | plugins/*.conf | EMQ X 各类插件配置文件    |
 | certs          | EMQ X SSL 证书文件       |
+| emqx.lic      | License 文件{% emqxce %}仅限 EMQ X Enterprise{% endemqxce %}   |
 
-EMQ X 具体的配置内容可以查看 [配置项](configuration/index.md)。
+EMQ X 具体的配置内容可以查看 [配置项](../configuration/index.md)。
 
 #### data 目录
 
@@ -64,8 +66,9 @@ EMQ X 读取 `etc/emqx.conf` 和 `etc/plugins/*.conf` 中的配置后，转换�
 
 **loaded_plugins**
 
-`loaded_plugins` 文件记录了 EMQ X 默认启动的插件列表，可以修改此文件以增删默认启动的插件。`loaded_plugins` 中启动项格式为 `{<Plugin Name>, <Enabled>}.`，`<Enabled>` 字段为布尔类型，EMQ X 会在启动时根据 `<Enabled>` 的值判断是否需要启动该插件。关于插件的更多内容，请查看 [插件](advanced/plugins.md)。
+`loaded_plugins` 文件记录了 EMQ X 默认启动的插件列表，可以修改此文件以增删默认启动的插件。`loaded_plugins` 中启动项格式为 `{<Plugin Name>, <Enabled>}.`，`<Enabled>` 字段为布尔类型，EMQ X 会在启动时根据 `<Enabled>` 的值判断是否需要启动该插件。关于插件的更多内容，请查看 [插件](../advanced/plugins.md)。
 
+{% emqxce %}
 ```bash
 $ cat loaded_plugins
 {emqx_management,true}.
@@ -75,6 +78,23 @@ $ cat loaded_plugins
 {emqx_rule_engine,true}.
 {emqx_bridge_mqtt,false}.
 ```
+{% endemqxce %}
+
+
+{% emqxee %}
+```bash
+$ cat loaded_plugins
+{emqx_management, true}.
+{emqx_recon, true}.
+{emqx_retainer, true}.
+{emqx_conf, true}.
+{emqx_dashboard, true}.
+{emqx_schema_registry, true}.
+{emqx_rule_engine, true}.
+{emqx_bridge_mqtt, false}.
+{emqx_cube, false}.
+```
+{% endemqxee %}
 
 **mnesia**
 
@@ -82,18 +102,18 @@ Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Er
 
 EMQ X 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规则引擎已创建的资源和规则、Dashbaord 用户信息等数据，这些数据都将被存储在 `mnesia` 目录下，因此一旦删除该目录，将导致 EMQ X 丢失所有业务数据。
 
-可以通过 `emqx_ctl mnesia` 命令查询 EMQ X 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](advanced/cli.md)。
+可以通过 `emqx_ctl mnesia` 命令查询 EMQ X 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../advanced/cli.md)。
 
 
 #### log 目录
 
 **emqx.log.***
 
-EMQ X 运行时产生的日志文件，具体请查看 [日志与追踪](using-emqx/log.md)。
+EMQ X 运行时产生的日志文件，具体请查看 [日志与追踪](./log.md)。
 
 **crash.dump**
 
-EMQ X 的崩溃转储文件，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](configuration/index.md)。
+EMQ X 的崩溃转储文件，可以通过 `etc/emqx.conf` 修改配置，具体内容可以查看 [配置项](../configuration/configuration.md)。
 
 **erlang.log.***
 
