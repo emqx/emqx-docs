@@ -108,7 +108,7 @@ Dashboard 中移除 **会话 (sessions)** 管理页面，相关信息整合到 *
 4.0 版本中规则引擎 SQL 语法更加易用，3.x 版本中所有事件 **FROM** 子句后面均需要指定事件名称，4.0 以后我们引入
 **事件主题** 概念，默认情况下 **消息发布** 事件不再需要指定事件名称：
 
-``` sourceCode 
+```bash 
 ## 3.x 版本
 ## 需要指定事件名称进行处理
 SELECT * FROM "message.publish" WHERE topic =~ 't/#'

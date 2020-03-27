@@ -3778,7 +3778,7 @@ EMQ R2.3 版本支持多种策略的节点自动发现与集群:
 
 EMQ R2.3版本正式支持集群脑裂自动愈合(Network Partition Autoheal):
 
-``` sourceCode properties
+```properties
 cluster.autoheal = on
 ```
 
@@ -3794,7 +3794,7 @@ cluster.autoheal = on
 
 EMQ R2.3版本支持从集群自动删除宕机节点(Autoclean):
 
-``` sourceCode properties
+```properties
 cluster.autoclean = 5m
 ```
 
@@ -5194,7 +5194,7 @@ release\](<https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release>)
 
 3.1G memory and 50+ CPU/core:
 
-``` sourceCode bash
+```bash
 Connections: 250K
 Subscribers: 250K
 Topics:      50K

@@ -1,4 +1,4 @@
-# SUMMARY
+# Summary
 
 * 概览
   * [EMQ X 消息服务器简介](introduction.md)
@@ -11,7 +11,7 @@
   * [目录结构](using-emqx/directory.md)
   * [配置说明](using-emqx/config.md)
   * [日志与追踪](using-emqx/log.md)
-  * [Dashboard](using-emqx/dashboard.md)
+  * [Dashboard](using-emqx/dashboard-ee.md)
 * 高级功能
   * 认证
     * [认证简介](advanced/auth.md)
@@ -54,7 +54,25 @@
   * 规则引擎
     * [规则引擎](advanced/rule-engine.md)
     * [创建规则](advanced/rule-examples.md)
-    * [规则引擎示例](https://www.emqx.io/cn/blog/category/rule-engine)
+    * [规则引擎示例](advanced/rule-use-guide.md)
+      <!-- * [创建 MySQL 规则](advanced/rule-use-guide.md##创建-mysql-规则)
+      * [创建 PostgreSQL 规则](advanced/rule-use-guide.md##创建-postgresql-规则)
+      * [创建 Cassandra 规则](advanced/rule-use-guide.md##创建-cassandra-规则)
+      * [创建 MongoDB 规则](advanced/rule-use-guide.md##创建-mongodb-规则)
+      * [创建 DynamoDB 规则](advanced/rule-use-guide.md##创建-dynamodb-规则)
+      * [创建 Redis 规则](advanced/rule-use-guide.md##创建-redis-规则)
+      * [创建 OpenTSDB 规则](advanced/rule-use-guide.md##创建-opentsdb-规则)
+      * [创建 TimescaleDB 规则](advanced/rule-use-guide.md##创建-timescaledb-规则)
+      * [创建 InfluxDB 规则](advanced/rule-use-guide.md##创建-influxdb-规则)
+      * [创建 WebHook 规则](advanced/rule-use-guide.md##创建-webhook-规则)
+      * [创建 Kafka 规则](advanced/rule-use-guide.md##创建-kafka-规则)
+      * [创建 Pulsar 规则](advanced/rule-use-guide.md##创建-pulsar-规则)
+      * [创建 RocketMQ 规则](advanced/rule-use-guide.md##创建-rocketmq-规则)
+      * [创建 RabbitMQ 规则](advanced/rule-use-guide.md##创建-rabbitmq-规则)
+      * [创建 BridgeMQTT 规则](advanced/rule-use-guide.md##创建-bridgemqtt-规则)
+      * [创建 BridgeRPC 规则](advanced/rule-use-guide.md##创建-bridgerpc-规则)
+      * [创建 Inspect 规则](advanced/rule-use-guide.md##创建-inspect-规则)
+      * [创建 WebHook 规则](advanced/rule-use-guide.md##创建-webhook-规则) -->
   * [分布集群](advanced/cluster.md)
   * [消息桥接](advanced/bridge.md)
   * [钩子](advanced/hooks.md)
@@ -72,7 +90,6 @@
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
-  * [企业功能](advanced/enterprise.md)
 * 教程指南
   * [设备管理](tutorial/device-management.md)
   * [系统调优](tutorial/turn.md)
