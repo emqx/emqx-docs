@@ -51,7 +51,7 @@ EMQ X Dashboard 可以配置多个用户，但在配置文件中仅支持配置�
 
 EMQ X Dashboard 支持 HTTP 和 HTTPS 两种 Listener，但默认只启用了监听端口为 18083 的 HTTP Listener，关于 Listener 的介绍请参见 [配置说明](config.md#)。
 
-关于 Dashboard 的详细配置项说明，请参见 [配置项](../configuration/index.md#)。
+关于 Dashboard 的详细配置项说明，请参见 [配置项](../configuration/configuration.md)。
 
 ## Dashboard 界面
 
@@ -149,7 +149,7 @@ EMQ X Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 使用 EMQ X 的规则引擎可以灵活地处理消息和事件，例如将消息转换成指定格式后存入数据库表或者重新发送到消息队列等等。为了方便用户更好地使用规则引擎，EMQ X Dashboard 提供了相应的可视化操作页面，您可以点击 `RULE ENGINE` 导航项目来访问这些页面。
 
-鉴于规则引擎的相关概念比较复杂， 涉及到的操作可能会占据相当大的篇幅，考虑到您的阅读体验，我们将通过额外的文档来介绍规则引擎，请参见 [规则引擎](../advanced/rule-engine.md#)。
+鉴于规则引擎的相关概念比较复杂， 涉及到的操作可能会占据相当大的篇幅，考虑到您的阅读体验，我们将通过额外的文档来介绍规则引擎，请参见 [规则引擎](../rule/rule-engine.md#)。
 
 ### MANAGEMENT
 

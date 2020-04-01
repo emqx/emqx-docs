@@ -807,7 +807,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 ##### 说明
 
-全局的日志级别。这包括 primary log level 以及所有的 log handlers。详情请参见 [日志级别和 log handlers](../using-emqx/log.md#log-level-and-log-handlers)。
+全局的日志级别。这包括 primary log level 以及所有的 log handlers。详情请参见 [日志级别和 log handlers](../getting-started/log.md#log-level-and-log-handlers)。
 
 <br />
 

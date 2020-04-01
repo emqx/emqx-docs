@@ -22,16 +22,16 @@ ref: undefined
 
 <div class="emqxce">
 {% hint style="danger" %}
-EMQ X Broker 版本中仅适用以下操作：
-- 创建 Inspect 规则
-- 创建 WebHook 规则
-- 创建 BridgeMQTT 规则
+EMQ X Broker 中仅适用以下操作：
+- 空动作 (调试)
+- 发送数据到 Web 服务
+- 桥接数据到 MQTT Broker
 
 其余均是 EMQ X Enterprise 专属功能。
 {% endhint %}
 </div>
 
-## 创建 Inspect 规则
+## 空动作 (调试)
 
 创建一个测试规则，当有消息发送到 't/a' 主题时，打印消息内容以及动作参数细节。
 
@@ -93,7 +93,7 @@ $ tail -f log/erlang.log.1
  - `Action Init Params` 是初始化动作的时候，我们传递给动作的参数。
 
 
-## 创建 WebHook 规则
+## 发送数据到 Web 服务
 
 创建一个规则，将所有发送自 client\_id='Steven' 的消息，转发到地址为 '<http://127.0.0.1:9910>' 的
 Web 服务器:
@@ -178,7 +178,7 @@ token: axfw34y235wrq234t4ersgw4t
 
 
 
-## 创建 BridgeMQTT 规则
+## 桥接数据到 MQTT Broker
 
 搭建 MQTT Broker 环境，以 MaxOS X 为例:
 ```bash
@@ -253,7 +253,7 @@ Payload: "Hello, World\!"
 
 ![image](./assets/rule-engine/mqtt-rulelist-0.png)
 
-## 创建 MySQL 规则
+## 保存数据到 MySQL
 
 搭建 MySQL 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 
@@ -364,7 +364,7 @@ Payload: "hello"
 
 ![image](./assets/rule-engine/mysql_result_1@2x.png)
 
-## 创建 PostgreSQL 规则
+## 保存数据到 PostgreSQL
 
 搭建 PostgreSQL 数据库，以 MacOS X 为例:
 
@@ -480,7 +480,7 @@ Payload: "hello1"
 
 ![image](./assets/rule-engine/pgsql-rulelist-1@2x.png)
 
-## 创建 Cassandra 规则
+## 保存数据到 Cassandra
 
 搭建 Cassandra 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 
@@ -585,7 +585,7 @@ Payload: "hello"
 
 ![image](./assets/rule-engine/cass-rule-result@2x.png)
 
-## 创建 MongoDB 规则
+## 保存数据到 MongoDB
 
 搭建 MongoDB 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 
@@ -674,7 +674,7 @@ Payload: "hello"
 
 ![image](./assets/rule-engine/mongo-rule-result@2x.png)
 
-## 创建 DynamoDB 规则
+## 保存数据到 DynamoDB
 
 搭建 DynamoDB 数据库，以 MacOS X 为例:
 
@@ -783,7 +783,7 @@ Payload: "hello"
 
 ![image](./assets/rule-engine/dynamo-result-1.png)
 
-## 创建 Redis 规则
+## 保存数据到 Redis
 
 搭建 Redis 环境，以 MaxOS X 为例:
 
@@ -877,7 +877,7 @@ hgetall Key
 
 ![image](./assets/rule-engine/redis-rulelist-0@2x.png)
 
-## 创建 OpenTSDB 规则
+## 保存数据到 OpenTSDB
 
 搭建 OpenTSDB 数据库环境，以 MaxOS X 为例:
 
@@ -1033,7 +1033,7 @@ Postman-Token: 69af0565-27f8-41e5-b0cd-d7c7f5b7a037
 
 ![image](./assets/rule-engine/opentsdb-rulelist-1@2x.png)
 
-## 创建 TimescaleDB 规则
+## 保存数据到 TimescaleDB
 
 搭建 TimescaleDB 数据库环境，以 MaxOS X 为例:
 
@@ -1158,7 +1158,7 @@ tutorial=# SELECT * FROM conditions LIMIT 100;
 
 ![image](./assets/rule-engine/timescaledb-rulelist-0@2x.png)
 
-## 创建 InfluxDB 规则
+## 保存数据到 InfluxDB
 
 搭建 InfluxDB 数据库环境，以 MacOS X 为例:
 
@@ -1266,7 +1266,7 @@ time                external host    internal location
 ![image](./assets/rule-engine/influxdb-rulelist-0@2x.png)
 
 
-## 创建 Kafka 规则
+## 桥接数据到 Kafka
 
 搭建 Kafka 环境，以 MaxOS X 为例:
 ```bash
@@ -1365,7 +1365,7 @@ $ ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic tes
 
 ![image](./assets/rule-engine/kafka-rulelist-0@2x.png)
 
-## 创建 Pulsar 规则
+## 桥接数据到 Pulsar
 
 搭建 Pulsar 环境，以 MaxOS X 为例:
    
@@ -1458,7 +1458,7 @@ $ ./bin/pulsar-client consume testTopic  -s "sub-name" -n 1000
 
 ![image](./assets/rule-engine/pulsar-rulelist-0@2x.png)
 
-## 创建 RocketMQ 规则
+## 桥接数据到 RocketMQ
 
 搭建 RocketMQ 环境，以 MaxOS X
        为例:
@@ -1548,7 +1548,7 @@ $ ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer TopicTest
 
 ![image](./assets/rule-engine/rocket-rulelist-0@2x.png)
 
-## 创建 RabbitMQ 规则
+## 桥接数据到 RabbitMQ
 
 搭建 RabbitMQ 环境，以 MaxOS X 为例:
 
@@ -1660,7 +1660,7 @@ channel.start_consuming()
 ![image](./assets/rule-engine/rabbit-rulelist-0.png)
 
 
-## 创建 BridgeRPC 规则
+## 桥接数据到 RPC 服务
 
 搭建 EMQX Broker 环境，以 MaxOS X 为例:
 

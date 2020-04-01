@@ -36,7 +36,7 @@ ref: undefined
 
 **emqx、emqx.cmd**
 
-EMQ X 的可执行文件，具体使用可以查看 [基本命令](../using-emqx/command-line.md)。
+EMQ X 的可执行文件，具体使用可以查看 [基本命令](./command-line.md)。
 
 **emqx_ctl、emqx_ctl.cmd**
 
@@ -54,7 +54,7 @@ EMQ X 通过 `etc` 目录下配置文件进行设置，主要配置文件包括:
 | certs          | EMQ X SSL 证书文件       |
 | emqx.lic      | License 文件{% emqxce %}仅限 EMQ X Enterprise{% endemqxce %}   |
 
-EMQ X 具体的配置内容可以查看 [配置项](../configuration/index.md)。
+EMQ X 具体的配置内容可以查看 [配置项](../configuration/configuration.md)。
 
 #### data 目录
 

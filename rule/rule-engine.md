@@ -28,7 +28,7 @@ EMQ X 在 **消息发布或事件触发** 时将触发规则引擎，满足触�
 {% hint style="info" %}
 适用版本: **EMQ X v3.1.0+**
 
-兼容提示: EMQ X v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule_engine.md# 迁移指南) 进行适配。
+兼容提示: EMQ X v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule-engine.md#迁移指南) 进行适配。
 {% endhint %}
 
 ### 消息发布
@@ -148,7 +148,9 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
 
 SQL 语句用于从原始数据中，根据条件筛选出字段，并进行预处理和转换，基本格式为::
 
-    SELECT <字段名> FROM <主题> [WHERE <条件>]
+```sql
+SELECT <字段名> FROM <主题> [WHERE <条件>]
+````
 
 FROM、SELECT 和 WHERE 子句:
 
@@ -167,45 +169,64 @@ FROM、SELECT 和 WHERE 子句:
 
 ### SQL 语句示例: {#rule-sql-examples}
 
-- 从 topic 为 "t/a" 的消息中提取所有字段::
+- 从 topic 为 "t/a" 的消息中提取所有字段:
 
-    SELECT * FROM "t/a"
+```sql
+SELECT * FROM "t/a"
+```
 
 - 从 topic 为 "t/a" 或 "t/b" 的消息中提取所有字段::
 
-    SELECT * FROM "t/a","t/b"
-
+```sql
+SELECT * FROM "t/a","t/b"
+```
 - 从 topic 能够匹配到 't/#' 的消息中提取所有字段。
 
-    SELECT * FROM "t/#"
+```sql
+SELECT * FROM "t/#"
+```
 
 - 从 topic 能够匹配到 't/#' 的消息中提取 qos, username 和 clientid 字段::
 
-    SELECT qos, username, clientid FROM "t/#"
+```sql
+SELECT qos, username, clientid FROM "t/#"
+```
 
 - 从任意 topic 的消息中提取 username 字段，并且筛选条件为 username = 'Steven'::
 
-    SELECT username FROM "#" WHERE username='Steven'
+```sql
+SELECT username FROM "#" WHERE username='Steven'
+```
 
 - 从任意 topic 的 JSON 消息体(payload) 中提取 x 字段，并创建别名 x 以便在 WHERE 子句中使用。WHERE 子句限定条件为 x = 1。下面这个 SQL 语句可以匹配到消息体 {"x": 1}, 但不能匹配到消息体 {"x": 2}:
 
-  SELECT payload as p FROM "#" WHERE p.x = 1
+```sql
+SELECT payload as p FROM "#" WHERE p.x = 1
+```
 
 - 类似于上面的 SQL 语句，但嵌套地提取消息体中的数据，下面的 SQL 语句可以匹配到 JSON 消息体 {"x": {"y": 1}}:
 
-  SELECT payload as a FROM "#" WHERE a.x.y = 1
+```sql
+SELECT payload as a FROM "#" WHERE a.x.y = 1
+```
 
 - 在 clientid = 'c1' 尝试连接时，提取其来源 IP 地址和端口号::
 
-    SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
+```sql
+SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
+```
 
 - 筛选所有订阅 't/#' 主题且订阅级别为 QoS1 的 clientid::
 
-    SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
+```sql
+SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
+```
 
 - 筛选所有订阅主题能匹配到 't/#' 且订阅级别为 QoS1 的 clientid。注意与上例不同的是，这里用的是主题匹配操作符 **'=~'**，所以会匹配订阅 't' 或 't/+/a' 的订阅事件::
 
-    SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
+```sql
+SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
+```
 
 {% hint type="primary" %}
 - FROM 子句后面的主题需要用双引号 ``""`` 引起来。
@@ -218,13 +239,13 @@ FROM、SELECT 和 WHERE 子句:
 
 | 事件主题名                    | 释义     |
 | ----------------------------- | :------- |
-| $events/message\_delivered    | 消息投递 |
-| $events/message\_acked        | 消息确认 |
-| $events/message\_dropped      | 消息丢弃 |
-| $events/client\_connected     | 连接完成 |
-| $events/client\_disconnected  | 连接断开 |
-| $events/session\_subscribed   | 订阅     |
-| $events/session\_unsubscribed | 取消订阅 |
+| $events/message_delivered    | 消息投递 |
+| $events/message_acked        | 消息确认 |
+| $events/message_dropped      | 消息丢弃 |
+| $events/client_connected     | 连接完成 |
+| $events/client_disconnected  | 连接断开 |
+| $events/session_subscribed   | 订阅     |
+| $events/session_unsubscribed | 取消订阅 |
 
 ### SELECT 和 WHERE 子句可用的字段 {#rule-sql-columns}
 
@@ -246,13 +267,13 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | timestamp | 时间戳 (ms)                           |
 | node      | 事件触发所在节点                      |
 
-#### $events/message\_delivered (消息投递)
+#### $events/message_delivered (消息投递)
 
 | event          | 事件类型，固定为 "message.delivered" |
 | -------------- | ------------------------------------ |
 | id             | MQTT 消息 ID                         |
-| from\_clientid | 消息来源 Client ID                   |
-| from\_username | 消息来源用户名                       |
+| from_clientid | 消息来源 Client ID                   |
+| from_username | 消息来源用户名                       |
 | clientid       | 消息目的 Client ID                   |
 | username       | 消息目的用户名                       |
 | payload        | MQTT 消息体                          |
@@ -267,8 +288,8 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | event          | 事件类型，固定为 "message.acked" |
 | :------------- | :------------------------------- |
 | id             | MQTT 消息 ID                     |
-| from\_clientid | 消息来源 Client ID               |
-| from\_username | 消息来源用户名                   |
+| from_clientid | 消息来源 Client ID               |
+| from_username | 消息来源用户名                   |
 | clientid       | 消息目的 Client ID               |
 | username       | 消息目的用户名                   |
 | payload        | MQTT 消息体                      |
@@ -303,13 +324,13 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | mountpoint       | 主题挂载点(主题前缀)                |
 | peername         | 终端的 IPAddress 和 Port            |
 | sockname         | emqx 监听的 IPAddress 和 Port       |
-| proto\_name      | 协议名字                            |
-| proto\_ver       | 协议版本                            |
+| proto_name      | 协议名字                            |
+| proto_ver       | 协议版本                            |
 | keepalive        | MQTT 保活间隔                       |
-| clean\_start     | MQTT clean\_start                   |
-| expiry\_interval | MQTT Session 过期时间               |
-| is\_bridge       | 是否为 MQTT bridge 连接             |
-| connected\_at    | 终端连接完成时间 (s)                |
+| clean_start     | MQTT clean_start                   |
+| expiry_interval | MQTT Session 过期时间               |
+| is_bridge       | 是否为 MQTT bridge 连接             |
+| connected_at    | 终端连接完成时间 (s)                |
 | timestamp        | 时间戳 (ms)                         |
 | node             | 事件触发所在节点                    |
 
@@ -322,7 +343,7 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | username         | 消息目的用户名                         |
 | peername         | 终端的 IPAddress 和 Port               |
 | sockname         | emqx 监听的 IPAddress 和 Port          |
-| disconnected\_at | 终端连接断开时间 (s)                   |
+| disconnected_at | 终端连接断开时间 (s)                   |
 | timestamp        | 时间戳 (ms)                            |
 | node             | 事件触发所在节点                       |
 

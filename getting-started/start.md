@@ -63,7 +63,7 @@ $ emqx_ctl status
 Node 'emqx@127.0.0.1' not responding to pings。
 ```
 
-你可以查看 [`logs`](../using-emqx/directory.md) 下的日志文件并确认是否属于 [常见错误](../faq/error.md#)。
+你可以查看 [`logs`](../getting-started/directory.md) 下的日志文件并确认是否属于 [常见错误](../faq/error.md#)。
 
 {% emqxce %}
 ## 启动 EMQ X Enterprise

@@ -13,4 +13,3 @@ fs.copyFileSync(
   path.join(__dirname, '../', summary),
   targetSummary,
 )
-
