@@ -246,7 +246,7 @@ cluster 命令可以管理由多个 EMQ X 节点（进程）组成的集群:
 
 示例:
 
-为更好地展示 cluster 命令，我们先在本机启动两个节点并组成集群，为避免端口冲突，我们对 emqx2 节点的监听端口做出了调整，例如 MQTT/TCP 监听端口由默认的 1883 改为了 2883，详情请参见 [配置说明](using-emqx/config.md) 与 [配置项](configuration/index.md)。
+为更好地展示 cluster 命令，我们先在本机启动两个节点并组成集群，为避免端口冲突，我们对 emqx2 节点的监听端口做出了调整，例如 MQTT/TCP 监听端口由默认的 1883 改为了 2883，详情请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
 
 启动 emqx1 :
 
@@ -703,7 +703,7 @@ error
 
 ## trace 命令
 
-trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，详情请查看 [日志与追踪](using-emqx/log.md)。
+trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，详情请查看 [日志与追踪](../getting-started/log.md)。
 
 | 命令                                              | 描述                                       |
 | ------------------------------------------------ | ------------------------------------------ |

@@ -59,7 +59,7 @@ mqtt.max_packet_size = 1MB
 
 **enum**
 
-通常我们会在类型为 `enum` 的配置项附近列出它的所有可选值。当然，你也可以查找 [配置项](../configuration/index.md#)。
+通常我们会在类型为 `enum` 的配置项附近列出它的所有可选值。当然，你也可以查找 [配置项](../configuration/configuration.md)。
 
 **ip**
 
@@ -87,7 +87,7 @@ dir = "tmp"
 
 **flag**
 
-`flag` 用于那些具有两个可能值的变量，`flag` 默认可用值为 `on` 和 `off`，它们将映射为 `true` 和 `false` 以供应用程序使用。如果我们为某个配置项建立了其他的映射关系，我们会在配置文件中注明，你也可以在 [配置项](../configuration/index.md#) 中查找这些信息。
+`flag` 用于那些具有两个可能值的变量，`flag` 默认可用值为 `on` 和 `off`，它们将映射为 `true` 和 `false` 以供应用程序使用。如果我们为某个配置项建立了其他的映射关系，我们会在配置文件中注明，你也可以在 [配置项](../configuration/configuration.md) 中查找这些信息。
 
 **duration**
 
@@ -148,6 +148,6 @@ listener.tcp.example = 12345
 
 ### Zone
 
-一个 Zone 定义了一组配置项 (比如最大连接数等)，Listener 可以通过配置项 `listener.<Protocol>.<Listener Name>.zone` 指定使用某个 Zone，以使用该 Zone 下的所有配置。多个 Listener 可以共享同一个 Zone。Zone 的命名规则为 `zone.<Zone Name>.xxx`，`Zone Name` 可以随意命名，但同样建议是全小写的英文单词，`xxx` 是具体的配置项，你可以在 [配置项](../configuration/index.md#) 中查看 Zone 支持的所有配置项。
+一个 Zone 定义了一组配置项 (比如最大连接数等)，Listener 可以通过配置项 `listener.<Protocol>.<Listener Name>.zone` 指定使用某个 Zone，以使用该 Zone 下的所有配置。多个 Listener 可以共享同一个 Zone。Zone 的命名规则为 `zone.<Zone Name>.xxx`，`Zone Name` 可以随意命名，但同样建议是全小写的英文单词，`xxx` 是具体的配置项，你可以在 [配置项](../configuration/configuration.md) 中查看 Zone 支持的所有配置项。
 
 此时，我们的每个配置项都存在三个可用值，分别是全局的值，Zone 里设置的值以及默认值，它们的优先级顺序为：Zone > Global > Default。

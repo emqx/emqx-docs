@@ -87,7 +87,7 @@
       },
       {
         "title": "规则引擎",
-        "file": "advanced/rule-engine.md"
+        "file": "rule/rule-engine.md"
       },
       {
         "title": "分布集群",

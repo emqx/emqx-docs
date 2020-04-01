@@ -31,7 +31,7 @@ ref: undefined
 
 ## 在线状态与连接历史管理
 
-设备连接、断开时 EMQ X 可以通过 Webhook 插件、[规则引擎](../advanced/rule-engine.md) 向管理系统 HTTP API 发送上下线信息，实现设备在线状态改写、设备连接 / 断开历史记录等功能。
+设备连接、断开时 EMQ X 可以通过 Webhook 插件、[规则引擎](../rule/rule-engine.md) 向管理系统 HTTP API 发送上下线信息，实现设备在线状态改写、设备连接 / 断开历史记录等功能。
 
 使用断开设备 API 可以实现在线设备踢出，会话清除操作。
 
