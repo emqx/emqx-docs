@@ -180,3 +180,16 @@ p .token.punctuation {
   font-size: 14px;
   outline: none;
 }
+
+
+li.header {
+  font-weight: 800;
+  color: #333;
+  font-size: 16px;
+}
+.summary li.chapter {
+  font-size: 16px;
+}
+.articles li.chapter {
+  font-size: 14px;
+}
