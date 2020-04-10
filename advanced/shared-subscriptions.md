@@ -32,7 +32,7 @@ ref: undefined
 | 示例            | 前缀        | 真实主题名 |
 | --------------- | ----------- | ---------- |
 | $queue/t/1      | $queue/     | t/1        |
-| $shared/abc/t/1 | $shared/abc | t/1        |
+| $share/abc/t/1 | $share/abc | t/1        |
 
 
 ### 带群组的共享订阅
