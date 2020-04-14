@@ -23,6 +23,7 @@
     "gitbook-plugin-local-pagefooter": "^1.0.5",
     "gitbook-plugin-page-toc": "^1.1.1",
     "gitbook-plugin-prism": "^2.4.0",
+    "gitbook-plugin-emqx": "*",
     "gitbook-plugin-scripts": "^1.0.2",
     "gitbook-plugin-simpletabs": "^0.1.1",
     "glob": "^7.1.6",
