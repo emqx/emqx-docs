@@ -33,7 +33,7 @@ ref:
 
 你可通过以下途径与 EMQ 社区及开发者联系：
 
-  - [EMQ X Slack](http://emqx.slack.com)
+  - [EMQ X Slack](https://slack-invite.emqx.io)
   - [Twitter](https://twitter.com/emqtt)
   - [Forum](https://groups.google.com/d/forum/emqtt)
   - [Medium](https://medium.com/@emqtt)
