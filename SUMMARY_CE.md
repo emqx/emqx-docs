@@ -122,7 +122,7 @@
   * [Prometheus 监控告警](tutorial/prometheus.md)
   * [性能测试](tutorial/benchmark.md)
 
-## [配置项](configuration/configuration.md)
+*[配置项](configuration/configuration.md)
 
 ## SDK & Tools
   * [MQTT 客户端库](development/client.md)
@@ -148,5 +148,5 @@
   
 ## 相关资料
   * [架构设计](design/design.md)
-  * [相关资料](awesome/awesome.md)
+  * [资源](awesome/awesome.md)
 
