@@ -1,15 +1,16 @@
+
 ## 概览
   * [EMQ X 消息服务器简介](introduction.md)
   * [EMQ X 消息服务器功能列表](introduction/checklist.md)
 
 ## 开始使用
-  * [安装](getting-started/install.md)
+  * [安装](getting-started/install-ee.md)
   * [启动 EMQ X](getting-started/start.md)
   * [基本命令](getting-started/command-line.md)
   * [目录结构](getting-started/directory.md)
   * [配置说明](getting-started/config.md)
   * [日志与追踪](getting-started/log.md)
-  * [Dashboard](getting-started/dashboard.md)
+  * [Dashboard](getting-started/dashboard-ee.md)
 
 ## 基础功能
   * [保留消息](advanced/retained.md)
@@ -33,7 +34,6 @@
     * [PostgreSQL 认证](advanced/auth-postgresql.md)
     * [Redis 认证](advanced/auth-redis.md)
     * [MongoDB 认证](advanced/auth-mongodb.md)
-
   * 发布订阅 ACL
     * [发布订阅 ACL 简介](advanced/acl.md)
     * [内置 ACL](advanced/acl-file.md)
@@ -42,7 +42,6 @@
     * [PostgreSQL ACL](advanced/acl-postgres.md)
     * [Redis ACL](advanced/acl-redis.md)
     * [MongoDB ACL](advanced/acl-mongodb.md)
-    
   * [WebHook](advanced/webhook.md)
   * [分布集群](advanced/cluster.md)
   * [钩子](advanced/hooks.md)
@@ -77,6 +76,7 @@
 ## 规则引擎
   * [规则引擎](rule/rule-engine.md)
   * [创建规则](rule/rule-create.md)
+  * [编解码](rule/schema-registry.md)
   * [空动作 (调试)](rule/rule-example.md)
   * [发送数据到 Web 服务](rule/rule-example.md#发送数据到-web-服务)
   * [桥接数据到 MQTT Broker](rule/rule-example.md#桥接数据到-mqtt-broker)
@@ -143,10 +143,10 @@
   * [FAQ 标签](faq/tags.md)
 
 ## 版本发布
-  * [变更日志](changes/changes.md)
+  <!-- * [变更日志](changes/changes-ee.md) -->
   * [升级指南](changes/upgrade.md)
-  
+
 ## 相关资料
   * [架构设计](design/design.md)
-  * [资源](awesome/awesome.md)
+  <!-- * [相关资料](awesome/awesome.md) -->
 
