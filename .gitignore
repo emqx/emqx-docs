@@ -3,3 +3,4 @@ _book
 yarn-error.log
 book.pdf
 .vscode
+*.lock
