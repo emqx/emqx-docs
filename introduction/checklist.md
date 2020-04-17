@@ -56,11 +56,11 @@ ref: undefined
   - 桥接数据到 MQTT Broker
   - 检查 (调试)
   - 发送数据到 Web 服务
-{% emqxce %}
 
-  **以下是 EMQ X Enterprise 特有功能**
+<strong class="emqxce">
+以下是 EMQ X Enterprise 特有功能
+</strong>
 
-{% endemqxce %}
 - Scalable RPC 架构: 分离 Erlang 自身的集群通道与 EMQ X 节点间的数据通道
 - 数据持久化
   - Redis 存储订阅关系、设备在线状态、MQTT 消息、保留消息，发布 SUB/UNSUB 事件
