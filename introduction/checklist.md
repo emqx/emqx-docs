@@ -117,6 +117,10 @@ EMQ X Enterprise 支持百万级物联网设备一站式接入、MQTT&CoAP 多�
 ## 功能说明
 {% endemqxee %}
 
+{% emqxce %}
+## 企业版功能
+{% endemqxce %}
+
 ### 消息数据存储
 
 EMQ X 企业版支持存储订阅关系、MQTT 消息、设备状态到

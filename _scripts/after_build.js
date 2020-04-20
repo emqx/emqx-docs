@@ -13,3 +13,8 @@ rmList.forEach(name => {
     console.log(e)
   }
 })
+// copy icon
+fs.copyFileSync(
+  path.join(_build, './assets/images/favicon.ico'),
+  path.join(_build, './gitbook/images/favicon.ico'),
+)
