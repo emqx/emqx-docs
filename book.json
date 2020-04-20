@@ -11,7 +11,9 @@
     "anchors",
     "anchor-navigation-ex",
     "emqx",
-    "-lunr"
+    "-lunr",
+    "-search",
+    "search-pro"
   ],
   "pluginsConfig": {
     "anchor-navigation-ex": {
