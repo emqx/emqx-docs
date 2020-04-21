@@ -4,3 +4,4 @@ yarn-error.log
 book.pdf
 .vscode
 *.lock
+.DS_Store
