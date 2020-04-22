@@ -80,7 +80,7 @@ SQL 语句的筛选结果为 `#{my_id => 1}`。
 规则引擎的 SQL 语句提供了对 JSON 格式字符串的编解码支持，将 JSON 字符串和 Map 格式相互转换的 SQL 函数为 json_decode() 和 json_encode():
 
 ```sql
-SELECT json_decode(payload) AS p FROM "message.publish" WHERE p.x = p.y, topic ~= "t/#"
+SELECT json_decode(payload) AS p FROM "message.publish" WHERE p.x = p.y, topic =~ "t/#"
 ```
 
 上面这个 SQL 语句将会匹配到 payload 内容为 JSON 字符串： `{"x" = 1, "y" = 1}` , 并且 topic 为 `t/a` 的 MQTT 消息。

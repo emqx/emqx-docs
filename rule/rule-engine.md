@@ -85,7 +85,7 @@ SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = '
 ```sql
 ## 3.x 版本
 ## 需要指定事件名称进行处理
-SELECT * FROM "message.publish" WHERE topic ~= 't/#'
+SELECT * FROM "message.publish" WHERE topic =~ 't/#'
 
 
 ## 4.0 及以后版本
@@ -94,7 +94,7 @@ SELECT * FROM "message.publish" WHERE topic ~= 't/#'
 SELECT * FROM 't/#'
 
 ## 其他事件，FROM 后面填写事件主题
-SELECT * FROM "$events/message_acked" where topic ~= 't/#'
+SELECT * FROM "$events/message_acked" where topic =~ 't/#'
 SELECT * FROM "$events/client_connected"
 ```
 
