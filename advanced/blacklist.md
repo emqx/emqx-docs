@@ -29,7 +29,13 @@ EMQ X 为用户提供了黑名单功能，用户可以通过相关的 HTTP API �
 
 需要注意的是，自动封禁功能只封禁客户端标识符，并不封禁用户名和 IP 地址，即该机器只要更换客户端标识符就能够继续登录。
 
-此功能强制开启并无法关闭，但用户可以在 `emqx.conf` 配置文件中调整触发阈值和封禁时长等配置：
+此功能默认关闭，用户可以在 `emqx.conf` 配置文件中将 `enable_flapping_detect` 配置项设为 `on` 以启用此功能。
+
+```bash
+zone.external.enable_flapping_detect = off
+```
+
+用户可以为此功能调整触发阈值和封禁时长，对应配置项如下：
 
 ```bash
 flapping_detect_policy = 30, 1m, 5m
