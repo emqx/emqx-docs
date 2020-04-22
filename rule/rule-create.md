@@ -8,7 +8,7 @@
 0. 搭建 Web 服务，这里使用 `nc` 命令做一个简单的Web 服务:
 
    ```bash
-   $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9901; done;
+   $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 8081; done;
    ```
 
 1. 创建规则:
@@ -21,7 +21,9 @@
       SELECT
         *
       FROM
-        "message.publish"
+        "t/#"
+      WHERE
+        qos = 1
    ```
 
    ![image](../assets/webhook-rulesql-1.png)
@@ -46,7 +48,7 @@
 
    填写 “请求 URL” 和请求头(可选):
 
-   http://127.0.0.1:9901
+   http://127.0.0.1:8081
 
    点击 “测试连接” 按钮，确保连接测试成功，最后点击 “新建” 按钮:
 

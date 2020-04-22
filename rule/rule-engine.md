@@ -10,7 +10,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
