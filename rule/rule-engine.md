@@ -87,7 +87,6 @@ SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = '
 ## 需要指定事件名称进行处理
 SELECT * FROM "message.publish" WHERE topic =~ 't/#'
 
-
 ## 4.0 及以后版本
 ## 默认处理 message.publish 事件，FROM 后面直接填写 MQTT 主题
 ## 上述 SQL 语句等价于:
@@ -130,12 +129,11 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
             ]
         }
 
-- 规则 (Rule): 规则由 SQL 语句和动作列表组成。
-  SQL 语句用于筛选或转换消息中的数据。
-  动作是 SQL 语句匹配通过之后，所执行的任务。动作列表包含一个或多个动作及其参数。
-- 动作 (Action): 动作定义了一个针对数据的操作。
+- 规则(Rule): 规则由 SQL 语句和动作列表组成。动作列表包含一个或多个动作及其参数。
+- SQL 语句用于筛选或转换消息中的数据。
+- 动作(Action) 是 SQL 语句匹配通过之后，所执行的任务。动作定义了一个针对数据的操作。
   动作可以绑定资源，也可以不绑定。例如，“inspect” 动作不需要绑定资源，它只是简单打印数据内容和动作参数。而 “data_to_webserver” 动作需要绑定一个 web_hook 类型的资源，此资源中配置了 URL。
-- 资源 (Resource): 资源是通过资源类型为模板实例化出来的对象，保存了与资源相关的配置(比如数据库连接地址和端口、用户名和密码等)。
+- 资源(Resource): 资源是通过资源类型为模板实例化出来的对象，保存了与资源相关的配置(比如数据库连接地址和端口、用户名和密码等) 和系统资源(如文件句柄，连接套接字等)。
 - 资源类型 (Resource Type): 资源类型是资源的静态定义，描述了此类型资源需要的配置项。
 
 {% hint type="primary" %}
@@ -229,10 +227,12 @@ SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos =
 ```
 
 {% hint type="primary" %}
+
 - FROM 子句后面的主题需要用双引号 ``""`` 引起来。
 - WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 ``''`` 引起来。
 - FROM 子句里如有多个主题，需要用逗号 ``","`` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
 - 可以使用使用 ``"."`` 符号对 payload 进行嵌套选择。
+
 {% endhint %}
 
 ### FROM 子句可用的事件主题 {#rule-sql-syntax}
@@ -253,121 +253,125 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 
 #### 普通主题 (消息发布)
 
-| event     | 事件类型，固定为 "message.publish"    |
-| :-------- | :------------------------------------ |
-| id        | MQTT 消息 ID                          |
-| clientid  | Client ID                             |
-| username  | 用户名                                |
-| payload   | MQTT 消息体                           |
-| peerhost  | 客户端的 IPAddress                    |
-| topic     | MQTT 主题                             |
-| qos       | MQTT 消息的 QoS                       |
-| flags     | MQTT 消息的 Flags                     |
-| headers   | MQTT 消息内部与流程处理相关的额外数据 |
-| timestamp | 时间戳 (ms)                           |
-| node      | 事件触发所在节点                      |
+|        event        |  事件类型，固定为 "message.publish"   |
+| :------------------ | :------------------------------------ |
+| id                  | MQTT 消息 ID                          |
+| clientid            | Client ID                             |
+| username            | 用户名                                |
+| payload             | MQTT 消息体                           |
+| peerhost            | 客户端的 IPAddress                    |
+| topic               | MQTT 主题                             |
+| qos                 | MQTT 消息的 QoS                       |
+| flags               | MQTT 消息的 Flags                     |
+| headers             | MQTT 消息内部与流程处理相关的额外数据 |
+| timestamp           | 事件触发时间 (ms)                     |
+| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms)   |
+| node                | 事件触发所在节点                      |
 
 #### $events/message_delivered (消息投递)
 
-| event          | 事件类型，固定为 "message.delivered" |
-| -------------- | ------------------------------------ |
-| id             | MQTT 消息 ID                         |
-| from_clientid | 消息来源 Client ID                   |
-| from_username | 消息来源用户名                       |
-| clientid       | 消息目的 Client ID                   |
-| username       | 消息目的用户名                       |
-| payload        | MQTT 消息体                          |
-| peerhost       | 客户端的 IPAddress                   |
-| topic          | MQTT 主题                            |
-| qos            | MQTT 消息的 QoS                      |
-| flags          | MQTT 消息的 Flags                    |
-| timestamp      | 时间戳 (ms)                          |
-| node           | 事件触发所在节点                     |
+|        event        | 事件类型，固定为 "message.delivered" |
+| ------------------- | ------------------------------------ |
+| id                  | MQTT 消息 ID                         |
+| from_clientid       | 消息来源 Client ID                   |
+| from_username       | 消息来源用户名                       |
+| clientid            | 消息目的 Client ID                   |
+| username            | 消息目的用户名                       |
+| payload             | MQTT 消息体                          |
+| peerhost            | 客户端的 IPAddress                   |
+| topic               | MQTT 主题                            |
+| qos                 | MQTT 消息的 QoS                      |
+| flags               | MQTT 消息的 Flags                    |
+| timestamp           | 事件触发时间 (ms)                    |
+| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms)  |
+| node                | 事件触发所在节点                     |
 
 #### $events/message_acked (消息确认)
-| event          | 事件类型，固定为 "message.acked" |
-| :------------- | :------------------------------- |
-| id             | MQTT 消息 ID                     |
-| from_clientid | 消息来源 Client ID               |
-| from_username | 消息来源用户名                   |
-| clientid       | 消息目的 Client ID               |
-| username       | 消息目的用户名                   |
-| payload        | MQTT 消息体                      |
-| peerhost       | 客户端的 IPAddress               |
-| topic          | MQTT 主题                        |
-| qos            | MQTT 消息的 QoS                  |
-| flags          | MQTT 消息的 Flags                |
-| timestamp      | 时间戳 (ms)                      |
-| node           | 事件触发所在节点                 |
+|        event        |  事件类型，固定为 "message.acked"   |
+| :------------------ | :---------------------------------- |
+| id                  | MQTT 消息 ID                        |
+| from_clientid       | 消息来源 Client ID                  |
+| from_username       | 消息来源用户名                      |
+| clientid            | 消息目的 Client ID                  |
+| username            | 消息目的用户名                      |
+| payload             | MQTT 消息体                         |
+| peerhost            | 客户端的 IPAddress                  |
+| topic               | MQTT 主题                           |
+| qos                 | MQTT 消息的 QoS                     |
+| flags               | MQTT 消息的 Flags                   |
+| timestamp           | 事件触发时间 (ms)                   |
+| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms) |
+| node                | 事件触发所在节点                    |
 
 #### $events/message_dropped (消息丢弃)
 
-| event     | 事件类型，固定为 "message.dropped" |
-| :-------- | :--------------------------------- |
-| id        | MQTT 消息 ID                       |
-| reason    | 消息丢弃原因                       |
-| clientid  | 消息目的 Client ID                 |
-| username  | 消息目的用户名                     |
-| payload   | MQTT 消息体                        |
-| peerhost  | 客户端的 IPAddress                 |
-| topic     | MQTT 主题                          |
-| qos       | MQTT 消息的 QoS                    |
-| flags     | MQTT 消息的 Flags                  |
-| timestamp | 时间戳 (ms)                        |
-| node      | 事件触发所在节点                   |
+|        event        | 事件类型，固定为 "message.dropped"  |
+| :------------------ | :---------------------------------- |
+| id                  | MQTT 消息 ID                        |
+| reason              | 消息丢弃原因                        |
+| clientid            | 消息目的 Client ID                  |
+| username            | 消息目的用户名                      |
+| payload             | MQTT 消息体                         |
+| peerhost            | 客户端的 IPAddress                  |
+| topic               | MQTT 主题                           |
+| qos                 | MQTT 消息的 QoS                     |
+| flags               | MQTT 消息的 Flags                   |
+| timestamp           | 事件触发时间 (ms)                   |
+| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms) |
+| node                | 事件触发所在节点                    |
 
 #### $events/client_connected (终端连接成功)
-| event            | 事件类型，固定为 "client.connected" |
-| ---------------- | :---------------------------------- |
-| clientid         | 消息目的 Client ID                  |
-| username         | 消息目的用户名                      |
-| mountpoint       | 主题挂载点(主题前缀)                |
-| peername         | 终端的 IPAddress 和 Port            |
-| sockname         | emqx 监听的 IPAddress 和 Port       |
+|      event      | 事件类型，固定为 "client.connected" |
+| --------------- | :---------------------------------- |
+| clientid        | 消息目的 Client ID                  |
+| username        | 消息目的用户名                      |
+| mountpoint      | 主题挂载点(主题前缀)                |
+| peername        | 终端的 IPAddress 和 Port            |
+| sockname        | emqx 监听的 IPAddress 和 Port       |
 | proto_name      | 协议名字                            |
 | proto_ver       | 协议版本                            |
-| keepalive        | MQTT 保活间隔                       |
-| clean_start     | MQTT clean_start                   |
+| keepalive       | MQTT 保活间隔                       |
+| clean_start     | MQTT clean_start                    |
 | expiry_interval | MQTT Session 过期时间               |
 | is_bridge       | 是否为 MQTT bridge 连接             |
 | connected_at    | 终端连接完成时间 (s)                |
-| timestamp        | 时间戳 (ms)                         |
-| node             | 事件触发所在节点                    |
+| timestamp       | 事件触发时间 (ms)                   |
+| node            | 事件触发所在节点                    |
 
 #### $events/client_disconnected (终端连接断开)
 
-| event            | 事件类型，固定为 "client.disconnected" |
-| ---------------- | :------------------------------------- |
-| reason           | 终端连接断开原因                       |
-| clientid         | 消息目的 Client ID                     |
-| username         | 消息目的用户名                         |
-| peername         | 终端的 IPAddress 和 Port               |
-| sockname         | emqx 监听的 IPAddress 和 Port          |
+|      event      | 事件类型，固定为 "client.disconnected" |
+| --------------- | :------------------------------------- |
+| reason          | 终端连接断开原因                       |
+| clientid        | 消息目的 Client ID                     |
+| username        | 消息目的用户名                         |
+| peername        | 终端的 IPAddress 和 Port               |
+| sockname        | emqx 监听的 IPAddress 和 Port          |
 | disconnected_at | 终端连接断开时间 (s)                   |
-| timestamp        | 时间戳 (ms)                            |
-| node             | 事件触发所在节点                       |
+| timestamp       | 事件触发时间 (ms)                      |
+| node            | 事件触发所在节点                       |
 
 #### $events/session_subscribed (终端订阅成功)
-| event     | 事件类型，固定为 "session.subscribed" |
+|   event   | 事件类型，固定为 "session.subscribed" |
 | --------- | ------------------------------------- |
 | clientid  | 消息目的 Client ID                    |
 | username  | 消息目的用户名                        |
 | peerhost  | 客户端的 IPAddress                    |
 | topic     | MQTT 主题                             |
 | qos       | MQTT 消息的 QoS                       |
-| timestamp | 时间戳 (ms)                           |
+| timestamp | 事件触发时间 (ms)                     |
 | node      | 事件触发所在节点                      |
 
 #### $events/session_unsubscribed (取消终端订阅成功)
 
-| event     | 事件类型，固定为 "session.unsubscribed" |
+|   event   | 事件类型，固定为 "session.unsubscribed" |
 | :-------- | :-------------------------------------- |
 | clientid  | 消息目的 Client ID                      |
 | username  | 消息目的用户名                          |
 | peerhost  | 客户端的 IPAddress                      |
 | topic     | MQTT 主题                               |
 | qos       | MQTT 消息的 QoS                         |
-| timestamp | 时间戳 (ms)                             |
+| timestamp | 事件触发时间 (ms)                       |
 | node      | 事件触发所在节点                        |
 
 ### SQL 关键字和符号 {#rule-sql-marks}
@@ -408,16 +412,16 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 
 #### 运算符号 {#rule-sql-marks}
 
-| 函数名 | 函数作用                                                     | 返回值     |      |
-| ------ | ------------------------------------------------------------ | ---------- | ---- |
-| `+`    | 加法                                                         | 加和       |      |
-| `-`    | 减法                                                         | 差值       |      |
-| `*`    | 乘法                                                         | 乘积       |      |
-| `/`    | 除法                                                         | 商值       |      |
-| `div`  | 整数除法                                                     | 整数商值   |      |
-| `mod`  | 取模                                                         | 模         |      |
-| `=`    | 比较两者是否完全相等。可用于比较变量和主题                   | true/false |      |
-| `=~`   | 比较主题(topic)是否能够匹配到主题过滤器(topic filter)。只能用于主题匹配 | true/false |      |
+| 函数名 |   函数作用            |   返回值   |     |
+| ------ | ------------------- | ---------- | --- |
+| `+`    | 加法，或字符串拼接     | 加和       |     |
+| `-`    | 减法                | 差值       |     |
+| `*`    | 乘法                | 乘积       |     |
+| `/`    | 除法                | 商值       |     |
+| `div`  | 整数除法             | 整数商值   |     |
+| `mod`  | 取模                 | 模         |     |
+| `=`    | 比较两者是否完全相等。可用于比较变量和主题 | true/false |     |
+| `=~`   | 比较主题(topic)是否能够匹配到主题过滤器(topic filter)。只能用于主题匹配 | true/false |     |
 
 ### SQL 语句中可用的函数 {#rule-sql-funcs}
 
@@ -784,118 +788,41 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 
 #### 字符串函数
 
-<table>
-<colgroup>
-<col style="width: 6%" />
-<col style="width: 10%" />
-<col style="width: 69%" />
-<col style="width: 14%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>函数名</td>
-<td>函数作用</td>
-<td>参数</td>
-<td>返回值</td>
-</tr>
-<tr class="even">
-<td>lower</td>
-<td>转为小写</td>
-<td><ol type="1">
-<li>输入字符串</li>
-</ol></td>
-<td>小写字符串</td>
-</tr>
-<tr class="odd">
-<td>upper</td>
-<td>转为大写</td>
-<td><ol type="1">
-<li>输入字符串</li>
-</ol></td>
-<td>大写字符串</td>
-</tr>
-<tr class="even">
-<td>trim</td>
-<td>去掉左右空格</td>
-<td><ol type="1">
-<li>输入字符串</li>
-</ol></td>
-<td>输出字符串</td>
-</tr>
-<tr class="odd">
-<td>ltrim</td>
-<td>去掉左空格</td>
-<td><ol type="1">
-<li>输入字符串</li>
-</ol></td>
-<td>输出字符串</td>
-</tr>
-<tr class="even">
-<td>rtrim</td>
-<td>去掉右空格</td>
-<td><ol type="1">
-<li>输入字符串</li>
-</ol></td>
-<td>输出字符串</td>
-</tr>
-<tr class="odd">
-<td>reverse</td>
-<td>字符串反转</td>
-<td><ol type="1">
-<li>输入字符串</li>
-</ol></td>
-<td>输出字符串</td>
-</tr>
-<tr class="even">
-<td>strlen</td>
-<td>字符串长度</td>
-<td><ol type="1">
-<li>输入字符串</li>
-</ol></td>
-<td>整数值</td>
-</tr>
-<tr class="odd">
-<td>substr</td>
-<td>取字符的子串</td>
-<td><ol type="1">
-<li>输入字符串 2. 起始位置. 注意: 下标从 1 开始</li>
-</ol></td>
-<td>子串</td>
-</tr>
-<tr class="even">
-<td>substr</td>
-<td>取字符的子串</td>
-<td><ol type="1">
-<li>输入字符串 2. 起始位置 3. 终止位置. 注意: 下标从 1 开始</li>
-</ol></td>
-<td>子串</td>
-</tr>
-<tr class="odd">
-<td>split</td>
-<td>字符串分割</td>
-<td><ol type="1">
-<li>输入字符串 2. 分割符子串</li>
-</ol></td>
-<td>分割后的字符串数组</td>
-</tr>
-<tr class="even">
-<td>split</td>
-<td>字符串分割</td>
-<td><ol type="1">
-<li>输入字符串 2. 分割符子串 3. 只查找左边或者右边第一个分隔符, 可选的取值为 'leading' 或者 'trailing'</li>
-</ol></td>
-<td>分割后的字符串数组</td>
-</tr>
-<tr class="odd">
-<td>split</td>
-<td>字符串分割</td>
-<td><ol type="1">
-<li>输入字符串 2. 分割符子串 3. 只查找左边或者右边第一个分隔符, 可选的取值为 'leading' 或者 'trailing'</li>
-</ol></td>
-<td>分割后的字符串数组</td>
-</tr>
-</tbody>
-</table>
+| 函数名   |   函数作用    |    参数     |       返回值       |       举例       |
+| ------- | ------------ | ----------- | ------------------ | ----------------- |
+| lower   | 转为小写      | 1. 原字符串     | 小写字符串         |` 1. lower('AbC') = 'abc'`<br/><br/>`2. lower('abc') = 'abc' `|
+| upper   | 转为大写      | 1. 原字符串     | 大写字符串         |` 1. upper('AbC') = 'ABC'`<br/><br/>`2. lower('ABC') = 'ABC' `|
+| trim    | 去掉左右空格  | 1. 原字符串     | 去掉空格后的字符串 |` 1. trim(' hello  ') = 'hello' `|
+| ltrim   | 去掉左空格    | 1. 原字符串     | 去掉空格后的字符串 |` 1. ltrim(' hello  ') = 'hello  '`|
+| rtrim   | 去掉右空格    | 1. 原字符串     | 去掉空格后的字符串 |` 1. rtrim(' hello  ') = ' hello'`|
+| reverse | 字符串反转    | 1. 原字符串     | 翻转后的字符串 |` 1. reverse('hello') = 'olleh' `|
+| strlen  | 取字符串长度    | 1. 原字符串     | 整数值，字符长度 |` 1. strlen('hello') = 5 `|
+| substr  | 取字符的子串  | 1. 原字符串 2. 起始位置. 注意: 下标从 0 开始 | 子串 |` 1. substr('abcdef', 2) = 'cdef' `|
+| substr  | 取字符的子串  | 1. 原字符串 2. 起始位置 3. 要取出的子串长度. 注意: 下标从 0 开始 | 子串 |` 1. substr('abcdef', 2, 3) = 'cde' `|
+| split   | 字符串分割    | 1. 原字符串 2. 分割符子串 | 分割后的字符串数组 | `1. split('a/b/ c', '/') = ['a', 'b', ' c']` |
+| split   | 字符串分割, 只查找左边第一个分隔符 | 1. 原字符串 2. 分割符子串 3. 'leading' | 分割后的字符串数组 | `1. split('a/b/ c', '/', 'leading') = ['a', 'b/ c']` |
+| split   | 字符串分割, 只查找右边第一个分隔符 | 1. 原字符串 2. 分割符子串 3. 'trailing' | 分割后的字符串数组 | `1. split('a/b/ c', '/', 'trailing') = ['a/b', ' c']` |
+| concat   | 字符串拼接  | 1. 左字符串 2. 右符子串 | 拼接后的字符串 | `1. concat('a', '/bc') = 'a/bc'`<br/><br/>`2. 'a' + '/bc' = 'a/bc'` |
+| tokens   | 字符串分解(按照指定字符串符分解)  | 1. 输入字符串 2. 分割符或字符串 | 分解后的字符串数组 | `1. tokens(' a/b/ c', '/') = [' a', 'b', ' c']`<br/><br/>`2. tokens(' a/b/ c', '/ ') = ['a', 'b', 'c']`<br/><br/>`3. tokens(' a/b/ c\n', '/ ') = ['a', 'b', 'c\n']` |
+| tokens   | 字符串分解(按照指定字符串和换行符分解)  | 1. 输入字符串 2. 分割符或字符串 3. 'nocrlf' | 分解后的字符串数组 | `1. tokens(' a/b/ c\n', '/ ', 'nocrlf') = ['a', 'b', 'c']`<br/><br/>`2. tokens(' a/b/ c\r\n', '/ ', 'nocrlf') = ['a', 'b', 'c']` |
+| sprintf   | 字符串格式化, 格式字符串的用法详见 https://erlang.org/doc/man/io.html#fwrite-1 里的 Format 部分 | 1. 格式字符串 2,3,4... 参数列表。参数个数不定 | 分解后的字符串数组 | `1. sprintf('hello, ~s!', 'steve') = 'hello, steve!'`<br/><br/>`2. sprintf('count: ~p~n', 100) = 'count: 100\n'` |
+| pad   | 字符串补足长度，补空格，从尾部补足  | 1. 原字符串 2. 字符总长度 | 补足后的字符串 | `1. pad('abc', 5) = 'abc  '` |
+| pad   | 字符串补足长度，补空格，从尾部补足  | 1. 原字符串 2. 字符总长度 3. 'trailing' | 补足后的字符串 | `1. pad('abc', 5, 'trailing') = 'abc  '` |
+| pad   | 字符串补足长度，补空格，从两边补足  | 1. 原字符串 2. 字符总长度 3. 'both' | 补足后的字符串 | `1. pad('abc', 5, 'both') = ' abc '` |
+| pad   | 字符串补足长度，补空格，从头部补足  | 1. 原字符串 2. 字符总长度 3. 'leading' | 补足后的字符串 | `1. pad('abc', 5, 'leading') = '  abc'` |
+| pad   | 字符串补足长度，补指定字符，从尾部补足  | 1. 原字符串 2. 字符总长度 3. 'trailing' 4. 指定用于补足的字符 | 补足后的字符串 |  `1. pad('abc', 5, 'trailing', '*') = 'abc**'`<br/><br/>`2. pad('abc', 5, 'trailing', '*#') = 'abc*#*#'` |
+| pad   | 字符串补足长度，补指定字符，从两边补足  | 1. 原字符串 2. 字符总长度 3. 'both' 4. 指定用于补足的字符 | 补足后的字符串 |  `1. pad('abc', 5, 'both', '*') = '*abc*'`<br/><br/>`2. pad('abc', 5, 'both', '*#') = '*#abc*#'` |
+| pad   | 字符串补足长度，补指定字符，从头部补足  | 1. 原字符串 2. 字符总长度 3. 'leading' 4. 指定用于补足的字符 | 补足后的字符串 | `1. pad('abc', 5, 'leading', '*') = '**abc'`<br/><br/>`2. pad('abc', 5, 'leading', '*#') = '*#*#abc'` |
+| replace | 替换字符串中的某子串，查找所有匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd') = 'cdcdef'` |
+| replace | 替换字符串中的某子串，查找所有匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'all' | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd', 'all') = 'cdcdef'` |
+| replace | 替换字符串中的某子串，从尾部查找第一个匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'trailing' | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd', 'trailing') = 'abcdef'` |
+| replace | 替换字符串中的某子串，从头部查找第一个匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'leading' | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd', 'leading') = 'cdabef'` |
+| regex_match | 判断字符串是否与某正则表达式匹配  | 1. 原字符串 2. 正则表达式 | true 或 false | `1. regex_match('abc123', '[a-zA-Z1-9]*') = true` |
+| regex_replace | 替换字符串中匹配到某正则表达式的子串  | 1. 原字符串 2. 正则表达式 3. 指定用于替换的字符串 | 替换后的字符串 | `1. regex_replace('ab1cd3ef', '[1-9]', '[&]') = 'ab[1]cd[3]ef'`<br/><br/>`2. regex_replace('ccefacef', 'c+', ':') = ':efa:ef'` |
+| ascii | 返回字符对应的 ASCII 码  | 1. 字符 | 整数值，字符对应的 ASCII 码 | `1. ascii('a') = 97` |
+| find | 查找并返回字符串中的某个子串，从头部查找  | 1. 原字符串 2. 要查找的子串 | 查抄到的子串，如找不到则返回空字符串 | `1. find('eeabcabcee', 'abc') = 'abcabcee'` |
+| find | 查找并返回字符串中的某个子串，从头部查找  | 1. 原字符串 2. 要查找的子串 3. 'leading' | 查抄到的子串，如找不到则返回空字符串 | `1. find('eeabcabcee', 'abc', 'leading') = 'abcabcee'` |
+| find | 查找并返回字符串中的某个子串，从尾部查找  | 1. 原字符串 2. 要查找的子串 3. 'trailing' | 查抄到的子串，如找不到则返回空字符串 | `1. find('eeabcabcee', 'abc', 'trailing') = 'abcee'` |
 
 #### Map 函数
 
