@@ -144,7 +144,7 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
 
 ### SQL 语法 {#rule-sql-syntax}
 
-SQL 语句用于从原始数据中，根据条件筛选出字段，并进行预处理和转换，基本格式为::
+SQL 语句用于从原始数据中，根据条件筛选出字段，并进行预处理和转换，基本格式为:
 
 ```sql
 SELECT <字段名> FROM <主题> [WHERE <条件>]
@@ -153,8 +153,20 @@ SELECT <字段名> FROM <主题> [WHERE <条件>]
 FROM、SELECT 和 WHERE 子句:
 
 - ``FROM`` 子句将规则挂载到某个主题上
-- ``SELECT`` 子句用于选择输出结果中的字段
-- ``WHERE`` 子句用于根据条件筛选消息
+- ``SELECT`` 子句用于对数据进行变换，并选择出感兴趣的字段
+- ``WHERE`` 子句用于对 SELECT 选择出来的某个字段施加条件过滤
+
+如果对于一个数组数据，想针对数组中的每个元素分别执行一些操作并执行 Actions，需要使用 `FOREACH-DO-INCASE` 语法。其基本格式为:
+
+```
+FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件>]
+````
+
+FOREACH、DO 和 INCASE 子句:
+
+- ``FOREACH`` 子句用于选择输出结果的字段，注意选择出的字段必须为数组类型
+- ``DO`` 子句用于对 FOREACH 选择出来的数组中的每个元素进行变换，并选择出感兴趣的字段
+- ``INCASE`` 子句用于对 DO 选择出来的某个字段施加条件过滤
 
 ### 事件和事件主题 {#event-topics}
 
@@ -173,7 +185,7 @@ FROM、SELECT 和 WHERE 子句:
 SELECT * FROM "t/a"
 ```
 
-- 从 topic 为 "t/a" 或 "t/b" 的消息中提取所有字段::
+- 从 topic 为 "t/a" 或 "t/b" 的消息中提取所有字段:
 
 ```sql
 SELECT * FROM "t/a","t/b"
@@ -184,13 +196,13 @@ SELECT * FROM "t/a","t/b"
 SELECT * FROM "t/#"
 ```
 
-- 从 topic 能够匹配到 't/#' 的消息中提取 qos, username 和 clientid 字段::
+- 从 topic 能够匹配到 't/#' 的消息中提取 qos, username 和 clientid 字段:
 
 ```sql
 SELECT qos, username, clientid FROM "t/#"
 ```
 
-- 从任意 topic 的消息中提取 username 字段，并且筛选条件为 username = 'Steven'::
+- 从任意 topic 的消息中提取 username 字段，并且筛选条件为 username = 'Steven':
 
 ```sql
 SELECT username FROM "#" WHERE username='Steven'
@@ -208,22 +220,46 @@ SELECT payload as p FROM "#" WHERE p.x = 1
 SELECT payload as a FROM "#" WHERE a.x.y = 1
 ```
 
-- 在 clientid = 'c1' 尝试连接时，提取其来源 IP 地址和端口号::
+- 在 clientid = 'c1' 尝试连接时，提取其来源 IP 地址和端口号:
 
 ```sql
 SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
 ```
 
-- 筛选所有订阅 't/#' 主题且订阅级别为 QoS1 的 clientid::
+- 筛选所有订阅 't/#' 主题且订阅级别为 QoS1 的 clientid:
 
 ```sql
 SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
 ```
 
-- 筛选所有订阅主题能匹配到 't/#' 且订阅级别为 QoS1 的 clientid。注意与上例不同的是，这里用的是主题匹配操作符 **'=~'**，所以会匹配订阅 't' 或 't/+/a' 的订阅事件::
+- 筛选所有订阅主题能匹配到 't/#' 且订阅级别为 QoS1 的 clientid。注意与上例不同的是，这里用的是主题匹配操作符 **'=~'**，所以会匹配订阅 't' 或 't/+/a' 的订阅事件:
 
 ```sql
 SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
+```
+
+- 假设消息体里有个 sensors 字段为 JSON 格式的数组: {"sensors": [{"name": "a","idx":0}, {"name": "b","idx":1}, {"name": "c","idx":3}]}。要求将数组中的两条 index 值大于等于 1 数据分别作为一个记录写入 mysql 数据库（就是说写入数据库两次）:
+
+```sql
+FOREACH payload.sensors as s
+DO s.name as name, s.idx as idx
+INCASE s.idx >= 1
+FROM "t/#"
+```
+
+上面的 SQL 选取结果为:
+
+```json
+[
+  {
+    "name": "b",
+    "idx": 1
+  },
+  {
+    "name": "c",
+    "idx": 3
+  }
+]
 ```
 
 {% hint type="primary" %}
