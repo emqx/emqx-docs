@@ -144,29 +144,31 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
 
 ### SQL 语法 {#rule-sql-syntax}
 
-SQL 语句用于从原始数据中，根据条件筛选出字段，并进行预处理和转换，基本格式为:
+**FROM、SELECT 和 WHERE 子句:**
+
+规则引擎的 SQL 语句基本格式为:
 
 ```sql
 SELECT <字段名> FROM <主题> [WHERE <条件>]
 ````
 
-FROM、SELECT 和 WHERE 子句:
-
 - ``FROM`` 子句将规则挂载到某个主题上
 - ``SELECT`` 子句用于对数据进行变换，并选择出感兴趣的字段
 - ``WHERE`` 子句用于对 SELECT 选择出来的某个字段施加条件过滤
 
+**FOREACH、DO 和 INCASE 子句:**
+
 如果对于一个数组数据，想针对数组中的每个元素分别执行一些操作并执行 Actions，需要使用 `FOREACH-DO-INCASE` 语法。其基本格式为:
 
-```
+```sql
 FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件>]
 ````
 
-FOREACH、DO 和 INCASE 子句:
-
-- ``FOREACH`` 子句用于选择输出结果的字段，注意选择出的字段必须为数组类型
+- ``FOREACH`` 子句用于选择需要做 foreach 操作的字段，注意选择出的字段必须为数组类型
 - ``DO`` 子句用于对 FOREACH 选择出来的数组中的每个元素进行变换，并选择出感兴趣的字段
 - ``INCASE`` 子句用于对 DO 选择出来的某个字段施加条件过滤
+
+其中 DO 和 INCASE 子句都是可选的。DO 相当于针对当前循环中对象的 SELECT 子句，而 INCASE 相当于针对当前循环中对象的 WHERE 语句。
 
 ### 事件和事件主题 {#event-topics}
 
@@ -179,6 +181,8 @@ FOREACH、DO 和 INCASE 子句:
 
 ### SQL 语句示例: {#rule-sql-examples}
 
+#### 基本语法举例
+
 - 从 topic 为 "t/a" 的消息中提取所有字段:
 
 ```sql
@@ -190,6 +194,7 @@ SELECT * FROM "t/a"
 ```sql
 SELECT * FROM "t/a","t/b"
 ```
+
 - 从 topic 能够匹配到 't/#' 的消息中提取所有字段。
 
 ```sql
@@ -238,30 +243,6 @@ SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 
 SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
 ```
 
-- 假设消息体里有个 sensors 字段为 JSON 格式的数组: {"sensors": [{"name": "a","idx":0}, {"name": "b","idx":1}, {"name": "c","idx":3}]}。要求将数组中的两条 index 值大于等于 1 数据分别作为一个记录写入 mysql 数据库（就是说写入数据库两次）:
-
-```sql
-FOREACH payload.sensors as s
-DO s.name as name, s.idx as idx
-INCASE s.idx >= 1
-FROM "t/#"
-```
-
-上面的 SQL 选取结果为:
-
-```json
-[
-  {
-    "name": "b",
-    "idx": 1
-  },
-  {
-    "name": "c",
-    "idx": 3
-  }
-]
-```
-
 {% hint type="primary" %}
 
 - FROM 子句后面的主题需要用双引号 ``""`` 引起来。
@@ -270,6 +251,197 @@ FROM "t/#"
 - 可以使用使用 ``"."`` 符号对 payload 进行嵌套选择。
 
 {% endhint %}
+
+#### 遍历语法(FOREACH-DO-INCASE) 举例
+
+假设有 ClientID 为 `c_steve`、主题为 `t/1` 的消息，消息体为 JSON 格式，其中 sensors 字段为包含多个 Object 的数组:
+
+```json
+{
+    "date": "2020-04-24",
+    "sensors": [
+        {"name": "a", "idx":0},
+        {"name": "b", "idx":1},
+        {"name": "c", "idx":2}
+    ]
+}
+```
+
+**示例1: 要求将 sensors 里的各个对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `${name}`。即最终规则引擎将会发出 3 条消息:**
+
+1) 主题：sensors/0
+   内容：a
+2) 主题：sensors/1
+   内容：b
+3) 主题：sensors/2
+   内容：c
+
+要完成这个规则，我们需要配置如下动作：
+
+- 动作类型：消息重新发布 (republish)
+- 目的主题：sensors/${idx}
+- 目的 QoS：0
+- 消息内容模板：${name}
+
+以及如下 SQL 语句：
+
+```sql
+FOREACH
+    payload.sensors
+FROM "t/#"
+```
+
+**示例解析:**
+
+这个 SQL 中，FOREACH 子句指定需要进行遍历的数组 sensors，则选取结果为:
+
+```json
+[
+  {
+    "name": "a",
+    "idx": 0
+  },
+  {
+    "name": "b",
+    "idx": 1
+  },
+  {
+    "name": "c",
+    "idx": 2
+  }
+]
+```
+
+FOREACH 语句将会对于结果数组里的每个对象分别执行 "消息重新发布" 动作，所以将会执行重新发布动作 3 次。
+
+**示例2: 要求将 sensors 里的 `idx` 值大于或等于 1 的对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `clientid=${clientid},name=${name},date=${date}`。即最终规则引擎将会发出 2 条消息:**
+
+1) 主题：sensors/1
+   内容：clientid=c_steve,name=b,date=2020-04-24
+2) 主题：sensors/2
+   内容：clientid=c_steve,name=c,date=2020-04-24
+
+要完成这个规则，我们需要配置如下动作：
+
+- 动作类型：消息重新发布 (republish)
+- 目的主题：sensors/${idx}
+- 目的 QoS：0
+- 消息内容模板：clientid=${clientid},name=${name},date=${date}
+
+以及如下 SQL 语句：
+
+```sql
+FOREACH
+    payload.sensors
+DO
+    clientid,
+    item.name as name,
+    item.idx as idx
+INCASE
+    item.idx >= 1
+FROM "t/#"
+```
+
+**示例解析:**
+
+这个 SQL 中，FOREACH 子句指定需要进行遍历的数组 `sensors`; DO 子句选取每次操作需要的字段，这里我们选了外层的 `clientid` 字段，以及当前 sensor 对象的 `name` 和 `idx` 两个字段，注意 `item` 代表 sensors 数组中本次循环的对象。INCASE 子句是针对 DO 语句中字段的筛选条件，仅仅当 idx >= 1 满足条件。所以 SQL 的选取结果为:
+
+```json
+[
+  {
+    "name": "b",
+    "idx": 1,
+    "clientid": "c_emqx"
+  },
+  {
+    "name": "c",
+    "idx": 2,
+    "clientid": "c_emqx"
+  }
+]
+```
+
+FOREACH 语句将会对于结果数组里的每个对象分别执行 "消息重新发布" 动作，所以将会执行重新发布动作 2 次。
+
+在 DO 和 INCASE 语句里，可以使用 `item` 访问当前循环的对象，也可以通过在 FOREACH 使用 `as` 语法自定义一个变量名。所以本例中的 SQL 语句又可以写为：
+
+```sql
+FOREACH
+    payload.sensors as s
+DO
+    clientid,
+    s.name as name,
+    s.idx as idx
+INCASE
+    s.idx >= 1
+FROM "t/#"
+```
+
+**示例3: 在示例2 的基础上，去掉 clientid 字段 `c_steve` 中的 `c_` 前缀**
+
+在 FOREACH 和 DO 语句中可以调用各类 SQL 函数，若要将 `c_steve` 变为 `steve`，则可以把例2 中的 SQL 改为：
+
+```sql
+FOREACH
+    payload.sensors as s
+DO
+    nth(2, tokens(clientid,'_')) as clientid,
+    s.name as name,
+    s.idx as idx
+INCASE
+    s.idx >= 1
+FROM "t/#"
+```
+
+另外，FOREACH 子句中也可以放多个表达式，只要最后一个表达式是指定要遍历的数组即可。比如我们将消息体改一下，sensors 外面多套一层 Object：
+
+```json
+{
+    "date": "2020-04-24",
+    "data": {
+        "sensors": [
+            {"name": "a", "idx":0},
+            {"name": "b", "idx":1},
+            {"name": "c", "idx":2}
+        ]
+    }
+}
+```
+
+则 FOREACH 中可以在决定要遍历的数组之前把 data 选取出来：
+
+```sql
+FOREACH
+    payload.data as data
+    data.sensors as s
+...
+```
+
+#### CASE-WHEN 语法示例
+
+**示例1: 将消息中 x 字段的值范围限定在 0~7 之间。**
+
+```sql
+SELECT
+  CASE WHEN payload.x < 0 THEN 0
+       WHEN payload.x > 7 THEN 7
+       ELSE payload.x
+  END as x
+FROM "t/#"
+```
+
+假设消息为:
+
+```json
+{"x": 8}
+```
+
+则上面的 SQL 输出为:
+
+```json
+{"x": 7}
+```
+
 
 ### FROM 子句可用的事件主题 {#rule-sql-syntax}
 
