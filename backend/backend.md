@@ -18,7 +18,6 @@ ref:
 # 数据存储
 
 
-
 数据存储的主要使用场景包括将客户端上下线状态，订阅主题信息，消息内容，消息抵达后发送消息回执等操作记录到 Redis、MySQL、PostgreSQL、MongoDB、Cassandra 等各种数据库中。用户也可以通过订阅相关主题的方式来实现类似的功能，但是在企业版中内置了对这些持久化的支持；相比于前者，后者的执行效率更高，也能大大降低开发者的工作量。
 
 <div class="emqxce">
@@ -410,12 +409,12 @@ backend.mysql.hook.message.acked.1       = {"topic": "#", "action": {"function":
 | client.connected    |       | on_client_connected    | 存储客户端在线状态  |
 | session.created     |       | on_subscribe_lookup    | 订阅主题       |
 | client.disconnected |       | on_client_disconnected | 存储客户端离线状态  |
-| session.subscribed  | \#    | on_message_fetch       | 获取离线消息     |
-| session.subscribed  | \#    | on_retain_lookup       | 获取retain消息 |
-| message.publish     | \#    | on_message_publish     | 存储发布消息     |
-| message.publish     | \#    | on_message_retain      | 存储retain消息 |
-| message.publish     | \#    | on_retain_delete       | 删除retain消息 |
-| message.acked       | \#    | on_message_acked       | 消息ACK处理    |
+| session.subscribed  | #    | on_message_fetch       | 获取离线消息     |
+| session.subscribed  | #    | on_retain_lookup       | 获取retain消息 |
+| message.publish     | #    | on_message_publish     | 存储发布消息     |
+| message.publish     | #    | on_message_retain      | 存储retain消息 |
+| message.publish     | #    | on_retain_delete       | 删除retain消息 |
+| message.acked       | #    | on_message_acked       | 消息ACK处理    |
 
 ### SQL 语句参数说明
 
