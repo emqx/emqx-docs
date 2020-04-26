@@ -85,7 +85,7 @@ SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = '
 ```sql
 ## 3.x 版本
 ## 需要指定事件名称进行处理
-SELECT * FROM "message.publish" WHERE topic =~ 't/#'
+SELECT * FROM "t/#" WHERE topic =~ 't/#'
 
 ## 4.0 及以后版本
 ## 默认处理 message.publish 事件，FROM 后面直接填写 MQTT 主题

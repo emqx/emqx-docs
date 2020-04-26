@@ -77,7 +77,7 @@
 ## 规则引擎
   * [规则引擎](rule/rule-engine.md)
   * [创建规则](rule/rule-create.md)
-  * [空动作 (调试)](rule/rule-example.md)
+  * [空动作 (调试)](rule/rule-example.md#空动作-调试)
   * [发送数据到 Web 服务](rule/rule-example.md#发送数据到-web-服务)
   * [桥接数据到 MQTT Broker](rule/rule-example.md#桥接数据到-mqtt-broker)
   * [保存数据到 MySQL](rule/rule-example.md#保存数据到-mysql)

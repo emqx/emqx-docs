@@ -15,7 +15,7 @@
 
    打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
-   选择触发事件 “消息发布”，然后填写规则 SQL:
+   填写用以处理 t/# 主题的规则 SQL:
 
    ```sql
       SELECT
@@ -84,13 +84,13 @@
 
 创建一个测试规则，当有消息发送到 't/a' 主题时，打印消息内容以及动作参数细节。
 
-- 规则的筛选 SQL 语句为: SELECT \* FROM "message.publish" WHERE topic = 't/a';
+- 规则的筛选 SQL 语句为: SELECT * FROM "t/a";
 
 - 动作是: "打印动作参数细节"，需要使用内置动作 'inspect'。
 
 ```bash
 $ ./bin/emqx_ctl rules create \
-  "SELECT * FROM \"message.publish\" WHERE topic = 't/a'" \
+  "SELECT * FROM \"t/a\" \
   '[{"name":"inspect", "params": {"a": 1}}]' \
   -d 'Rule for debug'
 
@@ -101,7 +101,7 @@ Rule rule:803de6db created
 
 参数中前两个为必选参数:
 
-- SQL 语句: SELECT \* FROM "message.publish" WHERE topic = 't/a'
+- SQL 语句: SELECT \* FROM "t/a"
 - 动作列表: \[{"name":"inspect", "params": {"a": 1}}\]。动作列表是用 JSON Array
   格式表示的。name 字段是动作的名字，params 字段是动作的参数。注意 `inspect` 动作是不需要绑定资源的。
 
@@ -145,7 +145,7 @@ $ tail -f log/erlang.log.1
 创建一个规则，将所有发送自 client\_id='Steven' 的消息，转发到地址为 '<http://127.0.0.1:9910>' 的
 Web 服务器:
 
-- 规则的筛选条件为: SELECT username as u, payload FROM "message.publish" where
+- 规则的筛选条件为: SELECT username as u, payload FROM "t/a" where
   u='Steven';
 - 动作是: "转发到地址为 '<http://127.0.0.1:9910>' 的 Web 服务";
 - 资源类型是: web\_hook;
