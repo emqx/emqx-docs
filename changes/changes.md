@@ -17,7 +17,7 @@ ref: undefined
 
 # 版本发布
 
-## 4.1-beta.1
+## 4.1-beta.1 版本
 
 *发布日期: 2020-04-26*
 
@@ -101,7 +101,7 @@ EMQ X 4.1-beta.1 现已发布，主要包含以下改动：
 
   Github PR: [emqx/emqx-dasboard#227](https://github.com/emqx/emqx-dasboard/pull/227), [emqx/emqx-dasboard#230](https://github.com/emqx/emqx-dasboard/pull/230)
 
-## 4.0.6
+## 4.0.6 版本
 
 *发布日期: 2020-04-22*
 
@@ -140,7 +140,7 @@ EMQ X 4.0.6 现已发布，主要包含以下改动：
   Github Commit: [emqx/emqx-rule-engine#33fcba](https://github.com/emqx/emqx-rule-engine/commit/33fcba394e59fef495e2fe54883297c8d3d893e5)
 
 
-## 4.1-alpha.3
+## 4.1-alpha.3 版本
 
 *发布日期: 2020-04-17*
 
@@ -186,7 +186,7 @@ EMQ X 4.1-alpha.3 现已发布，主要包含以下改动：
 
   Github PR: [emqx/emqx-lwm2m#78](https://github.com/emqx/emqx-lwm2m/pull/78)
 
-## 4.1-alpha.2
+## 4.1-alpha.2 版本
 
 *发布日期: 2020-04-11*
 
@@ -249,7 +249,7 @@ EMQ X 4.1-alpha.2 现已发布.
 
   Github Repository: [emqx/emqx-extension-hook](https://github.com/emqx/emqx-extension-hook)
 
-## Version 4.1-alpha.1
+## 4.1-alpha.1 版本
 
 *发布日期: 2020-03-27*
 
