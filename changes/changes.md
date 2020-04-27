@@ -17,6 +17,292 @@ ref: undefined
 
 # 版本发布
 
+## 4.1-beta.1
+
+*发布日期: 2020-04-26*
+
+EMQ X 4.1-beta.1 现已发布，主要包含以下改动：
+  
+### emqx
+
+**错误修复:**
+
+- 修复 flapping 检查没有删除过期数据的问题
+
+  Github PR: [emqx/emqx#3406](https://github.com/emqx/emqx/pull/3406)
+  
+- 修复内置 ACL 模块重新加载时没有清除 ACL 缓存的问题
+
+  Github PR: [emqx/emqx#3409](https://github.com/emqx/emqx/pull/3409)
+  
+### emqx-management
+
+**错误修复:**
+
+- 修复错误的时间戳单位
+
+  Github PR: [emqx/emqx-management#203](https://github.com/emqx/emqx-management/pull/203)
+
+### emqx-bridge-mqtt
+
+**错误修复:**
+
+- 修复没有发送 PINREQ 报文导致连接断开的问题
+
+  Github PR: [emqx/emqx-bridge-mqtt#68](https://github.com/emqx/emqx-bridge-mqtt/pull/68)
+
+### emqx-statsd
+
+**错误修复:**
+
+- 修复没有获取 EMQ X Broker 指标的问题
+
+  Github PR: [emqx/emqx-statsd#55](https://github.com/emqx/emqx-statsd/pull/55)
+
+### emqx-sasl
+
+**功能增强:**
+
+- 支持服务端认证
+
+  Github PR: [emqx/emqx-sasl#3](https://github.com/emqx/emqx-sasl/pull/3)
+  
+**错误修复:**
+
+- 修复 SCRAM-SHA-1 认证算法不可用的问题
+
+  Github PR: [emqx/emqx-sasl#2](https://github.com/emqx/emqx-sasl/pull/2)
+  
+### emqx-auth-jwt
+
+**功能增强:**
+
+- 支持配置 jwerl 签名格式
+
+  Github PR: [emqx/emqx-auth-jwt#117](https://github.com/emqx/emqx-auth-jwt/pull/117)
+  
+### emqx-extension-hook
+
+**功能增强:**
+
+- 增加 Java 支持
+
+  Github PR: [emqx/emqx-extension-hook#2](https://github.com/emqx/emqx-extension-hook/pull/2)
+  
+### emqx-dashboard
+
+**功能增强:**
+
+- 支持内部模块管理
+
+  Github PR: [emqx/emqx-dasboard#225](https://github.com/emqx/emqx-dasboard/pull/225)
+  
+- 支持规则编辑
+
+  Github PR: [emqx/emqx-dasboard#227](https://github.com/emqx/emqx-dasboard/pull/227), [emqx/emqx-dasboard#230](https://github.com/emqx/emqx-dasboard/pull/230)
+
+## 4.0.6
+
+*发布日期: 2020-04-22*
+
+EMQ X 4.0.6 现已发布，主要包含以下改动：
+  
+### emqx
+
+**错误修复:**
+
+- 修复 flapping 检查没有删除过期数据的问题
+
+  Github PR: [emqx/emqx#3407](https://github.com/emqx/emqx/pull/3407)
+  
+- 修复使用 WebSocket 时 Proxy Protocol 功能无法使用的问题
+
+  Github PR: [emqx/emqx#3372](https://github.com/emqx/emqx/pull/3372)
+  
+### emqx-bridge-mqtt
+
+**错误修复:**
+
+- 修复默认情况不会发送心跳包的问题
+
+  Github PR: [emqx/emqx-bridge-mqtt#67](https://github.com/emqx/emqx-bridge-mqtt/pull/67)
+
+### emqx-rule-engine
+
+**错误修复:**
+
+- 修复规则引擎时间戳的错误类型
+
+  Github Commit: [emqx/emqx-rule-engine#27ca37](https://github.com/emqx/emqx-rule-engine/commit/27ca3768602c107af71ea6b20f4518bb0f70404d)
+
+- 修复规则引擎测试 SQL 语句功能
+
+  Github Commit: [emqx/emqx-rule-engine#33fcba](https://github.com/emqx/emqx-rule-engine/commit/33fcba394e59fef495e2fe54883297c8d3d893e5)
+
+
+## 4.1-alpha.3
+
+*发布日期: 2020-04-17*
+
+EMQ X 4.1-alpha.3 现已发布，主要包含以下改动：
+  
+### emqx-coap
+
+**功能增强:**
+
+- 支持 IPv6
+
+  Github PR: [emqx/emqx-coap#167](https://github.com/emqx/emqx-coap/pull/167)
+  
+### emqx-auth-mnesia
+
+**功能增强:**
+
+- 增加基于 Mnesia 数据库的认证插件
+
+  Github PR: [emqx/emqx-auth-mnesia#1](https://github.com/emqx/emqx-auth-mnesia/pull/1)
+  
+### emqx-sasl
+
+**功能增强:**
+
+- 支持 SCRAM-SHA-1 认证算法
+
+  Github Repository: [emqx/emqx-sasl](https://github.com/emqx/emqx-sasl)
+
+### emqx-management
+
+**功能增强:**
+
+- 支持返回所有的 Topic Metrics
+
+  Github PR: [emqx/emqx-management#197](https://github.com/emqx/emqx-management/pull/197)
+  
+### emqx-lwm2m
+
+**功能增强:**
+
+- 支持 IPv6 和同时监听多个端口
+
+  Github PR: [emqx/emqx-lwm2m#78](https://github.com/emqx/emqx-lwm2m/pull/78)
+
+## 4.1-alpha.2
+
+*发布日期: 2020-04-11*
+
+EMQ X 4.1-alpha.2 现已发布.
+
+### emqx
+
+**功能增强:**
+
+- 支持使用代理协议时获取网络地址与端口
+
+  Github PR: [emqx/emqx#3372](https://github.com/emqx/emqx/pull/3372)
+  
+- 支持 MQTT AUTH 报文（尚未支持认证算法）
+
+  Github PR: [emqx/emqx#3374](https://github.com/emqx/emqx/pull/3374)
+
+### emqx-management (plugin)
+
+**功能增强:**
+
+- 优化主题统计指标的 HTTP APIs
+
+  Github PR: [emqx/emqx-management#189](https://github.com/emqx/emqx-management/pull/189)
+  
+- 支持跨版本数据迁移
+
+  Github PR: [emqx/emqx-management#190](https://github.com/emqx/emqx-management/pull/190)
+  
+- 支持订阅的模糊搜索
+
+  Github PR: [emqx/emqx-management#191](https://github.com/emqx/emqx-management/pull/191)
+
+- 为内部模块增加 HTTP APIs 和 CLIs
+
+  Github PR: [emqx/emqx-management#193](https://github.com/emqx/emqx-management/pull/193)
+
+### emqx-rel (build project)
+
+**错误修复:**
+
+- 修复 `etc/emqx.conf` 为只读文件时 emqx 无法启动的问题
+
+  Github issue: [emqx/emqx-rel#479](https://github.com/emqx/emqx-rel/issues/479)
+  Github PR: [emqx/emqx-rel#480](https://github.com/emqx/emqx-rel/pull/480)
+
+### emqx-dashboard (plugin)
+
+**错误修复:**
+  
+- 修复无法删除用户的问题
+
+  Github PR: [emqx/emqx-dashboard#219](https://github.com/emqx/emqx-dashboard/pull/219)
+
+### emqx-extension-hook (plugin)
+
+**功能增强:**
+
+- 支持多语言扩展，目前仅支持 Python
+
+  Github Repository: [emqx/emqx-extension-hook](https://github.com/emqx/emqx-extension-hook)
+
+## Version 4.1-alpha.1
+
+*发布日期: 2020-03-27*
+
+EMQ X 4.1-alpha.1 现已发布，主要包括以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 支持主题指标统计
+
+  Github PR: [emqx/emqx#3341](https://github.com/emqx/emqx/pull/3341)
+  
+- 插件启动时加载最新配置
+
+  Github PR: [emqx/emqx#3335](https://github.com/emqx/emqx/pull/3335)
+  
+- 支持消息转发时使用主题别名
+
+  Github PR: [emqx/emqx#3344](https://github.com/emqx/emqx/pull/3344)
+  
+- 延迟发布功能现通过内部模块提供
+
+  Github PR: [emqx/emqx#3323](https://github.com/emqx/emqx/pull/3323)
+  
+- 移除插件信息中的版本字段
+
+  Github PR: [emqx/emqx#3335](https://github.com/emqx/emqx/pull/3335)
+  
+- 代理订阅支持设置所有订阅选项
+
+  Github PR: [emqx/emqx#3307](https://github.com/emqx/emqx/pull/3307)
+  
+### emqx-management
+
+**功能增强:**
+
+- 为主题指标通知增加 HTTP APIs
+
+  Github PR: [emqx/emqx-management#183](https://github.com/emqx/emqx-management/pull/183)
+  
+- 支持模糊查询和多条件查询
+
+  Github PR: [emqx/emqx-management#182](https://github.com/emqx/emqx-management/pull/182)
+  
+### emqx-dashboard
+
+**功能增强:**
+
+- 支持通过 Dashboard 添加简单的认证信息
+
+  Github PR: [emqx/emqx-dashboard#182](https://github.com/emqx/emqx-dashboard/pull/182)
+
 ## 4.0.5 版本
 
 *发布日期: 2020-03-17*
