@@ -1160,17 +1160,33 @@ tutorial=# SELECT * FROM conditions LIMIT 100;
 
 ## 保存数据到 InfluxDB
 
-搭建 InfluxDB 数据库环境，以 MacOS X 为例:
+搭建 InfluxDB 数据库环境，以 macOS X 为例:
 
 ```bash   
 $ docker pull influxdb
 
-$ git clone -b v1.0.0 https://github.com/palkan/influx_udp.git
+$ docker run --name=influxdb --rm -d -p 8086:8086 -p 8089:8089/udp -v ${PWD}/files/influxdb.conf:/etc/influxdb/influxdb.conf influxdb:latest
 
-$ cd influx_udp
+```
 
-$ docker run --name=influxdb --rm -d -p 8086:8086 -p 8089:8089/udp -v ${PWD}/files/influxdb.conf:/etc/influxdb/influxdb.conf:ro -e INFLUXDB_DB=db influxdb:latest
+EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改默认 InfluxDB 配置文件如下：
 
+```bash
+[[udp]]
+  enabled = true
+  bind-address = ":8089"
+  # 消息保存的数据库
+  database = "emqx"
+
+  # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
+  # EMQ X 默认时间戳是毫秒
+  precision = "ms"
+  
+  # 其他配置根据需要自行修改
+  #   batch-size = 1000
+  #   batch-pending = 5
+  #   batch-timeout = "5s"
+  #   read-buffer = 1024
 ```
 
 创建规则:

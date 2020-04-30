@@ -1,9 +1,9 @@
 
-## 概览
+* 概览
   * [EMQ X 消息服务器简介](introduction.md)
   * [EMQ X 消息服务器功能列表](introduction/checklist.md)
 
-## 开始使用
+* 开始使用
   * [安装](getting-started/install-ee.md)
   * [启动 EMQ X](getting-started/start.md)
   * [基本命令](getting-started/command-line.md)
@@ -12,7 +12,7 @@
   * [日志与追踪](getting-started/log.md)
   * [Dashboard](getting-started/dashboard-ee.md)
 
-## 基础功能
+* 功能
   * [保留消息](advanced/retained.md)
   * [共享订阅](advanced/shared-subscriptions.md)
   * [延迟发布](advanced/delay-publish.md)
@@ -21,27 +21,6 @@
   * [主题重写](advanced/topic-rewrite.md)
   * [$SYS 系统主题](advanced/system-topic.md)
   * [黑名单](advanced/blacklist.md)
-
-## 高级功能
-  * 认证
-    * [认证简介](advanced/auth.md)
-    * [Username 认证](advanced/auth-username.md)
-    * [Cliend ID 认证](advanced/auth-clientid.md)
-    * [HTTP 认证](advanced/auth-http.md)
-    * [JWT 认证](advanced/auth-jwt.md)
-    * [LDAP 认证](advanced/auth-ldap.md)
-    * [MySQL 认证](advanced/auth-mysql.md)
-    * [PostgreSQL 认证](advanced/auth-postgresql.md)
-    * [Redis 认证](advanced/auth-redis.md)
-    * [MongoDB 认证](advanced/auth-mongodb.md)
-  * 发布订阅 ACL
-    * [发布订阅 ACL 简介](advanced/acl.md)
-    * [内置 ACL](advanced/acl-file.md)
-    * [HTTP ACL](advanced/acl-http.md)
-    * [MySQL ACL](advanced/acl-mysql.md)
-    * [PostgreSQL ACL](advanced/acl-postgres.md)
-    * [Redis ACL](advanced/acl-redis.md)
-    * [MongoDB ACL](advanced/acl-mongodb.md)
   * [WebHook](advanced/webhook.md)
   * [分布集群](advanced/cluster.md)
   * [钩子](advanced/hooks.md)
@@ -51,9 +30,28 @@
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
-  * [命令行接口](advanced/cli.md)
 
-## 管理监控 API
+* 认证
+  * [认证简介](advanced/auth.md)
+  * [Username 认证](advanced/auth-username.md)
+  * [Cliend ID 认证](advanced/auth-clientid.md)
+  * [HTTP 认证](advanced/auth-http.md)
+  * [JWT 认证](advanced/auth-jwt.md)
+  * [LDAP 认证](advanced/auth-ldap.md)
+  * [MySQL 认证](advanced/auth-mysql.md)
+  * [PostgreSQL 认证](advanced/auth-postgresql.md)
+  * [Redis 认证](advanced/auth-redis.md)
+  * [MongoDB 认证](advanced/auth-mongodb.md)
+* 发布订阅 ACL
+  * [发布订阅 ACL 简介](advanced/acl.md)
+  * [内置 ACL](advanced/acl-file.md)
+  * [HTTP ACL](advanced/acl-http.md)
+  * [MySQL ACL](advanced/acl-mysql.md)
+  * [PostgreSQL ACL](advanced/acl-postgres.md)
+  * [Redis ACL](advanced/acl-redis.md)
+  * [MongoDB ACL](advanced/acl-mongodb.md)
+
+* 管理监控 API
   * [管理监控 API](advanced/http-api.md)
   * [基本信息](advanced/http-api.md#endpoint-brokers)
   * [节点](advanced/http-api.md#endpoint-nodes)
@@ -73,7 +71,7 @@
   * [资源类型](advanced/http-api.md#endpoint-resource-types)
   * [资源](advanced/http-api.md#endpoint-resources)
 
-## 规则引擎
+* 规则引擎
   * [规则引擎](rule/rule-engine.md)
   * [创建规则](rule/rule-create.md)
   * [编解码](rule/schema-registry.md)
@@ -95,7 +93,7 @@
   * [桥接数据到 RabbitMQ](rule/rule-example.md#桥接数据到-rabbitmq)
   * [桥接数据到 RPC 服务](rule/rule-example.md#桥接数据到-rpc-服务)
 
-## 数据存储
+* 数据存储
   * [数据存储设计](backend/backend.md)
   * [Redis 数据存储](backend/backend.md#redis-数据存储)
   * [MySQL 数据存储](backend/backend.md#mysql-数据存储)
@@ -107,7 +105,7 @@
   * [OpenTSDB 消息存储](backend/backend.md#opentsdb-消息存储)
   * [Timescale 消息存储](backend/backend.md#timescale-消息存储)
 
-## 消息桥接
+* 消息桥接
    * [MQTT 桥接](bridge/bridge.md#mqtt-桥接)
    * [RPC 桥接](bridge/bridge.md#rpc-桥接)
    * [Kafka 桥接](bridge/bridge.md#kafka-桥接)
@@ -115,7 +113,7 @@
    * [Pulsar 桥接](bridge/bridge.md#pulsar-桥接)
    * [RocketMQ 桥接](bridge/bridge.md#rocketmq-桥接)
 
-## 进阶教程
+* 进阶教程
   * [设备管理](tutorial/device-management.md)
   * [系统调优](tutorial/turn.md)
   * [生产部署](tutorial/deploy.md)
@@ -123,8 +121,9 @@
   * [性能测试](tutorial/benchmark.md)
 
 * [配置项](configuration/configuration.md)
+* [命令行接口](advanced/cli.md)
 
-## SDK & Tools
+* SDK & Tools
   * [MQTT 客户端库](development/client.md)
   * [MQTT C 客户端库](development/c.md)
   * [MQTT Java 客户端库](development/java.md)
@@ -134,7 +133,7 @@
   * [MQTT Python 客户端库](development/python.md)
   * [其他资源](development/resource.md)
 
-## FAQ
+* FAQ
   * [入门概念](faq/faq.md)
   * [使用教程](faq/use-guide.md)
   * [安装部署](faq/deployment.md)
@@ -142,11 +141,11 @@
   * [商业服务](faq/enterprise.md)
   * [FAQ 标签](faq/tags.md)
 
-## 版本发布
+* 版本发布
   <!-- * [变更日志](changes/changes-ee.md) -->
   * [升级指南](changes/upgrade.md)
 
-## 相关资料
+* 相关资料
   * [架构设计](design/design.md)
   <!-- * [相关资料](awesome/awesome.md) -->
 
