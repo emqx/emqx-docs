@@ -1825,6 +1825,28 @@ aws dynamodb scan --table-name mqtt_topic_msg_map --region us-west-2  --endpoint
 
 ## InfluxDB 消息存储
 
+### InfluxDB 配置
+
+EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改默认 InfluxDB 配置文件如下：
+
+```bash
+[[udp]]
+  enabled = true
+  bind-address = ":8089"
+  # 消息保存的数据库
+  database = "emqx"
+
+  # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
+  # EMQ X 默认时间戳是毫秒
+  precision = "ms"
+  
+  # 其他配置根据需要自行修改
+  #   batch-size = 1000
+  #   batch-pending = 5
+  #   batch-timeout = "5s"
+  #   read-buffer = 1024
+```
+
 ### 配置 InfluxDB 消息存储
 
 配置文件: etc/plugins/emqx_backend_influxdb.conf:
@@ -1837,6 +1859,7 @@ backend.influxdb.pool1.server = 127.0.0.1:8089
 backend.influxdb.pool1.pool_size = 5
 
 ## 是否自动添加 timestamp
+## 如果设为 true，请将 InfluxDB UDP 配置中的 precision 设为 "ms"
 backend.influxdb.pool1.set_timestamp = true
 
 ## 存储 PUBLISH 消息
@@ -1871,7 +1894,7 @@ backend.influxdb.hook.message.publish.2 = {"topic": "stat/#", "action": {"functi
 emqx_backend_influxdb.tmpl 模板文件将 MQTT Message 转换为可写入 InfluxDB 的
 DataPoint。
 
-模板文件采用 Json 格式, 组成部分:
+模板文件采用 JSON 格式, 组成部分:
 
   - `key` - MQTT Topic, 字符串, 支持通配符
   - `value` - Template, Json 对象, 用于将 MQTT Message 转换成
@@ -1961,6 +1984,10 @@ data/templates 目录下提供了一个示例模板 (emqx_backend_influxdb_examp
   }
 }
 ```
+
+{% hint style="danget" %}
+当 Template 中设置 timestamp 或插件配置 `backend.influxdb.pool1.set_timestamp = true` 时，请将 InfluxDB UDP 配置中的 precision 设为 "ms"。
+{% endhint %}
 
 当 Topic 为 "sample" 的 MQTT Message 拥有以下 Payload 时:
 
