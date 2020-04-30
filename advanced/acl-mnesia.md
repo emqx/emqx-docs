@@ -17,8 +17,7 @@ ref: undefined
 
 # Mnesia ACL
 
-
-Mnesia ACL 使用 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
+Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
 
 插件：
 
@@ -39,22 +38,13 @@ auth.mnesia.as = username
 
 ### ACL 规则数据
 
-```
-## 格式
--record(emqx_acl, {
-        login,
-        topic,
-        action,
-        allow
-    }).
-
-## 结构
-#emqx_acl{
-  login = emqx, 
-  topic = Topic/A, 
-  action = pub,  
-  allow = true
-  }
+```json
+{
+	"login":"emqx",
+	"topic":"testtopic/1",
+	"action":"pub",
+	"allow": true
+}
 ```
 
 Mnesia ACL 一条规则中定义了发布、订阅或发布/订阅的信息，在规则中的都是**允许**列表。
@@ -68,8 +58,7 @@ Mnesia ACL 一条规则中定义了发布、订阅或发布/订阅的信息，�
 - action：操作行为，可选值：pub | sub | pubsub
 - allow：是否允许
   
-Mnesia ACL 默认没有任何配置的ACL规则，用户可以使用 HTTP API 管理 ACL 规则
-
+Mnesia ACL 默认不设规则，你可以使用 HTTP API 管理 ACL 规则。
 
 
 ## 使用 HTTP API 管理 ACL 规则
@@ -139,8 +128,19 @@ GET api/v4/emqx_acl
 
 # Response
 {
-    "code": 0,
-    "data": ["emqx","emqx_1","emqx_2"]
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "count": 1
+  },
+  "data": [
+    {
+      "topic": "Topic/A",
+      "login": "emqx",
+      "action": "pub"
+    }
+  ],
+  "code": 0
 }
 ```
 

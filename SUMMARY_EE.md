@@ -33,8 +33,9 @@
 
 * 认证
   * [认证简介](advanced/auth.md)
-  * [Username 认证](advanced/auth-username.md)
-  * [Cliend ID 认证](advanced/auth-clientid.md)
+  * [Username 认证（即将废弃）](advanced/auth-username.md)
+  * [Cliend ID 认证（即将废弃）](advanced/auth-clientid.md)
+  * [Mnesia 认证](advanced/auth-mnesia.md)
   * [HTTP 认证](advanced/auth-http.md)
   * [JWT 认证](advanced/auth-jwt.md)
   * [LDAP 认证](advanced/auth-ldap.md)
@@ -45,6 +46,7 @@
 * 发布订阅 ACL
   * [发布订阅 ACL 简介](advanced/acl.md)
   * [内置 ACL](advanced/acl-file.md)
+  * [Mnesia ACL](advanced/acl-mnesia.md)
   * [HTTP ACL](advanced/acl-http.md)
   * [MySQL ACL](advanced/acl-mysql.md)
   * [PostgreSQL ACL](advanced/acl-postgres.md)

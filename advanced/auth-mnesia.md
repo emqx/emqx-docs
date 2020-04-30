@@ -17,7 +17,7 @@ ref: undefined
 
 # Mnesia 认证
 
-Mnesia 认证使用配置文件预设客户端 Client ID、Username 与密码，支持通过 HTTP API 管理认证数据。
+Mnesia 认证使用 EMQ X 内置 Mnesia 数据库存储客户端 Client ID/Username 与密码，支持通过 HTTP API 管理认证数据。
 
 Mnesia 认证不依赖外部数据源，使用上足够简单轻量。
 
@@ -81,6 +81,7 @@ auth.mnesia.2.is_superuser = false
 
 预设认证数据在配置文件中使用了明文密码，出于安全性与可维护性考虑应当避免使用该功能。
 
+预设认证数据无法通过 API 修改、删除，请慎用。
 {% endhint %}
 
 ## 使用 HTTP API 管理认证数据
@@ -149,8 +150,19 @@ GET api/v4/auth_user
 
 # Response
 {
-    "code": 0,
-    "data": ["emqx_c","emqx_c_1","emqx_c_2"]
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "count": 1
+  },
+  "data": [
+    {
+      "password": "ceb5e917f7930ae8f0dc3ceb496a428f7e644736eebca36a2b8f6bbac756171a",
+      "login": "emqx_c",
+      "is_superuser": false
+    }
+  ],
+  "code": 0
 }
 ```
 

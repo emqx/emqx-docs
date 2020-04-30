@@ -1827,7 +1827,7 @@ aws dynamodb scan --table-name mqtt_topic_msg_map --region us-west-2  --endpoint
 
 ### InfluxDB 配置
 
-EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改默认 InfluxDB 配置文件如下：
+EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
 
 ```bash
 [[udp]]
