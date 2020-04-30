@@ -17,6 +17,48 @@ ref: undefined
 
 # 版本发布
 
+## 4.1-beta.2 版本
+
+*发布日期: 2020-04-30*
+
+EMQ X 4.1-beta.2 现已发布，主要包含以下改动：
+
+### emqx
+
+**错误修复:**
+
+- 修复证书中 CN 与 DN 字段没有正确获取的问题
+
+  Github PR: [emqx/emqx#3417](https://github.com/emqx/emqx/pull/3417)
+
+- 修复增强认证功能中重新认证部分的错误
+
+  Github PR: [emqx/emqx#3422](https://github.com/emqx/emqx/pull/3422)
+
+### emqx-extension-hook
+
+**错误修复:**
+
+- 修复 Java 驱动无法正确配置导致 Java 扩展无法使用的问题
+
+  Github PR: [emqx/emqx-extension-hook#10](https://github.com/emqx/emqx-extension-hook/pull/10)
+
+### emqx-auth-mnesia
+
+**错误修复:**
+
+- 修复 ACL 规则没有允许/拒绝字段的问题
+
+  Github PR: [emqx/emqx-auth-mnesia#2](https://github.com/emqx/emqx-auth-mnesia/pull/2)
+
+### emqx-management
+
+**错误修复:**
+
+- 修复主题指标 API 没有检查主题合法性的问题
+
+  Github PR: [emqx/emqx-management#212](https://github.com/emqx/emqx-management/pull/212)
+
 ## 4.1-beta.1 版本
 
 *发布日期: 2020-04-26*
