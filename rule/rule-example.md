@@ -1169,7 +1169,7 @@ $ docker run --name=influxdb --rm -d -p 8086:8086 -p 8089:8089/udp -v ${PWD}/fil
 
 ```
 
-EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改默认 InfluxDB 配置文件如下：
+EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
 
 ```bash
 [[udp]]

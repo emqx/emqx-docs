@@ -32,9 +32,10 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 
 
-**配置文件**
+**配置文件/内置数据源**
 
 * [内置 ACL](./acl-file.md)
+* [Mnesia ACL](./acl-mnesia.md)
 
 使用配置文件提供认证数据源，适用于变动较小的 ACL 管理。
 
