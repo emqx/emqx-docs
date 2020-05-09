@@ -1143,7 +1143,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/metrics"
 | Name | Type | Description   |
 | ---- | --------- | ------------- |
 | code | Integer   | 0 |
-| data | Objects | 各节点上的统计指标列表，详见 [GET /api/v4/metrics](#endpoint-get-metrics) |
+| data | Object | 各节点上的统计指标列表，详见 [GET /api/v4/metrics](#endpoint-get-metrics) |
 
 **Examples:**
 
@@ -1151,6 +1151,174 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/metrics"
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/metrics"
 
 {"data":{"bytes.received":0,"client.connected":0,"packets.pingreq.received":0,"messages.delayed":0,"rules.matched":0,"actions.failure":0,"packets.puback.sent":0,"packets.pingresp.sent":0,"packets.publish.auth_error":0,"client.check_acl":0,"delivery.dropped.queue_full":0,"actions.success":0,"packets.publish.error":0,"packets.pubcomp.received":0,"bytes.sent":0,"packets.pubrec.inuse":0,"packets.pubrec.missed":0,"packets.pubrel.sent":0,"delivery.dropped.too_large":0,"packets.pubcomp.missed":0,"packets.subscribe.error":0,"packets.suback.sent":0,"messages.qos2.sent":0,"messages.qos1.sent":0,"packets.pubrel.missed":0,"messages.publish":0,"messages.forward":0,"packets.auth.received":0,"delivery.dropped":0,"packets.sent":0,"packets.puback.inuse":0,"delivery.dropped.qos0_msg":0,"packets.publish.dropped":0,"packets.disconnect.sent":0,"packets.auth.sent":0,"packets.unsubscribe.received":0,"session.takeovered":0,"messages.delivered":0,"client.auth.anonymous":0,"packets.connack.error":0,"packets.connack.sent":0,"packets.subscribe.auth_error":0,"packets.unsuback.sent":0,"packets.pubcomp.sent":0,"packets.publish.sent":0,"client.connack":0,"packets.publish.received":0,"client.subscribe":0,"session.created":0,"delivery.dropped.expired":0,"client.unsubscribe":0,"packets.received":0,"packets.pubrel.received":0,"packets.unsubscribe.error":0,"messages.qos0.sent":0,"packets.connack.auth_error":0,"session.resumed":0,"delivery.dropped.no_local":0,"packets.puback.missed":0,"packets.pubcomp.inuse":0,"packets.pubrec.sent":0,"messages.dropped.expired":0,"messages.dropped.no_subscribers":0,"session.discarded":0,"messages.sent":0,"messages.received":0,"packets.puback.received":0,"messages.qos0.received":0,"messages.acked":0,"client.connect":0,"packets.disconnect.received":0,"client.disconnected":0,"messages.retained":3,"session.terminated":0,"packets.publish.inuse":0,"packets.pubrec.received":0,"messages.qos2.received":0,"messages.dropped":0,"packets.connect.received":0,"client.authenticate":0,"packets.subscribe.received":0,"messages.qos1.received":0},"code":0}
+```
+
+### 统计指标 {#endpoint-topic-metrics}
+
+#### GET /api/v4/topic-metrics {#endpoint-list-all-topic-metrics}
+
+返回所有主题统计指标数据。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name            | Type             | Description   |
+| --------------- | ---------------- | ------------- |
+| code            | Integer          | 0             |
+| data            | Array of Objects | 各节点上的统计指标列表 |
+| data[0].topic   | String           | 主题名 |
+| data[0].metrics | Object           | 主题统计指标数据，详见下面的 metrics: |
+
+**metrics: **
+
+| Name                    | Type      | Description |
+| ----------------------- | --------- | -------------------- |
+| messages.qos2.out.rate  | Integer   | QoS 2 消息 5 秒内平均发送速率 |
+| messages.qos2.out.count | Integer   | QoS 2 消息发送数量统计 |
+| messages.qos2.in.rate   | Integer   | QoS 2 消息 5 秒内平均接收速率 |
+| messages.qos2.in.count  | Integer   | QoS 2 消息接收数量统计 |
+| messages.qos1.out.rate  | Integer   | QoS 1 消息 5 秒内平均发送速率 |
+| messages.qos1.out.count | Integer   | QoS 1 消息发送数量统计 |
+| messages.qos1.in.rate   | Integer   | QoS 1 消息 5 秒内平均接收速率 |
+| messages.qos1.in.count  | Integer   | QoS 1 消息接收数量统计 |
+| messages.qos0.out.rate  | Integer   | QoS 0 消息 5 秒内平均发送速率 |
+| messages.qos0.out.count | Integer   | QoS 0 消息发送数量统计 |
+| messages.qos0.in.rate   | Integer   | QoS 0 消息 5 秒内平均接收速率 |
+| messages.qos0.in.count  | Integer   | QoS 0 消息接收数量统计 |
+| messages.out.rate       | Integer   | MQTT 消息 5 秒内平均发送速率 |
+| messages.out.count      | Integer   | MQTT 消息发送数量统计 |
+| messages.in.rate        | Integer   | MQTT 消息 5 秒内平均接收速率 |
+| messages.in.count       | Integer   | MQTT 消息接收数量统计 |
+| messages.dropped.rate   | Integer   | MQTT 消息 5 秒内平均丢弃速率 |
+| messages.dropped.count  | Integer   | MQTT 消息丢弃数量统计 |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-metrics"
+
+{"data":[],"code":0}
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/topic-metrics" -d '{"topic":"a/b/c"}'
+
+{"code":0}
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-metrics"
+
+{"data":[{"topic":"a/b/c","metrics":{"messages.qos2.out.rate":0.0,"messages.qos2.out.count":0,"messages.qos2.in.rate":0.0,"messages.qos2.in.count":0,"messages.qos1.out.rate":0.0,"messages.qos1.out.count":0,"messages.qos1.in.rate":0.0,"messages.qos1.in.count":0,"messages.qos0.out.rate":0.0,"messages.qos0.out.count":0,"messages.qos0.in.rate":0.0,"messages.qos0.in.count":0,"messages.out.rate":0.0,"messages.out.count":0,"messages.in.rate":0.0,"messages.in.count":0,"messages.dropped.rate":0.0,"messages.dropped.count":0}}],"code":0}
+```
+
+#### GET /api/v4/topic-metrics/{topic} {#endpoint-get-topic-metrics}
+
+返回指定主题的统计指标数据。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type             | Description   |
+| ---- | ---------------- | ------------- |
+| code | Integer          | 0             |
+| data | Object           | 主题统计指标数据，详见下面的 data: |
+
+**data: **
+
+| Name                    | Type      | Description |
+| ----------------------- | --------- | -------------------- |
+| messages.qos2.out.rate  | Integer   | QoS 2 消息 5 秒内平均发送速率 |
+| messages.qos2.out.count | Integer   | QoS 2 消息发送数量统计 |
+| messages.qos2.in.rate   | Integer   | QoS 2 消息 5 秒内平均接收速率 |
+| messages.qos2.in.count  | Integer   | QoS 2 消息接收数量统计 |
+| messages.qos1.out.rate  | Integer   | QoS 1 消息 5 秒内平均发送速率 |
+| messages.qos1.out.count | Integer   | QoS 1 消息发送数量统计 |
+| messages.qos1.in.rate   | Integer   | QoS 1 消息 5 秒内平均接收速率 |
+| messages.qos1.in.count  | Integer   | QoS 1 消息接收数量统计 |
+| messages.qos0.out.rate  | Integer   | QoS 0 消息 5 秒内平均发送速率 |
+| messages.qos0.out.count | Integer   | QoS 0 消息发送数量统计 |
+| messages.qos0.in.rate   | Integer   | QoS 0 消息 5 秒内平均接收速率 |
+| messages.qos0.in.count  | Integer   | QoS 0 消息接收数量统计 |
+| messages.out.rate       | Integer   | MQTT 消息 5 秒内平均发送速率 |
+| messages.out.count      | Integer   | MQTT 消息发送数量统计 |
+| messages.in.rate        | Integer   | MQTT 消息 5 秒内平均接收速率 |
+| messages.in.count       | Integer   | MQTT 消息接收数量统计 |
+| messages.dropped.rate   | Integer   | MQTT 消息 5 秒内平均丢弃速率 |
+| messages.dropped.count  | Integer   | MQTT 消息丢弃数量统计 |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-metrics/a%2Fb%2Fc"
+
+{"data":{"messages.qos2.out.rate":0.0,"messages.qos2.out.count":0,"messages.qos2.in.rate":0.0,"messages.qos2.in.count":0,"messages.qos1.out.rate":0.0,"messages.qos1.out.count":0,"messages.qos1.in.rate":0.0,"messages.qos1.in.count":0,"messages.qos0.out.rate":0.0,"messages.qos0.out.count":0,"messages.qos0.in.rate":0.0,"messages.qos0.in.count":0,"messages.out.rate":0.0,"messages.out.count":0,"messages.in.rate":0.0,"messages.in.count":0,"messages.dropped.rate":0.0,"messages.dropped.count":0},"code":0}
+```
+
+#### POST /api/v4/topic-metrics {#endpoint-add-topic-metrics}
+
+开启对指定主题的指标统计。
+
+**Parameters (json):**
+
+| Name  | Type      | Required | Default | Description |
+| ----- | --------- | -------- | ------- | ----------- |
+| topic | String    | Required |         | MQTT 主题名  |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+开启对 `a/b/c` 主题的指标统计 
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/topic-metrics" -d '{"topic":"a/b/c"}'
+
+{"code":0}
+```
+
+#### DELETE /api/v4/topic-metrics/{topic} {#endpoint-delete-topic-metrics}
+
+关闭对指定主题的指标统计。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+关闭对 `a/b/c` 主题的指标统计 
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-metrics/a%2Fb%2Fc"
+
+{"code":0}
+```
+
+#### DELETE /api/v4/topic-metrics {#endpoint-delete-all-topic-metrics}
+
+关闭所有主题的指标统计。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+关闭所有主题的指标统计 
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-metrics"
+
+{"code":0}
 ```
 
 ### 状态 {#endpoint-stats}
