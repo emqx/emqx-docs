@@ -17,6 +17,28 @@ ref: undefined
 
 # 版本发布
 
+## 4.0.7 版本
+
+*发布日期: 2020-05-09*
+
+EMQ X 4.0.7 现已发布，主要包含以下改动：
+
+### emqx
+
+**错误修复:**
+
+- 修复浏览器不支持当前 SSL/TLS 证书的问题
+
+  Github PR: [emqx/emqx#3448](https://github.com/emqx/emqx/pull/3448)
+
+### emqx-web-hook
+
+**错误修复:**
+
+- 修复 `client.disconnected` 事件在某些情况下出错的问题
+
+  Github PR: [emqx/emqx-web-hook#187](https://github.com/emqx/emqx-web-hook/pull/187)
+
 ## 4.1-beta.1 版本
 
 *发布日期: 2020-04-26*
