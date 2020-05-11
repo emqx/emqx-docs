@@ -23,7 +23,7 @@ ref: undefined
 <div class="emqxce">
 {% hint style="danger" %}
 EMQ X Broker 中仅适用以下操作：
-- 空动作 (调试)
+- 检查 (调试)
 - 发送数据到 Web 服务
 - 桥接数据到 MQTT Broker
 
@@ -31,7 +31,7 @@ EMQ X Broker 中仅适用以下操作：
 {% endhint %}
 </div>
 
-## 空动作 (调试)
+## 检查 (调试)
 
 创建一个测试规则，当有消息发送到 't/a' 主题时，打印消息内容以及动作参数细节。
 

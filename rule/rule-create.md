@@ -1,6 +1,5 @@
 # 创建规则 {#rule-examples}
 
-
 ## 使用 Dashboard 创建规则 {#rule-ex-dashboard}
 
 ### 创建 WebHook 规则 {#rule-ex-dashboard-webhook}

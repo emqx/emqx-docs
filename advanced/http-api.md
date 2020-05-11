@@ -1445,6 +1445,37 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/banned
 | - data.actions[0].name    | String    | 动作名字，与请求中的 actions.name 一致           |
 | - data.actions[0].metrics | Array     | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
 
+#### PUT /api/v4/rules/{rule_id} {#endpoint-update-rules}
+
+更新规则，返回规则 ID。
+
+**Parameters (json):**
+
+| Name                 | Type | Required | Description |
+| -------------------- | --------- | ----------- | ---------------- |
+| rawsql               | String    | True        | 可选，规则的 SQL 语句 |
+| actions              | Array     | True        | 可选，动作列表 |
+| - actions[0].name    | String    | True        | 可选，动作名称 |
+| - actions[0].params  | Object    | True        | 可选，动作参数。参数以 key-value 形式表示。<br />详情可参看添加规则的示例 |
+| description          | String    | False       | 可选，规则描述 |
+
+**Success Response Body (JSON):**
+
+| Name                       | Type | Description                                      |
+| -------------------------- | --------- | ------------------------------------------------ |
+| code                       | Integer   | 0                                                |
+| data                       | Object    | 创建成功的规则对象，包含 Rule ID                 |
+| - data.id                  | String    | Rule ID                                          |
+| - data.rawsql              | String    | SQL 语句，与请求中的 rawsql 一致                 |
+| - data.for                 | String    | Topic 列表，表示哪些 topic 可以匹配到此规则      |
+| - data.metrics             | Array     | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
+| - data.description         | String    | 规则的描述信息，与请求中的 description 一致      |
+| - data.actions             | Array     | 动作列表，每个动作是一个 Object                  |
+| - data.actions[0].id      | String    | Action ID                                        |
+| - data.actions[0].params  | Object    | 动作参数，与请求中的 actions.params 一致         |
+| - data.actions[0].name    | String    | 动作名字，与请求中的 actions.name 一致           |
+| - data.actions[0].metrics | Array     | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
+
 #### DELETE /api/v4/rules/{rule_id} {#endpoint-delete-rules}
 
 删除规则。
@@ -1490,6 +1521,22 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/rules/rule:7fdb2c9e
 $ curl --basic -u admin:public 'http://localhost:8081/api/v4/rules'
 
 {"data":[{"rawsql":"select * from \"t/a\"","metrics":[{"speed_max":0,"speed_last5m":0.0,"speed":0.0,"node":"emqx@127.0.0.1","matched":0}],"id":"rule:7fdb2c9e","for":["t/a"],"enabled":true,"description":"test-rule","actions":[{"params":{"a":1},"name":"inspect","metrics":[{"success":0,"node":"emqx@127.0.0.1","failed":0}],"id":"inspect_1582434715354188116"}]}],"code":0}
+```
+
+更新一下规则的 SQL 语句，改为 `select * from "t/b"`:
+
+```bash
+$ curl -XPUT --basic -u admin:public 'http://localhost:8081/api/v4/rules/rule:7fdb2c9e' -d '{"rawsql":"select * from \"t/b\""}'
+
+{"data":{"rawsql":"select * from \"t/b\"","metrics":[{"speed_max":0,"speed_last5m":0.0,"speed":0.0,"node":"emqx@127.0.0.1","matched":0}],"id":"rule:7fdb2c9e","for":["t/a"],"enabled":true,"description":"test-rule","actions":[{"params":{"a":1},"name":"inspect","metrics":[{"success":0,"node":"emqx@127.0.0.1","failed":0}],"id":"inspect_1582434715354188116"}]},"code":0}
+```
+
+停用规则 (disable):
+
+```bash
+$ curl -XPUT --basic -u admin:public 'http://localhost:8081/api/v4/rules/rule:7fdb2c9e' -d '{"enabled": false}'
+
+{"data":{"rawsql":"select * from \"t/b\"","metrics":[{"speed_max":0,"speed_last5m":0.0,"speed":0.0,"node":"emqx@127.0.0.1","matched":0}],"id":"rule:7fdb2c9e","for":["t/a"],"enabled":false,"description":"test-rule","actions":[{"params":{"a":1},"name":"inspect","metrics":[{"success":0,"node":"emqx@127.0.0.1","failed":0}],"id":"inspect_1582434715354188116"}]},"code":0}
 ```
 
 删除规则:
