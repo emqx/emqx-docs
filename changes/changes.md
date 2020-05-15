@@ -43,7 +43,7 @@ EMQ X 4.1-rc.1 现已发布，主要包含以下改动：
 
   Github PR: [emqx/emqx-auth-mnesia#6](https://github.com/emqx/emqx-auth-mnesia/pull/6)
 
-- 修复 ACL 校验没有正确处理错误的问题
+- 修复没有正确处理错误的问题
 
   Github PR: [emqx/emqx-auth-mnesia#9](https://github.com/emqx/emqx-auth-mnesia/pull/9)
 
