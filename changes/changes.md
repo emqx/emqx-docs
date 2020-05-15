@@ -17,6 +17,60 @@ ref: undefined
 
 # 版本发布
 
+## 4.1-rc.1 版本
+
+*发布日期: 2020-05-15*
+
+EMQ X 4.1-rc.1 现已发布，主要包含以下改动：
+
+### emqx
+
+**错误修复:**
+
+- 修复浏览器不支持当前 SSL/TLS 证书的问题
+
+  Github PR: [emqx/emqx#3447](https://github.com/emqx/emqx/pull/3447)
+
+- 修复连接进程在某些情况下出错崩溃的问题
+
+  Github PR: [emqx/emqx#3459](https://github.com/emqx/emqx/pull/3459)
+
+### emqx-auth-mnesia
+
+**错误修复:**
+
+- 修复配置的用户无法通过认证的问题
+
+  Github PR: [emqx/emqx-auth-mnesia#6](https://github.com/emqx/emqx-auth-mnesia/pull/6)
+
+- 修复 ACL 校验没有正确处理错误的问题
+
+  Github PR: [emqx/emqx-auth-mnesia#9](https://github.com/emqx/emqx-auth-mnesia/pull/9)
+
+### emqx-reloader
+
+**错误修复:**
+
+- 修复某些情况下不会重新加载模块代码的问题
+
+  Github PR: [emqx/emqx-reloader#73](https://github.com/emqx/emqx-reloader/pull/73)
+
+### emqx-sn
+
+**错误修复:**
+
+- 修复不支持指定监听 IP 地址的问题并支持 IPv6
+
+  Github PR: [emqx/emqx-sn#158](https://github.com/emqx/emqx-sn/pull/158)
+
+### emqx-web-hook
+
+**错误修复:**
+
+- 修复 `client.disconnected` 事件在某些情况下出错的问题
+
+  Github PR: [emqx/emqx-web-hook#188](https://github.com/emqx/emqx-web-hook/pull/188)
+
 ## 4.0.7 版本
 
 *发布日期: 2020-05-09*
@@ -30,6 +84,10 @@ EMQ X 4.0.7 现已发布，主要包含以下改动：
 - 修复浏览器不支持当前 SSL/TLS 证书的问题
 
   Github PR: [emqx/emqx#3448](https://github.com/emqx/emqx/pull/3448)
+
+- 修复连接进程在某些情况下出错崩溃的问题，感谢 [Github issue#3455](https://github.com/emqx/emqx/issues/3455) 的反馈
+
+  Github PR: [emqx/emqx#3458](https://github.com/emqx/emqx/pull/3458)
 
 ### emqx-web-hook
 
