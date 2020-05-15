@@ -21,13 +21,9 @@ EMQ X 的主题重写功能支持根据用户配置的规则在客户端订阅�
 
 EMQ X 的 [保留消息](advanced/retained.md) 和 [延迟发布](advanced/delay-publish.md) 可以与主题重写配合使用，例如，当用户想使用延迟发布功能，但不方便修改客户端发布的主题时，可以使用主题重写将相关主题重写为延迟发布的主题格式。
 
-## 开启主题重写功能
+## 启停主题重写功能
 
-主题重写功能默认关闭，开启此功能需要修改 `etc/emqx.conf` 文件中的 `module.rewrite` 配置项。默认 `off` 表示关闭，如需开启请修改为 `on`。
-
-```bash
-module.rewrite = off
-```
+主题重写功能由 `emqx_mod_rewrite` 内置模块提供, 此功能默认关闭，支持在 EMQ X Broker 运行期间动态启停，请参见 [内置模块](./internal-modules.md)。
 
 ## 配置主题重写规则
 

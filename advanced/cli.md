@@ -538,6 +538,58 @@ $ ./bin/emqx_ctl plugins reload emqx_lua_hook
 Plugin emqx_lua_hook reloaded successfully.
 ```
 
+## modules 命令 {#endpoint-modules}
+
+modules 命令用于加载、卸载和查询内置模块。
+
+| 命令 | 描述 |
+| ------------------------- | ---------------------- |
+| `modules list            `| 列出全部内置模块 (Module) |
+| `modules load <Module>   `| 加载内置模块 (Module) |
+| `modules unload <Module> `| 卸载内置模块 (Module) |
+| `modules reload <Module> `| 重载内置模块 (Module) |
+
+### modules list
+
+列出全部内置模块:
+
+```bash
+$ ./bin/emqx_ctl modules list
+Module(emqx_mod_delayed, description=EMQ X Delayed Publish Module, active=false)
+Module(emqx_mod_topic_metrics, description=EMQ X Topic Metrics Module, active=false)
+Module(emqx_mod_subscription, description=EMQ X Subscription Module, active=false)
+Module(emqx_mod_acl_internal, description=EMQ X Internal ACL Module, active=true)
+Module(emqx_mod_rewrite, description=EMQ X Topic Rewrite Module, active=false)
+Module(emqx_mod_presence, description=EMQ X Presence Module, active=true)
+```
+
+### modules load
+
+加载内置模块:
+
+```bash
+$ ./bin/emqx_ctl modules load emqx_mod_delayed
+Module emqx_mod_delayed loaded successfully.
+```
+
+### modules unload
+
+卸载内置模块:
+
+```bash
+$ ./bin/emqx_ctl modules unload emqx_mod_delayed
+Module emqx_mod_delayed unloaded successfully.
+```
+
+### modules reload
+
+重载内置模块:
+
+```bash
+$ ./bin/emqx_ctl modules reload emqx_mod_acl_internal
+Module emqx_mod_acl_internal reloaded successfully.
+```
+
 ## vm 命令
 
 vm 命令用于查询 Erlang 虚拟机负载、内存、进程、IO 信息。

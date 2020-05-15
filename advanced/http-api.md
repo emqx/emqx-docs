@@ -1020,6 +1020,108 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"shutdown_count":[],"protocol":"mqtt:ssl","max_conns":102400,"listen_on":"8883","current_conns":0,"acceptors":16},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"0.0.0.0:1883","current_conns":13,"acceptors":8},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"127.0.0.1:11883","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:dashboard","max_conns":512,"listen_on":"18083","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:management","max_conns":512,"listen_on":"8081","current_conns":1,"acceptors":2},{"shutdown_count":[],"protocol":"https:dashboard","max_conns":512,"listen_on":"18084","current_conns":0,"acceptors":2},{"shutdown_count":[],"protocol":"mqtt:ws:8083","max_conns":102400,"listen_on":"8083","current_conns":1,"acceptors":4},{"shutdown_count":[],"protocol":"mqtt:wss:8084","max_conns":16,"listen_on":"8084","current_conns":0,"acceptors":4}],"code":0}
 ```
 
+### 内置模块 {#endpoint-modules}
+
+#### GET /api/v4/modules {#endpoint-get-modules}
+
+返回集群下所有内置模块信息。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type | Description   |
+| ---- | --------- | ------------- |
+| code | Integer   | 0 |
+| data | Array of Objects | 各节点上的内置模块列表 |
+| data[0].node    | String    | 节点名称 |
+| data[0].modules | Object     | 内置模块信息列表，详见下面的 modules: |
+
+**modules:**
+
+| Name            | Type     | Description |
+| --------------- | -------- | ----------- |
+| name            | String   | 模块名 |
+| description     | String   | 模块功能描述 |
+| active          | Boolean  | 是否处于活跃状态（是否正在运行） |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/modules"
+
+{"data":[{"node":"emqx@127.0.0.1","modules":[{"name":"emqx_mod_delayed","description":"EMQ X Delayed Publish Module","active":true},{"name":"emqx_mod_topic_metrics","description":"EMQ X Topic Metrics Module","active":false},{"name":"emqx_mod_subscription","description":"EMQ X Subscription Module","active":false},{"name":"emqx_mod_acl_internal","description":"EMQ X Internal ACL Module","active":true},{"name":"emqx_mod_rewrite","description":"EMQ X Topic Rewrite Module","active":false},{"name":"emqx_mod_presence","description":"EMQ X Presence Module","active":true}]}],"code":0}
+```
+
+#### GET /api/v4/nodes/{node}/modules {#endpoint-nodes-get-modules}
+
+类似 [GET /api/v4/modules](#endpoint-get-modules)，返回指定节点下所有内置模块信息。
+
+#### PUT /api/v4/modules/{module}/load {#endpoint-load-module}
+
+加载集群下所有节点的指定内置模块。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/emqx_mod_topic_metrics/load"
+
+{"code":0}
+```
+
+#### PUT /api/v4/nodes/{node}/modules/{module}/load {#endpoint-nodes-load-module}
+
+类似 [PUT /api/v4/modules/{module}/load](#endpoint-load-module)，加载指定节点下的指定内置模块。
+
+#### PUT /api/v4/modules/{module}/unload {#endpoint-unload-module}
+
+卸载集群下所有节点的指定内置模块。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/emqx_mod_topic_metrics/unload"
+
+{"code":0}
+```
+
+#### PUT /api/v4/nodes/{node}/modules/{module}/unload {#endpoint-nodes-unload-module}
+
+类似 [PUT /api/v4/modules/{module}/unload](#endpoint-unload-module)，卸载指定节点下的指定内置模块。
+
+#### PUT /api/v4/modules/{module}/reload {#endpoint-reload-module}
+
+重新加载集群下所有节点的指定内置模块，仅为 `emqx_mod_acl_internal` 提供此功能。
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/emqx_mod_acl_internal/reload"
+
+{"code":0}
+```
+
+#### PUT /api/v4/nodes/{node}/modules/{module}/reload {#endpoint-nodes-reload-module}
+
+类似 [PUT /api/v4/modules/{module}/reload](#endpoint-reload-module)，重新加载指定节点下的指定内置模块，仅为 `emqx_mod_acl_internal` 提供此功能。
+
 ### 统计指标 {#endpoint-metrics}
 
 #### GET /api/v4/metrics {#endpoint-get-metrics}

@@ -19,22 +19,9 @@ ref: undefined
 
 EMQ X 的代理订阅功能使得客户端在连接建立时，不需要发送额外的 SUBSCRIBE 报文，便能自动建立用户预设的订阅关系。
 
-{% hint style="info" %}
-你可以使用管理监控 API 对处于连接状态的设备进行订阅、取消订阅操作，参见 [主题订阅](./http-api.md#endpoint-subscribe) [取消订阅](./http-api.md#endpoint-do-unsubscribe)
-{% endhint %}
-
-
-## 内置代理订阅
-
-通过内置代理订阅模块可以通过配置文件指定代理订阅规则实现代理订阅，适用于有规律可循的静态的代理订阅需求。
-
 ### 开启代理订阅功能
 
-代理订阅功能默认关闭，开启此功能需要修改 `etc/emqx.conf` 文件中的 `module.subscription` 配置项。默认 `off` 表示关闭，如需开启请修改为 `on`。
-
-```bash
-module.subscription = off
-```
+代理订阅功能由 `emqx_mod_subscription` 内置模块提供，此功能默认关闭，支持在 EMQ X Broker 运行期间动态启停，请参见 [内置模块](./internal-modules.md)。
 
 ### 配置代理订阅规则
 
@@ -59,8 +46,7 @@ module.subscription.2.qos = 2
 
 当一个客户端连接 EMQ X 的时候，假设客户端的 `Client ID` 为 `testclient`，`Username` 为 `tester`，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 QoS 为 1 的 `client/testclient` 和 QoS 为 2 的 `user/tester` 这两个主题。
 
-
 ## 动态代理订阅
 
-EMQ X Enterprise 版本中支持动态代理订阅，通过外部数据库设置主题列表在设备连接时读取列表实现代理订阅。
+EMQ X Enterprise 版本中支持动态代理订阅，即通过外部数据库设置主题列表在设备连接时读取列表实现代理订阅。
 
