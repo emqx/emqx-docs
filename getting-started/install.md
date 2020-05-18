@@ -509,8 +509,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
        - "EMQX_HOST=node1.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io, emqx@node2.emqx.io"
-       - "EMQX_ZONE__EXTERNAL__RETRY_INTERVAL=2s"
-       - "EMQX_MQTT__MAX_TOPIC_ALIAS=10"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -528,8 +526,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
        - "EMQX_HOST=node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io, emqx@node2.emqx.io"
-       - "EMQX_ZONE__EXTERNAL__RETRY_INTERVAL=2s"
-       - "EMQX_MQTT__MAX_TOPIC_ALIAS=10"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
