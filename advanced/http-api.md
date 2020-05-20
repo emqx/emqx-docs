@@ -1653,6 +1653,179 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/banned
 {"code":0}
 ```
 
+### 数据导入导出 {#endpoint-data-import-and-export}
+
+数据导入导出。
+
+#### GET /api/v4/data/export {#endpoint-get-export}
+
+获取当前的导出文件信息列表，包括文件名、大小和创建时间。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name               | Type             | Description |
+| ------------------ | ---------------- | ----------- |
+| code               | Integer          | 0 |
+| data               | Array of Objects | 所有路由信息 |
+| data[0].filename   | String           | 文件名 |
+| data[0].created_at | String           | "YYYY-MM-DD HH-mm-SS" 格式的文件创建时间 |
+| data[0].size       | String           | 文件大小，单位：字节 |
+
+**Examples:**
+
+列出当前的导出文件信息列表:
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/data/export"
+
+{"data":[{"size":350,"filename":"emqx-export-2020-5-15-18-6-29.json","created_at":"2020-5-15 18:6:29"},{"size":388,"filename":"emqx-export-2020-5-15-17-39-0.json","created_at":"2020-5-15 17:39:0"}],"code":0}
+```
+
+#### POST /api/v4/data/export {#endpoint-export-data-to-file}
+
+导出当前数据到文件。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name            | Type    | Description |
+| --------------- | ------- | ----------- |
+| code            | Integer | 0 |
+| data            | Object  | 文件信息 |
+| data.filename   | String  | 文件名 |
+| data.created_at | String  | "YYYY-MM-DD HH-mm-SS" 格式的文件创建时间 |
+| data.size       | String  | 文件大小，单位：字节 |
+
+**Examples:**
+
+导出文件：
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/export"
+
+{"data":{"size":350,"filename":"emqx-export-2020-5-18-17-17-44.json","created_at":"2020-5-18 17:17:44"},"code":0}
+```
+
+#### POST /api/v4/data/import {#endpoint-import-data-from-file}
+
+从指定文件导入数据。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type  | Required | Default | Description |
+| -------- | ----- | -------- | --------| ----------- |
+| filename | String| Required |         | 导入的文件名  |
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+从指定文件导入数据：
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-5-18-17-17-44.json"}'
+
+{"code":0}
+```
+
+#### GET /api/v4/data/file/{filename} {#endpoint-download-data-file}
+
+下载数据文件。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Default | Description |
+| -------- | ------ | -------- | --------| ----------- |
+| filename | String | Required |         | 导入的文件名  |
+
+**Success Response Body (JSON):**
+
+| Name     | Type   | Description |
+| -------- | ------ | ----------- |
+| filename | String | 文件名 |
+| file     | String | 文件内容 |
+
+**Examples:**
+
+下载指定的数据文件：
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/data/file/emqx-export-2020-5-18-17-17-44.json"
+
+{"filename":"/Users/zhouzibo/emqx-rel/_build/emqx/rel/emqx/data/emqx-export-2020-5-18-17-17-44.json","file":"{\"version\":\"dev\",\"users\":[{\"username\":\"admin\",\"tags\":\"administrator\",\"password\":\"oKQPB1hbigv6+2ntALELNOb1fF0=\"}],\"schemas\":[],\"rules\":[],\"resources\":[],\"date\":\"2020-05-18 17:17:44\",\"blacklist\":[],\"auth_mnesia\":[],\"apps\":[{\"status\":true,\"secret\":\"public\",\"name\":\"Default\",\"id\":\"admin\",\"expired\":\"undefined\",\"desc\":\"Application user\"}],\"acl_mnesia\":[]}"}
+```
+
+#### POST /api/v4/data/file {#endpoint-upload-data-file}
+
+上传数据文件。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Default | Description |
+| -------- | ------ | -------- | --------| ----------- |
+| filename | String | Required |         | 文件名  |
+| file     | String | Required |         | 文件内容 |
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+上传指定的数据文件：
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/file" -d '{"filename":"emqx-export-2020-5-18-17-17-44.json","file":"{\"version\":\"dev\",\"users\":[{\"username\":\"admin\",\"tags\":\"administrator\",\"password\":\"oKQPB1hbigv6+2ntALELNOb1fF0=\"}],\"schemas\":[],\"rules\":[],\"resources\":[],\"date\":\"2020-05-18 17:17:44\",\"blacklist\":[],\"auth_mnesia\":[],\"apps\":[{\"status\":true,\"secret\":\"public\",\"name\":\"Default\",\"id\":\"admin\",\"expired\":\"undefined\",\"desc\":\"Application user\"}],\"acl_mnesia\":[]}"}'
+
+{"code":0}
+```
+
+#### DELETE /api/v4/data/file/{filename} {#endpoint-delete-data-file}
+
+远程删除数据文件。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Default | Description |
+| -------- | ------ | -------- | --------| ----------- |
+| filename | String | Required |         | 文件名  |
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+删除指定的数据文件：
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/file/emqx-export-2020-5-18-17-17-44.json"
+
+{"code":0}
+```
+
 ### 规则 {#endpoint-rules}
 
 查询规则引擎的动作
