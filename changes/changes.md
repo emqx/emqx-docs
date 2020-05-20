@@ -17,47 +17,85 @@ ref: undefined
 
 # 版本发布
 
-## 4.1-beta.2 版本
+## 4.1-rc.1 版本
 
-*发布日期: 2020-04-30*
+*发布日期: 2020-05-15*
 
-EMQ X 4.1-beta.2 现已发布，主要包含以下改动：
+EMQ X 4.1-rc.1 现已发布，主要包含以下改动：
 
 ### emqx
 
 **错误修复:**
 
-- 修复证书中 CN 与 DN 字段没有正确获取的问题
+- 修复浏览器不支持当前 SSL/TLS 证书的问题
 
-  Github PR: [emqx/emqx#3417](https://github.com/emqx/emqx/pull/3417)
+  Github PR: [emqx/emqx#3447](https://github.com/emqx/emqx/pull/3447)
 
-- 修复增强认证功能中重新认证部分的错误
+- 修复连接进程在某些情况下出错崩溃的问题
 
-  Github PR: [emqx/emqx#3422](https://github.com/emqx/emqx/pull/3422)
-
-### emqx-extension-hook
-
-**错误修复:**
-
-- 修复 Java 驱动无法正确配置导致 Java 扩展无法使用的问题
-
-  Github PR: [emqx/emqx-extension-hook#10](https://github.com/emqx/emqx-extension-hook/pull/10)
+  Github PR: [emqx/emqx#3459](https://github.com/emqx/emqx/pull/3459)
 
 ### emqx-auth-mnesia
 
 **错误修复:**
 
-- 修复 ACL 规则没有允许/拒绝字段的问题
+- 修复配置的用户无法通过认证的问题
 
-  Github PR: [emqx/emqx-auth-mnesia#2](https://github.com/emqx/emqx-auth-mnesia/pull/2)
+  Github PR: [emqx/emqx-auth-mnesia#6](https://github.com/emqx/emqx-auth-mnesia/pull/6)
 
-### emqx-management
+- 修复没有正确处理错误的问题
+
+  Github PR: [emqx/emqx-auth-mnesia#9](https://github.com/emqx/emqx-auth-mnesia/pull/9)
+
+### emqx-reloader
 
 **错误修复:**
 
-- 修复主题指标 API 没有检查主题合法性的问题
+- 修复某些情况下不会重新加载模块代码的问题
 
-  Github PR: [emqx/emqx-management#212](https://github.com/emqx/emqx-management/pull/212)
+  Github PR: [emqx/emqx-reloader#73](https://github.com/emqx/emqx-reloader/pull/73)
+
+### emqx-sn
+
+**错误修复:**
+
+- 修复不支持指定监听 IP 地址的问题并支持 IPv6
+
+  Github PR: [emqx/emqx-sn#158](https://github.com/emqx/emqx-sn/pull/158)
+
+### emqx-web-hook
+
+**错误修复:**
+
+- 修复 `client.disconnected` 事件在某些情况下出错的问题
+
+  Github PR: [emqx/emqx-web-hook#188](https://github.com/emqx/emqx-web-hook/pull/188)
+
+## 4.0.7 版本
+
+*发布日期: 2020-05-09*
+
+EMQ X 4.0.7 现已发布，主要包含以下改动：
+
+### emqx
+
+**错误修复:**
+
+- 修复浏览器不支持当前 SSL/TLS 证书的问题
+
+  Github PR: [emqx/emqx#3448](https://github.com/emqx/emqx/pull/3448)
+
+- 修复连接进程在某些情况下出错崩溃的问题，感谢 [Github issue#3455](https://github.com/emqx/emqx/issues/3455) 的反馈
+
+  Github PR: [emqx/emqx#3458](https://github.com/emqx/emqx/pull/3458)
+
+### emqx-web-hook
+
+**错误修复:**
+
+- 修复 `client.disconnected` 事件在某些情况下出错的问题
+
+  Github PR: [emqx/emqx-web-hook#187](https://github.com/emqx/emqx-web-hook/pull/187)
 
 ## 4.1-beta.1 版本
 

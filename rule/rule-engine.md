@@ -15,9 +15,7 @@ category:
 ref: undefined
 ---
 
-
 # 规则引擎
-
 
 EMQ X Rule Engine (以下简称规则引擎) 用于配置 EMQ X 消息流与设备事件的处理、响应规则。规则引擎不仅提供了清晰、灵活的 "配置式" 的业务集成方案，简化了业务开发流程，提升用户易用性，降低业务系统与 EMQ X 的耦合度；也为 EMQ X 的私有功能定制提供了一个更优秀的基础架构。
 
@@ -442,7 +440,6 @@ FROM "t/#"
 {"x": 7}
 ```
 
-
 ### FROM 子句可用的事件主题 {#rule-sql-syntax}
 
 | 事件主题名                    | 释义     |
@@ -495,6 +492,7 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | node                | 事件触发所在节点                     |
 
 #### $events/message_acked (消息确认)
+
 |        event        |  事件类型，固定为 "message.acked"   |
 | :------------------ | :---------------------------------- |
 | id                  | MQTT 消息 ID                        |
@@ -529,6 +527,7 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | node                | 事件触发所在节点                    |
 
 #### $events/client_connected (终端连接成功)
+
 |      event      | 事件类型，固定为 "client.connected" |
 | --------------- | :---------------------------------- |
 | clientid        | 消息目的 Client ID                  |
@@ -560,6 +559,7 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | node            | 事件触发所在节点                       |
 
 #### $events/session_subscribed (终端订阅成功)
+
 |   event   | 事件类型，固定为 "session.subscribed" |
 | --------- | ------------------------------------- |
 | clientid  | 消息目的 Client ID                    |
@@ -862,11 +862,11 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 </tr>
 <tr class="odd">
 <td>is_not_null</td>
-<td>判断变量是否不为空值</td>
+<td>判断变量是否为非空值</td>
 <td><ol type="1">
 <li>Data</li>
 </ol></td>
-<td>Boolean 类型的数据。如果为空值(undefined) 则返回 true，否则返回 false</td>
+<td>Boolean 类型的数据。如果为空值(undefined) 则返回 false，否则返回 true</td>
 </tr>
 <tr class="even">
 <td>is_str</td>

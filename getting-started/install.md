@@ -509,10 +509,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
        - "EMQX_HOST=node1.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io, emqx@node2.emqx.io"
-       - "EMQX_ZONE__EXTERNAL__RETRY_INTERVAL=2s"
-       - "EMQX_MQTT__MAX_TOPIC_ALIAS=10"
-       volumes:
-           - ./tmp/emqx.lic:/opt/emqx/etc/emqx.lic
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -524,16 +520,12 @@ curl https://repos.emqx.io/install_emqx.sh | bash
            - node1.emqx.io
      
      emqx2:
-       image: ${IMAGE}
+       image: emqx/emqx:v4.0.0
        environment:
        - "EMQX_NAME=emqx"
        - "EMQX_HOST=node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io, emqx@node2.emqx.io"
-       - "EMQX_ZONE__EXTERNAL__RETRY_INTERVAL=2s"
-       - "EMQX_MQTT__MAX_TOPIC_ALIAS=10"
-       volumes:
-           - ./tmp/emqx.lic:/opt/emqx/etc/emqx.lic
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -543,16 +535,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
          emqx-bridge:
            aliases:
            - node2.emqx.io
-   
-     client:
-       image: python:3.7.2-alpine3.9
-       depends_on:
-         - emqx1
-         - emqx2
-       tty: true
-       networks:
-           emqx-bridge:
-   
+
    networks:
      emqx-bridge:
        driver: bridge
