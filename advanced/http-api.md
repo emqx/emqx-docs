@@ -187,6 +187,27 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | _page  | Integer   | False | 1       | 页码 |
 | _limit | Integer   | False | 10000   | 每页显示的数据条数，未指定时由 `emqx-management` 插件的配置项 `max_row_limit` 决定 |
 
+
+在 4.1 后，支持多条件和模糊查询，其包含的查询参数有：
+
+| Name              | Type   | Required |  Description |
+| ----------------- | ------ | -------- | ------------ |
+| clientid          | String | False    | 客户端标识符 |
+| username          | String | False    | 客户端用户名 |
+| zone              | String | False    | 客户端配置组名称 |
+| ip_address        | String | False    | 客户端 IP 地址  |
+| conn_state        | Enum   | False    | 客户端当前连接状态，<br />可取值有：`connected`,`idle`,`disconnected` |
+| clean_start       | Bool   | False    | 客户端是否使用了全新的会话 |
+| proto_name        | Enum   | False    | 客户端协议名称，<br />可取值有：`MQTT`,`CoAP`,`LwM2M`,`MQTT-SN` |
+| proto_ver         | Integer| False    | 客户端协议版本 |
+| _like_clientid    | String | False    | 客户端标识符，子串方式模糊查找 |
+| _like_username    | String | False    | 客户端用户名，子串方式模糊查找 |
+| _gte_created_at   | Integer| False    | 客户端会话创建时间，小于等于查找 |
+| _lte_created_at   | Integer| False    | 客户端会话创建时间，大于等于查找 |
+| _gte_connected_at | Integer| False    | 客户端连接创建时间，小于等于查找 |
+| _lte_connected_at | Integer| False    | 客户端连接创建时间，大于等于查找 |
+
+
 **Success Response Body (JSON):**
 
 | Name | Type | Description |
@@ -196,10 +217,10 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | data[0].node              | String    | 客户端所连接的节点名称 |
 | data[0].clientid          | String    | 客户端标识符 |
 | data[0].username          | String    | 客户端连接时使用的用户名 |
-| data[0].proto_name        | String    | 端点提供的功能介绍 |
+| data[0].proto_name        | String    | 客户端协议名称 |
 | data[0].proto_ver         | Integer   | 客户端使用的协议版本 |
-| data[0].ip_address        | String    | 客户端的网络 IP 地址 |
-| data[0].port              | Integer   | 客户端源端口 |
+| data[0].ip_address        | String    | 客户端的 IP 地址 |
+| data[0].port              | Integer   | 客户端的端口 |
 | data[0].is_bridge         | Boolean   | 指示客户端是否通过桥接方式连接 |
 | data[0].connected_at      | String    | 客户端连接时间，格式为 "YYYY-MM-DD HH:mm:ss" |
 | data[0].disconnected_at   | String    | 客户端离线时间，格式为 "YYYY-MM-DD HH:mm:ss"，<br/>此字段仅在 `connected` 为 `false` 时有效并被返回 |
@@ -241,6 +262,11 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients?_
 
 {"meta":{"page":1,"limit":10,"count":1},"data":[{"zone":"external","recv_cnt":2,"max_mqueue":1000,"node":"emqx@127.0.0.1","username":"test","mqueue_len":0,"max_inflight":32,"is_bridge":false,"mqueue_dropped":0,"inflight":0,"heap_size":2586,"max_subscriptions":0,"proto_name":"MQTT","created_at":"2020-02-19 17:01:26","proto_ver":4,"reductions":3997,"send_msg":0,"ip_address":"127.0.0.1","send_cnt":0,"mailbox_len":1,"awaiting_rel":0,"keepalive":60,"recv_msg":0,"send_pkt":0,"recv_oct":29,"clientid":"example","clean_start":true,"expiry_interval":0,"connected":true,"port":64491,"send_oct":0,"recv_pkt":1,"connected_at":"2020-02-19 17:01:26","max_awaiting_rel":100,"subscriptions_cnt":0}],"code":0}
 ```
+
+注：在 4.1 后，返回的 `meta` 内容做了修改：
+
+- `count`：仍表示总数，但在 多条件/模糊查询时，固定为 -1。
+- `hasnext`：为新增字段，表示是否存在下一页。
 
 #### GET /api/v4/clients/{clientid} {#endpoint-get-a-client}
 
@@ -490,6 +516,16 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 | _page  | Integer   | False | 1       | 页码 |
 | _limit | Integer   | False | 10000   | 每页显示的数据条数，未指定时由 `emqx-management` 插件的配置项 `max_row_limit` 决定 |
 
+在 4.1 版本后，支持多条件和模糊查询：
+| Name         | Type    | Description |
+| ------------ | ------- | ----------- |
+| clientid     | String  | 客户端标识符   |
+| topic        | String  | 主题，全等查询 |
+| qos          | Enum    | 可取值为：`0`,`1`,`2` |
+| share        | String  | 共享订阅的组名称 |
+| _match_topic | String  | 主题，匹配查询 |
+
+
 **Success Response Body (JSON):**
 
 | Name | Type | Description |
@@ -509,6 +545,12 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/subscript
 
 {"meta":{"page":1,"limit":10000,"count":2},"data":[{"topic":"a/+/c","qos":0,"node":"emqx@127.0.0.1","clientid":"78082755-e8eb-4a87-bab7-8277541513f0"},{"topic":"a/b/c","qos":1,"node":"emqx@127.0.0.1","clientid":"7a1dfceb-89c0-4f7e-992b-dfeb09329f01"}],"code":0}
 ```
+
+注：在 4.1 后，返回的 `meta` 内容做了修改：
+
+- `count`：仍表示总数，但在 多条件/模糊查询 时，固定为 -1。
+- `hasnext`：为新增字段，表示是否存在下一页。
+
 
 #### GET /api/v4/subscriptions/{clientid} {#endpoint-get-subscriptions-by-clientid}
 

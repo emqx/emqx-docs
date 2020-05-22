@@ -18,18 +18,71 @@ ref: undefined
 
 # 多语言支持
 
-EMQ X 发行包中，提供了一些用于多语言支持的 [插件](plugins.md)。它允许你使用其它编程语言来扩展 EMQ X 的行为，其在系统中的架构为：
+从 4.1 开始，EMQ X 提供了专门的多语言支持插件：[emqx_extension_hook](https://github.com/emqx/emqx-extension-hook) 以优化多语言的支持效果。
 
-![Multiple Language Suppoprt](assets/multiple-lang-arch.png)
+该插件允许你使用其它编程语言来处理 EMQ X 中的钩子事件，例如：
 
-- 多语言支持是作为一个插件出现的，它基于 [emqx](https://github.com/emqx/emqx) 核心项目所提供的 [钩子](hooks.md) 特性，拿到 EMQ X 的事件/消息。
-- 不同的语言环境，需要有不同的语言支持插件。
+- 认证某客户端的登录权限。
+- 校验某客户端的 PUB/SUB 的操作权限。
+- 处理 会话(Session) 和 消息(Message) 事件。
+
+## 架构
+
+其整体的事件传递的架构如下：
+
+```
+                            EMQ X
+                            +============================+
+                            |        Extension           |
+ +----------+    CONNECT    | Hooks +----------------+   |
+ |  Client  | <===========> - - - ->|    Drivers     |   |
+ +----------+    PUB/SUB    |       +----------------+   |
+                            |               |            |
+                            +===============|============+
+                                            |
+                                            | Callbacks
+             Third-party Runtimes           |
+             +=======================+      |
+             |  Python Script/ Java  |<-----+
+             |  Classes/ Others      |
+             +=======================+
+```
+
+- `emqx_extension_hook` 作为 EMQ X 的插件：
+    * 它会接收 EMQ X 所有的钩子事件，并将其分发到对应的 驱动(Driver) 上。
+    * 提供对驱动的管理、各个指标的统计。
+
+- 不同语言的支持，需要对应的驱动支持。
+
+- 三方语言的运行时和 Erlang 的运行时相互独立，他们仅通过操作系统提供的管道进行通信。
+
+理论上，对于其他任意的编程语言都能通过该插件进行扩展，仅需完成对应的驱动即可。
+
+目前仅提供 Python 和 Java 的支持，并提供了对应的 SDK 以方便开发。
+
+## 快速使用
+
+### Python {#python}
+
+Python 开发可参考：[emqx-extension-python-sdk](https://github.com/emqx/emqx-extension-python-sdk)
+
+### Java {#java}
+
+Java 开发可参考：[emqx-extension-java-sdk](https://github.com/emqx/emqx-extension-java-sdk)
+
+
+## 其他
+
+在 EMQ X 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与上面提到的不同，它会将整个语言的运行时，包含在 Erlang VM 中：
+
+![Old Multiple Lang Arch](assets/lua-lang-arch.png)
+
+- 多语言支持是作为一个插件出现，不同的语言环境，需要有不同的语言支持插件。
 - 该支持插件内嵌了该语言运行时的所有环境。
-- 用户仅需要编写该语言的脚本或库文件，供该支持插件调用。
 
-这是实现多语言支持基本逻辑。在使用这类插件时，请保证对 [钩子](hooks.md) 和 [插件](plugins.md) 都有一定的了解。
+为了保持兼容，该插件仍然保留在 EMQ X 的发行版本中。
 
-## Lua {#lua}
+### Lua {#lua}
 
 Lua 的支持由 [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) 实现。它包括：
 
@@ -79,7 +132,7 @@ end
 
 ### 回调函数
 
-支持的回调函数，及参数类型参考：[emqx-web-hook - README.md](https://github.com/emqx/emqx-lua-hook/tree/develop#hook-api)
+支持的回调函数，及参数类型参考：[emqx-lua-hook - README.md](https://github.com/emqx/emqx-lua-hook/tree/develop#hook-api)
 
 示例参考：[examples.lua](https://github.com/emqx/emqx-lua-hook/blob/develop/examples.lua)
 
