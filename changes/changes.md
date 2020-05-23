@@ -17,6 +17,60 @@ ref: undefined
 
 # 版本发布
 
+## 4.1-rc.2 版本
+
+*发布日期: 2020-05-23*
+
+EMQ X 4.1-rc.2 现已发布，主要包含以下改动：
+
+### emqx
+
+**错误修复:**
+
+- 修复客户端在发送 CONNECT 报文前发送其他报文导致崩溃的问题
+
+  Github PR: [emqx/emqx#3476](https://github.com/emqx/emqx/pull/3476)
+
+### emqx-auth-mnesia
+
+**功能增强:**
+
+- 支持全局 ACL 规则
+
+  Github PR: [emqx/emqx-auth-mnesia#13](https://github.com/emqx/emqx-auth-mnesia/pull/13)
+
+### emqx-rule-engine
+
+**错误修复:**
+
+- 修复资源不可用时无法导入规则的问题，以及修复导入规则后某些情况下无法启用的问题
+
+  Github Commit: [emqx-rule-engine#582de5](https://github.com/emqx/emqx-rule-engine/commit/582de5363229ce513d02919bb41c9289a1e3729f)
+
+### emqx-rel
+
+**功能增强:**
+
+- 通过 Docker 运行 EMQ X 时支持注释配置项
+
+  Github PR: [emqx/emqx-rel#508](https://github.com/emqx/emqx-rel/pull/508)
+
+### emqx-extension-java-sdk
+
+**功能增强:**
+
+- 为多语言扩展增加 Java SDK
+
+  Github Repository: [emqx/emqx-extension-java-sdk](https://github.com/emqx/emqx-extension-java-sdk)
+
+### emqx-extension-python-sdk
+
+**功能增强:**
+
+- 为多语言扩展增加 Python SDK
+
+  Github Repository: [emqx/emqx-extension-python-sdk](https://github.com/emqx/emqx-extension-python-sdk)
+
 ## 4.1-rc.1 版本
 
 *发布日期: 2020-05-15*
