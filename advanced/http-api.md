@@ -1062,6 +1062,108 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"shutdown_count":[],"protocol":"mqtt:ssl","max_conns":102400,"listen_on":"8883","current_conns":0,"acceptors":16},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"0.0.0.0:1883","current_conns":13,"acceptors":8},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"127.0.0.1:11883","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:dashboard","max_conns":512,"listen_on":"18083","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:management","max_conns":512,"listen_on":"8081","current_conns":1,"acceptors":2},{"shutdown_count":[],"protocol":"https:dashboard","max_conns":512,"listen_on":"18084","current_conns":0,"acceptors":2},{"shutdown_count":[],"protocol":"mqtt:ws:8083","max_conns":102400,"listen_on":"8083","current_conns":1,"acceptors":4},{"shutdown_count":[],"protocol":"mqtt:wss:8084","max_conns":16,"listen_on":"8084","current_conns":0,"acceptors":4}],"code":0}
 ```
 
+### 内置模块 {#endpoint-modules}
+
+#### GET /api/v4/modules {#endpoint-get-modules}
+
+返回集群下所有内置模块信息。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type | Description   |
+| ---- | --------- | ------------- |
+| code | Integer   | 0 |
+| data | Array of Objects | 各节点上的内置模块列表 |
+| data[0].node    | String    | 节点名称 |
+| data[0].modules | Object     | 内置模块信息列表，详见下面的 modules: |
+
+**modules:**
+
+| Name            | Type     | Description |
+| --------------- | -------- | ----------- |
+| name            | String   | 模块名 |
+| description     | String   | 模块功能描述 |
+| active          | Boolean  | 是否处于活跃状态（是否正在运行） |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/modules"
+
+{"data":[{"node":"emqx@127.0.0.1","modules":[{"name":"emqx_mod_delayed","description":"EMQ X Delayed Publish Module","active":true},{"name":"emqx_mod_topic_metrics","description":"EMQ X Topic Metrics Module","active":false},{"name":"emqx_mod_subscription","description":"EMQ X Subscription Module","active":false},{"name":"emqx_mod_acl_internal","description":"EMQ X Internal ACL Module","active":true},{"name":"emqx_mod_rewrite","description":"EMQ X Topic Rewrite Module","active":false},{"name":"emqx_mod_presence","description":"EMQ X Presence Module","active":true}]}],"code":0}
+```
+
+#### GET /api/v4/nodes/{node}/modules {#endpoint-nodes-get-modules}
+
+类似 [GET /api/v4/modules](#endpoint-get-modules)，返回指定节点下所有内置模块信息。
+
+#### PUT /api/v4/modules/{module}/load {#endpoint-load-module}
+
+加载集群下所有节点的指定内置模块。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/emqx_mod_topic_metrics/load"
+
+{"code":0}
+```
+
+#### PUT /api/v4/nodes/{node}/modules/{module}/load {#endpoint-nodes-load-module}
+
+类似 [PUT /api/v4/modules/{module}/load](#endpoint-load-module)，加载指定节点下的指定内置模块。
+
+#### PUT /api/v4/modules/{module}/unload {#endpoint-unload-module}
+
+卸载集群下所有节点的指定内置模块。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/emqx_mod_topic_metrics/unload"
+
+{"code":0}
+```
+
+#### PUT /api/v4/nodes/{node}/modules/{module}/unload {#endpoint-nodes-unload-module}
+
+类似 [PUT /api/v4/modules/{module}/unload](#endpoint-unload-module)，卸载指定节点下的指定内置模块。
+
+#### PUT /api/v4/modules/{module}/reload {#endpoint-reload-module}
+
+重新加载集群下所有节点的指定内置模块，仅为 `emqx_mod_acl_internal` 提供此功能。
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/emqx_mod_acl_internal/reload"
+
+{"code":0}
+```
+
+#### PUT /api/v4/nodes/{node}/modules/{module}/reload {#endpoint-nodes-reload-module}
+
+类似 [PUT /api/v4/modules/{module}/reload](#endpoint-reload-module)，重新加载指定节点下的指定内置模块，仅为 `emqx_mod_acl_internal` 提供此功能。
+
 ### 统计指标 {#endpoint-metrics}
 
 #### GET /api/v4/metrics {#endpoint-get-metrics}
@@ -1185,7 +1287,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/metrics"
 | Name | Type | Description   |
 | ---- | --------- | ------------- |
 | code | Integer   | 0 |
-| data | Objects | 各节点上的统计指标列表，详见 [GET /api/v4/metrics](#endpoint-get-metrics) |
+| data | Object | 各节点上的统计指标列表，详见 [GET /api/v4/metrics](#endpoint-get-metrics) |
 
 **Examples:**
 
@@ -1193,6 +1295,174 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/metrics"
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/metrics"
 
 {"data":{"bytes.received":0,"client.connected":0,"packets.pingreq.received":0,"messages.delayed":0,"rules.matched":0,"actions.failure":0,"packets.puback.sent":0,"packets.pingresp.sent":0,"packets.publish.auth_error":0,"client.check_acl":0,"delivery.dropped.queue_full":0,"actions.success":0,"packets.publish.error":0,"packets.pubcomp.received":0,"bytes.sent":0,"packets.pubrec.inuse":0,"packets.pubrec.missed":0,"packets.pubrel.sent":0,"delivery.dropped.too_large":0,"packets.pubcomp.missed":0,"packets.subscribe.error":0,"packets.suback.sent":0,"messages.qos2.sent":0,"messages.qos1.sent":0,"packets.pubrel.missed":0,"messages.publish":0,"messages.forward":0,"packets.auth.received":0,"delivery.dropped":0,"packets.sent":0,"packets.puback.inuse":0,"delivery.dropped.qos0_msg":0,"packets.publish.dropped":0,"packets.disconnect.sent":0,"packets.auth.sent":0,"packets.unsubscribe.received":0,"session.takeovered":0,"messages.delivered":0,"client.auth.anonymous":0,"packets.connack.error":0,"packets.connack.sent":0,"packets.subscribe.auth_error":0,"packets.unsuback.sent":0,"packets.pubcomp.sent":0,"packets.publish.sent":0,"client.connack":0,"packets.publish.received":0,"client.subscribe":0,"session.created":0,"delivery.dropped.expired":0,"client.unsubscribe":0,"packets.received":0,"packets.pubrel.received":0,"packets.unsubscribe.error":0,"messages.qos0.sent":0,"packets.connack.auth_error":0,"session.resumed":0,"delivery.dropped.no_local":0,"packets.puback.missed":0,"packets.pubcomp.inuse":0,"packets.pubrec.sent":0,"messages.dropped.expired":0,"messages.dropped.no_subscribers":0,"session.discarded":0,"messages.sent":0,"messages.received":0,"packets.puback.received":0,"messages.qos0.received":0,"messages.acked":0,"client.connect":0,"packets.disconnect.received":0,"client.disconnected":0,"messages.retained":3,"session.terminated":0,"packets.publish.inuse":0,"packets.pubrec.received":0,"messages.qos2.received":0,"messages.dropped":0,"packets.connect.received":0,"client.authenticate":0,"packets.subscribe.received":0,"messages.qos1.received":0},"code":0}
+```
+
+### 统计指标 {#endpoint-topic-metrics}
+
+#### GET /api/v4/topic-metrics {#endpoint-list-all-topic-metrics}
+
+返回所有主题统计指标数据。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name            | Type             | Description   |
+| --------------- | ---------------- | ------------- |
+| code            | Integer          | 0             |
+| data            | Array of Objects | 各节点上的统计指标列表 |
+| data[0].topic   | String           | 主题名 |
+| data[0].metrics | Object           | 主题统计指标数据，详见下面的 metrics: |
+
+**metrics: **
+
+| Name                    | Type      | Description |
+| ----------------------- | --------- | -------------------- |
+| messages.qos2.out.rate  | Integer   | QoS 2 消息 5 秒内平均发送速率 |
+| messages.qos2.out.count | Integer   | QoS 2 消息发送数量统计 |
+| messages.qos2.in.rate   | Integer   | QoS 2 消息 5 秒内平均接收速率 |
+| messages.qos2.in.count  | Integer   | QoS 2 消息接收数量统计 |
+| messages.qos1.out.rate  | Integer   | QoS 1 消息 5 秒内平均发送速率 |
+| messages.qos1.out.count | Integer   | QoS 1 消息发送数量统计 |
+| messages.qos1.in.rate   | Integer   | QoS 1 消息 5 秒内平均接收速率 |
+| messages.qos1.in.count  | Integer   | QoS 1 消息接收数量统计 |
+| messages.qos0.out.rate  | Integer   | QoS 0 消息 5 秒内平均发送速率 |
+| messages.qos0.out.count | Integer   | QoS 0 消息发送数量统计 |
+| messages.qos0.in.rate   | Integer   | QoS 0 消息 5 秒内平均接收速率 |
+| messages.qos0.in.count  | Integer   | QoS 0 消息接收数量统计 |
+| messages.out.rate       | Integer   | MQTT 消息 5 秒内平均发送速率 |
+| messages.out.count      | Integer   | MQTT 消息发送数量统计 |
+| messages.in.rate        | Integer   | MQTT 消息 5 秒内平均接收速率 |
+| messages.in.count       | Integer   | MQTT 消息接收数量统计 |
+| messages.dropped.rate   | Integer   | MQTT 消息 5 秒内平均丢弃速率 |
+| messages.dropped.count  | Integer   | MQTT 消息丢弃数量统计 |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-metrics"
+
+{"data":[],"code":0}
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/topic-metrics" -d '{"topic":"a/b/c"}'
+
+{"code":0}
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-metrics"
+
+{"data":[{"topic":"a/b/c","metrics":{"messages.qos2.out.rate":0.0,"messages.qos2.out.count":0,"messages.qos2.in.rate":0.0,"messages.qos2.in.count":0,"messages.qos1.out.rate":0.0,"messages.qos1.out.count":0,"messages.qos1.in.rate":0.0,"messages.qos1.in.count":0,"messages.qos0.out.rate":0.0,"messages.qos0.out.count":0,"messages.qos0.in.rate":0.0,"messages.qos0.in.count":0,"messages.out.rate":0.0,"messages.out.count":0,"messages.in.rate":0.0,"messages.in.count":0,"messages.dropped.rate":0.0,"messages.dropped.count":0}}],"code":0}
+```
+
+#### GET /api/v4/topic-metrics/{topic} {#endpoint-get-topic-metrics}
+
+返回指定主题的统计指标数据。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type             | Description   |
+| ---- | ---------------- | ------------- |
+| code | Integer          | 0             |
+| data | Object           | 主题统计指标数据，详见下面的 data: |
+
+**data: **
+
+| Name                    | Type      | Description |
+| ----------------------- | --------- | -------------------- |
+| messages.qos2.out.rate  | Integer   | QoS 2 消息 5 秒内平均发送速率 |
+| messages.qos2.out.count | Integer   | QoS 2 消息发送数量统计 |
+| messages.qos2.in.rate   | Integer   | QoS 2 消息 5 秒内平均接收速率 |
+| messages.qos2.in.count  | Integer   | QoS 2 消息接收数量统计 |
+| messages.qos1.out.rate  | Integer   | QoS 1 消息 5 秒内平均发送速率 |
+| messages.qos1.out.count | Integer   | QoS 1 消息发送数量统计 |
+| messages.qos1.in.rate   | Integer   | QoS 1 消息 5 秒内平均接收速率 |
+| messages.qos1.in.count  | Integer   | QoS 1 消息接收数量统计 |
+| messages.qos0.out.rate  | Integer   | QoS 0 消息 5 秒内平均发送速率 |
+| messages.qos0.out.count | Integer   | QoS 0 消息发送数量统计 |
+| messages.qos0.in.rate   | Integer   | QoS 0 消息 5 秒内平均接收速率 |
+| messages.qos0.in.count  | Integer   | QoS 0 消息接收数量统计 |
+| messages.out.rate       | Integer   | MQTT 消息 5 秒内平均发送速率 |
+| messages.out.count      | Integer   | MQTT 消息发送数量统计 |
+| messages.in.rate        | Integer   | MQTT 消息 5 秒内平均接收速率 |
+| messages.in.count       | Integer   | MQTT 消息接收数量统计 |
+| messages.dropped.rate   | Integer   | MQTT 消息 5 秒内平均丢弃速率 |
+| messages.dropped.count  | Integer   | MQTT 消息丢弃数量统计 |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-metrics/a%2Fb%2Fc"
+
+{"data":{"messages.qos2.out.rate":0.0,"messages.qos2.out.count":0,"messages.qos2.in.rate":0.0,"messages.qos2.in.count":0,"messages.qos1.out.rate":0.0,"messages.qos1.out.count":0,"messages.qos1.in.rate":0.0,"messages.qos1.in.count":0,"messages.qos0.out.rate":0.0,"messages.qos0.out.count":0,"messages.qos0.in.rate":0.0,"messages.qos0.in.count":0,"messages.out.rate":0.0,"messages.out.count":0,"messages.in.rate":0.0,"messages.in.count":0,"messages.dropped.rate":0.0,"messages.dropped.count":0},"code":0}
+```
+
+#### POST /api/v4/topic-metrics {#endpoint-add-topic-metrics}
+
+开启对指定主题的指标统计。
+
+**Parameters (json):**
+
+| Name  | Type      | Required | Default | Description |
+| ----- | --------- | -------- | ------- | ----------- |
+| topic | String    | Required |         | MQTT 主题名  |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+开启对 `a/b/c` 主题的指标统计 
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/topic-metrics" -d '{"topic":"a/b/c"}'
+
+{"code":0}
+```
+
+#### DELETE /api/v4/topic-metrics/{topic} {#endpoint-delete-topic-metrics}
+
+关闭对指定主题的指标统计。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+关闭对 `a/b/c` 主题的指标统计 
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-metrics/a%2Fb%2Fc"
+
+{"code":0}
+```
+
+#### DELETE /api/v4/topic-metrics {#endpoint-delete-all-topic-metrics}
+
+关闭所有主题的指标统计。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+关闭所有主题的指标统计 
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-metrics"
+
+{"code":0}
 ```
 
 ### 状态 {#endpoint-stats}
@@ -1421,6 +1691,179 @@ $ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/banned"
 
 ```bash
 $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/banned/clientid/example"
+
+{"code":0}
+```
+
+### 数据导入导出 {#endpoint-data-import-and-export}
+
+数据导入导出。
+
+#### GET /api/v4/data/export {#endpoint-get-export}
+
+获取当前的导出文件信息列表，包括文件名、大小和创建时间。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name               | Type             | Description |
+| ------------------ | ---------------- | ----------- |
+| code               | Integer          | 0 |
+| data               | Array of Objects | 所有路由信息 |
+| data[0].filename   | String           | 文件名 |
+| data[0].created_at | String           | "YYYY-MM-DD HH-mm-SS" 格式的文件创建时间 |
+| data[0].size       | String           | 文件大小，单位：字节 |
+
+**Examples:**
+
+列出当前的导出文件信息列表:
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/data/export"
+
+{"data":[{"size":350,"filename":"emqx-export-2020-5-15-18-6-29.json","created_at":"2020-5-15 18:6:29"},{"size":388,"filename":"emqx-export-2020-5-15-17-39-0.json","created_at":"2020-5-15 17:39:0"}],"code":0}
+```
+
+#### POST /api/v4/data/export {#endpoint-export-data-to-file}
+
+导出当前数据到文件。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name            | Type    | Description |
+| --------------- | ------- | ----------- |
+| code            | Integer | 0 |
+| data            | Object  | 文件信息 |
+| data.filename   | String  | 文件名 |
+| data.created_at | String  | "YYYY-MM-DD HH-mm-SS" 格式的文件创建时间 |
+| data.size       | String  | 文件大小，单位：字节 |
+
+**Examples:**
+
+导出文件：
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/export"
+
+{"data":{"size":350,"filename":"emqx-export-2020-5-18-17-17-44.json","created_at":"2020-5-18 17:17:44"},"code":0}
+```
+
+#### POST /api/v4/data/import {#endpoint-import-data-from-file}
+
+从指定文件导入数据。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type  | Required | Default | Description |
+| -------- | ----- | -------- | --------| ----------- |
+| filename | String| Required |         | 导入的文件名  |
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+从指定文件导入数据：
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-5-18-17-17-44.json"}'
+
+{"code":0}
+```
+
+#### GET /api/v4/data/file/{filename} {#endpoint-download-data-file}
+
+下载数据文件。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Default | Description |
+| -------- | ------ | -------- | --------| ----------- |
+| filename | String | Required |         | 导入的文件名  |
+
+**Success Response Body (JSON):**
+
+| Name     | Type   | Description |
+| -------- | ------ | ----------- |
+| filename | String | 文件名 |
+| file     | String | 文件内容 |
+
+**Examples:**
+
+下载指定的数据文件：
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/data/file/emqx-export-2020-5-18-17-17-44.json"
+
+{"filename":"/Users/zhouzibo/emqx-rel/_build/emqx/rel/emqx/data/emqx-export-2020-5-18-17-17-44.json","file":"{\"version\":\"dev\",\"users\":[{\"username\":\"admin\",\"tags\":\"administrator\",\"password\":\"oKQPB1hbigv6+2ntALELNOb1fF0=\"}],\"schemas\":[],\"rules\":[],\"resources\":[],\"date\":\"2020-05-18 17:17:44\",\"blacklist\":[],\"auth_mnesia\":[],\"apps\":[{\"status\":true,\"secret\":\"public\",\"name\":\"Default\",\"id\":\"admin\",\"expired\":\"undefined\",\"desc\":\"Application user\"}],\"acl_mnesia\":[]}"}
+```
+
+#### POST /api/v4/data/file {#endpoint-upload-data-file}
+
+上传数据文件。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Default | Description |
+| -------- | ------ | -------- | --------| ----------- |
+| filename | String | Required |         | 文件名  |
+| file     | String | Required |         | 文件内容 |
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+上传指定的数据文件：
+
+```bash
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/file" -d '{"filename":"emqx-export-2020-5-18-17-17-44.json","file":"{\"version\":\"dev\",\"users\":[{\"username\":\"admin\",\"tags\":\"administrator\",\"password\":\"oKQPB1hbigv6+2ntALELNOb1fF0=\"}],\"schemas\":[],\"rules\":[],\"resources\":[],\"date\":\"2020-05-18 17:17:44\",\"blacklist\":[],\"auth_mnesia\":[],\"apps\":[{\"status\":true,\"secret\":\"public\",\"name\":\"Default\",\"id\":\"admin\",\"expired\":\"undefined\",\"desc\":\"Application user\"}],\"acl_mnesia\":[]}"}'
+
+{"code":0}
+```
+
+#### DELETE /api/v4/data/file/{filename} {#endpoint-delete-data-file}
+
+远程删除数据文件。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Default | Description |
+| -------- | ------ | -------- | --------| ----------- |
+| filename | String | Required |         | 文件名  |
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+删除指定的数据文件：
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/file/emqx-export-2020-5-18-17-17-44.json"
 
 {"code":0}
 ```

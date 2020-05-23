@@ -151,3 +151,7 @@ listener.tcp.example = 12345
 一个 Zone 定义了一组配置项 (比如最大连接数等)，Listener 可以通过配置项 `listener.<Protocol>.<Listener Name>.zone` 指定使用某个 Zone，以使用该 Zone 下的所有配置。多个 Listener 可以共享同一个 Zone。Zone 的命名规则为 `zone.<Zone Name>.xxx`，`Zone Name` 可以随意命名，但同样建议是全小写的英文单词，`xxx` 是具体的配置项，你可以在 [配置项](../configuration/configuration.md) 中查看 Zone 支持的所有配置项。
 
 此时，我们的每个配置项都存在三个可用值，分别是全局的值，Zone 里设置的值以及默认值，它们的优先级顺序为：Zone > Global > Default。
+
+## 配置更新
+
+配置项会在 EMQ X Broker 与扩展插件被启动时读取并载入，EMQ X Broker 目前尚不支持运行时更新配置，但由于扩展插件支持动态加载和卸载，因此可以在修改插件配置后重新加载插件来应用最新的配置项。
