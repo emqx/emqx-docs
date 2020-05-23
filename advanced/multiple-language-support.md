@@ -89,7 +89,7 @@ Lua 的支持由 [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) 实现�
 - 一套 Lua 的运行时环境，由 [luerl](https://github.com/rvirding/luerl) 实现。
 - 一些控制命令，用于管理 Lua 的加载和卸载等。
 
-### 示例
+#### 示例
 
 在 EMQ X 发行包中，用户自定义的 Lua 脚本文件应该放在 `data/script/` 中。
 
@@ -130,13 +130,13 @@ end
 
 完成后，可以启动两个 MQTT 客户端，一个订阅主任意主题，另一个发布任意消息到刚刚订阅的主题上。可发现订阅端收到的消息内容都是 `hello`。证明 `test.lua` 脚本已经生效。
 
-### 回调函数
+#### 回调函数
 
 支持的回调函数，及参数类型参考：[emqx-lua-hook - README.md](https://github.com/emqx/emqx-lua-hook/tree/develop#hook-api)
 
 示例参考：[examples.lua](https://github.com/emqx/emqx-lua-hook/blob/develop/examples.lua)
 
-### 命令
+#### 命令
 
 加载指定 Lua 脚本：
 
