@@ -167,3 +167,21 @@ $ brew install openssl@1.1
 ```
 
 安装完成后，即可正常启动 EMQ X。
+
+### Windows 缺失 MSVCR120.dll
+
+**标签:** [*启动失败*](tags.md#启动失败)
+
+#### 现象
+
+Windows 执行  `./bin/emqx console` 弹出错误窗口：
+
+```bash
+无法启动次程序，因为计算机中丢失 MSVCR120.dll。请尝试重新安装该程序以解决此问题。
+```
+
+![error](static/WechatIMG18396.png)
+
+#### 解决方法
+
+安装 [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
