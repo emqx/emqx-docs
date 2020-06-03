@@ -26,6 +26,8 @@ ref: undefined
 - 校验某客户端的 PUB/SUB 的操作权限。
 - 处理 会话(Session) 和 消息(Message) 事件。
 
+注：消息(Message) 类钩子，仅在企业版中支持。
+
 ## 架构
 
 其整体的事件传递的架构如下：
