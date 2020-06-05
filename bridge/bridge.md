@@ -15,7 +15,7 @@ category:
 ref:
 ---
 
-# 桥接桥接
+# 桥接
 
 
 EMQ X 企业版桥接转发 MQTT 消息到 Kafka、RabbitMQ、Pulsar、RocketMQ、MQTT Broker 或其他 EMQ X 节点。

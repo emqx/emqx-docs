@@ -117,7 +117,7 @@
 
 * 进阶教程
   * [设备管理](tutorial/device-management.md)
-  * [系统调优](tutorial/turn.md)
+  * [系统调优](tutorial/tune.md)
   * [生产部署](tutorial/deploy.md)
   * [Prometheus 监控告警](tutorial/prometheus.md)
   * [性能测试](tutorial/benchmark.md)

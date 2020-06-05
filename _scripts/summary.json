@@ -233,7 +233,7 @@
       },
       {
         "title": "系统调优",
-        "file": "tutorial/turn.md"
+        "file": "tutorial/tune.md"
       },
       {
         "title": "生产部署",
