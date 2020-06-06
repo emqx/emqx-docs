@@ -28,18 +28,17 @@ gitbook.events.bind('page.change', function() {
         var title = document.title.split(' · ')[0]
         var pathNameList = window.location.pathname.split('/')
         var currentDocType = pathNameList[1]
-        var currentVersion = pathNameList[2]
         var currentLanguage = pathNameList[3]
+        var currentVersion = pathNameList[2]
         if (currentVersion === 'latest') {
-          currentVersion = document.querySelector('#version-select option').innerText.replace(' (latest)', '')
+          currentVersion = document.querySelector('#version-select option')
+            .innerText.replace(' (latest)', '')
         }
         // every page pv
-        window._hmt.push(['_trackEvent', currentDocType, currentVersion, title])
-        // language uv
-        window._hmt.push(['_trackEvent', currentDocType, currentVersion, currentLanguage])
+        window._hmt.push(['_trackEvent', currentDocType, currentVersion + '-' + currentLanguage, title])
       }
     } catch (e) {
       console.error('track error', e)
     }
-  }, 3500)
+  }, 4000)
 })
