@@ -25,18 +25,18 @@ Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存�
 emqx_auth_mnesia
 ```
 
-## 认证规则
+## ACL规则
 
-Mnesia 认证默认使用客户端的 Username 和密码进行认证, 可在可在 `etc/plugins/emqx_auth_mnesia.conf` 中更改为使用客户端的 Client ID 与密码认证：
+Mnesia ACL 默认基于 MQTT 报文中的 Username 和密码进行权限认证, 可在 `etc/plugins/emqx_auth_mnesia.conf` 中更改为使用 MQTT 报文的的 Client ID 与密码认证：
 
 ```bash
-## Auth as username or auth as clientid.
+## Auth and ACL base on username or clientid.
 ##
 ## Value: username | clientid
 auth.mnesia.as = username
 ```
 
-### ACL 规则数据
+### ACL 规则结构体
 
 ```json
 {
@@ -46,8 +46,6 @@ auth.mnesia.as = username
 	"allow": true
 }
 ```
-
-Mnesia ACL 一条规则中定义了发布、订阅或发布/订阅的信息，在规则中的都是**允许**列表。
 
 规则字段说明：
 
@@ -59,7 +57,6 @@ Mnesia ACL 一条规则中定义了发布、订阅或发布/订阅的信息，�
 - allow：是否允许
   
 Mnesia ACL 默认不设规则，你可以使用 HTTP API 管理 ACL 规则。
-
 
 ## 使用 HTTP API 管理 ACL 规则
 

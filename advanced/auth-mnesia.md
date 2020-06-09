@@ -29,7 +29,7 @@ emqx_auth_mnesia
 
 ## 认证规则
 
-Mnesia 认证默认使用客户端的 Username 和密码进行认证, 可在可在 `etc/plugins/emqx_auth_mnesia.conf` 中更改为使用客户端的 Client ID 与密码认证：
+Mnesia 认证默认基于 CONNECT 报文中的 Username 和密码进行认证, 可在 `etc/plugins/emqx_auth_mnesia.conf` 中更改为使用 CONNECT 报文的的 Client ID 与密码认证：
 
 ```bash
 ## Auth as username or auth as clientid.
@@ -50,8 +50,6 @@ auth.mnesia.password_hash = sha256
 ```
 
 配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQ X 内置数据库中。
-
-
 
 ## 预设认证数据
 
