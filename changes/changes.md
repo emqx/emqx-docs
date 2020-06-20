@@ -17,9 +17,73 @@ ref: undefined
 
 # 版本发布
 
+## 4.2-alpha.1 版本
+
+*发布日期: 2020-06-20*
+
+EMQ X 4.2-alpha.2 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 支持 `Response Information`
+
+  Github PR: [emqx/emqx#3533](https://github.com/emqx/emqx/pull/3533)
+
+**错误修复:**
+
+- 修复连接属性为空时导致连接进程崩溃的问题
+
+  Github PR: [emqx/emqx#3525](https://github.com/emqx/emqx/pull/3525)
+
+### emqx-rule-engine
+
+**功能增强:**
+
+- 为规则引擎事件增加 MQTT 属性字段以及与规则相关的元数据
+
+  Github PR: [emqx/emqx-rule-engine#163](https://github.com/emqx/emqx-rule-engine/pull/163)
+
+### emqx-rel
+
+**功能增强:**
+
+- 支持 CentOS 8
+
+  Github PR: [emqx/emqx-rel#526](https://github.com/emqx/emqx-rel/pull/526)
+
+- 支持 Ubuntu 20.04
+
+  Github PR: [emqx/emqx-rel#521](https://github.com/emqx/emqx-rel/pull/521)
+
+### esockd
+
+**错误修复:**
+
+- 修复 `max_conn_rate` 配置的错误类型
+
+  Github PR: [emqx/esockd#161](https://github.com/emqx/esockd/pull/130)
+
+### gen_coap
+
+**功能增强:**
+
+- 使用 esockd 替换 gen_udp
+
+  Github PR: [emqx/gen_coap#12](https://github.com/emqx/gen_coap/pull/12)
+
+### gen_rpc
+
+**错误修复:**
+
+- 修复 acceptor 在某些情况下发生崩溃的问题
+
+  Github PR: [emqx/gen_rpc#9](https://github.com/emqx/gen_rpc/pull/9)
+
 ## 4.1.0 版本
 
-*发布日期: 2019-06-04*
+*发布日期: 2020-06-04*
 
 EMQ X 4.1.0 现已发布，主要包含以下改动：
 
@@ -527,7 +591,7 @@ emqx-sn (plugin)
 
 ## 4.0.4 版本
 
-*发布日期: 2019-03-06*
+*发布日期: 2020-03-06*
 
 EMQ X 4.0.4 现已发布。此版本主要进行了错误修复。
 
@@ -583,7 +647,7 @@ EMQ X 4.0.4 现已发布。此版本主要进行了错误修复。
 
 ## 4.0.3 版本
 
-*发布日期: 2019-02-21*
+*发布日期: 2020-02-21*
 
 EMQ X 4.0.3 现已发布。此版本主要进行了错误修复。
 
@@ -627,7 +691,7 @@ EMQ X 4.0.3 现已发布。此版本主要进行了错误修复。
 
 ## 4.0.2 版本
 
-*发布日期: 2019-02-07*
+*发布日期: 2020-02-07*
 
 EMQ X 4.0.2 现已发布。此版本主要进行了错误修复和性能优化。
 
@@ -685,7 +749,7 @@ EMQ X 4.0.2 现已发布。此版本主要进行了错误修复和性能优�
 
 ## 4.0.1 版本
 
-*发布日期: 2019-01-17*
+*发布日期: 2020-01-17*
 
 EMQ X 4.0.1 现已发布。此版本主要进行了错误修复和性能优化。
 
@@ -756,7 +820,7 @@ EMQ X 4.0.1 现已发布。此版本主要进行了错误修复和性能优�
 
 ## 4.0.0 版本
 
-*发布日期: 2019-01-10*
+*发布日期: 2020-01-10*
 
 EMQ X 4.0.0 正式版现已发布。在这个版本中，我们通过重构 channel 和 session
 显著地改进了吞吐性能，通过添加更多的钩子和统计指标增强了可扩展性，重新设计了规则引擎的
