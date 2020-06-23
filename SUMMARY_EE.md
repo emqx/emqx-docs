@@ -144,7 +144,7 @@
   * [FAQ 标签](faq/tags.md)
 
 * 版本发布
-  <!-- * [变更日志](changes/changes-ee.md) -->
+  * [变更日志](changes/changes-ee.md)
   * [升级指南](changes/upgrade.md)
 
 * 相关资料
