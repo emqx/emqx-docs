@@ -17,6 +17,48 @@ ref: undefined
 
 # 版本发布
 
+## 4.1.1 版本
+
+*发布日期: 2020-07-03*
+
+EMQ X 4.1.1 现已发布，主要包含以下改动:
+
+### emqx-retainer
+
+**错误修复:**
+
+- 修复性能问题
+
+  Github PR: [emqx/emqx-retainer#141](https://github.com/emqx/emqx-retainer/pull/141)
+
+### emqx-bridge-mqtt
+
+**错误修复:**
+
+- 将挂载点改为可选配置
+
+  Github PR: [emqx/emqx-bridge-mqtt#84](https://github.com/emqx/emqx-bridge-mqtt/pull/84)
+
+### emqx-rel
+
+**错误修复:**
+
+- 屏蔽 docker 运行时输出的控制台日志中的敏感信息
+
+  Github Issue: [emqx/emqx-rel#524](https://github.com/emqx/emqx-rel/pull/524)
+
+  Github PR: [emqx/emqx-rel#542](https://github.com/emqx/emqx-rel/pull/542)
+
+  Thanks: [emqx/emqx-rel#525](https://github.com/emqx/emqx-rel/pull/525) - [daadu](https://github.com/daadu)
+
+### emqx-lua-hook
+
+**错误修复:**
+
+- 修复插件卸载时没有卸载脚本和 CLI 的问题
+
+  Github PR: [emqx/emqx-lua-hook#106](https://github.com/emqx/emqx-lua-hook/pull/106)
+
 ## 4.2-alpha.1 版本
 
 *发布日期: 2020-06-20*
