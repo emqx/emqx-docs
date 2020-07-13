@@ -10,7 +10,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -112,16 +112,16 @@ $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; d
 ```
 
 使用 WebHook 类型创建一个资源，并配置资源参数 url:
-   
+
 1). 列出当前所有可用的资源类型，确保 'web\_hook' 资源类型已存在:
 ```bash
 $ ./bin/emqx_ctl resource-types list
 resource_type(name='web_hook', provider='emqx_web_hook', params=#{...}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
 ...
 ```
-   
+
 2). 使用类型 'web\_hook' 创建一个新的资源，并配置 "url"="<http://127.0.0.1:9910>":
-   
+
 ```bash
 $ ./bin/emqx_ctl resources create \
     'web_hook' \
@@ -134,7 +134,7 @@ Resource resource:691c29ba create
 Web 服务，方法为 POST，并且设置了一个 HTTP Header: "token"。
 
 然后创建规则，并选择规则的动作为 'data\_to\_webserver':
-   
+
 1). 列出当前所有可用的动作，确保 'data\_to\_webserver' 动作已存在:
 
 ```bash
@@ -162,7 +162,7 @@ rule:26d84768
 
 现在我们使用 username "Steven" 发送 "hello" 到任意主题，上面创建的规则就会被触发，Web Server收到消息并回复 200 OK:
 
-```bash   
+```bash
 $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
 
 POST / HTTP/1.1
@@ -218,7 +218,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/mqtt-resource-0.png)
 
 填写资源配置:
-   
+
    填写真实的 mosquitto 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -235,7 +235,7 @@ SELECT * FROM "t/#"
 
 规则已经创建完成，现在发一条数据:
 
-```bash   
+```bash
 Topic: "t/1"
 
 QoS: 0
@@ -259,7 +259,7 @@ Payload: "Hello, World\!"
 
 ```bash
 $ brew install mysql
-       
+
 $ brew services start mysql
 
 $ mysql -u root -h localhost -p
@@ -464,7 +464,7 @@ insert into t_mqtt_msg(msgid, topic, qos, retain, payload, arrived) values (${id
 ![image](./assets/rule-engine/pgsql-rulesql-2@2x.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/1"
 QoS: 0
@@ -498,7 +498,7 @@ $ brew services start cassandra
 $ cqlsh -ucassandra -pcassandra
 
 create user root with password 'public' superuser;
-```    
+```
 
 初始化 Cassandra 表:
 
@@ -662,7 +662,7 @@ msgid=${id},topic=${topic},qos=${qos},payload=${payload},retain=${retain},arrive
 ![image](./assets/rule-engine/mongo-rule-overview.png)
 
 现在发送一条数据，测试该规则:
-   
+
 ```bash
 Topic: "t/mongo"
 QoS: 1
@@ -768,7 +768,7 @@ SELECT msgid as id, topic, payload FROM "#"
 ![image](./assets/rule-engine/dynamo-rulesql-1.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/a"
 QoS: 1
@@ -834,7 +834,7 @@ HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payloa
 ![image](./assets/rule-engine/redis-resource-1@2x.png)
 
 填写资源配置:
-   
+
    填写真实的 Redis 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -853,7 +853,7 @@ HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payloa
 
 ```bash
 Topic: "t/1"
-   
+
 QoS: 0
 
 Retained: false
@@ -876,6 +876,107 @@ hgetall Key
 在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
 
 ![image](./assets/rule-engine/redis-rulelist-0@2x.png)
+
+## 离线消息保存到 Redis
+
+搭建 Redis 环境，以 MaxOS X 为例:
+
+```bash
+ $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz
+$ tar xzf redis-4.0.14.tar.gz
+$ cd redis-4.0.14
+$ make && make install
+
+# 启动 redis
+$ redis-server
+```
+
+创建规则:
+
+打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+
+然后填写规则 SQL:
+
+FROM说明
+
+​ **t/#**: 发布者发布消息触发保存离线消息到Redis
+
+​ **$events/session_subscribed**: 订阅者订阅主题触发获取离线消息
+
+​ **$events/message_acked**: 订阅者回复消息ACK后触发删除已经被接收的离线消息
+
+```bash
+SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE topic =~ 't/#'
+```
+
+![](./assets/rule-engine/offline_msg_1.png)
+
+关联动作:
+
+在 “响应动作” 界面选择 “添加动作”，然后在 “动作” 下拉框里选择 “离线消息保存到 Redis”。
+
+![](./assets/rule-engine/offline_msg_2.png)
+
+填写动作参数:
+
+“离线消息保存到 Redis 动作需要两个参数：
+
+1). Redis Key 超期的 TTL
+
+2). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
+
+![](./assets/rule-engine/offline_msg_3.png)
+
+选择 Redis 单节点模式资源”。
+
+![](./assets/rule-engine/offline_msg_4.png)
+
+填写资源配置:
+
+   填写真实的 Redis 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
+
+最后点击 “新建” 按钮。
+
+![](./assets/rule-engine/offline_msg_5.png)
+
+返回响应动作界面，点击 “确认”。
+
+![](./assets/rule-engine/offline_msg_7.png)
+
+返回规则创建界面，点击 “新建”。
+
+![](./assets/rule-engine/offline_msg_6.png)
+
+规则已经创建完成，通过 Dashboard 的 WebSocket 客户端发一条数据**(发布消息的QoS必须大于0)**:
+
+![](./assets/rule-engine/offline_msg_8.png)
+
+
+
+消息发送后，通过 Redis CLI 查看到消息被保存到 Redis 里面:
+
+```bash
+$ redis-cli
+
+KEYS mqtt:msg\*
+
+hgetall Key
+```
+
+![](./assets/rule-engine/offline_msg_10.png)
+
+使用另外一个客户端，订阅主题 "t/1" **(订阅主题的QoS必须大于0，否则消息会被重复接收)**:
+
+![](./assets/rule-engine/offline_msg_11.png)
+
+订阅后马上接收到了保存到 Redis 里面的离线消息:
+
+![](./assets/rule-engine/offline_msg_12.png)
+
+离线消息被接收后会在 Redis 中删除:
+
+![](./assets/rule-engine/offline_msg_13.png)
+
 
 ## 保存数据到 OpenTSDB
 
@@ -948,10 +1049,10 @@ FROM
 ![image](./assets/rule-engine/opentsdb-rulesql-1@2x.png)
 
 规则已经创建完成，现在发一条消息:
-   
+
 ```bash
 Topic: "t/1"
-   
+
 QoS: 0
 
 Retained: false
@@ -1037,7 +1138,7 @@ Postman-Token: 69af0565-27f8-41e5-b0cd-d7c7f5b7a037
 
 搭建 TimescaleDB 数据库环境，以 MaxOS X 为例:
 
-```bash   
+```bash
 $ docker pull timescale/timescaledb
 
 $ docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg11
@@ -1053,7 +1154,7 @@ CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
 ```
 
 初始化 TimescaleDB 表:
-   
+
 ```bash
 $ docker exec -it timescaledb psql -U postgres -d tutorial
 ```
@@ -1134,10 +1235,10 @@ insert into conditions(time, location, temperature, humidity) values (NOW(), ${l
 ![image](./assets/rule-engine/timescaledb-rulesql-1@2x.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/1"
-   
+
 QoS: 0
 
 Retained: false
@@ -1162,7 +1263,7 @@ tutorial=# SELECT * FROM conditions LIMIT 100;
 
 搭建 InfluxDB 数据库环境，以 macOS X 为例:
 
-```bash   
+```bash
 $ docker pull influxdb
 
 $ docker run --name=influxdb --rm -d -p 8086:8086 -p 8089:8089/udp -v ${PWD}/files/influxdb.conf:/etc/influxdb/influxdb.conf influxdb:latest
@@ -1181,7 +1282,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
   # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
   # EMQ X 默认时间戳是毫秒
   precision = "ms"
-  
+
   # 其他配置根据需要自行修改
   #   batch-size = 1000
   #   batch-pending = 5
@@ -1251,10 +1352,10 @@ FROM
 ![image](./assets/rule-engine/influxdb-rulesql-1@2x.png)
 
 规则已经创建完成，现在发一条消息:
-   
+
 ```bash
 Topic: "t/1"
-   
+
 QoS: 0
 
 Retained: false
@@ -1287,7 +1388,7 @@ time                external host    internal location
 搭建 Kafka 环境，以 MaxOS X 为例:
 ```bash
 $ wget http://apache.claz.org/kafka/2.3.0/kafka_2.12-2.3.0.tgz
-       
+
 $ tar -xzf  kafka_2.12-2.3.0.tgz
 
 $ cd kafka_2.12-2.3.0
@@ -1305,7 +1406,7 @@ $ ./bin/kafka-server-start.sh config/server.properties
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
 ```
 
-{% hint style="danger" %}       
+{% hint style="danger" %}
 创建 Kafka Rule 之前必须先在 Kafka 中创建好主题，否则创建 Kafka Rule 失败。
 {% endhint %}
 
@@ -1342,7 +1443,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/kafka-resource-1@2x.png)
 
 填写资源配置:
-   
+
 填写真实的 Kafka 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1384,10 +1485,10 @@ $ ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic tes
 ## 桥接数据到 Pulsar
 
 搭建 Pulsar 环境，以 MaxOS X 为例:
-   
+
 ```bash
 $ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
-       
+
 $ tar xvfz apache-pulsar-2.3.2-bin.tar.gz
 
 $ cd apache-pulsar-2.3.2
@@ -1398,7 +1499,7 @@ $ ./bin/pulsar standalone
 
 创建 Pulsar 的主题:
 
-```bash   
+```bash
 $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 ```
 
@@ -1435,7 +1536,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/pulsar-resource-1@2x.png)
 
 填写资源配置:
-   
+
    填写真实的 Pulsar 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1452,7 +1553,7 @@ SELECT * FROM "t/#"
 
 规则已经创建完成，现在发一条数据:
 
-```bash   
+```bash
 Topic: "t/1"
 
 QoS: 0
@@ -1479,7 +1580,7 @@ $ ./bin/pulsar-client consume testTopic  -s "sub-name" -n 1000
 搭建 RocketMQ 环境，以 MaxOS X
        为例:
 
-```bash   
+```bash
 $ wget http://mirror.metrocast.net/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip
 
 $ unzip rocketmq-all-4.5.2-bin-release.zip
@@ -1526,7 +1627,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rocket-resource-0@2x.png)
 
 填写资源配置:
-   
+
    填写真实的 RocketMQ 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1612,7 +1713,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rabbit-resource-0.png)
 
 填写资源配置:
-   
+
    填写真实的 RabbitMQ 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1628,10 +1729,10 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rabbit-rulesql-1.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/1"
-   
+
 QoS: 0
 
 Retained: false
@@ -1682,7 +1783,7 @@ channel.start_consuming()
 
 ```bash
 $ brew tap emqx/emqx/emqx
-       
+
 $ brew install emqx
 
 # 启动 emqx
@@ -1718,7 +1819,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rpc-resource-0.png)
 
 填写资源配置:
-   
+
    填写真实的 emqx 节点名，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1735,7 +1836,7 @@ SELECT * FROM "t/#"
 
 规则已经创建完成，现在发一条数据:
 
-```bash 
+```bash
 Topic: "t/1"
 
 QoS: 0
