@@ -67,14 +67,14 @@ $ tail -f log/erlang.log.1
 
 (emqx@127.0.0.1)1> [inspect]
     Selected Data: #{client_id => <<"shawn">>,event => 'message.publish',
-                    flags => #{dup => false,retain => false},
+                    flags => #{dup => false},
                     id => <<"5898704A55D6AF4430000083D0002">>,
                     payload => <<"hello">>,
                     peername => <<"127.0.0.1:61770">>,qos => 1,
                     timestamp => 1558587875090,topic => <<"t/a">>,
                     username => undefined}
     Envs: #{event => 'message.publish',
-            flags => #{dup => false,retain => false},
+            flags => #{dup => false},
             from => <<"shawn">>,
             headers =>
                 #{allow_publish => true,
@@ -240,8 +240,6 @@ Topic: "t/1"
 
 QoS: 0
 
-Retained: false
-
 Payload: "Hello, World\!"
 ```
 
@@ -402,7 +400,6 @@ CREATE TABLE t_mqtt_msg (
     sender character varying(64),
     topic character varying(255),
     qos integer,
-    retain integer,
     payload text,
     arrived timestamp without time zone
 );
@@ -434,7 +431,7 @@ SELECT * FROM "#"
 ​    模板为:
 
 ```bash
-insert into t_mqtt_msg(msgid, topic, qos, retain, payload, arrived) values (${id}, ${topic}, ${qos}, ${retain}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
 ```
 
 插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
@@ -468,7 +465,6 @@ insert into t_mqtt_msg(msgid, topic, qos, retain, payload, arrived) values (${id
 ```bash
 Topic: "t/1"
 QoS: 0
-Retained: false
 Payload: "hello1"
 ```
 
@@ -521,7 +517,6 @@ CREATE TABLE t_mqtt_msg (
     topic text,
     qos int,
     payload text,
-    retain int,
     arrived timestamp,
     PRIMARY KEY (msgid, topic)
 );
@@ -552,7 +547,7 @@ SELECT * FROM "#"
 ​    模板为:
 
 ```sql
-insert into t_mqtt_msg(msgid, topic, qos, payload, retain, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${retain}, ${timestamp})
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
 ```
 
 插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
@@ -577,7 +572,6 @@ Keysapce 填写 “test”，用户名填写 “root”，密码填写 “public
 ```bash
 Topic: "t/cass"
 QoS: 1
-Retained: true
 Payload: "hello"
 ```
 
@@ -641,7 +635,7 @@ SELECT * FROM "#"
 ​    模板为:
 
 ```bash
-msgid=${id},topic=${topic},qos=${qos},payload=${payload},retain=${retain},arrived=${timestamp}
+msgid=${id},topic=${topic},qos=${qos},payload=${payload},arrived=${timestamp}
 ```
 
 插入数据之前，Selector 模板里的 ${key} 占位符会被替换为相应的值。
@@ -666,7 +660,6 @@ msgid=${id},topic=${topic},qos=${qos},payload=${payload},retain=${retain},arrive
 ```bash
 Topic: "t/mongo"
 QoS: 1
-Retained: true
 Payload: "hello"
 ```
 
@@ -822,7 +815,7 @@ SELECT * FROM "t/#"
 1). Redis 的命令:
 
 ```bash
-HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} retain ${retain} ts ${timestamp}
+HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} ts ${timestamp}
 ```
 
 2). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
@@ -855,8 +848,6 @@ HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payloa
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "hello"
 ```
@@ -954,8 +945,6 @@ FROM
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "{"metric":"cpu","tags":{"host":"serverA"},"value":12}"
 ```
@@ -1141,8 +1130,6 @@ Topic: "t/1"
 
 QoS: 0
 
-Retained: false
-
 Payload: "{"temp":24,"humidity":30,"location":"hangzhou"}"
 ```
 
@@ -1258,8 +1245,6 @@ Topic: "t/1"
 
 QoS: 0
 
-Retained: false
-
 Payload:
 "{"host":"serverA","location":"roomA","internal":25,"external":37}"
 ```
@@ -1281,6 +1266,104 @@ time                external host    internal location
 在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
 
 ![image](./assets/rule-engine/influxdb-rulelist-0@2x.png)
+
+
+## 保存数据到 ClickHouse
+
+搭建 ClickHouse 数据库，并设置用户名密码为 default/public，以 CentOS 为例:
+
+```bash
+## 安装依赖
+sudo yum install -y epel-release
+
+## 下载并运行packagecloud.io提供的安装shell脚本
+curl -s https://packagecloud.io/install/repositories/altinity/clickhouse/script.rpm.sh | sudo bash
+
+## 安装ClickHouse服务器和客户端
+sudo yum install -y clickhouse-server clickhouse-client
+
+## 启动ClickHouse服务器
+clickhouse-server
+
+## 启动ClickHouse客户端程序
+clickhouse-client
+```
+
+创建 “test” 数据库:
+```bash
+create database test;
+```
+创建 t_mqtt_msg 表:
+
+```sql
+use test;
+create table t_mqtt_msg (msgid Nullable(String), topic Nullable(String), clientid Nullable(String), payload Nullable(String)) engine = Log;
+```
+
+![](./assets/rule-engine/clickhouse_0.png)
+
+创建规则:
+
+打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+
+选择触发事件 “消息发布”，然后填写规则 SQL:
+
+```sql
+SELECT * FROM "#"
+```
+
+![image](./assets/rule-engine/clickhouse_1.png)
+
+关联动作:
+
+在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 ClickHouse”。
+
+![image](./assets/rule-engine/clickhouse_2.png)
+
+填写动作参数:
+
+“保存数据到 ClickHouse” 动作需要两个参数：
+
+1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 ClickHouse 资源:
+
+![image](./assets/rule-engine/clickhouse_3.png)
+
+选择 “ClickHouse 资源”。
+
+填写资源配置:
+
+![image](./assets/rule-engine/clickhouse_4.png)
+
+点击 “新建” 按钮。
+
+2). SQL 模板。这个例子里我们向 ClickHouse 插入一条数据，SQL
+​    模板为:
+
+```sql
+insert into test.t_mqtt_msg(msgid, clientid, topic, payload) values ('${id}', '${clientid}', '${topic}', '${payload}')
+```
+
+![image](./assets/rule-engine/clickhouse_5.png)
+
+返回响应动作界面，点击 “确认”。
+
+![image](./assets/rule-engine/clickhouse_6.png)
+
+在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
+
+![image](./assets/rule-engine/clickhouse_7.png)
+
+规则已经创建完成，现在发一条数据:
+
+```bash
+Topic: "t/a"
+QoS: 1
+Payload: "hello"
+```
+
+然后检查 ClickHouse 表，新的 record 是否添加成功:
+
+![image](./assets/rule-engine/clickhouse_8.png)
 
 
 ## 桥接数据到 Kafka
@@ -1364,8 +1447,6 @@ SELECT * FROM "t/#"
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "hello"
 ```
@@ -1458,8 +1539,6 @@ Topic: "t/1"
 
 QoS: 0
 
-Retained: false
-
 Payload: "hello"
 ```
 
@@ -1549,8 +1628,6 @@ Topic: "t/1"
 
 QoS: 0
 
-Retained: false
-
 Payload: "hello"
 ```
 
@@ -1634,8 +1711,6 @@ SELECT * FROM "t/#"
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "Hello, World\!"
 ```
@@ -1740,8 +1815,6 @@ SELECT * FROM "t/#"
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "Hello, World\!"
 ```
