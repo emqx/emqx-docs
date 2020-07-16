@@ -106,7 +106,7 @@ Web 服务器:
 <!-- end list -->
 
 首先我们创建一个简易 Web 服务，这可以使用 `nc`
-       命令实现:
+​       命令实现:
 ```bash
 $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
 ```
@@ -316,7 +316,7 @@ SELECT * FROM "#"
 “保存数据到 MySQL” 动作需要两个参数：
 
 1). SQL 模板。这个例子里我们向 MySQL 插入一条数据，SQL
-    模板为:
+​    模板为:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, FROM_UNIXTIME(${timestamp}/1000))
@@ -428,7 +428,7 @@ SELECT * FROM "#"
 “保存数据到 PostgreSQL” 动作需要两个参数：
 
 1). SQL 模板。这个例子里我们向 PostgreSQL 插入一条数据，SQL
-    模板为:
+​    模板为:
 
 ```bash
 insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
@@ -544,7 +544,7 @@ SELECT * FROM "#"
 “保存数据到 Cassandra” 动作需要两个参数：
 
 1). SQL 模板。这个例子里我们向 Cassandra 插入一条数据，SQL
-    模板为:
+​    模板为:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
@@ -632,7 +632,7 @@ SELECT * FROM "#"
 1). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t\_mqtt\_msg”
 
 2). Selector 模板。这个例子里我们向 MongoDB 插入一条数据，Selector
-    模板为:
+​    模板为:
 
 ```bash
 msgid=${id},topic=${topic},qos=${qos},payload=${payload},arrived=${timestamp}
@@ -868,6 +868,7 @@ hgetall Key
 
 ![image](./assets/rule-engine/redis-rulelist-0@2x.png)
 
+
 ## 保存数据到 OpenTSDB
 
 搭建 OpenTSDB 数据库环境，以 MaxOS X 为例:
@@ -1089,7 +1090,7 @@ FROM
 “保存数据到 TimescaleDB” 动作需要两个参数：
 
 1). SQL 模板。这个例子里我们向 TimescaleDB 插入一条数据，SQL
-    模板为:
+​    模板为:
 
 ```sql
 insert into conditions(time, location, temperature, humidity) values (NOW(), ${location}, ${temp}, ${humidity})
@@ -1382,7 +1383,7 @@ $ ./bin/kafka-server-start.sh config/server.properties
 ```
 
 创建 Kafka
-       的主题:
+​       的主题:
 
 ```bash
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
@@ -1556,7 +1557,7 @@ $ ./bin/pulsar-client consume testTopic  -s "sub-name" -n 1000
 ## 桥接数据到 RocketMQ
 
 搭建 RocketMQ 环境，以 MaxOS X
-       为例:
+​       为例:
 
 ```bash
 $ wget http://mirror.metrocast.net/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip
@@ -1826,4 +1827,179 @@ Payload: "Hello, World\!"
 
 ![image](./assets/rule-engine/rpc-rulelist-0.png)
 
+## 离线消息保存到 Redis
+
+搭建 Redis 环境，以 MaxOS X 为例:
+
+```bash
+ $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz
+$ tar xzf redis-4.0.14.tar.gz
+$ cd redis-4.0.14
+$ make && make install
+
+# 启动 redis
+$ redis-server
+```
+
+创建规则:
+
+打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+
+然后填写规则 SQL:
+
+FROM说明
+
+​ **t/#**: 发布者发布消息触发保存离线消息到Redis
+
+​ **$events/session_subscribed**: 订阅者订阅主题触发获取离线消息
+
+​ **$events/message_acked**: 订阅者回复消息ACK后触发删除已经被接收的离线消息
+
+```bash
+SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE topic =~ 't/#'
+```
+
+![](./assets/rule-engine/offline_msg_1.png)
+
+关联动作:
+
+在 “响应动作” 界面选择 “添加动作”，然后在 “动作” 下拉框里选择 “离线消息保存到 Redis”。
+
+![](./assets/rule-engine/offline_msg_2.png)
+
+填写动作参数:
+
+“离线消息保存到 Redis 动作需要两个参数：
+
+1). Redis Key 超期的 TTL
+
+2). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
+
+![](./assets/rule-engine/offline_msg_3.png)
+
+选择 Redis 单节点模式资源”。
+
+![](./assets/rule-engine/offline_msg_4.png)
+
+填写资源配置:
+
+   填写真实的 Redis 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
+
+最后点击 “新建” 按钮。
+
+![](./assets/rule-engine/offline_msg_5.png)
+
+返回响应动作界面，点击 “确认”。
+
+![](./assets/rule-engine/offline_msg_7.png)
+
+返回规则创建界面，点击 “新建”。
+
+![](./assets/rule-engine/offline_msg_6.png)
+
+规则已经创建完成，通过 Dashboard 的 WebSocket 客户端发一条数据**(发布消息的QoS必须大于0)**:
+
+![](./assets/rule-engine/offline_msg_8.png)
+
+
+消息发送后，通过 Redis CLI 查看到消息被保存到 Redis 里面:
+
+```bash
+$ redis-cli
+
+KEYS mqtt:msg\*
+
+hgetall Key
+```
+
+![](./assets/rule-engine/offline_msg_10.png)
+
+使用另外一个客户端，订阅主题 "t/1" **(订阅主题的QoS必须大于0，否则消息会被重复接收)**:
+
+![](./assets/rule-engine/offline_msg_11.png)
+
+订阅后马上接收到了保存到 Redis 里面的离线消息:
+
+![](./assets/rule-engine/offline_msg_12.png)
+
+离线消息被接收后会在 Redis 中删除:
+
+![](./assets/rule-engine/offline_msg_13.png)
+
+
+## 从 Redis 中获取订阅关系
+
+搭建 Redis 环境，以 MaxOS X 为例:
+
+```bash
+ $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz
+$ tar xzf redis-4.0.14.tar.gz
+$ cd redis-4.0.14
+$ make && make install
+
+# 启动 redis
+$ redis-server
+```
+
+创建规则:
+
+打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+
+然后填写规则 SQL:
+
+```bash
+SELECT * FROM "$events/client_connected"
+```
+
+![](./assets/rule-engine/redis_sub_1.png)
+
+关联动作:
+
+在 “响应动作” 界面选择 “添加动作”，然后在 “动作” 下拉框里选择 “从 Redis 中获取订阅关系”。
+
+![](./assets/rule-engine/redis_sub_2.png)
+
+填写动作参数:
+
+“离线消息保存到 Redis 动作需要一个参数：
+
+1). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
+
+![](./assets/rule-engine/redis_sub_3.png)
+
+选择 Redis 单节点模式资源”。
+
+![](./assets/rule-engine/offline_msg_4.png)
+
+填写资源配置:
+
+   填写真实的 Redis 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
+
+最后点击 “新建” 按钮。
+
+![](./assets/rule-engine/redis_sub_5.png)
+
+返回响应动作界面，点击 “确认”。
+
+![](./assets/rule-engine/redis_sub_6.png)
+
+返回规则创建界面，点击 “新建”。
+
+![](./assets/rule-engine/redis_sub_7.png)
+
+规则已经创建完成，通过 Redis CLI 往Redis插入一条订阅关系:
+
+```bash
+HSET mqtt:sub:test t1 1
+```
+
+![](./assets/rule-engine/redis_sub_8.png)
+
+通过 Dashboard  登录 clientid 为 test 的设备:
+
+![](./assets/rule-engine/redis_sub_9.png)
+
+查看订阅列表，可以看到 **test** 设备已经订阅了 **t1** 主题:
+
+![](./assets/rule-engine/redis_sub_10.png)
 
