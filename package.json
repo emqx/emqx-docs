@@ -8,6 +8,8 @@
     "docs": "npx gitbook serve",
     "docs-ee": "npx gitbook serve -e emqxee",
     "make": "node _scripts/make.js",
+    "pdf": "node _scripts/make.js -e emqxce && npx gitbook pdf",
+    "pdf-ee": "node _scripts/make.js -e emqxee && npx gitbook pdf -e emqxee",
     "lint": "node _scripts/stylelint.js",
     "html": "node _scripts/make.js && npx gitbook build && node _scripts/after_build.js",
     "html-ee": "node _scripts/make.js -e emqxee &&  npx gitbook build -e emqxee && node _scripts/after_build.js"
@@ -19,13 +21,13 @@
     "gitbook-plugin-anchors": "^0.7.1",
     "gitbook-plugin-cuav-chapters": "^1.0.3",
     "gitbook-plugin-edit-link": "^2.0.2",
+    "gitbook-plugin-emqx": "*",
     "gitbook-plugin-github": "^3.0.0",
     "gitbook-plugin-gittalk": "^0.0.8",
     "gitbook-plugin-hints": "^1.0.2",
     "gitbook-plugin-local-pagefooter": "^1.0.5",
     "gitbook-plugin-page-toc": "^1.1.1",
     "gitbook-plugin-prism": "^2.4.0",
-    "gitbook-plugin-emqx": "*",
     "gitbook-plugin-scripts": "^1.0.2",
     "gitbook-plugin-search-pro": "^2.0.2",
     "gitbook-plugin-simpletabs": "^0.1.1",
@@ -35,5 +37,8 @@
     "svgexport": "^0.4.0",
     "syntax-highlighting": "^1.0.0",
     "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "gitbook-pdfgen": "^0.0.2"
   }
 }

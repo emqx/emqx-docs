@@ -5,3 +5,4 @@ book.pdf
 .vscode
 *.lock
 .DS_Store
+*.pdf
