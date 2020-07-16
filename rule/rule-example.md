@@ -67,14 +67,14 @@ $ tail -f log/erlang.log.1
 
 (emqx@127.0.0.1)1> [inspect]
     Selected Data: #{client_id => <<"shawn">>,event => 'message.publish',
-                    flags => #{dup => false,retain => false},
+                    flags => #{dup => false},
                     id => <<"5898704A55D6AF4430000083D0002">>,
                     payload => <<"hello">>,
                     peername => <<"127.0.0.1:61770">>,qos => 1,
                     timestamp => 1558587875090,topic => <<"t/a">>,
                     username => undefined}
     Envs: #{event => 'message.publish',
-            flags => #{dup => false,retain => false},
+            flags => #{dup => false},
             from => <<"shawn">>,
             headers =>
                 #{allow_publish => true,
@@ -235,12 +235,10 @@ SELECT * FROM "t/#"
 
 规则已经创建完成，现在发一条数据:
 
-```bash   
+```bash
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "Hello, World\!"
 ```
@@ -402,7 +400,6 @@ CREATE TABLE t_mqtt_msg (
     sender character varying(64),
     topic character varying(255),
     qos integer,
-    retain integer,
     payload text,
     arrived timestamp without time zone
 );
@@ -434,7 +431,7 @@ SELECT * FROM "#"
     模板为:
 
 ```bash
-insert into t_mqtt_msg(msgid, topic, qos, retain, payload, arrived) values (${id}, ${topic}, ${qos}, ${retain}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
 ```
 
 插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
@@ -464,11 +461,10 @@ insert into t_mqtt_msg(msgid, topic, qos, retain, payload, arrived) values (${id
 ![image](./assets/rule-engine/pgsql-rulesql-2@2x.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/1"
 QoS: 0
-Retained: false
 Payload: "hello1"
 ```
 
@@ -521,7 +517,6 @@ CREATE TABLE t_mqtt_msg (
     topic text,
     qos int,
     payload text,
-    retain int,
     arrived timestamp,
     PRIMARY KEY (msgid, topic)
 );
@@ -552,7 +547,7 @@ SELECT * FROM "#"
     模板为:
 
 ```sql
-insert into t_mqtt_msg(msgid, topic, qos, payload, retain, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${retain}, ${timestamp})
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
 ```
 
 插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
@@ -577,7 +572,6 @@ Keysapce 填写 “test”，用户名填写 “root”，密码填写 “public
 ```bash
 Topic: "t/cass"
 QoS: 1
-Retained: true
 Payload: "hello"
 ```
 
@@ -641,7 +635,7 @@ SELECT * FROM "#"
     模板为:
 
 ```bash
-msgid=${id},topic=${topic},qos=${qos},payload=${payload},retain=${retain},arrived=${timestamp}
+msgid=${id},topic=${topic},qos=${qos},payload=${payload},arrived=${timestamp}
 ```
 
 插入数据之前，Selector 模板里的 ${key} 占位符会被替换为相应的值。
@@ -662,11 +656,10 @@ msgid=${id},topic=${topic},qos=${qos},payload=${payload},retain=${retain},arrive
 ![image](./assets/rule-engine/mongo-rule-overview.png)
 
 现在发送一条数据，测试该规则:
-   
+
 ```bash
 Topic: "t/mongo"
 QoS: 1
-Retained: true
 Payload: "hello"
 ```
 
@@ -822,7 +815,7 @@ SELECT * FROM "t/#"
 1). Redis 的命令:
 
 ```bash
-HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} retain ${retain} ts ${timestamp}
+HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} ts ${timestamp}
 ```
 
 2). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
@@ -853,10 +846,8 @@ HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payloa
 
 ```bash
 Topic: "t/1"
-   
-QoS: 0
 
-Retained: false
+QoS: 0
 
 Payload: "hello"
 ```
@@ -948,13 +939,11 @@ FROM
 ![image](./assets/rule-engine/opentsdb-rulesql-1@2x.png)
 
 规则已经创建完成，现在发一条消息:
-   
+
 ```bash
 Topic: "t/1"
-   
-QoS: 0
 
-Retained: false
+QoS: 0
 
 Payload: "{"metric":"cpu","tags":{"host":"serverA"},"value":12}"
 ```
@@ -1134,13 +1123,11 @@ insert into conditions(time, location, temperature, humidity) values (NOW(), ${l
 ![image](./assets/rule-engine/timescaledb-rulesql-1@2x.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/1"
-   
-QoS: 0
 
-Retained: false
+QoS: 0
 
 Payload: "{"temp":24,"humidity":30,"location":"hangzhou"}"
 ```
@@ -1251,13 +1238,11 @@ FROM
 ![image](./assets/rule-engine/influxdb-rulesql-1@2x.png)
 
 规则已经创建完成，现在发一条消息:
-   
+
 ```bash
 Topic: "t/1"
-   
-QoS: 0
 
-Retained: false
+QoS: 0
 
 Payload:
 "{"host":"serverA","location":"roomA","internal":25,"external":37}"
@@ -1364,8 +1349,6 @@ Topic: "t/1"
 
 QoS: 0
 
-Retained: false
-
 Payload: "hello"
 ```
 
@@ -1452,12 +1435,10 @@ SELECT * FROM "t/#"
 
 规则已经创建完成，现在发一条数据:
 
-```bash   
+```bash
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "hello"
 ```
@@ -1548,8 +1529,6 @@ Topic: "t/1"
 
 QoS: 0
 
-Retained: false
-
 Payload: "hello"
 ```
 
@@ -1628,13 +1607,11 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rabbit-rulesql-1.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/1"
-   
-QoS: 0
 
-Retained: false
+QoS: 0
 
 Payload: "Hello, World\!"
 ```
@@ -1735,12 +1712,10 @@ SELECT * FROM "t/#"
 
 规则已经创建完成，现在发一条数据:
 
-```bash 
+```bash
 Topic: "t/1"
 
 QoS: 0
-
-Retained: false
 
 Payload: "Hello, World\!"
 ```
