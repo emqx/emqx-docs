@@ -26,7 +26,6 @@ EMQ X Broker 中仅适用以下操作：
 - 检查 (调试)
 - 发送数据到 Web 服务
 - 桥接数据到 MQTT Broker
-
 其余均是 EMQ X Enterprise 专属功能。
 {% endhint %}
 </div>
@@ -197,7 +196,7 @@ $ mosquitto
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/mqtt-rulesql-0.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -213,11 +212,7 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/mqtt-action-1.png)
 
-选择 MQTT Bridge 资源。
-
-![image](./assets/rule-engine/mqtt-resource-0.png)
-
-填写资源配置:
+选择 MQTT Bridge 资源,填写资源配置:
 
    填写真实的 mosquitto 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
@@ -300,10 +295,10 @@ INDEX topic_index(`id`, `topic`)
 选择触发事件 “消息发布”，然后填写规则 SQL:
 
 ```sql
-SELECT * FROM "#"
+SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/rule_sql_1@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -326,15 +321,11 @@ insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${top
 
 2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 MySQL 资源:
 
-![image](./assets/rule-engine/rule_action_3@2x.png)
-
-选择 “MySQL 资源”。
-
 填写资源配置:
 
-数据库名填写 “test”，用户名填写 “root”，密码填写 “publish”，备注为 “MySQL resource to 127.0.0.1:3306 db=test”
+数据库名填写 “mqtt”，用户名填写 “root”，密码填写 “123456”
 
-![image](./assets/rule-engine/rule_resource_1@2x.png)
+![image](./assets/rule-engine/rule_action_3@2x.png)
 
 点击 “新建” 按钮。
 
@@ -342,7 +333,7 @@ insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${top
 
 ![image](./assets/rule-engine/rule_action_4@2x.png)
 
-返回规则创建界面，点击 “新建”。
+返回规则创建界面，点击 “创建”。
 
 ![image](./assets/rule-engine/rule_overview_1@2x.png)
 
@@ -412,10 +403,10 @@ CREATE TABLE t_mqtt_msg (
 选择触发事件 “消息发布”，然后填写规则 SQL:
 
 ```bash
-SELECT * FROM "#"
+SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/pgsql-rulesql-1@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -427,18 +418,7 @@ SELECT * FROM "#"
 
 “保存数据到 PostgreSQL” 动作需要两个参数：
 
-1). SQL 模板。这个例子里我们向 PostgreSQL 插入一条数据，SQL
-​    模板为:
-
-```bash
-insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
-```
-
-插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
-
-![image](./assets/rule-engine/pgsql-action-1@2x.png)
-
-2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 PostgreSQL 资源:
+1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 PostgreSQL 资源:
 
 ![image](./assets/rule-engine/pgsql-resource-0@2x.png)
 
@@ -454,9 +434,18 @@ insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${top
 
 返回响应动作界面，点击 “确认”。
 
+2).SQL 模板。这个例子里我们向 PostgreSQL 插入一条数据，SQL
+​    模板为:
+
+```bash
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
+```
+
+插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
+
 ![image](./assets/rule-engine/pgsql-action-2@2x.png)
 
-返回规则创建界面，点击 “新建”。
+返回规则创建界面，点击 “创建”。
 
 ![image](./assets/rule-engine/pgsql-rulesql-2@2x.png)
 
@@ -528,10 +517,10 @@ CREATE TABLE t_mqtt_msg (
 
 选择触发事件 “消息发布”，然后填写规则 SQL:
 ```bash
-SELECT * FROM "#"
+SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/pgsql-rulesql-1@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -543,16 +532,9 @@ SELECT * FROM "#"
 
 “保存数据到 Cassandra” 动作需要两个参数：
 
-1). SQL 模板。这个例子里我们向 Cassandra 插入一条数据，SQL
-​    模板为:
+1). 关联资源的 ID。初始状况下，资源下拉框为空，现点击右上角的 “新建资源” 来创建一个 Cassandra 资源。
 
-```sql
-insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
-```
-
-插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
-
-2). 关联资源的 ID。初始状况下，资源下拉框为空，现点击右上角的 “新建资源” 来创建一个 Cassandra 资源。
+![image](./assets/rule-engine/cass-resoure-0.png)
 
 填写资源配置:
 
@@ -563,7 +545,18 @@ Keysapce 填写 “test”，用户名填写 “root”，密码填写 “public
 
 点击 “新建” 按钮，完成资源的创建。
 
-自动返回响应动作界面，点击 “确认” 完成响应动作的创建；自动返回规则创建页面，在点击 “新建” 完成规则创建
+2). SQL 模板。这个例子里我们向 Cassandra 插入一条数据，SQL
+​    模板为:
+
+```sql
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
+```
+
+插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
+
+![image](./assets/rule-engine/cass-resoure-2.png)
+
+在点击 “新建” 完成规则创建
 
 ![image](./assets/rule-engine/cass-rule-overview.png)
 
@@ -578,6 +571,14 @@ Payload: "hello"
 然后检查 Cassandra 表，可以看到该消息已成功保存:
 
 ![image](./assets/rule-engine/cass-rule-result@2x.png)
+
+在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
+
+![image](./assets/rule-engine/cass-rule-result@3x.png)
+
+
+
+
 
 ## 保存数据到 MongoDB
 
@@ -614,10 +615,10 @@ db.createCollection("t_mqtt_msg");
 选择触发事件 “消息发布”，然后填写规则 SQL:
 
 ```bash
-SELECT * FROM "#"
+SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/pgsql-rulesql-1@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -629,18 +630,9 @@ SELECT * FROM "#"
 
 “保存数据到 MongoDB” 动作需要三个参数：
 
-1). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t\_mqtt\_msg”
+1). 关联资源的 ID。初始状况下，资源下拉框为空，现点击右上角的 “新建资源” 来创建一个 MongoDB 单节点 资源。
 
-2). Selector 模板。这个例子里我们向 MongoDB 插入一条数据，Selector
-​    模板为:
-
-```bash
-msgid=${id},topic=${topic},qos=${qos},payload=${payload},arrived=${timestamp}
-```
-
-插入数据之前，Selector 模板里的 ${key} 占位符会被替换为相应的值。
-
-3). 关联资源的 ID。初始状况下，资源下拉框为空，现点击右上角的 “新建资源” 来创建一个 MongoDB 单节点 资源。
+![image](./assets/rule-engine/mongo-resoure-0.png)
 
 填写资源配置:
 
@@ -651,7 +643,20 @@ msgid=${id},topic=${topic},qos=${qos},payload=${payload},arrived=${timestamp}
 
 点击 “新建” 按钮，完成资源的创建。
 
-自动返回响应动作界面，点击 “确认” 完成响应动作的创建；自动返回规则创建页面，在点击 “新建” 完成规则创建
+2). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t_mqtt\_msg”
+
+3). Selector 模板。这个例子里我们向 MongoDB 插入一条数据，Selector
+​    模板为:
+
+```bash
+msgid=${id},topic=${topic},qos=${qos},payload=${payload},arrived=${timestamp}
+```
+
+插入数据之前，Selector 模板里的 ${key} 占位符会被替换为相应的值。
+
+![](./assets/rule-engine/mongo-rule-overview1.png)
+
+在点击 “新建” 完成规则创建
 
 ![image](./assets/rule-engine/mongo-rule-overview.png)
 
@@ -666,6 +671,14 @@ Payload: "hello"
 然后检查 MongoDB 表，可以看到该消息已成功保存:
 
 ![image](./assets/rule-engine/mongo-rule-result@2x.png)
+
+在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
+
+![image](./assets/rule-engine/mongo-rule-result@3x.png)
+
+
+
+
 
 ## 保存数据到 DynamoDB
 
@@ -709,7 +722,7 @@ $ aws dynamodb create-table --cli-input-json file://mqtt_msg.json --endpoint-url
 选择触发事件 “消息发布”，然后填写规则 SQL:
 
 ```sql
-SELECT msgid as id, topic, payload FROM "#"
+SELECT id, topic, payload FROM "#"
 ```
 
 ![image](./assets/rule-engine/dynamo-rulesql-0.png)
@@ -734,19 +747,7 @@ SELECT msgid as id, topic, payload FROM "#"
 
 4). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 DynamoDB 资源:
 
-![image](./assets/rule-engine/dynamo-resource-0.png)
-
-选择 “DynamoDB 资源”。
-
 填写资源配置:
-
-区域名填写“us-west-2”
-
-服务器地址填写“<http://localhost:8000>”
-
-连接访问ID填写“AKIAU5IM2XOC7AQWG7HK”
-
-连接访问密钥填写“TZt7XoRi+vtCJYQ9YsAinh19jR1rngm/hxZMWR2P”
 
 ![image](./assets/rule-engine/dynamo-resource-1.png)
 
@@ -800,7 +801,7 @@ $ redis-server
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/redis-rulesql-0@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -812,19 +813,11 @@ SELECT * FROM "t/#"
 
 “保存数据到 Redis 动作需要两个参数：
 
-1). Redis 的命令:
-
-```bash
-HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} ts ${timestamp}
-```
-
-2). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
+1). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
 
 ![image](./assets/rule-engine/redis-resource-0@2x.png)
 
 选择 Redis 单节点模式资源”。
-
-![image](./assets/rule-engine/redis-resource-1@2x.png)
 
 填写资源配置:
 
@@ -835,6 +828,12 @@ HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payloa
 ![image](./assets/rule-engine/redis-resource-2@2x.png)
 
 返回响应动作界面，点击 “确认”。
+
+2). Redis 的命令:
+
+```bash
+HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} ts ${timestamp}
+```
 
 ![image](./assets/rule-engine/redis-action-1@2x.png)
 
@@ -867,6 +866,103 @@ hgetall Key
 在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
 
 ![image](./assets/rule-engine/redis-rulelist-0@2x.png)
+
+## 保存数据到 ClickHouse
+
+搭建 ClickHouse 数据库，并设置用户名密码为 default/public，以 CentOS 为例:
+
+```bash
+## 安装依赖
+sudo yum install -y epel-release
+
+## 下载并运行packagecloud.io提供的安装shell脚本
+curl -s https://packagecloud.io/install/repositories/altinity/clickhouse/script.rpm.sh | sudo bash
+
+## 安装ClickHouse服务器和客户端
+sudo yum install -y clickhouse-server clickhouse-client
+
+## 启动ClickHouse服务器
+clickhouse-server
+
+## 启动ClickHouse客户端程序
+clickhouse-client
+```
+
+创建 “test” 数据库:
+```bash
+create database test;
+```
+创建 t_mqtt_msg 表:
+
+```sql
+use test;
+create table t_mqtt_msg (msgid Nullable(String), topic Nullable(String), clientid Nullable(String), payload Nullable(String)) engine = Log;
+```
+
+![](./assets/rule-engine/clickhouse_0.png)
+
+创建规则:
+
+打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+
+选择触发事件 “消息发布”，然后填写规则 SQL:
+
+```sql
+SELECT * FROM "#"
+```
+
+![image](./assets/rule-engine/clickhouse_1.png)
+
+关联动作:
+
+在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 ClickHouse”。
+
+![image](./assets/rule-engine/clickhouse_2.png)
+
+填写动作参数:
+
+“保存数据到 ClickHouse” 动作需要两个参数：
+
+1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 ClickHouse 资源:
+
+![image](./assets/rule-engine/clickhouse_3.png)
+
+选择 “ClickHouse 资源”。
+
+填写资源配置:
+
+![image](./assets/rule-engine/clickhouse_4.png)
+
+点击 “新建” 按钮。
+
+2). SQL 模板。这个例子里我们向 ClickHouse 插入一条数据，SQL
+​    模板为:
+
+```sql
+insert into test.t_mqtt_msg(msgid, clientid, topic, payload) values ('${id}', '${clientid}', '${topic}', '${payload}')
+```
+
+![image](./assets/rule-engine/clickhouse_5.png)
+
+返回响应动作界面，点击 “确认”。
+
+![image](./assets/rule-engine/clickhouse_6.png)
+
+在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
+
+![image](./assets/rule-engine/clickhouse_7.png)
+
+规则已经创建完成，现在发一条数据:
+
+```bash
+Topic: "t/a"
+QoS: 1
+Payload: "hello"
+```
+
+然后检查 ClickHouse 表，新的 record 是否添加成功:
+
+![image](./assets/rule-engine/clickhouse_8.png)
 
 
 ## 保存数据到 OpenTSDB
@@ -920,8 +1016,6 @@ FROM
 ![image](./assets/rule-engine/opentsdb-action-1@2x.png)
 
 选择 “OpenTSDB 资源”:
-
-![image](./assets/rule-engine/opentsdb-resource-0@2x.png)
 
 填写资源配置:
 
@@ -1267,105 +1361,6 @@ time                external host    internal location
 
 ![image](./assets/rule-engine/influxdb-rulelist-0@2x.png)
 
-
-## 保存数据到 ClickHouse
-
-搭建 ClickHouse 数据库，并设置用户名密码为 default/public，以 CentOS 为例:
-
-```bash
-## 安装依赖
-sudo yum install -y epel-release
-
-## 下载并运行packagecloud.io提供的安装shell脚本
-curl -s https://packagecloud.io/install/repositories/altinity/clickhouse/script.rpm.sh | sudo bash
-
-## 安装ClickHouse服务器和客户端
-sudo yum install -y clickhouse-server clickhouse-client
-
-## 启动ClickHouse服务器
-clickhouse-server
-
-## 启动ClickHouse客户端程序
-clickhouse-client
-```
-
-创建 “test” 数据库:
-```bash
-create database test;
-```
-创建 t_mqtt_msg 表:
-
-```sql
-use test;
-create table t_mqtt_msg (msgid Nullable(String), topic Nullable(String), clientid Nullable(String), payload Nullable(String)) engine = Log;
-```
-
-![](./assets/rule-engine/clickhouse_0.png)
-
-创建规则:
-
-打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
-
-选择触发事件 “消息发布”，然后填写规则 SQL:
-
-```sql
-SELECT * FROM "#"
-```
-
-![image](./assets/rule-engine/clickhouse_1.png)
-
-关联动作:
-
-在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 ClickHouse”。
-
-![image](./assets/rule-engine/clickhouse_2.png)
-
-填写动作参数:
-
-“保存数据到 ClickHouse” 动作需要两个参数：
-
-1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 ClickHouse 资源:
-
-![image](./assets/rule-engine/clickhouse_3.png)
-
-选择 “ClickHouse 资源”。
-
-填写资源配置:
-
-![image](./assets/rule-engine/clickhouse_4.png)
-
-点击 “新建” 按钮。
-
-2). SQL 模板。这个例子里我们向 ClickHouse 插入一条数据，SQL
-​    模板为:
-
-```sql
-insert into test.t_mqtt_msg(msgid, clientid, topic, payload) values ('${id}', '${clientid}', '${topic}', '${payload}')
-```
-
-![image](./assets/rule-engine/clickhouse_5.png)
-
-返回响应动作界面，点击 “确认”。
-
-![image](./assets/rule-engine/clickhouse_6.png)
-
-在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
-
-![image](./assets/rule-engine/clickhouse_7.png)
-
-规则已经创建完成，现在发一条数据:
-
-```bash
-Topic: "t/a"
-QoS: 1
-Payload: "hello"
-```
-
-然后检查 ClickHouse 表，新的 record 是否添加成功:
-
-![image](./assets/rule-engine/clickhouse_8.png)
-
-
 ## 桥接数据到 Kafka
 
 搭建 Kafka 环境，以 MaxOS X 为例:
@@ -1403,7 +1398,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/kafka-rulesql-0@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -1422,8 +1417,6 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/kafka-resource-0@2x.png)
 
 选择 Kafka 资源”。
-
-![image](./assets/rule-engine/kafka-resource-1@2x.png)
 
 填写资源配置:
 
@@ -1494,7 +1487,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/pulsar-rulesql-0@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -1513,8 +1506,6 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/pulsar-resource-0@2x.png)
 
 选择 Pulsar 资源”。
-
-![image](./assets/rule-engine/pulsar-resource-1@2x.png)
 
 填写资源配置:
 
@@ -1587,7 +1578,7 @@ $ ./bin/mqbroker -n localhost:9876 -c conf/broker.conf
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/rocket-rulesql-0@2x.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -1663,7 +1654,7 @@ $ rabbitmq-server
 SELECT * FROM "t/#"
 ```
 
-![image](./assets/rule-engine/rabbit-rulesql-0.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -1686,8 +1677,6 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rabbit-action-1.png)
 
 选择 RabbitMQ 资源。
-
-![image](./assets/rule-engine/rabbit-resource-0.png)
 
 填写资源配置:
 
@@ -1773,7 +1762,7 @@ $ emqx console
 ```sql
 SELECT * FROM "t/#"
 ```
-![image](./assets/rule-engine/rpc-rulesql-0.png)
+![image](./assets/rule-engine/rule_sql.png)
 
 关联动作:
 
@@ -1790,8 +1779,6 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rpc-action-1.png)
 
 选择 RPC Bridge 资源。
-
-![image](./assets/rule-engine/rpc-resource-0.png)
 
 填写资源配置:
 
@@ -2002,4 +1989,3 @@ HSET mqtt:sub:test t1 1
 查看订阅列表，可以看到 **test** 设备已经订阅了 **t1** 主题:
 
 ![](./assets/rule-engine/redis_sub_10.png)
-
