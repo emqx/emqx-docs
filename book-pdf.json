@@ -1,0 +1,74 @@
+{
+  "plugins": [
+    "-highlight",
+    "prism",
+    "hints",
+    "simpletabs",
+    "-cuav-chapters",
+    "edit-link",
+    "gittalk",
+    "scripts",
+    "-anchors",
+    "-anchor-navigation-ex",
+    "emqx",
+    "-lunr",
+    "-search",
+    "search-pro"
+  ],
+  "pluginsConfig": {
+    "anchor-navigation-ex": {
+      "showLevel": false,
+      "multipleH1": false,
+      "mode": "float"
+    },
+    "styles": {
+      "website": "styles/website.css",
+      "ebook": "styles/ebook.css",
+      "pdf": "styles/pdf.css",
+      "mobi": "styles/mobi.css",
+      "epub": "styles/epub.css"
+    },
+    "scripts": {
+      "files": [
+        "./_js/emqx-docs.js"
+      ]
+    },
+    "gittalk": {
+      "clientID": "3b2217a86bdbdc09d0d8",
+      "clientSecret": "aee2b15ea39c494eb80b775513d38791895adb63",
+      "repo": "docs-gitalk",
+      "owner": "emqx",
+      "admin": [
+        "wivwiv"
+      ],
+      "distractionFreeMode": false
+    },
+    "github": {
+      "url": "https://github.com/emqx/emqx"
+    },
+    "edit-link": {
+      "base": "https://github.com/emqx/emqx-docs-cn/source",
+      "label": "编辑"
+    },
+    "local-pagefooter": {
+      "copyright": "© Copyright 2016-2020, EMQ Technologies Co., Ltd.",
+      "islocal": true,
+      "modify_label": "The document reversion time: ",
+      "modify_format": "YYYY-MM-DD HH:mm:ss"
+    }
+  },
+  "title": "EMQ X 使用文档",
+  "description": "EMQ X 百万级 MQTT 消息服务器使用文档",
+  "author": "EMQX Team",
+  "language": "zh-hans",
+  "structure": {
+    "readme": "introduction.md"
+  },
+  "redirects": {},
+  "links": {
+    "sharing": {
+      "facebook": false,
+      "twitter": "emqtt"
+    }
+  }
+}

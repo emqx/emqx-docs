@@ -53,7 +53,7 @@
   line-height: 16px !important;
   background: rgba(174, 185, 208, .2);
   border-radius: 13px !important;
-  color: #34c388 !important;
+  /* color: #34c388 !important; */
   border: none !important;
   min-width: 100px;
   text-align: center;
@@ -62,14 +62,14 @@
 .nav-tabs li a:hover {
   border: none;
   color: #fff !important;
-  background-color: #34c388;
+  /* background-color: #34c388; */
 }
 
 .nav-tabs li.active a, .nav-tabs li.active a:hover, .nav-tabs li.active a:focus {
   border-radius: 4px;
-  background-color: #34c388;
+  /* background-color: #34c388; */
   border: none !important;
-  color: #fff !important;
+  /* color: #fff !important; */
 }
 
 .page-footer {

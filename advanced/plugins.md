@@ -55,9 +55,6 @@ EMQ X 发行包中，包含了大量的官方插件，提供了一些基础的�
 | [emqx_recon](https://github.com/emqx/emqx-recon)                     | etc/plugins/emqx_recon.conf           | Recon 性能调试            |
 | [emqx_reloader](https://github.com/emqx/emqx-reloader)               | etc/plugins/emqx_reloader.conf        | 代码热加载插件            |
 | [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) | etc/plugins/emqx_plugin_template.conf | 插件开发模版              |
-| [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) | etc/plugins/emqx_plugin_template.conf | 插件开发模版              |
-| [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) | etc/plugins/emqx_plugin_template.conf | 插件开发模版              |
-| [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) | etc/plugins/emqx_plugin_template.conf | 插件开发模版              |
 
 ## 启停插件
 

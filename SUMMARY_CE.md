@@ -23,12 +23,13 @@
   * [WebHook](advanced/webhook.md)
   * [分布集群](advanced/cluster.md)
   * [钩子](advanced/hooks.md)
-  * [插件](advanced/plugins.md)
   * [多语言支持](advanced/multiple-language-support.md)
   * [指标监控](advanced/metrics-and-stats.md)
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
+
+* [插件](advanced/plugins.md)
 
 * 认证
   * [认证简介](advanced/auth.md)
@@ -53,8 +54,8 @@
   * [Redis ACL](advanced/acl-redis.md)
   * [MongoDB ACL](advanced/acl-mongodb.md)
 
-* 管理监控 API
-  * [管理监控 API](advanced/http-api.md)
+* HTTP API
+  * [HTTP API](advanced/http-api.md)
   * [基本信息](advanced/http-api.md#endpoint-brokers)
   * [节点](advanced/http-api.md#endpoint-nodes)
   * [客户端](advanced/http-api.md#endpoint-clients)
@@ -123,6 +124,13 @@
 
 * [配置项](configuration/configuration.md)
 * [命令行接口](advanced/cli.md)
+
+* 协议介绍
+  * [MQTT 协议](development/protocol.md)
+  * [MQTT-SN 协议](development/protocol.md#mqtt-sn-协议)
+  * [LwM2M 协议](development/protocol.md#lwm2m-协议)
+  * [私有 TCP 协议](development/protocol.md#私有-tcp-协议)
+
 
 * SDK & Tools
   * [MQTT 客户端库](development/client.md)
