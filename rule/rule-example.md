@@ -1198,8 +1198,6 @@ insert into conditions(time, location, temperature, humidity) values (NOW(), ${l
 
 选择 “TimescaleDB 资源”。
 
-![image](./assets/rule-engine/timescaledb-resource-1@2x.png)
-
 填写资源配置:
 
 数据库名填写 “tutorial”，用户名填写 “postgres”，密码填写 “password”，其他配置保持默认值，然后点击
