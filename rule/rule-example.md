@@ -10,7 +10,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -112,16 +112,16 @@ $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; d
 ```
 
 使用 WebHook 类型创建一个资源，并配置资源参数 url:
-   
+
 1). 列出当前所有可用的资源类型，确保 'web\_hook' 资源类型已存在:
 ```bash
 $ ./bin/emqx_ctl resource-types list
 resource_type(name='web_hook', provider='emqx_web_hook', params=#{...}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
 ...
 ```
-   
+
 2). 使用类型 'web\_hook' 创建一个新的资源，并配置 "url"="<http://127.0.0.1:9910>":
-   
+
 ```bash
 $ ./bin/emqx_ctl resources create \
     'web_hook' \
@@ -134,7 +134,7 @@ Resource resource:691c29ba create
 Web 服务，方法为 POST，并且设置了一个 HTTP Header: "token"。
 
 然后创建规则，并选择规则的动作为 'data\_to\_webserver':
-   
+
 1). 列出当前所有可用的动作，确保 'data\_to\_webserver' 动作已存在:
 
 ```bash
@@ -162,7 +162,7 @@ rule:26d84768
 
 现在我们使用 username "Steven" 发送 "hello" 到任意主题，上面创建的规则就会被触发，Web Server收到消息并回复 200 OK:
 
-```bash   
+```bash
 $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
 
 POST / HTTP/1.1
@@ -218,7 +218,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/mqtt-resource-0.png)
 
 填写资源配置:
-   
+
    填写真实的 mosquitto 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -257,7 +257,7 @@ Payload: "Hello, World\!"
 
 ```bash
 $ brew install mysql
-       
+
 $ brew services start mysql
 
 $ mysql -u root -h localhost -p
@@ -494,7 +494,7 @@ $ brew services start cassandra
 $ cqlsh -ucassandra -pcassandra
 
 create user root with password 'public' superuser;
-```    
+```
 
 初始化 Cassandra 表:
 
@@ -761,7 +761,7 @@ SELECT msgid as id, topic, payload FROM "#"
 ![image](./assets/rule-engine/dynamo-rulesql-1.png)
 
 规则已经创建完成，现在发一条数据:
-   
+
 ```bash
 Topic: "t/a"
 QoS: 1
@@ -827,7 +827,7 @@ HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payloa
 ![image](./assets/rule-engine/redis-resource-1@2x.png)
 
 填写资源配置:
-   
+
    填写真实的 Redis 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1026,7 +1026,7 @@ Postman-Token: 69af0565-27f8-41e5-b0cd-d7c7f5b7a037
 
 搭建 TimescaleDB 数据库环境，以 MaxOS X 为例:
 
-```bash   
+```bash
 $ docker pull timescale/timescaledb
 
 $ docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg11
@@ -1042,7 +1042,7 @@ CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
 ```
 
 初始化 TimescaleDB 表:
-   
+
 ```bash
 $ docker exec -it timescaledb psql -U postgres -d tutorial
 ```
@@ -1149,7 +1149,7 @@ tutorial=# SELECT * FROM conditions LIMIT 100;
 
 搭建 InfluxDB 数据库环境，以 macOS X 为例:
 
-```bash   
+```bash
 $ docker pull influxdb
 
 $ docker run --name=influxdb --rm -d -p 8086:8086 -p 8089:8089/udp -v ${PWD}/files/influxdb.conf:/etc/influxdb/influxdb.conf influxdb:latest
@@ -1168,7 +1168,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
   # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
   # EMQ X 默认时间戳是毫秒
   precision = "ms"
-  
+
   # 其他配置根据需要自行修改
   #   batch-size = 1000
   #   batch-pending = 5
@@ -1267,12 +1267,110 @@ time                external host    internal location
 ![image](./assets/rule-engine/influxdb-rulelist-0@2x.png)
 
 
+## 保存数据到 ClickHouse
+
+搭建 ClickHouse 数据库，并设置用户名密码为 default/public，以 CentOS 为例:
+
+```bash
+## 安装依赖
+sudo yum install -y epel-release
+
+## 下载并运行packagecloud.io提供的安装shell脚本
+curl -s https://packagecloud.io/install/repositories/altinity/clickhouse/script.rpm.sh | sudo bash
+
+## 安装ClickHouse服务器和客户端
+sudo yum install -y clickhouse-server clickhouse-client
+
+## 启动ClickHouse服务器
+clickhouse-server
+
+## 启动ClickHouse客户端程序
+clickhouse-client
+```
+
+创建 “test” 数据库:
+```bash
+create database test;
+```
+创建 t_mqtt_msg 表:
+
+```sql
+use test;
+create table t_mqtt_msg (msgid Nullable(String), topic Nullable(String), clientid Nullable(String), payload Nullable(String)) engine = Log;
+```
+
+![](./assets/rule-engine/clickhouse_0.png)
+
+创建规则:
+
+打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+
+选择触发事件 “消息发布”，然后填写规则 SQL:
+
+```sql
+SELECT * FROM "#"
+```
+
+![image](./assets/rule-engine/clickhouse_1.png)
+
+关联动作:
+
+在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 ClickHouse”。
+
+![image](./assets/rule-engine/clickhouse_2.png)
+
+填写动作参数:
+
+“保存数据到 ClickHouse” 动作需要两个参数：
+
+1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 ClickHouse 资源:
+
+![image](./assets/rule-engine/clickhouse_3.png)
+
+选择 “ClickHouse 资源”。
+
+填写资源配置:
+
+![image](./assets/rule-engine/clickhouse_4.png)
+
+点击 “新建” 按钮。
+
+2). SQL 模板。这个例子里我们向 ClickHouse 插入一条数据，SQL
+​    模板为:
+
+```sql
+insert into test.t_mqtt_msg(msgid, clientid, topic, payload) values ('${id}', '${clientid}', '${topic}', '${payload}')
+```
+
+![image](./assets/rule-engine/clickhouse_5.png)
+
+返回响应动作界面，点击 “确认”。
+
+![image](./assets/rule-engine/clickhouse_6.png)
+
+在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
+
+![image](./assets/rule-engine/clickhouse_7.png)
+
+规则已经创建完成，现在发一条数据:
+
+```bash
+Topic: "t/a"
+QoS: 1
+Payload: "hello"
+```
+
+然后检查 ClickHouse 表，新的 record 是否添加成功:
+
+![image](./assets/rule-engine/clickhouse_8.png)
+
+
 ## 桥接数据到 Kafka
 
 搭建 Kafka 环境，以 MaxOS X 为例:
 ```bash
 $ wget http://apache.claz.org/kafka/2.3.0/kafka_2.12-2.3.0.tgz
-       
+
 $ tar -xzf  kafka_2.12-2.3.0.tgz
 
 $ cd kafka_2.12-2.3.0
@@ -1290,7 +1388,7 @@ $ ./bin/kafka-server-start.sh config/server.properties
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
 ```
 
-{% hint style="danger" %}       
+{% hint style="danger" %}
 创建 Kafka Rule 之前必须先在 Kafka 中创建好主题，否则创建 Kafka Rule 失败。
 {% endhint %}
 
@@ -1327,7 +1425,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/kafka-resource-1@2x.png)
 
 填写资源配置:
-   
+
 填写真实的 Kafka 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1367,10 +1465,10 @@ $ ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic tes
 ## 桥接数据到 Pulsar
 
 搭建 Pulsar 环境，以 MaxOS X 为例:
-   
+
 ```bash
 $ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
-       
+
 $ tar xvfz apache-pulsar-2.3.2-bin.tar.gz
 
 $ cd apache-pulsar-2.3.2
@@ -1381,7 +1479,7 @@ $ ./bin/pulsar standalone
 
 创建 Pulsar 的主题:
 
-```bash   
+```bash
 $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 ```
 
@@ -1418,7 +1516,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/pulsar-resource-1@2x.png)
 
 填写资源配置:
-   
+
    填写真实的 Pulsar 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1460,7 +1558,7 @@ $ ./bin/pulsar-client consume testTopic  -s "sub-name" -n 1000
 搭建 RocketMQ 环境，以 MaxOS X
        为例:
 
-```bash   
+```bash
 $ wget http://mirror.metrocast.net/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip
 
 $ unzip rocketmq-all-4.5.2-bin-release.zip
@@ -1507,7 +1605,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rocket-resource-0@2x.png)
 
 填写资源配置:
-   
+
    填写真实的 RocketMQ 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1591,7 +1689,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rabbit-resource-0.png)
 
 填写资源配置:
-   
+
    填写真实的 RabbitMQ 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
@@ -1659,7 +1757,7 @@ channel.start_consuming()
 
 ```bash
 $ brew tap emqx/emqx/emqx
-       
+
 $ brew install emqx
 
 # 启动 emqx
@@ -1695,7 +1793,7 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/rpc-resource-0.png)
 
 填写资源配置:
-   
+
    填写真实的 emqx 节点名，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
