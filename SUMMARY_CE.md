@@ -94,6 +94,8 @@
   * [桥接数据到 RocketMQ](rule/rule-example.md#桥接数据到-rocketmq)
   * [桥接数据到 RabbitMQ](rule/rule-example.md#桥接数据到-rabbitmq)
   * [桥接数据到 RPC 服务](rule/rule-example.md#桥接数据到-rpc-服务)
+  * [离线消息保存到 Redis](rule/rule-example.md#离线消息保存到-redis)
+  * [从 Redis 中获取订阅关系](rule/rule-example.md#从-redis-中获取订阅关系)
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
