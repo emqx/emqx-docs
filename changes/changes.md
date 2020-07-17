@@ -17,6 +17,76 @@ ref: undefined
 
 # 版本发布
 
+## 4.2-alpha.2 版本
+
+*发布日期: 2020-07-17*
+
+EMQ X 4.2-alpha.2 现已发布，主要包含以下改动:
+
+### emqx-statsd
+
+**功能增强:**
+
+- 更名为 `emqx-prometheus`
+
+  Github Repository: [emqx/emqx-prometheus](https://github.com/emqx/emqx-prometheus)
+
+### emqx-bridge-mqtt
+
+**功能增强:**
+
+- 支持在规则引擎中创建订阅资源
+
+  Github PR: [emqx/emqx-bridge-mqtt#78](https://github.com/emqx/emqx-bridge-mqtt/pull/78)
+
+### emqx-lwm2m
+
+**错误修复:**
+
+- 修复没有正确获取版本号的问题
+
+  Github PR: [emqx/emqx-lwm2m#82](https://github.com/emqx/emqx-lwm2m/pull/82)
+
+### emqx-retainer
+
+**功能增强:**
+
+- 增强性能
+
+  Github PR: [emqx/emqx-retainer#140](https://github.com/emqx/emqx-retainer/pull/140)
+
+### emqx-lua-hook
+
+**错误修复:**
+
+- 修复没有正确卸载 Lua 脚本和命令行接口的问题
+
+  Github PR: [emqx/emqx-lua-hook#105](https://github.com/emqx/emqx-lua-hook/pull/105)
+
+### emqx-web-hook
+
+**功能增强:**
+
+- 支持配置自定义的 HTTP 请求头部
+
+  Github PR: [emqx/emqx-web-hook#200](https://github.com/emqx/emqx-web-hook/pull/200)
+
+### emqx-auth-mysql
+
+**功能增强:**
+
+- 支持 IPv6
+
+  Github PR: [emqx/emqx-auth-mysql#228](https://github.com/emqx/emqx-auth-mysql/pull/228)
+
+### emqx-exproto
+
+**功能增强:**
+
+- 支持使用多种编程语言开发任何定制协议
+
+  Github Repository: [emqx/emqx-exproto](https://github.com/emqx/emqx-exproto)
+
 ## 4.1.1 版本
 
 *发布日期: 2020-07-03*
