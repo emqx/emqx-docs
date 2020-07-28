@@ -17,6 +17,32 @@ ref: undefined
 
 # 版本发布
 
+## 4.1.2 版本
+
+*发布日期: 2020-07-23*
+
+EMQ X 4.1.2 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复没有使用主题别名替代主题的问题
+
+  Github PR: [emqx/emqx#3616](https://github.com/emqx/emqx/pull/3616)
+
+- 修复某些操作占用过多 CPU 的问题
+
+  Github PR: [emqx/emqx#3581](https://github.com/emqx/emqx/pull/3581)
+
+### emqx-rel
+
+**错误修复:**
+
+- 修复以容器方式运行 emqx 时日志写满所有日志文件后控制台不再输出日志的问题
+
+  Github PR: [emqx/emqx-rel#559](https://github.com/emqx/emqx-rel/pull/559)
+
 ## 4.2-alpha.2 版本
 
 *发布日期: 2020-07-17*
