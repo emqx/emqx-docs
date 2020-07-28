@@ -645,14 +645,14 @@ SELECT * FROM "t/#"
 
 2). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t_mqtt\_msg”
 
-3). Selector 模板。这个例子里我们向 MongoDB 插入一条数据，Selector
+3). Payload Tmpl 模板。这个例子里我们向 MongoDB 插入一条数据，Selector
 ​    模板为:
 
 ```bash
-msgid=${id},topic=${topic},qos=${qos},payload=${payload},arrived=${timestamp}
+${payload}
 ```
 
-插入数据之前，Selector 模板里的 ${key} 占位符会被替换为相应的值。
+插入数据之前，Payload Tmpl 模板里的 ${payload} 占位符会被替换为相应的值。
 
 ![](./assets/rule-engine/mongo-rule-overview1.png)
 
