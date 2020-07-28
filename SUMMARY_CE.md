@@ -86,6 +86,7 @@
   * [保存数据到 MongoDB](rule/rule-example.md#保存数据到-mongodb)
   * [保存数据到 DynamoDB](rule/rule-example.md#保存数据到-dynamodb)
   * [保存数据到 Redis](rule/rule-example.md#保存数据到-redis)
+  * [保存数据到 ClickHouse](rule/rule-example.md#保存数据到-clickhouse)
   * [保存数据到 OpenTSDB](rule/rule-example.md#保存数据到-opentsdb)
   * [保存数据到 TimescaleDB](rule/rule-example.md#保存数据到-timescaledb)
   * [保存数据到 InfluxDB](rule/rule-example.md#保存数据到-influxdb)

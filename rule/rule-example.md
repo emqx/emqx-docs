@@ -1899,7 +1899,7 @@ hgetall Key
 
 ![](./assets/rule-engine/offline_msg_10.png)
 
-使用另外一个客户端，订阅主题 "t/1" **(订阅主题的QoS必须大于0，否则消息会被重复接收)**:
+使用另外一个客户端，订阅主题 "t/1" **(订阅主题的QoS必须大于0，否则消息会被重复接收, 不支持主题通配符方式订阅获取离线消息)**:
 
 ![](./assets/rule-engine/offline_msg_11.png)
 
