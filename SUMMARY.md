@@ -211,7 +211,10 @@
 * 版本发布
   * [变更日志](changes/changes.md)
   * [升级指南](changes/upgrade.md)
-  
+
+* 版更新
+  * [小版本热更新](advanced/relup.md)
+
 * 相关资料
   * [架构设计](design/design.md)
   * [资源](awesome/awesome.md)
