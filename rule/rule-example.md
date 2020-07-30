@@ -252,7 +252,7 @@ Payload: "Hello, World\!"
 
 [TDengine](https://github.com/taosdata/TDengine) 是[涛思数据](https://www.taosdata.com/cn/)推出的一款开源的专为物联网、车联网、工业互联网、IT 运维等设计和优化的大数据平台。除核心的快 10 倍以上的时序数据库功能外，还提供缓存、数据订阅、流式计算等功能，最大程度减少研发和运维的复杂度。
 
-EMQ X 支持通过 **发送到 Web 服务** 的方式保存数据到 TDEngine，也在企业版上提供原生的 TDEngine 启动实现直接保存。
+EMQ X 支持通过 **发送到 Web 服务** 的方式保存数据到 TDEngine，也在企业版上提供原生的 TDEngine 驱动实现直接保存。
 
 使用 Docker 安装 TDEngine 或在 [Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) 上部署：
 
@@ -305,7 +305,7 @@ SELECT * FROM "t/#"
 
 ### 通过发送数据到 Web 服务写入
 
-为支持各种不同类型平台的开发，TDengine 提供符合 REST 设计标准的 API。通过 [https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector](RESTful Connector) 提供了最简单的连接方式，即使用 HTTP 请求携带认证信息与要执行的 SQL 操作 TDEngine。
+为支持各种不同类型平台的开发，TDengine 提供符合 REST 设计标准的 API。通过 [RESTful Connector](https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector) 提供了最简单的连接方式，即使用 HTTP 请求携带认证信息与要执行的 SQL 操作 TDEngine。
 
 EMQ X 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
 
