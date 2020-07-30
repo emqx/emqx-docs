@@ -81,6 +81,7 @@
   * [空动作 (调试)](rule/rule-example.md#空动作-调试)
   * [发送数据到 Web 服务](rule/rule-example.md#发送数据到-web-服务)
   * [桥接数据到 MQTT Broker](rule/rule-example.md#桥接数据到-mqtt-broker)
+  * [保存数据到 TDEngine](rule/rule-example.md#保存数据到-tdengine)
   * [保存数据到 MySQL](rule/rule-example.md#保存数据到-mysql)
   * [保存数据到 PostgreSQL](rule/rule-example.md#保存数据到-postgresql)
   * [保存数据到 Cassandra](rule/rule-example.md#保存数据到-cassandra)

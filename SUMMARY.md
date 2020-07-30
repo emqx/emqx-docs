@@ -3,13 +3,13 @@
   * [EMQ X 消息服务器功能列表](introduction/checklist.md)
 
 * 开始使用
-  * [安装](getting-started/install-ee.md)
+  * [安装](getting-started/install.md)
   * [启动 EMQ X](getting-started/start.md)
   * [基本命令](getting-started/command-line.md)
   * [目录结构](getting-started/directory.md)
   * [配置说明](getting-started/config.md)
   * [日志与追踪](getting-started/log.md)
-  * [Dashboard](getting-started/dashboard-ee.md)
+  * [Dashboard](getting-started/dashboard.md)
 
 * 功能
   * [保留消息](advanced/retained.md)
@@ -77,16 +77,17 @@
 * 规则引擎
   * [规则引擎](rule/rule-engine.md)
   * [创建规则](rule/rule-create.md)
-  * [编解码](rule/schema-registry.md)
   * [空动作 (调试)](rule/rule-example.md#空动作-调试)
   * [发送数据到 Web 服务](rule/rule-example.md#发送数据到-web-服务)
   * [桥接数据到 MQTT Broker](rule/rule-example.md#桥接数据到-mqtt-broker)
+  * [保存数据到 TDEngine](rule/rule-example.md#保存数据到-TDEngine)
   * [保存数据到 MySQL](rule/rule-example.md#保存数据到-mysql)
   * [保存数据到 PostgreSQL](rule/rule-example.md#保存数据到-postgresql)
   * [保存数据到 Cassandra](rule/rule-example.md#保存数据到-cassandra)
   * [保存数据到 MongoDB](rule/rule-example.md#保存数据到-mongodb)
   * [保存数据到 DynamoDB](rule/rule-example.md#保存数据到-dynamodb)
   * [保存数据到 Redis](rule/rule-example.md#保存数据到-redis)
+  * [保存数据到 ClickHouse](rule/rule-example.md#保存数据到-clickhouse)
   * [保存数据到 OpenTSDB](rule/rule-example.md#保存数据到-opentsdb)
   * [保存数据到 TimescaleDB](rule/rule-example.md#保存数据到-timescaledb)
   * [保存数据到 InfluxDB](rule/rule-example.md#保存数据到-influxdb)
@@ -95,6 +96,8 @@
   * [桥接数据到 RocketMQ](rule/rule-example.md#桥接数据到-rocketmq)
   * [桥接数据到 RabbitMQ](rule/rule-example.md#桥接数据到-rabbitmq)
   * [桥接数据到 RPC 服务](rule/rule-example.md#桥接数据到-rpc-服务)
+  * [离线消息保存到 Redis](rule/rule-example.md#离线消息保存到-redis)
+  * [从 Redis 中获取订阅关系](rule/rule-example.md#从-redis-中获取订阅关系)
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
@@ -132,6 +135,7 @@
   * [LwM2M 协议](development/protocol.md#lwm2m-协议)
   * [私有 TCP 协议](development/protocol.md#私有-tcp-协议)
 
+
 * SDK & Tools
   * [MQTT 客户端库](development/client.md)
   * [MQTT C 客户端库](development/c.md)
@@ -151,10 +155,10 @@
   * [FAQ 标签](faq/tags.md)
 
 * 版本发布
-  * [变更日志](changes/changes-ee.md)
+  * [变更日志](changes/changes.md)
   * [升级指南](changes/upgrade.md)
-
+  
 * 相关资料
   * [架构设计](design/design.md)
-  <!-- * [相关资料](awesome/awesome.md) -->
+  * [资源](awesome/awesome.md)
 
