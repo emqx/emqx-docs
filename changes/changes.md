@@ -17,6 +17,78 @@ ref: undefined
 
 # 版本发布
 
+## 4.2-alpha.3 版本
+
+*发布日期: 2020-07-31*
+
+EMQ X 4.2-alpha.3 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 支持全局速率限制
+
+  Github PR: [emqx/emqx#3613](https://github.com/emqx/emqx/pull/3613)
+
+- 重新设计的告警
+
+  Github PR: [emqx/emqx#3632](https://github.com/emqx/emqx/pull/3632)
+
+**错误修复:**
+
+- 修复没有使用主题别名替代主题的问题
+
+  Github PR: [emqx/emqx#3617](https://github.com/emqx/emqx/pull/3617)
+
+### emqx-auth-ldap
+
+**功能增强:**
+
+- 支持 IPv6
+
+  Github PR: [emqx/emqx-auth-ldap#114](https://github.com/emqx/emqx-auth-ldap/pull/114)
+
+### emqx-retainer
+
+**错误修复:**
+
+- 修复订阅主题同时包含 '+' 和 '#' 不会下发保留消息的问题
+
+  Github PR: [emqx/emqx-retainer#147](https://github.com/emqx/emqx-retainer/pull/147)
+
+### emqx-management
+
+**功能增强:**
+
+- 重新设计的告警 API
+
+  Github PR: [emqx/emqx-management#244](https://github.com/emqx/emqx-management/pull/244)
+
+### emqx-dashboard
+
+**功能增强:**
+
+- 增加告警页面
+
+  Github PR: [emqx/emqx-dashboard#245](https://github.com/emqx/emqx-dashboard/pull/245)
+
+### emqx-extension-hook
+
+**功能增强:**
+
+- 不再支持 Python 2
+
+  Github PR: [emqx/emqx-extension-hook#11](https://github.com/emqx/emqx-extension-hook/pull/11)
+
+### emqx-exproto
+
+**功能增强:**
+
+- 支持 Java 驱动
+
+  Github PR: [emqx/emqx-exproto#5](https://github.com/emqx/emqx-exproto/pull/5)
+
 ## 4.1.2 版本
 
 *发布日期: 2020-07-23*
