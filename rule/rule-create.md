@@ -6,6 +6,10 @@
 
 0. 搭建 Web 服务，这里使用 `nc` 命令做一个简单的Web 服务:
 
+{% hint style="danger" %} 
+nc 命令在部分 Linux 操作系统上有问题，无法与 EMQ X 发起的 HTTP 请求连接握手成功，第 7 步可能无法正常进行。
+{% endhint %}
+
    ```bash
    $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 8081; done;
    ```
