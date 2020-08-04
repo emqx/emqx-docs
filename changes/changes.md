@@ -17,6 +17,28 @@ ref: undefined
 
 # 版本发布
 
+## 4.1.3 版本
+
+*发布日期: 2020-08-04*
+
+EMQ X 4.1.3 现已发布，主要包含以下改动:
+
+### emqx-management
+
+**错误修复:**
+
+- 为 PUBLISH API 的 payload 字段增加类型检查
+
+  Github PR: [emqx/emqx-management#250](https://github.com/emqx/emqx-management/pull/250)
+
+### emqx-retainer
+
+**错误修复:**
+
+- 修复订阅主题同时包含 '+' 和 '#' 不会下发保留消息的问题
+
+  Github PR: [emqx/emqx-retainer#146](https://github.com/emqx/emqx-retainer/pull/146)
+
 ## 4.2-alpha.3 版本
 
 *发布日期: 2020-07-31*
