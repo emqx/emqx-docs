@@ -347,7 +347,11 @@ cluster.autoclean = 5m
 
 ## 防火墙设置 {#emqx-cluster-behind-firewall}
 
-如果集群节点间存在防火墙，防火墙需要开启 4369 端口和一个 TCP 端口段。4369 由 epmd 端口映射服务使用，TCP
+若预先设置了环境变量 WITH_EPMD=1, 启动 emqx 时会使用启动 epmd (监听端口 4369) 做节点发现。称为 `epmd 模式`。
+若环境变量 WITH_EPMD 没有设置，则启动 emqx 时不启用 epmd，而使用 emqx ekka 的节点发现，这也是 4.0 之后的默认节点发现方式。称为 `ekka 模式`。
+
+**epmd 模式：**
+如果集群节点间存在防火墙，防火墙需要开启 TCP 4369 端口和一个 TCP 端口段。4369 由 epmd 端口映射服务使用，TCP
 端口段用于节点间建立连接与通信。
 
 防火墙设置后，需要在 `emqx/etc/emqx.conf` 中配置相同的端口段:
@@ -357,3 +361,17 @@ cluster.autoclean = 5m
 node.dist_listen_min = 6369
 node.dist_listen_max = 7369
 ```
+
+**ekka 模式（4.0 版本之后的默认模式）：**
+
+如果集群节点间存在防火墙，默认情况下，只需要开启 TCP 4370 端口。
+
+但如果 node.name 配置制定的节点名字里，带有数字后缀(Offset)，则需要开启 4370 + Offset 端口。
+
+比如：
+
+```
+node.name = emqx-1@192.168.0.12
+```
+
+则需要开启 4371 端口。
