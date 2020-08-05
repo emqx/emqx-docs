@@ -619,10 +619,10 @@ db.createCollection("t_mqtt_msg");
 选择触发事件 “消息发布”，然后填写规则 SQL:
 
 ```bash
-SELECT * FROM "t/#"
+SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/#"
 ```
 
-![image](./assets/rule-engine/rule_sql.png)
+![image](./assets/rule-engine/mongodb_data_to_store1.png)
 
 关联动作:
 
@@ -636,7 +636,7 @@ SELECT * FROM "t/#"
 
 1). 关联资源的 ID。初始状况下，资源下拉框为空，现点击右上角的 “新建资源” 来创建一个 MongoDB 单节点 资源。
 
-![image](./assets/rule-engine/mongo-resoure-0.png)
+![image](./assets/rule-engine/mongodb_data_to_store2.png)
 
 填写资源配置:
 
@@ -649,20 +649,14 @@ SELECT * FROM "t/#"
 
 2). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t_mqtt\_msg”
 
-3). Payload Tmpl 模板。这个例子里我们向 MongoDB 插入一条数据，Selector
-​    模板为:
+3). Payload Tmpl 模板。这个例子里我们向 MongoDB 插入一条数据，模板为空, 插入的数据是上面SQL语句select出来的结果用json格式写入到MongoDB中
 
-```bash
-${payload}
-```
 
-插入数据之前，Payload Tmpl 模板里的 ${payload} 占位符会被替换为相应的值。
-
-![](./assets/rule-engine/mongo-rule-overview1.png)
+![](./assets/rule-engine/mongodb_data_to_store3.png)
 
 在点击 “新建” 完成规则创建
 
-![image](./assets/rule-engine/mongo-rule-overview.png)
+![image](./assets/rule-engine/mongodb_data_to_store4.png)
 
 现在发送一条数据，测试该规则:
 
