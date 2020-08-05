@@ -98,7 +98,17 @@
   * [桥接数据到 RabbitMQ](rule/rule-example.md#桥接数据到-rabbitmq)
   * [桥接数据到 RPC 服务](rule/rule-example.md#桥接数据到-rpc-服务)
   * [离线消息保存到 Redis](rule/rule-example.md#离线消息保存到-redis)
+  * [离线消息保存到 MySQL](rule/rule-example.md#离线消息保存到-mysql)
+  * [离线消息保存到 PostgreSQL](rule/rule-example.md#离线消息保存到-postgresql)
+  * [离线消息保存到 Cassandra](rule/rule-example.md#离线消息保存到-cassandra)
+  * [离线消息保存到 MongoDB](rule/rule-example.md#离线消息保存到-mongodb)
   * [从 Redis 中获取订阅关系](rule/rule-example.md#从-redis-中获取订阅关系)
+  * [从 MySQL 中获取订阅关系](rule/rule-example.md#从-mysql-中获取订阅关系)
+  * [从 PostgreSQL 中获取订阅关系](rule/rule-example.md#从-postgresql-中获取订阅关系)
+  * [从 Cassandra 中获取订阅关系](rule/rule-example.md#从-cassandra-中获取订阅关系)
+  * [从 MongoDB 中获取订阅关系](rule/rule-example.md#从-mongodb-中获取订阅关系)
+  * [从 Kafka 消费消息到 EMQX](rule/rule-example.md#从-kafka-消费消息到emqx)
+  * [从 Pulsar 消费消息到 EMQX](rule/rule-example.md#从-pulsar-消费消息到emqx)
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
