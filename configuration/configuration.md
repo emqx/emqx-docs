@@ -10,7 +10,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -389,6 +389,8 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 <br />
 
+## node
+
 ### node.name
 
 | Type   | Default          |
@@ -599,6 +601,8 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 <br />
 
+## rpc
+
 ### rpc.mode
 
 | Type | Optional Value  | Default |
@@ -779,6 +783,8 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 <br />
 
+## log
+
 ### log.to
 
 | Type | Optional Value                   | Default |
@@ -798,6 +804,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 - **both:** 同时将日志输出到文件和标准输出(emqx 控制台)
 
 <br />
+
 
 ### log.level
 
@@ -897,6 +904,8 @@ log.error.file = error.log
 
 <br />
 
+## authacl
+
 ### allow_anonymous
 
 | Type | Optional Value  | Default |
@@ -985,6 +994,8 @@ ACL 检查失败后，执行的操作。
 - `disconnect`：断开连接。
 
 <br />
+
+## mqtt
 
 ### flapping_detect_policy
 
@@ -1121,6 +1132,8 @@ ACL 检查失败后，执行的操作。
 是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
 
 <br />
+
+## zoneexternal
 
 ### zone.external.idle_timeout
 
@@ -1546,6 +1559,8 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 <br />
 
+## zoneinternal
+
 ### zone.internal.allow_anonymous
 
 | Type | Optional Value  | Default |
@@ -1780,6 +1795,8 @@ QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客�
 是否允许该 Zone 下的客户端绕过认证插件的认证步骤。
 
 <br />
+
+## tcpexternal
 
 ### listener.tcp.external
 
@@ -2044,6 +2061,8 @@ TCP 缓冲区大小 (用户级)。
 
 <br />
 
+## tcpinternal
+
 ### listener.tcp.internal
 
 | Type    | Default           |
@@ -2244,6 +2263,8 @@ TCP 缓冲区大小 (用户级)。
 即 `SO_REUSEADDR` 参数。开启该选项即允许本地重用端口，无需等待 `TIME_WAIT` 状态结束。
 
 <br />
+
+## tlsexternal
 
 ### listener.ssl.external
 
@@ -2666,6 +2687,8 @@ TCP 缓冲区大小 (用户级)。
 
 <br />
 
+## wsexternal
+
 ### listener.ws.external
 
 | Type    | Default |
@@ -3077,6 +3100,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 允许的单个 MQTT 报文长度的最大值。
 
 <br />
+
+## wssexternal
 
 ### listener.wss.external
 
@@ -3643,6 +3668,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 <br />
 
+## plugins
+
 ### plugins.etc_dir
 
 | Type    | Default       |
@@ -3678,6 +3705,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 外部插件存放目录。
 
 <br />
+
+## broker
 
 ### broker.sys_interval
 
@@ -3770,6 +3799,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 开启或关闭批量清理路由信息。批量清理路由可用在短时间内大量客户端掉线的情况，以提高清理效率。
 
 <br />
+
+## monitor
 
 ### sysmon.long_gc
 
@@ -6818,7 +6849,7 @@ CA 证书文件路径。
 
 ## [emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
 
-### rule_engine.ignore_sys_message
+### rule-engine.ignore_sys_message
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -6830,7 +6861,7 @@ CA 证书文件路径。
 
 <br />
 
-### rule_engine.events.<event-name>
+### rule-engine.events.<event-name>
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -6841,7 +6872,7 @@ CA 证书文件路径。
 设置是否发布事件消息。可指定事件消息的 QoS，例如:
 
 ```
-rule_engine.events.client_connected = on, qos1
+rule-engine.events.client_connected = on, qos1
 
 ```
 
@@ -6976,9 +7007,9 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 <br />
 
-## [emqx-statsd](https://github.com/emqx/emqx-statsd)
+## [emqx-prometheus](https://github.com/emqx/emqx-prometheus)
 
-### statsd.push.gateway.server
+### prometheus.push.gateway.server
 
 | Type   | Default                 |
 | ------ | ----------------------- |
@@ -6986,11 +7017,11 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ##### 说明
 
-指定 Statsd gateway 的 URI。
+指定 Prometheus gateway 的 URI。
 
 <br />
 
-### statsd.interval
+### prometheus.interval
 
 | Type    | Default |
 | ------- | ------- |
@@ -6998,15 +7029,15 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ##### 说明
 
-指定 Statsd 数据的收集间隔，单位: 毫秒。
+指定 Stats 数据的收集间隔，单位: 毫秒。
 
 <br />
 
 ### prometheus.collector.<N>
 
-| Type   | Default       |
-| ------ | ------------- |
-| string | `emqx_statsd` |
+| Type   | Default           |
+| ------ | ----------------- |
+| string | `emqx_prometheus` |
 
 ##### 说明
 
