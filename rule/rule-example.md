@@ -25,7 +25,6 @@ EMQ X Broker 中仅适用以下操作：
 其余均是 EMQ X Enterprise 专属功能。
 {% endhint %}
 </div>
-[toc]
 
 ## 检查 (调试)
 
