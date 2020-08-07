@@ -109,7 +109,6 @@
   * [从 Kafka 消费消息到 EMQ X](rule/rule-example.md#从-kafka-消费消息到-emq-x)
   * [从 Pulsar 消费消息到 EMQ X](rule/rule-example.md#从-pulsar-消费消息到-emq-x)
 
-
 * 数据存储
   * [数据存储设计](backend/backend.md)
   * [Redis 数据存储](backend/backend.md#redis-数据存储)
