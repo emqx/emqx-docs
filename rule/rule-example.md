@@ -1168,6 +1168,42 @@ SELECT * FROM "t/#"
 
 后续动作创建操作可以根据你的 EMQ X 版本灵活选择。
 
+### 原生方式（企业版）
+
+关联动作:
+
+在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 TDengine”。
+
+> 仅限企业版 4.1.1 及以后版本。
+
+填写动作参数:
+
+“保存数据到 TDengine” 动作需要两个参数：
+
+1). SQL 模板。这个例子里我们向 TDengine 插入一条数据，注意我们应当在 SQL 中指定数据库名，字符类型也要用单引号括起来，SQL 模板为：
+
+```sql
+insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}', '${topic}', ${qos}, '${payload}')
+```
+
+![image-20200729164158454](./assets/rule-engine/image-20200729164158454.png)
+
+2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 TDengine资源:
+
+填写资源配置:
+
+用户名填写 “root”，密码填写缺省密码 “taosdata”，**TDengine 不在资源中配置数据库名，请在 SQL 中自行配置。**
+
+![image-20200729165651951](./assets/rule-engine/image-20200729165651951.png)
+
+点击 “新建” 按钮。
+
+返回响应动作界面，点击 “确认”。
+
+![image-20200729174211581](./assets/rule-engine/image-20200729174211581.png)
+
+返回规则创建界面，点击 “创建”。
+
 
 ### 通过发送数据到 Web 服务写入
 
@@ -1206,46 +1242,6 @@ insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}'
 返回响应动作界面，点击 “确认”。
 
 ![image-20200730093457366](assets/rule-engine/image-20200730093457366.png)
-
-返回规则创建界面，点击 “创建”。
-
-
-
-
-
-### 原生方式（企业版）
-
-关联动作:
-
-在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 TDengine”。
-
-> 仅限企业版 4.1.1 及以后版本。
-
-填写动作参数:
-
-“保存数据到 TDengine” 动作需要两个参数：
-
-1). SQL 模板。这个例子里我们向 TDengine 插入一条数据，注意我们应当在 SQL 中指定数据库名，字符类型也要用单引号括起来，SQL 模板为：
-
-```sql
-insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}', '${topic}', ${qos}, '${payload}')
-```
-
-![image-20200729164158454](./assets/rule-engine/image-20200729164158454.png)
-
-2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 TDengine资源:
-
-填写资源配置:
-
-用户名填写 “root”，密码填写缺省密码 “taosdata”，**TDengine 不在资源中配置数据库名，请在 SQL 中自行配置。**
-
-![image-20200729165651951](./assets/rule-engine/image-20200729165651951.png)
-
-点击 “新建” 按钮。
-
-返回响应动作界面，点击 “确认”。
-
-![image-20200729174211581](./assets/rule-engine/image-20200729174211581.png)
 
 返回规则创建界面，点击 “创建”。
 
