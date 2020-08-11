@@ -34,11 +34,9 @@ emqx_auth_mysql 插件同时包含 ACL 功能，可通过注释禁用。
 
 ## MySQL 连接信息
 
-MySQL 基础连接信息，需要保证集群内所有节点均能访问。
+配置 MySQL 服务相关的连接地址，用户名密码和数据库：
 
 ```bash
-# etc/plugins/emqx_auth_mysql.conf
-
 ## 服务器地址
 auth.mysql.server = 127.0.0.1:3306
 
@@ -53,7 +51,6 @@ auth.mysql.database = mqtt
 
 auth.mysql.query_timeout = 5s
 ```
-
 
 
 ## 默认表结构
