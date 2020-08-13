@@ -170,7 +170,7 @@
   * [emqx-management](configuration/configuration.md#emqx-management)
   * [emqx-reloader](configuration/configuration.md#emqx-reloader)
   * [emqx-retainer](configuration/configuration.md#emqx-retainer)
-  * [emqx-rule_engine](configuration/configuration.md#emqx-rule_engine)
+  * [emqx-rule_engine](configuration/configuration.md#emqx-rule-engine)
   * [emqx-prometheus](configuration/configuration.md#emqx-prometheus)
   * [emqx-stomp](configuration/configuration.md#emqx-stomp)
   * [emqx-web-hook](configuration/configuration.md#emqx-web-hook)
