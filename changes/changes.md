@@ -17,6 +17,98 @@ ref: undefined
 
 # 版本发布
 
+## 4.2-beta.1 版本
+
+*发布日期: 2020-08-14*
+
+EMQ X 4.2-beta.1 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 支持使用配额限制转发的消息数量
+
+  Github PR: [emqx#3656](https://github.com/emqx/emqx/pull/3656)
+
+- 支持数据遥测功能并默认关闭
+
+  Github PR: [emqx#3653](https://github.com/emqx/emqx/pull/3653)
+
+**错误修复:**
+
+- 修复 Websocket 不支持 IPv6 的问题
+
+  Github PR: [emqx#3654](https://github.com/emqx/emqx/pull/3654)
+
+### emqx-rel
+
+**功能增强:**
+
+- 支持修订版本间的热升级
+
+  Github PR: [emqx-rel#571](https://github.com/emqx/emqx-rel/pull/571)
+
+### emqx-rule-engine
+
+**功能增强:**
+
+- 支持全新的 SQL 语法
+
+  Github PR: [emqx-rule-engine#168](https://github.com/emqx/emqx-rule-engine/pull/168)
+
+- 支持用户设置规则 ID 与资源 ID
+
+  Github PR: [emqx-rule-engine#169](https://github.com/emqx/emqx-rule-engine/pull/169)
+
+### emqx-exproto
+
+**错误修复:**
+
+- 修复了一些问题
+
+  Github PR: [emqx-exproto#9](https://github.com/emqx/emqx-exproto/pull/9)
+
+### emqx-web-hook
+
+**功能增强:**
+
+- 支持 HTTPS
+
+  Github PR: [emqx-web-hook#209](https://github.com/emqx/emqx-web-hook/pull/209)
+
+### emqx-auth-clientid
+
+**错误修复:**
+
+- 修复查找的认证信息不存在引发的错误
+
+  Github PR: [emqx-auth-clientid#145](https://github.com/emqx/emqx-auth-clientid/pull/145)
+
+### emqx-auth-http
+
+**错误修复:**
+
+- 默认关闭超级用户认证请求
+
+  Github PR: [emqx-auth-http#195](https://github.com/emqx/emqx-auth-http/pull/195)
+
+### emqx-bridge-mqtt
+
+**功能增强:**
+
+- 默认关闭桥接模式
+
+  Github PR: [emqx-bridge-mqtt#95](https://github.com/emqx/emqx-bridge-mqtt/pull/95)
+
+### emqx-management
+
+**功能增强:**
+
+- 为遥测功能添加 HTTP API 与 CLI，提供遥测数据查询接口
+
+  Github PR: [emqx-management#253](https://github.com/emqx/emqx-management/pull/253)
+
 ## 4.1.3 版本
 
 *发布日期: 2020-08-04*
