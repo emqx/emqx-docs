@@ -1538,7 +1538,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 
 ### 告警 {#endpoint-alarms}
 
-#### GET /api/v4/alarms/present {#endpoint-get-alarms-present}
+#### GET /api/v4/alarms {#endpoint-get-alarms}
 
 返回集群下当前告警信息。
 
@@ -1546,71 +1546,150 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 
 **Success Response Body (JSON):**
 
-| Name | Type | Description   |
-| ---- | --------- | ------------- |
-| code | Integer   | 0 |
-| data | Array of Objects | 各节点上的告警列表 |
-| data[0].node   | String    | 节点名称                           |
-| data[0].alarms | Array of Objects | 当前告警列表 |
-| data[0].alarms[0].id   | String    | 告警标识符     |
-| data[0].alarms[0].desc | String    | 告警的详细描述 |
+| Name                            | Type             | Description   |
+| ------------------------------- | ---------------- | ------------- |
+| code                            | Integer          | 0 |
+| data                            | Array of Objects | 各节点上的告警列表 |
+| data[0].node                    | String           | 节点名称 |
+| data[0].alarms                  | Array of Objects | 当前告警列表 |
+| data[0].alarms[0].name          | String           | 告警名称     |
+| data[0].alarms[0].message       | String           | 人类易读的告警信息 |
+| data[0].alarms[0].details       | Object           | 告警详情 |
+| data[0].alarms[0].activate_at   | Integer          | 告警激活时间，以微秒为单位的 UNIX 时间戳 |
+| data[0].alarms[0].deactivate_at | Integer          | 告警取消激活时间，以微秒为单位的 UNIX 时间戳 |
+| data[0].alarms[0].activated     | Boolean          | 是否激活 |
 
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/present"
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms"
 
-{"data":[{"node":"emqx@127.0.0.1","alarms":[{"id":"cpu_high_watermark","desc":"88.30833333333334"}]}],"code":0}
+{"data":[{"node":"emqx@127.0.0.1","alarms":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236},{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}]}],"code":0}
 ```
 
-#### GET /api/v4/alarms/present/{node} {#endpoint-nodes-get-alarms-present}
+#### GET /api/v4/nodes/{node}/alarms {#endpoint-get-alarms-in-specified-node}
 
-返回指定节点下当前告警信息。接口参数和返回请参看 [GET /api/v4/stats](#endpoint-get-alarms-present)。
+返回指定节点下的告警信息。接口参数和返回请参看 [GET /api/v4/alarms](#endpoint-get-alarms)。
 
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/present/emqx@127.0.0.1"
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/alarms"
 
-{"data":[{"id":"cpu_high_watermark","desc":"91.68333333333332"}],"code":0}
+{"data":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236},{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}],"code":0}
 ```
 
-#### GET /api/v4/alarms/history {#endpoint-get-alarms-history}
+#### GET /api/v4/alarms/activated {#endpoint-get-activated-alarms}
 
-返回集群下历史告警信息。
+返回集群下激活中的告警。接口参数和返回请参看 [GET /api/v4/alarms](#endpoint-get-alarms)。
 
-**Path Parameters:** 无
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/activated"
+
+{"data":[{"node":"emqx@127.0.0.1","alarms":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236}]}],"code":0}
+```
+
+#### GET /api/v4/nodes/{node}/alarms/activated {#endpoint-get-activated-alarms-in-specified-node}
+
+返回指定节点下激活中的告警。接口参数和返回请参看 [GET /api/v4/alarms](#endpoint-get-alarms)。
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/alarms/activated"
+
+{"data":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236}],"code":0}
+```
+
+#### GET /api/v4/alarms/deactivated {#endpoint-get-deactivated-alarms}
+
+返回集群下已经取消的告警。接口参数和返回请参看 [GET /api/v4/alarms/activated](#endpoint-get-activated-alarms)。
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/deactivated"
+
+{"data":[{"node":"emqx@127.0.0.1","alarms":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}]}],"code":0}
+```
+
+#### GET /api/v4/nodes/{node}/alarms/deactivated {#endpoint-get-deactivated-alarms-in-specified-node}
+
+返回指定节点下已经取消的告警。接口参数和返回请参看 [GET /api/v4/alarms/activated](#endpoint-get-activated-alarms-in-specified-node)。
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/alarms/deactivated"
+
+{"data":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}],"code":0}
+```
+
+#### POST /api/v4/alarms/deactivated {#endpoint-deactivate-alarm}
+
+取消指定告警。
+
+**Parameters (json):**
+
+| Name  | Type      | Required | Default | Description |
+| ----- | --------- | -------- | ------- | ----------- |
+| node  | String    | Required |         | 告警所在节点 |
+| name  | String    | Required |         | 告警名称 |
 
 **Success Response Body (JSON):**
 
-| Name | Type | Description   |
-| ---- | --------- | ------------- |
-| code | Integer   | 0 |
-| data | Array of Objects | 各节点上的告警列表 |
-| data[0].node   | String    | 节点名称 |
-| data[0].alarms | Array of Objects | 当前告警列表 |
-| data[0].alarms[0].id       | String    | 告警标识符 |
-| data[0].alarms[0].desc     | String    | 告警的详细描述 |
-| data[0].alarms[0].clear_at | String    | 告警清除时间，格式为 "YYYY-MM-DD HH:mm:ss" |
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0 |
 
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/history"
+$ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/alarms/deactivated" -d '{"node":"emqx@127.0.0.1","name":"high_system_memory_usage"}'
 
-{"data":[{"node":"emqx@127.0.0.1","alarms":[{"id":"cpu_high_watermark","desc":"93.27055293970582","clear_at":"2020-02-21 13:50:10"}]}],"code":0}
+{"code":0}
 ```
 
-#### GET /api/v4/alarms/history/{node} {#endpoint-nodes-get-alarms-history}
+#### DELETE /api/v4/alarms/deactivated {#endpoint-delete-all-deactivated-alarms}
 
-返回指定节点下历史告警信息。接口参数和返回请参看 [GET /api/v4/alarms/history](#endpoint-get-alarms-history)。
+清除所有已经取消的告警。
+
+**Parameters (json):** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0 |
 
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/history/emqx@127.0.0.1"
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/alarms/deactivated"
 
-{"data":[{"id":"cpu_high_watermark","desc":"93.27055293970582","clear_at":"2020-02-21 13:50:10"}],"code":0}
+{"code":0}
+```
+
+#### DELETE /api/v4/nodes/{node}/alarms/deactivated {#endpoint-delete-all-deactivated-alarms-in-specified-node}
+
+清除指定节点下所有已经取消的告警。
+
+**Parameters (json):** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0 |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/alarms/deactivated"
+
+{"code":0}
 ```
 
 ### 黑名单 {#endpoint-banned}
