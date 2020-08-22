@@ -43,6 +43,9 @@ EMQ X v4.0.0 is started successfully!
 如果你使用的是 EMQ X Enterprise 则需要导入 License 才能使用，导入步骤见下文**启动 EMQ X Enterprise**。
 
 通过 ZIP 压缩包安装的 EMQ X 不支持通过 systemctl 和 service 启动。
+
+4.2-rc.1 版本后，EMQ X 开源版新加入[遥测](../advanced/telemetry.md)功能，启动前请[详细了解](../advanced/telemetry.md)。
+
 {% endhint %}
 {% endemqxce %}
 

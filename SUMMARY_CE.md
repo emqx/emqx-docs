@@ -30,6 +30,7 @@
   * [消息重传](advanced/retransmission.md)
 
 * [插件](advanced/plugins.md)
+* [遥测](advanced/telemetry.md)
 
 * 认证
   * [认证简介](advanced/auth.md)
