@@ -10,7 +10,7 @@ EMQ 通过遥测收集有关 EMQ X 使用情况的信息，这种功能旨在为
 
 ### 遥测数据示例
 
-遥测通过加密 HTTP 请求将数据上报至 https://telemetry.emqx.io/api/telemetry，传输的数据如下，如果您有任何疑问请通过 [Issues](http://github.com/emqx/emqx/issues) 联系我们：
+遥测通过加密 HTTP 请求将数据上报至 [https://telemetry.emqx.io/api/telemetry](https://telemetry.emqx.io/api/telemetry)，传输的数据如下，如果您有任何疑问请通过 [Issues](http://github.com/emqx/emqx/issues) 联系我们：
 
 ```json
 {
@@ -49,6 +49,6 @@ EMQ 通过遥测收集有关 EMQ X 使用情况的信息，这种功能旨在为
 
 ### 运行中禁用
 
-在命令行中停止 emqx-telemetry 插件：./bin/emqx_ctl plugins unload emqx_sn
+在命令行中停止 emqx-telemetry 插件：./bin/emqx_ctl plugins unload emqx_telemetry 
 
 在 Dashboard 中停止 emqx-telemetry 插件：打开 http://localhost:18083 进入 Dashboard，进入 插件 页面，找到 emqx-telemetry 点击 停止 即可。
