@@ -17,6 +17,72 @@ ref: undefined
 
 # 版本发布
 
+## 4.2-rc.1 版本
+
+*发布日期: 2020-08-22*
+
+EMQ X 4.2-rc.1 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 允许一个 WebSocket 消息中包含多个 MQTT 报文以提供效率，也可以配置为仅可包含一个 MQTT 报文以兼容部分客户端
+
+  Github Issue: [emqx#3324](https://github.com/emqx/emqx/issues/3324)
+
+  Github PR: [emqx#3673](https://github.com/emqx/emqx/pull/3673)
+
+- 允许独立配置发布、订阅的主题重写规则
+
+  Github PR: [emqx#3676](https://github.com/emqx/emqx/pull/3676)
+
+**错误修复:**
+
+- 修复主题指标功能导致内存异常增长的问题
+
+  Github PR: [emqx#3679](https://github.com/emqx/emqx/pull/3679)
+
+### emqx-rel
+
+**错误修复:**
+
+- 修复热升级后丢失旧配置的问题
+
+  Github PR: [emqx-rel#578](https://github.com/emqx/emqx-rel/pull/578)
+
+### emqx-bridge-mqtt
+
+**功能增强:**
+
+- 为 clientid 配置项提供 `${node}` 占位符
+
+  Github PR: [emqx-bridge-mqtt#100](https://github.com/emqx/emqx-bridge-mqtt/pull/100)
+
+### emqx-telemetry
+
+**功能增强:**
+
+- 遥测功能正式上线，此功能被用于帮助我们改进产品且默认开启，此功能不会收集任何个人身份信息，用户可以通过开放的 API 查询我们上报的数据
+
+  Github PR: [emqx-telemetry#1](https://github.com/emqx/emqx-telemetry/pull/1)
+
+### emqx-exproto
+
+**错误修复:**
+
+- 修复一些问题
+
+  Github PR: [emqx-exproto#11](https://github.com/emqx/emqx-exproto/pull/11)
+
+### emqx-management
+
+**错误修复:**
+
+- 修复 RPM/Deb 包无法导出数据的问题
+
+  Github PR: [emqx-management#257](https://github.com/emqx/emqx-management/pull/257)
+
 ## 4.2-beta.1 版本
 
 *发布日期: 2020-08-14*
