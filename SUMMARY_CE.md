@@ -28,6 +28,8 @@
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
+  * [告警](advanced/alarms.md)
+  * [数据导入导出](advanced/data-import-and-export.md)
 
 * [插件](advanced/plugins.md)
 * [遥测(新)](advanced/telemetry.md)
