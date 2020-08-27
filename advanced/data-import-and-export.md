@@ -17,7 +17,7 @@ ref: undefined
 
 # 数据导入导出
 
-EMQ X Broker 为用户提供了数据导入导出功能，以满足服务器升级、迁移以及数据备份等需要。数据导入导出功能支持将当前运行的 EMQ X Broker 中的黑名单、规则引擎配置等存储在 EMQ X Broker 默认数据库 Mnesia 中的数据以 Json 格式导出至本地文件。当然用户无需关心导出文件中的数据内容。导出文件可以导入至其他 EMQ X Broker 的运行实例，EMQ X Broker 可以是相同版本，也可以是不同版本，但目前仅支持正式版本的 `v4.0.*` 导入至 `v4.1.*`。（`v4.0.*` 的数据导出功能将通过外部工具支持）
+EMQ X Broker 为用户提供了数据导入导出功能，以满足服务器升级、迁移以及数据备份等需要。数据导入导出功能支持将当前运行的 EMQ X Broker 中的黑名单、规则引擎配置等存储在 EMQ X Broker 默认数据库 Mnesia 中的数据以 Json 格式导出至本地文件。当然用户无需关心导出文件中的数据内容。导出文件可以导入至其他 EMQ X Broker 的运行实例，EMQ X Broker 可以是相同版本，也可以是不同版本，但目前仅支持 `4.1.0` 及之后的版本。
 
 EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endpoint-data-import-and-export)、[HTTP API](./http-api.md#endpoint-data-import-and-export)以及 Dashboard 的可视化界面（企业版）。目前支持导入导出的数据如下:
 
