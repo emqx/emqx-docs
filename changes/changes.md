@@ -17,6 +17,52 @@ ref: undefined
 
 # 版本发布
 
+## 4.2-rc.2 版本
+
+*发布日期: 2020-08-28*
+
+EMQ X 4.2-rc.2 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 调整 RPC 端口发现策略
+
+  Github PR: [emqx#3696](https://github.com/emqx/emqx/pull/3696)
+
+### emqx-rel
+
+**错误修复:**
+
+- 修复一台机器上运行多个 emqx 实例时命令行接口无法使用的问题
+
+  Github PR: [emqx-rel#583](https://github.com/emqx/emqx-rel/pull/583)
+
+### emqx-management
+
+**功能增强:**
+
+- 提供 Log Handler 的启动停止命令
+
+  Github PR: [emqx-management#259](https://github.com/emqx/emqx-management/pull/259)
+
+### emqx-telemetry
+
+**错误修复:**
+
+- 修复遥测功能在集群下无法使用的问题
+
+  Github PR: [emqx-telemetry#3](https://github.com/emqx/emqx-telemetry/pull/3)
+
+### emqx-auth-mnesia
+
+**功能增强:**
+
+- *不兼容改动：* API 端口调整为 `api/v4/mqtt_user` 与 `api/v4/mqtt_acl`
+
+  Github PR: [emqx-auth-mnesia#31](https://github.com/emqx/emqx-auth-mnesia/pull/31)
+
 ## 4.1.4 版本
 
 *发布日期: 2020-08-28*
