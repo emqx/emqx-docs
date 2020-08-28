@@ -1,5 +1,5 @@
 ---
-# 标题
+mqtt_user# 标题
 title: Mnesia 认证
 # 编写日期
 date: 2020-02-07 17:15:26
@@ -90,7 +90,7 @@ API 定义：
 
 ```bash
 # Request
-POST api/v4/auth_user
+POST api/v4/mqtt_user
 {
     "login": "emqx_c",
     "password": "emqx_p",
@@ -114,7 +114,7 @@ API 定义：
 
 ```bash
 # Request
-POST api/v4/auth_user
+POST api/v4/mqtt_user
 [
     {
     "login": "emqx_c_1",
@@ -144,7 +144,7 @@ API 定义：
 
 ```bash
 # Request
-GET api/v4/auth_user
+GET api/v4/mqtt_user
 
 # Response
 {
@@ -170,7 +170,7 @@ API 定义：
 
 ```bash
 # Request
-PUT api/v4/auth_user/${login}
+PUT api/v4/mqtt_user/${login}
 {
     "password": "emqx_new_p",
     "is_superuser": false
@@ -190,7 +190,7 @@ API 定义：
 
 ```bash
 # Request
-GET api/v4/auth_user/${login}
+GET api/v4/mqtt_user/${login}
 
 # Response
 {
@@ -211,7 +211,7 @@ API 定义：
 
 ```bash
 # Request
-DELETE api/v4/auth_user/${login}
+DELETE api/v4/mqtt_user/${login}
 
 # Response
 {

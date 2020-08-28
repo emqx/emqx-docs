@@ -56,6 +56,7 @@ auth.mnesia.as = username
 - action：操作行为，可选值：pub | sub | pubsub
 - allow：是否允许
   
+
 Mnesia ACL 默认不设规则，你可以使用 HTTP API 管理 ACL 规则。
 
 ## 使用 HTTP API 管理 ACL 规则
@@ -66,7 +67,7 @@ API 定义：
 
 ```bash
 # Request
-POST api/v4/emqx_acl
+POST api/v4/mqtt_acl
 {
 	"login":"emqx",
 	"topic":"Topic/A",
@@ -89,7 +90,7 @@ API 定义：
 
 ```bash
 # Request
-POST api/v4/emqx_acl
+POST api/v4/mqtt_acl
 [
   {
 	"login":"emqx_1",
@@ -121,7 +122,7 @@ API 定义：
 
 ```bash
 # Request
-GET api/v4/emqx_acl
+GET api/v4/mqtt_acl
 
 # Response
 {
@@ -147,7 +148,7 @@ API 定义：
 
 ```bash
 # Request
-GET api/v4/emqx_acl/${login}
+GET api/v4/mqtt_acl/${login}
 
 # Response
 {
@@ -170,7 +171,7 @@ API 定义：
 ```bash
 # Request
 # 请注意 ${topic} 需要使用 UrlEncode 编码
-DELETE api/v4/emqx_acl/${login}/${topic}
+DELETE api/v4/mqtt_acl/${login}/${topic}
 
 # Response
 {
