@@ -17,6 +17,44 @@ ref: undefined
 
 # 版本发布
 
+## 4.1.4 版本
+
+*发布日期: 2020-08-28*
+
+EMQ X 4.1.4 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复主题指标功能导致内存异常增长的问题
+
+  Github PR: [emqx#3680](https://github.com/emqx/emqx/pull/3680)
+
+### emqx-bridge-mqtt
+
+**功能增强:**
+
+- clientid 配置项支持 `${node}` 占位符，优化集群下的使用体验
+
+  Github PR: [emqx-bridge-mqtt#99](https://github.com/emqx/emqx-bridge-mqtt/pull/99)
+
+### emqx-management
+
+**错误修复:**
+
+- 修复数据迁移功能在 Windows 下不可用的问题
+
+  Github PR: [emqx-management#262](https://github.com/emqx/emqx-management/pull/262)
+
+### emqx-lua-hook
+
+**错误修复:**
+
+- 修复无法获取 Username 字段的问题
+
+  Github PR: [emqx-lua-hook#115](https://github.com/emqx/emqx-lua-hook/pull/115)
+
 ## 4.2-rc.1 版本
 
 *发布日期: 2020-08-22*
