@@ -440,6 +440,121 @@ FROM "t/#"
 {"x": 7}
 ```
 
+#### 数组操作语法举例
+
+**示例1: 创建一个数组，赋值给变量 a:**
+
+```sql
+SELECT
+  [1,2,3] as a
+FROM
+  "t/#"
+```
+
+下标从 1 开始，上面的 SQL 输出为:
+
+```json
+{
+  "a": [1, 2, 3]
+}
+```
+
+**示例2: 从数组中取出第 N 个元素。下标为负数时，表示从数组的右边取:**
+
+```sql
+SELECT
+  [1,2,3] as a,
+  a[2] as b,
+  a[-2] as c
+FROM
+  "t/#"
+```
+
+上面的 SQL 输出为:
+
+```json
+{
+  "b": 2,
+  "c": 2,
+  "a": [1, 2, 3]
+}
+```
+
+**示例3: 从 JSON 格式的 payload 中嵌套的获取值:**
+
+```sql
+SELECT
+  payload.data[1].id as id
+FROM
+  "t/#"
+```
+
+假设消息为:
+
+```json
+{"data": [
+    {"id": 1, "name": "steve"},
+    {"id": 2, "name": "bill"}
+]}
+```
+
+则上面的 SQL 输出为:
+
+```json
+{"id": 1}
+```
+
+**示例4: 数组范围(range)操作:**
+
+```sql
+SELECT
+  [1..5] as a,
+  a[2..4] as b
+FROM
+  "t/#"
+```
+
+上面的 SQL 输出为:
+
+```json
+{
+  "b": [2, 3, 4],
+  "a": [1, 2, 3, 4, 5]
+}
+```
+
+**示例5: 使用下标语法修改数组中的某个元素:**
+
+```sql
+SELECT
+  payload,
+  'STEVE' as payload.data[1].name
+FROM
+  "t/#"
+```
+
+假设消息为:
+
+```json
+{"data": [
+    {"id": 1, "name": "steve"},
+    {"id": 2, "name": "bill"}
+]}
+```
+
+则上面的 SQL 输出为:
+
+```json
+{
+  "payload": {
+    "data": [
+      {"name": "STEVE", "id": 1},
+      {"name": "bill", "id": 2}
+    ]
+  }
+}
+```
+
 ### FROM 子句可用的事件主题 {#rule-sql-syntax}
 
 | 事件主题名                    | 释义     |
