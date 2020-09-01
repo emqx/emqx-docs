@@ -213,7 +213,7 @@
   * [升级指南](changes/upgrade.md)
 
 * 版更新
-  * [小版本热更新](advanced/relup.md)
+  * [版本热更新](advanced/relup.md)
 
 * 相关资料
   * [架构设计](design/design.md)
