@@ -696,13 +696,15 @@ ports/limit           : 1048576
 
 log 命令用于设置日志等级。访问 [Documentation of logger](http://erlang.org/doc/apps/kernel/logger_chapter.html) 以获取详细信息
 
-| 命令                                          | 描述                                   |
+|                     命令                     |                  描述                  |
 | -------------------------------------------- | -------------------------------------- |
-| `log set-level <Level>                     ` | 设置主日志等级和所有 Handlers 日志等级 |
-| `log primary-level                         ` | 查看主日志等级                         |
-| `log primary-lelvel <Level>                ` | 设置主日志等级                         |
-| `log handlers list                         ` | 查看当前安装的所有 Hanlders            |
-| `log handlers set-level <HandlerId> <Level>` | 设置指定 Hanlder 的日志等级            |
+| `log set-level <Level>`                      | 设置主日志等级和所有 Handlers 日志等级 |
+| `log primary-level`                          | 查看主日志等级                         |
+| `log primary-lelvel <Level>`                 | 设置主日志等级                         |
+| `log handlers list`                          | 查看当前安装的所有 Handlers            |
+| `log handlers start <HandlerId>`             | 启动某个已停止的 Handler               |
+| `log handlers stop <HandlerId>`              | 停止某个 Handler                       |
+| `log handlers set-level <HandlerId> <Level>` | 设置指定 Handler 的日志等级            |
 
 日志的等级由低到高分别为：`debug | info | notice | warning | error | critical | alert | emergency`，日志等级越低，系统输出的日志数量越多，消耗的系统资源越大。为提高系统运行性能，默认的主日志等级是 error。
 
@@ -735,18 +737,36 @@ info
 
 ### log handlers list
 
-查看当前安装的所有 Hanlders:
+查看当前安装的所有 Handlers:
 
 ```bash
 $ ./bin/emqx_ctl log handlers list
-LogHandler (id=emqx_logger_handler, level=debug, destination=unknown)
-LogHandler (id=file, level=debug, destination=log/emqx.log)
-LogHandler (id=default, level=debug, destination=console)
+LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
+LogHandler(id=file, level=warning, destination=log/emqx.log, status=started)
+LogHandler(id=default, level=warning, destination=console, status=started)
+```
+
+### log handlers start <HandlerId>
+
+启动 log handler `'default'`:
+
+```bash
+$ ./bin/emqx_ctl log handlers start default
+log handler default started
+```
+
+### log handlers stop <HandlerId>
+
+停止 log handler `'default'`:
+
+```bash
+$ ./bin/emqx_ctl log handlers stop default
+log handler default stopped
 ```
 
 ### log handlers set-level <HandlerId> <Level>
 
-设置指定 Hanlder 的日志等级:
+设置指定 Handler 的日志等级:
 
 ```bash
 $ ./bin/emqx_ctl log handlers set-level emqx_logger_handler error

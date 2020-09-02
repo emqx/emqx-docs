@@ -166,9 +166,9 @@ log handler 是负责日志处理和输出的工作进程，它由 log handler i
 ```bash
 $ emqx_ctl log handlers list
 
-LogHandler(id=ssl_handler, level=debug, destination=console)
-LogHandler(id=file, level=debug, destination=log/emqx.log)
-LogHandler(id=default, level=debug, destination=console)
+LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
+LogHandler(id=file, level=warning, destination=log/emqx.log, status=started)
+LogHandler(id=default, level=warning, destination=console, status=started)
 ```
 
 - file: 负责输出到日志文件的 log handler。它没有设置特殊过滤条件，即所有日志消息只要级别满足要求就输出。输出目的地为日志文件。
@@ -213,6 +213,22 @@ $ emqx_ctl log primary-level debug
 
 ```bash
 $ emqx_ctl log handlers set-level file debug
+```
+
+#### 停止某个 log handler：
+
+例如，为了让日志不再输出到 console，可以停止 log handler `default`:
+
+```bash
+$ emqx_ctl log handlers stop default
+```
+
+#### 启动某个已经停止的 log handler：
+
+例如，启动上面已停止的 log handler `default`:
+
+```bash
+$ emqx_ctl log handlers start default
 ```
 
 ## 日志追踪 {#log-trace}
@@ -261,14 +277,14 @@ $ emqx_ctl log primary-level debug && emqx_ctl trace start client my_client log/
 
 ```bash
 $ emqx_ctl trace list
-Trace(clientid=my_client, level=debug, destination="log/my_client.log")
+Trace(clientid=my_client, level=debug, destination="log/my_client.log", status=started)
 ```
 
 在后台，emqx 会安装一个新的 log handler，并给其指定过滤条件为：仅当 ClientID 为 "my_client" 的时候，输出日志：
 
 ```bash
 $ emqx_ctl log handlers list
-LogHandler(id=trace_clientid_my_client, level=debug, destination=log/my_client.log)
+LogHandler(id=trace_clientid_my_client, level=debug, destination=log/my_client.log, status=started)
 ...
 ```
 
