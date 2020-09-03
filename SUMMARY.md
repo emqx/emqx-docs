@@ -212,8 +212,8 @@
   * [变更日志](changes/changes.md)
   * [升级指南](changes/upgrade.md)
 
-* 版更新
-  * [版本热更新](advanced/relup.md)
+* 版本热升级
+  * [版本热升级](advanced/relup.md)
 
 * 相关资料
   * [架构设计](design/design.md)

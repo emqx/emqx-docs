@@ -218,6 +218,9 @@
   * [变更日志](changes/changes-ee.md)
   * [升级指南](changes/upgrade.md)
 
+* 版本热升级
+  * [版本热升级](advanced/relup.md)
+
 * 相关资料
   * [架构设计](design/design.md)
   <!-- * [相关资料](awesome/awesome.md) -->
