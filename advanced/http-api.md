@@ -2300,3 +2300,98 @@ $ curl -XDELETE --basic -u admin:public 'http://localhost:8081/api/v4/resources/
 
 {"code":0}
 ```
+
+### 数据遥测 {#endpoint-telemetry}
+
+数据遥测
+
+#### PUT /api/v4/telemetry/status {#endpoint-change-telemetry-status}
+
+启用或关闭数据遥测功能。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name     | Type  | Required | Default | Description |
+| -------- | ----- | -------- | --------| ----------- |
+| enabled | Boolean| Required |         | 是否启用  |
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0 |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+启用数据遥测功能：
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/telemetry/status" -d '{"enabled":true}'
+
+{"code":0}
+```
+
+#### GET /api/v4/telemetry/status {#endpoint-get-telemetry-status}
+
+查询数据遥测功能是否启用。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name         | Type             | Description |
+| ---------- - | ---------------- | ----------- |
+| code         | Integer          | 0 |
+| data         | Array of Objects | 遥测状态 |
+| data.enabled | Boolean          | 是否启用 |
+
+**Examples:**
+
+查询数据遥测功能是否启用:
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry/status"
+
+{"data":{"enabled":true},"code":0}
+```
+
+#### GET /api/v4/telemetry/data {#endpoint-get-telemetry-data}
+
+获取数据遥测功能上报的数据内容。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name                    | Type             | Description |
+| ----------------------- | ---------------- | ----------- |
+| code                    | Integer          | 0 |
+| data                    | Array of Objects | 遥测数据 |
+| data.uuid               | String           | 由时间戳、随机数组成的 UUID |
+| data.up_time            | Integer          | Broker 启动时间，单位为毫秒 |
+| data.otp_version        | String           | Broker 使用的 Erlang OTP 版本 |
+| data.os_version         | String           | 操作系统版本 |
+| data.os_name            | String           | 操作系统名称 |
+| data.num_clients        | Integer          | 当前连接的客户端数量 |
+| data.nodes_uuid         | Array of Objects | 集群中其他节点的 UUID |
+| data.nodes_uuid[0].uuid | String           | 集群中其他节点的 UUID |
+| data.messages_sent      | Integer          | 发送的消息数量 |
+| data.messages_received  | Integer          | 接收的消息数量 |
+| data.license            | Objects          | 证书信息 |
+| data.license.edition    | String           | 版本 |
+| data.emqx_version       | String           | Broker 版本 |
+| data.active_plugins     | Array of Objects | 启用插件列表 |
+| data.active_modules     | Array of Objects | 启用模块列表 |
+
+**Examples:**
+
+获取数据遥测功能上报的数据内容:
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry/data"
+
+{"data":{"uuid":"856916F6-ECC1-11EA-87C9-F9385C1F4A9C","up_time":553357,"otp_version":"22","os_version":"10.13.6","os_name":"Mac OS X","num_clients":0,"nodes_uuid":[],"messages_sent":0,"messages_received":0,"license":{"edition":"community"},"emqx_version":"dev-v4.2-rc.3","active_plugins":["emqx_telemetry","emqx_rule_engine","emqx_retainer","emqx_recon","emqx_management","emqx_dashboard"],"active_modules":["emqx_mod_presence","emqx_mod_rewrite","emqx_mod_acl_internal"]},"code":0}
+```
