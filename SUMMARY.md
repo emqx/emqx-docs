@@ -23,7 +23,6 @@
   * [WebHook](advanced/webhook.md)
   * [分布集群](advanced/cluster.md)
   * [钩子](advanced/hooks.md)
-  * [多语言支持](advanced/multiple-language-support.md)
   * [指标监控](advanced/metrics-and-stats.md)
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
@@ -130,6 +129,12 @@
    * [RabbitMQ 桥接](bridge/bridge.md#rabbitmq-桥接)
    * [Pulsar 桥接](bridge/bridge.md#pulsar-桥接)
    * [RocketMQ 桥接](bridge/bridge.md#rocketmq-桥接)
+
+* 多语言支持
+  * [简介](advanced/lang.md)
+  * [钩子扩展](advanced/lang-exhook.md)
+  * [协议接入](advanced/lang-exproto.md)
+  * [Lua](advanced/lang-lua.md)
 
 * 进阶教程
   * [设备管理](tutorial/device-management.md)
