@@ -1,5 +1,5 @@
 ---
-mqtt_user# 标题
+# 标题
 title: Mnesia 认证
 # 编写日期
 date: 2020-02-07 17:15:26
