@@ -235,6 +235,8 @@ cluster.k8s.address_type = ip
 cluster.k8s.app_name = ekka
 ```
 
+> Kubernetes 不建议使用 Fannel 网络插件，推荐使用 Calico 网络插件。
+
 ### 手动(manual) 方式管理集群介绍 {#emqx-service-discovery-manual-tutorial}
 
 假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X 集群:
