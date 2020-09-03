@@ -21,13 +21,13 @@ EMQ X 目前支持的操作系统:
 
 + Centos6
 + Centos7
++ Centos8
 + OpenSUSE tumbleweed
-+ Debian 8
 + Debian 9
 + Debian 10
-+ Ubuntu 14.04
 + Ubuntu 16.04
 + Ubuntu 18.04
++ Ubuntu 20.04
 + macOS 10.13
 + macOS 10.14
 + macOS 10.15
