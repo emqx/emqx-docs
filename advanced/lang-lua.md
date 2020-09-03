@@ -1,8 +1,8 @@
 ---
 # 标题
-title: 多语言支持
+title: Lua
 # 编写日期
-date: 2020-02-21 09:28:26
+date: 2020-09-12 09:15:26
 # 作者 Github 名称
 author: hjianbo
 # 关键字
@@ -15,67 +15,9 @@ category:
 ref: undefined
 ---
 
+# 多语言 - Lua
 
-# 多语言支持
-
-从 4.1 开始，EMQ X 提供了专门的多语言支持插件：[emqx_extension_hook](https://github.com/emqx/emqx-extension-hook) 以优化多语言的支持效果。
-
-该插件允许你使用其它编程语言来处理 EMQ X 中的钩子事件，例如：
-
-- 认证某客户端的登录权限。
-- 校验某客户端的 PUB/SUB 的操作权限。
-- 处理 会话(Session) 和 消息(Message) 事件。
-
-注：消息(Message) 类钩子，仅在企业版中支持。
-
-## 架构
-
-其整体的事件传递的架构如下：
-
-```
-                            EMQ X
-                            +============================+
-                            |        Extension           |
- +----------+    CONNECT    | Hooks +----------------+   |
- |  Client  | <===========> - - - ->|    Drivers     |   |
- +----------+    PUB/SUB    |       +----------------+   |
-                            |               |            |
-                            +===============|============+
-                                            |
-                                            | Callbacks
-             Third-party Runtimes           |
-             +=======================+      |
-             |  Python Script/ Java  |<-----+
-             |  Classes/ Others      |
-             +=======================+
-```
-
-- `emqx_extension_hook` 作为 EMQ X 的插件：
-    * 它会接收 EMQ X 所有的钩子事件，并将其分发到对应的 驱动(Driver) 上。
-    * 提供对驱动的管理、各个指标的统计。
-
-- 不同语言的支持，需要对应的驱动支持。
-
-- 三方语言的运行时和 Erlang 的运行时相互独立，他们仅通过操作系统提供的管道进行通信。
-
-理论上，对于其他任意的编程语言都能通过该插件进行扩展，仅需完成对应的驱动即可。
-
-目前仅提供 Python 和 Java 的支持，并提供了对应的 SDK 以方便开发。
-
-## 快速使用
-
-### Python {#python}
-
-Python 开发可参考：[emqx-extension-python-sdk](https://github.com/emqx/emqx-extension-python-sdk)
-
-### Java {#java}
-
-Java 开发可参考：[emqx-extension-java-sdk](https://github.com/emqx/emqx-extension-java-sdk)
-
-
-## 其他
-
-在 EMQ X 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与上面提到的不同，它会将整个语言的运行时，包含在 Erlang VM 中：
+在 EMQ X 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与 4.1 之后的多语言架构不同，它会将整个语言的运行时包含在 Erlang VM 中：
 
 ![Old Multiple Lang Arch](assets/lua-lang-arch.png)
 
@@ -84,9 +26,7 @@ Java 开发可参考：[emqx-extension-java-sdk](https://github.com/emqx/emqx-ex
 
 为了保持兼容，该插件仍然保留在 EMQ X 的发行版本中。
 
-### Lua {#lua}
-
-Lua 的支持由 [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook) 实现。它包括：
+Lua 的支持由 [emqx-lua-hook](https://github.com/emqx/emqx-lua-hook) 实现。它包括：
 
 - 一套 Lua 的运行时环境，由 [luerl](https://github.com/rvirding/luerl) 实现。
 - 一些控制命令，用于管理 Lua 的加载和卸载等。
@@ -166,4 +106,3 @@ luahook enable <Script>
 ```bash
 luahook disable <Script>
 ```
-
