@@ -71,7 +71,7 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
    {"data":{"size":388,"filename":"emqx-export-2020-9-4-10-24-16.json","created_at":"2020-9-4 10:24:16"},"code":0}
    ```
 
-> 导出的数据文件位于 `.../emqx/data` 或 `/var/lib/emqx/data` 目录
+   > 导出的数据文件位于 `.../emqx/data` 或 `/var/lib/emqx/data` 目录
 
 2. 下载数据文件
 
@@ -81,13 +81,13 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 
 3. 上传数据文件
 
-  ```
-  $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d @/tmp/emqx-export-2020-9-4-10-24-16.json
+   ```
+   $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d @/tmp/emqx-export-2020-9-4-10-24-16.json
 
-  {"code":0}
-  ```
+   {"code":0}
+   ```
 
-> 第 2、3 步适用于在不同机器上迁移 emqx
+   > 第 2、3 步适用于在不同机器上迁移 emqx
 
 4. 导入数据
 
