@@ -27,6 +27,9 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 - Application 数据
 - Dashboard 用户数据
 - 通过 emqx-auth-mnesia 插件添加的 MQTT 用户数据和 ACL 数据
+- 通过 emqx-auth-clientid 插件添加的 MQTT 用户数据和 ACL 数据
+- 通过 emqx-auth-username 插件添加的 MQTT 用户数据和 ACL 数据
+- 编解码 Schema
 
 ### 示例
 
@@ -65,13 +68,31 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
    ```
    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/export"
 
-   {"data":{"size":350,"filename":"emqx-export-2020-5-15-18-6-29.json","created_at":"2020-5-15 18:6:29"},"code":0}
+   {"data":{"size":388,"filename":"emqx-export-2020-9-4-10-24-16.json","created_at":"2020-9-4 10:24:16"},"code":0}
    ```
 
-2. 导入数据
+> 导出的数据文件位于 `.../emqx/data` 或 `/var/lib/emqx/data` 目录
+
+2. 下载数据文件
+
+   ```
+   $ curl --basic -u admin:public -X GET http://localhost:8081/api/v4/data/file/emqx-export-2020-9-4-10-24-16.json -o /tmp/emqx-export-2020-9-4-10-24-16.json   
+   ```
+
+3. 上传数据文件
+
+  ```
+  $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d @/tmp/emqx-export-2020-9-4-10-24-16.json
+
+  {"code":0}
+  ```
+
+> 第 2、3 步适用于在不同机器上迁移 emqx
+
+4. 导入数据
 
     ```
-    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-5-15-17-39-0.json"}'
+    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-9-4-10-24-16.json"}'
 
     {"code",0}
     ```
