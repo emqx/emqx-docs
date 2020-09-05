@@ -17,6 +17,47 @@ ref: undefined
 
 # 版本发布
 
+## 4.2.0 版本
+
+*发布日期: 2020-09-05*
+
+EMQ X 4.2.0 现已发布，主要包含以下改动:
+
+**功能:**
+
+- 支持使用第三方语言编写扩展插件接入其他非 MQTT 协议，目前已支持 Java 和 Python 两种编程语言。访问 [Read Me](https://github.com/emqx/emqx-exproto/blob/master/README.md) 获取更多相关信息
+- 支持修订版本间的热升级
+- 新增遥测功能，收集有关 EMQ X Broker 使用情况的信息以帮助我们改进产品，此功能默认开启，支持手动关闭。访问 [EMQ X Telemetry](https://docs.emqx.io/broker/latest/en/advanced/telemetry.html) 获取更多遥测相关信息。
+- 支持配额形式的消息流控
+
+**增强:**
+
+- 规则引擎支持为 MQTT 桥接创建订阅
+- 规则引擎支持功能更加强大的 SQL 语法
+- MySQL、PostgreSQL 等插件全面支持 IPv6、SSL/TLS
+- 支持 CentOS 8、Ubuntu 20.04 操作系统和 ARM64 系统架构
+- Webhook 支持配置自定义的 HTTP 头部
+- 更加友好的告警机制，为开发者提供 HTTP API
+- 优化保留消息性能
+
+**调整:**
+
+- 后续版本不再支持 Debian 8、Ubuntu 14.04 和 Raspbian 8 操作系统
+- `emqx-statsd` 插件正式更名为 `emqx-prometheus`
+- 发布与订阅支持独立配置主题重写规则
+- 允许用户配置是否允许 WebSocket 消息包含多个 MQTT 报文，以兼容部分客户端
+- 调整 RPC 端口发现策略
+- ***不兼容改动：*** `emqx-auth-mnesia` 插件提供的 API 端口调整为 `api/v4/mqtt_user` 与 `api/v4/mqtt_acl`
+- `emqx-auth-http` 插件默认关闭超级用户认证请求
+- `emqx-bridge-mqtt` 默认关闭桥接模式
+
+**错误修复:**
+
+- 修复主题指标功能导致内存异常增长的问题
+- 修复 LwM2M 插件没有正确获取协议版本的问题
+- 修复一台机器上运行多个 emqx 实例时命令行接口无法使用的问题
+- 修复 Websocket 连接不支持 IPv6 的问题
+
 ## 4.2-rc.2 版本
 
 *发布日期: 2020-08-28*
