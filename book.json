@@ -48,7 +48,7 @@
       "url": "https://github.com/emqx/emqx"
     },
     "edit-link": {
-      "base": "https://github.com/emqx/emqx-docs-cn/source",
+      "base": "https://github.com/emqx/emqx-docs-cn/tree/develop",
       "label": "编辑"
     },
     "local-pagefooter": {

@@ -21,6 +21,7 @@ EMQ X Rule Engine (以下简称规则引擎) 用于配置 EMQ X 消息流与设�
 
 ![image-20190506171815028](../assets/image-20190506171815028.jpg)
 
+
 EMQ X 在 **消息发布或事件触发** 时将触发规则引擎，满足触发条件的规则将执行各自的 SQL 语句筛选并处理消息和事件的上下文信息。
 
 {% hint style="info" %}
@@ -28,6 +29,15 @@ EMQ X 在 **消息发布或事件触发** 时将触发规则引擎，满足触�
 
 兼容提示: EMQ X v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule-engine.md#迁移指南) 进行适配。
 {% endhint %}
+
+
+### EMQ X 规则引擎快速入门
+
+此处包含规则引擎的简介与实战，演示使用规则引擎结合华为云 RDS 上的 MySQL 服务，进行物联网 MQTT 设备在线状态记录、消息存储入库。
+
+从本视频中可以快速了解规则引擎解决的问题和基础使用方法。
+
+<iframe style="width: 500px; height: 360px; margin: 10px auto" src="//player.bilibili.com/player.html?aid=927036281&bvid=BV19T4y1w7Nj&cid=233977851&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 ### 消息发布
 
