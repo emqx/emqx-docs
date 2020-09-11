@@ -517,6 +517,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 | _limit | Integer   | False | 10000   | 每页显示的数据条数，未指定时由 `emqx-management` 插件的配置项 `max_row_limit` 决定 |
 
 在 4.1 版本后，支持多条件和模糊查询：
+
 | Name         | Type    | Description |
 | ------------ | ------- | ----------- |
 | clientid     | String  | 客户端标识符   |
@@ -1297,7 +1298,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":{"bytes.received":0,"client.connected":0,"packets.pingreq.received":0,"messages.delayed":0,"rules.matched":0,"actions.failure":0,"packets.puback.sent":0,"packets.pingresp.sent":0,"packets.publish.auth_error":0,"client.check_acl":0,"delivery.dropped.queue_full":0,"actions.success":0,"packets.publish.error":0,"packets.pubcomp.received":0,"bytes.sent":0,"packets.pubrec.inuse":0,"packets.pubrec.missed":0,"packets.pubrel.sent":0,"delivery.dropped.too_large":0,"packets.pubcomp.missed":0,"packets.subscribe.error":0,"packets.suback.sent":0,"messages.qos2.sent":0,"messages.qos1.sent":0,"packets.pubrel.missed":0,"messages.publish":0,"messages.forward":0,"packets.auth.received":0,"delivery.dropped":0,"packets.sent":0,"packets.puback.inuse":0,"delivery.dropped.qos0_msg":0,"packets.publish.dropped":0,"packets.disconnect.sent":0,"packets.auth.sent":0,"packets.unsubscribe.received":0,"session.takeovered":0,"messages.delivered":0,"client.auth.anonymous":0,"packets.connack.error":0,"packets.connack.sent":0,"packets.subscribe.auth_error":0,"packets.unsuback.sent":0,"packets.pubcomp.sent":0,"packets.publish.sent":0,"client.connack":0,"packets.publish.received":0,"client.subscribe":0,"session.created":0,"delivery.dropped.expired":0,"client.unsubscribe":0,"packets.received":0,"packets.pubrel.received":0,"packets.unsubscribe.error":0,"messages.qos0.sent":0,"packets.connack.auth_error":0,"session.resumed":0,"delivery.dropped.no_local":0,"packets.puback.missed":0,"packets.pubcomp.inuse":0,"packets.pubrec.sent":0,"messages.dropped.expired":0,"messages.dropped.no_subscribers":0,"session.discarded":0,"messages.sent":0,"messages.received":0,"packets.puback.received":0,"messages.qos0.received":0,"messages.acked":0,"client.connect":0,"packets.disconnect.received":0,"client.disconnected":0,"messages.retained":3,"session.terminated":0,"packets.publish.inuse":0,"packets.pubrec.received":0,"messages.qos2.received":0,"messages.dropped":0,"packets.connect.received":0,"client.authenticate":0,"packets.subscribe.received":0,"messages.qos1.received":0},"code":0}
 ```
 
-### 统计指标 {#endpoint-topic-metrics}
+### 主题统计指标 {#endpoint-topic-metrics}
 
 #### GET /api/v4/topic-metrics {#endpoint-list-all-topic-metrics}
 
@@ -1517,7 +1518,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/stats"
 
 #### GET /api/v4/nodes/{node}/stats {#endpoint-nodes-get-stats}
 
-类似 [GET /api/v4/stats](#endpoint-get-stats)，返回指定节点上的有状态数据。
+类似 [GET /api/v4/stats](#endpoint-get-stats)，返回指定节点上的状态数据。
 
 **Path Parameters:** 无
 
@@ -2082,7 +2083,7 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/actions'
 
 #### GET api/v4/resource_types/{resource_type_name} {#endpoint-get-resource-types}
 
-获取某个动作的详情，包括动作名字、参数列表等。
+获取某个资源的详情，包括资源描述、参数列表等。
 
 **Path Parameters:**
 
