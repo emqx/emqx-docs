@@ -517,6 +517,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 | _limit | Integer   | False | 10000   | 每页显示的数据条数，未指定时由 `emqx-management` 插件的配置项 `max_row_limit` 决定 |
 
 在 4.1 版本后，支持多条件和模糊查询：
+
 | Name         | Type    | Description |
 | ------------ | ------- | ----------- |
 | clientid     | String  | 客户端标识符   |
@@ -524,7 +525,6 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 | qos          | Enum    | 可取值为：`0`,`1`,`2` |
 | share        | String  | 共享订阅的组名称 |
 | _match_topic | String  | 主题，匹配查询 |
-
 
 **Success Response Body (JSON):**
 
@@ -1517,7 +1517,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/stats"
 
 #### GET /api/v4/nodes/{node}/stats {#endpoint-nodes-get-stats}
 
-类似 [GET /api/v4/stats](#endpoint-get-stats)，返回指定节点上的有状态数据。
+类似 [GET /api/v4/stats](#endpoint-get-stats)，返回指定节点上的状态数据。
 
 **Path Parameters:** 无
 
