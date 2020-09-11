@@ -1003,7 +1003,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/nodes/emq
 
 **Path Parameters:** 无
 
-**Success **Response Body (JSON):**
+**Success Response Body (JSON):**
 
 | Name | Type | Description                                |
 | ---- | --------- | ------------------------------------------ |
@@ -1041,7 +1041,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/listeners
 
 **Path Parameters:** 无
 
-**Success **Response Body (JSON):**
+**Success Response Body (JSON):**
 
 | Name | Type | Description                                |
 | ---- | --------- | ------------------------------------------ |
