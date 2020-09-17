@@ -31,7 +31,7 @@ EMQ X 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，用于�
 
 `emqx_statsd` 插件内部会启动一个定时器，使其每间隔一段时间便采集 EMQ X 中的监控数据。
 
-`emqx_statsd` 推送的监控数据包含的具体字段和含义，参见：[Metrics & Stats](metrics.md)
+`emqx_statsd` 推送的监控数据包含的具体字段和含义，参见：[Metrics & Stats](../advanced/metrics-and-stats.md)
 
 配置文件位于 `etc/plugins/emqx_statsd.conf`，其中：
 
