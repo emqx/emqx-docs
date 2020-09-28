@@ -175,7 +175,7 @@ token: axfw34y235wrq234t4ersgw4t
 
 ## 桥接数据到 MQTT Broker
 
-搭建 MQTT Broker 环境，以 MaxOS X 为例:
+搭建 MQTT Broker 环境，以 MacOS X 为例:
 ```bash
 $ brew install mosquitto
 
@@ -772,7 +772,7 @@ Payload: "hello"
 
 ## 保存数据到 Redis
 
-搭建 Redis 环境，以 MaxOS X 为例:
+搭建 Redis 环境，以 MacOS X 为例:
 
 ```bash
  $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz
@@ -962,7 +962,7 @@ Payload: "hello"
 
 ## 保存数据到 OpenTSDB
 
-搭建 OpenTSDB 数据库环境，以 MaxOS X 为例:
+搭建 OpenTSDB 数据库环境，以 MacOS X 为例:
 
 ```bash
 $ docker pull petergrace/opentsdb-docker
@@ -1272,7 +1272,7 @@ select * from t_mqtt_msg;
 
 ## 保存数据到 TimescaleDB
 
-搭建 TimescaleDB 数据库环境，以 MaxOS X 为例:
+搭建 TimescaleDB 数据库环境，以 MacOS X 为例:
 
 ```bash
 $ docker pull timescale/timescaledb
@@ -1514,7 +1514,7 @@ time                external host    internal location
 
 ## 桥接数据到 Kafka
 
-搭建 Kafka 环境，以 MaxOS X 为例:
+搭建 Kafka 环境，以 MacOS X 为例:
 ```bash
 $ wget http://apache.claz.org/kafka/2.3.0/kafka_2.12-2.3.0.tgz
 
@@ -1609,7 +1609,7 @@ $ ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic tes
 
 ## 桥接数据到 Pulsar
 
-搭建 Pulsar 环境，以 MaxOS X 为例:
+搭建 Pulsar 环境，以 MacOS X 为例:
 
 ```bash
 $ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
@@ -1698,7 +1698,7 @@ $ ./bin/pulsar-client consume testTopic  -s "sub-name" -n 1000
 
 ## 桥接数据到 RocketMQ
 
-搭建 RocketMQ 环境，以 MaxOS X
+搭建 RocketMQ 环境，以 MacOS X
 ​       为例:
 
 ```bash
@@ -1786,7 +1786,7 @@ $ ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer TopicTest
 
 ## 桥接数据到 RabbitMQ
 
-搭建 RabbitMQ 环境，以 MaxOS X 为例:
+搭建 RabbitMQ 环境，以 MacOS X 为例:
 
 ```bash
 $ brew install rabbitmq
@@ -1894,7 +1894,7 @@ channel.start_consuming()
 
 ## 桥接数据到 RPC 服务
 
-搭建 EMQ X Broker 环境，以 MaxOS X 为例:
+搭建 EMQ X Broker 环境，以 MacOS X 为例:
 
 ```bash
 $ brew tap emqx/emqx/emqx
@@ -1967,7 +1967,7 @@ Payload: "Hello, World\!"
 
 ## 离线消息保存到 Redis
 
-搭建 Redis 环境，以 MaxOS X 为例:
+搭建 Redis 环境，以 MacOS X 为例:
 
 ```bash
  $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz
@@ -2537,7 +2537,7 @@ db.mqtt_msg.find()
 
 ## 从 Redis 中获取订阅关系
 
-搭建 Redis 环境，以 MaxOS X 为例:
+搭建 Redis 环境，以 MacOS X 为例:
 
 ```bash
  $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz

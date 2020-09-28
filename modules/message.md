@@ -2,7 +2,7 @@
 
 Kafka 消费组使用外部 Kafka 作为消息队列，可以从 Kafka 中消费消息转换成为 MQTT 消息发布在 emqx 中。
 
-搭建 Kafka 环境，以 MaxOS X 为例:
+搭建 Kafka 环境，以 MacOS X 为例:
 
 ```bash
 $ wget http://apache.claz.org/kafka/2.3.1/kafka_2.12-2.3.1.tgz
@@ -83,7 +83,7 @@ Dashboard的websocket工具接收到了Kafka 生产的消息"hello-kafka":
 
 Pulsar 消费组使用外部 Pulsar 作为消息队列，可以从 Pulsar 中消费消息转换成为 MQTT 消息发布在 emqx 中。
 
-搭建 Pulsar 环境，以 MaxOS X 为例:
+搭建 Pulsar 环境，以 MacOS X 为例:
 
 ```bash
 $ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
