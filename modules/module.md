@@ -12,7 +12,7 @@ EMQ X 的代理订阅功能使得客户端在连接建立时，不需要发送�
 
 打开 [EMQ X Dashboard](http://127.0.0.1:18083/)，并登陆，点击左侧的 “模块” 选项卡，选择添加
 
-![image-20200927213049265](./assets/acl_file1.png)
+![image-20200927213049265](./assets/modules.png)
 
 选择 MQTT 代理订阅模块
 
@@ -41,15 +41,13 @@ B 客户端使用 MQTT V5 协议连接 EMQ X，根据上文的配置规则，代
 
 EMQ X 的主题重写功能支持根据用户配置的规则在客户端订阅主题、发布消息、取消订阅的时候将 A 主题重写为 B 主题。
 
-EMQ X 的 [保留消息](advanced/retained.md) 和 [延迟发布](advanced/delay-publish.md) 可以与主题重写配合使用，例如，当用户想使用延迟发布功能，但不方便修改客户端发布的主题时，可以使用主题重写将相关主题重写为延迟发布的主题格式。
-
 ## 开启主题重写功能
 
 通过 dashboard 页面可以开启 MQTT 主题重写控制模块
 
 打开 [EMQ X Dashboard](http://127.0.0.1:18083/)，并登陆，点击左侧的 “模块” 选项卡，选择添加
 
-![image-20200927213049265](./assets/acl_file1.png)
+![image-20200927213049265](./assets/modules.png)
 
 选择 MQTT 主题重写模块
 
@@ -101,7 +99,7 @@ EMQ X 的 [保留消息](advanced/retained.md) 和 [延迟发布](advanced/delay
 
 打开 [EMQ X Dashboard](http://127.0.0.1:18083/)，并登陆，点击左侧的 “模块” 选项卡，选择添加
 
-![image-20200927213049265](./assets/acl_file1.png)
+![image-20200927213049265](./assets/modules.png)
 
 选择保留消息模块
 
@@ -119,10 +117,10 @@ EMQ X 的 [保留消息](advanced/retained.md) 和 [延迟发布](advanced/delay
 
 | 配置项                         | 类型     | 可取值                   | 默认值 | 说明                                                         |
 | ------------------------------ | -------- | ------------------------ | ------ | ------------------------------------------------------------ |
-| retainer.storage_type          | enum     | `ram`, `disc`, `disc_only` | ram |ram：仅储存在内存中；<br />disc：储存在内存和硬盘中；<br />disc_only：仅储存在硬盘中。|
-| retainer.max_retained_messages | integer  | \>= 0                    | 0      | 保留消息的最大数量，0 表示没有限制。保留消息数量超出最大值限制后，可以替换已存在的保留消息，但不能为新的主题储存保留消息。 |
-| retainer.max_payload_size      | bytesize |                          | 1MB    | 保留消息的最大 Payload 值。Payload 大小超出最大值后 EMQ Ｘ 消息服务器会把收到的保留消息作为普通消息处理。 |
-| retainer.expiry_interval       | duration |                          | ０     | 保留消息的过期时间，0 表示永不过期。如果 PUBLISH 报文中设置了消息过期间隔，那么以 PUBLISH 报文中的消息过期间隔为准。 |
+| 存储类型               | enum     | `ram`, `disc`, `disc_only` | ram |ram：仅储存在内存中；<br />disc：储存在内存和硬盘中；<br />disc_only：仅储存在硬盘中。|
+| 最大保留消息数        | integer  | \>= 0                    | 0      | 保留消息的最大数量，0 表示没有限制。保留消息数量超出最大值限制后，可以替换已存在的保留消息，但不能为新的主题储存保留消息。 |
+| 最大保留消息大小      | bytesize |                          | 1MB    | 保留消息的最大 Payload 值。Payload 大小超出最大值后 EMQ Ｘ 消息服务器会把收到的保留消息作为普通消息处理。 |
+| 有效期限            | duration |                          | ０     | 保留消息的过期时间，0 表示永不过期。如果 PUBLISH 报文中设置了消息过期间隔，那么以 PUBLISH 报文中的消息过期间隔为准。 |
 
 # 延迟发布
 
@@ -132,7 +130,7 @@ EMQ X 的 [保留消息](advanced/retained.md) 和 [延迟发布](advanced/delay
 
 打开 [EMQ X Dashboard](http://127.0.0.1:18083/)，并登陆，点击左侧的 “模块” 选项卡，选择添加
 
-![image-20200927213049265](./assets/acl_file1.png)
+![image-20200927213049265](./assets/modules.png)
 
 选择延迟发布模块，无需配置参数，直接开启
 
@@ -156,5 +154,3 @@ $delayed/{DelayInterval}/{TopicName}
 - `$delayed/15/x/y`: 15 秒后将 MQTT 消息发布到主题 `x/y`。
 - `$delayed/60/a/b`: 1 分钟后将 MQTT 消息发布到 `a/b`。
 - `$delayed/3600/$SYS/topic`: 1 小时后将 MQTT 消息发布到 `$SYS/topic`。
-
-延迟发布功能由 `emqx_mod_delayed` 内置模块提供，此功能默认开启，支持动态启停，请参见 [内置模块](./internal-modules.md)。
