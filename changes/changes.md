@@ -17,6 +17,45 @@ ref: undefined
 
 # 版本发布
 
+## 4.2.1 版本
+
+*发布日期: 2020-09-29*
+
+EMQ X 4.2.1 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复没有正确处理 No Local 逻辑导致消息堆积在飞行窗口和消息队列的问题
+
+  Github PR: [emqx#3741](https://github.com/emqx/emqx/pull/3741)
+  Github Issue: [emqx#3738](https://github.com/emqx/emqx/issues/3738)
+
+### emqx-bridge-mqtt
+
+**错误修复:**
+
+- 修复规则引擎 MQTT 订阅无法接收消息的问题
+
+  Github PR: [emqx-bridge-mqtt#108](https://github.com/emqx/emqx-bridge-mqtt/pull/108)
+
+### emqx-dashboard
+
+**错误修复:**
+
+- 修复超长 Client ID 的显示错误问题
+
+  Github PR: [emqx-dashboard#262](https://github.com/emqx/emqx-dashboard/pull/262)
+
+### emqx-auth-mongo
+
+**错误修复:**
+
+- 修复 ACL 查询语句有多个匹配结果时仅处理了第一个匹配的问题
+
+  Github PR: [emqx-auth-mongo#231](https://github.com/emqx/emqx-auth-mongo/pull/231)
+
 ## 4.2.0 版本
 
 *发布日期: 2020-09-05*
