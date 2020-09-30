@@ -30,7 +30,7 @@
   * [告警](advanced/alarms.md)
   * [数据导入导出](advanced/data-import-and-export.md)
 
-* 功能
+* 模块
   * [内置访问控制文件](modules/auth.md#ACL-File-访问控制)
   * [MySQL 认证/访问控制](modules/auth.md#MySQL-认证/访问控制)
   * [PostgreSQL 认证/访问控制](modules/auth.md#PostgreSQL-认证/访问控制)
@@ -46,7 +46,7 @@
   * [LwM2M 接入网关](modules/protocol.md#LwM2M-接入网关)
   * [MQTT-SN 接入网关](modules/protocol.md#MQTT-SN-接入网关)
   * [TCP 接入网关](modules/protocol.md#TCP-接入网关)
-  * [JT/T808 接入网关](modules/protocol.md#JT/T808-接入网关
+  * [JT/T808 接入网关](modules/protocol.md#JT/T808-接入网关)
   * [Kafka 消费者](modules/message.md#Kafka-消费者)
   * [Pulsar 消费者](modules/message.md#Pulsar-消费者)
   * [MQTT Subscriber](modules/message.md#MQTT-Subscriber)
