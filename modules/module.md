@@ -74,15 +74,15 @@ EMQ X 的代理订阅功能使得客户端在连接建立时，不需要发送�
 
 选择 MQTT 代理订阅模块
 
-![image-20200927213049265](./assets/mod_subscription_1.png)
+![image-20200927213049265](./assets/mod_subscriptions_1.png)
 
 配置相关参数
 
-![image-20200927213049265](./assets/mod_subscription_2.png)
+![image-20200927213049265](./assets/mod_subscriptions_2.png)
 
 点击添加后，模块添加完成
 
-![image-20200927213049265](./assets/mod_subscription_3.png)
+![image-20200927213049265](./assets/mod_subscriptions_3.png)
 
 ## 代理订阅规则
 
