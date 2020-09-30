@@ -1,3 +1,0 @@
-# Extension Protocol
-
-# Extension Hook
