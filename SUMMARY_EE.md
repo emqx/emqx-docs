@@ -30,6 +30,38 @@
   * [告警](advanced/alarms.md)
   * [数据导入导出](advanced/data-import-and-export.md)
 
+* 功能
+  * [内置访问控制文件](modules/auth.md#ACL-File-访问控制)
+  * [MySQL 认证/访问控制](modules/auth.md#MySQL-认证/访问控制)
+  * [PostgreSQL 认证/访问控制](modules/auth.md#PostgreSQL-认证/访问控制)
+  * [Redis 认证/访问控制](modules/auth.md#Redis-认证/访问控制)
+  * [HTTP 认证/访问控制](modules/auth.md#HTTP-认证/访问控制)
+  * [内置数据库 认证/访问控制](modules/auth.md#内置数据库-认证/访问控制)
+  * [MongoDB 认证/访问控制](modules/auth.md#MongoDB-认证/访问控制)
+  * [PKSFile 认证](modules/auth.md#PKSFile-认证)
+  * [LDAP 认证/访问控制](modules/auth.md#LDAP-认证/访问控制)
+  * [JWT 认证](modules/auth.md#JWT-认证)
+  * [COAP 接入网关](modules/protocol.md#COAP-接入网关)
+  * [Stomp 接入网关](modules/protocol.md#Stomp-接入网关)
+  * [LwM2M 接入网关](modules/protocol.md#LwM2M-接入网关)
+  * [MQTT-SN 接入网关](modules/protocol.md#MQTT-SN-接入网关)
+  * [TCP 接入网关](modules/protocol.md#TCP-接入网关)
+  * [JT/T808 接入网关](modules/protocol.md#JT/T808-接入网关
+  * [Kafka 消费者](modules/message.md#Kafka-消费者)
+  * [Pulsar 消费者](modules/message.md#Pulsar-消费者)
+  * [MQTT Subscriber](modules/message.md#MQTT-Subscriber)
+  * [多语言扩展协议接入](modules/extension.md#多语言扩展协议接入)
+  * [多语言扩展钩子](modules/extension.md#多语言扩展钩子)
+  * [Recon](modules/devops.md#Recon)
+  * [EMQ X Prometheus Agent](modules/devops.md#EMQ-X-Prometheus-Agent)
+  * [主题监控](modules/module.md#主题监控)
+  * [MQTT 增强认证](modules/module.md#MQTT-增强认证)
+  * [上下线通知](modules/module.md#上下线通知)
+  * [MQTT 代理订阅](modules/module.md#MQTT-代理订阅)
+  * [主题重写](modules/module.md#主题重写)
+  * [MQTT 保留消息](modules/module.md#MQTT-保留消息)
+  * [MQTT 消息延迟发布](modules/module.md#MQTT-消息延迟发布)
+
 * [插件](advanced/plugins.md)
 
 * 认证
