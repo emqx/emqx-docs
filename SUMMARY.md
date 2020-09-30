@@ -24,6 +24,7 @@
   * [分布集群](advanced/cluster.md)
   * [钩子](advanced/hooks.md)
   * [指标监控](advanced/metrics-and-stats.md)
+  * [主题指标统计](advanced/topic-metrics.md)
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
