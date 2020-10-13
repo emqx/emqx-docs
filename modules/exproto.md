@@ -38,7 +38,7 @@
 
 ## 接口设计
 
-从 gRPC 的角度上看，ExProto 会作为客户端向 `ProtocolHandler` 服务发送回调请求。同时，它也会作为服务端向外部模块提供 `ConnectionAdapter` 服务，以提供 各类接口的调用。如图：
+从 gRPC 的角度上看，ExProto 会作为客户端向 `ConnectionHandler` 服务发送回调请求。同时，它也会作为服务端向外部模块提供 `ConnectionAdapter` 服务，以提供 各类接口的调用。如图：
 
 ![Extension Protocol gRPC Arch](assets/exproto-grpc-arch.jpg)
 
@@ -101,7 +101,7 @@ service ConnectionHandler {
 
 1. 拷贝出当前版本的 `lib/emqx_exproto-<x.y.z>/priv/protos/exproto.proto` 文件。
 2. 使用对应编程语言的 gRPC 框架，生成 `exproto.proto` 的 gRPC 服务端的代码。
-3. 实现 exproto.proto 当中 `ProtocolHandler` 服务的接口。
+3. 实现 exproto.proto 当中 `ConnectionHandler` 服务的接口。
 
 开发完成后，需将该服务部署到与 EMQ X 能够通信的服务器上，并保证端口的开放。
 
@@ -114,7 +114,7 @@ service ConnectionHandler {
 
 1. ExProto 的 `ConnectionApdapter` 服务的监听地址。用于接收 gRPC 请求。
 2. 配置 **监听器(Listener)**，提供 TCP/UDP/SSL/DTLS 的地址监听。用于监听、接收设备的连接。
-3. 为每个监听器指定一个 `ProtocolHandler` 的服务地址。用于发送各种事件回调到用户的服务。
+3. 为每个监听器指定一个 `ConnectionHandler` 的服务地址。用于发送各种事件回调到用户的服务。
 
 打开 EMQ X Dashboard，点击左侧的 “模块” 选项卡，选择添加
 
@@ -124,11 +124,14 @@ service ConnectionHandler {
 
 ![Add ExProto Module](assets/exproto-add.jpg)
 
-配置 gRPC 服务的监听地址，和是否开启 SSL：
+配置 `ConnectionAdapter` 服务的监听地址，和是否为其开启 SSL 监听：
 
 ![Configure ExProto gRPC Server](assets/exproto-conf-1.jpg)
 
-配置 ExProto 监听器的监听地址，和 协议处理服务(ProtocolHandler) 的回调地址：
+点击 “添加监听器” 为 ExProto 模块配置监听器，其中包括：
+
+1. 监听器的 `监听地址` 和 `监听类型`，它表明以何种方式接收自定义协议的 Socket 连接。
+2. 连接处理服务(ConnectionHandler) 的 `处理器服务地址` 和可能会有的 SSL 证书配置，它表明 ExProto 如何访问 ConnectionHandler 服务。
 
 ![Configure ExProto Listener](assets/exproto-conf-2.jpg)
 

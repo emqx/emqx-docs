@@ -20,11 +20,11 @@ $ ./bin/pulsar standalone
 $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 ```
 
-通过 dashboard 页面可以开启 Kafka 消费组模块
+通过 dashboard 页面可以开启 Pulsar 消费组模块
 
 打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡:
 
-选择 Kafka 消费组模块:
+选择 Pulsar 消费组模块:
 
 ![](./assets/pulsar_consumer1.png)
 

@@ -46,10 +46,10 @@
   * [MQTT-SN 接入网关](modules/mqtt_sn_protocol.md)
   * [TCP 接入网关](modules/tcp_protocol.md)
   * [JT/T808 接入网关](modules/jt808_protocol.md)
-  * [COAP 接入网关](modules/coap_protocol.md)
+  * [CoAP 接入网关](modules/coap_protocol.md)
   * [Stomp 接入网关](modules/stomp_protocol.md)
-  * [Kafka 消费者](modules/kafka_consumer.md)
-  * [Pulsar 消费者](modules/pulsar_consumer.md)
+  * [Kafka 消费组](modules/kafka_consumer.md)
+  * [Pulsar 消费组](modules/pulsar_consumer.md)
   * [MQTT Subscriber](modules/mqtt_subscriber.md)
   * [多语言扩展协议接入](modules/exproto.md)
   * [多语言扩展钩子](modules/exhook.md)
@@ -58,9 +58,9 @@
   * [主题监控](modules/topic_metrics.md)
   * [MQTT 增强认证](modules/auth_sasl.md)
   * [上下线通知](modules/presence.md)
-  * [MQTT 代理订阅](modules/subscription_module.md)
+  * [MQTT 代理订阅](modules/subscription.md)
   * [主题重写](modules/topic_rewrite.md)
-  * [MQTT 保留消息](modules/retainer_module.md)
+  * [MQTT 保留消息](modules/retainer.md)
   * [MQTT 消息延迟发布](modules/delayed_publish.md)
 
 * [插件](advanced/plugins.md)
@@ -169,12 +169,6 @@
    * [RabbitMQ 桥接](bridge/bridge.md#rabbitmq-桥接)
    * [Pulsar 桥接](bridge/bridge.md#pulsar-桥接)
    * [RocketMQ 桥接](bridge/bridge.md#rocketmq-桥接)
-
-* 多语言支持
-  * [简介](advanced/lang.md)
-  * [钩子扩展](advanced/lang-exhook.md)
-  * [协议接入](advanced/lang-exproto.md)
-  * [Lua](advanced/lang-lua.md)
 
 * 进阶教程
   * [设备管理](tutorial/device-management.md)

@@ -19,11 +19,11 @@ MQTT-SN 还支持设备的睡眠功能，如果设备进入睡眠状态，无法
 EMQX-SN 是 EMQ X 的一个网关接入模块，实现了 MQTT-SN 的大部分功能，它相当于一个在云端的 MQTT-SN 网关，直接和 EMQ
 X Broker 相连。
 
-## EMQX-SN 接入网关启动方式
+## 创建模块
 
 通过dashboard页面可以开启 MQTT-SN 接入网关模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，点击左侧的 “模块” 选项卡，选择添加
+打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加
 
 ![image-20200927213049265](./assets/modules.png)
 
