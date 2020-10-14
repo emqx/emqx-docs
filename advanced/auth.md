@@ -43,7 +43,7 @@ EMQ X 支持的认证方式：
 **内置数据源**
 
 {% emqxee %}
-* [内置数据库 认证/访问控制](modules/mnesia_authentication.md)
+* [内置数据库 认证/访问控制](../modules/mnesia_authentication.md)
 {% endemqxee %}
 
 {% emqxce %}
@@ -58,11 +58,11 @@ EMQ X 支持的认证方式：
 **外部数据库**
 
 {% emqxee %}
-* [MySQL 认证/访问控制](modules/mysql_authentication.md)
-* [PostgreSQL 认证/访问控制](modules/pgsql_authentication.md)
-* [Redis 认证/访问控制](modules/redis_authentication.md)
-* [MongoDB 认证/访问控制](modules/mongo_authentication.md)
-* [LDAP 认证/访问控制](modules/ldap_authentication.md)
+* [MySQL 认证/访问控制](../modules/mysql_authentication.md)
+* [PostgreSQL 认证/访问控制](../modules/pgsql_authentication.md)
+* [Redis 认证/访问控制](../modules/redis_authentication.md)
+* [MongoDB 认证/访问控制](../modules/mongo_authentication.md)
+* [LDAP 认证/访问控制](../modules/ldap_authentication.md)
 {% endemqxee %}
 
 {% emqxce %}
@@ -78,8 +78,8 @@ EMQ X 支持的认证方式：
 **其他**
 
 {% emqxee %}
-  * [HTTP 认证/访问控制](modules/http_authentication.md)
-  * [JWT 认证](modules/jwt_authentication.md)
+  * [HTTP 认证/访问控制](../modules/http_authentication.md)
+  * [JWT 认证](../modules/jwt_authentication.md)
 {% endemqxee %}
 
 {% emqxce %}
