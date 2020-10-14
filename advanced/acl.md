@@ -34,8 +34,14 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 **配置文件/内置数据源**
 
+{% emqxee %}
+* [内置数据库 认证/访问控制](modules/mnesia_authentication.md)
+{% endemqxee %}
+
+{% emqxce %}
 * [内置 ACL](./acl-file.md)
 * [Mnesia ACL](./acl-mnesia.md)
+{% endemqxce %}
 
 使用配置文件提供认证数据源，适用于变动较小的 ACL 管理。
 
@@ -43,10 +49,20 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 **外部数据库**
 
+{% emqxee %}
+* [MySQL 认证/访问控制](modules/mysql_authentication.md)
+* [PostgreSQL 认证/访问控制](modules/pgsql_authentication.md)
+* [Redis 认证/访问控制](modules/redis_authentication.md)
+* [MongoDB 认证/访问控制](modules/mongo_authentication.md)
+* [LDAP 认证/访问控制](modules/ldap_authentication.md)
+{% endemqxee %}
+
+{% emqxce %}
 * [MySQL ACL](./acl-mysql.md)
 * [PostgreSQL ACL](./acl-postgres.md)
 * [Redis ACL](./acl-redis.md)
 * [MongoDB ACL](./acl-mongodb.md)
+{% endemqxce %}
 
 外部数据库可以存储大量数据、动态管理 ACL，方便与外部设备管理系统集成。
 
@@ -54,20 +70,21 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 **其他**
 
+{% emqxee %}
+  * [HTTP 认证/访问控制](modules/http_authentication.md)
+{% endemqxee %}
+
+{% emqxce %}
 * [HTTP ACL](./acl-http.md)
+{% endemqxce %}
 
 HTTP ACL 能够实现复杂的 ACL 管理。
-
-
 
 {% hint style="info" %} 
 
 ACL 功能包含在认证鉴权插件中，更改插件配置后需要**重启插件**才能生效，
 
 {% endhint %}
-
-
-
 
 ## 规则详解
 

@@ -12,19 +12,15 @@
   * [Dashboard](getting-started/dashboard-ee.md)
 
 * 功能
-  * [保留消息](advanced/retained.md)
+  * [认证鉴权](advanced/auth.md)
+  * [发布订阅访问控制](advanced/acl.md)
   * [共享订阅](advanced/shared-subscriptions.md)
-  * [延迟发布](advanced/delay-publish.md)
-  * [代理订阅](advanced/proxy-subscriptions.md)
-  * [消息桥接](advanced/bridge.md)
-  * [主题重写](advanced/topic-rewrite.md)
   * [$SYS 系统主题](advanced/system-topic.md)
   * [黑名单](advanced/blacklist.md)
   * [WebHook](advanced/webhook.md)
   * [分布集群](advanced/cluster.md)
   * [钩子](advanced/hooks.md)
   * [指标监控](advanced/metrics-and-stats.md)
-  * [主题指标统计](advanced/topic-metrics.md)
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
@@ -32,7 +28,7 @@
   * [数据导入导出](advanced/data-import-and-export.md)
 
 * 模块
-  * [内置访问控制文件](modules/internal_acl.md)
+  * [内置访问控制](modules/internal_acl.md)
   * [MySQL 认证/访问控制](modules/mysql_authentication.md)
   * [PostgreSQL 认证/访问控制](modules/pgsql_authentication.md)
   * [Redis 认证/访问控制](modules/redis_authentication.md)
@@ -55,7 +51,7 @@
   * [多语言扩展钩子](modules/exhook.md)
   * [Recon](modules/recon.md)
   * [EMQ X Prometheus Agent](modules/prometheus.md)
-  * [主题监控](modules/topic_metrics.md)
+  * [主题指标统计](modules/topic_metrics.md)
   * [MQTT 增强认证](modules/auth_sasl.md)
   * [上下线通知](modules/presence.md)
   * [MQTT 代理订阅](modules/subscription.md)
@@ -64,29 +60,6 @@
   * [MQTT 消息延迟发布](modules/delayed_publish.md)
 
 * [插件](advanced/plugins.md)
-
-* 认证
-  * [认证简介](advanced/auth.md)
-  * [Username 认证（即将废弃）](advanced/auth-username.md)
-  * [Cliend ID 认证（即将废弃）](advanced/auth-clientid.md)
-  * [Mnesia 认证](advanced/auth-mnesia.md)
-  * [HTTP 认证](advanced/auth-http.md)
-  * [JWT 认证](advanced/auth-jwt.md)
-  * [LDAP 认证](advanced/auth-ldap.md)
-  * [MySQL 认证](advanced/auth-mysql.md)
-  * [PostgreSQL 认证](advanced/auth-postgresql.md)
-  * [Redis 认证](advanced/auth-redis.md)
-  * [MongoDB 认证](advanced/auth-mongodb.md)
-
-* 发布订阅 ACL
-  * [发布订阅 ACL 简介](advanced/acl.md)
-  * [内置 ACL](advanced/acl-file.md)
-  * [Mnesia ACL](advanced/acl-mnesia.md)
-  * [HTTP ACL](advanced/acl-http.md)
-  * [MySQL ACL](advanced/acl-mysql.md)
-  * [PostgreSQL ACL](advanced/acl-postgres.md)
-  * [Redis ACL](advanced/acl-redis.md)
-  * [MongoDB ACL](advanced/acl-mongodb.md)
 
 * HTTP API
   * [HTTP API](advanced/http-api.md)
@@ -219,9 +192,12 @@
 
 * 协议介绍
   * [MQTT 协议](development/protocol.md)
-  * [MQTT-SN 协议](development/protocol.md#mqtt-sn-协议)
-  * [LwM2M 协议](development/protocol.md#lwm2m-协议)
-  * [私有 TCP 协议](development/protocol.md#私有-tcp-协议)
+  * [LwM2M 接入网关](modules/lwm2m_protocol.md)
+  * [MQTT-SN 接入网关](modules/mqtt_sn_protocol.md)
+  * [TCP 接入网关](modules/tcp_protocol.md)
+  * [JT/T808 接入网关](modules/jt808_protocol.md)
+  * [CoAP 接入网关](modules/coap_protocol.md)
+  * [Stomp 接入网关](modules/stomp_protocol.md)
 
 * SDK & Tools
   * [MQTT 客户端库](development/client.md)
@@ -250,5 +226,4 @@
 
 * 相关资料
   * [架构设计](design/design.md)
-  <!-- * [相关资料](awesome/awesome.md) -->
 
