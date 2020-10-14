@@ -14,6 +14,9 @@
 * 功能
   * [认证鉴权](advanced/auth.md)
   * [发布订阅访问控制](advanced/acl.md)
+  * [规则引擎](rule/rule-engine.md)
+  * [数据存储设计](backend/backend.md)
+  * [消息桥接简介](bridge/bridge.md)
   * [共享订阅](advanced/shared-subscriptions.md)
   * [$SYS 系统主题](advanced/system-topic.md)
   * [黑名单](advanced/blacklist.md)
@@ -119,8 +122,6 @@
   * [从 PostgreSQL 中获取订阅关系](rule/rule-example.md#从-postgresql-中获取订阅关系)
   * [从 Cassandra 中获取订阅关系](rule/rule-example.md#从-cassandra-中获取订阅关系)
   * [从 MongoDB 中获取订阅关系](rule/rule-example.md#从-mongodb-中获取订阅关系)
-  * [从 Kafka 消费消息到 EMQ X](rule/rule-example.md#从-kafka-消费消息到-emq-x)
-  * [从 Pulsar 消费消息到 EMQ X](rule/rule-example.md#从-pulsar-消费消息到-emq-x)
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
