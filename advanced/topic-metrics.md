@@ -19,7 +19,7 @@ ref: undefined
 
 EMQ X Broker 提供了主题指标统计功能，可以统计指定主题下的消息收发数量、速率等指标。您可以通过 Dashboard 的 Topic Metrics 页面查看和使用这一功能，也可以通过 HTTP API 完成相应操作。
 
-###Dashboard
+### Dashboard
 
 Topic Metrics 页面位于 Dashboard 的 Analysis 标签下，由于主题指标统计功能以插件形式实现，且默认关闭，因此首次使用时需要点击 Topic Metrics 页面右上角的 *Enable* 按钮以开启此功能。
 
