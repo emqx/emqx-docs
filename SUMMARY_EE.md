@@ -151,7 +151,7 @@
   * [资源](advanced/http-api.md#endpoint-resources)
   * [数据遥测](advanced/http-api.md#endpoint-telemetry)
 
-* 配置项
+* 参数配置
   * [配置项](configuration/configuration.md)
   * [cluster](configuration/configuration.md#cluster)
   * [node](configuration/configuration.md#node)
