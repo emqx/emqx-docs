@@ -6,6 +6,7 @@
   * [安装](getting-started/install.md)
   * [启动 EMQ X](getting-started/start.md)
   * [基本命令](getting-started/command-line.md)
+   * [创建集群](getting-started/cluster.md)
   * [目录结构](getting-started/directory.md)
   * [配置说明](getting-started/config.md)
   * [日志与追踪](getting-started/log.md)
