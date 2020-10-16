@@ -237,6 +237,22 @@ SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = '
 编解码（Schema Registry） 用于管理编解码使用的 Schema、处理编码或解码请求并返回结果。编解码配合规则引擎，可进行
 Protobuf、Avro 以及私有协议上/下行消息解析处理，实现如消息加密、消息压缩、任意二进制-JSON 消息互转等复杂操作。
 
+## 模块
+
+模块页面用于查看 EMQ X 创建管理模块功能操作。
+
+Dashboard 上模块的创建、启动、停止操作是集群同步的，如果模块启动失败，请检查集群内每个节点的配置是否正确，任意集群启动失败都无法成功启动模块。
+
+![image-20200117235321920](./assets/dashboard-ee/image-dashboard-modules.png)
+
+## 插件
+
+插件页面用于查看 EMQ X 内置插件列表、进行插件的启动、停止操作。
+
+不同于命令行插件管理，Dashboard 上插件的启动、停止操作是集群同步的，如果插件启动失败，请检查集群内每个节点的配置是否正确，任意集群启动失败都无法成功启动插件。
+
+![image-20200117235321920](./assets/dashboard-ee/image-20200117235321920.png)
+
 ## 告警
 
 用于展示 EMQ X 基础的告警信息，包含当前告警与历史告警信息。更高级的告警与日志与监控管理由 EMQ X Control Center
@@ -244,15 +260,6 @@ Protobuf、Avro 以及私有协议上/下行消息解析处理，实现如消息
 技术人员获取。
 
 ![image-20200117233958665](./assets/dashboard-ee/image-20200117233958665.png)
-
-## 插件
-
-插件页面用于查看 EMQ X 内置插件列表、进行插件的启动、停止管理操作。
-
-不同于命令行插件管理，Dashboard
-上插件的启动、停止操作是集群同步的，如果插件启动失败，请检查集群内每个节点的配置是否正确，任意集群启动失败都无法成功启动插件。
-
-![image-20200117235321920](./assets/dashboard-ee/image-20200117235321920.png)
 
 ## 工具
 
@@ -267,14 +274,25 @@ Protobuf、Avro 以及私有协议上/下行消息解析处理，实现如消息
 基础在设置开放了 `emqx.conf` 中可以进行热更新的部分配置项，您无需重启 EMQ X 即可完成大部分关键信息如是否开启匿名认证、ACL
 缓存事件、ACL 缓存开关等配置。
 
-基础设置是以 Zone 来组织的，默认情况下 external Zone 关联了 1883
-端口所在监听器。
+基础设置是以 Zone 来组织的，默认情况下 external Zone 关联了 1883 端口所在监听器。
 
-![image-20200118002637754](./assets/dashboard-ee/image-20200118002637754.png)
+![image-20200118002637754](./assets/dashboard-ee/set-base.png)
+
+### zones设置
+动态设置zones相关配置，修改后在整个集群生效，并且会持久化在emqx内部。(不会同步到etc/zones.conf)
+![image-20200118002637754](./assets/dashboard-ee/set-zone.png)
+
+### 监听器设置
+动态设置监听器相关配置，修改后在整个集群生效，并且会持久化在emqx内部。(不会同步到etc/listeners.conf)
+![image-20200118002637754](./assets/dashboard-ee/set-listener.png)
+
+### 监控告警设置
+动态设置监控告警配置，修改后在整个集群生效，并且会持久化在emqx内部。(不会同步到etc/sys_momn.conf)
+![image-20200118002637754](./assets/dashboard-ee/set-sys_mon.png)
 
 ### 集群设置
 
-集群设置无法更改集群方式，但可用于手工集群邀请节点加入集群，更改静态集群、DNS 集群等集群方式的参数信息。
+集群设置无法更改集群方式，但可用于手工集群邀请节点加入集群。
 
 ## 通用
 

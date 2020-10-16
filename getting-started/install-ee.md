@@ -363,7 +363,7 @@ emqx 4.0.0 is running
 
 {% content "Debian" %}
 
-## Debian
+## Debian 
 
   - Stretch (Debian 9)
   - Jessie (Debian 8)

@@ -1,4 +1,4 @@
-* 概览
+* 产品概览
   * [EMQ X 消息服务器简介](introduction.md)
   * [EMQ X 消息服务器功能列表](introduction/checklist.md)
 
@@ -13,10 +13,10 @@
 
 * 功能
   * [认证鉴权](advanced/auth.md)
-  * [发布订阅访问控制](advanced/acl.md)
+  * [发布订阅 ACL](advanced/acl.md)
   * [规则引擎](rule/rule-engine.md)
-  * [数据存储设计](backend/backend.md)
-  * [消息桥接简介](bridge/bridge.md)
+  * [数据存储](backend/backend.md)
+  * [消息桥接](bridge/bridge.md)
   * [共享订阅](advanced/shared-subscriptions.md)
   * [$SYS 系统主题](advanced/system-topic.md)
   * [黑名单](advanced/blacklist.md)
@@ -30,7 +30,8 @@
   * [告警](advanced/alarms.md)
   * [数据导入导出](advanced/data-import-and-export.md)
 
-* 模块
+* 模块管理
+  * [模块介绍](modules/modules.md)
   * [内置访问控制](modules/internal_acl.md)
   * [MySQL 认证/访问控制](modules/mysql_authentication.md)
   * [PostgreSQL 认证/访问控制](modules/pgsql_authentication.md)
@@ -62,7 +63,7 @@
   * [MQTT 保留消息](modules/retainer.md)
   * [MQTT 消息延迟发布](modules/delayed_publish.md)
 
-* [插件](advanced/plugins.md)
+* [插件管理](advanced/plugins.md)
 
 * HTTP API
   * [HTTP API](advanced/http-api.md)
@@ -103,10 +104,10 @@
   * [保存数据到 DynamoDB](rule/rule-example.md#保存数据到-dynamodb)
   * [保存数据到 Redis](rule/rule-example.md#保存数据到-redis)
   * [保存数据到 ClickHouse](rule/rule-example.md#保存数据到-clickhouse)
-  * [保存数据到 TDengine](rule/rule-example.md#保存数据到-tdengine)
   * [保存数据到 OpenTSDB](rule/rule-example.md#保存数据到-opentsdb)
   * [保存数据到 TimescaleDB](rule/rule-example.md#保存数据到-timescaledb)
   * [保存数据到 InfluxDB](rule/rule-example.md#保存数据到-influxdb)
+  * [保存数据到 TDengine](rule/rule-example.md#保存数据到-tdengine)
   * [桥接数据到 Kafka](rule/rule-example.md#桥接数据到-kafka)
   * [桥接数据到 Pulsar](rule/rule-example.md#桥接数据到-pulsar)
   * [桥接数据到 RocketMQ](rule/rule-example.md#桥接数据到-rocketmq)
@@ -125,27 +126,26 @@
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
-  * [Redis 数据存储](backend/backend.md#redis-数据存储)
-  * [MySQL 数据存储](backend/backend.md#mysql-数据存储)
-  * [PostgreSQL 数据存储](backend/backend.md#postgresql-数据存储)
-  * [MongoDB 消息存储](backend/backend.md#mongodb-消息存储)
-  * [Cassandra 消息存储](backend/backend.md#cassandra-消息存储)
-  * [DynamoDB 消息存储](backend/backend.md#dynamodb-消息存储)
-  * [InfluxDB 消息存储](backend/backend.md#influxdb-消息存储)
-  * [OpenTSDB 消息存储](backend/backend.md#opentsdb-消息存储)
-  * [Timescale 消息存储](backend/backend.md#timescale-消息存储)
+  * [Redis 数据存储](backend/backends.md#redis-数据存储)
+  * [MySQL 数据存储](backend/backends.md#mysql-数据存储)
+  * [PostgreSQL 数据存储](backend/backends.md#postgresql-数据存储)
+  * [MongoDB 消息存储](backend/backends.md#mongodb-消息存储)
+  * [Cassandra 消息存储](backend/backends.md#cassandra-消息存储)
+  * [DynamoDB 消息存储](backend/backends.md#dynamodb-消息存储)
+  * [InfluxDB 消息存储](backend/backends.md#influxdb-消息存储)
+  * [OpenTSDB 消息存储](backend/backends.md#opentsdb-消息存储)
+  * [Timescale 消息存储](backend/backends.md#timescale-消息存储)
 
 * 消息桥接
    * [消息桥接简介](bridge/bridge.md)
-   * [MQTT 桥接](bridge/bridge.md#mqtt-桥接)
-   * [RPC 桥接](bridge/bridge.md#rpc-桥接)
-   * [Kafka 桥接](bridge/bridge.md#kafka-桥接)
-   * [RabbitMQ 桥接](bridge/bridge.md#rabbitmq-桥接)
-   * [Pulsar 桥接](bridge/bridge.md#pulsar-桥接)
-   * [RocketMQ 桥接](bridge/bridge.md#rocketmq-桥接)
+   * [MQTT 桥接](bridge/bridges.md#mqtt-桥接)
+   * [RPC 桥接](bridge/bridges.md#rpc-桥接)
+   * [Kafka 桥接](bridge/bridges.md#kafka-桥接)
+   * [RabbitMQ 桥接](bridge/bridges.md#rabbitmq-桥接)
+   * [Pulsar 桥接](bridge/bridges.md#pulsar-桥接)
+   * [RocketMQ 桥接](bridge/bridges.md#rocketmq-桥接)
 
-* 进阶教程
-  * [设备管理](tutorial/device-management.md)
+* 运维部署
   * [系统调优](tutorial/tune.md)
   * [生产部署](tutorial/deploy.md)
   * [Prometheus 监控告警](tutorial/prometheus.md)
@@ -169,25 +169,6 @@
   * [plugins](configuration/configuration.md#plugins)
   * [broker](configuration/configuration.md#broker)
   * [monitor](configuration/configuration.md#monitor)
-  * [emqx-auth-clientid](configuration/configuration.md#emqx-auth-clientid)
-  * [emqx-auth-http](configuration/configuration.md#emqx-auth-http)
-  * [emqx-auth-jwt](configuration/configuration.md#emqx-auth-jwt)
-  * [emqx-auth-ldap](configuration/configuration.md#emqx-auth-ldap)
-  * [emqx-auth-mongo](configuration/configuration.md#emqx-auth-mongo)
-  * [emqx-auth-mysql](configuration/configuration.md#emqx-auth-mysql)
-  * [emqx-auth-pgsql](configuration/configuration.md#emqx-auth-pgsql)
-  * [emqx-auth-redis](configuration/configuration.md#emqx-auth-redis)
-  * [emqx-auth-username](configuration/configuration.md#emqx-auth-username)
-  * [emqx-bridge-mqtt](configuration/configuration.md#emqx-bridge-mqtt)
-  * [emqx-dashboard](configuration/configuration.md#emqx-dashboard)
-  * [emqx-lwm2m](configuration/configuration.md#emqx-lwm2m)
-  * [emqx-management](configuration/configuration.md#emqx-management)
-  * [emqx-reloader](configuration/configuration.md#emqx-reloader)
-  * [emqx-retainer](configuration/configuration.md#emqx-retainer)
-  * [emqx-rule_engine](configuration/configuration.md#emqx-rule-engine)
-  * [emqx-prometheus](configuration/configuration.md#emqx-prometheus)
-  * [emqx-stomp](configuration/configuration.md#emqx-stomp)
-  * [emqx-web-hook](configuration/configuration.md#emqx-web-hook)
 
 * [命令行接口](advanced/cli.md)
 

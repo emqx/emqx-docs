@@ -107,29 +107,27 @@
   * [从 PostgreSQL 中获取订阅关系](rule/rule-example.md#从-postgresql-中获取订阅关系)
   * [从 Cassandra 中获取订阅关系](rule/rule-example.md#从-cassandra-中获取订阅关系)
   * [从 MongoDB 中获取订阅关系](rule/rule-example.md#从-mongodb-中获取订阅关系)
-  * [从 Kafka 消费消息到 EMQ X](rule/rule-example.md#从-kafka-消费消息到-emq-x)
-  * [从 Pulsar 消费消息到 EMQ X](rule/rule-example.md#从-pulsar-消费消息到-emq-x)
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
-  * [Redis 数据存储](backend/backend.md#redis-数据存储)
-  * [MySQL 数据存储](backend/backend.md#mysql-数据存储)
-  * [PostgreSQL 数据存储](backend/backend.md#postgresql-数据存储)
-  * [MongoDB 消息存储](backend/backend.md#mongodb-消息存储)
-  * [Cassandra 消息存储](backend/backend.md#cassandra-消息存储)
-  * [DynamoDB 消息存储](backend/backend.md#dynamodb-消息存储)
-  * [InfluxDB 消息存储](backend/backend.md#influxdb-消息存储)
-  * [OpenTSDB 消息存储](backend/backend.md#opentsdb-消息存储)
-  * [Timescale 消息存储](backend/backend.md#timescale-消息存储)
+  * [Redis 数据存储](backend/backends.md#redis-数据存储)
+  * [MySQL 数据存储](backend/backends.md#mysql-数据存储)
+  * [PostgreSQL 数据存储](backend/backends.md#postgresql-数据存储)
+  * [MongoDB 消息存储](backend/backends.md#mongodb-消息存储)
+  * [Cassandra 消息存储](backend/backends.md#cassandra-消息存储)
+  * [DynamoDB 消息存储](backend/backends.md#dynamodb-消息存储)
+  * [InfluxDB 消息存储](backend/backends.md#influxdb-消息存储)
+  * [OpenTSDB 消息存储](backend/backends.md#opentsdb-消息存储)
+  * [Timescale 消息存储](backend/backends.md#timescale-消息存储)
 
 * 消息桥接
    * [消息桥接简介](bridge/bridge.md)
-   * [MQTT 桥接](bridge/bridge.md#mqtt-桥接)
-   * [RPC 桥接](bridge/bridge.md#rpc-桥接)
-   * [Kafka 桥接](bridge/bridge.md#kafka-桥接)
-   * [RabbitMQ 桥接](bridge/bridge.md#rabbitmq-桥接)
-   * [Pulsar 桥接](bridge/bridge.md#pulsar-桥接)
-   * [RocketMQ 桥接](bridge/bridge.md#rocketmq-桥接)
+   * [MQTT 桥接](bridge/bridges.md#mqtt-桥接)
+   * [RPC 桥接](bridge/bridges.md#rpc-桥接)
+   * [Kafka 桥接](bridge/bridges.md#kafka-桥接)
+   * [RabbitMQ 桥接](bridge/bridges.md#rabbitmq-桥接)
+   * [Pulsar 桥接](bridge/bridges.md#pulsar-桥接)
+   * [RocketMQ 桥接](bridge/bridges.md#rocketmq-桥接)
 
 * 多语言支持
   * [简介](advanced/lang.md)
@@ -137,8 +135,7 @@
   * [协议接入](advanced/lang-exproto.md)
   * [Lua](advanced/lang-lua.md)
 
-* 进阶教程
-  * [设备管理](tutorial/device-management.md)
+* 运维部署
   * [系统调优](tutorial/tune.md)
   * [生产部署](tutorial/deploy.md)
   * [Prometheus 监控告警](tutorial/prometheus.md)
