@@ -171,7 +171,7 @@
   * [broker](configuration/configuration.md#broker)
   * [monitor](configuration/configuration.md#monitor)
 
-* [命令行接口]
+* 命令行接口
   * [命令行](advanced/cli.md)
 
 * 版本热升级

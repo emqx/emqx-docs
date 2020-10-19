@@ -112,12 +112,6 @@
    * [Pulsar 桥接](bridge/bridges.md#pulsar-桥接)
    * [RocketMQ 桥接](bridge/bridges.md#rocketmq-桥接)
 
-* 多语言支持
-  * [简介](advanced/lang.md)
-  * [钩子扩展](advanced/lang-exhook.md)
-  * [协议接入](advanced/lang-exproto.md)
-  * [Lua](advanced/lang-lua.md)
-
 * 运维部署
   * [系统调优](tutorial/tune.md)
   * [生产部署](tutorial/deploy.md)
@@ -187,7 +181,7 @@
   * [emqx-stomp](configuration/configuration.md#emqx-stomp)
   * [emqx-web-hook](configuration/configuration.md#emqx-web-hook)
 
-* [命令行接口]
+* 命令行接口
   * [命令行](advanced/cli.md)
 
 * 版本热升级
@@ -202,6 +196,12 @@
   * [FAQ 标签](faq/tags.md)
 
 * [遥测](advanced/telemetry.md)
+
+* 多语言支持
+  * [简介](advanced/lang.md)
+  * [钩子扩展](advanced/lang-exhook.md)
+  * [协议接入](advanced/lang-exproto.md)
+  * [Lua](advanced/lang-lua.md)
 
 * SDK & Tools
   * [MQTT 客户端库](development/client.md)
