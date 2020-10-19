@@ -1,4 +1,4 @@
-* 概览
+* 产品概览
   * [EMQ X 消息服务器简介](introduction.md)
   * [EMQ X 消息服务器功能列表](introduction/checklist.md)
 
@@ -12,7 +12,7 @@
   * [日志与追踪](getting-started/log.md)
   * [Dashboard](getting-started/dashboard.md)
 
-* 功能
+* 用户指南
   * [保留消息](advanced/retained.md)
   * [共享订阅](advanced/shared-subscriptions.md)
   * [延迟发布](advanced/delay-publish.md)
@@ -32,8 +32,8 @@
   * [告警](advanced/alarms.md)
   * [数据导入导出](advanced/data-import-and-export.md)
 
-* [插件](advanced/plugins.md)
-* [遥测(新)](advanced/telemetry.md)
+* 插件管理
+  * [插件介绍](advanced/plugins.md)
 
 * 认证
   * [认证简介](advanced/auth.md)
@@ -57,32 +57,6 @@
   * [PostgreSQL ACL](advanced/acl-postgres.md)
   * [Redis ACL](advanced/acl-redis.md)
   * [MongoDB ACL](advanced/acl-mongodb.md)
-
-* HTTP API
-  * [HTTP API](advanced/http-api.md)
-  * [基本信息](advanced/http-api.md#endpoint-brokers)
-  * [节点](advanced/http-api.md#endpoint-nodes)
-  * [客户端](advanced/http-api.md#endpoint-clients)
-  * [订阅信息](advanced/http-api.md#endpoint-subscriptions)
-  * [路由](advanced/http-api.md#endpoint-routes)
-  * [消息发布](advanced/http-api.md#endpoint-publish)
-  * [主题订阅](advanced/http-api.md#endpoint-subscribe)
-  * [消息批量发布](advanced/http-api.md#endpoint-publish-batch)
-  * [主题批量订阅](advanced/http-api.md#endpoint-subscribe-batch)
-  * [插件](advanced/http-api.md#endpoint-plugins)
-  * [监听器](advanced/http-api.md#endpoint-listeners)
-  * [内置模块](advanced/http-api.md#endpoint-modules)
-  * [统计指标](advanced/http-api.md#endpoint-metrics)
-  * [主题统计指标](advanced/http-api.md#endpoint-topic-metrics)
-  * [状态](advanced/http-api.md#endpoint-stats)
-  * [告警](advanced/http-api.md#endpoint-alarms)
-  * [黑名单](advanced/http-api.md#endpoint-banned)
-  * [数据导入导出](advanced/http-api.md#endpoint-import-and-export)
-  * [规则](advanced/http-api.md#endpoint-rules)
-  * [动作](advanced/http-api.md#endpoint-actions)
-  * [资源类型](advanced/http-api.md#endpoint-resource-types)
-  * [资源](advanced/http-api.md#endpoint-resources)
-  * [数据遥测](advanced/http-api.md#endpoint-telemetry)
 
 * 规则引擎
   * [规则引擎](rule/rule-engine.md)
@@ -150,8 +124,33 @@
   * [Prometheus 监控告警](tutorial/prometheus.md)
   * [性能测试](tutorial/benchmark.md)
 
-* 配置项
-  * [配置项](configuration/configuration.md)
+* HTTP API
+  * [HTTP API](advanced/http-api.md)
+  * [基本信息](advanced/http-api.md#endpoint-brokers)
+  * [节点](advanced/http-api.md#endpoint-nodes)
+  * [客户端](advanced/http-api.md#endpoint-clients)
+  * [订阅信息](advanced/http-api.md#endpoint-subscriptions)
+  * [路由](advanced/http-api.md#endpoint-routes)
+  * [消息发布](advanced/http-api.md#endpoint-publish)
+  * [主题订阅](advanced/http-api.md#endpoint-subscribe)
+  * [消息批量发布](advanced/http-api.md#endpoint-publish-batch)
+  * [主题批量订阅](advanced/http-api.md#endpoint-subscribe-batch)
+  * [插件](advanced/http-api.md#endpoint-plugins)
+  * [监听器](advanced/http-api.md#endpoint-listeners)
+  * [内置模块](advanced/http-api.md#endpoint-modules)
+  * [统计指标](advanced/http-api.md#endpoint-metrics)
+  * [主题统计指标](advanced/http-api.md#endpoint-topic-metrics)
+  * [状态](advanced/http-api.md#endpoint-stats)
+  * [告警](advanced/http-api.md#endpoint-alarms)
+  * [黑名单](advanced/http-api.md#endpoint-banned)
+  * [数据导入导出](advanced/http-api.md#endpoint-import-and-export)
+  * [规则](advanced/http-api.md#endpoint-rules)
+  * [动作](advanced/http-api.md#endpoint-actions)
+  * [资源类型](advanced/http-api.md#endpoint-resource-types)
+  * [资源](advanced/http-api.md#endpoint-resources)
+  * [数据遥测](advanced/http-api.md#endpoint-telemetry)
+
+* 参数配置
   * [cluster](configuration/configuration.md#cluster)
   * [node](configuration/configuration.md#node)
   * [rpc](configuration/configuration.md#rpc)
@@ -188,14 +187,21 @@
   * [emqx-stomp](configuration/configuration.md#emqx-stomp)
   * [emqx-web-hook](configuration/configuration.md#emqx-web-hook)
 
-* [命令行接口](advanced/cli.md)
+* [命令行接口]
+  * [命令行](advanced/cli.md)
 
-* 协议介绍
-  * [MQTT 协议](development/protocol.md)
-  * [MQTT-SN 协议](development/protocol.md#mqtt-sn-协议)
-  * [LwM2M 协议](development/protocol.md#lwm2m-协议)
-  * [私有 TCP 协议](development/protocol.md#私有-tcp-协议)
+* 版本热升级
+  * [版本热升级](advanced/relup.md)
 
+* FAQ
+  * [入门概念](faq/faq.md)
+  * [使用教程](faq/use-guide.md)
+  * [安装部署](faq/deployment.md)
+  * [常见错误](faq/error.md)
+  * [商业服务](faq/enterprise.md)
+  * [FAQ 标签](faq/tags.md)
+
+* [遥测](advanced/telemetry.md)
 
 * SDK & Tools
   * [MQTT 客户端库](development/client.md)
@@ -207,20 +213,18 @@
   * [MQTT Python 客户端库](development/python.md)
   * [其他资源](development/resource.md)
 
-* FAQ
-  * [入门概念](faq/faq.md)
-  * [使用教程](faq/use-guide.md)
-  * [安装部署](faq/deployment.md)
-  * [常见错误](faq/error.md)
-  * [商业服务](faq/enterprise.md)
-  * [FAQ 标签](faq/tags.md)
+* 协议介绍
+  * [MQTT 协议](development/protocol.md)
+  * [LwM2M 接入网关](modules/lwm2m_protocol.md)
+  * [MQTT-SN 接入网关](modules/mqtt_sn_protocol.md)
+  * [TCP 接入网关](modules/tcp_protocol.md)
+  * [JT/T808 接入网关](modules/jt808_protocol.md)
+  * [CoAP 接入网关](modules/coap_protocol.md)
+  * [Stomp 接入网关](modules/stomp_protocol.md)
 
 * 版本发布
   * [变更日志](changes/changes.md)
   * [升级指南](changes/upgrade.md)
-
-* 版本热升级
-  * [版本热升级](advanced/relup.md)
 
 * 相关资料
   * [架构设计](design/design.md)
