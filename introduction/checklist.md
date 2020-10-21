@@ -179,6 +179,6 @@ Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进
 {% emqxce %}
 ## EMQ X 不同版本对比
 
-![EMQ X 开源版、企业版和专业版的对比](assets/3011583829062_.pic_hd-3829209.jpg)
+详细对比以及价格参见 [EMQ X 定价](https://www.emqx.io/cn/products/pricing)。
 
 {% endemqxce %}

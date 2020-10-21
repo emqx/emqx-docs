@@ -1,3 +1,4 @@
+
 # 编解码
 
 ## 编解码（Schema Registry）介绍
@@ -80,7 +81,7 @@ SQL 语句的筛选结果为 `#{my_id => 1}`。
 规则引擎的 SQL 语句提供了对 JSON 格式字符串的编解码支持，将 JSON 字符串和 Map 格式相互转换的 SQL 函数为 json_decode() 和 json_encode():
 
 ```sql
-SELECT json_decode(payload) AS p FROM "message.publish" WHERE p.x = p.y, topic =~ "t/#"
+SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 ```
 
 上面这个 SQL 语句将会匹配到 payload 内容为 JSON 字符串： `{"x" = 1, "y" = 1}` , 并且 topic 为 `t/a` 的 MQTT 消息。
@@ -134,9 +135,9 @@ message Person {
 SELECT
   schema_decode('protobuf_person', payload, 'Person') as person, payload
 FROM
-  "message.publish"
+  "t/#"
 WHERE
-  topic =~ 't/#' and person.name = 'Shawn'
+  person.name = 'Shawn'
 ```
 
 这里的关键点在于 `schema_decode('protobuf_person', payload, 'Person')`:
@@ -232,9 +233,9 @@ t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 SELECT
   schema_decode('avro_user', payload) as avro_user, payload
 FROM
-  "message.publish"
+  "t/#"
 WHERE
-  topic =~ 't/#' and avro_user.name = 'Shawn'
+  avro_user.name = 'Shawn'
 ```
 
 这里的关键点在于 `schema_decode('avro_user', payload)`:
@@ -318,9 +319,7 @@ SELECT
   schema_encode('my_parser', payload) as encoded_data,
   schema_decode('my_parser', encoded_data) as decoded_data
 FROM
-  "message.publish"
-WHERE
-  topic =~ 't/#'
+  "t/#"
 ```
 
 这个 SQL 语句首先对数据做了 Encode，然后又做了 Decode，目的在于验证编解码过程是否正确:

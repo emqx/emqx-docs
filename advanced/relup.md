@@ -40,7 +40,7 @@ Installed versions:
 
 2. 从 EMQ X 官网下载要升级的软件包。
 
-访问 https://www.emqx.io/downloads#broker，选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
+访问 [https://www.emqx.io/downloads#broker](https://www.emqx.io/downloads#broker) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
 
 3. 找到 EMQ X 的安装目录：
 

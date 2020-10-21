@@ -6,57 +6,72 @@
   * [安装](getting-started/install.md)
   * [启动 EMQ X](getting-started/start.md)
   * [基本命令](getting-started/command-line.md)
-  * [创建集群](getting-started/cluster.md)
+  * [分布式集群](getting-started/cluster.md)
   * [目录结构](getting-started/directory.md)
   * [配置说明](getting-started/config.md)
   * [日志与追踪](getting-started/log.md)
   * [Dashboard](getting-started/dashboard.md)
 
 * 用户指南
-  * [保留消息](advanced/retained.md)
+  * [认证鉴权](advanced/auth.md)
+  * [发布订阅 ACL](advanced/acl.md)
+  * [规则引擎](rule/rule-engine.md)
+  * [数据存储](backend/backend.md)
+  * [消息桥接](bridge/bridge.md)
   * [共享订阅](advanced/shared-subscriptions.md)
-  * [延迟发布](advanced/delay-publish.md)
-  * [代理订阅](advanced/proxy-subscriptions.md)
-  * [消息桥接](advanced/bridge.md)
-  * [主题重写](advanced/topic-rewrite.md)
   * [$SYS 系统主题](advanced/system-topic.md)
   * [黑名单](advanced/blacklist.md)
   * [WebHook](advanced/webhook.md)
   * [分布集群](advanced/cluster.md)
   * [钩子](advanced/hooks.md)
   * [指标监控](advanced/metrics-and-stats.md)
-  * [主题指标统计](advanced/topic-metrics.md)
   * [速率限制](advanced/rate-limit.md)
   * [飞行窗口与消息队列](advanced/inflight-window-and-message-queue.md)
   * [消息重传](advanced/retransmission.md)
   * [告警](advanced/alarms.md)
   * [数据导入导出](advanced/data-import-and-export.md)
 
+* 模块管理
+  * [模块介绍](modules/modules.md)
+  ## 访问控制
+  * [内置访问控制](modules/internal_acl.md)
+  * [MySQL 认证/访问控制](modules/mysql_authentication.md)
+  * [PostgreSQL 认证/访问控制](modules/pgsql_authentication.md)
+  * [Redis 认证/访问控制](modules/redis_authentication.md)
+  * [HTTP 认证/访问控制](modules/http_authentication.md)
+  * [内置数据库 认证/访问控制](modules/mnesia_authentication.md)
+  * [MongoDB 认证/访问控制](modules/mongo_authentication.md)
+  * [PKSFile 认证](modules/psk_authentication.md)
+  * [LDAP 认证/访问控制](modules/ldap_authentication.md)
+  * [JWT 认证](modules/jwt_authentication.md)
+  * [LwM2M 接入网关](modules/lwm2m_protocol.md)
+  ## 协议扩展
+  * [MQTT-SN 接入网关](modules/mqtt_sn_protocol.md)
+  * [TCP 接入网关](modules/tcp_protocol.md)
+  * [JT/T808 接入网关](modules/jt808_protocol.md)
+  * [CoAP 接入网关](modules/coap_protocol.md)
+  * [Stomp 接入网关](modules/stomp_protocol.md)
+  ## 消息下发
+  * [Kafka 消费组](modules/kafka_consumer.md)
+  * [Pulsar 消费组](modules/pulsar_consumer.md)
+  * [MQTT Subscriber](modules/mqtt_subscriber.md)
+  ## 多语言
+  * [多语言扩展协议接入](modules/exproto.md)
+  * [多语言扩展钩子](modules/exhook.md)
+  ## 协议扩展
+  * [Recon](modules/recon.md)
+  * [EMQ X Prometheus Agent](modules/prometheus.md)
+  * [热配置](modules/hot_confs.md)
+  * [主题指标统计](modules/topic_metrics.md)
+  * [MQTT 增强认证](modules/auth_sasl.md)
+  * [上下线通知](modules/presence.md)
+  * [MQTT 代理订阅](modules/subscription.md)
+  * [主题重写](modules/topic_rewrite.md)
+  * [MQTT 保留消息](modules/retainer.md)
+  * [MQTT 消息延迟发布](modules/delayed_publish.md)
+
 * 插件管理
   * [插件介绍](advanced/plugins.md)
-
-* 认证
-  * [认证简介](advanced/auth.md)
-  * [Username 认证（即将废弃）](advanced/auth-username.md)
-  * [Cliend ID 认证（即将废弃）](advanced/auth-clientid.md)
-  * [Mnesia 认证](advanced/auth-mnesia.md)
-  * [HTTP 认证](advanced/auth-http.md)
-  * [JWT 认证](advanced/auth-jwt.md)
-  * [LDAP 认证](advanced/auth-ldap.md)
-  * [MySQL 认证](advanced/auth-mysql.md)
-  * [PostgreSQL 认证](advanced/auth-postgresql.md)
-  * [Redis 认证](advanced/auth-redis.md)
-  * [MongoDB 认证](advanced/auth-mongodb.md)
-
-* 发布订阅 ACL
-  * [发布订阅 ACL 简介](advanced/acl.md)
-  * [内置 ACL](advanced/acl-file.md)
-  * [Mnesia ACL](advanced/acl-mnesia.md)
-  * [HTTP ACL](advanced/acl-http.md)
-  * [MySQL ACL](advanced/acl-mysql.md)
-  * [PostgreSQL ACL](advanced/acl-postgres.md)
-  * [Redis ACL](advanced/acl-redis.md)
-  * [MongoDB ACL](advanced/acl-mongodb.md)
 
 * 规则引擎
   * [规则引擎](rule/rule-engine.md)
@@ -90,6 +105,9 @@
   * [从 PostgreSQL 中获取订阅关系](rule/subscriptions.md#从-postgresql-中获取订阅关系)
   * [从 Cassandra 中获取订阅关系](rule/subscriptions.md#从-cassandra-中获取订阅关系)
   * [从 MongoDB 中获取订阅关系](rule/subscriptions.md#从-mongodb-中获取订阅关系)
+
+* 编解码
+  * [编解码](rule/schema-registry.md)
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
@@ -161,25 +179,6 @@
   * [plugins](configuration/configuration.md#plugins)
   * [broker](configuration/configuration.md#broker)
   * [monitor](configuration/configuration.md#monitor)
-  * [emqx-auth-clientid](configuration/configuration.md#emqx-auth-clientid)
-  * [emqx-auth-http](configuration/configuration.md#emqx-auth-http)
-  * [emqx-auth-jwt](configuration/configuration.md#emqx-auth-jwt)
-  * [emqx-auth-ldap](configuration/configuration.md#emqx-auth-ldap)
-  * [emqx-auth-mongo](configuration/configuration.md#emqx-auth-mongo)
-  * [emqx-auth-mysql](configuration/configuration.md#emqx-auth-mysql)
-  * [emqx-auth-pgsql](configuration/configuration.md#emqx-auth-pgsql)
-  * [emqx-auth-redis](configuration/configuration.md#emqx-auth-redis)
-  * [emqx-auth-username](configuration/configuration.md#emqx-auth-username)
-  * [emqx-bridge-mqtt](configuration/configuration.md#emqx-bridge-mqtt)
-  * [emqx-dashboard](configuration/configuration.md#emqx-dashboard)
-  * [emqx-lwm2m](configuration/configuration.md#emqx-lwm2m)
-  * [emqx-management](configuration/configuration.md#emqx-management)
-  * [emqx-reloader](configuration/configuration.md#emqx-reloader)
-  * [emqx-retainer](configuration/configuration.md#emqx-retainer)
-  * [emqx-rule_engine](configuration/configuration.md#emqx-rule-engine)
-  * [emqx-prometheus](configuration/configuration.md#emqx-prometheus)
-  * [emqx-stomp](configuration/configuration.md#emqx-stomp)
-  * [emqx-web-hook](configuration/configuration.md#emqx-web-hook)
 
 * 命令行接口
   * [命令行](advanced/cli.md)
@@ -187,21 +186,13 @@
 * 版本热升级
   * [版本热升级](advanced/relup.md)
 
-* FAQ
+* FAQ 常见问题
   * [入门概念](faq/faq.md)
   * [使用教程](faq/use-guide.md)
   * [安装部署](faq/deployment.md)
   * [常见错误](faq/error.md)
   * [商业服务](faq/enterprise.md)
   * [FAQ 标签](faq/tags.md)
-
-* [遥测](advanced/telemetry.md)
-
-* 多语言支持
-  * [简介](advanced/lang.md)
-  * [钩子扩展](advanced/lang-exhook.md)
-  * [协议接入](advanced/lang-exproto.md)
-  * [Lua](advanced/lang-lua.md)
 
 * SDK & Tools
   * [MQTT 客户端库](development/client.md)
@@ -223,10 +214,9 @@
   * [Stomp 接入网关](modules/stomp_protocol.md)
 
 * 版本发布
-  * [变更日志](changes/changes.md)
+  * [变更日志](changes/changes-ee.md)
   * [升级指南](changes/upgrade.md)
 
 * 相关资料
   * [架构设计](design/design.md)
-  * [资源](awesome/awesome.md)
 
