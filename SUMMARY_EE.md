@@ -56,6 +56,7 @@
   * [多语言扩展钩子](modules/exhook.md)
   * [Recon](modules/recon.md)
   * [EMQ X Prometheus Agent](modules/prometheus.md)
+  * [热配置](modules/hot_confs.md)
   * [主题指标统计](modules/topic_metrics.md)
   * [MQTT 增强认证](modules/auth_sasl.md)
   * [上下线通知](modules/presence.md)
