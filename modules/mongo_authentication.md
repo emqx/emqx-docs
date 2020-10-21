@@ -10,11 +10,11 @@ MongoDB 认证/访问控制使⽤外部 MongoBD 数据库作为数据源，可�
 
 安装后启动MongoDB
 
-## 配置插件
+## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，点击左侧的 “模块” 选项卡，选择添加
+打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
-![image-20200928161310952](static/001.png)
+![image-20200928161310952](./assets/modules.png)
 
 选择 MongoDB 认证/访问控制模块
 

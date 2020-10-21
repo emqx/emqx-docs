@@ -10,9 +10,9 @@ MySQL 认证/访问控制使⽤外部 MySQL 数据库作为数据源，可以存
 
 安装完毕以后启动MySQL。
 
-## 配置模块
+## 创建模块
 
-打开 EMQ X Dashboard，点击左侧的 “模块” 选项卡
+打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200928161310952](./assets/modules.png)
 

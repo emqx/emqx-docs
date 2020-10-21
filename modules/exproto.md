@@ -108,7 +108,7 @@ service ConnectionHandler {
 其中各个语言的 gRPC 框架可参考：[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
 
-## 配置
+## ## 创建模块
 
 成功部署 gRPC 服务后，通过 dashboard 页面可以开启多语言扩展协议接入模块，并配置以下三部分的内容，即可成功使用：
 
@@ -116,7 +116,7 @@ service ConnectionHandler {
 2. 配置 **监听器(Listener)**，提供 TCP/UDP/SSL/DTLS 的地址监听。用于监听、接收设备的连接。
 3. 为每个监听器指定一个 `ConnectionHandler` 的服务地址。用于发送各种事件回调到用户的服务。
 
-打开 EMQ X Dashboard，点击左侧的 “模块” 选项卡，选择添加
+打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![Modules](assets/modules.png)
 

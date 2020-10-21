@@ -113,11 +113,11 @@ service HookProvider {
 其中各个语言的 gRPC 框架可参考：[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
 
-## 配置
+## 创建模块
 
 在成功部署 `HookProvider` 服务后，通过 dashboard 页面可以开启多语言钩子扩展模块，并配置其服务地址即可正常使用。
 
-打开 EMQ X Dashboard，点击左侧的 “模块” 选项卡，选择添加
+打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![Modules](./assets/modules.png)
 

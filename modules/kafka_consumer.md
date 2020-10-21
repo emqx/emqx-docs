@@ -30,9 +30,12 @@ Kafka消费组不支持Kafka0.9以下版本
 ```bash
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
 ```
-通过 dashboard 页面可以开启 Kafka 消费组模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡:
+## 创建模块
+
+打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+
+![image-20200927213049265](./assets/modules.png)
 
 选择 Kafka 消费组模块:
 

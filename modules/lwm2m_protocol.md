@@ -45,11 +45,9 @@ LwM2M 协议预定义了8种 Object 来满足基本的需求，分别是：
   - Location 位置对象
   - Connectivity Statistics 连通性统计对象
 
-## LwM2M 接入网关启动方式
+## 创建模块
 
-通过dashboard页面可以开启 LwM2M 协议接入网关
-
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，点击左侧的 “模块” 选项卡，选择添加
+打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200927213049265](./assets/modules.png)
 

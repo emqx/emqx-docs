@@ -2,23 +2,15 @@
 
 内置 ACL 通过文件设置规则，使用上足够简单轻量，适用于规则数量可预测、无变动需求或变动较小的项目。
 
-通过dashboard页面可以开启 内置 ACL 访问控制模块
+## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，点击左侧的 “模块” 选项卡，选择添加
+内置访问控制模块默认启动，可以通过dashboard页面进行停止和更新。
 
 ![image-20200927213049265](./assets/modules.png)
-
-选择 内置 ACL 访问控制模块
-
-![image-20200927213049265](./assets/acl_file2.png)
 
 配置相关参数
 
 ![image-20200927213049265](./assets/acl_file3.png)
-
-点击添加后，模块添加完成
-
-![image-20200927213049265](./assets/acl_file4.png)
 
 ## 定义 ACL
 
