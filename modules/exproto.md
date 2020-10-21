@@ -45,7 +45,7 @@
 
 详情参见：[exproto.proto](https://github.com/emqx/emqx-exproto/blob/dev/e4.2.0/priv/protos/exproto.proto)，例如接口的定义有：
 
-```protobuff
+```bash
 syntax = "proto3";
 
 package emqx.exproto.v1;

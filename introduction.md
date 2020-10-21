@@ -41,7 +41,15 @@ EMQ X 设计目标是实现高可靠，并支持承载海量物联网终端的MQ
 ## 认证鉴权
   - [认证简介](advanced/auth.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
   - [发布订阅 ACL](advanced/acl.md)：选择内置插件、外部数据库、或者 HTTP 服务作为 ACL 数据源，验证客户端发布订阅权限。
-  - [内置 ACL](advanced/acl-file.md)：内置 ACL 可能会影响到重要功能，使用前请详细了解。
+  - [内置 ACL](modules/internal_acl.md)：内置 ACL 可能会影响到重要功能，使用前请详细了解。
+
+## FAQ 常见问题解答
+
+[FAQ 常见问题解答](faq/faq.md)定期收集整理 EMQ X 用户常见问题和经常遇到的错误，如 Topic 数量限制、开源版/企业版区别，企业服务收费等；开源版如何存储数据等。
+
+
+## 社区交流
+ - [资源](awesome/awesome.md)：社区交流，包含社区热门教程、项目展示等资源。
 
 ## HTTP API
 
@@ -85,7 +93,8 @@ EMQ X 企业版桥接转发 MQTT 消息到 Kafka、RabbitMQ、Pulsar、RocketMQ�
   - [Pulsar 桥接](bridge/bridge.md#pulsar-桥接)
   - [RocketMQ 桥接](bridge/bridge.md#rocketmq-桥接)
 
-## 进阶教程
+
+## 运维部署
 
 包含官方使用指南、最佳实践等信息。
 
@@ -100,7 +109,4 @@ EMQ X 企业版桥接转发 MQTT 消息到 Kafka、RabbitMQ、Pulsar、RocketMQ�
  - [MQTT-SN 协议](development/protocol.md#mqtt-sn-协议)
  - [LwM2M 协议](development/protocol.md#lwm2m-协议)
  - [私有 TCP 协议](development/protocol.md#私有-tcp-协议)
-
-## 其他
- - [资源](awesome/awesome.md)：社区交流，包含社区热门教程、项目展示等资源。
 

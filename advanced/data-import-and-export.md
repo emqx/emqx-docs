@@ -37,35 +37,35 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 
 1. 导出数据，导出文件的文件名格式为 `emqx-export-YYYY-MM-DD-HH-mm-SS.json`，默认导出路径为 data 目录（请参见 [目录结构](../getting-started/directory.md)）
 
-    ```
+    ```bash
     $ ./emqx_ctl data export
     The emqx data has been successfully exported to /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json.
     ```
 2. 保存导出文件，这里将导出文件保存到 tmp 目录
 
-   ```
+   ```bash
    $ cp /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json /tmp
    ```
 
 3. 重新安装 EMQ X Broker 并启动
 
-   ```
+   ```bash
    $ ./emqx start
    EMQ X Broker v4.1-rc.1 is started successfully!
    ```
 
 4. 导入数据，导入的文件名必须以绝对路径形式指定
 
-    ```
-    $ ./emqx_ctl data import /tmp/emqx-export-2020-5-15-17-39-0.json
-    The emqx data has been imported successfully.
-    ```
+   ```bash
+   $ ./emqx_ctl data import /tmp/emqx-export-2020-5-15-17-39-0.json
+   The emqx data has been imported successfully.
+   ```
 
 #### HTTP API
 
 1. 导出数据
 
-   ```
+   ```bash
    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/export"
 
    {"data":{"size":388,"filename":"emqx-export-2020-9-4-10-24-16.json","created_at":"2020-9-4 10:24:16"},"code":0}
@@ -75,13 +75,13 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 
 2. 下载数据文件
 
-   ```
+   ```bash
    $ curl --basic -u admin:public -X GET http://localhost:8081/api/v4/data/file/emqx-export-2020-9-4-10-24-16.json -o /tmp/emqx-export-2020-9-4-10-24-16.json   
    ```
 
 3. 上传数据文件
 
-   ```
+   ```bash
    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d @/tmp/emqx-export-2020-9-4-10-24-16.json
 
    {"code":0}
@@ -91,7 +91,7 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 
 4. 导入数据
 
-    ```
+    ```bash
     $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-9-4-10-24-16.json"}'
 
     {"code",0}

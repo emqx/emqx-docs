@@ -1,4 +1,91 @@
-# 创建集群
+# 分布式集群
+
+## Erlang/OTP 分布式编程
+
+Erlang/OTP 最初是爱立信为开发电信设备系统设计的编程语言平台，电信设备(路由器、接入网关等)典型设计是通过背板连接主控板卡与多块业务板卡的分布式系统。
+
+Erlang/OTP 语言平台的分布式程序，由分布互联的 Erlang 运行系统组成，每个 Erlang 运行系统被称为节点(Node)，节点(Node) 间通过 TCP 互联，消息传递的方式通信:
+
+![](https://docs.emqx.net/broker/v3/cn/_images/cluster_1.png)
+
+### 节点(Node)
+
+Erlang 节点由唯一的节点名称标识，节点间通过名称进行通信寻址。 例如在本机启动四个 Erlang 节点，节点名称分别为:
+
+```bash
+erl -name node1@127.0.0.1
+erl -name node2@127.0.0.1
+erl -name node3@127.0.0.1
+erl -name node4@127.0.0.1
+```
+node1@127.0.0.1 控制台下建立与其他节点的连接:
+
+```bash
+(node1@127.0.0.1)1> net_kernel:connect_node('node2@127.0.0.1').
+true
+(node1@127.0.0.1)2> net_kernel:connect_node('node3@127.0.0.1').
+true
+(node1@127.0.0.1)3> net_kernel:connect_node('node4@127.0.0.1').
+true
+(node1@127.0.0.1)4> nodes().
+['node2@127.0.0.1','node3@127.0.0.1','node4@127.0.0.1']
+```
+
+## EMQ X 分布集群设计
+
+EMQ X 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
+
+MQTT 客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
+
+MQTT 客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
+
+EMQ X 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如:
+
+```bash
+topic1 -> node1, node2
+topic2 -> node3
+topic3 -> node2, node4
+```
+
+### 主题树(Topic Trie)与路由表(Route Table)
+
+EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
+
+例如下述主题订阅关系:
+
+| 客户端  | 节点  | 订阅主题     |
+| ------- | ----- | ------------ |
+| client1 | node1 | t/+/x, t/+/y |
+| client2 | node2 | t/#          |
+| client3 | node3 | t/+/x, t/a   |
+
+
+
+最终会生成如下主题树(Topic Trie)和路由表(Route Table):
+
+![](https://docs.emqx.net/broker/v3/cn/_images/cluster_2.png)
+
+
+
+### 订阅(Subscription)与消息派发
+
+客户端的主题订阅(Subscription)关系，只保存在客户端所在节点，用于本节点内派发消息到客户端。
+
+例如client1向主题’t/a’发布消息，消息在节点间的路由与派发流程:
+
+```bash
+title: Message Route and Deliver
+
+client1 -> node1: Publish[t/a]
+    node1 --> node2: Route[t/#]
+        node2 --> client2: Deliver[t/#]
+    node1 --> node3: Route[t/a]
+        node3 --> client3: Deliver[t/a]
+```
+
+![_images/design_9.png](https://docs.emqx.net/broker/v3/cn/_images/design_9.png)
+
+
 
 ## 节点发现与自动集群 {#emqx-service-discovery}
 
@@ -97,6 +184,7 @@ $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
 
+
 ## 防火墙设置 {#emqx-cluster-behind-firewall}
 
 若预先设置了环境变量 WITH_EPMD=1, 启动 emqx 时会使用启动 epmd (监听端口 4369) 做节点发现。称为 `epmd 模式`。
@@ -127,3 +215,4 @@ node.name = emqx-1@192.168.0.12
 ```
 
 则需要开启 4371 端口。
+

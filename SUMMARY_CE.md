@@ -6,7 +6,7 @@
   * [安装](getting-started/install.md)
   * [启动 EMQ X](getting-started/start.md)
   * [基本命令](getting-started/command-line.md)
-  * [创建集群](getting-started/cluster.md)
+  * [分布式集群](getting-started/cluster.md)
   * [目录结构](getting-started/directory.md)
   * [配置说明](getting-started/config.md)
   * [日志与追踪](getting-started/log.md)
@@ -90,6 +90,10 @@
   * [从 PostgreSQL 中获取订阅关系](rule/subscriptions.md#从-postgresql-中获取订阅关系)
   * [从 Cassandra 中获取订阅关系](rule/subscriptions.md#从-cassandra-中获取订阅关系)
   * [从 MongoDB 中获取订阅关系](rule/subscriptions.md#从-mongodb-中获取订阅关系)
+
+* 编解码
+  * [编解码](rule/schema-registry.md)
+
 
 * 数据存储
   * [数据存储设计](backend/backend.md)
@@ -187,7 +191,7 @@
 * 版本热升级
   * [版本热升级](advanced/relup.md)
 
-* FAQ
+* FAQ 常见问题解答
   * [入门概念](faq/faq.md)
   * [使用教程](faq/use-guide.md)
   * [安装部署](faq/deployment.md)
