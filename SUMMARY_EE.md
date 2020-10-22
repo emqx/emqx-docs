@@ -3,14 +3,14 @@
   * [EMQ X 消息服务器功能列表](introduction/checklist.md)
 
 * 开始使用
-  * [安装](getting-started/install.md)
+  * [安装](getting-started/install-ee.md)
   * [启动 EMQ X](getting-started/start.md)
   * [基本命令](getting-started/command-line.md)
   * [创建集群](getting-started/cluster.md)
   * [目录结构](getting-started/directory.md)
   * [配置说明](getting-started/config.md)
   * [日志与追踪](getting-started/log.md)
-  * [Dashboard](getting-started/dashboard.md)
+  * [Dashboard](getting-started/dashboard-ee.md)
 
 * 用户指南
   * [认证鉴权](advanced/auth.md)
