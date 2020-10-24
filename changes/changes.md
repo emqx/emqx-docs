@@ -17,6 +17,48 @@ ref: undefined
 
 # 版本发布
 
+## 4.2.2 版本
+
+*发布日期: 2020-10-24*
+
+EMQ X 4.2.2 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复主题统计速率计算不准确的问题
+
+  Github PR: [emqx#3784](https://github.com/emqx/emqx/pull/3784)
+
+### emqx-web-hook
+
+**功能增强:**
+
+- 支持 `GET` 和 `DELETE` 方法
+
+  Github PR: [emqx-web-hook#220](https://github.com/emqx/emqx-web-hook/pull/220)
+
+- 增加 `node` 和 `disconnected_at` 字段
+
+  Github PR: [emqx-web-hook#215](https://github.com/emqx/emqx-web-hook/pull/215)
+
+### emqx-auth-pgsql
+
+**错误修复:**
+
+- 修复 `%a` 占位符不生效的问题
+
+  Github PR: [emqx-auth-pgsql#208](https://github.com/emqx/emqx-auth-pgsql/pull/208)
+
+### emqx-auth-mysql
+
+**错误修复:**
+
+- 修复 `%a` 占位符不生效的问题
+
+  Github PR: [emqx-auth-mysql#245](https://github.com/emqx/emqx-auth-mysql/pull/245)
+
 ## 4.2.1 版本
 
 *发布日期: 2020-09-29*
