@@ -125,7 +125,7 @@
    * [Pulsar 桥接](bridge/bridges.md#pulsar-桥接)
    * [RocketMQ 桥接](bridge/bridges.md#rocketmq-桥接)
 
-* 运维部署
+* 运维操作
   * [系统调优](tutorial/tune.md)
   * [生产部署](tutorial/deploy.md)
   * [Prometheus 监控告警](tutorial/prometheus.md)
@@ -197,6 +197,7 @@
   * [MQTT Erlang 客户端库](development/erlang.md)
   * [MQTT JavaScript 客户端库](development/javascript.md)
   * [MQTT Python 客户端库](development/python.md)
+  * [MQTT 微信小程序接入](development/wechat-miniprogram.md)
   * [其他资源](development/resource.md)
 
 * 协议介绍

@@ -19,6 +19,14 @@ ref:
 
 在开发时我们通常使用压缩包方式以单节点的形式启动服务，生产运行需要一个更加简单稳定的方式。本页主要从部署架构最佳实践讲解如何部署你的 EMQ X 服务。
 
+{% hint style="info" %}
+如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开 Proxy Protocol 配置，配置项：[EMQ X 监听器 proxy_protocol](../configuration/configuration.md#listenertcpexternalproxyprotocol)
+
+`Proxy Protcol` 参考: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
+
+Nginx 使用 Proxy Prorcol 参考: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
+
+{% endhint %}
 
 
 ## 部署架构
