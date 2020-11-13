@@ -17,6 +17,74 @@ ref:
 
 # 版本发布
 
+## 4.2.3 版本
+
+*发布日期: 2020-11-13*
+
+EMQ X 4.2.3 现已发布，主要包含以下改动:
+
+### emqx-web-hook
+
+- 支持在请求的 URL 路径中插入变量
+
+  Github PR: [emqx-web-hook#225](https://github.com/emqx/emqx-web-hook/pull/225)
+  Github Issue: [emqx-web-hook#224](https://github.com/emqx/emqx-web-hook/issues/224)
+
+- 支持设置 Content Type
+
+  Github PR: [emqx-web-hook#230](https://github.com/emqx/emqx-web-hook/pull/230)
+
+### emqx-rel
+
+- 修复 LC_ALL 不等于 en_US.UTF-8 时编译失败的问题
+
+  Github PR: [emqx-rel#605](https://github.com/emqx/emqx-rel/pull/605)
+  Github Issue: [emqx-rel#604](https://github.com/emqx/emqx-rel/issues/604)
+
+- 支持在 emqx 容器启动前创建和运行其他服务
+
+  Github PR: [emqx-rel#608](https://github.com/emqx/emqx-rel/pull/608)
+
+- 允许为容器设置可变数量的配置项
+
+  Github PR: [emqx-rel#609](https://github.com/emqx/emqx-rel/pull/609)
+
+### emqx-sn
+
+- 修复尝试发布遗嘱消息将导致崩溃的问题
+
+  Github PR: [emqx-sn#169](https://github.com/emqx/emqx-sn/pull/169)
+
+- 修复为 from 字段设置了不恰当的值的问题
+
+  Github PR: [emqx-sn#170](https://github.com/emqx/emqx-sn/pull/170)
+
+### emqx-rule-engine
+
+- 保持向后兼容
+
+  Github PR: [emqx-rule-engine#189](https://github.com/emqx/emqx-rule-engine/pull/189)
+
+- 修复 `messages.received` 指标的统计
+
+  Github PR: [emqx-rule-engine#193](https://github.com/emqx/emqx-rule-engine/pull/193)
+
+### emqx-management
+
+- 修复 `messages.received` 指标的统计
+
+  Github PR: [emqx-rule-engine#284](https://github.com/emqx/emqx-rule-engine/pull/284)
+
+- 使数据导入导出功能能够在集群环境下使用
+
+  Github PR: [emqx-rule-engine#288](https://github.com/emqx/emqx-rule-engine/pull/288)
+
+### emqx-redis
+
+- 支持 Redis 6.0 的 SSL/TLS 单双向认证
+
+  Github PR: [emqx-auth-redis#180](https://github.com/emqx/emqx-auth-redis/pull/180)
+
 ## 4.2.2 版本
 
 *发布日期: 2020-10-24*
