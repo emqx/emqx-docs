@@ -73,11 +73,11 @@ EMQ X 4.2.3 现已发布，主要包含以下改动:
 
 - 修复 `messages.received` 指标的统计
 
-  Github PR: [emqx-rule-engine#284](https://github.com/emqx/emqx-rule-engine/pull/284)
+  Github PR: [emqx-management#284](https://github.com/emqx/emqx-management/pull/284)
 
 - 使数据导入导出功能能够在集群环境下使用
 
-  Github PR: [emqx-rule-engine#288](https://github.com/emqx/emqx-rule-engine/pull/288)
+  Github PR: [emqx-management#288](https://github.com/emqx/emqx-management/pull/288)
 
 ### emqx-redis
 
