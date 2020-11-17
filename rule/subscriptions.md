@@ -75,7 +75,7 @@ HSET mqtt:sub:test t1 1
 ![](./assets/rule-engine/redis_sub_10.png)
 
 
-# 从 MySQL 中获取订阅关系
+## 从 MySQL 中获取订阅关系
 
 搭建 MySQL 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 ```bash
@@ -180,7 +180,7 @@ insert into mqtt_sub(clientid, topic, qos) values("test", "t1", 1);
 ![](./assets/rule-engine/mysql_sub_10.png)
 
 
-# 从 PostgreSQL 中获取订阅关系
+## 从 PostgreSQL 中获取订阅关系
 
 搭建 PostgreSQL 数据库，以 MacOS X 为例:
 ```bash
@@ -285,7 +285,7 @@ insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1)'
 
 ![](./assets/rule-engine/pg_sub_10.png)
 
-# 从 Cassandra 中获取订阅关系
+## 从 Cassandra 中获取订阅关系
 
 搭建 Cassandra 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 ```bash
@@ -406,7 +406,7 @@ insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1);
 
 ![](./assets/rule-engine/cass_sub_10.png)
 
-# 从 MongoDB 中获取订阅关系
+## 从 MongoDB 中获取订阅关系
 
 搭建 MongoDB 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 ```bash

@@ -28,8 +28,18 @@ if (location.host === 'docs.emqx.net') {
   })();
 }
 
+function fixHash() {
+  var li = document.querySelector('li .chapter.active')
+  if (li.parentNode && li.parentNode.parentNode) {
+    $(li.parentNode.parentNode).addClass('cuav-expanded')
+  }
+}
+
 gitbook.events.bind('page.change', function() {
   fixTabs()
+  setTimeout(() => {
+    fixHash()
+  }, 100)
   setTimeout(function() {
     try {
       if (window._hmt) {
@@ -50,3 +60,13 @@ gitbook.events.bind('page.change', function() {
     }
   }, 4000)
 })
+
+// init
+function __init() {
+  var href = location.href
+  setTimeout(() => {
+    location.href = href
+    console.log('rest href')
+  }, 100)
+}
+__init()

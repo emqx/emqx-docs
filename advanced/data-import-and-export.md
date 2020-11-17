@@ -31,9 +31,9 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 - 通过 emqx-auth-username 插件添加的 MQTT 用户数据和 ACL 数据
 - 编解码 Schema
 
-### 示例
+## 示例
 
-#### 命令行接口
+### 命令行接口
 
 1. 导出数据，导出文件的文件名格式为 `emqx-export-YYYY-MM-DD-HH-mm-SS.json`，默认导出路径为 data 目录（请参见 [目录结构](../getting-started/directory.md)）
 
@@ -61,7 +61,7 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
    The emqx data has been imported successfully.
    ```
 
-#### HTTP API
+### HTTP API
 
 1. 导出数据
 
@@ -91,8 +91,8 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 
 4. 导入数据
 
-    ```bash
-    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-9-4-10-24-16.json"}'
+   ```bash
+   $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-9-4-10-24-16.json"}'
 
-    {"code",0}
-    ```
+   {"code",0}
+   ```

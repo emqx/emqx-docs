@@ -36,8 +36,8 @@
       "clientID": "ce53d8431991c3a1ef52",
       "clientSecret": "aa50bda974cef65ff3007a4cefa1b905fb907c70",
       "proxyGithubApi": "https://github-api-proxy.v2url.workers.dev",
-      "repo": "docs-gitalk",
-      "owner": "emqx",
+      "repo": "emqx-docs-comment",
+      "owner": "wivwiv",
       "admin": [
         "wivwiv"
       ],
