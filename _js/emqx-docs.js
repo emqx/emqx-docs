@@ -63,9 +63,9 @@ gitbook.events.bind('page.change', function() {
 
 // init
 function __init() {
-  var href = location.href
+  var hash = location.hash
   setTimeout(() => {
-    location.href = href
+    location.hash = hash
     console.log('rest href')
   }, 100)
 }
