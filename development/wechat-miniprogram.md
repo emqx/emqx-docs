@@ -6,7 +6,7 @@
 {% hint style="info" %}
 由于微信小程序的规范限制，EMQ X 使用微信小程序接入时需要注意以下几点：
 
-- 必须使用已经通过[域名备案](https://baike.baidu.com/item/%E5%9F%9F%E5%90%8D%E5%A4%87%E6%A1%88)的域名接入
+- 必须使用已经通过[域名备案](https://baike.baidu.com/item/%E5%9F%9F%E5%90%8D%E5%A4%87%E6%A1%88)的**域名**接入
 - 域名需要在[小程序管理后台](https://mp.weixin.qq.com/wxamp/devprofile/get_profile)域名/IP 白名单中(开发 -> 开发设置 -> 服务器域名 -> socket 合法域名)
 - 仅支持 WebSocket/TLS 协议，需要为域名分配受信任 CA 颁发的证书
 - 由于微信小程序 BUG，安卓**真机必须**使用 TLS/443 端口，否则会连接失败（即连接地址不能带端口）
@@ -32,31 +32,30 @@
 
 ```bash
 server {
-    listen  443 ssl;		
-		server_name XXX.XXX.XXX; 
-
-		ssl_certificate   cert/***.pem;
+    listen  443 ssl;        
+    server_name xxx.emqx.io; 
+    ssl_certificate   cert/***.pem;
     ssl_certificate_key  cert/***.key;
-    ssl_session_timeout  5m;        		
-		ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+    ssl_session_timeout  5m;      
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-		ssl_prefer_server_ciphers on;
+    ssl_prefer_server_ciphers on;
 
     # 添加反向代理
     location /mqtt {
       proxy_pass http://127.0.0.1:8083/mqtt;
-
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;		 client_max_body_size 35m;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      # client_max_body_size 35m;
       proxy_http_version 1.1;
       proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";	
-		}
+      proxy_set_header Connection "upgrade";    
+    }
 
 }
 ```
 
-3、开源社区提供了小程序 MQTT 接入的 Demo：https://github.com/iAoe444/WeChatMiniEsp8266，下载解压到一个文件夹后，用微信小程序开发者工具，打开 `index.js` 文件，将 MQTT 地址、用户名和密码改为实际参数即可。
+3、开源社区提供了小程序 MQTT 接入的 Demo：[https://github.com/iAoe444/WeChatMiniEsp8266](https://github.com/iAoe444/WeChatMiniEsp8266) 下载解压到一个文件夹后，用微信小程序开发者工具，打开 `index.js` 文件，**将 MQTT 地址、用户名和密码改为实际参数即可**。
 
 按照以上 3 步的安装配置，你的微信小程序已经能够成功连接到 EMQ X 服务器了。
