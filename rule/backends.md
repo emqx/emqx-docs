@@ -1109,7 +1109,7 @@ EMQ X 支持通过 **发送到 Web 服务** 的方式保存数据到 TDengine，
 使用 Docker 安装 TDengine 或在 [Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) 上部署：
 
 ```bash
-docker run --name TDengine -d -p 6020-6050:6020-6050/udp TDengine/TDengine 
+docker run --name TDengine -d -p 6030:6030 -p 6035:6035 -p 6041:6041 -p 6030-6040:6030-6040/udp TDengine/TDengine 
 ```
 
 进入 Docker 容器：
@@ -1197,6 +1197,7 @@ insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}'
 
 EMQ X 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
 
+
 关联动作:
 
 在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 Web 服务“。
@@ -1217,7 +1218,7 @@ insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}'
 
 填写资源配置:
 
-请求 URL 填写 http://127.0.0.1:6020/rest/sql ，请求方法选择 POST;
+请求 URL 填写 http://127.0.0.1:6041/rest/sql ，请求方法选择 POST;
 **还需添加 Authorization 请求头作为认证信息**，请求头的值为 Basic + TDengine {username}:{password} 经过Base64 编码之后的字符串, 例如默认的 root:taosdata 编码后为 `cm9vdDp0YW9zZGF0YQ==`，
 填入的值为 `Basic cm9vdDp0YW9zZGF0YQ==`。
 
