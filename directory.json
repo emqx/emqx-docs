@@ -1,0 +1,108 @@
+{
+	"cn": [{
+			"title": "开始使用",
+			"path": "getstarted"
+		},
+		{
+			"title": "安装部署",
+			"path": "install"
+		},
+		{
+			"title": "青云映像",
+			"path": "image"
+		},
+		{
+			"title": "配置说明",
+			"path": "config"
+		},
+		{
+			"title": "分布集群",
+			"path": "cluster"
+		},
+		{
+			"title": "分布桥接",
+			"path": "bridge"
+		},
+		{
+			"title": "用户指南",
+			"path": "guide"
+		},
+		{
+			"title": "架构设计",
+			"path": "design"
+		},
+		{
+			"title": "管理命令",
+			"path": "commands"
+		},
+		{
+			"title": "扩展插件",
+			"path": "plugins"
+		},
+		{
+			"title": "测试调优",
+			"path": "tune"
+		},
+		{
+			"title": "版本发布",
+			"path": "changes"
+		},
+		{
+			"title": "版本升级",
+			"path": "upgrade"
+		},
+		{
+			"title": "MQTT协议",
+			"path": "mqtt"
+		}
+	],
+	"en": [{
+			"title": "Get Started",
+			"path": "getstarted"
+		},
+		{
+			"title": "Installation",
+			"path": "install"
+		},
+		{
+			"title": "Configuration",
+			"path": "config"
+		},
+		{
+			"title": "Clustering",
+			"path": "cluster"
+		},
+		{
+			"title": "Bridge",
+			"path": "bridge"
+		},
+		{
+			"title": "User Guide",
+			"path": "guide"
+		},
+		{
+			"title": "Design",
+			"path": "design"
+		},
+		{
+			"title": "Commands",
+			"path": "commands"
+		},
+		{
+			"title": "Plugins",
+			"path": "plugins"
+		},
+		{
+			"title": "Tuning Guide",
+			"path": "tune"
+		},
+		{
+			"title": "Changes",
+			"path": "changes"
+		},
+		{
+			"title": "Upgrade",
+			"path": "upgrade"
+		}
+	]
+}
