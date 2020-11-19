@@ -1,0 +1,116 @@
+{
+	"cn": [{
+			"title": "开始使用",
+			"path": "getstarted"
+		},
+		{
+			"title": "程序安装",
+			"path": "install"
+		},
+		{
+			"title": "用户指南",
+			"path": "guide"
+		},
+		{
+			"title": "配置说明",
+			"path": "config"
+		},
+		{
+			"title": "扩展插件",
+			"path": "plugins"
+		},
+		{
+			"title": "管理命令",
+			"path": "commands"
+		},
+		{
+			"title": "管理监控API",
+			"path": "rest"
+		},
+		{
+			"title": "架构设计",
+			"path": "design"
+		},
+		{
+			"title": "分布集群",
+			"path": "cluster"
+		},
+		{
+			"title": "部署架构",
+			"path": "deploy"
+		},
+		{
+			"title": "测试调优",
+			"path": "tune"
+		},
+		{
+			"title": "版本发布",
+			"path": "changes"
+		},
+		{
+			"title": "版本升级",
+			"path": "upgrade"
+		},
+		{
+			"title": "协议介绍",
+			"path": "protocol"
+		}
+	],
+	"en": [{
+			"title": "Get Started",
+			"path": "getstarted"
+		},
+		{
+			"title": "Installation",
+			"path": "install"
+		},
+		{
+			"title": "User Guide",
+			"path": "guide"
+		},
+		{
+			"title": "Configuration",
+			"path": "config"
+		},
+		{
+			"title": "Plugins",
+			"path": "plugins"
+		},
+		{
+			"title": "Commands",
+			"path": "commands"
+		},
+		{
+			"title": "REST API",
+			"path": "rest"
+		},
+		{
+			"title": "Design",
+			"path": "design"
+		},
+		{
+			"title": "Clustering",
+			"path": "cluster"
+		},
+		{
+			"title": "Deployment",
+			"path": "deploy"
+		},
+		{
+			"title": "Tuning Guide",
+			"path": "tune"
+		},
+		{
+			"title": "Changes",
+			"path": "changes"
+		},
+		{
+			"title": "Upgrade",
+			"path": "upgrade"
+		},
+		{
+			"title": "Protocol",
+			"path": "protocol"
+		}
+	]
+}
