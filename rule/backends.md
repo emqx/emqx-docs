@@ -66,7 +66,7 @@ SELECT * FROM "t/#"
 ​    模板为:
 
 ```sql
-insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, FROM_UNIXTIME(${timestamp}/1000))
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values ('${id}', '${topic}', '${qos}', '${payload}', FROM_UNIXTIME(${timestamp}/1000))
 ```
 
 ![image](./assets/rule-engine/rule_action_2@2x.png)
@@ -190,7 +190,7 @@ SELECT * FROM "t/#"
 ​    模板为:
 
 ```bash
-insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values ('${id}', '${topic}', ${qos}, '${payload}', to_timestamp(${timestamp}::double precision /1000))
 ```
 
 插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
@@ -481,7 +481,7 @@ Keysapce 填写 “test”，用户名填写 “root”，密码填写 “public
 ​    模板为:
 
 ```sql
-insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
+insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values ('${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
 ```
 
 插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
@@ -1130,7 +1130,7 @@ use test;
 CREATE TABLE t_mqtt_msg (
   ts timestamp,
  	msgid NCHAR(64),
-  topic NCHAR(255), 
+  topic NCHAR(255),
   qos TINYINT,
   payload BINARY(1024),
   arrived timestamp
