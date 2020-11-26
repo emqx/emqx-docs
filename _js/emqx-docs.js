@@ -40,6 +40,20 @@ gitbook.events.bind('page.change', function() {
   setTimeout(() => {
     fixHash()
   }, 100)
+  var times = localStorage.getItem('emqx_wenjuan')
+  times = parseInt(times, 10) || 0
+  if (times <= 3 && !document.querySelector('#emqx_wenjuan')) {
+    var html = '<a target="_blank" id="emqx_wenjuan" style="border: 1px solid white;box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);border-radius: 2px 2px 2px 2px;font-size: 12px;line-height: 14px;position:fixed;z-index:999;display: inline-block;width: 25px;word-wrap: break-word;padding: 10px 6px;color: #FFFFFF; background: #34c388; right: 0; bottom: 20px;" href="https://jinshuju.net/f/uSbPs5">问卷调查</a>'
+    var a = document.createElement('a')
+    a.innerHTML = html
+    a.onclick = function() {
+      times += 1
+      localStorage.setItem('emqx_wenjuan', times)
+    }
+    document.querySelector('body').appendChild(
+      a    
+    )
+  }
   setTimeout(function() {
     try {
       if (window._hmt) {
