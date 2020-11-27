@@ -3,14 +3,14 @@
 
 微信小程序支持通过 WebSocket 进行即时通信，EMQ X 的 MQTT Over WebSocket 能够完全兼容使用在微信小程序上。
 
-{% hint style="info" %}
+::: tip
 由于微信小程序的规范限制，EMQ X 使用微信小程序接入时需要注意以下几点：
 
 - 必须使用已经通过[域名备案](https://baike.baidu.com/item/%E5%9F%9F%E5%90%8D%E5%A4%87%E6%A1%88)的**域名**接入
 - 域名需要在[小程序管理后台](https://mp.weixin.qq.com/wxamp/devprofile/get_profile)域名/IP 白名单中(开发 -> 开发设置 -> 服务器域名 -> socket 合法域名)
 - 仅支持 WebSocket/TLS 协议，需要为域名分配受信任 CA 颁发的证书
 - 由于微信小程序 BUG，安卓**真机必须**使用 TLS/443 端口，否则会连接失败（即连接地址不能带端口）
-{% endhint %}
+:::
 
 ## 参考资料
 

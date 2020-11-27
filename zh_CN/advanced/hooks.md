@@ -23,7 +23,7 @@ ref:
 
 简单来讲，该机制目的在于增强软件系统的扩展性、方便与其他三方系统的集成、或者改变其系统原有的默认行为。如：
 
-![Hooks-In-System](assets/hooks_in_system.png)
+![Hooks-In-System](./assets/hooks_in_system.png)
 
 当系统中不存在 **钩子 (Hooks)** 机制时，整个事件处理流程 *从 事件 (Event) 的输入，到 处理 (Handler)，再到完成后的返回 结果 (Result)* 对于系统外部而讲，都是不可见、且无法修改的。
 
@@ -80,7 +80,7 @@ ref:
 
 由此，我们可以得到一个链的设计简图：
 
-![Callback Functions Chain Design](assets/chain_of_responsiblity.png)
+![Callback Functions Chain Design](./assets/chain_of_responsiblity.png)
 
 该图的含义是指：
 1. 链的入参为只读的 `Args` 与用于链上的函数修改的参数 `Acc`
@@ -101,7 +101,7 @@ ref:
 - 钩子和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
 - 钩子与其他语言的应用，参见： [Multipe-Language-Support](lang.md)
 
-## 挂载点 {#hookpoint}
+## 挂载点
 
 EMQ X 以一个客户端在其生命周期内的关键活动为基础，预置了大量的 **挂载点 (HookPoint)**。目前系统中预置的挂载点有：
 
@@ -128,11 +128,11 @@ EMQ X 以一个客户端在其生命周期内的关键活动为基础，预置�
 | message.dropped      | 消息丢弃     | 发布出的消息被丢弃后                                  |
 
 
-{% hint style="info" %}
+::: tip
 - **会话被移除** 是指：当客户端以 `清除会话` 的方式登入时，如果服务端中已存在该客户端的会话，那么旧的会话就会被丢弃。
 
 - **会话被接管** 是指：当客户端以 `保留会话` 的方式登入时，如果服务端中已存在该客户端的会话，那么旧的会话就会被新的连接所接管。
-{% endhint %}
+:::
 
 ### 挂载与取消挂载
 
@@ -158,7 +158,7 @@ emqx:unhook(Name, {Module, Function}).
 ```
 
 
-## 回调函数 {#callback}
+## 回调函数
 
 回调函数的入参及返回值要求，见下表：
 

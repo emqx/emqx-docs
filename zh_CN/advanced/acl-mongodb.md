@@ -25,9 +25,9 @@ MongoDB ACL 使用外部 MongoDB 数据库存储 ACL 规则，可以存储大量
 emqx_auth_mongo
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_mongo 插件同时包含认证功能，可通过注释禁用。
-{% endhint %}
+:::
 
 
 ## MongoDB 连接信息
@@ -146,11 +146,11 @@ MongoDB ACL 一条规则中定义了发布、订阅和发布/订阅的信息，�
 - subscribe：允许订阅的主题数值，支持通配符
 - pubsub：允许发布订阅的主题数值，支持通配符
 
-{% hint style="info" %} 
+::: tip 
 主题可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
   - %u：用户名
   - %c：Client ID
-{% endhint %} 
+::: 
 
 
 默认配置下示例数据：
@@ -211,9 +211,9 @@ db.mqtt_user.find({
 1. 查询结果中必须包含 is_superuser 字段，is_superuser 应该显式的为 true
 
 
-{% hint style="info" %} 
+::: tip 
 如果不需要超级用户功能，注释并禁用该选项能有效提高效率
-{% endhint %}
+:::
 
 
 ## ACL 查询（acl_query）
@@ -267,7 +267,7 @@ db.mqtt_acl.find({
 - %c：Client ID
 
 
-{% hint style="danger" %} 
+::: danger 
 MongoDB ACL 规则需严格使用上述数据结构。
 MongoDB ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
-{% endhint %}
+:::

@@ -15,8 +15,7 @@ category:
 ref:
 ---
 
-# 速率限制 {#rate-limit}
-
+# 速率限制
 EMQ X 提供对接入速度、消息速度的限制：当客户端连接请求速度超过指定限制的时候，暂停新连接的建立；当消息接收速度超过指定限制的时候，暂停接收消息。
 
 速率限制是一种 *backpressure* 方案，从入口处避免了系统过载，保证了系统的稳定和可预测的吞吐。速率限制可在 `etc/emqx.conf` 中配置：
@@ -33,8 +32,7 @@ EMQ X 提供对接入速度、消息速度的限制：当客户端连接请求�
 
 `conn_messages_in` 和 `conn_bytes_in` 提供的都是针对单个连接的限制，EMQ X 目前没有提供全局的消息速率限制。
 
-## 速率限制原理 {#rate-limit-explanation}
-
+## 速率限制原理
 EMQ X 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucket) 算法来对所有的 Rate Limit 来做控制。 令牌桶算法 的逻辑如下图:
 
 ![image-20190604103907875](../assets/token-bucket.jpg)
@@ -51,7 +49,7 @@ EMQ X 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucke
 
   容易想到，最大速率 M 为：能在1个单位时间内消耗完满状态令牌桶的速度。而桶中令牌的消耗速度为 M - r，故可知：b / (M - r) = 1，得 M = b + r
 
-### 令牌桶算法在 EMQ X 中的应用{#rate-limit-explanation-in-emqx}
+### 令牌桶算法在 EMQ X 中的应用
 
 当使用如下配置做报文速率限制的时候：
 

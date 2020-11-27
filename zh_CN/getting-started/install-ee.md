@@ -3,12 +3,9 @@
 EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS、Windows 或 openSUSE 服务器上。
 
 
-{% hint style="danger" %}
+::: danger
 产品部署建议 Linux 服务器，不推荐 Windows 服务器。
-{% endhint %}
-
-
-{% tabs centos="CentOS", ubuntu="Ubuntu", Debian="Debian", macOS="macOS", Windows="Windows", openSUSE="openSUSE", FreeBSD="FreeBSD", Docker="Docker" %}
+:::
 
 
 ## EMQ X License 文件获取
@@ -22,7 +19,6 @@ EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD、
 
 下载地址: <https://www.emqx.io/cn/downloads#enterprise>
 
-{% content "centos" %}
 
 ## CentOS
 
@@ -56,10 +52,10 @@ $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ee/redhat/centos
 $ sudo yum install emqx-ee
 ```
 
-{% hint style="info" %}
+::: tip
 如果提示接受 GPG 密钥，请确认密钥符合 fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64
 0d53，如果符合，则接受该指纹。
-{% endhint %}
+:::
 
 5.  安装特定版本的 EMQ X
     
@@ -179,7 +175,6 @@ $ sudo yum install emqx-ee
     ```
 
 
-{% content "ubuntu" %}
 
 ## Ubuntu
 
@@ -361,7 +356,6 @@ Node 'emqx@127.0.0.1' is started
 emqx 4.0.0 is running
 ```
 
-{% content "Debian" %}
 
 ## Debian 
 
@@ -541,7 +535,6 @@ $ sudo apt install emqx-ee
     emqx 4.0.0 is running
     ```
 
-{% content "macOS" %}
 
 ## macOS
 
@@ -573,7 +566,6 @@ $ sudo apt install emqx-ee
     emqx 4.0.0 is running
     ```
 
-{% content "Windows" %}
 
 ## Windows
 
@@ -595,7 +587,6 @@ $ sudo apt install emqx-ee
     ```
 
 
-{% content "openSUSE" %}
 
 ## openSUSE
 
@@ -750,8 +741,6 @@ $ sudo apt install emqx-ee
     ```
 
 
-{% content "FreeBSD" %}
-
 ## FreeBSD
 
   - FreeBSD 12
@@ -784,7 +773,6 @@ $ sudo apt install emqx-ee
     emqx 4.0.0 is running
     ```
 
-{% content "Docker" %}
 
 ## Docker
 
@@ -821,6 +809,3 @@ $ docker run -d -\
 ```
 
 更多关于 EMQ X Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
-
-
-{% endtabs %}

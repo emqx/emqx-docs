@@ -3510,7 +3510,7 @@ EMQ X 3.0.1 版本发布。此版本主要包含功能改进和错误修复。
 
 功能改进:
 
-  - 增加 'plugins reload \<Name\>' CLI 命令，支持重载插件时重新生成配置
+  - 增加 'plugins reload <Name\>' CLI 命令，支持重载插件时重新生成配置
     
     Github PR:
     [emqx/emqx-management\#30](https://github.com/emqx/emqx-management/pull/30)
@@ -5333,7 +5333,7 @@ Add src/emqttd.app.src to be compatible with rebar3 (emqttd\#920)
 
 Add more test cases (emqttd\#944)
 
-CRASH REPORT Process \<0.1498.0\> with 0 neighbours crashed with reason:
+CRASH REPORT Process <0.1498.0\> with 0 neighbours crashed with reason:
 {ssl\_error,{tls\_alert,"certificate unknown"}} in
 esockd\_connection:upgrade (emqttd\#915)
 
@@ -5593,7 +5593,7 @@ EMQ-2.0版本正式发布！EMQ-1.0版本产品环境下已支持900K并发连�
 >     
 >     -----
 
-使用方式: 订阅者在主题(Topic)前增加'$queue'或'$share/\<group\>/'前缀。
+使用方式: 订阅者在主题(Topic)前增加'$queue'或'$share/<group\>/'前缀。
 
 ### 本地订阅(Local Subscription)
 
@@ -5932,7 +5932,7 @@ etc/emqttd.conf配置示例:
 
 ### 发布订阅流程
 
-![image](./_static/images/publish.png)
+<!-- ![image](./_static/images/publish.png) -->
 
 ## 1.1.3 版本
 
@@ -6207,7 +6207,7 @@ refactor the emqttd, emqttd\_time, emqttd\_opts, emqttd\_node modules.
 ### Bugfix
 
 noproc error when call to gen\_server2:call(false,
-{add\_route,Topic,\<0.685.0\>}, infinity) (\#446)
+{add\_route,Topic,<0.685.0\>}, infinity) (\#446)
 
 \#\#\#\# Plugins
 
@@ -6261,7 +6261,7 @@ emqttd\_plugin\_mongo: First release
 *发布日期: 2015-12-28*
 
 Bugfix: emqttd\_ws\_client.erl: Unexpected Info:
-{'EXIT',\<0.27792.18\>,{shutdown,destroy}} (\#413)
+{'EXIT',<0.27792.18\>,{shutdown,destroy}} (\#413)
 
 Improve: fix spec errors found by dialyzer
 
@@ -6322,7 +6322,7 @@ consume about 15G Memory and 200% CPU.
 Bugfix: Plugin pathes error under windows (\#387)
 
 Improve: Too many error logs "\[error\] Session ..... Unexpected EXIT:
-client\_pid=\<0.14137.35\>, exit\_pid=\<0.30829.22\>, reason=nop..."
+client\_pid=<0.14137.35\>, exit\_pid=<0.30829.22\>, reason=nop..."
 (\#383)
 
 Improve: Define QOS0/1/2, Pooler Error (PR\#382)
@@ -7115,7 +7115,7 @@ Feature: HTTP POST API to support 'qos', 'retain' parameters
 Feature: $SYS system topics support
 
 Change: Rewrite emqtt\_topic.erl, use '', '\#', '+' to replace
-\<\<""\>\>, \<\<"\#"\>\>, \<\<"+"\>\>
+<<""\>\>, <<"\#"\>\>, <<"+"\>\>
 
 Change: fix emqtt\_pubsub.erl to match '\#', '+'
 

@@ -63,11 +63,11 @@ MongoDB 支持配置集合名称、认证字段、认证占位符等等参数。
 2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQ X 使用该字段作为 salt（盐）值
 3. MongoDB 使用 findOne 查询命令，确保你期望的查询结果能够出现在第一条数据中
 
-{% hint style="info" %}
+::: tip
 
 这是默认配置使用的集合结构，熟悉该插件的使用后你可以使用任何满足条件的集合进行认证。
 
-{% endhint %}
+:::
 
 ## 访问控制集合
 
@@ -116,11 +116,11 @@ MongoDB 支持配置集合名称、认证字段、认证占位符等等参数。
 | 超级用户查询字段名 | 需要从集合里面查询出来的字段 |
 | 超级用户条件字段 | 超级用户查询的条件，如果需要查询多个，使用逗号分隔。例如 username=%u,clientid=%c |
 
-{% hint style="danger" %}
+::: danger
 
 MongoDB ACL 规则需严格使用上述数据结构。 MongoDB ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
 
-{% endhint %}
+:::
 
 ## 加密规则
 
@@ -142,8 +142,8 @@ sha256,salt
 pbkdf2,sha256,1000,20
 ```
 
-{% hint style="info" %}
+::: tip
 
 可参考:[加盐规则与哈希方法](https://docs.emqx.net/broker/latest/cn/advanced/auth.html#加盐规则与哈希方法)。
 
-{% endhint %}
+:::

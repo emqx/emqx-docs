@@ -25,9 +25,9 @@ PostgreSQL 认证使用外部 PostgreSQL 数据库作为认证数据源，可以
 emqx_auth_pgsql
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_pgsql 插件同时包含 ACL 功能，可通过注释禁用。
-{% endhint %}
+:::
 
 
 
@@ -90,9 +90,9 @@ VALUES
 
 
 
-{% hint style="info" %} 
+::: tip 
 这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行认证。
-{% endhint %}
+:::
 
 
 
@@ -135,7 +135,7 @@ auth.pgsql.auth_query = select password from mqtt_user where username = '%u' lim
 2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQ X 使用该字段作为 salt（盐）值
 3. 查询结果只能有一条，多条结果时只取第一条作为有效数据
 
-{% hint style="info" %} 
+::: tip 
 可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
-{% endhint %}
+:::
 

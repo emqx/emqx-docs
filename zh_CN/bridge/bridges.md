@@ -484,10 +484,10 @@ kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic message_deli
 kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic message_acked --from-beginning
 ```
 
-{% hint style="info" %}
+::: tip
 默认 payload 被 base64 编码，可通过修改配置 bridge.kafka.encode_payload_type 指定
 payload 数据格式。
-{% endhint %}
+:::
 
 ### 启用 Kafka 桥接插件
 
@@ -889,9 +889,9 @@ pulsar-client consume message_delivered  -s "message_delivered" -n 1000
 
 pulsar-client consume message_acked  -s "message_acked" -n 1000
 ```
-{% hint style="info" %}
+::: tip
 默认 payload 被 base64 编码，可通过修改配置 bridge.pulsar.encode_payload_type 指定 payload 数据格式。
-{% endhint %}
+:::
 
 ### 启用 Pulsar 桥接插件
 
@@ -1147,10 +1147,10 @@ bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer MessageDeliver
 bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer MessageAcked
 ```
 
-{% hint style="info" %}
+::: tip
 默认 payload 被 base64 编码，可通过修改配置 bridge.rocket.encode_payload_type 指定
 payload 数据格式。
-{% endhint %}
+:::
 
 ### 启用 RocketMQ 桥接插件
 

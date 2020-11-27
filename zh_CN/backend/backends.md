@@ -15,6 +15,8 @@ category:
 ref:
 ---
 
+# EMQ X 规则引擎数据存储
+
 ## Redis 数据存储
 
 配置文件: emqx_backend_redis.conf
@@ -274,9 +276,9 @@ PUBLISH "mqtt_channel" "{\"type\": \"subscribe\", \"topic\": \"topic0\", \"clien
 PUBLISH "mqtt_channel" "{\"type\": \"unsubscribe\", \"topic\": \"test_topic0\", \"clientid\": \"test\"}"
 ```
 
-{% hint style="danger" %}
+::: danger
 Redis Cluster 无法使用 Redis PUB/SUB 功能。
-{% endhint %}
+:::
 
 ### 启用 Redis 数据存储插件
 
@@ -325,9 +327,9 @@ backend.mysql.hook.message.publish.3     = {"topic": "#", "action": {"function":
 backend.mysql.hook.message.acked.1       = {"topic": "#", "action": {"function": "on_message_acked"}, "pool": "pool1"}
 
 ## 获取离线消息
-##  "offline_opts": 获取离线消息的配置
-##     - max_returned_count: 单次拉去的最大离线消息数目
-##     - time_range: 仅拉去在当前时间范围的消息
+### "offline_opts": 获取离线消息的配置
+####   - max_returned_count: 单次拉去的最大离线消息数目
+####   - time_range: 仅拉去在当前时间范围的消息
 ## backend.mysql.hook.session.subscribed.1  = {"topic": "#", "action": {"function": "on_message_fetch"}, "offline_opts": {"max_returned_count": 500, "time_range": "2h"}, "pool": "pool1"}
 
 ## 如果需要存储 Qos0 消息, 可开启以下配置
@@ -382,9 +384,9 @@ create database mqtt;
 mysql -u root -p mqtt < etc/sql/emqx_backend_mysql.sql
 ```
 
-{% hint style="info" %}
+::: tip
 数据库名称可自定义
-{% endhint %}
+:::
 ### MySQL 设备在线状态表
 
 *mqtt_client* 存储设备在线状态:
@@ -635,9 +637,9 @@ backend.pgsql.hook.message.publish.3     = {"topic": "#", "action": {"function":
 backend.pgsql.hook.message.acked.1       = {"topic": "#", "action": {"function": "on_message_acked"}, "pool": "pool1"}
 
 ## 获取离线消息
-##  "offline_opts": 获取离线消息的配置
-##     - max_returned_count: 单次拉去的最大离线消息数目
-##     - time_range: 仅拉去在当前时间范围的消息
+### "offline_opts": 获取离线消息的配置
+####   - max_returned_count: 单次拉去的最大离线消息数目
+####   - time_range: 仅拉去在当前时间范围的消息
 ## backend.pgsql.hook.session.subscribed.1  = {"topic": "#", "action": {"function": "on_message_fetch"}, "offline_opts": {"max_returned_count": 500, "time_range": "2h"}, "pool": "pool1"}
 
 ## 如果需要存储 Qos0 消息, 可开启以下配置
@@ -944,9 +946,9 @@ backend.mongo.hook.message.publish.3     = {"topic": "#", "action": {"function":
 backend.mongo.hook.message.acked.1       = {"topic": "#", "action": {"function": "on_message_acked"}, "pool": "pool1"}
 
 ## 获取离线消息
-##  "offline_opts": 获取离线消息的配置
-##     - max_returned_count: 单次拉去的最大离线消息数目
-##     - time_range: 仅拉去在当前时间范围的消息
+### "offline_opts": 获取离线消息的配置
+####   - max_returned_count: 单次拉去的最大离线消息数目
+####   - time_range: 仅拉去在当前时间范围的消息
 ## backend.mongo.hook.session.subscribed.1  = {"topic": "#", "action": {"function": "on_message_fetch"}, "pool": "pool1", "offline_opts": {"time_range": "2h", "max_returned_count": 500}}
 
 ## 如果需要存储 Qos0 消息, 可开启以下配置
@@ -1225,9 +1227,9 @@ backend.cassa.hook.message.publish.3     = {"topic": "#", "action": {"function":
 backend.cassa.hook.message.acked.1       = {"topic": "#", "action": {"function": "on_message_acked"}, "pool": "pool1"}
 
 ## 获取离线消息
-##  "offline_opts": 获取离线消息的配置
-##     - max_returned_count: 单次拉去的最大离线消息数目
-##     - time_range: 仅拉去在当前时间范围的消息
+### "offline_opts": 获取离线消息的配置
+####   - max_returned_count: 单次拉去的最大离线消息数目
+####   - time_range: 仅拉去在当前时间范围的消息
 ## backend.cassa.hook.session.subscribed.1  = {"topic": "#", "action": {"function": "on_message_fetch"}, "offline_opts": {"max_returned_count": 500, "time_range": "2h"}, "pool": "pool1"}
 
 ## 如果需要存储 Qos0 消息, 可开启以下配置
@@ -1913,10 +1915,10 @@ MQTT 消息中的数据。
 | $qos        | MQTT 消息的 QoS                           |
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
-| $\<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
+| $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
 | $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 纳秒            |
 
-**$payload 与 $\<Number\>:**
+**$payload 与 $<Number\>:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
@@ -1964,9 +1966,9 @@ data/templates 目录下提供了一个示例模板 (emqx_backend_influxdb_examp
 }
 ```
 
-{% hint style="danget" %}
+::: tip
 当 Template 中设置 timestamp 或插件配置 `backend.influxdb.pool1.set_timestamp = true` 时，请将 InfluxDB UDP 配置中的 precision 设为 "ms"。
-{% endhint %}
+:::
 
 当 Topic 为 "sample" 的 MQTT Message 拥有以下 Payload 时:
 
@@ -2151,10 +2153,10 @@ MQTT 消息中的数据。
 | $qos        | MQTT 消息的 QoS                           |
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
-| $\<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
+| $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
 | $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
-**$payload 与 $\<Number\>:**
+**$payload 与 $<Number\>:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
@@ -2362,10 +2364,10 @@ $2, $3)`。
 | $qos        | MQTT 消息的 QoS                           |
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
-| $\<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
+| $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
 | $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
-**$payload 与 $\<Number\>:**
+**$payload 与 $<Number\>:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。

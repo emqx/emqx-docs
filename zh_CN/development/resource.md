@@ -19,9 +19,7 @@ ref:
 
 本页整理提供 EMQ X 客户端库、客户端工具、性能测试工具以及硬件等资源，如果你有相关推荐，欢迎提交到此页。
 
-{% tabs client="MQTT 客户端库", coap="CoAP 客户端库", clientTools="客户端工具", benchmark="性能测试工具", hardware="硬件资源" %}
 
-{% content "client" %}
 <div class="development-hardware-warp">
 
   <a class="hardware-item" href="https://www.eclipse.org/paho/clients/c/" target="_blank">
@@ -29,7 +27,7 @@ ref:
     <div class="hardware-name">Eclipse Paho C</div>
   </a>
 
-
+`
   <a class="hardware-item" href="https://www.eclipse.org/paho/clients/c/embedded/" target="_blank">
     <img src="https://docs.emqx.io/static/images/sdk_tools/c.png" />
     <div class="hardware-name">Embedded C</div>
@@ -217,9 +215,6 @@ ref:
 
 </div>
 
-
-{% content "coap" %}
-
 <div class="development-hardware-warp">
 
   <a class="hardware-item" href="https://github.com/1248/microcoap" target="_blank">
@@ -284,8 +279,6 @@ ref:
 </div>
 
 
-{% content "clientTools" %}
-
 <div class="development-hardware-warp">
 
   <a class="hardware-item" href="http://tools.emqx.io/" target="_blank">
@@ -301,9 +294,6 @@ ref:
 
 </div>
 
-
-
-{% content "benchmark" %}
 
 <div class="development-hardware-warp">
 
@@ -339,7 +329,6 @@ ref:
 </div>
 
 
-{% content "hardware" %}
   <div class="development-hardware-warp">
     <a class="hardware-item" href="http://www.openluat.com/" target="_blank">
       <img src="https://docs.emqx.io/static/images/sdk_tools/Hardware_library/Air202.png" />
@@ -391,6 +380,3 @@ ref:
       <div class="hardware-name">ESP32</div>
     </a>
   </div>
-{% endtabs %}
-
-

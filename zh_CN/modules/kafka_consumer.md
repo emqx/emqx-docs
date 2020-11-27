@@ -17,13 +17,13 @@ $ ./bin/zookeeper-server-start.sh config/zookeeper.properties
 $ ./bin/kafka-server-start.sh config/server.properties
 ```
 
-{% hint style="danger" %}
+::: danger
 
 Kafka消费组不支持Kafka0.9以下版本
 
 创建资源之前，需要提前创建Kafka主题，不然会提示错误
 
-{% endhint %}
+:::
 
 创建 Kafka 的主题:
 

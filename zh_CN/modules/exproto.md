@@ -13,7 +13,7 @@
 
 ## 架构
 
-![Extension-Protocol Arch](assets/exproto-arch.jpg)
+![Extension-Protocol Arch](./assets/exproto-arch.jpg)
 
 该模块主要需要处理的内容包括：
 
@@ -40,7 +40,7 @@
 
 从 gRPC 的角度上看，ExProto 会作为客户端向 `ConnectionHandler` 服务发送回调请求。同时，它也会作为服务端向外部模块提供 `ConnectionAdapter` 服务，以提供 各类接口的调用。如图：
 
-![Extension Protocol gRPC Arch](assets/exproto-grpc-arch.jpg)
+![Extension Protocol gRPC Arch](./assets/exproto-grpc-arch.jpg)
 
 
 详情参见：[exproto.proto](https://github.com/emqx/emqx-exproto/blob/dev/e4.2.0/priv/protos/exproto.proto)，例如接口的定义有：
@@ -118,25 +118,25 @@ service ConnectionHandler {
 
 打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
-![Modules](assets/modules.png)
+![Modules](./assets/modules.png)
 
 选择 “多语言扩展协议接入”：
 
-![Add ExProto Module](assets/exproto-add.jpg)
+![Add ExProto Module](./assets/exproto-add.jpg)
 
 配置 `ConnectionAdapter` 服务的监听地址，和是否为其开启 SSL 监听：
 
-![Configure ExProto gRPC Server](assets/exproto-conf-1.jpg)
+![Configure ExProto gRPC Server](./assets/exproto-conf-1.jpg)
 
 点击 “添加监听器” 为 ExProto 模块配置监听器，其中包括：
 
 1. 监听器的 `监听地址` 和 `监听类型`，它表明以何种方式接收自定义协议的 Socket 连接。
 2. 连接处理服务(ConnectionHandler) 的 `处理器服务地址` 和可能会有的 SSL 证书配置，它表明 ExProto 如何访问 ConnectionHandler 服务。
 
-![Configure ExProto Listener](assets/exproto-conf-2.jpg)
+![Configure ExProto Listener](./assets/exproto-conf-2.jpg)
 
 点击确定，完成监听器添加；在点击添加完成模块的创建：
 
-![Add ExProto Successfully](assets/exproto-succ.jpg)
+![Add ExProto Successfully](./assets/exproto-succ.jpg)
 
 至此，多语言扩展协议接入的配置已经完成。

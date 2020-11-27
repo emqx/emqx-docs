@@ -15,7 +15,7 @@ category:
 ref:
 ---
 
-# 认证 {#authentication}
+# 认证
 
 
 身份认证是大多数应用的重要组成部分，MQTT 协议支持用户名密码认证，启用身份认证能有效阻止非法客户端的连接。
@@ -90,11 +90,11 @@ EMQ X 支持的认证方式：
 
 JWT 认证可以批量签发认证信息，HTTP 认证能够实现复杂的认证鉴权逻辑。
 
-{% hint style="info" %} 
+::: tip 
 
 更改插件配置后需要重启插件才能生效，部分认证鉴权插件包含 [ACL 功能](./acl.md)。
 
-{% endhint %}
+:::
 
 
 ## 认证结果
@@ -118,11 +118,11 @@ EMQ  X 默认配置中启用了匿名认证，任何客户端都能接入 EMQ X�
 allow_anonymous = true
 ```
 
-{% hint style="danger" %} 
+::: danger 
 
 生产环境中请禁用匿名认证。
 
-{% endhint %}
+:::
 
 
 ## 密码加盐规则与哈希方法
@@ -167,12 +167,12 @@ auth.mysql.password_hash = sha256,salt
 
 PostgreSQL 认证功能逻辑图：
 
-![image-20200217154254202](assets/image-20200217154254202.png)
+![image-20200217154254202](./assets/image-20200217154254202.png)
 
 
-{% hint style="info" %} 
+::: tip 
 写入数据的加盐规则、哈希方法与对应插件的配置一致时认证才能正常进行。更改哈希方法会造成现有认证数据失效。
-{% endhint %}
+:::
 
 
 
@@ -185,18 +185,18 @@ PostgreSQL 认证功能逻辑图：
   - 匿名认证开启时，允许客户端接入
   - 匿名认证关闭时，禁止客户端接入
 
-![_images/guide_2.png](assets/guide_2.png)
+![_images/guide_2.png](./assets/guide_2.png)
 
 <!-- replace -->
 
-{% hint style="info" %} 
+::: tip 
 
 同时只启用一个认证插件可以提高客户端身份认证效率。
 
-{% endhint %}
+:::
 
 
-## TLS 认证 {#auth-tls}
+## TLS 认证
 
 MQTT TLS 的默认端口是 8883：
 
@@ -220,7 +220,7 @@ listener.ssl.external.cacertfile = etc/certs/cacert.pem
 listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
 ```
 
-## PSK 认证 {#auth-tls-psk}
+## PSK 认证
 
 如果希望使用 PSK 认证，需要将 [TLS 认证](#auth-tls) 中的 `listener.ssl.external.ciphers` 注释掉，然后配置 `listener.ssl.external.psk_ciphers`：
 

@@ -80,11 +80,11 @@ VALUES
 
 启用 MySQL 认证后，你可以通过用户名： emqx，密码：public 连接。
 
-{% hint style="info" %}
+::: tip
 
 可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
 
-{% endhint %}
+:::
 
 ### 访问控制表
 
@@ -181,11 +181,11 @@ sha256,salt
 pbkdf2,sha256,1000,20
 ```
 
-{% hint style="info" %}
+::: tip
 
 可参考:[加盐规则与哈希方法](https://docs.emqx.net/broker/latest/cn/advanced/auth.html#加盐规则与哈希方法)。
 
-{% endhint %}
+:::
 
 ## 特殊说明
 

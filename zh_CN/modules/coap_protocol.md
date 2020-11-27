@@ -10,23 +10,23 @@ CoAP 协议网关为 EMQ X 提供了 CoAP 协议的接入能力。它允许符�
 
 点击 “选择”，然后选择 “CoAP 接入网关”：
 
-![Create CoAP Protocol Gateway](assets/coap_add.jpg)
+![Create CoAP Protocol Gateway](./assets/coap_add.jpg)
 
 配置相关基础参数：
 
-![Configure CoAP Protocol Gateway](assets/coap_conf1.jpg)
+![Configure CoAP Protocol Gateway](./assets/coap_conf1.jpg)
 
 添加监听端口：
 
-![Configure CoAP Protocol Gateway](assets/coap_conf2.jpg)
+![Configure CoAP Protocol Gateway](./assets/coap_conf2.jpg)
 
 配置监听参数：
 
-![Configure CoAP Protocol Gateway](assets/coap_conf3.jpg)
+![Configure CoAP Protocol Gateway](./assets/coap_conf3.jpg)
 
 点击 “确定” 完成监听器的配置，然后点击 “添加” 完成模块的创建： 
 
-![Complete CoAP Protocol Gateway](assets/coap_conf4.jpg)
+![Complete CoAP Protocol Gateway](./assets/coap_conf4.jpg)
 
 ## 使用示例
 

@@ -4307,7 +4307,7 @@ CA 证书文件路径。
 
 <br />
 
-### auth.jwt.verify_claims.<claims>
+### auth.jwt.verify_claims <claims>
 
 | Type   | Default |
 | ------ | ------- |

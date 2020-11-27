@@ -49,11 +49,11 @@ HMSET mqtt_user:emqx password public
 
 启用 Redis 认证后，你可以通过用户名： emqx，密码：public 连接。
 
-{% hint style="info" %} 
+::: tip 
 
 这是默认配置使用的数据结构，熟悉该模块的使用后，你可以使用任何满足条件的数据结构进行认证。
 
-{% endhint %}
+:::
 
 ## 加盐规则与哈希方法
 
@@ -75,7 +75,7 @@ sha256,salt
 pbkdf2,sha256,1000,20
 ```
 
-##  认证查询命令（auth query cmd）
+### 认证查询命令（auth query cmd）
 
 进行身份认证时，EMQ X 将使用当前客户端信息填充并执行用户配置的认证查询命令，查询出该客户端在 Redis 中的认证数据。
 
@@ -160,8 +160,8 @@ HGET mqtt_user:%u is_superuser
 
 1. 查询结果中第一个数据必须为 is_superuser 数据
 
-{% hint style="info" %} 
+::: tip 
 
 如果不需要超级用户功能，注释并禁用该选项能有效提高效率
 
-{% endhint %}
+:::

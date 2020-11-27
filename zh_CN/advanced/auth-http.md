@@ -25,9 +25,9 @@ HTTP 认证使用外部自建 HTTP 应用认证数据源，根据 HTTP API 返�
 emqx_auth_http
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_http 插件同时包含 ACL 功能，可通过注释禁用。
-{% endhint %}
+:::
 
 
 ## 认证原理
@@ -100,7 +100,7 @@ HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式�
 - %C：TLS 证书公用名（证书的域名或子域名），仅当 TLS 连接时有效
 - %d：TLS 证书 subject，仅当 TLS 连接时有效
 
-{% hint style="danger" %} 
+::: danger 
 推荐使用 POST 与 PUT 方法，使用 GET 方法时明文密码可能会随 URL 被记录到传输过程中的服务器日志中。
-{% endhint %}
+:::
 

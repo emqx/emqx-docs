@@ -294,9 +294,9 @@ EMQ X 可以转发消息到标准 MQTT Broker，包括其他 MQTT 实现、公�
 
 Mosquitto 可以配置转发消息到 EMQ X，请参考[数据桥接](../advanced/bridge.md)。
 
-{% hint style="info" %}
+::: tip
 > EMQ X 桥接相关的使用方式请参照 [EMQ X 桥接](../advanced/bridge.md)
-{% endhint %}
+:::
 
 
 ### 我想跟踪特定消息的发布和订阅过程，应该如何做？
@@ -381,7 +381,8 @@ EMQ X 支持加密连接。在生产环境部署时，推荐的方案是使用�
     Crash dump is being written to: log/crash.dump...done
 ```
 
-**解决办法：**安装1.1.1以上版本的 `openssl`
+**解决办法：**
+安装1.1.1以上版本的 `openssl`
 
 + `License` 文件缺失
 
@@ -413,7 +414,8 @@ EMQ X 支持加密连接。在生产环境部署时，推荐的方案是使用�
   [os_mon] cpu supervisor port (cpu_sup): Erlang has closed
 ```
 
-  **解决办法：**登陆[emqx.io](https://emqx.io)申请license或安装开源版的 EMQ X Broker
+  **解决办法：**
+  登陆[emqx.io](https://emqx.io)申请license或安装开源版的 EMQ X Broker
 
 
 

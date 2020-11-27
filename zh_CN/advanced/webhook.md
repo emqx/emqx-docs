@@ -29,10 +29,10 @@ WebHook 的内部实现是基于 [钩子](./hooks.md)，但它更靠近顶层一
                 |    Broker    |                |  Request     +------------+
 ```
 
-{% hint style="info" %}
+::: tip
 WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X 中的事件推送给 Web 服务，并不关心 Web 服务的返回**。
 借助 Webhook 可以完成设备在线、上下线记录，订阅与消息存储、消息送达确认等诸多业务。
-{% endhint %}
+:::
 
 ## 配置项
 
@@ -43,9 +43,9 @@ Webhook 的配置文件位于 `etc/plugins/emqx_web_hook.conf`：
 | api.url            | string | -      | http://127.0.0.1:8080 | 事件需要转发的目的服务器地址 |
 | encode_payload     | enum   | `base64`, `base62` | undefined | 对**消息类事件中的 Payload 字段**进行编码，注释或其他则表示不编码 |
 
-{% hint style="info" %}
+::: tip
 当消息内容是不可见字符（如二进制数据）时，为了能够在 HTTP 协议中传输，使用 encode_payload 是十分有用的。
-{% endhint %}
+:::
 
 
 ## 触发规则

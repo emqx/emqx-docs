@@ -80,11 +80,11 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 HTTP ACL 能够实现复杂的 ACL 管理。
 
-{% hint style="info" %} 
+::: tip 
 
 ACL 功能包含在认证鉴权插件中，更改插件配置后需要**重启插件**才能生效，
 
-{% endhint %}
+:::
 
 ## 规则详解
 
@@ -156,9 +156,9 @@ acl_file = etc/acl.conf
 acl_deny_action = ignore
 ```
 
-{% hint style="info" %}
+::: tip
 在 MQTT v3.1 和 v3.1.1 协议中，发布操作被拒绝后服务器无任何报文错误返回，这是协议设计的一个缺陷。但在 MQTT v5.0 协议上已经支持应答一个相应的错误报文。
-{% endhint %}
+:::
 
 
 ## 超级用户（superuser）
@@ -206,14 +206,14 @@ acl_cache_ttl = 1m
   - 默认授权为禁止时，禁止客户端通过验证
   
 
-![_images/guide_3.png](assets/guide_3.png)
+![_images/guide_3.png](./assets/guide_3.png)
 
 <!-- replace -->
 
-{% hint style="info" %} 
+::: tip 
 
 同时只启用一个 ACL 插件可以提高客户端 ACL 检查性能。
 
-{% endhint %}
+:::
 
 

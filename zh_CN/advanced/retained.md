@@ -38,6 +38,6 @@ EMQ X 的保留消息功能是由 `emqx_retainer` 插件实现，该插件默认
 | retainer.max_payload_size      | bytesize |                          | 1MB    | 保留消息的最大 Payload 值。Payload 大小超出最大值后 EMQ Ｘ 消息服务器会把收到的保留消息作为普通消息处理。 |
 | retainer.expiry_interval       | duration |                          | ０     | 保留消息的过期时间，0 表示永不过期。如果 PUBLISH 报文中设置了消息过期间隔，那么以 PUBLISH 报文中的消息过期间隔为准。 |
 
-{% hint style="info" %}
+::: tip
 EMQ X Enterprise 中可将保留消息存储到多种外部数据库。
-{% endhint %}
+:::

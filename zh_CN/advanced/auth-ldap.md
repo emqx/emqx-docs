@@ -27,10 +27,10 @@ LDAP 认证使用外部 LDAP 服务器作为认证数据源，可以存储大量
 emqx_auth_ldap
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_ldap 插件同时包含 ACL 功能，可通过注释禁用。
 目前版本仅支持 OpenLDAP，不支持 Microsoft Active Directory。
-{% endhint %}
+:::
 
 
 

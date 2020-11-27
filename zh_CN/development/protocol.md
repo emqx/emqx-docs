@@ -607,8 +607,8 @@ tcp.proto.idle_timeout = 1s
 ## 上行主题。上行消息到 EMQ 系统中的消息主题
 ##
 ## 占位符：
-##   - %c: 接入客户端的 ClientId
-##   - %u: 接入客户端的 Username
+#### - %c: 接入客户端的 ClientId
+#### - %u: 接入客户端的 Username
 tcp.proto.up_topic = tcp/%c/up
 
 ## 下行主题。客户端接入成功后, emqx-tcp 会订阅

@@ -17,11 +17,11 @@ ref:
 
 # 分布式集群
 
-## 分布式 Erlang {#distributed-erlang}
+## 分布式 Erlang
 
 Erlang/OTP 最初是爱立信为开发电信设备系统设计的编程语言平台，电信设备 (路由器、接入网关...) 典型设计是通过背板连接主控板卡与多块业务板卡的分布式系统。
 
-### 节点与分布式 Erlang {#node-and-distributed-erlang}
+### 节点与分布式 Erlang
 
 Erlang/OTP 语言平台的分布式程序，由分布互联的 Erlang 运行时系统组成，每个 Erlang
 运行时系统被称为节点(Node)，节点间通过 TCP 两两互联，组成一个网状结构。
@@ -73,13 +73,13 @@ true
 
 ![image](../assets/cluster_1.png)
 
-### 安全 {#distributed-erlang-security}
+### 安全
 
 Erlang 节点间通过 cookie 进行互连认证。cookie 是一个字符串，只有 cookie 相同的两个节点才能建立连接。[上节](#node-and-distributed-erlang) 中我们曾经使用 `-setcookie my_nodes` 参数给四个节点设置了相同的 cookie: `my_nodes`。
 
 详见: <http://erlang.org/doc/reference_manual/distributed.html>
 
-### EMQ X 集群协议设置 {#distributed-erlang-protocol}
+### EMQ X 集群协议设置
 
 Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `etc/emqx.conf`
 中配置连接方式:
@@ -89,7 +89,7 @@ Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `
 | cluster.proto_dist | enum | `inet_tcp` | 分布式协议，可选值：<br />  - inet_tcp: 使用 TCP IPv4<br/>  - inet6_tcp: 使用 TCP IPv6<br/>  - inet_tls: 使用 TLS |
 | node.ssl_dist_optfile | 文件路径 | `etc/ssl_dist.conf` | 当 `cluster.proto_dist` 选定为 inet_tls 时，需要配置 `etc/ssl_dist.conf` 文件，指定 TLS 证书等 |
 
-## EMQ X 分布式集群设计 {#emqx-distribution-design}
+## EMQ X 分布式集群设计
 
 EMQ X 分布式的基本功能是将消息转发和投递给各节点上的订阅者，如下图所示：
 
@@ -97,7 +97,7 @@ EMQ X 分布式的基本功能是将消息转发和投递给各节点上的订�
 
 为实现此过程，EMQ X 维护了几个与之相关的数据结构：订阅表，路由表，主题树。
 
-### 订阅表: 主题 - 订阅者 {#emqx-distribution-subscribers}
+### 订阅表: 主题 - 订阅者
 
 MQTT 客户端订阅主题时，EMQ X 会维护主题(Topic) -\> 订阅者(Subscriber) 映射的**订阅表**。订阅表只存在于订阅者所在的 EMQ X 节点上，例如:
 
@@ -112,7 +112,7 @@ node2:
     topic1 -> client4
 ```
 
-### 路由表: 主题 - 节点 {#emqx-distribution-routes}
+### 路由表: 主题 - 节点
 
 而同一集群的所有节点，都会**复制**一份主题(Topic) -\> 节点(Node) 映射的**路由表**，例如:
 
@@ -122,7 +122,7 @@ topic2 -> node3
 topic3 -> node2, node4
 ```
 
-### 主题树: 带统配符的主题匹配 {#emqx-distribution-trie}
+### 主题树: 带统配符的主题匹配
 
 除路由表之外，EMQ X 集群中的每个节点也会维护一份**主题树**(Topic Trie) 的备份。
 
@@ -138,7 +138,7 @@ topic3 -> node2, node4
 
 ![image](../assets/cluster_2.png)
 
-### 消息派发过程 {#emqx-distribution-msg-delivery}
+### 消息派发过程
 
 当 MQTT 客户端发布消息时，所在节点会根据消息主题，检索路由表并转发消息到相关节点，再由相关节点检索本地的订阅表并将消息发送给相关订阅者。
 
@@ -151,11 +151,11 @@ topic3 -> node2, node4
 5. node3 收到转发来的 `t/a` 消息后，查询本地订阅表，获取本节点上订阅了 `t/a` 的订阅者，并把消息投递给他们。
 6. 消息转发和投递结束。
 
-### 数据分片与共享方式 {#emqx-distribution-data-share-shard}
+### 数据分片与共享方式
 
 EMQ X 的订阅表在集群中是分片(partitioned)的，而主题树和路由表是共享(replicated)的。
 
-## 节点发现与自动集群 {#emqx-service-discovery}
+## 节点发现与自动集群
 
 EMQ X 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
@@ -172,15 +172,15 @@ EMQ X 支持多种节点发现策略:
 | etcd   | 通过 etcd 自动集群      |
 | k8s    | Kubernetes 服务自动集群 |
 
-### manual 手动创建集群 {#emqx-service-discovery-manual}
+### manual 手动创建集群
 
-默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join \<Node\> 命令加入:
+默认配置为手动创建集群，节点须通过 ./bin/emqx\_ctl join <Node\> 命令加入:
 
 ```bash
 cluster.discovery = manual
 ```
 
-### 基于 static 节点列表自动集群 {#emqx-service-discovery-static}
+### 基于 static 节点列表自动集群
 
 配置固定的节点列表，自动发现并创建集群:
 
@@ -189,7 +189,7 @@ cluster.discovery = static
 cluster.static.seeds = emqx1@127.0.0.1,emqx2@127.0.0.1
 ```
 
-### 基于 mcast 组播自动集群 {#emqx-service-discovery-mcast}
+### 基于 mcast 组播自动集群
 
 基于 UDP 组播自动发现并创建集群:
 
@@ -202,7 +202,7 @@ cluster.mcast.ttl = 255
 cluster.mcast.loop = on
 ```
 
-### 基于 DNS A 记录自动集群 {#emqx-service-discovery-dns}
+### 基于 DNS A 记录自动集群
 
 基于 DNS A 记录自动发现并创建集群:
 
@@ -212,7 +212,7 @@ cluster.dns.name = localhost
 cluster.dns.app  = ekka
 ```
 
-### 基于 etcd 自动集群 {#emqx-service-discovery-etcd}
+### 基于 etcd 自动集群
 
 基于 [etcd](https://coreos.com/etcd/) 自动发现并创建集群:
 
@@ -223,7 +223,7 @@ cluster.etcd.prefix = emqcl
 cluster.etcd.node_ttl = 1m
 ```
 
-### 基于 kubernetes 自动集群 {#emqx-service-discovery-k8s}
+### 基于 kubernetes 自动集群
 
 [Kubernetes](https://kubernetes.io/) 下自动发现并创建集群:
 
@@ -237,7 +237,7 @@ cluster.k8s.app_name = ekka
 
 > Kubernetes 不建议使用 Fannel 网络插件，推荐使用 Calico 网络插件。
 
-### 手动(manual) 方式管理集群介绍 {#emqx-service-discovery-manual-tutorial}
+### 手动(manual) 方式管理集群介绍
 
 假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X 集群:
 
@@ -323,7 +323,7 @@ $ ./bin/emqx_ctl cluster leave
 $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
-## 集群脑裂与自动愈合 {#emqx-cluster-autoheal}
+## 集群脑裂与自动愈合
 
 *EMQ X* 支持集群脑裂自动恢复(Network Partition Autoheal)，可在 `etc/emqx.conf` 中配置:
 
@@ -339,7 +339,7 @@ cluster.autoheal = on
 4. Leader 节点在多数派 (majority) 分区选择集群自愈的 Coordinator 节点；
 5. Coordinator 节点重启少数派 (minority) 分区节点恢复集群。
 
-## 集群节点自动清除 {#emqx-cluster-autoclean}
+## 集群节点自动清除
 
 *EMQ X* 支持从集群自动删除宕机节点 (Autoclean)，可在 `etc/emqx.conf` 中配置:
 
@@ -347,7 +347,7 @@ cluster.autoheal = on
 cluster.autoclean = 5m
 ```
 
-## 防火墙设置 {#emqx-cluster-behind-firewall}
+## 防火墙设置
 
 若预先设置了环境变量 WITH_EPMD=1, 启动 emqx 时会使用启动 epmd (监听端口 4369) 做节点发现。称为 `epmd 模式`。
 若环境变量 WITH_EPMD 没有设置，则启动 emqx 时不启用 epmd，而使用 emqx ekka 的节点发现，这也是 4.0 之后的默认节点发现方式。称为 `ekka 模式`。

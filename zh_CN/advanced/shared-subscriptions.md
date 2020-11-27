@@ -94,6 +94,6 @@ broker.shared_dispatch_ack_enabled = false
 | sticky      | 一直发往上次选取的订阅者     |
 | hash        | 按照发布者 ClientID 的哈希值 |
 
-{% hint style="info" %}
+::: tip
 无论是单客户端订阅还是共享订阅都要注意客户端性能与消息接收速率，否则会引发消息堆积、客户端崩溃等错误。
-{% endhint %}
+:::

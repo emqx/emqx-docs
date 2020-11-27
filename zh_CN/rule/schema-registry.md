@@ -11,10 +11,10 @@ Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并
 EMQ X Schema Registry 目前可支持三种格式的编解码：[Avro](https://avro.apache.org)，[Protobuf](https://developers.google.com/protocol-buffers/)，以及自定义编码。其中 
 Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 Map 格式。解码后的数据可直接被规则引擎和其他插件使用。用户自定义的 (3rd-party)编解码服务通过 HTTP 或 TCP 回调的方式，进行更加贴近业务需求的编解码。
 
-{% hint style="info" %}
+::: tip
 Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本，但对于自定义编解码
 (3rd-party) 格式，如需要，Schema 文本需由编解码服务自己维护
-{% endhint %}
+:::
 
 
 ## 数据格式

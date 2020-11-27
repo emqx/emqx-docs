@@ -62,10 +62,10 @@ auth.user.2.password = public
 
 <!-- TODO 补充加载规则 -->
 
-{% hint style="danger" %} 
+::: danger 
 
 预设认证数据在配置文件中使用了明文密码，出于安全性与可维护性考虑应当避免使用该功能。
-{% endhint %}
+:::
 
 ## 使用 HTTP API 管理认证数据
 

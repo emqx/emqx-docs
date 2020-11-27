@@ -24,11 +24,11 @@ EMQ X Rule Engine (以下简称规则引擎) 用于配置 EMQ X 消息流与设�
 
 EMQ X 在 **消息发布或事件触发** 时将触发规则引擎，满足触发条件的规则将执行各自的 SQL 语句筛选并处理消息和事件的上下文信息。
 
-{% hint style="info" %}
+::: tip
 适用版本: **EMQ X v3.1.0+**
 
 兼容提示: EMQ X v4.0 对规则引擎 SQL 语法做出较大调整，v3.x 升级用户请参照 [迁移指南](./rule-engine.md#迁移指南) 进行适配。
-{% endhint %}
+:::
 
 
 ### EMQ X 规则引擎快速入门
@@ -105,9 +105,9 @@ SELECT * FROM "$events/message_acked" where topic =~ 't/#'
 SELECT * FROM "$events/client_connected"
 ```
 
-{% hint style="info" %}
+::: tip
 Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移。
-{% endhint %}
+:::
 
 ## 规则引擎组成
 
@@ -144,14 +144,12 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
 - 资源(Resource): 资源是通过资源类型为模板实例化出来的对象，保存了与资源相关的配置(比如数据库连接地址和端口、用户名和密码等) 和系统资源(如文件句柄，连接套接字等)。
 - 资源类型 (Resource Type): 资源类型是资源的静态定义，描述了此类型资源需要的配置项。
 
-{% hint type="primary" %}
+::: tip
 动作和资源类型是由 emqx 或插件的代码提供的，不能通过 API 和 CLI 动态创建。
-{% endhint %}
+:::
 
-## SQL 语句 {#rule-sql}
-
-### SQL 语法 {#rule-sql-syntax}
-
+## SQL 语句
+### SQL 语法
 **FROM、SELECT 和 WHERE 子句:**
 
 规则引擎的 SQL 语句基本格式为:
@@ -178,8 +176,7 @@ FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件
 
 其中 DO 和 INCASE 子句都是可选的。DO 相当于针对当前循环中对象的 SELECT 子句，而 INCASE 相当于针对当前循环中对象的 WHERE 语句。
 
-### 事件和事件主题 {#event-topics}
-
+### 事件和事件主题
 规则引擎的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
 
 事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
@@ -187,8 +184,7 @@ FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件
 
 所有支持的事件及其可用字段详见: [规则事件](#rule-sql-events)。
 
-### SQL 语句示例: {#rule-sql-examples}
-
+### SQL 语句示例:
 #### 基本语法举例
 
 - 从 topic 为 "t/a" 的消息中提取所有字段:
@@ -251,14 +247,14 @@ SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 
 SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
 ```
 
-{% hint type="primary" %}
+::: tip
 
 - FROM 子句后面的主题需要用双引号 ``""`` 引起来。
 - WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 ``''`` 引起来。
 - FROM 子句里如有多个主题，需要用逗号 ``","`` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
 - 可以使用使用 ``"."`` 符号对 payload 进行嵌套选择。
 
-{% endhint %}
+:::
 
 #### 遍历语法(FOREACH-DO-INCASE) 举例
 
@@ -565,8 +561,7 @@ FROM
 }
 ```
 
-### FROM 子句可用的事件主题 {#rule-sql-syntax}
-
+### FROM 子句可用的事件主题
 | 事件主题名                    | 释义     |
 | ----------------------------- | :------- |
 | $events/message_delivered    | 消息投递 |
@@ -577,8 +572,7 @@ FROM
 | $events/session_subscribed   | 订阅     |
 | $events/session_unsubscribed | 取消订阅 |
 
-### SELECT 和 WHERE 子句可用的字段 {#rule-sql-columns}
-
+### SELECT 和 WHERE 子句可用的字段
 SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``clientid``, ``username`` 和 ``event`` 是通用字段，每种事件类型都有。
 
 #### 普通主题 (消息发布)
@@ -707,10 +701,8 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``client
 | timestamp | 事件触发时间 (ms)                       |
 | node      | 事件触发所在节点                        |
 
-### SQL 关键字和符号 {#rule-sql-marks}
-
-#### SELECT - FROM - WHERE 语句 {#rule-sql-reserved-keywords}
-
+### SQL 关键字和符号
+#### SELECT - FROM - WHERE 语句
 SELECT 语句用于决定最终的输出结果里的字段。比如:
 
 下面 SQL 的输出结果中将只有两个字段 "a" 和 "b":
@@ -743,8 +735,7 @@ SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
 
 FROM 语句用于选择事件来源。如果是消息发布则填写消息的主题，如果是事件则填写对应的事件主题。
 
-#### 运算符号 {#rule-sql-marks}
-
+#### 运算符号
 | 函数名 |   函数作用            |   返回值   |     |
 | ------ | ------------------- | ---------- | --- |
 | `+`    | 加法，或字符串拼接     | 加和，或拼接之后的字符串 |     |
@@ -756,8 +747,7 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 | `=`    | 比较两者是否完全相等。可用于比较变量和主题 | true/false |     |
 | `=~`   | 比较主题(topic)是否能够匹配到主题过滤器(topic filter)。只能用于主题匹配 | true/false |     |
 
-### SQL 语句中可用的函数 {#rule-sql-funcs}
-
+### SQL 语句中可用的函数
 #### 数学函数
 
 <table style="width:99%;">
@@ -1401,8 +1391,7 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 </tbody>
 </table>
 
-### 在 Dashboard 中测试 SQL 语句 {#test-rule-sql-funcs}
-
+### 在 Dashboard 中测试 SQL 语句
 Dashboard 界面提供了 SQL 语句测试功能，通过给定的 SQL 语句和事件参数，展示 SQL 测试结果。
 
 1.  在创建规则界面，输入 **规则SQL**，并启用 **SQL 测试** 开关:
