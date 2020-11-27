@@ -69,6 +69,7 @@ EMQ X 读取 `etc/emqx.conf` 和 `etc/plugins/*.conf` 中的配置后，转换�
 `loaded_plugins` 文件记录了 EMQ X 默认启动的插件列表，可以修改此文件以增删默认启动的插件。`loaded_plugins` 中启动项格式为 `{<Plugin Name>, <Enabled>}.`，`<Enabled>` 字段为布尔类型，EMQ X 会在启动时根据 `<Enabled>` 的值判断是否需要启动该插件。关于插件的更多内容，请查看 [插件](../advanced/plugins.md)。
 
 {% emqxce %}
+
 ```bash
 $ cat loaded_plugins
 {emqx_management,true}.
@@ -78,10 +79,11 @@ $ cat loaded_plugins
 {emqx_rule_engine,true}.
 {emqx_bridge_mqtt,false}.
 ```
+
 {% endemqxce %}
 
-
 {% emqxee %}
+
 ```bash
 $ cat loaded_plugins
 {emqx_management, true}.
@@ -94,6 +96,7 @@ $ cat loaded_plugins
 {emqx_bridge_mqtt, false}.
 {emqx_cube, false}.
 ```
+
 {% endemqxee %}
 
 **mnesia**

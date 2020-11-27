@@ -19,7 +19,7 @@ ref:
 
 在 EMQ X 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与 4.1 之后的多语言架构不同，它会将整个语言的运行时包含在 Erlang VM 中：
 
-![Old Multiple Lang Arch](assets/lua-lang-arch.png)
+![Old Multiple Lang Arch](./assets/lua-lang-arch.png)
 
 - 多语言支持是作为一个插件出现，不同的语言环境，需要有不同的语言支持插件。
 - 该支持插件内嵌了该语言运行时的所有环境。

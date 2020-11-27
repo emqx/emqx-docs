@@ -180,7 +180,7 @@ Windows 执行  `./bin/emqx console` 弹出错误窗口：
 无法启动次程序，因为计算机中丢失 MSVCR120.dll。请尝试重新安装该程序以解决此问题。
 ```
 
-![error](static/WechatIMG18396.png)
+![error](./static/WechatIMG18396.png)
 
 #### 解决方法
 

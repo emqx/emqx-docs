@@ -33,20 +33,16 @@ EMQ X 目前支持的操作系统:
 + macOS 10.15
 + Windows Server 2019
 
-{% hint style="danger" %}
+::: danger
 产品部署建议 Linux 服务器，不推荐 Windows 服务器。
-{% endhint %}
+:::
 
-{% tabs shell="Shell 脚本安装", packages="包管理器安装", binary="二进制包安装", zip="ZIP 压缩包安装", homebrew="Homebrew 安装", docker="Docker 运行", helm="Helm 安装并集群", build="源码编译安装" %}
-
-{% content "shell" %}
 ## Shell 脚本一键安装 (Linux)
 
 ```bash
 curl https://repos.emqx.io/install_emqx.sh | bash
 ```
 
-{% content "packages" %}
 ## 包管理器安装 (Linux)
 
 #### Centos
@@ -325,7 +321,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo zypper rm emqx
     ```
 
-{% content "binary" %}
 ## 二进制包安装 (Linux)
 
 1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQ X 版本的二进制包。
@@ -395,7 +390,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
       $ rpm -e emqx
       ```
 
-{% content "zip" %}
 ## ZIP 压缩包安装 (Linux、MaxOS、Windows)
 
 1.  通过 [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQ X 版本的 zip 包。
@@ -428,7 +422,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
     直接删除 EMQ X 目录即可
 
-{% content "homebrew" %}
 ## 通过 Homebrew 安装 (MacOS)
 
 1.  添加 EMQ X 的 tap
@@ -467,7 +460,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ brew uninstall emqx
     ```
 
-{% content "docker" %}
 ## 通过 Docker 运行 (包含简单的 docker-compose 集群)
 
 #### 运行单个容器
@@ -558,7 +550,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 更多关于 EMQ X Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
-{% content "helm" %}
 ## 通过 Helkm 安装并集群 (K8S、K3S)
 
 1. 添加 helm 仓库
@@ -601,7 +592,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
                     stopped_nodes => []}
   ```
 
-{% content "build" %}
 
 ## 源码编译安装
 
@@ -635,5 +625,3 @@ $ ./bin/emqx_ctl status
 Node 'emqx@127.0.0.1' is started
 emqx v4.0.0 is running
 ```
-
-{% endtabs %}

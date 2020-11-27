@@ -25,9 +25,9 @@ PostgreSQL ACL 使用外部 PostgreSQL 数据库存储 ACL 规则，可以存储
 emqx_auth_pgsql
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_pgsql 插件同时包含认证功能，可通过注释禁用。
-{% endhint %}
+:::
 
 
 ## PostgreSQL 连接信息
@@ -129,9 +129,9 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 启用 PostgreSQL ACL 后并以用户名 emqx 成功连接后，客户端应当数据具有相应的主题权限。
 
 
-{% hint style="info" %} 
+::: tip 
 这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行 ACL 规则存储。
-{% endhint %}
+:::
 
 
 
@@ -159,9 +159,9 @@ auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u
 1. 查询结果中必须包含 is_superuser 字段，is_superuser 应该显式的为 true
 2. 查询结果只能有一条，多条结果时只取第一条作为有效数据
 
-{% hint style="info" %} 
+::: tip 
 如果不需要超级用户功能，注释并禁用该选项能有效提高效率
-{% endhint %}
+:::
 
 
 ## ACL SQL（acl_query）
@@ -186,7 +186,7 @@ auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic f
 1. 查询结果中必须包含 allow、access、topic、clientid、username、ipaddr 字段，如果字段不想参与比对则使用 `$all` 字符串或者数据库 `NULL` 值
 2. 查询结果可以有多条，多条结果时按照从上到下的顺序进行匹配
 
-{% hint style="info" %} 
+::: tip 
 可以在 SQL 中调整查询条件、指定排序方式实现更高效率的查询。
-{% endhint %}
+:::
 

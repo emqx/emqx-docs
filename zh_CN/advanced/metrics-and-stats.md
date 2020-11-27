@@ -23,9 +23,9 @@ EMQ X 为用户提供了多种查看指标与状态的手段。最直接的，�
 
 如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，具体操作方法分别参见 [HTTP API](./http-api.md#endpoint-metrics) 与 [$SYS 系统主题](./system-topic.md#)。
 
-{% hint style="info" %}
+::: tip
 EMQ X 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，用于将系统的监控数据输出到第三方的监控系统中，使用示例参考 [Prometheus 监控告警](../tutorial/prometheus.md)。
-{% endhint %}
+:::
 
 ## Metrics & Stats
 

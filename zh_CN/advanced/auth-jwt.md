@@ -61,8 +61,8 @@ auth.jwt.verify_claims = off
 ## auth.jwt.verify_claims.$name = expected
 
 ## Variables:
-##  - %u: username
-##  - %c: clientid
+### - %u: username
+### - %c: clientid
 # auth.jwt.verify_claims.username = %u
 ```
 
@@ -90,8 +90,8 @@ JWT 的 Payload 应当是 JSON 结构的数据，`auth.jwt.verify_claims.$name` 
 
 ```bash
 ## Variables:
-##  - %u: username
-##  - %c: clientid
+### - %u: username
+### - %c: clientid
 auth.jwt.verify_claims.username = %u
 ```
 
@@ -101,7 +101,7 @@ auth.jwt.verify_claims.username = %u
 
 
 
-{% hint style="danger" %} 
+::: danger 
 JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限，使用 JWT 时建议启用 TLS 加密传输。
 JWT 使用过程中无法在过期前废止某个 Token，请妥善设置有效时长并保管好密钥等加密信息。
-{% endhint %}
+:::

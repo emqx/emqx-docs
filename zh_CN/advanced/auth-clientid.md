@@ -64,12 +64,12 @@ auth.clientid.2.password = public
 
 <!-- TODO 补充加载规则 -->
 
-{% hint style="danger" %} 
+::: danger 
 
 预设认证数据在配置文件中使用了明文密码，出于安全性与可维护性考虑应当避免使用该功能。
 
 预设认证数据无法通过 API 修改、删除，请慎用。
-{% endhint %}
+:::
 
 
 

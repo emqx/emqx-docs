@@ -25,9 +25,9 @@ ACL 规则文件：
 etc/acl.conf
 ```
 
-{% hint style="info" %}
+::: tip
 内置 ACL 优先级最低，可以被 ACL 插件覆盖，如需禁用全部注释即可。规则文件更改后需重启 EMQ X 以应用生效。
-{% endhint %}
+:::
 
 
 ## 定义 ACL
@@ -96,6 +96,6 @@ etc/acl.conf
 ```
 
 
-{% hint style="info" %}
+::: tip
 acl.conf 中应只包含一些简单而通用的规则，使其成为系统基础的 ACL 原则。如果需要支持复杂、大量的 ACL 内容，你应该在认证插件中去实现它。
-{% endhint %}
+:::

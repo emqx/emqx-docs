@@ -77,11 +77,11 @@ VALUES
 
 启用 PostgreSQL认证后，你可以通过用户名： emqx，密码：public 连接。
 
-{% hint style="info" %}
+::: tip
 
 可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
 
-{% endhint %}
+:::
 
 ### 访问控制表
 
@@ -157,11 +157,11 @@ select is_superuser from mqtt_user where username = '%u' limit 1
 1. 查询结果中必须包含 is_superuser 字段，is_superuser 应该显式的为 true
 2. 查询结果只能有一条，多条结果时只取第一条作为有效数据
 
-{% hint style="info" %}
+::: tip
 
 如果不需要超级用户功能，注释并禁用该选项能有效提高效率
 
-{% endhint %}
+:::
 
 ## 加密规则
 
@@ -183,8 +183,8 @@ sha256,salt
 pbkdf2,sha256,1000,20
 ```
 
-{% hint style="info" %}
+::: tip
 
 可参考:[加盐规则与哈希方法](https://docs.emqx.net/broker/latest/cn/advanced/auth.html#加盐规则与哈希方法)。
 
-{% endhint %}
+:::

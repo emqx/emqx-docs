@@ -1,3 +1,5 @@
+# EMQ X 数据桥接
+
 ## 桥接数据到 MQTT Broker
 
 搭建 MQTT Broker 环境，以 MacOS X 为例:
@@ -90,9 +92,9 @@ $ ./bin/kafka-server-start.sh config/server.properties
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
 ```
 
-{% hint style="danger" %}
+::: danger
 创建 Kafka Rule 之前必须先在 Kafka 中创建好主题，否则创建 Kafka Rule 失败。
-{% endhint %}
+:::
 
 创建规则:
 

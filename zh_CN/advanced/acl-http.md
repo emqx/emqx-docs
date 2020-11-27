@@ -25,9 +25,9 @@ HTTP 认证使用外部自建 HTTP 应用认证授权数据源，根据 HTTP API
 emqx_auth_http
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_http 插件同时包含认证功能，可通过注释禁用。
-{% endhint %}
+:::
 
 
 要启用 HTTP ACL，需要在 `etc/plugins/emqx_auth_http.conf` 中配置以下内容：
@@ -117,6 +117,6 @@ HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式�
 - %m：Mountpoint
 - %t：主题
 
-{% hint style="danger" %} 
+::: danger 
 推荐使用 POST 与 PUT 方法，使用 GET 方法时明文密码可能会随 URL 被记录到传输过程中的服务器日志中。
-{% endhint %}
+:::

@@ -26,9 +26,9 @@ Redis ACL 使用外部 Redis 数据库存储 ACL 规则，可以存储大量数�
 emqx_auth_redis
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_redis 插件同时包含认证功能，可通过注释禁用。
-{% endhint %}
+:::
 
 
 ## Redis 连接信息
@@ -120,9 +120,9 @@ auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 1. 查询结果中第一个数据必须为 is_superuser 数据
 
 
-{% hint style="info" %} 
+::: tip 
 如果不需要超级用户功能，注释并禁用该选项能有效提高效率
-{% endhint %}
+:::
 
 
 ## ACL 查询命令（acl cmd）
@@ -145,7 +145,7 @@ auth.redis.acl_cmd = HGETALL mqtt_acl:%u
 1. 哈希中使用 topic 作为键，access 作为值
 
 
-{% hint style="danger" %} 
+::: danger 
 Redis ACL 规则需严格使用上述数据结构。
 Redis ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
-{% endhint %}
+:::

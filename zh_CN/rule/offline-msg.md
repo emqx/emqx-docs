@@ -134,11 +134,11 @@ CREATE TABLE `mqtt_msg` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-{% hint style="danger" %}
+::: danger
 
 消息表结构不能修改，请使用上面SQL语句创建
 
-{% endhint %}
+:::
 
 创建规则:
 
@@ -253,11 +253,11 @@ CREATE TABLE mqtt_msg (
 );
 ```
 
-{% hint style="danger" %}
+::: danger
 
 消息表结构不能修改，请使用上面SQL语句创建
 
-{% endhint %}
+:::
 
 创建规则:
 
@@ -387,11 +387,11 @@ CREATE TABLE mqtt.mqtt_msg (
 
 ```
 
-{% hint style="danger" %}
+::: danger
 
 消息表结构不能修改，请使用上面SQL语句创建
 
-{% endhint %}
+:::
 
 创建规则:
 

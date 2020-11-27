@@ -25,9 +25,9 @@ MongoDB 认证使用外部 MongoDB 数据库作为认证数据源，可以存储
 emqx_auth_mongo
 ```
 
-{% hint style="info" %} 
+::: tip 
 emqx_auth_mongo 插件同时包含 ACL 功能，可通过注释禁用。
-{% endhint %}
+:::
 
 
 
@@ -129,9 +129,9 @@ db.mqtt_user.insert({
 启用 MongoDB 认证后，你可以通过用户名： emqx，密码：public 连接。
 
 
-{% hint style="info" %} 
+::: tip 
 这是默认配置使用的集合结构，熟悉该插件的使用后你可以使用任何满足条件的集合进行认证。
-{% endhint %}
+:::
 
 
 

@@ -101,7 +101,7 @@ EMQ X 发行包中，包含了大量的官方插件，提供了一些基础的�
 
 参考 [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) 插件模版创建新的插件项目。
 
-备注：在 `\<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQ X 的插件。
+备注：在 `<plugin name>_app.erl` 文件中必须加上标签 `-emqx_plugin(?MODULE).` 以表明这是一个 EMQ X 的插件。
 
 
 ### 创建 认证/访问控制 模块

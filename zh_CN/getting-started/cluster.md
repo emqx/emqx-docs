@@ -87,8 +87,7 @@ client1 -> node1: Publish[t/a]
 
 
 
-## 节点发现与自动集群 {#emqx-service-discovery}
-
+## 节点发现与自动集群
 EMQ X 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
 Autoheal)、自动删除宕机节点 (Autoclean)。
@@ -104,8 +103,7 @@ EMQ X 支持多种节点发现策略:
 | etcd   | 通过 etcd 自动集群      |
 | k8s    | Kubernetes 服务自动集群 |
 
-### 手动(manual) 方式管理集群介绍 {#emqx-service-discovery-manual-tutorial}
-
+### 手动(manual) 方式管理集群介绍
 假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X 集群:
 
 |                节点名                 | 主机名 (FQDN)  |   IP 地址    |
@@ -185,8 +183,7 @@ $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 
 
 
-## 防火墙设置 {#emqx-cluster-behind-firewall}
-
+## 防火墙设置
 若预先设置了环境变量 WITH_EPMD=1, 启动 emqx 时会使用启动 epmd (监听端口 4369) 做节点发现。称为 `epmd 模式`。
 若环境变量 WITH_EPMD 没有设置，则启动 emqx 时不启用 epmd，而使用 emqx ekka 的节点发现，这也是 4.0 之后的默认节点发现方式。称为 `ekka 模式`。
 

@@ -19,14 +19,14 @@ ref:
 
 在开发时我们通常使用压缩包方式以单节点的形式启动服务，生产运行需要一个更加简单稳定的方式。本页主要从部署架构最佳实践讲解如何部署你的 EMQ X 服务。
 
-{% hint style="info" %}
+::: tip
 如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开 Proxy Protocol 配置，配置项：[EMQ X 监听器 proxy_protocol](../configuration/configuration.md#listenertcpexternalproxyprotocol)
 
 `Proxy Protcol` 参考: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
 Nginx 使用 Proxy Prorcol 参考: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
 
-{% endhint %}
+:::
 
 
 ## 部署架构
@@ -35,7 +35,7 @@ EMQ X 集群可作为物联网接入服务（IoT Hub）部署，目前 EMQ 在�
 
 典型部署架构：
 
-![](_assets/deploy_1.png)
+![](./_assets/deploy_1.png)
 
 
 
@@ -64,11 +64,11 @@ LB (负载均衡器) 负责分发设备的 MQTT 连接与消息到 EMQ X 集群�
 
 
 
-{% hint style="info" %}
+::: tip
 
 国内公有云部署推荐青云 (EMQ X 合作伙伴)，国外部署推荐 AWS ，私有部署推荐使用 HAProxy 作为 LB。
 
-{% endhint %}
+:::
 
 
 
@@ -122,11 +122,11 @@ EMQ X 节点集群使用的 TCP 端口:
 
 6. 在 LB 上创建 MQTT TCP 监听器:
 
-![image](_assets/deploy_2.png)
+![image](./_assets/deploy_2.png)
 
 或创建 SSL 监听器，并终结 SSL 在 LB :
 
-![image](_assets/deploy_3.png)
+![image](./_assets/deploy_3.png)
 
 7. MQTT 客户端连接 LB 公网地址测试。
 
@@ -154,11 +154,11 @@ EMQ X 节点集群使用的 TCP 端口:
 
 7. 在 ELB 上创建 MQTT TCP 监听器:
 
-![image](_assets/deploy_4-20200225175403693.png)
+![image](./_assets/deploy_4-20200225175403693.png)
 
 或创建 SSL 监听器，并终结 SSL 在 LB :
 
-![image](_assets/deploy_5.png)
+![image](./_assets/deploy_5.png)
 
 8. MQTT 客户端连接 LB 公网地址测试。
 
@@ -174,9 +174,9 @@ EMQ X 集群直接挂 DNS 轮询，设备通过域名或者 IP 地址列表访�
 2. EMQ X 节点防火墙开启外部 MQTT 访问端口，例如 1883, 8883
 3. 设备通过 IP 地址列表或域名访问 EMQ X 集群
 
-{% hint style="info" %}
+::: tip
 产品部署不推荐这种部署方式。
-{% endhint %}
+:::
 
 ### HAProxy 负载均衡
 

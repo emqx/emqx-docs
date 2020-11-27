@@ -32,7 +32,7 @@ EMQ X Broker 内置监控与告警功能，目前支持监控 CPU 占用率、�
 
 以系统内存占用率过高告警为例，您将收到以下格式的消息：
 
-![alarms_avtivate_msg](assets/alarms_avtivate_msg.png)
+![alarms_avtivate_msg](./assets/alarms_avtivate_msg.png)
 
 告警不会重复产生，即如果 CPU 占用率过高告警已经激活，则在其激活期间，不会出现第二个 CPU 占用率过高告警。告警会在被监控项恢复正常后自动取消激活，但同样支持用户手动取消激活（如果用户明确自己不关心该告警）。用户除了可以在 Dashboard 查看当前告警（激活中的告警）与历史告警（已取消激活的告警）以外，还可以通过 EMQ X Broker 提供的 [HTTP API](./http-api.md#endpoint-alarms) 查询和管理告警。
 

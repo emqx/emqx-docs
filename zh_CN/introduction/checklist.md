@@ -57,7 +57,7 @@ ref:
   - 检查 (调试)
   - 发送数据到 Web 服务
 
-<strong class="emqxce">
+<strong>
 以下是 EMQ X Enterprise 特有功能
 </strong>
 
@@ -119,9 +119,9 @@ EMQ X Enterprise 支持百万级物联网设备一站式接入、MQTT&CoAP 多�
   - 全球专业团队技术支持，我们的团队覆盖全球北美、欧洲、中国 5 个分支机构，有来自华为、IBM、Amazon 专业创始团队，以及欧洲、北美、印度近十家合作伙伴，能够全天侯相应一流的技术支持与咨询服务。
 
 
-{% hint style="info" %}
+::: tip
 感谢你对 EMQ X 的支持，如果有企业服务需要，请联系我们的销售人员 sales-cn@emqx.io。
-{% endhint %}
+:::
 
 {% endemqxce %}
 
@@ -139,7 +139,7 @@ EMQ X 企业版支持存储订阅关系、MQTT 消息、设备状态到
 Redis、MySQL、PostgreSQL、MongoDB、Cassandra、TimescaleDB、InfluxDB、DynamoDB、OpenTDSB
 数据库:
 
-![image](assets/overview_4.png)
+![image](./assets/overview_4.png)
 
 数据存储相关配置，详见"数据存储"章节。
 
@@ -148,7 +148,7 @@ Redis、MySQL、PostgreSQL、MongoDB、Cassandra、TimescaleDB、InfluxDB、Dyna
 EMQ X 企业版支持直接转发 MQTT 消息到 RabbitMQ、Kafka、Pulsar、RocketMQ、MQTT
 Broker，可作为百万级的物联网接入服务器(IoT Hub):
 
-![image](assets/overview_5.png)
+![image](./assets/overview_5.png)
 
 ### 规则引擎
 
@@ -159,7 +159,7 @@ Kafka、Pulsar、RocketMQ、RabbitMQ、MQTT Broker；保存数据到
 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB、Cassandra、InfluxDB、OpenTSDB、TimescaleDB；发送数据到
 WebServer:
 
-![image](assets/overview_6.png)
+![image](./assets/overview_6.png)
 
 规则引擎相关配置，详见"规则引擎"章节。
 
@@ -171,7 +171,7 @@ Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进
 。解码后的数据可直接被规则引擎和其他插件使用。用户自定义的
 (3rd-party) 编解码服务通过 HTTP 或 TCP 回调的方式，进行更加贴近业务需求的编解码。
 
-![image](assets/overview_7.png)
+![image](./assets/overview_7.png)
 
 编解码相关配置，详见"编解码"章节。
 

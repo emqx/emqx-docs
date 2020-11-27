@@ -538,7 +538,7 @@ $ ./bin/emqx_ctl plugins reload emqx_lua_hook
 Plugin emqx_lua_hook reloaded successfully.
 ```
 
-## modules 命令 {#endpoint-modules}
+## modules 命令
 
 modules 命令用于加载、卸载和查询内置模块。
 
@@ -1078,9 +1078,9 @@ ok
 | `rule-actions show <ActionId>` | Show a rule action |
 
 
-{% hint type="primary" %}
+::: tip
 动作可以由 EMQ X 内置(称为系统内置动作)，或者由 EMQ X 插件编写，但不能通过 CLI/API 添加或删除。
-{% endhint %}
+:::
 
 #### rule-actions show
 
@@ -1160,9 +1160,9 @@ ok
 | resource-types list          | List all resource-types |
 | resource-types show `<Type>` | Show a resource-type    |
 
-{% hint type="primary" %}
+::: tip
 资源类型可以由 EMQ X 内置(称为系统内置资源类型)，或者由 EMQ X 插件编写，但不能通过 CLI/API 添加或删除。
-{% endhint %}
+:::
 
 #### resource-types list
 
@@ -1193,14 +1193,14 @@ ok
 - 最大命中速度: 规则命中速度的峰值(次/秒)
 - 5分钟平均速度: 5分钟内规则的平均命中速度(次/秒)
 
-### 动作状态和统计指标 {#action-metrics}
+### 动作状态和统计指标
 
 ![image](../assets/action_metrics.png)
 
 - 成功: 动作执行成功次数
 - 失败: 动作执行失败次数
 
-### 资源状态和告警 {#resource-metrics}
+### 资源状态和告警
 
 ![image](../assets/resource_status.png)
 

@@ -1228,13 +1228,13 @@ insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}'
 **还需添加 Authorization 请求头作为认证信息**，请求头的值为 Basic + TDengine {username}:{password} 经过Base64 编码之后的字符串, 例如默认的 root:taosdata 编码后为 `cm9vdDp0YW9zZGF0YQ==`，
 填入的值为 `Basic cm9vdDp0YW9zZGF0YQ==`。
 
-![image-20200730093728092](assets/rule-engine/tdengine-webhook.png)
+![image-20200730093728092](./assets/rule-engine/tdengine-webhook.png)
 
 点击 “新建” 按钮。
 
 返回响应动作界面，点击 “确认”。
 
-![image-20200730093457366](assets/rule-engine/image-20200730093457366.png)
+![image-20200730093457366](./assets/rule-engine/image-20200730093457366.png)
 
 返回规则创建界面，点击 “创建”。
 
@@ -1518,7 +1518,7 @@ select * from msg_ref;
 ```
 完成后，可以看到一张空的 `msg_ref` 已创建成功：
 
-![Create DolphinDB Table](assets/rule-engine/dolphin_create_tab.jpg)
+![Create DolphinDB Table](./assets/rule-engine/dolphin_create_tab.jpg)
 
 至此，DolphinDB 的配置已经完成了。
 
