@@ -1,0 +1,8 @@
+node_modules
+_book
+yarn-error.log
+book.pdf
+.vscode
+*.lock
+*.pdf
+.DS_Store
