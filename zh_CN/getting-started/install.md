@@ -45,7 +45,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 ## 包管理器安装 (Linux)
 
-#### Centos
+### Centos
 
 1.  安装所需要的依赖包
   
@@ -124,7 +124,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo yum remove emqx
     ```
 
-#### Ubuntu、Debian
+### Ubuntu、Debian
 
 1.  安装所需要的依赖包
   
@@ -240,7 +240,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo apt remove emqx
     ```
 
-#### OpenSUSE
+### OpenSUSE
 
 1.  下载 GPG 公钥并导入。
   
@@ -462,7 +462,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 ## 通过 Docker 运行 (包含简单的 docker-compose 集群)
 
-#### 运行单个容器
+### 运行单个容器
 
 1.  获取 docker 镜像
   
@@ -486,7 +486,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v4.0.0
     ```
 
-#### 使用 docker-compose 创建简单的 static 集群
+### 使用 docker-compose 创建简单的 static 集群
 
 1. 创建 `docker-compose.yaml` 文件
 
