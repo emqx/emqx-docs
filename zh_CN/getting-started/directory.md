@@ -32,7 +32,7 @@ ref:
 
 以上目录中，用户经常接触与使用的是 `bin`、`etc`、`data`、`log` 目录。
 
-#### bin 目录
+## bin 目录
 
 **emqx、emqx.cmd**
 
@@ -42,7 +42,7 @@ EMQ X 的可执行文件，具体使用可以查看 [基本命令](./command-lin
 
 EMQ X 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](../advanced/cli.md)。
 
-#### etc 目录
+## etc 目录
 
 EMQ X 通过 `etc` 目录下配置文件进行设置，主要配置文件包括:
 
@@ -56,7 +56,7 @@ EMQ X 通过 `etc` 目录下配置文件进行设置，主要配置文件包括:
 
 EMQ X 具体的配置内容可以查看 [配置项](../configuration/configuration.md)。
 
-#### data 目录
+## data 目录
 
 EMQ X 将运行数据存储在 `data` 目录下，主要的文件包括:
 
@@ -108,7 +108,7 @@ EMQ X 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规
 可以通过 `emqx_ctl mnesia` 命令查询 EMQ X 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../advanced/cli.md)。
 
 
-#### log 目录
+## log 目录
 
 **emqx.log.***
 
