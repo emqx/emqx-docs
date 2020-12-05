@@ -2287,7 +2287,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/telemetry
 **Success Response Body (JSON):**
 
 | Name         | Type             | Description |
-| ---------- - | ---------------- | ----------- |
+| ----------| ---------------- | ----------- |
 | code         | Integer          | 0 |
 | data         | Array of Objects | 遥测状态 |
 | data.enabled | Boolean          | 是否启用 |
