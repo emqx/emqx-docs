@@ -6,7 +6,9 @@ Take  [Prometheus](https://prometheus.io) as an example:
 
 `emqx_statsd` supports pushing data to Pushgateway, which is then pulled by Promethues Server for storage.
 
-Note: `emqx_statsd` does not support the pull operation of Prometheus.
+::: tip Tip
+`emqx_statsd` does not support the pull operation of Prometheus.
+:::
 
 ## Configuration
 

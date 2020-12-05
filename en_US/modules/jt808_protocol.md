@@ -130,7 +130,9 @@ HTTP status code 200: authentication succeeded
 Other: Authentication failed
 ```
 
-Note: The authentication request is only called when the system does not save the authentication code (that is, the terminal directly sends an authentication message to log in to the system)
+::: tip Tip
+The authentication request is only called when the system does not save the authentication code (that is, the terminal directly sends an authentication message to log in to the system)
+:::
 
 ### Data uplink and downlink
 
@@ -163,7 +165,9 @@ For example, after the terminal reports a message of type `Data Uplink Transpare
 }
 ```
 
-Note: For transparent transmission, the content of the data field will be base64 encoded and reported once
+::: tip Tip
+For transparent transmission, the content of the data field will be base64 encoded and reported once
+:::
 
 #### Data Downlink
 
@@ -172,4 +176,6 @@ Similarly, take the ID in the above row as an example; after the terminal is suc
 $ mosquitto_pub -t jt808/abcde1234567/dn -m'{"body":{"data":"MTIzNDU2","type":240},"header":{"msg_id":35072}}'
 ```
 
-Note: In the downstream JSON, the content in the header only needs to have msg_id; the content in the body has different structures according to different msg_id
+::: tip Tip
+In the downstream JSON, the content in the header only needs to have msg_id; the content in the body has different structures according to different msg_id
+:::

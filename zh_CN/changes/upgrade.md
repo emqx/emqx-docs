@@ -139,17 +139,9 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
 
 ## 升级到3.1版本
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 3.1版本全新设计了项目架构、配置方式与插件管理方式。2.x与1.x版本升级需要重新配置部署。
-
-</div>
+:::
 
 升级流程:
 
@@ -170,17 +162,10 @@ Note
 
 ## 升级到2.0版本
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 2.0版本全新设计了项目架构、配置方式与插件管理方式。1.x版本升级需要重新配置部署。
+:::
 
-</div>
 
 升级流程:
 
@@ -192,17 +177,10 @@ Note
 
 ## 升级到1.1.2版本
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 1.0以后版本可平滑升级到1.1.2
+:::
 
-</div>
 
 升级流程:
 

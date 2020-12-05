@@ -84,7 +84,9 @@ When EMQ X Broker is running, you can view, start and stop a plugin through [Man
 
 Refer to the [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) plugin template to create a new plugin project.
 
-Note: The tag of` -emqx_plugin (? MODULE)`should be added to `<plugin name>_app.erl` file to indicate that this is an EMQ X Broker plugin.
+::: tip Tip
+The tag of` -emqx_plugin (? MODULE)`should be added to `<plugin name>_app.erl` file to indicate that this is an EMQ X Broker plugin.
+:::
 
 
 ### Create Authentication / Access Control Module
@@ -223,7 +225,9 @@ Plug-in configuration files are placed in  `etc/${plugin_name}.conf|config`. EMQ
 plugin_name.key = value
 ```
 
-Note: `k = v` format configuration requires the plugin developer to create `priv/plugin_name.schema` mapping file.
+::: tip Tip
+`k = v` format configuration requires the plugin developer to create `priv/plugin_name.schema` mapping file.
+:::
 
 
 ### Compile and publish the plugin

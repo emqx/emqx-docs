@@ -86,84 +86,21 @@ mosquitto_pub -t a/b/c -m hello -q 1
 
 #### 报文结构
 
-|                       |
-| --------------------- |
-| 固定报头(Fixed header)    |
-| 可变报头(Variable header) |
-| 报文有效载荷(Payload)       |
+- 固定报头(Fixed header)
+- 可变报头(Variable header)
+- 报文有效载荷(Payload)
 
 #### 固定报头
 
-<table style="width:82%;">
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>Bit</td>
-<td><blockquote>
-<p>7</p>
-</blockquote></td>
-<td><blockquote>
-<p>6</p>
-</blockquote></td>
-<td><blockquote>
-<p>5</p>
-</blockquote></td>
-<td><blockquote>
-<p>4</p>
-</blockquote></td>
-<td><blockquote>
-<p>3</p>
-</blockquote></td>
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-</tr>
-<tr class="even">
-<td>byte1</td>
-<td><blockquote>
-<p>MQT</p>
-</blockquote></td>
-<td>T Pack</td>
-<td>et typ</td>
-<td>e</td>
-<td></td>
-<td><blockquote>
-<p>Fla</p>
-</blockquote></td>
-<td>gs</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>byte2...</td>
-<td><blockquote>
-<p>Rem</p>
-</blockquote></td>
-<td>aining</td>
-<td>Lengt</td>
-<td>h</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+```
++----------+-----+-----+-----+-----+-----+-----+-----+-----+
+| Bit      |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
++----------+-----+-----+-----+-----+-----+-----+-----+-----+
+| byte1    |   MQTT Packet type    |         Flags         |
++----------+-----------------------+-----------------------+
+| byte2... |   Remaining Length                            |
++----------+-----------------------------------------------+
+```
 
 #### 报文类型
 
@@ -198,119 +135,18 @@ PUBACK报文用于接收端确认QoS1报文，PUBREC/PUBREL/PUBCOMP报文用于Q
 
 MQTT发布消息QoS保证不是端到端的，是客户端与服务器之间的。订阅者收到MQTT消息的QoS级别，最终取决于发布消息的QoS和主题订阅的QoS。
 
-<table style="width:67%;">
-<colgroup>
-<col style="width: 22%" />
-<col style="width: 22%" />
-<col style="width: 22%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>发布消息的QoS</td>
-<td>主题订阅的QoS</td>
-<td>接收消息的QoS</td>
-</tr>
-<tr class="even">
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-</tr>
-<tr class="odd">
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-</tr>
-<tr class="even">
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-</tr>
-<tr class="odd">
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-</tr>
-<tr class="even">
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-</tr>
-<tr class="odd">
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-</tr>
-<tr class="even">
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-<td><blockquote>
-<p>0</p>
-</blockquote></td>
-</tr>
-<tr class="odd">
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-<td><blockquote>
-<p>1</p>
-</blockquote></td>
-</tr>
-<tr class="even">
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-<td><blockquote>
-<p>2</p>
-</blockquote></td>
-</tr>
-</tbody>
-</table>
+| 发布消息的 QoS | 主题订阅的 QoS | 接收消息的 QoS |
+| -------------- | -------------- | -------------- |
+| 0              | 0              | 0              |
+| 0              | 1              | 0              |
+| 0              | 2              | 0              |
+| 1              | 0              | 0              |
+| 1              | 1              | 1              |
+| 1              | 2              | 1              |
+| 2              | 0              | 0              |
+| 2              | 1              | 1              |
+| 2              | 2              | 2              |
+
 
 #### Qos0消息发布订阅
 

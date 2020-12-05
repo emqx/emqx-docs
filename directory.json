@@ -246,7 +246,7 @@
           "path": "rule/bridges"
         },
         {
-          "title": "离线消息保存到 Redis",
+          "title": "离线消息保存",
           "path": "rule/offline-msg"
         },
         {

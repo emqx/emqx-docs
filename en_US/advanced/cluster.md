@@ -205,7 +205,9 @@ Deploy EMQ X Broker cluster on two servers of s1.emqx.io, s2.emqx.io:
 | emqx@s1.emqx.io or emqx@192.168.0.10 | s1.emqx.io    | 192.168.0.10 |
 | emqx@s2.emqx.io or emqx@192.168.0.20 | s2.emqx.io    | 192.168.0.20 |
 
-**Note:** The format of node name is<Name@Host>, and Host must be an IP address or FQDN (server name. Domain name)
+::: tip Tip
+The format of node name is<Name@Host>, and Host must be an IP address or FQDN (server name. Domain name)
+:::
 
 #### Configure emqx@s1.emqx.io node
 
@@ -223,7 +225,9 @@ Configure through environment variables:
 export EMQX_NODE_NAME=emqx@s1.emqx.io && ./bin/emqx start
 ```
 
-**Note:** After a node starts to join the cluster, the node name cannot be changed.
+::: tip Tip
+After a node starts to join the cluster, the node name cannot be changed.
+:::
 
 #### Configure emqx@s2.emqx.io node
 
