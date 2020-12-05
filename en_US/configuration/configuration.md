@@ -29,7 +29,7 @@ ref: undefined
 
  Cluster name.
 
-<br />
+
 
 ### cluster.proto_dist
 
@@ -45,7 +45,7 @@ Distributed Erlang cluster protocol type. Available values are:
 - `inet6_tcp`: using IPv6
 - `inet_tls`: using TLS, required to be used with `node.ssl_dist_optfile` configuration
 
-<br />
+
 
 ### cluster.discovery
 
@@ -64,7 +64,7 @@ Cluster node discovery method. Available values are:
 - `etcd`: Use etcd to discover nodes.
 - `k8s`: Use Kubernetes to discover nodes.
 
-<br />
+
 
 ### cluster.autoheal
 
@@ -76,7 +76,7 @@ Cluster node discovery method. Available values are:
 
 Enable or disable the automatic recovery mechanism of cluster brain splitting.
 
-<br />
+
 
 ### cluster.autoclean
 
@@ -88,7 +88,7 @@ Enable or disable the automatic recovery mechanism of cluster brain splitting.
 
 Specify how long to delete short-line nodes from the cluster.
 
-<br />
+
 
 ### cluster.static.seeds
 
@@ -100,7 +100,7 @@ Specify how long to delete short-line nodes from the cluster.
 
 When using static clustering, specify a fixed list of nodes, separated by commas `,` between multiple nodes.
 
-<br />
+
 
 ### cluster.mcast.addr
 
@@ -112,7 +112,7 @@ When using static clustering, specify a fixed list of nodes, separated by commas
 
 When using the mcast cluster, specify the multicast address.
 
-<br />
+
 
 ### cluster.mcast.ports
 
@@ -124,7 +124,7 @@ When using the mcast cluster, specify the multicast address.
 
 When using the mcast cluster, specify the multicast port. If there are multiple ports, separate them with commas `,`.
 
-<br />
+
 
 ### cluster.mcast.iface
 
@@ -136,7 +136,7 @@ When using the mcast cluster, specify the multicast port. If there are multiple 
 
 When using mcast cluster, specify which local IP address the node discovery service needs to bind to.
 
-<br />
+
 
 ### cluster.mcast.ttl
 
@@ -148,7 +148,7 @@ When using mcast cluster, specify which local IP address the node discovery serv
 
 When using mcast cluster, specify the Time-To-Live value of multicast.
 
-<br />
+
 
 ### cluster.mcast.loop
 
@@ -160,7 +160,7 @@ When using mcast cluster, specify the Time-To-Live value of multicast.
 
 When using mcast clustering, set whether multicast packets are delivered to the local loopback address.
 
-<br />
+
 
 ### cluster.dns.name
 
@@ -190,7 +190,7 @@ emqx@192.168.0.101
 emqx@192.168.0.102
 ```
 
-<br />
+
 
 ### cluster.dns.app
 
@@ -202,7 +202,7 @@ emqx@192.168.0.102
 
 When using dns cluster, it is used to splice the IP list obtained from `cluster.dns.name` to get a list of node names.
 
-<br />
+
 
 ### cluster.etcd.server
 
@@ -214,7 +214,7 @@ When using dns cluster, it is used to splice the IP list obtained from `cluster.
 
 When using etcd cluster, specify the address of etcd service. If there are multiple services, use commas to separate them.
 
-<br />
+
 
 ### cluster.etcd.prefix
 
@@ -230,7 +230,7 @@ When using etcd cluster, specify the prefix of etcd path. Each node creates a pa
 v2/keys/<prefix>/<cluster.name>/<node.name>
 ```
 
-<br />
+
 
 ### cluster.etcd.node_ttl
 
@@ -242,7 +242,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 When using etcd cluster, specify the expiration time of the node path in etcd.
 
-<br />
+
 
 ### cluster.etcd.ssl.keyfile
 
@@ -254,7 +254,7 @@ When using etcd cluster, specify the expiration time of the node path in etcd.
 
 When using SSL to connect to etcd, specify the client's private key file.
 
-<br />
+
 
 ### cluster.etcd.ssl.certfile
 
@@ -266,7 +266,7 @@ When using SSL to connect to etcd, specify the client's private key file.
 
 When using SSL to connect to etcd, specify the SSL client certificate file.
 
-<br />
+
 
 ### cluster.etcd.ssl.cacertfile
 
@@ -278,7 +278,7 @@ When using SSL to connect to etcd, specify the SSL client certificate file.
 
 When using SSL to connect to etcd, specify the CA certificate file for SSL.
 
-<br />
+
 
 ### cluster.k8s.apiserver
 
@@ -290,7 +290,7 @@ When using SSL to connect to etcd, specify the CA certificate file for SSL.
 
 When using the k8s cluster, specify the Kubernetes API Server. If there are multiple Servers, separate them with commas `,`.
 
-<br />
+
 
 ### cluster.k8s.service_name
 
@@ -302,7 +302,7 @@ When using the k8s cluster, specify the Kubernetes API Server. If there are mult
 
 When using k8s cluster, specify the service name of EMQ X Broker in Kubernetes.
 
-<br />
+
 
 ### cluster.k8s.address_type
 
@@ -332,7 +332,7 @@ emqx@172.16.122.32
 emqx@172.16.122.33
 ```
 
-<br />
+
 
 ### cluster.k8s.app_name
 
@@ -344,7 +344,7 @@ emqx@172.16.122.33
 
 When using k8s clustering, app_name is used to splice with the obtained Host list to get the node list.
 
-<br />
+
 
 ### cluster.k8s.suffix
 
@@ -356,7 +356,7 @@ When using k8s clustering, app_name is used to splice with the obtained Host lis
 
 When using the k8s method and specifying `cluster.k8s.address_type` as the dns type, you can set the suffix of the emqx node name, and splice with `cluster.k8s.namespace` to get a list of node names.
 
-<br />
+
 
 ### cluster.k8s.namespace
 
@@ -386,7 +386,7 @@ emqx@172-16-122-32.default.pod.cluster.local
 emqx@172-16-122-33.default.pod.cluster.local
 ```
 
-<br />
+
 
 ### node.name
 
@@ -398,7 +398,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 The node name. The format is `<name> @ <host>`. Where `<host>` can be an IP address or FQDN. See [http://erlang.org/doc/reference_manual/distributed.html](http://erlang.org/doc/reference_manual/distributed.html) for details
 
-<br />
+
 
 ### node.cookie
 
@@ -410,7 +410,7 @@ The node name. The format is `<name> @ <host>`. Where `<host>` can be an IP addr
 
 The cookie value used by the distributed Erlang cluster.
 
-<br />
+
 
 ### node.data_dir
 
@@ -422,7 +422,7 @@ The cookie value used by the distributed Erlang cluster.
 
 The node's data directory, which is used to store Mnesia data files.
 
-<br />
+
 
 ### node.heartbeat
 
@@ -436,7 +436,7 @@ System tuning parameters. This configuration will override the `-heart` paramete
 
 Enable or disable Erlang runtime detection mechanism, and restart automatically when the runtime terminates. Use with care to avoid restarting the monitored process when emqx is closed manually.
 
-<br />
+
 
 ### node.async_threads
 
@@ -450,7 +450,7 @@ System tuning parameters. This configuration will override the `+A` parameter in
 
 Set the number of threads in the asynchronous thread pool in Erlang runtime, see [http://erlang.org/doc/man/erl.html](http://erlang.org/doc/man/erl.html) for details.
 
-<br />
+
 
 ### node.process_limit
 
@@ -464,7 +464,7 @@ System tuning parameters. This configuration will override the `+P` parameter in
 
 Set the maximum number of processes allowed by Erlang, which will affect the number of connections that emqx nodes can process. See [http://erlang.org/doc/man/erl.html](http://erlang.org/doc/man/erl.html) for details.
 
-<br />
+
 
 ### node.max_ports
 
@@ -478,7 +478,7 @@ System tuning parameters. This configuration will override the `+Q ` parameter i
 
 Set the maximum number of ports allowed by Erlang. See [http://erlang.org/doc/man/erl.html](http://erlang.org/doc/man/erl.html) for details.
 
-<br />
+
 
 ### node.dist_buffer_size
 
@@ -492,7 +492,7 @@ System tuning parameters. This configuration will override the `+zdbbl` paramete
 
 Set the maximum cache size used by Erlang distributed communication. See [http://erlang.org/doc/man/erl.html](http://erlang.org/doc/man/erl.html) for details.
 
-<br />
+
 
 ### node.max_ets_tables
 
@@ -506,7 +506,7 @@ System tuning parameters. This configuration will override the `+e` parameter in
 
 Set the maximum number of ETS tables allowed in Erlang runtime. See [http://erlang.org/doc/man/erl.html](http://erlang.org/doc/man/erl.html) for details.
 
-<br />
+
 
 ### node.global_gc_interval
 
@@ -518,7 +518,7 @@ Set the maximum number of ETS tables allowed in Erlang runtime. See [http://erla
 
 System tuning parameters, which set how often Erlang runs to force a global garbage collection.
 
-<br />
+
 
 ### node.fullsweep_after
 
@@ -532,7 +532,7 @@ System tuning parameters. This configuration will override the `-env ERL_FULLSWE
 
 Set how many times the generational GC will run before Erlang runs a fullsweep GC. For details, see [http://erlang.org/doc/man/erlang.html#spawn_opt-4](http://erlang.org/doc/man/erlang.html#spawn_opt-4).
 
-<br />
+
 
 ### node.crash_dump
 
@@ -544,7 +544,7 @@ Set how many times the generational GC will run before Erlang runs a fullsweep G
 
 Set the storage path and file name of the Erlang crash_dump file.
 
-<br />
+
 
 ### node.ssl_dist_optfile
 
@@ -558,7 +558,7 @@ This configuration will override the `-ssl_dist_optfile` parameter in the `vm.ar
 
 If you use SSL to establish an emqx cluster, you need to specify the SSL distributed protocol configuration file. It needs to be used with `cluster.proto_dist = inet_tls`.
 
-<br />
+
 
 ### node.dist_net_ticktime
 
@@ -572,7 +572,7 @@ System tuning parameters. This configuration will override the `-kernel net_tick
 
 Specifying how long time when a node has been unresponsive, it is considered to be down and disconnected. For details, see [http://www.erlang.org/doc/man/kernel_app.html#net_ticktime](http://www.erlang.org/doc/man/kernel_app.html#net_ticktime).
 
-<br />
+
 
 ### node.dist_listen_min
 
@@ -584,7 +584,7 @@ Specifying how long time when a node has been unresponsive, it is considered to 
 
 Set a TCP port range together with `node.dist_listen_max`. This port ranget is used for distribution to distributed Erlang as a listening port for distributed channels. Note that if a firewall is set between nodes, this port range needs to be placed into the firewall's whitelist.
 
-<br />
+
 
 ### node.dist_listen_max
 
@@ -596,7 +596,7 @@ Set a TCP port range together with `node.dist_listen_max`. This port ranget is u
 
 Set a TCP port range together with `node.dist_listen_min`. This port range is used for distribution to distributed Erlang as a listening port for distributed channels. Note that if a firewall is set up between nodes, this port rangeneeds to be put in The firewall's whitelist.
 
-<br />
+
 
 ### rpc.mode
 
@@ -608,7 +608,7 @@ Set a TCP port range together with `node.dist_listen_min`. This port range is us
 
 RPC mode. Synchronous or asynchronous mode is optional.
 
-<br />
+
 
 ### rpc.async_batch_size
 
@@ -620,7 +620,7 @@ RPC mode. Synchronous or asynchronous mode is optional.
 
 The maximum number of batch messages sent in asynchronous mode. Note that this configuration does not work in synchronous mode.
 
-<br />
+
 
 ### node.tcp_server_port
 
@@ -632,7 +632,7 @@ The maximum number of batch messages sent in asynchronous mode. Note that this c
 
 Set the listening port used by RPC local service
 
-<br />
+
 
 ### node.tcp_client_port
 
@@ -644,7 +644,7 @@ Set the listening port used by RPC local service
 
 Set the port of the remote RPC service.
 
-<br />
+
 
 ### node.tcp_client_num
 
@@ -656,7 +656,7 @@ Set the port of the remote RPC service.
 
 Set the number of RPC communication channels initiated by this node to each remote node. Set to 1 to ensure the order of messages. Keep the default value (half the number of CPU cores) to improve RPC throughput.
 
-<br />
+
 
 ### rpc.connect_timeout
 
@@ -668,7 +668,7 @@ Set the number of RPC communication channels initiated by this node to each remo
 
 Timeout for establishing an RPC connection. It means how long will it give up after trying if the remote node does not respond when establishing a connection, .
 
-<br />
+
 
 ### rpc.send_timeout
 
@@ -680,7 +680,7 @@ Timeout for establishing an RPC connection. It means how long will it give up af
 
 Timeout for sending, which means how long to give up after sending the message.
 
-<br />
+
 
 ### rpc.authentication_timeout
 
@@ -692,7 +692,7 @@ Timeout for sending, which means how long to give up after sending the message.
 
 RPC authentication timeout. It means how long it will give up if the remote node does not respond, .
 
-<br />
+
 
 ### rpc.call_receive_timeout
 
@@ -704,7 +704,7 @@ RPC authentication timeout. It means how long it will give up if the remote node
 
 The timeout period of RPC synchronous mode. It means how long it will take before giving up if the RPC synchronous call fails to receive a reply.
 
-<br />
+
 
 ### rpc.socket_keepalive_idle
 
@@ -716,7 +716,7 @@ The timeout period of RPC synchronous mode. It means how long it will take befor
 
 It means how long after the last packet was sent, keepalive probe packets are sent.
 
-<br />
+
 
 ### rpc.socket_keepalive_interval
 
@@ -728,7 +728,7 @@ It means how long after the last packet was sent, keepalive probe packets are se
 
 The interval between keepalive detection messages.
 
-<br />
+
 
 ### rpc.socket_keepalive_count
 
@@ -740,7 +740,7 @@ The interval between keepalive detection messages.
 
 For how many times if the keepalive probe message fails to receive a reply, the RPC connection is considered lost.
 
-<br />
+
 
 ### rpc.socket_sndbuf
 
@@ -752,7 +752,7 @@ For how many times if the keepalive probe message fails to receive a reply, the 
 
 TCP tuning parameters. TCP sending buffer size.
 
-<br />
+
 
 ### rpc.socket_recbuf
 
@@ -764,7 +764,7 @@ TCP tuning parameters. TCP sending buffer size.
 
 TCP tuning parameters. TCP receiving buffer size.
 
-<br />
+
 
 ### rpc.socket_buffer
 
@@ -776,7 +776,7 @@ TCP tuning parameters. TCP receiving buffer size.
 
 TCP tuning parameters. Socket buffer size in user mode.
 
-<br />
+
 
 ### log.to
 
@@ -793,7 +793,7 @@ Where to output the log. The optional values are:
 - **console:** Only output logs to standard output (emqx console)
 - **both:** output log to file and standard output at the same time (emqx console)
 
-<br />
+
 
 ### log.level
 
@@ -805,7 +805,7 @@ Where to output the log. The optional values are:
 
 Global log level. This includes the primary log level and all log handlers. For details, see [log level and log handlers](../getting-started/log.md#log-level-and-log-handlers).
 
-<br />
+
 
 ### log.dir
 
@@ -817,7 +817,7 @@ Global log level. This includes the primary log level and all log handlers. For 
 
 Log file directory.
 
-<br />
+
 
 ### log.file
 
@@ -829,7 +829,7 @@ Log file directory.
 
 The prefix of the log file. For example, if you use the default value (`log.file = emqx.log`), the log file name will be `emqx.log.1`, `emqx.log.2`, ...
 
-<br />
+
 
 ### log.chars_limit
 
@@ -841,7 +841,7 @@ The prefix of the log file. For example, if you use the default value (`log.file
 
 Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated. `-1` means no limit.
 
-<br />
+
 
 ### log.rotation.size
 
@@ -853,7 +853,7 @@ Set the maximum length of a single log message. If this length is exceeded, the 
 
 Set the size of a single log file. If it exceeds this size, the log file will be rolled to create a new log file.
 
-<br />
+
 
 ### log.rotation.count
 
@@ -865,7 +865,7 @@ Set the size of a single log file. If it exceeds this size, the log file will be
 
 Set the total number of log files. If this number is exceeded, the next log file will overwrite the first file.
 
-<br />
+
 
 ### log.<level>.file
 
@@ -891,7 +891,7 @@ Output error and error logs separately to the `error.log.N` file
 log.error.file = error.log
 ```
 
-<br />
+
 
 ### allow_anonymous
 
@@ -903,9 +903,11 @@ log.error.file = error.log
 
 Whether to allow anonymous users to log in to the system.
 
-Note: It is recommended to disable this option in the production environment.
+::: tip Tip
+It is recommended to disable this option in the production environment.
+:::
 
-<br />
+
 
 ### acl_nomatch
 
@@ -917,7 +919,7 @@ Note: It is recommended to disable this option in the production environment.
 
 When the ACL is not hit, allow or deny the publish/subscribe operation.
 
-<br />
+
 
 ### acl_file
 
@@ -929,7 +931,7 @@ When the ACL is not hit, allow or deny the publish/subscribe operation.
 
 The default path of ACL file.
 
-<br />
+
 
 ### enable_acl_cache
 
@@ -941,7 +943,7 @@ The default path of ACL file.
 
 Whether to enable ACL caching.
 
-<br />
+
 
 ### acl_cache_max_size
 
@@ -953,7 +955,7 @@ Whether to enable ACL caching.
 
 Maximum cache number of ACL rule.
 
-<br />
+
 
 ### acl_cache_ttl
 
@@ -965,7 +967,7 @@ Maximum cache number of ACL rule.
 
 Maximum cache time of ACL rule.
 
-<br />
+
 
 ### acl_deny_action
 
@@ -980,7 +982,7 @@ What to do after the ACL check fails.
 - `ignore`：No operation
 - `disconnect`：disconnect.
 
-<br />
+
 
 ### flapping_detect_policy
 
@@ -996,7 +998,7 @@ Format: <threshold>,<duration>,<banned>`.
 
 For example, `30, 1m, 5m`, it means that if the client disconnects 30 times within 1 minute, then login is prohibited for the next 5 minutes
 
-<br />
+
 
 ### mqtt.max_packet_size
 
@@ -1008,7 +1010,7 @@ For example, `30, 1m, 5m`, it means that if the client disconnects 30 times with
 
 The maximum allowed length of MQTT messages.
 
-<br />
+
 
 ### mqtt.max_clientid_len
 
@@ -1020,7 +1022,7 @@ The maximum allowed length of MQTT messages.
 
 The maximum allowed length of  Client ID  string.
 
-<br />
+
 
 ### mqtt.max_topic_levels
 
@@ -1032,7 +1034,7 @@ The maximum allowed length of  Client ID  string.
 
 The maximum allowed level of topics for client subscription. 0 means no limit.
 
-<br />
+
 
 ### mqtt.max_qos_allowed
 
@@ -1044,7 +1046,7 @@ The maximum allowed level of topics for client subscription. 0 means no limit.
 
 The maximum allowed QoS level for client to publish.
 
-<br />
+
 
 ### mqtt.max_topic_alias
 
@@ -1056,7 +1058,7 @@ The maximum allowed QoS level for client to publish.
 
 The maximum allowed number of topic aliases. 0 means that topic aliases are not supported.
 
-<br />
+
 
 ### mqtt.retain_available
 
@@ -1068,7 +1070,7 @@ The maximum allowed number of topic aliases. 0 means that topic aliases are not 
 
 Whether to support Retain message.
 
-<br />
+
 
 ### mqtt.wildcard_subscription
 
@@ -1080,7 +1082,7 @@ Whether to support Retain message.
 
 Whether to support subscribing to wildcard topics.
 
-<br />
+
 
 ### mqtt.shared_subscription
 
@@ -1092,7 +1094,7 @@ Whether to support subscribing to wildcard topics.
 
 Whether to support shared subscriptions.
 
-<br />
+
 
 ### mqtt.ignore_loop_deliver
 
@@ -1104,7 +1106,7 @@ Whether to support shared subscriptions.
 
 Whether to ignore the message sent by itself. If it is ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
 
-<br />
+
 
 ### mqtt.strict_mode
 
@@ -1116,7 +1118,7 @@ Whether to ignore the message sent by itself. If it is ignored, it means that EM
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
 
-<br />
+
 
 ### zone.external.idle_timeout
 
@@ -1128,7 +1130,7 @@ Whether to enable the strict check mode. The strict check mode will check the co
 
 The daze time after the TCP connection is established. If no packets are received within this time, the connection will be shutdown.
 
-<br />
+
 
 ### zone.external.enable_acl
 
@@ -1140,7 +1142,7 @@ The daze time after the TCP connection is established. If no packets are receive
 
 Whether to enable ACL check.
 
-<br />
+
 
 ### zone.external.enable_ban
 
@@ -1152,7 +1154,7 @@ Whether to enable ACL check.
 
 Whether to enable blacklist.
 
-<br />
+
 
 ### zone.external.enable_stats
 
@@ -1164,7 +1166,7 @@ Whether to enable blacklist.
 
 Whether to enable client status statistics.
 
-<br />
+
 
 ### zone.external.acl_deny_action
 
@@ -1179,7 +1181,7 @@ What to do after the ACL check fails.
 - `ignore`：No any operation.
 - `disconnect`：disconnect.
 
-<br />
+
 
 ### zone.external.force_gc_policy
 
@@ -1195,7 +1197,7 @@ Format: `<Number> | <Bytes>`.
 
 For example, `16000|16MB` means that when ` 16000` messages are received, or a byte of `16MB` flows in, a garbage collection is forced.
 
-<br />
+
 
 ### zone.external.force_shutdown_policy
 
@@ -1213,7 +1215,7 @@ Format: `<Number> | <Bytes>`.
 
 For example, `32000|32MB` means that when the process accumulates `32000` messages, or the process occupies memory up to `32MB`, the process is closed.
 
-<br />
+
 
 ### zone.external.max_packet_size
 
@@ -1225,7 +1227,7 @@ For example, `32000|32MB` means that when the process accumulates `32000` messag
 
 The maximum allowed length of MQTT packet.
 
-<br />
+
 
 ### zone.external.max_clientid_len
 
@@ -1237,7 +1239,7 @@ The maximum allowed length of MQTT packet.
 
 The maximum length of Client ID string.
 
-<br />
+
 
 ### zone.external.max_topic_levels
 
@@ -1249,7 +1251,7 @@ The maximum length of Client ID string.
 
 The maximum allowed level of topics for client subscription. 0 means no limit.
 
-<br />
+
 
 ### zone.external.max_qos_allowed
 
@@ -1261,7 +1263,7 @@ The maximum allowed level of topics for client subscription. 0 means no limit.
 
 The maximum QoS level allowed for the client to publish.
 
-<br />
+
 
 ### zone.external.max_topic_alias
 
@@ -1273,7 +1275,7 @@ The maximum QoS level allowed for the client to publish.
 
 The maximum number of topic aliases. 0 means that topic aliases are not supported.
 
-<br />
+
 
 ### zone.external.retain_available
 
@@ -1285,7 +1287,7 @@ The maximum number of topic aliases. 0 means that topic aliases are not supporte
 
 Whether to support Retain message.
 
-<br />
+
 
 ### zone.external.wildcard_subscription
 
@@ -1297,7 +1299,7 @@ Whether to support Retain message.
 
 Whether to support subscribing to wildcard topics.
 
-<br />
+
 
 ### zone.external.shared_subscription
 
@@ -1309,7 +1311,7 @@ Whether to support subscribing to wildcard topics.
 
 Whether to support shared subscriptions.
 
-<br />
+
 
 ### zone.external.server_keepalive
 
@@ -1321,7 +1323,7 @@ Whether to support shared subscriptions.
 
 Keepalive time specified by the server, used for MQTT v5.0 CONNACK messages
 
-<br />
+
 
 ### zone.external.keepalive_backoff
 
@@ -1333,7 +1335,7 @@ Keepalive time specified by the server, used for MQTT v5.0 CONNACK messages
 
 Keepalive backoff index. If no data packet is received from the client within the time of  `Keepalive * backoff * 2`, it is considered that the client has heartbeat timeout.
 
-<br />
+
 
 ### zone.external.max_subscriptions
 
@@ -1345,7 +1347,7 @@ Keepalive backoff index. If no data packet is received from the client within th
 
 The maximum number of topics that a single client is allowed to subscribe to. `0` means no limit.
 
-<br />
+
 
 ### zone.external.upgrade_qos
 
@@ -1357,7 +1359,7 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 
 Allow EMQ X Broker to force the QoS level of the message upgrading to the subscribed QoS level when publishing the message.
 
-<br />
+
 
 ### zone.external.max_inflight
 
@@ -1369,7 +1371,7 @@ Allow EMQ X Broker to force the QoS level of the message upgrading to the subscr
 
 Inflight window size: The inflight window is used to store unacknowledged QoS 1 and QoS 2 messages.
 
-<br />
+
 
 ### zone.external.retry_interval
 
@@ -1381,7 +1383,7 @@ Inflight window size: The inflight window is used to store unacknowledged QoS 1 
 
 Message retransmission interval: EMQ X Broker checks whether message retransmission is required at each interval.
 
-<br />
+
 
 ### zone.external.max_awaiting_rel
 
@@ -1393,7 +1395,7 @@ Message retransmission interval: EMQ X Broker checks whether message retransmiss
 
 The maximum receiving window for QoS 2 messages, which configures how many QoS 2 messages from the client can be processed by EMQ X Broker simultaneously. `0` means no limit.
 
-<br />
+
 
 ### zone.external.await_rel_timeout
 
@@ -1405,7 +1407,7 @@ The maximum receiving window for QoS 2 messages, which configures how many QoS 2
 
 Time for QoS 2 message processing timeout. If the QoS PUBREL message has not been received after the timeout, the message is dropped from the receiving window.
 
-<br />
+
 
 ### zone.external.session_expiry_interval
 
@@ -1417,7 +1419,7 @@ Time for QoS 2 message processing timeout. If the QoS PUBREL message has not bee
 
 The default timeout period of the session, which is mainly used for MQTT v3.1 and v3.1.1 protocols. In MQTT v5.0, this value is usually carried in the client's connection message.
 
-<br />
+
 
 ### zone.external.max_mqueue_len
 
@@ -1429,7 +1431,7 @@ The default timeout period of the session, which is mainly used for MQTT v3.1 an
 
 The maximum length of the message queue. When the flight window is full, or the client is offline, the message will be stored in the queue. 0 means no limit.
 
-<br />
+
 
 ### zone.external.mqueue_priorities
 
@@ -1449,7 +1451,7 @@ Queue message priority configuration:
 
 When the length of the message queue is limited, low priority messages will be dropped first.
 
-<br />
+
 
 ### zone.external.mqueue_default_priority
 
@@ -1461,7 +1463,7 @@ When the length of the message queue is limited, low priority messages will be d
 
 The default priority level of the message.
 
-<br />
+
 
 ### zone.external.mqueue_store_qos0
 
@@ -1473,7 +1475,7 @@ The default priority level of the message.
 
 Whether the message queue stores QoS 0 messages.
 
-<br />
+
 
 ### zone.external.enable_flapping_detect
 
@@ -1485,7 +1487,7 @@ Whether the message queue stores QoS 0 messages.
 
 Whether to enable `Flapping` check.
 
-<br />
+
 
 ### zone.external.mountpoint
 
@@ -1504,7 +1506,7 @@ The available placeholders are:
 
 For example, if the mount point is set to `user/%c/`. , when the client with client ID `tom` publishes the topic `open` message, the topic actually routed in EMQ X Broker is `user/tom/open`.
 
-<br />
+
 
 ### zone.external.use_username_as_clientid
 
@@ -1516,7 +1518,7 @@ For example, if the mount point is set to `user/%c/`. , when the client with cli
 
 Whether to use the client's Username as its Client ID.
 
-<br />
+
 
 ### zone.external.ignore_loop_deliver
 
@@ -1528,7 +1530,7 @@ Whether to use the client's Username as its Client ID.
 
 Whether to ignore the message sent by yourself. If ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
 
-<br />
+
 
 
 ### zone.external.strict_mode
@@ -1541,7 +1543,7 @@ Whether to ignore the message sent by yourself. If ignored, it means that EMQ X 
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
 
-<br />
+
 
 ### zone.internal.allow_anonymous
 
@@ -1553,7 +1555,7 @@ Whether to enable the strict check mode. The strict check mode will check the co
 
 Whether to allow anonymous users to log in to the system.
 
-<br />
+
 
 ### zone.internal.enable_stats
 
@@ -1565,7 +1567,7 @@ Whether to allow anonymous users to log in to the system.
 
 Whether to enable client status statistics.
 
-<br />
+
 
 ### zone.internal.enable_acl
 
@@ -1577,7 +1579,7 @@ Whether to enable client status statistics.
 
 Whether to enable ACL check.
 
-<br />
+
 
 ### zone.internal.acl_deny_action
 
@@ -1592,7 +1594,7 @@ What to do after the ACL check fails.
 - `ignore`：No operation.
 - `disconnect`：Disconnect.
 
-<br />
+
 
 ### zone.internal.force_gc_policy
 
@@ -1608,7 +1610,7 @@ Format: `<Number> | <Bytes>`.
 
 For example, `16000|16MB` means that when ` 16000` messages are received, or a byte of `16MB` flows in, a garbage collection is forced.
 
-<br />
+
 
 ### zone.internal.wildcard_subscription
 
@@ -1620,7 +1622,7 @@ For example, `16000|16MB` means that when ` 16000` messages are received, or a b
 
 Whether to support subscribing to wildcard topics.
 
-<br />
+
 
 ### zone.internal.shared_subscription
 
@@ -1632,7 +1634,7 @@ Whether to support subscribing to wildcard topics.
 
 Whether to support shared subscriptions.
 
-<br />
+
 
 ### zone.internal.max_subscriptions
 
@@ -1644,7 +1646,7 @@ Whether to support shared subscriptions.
 
 The maximum number of topics that a single client is allowed to subscribe to. `0` means no limit.
 
-<br />
+
 
 ### zone.internal.max_inflight
 
@@ -1656,7 +1658,7 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 
 Inflight window size: The flight window is used to store unanswered QoS 1 and QoS 2 messages.
 
-<br />
+
 
 ### zone.internal.max_awaiting_rel
 
@@ -1668,7 +1670,7 @@ Inflight window size: The flight window is used to store unanswered QoS 1 and Qo
 
 The maximum receiving window for QoS 2 messages, that configures how many QoS 2 messages from the client can be processed by EMQ X Broker simultaneously. `0` means no limit.
 
-<br />
+
 
 ### zone.internal.max_mqueue_len
 
@@ -1680,7 +1682,7 @@ The maximum receiving window for QoS 2 messages, that configures how many QoS 2 
 
 The maximum length of the message queue. When the flight window is full, or the client is offline, the message will be stored in the queue. `0` means no limit.
 
-<br />
+
 
 **``zone.internal.mqueue_store_qos0**
 
@@ -1692,7 +1694,7 @@ The maximum length of the message queue. When the flight window is full, or the 
 
 Whether the message queue stores QoS 0 messages.
 
-<br />
+
 
 ### zone.internal.enable_flapping_detect
 
@@ -1704,7 +1706,7 @@ Whether the message queue stores QoS 0 messages.
 
 Whether to enable `Flapping` check.
 
-<br />
+
 
 ### zone.internal.force_shutdown_policy
 
@@ -1722,7 +1724,7 @@ Format: `<Number> | <Bytes>`.
 
 For example, `32000|32MB` means that when the process accumulates `32000` messages, or the process occupies memory up to `32MB`, the process is closed.
 
-<br />
+
 
 ### zone.internal.mountpoint
 
@@ -1741,7 +1743,7 @@ The available placeholders are:
 
 For example, if the mount point is set to `user/%c/`. , when the client with client ID `tom` publishes the topic `open` message, the topic actually routed in EMQ X Broker is `user/tom/open`.
 
-<br />
+
 
 ### zone.internal.ignore_loop_deliver
 
@@ -1753,7 +1755,7 @@ For example, if the mount point is set to `user/%c/`. , when the client with cli
 
 Whether to ignore the message sent by itself. If ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
 
-<br />
+
 
 ### zone.internal.strict_mode
 
@@ -1765,7 +1767,7 @@ Whether to ignore the message sent by itself. If ignored, it means that EMQ X Br
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
 
-<br />
+
 
 ### zone.internal.bypass_auth_plugins
 
@@ -1777,7 +1779,7 @@ Whether to enable the strict check mode. The strict check mode will check the co
 
 Whether to allow clients under this zone to bypass the authentication step of the authentication plugin.
 
-<br />
+
 
 ### listener.tcp.external
 
@@ -1795,7 +1797,7 @@ Configure the listening address of the MQTT / TCP listener named `external`.
 `127.0.0.1: 1883`: monitor address is `1883` port on the `127.0.0.1` network card.
 `:: 1: 1883`: monitors the IPv6 address as `1883` port on the `:: 1` network card.
 
-<br />
+
 
 ### listener.tcp.external.acceptors
 
@@ -1807,7 +1809,7 @@ Configure the listening address of the MQTT / TCP listener named `external`.
 
 The size of the listener's receiving pool.
 
-<br />
+
 
 ### listener.tcp.external.max_connections
 
@@ -1819,7 +1821,7 @@ The size of the listener's receiving pool.
 
 The maximum number of concurrent connections allowed by the listener.
 
-<br />
+
 
 ### listener.tcp.external.max_conn_rate
 
@@ -1831,7 +1833,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 The maximum access rate allowed by the listener. Unit: pcs / sec
 
-<br />
+
 
 ### listener.tcp.external.active_n
 
@@ -1843,7 +1845,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec
 
 The number of times the listener continues to receive TCP packets.
 
-<br />
+
 
 ### listener.tcp.external.zone
 
@@ -1855,7 +1857,7 @@ The number of times the listener continues to receive TCP packets.
 
 The configuration zone to which the listener belongs.
 
-<br />
+
 
 ### listener.tcp.external.rate_limit
 
@@ -1871,7 +1873,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 `100KB,10s`：Limit the number of incoming bytes within 10 seconds not to exceed 100 KB.
 
-<br />
+
 
 ### listener.tcp.external.access.1
 
@@ -1896,7 +1898,7 @@ listener.tcp.external.access.2 = allow all
 
 It means that all TCP connections except `192.168.0.1` are allowed.
 
-<br />
+
 
 ### listener.tcp.external.proxy_protocol
 
@@ -1912,7 +1914,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 `Proxy Protcol` : [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
-<br />
+
 
 ### listener.tcp.external.proxy_protocol_timeout
 
@@ -1924,7 +1926,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
-<br />
+
 
 ### listener.tcp.external.backlog
 
@@ -1936,7 +1938,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
-<br />
+
 
 ### listener.tcp.external.send_timeout
 
@@ -1948,7 +1950,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 Timeout for sending TCP packets.
 
-<br />
+
 
 ### listener.tcp.external.send_timeout_close
 
@@ -1960,7 +1962,7 @@ Timeout for sending TCP packets.
 
 Whether to close the connection after TCP packet sending timeout.
 
-<br />
+
 
 ### listener.tcp.external.recbuf
 
@@ -1974,7 +1976,7 @@ TCP receiving buffer size (operating system kernel parameter)
 
 Reference: http://erlang.org/doc/man/inet.html
 
-<br />
+
 
 ### listener.tcp.external.sndbuf
 
@@ -1988,7 +1990,7 @@ TCP sending buffer size (operating system kernel parameter).
 
 Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.html).
 
-<br />
+
 
 ### listener.tcp.external.buffer
 
@@ -2004,7 +2006,7 @@ This value is recommended to be greater than or equal to the maximum value of `s
 
 Reference: [http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.html).
 
-<br />
+
 
 ### listener.tcp.external.tune_buffer
 
@@ -2016,7 +2018,7 @@ Reference: [http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
-<br />
+
 
 ### listener.tcp.external.nodelay
 
@@ -2028,7 +2030,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
-<br />
+
 
 ### listener.tcp.external.reuseaddr
 
@@ -2040,7 +2042,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 
 This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port to be reused without waiting for the end of the `TIME_WAIT` state.
 
-<br />
+
 
 ### listener.tcp.internal
 
@@ -2058,7 +2060,7 @@ Configure the listening address of the MQTT / TCP listener named `internal`.
 `127.0.0.1:11883`: listening address is` 11883` port on the `127.0.0.1` network card.
 `:: 1: 11883`: listen to the `11883` port on the `:: 1` network card of IPv6 address.
 
-<br />
+
 
 ### listener.tcp.internal.acceptors
 
@@ -2070,7 +2072,7 @@ Configure the listening address of the MQTT / TCP listener named `internal`.
 
 The size of the listener's receiving pool.
 
-<br />
+
 
 ### listener.tcp.internal.max_connections
 
@@ -2082,7 +2084,7 @@ The size of the listener's receiving pool.
 
 The maximum number of concurrent connections allowed by the listener.
 
-<br />
+
 
 ### listener.tcp.internal.max_conn_rate
 
@@ -2094,7 +2096,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 The maximum access rate allowed by the listener. Unit: pcs / sec
 
-<br />
+
 
 ### listener.tcp.internal.active_n
 
@@ -2106,7 +2108,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec
 
 The number of times the listener continues to receive TCP packets.
 
-<br />
+
 
 ### listener.tcp.internal.zone
 
@@ -2118,7 +2120,7 @@ The number of times the listener continues to receive TCP packets.
 
 The configuration zone to which the listener belongs.
 
-<br />
+
 
 ### listener.tcp.internal.rate_limit
 
@@ -2145,7 +2147,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
-<br />
+
 
 ### listener.tcp.internal.send_timeout
 
@@ -2157,7 +2159,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 Timeout for sending TCP packets.
 
-<br />
+
 
 ### listener.tcp.internal.send_timeout_close
 
@@ -2169,7 +2171,7 @@ Timeout for sending TCP packets.
 
 Whether to close the connection after TCP packet sending timeout.
 
-<br />
+
 
 ### listener.tcp.internal.recbuf
 
@@ -2181,7 +2183,7 @@ Whether to close the connection after TCP packet sending timeout.
 
 TCP receiving buffer size (operating system kernel parameter)
 
-<br />
+
 
 ### listener.tcp.internal.sndbuf
 
@@ -2193,7 +2195,7 @@ TCP receiving buffer size (operating system kernel parameter)
 
 TCP sending buffer size (operating system kernel parameter)
 
-<br />
+
 
 ### listener.tcp.internal.buffer
 
@@ -2205,7 +2207,7 @@ TCP sending buffer size (operating system kernel parameter)
 
 TCP buffer size (user level).
 
-<br />
+
 
 ### listener.tcp.internal.tune_buffer
 
@@ -2217,7 +2219,7 @@ TCP buffer size (user level).
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
-<br />
+
 
 ### listener.tcp.internal.nodelay
 
@@ -2229,7 +2231,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
-<br />
+
 
 ### listener.tcp.internal.reuseaddr
 
@@ -2241,7 +2243,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 
 This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port to be reused without waiting for the end of the `TIME_WAIT` state.
 
-<br />
+
 
 ### listener.ssl.external
 
@@ -2253,7 +2255,7 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 
 Configure an SSL listener named `external`.
 
-<br />
+
 
 ### listener.ssl.external.acceptors
 
@@ -2265,7 +2267,7 @@ Configure an SSL listener named `external`.
 
 The size of the listener's receiving pool.
 
-<br />
+
 
 ### listener.ssl.external.max_connections
 
@@ -2277,7 +2279,7 @@ The size of the listener's receiving pool.
 
 The maximum number of concurrent connections allowed by the listener.
 
-<br />
+
 
 ### listener.ssl.external.max_conn_rate
 
@@ -2289,7 +2291,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 The maximum access rate allowed by the listener. Unit: pcs / sec.
 
-<br />
+
 
 ### listener.ssl.external.active_n
 
@@ -2301,7 +2303,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec.
 
 The number of times the listener continues to receive TCP packets.
 
-<br />
+
 
 ### listener.ssl.external.zone
 
@@ -2313,7 +2315,7 @@ The number of times the listener continues to receive TCP packets.
 
 The configuration group to which the listener belongs.
 
-<br />
+
 
 ### listener.ssl.external.access.1
 
@@ -2337,7 +2339,7 @@ listener.ssl.external.access.1 = deny 192.168.0.1
 listener.ssl.external.access.2 = allow all
 ```
 
-<br />
+
 
 ### listener.ssl.external.rate_limit
 
@@ -2349,7 +2351,7 @@ listener.ssl.external.access.2 = allow all
 
 Listener rate limit, with the format of `<limit>,<duration>`.
 
-<br />
+
 
 ### listener.ssl.external.proxy_protocol
 
@@ -2365,7 +2367,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and it is required to 
 
 `Proxy Protcol` reference: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
-<br />
+
 
 ### listener.ssl.external.proxy_protocol_timeout
 
@@ -2377,7 +2379,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and it is required to 
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
-<br />
+
 
 ### listener.ssl.external.tls_versions
 
@@ -2389,7 +2391,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 Specify the SSL version list supported by the server. For details, see [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
-<br />
+
 
 ### listener.ssl.external.handshake_timeout
 
@@ -2401,7 +2403,7 @@ Specify the SSL version list supported by the server. For details, see [http://e
 
 Specify the timeout period for the SSL handshake process.
 
-<br />
+
 
 ### listener.ssl.external.keyfile
 
@@ -2413,7 +2415,7 @@ Specify the timeout period for the SSL handshake process.
 
 Specify SSL private key file (PEM).
 
-<br />
+
 
 ### listener.ssl.external.certfile
 
@@ -2425,7 +2427,7 @@ Specify SSL private key file (PEM).
 
 Specify SSL certificate file(PEM).
 
-<br />
+
 
 ### listener.ssl.external.cacertfile
 
@@ -2437,7 +2439,7 @@ Specify SSL certificate file(PEM).
 
 Specify the CA certificate file for SSL (PEM).
 
-<br />
+
 
 ### listener.ssl.external.dhfile
 
@@ -2449,7 +2451,7 @@ Specify the CA certificate file for SSL (PEM).
 
 If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by the algorithm.
 
-<br />
+
 
 ### listener.ssl.external.verify
 
@@ -2461,7 +2463,7 @@ If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by th
 
 Specifies whether to verify the client during the handshake.
 
-<br />
+
 
 ### listener.ssl.external.fail_if_no_peer_cert
 
@@ -2473,7 +2475,7 @@ Specifies whether to verify the client during the handshake.
 
 If the client does not have a certificate during the SSL handshake, it determines whether to let the handshake fail.
 
-<br />
+
 
 ### listener.ssl.external.ciphers
 
@@ -2485,7 +2487,7 @@ If the client does not have a certificate during the SSL handshake, it determine
 
 Specify the cipher suite supported by the server.
 
-<br />
+
 
 ### listener.ssl.external.psk_ciphers
 
@@ -2497,7 +2499,7 @@ Specify the cipher suite supported by the server.
 
 If using the PSK algorithm, specify the PSK Cipher list supported by the server. Note that only one of 'listener.ssl.external.ciphers' and 'listener.ssl.external.psk_ciphers' can be configured.
 
-<br />
+
 
 ### listener.ssl.external.secure_renegotiate
 
@@ -2509,7 +2511,7 @@ If using the PSK algorithm, specify the PSK Cipher list supported by the server.
 
 Specifies whether to reject renegotiation requests if the client does not follow RFC 5746
 
-<br />
+
 
 ### listener.ssl.external.reuse_sessions
 
@@ -2521,7 +2523,7 @@ Specifies whether to reject renegotiation requests if the client does not follow
 
 Specify whether to support SSL session reuse. For details, see[http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
-<br />
+
 
 ### listener.ssl.external.honor_cipher_order
 
@@ -2533,7 +2535,7 @@ Specify whether to support SSL session reuse. For details, see[http://erlang.org
 
 Specify whether to use the server's preferences to select Ciphers.
 
-<br />
+
 
 ### listener.ssl.external.peer_cert_as_username
 
@@ -2546,7 +2548,7 @@ Specify whether to use the server's preferences to select Ciphers.
 Use the value of the CN, DN, or CRT field in the client certificate as the value of the Username field in the MQTT CONNECT packet.
 Note that `listener.ssl.external.verify` should be set to `verify_peer`.
 
-<br />
+
 
 ### listener.ssl.external.backlog
 
@@ -2558,7 +2560,7 @@ Note that `listener.ssl.external.verify` should be set to `verify_peer`.
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
-<br />
+
 
 ### listener.ssl.external.send_timeout
 
@@ -2570,7 +2572,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 Timeout for sending TCP packets.
 
-<br />
+
 
 *`listener.ssl.external.send_timeout_close`**
 
@@ -2582,7 +2584,7 @@ Timeout for sending TCP packets.
 
 Whether to close the connection after TCP packet sending timeout.
 
-<br />
+
 
 ### listener.ssl.external.recbuf
 
@@ -2596,7 +2598,7 @@ TCP receiving buffer size (operating system kernel level parameter).
 
 Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.html).
 
-<br />
+
 
 ### listener.ssl.external.sndbuf
 
@@ -2610,7 +2612,7 @@ TCP sending buffer size (operating system kernel level parameter).
 
 Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.html).
 
-<br />
+
 
 ### listener.ssl.external.buffer
 
@@ -2626,7 +2628,7 @@ This value is recommended to be greater than or equal to the maximum value of `s
 
 Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.html).
 
-<br />
+
 
 ### listener.ssl.external.tune_buffer
 
@@ -2638,7 +2640,7 @@ Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.h
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
-<br />
+
 
 ### listener.ssl.external.nodelay
 
@@ -2650,7 +2652,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 
 This is the `TCP_NODELAY` parameter. Enabling this option means that the Nagle algorithm is disabled and small packets will be sent immediately.
 
-<br />
+
 
 ### listener.ssl.external.reuseaddr
 
@@ -2662,7 +2664,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option means that the Nagle a
 
 This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port to be reused without waiting for the end of the `TIME_WAIT` state.
 
-<br />
+
 
 ### listener.ws.external
 
@@ -2680,7 +2682,7 @@ Configure the listening address of the MQTT/WS listener named `external`.
 `127.0.0.1:8083`: Listening address is `8083` port on the `127.0.0.1` network card.
 `:: 1: 8083`: Listen to the `8083` port on the network card `:: 1` of IPv6 address.
 
-<br />
+
 
 ### listener.ws.external.mqtt_path
 
@@ -2692,7 +2694,7 @@ Configure the listening address of the MQTT/WS listener named `external`.
 
 WebSocket's MQTT protocol path. So the address of EMQ X Broker's WebSocket is: `ws://<ip>:<port>/mqtt`.
 
-<br />
+
 
 ### listener.ws.external.acceptors
 
@@ -2704,7 +2706,7 @@ WebSocket's MQTT protocol path. So the address of EMQ X Broker's WebSocket is: `
 
 The size of the listener's receiving pool.
 
-<br />
+
 
 ### listener.ws.external.max_connections
 
@@ -2716,7 +2718,7 @@ The size of the listener's receiving pool.
 
 The maximum number of concurrent connections allowed by the listener.
 
-<br />
+
 
 ### listener.ws.external.max_conn_rate
 
@@ -2728,7 +2730,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 The maximum access rate allowed by the listener. Unit: pcs/sec
 
-<br />
+
 
 ### listener.ws.external.active_n
 
@@ -2740,7 +2742,7 @@ The maximum access rate allowed by the listener. Unit: pcs/sec
 
 The number of times the listener continues to receive TCP packets.
 
-<br />
+
 
 ### listener.ws.external.rate_limit
 
@@ -2756,7 +2758,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 `100KB,10s`： Limit the number of incoming bytes within 10 seconds to not exceed 100 KB.
 
-<br />
+
 
 ### listener.ws.external.zone
 
@@ -2768,7 +2770,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 The configuration zone to which the listener belongs.
 
-<br />
+
 
 ### listener.ws.external.access.1
 
@@ -2780,7 +2782,7 @@ The configuration zone to which the listener belongs.
 
 List of ACL rules of the listener. It is used to set the white/black list of the connection layer.
 
-<br />
+
 
 ### listener.ws.external.verify_protocol_header
 
@@ -2792,7 +2794,7 @@ List of ACL rules of the listener. It is used to set the white/black list of the
 
 Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat applet needs to disable this verification.**
 
-<br />
+
 
 ### listener.ws.external.proxy_address_header
 
@@ -2804,7 +2806,7 @@ Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat
 
 If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
 
-<br />
+
 
 ### listener.ws.external.proxy_port_header
 
@@ -2816,7 +2818,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the confi
 
 If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the configuration to get the real port of the client.
 
-<br />
+
 
 ### listener.ws.external.proxy_protocol
 
@@ -2832,7 +2834,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 `Proxy Protcol` reference: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
-<br />
+
 
 ### listener.ws.external.proxy_protocol_timeout
 
@@ -2844,7 +2846,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
-<br />
+
 
 ### listener.ws.external.backlog
 
@@ -2856,7 +2858,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
-<br />
+
 
 ### listener.ws.external.send_timeout
 
@@ -2868,7 +2870,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 Timeout for sending TCP packets.
 
-<br />
+
 
 ### listener.ws.external.send_timeout_close
 
@@ -2880,7 +2882,7 @@ Timeout for sending TCP packets.
 
 Whether to close the connection after TCP packet sending timeout.
 
-<br />
+
 
 ### listener.ws.external.recbuf
 
@@ -2892,7 +2894,7 @@ Whether to close the connection after TCP packet sending timeout.
 
 TCP receiving buffer size (operating system kernel level parameter)
 
-<br />
+
 
 ### listener.ws.external.sndbuf
 
@@ -2904,7 +2906,7 @@ TCP receiving buffer size (operating system kernel level parameter)
 
 TCP sending buffer size (operating system kernel level parameter)
 
-<br />
+
 
 ### listener.ws.external.buffer
 
@@ -2916,7 +2918,7 @@ TCP sending buffer size (operating system kernel level parameter)
 
 TCP buffer size (user level).
 
-<br />
+
 
 ### listener.ws.external.tune_buffer
 
@@ -2928,7 +2930,7 @@ TCP buffer size (user level).
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
-<br />
+
 
 ### listener.ws.external.nodelay
 
@@ -2940,7 +2942,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
-<br />
+
 
 ### listener.ws.external.compress
 
@@ -2954,7 +2956,7 @@ Whether to compress WebSocket messages. The implementation of compression depend
 
 The configuration items under `defalte_opts` belong to the compression-related parameter configuration, if not necessary, please do not modify it.
 
-<br />
+
 
 ### listener.ws.external.deflate_opts.level
 
@@ -2966,7 +2968,7 @@ The configuration items under `defalte_opts` belong to the compression-related p
 
 compression level
 
-<br />
+
 
 ### listener.ws.external.deflate_opts.mem_level
 
@@ -2983,7 +2985,7 @@ Compression parameters. It means memory usage limit level, and configure how muc
 
 If not configured, the default is `8`.
 
-<br />
+
 
 ### listener.ws.external.deflate_opts.strategy
 
@@ -3002,7 +3004,7 @@ Compression strategy for tuning compression ratio:
 
 These strategies only affect the compression ratio and will not have any impact on correctness.
 
-<br />
+
 
 ### listener.ws.external.deflate_opts.server_context_takeover
 
@@ -3014,7 +3016,7 @@ These strategies only affect the compression ratio and will not have any impact 
 
 Whether to allow the server's compression context to be passed between frames.
 
-<br />
+
 
 ### listener.ws.external.deflate_opts.client_context_takeover
 
@@ -3026,7 +3028,7 @@ Whether to allow the server's compression context to be passed between frames.
 
 Whether to allow the client's compression context to be passed between frames.
 
-<br />
+
 
 ### listener.ws.external.deflate_opts.server_max_window_bits
 
@@ -3038,7 +3040,7 @@ Whether to allow the client's compression context to be passed between frames.
 
 Maximum window value on the server side. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
-<br />
+
 
 ### listener.ws.external.deflate_opts.client_max_window_bits
 
@@ -3050,7 +3052,7 @@ Maximum window value on the server side. Setting a larger value will result in b
 
 Client maximum window value. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
-<br />
+
 
 ### listener.ws.external.idle_timeout
 
@@ -3062,7 +3064,7 @@ Client maximum window value. Setting a larger value will result in better compre
 
 The daze time after the TCP connection is established. If no packets are received within this time, the connection will be closed.
 
-<br />
+
 
 ### listener.ws.external.max_frame_size
 
@@ -3074,7 +3076,7 @@ The daze time after the TCP connection is established. If no packets are receive
 
 The maximum allowed length of a single MQTT packet.
 
-<br />
+
 
 ### listener.wss.external
 
@@ -3086,7 +3088,7 @@ The maximum allowed length of a single MQTT packet.
 
 Configure a WSS (MQTT/WebSocket/SSL) listener named `external`.
 
-<br />
+
 
 ### listener.wss.external.mqtt_path
 
@@ -3098,7 +3100,7 @@ Configure a WSS (MQTT/WebSocket/SSL) listener named `external`.
 
 WebSocket URL Path.
 
-<br />
+
 
 ### listener.wss.external.acceptors
 
@@ -3110,7 +3112,7 @@ WebSocket URL Path.
 
 The size of the listener's receiving pool.
 
-<br />
+
 
 ### listener.wss.external.max_connections
 
@@ -3122,7 +3124,7 @@ The size of the listener's receiving pool.
 
 The maximum number of concurrent connections allowed by the listener.
 
-<br />
+
 
 ### listener.wss.external.max_conn_rate
 
@@ -3134,7 +3136,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 The maximum access rate allowed by the listener. Unit: pcs/sec.
 
-<br />
+
 
 ### listener.wss.external.active_n
 
@@ -3146,7 +3148,7 @@ The maximum access rate allowed by the listener. Unit: pcs/sec.
 
 The number of times the listener continues to receive TCP packets.
 
-<br />
+
 
 ### listener.wss.external.rate_limit
 
@@ -3158,7 +3160,7 @@ The number of times the listener continues to receive TCP packets.
 
 The rate limit of the listener. The format is `<limit>,<duration>`.
 
-<br />
+
 
 ### listener.wss.external.zone
 
@@ -3170,7 +3172,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 The configuration group to which the listener belongs.
 
-<br />
+
 
 ### listener.wss.external.access.1
 
@@ -3194,7 +3196,7 @@ listener.wss.external.access.1 = deny 192.168.0.1
 listener.wss.external.access.2 = allow all
 ```
 
-<br />
+
 
 ### listener.wss.external.verify_protocol_header
 
@@ -3206,7 +3208,7 @@ listener.wss.external.access.2 = allow all
 
 Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat applet needs to disable this verification.**
 
-<br />
+
 
 ### listener.wss.external.proxy_address_header
 
@@ -3218,7 +3220,7 @@ Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat
 
 If the EMQ X cluster is deployed in HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
 
-<br />
+
 
 ### listener.wss.external.proxy_protocol
 
@@ -3234,7 +3236,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 `Proxy Protcol` reference:[https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
-<br />
+
 
 ### listener.wss.external.proxy_protocol_timeout
 
@@ -3246,7 +3248,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
-<br />
+
 
 ### listener.wss.external.tls_versions
 
@@ -3258,7 +3260,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 Specify the SSL version list supported by the server. For details, see [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
-<br />
+
 
 ### listener.wss.external.keyfile
 
@@ -3270,7 +3272,7 @@ Specify the SSL version list supported by the server. For details, see [http://e
 
 Specify SSL private key file (PEM).
 
-<br />
+
 
 ### listener.wss.external.certfile
 
@@ -3282,7 +3284,7 @@ Specify SSL private key file (PEM).
 
 Specify SSL certificate file(PEM).
 
-<br />
+
 
 ### listener.wss.external.cacertfile
 
@@ -3294,7 +3296,7 @@ Specify SSL certificate file(PEM).
 
 If using SSL, specify the CA certificate file for SSL (PEM).
 
-<br />
+
 
 ### listener.wss.external.dhfile
 
@@ -3306,7 +3308,7 @@ If using SSL, specify the CA certificate file for SSL (PEM).
 
 If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by the algorithm.
 
-<br />
+
 
 ### listener.wss.external.verify
 
@@ -3318,7 +3320,7 @@ If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by th
 
 Specifies whether to verify the client during the handshake.
 
-<br />
+
 
 ### listener.wss.external.fail_if_no_peer_cert
 
@@ -3330,7 +3332,7 @@ Specifies whether to verify the client during the handshake.
 
 If the client does not have a certificate during the SSL handshake, it determines whether to let the handshake fail.
 
-<br />
+
 
 ### listener.wss.external.ciphers
 
@@ -3342,7 +3344,7 @@ If the client does not have a certificate during the SSL handshake, it determine
 
 Specifies the cipher suite supported by the server.
 
-<br />
+
 
 ### listener.wss.external.psk_ciphers
 
@@ -3354,7 +3356,7 @@ Specifies the cipher suite supported by the server.
 
 If using the PSK algorithm, specify the PSK Cipher list supported by the server. Note that only one of 'listener.wss.external.ciphers' and 'listener.wss.external.psk_ciphers' can be configured.
 
-<br />
+
 
 ### listener.wss.external.secure_renegotiate
 
@@ -3366,7 +3368,7 @@ If using the PSK algorithm, specify the PSK Cipher list supported by the server.
 
 Specifies whether to reject renegotiation requests if the client does not follow RFC 5746
 
-<br />
+
 
 ### listener.wss.external.reuse_sessions
 
@@ -3378,7 +3380,7 @@ Specifies whether to reject renegotiation requests if the client does not follow
 
 Specifies whether to support SSL session reuse. For details, see [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
-<br />
+
 
 ### listener.wss.external.honor_cipher_order
 
@@ -3390,7 +3392,7 @@ Specifies whether to support SSL session reuse. For details, see [http://erlang.
 
 Specify whether to use the server's preferences to select Ciphers.
 
-<br />
+
 
 ### listener.wss.external.peer_cert_as_username
 
@@ -3403,7 +3405,7 @@ Specify whether to use the server's preferences to select Ciphers.
 Use the value of the CN, DN, or CRT field in the client certificate as the value of the Username field in the MQTT CONNECT packet.
 Note that `listener.wss.external.verify` should be set to `verify_peer`.
 
-<br />
+
 
 ### listener.wss.external.backlog
 
@@ -3415,7 +3417,7 @@ Note that `listener.wss.external.verify` should be set to `verify_peer`.
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
-<br />
+
 
 ### listener.wss.external.send_timeout
 
@@ -3427,7 +3429,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 Timeout for sending TCP packets.
 
-<br />
+
 
 *`listener.wss.external.send_timeout_close`**
 
@@ -3439,7 +3441,7 @@ Timeout for sending TCP packets.
 
 Whether to close the connection after TCP packet sending timeout.
 
-<br />
+
 
 ### listener.wss.external.recbuf
 
@@ -3453,7 +3455,7 @@ TCP receiving buffer size (operating system kernel level parameter)
 
 Reference:http://erlang.org/doc/man/inet.html
 
-<br />
+
 
 ### listener.wss.external.sndbuf
 
@@ -3467,7 +3469,7 @@ TCP sending buffer size (operating system kernel level parameter)
 
 Reference:http://erlang.org/doc/man/inet.html
 
-<br />
+
 
 ### listener.wss.external.buffer
 
@@ -3483,7 +3485,7 @@ This value is recommended to be greater than or equal to the maximum value of `s
 
 Reference:http://erlang.org/doc/man/inet.html
 
-<br />
+
 
 ### listener.wss.external.tune_buffer
 
@@ -3495,7 +3497,7 @@ Reference:http://erlang.org/doc/man/inet.html
 
 If you open this configuration, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
-<br />
+
 
 ### listener.wss.external.nodelay
 
@@ -3507,7 +3509,7 @@ If you open this configuration, please set the value equal to the maximum value 
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
-<br />
+
 
 ### listener.wss.external.compress
 
@@ -3519,7 +3521,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 
 If this option is set to true, Websocket messages will be compressed.
 
-<br />
+
 
 ### listener.wss.external.deflate_opts.level
 
@@ -3531,7 +3533,7 @@ If this option is set to true, Websocket messages will be compressed.
 
 Compression level.
 
-<br />
+
 
 ### listener.wss.external.deflate_opts.mem_level
 
@@ -3548,7 +3550,7 @@ Compression parameters. It means memory usage limit level, configures how much m
 
 If not configured, the default is `8`.
 
-<br />
+
 
 ### listener.wss.external.deflate_opts.strategy
 
@@ -3567,7 +3569,7 @@ Compression strategy for tuning compression ratio:
 
 These strategies only affect the compression ratio and will not have any impact on correctness.
 
-<br />
+
 
 ### listener.wss.external.deflate_opts.server_context_takeover
 
@@ -3579,7 +3581,7 @@ These strategies only affect the compression ratio and will not have any impact 
 
 Whether to allow the server's compression context to be passed between frames.
 
-<br />
+
 
 ### listener.wss.external.deflate_opts.client_context_takeover
 
@@ -3591,7 +3593,7 @@ Whether to allow the server's compression context to be passed between frames.
 
 Whether to allow the client's compression context to be passed between frames.
 
-<br />
+
 
 ### listener.wss.external.deflate_opts.server_max_window_bits
 
@@ -3603,7 +3605,7 @@ Whether to allow the client's compression context to be passed between frames.
 
 Maximum window value on the server side. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
-<br />
+
 
 ### listener.wss.external.deflate_opts.client_max_window_bits
 
@@ -3615,7 +3617,7 @@ Maximum window value on the server side. Setting a larger value will result in b
 
 Client maximum window value. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
-<br />
+
 
 ### listener.wss.external.idle_timeout
 
@@ -3627,7 +3629,7 @@ Client maximum window value. Setting a larger value will result in better compre
 
 The daze time after the TCP connection is established. If no packets are received within this time, the connection will be closed.
 
-<br />
+
 
 ### listener.wss.external.max_frame_size
 
@@ -3639,7 +3641,7 @@ The daze time after the TCP connection is established. If no packets are receive
 
 The maximum length of a single MQTT packet.
 
-<br />
+
 
 ### plugins.etc_dir
 
@@ -3651,7 +3653,7 @@ The maximum length of a single MQTT packet.
 
 The configuration directory of the plugin.
 
-<br />
+
 
 ### plugins.loaded_file
 
@@ -3663,7 +3665,7 @@ The configuration directory of the plugin.
 
 The configuration file path of the plugin startup list.
 
-<br />
+
 
 ### plugins.expand_plugins_dir
 
@@ -3675,7 +3677,7 @@ The configuration file path of the plugin startup list.
 
 External plugin storage directory.
 
-<br />
+
 
 ### broker.sys_interval
 
@@ -3687,7 +3689,7 @@ External plugin storage directory.
 
 Set the system topic (`$SYS`) message release interval.
 
-<br />
+
 
 ### broker.sys_heartbeat
 
@@ -3702,7 +3704,7 @@ Set the system heartbeat message release interval. The system heartbeat message 
 - "$SYS/brokers/<node>/uptime"
 - "$SYS/brokers/<node>/datetime"
 
-<br />
+
 
 ### broker.enable_session_registry
 
@@ -3714,7 +3716,7 @@ Set the system heartbeat message release interval. The system heartbeat message 
 
 Enable or disable global session registration.
 
-<br />
+
 
 ### broker.session_locking_strategy
 
@@ -3726,7 +3728,7 @@ Enable or disable global session registration.
 
 Set the type of session cluster lock. The session cluster lock is used to prevent the same client from creating multiple sessions on multiple different nodes, which is common when clients frequently switch between nodes for logging.
 
-<br />
+
 
 ### broker.shared_subscription_strategy
 
@@ -3743,7 +3745,7 @@ Set a distribution strategy for shared subscriptions. Optional values are:
 - **sticky**: Always sent to the last selected subscriber
 - **hash**: According to the hash value of the publisher ClientID
 
-<br />
+
 
 ### broker.shared_dispatch_ack_enabled
 
@@ -3755,7 +3757,7 @@ Set a distribution strategy for shared subscriptions. Optional values are:
 
 Enable or disable the ACK check function for qos1/qos2 messages in shared subscriptions. After enabling, if it is delivered to a subscriber but fails to receive the ACK, it will try to deliver to the next subscriber in the subscription group.
 
-<br />
+
 
 ### broker.route_batch_clean
 
@@ -3767,7 +3769,7 @@ Enable or disable the ACK check function for qos1/qos2 messages in shared subscr
 
 Enable or disable batch cleanup routing information. Batch cleanup routing can be used in a short period of time when a large number of clients go offline to improve cleanup efficiency.
 
-<br />
+
 
 ### sysmon.long_gc
 
@@ -3779,7 +3781,7 @@ Enable or disable batch cleanup routing information. Batch cleanup routing can b
 
 Enable garbage collection time monitoring and trigger an alarm when the collection time exceeds the set value, 0 means disabling this monitoring.
 
-<br />
+
 
 ### sysmon.long_schedule
 
@@ -3791,7 +3793,7 @@ Enable garbage collection time monitoring and trigger an alarm when the collecti
 
 Enable process scheduling time monitoring and trigger an alarm when the scheduling time exceeds the set value, 0 means disabling this monitoring.
 
-<br />
+
 
 ### sysmon.large_heap
 
@@ -3803,7 +3805,7 @@ Enable process scheduling time monitoring and trigger an alarm when the scheduli
 
 Enable stack size monitoring and trigger an alarm when the stack size is still greater than the set value after the process performs garbage collection. 0 means disabling this monitoring.
 
-<br />
+
 
 ### sysmon.busy_port
 
@@ -3815,7 +3817,7 @@ Enable stack size monitoring and trigger an alarm when the stack size is still g
 
 Specifies whether to enable inter-process message channel busy monitoring.
 
-<br />
+
 
 ### sysmon.busy_dist_port
 
@@ -3827,7 +3829,7 @@ Specifies whether to enable inter-process message channel busy monitoring.
 
 Specifies whether to enable cluster RPC channel busy monitoring.
 
-<br />
+
 
 ### os_mon.cpu_check_interval
 
@@ -3839,7 +3841,7 @@ Specifies whether to enable cluster RPC channel busy monitoring.
 
 CPU usage rate check cycle.
 
-<br />
+
 
 ### os_mon.cpu_high_watermark
 
@@ -3851,7 +3853,7 @@ CPU usage rate check cycle.
 
 An alarm will be triggered when the CPU usage exceeds `os_mon.cpu_high_watermark`.
 
-<br />
+
 
 ### os_mon.cpu_low_watermark
 
@@ -3863,7 +3865,7 @@ An alarm will be triggered when the CPU usage exceeds `os_mon.cpu_high_watermark
 
 The alarm will be cleared when the CPU usage drops back below `os_mon.cpu_low_watermark` .
 
-<br />
+
 
 ### os_mon.mem_check_interval
 
@@ -3875,7 +3877,7 @@ The alarm will be cleared when the CPU usage drops back below `os_mon.cpu_low_wa
 
 Memory usage check cycle.
 
-<br />
+
 
 ### os_mon.sysmem_high_watermark
 
@@ -3887,7 +3889,7 @@ Memory usage check cycle.
 
 When the memory allocated by EMQ X Broker for all processes as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
 
-<br />
+
 
 ### os_mon.procmem_high_watermark
 
@@ -3899,7 +3901,7 @@ When the memory allocated by EMQ X Broker for all processes as a percentage of s
 
 When the memory allocated by EMQ X Broker for a single process as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
 
-<br />
+
 
 ### vm_mon.check_interval
 
@@ -3911,7 +3913,7 @@ When the memory allocated by EMQ X Broker for a single process as a percentage o
 
 Check interval for process number.
 
-<br />
+
 
 ### vm_mon.process_high_watermark
 
@@ -3923,7 +3925,7 @@ Check interval for process number.
 
 When the current process number as a percentage of the maximum process number exceeds `vm_mon.process_high_watermark`, an alarm will be triggered. The maximum process number is determined by the `node.process_limit` configuration item.
 
-<br />
+
 
 ### vm_mon.process_low_watermark
 
@@ -3935,7 +3937,7 @@ When the current process number as a percentage of the maximum process number ex
 
 When the percentage of the current number of processes in the maximum number of processes falls below `vm_mon.process_low_watermark`, an alarm will be triggered. The maximum number of processes is determined by the `node.process_limit` configuration item.
 
-<br />
+
 
 ## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
 
@@ -3949,7 +3951,7 @@ When the percentage of the current number of processes in the maximum number of 
 
 The authentication data of the client, where  `auth.client.<Number>.password` is the clear text password. `auth.client.<Number>.clientid` and `auth.client.<Number>.password` for the same `<Number>`  must appear in pairs. `<Number> `is an integer number used to distinguish authentication data of multiple clients.
 
-<br />
+
 
 ### auth.client.password_hash
 
@@ -3977,7 +3979,7 @@ The password is encrypted and stored using the SHA-1 algorithm.
 
 The password is encrypted and stored using the SHA-256 algorithm.
 
-<br />
+
 
 ## [emqx-auth-http](https://github.com/emqx/emqx-auth-http)
 
@@ -3991,7 +3993,7 @@ The password is encrypted and stored using the SHA-256 algorithm.
 
 Specify the target URL of the authentication request.
 
-<br />
+
 
 ### auth.http.auth_req.method
 
@@ -4003,7 +4005,7 @@ Specify the target URL of the authentication request.
 
 Specify the request method of the authentication request.
 
-<br />
+
 
 ### auth.http.auth_req.params
 
@@ -4026,7 +4028,7 @@ Specify the data carried in the authentication request. When using the GET metho
 | `%c`   | Common Name in client certificate |
 | `%d`   | Subject in client certificate |
 
-<br />
+
 
 ### auth.http.super_req
 
@@ -4058,7 +4060,7 @@ Specifies the request method of the super user authentication request.
 
 Specify the data carried in the authentication request. When using the GET method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent as query string parameters. When using the POST method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent in the form of Request Body. All placeholders will be replaced by run-time data , and the available placeholders are the same as those of `auth.http.auth_req.params`.
 
-<br />
+
 
 ### auth.http.acl_req
 
@@ -4070,7 +4072,7 @@ Specify the data carried in the authentication request. When using the GET metho
 
 Specify the target URL for ACL verification requests.
 
-<br />
+
 
 ### auth.http.acl_req.method
 
@@ -4082,7 +4084,7 @@ Specify the target URL for ACL verification requests.
 
 Specifies the request method for ACL verification requests.
 
-<br />
+
 
 ### auth.http.acl_req.params
 
@@ -4104,7 +4106,7 @@ Specify the data carried in the authentication request. When using the GET metho
 | `%m`        | Mount point                                                  |
 | `%t`        | Topic                                                        |
 
-<br />
+
 
 ### auth.http.request.timeout
 
@@ -4116,7 +4118,7 @@ Specify the data carried in the authentication request. When using the GET metho
 
 HTTP request timeout. Any setting equivalent to `0s` means never timeout.
 
-<br />
+
 
 ### auth.http.request.connect_timeout
 
@@ -4128,7 +4130,7 @@ HTTP request timeout. Any setting equivalent to `0s` means never timeout.
 
 Connection timeout for HTTP requests. Any setting value equivalent to `0s` means never time out.
 
-<br />
+
 
 ### auth.http.request.retry_times
 
@@ -4140,7 +4142,7 @@ Connection timeout for HTTP requests. Any setting value equivalent to `0s` means
 
 The number of retries when an HTTP request fails.
 
-<br />
+
 
 ### auth.http.request.retry_interval
 
@@ -4152,7 +4154,7 @@ The number of retries when an HTTP request fails.
 
 Retry interval when HTTP request fails.
 
-<br />
+
 
 ### auth.http.request.retry_backoff
 
@@ -4164,7 +4166,7 @@ Retry interval when HTTP request fails.
 
 When the HTTP request fails, the retry interval uses the exponential backoff algorithm. This configuration item is used to specify the backoff coefficient of the exponential backoff algorithm.
 
-<br />
+
 
 ### auth.http.header.<Key>
 
@@ -4183,7 +4185,7 @@ auth.http.header.Accept = */*
 auth.http.header.Accept-Encoding = *
 ```
 
-<br />
+
 
 ### auth.http.ssl.cacertfile
 
@@ -4195,7 +4197,7 @@ auth.http.header.Accept-Encoding = *
 
 CA certificate file path.
 
-<br />
+
 
 ### auth.http.ssl.certfile
 
@@ -4207,7 +4209,7 @@ CA certificate file path.
 
 Client certificate file path.
 
-<br />
+
 
 ### auth.http.ssl.keyfile
 
@@ -4219,7 +4221,7 @@ Client certificate file path.
 
 Client private key file path.
 
-<br />
+
 
 ## [emqx-auth-jwt](https://github.com/emqx/emqx-auth-jwt)
 
@@ -4233,7 +4235,7 @@ Client private key file path.
 
 Set HMAC Secret.
 
-<br />
+
 
 ### auth.jwt.from
 
@@ -4248,7 +4250,7 @@ Where to get JWT. Optional values are
 - username: The username field of the MQTT CONNECT packet is used as JWT.
 - password: The password field of the MQTT CONNECT packet is used as JWT.
 
-<br />
+
 
 ### auth.jwt.pubkey
 
@@ -4260,7 +4262,7 @@ Where to get JWT. Optional values are
 
 If you use RSA or ECDSA encryption algorithm, you must specify the private key file.
 
-<br />
+
 
 ### auth.jwt.verify_claims
 
@@ -4272,7 +4274,7 @@ If you use RSA or ECDSA encryption algorithm, you must specify the private key f
 
 Enable or disable Claims verification.
 
-<br />
+
 
 ### auth.jwt.verify_claims.<claims>
 
@@ -4301,7 +4303,7 @@ For example, if the value of the `sub` field in the JWT is expected to be the sa
 auth.jwt.verify_claims.sub = %u
 ```
 
-<br />
+
 
 ## [emqx-auth-ldap](https://github.com/emqx/emqx-auth-ldap)
 
@@ -4315,7 +4317,7 @@ auth.jwt.verify_claims.sub = %u
 
 LDAP service address.
 
-<br />
+
 
 ### auth.ldap.port
 
@@ -4327,7 +4329,7 @@ LDAP service address.
 
 LDAP service port.
 
-<br />
+
 
 ### auth.ldap.pool
 
@@ -4339,7 +4341,7 @@ LDAP service port.
 
 Connection pool size.
 
-<br />
+
 
 ### auth.ldap.bind_dn
 
@@ -4351,7 +4353,7 @@ Connection pool size.
 
 The DN for logging into the LDAP service.
 
-<br />
+
 
 ### auth.ldap.bind_password
 
@@ -4363,7 +4365,7 @@ The DN for logging into the LDAP service.
 
 The password for logging into the LDAP service.
 
-<br />
+
 
 ### auth.ldap.timeout
 
@@ -4375,7 +4377,7 @@ The password for logging into the LDAP service.
 
 The query timeout.
 
-<br />
+
 
 ### auth.ldap.device_dn
 
@@ -4387,7 +4389,7 @@ The query timeout.
 
 The DN to which the client belongs.
 
-<br />
+
 
 ### auth.ldap.match_objectclass
 
@@ -4399,7 +4401,7 @@ The DN to which the client belongs.
 
 The name of the client object.
 
-<br />
+
 
 ### auth.ldap.username.attributetype
 
@@ -4411,7 +4413,7 @@ The name of the client object.
 
 The data type of the Username attribute.
 
-<br />
+
 
 ### auth.ldap.password.attributetype
 
@@ -4423,7 +4425,7 @@ The data type of the Username attribute.
 
 The data type of the Password attribute.
 
-<br />
+
 
 ### auth.ldap.ssl
 
@@ -4435,7 +4437,7 @@ The data type of the Password attribute.
 
 Whether to enable SSL.
 
-<br />
+
 
 ### auth.ldap.ssl.certfile
 
@@ -4447,7 +4449,7 @@ Whether to enable SSL.
 
 SSL server certificate path.
 
-<br />
+
 
 ### auth.ldap.ssl.keyfile
 
@@ -4459,7 +4461,7 @@ SSL server certificate path.
 
 SSL server key file path.
 
-<br />
+
 
 ### auth.ldap.ssl.cacertfile
 
@@ -4471,7 +4473,7 @@ SSL server key file path.
 
 CA certificate file path.
 
-<br />
+
 
 ### auth.ldap.ssl.verify
 
@@ -4486,7 +4488,7 @@ SSL authentication method:
 - `verify_none`：One-way authentication.
 - `verify_peer`：Two-way authentication.
 
-<br />
+
 
 ### auth.ldap.ssl.fail_if_no_peer_cert
 
@@ -4498,7 +4500,7 @@ SSL authentication method:
 
 If the client does not provide an SSL certificate, disconnect it.
 
-<br />
+
 
 ## [emqx-auth-mongo](https://github.com/emqx/emqx-auth-mongo)
 
@@ -4517,7 +4519,7 @@ Set the topology type of MongoDB:
 - sharded: sharding mode
 - rs: replicated set
 
-<br />
+
 
 ### auth.mongo.rs_set_name
 
@@ -4529,7 +4531,7 @@ Set the topology type of MongoDB:
 
 In the case of using rs mode, set the name of rs.
 
-<br />
+
 
 ### auth.mongo.rs_set_name
 
@@ -4541,7 +4543,7 @@ In the case of using rs mode, set the name of rs.
 
 Set the address of MongoDB service. If there are multiple items, use comma `,` to separate them.
 
-<br />
+
 
 ### auth.mongo.pool
 
@@ -4553,7 +4555,7 @@ Set the address of MongoDB service. If there are multiple items, use comma `,` t
 
 Set the number of processes in the MongoDB connection pool.
 
-<br />
+
 
 ### auth.mongo.login
 
@@ -4565,7 +4567,7 @@ Set the number of processes in the MongoDB connection pool.
 
 Set the MongoDB's username.
 
-<br />
+
 
 ### auth.mongo.password
 
@@ -4577,7 +4579,7 @@ Set the MongoDB's username.
 
 Set the MongoDB's password.
 
-<br />
+
 
 ### auth.mongo.auth_source
 
@@ -4589,7 +4591,7 @@ Set the MongoDB's password.
 
 Set the MongoDB authentication source database name.
 
-<br />
+
 
 ### auth.mongo.database
 
@@ -4601,7 +4603,7 @@ Set the MongoDB authentication source database name.
 
 Set MongoDB database name.
 
-<br />
+
 
 ### auth.mongo.query_timeout
 
@@ -4613,7 +4615,7 @@ Set MongoDB database name.
 
 Set the timeout for accessing MongoDB.
 
-<br />
+
 
 ### auth.mongo.ssl
 
@@ -4625,7 +4627,7 @@ Set the timeout for accessing MongoDB.
 
 Set whether to use SSL to access MongoDB.
 
-<br />
+
 
 ### auth.mongo.ssl_opts.keyfile
 
@@ -4637,7 +4639,7 @@ Set whether to use SSL to access MongoDB.
 
 If using SSL to access MongoDB, set the private key file of the SSL client.
 
-<br />
+
 
 ### auth.mongo.ssl_opts.certfile
 
@@ -4649,7 +4651,7 @@ If using SSL to access MongoDB, set the private key file of the SSL client.
 
 If using SSL to access MongoDB, set the SSL client certificate file.
 
-<br />
+
 
 ### auth.mongo.ssl_opts.cacertfile
 
@@ -4661,7 +4663,7 @@ If using SSL to access MongoDB, set the SSL client certificate file.
 
 If you use SSL to access MongoDB, set the SSL certificate file.
 
-<br />
+
 
 ### auth.mongo.w_mode
 
@@ -4673,7 +4675,7 @@ If you use SSL to access MongoDB, set the SSL certificate file.
 
 Set the write mode of MongoDB.
 
-<br />
+
 
 ### auth.mongo.r_mode
 
@@ -4685,7 +4687,7 @@ Set the write mode of MongoDB.
 
 Set the read mode of MongoDB.
 
-<br />
+
 
 ### auth.mongo.auth_query.collection
 
@@ -4697,7 +4699,7 @@ Set the read mode of MongoDB.
 
 Collection name used in the authentication process.
 
-<br />
+
 
 ### auth.mongo.auth_query.password_field
 
@@ -4713,7 +4715,7 @@ The main fields used in the authentication process. To add salt after the passwo
 auth.mongo.auth_query.password_field = password,salt
 ```
 
-<br />
+
 
 ### auth.mongo.auth_query.password_hash
 
@@ -4741,7 +4743,7 @@ To add salt before the bcrypt password, you can set it to:
 auth.mongo.auth_query.password_hash = salt,bcrypt
 ```
 
-<br />
+
 
 ### auth.mongo.auth_query.selector
 
@@ -4758,7 +4760,7 @@ MongoDB statements are executed during the authentication process. Commands can 
 - %C: Common Name in client TLS certificate
 - %d: Subject in the client's TLS certificate
 
-<br />
+
 
 ### auth.mongo.auth_query.super_query
 
@@ -4770,7 +4772,7 @@ MongoDB statements are executed during the authentication process. Commands can 
 
 Whether to use SuperUser in authentication.
 
-<br />
+
 
 ### auth.mongo.super_query.collection
 
@@ -4782,7 +4784,7 @@ Whether to use SuperUser in authentication.
 
 If using SuperUser, specify the MongoDB Collection of SuperUser.
 
-<br />
+
 
 ### auth.mongo.super_query.selector
 
@@ -4794,7 +4796,7 @@ If using SuperUser, specify the MongoDB Collection of SuperUser.
 
 If SuperUser is used, specify the MongoDB statement used to query SuperUser.
 
-<br />
+
 
 ### auth.mongo.acl_query
 
@@ -4806,7 +4808,7 @@ If SuperUser is used, specify the MongoDB statement used to query SuperUser.
 
 Whether to enable the ACL function.
 
-<br />
+
 
 ### auth.mongo.acl_query.collection
 
@@ -4818,7 +4820,7 @@ Whether to enable the ACL function.
 
 If using the ACL function, specify the MongoDB Collection that queries the ACL rules.
 
-<br />
+
 
 ### auth.mongo.acl_query.selector
 
@@ -4843,7 +4845,7 @@ And the username of the client equals 'ilyas'. When querying acl rules, the foll
 db.mqtt_acl.find({$or: [{username: "ilyas"},  {username: "$all"}]});
 ```
 
-<br />
+
 
 ### auth.mongo.topology.pool_size
 
@@ -4855,7 +4857,7 @@ db.mqtt_acl.find({$or: [{username: "ilyas"},  {username: "$all"}]});
 
 MongoDB topology parameters, that set the thread pool size.
 
-<br />
+
 
 ### auth.mongo.topology.max_overflow
 
@@ -4867,7 +4869,7 @@ MongoDB topology parameters, that set the thread pool size.
 
 MongoDB topology parameter, which determines how many additional worker threads are allowed to be created when all workers in the thread pool are busy.
 
-<br />
+
 
 ### auth.mongo.topology.overflow_ttl
 
@@ -4879,7 +4881,7 @@ MongoDB topology parameter, which determines how many additional worker threads 
 
 MongoDB topology parameter, which determines how long to release additional worker threads when a worker is idle. Unit: ms
 
-<br />
+
 
 ### auth.mongo.topology.overflow_check_period
 
@@ -4891,7 +4893,7 @@ MongoDB topology parameter, which determines how long to release additional work
 
 MongoDB topology parameters, which determines how often to check for idle threads to release additional workers.
 
-<br />
+
 
 ### auth.mongo.topology.local_threshold_ms
 
@@ -4903,7 +4905,7 @@ MongoDB topology parameters, which determines how often to check for idle thread
 
 MongoDB topology parameters, which is to select the strategy of the secondary node used to process user requests. The minimum value of the RTT of all nodes is LowestRTT, then only those secondary nodes with RTT <LowestRTT + local_threshold_ms will be selected.
 
-<br />
+
 
 ### auth.mongo.topology.connect_timeout_ms
 
@@ -4915,7 +4917,7 @@ MongoDB topology parameters, which is to select the strategy of the secondary no
 
 MongoDB topology parameter, means MongoDB connection timeout, unit: ms.
 
-<br />
+
 
 ### auth.mongo.topology.socket_timeout_ms
 
@@ -4927,7 +4929,7 @@ MongoDB topology parameter, means MongoDB connection timeout, unit: ms.
 
 MongoDB topology parameter, that means MongoDB message sending timeout period, unit: ms.
 
-<br />
+
 
 ### auth.mongo.topology.server_selection_timeout_ms
 
@@ -4939,7 +4941,7 @@ MongoDB topology parameter, that means MongoDB message sending timeout period, u
 
 MongoDB topology parameter, select the timeout period of MongoDB Server, unit: ms.
 
-<br />
+
 
 ### auth.mongo.topology.wait_queue_timeout_ms
 
@@ -4951,7 +4953,7 @@ MongoDB topology parameter, select the timeout period of MongoDB Server, unit: m
 
 MongoDB topology parameters, that selects the worker's waiting timeout period from the thread pool, unit: ms.
 
-<br />
+
 
 ### auth.mongo.topology.heartbeat_frequency_ms
 
@@ -4963,7 +4965,7 @@ MongoDB topology parameters, that selects the worker's waiting timeout period fr
 
 MongoDB topology parameters, the interval between topological scans, unit: ms.
 
-<br />
+
 
 ### auth.mongo.topology.min_heartbeat_frequency_ms
 
@@ -4975,7 +4977,7 @@ MongoDB topology parameters, the interval between topological scans, unit: ms.
 
 MongoDB topology parameter, the minimum allowed value of `heartbeat_frequency_ms`, unit: milliseconds.
 
-<br />
+
 
 ## [emqx-auth-mysql](https://github.com/emqx/emqx-auth-mysql)
 
@@ -4989,7 +4991,7 @@ MongoDB topology parameter, the minimum allowed value of `heartbeat_frequency_ms
 
 MySQL server address.
 
-<br />
+
 
 ### auth.mysql.pool
 
@@ -5001,7 +5003,7 @@ MySQL server address.
 
 Database connection thread pool size.
 
-<br />
+
 
 ### auth.mysql.username
 
@@ -5013,7 +5015,7 @@ Database connection thread pool size.
 
 MySQL username.
 
-<br />
+
 
 ### auth.mysql.password
 
@@ -5025,7 +5027,7 @@ MySQL username.
 
 MySQL password.
 
-<br />
+
 
 ### auth.mysql.database
 
@@ -5037,7 +5039,7 @@ MySQL password.
 
 MySQL database name.
 
-<br />
+
 
 ### auth.mysql.query_timeout
 
@@ -5068,7 +5070,7 @@ The MySQL select statement used during authentication, the selected data will be
 | `%C`        | Common Name in the client certificate when TLS that will be replaced is connected |
 | `%d`        | Subject in the client certificate when TLS that will be replaced is connected |
 
-<br />
+
 
 ### auth.mysql.password_hash
 
@@ -5088,7 +5090,7 @@ The encryption method used for the password stored in the database. The followin
 - `pbkdf2`, the format is `pbkdf2,<Hashfun>,<Iterations>,<Dklen>`. Among them, `<Hashfun> `is the hash function used, which supports `md4`, `md5`,` ripemd160` `sha`,` sha224`, `sha256`,` sha384`, `sha512`. `<Iterations>`is the number of iterations and `<Dklen>`is the length of the derived key. Example: `pbkdf2, sha256,1000,20`
 - `bcrypt`, only forward salting is supported, eg `salt, bcrypt`
 
-<br />
+
 
 ### auth.mysql.super_query
 
@@ -5100,7 +5102,7 @@ The encryption method used for the password stored in the database. The followin
 
 The SQL select statement used for super user authentication. All table names and field names in this statement can be modified as appropriate. If and only if the value of the selected field is `1`, the user is a super user. In the WHERE clause, the supported placeholders are the same as `auth.mysql.auth_query`.
 
-<br />
+
 
 ### auth.mysql.acl_query
 
@@ -5118,7 +5120,7 @@ The SQL selection statement used in ACL verification. All table names and field 
 | `%u`   | To be replaced with the username specified by the MQTT client in the CONNECT packet |
 | `%c`   | To be replaced with the client identifier specified by the MQTT client in the CONNECT packet |
 
-<br />
+
 
 ## [emqx-auth-pgsql](https://github.com/emqx/emqx-auth-pgsql)
 
@@ -5132,7 +5134,7 @@ The SQL selection statement used in ACL verification. All table names and field 
 
 PostgreSQL server address.
 
-<br />
+
 
 ### auth.pgsql.pool
 
@@ -5144,7 +5146,7 @@ PostgreSQL server address.
 
 Database connection thread pool size.
 
-<br />
+
 
 ### auth.pgsql.username
 
@@ -5156,7 +5158,7 @@ Database connection thread pool size.
 
 PostgreSQL username.
 
-<br />
+
 
 ### auth.pgsql.password
 
@@ -5168,7 +5170,7 @@ PostgreSQL username.
 
 PostgreSQL password.
 
-<br />
+
 
 ### auth.pgsql.database
 
@@ -5180,7 +5182,7 @@ PostgreSQL password.
 
 PostgreSQL database name.
 
-<br />
+
 
 ### auth.pgsql.encoding
 
@@ -5192,7 +5194,7 @@ PostgreSQL database name.
 
 PostgreSQL database character encoding format.
 
-<br />
+
 
 ### auth.pgsql.ssl
 
@@ -5204,7 +5206,7 @@ PostgreSQL database character encoding format.
 
 Whether to enable TLS connection.
 
-<br />
+
 
 ### auth.pgsql.ssl_opts.keyfile
 
@@ -5216,7 +5218,7 @@ Whether to enable TLS connection.
 
 Client private key file path.
 
-<br />
+
 
 ### auth.pgsql.ssl_opts.certfile
 
@@ -5228,7 +5230,7 @@ Client private key file path.
 
 Client certificate file path.
 
-<br />
+
 
 ### auth.pgsql.ssl_opts.cacertfile
 
@@ -5240,7 +5242,7 @@ Client certificate file path.
 
 Client CA certificate file path.
 
-<br />
+
 
 ### auth.pgsql.auth_query
 
@@ -5252,7 +5254,7 @@ Client CA certificate file path.
 
 The SQL selection statement used for authentication, that is the same as `auth.mysql.auth_query`.
 
-<br />
+
 
 ### auth.pgsql.password_hash
 
@@ -5264,7 +5266,7 @@ The SQL selection statement used for authentication, that is the same as `auth.m
 
 The encryption method used for the password stored in the database, that is the same as `auth.mysql.password_hash`.
 
-<br />
+
 
 ### auth.pgsql.super_query
 
@@ -5276,7 +5278,7 @@ The encryption method used for the password stored in the database, that is the 
 
 The SQL select statement used for super user authentication, that is the same as `auth.mysql.super_query`.
 
-<br />
+
 
 ### auth.pgsql.acl_query
 
@@ -5288,7 +5290,7 @@ The SQL select statement used for super user authentication, that is the same as
 
 The SQL selection statement used in ACL verification,  the same as `auth.mysql.acl_query`.
 
-<br />
+
 
 ## [emqx-auth-redis](https://github.com/emqx/emqx-auth-redis)
 
@@ -5305,7 +5307,7 @@ Redis Service cluster type:
 - `sentinel`：sentinel pattern.
 - `cluster`：cluster pattern.
 
-<br />
+
 
 ### auth.redis.server
 
@@ -5317,7 +5319,7 @@ Redis Service cluster type:
 
 Redis service addresses, if there are multiple, they are separated by commas. For example, `192.168.0.1:6379, 192.168.0.2:6379`.
 
-<br />
+
 
 ### auth.redis.sentinel
 
@@ -5329,7 +5331,7 @@ Redis service addresses, if there are multiple, they are separated by commas. Fo
 
 The cluster name in Redis sentinel mode. If it is not in `sentinel` mode, no configuration is required.
 
-<br />
+
 
 ### auth.redis.pool
 
@@ -5341,7 +5343,7 @@ The cluster name in Redis sentinel mode. If it is not in `sentinel` mode, no con
 
 Connection pool size.
 
-<br />
+
 
 ### auth.redis.database
 
@@ -5353,7 +5355,7 @@ Connection pool size.
 
 The serial number of the Redis database to be connected.
 
-<br />
+
 
 ### auth.redis.password
 
@@ -5365,7 +5367,7 @@ The serial number of the Redis database to be connected.
 
 Redis password.
 
-<br />
+
 
 ### auth.redis.query_timeout
 
@@ -5377,7 +5379,7 @@ Redis password.
 
 Redis query timeout.
 
-<br />
+
 
 ### auth.redis.auth_cmd
 
@@ -5393,7 +5395,7 @@ Authentication query commands, available placeholders are:
  - `%C`: `cn` of client SSL certificate.
  - `%d`: `dn` of client SSL certificate.
 
-<br />
+
 
 ### auth.redis.password_hash
 
@@ -5405,7 +5407,7 @@ Authentication query commands, available placeholders are:
 
 The encoding format of the `password` field stored by Redis.
 
-<br />
+
 
 ### auth.redis.super_cmd
 
@@ -5422,7 +5424,7 @@ Authentication query commands for superuser, available placeholders are:
  - `%C`: `cn` of client SSL certificate.
  - `%d`: `dn` of client SSL certificate.
 
-<br />
+
 
 ### auth.redis.acl_cmd
 
@@ -5436,7 +5438,7 @@ ACL query commands. Available placeholders are:
  - `%u`: client username.
  - `%c`: client ID.
 
-<br />
+
 
 ## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
 
@@ -5450,7 +5452,7 @@ ACL query commands. Available placeholders are:
 
 The authentication data of the client, where `auth.user.<Number>.password` is the clear text password.  `auth.user.<Number>.username` and `auth.user.<Number>.password` of the same `<Number>` must appear in pairs. `<Number> `is an integer number used to distinguish authentication data of multiple clients.
 
-<br />
+
 
 ### auth.user.password_hash
 
@@ -5478,7 +5480,7 @@ The password is encrypted and stored using the SHA-1 algorithm.
 
 The password is encrypted and stored using the SHA-256 algorithm.
 
-<br />
+
 
 ## [emqx-bridge-mqtt](https://github.com/emqx/emqx-bridge-mqtt)
 
@@ -5494,7 +5496,7 @@ Bridge address, supports two formats, for example:
 - `emqx @ 192.168.0.100`: EMQ X Broker node name, which means that the message of this node is bridged to another EMQ X node.
 - `192.168.0.100: 1883`: IP address and port,which means that the message of the node is bridged to another MQTT server through an MQTT connection.
 
-<br />
+
 
 ### bridge.mqtt.aws.proto_ver
 
@@ -5506,7 +5508,7 @@ Bridge address, supports two formats, for example:
 
 The client protocol version of the MQTT bridge.
 
-<br />
+
 
 ### bridge.mqtt.aws.start_type
 
@@ -5520,7 +5522,7 @@ Start type:
 - `auto`: start automatically with the plugin.
 - `manual`: start the bridge manually.
 
-<br />
+
 
 ### bridge.mqtt.aws.bridge_mode
 
@@ -5532,9 +5534,11 @@ Start type:
 
 Whether to enable bridging mode, only MQTT bridging is supported. After being enabled, the MQTT client started by `emqx_bridge_mqtt` will carry a flag bit when sending a connection message, indicating that this is a bridging client.
 
-Note: RabbitMQ currently does not support this flag.
+::: tip Tip
+RabbitMQ currently does not support this flag.
+:::
 
-<br />
+
 
 ### bridge.mqtt.aws.clientid
 
@@ -5546,7 +5550,7 @@ Note: RabbitMQ currently does not support this flag.
 
 The client ID of the MQTT bridge.
 
-<br />
+
 
 ### bridge.mqtt.aws.clean_start
 
@@ -5558,7 +5562,7 @@ The client ID of the MQTT bridge.
 
 The `clean_start` flag of the MQTT bridge. It indicates whether the client connects to the remote MQTT Broker in the manner of `clean session`.
 
-<br />
+
 
 ### bridge.mqtt.aws.username
 
@@ -5570,7 +5574,7 @@ The `clean_start` flag of the MQTT bridge. It indicates whether the client conne
 
 The username of the MQTT bridge client.
 
-<br />
+
 
 ### bridge.mqtt.aws.password
 
@@ -5582,7 +5586,7 @@ The username of the MQTT bridge client.
 
 The password of the MQTT bridge client.
 
-<br />
+
 
 ### bridge.mqtt.aws.forwards
 
@@ -5595,7 +5599,7 @@ The password of the MQTT bridge client.
 Bridge forwarding rules. For example:
 - `topic1/#, topic2/#`：`emqx_bridge_mqtt` will forward all topic messages in EMQ X Broker that match `topic1/#`，`topic2/#` .
 
-<br />
+
 
 ### bridge.mqtt.aws.forward_mountpoint
 
@@ -5607,7 +5611,7 @@ Bridge forwarding rules. For example:
 
 The prefix of the forwarding topic. When forwarding the message to the target system, it is supported to add a uniform prefix to the topic.
 
-<br />
+
 
 ### bridge.mqtt.aws.subscription.1.topic
 
@@ -5619,7 +5623,7 @@ The prefix of the forwarding topic. When forwarding the message to the target sy
 
 Topic of the peer system subscribed.
 
-<br />
+
 
 ### bridge.mqtt.aws.subscription.1.qos
 
@@ -5631,7 +5635,7 @@ Topic of the peer system subscribed.
 
 QoS of the peer system topic subscribed.
 
-<br />
+
 
 ### bridge.mqtt.aws.receive_mountpoint
 
@@ -5643,7 +5647,7 @@ QoS of the peer system topic subscribed.
 
 The topic prefix of the received message.`emqx_bridge_mqtt` supports adding a unified topic prefix to the message from the peer.
 
-<br />
+
 
 ### bridge.mqtt.aws.ssl
 
@@ -5655,7 +5659,7 @@ The topic prefix of the received message.`emqx_bridge_mqtt` supports adding a un
 
 Whether the MQTT bridge client enables SSL.
 
-<br />
+
 
 ### bridge.mqtt.aws.cacertfile
 
@@ -5667,7 +5671,7 @@ Whether the MQTT bridge client enables SSL.
 
 The path of the CA certificate file of the MQTT bridge client.
 
-<br />
+
 
 ### bridge.mqtt.aws.certfile
 
@@ -5679,7 +5683,7 @@ The path of the CA certificate file of the MQTT bridge client.
 
 The path of the SSL certificate file of the MQTT bridge client.
 
-<br />
+
 
 ### bridge.mqtt.aws.keyfile
 
@@ -5691,7 +5695,7 @@ The path of the SSL certificate file of the MQTT bridge client.
 
 The path of the SSL key file of the MQTT bridge client.
 
-<br />
+
 
 ### bridge.mqtt.aws.ciphers
 
@@ -5703,7 +5707,7 @@ The path of the SSL key file of the MQTT bridge client.
 
 Cipher suite supported by SSL handshake.
 
-<br />
+
 
 ### bridge.mqtt.aws.psk_ciphers
 
@@ -5715,7 +5719,7 @@ Cipher suite supported by SSL handshake.
 
 Cipher suite supported by SSL PSK handshake.
 
-<br />
+
 
 ### bridge.mqtt.aws.keepalive
 
@@ -5727,7 +5731,7 @@ Cipher suite supported by SSL PSK handshake.
 
 Heartbeat interval of the MQTT bridge client.
 
-<br />
+
 
 ### bridge.mqtt.aws.tls_versions
 
@@ -5739,7 +5743,7 @@ Heartbeat interval of the MQTT bridge client.
 
 The SSL version of the MQTT bridge client.
 
-<br />
+
 
 ### bridge.mqtt.aws.reconnect_interval
 
@@ -5751,7 +5755,7 @@ The SSL version of the MQTT bridge client.
 
 Reconnection interval.
 
-<br />
+
 
 ### bridge.mqtt.aws.retry_interval
 
@@ -5763,7 +5767,7 @@ Reconnection interval.
 
 QoS 1/2 message retransmission interval.
 
-<br />
+
 
 ### bridge.mqtt.aws.batch_size
 
@@ -5775,7 +5779,7 @@ QoS 1/2 message retransmission interval.
 
 The batch size of the EMQ X bridge. The EMQ X bridge mode of `emqx_bridge_mqtt` supports batch sending of messages to increase throughput.
 
-<br />
+
 
 ### bridge.mqtt.aws.max_inflight_size
 
@@ -5787,7 +5791,7 @@ The batch size of the EMQ X bridge. The EMQ X bridge mode of `emqx_bridge_mqtt` 
 
 Inflight window size.
 
-<br />
+
 
 ### bridge.mqtt.aws.queue.replayq_dir
 
@@ -5799,7 +5803,7 @@ Inflight window size.
 
 Set the message queue file path. If not configured, only memory storage is used.
 
-<br />
+
 
 ### bridge.mqtt.aws.queue.replayq_seg_bytes
 
@@ -5811,7 +5815,7 @@ Set the message queue file path. If not configured, only memory storage is used.
 
 The single file size of the message queue stored on disk.
 
-<br />
+
 
 ### bridge.mqtt.aws.queue.max_total_size
 
@@ -5823,7 +5827,7 @@ The single file size of the message queue stored on disk.
 
 The maximum allowed message queue storage.
 
-<br />
+
 
 ## [emqx-coap](https://github.com/emqx/emqx-coap)
 
@@ -5837,7 +5841,7 @@ The maximum allowed message queue storage.
 
 Specify the UDP binding port of the CoAP plug-in.
 
-<br />
+
 
 ### coap.enable_stats
 
@@ -5849,7 +5853,7 @@ Specify the UDP binding port of the CoAP plug-in.
 
 Enable or disable CoAP statistics function.
 
-<br />
+
 
 ### coap.dtls.port
 
@@ -5861,7 +5865,7 @@ Enable or disable CoAP statistics function.
 
 Specify the DTLS binding port of the CoAP plugin.
 
-<br />
+
 
 ### coap.dtls.verify
 
@@ -5873,7 +5877,7 @@ Specify the DTLS binding port of the CoAP plugin.
 
 When using DTLS, specify whether to verify the client during the DTLS handshake.
 
-<br />
+
 
 ### coap.dtls.keyfile
 
@@ -5885,7 +5889,7 @@ When using DTLS, specify whether to verify the client during the DTLS handshake.
 
 When using DTLS, specify the DTLS private key file.
 
-<br />
+
 
 ### coap.dtls.certfile
 
@@ -5897,7 +5901,7 @@ When using DTLS, specify the DTLS private key file.
 
 When using DTLS, specify the DTLS certificate file.
 
-<br />
+
 
 ### coap.dtls.cacertfile
 
@@ -5909,7 +5913,7 @@ When using DTLS, specify the DTLS certificate file.
 
 When using DTLS, specify the CA certificate file for DTLS.
 
-<br />
+
 
 ### coap.dtls.fail_if_no_peer_cert
 
@@ -5921,7 +5925,7 @@ When using DTLS, specify the CA certificate file for DTLS.
 
 When using DTLS, if the client does not have a certificate during the DTLS handshake, whether to let the handshake fail.
 
-<br />
+
 
 ### coap.dtls.ciphers
 
@@ -5933,7 +5937,7 @@ When using DTLS, if the client does not have a certificate during the DTLS hands
 
 When using DTLS, specify the Cipher list supported by the DTLS server.
 
-<br />
+
 
 ## [emqx-dashboard](https://github.com/emqx/emqx-dashboard)
 
@@ -5947,7 +5951,7 @@ When using DTLS, specify the Cipher list supported by the DTLS server.
 
 Default user authentication data of Dashboard . `Dashboard.default_user.login` and `dashboard.default_user.password` must exist at tge sane tune.
 
-<br />
+
 
 ### dashboard.listener.http
 
@@ -5959,7 +5963,7 @@ Default user authentication data of Dashboard . `Dashboard.default_user.login` a
 
 The listening port of the HTTP listener.
 
-<br />
+
 
 ### dashboard.listener.http.acceptors
 
@@ -5971,7 +5975,7 @@ The listening port of the HTTP listener.
 
 The number of listening processes this listener will create.
 
-<br />
+
 
 ### dashboard.listener.http.max_clients
 
@@ -5983,7 +5987,7 @@ The number of listening processes this listener will create.
 
 The maximum number of connections allowed by this listener at the same time.
 
-<br />
+
 
 ### dashboard.listener.http.inet6
 
@@ -5995,7 +5999,7 @@ The maximum number of connections allowed by this listener at the same time.
 
 Whether to set the socket to allow IPv6 connections.
 
-<br />
+
 
 ### dashboard.listener.http.ipv6_v6only
 
@@ -6007,7 +6011,7 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
-<br />
+
 
 ### dashboard.listener.https
 
@@ -6019,7 +6023,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 
 The listening port of the HTTPS listener, **which is disabled by default.**
 
-<br />
+
 
 ### dashboard.listener.https.acceptors
 
@@ -6031,7 +6035,7 @@ The listening port of the HTTPS listener, **which is disabled by default.**
 
 Same as `dashboard.listener.http.acceptors`.
 
-<br />
+
 
 ### dashboard.listener.https.max_clients
 
@@ -6043,7 +6047,7 @@ Same as `dashboard.listener.http.acceptors`.
 
 Same as `dashboard.listener.http.max_clients`.
 
-<br />
+
 
 ### dashboard.listener.https.inet6
 
@@ -6055,7 +6059,7 @@ Same as `dashboard.listener.http.max_clients`.
 
 Same as `dashboard.listener.http.inet6`.
 
-<br />
+
 
 ### dashboard.listener.https.ipv6_v6only
 
@@ -6067,7 +6071,7 @@ Same as `dashboard.listener.http.inet6`.
 
 Same as `dashboard.listener.http.ipv6_v6only`.
 
-<br />
+
 
 ### dashboard.listener.https.keyfile
 
@@ -6079,7 +6083,7 @@ Same as `dashboard.listener.http.ipv6_v6only`.
 
 Server private key file path.
 
-<br />
+
 
 ### dashboard.listener.https.certfile
 
@@ -6091,7 +6095,7 @@ Server private key file path.
 
 Server certificate file path.
 
-<br />
+
 
 ### dashboard.listener.https.cacertfile
 
@@ -6103,7 +6107,7 @@ Server certificate file path.
 
 CA certificate file path.
 
-<br />
+
 
 ### dashboard.listener.https.dhfile
 
@@ -6115,7 +6119,7 @@ CA certificate file path.
 
 If a cipher suite exchanged from Diffie Hellman key is used, you can use this configuration item to specify a file path that contains PEM-encoded Diffie Hellman parameters. If not specified, the default parameters are used.
 
-<br />
+
 
 ### dashboard.listener.https.verify
 
@@ -6127,7 +6131,7 @@ If a cipher suite exchanged from Diffie Hellman key is used, you can use this co
 
 `verify_none` means to disable peer certificate verification, and the server will not send a certificate request to the client. `verify_peer` means to enable peer certificate verification, and the server will send a certificate request to the client. When this configuration item is set to `verify_peer`, it usually need to be used together with `dashboard.listener.https.fail_if_no_peer_cert` to specify whether to force the client to provide a certificate.
 
-<br />
+
 
 ### dashboard.listener.https.fail_if_no_peer_cert
 
@@ -6139,7 +6143,7 @@ If a cipher suite exchanged from Diffie Hellman key is used, you can use this co
 
 It should be used together with `dashboard.listener.https.verify`. If set to `true`, the server will request a certificate from the client. If the client does not provide a certificate, the handshake will fail. If set to `false`, the handshake can be successful even if the terminal does not provide a certificate.
 
-<br />
+
 
 ### dashboard.listener.https.tls_versions
 
@@ -6151,7 +6155,7 @@ It should be used together with `dashboard.listener.https.verify`. If set to `tr
 
 Specify the TLS protocol version supported by the server. The versions are separated by `,`. The supported TLS protocol versions are: `tlsv1.3`, `tlsv1.2`, `tlsv1.1`, `tlsv1`, `sslv3`.
 
-<br />
+
 
 ### dashboard.listener.https.ciphers
 
@@ -6163,7 +6167,7 @@ Specify the TLS protocol version supported by the server. The versions are separ
 
 Specify the cipher suite supported by the server.
 
-<br />
+
 
 ### dashboard.listener.https.secure_renegotiate
 
@@ -6175,7 +6179,7 @@ Specify the cipher suite supported by the server.
 
 Specifies whether to start the secure renegotiation mechanism.
 
-<br />
+
 
 ### dashboard.listener.https.reuse_sessions
 
@@ -6187,7 +6191,7 @@ Specifies whether to start the secure renegotiation mechanism.
 
 Specifies whether to enable the session resuing mechanism.
 
-<br />
+
 
 ### dashboard.listener.https.honor_cipher_order
 
@@ -6199,7 +6203,7 @@ Specifies whether to enable the session resuing mechanism.
 
 If set to `on`, use the server ’s preferences for password selection. If set to `off`, use the client ’s preferences.
 
-<br />
+
 
 ## [emqx-lwm2m](https://github.com/emqx/emqx-lwm2m)
 
@@ -6213,7 +6217,7 @@ If set to `on`, use the server ’s preferences for password selection. If set t
 
 Specify the UDP port used by LwM2M.
 
-<br />
+
 
 ### lwm2m.lifetime_min
 
@@ -6225,7 +6229,7 @@ Specify the UDP port used by LwM2M.
 
 Specify the minimum allowed LwM2M lifetime with the unit of second.
 
-<br />
+
 
 ### lwm2m.lifetime_max
 
@@ -6237,7 +6241,7 @@ Specify the minimum allowed LwM2M lifetime with the unit of second.
 
 Specify the maximum allowed LwM2M lifetime with the unit of second.
 
-<br />
+
 
 ### lwm2m.qmode_time_window
 
@@ -6249,7 +6253,7 @@ Specify the maximum allowed LwM2M lifetime with the unit of second.
 
 Specifies the window size used in LwM2M Q mode, with the unit of second.
 
-<br />
+
 
 Within this window period, it can be sent to the Q mode device, and after the window period, the downlink data is cached.
 
@@ -6263,7 +6267,7 @@ Within this window period, it can be sent to the Q mode device, and after the wi
 
 Set whether to use coaproxy. `undefined` means not to  use coaproxy.
 
-<br />
+
 
 ### lwm2m.auto_observe
 
@@ -6275,7 +6279,7 @@ Set whether to use coaproxy. `undefined` means not to  use coaproxy.
 
 Whether to automatically issue the observe command after device registration.
 
-<br />
+
 
 ### lwm2m.mountpoint
 
@@ -6290,7 +6294,7 @@ Set the mount point of the LwM2M topic. The following wildcards are supported:
 - '%e': Endpoint Name
 - '%a': IP Address
 
-<br />
+
 
 ### lwm2m.topics.command
 
@@ -6302,7 +6306,7 @@ Set the mount point of the LwM2M topic. The following wildcards are supported:
 
 The command line topic that need to be subscribd after the device registration is completed.
 
-<br />
+
 
 ### lwm2m.topics.response
 
@@ -6314,7 +6318,7 @@ The command line topic that need to be subscribd after the device registration i
 
 Which topic the device's upstream response needs to be published to.
 
-<br />
+
 
 ### lwm2m.topics.notify
 
@@ -6326,7 +6330,7 @@ Which topic the device's upstream response needs to be published to.
 
 Which topic the device's upstream report message (notify) needs to be published to.
 
-<br />
+
 
 ### lwm2m.topics.register
 
@@ -6338,7 +6342,7 @@ Which topic the device's upstream report message (notify) needs to be published 
 
 Which topic the device's upstream registration message (register) needs to be published to.
 
-<br />
+
 
 ### lwm2m.topics.update
 
@@ -6350,7 +6354,7 @@ Which topic the device's upstream registration message (register) needs to be pu
 
 Which topic the device's upstream update message (update) needs to be published to.
 
-<br />
+
 
 ### lwm2m.opts.buffer
 
@@ -6362,7 +6366,7 @@ Which topic the device's upstream update message (update) needs to be published 
 
 UDP tuning parameters, specify the UDP user mode cache size.
 
-<br />
+
 
 ### lwm2m.opts.recbuf
 
@@ -6374,7 +6378,7 @@ UDP tuning parameters, specify the UDP user mode cache size.
 
 UDP tuning parameters, specify the UDP receiving buffer size.
 
-<br />
+
 
 ### lwm2m.opts.sndbuf
 
@@ -6386,7 +6390,7 @@ UDP tuning parameters, specify the UDP receiving buffer size.
 
 UDP tuning parameters, specify the UDP sending buffer size.
 
-<br />
+
 
 ### lwm2m.opts.read_packets
 
@@ -6398,7 +6402,7 @@ UDP tuning parameters, specify the UDP sending buffer size.
 
 UDP tuning parameters, specify how many packets to read from UDP socket each time.
 
-<br />
+
 
 ### lwm2m.certfile
 
@@ -6410,7 +6414,7 @@ UDP tuning parameters, specify how many packets to read from UDP socket each tim
 
 Specify the certificate file used by UDP DTLS.
 
-<br />
+
 
 ### lwm2m.keyfile
 
@@ -6422,7 +6426,7 @@ Specify the certificate file used by UDP DTLS.
 
 Specify the private key file used by UDP DTLS.
 
-<br />
+
 
 ### lwm2m.xml_dir
 
@@ -6434,7 +6438,7 @@ Specify the private key file used by UDP DTLS.
 
 Specify the directory where the LwM2M Object definition file is stored.
 
-<br />
+
 
 ## [emqx-management](https://github.com/emqx/emqx-management)
 
@@ -6448,7 +6452,7 @@ Specify the directory where the LwM2M Object definition file is stored.
 
 Maximum number of records returned during paging query.
 
-<br />
+
 
 ### management.default_application.id
 
@@ -6460,7 +6464,7 @@ Maximum number of records returned during paging query.
 
 Default AppId.
 
-<br />
+
 
 ### management.default_application.secret
 
@@ -6472,7 +6476,7 @@ Default AppId.
 
 Default AppSecret.
 
-<br />
+
 
 ### management.listener.http
 
@@ -6484,7 +6488,7 @@ Default AppSecret.
 
 The listening port of the HTTP listener.
 
-<br />
+
 
 ### management.listener.http.acceptors
 
@@ -6496,7 +6500,7 @@ The listening port of the HTTP listener.
 
 The number of listening processes this listener will create.
 
-<br />
+
 
 ### management.listener.http.max_clients
 
@@ -6508,7 +6512,7 @@ The number of listening processes this listener will create.
 
 The maximum number of connections allowed by this listener at the same time
 
-<br />
+
 
 ### management.listener.http.backlog
 
@@ -6520,7 +6524,7 @@ The maximum number of connections allowed by this listener at the same time
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
-<br />
+
 
 ### management.listener.http.send_timeout
 
@@ -6532,7 +6536,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 HTTP packet sending timeout.
 
-<br />
+
 
 ### management.listener.http.send_timeout_close
 
@@ -6544,7 +6548,7 @@ HTTP packet sending timeout.
 
 Whether to close the connection after the HTTP packet sending is timeout.
 
-<br />
+
 
 ### management.listener.http.inet6
 
@@ -6556,7 +6560,7 @@ Whether to close the connection after the HTTP packet sending is timeout.
 
 Whether to set the socket to allow IPv6 connections.
 
-<br />
+
 
 ### management.listener.http.ipv6_v6only
 
@@ -6568,7 +6572,7 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
-<br />
+
 
 ### management.listener.https
 
@@ -6590,7 +6594,7 @@ The listening port of the HTTPS listener.
 
 The number of listening processes this listener will create.
 
-<br />
+
 
 ### management.listener.https.max_clients
 
@@ -6602,7 +6606,7 @@ The number of listening processes this listener will create.
 
 The maximum number of connections allowed by this listener at the same time.
 
-<br />
+
 
 ### management.listener.https.backlog
 
@@ -6614,7 +6618,7 @@ The maximum number of connections allowed by this listener at the same time.
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
-<br />
+
 
 ### management.listener.https.send_timeout
 
@@ -6626,7 +6630,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 Timeout for sending HTTPS packets.
 
-<br />
+
 
 ### management.listener.https.send_timeout_close
 
@@ -6638,7 +6642,7 @@ Timeout for sending HTTPS packets.
 
 Whether to close the connection after the HTTPS packet sending is timeout.
 
-<br />
+
 
 ### management.listener.https.keyfile
 
@@ -6650,7 +6654,7 @@ Whether to close the connection after the HTTPS packet sending is timeout.
 
 Server private key file path.
 
-<br />
+
 
 ### management.listener.https.certfile
 
@@ -6662,7 +6666,7 @@ Server private key file path.
 
 Server certificate file path.
 
-<br />
+
 
 ### management.listener.https.cacertfile
 
@@ -6674,7 +6678,7 @@ Server certificate file path.
 
 CA certificate file path.
 
-<br />
+
 
 ### management.listener.https.verify
 
@@ -6686,7 +6690,7 @@ CA certificate file path.
 
 `verify_none` means to disable peer certificate verification, and the server will not send a certificate request to the client. `verify_peer` means to enable peer certificate verification, and the server will send a certificate request to the client. When this configuration item is set to `verify_peer`, it usually need to be used together with `dashboard.listener.https.fail_if_no_peer_cert` to specify whether to force the client to provide a certificate.
 
-<br />
+
 
 ### management.listener.https.fail_if_no_peer_cert
 
@@ -6698,7 +6702,7 @@ CA certificate file path.
 
 It should be used together with `management.listener.https.verify`. If set to `true`, the server will fail the handshake if the client does not provide a certificate when requesting a certificate from the client. If set to `false`, the handshake can be successful even if the terminal does not provide a certificate.
 
-<br />
+
 
 ### management.listener.https.inet6
 
@@ -6710,7 +6714,7 @@ It should be used together with `management.listener.https.verify`. If set to `t
 
 Whether to set the socket to allow IPv6 connections.
 
-<br />
+
 
 ### management.listener.https.ipv6_v6only
 
@@ -6722,7 +6726,7 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
-<br />
+
 
 ## [emqx-reloader](https://github.com/emqx/emqx-reloader)
 
@@ -6736,7 +6740,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 
 How often do hot update all code.
 
-<br />
+
 
 ### reloader.logfile
 
@@ -6748,7 +6752,7 @@ How often do hot update all code.
 
 Log files for hot updates of code.
 
-<br />
+
 
 ## [emqx-retainer](https://github.com/emqx/emqx-retainer)
 
@@ -6774,7 +6778,7 @@ Retained messages are stored in both memory and disk.
 
 Retained  messages are only stored on disk.
 
-<br />
+
 
 ### retainer.max_retained_messages
 
@@ -6786,7 +6790,7 @@ Retained  messages are only stored on disk.
 
 Limit of retained messages. Once the number of stored messages reaches the limit, you can replace existing retained messages, but you cannot store retained messages for new topics. 0 means no limit.
 
-<br />
+
 
 ### retainer.max_payload_size
 
@@ -6798,7 +6802,7 @@ Limit of retained messages. Once the number of stored messages reaches the limit
 
 The maximum length of Payload allowed to store retained messages. If the Payload exceeds the maximum limit, the retained message can be processed normally, but it will not be stored on the server.
 
-<br />
+
 
 ### retainer.expiry_interval
 
@@ -6810,7 +6814,7 @@ The maximum length of Payload allowed to store retained messages. If the Payload
 
 The expiration interval of retained messages which is only valid for clients with protocol versions lower than MQTT v5.0. The expiration interval of retained messages for MQTT v5.0 clients will be based on the value of `Message Expiry Interval`. 0 means never expire.
 
-<br />
+
 
 ## [emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
 
@@ -6824,7 +6828,7 @@ The expiration interval of retained messages which is only valid for clients wit
 
 Ignore system messages ($ SYS). The rule engine will not process system messages if this option is enabled.
 
-<br />
+
 
 ### rule_engine.events.<event-name>
 
@@ -6857,7 +6861,7 @@ If this option is disabled, event messages will not be published, but event rule
 SELECT * FROM "$events/client_connected"
 ```
 
-<br />
+
 
 ## [emqx-sn](https://github.com/emqx/emqx-sn)
 
@@ -6871,7 +6875,7 @@ SELECT * FROM "$events/client_connected"
 
 The UDP port that `emqx_sn` listens on.
 
-<br />
+
 
 ### mqtt.sn.advertise_duration
 
@@ -6883,7 +6887,7 @@ The UDP port that `emqx_sn` listens on.
 
 ADVERTISE message broadcast interval, unit: second.
 
-<br />
+
 
 ### mqtt.sn.gateway_id
 
@@ -6895,7 +6899,7 @@ ADVERTISE message broadcast interval, unit: second.
 
 MQTT-SN gateway ID in ADVERTISE.
 
-<br />
+
 
 ### mqtt.sn.enable_stats
 
@@ -6907,7 +6911,7 @@ MQTT-SN gateway ID in ADVERTISE.
 
 Whether to enable client status statistics.
 
-<br />
+
 
 ### mqtt.sn.enable_qos3
 
@@ -6919,7 +6923,7 @@ Whether to enable client status statistics.
 
 Whether to process messages with QoS of -1.
 
-<br />
+
 
 ### mqtt.sn.idle_timeout
 
@@ -6931,7 +6935,7 @@ Whether to process messages with QoS of -1.
 
 The idle time after the establishment, if no message is received within this time, the connection will be closed.
 
-<br />
+
 
 ### mqtt.sn.predefined.topic.0
 
@@ -6947,7 +6951,7 @@ The predefined mapping of Topic and TopicId. Topics with an Id of 0 are reserved
 mqtt.sn.predefined.topic.1 = foo/bar
 ```
 
-<br />
+
 
 ### mqtt.sn.username
 
@@ -6959,7 +6963,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 `emqx_sn` username to connect to EMQ X Broker.
 
-<br />
+
 
 ### mqtt.sn.password
 
@@ -6971,7 +6975,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 `emqx_sn` password to connect to EMQ X Broker.
 
-<br />
+
 
 ## [emqx-statsd](https://github.com/emqx/emqx-statsd)
 
@@ -6985,7 +6989,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 Specify the URI of the Statsd gateway.
 
-<br />
+
 
 ### statsd.interval
 
@@ -6997,7 +7001,7 @@ Specify the URI of the Statsd gateway.
 
 Specify the collection interval of Statsd data in milliseconds.
 
-<br />
+
 
 ### prometheus.collector.<N>
 
@@ -7009,7 +7013,7 @@ Specify the collection interval of Statsd data in milliseconds.
 
 Specify Prometheus Collector.
 
-<br />
+
 
 ## [emqx-stomp](https://github.com/emqx/emqx-stomp)
 
@@ -7023,7 +7027,7 @@ Specify Prometheus Collector.
 
 Specify the local port where the Stomp plugin listens.
 
-<br />
+
 
 ### stomp.listener.acceptors
 
@@ -7035,7 +7039,7 @@ Specify the local port where the Stomp plugin listens.
 
 Specify the size of the thread pool for Stomp service Acceptor 
 
-<br />
+
 
 ### stomp.listener.max_connections
 
@@ -7047,7 +7051,7 @@ Specify the size of the thread pool for Stomp service Acceptor
 
 Specify the maximum number of connections supported by the Stomp service.
 
-<br />
+
 
 ### stomp.listener.ssl
 
@@ -7059,7 +7063,7 @@ Specify the maximum number of connections supported by the Stomp service.
 
 Specify whether to use SSL.
 
-<br />
+
 
 ### stomp.listener.keyfile
 
@@ -7071,7 +7075,7 @@ Specify whether to use SSL.
 
 If using SSL, specify the SSL private key file.
 
-<br />
+
 
 ### stomp.listener.certfile
 
@@ -7083,7 +7087,7 @@ If using SSL, specify the SSL private key file.
 
 If using SSL, specify the SSL certificate file.
 
-<br />
+
 
 ### stomp.listener.cacertfile
 
@@ -7095,7 +7099,7 @@ If using SSL, specify the SSL certificate file.
 
 If using SSL, specify the CA certificate file for SSL.
 
-<br />
+
 
 ### stomp.listener.dhfile
 
@@ -7107,7 +7111,7 @@ If using SSL, specify the CA certificate file for SSL.
 
 If using SSL, specify the key file used by the Ephemeral Diffie-Hellman algorithm.
 
-<br />
+
 
 ### stomp.listener.verify
 
@@ -7119,7 +7123,7 @@ If using SSL, specify the key file used by the Ephemeral Diffie-Hellman algorith
 
 If using SSL, specify whether to verify the client during the handshake.
 
-<br />
+
 
 ### stomp.listener.fail_if_no_peer_cert
 
@@ -7131,7 +7135,7 @@ If using SSL, specify whether to verify the client during the handshake.
 
 Specify whether the handshake fail if SSL is used, and the client does not have a certificate during the SSL handshake.
 
-<br />
+
 
 ### stomp.listener.tls_versions
 
@@ -7143,7 +7147,7 @@ Specify whether the handshake fail if SSL is used, and the client does not have 
 
 If using SSL, specify the list of SSL versions supported by the server.
 
-<br />
+
 
 ### stomp.listener.handshake_timeout
 
@@ -7155,7 +7159,7 @@ If using SSL, specify the list of SSL versions supported by the server.
 
 If using SSL, specify the timeout period for the SSL handshake process.
 
-<br />
+
 
 ### stomp.listener.ciphers
 
@@ -7167,7 +7171,7 @@ If using SSL, specify the timeout period for the SSL handshake process.
 
 If using SSL, specify the Cipher list supported by the server
 
-<br />
+
 
 ### stomp.listener.secure_renegotiate
 
@@ -7179,7 +7183,7 @@ If using SSL, specify the Cipher list supported by the server
 
 If using SSL, specify whether to reject the renegotiation request if the client does not follow RFC 5746.
 
-<br />
+
 
 ### stomp.listener.reuse_sessions
 
@@ -7191,7 +7195,7 @@ If using SSL, specify whether to reject the renegotiation request if the client 
 
 If using SSL, specify whether to support SSL session reuse.
 
-<br />
+
 
 ### stomp.listener.honor_cipher_order
 
@@ -7203,7 +7207,7 @@ If using SSL, specify whether to support SSL session reuse.
 
 If using SSL, specify whether to use the server's preferences to select Ciphers.
 
-<br />
+
 
 ### stomp.default_user.login
 
@@ -7215,7 +7219,7 @@ If using SSL, specify whether to use the server's preferences to select Ciphers.
 
 Specify the Username used by the Stomp plugin to log in.
 
-<br />
+
 
 ### stomp.default_user.passcode
 
@@ -7227,7 +7231,7 @@ Specify the Username used by the Stomp plugin to log in.
 
 Specify the password used for Stomp plugin login.
 
-<br />
+
 
 ### stomp.allow_anonymous
 
@@ -7239,7 +7243,7 @@ Specify the password used for Stomp plugin login.
 
 Whether to allow anonymous login.
 
-<br />
+
 
 ### stomp.frame.max_headers
 
@@ -7251,7 +7255,7 @@ Whether to allow anonymous login.
 
 Specify the maximum number of Stomp headers
 
-<br />
+
 
 ### stomp.frame.max_header_length
 
@@ -7263,7 +7267,7 @@ Specify the maximum number of Stomp headers
 
 Specify the maximum Stomp header length
 
-<br />
+
 
 ### stomp.frame.max_body_length
 
@@ -7275,7 +7279,7 @@ Specify the maximum Stomp header length
 
 Specify Stomp maximum message body length.
 
-<br />
+
 
 ## [emqx-web-hook](https://github.com/emqx/emqx-web-hook)
 
@@ -7289,7 +7293,7 @@ Specify Stomp maximum message body length.
 
 `emqx_web_hook` Forwarding web server address.
 
-<br />
+
 
 ### web.hook.encode_payload
 
@@ -7301,7 +7305,7 @@ Specify Stomp maximum message body length.
 
 The encoding format of the Payload field in the PUBLISH message.
 
-<br />
+
 
 ### web.hook.rule.client.connect.1
 
@@ -7313,7 +7317,7 @@ The encoding format of the Payload field in the PUBLISH message.
 
 Forward the `on_client_connect` event.
 
-<br />
+
 
 ### web.hook.rule.client.connack.1
 
@@ -7325,7 +7329,7 @@ Forward the `on_client_connect` event.
 
 Forward the `on_client_connack` event.
 
-<br />
+
 
 ### web.hook.rule.client.connected.1
 
@@ -7337,7 +7341,7 @@ Forward the `on_client_connack` event.
 
 Forward the `on_client_connected` event.
 
-<br />
+
 
 ### web.hook.rule.client.disconnected.1
 
@@ -7349,7 +7353,7 @@ Forward the `on_client_connected` event.
 
 Forward the `on_client_disconnected` event.
 
-<br />
+
 
 ### web.hook.rule.client.subscribe.1
 
@@ -7361,7 +7365,7 @@ Forward the `on_client_disconnected` event.
 
 Forward the `on_client_subscribe` event.
 
-<br />
+
 
 ### web.hook.rule.client.unsubscribe.1
 
@@ -7373,7 +7377,7 @@ Forward the `on_client_subscribe` event.
 
 Forward the `on_client_unsubscribe` event.
 
-<br />
+
 
 ### web.hook.rule.session.subscribed.1
 
@@ -7385,7 +7389,7 @@ Forward the `on_client_unsubscribe` event.
 
 Forward the `on_client_subscribe` event.
 
-<br />
+
 
 ### web.hook.rule.session.unsubscribed.1
 
@@ -7397,7 +7401,7 @@ Forward the `on_client_subscribe` event.
 
 Forward the `on_session_unsubscribe` event.
 
-<br />
+
 
 ### web.hook.rule.session.terminated.1
 
@@ -7409,7 +7413,7 @@ Forward the `on_session_unsubscribe` event.
 
 Forward the `on_session_terminated` event.
 
-<br />
+
 
 ### web.hook.rule.message.publish.1
 
@@ -7421,7 +7425,7 @@ Forward the `on_session_terminated` event.
 
 Forward the `on_client_publish` event.
 
-<br />
+
 
 ### web.hook.rule.message.delivered.1
 
@@ -7433,7 +7437,7 @@ Forward the `on_client_publish` event.
 
 Forward the `on_message_delivered` event.
 
-<br />
+
 
 ### web.hook.rule.message.acked.1
 

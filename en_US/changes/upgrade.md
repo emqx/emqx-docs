@@ -129,17 +129,9 @@ In version 4.0, Subscription/Unsubscription principal is changed to **session**.
 
 ## Upgrade to version 3.1
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 For Version 3.1, the project architecture, configuration method and plug-in management method are completely redesigned. Upgrade of 2.x and 1.x versions requires reconfiguration and deployment.
-
-</div>
+:::
 
 Upgrade process:
 
@@ -160,17 +152,9 @@ Upgrade process:
 
 ## Upgrade to version 2.0
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 For Version 2.0, the project architecture, configuration method and plugin management method are completely redesigned. Upgrade of 1.x versions requires reconfiguration and deployment.
-
-</div>
+:::
 
 Upgrade process:
 
@@ -183,17 +167,10 @@ Upgrade process:
 
 ## Upgrade to version 1.1.2
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 Versions after 1.0 can be smoothly upgraded to 1.1.2
+:::
 
-</div>
 
 Upgrade process:
 

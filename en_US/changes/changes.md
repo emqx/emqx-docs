@@ -5212,17 +5212,10 @@ Bugfix: Topic has been decoded by gen-coap, no conversion needed
 
 *Release Date: 2017-07-03*
 
-<div class="warning">
-
-<div class="admonition-title">
-
-Warning
-
-</div>
-
+::: warning Warning
 2.2-rc.2 requires Erlang/OTP R19.3+ to build.
+:::
 
-</div>
 
 ### Bugfix and Enhancements
 
@@ -5532,17 +5525,10 @@ auth.redis.password\_hash = plain by default (emq-auth-redis\#20)
 
 EMQ v2.1.0-beta.1 is now available.
 
-<div class="warning">
-
-<div class="admonition-title">
-
-Warning
-
-</div>
-
+::: warning Warning
 EMQ 2.1+ Requires Erlang/OTP R19+ to build.
+:::
 
-</div>
 
 Since 2.1.0 release, we will tag EMQ versions accoding to the [Semantic
 Versioning 2.0.0](http://semver.org) principles. And we will release EMQ

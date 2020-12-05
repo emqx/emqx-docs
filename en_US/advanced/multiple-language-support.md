@@ -27,7 +27,9 @@ This plugin allows you to use other programming languages to handle hook events 
 - Check the operation permission of PUB/SUB of a client.
 - Handle Session and Message events.
 
-Note: Message hooks are only supported in the Enterprise Edition.
+::: tip Tip
+Message hooks are only supported in the Enterprise Edition.
+:::
 
 ## Architecture
 

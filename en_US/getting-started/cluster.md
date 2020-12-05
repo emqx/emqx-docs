@@ -22,7 +22,9 @@ Suppose you are going to deploy an EMQ X cluster on two servers of s1.emqx.io, s
 | emqx@s1.emqx.io or emqx@192.168.0.10 | s1.emqx.io    | 192.168.0.10 |
 | emqx@s2.emqx.io or emqx@192.168.0.20 | s2.emqx.io    | 192.168.0.20 |
 
-**Note:** The format of node name  is <Name@Host>, and Host must be an IP address or FQDN (host name. domain name)
+::: tip Tip
+The format of node name  is <Name@Host>, and Host must be an IP address or FQDN (host name. domain name)
+:::
 
 #### Configure emqx@s1.emqx.io node
 
@@ -40,7 +42,9 @@ You can also configure through environment variables:
 export EMQX_NODE_NAME=emqx@s1.emqx.io && ./bin/emqx start
 ```
 
-**Note:** After the node joins the cluster, the node name cannot be changed.
+::: tip Tip
+After the node joins the cluster, the node name cannot be changed.
+:::
 
 #### Configure emqx@s2.emqx.io Node
 
@@ -62,7 +66,9 @@ $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
-**Note:** After s2.emqx.io joins the cluster, all its data will be cleared and the data of the s1.emqx.io node will be synchronized. If there are still s3.emqx.io nodes, you need to execute commands on the s3.emqx.io node to join emqx@s1.emqx.io or emqx@s2.emqx.io, and nodes already existing in the cluster cannot join other nodes. Otherwise, it will exit the current cluster and form a new cluster with the new joined node.
+::: tip Tip
+After s2.emqx.io joins the cluster, all its data will be cleared and the data of the s1.emqx.io node will be synchronized. If there are still s3.emqx.io nodes, you need to execute commands on the s3.emqx.io node to join emqx@s1.emqx.io or emqx@s2.emqx.io, and nodes already existing in the cluster cannot join other nodes. Otherwise, it will exit the current cluster and form a new cluster with the new joined node.
+:::
 
 
 Query the cluster status on any node:

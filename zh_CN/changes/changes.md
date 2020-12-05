@@ -4902,17 +4902,10 @@ EMQ R2.3-beta.2 版本发布！该版本新增 HTTP 管理 API，支持配置 Ke
   - emq-auth-pgsql
   - emq-auth-redis
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 为支持命令行更新配置参数，部分认证插件参数值采用','替代了空格分隔符。
+:::
 
-</div>
 
 ### Enhancements
 
@@ -5031,17 +5024,9 @@ Bugfix: Topic has been decoded by gen-coap, no conversion needed
 
 *发布日期: 2017-07-03*
 
-<div class="warning">
-
-<div class="admonition-title">
-
-Warning
-
-</div>
-
+::: warning Warning
 2.2-rc.2版本源码编译需要Erlang/OTP R19.3+
-
-</div>
+:::
 
 ### 问题与改进
 
@@ -5345,17 +5330,9 @@ esockd\_connection:upgrade (emqttd\#915)
 
 *EMQ* 2.1.0-beta.1版本发布。
 
-<div class="warning">
-
-<div class="admonition-title">
-
-Warning
-
-</div>
-
+::: warning Warning
 2.1.x版本源码编译需要Erlang/OTP R19+
-
-</div>
+:::
 
 EMQ正式采用 [Semantic Versioning 2.0.0](http://semver.org)
 规范创建发布版本号，按'Tick-Tock'方式按月发布迭代版本。奇数版本问题修复与性能改进，偶数版本架构改进和新功能布。
@@ -5821,17 +5798,10 @@ Fixing issues with unsubscribe hook (PR \#673)
 EMQ 2.0-beta1预览版本(Preview Release)发布。EMQ
 2.0版本改进了项目结构、发布方式、Git分支结构以及配置文件格式，以奠定EMQ消息服务器项目长期演进基础。
 
-<div class="note">
-
-<div class="admonition-title">
-
-Note
-
-</div>
-
+::: tip Tip
 1.x版本产品部署用户请勿升级到该版本，2.0正式版本发布前会有API变更。
+:::
 
-</div>
 
 ### 项目简称 - EMQ
 
