@@ -1024,7 +1024,7 @@ Returns all statistical  metrics under the cluster
 | data[0].node    | String    | Node name |
 | data[0].metrics | Object     | Monitoring metrics data, see metrics below |
 
-**metrics：**
+**metrics:**
 
 | Name | Type | Description |
 | ----------------| --------- | -------------------- |

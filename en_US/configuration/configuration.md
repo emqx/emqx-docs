@@ -1684,7 +1684,7 @@ The maximum length of the message queue. When the flight window is full, or the 
 
 
 
-**``zone.internal.mqueue_store_qos0**
+### zone.internal.mqueue_store_qos0
 
 | Type | Optional Value  | Default |
 | ---- | --------------- | ------- |
@@ -2574,7 +2574,7 @@ Timeout for sending TCP packets.
 
 
 
-*`listener.ssl.external.send_timeout_close`**
+### listener.ssl.external.send_timeout_close
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
@@ -3431,7 +3431,7 @@ Timeout for sending TCP packets.
 
 
 
-*`listener.wss.external.send_timeout_close`**
+### listener.wss.external.send_timeout_close
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |

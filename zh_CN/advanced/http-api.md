@@ -1302,7 +1302,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | data[0].topic   | String           | 主题名 |
 | data[0].metrics | Object           | 主题统计指标数据，详见下面的 metrics: |
 
-**metrics: **
+**metrics:**
 
 | Name                    | Type      | Description |
 | ----------------------- | --------- | -------------------- |
@@ -1351,7 +1351,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-met
 | code | Integer          | 0             |
 | data | Object           | 主题统计指标数据，详见下面的 data: |
 
-**data: **
+**data:**
 
 | Name                    | Type      | Description |
 | ----------------------- | --------- | -------------------- |
@@ -1464,7 +1464,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-
 | data[0].node  | String    | 节点名称 |
 | data[0].stats | Array     | 状态数据，详见下面的 *stats* |
 
-**stats：**
+**stats:**
 
 | Name                       | Type | Description                |
 | -------------------------- | --------- | -------------------------- |
