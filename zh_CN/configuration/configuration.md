@@ -1700,7 +1700,7 @@ QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客�
 
 <br />
 
-**``zone.internal.mqueue_store_qos0**
+### zone.internal.mqueue_store_qos0
 
 | Type | Optional Value  | Default |
 | ---- | --------------- | ------- |
@@ -2595,7 +2595,7 @@ TCP 报文发送超时时间。
 
 <br />
 
-*`listener.ssl.external.send_timeout_close`**
+### listener.ssl.external.send_timeout_close
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
@@ -3456,7 +3456,7 @@ TCP 报文发送超时时间。
 
 <br />
 
-*`listener.wss.external.send_timeout_close`**
+### listener.wss.external.send_timeout_close
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
