@@ -282,7 +282,64 @@
         },
         {
           "title": "保存数据到数据库",
-          "path": "rule/backends"
+          "children": [
+            {
+              "title": "保存数据到 MySQL",
+              "path": "rule/backend_mysql"
+            },
+            {
+              "title": "保存数据到 PostgreSQL",
+              "path": "rule/backend_pgsql"
+            },
+            {
+              "title": "保存数据到 MongoDB",
+              "path": "rule/backend_mongodb"
+            },
+            {
+              "title": "保存数据到 Redis",
+              "path": "rule/backend_redis"
+            },
+            {
+              "title": "保存数据到 Cassandra",
+              "path": "rule/backend_cassandra"
+            },
+            {
+              "title": "保存数据到 DynamoDB",
+              "path": "rule/backend_dynamodb"
+            },
+            {
+              "title": "保存数据到 ClickHouse",
+              "path": "rule/backend_clickhouse"
+            },
+            {
+              "title": "保存数据到 OpenTSDB",
+              "path": "rule/backend_opentsdb"
+            },
+            {
+              "title": "保存数据到 InfluxDB",
+              "path": "rule/backend_influxdb"
+            },
+            {
+              "title": "保存数据到 TimescaleDB",
+              "path": "rule/backend_timescaledb"
+            },
+            {
+              "title": "保存数据到 Oracle DB",
+              "path": "rule/backend_oracle"
+            },
+            {
+              "title": "保存数据到 SQLServer",
+              "path": "rule/backend_sqlserver"
+            },
+            {
+              "title": "保存数据到 DolphinDB",
+              "path": "rule/backend_dolphindb"
+            },
+            {
+              "title": "保存数据到 TDengine",
+              "path": "rule/backend_tdengine"
+            }
+          ]
         },
         {
           "title": "EMQ X 数据桥接",
