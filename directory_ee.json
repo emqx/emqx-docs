@@ -366,23 +366,23 @@
           "children": [
             {
               "title": "离线消息保存到 Redis",
-              "path": "rule/offline_msg_redis"
+              "path": "rule/offline_msg_to_redis"
             },
             {
               "title": "离线消息保存到 MySQL",
-              "path": "rule/offline_msg_mysql"
+              "path": "rule/offline_msg_to_mysql"
             },
             {
               "title": "离线消息保存到 PostgreSQL",
-              "path": "rule/offline_msg_pgsql"
+              "path": "rule/offline_msg_to_pgsql"
             },
             {
               "title": "离线消息保存到 Cassandra",
-              "path": "rule/offline_msg_cassandra"
+              "path": "rule/offline_msg_to_cassandra"
             },
             {
               "title": "离线消息保存到 MongoDB",
-              "path": "rule/offline_msg_mongodb"
+              "path": "rule/offline_msg_to_mongodb"
             }
           ]
         },
@@ -622,7 +622,7 @@
       "children": [
         {
           "title": "变更日志",
-          "path": "changes/changes"
+          "path": "changes/changes-ee"
         },
         {
           "title": "升级指南",
