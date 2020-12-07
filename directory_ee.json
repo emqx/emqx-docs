@@ -343,15 +343,82 @@
         },
         {
           "title": "EMQ X 数据桥接",
-          "path": "rule/bridges"
+          "children": [
+            {
+              "title": "桥接数据到 Kafka",
+              "path": "rule/bridge_kafka"
+            },
+            {
+              "title": "桥接数据到 Pulsar",
+              "path": "rule/bridge_pulsar"
+            },
+            {
+              "title": "桥接数据到 RabbitMQ",
+              "path": "rule/bridge_rabbitmq"
+            },
+            {
+              "title": "桥接数据到 RocketMQ",
+              "path": "rule/bridge_rocketmq"
+            },
+            {
+              "title": "桥接数据到 MQTT Broker",
+              "path": "rule/bridge_mqtt"
+            },
+            {
+              "title": "桥接数据到 EMQ X",
+              "path": "rule/bridge_emqx"
+            }
+          ]
         },
         {
-          "title": "离线消息保存到 Redis",
-          "path": "rule/offline-msg"
+          "title": "离线消息",
+          "children": [
+            {
+              "title": "离线消息保存到 Redis",
+              "path": "rule/offline_msg_redis"
+            },
+            {
+              "title": "离线消息保存到 MySQL",
+              "path": "rule/offline_msg_mysql"
+            },
+            {
+              "title": "离线消息保存到 PostgreSQL",
+              "path": "rule/offline_msg_pgsql"
+            },
+            {
+              "title": "离线消息保存到 Cassandra",
+              "path": "rule/offline_msg_cassandra"
+            },
+            {
+              "title": "离线消息保存到 MongoDB",
+              "path": "rule/offline_msg_mongodb"
+            }
+          ]
         },
         {
           "title": "获取订阅关系",
-          "path": "rule/subscriptions"
+          "children": [
+            {
+              "title": "从 Redis 中获取订阅关系",
+              "path": "rule/get_subs_from_redis"
+            },
+            {
+              "title": "从 MySQL 中获取订阅关系",
+              "path": "rule/get_subs_from_mysql"
+            },
+            {
+              "title": "从 PostgreSQL 中获取订阅关系",
+              "path": "rule/get_subs_from_pgsql"
+            },
+            {
+              "title": "从 Cassandra 中获取订阅关系",
+              "path": "rule/get_subs_from_cassandra"
+            },
+            {
+              "title": "从 MongoDB 中获取订阅关系",
+              "path": "rule/get_subs_from_mongodb"
+            }
+          ]
         }
       ]
     },

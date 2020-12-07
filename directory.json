@@ -238,37 +238,16 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "保存数据到数据库",
+          "title": "数据转发到 WebHook",
           "path": "rule/backends"
         },
         {
-          "title": "EMQ X 数据桥接",
-          "path": "rule/bridges"
+          "title": "数据桥接到 EMQX",
+          "path": "rule/bridge_emqx"
         },
         {
-          "title": "离线消息保存",
-          "path": "rule/offline-msg"
-        },
-        {
-          "title": "获取订阅关系",
-          "path": "rule/subscriptions"
-        }
-      ]
-    },
-    {
-      "title": "编解码",
-      "path": "rule/schema-registry"
-    },
-    {
-      "title": "数据存储",
-      "children": [
-        {
-          "title": "数据存储设计",
-          "path": "backend/backend"
-        },
-        {
-          "title": "EMQ X 规则引擎数据存储",
-          "path": "backend/backends.md"
+          "title": "数据桥接到 MQTT Broker",
+          "path": "rule/bridge_mqtt"
         }
       ]
     },
@@ -286,22 +265,6 @@
         {
           "title": "RPC 桥接",
           "path": "bridge/bridge-rpc"
-        },
-        {
-          "title": "Kafka 桥接",
-          "path": "bridge/bridge-kafka"
-        },
-        {
-          "title": "RabbitMQ 桥接",
-          "path": "bridge/bridge-rabbitmq"
-        },
-        {
-          "title": "Pulsar 桥接",
-          "path": "bridge/bridge-pulsar"
-        },
-        {
-          "title": "RocketMQ 桥接",
-          "path": "bridge/bridge-rocketmq"
         }
       ]
     },
