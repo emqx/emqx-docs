@@ -77,7 +77,7 @@ Payload: "hello"
 ```bash
 $ redis-cli
 
-KEYS mqtt:msg\*
+KEYS mqtt:msg*
 
 hgetall Key
 ```
