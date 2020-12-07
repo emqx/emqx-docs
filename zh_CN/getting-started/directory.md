@@ -87,14 +87,9 @@ $ cat loaded_plugins
 ```bash
 $ cat loaded_plugins
 {emqx_management, true}.
-{emqx_recon, true}.
-{emqx_retainer, true}.
-{emqx_conf, true}.
 {emqx_dashboard, true}.
 {emqx_schema_registry, true}.
 {emqx_rule_engine, true}.
-{emqx_bridge_mqtt, false}.
-{emqx_cube, false}.
 ```
 
 {% endemqxee %}

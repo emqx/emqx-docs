@@ -46,7 +46,7 @@
         },
         {
           "title": "Dashboard",
-          "path": "getting-started/dashboard"
+          "path": "getting-started/dashboard-ee"
         }
       ]
     },
@@ -257,15 +257,6 @@
       ]
     },
     {
-      "title": "插件管理",
-      "children": [
-        {
-          "title": "插件介绍",
-          "path": "advanced/plugins"
-        }
-      ]
-    },
-    {
       "title": "规则引擎",
       "children": [
         {
@@ -281,7 +272,7 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "保存数据到数据库",
+          "title": "数据存储",
           "children": [
             {
               "title": "保存数据到 MySQL",
@@ -342,7 +333,7 @@
           ]
         },
         {
-          "title": "EMQ X 数据桥接",
+          "title": "数据桥接",
           "children": [
             {
               "title": "桥接数据到 Kafka",
@@ -419,56 +410,65 @@
               "path": "rule/get_subs_from_mongodb"
             }
           ]
+        },
+        {
+          "title": "编解码",
+          "path": "rule/schema-registry"
         }
       ]
     },
     {
-      "title": "编解码",
-      "path": "rule/schema-registry"
-    },
-    {
-      "title": "数据存储",
+      "title": "插件管理",
       "children": [
         {
-          "title": "数据存储设计",
-          "path": "backend/backend"
+          "title": "插件介绍",
+          "path": "advanced/plugins"
         },
         {
-          "title": "EMQ X 规则引擎数据存储",
-          "path": "backend/backends.md"
-        }
-      ]
-    },
-    {
-      "title": "消息桥接",
-      "children": [
-        {
-          "title": "消息桥接简介",
-          "path": "bridge/bridge"
+          "title": "数据存储插件",
+          "children": [
+            {
+              "title": "数据存储设计",
+              "path": "backend/backend"
+            },
+            {
+              "title": "EMQ X 规则引擎数据存储",
+              "path": "backend/backends.md"
+            }
+          ]
         },
         {
-          "title": "MQTT 桥接",
-          "path": "bridge/bridge-mqtt"
-        },
-        {
-          "title": "RPC 桥接",
-          "path": "bridge/bridge-rpc"
-        },
-        {
-          "title": "Kafka 桥接",
-          "path": "bridge/bridge-kafka"
-        },
-        {
-          "title": "RabbitMQ 桥接",
-          "path": "bridge/bridge-rabbitmq"
-        },
-        {
-          "title": "Pulsar 桥接",
-          "path": "bridge/bridge-pulsar"
-        },
-        {
-          "title": "RocketMQ 桥接",
-          "path": "bridge/bridge-rocketmq"
+          "title": "消息桥接插件",
+          "children": [
+            {
+              "title": "消息桥接简介",
+              "path": "bridge/bridge"
+            },
+            {
+              "title": "MQTT 桥接",
+              "path": "bridge/bridge-mqtt"
+            },
+            {
+              "title": "RPC 桥接",
+              "path": "bridge/bridge-rpc"
+            },
+            {
+              "title": "Kafka 桥接",
+              "path": "bridge/bridge-kafka"
+            },
+            {
+              "title": "RabbitMQ 桥接",
+              "path": "bridge/bridge-rabbitmq"
+            },
+            {
+              "title": "Pulsar 桥接",
+              "path": "bridge/bridge-pulsar"
+            },
+            {
+              "title": "RocketMQ 桥接",
+              "path": "bridge/bridge-rocketmq"
+            }
+          ]
         }
       ]
     },
