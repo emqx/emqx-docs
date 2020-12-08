@@ -7,7 +7,7 @@
   - [配置文件](#配置文件)
   - [配置示例](#配置示例)
   - [注意事项](#注意事项)
-- [Markdown 书写规范](#Markdown 书写规范)
+- [Markdown 书写规范](#markdown-书写规范)
   - [必须有一级标题](#必须有一级标题)
   - [标题遵守层级关系](#标题遵守层级关系)
   - [代码块](#代码块)
@@ -35,7 +35,7 @@ EMQ 文档使用 Markdown 格式编写，并使用 [Vuepress](https://vuepress.v
 
   该部分将会自动显示 Markdown 文件内所有的二级标题。因此，合理的 Markdown 二级标题将能使用户更快速的了解文档内容大纲，并在页内进行跳转。
 
-![intro](/Users/mac/Downloads/styleguide/assets/intro.jpg)
+![intro](./assets/intro.jpg)
 
 
 ## 左侧目录配置
@@ -44,13 +44,13 @@ EMQ 文档使用 Markdown 格式编写，并使用 [Vuepress](https://vuepress.v
 
 目录配置文件为文档根目录下的 `directory.json`（企业版为 `directory_ee.json`）。如下所示：
 
-![directory](/Users/mac/Downloads/styleguide/assets/directory.jpg)
+![directory](./assets/directory.jpg)
 
 ### 配置示例
 
 我们以配置如下 Introduction 为例进行说明。
 
-![introduction-dir](/Users/mac/Downloads/styleguide/assets/introduction-dir.jpg)
+![introduction-dir](./assets/introduction-dir.jpg)
 
 对应的配置为：
 
@@ -115,7 +115,7 @@ EMQ 文档支持标准的 Markdown 规范语法，但是在编写文档过程中
 
 文档会读取二级标题作为右侧导航，遵守层级关系以保证目录结构清晰。
 
-```md
+```markdown
 # h1
   ## h2
     ### h3
@@ -138,7 +138,7 @@ EMQ 文档支持标准的 Markdown 规范语法，但是在编写文档过程中
 
   Input
 
-  ```md
+  ```markdown
   ::: v-pre
   {{ This will be displayed as-is }}
   :::
@@ -160,7 +160,7 @@ EMQ 文档支持标准的 Markdown 规范语法，但是在编写文档过程中
 
 文档支持如下特殊语法。
 
-```md
+```markdown
 ::: tip
 This is a tip
 :::
@@ -176,13 +176,13 @@ This is a dangerous warning
 
 输出效果如下。
 
-![block](/Users/mac/Downloads/styleguide/assets/block.jpg)
+![block](./assets/block.jpg)
 
 ### 差异化编译
 
 Broker 和 Enterprise 之间共用一个文档仓库，使用如下语法可实现差异化编译。
 
-```md
+```markdown
 # Broker Docs
 {% emqxce %}
   contents
@@ -196,7 +196,7 @@ Broker 和 Enterprise 之间共用一个文档仓库，使用如下语法可实�
 
 正确写法
 
-```
+```markdown
 {% emqxee %}
   contents
 {% endemqxee %}
@@ -208,7 +208,7 @@ or
 
 错误写法
 
-```
+```markdown
 {% emqxee %} contents
 {% endemqxee %}
 
@@ -217,3 +217,4 @@ or
 {% emqxee %}
 contents {% endemqxee %}
 ```
+
