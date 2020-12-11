@@ -70,7 +70,7 @@ import mqtt from 'mqtt'
 
 // 连接选项
 const options = {
-  		clean: true, // 保留回话
+      clean: true, // true: 清除会话, false: 保留会话
       connectTimeout: 4000, // 超时时间
       // 认证信息
       clientId: 'emqx_test',
