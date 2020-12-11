@@ -1,6 +1,4 @@
 ---
-# 标题
-title: Dashboard
 # 编写日期
 date: 2020-02-25 17:15:26
 # 作者 Github 名称

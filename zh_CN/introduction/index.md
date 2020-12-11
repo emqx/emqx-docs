@@ -1,5 +1,5 @@
 ---
-# 标题
+# 标题	
 title: {{title}}
 author: {{ author }}
 # 编写日期
