@@ -1,6 +1,4 @@
 ---
-# 标题
-title: 商业服务
 # 编写日期
 date: 2020-02-20 12:44:32
 # 作者 Github 名称
@@ -14,7 +12,9 @@ category:
 # 引用
 ref:
 ---
+
 # Business Service
+
 ### What's the major difference between EMQ X enterprise and broker?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)

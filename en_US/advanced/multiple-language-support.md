@@ -1,6 +1,4 @@
 ---
-# 标题
-title: 多语言支持
 # 编写日期
 date: 2020-02-21 09:28:26
 # 作者 Github 名称
@@ -14,8 +12,6 @@ category:
 # 引用
 ref: undefinedM
 ---
-
-# 多语言支持
 
 # Multi-language support
 

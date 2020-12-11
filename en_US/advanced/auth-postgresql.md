@@ -1,6 +1,6 @@
 ---
 # 标题
-title: PostgreSQL 认证
+title: PostgreSQL authentication
 # 编写日期
 date: 2020-02-07 17:15:26
 # 作者 Github 名称

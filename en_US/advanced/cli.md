@@ -1,6 +1,4 @@
 ---
-# 标题
-title: 命令行接口
 # 编写日期
 date: 2020-02-07 17:15:26
 # 作者 Github 名称
@@ -703,7 +701,7 @@ error
 
 ## trace command
 
-The trace command is used to trace a client or topic, and print log information to a file. For details, see [Log and Trace](getting-started/log.md).
+The trace command is used to trace a client or topic, and print log information to a file. For details, see [Log and Trace](../getting-started/log.md).
 
 | Command                                          | Description                                                  |
 | ------------------------------------------------ | ------------------------------------------------------------ |

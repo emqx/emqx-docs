@@ -95,12 +95,16 @@ Thank you for your support of EMQ X Broker. If you need business services, pleas
 {% endemqxce %}
 
 {% emqxee %}
+
 ## Function Description
+
 {% endemqxee %}
 
 
 {% emqxce %}
-## Function of enterprise version 
+
+## Function of enterprise version
+
 {% endemqxce %}
 
 ### Message data storage
@@ -138,6 +142,7 @@ For codec related configuration, please refer to "Codec" chapter for details.
 
 
 {% emqxce %}
+
 ## Comparison of different versions of EMQ X
 
 ![EMQ X Broker vs EMQ X Enterprise](./assets/3441587031341_.pic_hd.jpg)
