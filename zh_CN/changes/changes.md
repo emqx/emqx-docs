@@ -15,6 +15,36 @@ ref:
 
 # 版本发布
 
+## 4.2.4 版本
+
+*发布日期: 2020-12-11*
+
+EMQ X 4.2.4 现已发布，主要包含以下改动:
+
+### emqx
+
+- 支持配置 SSL/TLS 证书链长度和密钥文件密码
+
+  Github PR: [emqx#3901](https://github.com/emqx/emqx/pull/3901)
+
+### emqx-auth-http
+
+- 更新底层 HTTP 客户端驱动，解决驱动卡死导致的连接进程失去响应的问题
+
+  Github PR: [emqx-auth-http#213](https://github.com/emqx/emqx-auth-http/pull/213)
+
+### emqx-auth-mongo
+
+- 修复没有匹配查询结果导致的类型错误问题
+
+  Github PR: [emqx-auth-mongo#240](https://github.com/emqx/emqx-auth-mongo/pull/240)
+
+### emqx-auth-redis
+
+- 修复 redis 驱动在 cluster 模式下启动失败时未报错的问题
+
+  Github PR: [emqx-auth-redis#187](https://github.com/emqx/emqx-auth-redis/pull/187) 
+
 ## 4.2.3 版本
 
 *发布日期: 2020-11-13*
