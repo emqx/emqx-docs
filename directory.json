@@ -238,67 +238,6 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "数据存储",
-          "children": [
-            {
-              "title": "保存数据到 MySQL",
-              "path": "rule/backend_mysql"
-            },
-            {
-              "title": "保存数据到 PostgreSQL",
-              "path": "rule/backend_pgsql"
-            },
-            {
-              "title": "保存数据到 MongoDB",
-              "path": "rule/backend_mongodb"
-            },
-            {
-              "title": "保存数据到 Redis",
-              "path": "rule/backend_redis"
-            },
-            {
-              "title": "保存数据到 Cassandra",
-              "path": "rule/backend_cassandra"
-            },
-            {
-              "title": "保存数据到 DynamoDB",
-              "path": "rule/backend_dynamodb"
-            },
-            {
-              "title": "保存数据到 ClickHouse",
-              "path": "rule/backend_clickhouse"
-            },
-            {
-              "title": "保存数据到 OpenTSDB",
-              "path": "rule/backend_opentsdb"
-            },
-            {
-              "title": "保存数据到 InfluxDB",
-              "path": "rule/backend_influxdb"
-            },
-            {
-              "title": "保存数据到 TimescaleDB",
-              "path": "rule/backend_timescaledb"
-            },
-            {
-              "title": "保存数据到 Oracle DB",
-              "path": "rule/backend_oracle"
-            },
-            {
-              "title": "保存数据到 SQLServer",
-              "path": "rule/backend_sqlserver"
-            },
-            {
-              "title": "保存数据到 DolphinDB",
-              "path": "rule/backend_dolphindb"
-            },
-            {
-              "title": "保存数据到 TDengine",
-              "path": "rule/backend_tdengine"
-            }
-          ]
-        },
-        {
           "title": "数据桥接到 EMQX",
           "path": "rule/bridge_emqx"
         },
@@ -476,14 +415,6 @@
         {
           "title": "MQTT-SN 接入网关",
           "path": "modules/mqtt_sn_protocol"
-        },
-        {
-          "title": "TCP 接入网关",
-          "path": "modules/tcp_protocol"
-        },
-        {
-          "title": "JT/T808 接入网关",
-          "path": "modules/jt808_protocol"
         },
         {
           "title": "CoAP 接入网关",
@@ -752,25 +683,12 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "EMQ X Rule Engine Backends",
-          "path": "rule/backends"
-        },
-        {
           "title": "EMQ X Bridges",
-          "path": "rule/bridges"
-        }
-      ]
-    },
-    {
-      "title": "Backend",
-      "children": [
-        {
-          "title": "MQTT Message Persistence",
-          "path": "backend/backend"
+          "path": "rule/bridge_emqx"
         },
         {
-          "title": "EMQ X Rule Engine Backends",
-          "path": "backend/backends"
+          "title": "MQTT Broker Bridges",
+          "path": "rule/bridge_mqtt"
         }
       ]
     },
@@ -788,18 +706,6 @@
         {
           "title": "RPC Bridge",
           "path": "bridge/bridge-rpc"
-        },
-        {
-          "title": "Kafka Bridge",
-          "path": "bridge/bridge-kafka"
-        },
-        {
-          "title": "RabbitMQ Bridge",
-          "path": "bridge/bridge-rabbitmq"
-        },
-        {
-          "title": "Pulsar Bridge",
-          "path": "bridge/bridge-pulsar"
         }
       ]
     },
