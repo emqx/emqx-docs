@@ -43,7 +43,17 @@ EMQ X 4.2.4 现已发布，主要包含以下改动:
 
 - 修复 redis 驱动在 cluster 模式下启动失败时未报错的问题
 
-  Github PR: [emqx-auth-redis#187](https://github.com/emqx/emqx-auth-redis/pull/187) 
+  Github PR: [emqx-auth-redis#187](https://github.com/emqx/emqx-auth-redis/pull/187)
+
+### emqx-rel
+
+- Helm chart 支持通过密钥拉取私有镜像
+
+  Github PR: [emqx-rel#626](https://github.com/emqx/emqx-rel/pull/626)
+
+- 增强安全性
+
+  Github PR: [emqx-rel#612](https://github.com/emqx/emqx-rel/pull/612)
 
 ## 4.2.3 版本
 
