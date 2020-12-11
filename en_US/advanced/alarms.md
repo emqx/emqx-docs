@@ -1,6 +1,6 @@
 ---
 # 标题
-title: 告警
+title: Alarm
 # 编写日期
 date: 2020-08-21 17:41:22
 # 作者 Github 名称

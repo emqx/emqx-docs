@@ -54,6 +54,7 @@ After 4.2-rc.1, EMQ X has added [telemetry](./advanced/telemetry.md), Please lea
 
 ## Start EMQ X Enterprise
 EMQ X Enterprise needs a license file to start normally. EMQ X can skip this step.
+
 {% endemqxce %}
 
 

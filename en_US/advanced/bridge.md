@@ -1,6 +1,6 @@
 ---
 # 标题
-title: 消息桥接
+title: Bridge
 # 编写日期
 date: 2020-02-26 17:00:52
 # 作者 Github 名称

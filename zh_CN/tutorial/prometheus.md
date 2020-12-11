@@ -19,6 +19,7 @@ ref:
 # Prometheus 监控告警
 
 {% emqxce %}
+
 EMQ X 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，用于将系统的监控数据输出到第三方的监控系统中。
 
 以 [Prometheus](https://prometheus.io) 为例：
@@ -45,6 +46,7 @@ EMQ X 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，用于�
 `emqx_statsd` 插件提供了 Grafana 的 Dashboard 的模板文件。这些模板包含了所有 EMQ X 监控数据的展示。用户可直接导入到 Grafana 中，进行显示 EMQ X 的监控状态的图标。
 
 模板文件位于：[emqx_statsd/grafana_template](https://github.com/emqx/emqx-statsd/tree/master/grafana_template)。
+
 {% endemqxce %}
 
 
@@ -80,4 +82,5 @@ EMQ X 提供 [emqx_prometheus](https://github.com/emqx/emqx-prometheus) 插件�
 `emqx_prometheus` 插件提供了 Grafana 的 Dashboard 的模板文件。这些模板包含了所有 EMQ X 监控数据的展示。用户可直接导入到 Grafana 中，进行显示 EMQ X 的监控状态的图标。
 
 模板文件位于：[emqx_prometheus/grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template)。
+
 {% endemqxee %}

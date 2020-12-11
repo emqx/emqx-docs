@@ -1,6 +1,4 @@
 ---
-# 标题
-title: MQTT Erlang 客户端库
 # 编写日期
 date: 2020-02-07 17:15:26
 # 作者 Github 名称
@@ -17,8 +15,6 @@ ref:
 
 
 # MQTT Erlang client library
-
-
 
 [emqtt](https://github.com/emqx/emqtt) is the official client library provided by the open source MQTT Broker EMQ X, which is suitable for Erlang language.
 
