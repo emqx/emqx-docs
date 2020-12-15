@@ -4553,17 +4553,6 @@ SSL 认证方式：
 
 <br />
 
-### auth.mongo.rs_set_name
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-##### 说明
-
-在使用 rs 模式的情况下，设置 rs 的名字。
-
-<br />
 
 ### auth.mongo.rs_set_name
 

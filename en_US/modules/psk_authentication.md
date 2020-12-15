@@ -1,6 +1,6 @@
 # PSK Authentication
 
-# PSK certification
+## PSK certification
 
 If you want to use PSK authentication, you need to comment out `listener.ssl.external.ciphers` in [TLS authentication](#auth-tls), and then configure `listener.ssl.external.psk_ciphers`:
 

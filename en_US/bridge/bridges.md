@@ -590,7 +590,7 @@ channel.start_consuming()
 
 Sample of RabbitMQ client coding in other programming languages:
 
-    https://github.com/rabbitmq/rabbitmq-tutorials
+[https://github.com/rabbitmq/rabbitmq-tutorials](https://github.com/rabbitmq/rabbitmq-tutorials)
 
 ### Enable RabbitMQ Bridge
 

@@ -89,27 +89,27 @@ EMQ X Broker's rule engine can be used to flexibly process messages and events. 
 The concepts related to the EMQ X Broker rule engine include: rules, actions, resources, and resource-types.
 
 The relationship between rules, actions and resources:
-
-        Rule: {
-            SQL statement
-            Action list: [
-                {
-                    action 1,
-                    Action parameters,
-                    Bind resources: {
-                        Resource configuration
-                    }
-                },
-                {
-                    action 2,
-                    Action parameters,
-                    Bind resources:  {
-                        Resource configuration
-                    }
-                }
-            ]
+```
+Rule: {
+    SQL statement
+    Action list: [
+        {
+            action 1,
+            Action parameters,
+            Bind resources: {
+                Resource configuration
+            }
+        },
+        {
+            action 2,
+            Action parameters,
+            Bind resources:  {
+                Resource configuration
+            }
         }
-
+    ]
+}
+```
 - Rule: Rule consists of SQL statements and action list. The action list contains one or more actions and their parameters.
 - SQL statements are used to filter or transform data in messages.
 - The action is the task performed after the SQL statement is matched, which defines an operation for data.
@@ -126,9 +126,9 @@ Actions and resource types are provided by emqx or plugin code and cannot be cre
 **FROM, SELECT, and WHERE clauses:**
 
 The basic format of the SQL statement of the rule engine is:
-
-    SELECT <fields> FROM <topic> [WHERE <any>]
-
+```sql
+SELECT <fields> FROM <topic> [WHERE <any>]
+```
 - The `` FROM`` clause mounts rules to a topic
 - The `` SELECT`` clause is used to select fields in the output
 - The `` WHERE`` clause is used to filter messages based on conditions
@@ -150,8 +150,8 @@ The DO and INCASE clauses are optional. DO is equivalent to the SELECT clause fo
 ### Events and event topics 
 The SQL statements of the rule engine can handle both messages (message publishing) and events (client online and offline, client subscription, etc.). For messages, the FROM clause is directly followed by the topic name; for events, the FROM clause is followed by the event topic.
 
-The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed".
-If you want emqx to publish the event message, you can configure it in the ``emqx_rule_engine.conf`` file.
+The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
+If you want emqx to publish the event message, you can configure it in the `emqx_rule_engine.conf` file.
 
 For all supported events and available fields, please see  [rule event](#rule-sql-events).
 
@@ -159,49 +159,53 @@ For all supported events and available fields, please see  [rule event](#rule-sq
 **Basic syntax examples**
 
 -  Extract all fields from the messages with a topic of "t/a": 
-
+    ```sql
     SELECT * FROM "t/a"
-
+    ```
 -  Extract all fields from the messages with a topic of "t/a" or "t/b": 
-
+    ```sql
     SELECT * FROM "t/a","t/b"
-
+    ```
 -  Extract all fields from the message with a topic that can match 't/#'. 
-
+    ```sql
     SELECT * FROM "t/#"
-
+    ```
 -  Extract the qos, username, and clientid fields from the message with a topic that can match 't/#' :
-
+    ```sql
     SELECT qos, username, clientid FROM "t/#"
-
+    ````
 -  Extract the username field from any topic message with the filter criteria of username = 'Steven':
-
+    ```sql
     SELECT username FROM "#" WHERE username='Steven'
-
+    ```
 - Extract the x field from the payload of message with any topic and create the alias x for use in the WHERE clause. The WHERE clause is restricted as x = 1. Note that the payload must be in JSON format. Example: This SQL statement can match the payload `{"x": 1}`, but can not match to the payload `{"x": 2}`:
-
+    ```sql
   SELECT payload as p FROM "#" WHERE p.x = 1
-
+    ```
 - Similar to the SQL statement above, but nested extract the data in the payload, this SQL statement can match the payload{"x": {"y": 1}}`:
-
-  SELECT payload as a FROM "#" WHERE a.x.y = 1
-
+    ```sql
+    SELECT payload as a FROM "#" WHERE a.x.y = 1
+    ```
 -  Try to connect when clientid = 'c1', extract its source IP address and port number:
-
+    ```sql
     SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
-
+    ```
 - Filter all clientids that subscribe to the 't / #' topic and have a subscription level of QoS1 :
-
+    ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
-
+    ```
 - Filter all clientids that subscribe to the 't/#' topic and subscription level is QoS1. Note that the strict equality operator '=~' is used here, so it does not match subscription requests with the topic 't' or 't/+/a' :
-
+    ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
+    ```
 
 ::: tip
 - Topic after the FROM clause need to be enclosed in double quotes `` "" ``.
 - The WHERE clause is followed by the filter condition. If a string is used, it needs to be enclosed in single quotes `` '' ``.
-- If there are multiple topics in the FROM clause, they need to be separated by commas `` "," ``. For example, SELECT * FROM "t / 1", "t / 2".
+- If there are multiple topics in the FROM clause, they need to be separated by commas `` "," ``. For example,
+    ```sql
+    SELECT * FROM "t / 1", "t / 2".
+    ```
 - You can use the `` "." `` Symbol to nest select payloads
 - :::
 

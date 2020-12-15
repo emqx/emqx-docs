@@ -32,7 +32,7 @@ $ redis-server
 
 ![image-20200927213049265](./assets/auth_redis4.png)
 
-##认证默认数据结构
+## 认证默认数据结构
 
 Redis 认证默认配置下使用哈希表存储认证数据，使用 `mqtt_user:` 作为 Redis 键前缀，数据结构如下：
 

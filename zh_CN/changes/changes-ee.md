@@ -89,8 +89,7 @@ emqx_statsd
 
 EMQ X 4.0.2 现已发布。此版本主要进行了错误修复和性能优化。
 
-emqx
-----
+### emqx
 
 **功能增强:**
 
@@ -118,8 +117,7 @@ emqx
   Github PR:
   `emqx/emqx#3233 <https://github.com/emqx/emqx/pull/3233>`_
 
-emqx-stomp (plugin)
--------------------
+### emqx-stomp (plugin)
 
 **错误修复:**
 
@@ -128,8 +126,7 @@ emqx-stomp (plugin)
   Github PR:
   `emqx/emqx-stomp#93 <https://github.com/emqx/emqx-stomp/pull/93>`_
 
-emqx-auth-redis (plugin)
-------------------------
+### emqx-auth-redis (plugin)
 
 **错误修复:**
 
@@ -138,8 +135,7 @@ emqx-auth-redis (plugin)
   Github PR:
   `emqx/emqx-auth-redis#151 <https://github.com/emqx/emqx-auth-redis/pull/151>`_
 
-cowboy (dependency)
--------------------
+### cowboy (dependency)
 
 **错误修复:**
 
@@ -331,16 +327,12 @@ cowboy (dependency)
 
 *发布日期: 2019-08-05*
 
-# Version 3.2.2
-
 + 支持私有TCP协议
 + 支持复杂json数据数据化到timescale
 
 ## 3.2.1 版本
 
 *发布日期: 2019-07-20*
-
-# Version 3.2.1
 
 *Release Date: 2019-07-20*
 
@@ -418,8 +410,6 @@ cowboy (dependency)
 ## 3.0.0 版本
 
 *发布日期: 2019-01-17*
-
-# EMQ X Enterprise
 
 *EMQ X  Enterprise* is a massively scalable, highly available, distributed MQTT message broker for IoT, M2M and Mobile applications that can handle tens of millions of concurrent clients with enhanced security features and extended functionalities such as data bridging and data persistence .
 

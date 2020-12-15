@@ -1,9 +1,9 @@
 # Log & Trace 
 ## Control log output 
 EMQ X Broker supports log output to the console or log file, or both, which can be configured in `emqx.conf`:
-
-    log.to = both
-
+```
+log.to = both
+```
 The default value of `log.to` is both, and the optional values are:
 
 - **off:** Disable log function completely

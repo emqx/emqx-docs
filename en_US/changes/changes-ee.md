@@ -332,16 +332,12 @@ In this version we significantly improved the throughput of the broker by refact
 
 *Release date: 2019-08-05*
 
-# Version 3.2.2
-
 + supports private TCP protocol
 + supports datalization of complex json data to timescale
 
 ## 3.2.1 version
 
 *Release date: 2019-07-20*
-
-# Version 3.2.1
 
 *Release Date: 2019-07-20*
 
@@ -420,8 +416,6 @@ In this version we significantly improved the throughput of the broker by refact
 
 *Release date: 2019-01-17*
 
-# EMQ X Enterprise
-
 *EMQ X  Enterprise* is a massively scalable, highly available, distributed MQTT message broker for IoT, M2M and Mobile applications that can handle tens of millions of concurrent clients with enhanced security features and extended functionalities such as data bridging and data persistence .
 
 It supports MQTT V3.1 and V3.1.1,  as well as other communication protocols such as WebSocket. It can bridge and forward MQTT messages to enterprise messaging middleware like Kafka and RabbitMQ; it also can persist MQTT messages to Redis, MySQL, PostgreSQL, MongoDB, Cassandra and other databases.
@@ -432,8 +426,6 @@ It supports MQTT V3.1 and V3.1.1,  as well as other communication protocols such
 ## 2.4.3 version
 
 *Release date: 2018-07-23*
-
-# EMQ X Enterprise
 
 *EMQ X  Enterprise* is a massively scalable, highly available, distributed MQTT message broker for IoT, M2M and Mobile applications that can handle tens of millions of concurrent clients with enhanced security features and extended functionalities such as data bridging and data persistence .
 

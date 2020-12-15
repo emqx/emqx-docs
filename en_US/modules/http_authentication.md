@@ -29,9 +29,6 @@ EMQ X uses the relevant information of the current client as parameters in the d
  -Successful authentication: API returns 200 status code
  -Ignore authentication: API returns 200 status code and message body ignore
 
-## HTTP request information
-
-HTTP API basic request information, configuration certificate, request header and retry rules.
 
 ## Authentication request
 

@@ -4517,20 +4517,6 @@ Set the topology type of MongoDB:
 - sharded: sharding mode
 - rs: replicated set
 
-
-
-### auth.mongo.rs_set_name
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-##### Description
-
-In the case of using rs mode, set the name of rs.
-
-
-
 ### auth.mongo.rs_set_name
 
 | Type   | Default           |

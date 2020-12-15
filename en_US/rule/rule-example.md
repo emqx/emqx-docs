@@ -127,9 +127,9 @@ select "WebHook":
 Configure the resource:
 
 Fill in the "Request URL" and "Request Header"(Optional):
-
-    http://127.0.0.1:9901
-
+```
+http://127.0.0.1:9901
+```
 And click on the "Testing Connection" button to make sure the
 connection can be created successfully, and then click on the "Create"
 button.
@@ -150,11 +150,11 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 1
->
-> Payload: "Hello web server"
+Topic: "t/1"
+
+QoS: 1
+
+Payload: "Hello web server"
 ```
 
 Then inspect the Web Service table, verify a new record has been

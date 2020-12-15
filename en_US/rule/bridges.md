@@ -33,10 +33,10 @@ FROM
 ![image](./assets/rule-engine/mysql_sql_1.png)
 
 Bind an action:
-
-    Click on the "+ Add" button under "Action Handler", and then select
-    "Data bridge to MQTT Broker" in the pop-up dialog window.
-
+```
+Click on the "+ Add" button under "Action Handler", and then select
+"Data bridge to MQTT Broker" in the pop-up dialog window.
+```
 ![image](./assets/rule-engine/mqtt_action_0.png)
 
 Bind a resource to the action. Since the dropdown list "Resource" is
@@ -46,12 +46,12 @@ Bind a resource to the action. Since the dropdown list "Resource" is
 ![image](./assets/rule-engine/mqtt_action_1.png)
 
 Configure the resource:
-
-    Set "Broker Address" to the address of mosquitto, here is
-    127.0.0.1:2883, and keep all other configs as default, and click on
-    the "Testing Connection" button to make sure the connection can be
-    created successfully, and then click on the "Create" button.
-
+```
+Set "Broker Address" to the address of mosquitto, here is
+127.0.0.1:2883, and keep all other configs as default, and click on
+the "Testing Connection" button to make sure the connection can be
+created successfully, and then click on the "Create" button.
+```
 ![image](./assets/rule-engine/mqtt_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm"
@@ -68,13 +68,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "Hello, World\!"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "Hello, World\!"
 ```
 
 Then verify a message has been published to mosquitto:
@@ -151,12 +151,12 @@ Resource" to the top right, and then select "Kafka":
 ![image](./assets/rule-engine/kafka_action_1.png)
 
 Configure the resource:
-
-    Set the "Kafka Server" to "127.0.0.1:9092" (multiple servers should
-    be separated by comma), and keep all other configs as default, and
-    click on the "Testing Connection" button to make sure the connection
-    can be created successfully, and then click on the "Create" button.
-
+```
+Set the "Kafka Server" to "127.0.0.1:9092" (multiple servers should
+be separated by comma), and keep all other configs as default, and
+click on the "Testing Connection" button to make sure the connection
+can be created successfully, and then click on the "Create" button.
+```
 ![image](./assets/rule-engine/kafka_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm"
@@ -173,13 +173,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "hello"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "hello"
 ```
 
 Then inspect Kafka by consume from the
@@ -252,12 +252,12 @@ Resource" to the top right, and then select "Pulsar":
 ![image](./assets/rule-engine/pulsar_action_1.png)
 
 Configure the resource:
-
-    Set the " Pulsar Server" to "127.0.0.1:6650"(multiple servers should
-    be separated by comma), and keep all other configs as default, and
-    click on the "Testing Connection" button to make sure the connection
-    can be created successfully, and then click on the "Create" button.
-
+```
+Set the " Pulsar Server" to "127.0.0.1:6650"(multiple servers should
+be separated by comma), and keep all other configs as default, and
+click on the "Testing Connection" button to make sure the connection
+can be created successfully, and then click on the "Create" button.
+```
 ![image](./assets/rule-engine/pulsar_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm"
@@ -274,13 +274,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "hello"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "hello"
 ```
 
 Then inspect the Pulsar by consume the topic, verify a new record has
@@ -323,10 +323,10 @@ FROM
 ![image](./assets/rule-engine/mysql_sql_1.png)
 
 Bind an action:
-
-    Click on the "+ Add" button under "Action Handler", and then select
-    "Data bridge to RabbitMQ" in the pop-up dialog window.
-
+```
+Click on the "+ Add" button under "Action Handler", and then select
+"Data bridge to RabbitMQ" in the pop-up dialog window.
+```
 ![image](./assets/rule-engine/rabbit_action_0.png)
 
 Fill in the parameters required by the action:
@@ -370,13 +370,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "Hello, World\!"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "Hello, World\!"
 ```
 
 Write an AMQP Client to consume the messages, following is the one
@@ -459,12 +459,12 @@ Bind a resource to the action. Since the dropdown list "Resource" is
 ![image](./assets/rule-engine/mqtt_action_1.png)
 
 Configure the resource:
-
-    Set "EMQ X Node Name" to the node name of the remote name, and keep
-    all other configs as default, and click on the "Testing Connection"
-    button to make sure the connection can be created successfully, and
-    then click on the "Create" button.
-
+```
+Set "EMQ X Node Name" to the node name of the remote name, and keep
+all other configs as default, and click on the "Testing Connection"
+button to make sure the connection can be created successfully, and
+then click on the "Create" button.
+```
 ![image](./assets/rule-engine/rpc_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm"
@@ -481,13 +481,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "Hello, World\!"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "Hello, World\!"
 ```
 
 Then verify a message has been published to the other emqx:

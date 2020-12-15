@@ -1206,8 +1206,7 @@ EMQ X 4.1-alpha.1 现已发布，主要包括以下改动:
 
 EMQ X 4.0.5 现已发布。此版本主要进行了错误修复。
 
-emqx
-----
+### emqx
 
 **错误修复:**
 
@@ -1230,8 +1229,7 @@ emqx
   Github issue: [emqx/emqx#3302](https://github.com/emqx/emqx/pull/3302)
   Github PR: [emqx/emqx-rel#463](https://github.com/emqx/emqx-rel/pull/463)
 
-emqx-rule-engine (plugin)
-------------------------
+### emqx-rule-engine (plugin)
 
 **错误修复:**
 
@@ -1240,8 +1238,7 @@ emqx-rule-engine (plugin)
   Github issue: [emqx/emqx#3287](https://github.com/emqx/emqx/issues/3287)
   Github PR: [emqx/emqx#3299](https://github.com/emqx/emqx/pull/3299)
 
-emqx-sn (plugin)
-----------------
+### emqx-sn (plugin)
 
 **错误修复:**
 
@@ -4373,11 +4370,17 @@ EMQX 3.0 版本实现了大多数的 MQTT-5.0 特性，主要的 MQTT-5.0 新特
 
 EQMX 3.0 引入了伸缩性较强的 RPC 机制，现在单集群可以支持千万级别的并发连接:
 
-    --------               --------
-
->  EMQX EMQX |
-> 
-> | Ekka Ekka | | Mnesia Mnesia | | Kernel Kernel | -------- --------
+```
+     --------               --------
+    |  EMQX  |<--- MQTT--->|  EMQX  |
+    |--------|             |--------|
+    |  Ekka  |<----RPC---->|  Ekka  |
+    |--------|             |--------|
+    | Mnesia |<--Cluster-->| Mnesia |
+    |--------|             |--------|
+    | Kernel |<----TCP---->| Kernel |
+     --------               --------
+```
 
   - 引入 Ekka 以实现集群的自动建立和自动恢复。目前支持以下几种集群建立方式:
     
@@ -4850,10 +4853,6 @@ Service not starting on Debian 8 Jessie (emqttd\#1228)
 
 *发布日期: 2017-08-21*
 
-## 2.3-beta.3 版本
-
-*发布日期: 2017-08-21*
-
 ### Enhancements
 
 Add HTTP API for hot configuration.
@@ -5151,48 +5150,43 @@ support Elixir language.
 ### MQTT协议监听器配置
 
 一个EMQ节点可配置多个MQTT协议监听端口，例如下述配置external, internal监听器，分别用于设备连接与内部通信:
-
-    -------
-
->   - \-- Ex，支持Web Hook、Lua Hook、ernal TCP 1883 --\> | |
->     
->     EMQ | -- Internal TCP 2883 --\> Service
-> 
->   - \-- External SSL 8883--\> | |
->     
->     -----
+```
+                         -------
+-- External TCP 1883 --> |     |
+                         | EMQ | -- Internal TCP 2883 --> Service
+-- External SSL 8883-->  |     |
+                         -------
+```
 
 EMQ 2.2 版本etc/emq.conf监听器配置方式:
-
-    listener.tcp.${name}= 127.0.0.1:2883
+```
+listener.tcp.${name}= 127.0.0.1:2883
     
-    listener.tcp.${name}.acceptors = 16
+listener.tcp.${name}.acceptors = 16
     
-    listener.tcp.${name}.max_clients = 102400
-
+listener.tcp.${name}.max_clients = 102400
+```
 ### Proxy Protocol V1/2支持
 
 EMQ 集群通常部署在负载均衡器(LB)后面，典型架构:
-
-    -----
-    |   |
-    | L | --TCP 1883--> EMQ
-
->   - \--SSL 8883--\> | | |
->     
->     B | --TCP 1883--\> EMQ  
->       |
->     
->     -----
+```
+              -----
+              |   |
+              | L | --TCP 1883--> EMQ
+--SSL 8883--> |   |                |
+              | B | --TCP 1883--> EMQ
+              |   |
+              -----
+```
 
 HAProxy、NGINX等常用的负载均衡器(LB)，一般通过Proxy Protocol协议传递TCP连接源地址、源端口给EMQ。
 
 EMQ 2.2 版本的监听器开启Proxy Protocol支持:
-
-    ## Proxy Protocol V1/2
-    ## listener.tcp.${name}.proxy_protocol = on
-    ## listener.tcp.${name}.proxy_protocol_timeout = 3s
-
+```
+## Proxy Protocol V1/2
+## listener.tcp.${name}.proxy_protocol = on
+## listener.tcp.${name}.proxy_protocol_timeout = 3s
+```
 ### Web Hook插件
 
 新增WebHook插件: [emq-web-hook](https://github.com/emqtt/emq-web-hook)
@@ -5207,22 +5201,21 @@ EMQ 2.2 版本的监听器开启Proxy Protocol支持:
 
 EMQ 2.2 版本改进认证链设计，当前认证模块返回ignore(例如用户名不存在等情况下)，认证请求将继续转发后面认证模块:
 
-    -------------           ------------           -------------
-
->   - Client --\> | Redis认证 | -ignore-\> | HTTP认证 | -ignore-\> | MySQL认证
->     |
->     
->       - \------------- ------------ ------------- | | |  
->         |/ |/ |/
->     
->     allow | deny allow | deny allow | deny
+```
+           -------------           ------------           -------------
+Client --> | Redis认证 | -ignore-> | HTTP认证 | -ignore-> | mysql认证 |
+           -------------           ------------           -------------
+                 |                       |                       |
+                \|/                     \|/                     \|/
+           allow | deny            allow | deny            allow | deny
+```
 
 ### 支持bcrypt密码Hash
 
 EMQ 2.2 版本支持bcrypt密码Hash方式，例如Redis认证插件配置:
-
-    auth.redis.password_hash = bcrypt
-
+```
+auth.redis.password_hash = bcrypt
+```
 ### etc/emq.conf配置变更
 
 'mqtt.queue.*' 配置变更为 'mqtt.mqueue.*'
@@ -5361,39 +5354,39 @@ QoS1/2消息重传，大幅降低高消息吞吐情况下的CPU占用。
 ### Client, Session统计信息
 
 支持对单个Client、Session进程进行统计，etc/emq.conf配置文件中设置'enable\_stats'开启:
+```
+mqtt.client.enable_stats = 60s
 
-    mqtt.client.enable_stats = 60s
-    
-    mqtt.session.enable_stats = 60s
-
+mqtt.session.enable_stats = 60s
+```
 ### 新增missed统计指标
 
 EMQ收到客户端PUBACK、PUBREC、PUBREL、PUBCOMP报文，但在Inflight窗口无法找到对应消息时，计入missed统计指标:
+```
+packets/puback/missed
 
-    packets/puback/missed
-    
-    packets/pubrec/missed
-    
-    packets/pubrel/missed
-    
-    packets/pubcomp/missed
+packets/pubrec/missed
 
+packets/pubrel/missed
+
+packets/pubcomp/missed
+```
 ### Syslog日志集成
 
 支持输出EMQ日志到Syslog，etc/emq.config配置项:
-
-    ## Syslog. Enum: on, off
-    log.syslog = on
+```
+## Syslog. Enum: on, off
+log.syslog = on
     
-    ##  syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
-    log.syslog.level = error
-
+##  syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
+log.syslog.level = error
+```
 ### Tune QoS支持
 
 支持订阅端升级QoS，etc/emq.conf配置项:
-
-    mqtt.session.upgrade_qos = on
-
+```
+mqtt.session.upgrade_qos = on
+```
 ### 'acl reload'管理命令
 
 Reload acl.conf without restarting emqttd service (\#885)
@@ -5559,14 +5552,13 @@ EMQ-2.0版本正式发布！EMQ-1.0版本产品环境下已支持900K并发连�
 
 共享订阅(Shared Subscription)支持在多订阅者间采用分组负载平衡方式派发消息:
 
-    ---------
-    |       | --Msg1--> Subscriber1
-
->   - Publisher--Msg1,Msg2,Msg3--\>| EMQ | --Msg2--\> Subscriber2
->     
->           | --Msg3--\> Subscriber3
->     
->     -----
+```
+                            ---------
+                            |       | --Msg1--> Subscriber1
+Publisher--Msg1,Msg2,Msg3-->| EMQ X | --Msg2--> Subscriber2
+                            |       | --Msg3--> Subscriber3
+                            ---------
+```
 
 使用方式: 订阅者在主题(Topic)前增加'$queue'或'$share/<group\>/'前缀。
 
@@ -5598,26 +5590,27 @@ MQTT-SN插件: <https://github.com/emqtt/emq_sn>
 ### 'K = V'格式配置文件
 
 2.0版本支持用户友好的'K = V'格式配置文件etc/emq.conf:
-
-    node.name = emqttd@127.0.0.1
+```
+node.name = emqttd@127.0.0.1
     
-    ...
+...
     
-    mqtt.listener.tcp = 1883
+mqtt.listener.tcp = 1883
     
-    ...
-
+...
+```
 ### 操作系统环境变量
 
 2.0版本支持操作系统环境变量。启动时通过环境变量设置EMQ节点名称、安全Cookie以及TCP端口号:
-
-    EMQ_NODE_NAME=emqttd@127.0.0.1
-    EMQ_NODE_COOKIE=emq_dist_cookie
-    EMQ_MAX_PORTS=65536
-    EMQ_TCP_PORT=1883
-    EMQ_SSL_PORT=8883
-    EMQ_HTTP_PORT=8083
-    EMQ_HTTPS_PORT=8084
+```
+EMQ_NODE_NAME=emqttd@127.0.0.1
+EMQ_NODE_COOKIE=emq_dist_cookie
+EMQ_MAX_PORTS=65536
+EMQ_TCP_PORT=1883
+EMQ_SSL_PORT=8883
+EMQ_HTTP_PORT=8083
+EMQ_HTTPS_PORT=8084
+```
 
 ### Docker镜像支持
 
@@ -5670,8 +5663,6 @@ address
 
 ## 2.0-rc.3 版本
 
-## 2.0-rc.3 版本
-
 *发布日期:
 2016-11-01*
 
@@ -5696,24 +5687,26 @@ address
 
 1.  集成cuttlefish库，支持'K = V'通用配置文件格式，重构EMQ与全部插件配置文件:
     
-        node.name = emqttd@127.0.0.1
-        
-        ...
-        
-        mqtt.listener.tcp = 1883
-        
-        ...
+    ```
+    node.name = emqttd@127.0.0.1
+            
+    ...
+            
+    mqtt.listener.tcp = 1883
+            
+    ...
+    ```
 
 2.  支持操作系统环境变量。启动时通过环境变量设置EMQ节点名称、Cookie以及TCP端口号:
-    
-        EMQ_NODE_NAME
-        EMQ_NODE_COOKIE
-        EMQ_MAX_PORTS
-        EMQ_TCP_PORT
-        EMQ_SSL_PORT
-        EMQ_HTTP_PORT
-        EMQ_HTTPS_PORT
-
+    ```
+    EMQ_NODE_NAME
+    EMQ_NODE_COOKIE
+    EMQ_MAX_PORTS
+    EMQ_TCP_PORT
+    EMQ_SSL_PORT
+    EMQ_HTTP_PORT
+    EMQ_HTTPS_PORT
+    ```
 3.  重构认证模块、ACL模块与扩展模块，更新全部插件项目名称以及配置文件。
 
 TODO: issues closed.
@@ -5729,10 +5722,10 @@ TODO: issues closed.
 3.  改进插件管理设计，新增插件无需修改rel/sys.config配置
 
 4.  改进全部插件Makefile的emqttd依赖:
-    
-        BUILD_DEPS = emqttd
-        dep_emqttd = git https://github.com/emqtt/emqttd emq20
-
+    ```
+    BUILD_DEPS = emqttd
+    dep_emqttd = git https://github.com/emqtt/emqttd emq20
+    ```
 5.  重新设计Redis插件的ACL鉴权模块
 
 ## 2.0-beta.3 版本
@@ -5742,16 +5735,16 @@ TODO: issues closed.
 ### 共享订阅(Shared Subscription)
 
 Shared Suscriptions (\#639, \#416):
-
-    mosquitto_sub -t '$queue/topic'
-    mosquitto_sub -t '$share/group/topic'
-
+```
+mosquitto_sub -t '$queue/topic'
+mosquitto_sub -t '$share/group/topic'
+```
 ### 本地订阅(Local Subscription)
 
 Local Subscriptions that will not create global routes:
-
-    mosquitto_sub -t '$local/topic'
-
+```
+mosquitto_sub -t '$local/topic'
+```
 ### 问题修复
 
 Error on Loading emqttd\_auth\_http (\#691)
@@ -5820,13 +5813,13 @@ beta3, rc1, rc2等迭代，直到2.0正式版本发布。
 ，以解决1.0版本的插件(plugins)与emqttd应用编译依赖问题。
 
 源码编译请clone [emqttd\_relx](https://github.com/emqtt/emqttd-relx):
-
-    git clone https://github.com/emqtt/emqttd-relx.git
+```
+git clone https://github.com/emqtt/emqttd-relx.git
     
-    cd emqttd-relx && make
+cd emqttd-relx && make
     
-    cd _rel/emqttd && ./bin/emqttd console
-
+cd _rel/emqttd && ./bin/emqttd console
+```
 ### erlang.mk与relx
 
 2.0 版本发布项目 [emqttd\_relx](https://github.com/emqtt/emqttd-relx) 采用
@@ -5849,47 +5842,47 @@ etc/emqttd.conf配置文件 ---------=-------------
 2.0 版本改进项目配置文件格式，采用rebar.config、relx.config类似格式，提高配置文件的可读性和可编辑性。
 
 etc/emqttd.conf配置示例:
-
-    %% Max ClientId Length Allowed.
-    {mqtt_max_clientid_len, 512}.
+```
+%% Max ClientId Length Allowed.
+{mqtt_max_clientid_len, 512}.
     
-    %% Max Packet Size Allowed, 64K by default.
-    {mqtt_max_packet_size, 65536}.
+%% Max Packet Size Allowed, 64K by default.
+{mqtt_max_packet_size, 65536}.
     
-    %% Client Idle Timeout.
-    {mqtt_client_idle_timeout, 30}. % Second
-
+%% Client Idle Timeout.
+{mqtt_client_idle_timeout, 30}. % Second
+```
 ### MQTT-SN协议支持
 
 2.0-beta1版本正式发布 [emqttd\_sn](http://github.com/emqtt/emqttd_sn)
 项目支持MQTT-SN协议，插件加载方式启用emqttd\_sn项目，MQTT-SN默认UDP端口: 1884:
-
-    ./bin/emqttd_ctl plugins load emqttd_sn
-
+```
+./bin/emqttd_ctl plugins load emqttd_sn
+```
 ### 改进插件架构
 
 2.0
 版本从emqttd项目删除plugins/目录，插件作为一个普通的Erlang应用，直接依赖(deps)方式在编译到lib目录，插件配置文件统一放置在etc/plugins/目录中:
-
-    ▾ emqttd-relx/
-      ▾ etc/
-        ▸ modules/
-        ▾ plugins/
-            emqtt_coap.conf
-            emqttd.conf
-            emqttd_auth_http.conf
-            emqttd_auth_mongo.conf
-            emqttd_auth_mysql.conf
-            emqttd_auth_pgsql.conf
-            emqttd_auth_redis.conf
-            emqttd_coap.conf
-            emqttd_dashboard.conf
-            emqttd_plugin_template.conf
-            emqttd_recon.conf
-            emqttd_reloader.conf
-            emqttd_sn.conf
-            emqttd_stomp.conf
-
+```
+▾ emqttd-relx/
+  ▾ etc/
+    ▸ modules/
+    ▾ plugins/
+        emqtt_coap.conf
+        emqttd.conf
+        emqttd_auth_http.conf
+        emqttd_auth_mongo.conf
+        emqttd_auth_mysql.conf
+        emqttd_auth_pgsql.conf
+        emqttd_auth_redis.conf
+        emqttd_coap.conf
+        emqttd_dashboard.conf
+        emqttd_plugin_template.conf
+        emqttd_recon.conf
+        emqttd_reloader.conf
+        emqttd_sn.conf
+        emqttd_stomp.conf
+```
 ### 2.0 版本项目文档
 
 2.0 版本中文文档: <http://emqtt.com/docs/v2/index.html> 或
@@ -6933,14 +6926,14 @@ with other nodes.
 
 Benchmark this release on a ubuntu/14.04 server with 8 cores, 32G memory
 from QingCloud.com: :
-
-    200K Connections,
-    30K Messages/Sec,
-    20Mbps In/Out Traffic,
-    200K Topics,
-    200K Subscribers,
-    Consumed 7G memory, 40% CPU/core
-
+```
+200K Connections,
+30K Messages/Sec,
+20Mbps In/Out Traffic,
+200K Topics,
+200K Subscribers,
+Consumed 7G memory, 40% CPU/core
+```
 Benchmark code: <https://github.com/emqtt/emqttd_benchmark>
 
 Change: rewrite emqttd\_pubsub to handle more concurrent subscribe

@@ -123,7 +123,7 @@ channel.start_consuming()
 
 其他语言 RabbitMQ 客户端代码示例:
 
-    [https://github.com/rabbitmq/rabbitmq-tutorials](https://github.com/rabbitmq/rabbitmq-tutorials)
+[https://github.com/rabbitmq/rabbitmq-tutorials](https://github.com/rabbitmq/rabbitmq-tutorials)
 
 ## 启用 RabbitMQ 桥接插件
 

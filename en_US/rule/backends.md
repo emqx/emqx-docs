@@ -655,10 +655,10 @@ FROM
 ![image](./assets/rule-engine/mysql_sql_1.png)
 
 Bind an action:
-
-    Click on the "+ Add" button under "Action Handler", and then select
-    "Data to MySQL" in the pop-up dialog window.
-
+```
+Click on the "+ Add" button under "Action Handler", and then select
+"Data to MySQL" in the pop-up dialog window.
+```
 ![image](./assets/rule-engine/redis_action_0.png)
 
 Fill in the parameters required by the action:
@@ -681,12 +681,12 @@ Resource" to the top right, and then select "Redis Single Mode":
 ![image](./assets/rule-engine/redis_action_2.png)
 
 Configure the resource:
-
-    Fill in the "Redis Server", and keep all other configs as default,
-    and click on the "Testing Connection" button to make sure the
-    connection can be created successfully, and then click on the
-    "Create" button.
-
+```
+Fill in the "Redis Server", and keep all other configs as default,
+and click on the "Testing Connection" button to make sure the
+connection can be created successfully, and then click on the
+"Create" button.
+```
 ![image](./assets/rule-engine/redis_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
@@ -702,13 +702,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "hello"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "hello"
 ```
 
 Then inspect the Redis table, verify a new record has been inserted:
