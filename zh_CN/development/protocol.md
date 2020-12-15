@@ -63,11 +63,11 @@ $SYS/broker/metrics/#
 ```
 
 主题(Topic)通过'/'分割层级，支持'+', '\#'通配符:
-
-    '+': 表示通配一个层级，例如a/+，匹配a/x, a/y
+```
+'+': 表示通配一个层级，例如a/+，匹配a/x, a/y
     
-    '#': 表示通配多个层级，例如a/#，匹配a/x, a/b/c/d
-
+'#': 表示通配多个层级，例如a/#，匹配a/x, a/b/c/d
+```
 订阅者与发布者之间通过主题路由消息进行通信，例如采用mosquitto命令行发布订阅消息:
 
 ```bash
@@ -218,9 +218,9 @@ mosquitto_pub -r -q 1 -t a/b/c -m ''
 MQTT协议除支持TCP传输层外，还支持WebSocket作为传输层。通过WebSocket浏览器可以直连MQTT消息服务器，发布订阅模式与其他MQTT客户端通信。
 
 MQTT协议的WebSocket连接，必须采用binary模式，并携带子协议Header:
-
-    Sec-WebSocket-Protocol: mqttv3.1 或 mqttv3.1.1
-
+```
+Sec-WebSocket-Protocol: mqttv3.1 或 mqttv3.1.1
+```
 ### MQTT 与 XMPP 协议对比
 
 MQTT协议设计简单轻量、路由灵活，将在移动互联网物联网消息领域，全面取代PC时代的XMPP协议:

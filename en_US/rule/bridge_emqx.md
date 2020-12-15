@@ -41,12 +41,12 @@ Bind a resource to the action. Since the dropdown list "Resource" is
 ![image](./assets/rule-engine/mqtt_action_1.png)
 
 Configure the resource:
-
-    Set "EMQ X Node Name" to the node name of the remote name, and keep
-    all other configs as default, and click on the "Testing Connection"
-    button to make sure the connection can be created successfully, and
-    then click on the "Create" button.
-
+```
+Set "EMQ X Node Name" to the node name of the remote name, and keep
+all other configs as default, and click on the "Testing Connection"
+button to make sure the connection can be created successfully, and
+then click on the "Create" button.
+```
 ![image](./assets/rule-engine/rpc_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm"
@@ -63,13 +63,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "Hello, World\!"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "Hello, World\!"
 ```
 
 Then verify a message has been published to the other emqx:

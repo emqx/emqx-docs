@@ -59,7 +59,7 @@
 
    ![image](../assets/webhook-rule-create.png)
 
-    We have finished, testing the rule by sending an MQTT message to emqx: 
+   We have finished, testing the rule by sending an MQTT message to emqx: 
 
    ![image](../assets/webhook-rulelist-1.png)
 

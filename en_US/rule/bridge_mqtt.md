@@ -31,10 +31,10 @@ FROM
 ![image](./assets/rule-engine/mysql_sql_1.png)
 
 Bind an action:
-
-    Click on the "+ Add" button under "Action Handler", and then select
-    "Data bridge to MQTT Broker" in the pop-up dialog window.
-
+```
+Click on the "+ Add" button under "Action Handler", and then select
+"Data bridge to MQTT Broker" in the pop-up dialog window.
+```
 ![image](./assets/rule-engine/mqtt_action_0.png)
 
 Bind a resource to the action. Since the dropdown list "Resource" is
@@ -44,12 +44,12 @@ Bind a resource to the action. Since the dropdown list "Resource" is
 ![image](./assets/rule-engine/mqtt_action_1.png)
 
 Configure the resource:
-
-    Set "Broker Address" to the address of mosquitto, here is
-    127.0.0.1:2883, and keep all other configs as default, and click on
-    the "Testing Connection" button to make sure the connection can be
-    created successfully, and then click on the "Create" button.
-
+```
+Set "Broker Address" to the address of mosquitto, here is
+127.0.0.1:2883, and keep all other configs as default, and click on
+the "Testing Connection" button to make sure the connection can be
+created successfully, and then click on the "Create" button.
+```
 ![image](./assets/rule-engine/mqtt_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm"
@@ -66,13 +66,13 @@ We have finished, testing the rule by sending an MQTT message to
     emqx:
 
 ```bash
-> Topic: "t/1"
->
-> QoS: 0
->
-> Retained: false
->
-> Payload: "Hello, World\!"
+Topic: "t/1"
+
+QoS: 0
+
+Retained: false
+
+Payload: "Hello, World\!"
 ```
 
 Then verify a message has been published to mosquitto:

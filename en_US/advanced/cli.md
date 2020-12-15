@@ -958,43 +958,43 @@ Create a new rule with the following parameter:
 - *`-d <descr>`*: Optional, rule description
 
 Example
-
-    ## Create a test rule to simply print the content of all messages sent to the 't / a' topic
-    $ ./bin/emqx_ctl rules create \
-      'select * from "t/a"' \
-      '[{"name":"inspect", "params": {"a": 1}}]' \
-      -d 'Rule for debug'
+```bash
+## Create a test rule to simply print the content of all messages sent to the 't / a' topic
+$ ./bin/emqx_ctl rules create \
+    'select * from "t/a"' \
+    '[{"name":"inspect", "params": {"a": 1}}]' \
+    -d 'Rule for debug'
     
-    Rule rule:9a6a725d created
-
+Rule rule:9a6a725d created
+```
 The above example creates a rule with the ID `rule:9a6a725d`. There is only one action in the action list with the name inspect, and the action parameters are `{" a ": 1}`.
 
 #### rules list
 
 List all current rules:
-
-    $ ./bin/emqx_ctl rules list
+```bash
+$ ./bin/emqx_ctl rules list
     
-    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
-
+rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+```
 #### rules show
 
 Query rules:
-
-    ## Query rule with RuleID 'rule:9a6a725d'
-    $ ./bin/emqx_ctl rules show 'rule:9a6a725d'
+```bash
+## Query rule with RuleID 'rule:9a6a725d'
+$ ./bin/emqx_ctl rules show 'rule:9a6a725d'
     
-    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
-
+rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+```
 #### rules delete
 
 Delete rule:
-
-    ## Delete rule with RuleID 'rule:9a6a725d'
-    $ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
+```bash
+## Delete rule with RuleID 'rule:9a6a725d'
+$ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
     
-    ok
-
+ok
+```
 ### rule-actions command
 
 | Command                     | Description  |
@@ -1009,23 +1009,23 @@ Actions can be built-in by EMQ X Broker (called system built-in actions) or be w
 #### rule-actions show
 
 Query action:
-
-    ## Query action named 'inspect'
-    $ ./bin/emqx_ctl rule-actions show 'inspect'
+```bash
+## Query action named 'inspect'
+$ ./bin/emqx_ctl rule-actions show 'inspect'
     
-    action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
-
+action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
+```
 #### rule-actions list
 
 List eligible actions:
-
-    ## List all current actions
-    $ ./bin/emqx_ctl rule-actions list
+```bash
+## List all current actions
+$ ./bin/emqx_ctl rule-actions list
     
-    action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
-    action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
-    ...
-
+action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
+action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
+...
+```
 ### resources command
 
 | Command                                                    | Description  |
@@ -1050,33 +1050,33 @@ Create a new resource with the following parameters:
 #### resources list
 
 List all current resources:
-
-    $ ./bin/emqx_ctl resources list
+```bash
+$ ./bin/emqx_ctl resources list
     
-    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
-
+resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+```
 List resources of a certain type:
-
-    $ ./bin/emqx_ctl resources list --type='web_hook'
+```bash
+$ ./bin/emqx_ctl resources list --type='web_hook'
     
-    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
-
+resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+```
 #### resources show
 
 Query resource:
-
-    $ ./bin/emqx_ctl resources show 'resource:a7a38187'
+```bash
+$ ./bin/emqx_ctl resources show 'resource:a7a38187'
     
-    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
-
+resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+```
 #### resources delete
 
 Delete resource:
-
-    $ ./bin/emqx_ctl resources delete 'resource:a7a38187'
+```bash
+$ ./bin/emqx_ctl resources delete 'resource:a7a38187'
     
-    ok
-
+ok
+```
 ### resource-types command
 
 | Command                    | Description  |
@@ -1091,21 +1091,21 @@ Resource type can be built-in by EMQ X Broker (called system built-in resource t
 #### resource-types list
 
 List all current resource types:
-
-    ./bin/emqx_ctl resource-types list
+```bash
+./bin/emqx_ctl resource-types list
     
-    resource_type(name='backend_mongo_rs', provider='emqx_backend_mongo', title ='MongoDB Replica Set Mode', description='MongoDB Replica Set Mode')
-    resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassandra', description='Cassandra Database')
-    ...
-
+resource_type(name='backend_mongo_rs', provider='emqx_backend_mongo', title ='MongoDB Replica Set Mode', description='MongoDB Replica Set Mode')
+resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassandra', description='Cassandra Database')
+...
+```
 #### resource-types show
 
 Query resource type:
-
-    $ ./bin/emqx_ctl resource-types show backend_mysql
+```bash
+$ ./bin/emqx_ctl resource-types show backend_mysql
     
-    resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
-
+resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
+```
 ## Status, statistical indicators and alerts related to the rules engine
 
 ### Rule status and statistical indicators

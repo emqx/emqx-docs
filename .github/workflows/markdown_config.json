@@ -5,7 +5,6 @@
     "MD018": true,
     "MD019": true,
     "MD023": true,
-    "MD024": {"siblings_only": true},
     "MD025": {"level": 1, "front_matter_title": ""},
     "MD042": true,
     "MD046": {"style": "fenced"},

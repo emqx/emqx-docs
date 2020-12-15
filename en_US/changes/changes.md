@@ -1207,9 +1207,7 @@ EMQ X 4.1-alpha.1 is released now.
 
 EMQ X 4.0.5 is released now. This version mainly focuses on bug fixes.
 
-emqx
-----
-
+### emqx
 **Bug fixes:**
 
 - Fix GC policy
@@ -1231,8 +1229,7 @@ emqx
   Github issue: [emqx/emqx#3302](https://github.com/emqx/emqx/pull/3302)
   Github PR: [emqx/emqx-rel#463](https://github.com/emqx/emqx-rel/pull/463)
 
-emqx-rule-engine (plugin)
-------------------------
+### emqx-rule-engine (plugin)
 
 **Bug fixes:**
 
@@ -1241,8 +1238,7 @@ emqx-rule-engine (plugin)
   Github issue: [emqx/emqx#3287](https://github.com/emqx/emqx/issues/3287)
   Github PR: [emqx/emqx#3299](https://github.com/emqx/emqx/pull/3299)
 
-emqx-sn (plugin)
-----------------
+### emqx-sn (plugin)
 
 **Bug fixes:**
 
@@ -5339,50 +5335,44 @@ Lua Hook and Proxy Protocol have been released in this version.
 
 Support to configure multiple MQTT TCP/SSL listeners for one EMQ node.
 For example:
-
-    -------
-
->   - \-- External TCP 1883 --\> | |
->    
->     EMQ | -- Internal TCP 2883 --\> Service
-> 
->   - \-- External SSL 8883--\> | |
->    
->    -----
-
+```
+                          -------
+ -- External TCP 1883 --> |     |
+                          | EMQ | -- Internal TCP 2883 --> Service
+ -- External SSL 8883-->  |     |
+                          -------
+```
 Configure a listener in etc/emq.conf:
-
-    listener.tcp.${name}= 127.0.0.1:2883
+```
+listener.tcp.${name}= 127.0.0.1:2883
     
-    listener.tcp.${name}.acceptors = 16
+listener.tcp.${name}.acceptors = 16
     
-    listener.tcp.${name}.max_clients = 102400
-
+listener.tcp.${name}.max_clients = 102400
+```
 ### Proxy Protocol V1/2
 
 The EMQ cluster is usually deployed behind a Load Balancer, such as
 HAProxy or NGINX:
-
-    -----
-    |   |
-    | L | --TCP 1883--> EMQ
-
->   - \--SSL 8883--\> | | |
->    
->     B | --TCP 1883--\> EMQ  
->       |
->    
->    -----
+```
+                  -----
+                  |   |
+                  | L | --TCP 1883--> EMQ
+    --SSL 8883--> |   |                |
+                  | B | --TCP 1883--> EMQ
+                  |   |
+                  -----
+```
 
 The LB can pass the source IP, port of the TCP connection on to EMQ
 cluster by Proxy Protocol.
 
 Enable Proxy Protocol support for MQTT Listener:
-
-    ## Proxy Protocol V1/2
-    ## listener.tcp.${name}.proxy_protocol = on
-    ## listener.tcp.${name}.proxy_protocol_timeout = 3s
-
+```
+## Proxy Protocol V1/2
+## listener.tcp.${name}.proxy_protocol = on
+## listener.tcp.${name}.proxy_protocol_timeout = 3s
+```
 ### Web Hook Plugin
 
 The Web Hook plugin
@@ -5401,23 +5391,22 @@ to extend the broker and write business logic with Lua script.
 We improved the Auth/ACL chain design in 2.2 release. The Auth request
 will be forwarded to next auth module if it is ignored by the current
 auth module:
-
-    --------------           -------------           --------------
-
->   - Client --\> | Redis Auth | -ignore-\> | HTTP Auth | -ignore-\> |
->     MySQL Auth |
->    
->       - \-------------- ------------- -------------- | | |  
->           |/ |/ |/
->    
->     allow | deny allow | deny allow | deny
+```
+ 
+               -------------           ------------           -------------
+    Client --> | Redis认证 | -ignore-> | HTTP认证 | -ignore-> | MySQL认证 |
+               -------------           ------------           -------------
+                     |                       |                       |
+                    \|/                     \|/                     \|/
+               allow | deny            allow | deny            allow | deny
+```
 
 ### Support bcrypt password hash
 
 Enable the bcrypt password hash in auth module, for example:
-
-    auth.redis.password_hash = bcrypt
-
+```
+auth.redis.password_hash = bcrypt
+```
 ### API Breaking Change
 
 etc/emq.conf: 'mqtt.queue.*' changed to 'mqtt.mqueue.*'
@@ -5555,8 +5544,6 @@ emq-auth-http\#15: ACL endpoint isnt called
 
 ## Version 2.1-beta
 
-## Version 2.1-beta
-
 *Release Date: 2017-02-18*
 
 EMQ v2.1-beta is now available. We improved the design of
@@ -5568,41 +5555,41 @@ reduce CPU usage at the high rate of messages.
 
 Support Per Client, Session Statistics. Enable by configuration in
 etc/emq.conf:
-
-    mqtt.client.enable_stats = 60s
+```
+mqtt.client.enable_stats = 60s
     
-    mqtt.session.enable_stats = 60s
-
+mqtt.session.enable_stats = 60s
+```
 ### Add 'missed' Metrics
 
 The 'missed' metrics will be increased when EMQ broker received PUBACK,
 PUBREC, PUBREL, PUBCOMP packets from clients, but missing in inflight
 window:
-
-    packets/puback/missed
+```
+packets/puback/missed
     
-    packets/pubrec/missed
+packets/pubrec/missed
     
-    packets/pubrel/missed
+packets/pubrel/missed
     
-    packets/pubcomp/missed
-
+packets/pubcomp/missed
+```
 ### Integrate Syslog
 
 Output EMQ log to syslog:
-
-    ## Syslog. Enum: on, off
-    log.syslog = on
+```
+## Syslog. Enum: on, off
+log.syslog = on
     
-    ##  syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
-    log.syslog.level = error
-
+##  syslog level. Enum: debug, info, notice, warning, error, critical, alert, emergency
+log.syslog.level = error
+```
 ### Upgrade QoS
 
 Support to upgrade QoS accoding to the subscription:
-
-    mqtt.session.upgrade_qos = on
-
+```
+mqtt.session.upgrade_qos = on
+```
 ### Add 'acl reload' CLI
 
 Reload acl.conf without restarting emqttd service (\#885)
@@ -5777,40 +5764,21 @@ production now.
 
 Shared Subscription supports Load balancing to distribute MQTT messages
 between multiple subscribers in the same group:
-
-    ---------
-    |       | --Msg1--> Subscriber1
-
->   - Publisher--Msg1,Msg2,Msg3--\>| EMQ | --Msg2--\> Subscriber2
->    
->           | --Msg3--\> Subscriber3
->    
->    -----
+```
+                                                   [subscriber1] got msg1
+             msg1, msg2, msg3                    /
+[publisher]  ---------------->  "$share/g/topic"  -- [subscriber2] got msg2
+                                                 \
+                                                   [subscriber3] got msg3
+```
 
 Create a shared subscription with $queue/ or $share/<group\>/ prefix:
 
-<table style="width:86%;">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 61%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><blockquote>
-<p>Prefix</p>
-</blockquote></td>
-<td>Examples</td>
-</tr>
-<tr class="even">
-<td>$queue/</td>
-<td>mosquitto_sub -t '$queue/topic</td>
-</tr>
-<tr class="odd">
-<td>$share/&lt;group&gt;/</td>
-<td>mosquitto_sub -t '$share/group/topic</td>
-</tr>
-</tbody>
-</table>
+| Prefix | Examples |
+| ------          | --------                              |
+| $queue/         | mosquitto_sub -t '$queue/topic'       |
+| $share/\<group\>/ | mosquitto_sub -t '$share/group/topic' |
+
 
 ### Local Subscription
 
@@ -5853,15 +5821,14 @@ mqtt.max_clientid_len = 1024
 ```
 
 The new configuration files will be preprocessed and translated to an
-Erlang app.config before the EMQ broker
-    started:
-
+Erlang app.config before the EMQ broker started:
+```
     ----------------------                                          2.0/schema/*.schema      -------------------
     | etc/emq.conf       |                   -----------------              \|/              | data/app.config |
     |       +            | --> mergeconf --> | data/app.conf | -->  cuttlefish generate  --> |                 |
     | etc/plugins/*.conf |                   -----------------                               | data/vm.args    |
     ----------------------                                                                   -------------------
-
+```
 ### OS Environment Variables
 
 |                   |                                       |
@@ -5926,9 +5893,7 @@ address
 
 *Release Date: 2016-11-01*
 
-1.  Change the three modules(Presence, Retainer, Subscription) to
-    standalone
-plugins:
+1.  Change the three modules(Presence, Retainer, Subscription) to standalone plugins:
 
 |                                                                         |                                                                               |
 | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -5948,27 +5913,26 @@ plugins:
 
 *Release Date: 2016-10-19*
 
-1.  A more user-friendly configuration for the EMQ broker. Integrate
-    with cuttlefish library and adopt K = V syntax:
-    
-        node.name = emqttd@127.0.0.1
+1.  A more user-friendly configuration for the EMQ broker. Integrate with cuttlefish library and adopt K = V syntax:
+    ```
+    node.name = emqttd@127.0.0.1
         
-        ...
+    ...
         
-        mqtt.listener.tcp = 1883
+    mqtt.listener.tcp = 1883
         
-        ...
-
+    ...
+    ```
 2.  Support OS Environments:
-    
-        EMQ_NODE_NAME
-        EMQ_NODE_COOKIE
-        EMQ_MAX_PORTS
-        EMQ_TCP_PORT
-        EMQ_SSL_PORT
-        EMQ_HTTP_PORT
-        EMQ_HTTPS_PORT
-
+    ```
+    EMQ_NODE_NAME
+    EMQ_NODE_COOKIE
+    EMQ_MAX_PORTS
+    EMQ_TCP_PORT
+    EMQ_SSL_PORT
+    EMQ_HTTP_PORT
+    EMQ_HTTPS_PORT
+    ```
 3.  Refactor all the modules and plugins, and adopt new configuration
     syntax.
 
@@ -5986,10 +5950,10 @@ TODO: issues closed.
     config to rel/sys.config
 
 4.  Add BUILD\_DEPS in the plugin's Makefile:
-    
-        BUILD_DEPS = emqttd
-        dep_emqttd = git https://github.com/emqtt/emqttd emq20
-
+    ```
+    BUILD_DEPS = emqttd
+    dep_emqttd = git https://github.com/emqtt/emqttd emq20
+    ```
 5.  Improve the design of Redis ACL.
 
 ## Version 2.0-beta.3
@@ -5999,14 +5963,14 @@ TODO: issues closed.
 ### New Features
 
 Shared Suscriptions (\#639, \#416):
-
-    mosquitto_sub -t '$queue/topic'
-    mosquitto_sub -t '$share/group/topic'
-
+```
+mosquitto_sub -t '$queue/topic'
+mosquitto_sub -t '$share/group/topic'
+```
 Local Subscriptions that will not create global routes:
-
-    mosquitto_sub -t '$local/topic'
-
+```
+mosquitto_sub -t '$local/topic'
+```
 ### Bugfix
 
 Error on Loading emqttd\_auth\_http (\#691)
@@ -6024,14 +5988,11 @@ Release an experimental CoAP Gateway:
 
 ### API Breaking Changes
 
-'$u', '$c' variables in emqttd.conf and modules/acl.conf changed to
-'%u', '%c'
+'\$u', '\$c' variables in emqttd.conf and modules/acl.conf changed to '\%u', '\%c'
 
-Improve the design of mqtt retained message, replace emqttd\_retainer
-with emqttd\_mod\_retainer.
+Improve the design of mqtt retained message, replace emqttd\_retainer with emqttd\_mod\_retainer.
 
-Add 'session.subscribed', 'session.unsubscribed' hooks, remove
-'client.subscribe.after' hook
+Add 'session.subscribed', 'session.unsubscribed' hooks, remove 'client.subscribe.after' hook
 
 Tab 'retained\_message' -\> 'mqtt\_retained'
 
@@ -6066,24 +6027,19 @@ Candidate' named rc1, rc2 before a Major version is production ready.
 We split the emqttd 1.x project into two projects since 2.0-beta1
 release to resolve the plugins' dependency issue.
 
-A new project named [emqttd-relx](https://github.com/emqtt/emqttd-relx)
-is created and responsible for buiding the emqttd application and the
-plugins:
-
-    git clone https://github.com/emqtt/emqttd-relx.git
+A new project named [emqttd-relx](https://github.com/emqtt/emqttd-relx) is created and responsible for buiding the emqttd application and the plugins:
+```bash
+git clone https://github.com/emqtt/emqttd-relx.git
     
-    cd emqttd-relx && make
+cd emqttd-relx && make
     
-    cd _rel/emqttd && ./bin/emqttd console
-
+cd _rel/emqttd && ./bin/emqttd console
+```
 ### erlang.mk and relx
 
-The rebar which is used in 1.x release is replaced by
-[erlang.mk](https://erlang.mk) and
-[relx](https://github.com/erlware/relx) tools since 2.0-beta1 release.
+The rebar which is used in 1.x release is replaced by [erlang.mk](https://erlang.mk) and [relx](https://github.com/erlware/relx) tools since 2.0-beta1 release.
 
-You can check the 'Makefile' and 'relx.config' in the release project of
-the borker: [emqttd-relx](https://github.com/emqtt/emqttd-relx) .
+You can check the 'Makefile' and 'relx.config' in the release project of the borker: [emqttd-relx](https://github.com/emqtt/emqttd-relx) .
 
 ### Improve Git Branch Management
 
@@ -6098,20 +6054,19 @@ the borker: [emqttd-relx](https://github.com/emqtt/emqttd-relx) .
 
 ### New Config Syntax
 
-Since 2.0-beta1 release the configuration file of the broker and plugins
-adopt a new syntax like rebar.config and relx.config:
+Since 2.0-beta1 release the configuration file of the broker and plugins adopt a new syntax like rebar.config and relx.config:
 
 etc/emqttd.conf for example:
-
-    %% Max ClientId Length Allowed.
-    {mqtt_max_clientid_len, 512}.
+```
+%% Max ClientId Length Allowed.
+{mqtt_max_clientid_len, 512}.
     
-    %% Max Packet Size Allowed, 64K by default.
-    {mqtt_max_packet_size, 65536}.
+%% Max Packet Size Allowed, 64K by default.
+{mqtt_max_packet_size, 65536}.
     
-    %% Client Idle Timeout.
-    {mqtt_client_idle_timeout, 30}. % Second
-
+%% Client Idle Timeout.
+{mqtt_client_idle_timeout, 30}. % Second
+```
 ### MQTT-SN Protocol Plugin
 
 The MQTT-SN Protocol Plugin
@@ -6119,9 +6074,9 @@ The MQTT-SN Protocol Plugin
 2.0-beta1 release. The default UDP port of MQTT-SN is 1884.
 
 Load the plugin:
-
-    ./bin/emqttd_ctl plugins load emqttd_sn
-
+```bash
+./bin/emqttd_ctl plugins load emqttd_sn
+```
 ### Improve the PubSub Design
 
 <!-- ![image](./_static/images/publish.png) -->
@@ -6136,26 +6091,26 @@ application project, and add it to
 All the plugins' config files will be copied to emqttd/etc/plugins/
 folder when making emqttd brinary packages in
 [emqttd-relx](https://github.com/emqtt/emqttd-relx) project:
-
-    ▾ emqttd/
-      ▾ etc/
-        ▸ modules/
-        ▾ plugins/
-            emqtt_coap.conf
-            emqttd.conf
-            emqttd_auth_http.conf
-            emqttd_auth_mongo.conf
-            emqttd_auth_mysql.conf
-            emqttd_auth_pgsql.conf
-            emqttd_auth_redis.conf
-            emqttd_coap.conf
-            emqttd_dashboard.conf
-            emqttd_plugin_template.conf
-            emqttd_recon.conf
-            emqttd_reloader.conf
-            emqttd_sn.conf
-            emqttd_stomp.conf
-
+```
+▾ emqttd/
+  ▾ etc/
+    ▸ modules/
+    ▾ plugins/
+        emqtt_coap.conf
+        emqttd.conf
+        emqttd_auth_http.conf
+        emqttd_auth_mongo.conf
+        emqttd_auth_mysql.conf
+        emqttd_auth_pgsql.conf
+        emqttd_auth_redis.conf
+        emqttd_coap.conf
+        emqttd_dashboard.conf
+        emqttd_plugin_template.conf
+        emqttd_recon.conf
+        emqttd_reloader.conf
+        emqttd_sn.conf
+        emqttd_stomp.conf
+```
 ### EMQ 2.0 Documentation
 
 <https://docs.emqx.io/broker/v2/en/index.html>
@@ -6173,8 +6128,6 @@ Optimize the procedures that retrieve the Broker version and Borker
 description in the tick timer (PR\#627)
 
 Fix SSL certfile, keyfile config (\#651)
-
-## Version 1.1.2
 
 ## Version 1.1.2
 
@@ -6213,11 +6166,11 @@ java.io.EOFException using paho java client (\#551)
 Upgrade eSockd library to 4.0 and Support IPv6
 
 Support to listen on specific IP Address:
-
-    {mqtt, {"192.168.1.20", 1883}, [
-        ...
-    ]},
-
+```
+{mqtt, {"192.168.1.20", 1883}, [
+    ...
+]},
+```
 Add MongoDB, HTTP Authentication/ACL Plugins
 
 Upgrade MySQL, PostgreSQL, Redis Plugins to support superuser
@@ -6409,10 +6362,10 @@ bridge (\#438)
 emqttd\_ctl: better error message (\#450)
 
 ./bin/emqttd\_ctl: add 'routes' command:
-
-    routes list             # List all routes
-    routes show <Topic>     # Show a route
-
+```
+routes list             # List all routes
+routes show <Topic>     # Show a route
+```
 Add 'backend\_subscription' table and support static subscriptions
 (emqttd\_backend)
 
@@ -6444,13 +6397,13 @@ Licensed under the Apache License, Version 2.0 Now.
 
 Improve the design of cluster, support to join or leave the cluster
 (\#449):
-
-    $ ./bin/emqttd_ctl cluster
-    cluster join <Node>                     #Join the cluster
-    cluster leave                           #Leave the cluster
-    cluster remove <Node>                   #Remove the node from cluster
-    cluster status                          #Cluster status
-
+```bash
+$ ./bin/emqttd_ctl cluster
+cluster join <Node>                     #Join the cluster
+cluster leave                           #Leave the cluster
+cluster remove <Node>                   #Remove the node from cluster
+cluster status                          #Cluster status
+```
 Improve the design of Trie and Route, only the wildcard topics stored in
 Trie.
 
@@ -7223,15 +7176,15 @@ with other nodes.
 
 Benchmark this release on a ubuntu/14.04 server with 8 cores, 32G memory
 from QingCloud.com:
-
-    200K Connections,
-    30K Messages/Sec,
-    20Mbps In/Out Traffic,
-    200K Topics,
-    200K Subscribers,
+```
+200K Connections,
+30K Messages/Sec,
+20Mbps In/Out Traffic,
+200K Topics,
+200K Subscribers,
     
-    Consumed 7G memory, 40% CPU/core
-
+Consumed 7G memory, 40% CPU/core
+```
 Benchmark code: <https://github.com/emqtt/emqttd_benchmark>
 
 Change: rewrite emqttd\_pubsub to handle more concurrent subscribe

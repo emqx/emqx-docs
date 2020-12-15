@@ -1030,44 +1030,44 @@ ok
 - *`-d <descr>`*: 可选，规则描述信息
 
 使用举例:
+```bash
+## 创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容
+$ ./bin/emqx_ctl rules create \
+    'select * from "t/a"' \
+    '[{"name":"inspect", "params": {"a": 1}}]' \
+    -d 'Rule for debug'
 
-    ## 创建一个测试规则，简单打印所有发送到 't/a' 主题的消息内容
-    $ ./bin/emqx_ctl rules create \
-      'select * from "t/a"' \
-      '[{"name":"inspect", "params": {"a": 1}}]' \
-      -d 'Rule for debug'
-
-    Rule rule:9a6a725d created
-
+Rule rule:9a6a725d created
+```
 上例创建了一个 ID 为 `rule:9a6a725d` 的规则，动作列表里只有一个动作：动作名为 inspect，动作的参数是
 `{"a": 1}`。
 
 #### rules list
 
 列出当前所有的规则:
+```bash
+$ ./bin/emqx_ctl rules list
 
-    $ ./bin/emqx_ctl rules list
-
-    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
-
+rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+```
 #### rules show
 
 查询规则:
+```
+## 查询 RuleID 为 'rule:9a6a725d' 的规则
+$ ./bin/emqx_ctl rules show 'rule:9a6a725d'
 
-    ## 查询 RuleID 为 'rule:9a6a725d' 的规则
-    $ ./bin/emqx_ctl rules show 'rule:9a6a725d'
-
-    rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
-
+rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
+```
 #### rules delete
 
 删除规则:
+```bash
+## 删除 RuleID 为 'rule:9a6a725d' 的规则
+$ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
 
-    ## 删除 RuleID 为 'rule:9a6a725d' 的规则
-    $ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
-
-    ok
-
+ok
+```
 ### rule-actions 命令
 
 | 命令                           | 描述            |
@@ -1083,23 +1083,23 @@ ok
 #### rule-actions show
 
 查询动作:
-
+```bash
     ## 查询名为 'inspect' 的动作
-    $ ./bin/emqx_ctl rule-actions show 'inspect'
+$ ./bin/emqx_ctl rule-actions show 'inspect'
 
-    action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
-
+action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
+```
 #### rule-actions list
 
 列出符合条件的动作:
+```bash
+## 列出当前所有的动作
+$ ./bin/emqx_ctl rule-actions list
 
-    ## 列出当前所有的动作
-    $ ./bin/emqx_ctl rule-actions list
-
-    action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
-    action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
-    ...
-
+action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
+action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
+...
+```
 ### resources 命令
 
 | 命令                                                          | 描述            |
@@ -1116,41 +1116,41 @@ ok
 - type: 资源类型
 - \-c config: JSON 格式的配置
 - \-d descr: 可选，资源的描述
+```bash
+$ ./bin/emqx_ctl resources create 'web_hook' -c '{"url": "http://host-name/chats"}' -d 'forward msgs to host-name/chats'
 
-    $ ./bin/emqx_ctl resources create 'web_hook' -c '{"url": "http://host-name/chats"}' -d 'forward msgs to host-name/chats'
-
-    Resource resource:a7a38187 created
-
+Resource resource:a7a38187 created
+```
 #### resources list
 
 列出当前所有的资源:
+```bash
+$ ./bin/emqx_ctl resources list
 
-    $ ./bin/emqx_ctl resources list
-
-    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
-
+resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+```
 列出当前某个类型的资源:
+```bash
+$ ./bin/emqx_ctl resources list --type='web_hook'
 
-    $ ./bin/emqx_ctl resources list --type='web_hook'
-
-    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
-
+resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+```
 #### resources show
 
 查询资源:
+```bash
+$ ./bin/emqx_ctl resources show 'resource:a7a38187'
 
-    $ ./bin/emqx_ctl resources show 'resource:a7a38187'
-
-    resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
-
+resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
+```
 #### resources delete
 
 删除资源:
+```bash
+$ ./bin/emqx_ctl resources delete 'resource:a7a38187'
 
-    $ ./bin/emqx_ctl resources delete 'resource:a7a38187'
-
-    ok
-
+ok
+```
 ### resource-types 命令
 
 | 命令                          | 描述            |
@@ -1165,21 +1165,21 @@ ok
 #### resource-types list
 
 列出当前所有的资源类型:
+```bash
+./bin/emqx_ctl resource-types list
 
-    ./bin/emqx_ctl resource-types list
-
-    resource_type(name='backend_mongo_rs', provider='emqx_backend_mongo', title ='MongoDB Replica Set Mode', description='MongoDB Replica Set Mode')
-    resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassandra', description='Cassandra Database')
-    ...
-
+resource_type(name='backend_mongo_rs', provider='emqx_backend_mongo', title ='MongoDB Replica Set Mode', description='MongoDB Replica Set Mode')
+resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassandra', description='Cassandra Database')
+...
+```
 #### resource-types show
 
 查询资源类型:
+```bash
+$ ./bin/emqx_ctl resource-types show backend_mysql
 
-    $ ./bin/emqx_ctl resource-types show backend_mysql
-
-    resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
-
+resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
+```
 ## 与规则引擎相关的状态、统计指标和告警
 
 ### 规则状态和统计指标

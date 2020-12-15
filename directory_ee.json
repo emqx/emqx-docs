@@ -111,7 +111,7 @@
         },
         {
           "title": "消息重传",
-          "path": "advanced/retransmission.md"
+          "path": "advanced/retransmission"
         },
         {
           "title": "告警",
@@ -433,7 +433,7 @@
             },
             {
               "title": "EMQ X 规则引擎数据存储",
-              "path": "backend/backends.md"
+              "path": "backend/backends"
             }
           ]
         },
@@ -756,7 +756,7 @@
         },
         {
           "title": "Message retransmission",
-          "path": "advanced/retransmission.md"
+          "path": "advanced/retransmission"
         },
         {
           "title": "Alarm",
@@ -935,7 +935,7 @@
         },
         {
           "title": "EMQ X Rule Engine Backends",
-          "path": "backend/backends.md"
+          "path": "backend/backends"
         }
       ]
     },
