@@ -18,7 +18,7 @@
       "children": [
         {
           "title": "安装",
-          "path": "getting-started/install"
+          "path": "getting-started/install-ee"
         },
         {
           "title": "启动 EMQ X",
