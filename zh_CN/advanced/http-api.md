@@ -7,7 +7,7 @@ EMQ X 的 HTTP API 服务默认监听 8081 端口，可通过 `etc/plugins/emqx_
 ## 接口安全
 
 EMQ X 的 HTTP API 使用 [Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication) 方式，`id` 和 `password` 须分别填写 AppID 和 AppSecret。
-默认的 AppID 和 AppSecret 是：`amdin/public`。你可以在 Dashboard 的左侧菜单栏里，选择 "管理" -> "应用" 来修改和添加 AppID/AppSecret。
+默认的 AppID 和 AppSecret 是：`admin/public`。你可以在 Dashboard 的左侧菜单栏里，选择 "管理" -> "应用" 来修改和添加 AppID/AppSecret。
 
 ## 响应码
 

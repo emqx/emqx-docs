@@ -36,7 +36,6 @@ Configure odbc driver:
 ```
 $ brew install unixodbc freetds
 $ vim /usr/local/etc/odbcinst.ini
-
 [ms-sql]
 Description = ODBC for FreeTDS
 Driver      = /usr/local/lib/libtdsodbc.so

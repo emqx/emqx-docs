@@ -15,6 +15,46 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.4
+
+*Release Date: 2020-12-11*
+
+EMQ X 4.2.4 is released now, it mainly includes the following changes:
+
+### emqx
+
+- Support configuration of SSL/TLS certificate chain length and password of keyfile
+
+  Github PR: [emqx#3901](https://github.com/emqx/emqx/pull/3901)
+
+### emqx-auth-http
+
+- Update the underlying HTTP client driver to solve the issue of unresponsive connection process caused by driver stuck
+
+  Github PR: [emqx-auth-http#213](https://github.com/emqx/emqx-auth-http/pull/213)
+
+### emqx-auth-mongo
+
+- Fix the type error problem caused by no matching query results
+
+  Github PR: [emqx-auth-mongo#240](https://github.com/emqx/emqx-auth-mongo/pull/240)
+
+### emqx-auth-redis
+
+- Fix the issue that the redis driver did not report an error when it failed to start in cluster mode
+
+  Github PR: [emqx-auth-redis#187](https://github.com/emqx/emqx-auth-redis/pull/187)
+
+### emqx-rel
+
+- Supports pulling private image through secret for helm chart
+
+  Github PR: [emqx-rel#626](https://github.com/emqx/emqx-rel/pull/626)
+
+- Improve security
+
+  Github PR: [emqx-rel#612](https://github.com/emqx/emqx-rel/pull/612)
+
 ## Version 4.2.3
 
 *Release Date: 2020-11-13*

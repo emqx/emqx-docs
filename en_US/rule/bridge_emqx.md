@@ -80,3 +80,4 @@ And from the rule list, verify that the "Matched" column has increased
 to 1:
 
 ![image](./assets/rule-engine/rpc_rule_overview_1.png)
+

@@ -15,7 +15,6 @@ Upload the server directory of the installation package to the server directory 
 ```bash
 chmod +x ./dolphindb
 ./dolphindb
-
 ## If the startup is successful, you will enter the dolphindb command line and execute 1+1
 >1+1
 2
@@ -34,7 +33,6 @@ persistenceDir=/ddb/pubdata/
 #maxPersistenceQueueDepth=
 #maxMsgNumPerBlock=
 #maxPubQueueDepthPerSite=
-
 ## Subscriber for streaming
 subPort=8000
 #subExecutors=
@@ -64,12 +62,10 @@ db1 = database("", HASH, [STRING, 8])
 db2 = database("", HASH, [STRING, 8])
 db = database("dfs://emqx", COMPO, [db1, db2])
 db.createPartitionedTable(schema, "msg",`clientid`topic)
-
 // Create a StreamTable table named `st_msg` and persist the data to the `msg` table.
 share streamTable(10000:0,`clientid`topic`qos`payload, [STRING,STRING,INT,STRING]) as st_msg
 msg_ref= loadTable("dfs://emqx", "msg")
 subscribeTable(, "st_msg", "save_msg_to_dfs", 0, msg_ref, true)
-
 // Query msg_ref to check whether the creation is successful
 select * from msg_ref;
 ```
