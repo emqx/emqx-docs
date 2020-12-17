@@ -674,7 +674,7 @@
           "path": "getting-started/command-line"
         },
         {
-          "title": "Create Cluster",
+          "title": "Distributed Cluster",
           "path": "getting-started/cluster"
         },
         {
@@ -898,10 +898,6 @@
       ]
     },
     {
-      "title": "Plugin",
-      "path": "advanced/plugins"
-    },
-    {
       "title": "Rule Engine",
       "children": [
         {
@@ -917,54 +913,199 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "EMQ X Rule Engine Backends",
-          "path": "rule/backends"
+          "title": "Backends",
+          "children": [
+            {
+              "title": "Save data to MySQL",
+              "path": "rule/backend_mysql"
+            },
+            {
+              "title": "Save data to PostgreSQL",
+              "path": "rule/backend_pgsql"
+            },
+            {
+              "title": "Save data to MongoDB",
+              "path": "rule/backend_mongodb"
+            },
+            {
+              "title": "Save data to Redis",
+              "path": "rule/backend_redis"
+            },
+            {
+              "title": "Save data to Cassandra",
+              "path": "rule/backend_cassandra"
+            },
+            {
+              "title": "Save data to DynamoDB",
+              "path": "rule/backend_dynamodb"
+            },
+            {
+              "title": "Save data to ClickHouse",
+              "path": "rule/backend_clickhouse"
+            },
+            {
+              "title": "Save data to OpenTSDB",
+              "path": "rule/backend_opentsdb"
+            },
+            {
+              "title": "Save data to InfluxDB",
+              "path": "rule/backend_influxdb"
+            },
+            {
+              "title": "Save data to TimescaleDB",
+              "path": "rule/backend_timescaledb"
+            },
+            {
+              "title": "Save data to Oracle DB",
+              "path": "rule/backend_oracle"
+            },
+            {
+              "title": "Save data to SQLServer",
+              "path": "rule/backend_sqlserver"
+            },
+            {
+              "title": "Save data to DolphinDB",
+              "path": "rule/backend_dolphindb"
+            },
+            {
+              "title": "Save data to TDengine",
+              "path": "rule/backend_tdengine"
+            }
+          ]
         },
         {
-          "title": "EMQ X Bridges",
-          "path": "rule/bridges"
+          "title": "Bridges",
+          "children": [
+            {
+              "title": "Bridge data to Kafka",
+              "path": "rule/bridge_kafka"
+            },
+            {
+              "title": "Bridge data to Pulsar",
+              "path": "rule/bridge_pulsar"
+            },
+            {
+              "title": "Bridge data to RabbitMQ",
+              "path": "rule/bridge_rabbitmq"
+            },
+            {
+              "title": "Bridge data to RocketMQ",
+              "path": "rule/bridge_rocketmq"
+            },
+            {
+              "title": "Bridge data to MQTT Broker",
+              "path": "rule/bridge_mqtt"
+            },
+            {
+              "title": "Bridge data to EMQ X",
+              "path": "rule/bridge_emqx"
+            }
+          ]
+        },
+        {
+          "title": "Save Offline Message",
+          "children": [
+            {
+              "title": "Save offline Message to Redis",
+              "path": "rule/offline_msg_to_redis"
+            },
+            {
+              "title": "Save offline Message to MySQL",
+              "path": "rule/offline_msg_to_mysql"
+            },
+            {
+              "title": "Save offline Message to PostgreSQL",
+              "path": "rule/offline_msg_to_pgsql"
+            },
+            {
+              "title": "Save offline Message to Cassandra",
+              "path": "rule/offline_msg_to_cassandra"
+            },
+            {
+              "title": "Save offline Message to MongoDB",
+              "path": "rule/offline_msg_to_mongodb"
+            }
+          ]
+        },
+        {
+          "title": "Get Subscriptions",
+          "children": [
+            {
+              "title": "Get subscription from Redis",
+              "path": "rule/get_subs_from_redis"
+            },
+            {
+              "title": "Get subscription from MySQL",
+              "path": "rule/get_subs_from_mysql"
+            },
+            {
+              "title": "Get subscription from PostgreSQL",
+              "path": "rule/get_subs_from_pgsql"
+            },
+            {
+              "title": "Get subscription from Cassandra",
+              "path": "rule/get_subs_from_cassandra"
+            },
+            {
+              "title": "Get subscription from MongoDB",
+              "path": "rule/get_subs_from_mongodb"
+            }
+          ]
+        },
+        {
+          "title": "Schema",
+          "path": "rule/schema-registry"
         }
       ]
     },
     {
-      "title": "Backend",
+      "title": "Plugin",
       "children": [
         {
-          "title": "MQTT Message Persistence",
-          "path": "backend/backend"
+          "title": "插件介绍",
+          "path": "advanced/plugins"
         },
         {
-          "title": "EMQ X Rule Engine Backends",
-          "path": "backend/backends"
-        }
-      ]
-    },
-    {
-      "title": "Bridges",
-      "children": [
-        {
-          "title": "Bridge Introduction",
-          "path": "bridge/bridge"
+          "title": "Backend plugins",
+          "children": [
+            {
+              "title": "MQTT Message Persistence",
+              "path": "backend/backend"
+            },
+            {
+              "title": "Rule Engine data storage",
+              "path": "backend/backends"
+            }
+          ]
         },
         {
-          "title": "MQTT Bridge",
-          "path": "bridge/bridge-mqtt"
-        },
-        {
-          "title": "RPC Bridge",
-          "path": "bridge/bridge-rpc"
-        },
-        {
-          "title": "Kafka Bridge",
-          "path": "bridge/bridge-kafka"
-        },
-        {
-          "title": "RabbitMQ Bridge",
-          "path": "bridge/bridge-rabbitmq"
-        },
-        {
-          "title": "Pulsar Bridge",
-          "path": "bridge/bridge-pulsar"
+          "title": "Bridges",
+          "children": [
+            {
+              "title": "Bridge Introduction",
+              "path": "bridge/bridge"
+            },
+            {
+              "title": "MQTT Bridge",
+              "path": "bridge/bridge-mqtt"
+            },
+            {
+              "title": "RPC Bridge",
+              "path": "bridge/bridge-rpc"
+            },
+            {
+              "title": "Kafka Bridge",
+              "path": "bridge/bridge-kafka"
+            },
+            {
+              "title": "RabbitMQ Bridge",
+              "path": "bridge/bridge-rabbitmq"
+            },
+            {
+              "title": "Pulsar Bridge",
+              "path": "bridge/bridge-pulsar"
+            }
+          ]
         }
       ]
     },
@@ -1011,6 +1152,35 @@
       "path": "advanced/relup"
     },
     {
+      "title": "FAQ",
+      "children": [
+        {
+          "title": "Introduction",
+          "path": "faq/faq"
+        },
+        {
+          "title": "Use guide",
+          "path": "faq/use-guide"
+        },
+        {
+          "title": "Installation and deployment",
+          "path": "faq/deployment"
+        },
+        {
+          "title": "Common errors",
+          "path": "faq/error"
+        },
+        {
+          "title": "Business services",
+          "path": "faq/enterprise"
+        },
+        {
+          "title": "Tags",
+          "path": "faq/tags"
+        }
+      ]
+    },
+    {
       "title": "SDK & Tools",
       "children": [
         {
@@ -1044,35 +1214,6 @@
         {
           "title": "Others",
           "path": "development/resource"
-        }
-      ]
-    },
-    {
-      "title": "FAQ",
-      "children": [
-        {
-          "title": "Introduction",
-          "path": "faq/faq"
-        },
-        {
-          "title": "Use guide",
-          "path": "faq/use-guide"
-        },
-        {
-          "title": "Installation and deployment",
-          "path": "faq/deployment"
-        },
-        {
-          "title": "Common errors",
-          "path": "faq/error"
-        },
-        {
-          "title": "Business services",
-          "path": "faq/enterprise"
-        },
-        {
-          "title": "Tags",
-          "path": "faq/tags"
         }
       ]
     },
