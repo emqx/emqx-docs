@@ -36,7 +36,7 @@
 
 当客户端连接 EMQ X 时，内置数据库认证会获取 CONNENT 报文中的 Clientid 与 Username，然后数据库中记录的密码进行匹配，一旦匹配成功则认证成功。
 
-内置数据库认证还支持 HTTP API 操作，详情请查看 [Mnesia 认证](../advanced/auth-mnesia.md)。
+内置数据库认证还支持 HTTP API 操作，详情请查看 [HTTP AP](../advanced/http-api.md)。
 
 #### 访问控制数据
 
@@ -46,4 +46,4 @@
 
 当客户端向 EMQ X 进行发布、订阅、取消订阅时，访问控制可以根据内置数据库中提前设置的规则允许或拒绝该次操作。
 
-内置数据库访问控制还支持 HTTP API 操作，详情请查看 [Mnesia ACL](../advanced/acl-mnesia.md)。
+内置数据库访问控制还支持 HTTP API 操作，详情请查看 [HTTP API](../advanced/http-api.md)。

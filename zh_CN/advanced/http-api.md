@@ -1095,10 +1095,10 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/modules"
 {"data":[{"node":"emqx@127.0.0.1","modules":[{"name":"emqx_mod_delayed","description":"EMQ X Delayed Publish Module","active":true},{"name":"emqx_mod_topic_metrics","description":"EMQ X Topic Metrics Module","active":false},{"name":"emqx_mod_subscription","description":"EMQ X Subscription Module","active":false},{"name":"emqx_mod_acl_internal","description":"EMQ X Internal ACL Module","active":true},{"name":"emqx_mod_rewrite","description":"EMQ X Topic Rewrite Module","active":false},{"name":"emqx_mod_presence","description":"EMQ X Presence Module","active":true}]}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/modules 
+#### GET /api/v4/nodes/{node}/modules
 类似 [GET /api/v4/modules](#endpoint-get-modules)，返回指定节点下所有内置模块信息。
 
-#### PUT /api/v4/modules/{module}/load 
+#### PUT /api/v4/modules/{module}/load
 加载集群下所有节点的指定内置模块。
 
 **Path Parameters:** 无
@@ -1116,10 +1116,10 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 {"code":0}
 ```
 
-#### PUT /api/v4/nodes/{node}/modules/{module}/load 
+#### PUT /api/v4/nodes/{node}/modules/{module}/load
 类似 [PUT /api/v4/modules/{module}/load](#endpoint-load-module)，加载指定节点下的指定内置模块。
 
-#### PUT /api/v4/modules/{module}/unload 
+#### PUT /api/v4/modules/{module}/unload
 卸载集群下所有节点的指定内置模块。
 
 **Path Parameters:** 无
@@ -1137,10 +1137,10 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 {"code":0}
 ```
 
-#### PUT /api/v4/nodes/{node}/modules/{module}/unload 
+#### PUT /api/v4/nodes/{node}/modules/{module}/unload
 类似 [PUT /api/v4/modules/{module}/unload](#endpoint-unload-module)，卸载指定节点下的指定内置模块。
 
-#### PUT /api/v4/modules/{module}/reload 
+#### PUT /api/v4/modules/{module}/reload
 重新加载集群下所有节点的指定内置模块，仅为 `emqx_mod_acl_internal` 提供此功能。
 
 | Name    | Type      | Description                                  |
@@ -1154,11 +1154,11 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 {"code":0}
 ```
 
-#### PUT /api/v4/nodes/{node}/modules/{module}/reload 
+#### PUT /api/v4/nodes/{node}/modules/{module}/reload
 类似 [PUT /api/v4/modules/{module}/reload](#endpoint-reload-module)，重新加载指定节点下的指定内置模块，仅为 `emqx_mod_acl_internal` 提供此功能。
 
-### 统计指标 
-#### GET /api/v4/metrics 
+### 统计指标
+#### GET /api/v4/metrics
 返回集群下所有统计指标数据。
 
 **Path Parameters:** 无
@@ -1267,7 +1267,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/metrics"
 {"data":[{"node":"emqx@127.0.0.1","metrics":{"messages.dropped.no_subscribers":0,"packets.connack.sent":13,"bytes.received":805,"messages.received":0,"packets.unsuback.sent":0,"messages.delivered":0,"client.disconnected":0,"packets.puback.sent":0,"packets.subscribe.auth_error":0,"delivery.dropped.queue_full":0,"messages.forward":0,"delivery.dropped.qos0_msg":0,"delivery.dropped.expired":0,"bytes.sent":52,"messages.sent":0,"delivery.dropped.no_local":0,"packets.pubrec.received":0,"packets.pubcomp.received":0,"client.check_acl":0,"packets.puback.received":0,"session.takeovered":0,"messages.dropped.expired":0,"actions.success":0,"messages.qos1.sent":0,"messages.retained":0,"packets.pubcomp.inuse":0,"packets.pubrec.sent":0,"packets.received":13,"messages.acked":0,"session.terminated":0,"packets.sent":13,"packets.unsubscribe.error":0,"client.connect":13,"packets.pubrec.missed":0,"packets.auth.sent":0,"packets.disconnect.received":0,"messages.qos2.sent":0,"client.auth.anonymous":13,"packets.auth.received":0,"packets.unsubscribe.received":0,"packets.publish.auth_error":0,"client.connected":13,"rules.matched":0,"packets.disconnect.sent":0,"session.created":13,"packets.pingreq.received":0,"messages.dropped":0,"actions.failure":0,"packets.publish.sent":0,"session.resumed":0,"packets.connack.auth_error":0,"packets.pubrel.sent":0,"delivery.dropped":0,"packets.pubcomp.sent":0,"messages.qos2.received":0,"messages.qos0.received":0,"packets.publish.inuse":0,"client.unsubscribe":0,"packets.pubrel.received":0,"client.connack":13,"packets.connack.error":0,"packets.publish.dropped":0,"packets.publish.received":0,"client.subscribe":0,"packets.subscribe.error":0,"packets.suback.sent":0,"packets.pubcomp.missed":0,"messages.qos1.received":0,"delivery.dropped.too_large":0,"packets.pingresp.sent":0,"packets.pubrel.missed":0,"messages.qos0.sent":0,"packets.connect.received":13,"packets.puback.missed":0,"packets.subscribe.received":0,"packets.puback.inuse":0,"client.authenticate":13,"messages.publish":0,"packets.pubrec.inuse":0,"packets.publish.error":0,"messages.delayed":0,"session.discarded":0}}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/metrics 
+#### GET /api/v4/nodes/{node}/metrics
 类似 [GET /api/v4/metrics](#endpoint-get-metrics)，返回指定节点下所有监控指标数据。
 
 **Path Parameters:** 无
@@ -1287,8 +1287,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":{"bytes.received":0,"client.connected":0,"packets.pingreq.received":0,"messages.delayed":0,"rules.matched":0,"actions.failure":0,"packets.puback.sent":0,"packets.pingresp.sent":0,"packets.publish.auth_error":0,"client.check_acl":0,"delivery.dropped.queue_full":0,"actions.success":0,"packets.publish.error":0,"packets.pubcomp.received":0,"bytes.sent":0,"packets.pubrec.inuse":0,"packets.pubrec.missed":0,"packets.pubrel.sent":0,"delivery.dropped.too_large":0,"packets.pubcomp.missed":0,"packets.subscribe.error":0,"packets.suback.sent":0,"messages.qos2.sent":0,"messages.qos1.sent":0,"packets.pubrel.missed":0,"messages.publish":0,"messages.forward":0,"packets.auth.received":0,"delivery.dropped":0,"packets.sent":0,"packets.puback.inuse":0,"delivery.dropped.qos0_msg":0,"packets.publish.dropped":0,"packets.disconnect.sent":0,"packets.auth.sent":0,"packets.unsubscribe.received":0,"session.takeovered":0,"messages.delivered":0,"client.auth.anonymous":0,"packets.connack.error":0,"packets.connack.sent":0,"packets.subscribe.auth_error":0,"packets.unsuback.sent":0,"packets.pubcomp.sent":0,"packets.publish.sent":0,"client.connack":0,"packets.publish.received":0,"client.subscribe":0,"session.created":0,"delivery.dropped.expired":0,"client.unsubscribe":0,"packets.received":0,"packets.pubrel.received":0,"packets.unsubscribe.error":0,"messages.qos0.sent":0,"packets.connack.auth_error":0,"session.resumed":0,"delivery.dropped.no_local":0,"packets.puback.missed":0,"packets.pubcomp.inuse":0,"packets.pubrec.sent":0,"messages.dropped.expired":0,"messages.dropped.no_subscribers":0,"session.discarded":0,"messages.sent":0,"messages.received":0,"packets.puback.received":0,"messages.qos0.received":0,"messages.acked":0,"client.connect":0,"packets.disconnect.received":0,"client.disconnected":0,"messages.retained":3,"session.terminated":0,"packets.publish.inuse":0,"packets.pubrec.received":0,"messages.qos2.received":0,"messages.dropped":0,"packets.connect.received":0,"client.authenticate":0,"packets.subscribe.received":0,"messages.qos1.received":0},"code":0}
 ```
 
-### 主题统计指标 
-#### GET /api/v4/topic-metrics 
+### 主题统计指标
+#### GET /api/v4/topic-metrics
 返回所有主题统计指标数据。
 
 **Path Parameters:** 无
@@ -1339,7 +1339,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-met
 {"data":[{"topic":"a/b/c","metrics":{"messages.qos2.out.rate":0.0,"messages.qos2.out.count":0,"messages.qos2.in.rate":0.0,"messages.qos2.in.count":0,"messages.qos1.out.rate":0.0,"messages.qos1.out.count":0,"messages.qos1.in.rate":0.0,"messages.qos1.in.count":0,"messages.qos0.out.rate":0.0,"messages.qos0.out.count":0,"messages.qos0.in.rate":0.0,"messages.qos0.in.count":0,"messages.out.rate":0.0,"messages.out.count":0,"messages.in.rate":0.0,"messages.in.count":0,"messages.dropped.rate":0.0,"messages.dropped.count":0}}],"code":0}
 ```
 
-#### GET /api/v4/topic-metrics/{topic} 
+#### GET /api/v4/topic-metrics/{topic}
 返回指定主题的统计指标数据。
 
 **Path Parameters:** 无
@@ -1382,7 +1382,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-met
 {"data":{"messages.qos2.out.rate":0.0,"messages.qos2.out.count":0,"messages.qos2.in.rate":0.0,"messages.qos2.in.count":0,"messages.qos1.out.rate":0.0,"messages.qos1.out.count":0,"messages.qos1.in.rate":0.0,"messages.qos1.in.count":0,"messages.qos0.out.rate":0.0,"messages.qos0.out.count":0,"messages.qos0.in.rate":0.0,"messages.qos0.in.count":0,"messages.out.rate":0.0,"messages.out.count":0,"messages.in.rate":0.0,"messages.in.count":0,"messages.dropped.rate":0.0,"messages.dropped.count":0},"code":0}
 ```
 
-#### POST /api/v4/topic-metrics 
+#### POST /api/v4/topic-metrics
 开启对指定主题的指标统计。
 
 **Parameters (json):**
@@ -1399,7 +1399,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/topic-met
 
 **Examples:**
 
-开启对 `a/b/c` 主题的指标统计 
+开启对 `a/b/c` 主题的指标统计
 
 ```bash
 $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/topic-metrics" -d '{"topic":"a/b/c"}'
@@ -1407,7 +1407,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/topic-me
 {"code":0}
 ```
 
-#### DELETE /api/v4/topic-metrics/{topic} 
+#### DELETE /api/v4/topic-metrics/{topic}
 关闭对指定主题的指标统计。
 
 **Path Parameters:** 无
@@ -1420,7 +1420,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/topic-me
 
 **Examples:**
 
-关闭对 `a/b/c` 主题的指标统计 
+关闭对 `a/b/c` 主题的指标统计
 
 ```bash
 $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-metrics/a%2Fb%2Fc"
@@ -1428,7 +1428,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-
 {"code":0}
 ```
 
-#### DELETE /api/v4/topic-metrics 
+#### DELETE /api/v4/topic-metrics
 关闭所有主题的指标统计。
 
 **Path Parameters:** 无
@@ -1441,7 +1441,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-
 
 **Examples:**
 
-关闭所有主题的指标统计 
+关闭所有主题的指标统计
 
 ```bash
 $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-metrics"
@@ -1449,8 +1449,8 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/topic-
 {"code":0}
 ```
 
-### 状态 
-#### GET /api/v4/stats 
+### 状态
+#### GET /api/v4/stats
 返回集群下所有状态数据。
 
 **Path Parameters:** 无
@@ -1497,7 +1497,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/stats"
 {"data":[{"stats":{"topics.max":0,"topics.count":0,"subscriptions.shared.max":0,"subscriptions.shared.count":0,"subscriptions.max":0,"subscriptions.count":0,"subscribers.max":0,"subscribers.count":0,"suboptions.max":0,"suboptions.count":0,"sessions.max":0,"sessions.count":0,"rules.max":0,"rules.count":0,"routes.max":0,"routes.count":0,"retained.max":3,"retained.count":3,"resources.max":0,"resources.count":0,"connections.max":0,"connections.count":0,"channels.max":0,"channels.count":0,"actions.max":5,"actions.count":5},"node":"emqx@127.0.0.1"}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/stats 
+#### GET /api/v4/nodes/{node}/stats
 类似 [GET /api/v4/stats](#endpoint-get-stats)，返回指定节点上的状态数据。
 
 **Path Parameters:** 无
@@ -1517,8 +1517,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":{"topics.max":0,"topics.count":0,"subscriptions.shared.max":0,"subscriptions.shared.count":0,"subscriptions.max":0,"subscriptions.count":0,"subscribers.max":0,"subscribers.count":0,"suboptions.max":0,"suboptions.count":0,"sessions.max":0,"sessions.count":0,"rules.max":0,"rules.count":0,"routes.max":0,"routes.count":0,"retained.max":3,"retained.count":3,"resources.max":0,"resources.count":0,"connections.max":0,"connections.count":0,"channels.max":0,"channels.count":0,"actions.max":5,"actions.count":5},"code":0}
 ```
 
-### 告警 
-#### GET /api/v4/alarms 
+### 告警
+#### GET /api/v4/alarms
 返回集群下当前告警信息。
 
 **Path Parameters:** 无
@@ -1546,7 +1546,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms"
 {"data":[{"node":"emqx@127.0.0.1","alarms":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236},{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}]}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/alarms 
+#### GET /api/v4/nodes/{node}/alarms
 返回指定节点下的告警信息。接口参数和返回请参看 [GET /api/v4/alarms](#endpoint-get-alarms)。
 
 **Examples:**
@@ -1557,7 +1557,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236},{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}],"code":0}
 ```
 
-#### GET /api/v4/alarms/activated 
+#### GET /api/v4/alarms/activated
 返回集群下激活中的告警。接口参数和返回请参看 [GET /api/v4/alarms](#endpoint-get-alarms)。
 
 **Examples:**
@@ -1568,7 +1568,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/ac
 {"data":[{"node":"emqx@127.0.0.1","alarms":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236}]}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/alarms/activated 
+#### GET /api/v4/nodes/{node}/alarms/activated
 返回指定节点下激活中的告警。接口参数和返回请参看 [GET /api/v4/alarms](#endpoint-get-alarms)。
 
 **Examples:**
@@ -1579,7 +1579,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":"infinity","activated":true,"activate_at":1597996203658236}],"code":0}
 ```
 
-#### GET /api/v4/alarms/deactivated 
+#### GET /api/v4/alarms/deactivated
 返回集群下已经取消的告警。接口参数和返回请参看 [GET /api/v4/alarms/activated](#endpoint-get-activated-alarms)。
 
 **Examples:**
@@ -1590,7 +1590,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/de
 {"data":[{"node":"emqx@127.0.0.1","alarms":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}]}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/alarms/deactivated 
+#### GET /api/v4/nodes/{node}/alarms/deactivated
 返回指定节点下已经取消的告警。接口参数和返回请参看 [GET /api/v4/alarms/activated](#endpoint-get-activated-alarms-in-specified-node)。
 
 **Examples:**
@@ -1601,7 +1601,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"name":"high_system_memory_usage","message":"System memory usage is higher than 60%","details":{"high_watermark":60},"deactivate_at":1597994359335482,"activated":false,"activate_at":1597993108657522}],"code":0}
 ```
 
-#### POST /api/v4/alarms/deactivated 
+#### POST /api/v4/alarms/deactivated
 取消指定告警。
 
 **Parameters (json):**
@@ -1625,7 +1625,7 @@ $ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/alarms/
 {"code":0}
 ```
 
-#### DELETE /api/v4/alarms/deactivated 
+#### DELETE /api/v4/alarms/deactivated
 清除所有已经取消的告警。
 
 **Parameters (json):** 无
@@ -1644,7 +1644,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/alarms
 {"code":0}
 ```
 
-#### DELETE /api/v4/nodes/{node}/alarms/deactivated 
+#### DELETE /api/v4/nodes/{node}/alarms/deactivated
 清除指定节点下所有已经取消的告警。
 
 **Parameters (json):** 无
@@ -1663,8 +1663,8 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/
 {"code":0}
 ```
 
-### 黑名单 
-#### GET /api/v4/banned 
+### 黑名单
+#### GET /api/v4/banned
 获取黑名单
 
 **Query String Parameters:**
@@ -1689,7 +1689,7 @@ $ curl -i --basic -u admin:public -vX GET "http://localhost:8081/api/v4/banned"
 {"meta":{"page":1,"limit":10000,"count":1},"data":[{"who":"example","until":1582265833,"reason":"undefined","by":"user","at":1582265533,"as":"clientid"}],"code":0}
 ```
 
-#### POST /api/v4/banned 
+#### POST /api/v4/banned
 将对象添加至黑名单
 
 **Parameters (json):**
@@ -1719,7 +1719,7 @@ $ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/banned"
 {"data":{"who":"example","as":"clientid"},"code":0}
 ```
 
-#### DELETE /api/v4/banned/{as}/{who} 
+#### DELETE /api/v4/banned/{as}/{who}
 将对象从黑名单中删除
 
 **Parameters:** 无
@@ -1741,10 +1741,10 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/banned
 {"code":0}
 ```
 
-### 数据导入导出 
+### 数据导入导出
 数据导入导出。
 
-#### GET /api/v4/data/export 
+#### GET /api/v4/data/export
 获取当前的导出文件信息列表，包括文件名、大小和创建时间。
 
 **Path Parameters:** 无
@@ -1769,7 +1769,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/data/expo
 {"data":[{"size":350,"filename":"emqx-export-2020-5-15-18-6-29.json","created_at":"2020-5-15 18:6:29"},{"size":388,"filename":"emqx-export-2020-5-15-17-39-0.json","created_at":"2020-5-15 17:39:0"}],"code":0}
 ```
 
-#### POST /api/v4/data/export 
+#### POST /api/v4/data/export
 导出当前数据到文件。
 
 **Path Parameters:** 无
@@ -1794,7 +1794,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/exp
 {"data":{"size":350,"filename":"emqx-export-2020-5-18-17-17-44.json","created_at":"2020-5-18 17:17:44"},"code":0}
 ```
 
-#### POST /api/v4/data/import 
+#### POST /api/v4/data/import
 从指定文件导入数据。
 
 **Path Parameters:** 无
@@ -1822,7 +1822,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/imp
 {"code":0}
 ```
 
-#### GET /api/v4/data/file/{filename} 
+#### GET /api/v4/data/file/{filename}
 下载数据文件。
 
 **Path Parameters:** 无
@@ -1850,7 +1850,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/data/file
 {"filename":"/Users/zhouzibo/emqx-rel/_build/emqx/rel/emqx/data/emqx-export-2020-5-18-17-17-44.json","file":"{\"version\":\"dev\",\"users\":[{\"username\":\"admin\",\"tags\":\"administrator\",\"password\":\"oKQPB1hbigv6+2ntALELNOb1fF0=\"}],\"schemas\":[],\"rules\":[],\"resources\":[],\"date\":\"2020-05-18 17:17:44\",\"blacklist\":[],\"auth_mnesia\":[],\"apps\":[{\"status\":true,\"secret\":\"public\",\"name\":\"Default\",\"id\":\"admin\",\"expired\":\"undefined\",\"desc\":\"Application user\"}],\"acl_mnesia\":[]}"}
 ```
 
-#### POST /api/v4/data/file 
+#### POST /api/v4/data/file
 上传数据文件。
 
 **Path Parameters:** 无
@@ -1879,7 +1879,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/fil
 {"code":0}
 ```
 
-#### DELETE /api/v4/data/file/{filename} 
+#### DELETE /api/v4/data/file/{filename}
 远程删除数据文件。
 
 **Path Parameters:** 无
@@ -1907,10 +1907,10 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 {"code":0}
 ```
 
-### 规则 
+### 规则
 查询规则引擎的动作
 
-#### GET /api/v4/rules/{rule_id} 
+#### GET /api/v4/rules/{rule_id}
 获取某个规则的详情，包括规则的 SQL、Topics 列表、动作列表等。还会返回当前规则和动作的统计指标的值。
 
 **Path Parameters:**
@@ -1936,7 +1936,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 | - data.actions[0].name | String      | 动作名字，与请求中的 actions.name 一致           |
 | - data.actions[0].metrics | Array       | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
 
-#### POST /api/v4/rules 
+#### POST /api/v4/rules
 创建规则，返回规则 ID。
 
 **Parameters (json):**
@@ -1966,7 +1966,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 | - data.actions[0].name    | String    | 动作名字，与请求中的 actions.name 一致           |
 | - data.actions[0].metrics | Array     | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
 
-#### PUT /api/v4/rules/{rule_id} 
+#### PUT /api/v4/rules/{rule_id}
 更新规则，返回规则 ID。
 
 **Parameters (json):**
@@ -1996,7 +1996,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 | - data.actions[0].name    | String    | 动作名字，与请求中的 actions.name 一致           |
 | - data.actions[0].metrics | Array     | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
 
-#### DELETE /api/v4/rules/{rule_id} 
+#### DELETE /api/v4/rules/{rule_id}
 删除规则。
 
 **Parameters:** 无
@@ -2066,10 +2066,10 @@ $ curl -XDELETE --basic -u admin:public 'http://localhost:8081/api/v4/rules/rule
 {"code":0}
 ```
 
-### 动作 
+### 动作
 查询规则引擎的动作。注意动作只能由 emqx 提供，不能添加。
 
-#### GET api/v4/actions/{action_name} 
+#### GET api/v4/actions/{action_name}
 获取某个动作的详情，包括动作名字、参数列表等。
 
 **Path Parameters:**
@@ -2108,10 +2108,10 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/actions'
 {"data":[{"types":[],"title":{"zh":"空动作 (调试)","en":"Do Nothing (debug)"},"params":{},"name":"do_nothing","for":"$any","description":{"zh":"此动作什么都不做，并且不会失败 (用以调试)","en":"This action does nothing and never fails. It's for debug purpose"},"app":"emqx_rule_engine"}, ...],"code":0}
 ```
 
-### 资源类型 
+### 资源类型
 查询规则引擎的资源类型。注意资源类型只能由 emqx 提供，不能添加。
 
-#### GET api/v4/resource_types/{resource_type_name} 
+#### GET api/v4/resource_types/{resource_type_name}
 获取某个资源的详情，包括资源描述、参数列表等。
 
 **Path Parameters:**
@@ -2149,10 +2149,10 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/resource_types'
 {"data":[{"title":{"zh":"WebHook","en":"WebHook"},"provider":"emqx_web_hook","params":{"url":{"type":"string","title":{"zh":"请求 URL","en":"Request URL"},"required":true,"format":"url","description":{"zh":"请求 URL","en":"Request URL"}},"method":{"type":"string","title":{"zh":"请求方法","en":"Request Method"},"enum":["PUT","POST"],"description":{"zh":"请求方法","en":"Request Method"},"default":"POST"},"headers":{"type":"object","title":{"zh":"请求头","en":"Request Header"},"schema":{},"description":{"zh":"请求头","en":"Request Header"},"default":{}}},"name":"web_hook","description":{"zh":"WebHook","en":"WebHook"}}, ...],"code":0}
 ```
 
-### 资源 
+### 资源
 管理规则引擎的资源。资源是资源类型的实例，用于维护数据库连接等相关资源。
 
-#### GET api/v4/resources/{resource_id} 
+#### GET api/v4/resources/{resource_id}
 获取指定的资源的详细信息。
 
 **Path Parameters:**
@@ -2173,7 +2173,7 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/resource_types'
 | - data.status      | Array     | 资源的状态信息。详情请参看 Dashboard 上资源的状态。          |
 | - data.description | Object    | 资源的描述信息，中英文。                                     |
 
-#### POST /api/v4/resources 
+#### POST /api/v4/resources
 创建规则，返回资源 ID。
 
 **Parameters (json):**
@@ -2195,7 +2195,7 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/resource_types'
 | - data.config      | Object    | 资源的配置。参数以 key-value 形式表示。<br />详情可参看后面的示例 |
 | - data.description | Object    | 资源的描述信息，中英文。                                     |
 
-#### DELETE /api/v4/resources/{resource_id} 
+#### DELETE /api/v4/resources/{resource_id}
 删除资源。
 
 **Parameters:** 无
@@ -2248,10 +2248,11 @@ $ curl -XDELETE --basic -u admin:public 'http://localhost:8081/api/v4/resources/
 {"code":0}
 ```
 
-### 数据遥测 
+{% emqxce %}
+### 数据遥测
 数据遥测
 
-#### PUT /api/v4/telemetry/status 
+#### PUT /api/v4/telemetry/status
 启用或关闭数据遥测功能。
 
 **Path Parameters:** 无
@@ -2279,7 +2280,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/telemetry
 {"code":0}
 ```
 
-#### GET /api/v4/telemetry/status 
+#### GET /api/v4/telemetry/status
 查询数据遥测功能是否启用。
 
 **Path Parameters:** 无
@@ -2302,7 +2303,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry
 {"data":{"enabled":true},"code":0}
 ```
 
-#### GET /api/v4/telemetry/data 
+#### GET /api/v4/telemetry/data
 获取数据遥测功能上报的数据内容。
 
 **Path Parameters:** 无
@@ -2337,4 +2338,1054 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry/data"
 
 {"data":{"uuid":"856916F6-ECC1-11EA-87C9-F9385C1F4A9C","up_time":553357,"otp_version":"22","os_version":"10.13.6","os_name":"Mac OS X","num_clients":0,"nodes_uuid":[],"messages_sent":0,"messages_received":0,"license":{"edition":"community"},"emqx_version":"dev-v4.2-rc.3","active_plugins":["emqx_telemetry","emqx_rule_engine","emqx_retainer","emqx_recon","emqx_management","emqx_dashboard"],"active_modules":["emqx_mod_presence","emqx_mod_rewrite","emqx_mod_acl_internal"]},"code":0}
+```
+{% endemqxce %
+
+### Mnesia 认证
+
+Mnesia 认证使用 EMQ X 内置 Mnesia 数据库存储客户端 Client ID/Username 与密码，支持通过 HTTP API 管理认证数据。
+
+Mnesia 认证不依赖外部数据源，使用上足够简单轻量，Mnesia 支持使用 Client ID 或 Username 进行认证。
+
+#### POST api/v4/auth_clientid
+
+创建基于 Client ID 的认证规则。
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | Client ID   |
+| password | String | True     | 密码        |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X POST \
+	-d '{"clientid": "emqx_c", "password": "emqx_p"}' \
+  http://localhost:8081/api/v4/auth_clientid
+
+## Return
+{"code":0}
+```
+
+#### POST api/v4/auth_username
+
+创建基于 Username 的认证规则。
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| username | String | True     | Username    |
+| password | String | True     | 密码        |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X POST \
+	-d '{"username": "emqx_u", "password": "emqx_p"}' \
+  http://localhost:8081/api/v4/auth_username
+
+## Return
+{"code":0}
+```
+
+#### POST api/v4/auth_clientid
+
+批量创建基于 Client ID 的认证规则。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name        | Type   | Required | Description |
+| ----------- | ------ | -------- | ----------- |
+| [].clientid | String | True     | Client ID   |
+| [].password | String | True     | 密码        |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+| data | Object  |             |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X POST \
+	-d '[{"clientid": "emqx_c_1", "password": "emqx_p"}, {"clientid": "emqx_c_2", "password": "emqx_p"}]' \
+  http://localhost:8081/api/v4/auth_clientid
+
+## Return
+{
+    "data":{
+        "emqx_c_2":"ok",
+        "emqx_c_1":"ok"
+    },
+    "code":0
+}
+```
+
+#### POST api/v4/auth_username
+
+批量创建基于 Username 的认证规则。
+
+**Path Parameters:** 无
+
+**Parameters (json):**
+
+| Name        | Type   | Required | Description |
+| ----------- | ------ | -------- | ----------- |
+| [].username | String | True     | Username    |
+| [].password | String | True     | 密码        |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+| data | Object  |             |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X POST \
+	-d '[{"username": "emqx_u_1", "password": "emqx_p"}, {"username": "emqx_u_2", "password": "emqx_p"}]' \
+  http://localhost:8081/api/v4/auth_username
+
+## Return
+{
+  "data":{
+    "emqx_u_2":"ok",
+    "emqx_u_1":"ok"
+  },
+  "code":0
+}
+```
+
+#### GET api/v4/auth_clientid
+
+查看已经添加的认证数据。
+
+**Success Response Body (JSON):**
+
+| Name               | Type    | Description |
+| ------------------ | ------- | ----------- |
+| code               | Integer | 0           |
+| meta               | Object  | 规则对象    |
+| data               | Object  | 规则对象    |
+| - data.[].clinetid | String  | Client ID   |
+
+**Example**
+
+```shell
+## Return
+$ curl -i \
+  --basic \
+  -u admin:public \
+  -X GET \
+  http://localhost:8081/api/v4/auth_clientid
+
+## Request
+{
+    "meta":{
+        "page":1,
+        "limit":10,
+        "count":3
+    },
+    "data":[
+        {
+            "clientid":"emqx_c_1"
+        },
+        {
+            "clientid":"emqx_c_2"
+        },
+        {
+            "clientid":"emqx_c"
+        }
+    ],
+    "code":0
+}
+```
+
+#### GET api/v4/auth_username
+
+查看已经添加的认证数据。
+
+**Success Response Body (JSON):**
+
+| Name               | Type    | Description |
+| ------------------ | ------- | ----------- |
+| code               | Integer | 0           |
+| meta               | Object  | 规则对象    |
+| data               | Object  | 规则对象    |
+| - data.[].username | String  | Client ID   |
+
+**Example**
+
+```shell
+## Return
+curl -i \
+  --basic \
+  -u admin:public \
+  -X GET \
+  http://localhost:8081/api/v4/auth_username
+
+## Request
+{
+    "meta":{
+        "page":1,
+        "limit":10,
+        "count":3
+    },
+    "data":[
+        {
+            "username":"emqx_u"
+        },
+        {
+            "username":"emqx_u_2"
+        },
+        {
+            "username":"emqx_u_1"
+        }
+    ],
+    "code":0
+}
+```
+
+#### GET api/v4/auth_clientid/{clientid}
+
+获取指定的资源的详细信息。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | Client ID   |
+
+**Success Response Body (JSON):**
+
+| Name            | Type    | Description                                              |
+| --------------- | ------- | -------------------------------------------------------- |
+| code            | Integer | 0                                                        |
+| data            | Object  | 规则对象                                                 |
+| - data.clientid | String  | Client ID                                                |
+| - data.password | String  | 注意此处返回的密码是使用配置文件指定哈希方式加密后的密码 |
+
+#### **Example**
+
+```shell
+## Request
+curl -i \
+  --basic \
+  -u admin:public \
+  -X GET \
+  http://localhost:8081/api/v4/auth_clientid/emqx_c
+
+## Return
+{
+  "data":{
+    "password":"bb7bb456355aaeb55a4eb26ea286314fc360138720cfca2c852d4dfb8cd834",
+    "clientid":"emqx_c"
+  },
+  "code":0
+}
+```
+
+#### GET api/v4/auth_username/{username}
+
+获取指定的资源的详细信息。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| username | String | True     | Username    |
+
+**Success Response Body (JSON):**
+
+| Name            | Type    | Description                                              |
+| --------------- | ------- | -------------------------------------------------------- |
+| code            | Integer | 0                                                        |
+| data            | Object  | 规则对象                                                  |
+| - data.username | String  | Username                                                 |
+| - data.password | String  | 注意此处返回的密码是使用配置文件指定哈希方式加密后的密码 |
+
+#### **Example**
+
+```shell
+## Request
+curl -i \
+  --basic \
+  -u admin:public \
+  -X GET \
+  http://localhost:8081/api/v4/auth_username/emqx_u
+
+## Return
+{
+  "data":{
+    "password":"bb7bb456355aaeb55a4eb26ea286314fc360138720cfca2c852d4dfb8cd834",
+    "clientid":"emqx_u"
+  },
+  "code":0
+}
+```
+
+#### PUT api/v4/auth_clientid/{clientid}
+
+更新已添加的认证数据。
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | Client ID   |
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| password | String | True     | 密码        |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X PUT \
+	-d '{"password": "emqx_new_p"}' \
+  http://localhost:8081/api/v4/auth_clientid/emqx_c
+
+## Return
+{"code":0}
+```
+
+#### PUT api/v4/auth_username/{username}
+
+更新已添加的认证数据。
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| username | String | True     | Username    |
+
+**Parameters (json):**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| password | String | True     | 密码        |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X PUT \
+	-d '{"password": "emqx_new_p"}' \
+  http://localhost:8081/api/v4/auth_username/emqx_u
+
+## Return
+{"code":0}
+```
+
+#### DELETE /api/v4/auth_clientid/{clientid}
+
+删除认证规则。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | Client ID   |
+
+**Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X Delete\
+  http://localhost:8081/api/v4/auth_clientid/emqx_c
+
+## Return
+{"code":0}
+```
+
+#### DELETE /api/v4/auth_username/{username}
+
+删除认证规则。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| username | String | True     | Username    |
+
+**Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X Delete\
+  http://localhost:8081/api/v4/auth_username/emqx_u
+
+## Return
+{"code":0}
+```
+
+### Mnesia 访问控制
+
+Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
+
+#### POST api/v4/acl
+
+添加 ACL 规则。
+
++ Clientid ACL
+
+  **Parameters (json):**
+
+  | Name     | Type          | Required | Description |
+  | -------- | ------        | -------- | ----------- |
+  | clientid | String        | True     | Client ID   |
+  | topic    | String        | True     | 主题         |
+  | action   | sub/pub/subpub| True     | 动作         |
+  | access   | allow/deny    | True     | 是否允许      |
+
+  **Success Response Body (JSON):**
+
+  | Name             | Type    | Description |
+  | ----             | ------- | ----------- |
+  | code             | Integer | 0           |
+  | data             | Object  | 规则对象     |
+  | - data.clientid  | String  | Clientid    |
+  | - data.topic     | String  | 主题         |
+  | - data.action    | String  | 动作         |
+  | - data.access    | String  | 是否允许      |
+
+  **Examples**
+
+  ```shell
+  ## Request
+  curl -i \
+  --basic \
+  -u admin:public \
+  -X POST \
+  -d '{"clientid":"emqx_c", "topic":"Topic/A", "action":"pub", "access": "allow"}' \
+  http://localhost:8081/api/v4/acl
+
+  ## Return
+  {
+    "data":{
+        "topic":"Topic/A",
+        "result":"ok",
+        "clientid":"emqx_c",
+        "action":"pub",
+        "access":"allow"
+    },
+    "code":0
+  }
+  ```
+
++ Username ACL
+
+  **Parameters (json):**
+
+  | Name     | Type          | Required | Description |
+  | -------- | ------        | -------- | ----------- |
+  | username | String        | True     | Username    |
+  | topic    | String        | True     | 主题         |
+  | action   | sub/pub/subpub| True     | 动作         |
+  | access   | allow/deny    | True     | 是否允许      |
+
+  **Success Response Body (JSON):**
+
+  | Name             | Type    | Description |
+  | ----             | ------- | ----------- |
+  | code             | Integer | 0           |
+  | data             | Object  | 规则对象     |
+  | - data.username  | String  | Username    |
+  | - data.topic     | String  | 主题         |
+  | - data.action    | String  | 动作         |
+  | - data.access    | String  | 是否允许      |
+
+  **Examples**
+
+  ```shell
+  ## Request
+  curl -i \
+  --basic \
+  -u admin:public \
+  -X POST \
+  -d '{"username":"emqx_u", "topic":"Topic/A", "action":"pub", "access": "allow"}' \
+  http://localhost:8081/api/v4/acl
+
+  ## Return
+  {
+    "data":{
+        "topic":"Topic/A",
+        "result":"ok",
+        "username":"emqx_u",
+        "action":"pub",
+        "access":"allow"
+    },
+    "code":0
+  }
+  ```
+
++ $all ACL
+
+  **Parameters (json):**
+
+  | Name     | Type          | Required | Description |
+  | -------- | ------        | -------- | ----------- |
+  | topic    | String        | True     | 主题         |
+  | action   | sub/pub/subpub| True     | 动作         |
+  | access   | allow/deny    | True     | 是否允许      |
+
+  **Success Response Body (JSON):**
+
+  | name             | type    | description |
+  | ----             | ------- | ----------- |
+  | code             | integer | 0           |
+  | data             | object  | 规则对象     |
+  | - data.all       | string  | $all        |
+  | - data.topic     | string  | 主题         |
+  | - data.action    | string  | 动作         |
+  | - data.access    | string  | 是否允许      |
+
+  **Examples**
+
+  ```shell
+  ## Request
+  curl -i \
+  --basic \
+  -u admin:public \
+  -X POST \
+  -d '{"topic":"Topic/A", "action":"pub", "access": "allow"}' \
+  http://localhost:8081/api/v4/acl
+
+  ## Return
+  {
+    "data":{
+        "topic":"Topic/A",
+        "result":"ok",
+        "all":"$all",
+        "action":"pub",
+        "access":"allow"
+    },
+    "code":0
+  }
+  ```
+
+#### POST api/v4/acl
+
+批量添加 ACL 规则。
+
+**Parameters (json):**
+
+| Name         | Type          | Required | Description |
+| --------     | ------        | -------- | ----------- |
+| [0].clientid | String        | True     | Clientid    |
+| [0].topic    | String        | True     | 主题         |
+| [0].action   | sub/pub/subpub| True     | 动作         |
+| [0].access   | allow/deny    | True     | 是否允许      |
+| [1].username | String        | True     | Username    |
+| [1].topic    | String        | True     | 主题         |
+| [1].action   | sub/pub/subpub| True     | 动作         |
+| [1].access   | allow/deny    | True     | 是否允许      |
+| [2].topic    | String        | True     | 主题         |
+| [2].action   | sub/pub/subpub| True     | 动作         |
+| [2].access   | allow/deny    | True     | 是否允许      |
+
+**Success Response Body (JSON):**
+
+| name                 | type    | description |
+| ----                 | ------- | ----------- |
+| code                 | integer | 0           |
+| data                 | object  | 规则对象     |
+| - data.[0].clientid  | string  | Client ID   |
+| - data.[0].topic     | string  | 主题         |
+| - data.[0].action    | string  | 动作         |
+| - data.[0].access    | string  | 是否允许      |
+| - data.[1].username  | string  | Username     |
+| - data.[1].topic     | string  | 主题         |
+| - data.[1].action    | string  | 动作         |
+| - data.[1].access    | string  | 是否允许      |
+| - data.[2].all       | string  | $all         |
+| - data.[2].topic     | string  | 主题         |
+| - data.[2].action    | string  | 动作         |
+| - data.[2].access    | string  | 是否允许      |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X POST \
+	-d '[
+        {
+          "clientid":"emqx_c_1",
+          "topic":"Topic/A",
+          "action":"pub",
+          "access": "allow"
+        },
+        {
+          "username":"emqx_u_1",
+          "topic":"Topic/A",
+          "action":"sub",
+          "access": "allow"
+        },
+        {
+          "topic":"Topic/+",
+          "action":"pubsub",
+          "access": "deny"
+        }
+      ]' \
+  http://localhost:8081/api/v4/auth_clientid
+
+## Return
+{
+  "data": [
+    {
+      "clientid":"emqx_c_1",
+      "topic":"Topic/A",
+      "action":"pub",
+      "access": "allow",
+      "result": "ok"
+    },
+    {
+      "username":"emqx_u_1",
+      "topic":"Topic/A",
+      "action":"pub",
+      "access": "allow"
+      "result": "ok"
+    },
+    {
+      "all": "$all",
+      "topic":"Topic/+",
+      "action":"pubsub",
+      "access": "deny"
+    },
+  ],
+  "code": 0
+}
+```
+
+### GET api/v4/acl/clinetid
+
+查看已经添加的 ACL 规则
+
+**Success Response Body (JSON):**
+
+| Name                | Type    | Description |
+| ----                | ------- | ----------- |
+| code                | Integer | 0           |
+| data                | Object  | 规则对象     |
+| - data.[].clientid  | String  | Clientid    |
+| - data.[].topic     | String  | 主题         |
+| - data.[].action    | String  | 动作         |
+| - data.[].access    | String  | 是否允许      |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X GET \
+  http://localhost:8081/api/v4/acl/clientid
+
+## Return
+{
+    "meta": {
+      "page": 1,
+      "limit": 10,
+      "count": 1
+    },
+    "data": [
+      {
+        "clientid": "emqx_c",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "clientid": "emqx_c_1",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "clientid": "emqx_c_2",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      }
+    ],
+    "code": 0
+  }
+```
+
+### GET api/v4/acl/username
+
+查看已经添加的 ACL 规则
+
+**Success Response Body (JSON):**
+
+| Name                | Type    | Description |
+| ----                | ------- | ----------- |
+| code                | Integer | 0           |
+| data                | Object  | 规则对象     |
+| - data.[].username  | String  | Username    |
+| - data.[].topic     | String  | 主题         |
+| - data.[].action    | String  | 动作         |
+| - data.[].access    | String  | 是否允许      |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X GET \
+  http://localhost:8081/api/v4/acl/username
+
+## Return
+{
+    "meta": {
+      "page": 1,
+      "limit": 10,
+      "count": 1
+    },
+    "data": [
+      {
+        "clientid": "emqx_u",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "clientid": "emqx_u_1",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "clientid": "emqx_u_2",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      }
+    ],
+    "code": 0
+  }
+```
+
+### GET api/v4/acl/$all
+
+查看已经添加的 ACL 规则
+
+**Success Response Body (JSON):**
+
+| Name                | Type    | Description |
+| ----                | ------- | ----------- |
+| code                | Integer | 0           |
+| data                | Object  | 规则对象     |
+| - data.[].all       | String  | $all        |
+| - data.[].topic     | String  | 主题         |
+| - data.[].action    | String  | 动作         |
+| - data.[].access    | String  | 是否允许      |
+
+**Examples**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X GET \
+  http://localhost:8081/api/v4/acl/\$all
+
+## Return
+{
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "count": 1
+  },
+  "data": [
+    {
+      "all": "$all",
+      "topic": "Topic/A",
+      "action": "pub",
+      "access": "allow"
+    },
+    {
+      "all": "$all",
+      "topic": "Topic/+",
+      "action": "pubsub",
+      "access": "deny"
+    }
+  ],
+  "code": 0
+}
+```
+
+#### GET /api/v4/acl/clientid/{clientid}
+
+查看指定的 ACL 规则。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name             | Type        | Description |
+| ----             | -------     | ----------- |
+| code             | Integer     | 0           |
+| data             | object      | 规则对象     |
+| - data.clientid  | string      | ClientID        |
+| - data.topic     | string      | 主题         |
+| - data.action    | string      | 动作         |
+| - data.access    | string      | 是否允许     |
+
+**Examples:**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X GET \
+  http://localhost:8081/api/v4/acl/clientid/emqx_c
+
+## Return
+{
+  "data": {
+    "topic": "Topic/A",
+    "clientid": "emqx_c",
+    "allow": true,
+    "action": "pub"
+  },
+  "code": 0
+}
+```
+
+#### GET /api/v4/acl/username/{username}
+
+查看指定的 ACL 规则。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| usernmae | String | True     | Username    |
+
+**Parameters:** 无
+
+**Success response body (json):**
+
+| name             | type        | description |
+| ----             | -------     | ----------- |
+| code             | integer     | 0           |
+| data             | object      | 规则对象     |
+| - data.username  | string      | Username    |
+| - data.topic     | string      | 主题         |
+| - data.action    | string      | 动作         |
+| - data.access    | string      | 是否允许      |
+
+**Examples:**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X GET \
+  http://localhost:8081/api/v4/acl/usernmae/emqx_u
+
+## Return
+{
+  "data": {
+    "topic": "Topic/A",
+    "username": "emqx_u",
+    "allow": true,
+    "action": "pub"
+  },
+  "code": 0
+}
+```
+
+#### DELETE /api/v4/acl/clientid/{clientid}/topic/{topic}
+
+删除指定的 ACL 规则。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description                  |
+| -------- | ------ | -------- | -----------                  |
+| clientid | String | True     | ClientID                     |
+| topic    | String | True     | 主题，可能需要使用 UrlEncode 编码|
+
+**Parameters:** 无
+
+**Success response body (json):**
+
+| name             | type        | description |
+| ----             | -------     | ----------- |
+| code             | integer     | 0           |
+
+**Examples:**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X DELETE \
+  http://localhost:8081/api/v4/acl/clientid/emqx_c/topic/Topic%2fA
+
+## Return
+{"code": 0}
+```
+
+#### DELETE /api/v4/acl/username/{usernmae}/topic/{topic}
+
+删除指定的 ACL 规则。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description                  |
+| -------- | ------ | -------- | -----------                  |
+| username | String | True     | Username                     |
+| topic    | String | True     | 主题，可能需要使用 UrlEncode 编码|
+
+**Parameters:** 无
+
+**Success response body (json):**
+
+| name             | type        | description |
+| ----             | -------     | ----------- |
+| code             | integer     | 0           |
+
+**Examples:**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X DELETE \
+  http://localhost:8081/api/v4/acl/username/emqx_u/topic/Topic%2fA
+
+## Return
+{"code": 0}
+```
+
+#### DELETE /api/v4/acl/all/$all/topic/{topic}
+
+删除指定的 ACL 规则。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description                  |
+| -------- | ------ | -------- | -----------                  |
+| topic    | String | True     | 主题，可能需要使用 UrlEncode 编码|
+
+**Parameters:** 无
+
+**Success response body (json):**
+
+| name             | type        | description |
+| ----             | -------     | ----------- |
+| code             | integer     | 0           |
+
+**Examples:**
+
+```shell
+## Request
+curl -i \
+	--basic \
+	-u admin:public \
+	-X DELETE \
+  http://localhost:8081/api/v4/acl/all/\$all/topic/Topic%2fA
+
+## Return
+{"code": 0}
 ```
