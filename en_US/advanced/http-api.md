@@ -5,7 +5,7 @@ EMQ X Broker's HTTP API service listens on port 8081 by default. You can modify 
 
 ## Interface security 
 EMQ X Broker's HTTP API uses the method of [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). The `id` and ` password` must be filled with AppID and AppSecret respectively.
-The default AppID and AppSecret are: `amdin/public`. You can modify and add AppID / AppSecret in the left menu bar of Dashboard by selecting "Manage"-> "Apps".
+The default AppID and AppSecret are: `admin/public`. You can modify and add AppID / AppSecret in the left menu bar of Dashboard by selecting "Manage"-> "Apps".
 
 ## Response code 
 ### HTTP status codes
