@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import re
 
 docs_path = sys.argv[1]
 success = True
@@ -23,6 +24,20 @@ def check_path(path_list, folder):
             if not os.path.exists(file_path):
                 print(f'{folder}/{md_path}.md not exists')
                 success = False
+
+            md_content = open(file_path, 'r').read()
+            image_list = re.findall('(.*?)!\[(.*?)\]\((.*?)\)', md_content)
+            for image in image_list:
+                if image[0].startswith('<!--'):
+                    continue
+                if image[2].startswith(('http://', 'https://', '<')):
+                    continue
+                image_path = os.path.join(f'{"/".join(file_path.split("/")[:-1])}/', image[2])
+
+                if not os.path.exists(image_path):
+                    print(f'In {folder}/{md_path}.md：', end='')
+                    print(image[2], 'does not exist')
+                    success = False
 
 
 if __name__ == '__main__':
