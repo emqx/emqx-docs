@@ -1,31 +1,30 @@
-# 保存数据到 DolphinDB
+# Save data to DolphinDB
 
-[DolphinDB](https://www.dolphindb.cn) 是由浙江智臾科技有限公司研发的一款高性能分布式时序数据库，集成了功能强大的编程语言和高容量高速度的流数据分析系统，为海量结构化数据的快速存储、检索、分析及计算提供一站式解决方案，适用于量化金融及工业物联网等领域。
+[DolphinDB](https://www.dolphindb.cn) is a high-performance distributed time series database developed by Zhejiang  DolphinDB Co., Ltd, which integrates powerful programming language and high-capacity and high-speed flow data analysis system, providing a one-stop solution for rapid storage, retrieval, analysis and calculation of massive structured data. It is suitable for the area of quantitative finance and industrial Internet of things.
 
-EMQ X 用 Erlang 实现了 DolphinDB 的客户端 API，它通过 TCP 的方式将数据传输到 DolphinDB 进行存储。
+EMQ X uses Erlang to implement DolphinDB's client API, which transmits data to DolphinDB for storage through TCP.
 
-## 搭建 DolphinDB
+## Set up DolphinDB
 
-目前，EMQ X 仅适配 DolphinDB 1.20.7 的版本。
+Currently, EMQ X only adapts to DolphinDB 1.20.7 version.
 
-以 Linux 版本为例，前往官网下载社区最新版本的 Linux64 安装包：https://www.dolphindb.cn/downloads.html
+Taking the Linux version as an example, you can go to the official website to download the latest version of the Linux64 installation package from the community:https://www.dolphindb.cn/downloads.html
 
-将安装包的 server 目录上传至服务器目录 `/opts/app/dolphindb`，并测试启动是否正常：
+Upload the server directory of the installation package to the server directory `/opts/app/dolphindb`, and test whether the startup is normal:
 
 ```bash
 chmod +x ./dolphindb
 ./dolphindb
-
-## 启动成功后，会进入到 dolphindb 命令行，执行 1+1
+## If the startup is successful, you will enter the dolphindb command line and execute 1+1
 >1+1
 2
 ```
 
-启动成功，并得到正确输出，表示成功安装 DolphinDB。然后使用 `<CRTL+D>` 关闭 DolphinDB。
+If the startup is successful and the correct output is obtained, it indicates that DolphinDB is successfully installed. Then use `<CRTL+D>` to close DolphinDB.
 
-现在，我们需要打开 DolphinDB 的 StreamTable 的发布/订阅的功能，并创建相关数据表，以实现 EMQ X 消息存储并持久化的功能：
+Now, we need to open the publish / subscribe function of streamtable in dolphin dB and create relevant data tables to realize the function of EMQ x message storage and persistence:
 
-1. 修改 DolphinDB 的配置文件 `vim dolphindb.cfg` 加入以下配置项，以打开 发布/订阅 的功能：
+1. Modify the DolphinDB's configuration file `vim dolphindb.cfg` and add the following configuration items to enable the publish/subscribe function:
 ``` properties
 ## Publisher for streaming
 maxPubConnections=10
@@ -34,7 +33,6 @@ persistenceDir=/ddb/pubdata/
 #maxPersistenceQueueDepth=
 #maxMsgNumPerBlock=
 #maxPubQueueDepthPerSite=
-
 ## Subscriber for streaming
 subPort=8000
 #subExecutors=
@@ -43,55 +41,53 @@ subPort=8000
 #maxSubQueueDepth=
 ```
 
-2. 后台启动 DolphinDB 服务：
+2. Start the dolphin DB service from the background:
 ```bash
-## 启动完成后，DolphinDB 会监听 8848 端口供客户端使用。
+## After startup, dolphin DB will listen to port 8848 for client.
 nohup ./dolphindb -console 0 &
 ```
 
-3. 前往 DolphinDB 官网，下载合适的 GUI 客户端连接 DolphinDB 服务：
-    - 前往 [下载页](http://www.dolphindb.cn/alone/alone.php?id=10) 下载 `DolphinDB GUI`
-    - DolphinDB GUI 客户端依赖 Java 环境，先确保已经安装 Java
-    - 前往 DolphinDB GUI 目录中执行 `sh gui.sh` 启动客户端
-    - 在客户端中添加 Server 并创建一个 Project，和脚本文件。
+3. Go to the official website of DolphinDB and download a suitable GUI client to connect to the DolphinDB service:
+    - Go to [download page](http://www.dolphindb.cn/alone/alone.php?id=10) to download `DolphinDB GUI`
+    - DolphinDB GUI client depends on the Java environment, therefore, make sure that Java is installed at first
+    - Go to the DolphinDB GUI directory and execute `sh gui.sh` to start the client
+    - Add Server in the client and create a Project with script files.
 
-4. 创建分布式数据库，和 StreamTable 表；并将 StreamTable 的数据持久化到分布式表中：
+4. Create a distributed database and a streamtable table, and persist the data of streamtable into the distributed table
 ```ruby
-// 创建一个名为 emqx 的 分布式文件数据库
-// 并创建一张名为 `msg` 表，按 `clientid` 和 `topic` 的 HASH 值进行分区：
+// Create a distributed file database named emqx
+// And create a table named `msg`, partition by the hash values of `clientid` and `topic`:
 schema = table(1:0, `clientid`topic`qos`payload, [STRING, STRING, INT, STRING])
 db1 = database("", HASH, [STRING, 8])
 db2 = database("", HASH, [STRING, 8])
 db = database("dfs://emqx", COMPO, [db1, db2])
 db.createPartitionedTable(schema, "msg",`clientid`topic)
-
-// 创建名为 `st_msg` 的 StreamTable 表，并将数据持久化到 `msg` 表。
+// Create a StreamTable table named `st_msg` and persist the data to the `msg` table.
 share streamTable(10000:0,`clientid`topic`qos`payload, [STRING,STRING,INT,STRING]) as st_msg
 msg_ref= loadTable("dfs://emqx", "msg")
 subscribeTable(, "st_msg", "save_msg_to_dfs", 0, msg_ref, true)
-
-// 查询 msg_ref；检查是否创建成功
+// Query msg_ref to check whether the creation is successful
 select * from msg_ref;
 ```
-完成后，可以看到一张空的 `msg_ref` 已创建成功：
+After that, you can see that an empty `msg_ref` has been created successfully:
 
 ![Create DolphinDB Table](./assets/rule-engine/dolphin_create_tab.jpg)
 
-至此，DolphinDB 的配置已经完成了。
+So far, the configuration of DolphinDB has been completed.
 
-详细的 DolphinDB 使用文档请参考：
-- 用户指南：https://github.com/dolphindb/Tutorials_CN/blob/master/dolphindb_user_guide.md
-- IoT 场景示例：https://gitee.com/dolphindb/Tutorials_CN/blob/master/iot_examples.md
-- 流处理指南：https://github.com/dolphindb/Tutorials_CN/blob/master/streaming_tutorial.md
-- 编程手册：https://www.dolphindb.cn/cn/help/index.html
+For detailed DolphinDB usage documentation, please refer to:
+- User Guide: https://github.com/dolphindb/Tutorials_CN/blob/master/dolphindb_user_guide.md
+- Examples of IoT scenarios: https://gitee.com/dolphindb/Tutorials_CN/blob/master/iot_examples.md
+- Stream processing guidelines: https://github.com/dolphindb/Tutorials_CN/blob/master/streaming_tutorial.md
+- Programming manual: https://www.dolphindb.cn/cn/help/index.html
 
-## 配置规则引擎
+## Configure the rules engine
 
-创建规则:
+Create rules:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
-填写规则 SQL:
+Fill in the rule SQL:
 
 ```sql
 SELECT * FROM "t/#"
@@ -99,45 +95,43 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/rule_sql.png)
 
-关联动作:
+Related actions:
 
-在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 DolphinDB”。
+On the "Response Action" interface, select "Add", and then select "Save Data to DolphinDB" in the "Action" drop-down box.
 
 ![image](./assets/rule-engine/dolphin_action_1.jpg)
 
-填写动作参数:
+Fill in the action parameters:
 
-“保存数据到 DolphinDB” 动作需要两个参数：
+The "Save data to DolphinDB" action requires two parameters:
 
-1). SQL 模板。这个例子里我们向流表 `st_msg` 中插入一条数据，SQL 模板为:
+1). SQL template. In this example, we insert a piece of data into the stream table `st_msg`, and the SQL template is:
 
 ```sql
 insert into st_msg values(${clientid}, ${topic}, ${qos}, ${payload})
 ```
 
-2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个DolphinDB 资源:
+2). The ID of the associated resource. Now that the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a DolphinDB resource:
 
-填写资源配置:
-
-服务器地址填写对应上文部署的 DolphinDB 的服务器，用户名为 `admin` 密码为 `123456`
+Fill in the server address corresponding to the DolphinDB server deployed above. The user name is `admin` and the password is `123456`
 
 ![image](./assets/rule-engine/dolphin_res_1.jpg)
 
-点击 “确定” 按钮。
+Click the "OK" button.
 
-返回响应动作界面，点击 “确定”。
+Return to the response action interface and click "OK".
 
 ![image](./assets/rule-engine/dolphin_action_2.jpg)
 
-返回规则创建界面，点击 “创建”。
+Return to the rule creation interface and click "Create".
 
 ![image](./assets/rule-engine/dolphin_action_3.jpg)
 
-在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
+In the rule list, click the "View" button or the rule ID connection to preview the rule just created:
 
 ![image](./assets/rule-engine/dolphin_overview.jpg)
 
-规则已经创建完成，现在发一条数据:
+The rule has been created. Now, send a piece of data:
 
 ```bash
 Topic: "t/a"
@@ -145,6 +139,6 @@ QoS: 1
 Payload: "hello"
 ```
 
-然后检查持久化的 `msg_dfs` 表，新的数据是否添加成功:
+Then check the persistent `msg_dfs` table to see whether the new data is added successfully:
 
 ![image](./assets/rule-engine/dolphin_result.jpg)
