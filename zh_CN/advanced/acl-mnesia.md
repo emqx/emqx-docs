@@ -345,7 +345,7 @@ POST api/v4/acl
       "code": 0
   }
   ```
-+ Clinet ACL
++ $all ACL
 
   ```bash
   # Request
