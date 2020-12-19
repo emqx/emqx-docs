@@ -1,6 +1,6 @@
-# 离线消息保存到 Redis
+# Save offline messages to Redis
 
-搭建 Redis 环境，以 MacOS X 为例:
+Set up the Redis environment, and take MacOS X as an example:
 
 ```bash
  $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz
@@ -8,23 +8,23 @@ $ tar xzf redis-4.0.14.tar.gz
 $ cd redis-4.0.14
 $ make && make install
 
-# 启动 redis
+# Start redis
 $ redis-server
 ```
 
-创建规则:
+Create rules:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
-然后填写规则 SQL:
+Then fill in the rule SQL:
 
-FROM说明
+FROM description
 
- **t/#**: 发布者发布消息触发保存离线消息到Redis
+​	**t/#**: The publisher publishes a message to trigger the action of saving of offline messages to Redis
 
- **$events/session_subscribed**: 订阅者订阅主题触发获取离线消息
+​	**$events/session_subscribed**: The subscriber subscribes to topics to trigger  the action of getting offline messages
 
- **$events/message_acked**: 订阅者回复消息ACK后触发删除已经被接收的离线消息
+​	**$events/message_acked**: The subscriber replies to the message ACK to trigger the action of deleting the offline message that has been received
 
 ```bash
 SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE topic =~ 't/#'
@@ -32,48 +32,47 @@ SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE
 
 ![](./assets/rule-engine/offline_msg_1.png)
 
-关联动作:
+Related actions:
 
-在 “响应动作” 界面选择 “添加动作”，然后在 “动作” 下拉框里选择 “离线消息保存到 Redis”。
+Select "Add Action" on the "Response Action" interface, and then select "Save offline messages to Redis" in the "Action" drop-down box
 
 ![](./assets/rule-engine/offline_msg_2.png)
 
-填写动作参数:
+Fill in the action parameters:
 
-“离线消息保存到 Redis 动作需要两个参数：
+The action of saving offline messages to Redis requires two parameters:
 
-1). Redis Key 超期的 TTL
+1). Redis Key expired TTL
 
-2). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Redis 资源:
+2). Associated resources. Now that the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a Redis resource:
 
 ![](./assets/rule-engine/offline_msg_3.png)
 
-选择 Redis 单节点模式资源”。
+Select Redis single-node mode resources.
 
 ![](./assets/rule-engine/offline_msg_4.png)
 
-填写资源配置:
+Fill in the resource configuration:
 
-   填写真实的 Redis 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
+Fill in the real Redis server address and keep other configurations as default, and then click the "Test Connection" button to ensure that the connection test is successful.
 
-最后点击 “新建” 按钮。
+Finally click the "OK" button.
 
 ![](./assets/rule-engine/offline_msg_5.png)
 
-返回响应动作界面，点击 “确认”。
+Return to the response action interface and click "OK".
 
 ![](./assets/rule-engine/offline_msg_7.png)
 
-返回规则创建界面，点击 “新建”。
+Return to the rule creation interface and click "Create".
 
 ![](./assets/rule-engine/offline_msg_6.png)
 
-规则已经创建完成，通过 Dashboard 的 WebSocket 客户端发一条数据**(发布消息的QoS必须大于0)**:
+The rule has been created, and you can send a piece of data through the WebSocket client of Dashboard **(The QoS of the published message must be greater than 0):**
 
 ![](./assets/rule-engine/offline_msg_8.png)
 
-
-消息发送后，通过 Redis CLI 查看到消息被保存到 Redis 里面:
+After the message is sent, you can see the message is saved in Redis through Redis CLI:
 
 ```bash
 $ redis-cli
@@ -85,14 +84,14 @@ hgetall Key
 
 ![](./assets/rule-engine/offline_msg_10.png)
 
-使用另外一个客户端，订阅主题 "t/1" **(订阅主题的QoS必须大于0，否则消息会被重复接收, 不支持主题通配符方式订阅获取离线消息)**:
+Use another client to subscribe to the topic "t/1" **(the QoS of the subscribed topic must be greater than 0, otherwise the message will be received repeatedly. Topic wildcard subscription is not supported to get offline messages):**
 
 ![](./assets/rule-engine/offline_msg_11.png)
 
-订阅后马上接收到了保存到 Redis 里面的离线消息:
+After subscribing, you will receive the offline message saved in Redis immediately:
 
 ![](./assets/rule-engine/offline_msg_12.png)
 
-离线消息被接收后会在 Redis 中删除:
+Offline messages will be deleted in Redis after being received:
 
 ![](./assets/rule-engine/offline_msg_13.png)

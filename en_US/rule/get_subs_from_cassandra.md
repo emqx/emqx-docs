@@ -1,9 +1,9 @@
-# 从 Cassandra 中获取订阅关系
+# Get subscription relationship from Cassandra
 
-搭建 Cassandra 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
+Set up the Cassandra database and set the user name and password to root/public. Take MacOS X as an example:
 ```bash
 $ brew install cassandra
-## 修改配置，关闭匿名认证
+## Modify the configuration and disable anonymous authentication
 $  vim /usr/local/etc/cassandra/cassandra.yaml
 
     authenticator: PasswordAuthenticator
@@ -11,20 +11,20 @@ $  vim /usr/local/etc/cassandra/cassandra.yaml
 
 $ brew services start cassandra
 
-## 创建 root 用户
+## Create root user
 $ cqlsh -ucassandra -pcassandra
 
 create user root with password 'public' superuser;
 ```
 
-创建 "mqtt" 表空间:
+Create the "mqtt" tablespace:
 ```bash
 $ cqlsh -uroot -ppublic
 
 CREATE KEYSPACE mqtt WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 ```
 
-创建 mqtt_sub 表:
+Create the mqtt_sub table:
 
 ```sql
 
@@ -53,15 +53,15 @@ CREATE TABLE mqtt_sub (
 
 ::: danger
 
-订阅关系表结构不能修改，请使用上面SQL语句创建
+The subscription relationship table structure cannot be modified. Please use the above SQL statement to create
 
 :::
 
-创建规则:
+Create rules:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
-然后填写规则 SQL:
+Then fill in the rule SQL:
 
 ```bash
 SELECT * FROM "$events/client_connected"
@@ -69,41 +69,41 @@ SELECT * FROM "$events/client_connected"
 
 ![](./assets/rule-engine/cass_sub_01.png)
 
-关联动作:
+Related actions:
 
-在“响应动作”界面选择“添加动作”，然后在“新增动作”下拉框里选择“从 Cassandra 中获取订阅列表”
+Select "Add Action" on the "Response Action" interface, and then select "Get Subscription List from Cassandra" in the "Add Action" drop-down box
 
 ![](./assets/rule-engine/cass_sub_02.png)
 
-填写动作参数:
+Fill in the action parameters:
 
-“从 Cassandra 中获取订阅列表”动作需要一个参数：
+The action of "Get subscription list from Cassandra" requires one parameter:
 
-1). 关联资源。现在资源下拉框为空，可以点击右上角的 “新建” 来创建一个 Cassandra 资源：
+1). Associated resources. The resource drop-down box is empty now, and you can click "New" in the upper right corner to create a Cassandra resource:
 
 ![](./assets/rule-engine/cass_sub_03.png)
 
-弹出“创建资源”对话框
+The "Create Resource" dialog box pops up
 
 ![](./assets/rule-engine/cass_sub_04.png)
 
-填写资源配置:
+Fill in the resource configuration:
 
-   填写真实的 Cassandra 服务器地址，其他配置相应的值，然后点击 “测试连接” 按钮，确保连接测试成功。
+Fill in the real Cassandra server address and the values corresponding to other configurations, and then click the "Test Connection" button to ensure that the connection test is successful.
 
-最后点击 “确定” 按钮。
+Finally click the "OK" button.
 
 ![](./assets/rule-engine/cass_sub_05.png)
 
-返回响应动作界面，点击 “确认”。
+Return to the response action interface and click "OK".
 
 ![](./assets/rule-engine/cass_sub_06.png)
 
-返回规则创建界面，点击 “创建”。
+Return to the rule creation interface and click "Create".
 
 ![](./assets/rule-engine/cass_sub_07.png)
 
-规则已经创建完成，通过 “cqlsh” 往 Cassandra 插入一条订阅关系:
+The rule has been created, and you can insert a subscription relationship into Cassandra through "cqlsh":
 
 ```
 insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1);
@@ -111,10 +111,10 @@ insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1);
 
 ![](./assets/rule-engine/cass_sub_08.png)
 
-通过 Dashboard 登录 clientid 为 test 的设备:
+Log in to the device whose clientid is test via Dashboard:
 
 ![](./assets/rule-engine/cass_sub_09.png)
 
-查看“订阅”列表，可以看到 Broker 从 Cassandra 里面获取到订阅关系，并代理设备订阅:
+Check the "Subscription" list, and you can see that the Broker obtains the subscription relationship from Cassandra and subscribes as the agent device:
 
 ![](./assets/rule-engine/cass_sub_10.png)
