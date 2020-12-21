@@ -183,7 +183,7 @@ pbkdf2,sha256,1000,20
 
 ::: tip
 
-可参考:[加盐规则与哈希方法](https://docs.emqx.net/broker/latest/cn/advanced/auth.html#加盐规则与哈希方法)。
+可参考:[加盐规则与哈希方法](https://docs.emqx.cn/cn/broker/latest/advanced/auth.html#密码加盐规则与哈希方法)。
 
 :::
 

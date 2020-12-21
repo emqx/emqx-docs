@@ -28,7 +28,7 @@
 
 和 EMQ X 原生的钩子一致，它也支持链式的方式计算和返回：
 
-<img src="https://docs.emqx.net/broker/latest/cn/advanced/assets/chain_of_responsiblity.png" style="zoom:50%;" />
+![chain_of_responsiblity](../advanced/assets/chain_of_responsiblity.png)
 
 ## 接口设计
 

@@ -91,7 +91,7 @@ Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `
 
 EMQ X 分布式的基本功能是将消息转发和投递给各节点上的订阅者，如下图所示：
 
-![image](./../assets/design_9.png)
+![image](../assets/design_9.png)
 
 为实现此过程，EMQ X 维护了几个与之相关的数据结构：订阅表，路由表，主题树。
 

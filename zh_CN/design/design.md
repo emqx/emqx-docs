@@ -66,7 +66,7 @@ Redis、MongoDB、Cassandra、MySQL、PostgreSQL 等数据库，以及 RabbitMQ�
 EMQ X 概念上更像一台网络路由器 (Router) 或交换机 (Switch)，而不是传统的企业级消息队列 (MQ)。相比网络路由器按
 IP 地址或 MPLS 标签路由报文，EMQ X 按主题树 (Topic Trie) 发布订阅模式在集群节点间路由 MQTT 消息:
 
-![image](./../assets/design_3.png)
+![image](../assets/design_3.png)
 
 ### 设计原则
 

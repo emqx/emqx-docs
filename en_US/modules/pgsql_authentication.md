@@ -185,6 +185,6 @@ pbkdf2,sha256,1000,20
 
 ::: tip
 
-Refer to: [Salt rules and hash methods](https://docs.emqx.net/broker/latest/cn/advanced/auth.html#Salt rules and hash methods).
+Refer to: [Salt rules and hash methods](https://docs.emqx.io/en/broker/latest/advanced/auth.html#password-salting-rules-and-hash-methods).
 
 :::

@@ -6,7 +6,7 @@ Erlang/OTP 最初是爱立信为开发电信设备系统设计的编程语言平
 
 Erlang/OTP 语言平台的分布式程序，由分布互联的 Erlang 运行系统组成，每个 Erlang 运行系统被称为节点(Node)，节点(Node) 间通过 TCP 互联，消息传递的方式通信:
 
-![](https://docs.emqx.net/broker/v3/cn/_images/cluster_1.png)
+![](../assets/cluster_1.png)
 
 ### 节点(Node)
 
@@ -63,7 +63,7 @@ EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)�
 
 最终会生成如下主题树(Topic Trie)和路由表(Route Table):
 
-![](https://docs.emqx.net/broker/v3/cn/_images/cluster_2.png)
+![](../assets/cluster_2.png)
 
 
 
@@ -83,7 +83,7 @@ client1 -> node1: Publish[t/a]
         node3 --> client3: Deliver[t/a]
 ```
 
-![_images/design_9.png](https://docs.emqx.net/broker/v3/cn/_images/design_9.png)
+![_images/design_9.png](../assets/design_9.png)
 
 
 

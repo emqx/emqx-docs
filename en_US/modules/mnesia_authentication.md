@@ -36,7 +36,7 @@ The authentication data can be managed through the dashboard
 
 When the client connects to EMQ X, the builtin database authentication will obtain the Clientid and Username in the CONNENT message, and then match the password recorded in the database. Once the match is successful, the authentication is successful.
 
-The builtin database authentication also supports HTTP API operations. For details, please refer to [Mnesia Authentication](https://docs.emqx.net/broker/latest/cn/advanced/auth-mnesia.html).
+The builtin database authentication also supports HTTP API operations. For details, please refer to [Mnesia Authentication](https://docs.emqx.io/en/broker/latest/advanced/auth-mnesia.html).
 
 #### Access control data
 
@@ -46,4 +46,4 @@ Access control data can be managed through the dashboard
 
 When the client publishes, subscribes, or unsubscribes to EMQ X, the access control can allow or deny the operation according to the rules set in advance in the builtin database.
 
-The builtin database access control also supports HTTP API operations. For details, please see [Mnesia ACL](https://docs.emqx.net/broker/latest/cn/advanced/acl-mnesia.html#mnesia-acl).
+The builtin database access control also supports HTTP API operations. For details, please see [Mnesia ACL](https://docs.emqx.io/en/broker/latest/advanced/acl-mnesia.html).
