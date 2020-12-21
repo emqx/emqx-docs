@@ -28,7 +28,7 @@ It shows: The ExHook module in EMQ X acts as a gRPC client, sending all hook eve
 
 Consistent with EMQ X's native hook, it also supports chained calculation and return:
 
-<img src="https://docs.emqx.net/broker/latest/cn/advanced/assets/chain_of_responsiblity.png" style="zoom:50%;" />
+![chain_of_responsiblity](../advanced/assets/chain_of_responsiblity.png)
 
 ## Interface design
 

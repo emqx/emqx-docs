@@ -56,7 +56,7 @@ In EMQ X Enterprise Edition products, through rule engines or plugins, messages 
 
 EMQ X Broker is more like a network Router or a Switch in concept, rather than the traditional enterprise-level message queue (MQ). Compared to network routers that route packets by IP address or MPLS label, EMQ X Broker routes MQTT messages between cluster nodes by publish-subscribe model of Topic Trie:
 
-![image](./../assets/design_3.png)
+![image](../assets/design_3.png)
 
 ### Design Philosophy
 

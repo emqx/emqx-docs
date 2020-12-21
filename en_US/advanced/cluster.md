@@ -69,7 +69,7 @@ Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, an
 ## EMQ X Broker Distributed cluster design
 The basic function of EMQ X Broker distribution is to forward and publish messages to subscribers on each node, as shown in the following figure:
 
-![image](./../assets/design_9.png)
+![image](../assets/design_9.png)
 
 To achieve this, EMQ X Broker maintains several data structures related to it: subscription tables, routing tables, and topic trees.
 
