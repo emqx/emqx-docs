@@ -1,4 +1,4 @@
-# EMQ X 中文文档贡献指南
+# EMQ X 文档贡献指南
 
 欢迎您的参与，以帮助改善 EMQ X 文档。当您反馈问题，编辑、新增、翻译文档内容时，可以为 EMQ X 开源社区提供非常有价值的帮助。
 
@@ -22,15 +22,15 @@
 
 ## 如何贡献文档
 
-EMQ X 的文档发布在 https://docs.emqx.cn/，您可以通过以下几种方式贡献文档。
+EMQ X 的文档发布在 [https://docs.emqx.cn/](https://docs.emqx.cn/)，您可以通过以下几种方式贡献文档。
 
 > 注：以下几种方式都需要 GitHub 帐号进行操作，如果您还没有 GitHub 帐号，请点击 [GitHub 注册页面](https://github.com/join) 进行创建。
 
 ### 反馈问题
 
-点击文档站点 https://docs.emqx.cn/ 每个页面右上角的 `编辑此页` 或 `反馈问题`，可直接跳转到 GitHub 网站的编辑或 Issue 页面，这意味着此种方式不需要您了解有关 Git 甚至 Markdown 的很多知识。
+点击文档站点 [https://docs.emqx.cn/](https://docs.emqx.cn/ ) 每个页面右上角的 `编辑此页` 或 `反馈问题`，可直接跳转到 GitHub 网站的编辑或 Issue 页面，这意味着此种方式不需要您了解有关 Git 甚至 Markdown 的很多知识。
 
-您也可以直接访问文档仓库的 https://github.com/emqx/emqx-docs/issues 页面提交 Issue 反馈文档问题，这类似于点击文档站点右上角的 `反馈问题`。
+您也可以直接访问文档仓库的 [https://github.com/emqx/emqx-docs/issues](https://github.com/emqx/emqx-docs/issues) 页面提交 Issue 反馈文档问题，这类似于点击文档站点右上角的 `反馈问题`。
 
 > 如果您在文档仓库里直接提交 Issue 反馈问题，需要在 Issue 内容里写明待完善文档页面的链接。
 
@@ -66,7 +66,7 @@ EMQ X 的文档发布在 https://docs.emqx.cn/，您可以通过以下几种方�
 
 本地编辑需要贡献者具有熟练的 Git 基础，我们建议初次接触 Git 的贡献者直接使用以上 [线上编辑](#线上编辑) 的方式贡献文档。
 
-1. 打开文档仓库 https://github.com/emqx/emqx-docs 进行 Fork。
+1. 打开文档仓库 [https://github.com/emqx/emqx-docs](https://github.com/emqx/emqx-docs) 进行 Fork。
 
 2. 将 Fork 的仓库 Clone 到本地，然后进入本地目录，添加上游仓库。
 
@@ -90,9 +90,9 @@ EMQ X 中文文档一般会先于英文文档发布，所以文档翻译大多�
 
    打开 [EMQ X 文档待翻译 PR 列表](https://github.com/emqx/emqx-docs/pulls?q=is%3Apr+is%3Aclosed+label%3Atranslation%2Ftodo)，即可看到所有已合并且打上了 `translation/todo` Label 的 PR，这些 PR 都是待翻译的。
 
-2.  认领 PR。
+2. 认领 PR。
 
-   在想认领的 PR 底部依次添加 2 条评论：`/unlabel translation/todo` 及  `/label translation/doing`，即可将右侧 Label 栏中的 `translation/todo` 改为 `translation/doing`。Label 修改成功后，您就可以开始翻译了。
+   在想认领的 PR 底部依次添加 2 条评论：`/unlabel translation/todo` 及 `/label translation/doing`，即可将右侧 Label 栏中的 `translation/todo` 改为 `translation/doing`。Label 修改成功后，您就可以开始翻译了。
 
 3. 翻译并提交 PR。
 
@@ -105,7 +105,7 @@ EMQ X 中文文档一般会先于英文文档发布，所以文档翻译大多�
 
 ## PR 自动检查
 
-文档项目将会根据  [文档编写指南](./DOCS-WRITING-GUIDE-CN.md) 里的规则进行自动检查，检查通过的 PR 才能被合并。假如你提 PR 时遇到了 markdownlint check 失败，报错信息里会明确提示哪一个文件的哪一行出了什么问题，请根据提示修改后再更新到 PR 里。
+文档项目将会根据 [文档编写指南](./DOCS-WRITING-GUIDE-CN.md) 里的规则进行自动检查，检查通过的 PR 才能被合并。假如你提 PR 时遇到了 markdownlint check 失败，报错信息里会明确提示哪一个文件的哪一行出了什么问题，请根据提示修改后再更新到 PR 里。
 
 
 ## 如何寻求帮助
@@ -114,6 +114,7 @@ EMQ X 中文文档一般会先于英文文档发布，所以文档翻译大多�
 
 - 扫码添加 EMQ 小助手微信（并备注：文档贡献）。
 
-  <img src="./assets/wechat.png" align="left" width=280>
+  <img src="./assets/wechat.png" width=280 />
 
-- 直接提交 GitHub Issue：https://github.com/emqx/emqx-docs/issues/new。
+- 直接提交 GitHub Issue：[https://github.com/emqx/emqx-docs/issues/new](https://github.com/emqx/emqx-docs/issues/new)。
+
