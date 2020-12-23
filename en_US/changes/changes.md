@@ -15,6 +15,24 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.5
+
+*Release Date: 2020-12-23*
+
+EMQ X 4.2.5 is released now, it mainly includes the following changes:
+
+### emqx-auth-http
+
+- Fix wrong field name in HTTP request header
+
+  Github PR: [emqx-auth-http#229](https://github.com/emqx/emqx-auth-http/pull/229)
+
+### emqx-web-hook
+
+- Update the underlying HTTP client driver to solve the issue of unresponsive connection process caused by driver stuck
+
+  Github PR: [emqx-web-hook#240](https://github.com/emqx/emqx-web-hook/pull/240)
+
 ## Version 4.2.4
 
 *Release Date: 2020-12-11*
