@@ -15,6 +15,24 @@ ref:
 
 # 版本发布
 
+## 4.2.5 版本
+
+*发布日期: 2020-12-23*
+
+EMQ X 4.2.5 现已发布，主要包含以下改动:
+
+### emqx-auth-http
+
+- 修复 HTTP 请求头部中错误的字段名
+
+  Github PR: [emqx-auth-http#229](https://github.com/emqx/emqx-auth-http/pull/229)
+
+### emqx-web-hook
+
+- 更新底层 HTTP 客户端驱动，解决驱动卡死导致的连接进程失去响应的问题
+
+  Github PR: [emqx-web-hook#240](https://github.com/emqx/emqx-web-hook/pull/240)
+
 ## 4.2.4 版本
 
 *发布日期: 2020-12-11*
