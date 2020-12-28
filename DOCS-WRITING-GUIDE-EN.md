@@ -9,7 +9,7 @@
   - [Configuration examples](#configuration-examples)
   - [Notes](#notes)
 - [Markdown writing specifications](#markdown-writing-specifications)
-  - [Must have a level 1 headings](#must-have-a-level-1-heading)
+  - [Must have a level 1 heading](#must-have-a-level-1-heading)
   - [Headings must obey the hierarchy](#headings-must-obey-the-hierarchy)
   - [Code block](#code-block)
   - [Escape special characters](#escape-special-characters)
