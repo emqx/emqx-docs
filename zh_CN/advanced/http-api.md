@@ -1203,8 +1203,8 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 | messages.forward                | Integer   | 向其他节点转发的消息数量 |
 | messages.publish                | Integer   | 除系统消息外发布的消息数量 |
 | messages.qos0.received          | Integer   | 接收来自客户端的 QoS 0 消息数量 |
-| messages.qos2.received          | Integer   | 接收来自客户端的 QoS 1 消息数量 |
-| messages.qos1.received          | Integer   | 接收来自客户端的 QoS 2 消息数量 |
+| messages.qos1.received          | Integer   | 接收来自客户端的 QoS 1 消息数量 |
+| messages.qos2.received          | Integer   | 接收来自客户端的 QoS 2 消息数量 |
 | messages.qos0.sent              | Integer   | 发送给客户端的 QoS 0 消息数量 |
 | messages.qos1.sent              | Integer   | 发送给客户端的 QoS 1 消息数量 |
 | messages.qos2.sent              | Integer   | 发送给客户端的 QoS 2 消息数量 |

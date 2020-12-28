@@ -1055,8 +1055,8 @@ Returns all statistical  metrics under the cluster
 | messages.forward                | Integer   | Number of messages forwarded to other nodes |
 | messages.publish                | Integer   | Number of messages published in addition to system messages |
 | messages.qos0.received          | Integer   | Number of QoS 0 messages received from clients |
-| messages.qos2.received          | Integer   | Number of QoS 1 messages received from clients |
-| messages.qos1.received          | Integer   | Number of QoS 2 messages received from clients |
+| messages.qos1.received          | Integer   | Number of QoS 1 messages received from clients |
+| messages.qos2.received          | Integer   | Number of QoS 2 messages received from clients |
 | messages.qos0.sent              | Integer   | Number of QoS 0 messages sent to clients |
 | messages.qos1.sent              | Integer   | Number of QoS 1 messages sent to clients |
 | messages.qos2.sent              | Integer   | Number of QoS 2 messages sent to clients |
