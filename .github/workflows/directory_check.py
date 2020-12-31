@@ -24,6 +24,7 @@ def check_path(path_list, folder):
             if not os.path.exists(file_path):
                 print(f'{folder}/{md_path}.md not exists')
                 success = False
+                continue
 
             md_content = open(file_path, 'r').read()
             image_list = re.findall('(.*?)!\[(.*?)\]\((.*?)\)', md_content)
