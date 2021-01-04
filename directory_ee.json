@@ -272,7 +272,7 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "数据存储",
+          "title": "数据持久化",
           "children": [
             {
               "title": "保存数据到 MySQL",
@@ -333,8 +333,12 @@
           ]
         },
         {
-          "title": "数据桥接",
+          "title": "数据转发",
           "children": [
+            {
+              "title": "发送数据到 Web 服务",
+              "path": "rule/send_webhook"
+            },
             {
               "title": "桥接数据到 Kafka",
               "path": "rule/bridge_kafka"
@@ -387,7 +391,7 @@
           ]
         },
         {
-          "title": "获取订阅关系",
+          "title": "代理订阅",
           "children": [
             {
               "title": "从 Redis 中获取订阅关系",
