@@ -63,7 +63,7 @@ CREATE TABLE `mqtt_user` (
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `salt` varchar(35) DEFAULT NULL,
-  `is_superuser` (1) DEFAULT 0,
+  `is_superuser` tinyint(1) DEFAULT 0,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `mqtt_username` (`username`)
