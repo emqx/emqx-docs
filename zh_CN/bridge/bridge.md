@@ -37,7 +37,7 @@ Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node
 EMQ X Broker 中仅适用以下操作：
 - MQTT 桥接
 - RPC 桥接
-其余均是 EMQ X Enterprise 专属功能，推荐使用[规则引擎](../rule/rule-engine.md) 以实现更灵活的桥接功能。
+- 其余均是 EMQ X Enterprise 专属功能，推荐使用[规则引擎](../rule/rule-engine.md) 以实现更灵活的桥接功能。
 :::
 
 ::: tip
