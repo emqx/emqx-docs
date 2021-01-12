@@ -2339,4 +2339,208 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry
 
 {"data":{"uuid":"856916F6-ECC1-11EA-87C9-F9385C1F4A9C","up_time":553357,"otp_version":"22","os_version":"10.13.6","os_name":"Mac OS X","num_clients":0,"nodes_uuid":[],"messages_sent":0,"messages_received":0,"license":{"edition":"community"},"emqx_version":"dev-v4.2-rc.3","active_plugins":["emqx_telemetry","emqx_rule_engine","emqx_retainer","emqx_recon","emqx_management","emqx_dashboard"],"active_modules":["emqx_mod_presence","emqx_mod_rewrite","emqx_mod_acl_internal"]},"code":0}
 ```
-{% endemqxce %
+{% endemqxce %}
+
+{% emqxee %}
+
+## 日志
+
+### GET /api/v4/log
+
+获取 primary log level。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name               | Type    | Description       |
+| ------------------ | ------- | ----------------- |
+| code               | Integer | 0                 |
+| data               | Objects |                   |
+| data.primary_level | String  | primary log level |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/log"
+
+{"data":{"primary_level":"warning"},"code":0}
+```
+
+### PUT /api/v4/log
+
+设置 primary log level。
+
+**Parameters (json):**
+
+| Name          | Type   | Required | Description       |
+| ------------- | ------ | -------- | ----------------- |
+| primary_level | String | True     | primary log level |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X PUT -d '{"primary_level": "debug"}' "http://localhost:8081/api/v4/log"
+
+{"code":0}
+```
+
+### POST /api/v4/log/trace
+
+创建 trace。
+
+**Parameters (json):**
+
+| Name  | Type   | Required | Description                    |
+| ----- | ------ | -------- | ------------------------------ |
+| type  | String | True     | 可选值：clientid、topic        |
+| name  | String | True     | 需要 trace 的 clienid 或 topic |
+| level | String | True     | 日志等级                       |
+| file  | String | False    | 日志文件                       |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X POST -d '{"type":"clientid","name":"emqx","level":"warning"}' "http://localhost:8081/api/v4/log/trace"
+
+{"code":0}
+```
+
+### GET /api/v4/log/trace
+
+### 获取 trace 列表。
+
+**Path Parameters:** 无
+
+**Success Response Body (JSON):**
+
+| Name          | Type             | Description               |
+| ------------- | ---------------- | ------------------------- |
+| code          | Integer          | 0                         |
+| data          | Array of Objects |                           |
+| data[0].node  | String           | node name                 |
+| data[o].type  | String           | trace 类型                |
+| data[0].name  | String           | trace 的 clienid 或 topic |
+| data[0].level | String           | trace 等级                |
+| data[0].file  | String           | trace                     |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/log/trace"
+
+{"data":[{"type":"clientid","node":"emqx@127.0.0.1","name":"emqx","level":"warning","file":"log/clientid_emqx_warning"}],"code":0}
+```
+
+### GET api/v4/log/trace/{type}/{name}
+
+查看指定的 trace log
+
+**Path Parameters:**
+
+| Name | Type   | Required | Description               |
+| ---- | ------ | -------- | ------------------------- |
+| type | String | True     | clientid / topic          |
+| name | String | True     | trace 的 clienid 或 topic |
+
+**Success Response Body (JSON):**
+
+| Name       | Type    | Description               |
+| ---------- | ------- | ------------------------- |
+| code       | Integer | 0                         |
+| data       | Objects |                           |
+| data.node  | String  | node name                 |
+| data.type  | String  | trace 类型                |
+| data.name  | String  | trace 的 clienid 或 topic |
+| data.level | String  | trace 等级                |
+| data.file  | String  | trace                     |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/log/trace/clientid/emqx"
+
+{"data":"xxx","code":0}
+```
+
+### DELETE api/v4/log/trace/{type}/{name}
+
+删除指定的 trace
+
+**Path Parameters:**
+
+| Name | Type   | Required | Description               |
+| ---- | ------ | -------- | ------------------------- |
+| type | String | True     | clientid / topic          |
+| name | String | True     | trace 的 clienid 或 topic |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/log/trace/clientid/emqx"
+
+{"code":0}
+```
+
+### GET api/v4/log/trace/view/{type}/{name}
+
+查看指定的 trace log
+
+**Path Parameters:**
+
+| Name | Type   | Required | Description               |
+| ---- | ------ | -------- | ------------------------- |
+| type | String | True     | clientid / topic          |
+| name | String | True     | trace 的 clienid 或 topic |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+| data | String  | log 内容    |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/log/trace/clientid/emqx"
+
+{"data":"xxx","code":0}
+```
+
+### GET api/v4/log/trace/download/{type}/{name}
+
+下载指定的 trace 日志文件
+
+**Path Parameters:**
+
+| Name | Type   | Required | Description               |
+| ---- | ------ | -------- | ------------------------- |
+| type | String | True     | clientid / topic          |
+| name | String | True     | trace 的 clienid 或 topic |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X GET -f -L -o trace.log "http://localhost:8081/api/v4/log/trace/download/clientid/emqx"
+```
+
+{% endemqxee %}
