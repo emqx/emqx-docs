@@ -248,6 +248,10 @@
       ]
     },
     {
+      "title": "数据存储",
+      "path": "backend/backend"
+    },
+    {
       "title": "消息桥接",
       "children": [
         {
@@ -691,6 +695,10 @@
           "path": "rule/bridge_mqtt"
         }
       ]
+    },
+    {
+      "title": "Backend",
+      "path": "backend/backend"
     },
     {
       "title": "Bridges",
