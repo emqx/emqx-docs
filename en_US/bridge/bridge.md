@@ -15,8 +15,10 @@ EMQ X can bridge and forward messages to Kafka, RabbitMQ or other EMQ X nodes. M
 
 ::: danger
 Only the following functions are applicable in EMQ X Broker：
+
 - MQTT bridge
 - RPC bridge
+
 The rest are exclusive to EMQ X Enterprise. It is recommended to use [rule engine] (../rule/rule-engine.md) to realize more flexible bridge function.
 :::
 
