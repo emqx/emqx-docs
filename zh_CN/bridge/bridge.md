@@ -1,6 +1,5 @@
 # 消息桥接
 
-
 EMQ X 企业版桥接转发 MQTT 消息到 Kafka、RabbitMQ、Pulsar、RocketMQ、MQTT Broker 或其他 EMQ X 节点。
 
 桥接是一种连接多个 EMQ X 或者其他 MQTT 消息中间件的方式。不同于集群，工作在桥接模式下的节点之间不会复制主题树和路由表。桥接模式所做的是：
@@ -21,8 +20,7 @@ Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node
 - 提高单个应用的服务上限。由于内部的系统开销，单个的 EMQ X 有节点数上限。如果将多个集群桥接起来，按照业务需求设计桥接规则，可以将应用的服务上限再提高一个等级。
 在具体应用中，一个桥接的发起节点可以被近似的看作一个远程节点的客户端。
 
-
-**桥接插件列表**
+## 桥接插件列表
 
 | 存储插件                 | 配置文件                      | 说明               |
 | -------------------- | ------------------------- | ---------------- |
@@ -32,16 +30,25 @@ Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node
 | emqx_bridge_pulsar | emqx_bridge_pulsar.conf | Pulsar 消息队列      |
 | emqx_bridge_rocket | emqx_bridge_rocket.conf | RocketMQ 消息队列    |
 
+{% emqxce %}
 
 ::: danger
 EMQ X Broker 中仅适用以下操作：
+
 - MQTT 桥接
 - RPC 桥接
-- 其余均是 EMQ X Enterprise 专属功能，推荐使用[规则引擎](../rule/rule-engine.md) 以实现更灵活的桥接功能。
+
+其余均是 EMQ X Enterprise 专属功能，推荐使用[规则引擎](../rule/rule-engine.md) 以实现更灵活的桥接功能。
 :::
+
+{% endemqxce %}
+
+{% emqxee %}
 
 ::: tip
 推荐使用
 [规则引擎](../rule/rule-engine.md)
 以实现更灵活的桥接功能。
 :::
+
+{% endemqxee %}
