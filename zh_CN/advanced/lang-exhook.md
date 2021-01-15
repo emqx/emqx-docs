@@ -102,8 +102,8 @@ EMQ X 发行包中不包含其它语言运行时环境的支持。它通过 EMQ 
 
 ### Python
 
-参考：https://www.emqx.io/cn/blog/develop-emqx-plugin-using-python
+参考：https://www.emqx.cn/blog/develop-emqx-plugin-using-python
 
 ### Java
 
-参考：https://www.emqx.io/cn/blog/develop-emqx-plugin-using-java
+参考：https://www.emqx.cn/blog/develop-emqx-plugin-using-java
