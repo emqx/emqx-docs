@@ -26,7 +26,7 @@ ref:
 ## Official resources
 
   - [EMQ Official website](https://www.emqx.io?spm=docs)
-  - [EMQ Official blog](https://www.emqx.io/cn/blog?spm=docs)
+  - [EMQ Official blog](https://www.emqx.io/blog?spm=docs)
   - [EMQ X GitHub  depositary ](https://github.com/emqx/emqx)
 
 ## Community, discussion, contribution and support

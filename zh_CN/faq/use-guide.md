@@ -19,9 +19,9 @@ ref:
 ### 怎么样才能使用 EMQ X？
 
 
-EMQ X 开源版可免费下载使用，下载地址：[https://www.emqx.io/downloads#broker](https://www.emqx.io/downloads#broker)
+EMQ X 开源版可免费下载使用，下载地址：[https://www.emqx.cn/downloads#broker](https://www.emqx.cn/downloads#broker)
 
-EMQ X 企业版支持下载试用，用户可以在 [https://www.emqx.io/downloads#enterprise](https://www.emqx.io/downloads#enterprise) 下载，[申请试用 license](https://www.emqx.io/licenses#trial)之后即可试用。
+EMQ X 企业版支持下载试用，用户可以在 [https://www.emqx.cn/downloads#enterprise](https://www.emqx.cn/downloads#enterprise) 下载，[申请试用 license](https://www.emqx.cn/licenses#trial)之后即可试用。
 
 另外，还可以在公有云直接创建 EMQ X 企业版：
 
