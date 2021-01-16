@@ -97,7 +97,7 @@ ref: undefined
 {% emqxce %}
 ## EMQ X Enterprise
 
-[EMQ X Enterprise](https://www.emqx.io/cn/products/enterprise) 是一个强大的企业级物联网 MQTT 消息平台，由开发开源 EMQ X 的人员构建。
+[EMQ X Enterprise](https://www.emqx.cn/products/enterprise) 是一个强大的企业级物联网 MQTT 消息平台，由开发开源 EMQ X 的人员构建。
 
 EMQ X Enterprise 支持百万级物联网设备一站式接入、MQTT&CoAP 多协议处理、低时延实时消息通信。它保持了 EMQ X 的简单性和高性能，同时增加了许多企业特性：
 
