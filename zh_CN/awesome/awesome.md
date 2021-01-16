@@ -25,8 +25,8 @@ ref:
 
 ## 官方资源
 
-  - [EMQ 官方网站](https://www.emqx.io/cn?spm=docs)
-  - [EMQ 官方博客](https://www.emqx.io/cn/blog?spm=docs)
+  - [EMQ 官方网站](https://www.emqx.cn?spm=docs)
+  - [EMQ 官方博客](https://www.emqx.cn/blog?spm=docs)
   - [EMQ X GitHub 仓库](https://github.com/emqx/emqx)
 
 ## 社区、讨论、贡献和支持
