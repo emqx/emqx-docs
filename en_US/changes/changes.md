@@ -15,6 +15,80 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.6
+
+*Release Date: 2021-01-16*
+
+EMQ X 4.2.6 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Fix the wrong port used by remsh
+
+  Github PR: [emqx#4016](https://github.com/emqx/emqx/pull/4016)
+
+### emqx-auth-http
+
+**Enhancement:**
+
+- The host field in the HTTP request header uses the original URL configured by the user
+
+  Github PR: [emqx-auth-http#240](https://github.com/emqx/emqx-auth-http/pull/240)
+
+**Bug fixes:**
+
+- Fix the issue of unavailable GET request
+
+  Github PR: [emqx-auth-http#238](https://github.com/emqx/emqx-auth-http/pull/238)
+
+### emqx-web-hook
+
+**Enhancement:**
+
+- The host field in the HTTP request header uses the original URL configured by the user
+
+  Github PR: [emqx-web-hook#256](https://github.com/emqx/emqx-web-hook/pull/256)
+
+- Use the default port when the port is not included in the URL
+
+  Github PR: [emqx-web-hook#253](https://github.com/emqx/emqx-web-hook/pull/253)
+
+**Bug fixes:**
+
+- Fix the issue of SSL configuration item parsing error
+
+  Github PR: [emqx-web-hook#252](https://github.com/emqx/emqx-web-hook/pull/252)
+
+- Fix the issue of unavailable GET request
+
+  Github PR: [emqx-web-hook#254](https://github.com/emqx/emqx-web-hook/pull/254)
+
+### emqx-management
+
+**Bug fixes:**
+
+- Increase the duration field of the alarm, fix the issue that the front-end may cause calculation errors due to time inconsistency
+
+  Github PR: [emqx-management#304](https://github.com/emqx/emqx-management/pull/304)
+
+### emqx-dashboard
+
+**Enhancement:**
+
+- Improve the display of alarm duration
+
+  Github PR: [emqx-dashboard#271](https://github.com/emqx/emqx-dashboard/pull/271)
+
+### ehttpc
+
+**Bug fixes:**
+
+- Fix the issue of gen_server:call/3 timeout causing the reply to be sent to the message queue of the calling process
+
+  Github PR: [ehttpc#2](https://github.com/emqx/ehttpc/pull/2)
+
 ## Version 4.2.5
 
 *Release Date: 2020-12-23*

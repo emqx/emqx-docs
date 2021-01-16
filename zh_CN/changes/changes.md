@@ -15,6 +15,80 @@ ref:
 
 # 版本发布
 
+## 4.2.6 版本
+
+*发布日期: 2020-01-16*
+
+EMQ X 4.2.6 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复 remsh 使用的端口错误问题
+
+  Github PR: [emqx#4016](https://github.com/emqx/emqx/pull/4016)
+
+### emqx-auth-http
+
+**功能增强:**
+
+- HTTP 请求头部中的 host 字段使用用户配置的原始 URL
+
+  Github PR: [emqx-auth-http#240](https://github.com/emqx/emqx-auth-http/pull/240)
+
+**错误修复:**
+
+- 修复 GET 请求不可用的问题
+
+  Github PR: [emqx-auth-http#238](https://github.com/emqx/emqx-auth-http/pull/238)
+
+### emqx-web-hook
+
+**功能增强:**
+
+- HTTP 请求头部中的 host 字段使用用户配置的原始 URL
+
+  Github PR: [emqx-web-hook#256](https://github.com/emqx/emqx-web-hook/pull/256)
+
+- URL 中未携带端口时使用默认端口
+
+  Github PR: [emqx-web-hook#253](https://github.com/emqx/emqx-web-hook/pull/253)
+
+**错误修复:**
+
+- 修复 SSL 配置项解析错误问题
+
+  Github PR: [emqx-web-hook#252](https://github.com/emqx/emqx-web-hook/pull/252)
+
+- 修复 GET 请求不可用的问题
+
+  Github PR: [emqx-web-hook#254](https://github.com/emqx/emqx-web-hook/pull/254)
+
+### emqx-management
+
+**错误修复:**
+
+- 告警增加持续时间字段，修复前端可能由于时间不一致导致计算出错的问题
+
+  Github PR: [emqx-management#304](https://github.com/emqx/emqx-management/pull/304)
+
+### emqx-dashboard
+
+**功能增强:**
+
+- 改进告警持续时间显示
+
+  Github PR: [emqx-dashboard#271](https://github.com/emqx/emqx-dashboard/pull/271)
+
+### ehttpc
+
+**错误修复:**
+
+- 修复 gen_server:call/3 超时导致回复被送至调用进程的消息队列的问题
+
+  Github PR: [ehttpc#2](https://github.com/emqx/ehttpc/pull/2)
+
 ## 4.2.5 版本
 
 *发布日期: 2020-12-23*
