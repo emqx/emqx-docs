@@ -1,4 +1,4 @@
-# 程序安装
+# EMQ X 企业版安装
 
 EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS、Windows 或 openSUSE 服务器上。
 
