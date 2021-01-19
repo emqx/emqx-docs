@@ -62,7 +62,7 @@ EMQ X Enterprise needs a license file to start normally. EMQ X can skip this ste
 
 EMQ X Enterprise requires a license file to start normally. EMQ X Broker can skip this step.
 
-1. Visit `https: // emqx.io`. On the EMQ X Enterprise download page, click **Get FREE Trial License**.
+1. Visit `https://emqx.io`. On the EMQ X Enterprise download page, click **Get FREE Trial License**.
 
     ![](./static/WX20200210-153301@2x.png)
 
