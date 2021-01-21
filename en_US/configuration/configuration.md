@@ -3736,13 +3736,13 @@ Set the type of session cluster lock. The session cluster lock is used to preven
 
 ##### Description
 
-Set a distribution strategy for shared subscriptions. Optional values are:
+Set a dispatch strategy for shared subscribers. Options are:
 
-- **random**: Choose randomly among all subscribers
-- **round_robin**: According to the order of subscription
-- **sticky**: Always sent to the last selected subscriber
-- **hash_clientid**: Map (hash) publisher ClientID to subscriber
-- **hash_topic**: Map (hash) source MQTT topic to subscriber
+- **random**: Choose randomly among all subscribers.
+- **round_robin**: Enumerate subscribers in (unsorted) order.
+- **sticky**: First dispatch is random, then stick to it for all subsequent messages.
+- **hash_clientid**: Map (hash) publisher ClientID to subscriber.
+- **hash_topic**: Map (hash) source MQTT topic to subscriber.
 
 ### broker.shared_dispatch_ack_enabled
 
