@@ -3730,9 +3730,9 @@ Set the type of session cluster lock. The session cluster lock is used to preven
 
 ### broker.shared_subscription_strategy
 
-| Type | Optional Value                            | Default  |
-| ---- | ----------------------------------------- | -------- |
-| enum | `random`, `round_robin`, `sticky`, `hash` | `random` |
+| Type | Optional Value                                                   | Default  |
+| ---- | ---------------------------------------------------------------- | -------- |
+| enum | `random`, `round_robin`, `sticky`, `hash_clientid`, `hash_topic` | `random` |
 
 ##### Description
 
@@ -3741,9 +3741,8 @@ Set a distribution strategy for shared subscriptions. Optional values are:
 - **random**: Choose randomly among all subscribers
 - **round_robin**: According to the order of subscription
 - **sticky**: Always sent to the last selected subscriber
-- **hash**: According to the hash value of the publisher ClientID
-
-
+- **hash_clientid**: Map (hash) publisher ClientID to subscriber
+- **hash_topic**: Map (hash) source MQTT topic to subscriber
 
 ### broker.shared_dispatch_ack_enabled
 
