@@ -15,14 +15,14 @@ ref: undefinedBasic concept
 
 # Introduction
 
-### What's EMQ X?
+## What's EMQ X?
 
 EMQ X is an open-source, distributed MQTT messaging broker, it can support up to million level of concurrent MQTT connections.  It can be used for connecting to any devices that support MQTT protocol, and it can also be used for delivering message from server side to client.
 
 
 
 
-### How many products in EMQ X?
+## How many products in EMQ X?
 
 
 EMQ X totally has [3 products.](https://www.emqx.io/products) Different products support different level of connections, features and services etc.
@@ -34,7 +34,7 @@ EMQ X totally has [3 products.](https://www.emqx.io/products) Different products
 
 
 
-### What's EMQ X authentication and it's use scenario?
+## What's EMQ X authentication and it's use scenario?
 
 **Tags:** [*Auth*](tags.md#auth)
 
@@ -52,7 +52,7 @@ Besides using the configuration file (to configure authentication), EMQ X can al
 
 
 
-### What's Hook? What's the use scenario?
+## What's Hook? What's the use scenario?
 
 **Tags:** [*WebHook*](tags.md#webhook)
 
@@ -76,7 +76,7 @@ Hook is an interface provided by EMQ X, which will be triggered when a connectio
 
 
 
-### What's mqueue? How to use mqueue in EMQ X?
+## What's mqueue? How to use mqueue in EMQ X?
 
 **Tags:** [*Message Queue*](tags.md#message-queue)
 
@@ -86,7 +86,7 @@ mqueue is message queue stored in session during the message publish process. If
 
 
 
-### What's WebSocket? When to use Websocket to connect EMQ X?
+## What's WebSocket? When to use Websocket to connect EMQ X?
 
 **Tags:** [*WebSocket*](tags.md#websocket)
 
@@ -96,7 +96,7 @@ WebSocket is a full-duplex communication protocol based on HTTP protocol, user c
 
 
 
-### What's shared subscription, and it's use scenario?
+## What's shared subscription, and it's use scenario?
 
 **Tags:** [*Shared Subscription*](tags.md#shared-subscription)  [*Pub/Sub*](tags.md#pub-sub)
 
@@ -108,7 +108,7 @@ Shared subscription is very useful in data collection and centralized data analy
 
 
 
-### What is off-line message?
+## What is off-line message?
 
 **Tags:** [*Retain*](tags.md#retain)
 
@@ -120,7 +120,7 @@ Off-line message is useful when the connection is not stable, or the application
 
 
 
-### What is Subscription by Broker? And its use scenario?
+## What is Subscription by Broker? And its use scenario?
 
 **Tags:** [*Subscription by Broke*](tags.md#subscription-by-broke)
 
@@ -136,7 +136,7 @@ Currently this feature is available in the EMQ X Enterprise edition.
 
 
 
-### What is the usage of system topics? What system topics are available?
+## What is the usage of system topics? What system topics are available?
 
 **Tags:** [*System Topic*](tags.md#system-topic)
 

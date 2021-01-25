@@ -29,7 +29,7 @@ EMQ X 在 **消息发布或事件触发** 时将触发规则引擎，满足触�
 :::
 
 
-### EMQ X 规则引擎快速入门
+## EMQ X 规则引擎快速入门
 
 此处包含规则引擎的简介与实战，演示使用规则引擎结合华为云 RDS 上的 MySQL 服务，进行物联网 MQTT 设备在线状态记录、消息存储入库。
 
@@ -37,7 +37,7 @@ EMQ X 在 **消息发布或事件触发** 时将触发规则引擎，满足触�
 
 <iframe style="width: 500px; height: 360px; margin: 10px auto" src="//player.bilibili.com/player.html?aid=927036281&bvid=BV19T4y1w7Nj&cid=233977851&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
-### 消息发布
+## 消息发布
 
 规则引擎借助响应动作可将特定主题的消息处理结果存储到数据库，发送到 HTTP Server，转发到消息队列 Kafka 或 RabbitMQ，重新发布到新的主题甚至是另一个 Broker 集群中，每个规则可以配置多个响应动作。
 
@@ -53,7 +53,7 @@ SELECT * FROM "t/#"
 SELECT payload.x as x FROM "t/a"
 ```
 
-### 事件触发
+## 事件触发
 
 规则引擎使用 **$events/** 开头的虚拟主题（**事件主题**）处理 EMQ X 内置事件，内置事件提供更精细的消息控制和客户端动作处理能力，可用在 QoS 1 QoS 2 的消息抵达记录、设备上下线记录等业务中。
 

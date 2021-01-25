@@ -8,7 +8,7 @@ EMQ collects information about the usage of EMQ X through telemetry. This functi
 
 These statistics do not contain individual data, such as server model, hardware number, IP address, and will never be shared with anyone else.
 
-### Telemetry data example
+## Telemetry data example
 
 Telemetry reports data to by encrypting HTTP requests https://telemetry.emqx.io/api/telemetry. If you have any questions, please click [Issues](http://github.com/emqx/emqx/issues) to contact us:
 
@@ -43,11 +43,11 @@ Telemetry reports data to by encrypting HTTP requests https://telemetry.emqx.io/
 
 **Telemetry is enabled by default**. Any people may feel uncomfortable collecting such data. You can disable it in the simplest way before startup and during operation.
 
-### Disable before start EMQ X
+## Disable before start EMQ X
 
 Edit `data/loaded_plugins` file, and remove the line of emqx_telemetry. (Note that there is a "." character at the end of the line）, which means that the telemetry plug-in will never start.
 
-### Disable in running
+## Disable in running
 
 Stop the emqx_telemetry plugin in the command line: ./bin/emqx_ctl plugins unload emqx_telemetry
 

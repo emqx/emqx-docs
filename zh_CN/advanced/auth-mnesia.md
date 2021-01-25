@@ -67,7 +67,7 @@ auth.user.2.password = public
 
 ## 使用 HTTP API 管理认证数据
 
-#### 添加认证数据
+### 添加认证数据
 
 + Clientid
 
@@ -101,7 +101,7 @@ auth.user.2.password = public
   ```
 
 
-#### 批量添加认证数据
+### 批量添加认证数据
 
 + Clientid
 
@@ -156,7 +156,7 @@ auth.user.2.password = public
   ```
 
 
-#### 查看已经添加的认证数据
+### 查看已经添加的认证数据
 
 + Clientid
 
@@ -202,7 +202,7 @@ auth.user.2.password = public
   }
   ```
 
-#### 更改已添加的认证数据
+### 更改已添加的认证数据
 
 + Clientid
 
@@ -234,7 +234,7 @@ auth.user.2.password = public
   }
   ```
 
-#### 查看指定的认证数据
+### 查看指定的认证数据
 
 注意此处返回的密码是使用配置文件指定哈希方式加密后的密码：
 
@@ -271,7 +271,7 @@ auth.user.2.password = public
   ```
 
 
-#### 删除指定的 Clientid 认证数据
+### 删除指定的 Clientid 认证数据
 
 + Clinetid
 

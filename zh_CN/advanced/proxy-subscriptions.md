@@ -17,11 +17,11 @@ ref:
 
 EMQ X 的代理订阅功能使得客户端在连接建立时，不需要发送额外的 SUBSCRIBE 报文，便能自动建立用户预设的订阅关系。
 
-### 开启代理订阅功能
+## 开启代理订阅功能
 
 代理订阅功能由 `emqx_mod_subscription` 内置模块提供，此功能默认关闭，支持在 EMQ X Broker 运行期间动态启停，请参见 [内置模块](./internal-modules.md)。
 
-### 配置代理订阅规则
+## 配置代理订阅规则
 
 代理订阅功能开启之后还需要配置相应的规则，EMQ X 的代理订阅规则支持用户自行配置，用户可以自行添加多条代理订阅规则，代理订阅规则支持用户配置 Topic 和订阅选项（QoS、No Local、Retain As Published、Retain Handling），其中 Topic 为必填项，订阅选项如果不配置的话 EMQ X 会应用默认的配置。
 

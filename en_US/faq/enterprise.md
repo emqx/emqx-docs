@@ -15,7 +15,7 @@ ref:
 
 # Business Service
 
-### What's the major difference between EMQ X enterprise and broker?
+## What's the major difference between EMQ X enterprise and broker?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 
@@ -38,7 +38,7 @@ EMQ X Enterprise (enterprise version) is based on Broker (open source version), 
 
 
 
-### Does EMQ X provide consulting service?
+## Does EMQ X provide consulting service?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 

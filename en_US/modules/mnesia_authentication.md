@@ -28,7 +28,7 @@ The builtin database can manage authentication and access control data through t
 
 ![image-20200928141558866](./assets/auth_mnesia_4.png)
 
-#### Authentication data
+### Authentication data
 
 The authentication data can be managed through the dashboard
 
@@ -38,7 +38,7 @@ When the client connects to EMQ X, the builtin database authentication will obta
 
 The builtin database authentication also supports HTTP API operations. For details, please refer to [Mnesia Authentication](https://docs.emqx.io/en/broker/latest/advanced/auth-mnesia.html).
 
-#### Access control data
+### Access control data
 
 Access control data can be managed through the dashboard
 

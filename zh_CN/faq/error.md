@@ -14,7 +14,7 @@ ref:
 ---
 
 # 常见错误
-### EMQ X 无法连接 MySQL 8.0
+## EMQ X 无法连接 MySQL 8.0
 
 **标签:** [*MySQL*](tags.md#mysql)  [*认证*](tags.md#认证)
 
@@ -59,11 +59,11 @@ ref:
   + 重启 MySQL 即可
 
 
-### OPENSSL 版本不正确
+## OPENSSL 版本不正确
 
 **标签:** [*启动失败*](tags.md#启动失败)
 
-#### 现象
+### 现象
 
 执行  `./bin/emqx console` 输出的错误内容包含：
 
@@ -73,9 +73,9 @@ ref:
 
 它表示，EMQ X 依赖的 Erlang/OTP 中的 `crypto` 应用启动失败。
 
-#### 解决方法
+### 解决方法
 
-##### Linux
+#### Linux
 
 进入到 EMQ X 的安装目录（如果使用包管理工具安装 EMQ X，则应该进入与 EMQ X 的 `lib` 目录同级的位置）
 
@@ -128,7 +128,7 @@ $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 完成后，执行在 EMQ X 的 lib 同级目录下执行 `ldd lib/crypto-*/priv/lib/crypto.so` ，检查是否已能正确识别。如果不在有 `not found` 的 `.so` 库，即可正常启动 EMQ X。
 
 
-##### macOS
+#### macOS
 
 进入到 EMQ X 的安装目录：
 
@@ -166,11 +166,11 @@ $ brew install openssl@1.1
 
 安装完成后，即可正常启动 EMQ X。
 
-### Windows 缺失 MSVCR120.dll
+## Windows 缺失 MSVCR120.dll
 
 **标签:** [*启动失败*](tags.md#启动失败)
 
-#### 现象
+### 现象
 
 Windows 执行  `./bin/emqx console` 弹出错误窗口：
 
@@ -180,6 +180,6 @@ Windows 执行  `./bin/emqx console` 弹出错误窗口：
 
 ![error](./static/WechatIMG18396.png)
 
-#### 解决方法
+### 解决方法
 
 安装 [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)

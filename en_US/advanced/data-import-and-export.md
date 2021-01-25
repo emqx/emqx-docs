@@ -20,9 +20,9 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
 
 {% endemqxee %}
 
-### Example
+## Example
 
-#### Command line interface
+### Command line interface
 
 1. Export data. The file name format of the exported file is `emqx-export-YYYY-MM-DD-HH-mm-SS.json`, and the default export path is the data directory (Refer to  [Directory structure](../getting-started/directory.md))
 
@@ -51,7 +51,7 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
     The emqx data has been imported successfully.
     ```
 
-#### HTTP API
+### HTTP API
 
 1. Import data.
 

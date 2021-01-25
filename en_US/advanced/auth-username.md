@@ -73,7 +73,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
 
 ## Manage authentication data using HTTP API
 
-#### Add authentication data
+### Add authentication data
 
 API definition:
 
@@ -95,7 +95,7 @@ A POST request is used to add authentication information with username of `emqx_
 
 
 
-#### Check the added authentication data
+### Check the added authentication data
 
 API definition:
 
@@ -112,7 +112,7 @@ GET api/v4/auth_username
 
 
 
-#### Change the password of the specified user name
+### Change the password of the specified user name
 
 After specifying the user name and passing the new password to change it, it needs to use the new password when connecting again:
 
@@ -133,7 +133,7 @@ PUT api/v4/auth_username/${username}
 
 
 
-#### Check the specified username information
+### Check the specified username information
 
 Specify the user name and check the related user name and password information. Note that the password returned here is the password encrypted with the hash method specified by the configuration file:
 
@@ -156,7 +156,7 @@ GET api/v4/auth_username/${username}
 
 
 
-#### Delete authentication data
+### Delete authentication data
 
 Delete the specified authentication data:
 

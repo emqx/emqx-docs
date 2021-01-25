@@ -14,7 +14,7 @@ ref:
 ---
 
 # Installation and deployment
-### What's EMQ X suggested OS?
+## What's EMQ X suggested OS?
 
 
 EMQ X supports deployment on at Linux, Windows, MacOS, ARM system, and suggest to deploy product environment at issued Linux version, such as CentOS, Ubuntu and Debian.
@@ -22,7 +22,7 @@ EMQ X supports deployment on at Linux, Windows, MacOS, ARM system, and suggest t
 
 
 
-### How to estimate resource usage of EMQ X?
+## How to estimate resource usage of EMQ X?
 
 **Tags:** [*Resource estimation*](tags.md#resource-estimation)
 
@@ -46,7 +46,7 @@ You can use our online calculation tool [TODO](https://www.emqx.io) to estimate 
 
 
 
-### When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?
+## When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?
 
 **Tags:** [*Debug*](tags.md#debug)  [*Performance*](tags.md#performance)
 
@@ -58,7 +58,7 @@ Different use scenario requires diferent tuning。 In the EMQ X document there i
 
 
 
-### My connections number is small, do I still need to deploy multiple nodes in production?
+## My connections number is small, do I still need to deploy multiple nodes in production?
 
 **Tags:** [*Performance*](tags.md#performance)
 

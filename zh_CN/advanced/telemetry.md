@@ -8,7 +8,7 @@ EMQ 通过遥测收集有关 EMQ X 使用情况的信息，这种功能旨在为
 
 这些统计信息不包含个体数据，如服务器型号、硬件编号、IP 地址，统计数据数据永远不会与其他任何人共享。
 
-### 遥测数据示例
+## 遥测数据示例
 
 遥测通过加密 HTTP 请求将数据上报至 [https://telemetry.emqx.io/api/telemetry](https://telemetry.emqx.io/api/telemetry)，传输的数据如下，如果您有任何疑问请通过 [Issues](http://github.com/emqx/emqx/issues) 联系我们：
 
@@ -43,11 +43,11 @@ EMQ 通过遥测收集有关 EMQ X 使用情况的信息，这种功能旨在为
 
 遥测**默认是启用的**，有些人可能对收集这样的数据感到不舒服，你在启动前、运行中都可以通过最简单的方式禁用它。
 
-### 启动前禁用
+## 启动前禁用
 
 编辑 data/loaded_plugins 文件，删除 emqx_telemetry.  这一行数据（注意后面有一个 "." 字符），这表示遥测插件永远不会启动。
 
-### 运行中禁用
+## 运行中禁用
 
 在命令行中停止 emqx-telemetry 插件：./bin/emqx_ctl plugins unload emqx_telemetry 
 

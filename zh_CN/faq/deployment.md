@@ -14,7 +14,7 @@ ref:
 ---
 
 # 安装部署
-### EMQ X 推荐部署的操作系统是什么？
+## EMQ X 推荐部署的操作系统是什么？
 
 
 EMQ X 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生产系推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
@@ -22,7 +22,7 @@ EMQ X 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生�
 
 
 
-### EMQ X 支持 Windows 操作系统吗？
+## EMQ X 支持 Windows 操作系统吗？
 
 
 支持。部署参考[文章](https://www.jianshu.com/p/e5cf0c1fd55c).
@@ -30,7 +30,7 @@ EMQ X 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生�
 
 
 
-### EMQ X 如何预估资源的使用？
+## EMQ X 如何预估资源的使用？
 
 **标签:** [*资源估算*](tags.md#资源估算)
 
@@ -54,7 +54,7 @@ EMQ X 对资源的使用主要有以下的影响因素，每个因素都会对�
 
 
 
-### EMQ X 的百万连接压力测试的场景是什么？
+## EMQ X 的百万连接压力测试的场景是什么？
 
 **标签:** [*性能测试*](tags.md#性能测试)
 
@@ -66,7 +66,7 @@ EMQ X 对资源的使用主要有以下的影响因素，每个因素都会对�
 
 
 
-### 我的连接数目并不大，EMQ X 生产环境部署需要多节点吗？
+## 我的连接数目并不大，EMQ X 生产环境部署需要多节点吗？
 
 **标签:** [*集群*](tags.md#集群)
 
