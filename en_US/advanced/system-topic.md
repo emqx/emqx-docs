@@ -23,7 +23,7 @@ Most of the data of the $ SYS topic in EMQ X Broker can be obtained through othe
 
 :::
 
-### Cluster status information
+## Cluster status information
 
 | Topic                      | Description       |
 | ----------------------------- | -------------------- |
@@ -33,7 +33,7 @@ Most of the data of the $ SYS topic in EMQ X Broker can be obtained through othe
 | $SYS/brokers/\${node}/datetime | EMQ X Broker time |
 | $SYS/brokers/\${node}/sysdescr | EMQ X Broker description |
 
-### Client Online and Offline Events
+## Client Online and Offline Events
 
 `$SYS` topic prefix: `$SYS/brokers/${node}/clients/`
 
@@ -77,14 +77,14 @@ Most of the data of the $ SYS topic in EMQ X Broker can be obtained through othe
 
 System topic prefix : `$SYS/brokers/${node}/stats/`
 
-#### Client statistics
+### Client statistics
 
 | Topic       | Description |
 | ----------------- | -------------- |
 | connections/count | Total number of current clients |
 | connections/max   | Maximum number of clients |
 
-#### Subscription statistics
+### Subscription statistics
 
 | Topic                | Description  |
 | -------------------------- | ---------------- |
@@ -97,14 +97,14 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | subscriptions/shared/count | total number of current shared subscriptions |
 | subscriptions/shared/max   | maximum number of shared subscriptions |
 
-#### Topic statistics
+### Topic statistics
 
 | Topic  | Description |
 | ------------ | --------------- |
 | topics/count | total number of current topics |
 | topics/max   | maximum number of topics |
 
-#### Routes statistics
+### Routes statistics
 
 | Topic  | Description  |
 | ------------ | ---------------- |
@@ -117,14 +117,14 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 
  System Topic Prefix : `$SYS/brokers/${node}/metrics/`
 
-#### sent and received bytes statistics
+### sent and received bytes statistics
 
 | Topic          | Description                |
 | -------------- | ------------ |
 | bytes/received | Accumulated received bytes |
 | bytes/sent     | Accumulated sent bytes |
 
-#### sent and received MQTT packets statistics
+### sent and received MQTT packets statistics
 
 | Topic                        | Description                                      |
 | ---------------------------- | ------------------------------------------------ |
@@ -165,7 +165,7 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | packets/auth/received        | Accumulative received packets of AUTH            |
 | packets/auth/sent            | Accumulative sent packets of AUTH                |
 
-#### MQTT sent and received messages statistics
+### MQTT sent and received messages statistics
 
 | Topic                           | Description                                      |
 | ------------------------------- | ------------------------------------------------ |

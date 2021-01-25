@@ -43,7 +43,7 @@ sudo ./install_emqx.sh emqx-ee
 
 ## Package manager installation (Linux)
 
-#### Centos
+### Centos
 
 1.   Install the required dependencies 
   
@@ -121,7 +121,7 @@ sudo ./install_emqx.sh emqx-ee
     $ sudo yum remove emqx-ee
     ```
 
-#### Ubuntu、Debian
+### Ubuntu、Debian
 
 1.   Install the required dependency 
   
@@ -231,7 +231,7 @@ sudo ./install_emqx.sh emqx-ee
     $ sudo apt remove emqx-ee
     ```
 
-#### OpenSUSE
+### OpenSUSE
 
 1.  Download the GPG public key and import it.
   
@@ -416,7 +416,7 @@ sudo ./install_emqx.sh emqx-ee
 
 ## Install EMQ X in Docker (Contain a simple docker-compose cluster)
 
-#### Run a single container
+### Run a single container
 
 1.  Get docker image
   
@@ -440,7 +440,7 @@ sudo ./install_emqx.sh emqx-ee
     $ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx-ee:v4.0.0
     ```
 
-#### create a simple static cluster by docker-compose
+### create a simple static cluster by docker-compose
 
 1. Create `docker-compose.yaml` file
 

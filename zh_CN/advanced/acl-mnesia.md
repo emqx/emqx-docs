@@ -23,7 +23,7 @@ Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存�
 emqx_auth_mnesia
 ```
 
-### ACL 规则结构体
+## ACL 规则结构体
 
 ```json
 {
@@ -48,7 +48,7 @@ Mnesia ACL 默认不设规则，你可以使用 HTTP API 和 `emqx_ct`l 管理 A
 
 ## 使用 HTTP API 管理 ACL 规则
 
-#### 添加 ACL 规则
+### 添加 ACL 规则
 
 + Clinetid ACL：
 
@@ -122,7 +122,7 @@ Mnesia ACL 默认不设规则，你可以使用 HTTP API 和 `emqx_ct`l 管理 A
   }
   ```
 
-#### 批量添加 ACL 规则
+### 批量添加 ACL 规则
 
 ```bash
 # Request
@@ -175,7 +175,7 @@ POST api/v4/acl
 }
 ```
 
-#### 查看已经添加的 ACL 规则
+### 查看已经添加的 ACL 规则
 
 + Clinetid ACL：
 
@@ -282,7 +282,7 @@ POST api/v4/acl
   }
   ```
   
-#### 查看指定 ACL 规则
+### 查看指定 ACL 规则
 
 + Clientid ACL
 
@@ -319,7 +319,7 @@ POST api/v4/acl
   }
   ```
   
-#### 删除 ACL 规则
+### 删除 ACL 规则
 
 + Clinet ACL
 

@@ -85,7 +85,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
 
 ## Use the HTTP API to manage authentication data
 
-#### Add authentication data
+### Add authentication data
 
 API definition:
 
@@ -109,7 +109,7 @@ POST api/v4/auth_user
 
 Use POST request to add login as `emqx_c`, password as `emqx_p`, which is an non-super user authentication information, and  “code = 0` in the returned message means success.
 
-#### Add authentication data in batch
+### Add authentication data in batch
 
 API definition:
 
@@ -139,7 +139,7 @@ POST api/v4/auth_user
 }
 ```
 
-#### Check the added authentication data
+### Check the added authentication data
 
 API definition:
 
@@ -165,7 +165,7 @@ GET api/v4/auth_user
 }
 ```
 
-#### Change the added authentication data
+### Change the added authentication data
 
 API definition:
 
@@ -183,7 +183,7 @@ PUT api/v4/auth_user/${login}
 }
 ```
 
-#### Check the specified authentication data
+### Check the specified authentication data
 
 Note that the password returned here is the password encrypted using the hash method specified in the configuration file:
 
@@ -204,7 +204,7 @@ GET api/v4/auth_user/${login}
 }
 ```
 
-#### Delete the authentication data
+### Delete the authentication data
 
 Delete the specified authentication data:
 

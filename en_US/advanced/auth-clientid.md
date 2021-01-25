@@ -74,7 +74,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
 
 ## Manage authentication data with HTTP API
 
-#### Add authentication data
+### Add authentication data
 
 API definition:
 
@@ -96,7 +96,7 @@ The POST request is used to add authentication information with clientid of `emq
 
 
 
-#### Check the added authentication data
+### Check the added authentication data
 
 API definition:
 
@@ -113,7 +113,7 @@ GET api/v4/auth_clientid
 
 
 
-#### Change the password of the specified Client ID
+### Change the password of the specified Client ID
 
 After specifying the Client ID and passing the new password to change it, it need to use the new password when connecting again:
 
@@ -134,7 +134,7 @@ PUT api/v4/auth_clientid/${clientid}
 
 
 
-#### Check the specified Client ID information
+### Check the specified Client ID information
 
 Specify the Client ID and check the related Client ID and password information. Note that the password returned here is the password encrypted using the hash method specified by the configuration file:
 
@@ -157,7 +157,7 @@ GET api/v4/auth_clientid/${clientid}
 
 
 
-#### Delete authentication data
+### Delete authentication data
 
 Delete the specified Client ID:
 

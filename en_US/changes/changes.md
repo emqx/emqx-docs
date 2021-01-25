@@ -1637,7 +1637,7 @@ improved the extensibility by adding more hooks and counters, redesigned
 rule engine SQL that filter messages/events mainly by topics, and also
 lots of improvements in edge.
 
-#### General
+### General
 
 **Enhancements:**
 
@@ -1657,7 +1657,7 @@ lots of improvements in edge.
   - Fix the issue that REST API and CLI cannot get multiple routes for a
     topic
 
-#### REST API
+### REST API
 
 **Enhancements:**
 
@@ -1677,7 +1677,7 @@ lots of improvements in edge.
 
   - Fix the issue that encoded URI isn't handled correctly
 
-#### Authentication
+### Authentication
 
 **Enhancements:**
 

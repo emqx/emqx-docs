@@ -60,7 +60,7 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
 
 ## Use the HTTP API to manage ACL rules
 
-#### Add ACL rule
+### Add ACL rule
 
 API definition:
 
@@ -83,7 +83,7 @@ POST api/v4/emqx_acl
 }
 ```
 
-#### Add ACL rules in batch
+### Add ACL rules in batch
 
 API definition:
 
@@ -115,7 +115,7 @@ POST api/v4/emqx_acl
 }
 ```
 
-#### Check the added ACL rules
+### Check the added ACL rules
 
 API definition:
 
@@ -141,7 +141,7 @@ GET api/v4/emqx_acl
 }
 ```
 
-#### Check the specified ACL rule
+### Check the specified ACL rule
 
 API definition:
 
@@ -161,7 +161,7 @@ GET api/v4/emqx_acl/${login}
 }
 ```
 
-#### Delete ACL rule
+### Delete ACL rule
 
 Delete the specified ACL rule：
 

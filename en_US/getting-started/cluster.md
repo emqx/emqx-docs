@@ -14,7 +14,7 @@ EMQ X supports multiple node discovery strategies:
 | etcd   | Autocluster through etcd |
 | k8s    | Autocluster of Kubernetes service |
 
-#### Introduction to cluster management  through manual method
+### Introduction to cluster management  through manual method
 Suppose you are going to deploy an EMQ X cluster on two servers of s1.emqx.io, s2.emqx.io:
 
 |                Node name                | Hostname (FQDN) |   IP address   |
@@ -26,7 +26,7 @@ Suppose you are going to deploy an EMQ X cluster on two servers of s1.emqx.io, s
 The format of node name  is <Name@Host>, and Host must be an IP address or FQDN (host name. domain name)
 :::
 
-#### Configure emqx@s1.emqx.io node
+### Configure emqx@s1.emqx.io node
 
 emqx/etc/emqx.conf:
 
@@ -46,7 +46,7 @@ export EMQX_NODE_NAME=emqx@s1.emqx.io && ./bin/emqx start
 After the node joins the cluster, the node name cannot be changed.
 :::
 
-#### Configure emqx@s2.emqx.io Node
+### Configure emqx@s2.emqx.io Node
 
 emqx/etc/emqx.conf:
 
@@ -56,7 +56,7 @@ node.name = emqx@s2.emqx.io
 node.name = emqx@192.168.0.20
 ```
 
-#### Node joins the cluster
+### Node joins the cluster
 
 After starting the two nodes, execute the following on s2.emqx.io:
 
@@ -79,7 +79,7 @@ $ ./bin/emqx_ctl cluster status
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-#### Exit the cluster
+### Exit the cluster
 
 There are two ways for a node to exit the cluster:
 

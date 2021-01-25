@@ -14,7 +14,7 @@ ref:
 ---
 
 # Use Guide
-### How to use EMQ X?
+## How to use EMQ X?
 
 
 EMQ X Broker is free and it can be download at [https://www.emqx.io/downloads#broker](https://www.emqx.io/downloads#enterprise#broker).
@@ -28,7 +28,7 @@ Also you can use the EMQ X enterprise version through public cloud service.
 
 
 
-### How to update EMQ X license?
+## How to update EMQ X license?
 
 **Tags:** [*Update*](tags.md#update)
 
@@ -64,7 +64,7 @@ docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
 
 
 
-### Can EMQ X support customized protocols? How to implement?
+## Can EMQ X support customized protocols? How to implement?
 
 **Tags:** [*Protocol*](tags.md#protocol)  [*Extends*](tags.md#extends)
 
@@ -74,7 +74,7 @@ TODO...
 
 
 
-### Can I capture device online and offline events? How to use it?
+## Can I capture device online and offline events? How to use it?
 
 **Tags:** [*WebHook*](tags.md#webhook)  [*System Topic*](tags.md#system-topic)
 
@@ -95,7 +95,7 @@ EMQ X supports to capture device online and offline events through below 3 appro
 
 
 
-### I want to control topics can be used for specific clients, how to configure it in EMQ X?
+## I want to control topics can be used for specific clients, how to configure it in EMQ X?
 
 **Tags:** [*ACL*](tags.md#acl)  [*Pub/Sub*](tags.md#pub-sub)
 
@@ -111,7 +111,7 @@ ACL can be configured in configuration file, or backend databases. Below is one 
 
 
 
-### Can EMQ X support traffic control?
+## Can EMQ X support traffic control?
 
 **Tags:** [*Rate Limit*](tags.md#rate-limit)
 
@@ -129,7 +129,7 @@ listener.tcp.external.rate_limit = 1024,4096
 
 
 
-### How does the EMQ X achieve high concurrency and high availability?
+## How does the EMQ X achieve high concurrency and high availability?
 
 **Tags:** [*Performance*](tags.md#performance)
 
@@ -148,7 +148,7 @@ EMQ X supports clustering. The EMQ X performance can be scale-out with the incre
 
 
 
-### Can EMQ X store messages to database?
+## Can EMQ X store messages to database?
 
 **Tags:** [*Persistence*](tags.md#persistence)
 
@@ -164,7 +164,7 @@ The EMQ X Enterprise edition supports data persistence. Supported databases are:
 
 
 
-### Can I disconnect an MQTT connection from EMQ X server?
+## Can I disconnect an MQTT connection from EMQ X server?
 
 **Tags:** [*REAT API*](tags.md#reat-api)  [*Dashboard*](tags.md#dashboard)
 
@@ -191,7 +191,7 @@ Returned response:
 
 
 
-### Can EMQ X forward messages to Kafka?
+## Can EMQ X forward messages to Kafka?
 
 **Tags:** [*Kafka*](tags.md#kafka)  [*Bridge*](tags.md#bridge)  [*Persistence*](tags.md#persistence)
 
@@ -201,7 +201,7 @@ The EMQ X Enterprise edition integrates a Kafka bridge, it can bridge data to Ka
 
 
 
-### I use Kafka bridge in EMQ X enterprise, when will the MQTT Ack packet sent back to client?  Is the time when message arriving EMQ X or after getting Ack message from Kafka?
+## I use Kafka bridge in EMQ X enterprise, when will the MQTT Ack packet sent back to client?  Is the time when message arriving EMQ X or after getting Ack message from Kafka?
 
 **Tags:** [*Kafka*](tags.md#kafka)
 
@@ -226,7 +226,7 @@ So we suggest you to closely monitor Kafka server, and recover Kafka service as 
 
 
 
-### Does EMQ X support cluster auto discovery? What clustering methods are supported?
+## Does EMQ X support cluster auto discovery? What clustering methods are supported?
 
 **Tags:** [*Cluster*](tags.md#cluster)
 
@@ -245,7 +245,7 @@ Currently supported clustering methods:
 
 
 
-### Can I forward MQTT messages EMQ X to other MQTT broker, like RabbitMQ?
+## Can I forward MQTT messages EMQ X to other MQTT broker, like RabbitMQ?
 
 **Tags:** [*RabbitMQ*](tags.md#rabbitmq)  [*Bridge*](tags.md#bridge)  [*Persistence*](tags.md#persistence)
 
@@ -255,7 +255,7 @@ EMQ X support forward messages to other MQTT broker. Using MQTT bridge, EMQ X ca
 
 
 
-### Can I forward messages from EMQ X to MQTT services hosted on public cloud?
+## Can I forward messages from EMQ X to MQTT services hosted on public cloud?
 
 **Tags:** [*Bridge*](tags.md#bridge)  [*Cloud*](tags.md#cloud)
 
@@ -265,7 +265,7 @@ EMQ X can forward messages to IoT Hub hosted on public cloud, this is a feature 
 
 
 
-### Can other MQTT broker (for example Mosquitto) forward messages to EMQ X?
+## Can other MQTT broker (for example Mosquitto) forward messages to EMQ X?
 
 **Tags:** [*Mosquitto*](tags.md#mosquitto)  [*Bridge*](tags.md#bridge)
 
@@ -275,7 +275,7 @@ EMQ X can receive messages from other broker, but it depends also on the impleme
 
 
 
-### What should I do if I want trace the subscription and publish of some particular message?
+## What should I do if I want trace the subscription and publish of some particular message?
 
 **Tags:** [*Trace*](tags.md#trace)
 
@@ -289,7 +289,7 @@ EMQ X support the tracing of messages from particular client or under particular
 
 
 
-### Does EMQ X support encrypted connection? What is the recommended deployment?
+## Does EMQ X support encrypted connection? What is the recommended deployment?
 
 **Tags:** [*TLS*](tags.md#tls)
 
@@ -299,7 +299,7 @@ EMQ X Support SSL/TLS. In production, we recommend to terminate the TLS connecti
 
 
 
-### How to troubleshoot if EMQ X can't start after installation?
+## How to troubleshoot if EMQ X can't start after installation?
 
 **Tags:** [*Debug*](tags.md#debug)
 
@@ -382,7 +382,7 @@ Execute `$ emqx console` to view the output.
 
 
 
-### Use of ssl resumption session in EMQ X
+## Use of ssl resumption session in EMQ X
 
 **Tags:** [*Performance*](tags.md#performance)
 
@@ -392,7 +392,7 @@ Modify the reuse_sessions = on in the emqx.conf configuration and take effect. I
 
 
 
-### MQTT client disconnect statistics
+## MQTT client disconnect statistics
 
 **Tags:** [*Metrics*](tags.md#metrics)
 

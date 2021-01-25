@@ -73,7 +73,7 @@ auth.clientid.2.password = public
 
 ## 使用 HTTP API 管理认证数据
 
-#### 添加认证数据
+### 添加认证数据
 
 API 定义：
 
@@ -95,7 +95,7 @@ POST api/v4/auth_clientid
 
 
 
-#### 查看已经添加的认证数据
+### 查看已经添加的认证数据
 
 API 定义：
 
@@ -112,7 +112,7 @@ GET api/v4/auth_clientid
 
 
 
-#### 更改指定 Client ID 的密码
+### 更改指定 Client ID 的密码
 
 指定 Client ID，传递新密码进行更改，再次连接时需要使用新密码进行连接：
 
@@ -133,7 +133,7 @@ PUT api/v4/auth_clientid/${clientid}
 
 
 
-#### 查看指定 Client ID 信息
+### 查看指定 Client ID 信息
 
 指定 Client ID，查看相关 Client ID、密码信息，注意此处返回的密码是使用配置文件指定哈希方式加密后的密码：
 
@@ -156,7 +156,7 @@ GET api/v4/auth_clientid/${clientid}
 
 
 
-#### 删除认证数据
+### 删除认证数据
 
 删除指定 Client ID：
 

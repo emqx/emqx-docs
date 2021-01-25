@@ -106,7 +106,7 @@ log.chars_limit = 8192
 - **module_info:** 可选字段，仅当此日志消息与某个模块相关时存在。其格式为：[Module Info]
 - **msg:** 日志消息内容。格式任意，可包含空格。
 
-#### 日志消息举例 1：
+### 日志消息举例 1：
 
 ```bash
 2020-02-18 16:10:03.872 [debug] <<"mqttjs_9e49354bb3">>@127.0.0.1:57105 [MQTT/WS] SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)
@@ -121,7 +121,7 @@ log.chars_limit = 8192
 - **module_info:** `[MQTT/WS]`
 - **msg:** `SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)`
 
-#### 日志消息举例 2：
+### 日志消息举例 2：
 
 ```bash
 2020-02-18 16:10:08.474 [warning] [Alarm Handler] New Alarm: system_memory_high_watermark, Alarm Info: []
@@ -181,7 +181,7 @@ Primary Log Level 相当于一个自来水管道系统的总开关，一旦关�
 ## 运行时修改日志级别
 你可以使用 EMQ X 的命令行工具 `emqx_ctl` 在运行时修改 emqx 的日志级别：
 
-#### 修改全局日志级别：
+### 修改全局日志级别：
 
 例如，将 primary log level 以及所有 log handlers 的级别设置为 debug：
 
@@ -189,7 +189,7 @@ Primary Log Level 相当于一个自来水管道系统的总开关，一旦关�
 $ emqx_ctl log set-level debug
 ```
 
-#### 修改主日志级别：
+### 修改主日志级别：
 
 例如，将 primary log level 设置为 debug:
 
@@ -197,7 +197,7 @@ $ emqx_ctl log set-level debug
 $ emqx_ctl log primary-level debug
 ```
 
-#### 修改某个 log handler 的日志级别：
+### 修改某个 log handler 的日志级别：
 
 例如，将 log handler `file` 设置为 debug:
 
@@ -205,7 +205,7 @@ $ emqx_ctl log primary-level debug
 $ emqx_ctl log handlers set-level file debug
 ```
 
-#### 停止某个 log handler：
+### 停止某个 log handler：
 
 例如，为了让日志不再输出到 console，可以停止 log handler `default`:
 
@@ -213,7 +213,7 @@ $ emqx_ctl log handlers set-level file debug
 $ emqx_ctl log handlers stop default
 ```
 
-#### 启动某个已经停止的 log handler：
+### 启动某个已经停止的 log handler：
 
 例如，启动上面已停止的 log handler `default`:
 

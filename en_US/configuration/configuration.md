@@ -23,7 +23,7 @@ ref: undefined
 | ------ | -------- |
 | string | `emqxcl` |
 
-##### Description
+#### Description
 
  Cluster name.
 
@@ -35,7 +35,7 @@ ref: undefined
 | ---- | ----------------------------------- | ---------- |
 | enum | `inet_tcp`, `inet6_tcp`, `inet_tls` | `inet_tcp` |
 
-##### Description
+#### Description
 
 Distributed Erlang cluster protocol type. Available values are:
 
@@ -51,7 +51,7 @@ Distributed Erlang cluster protocol type. Available values are:
 | ---- | ------------------------------------------------- | -------- |
 | enum | `manual`, `static`, `mcast`, `dns`, `etcd`, `k8s` | `manual` |
 
-##### Description
+#### Description
 
 Cluster node discovery method. Available values are:
 
@@ -70,7 +70,7 @@ Cluster node discovery method. Available values are:
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Enable or disable the automatic recovery mechanism of cluster brain splitting.
 
@@ -82,7 +82,7 @@ Enable or disable the automatic recovery mechanism of cluster brain splitting.
 | -------- | ------- |
 | duration | `5m`    |
 
-##### Description
+#### Description
 
 Specify how long to delete short-line nodes from the cluster.
 
@@ -94,7 +94,7 @@ Specify how long to delete short-line nodes from the cluster.
 | ------ | ------- | ----------------------------------------- |
 | string | -       | `emqx1@192.168.0.100,emqx2@192.168.0.101` |
 
-##### Description
+#### Description
 
 When using static clustering, specify a fixed list of nodes, separated by commas `,` between multiple nodes.
 
@@ -106,7 +106,7 @@ When using static clustering, specify a fixed list of nodes, separated by commas
 | ------ | ------------- |
 | ipaddr | `239.192.0.1` |
 
-##### Description
+#### Description
 
 When using the mcast cluster, specify the multicast address.
 
@@ -118,7 +118,7 @@ When using the mcast cluster, specify the multicast address.
 | ------ | ------- |
 | string | `4369`  |
 
-##### Description
+#### Description
 
 When using the mcast cluster, specify the multicast port. If there are multiple ports, separate them with commas `,`.
 
@@ -130,7 +130,7 @@ When using the mcast cluster, specify the multicast port. If there are multiple 
 | ------ | --------- |
 | ipaddr | `0.0.0.0` |
 
-##### Description
+#### Description
 
 When using mcast cluster, specify which local IP address the node discovery service needs to bind to.
 
@@ -142,7 +142,7 @@ When using mcast cluster, specify which local IP address the node discovery serv
 | ------- | ------- |
 | integer | 255     |
 
-##### Description
+#### Description
 
 When using mcast cluster, specify the Time-To-Live value of multicast.
 
@@ -154,7 +154,7 @@ When using mcast cluster, specify the Time-To-Live value of multicast.
 | ------- | -------------- | ------- |
 | enum    |  `on`, `off`   | `on`    |
 
-##### Description
+#### Description
 
 When using mcast clustering, set whether multicast packets are delivered to the local loopback address.
 
@@ -166,11 +166,11 @@ When using mcast clustering, set whether multicast packets are delivered to the 
 | ------ | ------- | --------------- |
 | string | -       | `mycluster.com` |
 
-##### Description
+#### Description
 
 When using the dns cluster, specify the name of the DNS A record. emqx will access the DNS A record to obtain a list of IP addresses, and then splice the APP name specified in `cluster.dns.app` to get a list of all nodes in the cluster.
 
-##### Example
+#### Example
 
 Set `cluster.dns.app = emqx`, and configure a DNS: `mycluster.com`, which points to 3 IP addresses:
 
@@ -196,7 +196,7 @@ emqx@192.168.0.102
 | ------ | ------- | ------- |
 | string | -       | `emqx`  |
 
-##### Description
+#### Description
 
 When using dns cluster, it is used to splice the IP list obtained from `cluster.dns.name` to get a list of node names.
 
@@ -208,7 +208,7 @@ When using dns cluster, it is used to splice the IP list obtained from `cluster.
 | ------ | ------- | ----------------------- |
 | string | -       | `http://127.0.0.1:2379` |
 
-##### Description
+#### Description
 
 When using etcd cluster, specify the address of etcd service. If there are multiple services, use commas to separate them.
 
@@ -220,7 +220,7 @@ When using etcd cluster, specify the address of etcd service. If there are multi
 | ------ | ------- | -------- |
 | string | -       | `emqxcl` |
 
-##### Description
+#### Description
 
 When using etcd cluster, specify the prefix of etcd path. Each node creates a path in etcd:
 
@@ -236,7 +236,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 | -------- | ------- | ------- |
 | duration | -       | `1m`    |
 
-##### Description
+#### Description
 
 When using etcd cluster, specify the expiration time of the node path in etcd.
 
@@ -248,7 +248,7 @@ When using etcd cluster, specify the expiration time of the node path in etcd.
 | -------- | ------- | -------------------------- |
 | string   |  -      | `etc/certs/client-key.pem` |
 
-##### Description
+#### Description
 
 When using SSL to connect to etcd, specify the client's private key file.
 
@@ -260,7 +260,7 @@ When using SSL to connect to etcd, specify the client's private key file.
 | -------- | ------- | ---------------------- |
 | string   |  -      | `etc/certs/client.pem` |
 
-##### Description
+#### Description
 
 When using SSL to connect to etcd, specify the SSL client certificate file.
 
@@ -272,7 +272,7 @@ When using SSL to connect to etcd, specify the SSL client certificate file.
 | -------- | ------- | ------------------ |
 | string   |  -      | `etc/certs/ca.pem` |
 
-##### Description
+#### Description
 
 When using SSL to connect to etcd, specify the CA certificate file for SSL.
 
@@ -284,7 +284,7 @@ When using SSL to connect to etcd, specify the CA certificate file for SSL.
 | -------- | ------- | ---------------------------- |
 | string   | -       | `http://10.110.111.204:8080` |
 
-##### Description
+#### Description
 
 When using the k8s cluster, specify the Kubernetes API Server. If there are multiple Servers, separate them with commas `,`.
 
@@ -296,7 +296,7 @@ When using the k8s cluster, specify the Kubernetes API Server. If there are mult
 | -------- | ------- | ------- |
 | string   | -       | `emqx`  |
 
-##### Description
+#### Description
 
 When using k8s cluster, specify the service name of EMQ X Broker in Kubernetes.
 
@@ -308,11 +308,11 @@ When using k8s cluster, specify the service name of EMQ X Broker in Kubernetes.
 | ---- | ----------------------- | ------- |
 | enum | `ip`, `dns`, `hostname` | `ip`    |
 
-##### Description
+#### Description
 
 When using k8s cluster, address_type is used to obtain the host list from the response of the Kubernetes interface.
 
-##### Example
+#### Example
 
 Specifying `cluster.k8s.address_type` as `ip`, it will get the list of IP addresses of emqx services from the Kubernetes interface:
 
@@ -338,7 +338,7 @@ emqx@172.16.122.33
 | -------- | ------- | ------- |
 | string   |  -      | `emqx`  |
 
-##### Description
+#### Description
 
 When using k8s clustering, app_name is used to splice with the obtained Host list to get the node list.
 
@@ -350,7 +350,7 @@ When using k8s clustering, app_name is used to splice with the obtained Host lis
 | -------- | ------- | ------------------- |
 | string   | -       | `pod.cluster.local` |
 
-##### Description
+#### Description
 
 When using the k8s method and specifying `cluster.k8s.address_type` as the dns type, you can set the suffix of the emqx node name, and splice with `cluster.k8s.namespace` to get a list of node names.
 
@@ -362,11 +362,11 @@ When using the k8s method and specifying `cluster.k8s.address_type` as the dns t
 | ------ | ------- | --------- |
 | string | -       | `default` |
 
-##### Description
+#### Description
 
 When using the k8s method and specifying `cluster.k8s.address_type` as the dns type, you can set the namespace of the emqx node name, and splice with `cluster.k8s.suffix` to get a list of node names.
 
-##### Example
+#### Example
 
 Setting `cluster.k8s.address_type` to `dns`, you will get the dns list of emqx service from the Kubernetes interface:
 
@@ -392,7 +392,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------ | ---------------- |
 | string | `emqx@127.0.0.1` |
 
-##### Description
+#### Description
 
 The node name. The format is `<name> @ <host>`. Where `<host>` can be an IP address or FQDN. See [http://erlang.org/doc/reference_manual/distributed.html](http://erlang.org/doc/reference_manual/distributed.html) for details
 
@@ -404,7 +404,7 @@ The node name. The format is `<name> @ <host>`. Where `<host>` can be an IP addr
 | ------ | ------------------ |
 | string | `emqxsecretcookie` |
 
-##### Description
+#### Description
 
 The cookie value used by the distributed Erlang cluster.
 
@@ -416,7 +416,7 @@ The cookie value used by the distributed Erlang cluster.
 | ------ | -------- |
 | folder | `./data` |
 
-##### Description
+#### Description
 
 The node's data directory, which is used to store Mnesia data files.
 
@@ -428,7 +428,7 @@ The node's data directory, which is used to store Mnesia data files.
 | ------- | -------------- | ------- |
 | enum    |  `on`, `off`   | `off`   |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `-heart` parameter in the `vm.args` file.
 
@@ -442,7 +442,7 @@ Enable or disable Erlang runtime detection mechanism, and restart automatically 
 | ------- | -------------- | ------- |
 | integer | 0 - 1024       | 4       |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `+A` parameter in the `vm.args` file.
 
@@ -456,7 +456,7 @@ Set the number of threads in the asynchronous thread pool in Erlang runtime, see
 | -------- | ---------------- | ------- |
 | integer  | 1024 - 134217727 | 2097152 |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `+P` parameter in the `vm.args` file.
 
@@ -470,7 +470,7 @@ Set the maximum number of processes allowed by Erlang, which will affect the num
 | -------- | ---------------- | ------- |
 | integer  | 1024 - 134217727 | 1048576 |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `+Q ` parameter in the `vm.args` file.
 
@@ -484,7 +484,7 @@ Set the maximum number of ports allowed by Erlang. See [http://erlang.org/doc/ma
 | -------- | -------------- | ------- |
 | bytesize | 1KB - 2GB      | `8MB`   |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `+zdbbl` parameter in the `vm.args` file.
 
@@ -498,7 +498,7 @@ Set the maximum cache size used by Erlang distributed communication. See [http:/
 | ------- | ------- |
 | integer | 262144  |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `+e` parameter in the `vm.args` file.
 
@@ -512,7 +512,7 @@ Set the maximum number of ETS tables allowed in Erlang runtime. See [http://erla
 | -------- | ------- |
 | duration | `15m`   |
 
-##### Description
+#### Description
 
 System tuning parameters, which set how often Erlang runs to force a global garbage collection.
 
@@ -524,7 +524,7 @@ System tuning parameters, which set how often Erlang runs to force a global garb
 | ------- | -------------- | ------- |
 | integer | 0 - 65535      | 1000    |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `-env ERL_FULLSWEEP_AFTER` parameter in the `vm.args` file.
 
@@ -538,7 +538,7 @@ Set how many times the generational GC will run before Erlang runs a fullsweep G
 | ------- | ---------------- |
 | string  | `log/crash.dump` |
 
-##### Description
+#### Description
 
 Set the storage path and file name of the Erlang crash_dump file.
 
@@ -550,7 +550,7 @@ Set the storage path and file name of the Erlang crash_dump file.
 | ------ | ------------------- |
 | string | `etc/ssl_dist.conf` |
 
-##### Description
+#### Description
 
 This configuration will override the `-ssl_dist_optfile` parameter in the `vm.args` file.
 
@@ -564,7 +564,7 @@ If you use SSL to establish an emqx cluster, you need to specify the SSL distrib
 | --------| ------- |
 | integer | 120     |
 
-##### Description
+#### Description
 
 System tuning parameters. This configuration will override the `-kernel net_ticktime` parameter in the `vm.args` file.
 
@@ -578,7 +578,7 @@ Specifying how long time when a node has been unresponsive, it is considered to 
 | ------- | -------------- | ------- |
 | integer | 1024 - 65535   | 6369    |
 
-##### Description
+#### Description
 
 Set a TCP port range together with `node.dist_listen_max`. This port ranget is used for distribution to distributed Erlang as a listening port for distributed channels. Note that if a firewall is set between nodes, this port range needs to be placed into the firewall's whitelist.
 
@@ -590,7 +590,7 @@ Set a TCP port range together with `node.dist_listen_max`. This port ranget is u
 | ------- | -------------- | ------- |
 | integer | 1024 - 65535   | 6369    |
 
-##### Description
+#### Description
 
 Set a TCP port range together with `node.dist_listen_min`. This port range is used for distribution to distributed Erlang as a listening port for distributed channels. Note that if a firewall is set up between nodes, this port rangeneeds to be put in The firewall's whitelist.
 
@@ -602,7 +602,7 @@ Set a TCP port range together with `node.dist_listen_min`. This port range is us
 | ---- | --------------- | ------- |
 | enum | `sync`, `async` | `async` |
 
-##### Description
+#### Description
 
 RPC mode. Synchronous or asynchronous mode is optional.
 
@@ -614,7 +614,7 @@ RPC mode. Synchronous or asynchronous mode is optional.
 | ------- | ------- |
 | integer | 256     |
 
-##### Description
+#### Description
 
 The maximum number of batch messages sent in asynchronous mode. Note that this configuration does not work in synchronous mode.
 
@@ -626,7 +626,7 @@ The maximum number of batch messages sent in asynchronous mode. Note that this c
 | ------- | -------------- | ------- |
 | integer | 1024 - 65535   | 5369    |
 
-##### Description
+#### Description
 
 Set the listening port used by RPC local service
 
@@ -638,7 +638,7 @@ Set the listening port used by RPC local service
 | ------- | -------------- | ------- |
 | integer | 1024-65535     | 5369    |
 
-##### Description
+#### Description
 
 Set the port of the remote RPC service.
 
@@ -650,7 +650,7 @@ Set the port of the remote RPC service.
 | ------- | -------------- | --------------- |
 | integer | 1 - 256        | CPU core number / 2 |
 
-##### Description
+#### Description
 
 Set the number of RPC communication channels initiated by this node to each remote node. Set to 1 to ensure the order of messages. Keep the default value (half the number of CPU cores) to improve RPC throughput.
 
@@ -662,7 +662,7 @@ Set the number of RPC communication channels initiated by this node to each remo
 | -------- | ------- |
 | duration | `5s`    |
 
-##### Description
+#### Description
 
 Timeout for establishing an RPC connection. It means how long will it give up after trying if the remote node does not respond when establishing a connection, .
 
@@ -674,7 +674,7 @@ Timeout for establishing an RPC connection. It means how long will it give up af
 | -------- | ------- |
 | duration | `5s`    |
 
-##### Description
+#### Description
 
 Timeout for sending, which means how long to give up after sending the message.
 
@@ -686,7 +686,7 @@ Timeout for sending, which means how long to give up after sending the message.
 | -------- | ------- |
 | duration | `5s`    |
 
-##### Description
+#### Description
 
 RPC authentication timeout. It means how long it will give up if the remote node does not respond, .
 
@@ -698,7 +698,7 @@ RPC authentication timeout. It means how long it will give up if the remote node
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 The timeout period of RPC synchronous mode. It means how long it will take before giving up if the RPC synchronous call fails to receive a reply.
 
@@ -710,7 +710,7 @@ The timeout period of RPC synchronous mode. It means how long it will take befor
 | -------- | ------- |
 | duration | `900s`  |
 
-##### Description
+#### Description
 
 It means how long after the last packet was sent, keepalive probe packets are sent.
 
@@ -722,7 +722,7 @@ It means how long after the last packet was sent, keepalive probe packets are se
 | -------- | ------- |
 | duration | `75s`   |
 
-##### Description
+#### Description
 
 The interval between keepalive detection messages.
 
@@ -734,7 +734,7 @@ The interval between keepalive detection messages.
 | ------- | ------- |
 | integer | 9       |
 
-##### Description
+#### Description
 
 For how many times if the keepalive probe message fails to receive a reply, the RPC connection is considered lost.
 
@@ -746,7 +746,7 @@ For how many times if the keepalive probe message fails to receive a reply, the 
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-##### Description
+#### Description
 
 TCP tuning parameters. TCP sending buffer size.
 
@@ -758,7 +758,7 @@ TCP tuning parameters. TCP sending buffer size.
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-##### Description
+#### Description
 
 TCP tuning parameters. TCP receiving buffer size.
 
@@ -770,7 +770,7 @@ TCP tuning parameters. TCP receiving buffer size.
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-##### Description
+#### Description
 
 TCP tuning parameters. Socket buffer size in user mode.
 
@@ -782,7 +782,7 @@ TCP tuning parameters. Socket buffer size in user mode.
 | ---- | -------------------------------- | ------- |
 | enum | `off`, `file`, `console`, `both` | `both`  |
 
-##### Description
+#### Description
 
 Where to output the log. The optional values are:
 
@@ -799,7 +799,7 @@ Where to output the log. The optional values are:
 | ---- | ---------------------------------------------------------------------------------- | --------- |
 | enum | `debug`, `info`, `notice`, `warning`<br/>`error`, `critical`, `alert`, `emergency` | `warning` |
 
-##### Description
+#### Description
 
 Global log level. This includes the primary log level and all log handlers. For details, see [log level and log handlers](../getting-started/log.md#log-level-and-log-handlers).
 
@@ -811,7 +811,7 @@ Global log level. This includes the primary log level and all log handlers. For 
 | ---- | ------- |
 | dir  | `./log` |
 
-##### Description
+#### Description
 
 Log file directory.
 
@@ -823,7 +823,7 @@ Log file directory.
 | ------ | ---------- |
 | string | `emqx.log` |
 
-##### Description
+#### Description
 
 The prefix of the log file. For example, if you use the default value (`log.file = emqx.log`), the log file name will be `emqx.log.1`, `emqx.log.2`, ...
 
@@ -835,7 +835,7 @@ The prefix of the log file. For example, if you use the default value (`log.file
 | ------- | ------- |
 | integer | -1      |
 
-##### Description
+#### Description
 
 Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated. `-1` means no limit.
 
@@ -847,7 +847,7 @@ Set the maximum length of a single log message. If this length is exceeded, the 
 | -------- | ------- |
 | bytesize | `10MB`  |
 
-##### Description
+#### Description
 
 Set the size of a single log file. If it exceeds this size, the log file will be rolled to create a new log file.
 
@@ -859,7 +859,7 @@ Set the size of a single log file. If it exceeds this size, the log file will be
 | ------- | ------- |
 | integer | 5       |
 
-##### Description
+#### Description
 
 Set the total number of log files. If this number is exceeded, the next log file will overwrite the first file.
 
@@ -871,11 +871,11 @@ Set the total number of log files. If this number is exceeded, the next log file
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Set a separate log file for a certain log level.
 
-##### Example
+#### Example
 
 Separately output info and above logs to `info.log.N` file:
 
@@ -897,7 +897,7 @@ log.error.file = error.log
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether to allow anonymous users to log in to the system.
 
@@ -913,7 +913,7 @@ It is recommended to disable this option in the production environment.
 | ---- | --------------- | ------- |
 | enum | `allow`, `deny` | `allow` |
 
-##### Description
+#### Description
 
 When the ACL is not hit, allow or deny the publish/subscribe operation.
 
@@ -925,7 +925,7 @@ When the ACL is not hit, allow or deny the publish/subscribe operation.
 | ------ | -------------- |
 | string | `etc/acl.conf` |
 
-##### Description
+#### Description
 
 The default path of ACL file.
 
@@ -937,7 +937,7 @@ The default path of ACL file.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to enable ACL caching.
 
@@ -949,7 +949,7 @@ Whether to enable ACL caching.
 | ------- | -------- |
 | integer | 32       |
 
-##### Description
+#### Description
 
 Maximum cache number of ACL rule.
 
@@ -961,7 +961,7 @@ Maximum cache number of ACL rule.
 | -------- | ------- |
 | duration | `1m`    |
 
-##### Description
+#### Description
 
 Maximum cache time of ACL rule.
 
@@ -973,7 +973,7 @@ Maximum cache time of ACL rule.
 | ------- | ---------------------- | -------- |
 | enum    | `ignore`, `disconnect` | `ignore` |
 
-##### Description
+#### Description
 
 What to do after the ACL check fails.
 
@@ -988,7 +988,7 @@ What to do after the ACL check fails.
 | ------ | ------------ |
 | string | `30, 1m, 5m` |
 
-##### Description
+#### Description
 
 Specify the `Flapping` inspection strategy.
 
@@ -1004,7 +1004,7 @@ For example, `30, 1m, 5m`, it means that if the client disconnects 30 times with
 | --------- | ------- |
 | bytesize  | `1MB`   |
 
-##### Description
+#### Description
 
 The maximum allowed length of MQTT messages.
 
@@ -1016,7 +1016,7 @@ The maximum allowed length of MQTT messages.
 | ------- | ------- |
 | integer | 65535   |
 
-##### Description
+#### Description
 
 The maximum allowed length of  Client ID  string.
 
@@ -1028,7 +1028,7 @@ The maximum allowed length of  Client ID  string.
 | ------- | ------- |
 | integer | 0       |
 
-##### Description
+#### Description
 
 The maximum allowed level of topics for client subscription. 0 means no limit.
 
@@ -1040,7 +1040,7 @@ The maximum allowed level of topics for client subscription. 0 means no limit.
 | ------- | -------------- | ------- |
 | enum    | `0`, `1`, `2`  | `2`     |
 
-##### Description
+#### Description
 
 The maximum allowed QoS level for client to publish.
 
@@ -1052,7 +1052,7 @@ The maximum allowed QoS level for client to publish.
 | ------- | ------- |
 | integer | 65535   |
 
-##### Description
+#### Description
 
 The maximum allowed number of topic aliases. 0 means that topic aliases are not supported.
 
@@ -1064,7 +1064,7 @@ The maximum allowed number of topic aliases. 0 means that topic aliases are not 
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether to support Retain message.
 
@@ -1076,7 +1076,7 @@ Whether to support Retain message.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether to support subscribing to wildcard topics.
 
@@ -1088,7 +1088,7 @@ Whether to support subscribing to wildcard topics.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether to support shared subscriptions.
 
@@ -1100,7 +1100,7 @@ Whether to support shared subscriptions.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to ignore the message sent by itself. If it is ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
 
@@ -1112,7 +1112,7 @@ Whether to ignore the message sent by itself. If it is ignored, it means that EM
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
 
@@ -1124,7 +1124,7 @@ Whether to enable the strict check mode. The strict check mode will check the co
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 The daze time after the TCP connection is established. If no packets are received within this time, the connection will be shutdown.
 
@@ -1136,7 +1136,7 @@ The daze time after the TCP connection is established. If no packets are receive
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to enable ACL check.
 
@@ -1148,7 +1148,7 @@ Whether to enable ACL check.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to enable blacklist.
 
@@ -1160,7 +1160,7 @@ Whether to enable blacklist.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to enable client status statistics.
 
@@ -1172,7 +1172,7 @@ Whether to enable client status statistics.
 | ---- | -------------------- - | -------- |
 | enum | `ignore`, `disconnect` | `ignore` |
 
-##### Description
+#### Description
 
 What to do after the ACL check fails.
 
@@ -1187,7 +1187,7 @@ What to do after the ACL check fails.
 | ------- | ------------ |
 | string  | `16000|16MB` |
 
-##### Description
+#### Description
 
 When a certain number of messages, or bytes, are received, a garbage collection is forced.
 
@@ -1203,7 +1203,7 @@ For example, `16000|16MB` means that when ` 16000` messages are received, or a b
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 When the process message queue length, or the memory bytes reaches a certain value, the process is forced to close.
 
@@ -1221,7 +1221,7 @@ For example, `32000|32MB` means that when the process accumulates `32000` messag
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 The maximum allowed length of MQTT packet.
 
@@ -1233,7 +1233,7 @@ The maximum allowed length of MQTT packet.
 | ------- | ------- |
 | integer | -       |
 
-##### Description
+#### Description
 
 The maximum length of Client ID string.
 
@@ -1245,7 +1245,7 @@ The maximum length of Client ID string.
 | ------- | ------- |
 | integer | -       |
 
-##### Description
+#### Description
 
 The maximum allowed level of topics for client subscription. 0 means no limit.
 
@@ -1257,7 +1257,7 @@ The maximum allowed level of topics for client subscription. 0 means no limit.
 | ------- | -------------- | ------- |
 | enum    | `0`, `1`, `2`  | -       |
 
-##### Description
+#### Description
 
 The maximum QoS level allowed for the client to publish.
 
@@ -1269,7 +1269,7 @@ The maximum QoS level allowed for the client to publish.
 | ------- | ------- |
 | integer | -       |
 
-##### Description
+#### Description
 
 The maximum number of topic aliases. 0 means that topic aliases are not supported.
 
@@ -1281,7 +1281,7 @@ The maximum number of topic aliases. 0 means that topic aliases are not supporte
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-##### Description
+#### Description
 
 Whether to support Retain message.
 
@@ -1293,7 +1293,7 @@ Whether to support Retain message.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-##### Description
+#### Description
 
 Whether to support subscribing to wildcard topics.
 
@@ -1305,7 +1305,7 @@ Whether to support subscribing to wildcard topics.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-##### Description
+#### Description
 
 Whether to support shared subscriptions.
 
@@ -1317,7 +1317,7 @@ Whether to support shared subscriptions.
 | ------- | ------- |
 | integer | -       |
 
-##### Description
+#### Description
 
 Keepalive time specified by the server, used for MQTT v5.0 CONNACK messages
 
@@ -1329,7 +1329,7 @@ Keepalive time specified by the server, used for MQTT v5.0 CONNACK messages
 | ----- | -------------- | ------- |
 | float | > 0.5          | 0.75    |
 
-##### Description
+#### Description
 
 Keepalive backoff index. If no data packet is received from the client within the time of  `Keepalive * backoff * 2`, it is considered that the client has heartbeat timeout.
 
@@ -1341,7 +1341,7 @@ Keepalive backoff index. If no data packet is received from the client within th
 | ------- | ------- |
 | integer | 0     |
 
-##### Description
+#### Description
 
 The maximum number of topics that a single client is allowed to subscribe to. `0` means no limit.
 
@@ -1353,7 +1353,7 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Allow EMQ X Broker to force the QoS level of the message upgrading to the subscribed QoS level when publishing the message.
 
@@ -1365,7 +1365,7 @@ Allow EMQ X Broker to force the QoS level of the message upgrading to the subscr
 | ------- | ------- |
 | integer | 32      |
 
-##### Description
+#### Description
 
 Inflight window size: The inflight window is used to store unacknowledged QoS 1 and QoS 2 messages.
 
@@ -1377,7 +1377,7 @@ Inflight window size: The inflight window is used to store unacknowledged QoS 1 
 | -------- | ------- |
 | duration | `30s`   |
 
-##### Description
+#### Description
 
 Message retransmission interval: EMQ X Broker checks whether message retransmission is required at each interval.
 
@@ -1389,7 +1389,7 @@ Message retransmission interval: EMQ X Broker checks whether message retransmiss
 | ------- | ------- |
 | integer | 100     |
 
-##### Description
+#### Description
 
 The maximum receiving window for QoS 2 messages, which configures how many QoS 2 messages from the client can be processed by EMQ X Broker simultaneously. `0` means no limit.
 
@@ -1401,7 +1401,7 @@ The maximum receiving window for QoS 2 messages, which configures how many QoS 2
 | -------- | ------- |
 | duration | `300s`  |
 
-##### Description
+#### Description
 
 Time for QoS 2 message processing timeout. If the QoS PUBREL message has not been received after the timeout, the message is dropped from the receiving window.
 
@@ -1413,7 +1413,7 @@ Time for QoS 2 message processing timeout. If the QoS PUBREL message has not bee
 | -------- | ------- |
 | duration | `2h`    |
 
-##### Description
+#### Description
 
 The default timeout period of the session, which is mainly used for MQTT v3.1 and v3.1.1 protocols. In MQTT v5.0, this value is usually carried in the client's connection message.
 
@@ -1425,7 +1425,7 @@ The default timeout period of the session, which is mainly used for MQTT v3.1 an
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 The maximum length of the message queue. When the flight window is full, or the client is offline, the message will be stored in the queue. 0 means no limit.
 
@@ -1437,7 +1437,7 @@ The maximum length of the message queue. When the flight window is full, or the 
 | ------ | ---------------- | ------- |
 | string | `none`, `<Spec>` | `none`  |
 
-##### Description
+#### Description
 
 Queue message priority configuration:
 
@@ -1457,7 +1457,7 @@ When the length of the message queue is limited, low priority messages will be d
 | ------- | ------------------- | --------- |
 | enum    | `highest`, `lowest` | `highest` |
 
-##### Description
+#### Description
 
 The default priority level of the message.
 
@@ -1469,7 +1469,7 @@ The default priority level of the message.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether the message queue stores QoS 0 messages.
 
@@ -1481,7 +1481,7 @@ Whether the message queue stores QoS 0 messages.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Whether to enable `Flapping` check.
 
@@ -1493,7 +1493,7 @@ Whether to enable `Flapping` check.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 After topic mount point is configured, all subscribed and published topics will be prefixed by EMQ X Broker.
 
@@ -1512,7 +1512,7 @@ For example, if the mount point is set to `user/%c/`. , when the client with cli
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to use the client's Username as its Client ID.
 
@@ -1524,7 +1524,7 @@ Whether to use the client's Username as its Client ID.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to ignore the message sent by yourself. If ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
 
@@ -1537,7 +1537,7 @@ Whether to ignore the message sent by yourself. If ignored, it means that EMQ X 
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
 
@@ -1549,7 +1549,7 @@ Whether to enable the strict check mode. The strict check mode will check the co
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether to allow anonymous users to log in to the system.
 
@@ -1561,7 +1561,7 @@ Whether to allow anonymous users to log in to the system.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to enable client status statistics.
 
@@ -1573,7 +1573,7 @@ Whether to enable client status statistics.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Whether to enable ACL check.
 
@@ -1585,7 +1585,7 @@ Whether to enable ACL check.
 | ------- | ---------------------- | -------- |
 | enum    | `ignore`, `disconnect` | `ignore` |
 
-##### Description
+#### Description
 
 What to do after the ACL check fails.
 
@@ -1600,7 +1600,7 @@ What to do after the ACL check fails.
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 When a certain number of messages, or bytes, are received, a garbage collection is forced.
 
@@ -1616,7 +1616,7 @@ For example, `16000|16MB` means that when ` 16000` messages are received, or a b
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-##### Description
+#### Description
 
 Whether to support subscribing to wildcard topics.
 
@@ -1628,7 +1628,7 @@ Whether to support subscribing to wildcard topics.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-##### Description
+#### Description
 
 Whether to support shared subscriptions.
 
@@ -1640,7 +1640,7 @@ Whether to support shared subscriptions.
 | ------- | ------- |
 | integer | 0       |
 
-##### Description
+#### Description
 
 The maximum number of topics that a single client is allowed to subscribe to. `0` means no limit.
 
@@ -1652,7 +1652,7 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 | ------- | ------- |
 | integer | 128     |
 
-##### Description
+#### Description
 
 Inflight window size: The flight window is used to store unanswered QoS 1 and QoS 2 messages.
 
@@ -1664,7 +1664,7 @@ Inflight window size: The flight window is used to store unanswered QoS 1 and Qo
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 The maximum receiving window for QoS 2 messages, that configures how many QoS 2 messages from the client can be processed by EMQ X Broker simultaneously. `0` means no limit.
 
@@ -1676,7 +1676,7 @@ The maximum receiving window for QoS 2 messages, that configures how many QoS 2 
 | ------- | ------- |
 | integer | 10000   |
 
-##### Description
+#### Description
 
 The maximum length of the message queue. When the flight window is full, or the client is offline, the message will be stored in the queue. `0` means no limit.
 
@@ -1688,7 +1688,7 @@ The maximum length of the message queue. When the flight window is full, or the 
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether the message queue stores QoS 0 messages.
 
@@ -1700,7 +1700,7 @@ Whether the message queue stores QoS 0 messages.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Whether to enable `Flapping` check.
 
@@ -1712,7 +1712,7 @@ Whether to enable `Flapping` check.
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 When the process message queue length, or the memory bytes reaches a certain value, the process is forced to close.
 
@@ -1730,7 +1730,7 @@ For example, `32000|32MB` means that when the process accumulates `32000` messag
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 After topic mount point is configured, all subscribed and published topics will be prefixed by EMQ X Broker.
 
@@ -1749,7 +1749,7 @@ For example, if the mount point is set to `user/%c/`. , when the client with cli
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to ignore the message sent by itself. If ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
 
@@ -1761,7 +1761,7 @@ Whether to ignore the message sent by itself. If ignored, it means that EMQ X Br
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
 
@@ -1773,7 +1773,7 @@ Whether to enable the strict check mode. The strict check mode will check the co
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether to allow clients under this zone to bypass the authentication step of the authentication plugin.
 
@@ -1785,11 +1785,11 @@ Whether to allow clients under this zone to bypass the authentication step of th
 | ------- | -------------- |
 | string  | `0.0.0.0:1883` |
 
-##### Description
+#### Description
 
 Configure the listening address of the MQTT / TCP listener named `external`.
 
-##### Example
+#### Example
 
 `1883`: monitors IPv4 `0.0.0.0: 1883`.
 `127.0.0.1: 1883`: monitor address is `1883` port on the `127.0.0.1` network card.
@@ -1803,7 +1803,7 @@ Configure the listening address of the MQTT / TCP listener named `external`.
 | ------- | ------- |
 | integer | 8       |
 
-##### Description
+#### Description
 
 The size of the listener's receiving pool.
 
@@ -1815,7 +1815,7 @@ The size of the listener's receiving pool.
 | ------- | ------- |
 | integer | 1024000 |
 
-##### Description
+#### Description
 
 The maximum number of concurrent connections allowed by the listener.
 
@@ -1827,7 +1827,7 @@ The maximum number of concurrent connections allowed by the listener.
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 The maximum access rate allowed by the listener. Unit: pcs / sec
 
@@ -1839,7 +1839,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec
 | ------- | ------- |
 | integer | 100     |
 
-##### Description
+#### Description
 
 The number of times the listener continues to receive TCP packets.
 
@@ -1851,7 +1851,7 @@ The number of times the listener continues to receive TCP packets.
 | ------- | ---------- |
 | string  | `external` |
 
-##### Description
+#### Description
 
 The configuration zone to which the listener belongs.
 
@@ -1863,11 +1863,11 @@ The configuration zone to which the listener belongs.
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 The rate limit of the listener. The format is `<limit>,<duration>`.
 
-##### Example
+#### Example
 
 `100KB,10s`：Limit the number of incoming bytes within 10 seconds not to exceed 100 KB.
 
@@ -1879,11 +1879,11 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 | ------- | ----------- |
 | string  | `allow all` |
 
-##### Description
+#### Description
 
 List of ACL rules of the listener. It is used to set the white/black list of the connection layer.
 
-##### Example
+#### Example
 
 `allow all`：Allow all TCP connections.
 `allow 192.168.0.0/24`：Allow TCP connection with network address `192.168.0.0/24`.
@@ -1904,7 +1904,7 @@ It means that all TCP connections except `192.168.0.1` are allowed.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 Whether the listener enables `Proxy Protocol` support.
 
@@ -1920,7 +1920,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 | -------- | ------- |
 | duration | -       |
 
-##### Description
+#### Description
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
@@ -1932,7 +1932,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 | ------- | ------- |
 | integer | 1024    |
 
-##### Description
+#### Description
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
@@ -1944,7 +1944,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 Timeout for sending TCP packets.
 
@@ -1956,7 +1956,7 @@ Timeout for sending TCP packets.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to close the connection after TCP packet sending timeout.
 
@@ -1968,7 +1968,7 @@ Whether to close the connection after TCP packet sending timeout.
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP receiving buffer size (operating system kernel parameter)
 
@@ -1982,7 +1982,7 @@ Reference: http://erlang.org/doc/man/inet.html
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP sending buffer size (operating system kernel parameter).
 
@@ -1996,7 +1996,7 @@ Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.h
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP buffer size (user level).
 
@@ -2012,7 +2012,7 @@ Reference: [http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
@@ -2024,7 +2024,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
@@ -2036,7 +2036,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port to be reused without waiting for the end of the `TIME_WAIT` state.
 
@@ -2048,11 +2048,11 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 | ------- | ----------------- |
 | string  | `127.0.0.1:11883` |
 
-##### Description
+#### Description
 
 Configure the listening address of the MQTT / TCP listener named `internal`.
 
-##### Example
+#### Example
 
 `11883`: listen to `0.0.0.0: 11883` of IPv4.
 `127.0.0.1:11883`: listening address is` 11883` port on the `127.0.0.1` network card.
@@ -2066,7 +2066,7 @@ Configure the listening address of the MQTT / TCP listener named `internal`.
 | ------- | ------- |
 | integer | 4       |
 
-##### Description
+#### Description
 
 The size of the listener's receiving pool.
 
@@ -2078,7 +2078,7 @@ The size of the listener's receiving pool.
 | ------- | ------- |
 | integer | 1024000 |
 
-##### Description
+#### Description
 
 The maximum number of concurrent connections allowed by the listener.
 
@@ -2090,7 +2090,7 @@ The maximum number of concurrent connections allowed by the listener.
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 The maximum access rate allowed by the listener. Unit: pcs / sec
 
@@ -2102,7 +2102,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 The number of times the listener continues to receive TCP packets.
 
@@ -2114,7 +2114,7 @@ The number of times the listener continues to receive TCP packets.
 | ------- | ---------- |
 | string  | `internal` |
 
-##### Description
+#### Description
 
 The configuration zone to which the listener belongs.
 
@@ -2126,11 +2126,11 @@ The configuration zone to which the listener belongs.
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 The rate limit of the listener. The format is `<limit>,<duration>`.
 
-##### Example
+#### Example
 
 `100KB,10s`：Limit the number of incoming bytes within 10 seconds no tot exceed 100 KB.
 
@@ -2141,7 +2141,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
@@ -2153,7 +2153,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 | -------- | ------- |
 | duration | `5s`    |
 
-##### Description
+#### Description
 
 Timeout for sending TCP packets.
 
@@ -2165,7 +2165,7 @@ Timeout for sending TCP packets.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to close the connection after TCP packet sending timeout.
 
@@ -2177,7 +2177,7 @@ Whether to close the connection after TCP packet sending timeout.
 | -------- | ------- |
 | bytesize | `64KB`  |
 
-##### Description
+#### Description
 
 TCP receiving buffer size (operating system kernel parameter)
 
@@ -2189,7 +2189,7 @@ TCP receiving buffer size (operating system kernel parameter)
 | -------- | ------- |
 | bytesize | `64KB`  |
 
-##### Description
+#### Description
 
 TCP sending buffer size (operating system kernel parameter)
 
@@ -2201,7 +2201,7 @@ TCP sending buffer size (operating system kernel parameter)
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP buffer size (user level).
 
@@ -2213,7 +2213,7 @@ TCP buffer size (user level).
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
@@ -2225,7 +2225,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
@@ -2237,7 +2237,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port to be reused without waiting for the end of the `TIME_WAIT` state.
 
@@ -2249,7 +2249,7 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 | ------- | -------------- |
 | string  | `0.0.0.0:8883` |
 
-##### Description
+#### Description
 
 Configure an SSL listener named `external`.
 
@@ -2261,7 +2261,7 @@ Configure an SSL listener named `external`.
 | ------- | ------- |
 | integer | 16      |
 
-##### Description
+#### Description
 
 The size of the listener's receiving pool.
 
@@ -2273,7 +2273,7 @@ The size of the listener's receiving pool.
 | ------- | ------- |
 | integer | 102400  |
 
-##### Description
+#### Description
 
 The maximum number of concurrent connections allowed by the listener.
 
@@ -2285,7 +2285,7 @@ The maximum number of concurrent connections allowed by the listener.
 | ------- | ------- |
 | integer | 500     |
 
-##### Description
+#### Description
 
 The maximum access rate allowed by the listener. Unit: pcs / sec.
 
@@ -2297,7 +2297,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec.
 | ------- | ------- |
 | integer | 100     |
 
-##### Description
+#### Description
 
 The number of times the listener continues to receive TCP packets.
 
@@ -2309,7 +2309,7 @@ The number of times the listener continues to receive TCP packets.
 | ------- | ---------- |
 | string  | `external` |
 
-##### Description
+#### Description
 
 The configuration group to which the listener belongs.
 
@@ -2321,7 +2321,7 @@ The configuration group to which the listener belongs.
 | ------- | ----------- |
 | string  | `allow all` |
 
-##### Description
+#### Description
 
 List of ACL rules of the listener. It is used to set the white/black list of the connection layer.
 
@@ -2345,7 +2345,7 @@ listener.ssl.external.access.2 = allow all
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 Listener rate limit, with the format of `<limit>,<duration>`.
 
@@ -2357,7 +2357,7 @@ Listener rate limit, with the format of `<limit>,<duration>`.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 Whether the listener enables `Proxy Protocol` support.
 
@@ -2373,7 +2373,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and it is required to 
 | -------- | ------- |
 | duration | -       |
 
-##### Description
+#### Description
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
@@ -2385,7 +2385,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 | ------ | ----------------------- |
 | string | `tlsv1.2,tlsv1.1,tlsv1` |
 
-##### Description
+#### Description
 
 Specify the SSL version list supported by the server. For details, see [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
@@ -2397,7 +2397,7 @@ Specify the SSL version list supported by the server. For details, see [http://e
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 Specify the timeout period for the SSL handshake process.
 
@@ -2409,7 +2409,7 @@ Specify the timeout period for the SSL handshake process.
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-##### Description
+#### Description
 
 Specify SSL private key file (PEM).
 
@@ -2421,7 +2421,7 @@ Specify SSL private key file (PEM).
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-##### Description
+#### Description
 
 Specify SSL certificate file(PEM).
 
@@ -2433,7 +2433,7 @@ Specify SSL certificate file(PEM).
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-##### Description
+#### Description
 
 Specify the CA certificate file for SSL (PEM).
 
@@ -2445,7 +2445,7 @@ Specify the CA certificate file for SSL (PEM).
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-##### Description
+#### Description
 
 If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by the algorithm.
 
@@ -2457,7 +2457,7 @@ If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by th
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-##### Description
+#### Description
 
 Specifies whether to verify the client during the handshake.
 
@@ -2469,7 +2469,7 @@ Specifies whether to verify the client during the handshake.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 If the client does not have a certificate during the SSL handshake, it determines whether to let the handshake fail.
 
@@ -2481,7 +2481,7 @@ If the client does not have a certificate during the SSL handshake, it determine
 | ------ | ------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-##### Description
+#### Description
 
 Specify the cipher suite supported by the server.
 
@@ -2493,7 +2493,7 @@ Specify the cipher suite supported by the server.
 | ------ | ------------------------------------------------------------------------ |
 | string | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
-##### Description
+#### Description
 
 If using the PSK algorithm, specify the PSK Cipher list supported by the server. Note that only one of 'listener.ssl.external.ciphers' and 'listener.ssl.external.psk_ciphers' can be configured.
 
@@ -2505,7 +2505,7 @@ If using the PSK algorithm, specify the PSK Cipher list supported by the server.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Specifies whether to reject renegotiation requests if the client does not follow RFC 5746
 
@@ -2517,7 +2517,7 @@ Specifies whether to reject renegotiation requests if the client does not follow
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Specify whether to support SSL session reuse. For details, see[http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
@@ -2529,7 +2529,7 @@ Specify whether to support SSL session reuse. For details, see[http://erlang.org
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Specify whether to use the server's preferences to select Ciphers.
 
@@ -2541,7 +2541,7 @@ Specify whether to use the server's preferences to select Ciphers.
 | ---- | ----------------- | ------- |
 | enum | `cn`, `dn`, `crt` | `cn`    |
 
-##### Description
+#### Description
 
 Use the value of the CN, DN, or CRT field in the client certificate as the value of the Username field in the MQTT CONNECT packet.
 Note that `listener.ssl.external.verify` should be set to `verify_peer`.
@@ -2554,7 +2554,7 @@ Note that `listener.ssl.external.verify` should be set to `verify_peer`.
 | ------- | ------- |
 | integer | 1024    |
 
-##### Description
+#### Description
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
@@ -2566,7 +2566,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 Timeout for sending TCP packets.
 
@@ -2578,7 +2578,7 @@ Timeout for sending TCP packets.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to close the connection after TCP packet sending timeout.
 
@@ -2590,7 +2590,7 @@ Whether to close the connection after TCP packet sending timeout.
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP receiving buffer size (operating system kernel level parameter).
 
@@ -2604,7 +2604,7 @@ Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.h
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP sending buffer size (operating system kernel level parameter).
 
@@ -2618,7 +2618,7 @@ Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.h
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 CP buffer size (user level).
 
@@ -2634,7 +2634,7 @@ Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.h
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
@@ -2646,7 +2646,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 This is the `TCP_NODELAY` parameter. Enabling this option means that the Nagle algorithm is disabled and small packets will be sent immediately.
 
@@ -2658,7 +2658,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option means that the Nagle a
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port to be reused without waiting for the end of the `TIME_WAIT` state.
 
@@ -2670,11 +2670,11 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 | ------- | ------- |
 | string  | `8083`  |
 
-##### Description
+#### Description
 
 Configure the listening address of the MQTT/WS listener named `external`.
 
-##### Example
+#### Example
 
 `8083`: Listen s to `0.0.0.0: 8083` of IPv4.
 `127.0.0.1:8083`: Listening address is `8083` port on the `127.0.0.1` network card.
@@ -2688,7 +2688,7 @@ Configure the listening address of the MQTT/WS listener named `external`.
 | ------- | ------- |
 | string  | `/mqtt` |
 
-##### Description
+#### Description
 
 WebSocket's MQTT protocol path. So the address of EMQ X Broker's WebSocket is: `ws://<ip>:<port>/mqtt`.
 
@@ -2700,7 +2700,7 @@ WebSocket's MQTT protocol path. So the address of EMQ X Broker's WebSocket is: `
 | ------- | ------- |
 | integer | 4       |
 
-##### Description
+#### Description
 
 The size of the listener's receiving pool.
 
@@ -2712,7 +2712,7 @@ The size of the listener's receiving pool.
 | ------- | ------- |
 | integer | 102400  |
 
-##### Description
+#### Description
 
 The maximum number of concurrent connections allowed by the listener.
 
@@ -2724,7 +2724,7 @@ The maximum number of concurrent connections allowed by the listener.
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 The maximum access rate allowed by the listener. Unit: pcs/sec
 
@@ -2736,7 +2736,7 @@ The maximum access rate allowed by the listener. Unit: pcs/sec
 | ------- | ------- |
 | integer | 100     |
 
-##### Description
+#### Description
 
 The number of times the listener continues to receive TCP packets.
 
@@ -2748,11 +2748,11 @@ The number of times the listener continues to receive TCP packets.
 | ------- | ----------- |
 | string  | `100KB,10s` |
 
-##### Description
+#### Description
 
 The rate limit of the listener. The format is `<limit>,<duration>`.
 
-##### Example
+#### Example
 
 `100KB,10s`： Limit the number of incoming bytes within 10 seconds to not exceed 100 KB.
 
@@ -2764,7 +2764,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 | ------- | ---------- |
 | string  | `external` |
 
-##### Description
+#### Description
 
 The configuration zone to which the listener belongs.
 
@@ -2776,7 +2776,7 @@ The configuration zone to which the listener belongs.
 | ------- | ----------- |
 | string  | `allow all` |
 
-##### Description
+#### Description
 
 List of ACL rules of the listener. It is used to set the white/black list of the connection layer.
 
@@ -2788,7 +2788,7 @@ List of ACL rules of the listener. It is used to set the white/black list of the
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat applet needs to disable this verification.**
 
@@ -2800,7 +2800,7 @@ Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat
 | ------- | ----------------- |-------- |
 | string  | `X-Forwarded-For` | -       |
 
-##### Description
+#### Description
 
 If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
 
@@ -2812,7 +2812,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the confi
 | ------- | ------------------ | ------- |
 | string  | `X-Forwarded-Port` | -       |
 
-##### Description
+#### Description
 
 If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the configuration to get the real port of the client.
 
@@ -2824,7 +2824,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the confi
 | ------- | ------------------- | ------- |
 | enum    | `on`, `off`         | -       |
 
-##### Description
+#### Description
 
 Whether the listener enables `Proxy Protocol` support.
 
@@ -2840,7 +2840,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 | -------- | ------- |
 | duration | -       |
 
-##### Description
+#### Description
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
@@ -2852,7 +2852,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 | ------- | ------- |
 | integer | 1024    |
 
-##### Description
+#### Description
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
@@ -2864,7 +2864,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 Timeout for sending TCP packets.
 
@@ -2876,7 +2876,7 @@ Timeout for sending TCP packets.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to close the connection after TCP packet sending timeout.
 
@@ -2888,7 +2888,7 @@ Whether to close the connection after TCP packet sending timeout.
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP receiving buffer size (operating system kernel level parameter)
 
@@ -2900,7 +2900,7 @@ TCP receiving buffer size (operating system kernel level parameter)
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP sending buffer size (operating system kernel level parameter)
 
@@ -2912,7 +2912,7 @@ TCP sending buffer size (operating system kernel level parameter)
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP buffer size (user level).
 
@@ -2924,7 +2924,7 @@ TCP buffer size (user level).
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 If this configuration is enabled, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
@@ -2936,7 +2936,7 @@ If this configuration is enabled, please set the value equal to the maximum valu
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
@@ -2948,7 +2948,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-##### Description
+#### Description
 
 Whether to compress WebSocket messages. The implementation of compression depends on [zlib](http://www.zlib.net).
 
@@ -2962,7 +2962,7 @@ The configuration items under `defalte_opts` belong to the compression-related p
 | ------- | --------------------------------------------------- | ------- |
 | enum    | `none`, `default`, `best_compression`, `best_speed` | -       |
 
-##### Description
+#### Description
 
 compression level
 
@@ -2974,7 +2974,7 @@ compression level
 | ------- | -------------- | ------- |
 | integer | 1 - 9          | -       |
 
-##### Description
+#### Description
 
 Compression parameters. It means memory usage limit level, and configure how much memory can be opened to participate in the compression process.
 
@@ -2991,7 +2991,7 @@ If not configured, the default is `8`.
 | ------- | --------------------------------------------- | ------- |
 | enum    | `default`, `filtered`, `huffman_only`, `rle`  | -       |
 
-##### Description
+#### Description
 
 Compression strategy for tuning compression ratio:
 
@@ -3010,7 +3010,7 @@ These strategies only affect the compression ratio and will not have any impact 
 | ------- | ------------------------- | ------- |
 | enum    | `takeover`, `no_takeover` | -       |
 
-##### Description
+#### Description
 
 Whether to allow the server's compression context to be passed between frames.
 
@@ -3022,7 +3022,7 @@ Whether to allow the server's compression context to be passed between frames.
 | ------- | ------------------------- | ------- |
 | enum    | `takeover`, `no_takeover` | -       |
 
-##### Description
+#### Description
 
 Whether to allow the client's compression context to be passed between frames.
 
@@ -3034,7 +3034,7 @@ Whether to allow the client's compression context to be passed between frames.
 | ------- | --------------- | ------- |
 | integer | 8 - 15          | -       |
 
-##### Description
+#### Description
 
 Maximum window value on the server side. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
@@ -3046,7 +3046,7 @@ Maximum window value on the server side. Setting a larger value will result in b
 | ------- | -------------- | ------- |
 | integer | 8 - 15         | -       |
 
-##### Description
+#### Description
 
 Client maximum window value. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
@@ -3058,7 +3058,7 @@ Client maximum window value. Setting a larger value will result in better compre
 | -------- | ------- |
 | duration | -       |
 
-##### Description
+#### Description
 
 The daze time after the TCP connection is established. If no packets are received within this time, the connection will be closed.
 
@@ -3070,7 +3070,7 @@ The daze time after the TCP connection is established. If no packets are receive
 | ------- | ------- |
 | integer | -       |
 
-##### Description
+#### Description
 
 The maximum allowed length of a single MQTT packet.
 
@@ -3082,7 +3082,7 @@ The maximum allowed length of a single MQTT packet.
 | ------- | -------------- |
 | string  | `0.0.0.0:8084` |
 
-##### Description
+#### Description
 
 Configure a WSS (MQTT/WebSocket/SSL) listener named `external`.
 
@@ -3094,7 +3094,7 @@ Configure a WSS (MQTT/WebSocket/SSL) listener named `external`.
 | ------- | ------- |
 | string  | `/mqtt` |
 
-##### Description
+#### Description
 
 WebSocket URL Path.
 
@@ -3106,7 +3106,7 @@ WebSocket URL Path.
 | ------- | ------- |
 | integer | 4       |
 
-##### Description
+#### Description
 
 The size of the listener's receiving pool.
 
@@ -3118,7 +3118,7 @@ The size of the listener's receiving pool.
 | ------- | ------- |
 | integer | 16      |
 
-##### Description
+#### Description
 
 The maximum number of concurrent connections allowed by the listener.
 
@@ -3130,7 +3130,7 @@ The maximum number of concurrent connections allowed by the listener.
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 The maximum access rate allowed by the listener. Unit: pcs/sec.
 
@@ -3142,7 +3142,7 @@ The maximum access rate allowed by the listener. Unit: pcs/sec.
 | ------- | ------- |
 | integer | 100     |
 
-##### Description
+#### Description
 
 The number of times the listener continues to receive TCP packets.
 
@@ -3154,7 +3154,7 @@ The number of times the listener continues to receive TCP packets.
 | ------- | ------- |
 | string  | -       |
 
-##### Description
+#### Description
 
 The rate limit of the listener. The format is `<limit>,<duration>`.
 
@@ -3166,7 +3166,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 | ------- | ---------- |
 | string  | `external` |
 
-##### Description
+#### Description
 
 The configuration group to which the listener belongs.
 
@@ -3178,7 +3178,7 @@ The configuration group to which the listener belongs.
 | ------- | ----------- |
 | string  | `allow all` |
 
-##### Description
+#### Description
 
 List of ACL rules of the listener. It is used to set the white/black list of the connection layer.
 
@@ -3202,7 +3202,7 @@ listener.wss.external.access.2 = allow all
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat applet needs to disable this verification.**
 
@@ -3214,7 +3214,7 @@ Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat
 | ------ | ----------------- |
 | string | `X-Forwarded-For` |
 
-##### Description
+#### Description
 
 If the EMQ X cluster is deployed in HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
 
@@ -3226,7 +3226,7 @@ If the EMQ X cluster is deployed in HAProxy or Nginx, you can open the configura
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 Whether the listener enables `Proxy Protocol` support.
 
@@ -3242,7 +3242,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 | -------- | ------- |
 | duration | -       |
 
-##### Description
+#### Description
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
 
@@ -3254,7 +3254,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 | ------ | ----------------------- |
 | string | `tlsv1.2,tlsv1.1,tlsv1` |
 
-##### Description
+#### Description
 
 Specify the SSL version list supported by the server. For details, see [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
@@ -3266,7 +3266,7 @@ Specify the SSL version list supported by the server. For details, see [http://e
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-##### Description
+#### Description
 
 Specify SSL private key file (PEM).
 
@@ -3278,7 +3278,7 @@ Specify SSL private key file (PEM).
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-##### Description
+#### Description
 
 Specify SSL certificate file(PEM).
 
@@ -3290,7 +3290,7 @@ Specify SSL certificate file(PEM).
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-##### Description
+#### Description
 
 If using SSL, specify the CA certificate file for SSL (PEM).
 
@@ -3302,7 +3302,7 @@ If using SSL, specify the CA certificate file for SSL (PEM).
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-##### Description
+#### Description
 
 If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by the algorithm.
 
@@ -3314,7 +3314,7 @@ If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by th
 | ---- | ---------------------------  | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-##### Description
+#### Description
 
 Specifies whether to verify the client during the handshake.
 
@@ -3326,7 +3326,7 @@ Specifies whether to verify the client during the handshake.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 If the client does not have a certificate during the SSL handshake, it determines whether to let the handshake fail.
 
@@ -3338,7 +3338,7 @@ If the client does not have a certificate during the SSL handshake, it determine
 | ------ | ------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-##### Description
+#### Description
 
 Specifies the cipher suite supported by the server.
 
@@ -3350,7 +3350,7 @@ Specifies the cipher suite supported by the server.
 | ------ | ------------------------------------------------------------------------ |
 | string | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
-##### Description
+#### Description
 
 If using the PSK algorithm, specify the PSK Cipher list supported by the server. Note that only one of 'listener.wss.external.ciphers' and 'listener.wss.external.psk_ciphers' can be configured.
 
@@ -3362,7 +3362,7 @@ If using the PSK algorithm, specify the PSK Cipher list supported by the server.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Specifies whether to reject renegotiation requests if the client does not follow RFC 5746
 
@@ -3374,7 +3374,7 @@ Specifies whether to reject renegotiation requests if the client does not follow
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Specifies whether to support SSL session reuse. For details, see [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html).
 
@@ -3386,7 +3386,7 @@ Specifies whether to support SSL session reuse. For details, see [http://erlang.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Specify whether to use the server's preferences to select Ciphers.
 
@@ -3398,7 +3398,7 @@ Specify whether to use the server's preferences to select Ciphers.
 | ---- | ----------------- | ------- |
 | enum | `cn`, `dn`, `crt` | `cn`    |
 
-##### Description
+#### Description
 
 Use the value of the CN, DN, or CRT field in the client certificate as the value of the Username field in the MQTT CONNECT packet.
 Note that `listener.wss.external.verify` should be set to `verify_peer`.
@@ -3411,7 +3411,7 @@ Note that `listener.wss.external.verify` should be set to `verify_peer`.
 | ------- | ------- |
 | integer | 1024    |
 
-##### Description
+#### Description
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
@@ -3423,7 +3423,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 Timeout for sending TCP packets.
 
@@ -3435,7 +3435,7 @@ Timeout for sending TCP packets.
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to close the connection after TCP packet sending timeout.
 
@@ -3447,7 +3447,7 @@ Whether to close the connection after TCP packet sending timeout.
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP receiving buffer size (operating system kernel level parameter)
 
@@ -3461,7 +3461,7 @@ Reference:http://erlang.org/doc/man/inet.html
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP sending buffer size (operating system kernel level parameter)
 
@@ -3475,7 +3475,7 @@ Reference:http://erlang.org/doc/man/inet.html
 | -------- | ------- |
 | bytesize | -       |
 
-##### Description
+#### Description
 
 TCP buffer size (user level).
 
@@ -3491,7 +3491,7 @@ Reference:http://erlang.org/doc/man/inet.html
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | -       |
 
-##### Description
+#### Description
 
 If you open this configuration, please set the value equal to the maximum value of `sndbuff` and `recbuff`.
 
@@ -3503,7 +3503,7 @@ If you open this configuration, please set the value equal to the maximum value 
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data packets to be sent immediately.
 
@@ -3515,7 +3515,7 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 | ------- | --------------- | ------- |
 | enum    | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 If this option is set to true, Websocket messages will be compressed.
 
@@ -3527,7 +3527,7 @@ If this option is set to true, Websocket messages will be compressed.
 | ------- | --------------------------------------------------- | --------- |
 | enum    | `none`, `default`, `best_compression`, `best_speed` | `default` |
 
-##### Description
+#### Description
 
 Compression level.
 
@@ -3539,7 +3539,7 @@ Compression level.
 | ------- | -------------- | ------- |
 | integer | 1 - 9          | -       |
 
-##### Description
+#### Description
 
 Compression parameters. It means memory usage limit level, configures how much memory can be opened to participate in the compression process.
 
@@ -3556,7 +3556,7 @@ If not configured, the default is `8`.
 | ------- | --------------------------------------------- | ------- |
 | enum    | `default`, `filtered`, `huffman_only`, `rle`  | -       |
 
-##### Description
+#### Description
 
 Compression strategy for tuning compression ratio:
 
@@ -3575,7 +3575,7 @@ These strategies only affect the compression ratio and will not have any impact 
 | ------- | ------------------------- | ------- |
 | enum    | `takeover`, `no_takeover` | -       |
 
-##### Description
+#### Description
 
 Whether to allow the server's compression context to be passed between frames.
 
@@ -3587,7 +3587,7 @@ Whether to allow the server's compression context to be passed between frames.
 | ------- | ------------------------- | ------- |
 | enum    | `takeover`, `no_takeover` | -       |
 
-##### Description
+#### Description
 
 Whether to allow the client's compression context to be passed between frames.
 
@@ -3599,7 +3599,7 @@ Whether to allow the client's compression context to be passed between frames.
 | ------- | -------------- | ------- |
 | integer | 8 - 15         | -       |
 
-##### Description
+#### Description
 
 Maximum window value on the server side. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
@@ -3611,7 +3611,7 @@ Maximum window value on the server side. Setting a larger value will result in b
 | ------- | -------------- | ------- |
 | integer | 8 - 15         | -       |
 
-##### Description
+#### Description
 
 Client maximum window value. Setting a larger value will result in better compression ratio, but will consume additional memory.
 
@@ -3623,7 +3623,7 @@ Client maximum window value. Setting a larger value will result in better compre
 | -------- | ------- |
 | duration | -       |
 
-##### Description
+#### Description
 
 The daze time after the TCP connection is established. If no packets are received within this time, the connection will be closed.
 
@@ -3635,7 +3635,7 @@ The daze time after the TCP connection is established. If no packets are receive
 | ------- | ------- |
 | integer | -       |
 
-##### Description
+#### Description
 
 The maximum length of a single MQTT packet.
 
@@ -3647,7 +3647,7 @@ The maximum length of a single MQTT packet.
 | ------- | ------------- |
 | string  | `etc/plugins` |
 
-##### Description
+#### Description
 
 The configuration directory of the plugin.
 
@@ -3659,7 +3659,7 @@ The configuration directory of the plugin.
 | ------- | -------------------- |
 | string  | `etc/loaded_plugins` |
 
-##### Description
+#### Description
 
 The configuration file path of the plugin startup list.
 
@@ -3671,7 +3671,7 @@ The configuration file path of the plugin startup list.
 | ------- | ---------- |
 | string  | `plugins/` |
 
-##### Description
+#### Description
 
 External plugin storage directory.
 
@@ -3683,7 +3683,7 @@ External plugin storage directory.
 | --------- | ------- |
 | duration  | `1m`    |
 
-##### Description
+#### Description
 
 Set the system topic (`$SYS`) message release interval.
 
@@ -3695,7 +3695,7 @@ Set the system topic (`$SYS`) message release interval.
 | -------- | ------- |
 | duration | `30s`   |
 
-##### Description
+#### Description
 
 Set the system heartbeat message release interval. The system heartbeat message includes the following two topics:
 
@@ -3710,7 +3710,7 @@ Set the system heartbeat message release interval. The system heartbeat message 
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Enable or disable global session registration.
 
@@ -3722,7 +3722,7 @@ Enable or disable global session registration.
 | ---- | ------------------------------- | -------- |
 | enum | `local`, `one`, `quorum`, `all` | `quorum` |
 
-##### Description
+#### Description
 
 Set the type of session cluster lock. The session cluster lock is used to prevent the same client from creating multiple sessions on multiple different nodes, which is common when clients frequently switch between nodes for logging.
 
@@ -3734,7 +3734,7 @@ Set the type of session cluster lock. The session cluster lock is used to preven
 | ---- | ---------------------------------------------------------------- | -------- |
 | enum | `random`, `round_robin`, `sticky`, `hash_clientid`, `hash_topic` | `random` |
 
-##### Description
+#### Description
 
 Set a dispatch strategy for shared subscribers. Options are:
 
@@ -3750,7 +3750,7 @@ Set a dispatch strategy for shared subscribers. Options are:
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Enable or disable the ACK check function for qos1/qos2 messages in shared subscriptions. After enabling, if it is delivered to a subscriber but fails to receive the ACK, it will try to deliver to the next subscriber in the subscription group.
 
@@ -3762,7 +3762,7 @@ Enable or disable the ACK check function for qos1/qos2 messages in shared subscr
 | ------- | -------------- | ------- |
 | enum    | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Enable or disable batch cleanup routing information. Batch cleanup routing can be used in a short period of time when a large number of clients go offline to improve cleanup efficiency.
 
@@ -3774,7 +3774,7 @@ Enable or disable batch cleanup routing information. Batch cleanup routing can b
 | -------- | ------- |
 | duration | `0ms`   |
 
-##### Description
+#### Description
 
 Enable garbage collection time monitoring and trigger an alarm when the collection time exceeds the set value, 0 means disabling this monitoring.
 
@@ -3786,7 +3786,7 @@ Enable garbage collection time monitoring and trigger an alarm when the collecti
 | -------- | ------- |
 | duration | `240ms` |
 
-##### Description
+#### Description
 
 Enable process scheduling time monitoring and trigger an alarm when the scheduling time exceeds the set value, 0 means disabling this monitoring.
 
@@ -3798,7 +3798,7 @@ Enable process scheduling time monitoring and trigger an alarm when the scheduli
 | -------- | ------- |
 | bytesize | `8MB`   |
 
-##### Description
+#### Description
 
 Enable stack size monitoring and trigger an alarm when the stack size is still greater than the set value after the process performs garbage collection. 0 means disabling this monitoring.
 
@@ -3810,7 +3810,7 @@ Enable stack size monitoring and trigger an alarm when the stack size is still g
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Specifies whether to enable inter-process message channel busy monitoring.
 
@@ -3822,7 +3822,7 @@ Specifies whether to enable inter-process message channel busy monitoring.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Specifies whether to enable cluster RPC channel busy monitoring.
 
@@ -3834,7 +3834,7 @@ Specifies whether to enable cluster RPC channel busy monitoring.
 | -------- | ------- |
 | duration | `60s`   |
 
-##### Description
+#### Description
 
 CPU usage rate check cycle.
 
@@ -3846,7 +3846,7 @@ CPU usage rate check cycle.
 | ------- | ------- |
 | percent | `80%`   |
 
-##### Description
+#### Description
 
 An alarm will be triggered when the CPU usage exceeds `os_mon.cpu_high_watermark`.
 
@@ -3858,7 +3858,7 @@ An alarm will be triggered when the CPU usage exceeds `os_mon.cpu_high_watermark
 | ------- | ------- |
 | percent | `60%`   |
 
-##### Description
+#### Description
 
 The alarm will be cleared when the CPU usage drops back below `os_mon.cpu_low_watermark` .
 
@@ -3870,7 +3870,7 @@ The alarm will be cleared when the CPU usage drops back below `os_mon.cpu_low_wa
 | -------- | ------- |
 | duration | `60s`   |
 
-##### Description
+#### Description
 
 Memory usage check cycle.
 
@@ -3882,7 +3882,7 @@ Memory usage check cycle.
 | ------- | ------- |
 | percent | `70%`   |
 
-##### Description
+#### Description
 
 When the memory allocated by EMQ X Broker for all processes as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
 
@@ -3894,7 +3894,7 @@ When the memory allocated by EMQ X Broker for all processes as a percentage of s
 | ------- | ------- |
 | percent | `5%`    |
 
-##### Description
+#### Description
 
 When the memory allocated by EMQ X Broker for a single process as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
 
@@ -3906,7 +3906,7 @@ When the memory allocated by EMQ X Broker for a single process as a percentage o
 | -------- | ------- |
 | duration | `30s`   |
 
-##### Description
+#### Description
 
 Check interval for process number.
 
@@ -3918,7 +3918,7 @@ Check interval for process number.
 | ------- | ------- |
 | percent | `80%`   |
 
-##### Description
+#### Description
 
 When the current process number as a percentage of the maximum process number exceeds `vm_mon.process_high_watermark`, an alarm will be triggered. The maximum process number is determined by the `node.process_limit` configuration item.
 
@@ -3930,7 +3930,7 @@ When the current process number as a percentage of the maximum process number ex
 | ------- | ------- |
 | percent | `60%`   |
 
-##### Description
+#### Description
 
 When the percentage of the current number of processes in the maximum number of processes falls below `vm_mon.process_low_watermark`, an alarm will be triggered. The maximum number of processes is determined by the `node.process_limit` configuration item.
 
@@ -3944,7 +3944,7 @@ When the percentage of the current number of processes in the maximum number of 
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 The authentication data of the client, where  `auth.client.<Number>.password` is the clear text password. `auth.client.<Number>.clientid` and `auth.client.<Number>.password` for the same `<Number>`  must appear in pairs. `<Number> `is an integer number used to distinguish authentication data of multiple clients.
 
@@ -3956,7 +3956,7 @@ The authentication data of the client, where  `auth.client.<Number>.password` is
 | ---- | ------------------------------- | -------- |
 | enum | `plain`, `md5`, `sha`, `sha256` | `sha256` |
 
-##### Description
+#### Description
 
 Hash algorithm is used when the password is stored in the database. The following options are available:
 
@@ -3986,7 +3986,7 @@ The password is encrypted and stored using the SHA-256 algorithm.
 | ------ | --------------------------------- |
 | string | `http://127.0.0.1:8991/mqtt/auth` |
 
-##### Description
+#### Description
 
 Specify the target URL of the authentication request.
 
@@ -3998,7 +3998,7 @@ Specify the target URL of the authentication request.
 | ---- | -------------- | ------- |
 | enum | `get`, `post`  | `post`  |
 
-##### Description
+#### Description
 
 Specify the request method of the authentication request.
 
@@ -4010,7 +4010,7 @@ Specify the request method of the authentication request.
 | ------ | ------------------------------------------------------------ | ------------------------------------- |
 | string | `K=v` key-value pairs separated by`, `,` v` can be fixed content or placeholder | `clientid=%c,username=%u,password=%P` |
 
-##### Description
+#### Description
 
 Specify the data carried in the authentication request. When using the GET method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent as query string parameters. When using the POST method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent in the form of Request Body. All placeholders will be replaced by run-time data , and the available placeholders are as follows:
 
@@ -4033,7 +4033,7 @@ Specify the data carried in the authentication request. When using the GET metho
 | ------ | -------------------------------------- |
 | string | `http://127.0.0.1:8991/mqtt/superuser` |
 
-##### Description
+#### Description
 
 Specify the target URL for the superuser authentication request.
 
@@ -4043,7 +4043,7 @@ Specify the target URL for the superuser authentication request.
 | ---- | -------------- | ------- |
 | enum | `get`, `post`  | `post`  |
 
-##### Description
+#### Description
 
 Specifies the request method of the super user authentication request.
 
@@ -4053,7 +4053,7 @@ Specifies the request method of the super user authentication request.
 | ------ | ------------------------------------------------------------ | ------------------------- |
 | string | `K=v` key-value pairs separated by`, `,` v` can be fixed content or placeholder | `clientid=%c,username=%u` |
 
-##### Description
+#### Description
 
 Specify the data carried in the authentication request. When using the GET method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent as query string parameters. When using the POST method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent in the form of Request Body. All placeholders will be replaced by run-time data , and the available placeholders are the same as those of `auth.http.auth_req.params`.
 
@@ -4065,7 +4065,7 @@ Specify the data carried in the authentication request. When using the GET metho
 | ------ | -------------------------------- |
 | string | `http://127.0.0.1:8991/mqtt/acl` |
 
-##### Description
+#### Description
 
 Specify the target URL for ACL verification requests.
 
@@ -4077,7 +4077,7 @@ Specify the target URL for ACL verification requests.
 | ---- | -------------- | ------- |
 | enum | `get`, `post`  | `post`  |
 
-##### Description
+#### Description
 
 Specifies the request method for ACL verification requests.
 
@@ -4089,7 +4089,7 @@ Specifies the request method for ACL verification requests.
 | ------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | string | `K=v` key-value pairs separated by`, `,` v` can be fixed content or placeholder | `access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m` |
 
-##### Description
+#### Description
 
 Specify the data carried in the authentication request. When using the GET method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent as query string parameters. When using the POST method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent in the form of Request Body. All placeholders will be replaced by run-time data , and the available placeholders are as follows:
 
@@ -4111,7 +4111,7 @@ Specify the data carried in the authentication request. When using the GET metho
 | -------- | ------- |
 | duration | `0s`    |
 
-##### Description
+#### Description
 
 HTTP request timeout. Any setting equivalent to `0s` means never timeout.
 
@@ -4123,7 +4123,7 @@ HTTP request timeout. Any setting equivalent to `0s` means never timeout.
 | -------- | ------- |
 | duration | `0s`    |
 
-##### Description
+#### Description
 
 Connection timeout for HTTP requests. Any setting value equivalent to `0s` means never time out.
 
@@ -4135,7 +4135,7 @@ Connection timeout for HTTP requests. Any setting value equivalent to `0s` means
 | ------- | ------- |
 | integer | 3       |
 
-##### Description
+#### Description
 
 The number of retries when an HTTP request fails.
 
@@ -4147,7 +4147,7 @@ The number of retries when an HTTP request fails.
 | -------- | ------- |
 | duration | `1s`    |
 
-##### Description
+#### Description
 
 Retry interval when HTTP request fails.
 
@@ -4159,7 +4159,7 @@ Retry interval when HTTP request fails.
 | ----- | ------- |
 | float | 2.0     |
 
-##### Description
+#### Description
 
 When the HTTP request fails, the retry interval uses the exponential backoff algorithm. This configuration item is used to specify the backoff coefficient of the exponential backoff algorithm.
 
@@ -4171,11 +4171,11 @@ When the HTTP request fails, the retry interval uses the exponential backoff alg
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Specify the data in the HTTP request header. `<Key>` Specify the field name in the HTTP request header, and the value of this configuration item is the corresponding field value. `<Key>` can be the standard HTTP request header field. User can also customize the field to configure multiple different request header fields.
 
-##### Example
+#### Example
 
 ```
 auth.http.header.Accept = */*
@@ -4190,7 +4190,7 @@ auth.http.header.Accept-Encoding = *
 | ------ | ------------------ |
 | string | `etc/certs/ca.pem` |
 
-##### Description
+#### Description
 
 CA certificate file path.
 
@@ -4202,7 +4202,7 @@ CA certificate file path.
 | ------ | --------------------------- |
 | string | `etc/certs/client-cert.pem` |
 
-##### Description
+#### Description
 
 Client certificate file path.
 
@@ -4214,7 +4214,7 @@ Client certificate file path.
 | ------ | -------------------------- |
 | string | `etc/certs/client.key.pem` |
 
-##### Description
+#### Description
 
 Client private key file path.
 
@@ -4228,7 +4228,7 @@ Client private key file path.
 | ------- | ------------ |
 | string  | `emqxsecret` |
 
-##### Description
+#### Description
 
 Set HMAC Secret.
 
@@ -4240,7 +4240,7 @@ Set HMAC Secret.
 | ---- | ---------------------- | ---------- |
 | enum | `username`, `password` | `password` |
 
-##### Description
+#### Description
 
 Where to get JWT. Optional values are
 
@@ -4255,7 +4255,7 @@ Where to get JWT. Optional values are
 | ------- | ------------------------------ |
 | string  | `etc/certs/jwt_public_key.pem` |
 
-##### Description
+#### Description
 
 If you use RSA or ECDSA encryption algorithm, you must specify the private key file.
 
@@ -4267,7 +4267,7 @@ If you use RSA or ECDSA encryption algorithm, you must specify the private key f
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Enable or disable Claims verification.
 
@@ -4279,7 +4279,7 @@ Enable or disable Claims verification.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 When the Claims verification function is enabled, you can set optional values for fields in the JWT.
 
@@ -4310,7 +4310,7 @@ auth.jwt.verify_claims.sub = %u
 | -------- | ----------- |
 | string   | `127.0.0.1` |
 
-##### Description
+#### Description
 
 LDAP service address.
 
@@ -4322,7 +4322,7 @@ LDAP service address.
 | -------- | ------- |
 | integer  | 389     |
 
-##### Description
+#### Description
 
 LDAP service port.
 
@@ -4334,7 +4334,7 @@ LDAP service port.
 | -------- | -------------- | ------- |
 | integer  | > 0            | 8       |
 
-##### Description
+#### Description
 
 Connection pool size.
 
@@ -4346,7 +4346,7 @@ Connection pool size.
 | -------- | ----------------------- |
 | string   | `cn=root,dc=emqx,dc=io` |
 
-##### Description
+#### Description
 
 The DN for logging into the LDAP service.
 
@@ -4358,7 +4358,7 @@ The DN for logging into the LDAP service.
 | -------- | -------- |
 | string   | `public` |
 
-##### Description
+#### Description
 
 The password for logging into the LDAP service.
 
@@ -4370,7 +4370,7 @@ The password for logging into the LDAP service.
 | -------- | ------- |
 | duration | `30s`   |
 
-##### Description
+#### Description
 
 The query timeout.
 
@@ -4382,7 +4382,7 @@ The query timeout.
 | -------- | -------------------------- |
 | string   | `ou=device,dc=emqx,dc=io`  |
 
-##### Description
+#### Description
 
 The DN to which the client belongs.
 
@@ -4394,7 +4394,7 @@ The DN to which the client belongs.
 | -------- | ----------- |
 | string   | `mqttUser`  |
 
-##### Description
+#### Description
 
 The name of the client object.
 
@@ -4406,7 +4406,7 @@ The name of the client object.
 | -------- | ------- |
 | string   | `uid`   |
 
-##### Description
+#### Description
 
 The data type of the Username attribute.
 
@@ -4418,7 +4418,7 @@ The data type of the Username attribute.
 | -------- | ---------------- |
 | string   | `userPassword`   |
 
-##### Description
+#### Description
 
 The data type of the Password attribute.
 
@@ -4430,7 +4430,7 @@ The data type of the Password attribute.
 | -------- | ---------------- | ------- |
 | enum     | `true`, `false`  | `false` |
 
-##### Description
+#### Description
 
 Whether to enable SSL.
 
@@ -4442,7 +4442,7 @@ Whether to enable SSL.
 | -------- | ------- |
 | string   | -       |
 
-##### Description
+#### Description
 
 SSL server certificate path.
 
@@ -4454,7 +4454,7 @@ SSL server certificate path.
 | -------- | ------- |
 | string   | -       |
 
-##### Description
+#### Description
 
 SSL server key file path.
 
@@ -4466,7 +4466,7 @@ SSL server key file path.
 | -------- | ------- |
 | string   | -       |
 
-##### Description
+#### Description
 
 CA certificate file path.
 
@@ -4478,7 +4478,7 @@ CA certificate file path.
 | -------- | ----------------------------- | ------- |
 | enum     | `verify_peer`, `verify_none`  | -       |
 
-##### Description
+#### Description
 
 SSL authentication method:
 
@@ -4493,7 +4493,7 @@ SSL authentication method:
 | -------- | ---------------- | ------- |
 | enum     | `true`, `false`  | `false` |
 
-##### Description
+#### Description
 
 If the client does not provide an SSL certificate, disconnect it.
 
@@ -4507,7 +4507,7 @@ If the client does not provide an SSL certificate, disconnect it.
 | ---- | ----------------------------------- | -------- |
 | enum | `single`, `unknown`, `sharded`, `rs`| `single` |
 
-##### Description
+#### Description
 
 Set the topology type of MongoDB:
 
@@ -4522,7 +4522,7 @@ Set the topology type of MongoDB:
 | ------ | ----------------- |
 | string | `127.0.0.1:27017` |
 
-##### Description
+#### Description
 
 Set the address of MongoDB service. If there are multiple items, use comma `,` to separate them.
 
@@ -4534,7 +4534,7 @@ Set the address of MongoDB service. If there are multiple items, use comma `,` t
 | ------- | ------- |
 | integer | 8       |
 
-##### Description
+#### Description
 
 Set the number of processes in the MongoDB connection pool.
 
@@ -4546,7 +4546,7 @@ Set the number of processes in the MongoDB connection pool.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Set the MongoDB's username.
 
@@ -4558,7 +4558,7 @@ Set the MongoDB's username.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Set the MongoDB's password.
 
@@ -4570,7 +4570,7 @@ Set the MongoDB's password.
 | ------ | ------- |
 | string | `mqtt`  |
 
-##### Description
+#### Description
 
 Set the MongoDB authentication source database name.
 
@@ -4582,7 +4582,7 @@ Set the MongoDB authentication source database name.
 | ------ | ------- |
 | string | `mqtt`  |
 
-##### Description
+#### Description
 
 Set MongoDB database name.
 
@@ -4594,7 +4594,7 @@ Set MongoDB database name.
 | -------- | ------- |
 | duration | `5s`    |
 
-##### Description
+#### Description
 
 Set the timeout for accessing MongoDB.
 
@@ -4606,7 +4606,7 @@ Set the timeout for accessing MongoDB.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Set whether to use SSL to access MongoDB.
 
@@ -4618,7 +4618,7 @@ Set whether to use SSL to access MongoDB.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 If using SSL to access MongoDB, set the private key file of the SSL client.
 
@@ -4630,7 +4630,7 @@ If using SSL to access MongoDB, set the private key file of the SSL client.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 If using SSL to access MongoDB, set the SSL client certificate file.
 
@@ -4642,7 +4642,7 @@ If using SSL to access MongoDB, set the SSL client certificate file.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 If you use SSL to access MongoDB, set the SSL certificate file.
 
@@ -4654,7 +4654,7 @@ If you use SSL to access MongoDB, set the SSL certificate file.
 | ---- | ------------------------- | ------- |
 | enum | `unsafe`, `safe`, `undef` | `undef` |
 
-##### Description
+#### Description
 
 Set the write mode of MongoDB.
 
@@ -4666,7 +4666,7 @@ Set the write mode of MongoDB.
 | ---- | ----------------------------- | ------- |
 | enum | `master`, `slave_ok`, `undef` | `undef` |
 
-##### Description
+#### Description
 
 Set the read mode of MongoDB.
 
@@ -4678,7 +4678,7 @@ Set the read mode of MongoDB.
 | ------ | ----------- |
 | string | `mqtt_user` |
 
-##### Description
+#### Description
 
 Collection name used in the authentication process.
 
@@ -4690,7 +4690,7 @@ Collection name used in the authentication process.
 | ------ | ---------- |
 | string | `password` |
 
-##### Description
+#### Description
 
 The main fields used in the authentication process. To add salt after the password, it can be configured as:
 
@@ -4706,7 +4706,7 @@ auth.mongo.auth_query.password_field = password,salt
 | ---- | ----------------------------------------- | -------- |
 | enum | `plain`, `md5`, `sha`, `sha256`, `bcrypt` | `sha256` |
 
-##### Description
+#### Description
 
 Set the hash algorithm used for the password field. To add salt after the sha256 password, you can set it to:
 
@@ -4734,7 +4734,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ------ | ------------- |
 | string | `username=%u` |
 
-##### Description
+#### Description
 
 MongoDB statements are executed during the authentication process. Commands can support following wildcards:
 
@@ -4751,7 +4751,7 @@ MongoDB statements are executed during the authentication process. Commands can 
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to use SuperUser in authentication.
 
@@ -4763,7 +4763,7 @@ Whether to use SuperUser in authentication.
 | ------ | ----------- |
 | string | `mqtt_user` |
 
-##### Description
+#### Description
 
 If using SuperUser, specify the MongoDB Collection of SuperUser.
 
@@ -4775,7 +4775,7 @@ If using SuperUser, specify the MongoDB Collection of SuperUser.
 | ------ | -------------------------- |
 | string | `username=%u, clientid=%c` |
 
-##### Description
+#### Description
 
 If SuperUser is used, specify the MongoDB statement used to query SuperUser.
 
@@ -4787,7 +4787,7 @@ If SuperUser is used, specify the MongoDB statement used to query SuperUser.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to enable the ACL function.
 
@@ -4799,7 +4799,7 @@ Whether to enable the ACL function.
 | ------ | ---------- |
 | string | `mqtt_acl` |
 
-##### Description
+#### Description
 
 If using the ACL function, specify the MongoDB Collection that queries the ACL rules.
 
@@ -4811,7 +4811,7 @@ If using the ACL function, specify the MongoDB Collection that queries the ACL r
 | ------ | ------------- |
 | string | `username=%u` |
 
-##### Description
+#### Description
 
 If the ACL function is used, specify the MongoDB statement used to query the ACL rules. It can support multiple ACL statements, and "or" is used to connect multiple statements.
 
@@ -4836,7 +4836,7 @@ db.mqtt_acl.find({$or: [{username: "ilyas"},  {username: "$all"}]});
 | ------- | ------- |
 | integer | 1       |
 
-##### Description
+#### Description
 
 MongoDB topology parameters, that set the thread pool size.
 
@@ -4848,7 +4848,7 @@ MongoDB topology parameters, that set the thread pool size.
 | ------- | ------- |
 | integer | 0       |
 
-##### Description
+#### Description
 
 MongoDB topology parameter, which determines how many additional worker threads are allowed to be created when all workers in the thread pool are busy.
 
@@ -4860,7 +4860,7 @@ MongoDB topology parameter, which determines how many additional worker threads 
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 MongoDB topology parameter, which determines how long to release additional worker threads when a worker is idle. Unit: ms
 
@@ -4872,7 +4872,7 @@ MongoDB topology parameter, which determines how long to release additional work
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 MongoDB topology parameters, which determines how often to check for idle threads to release additional workers.
 
@@ -4884,7 +4884,7 @@ MongoDB topology parameters, which determines how often to check for idle thread
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 MongoDB topology parameters, which is to select the strategy of the secondary node used to process user requests. The minimum value of the RTT of all nodes is LowestRTT, then only those secondary nodes with RTT <LowestRTT + local_threshold_ms will be selected.
 
@@ -4896,7 +4896,7 @@ MongoDB topology parameters, which is to select the strategy of the secondary no
 | ------- | ------- |
 | integer | 20000   |
 
-##### Description
+#### Description
 
 MongoDB topology parameter, means MongoDB connection timeout, unit: ms.
 
@@ -4908,7 +4908,7 @@ MongoDB topology parameter, means MongoDB connection timeout, unit: ms.
 | ------- | ------- |
 | integer | 100     |
 
-##### Description
+#### Description
 
 MongoDB topology parameter, that means MongoDB message sending timeout period, unit: ms.
 
@@ -4920,7 +4920,7 @@ MongoDB topology parameter, that means MongoDB message sending timeout period, u
 | ------- | ------- |
 | integer | 30000   |
 
-##### Description
+#### Description
 
 MongoDB topology parameter, select the timeout period of MongoDB Server, unit: ms.
 
@@ -4932,7 +4932,7 @@ MongoDB topology parameter, select the timeout period of MongoDB Server, unit: m
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 MongoDB topology parameters, that selects the worker's waiting timeout period from the thread pool, unit: ms.
 
@@ -4944,7 +4944,7 @@ MongoDB topology parameters, that selects the worker's waiting timeout period fr
 | ------- | ------- |
 | integer | 10000   |
 
-##### Description
+#### Description
 
 MongoDB topology parameters, the interval between topological scans, unit: ms.
 
@@ -4956,7 +4956,7 @@ MongoDB topology parameters, the interval between topological scans, unit: ms.
 | ------- | ------- |
 | integer | 1000    |
 
-##### Description
+#### Description
 
 MongoDB topology parameter, the minimum allowed value of `heartbeat_frequency_ms`, unit: milliseconds.
 
@@ -4970,7 +4970,7 @@ MongoDB topology parameter, the minimum allowed value of `heartbeat_frequency_ms
 | ---- | ---------------- |
 | ip   | `127.0.0.1:3306` |
 
-##### Description
+#### Description
 
 MySQL server address.
 
@@ -4982,7 +4982,7 @@ MySQL server address.
 | ------- | ------- |
 | integer | 8       |
 
-##### Description
+#### Description
 
 Database connection thread pool size.
 
@@ -4994,7 +4994,7 @@ Database connection thread pool size.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 MySQL username.
 
@@ -5006,7 +5006,7 @@ MySQL username.
 | ------ | ------- |
 | string | -      |
 
-##### Description
+#### Description
 
 MySQL password.
 
@@ -5018,7 +5018,7 @@ MySQL password.
 | ------ | ------- |
 | string | `mqtt`  |
 
-##### Description
+#### Description
 
 MySQL database name.
 
@@ -5030,7 +5030,7 @@ MySQL database name.
 | -------- | ------- |
 | duration | `5s`    |
 
-##### Description
+#### Description
 
 MySQL data query timeout. The query timeout means user data was not found.
 
@@ -5042,7 +5042,7 @@ MySQL data query timeout. The query timeout means user data was not found.
 | ------ | -------------------------------------------------------------- |
 | string | `select password from mqtt_user where username = '%u' limit 1` |
 
-##### Description
+#### Description
 
 The MySQL select statement used during authentication, the selected data will be compared with the password encrypted by the encryption method specified by `auth.mysql.password_hash`, and the client with the same content after the comparison will be allowed to log in. The stored password with salt needs to select the fields corresponding to the salt at the same time, such as `select password, salt from mqtt_user where username = '%u' limit 1`.` Password` and `salt` field names cannot be modified, the table name and the field name in the WHERE clause can change depending on the situation. The WHERE clause supports the following placeholders:
 
@@ -5061,7 +5061,7 @@ The MySQL select statement used during authentication, the selected data will be
 | ------ | ------- |
 | string | `sh256` |
 
-##### Description
+#### Description
 
 The encryption method used for the password stored in the database. The following encryption methods are supported:
 
@@ -5081,7 +5081,7 @@ The encryption method used for the password stored in the database. The followin
 | ------ | ------------------------------------------------------------------ |
 | string | `select is_superuser from mqtt_user where username = '%u' limit 1` |
 
-##### Description
+#### Description
 
 The SQL select statement used for super user authentication. All table names and field names in this statement can be modified as appropriate. If and only if the value of the selected field is `1`, the user is a super user. In the WHERE clause, the supported placeholders are the same as `auth.mysql.auth_query`.
 
@@ -5093,7 +5093,7 @@ The SQL select statement used for super user authentication. All table names and
 | ------ | ------- |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
-##### Description
+#### Description
 
 The SQL selection statement used in ACL verification. All table names and field names in this statement can be modified as appropriate. The placeholders supported in the WHERE clause are as follows:
 
@@ -5113,7 +5113,7 @@ The SQL selection statement used in ACL verification. All table names and field 
 | ---- | ---------------- |
 | ip   | `127.0.0.1:5432` |
 
-##### Description
+#### Description
 
 PostgreSQL server address.
 
@@ -5125,7 +5125,7 @@ PostgreSQL server address.
 | ------- | ------- |
 | integer | 8       |
 
-##### Description
+#### Description
 
 Database connection thread pool size.
 
@@ -5137,7 +5137,7 @@ Database connection thread pool size.
 | ------ | ------- |
 | string | `root`  |
 
-##### Description
+#### Description
 
 PostgreSQL username.
 
@@ -5149,7 +5149,7 @@ PostgreSQL username.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 PostgreSQL password.
 
@@ -5161,7 +5161,7 @@ PostgreSQL password.
 | ------ | ------- |
 | string | `mqtt`  |
 
-##### Description
+#### Description
 
 PostgreSQL database name.
 
@@ -5173,7 +5173,7 @@ PostgreSQL database name.
 | ------ | ------- |
 | string | `utf8`  |
 
-##### Description
+#### Description
 
 PostgreSQL database character encoding format.
 
@@ -5185,7 +5185,7 @@ PostgreSQL database character encoding format.
 | ------ | --------------- | ------- |
 | enum   | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to enable TLS connection.
 
@@ -5197,7 +5197,7 @@ Whether to enable TLS connection.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Client private key file path.
 
@@ -5209,7 +5209,7 @@ Client private key file path.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Client certificate file path.
 
@@ -5221,7 +5221,7 @@ Client certificate file path.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Client CA certificate file path.
 
@@ -5233,7 +5233,7 @@ Client CA certificate file path.
 | ------ | -------------------------------------------------------------- |
 | string | `select password from mqtt_user where username = '%u' limit 1` |
 
-##### Description
+#### Description
 
 The SQL selection statement used for authentication, that is the same as `auth.mysql.auth_query`.
 
@@ -5245,7 +5245,7 @@ The SQL selection statement used for authentication, that is the same as `auth.m
 | ------ | ------- |
 | string | `sh256` |
 
-##### Description
+#### Description
 
 The encryption method used for the password stored in the database, that is the same as `auth.mysql.password_hash`.
 
@@ -5257,7 +5257,7 @@ The encryption method used for the password stored in the database, that is the 
 | ------ | ------- |
 | string | `select is_superuser from mqtt_user where username = '%u' limit 1` |
 
-##### Description
+#### Description
 
 The SQL select statement used for super user authentication, that is the same as `auth.mysql.super_query`.
 
@@ -5269,7 +5269,7 @@ The SQL select statement used for super user authentication, that is the same as
 | ------ | ------- |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
-##### Description
+#### Description
 
 The SQL selection statement used in ACL verification,  the same as `auth.mysql.acl_query`.
 
@@ -5283,7 +5283,7 @@ The SQL selection statement used in ACL verification,  the same as `auth.mysql.a
 | -------- | ------------------------------- | --------- |
 | enum     | `single`, `sentinel`, `cluster` | `single`  |
 
-##### Description
+#### Description
 
 Redis Service cluster type:
 - `single`：Single node service.
@@ -5298,7 +5298,7 @@ Redis Service cluster type:
 | -------- | ------------------ |
 | string   | `127.0.0.1:6379`   |
 
-##### Description
+#### Description
 
 Redis service addresses, if there are multiple, they are separated by commas. For example, `192.168.0.1:6379, 192.168.0.2:6379`.
 
@@ -5310,7 +5310,7 @@ Redis service addresses, if there are multiple, they are separated by commas. Fo
 | -------- | ------- |
 | string   | -       |
 
-##### Description
+#### Description
 
 The cluster name in Redis sentinel mode. If it is not in `sentinel` mode, no configuration is required.
 
@@ -5322,7 +5322,7 @@ The cluster name in Redis sentinel mode. If it is not in `sentinel` mode, no con
 | -------- | -------------- | ------- |
 | integer  | > 0            | 8       |
 
-##### Description
+#### Description
 
 Connection pool size.
 
@@ -5334,7 +5334,7 @@ Connection pool size.
 | -------- | ------- |
 | integer  | 0       |
 
-##### Description
+#### Description
 
 The serial number of the Redis database to be connected.
 
@@ -5346,7 +5346,7 @@ The serial number of the Redis database to be connected.
 | -------- | ------- |
 | string   | -       |
 
-##### Description
+#### Description
 
 Redis password.
 
@@ -5358,7 +5358,7 @@ Redis password.
 | -------- | ------- |
 | duration | `5s`    |
 
-##### Description
+#### Description
 
 Redis query timeout.
 
@@ -5370,7 +5370,7 @@ Redis query timeout.
 | -------- | ----------------------------- |
 | string   | `HMGET mqtt_user:%u password` |
 
-##### Description
+#### Description
 
 Authentication query commands, available placeholders are:
  - `%u`: client username.
@@ -5386,7 +5386,7 @@ Authentication query commands, available placeholders are:
 | -------- | ------------------------------------------ | ------- |
 | enum     | `plain`, `md5`, `sha`, `sha256`, `bcrypt`  | `plain` |
 
-##### Description
+#### Description
 
 The encoding format of the `password` field stored by Redis.
 
@@ -5398,7 +5398,7 @@ The encoding format of the `password` field stored by Redis.
 | -------- | -------------------------------- |
 | string   | `HGET mqtt_user:%u is_superuser` |
 
-##### Description
+#### Description
 
 Authentication query commands for superuser, available placeholders are:
 
@@ -5415,7 +5415,7 @@ Authentication query commands for superuser, available placeholders are:
 | -------- | --------------------- |
 | string   | `HGETALL mqtt_acl:%u` |
 
-##### Description
+#### Description
 
 ACL query commands. Available placeholders are:
  - `%u`: client username.
@@ -5431,7 +5431,7 @@ ACL query commands. Available placeholders are:
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 The authentication data of the client, where `auth.user.<Number>.password` is the clear text password.  `auth.user.<Number>.username` and `auth.user.<Number>.password` of the same `<Number>` must appear in pairs. `<Number> `is an integer number used to distinguish authentication data of multiple clients.
 
@@ -5443,7 +5443,7 @@ The authentication data of the client, where `auth.user.<Number>.password` is th
 | ---- | ------------------------------- | -------- |
 | enum | `plain`, `md5`, `sha`, `sha256` | `sha256` |
 
-##### Description
+#### Description
 
 Hash algorithm used when the password is stored in the database. The following options are available:
 
@@ -5473,7 +5473,7 @@ The password is encrypted and stored using the SHA-256 algorithm.
 | -------- | ---------------- |
 | string   | `127.0.0.1:1883` |
 
-##### Description
+#### Description
 
 Bridge address, supports two formats, for example:
 - `emqx @ 192.168.0.100`: EMQ X Broker node name, which means that the message of this node is bridged to another EMQ X node.
@@ -5487,7 +5487,7 @@ Bridge address, supports two formats, for example:
 | -------- | ---------------------------- | -------- |
 | enum     | `mqttv3`, `mqttv4`, `mqttv5` | `mqttv4` |
 
-##### Description
+#### Description
 
 The client protocol version of the MQTT bridge.
 
@@ -5499,7 +5499,7 @@ The client protocol version of the MQTT bridge.
 | -------- | ----------------- | -------- |
 | eunm     | `manual`, `auto`  | `manual` |
 
-##### Description
+#### Description
 
 Start type:
 - `auto`: start automatically with the plugin.
@@ -5513,7 +5513,7 @@ Start type:
 | -------- | ---------------- | ------- |
 | boolean  | `true`, `false`  | `true`  |
 
-##### Description
+#### Description
 
 Whether to enable bridging mode, only MQTT bridging is supported. After being enabled, the MQTT client started by `emqx_bridge_mqtt` will carry a flag bit when sending a connection message, indicating that this is a bridging client.
 
@@ -5529,7 +5529,7 @@ RabbitMQ currently does not support this flag.
 | -------- | ------------ |
 | string   | `bridge_aws` |
 
-##### Description
+#### Description
 
 The client ID of the MQTT bridge.
 
@@ -5541,7 +5541,7 @@ The client ID of the MQTT bridge.
 | -------- | ---------------- | ------- |
 | boolean  | `true`, `false`  | `true`  |
 
-##### Description
+#### Description
 
 The `clean_start` flag of the MQTT bridge. It indicates whether the client connects to the remote MQTT Broker in the manner of `clean session`.
 
@@ -5553,7 +5553,7 @@ The `clean_start` flag of the MQTT bridge. It indicates whether the client conne
 | -------- | ------- |
 | string   | `user`  |
 
-##### Description
+#### Description
 
 The username of the MQTT bridge client.
 
@@ -5565,7 +5565,7 @@ The username of the MQTT bridge client.
 | -------- | -------- |
 | string   | `passwd` |
 
-##### Description
+#### Description
 
 The password of the MQTT bridge client.
 
@@ -5577,7 +5577,7 @@ The password of the MQTT bridge client.
 | -------- | ------------------- |
 | string   | `topic1/#,topic2/#` |
 
-##### Description
+#### Description
 
 Bridge forwarding rules. For example:
 - `topic1/#, topic2/#`：`emqx_bridge_mqtt` will forward all topic messages in EMQ X Broker that match `topic1/#`，`topic2/#` .
@@ -5590,7 +5590,7 @@ Bridge forwarding rules. For example:
 | -------- | --------------------- |
 | string   | `bridge/aws/${node}/` |
 
-##### Description
+#### Description
 
 The prefix of the forwarding topic. When forwarding the message to the target system, it is supported to add a uniform prefix to the topic.
 
@@ -5602,7 +5602,7 @@ The prefix of the forwarding topic. When forwarding the message to the target sy
 | -------- | ------- |
 | string   | -       |
 
-##### Description
+#### Description
 
 Topic of the peer system subscribed.
 
@@ -5614,7 +5614,7 @@ Topic of the peer system subscribed.
 | -------- | -------------- | ------- |
 | enum     | `0`, `1`, `2`  | `1`     |
 
-##### Description
+#### Description
 
 QoS of the peer system topic subscribed.
 
@@ -5626,7 +5626,7 @@ QoS of the peer system topic subscribed.
 | -------- | -------------- |
 | string   | `receive/aws/` |
 
-##### Description
+#### Description
 
 The topic prefix of the received message.`emqx_bridge_mqtt` supports adding a unified topic prefix to the message from the peer.
 
@@ -5638,7 +5638,7 @@ The topic prefix of the received message.`emqx_bridge_mqtt` supports adding a un
 | -------- | --------------- | ------- |
 | boolean  | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether the MQTT bridge client enables SSL.
 
@@ -5650,7 +5650,7 @@ Whether the MQTT bridge client enables SSL.
 | -------- | ---------------------- |
 | string   | `etc/certs/cacert.pem` |
 
-##### Description
+#### Description
 
 The path of the CA certificate file of the MQTT bridge client.
 
@@ -5662,7 +5662,7 @@ The path of the CA certificate file of the MQTT bridge client.
 | -------- | --------------------------- |
 | string   | `etc/certs/client-cert.pem` |
 
-##### Description
+#### Description
 
 The path of the SSL certificate file of the MQTT bridge client.
 
@@ -5674,7 +5674,7 @@ The path of the SSL certificate file of the MQTT bridge client.
 | -------- | -------------------------- |
 | string   | `etc/certs/client-key.pem` |
 
-##### Description
+#### Description
 
 The path of the SSL key file of the MQTT bridge client.
 
@@ -5686,7 +5686,7 @@ The path of the SSL key file of the MQTT bridge client.
 | -------- | ----------------------------------------------------------- |
 | string   | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384` |
 
-##### Description
+#### Description
 
 Cipher suite supported by SSL handshake.
 
@@ -5698,7 +5698,7 @@ Cipher suite supported by SSL handshake.
 | -------- | ------------------------------------------------------------------------ |
 | string   | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
-##### Description
+#### Description
 
 Cipher suite supported by SSL PSK handshake.
 
@@ -5710,7 +5710,7 @@ Cipher suite supported by SSL PSK handshake.
 | -------- | ------- |
 | duration | `60s`   |
 
-##### Description
+#### Description
 
 Heartbeat interval of the MQTT bridge client.
 
@@ -5722,7 +5722,7 @@ Heartbeat interval of the MQTT bridge client.
 | -------- | ----------------------- |
 | string   | `tlsv1.2,tlsv1.1,tlsv1` |
 
-##### Description
+#### Description
 
 The SSL version of the MQTT bridge client.
 
@@ -5734,7 +5734,7 @@ The SSL version of the MQTT bridge client.
 | -------- | ------- |
 | duration | `30s`   |
 
-##### Description
+#### Description
 
 Reconnection interval.
 
@@ -5746,7 +5746,7 @@ Reconnection interval.
 | -------- | ------- |
 | duration | `20s`   |
 
-##### Description
+#### Description
 
 QoS 1/2 message retransmission interval.
 
@@ -5758,7 +5758,7 @@ QoS 1/2 message retransmission interval.
 | -------- | ------- |
 | integer  | 32      |
 
-##### Description
+#### Description
 
 The batch size of the EMQ X bridge. The EMQ X bridge mode of `emqx_bridge_mqtt` supports batch sending of messages to increase throughput.
 
@@ -5770,7 +5770,7 @@ The batch size of the EMQ X bridge. The EMQ X bridge mode of `emqx_bridge_mqtt` 
 | -------- | ------- |
 | integer  | 32      |
 
-##### Description
+#### Description
 
 Inflight window size.
 
@@ -5782,7 +5782,7 @@ Inflight window size.
 | -------- | ----------------------- |
 | string   | `etc/emqx_aws_bridge/`  |
 
-##### Description
+#### Description
 
 Set the message queue file path. If not configured, only memory storage is used.
 
@@ -5794,7 +5794,7 @@ Set the message queue file path. If not configured, only memory storage is used.
 | -------- | ------- |
 | bytesize | `10MB`  |
 
-##### Description
+#### Description
 
 The single file size of the message queue stored on disk.
 
@@ -5806,7 +5806,7 @@ The single file size of the message queue stored on disk.
 | -------- | ------- |
 | bytesize | `5GB`   |
 
-##### Description
+#### Description
 
 The maximum allowed message queue storage.
 
@@ -5820,7 +5820,7 @@ The maximum allowed message queue storage.
 | ------- | ------- |
 | integer | 5683    |
 
-##### Description
+#### Description
 
 Specify the UDP binding port of the CoAP plug-in.
 
@@ -5832,7 +5832,7 @@ Specify the UDP binding port of the CoAP plug-in.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Enable or disable CoAP statistics function.
 
@@ -5844,7 +5844,7 @@ Enable or disable CoAP statistics function.
 | ------- | ------- |
 | integer | 5684    |
 
-##### Description
+#### Description
 
 Specify the DTLS binding port of the CoAP plugin.
 
@@ -5856,7 +5856,7 @@ Specify the DTLS binding port of the CoAP plugin.
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-##### Description
+#### Description
 
 When using DTLS, specify whether to verify the client during the DTLS handshake.
 
@@ -5868,7 +5868,7 @@ When using DTLS, specify whether to verify the client during the DTLS handshake.
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-##### Description
+#### Description
 
 When using DTLS, specify the DTLS private key file.
 
@@ -5880,7 +5880,7 @@ When using DTLS, specify the DTLS private key file.
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-##### Description
+#### Description
 
 When using DTLS, specify the DTLS certificate file.
 
@@ -5892,7 +5892,7 @@ When using DTLS, specify the DTLS certificate file.
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-##### Description
+#### Description
 
 When using DTLS, specify the CA certificate file for DTLS.
 
@@ -5904,7 +5904,7 @@ When using DTLS, specify the CA certificate file for DTLS.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 When using DTLS, if the client does not have a certificate during the DTLS handshake, whether to let the handshake fail.
 
@@ -5916,7 +5916,7 @@ When using DTLS, if the client does not have a certificate during the DTLS hands
 | ---- | ------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-##### Description
+#### Description
 
 When using DTLS, specify the Cipher list supported by the DTLS server.
 
@@ -5930,7 +5930,7 @@ When using DTLS, specify the Cipher list supported by the DTLS server.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 Default user authentication data of Dashboard . `Dashboard.default_user.login` and `dashboard.default_user.password` must exist at tge sane tune.
 
@@ -5942,7 +5942,7 @@ Default user authentication data of Dashboard . `Dashboard.default_user.login` a
 | ------- | ------- |
 | integer | 18083   |
 
-##### Description
+#### Description
 
 The listening port of the HTTP listener.
 
@@ -5954,7 +5954,7 @@ The listening port of the HTTP listener.
 | ------- | ------- |
 | integer | 4       |
 
-##### Description
+#### Description
 
 The number of listening processes this listener will create.
 
@@ -5966,7 +5966,7 @@ The number of listening processes this listener will create.
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 The maximum number of connections allowed by this listener at the same time.
 
@@ -5978,7 +5978,7 @@ The maximum number of connections allowed by this listener at the same time.
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to set the socket to allow IPv6 connections.
 
@@ -5990,7 +5990,7 @@ Whether to set the socket to allow IPv6 connections.
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
@@ -6002,7 +6002,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 | ------- | ------- |
 | integer | 18084   |
 
-##### Description
+#### Description
 
 The listening port of the HTTPS listener, **which is disabled by default.**
 
@@ -6014,7 +6014,7 @@ The listening port of the HTTPS listener, **which is disabled by default.**
 | ------- | ------- |
 | integer | 2       |
 
-##### Description
+#### Description
 
 Same as `dashboard.listener.http.acceptors`.
 
@@ -6026,7 +6026,7 @@ Same as `dashboard.listener.http.acceptors`.
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 Same as `dashboard.listener.http.max_clients`.
 
@@ -6038,7 +6038,7 @@ Same as `dashboard.listener.http.max_clients`.
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-##### Description
+#### Description
 
 Same as `dashboard.listener.http.inet6`.
 
@@ -6050,7 +6050,7 @@ Same as `dashboard.listener.http.inet6`.
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-##### Description
+#### Description
 
 Same as `dashboard.listener.http.ipv6_v6only`.
 
@@ -6062,7 +6062,7 @@ Same as `dashboard.listener.http.ipv6_v6only`.
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-##### Description
+#### Description
 
 Server private key file path.
 
@@ -6074,7 +6074,7 @@ Server private key file path.
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-##### Description
+#### Description
 
 Server certificate file path.
 
@@ -6086,7 +6086,7 @@ Server certificate file path.
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-##### Description
+#### Description
 
 CA certificate file path.
 
@@ -6098,7 +6098,7 @@ CA certificate file path.
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-##### Description
+#### Description
 
 If a cipher suite exchanged from Diffie Hellman key is used, you can use this configuration item to specify a file path that contains PEM-encoded Diffie Hellman parameters. If not specified, the default parameters are used.
 
@@ -6110,7 +6110,7 @@ If a cipher suite exchanged from Diffie Hellman key is used, you can use this co
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-##### Description
+#### Description
 
 `verify_none` means to disable peer certificate verification, and the server will not send a certificate request to the client. `verify_peer` means to enable peer certificate verification, and the server will send a certificate request to the client. When this configuration item is set to `verify_peer`, it usually need to be used together with `dashboard.listener.https.fail_if_no_peer_cert` to specify whether to force the client to provide a certificate.
 
@@ -6122,7 +6122,7 @@ If a cipher suite exchanged from Diffie Hellman key is used, you can use this co
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `true`  |
 
-##### Description
+#### Description
 
 It should be used together with `dashboard.listener.https.verify`. If set to `true`, the server will request a certificate from the client. If the client does not provide a certificate, the handshake will fail. If set to `false`, the handshake can be successful even if the terminal does not provide a certificate.
 
@@ -6134,7 +6134,7 @@ It should be used together with `dashboard.listener.https.verify`. If set to `tr
 | ------ | ----------------------- |
 | string | `tlsv1.2,tlsv1.1,tlsv1` |
 
-##### Description
+#### Description
 
 Specify the TLS protocol version supported by the server. The versions are separated by `,`. The supported TLS protocol versions are: `tlsv1.3`, `tlsv1.2`, `tlsv1.1`, `tlsv1`, `sslv3`.
 
@@ -6146,7 +6146,7 @@ Specify the TLS protocol version supported by the server. The versions are separ
 | ------ | ------------------------------------------------------------ |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-##### Description
+#### Description
 
 Specify the cipher suite supported by the server.
 
@@ -6158,7 +6158,7 @@ Specify the cipher suite supported by the server.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Specifies whether to start the secure renegotiation mechanism.
 
@@ -6170,7 +6170,7 @@ Specifies whether to start the secure renegotiation mechanism.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Specifies whether to enable the session resuing mechanism.
 
@@ -6182,7 +6182,7 @@ Specifies whether to enable the session resuing mechanism.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 If set to `on`, use the server ’s preferences for password selection. If set to `off`, use the client ’s preferences.
 
@@ -6196,7 +6196,7 @@ If set to `on`, use the server ’s preferences for password selection. If set t
 | ------- | ------- |
 | integer | 5683    |
 
-##### Description
+#### Description
 
 Specify the UDP port used by LwM2M.
 
@@ -6208,7 +6208,7 @@ Specify the UDP port used by LwM2M.
 | -------- | ------- |
 | duration | `1s`    |
 
-##### Description
+#### Description
 
 Specify the minimum allowed LwM2M lifetime with the unit of second.
 
@@ -6220,7 +6220,7 @@ Specify the minimum allowed LwM2M lifetime with the unit of second.
 | -------- | -------- |
 | duration | `86400s` |
 
-##### Description
+#### Description
 
 Specify the maximum allowed LwM2M lifetime with the unit of second.
 
@@ -6232,7 +6232,7 @@ Specify the maximum allowed LwM2M lifetime with the unit of second.
 | ------- | ------- |
 | integer | 22      |
 
-##### Description
+#### Description
 
 Specifies the window size used in LwM2M Q mode, with the unit of second.
 
@@ -6246,7 +6246,7 @@ Within this window period, it can be sent to the Q mode device, and after the wi
 | ---- | ----------------------- | ----------- |
 | enum | `coaproxy`, `undefined` | `undefined` |
 
-##### Description
+#### Description
 
 Set whether to use coaproxy. `undefined` means not to  use coaproxy.
 
@@ -6258,7 +6258,7 @@ Set whether to use coaproxy. `undefined` means not to  use coaproxy.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Whether to automatically issue the observe command after device registration.
 
@@ -6270,7 +6270,7 @@ Whether to automatically issue the observe command after device registration.
 | ------ | ----------- |
 | string | `lwm2m/%e/` |
 
-##### Description
+#### Description
 
 Set the mount point of the LwM2M topic. The following wildcards are supported:
 
@@ -6285,7 +6285,7 @@ Set the mount point of the LwM2M topic. The following wildcards are supported:
 | ------ | ------- |
 | string | `dn/#`  |
 
-##### Description
+#### Description
 
 The command line topic that need to be subscribd after the device registration is completed.
 
@@ -6297,7 +6297,7 @@ The command line topic that need to be subscribd after the device registration i
 | ------ | --------- |
 | string | `up/resp` |
 
-##### Description
+#### Description
 
 Which topic the device's upstream response needs to be published to.
 
@@ -6309,7 +6309,7 @@ Which topic the device's upstream response needs to be published to.
 | ------ | ----------- |
 | string | `up/notify` |
 
-##### Description
+#### Description
 
 Which topic the device's upstream report message (notify) needs to be published to.
 
@@ -6321,7 +6321,7 @@ Which topic the device's upstream report message (notify) needs to be published 
 | ------ | --------- |
 | string | `up/resp` |
 
-##### Description
+#### Description
 
 Which topic the device's upstream registration message (register) needs to be published to.
 
@@ -6333,7 +6333,7 @@ Which topic the device's upstream registration message (register) needs to be pu
 | ------ | --------- |
 | string | `up/resp` |
 
-##### Description
+#### Description
 
 Which topic the device's upstream update message (update) needs to be published to.
 
@@ -6345,7 +6345,7 @@ Which topic the device's upstream update message (update) needs to be published 
 | -------- | -------- |
 | bytesize | `1024KB` |
 
-##### Description
+#### Description
 
 UDP tuning parameters, specify the UDP user mode cache size.
 
@@ -6357,7 +6357,7 @@ UDP tuning parameters, specify the UDP user mode cache size.
 | -------- | -------- |
 | bytesize | `1024KB` |
 
-##### Description
+#### Description
 
 UDP tuning parameters, specify the UDP receiving buffer size.
 
@@ -6369,7 +6369,7 @@ UDP tuning parameters, specify the UDP receiving buffer size.
 | -------- | -------- |
 | bytesize | `1024KB` |
 
-##### Description
+#### Description
 
 UDP tuning parameters, specify the UDP sending buffer size.
 
@@ -6381,7 +6381,7 @@ UDP tuning parameters, specify the UDP sending buffer size.
 | ------- | ------- |
 | integer | 20      |
 
-##### Description
+#### Description
 
 UDP tuning parameters, specify how many packets to read from UDP socket each time.
 
@@ -6393,7 +6393,7 @@ UDP tuning parameters, specify how many packets to read from UDP socket each tim
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-##### Description
+#### Description
 
 Specify the certificate file used by UDP DTLS.
 
@@ -6405,7 +6405,7 @@ Specify the certificate file used by UDP DTLS.
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-##### Description
+#### Description
 
 Specify the private key file used by UDP DTLS.
 
@@ -6417,7 +6417,7 @@ Specify the private key file used by UDP DTLS.
 | ---- | --------------- |
 | dir  | `etc/lwm2m_xml` |
 
-##### Description
+#### Description
 
 Specify the directory where the LwM2M Object definition file is stored.
 
@@ -6431,7 +6431,7 @@ Specify the directory where the LwM2M Object definition file is stored.
 | ------- | ------- |
 | integer | 10000   |
 
-##### Description
+#### Description
 
 Maximum number of records returned during paging query.
 
@@ -6443,7 +6443,7 @@ Maximum number of records returned during paging query.
 | ------ | ------- |
 | string | `admin` |
 
-##### Description
+#### Description
 
 Default AppId.
 
@@ -6455,7 +6455,7 @@ Default AppId.
 | ------ | -------- |
 | string | `public` |
 
-##### Description
+#### Description
 
 Default AppSecret.
 
@@ -6467,7 +6467,7 @@ Default AppSecret.
 | ------- | ------- |
 | integer | 8081    |
 
-##### Description
+#### Description
 
 The listening port of the HTTP listener.
 
@@ -6479,7 +6479,7 @@ The listening port of the HTTP listener.
 | ------- | ------- |
 | integer | 2       |
 
-##### Description
+#### Description
 
 The number of listening processes this listener will create.
 
@@ -6491,7 +6491,7 @@ The number of listening processes this listener will create.
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 The maximum number of connections allowed by this listener at the same time
 
@@ -6503,7 +6503,7 @@ The maximum number of connections allowed by this listener at the same time
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
@@ -6515,7 +6515,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 | ------- | ------- |
 | duration | `15s`  |
 
-##### Description
+#### Description
 
 HTTP packet sending timeout.
 
@@ -6527,7 +6527,7 @@ HTTP packet sending timeout.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to close the connection after the HTTP packet sending is timeout.
 
@@ -6539,7 +6539,7 @@ Whether to close the connection after the HTTP packet sending is timeout.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to set the socket to allow IPv6 connections.
 
@@ -6551,7 +6551,7 @@ Whether to set the socket to allow IPv6 connections.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
@@ -6563,7 +6563,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 | ------- | ------- | ------- |
 | integer | -       | 8081    |
 
-##### Description
+#### Description
 
 The listening port of the HTTPS listener.
 
@@ -6573,7 +6573,7 @@ The listening port of the HTTPS listener.
 | ------- | ------- |
 | integer | 2       |
 
-##### Description
+#### Description
 
 The number of listening processes this listener will create.
 
@@ -6585,7 +6585,7 @@ The number of listening processes this listener will create.
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 The maximum number of connections allowed by this listener at the same time.
 
@@ -6597,7 +6597,7 @@ The maximum number of connections allowed by this listener at the same time.
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 The maximum length of the TCP connection queue. It indicates the maximum number of TCP connection queues that are allowed in the system to undergo three-time handshake.
 
@@ -6609,7 +6609,7 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 | ------- | ------- |
 | duration | `15s`  |
 
-##### Description
+#### Description
 
 Timeout for sending HTTPS packets.
 
@@ -6621,7 +6621,7 @@ Timeout for sending HTTPS packets.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Whether to close the connection after the HTTPS packet sending is timeout.
 
@@ -6633,7 +6633,7 @@ Whether to close the connection after the HTTPS packet sending is timeout.
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-##### Description
+#### Description
 
 Server private key file path.
 
@@ -6645,7 +6645,7 @@ Server private key file path.
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-##### Description
+#### Description
 
 Server certificate file path.
 
@@ -6657,7 +6657,7 @@ Server certificate file path.
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-##### Description
+#### Description
 
 CA certificate file path.
 
@@ -6669,7 +6669,7 @@ CA certificate file path.
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-##### Description
+#### Description
 
 `verify_none` means to disable peer certificate verification, and the server will not send a certificate request to the client. `verify_peer` means to enable peer certificate verification, and the server will send a certificate request to the client. When this configuration item is set to `verify_peer`, it usually need to be used together with `dashboard.listener.https.fail_if_no_peer_cert` to specify whether to force the client to provide a certificate.
 
@@ -6681,7 +6681,7 @@ CA certificate file path.
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `true`  |
 
-##### Description
+#### Description
 
 It should be used together with `management.listener.https.verify`. If set to `true`, the server will fail the handshake if the client does not provide a certificate when requesting a certificate from the client. If set to `false`, the handshake can be successful even if the terminal does not provide a certificate.
 
@@ -6693,7 +6693,7 @@ It should be used together with `management.listener.https.verify`. If set to `t
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to set the socket to allow IPv6 connections.
 
@@ -6705,7 +6705,7 @@ Whether to set the socket to allow IPv6 connections.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
@@ -6719,7 +6719,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 | -------- | ------- |
 | duration | `60s`   |
 
-##### Description
+#### Description
 
 How often do hot update all code.
 
@@ -6731,7 +6731,7 @@ How often do hot update all code.
 | ------ | -------------- |
 | string | `reloader.log` |
 
-##### Description
+#### Description
 
 Log files for hot updates of code.
 
@@ -6745,7 +6745,7 @@ Log files for hot updates of code.
 | ---- | -------------------------- | ------- |
 | enum | `ram`, `disc`, `disc_only` | `ram`   |
 
-##### Description
+#### Description
 
 Storage type of the message, the following options are available:
 
@@ -6769,7 +6769,7 @@ Retained  messages are only stored on disk.
 | ------- | ------- |
 | integer | 0       |
 
-##### Description
+#### Description
 
 Limit of retained messages. Once the number of stored messages reaches the limit, you can replace existing retained messages, but you cannot store retained messages for new topics. 0 means no limit.
 
@@ -6781,7 +6781,7 @@ Limit of retained messages. Once the number of stored messages reaches the limit
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-##### Description
+#### Description
 
 The maximum length of Payload allowed to store retained messages. If the Payload exceeds the maximum limit, the retained message can be processed normally, but it will not be stored on the server.
 
@@ -6793,7 +6793,7 @@ The maximum length of Payload allowed to store retained messages. If the Payload
 | -------- | ------- |
 | duration | `0`     |
 
-##### Description
+#### Description
 
 The expiration interval of retained messages which is only valid for clients with protocol versions lower than MQTT v5.0. The expiration interval of retained messages for MQTT v5.0 clients will be based on the value of `Message Expiry Interval`. 0 means never expire.
 
@@ -6807,7 +6807,7 @@ The expiration interval of retained messages which is only valid for clients wit
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 Ignore system messages ($ SYS). The rule engine will not process system messages if this option is enabled.
 
@@ -6819,7 +6819,7 @@ Ignore system messages ($ SYS). The rule engine will not process system messages
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Set whether to publish event messages. You can specify the QoS of event messages, for example:
 
@@ -6854,7 +6854,7 @@ SELECT * FROM "$events/client_connected"
 | -------- | ------- |
 | string   | `1884`  |
 
-##### Description
+#### Description
 
 The UDP port that `emqx_sn` listens on.
 
@@ -6866,7 +6866,7 @@ The UDP port that `emqx_sn` listens on.
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 ADVERTISE message broadcast interval, unit: second.
 
@@ -6878,7 +6878,7 @@ ADVERTISE message broadcast interval, unit: second.
 | -------- | ------- |
 | integer  | 1       |
 
-##### Description
+#### Description
 
 MQTT-SN gateway ID in ADVERTISE.
 
@@ -6890,7 +6890,7 @@ MQTT-SN gateway ID in ADVERTISE.
 | -------- | -------------- | ------- |
 | enum     | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Whether to enable client status statistics.
 
@@ -6902,7 +6902,7 @@ Whether to enable client status statistics.
 | -------- | -------------- | ------- |
 | enum     | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Whether to process messages with QoS of -1.
 
@@ -6914,7 +6914,7 @@ Whether to process messages with QoS of -1.
 | -------- | ------- |
 | duration | `30s`   |
 
-##### Description
+#### Description
 
 The idle time after the establishment, if no message is received within this time, the connection will be closed.
 
@@ -6926,7 +6926,7 @@ The idle time after the establishment, if no message is received within this tim
 | -------- | ---------- |
 | string   | `reserved` |
 
-##### Description
+#### Description
 
 The predefined mapping of Topic and TopicId. Topics with an Id of 0 are reserved and fixed to `reserved`. For example, the Id of the predefined topic `foo / bar` is `1`:
 
@@ -6942,7 +6942,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | -------- | -------------- |
 | string   | `mqtt_sn_user` |
 
-##### Description
+#### Description
 
 `emqx_sn` username to connect to EMQ X Broker.
 
@@ -6954,7 +6954,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | -------- | ------- |
 | string   | `abc`   |
 
-##### Description
+#### Description
 
 `emqx_sn` password to connect to EMQ X Broker.
 
@@ -6968,7 +6968,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ----------------------- |
 | string | `http://127.0.0.1:9091` |
 
-##### Description
+#### Description
 
 Specify the URI of the Statsd gateway.
 
@@ -6980,7 +6980,7 @@ Specify the URI of the Statsd gateway.
 | ------- | ------- |
 | integer | 15000   |
 
-##### Description
+#### Description
 
 Specify the collection interval of Statsd data in milliseconds.
 
@@ -6992,7 +6992,7 @@ Specify the collection interval of Statsd data in milliseconds.
 | ------ | ------------- |
 | string | `emqx_statsd` |
 
-##### Description
+#### Description
 
 Specify Prometheus Collector.
 
@@ -7006,7 +7006,7 @@ Specify Prometheus Collector.
 | ------- | ------- |
 | integer | 61613   |
 
-##### Description
+#### Description
 
 Specify the local port where the Stomp plugin listens.
 
@@ -7018,7 +7018,7 @@ Specify the local port where the Stomp plugin listens.
 | ------- | ------- |
 | integer | 4       |
 
-##### Description
+#### Description
 
 Specify the size of the thread pool for Stomp service Acceptor 
 
@@ -7030,7 +7030,7 @@ Specify the size of the thread pool for Stomp service Acceptor
 | ------- | ------- |
 | integer | 512     |
 
-##### Description
+#### Description
 
 Specify the maximum number of connections supported by the Stomp service.
 
@@ -7042,7 +7042,7 @@ Specify the maximum number of connections supported by the Stomp service.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 Specify whether to use SSL.
 
@@ -7054,7 +7054,7 @@ Specify whether to use SSL.
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-##### Description
+#### Description
 
 If using SSL, specify the SSL private key file.
 
@@ -7066,7 +7066,7 @@ If using SSL, specify the SSL private key file.
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-##### Description
+#### Description
 
 If using SSL, specify the SSL certificate file.
 
@@ -7078,7 +7078,7 @@ If using SSL, specify the SSL certificate file.
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-##### Description
+#### Description
 
 If using SSL, specify the CA certificate file for SSL.
 
@@ -7090,7 +7090,7 @@ If using SSL, specify the CA certificate file for SSL.
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-##### Description
+#### Description
 
 If using SSL, specify the key file used by the Ephemeral Diffie-Hellman algorithm.
 
@@ -7102,7 +7102,7 @@ If using SSL, specify the key file used by the Ephemeral Diffie-Hellman algorith
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-##### Description
+#### Description
 
 If using SSL, specify whether to verify the client during the handshake.
 
@@ -7114,7 +7114,7 @@ If using SSL, specify whether to verify the client during the handshake.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-##### Description
+#### Description
 
 Specify whether the handshake fail if SSL is used, and the client does not have a certificate during the SSL handshake.
 
@@ -7126,7 +7126,7 @@ Specify whether the handshake fail if SSL is used, and the client does not have 
 | ------ | ----------------------- |
 | string | `tlsv1.2,tlsv1.1,tlsv1` |
 
-##### Description
+#### Description
 
 If using SSL, specify the list of SSL versions supported by the server.
 
@@ -7138,7 +7138,7 @@ If using SSL, specify the list of SSL versions supported by the server.
 | -------- | ------- |
 | duration | `15s`   |
 
-##### Description
+#### Description
 
 If using SSL, specify the timeout period for the SSL handshake process.
 
@@ -7150,7 +7150,7 @@ If using SSL, specify the timeout period for the SSL handshake process.
 | ---- | ------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-##### Description
+#### Description
 
 If using SSL, specify the Cipher list supported by the server
 
@@ -7162,7 +7162,7 @@ If using SSL, specify the Cipher list supported by the server
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-##### Description
+#### Description
 
 If using SSL, specify whether to reject the renegotiation request if the client does not follow RFC 5746.
 
@@ -7174,7 +7174,7 @@ If using SSL, specify whether to reject the renegotiation request if the client 
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 If using SSL, specify whether to support SSL session reuse.
 
@@ -7186,7 +7186,7 @@ If using SSL, specify whether to support SSL session reuse.
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-##### Description
+#### Description
 
 If using SSL, specify whether to use the server's preferences to select Ciphers.
 
@@ -7198,7 +7198,7 @@ If using SSL, specify whether to use the server's preferences to select Ciphers.
 | ------ | ------- |
 | string | `guest` |
 
-##### Description
+#### Description
 
 Specify the Username used by the Stomp plugin to log in.
 
@@ -7210,7 +7210,7 @@ Specify the Username used by the Stomp plugin to log in.
 | ------ | ------- |
 | string | `guest` |
 
-##### Description
+#### Description
 
 Specify the password used for Stomp plugin login.
 
@@ -7222,7 +7222,7 @@ Specify the password used for Stomp plugin login.
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-##### Description
+#### Description
 
 Whether to allow anonymous login.
 
@@ -7234,7 +7234,7 @@ Whether to allow anonymous login.
 | ------- | ------- |
 | integer | 10      |
 
-##### Description
+#### Description
 
 Specify the maximum number of Stomp headers
 
@@ -7246,7 +7246,7 @@ Specify the maximum number of Stomp headers
 | ------- | ------- |
 | integer | 1024    |
 
-##### Description
+#### Description
 
 Specify the maximum Stomp header length
 
@@ -7258,7 +7258,7 @@ Specify the maximum Stomp header length
 | ------- | ------- |
 | integer | 8192    |
 
-##### Description
+#### Description
 
 Specify Stomp maximum message body length.
 
@@ -7272,7 +7272,7 @@ Specify Stomp maximum message body length.
 | ------ | ------- |
 | string | -       |
 
-##### Description
+#### Description
 
 `emqx_web_hook` Forwarding web server address.
 
@@ -7284,7 +7284,7 @@ Specify Stomp maximum message body length.
 | -------- | ------------------- | ------- |
 | enum     | `base62`, `base64`  | -       |
 
-##### Description
+#### Description
 
 The encoding format of the Payload field in the PUBLISH message.
 
@@ -7296,7 +7296,7 @@ The encoding format of the Payload field in the PUBLISH message.
 | -------- | --------------------------------- |
 | string   | `{"action": "on_client_connect"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_connect` event.
 
@@ -7308,7 +7308,7 @@ Forward the `on_client_connect` event.
 | -------- | --------------------------------- |
 | string   | `{"action": "on_client_connack"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_connack` event.
 
@@ -7320,7 +7320,7 @@ Forward the `on_client_connack` event.
 | -------- | ----------------------------------- |
 | string   | `{"action": "on_client_connected"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_connected` event.
 
@@ -7332,7 +7332,7 @@ Forward the `on_client_connected` event.
 | -------- | -------------------------------------- |
 | string   | `{"action": "on_client_disconnected"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_disconnected` event.
 
@@ -7344,7 +7344,7 @@ Forward the `on_client_disconnected` event.
 | -------- | ----------------------------------- |
 | string   | `{"action": "on_client_subscribe"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_subscribe` event.
 
@@ -7356,7 +7356,7 @@ Forward the `on_client_subscribe` event.
 | -------- | ------------------------------------- |
 | string   | `{"action": "on_client_unsubscribe"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_unsubscribe` event.
 
@@ -7368,7 +7368,7 @@ Forward the `on_client_unsubscribe` event.
 | -------- | ------------------------------------- |
 | string   | `{"action": "on_session_subscribed"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_subscribe` event.
 
@@ -7380,7 +7380,7 @@ Forward the `on_client_subscribe` event.
 | -------- | --------------------------------------- |
 | string   | `{"action": "on_session_unsubscribed"}` |
 
-##### Description
+#### Description
 
 Forward the `on_session_unsubscribe` event.
 
@@ -7392,7 +7392,7 @@ Forward the `on_session_unsubscribe` event.
 | -------- | ------------------------------------- |
 | string   | `{"action": "on_session_terminated"}` |
 
-##### Description
+#### Description
 
 Forward the `on_session_terminated` event.
 
@@ -7404,7 +7404,7 @@ Forward the `on_session_terminated` event.
 | -------- | ---------------------------------- |
 | string   | `{"action": "on_message_publish"}` |
 
-##### Description
+#### Description
 
 Forward the `on_client_publish` event.
 
@@ -7416,7 +7416,7 @@ Forward the `on_client_publish` event.
 | -------- | ------------------------------------ |
 | string   | `{"action": "on_message_delivered"}` |
 
-##### Description
+#### Description
 
 Forward the `on_message_delivered` event.
 
@@ -7428,6 +7428,6 @@ Forward the `on_message_delivered` event.
 | -------- | -------------------------------- |
 | string   | `{"action": "on_message_acked"}` |
 
-##### Description
+#### Description
 
 Forward the `on_message_acked` event.

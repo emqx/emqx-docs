@@ -12,7 +12,7 @@ Applicable version:**EMQ X Broker v3.1.0+**
 Compatibility Tip: EMQ X Broker v4.0 makes major adjustments to the SQL syntax of the rule engine. For v3.x upgrade users, please refer to  [Migration Guide](./rule-engine.md#migration-guide) for compatibility.
 :::
 
-### Publish message
+## Publish message
 
 The rule engine can store the message processing results of a specific topic to the database with the response action, send it to the HTTP server, forward it to the message queue of Kafka or RabbitMQ, and republish to a new topic or even another Broker cluster. Each rule can be configured with multiple response actions.
 
@@ -28,7 +28,7 @@ Select the message posted to the t/a topic, and filter out the "x" field from th
 SELECT payload.x as x FROM "t/a"
 ```
 
-### Event trigger
+## Event trigger
 
 The rule engine uses a virtual topic beginning with **$events/** to process EMQ X Broker built-in events. The built-in events provide finer message control and client action processing capabilities, which can be used in the business of QoS 1 QoS 2 messages arrival recording, device online and offline recording.
 

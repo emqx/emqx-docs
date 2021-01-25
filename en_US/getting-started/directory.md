@@ -14,7 +14,7 @@ The directory structure of EMQ X Broker obtained by different installation metho
 
 In the above directories,  `bin`, `etc`, `data` and`log` are commonly used by users.
 
-#### bin directory
+## bin directory
 
 **emqx、emqx.cmd**
 
@@ -24,7 +24,7 @@ The executable file of EMQ X Broker can be found in [Basic Command](getting-star
 
 The executable file of EMQ X Broker management command, you can check [Management Command CLI](advanced/cli.md) for specific use.
 
-#### etc directory
+## etc directory
 
 EMQ X Broker is set by configuration files in the `etc` directory. The main configuration files include:
 
@@ -37,7 +37,7 @@ EMQ X Broker is set by configuration files in the `etc` directory. The main conf
 
 The specific configuration content of EMQ X Broker can be viewed in [Configuration Item](configuration/index.md).
 
-#### data directory
+## data directory
 
 EMQ X Broker stores the running data in the `data` directory. The main files include:
 
@@ -85,7 +85,7 @@ EMQ X Broker uses the Mnesia database to store its own running data, such as ala
 You can query the system information of the Mnesia database in EMQ X Broker through the `emqx_ctl mnesia` command. For details, please see [Management Command CLI](advanced/cli.md).
 
 
-#### log directory
+## log directory
 
 **emqx.log.***
 
