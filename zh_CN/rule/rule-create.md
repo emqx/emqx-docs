@@ -88,7 +88,7 @@ nc 命令在部分 Linux 操作系统上有问题，无法与 EMQ X 发起的 HT
 
 ```bash
 $ ./bin/emqx_ctl rules create \
-  "SELECT * FROM \"t/a\" \
+  "SELECT * FROM \"t/a\"" \
   '[{"name":"inspect", "params": {"a": 1}}]' \
   -d 'Rule for debug'
 
