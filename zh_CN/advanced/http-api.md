@@ -2339,4 +2339,4 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry
 
 {"data":{"uuid":"856916F6-ECC1-11EA-87C9-F9385C1F4A9C","up_time":553357,"otp_version":"22","os_version":"10.13.6","os_name":"Mac OS X","num_clients":0,"nodes_uuid":[],"messages_sent":0,"messages_received":0,"license":{"edition":"community"},"emqx_version":"dev-v4.2-rc.3","active_plugins":["emqx_telemetry","emqx_rule_engine","emqx_retainer","emqx_recon","emqx_management","emqx_dashboard"],"active_modules":["emqx_mod_presence","emqx_mod_rewrite","emqx_mod_acl_internal"]},"code":0}
 ```
-{% endemqxce %
+{% endemqxce %}
