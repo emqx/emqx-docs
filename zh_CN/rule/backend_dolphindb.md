@@ -112,7 +112,7 @@ SELECT * FROM "t/#"
 1). SQL 模板。这个例子里我们向流表 `st_msg` 中插入一条数据，SQL 模板为:
 
 ```sql
-insert into st_msg values(${clientid}, ${topic}, ${qos}, ${payload})
+insert into st_msg values('${clientid}', '${topic}', ${qos}, '${payload}')
 ```
 
 2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个DolphinDB 资源:
