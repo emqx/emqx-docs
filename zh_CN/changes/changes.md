@@ -15,6 +15,40 @@ ref:
 
 # 版本发布
 
+## 4.2.7 版本
+
+*发布日期: 2020-01-29*
+
+EMQ X 4.2.7 现已发布，主要包含以下改动:
+
+### emqx-auth-http
+
+**错误修复:**
+
+- 修复 HTTP 长连接在达到 Keepalive 超时时长或最大请求数时被断开导致请求丢失的情况
+
+  Github PR: [emqx-auth-http#245](https://github.com/emqx/emqx-auth-http/pull/245)
+
+### emqx-web-hook
+
+**错误修复:**
+
+- 修复 HTTP 长连接在达到 Keepalive 超时时长或最大请求数时被断开导致请求丢失的情况
+
+  Github PR: [emqx-web-hook#272](https://github.com/emqx/emqx-web-hook/pull/272)
+
+- 修复 SSL 证书配置问题
+
+  Github PR: [emqx-web-hook#264](https://github.com/emqx/emqx-web-hook/pull/264)
+
+### emqx-auth-redis
+
+**错误修复:**
+
+- 修复 Redis 重连失败的问题
+
+  Github PR: [emqx-auth-redis#195](https://github.com/emqx/emqx-auth-redis/pull/195)
+
 ## 4.2.6 版本
 
 *发布日期: 2020-01-16*

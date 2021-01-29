@@ -15,6 +15,40 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.7
+
+*Release Date: 2020-01-29*
+
+EMQ X 4.2.7 is released now, it mainly includes the following changes:
+
+### emqx-auth-http
+
+**Bug fixes:**
+
+- Fix the issue that the HTTP long connection is disconnected when the Keepalive timeout period or the maximum number of requests is reached, causing the request to be lost
+
+  Github PR: [emqx-auth-http#245](https://github.com/emqx/emqx-auth-http/pull/245)
+
+### emqx-web-hook
+
+**Bug fixes:**
+
+- Fix the issue that the HTTP long connection is disconnected when the Keepalive timeout period or the maximum number of requests is reached, causing the request to be lost
+
+  Github PR: [emqx-web-hook#272](https://github.com/emqx/emqx-web-hook/pull/272)
+
+- Fix SSL certificate configuration issue
+
+  Github PR: [emqx-web-hook#264](https://github.com/emqx/emqx-web-hook/pull/264)
+
+### emqx-auth-redis
+
+**Bug fixes:**
+
+- Fix Redis reconnection failure
+
+  Github PR: [emqx-auth-redis#195](https://github.com/emqx/emqx-auth-redis/pull/195)
+
 ## Version 4.2.6
 
 *Release Date: 2021-01-16*
