@@ -15,6 +15,40 @@ ref:
 
 # 版本发布
 
+## 4.3-alpha.1 版本
+
+*发布日期: 2020-01-29*
+
+EMQ X 4.3-alpha.1 现已发布，主要包含以下改动:
+
+*功能*
+
+- 支持 Erlang/OTP 23
+- 规则引擎新增更新资源逻辑
+- 增强 Webhook 与 HTTP 认证性能
+- 多语言扩展功能底层实现方式由 erlport 改为 gRPC
+- 保护 EMQ X Broker 免受跨站点 WebSocket 劫持攻击
+- 项目调整为 umbrella 结构
+- 解决集群环境下节点必须按首次启动顺序启动，否则需要等待前置节点启动的问题
+- Websocket 监听器支持从 subprotocols 列表中选择支持的 subprotocol
+- 支持 MySQL 8.0 的默认认证方法 caching_sha2_password
+- JWT 认证支持 JWKS
+- 支持配置证书链最大长度以及私钥文件密码
+- 支持 Mnesia 认证信息的导入导出
+- 共享订阅支持按源主题的 Hash 分发
+
+
+*BUG*
+
+- 修复 ekka_locker 在极端条件下内存可能无限增长的问题
+- 修复 MQTT 桥接功能中 `max_inflight_size` 配置项不生效的问题
+- 修复 CoAP 连接中 ACL 配置不生效的问题
+- 修复使用相同 ClientID 的 CoAP 客户端可以同时接入的问题
+- 修复告警持续时间计算错误的问题
+- 修复 MySQL 认证 SSL/TLS 连接功能不可用的问题
+- 修复 MQTT 桥接功能中指标统计错误和 `retry_interval` 字段进行了多次单位转换的问题
+- 修复 Redis 重连失败问题
+
 ## 4.2.7 版本
 
 *发布日期: 2020-01-29*
