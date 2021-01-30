@@ -25,7 +25,7 @@ EMQ X 默认开启保留消息的功能，可以在 `etc/emqx.conf` 中修改 `m
 
 ## 配置
 
-EMQ X 的保留消息功能是由 `emqx_retainer` 插件实现，该插件默认开启，通过修改 `emqx_retainer` 插件的配置，可以调整 EMQ X 储存保留消息的位置，限制接收保留消息数量和 Payload 最大长度，以及调整保留消息的过期时间。关于 EMQ X 插件的更多信息， 请参见 [插件](advanced/plugins.md)。
+EMQ X 的保留消息功能是由 `emqx_retainer` 插件实现，该插件默认开启，通过修改 `emqx_retainer` 插件的配置，可以调整 EMQ X 储存保留消息的位置，限制接收保留消息数量和 Payload 最大长度，以及调整保留消息的过期时间。关于 EMQ X 插件的更多信息， 请参见 [插件](./plugins.md)。
 
 `emqx_retainer` 插件默认开启，插件的配置路径为 `etc/plugins/emqx_retainer.conf`。
 

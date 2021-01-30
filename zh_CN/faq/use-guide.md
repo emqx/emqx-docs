@@ -290,10 +290,10 @@ EMQ X 可以转发消息到标准 MQTT Broker，包括其他 MQTT 实现、公�
 **标签:** [*Mosquitto*](tags.md#mosquitto)  [*桥接*](tags.md#桥接)
 
 
-Mosquitto 可以配置转发消息到 EMQ X，请参考[数据桥接](../advanced/bridge.md)。
+Mosquitto 可以配置转发消息到 EMQ X，请参考[数据桥接](../rule/bridge_emqx.md)。
 
 ::: tip
-> EMQ X 桥接相关的使用方式请参照 [EMQ X 桥接](../advanced/bridge.md)
+> EMQ X 桥接相关的使用方式请参照 [EMQ X 桥接](../rule/bridge_emqx.md)
 :::
 
 
