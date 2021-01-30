@@ -39,7 +39,7 @@ EMQ X 设计目标是实现高可靠，并支持承载海量物联网终端的MQ
 ## 认证鉴权
   - [认证简介](advanced/auth.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
   - [发布订阅 ACL](advanced/acl.md)：选择内置插件、外部数据库、或者 HTTP 服务作为 ACL 数据源，验证客户端发布订阅权限。
-  - [内置 ACL](modules/internal_acl.md)：内置 ACL 可能会影响到重要功能，使用前请详细了解。
+  - [内置 ACL](advanced/acl-file.md)：内置 ACL 可能会影响到重要功能，使用前请详细了解。
 
 ## FAQ 常见问题解答
 

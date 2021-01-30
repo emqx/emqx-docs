@@ -149,7 +149,13 @@ ACL 是允许与拒绝条件的集合，EMQ X 中使用以下元素描述 ACL �
 acl_nomatch = allow
 ```
 
+{% emqxce %}
 配置默认 [ACL 文件](./acl-file.md)，使用文件定义默认 ACL 规则：
+{% endemqxce %}
+
+{% emqxee %}
+配置默认 ACL 文件，使用文件定义默认 ACL 规则：
+{% endemqxee %}
 
 ```bash
 # etc/emqx.conf
