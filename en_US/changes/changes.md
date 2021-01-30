@@ -24,6 +24,7 @@ EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 *Features*
 
 - Support Erlang/OTP 23
+- The new installation package only supports macOS 10.14 and above
 - Added update resource logic for rule engine
 - Enhance Webhook and HTTP authentication performance
 - The underlying implementation of the multi-language extension function is changed from erlport to gRPC
@@ -35,7 +36,7 @@ EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 - JWT authentication supports JWKS
 - Support the configuration of the maximum length of the certificate chain and the password of the private key file
 - Support the import and export of Mnesia certification information
-- Shared subscription supports distribution by hash of source topic
+- Shared subscription supports Hash distribution of messages by source topic
 
 *BUG*
 
