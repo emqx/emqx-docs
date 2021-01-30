@@ -15,6 +15,39 @@ ref: undefined
 
 # Changes
 
+## Version 4.3-alpha.1
+
+*Release Date: 2020-01-29*
+
+EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
+
+*Features*
+
+- Support Erlang/OTP 23
+- Added update resource logic for rule engine
+- Enhance Webhook and HTTP authentication performance
+- The underlying implementation of the multi-language extension function is changed from erlport to gRPC
+- Protect EMQ X Broker from cross-site WebSocket hijacking attacks
+- Project adjusted to umbrella structure
+- Solve the problem that the nodes in the cluster environment must be started in the first startup sequence, otherwise you need to wait for the front node to start
+- Websocket listener supports selecting supported subprotocols from the subprotocols list
+- Support the default authentication method caching_sha2_password of MySQL 8.0
+- JWT authentication supports JWKS
+- Support the configuration of the maximum length of the certificate chain and the password of the private key file
+- Support the import and export of Mnesia certification information
+- Shared subscription supports distribution by hash of source topic
+
+*BUG*
+
+- Fix the issue that ekka_locker's memory may grow infinitely under extreme conditions
+- Fix the issue that the `max_inflight_size` configuration item in the MQTT bridge function does not take effect
+- Fix the issue that ACL configuration in CoAP connection does not take effect
+- Fix the issue that CoAP clients using the same ClientID can access at the same time
+- Fix the issue of incorrect calculation of alarm duration
+- Fix the issue that the MySQL authentication SSL/TLS connection function is not available
+- Fixed the error of indicator statistics in the MQTT bridge function and the problem of multiple unit conversions in the `retry_interval` field
+- Fix Redis reconnection failure
+
 ## Version 4.2.7
 
 *Release Date: 2020-01-29*
