@@ -23,8 +23,6 @@ EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 
 *Features*
 
-- Support Erlang/OTP 23
-- The new installation package only supports macOS 10.14 and above
 - Added update resource logic for rule engine
 - Enhance Webhook and HTTP authentication performance
 - The underlying implementation of the multi-language extension function is changed from erlport to gRPC
@@ -35,8 +33,9 @@ EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 - Support the default authentication method caching_sha2_password of MySQL 8.0
 - JWT authentication supports JWKS
 - Support the configuration of the maximum length of the certificate chain and the password of the private key file
-- Support the import and export of Mnesia certification information
+- Support import and export of Authentication & ACL information in Mnesia
 - Shared subscription supports Hash distribution of messages by source topic
+- EMQ X Broker in docker now starts in foreground mode
 
 *BUG*
 
@@ -48,6 +47,11 @@ EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 - Fix the issue that the MySQL authentication SSL/TLS connection function is not available
 - Fixed the error of indicator statistics in the MQTT bridge function and the problem of multiple unit conversions in the `retry_interval` field
 - Fix Redis reconnection failure
+
+*Others*
+
+- Support Erlang/OTP 23
+- The new installation package only supports macOS 10.14 and above
 
 ## Version 4.2.7
 
