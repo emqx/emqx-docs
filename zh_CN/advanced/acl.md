@@ -157,7 +157,7 @@ acl_nomatch = allow
 acl_file = etc/acl.conf
 ```
 
-配置 ACL 授权结果为**禁止**的响应动作，为 `ignore` 时将断开设备：
+配置 ACL 授权结果为**禁止**的响应动作，为 `disconnect` 时将断开设备：
 
 ```bash
 # etc/emqx.conf
