@@ -1,5 +1,9 @@
 {
 	"cn": [{
+			"title": "摘要",
+			"path": "./"
+		},
+		{
 			"title": "开始使用",
 			"path": "getstarted"
 		},
@@ -77,6 +81,10 @@
 		}
 	],
 	"en": [{
+			"title": "Introduction",
+			"path": "./"
+		},
+	       {
 			"title": "Get Started",
 			"path": "getstarted"
 		},
