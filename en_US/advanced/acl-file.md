@@ -94,7 +94,7 @@ After the `acl.conf` modification is completed, it will not be automatically loa
 
 The built-in `acl.conf` supports only the following placeholders in the subject's field (the 4th position of the tuple).
 
-- `%c`: Indicates the Client ID, which will be replaced with the actual client ID when the rule takes effect.
+- `%c`: For Client ID, which is replaced by the client ID when the rule takes effect.
 - `%u`: For username, which is replaced by the client's username when the rule takes effect.
 
 E.g:
