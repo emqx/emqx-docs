@@ -79,7 +79,7 @@ The syntax rules of `acl.conf` are included in the comments at the top. Those fa
     * `pubsub`：The rule applies to both PUBLISH and SUBSCRIBE operations
 - The fourth position of the tuple means the list of topics restricted by the rule. The content is given in the form of an array. For example:
     * `"$SYS/#"`：a **Topic Filter** which means that the rule can hit topics that match `$SYS/#`; for example, it can hit "$SYS/#" and "$SYS/a/b/c"
-    * `{eq, "#"}`：It indicates full equivalence of characters. The rule can only hit strings with the topic `#`. It cannot hit `/a/b/c`, etc.
+    * `{eq, "#"}`：It indicates full equivalence of characters. The rule is only applied for topic `#` but not for `/a/b/c`, etc.
 - In addition, there are two special rules:
     - `{allow, all}`：Allow all operations
     - `{deny, all}`：Deny all operations
