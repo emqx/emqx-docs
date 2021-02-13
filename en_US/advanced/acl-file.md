@@ -36,7 +36,7 @@ The built-in ACL is the lowest priority rule table. If it is not hit after all t
 The rules file is described in Erlang syntax:
 
 ```erlang
-%% Allow "dashboard" users to subscribe to "$ SYS/#" topics
+%% Allow "dashboard" users to subscribe to "$SYS/#" topics
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 %% Allow users with IP address "127.0.0.1" to publish/subscribe to topics "$SYS/#", "#"

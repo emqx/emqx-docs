@@ -6809,7 +6809,7 @@ The expiration interval of retained messages which is only valid for clients wit
 
 #### Description
 
-Ignore system messages ($ SYS). The rule engine will not process system messages if this option is enabled.
+Ignore system messages ($SYS). The rule engine will not process system messages if this option is enabled.
 
 
 
