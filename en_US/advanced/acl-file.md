@@ -103,7 +103,7 @@ E.g:
 {allow, all, pubsub, ["sensor/%c/ctrl"]}.
 ```
 
-Means that clients with ID light are **Allowed** to **Subscribe and Publish** to the `sensor/light/ctrl` topic.
+Means that a client with ID 'light' is **Allowed** to **Subscribe and Publish** to the `sensor/light/ctrl` topic.
 
 
 ::: tip
