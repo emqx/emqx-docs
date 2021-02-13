@@ -64,9 +64,9 @@ ACL is a collection of allowing and denying conditions. The following elements a
 When there are multiple ACL rules at the same time, EMQ X will merge them in order according to the rules. Taking the default ACL in [ACL file](./acl-file.md) as an example, it loads the rule from bottom to top:
 
 1. The first rule allows clients to publish and subscribe to all topics
-2. The second rule prohibits all clients from subscribing to the topics `$ SYS / #` and `#`
-3. The third rule allows clients with IP address `127.0.0.1` to publish / subscribe to the topics ` $ SYS / # `and ` # `, which makes a special case for the second rule
-4. The fourth rule allows clients with the username `dashboard` to subscribe to the topic ` $ SYS / # `, which makes a special case for the second rule
+2. The second rule prohibits all clients from subscribing to the topics `$SYS/#` and `#`
+3. The third rule allows clients with IP address `127.0.0.1` to publish/subscribe to the topics ` $SYS/# `and `# `, which makes a special case for the second rule
+4. The fourth rule allows clients with the username `dashboard` to subscribe to the topic ` $SYS/# `, which makes a special case for the second rule
 
 ```erlang
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
