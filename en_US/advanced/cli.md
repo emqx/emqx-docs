@@ -773,10 +773,10 @@ Trace (topic=topic2, level=error, destination="log/topic2_trace.log")
 
 The listeners command is used to query the active TCP service listeners.
 
-| Command                          | Description                                                  |
-| -------------------------------- | ------------------------------------------------------------ |
-| `listeners                     ` | Query active TCP Service Listeners                           |
-| `listeners stop <Proto> <Port> ` | Stop listener port, support `mqtt: ssl`,` mqtt: tcp`, `http: dashboard`,` http: management`, `mqtt: ws`,` mqtt: wss` protocol |
+| Command                         | Description                   |
+| ------------------------------- | ------------------------------|
+| `listeners`                     | List active service listeners |
+| `listeners stop <Identifier>`   | Stop a listener. `Idnetifier` is of format `<Protocol>[:<Transport>]:<Name>` e.g. `mqtt:tcp:internal`, `http:management` |
 
 ### listeners list
 
@@ -784,41 +784,48 @@ Query the active TCP service listeners
 
 ```bash
 $ ./bin/emqx_ctl listeners
-listener on mqtt:ssl:8883
-    acceptors       : 16
-    max_conns       : 102400
-    current_conn    : 0
-    shutdown_count  : []
-listener on mqtt:tcp:0.0.0.0:1883
-    acceptors       : 8
-    max_conns       : 1024000
-    current_conn    : 0
-    shutdown_count  : []
-listener on mqtt:tcp:127.0.0.1:11883
-    acceptors       : 4
-    max_conns       : 1024000
-    current_conn    : 2
-    shutdown_count  : []
-listener on http:dashboard:18083
-    acceptors       : 2
-    max_conns       : 512
-    current_conn    : 0
-    shutdown_count  : []
-listener on http:management:8081
-    acceptors       : 2
-    max_conns       : 512
-    current_conn    : 0
-    shutdown_count  : []
-listener on mqtt:ws:8083
-    acceptors       : 2
-    max_conns       : 102400
-    current_conn    : 0
-    shutdown_count  : []
-listener on mqtt:wss:8084
-    acceptors       : 2
-    max_conns       : 16
-    current_conn    : 0
-    shutdown_count  : []
+mqtt:ssl:external
+  listen_on       : 0.0.0.0:8883
+  acceptors       : 16
+  max_conns       : 102400
+  current_conn    : 0
+  shutdown_count  : []
+mqtt:tcp:external
+  listen_on       : 0.0.0.0:1883
+  acceptors       : 8
+  max_conns       : 1024000
+  current_conn    : 0
+  shutdown_count  : []
+mqtt:tcp:internal
+  listen_on       : 127.0.0.1:11883
+  acceptors       : 4
+  max_conns       : 1024000
+  current_conn    : 0
+  shutdown_count  : []
+http:dashboard
+  listen_on       : 0.0.0.0:18083
+  acceptors       : 4
+  max_conns       : 512
+  current_conn    : 0
+  shutdown_count  : []
+http:management
+  listen_on       : 0.0.0.0:8081
+  acceptors       : 2
+  max_conns       : 512
+  current_conn    : 0
+  shutdown_count  : []
+mqtt:ws:external
+  listen_on       : 0.0.0.0:8083
+  acceptors       : 4
+  max_conns       : 102400
+  current_conn    : 0
+  shutdown_count  : []
+mqtt:wss:external
+  listen_on       : 0.0.0.0:8084
+  acceptors       : 4
+  max_conns       : 16
+  current_conn    : 0
+  shutdown_count  : []
 ```
 
 listener parameter description:
@@ -835,8 +842,8 @@ listener parameter description:
 Stop listener port:
 
 ```bash
-$ ./bin/emqx_ctl listeners stop mqtt:tcp 0.0.0.0:1883
-Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
+$ ./bin/emqx_ctl listeners stop mqtt:tcp:external
+Stop mqtt:tcp:external listener on 0.0.0.0:1883 successfully.
 ```
 
 ## recon command
