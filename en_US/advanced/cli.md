@@ -776,7 +776,8 @@ The listeners command is used to query the active TCP service listeners.
 | Command                         | Description                   |
 | ------------------------------- | ------------------------------|
 | `listeners`                     | List active service listeners |
-| `listeners stop <Identifier>`   | Stop a listener. `Idnetifier` is of format `<Protocol>[:<Transport>]:<Name>` e.g. `mqtt:tcp:internal`, `http:management` |
+| `listeners stop <Identifier>`   | Stop a listener. `Identifier` is of format `<Protocol>[:<Transport>]:<Name>` e.g. `mqtt:tcp:internal`, `http:management` |
+| `listeners restart <Identifier>`| Restart a listener. `Identifier` is of format `<Protocol>[:<Transport>]:<Name>` e.g. `mqtt:tcp:internal`, `http:management` |
 
 ### listeners list
 
@@ -837,13 +838,22 @@ listener parameter description:
 | current\_conns  | Current connections |
 | shutdown\_count | Statistics of connection shutdown reasons |
 
-### listeners stop <Proto> <Port>
+### listeners stop <Identifier>
 
-Stop listener port:
+Stop listener:
 
 ```bash
 $ ./bin/emqx_ctl listeners stop mqtt:tcp:external
-Stop mqtt:tcp:external listener on 0.0.0.0:1883 successfully.
+Stop listener mqtt:tcp:external successfully.
+```
+
+### listeners restart <Identifier>
+
+Restart listener:
+
+```bash
+$ ./bin/emqx_ctl listeners restart mqtt:tcp:external
+Restarted listener mqtt:tcp:external successfully.
 ```
 
 ## recon command
