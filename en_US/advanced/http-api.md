@@ -963,6 +963,7 @@ Returns information about all listeners in the cluster.
 | data[0].listeners | Array of Objects   | Listener list |
 | data[0].listeners[0].acceptors      | Integer   | Number of Acceptor process |
 | data[0].listeners[0].listen_on      | String    | Listening port |
+| data[0].listeners[0].identifier     | String    | Identifier |
 | data[0].listeners[0].protocol       | String    | Plugin description |
 | data[0].listeners[0].current_conns  | Integer   | Whether plugin is enabled |
 | data[0].listeners[0].max_conns      | Integer   | Maximum number of allowed connections |
@@ -982,7 +983,26 @@ Normal shutdown_count*
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/listeners"
 
-{"data":[{"node":"emqx@127.0.0.1","listeners":[{"shutdown_count":[],"protocol":"mqtt:ssl","max_conns":102400,"listen_on":"8883","current_conns":0,"acceptors":16},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"0.0.0.0:1883","current_conns":13,"acceptors":8},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"127.0.0.1:11883","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:dashboard","max_conns":512,"listen_on":"18083","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:management","max_conns":512,"listen_on":"8081","current_conns":1,"acceptors":2},{"shutdown_count":[],"protocol":"https:dashboard","max_conns":512,"listen_on":"18084","current_conns":0,"acceptors":2},{"shutdown_count":[],"protocol":"mqtt:ws:8083","max_conns":102400,"listen_on":"8083","current_conns":1,"acceptors":4},{"shutdown_count":[],"protocol":"mqtt:wss:8084","max_conns":16,"listen_on":"8084","current_conns":0,"acceptors":4}]}],"code":0}
+{"data":[{"node":"emqx@127.0.0.1","listeners":[{"shutdown_count":[],"protocol":"mqtt:ssl","max_conns":102400,"listen_on":"8883","identifier":"mqtt:ssl:external","current_conns":1,"acceptors":32},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"0.0.0.0:1883","identifier":"mqtt:tcp:external","current_conns":1,"acceptors":64},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"127.0.0.1:11883","identifier":"mqtt:tcp:internal","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:dashboard","max_conns":512,"listen_on":"18083","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:management","max_conns":512,"listen_on":"8081","current_conns":1,"acceptors":2},{"shutdown_count":[],"protocol":"mqtt:ws:8083","max_conns":102400,"listen_on":"8083","current_conns":0,"acceptors":16},{"shutdown_count":[],"protocol":"mqtt:wss:8084","max_conns":102400,"listen_on":"8084","current_conns":0,"acceptors":16}]}],"code":0}
+```
+
+#### PUT /api/v4/listeners/{identifier}/restart
+Restarts a listener in the cluster
+
+**Path Parameters:** 无
+
+**Success **Response Body (JSON):**
+
+| Name | Type      | Description |
+| ---- | --------- | ----------- |
+| code | Integer   | 0           |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/listeners/mqtt:tcp:external/restart"
+
+{"code":0}
 ```
 
 #### GET /api/v4/nodes/{node}/listeners 
@@ -996,6 +1016,7 @@ Similar with [GET /api/v4/listeners](#endpoint-get-listeners), returns the liste
 | data | Array of Objects | List of listeners for each node |
 | data[0].acceptors      | Integer   | Number of Acceptor process |
 | data[0].listen_on      | String    | Listening port |
+| data[0].identifier     | String    | Identifier |
 | data[0].protocol       | String    | Plugin description |
 | data[0].current_conns  | Integer   | Whether the plugin is enabled |
 | data[0].max_conns      | Integer   | Maximum number of allowed connections |
@@ -1006,8 +1027,28 @@ Similar with [GET /api/v4/listeners](#endpoint-get-listeners), returns the liste
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/listeners"
 
-{"data":[{"shutdown_count":[],"protocol":"mqtt:ssl","max_conns":102400,"listen_on":"8883","current_conns":0,"acceptors":16},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"0.0.0.0:1883","current_conns":13,"acceptors":8},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"127.0.0.1:11883","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:dashboard","max_conns":512,"listen_on":"18083","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:management","max_conns":512,"listen_on":"8081","current_conns":1,"acceptors":2},{"shutdown_count":[],"protocol":"https:dashboard","max_conns":512,"listen_on":"18084","current_conns":0,"acceptors":2},{"shutdown_count":[],"protocol":"mqtt:ws:8083","max_conns":102400,"listen_on":"8083","current_conns":1,"acceptors":4},{"shutdown_count":[],"protocol":"mqtt:wss:8084","max_conns":16,"listen_on":"8084","current_conns":0,"acceptors":4}],"code":0}
+{"data":[{"shutdown_count":[],"protocol":"mqtt:ssl","max_conns":102400,"listen_on":"8883","identifier":"mqtt:ssl:external","current_conns":1,"acceptors":32},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"0.0.0.0:1883","identifier":"mqtt:tcp:external","current_conns":1,"acceptors":64},{"shutdown_count":[],"protocol":"mqtt:tcp","max_conns":1024000,"listen_on":"127.0.0.1:11883","identifier":"mqtt:tcp:internal","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:dashboard","max_conns":512,"listen_on":"18083","current_conns":0,"acceptors":4},{"shutdown_count":[],"protocol":"http:management","max_conns":512,"listen_on":"8081","current_conns":1,"acceptors":2},{"shutdown_count":[],"protocol":"mqtt:ws:8083","max_conns":102400,"listen_on":"8083","current_conns":0,"acceptors":16},{"shutdown_count":[],"protocol":"mqtt:wss:8084","max_conns":102400,"listen_on":"8084","current_conns":0,"acceptors":16}],"code":0}
 ```
+
+#### PUT /api/v4/nodes/{node}/listeners/{identifier}/restart
+Restarts a listener in the cluster
+
+**Path Parameters:** 无
+
+**Success **Response Body (JSON):**
+
+| Name | Type      | Description |
+| ---- | --------- | ----------- |
+| code | Integer   | 0           |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/listeners/mqtt:tcp:external/restart"
+
+{"code":0}
+```
+
 
 ### Metrics 
 #### GET /api/v4/metrics 
