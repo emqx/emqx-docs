@@ -1943,6 +1943,39 @@ listener.tcp.external.access.2 = allow all
 
 <br />
 
+### listener.tcp.external.peer_cert_as_username
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### 说明
+
+使用客户端证书来覆盖 Username 字段的值。其可选值为：
+- cn：客户端证书的 Common Name 字段值
+- dn：客户端证书的 Subject Name 字段值
+- crt：DER 格式编码的客户端证书二进制
+- pem：基于 DER 格式上的 base64 编码后的字符串
+- md5：DER 格式证书的 MD5 哈希值
+
+注意：在 TCP 的监听器下，该配置仅在负载均衡服务器终结 SSL 的部署情况下可以用；且负载均衡服务器需要配置
+Proxy Protocol 将证书域的内容给发送至 EMQ X。例如 HAProxy 的配置可参考
+[send-proxy-v2-ssl](http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#5.2-send-proxy-v2-ssl)
+
+<br />
+
+### listener.tcp.external.peer_cert_as_clientid
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### 说明
+
+使用客户端证书来覆盖 ClientID 字段的值。其可选值的含义同上。
+
+<br />
+
 ### listener.tcp.external.backlog
 
 | Type    | Default |
@@ -2558,13 +2591,33 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.ssl.external.peer_cert_as_username
 
-| Type | Optional Value    | Default |
-| ---- | ----------------- | ------- |
-| enum | `cn`, `dn`, `crt` | `cn`    |
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
 #### 说明
 
-使用客户端证书中的 CN、DN 或者 CRT 字段的值作为 MQTT CONNECT 报文中的 Username 字段的值。
+使用客户端证书来覆盖 Username 字段的值。其可选值为：
+- cn：客户端证书的 Common Name 字段值
+- dn：客户端证书的 Subject Name 字段值
+- crt：DER 格式编码的客户端证书二进制
+- pem：基于 DER 格式上的 base64 编码后的字符串
+- md5：DER 格式证书的 MD5 哈希值
+
+注意 `listener.ssl.external.verify` 应当设置为 `verify_peer`。
+
+<br />
+
+### listener.ssl.external.peer_cert_as_clientid
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### 说明
+
+使用客户端证书来覆盖 ClientID 字段的值。其可选值的含义同上。
+
 注意 `listener.ssl.external.verify` 应当设置为 `verify_peer`。
 
 <br />
@@ -3419,13 +3472,33 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.wss.external.peer_cert_as_username
 
-| Type | Optional Value    | Default |
-| ---- | ----------------- | ------- |
-| enum | `cn`, `dn`, `crt` | `cn`    |
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
 #### 说明
 
-使用客户端证书中的 CN、DN 或者 CRT 字段的值作为 MQTT CONNECT 报文中的 Username 字段的值。
+使用客户端证书来覆盖 Username 字段的值。其可选值为：
+- cn：客户端证书的 Common Name 字段值
+- dn：客户端证书的 Subject Name 字段值
+- crt：DER 格式编码的客户端证书二进制
+- pem：基于 DER 格式上的 base64 编码后的字符串
+- md5：DER 格式证书的 MD5 哈希值
+
+注意 `listener.wss.external.verify` 应当设置为 `verify_peer`。
+
+<br />
+
+### listener.wss.external.peer_cert_as_clientid
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### 说明
+
+使用客户端证书来覆盖 ClientID 字段的值。其可选值的含义同上。
+
 注意 `listener.wss.external.verify` 应当设置为 `verify_peer`。
 
 <br />
