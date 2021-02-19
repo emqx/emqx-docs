@@ -1926,6 +1926,40 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 
 
+### listener.tcp.external.peer_cert_as_username
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### Description
+
+Use the client certificate to override the value of the Username field. The optional values are:
+- cn: the Common Name of the client certificate
+- dn: the Subject Name of the client certificate
+- crt: the DER-encoded binary of the client certificate
+- pem: base64 encoded string based on the DER-encoded binary
+- md5: MD5 hash of the DER-encoded binary
+
+Note: Under TCP listener, this configuration is only available if the load balancing server terminates the SSL deployment;
+and the load balancing server needs to be configured to send the content of the certificate domain to EMQ X.
+For example, for HAProxy, see
+[send-proxy-v2-ssl](http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#5.2-send-proxy-v2-ssl)
+
+<br />
+
+### listener.tcp.external.peer_cert_as_clientid
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### Description
+
+Use the client certificate to override the value of the ClientID field. The meaning of the optional values is the same as above.
+
+
+
 ### listener.tcp.external.backlog
 
 | Type    | Default |
@@ -2537,14 +2571,32 @@ Specify whether to use the server's preferences to select Ciphers.
 
 ### listener.ssl.external.peer_cert_as_username
 
-| Type | Optional Value    | Default |
-| ---- | ----------------- | ------- |
-| enum | `cn`, `dn`, `crt` | `cn`    |
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
 #### Description
 
-Use the value of the CN, DN, or CRT field in the client certificate as the value of the Username field in the MQTT CONNECT packet.
+Use the client certificate to override the value of the Username field. The optional values are:
+- cn: the Common Name of the client certificate
+- dn: the Subject Name of the client certificate
+- crt: the DER-encoded binary of the client certificate
+- pem: base64 encoded string based on the DER-encoded binary
+- md5: MD5 hash of the DER-encoded binary
+
 Note that `listener.ssl.external.verify` should be set to `verify_peer`.
+
+
+
+### listener.tcp.external.peer_cert_as_clientid
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### Description
+
+Use the client certificate to override the value of the ClientID field. The meaning of the optional values is the same as above.
 
 
 
@@ -3245,6 +3297,37 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 #### Description
 
 Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
+
+
+
+### listener.wss.external.peer_cert_as_username
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### Description
+
+Use the client certificate to override the value of the Username field. The optional values are:
+- cn: the Common Name of the client certificate
+- dn: the Subject Name of the client certificate
+- crt: the DER-encoded binary of the client certificate
+- pem: base64 encoded string based on the DER-encoded binary
+- md5: MD5 hash of the DER-encoded binary
+
+Note that `listener.wss.external.verify` should be set to `verify_peer`.
+
+
+
+### listener.wss.external.peer_cert_as_clientid
+
+| Type | Optional Value                  | Default |
+| ---- | ------------------------------- | ------- |
+| enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
+
+#### Description
+
+Use the client certificate to override the value of the ClientID field. The meaning of the optional values is the same as above.
 
 
 
