@@ -42,26 +42,49 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGU
 # etc/plugins/emqx_auth_jwt.conf
 
 ## 密钥
+##
+## 使用 HMAC 算法校验 Token 的密钥
 auth.jwt.secret = emqxsecret
 
+## RSA 或 ECDSA 公钥文件
+##
+## 使用 RSA 或 ECDSA 算法校验 Token 的公钥
+#auth.jwt.pubkey = etc/certs/jwt_public_key.pem
+
+## JWKs 的服务器地址
+##
+## EMQ X 会从 JWKs 服务器获取密钥列表，并用于验证 Token
+##
+## JWKs 规范见: http://self-issued.info/docs/draft-ietf-jose-json-web-key.html
+#auth.jwt.jwks = https://127.0.0.1:8080/jwks
+
+## JWKs 密钥刷新时间
+##
+#auth.jwt.jwks.refresh_interval = 5m
+
 ## 客户端携带 Token 的方式
+##
 ## Value: username | password
 auth.jwt.from = password
 
-
-## 高级选项
-## 公钥文件，证书作为签发密钥时使用
-## auth.jwt.pubkey = etc/certs/jwt_public_key.pem
-
+## 是否校验 JWT 携带的字段
+##
 ## Value: on | off
 auth.jwt.verify_claims = off
 
-## auth.jwt.verify_claims.$name = expected
-
-## Variables:
-### - %u: username
-### - %c: clientid
-# auth.jwt.verify_claims.username = %u
+## 字段校验列表
+##
+## 配置格式：auth.jwt.verify_claims.$name = $expected
+##   $name 为需要校验的 JWT 的 payload 中的字段名称
+##   $expected 为期待值
+##
+## $expected 可用的占位符为
+##   - %u: username
+##   - %c: clientid
+##
+## 例如：校验 JWT 的 payload 中的 username 是否与
+## 客户端(MQTT协议)中携带的 username 一致
+#auth.jwt.verify_claims.username = %u
 ```
 
 ### auth.jwt.from
@@ -72,11 +95,7 @@ auth.jwt.verify_claims = off
 
 如果你启用了 `auth.jwt.verify_claims` 选项，认证插件在验证 JWT 有效性之后还会进一步验证 Payload 中的数据有效性。
 
-```bash
-auth.jwt.verify_claims = on
-```
-
-JWT 的 Payload 应当是 JSON 结构的数据，`auth.jwt.verify_claims.$name` 中 `name` 即为需要验证的 Payload 数据 key 值，假设你的 Payload 为：
+假设你的 Payload 为：
 
 ```json
 {
@@ -88,8 +107,8 @@ JWT 的 Payload 应当是 JSON 结构的数据，`auth.jwt.verify_claims.$name` 
 
 ```bash
 ## Variables:
-### - %u: username
-### - %c: clientid
+##   - %u: username
+##   - %c: clientid
 auth.jwt.verify_claims.username = %u
 ```
 
@@ -97,6 +116,28 @@ auth.jwt.verify_claims.username = %u
 - %u：当前客户端 username
 - %c：当前客户端 client id
 
+
+## 密钥配置和算法支持
+
+JWT 认证支持以三种方式配置密钥，这三种方式分别对应三种类型的算法支持：
+
+- `auth.jwt.secret`：对称加密的方式，验证 JWT 的 Token 字段。它支持的算法有：
+    - HS256 - HMAC，使用 SHA-256 哈希算法。
+    - HS384 - HMAC，使用 SHA-384 哈希算法。
+    - HS512 - HMAC，使用 SHA-512 哈希算法。
+
+- `auth.jwt.pubkey`：使用非对称加密的方式，验证 JWT 的 Token 字段。它支持的算法有：
+    - RS256 - RSA，使用 SHA-256 哈希算法。
+    - RS384 - RSA，使用 SHA-384 哈希算法。
+    - RS512 - RSA，使用 SHA-512 哈希算法。
+    - ES256 - ECDSA，使用 P-256 曲线。
+    - ES384 - ECDSA，使用 P-384 曲线。
+    - ES512 - ECDSA，使用 P-512 曲线。
+
+- `auth.jwt.jwks`：配置为 [JWKs](http://self-issued.info/docs/draft-ietf-jose-json-web-key.html) 服务器地址，从 JWKs 服务器中获取可用的密钥列表。
+
+
+该三类密钥允许同时配置。EMQ X 在验证 Token 时会按 `auth.jwt.secret`，`auth.jwt.pubkey`，`auth.jwt.jwks` 顺序检查。
 
 
 ::: danger 
