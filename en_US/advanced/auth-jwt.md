@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -38,36 +38,108 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGU
 
 If you want to use JWT Auth you need open `etc/plugins/emqx_auth_jwt.conf` and edit as：
 
-To enable JWT authentication, the following needs to be configured in  `etc/plugins/emqx_auth_jwt.conf`:
+To enable JWT authentication, the following needs to be configured in `etc/plugins/emqx_auth_jwt.conf`:
 
 ```bash
 # etc/plugins/emqx_auth_jwt.conf
 
-## Key
+## Secret Key
+##
+## The key to verify the JWT Token using HMAC algorithm
 auth.jwt.secret = emqxsecret
+
+## RSA or ECDSA public key file
+##
+## The public key file to verify the JWT Token using RSA or ECDSA algorithm
+#auth.jwt.pubkey = etc/certs/jwt_public_key.pem
+
+## JWKs server address
+##
+## EMQ X will get the key list from JWKs server and use it to verify the Token
+##
+## About the JWKs, see: http://self-issued.info/docs/draft-ietf-jose-json-web-key.html
+#auth.jwt.jwks = https://127.0.0.1:8080/jwks
+
+## JWKs refresh interval
+##
+#auth.jwt.jwks.refresh_interval = 5m
 
 ## The way the client carries the token
 ## Value: username | password
 auth.jwt.from = password
 
-
-## Advanced options
-## Public key file, certificate is used when signing the key
-auth.jwt.pubkey = etc/certs/jwt_public_key.pem
-
+## Enable to verify claims fields
+##
 ## Value: on | off
 auth.jwt.verify_claims = off
 
-## auth.jwt.verify_claims.$name = expected
-
-## Variables:
-### - %u: username
-### - %c: clientid
-# auth.jwt.verify_claims.username = %u
+## The checklist of claims to validate
+##
+## Configuration format: auth.jwt.verify_claims.$name = $expected
+##   - $name: the name of the field in the JWT payload to be verified
+##   - $expected: the expected value
+##
+## The available placeholders for $expected:
+##   - %u: username
+##   - %c: clientid
+##
+## For example, to verify that the username in the JWT payload is the same
+## as the client (MQTT protocol) username
+#auth.jwt.verify_claims.username = %u
 ```
-<!-- TODO: verify_claims 的作用 -->
+### auth.jwt.from
 
-::: danger 
+The field where the client carries the JWT Token, used to configure where the client carries the JWT string, optional fields are username and password.
+
+### auth.jwt.verify_claims
+
+If you enable the `auth.jwt.verify_claims` option, EMQ Xwill verify the validity of the data in the Payload after verifying the validity of the JWT.
+
+suppose your Payload is:
+
+```json
+{
+  "username": "emqx_client_username"
+}
+```
+
+You can use the following configuration to verify that client `username` is **equal to** `emqx_client_username` when the client carries this Token.
+
+```properties
+## Variables:
+## - %u: username
+## - %c: clientid
+auth.jwt.verify_claims.username = %u
+```
+
+Support for verification using fixed values or current client information:
+- %u: current client username
+- %c: current client client id
+
+## Key and Algorithm support
+
+JWT authentication supports three ways to configure keys, which correspond to three types of algorithm support.
+
+- `auth.jwt.secret`: a symmetric encryption method that validates the JWT Token field. It supports the following algorithms:
+    - HS256 - HMAC, using the SHA-256 hash algorithm.
+    - HS384 - HMAC, using the SHA-384 hash algorithm.
+    - HS512 - HMAC, using the SHA-512 hash algorithm.
+
+- `auth.jwt.pubkey`: authenticates the JWT Token field using asymmetric encryption. It supports the following algorithms.
+    - RS256 - RSA, using the SHA-256 hash algorithm.
+    - RS384 - RSA, using the SHA-384 hash algorithm.
+    - RS512 - RSA, using the SHA-512 hash algorithm.
+    - ES256 - ECDSA, using the P-256 curve.
+    - ES384 - ECDSA, using the P-384 curve.
+    - ES512 - ECDSA, using the P-512 curve.
+
+- `auth.jwt.jwks`: configured as [JWKs](http://self-issued.info/docs/draft-ietf-jose-json-web-key.html) server address to get the list of available keys from the JWKs server.
+
+
+The three types of keys are allowed to be configured simultaneously. EMQ X checks the Token in the order of `auth.jwt.secret`, `auth.jwt.pubkey`, `auth.jwt.jwks`.
+
+
+::: danger
 JWT contains authentication information by itself. Once leaked, anyone can get all the permissions of the token. It is recommended to enable TLS encrypted transmission when using JWT.
 
 During the use of JWT, a token cannot be invalidated before it expires. Please properly set the validity time and keep the encryption information well.
