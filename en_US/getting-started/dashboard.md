@@ -49,7 +49,7 @@ It should be noted that once you change the password of the default user through
 
 EMQ X Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners with a listening port of 18083 are enabled by default. For the introduction of Listeners, please refer to [Configuration Instructions](config.md#).
 
-For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../configuration/index.md#).
+For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../configuration/configuration.md).
 
 ## Dashboard interface
 
@@ -148,7 +148,7 @@ The `Subscriptions` page provides all subscription information under the specifi
 
 The rule engine of EMQ X Broker can flexibly process messages and events, such as converting the message into a specified format and storing it in a database table or resending it to the message queue. In order to facilitate users to better use the rules engine, EMQ X Dashboard provides corresponding visual operation pages, and you can click the `RULE ENGINE` navigation item to access these pages.
 
-Due to the complexity of the related concepts of the rule engine, the operations involved may occupy a considerable amount of space. Considering your reading experience, we will introduce the rule engine through additional documents of  [rule-engine](../advanced/rule-engine.md#).
+Due to the complexity of the related concepts of the rule engine, the operations involved may occupy a considerable amount of space. Considering your reading experience, we will introduce the rule engine through additional documents of  [rule-engine](../rule/rule-engine.md#).
 
 ### MANAGEMENT
 
