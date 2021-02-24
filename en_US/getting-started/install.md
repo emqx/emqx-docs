@@ -17,9 +17,9 @@ ref: undefined
 
 Operating systems currently supported by EMQ X Broker:
 
-+ Centos6
-+ Centos7
-+ Centos8
++ CentOS 6
++ CentOS 7
++ CentOS 8
 + OpenSUSE tumbleweed
 + Debian 8
 + Debian 9
@@ -41,7 +41,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 ## Package manager installation (Linux)
 
-### Centos
+### CentOS
 
 1.   Install the required dependencies 
   
@@ -49,7 +49,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
      $ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
      ```
 
-2.   Set up a stable repository, taking the CentOS7 as an example. 
+2.   Set up a stable repository, taking the CentOS 7 as an example. 
     
      ```bash
      $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ce/redhat/centos/7/emqx-ce.repo
@@ -119,7 +119,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo yum remove emqx
     ```
 
-### Ubuntu、Debian
+### Ubuntu | Debian
 
 1.   Install the required dependency 
   
