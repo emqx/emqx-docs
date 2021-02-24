@@ -46,7 +46,7 @@ $ emqx_ctl status
 Node 'emqx@127.0.0.1' not responding to pings。
 ```
 
-You can check the log file from [`logs`](../getting-started/directory.md) and confirm whether it belongs to [Common Error](../faq/error.md#).
+You can check the log file from [`logs`](./directory.md) and confirm whether it belongs to [Common Error](../faq/error.md#).
 
 {% emqxce %}
 
