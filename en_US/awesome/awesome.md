@@ -13,7 +13,7 @@ category:
 ref:
 ---
 
-# Awsome
+# Awesome
 
 [![GitHub Release](https://img.shields.io/github/release/emqx/emqx?color=brightgreen)](https://github.com/emqx/emqx/releases)
 [![Docker Pulls](https://img.shields.io/docker/pulls/emqx/emqx)](https://hub.docker.com/r/emqx/emqx)
@@ -25,7 +25,7 @@ ref:
 
   - [EMQ Official website](https://www.emqx.io?spm=docs)
   - [EMQ Official blog](https://www.emqx.io/blog?spm=docs)
-  - [EMQ X GitHub  depositary ](https://github.com/emqx/emqx)
+  - [EMQ X GitHub  repositary ](https://github.com/emqx/emqx)
 
 ## Community, discussion, contribution and support
 
