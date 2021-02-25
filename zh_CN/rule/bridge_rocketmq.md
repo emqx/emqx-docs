@@ -4,11 +4,9 @@
 ​       为例:
 
 ```bash
-$ wget http://mirror.metrocast.net/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip
-
-$ unzip rocketmq-all-4.5.2-bin-release.zip
-
-$ cd rocketmq-all-4.5.2-bin-release
+$ wget https://mirrors.bfsu.edu.cn/apache/rocketmq/4.8.0/rocketmq-all-4.8.0-bin-release.zip
+$ unzip rocketmq-all-4.8.0-bin-release.zip
+$ cd rocketmq-all-4.8.0-bin-release/
 
 # 在conf/broker.conf添加了2个配置
 brokerIP1 = 127.0.0.1
