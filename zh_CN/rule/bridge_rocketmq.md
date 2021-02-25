@@ -1,14 +1,12 @@
 # 桥接数据到 RocketMQ
 
-搭建 RocketMQ 环境，以 MacOS X
-​       为例:
+搭建 RocketMQ 环境，以 MacOS X 为例:
 
 ```bash
-$ wget http://mirror.metrocast.net/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip
 
-$ unzip rocketmq-all-4.5.2-bin-release.zip
-
-$ cd rocketmq-all-4.5.2-bin-release
+wget https://mirrors.bfsu.edu.cn/apache/rocketmq/4.8.0/rocketmq-all-4.8.0-bin-release.zip
+unzip rocketmq-all-4.8.0-bin-release.zip
+cd rocketmq-all-4.8.0-bin-release/
 
 # 在conf/broker.conf添加了2个配置
 brokerIP1 = 127.0.0.1
@@ -20,6 +18,8 @@ $ ./bin/mqnamesrv
 # 启动 RocketMQ Broker
 $ ./bin/mqbroker -n localhost:9876 -c conf/broker.conf
 ```
+
+详细安装步骤和配置细节见 [RocketMQ 文档](https://rocketmq.apache.org/docs/quick-start/)。
 
 创建规则:
 
