@@ -24,7 +24,7 @@ Authentication methods supported by EMQ X:
 **Built-in data source**
 
 * [Username authentication](./auth-username.md)
-* [Cliend ID authentication](./auth-clientid.md)
+* [Client ID authentication](./auth-clientid.md)
 * [Mnesia authentication](./auth-mnesia.md)
 
 The configuration file and the built-in database of EMQ X are used to provide an authenticated data source, which is managed through the HTTP API and is simple and lightweight.
