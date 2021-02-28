@@ -2417,7 +2417,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -3335,7 +3335,7 @@ Use the client certificate to override the value of the ClientID field. The mean
 
 | Type   | Default                |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -5803,7 +5803,7 @@ Heartbeat interval of the MQTT bridge client.
 
 | Type     | Default                 |
 | -------- | ----------------------- |
-| string   | `tlsv1.2,tlsv1.1,tlsv1` |
+| string   | `tslv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -6215,7 +6215,7 @@ It should be used together with `dashboard.listener.https.verify`. If set to `tr
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
