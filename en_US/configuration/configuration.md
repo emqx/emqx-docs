@@ -2445,7 +2445,7 @@ Specify the timeout period for the SSL handshake process.
 
 #### Description
 
-Specify SSL private key file (PEM).
+File path to the server's private key.
 
 
 
@@ -2457,7 +2457,7 @@ Specify SSL private key file (PEM).
 
 #### Description
 
-Specify SSL certificate file(PEM).
+File path to the server's certificate.
 
 
 
@@ -2469,7 +2469,10 @@ Specify SSL certificate file(PEM).
 
 #### Description
 
-Specify the CA certificate file for SSL (PEM).
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 
@@ -3351,7 +3354,7 @@ Specify the SSL version list supported by the server. For details, see [http://e
 
 #### Description
 
-Specify SSL private key file (PEM).
+File path to server's private key.
 
 
 
@@ -3363,7 +3366,7 @@ Specify SSL private key file (PEM).
 
 #### Description
 
-Specify SSL certificate file(PEM).
+File path to the server's certificate.
 
 
 
@@ -3375,7 +3378,10 @@ Specify SSL certificate file(PEM).
 
 #### Description
 
-If using SSL, specify the CA certificate file for SSL (PEM).
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 
@@ -6147,7 +6153,7 @@ Same as `dashboard.listener.http.ipv6_v6only`.
 
 #### Description
 
-Server private key file path.
+File path to the server's private key.
 
 
 
@@ -6159,7 +6165,7 @@ Server private key file path.
 
 #### Description
 
-Server certificate file path.
+File path to the server's certificate.
 
 
 
@@ -6171,7 +6177,10 @@ Server certificate file path.
 
 #### Description
 
-CA certificate file path.
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 
@@ -6718,7 +6727,7 @@ Whether to close the connection after the HTTPS packet sending is timeout.
 
 #### Description
 
-Server private key file path.
+File path to server's private key.
 
 
 
@@ -6730,7 +6739,7 @@ Server private key file path.
 
 #### Description
 
-Server certificate file path.
+File path to server's certificate.
 
 
 
@@ -6742,7 +6751,10 @@ Server certificate file path.
 
 #### Description
 
-CA certificate file path.
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 
