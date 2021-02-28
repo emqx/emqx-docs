@@ -2437,7 +2437,7 @@ listener.ssl.external.access.2 = allow all
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -3330,7 +3330,7 @@ listener.wss.external.access.2 = allow all
 
 | Type   | Default                |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -5829,7 +5829,7 @@ MQTT 桥接客户端的心跳间隔。
 
 | Type     | Default                 |
 | -------- | ----------------------- |
-| string   | `tlsv1.2,tlsv1.1,tlsv1` |
+| string   | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -6241,7 +6241,7 @@ CA 证书文件路径。
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
