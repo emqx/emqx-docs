@@ -15,16 +15,16 @@ ref: undefined
 
 # Configuration from environment variable
 
-Use environment variables to set configuration values temporarily.
-
 By default, EMQ X maps environment variables with prefix ``EMQX_``
 to key-value pairs in configuration files.
 
-- Default mapping rules:
+Mapping rules from environment variable name to config key
 
-  - Prefix ``EMQX_`` is removed
-  - Upper case letters are mapped to lower case letters
-  - Double underscore ``__`` is mapped to ``.``
+- Prefix ``EMQX_`` is removed
+- Upper case letters are mapped to lower case letters
+- Double underscore ``__`` is mapped to ``.``
+
+## Use default environment variable prefix
 
 ```bash
 # management.listener.http = 9000
@@ -37,7 +37,7 @@ Starting emqx on node emqx@127.0.0.1
 Start http:management listener on 9000 successfully.
 ```
 
-- Edit mapping prefix:
+## Customizing environment variable prefix
 
 Set `CUTTLEFISH_ENV_OVERRIDE_PREFIX` to alter the mapping prefix.
 
