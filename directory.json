@@ -299,7 +299,16 @@
     },
     {
       "title": "参数配置",
-      "path": "configuration/configuration"
+      "children": [
+        {
+          "title": "参数配置列表",
+          "path": "configuration/configuration"
+        },
+        {
+          "title": "环境变量",
+          "path": "configuration/environment-variable"
+        }
+      ]
     },
     {
       "title": "命令行接口",
