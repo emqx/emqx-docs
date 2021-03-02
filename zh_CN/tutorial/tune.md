@@ -91,6 +91,7 @@ FIN-WAIT-2 Socket 超时设置:
 ```bash
 sysctl -w net.ipv4.tcp_fin_timeout=15
 ```
+
 ## Erlang 虚拟机参数
 
 优化设置 Erlang 虚拟机启动参数，配置文件 emqx/etc/emqx.conf:
