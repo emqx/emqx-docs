@@ -24,7 +24,7 @@ Mapping rules from environment variable name to config key
 - Upper case letters are mapped to lower case letters
 - Double underscore ``__`` is mapped to ``.``
 
-## Use default environment variable prefix
+## Examples
 
 ```bash
 # management.listener.http = 9000
@@ -35,21 +35,6 @@ $ _build/emqx/rel/emqx/bin/emqx console
 
 Starting emqx on node emqx@127.0.0.1
 Start http:management listener on 9000 successfully.
-```
-
-## Customizing environment variable prefix
-
-Set `CUTTLEFISH_ENV_OVERRIDE_PREFIX` to alter the mapping prefix.
-
-```bash
-$ export CUTTLEFISH_ENV_OVERRIDE_PREFIX=DEV_
-$ export DEV_MANAGEMENT__LISTENER__HTTP=9001
-$ _build/emqx/rel/emqx/bin/emqx console
-
-...
-
-Starting emqx on node emqx@127.0.0.1
-Start http:management listener on 9001 successfully.
 ```
 
 ::: tip Tip

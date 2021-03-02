@@ -24,7 +24,7 @@ ref: undefined
 - 双下划线 ``__`` 替换成点 ``.``
 
 
-## 使用默认环境变量前缀
+## 示例
 
 ```bash
 # management.listener.http = 9000
@@ -35,21 +35,6 @@ $ _build/emqx/rel/emqx/bin/emqx console
 
 Starting emqx on node emqx@127.0.0.1
 Start http:management listener on 9000 successfully.
-```
-
-## 自定义环境变量名前缀
-
-Set `CUTTLEFISH_ENV_OVERRIDE_PREFIX` to alter the mapping prefix.
-
-```bash
-$ export CUTTLEFISH_ENV_OVERRIDE_PREFIX=DEV_
-$ export DEV_MANAGEMENT__LISTENER__HTTP=9001
-$ _build/emqx/rel/emqx/bin/emqx console
-
-...
-
-Starting emqx on node emqx@127.0.0.1
-Start http:management listener on 9001 successfully.
 ```
 
 ::: tip Tip
