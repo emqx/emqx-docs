@@ -15,6 +15,54 @@ ref:
 
 # 版本发布
 
+## 4.3-beta.1 版本
+
+*发布日期: 2020-03-03*
+
+EMQ X 4.3-beta.1 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 减少开启规则引擎插件时的性能损耗
+
+  Github PR: [emqx#4160](https://github.com/emqx/emqx/pull/4160)
+
+- 仅在正式版本中启用数据遥测功能
+
+  Github PR: [emqx#4163](https://github.com/emqx/emqx/pull/4163)
+
+- 支持重启监听器
+
+  Github PR: [emqx#4188](https://github.com/emqx/emqx/pull/4188), [emqx#4190](https://github.com/emqx/emqx/pull/4190)
+
+- 禁用规则的同时销毁动作占用的资源
+
+  Github PR: [emqx#4232](https://github.com/emqx/emqx/pull/4232)
+
+- 共享订阅分发策略配置为 `round_robin` 时随机选择起始点
+
+  Github PR: [emqx#4232](https://github.com/emqx/emqx/pull/4232)
+
+- 允许使用 Base64 编码的客户端证书或者客户端证书的 MD5 值作为用户名或者 Client ID
+
+  Github PR: [emqx#4194](https://github.com/emqx/emqx/pull/4194)
+
+- 保持对 EMQ X Broker 启动后连接失败的资源进行重试
+
+  Github PR: [emqx#4125](https://github.com/emqx/emqx/pull/4125)
+
+**错误修复:**
+
+- 修复过长的 Client ID 无法追踪的问题
+
+  Github PR: [emqx#4163](https://github.com/emqx/emqx/pull/4163)
+
+- 修复查询客户端信息可能出现崩溃的问题
+
+  Github PR: [emqx#4124](https://github.com/emqx/emqx/pull/4124)
+
 ## 4.3-alpha.1 版本
 
 *发布日期: 2020-01-29*
@@ -37,7 +85,6 @@ EMQ X 4.3-alpha.1 现已发布，主要包含以下改动:
 - 支持配置证书链最大长度以及私钥文件密码
 - 支持 Mnesia 认证信息的导入导出
 - 共享订阅支持按源主题的 Hash 分发消息
-
 
 *BUG*
 

@@ -15,6 +15,54 @@ ref: undefined
 
 # Changes
 
+## Version 4.3-beta.1
+
+*Release Date: 2020-03-03*
+
+EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Enhancement:**
+
+- Reduce the performance loss when opening the rule engine plugin
+
+  Github PR: [emqx#4160](https://github.com/emqx/emqx/pull/4160)
+
+- Only enable data telemetry in the official version
+
+  Github PR: [emqx#4163](https://github.com/emqx/emqx/pull/4163)
+
+- Support restarting the listener
+
+  Github PR: [emqx#4188](https://github.com/emqx/emqx/pull/4188), [emqx#4190](https://github.com/emqx/emqx/pull/4190)
+
+- Disable the rules while destroying the resources occupied by the action
+
+  Github PR: [emqx#4232](https://github.com/emqx/emqx/pull/4232)
+
+- The starting point is randomly selected when the shared subscription distribution strategy is configured as `round_robin`
+
+  Github PR: [emqx#4232](https://github.com/emqx/emqx/pull/4232)
+
+- Allow to use Base64 encoded client certificate or MD5 value of client certificate as username or Client ID
+
+  Github PR: [emqx#4194](https://github.com/emqx/emqx/pull/4194)
+
+- Keep retrying the resources that failed to connect after the EMQ X Broker is started
+
+  Github PR: [emqx#4125](https://github.com/emqx/emqx/pull/4125)
+
+**Bug fixes:**
+
+- Fix the issue that the long Client ID cannot be tracked
+
+  Github PR: [emqx#4163](https://github.com/emqx/emqx/pull/4163)
+
+- Fix the issue that the query client information may crash
+
+  Github PR: [emqx#4124](https://github.com/emqx/emqx/pull/4124)
+
 ## Version 4.3-alpha.1
 
 *Release Date: 2020-01-29*
