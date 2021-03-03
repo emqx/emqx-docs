@@ -2417,7 +2417,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -2445,7 +2445,7 @@ Specify the timeout period for the SSL handshake process.
 
 #### Description
 
-Specify SSL private key file (PEM).
+File path to the server's private key.
 
 
 
@@ -2457,7 +2457,7 @@ Specify SSL private key file (PEM).
 
 #### Description
 
-Specify SSL certificate file(PEM).
+File path to the server's certificate.
 
 
 
@@ -2469,7 +2469,10 @@ Specify SSL certificate file(PEM).
 
 #### Description
 
-Specify the CA certificate file for SSL (PEM).
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 
@@ -3335,7 +3338,7 @@ Use the client certificate to override the value of the ClientID field. The mean
 
 | Type   | Default                |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -3351,7 +3354,7 @@ Specify the SSL version list supported by the server. For details, see [http://e
 
 #### Description
 
-Specify SSL private key file (PEM).
+File path to server's private key.
 
 
 
@@ -3363,7 +3366,7 @@ Specify SSL private key file (PEM).
 
 #### Description
 
-Specify SSL certificate file(PEM).
+File path to the server's certificate.
 
 
 
@@ -3375,7 +3378,10 @@ Specify SSL certificate file(PEM).
 
 #### Description
 
-If using SSL, specify the CA certificate file for SSL (PEM).
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 
@@ -5803,7 +5809,7 @@ Heartbeat interval of the MQTT bridge client.
 
 | Type     | Default                 |
 | -------- | ----------------------- |
-| string   | `tlsv1.2,tlsv1.1,tlsv1` |
+| string   | `tslv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -6147,7 +6153,7 @@ Same as `dashboard.listener.http.ipv6_v6only`.
 
 #### Description
 
-Server private key file path.
+File path to the server's private key.
 
 
 
@@ -6159,7 +6165,7 @@ Server private key file path.
 
 #### Description
 
-Server certificate file path.
+File path to the server's certificate.
 
 
 
@@ -6171,7 +6177,10 @@ Server certificate file path.
 
 #### Description
 
-CA certificate file path.
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 
@@ -6215,7 +6224,7 @@ It should be used together with `dashboard.listener.https.verify`. If set to `tr
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -6718,7 +6727,7 @@ Whether to close the connection after the HTTPS packet sending is timeout.
 
 #### Description
 
-Server private key file path.
+File path to server's private key.
 
 
 
@@ -6730,7 +6739,7 @@ Server private key file path.
 
 #### Description
 
-Server certificate file path.
+File path to server's certificate.
 
 
 
@@ -6742,7 +6751,10 @@ Server certificate file path.
 
 #### Description
 
-CA certificate file path.
+File path to the CA certificates.
+It should include all intermediate CA certificates and root CA certificate of the
+server certificate. It should also include trusted CAs to validate client certificates
+when `verify` configuration is set to `verify_peer`.
 
 
 

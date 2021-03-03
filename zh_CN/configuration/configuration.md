@@ -2437,7 +2437,7 @@ listener.ssl.external.access.2 = allow all
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -2489,7 +2489,8 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-指定 SSL 的 CA 证书文件 (PEM)。
+指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
+该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
 
 <br />
 
@@ -3330,7 +3331,7 @@ listener.wss.external.access.2 = allow all
 
 | Type   | Default                |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -3370,7 +3371,9 @@ listener.wss.external.access.2 = allow all
 
 #### 说明
 
-若使用 SSL，指定 SSL 的 CA 证书文件 (PEM)。
+指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
+该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
+
 
 <br />
 
@@ -5829,7 +5832,7 @@ MQTT 桥接客户端的心跳间隔。
 
 | Type     | Default                 |
 | -------- | ----------------------- |
-| string   | `tlsv1.2,tlsv1.1,tlsv1` |
+| string   | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -6197,7 +6200,9 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 
 #### 说明
 
-CA 证书文件路径。
+指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
+该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
+
 
 <br />
 
@@ -6241,7 +6246,7 @@ CA 证书文件路径。
 
 | Type   | Default                 |
 | ------ | ----------------------- |
-| string | `tlsv1.2,tlsv1.1,tlsv1` |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -6768,7 +6773,9 @@ HTTPS 报文发送超时后，是否关闭该连接。
 
 #### 说明
 
-CA 证书文件路径。
+指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
+该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
+
 
 <br />
 
