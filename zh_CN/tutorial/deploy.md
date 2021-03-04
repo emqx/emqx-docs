@@ -45,13 +45,13 @@ LB (负载均衡器) 负责分发设备的 MQTT 连接与消息到 EMQ X 集群�
 
 公有云厂商 LB 产品:
 
-| 云计算厂商                            | 是否支持 TLS 终结 | LB 产品介绍                                              |
-| -------------------------------- | ----------- | ---------------------------------------------------- |
-| [青云](https://qingcloud.com)      | 是           | <https://docs.qingcloud.com/guide/loadbalancer.html> |
-| [AWS](https://aws.amazon.com)    | 是           | <https://aws.amazon.com/cn/elasticloadbalancing/>    |
-| [阿里云](https://www.aliyun.com)    | 否           | <https://www.aliyun.com/product/slb>                 |
-| [UCloud](https://ucloud.cn)      | 未知          | <https://ucloud.cn/site/product/ulb.html>            |
-| [QCloud](https://www.qcloud.com) | 未知          | <https://www.qcloud.com/product/clb>                 |
+| 云计算厂商                       | 是否支持 TLS 终结 | LB 产品介绍                                                |
+| -------------------------------- | ----------------- | ---------------------------------------------------------- |
+| [青云](https://qingcloud.com)    | 是                | <https://docs.qingcloud.com/product/network/loadbalancer/> |
+| [AWS](https://aws.amazon.com)    | 是                | <https://aws.amazon.com/cn/elasticloadbalancing/>          |
+| [阿里云](https://www.aliyun.com) | 否                | <https://www.aliyun.com/product/slb>                       |
+| [UCloud](https://ucloud.cn)      | 未知              | <https://ucloud.cn/site/product/ulb.html>                  |
+| [QCloud](https://www.qcloud.com) | 未知              | <https://www.qcloud.com/product/clb>                       |
 
 私有部署 LB 服务器:
 
@@ -76,13 +76,13 @@ EMQ X 节点集群部署在 LB 之后，建议部署在 VPC 或私有网络内�
 
 EMQ X 默认开启的 MQTT 服务 TCP 端口:
 
-| 端口 | 说明 |
-| ----- | --------------------- |
-| 1883  | MQTT 协议端口             |
+| 端口  | 说明                    |
+| ----- | ----------------------- |
+| 1883  | MQTT 协议端口           |
 | 8883  | MQTT/SSL 端口           |
 | 8083  | MQTT/WebSocket 端口     |
 | 8084  | MQTT/WebSocket/SSL 端口 |
-| 8081 | 管理 API 端口              |
+| 8081  | 管理 API 端口           |
 | 18083 | Dashboard 端口          |
 
 防火墙根据使用的 MQTT 接入方式，开启上述端口的访问权限。
@@ -91,12 +91,12 @@ EMQ X 默认开启的 MQTT 服务 TCP 端口:
 
 EMQ X 节点集群使用的 TCP 端口:
 
-| 端口 | 说明 |
-| ---- | --------- |
-| 4369 | 集群节点发现端口 (EPMD)  |
-| 4370 | 集群节点发现端口  |
-| 5369 | 集群节点 PRC 通道 |
-| 6369 | 集群节点控制通道  |
+| 端口 | 说明                    |
+| ---- | ----------------------- |
+| 4369 | 集群节点发现端口 (EPMD) |
+| 4370 | 集群节点发现端口        |
+| 5369 | 集群节点 PRC 通道       |
+| 6369 | 集群节点控制通道        |
 
 集群节点间如有防护墙，需开启上述 TCP 端口互访权限。
 
@@ -138,7 +138,7 @@ EMQ X 节点集群使用的 TCP 端口:
 
 3. 私有网络内创建两台 EMQ X 主机，指定上面创建的 VPC 网络，例如:
   
-|  节点  |  IP 地址   |
+| 节点  | IP 地址     |
 | ----- | ----------- |
 | emqx1 | 192.168.0.2 |
 | emqx2 | 192.168.0.3 |
@@ -182,7 +182,7 @@ HAProxy 作为 LB 部署 EMQ X 集群，并终结 SSL 连接:
 
 1. 创建 EMQ X 集群节点，例如:
 
-| 节点    | IP 地址    |
+| 节点  | IP 地址     |
 | ----- | ----------- |
 | emqx1 | 192.168.0.2 |
 | emqx2 | 192.168.0.3 |
@@ -214,7 +214,7 @@ Nginx 产品作为 EMQ X 集群 LB，并终结 SSL 连接:
 
 1. 创建 EMQ X 节点集群，例如:
 
-| 节点    | IP 地址     |
+| 节点  | IP 地址     |
 | ----- | ----------- |
 | emqx1 | 192.168.0.2 |
 | emqx2 | 192.168.0.3 |
