@@ -38,7 +38,7 @@ etc/acl.conf
 %% 允许 "dashboard" 用户 订阅 "$SYS/#" 主题
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
-%% 允许 IP 地址为 "127.0.0.1" 的用户 发布/订阅 "#SYS/#"，"#" 主题
+%% 允许 IP 地址为 "127.0.0.1" 的用户 发布/订阅 "$SYS/#"，"#" 主题
 {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
 
 %% 拒绝 "所有用户" 订阅 "$SYS/#" "#" 主题
@@ -90,8 +90,23 @@ etc/acl.conf
 在 `acl.conf` 修改完成后，并不会自动加载至 EMQ X 系统。需要手动执行：
 
 ```bash
-./bin/emqx_ctl acl reload
+./bin/emqx_ctl modules reload emqx_mod_acl_internal
 ```
+
+## 占位符
+
+内置的 `acl.conf` 在主题的域（元组的第四位）仅支持以下占位符：
+
+- `%c`： 表示客户端 ID，在规则生效时它将被替换为实际的客户端 ID。
+- `%u`： 表示客户端的用户名，在规则生效时将被替换为实际的客户端用户名。
+
+例如：
+
+```erlang
+{allow, all, pubsub, ["sensor/%c/ctrl"]}.
+```
+
+表示，**允许** 客户端 ID 为 `light` 的客户端 **订阅和发布** 到 `sensor/light/ctrl` 主题。
 
 
 ::: tip

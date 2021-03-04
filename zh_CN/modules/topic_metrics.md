@@ -22,4 +22,4 @@ EMQ X 提供了主题指标统计功能，可以统计指定主题下的消息�
 
 ### HTTP API
 
-我们为您提供了与 Dashboard 操作一致的 HTTP API，以便您与自己的应用进行集成。相关 HTTP API 的具体使用方法，请参见 [HTTP API - 主题指标统计](http-api.md#endpoint-topic-metrics)。
+我们为您提供了与 Dashboard 操作一致的 HTTP API，以便您与自己的应用进行集成。相关 HTTP API 的具体使用方法，请参见 [HTTP API - 主题指标统计](../advanced/http-api.md#endpoint-topic-metrics)。

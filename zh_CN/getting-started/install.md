@@ -17,9 +17,9 @@ ref:
 
 EMQ X 目前支持的操作系统:
 
-+ Centos6
-+ Centos7
-+ Centos8
++ CentOS 6
++ CentOS 7
++ CentOS 8
 + OpenSUSE tumbleweed
 + Debian 9
 + Debian 10
@@ -43,7 +43,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 ## 包管理器安装 (Linux)
 
-### Centos
+### CentOS
 
 1.  安装所需要的依赖包
   
@@ -51,8 +51,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     $ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
     ```
 
-2.  使用以下命令设置稳定存储库，以 CentOS7
-    为例
+2.  使用以下命令设置稳定存储库，以 CentOS 7 为例
     
     ```
     $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ce/redhat/centos/7/emqx-ce.repo
