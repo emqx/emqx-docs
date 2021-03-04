@@ -613,7 +613,7 @@ $ cd emqx-rel && make
 4. 启动 EMQ X Broker
   
 ```bash
-$ cd _build/emqx-rel/_rel/emqx
+$ cd _build/emqx/rel/emqx
 
 $ ./bin/emqx start
 emqx 4.0.0 is started successfully!
