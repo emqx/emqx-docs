@@ -22,13 +22,13 @@ It is recommended that SSL connections are terminated by a LB. The links between
 
 LB products of public cloud providers:
 
-| Cloud provider                                               | SSL Termination | LB Product DOC/URL                                   |
-| ------------------------------------------------------------ | --------------- | ---------------------------------------------------- |
-| [QingCloud](https://qingcloud.com) | Yes             | <https://docs.qingcloud.com/guide/loadbalancer.html> |
-| [AWS](https://aws.amazon.com)                                | Yes             | <https://aws.amazon.com/cn/elasticloadbalancing/>    |
-| [Aliyun](https://www.aliyun.com)                             | No              | <https://www.aliyun.com/product/slb>                 |
-| [UCloud](https://ucloud.cn)                                  | Unknown            | <https://ucloud.cn/site/product/ulb.html>            |
-| [QCloud](https://www.qcloud.com)                             | Unknown         | <https://www.qcloud.com/product/clb>                 |
+| Cloud provider                     | SSL Termination | LB Product DOC/URL                                         |
+| ---------------------------------- | --------------- | ---------------------------------------------------------- |
+| [QingCloud](https://qingcloud.com) | Yes             | <https://docs.qingcloud.com/product/network/loadbalancer/> |
+| [AWS](https://aws.amazon.com)      | Yes             | <https://aws.amazon.com/cn/elasticloadbalancing/>          |
+| [Aliyun](https://www.aliyun.com)   | No              | <https://www.aliyun.com/product/slb>                       |
+| [UCloud](https://ucloud.cn)        | Unknown         | <https://ucloud.cn/site/product/ulb.html>                  |
+| [QCloud](https://www.qcloud.com)   | Unknown         | <https://www.qcloud.com/product/clb>                       |
 
  LBs for Private Cloud: 
 
@@ -53,13 +53,13 @@ Qingcloud(EMQ X partner) is recommended for domestic public cloud deployments, A
 
 *EMQ X* Provides the MQTT service on following TCP ports by default:
 
-| Port | Description |
-| ----- | --------------------- |
-| 1883  | MQTT             |
+| Port  | Description        |
+| ----- | ------------------ |
+| 1883  | MQTT               |
 | 8883  | MQTT/SSL           |
 | 8083  | MQTT/WebSocket     |
 | 8084  | MQTT/WebSocket/SSL |
-| 8081 | Management API |
+| 8081  | Management API     |
 | 18083 | Dashboard          |
 
 Firewall should make the relevant ports accessible for public according to the MQTT access method. 
@@ -69,10 +69,10 @@ Firewall should make the relevant ports accessible for public according to the M
 TCP ports used by EMQ X node cluster:
 
 | Port | Description         |
-| ---- | --------- |
+| ---- | ------------------- |
 | 4369 | Node discovery port |
-| 5369 | Cluster PRC |
-| 6369 | Cluster channel |
+| 5369 | Cluster PRC         |
+| 6369 | Cluster channel     |
 
 If deployed between nodes, firewalls should be configured that the above ports are inter-accessible between the nodes. 
 
