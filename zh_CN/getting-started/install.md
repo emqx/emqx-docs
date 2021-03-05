@@ -595,19 +595,20 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 1. 获取源码
 
 ```bash
-$ git clone -b v4.0.0 https://github.com/emqx/emqx-rel.git
+$ git clone https://github.com/emqx/emqx.git
 ```
 
-2. 设置环境变量
+2. 切换到最近的 Tag
 
 ```bash
-$ export EMQX_DEPS_DEFAULT_VSN=v4.0.0
+$ cd emqx
+$ git checkout $(git describe --abbrev=0 --tags)
 ```
 
 3. 编译
 
 ```bash
-$ cd emqx-rel && make
+$ make
 ```
 
 4. 启动 EMQ X Broker
@@ -616,9 +617,9 @@ $ cd emqx-rel && make
 $ cd _build/emqx/rel/emqx
 
 $ ./bin/emqx start
-emqx 4.0.0 is started successfully!
+EMQ X Broker 4.3-beta.1 is started successfully!
 
 $ ./bin/emqx_ctl status
 Node 'emqx@127.0.0.1' is started
-emqx v4.0.0 is running
+emqx 4.3-beta.1 is running
 ```
