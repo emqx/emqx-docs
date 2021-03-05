@@ -325,6 +325,9 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     + DEB 包:
 
       ```bash
+      # for ubuntu
+      $ sudo apt install ./emqx-ubuntu18.04-v4.0.0_amd64.deb
+      # for debian
       $ sudo dpkg -i emqx-ubuntu18.04-v4.0.0_amd64.deb
       ```
 

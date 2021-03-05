@@ -294,6 +294,9 @@ $ sudo apt install emqx-ee
 2.  安装 EMQ X
     
 ```bash
+# for ubuntu
+$ sudo apt install ./emqx-ee-ubuntu18.04-v3.1.0_amd64.deb
+# for debian
 $ sudo dpkg -i emqx-ee-ubuntu18.04-v3.1.0_amd64.deb
 ```
 
@@ -473,6 +476,9 @@ $ sudo apt install emqx-ee
 2.  安装 EMQ X
     
     ```bash
+    # for ubuntu
+    $ sudo apt install ./emqx-ee-debian9-v3.1.0_amd64.deb
+    # for debian
     $ sudo dpkg -i emqx-ee-debian9-v3.1.0_amd64.deb
     ```
 
