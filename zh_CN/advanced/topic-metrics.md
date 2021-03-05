@@ -31,4 +31,4 @@ Topic Metrics 页面位于 Dashboard 的 Analysis 标签下，由于主题指标
 
 ## HTTP API
 
-我们为您提供了与 Dashboard 操作一致的 HTTP API，以便您与自己的应用进行集成。相关 HTTP API 的具体使用方法，请参见 [HTTP API - 主题指标统计](http-api.md#主题统计指标)。
+我们为您提供了与 Dashboard 操作一致的 HTTP API，以便您与自己的应用进行集成。相关 HTTP API 的具体使用方法，请参见 [HTTP API - 主题指标统计](./http-api.md#主题统计指标)。

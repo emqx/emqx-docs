@@ -15,9 +15,10 @@ $SYS/brokers/emqx@127.0.0.1/uptime
 ```bash
 broker.sys_interval = 1m
 ```
-
+{% emqxce %}
 ::: danger
 By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to [build-in ACL](./acl-file.md) to modify the ACL rules for publish and subscription.
+{% endemqxce %}
 
 Most of the data of the $SYS topic in EMQ X Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through  [HTTP API - Statistics Metrics](./http-api.md#endpoint-metrics).
 

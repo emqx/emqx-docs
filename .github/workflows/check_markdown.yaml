@@ -22,4 +22,13 @@ jobs:
       uses: actions/checkout@main
   
     - name: Check directory config
-      run: python3 .github/workflows/directory_check.py $(pwd)
+      run: python3 .github/workflows/directory_check.py directory.json $(pwd)
+
+  Enterprise_Directory_Checker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@main
+  
+    - name: Check enterprise directory config
+      run: python3 .github/workflows/directory_check.py directory_ee.json $(pwd)
