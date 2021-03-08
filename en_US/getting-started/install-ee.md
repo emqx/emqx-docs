@@ -327,6 +327,11 @@ sudo ./install_emqx.sh emqx-ee
     + DEB 包:
 
       ```
+      # for ubuntu 
+      $ sudo apt install -i ./emqx-ee-ubuntu18.04-v4.0.0_amd64.deb
+      
+      # for debian
+      # first ensure libodbc is installed, then
       $ sudo dpkg -i emqx-ee-ubuntu18.04-v4.0.0_amd64.deb
       ```
 

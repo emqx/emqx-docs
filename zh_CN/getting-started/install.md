@@ -333,6 +333,11 @@ curl https://repos.emqx.io/install_emqx.sh | bash
     + DEB 包:
 
       ```
+      # for ubuntu
+      $ sudo apt-install -i ./emqx-ubuntu18.04-v4.0.0_amd64.deb
+
+      # for debian
+      # 首先确保已安装 libodbc 
       $ sudo dpkg -i emqx-ubuntu18.04-v4.0.0_amd64.deb
       ```
 

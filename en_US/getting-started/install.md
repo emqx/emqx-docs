@@ -316,15 +316,20 @@ curl https://repos.emqx.io/install_emqx.sh | bash
   
 2. Install EMQ X Broker:
 
-    + RPM 包:
+    + RPM package:
 
     	```shell
     	$ sudo rpm -ivh emqx-cenots7-v4.0.0.x86_64.rpm
     	```
     	
-    + DEB 包:
+    + DEB package:
 
       ```bash
+      # for ubuntu
+      $ sudo apt install ./emqx-ubuntu18.04-v4.0.0_amd64.deb
+      
+      # for debian
+      # first ensure libodbc is installed, then
       $ sudo dpkg -i emqx-ubuntu18.04-v4.0.0_amd64.deb
       ```
 
