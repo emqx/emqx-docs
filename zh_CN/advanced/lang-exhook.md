@@ -15,95 +15,120 @@ ref:
 
 # 多语言 - 钩子扩展
 
-多语言的 **钩子扩展** 由 [emqx-extension-hook](https://github.com/emqx/emqx-extension-hook) 插件进行支持。该插件在 4.1.0 中首次引入。它允许用户使用其它编程语言处理 EMQ X 的 [钩子(Hooks)](hooks.md)。例如：
+多语言的 **钩子扩展** 由 **emqx-exhook** 插件进行支持。它允许用户使用其它编程（例如：Python, Java 等）直接向 EMQ X 挂载钩子，以接收并处理 EMQ X 系统的事件，达到扩展和定制 EMQ X 的目的。例如，用户可以使用其他编程语言来实现：
 
-- 校验某客户端的登录权限。
-- 校验某客户端 PUB/SUB 的操作权限。
-- 处理消息类事件，并消息桥接、转发或存储到其它的系统。
+- 客户端接入的认证授权
+- 发布/订阅的 ACL 鉴权
+- 消息的持久化，桥接
+- 发布/订阅，或者客户端上下线事件的通知处理
 
-注：消息类钩子仅在企业版中支持。
-注：4.1 到 4.2 版本中仅实现 Python, Java 的支持。
 
 ## 设计
-EMQ X 发行包中不包含其它语言运行时环境的支持。它通过 EMQ X 提供的该语言的 驱动(Drivers) 进行通信和过程调用(Remote Process Call).
 
-`emqx-extension-hook` 通过过程调用将 EMQ X 中的钩子事件，直接触发到某语言某个具体的函数，并得到其函数的返回值，作为事件的处理结果。
+**多语言扩展钩子**  功能由 **emqx-exhook** 插件提供。它使用 [gRPC](https://www.grpc.io) 作为 RPC 的通信框架。
 
-如下图所示：
-
-```
- EMQ X                                      Third-party Runtimes
-+========================+                 +====================+ 
-|    Extension           |                 |                    |
-|   +----------------+   |     Hooks       |  Python scripts /  |
-|   |    Drivers     | ------------------> |  Java Classes   /  |
-|   +----------------+   |     (pipe)      |  Others ...        |
-|                        |                 |                    |
-+========================+                 +====================+
+架构如下图：
 
 ```
-
-因此，它要求：
-
-- EMQ X 的宿主机，具备某语言的运行时环境，并已经配置到系统的环境变量中。
-- 必须将脚本（或编译后的代码）、资源文件等，放到 emqx-extension-hook 指示的路径。
-- 用户代码的实现，若包含三方依赖、库等，它应该包含在 emqx-extension-hook 对其的搜索路径中。
-
-### 驱动
-
-驱动(Drivers) 实现了 Erlang 和 其它语言（例如：Python, Java）间的过程调用和通信。它基于 [Erlang - Port](http://erlang.org/doc/tutorial/c_port.html) 进行实现。
-
-例如：Java 语言驱动的实现包括两部分的内容：
-- Erlang 侧的实现，它包含如何启动其他语言的运行时系统、和分发请求、处理结果等。
-- Java 侧的实现，它包含如何和 Erlang 虚拟机通信，如何分发函数调用等。
-
-```
- Erlang VM                       Third Runtimes (e.g: Java VM)
-+===========+=========+         +=========+================+
-| Extension | Driver  | <=====> |  Driver | User's Codes   |
-+===========+=========+         +=========+================+
+  EMQ X
++========================+                 +========+==========+
+|    ExHook              |                 |        |          |
+|   +----------------+   |      gRPC       | gRPC   |  User's  |
+|   |   gRPC Client  | ------------------> | Server |  Codes   |
+|   +----------------+   |    (HTTP/2)     |        |          |
+|                        |                 |        |          |
++========================+                 +========+==========+
 ```
 
-### SDK
-为了方便用户的开发，我们对每类的语言都提供了对应的 SDK 支持。
+它表明：EMQ X 作为一个 gRPC 客户端，将系统中的钩子事件发送到用户的 gRPC 服务端。
 
-对于用户开发自己的代码来说，SDK 并不是必须的，但它封装底层的比较晦涩的数据格式和方法，屏蔽底层细节。直接提供了更为优好的 API 和数据类型供用户使用。
+和 EMQ X 原生的钩子一致，它也支持链式的方式计算和返回：
 
-从依赖的层级关系来说：
+![chain_of_responsiblity](./assets/chain_of_responsiblity.png)
 
+
+## 接口设计
+
+作为事件的处理端，即 gRPC 的服务端。它需要用户自定义实现需要挂载的钩子列表，和每个钩子事件到达后如何去处理的回调函数。这些接口在 **多语言扩展钩子** 中被定义为一个名为 `HookProvider` 的 gRPC 服务，其需要实现的接口的列表包含：
+
+```protobuff
+syntax = "proto3";
+
+package emqx.exhook.v1;
+
+service HookProvider {
+
+  rpc OnProviderLoaded(ProviderLoadedRequest) returns (LoadedResponse) {};
+
+  rpc OnProviderUnloaded(ProviderUnloadedRequest) returns (EmptySuccess) {};
+
+  rpc OnClientConnect(ClientConnectRequest) returns (EmptySuccess) {};
+
+  rpc OnClientConnack(ClientConnackRequest) returns (EmptySuccess) {};
+
+  rpc OnClientConnected(ClientConnectedRequest) returns (EmptySuccess) {};
+
+  rpc OnClientDisconnected(ClientDisconnectedRequest) returns (EmptySuccess) {};
+
+  rpc OnClientAuthenticate(ClientAuthenticateRequest) returns (ValuedResponse) {};
+
+  rpc OnClientCheckAcl(ClientCheckAclRequest) returns (ValuedResponse) {};
+
+  rpc OnClientSubscribe(ClientSubscribeRequest) returns (EmptySuccess) {};
+
+  rpc OnClientUnsubscribe(ClientUnsubscribeRequest) returns (EmptySuccess) {};
+
+  rpc OnSessionCreated(SessionCreatedRequest) returns (EmptySuccess) {};
+
+  rpc OnSessionSubscribed(SessionSubscribedRequest) returns (EmptySuccess) {};
+
+  rpc OnSessionUnsubscribed(SessionUnsubscribedRequest) returns (EmptySuccess) {};
+
+  rpc OnSessionResumed(SessionResumedRequest) returns (EmptySuccess) {};
+
+  rpc OnSessionDiscarded(SessionDiscardedRequest) returns (EmptySuccess) {};
+
+  rpc OnSessionTakeovered(SessionTakeoveredRequest) returns (EmptySuccess) {};
+
+  rpc OnSessionTerminated(SessionTerminatedRequest) returns (EmptySuccess) {};
+
+  rpc OnMessagePublish(MessagePublishRequest) returns (ValuedResponse) {};
+
+  rpc OnMessageDelivered(MessageDeliveredRequest) returns (EmptySuccess) {};
+
+  rpc OnMessageDropped(MessageDroppedRequest) returns (EmptySuccess) {};
+
+  rpc OnMessageAcked(MessageAckedRequest) returns (EmptySuccess) {};
+}
 ```
-+---------------------+
-|     User's Codes    |
-+---------------------+
-|         SDK         |  <====  The SDK Located
-+---------------------+
-|       Raw APIs      |
-+---------------------+
-|        Driver       |
-+=====================+
-           ||
-+=====================+
-|        Erlang       |
-+---------------------+
-```
 
-对于 EMQ X 来说，`Raw APIs` 及往下的部分都属于 `emqx-extension-hook` 插件所包含的内容，并已包含在 EMQ X 的发行包中；往上的 `SDK` 和 `Users's Codes` 都属于用户使用的编程语言，需要额外部署到 EMQ X 的代码和资源。
+其中 HookProvider 部分：
 
-`Raw APIs` 可参考 [emqx-extension-hook - examples](https://github.com/emqx/emqx-extension-hook/tree/master/test/scripts)
+- `OnProviderLoaded`：定义 HookProvider 如何被加载，返回需要挂载的钩子列表。仅在该列表中的钩子会被回调到 HookProivder 服务。
+- `OnProviderUnloaded`：定义 HookProvider 如何被卸载，仅用作通知。
 
-目前对于 `emqx-extension-hook` 提供的 SDK 有：
+钩子事件部分：
 
-- Python: https://github.com/emqx/emqx-extension-python-sdk
-- Java: https://github.com/emqx/emqx-extension-java-sdk
+- `OnClient*`，`OnSession*`，`OnMessage*` 为前缀的方法与 [钩子](hooks.md) 的当中的方法一一对应。它们有着相同的调用时机和相似的参数列表。
+- 仅 `OnClientAuthenticate`，`OnClientCheckAcl`，`OnMessagePublish` 允许携带返回值到 EMQ X 系统，其它回调则不支持。
 
-注：SDK 版本与 EMQ X 的第二位版本号进行兼容。例如，在 EMQ X v4.1.4 中，应该使用 v4.1.x 的 SDK
+其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exhook/priv/protos/exhook.proto)
 
-## 快速上手
 
-### Python
+## 开发指南
 
-参考：https://www.emqx.cn/blog/develop-emqx-plugin-using-python
+用户在使用多语言扩展钩子的功能时，需要实现 `HookProvider` 的 gRPC 服务来接收 EMQ X 的回调事件。
 
-### Java
+其步骤如下：
 
-参考：https://www.emqx.cn/blog/develop-emqx-plugin-using-java
+1. 拷贝出当前版本的 `lib/emqx_exhook-<x.y.z>/priv/protos/exhook.proto` 文件。
+2. 使用对应编程语言的 gRPC 框架，生成 `exhook.proto` 的 gRPC 服务端的代码。
+3. 按需实现 exhook.proto 中定义的接口。
+
+开发完成后，需将该服务部署到与 EMQ X 能够通信的服务器上，并保证端口的开放。
+
+
+
+其中各个语言的 gRPC 框架可参考：[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
+
+我们也提供了一些常见编程语言的示例程序：[emqx-extension-examples](https://github.com/emqx/emqx-extension-examples)
