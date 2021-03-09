@@ -18,6 +18,9 @@ ref:
 
 **标签:** [*MySQL*](tags.md#mysql)  [*认证*](tags.md#认证)
 
+::: tip
+4.3 已兼容 caching_sha2_password，该问题仅在 4.3 以下的版本中出现。
+:::
 
 不同于以往版本，MySQL 8.0 对账号密码配置默认使用`caching_sha2_password`插件，需要将密码插件改成`mysql_native_password`
 
