@@ -1,4 +1,4 @@
----
+
 # 编写日期
 date: 2020-09-12 09:15:26
 # 作者 Github 名称
@@ -25,7 +25,7 @@ ref:
 
 ## 设计
 
-**多语言扩展钩子**  功能由 **emqx-exhook** 插件提供。它使用 [gRPC](https://www.grpc.io) 作为 RPC 的通信框架。
+**emqx-exhook** 使用 [gRPC](https://www.grpc.io) 作为 RPC 的通信框架。
 
 架构如下图：
 
@@ -49,7 +49,7 @@ ref:
 
 ## 接口设计
 
-作为事件的处理端，即 gRPC 的服务端。它需要用户自定义实现需要挂载的钩子列表，和每个钩子事件到达后如何去处理的回调函数。这些接口在 **多语言扩展钩子** 中被定义为一个名为 `HookProvider` 的 gRPC 服务，其需要实现的接口的列表包含：
+作为事件的处理端，即 gRPC 的服务端。它需要用户自定义实现需要挂载的钩子列表，和每个钩子事件到达后如何去处理的回调函数。这些接口被定义为一个名为 `HookProvider` 的 gRPC 服务，其需要实现的接口的列表包含：
 
 ```protobuff
 syntax = "proto3";
@@ -105,7 +105,7 @@ service HookProvider {
 其中 HookProvider 部分：
 
 - `OnProviderLoaded`：定义 HookProvider 如何被加载，返回需要挂载的钩子列表。仅在该列表中的钩子会被回调到 HookProivder 服务。
-- `OnProviderUnloaded`：定义 HookProvider 如何被卸载，仅用作通知。
+- `OnProviderUnloaded`：通知用户该 HookProvier 已经从 emqx 中卸载。
 
 钩子事件部分：
 
@@ -121,12 +121,19 @@ service HookProvider {
 
 其步骤如下：
 
-1. 拷贝出当前版本的 `lib/emqx_exhook-<x.y.z>/priv/protos/exhook.proto` 文件。
+1. 拷贝 `lib/emqx_exhook-<x.y.z>/priv/protos/exhook.proto` 文件到你的项目中。
 2. 使用对应编程语言的 gRPC 框架，生成 `exhook.proto` 的 gRPC 服务端的代码。
 3. 按需实现 exhook.proto 中定义的接口。
 
 开发完成后，需将该服务部署到与 EMQ X 能够通信的服务器上，并保证端口的开放。
 
+然后修改 `etc/plugins/emqx_exhook.conf` 中的服务器配置，例如：
+
+```
+exhook.server.default.url = http://127.0.0.1:9000
+```
+
+启动 `emqx_exhook` 插件，观察输出。
 
 
 其中各个语言的 gRPC 框架可参考：[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
