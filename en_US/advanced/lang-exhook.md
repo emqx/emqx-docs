@@ -106,8 +106,6 @@ service HookProvider {
 }
 ```
 
-##
-
 The HookProvider part:
 
 - `OnProviderLoaded`: Defines how the HookProvider will be loaded. This method returns the list of hooks that need to be mounted. Only the hooks in this list will be called back to the user's HookProvider service.
