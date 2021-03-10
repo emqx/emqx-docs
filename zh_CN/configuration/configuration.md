@@ -2859,15 +2859,27 @@ WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws
 
 <br />
 
-### listener.ws.external.verify_protocol_header
+### listener.ws.external.fail_if_no_subprotocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
 
 #### 说明
 
-是否验证 WebSocket 携带的 HTTP 头部是否正确。**微信小程序需关闭该验证**。
+如果设置为 true，则服务器将在客户端没有携带 Sec-WebSocket-Protocol 字段时返回错误。**微信小程序需关闭该验证**。
+
+<br />
+
+### listener.ws.external.supported_protocols
+
+| Type    | Default                               |
+| ------- | ------------------------------------- |
+| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+
+#### 说明
+
+指定支持的子协议，子协议之间以逗号分隔。
 
 <br />
 
@@ -3275,15 +3287,27 @@ listener.wss.external.access.2 = allow all
 
 <br />
 
-### listener.wss.external.verify_protocol_header
+### listener.wss.external.fail_if_no_subprotocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
 
 #### 说明
 
-是否验证 WebSocket 携带的 HTTP 头部是否正确。**微信小程序需关闭该验证**。
+如果设置为 true，则服务器将在客户端没有携带 Sec-WebSocket-Protocol 字段时返回错误。**微信小程序需关闭该验证**。
+
+<br />
+
+### listener.wss.external.supported_protocols
+
+| Type    | Default                               |
+| ------- | ------------------------------------- |
+| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+
+#### 说明
+
+指定支持的子协议，子协议之间以逗号分隔。
 
 <br />
 
