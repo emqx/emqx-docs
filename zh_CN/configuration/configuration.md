@@ -2457,6 +2457,30 @@ listener.ssl.external.access.2 = allow all
 
 <br />
 
+### listener.ssl.external.depth
+
+| Type     | Default |
+| -------- | ------- |
+| number   | `10`    |
+
+#### 说明
+
+证书链中非自签发的中间证书的最大数量。如果该值为 0 则表示，对端证书必须是根 CA 直接授信的。
+
+<br />
+
+### listener.ssl.external.key_password
+
+| Type     | Default |
+| -------- | ------- |
+| string   | -       |
+
+#### 说明
+
+证书密钥文件的密码。如果你的证书密钥设置了密码，则需要配置该选项。
+
+<br />
+
 ### listener.ssl.external.keyfile
 
 | Type   | Default             |
@@ -3374,6 +3398,29 @@ listener.wss.external.access.2 = allow all
 指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
 该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
 
+<br />
+
+### listener.wss.external.depth
+
+| Type     | Default |
+| -------- | ------- |
+| number   | `10`    |
+
+#### 说明
+
+证书链中非自签发的中间证书的最大数量。如果该值为 0 则表示，对端证书必须是根 CA 直接授信的。
+
+<br />
+
+### listener.wss.external.key_password
+
+| Type     | Default |
+| -------- | ------- |
+| string   | -       |
+
+#### 说明
+
+证书密钥文件的密码。如果你的证书密钥设置了密码，则需要配置该选项。
 
 <br />
 
