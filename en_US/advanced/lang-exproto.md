@@ -37,7 +37,7 @@ The interfaces provided by emqx-exproto:
 1. **Connection Layer:** This layer mainly **maintains the life cycle of the socket, and the sending/receiving of data**. Included:
     - Listens on a port. When a new TCP/UDP connection arrives, a connection process is started to maintain the state of the connection.
     - Call the `OnSocketCreated` callback. Used to notify the user's server that **a new connection has been established**.
-    - Call `OnScoektClosed` callback. Used to notify the user's server that a connection **has been closed**.
+    - Call `OnSocketClosed` callback. Used to notify the user's server that a connection **has been closed**.
     - Call `OnReceivedBytes` callback. Used to notify the user's server that **the connection received new packets**.
     - Provides the `Send` interface. Called by user's server to **send packets**.
     - Provides the `Close` interface. Called by user's server. **For actively closing the connection**.
