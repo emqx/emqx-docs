@@ -15,6 +15,12 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.8
+
+*Release Date: 2020-03-10*
+
+EMQ X 4.2.8 is released now, it mainly fixes some errors.
+
 ## Version 4.3-beta.1
 
 *Release Date: 2020-03-03*
