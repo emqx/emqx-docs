@@ -4,6 +4,10 @@
 **Tags:** [*MySQL*](tags.md#mysql)  [*Auth*](tags.md#auth)
 
 
+::: tip
+4.3 is now compatible with caching_sha2_password, this issue only occurs in versions below 4.3
+:::
+
 Different from previous versions, Mysql8.0 uses the `caching_sha2_password` plugin by default for account password configuration. The password plugin is required to change to `mysql_native_password`.
 
 - Modify the `mysql.user` table
