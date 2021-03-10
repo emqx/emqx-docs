@@ -19,7 +19,7 @@ ref: undefined
 
 *Release Date: 2020-03-10*
 
-EMQ X 4.2.8 is released now, it mainly fixes some errors.
+EMQ X 4.2.8 is released now, it fixes a bug in MQTT message parser.
 
 ## Version 4.3-beta.1
 
