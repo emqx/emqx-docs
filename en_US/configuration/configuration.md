@@ -2437,6 +2437,30 @@ Specify the timeout period for the SSL handshake process.
 
 
 
+### listener.ssl.external.depth
+
+| Type     | Default |
+| -------- | ------- |
+| number   | `10`    |
+
+#### Description
+
+Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+
+
+
+### listener.ssl.external.key_password
+
+| Type     | Default |
+| -------- | ------- |
+| string   | -       |
+
+#### Description
+
+String containing the user's password. Only used if the private keyfile is password-protected.
+
+
+
 ### listener.ssl.external.keyfile
 
 | Type   | Default             |
@@ -3382,6 +3406,30 @@ File path to the CA certificates.
 It should include all intermediate CA certificates and root CA certificate of the
 server certificate. It should also include trusted CAs to validate client certificates
 when `verify` configuration is set to `verify_peer`.
+
+
+
+### listener.wss.external.depth
+
+| Type     | Default |
+| -------- | ------- |
+| number   | `10`    |
+
+#### Description
+
+Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.
+
+
+
+### listener.wss.external.key_password
+
+| Type     | Default |
+| -------- | ------- |
+| string   | -       |
+
+#### Description
+
+String containing the user's password. Only used if the private keyfile is password-protected.
 
 
 
