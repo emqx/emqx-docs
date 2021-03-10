@@ -55,7 +55,7 @@ As the event handler, i.e. user implemented server side of gRPC. It can define t
 
 These interfaces are defined as a gRPC service called `HookProvider`:
 
-```protobuff
+```protobuf
 syntax = "proto3";
 
 package emqx.exhook.v1;
