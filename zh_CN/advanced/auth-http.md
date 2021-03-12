@@ -36,32 +36,6 @@ EMQ X 在设备连接事件中使用当前客户端相关信息作为参数，�
  - 认证成功：API 返回 200 状态码
  - 忽略认证：API 返回 200 状态码且消息体 ignore
 
-## HTTP 请求信息
-
-HTTP API 基础请求信息，配置证书、请求头与重试规则。
-
-```bash
-# etc/plugins/emqx_auth_http.conf
-
-## 启用 HTTPS 所需证书信息
-## auth.http.ssl.cacertfile = etc/certs/ca.pem
-
-## auth.http.ssl.certfile = etc/certs/client-cert.pem
-
-## auth.http.ssl.keyfile = etc/certs/client-key.pem
-
-## 请求头设置
-## auth.http.header.Accept = */*
-
-## 重试设置
-auth.http.request.retry_times = 3
-
-auth.http.request.retry_interval = 1s
-
-auth.http.request.retry_backoff = 2.0
-```
-
-
 ## 加盐规则与哈希方法
 
 HTTP 在请求中传递明文密码，加盐规则与哈希方法取决于 HTTP 应用。
@@ -75,17 +49,21 @@ HTTP 在请求中传递明文密码，加盐规则与哈希方法取决于 HTTP 
 # etc/plugins/emqx_auth_http.conf
 
 ## 请求地址
-auth.http.auth_req = http://127.0.0.1:8991/mqtt/auth
+auth.http.auth_req = http://127.0.0.1:80/mqtt/auth
 
 ## HTTP 请求方法
 ## Value: post | get | put
 auth.http.auth_req.method = post
 
+## 认证请求的 HTTP 请求头部，默认情况下配置 Content-Type 头部。
+## Content-Type 头部目前支持以下值：application/x-www-form-urlencoded，application/json
+auth.http.auth_req.headers.content-type = application/x-www-form-urlencoded
+
 ## 请求参数
 auth.http.auth_req.params = clientid=%c,username=%u,password=%P
 ```
 
-HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式传递；POST、PUT 请求则将请求参数以普通表单形式提交（content-type 为 x-www-form-urlencoded）。
+HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式传递；POST、PUT 请求则将请求参数以普通表单形式或者以 Json 格式放在 Body 中提交（由 content-type 的值决定）。
 
 你可以在认证请求中使用以下占位符，请求时 EMQ X 将自动填充为客户端信息：
 
