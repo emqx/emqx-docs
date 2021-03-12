@@ -63,7 +63,7 @@ auth.http.auth_req.headers.content-type = application/x-www-form-urlencoded
 auth.http.auth_req.params = clientid=%c,username=%u,password=%P
 ```
 
-HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式传递；POST、PUT 请求则将请求参数以普通表单形式或者以 Json 格式放在 Body 中提交（由 content-type 的值决定）。
+HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式传递；POST、PUT 请求则将请求参数以普通表单形式或者以 Json 形式提交（由 content-type 的值决定）。
 
 你可以在认证请求中使用以下占位符，请求时 EMQ X 将自动填充为客户端信息：
 
