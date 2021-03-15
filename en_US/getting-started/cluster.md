@@ -117,9 +117,13 @@ node.dist_listen_max = 7369
 
 **ekka mode（Default mode after version 4.0）：**
 
-If there is a firewall between the cluster nodes, only the TCP 4370 port needs to be opened by default.
+If there is a firewall between the cluster nodes, then we don't need to care
+about the settings about `node.dist_listen_min` and `node.dist_listen_max`, we
+need to open the TCP port 4370 and 5370 instead.
 
-However, if the node name specified by the node.name configuration has a numeric suffix (Offset), you need to open the 4370 + Offset port.
+However, if the node name specified by the `node.name` configuration has a
+numeric suffix (Offset), you need to open the TCP port 4370 + Offset and
+5370 + Offset.
 
 For example:
 
@@ -127,4 +131,4 @@ For example:
 node.name = emqx-1@192.168.0.12
 ```
 
-You need to open port 4371.
+Then you need to open TCP port 4371 and 5371.
