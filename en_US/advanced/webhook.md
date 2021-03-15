@@ -20,17 +20,7 @@ With the help of Webhooks, many services such as device going online, online and
 
 ## Configuration item
 
-The webhook configuration file is located in: `etc/plugins/emqx_web_hook.conf`：
-
-| Configuration item | Type | Optional value | Default value | Description     |
-| ------------------ | ------ | ------ | ------ | ------------------ |
-| api.url            | string | -      | http://127.0.0.1:8080 | Address of the destination server to which the event needs to be forwarded |
-| encode_payload     | enum   | `base64`, `base62` | undefined | Encode the Payload field in the message event |
-
-::: tip
-When the message content is invisible characters (such as binary data), encode_payload is very useful for transmission in the HTTP protocol.
-:::
-
+The webhook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, the detailed description of configuration items can be found in [Configuration Item](../configuration/configuration.md).
 
 ## Trigger rule
 
@@ -88,10 +78,10 @@ In this way, Webhook will only forward messages matching the topics of  `a/b/c` 
 
 ## Webhook event parameters
 
-When the event is triggered, Webhook will group each event into an HTTP request and sent it to the web server configured by api.url according to the configuration. The request format is:
+When the event is triggered, Webhook will group each event into an HTTP request and sent it to the web server configured by url according to the configuration. The request format is:
 
 ```bash
-URL: <api.url>      # From the api.url field in the configuration
+URL: <url>      # From the url field in the configuration
 Method: POST        # Fixed as POST method
 
 Body: <JSON>        # Body is a JSON format string
