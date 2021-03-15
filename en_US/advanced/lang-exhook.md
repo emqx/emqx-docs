@@ -20,8 +20,8 @@ The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows use
 In this way, other programming languages can handle emqx events for the purpose of customizing and extending emqx. For example, users can use other programming languages to implement:
 
 - Authorization for client access
-- ACL authentication for publish/subscribe
-- Persistence for messages
+- ACL authentication for publishing/subscribing
+- Persistence and bridging for messages
 - Process client connected/disconnected events
 
 
@@ -128,7 +128,7 @@ The main development steps are as following:
 2. Generate the code for the gRPC server side of `exhook.proto` using the gRPC framework for the corresponding programming language.
 3. Implement the interfaces defined in exhook.proto on demand
 
-Once the development is complete, the service needs to be deployed to a server that can communicate with EMQ X.
+Once the development is complete, the service needs to be deployed to a server that can communicate with EMQ X and ensure that the ports are open.
 
 Then modify the server configuration in `etc/plugins/emqx_exhook.conf`, for example:
 

@@ -23,7 +23,7 @@ This feature gives EMQ X the power of scalability to handle any private protocol
 ## Features
 
 - Extremely scalable. Supports all major programming languages using gRPC as the RPC communication framework
-- Fully asynchronous IO. the connection layer is implemented as fully asynchronous non-blocking I/O
+- Fully asynchronous IO. The connection layer is implemented as fully asynchronous non-blocking I/O
 - Transparent connection layer. Full support for TCP/TLS UDP/DTLS type connection management, and provides a unified API for the upper layers
 - Connection management capabilities. For example, maximum number of connections, connection and throughput rate limits, IP blacklisting, etc.
 
@@ -49,7 +49,7 @@ The interfaces provided by emqx-exproto:
     - Provides the `Subscribe` interface. Called by user's server to subscribe to a topic to receive certain downlink messages from the EMQ X.
     - Provides the `Unsubscribe` interface. Called by user's server to unsubscribe from a topic.
     - Calls the `OnTimerTimeout` callback. Used to handle timer timeout events
-    - Call the `OnReceivedMessages` callback. Used to receive downlink messages.
+    - Call the `OnReceivedMessages` callback. Used to receive downlink messages (After a successful subscription to a topic, this method will be called back if there are messages on the topic)
 
 
 ## APIs
@@ -121,7 +121,7 @@ The main development steps are as following:
 2. Generate the code for the gRPC server and client side of `exproto.proto` using the gRPC framework for the corresponding programming language.
 3. Implement the interfaces defined in exhook.proto on demand
 
-Once the development is complete, the service needs to be deployed to a server that can communicate with EMQ X.
+Once the development is complete, the service needs to be deployed to a server that can communicate with EMQ X and ensure that the ports are open.
 
 Then modify the server configuration in `etc/plugins/emqx_exproto.conf`, for example:
 
