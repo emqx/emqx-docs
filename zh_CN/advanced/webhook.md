@@ -34,16 +34,7 @@ WebHook 对于事件的处理是单向的，**它仅支持将 EMQ X 中的事件
 
 ## 配置项
 
-Webhook 的配置文件位于 `etc/plugins/emqx_web_hook.conf`：
-
-|  配置项            | 类型   | 可取值 | 默认值 | 说明               |
-| ------------------ | ------ | ------ | ------ | ------------------ |
-| api.url            | string | -      | http://127.0.0.1:8080 | 事件需要转发的目的服务器地址 |
-| encode_payload     | enum   | `base64`, `base62` | undefined | 对**消息类事件中的 Payload 字段**进行编码，注释或其他则表示不编码 |
-
-::: tip
-当消息内容是不可见字符（如二进制数据）时，为了能够在 HTTP 协议中传输，使用 encode_payload 是十分有用的。
-:::
+Webhook 的配置文件位于 `etc/plugins/emqx_web_hook.conf`，配置项的详细说明可以查看 [配置项](../configuration/configuration.md)。
 
 
 ## 触发规则
@@ -102,10 +93,10 @@ web.hook.rule.message.publish.2 = {"action": "on_message_publish", "topic": "foo
 
 ## Webhook 事件参数
 
-事件触发时 Webhook 会按照配置将每个事件组成一个 HTTP 请求发送到 `api.url` 所配置的 Web 服务器上。其请求格式为：
+事件触发时 Webhook 会按照配置将每个事件组成一个 HTTP 请求发送到 `url` 所配置的 Web 服务器上。其请求格式为：
 
 ```bash
-URL: <api.url>      # 来自于配置中的 `api.url` 字段
+URL: <url>      # 来自于配置中的 `url` 字段
 Method: POST        # 固定为 POST 方法
 
 Body: <JSON>        # Body 为 JSON 格式字符串
