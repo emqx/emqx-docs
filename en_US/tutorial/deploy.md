@@ -62,19 +62,17 @@ Qingcloud(EMQ X partner) is recommended for domestic public cloud deployments, A
 | 8081  | Management API     |
 | 18083 | Dashboard          |
 
-Firewall should make the relevant ports accessible for public according to the MQTT access method. 
-
-
+Firewall should make the relevant ports accessible for public according to the MQTT access method.
 
 TCP ports used by EMQ X node cluster:
 
-| Port | Description         |
-| ---- | ------------------- |
-| 4369 | Node discovery port |
-| 5369 | Cluster PRC         |
-| 6369 | Cluster channel     |
+| Port | Description                     |
+|------|---------------------------------|
+| 4369 | Node discovery port (EPMD Mode) |
+| 4370 | Node discovery port             |
+| 5370 | Cluster PRC                     |
 
-If deployed between nodes, firewalls should be configured that the above ports are inter-accessible between the nodes. 
+If deployed between nodes, firewalls should be configured that the above ports are inter-accessible between the nodes.
 
 
 

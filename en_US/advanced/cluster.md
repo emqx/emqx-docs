@@ -309,12 +309,35 @@ cluster.autoclean = 5m
 ```
 
 ## Firewall settings
-If there is a firewall between the cluster nodes, the firewall needs to open port 4369 and a TCP port segment. 4369 is used by the epmd port mapping service. The TCP port segment is used to establish connections and communications between nodes.
+If the environment variable WITH_EPMD=1 is set in advance, the epmd (listening port 4369) will be enabled for node discovery when emqx is started, which is called `epmd mode`.
+If the environment variable WITH_EPMD is not set, epmd is not enabled when emqx is started, and emqx ekka is used for node discovery, which is also the default method of node discovery  after version 4.0. This is called `ekka mode`.
 
-After the firewall is set, you need to configure the same port segment in  `emqx/etc/emqx.conf`:
+**epmd mode：**
+
+If there is a firewall between cluster nodes, the firewall needs to open TCP port of 4369 and a TCP port segment. 4369 is used by the epmd port for mapping service. The TCP port segment is used to establish connection and communication between nodes.
+
+After setting up the firewall, you need to configure the same port segment in `emqx/etc/emqx.conf` :
 
 ```bash
 ## Distributed node port range
 node.dist_listen_min = 6369
 node.dist_listen_max = 7369
 ```
+
+**ekka mode（Default mode after version 4.0）：**
+
+If there is a firewall between the cluster nodes, then we don't need to care
+about the settings about `node.dist_listen_min` and `node.dist_listen_max`, we
+need to open the TCP port 4370 and 5370 instead.
+
+However, if the node name specified by the `node.name` configuration has a
+numeric suffix (Offset), you need to open the TCP port 4370 + Offset and
+5370 + Offset.
+
+For example:
+
+```
+node.name = emqx-1@192.168.0.12
+```
+
+Then you need to open TCP port 4371 and 5371.
