@@ -31,13 +31,13 @@ emqx v4.0.0 is running
 
 mgmt 命令查询应用程序。
 
-| 命令                             | 描述                         |
-| -------------------------------- | ---------------------------- |
-| `mgmt list                       ` | 列出应用程序列表             |
-| `mgmt insert <AppId> <Name>   `| 添加允许访问 HTTP API 的应用程序     |
-| `mgmt update <AppId> <status>` | 更新允许访问 HTTP API 的应用程序     |
-| `mgmt lookup <AppId>         ` | 获取允许访问 HTTP API 的应用程序详情 |
-| `mgmt delete <AppId>           ` | 删除允许访问 HTTP API 的应用程序     |
+| 命令                               | 描述                                 |
+| ---------------------------------- | ------------------------------------ |
+| `mgmt list                       ` | 列出应用程序列表                     |
+| `mgmt insert <AppId> <Name>   `    | 添加允许访问 HTTP API 的应用程序     |
+| `mgmt update <AppId> <status>`     | 更新允许访问 HTTP API 的应用程序     |
+| `mgmt lookup <AppId>         `     | 获取允许访问 HTTP API 的应用程序详情 |
+| `mgmt delete <AppId>           `   | 删除允许访问 HTTP API 的应用程序     |
 
 ### mgmt list
 
@@ -93,11 +93,11 @@ ok
 
 broker 命令查询服务器基本信息，启动时间，统计数据与性能数据。
 
-| 命令           | 描述                                                         |
-| -------------- | ------------------------------------------------------------ |
-| `broker` | 查询 EMQ X 描述、版本、启动时间                    |
-| `broker stats` | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、订阅 (Subscription)、路由 (Route) 统计信息 |
-| `broker metrics` | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计             |
+| 命令             | 描述                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------- |
+| `broker`         | 查询 EMQ X 描述、版本、启动时间                                                                 |
+| `broker stats`   | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、订阅 (Subscription)、路由 (Route) 统计信息 |
+| `broker metrics` | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计                                                |
 
 查询 EMQ X 基本信息，包括版本、启动时间等:
 
@@ -235,12 +235,12 @@ session.terminated            : 0
 
 cluster 命令可以管理由多个 EMQ X 节点（进程）组成的集群:
 
-| 命令                         | 描述           |
-| ---------------------------- | -------------- |
-| `cluster join <Node>        `| 加入集群       |
-| `cluster leave              `| 离开集群       |
-| `cluster force-leave <Node> `| 从集群删除节点 |
-| `cluster status             `| 查询集群状态   |
+| 命令                          | 描述           |
+| ----------------------------- | -------------- |
+| `cluster join <Node>        ` | 加入集群       |
+| `cluster leave              ` | 离开集群       |
+| `cluster force-leave <Node> ` | 从集群删除节点 |
+| `cluster status             ` | 查询集群状态   |
 
 示例:
 
@@ -321,10 +321,10 @@ ok
 
 clients 命令查询连接的 MQTT 客户端。
 
-| 命令                      | 描述                     |
-| ------------------------- | ------------------------ |
-| `clients list           ` | 列出所有客户端连接       |
-| `clients show <ClientId>` | 查询指定 ClientId 的客户端 |
+| 命令                      | 描述                                               |
+| ------------------------- | -------------------------------------------------- |
+| `clients list           ` | 列出所有客户端连接                                 |
+| `clients show <ClientId>` | 查询指定 ClientId 的客户端                         |
 | `clients kick <ClientId>` | 踢除指定 ClientId 的客户端，连接与会话将一并终结。 |
 
 ### clients list
@@ -340,23 +340,23 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 
 返回 Client 对象的属性:
 
-| Name | 描述 |
-| ------------------------- | ------------------------- |
-| username                  | 用户名                       |
-| peername                  | 客户端 IP 与端口                |
-| clean\_start              | MQTT Clean Start          |
-| keepalive                 | MQTT KeepAlive            |
-| session\_expiry\_interval | 会话过期间隔                    |
-| subscriptions             | 当前订阅数量                    |
-| inflight                  | 当前正在下发的 QoS 1 和 QoS 2 的消息总数     |
-| awaiting\_rel             | 等待客户端发送 PUBREL 的 QoS2 消息数 |
-| delivered\_msgs           | EMQ X 向此客户端转发的消息数量 (包含重传)  |
-| enqueued\_msgs            | 消息队列当前长度                  |
-| dropped\_msgs             | 消息队列达到最大长度后丢弃的消息数量        |
-| connected                 | 是否在线                      |
-| created\_at               | 会话创建时间戳                |
-| connected\_at             | 客户端连接时间戳                |
-| disconnected_at | 客户端断开连接时间戳（仅当断开连接还保留会话时才会出现） |
+| Name                      | 描述                                                     |
+| ------------------------- | -------------------------------------------------------- |
+| username                  | 用户名                                                   |
+| peername                  | 客户端 IP 与端口                                         |
+| clean\_start              | MQTT Clean Start                                         |
+| keepalive                 | MQTT KeepAlive                                           |
+| session\_expiry\_interval | 会话过期间隔                                             |
+| subscriptions             | 当前订阅数量                                             |
+| inflight                  | 当前正在下发的 QoS 1 和 QoS 2 的消息总数                 |
+| awaiting\_rel             | 等待客户端发送 PUBREL 的 QoS2 消息数                     |
+| delivered\_msgs           | EMQ X 向此客户端转发的消息数量 (包含重传)                |
+| enqueued\_msgs            | 消息队列当前长度                                         |
+| dropped\_msgs             | 消息队列达到最大长度后丢弃的消息数量                     |
+| connected                 | 是否在线                                                 |
+| created\_at               | 会话创建时间戳                                           |
+| connected\_at             | 客户端连接时间戳                                         |
+| disconnected_at           | 客户端断开连接时间戳（仅当断开连接还保留会话时才会出现） |
 
 ### clients show <ClientId>
 
@@ -382,9 +382,9 @@ routes 命令用于查询路由信息。
 
 EMQ X 中路由是指主题与节点的映射关系，用于在多个节点之间路由消息。
 
-| 命令                  | 描述                |
-| --------------------- | ------------------- |
-| `routes list        ` | 列出所有路由        |
+| 命令                  | 描述                  |
+| --------------------- | --------------------- |
+| `routes list        ` | 列出所有路由          |
 | `routes show <Topic>` | 查询指定 Topic 的路由 |
 
 ### routes list
@@ -410,12 +410,12 @@ t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 
 subscriptions 命令查询消息服务器的订阅 (Subscription) 表。
 
-| 命令                                         | 描述                     |
-| -------------------------------------------- | ------------------------ |
-| `subscriptions list                        ` | 列出所有订阅             |
+| 命令                                         | 描述                           |
+| -------------------------------------------- | ------------------------------ |
+| `subscriptions list                        ` | 列出所有订阅                   |
 | `subscriptions show <ClientId>             ` | 查询指定 ClientId 客户端的订阅 |
-| `subscriptions add <ClientId> <Topic> <QoS>` | 手动添加静态订阅         |
-| `subscriptions del <ClientId> <Topic>      ` | 手动删除静态订阅         |
+| `subscriptions add <ClientId> <Topic> <QoS>` | 手动添加静态订阅               |
+| `subscriptions del <ClientId> <Topic>      ` | 手动删除静态订阅               |
 
 ### subscriptions list
 
@@ -458,12 +458,12 @@ ok
 
 plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩展认证、定制功能，插件配置位于 `etc/plugins/` 目录下。
 
-| 命令 | 描述 |
-| ------------------------- | -------------- |
-| `plugins list            `| 列出全部插件 (Plugin) |
-| `plugins load <Plugin>   `| 加载插件 (Plugin)   |
-| `plugins unload <Plugin> `| 卸载插件 (Plugin)   |
-| `plugins reload <Plugin> `| 重载插件 (Plugin)   |
+| 命令                       | 描述                  |
+| -------------------------- | --------------------- |
+| `plugins list            ` | 列出全部插件 (Plugin) |
+| `plugins load <Plugin>   ` | 加载插件 (Plugin)     |
+| `plugins unload <Plugin> ` | 卸载插件 (Plugin)     |
+| `plugins reload <Plugin> ` | 重载插件 (Plugin)     |
 
  当配置文件发生更改，如果需要配置立即生效，你可以执行 `emqx_ctl reload <Plugin\> 命令，即使插件在配置修改时并未处于运行状态，你也应当使用此命令而不是 `emqx_ctl load <Plugin\>，因为 `emqx_ctl load <Plugin\> 不会编译新的配置文件。
 
@@ -540,12 +540,12 @@ Plugin emqx_lua_hook reloaded successfully.
 
 modules 命令用于加载、卸载和查询内置模块。
 
-| 命令 | 描述 |
-| ------------------------- | ---------------------- |
-| `modules list            `| 列出全部内置模块 (Module) |
-| `modules load <Module>   `| 加载内置模块 (Module) |
-| `modules unload <Module> `| 卸载内置模块 (Module) |
-| `modules reload <Module> `| 重载内置模块 (Module) |
+| 命令                       | 描述                      |
+| -------------------------- | ------------------------- |
+| `modules list            ` | 列出全部内置模块 (Module) |
+| `modules load <Module>   ` | 加载内置模块 (Module)     |
+| `modules unload <Module> ` | 卸载内置模块 (Module)     |
+| `modules reload <Module> ` | 重载内置模块 (Module)     |
 
 ### modules list
 
@@ -592,15 +592,15 @@ Module emqx_mod_acl_internal reloaded successfully.
 
 vm 命令用于查询 Erlang 虚拟机负载、内存、进程、IO 信息。
 
-| 命令        | 描述                    |
-| ----------- | ----------------------- |
-| `vm        `| 等同于 vm all           |
-| `vm all    `| 查询 VM 全部信息        |
-| `vm load   `| 查询 VM 负载            |
-| `vm memory `| 查询 VM 内存            |
-| `vm process`| 查询 VM Erlang 进程数量 |
-| `vm io     `| 查询 VM io 最大文件句柄 |
-| `vm ports  `| 查询 VM 的端口          |
+| 命令         | 描述                    |
+| ------------ | ----------------------- |
+| `vm        ` | 等同于 vm all           |
+| `vm all    ` | 查询 VM 全部信息        |
+| `vm load   ` | 查询 VM 负载            |
+| `vm memory ` | 查询 VM 内存            |
+| `vm process` | 查询 VM Erlang 进程数量 |
+| `vm io     ` | 查询 VM io 最大文件句柄 |
+| `vm ports  ` | 查询 VM 的端口          |
 
 ### vm all
 
@@ -694,7 +694,7 @@ ports/limit           : 1048576
 
 log 命令用于设置日志等级。访问 [Documentation of logger](http://erlang.org/doc/apps/kernel/logger_chapter.html) 以获取详细信息
 
-|                     命令                     |                  描述                  |
+| 命令                                         | 描述                                   |
 | -------------------------------------------- | -------------------------------------- |
 | `log set-level <Level>`                      | 设置主日志等级和所有 Handlers 日志等级 |
 | `log primary-level`                          | 查看主日志等级                         |
@@ -775,7 +775,7 @@ error
 
 trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，详情请查看 [日志与追踪](../getting-started/log.md)。
 
-| 命令                                              | 描述                                       |
+| 命令                                             | 描述                                       |
 | ------------------------------------------------ | ------------------------------------------ |
 | `trace list                                    ` | 列出所有开启的追踪                         |
 | `trace start client <ClientId> <File> [<Level>]` | 开启 Client 追踪，存储指定等级的日志到文件 |
@@ -845,10 +845,12 @@ Trace (topic=topic2, level=error, destination="log/topic2_trace.log")
 
 listeners 命令用于查询开启的 TCP 服务监听器。
 
-| 命令                            | 描述                      |
-| ------------------------------- | ------------------------- |
-| `listeners `                    | 查询开启的服务监听器      |
-| `listeners stop <Identifier> `  | 停止一个监听器，`Identifier` 式为 `<Protocol>[:<Transport>]:<Name>`, 例如 `mqtt:tcp:internal`，`http:management` |
+| 命令                             | 描述                 |
+| -------------------------------- | -------------------- |
+| listeners                        | # List listeners     |
+| listeners stop    <Identifier>   | # Stop a listener    |
+| listeners stop    <Proto> <Port> | # Stop a listener    |
+| listeners restart <Identifier>   | # Restart a listener |
 
 ### listeners list
 
@@ -902,11 +904,11 @@ mqtt:wss:external
 
 listener 参数说明:
 
-| Name            | 描述                |
-| --------------- | ------------------- |
-| acceptors       | TCP Acceptor 池     |
-| max\_conns      | 最大允许连接数      |
-| current\_conns  | 当前连接数          |
+| Name            | 描述             |
+| --------------- | ---------------- |
+| acceptors       | TCP Acceptor 池  |
+| max\_conns      | 最大允许连接数   |
+| current\_conns  | 当前连接数       |
 | shutdown\_count | 连接关闭原因统计 |
 
 ### listeners stop
@@ -918,29 +920,38 @@ $ ./bin/emqx_ctl listeners stop mqtt:tcp:external
 Stop mqtt:tcp:external listener on 0.0.0.0:1883 successfully.
 ```
 
+### listeners restart
+重启监听器:
+```bash
+$ ./bin/emqx_ctl listeners restart http:dashboard
+Stop http:dashboard listener on 0.0.0.0:18083 successfully.
+Start http:dashboard listener on 0.0.0.0:18083 successfully.
+
+```
+
 ## recon 命令
 
 EMQ X 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
 
-| 命令                    | 描述                                                         |
-| ----------------------- | ------------------------------------------------------------ |
-| `recon memory            `| [recon\_alloc:memory/2](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
-| `recon allocated         `| [recon\_alloc:memory (allocated\_types, current/max)](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
-| `recon bin_leak         `| [recon:bin\_leak (100)](http://ferd.github.io/recon/recon.html#bin_leak-1) |
-| `recon node_stats       `| [recon:node\_stats_print(10, 1000)](http://ferd.github.io/recon/recon.html#node_stats_print-2) |
-| `recon remote_load Mod  `| [recon:remote\_load (Mod)](http://ferd.github.io/recon/recon.html#remote_load-1) |
-| `recon proc_count Attr N `| [recon:proc_count(Attr, N)](http://ferd.github.io/recon/recon.html#proc_count-2) |
+| 命令                       | 描述                                                                                                         |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `recon memory            ` | [recon\_alloc:memory/2](http://ferd.github.io/recon/recon_alloc.html#memory-2)                               |
+| `recon allocated         ` | [recon\_alloc:memory (allocated\_types, current/max)](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
+| `recon bin_leak         `  | [recon:bin\_leak (100)](http://ferd.github.io/recon/recon.html#bin_leak-1)                                   |
+| `recon node_stats       `  | [recon:node\_stats_print(10, 1000)](http://ferd.github.io/recon/recon.html#node_stats_print-2)               |
+| `recon remote_load Mod  `  | [recon:remote\_load (Mod)](http://ferd.github.io/recon/recon.html#remote_load-1)                             |
+| `recon proc_count Attr N ` | [recon:proc_count(Attr, N)](http://ferd.github.io/recon/recon.html#proc_count-2)                             |
 
 访问 [Documentation for recon](http://ferd.github.io/recon/) 以获取详细信息。
 
 ## retainer 命令
 
-| 命令                     | 描述                         |
-| ------------------------ | ---------------------------- |
-| `retainer info         ` | 显示保留消息的数量           |
-| `retainer topics       ` | 显示当前存储的保留消息的所有主题       |
-| `retainer clean        ` | 清除所有保留的消息           |
-| `retainer clean <Topic>` | 清除指定的主题下的保留的消息 |
+| 命令                     | 描述                             |
+| ------------------------ | -------------------------------- |
+| `retainer info         ` | 显示保留消息的数量               |
+| `retainer topics       ` | 显示当前存储的保留消息的所有主题 |
+| `retainer clean        ` | 清除所有保留的消息               |
+| `retainer clean <Topic>` | 清除指定的主题下的保留的消息     |
 
 ### retainer info
 
@@ -985,10 +996,10 @@ Cleaned 1 retained messages
 用于创建、删除管理员账号，重置管理员密码。
 
 | 命令                                       | 描述            |
-| ----------------------------------------- | --------------- |
-| `admins add <Username> <Password> <Tags> `| 创建 admin 账号 |
-| `admins passwd <Username> <Password>     `| 重置 admin 密码 |
-| `admins del <Username>                   `| 删除 admin 账号 |
+| ------------------------------------------ | --------------- |
+| `admins add <Username> <Password> <Tags> ` | 创建 admin 账号 |
+| `admins passwd <Username> <Password>     ` | 重置 admin 密码 |
+| `admins del <Username>                   ` | 删除 admin 账号 |
 
 ### admins add <Username> <Password> <Tags>
 
@@ -1021,8 +1032,8 @@ ok
 
 ### rules 命令
 
-| 命令                                          | 描述            |
-| --------------------------------------------- | --------------- |
+| 命令                                          | 描述           |
+| --------------------------------------------- | -------------- |
 | `rules list`                                  | List all rules |
 | `rules show <RuleId>`                         | Show a rule    |
 | `rules create <sql> <actions> [-d [<descr>]]` | Create a rule  |
@@ -1077,9 +1088,9 @@ ok
 ```
 ### rule-actions 命令
 
-| 命令                           | 描述            |
-| ------------------------------ | --------------- |
-| `rule-actions list`            | List actions |
+| 命令                           | 描述               |
+| ------------------------------ | ------------------ |
+| `rule-actions list`            | List actions       |
 | `rule-actions show <ActionId>` | Show a rule action |
 
 
@@ -1109,12 +1120,12 @@ action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb]
 ```
 ### resources 命令
 
-| 命令                                                          | 描述            |
-| ------------------------------------------------------------ | --------------- |
-| `resources create <type> [-c [<config>]] [-d [<descr>]]`     | Create a resource |
-| `resources list [-t <ResourceType>]`                         | List resources    |
-| `resources show <ResourceId>`                                | Show a resource   |
-| `resources delete <ResourceId>`                              | Delete a resource |
+| 命令                                                     | 描述              |
+| -------------------------------------------------------- | ----------------- |
+| `resources create <type> [-c [<config>]] [-d [<descr>]]` | Create a resource |
+| `resources list [-t <ResourceType>]`                     | List resources    |
+| `resources show <ResourceId>`                            | Show a resource   |
+| `resources delete <ResourceId>`                          | Delete a resource |
 
 #### resources create
 
@@ -1160,8 +1171,8 @@ ok
 ```
 ### resource-types 命令
 
-| 命令                          | 描述            |
-| ---------------------------- | --------------- |
+| 命令                         | 描述                    |
+| ---------------------------- | ----------------------- |
 | resource-types list          | List all resource-types |
 | resource-types show `<Type>` | Show a resource-type    |
 
