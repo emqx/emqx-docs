@@ -2858,7 +2858,7 @@ Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat
 
 If set to true, the server will return an error when the client does not carry the Sec-WebSocket-Protocol field. **WeChat applet needs to disable this verification.**
 
-### listener.ws.external.supported_protocols
+### listener.ws.external.supported_subprotocols
 
 | Type    | Default                               |
 | ------- | ------------------------------------- |
@@ -3282,7 +3282,7 @@ listener.wss.external.access.2 = allow all
 
 If set to true, the server will return an error when the client does not carry the Sec-WebSocket-Protocol field. **WeChat applet needs to disable this verification.**
 
-### listener.wss.external.supported_protocols
+### listener.wss.external.supported_subprotocols
 
 | Type    | Default                               |
 | ------- | ------------------------------------- |
