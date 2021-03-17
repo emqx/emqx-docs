@@ -2872,6 +2872,27 @@ List of ACL rules of the listener. It is used to set the white/black list of the
 Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat applet needs to disable this verification.**
 
 
+### listener.ws.external.fail_if_no_subprotocol
+
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
+
+#### Description
+
+If set to true, the server will return an error when the client does not carry the Sec-WebSocket-Protocol field. **WeChat applet needs to disable this verification.**
+
+### listener.ws.external.supported_subprotocols
+
+| Type    | Default                               |
+| ------- | ------------------------------------- |
+| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+
+#### Description
+
+Specify the supported subprotocols, separated by commas.
+
+
 
 ### listener.ws.external.proxy_address_header
 
@@ -3275,15 +3296,25 @@ listener.wss.external.access.2 = allow all
 
 
 
-### listener.wss.external.verify_protocol_header
+### listener.wss.external.fail_if_no_subprotocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
 
 #### Description
 
-Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat applet needs to disable this verification.**
+If set to true, the server will return an error when the client does not carry the Sec-WebSocket-Protocol field. **WeChat applet needs to disable this verification.**
+
+### listener.wss.external.supported_subprotocols
+
+| Type    | Default                               |
+| ------- | ------------------------------------- |
+| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+
+#### Description
+
+Specify the supported subprotocols, separated by commas.
 
 
 
