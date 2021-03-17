@@ -31,13 +31,13 @@ emqx v4.0.0 is running
 
 The mgmt command can query the application.
 
-| Command                      | Description               |
-| -------------------------------- | ---------------------------- |
-| `mgmt list                       ` | List application |
-| `mgmt insert <AppId> <Name>   `| Add an application that can access to the HTTP API |
-| `mgmt update <AppId> <status>` | Update applications that can access to the HTTP API |
-| `mgmt lookup <AppId>         ` | Get application details that can access to the HTTP API |
-| `mgmt delete <AppId>           ` | Remove applications that can access to the HTTP API |
+| Command                            | Description                                             |
+| ---------------------------------- | ------------------------------------------------------- |
+| `mgmt list                       ` | List application                                        |
+| `mgmt insert <AppId> <Name>   `    | Add an application that can access to the HTTP API      |
+| `mgmt update <AppId> <status>`     | Update applications that can access to the HTTP API     |
+| `mgmt lookup <AppId>         `     | Get application details that can access to the HTTP API |
+| `mgmt delete <AppId>           `   | Remove applications that can access to the HTTP API     |
 
 ### mgmt list
 
@@ -93,11 +93,11 @@ ok
 
 The broker command queries basic server information, startup time, statistics data and performance data.
 
-| Command     | Description                                               |
-| -------------- | ------------------------------------------------------------ |
-| `broker` | Query EMQ X Broker description, version, start time |
-| `broker stats` | Statistics of Connection, Session, Topic, Subscription, Route |
-| `broker metrics` | Query MQTT Packet and Message Statistics |
+| Command          | Description                                                   |
+| ---------------- | ------------------------------------------------------------- |
+| `broker`         | Query EMQ X Broker description, version, start time           |
+| `broker stats`   | Statistics of Connection, Session, Topic, Subscription, Route |
+| `broker metrics` | Query MQTT Packet and Message Statistics                      |
 
 Query basic information of EMQ X Broker, including version, startup time, etc .:
 
@@ -321,10 +321,10 @@ ok
 
 The clients command can query the connected MQTT clients.
 
-| Command                | Description           |
-| ------------------------- | ------------------------ |
-| `clients list           ` | List all client connections |
-| `clients show <ClientId>` | Query the client with the specified ClientId |
+| Command                   | Description                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `clients list           ` | List all client connections                                                                                  |
+| `clients show <ClientId>` | Query the client with the specified ClientId                                                                 |
 | `clients kick <ClientId>` | Kick out the client with the specified ClientId, and the connection and session will be terminated together. |
 
 ### clients list
@@ -340,23 +340,23 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 
 Return the properties of the Client object:
 
-| Name | Description |
-| ------------------------- | ------------------------- |
-| username                  | Username                |
-| peername                  | Client IP and port |
-| clean\_start              | MQTT Clean Start          |
-| keepalive                 | MQTT KeepAlive            |
-| session\_expiry\_interval | Session expiration interval |
-| subscriptions             | Current subscriptions |
-| inflight                  | Total number of QoS 1 and QoS 2 messages currently being issued |
-| awaiting\_rel             | Number of QoS2 messages waiting for the client to send PUBREL |
-| delivered\_msgs           | Number of messages forwarded by EMQ X Broker to this client (including retransmissions) |
-| enqueued\_msgs            | Current length of message queue |
-| dropped\_msgs             | Number of messages dropped after the message queue reached the maximum length |
-| connected                 | Whether online      |
-| created\_at               | Session creation timestamp |
-| connected\_at             | Client connection timestamp |
-| disconnected_at | Client disconnection timestamp (appears only if the disconnection also retains the session) |
+| Name                      | Description                                                                                 |
+| ------------------------- | ------------------------------------------------------------------------------------------- |
+| username                  | Username                                                                                    |
+| peername                  | Client IP and port                                                                          |
+| clean\_start              | MQTT Clean Start                                                                            |
+| keepalive                 | MQTT KeepAlive                                                                              |
+| session\_expiry\_interval | Session expiration interval                                                                 |
+| subscriptions             | Current subscriptions                                                                       |
+| inflight                  | Total number of QoS 1 and QoS 2 messages currently being issued                             |
+| awaiting\_rel             | Number of QoS2 messages waiting for the client to send PUBREL                               |
+| delivered\_msgs           | Number of messages forwarded by EMQ X Broker to this client (including retransmissions)     |
+| enqueued\_msgs            | Current length of message queue                                                             |
+| dropped\_msgs             | Number of messages dropped after the message queue reached the maximum length               |
+| connected                 | Whether online                                                                              |
+| created\_at               | Session creation timestamp                                                                  |
+| connected\_at             | Client connection timestamp                                                                 |
+| disconnected_at           | Client disconnection timestamp (appears only if the disconnection also retains the session) |
 
 ### clients show <ClientId>
 
@@ -382,9 +382,9 @@ The routes command is used to query routing information.
 
 In EMQ X Broker, route refers to the mapping of topics to nodes, which is used to route messages between multiple nodes.
 
-| Command            | Description      |
-| --------------------- | ------------------- |
-| `routes list        ` | List all routes |
+| Command               | Description                            |
+| --------------------- | -------------------------------------- |
+| `routes list        ` | List all routes                        |
 | `routes show <Topic>` | Query the route of the specified topic |
 
 ### routes list
@@ -410,12 +410,12 @@ t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 
 The subscriptions command queries the subscription table of the message server.
 
-| Command                                   | Description           |
-| -------------------------------------------- | ------------------------ |
-| `subscriptions list                        ` | List all subscriptions |
+| Command                                      | Description                                             |
+| -------------------------------------------- | ------------------------------------------------------- |
+| `subscriptions list                        ` | List all subscriptions                                  |
 | `subscriptions show <ClientId>             ` | Query the subscription of the specified ClientId client |
-| `subscriptions add <ClientId> <Topic> <QoS>` | Add static subscriptions manually |
-| `subscriptions del <ClientId> <Topic>      ` | Delete static subscriptions manually |
+| `subscriptions add <ClientId> <Topic> <QoS>` | Add static subscriptions manually                       |
+| `subscriptions del <ClientId> <Topic>      ` | Delete static subscriptions manually                    |
 
 ### subscriptions list
 
@@ -458,12 +458,12 @@ ok
 
 The plugins command is used to load, unload, and query plugin applications. EMQ X Broker extends authentication and customization through plugins. The plugin configuration is located in the directory of `etc/plugins/` .
 
-| Command | Description |
-| ------------------------- | -------------- |
-| `plugins list            `| List all plugins |
-| `plugins load <Plugin>   `| Load plugins |
-| `plugins unload <Plugin> `| Unload plugins |
-| `plugins reload <Plugin> `| Reload plugins |
+| Command                    | Description      |
+| -------------------------- | ---------------- |
+| `plugins list            ` | List all plugins |
+| `plugins load <Plugin>   ` | Load plugins     |
+| `plugins unload <Plugin> ` | Unload plugins   |
+| `plugins reload <Plugin> ` | Reload plugins   |
 
 When the configuration file changesand it needs to take effect immediately, you can execute the `emqx_ctl reload <Plugin \>` command, even if the plugin is not running when the configuration is modified. You should use this command instead of `emqx_ctl load <Plugin\>` . Because `emqx_ctl load <Plugin \>` does not compile the new configuration file.
 
@@ -703,13 +703,13 @@ error
 
 The trace command is used to trace a client or topic, and print log information to a file. For details, see [Log and Trace](../getting-started/log.md).
 
-| Command                                          | Description                                                  |
-| ------------------------------------------------ | ------------------------------------------------------------ |
-| `trace list                                    ` | List all started traces                                      |
+| Command                                          | Description                                                    |
+| ------------------------------------------------ | -------------------------------------------------------------- |
+| `trace list                                    ` | List all started traces                                        |
 | `trace start client <ClientId> <File> [<Level>]` | Start client trace and store logs of specified level to a file |
-| `trace stop client <ClientId>                  ` | Stop Client trace                                            |
-| `trace start topic <Topic> <File> [<Level>]    ` | Start Topic trace and store logs of specified level to a file |
-| `trace stop topic <Topic>                      ` | Stop Topic trace                                             |
+| `trace stop client <ClientId>                  ` | Stop Client trace                                              |
+| `trace start topic <Topic> <File> [<Level>]    ` | Start Topic trace and store logs of specified level to a file  |
+| `trace stop topic <Topic>                      ` | Stop Topic trace                                               |
 
 ### trace start client <ClientId> <File> [ <Level> ]
 
@@ -773,11 +773,12 @@ Trace (topic=topic2, level=error, destination="log/topic2_trace.log")
 
 The listeners command is used to query the active TCP service listeners.
 
-| Command                         | Description                   |
-| ------------------------------- | ------------------------------|
-| `listeners`                     | List active service listeners |
-| `listeners stop <Identifier>`   | Stop a listener. `Identifier` is of format `<Protocol>[:<Transport>]:<Name>` e.g. `mqtt:tcp:internal`, `http:management` |
-| `listeners restart <Identifier>`| Restart a listener. `Identifier` is of format `<Protocol>[:<Transport>]:<Name>` e.g. `mqtt:tcp:internal`, `http:management` |
+| Command                          | Description          |
+| -------------------------------- | -------------------- |
+| listeners                        | # List listeners     |
+| listeners stop    <Identifier>   | # Stop a listener    |
+| listeners stop    <Proto> <Port> | # Stop a listener    |
+| listeners restart <Identifier>   | # Restart a listener |
 
 ### listeners list
 
@@ -831,11 +832,11 @@ mqtt:wss:external
 
 listener parameter description:
 
-| Name            | Description |
-| --------------- | ------------------- |
-| acceptors       | TCP Acceptor pool  |
-| max\_conns      | Maximum allowed connections |
-| current\_conns  | Current connections |
+| Name            | Description                               |
+| --------------- | ----------------------------------------- |
+| acceptors       | TCP Acceptor pool                         |
+| max\_conns      | Maximum allowed connections               |
+| current\_conns  | Current connections                       |
 | shutdown\_count | Statistics of connection shutdown reasons |
 
 ### listeners stop <Identifier>
@@ -849,36 +850,39 @@ Stop listener mqtt:tcp:external successfully.
 
 ### listeners restart <Identifier>
 
-Restart listener:
+
+### listeners restart
 
 ```bash
-$ ./bin/emqx_ctl listeners restart mqtt:tcp:external
-Restarted listener mqtt:tcp:external successfully.
+$ ./bin/emqx_ctl listeners restart http:dashboard
+Stop http:dashboard listener on 0.0.0.0:18083 successfully.
+Start http:dashboard listener on 0.0.0.0:18083 successfully.
+
 ```
 
 ## recon command
 
 The recon command of EMQ X Broker is based on the Erlang Recon library, which is used to help DevOps staff to diagnose problems in the production node, and ordinary users do not need to care. The recon command will consume some performance, so, please use it with caution.
 
-| Command              | Description                                               |
-| ----------------------- | ------------------------------------------------------------ |
-| `recon memory            `| [recon\_alloc:memory/2](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
-| `recon allocated         `| [recon\_alloc:memory (allocated\_types, current/max)](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
-| `recon bin_leak         `| [recon:bin\_leak (100)](http://ferd.github.io/recon/recon.html#bin_leak-1) |
-| `recon node_stats       `| [recon:node\_stats_print(10, 1000)](http://ferd.github.io/recon/recon.html#node_stats_print-2) |
-| `recon remote_load Mod  `| [recon:remote\_load (Mod)](http://ferd.github.io/recon/recon.html#remote_load-1) |
-| `recon proc_count Attr N `| [recon:proc_count(Attr, N)](http://ferd.github.io/recon/recon.html#proc_count-2) |
+| Command                    | Description                                                                                                  |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `recon memory            ` | [recon\_alloc:memory/2](http://ferd.github.io/recon/recon_alloc.html#memory-2)                               |
+| `recon allocated         ` | [recon\_alloc:memory (allocated\_types, current/max)](http://ferd.github.io/recon/recon_alloc.html#memory-2) |
+| `recon bin_leak         `  | [recon:bin\_leak (100)](http://ferd.github.io/recon/recon.html#bin_leak-1)                                   |
+| `recon node_stats       `  | [recon:node\_stats_print(10, 1000)](http://ferd.github.io/recon/recon.html#node_stats_print-2)               |
+| `recon remote_load Mod  `  | [recon:remote\_load (Mod)](http://ferd.github.io/recon/recon.html#remote_load-1)                             |
+| `recon proc_count Attr N ` | [recon:proc_count(Attr, N)](http://ferd.github.io/recon/recon.html#proc_count-2)                             |
 
 Visit [Documentation for recon](http://ferd.github.io/recon/) for more information.
 
 ## retainer command
 
-| Command               | Description               |
-| ------------------------ | ---------------------------- |
-| `retainer info         ` | Show the number of retained messages |
+| Command                  | Description                                              |
+| ------------------------ | -------------------------------------------------------- |
+| `retainer info         ` | Show the number of retained messages                     |
 | `retainer topics       ` | Display all topics of currently stored retained messages |
-| `retainer clean        ` | Clean all retained messages |
-| `retainer clean <Topic>` | Clean retained messages with the specified topic |
+| `retainer clean        ` | Clean all retained messages                              |
+| `retainer clean <Topic>` | Clean retained messages with the specified topic         |
 
 ### retainer info
 
@@ -959,8 +963,8 @@ ok
 
 ### rules command
 
-| Command                                    | Description  |
-| --------------------------------------------- | --------------- |
+| Command                                       | Description    |
+| --------------------------------------------- | -------------- |
 | `rules list`                                  | List all rules |
 | `rules show <RuleId>`                         | Show a rule    |
 | `rules create <sql> <actions> [-d [<descr>]]` | Create a rule  |
@@ -1014,9 +1018,9 @@ ok
 ```
 ### rule-actions command
 
-| Command                     | Description  |
-| ------------------------------ | --------------- |
-| `rule-actions list`            | List actions |
+| Command                        | Description        |
+| ------------------------------ | ------------------ |
+| `rule-actions list`            | List actions       |
 | `rule-actions show <ActionId>` | Show a rule action |
 
 ::: tip
@@ -1045,12 +1049,12 @@ action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb]
 ```
 ### resources command
 
-| Command                                                    | Description  |
-| ------------------------------------------------------------ | --------------- |
-| `resources create <type> [-c [<config>]] [-d [<descr>]]`     | Create a resource |
-| `resources list [-t <ResourceType>]`                         | List resources    |
-| `resources show <ResourceId>`                                | Show a resource   |
-| `resources delete <ResourceId>`                              | Delete a resource |
+| Command                                                  | Description       |
+| -------------------------------------------------------- | ----------------- |
+| `resources create <type> [-c [<config>]] [-d [<descr>]]` | Create a resource |
+| `resources list [-t <ResourceType>]`                     | List resources    |
+| `resources show <ResourceId>`                            | Show a resource   |
+| `resources delete <ResourceId>`                          | Delete a resource |
 
 #### resources create
 
@@ -1096,8 +1100,8 @@ ok
 ```
 ### resource-types command
 
-| Command                    | Description  |
-| ---------------------------- | --------------- |
+| Command                      | Description             |
+| ---------------------------- | ----------------------- |
 | resource-types list          | List all resource-types |
 | resource-types show `<Type>` | Show a resource-type    |
 
