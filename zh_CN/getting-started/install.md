@@ -480,7 +480,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 2.  启动 docker 容器
   
     ```
-    $ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v4.0.0
+    $ docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v4.0.0
     ```
 
 ### 使用 docker-compose 创建简单的 static 集群
