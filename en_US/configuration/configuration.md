@@ -7440,7 +7440,46 @@ Specify Stomp maximum message body length.
 
 ## [emqx-web-hook](https://github.com/emqx/emqx-web-hook)
 
-### web.hook.api.url
+### web.hook.url
+
+| Type   | Default             |
+| ------ | ------------------- |
+| string | http://127.0.0.1:80 |
+
+#### Description
+
+The web server address to which the webhook request is forwarded.
+
+<br />
+
+### web.hook.headers.\<Any\>
+
+#### Example
+
+```
+web.hook.headers.content-type = application/json
+web.hook.headers.accept = */*
+```
+
+#### Description
+
+Specify the data in the HTTP request header. `<Key>` Specify the field name in the HTTP request header, and the value of this configuration item is the corresponding field value. `<Key>` can be the standard HTTP request header field. User can also customize the field to configure multiple different request header fields.
+
+<br />
+
+### web.hook.encoding_of_payload_field
+
+| Type     | Optional Value              | Default |
+| -------- | --------------------------- | ------- |
+| enum     | `plain`, `base62`, `base64` | -       |
+
+#### Description
+
+The encoding format of the Payload field in the PUBLISH packet.
+
+<br />
+
+### web.hook.ssl.cacertfile
 
 | Type   | Default |
 | ------ | ------- |
@@ -7448,21 +7487,57 @@ Specify Stomp maximum message body length.
 
 #### Description
 
-`emqx_web_hook` Forwarding web server address.
+CA certificate file path.
 
+<br />
 
+### web.hook.ssl.certfile
 
-### web.hook.encode_payload
-
-| Type     | Optional Value      | Default |
-| -------- | ------------------- | ------- |
-| enum     | `base62`, `base64`  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
-The encoding format of the Payload field in the PUBLISH message.
+Client certificate file path.
 
+<br />
 
+### web.hook.ssl.keyfile
+
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
+
+#### Description
+
+Client private key file path.
+
+<br />
+
+### web.hook.ssl.verify
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false`  |
+
+#### Description
+
+Specify whether to verify the peer certificate.
+
+<br />
+
+### web.hook.ssl.pool_size
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
+
+#### Description
+
+HTTP connection process pool size.
+
+<br />
 
 ### web.hook.rule.client.connect.1
 
@@ -7474,7 +7549,7 @@ The encoding format of the Payload field in the PUBLISH message.
 
 Forward the `on_client_connect` event.
 
-
+<br />
 
 ### web.hook.rule.client.connack.1
 
@@ -7486,7 +7561,7 @@ Forward the `on_client_connect` event.
 
 Forward the `on_client_connack` event.
 
-
+<br />
 
 ### web.hook.rule.client.connected.1
 
@@ -7498,7 +7573,7 @@ Forward the `on_client_connack` event.
 
 Forward the `on_client_connected` event.
 
-
+<br />
 
 ### web.hook.rule.client.disconnected.1
 
@@ -7510,7 +7585,7 @@ Forward the `on_client_connected` event.
 
 Forward the `on_client_disconnected` event.
 
-
+<br />
 
 ### web.hook.rule.client.subscribe.1
 
@@ -7522,7 +7597,7 @@ Forward the `on_client_disconnected` event.
 
 Forward the `on_client_subscribe` event.
 
-
+<br />
 
 ### web.hook.rule.client.unsubscribe.1
 
@@ -7534,7 +7609,7 @@ Forward the `on_client_subscribe` event.
 
 Forward the `on_client_unsubscribe` event.
 
-
+<br />
 
 ### web.hook.rule.session.subscribed.1
 
@@ -7546,7 +7621,7 @@ Forward the `on_client_unsubscribe` event.
 
 Forward the `on_client_subscribe` event.
 
-
+<br />
 
 ### web.hook.rule.session.unsubscribed.1
 
@@ -7558,7 +7633,7 @@ Forward the `on_client_subscribe` event.
 
 Forward the `on_session_unsubscribe` event.
 
-
+<br />
 
 ### web.hook.rule.session.terminated.1
 
@@ -7570,7 +7645,7 @@ Forward the `on_session_unsubscribe` event.
 
 Forward the `on_session_terminated` event.
 
-
+<br />
 
 ### web.hook.rule.message.publish.1
 
@@ -7582,7 +7657,7 @@ Forward the `on_session_terminated` event.
 
 Forward the `on_client_publish` event.
 
-
+<br />
 
 ### web.hook.rule.message.delivered.1
 
@@ -7594,7 +7669,7 @@ Forward the `on_client_publish` event.
 
 Forward the `on_message_delivered` event.
 
-
+<br />
 
 ### web.hook.rule.message.acked.1
 

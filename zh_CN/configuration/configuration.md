@@ -7452,7 +7452,46 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ## [emqx-web-hook](https://github.com/emqx/emqx-web-hook)
 
-### web.hook.api.url
+### web.hook.url
+
+| Type   | Default              |
+| ------ | -------------------- |
+| string | http://127.0.0.1:80  |
+
+#### 说明
+
+Webhook 请求转发的目的 Web 服务器地址。
+
+<br />
+
+### web.hook.headers.\<Any\>
+
+#### 示例
+
+```
+web.hook.headers.content-type = application/json
+web.hook.headers.accept = */*
+```
+
+#### 说明
+
+指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
+
+<br />
+
+### web.hook.encoding_of_payload_field
+
+| Type     | Optional Value              | Default |
+| -------- | --------------------------- | ------- |
+| enum     | `plain`, `base62`, `base64` | `plain` |
+
+#### 说明
+
+PUBLISH 报文中 Payload 字段的编码格式。
+
+<br />
+
+### web.hook.ssl.cacertfile
 
 | Type   | Default |
 | ------ | ------- |
@@ -7460,19 +7499,55 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 #### 说明
 
-`emqx_web_hook` 转发的目的 Web 服务器地址。
+CA 证书文件路径。
 
 <br />
 
-### web.hook.encode_payload
+### web.hook.ssl.certfile
 
-| Type     | Optional Value      | Default |
-| -------- | ------------------- | ------- |
-| enum     | `base62`, `base64`  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
-PUBLISH 消息中 Payload 字段的编码格式。
+客户端证书文件路径。
+
+<br />
+
+### web.hook.ssl.keyfile
+
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
+
+#### 说明
+
+客户端私钥文件路径。
+
+<br />
+
+### web.hook.ssl.verify
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false`  |
+
+#### 说明
+
+指定是否校验对端证书。
+
+<br />
+
+### web.hook.ssl.pool_size
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
+
+#### 说明
+
+HTTP 连接进程池大小。
 
 <br />
 
