@@ -309,12 +309,35 @@ cluster.autoclean = 5m
 ```
 
 ## Firewall settings
-If there is a firewall between the cluster nodes, the firewall needs to open port 4369 and a TCP port segment. 4369 is used by the epmd port mapping service. The TCP port segment is used to establish connections and communications between nodes.
 
-After the firewall is set, you need to configure the same port segment in  `emqx/etc/emqx.conf`:
+### The Node Discovery Ports
 
-```bash
-## Distributed node port range
-node.dist_listen_min = 6369
-node.dist_listen_max = 7369
-```
+If the environment variable WITH_EPMD=1 is set in advance, the epmd (listening port 4369) will be enabled for node discovery when emqx is started, which is called `epmd mode`.
+
+If the environment variable WITH_EPMD is not set, epmd is not enabled when emqx is started, and emqx ekka is used for node discovery, which is also the default method of node discovery  since version 4.0. This is called `ekka mode`.
+
+**epmd mode：**
+
+If there is a firewall between cluster nodes, the firewall needs to open TCP port 4369 for each node, to allow peers query each other's listening port. The firewall should also allow nodes connecting to port in configurable range from `node.dist_listen_min` to `node.dist_listen_max` (inclusive, default is `6369` for both)
+
+**ekka mode（Default mode since version 4.0）：**
+
+In `ekka` mode, the port mapping is conventional, but not dynamic as in `epmd` mode.
+The configurations `node.dist_listen_min` and `node.dist_listen_max` take no effect in this case.
+
+If there is a firewall between the cluster nodes, the conventional listening port should be allowed
+for nodes to connect each other. See below for port mapping rule in `ekka` mode.
+
+Erlang distribution port mapping rule in `ekka` mode: `ListeningPort = BasePort + Offset`,
+where `BasePort` is 4370 (which is not made configurable), and `Offset` is the numeric suffix of the node's name. If the node name does not have a numeric suffix, `Offsset` is 0.
+
+For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the
+node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
+
+### The Cluster PRC Port
+
+Each emqx node also listens on a (conventional) port for the RPC channels, which should
+also be allowed by the firewall. The port mapping rule is similar to the node discovery
+ports in `ekka mode`, but with the `BasePort = 5370`. That is, having
+`node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370`,
+and port `5371` for `emqx1` (or `emqx-1`), and so on.
