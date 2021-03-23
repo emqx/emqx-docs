@@ -23,9 +23,19 @@ Authentication methods supported by EMQ X:
 
 **Built-in data source**
 
+{% emqxee %}
+
+* [Built-in Auth](../modules/mnesia_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
+
 * [Username authentication](./auth-username.md)
 * [Client ID authentication](./auth-clientid.md)
 * [Mnesia authentication](./auth-mnesia.md)
+
+{% endemqxce %}
 
 The configuration file and the built-in database of EMQ X are used to provide an authenticated data source, which is managed through the HTTP API and is simple and lightweight.
 
@@ -33,11 +43,25 @@ The configuration file and the built-in database of EMQ X are used to provide an
 
 **External Database**
 
+{% emqxee %}
+
+* [MySQL authentication](../modules/mysql_authentication.md)
+* [PostgreSQL authentication](../modules/pgsql_authentication.md)
+* [Redis authentication](../modules/redis_authentication.md)
+* [MongoDB authentication](../modules/mongo_authentication.md)
+* [LDAP authentication](../modules/ldap_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
+
 * [LDAP authentication](./auth-ldap.md)
 * [MySQL authentication](./auth-mysql.md)
 * [PostgreSQL authentication](./auth-postgresql.md)
 * [Redis authentication](./auth-redis.md)
 * [MongoDB authentication](./auth-mongodb.md)
+
+{% endemqxce %}
 
 The external database can store a large amount of data, while facilitating integration with external device management systems.
 
@@ -45,8 +69,19 @@ The external database can store a large amount of data, while facilitating integ
 
 Others
 
+{% emqxee %}
+
+* [HTTP authentication](../modules/http_authentication.md)
+* [JWT authentication](../modules/jwt_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
+
 * [HTTP authentication](./auth-http.md)
 * [JWT authentication](./auth-jwt.md)
+
+{% endemqxce %}
 
 JWT authentication can issue authentication information in batches, and HTTP authentication can implement complex authentication logic.
 

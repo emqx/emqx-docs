@@ -244,7 +244,7 @@ The cluster command is used to manage a cluster of multiple EMQ X Broker nodes (
 
 Example:
 
-To demonstrate the cluster command in a better way, we first start two nodes on the local machine and create a cluster. To avoid port conflicts, we have adjusted the listening port of the emqx2 node. For example, the MQTT/TCP listening port was changed from the default 1883 to 2883. Please refer to [Configuration Instructions](getting-started/config.md) and  [Configuration Items](configuration/index.md) for details.
+To demonstrate the cluster command in a better way, we first start two nodes on the local machine and create a cluster. To avoid port conflicts, we have adjusted the listening port of the emqx2 node. For example, the MQTT/TCP listening port was changed from the default 1883 to 2883. Please refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
 
 Start emqx1 :
 

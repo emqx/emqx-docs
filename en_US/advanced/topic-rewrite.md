@@ -17,7 +17,7 @@ ref: undefined
 
 The topic rewrite function of EMQ X Broker supports rewriting topic A to topic B when the client subscribes to topics, publishes messages, and unsubscribes according to user-configured rules.
 
-EMQ X Broker's [retained message](advanced/retained.md) and [delayed publish](advanced/delay-publish.md) can be used in conjunction with topic rewriting. For example, when users want to use the delayed publish function, they can use topic rewrite function to rewrite the related topic to the topic format for delayed publication if it is not convenient for modifying the topic published by the client.
+EMQ X Broker's [retained message](./retained.md) and [delayed publish](./delay-publish.md) can be used in conjunction with topic rewriting. For example, when users want to use the delayed publish function, they can use topic rewrite function to rewrite the related topic to the topic format for delayed publication if it is not convenient for modifying the topic published by the client.
 
 ## Enable topic rewrite
 

@@ -90,7 +90,7 @@ EMQ X 发行包中，包含了大量的官方插件，提供了一些基础的�
 
 **使用管理 API 启停插件**
 
-在 EMQ X 运行过程中，可通过 [管理监控 API - Load Plugin](#http-api.md#load_plugin) 的方式查看、和启停某插件。
+在 EMQ X 运行过程中，可通过 [管理监控 API - Load Plugin](http-api.md#load_plugin) 的方式查看、和启停某插件。
 
 
 ## 插件开发

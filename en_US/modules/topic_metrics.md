@@ -22,4 +22,4 @@ The topic metrics page is located under the statistical analysis tab of Dashboar
 
 ### HTTP API
 
-We provide you with an HTTP API consistent with Dashboard operations so that you can integrate with your application. For the specific usage of the related HTTP API, please refer to [HTTP API-Subject Index Statistics](http-api.md#endpoint-topic-metrics).
+We provide you with an HTTP API consistent with Dashboard operations so that you can integrate with your application. For the specific usage of the related HTTP API, please refer to [HTTP API-Subject Index Statistics](../advanced/http-api.md#endpoint-topic-metrics).
