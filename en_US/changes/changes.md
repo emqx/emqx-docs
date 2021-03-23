@@ -25,7 +25,7 @@ EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
 
 **Enhancement:**
 
-- Support observer_cli
+- Added observer_cli
 
   Github PR: [emqx#4323](https://github.com/emqx/emqx/pull/4323)
 
@@ -33,7 +33,7 @@ EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4361](https://github.com/emqx/emqx/pull/4361)
 
-- SSL supports `verify` and `server_name_indication` configuration items
+- SSL supports `verify` and `server_name_indication` configuration
 
   Github PR: [emqx#4349](https://github.com/emqx/emqx/pull/4349)
 
