@@ -4160,11 +4160,11 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 
 ## [emqx-auth-http](https://github.com/emqx/emqx-auth-http)
 
-### auth.http.auth_req
+### auth.http.auth_req.url
 
 | Type   | Default                           |
 | ------ | --------------------------------- |
-| string | `http://127.0.0.1:8991/mqtt/auth` |
+| string | `http://127.0.0.1:80/mqtt/auth` |
 
 #### 说明
 
@@ -4181,6 +4181,21 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 #### 说明
 
 指定认证请求的请求方法。
+
+<br />
+
+### auth.http.auth_req.headers.\<Any\>
+
+#### 示例
+
+```
+auth.http.auth_req.headers.content-type = application/x-www-form-urlencoded
+auth.http.auth_req.headers.accept = */*
+```
+
+#### 说明
+
+指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
 
 <br />
 
@@ -4207,15 +4222,17 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 
 <br />
 
-### auth.http.super_req
+### auth.http.super_req.url
 
 | Type   | Default                                |
 | ------ | -------------------------------------- |
-| string | `http://127.0.0.1:8991/mqtt/superuser` |
+| string | `http://127.0.0.1:80/mqtt/superuser` |
 
 #### 说明
 
 指定超级用户认证请求的目标 URL。
+
+<br />
 
 ### auth.http.super_req.method
 
@@ -4226,6 +4243,23 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 #### 说明
 
 指定超级用户认证请求的请求方法。
+
+<br />
+
+### auth.http.super_req.headers.\<Any\>
+
+#### 示例
+
+```
+auth.http.super_req.headers.content-type = application/x-www-form-urlencoded
+auth.http.super_req.headers.accept = */*
+```
+
+#### 说明
+
+指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
+
+<br />
 
 ### auth.http.super_req.params
 
@@ -4263,6 +4297,21 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 
 <br />
 
+### auth.http.acl_req.headers.\<Any\>
+
+#### 示例
+
+```
+auth.http.acl_req.headers.content-type = application/x-www-form-urlencoded
+auth.http.acl_req.headers.accept = */*
+```
+
+#### 说明
+
+指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
+
+<br />
+
 ### auth.http.acl_req.params
 
 | Type   | Format                                                       | Default                                                              |
@@ -4285,11 +4334,11 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 
 <br />
 
-### auth.http.request.timeout
+### auth.http.timeout
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `0s`    |
+| duration | `5s`    |
 
 #### 说明
 
@@ -4297,70 +4346,15 @@ HTTP 请求超时时间。任何等价于 `0s` 的设定值都表示永不超时
 
 <br />
 
-### auth.http.request.connect_timeout
+### auth.http.connect_timeout
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `0s`    |
+| duration | `5s`    |
 
 #### 说明
 
 HTTP 请求的连接超时时间。任何等价于 `0s` 的设定值都表示永不超时。
-
-<br />
-
-### auth.http.request.retry_times
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 3       |
-
-#### 说明
-
-HTTP 请求失败时的重试次数。
-
-<br />
-
-### auth.http.request.retry_interval
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `1s`    |
-
-#### 说明
-
-HTTP 请求失败时的重试间隔。
-
-<br />
-
-### auth.http.request.retry_backoff
-
-| Type  | Default |
-| ----- | ------- |
-| float | 2.0     |
-
-#### 说明
-
-HTTP 请求失败时的重试间隔使用了指数退避算法，此配置项用于指定指数退避算法的退避系数。
-
-<br />
-
-### auth.http.header.<Key>
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### 说明
-
-指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
-
-#### 示例
-
-```
-auth.http.header.Accept = */*
-auth.http.header.Accept-Encoding = *
-```
 
 <br />
 

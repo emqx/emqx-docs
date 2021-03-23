@@ -4148,11 +4148,11 @@ The password is encrypted and stored using the SHA-256 algorithm.
 
 ## [emqx-auth-http](https://github.com/emqx/emqx-auth-http)
 
-### auth.http.auth_req
+### auth.http.auth_req.url
 
 | Type   | Default                           |
 | ------ | --------------------------------- |
-| string | `http://127.0.0.1:8991/mqtt/auth` |
+| string | `http://127.0.0.1:80/mqtt/auth` |
 
 #### Description
 
@@ -4169,6 +4169,20 @@ Specify the target URL of the authentication request.
 #### Description
 
 Specify the request method of the authentication request.
+
+
+### auth.http.auth_req.headers.\<Any\>
+
+#### Example
+
+```
+auth.http.auth_req.headers.content-type = application/x-www-form-urlencoded
+auth.http.auth_req.headers.accept = */*
+```
+
+#### Description
+
+Specify the data in the HTTP request header. `<Key>` Specify the field name in the HTTP request header, and the value of this configuration item is the corresponding field value. `<Key>` can be the standard HTTP request header field. User can also customize the field to configure multiple different request header fields.
 
 
 
@@ -4195,11 +4209,11 @@ Specify the data carried in the authentication request. When using the GET metho
 
 
 
-### auth.http.super_req
+### auth.http.super_req.url
 
 | Type   | Default                                |
 | ------ | -------------------------------------- |
-| string | `http://127.0.0.1:8991/mqtt/superuser` |
+| string | `http://127.0.0.1:80/mqtt/superuser` |
 
 #### Description
 
@@ -4215,6 +4229,23 @@ Specify the target URL for the superuser authentication request.
 
 Specifies the request method of the super user authentication request.
 
+
+
+### auth.http.super_req.headers.\<Any\>
+
+#### Example
+
+```
+auth.http.super_req.headers.content-type = application/x-www-form-urlencoded
+auth.http.super_req.headers.accept = */*
+```
+
+#### Description
+
+Specify the data in the HTTP request header. `<Key>` Specify the field name in the HTTP request header, and the value of this configuration item is the corresponding field value. `<Key>` can be the standard HTTP request header field. User can also customize the field to configure multiple different request header fields.
+
+
+
 ### auth.http.super_req.params
 
 | Type   | Format                                                       | Default                   |
@@ -4227,11 +4258,11 @@ Specify the data carried in the authentication request. When using the GET metho
 
 
 
-### auth.http.acl_req
+### auth.http.acl_req.url
 
 | Type   | Default                          |
 | ------ | -------------------------------- |
-| string | `http://127.0.0.1:8991/mqtt/acl` |
+| string | `http://127.0.0.1:80/mqtt/acl` |
 
 #### Description
 
@@ -4249,6 +4280,19 @@ Specify the target URL for ACL verification requests.
 
 Specifies the request method for ACL verification requests.
 
+
+### auth.http.acl_req.headers.\<Any\>
+
+#### Example
+
+```
+auth.http.acl_req.headers.content-type = application/x-www-form-urlencoded
+auth.http.acl_req.headers.accept = */*
+```
+
+#### Description
+
+Specify the data in the HTTP request header. `<Key>` Specify the field name in the HTTP request header, and the value of this configuration item is the corresponding field value. `<Key>` can be the standard HTTP request header field. User can also customize the field to configure multiple different request header fields.
 
 
 ### auth.http.acl_req.params
@@ -4273,11 +4317,11 @@ Specify the data carried in the authentication request. When using the GET metho
 
 
 
-### auth.http.request.timeout
+### auth.http.timeout
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `0s`    |
+| duration | `5s`    |
 
 #### Description
 
@@ -4285,11 +4329,11 @@ HTTP request timeout. Any setting equivalent to `0s` means never timeout.
 
 
 
-### auth.http.request.connect_timeout
+### auth.http.connect_timeout
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `0s`    |
+| duration | `5s`    |
 
 #### Description
 
@@ -4297,58 +4341,16 @@ Connection timeout for HTTP requests. Any setting value equivalent to `0s` means
 
 
 
-### auth.http.request.retry_times
+### auth.http.pool_size
 
 | Type    | Default |
 | ------- | ------- |
-| integer | 3       |
+| integer | 32       |
 
 #### Description
 
-The number of retries when an HTTP request fails.
+HTTP client connection process pool size.
 
-
-
-### auth.http.request.retry_interval
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `1s`    |
-
-#### Description
-
-Retry interval when HTTP request fails.
-
-
-
-### auth.http.request.retry_backoff
-
-| Type  | Default |
-| ----- | ------- |
-| float | 2.0     |
-
-#### Description
-
-When the HTTP request fails, the retry interval uses the exponential backoff algorithm. This configuration item is used to specify the backoff coefficient of the exponential backoff algorithm.
-
-
-
-### auth.http.header.<Key>
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### Description
-
-Specify the data in the HTTP request header. `<Key>` Specify the field name in the HTTP request header, and the value of this configuration item is the corresponding field value. `<Key>` can be the standard HTTP request header field. User can also customize the field to configure multiple different request header fields.
-
-#### Example
-
-```
-auth.http.header.Accept = */*
-auth.http.header.Accept-Encoding = *
-```
 
 
 
