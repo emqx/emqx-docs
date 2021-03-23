@@ -106,7 +106,17 @@ ACL 是允许与拒绝条件的集合，EMQ X 中使用以下元素描述 ACL �
 "允许(Allow) / 拒绝(Deny)"  "谁(Who)"  "订阅(Subscribe) / 发布(Publish)" "主题列表(Topics)"
 ```
 
+{% emqxee %}
+
+同时具有多条 ACL 规则时，EMQ X 将按照规则排序进行合并，以 ACL 文件中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
+
+{% endemqxee %}
+
+{% emqxce %}
+
 同时具有多条 ACL 规则时，EMQ X 将按照规则排序进行合并，以 [ACL 文件](./acl-file.md) 中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
+
+{% endemqxce %}
 
 1. 第一条规则允许客户端发布订阅所有主题
 2. 第二条规则禁止全部客户端订阅 `$SYS/#` 与 `#` 主题

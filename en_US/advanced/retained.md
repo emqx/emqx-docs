@@ -25,7 +25,7 @@ EMQ X Broker enables the function of retaining messages by default. You can modi
 
 ## Configuration
 
-EMQ X Broker's retained message function is implemented by the `emqx_retainer` plugin, which is enabled by default. By modifying the configuration of the ` emqx_retainer` plugin, you can adjust the storage location of the retained messages in EMQ X Broker, limit the number of received retained messages and the maximum length of Payload, and adjust the expiration time of retained messages. For more information about the EMQ X Broker plug-in, see  [plugin](advanced/plugins.md).
+EMQ X Broker's retained message function is implemented by the `emqx_retainer` plugin, which is enabled by default. By modifying the configuration of the ` emqx_retainer` plugin, you can adjust the storage location of the retained messages in EMQ X Broker, limit the number of received retained messages and the maximum length of Payload, and adjust the expiration time of retained messages. For more information about the EMQ X Broker plug-in, see  [plugin](./plugins.md).
 
 The `emqx_retainer` plugin is enabled by default, and the configuration path of the plugin is `etc/plugins/emqx_retainer.conf`.
 

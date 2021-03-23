@@ -98,6 +98,10 @@
           "path": "advanced/hooks"
         },
         {
+          "title": "内置模块",
+          "path": "advanced/internal-modules"
+        },
+        {
           "title": "指标监控",
           "path": "advanced/metrics-and-stats"
         },
@@ -830,6 +834,10 @@
           "path": "development/resource"
         }
       ]
+    },
+    {
+      "title": "Telemetry",
+      "path": "advanced/telemetry"
     },
     {
       "title": "FAQ",
