@@ -15,6 +15,48 @@ ref: undefined
 
 # Changes
 
+## Version 4.3-rc.1
+
+*Release Date: 2020-03-23*
+
+EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Enhancement:**
+
+- Support observer_cli
+
+  Github PR: [emqx#4323](https://github.com/emqx/emqx/pull/4323)
+
+- Support clearing all ACL cache
+
+  Github PR: [emqx#4361](https://github.com/emqx/emqx/pull/4361)
+
+- SSL supports `verify` and `server_name_indication` configuration items
+
+  Github PR: [emqx#4349](https://github.com/emqx/emqx/pull/4349)
+
+**Bug fixes:**
+
+- Fix issues caused by subject rewriting and ACL execution order
+
+  Github Issue: [emqx#4200](https://github.com/emqx/emqx/issues/4200)
+  Github PR: [emqx#4331](https://github.com/emqx/emqx/pull/4331)
+
+- Fix MQTT packet receiving count issue
+
+  Github PR: [emqx#4371](https://github.com/emqx/emqx/pull/4371)
+
+- Fix the processing of heartbeat packets
+
+  Github Issue: [emqx#4370](https://github.com/emqx/emqx/issues/4370)
+  Github PR: [emqx#4371](https://github.com/emqx/emqx/pull/4371)
+
+- Fix the issue that the default SSL Ciphers contains Ciphers that are not supported by OTP 22, which causes the startup failure after compiling with OTP 22
+
+  Github PR: [emqx#4377](https://github.com/emqx/emqx/pull/4377)
+
 ## Version 4.2.8
 
 *Release Date: 2020-03-10*
