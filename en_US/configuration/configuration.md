@@ -6517,7 +6517,7 @@ Which topic the device's upstream update message (update) needs to be published 
 
 #### Description
 
-When publish the update message. Can be one of:
+When to publish the update message. Can be one of:
 
 - contains_object_list: only if the update message contains object list
 
