@@ -15,6 +15,48 @@ ref:
 
 # 版本发布
 
+## 4.3-rc.1 版本
+
+*发布日期: 2020-03-23*
+
+EMQ X 4.3-rc.1 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 支持 observer_cli
+
+  Github PR: [emqx#4323](https://github.com/emqx/emqx/pull/4323)
+
+- 支持清除所有 ACL 缓存
+
+  Github PR: [emqx#4361](https://github.com/emqx/emqx/pull/4361)
+
+- SSL 支持 `verify` 与 `server_name_indication` 配置项
+
+  Github PR: [emqx#4349](https://github.com/emqx/emqx/pull/4349)
+
+**错误修复:**
+
+- 修复主题重写与 ACL 执行顺序导致的问题
+
+  Github Issue: [emqx#4200](https://github.com/emqx/emqx/issues/4200)
+  Github PR: [emqx#4331](https://github.com/emqx/emqx/pull/4331)
+
+- 修复 MQTT 报文接收计数问题
+
+  Github PR: [emqx#4371](https://github.com/emqx/emqx/pull/4371)
+
+- 修复心跳报文的处理
+
+  Github Issue: [emqx#4370](https://github.com/emqx/emqx/issues/4370)
+  Github PR: [emqx#4371](https://github.com/emqx/emqx/pull/4371)
+
+- 修复由于默认的 SSL Ciphers 中包含了 OTP 22 不支持的 Ciphers 导致使用 OTP 22 编译后启动失败的问题
+
+  Github PR: [emqx#4377](https://github.com/emqx/emqx/pull/4377)
+
 ## 4.2.8 版本
 
 *发布日期: 2020-03-10*
