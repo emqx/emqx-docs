@@ -154,11 +154,11 @@ Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移
 
 ```sql
 SELECT <字段名> FROM <主题> [WHERE <条件>]
-````
+```
 
-- ``FROM`` 子句将规则挂载到某个主题上
-- ``SELECT`` 子句用于对数据进行变换，并选择出感兴趣的字段
-- ``WHERE`` 子句用于对 SELECT 选择出来的某个字段施加条件过滤
+- `FROM` 子句将规则挂载到某个主题上
+- `SELECT` 子句用于对数据进行变换，并选择出感兴趣的字段
+- `WHERE` 子句用于对 SELECT 选择出来的某个字段施加条件过滤
 
 **FOREACH、DO 和 INCASE 子句:**
 
@@ -166,11 +166,11 @@ SELECT <字段名> FROM <主题> [WHERE <条件>]
 
 ```sql
 FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件>]
-````
+```
 
-- ``FOREACH`` 子句用于选择需要做 foreach 操作的字段，注意选择出的字段必须为数组类型
-- ``DO`` 子句用于对 FOREACH 选择出来的数组中的每个元素进行变换，并选择出感兴趣的字段
-- ``INCASE`` 子句用于对 DO 选择出来的某个字段施加条件过滤
+- `FOREACH` 子句用于选择需要做 foreach 操作的字段，注意选择出的字段必须为数组类型
+- `DO` 子句用于对 FOREACH 选择出来的数组中的每个元素进行变换，并选择出感兴趣的字段
+- `INCASE` 子句用于对 DO 选择出来的某个字段施加条件过滤
 
 其中 DO 和 INCASE 子句都是可选的。DO 相当于针对当前循环中对象的 SELECT 子句，而 INCASE 相当于针对当前循环中对象的 WHERE 语句。
 
@@ -178,7 +178,7 @@ FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件
 规则引擎的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
 
 事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
-如果想让 emqx 将事件消息发布出来，可以在 ``emqx_rule_engine.conf`` 文件中配置。
+如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
 
 所有支持的事件及其可用字段详见: [规则事件](#rule-sql-events)。
 
@@ -247,10 +247,10 @@ SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos =
 
 ::: tip
 
-- FROM 子句后面的主题需要用双引号 ``""`` 引起来。
-- WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 ``''`` 引起来。
-- FROM 子句里如有多个主题，需要用逗号 ``","`` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
-- 可以使用使用 ``"."`` 符号对 payload 进行嵌套选择。
+- FROM 子句后面的主题需要用双引号 `""` 引起来。
+- WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 `''` 引起来。
+- FROM 子句里如有多个主题，需要用逗号 `","` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
+- 可以使用使用 `"."` 符号对 payload 进行嵌套选择。
 
 :::
 
@@ -571,7 +571,7 @@ FROM
 | $events/session_unsubscribed | 取消订阅 |
 
 ### SELECT 和 WHERE 子句可用的字段
-SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 ``clientid``, ``username`` 和 ``event`` 是通用字段，每种事件类型都有。
+SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clientid`, `username` 和 `event` 是通用字段，每种事件类型都有。
 
 #### 普通主题 (消息发布)
 
@@ -1308,86 +1308,18 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 
 #### 编解码函数
 
-<table>
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 14%" />
-<col style="width: 52%" />
-<col style="width: 16%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>函数名</td>
-<td>函数作用</td>
-<td>参数</td>
-<td>返回值</td>
-</tr>
-<tr class="even">
-<td>base64_encode</td>
-<td>BASE64 编码</td>
-<td><ol type="1">
-<li>数据</li>
-</ol></td>
-<td>BASE64 字符串</td>
-</tr>
-<tr class="odd">
-<td>base64_decode</td>
-<td>BASE64 解码</td>
-<td><ol type="1">
-<li>BASE64 字符串</li>
-</ol></td>
-<td>数据</td>
-</tr>
-<tr class="even">
-<td>json_encode</td>
-<td>JSON 编码</td>
-<td><ol type="1">
-<li>JSON 字符串</li>
-</ol></td>
-<td>内部 Map</td>
-</tr>
-<tr class="odd">
-<td>json_decode</td>
-<td>JSON 解码</td>
-<td><ol type="1">
-<li>内部 Map</li>
-</ol></td>
-<td>JSON 字符串</td>
-</tr>
-<tr class="even">
-<td>schema_encode</td>
-<td>Schema 编码</td>
-<td><ol type="1">
-<li>Schema ID 2. 内部 Map</li>
-</ol></td>
-<td>数据</td>
-</tr>
-<tr class="odd">
-<td>schema_encode</td>
-<td>Schema 编码</td>
-<td><ol type="1">
-<li>Schema ID 2. 内部 Map 3. Protobuf Message 名</li>
-</ol></td>
-<td>数据</td>
-</tr>
-<tr class="even">
-<td>schema_decode</td>
-<td>Schema 解码</td>
-<td><ol type="1">
-<li>Schema ID 2. 数据</li>
-</ol></td>
-<td>内部 Map</td>
-</tr>
-<tr class="odd">
-<td>schema_decode</td>
-<td>Schema 解码</td>
-<td><ol type="1">
-<li>Schema ID 2. 数据 3. Protobuf Message 名</li>
-</ol></td>
-<td>内部 Map</td>
-</tr>
-</tbody>
-</table>
+#### Decode and encode functions
+
+| 函数名 | 函数功能 |        参数         | 返回值 |
+| -------- | -------------- |--------------- | --------------------------- |
+| `base64_encode` | BASE64 编码 | 要编码的二进制数据 | Base64 编码的字符串 |
+| `base64_decode` | BASE64 解码 | Base64 编码的字符串 | 解码后的二进制数据 |
+| `json_encode` | JSON 编码 | 要转成 JSON 的数据结构 | JSON 字符串 |
+| `json_decode` | JSON 解码 | 要解码的 JSON 字符串 | 解码后的数据结构 |
+| `schema_encode` | 按照 schema 编码. 依赖 [schema registry](schema-registry.md) | 1. 由 schema registry 定义的 Schema ID 2. 要编码的数据 3..N. 其他参数，跟 schema 相关 | 编码后的数据 |
+| `schema_decode` | 按照 schema 编码. 依赖 [schema registry](schema-registry.md) | 1. 由 schema registry 定义的 Schema ID 2. 要解码的数据 3..N.  其他参数，跟 schema 相关 | 解码后的数据 |
+| `bin2hexstr` | 二进制数据转为 Hex 字符串 | 二进制数据 | Hex 字符串 |
+| `hexstr2bin` | Hex 字符串转为二进制数据 | Hex 字符串 | 二进制数据 |
 
 ### 在 Dashboard 中测试 SQL 语句
 Dashboard 界面提供了 SQL 语句测试功能，通过给定的 SQL 语句和事件参数，展示 SQL 测试结果。
