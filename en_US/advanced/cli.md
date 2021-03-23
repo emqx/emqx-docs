@@ -509,7 +509,7 @@ Plugin properties:
 | description | Plugin description |
 | active      | Whether loaded     |
 
-### plugins load <Plugin>
+### plugins load <Plugin> {#load_plugin}
 
 Load plugin:
 

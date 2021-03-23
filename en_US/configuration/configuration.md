@@ -6509,6 +6509,20 @@ Which topic the device's upstream registration message (register) needs to be pu
 Which topic the device's upstream update message (update) needs to be published to.
 
 
+### lwm2m.update_msg_publish_condition
+
+| Type | Optional Value                   | Default                |
+|------|----------------------------------|------------------------|
+| enum | `contains_object_list`, `always` | `contains_object_list` |
+
+#### Description
+
+When publish the update message. Can be one of:
+
+- contains_object_list: only if the update message contains object list
+
+- always: always publish the update message
+
 
 ### lwm2m.opts.buffer
 
