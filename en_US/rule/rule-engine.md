@@ -64,7 +64,7 @@ The following figure is a simple rule, which is used to process the data at the 
 In version 4.0, the SQL syntax of the rule engine is easier to use. In version 3. X, the event name needs to be specified after the **FROM** clause. After 4.0 version, we introduce the concept of **event topic** . By default, the **message publish** event no longer needs to be specified. 
 
 ```sql
-## 3.x 
+## 3.x
 ## Event name needs to be specified for processing
 SELECT * FROM "message.publish" WHERE topic =~ 't/#'
 
@@ -129,9 +129,9 @@ The basic format of the SQL statement of the rule engine is:
 ```sql
 SELECT <fields> FROM <topic> [WHERE <any>]
 ```
-- The `` FROM`` clause mounts rules to a topic
-- The `` SELECT`` clause is used to select fields in the output
-- The `` WHERE`` clause is used to filter messages based on conditions
+- The `FROM` clause mounts rules to a topic
+- The `SELECT` clause is used to select fields in the output
+- The `WHERE` clause is used to filter messages based on conditions
 
 **FOREACH, DO and INCASE clauses:**
 
@@ -139,11 +139,11 @@ If you want to perform some operations and actions for each element of an array 
 
 ```sql
 FOREACH <Field name> [DO <Condition>] [INCASE <Condition>] FROM <Topic> [WHERE <Condition>]
-````
+```
 
-- The `` FOREACH`` clause is used to select the field that needs to perform foreach operation. Note that the selected field must be an array type
-- The `` DO`` clause is used to transform each element in the array selected by FOREACH and select the field of interest
-- The `` INCASE`` clause is used to apply conditional filtering to a field selected by DO
+- The `FOREACH` clause is used to select the field that needs to perform foreach operation. Note that the selected field must be an array type
+- The `DO` clause is used to transform each element in the array selected by FOREACH and select the field of interest
+- The `INCASE` clause is used to apply conditional filtering to a field selected by DO
 
 The DO and INCASE clauses are optional. DO is equivalent to the SELECT clause for objects in the current loop, while INCASE is equivalent to the WHERE statement for objects in the current loop.
 
@@ -173,7 +173,7 @@ For all supported events and available fields, please see  [rule event](#rule-sq
 -  Extract the qos, username, and clientid fields from the message with a topic that can match 't/#' :
     ```sql
     SELECT qos, username, clientid FROM "t/#"
-    ````
+    ```
 -  Extract the username field from any topic message with the filter criteria of username = 'Steven':
     ```sql
     SELECT username FROM "#" WHERE username='Steven'
@@ -190,7 +190,7 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     ```sql
     SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
     ```
-- Filter all clientids that subscribe to the 't / #' topic and have a subscription level of QoS1 :
+- Filter all clientids that subscribe to the 't/#' topic and have a subscription level of QoS1 :
     ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
     ```
@@ -200,13 +200,13 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     ```
 
 ::: tip
-- Topic after the FROM clause need to be enclosed in double quotes `` "" ``.
-- The WHERE clause is followed by the filter condition. If a string is used, it needs to be enclosed in single quotes `` '' ``.
-- If there are multiple topics in the FROM clause, they need to be separated by commas `` "," ``. For example,
+- Topic after the FROM clause need to be enclosed in double quotes `""`.
+- The WHERE clause is followed by the filter condition. If a string is used, it needs to be enclosed in single quotes `'' `.
+- If there are multiple topics in the FROM clause, they need to be separated by commas `","`. For example,
     ```sql
-    SELECT * FROM "t / 1", "t / 2".
+    SELECT * FROM "t/1", "t/2".
     ```
-- You can use the `` "." `` Symbol to nest select payloads
+- You can use the `"." `Symbol to nest select payloads
 - :::
 
 #### Examples of FOREACH-DO-INCASE
@@ -410,8 +410,8 @@ Then the above SQL output is:
 | $events/session\_subscribed   | Subscribe            |
 | $events/session\_unsubscribed | Unsubcribe           |
 
-### Available fields in SELECT and WHERE clauses 
-The fields available in the SELECT and WHERE clauses are related to the type of event. Among them, `` clientid``, `` username`` and `` event`` are common fields that is contained by each type of event.
+### Available fields in SELECT and WHERE clauses
+The fields available in the SELECT and WHERE clauses are related to the type of event. Among them, `clientid`, `username` and ` event` are common fields that is contained by each type of event.
 
 #### Message Publish
 
@@ -430,7 +430,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | publish_received_at | Time when PUBLISH message reaches Broker (ms)             |
 | node                | Node name of the trigger event                            |
 
-#### $events/message\_delivered 
+#### $events/message\_delivered
 
 | event               | Event type, fixed at "message.delivered"      |
 | ------------------- | --------------------------------------------- |
@@ -448,7 +448,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
 
-#### $events/message_acked 
+#### $events/message_acked
 | event               | Event type, fixed at "message.acked"          |
 | :------------------ | :-------------------------------------------- |
 | id                  | MQTT message id                               |
@@ -500,7 +500,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | timestamp        | Event trigger time(millisecond)         |
 | node             | Node name of the trigger event          |
 
-#### $events/client_disconnected 
+#### $events/client_disconnected
 
 | event            | Event type, fixed at "client.disconnected" |
 | ---------------- | :----------------------------------------- |
@@ -524,7 +524,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | timestamp | Event trigger time(millisecond)           |
 | node      | Node name of the trigger event            |
 
-#### $events/session_unsubscribed 
+#### $events/session_unsubscribed
 
 | event     | Event type, fixed at "session.unsubscribed" |
 | :-------- | :------------------------------------------ |
@@ -570,7 +570,7 @@ SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
 
 The FROM statement is used to select the source of the event. If the message is published, fill in the topic of the message, if it is an event, fill in the corresponding event topic.
 
-#### Operational symbol 
+#### Operational symbol
 | Function | Purpose                                                      | Returned value              |      |
 | -------- | ------------------------------------------------------------ | --------------------------- | ---- |
 | `+`      | addition, or string concatenation                            | Sum, or concatenated string |      |
@@ -1220,88 +1220,18 @@ The FROM statement is used to select the source of the event. If the message is 
 </tbody>
 </table>
 
-#### Schema Registry function
+#### Decoding and encoding functions
 
-<table>
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 14%" />
-<col style="width: 52%" />
-<col style="width: 16%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>function name</td>
-<td>purpose</td>
-<td>parameter</td>
-<td>returned value</td>
-</tr>
-<tr class="even">
-<td>base64_encode</td>
-<td>BASE64 encode</td>
-<td><ol type="1">
-<li>data</li>
-</ol></td>
-<td>BASE64 string</td>
-</tr>
-<tr class="odd">
-<td>base64_decode</td>
-<td>BASE64 decode</td>
-<td><ol type="1">
-<li>BASE64 string</li>
-</ol></td>
-<td>data</td>
-</tr>
-<tr class="even">
-<td>json_encode</td>
-<td>JSON encode</td>
-<td><ol type="1">
-<li>JSON string</li>
-</ol></td>
-<td>internal Map</td>
-</tr>
-<tr class="odd">
-<td>json_decode</td>
-<td>JSON decode</td>
-<td><ol type="1">
-<li>internal Map</li>
-</ol></td>
-<td>JSON strubg</td>
-</tr>
-<tr class="even">
-<td>schema_encode</td>
-<td>Schema encode</td>
-<td><ol type="1">
-<li>Schema ID 2. internal Map</li>
-</ol></td>
-<td>data</td>
-</tr>
-<tr class="odd">
-<td>schema_encode</td>
-<td>Schema encode</td>
-<td><ol type="1">
-<li>Schema ID 2. internal Map 3. Protobuf Message name</li>
-</ol></td>
-<td>data</td>
-</tr>
-<tr class="even">
-<td>schema_decode</td>
-<td>Schema decode</td>
-<td><ol type="1">
-<li>Schema ID 2. data</li>
-</ol></td>
-<td>internal Map</td>
-</tr>
-<tr class="odd">
-<td>schema_decode</td>
-<td>Schema decode</td>
-<td><ol type="1">
-<li>Schema ID 2. data 3. Protobuf Message name</li>
-</ol></td>
-<td>internal Map</td>
-</tr>
-</tbody>
-</table>
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|------------------ ------- | --------------------------- |
+| `base64_encode` | BASE64 encode   | The binary to be encoded | The encoded base64-formatted string |
+| `base64_decode` | BASE64 decode   | The base64-formatted string to be decoded | The decoded binary |
+| `json_encode` | JSON encode   | The data to be encoded | The JSON string |
+| `json_decode` | JSON decode   | The JSON string to be decoded | The decoded data |
+| `schema_encode` | Encode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
+| `schema_decode` | Decode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
+| `bin2hexstr` | Binary to Hex String | The binary | The hex string |
+| `hexstr2bin` | Binary to Hex String | The hex string | The binary |
 
 ### Test SQL statements in Dashboard
 The SQL statement test function is provided in the Dashboard interface, and the SQL test results are shown through the given SQL statement and event parameters.
