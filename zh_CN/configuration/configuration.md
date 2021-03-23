@@ -6512,6 +6512,23 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | --------- |
 | string | `up/resp` |
 
+<br />
+
+### lwm2m.update_msg_publish_condition
+
+| Type | Optional Value                   | Default                |
+|------|----------------------------------|------------------------|
+| enum | `contains_object_list`, `always` | `contains_object_list` |
+
+#### Description
+
+发布 UPDATE 事件的条件。可以为下列两种之一：
+
+- contains_object_list: 仅当 UPDATE 消息包含 `object list` 时发布
+
+- always: 总是发布
+
+
 #### 说明
 
 设备的上行更新消息 (update) 需要发布到哪个主题。

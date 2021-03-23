@@ -890,7 +890,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Broker Authentication with ClientId/Password","active":false}, ...],"code":0}
 ```
 
-#### PUT /api/v4/nodes/{node}/plugins/{plugin}/load 
+#### PUT /api/v4/nodes/{node}/plugins/{plugin}/load {#load_plugin}
 Load the specified plugin under the specified node.
 
 **Parameters:** None
