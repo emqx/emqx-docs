@@ -476,6 +476,10 @@
       "title": "运维操作",
       "children": [
         {
+          "title": "设备管理",
+          "path": "tutorial/device-management"
+        },
+        {
           "title": "系统调优",
           "path": "tutorial/tune"
         },

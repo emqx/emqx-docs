@@ -75,7 +75,7 @@ If Dashboard plugin is started (by default), the plugins can be start or stopped
 
 **Start and stop plugins using management API**
 
-When EMQ X Broker is running, you can view, start and stop a plugin through [Managing and Monitoring API - Load Plugin](#http-api.md#load_plugin).
+When EMQ X Broker is running, you can view, start and stop a plugin through [Managing and Monitoring API - Load Plugin](./http-api.md#load_plugin).
 
 
 ## Plugin development
