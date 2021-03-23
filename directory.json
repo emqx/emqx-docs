@@ -773,6 +773,28 @@
       "path": "advanced/relup"
     },
     {
+      "title": "Multi-language Extension",
+      "children": [
+        {
+          "title": "Introduction",
+          "path": "advanced/lang"
+        },
+        {
+          "title": "Extension Hook",
+          "path": "advanced/lang-exhook"
+        },
+        {
+          "title": "Extension Proto",
+          "path": "advanced/lang-exproto"
+        },
+        {
+          "title": "Lua",
+          "path": "advanced/lang-lua"
+        }
+      ]
+    },
+
+    {
       "title": "SDK & Tools",
       "children": [
         {
