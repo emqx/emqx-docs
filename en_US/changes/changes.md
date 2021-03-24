@@ -15,6 +15,33 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.9
+
+*Release Date: 2020-03-24*
+
+EMQ X 4.2.9 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Fix MQTT packet receiving count issue
+
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+- Fix the processing of heartbeat packets
+
+  Github Issue: [emqx#4370](https://github.com/emqx/emqx/issues/4370)
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+### emqx-auth-mnesia
+
+**Bug fixes:**
+
+- Fixed database storage issues and CLI issues
+
+  Github PR: [emqx-auth-mnesia#54](https://github.com/emqx/emqx-auth-mnesia/pull/54)
+
 ## Version 4.3-rc.1
 
 *Release Date: 2020-03-23*
