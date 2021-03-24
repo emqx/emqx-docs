@@ -700,6 +700,10 @@
           "path": "rule/rule-create"
         },
         {
+          "title": "Update resources",
+          "path": "rule/how_to_update_resources"
+        },
+        {
           "title": "Create Inspect Rules",
           "path": "rule/rule-example"
         },
