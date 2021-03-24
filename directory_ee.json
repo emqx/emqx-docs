@@ -926,6 +926,10 @@
           "path": "rule/rule-create"
         },
         {
+          "title": "Update resource",
+          "path": "rule/how_to_update_resources"
+        },
+        {
           "title": "Create Inspect Rules",
           "path": "rule/rule-example"
         },
