@@ -238,6 +238,10 @@
           "path": "rule/rule-create"
         },
         {
+          "title": "更新资源",
+          "path": "rule/how_to_update_resources"
+        },
+        {
           "title": "检查 (调试)",
           "path": "rule/rule-example"
         },
