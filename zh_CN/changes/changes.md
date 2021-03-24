@@ -15,6 +15,33 @@ ref:
 
 # 版本发布
 
+## 4.2.9 版本
+
+*发布日期: 2020-03-24*
+
+EMQ X 4.2.9 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复 MQTT 报文接收计数问题
+
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+- 修复心跳报文的处理
+
+  Github Issue: [emqx#4370](https://github.com/emqx/emqx/issues/4370)
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+### emqx-auth-mnesia
+
+**错误修复:**
+
+- 修复了数据库存储问题与 CLI 问题
+
+  Github PR: [emqx-auth-mnesia#54](https://github.com/emqx/emqx-auth-mnesia/pull/54)
+
 ## 4.3-rc.1 版本
 
 *发布日期: 2020-03-23*
