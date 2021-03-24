@@ -161,11 +161,15 @@ acl_nomatch = allow
 ```
 
 {% emqxce %}
+
 配置默认 [ACL 文件](./acl-file.md)，使用文件定义默认 ACL 规则：
+
 {% endemqxce %}
 
 {% emqxee %}
+
 配置默认 ACL 文件，使用文件定义默认 ACL 规则：
+
 {% endemqxee %}
 
 ```bash

@@ -152,11 +152,15 @@ acl_nomatch = allow
 ```
 
 {% emqxce %}
+
 Configure the default  [ACL file](./acl-file.md) and use the file to define the default ACL rule:
+
 {% endemqxce %}
 
 {% emqxee %}
+
 Configure the default, use the file to define the default ACL rule:
+
 {% endemqxee %}
 
 
