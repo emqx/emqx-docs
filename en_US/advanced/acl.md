@@ -97,11 +97,15 @@ ACL is a collection of allowing and denying conditions. The following elements a
 ```
 
 {% emqxee %}
+
 When there are multiple ACL rules at the same time, EMQ X will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from bottom to top:
+
 {% endemqxee %}
 
 {% emqxce %}
+
 When there are multiple ACL rules at the same time, EMQ X will merge them in order according to the rules. Taking the default ACL in [ACL file](./acl-file.md) as an example, it loads the rule from bottom to top:
+
 {% endemqxce %}
 
 1. The first rule allows clients to publish and subscribe to all topics
@@ -146,11 +150,15 @@ acl_nomatch = allow
 ```
 
 {% emqxce %}
+
 Configure the default  [ACL file](./acl-file.md) and use the file to define the default ACL rule:
+
 {% endemqxce %}
 
 {% emqxee %}
+
 Configure the default, use the file to define the default ACL rule:
+
 {% endemqxee %}
 
 ```bash
