@@ -691,6 +691,10 @@
           "path": "rule/rule-create"
         },
         {
+          "title": "Update resource",
+          "path": "rule/how_to_update_resources"
+        },
+        {
           "title": "Update resources",
           "path": "rule/how_to_update_resources"
         },
