@@ -42,6 +42,10 @@ EMQ X 4.2.9 is released now, it mainly includes the following changes:
 
   Github PR: [emqx-auth-mnesia#54](https://github.com/emqx/emqx-auth-mnesia/pull/54)
 
+- Fix the issue that the `password_hash` configuration does not take effect
+
+  Github PR: [emqx-auth-mnesia#56](https://github.com/emqx/emqx-auth-mnesia/pull/56)
+
 ## Version 4.3-rc.1
 
 *Release Date: 2020-03-23*
