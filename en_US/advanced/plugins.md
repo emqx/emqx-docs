@@ -6,6 +6,10 @@ They rely on the code API of  [emqx](https://github.com/emqx/emqx) or[hooks](hoo
 
 You can compile it with the [emqx](https:://github.com/emqx/emqx) core project and package it into a working package through the package compilation tool [emqx-rel](https://github.com/emqx/emqx-rel).
 
+::: danger
+EMQ X Enteprise does not provide source code, and does not support the development and compilation of plugins by customers.
+:::
+
 
 ## List of plugins
 
