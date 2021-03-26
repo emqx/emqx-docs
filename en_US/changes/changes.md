@@ -15,6 +15,20 @@ ref: undefined
 
 # Changes
 
+## Version 4.2-rc.2
+
+*发布日期: 2020-03-26*
+
+EMQ X 4.2-rc.2 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Fix the issue that `emqx` and `emqx_ctl` commands are not available in some cases
+
+  Github PR: [emqx#4430](https://github.com/emqx/emqx/pull/4430)
+
 ## Version 4.2.9
 
 *Release Date: 2020-03-24*
