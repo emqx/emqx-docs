@@ -42,6 +42,10 @@ EMQ X 4.2.9 现已发布，主要包含以下改动:
 
   Github PR: [emqx-auth-mnesia#54](https://github.com/emqx/emqx-auth-mnesia/pull/54)
 
+- 修复 `password_hash` 配置项不生效的问题
+
+  Github PR: [emqx-auth-mnesia#56](https://github.com/emqx/emqx-auth-mnesia/pull/56)
+
 ## 4.3-rc.1 版本
 
 *发布日期: 2020-03-23*
