@@ -11,7 +11,6 @@ EMQ X Enterprise edition customers are not provided with the source code.
 EMQ provides no supports for customer developed plugins in their development, test or integration work.
 :::
 
-
 ## List of plugins
 
  The official plug-ins provided by EMQ X include: 
