@@ -21,6 +21,10 @@ EMQ X 发行包中，包含了大量的官方插件，提供了一些基础的�
 
 然后通过打包编译工具 [emqx-rel](https://github.com/emqx/emqx-rel) 将其与 [emqx](https:://github.com/emqx/emqx) 核心项目一起编译并打包至一个可运行的软件包中。
 
+::: danger
+EMQ X Enteprise 商业销售时不提供源代码，不支持客户自行开发、编译插件。
+:::
+
 
 ## 插件列表
 
