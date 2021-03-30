@@ -15,6 +15,36 @@ ref: undefined
 
 # Changes
 
+## Version 4.2-rc.3
+
+*Release Date: 2020-03-30*
+
+EMQ X 4.2-rc.3 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Limit the maximum effective size of the flight window to 65535
+
+  Github PR: [emqx#4436](https://github.com/emqx/emqx/pull/4436)
+
+- Fix the issue that the value of the `Keep Alive` field in the Dashboard is not synchronized when `Server Keep Alive` was in effect
+
+  Github PR: [emqx#4444](https://github.com/emqx/emqx/pull/4444)
+
+- Quickly kill the connection process when OOM
+
+  Github PR: [emqx#4451](https://github.com/emqx/emqx/pull/4451)
+
+- Fix the issue that `emqx start` reports timeout but the service has actually started
+
+  Github PR: [emqx#4449](https://github.com/emqx/emqx/pull/4449)
+
+- Fix the issue that the sleep mode of MQTT-SN is unavailable
+
+  Github PR: [emqx#4435](https://github.com/emqx/emqx/pull/4435)
+
 ## Version 4.2-rc.2
 
 *Release Date: 2020-03-26*

@@ -15,6 +15,36 @@ ref:
 
 # 版本发布
 
+## 4.2-rc.3 版本
+
+*发布日期: 2020-03-30*
+
+EMQ X 4.2-rc.3 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 限制飞行窗口的最大长度为 65535
+
+  Github PR: [emqx#4436](https://github.com/emqx/emqx/pull/4436)
+
+- 修复 Server Keep Alive 生效情况下 Dashboard 中 Keep Alive 字段的值未同步的问题
+
+  Github PR: [emqx#4444](https://github.com/emqx/emqx/pull/4444)
+
+- OOM 时快速杀死连接进程
+
+  Github PR: [emqx#4451](https://github.com/emqx/emqx/pull/4451)
+
+- 修复 `emqx start` 报超时但服务实际已启动的问题
+
+  Github PR: [emqx#4449](https://github.com/emqx/emqx/pull/4449)
+
+- 修复 MQTT-SN 睡眠模式不可用的问题
+
+  Github PR: [emqx#4435](https://github.com/emqx/emqx/pull/4435)
+
 ## 4.2-rc.2 版本
 
 *发布日期: 2020-03-26*
