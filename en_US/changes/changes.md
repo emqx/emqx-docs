@@ -17,7 +17,7 @@ ref: undefined
 
 ## Version 4.2-rc.2
 
-*发布日期: 2020-03-26*
+*Release Date: 2020-03-26*
 
 EMQ X 4.2-rc.2 is released now, it mainly includes the following changes:
 
