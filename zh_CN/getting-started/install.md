@@ -543,7 +543,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 更多关于 EMQ X Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
-## 通过 Helkm 安装并集群 (K8S、K3S)
+## 通过 Helm 安装并集群 (K8S、K3S)
 
 1. 添加 helm 仓库
 
