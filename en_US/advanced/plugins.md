@@ -262,11 +262,11 @@ Start the node (interactive mode)
 ./_build/emqx/rel/emqx/bin/emqx console
 ```
 
-Load the plugin with command:
+Load the plugin with the command:
 ```
 ./_build/emqx/rel/emqx/bin/emqx_ctl plugins load plugin_name
 ```
 
 ::: tip Tip
-To have the plugin enabled/loaded by default, you can include it by `data/loaded_plugins.tmpl`.
+To have the plugin enabled/loaded by default, you can include it in `data/loaded_plugins.tmpl`.
 :::
