@@ -19,8 +19,6 @@ EMQ provides no supports for customer developed plugins in their development, te
 | ------------------------------------------------------------ | ------------------------------------- | ---------------------------------- |
 | [emqx_dashboard](https://github.com/emqx/emqx/tree/master/lib-ce/emqx_dashboard)   | etc/plugins/emqx_dashbord.conf        | Web dashboard Plugin (Default)     |
 | [emqx_management](https://github.com/emqx/emqx/tree/master/apps/emqx-management)   | etc/plugins/emqx_management.conf      | HTTP API and CLI Management Plugin |
-| [emqx_auth_clientid](https://github.com/emqx/emqx/tree/master/apps/emqx-auth-clientid) | etc/plugins/emqx_auth_clientid.conf   | ClientId Auth Plugin               |
-| [emqx_auth_username](https://github.com/emqx/emqx/tree/master/apps/emqx-auth-username) | etc/plugins/emqx_auth_username.conf   | Username/Password Auth Plugin      |
 | [emqx_auth_jwt](https://github.com/emqx/emqx/tree/master/apps/emqx-auth-jwt)       | etc/plugins/emqx_auth_jwt.conf        | JWT Auth/access control            |
 | [emqx_auth_ldap](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_ldap)     | etc/plugins/emqx_auth_ldap.conf       | LDAP Auth/access control           |
 | [emqx_auth_http](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_http)     | etc/plugins/emqx_auth_http.conf       | HTTP Auth/access control           |
@@ -39,7 +37,6 @@ EMQ provides no supports for customer developed plugins in their development, te
 | [emqx_sn](https://github.com/emqx/emqx/tree/master/apps/emqx_sn)                   | etc/plugins/emqx_sn.conf              | MQTT-SN protocol support           |
 | [emqx_stomp](https://github.com/emqx/emqx/tree/master/apps/emqx_stomp)             | etc/plugins/emqx_stomp.conf           | Stomp protocol support             |
 | [emqx_recon](https://github.com/emqx/emqx/tree/master/apps/emqx_recon)             | etc/plugins/emqx_recon.conf           | Recon performance debugging        |
-| [emqx_reloader](https://github.com/emqx/emqx/tree/master/apps/emqx_reloader)       | etc/plugins/emqx_reloader.conf        | Hot load plugin                    |
 | [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)               | etc/plugins/emqx_plugin_template.conf | plugin develop template            |
 
 ## Start and stop plugin
