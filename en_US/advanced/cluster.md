@@ -334,7 +334,7 @@ where `BasePort` is 4370 (which is not made configurable), and `Offset` is the n
 For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the
 node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
 
-### The Cluster PRC Port
+### The Cluster RPC Port
 
 Each emqx node also listens on a (conventional) port for the RPC channels, which should
 also be allowed by the firewall. The port mapping rule is similar to the node discovery
