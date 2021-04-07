@@ -48,7 +48,7 @@ Mnesia authentication uses sha256 for password hash encryption by default, which
 auth.mnesia.password_hash = sha256
 ```
 
-After configuring [Hash Method](./auth.md#加盐规则与哈希方法), the newly added preset authentication data and authentication data added through the HTTP API will be stored in the EMQ X built-in database in the format of hash ciphertext.
+After configuring [Hash Method](./auth.md#Password salting rules and hash methods), the newly added preset authentication data and authentication data added through the HTTP API will be stored in the EMQ X built-in database in the format of hash ciphertext.
 
 
 
