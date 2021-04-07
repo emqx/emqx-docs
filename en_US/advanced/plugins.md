@@ -18,8 +18,9 @@ EMQ provides no supports for customer developed plugins in their development, te
 | Plugin                                                       | Configuration file                    | Description                        |
 | ------------------------------------------------------------ | ------------------------------------- | ---------------------------------- |
 | [emqx_dashboard](https://github.com/emqx/emqx/tree/master/lib-ce/emqx_dashboard)   | etc/plugins/emqx_dashbord.conf        | Web dashboard Plugin (Default)     |
-| [emqx_management](https://github.com/emqx/emqx/tree/master/apps/emqx-management)   | etc/plugins/emqx_management.conf      | HTTP API and CLI Management Plugin |
-| [emqx_auth_jwt](https://github.com/emqx/emqx/tree/master/apps/emqx-auth-jwt)       | etc/plugins/emqx_auth_jwt.conf        | JWT Auth/access control            |
+| [emqx_management](https://github.com/emqx/emqx/tree/master/apps/emqx_management)   | etc/plugins/emqx_management.conf      | HTTP API and CLI Management Plugin |
+| [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_mnesia) | etc/plugins/emqx_auth_mnesia.conf     | Mnesia Auth/access control         |
+| [emqx_auth_jwt](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_jwt)       | etc/plugins/emqx_auth_jwt.conf        | JWT Auth/access control            |
 | [emqx_auth_ldap](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_ldap)     | etc/plugins/emqx_auth_ldap.conf       | LDAP Auth/access control           |
 | [emqx_auth_http](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_http)     | etc/plugins/emqx_auth_http.conf       | HTTP Auth/access control           |
 | [emqx_auth_mongo](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_mongo)   | etc/plugins/emqx_auth_mongo.conf      | MongoDB Auth/access control        |
