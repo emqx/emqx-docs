@@ -31,9 +31,7 @@ Authentication methods supported by EMQ X:
 
 {% emqxce %}
 
-* [Username authentication](./auth-username.md)
-* [Client ID authentication](./auth-clientid.md)
-* [Mnesia authentication](./auth-mnesia.md)
+* [Mnesia (username/clientid) authentication](./auth-mnesia.md)
 
 {% endemqxce %}
 
