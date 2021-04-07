@@ -48,9 +48,7 @@ EMQ X 支持的认证方式：
 
 {% emqxce %}
 
-* [Username 认证](./auth-username.md)
-* [Cliend ID 认证](./auth-clientid.md)
-* [Mnesia 认证](./auth-mnesia.md)
+* [Mnesia (用户名/Client ID）认证](./auth-mnesia.md)
 
 {% endemqxce %}
 
