@@ -33,8 +33,7 @@ EMQ X Enteprise 商业销售时不提供源代码，不支持客户自行开发�
 | -------------------------------------------------------------------- | ------------------------------------- | ------------------------- |
 | [emqx_dashboard](https://github.com/emqx/emqx-dashboard)             | etc/plugins/emqx_dashbord.conf        | Web 控制台插件 (默认加载) |
 | [emqx_management](https://github.com/emqx/emqx-management)           | etc/plugins/emqx_management.conf      | HTTP API 与 CLI 管理插件  |
-| [emqx_auth_clientid](https://github.com/emqx/emqx-auth-clientid)     | etc/plugins/emqx_auth_clientid.conf   | ClientId 认证插件         |
-| [emqx_auth_username](https://github.com/emqx/emqx-auth-username)     | etc/plugins/emqx_auth_username.conf   | 用户名、密码认证插件      |
+| [emqx_auth_mnesia](https://github.com/emqx/emqx-auth-username)     | etc/plugins/emqx_auth_username.conf   | 用户名、密码认证插件      |
 | [emqx_auth_jwt](https://github.com/emqx/emqx-auth-jwt)               | etc/plugins/emqx_auth_jwt.conf        | JWT 认证 / 访问控制       |
 | [emqx_auth_ldap](https://github.com/emqx/emqx-auth-ldap)             | etc/plugins/emqx_auth_ldap.conf       | LDAP 认证 / 访问控制      |
 | [emqx_auth_http](https://github.com/emqx/emqx-auth-http)             | etc/plugins/emqx_auth_http.conf       | HTTP 认证 / 访问控制      |
