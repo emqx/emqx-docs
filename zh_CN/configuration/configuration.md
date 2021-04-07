@@ -5644,7 +5644,7 @@ ACL 查询命令。可用的占位符有：
 
 <br />
 
-## [emqx-bridge-mqtt](https://github.com/emqx/emqx-bridge-mqtt)
+## 插件 `emqx_bridge_mqtt`
 
 ### bridge.mqtt.aws.address
 
@@ -5989,7 +5989,7 @@ EMQ X 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQ X 桥接模式支持
 
 <br />
 
-## [emqx-coap](https://github.com/emqx/emqx-coap)
+## 插件 `emqx_coap`
 
 ### coap.port
 
@@ -6099,7 +6099,7 @@ EMQ X 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQ X 桥接模式支持
 
 <br />
 
-## [emqx-dashboard](https://github.com/emqx/emqx-dashboard)
+## 插件 `emqx_dashboard`
 
 ### dashboard.default_user.login` & `dashboard.default_user.password
 
@@ -6367,7 +6367,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 
 <br />
 
-## [emqx-lwm2m](https://github.com/emqx/emqx-lwm2m)
+## 插件 `emqx_lwm2m`
 
 ### lwm2m.port
 
@@ -6619,7 +6619,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 
 <br />
 
-## [emqx-management](https://github.com/emqx/emqx-management)
+## 插件 `emqx_management`
 
 ### management.max_row_limit
 
@@ -6909,33 +6909,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 
 <br />
 
-## [emqx-reloader](https://github.com/emqx/emqx-reloader)
-
-### reloader.interval
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `60s`   |
-
-#### 说明
-
-每隔多长时间将所有代码代码热更新一次。
-
-<br />
-
-### reloader.logfile
-
-| Type   | Default        |
-| ------ | -------------- |
-| string | `reloader.log` |
-
-#### 说明
-
-代码热更新的日志文件
-
-<br />
-
-## [emqx-retainer](https://github.com/emqx/emqx-retainer)
+## 插件`emqx_retainer`
 
 ### retainer.storage_type
 
@@ -6997,7 +6971,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 
 <br />
 
-## [emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
+## 插件`emqx_rule_engine`
 
 ### rule-engine.ignore_sys_message
 
@@ -7044,7 +7018,7 @@ SELECT * FROM "$events/client_connected"
 
 <br />
 
-## [emqx-sn](https://github.com/emqx/emqx-sn)
+## 插件 `emqx_sn`
 
 ### mqtt.sn.port
 
@@ -7157,7 +7131,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 <br />
 
-## [emqx-prometheus](https://github.com/emqx/emqx-prometheus)
+## 插件 `emqx_prometheus`
 
 ### prometheus.push.gateway.server
 
@@ -7195,7 +7169,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 <br />
 
-## [emqx-stomp](https://github.com/emqx/emqx-stomp)
+## 插件 `emqx_stomp`
 
 ### stomp.listener
 
@@ -7461,7 +7435,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 <br />
 
-## [emqx-web-hook](https://github.com/emqx/emqx-web-hook)
+## 插件`emqx_web_hook`
 
 ### web.hook.url
 
