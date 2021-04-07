@@ -473,32 +473,9 @@ plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩
 
 ```bash
 $ ./bin/emqx_ctl plugins list
-Plugin (emqx_auth_clientid, version=v4.0.0, description=EMQ X Authentication with ClientId/Password, active=false)
-Plugin (emqx_auth_http, version=v4.0.0, description=EMQ X Authentication/ACL with HTTP API, active=false)
-Plugin (emqx_auth_jwt, version=v4.0.0, description=EMQ X Authentication with JWT, active=false)
-Plugin (emqx_auth_ldap, version=v4.0.0, description=EMQ X Authentication/ACL with LDAP, active=false)
-Plugin (emqx_auth_mongo, version=v4.0.0, description=EMQ X Authentication/ACL with MongoDB, active=false)
-Plugin (emqx_auth_mysql, version=v4.0.0, description=EMQ X Authentication/ACL with MySQL, active=false)
-Plugin (emqx_auth_pgsql, version=v4.0.0, description=EMQ X Authentication/ACL with PostgreSQL, active=false)
-Plugin (emqx_auth_redis, version=v4.0.0, description=EMQ X Authentication/ACL with Redis, active=false)
-Plugin (emqx_auth_username, version=v4.0.0, description=EMQ X Authentication with Username and Password, active=false)
-Plugin (emqx_bridge_mqtt, version=v4.0.0, description=EMQ X Bridge to MQTT Broker, active=false)
-Plugin (emqx_coap, version=v4.0.0, description=EMQ X CoAP Gateway, active=false)
-Plugin (emqx_dashboard, version=v4.0.0, description=EMQ X Web Dashboard, active=true)
-Plugin (emqx_delayed_publish, version=v4.0.0, description=EMQ X Delayed Publish, active=false)
-Plugin (emqx_lua_hook, version=v4.0.0, description=EMQ X Lua Hooks, active=false)
-Plugin (emqx_lwm2m, version=v4.0.0, description=EMQ X LwM2M Gateway, active=false)
-Plugin (emqx_management, version=v4.0.0, description=EMQ X Management API and CLI, active=true)
-Plugin (emqx_plugin_template, version=v4.0.0, description=EMQ X Plugin Template, active=false)
-Plugin (emqx_psk_file, version=v4.0.0, description=EMQX PSK Plugin from File, active=false)
-Plugin (emqx_recon, version=v4.0.0, description=EMQ X Recon Plugin, active=true)
-Plugin (emqx_reloader, version=v4.0.0, description=EMQ X Reloader Plugin, active=false)
-Plugin (emqx_retainer, version=v4.0.0, description=EMQ X Retainer, active=true)
-Plugin (emqx_rule_engine, version=v4.0.0, description=EMQ X Rule Engine, active=true)
-Plugin (emqx_sn, version=v4.0.0, description=EMQ X MQTT SN Plugin, active=false)
-Plugin (emqx_statsd, version=v4.0.0, description=Statsd for EMQ X, active=false)
-Plugin (emqx_stomp, version=v4.0.0, description=EMQ X Stomp Protocol Plugin, active=false)
-Plugin (emqx_web_hook, version=v4.0.0, description=EMQ X Webhook Plugin, active=false)
+Plugin(emqx_auth_http, description=EMQ X Authentication/ACL with HTTP API, active=false)
+Plugin(emqx_auth_jwt, description=EMQ X Authentication with JWT, active=false)
+Plugin(emqx_auth_ldap, description=EMQ X Authentication/ACL with LDAP, active=false)
 ```
 
 插件属性:
