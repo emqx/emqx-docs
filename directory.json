@@ -148,14 +148,6 @@
           "path": "advanced/auth"
         },
         {
-          "title": "Username 认证（即将废弃）",
-          "path": "advanced/auth-username"
-        },
-        {
-          "title": "Cliend ID 认证（即将废弃）",
-          "path": "advanced/auth-clientid"
-        },
-        {
           "title": "Mnesia 认证",
           "path": "advanced/auth-mnesia"
         },
@@ -608,14 +600,6 @@
         {
           "title": "Introduction",
           "path": "advanced/auth"
-        },
-        {
-          "title": "Username",
-          "path": "advanced/auth-username"
-        },
-        {
-          "title": "Cliend ID",
-          "path": "advanced/auth-clientid"
         },
         {
           "title": "Mnesia",
