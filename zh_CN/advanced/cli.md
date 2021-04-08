@@ -324,6 +324,16 @@ $ ./bin/emqx_ctl acl reload
 ok
 ```
 
+### acl cache-clean
+
+在 v4.3 之后，引入了的命令来清理 ACL 缓存:
+
+| 命令                        | 描述                      |
+| --------------------------- | ------------------------- |
+| acl cache-clean all         | 清除集群中所有的 ACL 缓存 |
+| acl cache-clean node <Node> | 清除指定节点的 ACL 缓存   |
+| acl cache-clean <ClientId>  | 清除指定客户端的 ACL 缓存 |
+
 ## clients 命令
 
 clients 命令查询连接的 MQTT 客户端。
