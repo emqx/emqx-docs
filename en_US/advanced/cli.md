@@ -310,7 +310,14 @@ It is Noted that EMQ X Broker does not support joining a node that is already in
 
 ## acl command
 
-Reload acl rule:
+Since v4.1 the command `modules` has been introduced and we reload the ACLs using the following command:
+
+```bash
+$ ./bin/emqx_ctl modules reload emqx_mod_acl_internal
+Module emqx_mod_acl_internal reloaded successfully.
+```
+
+Prior to v4.1, still use:
 
 ```bash
 $ ./bin/emqx_ctl acl reload
@@ -534,6 +541,58 @@ Reload plugin:
 ```bash
 $ ./bin/emqx_ctl plugins reload emqx_lua_hook
 Plugin emqx_lua_hook reloaded successfully.
+```
+
+## modules command
+
+Since v4.1 we have introduced the `modules` command to manage EMQ X's built-in modules at runtime.
+
+| Command                    | Description               |
+| -------------------------- | ------------------------- |
+| `modules list            ` | List all modules          |
+| `modules load   <Module> ` | Load a module             |
+| `modules unload <Module> ` | Unload a module           |
+| `modules reload <Module> ` | Reload a module           |
+
+### modules list
+
+Lists all built-in modules, including those that have not been started:
+
+```bash
+$ ./bin/emqx_ctl modules list
+Module(emqx_mod_delayed, description=EMQ X Delayed Publish Module, active=false)
+Module(emqx_mod_topic_metrics, description=EMQ X Topic Metrics Module, active=false)
+Module(emqx_mod_subscription, description=EMQ X Subscription Module, active=false)
+Module(emqx_mod_acl_internal, description=EMQ X Internal ACL Module, active=true)
+Module(emqx_mod_rewrite, description=EMQ X Topic Rewrite Module, active=false)
+Module(emqx_mod_presence, description=EMQ X Presence Module, active=true)
+```
+
+### modules load
+
+Load a module:
+
+```bash
+$ ./bin/emqx_ctl modules load emqx_mod_delayed
+Module emqx_mod_delayed loaded successfully.
+```
+
+### modules unload
+
+Unload a module:
+
+```bash
+$ ./bin/emqx_ctl modules unload emqx_mod_delayed
+Module emqx_mod_delayed unloaded successfully.
+```
+
+### modules reload
+
+Reload a module:
+
+```bash
+$ ./bin/emqx_ctl modules reload emqx_mod_acl_internal
+Module emqx_mod_acl_internal reloaded successfully.
 ```
 
 ## vm command
