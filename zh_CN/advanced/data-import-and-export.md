@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -39,6 +39,7 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
     $ ./emqx_ctl data export
     The emqx data has been successfully exported to /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json.
     ```
+
 2. 保存导出文件，这里将导出文件保存到 tmp 目录
 
    ```bash
@@ -59,6 +60,13 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
    The emqx data has been imported successfully.
    ```
 
+5. 数据重载。有时由于一些版本间的兼容性问题和自定义数据处理的需求，我们允许重载被导入的数据内容。通过指定 `--env` 参数来指定一个 JSON 格式重载数据或兼容性指令：
+
+    ```
+    $ ./emqx_ctl data import /tmp/emqx-export-2020-5-15-17-39-0.json --env '{"auth.mnesia.as":"username"}'
+    The emqx data has been imported successfully.
+    ```
+
 ### HTTP API
 
 1. 导出数据
@@ -74,7 +82,7 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
 2. 下载数据文件
 
    ```bash
-   $ curl --basic -u admin:public -X GET http://localhost:8081/api/v4/data/file/emqx-export-2020-9-4-10-24-16.json -o /tmp/emqx-export-2020-9-4-10-24-16.json   
+   $ curl --basic -u admin:public -X GET http://localhost:8081/api/v4/data/file/emqx-export-2020-9-4-10-24-16.json -o /tmp/emqx-export-2020-9-4-10-24-16.json
    ```
 
 3. 上传数据文件

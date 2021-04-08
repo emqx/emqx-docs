@@ -8,18 +8,36 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
 
 # Upgrade guide
 
+## Upgrade to version 4.3
+
+`emqx_auth_mnesia` plugin now supports rules based on both `clientid` and `username`.
+Previously only one type of filter was supported, as configured in `etc/plugins/emqx_auth_mnesia.conf` file.
+In order to import data from the previous EMQ X versions, it is necessary to specify the value of this parameter by passing it as a CLI option:
+
+```bash
+$ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
+```
+
+or
+
+```bash
+$ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"clientid"}'
+```
+
+Or by editing the import file using the same format.
+
 ## Upgrade to version 4.0
 
 The following provides a set of guidelines for migrating from the EMQ X 3.x version to the latest EMQ X 4.0 version. Although we tried to reduce some major changes, we have modified in several places in order to balance performance and simplify usage.
 
-**How long does it take to migrate from EMQ X 3.x to EMQ X 4.0?** 
+**How long does it take to migrate from EMQ X 3.x to EMQ X 4.0?**
 
 EMQ X always guarantees the standardization and continuous update of the access protocol. When the version is migrated, the client does not need any adjustments, which means that you do not need to stop the device function and reprogram the device firmware. You only need to pay attention to the changes of plug-ins, configuration items, command line and REST API.
 
@@ -97,7 +115,7 @@ The SQL syntax of the rule engine has been changed, and the **event** drop-down 
 
 In the 4.0 version, the SQL syntax of the rule engine is easier to use. In the 3.x version, event name needs to be specified after the all **FROM** clauses. After 4.0, we introduce the concept of **event topic**. By default, the **message Publishing** event no longer requires specifying the event name:
 
-```bash 
+```bash
 ## 3.x version
 ## Need to specify event name
 SELECT * FROM "message.publish" WHERE topic =~ 't/#'
@@ -176,4 +194,3 @@ Upgrade process:
 2. The 'etc /' configuration file and the 'data /' data file of the old version are overwritten to the new version directory;
 3. If there are plugins loaded, overwrite the old plugin configuration file to the new version;
 4. Stop the old version and start the new version.
-
