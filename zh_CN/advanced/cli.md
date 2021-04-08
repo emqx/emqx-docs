@@ -310,7 +310,14 @@ $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 
 ## acl 命令
 
-重新加载 acl 规则:
+从 v4.1 之后引入了 `modules` 的命令，我们使用以下命令重新加载 ACL：
+
+```bash
+$ ./bin/emqx_ctl modules reload emqx_mod_acl_internal
+Module emqx_mod_acl_internal reloaded successfully.
+```
+
+在 v4.1 之前，则仍然使用：
 
 ```bash
 $ ./bin/emqx_ctl acl reload
@@ -517,12 +524,12 @@ Plugin emqx_lua_hook reloaded successfully.
 
 ## modules 命令
 
-modules 命令用于加载、卸载和查询内置模块。
+自 v4.1 之后，引入了 `modules` 命令用于在运行时管理 EMQ X 内置的模块。
 
 | 命令                       | 描述                      |
 | -------------------------- | ------------------------- |
 | `modules list            ` | 列出全部内置模块 (Module) |
-| `modules load <Module>   ` | 加载内置模块 (Module)     |
+| `modules load   <Module> ` | 加载内置模块 (Module)     |
 | `modules unload <Module> ` | 卸载内置模块 (Module)     |
 | `modules reload <Module> ` | 重载内置模块 (Module)     |
 
