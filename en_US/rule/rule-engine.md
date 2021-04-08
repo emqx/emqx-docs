@@ -1228,8 +1228,10 @@ The FROM statement is used to select the source of the event. If the message is 
 | `base64_decode` | BASE64 decode   | The base64-formatted string to be decoded | The decoded binary |
 | `json_encode` | JSON encode   | The data to be encoded | The JSON string |
 | `json_decode` | JSON decode   | The JSON string to be decoded | The decoded data |
+{% emqxee %}
 | `schema_encode` | Encode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
 | `schema_decode` | Decode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
+{% endemqxee %}
 | `bin2hexstr` | Binary to Hex String | The binary | The hex string |
 | `hexstr2bin` | Binary to Hex String | The hex string | The binary |
 
