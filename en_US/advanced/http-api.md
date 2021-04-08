@@ -1320,6 +1320,51 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/hi
 {"data":[{"id":"cpu_high_watermark","desc":"93.27055293970582","clear_at":"2020-02-21 13:50:10"}],"code":0}
 ```
 
+### ACL Cache
+#### DELETE /api/v4/acl-cache
+
+Clean acl cache on all nodes
+
+**Query String Parameters:** None
+
+
+**Success Response Body (JSON):**
+
+| Name    | Type | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0   |
+| message | String    | Return only when an error occurs to provide more detailed error information |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/acl-cache"
+
+{"code":0}
+```
+
+#### DELETE /api/v4/node/{node}/acl-cache
+
+Clean acl cache for specific node
+
+**Query String Parameters:** None
+
+
+**Success Response Body (JSON):**
+
+| Name    | Type | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0   |
+| message | String    | Return only when an error occurs to provide more detailed error information |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/node/emqx@127.0.0.1/acl-cache"
+
+{"code":0}
+```
+
 ### Blacklist 
 #### GET /api/v4/banned 
 Get the blacklist
