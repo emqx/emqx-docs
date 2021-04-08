@@ -16,7 +16,7 @@ ref:
 # 配置项
 
 
-## cluster
+## Cluster
 
 ### cluster.name
 
@@ -387,7 +387,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 <br />
 
-## node
+## Node
 
 ### node.name
 
@@ -599,7 +599,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 <br />
 
-## rpc
+## RPC
 
 ### rpc.mode
 
@@ -781,7 +781,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 <br />
 
-## log
+## Log
 
 ### log.to
 
@@ -4116,49 +4116,7 @@ EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pr
 
 <br />
 
-## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
-
-### auth.client.<Number>.clientid` & `auth.client.<Number>.password
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### 说明
-
-客户端的认证数据，其中 `auth.client.<Number>.password` 为明文密码。`<Number>` 相同的 `auth.client.<Number>.clientid` 与 `auth.client.<Number>.password` 必须成对出现。`<Number>` 是一个整型数字，用于区分多个客户端的认证数据。
-
-<br />
-
-### auth.client.password_hash
-
-| Type | Optional Value                  | Default  |
-| ---- | ------------------------------- | -------- |
-| enum | `plain`, `md5`, `sha`, `sha256` | `sha256` |
-
-#### 说明
-
-密码存储至数据库时使用的 Hash 算法。以下选项可用：
-
-`plain`
-
-密码以明文形式存储。
-
-`md5`
-
-密码使用 MD5 算法加密后存储。
-
-`sha`
-
-密码使用 SHA-1 算法加密后存储。
-
-`sha256`
-
-密码使用 SHA-256 算法加密后存储。
-
-<br />
-
-## [emqx-auth-http](https://github.com/emqx/emqx-auth-http)
+## 插件 `emqx-auth-http`
 
 ### auth.http.auth_req.url
 
@@ -4394,7 +4352,7 @@ CA 证书文件路径。
 
 <br />
 
-## [emqx-auth-jwt](https://github.com/emqx/emqx-auth-jwt)
+## 插件 `emqx_auth_jwt`
 
 ### auth.jwt.secret
 
@@ -4476,7 +4434,7 @@ auth.jwt.verify_claims.sub = %u
 
 <br />
 
-## [emqx-auth-ldap](https://github.com/emqx/emqx-auth-ldap)
+## 插件 `emqx_auth_ldap`
 
 ### auth.ldap.servers
 
@@ -4673,7 +4631,7 @@ SSL 认证方式：
 
 <br />
 
-## [emqx-auth-mongo](https://github.com/emqx/emqx-auth-mongo)
+## 插件 `emqx_auth_mongo`
 
 ### auth.mongo.type
 
@@ -5142,7 +5100,7 @@ MongoDB 拓扑参数，`heartbeat_frequency_ms` 允许的最小值，单位: 毫
 
 <br />
 
-## [emqx-auth-mysql](https://github.com/emqx/emqx-auth-mysql)
+## 插件 `emqx_auth_mysql`
 
 ### auth.mysql.server
 
@@ -5285,7 +5243,7 @@ ACL 校验时使用的 SQL 选取语句，此语句中所有表名与字段名�
 
 <br />
 
-## [emqx-auth-pgsql](https://github.com/emqx/emqx-auth-pgsql)
+## 插件 `emqx_auth_pgsql`
 
 ### auth.pgsql.server
 
@@ -5455,7 +5413,7 @@ ACL 校验时使用的 SQL 选取语句，同 `auth.mysql.acl_query`。
 
 <br />
 
-## [emqx-auth-redis](https://github.com/emqx/emqx-auth-redis)
+## 插件 `emqx_auth_redis`
 
 ### auth.redis.type
 
@@ -5599,48 +5557,6 @@ Redis 存储的 `password` 字段的编码格式。
 ACL 查询命令。可用的占位符有：
  - `%u`：客户端用户名。
  - `%c`：客户端标识。
-
-<br />
-
-## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
-
-### auth.user.<Number>.username` & `auth.user.<Number>.password
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### 说明
-
-客户端的认证数据，其中 `auth.user.<Number>.password` 为明文密码。`<Number>` 相同的 `auth.user.<Number>.username` 与 `auth.user.<Number>.password` 必须成对出现。`<Number>` 是一个整型数字，用于区分多个客户端的认证数据。
-
-<br />
-
-### auth.user.password_hash
-
-| Type | Optional Value                  | Default  |
-| ---- | ------------------------------- | -------- |
-| enum | `plain`, `md5`, `sha`, `sha256` | `sha256` |
-
-#### 说明
-
-密码存储至数据库时使用的 Hash 算法。以下选项可用：
-
-`plain`
-
-密码以明文形式存储。
-
-`md5`
-
-密码使用 MD5 算法加密后存储。
-
-`sha`
-
-密码使用 SHA-1 算法加密后存储。
-
-`sha256`
-
-密码使用 SHA-256 算法加密后存储。
 
 <br />
 

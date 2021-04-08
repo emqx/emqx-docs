@@ -15,7 +15,7 @@ ref: undefined
 
 # Configuration
 
-## cluster
+## Cluster
 
 ### cluster.name
 
@@ -4103,50 +4103,7 @@ When the current process number as a percentage of the maximum process number ex
 When the percentage of the current number of processes in the maximum number of processes falls below `vm_mon.process_low_watermark`, an alarm will be triggered. The maximum number of processes is determined by the `node.process_limit` configuration item.
 
 
-
-## [emqx-auth-clientid](https://github.com/emqx/emqx-auth-clientid)
-
-### auth.client.<Number>.clientid` & `auth.client.<Number>.password
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### Description
-
-The authentication data of the client, where  `auth.client.<Number>.password` is the clear text password. `auth.client.<Number>.clientid` and `auth.client.<Number>.password` for the same `<Number>`  must appear in pairs. `<Number> `is an integer number used to distinguish authentication data of multiple clients.
-
-
-
-### auth.client.password_hash
-
-| Type | Optional Value                  | Default  |
-| ---- | ------------------------------- | -------- |
-| enum | `plain`, `md5`, `sha`, `sha256` | `sha256` |
-
-#### Description
-
-Hash algorithm is used when the password is stored in the database. The following options are available:
-
-`plain`
-
-The password is stored in clear text.
-
-`md5`
-
-The password is encrypted and stored using the MD5 algorithm.
-
-`sha`
-
-The password is encrypted and stored using the SHA-1 algorithm.
-
-`sha256`
-
-The password is encrypted and stored using the SHA-256 algorithm.
-
-
-
-## [emqx-auth-http](https://github.com/emqx/emqx-auth-http)
+## Plugin `emqx_auth_http`
 
 ### auth.http.auth_req.url
 
@@ -4390,7 +4347,7 @@ Client private key file path.
 
 
 
-## [emqx-auth-jwt](https://github.com/emqx/emqx-auth-jwt)
+## Plugin `emqx_auth_jwt`
 
 ### auth.jwt.secret
 
@@ -4472,7 +4429,7 @@ auth.jwt.verify_claims.sub = %u
 
 
 
-## [emqx-auth-ldap](https://github.com/emqx/emqx-auth-ldap)
+## Plugin `emqx_auth_ldap`
 
 ### auth.ldap.servers
 
@@ -4669,7 +4626,7 @@ If the client does not provide an SSL certificate, disconnect it.
 
 
 
-## [emqx-auth-mongo](https://github.com/emqx/emqx-auth-mongo)
+## Plugin `emqx_auth_mongo`
 
 ### auth.mongo.type
 
@@ -5092,7 +5049,7 @@ MongoDB topology parameter, that means MongoDB message sending timeout period, u
 
 #### Description
 
-MongoDB topology parameter, select the timeout period of MongoDB Server, unit: ms.
+Specifies how long (in milliseconds) to block for server selection.
 
 
 
@@ -5104,8 +5061,7 @@ MongoDB topology parameter, select the timeout period of MongoDB Server, unit: m
 
 #### Description
 
-MongoDB topology parameters, that selects the worker's waiting timeout period from the thread pool, unit: ms.
-
+The maximum time in milliseconds for a worker to wait for a connection to become available.
 
 
 ### auth.mongo.topology.heartbeat_frequency_ms
@@ -5132,7 +5088,7 @@ MongoDB topology parameter, the minimum allowed value of `heartbeat_frequency_ms
 
 
 
-## [emqx-auth-mysql](https://github.com/emqx/emqx-auth-mysql)
+## Plugin `emqx_auth_mysql`
 
 ### auth.mysql.server
 
@@ -5275,7 +5231,7 @@ The SQL selection statement used in ACL verification. All table names and field 
 
 
 
-## [emqx-auth-pgsql](https://github.com/emqx/emqx-auth-pgsql)
+## Plugin `emqx_auth_pgsql`
 
 ### auth.pgsql.server
 
@@ -5445,7 +5401,7 @@ The SQL selection statement used in ACL verification,  the same as `auth.mysql.a
 
 
 
-## [emqx-auth-redis](https://github.com/emqx/emqx-auth-redis)
+## Plugin `emqx_auth_redis`
 
 ### auth.redis.type
 
@@ -5592,50 +5548,7 @@ ACL query commands. Available placeholders are:
  - `%c`: client ID.
 
 
-
-## [emqx-auth-username](https://github.com/emqx/emqx-auth-username)
-
-### auth.user.<Number>.username` & `auth.user.<Number>.password
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### Description
-
-The authentication data of the client, where `auth.user.<Number>.password` is the clear text password.  `auth.user.<Number>.username` and `auth.user.<Number>.password` of the same `<Number>` must appear in pairs. `<Number> `is an integer number used to distinguish authentication data of multiple clients.
-
-
-
-### auth.user.password_hash
-
-| Type | Optional Value                  | Default  |
-| ---- | ------------------------------- | -------- |
-| enum | `plain`, `md5`, `sha`, `sha256` | `sha256` |
-
-#### Description
-
-Hash algorithm used when the password is stored in the database. The following options are available:
-
-`plain`
-
-The password is stored in clear text.
-
-`md5`
-
-The password is encrypted and stored using the MD5 algorithm.
-
-`sha`
-
-The password is encrypted and stored using the SHA-1 algorithm.
-
-`sha256`
-
-The password is encrypted and stored using the SHA-256 algorithm.
-
-
-
-## [emqx-bridge-mqtt](https://github.com/emqx/emqx-bridge-mqtt)
+## Plugin `emqx_bridge_mqtt`
 
 ### bridge.mqtt.aws.address
 
@@ -5982,7 +5895,7 @@ The maximum allowed message queue storage.
 
 
 
-## [emqx-coap](https://github.com/emqx/emqx-coap)
+## Plugin `emqx_coap`
 
 ### coap.port
 
@@ -6092,7 +6005,7 @@ When using DTLS, specify the Cipher list supported by the DTLS server.
 
 
 
-## [emqx-dashboard](https://github.com/emqx/emqx-dashboard)
+## Plugin `emqx_dashboard`
 
 ### dashboard.default_user.login` & `dashboard.default_user.password
 
@@ -6360,8 +6273,7 @@ Specifies whether to enable the session resuing mechanism.
 If set to `on`, use the server ’s preferences for password selection. If set to `off`, use the client ’s preferences.
 
 
-
-## [emqx-lwm2m](https://github.com/emqx/emqx-lwm2m)
+## Plugin `emqx_lwm2m`
 
 ### lwm2m.port
 
@@ -6610,7 +6522,7 @@ Specify the directory where the LwM2M Object definition file is stored.
 
 
 
-## [emqx-management](https://github.com/emqx/emqx-management)
+## Plugin `emqx_management`
 
 ### management.max_row_limit
 
@@ -6900,34 +6812,7 @@ Whether to set the socket to allow IPv6 connections.
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
 
-
-## [emqx-reloader](https://github.com/emqx/emqx-reloader)
-
-### reloader.interval
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `60s`   |
-
-#### Description
-
-How often do hot update all code.
-
-
-
-### reloader.logfile
-
-| Type   | Default        |
-| ------ | -------------- |
-| string | `reloader.log` |
-
-#### Description
-
-Log files for hot updates of code.
-
-
-
-## [emqx-retainer](https://github.com/emqx/emqx-retainer)
+## Plugin `emqx_retainer`
 
 ### retainer.storage_type
 
@@ -6989,7 +6874,7 @@ The expiration interval of retained messages which is only valid for clients wit
 
 
 
-## [emqx-rule-engine](https://github.com/emqx/emqx-rule-engine)
+## Plugin `emqx_rule_engine`
 
 ### rule_engine.ignore_sys_message
 
@@ -7036,7 +6921,7 @@ SELECT * FROM "$events/client_connected"
 
 
 
-## [emqx-sn](https://github.com/emqx/emqx-sn)
+## Plugin `emqx_sn`
 
 ### mqtt.sn.port
 
@@ -7150,7 +7035,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 
 
-## [emqx-statsd](https://github.com/emqx/emqx-statsd)
+## Plugin `emqx_statsd`
 
 ### statsd.push.gateway.server
 
@@ -7188,7 +7073,7 @@ Specify Prometheus Collector.
 
 
 
-## [emqx-stomp](https://github.com/emqx/emqx-stomp)
+## Plugin `emqx_stomp`
 
 ### stomp.listener
 
@@ -7454,7 +7339,7 @@ Specify Stomp maximum message body length.
 
 
 
-## [emqx-web-hook](https://github.com/emqx/emqx-web-hook)
+## Plugin `emqx_web_hook`
 
 ### web.hook.url
 
