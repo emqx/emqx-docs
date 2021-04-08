@@ -473,9 +473,11 @@ plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩
 
 ```bash
 $ ./bin/emqx_ctl plugins list
+...
 Plugin(emqx_auth_http, description=EMQ X Authentication/ACL with HTTP API, active=false)
 Plugin(emqx_auth_jwt, description=EMQ X Authentication with JWT, active=false)
 Plugin(emqx_auth_ldap, description=EMQ X Authentication/ACL with LDAP, active=false)
+...
 ```
 
 插件属性:

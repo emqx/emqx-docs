@@ -473,9 +473,11 @@ List all plugins:
 
 ```bash
 $ ./bin/emqx_ctl plugins list
+...
 Plugin(emqx_auth_http, description=EMQ X Authentication/ACL with HTTP API, active=false)
 Plugin(emqx_auth_jwt, description=EMQ X Authentication with JWT, active=false)
 Plugin(emqx_auth_ldap, description=EMQ X Authentication/ACL with LDAP, active=false)
+...
 ```
 
 Plugin properties:
