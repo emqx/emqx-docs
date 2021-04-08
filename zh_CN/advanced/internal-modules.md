@@ -42,7 +42,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/nodes/emq
 
 当然，用户也可以在 Dashboard 上完成这些操作，包括查看模块状态，这也更加常用。
 
-EMQ X Broker 在默认情况下会启动 `emqx_mod_acl_internal` 和 `emqx_mod_presence` 这两个模块，即内置 ACL 与上下线通知功能默认开启。用户可以修改 `.../data` 目录下的 `loaded_modules` 文件来更改默认启动的模块。
+EMQ X Broker 在默认情况下会启动 `emqx_mod_acl_internal` 和 `emqx_mod_presence` 这两个模块，即内置 ACL 与上下线通知功能默认开启。用户可以修改 EMQ X `data` 目录下的 `loaded_modules` 文件来更改默认启动的模块。
 
 ***默认不启动***
 
