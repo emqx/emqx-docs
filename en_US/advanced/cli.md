@@ -324,6 +324,17 @@ $ ./bin/emqx_ctl acl reload
 ok
 ```
 
+### acl cache-clean
+
+After v4.3, the command to clean up the ACL cache has been introduced:
+
+| Commads                     | Description                       |
+| --------------------------- | --------------------------------- |
+| acl cache-clean all         | Clears acl cache on all nodes     |
+| acl cache-clean node <Node> | Clears acl cache on given node    |
+| acl cache-clean <ClientId>  | Clears acl cache for given client |
+
+
 ## clients command
 
 The clients command can query the connected MQTT clients.
