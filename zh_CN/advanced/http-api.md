@@ -1663,6 +1663,52 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/
 {"code":0}
 ```
 
+## ACL 缓存
+### DELETE /api/v4/acl-cache
+
+清除集群中所有的 ACL 缓存
+
+**Query String Parameters:** 无
+
+
+**Success Response Body (JSON):**
+
+| Name    | Type | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0   |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/acl-cache"
+
+{"code":0}
+```
+
+#### DELETE /api/v4/node/{node}/acl-cache
+
+清除指定节点的 ACL 缓存
+
+**Query String Parameters:** 无
+
+
+**Success Response Body (JSON):**
+
+| Name    | Type | Description                                  |
+| ------- | --------- | -------------------------------------------- |
+| code    | Integer   | 0   |
+| message | String    | 仅在发生错误时返回，用于提供更详细的错误信息 |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/node/emqx@127.0.0.1/acl-cache"
+
+{"code":0}
+```
+
 ## 黑名单
 ### GET /api/v4/banned
 获取黑名单
