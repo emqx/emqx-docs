@@ -15,11 +15,11 @@ ref: undefined
 
 # Changes
 
-## Version 4.2-rc.3
+## Version 4.3-rc.3
 
 *Release Date: 2020-03-30*
 
-EMQ X 4.2-rc.3 is released now, it mainly includes the following changes:
+EMQ X 4.3-rc.3 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -45,11 +45,11 @@ EMQ X 4.2-rc.3 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4435](https://github.com/emqx/emqx/pull/4435)
 
-## Version 4.2-rc.2
+## Version 4.3-rc.2
 
 *Release Date: 2020-03-26*
 
-EMQ X 4.2-rc.2 is released now, it mainly includes the following changes:
+EMQ X 4.3-rc.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
