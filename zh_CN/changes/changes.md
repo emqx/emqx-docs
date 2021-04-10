@@ -17,6 +17,26 @@ ref: undefined
 
 # 版本发布
 
+## Version 4.0.11
+
+*发布日期: 2021-04-10*
+
+EMQ X 4.0.11 is released now, it mainly includes the following changes:
+
+### emqx-management
+
+**Bug fixes:**
+
+- 导出数据时, 对 `emqx_auth_clientid` 的密码进行 base64 编码
+
+  Github PR: [emqx-management#316](https://github.com/emqx/emqx-management/pull/316)
+
+## Version 4.0.9
+
+*发布日期: 2021-03-12*
+
+EMQ X 4.0.9 现已发布，主要修复了 MQTT 消息解析的问题。
+
 ## 4.1-beta.1 版本
 
 *发布日期: 2020-04-26*

@@ -17,6 +17,26 @@ ref: undefined
 
 # Changes
 
+## Version 4.0.11
+
+*Release Date: 2021-04-10*
+
+EMQ X 4.0.11 is released now, it mainly includes the following changes:
+
+### emqx-management
+
+**Bug fixes:**
+
+- When export data, use base64 encoding for `emqx_auth_clientid`
+
+  Github PR: [emqx-management#316](https://github.com/emqx/emqx-management/pull/316)
+
+## Version 4.0.9
+
+*Release Date: 2021-03-12*
+
+EMQ X 4.0.9 is released now, it fixes a bug in MQTT message parser.
+
 ## Version 4.1-rc.2
 
 *Release Date: 2020-05-23*
