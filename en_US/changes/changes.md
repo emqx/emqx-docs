@@ -15,9 +15,37 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.10
+
+*Release Date: 2021-04-10*
+
+EMQ X 4.2.10 is released now, it mainly includes the following changes:
+
+### emqx-management
+
+**Bug fixes:**
+
+- When export data, use base64 encoding for `emqx_auth_clientid`
+
+  Github PR: [emqx-management#314](https://github.com/emqx/emqx-management/pull/314)
+
+## Version 4.0.11
+
+*Release Date: 2021-04-10*
+
+EMQ X 4.0.11 is released now, it mainly includes the following changes:
+
+### emqx-management
+
+**Bug fixes:**
+
+- When export data, use base64 encoding for `emqx_auth_clientid`
+
+  Github PR: [emqx-management#316](https://github.com/emqx/emqx-management/pull/316)
+
 ## Version 4.3-rc.3
 
-*Release Date: 2020-03-30*
+*Release Date: 2021-03-30*
 
 EMQ X 4.3-rc.3 is released now, it mainly includes the following changes:
 
@@ -47,7 +75,7 @@ EMQ X 4.3-rc.3 is released now, it mainly includes the following changes:
 
 ## Version 4.3-rc.2
 
-*Release Date: 2020-03-26*
+*Release Date: 2021-03-26*
 
 EMQ X 4.3-rc.2 is released now, it mainly includes the following changes:
 
@@ -61,7 +89,7 @@ EMQ X 4.3-rc.2 is released now, it mainly includes the following changes:
 
 ## Version 4.2.9
 
-*Release Date: 2020-03-24*
+*Release Date: 2021-03-24*
 
 EMQ X 4.2.9 is released now, it mainly includes the following changes:
 
@@ -92,7 +120,7 @@ EMQ X 4.2.9 is released now, it mainly includes the following changes:
 
 ## Version 4.3-rc.1
 
-*Release Date: 2020-03-23*
+*Release Date: 2021-03-23*
 
 EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
 
@@ -140,7 +168,7 @@ EMQ X 4.2.8 is released now, it fixes a bug in MQTT message parser.
 
 ## Version 4.3-beta.1
 
-*Release Date: 2020-03-03*
+*Release Date: 2021-03-03*
 
 EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
 
@@ -188,7 +216,7 @@ EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
 
 ## Version 4.3-alpha.1
 
-*Release Date: 2020-01-29*
+*Release Date: 2021-01-29*
 
 EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 
@@ -226,7 +254,7 @@ EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 
 ## Version 4.2.7
 
-*Release Date: 2020-01-29*
+*Release Date: 2021-01-29*
 
 EMQ X 4.2.7 is released now, it mainly includes the following changes:
 
