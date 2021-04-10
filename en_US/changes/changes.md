@@ -15,9 +15,60 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.10
+
+*Release Date: 2021-04-10*
+
+EMQ X 4.2.10 is released now, it mainly includes the following changes:
+
+### emqx-management
+
+**Bug fixes:**
+
+- When export data, use base64 encoding for `emqx_auth_clientid`
+
+  Github PR: [emqx-management#314](https://github.com/emqx/emqx-management/pull/314)
+
+## Version 4.2.9
+
+*Release Date: 2021-03-24*
+
+EMQ X 4.2.9 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Fix MQTT packet receiving count issue
+
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+- Fix the processing of heartbeat packets
+
+  Github Issue: [emqx#4370](https://github.com/emqx/emqx/issues/4370)
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+### emqx-auth-mnesia
+
+**Bug fixes:**
+
+- Fixed database storage issues and CLI issues
+
+  Github PR: [emqx-auth-mnesia#54](https://github.com/emqx/emqx-auth-mnesia/pull/54)
+
+- Fix the issue that the `password_hash` configuration does not take effect
+
+  Github PR: [emqx-auth-mnesia#56](https://github.com/emqx/emqx-auth-mnesia/pull/56)
+
+## Version 4.2.8
+
+*Release Date: 2021-03-10*
+
+EMQ X 4.2.8 is released now, it fixes a bug in MQTT message parser.
+
 ## Version 4.2.7
 
-*Release Date: 2020-01-29*
+*Release Date: 2021-01-29*
 
 EMQ X 4.2.7 is released now, it mainly includes the following changes:
 
