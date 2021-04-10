@@ -15,9 +15,58 @@ ref:
 
 # 版本发布
 
+## Version 4.2.10
+
+*发布日期: 2021-04-10*
+
+EMQ X 4.2.10 现已发布，主要包含以下改动:
+
+### emqx-management
+
+**错误修复:**
+
+- 导出数据时, 对 `emqx_auth_clientid` 的密码进行 base64 编码
+
+## 4.2.9 版本
+
+*发布日期: 2021-03-24*
+
+EMQ X 4.2.9 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复 MQTT 报文接收计数问题
+
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+- 修复心跳报文的处理
+
+  Github Issue: [emqx#4370](https://github.com/emqx/emqx/issues/4370)
+  Github PR: [emqx#4425](https://github.com/emqx/emqx/pull/4425)
+
+### emqx-auth-mnesia
+
+**错误修复:**
+
+- 修复了数据库存储问题与 CLI 问题
+
+  Github PR: [emqx-auth-mnesia#54](https://github.com/emqx/emqx-auth-mnesia/pull/54)
+
+- 修复 `password_hash` 配置项不生效的问题
+
+  Github PR: [emqx-auth-mnesia#56](https://github.com/emqx/emqx-auth-mnesia/pull/56)
+
+## 4.2.8 版本
+
+*发布日期: 2021-03-10*
+
+EMQ X 4.2.8 现已发布，主要修复了 MQTT 消息解析的问题。
+
 ## 4.2.7 版本
 
-*发布日期: 2020-01-29*
+*发布日期: 2021-01-29*
 
 EMQ X 4.2.7 现已发布，主要包含以下改动:
 
@@ -51,7 +100,7 @@ EMQ X 4.2.7 现已发布，主要包含以下改动:
 
 ## 4.2.6 版本
 
-*发布日期: 2020-01-16*
+*发布日期: 2021-01-16*
 
 EMQ X 4.2.6 现已发布，主要包含以下改动:
 
