@@ -817,10 +817,6 @@
       "path": "advanced/telemetry"
     },
     {
-      "title": "Multiple Language Support",
-      "path": "advanced/multiple-language-support"
-    },
-    {
       "title": "FAQ",
       "children": [
         {
