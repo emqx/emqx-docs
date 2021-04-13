@@ -4,6 +4,8 @@ EMQ X provides users with data import and export function to meet the needs of s
 
 EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-export), [HTTP API](./http-api.md#endpoint-data- import-and-export) and Dashboard's visual interface (Enterprise Edition) for data import and export functions. The data currently supported for import and export are as follows:
 
+{% emqxce %}
+
 - Rule engine configuration data (resources, rules)
 - Blacklist data
 - Application data
@@ -12,13 +14,24 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
 - MQTT user data and ACL data added through the emqx-auth-clientid plugin
 - MQTT user data and ACL data added through the emqx-auth-username plugin
 
+{% endemqxce %}
+
+
 {% emqxee %}
 
+- Rule engine configuration data (resources, rules)
+- Blacklist data
+- Application data
+- Dashboard user data
+- MQTT user data and ACL data added through the emqx-auth-mnesia plugin
+- MQTT user data and ACL data added through the emqx-auth-clientid plugin
+- MQTT user data and ACL data added through the emqx-auth-username plugin
 - Rule engine schema data
 - Modules data
 - Hot Configuration data
 
 {% endemqxee %}
+
 
 ## Example
 

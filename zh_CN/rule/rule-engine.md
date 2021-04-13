@@ -1310,18 +1310,33 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 
 #### Decode and encode functions
 
+{% emqxce %}
+
 | 函数名 | 函数功能 |        参数         | 返回值 |
 | -------- | -------------- |--------------- | --------------------------- |
 | `base64_encode` | BASE64 编码 | 要编码的二进制数据 | Base64 编码的字符串 |
 | `base64_decode` | BASE64 解码 | Base64 编码的字符串 | 解码后的二进制数据 |
 | `json_encode` | JSON 编码 | 要转成 JSON 的数据结构 | JSON 字符串 |
 | `json_decode` | JSON 解码 | 要解码的 JSON 字符串 | 解码后的数据结构 |
-{% emqxee %}
-| `schema_encode` | 按照 schema 编码. 依赖 [schema registry](schema-registry.md) | 1. 由 schema registry 定义的 Schema ID 2. 要编码的数据 3..N. 其他参数，跟 schema 相关 | 编码后的数据 |
-| `schema_decode` | 按照 schema 编码. 依赖 [schema registry](schema-registry.md) | 1. 由 schema registry 定义的 Schema ID 2. 要解码的数据 3..N.  其他参数，跟 schema 相关 | 解码后的数据 |
-{% endemqxee %}
 | `bin2hexstr` | 二进制数据转为 Hex 字符串 | 二进制数据 | Hex 字符串 |
 | `hexstr2bin` | Hex 字符串转为二进制数据 | Hex 字符串 | 二进制数据 |
+
+{% endemqxce %}
+
+{% emqxee %}
+
+| 函数名 | 函数功能 |        参数         | 返回值 |
+| -------- | -------------- |--------------- | --------------------------- |
+| `base64_encode` | BASE64 编码 | 要编码的二进制数据 | Base64 编码的字符串 |
+| `base64_decode` | BASE64 解码 | Base64 编码的字符串 | 解码后的二进制数据 |
+| `json_encode` | JSON 编码 | 要转成 JSON 的数据结构 | JSON 字符串 |
+| `json_decode` | JSON 解码 | 要解码的 JSON 字符串 | 解码后的数据结构 |
+| `schema_encode` | 按照 schema 编码. 依赖 [schema registry](schema-registry.md) | 1. 由 schema registry 定义的 Schema ID 2. 要编码的数据 3..N. 其他参数，跟 schema 相关 | 编码后的数据 |
+| `schema_decode` | 按照 schema 编码. 依赖 [schema registry](schema-registry.md) | 1. 由 schema registry 定义的 Schema ID 2. 要解码的数据 3..N.  其他参数，跟 schema 相关 | 解码后的数据 |
+| `bin2hexstr` | 二进制数据转为 Hex 字符串 | 二进制数据 | Hex 字符串 |
+| `hexstr2bin` | Hex 字符串转为二进制数据 | Hex 字符串 | 二进制数据 |
+
+{% endemqxee %}
 
 ### 在 Dashboard 中测试 SQL 语句
 Dashboard 界面提供了 SQL 语句测试功能，通过给定的 SQL 语句和事件参数，展示 SQL 测试结果。

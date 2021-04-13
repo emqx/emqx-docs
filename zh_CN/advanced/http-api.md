@@ -2249,6 +2249,7 @@ $ curl -XDELETE --basic -u admin:public 'http://localhost:8081/api/v4/resources/
 ```
 
 {% emqxce %}
+
 ## 数据遥测
 数据遥测
 
