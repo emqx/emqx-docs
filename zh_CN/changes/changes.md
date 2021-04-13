@@ -17,7 +17,7 @@ ref:
 
 ## Version 4.2.10
 
-*发布日期: 2021-04-10*
+*发布日期: 2021-04-12*
 
 EMQ X 4.2.10 现已发布，主要包含以下改动:
 
@@ -26,6 +26,10 @@ EMQ X 4.2.10 现已发布，主要包含以下改动:
 **错误修复:**
 
 - 导出数据时, 对 `emqx_auth_clientid` 的密码进行 base64 编码
+  [emqx-management#314](https://github.com/emqx/emqx-management/pull/314)
+
+- MQTT 桥接飞行窗口中的消息ID引用的错误
+  [emqx-bridge-mqtt#132](https://github.com/emqx/emqx-bridge-mqtt/pull/132)
 
 ## 4.2.9 版本
 
