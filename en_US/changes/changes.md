@@ -17,7 +17,7 @@ ref: undefined
 
 ## Version 4.2.10
 
-*Release Date: 2021-04-10*
+*Release Date: 2021-04-12*
 
 EMQ X 4.2.10 is released now, it mainly includes the following changes:
 
@@ -28,6 +28,10 @@ EMQ X 4.2.10 is released now, it mainly includes the following changes:
 - When export data, use base64 encoding for `emqx_auth_clientid`
 
   Github PR: [emqx-management#314](https://github.com/emqx/emqx-management/pull/314)
+
+- Fix MQTT bridge inflight reference booking error
+
+  Github PR: [emqx-bridge-mqtt#132](https://github.com/emqx/emqx-bridge-mqtt/pull/132)
 
 ## Version 4.2.9
 
