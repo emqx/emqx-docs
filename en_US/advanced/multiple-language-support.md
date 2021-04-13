@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefinedM
 ---
@@ -63,10 +63,10 @@ Currently, only Python and Java support is provided, and corresponding SDKs are 
 
 ## Quick start
 
-### Python 
+### Python
 Python development can refer to: [emqx-extension-python-sdk](https://github.com/emqx/emqx-extension-python-sdk)
 
-### Java 
+### Java
 Java development can refer to: [emqx-extension-java-sdk](https://github.com/emqx/emqx-extension-java-sdk)
 
 
@@ -74,20 +74,20 @@ Java development can refer to: [emqx-extension-java-sdk](https://github.com/emqx
 
 Before EMQ X 4.1. We only provide multi-language support for Lua. Its architecture is different from the above mentioned, which will include the entire language runtime in the Erlang VM:
 
-![Old Multiple Lang Arch](D:/emqx/emqx-docs-cn/advanced/assets/lua-lang-arch.png)
+![Old Multiple Lang Arch](./assets/lua-lang-arch.png)
 
 - Multiple language support appears as a plug-in. For different language environments, different language support plugins are required.
 - This supported plugin embeds all the environments of the language runtime.
 
 To maintain compatibility, the plug-in remains in the release version of EMQ X.
 
-## Lua 
+### Lua
 Support of Lua is achieved by [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook)  which includes:
 
 - A set of Lua runtime environment, implemented by [luerl](https://github.com/rvirding/luerl)
 - Some control commands to manage the load and unload of Lua.
 
-### Example
+#### Example
 
 In the EMQ X Broker distribution, user-defined Lua script files should be placed in `data/script/`.
 
@@ -128,13 +128,13 @@ When the execution succeeds, it means that the script has been successfully load
 
 After completion, you can start two MQTT clients, one to subscribe to any topic, and the other to publish any message to the topic that you just subscribed to. It can be found that the message content received by the subscriber is `hello` which proves that the `test.lua` script has taken effect.
 
-### Callback function
+#### Callback function
 
 Supported callback functions and parameter type: [emqx-lua-hook - README.md](https://github.com/emqx/emqx-lua-hook/tree/develop#hook-api)
 
 Example: [examples.lua](https://github.com/emqx/emqx-lua-hook/blob/develop/examples.lua)
 
-### Command
+#### Command
 
 Load the specified Lua script:
 
@@ -162,4 +162,3 @@ Unload the specified Lua script and cancel it to start with `emqx_lua_hook`:
 ```bash
 luahook disable <Script>
 ```
-
