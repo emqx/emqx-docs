@@ -64,7 +64,7 @@ The grammar rules of ʻacl.conf` are contained in the comments at the top. Those
 
 ​ * `{user, "dashboard"}`: indicates that the rule only takes effect for the user whose *Username (Username)* is "dashboard"
 
-​ * `{clientid, "dashboard"}`: indicates that the rule only takes effect for users whose *client ID (ClientId)* is "dashboard"
+​ * `{client, "dashboard"}`: indicates that the rule only takes effect for users whose *client ID (ClientId)* is "dashboard"
 
 ​ * `{ipaddr, "127.0.0.1"}`: indicates that the rule only takes effect for users whose source address is "127.0.0.1"
 
