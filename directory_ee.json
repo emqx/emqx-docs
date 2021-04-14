@@ -639,11 +639,11 @@
       "children": [
         {
           "title": "变更日志",
-          "path": "changes/changes-ee"
+          "path": "changes/changes-ee-4.3"
         },
         {
           "title": "升级指南",
-          "path": "changes/upgrade"
+          "path": "changes/upgrade-4.3"
         }
       ]
     },
@@ -1243,11 +1243,11 @@
       "children": [
         {
           "title": "Change log",
-          "path": "changes/changes-ee"
+          "path": "changes/changes-ee-4.3"
         },
         {
           "title": "Upgrade guide",
-          "path": "changes/upgrade"
+          "path": "changes/upgrade-4.3"
         }
       ]
     },
