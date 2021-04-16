@@ -1,7 +1,7 @@
 # EMQ X Documentation
 
 [![Slack Invite](<https://slack-invite.emqx.io/badge.svg>)](https://slack-invite.emqx.io)
-[![Twitter](https://img.shields.io/badge/Twitter-EMQ%20X-1DA1F2?logo=twitter)](https://twitter.com/emqtt)
+[![Twitter](https://img.shields.io/badge/Twitter-EMQ%20X-1DA1F2?logo=twitter)](https://twitter.com/EMQTech)
 [![Reddit](https://img.shields.io/badge/Reddit-EMQ%20X-orange?logo=reddit)](https://www.reddit.com/r/emqx/)
 
 [![The best IoT MQTT open source team looks forward to your joining](https://www.emqx.io/static/img/github_readme_en_bg.png)](https://www.emqx.io/careers)
@@ -29,7 +29,7 @@ See [EMQ X Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a c
 You can reach the EMQ community and developers via the following channels.
 
 - [Slack](https://slack-invite.emqx.io/)
-- [Twitter](https://twitter.com/emqtt)
+- [Twitter](https://twitter.com/EMQTech)
 - [Facebook](https://www.facebook.com/emqxmqtt)
 - [Reddit](https://www.reddit.com/r/emqx/)
 - [Blog](https://medium.com/@emqtt)
