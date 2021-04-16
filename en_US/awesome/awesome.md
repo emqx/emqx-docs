@@ -18,7 +18,7 @@ ref:
 [![GitHub Release](https://img.shields.io/github/release/emqx/emqx?color=brightgreen)](https://github.com/emqx/emqx/releases)
 [![Docker Pulls](https://img.shields.io/docker/pulls/emqx/emqx)](https://hub.docker.com/r/emqx/emqx)
 [![Slack Invite](<https://slack-invite.emqx.io/badge.svg>)](https://slack-invite.emqx.io)
-[![Twitter](https://img.shields.io/badge/Twitter-EMQ%20X-1DA1F2?logo=twitter)](https://twitter.com/emqtt)
+[![Twitter](https://img.shields.io/badge/Twitter-EMQ%20X-1DA1F2?logo=twitter)](https://twitter.com/EMQTech)
 
 
 ## Official resources
@@ -32,7 +32,7 @@ ref:
 You can contact the EMQ community and developers through the following channels:
 
   - [EMQ X Slack](https://slack-invite.emqx.io)
-  - [Twitter](https://twitter.com/emqtt)
+  - [Twitter](https://twitter.com/EMQTech)
   - [Forum](https://groups.google.com/d/forum/emqtt)
   - [Medium](https://medium.com/@emqtt)
   - [Reddit](https://www.reddit.com/r/emqx/)
