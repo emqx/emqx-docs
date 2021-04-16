@@ -15,7 +15,29 @@ ref:
 
 # 版本发布
 
-## Version 4.2.10
+## 4.2.11 版本
+
+*发布日期: 2021-04-16*
+
+EMQ X 4.2.11 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复 WebSocket 连接无法使用对端证书作为用户名的问题
+
+  Github PR: [emqx#4574](https://github.com/emqx/emqx/pull/4574)
+
+### emqx-management
+
+**错误修复:**
+
+- 修复认证数据导出导入问题
+
+  Github PR: [emqx-management#320](https://github.com/emqx/emqx-management/pull/320)
+
+## 4.2.10 版本
 
 *发布日期: 2021-04-12*
 
@@ -26,10 +48,12 @@ EMQ X 4.2.10 现已发布，主要包含以下改动:
 **错误修复:**
 
 - 导出数据时, 对 `emqx_auth_clientid` 的密码进行 base64 编码
-  [emqx-management#314](https://github.com/emqx/emqx-management/pull/314)
+
+  Github PR: [emqx-management#314](https://github.com/emqx/emqx-management/pull/314)
 
 - MQTT 桥接飞行窗口中的消息ID引用的错误
-  [emqx-bridge-mqtt#132](https://github.com/emqx/emqx-bridge-mqtt/pull/132)
+
+  Github PR: [emqx-bridge-mqtt#132](https://github.com/emqx/emqx-bridge-mqtt/pull/132)
 
 ## 4.2.9 版本
 
