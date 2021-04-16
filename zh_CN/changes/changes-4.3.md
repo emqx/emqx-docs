@@ -15,9 +15,65 @@ ref:
 
 # 版本发布
 
+## 4.3-rc.4 版本
+
+*发布日期: 2021-04-16*
+
+EMQ X 4.3-rc.4 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- Redis 哨兵模式支持 SSL 连接
+
+  Github PR: [emqx#4553](https://github.com/emqx/emqx/pull/4553)
+
+- WebSocket 连接支持获取真实 IP 与 Port
+
+  Github PR: [emqx#4558](https://github.com/emqx/emqx/pull/4558)
+
+**错误修复:**
+
+- 修复 MQTT 桥接飞行窗口的问题
+
+  Github Issue: [emqx#3629](https://github.com/emqx/emqx/issues/3629)
+  Github PR: [emqx#4513](https://github.com/emqx/emqx/pull/4513), [emqx#4526](https://github.com/emqx/emqx/pull/4526)
+  
+- 修复多语言扩展钩子无法处理返回的 false 值的问题
+
+  Github PR: [emqx#4542](https://github.com/emqx/emqx/pull/4542)
+
+- 默认启动模块，避免集群后内置模块无法正常工作
+
+  Github PR: [emqx#4547](https://github.com/emqx/emqx/pull/4547)
+
+- 修复认证数据无法导入的问题
+
+  Github PR: [emqx#4582](https://github.com/emqx/emqx/pull/4582), [emqx#4528](https://github.com/emqx/emqx/pull/4528)
+
+- 修复 WebSocket 连接无法使用对端证书作为用户名的问题
+
+  Github PR: [emqx#4563](https://github.com/emqx/emqx/pull/4563)
+
+- 修复 MQTT-SN 网关在睡眠模式下会丢弃 DISCONNECT 报文的问题
+
+  Github Issue: [emqx#4506](https://github.com/emqx/emqx/issues/4506)
+  Github PR: [emqx#4515](https://github.com/emqx/emqx/pull/4515)
+
+- 修复 LwM2M 网关将数字编码、解码为无符号整型的问题
+
+  Github Issue: [emqx#4499](https://github.com/emqx/emqx/issues/4499)
+  Github PR: [emqx#4500](https://github.com/emqx/emqx/pull/4500)
+
+- 修复部分 HTTP API 不可用的问题
+
+  Github Issue: [emqx#4472](https://github.com/emqx/emqx/issues/4472)
+  Github PR: [emqx#4503](https://github.com/emqx/emqx/pull/4503)
+
 ## 4.3-rc.3 版本
 
-*发布日期: 2020-03-30*
+*发布日期: 2021-03-30*
 
 EMQ X 4.3-rc.3 现已发布，主要包含以下改动:
 
@@ -47,7 +103,7 @@ EMQ X 4.3-rc.3 现已发布，主要包含以下改动:
 
 ## 4.3-rc.2 版本
 
-*发布日期: 2020-03-26*
+*发布日期: 2021-03-26*
 
 EMQ X 4.3-rc.2 现已发布，主要包含以下改动:
 
@@ -61,7 +117,7 @@ EMQ X 4.3-rc.2 现已发布，主要包含以下改动:
 
 ## 4.3-rc.1 版本
 
-*发布日期: 2020-03-23*
+*发布日期: 2021-03-23*
 
 EMQ X 4.3-rc.1 现已发布，主要包含以下改动:
 
@@ -103,7 +159,7 @@ EMQ X 4.3-rc.1 现已发布，主要包含以下改动:
 
 ## 4.3-beta.1 版本
 
-*发布日期: 2020-03-03*
+*发布日期: 2021-03-03*
 
 EMQ X 4.3-beta.1 现已发布，主要包含以下改动:
 
@@ -151,7 +207,7 @@ EMQ X 4.3-beta.1 现已发布，主要包含以下改动:
 
 ## 4.3-alpha.1 版本
 
-*发布日期: 2020-01-29*
+*发布日期: 2021-01-29*
 
 EMQ X 4.3-alpha.1 现已发布，主要包含以下改动:
 

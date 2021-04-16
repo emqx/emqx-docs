@@ -15,9 +15,65 @@ ref: undefined
 
 # Changes
 
+## Version 4.3-rc.4
+
+*Release Date: 2021-04-16*
+
+EMQ X 4.3-rc.4 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Enhancement:**
+
+- Redis sentinel mode supports SSL connection
+
+  Github PR: [emqx#4553](https://github.com/emqx/emqx/pull/4553)
+
+- WebSocket connection supports obtaining real IP and Port
+
+  Github PR: [emqx#4558](https://github.com/emqx/emqx/pull/4558)
+
+**Bug fixes:**
+
+- Fix the issue of inflight in MQTT bridge
+
+  Github Issue: [emqx#3629](https://github.com/emqx/emqx/issues/3629)
+  Github PR: [emqx#4513](https://github.com/emqx/emqx/pull/4513), [emqx#4526](https://github.com/emqx/emqx/pull/4526)
+  
+- Fix the issue that the multi-language extension hook cannot handle the false value returned
+
+  Github PR: [emqx#4542](https://github.com/emqx/emqx/pull/4542)
+
+- Start modules by default to prevent modules from not working properly after the cluster
+
+  Github PR: [emqx#4547](https://github.com/emqx/emqx/pull/4547)
+
+- Fix the issue that the authentication data cannot be imported
+
+  Github PR: [emqx#4582](https://github.com/emqx/emqx/pull/4582), [emqx#4528](https://github.com/emqx/emqx/pull/4528)
+
+- Fix the issue that the authentication data cannot be imported
+
+  Github PR: [emqx#4563](https://github.com/emqx/emqx/pull/4563)
+
+- Fix the issue that the MQTT-SN gateway will discard DISCONNECT packets in sleep mode
+
+  Github Issue: [emqx#4506](https://github.com/emqx/emqx/issues/4506)
+  Github PR: [emqx#4515](https://github.com/emqx/emqx/pull/4515)
+
+- Fix the issue that the LwM2M gateway encodes and decodes numbers into unsigned integers
+
+  Github Issue: [emqx#4499](https://github.com/emqx/emqx/issues/4499)
+  Github PR: [emqx#4500](https://github.com/emqx/emqx/pull/4500)
+
+- Fix the issue that some HTTP APIs are unavailable
+
+  Github Issue: [emqx#4472](https://github.com/emqx/emqx/issues/4472)
+  Github PR: [emqx#4503](https://github.com/emqx/emqx/pull/4503)
+
 ## Version 4.3-rc.3
 
-*Release Date: 2020-03-30*
+*Release Date: 2021-03-30*
 
 EMQ X 4.3-rc.3 is released now, it mainly includes the following changes:
 
@@ -47,7 +103,7 @@ EMQ X 4.3-rc.3 is released now, it mainly includes the following changes:
 
 ## Version 4.3-rc.2
 
-*Release Date: 2020-03-26*
+*Release Date: 2021-03-26*
 
 EMQ X 4.3-rc.2 is released now, it mainly includes the following changes:
 
@@ -61,7 +117,7 @@ EMQ X 4.3-rc.2 is released now, it mainly includes the following changes:
 
 ## Version 4.3-rc.1
 
-*Release Date: 2020-03-23*
+*Release Date: 2021-03-23*
 
 EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
 
@@ -103,7 +159,7 @@ EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
 
 ## Version 4.3-beta.1
 
-*Release Date: 2020-03-03*
+*Release Date: 2021-03-03*
 
 EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
 
@@ -151,7 +207,7 @@ EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
 
 ## Version 4.3-alpha.1
 
-*Release Date: 2020-01-29*
+*Release Date: 2021-01-29*
 
 EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 
