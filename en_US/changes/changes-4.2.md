@@ -15,6 +15,28 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.11
+
+*Release Date: 2021-04-16*
+
+EMQ X 4.2.11 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Fix the issue that the WebSocket connection cannot use the peer certificate as the username
+
+  Github PR: [emqx#4574](https://github.com/emqx/emqx/pull/4574)
+
+### emqx-management
+
+**Bug fixes:**
+
+- Fix the issue of authentication data export and import
+
+  Github PR: [emqx-management#320](https://github.com/emqx/emqx-management/pull/320)
+
 ## Version 4.2.10
 
 *Release Date: 2021-04-12*
