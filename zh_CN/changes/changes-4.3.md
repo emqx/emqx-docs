@@ -33,6 +33,11 @@ EMQ X 4.3-rc.4 现已发布，主要包含以下改动:
 
   Github PR: [emqx#4558](https://github.com/emqx/emqx/pull/4558)
 
+- Prometheus 支持集群指标
+
+  Github Issue: [emqx#4548](https://github.com/emqx/emqx/pull/4548)
+  Github PR: [emqx#4572](https://github.com/emqx/emqx/pull/4572)
+
 **错误修复:**
 
 - 修复 MQTT 桥接飞行窗口的问题

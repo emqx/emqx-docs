@@ -33,6 +33,11 @@ EMQ X 4.3-rc.4 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4558](https://github.com/emqx/emqx/pull/4558)
 
+- Support cluster metrics for Prometheus
+
+  Github Issue: [emqx#4548](https://github.com/emqx/emqx/pull/4548)
+  Github PR: [emqx#4572](https://github.com/emqx/emqx/pull/4572)
+
 **Bug fixes:**
 
 - Fix the issue of inflight in MQTT bridge
