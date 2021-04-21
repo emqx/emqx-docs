@@ -16,7 +16,7 @@ Schema Registry maintains Schema text for built-in encoding formats such as Avro
 
 The diagram below shows an example of a Schema Registry application. Multiple devices report data in different formats, which are decoded by Schema Registry into a uniform internal format and then forwarded to the backend application.
 
-![schema-registry](/Users/liurz/工作/翻译文件/EMQ X 消息服务器简介/assets/schema-registry.png)
+![schema-registry](./assets/schema-registry.png)
 
 
 ### Binary format support
@@ -29,7 +29,7 @@ Schema Registry maintains Schema text for built-in encoding formats such as Avro
 
 The Schema Registry can perform both decoding and encoding.  Schema Name needs to be specified when encoding and decoding.
 
-![architecture](/Users/liurz/工作/翻译文件/EMQ X 消息服务器简介/assets/arch.png)
+![architecture](./assets/arch.png)
 
 
 Example of an encoding call: parameter is Schema:
@@ -54,7 +54,7 @@ The message processing level of EMQ X can be divided into three parts: Messaging
 
 EMQ X's PUB/SUB system routes messages to specified topics. The rule engine has the flexibility to configure business rules for the data, match messages to the rules and then specify the corresponding action. Data format conversion occurs before the rule matching process, converting the data into a Map format that can participate in rule matching, and then matching it.
 
-![SchemaAndRuleEngine](/Users/liurz/工作/翻译文件/EMQ X 消息服务器简介/assets/SchemaAndRuleEngine.png)
+![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
 
 
 ### Rule engine internal data format (Map)
