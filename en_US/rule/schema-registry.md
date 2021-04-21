@@ -1,4 +1,4 @@
-# Introduction to Codec (Schema Registry)
+# Introduction to Schema Registry
 
 
 Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
