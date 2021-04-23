@@ -17,15 +17,15 @@ ref:
 
 不同安装方式得到的 EMQ X 其目录结构会有所不同，具体如下:
 
-| 描述                        | 使用 ZIP 压缩包安装                 | 使用二进制包安装                  |
-| --------------------------- | -------------------------------- | ----------------------------- |
-| 可执行文件目录              | `./bin`                          | `/usr/lib/emqx/bin`           |
-| 数据文件                    | `./data`                         | `/var/lib/emqx/data`          |
-| Erlang 虚拟机文件           | `./erts-*`                       | `/usr/lib/emqx/erts-*`        |
-| 配置文件目录                | `./etc`                          | `/etc/emqx/etc`               |
-| 依赖项目录                  | `./lib`                          | `/usr/lib/emqx/lib`           |
-| 日志文件                    | `./log`                          | `/var/log/emqx`               |
-| 启动相关的脚本、schema 文件 | `./releases`                     | `/usr/lib/emqx/releases`      |
+| 描述                        | 使用 ZIP 压缩包安装                 | 使用二进制包安装                  | Homebrew(MacOS) 安装             |
+| --------------------------- | -------------------------------- | ----------------------------- | -----------------------------    |
+| 可执行文件目录              | `./bin`                          | `/usr/lib/emqx/bin`           | `/usr/local/bin`                    |
+| 数据文件                    | `./data`                         | `/var/lib/emqx/data`          | `/usr/local/Cellar/emqx/*/data`    |
+| Erlang 虚拟机文件           | `./erts-*`                       | `/usr/lib/emqx/erts-*`        | `/usr/local/Cellar/emqx/*/erts-*`  |
+| 配置文件目录                | `./etc`                          | `/etc/emqx/etc`               | `/usr/local/Cellar/emqx/etc`        |
+| 依赖项目录                  | `./lib`                          | `/usr/lib/emqx/lib`           | `/usr/local/Cellar/emqx/lib`       |
+| 日志文件                    | `./log`                          | `/var/log/emqx`               | `/usr/local/Cellar/emqx/log`       |
+| 启动相关的脚本、schema 文件 | `./releases`                     | `/usr/lib/emqx/releases`      | `/usr/local/Cellar/emqx/releases`    |
 
 
 以上目录中，用户经常接触与使用的是 `bin`、`etc`、`data`、`log` 目录。
