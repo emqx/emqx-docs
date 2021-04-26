@@ -27,16 +27,16 @@ EMQ X 4.3-rc.5 is released now, it mainly includes the following changes:
 
 - Improve wildcard subscription performance
 
-  Github Issue: [emqx##2985](https://github.com/emqx/emqx/issue/#2985)
-  Github PR: [emqx##4645](https://github.com/emqx/emqx/pull/#4645)
+  Github Issue: [emqx#2985](https://github.com/emqx/emqx/issues/2985)
+  Github PR: [emqx#4645](https://github.com/emqx/emqx/pull/4645)
 
 - Support single-line log output, and support rfc3339 time format
 
-  Github PR: [emqx##4656](https://github.com/emqx/emqx/pull/#4656)
+  Github PR: [emqx#4656](https://github.com/emqx/emqx/pull/4656)
 
 - Support routing table compression, reduce memory usage, enhance subscription performance, publishing performance will be slightly affected, so disable option is provided
 
-  Github PR: [emqx##4628](https://github.com/emqx/emqx/pull/#4628)
+  Github PR: [emqx##4628](https://github.com/emqx/emqx/pull/4628)
 
 - Rule engine SQL function supports conversion between unix timestamp and rfc3339 format time
 
@@ -50,12 +50,16 @@ EMQ X 4.3-rc.5 is released now, it mainly includes the following changes:
 
 - When the rule engine resource is not initialized successfully, the corresponding rule status is set to unavailable
 
-  Github Issue: [emqx##4642](https://github.com/emqx/emqx/issue/#4642)
-  Github PR: [emqx##4643](https://github.com/emqx/emqx/pull/#4643)
+  Github Issue: [emqx#4642](https://github.com/emqx/emqx/issues/4642)
+  Github PR: [emqx#4643](https://github.com/emqx/emqx/pull/4643)
 
 - Fix the issue caused by reporting telemetry data when EMQ X is not fully started
 
-  Github PR: [emqx##4627](https://github.com/emqx/emqx/pull/#4627)
+  Github PR: [emqx#4627](https://github.com/emqx/emqx/pull/4627)
+
+- Fix the issue that the HTTPS certificate must be configured to load `emqx-exhook` plugin
+
+  Github PR: [emqx#4678](https://github.com/emqx/emqx/pull/4678)
 
 ## Version 4.3-rc.4
 
