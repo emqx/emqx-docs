@@ -15,6 +15,48 @@ ref: undefined
 
 # Changes
 
+## Version 4.3-rc.5
+
+*Release Date: 2021-04-26*
+
+EMQ X 4.3-rc.5 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Enhancement:**
+
+- Improve wildcard subscription performance
+
+  Github Issue: [emqx##2985](https://github.com/emqx/emqx/issue/#2985)
+  Github PR: [emqx##4645](https://github.com/emqx/emqx/pull/#4645)
+
+- Support single-line log output, and support rfc3339 time format
+
+  Github PR: [emqx##4656](https://github.com/emqx/emqx/pull/#4656)
+
+- Support routing table compression, reduce memory usage, enhance subscription performance, publishing performance will be slightly affected, so disable option is provided
+
+  Github PR: [emqx##4628](https://github.com/emqx/emqx/pull/#4628)
+
+- Rule engine SQL function supports conversion between unix timestamp and rfc3339 format time
+
+  Github PR: [emqx#4639](https://github.com/emqx/emqx/pull/4639)
+
+**Bug fixes:**
+
+- Fix the issue that EMQ X may fail to start in Docker
+
+  Github PR: [emqx#4670](https://github.com/emqx/emqx/pull/4670), [emqx#4675](https://github.com/emqx/emqx/pull/4675), [emqx#4657](https://github.com/emqx/emqx/pull/4657)
+
+- When the rule engine resource is not initialized successfully, the corresponding rule status is set to unavailable
+
+  Github Issue: [emqx##4642](https://github.com/emqx/emqx/issue/#4642)
+  Github PR: [emqx##4643](https://github.com/emqx/emqx/pull/#4643)
+
+- Fix the issue caused by reporting telemetry data when EMQ X is not fully started
+
+  Github PR: [emqx##4627](https://github.com/emqx/emqx/pull/#4627)
+
 ## Version 4.3-rc.4
 
 *Release Date: 2021-04-16*
