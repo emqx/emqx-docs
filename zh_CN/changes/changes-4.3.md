@@ -27,16 +27,16 @@ EMQ X 4.3-rc.5 现已发布，主要包含以下改动:
 
 - 优化通配符订阅性能
 
-  Github Issue: [emqx##2985](https://github.com/emqx/emqx/issue/#2985)
-  Github PR: [emqx##4645](https://github.com/emqx/emqx/pull/#4645)
+  Github Issue: [emqx#2985](https://github.com/emqx/emqx/issues/2985)
+  Github PR: [emqx#4645](https://github.com/emqx/emqx/pull/4645)
 
 - 支持单行日志输出，并支持 rfc3339 时间格式
 
-  Github PR: [emqx##4656](https://github.com/emqx/emqx/pull/#4656)
+  Github PR: [emqx#4656](https://github.com/emqx/emqx/pull/4656)
 
 - 支持路由表压缩，减少内存占用，增强订阅性能，发布性能会略受影响，因此提供了关闭选项
 
-  Github PR: [emqx##4628](https://github.com/emqx/emqx/pull/#4628)
+  Github PR: [emqx#4628](https://github.com/emqx/emqx/pull/4628)
 
 - 规则引擎 SQL 函数支持 unix 时间戳与 rfc3339 格式时间之间的转换
 
@@ -50,12 +50,16 @@ EMQ X 4.3-rc.5 现已发布，主要包含以下改动:
 
 - 规则引擎资源未初始化成功时将相应规则状态设为不可用
 
-  Github Issue: [emqx##4642](https://github.com/emqx/emqx/issue/#4642)
-  Github PR: [emqx##4643](https://github.com/emqx/emqx/pull/#4643)
+  Github Issue: [emqx#4642](https://github.com/emqx/emqx/issues/4642)
+  Github PR: [emqx#4643](https://github.com/emqx/emqx/pull/4643)
 
 - 修复在 EMQ X 未完全启动时上报遥测数据导致的问题
 
-  Github PR: [emqx##4627](https://github.com/emqx/emqx/pull/#4627)
+  Github PR: [emqx#4627](https://github.com/emqx/emqx/pull/4627)
+
+- 修复启动 emqx-exhook 插件必须配置 HTTPS 证书的问题
+
+  Github PR: [emqx#4678](https://github.com/emqx/emqx/pull/4678)
 
 ## 4.3-rc.4 版本
 
