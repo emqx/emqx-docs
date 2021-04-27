@@ -25,20 +25,12 @@ emqx_auth_mnesia
 
 ## ACL rules
 
-Mnesia ACL uses the username and password of MQTT packet for authentication by default, and can be changed to use the Client ID and password of MQTT packet for authentication in `etc/plugins/emqx_auth_mnesia.conf` :
-
-```bash
-## Auth and ACL base on username or clientid.
-##
-## Value: username | clientid
-auth.mnesia.as = username
-```
-
 ### ACL Rule Structure Body
 
 ```json
 {
-	"login":"emqx",
+	"username":"emqx",
+	"clientid":"client1",
 	"topic":"testtopic/1",
 	"action":"pub",
 	"allow": true
@@ -47,13 +39,15 @@ auth.mnesia.as = username
 
 Rule field description:
 
-- login: Match the client's Username or Client ID according to the value of `auth.mnesia.as`.
+- username: Match the client's Username.
+- clientid: Match the client's Client.
 - topic: Control topics, you can use wildcards, and you can add placeholders to topics to match client information, such as `t/%c`, then the topic will be replaced with the client ID of the current client when matching
   - %u: Username
   - %c: Client ID
 - action: Operation action, optional value: pub | sub | pubsub
 - allow: Whether allow
-  
+
+`username` and `clientid` are optional fields, when both a missing, the rule applies to all clients.
 
 Mnesia ACL does not set rules by default, and you can use the HTTP API to manage ACL rules.
 
