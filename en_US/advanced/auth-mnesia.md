@@ -28,15 +28,6 @@ emqx_auth_mnesia
 
 ## Authentication rules
 
-Mnesia authentication uses the username and password based on CONNECT packet for authentication by default, and can be changed to use the Client ID and password of CONNECT packet for authentication in  `etc/plugins/emqx_auth_mnesia.conf` :
-
-```bash
-## Auth as username or auth as clientid.
-##
-## Value: username | clientid
-auth.mnesia.as = username
-```
-
 ## Hash method
 
 Mnesia authentication uses sha256 for password hash encryption by default, which can be changed in `etc/plugins/emqx_auth_mnesia.conf`:
@@ -69,8 +60,6 @@ auth.mnesia.2.login = client
 auth.mnesia.2.password = public
 auth.mnesia.2.is_superuser = false
 ```
-
-In the authentication data, `login` will read the client's Username or Client ID based on the value of `auth.mnesia.as`.
 
 When the plugin starts, it will read the preset authentication data and load it into the EMQ X built-in database, and the authentication data on the node will be synchronized to the cluster at this stage.
 

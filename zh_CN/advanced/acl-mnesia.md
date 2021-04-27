@@ -27,7 +27,8 @@ emqx_auth_mnesia
 
 ```json
 {
-	"clientid":"emqx",
+	"username":"emqx",
+	"clientid":"client1",
 	"topic":"testtopic/1",
 	"action":"pub",
 	"access": "allow"
@@ -36,13 +37,15 @@ emqx_auth_mnesia
 
 规则字段说明：
 
-- clientid / username：客户端的 Username 或 Client ID.
+- clientid：客户端的 Client ID.
+- username: 客户端的 Username.
 - topic：控制的主题，可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
   - %u：用户名
   - %c：Client ID
 - action：操作行为，可选值：pub | sub | pubsub
 - Access：是否允许，可选值：allow | deny
-  
+
+`username`和`clientid`是可选的，当两个都没有提供时，该规则适用于所有的客户端
 
 Mnesia ACL 默认不设规则，你可以使用 HTTP API 和 `emqx_ct`l 管理 ACL 规则。
 
