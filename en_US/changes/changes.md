@@ -17,6 +17,20 @@ ref: undefined
 
 # Changes
 
+## Version 4.0.13
+
+*Release Date: 2021-04-16*
+
+EMQ X 4.0.13 is released now, it mainly includes the following changes:
+
+### emqx-management
+
+**Bug fixes:**
+
+- Fix the issue when data is imported and exported
+
+  Github PR: [emqx-management#319](https://github.com/emqx/emqx-management/pull/319), [emqx-management#321](https://github.com/emqx/emqx-management/pull/321)
+
 ## Version 4.0.11
 
 *Release Date: 2021-04-10*
