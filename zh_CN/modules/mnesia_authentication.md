@@ -524,7 +524,7 @@ Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存�
   | -------- | ------        | -------- | ----------- |
   | clientid | String        | True     | Client ID   |
   | topic    | String        | True     | 主题         |
-  | action   | sub/pub/subpub| True     | 动作         |
+  | action   | sub/pub/pubsub| True     | 动作         |
   | access   | allow/deny    | True     | 是否允许      |
 
   **Success Response Body (JSON):**
@@ -570,7 +570,7 @@ Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存�
   | -------- | ------        | -------- | ----------- |
   | username | String        | True     | Username    |
   | topic    | String        | True     | 主题         |
-  | action   | sub/pub/subpub| True     | 动作         |
+  | action   | sub/pub/pubsub| True     | 动作         |
   | access   | allow/deny    | True     | 是否允许      |
 
   **Success Response Body (JSON):**
@@ -615,7 +615,7 @@ Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存�
   | Name     | Type          | Required | Description |
   | -------- | ------        | -------- | ----------- |
   | topic    | String        | True     | 主题         |
-  | action   | sub/pub/subpub| True     | 动作         |
+  | action   | sub/pub/pubsub| True     | 动作         |
   | access   | allow/deny    | True     | 是否允许      |
 
   **Success Response Body (JSON):**
@@ -663,14 +663,14 @@ Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存�
 | --------     | ------        | -------- | ----------- |
 | [0].clientid | String        | True     | Clientid    |
 | [0].topic    | String        | True     | 主题         |
-| [0].action   | sub/pub/subpub| True     | 动作         |
+| [0].action   | sub/pub/pubsub| True     | 动作         |
 | [0].access   | allow/deny    | True     | 是否允许      |
 | [1].username | String        | True     | Username    |
 | [1].topic    | String        | True     | 主题         |
-| [1].action   | sub/pub/subpub| True     | 动作         |
+| [1].action   | sub/pub/pubsub| True     | 动作         |
 | [1].access   | allow/deny    | True     | 是否允许      |
 | [2].topic    | String        | True     | 主题         |
-| [2].action   | sub/pub/subpub| True     | 动作         |
+| [2].action   | sub/pub/pubsub| True     | 动作         |
 | [2].access   | allow/deny    | True     | 是否允许      |
 
 **Success Response Body (JSON):**
