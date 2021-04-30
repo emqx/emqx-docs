@@ -17,11 +17,25 @@ ref: undefined
 
 # 版本发布
 
-## Version 4.0.11
+## 4.0.13 版本
+
+*发布日期: 2021-04-13*
+
+EMQ X 4.0.13 现已发布，主要包含以下改动
+
+### emqx-management
+
+**Bug fixes:**
+
+- 修复数据导入导出时的问题
+
+  Github PR: [emqx-management#319](https://github.com/emqx/emqx-management/pull/319), [emqx-management#321](https://github.com/emqx/emqx-management/pull/321)
+
+## 4.0.11 版本
 
 *发布日期: 2021-04-10*
 
-EMQ X 4.0.11 is released now, it mainly includes the following changes:
+EMQ X 4.0.11 现已发布，主要包含以下改动
 
 ### emqx-management
 
@@ -31,7 +45,7 @@ EMQ X 4.0.11 is released now, it mainly includes the following changes:
 
   Github PR: [emqx-management#316](https://github.com/emqx/emqx-management/pull/316)
 
-## Version 4.0.9
+## 4.0.9 版本
 
 *发布日期: 2021-03-12*
 
