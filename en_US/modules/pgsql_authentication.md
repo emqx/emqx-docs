@@ -131,10 +131,10 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, '10.59.1.100', NULL, NULL, 1,'$SYS/#');
 
 - Disallow clients from subscribing to the /smarthome/+/temperature topic
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, NULL, NULL, 1,'/smarthome/+/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1,'/smarthome/+/temperature');
 
 - Allow clients to subscribe to the topic /smarthome/${clientid}/temperature containing their Client ID
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, NULL, NULL, 1,'/smarthome/%c/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1,'/smarthome/%c/temperature');
 ```
 
 ## root
