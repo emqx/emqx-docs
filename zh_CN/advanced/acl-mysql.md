@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -23,7 +23,7 @@ MySQL ACL 使用外部 MySQL 数据库存储 ACL 规则，可以存储大量数�
 emqx_auth_mysql
 ```
 
-::: tip 
+::: tip
 emqx_auth_mysql 插件同时包含认证功能，可通过注释禁用。
 :::
 
@@ -104,7 +104,7 @@ CREATE TABLE `mqtt_acl` (
 - topic：控制的主题，可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
   - %u：用户名
   - %c：Client ID
-  
+
 
 
 默认配置下示例数据：
@@ -117,16 +117,16 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, '10.59.1.100', NULL, NULL, 1, '$SYS/#');
 
 -- 禁止客户端订阅 /smarthome/+/temperature 主题
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, NULL, NULL, 1, '/smarthome/+/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1, '/smarthome/+/temperature');
 
 -- 允许客户端订阅包含自身 Client ID 的 /smarthome/${clientid}/temperature 主题
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, NULL, NULL, 1, '/smarthome/%c/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1, '/smarthome/%c/temperature');
 ```
 
 启用 MySQL ACL 后并以用户名 emqx 成功连接后，客户端应当数据具有相应的主题权限。
 
 
-::: tip 
+::: tip
 这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行 ACL 规则存储。
 :::
 
@@ -155,7 +155,7 @@ auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u
 1. 查询结果中必须包含 is_superuser 字段，is_superuser 应该显式的为 true
 2. 查询结果只能有一条，多条结果时只取第一条作为有效数据
 
-::: tip 
+::: tip
 如果不需要超级用户功能，注释并禁用该选项能有效提高效率
 :::
 
@@ -183,7 +183,7 @@ auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic f
 1. 查询结果中必须包含 allow、access、topic、clientid、username、ipaddr 字段，如果字段不想参与比对则使用 `$all` 字符串或者数据库 `NULL` 值
 2. 查询结果可以有多条，多条结果时按照从上到下的顺序进行匹配
 
-::: tip 
+::: tip
 可以在 SQL 中调整查询条件、指定排序方式实现更高效率的查询。
 :::
 

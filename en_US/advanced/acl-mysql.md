@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -23,7 +23,7 @@ Plugin:
 emqx_auth_mysql
 ```
 
-::: tip 
+::: tip
 The emqx_auth_mysql plugin also includes authentication feature, which can be disabled via comments.
 :::
 
@@ -104,7 +104,7 @@ Rule table field description:
 - topic: Topics to be controlled, which can use wildcards, and placeholders can be added to the topic to match client information. For example, the topic will be replaced with the client ID of the current client when matching `t/%c`
   - %u: Username
   - %c：Client ID
-  
+
 
 
 Sample data in the default configuration:
@@ -117,15 +117,15 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, '10.59.1.100', NULL, NULL, 1, '$SYS/#');
 
 -- Deny client to subscribe to the topic of /smarthome/+/temperature
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, NULL, NULL, 1, '/smarthome/+/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1, '/smarthome/+/temperature');
 
 -- Allow clients to subscribe to the topic of /smarthome/${clientid}/temperature with their own Client ID
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, NULL, NULL, 1, '/smarthome/%c/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1, '/smarthome/%c/temperature');
 ```
 
 After enabling MySQL ACL and successfully connecting with the username emqx, the client should have permissions on the topics it wants to subscribe to/publish.
 
-::: tip 
+::: tip
 This is the table structure used by default configuration. After being familiar with the use of this plugin, you can use any data table that meets the conditions for ACL rule storage.
 :::
 
@@ -153,8 +153,8 @@ You can adjust the super user SQL according to business to achieve more business
 1. The query result must include the is_superuser field, which should be explicitly true
 2. There can be only one query result. When there are multiple results, only the first one is taken as valid data.
 
-::: tip 
-If superuser functionality is not needed, it can be more efficient when commenting and disabling this option 
+::: tip
+If superuser functionality is not needed, it can be more efficient when commenting and disabling this option
 :::
 
 
@@ -180,7 +180,7 @@ You can adjust the ACL SQL according to business to achieve more business-relate
 1. The query result must include the fields of allow, access, topic, clientid, username, ipaddr. If the fields is not involved in the comparison, the `$ all` string or the database` NULL` value should be used.
 2. There can be multiple query results. When multiple results are matched, they are matched from top to bottom.
 
-::: tip 
+::: tip
 You can adjust query conditions and specify sorting methods in SQL to achieve more efficient queries
 :::
 
