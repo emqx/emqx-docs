@@ -28,6 +28,7 @@ EMQ X 4.3.0 现已发布，主要包含以下改动:
 - 支持 Erlang/OTP 23
 - 新安装包仅支持 macOS 10.14 及以上版本
 - 项目调整为 umbrella 结构
+- 支持使用 Elixir 编译插件
 
 #### 性能改进
 
@@ -41,6 +42,7 @@ EMQ X 4.3.0 现已发布，主要包含以下改动:
 - 保护 EMQ X Broker 免受跨站点 WebSocket 劫持攻击
 - SSL 支持 `verify` 与 `server_name_indication` 配置项
 - SSL 支持证书链最大长度以及私钥文件密码配置项
+- JWT 认证支持 JWKS
 
 #### 其他
 
@@ -50,7 +52,6 @@ EMQ X 4.3.0 现已发布，主要包含以下改动:
 - Websocket 监听器支持从 subprotocols 列表中选择支持的 subprotocol
 - WebSocket 连接支持获取真实 IP 与 Port
 - 支持 MySQL 8.0 的默认认证方法 caching_sha2_password
-- JWT 认证支持 JWKS
 - 共享订阅分发策略配置为 `round_robin` 时随机选择起始点
 - 共享订阅支持按源主题的 Hash 分发消息
 - 支持 Mnesia 认证信息的导入导出
@@ -59,10 +60,16 @@ EMQ X 4.3.0 现已发布，主要包含以下改动:
 - 仅在正式版本中启用数据遥测功能
 - 支持清除所有 ACL 缓存
 - 支持 observer_cli
-- OOM 时快速杀死连接进程
 - Prometheus 支持集群指标
 - Redis 哨兵模式支持 SSL 连接
 - 支持单行日志输出，并支持 rfc3339 时间格式
+- `emqx_auth_clientid` 与 `emqx_auth_usernmae` 合并为 `emqx_auth_mnesia`。请参考 [文档](https://docs.emqx.io/en/broker/v4.3/advanced/data-import-and-export.html) 将数据到旧版本导出，并导入到 4.3 中
+- Docker 默认输出日志到控制台，设置 EMQX_LOG__TO=file 使日志输出到文件
+- 支持输出 Json 格式的日志
+- 支持 IPv6 自动探测
+- 所有发行版都支持环境变量覆盖配置文件（以前仅适用于 Docker）
+- 开源版支持 Dashboard 上传证书文件（以前仅适用于企业版）
+
 
 ### 错误修复
 
@@ -86,7 +93,7 @@ EMQ X 4.3.0 现已发布，主要包含以下改动:
 - 修复 MySQL 认证 SSL/TLS 连接功能不可用的问题
 - 修复 Redis 重连失败问题
 
-#### 其他
+#### 其他修复
 
 - 修复 ekka_locker 在极端条件下内存可能无限增长的问题
 - 修复 MQTT 桥接功能中 `max_inflight_size` 配置项不生效的问题
@@ -99,6 +106,8 @@ EMQ X 4.3.0 现已发布，主要包含以下改动:
 - 修复 WebSocket 连接无法使用对端证书作为用户名的问题
 - 修复认证数据无法导入的问题
 - 修复 Docker 中 EMQ X 可能启动失败的问题
+- OOM 时快速杀死连接进程
+- 修复 Clean Session 为 false 的 MQTT-SN 连接在非正常断开时没有发布遗嘱消息的问题
 
 ## 4.3-rc.5 版本
 
