@@ -15,6 +15,91 @@ ref: undefined
 
 # Changes
 
+## 4.3.0 版本
+
+*Release Date: 2021-05-06*
+
+EMQ X 4.3.0 is released now, it mainly includes the following changes:
+
+### Features and Enhancement
+
+#### Building
+
+- Support Erlang/OTP 23
+- The new installation package only supports macOS 10.14 and above
+- Project adjusted to umbrella structure
+
+#### Performance improvement
+
+- The underlying implementation of the multi-language extension function is changed from erlport to gRPC
+- Support routing table compression, reduce memory usage, enhance subscription performance, publishing performance will be slightly affected, so disable option is provided
+- Improve wildcard subscription performance
+- Improve processing performance when a large number of clients are offline
+
+#### Safety
+
+- Protect EMQ X Broker from cross-site WebSocket hijacking attacks
+- SSL supports `verify` and `server_name_indication` configuration
+- Support the configuration of the maximum length of the certificate chain and the password of the private key file
+
+#### Other
+
+- Added update resource logic for rule engine
+- Rule engine SQL function supports conversion between unix timestamp and rfc3339 format time
+- Keep retrying the resources that failed to connect after the EMQ X Broker is started
+- Websocket listener supports selecting supported subprotocols from the subprotocols list
+- WebSocket connection supports obtaining real IP and Port
+- Support the default authentication method caching_sha2_password of MySQL 8.0
+- JWT authentication supports JWKS
+- The starting point is randomly selected when the shared subscription distribution strategy is configured as `round_robin`
+- Shared subscription supports Hash distribution of messages by source topic
+- Support import and export of Authentication & ACL information in Mnesia
+- Allow to use Base64 encoded client certificate or MD5 value of client certificate as username or Client ID
+- Support restarting the listener
+- Only enable data telemetry in the official version
+- Support clearing all ACL cache
+- Support observer_cli
+- Quickly kill the connection process when OOM
+- Support cluster metrics for Prometheus
+- Redis sentinel mode supports SSL connection
+- Support single-line log output, and support rfc3339 time format
+
+### Bugs Fix
+
+#### MQTT Protocol
+
+- Fix the processing of MQTT heartbeat packets
+- Fix MQTT packet receiving count issue
+- Limit the maximum effective size of the flight window to 65535
+- Fix the issue that the value of the `Keep Alive` field in the Dashboard is not synchronized when `Server Keep Alive` was in effect
+
+#### Gateway
+
+- Fix the issue that ACL configuration in CoAP connection does not take effect
+- Fix the issue that CoAP clients using the same ClientID can access at the same time
+- Fix the issue that the sleep mode of MQTT-SN is unavailable
+- Fix the issue that the MQTT-SN gateway will discard DISCONNECT packets in sleep mode
+- Fix the issue that the LwM2M gateway encodes and decodes numbers into unsigned integers
+
+#### Resource
+
+- Fix the issue that the MySQL authentication SSL/TLS connection function is not available
+- Fix Redis reconnection failure
+
+#### Other
+
+- Fix the issue that ekka_locker's memory may grow infinitely under extreme conditions
+- Fix the issue that the `max_inflight_size` configuration item in the MQTT bridge function does not take effect
+- Fix the issue of inflight in MQTT bridge
+- Fixed the error of indicator statistics in the MQTT bridge function and the problem of multiple unit conversions in the `retry_interval` field
+- Fix the issue of incorrect calculation of alarm duration
+- Fix the issue that the long Client ID cannot be tracked
+- Fix the issue that the query client information may crash
+- Fix the issue of the inconsistency between topic rewriting and ACL execution order when publishing and subscribing
+- Fix the issue that the WebSocket connection cannot use the peer certificate as the username
+- Fix the issue that the authentication data cannot be imported
+- Fix the issue that EMQ X may fail to start in Docker
+
 ## Version 4.3-rc.5
 
 *Release Date: 2021-04-26*
