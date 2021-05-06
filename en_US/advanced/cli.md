@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -262,7 +262,7 @@ Use `cluster join <Node>` to combine two nodes into one cluster:
 
 ```bash
 $ cd emqx2 && ./bin/emqx_ctl cluster join emqx1@127.0.0.1
- 
+
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx1@127.0.0.1','emqx2@127.0.0.1']}]
 ```
@@ -289,7 +289,7 @@ Client emqtt-0898fa447676e17479a5 sent CONNECT
 Client emqtt-0898fa447676e17479a5 sent PUBLISH (Q1, R0, D0, Topic=x, Payload=...(5 bytes))
 Client emqtt-0898fa447676e17479a5 sent DISCONNECT
 
-# received a message by emqx1 node (port 1883) 
+# received a message by emqx1 node (port 1883)
 $ ./bin/emqtt sub -t x -q 1 -p 1883
 hello
 ```
@@ -689,7 +689,7 @@ Query the mnesia database system status.
 
 ## log command
 
-The log command is used to set the log level. Visit [Documentation of logger](http://erlang.org/doc/apps/kernel/logger_chapter.html) for more information in detail. 
+The log command is used to set the log level. Visit [Documentation of logger](http://erlang.org/doc/apps/kernel/logger_chapter.html) for more information in detail.
 
 | Command                                      | Description                                           |
 | -------------------------------------------- | ----------------------------------------------------- |
@@ -767,10 +767,10 @@ Start client trace:
 ```bash
 $ ./bin/emqx_ctl log primary-level debug
 debug
-    
+ 
 $ ./bin/emqx_ctl trace start client clientid log/clientid_trace.log
 trace clientid clientid successfully
-    
+
 $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 trace clientid clientid2 successfully
 ```
@@ -1034,7 +1034,7 @@ $ ./bin/emqx_ctl rules create \
     'select * from "t/a"' \
     '[{"name":"inspect", "params": {"a": 1}}]' \
     -d 'Rule for debug'
-    
+
 Rule rule:9a6a725d created
 ```
 The above example creates a rule with the ID `rule:9a6a725d`. There is only one action in the action list with the name inspect, and the action parameters are `{" a ": 1}`.
@@ -1044,7 +1044,7 @@ The above example creates a rule with the ID `rule:9a6a725d`. There is only one 
 List all current rules:
 ```bash
 $ ./bin/emqx_ctl rules list
-    
+ 
 rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
 ```
 #### rules show
@@ -1053,7 +1053,7 @@ Query rules:
 ```bash
 ## Query rule with RuleID 'rule:9a6a725d'
 $ ./bin/emqx_ctl rules show 'rule:9a6a725d'
-    
+ 
 rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
 ```
 #### rules delete
@@ -1062,7 +1062,7 @@ Delete rule:
 ```bash
 ## Delete rule with RuleID 'rule:9a6a725d'
 $ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
-    
+ 
 ok
 ```
 ### rule-actions command
@@ -1082,7 +1082,7 @@ Query action:
 ```bash
 ## Query action named 'inspect'
 $ ./bin/emqx_ctl rule-actions show 'inspect'
-    
+
 action(name='inspect', app='emqx_rule_engine', types=[], title ='Inspect (debug)', description='Inspect the details of action params for debug purpose')
 ```
 #### rule-actions list
@@ -1091,7 +1091,7 @@ List eligible actions:
 ```bash
 ## List all current actions
 $ ./bin/emqx_ctl rule-actions list
-    
+
 action(name='data_to_rabbit', app='emqx_bridge_rabbit', types=[bridge_rabbit], title ='Data bridge to RabbitMQ', description='Store Data to Kafka')
 action(name='data_to_timescaledb', app='emqx_backend_pgsql', types=[timescaledb], title ='Data to TimescaleDB', description='Store data to TimescaleDB')
 ...
@@ -1122,13 +1122,13 @@ Create a new resource with the following parameters:
 List all current resources:
 ```bash
 $ ./bin/emqx_ctl resources list
-    
+
 resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
 ```
 List resources of a certain type:
 ```bash
 $ ./bin/emqx_ctl resources list --type='web_hook'
-    
+ 
 resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
 ```
 #### resources show
@@ -1136,7 +1136,7 @@ resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http:
 Query resource:
 ```bash
 $ ./bin/emqx_ctl resources show 'resource:a7a38187'
-    
+ 
 resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
 ```
 #### resources delete
@@ -1144,7 +1144,7 @@ resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http:
 Delete resource:
 ```bash
 $ ./bin/emqx_ctl resources delete 'resource:a7a38187'
-    
+ 
 ok
 ```
 ### resource-types command
@@ -1163,7 +1163,7 @@ Resource type can be built-in by EMQ X Broker (called system built-in resource t
 List all current resource types:
 ```bash
 ./bin/emqx_ctl resource-types list
-    
+ 
 resource_type(name='backend_mongo_rs', provider='emqx_backend_mongo', title ='MongoDB Replica Set Mode', description='MongoDB Replica Set Mode')
 resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassandra', description='Cassandra Database')
 ...
@@ -1173,7 +1173,7 @@ resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassa
 Query resource type:
 ```bash
 $ ./bin/emqx_ctl resource-types show backend_mysql
-    
+ 
 resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
 ```
 ## Status, statistical indicators and alerts related to the rules engine
@@ -1198,3 +1198,220 @@ resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL
 
 - Available: Resources available
 - Unavailable: resources unavailable (e.g. database connection shutdown)
+
+## EMQ X Internal DB Auth/ACL
+
+This command will only take effect when the emqx_auth_mnesia plug-in is turned on
+
+### clientid command
+
+| Command                      | Description            |
+| ---------------------------- | ----------------------- |
+| clientid list                | List clientid auth rules |
+| clientid add `<ClientID>` `<Password>` | Add clientid auth rule |
+| clientid update `<ClientID>` `<Password>` | Update clientid auth rule |
+| clientid del `<ClientID>` `<Password>` | Delete clientid auth rule |
+
+#### clientid list
+
+List clientid auth rules
+
+```bash
+./bin/emqx_ctl clientid list
+emqx
+```
+
+#### clientid add `<ClientID>` `<Password>`
+
+Add clientid auth rule
+
+```bash
+./bin/emqx_ctl clientid add emqx public
+ok
+```
+
+#### clientid update `<ClientID>` `<Password>`
+
+Update clientid auth rule
+
+```bash
+./bin/emqx_ctl clientid update emqx new_password
+ok
+```
+
+#### clientid del `<ClientID>` `<Password>`
+
+Delete clientid auth rule
+
+```bash
+./bin/emqx_ctl clientid del emqx new_password
+ok
+```
+
+### user command
+
+| Command                      | Description            |
+| ---------------------------- | ----------------------- |
+| user list                    | List username auth rules |
+| user add `<Username>` `<Password>` | Add username auth rule |
+| user update `<Username>` `<Password>` | Update username auth rule |
+| user del `<Username>` `<Password>` | Delete username auth rule |
+
+#### user list
+
+List username auth rules
+
+```bash
+./bin/emqx_ctl user list
+emqx
+```
+
+#### user add `<Username>` `<Password>`
+
+Add username auth rule
+
+```bash
+./bin/emqx_ctl user add emqx public
+ok
+```
+
+#### user update `<Username>` `<Password>`
+
+Update username auth rule
+
+```bash
+./bin/emqx_ctl user update emqx new_password
+ok
+```
+
+#### user del `<Username>` `<Password>`
+
+Delete username auth rule
+
+```bash
+./bin/emqx_ctl user del emqx new_password
+ok
+```
+
+### acl command
+
+| Command                      | Description            |
+| ---------------------------- | ----------------------- |
+| acl list clientid                                    | List clientid acls|
+| acl list username                                    | List username acls|
+| acl list _all                                        | List $all acls|
+| acl show clientid <Clientid>                         | Lookup clientid acl detail|
+| acl show username <Username>                         | Lookup username acl detail|
+| acl aad clientid <Clientid> <Topic> <Action> <Access>| Add clientid acl|
+| acl add Username <Username> <Topic> <Action> <Access>| Add username acl|
+| acl add _all <Topic> <Action> <Access>               | Add $all acl|
+| acl del clientid <Clientid> <Topic>                  | Delete clientid acl|
+| acl del username <Username> <Topic>                  | Delete username acl|
+| acl del _all <Topic>                                 | Delete $all acl|
+
+#### acl list
+
++ acl list clientid
+
+  List clientid acls
+
+  ```bash
+  ./bin/emqx_ctl acl list clientid
+  Acl(clientid = <<"emqx_clientid">> topic = <<"Topic/A">> action = pub access = allow)
+  ```
+
++ acl list username
+
+  List username acls
+
+  ```bash
+  ./bin/emqx_ctl acl list username
+  Acl(username = <<"emqx_username">> topic = <<"Topic/B">> action = sub access = deny)
+  ```
+
++ acl list _all
+
+  List $all acls
+
+  ```bash
+  ./bin/emqx_ctl acl list _all
+  Acl($all topic = <<"Topic/C">> action = pubsub access = allow)
+  ```
+
+#### acl show
+
++ acl show clientid `<Clientid>`
+
+  Lookup clientid acl detail
+
+  ```bash
+  ./bin/emqx_ctl acl show clientid emqx_clientid
+  Acl(clientid = <<"emqx_clientid">> topic = <<"Topic/A">> action = pub access = allow)
+  ```
+
++ acl show username `<Username>`
+
+  Lookup username acl detail
+
+  ```bash
+  ./bin/emqx_ctl acl show username emqx_username
+  Acl(username = <<"emqx_username">> topic = <<"Topic/B">> action = sub access = deny)
+  ```
+
+#### acl add
+
++ acl aad clientid `<Clientid>` `<Topic>` `<Action>` `<Access>`
+
+  Add clientid acl
+
+  ```bash
+  ./bin/emqx_ctl acl add clientid emqx_clientid Topic/A pub allow
+  ok
+  ```
+
++ acl aad username `<Username>` `<Topic>` `<Action>` `<Access>`
+
+  Add username acl
+
+  ```bash
+  ./bin/emqx_ctl acl add username emqx_username Topic/B sub deny
+  ok
+  ```
+
++ acl aad _all `<Topic>` `<Action>` `<Access>`
+
+  Add $all acl
+
+  ```bash
+  ./bin/emqx_ctl acl add _all Topic/C pubsub allow
+  ok
+  ```
+
+#### acl del
+
++ acl del clientid `<Clientid>` `<Topic>`
+
+  Delete clientid acl
+
+  ```bash
+  ./bin/emqx_ctl acl del clientid emqx_clientid Topic/A
+  ok
+  ```
+
++ acl del username `<Username>` `<Topic>`
+
+  Delete username acl
+
+  ```bash
+  ./bin/emqx_ctl acl del clientid emqx_username Topic/B
+  ok
+  ```
+
++ acl del _all `<Topic>`
+
+  Delete $all acl
+
+  ```bash
+  ./bin/emqx_ctl acl del _all Topic/C
+  ok
+  ```
