@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -262,7 +262,7 @@ $ cd emqx2 && ./bin/emqx start
 
 ```bash
 $ cd emqx2 && ./bin/emqx_ctl cluster join emqx1@127.0.0.1
- 
+
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx1@127.0.0.1','emqx2@127.0.0.1']}]
 ```
@@ -786,10 +786,10 @@ trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，
 ```bash
 $ ./bin/emqx_ctl log primary-level debug
 debug
-    
+
 $ ./bin/emqx_ctl trace start client clientid log/clientid_trace.log
 trace clientid clientid successfully
-    
+
 $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 trace clientid clientid2 successfully
 ```
@@ -1218,3 +1218,220 @@ resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL
 
 - 可用: 资源可用
 - 不可用: 资源不可用(比如数据库连接断开)
+
+## EMQ X 内置数据库 Auth 与 ACL 规则
+
+此命令只有在开启 emqx_auth_mnesia 插件后生效
+
+### clientid 命令
+
+| 命令                         | 描述                    |
+| ---------------------------- | ----------------------- |
+| clientid list                | List clientid auth rules |
+| clientid add `<ClientID>` `<Password>` | Add clientid auth rule |
+| clientid update `<ClientID>` `<Password>` | Update clientid auth rule |
+| clientid del `<ClientID>` `<Password>` | Delete clientid auth rule |
+
+#### clientid list
+
+列出所有的 clientid 验证规则
+
+```bash
+./bin/emqx_ctl clientid list
+emqx
+```
+
+#### clientid add `<ClientID>` `<Password>`
+
+增加 clientid 验证规则
+
+```bash
+./bin/emqx_ctl clientid add emqx public
+ok
+```
+
+#### clientid update `<ClientID>` `<Password>`
+
+更新 ClientID 验证的密码
+
+```bash
+./bin/emqx_ctl clientid update emqx new_password
+ok
+```
+
+#### clientid del `<ClientID>` `<Password>`
+
+删除 clientid 验证规则码
+
+```bash
+./bin/emqx_ctl clientid del emqx new_password
+ok
+```
+
+### user 命令
+
+| 命令                         | 描述                    |
+| ---------------------------- | ----------------------- |
+| user list                    | List username auth rules |
+| user add `<Username>` `<Password>` | Add username auth rule |
+| user update `<Username>` `<Password>` | Update username auth rule |
+| user del `<Username>` `<Password>` | Delete username auth rule |
+
+#### user list
+
+列出所有的 username 验证规则
+
+```bash
+./bin/emqx_ctl user list
+emqx
+```
+
+#### user add `<Username>` `<Password>`
+
+增加 username 验证规则
+
+```bash
+./bin/emqx_ctl user add emqx public
+ok
+```
+
+#### user update `<Username>` `<Password>`
+
+更新 ClientID 验证的密码
+
+```bash
+./bin/emqx_ctl user update emqx new_password
+ok
+```
+
+#### user del `<Username>` `<Password>`
+
+删除 username 验证规则码
+
+```bash
+./bin/emqx_ctl user del emqx new_password
+ok
+```
+
+### acl 命令
+
+| 命令                         | 描述                    |
+| ---------------------------- | ----------------------- |
+| acl list clientid                                    | List clientid acls|
+| acl list username                                    | List username acls|
+| acl list _all                                        | List $all acls|
+| acl show clientid <Clientid>                         | Lookup clientid acl detail|
+| acl show username <Username>                         | Lookup username acl detail|
+| acl aad clientid <Clientid> <Topic> <Action> <Access>| Add clientid acl|
+| acl add Username <Username> <Topic> <Action> <Access>| Add username acl|
+| acl add _all <Topic> <Action> <Access>               | Add $all acl|
+| acl del clientid <Clientid> <Topic>                  | Delete clientid acl|
+| acl del username <Username> <Topic>                  | Delete username acl|
+| acl del _all <Topic>                                 | Delete $all acl|
+
+#### acl list
+
++ acl list clientid
+
+  列出 clientid 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl list clientid
+  Acl(clientid = <<"emqx_clientid">> topic = <<"Topic/A">> action = pub access = allow)
+  ```
+
++ acl list username
+
+  列出 username 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl list username
+  Acl(username = <<"emqx_username">> topic = <<"Topic/B">> action = sub access = deny)
+  ```
+
++ acl list _all
+
+  列出 $all 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl list _all
+  Acl($all topic = <<"Topic/C">> action = pubsub access = allow)
+  ```
+
+#### acl show
+
++ acl show clientid `<Clientid>`
+
+  展示某一的 clientid ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl show clientid emqx_clientid
+  Acl(clientid = <<"emqx_clientid">> topic = <<"Topic/A">> action = pub access = allow)
+  ```
+
++ acl show username `<Username>`
+
+  展示某一的 username ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl show username emqx_username
+  Acl(username = <<"emqx_username">> topic = <<"Topic/B">> action = sub access = deny)
+  ```
+
+#### acl add
+
++ acl aad clientid `<Clientid>` `<Topic>` `<Action>` `<Access>`
+
+  增加一条 clientid 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl add clientid emqx_clientid Topic/A pub allow
+  ok
+  ```
+
++ acl aad username `<Username>` `<Topic>` `<Action>` `<Access>`
+
+  增加一条 username 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl add username emqx_username Topic/B sub deny
+  ok
+  ```
+
++ acl aad _all `<Topic>` `<Action>` `<Access>`
+
+  增加一条 $all 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl add _all Topic/C pubsub allow
+  ok
+  ```
+
+#### acl del
+
++ acl del clientid `<Clientid>` `<Topic>`
+
+  删除一条 clientid 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl del clientid emqx_clientid Topic/A
+  ok
+  ```
+
++ acl del username `<Username>` `<Topic>`
+
+  删除一条 username 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl del clientid emqx_username Topic/B
+  ok
+  ```
+
++ acl del _all `<Topic>`
+
+  删除一条 $all 的 ACL 规则
+
+  ```bash
+  ./bin/emqx_ctl acl del _all Topic/C
+  ok
+  ```
