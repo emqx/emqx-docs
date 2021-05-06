@@ -15,7 +15,7 @@ ref: undefined
 
 # Changes
 
-## 4.3.0 版本
+## Version 4.3.0
 
 *Release Date: 2021-05-06*
 
@@ -28,6 +28,7 @@ EMQ X 4.3.0 is released now, it mainly includes the following changes:
 - Support Erlang/OTP 23
 - The new installation package only supports macOS 10.14 and above
 - Project adjusted to umbrella structure
+- Support using Elixir to build plugins
 
 #### Performance improvement
 
@@ -36,33 +37,38 @@ EMQ X 4.3.0 is released now, it mainly includes the following changes:
 - Improve wildcard subscription performance
 - Improve processing performance when a large number of clients are offline
 
-#### Safety
+#### Security
 
 - Protect EMQ X Broker from cross-site WebSocket hijacking attacks
 - SSL supports `verify` and `server_name_indication` configuration
 - Support the configuration of the maximum length of the certificate chain and the password of the private key file
+- Use TLS v1.3 by default, TLS v1.3 configs has no effect if started on OTP 22
+- JWT authentication supports JWKS
 
 #### Other
 
-- Added update resource logic for rule engine
+- Added update resource functionality for rule engine
 - Rule engine SQL function supports conversion between unix timestamp and rfc3339 format time
 - Keep retrying the resources that failed to connect after the EMQ X Broker is started
 - Websocket listener supports selecting supported subprotocols from the subprotocols list
 - WebSocket connection supports obtaining real IP and Port
 - Support the default authentication method caching_sha2_password of MySQL 8.0
-- JWT authentication supports JWKS
 - The starting point is randomly selected when the shared subscription distribution strategy is configured as `round_robin`
-- Shared subscription supports Hash distribution of messages by source topic
+- Shared subscription supports hash distribution of messages by source topic
 - Support import and export of Authentication & ACL information in Mnesia
-- Allow to use Base64 encoded client certificate or MD5 value of client certificate as username or Client ID
-- Support restarting the listener
-- Only enable data telemetry in the official version
-- Support clearing all ACL cache
-- Support observer_cli
-- Quickly kill the connection process when OOM
+- Allow to use base64 encoded client certificate or MD5 value of client certificate as username or Client ID
+- MQTT listener restart from API/CLI
+- API/CLI to force evict ACL cache
+- Added observer_cli
 - Support cluster metrics for Prometheus
 - Redis sentinel mode supports SSL connection
 - Support single-line log output, and support rfc3339 time format
+- `emqx_auth_clientid` and `emqx_auth_username` are merged to `emqx_auth_mnesia`. Please refer to [doc](https://docs.emqx.io/en/broker/v4.3/advanced/data-import-and-export.html) to export data from older versions, and import to v4.3
+- By default, docker only logs to console, set EMQX_LOG__TO=file to switch to file
+- Support Json format log
+- Support IPv6 auto probe
+- Environment variable override configuration files can be used for all distributions (previously only for docker)
+- Certificate upload from dashboard has been made available for open-source edition (previously only for enterprise edition)
 
 ### Bugs Fix
 
@@ -71,34 +77,36 @@ EMQ X 4.3.0 is released now, it mainly includes the following changes:
 - Fix the processing of MQTT heartbeat packets
 - Fix MQTT packet receiving count issue
 - Limit the maximum effective size of the flight window to 65535
-- Fix the issue that the value of the `Keep Alive` field in the Dashboard is not synchronized when `Server Keep Alive` was in effect
+- The value of the `Keep Alive` field in the Dashboard is not synchronized when `Server Keep Alive` was in effect
 
 #### Gateway
 
-- Fix the issue that ACL configuration in CoAP connection does not take effect
-- Fix the issue that CoAP clients using the same ClientID can access at the same time
-- Fix the issue that the sleep mode of MQTT-SN is unavailable
-- Fix the issue that the MQTT-SN gateway will discard DISCONNECT packets in sleep mode
-- Fix the issue that the LwM2M gateway encodes and decodes numbers into unsigned integers
+- ACL configuration in CoAP connection does not take effect
+- CoAP clients using the same ClientID can access at the same time
+- The sleep mode of MQTT-SN is unavailable
+- The MQTT-SN gateway will discard DISCONNECT packets in sleep mode
+- The LwM2M gateway encodes and decodes numbers into unsigned integers
 
 #### Resource
 
-- Fix the issue that the MySQL authentication SSL/TLS connection function is not available
+- The MySQL authentication SSL/TLS connection function is not available
 - Fix Redis reconnection failure
 
-#### Other
+#### Other Fixes
 
-- Fix the issue that ekka_locker's memory may grow infinitely under extreme conditions
-- Fix the issue that the `max_inflight_size` configuration item in the MQTT bridge function does not take effect
+- ekka_locker's memory may grow infinitely under extreme conditions
+- The `max_inflight_size` configuration item in the MQTT bridge function does not take effect
 - Fix the issue of inflight in MQTT bridge
 - Fixed the error of indicator statistics in the MQTT bridge function and the problem of multiple unit conversions in the `retry_interval` field
-- Fix the issue of incorrect calculation of alarm duration
-- Fix the issue that the long Client ID cannot be tracked
-- Fix the issue that the query client information may crash
-- Fix the issue of the inconsistency between topic rewriting and ACL execution order when publishing and subscribing
-- Fix the issue that the WebSocket connection cannot use the peer certificate as the username
-- Fix the issue that the authentication data cannot be imported
-- Fix the issue that EMQ X may fail to start in Docker
+- Incorrect calculation of alarm duration
+- The long Client ID cannot be tracked
+- The query client information may crash
+- The inconsistency between topic rewriting and ACL execution order when publishing and subscribing
+- The WebSocket connection cannot use the peer certificate as the username
+- The authentication data cannot be imported
+- EMQ X may fail to start in Docker
+- Fixed delayed connection process OOM kill
+- The MQTT-SN connection with Clean Session being false did not publish a will message when it was disconnected abnormally
 
 ## Version 4.3-rc.5
 
