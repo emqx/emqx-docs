@@ -902,6 +902,45 @@ log.error.file = error.log
 
 <br />
 
+### log.max_depth
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 20      |
+
+#### 说明
+
+控制对大的数据结构打印日志时的最大深度。超过深度的部分将被 '...' 代替。
+
+
+<br />
+
+### log.single_line
+
+| Type    | Default |
+| ------- | ------- |
+| boolean | true    |
+
+#### 说明
+
+设置成 `true` 时，单行打印日志。
+如果设置成 `false`, 如 crash 日志中的堆栈信息等将打印多行
+
+<br />
+
+### log.formatter
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `text`, `json`  | `text`  |
+
+#### 说明
+
+选择打印日志的格式
+
+<br />
+
+
 ## authacl
 
 ### allow_anonymous

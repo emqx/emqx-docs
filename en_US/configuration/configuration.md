@@ -889,7 +889,39 @@ Output error and error logs separately to the `error.log.N` file
 log.error.file = error.log
 ```
 
+### log.max_depth
 
+| Type    | Default |
+| ------- | ------- |
+| integer | 20      |
+
+#### Description
+
+Max depth when printing large data blob to log.
+Exceeding parts will be logge as '...'.
+
+### log.single_line
+
+| Type    | Default |
+| ------- | ------- |
+| boolean | true    |
+
+#### Description
+
+Print logs in a single line if set to `true`.
+If set to `false`, information like stacktraces in crash logs may span multiple lines.
+
+### log.formatter
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `text`, `json`  | `text`  |
+
+#### Description
+
+Choose log format. `text` for free text, and `json` for structured logging.
+
+## authacl
 
 ### allow_anonymous
 
