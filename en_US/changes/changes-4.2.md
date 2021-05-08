@@ -15,6 +15,25 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.12
+
+*Release Date: 2021-05-07*
+
+### emqx
+
+** Bug Fix **:
+
+Fixed a wait-for-table timeout bug which may lead to premature EMQ X start up when there is a lot of Mnesia data to load.
+
+GitHub PR: [emqx#4724](https://github.com/emqx/emqx/pull/4724)
+
+** Performance Improvement **:
+
+Optimisation for massive concurrent subscribe/unsubscribe requests handling
+
+GitHub PR: [emqx#4732](https://github.com/emqx/emqx/pull/4732)
+GitHub PR: [emqx#4738](https://github.com/emqx/emqx/pull/4738)
+
 ## Version 4.2.11
 
 *Release Date: 2021-04-16*
