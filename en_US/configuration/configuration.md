@@ -618,9 +618,22 @@ RPC mode. Synchronous or asynchronous mode is optional.
 
 The maximum number of batch messages sent in asynchronous mode. Note that this configuration does not work in synchronous mode.
 
+### rpc.port_discovery
 
+| Type | Optional Value Default |
+| ---- | --------------------- |
+| enum | `manual`, `stateless` |
 
-### node.tcp_server_port
+#### Description
+
+`manual`: discover ports by `tcp_server_port` and `tcp_client_port`.
+`stateless`: discover ports in a stateless manner. If node name is `emqx<N>@127.0.0.1`, where the `<N>` is an integer,
+then the listening port will be `5370 + <N>`
+
+Default is `manual` when started from docker (environment variable override from docker-entrypoint)
+otherwise `stateless`.
+
+### rpc.tcp_server_port
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
@@ -629,22 +642,9 @@ The maximum number of batch messages sent in asynchronous mode. Note that this c
 #### Description
 
 Set the listening port used by RPC local service
+NOTE: this config only takes effect when `rpc.port_discovery` is set to `manual`
 
-
-
-### node.tcp_client_port
-
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| integer | 1024-65535     | 5369    |
-
-#### Description
-
-Set the port of the remote RPC service.
-
-
-
-### node.tcp_client_num
+### rpc.tcp_client_num
 
 | Type    | Optional Value | Default         |
 | ------- | -------------- | --------------- |
