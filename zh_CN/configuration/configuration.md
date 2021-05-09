@@ -625,6 +625,23 @@ RPC 模式。可选同步或异步模式。
 
 <br />
 
+### rpc.port_discovery
+
+| Type | Optional Value Default |
+| ---- | --------------------- |
+| enum | `manual`, `stateless` |
+
+#### 说明
+
+`manual`: 手动指定服务器客户端的端口号 `tcp_server_port` and `tcp_client_port`.
+`stateless`: discover ports in a stateless manner. If node name is `emqx<N>@127.0.0.1`, where the `<N>` is an integer,
+then the listening port will be `5370 + <N>`
+
+Default is `manual` when started from docker (environment variable override from docker-entrypoint)
+otherwise `stateless`.
+
+<br />
+
 ### node.tcp_server_port
 
 | Type    | Optional Value | Default |
@@ -634,22 +651,11 @@ RPC 模式。可选同步或异步模式。
 #### 说明
 
 设置 RPC 本地服务使用的监听 port。
+注意，该配置仅在 `rpc.port_discovery` 设置成 `manual` 时有效
 
 <br />
 
-### node.tcp_client_port
-
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| integer | 1024-65535     | 5369    |
-
-#### 说明
-
-设置远程 RPC 服务的端口。
-
-<br />
-
-### node.tcp_client_num
+### rpc.tcp_client_num
 
 | Type    | Optional Value | Default         |
 | ------- | -------------- | --------------- |
