@@ -15,6 +15,38 @@ ref:
 
 # 版本发布
 
+## 4.3.1 版本
+
+*发布日期: 2021-05-14*
+
+EMQ X 4.3.1 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复路由压缩之后性能消耗随主题层级数量指数级增长的问题
+
+  Github PR: [emqx#4800](https://github.com/emqx/emqx/pull/4800)
+
+- 修复处理大报文的性能问题
+
+  Github Issue: [emqx#4787](https://github.com/emqx/emqx/issues/4787)
+  Github PR: [emqx#4802](https://github.com/emqx/emqx/pull/4802)
+
+- 修复新增的共享订阅策略不可用的问题
+
+  Github Issue: [emqx#4808](https://github.com/emqx/emqx/issues/4808)
+  Github PR: [emqx#4809](https://github.com/emqx/emqx/pull/4809)
+
+- 修复了保留消息和延迟发布消息统计指标的错误实现
+
+  Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4778), [emqx#4778](https://github.com/emqx/emqx/pull/4799)
+
+- 修改 JSON 格式日志全部输出在同一行的问题
+
+  Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4771)
+
 ## 4.3.0 版本
 
 *发布日期: 2021-05-06*
