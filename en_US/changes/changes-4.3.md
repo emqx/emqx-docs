@@ -43,7 +43,7 @@ EMQ X 4.3.1 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4778), [emqx#4778](https://github.com/emqx/emqx/pull/4799)
 
-- All logs in JSON format are output on the same line
+- Ensure line breaks between json logs
 
   Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4771)
 

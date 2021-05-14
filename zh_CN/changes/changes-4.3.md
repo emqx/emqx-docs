@@ -43,7 +43,7 @@ EMQ X 4.3.1 现已发布，主要包含以下改动:
 
   Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4778), [emqx#4778](https://github.com/emqx/emqx/pull/4799)
 
-- 修改 JSON 格式日志全部输出在同一行的问题
+- 确保 JSON 日志之间的换行
 
   Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4771)
 
