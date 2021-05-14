@@ -15,6 +15,38 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.1
+
+*Release Date: 2021-05-14*
+
+EMQ X 4.3.1 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Performance consumption increases exponentially with the number of topic levels after route compression
+
+  Github PR: [emqx#4800](https://github.com/emqx/emqx/pull/4800)
+
+- Fix poor large frame concatenation performance
+
+  Github Issue: [emqx#4787](https://github.com/emqx/emqx/issues/4787)
+  Github PR: [emqx#4802](https://github.com/emqx/emqx/pull/4802)
+
+- Newly added shared subscription strategy is unavailable
+
+  Github Issue: [emqx#4808](https://github.com/emqx/emqx/issues/4808)
+  Github PR: [emqx#4809](https://github.com/emqx/emqx/pull/4809)
+
+- Fixed the incorrect implementation of metrics/stats for retained messages and messages of delayed publish
+
+  Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4778), [emqx#4778](https://github.com/emqx/emqx/pull/4799)
+
+- All logs in JSON format are output on the same line
+
+  Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4771)
+
 ## Version 4.3.0
 
 *Release Date: 2021-05-06*
