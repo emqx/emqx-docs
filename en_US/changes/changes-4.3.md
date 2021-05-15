@@ -25,7 +25,7 @@ EMQ X 4.3.1 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
-- Performance consumption increases exponentially with the number of topic levels after route compression
+- CPU consumption increases exponentially with the number of topic levels after route compression
 
   Github PR: [emqx#4800](https://github.com/emqx/emqx/pull/4800)
 
