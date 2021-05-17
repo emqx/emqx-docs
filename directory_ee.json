@@ -642,6 +642,10 @@
           "path": "changes/changes-ee-4.3"
         },
         {
+          "title": "生命周期 EOL",
+          "path": "changes/eol-ee"
+        },
+        {
           "title": "升级指南",
           "path": "changes/upgrade-4.3"
         }
@@ -1244,6 +1248,10 @@
         {
           "title": "Change log",
           "path": "changes/changes-ee-4.3"
+        },
+        {
+          "title": "End of life dates",
+          "path": "changes/eol-ee"
         },
         {
           "title": "Upgrade guide",
