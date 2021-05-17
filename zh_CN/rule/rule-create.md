@@ -13,7 +13,7 @@ nc 命令在部分 Linux 操作系统上有问题，无法与 EMQ X 发起的 HT
 
 1. 创建规则:
 
-   打开 [emqx dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+   打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
    填写用以处理 t/# 主题的规则 SQL:
 
