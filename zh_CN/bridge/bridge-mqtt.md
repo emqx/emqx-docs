@@ -1,5 +1,11 @@
 # MQTT 桥接
 
+::: tip
+
+EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[MQTT 桥接](../rule/bridge_mqtt.md)规则引擎中创建 MQTT 桥接
+
+:::
+
 EMQ X 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服务:
 
 ![image](./assets/bridge_mqtt.png)
