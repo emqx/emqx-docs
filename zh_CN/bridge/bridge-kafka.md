@@ -1,5 +1,11 @@
 # Kafka 桥接
 
+::: tip
+
+EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[Kafka 桥接](../rule/bridge_kafka.md)
+
+:::
+
 EMQ X 桥接转发 MQTT 消息到 Kafka 集群，Apache Kafka是一个快速、高可扩展、高吞吐的分布式日志系统，配合kafka Stream，在流式数据处理中非常常用。
 
 ![image](./assets/bridge_kafka.png)

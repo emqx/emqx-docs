@@ -1,5 +1,11 @@
 # RPC Bridge
 
+::: tip
+
+After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to EMQ X](../rule/bridge_emqx.md) to setup EMQ X bridges in rule engine.
+
+:::
+
 EMQ X bridges and forwards MQTT messages to remote EMQ X:
 
 ![image](./assets/bridge_rpc.png)

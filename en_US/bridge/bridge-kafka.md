@@ -1,5 +1,11 @@
 # Kafka Bridge
 
+::: tip
+
+After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to Kafka](../rule/bridge_kafka.md) to setup kafka bridges in rule engine.
+
+:::
+
 EMQ X bridges and forwards MQTT messages to Kafka cluster:
 
 ![image](./assets/bridges_1.png)

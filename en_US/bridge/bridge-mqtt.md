@@ -1,5 +1,11 @@
 # MQTT Bridge
 
+::: tip
+
+After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to MQTT](../rule/bridge_mqtt.md) to setup mqtt bridges in rule engine.
+
+:::
+
 EMQ X bridges and forwards MQTT messages to MQTT Broker:
 
 ![image](./assets/bridge_mqtt.png)
