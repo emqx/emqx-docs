@@ -3991,6 +3991,43 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 <br />
 
+## broker.perf.route_lock_type = key
+
+| Type    | Optional Value         | Default |
+| ------- | ---------------------- | ------- |
+| enum    | `key`, `tab`, `global` | `key`   |
+
+### Description
+
+选择在数据库中为通配符订阅更新路由信息时锁的粒度。
+
+- `key` (默认值) 为每个前缀拿一次数据库锁。
+- `tab` 表锁
+- `global` 全局锁
+
+对于较大集群，(如7个node或以上），尤其是node之间网络延迟大的，推荐是用`tab` 和 `global`。
+注意：是需要重启整个集群来使得更新生效。
+
+<br />
+
+## broker.perf.trie_compaction = true
+
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
+
+### Description
+
+设置为 `true` 时，对通配符订阅表进行压缩。
+压缩可优化写操作，降低高并发量的订阅请求响应时间，内存使用量也只有非压缩时的一半。
+非压缩优化读操作，适用于发布主题层数较多的场景。
+
+注意: 将该配置从 `fase` 改成 `true` 时，集群中的节点可依次重启来是配置生效。
+从 `true` 改为 `false` 时，需要将集群中所有的节点重启，否则会发生有些消息
+无法被路由的情况。
+
+<br />
+
 ## monitor
 
 ### sysmon.long_gc
