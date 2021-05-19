@@ -3967,6 +3967,40 @@ Enable or disable the ACK check function for qos1/qos2 messages in shared subscr
 Enable or disable batch cleanup routing information. Batch cleanup routing can be used in a short period of time when a large number of clients go offline to improve cleanup efficiency.
 
 
+## broker.perf.route_lock_type = key
+
+| Type    | Optional Value         | Default |
+| ------- | ---------------------- | ------- |
+| enum    | `key`, `tab`, `global` | `key`   |
+
+### Description
+
+Choose the granularity of the database lock when updating the routing information for whildcard subscriptions.
+
+- `key` (default) is to take a lock for each key representing prefixes of a wildcard topic;
+- `tab` is to take the lock for the entire table which stores prefixes of wildcard topics;
+- `global` is to take a global lock.
+
+Options `tab` and `global` are recommended for large scale clusters (e.g. more than 7 nodes) especially
+when network latency between the nodes is at milliseconds level.
+NOTE: It requires entire cluster to be stopped before changing this config.
+
+## broker.perf.trie_compaction = true
+
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
+
+### Description
+
+Set to `true` (default) to compact the routing information table for wildcard topics.
+Compaction is optimized for writes, handles high rate subscription requests quicker,
+it also requires half of the RAM comparing to non-compacted.
+Non-compaction is optimized for reads (e.g. large number of topic levels in publish requests).
+
+NOTE: Changing from `false` to `true` can be done by rolling-restart the nodes in a cluster.
+The safe way of changing from `true` to `false` is to stop all nodes in the cluster, otherwise
+some message may not get routed before all nodes have restarted.
 
 ### sysmon.long_gc
 
@@ -3978,7 +4012,7 @@ Enable or disable batch cleanup routing information. Batch cleanup routing can b
 
 Enable garbage collection time monitoring and trigger an alarm when the collection time exceeds the set value, 0 means disabling this monitoring.
 
-
+## monitor
 
 ### sysmon.long_schedule
 
