@@ -440,8 +440,40 @@
               "path": "backend/backend"
             },
             {
-              "title": "EMQ X 数据存储插件",
-              "path": "backend/backends"
+              "title": "Redis 数据存储",
+              "path": "backend/backend_redis"
+            },
+            {
+              "title": "MySQL 数据存储",
+              "path": "backend/backend_mysql"
+            },
+            {
+              "title": "PostgreSQL 数据存储",
+              "path": "backend/backend_pgsql"
+            },
+            {
+              "title": "MongoDB 消息存储",
+              "path": "backend/backend_mongodb"
+            },
+            {
+              "title": "Cassandra 消息存储",
+              "path": "backend/backend_cassandra"
+            },
+            {
+              "title": "DynamoDB 消息存储",
+              "path": "backend/backend_dynamodb"
+            },
+            {
+              "title": "InfluxDB 消息存储",
+              "path": "backend/backend_influxdb"
+            },
+            {
+              "title": "OpenTSDB 消息存储",
+              "path": "backend/backend_opentsdb"
+            },
+            {
+              "title": "Timescale 消息存储",
+              "path": "backend/backend_timescale"
             }
           ]
         },
@@ -1102,8 +1134,40 @@
               "path": "backend/backend"
             },
             {
-              "title": "Persistence plugins",
-              "path": "backend/backends"
+              "title": "Redis Backend",
+              "path": "backend/backend_redis"
+            },
+            {
+              "title": "MySQL Backend",
+              "path": "backend/backend_mysql"
+            },
+            {
+              "title": "PostgreSQL Backend",
+              "path": "backend/backend_pgsql"
+            },
+            {
+              "title": "MongoDB Backend",
+              "path": "backend/backend_mongodb"
+            },
+            {
+              "title": "Cassandra Backend",
+              "path": "backend/backend_cassandra"
+            },
+            {
+              "title": "DynamoDB Backend",
+              "path": "backend/backend_dynamodb"
+            },
+            {
+              "title": "InfluxDB Backend",
+              "path": "backend/backend_influxdb"
+            },
+            {
+              "title": "OpenTSDB Backend",
+              "path": "backend/backend_opentsdb"
+            },
+            {
+              "title": "Timescale Backend",
+              "path": "backend/backend_timescale"
             }
           ]
         },
