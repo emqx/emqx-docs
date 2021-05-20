@@ -316,7 +316,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
 2. Install EMQ X Broker:
 
-    + RPM 包:
+    + RPM package:
 
     	```shell
     	$ sudo yum install emqx-cenots7-v4.0.0.x86_64.rpm

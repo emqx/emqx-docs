@@ -13,7 +13,7 @@ EMQ provides no supports for customer developed plugins in their development, te
 
 ## List of plugins
 
- The official plug-ins provided by EMQ X include: 
+ The official plug-ins provided by EMQ X include:
 
 | Plugin                                                       | Configuration file                    | Description                        |
 | ------------------------------------------------------------ | ------------------------------------- | ---------------------------------- |
@@ -66,13 +66,13 @@ EMQ provides no supports for customer developed plugins in their development, te
 ```
 
 
- **Start and stop plugin on command line** 
+ **Start and stop plugin on command line**
 
-When the EMQ X is running, plugins can be checked, loaded/unloaded by [CLI - Load/Unload Plugin](cli.md#load_plugin): 
+When the EMQ X is running, plugins can be checked, loaded/unloaded by [CLI - Load/Unload Plugin](cli.md#load_plugin):
 
- **Start and stop plugin on Dashboard** 
+ **Start and stop plugin on Dashboard**
 
-If Dashboard plugin is started (by default), the plugins can be start or stopped by visiting the managing page that can be found under `http://localhost:18083/plugins`. 
+If Dashboard plugin is started (by default), the plugins can be start or stopped by visiting the managing page that can be found under `http://localhost:18083/plugins`.
 
 **Start and stop plugins using management API**
 

@@ -85,7 +85,7 @@ JWT authentication can issue authentication information in batches, and HTTP aut
 
 
 
-::: tip 
+::: tip
 
 After changing the plugin configuration, you need to restart the plugin to take effect. Some authentication plugins include [ACL function](./acl.md).
 
@@ -113,7 +113,7 @@ Configure the anonymous authentication:
 allow_anonymous = true
 ```
 
-::: danger 
+::: danger
 
 Disable anonymous authentication in production environments.
 
@@ -164,7 +164,7 @@ MySQL authentication function logic diagram:
 
 ![image-20200217154254202](./assets/image-20200217154254202.png)
 
-::: tip 
+::: tip
 The authentication can be performed normally when the salting rules and hash method of the written data are consistent with the configuration of the corresponding plugin. It will invalidate existing authentication data when changing the hashing method.
 :::
 
@@ -185,7 +185,7 @@ When multiple authentication methods are enabled at the same time, EMQ X will pe
 
 <!-- replace -->
 
-::: tip 
+::: tip
 
 It can improve client authentication efficiency when enabling only one authentication plugin at the same time
 

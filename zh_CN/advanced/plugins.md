@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -224,7 +224,7 @@ ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
 插件自带配置文件放置在 `etc/${plugin_name}.conf|config`。 EMQ X 支持两种插件配置格式：
 
 1. Erlang 原生配置文件格式 - `${plugin_name}.config`：
-   
+
 ```erlang
 [
     {plugin_name, [
@@ -232,7 +232,7 @@ ok = emqx_ctl:register_command(cmd, {emqx_cli_demo, cmd}, []),
     ]}
 ].
 ```
-   
+
 2. sysctl 的 `k = v` 通用格式 - `${plugin_name}.conf`：
 
 ```erlang

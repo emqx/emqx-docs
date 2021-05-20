@@ -1,8 +1,8 @@
 # $SYS - System Topic
 
-The EMQ X Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`. 
+The EMQ X Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
 
- The `$SYS` topic path begins with `$SYS/brokers/{node}/`. `{node}` is the name of the node where the event/message is generated, for example: 
+ The `$SYS` topic path begins with `$SYS/brokers/{node}/`. `{node}` is the name of the node where the event/message is generated, for example:
 
 ```bash
 $SYS/brokers/emqx@127.0.0.1/version
@@ -10,11 +10,12 @@ $SYS/brokers/emqx@127.0.0.1/uptime
 ```
 
 
- $SYS system message publish interval is configured in `etc/emqx.conf`: 
+ $SYS system message publish interval is configured in `etc/emqx.conf`:
 
 ```bash
 broker.sys_interval = 1m
 ```
+{% emqxce %}
 
 ::: danger
 
@@ -53,7 +54,7 @@ Most of the data of the $SYS topic in EMQ X Broker can be obtained through other
 | ${clientid}/connected    | Online event. This message is published when a client goes online |
 | ${clientid}/disconnected | Offline event. This message is published when a client is offline |
 
- The Payload of the ‘connected’ event message can be parsed into JSON format: 
+ The Payload of the ‘connected’ event message can be parsed into JSON format:
 
 ```bash
 {
@@ -72,7 +73,7 @@ Most of the data of the $SYS topic in EMQ X Broker can be obtained through other
 }
 ```
 
- The Payload of the ‘disconnected’ event message can be parsed into JSON format: 
+ The Payload of the ‘disconnected’ event message can be parsed into JSON format:
 
 ```bash
 {

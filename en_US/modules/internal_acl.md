@@ -16,7 +16,7 @@ The builtin ACL is the rule table with the lowest priority. After all ACL checks
 
 The rules file is described in the format of Erlang syntax:
 
-``ʻerlang
+```erlang
 %% allows "dashboard" users to subscribe to the "$SYS/#" topic
 
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
@@ -56,7 +56,7 @@ The grammar rules of ʻacl.conf` are contained in the comments at the top. Those
 
 -The first place of the tuple: indicates that the permission control operation is performed after the rule is successfully hit. The possible values ​​are:
 
-​ * ʻallow`: means `allow`
+​ * `allow`: means `allow`
 
 ​ * `deny`: means `deny`
 
@@ -68,7 +68,7 @@ The grammar rules of ʻacl.conf` are contained in the comments at the top. Those
 
 ​ * `{ipaddr, "127.0.0.1"}`: indicates that the rule only takes effect for users whose source address is "127.0.0.1"
 
-​ * ʻall`: indicates that the rule is effective for all users
+​ * `all`: indicates that the rule is effective for all users
 
 -The third position of the tuple: indicates the operation controlled by the rule, and the possible values ​​are:
 
@@ -80,7 +80,7 @@ The grammar rules of ʻacl.conf` are contained in the comments at the top. Those
 
 -The fourth place of the tuple: indicates the list of topics restricted by the rule, the content is given in the format of an array, for example:
 
-​ * `"$SYS/#"`: It is a **topic filter (Topic Filter)**; it means that the rule can hit the topic that matches `$SYS/#`; for example, it can hit "$SYS/#" , You can also hit "$SYS/a/b/c"
+​ * `$SYS/#`: It is a **topic filter (Topic Filter)**; it means that the rule can hit the topic that matches `$SYS/#`; for example, it can hit "$SYS/#" , You can also hit "$SYS/a/b/c"
 
 ​ * `{eq, "#"}`: indicates the congruence of characters. The rule can only hit the string with subject `#`, not `/a/b/c` etc.
 

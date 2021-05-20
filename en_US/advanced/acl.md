@@ -76,14 +76,11 @@ The external database can store a large amount of data and dynamically manage AC
 HTTP ACL enables complex ACL management.
 
 
-
-::: tip 
+::: tip
 
 The ACL function is included in the authentication plugin. After changing the plugin configuration, you need to restart the plugin to take effect.
 
 :::
-
-
 
 
 ## Detailed Rules
@@ -233,7 +230,7 @@ When multiple ACL plugins are enabled at the same time, EMQ X will perform chain
 
 <!-- replace -->
 
-::: tip 
+::: tip
 
 Enabling only one ACL plugin at the time can improve client ACL checking performance.
 

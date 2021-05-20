@@ -96,8 +96,17 @@ In the following two sections of [HookPoint](#hookpoint) and [callback function]
 
 {% endemqxee %}
 
+{% endemqxce %}
+
+{% emqxee %}
+
+- For hooks and HTTP server applications, Refer to: [WebHook](webhook.md)
+
+{% endemqxee %}
+
 
 ## HookPoint
+
 EMQ X Broker is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
 
 | Name                 | Description                 | Execution Timing                                             |

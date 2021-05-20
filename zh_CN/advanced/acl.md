@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -90,7 +90,7 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 HTTP ACL 能够实现复杂的 ACL 管理。
 
-::: tip 
+::: tip
 
 ACL 功能包含在认证鉴权插件中，更改插件配置后需要**重启插件**才能生效，
 
@@ -234,13 +234,13 @@ acl_cache_ttl = 1m
 - 直到最后一个 ACL 插件仍未通过，根据**默认授权**配置判定
   - 默认授权为允许时，允许客户端通过验证
   - 默认授权为禁止时，禁止客户端通过验证
-  
+
 
 ![_images/guide_3.png](./assets/guide_3.png)
 
 <!-- replace -->
 
-::: tip 
+::: tip
 
 同时只启用一个 ACL 插件可以提高客户端 ACL 检查性能。
 

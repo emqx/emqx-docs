@@ -187,6 +187,10 @@
           "path": "modules/jt808_protocol"
         },
         {
+          "title": "GB/T32960 网关",
+          "path": "modules/gbt32960_protocol"
+        },
+        {
           "title": "CoAP 网关",
           "path": "modules/coap_protocol"
         },
@@ -436,7 +440,7 @@
               "path": "backend/backend"
             },
             {
-              "title": "EMQ X 规则引擎数据存储",
+              "title": "EMQ X 数据存储插件",
               "path": "backend/backends"
             }
           ]
@@ -1098,7 +1102,7 @@
               "path": "backend/backend"
             },
             {
-              "title": "Rule Engine data storage",
+              "title": "Persistence plugins",
               "path": "backend/backends"
             }
           ]

@@ -1,89 +1,87 @@
-# 编解码（Schema Registry）介绍
+# Introduction to Schema Registry
 
 
-物联网设备终端种类繁杂，各厂商使用的编码格式各异，所以在接入物联网平台的时候就产生了统一数据格式的需求，以便平台之上的应用进行设备管理。
+Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
 
-Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并返回结果。Schema Registry 配合规则引擎，可适配各种场景的设备接入和规则设计。
+The Schema Registry manages the Schema used for coding and decoding, processes the encoding or decoding requests, and returns the results. The Schema Registry in collaboration with the rule engine can be adapted for device access and rule design in various scenarios.
 
-EMQ X Schema Registry 目前可支持三种格式的编解码：[Avro](https://avro.apache.org)，[Protobuf](https://developers.google.com/protocol-buffers/)，以及自定义编码。其中 
-Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 Map 格式。解码后的数据可直接被规则引擎和其他插件使用。用户自定义的 (3rd-party)编解码服务通过 HTTP 或 TCP 回调的方式，进行更加贴近业务需求的编解码。
+EMQ X Schema Registry currently supports codecs in three formats: [Avro](https://avro.apache.org), [Protobuf](https://developers.google.com/protocol-buffers/), and custom encoding. Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in Map format. The decoded data can be used directly by the rule engine and other plugins. User-defined (3rd-party) coding and decoding services can perform coding and decoding more closely to business needs via HTTP or TCP callbacks.
 
 ::: tip
-Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本，但对于自定义编解码
-(3rd-party) 格式，如需要，Schema 文本需由编解码服务自己维护
+Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf, but for custom codec (3rd-party) formats, Schema text needs to be maintained by the codec service itself, if required.
 :::
 
 
-## 数据格式
+## Data Format
 
-下图展示了 Schema Registry 的一个应用案例。多个设备上报不同格式的数据，经过 Schema Registry 解码之后，变为统一的内部格式，然后转发给后台应用。
+The diagram below shows an example of a Schema Registry application. Multiple devices report data in different formats, which are decoded by Schema Registry into a uniform internal format and then forwarded to the backend application.
 
 ![schema-registry](./assets/schema-registry.png)
 
 
-### 二进制格式支持
+### Binary format support
 
-Schema Registry 数据格式包括 [Avro](https://avro.apache.org) 和 [Protobuf](https://developers.google.com/protocol-buffers/)。Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，使用 Schema Registry 解码后的内部数据格式(Map，稍后讲解) 可直接被规则引擎和其他插件使用。此外 Schema Registry 支持用户自定义的 (3rd-party) 编解码服务，通过 HTTP 或 TCP 回调的方式，进行更加贴近业务需求的编解码。
+Schema Registry data formats include [Avro](https://avro.apache.org) and [Protobuf](https://developers.google.com/protocol-buffers/). Avro and Protobuf are Schema-dependent data formats and encoded as binary data. The internal data format (Map, explained later) decoded using the Schema Registry can be used directly by rule engines and other plugins. Besides, Schema Registry supports user-defined (3rd-party) coding and decoding services that can perform coding and decoding more closely to business needs via HTTP or TCP callbacks.
 
-## 架构设计
+## Architecture Design
 
-Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本，但对于自定义编解码 (3rd-party) 格式，如需要 Schema，Schema 文本需由编解码服务自己维护。Schema API 提供了通过 Schema Name 的添加、查询和删除操作。
+Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf, but for custom codec (3rd-party) formats, Schema text needs to be maintained by the codec service itself, if required. The Schema API provides for add, query, and delete operations via Schema Name.
 
-Schema Registry 既可以解码，也可以编码。编码和解码时需要指定 Schema Name。
+The Schema Registry can perform both decoding and encoding.  Schema Name needs to be specified when encoding and decoding.
 
 ![architecture](./assets/arch.png)
 
 
-编码调用示例：参数为 Schema
+Example of an encoding call: parameter is Schema:
 
 ```c
 schema_encode(SchemaName, Data) -> RawData
 ```
 
-解码调用示例：
+Example of a decoding call:
 
 ```c
 schema_decode(SchemaName, RawData) -> Data
 ```
 
-常见的使用案例是，使用规则引擎来调用 Schema Registry 提供的编码和解码接口，然后将编码或解码后的数据作为后续动作的输入。
+A common use case is to use the rule engine to call the encoding and decoding interfaces provided by the Schema Registry and then use the encoded or decoded data as input for subsequent actions.
 
 
 
-## 编解码 + 规则引擎
+## Codec + Rules Engine
 
-EMQ X 的消息处理层面可分为消息路由(Messaging)、规则引擎(Rule Engine)、数据格式转换(Data Conversion) 三个部分。
+The message processing level of EMQ X can be divided into three parts: Messaging, Rule Engine, and Data Conversion.
 
-EMQ X 的 PUB/SUB 系统将消息路由到指定的主题。规则引擎可以灵活地配置数据的业务规则，按规则匹配消息，然后指定相应动作。数据格式转换发生在规则匹配的过程之前，先将数据转换为可参与规则匹配的 Map 格式，然后进行匹配。
+EMQ X's PUB/SUB system routes messages to specified topics. The rule engine has the flexibility to configure business rules for the data, match messages to the rules and then specify the corresponding action. Data format conversion occurs before the rule matching process, converting the data into a Map format that can participate in rule matching, and then matching it.
 
 ![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
 
 
-### 规则引擎内部数据格式(Map)
+### Rule engine internal data format (Map)
 
-规则引擎内部使用的数据格式为 Erlang Map，所以如果原数据内容为二进制或者其他格式，必须使用编解码函数(比如上面提到的 schema_decode 和 json_decode 函数) 将其转换为 Map。
+The data format used in the internal rule engine is Erlang Map, so if the original data is in binary or other formats, it must be converted to Map using codec functions (such as schema_decode and json_decode as mentioned above).
 
-Map 是一个 Key-Value 形式的数据结构，形如 #{key => value}。例如，`user = #{id => 1, name => "Steve"} ` 定义了一个 `id` 为 `1`，`name` 为 `"Steve"` 的 `user` Map。
+A Map is a data structure of the form Key-Value, in the form #{key => value}. For example, `user = #{id => 1, name => "Steve"} ` defines a `user` Map with `id` of `1` and `name` of `"Steve"`.
 
-SQL 语句提供了 "." 操作符嵌套地提取和添加 Map 字段。下面是使用 SQL 语句对这个 Map 操作的示例:
+The SQL statement provides the "." operator to extract and add Map fields in a nested way. The following is an example of this Map operation using a SQL statement:
 
 ```sql
 SELECT user.id AS my_id
 ```
 
-SQL 语句的筛选结果为 `#{my_id => 1}`。
+The filter result of the SQL statement is `#{my_id => 1}`.
 
-### JSON 编解码
+### JSON Codec
 
-规则引擎的 SQL 语句提供了对 JSON 格式字符串的编解码支持，将 JSON 字符串和 Map 格式相互转换的 SQL 函数为 json_decode() 和 json_encode():
+The SQL statements of the rules engine provide support for coding and decoding JSON formatted strings. The SQL functions for converting JSON strings to Map format are json_decode() and json_encode():
 
 ```sql
 SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 ```
 
-上面这个 SQL 语句将会匹配到 payload 内容为 JSON 字符串： `{"x" = 1, "y" = 1}` , 并且 topic 为 `t/a` 的 MQTT 消息。
+The SQL statement above will match an MQTT message with the content of the payload as a JSON string: `{"x" = 1, "y" = 1}`, and the topic as `t/a`.
 
-`json_decode(payload) as p` 将 JSON 字符串解码为下面的 Map 数据结构，从而可以在 `WHERE` 子句中使用 p.x 和 p.y 使用 Map 中的字段：
+`json_decode(payload) as p` decodes the JSON string into the following Map data structure so that the fields in the Map can be used in the `WHERE` clause using p.x and p.y.
 
 ```erlang
 #{
@@ -94,27 +92,27 @@ SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 }
 ```
 
-**注意:** `AS` 子句是必须的，将解码之后的数据赋值给某个Key，后面才能对其进行后续操作。
+**Note:** The `AS` clause is required to assign the decoded data to a Key so that subsequent operations can be performed on it later.
 
-## 编解码实战
+## Coding and Decoding in Practice
 
-### Protobuf 数据解析举例
+### Protobuf data parsing example
 
-#### 规则需求
+#### Rule requirements
 
-设备发布一个使用 Protobuf 编码的二进制消息，需要通过规则引擎匹配过后，将消息重新发布到与 "name" 字段相关的主题上。主题的格式为 "person/${name}"。
+The device publishes a binary message encoded using Protobuf, which needs to be matched by the rule engine and then republished to the topic associated with the "name" field. The format of the topic is "person/${name}".
 
-比如，将 "name" 字段为 "Shawn" 的消息重新发布到主题 "person/Shawn"。
+For example, republish a message with the "name" field as "Shawn" to the topic "person/Shawn".
 
-#### 创建 Schema
+#### Create schema
 
-在 EMQ X 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 Protobuf Schema:
+In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQ X, create a Protobuf Schema using the following parameters:
 
-1. 名称：protobuf_person
+1. Name: protobuf_person
 
-2. 编解码类型：protobuf
+2. Codec Type: protobuf
 
-3. Schema：下面的 protobuf schema 定义了一个 Person 消息。
+3. Schema: The following protobuf schema defines a Person message.
 
 ```protobuf
 message Person {
@@ -124,9 +122,9 @@ message Person {
 }
 ```
 
-#### 创建规则
+#### Creating rules
 
-**使用刚才创建好的 Schema 来编写规则 SQL 语句：**
+**Use the Schema you have just created to write the rule SQL statement:**
 
 ```sql
 SELECT
@@ -137,25 +135,25 @@ WHERE
   person.name = 'Shawn'
 ```
 
-这里的关键点在于 `schema_decode('protobuf_person', payload, 'Person')`:
+The key point here is `schema_decode('protobuf_person', payload, 'Person')`:
 
-- `schema_decode` 函数将 payload 字段的内容按照 'protobuf_person' 这个 Schema 来做解码;
-- `as person` 将解码后的值保存到变量 "person" 里;
-- 最后一个参数 `Person` 指明了 payload 中的消息的类型是 protobuf schema 里定义的 'Person' 类型。
+- The `schema_decode` function decodes the contents of the payload field according to the Schema 'protobuf_person';
+- `as person` stores the decoded value in the variable "person";
+- The last argument `Person` specifies that the message type in the payload is the 'Person' type defined in the protobuf schema.
 
-**然后使用以下参数添加动作：**
+**Then add the action using the following parameters:**
 
-- 动作类型：消息重新发布
-- 目的主题：person/${person.name}
-- 消息内容模板：${person}
+- Action Type: Message republishing
+- Destination Topic: person/${person.name}
+- Message Content Template: ${person}
 
-这个动作将解码之后的 "person" 以 JSON 的格式发送到 `person/${person.name}` 这个主题。其中`${person.name}` 是个变量占位符，将在运行时被替换为消息内容中 "name" 字段的值。
+This action sends the decoded "person" to the topic `person/${person.name}` in JSON format. `${person.name}` is a variable placeholder that will be replaced at runtime with the value of the "name" field in the message content.
 
-#### 设备端代码
+#### Device side code
 
-规则创建好之后，就可以模拟数据进行测试了。
+Once the rules have been created, it is time to simulate the data for testing.
 
-下面的代码使用 Python 语言填充了一个 Person 消息并编码为二进制数据，然后将其发送到 "t/1" 主题。详见 [完整代码](https://github.com/terry-xiaoyu/schema-registry-examples/blob/master/protobuf/pb2_mqtt.py)。
+The following code uses the Python language to fill a Person message and encode it as binary data, then sends it to the "t/1" topic. See [full code](https://github.com/terry-xiaoyu/schema-registry-examples/blob/master/protobuf/pb2_mqtt.py) for details.
 
 ```python
 def publish_msg(client):
@@ -169,11 +167,11 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-#### 检查规则执行结果
+#### Checking rule execution results
 
-1) 在 Dashboard 的 [Websocket](http://127.0.0.1:18083/#/websocket) 工具里，登录一个 MQTT Client 并订阅 "person/#"。
+1)  In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "person/#".
 
-2) 安装 python 依赖，并执行设备端代码:
+2)  Install the python dependency and execute the device-side code:
 
 ```shell
 $ pip3 install protobuf
@@ -185,7 +183,7 @@ publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 ```
 
-3) 检查 Websocket 端收到主题为 `person/Shawn` 的消息:
+3) Check that a message with the topic `person/Shawn` is received on the Websocket side:
 
 ```bash
 {"email":"liuxy@emqx.io","id":1,"name":"Shawn"}
@@ -193,21 +191,21 @@ t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 
 
 
-### Avro 数据解析举例
+### Avro data parsing example
 
-#### 规则需求
+#### Rule requirements
 
-设备发布一个使用 Avro 编码的二进制消息，需要通过规则引擎匹配过后，将消息重新发布到与 "name" 字段相关的主题上。主题的格式为 "avro_user/${name}"。
+The device publishes a binary message encoded using Avro, which needs to be matched by the rule engine and then republished to the topic associated with the "name" field. The format of the topic is "avro_user/${name}".
 
-比如，将 "name" 字段为 "Shawn" 的消息重新发布到主题 "avro_user/Shawn"。
+For example, republish a message with the "name" field as "Shawn" to the topic "avro_user/Shawn".
 
-#### 创建 Schema
+#### Create Schema
 
-在 EMQ X 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 Avro Schema:
+In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQ X, create an Avro Schema using the following parameters:
 
-1. 名称：avro_user
+1. Name: avro_user
 
-2. 编解码类型：avro
+2. Codec Type: avro
 
 3. Schema:
 
@@ -222,9 +220,9 @@ t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 }
 ```
 
-#### 创建规则
+#### Creating rules
 
-**使用刚才创建好的 Schema 来编写规则 SQL 语句：**
+**Use the Schema you have just created to write the rule SQL statement:**
 
 ```sql
 SELECT
@@ -235,24 +233,24 @@ WHERE
   avro_user.name = 'Shawn'
 ```
 
-这里的关键点在于 `schema_decode('avro_user', payload)`:
+The key point here is `schema_decode('avro_user', payload)`:
 
-- `schema_decode` 函数将 payload 字段的内容按照 'avro_user' 这个 Schema 来做解码;
-- `as avro_user` 将解码后的值保存到变量 "avro_user" 里。
+- The `schema_decode` function decodes the contents of the payload field according to the Schema "avro_user";
+- `as avro_user` stores the decoded value in the variable "avro_user";
 
-**然后使用以下参数添加动作：**
+**Then add the action using the following parameters:**
 
-- 动作类型：消息重新发布
-- 目的主题：avro_user/${avro_user.name}
-- 消息内容模板：${avro_user}
+- Action Type: Message republishing
+- Destination Topic: avro_user/${avro_user.name}
+- Message Content Template: ${avro_user}
 
-这个动作将解码之后的 "user" 以 JSON 的格式发送到 `avro_user/${avro_user.name}` 这个主题。其中`${avro_user.name}` 是个变量占位符，将在运行时被替换为消息内容中 "name" 字段的值。
+This action sends the decoded "user" to the topic `avro_user/${avro_user.name}` in JSON format. `${avro_user.name}` is a variable placeholder that will be replaced at runtime with the value of the "name" field in the message content.
 
-#### 设备端代码
+#### Device side code
 
-规则创建好之后，就可以模拟数据进行测试了。
+Once the rules have been created, it is time to simulate the data for testing.
 
-下面的代码使用 Python 语言填充了一个 User 消息并编码为二进制数据，然后将其发送到 "t/1" 主题。详见 [完整代码](https://github.com/terry-xiaoyu/schema-registry-examples/blob/master/avro/avro_mqtt.py)。
+The following code uses the Python language to fill a User message and encode it as binary data, then sends it to the "t/1" topic. See [full code](https://github.com/terry-xiaoyu/schema-registry-examples/blob/master/avro/avro_mqtt.py) for details.
 
 ```python
 def publish_msg(client):
@@ -266,11 +264,11 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-#### 检查规则执行结果
+#### Checking rule execution results
 
-1) 在 Dashboard 的 [Websocket](http://127.0.0.1:18083/#/websocket) 工具里，登录一个 MQTT Client 并订阅 "avro_user/#"。
+1)  In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "avro_user/#".
 
-2) 安装 python 依赖，并执行设备端代码:
+2)  Install the python dependency and execute the device-side code:
 
 ```shell
 $ pip3 install protobuf
@@ -281,35 +279,35 @@ Connected with result code 0
 publish to topic: t/1, payload: b'\nShawn\x00\xb4\n\x00\x06red'
 ```
 
-3) 检查 Websocket 端收到主题为 `avro_user/Shawn` 的消息:
+3) Check that a message with the topic `avro_user/Shawn` is received on the Websocket side:
 
 ```
 {"favorite_color":"red","favorite_number":666,"name":"Shawn"}
 ```
 
-### 自定义编解码举例
+### Custom codec example
 
-#### 规则需求
+#### Rule requirements
 
-设备发布一个任意的消息，验证自部署的编解码服务能正常工作。
+The device publishes an arbitrary message to verify that the self-deployed codec service is working normally.
 
-#### 创建 Schema
+#### Create Schema
 
-在 EMQ X 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 3rd-Party Schema:
+In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQ X, create a 3rd-Party Schema using the following parameters:
 
-1. 名称：my_parser
-2. 编解码类型：3rd-party
-3. 第三方类型: HTTP
+1. Name: my_parser
+2. Codec Type: 3rd-party
+3. Third Party Type: HTTP
 4. URL: http://127.0.0.1:9003/parser
-5. 编解码配置: xor
+5. Codec Configuration: xor
 
-其他配置保持默认。
+All other configurations remain default.
 
-上面第 5 项编解码配置是个可选项，是个字符串，内容跟编解码服务的业务相关。
+Item 5 (i.e.codec configuration) above is optional and is a string, the content of which is related to the service of the codec service.
 
-#### 创建规则
+#### Creating rules
 
-**使用刚才创建好的 Schema 来编写规则 SQL 语句：**
+**Use the Schema you have just created to write the rule SQL statement:**
 
 ```sql
 SELECT
@@ -319,29 +317,29 @@ FROM
   "t/#"
 ```
 
-这个 SQL 语句首先对数据做了 Encode，然后又做了 Decode，目的在于验证编解码过程是否正确:
+This SQL statement first encodes and then decodes the data to verify that the encoding and decoding process is correct:
 
-- `schema_encode` 函数将 payload 字段的内容按照 'my_parser' 这个 Schema 来做编码，结果存储到 `encoded_data` 这个变量里;
-- `schema_decode` 函数将 payload 字段的内容按照 'my_parser' 这个 Schema 来做解码，结果存储到 `decoded_data` 这个变量里;
+- The `schema_encode` function encodes the contents of the payload field according to the Schema 'my_parser' and stores the result in the variable `encoded_data`;
+- The `schema_decode` function decodes the contents of the payload field according to the Schema 'my_parser' and stores the result in the variable `decoded_data`;
 
-最终这个 SQL 语句的筛选结果是 `encoded_data` 和 `decoded_data` 这两个变量。
+The final filtered result of this SQL statement is the variables `encoded_data` and `decoded_data`.
 
-**然后使用以下参数添加动作：**
+**Then add the action using the following parameters:**
 
-- 动作类型：检查(调试)
+- Action Type: Check (debug)
 
-这个检查动作会把 SQL 语句筛选的结果打印到 emqx 控制台 (erlang shell) 里。
+This check action prints the results filtered by the SQL statement to the emqx console (erlang shell).
 
-如果是使用 emqx console 启动的服务，打印会直接显示在控制台里；如果是使用 emqx start 启动的服务，打印会输出到日志目录下的 erlang.log.N 文件里，这里 "N" 为整数，比如 "erlang.log.1", "erlang.log.2"。
+If the service is started with emqx console, the print will be displayed directly in the console; if the service is started with emqx start, the print will be output to the erlang.log.N file in the log directory, where "N" is an integer, e.g. "erlang.log.1", " erlang.log.2".
 
-#### 编解码服务端代码
+#### Codec server-side code
 
-规则创建好之后，就可以模拟数据进行测试了。所以首先需要编写一个自己的编解码服务。
+Once the rules have been created, it is time to simulate the data for testing. Therefore, the first thing you need to do is write your own codec service.
 
-下面的代码使用 Python 语言实现了一个 HTTP 编解码服务，为简单起见，这个服务提供两种简单的方式来进行编解码(加解密)，详见 [完整代码](https://github.com/terry-xiaoyu/schema-registry-examples/blob/master/3rd_party/http_parser_server.py):
+The following code implements an HTTP codec service using the Python language. For simplicity, this service provides two simple ways of coding and decoding (encryption and decryption). See [full code](https://github.com/terry-xiaoyu/schema-registry-examples/blob/master/3rd_party/http_parser_server.py) for details.
 
-- 按位异或
-- 字符替换
+- xor
+- Character substitution
 
 ```python
 def xor(data):
@@ -379,7 +377,7 @@ def subst(dtype, data, n):
   return bytes(adata)
 ```
 
-将这个服务运行起来:
+Run this service:
 
 ```shell
 $ pip3 install flask
@@ -392,13 +390,13 @@ $ python3 http_parser_server.py
  * Running on http://127.0.0.1:9003/ (Press CTRL+C to quit)
 ```
 
-#### 检查规则执行结果
+#### Checking rule execution results
 
-由于本示例比较简单，我们直接使用 MQTT Websocket 客户端来模拟设备端发一条消息。
+Since this example is relatively simple, we'll use the MQTT Websocket client directly to simulate sending a message on the device side.
 
-1) 在 Dashboard 的 [Websocket](http://127.0.0.1:18083/#/websocket) 工具里，登录一个 MQTT Client 并发布一条消息到 "t/1"，内容为 "hello"。
+1) In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and publish a message to "t/1" with the text "hello".
 
-2) 检查 emqx 控制台 (erlang shell) 里的打印:
+2) Check what is printed in the emqx console (erlang shell):
 
 ```bash
 (emqx@127.0.0.1)1> [inspect]
@@ -418,6 +416,6 @@ $ python3 http_parser_server.py
         Action Init Params: #{}
 ```
 
-Select Data 是经过 SQL 语句筛选之后的数据，Envs 是规则引擎内部可用的环境变量，Action Init Params 是动作的初始化参数。这三个数据均为 `Map` 格式。
+Select Data is the data filtered by the SQL statement, Envs are available environment variables within the rule engine and Action Init Params is the initialization parameters for actions. All three data are in `Map` format.
 
-Selected Data 里面的两个字段 `decoded_data` 和 `encoded_data` 对应 SELECT 语句里面的两个 AS。因为 `decoded_data` 是编码然后再解码之后的结果，所以它又被还原为了我们发送的内容 "hello"，表明编解码插件工作正常。
+The two fields `decoded_data` and `encoded_data` in Selected Data correspond to the two ASs in the SELECT statement. Because `decoded_data` is the result of encoding and then decoding, it is reverted to the content we sent, "hello", indicating that the codec plugin is working correctly.

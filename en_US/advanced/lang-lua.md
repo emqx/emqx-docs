@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -25,10 +25,6 @@ Before EMQ X 4.1. We only provide multi-language support for Lua. Its architectu
 
 To maintain compatibility, the plug-in remains in the release version of EMQ X.
 
-Support of Lua is achieved by [emqx_lua_hook](https://github.com/emqx/emqx-lua-hook)  which includes:
-
-- A set of Lua runtime environment, implemented by [luerl](https://github.com/rvirding/luerl)
-- Some control commands to manage the load and unload of Lua.
 
 ## Example
 

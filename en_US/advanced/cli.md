@@ -238,7 +238,7 @@ The cluster command is used to manage a cluster of multiple EMQ X Broker nodes (
 | Command                       | Description                   |
 | ----------------------------- | ----------------------------- |
 | `cluster join <Node>        ` | Join the cluster              |
-| `cluster leave                | Leave the cluster             |
+| `cluster leave              ` | Leave the cluster             |
 | `cluster force-leave <Node> ` | Remove nodes from the cluster |
 | `cluster status             ` | Query cluster status          |
 
