@@ -391,6 +391,10 @@
             {
               "title": "离线消息保存到 MongoDB",
               "path": "rule/offline_msg_to_mongodb"
+            },
+            {
+              "title": "离线消息保存到 ClickHouse",
+              "path": "rule/offline_msg_to_clickhouse"
             }
           ]
         },
@@ -416,6 +420,10 @@
             {
               "title": "从 MongoDB 中获取订阅关系",
               "path": "rule/get_subs_from_mongodb"
+            },
+            {
+              "title": "从 ClickHouse 中获取订阅关系",
+              "path": "rule/get_subs_from_clickhouse"
             }
           ]
         },
