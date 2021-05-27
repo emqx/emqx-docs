@@ -15,6 +15,37 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.2
+
+*Release Date: 2021-05-27*
+
+EMQ X 4.3.2 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Topic metrics monitoring cannot be used in the cluster environment
+
+  Github PR: [emqx#4870](https://github.com/emqx/emqx/pull/4870)
+
+- Fix some errors in message parsing
+
+  Github PR: [emqx#4858](https://github.com/emqx/emqx/pull/4858)
+
+- Fix the conflict between MQTT-SN sleep mode and KeepAlive mechanism
+
+  Github PR: [emqx#4842](https://github.com/emqx/emqx/pull/4842)
+
+- Broker may crash when a large number of clients are offline
+
+  Github Issue: [emqx#4823](https://github.com/emqx/emqx/issues/4823)
+  Github PR: [emqx#4824](https://github.com/emqx/emqx/pull/4824)
+
+- Mark the resource as unavailable when the rule engine fails to refresh the resource
+
+  Github PR: [emqx#4821](https://github.com/emqx/emqx/pull/4821)
+
 ## Version 4.3.1
 
 *Release Date: 2021-05-14*
