@@ -15,6 +15,37 @@ ref:
 
 # 版本发布
 
+## 4.3.2 版本
+
+*发布日期: 2021-05-27*
+
+EMQ X 4.3.2 现已发布，主要包含以下改动:
+
+### emqx
+
+**错误修复:**
+
+- 修复主题指标监控无法在集群环境使用的问题
+
+  Github PR: [emqx#4870](https://github.com/emqx/emqx/pull/4870)
+
+- 修复报文解析时的一些问题
+
+  Github PR: [emqx#4858](https://github.com/emqx/emqx/pull/4858)
+
+- 修复 MQTT-SN 睡眠模式与 KeepAlive 机制的冲突问题
+
+  Github PR: [emqx#4842](https://github.com/emqx/emqx/pull/4842)
+
+- 修复客户端大量离线时可能出现崩溃的问题
+
+  Github Issue: [emqx#4823](https://github.com/emqx/emqx/issues/4823)
+  Github PR: [emqx#4824](https://github.com/emqx/emqx/pull/4824)
+
+- 规则引擎刷新资源失败时将资源标记为不可用
+
+  Github PR: [emqx#4821](https://github.com/emqx/emqx/pull/4821)
+
 ## 4.3.1 版本
 
 *发布日期: 2021-05-14*
