@@ -3894,9 +3894,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### broker.session_locking_strategy
 
-| Type | Optional Value                  | Default  |
-| ---- | ------------------------------- | -------- |
-| enum | `local`, `one`, `quorum`, `all` | `quorum` |
+| Type | Optional Value                     | Default  |
+| ---- | ---------------------------------- | -------- |
+| enum | `local`, `leader`, `quorum`, `all` | `quorum` |
 
 #### 说明
 

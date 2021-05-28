@@ -3886,9 +3886,9 @@ Enable or disable global session registration.
 
 ### broker.session_locking_strategy
 
-| Type | Optional Value                  | Default  |
-| ---- | ------------------------------- | -------- |
-| enum | `local`, `one`, `quorum`, `all` | `quorum` |
+| Type | Optional Value                     | Default  |
+| ---- | ---------------------------------- | -------- |
+| enum | `local`, `leader`, `quorum`, `all` | `quorum` |
 
 #### Description
 
