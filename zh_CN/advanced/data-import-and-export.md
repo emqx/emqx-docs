@@ -85,7 +85,7 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
    $ curl --basic -u admin:public -X GET http://localhost:8081/api/v4/data/file/emqx-export-2020-9-4-10-24-16.json -o /tmp/emqx-export-2020-9-4-10-24-16.json
    ```
 
-3. 上传数据文件
+3. 导入数据
 
    ```bash
    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d @/tmp/emqx-export-2020-9-4-10-24-16.json
@@ -94,11 +94,3 @@ EMQ X Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endp
    ```
 
    > 第 2、3 步适用于在不同机器上迁移 emqx
-
-4. 导入数据
-
-   ```bash
-   $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-9-4-10-24-16.json"}'
-
-   {"code",0}
-   ```

@@ -73,7 +73,7 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
 
 ### HTTP API
 
-1. Import data.
+1. Export data.
 
    ```
    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/export"
@@ -89,7 +89,7 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
    $ curl --basic -u admin:public -X GET http://localhost:8081/api/v4/data/file/emqx-export-2020-9-4-10-24-16.json -o /tmp/emqx-export-2020-9-4-10-24-16.json
    ```
 
-3. Upload data file
+3. Import data
 
    ```
    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d @/tmp/emqx-export-2020-9-4-10-24-16.json
@@ -98,11 +98,3 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
    ```
 
    > Steps 2 and 3 are suitable for migrating emqx on different devices
-
-4. Import Data
-
-    ```
-    $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/data/import" -d '{"filename":"emqx-export-2020-9-4-10-24-16.json"}'
-
-    {"code",0}
-    ```
