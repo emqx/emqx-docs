@@ -225,7 +225,7 @@ Refer to [HTTP API - CLear ACL cache](http-api.md#endpoint-get-acl-cache)
 ## ACL Authentication Chain
 
 When multiple ACL plugins are enabled at the same time, EMQ X will perform chain authentication in the order in which the plugins are opened:
-- -Once authentication passed, terminate the chain and allow clients to pass authentication
+- Once authentication passed, terminate the chain and allow clients to pass authentication
 - Once authorization fails, terminate the chain and deny clients from passing authentication
 - if keep failing until the last ACL plugin, judge according to the **default authentication** configuration
   - Allow client to pass authentication when default authentication is *allow*
