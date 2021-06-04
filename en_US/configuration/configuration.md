@@ -839,7 +839,16 @@ The prefix of the log file. For example, if you use the default value (`log.file
 
 Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated. `-1` means no limit.
 
+### log.max_depth
 
+| Type                        | Default |
+| --------------------------- | ------- |
+| union(integer, 'unlimited') | 20      |
+
+#### Description
+
+Maximum depth for Erlang term log formatting and Erlang process message queue inspection.
+Set 'unlimited' (without quotes) to print Erlang terms without depth limit.
 
 ### log.rotation.size
 

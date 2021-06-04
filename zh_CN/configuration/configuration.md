@@ -858,6 +858,19 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 <br />
 
+### log.max_depth
+
+| Type                        | Default |
+| --------------------------- | ------- |
+| union(integer, 'unlimited') | 20      |
+
+#### Description
+
+控制 Eralng 数据结构的打印深度，和 Erlang 进程消息队列查看的深度。
+或配置成 'unlimited' (不带引号) 不限深度打印。
+
+<br />
+
 ### log.rotation.size
 
 | Type     | Default |
