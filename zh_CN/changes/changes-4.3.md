@@ -15,6 +15,42 @@ ref:
 
 # 版本发布
 
+## 4.3.3 版本
+
+*发布日期: 2021-06-05*
+
+EMQ X 4.3.3 现已发布，主要包含以下改动:
+
+### emqx
+
+**功能增强:**
+
+- 数据转储支持从 HTTP 请求中获取导入数据
+
+  Github PR: [emqx#4900](https://github.com/emqx/emqx/pull/4900)
+
+**错误修复:**
+
+- 修复没有配置 JWKS 端点导致崩溃的问题
+
+  Github PR: [emqx#4916](https://github.com/emqx/emqx/pull/4916)
+
+- 修复 MQTT-SN 在集群环境下的订阅
+
+  Github PR: [emqx#4915](https://github.com/emqx/emqx/pull/4915)
+
+- 修复 Webhook 无法使用 TLS 的问题
+
+  Github PR: [emqx#4908](https://github.com/emqx/emqx/pull/4908)
+
+- 修复客户端多条件查询时参数错误可能导致崩溃的问题
+
+  Github PR: [emqx#4916](https://github.com/emqx/emqx/pull/4916)
+
+- 修复内存占用计算错误的问题
+
+  Github PR: [emqx#4891](https://github.com/emqx/emqx/pull/4891)
+
 ## 4.3.2 版本
 
 *发布日期: 2021-05-27*
