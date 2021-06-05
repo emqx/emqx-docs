@@ -15,6 +15,42 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.3
+
+*Release Date: 2021-06-05*
+
+EMQ X 4.3.3 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Enhancement:**
+
+- Data dump support to get imported data from HTTP request
+
+  Github PR: [emqx#4900](https://github.com/emqx/emqx/pull/4900)
+
+**Bug fixes:**
+
+- Fix the crash caused by not configuring the JWKS endpoint
+
+  Github PR: [emqx#4916](https://github.com/emqx/emqx/pull/4916)
+
+- Fix MQTT-SN subscription in cluster environment
+
+  Github PR: [emqx#4915](https://github.com/emqx/emqx/pull/4915)
+
+- Fix Webhook cannot use TLS
+
+  Github PR: [emqx#4908](https://github.com/emqx/emqx/pull/4908)
+
+- Fix the issue that the parameter error in the client's multi-condition query may cause a crash
+
+  Github PR: [emqx#4916](https://github.com/emqx/emqx/pull/4916)
+
+- Fix incorrect calculation of memory usage
+
+  Github PR: [emqx#4891](https://github.com/emqx/emqx/pull/4891)
+
 ## Version 4.3.2
 
 *Release Date: 2021-05-27*
