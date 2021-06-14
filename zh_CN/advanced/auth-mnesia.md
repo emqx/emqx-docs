@@ -48,7 +48,7 @@ auth.mnesia.password_hash = sha256
 # etc/plugins/emqx_auth_mnesia.conf
 
 ## clientid 认证数据
-auth.client.1.clientid = admin_client
+auth.client.1.clientid = admin
 auth.client.1.password = public
 
 ## username 认证数据
