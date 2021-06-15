@@ -181,7 +181,7 @@ For all supported events and available fields, please see  [rule event](#rule-sq
 - Extract the x field from the payload of message with any topic and create the alias x for use in the WHERE clause. The WHERE clause is restricted as x = 1. Note that the payload must be in JSON format. Example: This SQL statement can match the payload `{"x": 1}`, but can not match to the payload `{"x": 2}`:
     ```sql
   SELECT payload as p FROM "#" WHERE p.x = 1
-    ```
+  ```
 - Similar to the SQL statement above, but nested extract the data in the payload, this SQL statement can match the payload{"x": {"y": 1}}`:
     ```sql
     SELECT payload as a FROM "#" WHERE a.x.y = 1
@@ -502,16 +502,16 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 
 #### $events/client_disconnected
 
-| event            | Event type, fixed at "client.disconnected" |
-| ---------------- | :----------------------------------------- |
-| reason           | Reason for disconnection of terminal       |
-| clientid         | client ID                                  |
-| username         | Current MQTT username                      |
-| peername         | IPAddress and Port of terminal             |
-| sockname         | IPAddress and Port listened by emqx        |
-| disconnected\_at | Terminal disconnection completion time (s) |
-| timestamp        | Event trigger time(millisecond)            |
-| node             | Node name of the trigger event             |
+| event            | Event type, fixed at "client.disconnected"                   |
+| ---------------- | :----------------------------------------------------------- |
+| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: bad protocol<br/>internal_error: malformed message parsing error<br/> |
+| clientid         | client ID                                                    |
+| username         | Current MQTT username                                        |
+| peername         | IPAddress and Port of terminal                               |
+| sockname         | IPAddress and Port listened by emqx                          |
+| disconnected\_at | Terminal disconnection completion time (s)                   |
+| timestamp        | Event trigger time(millisecond)                              |
+| node             | Node name of the trigger event                               |
 
 #### $events/session_subscribed
 | event     | Event type, fixed at "session.subscribed" |

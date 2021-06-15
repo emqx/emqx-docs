@@ -3,16 +3,16 @@
 Setup a Kafka, taking Mac OSX for instance:
 
 ```bash
-$ wget http://apache.claz.org/kafka/2.3.0/kafka_2.12-2.3.0.tgz
+wget http://apache.claz.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
-$ tar -xzf  kafka_2.12-2.3.0.tgz
+tar -xzf  kafka_2.13-2.8.0.tgz
 
-$ cd kafka_2.12-2.3.0
+cd kafka_2.13-2.8.0
 
 # start Zookeeper
-$ ./bin/zookeeper-server-start.sh config/zookeeper.properties
+./bin/zookeeper-server-start.sh config/zookeeper.properties
 # start Kafka
-$ ./bin/kafka-server-start.sh config/server.properties
+./bin/kafka-server-start.sh config/server.properties
 ```
 
 
