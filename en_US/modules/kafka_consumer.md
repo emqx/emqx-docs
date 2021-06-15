@@ -5,11 +5,11 @@ The Kafka consumer group uses external Kafka as a message queue, which can conve
 Set up the Kafka environment, taking MacOS X as an example:
 
 ```bash
-$ wget http://apache.claz.org/kafka/2.3.1/kafka_2.12-2.3.1.tgz
+wget http://apache.claz.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
-$ tar -xzf kafka_2.12-2.3.1.tgz
+tar -xzf  kafka_2.13-2.8.0.tgz
 
-$ cd kafka_2.12-2.3.1
+cd kafka_2.13-2.8.0
 
 # Start Zookeeper
 $ ./bin/zookeeper-server-start.sh config/zookeeper.properties
