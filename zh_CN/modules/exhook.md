@@ -95,7 +95,7 @@ service HookProvider {
 - `OnClient*`，`OnSession*`，`OnMessage*` 为前缀的方法与 [钩子](../advanced/hooks.md) 的当中的方法一一对应。它们有着相同的调用时机和相似的参数列表。
 - 仅 `OnClientAuthenticate`，`OnClientCheckAcl`，`OnMessagePublish` 允许携带返回值到 EMQ X 系统，其它回调则不支持。
 
-其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx-exhook/blob/dev/e4.2.0/priv/protos/exhook.proto)
+其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
 
 ## 开发指南
