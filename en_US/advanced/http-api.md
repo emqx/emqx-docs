@@ -1400,6 +1400,7 @@ Add object to blacklist
 | ----- | --------- | -------- | ----------| -------------------------------- |
 | who   | String    | Required |    | Objects added to the blacklist, which can be client identifiers, usernames, and IP addresses |
 | as    | String    | Required |      | Used to distinguish the types of blacklist objects, which can be `clientid`，`username`，`peerhost` |
+| reason | String    | Required |      | Detailed information |
 | by    | String    | Optional | user | Indicate which object was added to the blacklist |
 | at    | Integer   | Optional | Current system time | Time added to blacklist, unit: second |
 | until | Integer   | Optional | Current system time+ 5 minutes | When to remove from blacklist, unit: second |
@@ -1416,12 +1417,12 @@ Add object to blacklist
 Add client to blacklist:
 
 ```bash
-$ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/banned" -d '{"who":"example","as":"clientid"}'
+$ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/banned" -d '{"who":"example","as":"clientid","reason":"example"}'
 
 {"data":{"who":"example","as":"clientid"},"code":0}
 ```
 
-#### DELETE /api/v4/banned/{as}/{who} 
+#### DELETE /api/v4/banned/{as}/{who}
 Delete object from blacklist
 
 **Parameters:** None
