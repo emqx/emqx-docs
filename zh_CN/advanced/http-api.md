@@ -1744,6 +1744,7 @@ $ curl -i --basic -u admin:public -vX GET "http://localhost:8081/api/v4/banned"
 | ----- | --------- | -------- | ----------| -------------------------------- |
 | who   | String    | Required |    | 添加至黑名单的对象，可以是客户端标识符、用户名和 IP 地址 |
 | as    | String    | Required |      | 用于区分黑名单对象类型，可以是 `clientid`，`username`，`peerhost` |
+| reason | String    | Required |      | 详细信息 |
 | by    | String    | Optional | user | 指示该对象被谁添加至黑名单 |
 | at    | Integer   | Optional | 当前系统时间          | 添加至黑名单的时间，单位：秒 |
 | until | Integer   | Optional | 当前系统时间 + 5 分钟 | 何时从黑名单中解除，单位：秒 |
@@ -1760,7 +1761,7 @@ $ curl -i --basic -u admin:public -vX GET "http://localhost:8081/api/v4/banned"
 将 client 添加到黑名单:
 
 ```bash
-$ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/banned" -d '{"who":"example","as":"clientid"}'
+$ curl -i --basic -u admin:public -vX POST "http://localhost:8081/api/v4/banned" -d '{"who":"example","as":"clientid","reason":"example"}'
 
 {"data":{"who":"example","as":"clientid"},"code":0}
 ```
