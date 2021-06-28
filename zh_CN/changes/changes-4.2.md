@@ -15,24 +15,26 @@ ref:
 
 # 版本发布
 
-## Version 4.2.12
+## 4.2.12 版本
 
 *发布日期: 2021-05-07*
 
+EMQ X 4.2.12 现已发布，主要包含以下改动:
+
 ### emqx
 
-**修复错误:**
+**错误修复:**
 
-修复了一个因等待 Mnesia 表超时导致 emqx 过早启动的问题
+- 修复了一个因等待 Mnesia 表超时导致 emqx 过早启动的问题
 
-GitHub PR: [emqx#4724](https://github.com/emqx/emqx/pull/4724)
+  GitHub PR: [emqx#4724](https://github.com/emqx/emqx/pull/4724)
 
 **性能优化:**
 
-优化了大批量客户端同时订阅和取消订阅的性能
+- 优化了大批量客户端同时订阅和取消订阅的性能
 
-GitHub PR: [emqx#4732](https://github.com/emqx/emqx/pull/4732)
-GitHub PR: [emqx#4738](https://github.com/emqx/emqx/pull/4738)
+  GitHub PR: [emqx#4732](https://github.com/emqx/emqx/pull/4732)
+  GitHub PR: [emqx#4738](https://github.com/emqx/emqx/pull/4738)
 
 ## 4.2.11 版本
 

@@ -15,6 +15,18 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.5
+
+*Release Date: 2021-06-28*
+
+EMQ X 4.3.5 is released now, it mainly includes the following changes:
+
+**Bug fixes:**
+
+- Fix the issue that messages may be lost after canceling the subscription when multiple shared subscriptions are established by the same client
+
+  Github PR: [emqx#5098](https://github.com/emqx/emqx/pull/5098)
+
 ## Version 4.3.4
 
 *Release Date: 2021-06-23*
