@@ -15,9 +15,11 @@ ref:
 
 # 版本发布
 
-## Version 4.2.13
+## 4.2.13 版本
 
 *发布日期: 2021-06-28*
+
+EMQ X 4.2.13 现已发布，主要包含以下改动:
 
 ### emqx
 
@@ -47,9 +49,11 @@ ref:
 
   GitHub PR: [emqx-web-hook#284](https://github.com/emqx/emqx-web-hook/pull/284)
 
-## Version 4.2.12
+## 4.2.12 版本
 
 *发布日期: 2021-05-07*
+
+EMQ X 4.2.12 现已发布，主要包含以下改动:
 
 ### emqx
 

@@ -15,9 +15,45 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.13
+
+*Release Date: 2021-06-28*
+
+EMQ X 4.2.13 is released now, it mainly includes the following changes:
+
+### emqx
+
+**Bug fixes:**
+
+- Fix the issue that messages may be lost after canceling the subscription when multiple shared subscriptions are established by the same client
+
+  GitHub PR: [emqx#5104](https://github.com/emqx/emqx/pull/5104)
+
+### emqx-auth-http
+
+**Bug fixes:**
+
+- Fix the issue of printing crash log after request timeout
+
+  GitHub PR: [emqx-auth-http#263](https://github.com/emqx/emqx-auth-http/pull/263)
+
+- Support Query String Parameters
+
+  GitHub PR: [emqx-auth-http#264](https://github.com/emqx/emqx-auth-http/pull/264)
+
+### emqx-web-hook
+
+**Bug fixes:**
+
+- Support Query String Parameters
+
+  GitHub PR: [emqx-web-hook#284](https://github.com/emqx/emqx-web-hook/pull/284)
+
 ## Version 4.2.12
 
 *Release Date: 2021-05-07*
+
+EMQ X 4.2.12 is released now, it mainly includes the following changes:
 
 ### emqx
 
