@@ -15,6 +15,35 @@ ref:
 
 # 版本发布
 
+## 4.3.4 版本
+
+*发布日期: 2021-06-23*
+
+EMQ X 4.3.4 现已发布，主要包含以下改动:
+
+**错误修复:**
+
+- 修复 CoAP 网关无法解析某些 URI 的问题
+
+  Github Issue: [emqx#5062](https://github.com/emqx/emqx/issues/5062)
+  Github PR: [emqx#5059](https://github.com/emqx/emqx/pull/5059)
+
+- 修复多语言扩展钩子可能启动失败的问题
+
+  Github PR: [emqx#5004](https://github.com/emqx/emqx/pull/5004)
+
+- 修复规则引擎删除资源时如果存在依赖该资源的规则会导致 Crash 的问题
+
+  Github PR: [emqx#4996](https://github.com/emqx/emqx/pull/4996)
+
+- 修复 HTTP 认证与 Webhook 不支持 Query String 的问题
+
+  Github PR: [emqx#4981](https://github.com/emqx/emqx/pull/4981)
+
+- 保证默认配置下节点间报文的转发顺序
+
+  Github PR: [emqx#4979](https://github.com/emqx/emqx/pull/4979)
+
 ## 4.3.3 版本
 
 *发布日期: 2021-06-05*

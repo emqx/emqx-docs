@@ -15,6 +15,35 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.4
+
+*Release Date: 2021-06-23*
+
+EMQ X 4.3.4 is released now, it mainly includes the following changes:
+
+**Bug fixes:**
+
+- CoAP gateway cannot resolve certain URIs
+
+  Github Issue: [emqx#5062](https://github.com/emqx/emqx/issues/5062)
+  Github PR: [emqx#5059](https://github.com/emqx/emqx/pull/5059)
+
+- Multi-language extension hooks may fail to start
+
+  Github PR: [emqx#5004](https://github.com/emqx/emqx/pull/5004)
+
+- When the rule engine deletes a resource, if there is a rule that depends on the resource, it will cause a crash
+
+  Github PR: [emqx#4996](https://github.com/emqx/emqx/pull/4996)
+
+- HTTP authentication and Webhook do not support Query String
+
+  Github PR: [emqx#4981](https://github.com/emqx/emqx/pull/4981)
+
+- Ensure the forwarding order of messages between nodes in the default configuration
+
+  Github PR: [emqx#4979](https://github.com/emqx/emqx/pull/4979)
+
 ## Version 4.3.3
 
 *Release Date: 2021-06-05*
