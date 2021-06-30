@@ -363,21 +363,28 @@ RLOG extension works by separating nodes in the cluster into two logical groups:
 - core nodes
 - replicate nodes
 
-Core node are the source of truth for the database.
-They contain an up-to-date consistent replicas of the tables.
-It's better to have several core nodes in the cluster to increase redundancy of the data.
+#### Core nodes
+
+Core nodes are the source of truth for the database.
+They contain up-to-date consistent replicas of the tables and they are directly responsible for high availability.
 Note: it is not recommended to put core nodes into auto-scaling groups.
 
+While it is possible to have any number of core nodes in the cluster, the recommended starting point is 2 or 3.
+
+#### Replicants
+
+Replicants can handle MQTT traffic, but they delegate mnesia transaction coordination to the core nodes.
 Replicant nodes passively and asynchronously replicate data from the core nodes.
-They can handle MQTT traffic, but they delegate transaction coordination to the core nodes.
+They can receive data from several different core nodes simultaneously, however, they try to choose core nodes with the least load.
+
 It is possible to put replicate nodes into an auto-scaling group.
 
 ::: warning
-It takes time for the new replicant to join the cluster, and this process generates some additional load on the core nodes.
+It takes time for the new replicant to join the cluster, and this process puts additional load on the core nodes.
 Don't use too aggressive autoscaling settings to avoid frequent replicant restarts.
 :::
 
-Flow of the data in the cluster is illustrated in the following diagram:
+Flow of the data in the cluster is illustrated in the following diagram (simplified):
 
 ![image](./assets/rlog_cluster.png)
 
@@ -387,6 +394,7 @@ Let's suppose we delegate `core` role to nodes `emqx@core1.internal` and `emqx@c
 
 The following changes should be done in the `etc/emqx.conf` file:
 
+1. Stop all the nodes in the cluster, if modifying an existing deployment
 1. Set `cluster.db_backend` parameter to `rlog` on all nodes in the cluster
 1. Set `cluster.rlog.role` parameter to `core` on `emqx@core1.internal` and `emqx@core2.internal`, and to `replicant` on all the other nodes
 1. Set `cluster.rlog.core_nodes` parameter to `emqx@core1.internal,emqx@core2.internal` on all the nodes
