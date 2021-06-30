@@ -155,7 +155,7 @@ cluster.discovery = static
 cluster.static.seeds = emqx1@127.0.0.1,emqx2@127.0.0.1
 ```
 
-### Autocluster based on mcast  
+### Autocluster based on mcast
 Automatically discover and create clusters based on UDP multicast:
 
 ```bash
@@ -167,7 +167,7 @@ cluster.mcast.ttl = 255
 cluster.mcast.loop = on
 ```
 
-### Autocluster based on DNS A records 
+### Autocluster based on DNS A records
 Automatically discover and create clusters based on DNS A records:
 
 ```bash
@@ -176,7 +176,7 @@ cluster.dns.name = localhost
 cluster.dns.app  = ekka
 ```
 
-### Autocluster based on etcd 
+### Autocluster based on etcd
 Automatically discover and create clusters based on [etcd](https://coreos.com/etcd/):
 
 ```bash
@@ -186,7 +186,7 @@ cluster.etcd.prefix = emqcl
 cluster.etcd.node_ttl = 1m
 ```
 
-### Autocluster based on kubernetes 
+### Autocluster based on kubernetes
 Automatically discover and create clusters based on [Kubernetes](https://kubernetes.io/):
 
 ```bash
@@ -286,7 +286,7 @@ Or remove the emqx@s2.emqx.io node from the cluster on s1.emqx.io:
 $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
-## Network Partition Autoheal 
+## Network Partition Autoheal
 *EMQ X* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
 
 ```bash
@@ -301,7 +301,7 @@ Network Partition Autoheal Process:
 4. The Leader node selects the self-healing Coordinator node in the majority partition;
 5. The Coordinator node restarts the minority partition node to restore the cluster.
 
-## Autoclean of Cluster nodes 
+## Autoclean of Cluster nodes
 *EMQ X* supports Autoclean frol cluster , which can be configured in `etc/emqx.conf` :
 
 ```bash
@@ -341,3 +341,53 @@ also be allowed by the firewall. The port mapping rule is similar to the node di
 ports in `ekka mode`, but with the `BasePort = 5370`. That is, having
 `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370`,
 and port `5371` for `emqx1` (or `emqx-1`), and so on.
+
+## Asynchronous database replication
+
+::: danger
+This feature is highly experimental.
+You can enable it if you want to help us testing and tuning it.
+:::
+
+Some EMQ X features rely on the open-source [Mnesia](http://erlang.org/doc/apps/mnesia/Mnesia_overview.html) database.
+Mnesia uses full-mesh topology for transaction replication.
+While being blazing-fast in the small clusters, it has some scalability issues when the number of nodes in the cluster becomes large.
+Also it becomes more vulnerable to network splits.
+To address these issues, EMQ X supports an experimental extension to Mnesia called `RLOG`.
+This extension can be used in large EMQ X clusters (4 nodes and more).
+
+### RLOG principles
+
+RLOG extension works by separating nodes in the cluster into two logical groups:
+
+- core nodes
+- replicate nodes
+
+Core node are the source of truth for the database.
+They contain an up-to-date consistent replicas of the tables.
+It's better to have several core nodes in the cluster to increase redundancy of the data.
+Note: it is not recommended to put core nodes into auto-scaling groups.
+
+Replicant nodes passively and asynchronously replicate data from the core nodes.
+They can handle MQTT traffic, but they delegate transaction coordination to the core nodes.
+It is possible to put replicate nodes into an auto-scaling group.
+
+::: warning
+It takes time for the new replicant to join the cluster, and this process generates some additional load on the core nodes.
+Don't use too aggressive autoscaling settings to avoid frequent replicant restarts.
+:::
+
+Flow of the data in the cluster is illustrated in the following diagram:
+
+![image](./assets/rlog_cluster.png)
+
+### Enabling RLOG feature
+
+Let's suppose we delegate `core` role to nodes `emqx@core1.internal` and `emqx@core2.internal`.
+
+The following changes should be done in the `etc/emqx.conf` file:
+
+1. Set `cluster.db_backend` parameter to `rlog` on all nodes in the cluster
+1. Set `cluster.rlog.role` parameter to `core` on `emqx@core1.internal` and `emqx@core2.internal`, and to `replicant` on all the other nodes
+1. Set `cluster.rlog.core_nodes` parameter to `emqx@core1.internal,emqx@core2.internal` on all the nodes
+1. Start the cluster
