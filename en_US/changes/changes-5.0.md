@@ -21,7 +21,7 @@ ref: undefined
 
 EMQ X 5.0-alpha.1 is released now, it mainly includes the following changes:
 
-> Note: In 5.0-alpha.1, some required but not yet implemented feature codes have been removed, so the current feature set does not represent the final state, we will implement them in the version version.
+> Note: In 5.0-alpha.1, some required but not yet implemented feature codes have been removed, so the current feature set does not represent the final state, we will implement them in the next versions.
 
 **Feature**
 
