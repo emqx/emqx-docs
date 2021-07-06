@@ -65,18 +65,18 @@ EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更�
 
 ```bash
 {
-    "username":"undefined",
-    "ts":1582687922392,
-    "sockport":1883,
-    "proto_ver":5,
-    "proto_name":"MQTT",
-    "keepalive":300,
-    "ipaddress":"127.0.0.1",
-    "expiry_interval":0,
-    "connected_at":1582687922,
-    "connack":0,
-    "clientid":"emqtt-8348fe27a87976ad4db3",
-    "clean_start":true
+    "username": "foo",
+    "ts": 1625572213873,
+    "sockport": 1883,
+    "proto_ver": 4,
+    "proto_name": "MQTT",
+    "keepalive": 60,
+    "ipaddress": "127.0.0.1",
+    "expiry_interval": 0,
+    "connected_at": 1625572213873,
+    "connack": 0,
+    "clientid": "emqtt-8348fe27a87976ad4db3",
+    "clean_start": true
 }
 ```
 
@@ -84,11 +84,15 @@ EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更�
 
 ```bash
 {
-    "username":"undefined",
-    "ts":1582688032203,
-    "reason":"tcp_closed",
-    "disconnected_at":1582688032,
-    "clientid":"emqtt-8348fe27a87976ad4db3"
+    "username": "foo",
+    "ts": 1625572213873,
+    "sockport": 1883,
+    "reason": "tcp_closed",
+    "proto_ver": 4,
+    "proto_name": "MQTT",
+    "ipaddress": "127.0.0.1",
+    "disconnected_at": 1625572213873,
+    "clientid": "emqtt-8348fe27a87976ad4db3"
 }
 ```
 
