@@ -754,7 +754,16 @@
     },
     {
       "title": "Configuration",
-      "path": "configuration/configuration"
+      "children": [
+        {
+          "title": "Configuration",
+          "path": "configuration/configuration"
+        },
+        {
+          "title": "Environment variables",
+          "path": "configuration/environment-variable"
+        }
+      ]
     },
     {
       "title": "Command",
