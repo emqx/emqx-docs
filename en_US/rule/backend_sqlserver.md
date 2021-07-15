@@ -32,7 +32,7 @@ CREATE TABLE t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
 go;
 ```
 
-Configure odbc driver:
+Configure odbc driver in Mac:
 ```
 $ brew install unixodbc freetds
 $ vim /usr/local/etc/odbcinst.ini
@@ -40,6 +40,20 @@ $ vim /usr/local/etc/odbcinst.ini
 Description = ODBC for FreeTDS
 Driver      = /usr/local/lib/libtdsodbc.so
 Setup       = /usr/local/lib/libtdsodbc.so
+FileUsage   = 1
+```
+
+Configure odbc driver in CentOS:
+```
+$ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
+$ vim /etc/odbcinst.ini
+# add as below
+[ms-sql]
+Description = ODBC for FreeTDS
+Driver      = /usr/lib64/libtdsodbc.so
+Setup       = /usr/lib64/libtdsS.so.2
+Driver64    = /usr/lib64/libtdsodbc.so
+Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
