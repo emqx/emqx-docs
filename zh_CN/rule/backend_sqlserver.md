@@ -32,7 +32,7 @@ CREATE TABLE t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
 go;
 ```
 
-配置 odbc 驱动:
+Mac上配置 odbc 驱动:
 ```
 $ brew install unixodbc freetds
 $ vim /usr/local/etc/odbcinst.ini
@@ -41,6 +41,20 @@ $ vim /usr/local/etc/odbcinst.ini
 Description = ODBC for FreeTDS
 Driver      = /usr/local/lib/libtdsodbc.so
 Setup       = /usr/local/lib/libtdsodbc.so
+FileUsage   = 1
+```
+
+Centos上配置 odbc驱动:
+```
+$ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
+$ vim /etc/odbcinst.ini
+# 加入以下内容
+[ms-sql]
+Description = ODBC for FreeTDS
+Driver      = /usr/lib64/libtdsodbc.so
+Setup       = /usr/lib64/libtdsS.so.2
+Driver64    = /usr/lib64/libtdsodbc.so
+Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
