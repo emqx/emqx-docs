@@ -44,7 +44,7 @@ Setup       = /usr/local/lib/libtdsodbc.so
 FileUsage   = 1
 ```
 
-Centos上配置 odbc驱动:
+Centos上配置 odbc 驱动:
 ```
 $ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
 $ vim /etc/odbcinst.ini
@@ -55,6 +55,18 @@ Driver      = /usr/lib64/libtdsodbc.so
 Setup       = /usr/lib64/libtdsS.so.2
 Driver64    = /usr/lib64/libtdsodbc.so
 Setup64     = /usr/lib64/libtdsS.so.2
+FileUsage   = 1
+```
+
+Ubuntu上配置 odbc 驱动:
+```
+$ apt-get install unixodbc unixodbc-dev unixodbc-bin tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
+$ vim /etc/odbcinst.ini
+# 加入以下内容
+[ms-sql]
+Description = ODBC for FreeTDS
+Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
+Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
 FileUsage   = 1
 ```
 
