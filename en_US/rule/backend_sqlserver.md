@@ -57,6 +57,18 @@ Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
+Configure odbc dirver in Ubuntu:
+```
+$ apt-get install unixodbc unixodbc-dev unixodbc-bin tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
+$ vim /etc/odbcinst.ini
+# add as below
+[ms-sql]
+Description = ODBC for FreeTDS
+Driver      = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
+Setup       = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
+FileUsage   = 1
+```
+
 Create rules:
 
 Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
