@@ -23,7 +23,7 @@ clickhouse-client
 ```bash
 create database mqtt;
 ```
-创建 mqtt_msg 表:
+创建 mqtt_sub 表:
 
 ```sql
 use mqtt;
