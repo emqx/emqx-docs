@@ -41,7 +41,7 @@ The following factors will have an impact on EMQ X resource consumption, mainly 
 
 If client devices connect to EMQ X through TLS, more CPU resource is required for encryption and decryption. Our suggested solution is to add a load balancer in front of EMQ X nodes, the TLS is offloaded at load balance node, connections between load balancer and backend EMQ X nodes use plain TCP connections.
 
-You can use our online calculation tool [TODO](https://www.emqx.io) to estimate the resource consumption.
+You can use our online calculation tool [https://www.emqx.com/en/server-estimate](https://www.emqx.com/en/server-estimate) to estimate the resource consumption.
 
 
 

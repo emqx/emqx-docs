@@ -49,7 +49,7 @@ EMQ X 对资源的使用主要有以下的影响因素，每个因素都会对�
 
 另外，如果设备通过 TLS（加密的连接）连接 EMQ X，EMQ X 会需要额外的资源（主要是 CPU 资源）。推荐方案是在 EMQ X 前面部署负载均衡，由负载均衡节点卸载 TLS，实现职责分离。
 
-可参考 [TODO](https://www.emqx.io) 来预估计算资源的使用；公有云快速部署 EMQ X 实例，请参考[TODO](https://www.emqx.io)。
+可参考 [https://www.emqx.com/zh/server-estimate](https://www.emqx.com/zh/server-estimate) 来预估计算资源的使用；公有云快速部署 EMQ X 实例，请参考[TODO](https://www.emqx.io)。
 
 
 
