@@ -25,7 +25,7 @@ EMQ X is an open-source, distributed MQTT messaging broker, it can support up to
 ## How many products in EMQ X?
 
 
-EMQ X totally has [3 products.](https://www.emqx.io/products) Different products support different level of connections, features and services etc.
+EMQ X totally has [3 products.](https://www.emqx.com/en/products/emqx) Different products support different level of connections, features and services etc.
 
 - EMQ X Broker: EMQ X open source version, supports the popular IoT protocols, such as MQTT, CoAP and LwM2M.
 - EMQ X Enterprise: EMQ X enterprise version.  It is based on the open source version, and adds data persistence (support Redis, MySQL, MongoDB or PostgreSQL), data bridge to Kafka, LoRaWAN support, EMQ X monitoring, Kubernetes deployment etc. It supports 1M level concurrent MQTT connections.

@@ -14,7 +14,7 @@
 
 ## 参考资料
 
-- EMQ X [使用 WebSocket 连接 MQTT 服务器](https://www.emqx.cn/blog/connect-to-mqtt-broker-with-websocket)
+- EMQ X [使用 WebSocket 连接 MQTT 服务器](https://www.emqx.com/zh/blog/connect-to-mqtt-broker-with-websocket)
 - CSDN [Nginx 反向代理 WebSocket](https://www.xncoding.com/2018/03/12/fullstack/nginx-websocket.html)
 - 微信小程序 MQTT 接入[Demo](https://github.com/iAoe444/WeChatMiniEsp8266)
 
