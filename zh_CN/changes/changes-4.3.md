@@ -15,6 +15,22 @@ ref:
 
 # 版本发布
 
+## 4.3.6 版本
+
+*发布日期: 2021-07-28*
+
+EMQ X 4.3.6 现已发布，主要包含以下改动:
+
+**功能改进:**
+
+- 支持关闭 HTTP Pipelining
+
+  Github PR: [emqx#5279](https://github.com/emqx/emqx/pull/5279)
+
+- ACL 支持 IP 地址列表
+
+  Github PR: [emqx#5328](https://github.com/emqx/emqx/pull/5328)
+
 ## 4.3.5 版本
 
 *发布日期: 2021-06-28*

@@ -15,6 +15,22 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.6
+
+*Release Date: 2021-07-28*
+
+EMQ X 4.3.6 is released now, it mainly includes the following changes:
+
+**Enhancement:**
+
+- Support disable HTTP Pipelining
+
+  Github PR: [emqx#5279](https://github.com/emqx/emqx/pull/5279)
+
+- ACL supports IP address list
+
+  Github PR: [emqx#5328](https://github.com/emqx/emqx/pull/5328)
+
 ## Version 4.3.5
 
 *Release Date: 2021-06-28*
