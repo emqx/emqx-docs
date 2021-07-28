@@ -15,6 +15,20 @@ ref: undefined
 
 # Changes
 
+## Version 5.0-alpha.2
+
+*Release Date: 2021-07-17*
+
+EMQ X 5.0-alpha.2 is released now, it mainly includes the following changes:
+
+**Feature**
+
+- Support RLOG to provide better support for large clusters
+- Authorization supports MongoDB and HTTP Server
+- Functional adjustments for authentication, support for HTTP Server, support for enhanced authentication
+- Support flow control for retained messages
+- Brand new configuration structure
+
 ## Version 5.0-alpha.1
 
 *Release Date: 2021-07-02*
