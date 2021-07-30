@@ -15,6 +15,20 @@ ref: undefined
 
 # Changes
 
+## Version 5.0-alpha.3
+
+*Release Date: 2021-07-30*
+
+EMQ X 5.0-alpha.3 is released now, it mainly includes the following changes:
+
+**Feature**
+
+- Improve event notification feature
+- Introduce a new HTTP API development framework, support the use of OpenAPI specifications to define interfaces and generate documents
+- Authentication supports MongoDB, improves the update mechanism, and opens HTTP API
+- Open HTTP API for metric monitoring (StatsD, Prometheus) and telemetry
+- Improvements to the bottom layer of hot configuration
+
 ## Version 5.0-alpha.2
 
 *Release Date: 2021-07-17*
