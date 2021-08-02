@@ -15,6 +15,16 @@ ref: undefined
 
 # Changes
 
+## Version 4.2.14
+
+*Release Date: 2021-08-02*
+
+EMQ X 4.2.14 is released now, it mainly includes the following changes:
+
+**Bug fixes:**
+
+- Fix the issue of unavailable hot upgrade
+
 ## Version 4.2.13
 
 *Release Date: 2021-06-28*
