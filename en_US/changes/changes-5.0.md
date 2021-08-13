@@ -15,6 +15,20 @@ ref: undefined
 
 # Changes
 
+## Version 5.0-alpha.4
+
+*Release Date: 2021-08-13*
+
+EMQ X 5.0-alpha.4 is released now, it mainly includes the following changes:
+
+**Feature**
+
+- Dashboard provides monitoring, management, system pages, and supports viewing node topology diagrams, etc.
+- Support Redis authentication
+- Authorization provides HTTP API, supports creation of ACL rules and adjustment sequence
+- New gateway, adding support for CoAP
+- Hot configuration provides HTTP API, supports updating configuration at runtime
+
 ## Version 5.0-alpha.3
 
 *Release Date: 2021-07-30*
