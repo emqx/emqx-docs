@@ -24,7 +24,7 @@ The webhook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, 
 
 ## Trigger rule
 
-Trigger rules can be configured in `etc/plugins/emqx_web_hooks.conf`. The configuration format is as follows:
+Trigger rules can be configured in `etc/plugins/emqx_web_hook.conf`. The configuration format is as follows:
 
 ```bash
 ## Format example
