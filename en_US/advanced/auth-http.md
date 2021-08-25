@@ -48,7 +48,7 @@ During authentication, EMQ X Broker will use the current client information to p
 # etc/plugins/emqx_auth_http.conf
 
 ## Request address
-auth.http.auth_req = http://127.0.0.1:80/mqtt/auth
+auth.http.auth_req.url = http://127.0.0.1:80/mqtt/auth
 
 ## HTTP request method
 ## Value: post | get | put
