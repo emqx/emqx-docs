@@ -15,6 +15,42 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.7
+
+*Release Date: 2021-08-09*
+
+EMQ X 4.3.7 is released now, it mainly includes the following changes:
+
+**Bug fixes:**
+
+- Fix the issue that the current HTTP KeepAlive behavior may cause some servers to disconnect
+
+  Github PR: [emqx#5395](https://github.com/emqx/emqx/pull/5395)
+
+- Fix the issue that the command line interface cannot print certain characters
+
+  Github PR: [emqx#5411](https://github.com/emqx/emqx/pull/5411)
+
+- Fix the issue of coding error when LwM2M gateway sends integer numbers
+
+  Github PR: [emqx#5425](https://github.com/emqx/emqx/pull/5425)
+
+## Version 4.3.6
+
+*Release Date: 2021-07-28*
+
+EMQ X 4.3.6 is released now, it mainly includes the following changes:
+
+**Enhancement:**
+
+- Support disable HTTP Pipelining
+
+  Github PR: [emqx#5279](https://github.com/emqx/emqx/pull/5279)
+
+- ACL supports IP address list
+
+  Github PR: [emqx#5328](https://github.com/emqx/emqx/pull/5328)
+
 ## Version 4.3.5
 
 *Release Date: 2021-06-28*

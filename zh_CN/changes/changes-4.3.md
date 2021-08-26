@@ -15,6 +15,42 @@ ref:
 
 # 版本发布
 
+## 4.3.7 版本
+
+*发布日期: 2021-08-09*
+
+EMQ X 4.3.7 现已发布，主要包含以下改动:
+
+**错误修复:**
+
+- 修复当前 HTTP KeepAlive 行为可能导致某些服务器断开连接的问题
+
+  Github PR: [emqx#5395](https://github.com/emqx/emqx/pull/5395)
+
+- 修复命令行接口无法打印某些字符的问题
+
+  Github PR: [emqx#5411](https://github.com/emqx/emqx/pull/5411)
+
+- 修复 LwM2M 网关下发整型数字时编码错误的问题
+
+  Github PR: [emqx#5425](https://github.com/emqx/emqx/pull/5425)
+
+## 4.3.6 版本
+
+*发布日期: 2021-07-28*
+
+EMQ X 4.3.6 现已发布，主要包含以下改动:
+
+**功能改进:**
+
+- 支持关闭 HTTP Pipelining
+
+  Github PR: [emqx#5279](https://github.com/emqx/emqx/pull/5279)
+
+- ACL 支持 IP 地址列表
+
+  Github PR: [emqx#5328](https://github.com/emqx/emqx/pull/5328)
+
 ## 4.3.5 版本
 
 *发布日期: 2021-06-28*

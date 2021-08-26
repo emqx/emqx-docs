@@ -82,19 +82,19 @@ EMQ X Enterprise 需要 License 文件才能正常启动，EMQ X 可以略过这
 EMQ X Enterprise 需要 License 文件才能正常启动，请联系销售人员或在线自助购买/申请试用以获取 License。
 
 - 试用版 License：到期后将停止正在运行的 EMQ X；
-- 正式版 License：到期后
+- 正式版 License：到期后不会停止正在运行的 EMQ X，但是新节点或手动停止之后的节点将无法启动。
 
 {% endemqxee %}
 
 ### 申请试用 License
 
-- 访问 `https://emqx.io`，在 EMQ X Enterprise 下载页面，点击 **Get FREE Trial License**。
+- 访问 [EMQ X Enterprise 下载页面](https://www.emqx.com/zh/downloads?product=enterprise)，点击 **[免费获取 License](https://www.emqx.com/zh/apply-licenses/emqx)**。
 
-    ![](./static/WX20200210-153301@2x.png)
+    ![](./static/download_enterprise_page.png)
 
-- 注册登陆并申请 License 文件试用，下载 License 文件。
+- 申请 License 文件试用，下载 License 文件。
 
-    ![](./static/WX20200210-153822@2x.png)
+    ![](./static/apply_license.png)
 
 ### 放置 License
 

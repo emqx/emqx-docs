@@ -207,7 +207,7 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     SELECT * FROM "t/1", "t/2".
     ```
 - You can use the `"." `Symbol to nest select payloads
-- :::
+:::
 
 #### Examples of FOREACH-DO-INCASE
 
