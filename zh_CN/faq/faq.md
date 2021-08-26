@@ -57,7 +57,7 @@ EMQ X 与别的 MQTT 服务器相比，有以下的优点：
 **标签:** [*企业版*](tags.md#企业版)
 
 
-EMQ X 公司主要提供[三个产品](https://www.emqx.io/products)，主要体现在支持的连接数量、产品功能和商业服务等方面的区别：
+EMQ X 公司主要提供[三个产品](https://www.emqx.com/zh/products/emqx)，主要体现在支持的连接数量、产品功能和商业服务等方面的区别：
 
 - EMQ X Broker：EMQ X 开源版，提供 MQTT 协议、CoAP 和 LwM2M 等常见物联网协议的支持；
 
