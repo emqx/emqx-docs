@@ -24,7 +24,7 @@ Installed versions:
 
 2. Download the software package to be upgraded from the EMQ X website.
 
-Visit https://www.emqx.io/downloads#broker, Select the corresponding version and operating system type, and then select the **"zip"** package type.
+Visit https://www.emqx.com/en/downloads?product=broker, Select the corresponding version and operating system type, and then select the **"zip"** package type.
 
 3. Find the installation directory of EMQ X:
 
