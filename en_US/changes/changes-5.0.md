@@ -15,6 +15,21 @@ ref: undefined
 
 # Changes
 
+## Version 5.0-alpha.5
+
+*Release Date: 2021-08-27*
+
+EMQ X 5.0-alpha.5 is released now, it mainly includes the following changes:
+
+**Feature**
+
+- Dashboard provides pages such as retained message, delayed publish, topic rewriting, auto subscribe, etc.
+- HTTP API services are uniformly provided by port 18083
+- Support auto subscribe
+- Improved configuration items to make configuration files easier to read
+- Optimize cluster calls
+- Support to view EMQ X VM information through the command line interface
+
 ## Version 5.0-alpha.4
 
 *Release Date: 2021-08-13*
