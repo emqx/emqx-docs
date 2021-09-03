@@ -1111,39 +1111,39 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 
 | 函数名   |   函数作用    |    参数     |       返回值       |       举例       |
 | ------- | ------------ | ----------- | ------------------ | ----------------- |
-| lower   | 转为小写      | 1. 原字符串     | 小写字符串         |` 1. lower('AbC') = 'abc'`<br/><br/>`2. lower('abc') = 'abc' `|
-| upper   | 转为大写      | 1. 原字符串     | 大写字符串         |` 1. upper('AbC') = 'ABC'`<br/><br/>`2. lower('ABC') = 'ABC' `|
-| trim    | 去掉左右空格  | 1. 原字符串     | 去掉空格后的字符串 |` 1. trim(' hello  ') = 'hello' `|
-| ltrim   | 去掉左空格    | 1. 原字符串     | 去掉空格后的字符串 |` 1. ltrim(' hello  ') = 'hello  '`|
-| rtrim   | 去掉右空格    | 1. 原字符串     | 去掉空格后的字符串 |` 1. rtrim(' hello  ') = ' hello'`|
-| reverse | 字符串反转    | 1. 原字符串     | 翻转后的字符串 |` 1. reverse('hello') = 'olleh' `|
-| strlen  | 取字符串长度    | 1. 原字符串     | 整数值，字符长度 |` 1. strlen('hello') = 5 `|
-| substr  | 取字符的子串  | 1. 原字符串 2. 起始位置. 注意: 下标从 0 开始 | 子串 |` 1. substr('abcdef', 2) = 'cdef' `|
-| substr  | 取字符的子串  | 1. 原字符串 2. 起始位置 3. 要取出的子串长度. 注意: 下标从 0 开始 | 子串 |` 1. substr('abcdef', 2, 3) = 'cde' `|
-| split   | 字符串分割    | 1. 原字符串 2. 分割符子串 | 分割后的字符串数组 | `1. split('a/b/ c', '/') = ['a', 'b', ' c']` |
-| split   | 字符串分割, 只查找左边第一个分隔符 | 1. 原字符串 2. 分割符子串 3. 'leading' | 分割后的字符串数组 | `1. split('a/b/ c', '/', 'leading') = ['a', 'b/ c']` |
-| split   | 字符串分割, 只查找右边第一个分隔符 | 1. 原字符串 2. 分割符子串 3. 'trailing' | 分割后的字符串数组 | `1. split('a/b/ c', '/', 'trailing') = ['a/b', ' c']` |
-| concat   | 字符串拼接  | 1. 左字符串 2. 右符子串 | 拼接后的字符串 | `1. concat('a', '/bc') = 'a/bc'`<br/><br/>`2. 'a' + '/bc' = 'a/bc'` |
-| tokens   | 字符串分解(按照指定字符串符分解)  | 1. 输入字符串 2. 分割符或字符串 | 分解后的字符串数组 | `1. tokens(' a/b/ c', '/') = [' a', 'b', ' c']`<br/><br/>`2. tokens(' a/b/ c', '/ ') = ['a', 'b', 'c']`<br/><br/>`3. tokens(' a/b/ c\n', '/ ') = ['a', 'b', 'c\n']` |
-| tokens   | 字符串分解(按照指定字符串和换行符分解)  | 1. 输入字符串 2. 分割符或字符串 3. 'nocrlf' | 分解后的字符串数组 | `1. tokens(' a/b/ c\n', '/ ', 'nocrlf') = ['a', 'b', 'c']`<br/><br/>`2. tokens(' a/b/ c\r\n', '/ ', 'nocrlf') = ['a', 'b', 'c']` |
-| sprintf   | 字符串格式化, 格式字符串的用法详见 https://erlang.org/doc/man/io.html#fwrite-1 里的 Format 部分 | 1. 格式字符串 2,3,4... 参数列表。参数个数不定 | 分解后的字符串数组 | `1. sprintf('hello, ~s!', 'steve') = 'hello, steve!'`<br/><br/>`2. sprintf('count: ~p~n', 100) = 'count: 100\n'` |
-| pad   | 字符串补足长度，补空格，从尾部补足  | 1. 原字符串 2. 字符总长度 | 补足后的字符串 | `1. pad('abc', 5) = 'abc  '` |
-| pad   | 字符串补足长度，补空格，从尾部补足  | 1. 原字符串 2. 字符总长度 3. 'trailing' | 补足后的字符串 | `1. pad('abc', 5, 'trailing') = 'abc  '` |
-| pad   | 字符串补足长度，补空格，从两边补足  | 1. 原字符串 2. 字符总长度 3. 'both' | 补足后的字符串 | `1. pad('abc', 5, 'both') = ' abc '` |
-| pad   | 字符串补足长度，补空格，从头部补足  | 1. 原字符串 2. 字符总长度 3. 'leading' | 补足后的字符串 | `1. pad('abc', 5, 'leading') = '  abc'` |
-| pad   | 字符串补足长度，补指定字符，从尾部补足  | 1. 原字符串 2. 字符总长度 3. 'trailing' 4. 指定用于补足的字符 | 补足后的字符串 |  `1. pad('abc', 5, 'trailing', '*') = 'abc**'`<br/><br/>`2. pad('abc', 5, 'trailing', '*#') = 'abc*#*#'` |
-| pad   | 字符串补足长度，补指定字符，从两边补足  | 1. 原字符串 2. 字符总长度 3. 'both' 4. 指定用于补足的字符 | 补足后的字符串 |  `1. pad('abc', 5, 'both', '*') = '*abc*'`<br/><br/>`2. pad('abc', 5, 'both', '*#') = '*#abc*#'` |
-| pad   | 字符串补足长度，补指定字符，从头部补足  | 1. 原字符串 2. 字符总长度 3. 'leading' 4. 指定用于补足的字符 | 补足后的字符串 | `1. pad('abc', 5, 'leading', '*') = '**abc'`<br/><br/>`2. pad('abc', 5, 'leading', '*#') = '*#*#abc'` |
-| replace | 替换字符串中的某子串，查找所有匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd') = 'cdcdef'` |
-| replace | 替换字符串中的某子串，查找所有匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'all' | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd', 'all') = 'cdcdef'` |
-| replace | 替换字符串中的某子串，从尾部查找第一个匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'trailing' | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd', 'trailing') = 'abcdef'` |
-| replace | 替换字符串中的某子串，从头部查找第一个匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'leading' | 替换后的字符串 | `1. replace('ababef', 'ab', 'cd', 'leading') = 'cdabef'` |
-| regex_match | 判断字符串是否与某正则表达式匹配  | 1. 原字符串 2. 正则表达式 | true 或 false | `1. regex_match('abc123', '[a-zA-Z1-9]*') = true` |
-| regex_replace | 替换字符串中匹配到某正则表达式的子串  | 1. 原字符串 2. 正则表达式 3. 指定用于替换的字符串 | 替换后的字符串 | `1. regex_replace('ab1cd3ef', '[1-9]', '[&]') = 'ab[1]cd[3]ef'`<br/><br/>`2. regex_replace('ccefacef', 'c+', ':') = ':efa:ef'` |
-| ascii | 返回字符对应的 ASCII 码  | 1. 字符 | 整数值，字符对应的 ASCII 码 | `1. ascii('a') = 97` |
-| find | 查找并返回字符串中的某个子串，从头部查找  | 1. 原字符串 2. 要查找的子串 | 查抄到的子串，如找不到则返回空字符串 | `1. find('eeabcabcee', 'abc') = 'abcabcee'` |
-| find | 查找并返回字符串中的某个子串，从头部查找  | 1. 原字符串 2. 要查找的子串 3. 'leading' | 查抄到的子串，如找不到则返回空字符串 | `1. find('eeabcabcee', 'abc', 'leading') = 'abcabcee'` |
-| find | 查找并返回字符串中的某个子串，从尾部查找  | 1. 原字符串 2. 要查找的子串 3. 'trailing' | 查抄到的子串，如找不到则返回空字符串 | `1. find('eeabcabcee', 'abc', 'trailing') = 'abcee'` |
+| <img width=120/>lower | <img width=300/>转为小写 | <img width=200/>1. 原字符串 | 小写字符串         |<img width=400/>`lower('AbC') = 'abc'`<br/><br/>`lower('abc') = 'abc' `|
+| upper   | 转为大写      | 1. 原字符串     | 大写字符串         |`upper('AbC') = 'ABC'`<br/><br/>`lower('ABC') = 'ABC' `|
+| trim    | 去掉左右空格  | 1. 原字符串     | 去掉空格后的字符串 |`trim(' hello  ') = 'hello' `|
+| ltrim   | 去掉左空格    | 1. 原字符串     | 去掉空格后的字符串 |`ltrim(' hello  ') = 'hello  '`|
+| rtrim   | 去掉右空格    | 1. 原字符串     | 去掉空格后的字符串 |`rtrim(' hello  ') = ' hello'`|
+| reverse | 字符串反转    | 1. 原字符串     | 翻转后的字符串 |`reverse('hello') = 'olleh' `|
+| strlen  | 取字符串长度    | 1. 原字符串     | 整数值，字符长度 |`strlen('hello') = 5 `|
+| substr  | 取字符的子串  | 1. 原字符串 2. 起始位置. 注意: 下标从 0 开始 | 子串 |`substr('abcdef', 2) = 'cdef' `|
+| substr  | 取字符的子串  | 1. 原字符串 2. 起始位置 3. 要取出的子串长度. 注意: 下标从 0 开始 | 子串 |`substr('abcdef', 2, 3) = 'cde' `|
+| split   | 字符串分割    | 1. 原字符串 2. 分割符子串 | 分割后的字符串数组 | `split('a/b/ c', '/') = ['a', 'b', ' c']` |
+| split   | 字符串分割, 只查找左边第一个分隔符 | 1. 原字符串 2. 分割符子串 3. 'leading' | 分割后的字符串数组 | `split('a/b/ c', '/', 'leading') = ['a', 'b/ c']` |
+| split   | 字符串分割, 只查找右边第一个分隔符 | 1. 原字符串 2. 分割符子串 3. 'trailing' | 分割后的字符串数组 | `split('a/b/ c', '/', 'trailing') = ['a/b', ' c']` |
+| concat   | 字符串拼接  | 1. 左字符串 2. 右符子串 | 拼接后的字符串 | `concat('a', '/bc') = 'a/bc'`<br/><br/>`'a' + '/bc' = 'a/bc'` |
+| tokens   | 字符串分解(按照指定字符串符分解)  | 1. 输入字符串 2. 分割符或字符串 | 分解后的字符串数组 | `tokens(' a/b/ c', '/') = [' a', 'b', ' c']`<br/><br/>`tokens(' a/b/ c', '/ ') = ['a', 'b', 'c']`<br/><br/>`tokens(' a/b/ c\n', '/ ') = ['a', 'b', 'c\n']` |
+| tokens   | 字符串分解(按照指定字符串和换行符分解)  | 1. 输入字符串 2. 分割符或字符串 3. 'nocrlf' | 分解后的字符串数组 | `tokens(' a/b/ c\n', '/ ', 'nocrlf') = ['a', 'b', 'c']`<br/><br/>`tokens(' a/b/ c\r\n', '/ ', 'nocrlf') = ['a', 'b', 'c']` |
+| sprintf   | 字符串格式化, 格式字符串的用法详见 https://erlang.org/doc/man/io.html#fwrite-1 里的 Format 部分 | 1. 格式字符串 2,3,4... 参数列表。参数个数不定 | 分解后的字符串数组 | `sprintf('hello, ~s!', 'steve') = 'hello, steve!'`<br/><br/>`sprintf('count: ~p~n', 100) = 'count: 100\n'` |
+| pad   | 字符串补足长度，补空格，从尾部补足  | 1. 原字符串 2. 字符总长度 | 补足后的字符串 | `pad('abc', 5) = 'abc  '` |
+| pad   | 字符串补足长度，补空格，从尾部补足  | 1. 原字符串 2. 字符总长度 3. 'trailing' | 补足后的字符串 | `pad('abc', 5, 'trailing') = 'abc  '` |
+| pad   | 字符串补足长度，补空格，从两边补足  | 1. 原字符串 2. 字符总长度 3. 'both' | 补足后的字符串 | `pad('abc', 5, 'both') = ' abc '` |
+| pad   | 字符串补足长度，补空格，从头部补足  | 1. 原字符串 2. 字符总长度 3. 'leading' | 补足后的字符串 | `pad('abc', 5, 'leading') = '  abc'` |
+| pad   | 字符串补足长度，补指定字符，从尾部补足  | 1. 原字符串 2. 字符总长度 3. 'trailing' 4. 指定用于补足的字符 | 补足后的字符串 |  `pad('abc', 5, 'trailing', '*') = 'abc**'`<br/><br/>`pad('abc', 5, 'trailing', '*#') = 'abc*#*#'` |
+| pad   | 字符串补足长度，补指定字符，从两边补足  | 1. 原字符串 2. 字符总长度 3. 'both' 4. 指定用于补足的字符 | 补足后的字符串 |  `pad('abc', 5, 'both', '*') = '*abc*'`<br/><br/>`pad('abc', 5, 'both', '*#') = '*#abc*#'` |
+| pad   | 字符串补足长度，补指定字符，从头部补足  | 1. 原字符串 2. 字符总长度 3. 'leading' 4. 指定用于补足的字符 | 补足后的字符串 | `pad('abc', 5, 'leading', '*') = '**abc'`<br/><br/>`pad('abc', 5, 'leading', '*#') = '*#*#abc'` |
+| replace | 替换字符串中的某子串，查找所有匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 | 替换后的字符串 | `replace('ababef', 'ab', 'cd') = 'cdcdef'` |
+| replace | 替换字符串中的某子串，查找所有匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'all' | 替换后的字符串 | `replace('ababef', 'ab', 'cd', 'all') = 'cdcdef'` |
+| replace | 替换字符串中的某子串，从尾部查找第一个匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'trailing' | 替换后的字符串 | `replace('ababef', 'ab', 'cd', 'trailing') = 'abcdef'` |
+| replace | 替换字符串中的某子串，从头部查找第一个匹配子串替换  | 1. 原字符串 2. 要被替换的子串 3. 指定用于替换的字符串 4. 'leading' | 替换后的字符串 | `replace('ababef', 'ab', 'cd', 'leading') = 'cdabef'` |
+| regex_match | 判断字符串是否与某正则表达式匹配  | 1. 原字符串 2. 正则表达式 | true 或 false | `regex_match('abc123', '[a-zA-Z1-9]*') = true` |
+| regex_replace | 替换字符串中匹配到某正则表达式的子串  | 1. 原字符串 2. 正则表达式 3. 指定用于替换的字符串 | 替换后的字符串 | `regex_replace('ab1cd3ef', '[1-9]', '[&]') = 'ab[1]cd[3]ef'`<br/><br/>`regex_replace('ccefacef', 'c+', ':') = ':efa:ef'` |
+| ascii | 返回字符对应的 ASCII 码  | 1. 字符 | 整数值，字符对应的 ASCII 码 | `ascii('a') = 97` |
+| find | 查找并返回字符串中的某个子串，从头部查找  | 1. 原字符串 2. 要查找的子串 | 查抄到的子串，如找不到则返回空字符串 | `find('eeabcabcee', 'abc') = 'abcabcee'` |
+| find | 查找并返回字符串中的某个子串，从头部查找  | 1. 原字符串 2. 要查找的子串 3. 'leading' | 查抄到的子串，如找不到则返回空字符串 | `find('eeabcabcee', 'abc', 'leading') = 'abcabcee'` |
+| find | 查找并返回字符串中的某个子串，从尾部查找  | 1. 原字符串 2. 要查找的子串 3. 'trailing' | 查抄到的子串，如找不到则返回空字符串 | `find('eeabcabcee', 'abc', 'trailing') = 'abcee'` |
 
 #### Map 函数
 
