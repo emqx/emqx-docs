@@ -15,6 +15,46 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.8
+
+*Release Date: 2021-08-10*
+
+EMQ X 4.3.8 is released now, it mainly includes the following changes:
+
+**Bug fixes:**
+
+- Fix the rule engine rule import fails
+
+  Github PR: [emqx#5512](https://github.com/emqx/emqx/pull/5512)
+
+- Fix the Path field in the Webhook action of rule engine cannot be used
+
+  Github PR: [emqx#5468](https://github.com/emqx/emqx/pull/5468)
+
+- Fix the issue that the Force Shutdown mechanism cannot take effect when the process is suspended
+
+  Github PR: [emqx#5460](https://github.com/emqx/emqx/pull/5460)
+
+- Fix the issue that the k8s deployment EMQ X cluster cannot be restarted correctly in some cases
+
+  Github PR: [emqx#5646](https://github.com/emqx/emqx/pull/5646), [emqx#5428](https://github.com/emqx/emqx/pull/5428)
+
+- Fix exproto cross-node process call error
+
+  Github PR: [emqx#5436](https://github.com/emqx/emqx/pull/5436)
+
+**Enhancement:**
+
+- Add automatic reconnection mechanism and related configuration items for request timeout for exhook to enhance reliability
+
+  Github PR: [emqx#5447](https://github.com/emqx/emqx/pull/5447)
+
+- Add disconnect retry mechanism for exproto
+
+  Github PR: [emqx#5436](https://github.com/emqx/emqx/pull/5436)
+
+> Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Vesion](https://docs.emqx.io/en/broker/v4.3/faq/error.html#incorrect-openssl-version)
+
 ## Version 4.3.7
 
 *Release Date: 2021-08-09*

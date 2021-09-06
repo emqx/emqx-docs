@@ -15,6 +15,46 @@ ref:
 
 # 版本发布
 
+## 4.3.8 版本
+
+*发布日期: 2021-08-10*
+
+EMQ X 4.3.8 现已发布，主要包含以下改动:
+
+**错误修复:**
+
+- 修复规则引擎规则导入失败的问题
+
+  Github PR: [emqx#5512](https://github.com/emqx/emqx/pull/5512)
+
+- 修复规则引擎 Webhook 动作中 Path 字段无法使用的问题
+
+  Github PR: [emqx#5468](https://github.com/emqx/emqx/pull/5468)
+
+- 修复 Force Shutdown 机制在进程挂起时无法生效的问题
+
+  Github PR: [emqx#5460](https://github.com/emqx/emqx/pull/5460)
+
+- 修复某些情况下 k8s 部署 EMQ X 集群无法正确重启的问题
+
+  Github PR: [emqx#5646](https://github.com/emqx/emqx/pull/5646), [emqx#5428](https://github.com/emqx/emqx/pull/5428)
+
+- 修复 exproto 跨节点进程间调用的错误
+
+  Github PR: [emqx#5436](https://github.com/emqx/emqx/pull/5436)
+
+**功能增强:**
+
+- 为 exhook 增加自动重连机制以及请求超时的相关配置项，增强可靠性
+
+  Github PR: [emqx#5447](https://github.com/emqx/emqx/pull/5447)
+
+- 为 exproto 增加断连重试机制
+
+  Github PR: [emqx#5436](https://github.com/emqx/emqx/pull/5436)
+
+> 注: 此版本开始 CentoOS 7 要求使用 openssl 1.1.1，openssl 升级安装办法见：[FAQ - OpenSSL 版本不正确](https://docs.emqx.cn/broker/v4.3/faq/error.html#openssl-%E7%89%88%E6%9C%AC%E4%B8%8D%E6%AD%A3%E7%A1%AE)
+
 ## 4.3.7 版本
 
 *发布日期: 2021-08-09*
