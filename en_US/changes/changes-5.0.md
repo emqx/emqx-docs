@@ -15,6 +15,20 @@ ref: undefined
 
 # Changes
 
+## Version 5.0-alpha.6
+
+*Release Date: 2021-09-10*
+
+EMQ X 5.0-alpha.6 is released now, it mainly includes the following changes:
+
+**Feature**
+
+- Support global authentication and listener authentication
+- Provides APIs to manage the gateway's listener
+- LwM2M and CoAP gateways provide client-related APIs
+- Dashboard provides authentication and blacklist pages, currently only supports HTTP Server and MySQL authentication, and the remaining authentication will be supported successively
+- Fix some bugs
+
 ## Version 5.0-alpha.5
 
 *Release Date: 2021-08-27*
