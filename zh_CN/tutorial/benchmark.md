@@ -21,7 +21,7 @@ ref:
 
 `emqtt_bench` 的运行依赖于 Erlang/OTP 21.2  以上版本运行环境，安装过程略过，详情请参考网上各个安装教程。
 
-Erlang 环境安装完成后，下载 `emqtt-bench` 最新代码，并编译：
+Erlang 环境安装完成后，下载 `emqtt-bench` 最新代码，并编译（**编译时会访问 https://hex.pm 等地址，请勿在无公网的环境中编译**）：
 
 ```bash
 git clone https://github.com/emqx/emqtt-bench
