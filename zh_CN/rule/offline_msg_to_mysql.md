@@ -33,16 +33,6 @@ CREATE TABLE `mqtt_msg` (
   PRIMARY KEY (`id`),
   INDEX topic_index(`id`, `topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
-CREATE TABLE `mqtt_acked` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `clientid` varchar(64) DEFAULT NULL,
-  `topic` varchar(180) DEFAULT NULL,
-  `mid` int(11) unsigned DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mqtt_acked_key` (`clientid`,`topic`),
-  INDEX topic_index(`id`, `topic`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
 ::: danger
