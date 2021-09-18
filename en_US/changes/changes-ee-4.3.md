@@ -8,12 +8,85 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
 
 # Release version
+
+## 4.3.4 Release
+
+*Release Date: 2021-09-18*
+
+### Enhancement
+
+- Rule engine Data bridge to pursar supports data compression
+- Extend the timeout interval for creating rules
+
+### Bug fixes
+
+- Fix rule engine data saved to InfluxDB performance issues
+- Fixes an issue where WebHook inability to configure sni caused HTTPS to not be available in some cases
+- Fix an issue where resources cannot be released after the rule is shut down by the rule engine
+- Fixes an issue where the rule engine offline messages cannot be deleted after receiving them in some cases
+
+
+
+## 4.3.3 Release
+
+*Release Date: 2021-08-16*
+
+### Enhancement
+
+- Save offline messages to Redis to support clearing residual data
+- ExHook to add automatic reconnection mechanism, timeout parameters and alternative actions
+
+### Bug fixes
+
+- Fix the rule engine can't connect to InfluxDB using HTTPS
+- Fix the rule engine data saving to InfluxDB action cannot use placeholder
+- Fix the rule engine data bridging to WebServer can not use Path
+- Repair grpc-client timeout processing logic.
+- Fix ExProto bug, add retry logic, reduce some unnecessary printing
+
+
+## 4.3.2 Release
+
+*Release Date: 2021-07-17*
+
+### Enhancement
+
+- The client adds more fields to the on/offline message
+
+### Bug fixes
+
+- Fix an issue where the LwM2M Gateway Management page could not be opened
+- Fix an issue where custom fields cannot be resolved in a resolution location escalation for the JT/T808 gateway
+- Fix an acl.conf file format error that invalidated the ACL rule
+- Fix an issue where creating a auth_ldap authentication module failed
+- Fix an issue that cannot be stopped in the case of a multilingual protocol resolution exception
+- Fix an issue where the Rule Engine was unable to create Oracle resources
+- Fix an issue where the Rule Engine failed to synchronize bulk writes to SQL Server
+
+## 4.3.1 Release
+
+*Release Date: 2021-06-05*
+
+### Enhancement
+
+- New Rule Engine Description of the TimeRange field in Offline Message Save
+
+### Bug fixes
+
+- Rule engine Problems where data cannot be written in the case of An OpenTSDB exception
+- An issue with the wrong display in the hotly upgraded version
+- MQTT-SN protocol 'cleansession'false' client loses the topicid when recovering the session
+- There is a problem with the preset module modifying the configuration after the restart
+- Dashboard rule engine editing shows an error issue
+- Dashboard navigation breadcrumbs show problems
+
+
 
 ## 4.3.0 Release
 
