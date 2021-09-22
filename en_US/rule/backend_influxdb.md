@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to InfluxDB
 
 Setup a InfluxDB database, taking Mac OSX for instance:

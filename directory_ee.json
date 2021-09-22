@@ -677,7 +677,7 @@
           "path": "modules/stomp_protocol"
         }
       ]
-    },
+    }, 
     {
       "title": "版本发布",
       "children": [

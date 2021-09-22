@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MySQL 数据存储
 
 ::: tip

@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 保存数据到 TimescaleDB
 
 搭建 TimescaleDB 数据库环境，以 MacOS X 为例:

@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to MySQL
 
 Setup a MySQL database, and changes the username/password to root/public, taking Mac OSX for instance:

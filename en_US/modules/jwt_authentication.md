@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # JWT Authentication
 
 [JWT](https://JWT.io/) Authentication is an authentication mechanism based on Token. It does not rely on the server to retain the authentication information or session information of the client. The authentication information can be issued in batches with the key. The easiest way to authenticate.

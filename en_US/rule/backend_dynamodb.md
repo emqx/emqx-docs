@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to DynamoDB
 
 Setup a DynamoDB database, taking Mac OSX for instance:

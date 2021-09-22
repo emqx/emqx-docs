@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 桥接数据到 RocketMQ
 
 搭建 RocketMQ 环境，以 MacOS X

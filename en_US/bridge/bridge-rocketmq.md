@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # RocketMQ Bridge
 
 ::: tip

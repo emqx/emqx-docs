@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Kafka 桥接
 
 ::: tip

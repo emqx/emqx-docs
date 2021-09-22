@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Pulsar 桥接
 
 ::: tip

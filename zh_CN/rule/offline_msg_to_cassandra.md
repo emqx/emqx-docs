@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 离线消息保存到 Cassandra
 
 搭建 Cassandra 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:

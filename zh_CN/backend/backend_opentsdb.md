@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # OpenTSDB 消息存储
 
 ::: tip

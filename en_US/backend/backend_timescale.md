@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Timescale Backend
 
 ::: tip

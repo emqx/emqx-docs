@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Delayed publish
 
 ## Create module

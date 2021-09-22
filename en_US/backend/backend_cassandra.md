@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Cassandra Backend
 
 ::: tip

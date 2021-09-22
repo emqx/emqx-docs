@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Kafka Consumer Group
 
 The Kafka consumer group uses external Kafka as a message queue, which can convert consumer messages from Kafka into MQTT messages and publish them in emqx.

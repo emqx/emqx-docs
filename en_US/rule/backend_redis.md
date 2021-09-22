@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to Redis
 
 Setup a Redis database, taking Mac OSX for instance:

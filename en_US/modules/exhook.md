@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Multi-language extension-hook
 
 In EMQ X Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extension Hook** module allows the use of other programming languages ​​(such as Python, Java, etc.) to directly mount hooks to the EMQ X system to receive and process the hook events of the EMQ X system to achieve the expansion and customization of EMQ X purpose. For example, users can customize using other programming languages:

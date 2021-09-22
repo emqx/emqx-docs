@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Bridge data to Pulsar
 
 Setup a Pulsar, taking Mac OSX for instance:

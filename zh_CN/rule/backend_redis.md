@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 保存数据到 Redis
 
 搭建 Redis 环境，以 MacOS X 为例:

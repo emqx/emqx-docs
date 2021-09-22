@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Kafka Bridge
 
 ::: tip

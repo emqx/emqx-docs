@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # InfluxDB 消息存储
 
 ::: tip

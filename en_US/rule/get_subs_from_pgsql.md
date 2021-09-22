@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Get subscription relationship from PostgreSQL 
 
 Set up the PostgreSQL database, and take MacOS X as an example:

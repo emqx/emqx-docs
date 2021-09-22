@@ -1,3 +1,7 @@
+---
+enterprise: true
+---
+
 # Save offline messages to MySQL
 
 Set up the MySQL database and set the user name and password to root/public. Take MacOS X as an example:

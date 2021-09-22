@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # LDAP Authentication/ACL
 LDAP authentication/access control uses an external OpenLDAP server as the authentication data source, which can store large amounts of data and facilitate integration with external device management systems.
 

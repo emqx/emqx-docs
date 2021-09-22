@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # InfluxDB Backend
 
 ::: tip

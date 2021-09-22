@@ -11,6 +11,7 @@ description:
 category: 
 # 引用
 ref:
+enterprise: true
 ---
 
 # 生命周期 EOL

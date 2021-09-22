@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MySQL Backend
 
 ::: tip

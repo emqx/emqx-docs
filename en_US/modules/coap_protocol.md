@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # CoAP Protocol Gateway
 
 The CoAP protocol gateway provides EMQ X with the access capability of the CoAP protocol. It allows publishing, subscribing, and receiving messages to EMQ X in accordance with a certain defined CoAP message format.

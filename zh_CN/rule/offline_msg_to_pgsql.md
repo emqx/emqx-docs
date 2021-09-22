@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 离线消息保存到 PostgreSQL
 
 搭建 PostgreSQL 数据库，以 MacOS X 为例:

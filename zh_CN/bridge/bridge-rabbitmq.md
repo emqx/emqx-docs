@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # RabbitMQ 桥接
 
 ::: tip

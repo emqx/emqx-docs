@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Bridge data to Kafka
 
 Setup a Kafka, taking Mac OSX for instance:

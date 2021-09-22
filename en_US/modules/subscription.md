@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MQTT proxy subscription
 
 The proxy subscription function of EMQ X enables the client to automatically establish the user's preset subscription relationship without sending additional SUBSCRIBE messages when the connection is established.

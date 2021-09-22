@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # PostgreSQL 数据存储
 
 ::: tip

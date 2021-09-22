@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to OpenTSDB
 
 Setup a OpenTSDB database, taking Mac OSX for instance:

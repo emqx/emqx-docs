@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Pulsar Bridge
 
 ::: tip

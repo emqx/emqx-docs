@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Redis Backend
 
 ::: tip

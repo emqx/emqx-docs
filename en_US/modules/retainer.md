@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MQTT retainer message
 
 ## Introduction

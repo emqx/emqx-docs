@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Builtin ACL File
 
 The builtin ACL sets rules through files, which is simple and lightweight enough to use, and is suitable for projects with predictable number of rules, no changes in demand, or small changes.

@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MongoDB Backend
 
 ::: tip

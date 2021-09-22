@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # PostgreSQL Backend
 
 ::: tip

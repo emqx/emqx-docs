@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to MongoDB
 Setup a MongoDB database, and changes the username/password to root/public, taking Mac OSX for instance:
 

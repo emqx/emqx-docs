@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 从 Redis 中获取订阅关系
 
 搭建 Redis 环境，以 MacOS X 为例:

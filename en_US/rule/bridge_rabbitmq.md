@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Bridge data to RabbitMQ
 
 Setup a RabbitMQ, taking Mac OSX for instance:

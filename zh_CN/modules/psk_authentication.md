@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # PSK 认证
 
 如果希望使用 PSK 认证，需要将 [TLS 认证](#auth-tls) 中的 `listener.ssl.external.ciphers` 注释掉，然后配置 `listener.ssl.external.psk_ciphers`：

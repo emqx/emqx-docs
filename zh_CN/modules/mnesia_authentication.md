@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 内置数据库 认证/访问控制
 
 内置数据库认证使用 EMQ X 内置 Mnesia 数据库存储客户端 Clientid/Username 与密码，支持通过 HTTP API 管理认证数据。

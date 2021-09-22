@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Cassandra 消息存储
 
 ::: tip

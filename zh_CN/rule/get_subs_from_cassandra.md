@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 从 Cassandra 中获取订阅关系
 
 搭建 Cassandra 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:

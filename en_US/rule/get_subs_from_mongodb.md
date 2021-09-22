@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Get subscription relationship from MongoDB
 
 Set up the MongoDB database and set the user name and password to root/public. Take MacOS X as an example:

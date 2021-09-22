@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Introduction to Schema Registry
 
 

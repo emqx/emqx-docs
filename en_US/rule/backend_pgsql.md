@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to PostgreSQL
 
 Setup a PostgreSQL database, taking Mac OSX for instance:

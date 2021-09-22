@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Recon
 EMQ X Recon Debug/Optimize, emqx is enabled by default recon
 

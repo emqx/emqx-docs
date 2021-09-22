@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 从 PostgreSQL 中获取订阅关系
 
 搭建 PostgreSQL 数据库，以 MacOS X 为例:

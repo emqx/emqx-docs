@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MQTT 订阅者
 
 ## 创建模块

@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # OpenTSDB Backend
 
 ::: tip

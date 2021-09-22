@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # LwM2M 协议网关
 
 ## 协议介绍

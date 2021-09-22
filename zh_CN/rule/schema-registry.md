@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 编解码（Schema Registry）介绍
 
 

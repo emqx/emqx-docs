@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # RocketMQ 桥接
 
 ::: tip

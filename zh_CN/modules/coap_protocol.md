@@ -1,3 +1,7 @@
+---
+enterprise: true
+---
+
 # CoAP 协议网关
 
 CoAP 协议网关为 EMQ X 提供了 CoAP 协议的接入能力。它允许符合某种定义的 CoAP 消息格式向 EMQ X 执行发布，订阅，和接收消息等操作。

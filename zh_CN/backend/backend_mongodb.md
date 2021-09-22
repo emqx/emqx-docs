@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MongoDB 消息存储
 
 ::: tip

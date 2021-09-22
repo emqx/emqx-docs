@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Pulsar 消费组
 
 Pulsar 消费组使用外部 Pulsar 作为消息队列，可以从 Pulsar 中消费消息转换成为 MQTT 消息发布在 emqx 中。

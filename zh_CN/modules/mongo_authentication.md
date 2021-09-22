@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # MongoDB 认证/访问控制
 
 MongoDB 认证/访问控制使⽤外部 MongoBD 数据库作为数据源，可以存储⼤量数据，同时⽅便与外部设备管理系统集成。

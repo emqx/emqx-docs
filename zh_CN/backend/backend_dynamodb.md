@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # DynamoDB 消息存储
 
 ::: tip

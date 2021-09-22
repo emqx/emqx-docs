@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # EMQ X Prometheus Agent
 
 EMQ X Prometheus Agent 支持将数据推送至 Pushgateway 中，然后再由 Promethues Server 拉取进行存储。

@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 桥接数据到 Pulsar
 
 搭建 Pulsar 环境，以 MacOS X 为例:

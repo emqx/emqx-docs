@@ -1,7 +1,7 @@
 # Telemetry
 
 ::: tip
-Telemetry was added to EMQ X in version 4.2-rc.1.
+Telemetry was added in the community(EMQ X Broker) version after 4.2.1-rc.1
 :::
 
 EMQ collects information about the usage of EMQ X through telemetry. This function is designed to provide us with comprehensive information about users and communities, as well as an understanding of how EMQ X is used. Sharing these metrics with us can help us better understand how you use our products and can continuously help us improve our products.

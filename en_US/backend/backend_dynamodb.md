@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # DynamoDB Backend
 
 ::: tip

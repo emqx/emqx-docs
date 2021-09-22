@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Redis 数据存储
 
 ::: tip

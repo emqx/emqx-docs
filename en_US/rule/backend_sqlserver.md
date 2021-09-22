@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to SQLServer
 
 Set up a SQLServer database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:

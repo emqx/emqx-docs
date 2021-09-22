@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # 桥接数据到 RabbitMQ
 
 搭建 RabbitMQ 环境，以 MacOS X 为例:

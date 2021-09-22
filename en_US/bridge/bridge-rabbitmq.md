@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # RabbitMQ Bridge
 
 ::: tip

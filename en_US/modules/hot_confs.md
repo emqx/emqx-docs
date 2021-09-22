@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Hot configuration
 
 After the hot configuration is enabled, EMQ X will copy a configuration copy from the configuration file, and all configurations that can be modified on the Dashboard will be persisted to the disk.

@@ -1,3 +1,6 @@
+---
+enterprise: true
+---
 # Save data to TimescaleDB
 
 Setup a TimescaleDB database, taking Mac OSX for instance:

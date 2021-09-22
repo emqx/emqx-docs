@@ -52,6 +52,11 @@ SELECT * FROM "t/#"
 
 后续动作创建操作可以根据你的 EMQ X 版本灵活选择。
 
+
+:::: tabs
+
+::: tab 开源版
+
 ## 原生方式（企业版）
 
 关联动作:
@@ -87,7 +92,9 @@ insert into test.t_mqtt_msg(ts, msgid, topic, qos, payload) values (now, '${id}'
 ![image-20200729174211581](./assets/rule-engine/image-20200729174211581.png)
 
 返回规则创建界面，点击 “创建”。
+:::
 
+::: tab 企业版
 
 ## 通过发送数据到 Web 服务写入
 
@@ -152,3 +159,6 @@ select * from t_mqtt_msg;
 ```
 
 ![image-20200729174914518](./assets/rule-engine/image-20200729174914518.png)
+:::
+
+::::
