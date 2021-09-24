@@ -52,7 +52,7 @@ EMQ X Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners 
 For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../configuration/configuration.md).
 
 
-:::: tabs
+:::: tabs type:card
 
 ::: tab EMQ X Community
 ## Dashboard interface

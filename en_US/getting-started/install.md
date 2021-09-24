@@ -38,7 +38,7 @@ Operating systems currently supported by EMQ X Broker:
 Linux system deployment is recommended and Windows is not recommended. Windows installation package is not available for EMQ X Enterprise.
 :::
 
-:::: tabs
+:::: tabs type:card
 
 ::: tab EMQ X Community
 

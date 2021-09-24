@@ -51,7 +51,7 @@ EMQ X Dashboard 支持 HTTP 和 HTTPS 两种 Listener，但默认只启用了监
 
 关于 Dashboard 的详细配置项说明，请参见 [配置项](../configuration/configuration.md)。
 
-:::: tabs
+:::: tabs type:card
 
 ::: tab 开源版
 ## Dashboard 界面
