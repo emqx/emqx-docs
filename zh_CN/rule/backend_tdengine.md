@@ -53,7 +53,7 @@ SELECT * FROM "t/#"
 后续动作创建操作可以根据你的 EMQ X 版本灵活选择。
 
 
-:::: tabs
+:::: tabs type:card
 
 ::: tab 开源版
 
