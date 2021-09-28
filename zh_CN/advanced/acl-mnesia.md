@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -47,13 +47,13 @@ emqx_auth_mnesia
 
 `username`和`clientid`是可选的，当两个都没有提供时，该规则适用于所有的客户端
 
-Mnesia ACL 默认不设规则，你可以使用 HTTP API 和 `emqx_ct`l 管理 ACL 规则。
+Mnesia ACL 默认不设规则，你可以使用 HTTP API 和 `emqx_ctl` 管理 ACL 规则。
 
 ## 使用 HTTP API 管理 ACL 规则
 
 ### 添加 ACL 规则
 
-+ Clinetid ACL：
++ Clientid ACL：
 
   ```bash
   # Request
@@ -180,11 +180,11 @@ POST api/v4/acl
 
 ### 查看已经添加的 ACL 规则
 
-+ Clinetid ACL：
++ Clientid ACL：
 
   ```bash
   # Request
-  GET api/v4/acl/clinetid
+  GET api/v4/acl/clientid
 
   # Response
   {
@@ -216,7 +216,7 @@ POST api/v4/acl
     "code": 0
   }
   ```
-  
+
 + Username ACL：
 
   ```bash
@@ -253,7 +253,7 @@ POST api/v4/acl
     "code": 0
   }
   ```
-  
+
 + $all ACL：
 
   ```bash
@@ -284,52 +284,68 @@ POST api/v4/acl
     "code": 0
   }
   ```
-  
+
 ### 查看指定 ACL 规则
 
-+ Clientid ACL
++ Clientid ACL:
 
   ```bash
   # Request
-  GET api/v4/acl/clientid/${clientid}
+  GET api/v4/acl/clientid/emqx_c
 
   # Response
   {
-      "data": {
+      "data": [
+        {
           "topic": "Topic/A",
           "clientid": "emqx_c",
-          "allow": true,
+          "access": "allow",
           "action": "pub"
-      },
+        },
+        {
+          "topic": "Topic/B",
+          "clientid": "emqx_c",
+          "access": "allow",
+          "action": "pub"
+        }
+      ],
       "code": 0
   }
   ```
-+ Username ACL
++ Username ACL:
 
   ```bash
   # Request
-  GET api/v4/acl/username/${username}
+  GET api/v4/acl/username/emqx_u
 
   # Response
   {
-      "data": {
+      "data": [
+        {
           "topic": "Topic/A",
           "username": "emqx_u",
-          "allow": true,
+          "access": "allow",
           "action": "pub"
-      },
+        },
+        {
+          "topic": "Topic/B",
+          "username": "emqx_u",
+          "access": "allow",
+          "action": "pub"
+        }
+      ],
       "code": 0
   }
   ```
-  
+
 ### 删除 ACL 规则
 
-+ Clinet ACL
++ Client ACL
 
   ```bash
   # Request
   # 请注意 ${topic} 需要使用 UrlEncode 编码
-  DELETE api/v4/acl/clinetid/${clientid}/topic/${topic}
+  DELETE api/v4/acl/clientid/${clientid}/topic/${topic}
 
   # Response
   {
