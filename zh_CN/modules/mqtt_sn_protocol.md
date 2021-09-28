@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # MQTT-SN 协议网关
 
 ## 协议介绍

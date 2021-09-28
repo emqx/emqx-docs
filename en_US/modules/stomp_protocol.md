@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Stomp Protocol Gateway
 
 The Stomp protocol gateway provides EMQ X with the access capability of the Stomp protocol.

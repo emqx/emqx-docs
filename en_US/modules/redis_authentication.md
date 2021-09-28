@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Redis Authentication/ACL
 
 Redis Authentication/ACL uses an external Redis database as a data source, which can store large amounts of data and facilitate integration with external device management systems.

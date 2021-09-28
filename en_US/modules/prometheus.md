@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # EMQ X Prometheus Agent
 
 EMQ X Prometheus Agent supports pushing data to Pushgateway, and then pulling it by Promethues Server for storage.

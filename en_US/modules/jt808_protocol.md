@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # JT/T808 Protocol Gateway
 
 ## Protocol Introduction

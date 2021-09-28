@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Topic Rewrite
 
 The topic rewriting function of EMQ X supports rewriting topic A to topic B when the client subscribes to topics, publishes messages, and cancels subscriptions according to user-configured rules.

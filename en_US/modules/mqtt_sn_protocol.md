@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # MQTT-SN protocol gateway
 
 ## Protocol Introduction

@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # HTTP Authentication/ACL
 
 HTTP Authentication/ACL uses an external self-built HTTP application authentication data source, and judges the authentication result based on the data returned by the HTTP API, which can implement complex authentication logic and complex ACL verification logic.

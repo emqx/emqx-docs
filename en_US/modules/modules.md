@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Module Management
 
 The EMQ X provides abundant functional modules, including authentication and authorization, protocol access, message delivery, language extension, operation and maintenance monitoring, and internal modules.

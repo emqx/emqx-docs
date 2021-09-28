@@ -220,6 +220,7 @@
     },
     {
       "title": "模块管理(EE)",
+      "enterprise": true,
       "children": [
         {
           "title": "模块介绍",
@@ -1033,6 +1034,7 @@
     },
     {
       "title": "Modules(EE)",
+      "enterprise": true,
       "children": [
         {
           "title": "Modules Introduction",
@@ -1535,6 +1537,7 @@
     },
     {
       "title": "Protocol Introduction",
+      "enterprise": true,
       "children": [
         {
           "title": "LwM2M gateway",
