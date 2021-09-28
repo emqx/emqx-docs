@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Kafka 消费组
 
 Kafka 消费组使用外部 Kafka 作为消息队列，可以从 Kafka 中消费消息转换成为 MQTT 消息发布在 emqx 中。

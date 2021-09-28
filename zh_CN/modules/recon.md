@@ -1,7 +1,5 @@
----
-enterprise: true
----
 # recon
+
 EMQ X Recon 调试/调优
 
 ## 创建模块

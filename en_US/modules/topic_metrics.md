@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Topic Metrics
 
 EMQ X provides a topic indicator statistics function, which can count the number of messages sent and received, rate and other indicators under a specified topic.

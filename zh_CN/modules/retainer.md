@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # MQTT 保留消息
 
 ## 简介

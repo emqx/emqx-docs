@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # JT/T808 协议网关
 
 ## 协议介绍

@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Builtin database authentication/ACL
 
 Builtin database authentication uses EMQ X builtin Mnesia database to store the client's Clientid/Username and password, and supports management of authentication data through HTTP API.

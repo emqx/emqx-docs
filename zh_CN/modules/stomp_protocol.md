@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # Stomp 协议网关
 
 Stomp 协议网关为 EMQ X 提供了 Stomp 协议的接入能力。

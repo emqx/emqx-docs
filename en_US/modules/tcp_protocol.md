@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # TCP protocol gateway
 
 ## Protocol Introduction

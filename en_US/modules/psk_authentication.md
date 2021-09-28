@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # PSK Authentication
 
 ## PSK certification

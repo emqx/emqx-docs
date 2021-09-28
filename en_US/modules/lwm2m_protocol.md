@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # LwM2M Protocol Gateway
 
 ## Protocol Introduction

@@ -1,6 +1,3 @@
----
-enterprise: true
----
 # MQTT subscriber
 
 ## Create module
