@@ -15,6 +15,42 @@ ref: undefined
 
 # Release version
 
+## 4.2.8 version
+
+*Release date: 2021-09-29*
+
+- Fix an issue that the rule engine failed to synchronize batch write to SQL Server
+- Fix an issue that the rule engine cannot create Oracle resources
+- Fix an issue that multi-language protocol analysis cannot be stopped under abnormal conditions
+- Fix an issue of failure to create LDAP Auth authentication module
+- Fix an issue where custom fields could not be parsed in the JT/T808 gateway parsing location report
+- Fix an issue that rule engine offline messages cannot be deleted after being received in some cases
+- Fix an issue that resources cannot be released after the rule engine is closed
+- Enhanced saving of offline messages to Redis to support clearing residual data
+- Fix an issue that the error code returned by the backend is not clear when the wrong data format is entered when searching on the client
+- Fix an issue that the client's protocol name is incorrectly displayed after the MQTT-SN client is connected
+- Fix an issue that the client process may be stuck, causing some clients to fail to connect
+- Fix an issue that the client cannot access after proxy-protocol is turned on.
+- Fix an issue where the client page displayed incorrect Socket type after proxy-protocol was turned on
+- Fix an issue of "Connection process is not alive" when calling exproto's ConnectionAdapter method across nodes in the cluster
+- Fix a bug that caused a zombie on the Kafka client due to network fluctuations
+- Webhook supports switching http-pipelining , which is disabled by default
+- Added support for ipaddrs in acl.conf
+- Optimize an issue of printing a large number of useless logs when the exproto client is disconnected
+
+## 4.2.7 version
+
+*Release date: 2021-06-17*
+
+- Fix an issue where rule engine data is saved to an openTSDB exception that cannot be written  
+- Fix A hot configuration issue cannot be performed on dashboard in a special case 
+- Fix the problem that the client of the MQTT-SN protocol cleansession-false lost topicid when restoring the session  
+- Fix MQTT-SN the client is stuck in an abnormal situation
+- Fix an issue where rule engine data is forwarded to a WebServer SSL configuration that does not take effect  
+- Fix an issue where module Kafka consumer group SSL configurations do not work  
+- Fix rule engine The problem with editing a resource that prevents the list of resources from appearing  
+- Enhanced exception handling of failed import lice
+
 ## 4.2.6 version
 
 *Release date: 2021-04-28*
@@ -41,10 +77,10 @@ ref: undefined
 
 - New rule engine update resource logic
 - Added new rule engine, data bridge to kafka supports configuration of cache size
-- Fixed the situation where the AUTH_HTTP long connection is disconnected when the Keepalive timeout period or the maximum number of requests is reached, causing the request to be lost
+- Fix the situation where the AUTH_HTTP long connection is disconnected when the Keepalive timeout period or the maximum number of requests is reached, causing the request to be lost
 - Fix the issue of WebHook SSL certificate configuration
 - Fix the problem of AuthRedis reconnection failure
-- Fixed the issue of checking MQTT Topic format when creating Kafka consumer group
+- Fix the issue of checking MQTT Topic format when creating Kafka consumer group
 - Optimize the theme statistics page moved to the module management page
 
 ## 4.2.3 version
@@ -97,7 +133,7 @@ ref: undefined
 - Rule engine Mysql/MongoDB/Cassandra/PGsql resource supports IPV6 and SSL connection
 - The rule engine "resources" supports uploading certificates
 - Rule engine "action" group
-- Fixed InfluxDB not supporting underscore characters
+- Fix InfluxDB not supporting underscore characters
 - Support dynamic creation and configuration of functional modules
 - Support more parameter hot configuration
 - Support hot upgrade between minor version numbers
