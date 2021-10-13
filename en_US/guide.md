@@ -120,8 +120,8 @@ plugins                                                            |  descriptio
 [ emqx_auth_jwt ](https://github.com/emqx/emqx-auth-jwt)           |  JWT authentication plugin                   
 [ emqx_auth_ldap ](https://github.com/emqx/emqx-auth-ldap)         |  LDAP authentication plugin                  
 [ emqx_auth_http ](https://github.com/emqx/emqx-auth-http)         |  HTTP authentication plugin                  
-[ emqx_auth_mysql ](https://github.com/emqx/emqx-auth-mysql)       |  MySQ Lauthentication plugin                 
-[ emqx_auth_pgsql ](https://github.com/emqx/emqx-auth-pgsql)       |  Postgre authentication plugin               
+[ emqx_auth_mysql ](https://github.com/emqx/emqx-auth-mysql)       |  MySQL authentication plugin                 
+[ emqx_auth_pgsql ](https://github.com/emqx/emqx-auth-pgsql)       |  PostgreSQL authentication plugin               
 [ emqx_auth_redis ](https://github.com/emqx/emqx-auth-redis)       |  Redis authentication plugin                 
 [ emqx_auth_mongo ](https://github.com/emqx/emqx-auth-mongo)       |  MongoDB authentication plugin               
 
