@@ -17,8 +17,12 @@
       "title": "开始使用",
       "children": [
         {
-          "title": "安装",
+          "title": "安装开源版",
           "path": "getting-started/install"
+        },
+        {
+          "title": "安装企业版",
+          "path": "getting-started/install-ee"
         },
         {
           "title": "启动 EMQ X",
@@ -845,6 +849,10 @@
         {
           "title": "Installation",
           "path": "getting-started/install"
+        },
+        {
+          "title": "Installation Enterprise",
+          "path": "getting-started/install-ee"
         },
         {
           "title": "Start EMQ X",
