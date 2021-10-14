@@ -115,6 +115,6 @@ HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式�
 - %m：Mountpoint
 - %t：主题
 
-::: danger 
+::: tip 
 推荐使用 POST 与 PUT 方法，使用 GET 方法时明文密码可能会随 URL 被记录到传输过程中的服务器日志中。
 :::

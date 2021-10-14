@@ -117,5 +117,4 @@ You can use the following placeholders in the authentication request, and EMQ X 
 
 ::: danger 
 The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
-
 :::

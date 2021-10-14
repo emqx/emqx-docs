@@ -38,7 +38,7 @@ CREATE TABLE mqtt_sub(
 );
 ```
 
-::: danger
+::: tip
 
 订阅关系表结构不能修改，请使用上面SQL语句创建
 

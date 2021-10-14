@@ -51,7 +51,7 @@ CREATE TABLE mqtt_acked (
 );
 ```
 
-::: danger
+::: tip
 
 The message table structure cannot be modified. Please use the above SQL statement to create
 
