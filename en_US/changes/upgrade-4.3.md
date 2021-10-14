@@ -19,6 +19,15 @@ and [behaviour changes](#important-behaviour-changes) which are summarised below
 
 ## Database migration
 
+NOTE: Please refer to [Data import and export](../advanced/data-import-and-export.md) for details.
+
+To export data from the old cluster, execute command.
+```bash
+$ emqx_ctl data export
+```
+
+This will generate a JSON file with timestamp in its name. This file will be the input of the import command.
+
 `emqx_auth_mnesia` plugin now supports rules based on both `clientid` and `username`.
 Previously only one type of filter was supported, as configured in `etc/plugins/emqx_auth_mnesia.conf` file.
 In order to import data from the previous EMQ X versions, it is necessary to specify the value of this parameter by passing it as a CLI option:
