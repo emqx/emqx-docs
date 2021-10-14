@@ -78,7 +78,7 @@ CREATE TABLE mqtt.acked (
 
 ```
 
-::: danger
+::: tip
 
 消息表结构不能修改，请使用上面SQL语句创建
 

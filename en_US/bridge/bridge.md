@@ -13,7 +13,7 @@ EMQ X can bridge and forward messages to Kafka, RabbitMQ or other EMQ X nodes. M
 
 {% emqxce %}
 
-::: danger
+::: tip
 Only the following functions are applicable in EMQ X Broker：
 
 - MQTT bridge

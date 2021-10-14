@@ -48,7 +48,7 @@ CREATE TABLE `mqtt_acked` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-::: danger
+::: tip
 
 消息表结构不能修改，请使用上面SQL语句创建
 

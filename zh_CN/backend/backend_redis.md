@@ -261,7 +261,7 @@ PUBLISH "mqtt_channel" "{\"type\": \"subscribe\", \"topic\": \"topic0\", \"clien
 PUBLISH "mqtt_channel" "{\"type\": \"unsubscribe\", \"topic\": \"test_topic0\", \"clientid\": \"test\"}"
 ```
 
-::: danger
+::: tip
 Redis Cluster 无法使用 Redis PUB/SUB 功能。
 :::
 

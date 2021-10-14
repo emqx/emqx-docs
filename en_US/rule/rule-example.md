@@ -2,7 +2,7 @@
 
 {% emqxce %}
 
-::: danger
+::: tip
 Only the following operations are applicable in EMQ X Broker:
 - Check (debug)
 - Send data to web service

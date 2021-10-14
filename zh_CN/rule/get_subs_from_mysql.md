@@ -37,7 +37,7 @@ CREATE TABLE `mqtt_sub` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-::: danger
+::: tip
 
 订阅关系表结构不能修改，请使用上面SQL语句创建
 

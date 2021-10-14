@@ -461,6 +461,10 @@
           "title": "数据存储",
           "children": [
             {
+              "title": "保存数据到 TDengine",
+              "path": "rule/backend_tdengine"
+            },
+            {
               "title": "保存数据到 MySQL",
               "path": "rule/backend_mysql"
             },
@@ -511,10 +515,6 @@
             {
               "title": "保存数据到 DolphinDB",
               "path": "rule/backend_dolphindb"
-            },
-            {
-              "title": "保存数据到 TDengine",
-              "path": "rule/backend_tdengine"
             }
           ]
         },
@@ -549,6 +549,7 @@
         },
         {
           "title": "离线消息",
+          "enterprise": true,
           "children": [
             {
               "title": "离线消息保存到 Redis",
@@ -578,6 +579,7 @@
         },
         {
           "title": "获取订阅关系",
+          "enterprise": true,
           "children": [
             {
               "title": "从 Redis 中获取订阅关系",
@@ -1271,6 +1273,10 @@
           "title": "Backends",
           "children": [
             {
+              "title": "Save data to TDengine",
+              "path": "rule/backend_tdengine"
+            },
+            {
               "title": "Save data to MySQL",
               "path": "rule/backend_mysql"
             },
@@ -1321,10 +1327,6 @@
             {
               "title": "Save data to DolphinDB",
               "path": "rule/backend_dolphindb"
-            },
-            {
-              "title": "Save data to TDengine",
-              "path": "rule/backend_tdengine"
             }
           ]
         },
@@ -1359,6 +1361,7 @@
         },
         {
           "title": "Save Offline Message",
+          "enterprise": true,
           "children": [
             {
               "title": "Save offline Message to Redis",
@@ -1384,6 +1387,7 @@
         },
         {
           "title": "Get Subscriptions",
+          "enterprise": true,
           "children": [
             {
               "title": "Get subscription from Redis",

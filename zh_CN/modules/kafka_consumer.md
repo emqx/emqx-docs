@@ -17,7 +17,7 @@ cd kafka_2.13-2.8.0
 ./bin/kafka-server-start.sh config/server.properties
 ```
 
-::: danger
+::: tip
 
 Kafka消费组不支持Kafka0.9以下版本
 

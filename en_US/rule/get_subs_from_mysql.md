@@ -38,7 +38,7 @@ CREATE TABLE `mqtt_sub` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-::: danger
+::: tip
 
 The subscription relationship table structure cannot be modified. Please use the above SQL statement to create
 

@@ -32,7 +32,7 @@ Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node
 
 {% emqxce %}
 
-::: danger
+::: tip
 EMQ X Broker 中仅适用以下操作：
 
 - MQTT 桥接

@@ -125,7 +125,7 @@ After enabling LDAP authentication, you can connect via username: mqttuser0001 a
 
 `mqttPubSubTopic` allows to subscribe/publish the topic (multiple can be configured)
 
-::: danger
+::: waring
 
 The current version only supports OpenLDAP, not Microsoft Active Directory.
 

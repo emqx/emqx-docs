@@ -17,7 +17,7 @@ broker.sys_interval = 1m
 ```
 {% emqxce %}
 
-::: danger
+::: tip
 
 {% emqxce %}
 

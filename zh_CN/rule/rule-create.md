@@ -3,7 +3,7 @@
 ### 创建 WebHook 规则
 0. 搭建 Web 服务，这里使用 `nc` 命令做一个简单的Web 服务:
 
-::: danger 
+::: waring 
 nc 命令在部分 Linux 操作系统上有问题，无法与 EMQ X 发起的 HTTP 请求连接握手成功，第 7 步可能无法正常进行。
 :::
 
