@@ -11,27 +11,15 @@ description:
 category: 
 # 引用
 ref: undefined
+enterprise: true
 ---
 
-# Installation
+# Installation Enterprise
 
-Operating systems currently supported by EMQ X Broker:
 
-+ Centos6
-+ Centos7
-+ Centos8
-+ OpenSUSE tumbleweed
-+ Debian 8
-+ Debian 9
-+ Debian 10
-+ Ubuntu 14.04
-+ Ubuntu 16.04
-+ Ubuntu 18.04
-+ Ubuntu 20.04
-+ macOS 10.13
-+ macOS 10.14
-+ macOS 10.15
-+ Windows Server 2019
+::: tips
+Linux system deployment is recommended and Windows is not recommended. Windows installation package is not available for EMQ X Enterprise.
+:::
 
 ## One-click installation of shell script (Linux)
 
@@ -45,19 +33,19 @@ sudo ./install_emqx.sh emqx-ee
 
 ### Centos
 
-1.   Install the required dependencies 
+1. Install the required dependencies 
   
       ```
       $ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
       ```
 
-2.   Set up a stable repository, taking the CentOS7 as an example. 
+2. Set up a stable repository, taking the CentOS7 as an example. 
     
       ```
       $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ee/redhat/centos/7/emqx-ee.repo
       ```
     
-3.   Install the latest version of EMQ X 
+3. Install the latest version of EMQ X 
   
       ```
       $ sudo yum install emqx-ee
@@ -65,7 +53,7 @@ sudo ./install_emqx.sh emqx-ee
     
       If prompted to accept the GPG key, confirm that the key complies with fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53 and accept the fingerprint.
     
-4.   Install a specific version of EMQ X 
+4. Install a specific version of EMQ X 
 
        1.   Query available version 
       
@@ -83,7 +71,7 @@ sudo ./install_emqx.sh emqx-ee
             $ sudo yum install emqx-ee-4.0.0
             ```
 
-5.   Start EMQ X 
+5. Start EMQ X 
   
       -  Directly start 
         
@@ -123,7 +111,7 @@ sudo ./install_emqx.sh emqx-ee
 
 ### Ubuntu、Debian
 
-1.   Install the required dependency 
+1. Install the required dependency 
   
       ```
       $ sudo apt update && sudo apt install -y \
@@ -134,7 +122,7 @@ sudo ./install_emqx.sh emqx-ee
           software-properties-common
       ```
 
-2.   Add the GPG key for EMQ X 
+2. Add the GPG key for EMQ X 
   
       ```
       $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
@@ -391,7 +379,7 @@ sudo ./install_emqx.sh emqx-ee
 
 1.  Download the zip package of the EMQ X Broker version to be installed from [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) or [Github](https://github.com/emqx/emqx/releases).
   
-2.   Unzip the installation file: 
+2. Unzip the installation file: 
   
       ```shell
       $ unzip emqx-ee-ubuntu18.04-v4.0.0.zip
