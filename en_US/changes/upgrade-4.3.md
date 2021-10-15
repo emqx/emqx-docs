@@ -3,7 +3,7 @@
 Due to database schema and inter-broker API changes, an EMQ X 4.3 node can not
 join a 4.2 cluster.
 
-he recommended way to upgrade is as follows
+The recommended way to upgrade is as follows
 
 1. Export database from one of the 4.2 nodes (see below for db export command)
 1. Create a standing-by 4.3 cluster using 4.3 configurations
