@@ -1,9 +1,9 @@
 # Upgrade from 4.2 to 4.3
 
-Due to database schema and inter-broker API changes, a EMQ X 4.3 node can not
+Due to database schema and inter-broker API changes, an EMQ X 4.3 node can not
 join a 4.2 cluster.
 
-The recommended way to upgrade is be done in below steps
+he recommended way to upgrade is as follows
 
 1. Export database from one of the 4.2 nodes (see below for db export command)
 1. Create a standing-by 4.3 cluster using 4.3 configurations
@@ -46,13 +46,13 @@ Or by editing the import file using the same format.
 
 ## Important config changes
 
-- EMQ X now tries to use tlsv1.3 by default, please make sure openssl is up to date (1.1.1), otherwise SSL related configs such as `listener.ssl.external.tls_versions` may have to be changed to remove tls1.3 from the list.
-- New configs `listener.ws.$zone.check_origin_enable` `listener.ws.$zone.allow_origin_absence` and `listener.ws.$zone.check_origins` for better websocket securty.
+- EMQ X now tries to use tlsv1.3 by default, please make sure openssl is up to date (1.1.1), otherwise SSL related configs such as `listener.ssl.external.tls_versions` may have to be changed and remove tls1.3 from the list.
+- New configs `listener.ws.$zone.check_origin_enable` ,`listener.ws.$zone.allow_origin_absence` and `listener.ws.$zone.check_origins` for better websocket security.
 - Config `listener.ws.$name.verify_protocol_header` is replaced by `listener.ws.external.fail_if_no_subprotocol` and `listener.ws.external.supported_subprotocols`
-- Config `node.heartbeat` can not be overriden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)
-- Set `log.formatter=json` to log in JSON format, but it may requre more CPU resources.
-- Set `log.single_line=true` to collect logs in one line.
-- Config `rpc.tcp_client_num` now defaults to 1. A value greater than 1 may cause messages out of order when sent between the nodes in a cluster.
+- Config `node.heartbeat` cannot be overriden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)
+- Set `log.formatter=json` to log in JSON format, it may requre more CPU resources.
+- Set `log.single_line=true` to collect log entries in single lines.
+- Config `rpc.tcp_client_num` now is set to 1 by default. A value greater than 1 may cause messages out of order when sent between the nodes in a cluster.
 
 ### Important plugin config changes
 
@@ -61,12 +61,12 @@ Or by editing the import file using the same format.
 To make it easier to understand, we use the key word REQUEST for `auth_req`，`super_req` and `acl_req`.
 
 - The config key `auth.http.REQUEST` is replaced by `auth.http.REQUEST.url`.
-- Config key `auth.http.header.<Key>` is replaced by `auth.http.REQUEST.headers.<Key> = <Value>`. i.e. it is now possible to configure different HTTP headers per REQUEST type.
+- Config key `auth.http.header.<Key>` is replaced by `auth.http.REQUEST.headers.<Key> = <Value>`. I.e. it is now possible to configure different HTTP headers per REQUEST type.
 - Config key `auth.http.REQUEST.content_type` is replaced by `auth.http.REQUEST.headers.content_type`.
 - Config key `auth.http.request.timeout` is replaced by `auth.http.timeout`.
 - Config key `auth.http.request.connect_timeout` is replaced by `auth.http.connect_timeout`.
-- The retry config keys `auth.http.request.retry_times`，`auth.http.request.retry_interval` and `auth.http.request.retry_backoff` are deleted.
-- New config `auth.http.pool_size` to support configurable pool size.
+- The config keys `auth.http.request.retry_times`，`auth.http.request.retry_interval` and `auth.http.request.retry_backoff` are deleted.
+- New config `auth.http.pool_size` for configurable pool size.
 - New config `auth.http.enable_pipelining` to enable HTTP Pipelining.
 - New security related configs: `auth.http.ssl.verify` and `auth.http.ssl.server_name_indication`.
 
@@ -90,13 +90,13 @@ Note: webhook resources and actions in rule engine are migrated by the database 
 - Config key `web.hook.api.url` is renamed to `web.hook.url`.
 - Config key `web.hook.encode_payload` is replaced by `web.hook.body.encoding_of_payload_field`
 - New security config `web.hook.ssl.verify` and `web.hook.ssl.server_name_indication`
-- New config `web.hook.pool_size` made possible to configure http connection pool size.
+- New config `web.hook.pool_size` makes possible to configure http connection pool size.
 - New config `web.hook.enable_pipelining` to enable http pipelining.
 
 ## Important behaviour changes
 
-- Logs timestamps is now RFC3339 format, make sure your log indexer is ready for this change.
-- When `round_robin` strategy is used for shared subscribe, the dispatch now starts from a random member in the group (instead of always starting from the first).
+- Log timestamp is now in RFC3339 format, make sure your log indexer is ready for this change.
+- When `round_robin` strategy is used for shared subscription, the dispatch now starts from a random member in the group (instead of always starting from the first).
 - When rule engin starts up, unavailable resources are automatically retried.
 - New MacOS package no longer supports the version older than 10.14.
 - The underlying transport protocol for `emqx_exhook` plugin (which supports developing plugins in other languages) has been changed from erlport to gRPC,
