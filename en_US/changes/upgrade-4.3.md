@@ -1,6 +1,6 @@
 # Upgrade from 4.2 to 4.3
 
-Due to database schema and inter-broker API changes, a EMQ X 4.3 node can not
+Due to database schema and inter-broker API changes, an EMQ X 4.3 node can not
 join a 4.2 cluster.
 
 The recommended way to upgrade is be done in below steps
