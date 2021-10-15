@@ -1,6 +1,6 @@
 # Upgrade from 4.2 to 4.3
 
-Due to database schema and inter-broker API changes, an EMQ X 4.3 node can not
+Due to database schema and inter-broker API changes, a EMQ X 4.3 node can not
 join a 4.2 cluster.
 
 The recommended way to upgrade is be done in below steps
@@ -81,11 +81,11 @@ To make it easier to understand, we use the key word REQUEST for `auth_req`，`s
 
 #### `emqx_auth_redis`:
 
-- SSL configs are now groupped by `.ssl` in the config path. e.g. `auth.redis.cacertfile` is now `auth.redis.ssl.cacertfile`
+- SSL configs are now groupped by `.ssl` in the config path. E.g. `auth.redis.cacertfile` is now `auth.redis.ssl.cacertfile`
 
 #### `emqx_web_hook` config changes
 
-Note: webhook resources and actions in rule engine is migrated by the database migration command.
+Note: webhook resources and actions in rule engine are migrated by the database export&import command.
 
 - Config key `web.hook.api.url` is renamed to `web.hook.url`.
 - Config key `web.hook.encode_payload` is replaced by `web.hook.body.encoding_of_payload_field`
