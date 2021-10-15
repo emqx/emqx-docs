@@ -49,14 +49,14 @@ Or by editing the import file using the same format.
 - EMQ X now tries to use tlsv1.3 by default, please make sure openssl is up to date (1.1.1), otherwise SSL related configs such as `listener.ssl.external.tls_versions` may have to be changed to remove tls1.3 from the list.
 - New configs `listener.ws.$zone.check_origin_enable` `listener.ws.$zone.allow_origin_absence` and `listener.ws.$zone.check_origins` for better websocket securty.
 - Config `listener.ws.$name.verify_protocol_header` is replaced by `listener.ws.external.fail_if_no_subprotocol` and `listener.ws.external.supported_subprotocols`
-- Config `node.heartbeat' can not be overriden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)
+- Config `node.heartbeat` can not be overriden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)
 - Set `log.formatter=json` to log in JSON format, but it may requre more CPU resources.
 - Set `log.single_line=true` to collect logs in one line.
 - Config `rpc.tcp_client_num` now defaults to 1. A value greater than 1 may cause messages out of order when sent between the nodes in a cluster.
 
 ### Important plugin config changes
 
-#### `emqx_auth_http` plugin config changes.
+#### `emqx_auth_http`
 
 To make it easier to understand, we use the key word REQUEST for `auth_req`，`super_req` and `acl_req`.
 
@@ -77,7 +77,7 @@ To make it easier to understand, we use the key word REQUEST for `auth_req`，`s
 
 #### `emqx_auth_pgsql`:
 
-- Config keys `auth.mongo.ssl_opts.*` are replaced by ` auth.mongo.ssl.*`
+- Config keys `auth.pgsql.ssl_opts.*` are replaced by ` auth.pgsql.ssl.*`
 
 #### `emqx_auth_redis`:
 
