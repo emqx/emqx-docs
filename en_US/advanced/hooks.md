@@ -164,7 +164,7 @@ emqx:unhook(Name, {Module, Function}).
 ## Callback function
 The input parameters and returned value of the callback function are shown in the following table:
 
-(For parameter data structure, see:[emqx_types.erl](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_types.erl))
+(For parameter data structure, see:[emqx_types.erl](https://github.com/emqx/emqx/blob/main-v4.3/src/emqx_types.erl))
 
 
 | Name              | input parameter                                          | Returned value    |
