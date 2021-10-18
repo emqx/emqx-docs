@@ -170,7 +170,7 @@ emqx:unhook(Name, {Module, Function}).
 
 回调函数的入参及返回值要求，见下表：
 
-(参数数据结构参见：[emqx_types.erl](https://github.com/emqx/emqx/blob/master/src/emqx_types.erl))
+(参数数据结构参见：[emqx_types.erl](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_types.erl))
 
 
 | 名称                 | 入参                                                         | 返回                |
