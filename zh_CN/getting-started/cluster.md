@@ -214,7 +214,7 @@ ListeningPort = BasePort + Offset
 举例来说, 如果 `emqx.conf` 里配置了节点名：`node.name = emqx@192.168.0.12`，那么监听端口为 `4370`，
 但对于 `emqx1` (或者 `emqx-1`) 端口就是 `4371`，以此类推。
 
-### The Cluster PRC Port
+### The Cluster RPC Port
 
 每个节点还需要监听一个 RPC 端口，也需要被防火墙也放开。跟上面说的`ekka 模式`下的集群发现端口一样，这个 RPC 端口也是约定式的。
 
