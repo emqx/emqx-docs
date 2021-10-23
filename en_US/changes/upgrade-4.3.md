@@ -17,7 +17,27 @@ can be migrated with data export and import [command](#database-migration) runs.
 There are also a few important [configuration changes](#important-config-changes)
 and [behaviour changes](#important-behaviour-changes) which are summarised below.
 
-## Database migration
+## Data migration
+
+It is recommended to take a backup of the `data` directory for each 4.2 node before
+the upgrade. The `data` directory can be located in below possible paths depending
+on different installation and configuration.
+
+* Where the environment variable `EMQX_NODE__DATA_DIR` points to
+* Where the `node.data_dir` config key points to in `emqx.conf`
+* `/opt/emqx/data` when running in docker (typically a mounted volume)
+* `<install-path>/data` when installed from zip package extraction
+* `/var/lib/emqx/data` when installed from RPM or DEB packages
+
+### Copy Data directory
+
+When upgrading from 4.2 to 4.3 in a different host,
+the `data` directory should be copied from the 4.2 host to the new 4.3 host.
+
+However due to database schema changes, the old files in `data/mnesia` should *not* be copied,
+to the 4.3 node.
+
+### Database migration
 
 NOTE: Please refer to [Data import and export](../advanced/data-import-and-export.md) for details.
 
