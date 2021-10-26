@@ -1220,6 +1220,14 @@ The FROM statement is used to select the source of the event. If the message is 
 </tbody>
 </table>
 
+#### Bit functions
+
+| Function  | Purpose                                                                                                                                                                  | Parameters                                                                                                                                                                                                                                                             | Returned value       | Example                                               |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|-------------------------------------------------------|
+| `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).                                                      | 1. The binary 2. The length of bits to get                                                                                                                                                                                                                             | The unsigned integer | `subbits(payload, 10)`                                |
+| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1.                | 1. The binary 2. The offset 3. The length of bits to get                                                                                                                                                                                                          | The unsigned integer | `subbits(payload, 1, 10)`                             |
+| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to a data type according to the arguments provided. Offsets are start from 1. | 1. The binary 2. The offset 3. The length of bits to get 4. Data Type, can be one of 'integer', 'float', 'bits' 5. Signedness, only works for integers, can be one of 'unsigned', 'signed', 6. Endianness, only works for integers, can be one of 'big', 'little' | The data got from the binary | `subbits(payload, 1, 10, 'integer', 'signed', 'big')` |
+
 #### Decoding and encoding functions
 
 
