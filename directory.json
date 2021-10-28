@@ -633,7 +633,7 @@
           "path": "tutorial/prometheus"
         },
         {
-          "title": "性能测试",
+          "title": "emqtt_bench 性能测试",
           "path": "tutorial/benchmark"
         }
       ]
@@ -1433,7 +1433,7 @@
           "path": "tutorial/prometheus"
         },
         {
-          "title": "Benchmark",
+          "title": "emqtt_bench Benchmark",
           "path": "tutorial/benchmark"
         }
       ]

@@ -11,7 +11,7 @@ EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS 或 openSUSE 
 
 ## EMQ X License 文件获取
 
-EMQ X 企业版内置了用于评估测试的 License（禁止用于生产环境），限制为 10 个客户端连接。可以联系商务或登陆 https://www.emqx.com/zh/apply-licenses/emqx 注册账号获取更大规格免费的试用 License。
+EMQ X 企业版内置了用于评估测试的 License（禁止用于生产环境），限制为 10 个客户端连接。可以联系商务或登陆 [https://www.emqx.com/zh/apply-licenses/emqx](https://www.emqx.com/zh/apply-licenses/emqx) 注册账号申请更大规格免费的试用 License。
 
 :::: tabs type:card
 
@@ -86,11 +86,9 @@ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ee/redhat/centos/7
 sudo yum install emqx-ee
 ```
 
-::: tip
-如果提示接受 GPG 密钥，请确认密钥符合 fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e640d53，如果符合，则接受该指纹。
-:::
+> 如果提示接受 GPG 密钥，请确认密钥符合 fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e640d53，如果符合，则接受该指纹。
 
-5. 安装特定版本的 EMQ X
+1. 安装特定版本的 EMQ X
 
 - 查询可用版本
 
