@@ -54,22 +54,21 @@ sudo ./install_emqx.sh emqx-ee
       If prompted to accept the GPG key, confirm that the key complies with fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53 and accept the fingerprint.
     
 4. Install a specific version of EMQ X 
+    1. Query available version 
 
-       1.   Query available version 
-      
-            ```
-            $ yum list emqx --showduplicates | sort -r
+          ```
+          $ yum list emqx --showduplicates | sort -r
             
-            emqx-ee.x86_64                     4.0.0-1.el7                        emqx-stable
-            emqx-ee.x86_64                     3.0.1-1.el7                        emqx-stable
-            emqx-ee.x86_64                     3.0.0-1.el7                        emqx-stable
-            ```
+          emqx-ee.x86_64                     4.0.0-1.el7                        emqx-stable
+          emqx-ee.x86_64                     3.0.1-1.el7                        emqx-stable
+          emqx-ee.x86_64                     3.0.0-1.el7                        emqx-stable
+          ```
 
-     1.   Install a specific version based on the version string in the second column, such as 4.0.0 
+    2. Install a specific version based on the version string in the second column, such as 4.0.0 
       
-            ```
-            $ sudo yum install emqx-ee-4.0.0
-            ```
+          ```
+          $ sudo yum install emqx-ee-4.0.0
+          ```
 
 5. Start EMQ X 
   
