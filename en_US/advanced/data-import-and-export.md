@@ -7,12 +7,11 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
 {% emqxce %}
 
 - Rule engine configuration data (resources, rules)
-- Blacklist data
-- Application data
-- Dashboard user data
+- Blacklist data (emqx-banned)
+- Management users and apsswords (hash)
 - MQTT user data and ACL data added through the emqx-auth-mnesia plugin
-- MQTT user data and ACL data added through the emqx-auth-clientid plugin
-- MQTT user data and ACL data added through the emqx-auth-username plugin
+- MQTT user data and ACL data added through the emqx-auth-clientid plugin (exported from EMQ X 4.2)
+- MQTT user data and ACL data added through the emqx-auth-username plugin (exported from EMQ X 4.2)
 
 {% endemqxce %}
 
@@ -21,14 +20,13 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
 
 - Rule engine configuration data (resources, rules)
 - Blacklist data
-- Application data
 - Dashboard user data
 - MQTT user data and ACL data added through the emqx-auth-mnesia plugin
-- MQTT user data and ACL data added through the emqx-auth-clientid plugin
-- MQTT user data and ACL data added through the emqx-auth-username plugin
-- Rule engine schema data
-- Modules data
-- Hot Configuration data
+- MQTT user data and ACL data added through the emqx-auth-clientid plugin (exported from EMQ X 4.2)
+- MQTT user data and ACL data added through the emqx-auth-username plugin (exported from EMQ X 4.2)
+- Rule engine resources and rule
+- Modules configuration
+- Configurations updated from HTTP API (or dashboard GUI)
 
 {% endemqxee %}
 

@@ -592,6 +592,10 @@
         {
           "title": "Import/Export Data",
           "path": "advanced/data-import-and-export"
+        },
+        {
+          "title": "Config and Data Backup & Restore",
+          "path": "advanced/config-and-data-backup-restore"
         }
       ]
     },
