@@ -793,7 +793,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 | Type | Optional Value                   | Default |
 | ---- | -------------------------------- | ------- |
-| enum | `off`, `file`, `console`, `both` | `both`  |
+| enum | `off`, `file`, `console`, `both` | `file`  |
 
 #### 说明
 

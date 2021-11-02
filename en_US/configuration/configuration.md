@@ -780,7 +780,7 @@ TCP tuning parameters. Socket buffer size in user mode.
 
 | Type | Optional Value                   | Default |
 | ---- | -------------------------------- | ------- |
-| enum | `off`, `file`, `console`, `both` | `both`  |
+| enum | `off`, `file`, `console`, `both` | `file`  |
 
 #### Description
 
