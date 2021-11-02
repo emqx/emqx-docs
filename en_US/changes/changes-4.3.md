@@ -15,6 +15,72 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.9
+
+*Release Date: 2021-11-02*
+
+EMQ X 4.3.9 is released now, it mainly includes the following changes:
+
+**Bug fixes:**
+
+- Fix the issue that WebHook's TLS is unavailable
+
+  Github PR: [emqx#5696](https://github.com/emqx/emqx/pull/5696)
+
+- Fix the issue that MongoDB resources do not support domain names
+
+  Github PR: [emqx#6035](https://github.com/emqx/emqx/pull/6035)
+
+- Fix the performance of ACL based on the built-in database
+
+  Github PR: [emqx#5885](https://github.com/emqx/emqx/pull/5885)
+
+- Fix the issue that the authentication based on the built-in database incorrectly transcodes the HTTP request parameters
+
+  Github PR: [emqx#5674](https://github.com/emqx/emqx/pull/5674)
+
+- Fixed the issue that the Client ID containing "\" characters could not be searched in a fuzzy manner
+
+  Github PR: [emqx#5978](https://github.com/emqx/emqx/pull/5978)
+
+- Fix the issue that variable byte integers may be larger than 4 bytes
+
+  Github PR: [emqx#5826](https://github.com/emqx/emqx/pull/5826)
+
+- Fix the issue that the rules cannot be modified in cluster
+
+  Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
+
+- Fix an issue where low priority queues may not be processed when messages are forwarded with different priorities
+
+  Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
+
+- Fix the issue that STOMP client cannot be displayed on the Dashboard page, and supports subscribing and unsubscribing operations on the page
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+- Fix the issue that the ID of the STOMP client may not be unique in the cluster
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+- Fix the authentication issue of STOMP gateway
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+**Enhancement:**
+
+- Improve client kicking mechanism
+
+  Github PR: [emqx#6030](https://github.com/emqx/emqx/pull/6030)
+
+- Add support for new cipher suites for LwM2M gateway
+
+  Github PR: [emqx#5970](https://github.com/emqx/emqx/pull/5970)
+
+- HTTP authentication plugin disable superuser requests by default
+
+  Github PR: [emqx#5567](https://github.com/emqx/emqx/pull/5567)
+
 ## Version 4.3.8
 
 *Release Date: 2021-08-10*

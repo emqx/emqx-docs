@@ -15,9 +15,75 @@ ref:
 
 # 版本发布
 
+## 4.3.9 版本
+
+*发布日期: 2021-11-02*
+
+EMQ X 4.3.9 现已发布，主要包含以下改动:
+
+**错误修复:**
+
+- 修复 WebHook TLS 不可用的问题
+
+  Github PR: [emqx#5696](https://github.com/emqx/emqx/pull/5696)
+
+- 修复 MongoDB 资源不支持域名的问题
+
+  Github PR: [emqx#6035](https://github.com/emqx/emqx/pull/6035)
+
+- 修复基于内置数据库的 ACL 的性能问题
+
+  Github PR: [emqx#5885](https://github.com/emqx/emqx/pull/5885)
+
+- 修复基于内置数据库的认证错误转码 HTTP 请求参数的问题
+
+  Github PR: [emqx#5674](https://github.com/emqx/emqx/pull/5674)
+
+- 修复包含 “\” 字符的 Client ID 无法进行模糊搜索的问题
+
+  Github PR: [emqx#5978](https://github.com/emqx/emqx/pull/5978)
+
+- 修复可变字节整数可能大于 4 字节的问题
+
+  Github PR: [emqx#5826](https://github.com/emqx/emqx/pull/5826)
+
+- 修复集群环境下无法修改规则的问题
+
+  Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
+
+- 修复使用不同优先级转发消息时低优先级队列可能无法得到处理的问题
+
+  Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
+
+- 修复 Stomp 客户端无法在 Dashboard 页面展示的问题，并支持在页面中进行订阅和取消订阅操作
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+- 修复 STOMP 客户端的 ID 在集群中可能不唯一的问题
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+- 修复 STOMP 网关的认证问题
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+**功能增强:**
+
+- 改进客户端踢除机制
+
+  Github PR: [emqx#6030](https://github.com/emqx/emqx/pull/6030)
+
+- 为 LwM2M 网关添加新加密套件的支持
+
+  Github PR: [emqx#5970](https://github.com/emqx/emqx/pull/5970)
+
+- 默认为 HTTP 认证插件关闭超级用户请求
+
+  Github PR: [emqx#5567](https://github.com/emqx/emqx/pull/5567)
+
 ## 4.3.8 版本
 
-*发布日期: 2021-08-10*
+*发布日期: 2021-09-06*
 
 EMQ X 4.3.8 现已发布，主要包含以下改动:
 
