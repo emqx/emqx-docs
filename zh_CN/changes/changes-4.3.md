@@ -39,7 +39,7 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 
   Github PR: [emqx#5674](https://github.com/emqx/emqx/pull/5674)
 
-- 修复集群环境下禁用规则时资源没有正确清理的问题
+- 修复规则引擎在集群环境下禁用规则后资源无法释放的问题
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
 

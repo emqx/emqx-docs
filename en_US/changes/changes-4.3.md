@@ -39,7 +39,7 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5674](https://github.com/emqx/emqx/pull/5674)
 
-- Fix the issue that resources are not properly cleaned up when rules are disabled in cluster
+- Fix the issue that resources cannot be released after the rule engine disables the rules in cluster
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
 
