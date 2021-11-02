@@ -21,7 +21,7 @@ ref: undefined
 
 EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
-**Bug fixes:**
+**Bug fixes (Important):**
 
 - Fix the issue that WebHook's TLS is unavailable
 
@@ -39,15 +39,7 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5674](https://github.com/emqx/emqx/pull/5674)
 
-- Fixed the issue that the Client ID containing "\" characters could not be searched in a fuzzy manner
-
-  Github PR: [emqx#5978](https://github.com/emqx/emqx/pull/5978)
-
-- Fix the issue that variable byte integers may be larger than 4 bytes
-
-  Github PR: [emqx#5826](https://github.com/emqx/emqx/pull/5826)
-
-- Fix the issue that the rules cannot be modified in cluster
+- Fix the issue that resources are not properly cleaned up when rules are disabled in cluster
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
 
@@ -66,6 +58,16 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 - Fix the authentication issue of STOMP gateway
 
   Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+**Bug fixes (Minor):**
+
+- Fixed the issue that the Client ID containing "\" characters could not be searched in a fuzzy manner
+
+  Github PR: [emqx#5978](https://github.com/emqx/emqx/pull/5978)
+
+- Fix the issue that variable byte integers may be larger than 4 bytes
+
+  Github PR: [emqx#5826](https://github.com/emqx/emqx/pull/5826)
 
 **Enhancement:**
 

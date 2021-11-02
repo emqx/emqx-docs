@@ -21,7 +21,7 @@ ref:
 
 EMQ X 4.3.9 现已发布，主要包含以下改动:
 
-**错误修复:**
+**错误修复（重要）:**
 
 - 修复 WebHook TLS 不可用的问题
 
@@ -39,15 +39,7 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 
   Github PR: [emqx#5674](https://github.com/emqx/emqx/pull/5674)
 
-- 修复包含 “\” 字符的 Client ID 无法进行模糊搜索的问题
-
-  Github PR: [emqx#5978](https://github.com/emqx/emqx/pull/5978)
-
-- 修复可变字节整数可能大于 4 字节的问题
-
-  Github PR: [emqx#5826](https://github.com/emqx/emqx/pull/5826)
-
-- 修复集群环境下无法修改规则的问题
+- 修复集群环境下禁用规则时资源没有正确清理的问题
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
 
@@ -66,6 +58,16 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 - 修复 STOMP 网关的认证问题
 
   Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+**错误修复（次要）:**
+
+- 修复包含 “\” 字符的 Client ID 无法进行模糊搜索的问题
+
+  Github PR: [emqx#5978](https://github.com/emqx/emqx/pull/5978)
+
+- 修复可变字节整数可能大于 4 字节的问题
+
+  Github PR: [emqx#5826](https://github.com/emqx/emqx/pull/5826)
 
 **功能增强:**
 
