@@ -43,10 +43,6 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
 
-- 修复使用不同优先级转发消息时低优先级队列可能无法得到处理的问题
-
-  Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
-
 **错误修复（次要）:**
 
 - 修复包含 “\” 字符的 Client ID 无法进行模糊搜索的问题
@@ -66,6 +62,10 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 - 为 LwM2M 网关添加新加密套件的支持
 
   Github PR: [emqx#5970](https://github.com/emqx/emqx/pull/5970)
+
+- 修复使用不同优先级转发消息时低优先级队列可能无法得到处理的问题
+
+  Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
 
 - 默认为 HTTP 认证插件关闭超级用户请求
 

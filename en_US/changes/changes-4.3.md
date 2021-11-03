@@ -23,15 +23,15 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
 **Bug fixes (Important):**
 
-- Fix the issue that WebHook's TLS is unavailable
+- WebHook's HTTP client SSL configuration parse
 
   Github PR: [emqx#5696](https://github.com/emqx/emqx/pull/5696)
 
-- Fix the issue that MongoDB resources do not support domain names
+- MongoDB resources allow host names
 
   Github PR: [emqx#6035](https://github.com/emqx/emqx/pull/6035)
 
-- Fix the performance of ACL based on the built-in database
+- Performance improvement for built-in database ACL (emqx_auth_mnesia)
 
   Github PR: [emqx#5885](https://github.com/emqx/emqx/pull/5885)
 
@@ -42,10 +42,6 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 - Fix the issue that resources cannot be released after the rule engine disables the rules in cluster
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
-
-- Fix an issue where low priority queues may not be processed when messages are forwarded with different priorities
-
-  Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
 
 **Bug fixes (Minor):**
 
@@ -59,13 +55,17 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
 **Enhancement:**
 
-- Improve client kicking mechanism
+- Improve client kick (forced step-down)
 
   Github PR: [emqx#6030](https://github.com/emqx/emqx/pull/6030)
 
 - Add support for new cipher suites for LwM2M gateway
 
   Github PR: [emqx#5970](https://github.com/emqx/emqx/pull/5970)
+
+- Introduced interleaving for priority queues (to avoid low priority queue stavation)
+
+  Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
 
 - HTTP authentication plugin disable superuser requests by default
 
