@@ -43,6 +43,10 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
 
+- 修复 STOMP 网关若干问题
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
 **错误修复（次要）:**
 
 - 修复包含 “\” 字符的 Client ID 无法进行模糊搜索的问题

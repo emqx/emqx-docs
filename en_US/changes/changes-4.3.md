@@ -43,6 +43,10 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
 
+- Fix some issues of STOMP gateway
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
 **Bug fixes (Minor):**
 
 - Fixed the issue that the Client ID containing "\" characters could not be searched in a fuzzy manner
