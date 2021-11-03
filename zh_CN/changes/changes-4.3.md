@@ -47,18 +47,6 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 
   Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
 
-- 修复 Stomp 客户端无法在 Dashboard 页面展示的问题，并支持在页面中进行订阅和取消订阅操作
-
-  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
-
-- 修复 STOMP 客户端的 ID 在集群中可能不唯一的问题
-
-  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
-
-- 修复 STOMP 网关的认证问题
-
-  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
-
 **错误修复（次要）:**
 
 - 修复包含 “\” 字符的 Client ID 无法进行模糊搜索的问题

@@ -47,18 +47,6 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
 
-- Fix the issue that STOMP client cannot be displayed on the Dashboard page, and supports subscribing and unsubscribing operations on the page
-
-  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
-
-- Fix the issue that the ID of the STOMP client may not be unique in the cluster
-
-  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
-
-- Fix the authentication issue of STOMP gateway
-
-  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
-
 **Bug fixes (Minor):**
 
 - Fixed the issue that the Client ID containing "\" characters could not be searched in a fuzzy manner
