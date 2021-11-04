@@ -17,11 +17,15 @@ ref: undefined
 
 ## Version 4.3.9
 
-*Release Date: 2021-11-02*
+*Release Date: 2021-11-04*
 
 EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
 **Bug fixes (Important):**
+
+- Fix the issue that calls between clusters may cause the client process to lose response
+
+  Github PR: [emqx#6062](https://github.com/emqx/emqx/pull/6062)
 
 - WebHook's HTTP client SSL configuration parse
 
