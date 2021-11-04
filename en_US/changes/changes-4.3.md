@@ -15,6 +15,66 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.9
+
+*Release Date: 2021-11-02*
+
+EMQ X 4.3.9 is released now, it mainly includes the following changes:
+
+**Bug fixes (Important):**
+
+- WebHook's HTTP client SSL configuration parse
+
+  Github PR: [emqx#5696](https://github.com/emqx/emqx/pull/5696)
+
+- MongoDB resources allow host names
+
+  Github PR: [emqx#6035](https://github.com/emqx/emqx/pull/6035)
+
+- Performance improvement for built-in database ACL (emqx_auth_mnesia)
+
+  Github PR: [emqx#5885](https://github.com/emqx/emqx/pull/5885)
+
+- Fix the issue that the authentication based on the built-in database incorrectly transcodes the HTTP request parameters
+
+  Github PR: [emqx#5674](https://github.com/emqx/emqx/pull/5674)
+
+- Fix the issue that resources cannot be released after the rule engine disables the rules in cluster
+
+  Github PR: [emqx#5731](https://github.com/emqx/emqx/pull/5731)
+
+- Fix some issues of STOMP gateway
+
+  Github PR: [emqx#6040](https://github.com/emqx/emqx/pull/6040)
+
+**Bug fixes (Minor):**
+
+- Fixed the issue that the Client ID containing "\" characters could not be searched in a fuzzy manner
+
+  Github PR: [emqx#5978](https://github.com/emqx/emqx/pull/5978)
+
+- Fix the issue that variable byte integers may be larger than 4 bytes
+
+  Github PR: [emqx#5826](https://github.com/emqx/emqx/pull/5826)
+
+**Enhancement:**
+
+- Improve client kick (forced step-down)
+
+  Github PR: [emqx#6030](https://github.com/emqx/emqx/pull/6030)
+
+- Add support for new cipher suites for LwM2M gateway
+
+  Github PR: [emqx#5970](https://github.com/emqx/emqx/pull/5970)
+
+- Introduced interleaving for priority queues (to avoid low priority queue stavation)
+
+  Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
+
+- HTTP authentication plugin disable superuser requests by default
+
+  Github PR: [emqx#5567](https://github.com/emqx/emqx/pull/5567)
+
 ## Version 4.3.8
 
 *Release Date: 2021-08-10*
