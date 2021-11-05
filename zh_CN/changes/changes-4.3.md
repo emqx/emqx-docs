@@ -23,6 +23,10 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 
 **错误修复（重要）:**
 
+- 修复集群间调用可能导致客户端进程失去响应的问题
+
+  Github PR: [emqx#6062](https://github.com/emqx/emqx/pull/6062)
+
 - 修复 WebHook TLS 不可用的问题
 
   Github PR: [emqx#5696](https://github.com/emqx/emqx/pull/5696)
@@ -67,7 +71,7 @@ EMQ X 4.3.9 现已发布，主要包含以下改动:
 
   Github PR: [emqx#5970](https://github.com/emqx/emqx/pull/5970)
 
-- 修复使用不同优先级转发消息时低优先级队列可能无法得到处理的问题
+- 支持优先级队列的交错（以避免低优先级队列枯竭）
 
   Github PR: [emqx#5666](https://github.com/emqx/emqx/pull/5666)
 
