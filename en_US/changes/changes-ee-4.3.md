@@ -26,6 +26,7 @@ ref: undefined
 - Introduced interleaving for priority queues (to avoid low priority queue stavation)
 - HTTP authentication plugin disable superuser requests by default
 - Improve InfluxDB write performance
+- InfluxDB Tag Name and Field Name support the use of placeholders
 
 ### Important fixes
 
