@@ -15,6 +15,28 @@ ref:
 
 # 版本发布
 
+## 4.3.10 版本
+
+*发布日期: 2021-11-11*
+
+EMQ X 4.3.10 现已发布，主要包含以下改动:
+
+**错误修复（重要）:**
+
+- 修复 STOMP 网关热升级失败
+
+  Github PR: [emqx#6110](https://github.com/emqx/emqx/pull/6110)
+
+- 修复通过 Dashboard 修改监听器配置后 emqx 将无法启动的问题
+
+  Github PR: [emqx#6121](https://github.com/emqx/emqx/pull/6121)
+
+**功能增强:**
+
+- 为 MQTT 客户端引入压力反馈
+
+  Github PR: [emqx#6065](https://github.com/emqx/emqx/pull/6065)
+
 ## 4.3.9 版本
 
 *发布日期: 2021-11-02*

@@ -15,6 +15,28 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.10
+
+*Release Date: 2021-11-11*
+
+EMQ X 4.3.10 is released now, it mainly includes the following changes:
+
+**Bug fixes (Important):**
+
+- Fix STOMP gateway live-upgrade failure
+
+  Github PR: [emqx#6110](https://github.com/emqx/emqx/pull/6110)
+
+- Fix the issue that emqx cannot start after updating the listener configuration through Dashboard
+
+  Github PR: [emqx#6121](https://github.com/emqx/emqx/pull/6121)
+
+**Enhancement:**
+
+- Introduced pushback for MQTT clients
+
+  Github PR: [emqx#6065](https://github.com/emqx/emqx/pull/6065)
+
 ## Version 4.3.9
 
 *Release Date: 2021-11-04*
