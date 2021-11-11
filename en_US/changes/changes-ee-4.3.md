@@ -15,6 +15,37 @@ ref: undefined
 
 # Release version
 
+## 4.3.5 Release
+
+*Release Date: 2021-11-05*
+
+### Enhancement
+
+- Improve client kick (forced step-down)
+- Add support for new cipher suites for LwM2M gateway
+- Introduced interleaving for priority queues (to avoid low priority queue stavation)
+- HTTP authentication plugin disable superuser requests by default
+- Improve InfluxDB write performance
+- InfluxDB Tag Name and Field Name support the use of placeholders
+
+### Important fixes
+
+- Fix the issue that calls between clusters may cause the client process to lose response
+- WebHook's HTTP client SSL configuration parse
+- MongoDB resources allow host names
+- Performance improvement for built-in database ACL (emqx_auth_mnesia)
+- Fix the issue that the authentication based on the built-in database incorrectly transcodes the HTTP request parameters
+- Fix the issue that the MySQL authentication module may fail to start
+- Fix some issues of STOMP gateway
+
+### Minor fixes
+
+- Fix the wrong status of Kafka and MongoDB resources of the rule engine
+- Fixed the issue that the Client ID containing "\" characters could not be searched in a fuzzy manner
+- Fix the issue that variable byte integers may be larger than 4 bytes
+- Fix the issue that duplicate modules may be added
+- Fix the issue that the Listener cannot be restarted on the Dashboard
+
 ## 4.3.4 Release
 
 *Release Date: 2021-09-18*
