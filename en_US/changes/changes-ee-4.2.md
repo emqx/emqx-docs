@@ -15,6 +15,28 @@ ref: undefined
 
 # Release version
 
+## 4.2.9 Version
+
+*发布日期: 2021-11-12*
+
+### Enhancement
+
+- Improve client kick (forced step-down)
+
+### Important fixes
+
+- Fix the issue that calls between clusters may cause the client process to lose response
+- Fix the issue that modules reporting errors after multiple startups and shutdowns
+- Fix the issue that lock release may cause the client process to crash in some cases
+
+### Minor fixes
+
+- MongoDB resources allow host names
+- Fixed the issue that the Client ID containing "\\" characters could not be searched in a fuzzy manner
+- Fix the issue that variable byte integers may be larger than 4 bytes
+- Fix the issue that the same module may be added repeatedly
+- Fixed the issue that the new configuration actually took effect after modifying the Action-related configuration in Dashboard, but the Dashboard did not refresh the display
+
 ## 4.2.8 version
 
 *Release date: 2021-09-29*
