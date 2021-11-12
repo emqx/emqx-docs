@@ -17,7 +17,7 @@ ref: undefined
 
 ## 4.2.9 Version
 
-*发布日期: 2021-11-12*
+*Release date: 2021-11-12*
 
 ### Enhancement
 
@@ -32,6 +32,7 @@ ref: undefined
 ### Minor fixes
 
 - MongoDB resources allow host names
+- Fix some issues of MongoDB authentication module
 - Fixed the issue that the Client ID containing "\\" characters could not be searched in a fuzzy manner
 - Fix the issue that variable byte integers may be larger than 4 bytes
 - Fix the issue that the same module may be added repeatedly
