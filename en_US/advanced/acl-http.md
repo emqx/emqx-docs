@@ -33,7 +33,7 @@ To enable HTTP ACL, the following needs to be configured in `etc/plugins/emqx_au
 
 EMQ X Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP statusCode .
 
- - Authorization denied: API returns 4xx status code
+ - Authorization denied: The API returns status codes other than 200
  - Authorization succeeded: API returns 200 status code
  - Authorization ignored: API returns 200 status code with the message body of ignore
 
