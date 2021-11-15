@@ -131,7 +131,6 @@ Any  ACL authentication eventually returns a result:
 - Ignore: No ACL permission information was found, and the result could not be explicitly determined as allowed or denied. It will be determined by the next ACL plugin or the default ACL rule.
 
 
-
 ## Global Configuration
 
 In the default configuration, ACL is open for authentication, which means when the authentication result is **ignore**, the client is allowed to pass the authentication.
