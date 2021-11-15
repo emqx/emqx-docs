@@ -35,7 +35,7 @@ CREATE TABLE mqtt_sub(
 );
 ```
 
-::: danger
+::: tip
 
 The subscription relationship table structure cannot be modified. Please use the above SQL statement to create
 

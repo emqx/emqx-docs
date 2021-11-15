@@ -37,7 +37,7 @@ create table mqtt_msg (
 	arrived Int64) engine = MergeTree() ORDER BY msgid;
 ```
 
-::: danger
+::: tip
 
 消息表结构不能修改，请使用上面SQL语句创建
 

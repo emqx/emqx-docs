@@ -53,7 +53,7 @@ CREATE TABLE mqtt.mqtt_msg (
     AND speculative_retry = '99PERCENTILE';
 
 ```
-::: danger
+::: tip
 
 The message table structure cannot be modified. Please use the above SQL statement to create
 
