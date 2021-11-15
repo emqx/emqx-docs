@@ -13,7 +13,7 @@ category:
 ref:
 ---
 
-::: danger
+::: tip
 EMQ X Broker 中仅适用以下操作：
 - 检查 (调试)
 - 发送数据到 Web 服务
