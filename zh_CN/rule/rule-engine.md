@@ -666,7 +666,7 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 
 | event           | 事件类型，固定为 "client.disconnected"                       |
 | --------------- | :----------------------------------------------------------- |
-| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout: keepalive 超时<br/>not_authorized:  认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed: 协议错误<br/>internal_error: 畸形报文解析出错<br/> |
+| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout: keepalive 超时<br/>not_authorized:  认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed: 对端关闭了网络连接<br/>internal_error: 畸形报文或其他未知错误<br/> |
 | clientid        | 消息目的 Client ID                                           |
 | username        | 消息目的用户名                                               |
 | peername        | 终端的 IPAddress 和 Port                                     |
