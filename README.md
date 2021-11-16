@@ -1,6 +1,6 @@
 # EMQ X Documentation
 
-[![Slack Invite](<https://slack-invite.emqx.io/badge.svg>)](https://slack-invite.emqx.io)
+[![Slack](https://img.shields.io/badge/Slack-EMQ%20X-39AE85?logo=slack)](https://slack-invite.emqx.io/)
 [![Twitter](https://img.shields.io/badge/Twitter-EMQ-1DA1F2?logo=twitter)](https://twitter.com/EMQTech)
 [![Reddit](https://img.shields.io/badge/Reddit-EMQ%20X-orange?logo=reddit)](https://www.reddit.com/r/emqx/)
 
@@ -23,6 +23,20 @@ If you find EMQ X documentation issues, please create an Issue to let us know or
 
 See [EMQ X Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a contributor!
 
+
+## Preview with docker
+
+```sh
+docker pull ghcr.io/emqx/docs-frontend:latest
+
+docker container run -p 8080:8080 -it \
+-v $(pwd)/directory.json:/app/docs/.vuepress/config/directory.json \
+-v $(pwd)/en_US:/app/docs/en/emqx/latest \
+-v $(pwd)/zh_CN:/app/docs/zh/emqx/latest \
+ghcr.io/emqx/docs-frontend:latest
+```
+
+Now, open <http://localhost:8080/en/emqx/latest/>, if `directory.json` has been updated, you can rerun `docker container run` to update the docs.
 
 ## Community
 
