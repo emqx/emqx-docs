@@ -72,7 +72,7 @@ Or by editing the import file using the same format.
 - Config `node.heartbeat` cannot be overriden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)
 - Set `log.formatter=json` to log in JSON format, it may requre more CPU resources.
 - Set `log.single_line=true` to collect log entries in single lines.
-- Config `rpc.tcp_client_num` now is set to 1 by default. A value greater than 1 may cause messages out of order when sent between the nodes in a cluster.
+- Config `rpc.tcp_client_num` now is set to 1 by default.
 
 ### Important plugin config changes
 
@@ -121,4 +121,3 @@ Note: webhook resources and actions in rule engine are migrated by the database 
 - New MacOS package no longer supports the version older than 10.14.
 - The underlying transport protocol for `emqx_exhook` plugin (which supports developing plugins in other languages) has been changed from erlport to gRPC,
   meaning it will not able to communicate with extension plugins develped for 4.2.
-
