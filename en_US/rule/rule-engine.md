@@ -504,7 +504,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 
 | event            | Event type, fixed at "client.disconnected"                   |
 | ---------------- | :----------------------------------------------------------- |
-| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: bad protocol<br/>internal_error: malformed message parsing error<br/> |
+| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: the peer has closed the network connection<br/>internal_error: malformed message or other unknown errors<br/> |
 | clientid         | client ID                                                    |
 | username         | Current MQTT username                                        |
 | peername         | IPAddress and Port of terminal                               |
