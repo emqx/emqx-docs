@@ -149,3 +149,12 @@ Here are some examples of system topics, for a complete list of system topic ple
 - $SYS/brokers/${node}/clients/${clientid}/connected: this message is published when a client connects
 - $SYS/broker/${node}/stats/connections/count: Number of connections on a node
 - $SYS/broker/${node}/stats/sessions/count: Number of sessions on a node
+
+
+## Why can the client without username and password still connect after authentication is enabled?
+
+**Tags:** [*Auth*](tags.md#auth)
+
+EMQ X supports anonymous authentication and is enabled by default. After authentication is enabled, clients without username and password will successfully login using anonymous authentication. To change this behavior, you need to modify the `allow_anonymous` configuration item in `emqx.conf`, set it to false, and then restart EMQ X.
+
+Note: If your client is connected to port 11883, you need to modify `zone.internal.allow_anonymous`. For the relevant knowledge of Zone and Listener, please refer to [Configuration](../getting-started/config.md).

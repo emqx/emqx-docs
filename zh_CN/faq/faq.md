@@ -216,3 +216,12 @@ WebSocket 是一种在基于 HTTP 协议上支持全双工通讯的协议，通�
 - \$SYS/brokers/\${node}/clients/${clientid}/connected: 当客户端连接时发送的客户端信息
 - \$SYS/broker/${node}/stats/connections/count: 当前客户端总数
 - \$SYS/broker/${node}/stats/sessions/count: 当前会话总数
+
+
+## 为什么开启认证后，客户端还是可以不需要用户名密码就能连接？
+
+**标签:** [*认证鉴权*](tags.md#认证鉴权)
+
+EMQ X 支持匿名认证，并默认启用。开启认证后，未指定用户名密码的客户端将以匿名认证的方式成功登录。想要更改这一行为，需要修改 emqx.conf 文件中的 `allow_anonymous` 配置项，将其设为 false，然后重启 EMQ X 即可。
+
+注：如果您的客户端连接的是 11883 端口，则需要修改 `zone.internal.allow_anonymous`，Zone 与 Listener 的相关知识可参阅 [配置说明](../getting-started/config.md)。
