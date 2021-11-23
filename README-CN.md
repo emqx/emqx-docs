@@ -25,16 +25,10 @@ EMQ X 是一款完全开源，高度可伸缩，高可用的分布式 [MQTT](htt
 
 文档编写时需要注意的相关事项，可查看我们的 [文档贡献指南](./CONTRIBUTING-CN.md)。
 
-## 使用 Docker 预览
+## 预览
 
 ```sh
-docker pull ghcr.io/emqx/docs-frontend:latest
-
-docker container run -p 8080:8080 -it \
--v $(pwd)/directory.json:/app/docs/.vuepress/config/directory.json \
--v $(pwd)/en_US:/app/docs/en/emqx/latest \
--v $(pwd)/zh_CN:/app/docs/zh/emqx/latest \
-ghcr.io/emqx/docs-frontend:latest
+./preview.sh 8080
 ```
 
 现在浏览器打开 <http://localhost:8080/zh/emqx/latest/>, 如果更新了 `directory.json` 文件, 你需要重新运行 `docker container run` 命令。

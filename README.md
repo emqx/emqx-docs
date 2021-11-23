@@ -24,16 +24,10 @@ If you find EMQ X documentation issues, please create an Issue to let us know or
 See [EMQ X Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a contributor!
 
 
-## Preview with docker
+## Preview
 
 ```sh
-docker pull ghcr.io/emqx/docs-frontend:latest
-
-docker container run -p 8080:8080 -it \
--v $(pwd)/directory.json:/app/docs/.vuepress/config/directory.json \
--v $(pwd)/en_US:/app/docs/en/emqx/latest \
--v $(pwd)/zh_CN:/app/docs/zh/emqx/latest \
-ghcr.io/emqx/docs-frontend:latest
+./preview.sh 8080
 ```
 
 Now, open <http://localhost:8080/en/emqx/latest/>, if `directory.json` has been updated, you can rerun `docker container run` to update the docs.
