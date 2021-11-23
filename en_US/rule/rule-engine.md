@@ -180,11 +180,11 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     ```
 - Extract the x field from the payload of message with any topic and create the alias x for use in the WHERE clause. The WHERE clause is restricted as x = 1. Note that the payload must be in JSON format. Example: This SQL statement can match the payload `{"x": 1}`, but can not match to the payload `{"x": 2}`:
     ```sql
-  SELECT payload as p FROM "#" WHERE p.x = 1
+  SELECT payload FROM "#" WHERE payload.x = 1
   ```
 - Similar to the SQL statement above, but nested extract the data in the payload, this SQL statement can match the payload{"x": {"y": 1}}`:
     ```sql
-    SELECT payload as a FROM "#" WHERE a.x.y = 1
+    SELECT payload FROM "#" WHERE payload.x.y = 1
     ```
 -  Try to connect when clientid = 'c1', extract its source IP address and port number:
     ```sql
@@ -207,6 +207,8 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     SELECT * FROM "t/1", "t/2".
     ```
 - You can use the `"." `Symbol to nest select payloads
+- If possible, don't create alias for payload, as this would cause performance degradations.
+  i.e. Do not use `SELECT payload as p`
 :::
 
 #### Examples of FOREACH-DO-INCASE
