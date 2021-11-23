@@ -1,6 +1,6 @@
 # EMQ X 文档
 
-[![Slack Invite](<https://slack-invite.emqx.io/badge.svg>)](https://slack-invite.emqx.io)
+[![Slack](https://img.shields.io/badge/Slack-EMQ%20X-39AE85?logo=slack)](https://slack-invite.emqx.io/)
 [![Twitter](https://img.shields.io/badge/Twitter-EMQ-1DA1F2?logo=twitter)](https://twitter.com/EMQTech)
 [![Reddit](https://img.shields.io/badge/Reddit-EMQ%20X-orange?logo=reddit)](https://www.reddit.com/r/emqx/)
 
@@ -25,6 +25,19 @@ EMQ X 是一款完全开源，高度可伸缩，高可用的分布式 [MQTT](htt
 
 文档编写时需要注意的相关事项，可查看我们的 [文档贡献指南](./CONTRIBUTING-CN.md)。
 
+## 使用 Docker 预览
+
+```sh
+docker pull ghcr.io/emqx/docs-frontend:latest
+
+docker container run -p 8080:8080 -it \
+-v $(pwd)/directory.json:/app/docs/.vuepress/config/directory.json \
+-v $(pwd)/en_US:/app/docs/en/emqx/latest \
+-v $(pwd)/zh_CN:/app/docs/zh/emqx/latest \
+ghcr.io/emqx/docs-frontend:latest
+```
+
+现在浏览器打开 <http://localhost:8080/zh/emqx/latest/>, 如果更新了 `directory.json` 文件, 你需要重新运行 `docker container run` 命令。
 
 ## 联系我们
 
