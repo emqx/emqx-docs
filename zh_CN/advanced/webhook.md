@@ -39,7 +39,7 @@ Webhook 的配置文件位于 `etc/plugins/emqx_web_hook.conf`，配置项的详
 
 ## 触发规则
 
-在 `etc/plugins/emqx_web_hooks.conf` 可配置触发规则，其配置的格式如下：
+在 `etc/plugins/emqx_web_hook.conf` 可配置触发规则，其配置的格式如下：
 
 ```bash
 ## 格式示例
