@@ -1067,11 +1067,15 @@ The maximum allowed length of  Client ID  string.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | 0       |
+| integer | 128     |
 
 #### Description
 
 The maximum allowed level of topics for client subscription. 0 means no limit.
+
+::: warning Warning
+Too many topic levels may cause performance problems during subscription.
+:::
 
 
 
@@ -1289,6 +1293,10 @@ The maximum length of Client ID string.
 #### Description
 
 The maximum allowed level of topics for client subscription. 0 means no limit.
+
+::: warning Warning
+Too many topic levels may cause performance problems during subscription.
+:::
 
 
 
