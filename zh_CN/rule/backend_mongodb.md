@@ -12,11 +12,11 @@
 
 在进入下一步之前，我们还需要在 `Database Access` 和 `Network Access` 页面配置用户密码和 IP 访问白名单以确保能成功访问。
 
-#### 创建资源
+## 创建资源
 
 完成以上工作后，接下来我们将在 EMQ X Dashboard 中完成 MongoDB 资源和规则的创建。
 
-首先打开 [EMQ X Dashboard]()，进入规则引擎的资源页面，点击左上角的创建按钮，将弹出 **创建资源** 表单，在表单中的 **资源类型** 下拉框中我们可以看到 **MongoDB 单节点模式**、**MongoDB Relica Set 模式**和 **MongoDB Sharded 模式**三个资源类型，分别对应 MongoDB 的三种部署方式。
+首先打开 EMQ X Dashboard，进入规则引擎的资源页面，点击左上角的创建按钮，将弹出 **创建资源** 表单，在表单中的 **资源类型** 下拉框中我们可以看到 **MongoDB 单节点模式**、**MongoDB Relica Set 模式**和 **MongoDB Sharded 模式**三个资源类型，分别对应 MongoDB 的三种部署方式。
 
 ![image-20211126200858453](./assets/rule-engine/mongo_data_to_store3.png)
 
@@ -39,7 +39,7 @@
 
 根据是否启用 SRV Record，我们可以使用以下两种方式配置 MongoDB 资源：
 
-##### 启用 SRV Record
+### 启用 SRV Record
 
 MongoDB Cloud 默认提供了一个已经添加了 SRV 和 TXT 记录的域名以供连接。
 
@@ -61,7 +61,7 @@ MongoDB Cloud 默认提供了一个已经添加了 SRV 和 TXT 记录的域名�
 
 ![image-20211129113336183](./assets/rule-engine/mongo_data_to_store7.png)
 
-##### 不启用 SRV Record
+### 不启用 SRV Record
 
 如果我们选择不启用 SRV Record，那么在副本集和分片模式下我们就需要将 MongoDB 集群的所有节点地址都填写到 **MongoDB 服务器** 选项中，并且在副本集模式下还必须指定副本集名称。
 
@@ -95,11 +95,9 @@ cluster0.j0ehi.mongodb.net      text = "authSource=admin&replicaSet=atlas-r36spx
 
 最后，我们同样点击 **创建资源** 表单最下方的 **确定** 按钮以完成创建。
 
+## 创建规则
 
-
-#### 创建规则
-
-##### 1. 配置 SQL
+### 1. 配置 SQL
 
 资源创建完成后，我们还需创建相应的规则。点击规则页面左上角的 **创建** 按钮进入 **创建规则** 页面，输入以下 SQL：
 
@@ -118,15 +116,13 @@ FROM
 
 ![image-20211129150342611](./assets/rule-engine/mongo_data_to_store9.png)
 
-##### 2. 添加响应动作
+### 2. 添加响应动作
 
 点击 **添加动作** 按钮，**动作类型** 选择数据持久话和保存数据到 MongoDB，然后在 **使用资源** 下拉列表选择一个我们刚刚创建的资源。**Collection** 按需配置，这里我配置为 demo。**消息内容模板 ** 保持为空，表示将 SQL 筛选出来的数据，以 Key-Value 列表的形式转换为 Json 数据写入 MongoDB。每条规则里面都可以添加多个响应动作，这里我们只需要用到一个响应动作，所以添加完以下动作时，就可以点击页面最下方的 **创建** 按钮完成规则的创建。
 
 ![image-20211129151712310](./assets/rule-engine/mongo_data_to_store10.png)
 
-
-
-#### 测试验证
+## 测试验证
 
 我们直接使用 Dashboard 中的 MQTT 客户端工具来发布一条消息。本示例中我们将消息主题改为 `t/1` 以命中我们设置的规则，Payload 和 QoS 保持不变，然后点击 **发布**。
 
