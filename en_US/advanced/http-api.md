@@ -480,7 +480,42 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 {"code":0}
 ```
 
+### PUT /api/v4/clients/{clientid}/keepalive
+
+Set the keepalive time (in seconds) for the specified client.
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                                           |
+| -------- | ------- | :------: | ----------------------------------------------------- |
+| interval | Integer |   True   | seconds：0～65535，0 means keepalive check is disable |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+Update the specified client(example) Keepalive to 10 seconds
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
+
+{"code":0}
+```
+
+### 
+
 ### Subscription Information
+
 #### GET /api/v4/subscriptions 
 Returns all subscription information under the cluster, and supports paging mechanism
 
