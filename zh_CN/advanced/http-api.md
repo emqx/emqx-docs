@@ -503,6 +503,40 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 {"code":0}
 ```
 
+### PUT /api/v4/clients/{clientid}/keepalive
+
+设置指定客户端的keepalive时间（秒）。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                            |
+| -------- | ------- | :------: | -------------------------------------- |
+| interval | Integer |   True   | 秒：0～65535，0表示不启动keepalive检查 |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+更新指定客户端（example）keepalive为10秒
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
+
+{"code":0}
+```
+
+### 
+
 ## 订阅信息
 
 ### GET /api/v4/subscriptions
