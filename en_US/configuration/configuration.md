@@ -2810,7 +2810,7 @@ Configure the listening address of the MQTT/WS listener named `external`.
 
 #### Description
 
-WebSocket's MQTT protocol path. So the address of EMQ X Broker's WebSocket is: `ws://<ip>:<port>/mqtt`.
+WebSocket's MQTT protocol path. So the address of EMQ X Broker's WebSocket is: `ws://{ip}:{port}/mqtt`.
 
 
 

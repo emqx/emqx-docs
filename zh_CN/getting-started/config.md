@@ -53,7 +53,7 @@ EMQ X 的配置文件通常以 `.conf` 作为后缀名，你可以在 `etc` 目�
 - 采用类似 sysctl 的 k = v 通用格式
 - 单个配置项的所有信息都在同一行内，换行意味着创建一个新的配置项
 - 键可以通过 `.` 进行分层，支持按树形结构管理配置项
-- 值的类型可以是 `integer`, `fload`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
+- 值的类型可以是 `integer`, `float`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
 - 任何以＃开头的行均被视为注释
 
 **示例：**
@@ -82,7 +82,7 @@ mqtt.max_packet_size = 1MB
 
 **ip**
 
-当你看到某个配置项的数据类型为 `ip` 时，意味着你可以使用 `<IP>:<Port>` 的形式来设置该配置项，例如 `0.0.0.0:1883`。
+当你看到某个配置项的数据类型为 `ip` 时，意味着你可以使用 `{ip}:{port}` 的形式来设置该配置项，例如 `0.0.0.0:1883`。
 
 **string**
 

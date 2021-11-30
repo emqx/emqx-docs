@@ -2849,7 +2849,7 @@ TCP 缓冲区大小 (用户级)。
 
 #### 说明
 
-WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws://<ip>:<port>/mqtt`。
+WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws://{ip}:{port}/mqtt`。
 
 <br />
 
