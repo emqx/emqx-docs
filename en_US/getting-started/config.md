@@ -42,7 +42,7 @@ Usually we will list all its optional values near the configuration item of type
 
 **ip**
 
-When you see that the data type of a configuration item is `ip`, it means that you can set the configuration item in the form of <IP>: <Port>`, for example, `0.0.0.0: 1883`.
+When you see that the data type of a configuration item is `ip`, it means that you can set the configuration item in the form of `<ip>:<port>`, for example, `0.0.0.0:1883`.
 
 **string**
 
