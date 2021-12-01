@@ -354,29 +354,6 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"recv_cnt":4,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":3,"created_at":"2020-02-20 13:38:51","reductions":5994,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":3,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":0,"mqueue_len":0,"recv_oct":33,"connected_at":"2020-02-20 13:38:51","clean_start":true,"clientid":"example","connected":true,"port":54889,"send_oct":8,"zone":"external"}],"code":0}
 ```
 
-#### DELETE /api/v4/nodes/{node}/clients/{clientid} 
-Similar with [DELETE /api/v4/clients/{clientid}](#endpoint-delete-a-client)，kick out the specified client under the specified node.
-
-**Path Parameters:**
-
-| Name   | Type | Required | Description |
-| ------ | --------- | -------- |  ---- |
-| clientid  | String | True | ClientID |
-
-**Success Response Body (JSON):**
-
-| Name | Type | Description |
-| ---- | --------- | ----------- |
-| code | Integer   | 0         |
-
-**Examples:**
-
-```bash
-$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/clients/example"
-
-{"code":0}
-```
-
 #### GET /api/v4/clients/username/{username} 
 Query client information by Username. Since there may be multiple clients using the same user name, multiple client information may be returned at the same time.
 
@@ -480,7 +457,40 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 {"code":0}
 ```
 
+### PUT /api/v4/clients/{clientid}/keepalive
+
+Set the keepalive time (in seconds) for the specified client.
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                                           |
+| -------- | ------- | :------: | ----------------------------------------------------- |
+| interval | Integer |   True   | seconds：0～65535，0 means keepalive check is disable |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+Update the specified client(example) Keepalive to 10 seconds
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
+
+{"code":0}
+```
+
 ### Subscription Information
+
 #### GET /api/v4/subscriptions 
 Returns all subscription information under the cluster, and supports paging mechanism
 

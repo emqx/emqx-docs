@@ -372,30 +372,6 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"recv_cnt":4,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":3,"created_at":"2020-02-20 13:38:51","reductions":5994,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":3,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":0,"mqueue_len":0,"recv_oct":33,"connected_at":"2020-02-20 13:38:51","clean_start":true,"clientid":"example","connected":true,"port":54889,"send_oct":8,"zone":"external"}],"code":0}
 ```
 
-### DELETE /api/v4/nodes/{node}/clients/{clientid}
-
-类似 [DELETE /api/v4/clients/{clientid}](#endpoint-delete-a-client)，踢除指定节点下的指定客户端。
-
-**Path Parameters:**
-
-| Name   | Type | Required | Description |
-| ------ | --------- | -------- |  ---- |
-| clientid  | String | True | ClientID |
-
-**Success Response Body (JSON):**
-
-| Name | Type | Description |
-| ---- | --------- | ----------- |
-| code | Integer   | 0         |
-
-**Examples:**
-
-```bash
-$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/clients/example"
-
-{"code":0}
-```
-
 ### GET /api/v4/clients/username/{username}
 
 通过 Username 查询客户端的信息。由于可能存在多个客户端使用相同的用户名的情况，所以可能同时返回多个客户端信息。
@@ -499,6 +475,38 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients/e
 
 ```bash
 $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/clients/example/acl_cache"
+
+{"code":0}
+```
+
+### PUT /api/v4/clients/{clientid}/keepalive
+
+设置指定客户端的keepalive时间（秒）。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                            |
+| -------- | ------- | :------: | -------------------------------------- |
+| interval | Integer |   True   | 秒：0～65535，0表示不启动keepalive检查 |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+更新指定客户端（example）keepalive为10秒
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
 
 {"code":0}
 ```
