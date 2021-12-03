@@ -8,7 +8,7 @@ By using the hot upgrade feature, users can quickly and safely upgrade the EMQ X
 Currently EMQ X Broker only supports hot upgrade of Patch version (Patch version is the third digit of the version number).
 That is, it currently supports hot upgrades from 4.2.0 -> 4.2.1, 4.2.0 -> 4.2.2, ..., etc., but 4.2.x cannot be hot upgraded to 4.3.0 or 5.0.
 
-Currently, Windows、 MacOSX does not support hot upgrade feature.
+Currently, Windows, MacOSX does not support hot upgrade feature.
 
 ## Hot upgrade steps
 
