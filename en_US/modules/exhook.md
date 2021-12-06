@@ -87,13 +87,13 @@ service HookProvider {
 
 The HookProvider part:
 
--ʻOnProviderLoaded`: Define how the HookProvider is loaded and return the list of hooks that need to be mounted. Only the hooks in this list will be called back to the HookProivder service.
--ʻOnProviderUnloaded`: Define how the HookProvider is unloaded, only for notification.
+- `OnProviderLoaded`: Define how the HookProvider is loaded and return the list of hooks that need to be mounted. Only the hooks in this list will be called back to the HookProivder service.
+- `OnProviderUnloaded`: Define how the HookProvider is unloaded, only for notification.
 
 Hook event part:
 
--Methods prefixed with ʻOnClient*`, ʻOnSession*`, ʻOnMessage*` correspond to the methods in [hooks](../advanced/hooks.md) one-to-one. They have the same calling timing and similar parameter lists.
--Only ʻOnClientAuthenticate`, ʻOnClientCheckAcl`, ʻOnMessagePublish` are allowed to carry the return value to the EMQ X system, other callbacks are not supported.
+- Methods prefixed with `OnClient`, `OnSession`, `OnMessage` correspond to the methods in [hooks](../advanced/hooks.md) one-to-one. They have the same calling timing and similar parameter lists.
+- Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return value to the EMQ X system, other callbacks are not supported.
 
 For details of the interface and parameter data structure, please refer to: [exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
