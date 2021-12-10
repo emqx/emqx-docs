@@ -23,7 +23,7 @@
 
 打开 EMQ X Dashboard，点击左侧的 “模块” 选项卡，选择添加：
 
-[addModule.png](./assets/slow_subscribers_statistics_1.png)
+![image](./assets/slow_subscribers_statistics_1.png)
 
 选择 ****慢订阅统计**** 模块, 然后点击 *启动* 即可
 
@@ -68,7 +68,7 @@
 
 ## 配置说明
 
-[config.png](./assets/slow_subscribers_statistics_2.png)
+![image](./assets/slow_subscribers_statistics_2.png)
 
 -   时延阈值
     *时延阈值* 用来判断订阅者是否可以参与统计,如果订阅者的时延低于这个值,将不会进行统计
@@ -90,8 +90,8 @@
 
 ## 慢订阅记录
 
-[record.png](./assets/slow_subscribers_statistics_3.png)
+![image](./assets/slow_subscribers_statistics_3.png)
 这个标签页下会按照时延,从高到底依次显示订阅者信息,点击 *Client ID* 将会显示订阅者详情,可以通过订阅者详情来进行问题分析
 和查找.
 
-[record.png](./assets/slow_subscribers_statistics_4.png)
+![image](./assets/slow_subscribers_statistics_4.png)
