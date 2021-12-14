@@ -30,13 +30,13 @@ CREATE TABLE t_mqtt_msg (
 SELECT * FROM "t/#"
 ```
 
-![image-20211201154727219](./assets/rule-engine/matrixdb_data_to_store1.png)
+![image-20211214154912737](./assets/rule-engine/matrixdb_data_to_store1.png)
 
 关联动作:
 
 在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 MatrixDB”。
 
-![image-20211201154826879](./assets/rule-engine/matrixdb_data_to_store2.png)
+![image-20211214155053420](./assets/rule-engine/matrixdb_data_to_store2.png)
 
 填写动作参数:
 
@@ -44,7 +44,7 @@ SELECT * FROM "t/#"
 
 1). **使用资源**，即资源 ID，现在资源下拉框为空，需要先创建一个可用的 MatrixDB 资源实例。
 
-![image-20211201155055729](./assets/rule-engine/matrixdb_data_to_store3.png)
+![image-20211214155326940](./assets/rule-engine/matrixdb_data_to_store3.png)
 
 点击 **使用资源** 右侧的 **新建** 按钮，进入 **创建资源** 页面，MatrixDB 资源提供了以下可配置项：
 
@@ -62,11 +62,11 @@ SELECT * FROM "t/#"
 
 配置完成后，点击 **确定** 以完成创建。
 
-![image-20211201163555899](./assets/rule-engine/matrixdb_data_to_store4.png)
+![image-20211214155444612](./assets/rule-engine/matrixdb_data_to_store4.png)
 
 资源创建成功后我们将回到 **新增动作** 页面，**使用资源** 也自动填充为我们刚刚创建的 Matrix 资源的资源 ID。
 
-![image-20211201160356380](./assets/rule-engine/matrixdb_data_to_store5.png)
+![image-20211214155555118](./assets/rule-engine/matrixdb_data_to_store5.png)
 
 2). **启用批量插入**，是否启用批量插入，高并发场景下开启批量插入可显著改善写入性能。
 
@@ -87,14 +87,14 @@ VALUES (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double p
 
 这里我们使用了 ${id} 等占位符，它们会在动作执行时被替换为运行时数据。
 
-![image-20211201163937652](./assets/rule-engine/matrixdb_data_to_store6.png)
+![image-20211214155619480](./assets/rule-engine/matrixdb_data_to_store6.png)
 
 配置完成后，点击 **确定** 以完成动作的添加。然后在规则页面点击最下方的 **创建** 按钮完成规则创建。
 
 完成 MatrixDB 资源和规则的创建后，我们来测试验证一下。我们直接使用 Dashboard 中的 MQTT 客户端工具来发布一条消息。本示例中我们将消息主题改为 `t/1` 以命中我们设置的规则，Payload 和 QoS 保持不变，然后点击 **发布**。
 
-![image-20211201164831324](./assets/rule-engine/matrixdb_data_to_store7.png)
+![image-20211214155710772](./assets/rule-engine/matrixdb_data_to_store7.png)
 
 消息发布成功后，我们将可以在 `t_mqtt_msg` 表中看到新写入的数据：
 
-![image-20211201165210566](./assets/rule-engine/matrixdb_data_to_store8.png)
+![image-20211214155732296](./assets/rule-engine/matrixdb_data_to_store8.png)
