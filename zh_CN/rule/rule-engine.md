@@ -247,7 +247,7 @@ SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos =
 
 ::: tip
 
-- FROM 子句后面的主题需要用双引号 `""` 引起来。
+- FROM 子句后面的主题需要用双引号 `""`，或者单引号 `''` 引起来。
 - WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 `''` 引起来。
 - FROM 子句里如有多个主题，需要用逗号 `","` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
 - 可以使用使用 `"."` 符号对 payload 进行嵌套选择。

@@ -200,7 +200,7 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     ```
 
 ::: tip
-- Topic after the FROM clause need to be enclosed in double quotes `""`.
+- Topic after the FROM clause need to be enclosed in double quotes `""` or single quotes `''`.
 - The WHERE clause is followed by the filter condition. If a string is used, it needs to be enclosed in single quotes `'' `.
 - If there are multiple topics in the FROM clause, they need to be separated by commas `","`. For example,
     ```sql
