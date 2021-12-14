@@ -22,7 +22,7 @@ Select MongoDB Authentication/ACL module
 
 Configure MongoDB related parameters
 
-![image-20200928114832162](./assets/auth_mongo3.png)
+![image-20211214110937457](./assets/auth_mongo3.png)
 
 After clicking Add, the module is added:
 
