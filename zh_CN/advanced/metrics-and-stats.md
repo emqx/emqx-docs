@@ -129,6 +129,12 @@ EMQ X 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只�
 | client.check_acl      | Integer   | `client.check_acl` 钩子触发次数    |
 | client.subscribe      | Integer   | `client.subscribe` 钩子触发次数    |
 | client.unsubscribe    | Integer   | `client.unsubscribe` 钩子触发次数  |
+| client.auth.success   | Integer   | 客户端认证成功次数，至少启用一个认证插件后可用 |
+| client.auth.failure   | Integer   | 客户端认证失败次数，至少启用一个认证插件后可用  |
+| client.auth.ignore    | Integer   | 认证忽略次数，至少启用一个认证插件后可用，同时启用多个认证插件时，一次登录事件可能触发多次 ignore 计数，所有认证插件都 ignore 后，客户端可能以匿名方式成功登录 |
+| client.acl.allow      | Integer   | 客户端 ACL 校验通过次数，至少启用一个 ACL 插件后可用 |
+| client.acl.deny       | Integer   | 客户端 ACL 校验失败次数，至少启用一个 ACL 插件后可用  |
+| client.acl.ignore     | Integer   | ACL 校验忽略次数，至少启用一个 ACL 插件后可用，同时启用多个 ACL 插件时，一次发布/订阅事件可能触发多次 ignore 计数，所有 ACL插件都 ignore 后，发布/订阅操作可能因 acl_nomatch = true 成功 |
 | session.created       | Integer   | `session.created` 钩子触发次数     |
 | session.discarded     | Integer   | `session.discarded` 钩子触发次数   |
 | session.resumed       | Integer   | `session.resumed` 钩子触发次数     |
@@ -159,5 +165,3 @@ EMQ X 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只�
 | routes.max                 | Integer   | 路由数量的历史最大值       |
 | retained.count             | Integer   | 当前保留消息数量           |
 | retained.max               | Integer   | 保留消息的历史最大值       |
-
-
