@@ -198,6 +198,10 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
     ```
+- For an MQTT 5.0 PUBLISH message, select the User Property with Key "foo":
+    ```sql
+    SELECT pub_props.'User-Property'.foo as foo FROM "t/#"
+    ```
 
 ::: tip
 - Topic after the FROM clause need to be enclosed in double quotes `""` or single quotes `''`.
@@ -419,14 +423,15 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | :------------------ | :-------------------------------------------------------- |
 | id                  | MQTT message ID                                           |
 | clientid            | Client ID                                                 |
-| username            | username                                                  |
+| username            | Username                                                  |
 | payload             | MQTT payload                                              |
-| peerhost            | client IPAddress                                          |
+| peerhost            | Client IPAddress                                          |
 | topic               | MQTT topic                                                |
 | qos                 | Enumeration of message QoS 0,1,2                          |
-| flags               | flags                                                     |
-| headers             | Additional data related to proces within the MQTT message |
-| timestamp           | timestamp (ms)                                            |
+| flags               | Flags                                                     |
+| headers             | Internal data related to the message processing           |
+| pub_props           | The PUBLISH Properties (MQTT 5.0 only)                    |
+| timestamp           | Timestamp (ms)                                            |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms)             |
 | node                | Node name of the trigger event                            |
 
@@ -444,6 +449,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
+| pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
 | timestamp           | Event trigger time(millisecond)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
@@ -461,6 +467,8 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
+| pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
+| puback_props        | The PUBACK Properties (MQTT 5.0 only)         |
 | timestamp           | Event trigger time(millisecond)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
@@ -478,6 +486,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
+| pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
 | timestamp           | Event trigger time(millisecond)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
@@ -497,6 +506,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | expiry\_interval | MQTT Session Expiration time            |
 | is\_bridge       | whether it is MQTT bridge connection    |
 | connected\_at    | Terminal connection completion time (s) |
+| conn_props       | The CONNECT Properties (MQTT 5.0 only)  |
 | timestamp        | Event trigger time(millisecond)         |
 | node             | Node name of the trigger event          |
 
@@ -510,6 +520,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | peername         | IPAddress and Port of terminal                               |
 | sockname         | IPAddress and Port listened by emqx                          |
 | disconnected\_at | Terminal disconnection completion time (s)                   |
+| disconn_props    | The DISCONNECT Properties (MQTT 5.0 only)                    |
 | timestamp        | Event trigger time(millisecond)                              |
 | node             | Node name of the trigger event                               |
 
@@ -521,6 +532,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | peerhost  | client IPAddress                          |
 | topic     | MQTT topic                                |
 | qos       | Enumeration of message QoS 0,1,2          |
+| sub_props | The SUBSCRIBE Properties (MQTT 5.0 only)  |
 | timestamp | Event trigger time(millisecond)           |
 | node      | Node name of the trigger event            |
 
@@ -533,6 +545,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | peerhost  | client IPAddress                            |
 | topic     | MQTT topic                                  |
 | qos       | Enumeration of message QoS 0,1,2            |
+| unsub_props | The UNSUBSCRIBE Properties (MQTT 5.0 only)  |
 | timestamp | Event trigger time(millisecond)             |
 | node      | Node name of the trigger event              |
 
