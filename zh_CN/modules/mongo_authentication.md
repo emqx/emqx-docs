@@ -22,7 +22,9 @@ MongoDB 认证/访问控制使⽤外部 MongoBD 数据库作为数据源，可�
 
 配置 MongoDB 相关参数
 
-![image-20200928114832162](./assets/auth_mongo3.png)
+![image-20211129165339766](./assets/auth_mongo3.png)
+
+> SRV 记录的相关说明和使用方式请参考 [规则引擎 - 保存数据到 MongoDB](../rule/backend_mongodb.md)。
 
 点击添加后，模块添加完成:
 
