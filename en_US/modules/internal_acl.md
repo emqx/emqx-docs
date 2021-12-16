@@ -4,11 +4,14 @@ The builtin ACL sets rules through files, which is simple and lightweight enough
 
 
 ## Builtin ACL File
-emqx is enabled by default Builtin ACL file
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/), log in, click the "Module" tab on the left, and select Add
+Builtin ACL module is enabled by default, it could be updated or stoped by dashboard but can not be deleted.
 
-![image-20200927213049265](./assets/modules.png)
+![image-20200927213049265](./assets/acl_file4.png)
+
+Editing ACL file content directly, or select a file to replace
+
+![image-20200927213049265](./assets/acl_file3.png)
 
 ## Define ACL
 
