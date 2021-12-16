@@ -1288,7 +1288,7 @@ The maximum length of Client ID string.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | 7       |
+| integer | -       |
 
 #### Description
 
