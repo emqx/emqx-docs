@@ -79,7 +79,7 @@ Payload:
 
 在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
 
-![image](./assets/rule-engine/influxdb-rulelist-1@2x.png)
+![image](./assets/rule-engine/influxdbv2_rule_run.png)
 
 在InfluxDB控制台中查询结果:
 
