@@ -66,11 +66,12 @@ In the default configuration of PostgreSQL authentication, you need to ensure th
 
 ```sql
 CREATE TABLE mqtt_user (
-  id SERIAL primary key,
-  is_superuser boolean,
-  username character varying(100),
-  password character varying(100),
-  salt character varying(40)
+  id SERIAL PRIMARY KEY,
+  username CHARACTER VARYING(100),
+  password CHARACTER VARYING(100),
+  salt CHARACTER VARYING(40),
+  is_superuser BOOLEAN,
+  UNIQUE (username)
 )
 ```
 
@@ -137,3 +138,8 @@ You can adjust the authentication SQL according to business to achieve more busi
 You can use AS syntax in SQL to specify passwords for field renaming, or set the salt value to a fixed value.
 :::
 
+### Advanced
+
+In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
+
+If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.
