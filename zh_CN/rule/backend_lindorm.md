@@ -4,6 +4,21 @@
 </br>
 非阿里云主机云上部署的方式，并打开访问控制白名单，确保部署机器的IP在访问白名单中，并开启公网访问地址。此类操作步骤请参考阿里 Lindorm 操作文档。
 </br>
+创建数据库
+
+```SQL
+CREATE DATABASE DemoDB1
+```
+
+创建表
+
+```SQL
+CREATE TABLE demo_sensor(
+    device_id VARCHAR TAG,
+    time BIGINT,
+    msg VARCHAR)
+```
+
 资源需要以下启动参数：
 
 - Lindorm 服务器：Lindorm 访问地址，Lindorm 提供了域名访问，阿里云主机请填写内网访问地址，默认端口 `8242`，根据实际情况填写，需要添加 `http://` 前缀；
