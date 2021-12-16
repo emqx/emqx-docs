@@ -86,6 +86,12 @@ VALUES
 
 :::
 
+#### 进阶
+
+默认表结构中，我们将 username 字段设为了唯一索引（UNIQUE），与默认的查询语句（`select password from mqtt_user where username = '%u' limit 1`）配合使用可以获得非常不错的查询性能。
+
+如果默认查询条件不能满足您的需要，例如你需要根据 Client ID 查询相应的 Password Hash 和 Salt，请确保将 Client ID 设置为索引；又或者您想要对 Username、Client ID 或者其他更多字段进行多条件查询，建议设置正确的单索引或是联合索引。总之，设置正确的表结构和查询语句，尽可能不要让索引失效而影响查询性能。
+
 ### 访问控制表
 
 ```sql
@@ -97,7 +103,10 @@ CREATE TABLE `mqtt_acl` (
   `clientid` varchar(100) DEFAULT NULL COMMENT 'ClientId',
   `access` int(2) NOT NULL COMMENT '1: subscribe, 2: publish, 3: pubsub',
   `topic` varchar(100) NOT NULL DEFAULT '' COMMENT 'Topic Filter',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX (ipaddr),
+  INDEX (username),
+  INDEX (clientid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
