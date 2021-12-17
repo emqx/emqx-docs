@@ -60,7 +60,7 @@ FROM
 - Fields：数据键值对 Fields；
 - Tags：数据标签 Tags；
 
-![image](./assets/rule-engine/influxdbv2_create_action_zh.png )
+![image](./assets/rule-engine/influxdbv2_create_action.png )
 
 最后点击 “Confirm” 按钮。
 
