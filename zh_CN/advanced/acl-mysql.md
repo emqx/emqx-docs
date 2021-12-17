@@ -90,7 +90,10 @@ CREATE TABLE `mqtt_acl` (
   `clientid` varchar(100) DEFAULT NULL COMMENT 'ClientId',
   `access` int(2) NOT NULL COMMENT '1: subscribe, 2: publish, 3: pubsub',
   `topic` varchar(100) NOT NULL DEFAULT '' COMMENT 'Topic Filter',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX (ipaddr),
+  INDEX (username),
+  INDEX (clientid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
@@ -104,7 +107,6 @@ CREATE TABLE `mqtt_acl` (
 - topic：控制的主题，可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
   - %u：用户名
   - %c：Client ID
-
 
 
 默认配置下示例数据：
