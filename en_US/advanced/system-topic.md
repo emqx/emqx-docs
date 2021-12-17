@@ -129,6 +129,12 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 
  The topics/count and topics/max are numerically equal to routes/count and routes/max.
 
+### Slow subscriber statistics
+
+|  Topic  | Description  |
+| ------------ | ---------------- |
+| slow_subs | Statistics of current slow subscribers |
+
 ### Throughput (bytes/packets/message) statistics
 
  System Topic Prefix : `$SYS/brokers/${node}/metrics/`
