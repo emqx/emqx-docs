@@ -46,9 +46,9 @@
 ### 时延计算方法
 
 -   QoS1
-    从 *publish* 消息到到EMQX内时开始计算, 知道EMQX收到 *puback* 为止
+    从 *publish* 消息到到EMQX内时开始计算, 直到EMQX收到 *puback* 为止
 -   QoS2
-    从 *publish* 消息到到EMQX内时开始计算, 知道EMQX收到 *pubcomp* 为止
+    从 *publish* 消息到到EMQX内时开始计算, 直到EMQX收到 *pubcomp* 为止
 
 
 <a id="org712747a"></a>
