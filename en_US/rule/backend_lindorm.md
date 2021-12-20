@@ -2,7 +2,7 @@
 
 First, make sure that the Lindorm database service is enabled.
 </br>
-For Non-Alibaba Cloud host deployment, open the access control whitelist, ensure that the IP of the deployed machine is in the access whitelist, and open the public network access address. For detailed operation steps, please refer to the Ali Lindorm operations documentation.
+For the condition that the database is not deployed in Alibaba Cloud, open the access control whitelist, ensure that the IP of the deployed machine is in the access whitelist, and open the public network access address. For detailed operation steps, please refer to the Ali Lindorm operations documentation.
 
 Ensure that the IP of the host where EMQ X is deployed is in the access whitelist. If EMQ X is deployed in Alibaba Cloud, it can access Lindorm through the cloud host intranet. For other types of deployment, the Lindorm Internet access function should be enabled for access. For detailed operation steps, please refer to the Ali Lindorm operation documentation.
 
@@ -30,11 +30,11 @@ The resource requires the following startup parameters:
 - User name: It is not required to fill in if the authentication is disabled. Otherwise, please fill in according to the actual situation;
 - Password: It is not required to fill in if the authentication is disabled. Otherwise, please fill in according to the actual situation;
 
-![image](D:/emqx/emqx-docs/zh_CN/rule/assets/rule-engine/lindorm_create_resource.png)
+![image](../../en_US/rule/assets/rule-engine/lindorm_create_resource.png)
 
 Ensure that the resource status is available (for non-Alibaba Cloud deployments, there may be an unavailable status due to the slow link for the first time after creation. Click the status button to refresh the status).
 
-![image](D:/emqx/emqx-docs/zh_CN/rule/assets/rule-engine/lindorm_resource_status.png)
+![image](../../en_US/rule/assets/rule-engine/lindorm_resource_status.png)
 
 Create rule
 
@@ -47,7 +47,7 @@ FROM
   "#"
 ```
 
-![image](D:/emqx/emqx-docs/zh_CN/rule/assets/rule-engine/lindorm_create_rule.png)
+![image](../../en_US//rule/assets/rule-engine/lindorm_create_rule.png)
 
 Add action
 
@@ -61,15 +61,15 @@ Add action
 - Tags: data tag key-value pairs, which is filled in according to the created table structure;
 - Fields: data key-value pairs, which is filled in according to the created table structure;
 
-![image](D:/emqx/emqx-docs/zh_CN/rule/assets/rule-engine/lindorm_create_action.png)
+![image](../../en_US/rule/assets/rule-engine/lindorm_create_action.png)
 
 Click OK. Then, click Create and view the rules:
 
-![image](D:/emqx/emqx-docs/zh_CN/rule/assets/rule-engine/lindorm_create_rule_over.png )
+![image](../../en_US/rule/assets/rule-engine/lindorm_create_rule_over.png )
 
 Use the MQTT client to publish messages and view the counts of successes and failures of rule hits;
 
-![image](D:/emqx/emqx-docs/zh_CN/rule/assets/rule-engine/lindorm_create_rule_run.png )
+![image](../../en_US/rule/assets/rule-engine/lindorm_create_rule_run.png )
 
 Use API to query database and write results:
 
@@ -77,6 +77,6 @@ Use API to query database and write results:
 # Replace
 # ${LINDORM_SERVER}： Server address
 # ${DB_NAME}： Database name
-# ${LINDORM_TABLE}： Table Name
+# ${LINDORM_TABLE}： Table name
 curl -X POST http://${LINDORM_SERVER}:8242/api/v2/sql?database=${DB_NAME} -H "Content-Type: text/plain" -d 'SELECT count(*) FROM ${LINDORM_TABLE}'
 ```
