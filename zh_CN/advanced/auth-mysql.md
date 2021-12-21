@@ -68,8 +68,6 @@ CREATE TABLE `mqtt_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-
-
 默认配置下示例数据如下：
 
 ```sql
@@ -130,6 +128,11 @@ auth.mysql.auth_query = select password from mqtt_user where username = '%u' lim
 可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
 :::
 
+### 进阶
+
+默认表结构中，我们将 username 字段设为了唯一索引（UNIQUE），与默认的查询语句（`select password from mqtt_user where username = '%u' limit 1`）配合使用可以获得非常不错的查询性能。
+
+如果默认查询条件不能满足您的需要，例如你需要根据 Client ID 查询相应的 Password Hash 和 Salt，请确保将 Client ID 设置为索引；又或者您想要对 Username、Client ID 或者其他更多字段进行多条件查询，建议设置正确的单列索引或是联合索引。总之，设置正确的表结构和查询语句，尽可能不要让索引失效而影响查询性能。
 
 ## 特殊说明
 
@@ -138,3 +141,4 @@ MySQL 8.0 及以后版本使用了 `caching_sha2_password` 作为默认身份验
 ```sql
 ALTER USER 'your_username'@'your_host' IDENTIFIED WITH mysql_native_password BY 'your_password';
 ```
+
