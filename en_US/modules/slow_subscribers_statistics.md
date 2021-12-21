@@ -11,23 +11,23 @@
 
 <a id="org10c5186"></a>
 
-# Slow subscribers statistics
+## Slow subscribers statistics
 
 This function ranks subscribers in descending order according to the average latency of message transmission
 
 <a id="org395e425"></a>
 
-## Create module
+### Create module
 
 Open EMQ X Dashboard, click on the "Module" on the left. Then, select "add module":
 
-![image](../../en_US/modules/assets/slow_subscribers_statistics_1.png)
+![image](./assets/slow_subscribers_statistics_1.png)
 
 Select the **Slow Subscribers Statistics** module, and then click *Start*
 
 <a id="orgdd4d5d6"></a>
 
-## Implementation note
+### Implementation note
 
 This function will track the time consumption of QoS1 and QoS2 messages to complete the whole process of message transmission after arriving at EMQX, and then use the exponential moving average algorithm to calculate the average message transmission latency of the subscriber, and then rank the subscribers according to the latency.
 
@@ -38,7 +38,7 @@ Note: In order to avoid performance overhead, the minimum latency for statistica
 
 <a id="org693a7e9"></a>
 
-### latency calculation method
+#### latency calculation method
 
 -   QoS1
     It starts from *publishing* messages to EMQX, until EMQX receives *puback*
@@ -47,7 +47,7 @@ Note: In order to avoid performance overhead, the minimum latency for statistica
 
 <a id="org712747a"></a>
 
-### Average latency calculation method
+#### Average latency calculation method
 
 The average latency adopts [Exponential Moving Average Algorithm](https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average) to weight the transmission latency of each message, avoiding the influence of single jitter or historical extreme value on the average Value.
 
@@ -57,9 +57,9 @@ The larger the value, the greater the influence of the historical value. If it i
 
 <a id="orgcd5b688"></a>
 
-## Configuration description
+### Configuration description
 
-![image](../../en_US/modules/assets/slow_subscribers_statistics_2.png)
+![image](./assets/slow_subscribers_statistics_2.png)
 
 -   latency threshold
     *latency threshold* is used to determine whether subscribers can participate in statistics. If the latency of subscribers is lower than this value, they will not be counted
@@ -77,10 +77,10 @@ The larger the value, the greater the influence of the historical value. If it i
 
 <a id="orgb3ce581"></a>
 
-## Slow subscribers record
+### Slow subscribers record
 
-![image](../../en_US/modules/assets/slow_subscribers_statistics_3.png)
+![image](./assets/slow_subscribers_statistics_3.png)
 Under this tab, the subscriber information will be displayed in descending order according to the time latency. After Clicking *Client ID*, it will display the subscriber details, where you can analyze and find the problem.
 
-![image](../../en_US/modules/assets/slow_subscribers_statistics_4.png)
+![image](./assets/slow_subscribers_statistics_4.png)
 
