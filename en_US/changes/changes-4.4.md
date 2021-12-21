@@ -33,15 +33,15 @@ EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
 
 - Dashboard supports relative paths and custom access paths
 
-- Supports configuring whether to forward empty retained messages to suit users who are still using MQTT v3.1. The relevant configurable item is `retainer.stop_publish_clear_msg`
+- Supports configuring whether to forward retained messages with empty payload to suit users who are still using MQTT v3.1. The relevant configurable item is `retainer.stop_publish_clear_msg`
 
 - Multi-language hook extension (ExHook) supports dynamic cancellation of subsequent forwarding of client messages
 
-- Rule engine SQL supports single quotes, for example: `SELECT * FROM't/#'`
+- Rule engine SQL supports the use of single quotes in FROM clause, for example: `SELECT * FROM't/#'`
 
 - Change the default value of the `max_topic_levels` configurable item to 128. Previously, it had no limit (configured to 0), which may be a potential DoS threat
 
-- Improved log message when TCP proxy is in use but `proxy_protocol` configuration is not turned on
+- Improve the error log content when the Proxy Protocol message is received but the `proxy_protocol` configuration is not turned on
 
 - Add additional message attributes to the message reported by the gateway. Messages from gateways such as CoAP, LwM2M, Stomp, ExProto, etc., when converted to EMQ X messages, add fields such as protocol name, protocol version, user name, client IP, etc., which can be used for multi-language hook extension (ExHook)
 
@@ -51,7 +51,7 @@ EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
-- Fix the issue that the client process becomes unresponsive due to the blockage of RPC calls in the cluster
+- Fix the issue that the client process becomes unresponsive due to the blockage of RPC calls between nodes
 
 - Fix the issue that the lock management process `ekka_locker` crashes after killing the suspended lock owner
 

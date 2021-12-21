@@ -33,15 +33,15 @@ EMQ X 4.4-beta.1 现已正式发布，主要包含以下改动:
 
 - Dashboard 支持相对路径和自定义访问路径
 
-- 支持配置是否转发为空的保留消息，以适应仍在使用 MQTT v3.1 的用户，相关配置项为 `retainer.stop_publish_clear_msg`
+- 支持配置是否转发为 Payload 为空的保留消息，以适应仍在使用 MQTT v3.1 的用户，相关配置项为 `retainer.stop_publish_clear_msg`
 
 - 多语言钩子扩展（exhook）支持动态取消客户端消息的后续转发
 
-- 规则引擎 SQL 支持单引号，例如：`SELECT * FROM 't/#'`
+- 规则引擎 SQL 支持在 FROM 子句中使用单引号，例如：`SELECT * FROM 't/#'`
 
 - 将 `max_topic_levels` 配置项的默认值更改为 128，以前它没有限制（配置为 0），这可能是潜在的 DoS 威胁
 
-- 改进了使用 TCP Proxy 但 `proxy_protocol` 配置项未开启时的日志内容
+- 改进了接收到 Proxy Protocol 报文但 `proxy_protocol` 配置项未开启时的错误日志内容
 
 - 为网关上报消息添加额外的消息属性。来自 CoAP, LwM2M，Stomp，ExProto 等网关的消息，在转换为 EMQ X 的消息时，添加例如协议名称，协议版本，用户名，客户端 IP 等字段，可用于多语言钩子扩展
 
@@ -51,7 +51,7 @@ EMQ X 4.4-beta.1 现已正式发布，主要包含以下改动:
 
 **问题修复:**
 
-- 修复集群见 RPC 调用堵塞导致客户端进程失去响应的问题
+- 修复节点间 RPC 调用堵塞导致客户端进程失去响应的问题
 
 - 修复锁管理进程 `ekka_locker` 在杀死挂起的锁持有者后 Crash 的问题
 
