@@ -30,11 +30,11 @@ The resource requires the following startup parameters:
 - User name: It is not required to fill in if the authentication is disabled. Otherwise, please fill in according to the actual situation;
 - Password: It is not required to fill in if the authentication is disabled. Otherwise, please fill in according to the actual situation;
 
-![image](../../en_US/rule/assets/rule-engine/lindorm_create_resource.png)
+![image](./assets/rule-engine/lindorm_create_resource.png)
 
 Ensure that the resource status is available (for non-Alibaba Cloud deployments, there may be an unavailable status due to the slow link for the first time after creation. Click the status button to refresh the status).
 
-![image](../../en_US/rule/assets/rule-engine/lindorm_resource_status.png)
+![image](./assets/rule-engine/lindorm_resource_status.png)
 
 Create rule
 
@@ -47,7 +47,7 @@ FROM
   "#"
 ```
 
-![image](../../en_US//rule/assets/rule-engine/lindorm_create_rule.png)
+![image](./assets/rule-engine/lindorm_create_rule.png)
 
 Add action
 
@@ -61,15 +61,15 @@ Add action
 - Tags: data tag key-value pairs, which is filled in according to the created table structure;
 - Fields: data key-value pairs, which is filled in according to the created table structure;
 
-![image](../../en_US/rule/assets/rule-engine/lindorm_create_action.png)
+![image](./assets/rule-engine/lindorm_create_action.png)
 
 Click OK. Then, click Create and view the rules:
 
-![image](../../en_US/rule/assets/rule-engine/lindorm_create_rule_over.png )
+![image](./assets/rule-engine/lindorm_create_rule_over.png )
 
 Use the MQTT client to publish messages and view the counts of successes and failures of rule hits;
 
-![image](../../en_US/rule/assets/rule-engine/lindorm_create_rule_run.png )
+![image](./assets/rule-engine/lindorm_create_rule_run.png )
 
 Use API to query database and write results:
 
