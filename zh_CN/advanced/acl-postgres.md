@@ -64,11 +64,12 @@ PostgreSQL 认证插件默认配置下需要确保数据库中有以下两张数
 
 ```sql
 CREATE TABLE mqtt_user (
-  id SERIAL primary key,
-  is_superuser boolean,
-  username character varying(100),
-  password character varying(100),
-  salt character varying(40)
+  id SERIAL PRIMARY KEY,
+  username CHARACTER VARYING(100),
+  password CHARACTER VARYING(100),
+  salt CHARACTER VARYING(40),
+  is_superuser BOOLEAN,
+  UNIQUE (username)
 )
 ```
 
@@ -85,14 +86,17 @@ VALUES
 
 ```sql
 CREATE TABLE mqtt_acl (
-  id SERIAL primary key,
-  allow integer,
-  ipaddr character varying(60),
-  username character varying(100),
-  clientid character varying(100),
-  access  integer,
-  topic character varying(100)
-)
+  id SERIAL PRIMARY KEY,
+  allow INTEGER,
+  ipaddr CHARACTER VARYING(60),
+  username CHARACTER VARYING(100),
+  clientid CHARACTER VARYING(100),
+  access  INTEGER,
+  topic CHARACTER VARYING(100)
+);
+CREATE INDEX ipaddr ON mqtt_acl (ipaddr);
+CREATE INDEX username ON mqtt_acl (username);
+CREATE INDEX clientid ON mqtt_acl (clientid);
 ```
 
 规则表字段说明：
@@ -187,4 +191,3 @@ auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic f
 ::: tip 
 可以在 SQL 中调整查询条件、指定排序方式实现更高效率的查询。
 :::
-
