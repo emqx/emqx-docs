@@ -25,13 +25,13 @@ The following configurations are included in the resource:
 
 Example of obtaining organization name by InfluxDB Cloud (For local or docker deployment, you can enter the console by accessing port 8086 of the deployment address):
 
-![image](.\assets\rule-engine\influxdbv2_get_orgname_demo.png)
+![image](./assets/rule-engine/influxdbv2_get_orgname_demo.png)
 
 Example of obtaining API Token by InfluxDB Cloud (For local or docker deployment, you can enter the console by accessing port 8086 of the deployment address):
-![image](.\assets\rule-engine\influxdbv2_get_api_token_demo.png)
+![image](./assets/rule-engine/influxdbv2_get_api_token_demo.png)
 
 Create the resource:
-![image](.\assets\rule-engine\influxdbv2_create_resource.png)
+![image](./assets/rule-engine/influxdbv2_create_resource.png)
 
 Create a rule:
 
@@ -47,7 +47,7 @@ FROM
   "#"
 ```
 
-![image](.\assets\rule-engine\influxdbv2_create_rule.png )
+![image](./assets/rule-engine/influxdbv2_create_rule.png )
 
 Related action:
 
@@ -62,7 +62,7 @@ Required fields:
 - Fields: data key-value pair fields;
 - Tags: data tags;
 
-![image](.\assets\rule-engine\influxdbv2_create_action.png )
+![image](./assets/rule-engine/influxdbv2_create_action.png )
 
 Finally, click "Confirm".
 
@@ -81,9 +81,9 @@ Payload:
 
 In the rule list, you can see that the number of matches of the rule just created has increased by 1:
 
-![image](.\assets\rule-engine\influxdbv2_rule_run.png)
+![image](./assets/rule-engine/influxdbv2_rule_run.png)
 
 Query the results in the InfluxDB console:
 
-![image](.\assets\rule-engine\influxdbv2_result.png)
+![image](./assets/rule-engine/influxdbv2_result.png)
 
