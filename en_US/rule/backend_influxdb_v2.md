@@ -47,7 +47,7 @@ FROM
   "#"
 ```
 
-![image](./assets/rule-engine/influxdbv2_create_rule.png )
+![image](./assets/rule-engine/influxdbv2_create_rule.png)
 
 Related action:
 
@@ -62,7 +62,7 @@ Required fields:
 - Fields: data key-value pair fields;
 - Tags: data tags;
 
-![image](./assets/rule-engine/influxdbv2_create_action.png )
+![image](./assets/rule-engine/influxdbv2_create_action.png)
 
 Finally, click "Confirm".
 
