@@ -62,11 +62,11 @@ FROM
 
 点击确定，点击创建，查看规则：
 
-![image](./assets/rule-engine/lindorm_create_rule_over.png )
+![image](./assets/rule-engine/lindorm_create_rule_over.png)
 
 使用 MQTT 客户端发布消息，查看规则命中与成功失败计数；
 
-![image](./assets/rule-engine/lindorm_create_rule_run.png )
+![image](./assets/rule-engine/lindorm_create_rule_run.png)
 
 使用 API 查询数据库写入结果：
 

@@ -337,6 +337,10 @@
             {
               "title": "保存数据到 TDengine",
               "path": "rule/backend_tdengine"
+            },
+            {
+              "title": "保存数据到 Lindorm",
+              "path": "rule/backend_lindorm"
             }
           ]
         },
@@ -1039,6 +1043,10 @@
             {
               "title": "Save data to TDengine",
               "path": "rule/backend_tdengine"
+            },
+            {
+              "title": "Save data to Lindorm",
+              "path": "rule/backend_lindorm"
             }
           ]
         },
