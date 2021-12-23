@@ -16,7 +16,7 @@ The following configurations are included in the resource:
 
 - InfluxDB host: fill in the host address or the service address created in InfluxDB Cloud;
 - InfluxDB port: The default port for local installation or docker installation is 8086, and the https default port 443 is used for InfluxDB Cloud installation;
-- InfluxDB Bucket: database/data set name;
+- InfluxDB Bucket: Bucket set name;
 - InfluxDB organization name: the name of the organization filled in when creating the service;
 - InfluxDB Token: API Token corresponding to database permissions, which can be found in the InfluxDB console;
 - Timestamp accuracy: milliseconds by default;
