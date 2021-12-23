@@ -440,6 +440,14 @@
         {
           "title": "Stomp 接入网关",
           "path": "modules/stomp_protocol"
+        },
+        {
+          "title": "日志追踪",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "慢订阅者统计",
+          "path": "modules/slow_subscribers_statistics"
         }
       ]
     },
@@ -926,6 +934,14 @@
         {
           "title": "Stomp gateway",
           "path": "modules/stomp_protocol"
+        },
+        {
+          "title": "Log Tracer",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "Slow Subscriber Statistics",
+          "path": "modules/slow_subscribers_statistics"
         }
       ]
     }
