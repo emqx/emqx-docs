@@ -65,11 +65,11 @@ Add action
 
 Click OK. Then, click Create and view the rules:
 
-![image](./assets/rule-engine/lindorm_create_rule_over.png )
+![image](./assets/rule-engine/lindorm_create_rule_over.png)
 
 Use the MQTT client to publish messages and view the counts of successes and failures of rule hits;
 
-![image](./assets/rule-engine/lindorm_create_rule_run.png )
+![image](./assets/rule-engine/lindorm_create_rule_run.png)
 
 Use API to query database and write results:
 
