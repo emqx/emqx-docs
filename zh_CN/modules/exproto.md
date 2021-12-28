@@ -43,7 +43,7 @@
 ![Extension Protocol gRPC Arch](./assets/exproto-grpc-arch.jpg)
 
 
-详情参见：[exproto.proto](https://github.com/emqx/emqx/blob/cd22f54f08/apps/emqx_gateway/src/exproto/protos/exproto.proto)，例如接口的定义有：
+详情参见：[exproto.proto](https://github.com/emqx/emqx/blob/main-v4.3/apps/emqx_exproto/priv/protos/exproto.proto)，例如接口的定义有：
 
 ```bash
 syntax = "proto3";
