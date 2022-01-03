@@ -12,7 +12,9 @@ PORT="${1:-8080}"
 
 THIS_DIR="$(cd "$(dirname "$(readlink "$0" || echo "$0")")"; pwd -P)"
 
-docker run -p ${PORT}:8080 -it \
+docker rm emqx-doc-preview || true
+
+docker run -p ${PORT}:8080 -it --name emqx-doc-preview \
     -v "$THIS_DIR"/directory.json:/app/docs/.vuepress/config/directory.json \
     -v "$THIS_DIR"/en_US:/app/docs/en/emqx/latest \
     -v "$THIS_DIR"/zh_CN:/app/docs/zh/emqx/latest \
