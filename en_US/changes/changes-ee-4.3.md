@@ -15,6 +15,28 @@ ref: undefined
 
 # Release version
 
+## 4.3.6 Release
+
+*Release Date: 2021-12-17*
+
+### Enhancement
+
+- Rule engine supports Ali Lindorm database now
+- Support the configuration of whether to continue to deliver empty retained messages to suit users who are still using the MQTT v3.1 protocol
+- Optimize the use and interaction of the built-in access control file module
+
+### Bug fixes
+
+- Fix the issue of incorrect calculation of memory usage
+- Fix the issue that the Path option of Webhook Action in rule engine doesn't support the use of ${Variable}
+- Fix the issue of garbled data when writing data to RocketMQ asynchronously
+- Fix the issue of inaccurate statistics of RocketMQ
+- Fix the issue that the connection failure log will continue to be printed when updating or deleting MQTT Bridge and MQTT Subscribe resources in some cases
+- Fix the issue that the rule engine may have a higher failure rate when saving data to MySQL
+- Fix the issue that the Clickhouse-based offline messaging feature of the rule engine is unavailable
+- Fix the issue that the Max Returned Count option in the MongoDB-based offline message feature of the rule engine cannot be used
+- Fix the issue of partial hot configuration failure
+
 ## 4.3.5 Release
 
 *Release Date: 2021-11-05*

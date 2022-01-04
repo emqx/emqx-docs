@@ -2,7 +2,7 @@
 
 Authentication is an important part of most applications. MQTT protocol supports username/password authentication. Enabling authentication can effectively prevent illegal client connections.
 
-Authentication in EMQ X Broker means that when a client connects to EMQ X Broker, the server configuration  is used to controls the client's permission to connect to the server.
+Authentication in EMQ X Broker means that when a client connects to EMQ X Broker, the server configuration  is used to control the client's permission to connect to the server.
 
 EMQ X Broker's authentication support includes two levels:
 

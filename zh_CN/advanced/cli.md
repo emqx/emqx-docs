@@ -244,7 +244,9 @@ cluster 命令可以管理由多个 EMQ X 节点（进程）组成的集群:
 
 示例:
 
-为更好地展示 cluster 命令，我们先在本机启动两个节点并组成集群，为避免端口冲突，我们对 emqx2 节点的监听端口做出了调整，例如 MQTT/TCP 监听端口由默认的 1883 改为了 2883，详情请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
+为更好地展示 cluster 命令，我们可以先在单机上启动两个节点并组成集群，这称之为伪分布式启动模式。由于我们要在单机上启动两个 emqx 实例，为避免端口冲突，我们需要对其它节点的监听端口做出调整。
+
+基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
 
 启动 emqx1 :
 

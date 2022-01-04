@@ -15,6 +15,22 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.11
+
+*Release Date: 2021-12-17*
+
+EMQ X 4.3.11 is released now, it mainly includes the following changes:
+
+### Enhancement
+
+- Support the configuration of whether to continue to deliver empty retained messages to suit users who are still using the MQTT v3.1 protocol
+
+### Bug fixes
+
+- Fix the issue of incorrect calculation of memory usage
+- Fix the issue that the Path option of Webhook Action in rule engine doesn't support the use of ${Variable}
+- Fix the issue that the connection failure log will continue to be printed when stopping MQTT Bridge plugin in some cases
+
 ## Version 4.3.10
 
 *Release Date: 2021-11-11*
