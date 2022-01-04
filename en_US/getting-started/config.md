@@ -17,7 +17,7 @@ It should be noted that for the EMQ X Broker installed by different methods, the
 - Use k = v common format like sysctl
 - All information for a single configuration item is on the same line, and a new line means creating a new configuration item
 - The key can be layered by `.`, support configuration items managed by tree structure
-- Value types can be `integer`, `fload`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
+- Value types can be `integer`, `float`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
 - Any line beginning with # is considered as a comment
 
 **Example:**
@@ -42,7 +42,7 @@ Usually we will list all its optional values near the configuration item of type
 
 **ip**
 
-When you see that the data type of a configuration item is `ip`, it means that you can set the configuration item in the form of <IP>: <Port>`, for example, `0.0.0.0: 1883`.
+When you see that the data type of a configuration item is `ip`, it means that you can set the configuration item in the form of `{ip}:{port}`, for example, `0.0.0.0:1883`.
 
 **string**
 

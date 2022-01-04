@@ -165,5 +165,3 @@ EMQ X 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只�
 | routes.max                 | Integer   | 路由数量的历史最大值       |
 | retained.count             | Integer   | 当前保留消息数量           |
 | retained.max               | Integer   | 保留消息的历史最大值       |
-
-

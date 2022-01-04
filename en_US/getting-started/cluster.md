@@ -98,6 +98,12 @@ Or delete the emqx@s2.emqx.io node from the cluster on s1.emqx.io:
 $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
+#### Start a cluster on single machine
+
+For users who only have one server, the pseudo-distributed starting mode can be used. Please notice that if we want to start two or more nodes on one machine, we must adjust the listening port of the other node to avoid the port conflicts.
+
+The basic process is to copy another emqx folder and name it emqx2. After that, we let all the listening ports of the original emqx to be added by an offset as the listening ports of the emqx2 node. For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 as the MQTT/TCP listening port for emqx2. Please refer to [Cluster Script](https://github.com/terry-xiaoyu/one_more_emqx) regarding to the above operations and also refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
+
 
 ## Firewall settings
 
