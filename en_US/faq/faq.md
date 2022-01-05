@@ -68,7 +68,7 @@ Hook is an interface provided by EMQ X, which will be triggered when a connectio
 - session.subscribed: after session subscribe topic
 - session.unsubscribed: after session unsubscribe topic
 - session.terminated: session is terminated
-- message.publish: MQTT message is publish
+- message.publish: MQTT message is published
 - message.delivered: MQTT message is delivered
 - message.acked: MQTT message is acknowledged
 - message.dropped: MQTT message is dropped
