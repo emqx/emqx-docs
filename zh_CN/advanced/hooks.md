@@ -128,7 +128,7 @@ EMQ X 以一个客户端在其生命周期内的关键活动为基础，预置�
 | session.unsubscribed | 会话取消订阅 | 完成取消订阅操作后                                    |
 | session.resumed      | 会话恢复     | `client.connected` 执行完成，且成功恢复旧的会话信息后 |
 | session.discarded    | 会话被移除   | 会话由于被**移除**而终止后                            |
-| session.takeovered   | 会话被接管   | 会话由于被**接管**而终止后                            |
+| session.takenover   | 会话被接管   | 会话由于被**接管**而终止后                            |
 | session.terminated   | 会话终止     | 会话由于其他原因被终止后                              |
 | message.publish      | 消息发布     | 服务端在发布（路由）消息前                            |
 | message.delivered    | 消息投递     | 消息准备投递到客户端前                                |
@@ -188,7 +188,7 @@ emqx:unhook(Name, {Module, Function}).
 | session.unsubscribed | `ClientInfo`：客户端信息参数<br/>`Topic`：取消订阅的主题<br/>`SubOpts`：取消订阅操作的配置选项 | -                   |
 | session.resumed      | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
 | session.discarded    | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
-| session.takeovered   | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        |                     |
+| session.takenover   | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        |                     |
 | session.terminated   | `ClientInfo`：客户端信息参数<br/>`Reason`：终止原因 <br>`SessInfo`：会话信息 | -   |
 | message.publish      | `Message`：消息对象                                          | 新的 `Message`      |
 | message.delivered    | `ClientInfo`：客户端信息参数<br/>`Message`：消息对象         | 新的 `Message`      |

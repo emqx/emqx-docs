@@ -1730,7 +1730,7 @@ and performance optimizes.
     Github PR: [emqx/emqx\#3196](https://github.com/emqx/emqx/pull/3196)
 
   - Fix the issue that EMQ X may not send DISCONNECT packet when session
-    is takeovered
+    is takenover
     
     Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
 
