@@ -169,7 +169,7 @@ load(Env) ->
     emqx:hook('session.unsubscribed',{?MODULE, on_session_unsubscribed, [Env]}),
     emqx:hook('session.resumed',     {?MODULE, on_session_resumed, [Env]}),
     emqx:hook('session.discarded',   {?MODULE, on_session_discarded, [Env]}),
-    emqx:hook('session.takeovered',  {?MODULE, on_session_takeovered, [Env]}),
+    emqx:hook('session.takenover',   {?MODULE, on_session_takenover, [Env]}),
     emqx:hook('session.terminated',  {?MODULE, on_session_terminated, [Env]}),
     emqx:hook('message.publish',     {?MODULE, on_message_publish, [Env]}),
     emqx:hook('message.delivered',   {?MODULE, on_message_delivered, [Env]}),

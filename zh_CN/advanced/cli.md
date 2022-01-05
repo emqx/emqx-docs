@@ -227,7 +227,7 @@ rules.matched                 : 0
 session.created               : 0
 session.discarded             : 0
 session.resumed               : 0
-session.takeovered            : 0
+session.takenover             : 0
 session.terminated            : 0
 ```
 

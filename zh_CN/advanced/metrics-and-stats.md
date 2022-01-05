@@ -132,7 +132,7 @@ EMQ X 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只�
 | session.created       | Integer   | `session.created` 钩子触发次数     |
 | session.discarded     | Integer   | `session.discarded` 钩子触发次数   |
 | session.resumed       | Integer   | `session.resumed` 钩子触发次数     |
-| session.takeovered    | Integer   | `session.takeovered` 钩子触发次数  |
+| session.takenover     | Integer   | `session.takenover` 钩子触发次数  |
 | session.terminated    | Integer   | `session.terminated` 钩子触发次数  |
 
 ## Stats
