@@ -218,13 +218,13 @@ SELECT username FROM "#" WHERE username='Steven'
 - 从任意 topic 的 JSON 消息体(payload) 中提取 x 字段，并创建别名 x 以便在 WHERE 子句中使用。WHERE 子句限定条件为 x = 1。下面这个 SQL 语句可以匹配到消息体 {"x": 1}, 但不能匹配到消息体 {"x": 2}:
 
 ```sql
-SELECT payload as p FROM "#" WHERE p.x = 1
+SELECT payload FROM "#" WHERE payload.x = 1
 ```
 
 - 类似于上面的 SQL 语句，但嵌套地提取消息体中的数据，下面的 SQL 语句可以匹配到 JSON 消息体 {"x": {"y": 1}}:
 
 ```sql
-SELECT payload as a FROM "#" WHERE a.x.y = 1
+SELECT payload FROM "#" WHERE payload.x.y = 1
 ```
 
 - 在 clientid = 'c1' 尝试连接时，提取其来源 IP 地址和端口号:
@@ -251,7 +251,7 @@ SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos =
 - WHERE 子句后面接筛选条件，如果使用到字符串需要用单引号 `''` 引起来。
 - FROM 子句里如有多个主题，需要用逗号 `","` 分隔。例如 SELECT * FROM "t/1", "t/2" 。
 - 可以使用使用 `"."` 符号对 payload 进行嵌套选择。
-
+- 尽量不要给 payload 创建别名，否则会影响运行性能。即尽量不要这么写：`SELECT payload as p`
 :::
 
 #### 遍历语法(FOREACH-DO-INCASE) 举例

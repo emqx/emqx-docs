@@ -100,8 +100,9 @@ EMQ X Broker divides metrics into Metrics and Stats. Metrics usually refer to da
 
 | Name                  | Data Type | Description                                               |
 | --------------------- | --------- | --------------------------------------------------------- |
-| actions.failure       | Integer   | Number of successful executions of the rule engine action |
-| actions.success       | Integer   | Number of failed executions of the rule engine action     |
+| actions.success       | Integer   | Number of successful executions of the rule engine action |
+| actions.error         | Integer   | Number of failed rule engine actions                      |
+| actions.exception     | Integer   | Number of exceptional rule engine actions                 |
 | rules.matched         | Integer   | Number of matched rules                                   |
 | client.auth.anonymous | Integer   | The number of client's final anonymous login              |
 | client.connect        | Integer   | `client.connect` hook trigger times                       |
@@ -112,6 +113,12 @@ EMQ X Broker divides metrics into Metrics and Stats. Metrics usually refer to da
 | client.check_acl      | Integer   | `client.check_acl` hook trigger times                     |
 | client.subscribe      | Integer   | `client.subscribe` hook trigger times                     |
 | client.unsubscribe    | Integer   | `client.unsubscribe` hook trigger times                   |
+| client.auth.success   | Integer   | Number of successful client authentications, available after at least one authentication plugin is enabled |
+| client.auth.failure   | Integer   | Number of client authentication failures, available after at least one authentication plugin is enabled |
+| client.auth.ignore    | Integer   | Number of authentication ignores, available after at least one authentication plugin is enabled. When multiple authentication plugins are enabled at the same time, a login event may trigger multiple ignore counts. After all authentication plugins are ignored, the client may successfully log in anonymously |
+| client.acl.allow      | Integer   | Number of client ACL verification passes, available after at least one ACL plugin is enabled |
+| client.acl.deny       | Integer   |Number of client ACL verification failures, available after at least one ACL plugin is enabled  |
+| client.acl.ignore     | Integer   | ACL verification ignore times, available after at least one ACL plugin is enabled. When multiple ACL plugins are enabled at the same time, a publish/subscribe event may trigger multiple ignore counts. After all ACL plug-ins are ignored, the publish/subscribe operation may succeed because acl_nomatch is true |
 | session.created       | Integer   | `session.created` hook trigger times                      |
 | session.discarded     | Integer   | `session.discarded` hook trigger times                    |
 | session.resumed       | Integer   | `session.resumed` hook trigger times                      |
