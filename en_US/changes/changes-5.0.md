@@ -15,6 +15,16 @@ ref: undefined
 
 # Changes
 
+## Version 5.0-beta.3
+
+*Release Date: 2022-01-05*
+
+EMQ X 5.0-beta.3 has been released and it is still an early version. We have opened most of the Dashboard pages in this version. You can see it quickly. The rules engine and some functional pages are still being polished, and we need to be able to meet you later.
+
+In the newly designed Dashboard page, we have simplified the operation path of common features such as authentication, authorization, gateway, etc., and redesigned the operation method based on the feature, and also provided an interactive management page for more features.
+
+In other aspects of 5.0-beta.3, we have improved cluster-related operations and fixed some issues.
+
 ## Version 5.0-alpha.6
 
 *Release Date: 2021-09-10*
