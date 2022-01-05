@@ -975,8 +975,8 @@ Normal shutdown_count*
 | ---------- | --------- | ------------------------------------------------------------ |
 | normal     | Integer   | Number of normally closed connections, only returned when the count is greater than 0 |
 | kicked     | Integer   | Number of manually dropped connections, only returned if the count is greater than 0 |
-| discarded  | Integer   | Number of connections dropped because `Clean Session` or `Clean Start` is `true` |
-| takenover | Integer   | Number of connections takenover because `Clean Session` or `Clean Start` is `false` |
+| discarded  | Integer   | Number of discarded events for non-persistent sessions (when `Clean Session` or `Clean Start` set `true`) |
+| takenover  | Integer   | Number of take-over events for persistent sessions (when `Clean Session` or `Clean Start` set to `false`) |
 
 **Examples:**
 
@@ -1147,9 +1147,9 @@ Returns all statistical  metrics under the cluster
 | packets.auth.sent               | Integer   | Number of sent AUTH packet |
 | rules.matched                   | Integer   | Number of rule matched |
 | session.created                 | Integer   | Number of sessions created |
-| session.discarded               | Integer   | Number of sessions dropped because `Clean Session` or `Clean Start` is `true` |
-| session.resumed                 | Integer   | Number of sessions resumed because `Clean Session` or `Clean Start` is false |
-| session.takenover              | Integer   | Number of sessions takenover because `Clean Session` or `Clean Start` is false |
+| session.discarded               | Integer   | Number of discarded non-persistent sessions (`Clean Session` or `Clean Start` is `true`) |
+| session.resumed                 | Integer   | Number of resumed persistent sessions (`Clean Session` or `Clean Start` is `false`) |
+| session.takenover               | Integer   | Number of taken over persistent sessions (`Clean Session` or `Clean Start` is `false`) |
 | session.terminated              | Integer   | Number of terminated sessions |
 
 **Examples:**

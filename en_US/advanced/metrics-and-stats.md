@@ -115,7 +115,7 @@ EMQ X Broker divides metrics into Metrics and Stats. Metrics usually refer to da
 | session.created       | Integer   | `session.created` hook trigger times                      |
 | session.discarded     | Integer   | `session.discarded` hook trigger times                    |
 | session.resumed       | Integer   | `session.resumed` hook trigger times                      |
-| session.takenover    | Integer   | `session.takenover` hook trigger times                   |
+| session.takenover     | Integer   | `session.takenover` hook trigger times                    |
 | session.terminated    | Integer   | `session.terminated` hook trigger times                   |
 
 ## Stats

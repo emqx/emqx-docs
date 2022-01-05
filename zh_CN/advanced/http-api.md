@@ -1024,8 +1024,8 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/nodes/emq
 | ---------- | --------- | ------------------------------------------------------------ |
 | normal     | Integer   | 正常关闭的连接数量，仅在计数大于 0 时返回                    |
 | kicked     | Integer   | 被手动踢除的连接数量，仅在计数大于 0 时返回                  |
-| discarded  | Integer   | 由于 `Clean Session` 或 `Clean Start` 为 `true` 而被丢弃的连接数量 |
-| takenover | Integer   | 由于 `Clean Session` 或 `Clean Start` 为 `false` 而被接管的连接数量 |
+| discarded  | Integer   | 而被丢弃的非持久会话连接数量 |
+| takenover  | Integer   | 而被接管的持久会话连接数量 |
 
 **Examples:**
 
@@ -1254,9 +1254,9 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 | packets.auth.sent               | Integer   | 发送的 AUTH 报文数量 |
 | rules.matched                   | Integer   | 规则的匹配次数 |
 | session.created                 | Integer   | 创建的会话数量 |
-| session.discarded               | Integer   | 由于 `Clean Session` 或 `Clean Start` 为 `true` 而被丢弃的会话数量 |
-| session.resumed                 | Integer   | 由于 `Clean Session` 或 `Clean Start` 为 `false` 而恢复的会话数量 |
-| session.takenover              | Integer   | 由于 `Clean Session` 或 `Clean Start` 为 `false` 而被接管的会话数量 |
+| session.discarded               | Integer   | 被丢弃的非持久会话数量 |
+| session.resumed                 | Integer   | 恢复的持久会话数量 |
+| session.takenover               | Integer   | 被接管的非持持会话数量 |
 | session.terminated              | Integer   | 终结的会话数量 |
 
 **Examples:**

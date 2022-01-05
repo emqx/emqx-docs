@@ -124,7 +124,7 @@ EMQ X Broker is based on a client's key activities during its life cycle, and pr
 | session.unsubscribed | Session unsubscription      | After the unsubscription operation is completed              |
 | session.resumed      | Session resume              | when `client.connected` is executed and the old session information is successfully resumed |
 | session.discarded    | Session discarded           | After the session was terminated due to discarding           |
-| session.takenover   | Session takenover          | After the session was terminated due to takeovering          |
+| session.takenover    | Session takenover           | After the session was terminated due to take-over            |
 | session.terminated   | Session terminated          | After the session was terminated due to other reason         |
 | message.publish      | Message published           | Before the server publishes (routes) the message             |
 | message.delivered    | Message delivered           | Before the message is ready to be delivered to the client    |
@@ -182,7 +182,7 @@ The input parameters and returned value of the callback function are shown in th
 | session.unsubscribed | `ClientInfo`：Client information parameters<br/>`Topic`：unsubscribed topic<br/>`SubOpts`：Configuration options for unsubscribe operations | -                   |
 | session.resumed      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
 | session.discarded    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
-| session.takenover   | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information |                     |
+| session.takenover    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information |                     |
 | session.terminated   | `ClientInfo`：Client information parameters<br/>`Reason`：Termination reason <br>`SessInfo`：Session information | -   |
 | message.publish      | `Message`：Message object                            | New `Message`   |
 | message.delivered    | `ClientInfo`：Client information parameters<br/>`Message`：Message object | New `Message`   |
