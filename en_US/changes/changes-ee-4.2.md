@@ -15,6 +15,33 @@ ref: undefined
 
 # Release version
 
+## 4.2.10 Version
+
+*Release date: 2022-01-13*
+
+### Enhancement
+
+- The action's metrics in rule engine will no longer be cleared when updating
+- Supports configuring whether to forward retained messages with empty payload to suit users who are still using MQTT v3.1. The relevant configurable item is `retainer.stop_publish_clear_msg`
+- Optimize the use and interaction of the built-in access control file module
+- Change the default value of the `max_topic_levels` configurable item to 128. Previously, it had no limit (configured to 0), which may be a potential DoS threat
+- Improve the error log content when the Proxy Protocol message is received but the `proxy_protocol` configuration is not turned on
+
+### Important fixes
+
+- Fix the issue that the rule engine may have a higher failure rate when saving data to MySQL
+- Fix the issue of garbled data when writing data to RocketMQ asynchronously
+- Fix the issue of inaccurate metrics of RocketMQ
+- Fix the issue that the Max Returned Count option in the MongoDB-based offline message feature of the rule engine cannot be used
+- Fixed an issue that health checks on resources could block the creation process
+
+### Minor fixes
+
+- Fixed the issue that the Retain Handling subscription option in the proxy subscription module could not be configured to 2
+- Fix the issue that the client list obtained by filtering by session creation time is inaccurate
+- Fix Erlang VM memory calculation error in Dashboard node details page
+- Removed run-time configurable items that have expired, support more run-time configurable items
+
 ## 4.2.9 Version
 
 *Release date: 2021-11-17*
