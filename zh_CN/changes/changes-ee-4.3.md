@@ -15,6 +15,22 @@ ref:
 
 # 版本发布
 
+## 4.3.7 版本
+
+*发布日期: TODO*
+
+EMQ X 4.3.7 现已发布，主要包含以下改动:
+
+### 增强
+
+- license 连接数上限可配置预警，默认连接数达到配额80%则告警，小于75%就解除告警。也可用户自定义于emqx.conf： `license.connection_high_watermark_alarm` , `license.connection_low_watermark_alarm`
+- license 过期时间预警，当有效期小于30天时，会告警提示。
+
+### 修复
+
+- 修复多次修改`emqx_auth_mnesia.conf`中的默认用户的密码，重启新密码不生效问题。
+
+
 ## 4.3.6 版本
 
 *发布日期: 2021-12-17*
