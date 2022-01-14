@@ -90,7 +90,11 @@ node.max_ports = 1048576
 
 ## EMQ X Broker Tuning
 
- Tune the acceptor pool, max_clients limit and sockopts for TCP listener in etc/emqx.conf: 
+Tune the acceptor pool, max_clients limit and socket options.
+
+For EMQ X Community edition, find listeners config in `etc/emqx.conf`
+
+For EMQ X Enterprise eidtion, find listeners config in `etc/listeners.conf`
 
 ```bash
 ## TCP Listener

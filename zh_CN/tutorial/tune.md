@@ -106,7 +106,10 @@ node.max_ports = 1048576
 
 ## EMQ X 消息服务器参数
 
-设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。配置文件 emqx/etc/emqx.conf:
+设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。
+
+EMQ X 社区版 配置文件 emqx/etc/emqx.confa
+EMQ X 企业版 配置文件 emqx/etc/listeners.conf
 
 ```bash
 ## TCP Listener
