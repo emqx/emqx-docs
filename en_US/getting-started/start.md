@@ -65,13 +65,11 @@ Node 'emqx@127.0.0.1' not responding to pings。
 
 You can check the log file from [`logs`](getting-started/directory.md) and confirm whether it belongs to [Common Error](faq/error.md#).
 
-{% emqxce %}
 
 After 4.2-rc.1, EMQ X has added [telemetry](./advanced/telemetry.md), Please learn more before starting.
 
 ## Start EMQ X Enterprise
 EMQ X Enterprise needs a license file to start normally. EMQ X can skip this step.
-{% endemqxce %}
 
 
 ## Request a trial license
