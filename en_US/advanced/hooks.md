@@ -80,19 +80,12 @@ The above is the main design concept of the callback function chain, which regul
 
 In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation. 
 
-{% emqxce %}
 
 - For hooks and HTTP server applications, Refer to: [WebHook](webhook.md)
 - For hooks and other language applications, Refer to: [Multipe-Language-Support](multiple-language-support.md)
     - Only Lua is currently supported, Refer to: [emqx_lua_hook](multiple-language-support.md#lua)
 
-{% endemqxce %}
 
-{% emqxee %}
-
-- For hooks and HTTP server applications, Refer to: [WebHook](webhook.md)
-
-{% endemqxee %}
 
 
 ## HookPoint

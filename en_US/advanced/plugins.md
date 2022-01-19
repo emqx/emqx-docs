@@ -4,7 +4,7 @@ The EMQ X Broker distribution contains a large number of official plug-ins, whic
 
 They rely on the code API of  [emqx](https://github.com/emqx/emqx) or[hooks](hooks.md) for their special functions.
 
-You can compile it with the [emqx](https:://github.com/emqx/emqx) core project and package it into a working package through the package compilation tool [emqx-rel](https://github.com/emqx/emqx-rel).
+You can compile it with the [emqx](https://github.com/emqx/emqx) core project and package it into a working package through the package compilation tool [emqx-rel](https://github.com/emqx/emqx-rel).
 
 ::: danger
 EMQ X Enterprise edition customers are not provided with the source code.

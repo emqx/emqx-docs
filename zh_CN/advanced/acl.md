@@ -32,18 +32,11 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 **配置文件/内置数据源**
 
-{% emqxee %}
 
-* [内置数据库 认证/访问控制](../modules/mnesia_authentication.md)
-
-{% endemqxee %}
-
-{% emqxce %}
 
 * [内置 ACL](./acl-file.md)
 * [Mnesia ACL](./acl-mnesia.md)
 
-{% endemqxce %}
 
 使用配置文件提供认证数据源，适用于变动较小的 ACL 管理。
 
@@ -51,24 +44,13 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 **外部数据库**
 
-{% emqxee %}
 
-* [MySQL 认证/访问控制](../modules/mysql_authentication.md)
-* [PostgreSQL 认证/访问控制](../modules/pgsql_authentication.md)
-* [Redis 认证/访问控制](../modules/redis_authentication.md)
-* [MongoDB 认证/访问控制](../modules/mongo_authentication.md)
-* [LDAP 认证/访问控制](../modules/ldap_authentication.md)
-
-{% endemqxee %}
-
-{% emqxce %}
 
 * [MySQL ACL](./acl-mysql.md)
 * [PostgreSQL ACL](./acl-postgres.md)
 * [Redis ACL](./acl-redis.md)
 * [MongoDB ACL](./acl-mongodb.md)
 
-{% endemqxce %}
 
 外部数据库可以存储大量数据、动态管理 ACL，方便与外部设备管理系统集成。
 
@@ -76,17 +58,10 @@ EMQ X 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 **其他**
 
-{% emqxee %}
 
-* [HTTP 认证/访问控制](../modules/http_authentication.md)
-
-{% endemqxee %}
-
-{% emqxce %}
 
 * [HTTP ACL](./acl-http.md)
 
-{% endemqxce %}
 
 HTTP ACL 能够实现复杂的 ACL 管理。
 
@@ -106,17 +81,10 @@ ACL 是允许与拒绝条件的集合，EMQ X 中使用以下元素描述 ACL �
 "允许(Allow) / 拒绝(Deny)"  "谁(Who)"  "订阅(Subscribe) / 发布(Publish)" "主题列表(Topics)"
 ```
 
-{% emqxee %}
 
-同时具有多条 ACL 规则时，EMQ X 将按照规则排序进行合并，以 ACL 文件中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
-
-{% endemqxee %}
-
-{% emqxce %}
 
 同时具有多条 ACL 规则时，EMQ X 将按照规则排序进行合并，以 [ACL 文件](./acl-file.md) 中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
 
-{% endemqxce %}
 
 
 1. 第一条规则允许客户端发布订阅所有主题
@@ -160,17 +128,10 @@ ACL 是允许与拒绝条件的集合，EMQ X 中使用以下元素描述 ACL �
 acl_nomatch = allow
 ```
 
-{% emqxce %}
 
 配置默认 [ACL 文件](./acl-file.md)，使用文件定义默认 ACL 规则：
 
-{% endemqxce %}
 
-{% emqxee %}
-
-配置默认 ACL 文件，使用文件定义默认 ACL 规则：
-
-{% endemqxee %}
 
 ```bash
 # etc/emqx.conf

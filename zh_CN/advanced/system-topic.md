@@ -31,12 +31,10 @@ $SYS 系统消息发布周期配置项：
 broker.sys_interval = 1m
 ```
 
-{% emqxce %}
 
 ::: danger
 EMQ X 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [内置 ACL](./acl-file.md) 修改发布订阅 ACL 规则。
 
-{% endemqxce %}
 
 EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [Webhook](./webhook.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#endpoint-metrics) 获取。
 :::

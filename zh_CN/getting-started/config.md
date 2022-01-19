@@ -19,23 +19,7 @@ ref:
 
 EMQ X 的配置文件通常以 `.conf` 作为后缀名，你可以在 `etc` 目录找到这些配置文件，主要配置文件包括：
 
-{% emqxee %}
 
-| 配置文件           | 说明                      |
-| ------------------ | ------------------------- |
-| etc/emqx.conf      | EMQ X 基础配置文件  |
-| etc/cluster.conf      | EMQ X 集群相关配置文件  |
-| etc/rpc.conf      | EMQ X 远程调用配置文件  |
-| etc/logger.conf      | EMQ X 日志配置文件  |
-| etc/zones.conf      | EMQ X Zone配置文件  |
-| etc/listeners.conf      | EMQ X 监听端口配置文件  |
-| etc/sys_mon.conf      | EMQ X 告警监控配置文件  |
-| etc/acl.conf       | EMQ X 默认 ACL 规则配置文件 |
-| etc/plugins/*.conf | EMQ X 扩展插件配置文件      |
-
-{% endemqxee %}
-
-{% emqxce %}
 
 | 配置文件           | 说明                      |
 | ------------------ | ------------------------- |
@@ -43,7 +27,6 @@ EMQ X 的配置文件通常以 `.conf` 作为后缀名，你可以在 `etc` 目�
 | etc/acl.conf       | EMQ X 默认 ACL 规则配置文件 |
 | etc/plugins/*.conf | EMQ X 扩展插件配置文件      |
 
-{% endemqxce %}
 
 
 需要注意的是，安装方式不同 `etc` 目录所处的路径可能不同，具体请参见 [目录结构](./directory.md#)。
