@@ -66,7 +66,6 @@ EMQ X Broker reads the configuration in `etc/emqx.conf` and `etc/plugins/*.conf`
 
 The `loaded_plugins` file records the list of plug-ins that was started by EMQ X Broker by default. You can modify this file to add or delete plug-ins. The startup item format in `loaded_plugins` is `{<Plugin Name>, <Enabled>}. `, the `<Enabled> `field is a Boolean type, and EMQ X Broker will determine whether to start this plugin according to the value of `<Enabled> `. For more information about plugins, please see [plug-ins](advanced/plugins.md).
 
-{% emqxce %}
 ```bash
 $ cat loaded_plugins
 {emqx_management,true}.
@@ -76,22 +75,7 @@ $ cat loaded_plugins
 {emqx_rule_engine,true}.
 {emqx_bridge_mqtt,false}.
 ```
-{% endemqxce %}
 
-{% emqxee %}
-```bash
-$ cat loaded_plugins
-{emqx_management, true}.
-{emqx_recon, true}.
-{emqx_retainer, true}.
-{emqx_conf, true}.
-{emqx_dashboard, true}.
-{emqx_schema_registry, true}.
-{emqx_rule_engine, true}.
-{emqx_bridge_mqtt, false}.
-{emqx_cube, false}.
-```
-{% endemqxee %}
 
 **mnesia**
 
