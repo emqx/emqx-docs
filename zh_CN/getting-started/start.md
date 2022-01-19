@@ -38,13 +38,11 @@ $ sudo service emqx start
 EMQ X v4.0.0 is started successfully!
 ```
 
-{% emqxce %}
 ::: tip
 如果你使用的是 EMQ X Enterprise 则需要导入 License 才能使用，导入步骤见下文**启动 EMQ X Enterprise**。
 
 通过 ZIP 压缩包安装的 EMQ X 不支持通过 systemctl 和 service 启动。
 :::
-{% endemqxce %}
 
 ## 查看 EMQ X 的状态
 
@@ -65,19 +63,9 @@ Node 'emqx@127.0.0.1' not responding to pings。
 
 你可以查看 [`logs`](../getting-started/directory.md) 下的日志文件并确认是否属于 [常见错误](../faq/error.md#)。
 
-{% emqxce %}
 ## 启动 EMQ X Enterprise
 EMQ X Enterprise 需要 License 文件才能正常启动，EMQ X 可以略过这一步。
-{% endemqxce %}
 
-{% emqxee %}
-## License
-
-EMQ X Enterprise 需要 License 文件才能正常启动，请联系销售人员或在线自助购买/申请试用以获取 License。
-
-- 试用版 License：到期后将停止正在运行的 EMQ X；
-- 正式版 License：到期后
-{% endemqxee %}
 
 ### 申请试用 License
 
