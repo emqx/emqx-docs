@@ -143,7 +143,7 @@ auth.redis.acl_cmd = HGETALL mqtt_acl:%u
 1. 哈希中使用 topic 作为键，access 作为值
 
 
-::: danger 
+::: tip 
 Redis ACL 规则需严格使用上述数据结构。
 Redis ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
 :::
