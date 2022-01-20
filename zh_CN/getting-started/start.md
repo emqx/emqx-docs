@@ -88,6 +88,6 @@ EMQ X Enterprise 需要 License 文件才能正常启动，EMQ X 可以略过这
 
 - 如果是正在运行的 EMQ X Enterprise 需要更新 License 文件，那么可以使用 `emqx_ctl license reload [license 文件所在路径]` 命令直接更新 License 文件，无需重启 EMQ X Enterprise。
 
-::: danger
+::: tip
 `emqx_ctl license reload` 命令加载的证书仅在 EMQ X Enterprise 本次运行期间生效，如果需要永久更新 License 证书的路径，依然需要替换旧证书或修改配置文件。
 :::

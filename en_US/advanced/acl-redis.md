@@ -145,5 +145,5 @@ You can adjust the ACL query command according to business requirement. However,
 
 1. Topic is used as key and access is used as value in hash
 
-::: danger 
+::: tip 
 The above data structures   need to be used strictly for Redis ACL rules.All rules added in Redis ACL are `allow` rules, which can be used with `acl_nomatch = deny` in` etc / emqx.conf`. :::

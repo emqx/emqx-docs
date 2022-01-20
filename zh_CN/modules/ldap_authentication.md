@@ -124,7 +124,7 @@ userPassword:: e1NIQX1tbGIzZmF0NDBNS0JUWFVWWndDS21MNzNSLzA9
 
 `mqttPubSubTopic` 允许订阅/发布的主题(可以配置多个)
 
-::: danger
+::: tip
 
 目前版本仅支持 OpenLDAP，不支持 Microsoft Active Directory。
 
