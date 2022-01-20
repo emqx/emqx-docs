@@ -136,12 +136,6 @@ EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更�
 
 `topics/count` 和 `topics/max` 与 `routes/count` 和 `routes/max` 数值上是相等的。
 
-### 慢订阅者统计
-
-| 主题 (Topic)  | 说明             |
-| ------------ | ---------------- |
-| slow_subs | 当前慢订阅者统计数据 |
-
 ## 收发流量 / 报文 / 消息统计
 
 系统主题 (Topic) 前缀: `$SYS/brokers/${node}/metrics/`
