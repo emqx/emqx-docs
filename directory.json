@@ -2,16 +2,7 @@
   "cn": [
     {
       "title": "产品概览",
-      "children": [
-        {
-          "title": "EMQ X 消息服务器简介",
-          "path": "./"
-        },
-        {
-          "title": "EMQ X 消息服务器功能列表",
-          "path": "introduction/checklist"
-        }
-      ]
+      "path": "./"
     },
     {
       "title": "开始使用",
@@ -474,16 +465,7 @@
   "en": [
     {
       "title": "Introduction",
-      "children": [
-        {
-          "title": "EMQ X Broker",
-          "path": "./"
-        },
-        {
-          "title": "Features List",
-          "path": "introduction/checklist"
-        }
-      ]
+      "path": "./"
     },
     {
       "title": "Get Started",
