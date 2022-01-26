@@ -126,7 +126,7 @@ After EMQ X is started successfully, you can visit [http://localhost:18083/](htt
 emqx start
 ```
 
-After the startup is successful, you can use the emqx ping command to check the running status of the node. If pong is returned, it means the running status is OK:
+After the startup is successful, you can use the `emqx ping` command to check the running status of the node. If pong is returned, it means the running status is OK:
 
 ```bash
 emqx ping
