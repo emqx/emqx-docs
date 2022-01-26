@@ -15,7 +15,7 @@ ref:
 
 # 快速开始
 
-本章节将指导您从下载安装开始，快速入门 EMQ X 主要功能和关键特性。
+本章节将指导您从下载安装开始，快速开始使用 EMQ X。
 
 ## 版本选择
 
@@ -48,6 +48,7 @@ EMQ X 提供开源版和企业版下载安装，也提供了全托管的 MQTT �
 :::
 
 ::: tab EMQ X 企业版
+
 **「随处运行，无限连接，任意集成」**云原生分布式物联网接入平台，一体化的分布式 MQTT 消息服务和强大的 IoT 规则引擎，为高可靠、高性能的物联网实时数据移动、处理和集成提供动力，助力企业快速构建关键业务的 IoT 平台与应用。
 
 - 标准或专有多协议支持
@@ -71,7 +72,7 @@ EMQ X Cloud 是全球首个全托管的 MQTT 5.0 公有云服务。在 [EMQ X Cl
 
 ### 通过 Docker 容器运行
 
-EMQ X 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.com/r/emqx/emqx)上了解该镜像的详细信息。通过容器化部署是您能快速开始体验 EMQ X 产品的方式之一。
+EMQ X 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.com/r/emqx/emqx)上了解该镜像的详细信息。通过容器化部署是快速开始体验 EMQ X 的最快方式。
 
 1. 获取 Docker 镜像
 
@@ -91,7 +92,7 @@ EMQ X 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker
 
 对于使用 Kubernetes 的用户，EMQ X 提供了 [EMQ X Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator)。该 Operator 可以帮助您在 Kubernetes 环境下快速部署一个可用于生产环境的，功能完备的 EMQ X 集群。
 
-EMQ X Kubernetes Operator 是基于 Kubernetes 原生 API 开发的应用编排工具，用于 EMQ X 集群的自动化部署和生命周期管理。您可以查阅 EMQ X Kubernetes Operator 的[文档](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md)来了解如何使用 Operator 部署 EMQ X。
+EMQ X Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具，用于 EMQ X 集群的自动化部署和生命周期管理。您可以查阅[文档](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md)来了解如何使用 Operator 部署 EMQ X。
 
 ### Terraform 安装部署
 

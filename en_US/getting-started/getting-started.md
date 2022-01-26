@@ -15,7 +15,7 @@ ref:
 
 # Getting Started
 
-Starting from download and installation, this article will guide you to get started quickly on the main functionalities and key features of EMQ X.
+Starting from download and installation, this section will take you to quickly get started with EMQ X.
 
 ## Select EMQ X Version
 
@@ -23,7 +23,7 @@ EMQ X as a software is released in two different editions: Community and Enterpr
 
 :::: tabs type:card
 
-::: tab EMQ X Community Edition 
+::: tab EMQ X Community Edition
 The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
 
 - Fully open-sourced under APL 2.0
