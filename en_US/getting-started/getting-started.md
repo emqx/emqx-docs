@@ -50,7 +50,7 @@ Connecting your IoT devices to everything with reliable, real-time IoT data tran
 ::: tab EMQ X Enterprise Edition 
 The world’s leading **Cloud-Native IoT Messaging Platform** with an all-in-one distributed MQTT broker and SQL-based IoT rule engine, powering high-performance, reliable data transport, processing, and integration for business-critical IoT solutions.
 
-- Multiple IoT protocols support
+- Support for multiple IoT protocols
 - Powerful SQL-based rule engine
 - Data persistence and bridging
 - Management & monitoring center
