@@ -28,7 +28,7 @@ The world's most scalable distributed MQTT broker with a high-performance real-t
 
 - Fully open-sourced under APL 2.0
 - MQTT 3.1.1 and MQTT 5.0 spec
-- High available, masterless clustering
+- Highly available, masterless clustering
 - High concurrency with low latency
 - Extensible gateways and plugins
 
