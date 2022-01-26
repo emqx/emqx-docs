@@ -725,6 +725,10 @@
       "title": "DevOps",
       "children": [
         {
+          "title": "Device management",
+          "path": "tutorial/device-management"
+        },
+        {
           "title": "System tuning",
           "path": "tutorial/tune"
         },
