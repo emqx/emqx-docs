@@ -92,7 +92,7 @@ For more information about Docker installation and building a cluster quickly wi
 
 For users using Kubernetes, EMQ X provides [EMQ X Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator). This Operator can help you quickly deploy an EMQ X cluster with complete functions that can be used in a production environment in Kubernetes environment.
 
-EMQ X Kubernetes Operator is an application orchestration tool developed based on Kubernetes native API, which is used for automatic deployment and lifecycle management of EMQ X clusters. You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md) of the EMQ X Kubernetes Operator to learn how to deploy EMQ X using the Operator.
+EMQ X Kubernetes Operator is an application orchestration tool based on Kubernetes native API, which is used for automatic deployment and lifecycle management of EMQ X clusters. You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md) to learn how to deploy EMQ X using the Operator.
 
 ### Install EMQ X on Terraform
 
