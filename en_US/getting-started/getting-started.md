@@ -105,7 +105,7 @@ For more information about Terraform installation and deployment, please refer t
 
 ### Run in a virtual machine or physical machine
 
-EMQ X Enterprise can be directly deployed on bare metal servers or virtual machines. A minimum of 2 core and 4GB machine can run the EMQ X Enterprise. It can support CentOS/Debian/Ubuntu/MacOS operating systems.
+EMQ X Enterprise can be deployed directly to bare metal servers or virtual machines. A minimum of 2 core and 4GB machine can run the EMQ X Enterprise. It can support CentOS/Debian/Ubuntu/MacOS operating systems.
 
 - [Shell script one-click installation (Linux)](./install.md#one-click-installation-of-shell-script-linux)
 - [CentOS installation](./install.md#centos)
