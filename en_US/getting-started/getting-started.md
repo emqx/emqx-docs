@@ -72,7 +72,7 @@ EMQ X Cloud is the first fully managed MQTT 5.0 public cloud service in the worl
 
 ### Running EMQ X in containers
 
-Learn more about the docker image on [Docker Hub](https://hub.docker.com/r/emqx/emqx). Container deployment is one of the ways you can quickly start to experiment with EMQ X
+Learn more about the docker image on [Docker Hub](https://hub.docker.com/r/emqx/emqx). Container deployment is the quickest way to start experimenting with EMQ X
 
 1. Get the Docker image
 
