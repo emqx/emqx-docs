@@ -118,7 +118,7 @@ If you need FreeBSD, other hardware platforms or other Linux distribution instal
 
 After the installation, you can start EMQ X through the command of systemctl or emqx. For more startup methods and precautions, please refer to [Starting EMQ X](./start.md).
 
-After EMQ X is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/) (replace localhost with your actual IP address) through a browser to access [EMQ X Dashboard](./dashboard.html) management console for device connection and related indicator monitoring and management.
+After EMQ X is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/) (replace localhost with your actual IP address) through a browser to access [EMQ X Dashboard](./dashboard.md) management console for device connection and related indicator monitoring and management.
 
 ### Start EMQ X in the background
 
@@ -192,7 +192,6 @@ The following is the introduction and description of popular MQTT client librari
 - [MQTT Erlang client library](../development/erlang.md)
 - [MQTT JavaScript client library](../development/javascript.md)
 - [MQTT Python client library](../development/python.md)
-- [MQTT WeChat miniprogram access](../development/wechat-miniprogram.md)
 
 ### Client library project engineering code example
 
