@@ -32,7 +32,7 @@ The world's most scalable distributed MQTT broker with a high-performance real-t
 - High concurrency with low latency
 - Extensible gateways and plugins
 
-[Download](https://www.emqx.com/en/try?product=broker)
+[Download](https://www.emqx.io/downloads)
 :::
 
 ::: tab EMQ X Cloud
