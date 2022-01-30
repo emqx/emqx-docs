@@ -34,7 +34,7 @@ create table mqtt_sub (
     ) engine = MergeTree() ORDER BY clientid;
 ```
 
-::: danger
+::: tip
 
 消息表结构不能修改，请使用上面SQL语句创建
 

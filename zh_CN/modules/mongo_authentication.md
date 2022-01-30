@@ -118,7 +118,7 @@ MongoDB 支持配置集合名称、认证字段、认证占位符等等参数。
 | 超级用户查询字段名 | 需要从集合里面查询出来的字段 |
 | 超级用户条件字段 | 超级用户查询的条件，如果需要查询多个，使用逗号分隔。例如 username=%u,clientid=%c |
 
-::: danger
+::: tip
 
 MongoDB ACL 规则需严格使用上述数据结构。 MongoDB ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
 

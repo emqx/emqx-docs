@@ -17,11 +17,11 @@ cd kafka_2.13-2.8.0
 ./bin/kafka-server-start.sh config/server.properties
 ```
 
-::: danger
+::: tip
 
-Kafka消费组不支持Kafka0.9以下版本
+Kafka 消费组不支持 Kafka0.9 以下版本
 
-创建资源之前，需要提前创建Kafka主题，不然会提示错误
+创建资源之前，需要提前创建 Kafka 主题，不然会提示错误
 
 :::
 

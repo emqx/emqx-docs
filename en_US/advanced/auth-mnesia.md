@@ -63,7 +63,7 @@ When the plugin starts, it will read the preset authentication data and load it 
 
 <!-- TODO 补充加载规则 -->
 
-::: danger
+::: tip
 
 The preset authentication data uses a clear text password in the configuration file. For security and maintainability, this function should be avoided.
 

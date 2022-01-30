@@ -104,7 +104,6 @@ ref:
   - 从 MongoDB 中获取订阅关系
 - Schema Registry：将 EMQ X 的事件、消息 提供了数据编解码能力
 
-{% emqxce %}
 
 ## EMQ X Enterprise
 
@@ -122,19 +121,11 @@ EMQ X Enterprise 支持百万级物联网设备一站式接入、MQTT&CoAP 多�
 感谢你对 EMQ X 的支持，如果有企业服务需要，请联系我们的销售人员 sales-cn@emqx.io。
 :::
 
-{% endemqxce %}
 
-{% emqxee %}
 
-## 功能说明
-
-{% endemqxee %}
-
-{% emqxce %}
 
 ## 企业版功能
 
-{% endemqxce %}
 
 ### 消息数据存储
 
@@ -179,10 +170,8 @@ Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进
 编解码相关配置，详见"编解码"章节。
 
 
-{% emqxce %}
 
 ## EMQ X 不同版本对比
 
 详细对比以及价格参见 [EMQ X 定价](https://www.emqx.com/zh/products/emqx)。
 
-{% endemqxce %}

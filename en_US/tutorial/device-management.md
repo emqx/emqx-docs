@@ -27,7 +27,7 @@ The management system can directly read and write external authentication databa
 
 ## Online status and connection history management
 
-When the device is connected or disconnected, EMQ X can send the online and offline information to the management system HTTP API through the Webhook plug-in and [rule engine](../advanced/rule-engine.md) to realize the device online status rewriting and device connection/disconnection history recording and other functions.
+When the device is connected or disconnected, EMQ X can send the online and offline information to the management system HTTP API through the Webhook plug-in and [rule engine](../rule/rule-engine.md) to realize the device online status rewriting and device connection/disconnection history recording and other functions.
 
 Use the disconnecting device API to achieve online device kick out and session clean operations.
 

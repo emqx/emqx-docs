@@ -33,7 +33,7 @@ To enable HTTP ACL, the following needs to be configured in `etc/plugins/emqx_au
 
 EMQ X Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP statusCode .
 
- - Authorization denied: API returns 4xx status code
+ - Authorization denied: The API returns status codes other than 200
  - Authorization succeeded: API returns 200 status code
  - Authorization ignored: API returns 200 status code with the message body of ignore
 
@@ -115,7 +115,7 @@ You can use the following placeholders in the authentication request, and EMQ X 
 - %C:TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
 - %d:TLS certificate subject, valid only for TLS connections
 
-::: danger 
+::: warning 
 The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
 
 :::

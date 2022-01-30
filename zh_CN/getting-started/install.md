@@ -31,7 +31,7 @@ EMQ X 目前支持的操作系统:
 + macOS 10.15
 + Windows Server 2019
 
-::: danger
+::: tip
 产品部署建议 Linux 服务器，不推荐 Windows 服务器。
 :::
 

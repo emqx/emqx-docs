@@ -265,7 +265,7 @@ You can use the following placeholders in ACL queries, and EMQ X Broker will aut
 - %u：username
 - %c：Client ID
 
-::: danger 
+::: tip
 MongoDB ACL rules need to use the above data structures strictly.
 All rules added in MongoDB ACL are **allow** rules, which can be used with `acl_nomatch=deny` in` etc/emqx.conf`.
 :::

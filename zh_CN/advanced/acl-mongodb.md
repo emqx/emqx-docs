@@ -288,7 +288,7 @@ db.mqtt_acl.find({
 - %c：Client ID
 
 
-::: danger 
+::: tip 
 MongoDB ACL 规则需严格使用上述数据结构。
 MongoDB ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
 :::
