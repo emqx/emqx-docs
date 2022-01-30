@@ -17,7 +17,7 @@ ref:
 
 Starting from download and installation, this section will take you to quickly get started with EMQ X.
 
-## Select EMQ X Version
+## Select EMQ X Edition
 
 EMQ X as a software is released in two different editions: Community and Enterprise. EMQ as a company offers a fully managed MQTT cloud service [EMQ X Cloud](https://www.emqx.com/en/try?product=cloud) which runs EMQ X Enterprise edition. You can customize the deployment to suit your business development plans the best and get started quickly.
 
