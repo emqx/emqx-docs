@@ -58,6 +58,51 @@ Cookies are used for interconnection authentication between Erlang nodes. A cook
 
 See <http://erlang.org/doc/reference_manual/distributed.html> for details.
 
+### Using TLS for backplane connections
+It is possible to enable TLS encryption for the backplane connections. It comes at the cost of increased CPU load, though.
+
+1. Create a root CA using `openssl` tool:
+   ```
+   # Create self-signed root CA:
+   openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key -out rootCA.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
+   ```
+2. Generate CA-signed certificates for the nodes using the rootCA.pem created at step 1:
+   ```
+   # Create a private key:
+   openssl genrsa -out domain.key 2048
+   # Create openssl extfile:
+   cat <<EOF > domain.ext
+   authorityKeyIdentifier=keyid,issuer
+   basicConstraints=CA:FALSE
+   subjectAltName = @alt_names
+   [alt_names]
+   DNS.1 = backplane
+   EOF
+   # Create a CSR:
+   openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
+   # Sign the CSR with the Root CA:
+   openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
+   ```
+   All the nodes in the cluster must use certificates signed by the same CA.
+3. Put the generated `domain.pem`, `domain.key` and `rootCA.pem` files to `/var/lib/emqx/ssl` on each node of the cluster.
+   Make sure the emqx user can read these files, and permissions are set to `600`.
+4. Add the following configuration to `./releases/4.4.0/emqx.schema` file, if not present:
+   ```
+   {mapping, "rpc.default_client_driver", "gen_rpc.default_client_driver",
+   [ {default, tcp}
+   , {datatype, {enum, [tcp, ssl]}}
+   ]}.
+   ```
+5. Add the following configuration to `etc/rpc.conf`:
+   ```
+   rpc.driver=ssl
+   rpc.default_client_driver=ssl
+   rpc.certfile=/var/lib/emqx/ssl/domain.pem
+   rpc.cacertfile=/var/lib/emqx/ssl/rootCA.pem
+   rpc.keyfile=/var/lib/emqx/ssl/domain.key
+   rpc.enable_ssl=5369
+   ```
+
 ### EMQ X Broker Cluster protocol settings
 Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, and the connection method can be configured in`etc/emqx.conf`:
 
@@ -155,7 +200,7 @@ cluster.discovery = static
 cluster.static.seeds = emqx1@127.0.0.1,emqx2@127.0.0.1
 ```
 
-### Autocluster based on mcast  
+### Autocluster based on mcast
 Automatically discover and create clusters based on UDP multicast:
 
 ```bash
@@ -167,7 +212,7 @@ cluster.mcast.ttl = 255
 cluster.mcast.loop = on
 ```
 
-### Autocluster based on DNS A records 
+### Autocluster based on DNS A records
 Automatically discover and create clusters based on DNS A records:
 
 ```bash
@@ -176,7 +221,7 @@ cluster.dns.name = localhost
 cluster.dns.app  = ekka
 ```
 
-### Autocluster based on etcd 
+### Autocluster based on etcd
 Automatically discover and create clusters based on [etcd](https://coreos.com/etcd/):
 
 ```bash
@@ -186,7 +231,7 @@ cluster.etcd.prefix = emqcl
 cluster.etcd.node_ttl = 1m
 ```
 
-### Autocluster based on kubernetes 
+### Autocluster based on kubernetes
 Automatically discover and create clusters based on [Kubernetes](https://kubernetes.io/):
 
 ```bash
@@ -292,7 +337,7 @@ For users who only have one server, the pseudo-distributed starting mode can be 
 
 The basic process is to copy another emqx folder and name it emqx2. After that, we let all the listening ports of the original emqx to be added by an offset as the listening ports of the emqx2 node. For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 as the MQTT/TCP listening port for emqx2. Please refer to [Cluster Script](https://github.com/terry-xiaoyu/one_more_emqx) regarding to the above operations and also refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
 
-## Network Partition Autoheal 
+## Network Partition Autoheal
 *EMQ X* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
 
 ```bash
@@ -307,7 +352,7 @@ Network Partition Autoheal Process:
 4. The Leader node selects the self-healing Coordinator node in the majority partition;
 5. The Coordinator node restarts the minority partition node to restore the cluster.
 
-## Autoclean of Cluster nodes 
+## Autoclean of Cluster nodes
 *EMQ X* supports Autoclean frol cluster , which can be configured in `etc/emqx.conf` :
 
 ```bash
