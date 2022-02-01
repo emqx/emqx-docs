@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -654,6 +654,62 @@ NOTE: this config only takes effect when `rpc.port_discovery` is set to `manual`
 
 Set the number of RPC communication channels initiated by this node to each remote node. Set to 1 to ensure the order of messages. Keep the default value (half the number of CPU cores) to improve RPC throughput.
 
+### rpc.driver
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| enum    | `tcp`, `ssl`   | `tcp` |
+
+#### Description
+
+Transport-layer protocol used for communication between the brokers.
+
+
+### rpc.enable_ssl
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| integer | 1024 - 65535   | 5369 |
+
+#### Description
+
+Listening port used by RPC local service.
+Note that this config only takes effect when rpc.port_discovery is set to manual and driver is set to ssl.
+
+### rpc.certfile
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| string  |                |                 |
+
+#### Description
+
+Path to TLS certificate file used to validate identity of the cluster nodes.
+This configuration is mandatory when `rpc.driver` is set to `ssl`, otherwise it doesn't take any effect.
+
+
+### rpc.cacertfile
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| string  |                |                 |
+
+#### Description
+
+Path to certification authority TLS certificate file used to validate `rpc.certfile`.
+This configuration is mandatory when `rpc.driver` is set to `ssl`, otherwise it doesn't take any effect.
+
+
+### rpc.keyfile
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| string  |                |                 |
+
+#### Description
+
+Path to the private key file for the `rpc.certfile`.
+This configuration is mandatory when `rpc.driver` is set to `ssl`, otherwise it doesn't take any effect.
 
 
 ### rpc.connect_timeout
@@ -7178,7 +7234,7 @@ Specify the local port where the Stomp plugin listens.
 
 #### Description
 
-Specify the size of the thread pool for Stomp service Acceptor 
+Specify the size of the thread pool for Stomp service Acceptor
 
 
 
