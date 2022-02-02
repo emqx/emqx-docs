@@ -23,6 +23,8 @@ EMQ X 4.4-beta.1 现已正式发布，主要包含以下改动:
 
 **重要变更:**
 
+- 从 4.4 开始，EMQ X 的发行包命名将包含 Erlang/OTP 的版本号，例如 `emqx-4.4.0-otp24.1.5-3-centos7-arm64.rpm`
+
 - **对于 Debian/Ubuntu 用户**，Debian/Ubuntu 包 (deb) 安装的 EMQ X 现在可以在 systemd 上运行，这是为了利用 systemd 的监督功能来确保 EMQ X 服务在崩溃后重新启动。包安装服务从 init.d 升级到 systemd 已经过验证，但仍建议您在部署到生产环境之前再次验证确认，至少确保 systemd 在您的系统中可用
 
 - MongoDB 认证支持 DNS SRV 和 TXT Records 解析，可以与 MongoDB Altas 无缝对接
@@ -56,7 +58,7 @@ EMQ X 4.4-beta.1 现已正式发布，主要包含以下改动:
 
 **问题修复:**
 
-- 修复节点间 RPC 调用堵塞导致客户端进程失去响应的问题
+- 修复节点间 RPC 调用堵塞导致客户端进程失去响应的问题。详见 [Erlang/OTP #5346](#https://github.com/erlang/otp/issues/5346)
 
 - 修复锁管理进程 `ekka_locker` 在杀死挂起的锁持有者后 Crash 的问题
 

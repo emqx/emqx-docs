@@ -23,6 +23,8 @@ EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
 
 **Important changes:**
 
+- Starting from 4.4, EMQ X releases are named with Erlang/OTP release in the package name. e.g. `emqx-4.4.0-otp24.1.5-3-centos7-arm64.rpm`
+
 - **For Debian/Ubuntu users**, Debian/Ubuntu package (deb) installed EMQ X now now run on systemd. This is to use systemd's supervision functionality to ensure that EMQ X service restarts after a crash. The package installation service upgrade from init.d to systemd has been verified, but it is still recommended that you verify and confirm again before deploying to the production environment, at least to ensure that systemd is available in your system
 
 - MongoDB authentication supports DNS SRV and TXT Records resolution, which can seamlessly connect with MongoDB Altas
@@ -55,7 +57,7 @@ EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
-- Fix the issue that the client process becomes unresponsive due to the blockage of RPC calls between nodes
+- Various RPC timeouts or even indefinite hangs, e.g. client becomes unresponsive due to the a bug in [Erlang/OTP](#https://github.com/erlang/otp/issues/5346) which is triggered under high load
 
 - Fix the issue that the lock management process `ekka_locker` crashes after killing the suspended lock owner
 
