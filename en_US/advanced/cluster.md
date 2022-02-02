@@ -92,7 +92,7 @@ It is possible to enable TLS encryption for the backplane connections. It comes 
 3. Put the generated `domain.pem`, `domain.key` and `rootCA.pem` files to `/var/lib/emqx/ssl` on each node of the cluster.
    Make sure the emqx user can read these files, and permissions are set to `600`.
 
-4. For Enterprise edition 4.4, add the following configuration to the end of `./releases/4.4.0/emqx.schema`
+4. For Enterprise edition 4.4.0, add the following configuration to the end of `./releases/4.4.0/emqx.schema`
 
    ```
    {mapping, "rpc.default_client_driver", "gen_rpc.default_client_driver",

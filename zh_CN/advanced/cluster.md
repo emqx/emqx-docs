@@ -112,7 +112,7 @@ openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pe
 3. 为每个节点，将生成的私钥以及证书文件 `domain.pem`, `domain.key` 和 `rootCA.pem` 放置在 `/var/lib/emqx/ssl`。
    请保证 `emqx` 用户是这些文件的所有者，并设置权限为 `600`.
 
-4. 如果版本是 Enterprise e4.4.0, 需要在 `releases/4.4.0/emqx.schema` 末尾增加如下配置
+4. 如果版本是企业版 4.4.0, 需要在 `releases/4.4.0/emqx.schema` 末尾增加如下配置
 
 ```
 {mapping, "rpc.default_client_driver", "gen_rpc.default_client_driver",
