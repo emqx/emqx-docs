@@ -31,7 +31,7 @@ EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
 
 - Support 4.3 to 4.4 rolling upgrade of clustered nodes. See upgrade document for more dtails.
 
-- Intra-cluster RPC calls can be secured with TLS. See configuration document for `rpc.enable_ssl`, `rpc.certfile`, `rpc.cacertfile` and `rpc.keyfile`
+- TLS for cluster backplane (RPC) connections. See [clustering document](../advanced/cluster.md#using-tls-for-backplane-connections) for details.
 
 **Minor changes:**
 
