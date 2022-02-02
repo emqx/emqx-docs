@@ -23,6 +23,8 @@ EMQ X Enterprise 4.4.0 mainly includes the following changes:
 
 **Important changes:**
 
+- Starting from 4.4, EMQ X releases are named with Erlang/OTP release in the package name. e.g. `emqx-ee-4.4.0-otp24.1.5-3-centos7-arm64.rpm`
+
 - **For Debian/Ubuntu users**, Debian/Ubuntu package (deb) installed EMQ X now now run on systemd. This is to use systemd's supervision functionality to ensure that EMQ X service restarts after a crash. The package installation service upgrade from init.d to systemd has been verified, but it is still recommended that you verify and confirm again before deploying to the production environment, at least to ensure that systemd is available in your system
 
 - Rule engine InfluxDB integration adds support for InfluxDB v2 API, rule engine supports InfluxDB 2.0 and InfluxDB Cloud now
