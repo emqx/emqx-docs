@@ -19,7 +19,7 @@ ref:
 
 *Release Date: 2021-12-21*
 
-EMQ X 4.4.0 is released now, it mainly includes the following changes:
+EMQ X Enterprise 4.4.0 mainly includes the following changes:
 
 **Important changes:**
 
@@ -38,6 +38,10 @@ EMQ X 4.4.0 is released now, it mainly includes the following changes:
 - Supports slow subscription statistics, which can be used to find abnormal situations such as message blockage in the production environment in time
 
 - Support dynamic modification of MQTT Keep Alive to adapt to different energy consumption strategies
+
+- Support 4.3 to 4.4 rolling upgrade of clustered nodes. See upgrade document for more dtails.
+
+- Intra-cluster RPC calls can be secured with TLS. See configuration document for `rpc.enable_ssl`, `rpc.certfile`, `rpc.cacertfile` and `rpc.keyfile`
 
 **Minor changes:**
 
