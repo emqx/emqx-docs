@@ -29,6 +29,10 @@ EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
 
 - Support dynamic modification of MQTT Keep Alive to adapt to different energy consumption strategies
 
+- Support 4.3 to 4.4 rolling upgrade of clustered nodes. See upgrade document for more dtails.
+
+- Intra-cluster RPC calls can be secured with TLS. See configuration document for `rpc.enable_ssl`, `rpc.certfile`, `rpc.cacertfile` and `rpc.keyfile`
+
 **Minor changes:**
 
 - Dashboard supports relative paths and custom access paths
