@@ -41,7 +41,7 @@ EMQ X 4.4.0 现已正式发布，主要包含以下改动:
 
 - 集群从 4.3 到 4.4 支持滚动升级。详情请见升级指南。
 
-- 节点间到 RPC 链接支持配置 TLS. 详情请见新增配置 `rpc.enable_ssl`, `rpc.certfile`, `rpc.cacertfile` and `rpc.keyfile`
+- 节点间的 RPC 链接支持配置 TLS. 详情请见[集群文档](../advanced/cluster.md#节点间RPC使用TLS)
 
 **次要变更:**
 
