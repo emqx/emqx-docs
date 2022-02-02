@@ -84,49 +84,51 @@ TLS 可能会到指节点的CPU使用率上升。
 
 1. 创建一个自签名的根证书
 
-   ```
-  # Create self-signed root CA:
-  openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key -out rootCA.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
-   ```
+```
+# Create self-signed root CA:
+openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key -out rootCA.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
+```
 
 2. 使用第一步的根证书签发节点证书
 
-  ```
-  # Create a private key:
-  openssl genrsa -out domain.key 2048
-  # Create openssl extfile:
-  cat <<EOF > domain.ext
-  authorityKeyIdentifier=keyid,issuer
-  basicConstraints=CA:FALSE
-  subjectAltName = @alt_names
-  [alt_names]
-  DNS.1 = backplane
-  EOF
-  # Create a CSR:
-  openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
-  # Sign the CSR with the Root CA:
-  openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
-  ```
-  请注意，集群中的所有节点必须使用同一个跟证书。
+```
+# Create a private key:
+openssl genrsa -out domain.key 2048
+# Create openssl extfile:
+cat <<EOF > domain.ext
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = backplane
+EOF
+# Create a CSR:
+openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
+# Sign the CSR with the Root CA:
+openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
+```
+请注意，集群中的所有节点必须使用同一个跟证书。
 
 3. 为每个节点，将生成的私钥以及证书文件 `domain.pem`, `domain.key` 和 `rootCA.pem` 放置在 `/var/lib/emqx/ssl`。
    请保证 `emqx` 用户是这些文件的所有者，并设置权限为 `600`.
 
 4. 如果版本是 Enterprise e4.4.0, 需要在 `releases/4.4.0/emqx.schema` 末尾增加如下配置
 
-   ```
-   {mapping, "rpc.default_client_driver", "gen_rpc.default_client_driver",
-    [{default, tcp}, {datatype, {enum, [tcp, ssl]}}]}.
-   ```
+```
+{mapping, "rpc.default_client_driver", "gen_rpc.default_client_driver",
+[{default, tcp}, {datatype, {enum, [tcp, ssl]}}]}.
+```
 
 5. 在企业版的 `etc/rpc.conf`, 或开源版的 `etc/emqx.conf` 中加入如下配置:
-   ```
-   rpc.driver=ssl
-   rpc.default_client_driver=ssl
-   rpc.certfile=/var/lib/emqx/ssl/domain.pem
-   rpc.cacertfile=/var/lib/emqx/ssl/rootCA.pem
-   rpc.keyfile=/var/lib/emqx/ssl/domain.key
-   rpc.enable_ssl=5369
+
+```
+rpc.driver=ssl
+rpc.default_client_driver=ssl
+rpc.certfile=/var/lib/emqx/ssl/domain.pem
+rpc.cacertfile=/var/lib/emqx/ssl/rootCA.pem
+rpc.keyfile=/var/lib/emqx/ssl/domain.key
+rpc.enable_ssl=5369
+```
 
 ### EMQ X 集群协议设置
 
