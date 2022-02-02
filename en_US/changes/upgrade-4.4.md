@@ -75,7 +75,7 @@ cp -r ~/emqx-backup/data/ /var/lib/emqx/
 ```bash
 # Start
 systemctl start emqx
-# Innspect status
+# Check status
 systemctl status emqx
 ```
 
