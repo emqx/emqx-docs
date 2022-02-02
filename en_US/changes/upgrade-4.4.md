@@ -13,8 +13,6 @@ The upgrade steps of each EMQ X node are summarised below:
 1. Start v4.4, and monitor alerts/error logs
 1. Optional: add the node back to the load-balancer
 
-NOTE: Mind the [Config changes](#config-change) and [Behaviour changes](#behaviour-changes).
-
 ## Data and config backup
 
 Before upgrading, please make sure to backup `data` and `etc` directories.

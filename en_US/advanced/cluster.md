@@ -59,6 +59,7 @@ Cookies are used for interconnection authentication between Erlang nodes. A cook
 See <http://erlang.org/doc/reference_manual/distributed.html> for details.
 
 ### Using TLS for backplane connections
+
 It is possible to enable TLS encryption for the backplane connections. It comes at the cost of increased CPU load, though.
 
 1. Create a root CA using `openssl` tool:
