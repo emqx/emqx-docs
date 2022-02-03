@@ -84,7 +84,7 @@ We recommend first-time contributors to directly use the [Online editing](#onlin
 1. Checkout the earliest branch which is subject to the change.
    e.g. if an issue is found in EMQ X 4.3, checkout `release-4.3` with command `git checkout --track upstream/release-4.3`
 
-1. Optional: Checckout a work-branch `git checkout -b my-first-pr-branch-for-emqx-4.3`
+1. Optional: Checkout a work-branch `git checkout -b my-first-pr-branch-for-emqx-4.3`
 
 1. Edit, commit, and push the branch to your fork
    ```
