@@ -44,9 +44,13 @@ Set the maximum number of file handles for the service in `/etc/systemd/system.c
 DefaultLimitNOFILE=2097152
 ```
 
-### /usr/lib/systemd/system/emqx.service
+### emqx.service
 
-Set the maximum number of file handles for emqx service in `/usr/lib/systemd/system/emqx.service`:
+Set the maximum number of file handles for emqx service in e.g. one of below paths depending
+on which linux distribution is in use.
+
+- `/usr/lib/systemd/system/emqx.service`
+- `/lib/systemd/system/emqx.service`
 
 ```
 LimitNOFILE=2097152
