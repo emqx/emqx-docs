@@ -76,7 +76,7 @@ We recommend first-time contributors to directly use the [Online editing](#onlin
 
 1. Open the document repository [https://github.com/emqx/emqx-docs](https://github.com/emqx/emqx-docs) for Fork.
 
-1. Clone the forked repository into local and then go to the local directory and add the upstream repository.
+1. Clone the forked repository into your local workspace and then go to the local directory and add the upstream repository.
    ```
    git remote add upstream https://github.com/emqx/emqx-docs.git
    ```
