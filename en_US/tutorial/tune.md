@@ -11,7 +11,7 @@ which in turn significantly affects the system stability.
 It is recommended to turn off swap permanently.
 
 To turn off swap immediately, execute command `sudo swapoff -a`.
-To turn off swap permanently, coment out the `swap` line in `/etc/fstab` and reboot the host
+To turn off swap permanently, comment out the `swap` line in `/etc/fstab` and reboot the host
 
 ## Linux Kernel Tuning
 
