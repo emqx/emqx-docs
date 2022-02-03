@@ -28,7 +28,7 @@ You can make contributions in several different ways listed below.
 > **Note:** You will need a GitHub account to make contributions.
 In case you do not have one, you may follow the instructions in [GitHub registration page](https://github.com/join) to create one.
 
-### Requst a change
+### Request a change
 
 Click on `Edit this page` or `Request docs changes` on the top right corner of each page of the documentation site
 [https://docs.emqx.io/](https://docs.emqx.io/) will take you directly to the Edit or Issue pages on the GitHub site,
