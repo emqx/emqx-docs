@@ -15,7 +15,7 @@ Thank you for your contributions to EMQ X open-source project.
 
 ## Documentation Writing Guide
 
-To ensure consistency throughout all EMQ documentation,
+To ensure consistency throughout all EMQ X documentation,
 we kindly request all contributors reference our [Documentation Writing Guide](./DOCS-WRITING-GUIDE-EN.md).
 This guideline provides detailed instructions on document **directory configuration** and **Markdown writing specifications**.
 
