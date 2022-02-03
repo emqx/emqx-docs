@@ -6,7 +6,7 @@ This guide includes in general tuning suggestions for one EMQ X broker to serve 
 
 ## Turn off swap
 
-Linux swap partitions may cause nondeterministic memory latency to Erlang virutal machine,
+Linux swap partitions may cause nondeterministic memory latency to Erlang virtual machine,
 which in turn significantly affects the system stability.
 It is recommended to turn off swap permanently.
 
