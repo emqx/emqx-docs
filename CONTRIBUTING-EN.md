@@ -23,7 +23,7 @@ This guideline provides detailed instructions on document **directory configurat
 ## How to contribute
 
 EMQ X's documentation is published at [https://docs.emqx.io/](https://docs.emqx.io/).
-You can make contributions in sveral different ways listed below.
+You can make contributions in several different ways listed below.
 
 > **Note:** You will need a GitHub account to make contributions.
 In case you do not have one, you may follow the instructions in [GitHub registration page](https://github.com/join) to create one.
