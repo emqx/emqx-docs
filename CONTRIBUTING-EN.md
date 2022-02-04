@@ -1,9 +1,6 @@
 # EMQ X Documentation Contributing Guide
 
-We welcome your participation to help make the documentation better!
-
-When you offer feedback, questions, edits, or new content, you help us, the projects you work on, and the EMQ X open source community.
-
+Thank you for your contributions to EMQ X open-source project.
 
 ## Table of Contents
 
@@ -18,22 +15,29 @@ When you offer feedback, questions, edits, or new content, you help us, the proj
 
 ## Documentation Writing Guide
 
-To ensure consistency throughout all EMQ documentation, we ask that all contributors reference our [Documentation Writing Guide](./DOCS-WRITING-GUIDE-EN.md). This guideline provides detailed instructions on document **directory configuration** and **Markdown writing specifications**.
+To ensure consistency throughout all EMQ X documentation,
+we kindly request all contributors reference our [Documentation Writing Guide](./DOCS-WRITING-GUIDE-EN.md).
+This guideline provides detailed instructions on document **directory configuration** and **Markdown writing specifications**.
 
 
 ## How to contribute
 
-EMQ X's documentation will be published at [https://docs.emqx.io/](https://docs.emqx.io/). You can contribute documentation via the followings methods.
+EMQ X's documentation is published at [https://docs.emqx.io/](https://docs.emqx.io/).
+You can make contributions in several different ways listed below.
 
-> **Note:** The following methods require a GitHub account to operate. If you do not have a GitHub account, please click on the [GitHub registration page](https://github.com/join) to create one.
+> **Note:** You will need a GitHub account to make contributions.
+In case you do not have one, you may follow the instructions in [GitHub registration page](https://github.com/join) to create one.
 
-### Feedback questions
+### Request a change
 
-Clicking on `Edit this page` or `Request docs changes` on the top right corner of each page on the documentation site [https://docs.emqx.io/](https://docs.emqx.io/) will take you directly to the Edit or Issue pages on the GitHub site, which means you don't need to know much about Git or even Markdown.
+Click on `Edit this page` or `Request docs changes` on the top right corner of each page of the documentation site
+[https://docs.emqx.io/](https://docs.emqx.io/) will take you directly to the Edit or Issue pages on the GitHub site,
+which means you don't need to know much about Git or Markdown.
 
-You can also directly access this page [https://github.com/emqx/emqx-docs/issues](https://github.com/emqx/emqx-docs/issues) of the documentation repository to submit an Issue for feedback questions of documentation.
+You can also directly submit an issue here from this repo's [issues](https://github.com/emqx/emqx-docs/issues) page.
 
-> This is similar to clicking **Request doc changes** on a published docs page, but if you manually file an issue you need to fill in links to the related pages.
+> This is similar to clicking **Request doc changes** on a published docs page,
+but if you manually file an issue you need to fill in links to the related pages.
 
 ![edit-online-cn](./assets/edit-online-en.jpg)
 
@@ -41,13 +45,15 @@ You can also directly access this page [https://github.com/emqx/emqx-docs/issues
 
 #### Fork
 
-As you can see above, when you click on `Edit this page` in the top right corner of the documentation site, you will be taken to the following page on GitHub, follow the instructions, and click `Fork this repository`.
+As you can see above, when you click on `Edit this page` in the top right corner of the documentation site,
+you will be taken to the following page on GitHub, follow the instructions, and click `Fork this repository`.
 
 ![github-fork](./assets/github-fork.jpg)
 
 #### Commit
 
-Click `Fork this repository` to jump to the document editing page and then you can start editing your document. After completing editing, you need to enter the title and description of this submission at the bottom of the page to complete your submission.
+Click `Fork this repository` to jump to the document editing page and then you can start editing your document.
+After completing editing, you need to enter the title and description of this submission at the bottom of the page to complete your submission.
 
 > You need to ensure that the title and description clearly describe what you are modifying.
 
@@ -65,27 +71,36 @@ After you have jumped to the following page, confirm the pull request informatio
 
 ### Local editing
 
-Local editing requires contributors to have a good foundation in Git. We recommend that first-time contributors directly use the [Online editing](#online-editing) method above to contribute documents.
+Local editing requires contributors to have some Git knowledge.
+We recommend first-time contributors to directly use the [Online editing](#online-editing) method above to contribute documents.
 
 1. Open the document repository [https://github.com/emqx/emqx-docs](https://github.com/emqx/emqx-docs) for Fork.
 
-2. Clone the forked repository into local and then go to the local directory and add the upstream repository.
-
+1. Clone the forked repository into your local workspace and then go to the local directory and add the upstream repository.
    ```
    git remote add upstream https://github.com/emqx/emqx-docs.git
    ```
 
-3. Determine the branch of the contributed document and corresponding rules: latest correspond to develop branch, v4.1 correspond to release-4.1, v4.0 correspond to release-4.0, and so on.
+1. Checkout the earliest branch which is subject to the change.
+   e.g. if an issue is found in EMQ X 4.3, checkout `release-4.3` with command `git checkout --track upstream/release-4.3`
 
-4. Switch to the corresponding branch to edit, and commit to the Fork repository when you are done.
+1. Optional: Checkout a work-branch `git checkout -b my-first-pr-branch-for-emqx-4.3`
 
-5. Create a Pull request from Fork's repository to the upstream repository.
+1. Edit, commit, and push the branch to your fork
+   ```
+   git commit -a -m 'docs(WHICH_DOC): fix xxxx in WHICH_DOC'
+   git push origin my-first-pr-branch-for-emqx-4.3
+   ```
+
+1. Create a Pull request from your forked repository to the upstream repository.
 
 
 ## PR automatic check
 
-Document projects will be automatically checked according to the rules in the [Documentation Writing Guide](./DOCS-WRITING-GUIDE-EN.md), and only the PR that passes the check will be merged. If you encounter a `markdownlint check` failure when submitting PR, the error message will indicate which line in which file is the problem, so please follow the instructions to modify and update the PR.
-
+Document projects will be automatically checked according to the rules in the [Documentation Writing Guide](./DOCS-WRITING-GUIDE-EN.md).
+Only the PRs that passed the checks can be merged.
+If you encounter a `markdownlint check` failure when submitting PR, the error message will indicate which line in which file is the problem,
+so please follow the instructions to modify and update the PR.
 
 ## How to get help
 
