@@ -724,6 +724,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes/a%
 | encoding | String    | Optional | plain   | 消息正文使用的编码方式，目前仅支持 `plain` 与 `base64` 两种 |
 | qos      | Integer   | Optional | 0       | QoS 等级 |
 | retain   | Boolean   | Optional | false   | 是否为保留消息 |
+| user_properties   | Object   | Optional | {} | PUBLISH 消息里的 User Property 字段 (MQTT 5.0) |
 
 **Success Response Body (JSON):**
 
@@ -734,7 +735,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes/a%
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d '{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"}'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d \
+'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}'
 
 {"code":0}
 ```
@@ -814,6 +816,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 | [0].encoding | String    | Optional | plain   | 消息正文使用的编码方式，目前仅支持 `plain` 与 `base64` 两种 |
 | [0].qos      | Integer   | Optional | 0       | QoS 等级 |
 | [0].retain   | Boolean   | Optional | false   | 是否为保留消息 |
+| [0].user_properties   | Object   | Optional | {} | PUBLISH 消息里的 User Property 字段 (MQTT 5.0) |
 
 **Success Response Body (JSON):**
 
@@ -824,9 +827,9 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example"}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}]'
 
-{"code":0}
+{"data":[{"topic":"a/b/c","code":0},{"topic":"a/b/c","code":0}],"code":0}
 ```
 
 ## 主题批量订阅

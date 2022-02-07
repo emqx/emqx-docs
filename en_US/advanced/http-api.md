@@ -692,6 +692,7 @@ Publish MQTT message。
 | encoding | String    | Optional | plain   | The encoding used in the message body. Currently only plain and base64 are supported. |
 | qos      | Integer   | Optional | 0       | QoS level |
 | retain   | Boolean   | Optional | false   | Whether it is a retained message |
+| user_properties   | Object   | Optional | {}   | The User Property of the PUBLISH message (MQTT 5.0) |
 
 **Success Response Body (JSON):**
 
@@ -702,7 +703,8 @@ Publish MQTT message。
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d '{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"}'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d \
+'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}'
 
 {"code":0}
 ```
@@ -777,7 +779,7 @@ Publish MQTT messages in batch.
 | [0].encoding | String  | Optional | plain   | The encoding method used in the message body, only `plain` and `base64` are supported currently |
 | [0].qos      | Integer | Optional | 0       | QoS level                                                    |
 | [0].retain   | Boolean | Optional | false   | Whether it is a retained message or not                      |
-
+| [0].user_properties   | Object   | Optional | {}   | The User Property of the PUBLISH message (MQTT 5.0) |
 **Success Response Body (JSON):**
 
 | Name | Type    | Description |
@@ -787,9 +789,9 @@ Publish MQTT messages in batch.
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example"}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}]'
 
-{"code":0}
+{"data":[{"topic":"a/b/c","code":0},{"topic":"a/b/c","code":0}],"code":0}
 ```
 
 ### Topic subscription in batch
