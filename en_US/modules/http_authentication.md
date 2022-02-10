@@ -25,9 +25,9 @@ After clicking add, the module is added
 
 EMQ X uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP statusCode).
 
- -Authentication failed: The API returns status codes other than 200
+ -Authentication failed: API returns 4xx status code
  -Successful authentication: API returns 200 status code
- -Ignore authentication: API returns 200 status code and response body is `ignore`
+ -Ignore authentication: API returns 200 status code and message body ignore
 
 
 ## Authentication request
@@ -69,9 +69,9 @@ It is recommended to use the POST and PUT methods. When using the GET method, th
 
 EMQ X uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP statusCode).
 
- -No permission: The API returns status codes other than 200
+ -No permission: API returns 4xx status code
  -Authorization is successful: API returns 200 status code
- -Ignore authorization: API returns 200 status code and response body is `ignore`
+ -Ignore authorization: API returns a 200 status code and the message body is fixed content: "ignore"
 
 ## HTTP request information
 

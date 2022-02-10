@@ -1,6 +1,6 @@
 # Rule engine example
 
-
+{% emqxce %}
 ::: tip
 Only the following operations are applicable in EMQ X Broker:
 - Check (debug)
@@ -11,6 +11,7 @@ Only the following operations are applicable in EMQ X Broker:
 The rest are exclusive to EMQ X Enterprise.
 :::
 
+{% endemqxce %}
 
 
 

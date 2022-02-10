@@ -31,6 +31,7 @@ Operating systems currently supported by EMQ X Broker:
 + macOS 10.13
 + macOS 10.14
 + macOS 10.15
++ Windows Server 2019
 
 ## One-click installation of shell script (Linux)
 
@@ -386,7 +387,7 @@ sudo ./install_emqx.sh emqx-ee
       ```
 
 
-## ZIP (Linux、MaxOS)
+## ZIP (Linux、MaxOS、Windows)
 
 1.  Download the zip package of the EMQ X Broker version to be installed from [emqx.io](https://www.emqx.com/en/downloads/broker?osType=Linux) or [Github](https://github.com/emqx/emqx/releases).
   

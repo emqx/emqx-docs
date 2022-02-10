@@ -1,6 +1,12 @@
 # EMQ X 企业版安装
 
-EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS 或 openSUSE 服务器上。
+EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS、Windows 或 openSUSE 服务器上。
+
+
+::: tip
+产品部署建议 Linux 服务器，不推荐 Windows 服务器。
+:::
+
 
 ## EMQ X License 文件获取
 
@@ -8,7 +14,7 @@ EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS 或 openSUSE 
 
 ## EMQ X 程序包下载
 
-EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD 、openSUSE
+EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD、Windows 、openSUSE
 平台程序包与 Docker 镜像。
 
 下载地址: <https://www.emqx.com/zh/downloads?product=enterprise>
@@ -18,7 +24,6 @@ EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD �
 
   - CentOS6.X
   - CentOS7.X
-  - CentOS8.X
 
 ### 使用储存库安装 EMQ X
 
@@ -568,6 +573,27 @@ $ sudo apt install emqx-ee
     Node 'emqx@127.0.0.1' is started
     emqx 4.0.0 is running
     ```
+
+
+## Windows
+
+1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 下载 .zip 包。
+
+2.  解压压缩包
+
+3.  导入License文件:
+    
+    ```bash
+    $ cp /path/to/emqx.lic /path/to/emqx/etc/emqx.lic
+    ```
+
+4.  打开 Windows 命令行窗口，cd 到程序目录， 启动 EMQ X。
+    
+    ```bash
+    cd /path/to/emqx/bin
+    emqx start
+    ```
+
 
 
 ## openSUSE
