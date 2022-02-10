@@ -40,10 +40,18 @@ EMQ X 支持的认证方式：
 
 **内置数据源**
 
+{% emqxee %}
 
+* [内置数据库 认证/访问控制](../modules/mnesia_authentication.md)
+
+{% endemqxee %}
+
+
+{% emqxce %}
 
 * [Mnesia (用户名/Client ID）认证](./auth-mnesia.md)
 
+{% endemqxce %}
 
 
 使用配置文件与 EMQ X 内置数据库提供认证数据源，通过 HTTP API 进行管理，足够简单轻量。
@@ -51,6 +59,19 @@ EMQ X 支持的认证方式：
 **外部数据库**
 
 
+{% emqxee %}
+
+* [MySQL 认证/访问控制](../modules/mysql_authentication.md)
+* [PostgreSQL 认证/访问控制](../modules/pgsql_authentication.md)
+* [Redis 认证/访问控制](../modules/redis_authentication.md)
+* [MongoDB 认证/访问控制](../modules/mongo_authentication.md)
+* [LDAP 认证/访问控制](../modules/ldap_authentication.md)
+
+{% endemqxee %}
+
+
+
+{% emqxce %}
 
 * [LDAP 认证](./auth-ldap.md)
 * [MySQL 认证](./auth-mysql.md)
@@ -58,15 +79,29 @@ EMQ X 支持的认证方式：
 * [Redis 认证](./auth-redis.md)
 * [MongoDB 认证](./auth-mongodb.md)
 
+{% endemqxce %}
+
+
 
 外部数据库可以存储大量数据，同时方便与外部设备管理系统集成。
 
 **其他**
 
 
+{% emqxee %}
+
+* [HTTP 认证/访问控制](../modules/http_authentication.md)
+* [JWT 认证](../modules/jwt_authentication.md)
+
+{% endemqxee %}
+
+
+{% emqxce %}
 
 * [HTTP 认证](./auth-http.md)
 * [JWT 认证](./auth-jwt.md)
+
+{% endemqxce %}
 
 
 

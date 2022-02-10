@@ -78,6 +78,9 @@ The following are the unique features of EMQ X Enterprise
 - Schema Registry: provide data encoding and decoding capabilities for EMQ X events and messages
 
 
+
+{% emqxce %}
+
 [EMQ X Enterprise](https://www.emqx.com/en/products/emqx) is a powerful enterprise-level IoT MQTT messaging platform built by the people who develop the open source EMQ X Broker.
 
 EMQ X Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP multi-protocol processing, and low-latency real-time communication. It maintains the simplicity and high performance of EMQ X Broker, while adding many enterprise-level features:
@@ -91,11 +94,21 @@ EMQ X Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP 
 Thank you for your support of EMQ X Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io。
 :::
 
+{% endemqxce %}
 
 
+{% emqxee %}
 
+## Function Description
+
+{% endemqxee %}
+
+
+{% emqxce %}
 
 ## Function of enterprise version
+
+{% endemqxce %}
 
 
 ### Message data storage
@@ -132,8 +145,10 @@ Currently, three formats of codec are supported: [Avro](https://avro.apache.org)
 For codec related configuration, please refer to "Codec" chapter for details.
 
 
+{% emqxce %}
 
 ## Comparison of different versions of EMQ X
 
 ![EMQ X Broker vs EMQ X Enterprise](./assets/3441587031341_.pic_hd.jpg)
 
+{% endemqxce %}

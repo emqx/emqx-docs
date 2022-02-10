@@ -51,6 +51,7 @@ EMQ X 通过 `etc` 目录下配置文件进行设置，主要配置文件包括:
 | plugins/*.conf | EMQ X 各类插件配置文件    |
 | certs          | EMQ X SSL 证书文件       |
 
+{% emqxce %}
 EMQ X 具体的配置内容可以查看 [配置项](../configuration/configuration.md)。
 
 ## data 目录
@@ -65,7 +66,6 @@ EMQ X 读取 `etc/emqx.conf` 和 `etc/plugins/*.conf` 中的配置后，转换�
 
 `loaded_plugins` 文件记录了 EMQ X 默认启动的插件列表，可以修改此文件以增删默认启动的插件。`loaded_plugins` 中启动项格式为 `{<Plugin Name>, <Enabled>}.`，`<Enabled>` 字段为布尔类型，EMQ X 会在启动时根据 `<Enabled>` 的值判断是否需要启动该插件。关于插件的更多内容，请查看 [插件](../advanced/plugins.md)。
 
-
 ```bash
 $ cat loaded_plugins
 {emqx_management,true}.
@@ -76,6 +76,20 @@ $ cat loaded_plugins
 {emqx_bridge_mqtt,false}.
 ```
 
+{% endemqxce %}
+
+
+{% emqxee %}
+
+```bash
+$ cat loaded_plugins
+{emqx_management, true}.
+{emqx_dashboard, true}.
+{emqx_schema_registry, true}.
+{emqx_rule_engine, true}.
+```
+
+{% endemqxee %}
 
 
 **mnesia**
