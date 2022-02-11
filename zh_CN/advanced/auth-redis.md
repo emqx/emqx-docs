@@ -63,13 +63,15 @@ redis> hgetall mqtt_user:emqx
 默认配置下示例数据如下：
 
 ```bash
-HMSET mqtt_user:emqx password public salt wivwiv
+HMSET mqtt_user:emqx
+  password public
+  salt wivwiv
 ```
 
 启用 Redis 认证后，你可以通过用户名： emqx，密码：public 连接。
 
 
-::: tip 
+::: tip
 这是默认配置使用的数据结构，熟悉该插件的使用后你可以使用任何满足条件的数据结构进行认证。
 :::
 
@@ -107,6 +109,3 @@ auth.redis.auth_cmd = HMGET mqtt_user:%u password
 
 1. 查询结果中第一个数据必须为 password，EMQ X 使用该字段与客户端密码比对
 2. 如果启用了加盐配置，查询结果中第二个数据必须是 salt 字段，EMQ X 使用该字段作为 salt（盐）值
-
-
-
