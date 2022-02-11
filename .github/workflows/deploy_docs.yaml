@@ -37,7 +37,7 @@ jobs:
 
     - name: clone ce frontend
       uses: actions/checkout@v2
-      if: env.DOCS_TYPE == "broker"
+      if: env.DOCS_TYPE == 'broker'
       with:
         repository: "emqx/emqx-io-docs-frontend"
         token: ${{ secrets.CI_GIT_TOKEN }}
@@ -45,7 +45,7 @@ jobs:
 
     - name: clone ee frontend
       uses: actions/checkout@v2
-      if: env.DOCS_TYPE == "enterprise"
+      if: env.DOCS_TYPE == 'enterprise'
       with:
         repository: 'emqx/docs-emqx-com-frontend'
         token: ${{ secrets.CI_GIT_TOKEN }}
@@ -67,7 +67,7 @@ jobs:
         fi
 
     - name: move ce files
-      if: env.DOCS_TYPE == "broker"
+      if: env.DOCS_TYPE == 'broker'
       run: |
         rm frontend/docs/en/README.md || true
         rm frontend/docs/zh/README.md || true
@@ -81,7 +81,7 @@ jobs:
         cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
 
     - name: move ee files
-      if: env.DOCS_TYPE == "enterprise"
+      if: env.DOCS_TYPE == 'enterprise'
       run: |
         rm frontend/docs/en/README.md || true
         rm frontend/docs/zh/README.md || true
@@ -99,9 +99,9 @@ jobs:
         cd docs-files
         if [[ $DOCS_TYPE == "broker" ]];
         then
-          version_list=$(git tag | egrep "v[0-9](\.[0-9])*(-?\d*)$" | xargs echo -n)
+          version_list=$(git tag | egrep "v.*$" | xargs echo -n)
         else
-          version_list=$(git tag | egrep "e[0-9](\.[0-9])*(-?\d*)$" | xargs echo -n)
+          version_list=$(git tag | egrep "e.*$" | xargs echo -n)
         fi
         python3 .ci/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
@@ -114,7 +114,7 @@ jobs:
         yarn && yarn build
 
     - name: upload ce files
-      if: env.DOCS_TYPE == "broker"
+      if: env.DOCS_TYPE == 'broker'
       run: |
         cd frontend/docs/.vuepress/
         wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
@@ -123,7 +123,7 @@ jobs:
         ./ossutil64 cp -r dist/ oss://${{ secrets.OSS_BUCKET }}/docs/ -u
 
     - name: upload ee file
-      if: env.DOCS_TYPE == "enterprise"
+      if: env.DOCS_TYPE == 'enterprise'
       run: |
         pip3 install coscmd
         coscmd config -a ${{ secrets.COS_ID }} -s ${{ secrets.COS_KEY }} -b ${{ secrets.COS_NAME }} -r ${{ secrets.COS_REGION }}
@@ -136,7 +136,7 @@ jobs:
         sleep 90
 
     - name: flush ee cdn
-      if: env.DOCS_TYPE == "enterprise"
+      if: env.DOCS_TYPE == 'enterprise'
       run: |
         pip3 install tccli
         tccli configure set secretId ${{ secrets.COS_ID }}
