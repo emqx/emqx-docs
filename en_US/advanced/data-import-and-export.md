@@ -12,6 +12,13 @@ EMQ X Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and
 - MQTT user data and ACL data added through the emqx-auth-clientid plugin
 - MQTT user data and ACL data added through the emqx-auth-username plugin
 
+{% emqxee %}
+
+- Rule engine schema data
+- Modules data
+- Hot Configuration data
+
+{% endemqxee %}
 
 ## Example
 

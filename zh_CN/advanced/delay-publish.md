@@ -33,4 +33,4 @@ $delayed/{DelayInterval}/{TopicName}
 - `$delayed/60/a/b`: 1 分钟后将 MQTT 消息发布到 `a/b`。
 - `$delayed/3600/$SYS/topic`: 1 小时后将 MQTT 消息发布到 `$SYS/topic`。
 
-延迟发布功能由 `emqx_mod_delayed` 内置模块提供，此功能默认开启，支持动态启停，请参见 [modules 命令](./cli.md#modules-%E5%91%BD%E4%BB%A4)。
+延迟发布功能由 `emqx_mod_delayed` 内置模块提供，此功能默认开启，支持动态启停，请参见 [modules 命令](./cli.html#modules-%E5%91%BD%E4%BB%A4)。
