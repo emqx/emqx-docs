@@ -15,6 +15,32 @@ ref: undefined
 
 # Release version
 
+## 4.3.7 Release
+
+*Release Date: 2022-02-11*
+
+### Enhancement
+
+- Rule engine supports the configuration of rules and actions for the event of abnormal loss of client messages to enhance the user's custom processing capabilities in this scenario
+- Improve the relevant metrics during the execution of the rule engine SQL matching
+- Fuzzy search on client supports special characters such as `*`, `(`, `)`
+- Improve ACL-related metrics to solve the issue that the count does not increase due to hitting the ACL cache
+- Added `connected_at` field to webhook event notifications
+- Log client state before terminating client due to holding the lock too long
+
+### Bug fixes
+
+- Fix the issue that data import and export were not available in some cases
+- The module update mechanism is improved to solve the issue that the module is unavailable after the update fails
+- Fix the issue that the rule engine did not perform type checking when executing the size comparison statement
+- Fix the issue that the related counts are cleared after updating the rule engine action
+- Fixed the issue that the metrics interface does not return authentication metrics such as `client.acl.deny` by default
+- Fixed the issue that the subscription query interface did not return paginated data
+- Fix the issue of parsing failure when STOMP handles TCP sticky packets
+- Fix the issue where the session creation time option was not available when filtering clients
+- Fix the issue where memory alarms might not be triggered after restarting
+- Fix the crash of import data when user data exists in `emqx_auth_mnesia` plugin
+
 ## 4.3.6 Release
 
 *Release Date: 2021-12-17*
