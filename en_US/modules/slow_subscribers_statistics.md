@@ -19,7 +19,7 @@ This module ranks subscribers and topics in descending order according to the la
 
 ## Open module
 
-Open EMQ X Dashboard, click on the "Module" on the left. 
+Open EMQ X Dashboard, click on the "Module" on the left.
 
 ![image](./assets/slow_subscribers_statistics_1.png)
 
@@ -30,8 +30,9 @@ Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 
 ## Implementation note
 
-This function will track the time consumption of the entire message transmission process after the QoS1 and QoS2 messages arrive at EMQX, and then calculate the message transmission latency according to the options in the configuration.
-Afterwards, the subscribers and topics are ranked according to the latency.
+With this feature enabled, EMQ X will start measuring message transmission latency. The measurement always starts at when a message is received by EMQ X, the end of the measurement is configurable. See more details...
+
+The per clientid-topic latency measurements are then ranked in the table view.
 
 <a id="orgf0feb6e"></a>
 
@@ -41,16 +42,15 @@ Afterwards, the subscribers and topics are ranked according to the latency.
 
 -   threshold
 
-    *threshold* is used to determine whether subscribers can participate in statistics. If the latency of subscribers is lower than this value, they will not be counted
-
+     *threshold* is the minimum number of milliseconds the latency has to exceed, otherwise not collected for ranking
 
 -   top\_k\_num
 
-    This field determines the upper limit of the number in the statistical record table
+    This field determines the upper limit of the number of statistical records in the ranking table
 
 -   expire\_interval
 
-	*expire interval* controls the effective time of each piece of data in the statistical record. If the data has not been updated within this time range, it will be removed. (For example, after a message is sent, it is added to the statistics record because of the long latency. If the message is not sent again for a long time that exceeds this value, it will be cleared)
+    *expire interval* controls the effective time of each ranking record. If the a client-topic has no higher latency inserted for such long time, the record expires. For example if expire interval is 5 minutes, and client1-topic1 had a latency 500ms recorded (ranked top-K) at T1, and for the next 5 minutes, if there is no further measurements greater than 500, the ranking recorded will be deleted shortly after T1+5min
 
 -   stats\_type
 
