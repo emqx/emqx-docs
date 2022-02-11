@@ -17,9 +17,11 @@ ref:
 
 # Backends
 
+{% emqxce %}
 ::: danger
 Data storage is an exclusive feature of EMQ X Enterprise.
 :::
+{% endemqxce %}
 
 ## MQTT Message Persistence
 
