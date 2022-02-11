@@ -18,6 +18,7 @@ ref: undefined
 # Rule engine example
 
 
+{% emqxce %}
 ::: danger
 Only the following operations are applicable in EMQ X Broker:
 - Check (debug)
@@ -27,6 +28,7 @@ Only the following operations are applicable in EMQ X Broker:
 
 The rest are exclusive to EMQ X Enterprise.
 :::
+{% endemqxce %}
 
 
 
