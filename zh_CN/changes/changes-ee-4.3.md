@@ -19,8 +19,16 @@ ref:
 
 *发布日期: 2022-02-11*
 
+### 重要
+
+我们在 4.3.7 中修复了 License 总连接数计算的 Bug，License 将正确地检查集群的总连接数，而非错误地仅检查每个节点上的连接数。
+
+请计划升级的用户注意此变化可能导致的客户端达到 License 限制而无法连接的可能性。
+
 ### 增强
 
+- license 连接数预警，默认连接数达到证书允许的 80% 则告警，小于 75% 时解除告警。用户也可在 `emqx.conf` 中进行自定义：`license.connection_high_watermark_alarm` , `license.connection_low_watermark_alarm`
+- license 过期预警，当有效期小于 30 天时，会告警提示
 - 规则引擎支持为客户端消息异常丢失事件配置规则与动作，以增强用户在这一场景的自定义处理能力
 - 改进规则引擎 SQL 匹配执行过程中的相关统计指标
 - 客户端模糊搜索支持 `*`， `(`，`)` 等特殊字符
@@ -40,22 +48,6 @@ ref:
 - 修复客户端过滤查询时会话创建时间选项不可用的问题
 - 修复重启后内存告警可能不会触发的问题
 - 修复 `emqx_auth_mnesia` 插件中存在用户数据时导入数据崩溃的问题
-
-## 4.3.7 版本
-
-*发布日期: TODO*
-
-EMQ X 4.3.7 现已发布，主要包含以下改动:
-
-### 增强
-
-- license 连接数上限可配置预警，默认连接数达到配额80%则告警，小于75%就解除告警。也可用户自定义于emqx.conf： `license.connection_high_watermark_alarm` , `license.connection_low_watermark_alarm`
-- license 过期时间预警，当有效期小于30天时，会告警提示。
-
-### 修复
-
-- 修复多次修改`emqx_auth_mnesia.conf`中的默认用户的密码，重启新密码不生效问题。
-
 
 ## 4.3.6 版本
 
