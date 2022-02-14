@@ -21,7 +21,7 @@ ref: undefined
 
 ### Important
 
-We fixed a bug in the calculation of the total number of license connections in 4.3.7, the license will correctly check the total number of connections in the cluster instead of only the number of connections on each node by mistake.
+A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.3.7. Previously only the node's local number of connections are checked against the max number of connections allowed by the license. After this fix, total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation.
 
 Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.
 
