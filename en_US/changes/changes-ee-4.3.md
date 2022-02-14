@@ -19,8 +19,16 @@ ref: undefined
 
 *Release Date: 2022-02-11*
 
+### Important
+
+A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.3.7. Previously only the individual node's local number of connections were checked against the max number of connections allowed by the license. After this fix, the total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation.
+
+Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.
+
 ### Enhancement
 
+- Support alarm about the usage rate of license connections. By default, the number of connections reaches 80% of the allowed number of licenses, and the alarm is raised. When it is less than 75%, the alarm is cleared. User can also customize in `emqx.conf`: `license.connection_high_watermark_alarm` , `license.connection_low_watermark_alarm`
+- Support alarm about license expiration, when the validity period is less than 30 days, the alarm will be raised
 - Rule engine supports the configuration of rules and actions for the event of abnormal loss of client messages to enhance the user's custom processing capabilities in this scenario
 - Improve the relevant metrics during the execution of the rule engine SQL matching
 - Fuzzy search on client supports special characters such as `*`, `(`, `)`
