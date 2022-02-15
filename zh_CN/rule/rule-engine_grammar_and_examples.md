@@ -13,7 +13,7 @@ category:
 ref:
 ---
 
-# 规则引擎
+# 规则引擎语法与示列
 
 使用 EMQ X 的规则引擎可以灵活地处理消息和事件。使用规则引擎可以方便地实现诸如将消息转换成指定格式，然后存入数据库表，或者发送到消息队列等。
 
@@ -81,7 +81,7 @@ FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件
 其中 DO 和 INCASE 子句都是可选的。DO 相当于针对当前循环中对象的 SELECT 子句，而 INCASE 相当于针对当前循环中对象的 WHERE 语句。
 
 ### SQL 关键字和符号
-#### SELECT - FROM - WHERE 语句
+##### SELECT - FROM - WHERE 语句
 SELECT 语句用于决定最终的输出结果里的字段。比如:
 
 下面 SQL 的输出结果中将只有两个字段 "a" 和 "b":
@@ -114,21 +114,17 @@ SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
 
 FROM 语句用于选择事件来源。如果是消息发布则填写消息的主题，如果是事件则填写对应的事件主题。
 
-
-#### FOREACH - DO - INCASE 语句
-.......
-
 #### 运算符号
-| 函数名 |   函数作用            |   返回值   |     |
-| ------ | ------------------- | ---------- | --- |
-| `+`    | 加法，或字符串拼接     | 加和，或拼接之后的字符串 |     |
-| `-`    | 减法                | 差值       |     |
-| `*`    | 乘法                | 乘积       |     |
-| `/`    | 除法                | 商值       |     |
-| `div`  | 整数除法             | 整数商值   |     |
-| `mod`  | 取模                 | 模         |     |
-| `=`    | 比较两者是否完全相等。可用于比较变量和主题 | true/false |     |
-| `=~`   | 比较主题(topic)是否能够匹配到主题过滤器(topic filter)。只能用于主题匹配 | true/false |     |
+| 函数名 |   函数作用            |   返回值   |
+| ------ | ------------------- | ---------- |
+| `+`    | 加法，或字符串拼接     | 加和，或拼接之后的字符串 |
+| `-`    | 减法                | 差值       |
+| `*`    | 乘法                | 乘积       |
+| `/`    | 除法                | 商值       |
+| `div`  | 整数除法             | 整数商值   |
+| `mod`  | 取模                 | 模         |
+| `=`    | 比较两者是否完全相等。可用于比较变量和主题 | true/false |
+| `=~`   | 比较主题(topic)是否能够匹配到主题过滤器(topic filter)。只能用于主题匹配 | true/false |
 
 
 ## 事件和事件主题
@@ -534,142 +530,5 @@ FROM
 }
 ```
 
-### SELECT 和 WHERE 子句可用的字段
-SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clientid`, `username` 和 `event` 是通用字段，每种事件类型都有。
 
-#### 普通主题 (消息发布)
-
-|        event        |  事件类型，固定为 "message.publish"   |
-| :------------------ | :------------------------------------ |
-| id                  | MQTT 消息 ID                          |
-| clientid            | Client ID                             |
-| username            | 用户名                                |
-| payload             | MQTT 消息体                           |
-| peerhost            | 客户端的 IPAddress                    |
-| topic               | MQTT 主题                             |
-| qos                 | MQTT 消息的 QoS                       |
-| flags               | MQTT 消息的 Flags                     |
-| headers             | MQTT 消息内部与流程处理相关的额外数据     |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (ms)                     |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms)   |
-| node                | 事件触发所在节点                      |
-
-#### $events/message_delivered (消息投递)
-
-|        event        | 事件类型，固定为 "message.delivered" |
-| ------------------- | ------------------------------------ |
-| id                  | MQTT 消息 ID                         |
-| from_clientid       | 消息来源 Client ID                   |
-| from_username       | 消息来源用户名                       |
-| clientid            | 消息目的 Client ID                   |
-| username            | 消息目的用户名                       |
-| payload             | MQTT 消息体                          |
-| peerhost            | 客户端的 IPAddress                   |
-| topic               | MQTT 主题                            |
-| qos                 | MQTT 消息的 QoS                      |
-| flags               | MQTT 消息的 Flags                    |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (ms)                    |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms)  |
-| node                | 事件触发所在节点                     |
-
-#### $events/message_acked (消息确认)
-
-|        event        |  事件类型，固定为 "message.acked"   |
-| :------------------ | :---------------------------------- |
-| id                  | MQTT 消息 ID                        |
-| from_clientid       | 消息来源 Client ID                  |
-| from_username       | 消息来源用户名                      |
-| clientid            | 消息目的 Client ID                  |
-| username            | 消息目的用户名                      |
-| payload             | MQTT 消息体                         |
-| peerhost            | 客户端的 IPAddress                  |
-| topic               | MQTT 主题                           |
-| qos                 | MQTT 消息的 QoS                     |
-| flags               | MQTT 消息的 Flags                   |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| puback_props        | PUBACK Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (ms)                   |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms) |
-| node                | 事件触发所在节点                    |
-
-#### $events/message_dropped (消息丢弃)
-
-|        event        | 事件类型，固定为 "message.dropped"  |
-| :------------------ | :---------------------------------- |
-| id                  | MQTT 消息 ID                        |
-| reason              | 消息丢弃原因                        |
-| clientid            | 消息目的 Client ID                  |
-| username            | 消息目的用户名                      |
-| payload             | MQTT 消息体                         |
-| peerhost            | 客户端的 IPAddress                  |
-| topic               | MQTT 主题                           |
-| qos                 | MQTT 消息的 QoS                     |
-| flags               | MQTT 消息的 Flags                   |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (ms)                   |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms) |
-| node                | 事件触发所在节点                    |
-
-#### $events/client_connected (终端连接成功)
-
-|      event      | 事件类型，固定为 "client.connected" |
-| --------------- | :---------------------------------- |
-| clientid        | 消息目的 Client ID                  |
-| username        | 消息目的用户名                      |
-| mountpoint      | 主题挂载点(主题前缀)                |
-| peername        | 终端的 IPAddress 和 Port            |
-| sockname        | emqx 监听的 IPAddress 和 Port       |
-| proto_name      | 协议名字                            |
-| proto_ver       | 协议版本                            |
-| keepalive       | MQTT 保活间隔                       |
-| clean_start     | MQTT clean_start                    |
-| expiry_interval | MQTT Session 过期时间               |
-| is_bridge       | 是否为 MQTT bridge 连接             |
-| connected_at    | 终端连接完成时间 (s)                |
-| conn_props      | CONNECT Properties (仅适用于 MQTT 5.0) |
-| timestamp       | 事件触发时间 (ms)                   |
-| node            | 事件触发所在节点                    |
-
-#### $events/client_disconnected (终端连接断开)
-
-| event           | 事件类型，固定为 "client.disconnected"                       |
-| --------------- | :----------------------------------------------------------- |
-| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout: keepalive 超时<br/>not_authorized:  认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed: 对端关闭了网络连接<br/>internal_error: 畸形报文或其他未知错误<br/> |
-| clientid        | 消息目的 Client ID                                           |
-| username        | 消息目的用户名                                               |
-| peername        | 终端的 IPAddress 和 Port                                     |
-| sockname        | emqx 监听的 IPAddress 和 Port                                |
-| disconnected_at | 终端连接断开时间 (s)                                         |
-| disconn_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                    |
-| timestamp       | 事件触发时间 (ms)                                            |
-| node            | 事件触发所在节点                                             |
-
-#### $events/session_subscribed (终端订阅成功)
-
-|   event   | 事件类型，固定为 "session.subscribed" |
-| --------- | ------------------------------------- |
-| clientid  | 消息目的 Client ID                    |
-| username  | 消息目的用户名                        |
-| peerhost  | 客户端的 IPAddress                    |
-| topic     | MQTT 主题                             |
-| qos       | MQTT 消息的 QoS                       |
-| sub_props | SUBSCRIBE Properties (仅适用于 5.0)  |
-| timestamp | 事件触发时间 (ms)                     |
-| node      | 事件触发所在节点                      |
-
-#### $events/session_unsubscribed (取消终端订阅成功)
-
-|   event   | 事件类型，固定为 "session.unsubscribed" |
-| :-------- | :-------------------------------------- |
-| clientid  | 消息目的 Client ID                      |
-| username  | 消息目的用户名                          |
-| peerhost  | 客户端的 IPAddress                      |
-| topic     | MQTT 主题                               |
-| qos       | MQTT 消息的 QoS                         |
-| unsub_props | UNSUBSCRIBE Properties (仅适用于 5.0)  |
-| timestamp | 事件触发时间 (ms)                       |
-| node      | 事件触发所在节点                        |
-
-[下一部分，规则引擎内置函数](rule-engine_function.md)
+[下一部分，SELECT 和 WHERE 子句可用的字段](rule-engine_field.md)

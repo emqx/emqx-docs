@@ -122,4 +122,4 @@ SELECT * FROM "$events/client_connected"
 Dashboard 中提供了旧版 SQL 语法转换功能可以完成 SQL 升级迁移。
 :::
 
-[下一部分，规则引擎语法和示列](rule-engine_syntax.md)
+[下一部分，规则引擎语法和示列](rule-engine_grammar_and_examples.md)
