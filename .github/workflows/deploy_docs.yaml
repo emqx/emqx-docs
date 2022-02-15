@@ -99,9 +99,9 @@ jobs:
         cd docs-files
         if [[ $DOCS_TYPE == "broker" ]];
         then
-          version_list=$(git tag | egrep "v.*$" | xargs echo -n)
+          version_list=$(git tag | egrep "^v.*$" | xargs echo -n)
         else
-          version_list=$(git tag | egrep "e.*$" | xargs echo -n)
+          version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
         fi
         python3 .ci/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
