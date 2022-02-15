@@ -92,7 +92,7 @@ jobs:
         mkdir -p frontend/docs/.vuepress/public/api/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
-        cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
+        cp docs-files/directory_ee.json frontend/docs/.vuepress/config/directory.json
 
     - name: generate version config
       run: |
