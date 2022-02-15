@@ -15,6 +15,21 @@ ref: undefined
 
 # Release version
 
+## 4.2.11 Release
+
+*Release Date: 2022-03-TODO*
+
+### Important
+
+A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.2.11. Previously only the individual node's local number of connections were checked against the max number of connections allowed by the license. After this fix, the total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation.
+
+Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.
+
+### Enhancement
+
+### Bug fixes
+
+
 ## 4.2.10 Version
 
 *Release date: 2022-01-13*
