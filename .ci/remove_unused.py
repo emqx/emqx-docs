@@ -2,7 +2,8 @@ import os
 import sys
 import json
 
-docs_path = sys.argv[1]
+directory_file = sys.argv[1]
+docs_path = sys.argv[2]
 
 
 def get_markdown_file(dir_config, base_path):
@@ -19,7 +20,7 @@ def get_markdown_file(dir_config, base_path):
 
 
 if __name__ == '__main__':
-    r = open(f'{docs_path}/directory.json', 'r')
+    r = open(f'{docs_path}/{directory_file}', 'r')
     directory_config = json.load(r)
     markdown_files = get_markdown_file(directory_config['cn'], f'{docs_path}/zh_CN')
     markdown_files += get_markdown_file(directory_config['en'], f'{docs_path}/en_US')
