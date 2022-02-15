@@ -18,10 +18,18 @@ When a client subscribes to a topic or publishes a message, the plugin implement
 **Configuration file**
 
 
+{% emqxee %}
+
+* [Built-in ACL](../modules/mnesia_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
 
 * [Built-in ACL](./acl-file.md)
 * [Mnesia ACL](./acl-mnesia.md)
 
+{% endemqxce %}
 
 The configuration file is used to provide an authentication data source, which is suitable for ACL management with less changes.
 
@@ -29,12 +37,24 @@ The configuration file is used to provide an authentication data source, which i
 
 **External Database**
 
+{% emqxee %}
 
+* [MySQL ACL](../modules/mysql_authentication.md)
+* [PostgreSQL ACL](../modules/pgsql_authentication.md)
+* [Redis ACL](../modules/redis_authentication.md)
+* [MongoDB ACL](../modules/mongo_authentication.md)
+* [LDAP ACL](../modules/ldap_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
 
 * [MySQL ACL](./acl-mysql.md)
 * [PostgreSQL ACL](./acl-postgres.md)
 * [Redis ACL](./acl-redis.md)
 * [MongoDB ACL](./acl-mongodb.md)
+
+{% endemqxce %}
 
 
 The external database can store a large amount of data and dynamically manage ACLs to facilitate integration with external device management systems.
@@ -44,8 +64,18 @@ The external database can store a large amount of data and dynamically manage AC
 **Else**
 
 
+{% emqxee %}
+
+* [HTTP ACL](../modules/http_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
 
 * [HTTP ACL](./acl-http.md)
+
+{% endemqxce %}
+
 
 
 HTTP ACL enables complex ACL management.
@@ -68,9 +98,17 @@ ACL is a collection of allowing and denying conditions. The following elements a
 "Allow/Deny"  "Who"  "Subscribe/Publish" "Topics"
 ```
 
+{% emqxee %}
 
+When there are multiple ACL rules at the same time, EMQ X will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from bottom to top:
 
-When there are multiple ACL rules at the same time, EMQ X will merge them in order according to the rules. Taking the default ACL in [ACL file](./acl-file.md) as an example, it loads the rule from bottom to top:
+{% endemqxee %}
+
+{% emqxce %}
+
+When there are multiple ACL rules at the same time, EMQ X will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from bottom to top:
+
+{% endemqxce %}
 
 
 1. The first rule allows clients to publish and subscribe to all topics
@@ -114,8 +152,18 @@ acl_nomatch = allow
 ```
 
 
+
+{% emqxce %}
+
 Configure the default  [ACL file](./acl-file.md) and use the file to define the default ACL rule:
 
+{% endemqxce %}
+
+{% emqxee %}
+
+Configure the default, use the file to define the default ACL rule:
+
+{% endemqxee %}
 
 
 ```bash

@@ -8,6 +8,7 @@ on:
   push:
     tags:
       - v*
+      - e*
 
 jobs:
   deploy:
@@ -20,10 +21,33 @@ jobs:
         fetch-depth: 0
         path: docs-files
 
-    - name: clone frontend
+    - name: set env
+      run: |
+         BRANCH=$(echo ${{ github.ref }} | sed -r  "s ^refs/heads/|^refs/tags/(.*) \1 g")
+         echo "DOCS_BRANCH=$BRANCH" >> $GITHUB_ENV
+         version=${BRANCH%%-*}
+         if [[ $BRANCH == v* ]];
+         then
+           echo "DOCS_TYPE=broker" >> $GITHUB_ENV
+         else
+           version=${version/e/v}
+           echo "DOCS_TYPE=enterprise" >> $GITHUB_ENV
+         fi
+         echo "VERSION=$version" >> $GITHUB_ENV
+
+    - name: clone ce frontend
       uses: actions/checkout@v2
+      if: env.DOCS_TYPE == 'broker'
       with:
         repository: "emqx/emqx-io-docs-frontend"
+        token: ${{ secrets.CI_GIT_TOKEN }}
+        path: frontend
+
+    - name: clone ee frontend
+      uses: actions/checkout@v2
+      if: env.DOCS_TYPE == 'enterprise'
+      with:
+        repository: 'emqx/docs-emqx-com-frontend'
         token: ${{ secrets.CI_GIT_TOKEN }}
         path: frontend
 
@@ -32,19 +56,18 @@ jobs:
       with:
         node-version: 14.15
 
-    - name: set env
-      run: |
-         BRANCH=$(echo ${{ github.ref }} | sed -r  "s ^refs/heads/|^refs/tags/(.*) \1 g")
-         echo "DOCS_BRANCH=$BRANCH" >> $GITHUB_ENV
-         echo "VERSION=$BRANCH" >> $GITHUB_ENV
-         echo "DOCS_TYPE=broker" >> $GITHUB_ENV
-
     - name: remove unused files
       run: |
         cd docs-files
-        python3 .ci/remove_unused.py $(pwd)
+        if [[ $DOCS_TYPE == "broker" ]];
+        then
+          python3 .ci/remove_unused.py directory.json $(pwd)
+        else
+          python3 .ci/remove_unused.py directory_ee.json $(pwd)
+        fi
 
-    - name: move files
+    - name: move ce files
+      if: env.DOCS_TYPE == 'broker'
       run: |
         rm frontend/docs/en/README.md || true
         rm frontend/docs/zh/README.md || true
@@ -57,10 +80,30 @@ jobs:
         cp -r docs-files/zh_CN/* frontend/docs/zh/${VERSION}/
         cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
 
+    - name: move ee files
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        rm frontend/docs/en/README.md || true
+        rm frontend/docs/zh/README.md || true
+        rm frontend/docs/*.md || true
+        rm frontend/README.md
+        mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
+        mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        mkdir -p frontend/docs/.vuepress/public/api/
+        cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
+        cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
+
     - name: generate version config
       run: |
         cd docs-files
-        python3 .ci/generate_version.py $(git tag | egrep "v[0-9](\.[0-9])*$" | xargs echo -n) > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
+        if [[ $DOCS_TYPE == "broker" ]];
+        then
+          version_list=$(git tag | egrep "v.*$" | xargs echo -n)
+        else
+          version_list=$(git tag | egrep "e.*$" | xargs echo -n)
+        fi
+        python3 .ci/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         latest_version=$(cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json  | jq -r '.[0]')
         echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
@@ -70,42 +113,75 @@ jobs:
         cd frontend
         yarn && yarn build
 
-    - name: use ossutil
+    - name: upload ce files
+      if: env.DOCS_TYPE == 'broker'
       run: |
         cd frontend/docs/.vuepress/
         wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
         chmod 755 ./ossutil64
         ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.OSS_ACCESSKEY_ID }} -k ${{ secrets.OSS_ACCESSKEY_SECRET }} -L CH
-
-    - name: upload dist
-      run: |
-        cd frontend/docs/.vuepress/
         ./ossutil64 cp -r dist/ oss://${{ secrets.OSS_BUCKET }}/docs/ -u
 
+    - name: upload ee file
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        pip3 install coscmd
+        coscmd config -a ${{ secrets.COS_ID }} -s ${{ secrets.COS_KEY }} -b ${{ secrets.COS_NAME }} -r ${{ secrets.COS_REGION }}
+        coscmd delete -r -f en/${DOCS_TYPE}/${VERSION} || true
+        coscmd delete -r -f zh/${DOCS_TYPE}/${VERSION} || true
+        coscmd config -a ${{ secrets.COS_ID }} -s ${{ secrets.COS_KEY }} -b ${{ secrets.COS_NAME }} -e cos.accelerate.myqcloud.com
+        cd frontend/docs/.vuepress/dist/
+        zip -rq docs-dist-${DOCS_TYPE}-${VERSION}.zip ./
+        coscmd upload docs-dist-${DOCS_TYPE}-${VERSION}.zip docs-zip/
+        sleep 90
+
+    - name: flush ee cdn
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        pip3 install tccli
+        tccli configure set secretId ${{ secrets.COS_ID }}
+        tccli configure set secretKey ${{ secrets.COS_KEY }}
+        tccli configure set region ${{ secrets.COS_REGION }}
+        tccli cdn UpdateDomainConfig --cli-unfold-argument --Domain docs.emqx.com \
+            --UrlRedirect.Switch on \
+            --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
+            --UrlRedirect.PathRules.0.Pattern "/zh/enterprise/latest/*" \
+            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/index.html" \
+            --UrlRedirect.PathRules.0.RedirectHost https://docs.emqx.com \
+            --UrlRedirect.PathRules.1.RedirectStatusCode 302 \
+            --UrlRedirect.PathRules.1.Pattern "/en/enterprise/latest/*" \
+            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/index.html" \
+            --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com
+        tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
+        tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
+
     - name: clone docsearch
+      if: env.LATEST_VERSION == env.VERSION
       uses: actions/checkout@v2
       with:
         repository: 'Swilder-M/docsearch-scraper-simple'
         path: docsearch
 
-    - name: Install pipenv
+    - name: install pipenv
+      if: env.LATEST_VERSION == env.VERSION
       run: |
           python -m pip install --upgrade pipenv wheel
 
     - id: cache-pipenv
+      if: env.LATEST_VERSION == env.VERSION
       uses: actions/cache@v1
       with:
         path: ~/.local/share/virtualenvs
         key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
     - name: install dependencies
-      if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      if: env.LATEST_VERSION == env.VERSION && steps.cache-pipenv.outputs.cache-hit != 'true'
       run: |
         cd docsearch
         pipenv install --keep-outdated
 
     - name: update current version
-      if: ${{ env.LATEST_VERSION == env.VERSION }}
+      if: env.LATEST_VERSION == env.VERSION
       env:
         APPLICATION_ID: ${{ secrets.DOCS_APPLICATION_ID }}
         API_KEY: ${{ secrets.DOCS_API_KEY }}
