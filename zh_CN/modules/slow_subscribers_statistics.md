@@ -38,8 +38,6 @@
 
 ## 配置说明
 
-![image](./assets/slow_subscribers_statistics_2.png)
-
 -   时延阈值/threshold
 
     *时延阈值* 用来判断订阅者是否可以参与统计, 如果订阅者的时延低于这个值, 将不会进行统计
@@ -82,6 +80,7 @@
 
         EMQX 收到客户端的 *pubcomp* 时
 
+注意:开源版配置在emqx.conf中
 
 <a id="orga6267c1"></a>
 

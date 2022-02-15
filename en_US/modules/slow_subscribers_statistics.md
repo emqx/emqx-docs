@@ -38,8 +38,6 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
 ## Configuration description
 
-![image](./assets/slow_subscribers_statistics_2.png)
-
 -   threshold
 
      *threshold* is the minimum number of milliseconds the latency has to exceed, otherwise not collected for ranking
@@ -82,6 +80,7 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
         When EMQX receives *pubcomp* from the client
 
+Note: The open source version is configured in emqx.conf
 
 <a id="orga6267c1"></a>
 
