@@ -145,5 +145,16 @@ You can adjust the ACL query command according to business requirement. However,
 
 1. Topic is used as key and access is used as value in hash
 
-::: tip 
-The above data structures   need to be used strictly for Redis ACL rules.All rules added in Redis ACL are `allow` rules, which can be used with `acl_nomatch = deny` in` etc / emqx.conf`. :::
+::: tip
+The above data structures need to be used strictly for Redis ACL rules.
+
+ACL rules from redis are all **allow** rules. i.e. a whitelist.
+
+When a client's rules list is empty, EMQ X continues to check the next auth/ACL plugin.
+Otherwise the check returns immediately without proceeding to the next auth/ACL plugins.
+
+When the rule is non-empty and does not match the corresponding pub/sub permission,
+an authentication failure will be returned (the corresponding pub/sub behavior will be denied) and the authentication chain will be terminated.
+
+When more than one auth/ACL plugins are in use, it is recommended to position Redis ACL after other auth/ACL plugins in the enabled plugins list.
+:::
