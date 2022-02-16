@@ -584,8 +584,8 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 |        event        |  事件类型，固定为 "message.publish"   |
 | :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                          |
-| clientid            | Client ID                             |
-| username            | 用户名                                |
+| clientid            | 消息来源 Client ID                             |
+| username            | 消息来源用户名                                |
 | payload             | MQTT 消息体                           |
 | peerhost            | 客户端的 IPAddress                    |
 | topic               | MQTT 主题                             |
@@ -642,8 +642,8 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 | :------------------ | :---------------------------------- |
 | id                  | MQTT 消息 ID                        |
 | reason              | 消息丢弃原因                        |
-| clientid            | 消息目的 Client ID                  |
-| username            | 消息目的用户名                      |
+| clientid            | 消息来源 Client ID                  |
+| username            | 消息来源用户名                      |
 | payload             | MQTT 消息体                         |
 | peerhost            | 客户端的 IPAddress                  |
 | topic               | MQTT 主题                           |
