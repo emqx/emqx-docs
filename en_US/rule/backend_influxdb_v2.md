@@ -10,7 +10,7 @@ docker run -d  -p 8086:8086  influxdb
 
 Configure the resource
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the "Resources" tab on the left, click "Create", and select "InfluxDB HTTP V2 Service" as the resource type.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "Resources" tab on the left, click "Create", and select "InfluxDB HTTP V2 Service" as the resource type.
 
 The following configurations are included in the resource:
 
@@ -35,7 +35,7 @@ Create the resource:
 
 Create a rule:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rule" tab on the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rule" tab on the left.
 
 Fill in the rule SQL:
 

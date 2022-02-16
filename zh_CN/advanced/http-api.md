@@ -1189,8 +1189,8 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 | ----------------| --------- | -------------------- |
 | actions.failure                 | Integer   | 规则引擎 action 执行失败次数 |
 | actions.success                 | Integer   | 规则引擎 action 执行成功次数 |
-| bytes.received                  | Integer   | EMQ X 接收的字节数 |
-| bytes.sent                      | Integer   | EMQ X 在此连接上发送的字节数 |
+| bytes.received                  | Integer   | EMQX 接收的字节数 |
+| bytes.sent                      | Integer   | EMQX 在此连接上发送的字节数 |
 | client.authenticate             | Integer   | 客户端认证次数 |
 | client.auth.anonymous           | Integer   | 匿名登录的客户端数量 |
 | client.connect                  | Integer   | 客户端连接次数 |

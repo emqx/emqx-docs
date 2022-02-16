@@ -14,9 +14,9 @@ Before entering the next step, we also need to configure the user password and I
 
 ## Create resources
 
-After completing the above work, we will create MongoDB resources and rules in EMQ X Dashboard.
+After completing the above work, we will create MongoDB resources and rules in EMQX Dashboard.
 
-First, open the EMQ X Dashboard, enter the resource page of the rule engine, click the **Create** button in the upper left corner, and the **Create Resource** form will pop up. In the **Resource Type** drop-down box in the form, we can see three resource types of **MongoDB Single node mode**, **MongoDB Replica Set mode** and **MongoDB Sharded mode**, which correspond to the three deployment methods of MongoDB.
+First, open the EMQX Dashboard, enter the resource page of the rule engine, click the **Create** button in the upper left corner, and the **Create Resource** form will pop up. In the **Resource Type** drop-down box in the form, we can see three resource types of **MongoDB Single node mode**, **MongoDB Replica Set mode** and **MongoDB Sharded mode**, which correspond to the three deployment methods of MongoDB.
 
 ![image-20211126200858453](./assets/rule-engine/mongo_data_to_store3.png)
 
@@ -43,7 +43,7 @@ According to the status of SRV Record, we can configure MongoDB resources in the
 
 By default, MongoDB Cloud provides a domain name with SRV and TXT records added for connection.
 
-We can click the Connect button of the Cluster0 instance on the Databases page of MongoDB Cloud, and select one of the three connection methods. Then, we can see the connection string to be used by the current instance. The selected part of the cursor is the content of the **MongoDB Server**  field that we need to configure to the MongoDB resource of the EMQ X rule engine later.
+We can click the Connect button of the Cluster0 instance on the Databases page of MongoDB Cloud, and select one of the three connection methods. Then, we can see the connection string to be used by the current instance. The selected part of the cursor is the content of the **MongoDB Server**  field that we need to configure to the MongoDB resource of the EMQX rule engine later.
 
 ![image-20211129104759799](./assets/rule-engine/mongo_data_to_store5.png)
 
@@ -54,12 +54,12 @@ Now, we continue to complete the configuration of MongoDB resources. Here we mai
 
 3. Configure **Username** and **Password**. You need to configure them according to the actual situation.
 
-4. **Auth Source** and **Replica Set** remain empty. EMQ X will automatically query DNS TXT records.
+4. **Auth Source** and **Replica Set** remain empty. EMQX will automatically query DNS TXT records.
 5. Set **Enable SSL** to true. This is the connection requirement of MongoDB Cloud. Please configure as needed when deploying in other ways.
 
 ![image-20211129112203066](./assets/rule-engine/mongo_data_to_store6.png)
 
-Finally, we click the **OK** button at the bottom of the **Create Resource** form to complete the creation. At this time, a new MongoDB resource instance is successfully created in EMQ X:
+Finally, we click the **OK** button at the bottom of the **Create Resource** form to complete the creation. At this time, a new MongoDB resource instance is successfully created in EMQX:
 
 ![image-20211129113336183](./assets/rule-engine/mongo_data_to_store7.png)
 

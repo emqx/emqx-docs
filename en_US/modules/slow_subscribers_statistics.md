@@ -19,7 +19,7 @@ This function ranks subscribers in descending order according to the average lat
 
 ### Create module
 
-Open EMQ X Dashboard, click on the "Module" on the left. Then, select "add module":
+Open EMQX Dashboard, click on the "Module" on the left. Then, select "add module":
 
 ![image](./assets/slow_subscribers_statistics_1.png)
 

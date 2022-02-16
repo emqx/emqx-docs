@@ -59,7 +59,7 @@ auth.mongo.srv_record = false
 ## 如果你的 URI 具有以下格式：
 ## mongodb+srv://server.example.com
 ## 请将 auth.mongo.server 配置为 server.example.com，并将 srv_record
-## 设置为 true，EMQ X 将自动查询 SRV 和 TXT 记录以获取服务列表和 replicaSet 等选项
+## 设置为 true，EMQX 将自动查询 SRV 和 TXT 记录以获取服务列表和 replicaSet 等选项
 ##
 ## 现已支持 IPv6 和域名
 auth.mongo.server = 127.0.0.1:27017

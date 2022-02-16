@@ -1,9 +1,9 @@
 # Upgrade from 4.3 to 4.4
 
-EMQ X 4.3 and 4.4 nodes co-exist in the same cluster.
-Hence it's possible to apply a rolling upgrade of a EMQ X cluster.
+EMQX 4.3 and 4.4 nodes co-exist in the same cluster.
+Hence it's possible to apply a rolling upgrade of a EMQX cluster.
 
-The upgrade steps of each EMQ X node are summarised below:
+The upgrade steps of each EMQX node are summarised below:
 
 1. Optional: remove the node from load-balancer
 1. Stop the node, (e.g. `emqx stop`, `systemctl stop emqx`)
@@ -32,7 +32,7 @@ Take RPM or DEB installation for example.
 mkdir -p ~/emqx-backup/etc/
 mkdir -p ~/emqx-backup/data/
 
-## Ensure EMQ X is stopped
+## Ensure EMQX is stopped
 systemctl stop emqx
 systemctl status emqx
 
@@ -99,4 +99,4 @@ ls -htl /var/log/emqx/emqx.log.*[0-9] | head -n 1
 tail -f -n 100 /var/log/emqx/emqx.log.N
 ```
 
-- Check EMQ X dashboard to see if the node is running as expected.
+- Check EMQX dashboard to see if the node is running as expected.

@@ -347,7 +347,7 @@ The basic process is to copy another emqx folder and name it emqx2. After that, 
 
 ## Network Partition Autoheal
 
-*EMQ X* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
+*EMQX* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
 
 ```bash
 cluster.autoheal = on
@@ -362,7 +362,7 @@ Network Partition Autoheal Process:
 5. The Coordinator node restarts the minority partition node to restore the cluster.
 
 ## Autoclean of Cluster nodes
-*EMQ X* supports Autoclean frol cluster , which can be configured in `etc/emqx.conf` :
+*EMQX* supports Autoclean frol cluster , which can be configured in `etc/emqx.conf` :
 
 ```bash
 cluster.autoclean = 5m

@@ -14,9 +14,9 @@
 
 ## 创建资源
 
-完成以上工作后，接下来我们将在 EMQ X Dashboard 中完成 MongoDB 资源和规则的创建。
+完成以上工作后，接下来我们将在 EMQX Dashboard 中完成 MongoDB 资源和规则的创建。
 
-首先打开 EMQ X Dashboard，进入规则引擎的资源页面，点击左上角的创建按钮，将弹出 **创建资源** 表单，在表单中的 **资源类型** 下拉框中我们可以看到 **MongoDB 单节点模式**、**MongoDB Relica Set 模式**和 **MongoDB Sharded 模式**三个资源类型，分别对应 MongoDB 的三种部署方式。
+首先打开 EMQX Dashboard，进入规则引擎的资源页面，点击左上角的创建按钮，将弹出 **创建资源** 表单，在表单中的 **资源类型** 下拉框中我们可以看到 **MongoDB 单节点模式**、**MongoDB Relica Set 模式**和 **MongoDB Sharded 模式**三个资源类型，分别对应 MongoDB 的三种部署方式。
 
 ![image-20211126200858453](./assets/rule-engine/mongo_data_to_store3.png)
 
@@ -43,7 +43,7 @@
 
 MongoDB Cloud 默认提供了一个已经添加了 SRV 和 TXT 记录的域名以供连接。
 
-我们在 MongoDB Cloud 的 Databases 页面点击 Cluster0 实例的 Connect 按钮，三个连接方式任选其一，然后就可以看到当前实例需要使用的连接字符串，其中光标选中的部分就是我们稍后需要配置到 EMQ X 规则引擎 MongoDB 资源的 **MongoDB 服务器** 字段的内容。
+我们在 MongoDB Cloud 的 Databases 页面点击 Cluster0 实例的 Connect 按钮，三个连接方式任选其一，然后就可以看到当前实例需要使用的连接字符串，其中光标选中的部分就是我们稍后需要配置到 EMQX 规则引擎 MongoDB 资源的 **MongoDB 服务器** 字段的内容。
 
 ![image-20211129104759799](./assets/rule-engine/mongo_data_to_store5.png)
 
@@ -52,12 +52,12 @@ MongoDB Cloud 默认提供了一个已经添加了 SRV 和 TXT 记录的域名�
 1. 将 **SRV 记录** 设置为 true，然后将 **MongoDB 服务器** 设置为我们刚刚获取的域名。
 2. 将 **数据库名称** 设置为 test，这是 MongoDB Cloud 的默认数据库，你可以按需配置。
 3. 配置 **用户名** 和 **密码**，你需要按实际情况配置。
-4. **连接认证源** 和 **副本集名称** 保持为空，EMQ X 会自动查询 DNS TXT 记录。
+4. **连接认证源** 和 **副本集名称** 保持为空，EMQX 会自动查询 DNS TXT 记录。
 5. 将 **开启 SSL** 设置为 true，这是 MongoDB Cloud 的连接要求，其他方式部署时请按需配置。
 
 ![image-20211129112203066](./assets/rule-engine/mongo_data_to_store6.png)
 
-最后，我们点击 **创建资源** 表单最下方的 **确定** 按钮以完成创建，此时一个新的 MongoDB 资源实例就在 EMQ X 中创建成功了：
+最后，我们点击 **创建资源** 表单最下方的 **确定** 按钮以完成创建，此时一个新的 MongoDB 资源实例就在 EMQX 中创建成功了：
 
 ![image-20211129113336183](./assets/rule-engine/mongo_data_to_store7.png)
 

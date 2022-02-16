@@ -93,7 +93,7 @@ The HookProvider part:
 Hook event part:
 
 - Methods prefixed with `OnClient`, `OnSession`, `OnMessage` correspond to the methods in [hooks](../advanced/hooks.md) one-to-one. They have the same calling timing and similar parameter lists.
-- Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return value to the EMQ X system, other callbacks are not supported.
+- Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return value to the EMQX system, other callbacks are not supported.
 
 For details of the interface and parameter data structure, please refer to: [exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
