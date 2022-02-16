@@ -636,12 +636,12 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 | publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms) |
 | node                | 事件触发所在节点                    |
 
-#### $events/message_dropped (消息丢弃)
+#### $events/message_dropped (消息在转发的过程中被丢弃)
 
 |        event        | 事件类型，固定为 "message.dropped"  |
 | :------------------ | :---------------------------------- |
 | id                  | MQTT 消息 ID                        |
-| reason              | 消息丢弃原因                        |
+| reason              | 消息丢弃原因，可能的原因：<br/>no_subscribers: 没有订阅者|
 | clientid            | 消息来源 Client ID                  |
 | username            | 消息来源用户名                      |
 | payload             | MQTT 消息体                         |
@@ -653,6 +653,26 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 | timestamp           | 事件触发时间 (ms)                   |
 | publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms) |
 | node                | 事件触发所在节点                    |
+
+#### $events/delivery_dropped (消息在投递的过程中被丢弃)
+
+|        event        | 事件类型，固定为 "delivery.dropped" |
+| ------------------- | ------------------------------------ |
+| id                  | MQTT 消息 ID                         |
+| reason              | 消息丢弃原因，可能的原因：<br/>queue_full: 消息队列已满(QoS>0)<br/>no_local: 不允许客户端接收自己发布的消息<br/>expired: 消息或者会话过期<br/>qos0_msg: QoS0 的消息因为消息队列已满被丢弃|
+| from_clientid       | 消息来源 Client ID                   |
+| from_username       | 消息来源用户名                       |
+| clientid            | 消息目的 Client ID                   |
+| username            | 消息目的用户名                       |
+| payload             | MQTT 消息体                          |
+| peerhost            | 客户端的 IPAddress                   |
+| topic               | MQTT 主题                            |
+| qos                 | MQTT 消息的 QoS                      |
+| flags               | MQTT 消息的 Flags                    |
+| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
+| timestamp           | 事件触发时间 (ms)                    |
+| publish_received_at | PUBLISH 消息到达 Broker 的时间 (ms)  |
+| node                | 事件触发所在节点                     |
 
 #### $events/client_connected (终端连接成功)
 
