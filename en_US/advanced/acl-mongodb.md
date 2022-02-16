@@ -173,7 +173,7 @@ After enabling MongoDB ACL and successfully connecting with the username emqx, t
 
 ## super_query
 
-When performing ACL authentication, EMQ X Broker will use the current client information to execute a user-configured superuser query to query whether the client is a superuser. ACL queries are skipped when the client is a superuser.
+When performing ACL authentication, EMQX Broker will use the current client information to execute a user-configured superuser query to query whether the client is a superuser. ACL queries are skipped when the client is a superuser.
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -201,7 +201,7 @@ db.mqtt_user.find({
 })
 ```
 
-You can use the following placeholders in your query conditions, and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in your query conditions, and EMQX Broker will automatically populate with client information when executed:
 
 - %u：user name
 - %c：Client ID
@@ -217,7 +217,7 @@ If superuser functionality is not needed, it can be more efficient when commenti
 
 ## acl_query
 
-When performing ACL authentication, EMQ X Broker will use the current client information to execute the user-configured superuser query. If superuser query is not enabled or the client is not a superuser, ACL query will be used to find out the ACL rules of client in the database.
+When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser query. If superuser query is not enabled or the client is not a superuser, ACL query will be used to find out the ACL rules of client in the database.
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -260,7 +260,7 @@ db.mqtt_acl.find({
 ```
 
 
-You can use the following placeholders in ACL queries, and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in ACL queries, and EMQX Broker will automatically populate with client information when executed:
 
 - %u：username
 - %c：Client ID
@@ -270,7 +270,7 @@ MongoDB ACL rules need to use the above data structures strictly.
 
 All rules added in MongoDB ACL are **allow** rules. i.e. a whitelist.
 
-When a client's rules list is empty, EMQ X continues to check the next auth/ACL plugin.
+When a client's rules list is empty, EMQX continues to check the next auth/ACL plugin.
 Otherwise the check returns immediately without proceeding to the next auth/ACL plugins.
 
 When the rule is non-empty and does not match the corresponding pub/sub permission,

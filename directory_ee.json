@@ -4,11 +4,11 @@
       "title": "产品概览",
       "children": [
         {
-          "title": "EMQ X 消息服务器简介",
+          "title": "EMQX 消息服务器简介",
           "path": "./"
         },
         {
-          "title": "EMQ X 消息服务器功能列表",
+          "title": "EMQX 消息服务器功能列表",
           "path": "introduction/checklist"
         }
       ]
@@ -21,7 +21,7 @@
           "path": "getting-started/install-ee"
         },
         {
-          "title": "启动 EMQ X",
+          "title": "启动 EMQX",
           "path": "getting-started/start"
         },
         {
@@ -223,7 +223,7 @@
           "path": "modules/recon"
         },
         {
-          "title": "EMQ X Prometheus Agent",
+          "title": "EMQX Prometheus Agent",
           "path": "modules/prometheus"
         },
         {
@@ -388,7 +388,7 @@
               "path": "rule/bridge_mqtt"
             },
             {
-              "title": "桥接数据到 EMQ X",
+              "title": "桥接数据到 EMQX",
               "path": "rule/bridge_emqx"
             }
           ]
@@ -738,7 +738,7 @@
       "title": "Introduction",
       "children": [
         {
-          "title": "EMQ X Broker",
+          "title": "EMQX Broker",
           "path": "./"
         },
         {
@@ -755,7 +755,7 @@
           "path": "getting-started/install-ee"
         },
         {
-          "title": "Start EMQ X",
+          "title": "Start EMQX",
           "path": "getting-started/start"
         },
         {
@@ -953,7 +953,7 @@
           "path": "modules/recon"
         },
         {
-          "title": "EMQ X Prometheus Agent",
+          "title": "EMQX Prometheus Agent",
           "path": "modules/prometheus"
         },
         {
@@ -1118,7 +1118,7 @@
               "path": "rule/bridge_mqtt"
             },
             {
-              "title": "Bridge data to EMQ X",
+              "title": "Bridge data to EMQX",
               "path": "rule/bridge_emqx"
             }
           ]

@@ -168,7 +168,7 @@ auth.mongo.password_hash = sha256
 
 ## 认证查询（auth_selector）
 
-进行身份认证时，EMQ X 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
+进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
 
 MongoDB 支持配置集合名称、密码字段、selector 命令
 
@@ -184,7 +184,7 @@ auth.mongo.auth_query.password_field = password
 auth.mongo.auth_query.selector = username=%u
 ```
 
-你可以在认证查询（selector）中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在认证查询（selector）中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
@@ -194,6 +194,6 @@ auth.mongo.auth_query.selector = username=%u
 
 你可以根据业务需要调整认证查询，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下认证查询需要满足以下条件：
 
-1. 查询结果中必须包含 password 字段，EMQ X 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQ X 使用该字段作为 salt（盐）值
+1. 查询结果中必须包含 password 字段，EMQX 使用该字段与客户端密码比对
+2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQX 使用该字段作为 salt（盐）值
 3. MongoDB 使用 findOne 查询命令，确保你期望的查询结果能够出现在第一条数据中

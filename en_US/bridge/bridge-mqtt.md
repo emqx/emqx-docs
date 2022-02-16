@@ -2,11 +2,11 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to MQTT](../rule/bridge_mqtt.md) to setup mqtt bridges in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to MQTT](../rule/bridge_mqtt.md) to setup mqtt bridges in rule engine.
 
 :::
 
-EMQ X bridges and forwards MQTT messages to MQTT Broker:
+EMQX bridges and forwards MQTT messages to MQTT Broker:
 
 ![image](./assets/bridge_mqtt.png)
 
@@ -95,10 +95,10 @@ whose topic is "sensor1/hello", its topic will change to
 "<bridge/aws/emqx1@192.168.1.1/sensor1/hello>" when it reaches the
 remote node.
 
-Forwards: Messages forwarded to `forwards` specified by local EMQ X are
+Forwards: Messages forwarded to `forwards` specified by local EMQX are
 forwarded to the remote MQTT Broker.
 
-Subscription: Local EMQ X synchronizes messages from a remote MQTT
+Subscription: Local EMQX synchronizes messages from a remote MQTT
 Broker to local by subscribing to the topic of the remote MQTT Broker.
 
 ## Enable MQTT Bridge

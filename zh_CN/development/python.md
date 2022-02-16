@@ -27,7 +27,7 @@ pip install paho-mqtt
 
 ## Paho Python 使用示例
 
-本示例包含 Python 语言的 Paho Python 连接 EMQ X Broker，并进行消息收发完整代码：
+本示例包含 Python 语言的 Paho Python 连接 EMQX Broker，并进行消息收发完整代码：
 
 
 ```python

@@ -2,7 +2,7 @@
 
 ## Definition
 
-**Hooks** are a mechanism provided by EMQ X Broker, which modifies or extends system functions by intercepting function calls, message passing, and event passing between modules.
+**Hooks** are a mechanism provided by EMQX Broker, which modifies or extends system functions by intercepting function calls, message passing, and event passing between modules.
 
 In simple terms, the purpose of this mechanism is to enhance the scalability of the software system, facilitate integration with the three-party systems, or change the original default behavior of its system. Such as:
 
@@ -24,7 +24,7 @@ When only the `emqx_auth_mnesia` authentication plugin is enabled and anonymous 
 It is shown in the following figure:
 
 ```
-                     EMQ X Core          Hooks & Plugins
+                     EMQX Core          Hooks & Plugins
                 |<---  Scope  --->|<-------  Scope  -------->|
                 |                 |                          |
   Authenticate  |     Allow       |   emqx_auth_mnesia       | Authenticate
@@ -34,7 +34,7 @@ It is shown in the following figure:
                 +-----------------+--------------------------+
 ```
 
-Therefore, in EMQ X Broker, the mechanism of **Hooks** greatly facilitates the extension of the system. We don't need to modify the  [emqx](https://github.com/emqx/emqx) core code, but only need to bury the **HookPoint** in a specific location to allow external plugins to extend EMQ X Broker with various behaviors.
+Therefore, in EMQX Broker, the mechanism of **Hooks** greatly facilitates the extension of the system. We don't need to modify the  [emqx](https://github.com/emqx/emqx) core code, but only need to bury the **HookPoint** in a specific location to allow external plugins to extend EMQX Broker with various behaviors.
 
 For implementers, it only needs to pay attention to:
 
@@ -100,7 +100,7 @@ In the following two sections of [HookPoint](#hookpoint) and [callback function]
 
 ## HookPoint
 
-EMQ X Broker is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
+EMQX Broker is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
 
 | Name                 | Description                 | Execution Timing                                             |
 | -------------------- | --------------------------- | ------------------------------------------------------------ |
@@ -132,7 +132,7 @@ EMQ X Broker is based on a client's key activities during its life cycle, and pr
 
 ### Hook and unhook
 
-EMQ X Broker provides an API for the operation of hooking and unhooking.
+EMQX Broker provides an API for the operation of hooking and unhooking.
 
 **Hook:**
 

@@ -2,7 +2,7 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to MongoDB](../rule/backend_mongodb.md) to setup Save data to MongoDB in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to MongoDB](../rule/backend_mongodb.md) to setup Save data to MongoDB in rule engine.
 
 :::
 

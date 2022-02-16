@@ -1,11 +1,11 @@
 # Module Management
 
-The EMQ X provides abundant functional modules, including authentication and authorization, protocol access, message delivery, language extension, operation and maintenance monitoring, and internal modules.
+The EMQX provides abundant functional modules, including authentication and authorization, protocol access, message delivery, language extension, operation and maintenance monitoring, and internal modules.
 On the module management page of dashboard, modules can be started and stopped, as well as their configuration and data can be managed.
 
 ## Module list
 
-The modules currently provided by the EMQ X include:
+The modules currently provided by the EMQX include:
 
 - Authentication & Authorization
   - Builtin ACL file
@@ -54,9 +54,9 @@ Currently there are two ways to start the module:
 
 **Enable loading modules with system**
 
-If you need to start a certain module when EMQ X starts, you can directly add the module that needs to be started in `data/loaded_modules`.
+If you need to start a certain module when EMQX starts, you can directly add the module that needs to be started in `data/loaded_modules`.
 
-For example, the modules automatically loaded by EMQ X are:
+For example, the modules automatically loaded by EMQX are:
 
 ```json
 [

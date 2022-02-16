@@ -110,7 +110,8 @@ It is possible to enable TLS encryption for the backplane connections. It comes 
    rpc.enable_ssl=5369
    ```
 
-### EMQ X Broker Cluster protocol settings
+### EMQX Broker Cluster protocol settings
+
 Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, and the connection method can be configured in`etc/emqx.conf`:
 
 | Configuration name | Type | Default value | Description |
@@ -118,15 +119,15 @@ Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, an
 | cluster.proto_dist | enum | `inet_tcp` | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
 | node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate. |
 
-## EMQ X Broker Distributed cluster design
-The basic function of EMQ X Broker distribution is to forward and publish messages to subscribers on each node, as shown in the following figure:
+## EMQX Broker Distributed cluster design
+The basic function of EMQX Broker distribution is to forward and publish messages to subscribers on each node, as shown in the following figure:
 
 ![image](../assets/design_9.png)
 
-To achieve this, EMQ X Broker maintains several data structures related to it: subscription tables, routing tables, and topic trees.
+To achieve this, EMQX Broker maintains several data structures related to it: subscription tables, routing tables, and topic trees.
 
 ### Subscription Table: Topics-Subscribers
-When an MQTT client subscribes to a topic, EMQ X Broker maintains a **Subscription Table** for the Topic-\> Subscriber mapping. The subscription table only exists on the EMQ X Broker node where the subscriber is located, for example:
+When an MQTT client subscribes to a topic, EMQX Broker maintains a **Subscription Table** for the Topic-\> Subscriber mapping. The subscription table only exists on the EMQX Broker node where the subscriber is located, for example:
 
 ```bash
 node1:
@@ -149,7 +150,7 @@ topic3 -> node2, node4
 ```
 
 ### Topic tree: topic matching with wildcards
-In addition to the routing table, each node in the EMQ X Broker cluster also maintains a backup of the **Topic Trie.**
+In addition to the routing table, each node in the EMQX Broker cluster also maintains a backup of the **Topic Trie.**
 
 The following topic-subscription relationship is an example:
 
@@ -159,7 +160,7 @@ The following topic-subscription relationship is an example:
 | client2 | node2 | t/# |
 | client3 | node3 | t/+/x, t/a |
 
-When all subscriptions are completed, EMQ X Broker maintains the following Topic Trie and Route Table:
+When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
 
 ![image](../assets/cluster_2.png)
 
@@ -176,12 +177,12 @@ For example, when client1 publishes a message to the topic `t/a`. The routing an
 6. Message forwarding and distribution are finished.
 
 ### Data partition and sharing
-EMQ X Broker's subscription table is partitioned in the cluster, while the topic tree and routing table are replicated.
+EMQX Broker's subscription table is partitioned in the cluster, while the topic tree and routing table are replicated.
 
 ## Node discovery and automatic clustering
-EMQ X Broker supports Autocluster based on Ekka library. Ekka is a cluster management library developed for Erlang / OTP applications. It supports Service Discovery, Autocluster, Network Partition Autoheal, and Autoclean of  Erlang node.
+EMQX Broker supports Autocluster based on Ekka library. Ekka is a cluster management library developed for Erlang / OTP applications. It supports Service Discovery, Autocluster, Network Partition Autoheal, and Autoclean of  Erlang node.
 
-EMQ X supports multiple node discovery strategies:
+EMQX supports multiple node discovery strategies:
 
 | strategy | Description                       |
 | -------- | --------------------------------- |
@@ -250,7 +251,7 @@ cluster.k8s.app_name = ekka
 ```
 
 ### Introduction to manual cluster management
-Deploy EMQ X Broker cluster on two servers of s1.emqx.io, s2.emqx.io:
+Deploy EMQX Broker cluster on two servers of s1.emqx.io, s2.emqx.io:
 
 |                Node name                | Server |   IP address   |
 | ------------------------------------ | ------------- | ------------ |
@@ -345,6 +346,7 @@ For users who only have one server, the pseudo-distributed starting mode can be 
 The basic process is to copy another emqx folder and name it emqx2. After that, we let all the listening ports of the original emqx to be added by an offset as the listening ports of the emqx2 node. For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 as the MQTT/TCP listening port for emqx2. Please refer to [Cluster Script](https://github.com/terry-xiaoyu/one_more_emqx) regarding to the above operations and also refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
 
 ## Network Partition Autoheal
+
 *EMQ X* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
 
 ```bash
