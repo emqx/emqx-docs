@@ -2,11 +2,11 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[RocketMQ 桥接](../rule/bridge_rocketmq.md)规则引擎中创建 RocketMQ 桥接
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[RocketMQ 桥接](../rule/bridge_rocketmq.md)规则引擎中创建 RocketMQ 桥接
 
 :::
 
-EMQ X 桥接转发 MQTT 消息到 RocketMQ 集群:
+EMQX 桥接转发 MQTT 消息到 RocketMQ 集群:
 
 ![image](./assets/bridge_rocket.png)
 
@@ -115,7 +115,7 @@ bridge.rocket.hook.message.acked.1        = {"filter": "#",  "topic": "MessageAc
 
 ## 客户端上下线事件转发 RocketMQ
 
-设备上线 EMQ X 转发上线事件消息到 RocketMQ:
+设备上线 EMQX 转发上线事件消息到 RocketMQ:
 
 ```bash
 topic = "ClientConnected",
@@ -127,7 +127,7 @@ value = {
         }
 ```
 
-设备下线 EMQ X 转发下线事件消息到 RocketMQ:
+设备下线 EMQX 转发下线事件消息到 RocketMQ:
 
 ```bash
 topic = "ClientDisconnected",

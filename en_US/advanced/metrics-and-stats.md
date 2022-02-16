@@ -1,18 +1,18 @@
 # Metrics
 
-EMQ X Broker provides users with metrics monitoring functions, allowing users and operation and maintenance personnel to know the current service status based on these metrics. The metrics monitoring function is forcibly enabled. This function has high performance, and users do not need to worry about affecting system performance in high-throughput scenarios.
+EMQX Broker provides users with metrics monitoring functions, allowing users and operation and maintenance personnel to know the current service status based on these metrics. The metrics monitoring function is forcibly enabled. This function has high performance, and users do not need to worry about affecting system performance in high-throughput scenarios.
 
-EMQ X Broker provides users with multiple ways to view metrics and status. Most directly, users can see this data on the Overview page of EMQ X Dashboard.
+EMQX Broker provides users with multiple ways to view metrics and status. Most directly, users can see this data on the Overview page of EMQX Dashboard.
 
 If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. For specific operations, see [HTTP API](./http-api.md#endpoint-metrics) and [$SYS system topic](./system-topic.md#).
 
 ::: tip
-EMQ X Broker provides the [emqx_statsd](https://github.com/emqx/emqx-statsd) plug-in, which is used to output the system's monitoring data to a third-party monitoring system. You can refer to [Prometheus Monitoring Alarm](../tutorial/prometheus.md) for an example.
+EMQX Broker provides the [emqx_statsd](https://github.com/emqx/emqx-statsd) plug-in, which is used to output the system's monitoring data to a third-party monitoring system. You can refer to [Prometheus Monitoring Alarm](../tutorial/prometheus.md) for an example.
 :::
 
 ## Metrics & Stats
 
-EMQ X Broker divides metrics into Metrics and Stats. Metrics usually refer to data that will only increase monotonically, such as the number of sent bytes and the number of sent messages. Metrics currently provided by EMQ X Broker covers the four dimensions of bytes, packets, messages, and events. Stats usually refers to data that appears in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscription.
+EMQX Broker divides metrics into Metrics and Stats. Metrics usually refer to data that will only increase monotonically, such as the number of sent bytes and the number of sent messages. Metrics currently provided by EMQX Broker covers the four dimensions of bytes, packets, messages, and events. Stats usually refers to data that appears in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscription.
 
 ### Metrics
 
@@ -78,9 +78,9 @@ EMQ X Broker divides metrics into Metrics and Stats. Metrics usually refer to da
 | delivery.dropped.expired        | Integer   | Number of messages that were dropped due to message expiration when sending |
 | delivery.dropped.no_local       | Integer   | Number of messages that were dropped due to the `No Local` subscription option when sending |
 | delivery.dropped                | Integer   | Total number of messages that were dropped when sent         |
-| messages.delayed                | Integer   | Number of delay-published messages stored by EMQ X Broker    |
-| messages.delivered              | Integer   | Number of messages forwarded to the subscription process internally by EMQ X Broker |
-| messages.dropped                | Integer   | Total number of messages dropped by EMQ X Broker before forwarding to the subscription process |
+| messages.delayed                | Integer   | Number of delay-published messages stored by EMQX Broker    |
+| messages.delivered              | Integer   | Number of messages forwarded to the subscription process internally by EMQX Broker |
+| messages.dropped                | Integer   | Total number of messages dropped by EMQX Broker before forwarding to the subscription process |
 | messages.dropped.expired        | Integer   | Number of messages that were dropped due to message expiration when receiving |
 | messages.dropped.no_subscribers | Integer   | Number of messages dropped due to no subscribers             |
 | messages.forward                | Integer   | Number of messages forwarded to other nodes                  |
@@ -93,7 +93,7 @@ EMQ X Broker divides metrics into Metrics and Stats. Metrics usually refer to da
 | messages.qos2.sent              | Integer   | Number of QoS 2 messages sent to clients                     |
 | messages.received               | Integer   | Number of messages received from the client, which is equal to the sum of `messages.qos0.received`,` messages.qos1.received`, and `messages.qos2.received` |
 | messages.sent                   | Integer   | The number of messages sent to the client, which is equal to the sum of `messages.qos0.sent`,` messages.qos1.sent`, and `messages.qos2.sent` |
-| messages.retained               | Integer   | Number of retained messages stored by EMQ X Broker           |
+| messages.retained               | Integer   | Number of retained messages stored by EMQX Broker           |
 | messages.acked                  | Integer   | Number of acked messages                                     |
 
 ### Event

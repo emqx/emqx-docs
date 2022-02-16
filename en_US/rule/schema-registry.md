@@ -5,7 +5,7 @@ Because of the variety of IoT device terminals and the different coding formats 
 
 The Schema Registry manages the Schema used for coding and decoding, processes the encoding or decoding requests, and returns the results. The Schema Registry in collaboration with the rule engine can be adapted for device access and rule design in various scenarios.
 
-EMQ X Schema Registry currently supports codecs in three formats: [Avro](https://avro.apache.org), [Protobuf](https://developers.google.com/protocol-buffers/), and custom encoding. Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in Map format. The decoded data can be used directly by the rule engine and other plugins. User-defined (3rd-party) coding and decoding services can perform coding and decoding more closely to business needs via HTTP or TCP callbacks.
+EMQX Schema Registry currently supports codecs in three formats: [Avro](https://avro.apache.org), [Protobuf](https://developers.google.com/protocol-buffers/), and custom encoding. Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in Map format. The decoded data can be used directly by the rule engine and other plugins. User-defined (3rd-party) coding and decoding services can perform coding and decoding more closely to business needs via HTTP or TCP callbacks.
 
 ::: tip
 Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf, but for custom codec (3rd-party) formats, Schema text needs to be maintained by the codec service itself, if required.
@@ -50,9 +50,9 @@ A common use case is to use the rule engine to call the encoding and decoding in
 
 ## Codec + Rules Engine
 
-The message processing level of EMQ X can be divided into three parts: Messaging, Rule Engine, and Data Conversion.
+The message processing level of EMQX can be divided into three parts: Messaging, Rule Engine, and Data Conversion.
 
-EMQ X's PUB/SUB system routes messages to specified topics. The rule engine has the flexibility to configure business rules for the data, match messages to the rules and then specify the corresponding action. Data format conversion occurs before the rule matching process, converting the data into a Map format that can participate in rule matching, and then matching it.
+EMQX's PUB/SUB system routes messages to specified topics. The rule engine has the flexibility to configure business rules for the data, match messages to the rules and then specify the corresponding action. Data format conversion occurs before the rule matching process, converting the data into a Map format that can participate in rule matching, and then matching it.
 
 ![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
 
@@ -106,7 +106,7 @@ For example, republish a message with the "name" field as "Shawn" to the topic "
 
 #### Create schema
 
-In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQ X, create a Protobuf Schema using the following parameters:
+In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQX, create a Protobuf Schema using the following parameters:
 
 1. Name: protobuf_person
 
@@ -201,7 +201,7 @@ For example, republish a message with the "name" field as "Shawn" to the topic "
 
 #### Create Schema
 
-In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQ X, create an Avro Schema using the following parameters:
+In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQX, create an Avro Schema using the following parameters:
 
 1. Name: avro_user
 
@@ -293,7 +293,7 @@ The device publishes an arbitrary message to verify that the self-deployed codec
 
 #### Create Schema
 
-In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQ X, create a 3rd-Party Schema using the following parameters:
+In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of EMQX, create a 3rd-Party Schema using the following parameters:
 
 1. Name: my_parser
 2. Codec Type: 3rd-party

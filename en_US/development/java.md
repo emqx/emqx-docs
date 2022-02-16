@@ -34,7 +34,7 @@ The Paho Java client library can be easily installed through the package managem
 
 ## Paho Java usage example
 
-In the Java system, Paho Java is a relatively stable and widely used MQTT client library. This example contains the complete code of Paho Java in the Java language connecting to EMQ X Broker, sending and receiving messages:
+In the Java system, Paho Java is a relatively stable and widely used MQTT client library. This example contains the complete code of Paho Java in the Java language connecting to EMQX Broker, sending and receiving messages:
 
 **App.java**
 

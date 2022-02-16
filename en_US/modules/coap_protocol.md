@@ -1,10 +1,10 @@
 # CoAP Protocol Gateway
 
-The CoAP protocol gateway provides EMQ X with the access capability of the CoAP protocol. It allows publishing, subscribing, and receiving messages to EMQ X in accordance with a certain defined CoAP message format.
+The CoAP protocol gateway provides EMQX with the access capability of the CoAP protocol. It allows publishing, subscribing, and receiving messages to EMQX in accordance with a certain defined CoAP message format.
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200928161310952](./assets/modules.png)
 
@@ -32,7 +32,7 @@ Click "OK" to complete the configuration of the listener, and then click "Add" t
 
 ### Client
 
-[libcoap](http://github.com/obgm/libcoap) is a very easy-to-use CoAP client library. Here we use it as a CoAP client to test the function of EMQ X CoAP access gateway.
+[libcoap](http://github.com/obgm/libcoap) is a very easy-to-use CoAP client library. Here we use it as a CoAP client to test the function of EMQX CoAP access gateway.
 
 ```
 git clone http://github.com/obgm/libcoap
@@ -76,7 +76,7 @@ During this period, if a message is generated on the topic of `topic1`, `libcoap
 
 #### CoAP Client Observe Operation
 
-In the EMQ X CoAP access gateway, you can use the Observe operation of CoAP to implement a topic subscription operation:
+In the EMQX CoAP access gateway, you can use the Observe operation of CoAP to implement a topic subscription operation:
 
 ```
 GET coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password} with OBSERVE=0
@@ -162,7 +162,7 @@ The subject name in the URI must be URI encoded first (reference: RFC 7252-secti
 
 ClientId, Username, Password, Topic in CoAP URI are concepts in MQTT. In other words, the CoAP access gateway tries to incorporate CoAP information into the MQTT system by borrowing the concept of nouns in MQTT.
 
-The authentication, access control, hook and other functions of EMQ X are also applicable to the CoAP access gateway. such as:
+The authentication, access control, hook and other functions of EMQX are also applicable to the CoAP access gateway. such as:
 
 -If the username/password is not authorized, the CoAP client will get an ʻuauthorized` error
 -If the username/client ID is not allowed to publish a specific topic, the CoAP message will actually be discarded, although the CoAP client will get an Acknoledgement from the access gateway

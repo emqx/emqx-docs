@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 DynamoDB](../rule/backend_dynamodb.md)规则引擎中创建 保存数据到 DynamoDB
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 DynamoDB](../rule/backend_dynamodb.md)规则引擎中创建 保存数据到 DynamoDB
 
 :::
 

@@ -1,14 +1,14 @@
-# EMQ X 企业版安装
+# EMQX 企业版安装
 
-EMQ X 消息服务器可跨平台运行在 Linux、FreeBSD、macOS 或 openSUSE 服务器上。
+EMQX 消息服务器可跨平台运行在 Linux、FreeBSD、macOS 或 openSUSE 服务器上。
 
-## EMQ X License 文件获取
+## EMQX License 文件获取
 
 联系商务或登陆 https://emqx.io 注册账号获取免费的试用 License 文件
 
-## EMQ X 程序包下载
+## EMQX 程序包下载
 
-EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD 、openSUSE
+EMQX 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD 、openSUSE
 平台程序包与 Docker 镜像。
 
 下载地址: <https://www.emqx.com/zh/downloads?product=enterprise>
@@ -20,9 +20,9 @@ EMQ X 消息服务器每个版本会发布 CentOS、Ubuntu、Debian、FreeBSD �
   - CentOS7.X
   - CentOS8.X
 
-### 使用储存库安装 EMQ X
+### 使用储存库安装 EMQX
 
-1.  删除旧的 EMQ X
+1.  删除旧的 EMQX
     
 ```bash
 $ sudo yum remove emqx emqx-edge emqx-ee
@@ -41,7 +41,7 @@ $ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ee/redhat/centos/7/emqx-ee.repo
 ```
 
-4.  安装最新版本的 EMQ X
+4.  安装最新版本的 EMQX
     
 ```bash
 $ sudo yum install emqx-ee
@@ -52,7 +52,7 @@ $ sudo yum install emqx-ee
 0d53，如果符合，则接受该指纹。
 :::
 
-5.  安装特定版本的 EMQ X
+5.  安装特定版本的 EMQX
     
     1.  查询可用版本
         
@@ -74,7 +74,7 @@ $ sudo yum install emqx-ee
     $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
     ```
 
-7.  启动 EMQ X
+7.  启动 EMQX
     
       - 直接启动
         
@@ -99,12 +99,12 @@ $ sudo yum install emqx-ee
         $ sudo service emqx start
         ```
 
-### 使用 rpm 包安装 EMQ X
+### 使用 rpm 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择 CentOS
-    版本，然后下载要安装的 EMQ X 版本的 rpm 包。
+    版本，然后下载要安装的 EMQX 版本的 rpm 包。
 
-2.  安装 EMQ X
+2.  安装 EMQX
     
     ```bash
     $ sudo rpm -ivh emqx-ee-centos7-v4.0.0.x86_64.rpm
@@ -116,7 +116,7 @@ $ sudo yum install emqx-ee
     $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
       - 直接启动
         
@@ -141,10 +141,10 @@ $ sudo yum install emqx-ee
         $ sudo service emqx start
         ```
 
-### 使用 zip 包安装 EMQ X
+### 使用 zip 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择 Centos
-    版本，然后下载要安装的 EMQ X 版本的 zip 包。
+    版本，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
     
@@ -158,7 +158,7 @@ $ sudo yum install emqx-ee
     $ cp /path/to/emqx.lic /path/to/emqx/etc/emqx.lic
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
     ```bash
     $ ./bin/emqx start
@@ -178,9 +178,9 @@ $ sudo yum install emqx-ee
   - Trusty 14.04 (LTS)
   - Precise 12.04 (LTS)
 
-### 使用储存库安装 EMQ X
+### 使用储存库安装 EMQX
 
-1.  删除旧的 EMQ X
+1.  删除旧的 EMQX
 
 ```bash
 $ sudo apt remove emqx emqx-edge emqx-ee
@@ -197,7 +197,7 @@ $ sudo apt update && sudo apt install -y \
     software-properties-common
 ```
 
-3.  添加 EMQ X 的官方 GPG 密钥
+3.  添加 EMQX 的官方 GPG 密钥
     
 ```bash
 $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
@@ -213,7 +213,7 @@ pub   rsa2048 2019-04-10 [SC]
 uid           [ unknown] emqx team <support@emqx.io>
 ```
 
-4.  添加 EMQ X 存储库。
+4.  添加 EMQX 存储库。
     
 ```bash
 $ sudo add-apt-repository \
@@ -228,13 +228,13 @@ $ sudo add-apt-repository \
 $ sudo apt update
 ```
 
-6.  安装最新版本的 EMQ X
+6.  安装最新版本的 EMQX
 
 ```bash
 $ sudo apt install emqx-ee
 ```
 
-7.  安装特定版本的 EMQ X
+7.  安装特定版本的 EMQX
     
     1.  查询可用版本
         
@@ -256,7 +256,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
     ```
 
-9.  启动 EMQ X
+9.  启动 EMQX
     
     - 直接启动
     
@@ -281,12 +281,12 @@ $ sudo apt install emqx-ee
     $ sudo service emqx start
     ```
 
-### 使用 deb 包安装 EMQ X
+### 使用 deb 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择 Ubuntu
-    版本，然后下载要安装的 EMQ X 版本的 deb 包。
+    版本，然后下载要安装的 EMQX 版本的 deb 包。
 
-2.  安装 EMQ X
+2.  安装 EMQX
     
 ```bash
 # for ubuntu
@@ -301,7 +301,7 @@ $ sudo dpkg -i emqx-ee-ubuntu18.04-v3.1.0_amd64.deb
 $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
 ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
 - 直接启动
 
@@ -326,10 +326,10 @@ $ sudo systemctl start emqx
 $ sudo service emqx start
 ```
 
-### 使用 zip 包安装 EMQ X
+### 使用 zip 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择 Ubuntu
-    版本，然后下载要安装的 EMQ X 版本的 zip 包。
+    版本，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
 
@@ -343,7 +343,7 @@ $ unzip emqx-ee-ubuntu18.04-v4.0.0.zip
 $ cp /path/to/emqx.lic /path/to/emqx/etc/emqx.lic
 ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
 ```bash
 $ ./bin/emqx start
@@ -360,9 +360,9 @@ emqx 4.0.0 is running
   - Stretch (Debian 9)
   - Jessie (Debian 8)
 
-### 使用储存库安装 EMQ X
+### 使用储存库安装 EMQX
 
-1.  删除旧的 EMQ X
+1.  删除旧的 EMQX
     
 ```bash
 $ sudo apt remove emqx emqx-edge emqx-ee
@@ -379,7 +379,7 @@ $ sudo apt update && sudo apt install -y \
     software-properties-common
 ```
 
-3.  添加 EMQ X 的官方 GPG 密钥
+3.  添加 EMQX 的官方 GPG 密钥
     
 ```bash
 $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
@@ -395,7 +395,7 @@ pub   rsa2048 2019-04-10 [SC]
 uid           [ unknown] emqx team <support@emqx.io>
 ```
 
-4.  设置 EMQ X 存储库。
+4.  设置 EMQX 存储库。
     
 ```bash
 $ sudo add-apt-repository \
@@ -410,13 +410,13 @@ $ sudo add-apt-repository \
 $ sudo apt update
 ```
 
-6.  安装最新版本的 EMQ X
+6.  安装最新版本的 EMQX
 
 ```bash
 $ sudo apt install emqx-ee
 ```
 
-7.  安装特定版本的 EMQ X
+7.  安装特定版本的 EMQX
     
     1.  查询可用版本
         
@@ -438,7 +438,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
     ```
 
-9.  启动 EMQ X
+9.  启动 EMQX
     
     - 直接启动
     
@@ -463,12 +463,12 @@ $ sudo apt install emqx-ee
     $ sudo service emqx start
     ```
 
-### 使用 deb 包安装 EMQ X
+### 使用 deb 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择 Debian
-    版本，然后下载要安装的 EMQ X 版本的 deb 包。
+    版本，然后下载要安装的 EMQX 版本的 deb 包。
 
-2.  安装 EMQ X
+2.  安装 EMQX
     
     ```bash
     # for ubuntu
@@ -485,7 +485,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
       - 直接启动
         
@@ -510,10 +510,10 @@ $ sudo apt install emqx-ee
         $ sudo service emqx start
         ```
 
-### 使用 zip 包安装 EMQ X
+### 使用 zip 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择 Debian
-    版本，然后下载要安装的 EMQ X 版本的 zip 包。
+    版本，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
     
@@ -527,7 +527,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /path/to/emqx/etc/emqx.lic
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
     ```bash
     $ ./bin/emqx start
@@ -541,9 +541,9 @@ $ sudo apt install emqx-ee
 
 ## macOS
 
-### 使用 ZIP 包安装 EMQ X
+### 使用 ZIP 包安装 EMQX
 
-1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) ，选择 EMQ X
+1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) ，选择 EMQX
     版本，然后下载要安装的 zip 包。
 
 2.  解压压缩包
@@ -558,7 +558,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /path/to/emqx/etc/emqx.li
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
     ```bash
     $ ./bin/emqx start
@@ -574,9 +574,9 @@ $ sudo apt install emqx-ee
 
   - openSUSE leap
 
-### 使用储存库安装 EMQ X
+### 使用储存库安装 EMQX
 
-1.  删除旧的 EMQ X
+1.  删除旧的 EMQX
     
     ```bash
     $ sudo zypper remove emqx emqx-edge emqx-ee
@@ -595,13 +595,13 @@ $ sudo apt install emqx-ee
     $ sudo zypper ar -f -c https://repos.emqx.io/emqx-ee/redhat/opensuse/leap/stable emqx-ee
     ```
 
-4.  安装最新版本的 EMQ X
+4.  安装最新版本的 EMQX
     
     ```bash
     $ sudo zypper in emqx-ee
     ```
 
-5.  安装特定版本的 EMQ X
+5.  安装特定版本的 EMQX
     
     1.  查询可用版本
         
@@ -627,7 +627,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
     ```
 
-7.  启动 EMQ X
+7.  启动 EMQX
     
       - 直接启动
         
@@ -652,12 +652,12 @@ $ sudo apt install emqx-ee
         $ sudo service emqx start
         ```
 
-### 使用 rpm 包安装 EMQ X
+### 使用 rpm 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择
-    openSUSE，然后下载要安装的 EMQ X 版本的 rpm 包。
+    openSUSE，然后下载要安装的 EMQX 版本的 rpm 包。
 
-2.  安装 EMQ X，将下面的路径更改为您下载 EMQ X 软件包的路径。
+2.  安装 EMQX，将下面的路径更改为您下载 EMQX 软件包的路径。
     
     ```bash
     $ sudo rpm -ivh emqx-ee-opensuse-v4.0.0.x86_64.rpm
@@ -669,7 +669,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /etc/emqx/emqx.lic
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
       - 直接启动
         
@@ -694,10 +694,10 @@ $ sudo apt install emqx-ee
         $ sudo service emqx start
         ```
 
-### 使用 zip 包安装 EMQ X
+### 使用 zip 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择
-    openSUSE，然后下载要安装的 EMQ X 版本的 zip 包。
+    openSUSE，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压压缩包
     
@@ -711,7 +711,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /path/to/emqx/etc/emqx.lic
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
     ```bash
     $ ./bin/emqx start
@@ -727,10 +727,10 @@ $ sudo apt install emqx-ee
 
   - FreeBSD 12
 
-### 使用 zip 包安装 EMQ X
+### 使用 zip 包安装 EMQX
 
 1.  通过 [emqx.io](https://www.emqx.com/zh/downloads?product=enterprise) 选择
-    FreeBSD，然后下载要安装的 EMQ X 版本的 zip 包。
+    FreeBSD，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压压缩包
     
@@ -744,7 +744,7 @@ $ sudo apt install emqx-ee
     $ cp /path/to/emqx.lic /path/to/emqx/etc/emqx.lic
     ```
 
-4.  启动 EMQ X
+4.  启动 EMQX
     
     ```bash
     $ ./bin/emqx start
@@ -790,4 +790,4 @@ $ docker run -d -\
     emqx/emqx-ee:v4.0.0
 ```
 
-更多关于 EMQ X Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
+更多关于 EMQX Docker 的信息请查看 [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)

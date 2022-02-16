@@ -15,9 +15,9 @@ ref:
 
 # 系统调优
 
-*EMQ X* 消息服务器 4.x 版本 MQTT 连接压力测试到 130 万，在一台 8 核心、32G 内存的 CentOS 服务器上。
+*EMQX* 消息服务器 4.x 版本 MQTT 连接压力测试到 130 万，在一台 8 核心、32G 内存的 CentOS 服务器上。
 
-100 万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， *EMQ X* 消息服务器参数设置如下:
+100 万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， *EMQX* 消息服务器参数设置如下:
 
 ## Linux 操作系统参数
 
@@ -104,12 +104,12 @@ node.process_limit = 2097152
 node.max_ports = 1048576
 ```
 
-## EMQ X 消息服务器参数
+## EMQX 消息服务器参数
 
 设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。
 
-EMQ X 社区版 配置文件 emqx/etc/emqx.confa
-EMQ X 企业版 配置文件 emqx/etc/listeners.conf
+EMQX 社区版 配置文件 emqx/etc/emqx.confa
+EMQX 企业版 配置文件 emqx/etc/listeners.conf
 
 ```bash
 ## TCP Listener

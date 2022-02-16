@@ -1,6 +1,6 @@
 # Upgrade from 4.2 to 4.3
 
-Due to database schema and inter-broker API changes, an EMQ X 4.3 node can not
+Due to database schema and inter-broker API changes, an EMQX 4.3 node can not
 join a 4.2 cluster.
 
 The recommended way to upgrade is as follows
@@ -50,7 +50,7 @@ This will generate a JSON file with timestamp in its name. This file will be the
 
 `emqx_auth_mnesia` plugin now supports rules based on both `clientid` and `username`.
 Previously only one type of filter was supported, as configured in `etc/plugins/emqx_auth_mnesia.conf` file.
-In order to import data from the previous EMQ X versions, it is necessary to specify the value of this parameter by passing it as a CLI option:
+In order to import data from the previous EMQX versions, it is necessary to specify the value of this parameter by passing it as a CLI option:
 
 ```bash
 $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"username"}'
@@ -66,7 +66,7 @@ Or by editing the import file using the same format.
 
 ## Important config changes
 
-- EMQ X now tries to use tlsv1.3 by default, please make sure openssl is up to date (1.1.1), otherwise SSL related configs such as `listener.ssl.external.tls_versions` may have to be changed and remove tls1.3 from the list.
+- EMQX now tries to use tlsv1.3 by default, please make sure openssl is up to date (1.1.1), otherwise SSL related configs such as `listener.ssl.external.tls_versions` may have to be changed and remove tls1.3 from the list.
 - New configs `listener.ws.$zone.check_origin_enable` ,`listener.ws.$zone.allow_origin_absence` and `listener.ws.$zone.check_origins` for better websocket security.
 - Config `listener.ws.$name.verify_protocol_header` is replaced by `listener.ws.external.fail_if_no_subprotocol` and `listener.ws.external.supported_subprotocols`
 - Config `node.heartbeat` cannot be overriden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)

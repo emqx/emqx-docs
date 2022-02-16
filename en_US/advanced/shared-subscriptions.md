@@ -10,7 +10,7 @@ Shared subscription is a subscription method that achieves load balancing among 
                                                    [subscriber3] got msg3
 ```
 
-In the above picture, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method, where ` topic` is the real topic name they subscribed to, and `$share/g/`  is a shared subscription Prefix. EMQ X Broker supports shared subscription prefixes in two formats:
+In the above picture, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method, where ` topic` is the real topic name they subscribed to, and `$share/g/`  is a shared subscription Prefix. EMQX Broker supports shared subscription prefixes in two formats:
 
 | Example         | Prefix      | Real topic name |
 | --------------- | ----------- | --------------- |
@@ -22,11 +22,11 @@ In the above picture, three subscribers subscribe to the same topic `$share/g/to
 
 Shared subscriptions prefixed with `$ share/<group-name>` are shared subscriptions with groups:
 
-group-name can be any string. Subscribers who belong to the same group will receive messages with load balancing, but EMQ X Broker will broadcast messages to different groups.
+group-name can be any string. Subscribers who belong to the same group will receive messages with load balancing, but EMQX Broker will broadcast messages to different groups.
 
-For example, suppose that subscribers s1, s2, and s3 belong to group g1, and subscribers s4 and s5 belong to group g2. Then when EMQ X Broker publishes a message msg1 to this topic:
+For example, suppose that subscribers s1, s2, and s3 belong to group g1, and subscribers s4 and s5 belong to group g2. Then when EMQX Broker publishes a message msg1 to this topic:
 
-- EMQ X Broker will send msg1 to both groups g1 and g2
+- EMQX Broker will send msg1 to both groups g1 and g2
 - Only one of s1, s2, s3 will receive msg1
 - Only one of s4 and s5 will receive msg1
 
@@ -56,7 +56,7 @@ Shared subscriptions prefixed with `$queue/` are shared subscriptions without gr
 
 ### Balancing strategy and distribution of Ack configuration
 
-EMQ X Broker's shared subscription supports balancing strategy and distribution of Ack configuration:
+EMQX Broker's shared subscription supports balancing strategy and distribution of Ack configuration:
 
 ```bash
 # etc/emqx.conf

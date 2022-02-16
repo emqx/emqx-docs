@@ -15,7 +15,7 @@ ref:
 
 # Mnesia ACL
 
-Mnesia ACL 使用 EMQ X 内置的 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
+Mnesia ACL 使用 EMQX 内置的 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
 
 插件：
 

@@ -1,12 +1,12 @@
 # Introduction
 
-*EMQ X* (Erlang/Enterprise/Elastic MQTT Broker) is an open source IoT MQTT message broker based on the Erlang/OTP platform.
+*EMQX* (Erlang/Enterprise/Elastic MQTT Broker) is an open source IoT MQTT message broker based on the Erlang/OTP platform.
 
 Erlang/OTP is an excellent Soft-Realtime, Low-Latency and Distributed development platform.
 
 MQTT is a lightweight message exchange protocol using publish-subscribe pattern.
 
-*EMQ X* is designed for massive clients access and realizes fast and low-latency message routing between massive physical network devices:
+*EMQX* is designed for massive clients access and realizes fast and low-latency message routing between massive physical network devices:
 
 1. Stable to host large-scale MQTT client connections, and a single server node supports 2 million connections.
 2. Distributed cluster, fast and low-latency message routing, and single-cluster supports tens of thousands of routes.

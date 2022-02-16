@@ -104,7 +104,7 @@ auth.mysql.password_hash = sha256
 
 ## auth_query
 
-During authentication, EMQ X Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
+During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
 
 ```bash
 # etc/plugins/emqx_auth_mysql.conf
@@ -114,7 +114,7 @@ auth.mysql.auth_query = select password from mqtt_user where username = '%u' lim
 
 
 
-You can use the following placeholders in the SQL authentication, and EMQ X Broker will be automatically populated with client information when executed:
+You can use the following placeholders in the SQL authentication, and EMQX Broker will be automatically populated with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -125,8 +125,8 @@ You can use the following placeholders in the SQL authentication, and EMQ X Brok
 
 You can adjust the authentication SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication  must meet the following conditions:
 
-1. The query result must include the password field, which is used by EMQ X Broker to compare with the client password
-2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQ X Broker as the salt value
+1. The query result must include the password field, which is used by EMQX Broker to compare with the client password
+2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQX Broker as the salt value
 3. There can only be one query result. When there are multiple results, only the first one is taken as valid data.
 
 ::: tip 
