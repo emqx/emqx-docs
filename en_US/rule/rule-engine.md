@@ -480,11 +480,31 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | event               | Event type, fixed at "message.dropped"        |
 | :------------------ | :-------------------------------------------- |
 | id                  | MQTT message id                               |
-| reason              | reason                                        |
+| reason              | reason for dropping, possible reasons: <br/>no_subscribers: no clients subscribes the topic|
 | clientid            | Client ID of the sender                       |
 | username            | Username of the sender                        |
 | payload             | MQTT payload                                  |
 | peerhost            | Client IPAddress                              |
+| topic               | MQTT topic                                    |
+| qos                 | Enumeration of message QoS 0,1,2              |
+| flags               | flags                                         |
+| pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
+| timestamp           | Event trigger time(millisecond)               |
+| publish_received_at | Time when PUBLISH message reaches Broker (ms) |
+| node                | Node name of the trigger event                |
+
+#### $events/delivery_dropped (消息在投递的过程中被丢弃)
+
+|        event        | 事件类型，固定为 "delivery.dropped" |
+| ------------------- | ------------------------------------ |
+| id                  | MQTT message id                               |
+| reason              | reason for dropping, possible reasons: <br/>queue_full: the message queue is full(QoS>0)<br/>no_local: it's not allowed for the client to received messages published by themselves<br/>expired: the message or the session is expired<br/>qos0_msg: the message queue is full(QoS0)|
+| from\_clientid      | Client ID of the sender                       |
+| from\_username      | Username of the sender                        |
+| clientid            | Client ID of the receiver                     |
+| username            | Username of the receiver                      |
+| payload             | MQTT payload                                  |
+| peerhost            | client IPAddress                              |
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
