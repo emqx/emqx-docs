@@ -2,7 +2,7 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to Cassandra](../rule/backend_cassandra.md) to setup Save data to Cassandra in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to Cassandra](../rule/backend_cassandra.md) to setup Save data to Cassandra in rule engine.
 
 :::
 
@@ -124,7 +124,7 @@ Cassandra backend supports CLQ in
 'action':
 
 ```bash
-## After a client is connected to the EMQ X server, it executes a CQL command(multiple command also supported):
+## After a client is connected to the EMQX server, it executes a CQL command(multiple command also supported):
 backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 

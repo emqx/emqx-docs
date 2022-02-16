@@ -49,7 +49,7 @@ CREATE TABLE t_mqtt_msg (
 
 Create a rule:
 
-Go to [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:

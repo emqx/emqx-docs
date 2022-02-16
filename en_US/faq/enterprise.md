@@ -15,12 +15,12 @@ ref:
 
 # Business Service
 
-## What's the major difference between EMQ X enterprise and broker?
+## What's the major difference between EMQX enterprise and broker?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 
 
-EMQ X Enterprise is based on the community edition, it includes all of the features from comunity edition. More features are added:
+EMQX Enterprise is based on the community edition, it includes all of the features from comunity edition. More features are added:
 
 
 - Data persistence: Enterprise version supports to persist data to several kinds of databases, includes the popular relational database, such as MySQL, PostgreSQL; Memory database, such as Redis; Non-SQL DB, such as MongoDB.
@@ -41,15 +41,15 @@ EMQ X Enterprise is based on the community edition, it includes all of the featu
 
 - Runtime Config Change: Configurations which can be set on-the-fly without restarting the service can be changed from dashboard UI, while the community edition always require restarts.
 
-- System monitoring (EMQ X Control Center)
+- System monitoring (EMQX Control Center)
 
-  - EMQ X cluster monitor: Including statistics of connections, topics, message & sessions.
+  - EMQX cluster monitor: Including statistics of connections, topics, message & sessions.
 
   - Erlang VM monitor: Erlang process, threads, memory, distributed database & distributed locks etc.
 
   - Host monitor: Measurements of CPU, memory, disk, network and operating system.
 
-## Does EMQ X provide consulting service?
+## Does EMQX provide consulting service?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 

@@ -2,11 +2,11 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[Kafka 桥接](../rule/bridge_kafka.md)
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[Kafka 桥接](../rule/bridge_kafka.md)
 
 :::
 
-EMQ X 桥接转发 MQTT 消息到 Kafka 集群，Apache Kafka是一个快速、高可扩展、高吞吐的分布式日志系统，配合kafka Stream，在流式数据处理中非常常用。
+EMQX 桥接转发 MQTT 消息到 Kafka 集群，Apache Kafka是一个快速、高可扩展、高吞吐的分布式日志系统，配合kafka Stream，在流式数据处理中非常常用。
 
 ![image](./assets/bridge_kafka.png)
 
@@ -123,7 +123,7 @@ bridge.kafka.hook.message.acked.1        = {"filter": "#",  "topic": "message_ac
 
 ## 客户端上下线事件转发 Kafka
 
-设备上线 EMQ X 转发上线事件消息到 Kafka:
+设备上线 EMQX 转发上线事件消息到 Kafka:
 
 ```bash
 topic = "client_connected",
@@ -135,7 +135,7 @@ value = {
 }
 ```
 
-设备下线 EMQ X 转发下线事件消息到 Kafka:
+设备下线 EMQX 转发下线事件消息到 Kafka:
 
 ```bash
 topic = "client_disconnected",

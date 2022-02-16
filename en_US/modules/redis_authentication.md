@@ -16,7 +16,7 @@ $ redis-server
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -77,13 +77,13 @@ pbkdf2,sha256,1000,20
 
 ## Authentication query command (auth query cmd)
 
-When performing identity authentication, EMQ X will use the current client information to fill in and execute the authentication query command configured by the user to query the authentication data of the client in Redis.
+When performing identity authentication, EMQX will use the current client information to fill in and execute the authentication query command configured by the user to query the authentication data of the client in Redis.
 
 ```
 HMGET mqtt_user:%u password
 ```
 
-You can use the following placeholders in the command, and EMQ X will automatically fill in the client information when executed:
+You can use the following placeholders in the command, and EMQX will automatically fill in the client information when executed:
 
 -%u: username
 
@@ -95,9 +95,9 @@ You can use the following placeholders in the command, and EMQ X will automatica
 
 You can adjust the authentication query command according to your business needs, and use any [Redis supported command](http://redisdoc.com/index.html), but in any case, the authentication query command needs to meet the following conditions:
 
-1. The first data in the query result must be password. EMQ X uses this field to compare with the client password
+1. The first data in the query result must be password. EMQX uses this field to compare with the client password
 
-2. If the salt configuration is enabled, the second data in the query result must be the salt field, and EMQ X uses this field as the salt value
+2. If the salt configuration is enabled, the second data in the query result must be the salt field, and EMQX uses this field as the salt value
 
 ## Access control default data structure
 
@@ -122,13 +122,13 @@ HSET mqtt_acl:testtopic/2 2
 
 ## ACL query command (acl cmd)
 
-When performing ACL authentication, EMQ X will use the current client information to fill in and execute the super user command configured by the user. If the super user command is not enabled or the client is not a super user, the ACL query command will be used to query the client’s database in the database. ACL rules.
+When performing ACL authentication, EMQX will use the current client information to fill in and execute the super user command configured by the user. If the super user command is not enabled or the client is not a super user, the ACL query command will be used to query the client’s database in the database. ACL rules.
 
 ```bash
 HGETALL mqtt_acl:%u
 ```
 
-You can use the following placeholders in ACL query commands, and EMQ X will automatically fill in client information when executed:
+You can use the following placeholders in ACL query commands, and EMQX will automatically fill in client information when executed:
 
 -%u: username
 
@@ -140,13 +140,13 @@ You can adjust the ACL query command according to your business needs, but in an
 
 ## Super user query command (super cmd)
 
-When performing ACL authentication, EMQ X will use the current client information to fill and execute the super user query command configured by the user to query whether the client is a super user. When the client is a super user, the ACL query command will be skipped.
+When performing ACL authentication, EMQX will use the current client information to fill and execute the super user query command configured by the user to query whether the client is a super user. When the client is a super user, the ACL query command will be skipped.
 
 ```bash
 HGET mqtt_user:%u is_superuser
 ```
 
-You can use the following placeholders in the command, and EMQ X will automatically fill in the client information when executed:
+You can use the following placeholders in the command, and EMQX will automatically fill in the client information when executed:
 
 -%u: username
 

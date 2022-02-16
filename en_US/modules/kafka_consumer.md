@@ -32,7 +32,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 ```
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 Select Kafka consumer group module:
 

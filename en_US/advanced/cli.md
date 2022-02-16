@@ -15,11 +15,11 @@ ref: undefined
 
 # Command line interface
 
-EMQ X Broker provides the management command line of `./bin/emqx_ctl` for users to manage, configure and query EMQ X Broker.
+EMQX Broker provides the management command line of `./bin/emqx_ctl` for users to manage, configure and query EMQX Broker.
 
 ## status command
 
-Query the running status of EMQ X Broker:
+Query the running status of EMQX Broker:
 
 ```bash
 $ ./bin/emqx_ctl status
@@ -95,15 +95,15 @@ The broker command queries basic server information, startup time, statistics da
 
 | Command          | Description                                                   |
 | ---------------- | ------------------------------------------------------------- |
-| `broker`         | Query EMQ X Broker description, version, start time           |
+| `broker`         | Query EMQX Broker description, version, start time           |
 | `broker stats`   | Statistics of Connection, Session, Topic, Subscription, Route |
 | `broker metrics` | Query MQTT Packet and Message Statistics                      |
 
-Query basic information of EMQ X Broker, including version, startup time, etc .:
+Query basic information of EMQX Broker, including version, startup time, etc .:
 
 ```bash
 $ ./bin/emqx_ctl broker
-sysdescr  : EMQ X Broker
+sysdescr  : EMQX Broker
 version   : 4.0.0
 uptime    : 4 minutes, 52 seconds
 datetime  : 2020-02-21 09:39:58
@@ -233,7 +233,7 @@ session.terminated            : 0
 
 ## cluster command
 
-The cluster command is used to manage a cluster of multiple EMQ X Broker nodes (processes):
+The cluster command is used to manage a cluster of multiple EMQX Broker nodes (processes):
 
 | Command                       | Description                   |
 | ----------------------------- | ----------------------------- |
@@ -277,7 +277,7 @@ Cluster status: [{running_nodes,['emqx2@127.0.0.1','emqx1@127.0.0.1']}]
 ```
 
 Cluster message routing test:
-The MQTT command line tool uses the  [emqtt](https://github.com/emqx/emqtt/releases) client developed by the EMQ X team.
+The MQTT command line tool uses the  [emqtt](https://github.com/emqx/emqtt/releases) client developed by the EMQX team.
 
 ```bash
 # emqx1 node (port 1883) subscribed topic x
@@ -308,7 +308,7 @@ emqx2 node is forced to leave the cluster, and you need to perform operations on
 $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 ```
 
-It is Noted that EMQ X Broker does not support joining a node that is already in a cluster to another cluster. That is because this will cause the data of the two clusters to be inconsistent. However, it supports nodes that have joined the cluster to join another cluster after leaving the cluster.
+It is Noted that EMQX Broker does not support joining a node that is already in a cluster to another cluster. That is because this will cause the data of the two clusters to be inconsistent. However, it supports nodes that have joined the cluster to join another cluster after leaving the cluster.
 
 ## acl command
 
@@ -370,7 +370,7 @@ Return the properties of the Client object:
 | subscriptions             | Current subscriptions                                                                       |
 | inflight                  | Total number of QoS 1 and QoS 2 messages currently being issued                             |
 | awaiting\_rel             | Number of QoS2 messages waiting for the client to send PUBREL                               |
-| delivered\_msgs           | Number of messages forwarded by EMQ X Broker to this client (including retransmissions)     |
+| delivered\_msgs           | Number of messages forwarded by EMQX Broker to this client (including retransmissions)     |
 | enqueued\_msgs            | Current length of message queue                                                             |
 | dropped\_msgs             | Number of messages dropped after the message queue reached the maximum length               |
 | connected                 | Whether online                                                                              |
@@ -400,7 +400,7 @@ ok
 
 The routes command is used to query routing information.
 
-In EMQ X Broker, route refers to the mapping of topics to nodes, which is used to route messages between multiple nodes.
+In EMQX Broker, route refers to the mapping of topics to nodes, which is used to route messages between multiple nodes.
 
 | Command               | Description                            |
 | --------------------- | -------------------------------------- |
@@ -476,7 +476,7 @@ ok
 
 ## plugins command
 
-The plugins command is used to load, unload, and query plugin applications. EMQ X Broker extends authentication and customization through plugins. The plugin configuration is located in the directory of `etc/plugins/` .
+The plugins command is used to load, unload, and query plugin applications. EMQX Broker extends authentication and customization through plugins. The plugin configuration is located in the directory of `etc/plugins/` .
 
 | Command                    | Description      |
 | -------------------------- | ---------------- |
@@ -494,9 +494,9 @@ List all plugins:
 ```bash
 $ ./bin/emqx_ctl plugins list
 ...
-Plugin(emqx_auth_http, description=EMQ X Authentication/ACL with HTTP API, active=false)
-Plugin(emqx_auth_jwt, description=EMQ X Authentication with JWT, active=false)
-Plugin(emqx_auth_ldap, description=EMQ X Authentication/ACL with LDAP, active=false)
+Plugin(emqx_auth_http, description=EMQX Authentication/ACL with HTTP API, active=false)
+Plugin(emqx_auth_jwt, description=EMQX Authentication with JWT, active=false)
+Plugin(emqx_auth_ldap, description=EMQX Authentication/ACL with LDAP, active=false)
 ...
 ```
 
@@ -537,7 +537,7 @@ Plugin emqx_lua_hook reloaded successfully.
 
 ## modules command
 
-Since v4.1 we have introduced the `modules` command to manage EMQ X's built-in modules at runtime.
+Since v4.1 we have introduced the `modules` command to manage EMQX's built-in modules at runtime.
 
 | Command                    | Description               |
 | -------------------------- | ------------------------- |
@@ -552,12 +552,12 @@ Lists all built-in modules, including those that have not been started:
 
 ```bash
 $ ./bin/emqx_ctl modules list
-Module(emqx_mod_delayed, description=EMQ X Delayed Publish Module, active=false)
-Module(emqx_mod_topic_metrics, description=EMQ X Topic Metrics Module, active=false)
-Module(emqx_mod_subscription, description=EMQ X Subscription Module, active=false)
-Module(emqx_mod_acl_internal, description=EMQ X Internal ACL Module, active=true)
-Module(emqx_mod_rewrite, description=EMQ X Topic Rewrite Module, active=false)
-Module(emqx_mod_presence, description=EMQ X Presence Module, active=true)
+Module(emqx_mod_delayed, description=EMQX Delayed Publish Module, active=false)
+Module(emqx_mod_topic_metrics, description=EMQX Topic Metrics Module, active=false)
+Module(emqx_mod_subscription, description=EMQX Subscription Module, active=false)
+Module(emqx_mod_acl_internal, description=EMQX Internal ACL Module, active=true)
+Module(emqx_mod_rewrite, description=EMQX Topic Rewrite Module, active=false)
+Module(emqx_mod_presence, description=EMQX Presence Module, active=true)
 ```
 
 ### modules load
@@ -913,7 +913,7 @@ Start http:dashboard listener on 0.0.0.0:18083 successfully.
 
 ## recon command
 
-The recon command of EMQ X Broker is based on the Erlang Recon library, which is used to help DevOps staff to diagnose problems in the production node, and ordinary users do not need to care. The recon command will consume some performance, so, please use it with caution.
+The recon command of EMQX Broker is based on the Erlang Recon library, which is used to help DevOps staff to diagnose problems in the production node, and ordinary users do not need to care. The recon command will consume some performance, so, please use it with caution.
 
 | Command                    | Description                                                                                                  |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -1075,7 +1075,7 @@ ok
 | `rule-actions show <ActionId>` | Show a rule action |
 
 ::: tip
-Actions can be built-in by EMQ X Broker (called system built-in actions) or be written by EMQ X Broker plugins, but cannot be added or removed through the CLI/API.
+Actions can be built-in by EMQX Broker (called system built-in actions) or be written by EMQX Broker plugins, but cannot be added or removed through the CLI/API.
 :::
 
 #### rule-actions show
@@ -1157,7 +1157,7 @@ ok
 | resource-types show `<Type>` | Show a resource-type    |
 
 ::: tip
-Resource type can be built-in by EMQ X Broker (called system built-in resource type) or be written by EMQ X Broker plugins, but cannot be added or removed through the CLI/API
+Resource type can be built-in by EMQX Broker (called system built-in resource type) or be written by EMQX Broker plugins, but cannot be added or removed through the CLI/API
 :::
 
 #### resource-types list
@@ -1201,7 +1201,7 @@ resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL
 - Available: Resources available
 - Unavailable: resources unavailable (e.g. database connection shutdown)
 
-## EMQ X Internal DB Auth/ACL
+## EMQX Internal DB Auth/ACL
 
 This command will only take effect when the emqx_auth_mnesia plug-in is turned on
 

@@ -14,15 +14,15 @@ ref:
 ---
 
 # 安装部署
-## EMQ X 推荐部署的操作系统是什么？
+## EMQX 推荐部署的操作系统是什么？
 
 
-EMQ X 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生产系推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
+EMQX 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生产系推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
 
 
 
 
-## EMQ X 支持 Windows 操作系统吗？
+## EMQX 支持 Windows 操作系统吗？
 
 
 支持。部署参考[文章](https://www.jianshu.com/p/e5cf0c1fd55c).
@@ -30,31 +30,31 @@ EMQ X 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生�
 
 
 
-## EMQ X 如何预估资源的使用？
+## EMQX 如何预估资源的使用？
 
 **标签:** [*资源估算*](tags.md#资源估算)
 
 
-EMQ X 对资源的使用主要有以下的影响因素，每个因素都会对计算和存储资源的使用产生影响：
+EMQX 对资源的使用主要有以下的影响因素，每个因素都会对计算和存储资源的使用产生影响：
 
-- 连接数：对于每一个 MQTT 长连接，EMQ X 会创建两个 Erlang 进程，每个进程都会耗费一定的资源。连接数越高，所需的资源越多；
+- 连接数：对于每一个 MQTT 长连接，EMQX 会创建两个 Erlang 进程，每个进程都会耗费一定的资源。连接数越高，所需的资源越多；
 
-- 平均吞吐量：指的是每秒 Pub 和 Sub 的消息数量。吞吐量越高，EMQ X 的路由处理和消息转发处理就需要更多的资源；
+- 平均吞吐量：指的是每秒 Pub 和 Sub 的消息数量。吞吐量越高，EMQX 的路由处理和消息转发处理就需要更多的资源；
 
-- 消息体大小：消息体越大，在 EMQ X 中处理消息转发的时候在内存中进行数据存储和处理，所需的资源就越多；
+- 消息体大小：消息体越大，在 EMQX 中处理消息转发的时候在内存中进行数据存储和处理，所需的资源就越多；
 
-- 主题数目：如果主题数越多，在 EMQ X 中的路由表会相应增长，因此所需的资源就越多；
+- 主题数目：如果主题数越多，在 EMQX 中的路由表会相应增长，因此所需的资源就越多；
 
-- QoS：消息的 QoS 越高，EMQ X 服务器端所处理的逻辑会更多，因此会耗费更多的资源；
+- QoS：消息的 QoS 越高，EMQX 服务器端所处理的逻辑会更多，因此会耗费更多的资源；
 
-另外，如果设备通过 TLS（加密的连接）连接 EMQ X，EMQ X 会需要额外的资源（主要是 CPU 资源）。推荐方案是在 EMQ X 前面部署负载均衡，由负载均衡节点卸载 TLS，实现职责分离。
+另外，如果设备通过 TLS（加密的连接）连接 EMQX，EMQX 会需要额外的资源（主要是 CPU 资源）。推荐方案是在 EMQX 前面部署负载均衡，由负载均衡节点卸载 TLS，实现职责分离。
 
-可参考 [https://www.emqx.com/zh/server-estimate](https://www.emqx.com/zh/server-estimate) 来预估计算资源的使用；公有云快速部署 EMQ X 实例，请参考[TODO](https://www.emqx.io)。
-
-
+可参考 [https://www.emqx.com/zh/server-estimate](https://www.emqx.com/zh/server-estimate) 来预估计算资源的使用；公有云快速部署 EMQX 实例，请参考[TODO](https://www.emqx.io)。
 
 
-## EMQ X 的百万连接压力测试的场景是什么？
+
+
+## EMQX 的百万连接压力测试的场景是什么？
 
 **标签:** [*性能测试*](tags.md#性能测试)
 
@@ -66,7 +66,7 @@ EMQ X 对资源的使用主要有以下的影响因素，每个因素都会对�
 
 
 
-## 我的连接数目并不大，EMQ X 生产环境部署需要多节点吗？
+## 我的连接数目并不大，EMQX 生产环境部署需要多节点吗？
 
 **标签:** [*集群*](tags.md#集群)
 

@@ -17,11 +17,11 @@ ref: undefined
 
 ## Upgrade to version 4.0
 
-The following provides a set of guidelines for migrating from the EMQ X 3.x version to the latest EMQ X 4.0 version. Although we tried to reduce some major changes, we have modified in several places in order to balance performance and simplify usage.
+The following provides a set of guidelines for migrating from the EMQX 3.x version to the latest EMQX 4.0 version. Although we tried to reduce some major changes, we have modified in several places in order to balance performance and simplify usage.
 
-**How long does it take to migrate from EMQ X 3.x to EMQ X 4.0?** 
+**How long does it take to migrate from EMQX 3.x to EMQX 4.0?** 
 
-EMQ X always guarantees the standardization and continuous update of the access protocol. When the version is migrated, the client does not need any adjustments, which means that you do not need to stop the device function and reprogram the device firmware. You only need to pay attention to the changes of plug-ins, configuration items, command line and REST API.
+EMQX always guarantees the standardization and continuous update of the access protocol. When the version is migrated, the client does not need any adjustments, which means that you do not need to stop the device function and reprogram the device firmware. You only need to pay attention to the changes of plug-ins, configuration items, command line and REST API.
 
 The time required depends on the size of your project and the scope of changes. Small and medium-sized projects can be completed within a day.
 
@@ -29,7 +29,7 @@ The time required depends on the size of your project and the scope of changes. 
 
 #### Change client\_id  to clientid
 
-We have made major changes in variable names here. All client\_id characters in EMQ X have been changed to clientid, including:
+We have made major changes in variable names here. All client\_id characters in EMQX have been changed to clientid, including:
 
   - URL of REST API, field name in request and corresponding data
   - Naming conventions in the source code

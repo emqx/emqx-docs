@@ -14,14 +14,14 @@ ref:
 ---
 
 # 使用教程
-## 怎么样才能使用 EMQ X？
+## 怎么样才能使用 EMQX？
 
 
-EMQ X 开源版可免费下载使用，下载地址：[https://www.emqx.com/en/downloads?product=broker](https://www.emqx.com/en/downloads?product=broker)
+EMQX 开源版可免费下载使用，下载地址：[https://www.emqx.com/en/downloads?product=broker](https://www.emqx.com/en/downloads?product=broker)
 
-EMQ X 企业版支持下载试用，用户可以在 [https://www.emqx.com/en/downloads?product=enterprise](https://www.emqx.com/en/downloads?product=enterprise) 下载，[申请试用 license](https://www.emqx.com/zh/licenses#trial)之后即可试用。
+EMQX 企业版支持下载试用，用户可以在 [https://www.emqx.com/en/downloads?product=enterprise](https://www.emqx.com/en/downloads?product=enterprise) 下载，[申请试用 license](https://www.emqx.com/zh/licenses#trial)之后即可试用。
 
-另外，还可以在公有云直接创建 EMQ X 企业版：
+另外，还可以在公有云直接创建 EMQX 企业版：
 
 - [阿里云](https://market.aliyun.com/products/56014009/cmjj029979.html?spm=5176.730005.productlist.d_cmjj029979.69013524xism4L&innerSource=search_EMQ)
 
@@ -30,14 +30,14 @@ EMQ X 企业版支持下载试用，用户可以在 [https://www.emqx.com/en/dow
 
 
 
-## 怎样更新 EMQ X license?
+## 怎样更新 EMQX license?
 
 **标签:** [*License*](tags.md#license)
 
 
 点击 "Download License" 按钮下载 license, 然后找到您下载的 "license.zip" 文件并解压.
 
-复制压缩包里的两个文件 (emqx.lic, emqx.key) 到 EMQ X 的 license 目录.
+复制压缩包里的两个文件 (emqx.lic, emqx.key) 到 EMQX 的 license 目录.
 
 如果您的 EMQX 是使用 zip 包安装的, 那么压缩包里的两个文件需要拷贝到 "emqx/etc/" 目录;
 如果是用 DEB/RPM 包安装的, 两个文件需要拷贝到 "/etc/emqx/" 目录;
@@ -67,12 +67,12 @@ docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
 
 
 
-## EMQ X 支持私有协议进行扩展吗？如支持应该如何实现？
+## EMQX 支持私有协议进行扩展吗？如支持应该如何实现？
 
 **标签:** [*多协议*](tags.md#多协议)  [*扩展*](tags.md#扩展)
 
 
-对于新开发的私有协议，EMQ X 提供一套 TCP 协议接入规范，私有协议可以按照该规范进行开发接入。如果您所使用的协议已经定型或协议底层非 TCP，可以通过网关进行转换处理，之后通过 MQTT 协议接入 EMQ X，或直接联系 EMQ 官方支持私有协议适配。
+对于新开发的私有协议，EMQX 提供一套 TCP 协议接入规范，私有协议可以按照该规范进行开发接入。如果您所使用的协议已经定型或协议底层非 TCP，可以通过网关进行转换处理，之后通过 MQTT 协议接入 EMQX，或直接联系 EMQ 官方支持私有协议适配。
 
 
 
@@ -82,7 +82,7 @@ docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
 **标签:** [*WebHook*](tags.md#webhook)  [*系统主题*](tags.md#系统主题)
 
 
-EMQ X 企业版可以通过以下的三种方式捕获设备的上下线的事件，
+EMQX 企业版可以通过以下的三种方式捕获设备的上下线的事件，
 
 - Web Hook
 - 订阅相关的 $SYS 主题
@@ -95,12 +95,12 @@ EMQ X 企业版可以通过以下的三种方式捕获设备的上下线的事�
 
 
 
-## 我想限定某些主题只为特定的客户端所使用，EMQ X 该如何进行配置？
+## 我想限定某些主题只为特定的客户端所使用，EMQX 该如何进行配置？
 
 **标签:** [*ACL*](tags.md#acl)  [*发布订阅*](tags.md#发布订阅)
 
 
-EMQ X 支持限定客户端可以使用的主题，从而实现设备权限的管理。如果要做这样的限定，需要在 EMQ X 启用 ACL（Access Control List），并禁用匿名访问和关闭无 ACL 命中的访问许可（为了测试调试方便，在默认配置中，后两项是开启的，请注意关闭）。
+EMQX 支持限定客户端可以使用的主题，从而实现设备权限的管理。如果要做这样的限定，需要在 EMQX 启用 ACL（Access Control List），并禁用匿名访问和关闭无 ACL 命中的访问许可（为了测试调试方便，在默认配置中，后两项是开启的，请注意关闭）。
 
 ```bash
 ## etc/emqx.conf
@@ -109,7 +109,7 @@ EMQ X 支持限定客户端可以使用的主题，从而实现设备权限的�
 mqtt.acl_nomatch = allow
 ```
 
-ACL 可以配置在文件 `etc/acl.conf` 中，或者配置在后台数据库中。下面例子是 ACL 控制文件的一个配置行，含义是用户 “dashboard” 可以订阅 “$SYS/#” 主题。ACL 在后台数据库中的配置思想与此类似，详细配置方法请参阅 EMQ X 文档的 [ACL 访问控制](https://docs.emqx.io/tutorial/v3/cn/security/acl.html) 章节。
+ACL 可以配置在文件 `etc/acl.conf` 中，或者配置在后台数据库中。下面例子是 ACL 控制文件的一个配置行，含义是用户 “dashboard” 可以订阅 “$SYS/#” 主题。ACL 在后台数据库中的配置思想与此类似，详细配置方法请参阅 EMQX 文档的 [ACL 访问控制](https://docs.emqx.io/tutorial/v3/cn/security/acl.html) 章节。
 ```
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 ```
@@ -117,12 +117,12 @@ ACL 可以配置在文件 `etc/acl.conf` 中，或者配置在后台数据库中
 
 
 
-## EMQ X 能做流量控制吗？
+## EMQX 能做流量控制吗？
 
 **标签:** [*流量控制*](tags.md#流量控制)
 
 
-能。目前 EMQ X 支持连接速率和消息率控制。配置如下：
+能。目前 EMQX 支持连接速率和消息率控制。配置如下：
 
 ```
 ## Value: Number
@@ -135,31 +135,31 @@ listener.tcp.external.rate_limit = 1024,4096
 
 
 
-## EMQ X 是如何实现支持大规模并发和高可用的？
+## EMQX 是如何实现支持大规模并发和高可用的？
 
 **标签:** [*性能*](tags.md#性能)  [*高并发*](tags.md#高并发)
 
 
-高并发和高可用是 EMQ X 的设计目标，为了实现这些目标 EMQ X 中应用了多种技术，比如：
+高并发和高可用是 EMQX 的设计目标，为了实现这些目标 EMQX 中应用了多种技术，比如：
 
 - 利用 Erlang/OTP 平台的软实时、高并发和容错；
 - 全异步架构；
 - 连接、会话、路由、集群的分层设计；
 - 消息平面和控制平面的分离等。
 
-在精心设计和实现之后，单个 EMQ X Enterprise 节点就可以处理百万级的连接。
+在精心设计和实现之后，单个 EMQX Enterprise 节点就可以处理百万级的连接。
 
-EMQ X 支持多节点集群，集群下整个系统的性能会成倍高于单节点，并能在单节点故障时保证系统服务不中断。
-
-
+EMQX 支持多节点集群，集群下整个系统的性能会成倍高于单节点，并能在单节点故障时保证系统服务不中断。
 
 
-## EMQ X 能把接入的 MQTT 消息保存到数据库吗？
+
+
+## EMQX 能把接入的 MQTT 消息保存到数据库吗？
 
 **标签:** [*持久化*](tags.md#持久化)
 
 
-EMQ X 企业版支持消息持久化，可以将消息保存到数据库，开源版还暂时不支持。目前 EMQ X 企业版消息持久化支持的数据库有：
+EMQX 企业版支持消息持久化，可以将消息保存到数据库，开源版还暂时不支持。目前 EMQX 企业版消息持久化支持的数据库有：
 
 - Redis
 - MongoDB
@@ -171,7 +171,7 @@ EMQ X 企业版支持消息持久化，可以将消息保存到数据库，开�
 - OpenTSDB
 - InfluxDB
 
-有关数据持久化的支持请参见 [EMQ X 数据持久化概览](https://docs.emqx.io/tutorial/v3/cn/backend/whats_backend.html)。
+有关数据持久化的支持请参见 [EMQX 数据持久化概览](https://docs.emqx.io/tutorial/v3/cn/backend/whats_backend.html)。
 
 
 
@@ -181,9 +181,9 @@ EMQ X 企业版支持消息持久化，可以将消息保存到数据库，开�
 **标签:** [*HTTP API*](tags.md#http-api)  [*Dashboard*](tags.md#dashboard)
 
 
-可以的。EMQ X 提供的 HTTP API 中包含断开 MQTT 连接，该操作在 EMQ X 2.x 和 3.0 的实现方式有所不同：
+可以的。EMQX 提供的 HTTP API 中包含断开 MQTT 连接，该操作在 EMQX 2.x 和 3.0 的实现方式有所不同：
 
-- 在 2.x 版本中是由 EMQ X 自定义扩展协议实现的
+- 在 2.x 版本中是由 EMQX 自定义扩展协议实现的
 - 在 3.0 版本之后按照 MQTT 5.0 协议对从服务器端断开连接的规范要求实现的
 
 调用的 API 如下所示：
@@ -205,19 +205,19 @@ HTTP API 使用方式参考 [管理监控API (HTTP API)](https://docs.emqx.io/br
 
 
 
-## EMQ X 能把接入的消息转发到 Kafka 吗？
+## EMQX 能把接入的消息转发到 Kafka 吗？
 
 **标签:** [*Kafka*](tags.md#kafka)  [*桥接*](tags.md#桥接)  [*持久化*](tags.md#持久化)
 
 
-能。目前 EMQ X 企业版提供了内置的 Kafka 桥接方式，支持把消息桥接至 Kafka 进行流式处理。
+能。目前 EMQX 企业版提供了内置的 Kafka 桥接方式，支持把消息桥接至 Kafka 进行流式处理。
 
-EMQ X 使用 Kafka 参照 [EMQ X 到 Kafka 的桥接](https://docs.emqx.io/tutorial/v3/cn/bridge/bridge_to_kafka.html)
-
-
+EMQX 使用 Kafka 参照 [EMQX 到 Kafka 的桥接](https://docs.emqx.io/tutorial/v3/cn/bridge/bridge_to_kafka.html)
 
 
-## EMQ X 企业版中桥接 Kafka，一条 MQTT 消息到达 EMQ X 集群之后就回 MQTT Ack 报文还是写入 Kafka 之后才回 MQTT Ack 报文?
+
+
+## EMQX 企业版中桥接 Kafka，一条 MQTT 消息到达 EMQX 集群之后就回 MQTT Ack 报文还是写入 Kafka 之后才回 MQTT Ack 报文?
 
 **标签:** [*Kafka*](tags.md#kafka)  [*配置*](tags.md#配置)
 
@@ -229,25 +229,25 @@ EMQ X 使用 Kafka 参照 [EMQ X 到 Kafka 的桥接](https://docs.emqx.io/tutor
 bridge.kafka.produce = sync
 ```
 
-- 同步：EMQ X 在收到 Kafka 返回的 Ack 之后才会给前端返回 MQTT Ack 报文
-- 异步：MQTT 消息到达 EMQ X 集群之后就回 MQTT Ack 报文，而不会等待 Kafka 返回给 EMQ X 的 Ack
+- 同步：EMQX 在收到 Kafka 返回的 Ack 之后才会给前端返回 MQTT Ack 报文
+- 异步：MQTT 消息到达 EMQX 集群之后就回 MQTT Ack 报文，而不会等待 Kafka 返回给 EMQX 的 Ack
 
-如果运行期间，后端的 Kafka 服务不可用，则消息会被累积在 EMQ X 服务器中，
+如果运行期间，后端的 Kafka 服务不可用，则消息会被累积在 EMQX 服务器中，
 
-- EMQ X 2.4.3 之前的版本会将未发送至 Kafka 的消息在内存中进行缓存，直至内存使用完毕，并且会导致 EMQ X 服务不可用。
-- EMQ X 2.4.3 版本开始会将未发送至 Kafka 的消息在磁盘中进行缓存，如果磁盘用完可能会导致数据丢失。
+- EMQX 2.4.3 之前的版本会将未发送至 Kafka 的消息在内存中进行缓存，直至内存使用完毕，并且会导致 EMQX 服务不可用。
+- EMQX 2.4.3 版本开始会将未发送至 Kafka 的消息在磁盘中进行缓存，如果磁盘用完可能会导致数据丢失。
 
 因此建议做好 Kafka 服务的监控，在发现 Kafka 服务有异常情况的时候尽快恢复 Kafka 服务。
 
 
 
 
-## EMQ X 支持集群自动发现吗？有哪些实现方式？
+## EMQX 支持集群自动发现吗？有哪些实现方式？
 
 **标签:** [*集群*](tags.md#集群)
 
 
-EMQ X 支持集群自动发现。集群可以通过手动配置或自动配置的方式实现。
+EMQX 支持集群自动发现。集群可以通过手动配置或自动配置的方式实现。
 
 目前支持的自动发现方式有：
 
@@ -258,42 +258,42 @@ EMQ X 支持集群自动发现。集群可以通过手动配置或自动配置�
 - ETCD 自动集群
 - K8S 自动集群
 
-有关集群概念和组建集群方式请参照 [EMQ X 的集群概念](https://docs.emqx.io/tutorial/v3/cn/cluster/whats_cluster.html)
+有关集群概念和组建集群方式请参照 [EMQX 的集群概念](https://docs.emqx.io/tutorial/v3/cn/cluster/whats_cluster.html)
 
 
 
 
-## 我可以把 MQTT 消息从 EMQ X 转发其他消息中间件吗？例如 RabbitMQ？
+## 我可以把 MQTT 消息从 EMQX 转发其他消息中间件吗？例如 RabbitMQ？
 
 **标签:** [*RabbitMQ*](tags.md#rabbitmq)  [*桥接*](tags.md#桥接)  [*持久化*](tags.md#持久化)
 
 
-EMQ X 支持转发消息到其他消息中间件，通过 EMQ X 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。
+EMQX 支持转发消息到其他消息中间件，通过 EMQX 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。
 
-EMQ X 桥接相关的使用方式请参照 [EMQ X 桥接](https://docs.emqx.io/tutorial/v3/cn/bridge/bridge.html)
-
-
+EMQX 桥接相关的使用方式请参照 [EMQX 桥接](https://docs.emqx.io/tutorial/v3/cn/bridge/bridge.html)
 
 
-## 我可以把消息从 EMQ X 转到公有云 MQTT 服务上吗？比如 AWS 或者 Azure 的 IoT Hub？
+
+
+## 我可以把消息从 EMQX 转到公有云 MQTT 服务上吗？比如 AWS 或者 Azure 的 IoT Hub？
 
 **标签:** [*桥接*](tags.md#桥接)
 
 
-EMQ X 可以转发消息到标准 MQTT Broker，包括其他 MQTT 实现、公有云的 IoT Hub，通过 EMQ X 提供的桥接就可以实现。
+EMQX 可以转发消息到标准 MQTT Broker，包括其他 MQTT 实现、公有云的 IoT Hub，通过 EMQX 提供的桥接就可以实现。
 
 
 
 
-## MQTT Broker（比如 Mosquitto）可以转发消息到 EMQ X 吗？
+## MQTT Broker（比如 Mosquitto）可以转发消息到 EMQX 吗？
 
 **标签:** [*Mosquitto*](tags.md#mosquitto)  [*桥接*](tags.md#桥接)
 
 
-Mosquitto 可以配置转发消息到 EMQ X，请参考[数据桥接](../rule/bridge_emqx.md)。
+Mosquitto 可以配置转发消息到 EMQX，请参考[数据桥接](../rule/bridge_emqx.md)。
 
 ::: tip
-> EMQ X 桥接相关的使用方式请参照 [EMQ X 桥接](../rule/bridge_emqx.md)
+> EMQX 桥接相关的使用方式请参照 [EMQX 桥接](../rule/bridge_emqx.md)
 :::
 
 
@@ -302,7 +302,7 @@ Mosquitto 可以配置转发消息到 EMQ X，请参考[数据桥接](../rule/br
 **标签:** [*Trace*](tags.md#trace)  [*调试*](tags.md#调试)
 
 
-EMQ X 支持追踪来自某个客户端的报文或者发布到某个主题的报文。追踪消息的发布和订阅需要使用命令行工具（emqx_ctl）的 trace 命令，下面给出一个追踪‘topic’主题的消息并保存在 `trace_topic.log` 中的例子。更详细的说明请参阅 EMQ X 文档的相关章节。
+EMQX 支持追踪来自某个客户端的报文或者发布到某个主题的报文。追踪消息的发布和订阅需要使用命令行工具（emqx_ctl）的 trace 命令，下面给出一个追踪‘topic’主题的消息并保存在 `trace_topic.log` 中的例子。更详细的说明请参阅 EMQX 文档的相关章节。
 
 ```
 ./bin/emqx_ctl trace topic "topic" "trace_topic.log"
@@ -318,22 +318,22 @@ EMQ X 支持追踪来自某个客户端的报文或者发布到某个主题的�
 
 在做压力测试的时候，除了要选用有足够计算能力的硬件，也需要对软件运行环境做一定的调优。比如修改修改操作系统的全局最大文件句柄数，允许用户打开的文件句柄数，TCP 的 backlog 和 buffer，Erlang 虚拟机的进程数限制等等。甚至包括需要在客户端上做一定的调优以保证客户端可以有足够的连接资源。
 
-系统的调优在不同的需求下有不同的方式，在 EMQ X 的[文档-测试调优](https://developer.emqx.io/docs/broker/v3/cn/tune.html) 中对用于普通场景的调优有较详细的说明
+系统的调优在不同的需求下有不同的方式，在 EMQX 的[文档-测试调优](https://developer.emqx.io/docs/broker/v3/cn/tune.html) 中对用于普通场景的调优有较详细的说明
 
 
 
 
-## EMQ X 支持加密连接吗？推荐的部署方案是什么？
+## EMQX 支持加密连接吗？推荐的部署方案是什么？
 
 **标签:** [*TLS*](tags.md#tls)  [*加密连接*](tags.md#加密连接)
 
 
-EMQ X 支持加密连接。在生产环境部署时，推荐的方案是使用负载均衡终结 TLS。通过该方式，设备端和服务器端（负载均衡）的采用加密的连接，而负载均衡和后端的 EMQ X 节点采用一般的 TCP 连接。
+EMQX 支持加密连接。在生产环境部署时，推荐的方案是使用负载均衡终结 TLS。通过该方式，设备端和服务器端（负载均衡）的采用加密的连接，而负载均衡和后端的 EMQX 节点采用一般的 TCP 连接。
 
 
 
 
-## EMQ X 安装之后无法启动怎么排查？
+## EMQX 安装之后无法启动怎么排查？
 
 **标签:** [*调试*](tags.md#调试)
 
@@ -399,7 +399,7 @@ EMQ X 支持加密连接。在生产环境部署时，推荐的方案是使用�
   Start mqtt:ws listener on 0.0.0.0:8083 successfully.
   Start mqtt:ssl listener on 0.0.0.0:8883 successfully.
   Start mqtt:wss listener on 0.0.0.0:8084 successfully.
-  EMQ X 3.2.1 is running now!
+  EMQX 3.2.1 is running now!
   "The license certificate is expired!"
   2019-07-23 05:52:51.355 [critical] The license certificate is expired!
   2019-07-23 05:52:51.355 [critical] The license certificate is expired! System shutdown!
@@ -413,12 +413,12 @@ EMQ X 支持加密连接。在生产环境部署时，推荐的方案是使用�
 ```
 
   **解决办法：**
-  登陆[emqx.io](https://emqx.io)申请license或安装开源版的 EMQ X Broker
+  登陆[emqx.io](https://emqx.io)申请license或安装开源版的 EMQX Broker
 
 
 
 
-## EMQ X中ssl resumption session的使用
+## EMQX中ssl resumption session的使用
 
 **标签:** [*TLS*](tags.md#tls)
 
@@ -440,7 +440,7 @@ EMQ X 支持加密连接。在生产环境部署时，推荐的方案是使用�
 + `keepalive_timeout`：MQTT keepalive 超时
 + `closed`：TCP客户端断开连接（客户端发来的FIN，但没收到 MQTT DISCONNECT）
 + `normal`：MQTT客户端正常断开
-+ `einval`：EMQ X 想向客户端发送一条消息，但是Socket 已经断开
++ `einval`：EMQX 想向客户端发送一条消息，但是Socket 已经断开
 + `function_clause`：MQTT 报文格式错误
 + `etimedout`：TCP 发送超时（没有收到TCP ACK 回应）
 + `proto_unexpected_c`：在已经有一条MQTT连接的情况下重复收到了MQTT连接请求
