@@ -4,13 +4,18 @@ Thank you for your contributions to EMQ X open-source project.
 
 ## Table of Contents
 
-- [Documentation Writing Guide](#documentation-writing-guide)
-- [How to contribute](#how-to-contribute)
-  - [Feedback questions](#feedback-questions)
-  - [Online editing](#online-editing)
-  - [Local editing](#local-editing)
-- [PR automatic check](#pr-automatic-check)
-- [How to get help](#how-to-get-help)
+- [EMQ X Documentation Contributing Guide](#emq-x-documentation-contributing-guide)
+  - [Table of Contents](#table-of-contents)
+  - [Documentation Writing Guide](#documentation-writing-guide)
+  - [How to contribute](#how-to-contribute)
+    - [Request a change](#request-a-change)
+    - [Online editing](#online-editing)
+      - [Fork](#fork)
+      - [Commit](#commit)
+      - [Pull request](#pull-request)
+    - [Local editing](#local-editing)
+  - [PR automatic check](#pr-automatic-check)
+  - [How to get help](#how-to-get-help)
 
 
 ## Documentation Writing Guide
@@ -109,4 +114,3 @@ If you encounter any problems when contributing to the documentation, you can co
 - Slack: [https://slack-invite.emqx.io/](https://slack-invite.emqx.io/)
 
 - Submit the GitHub Issue directly: [https://github.com/emqx/emqx-docs/issues/new](https://github.com/emqx/emqx-docs/issues/new).
-

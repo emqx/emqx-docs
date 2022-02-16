@@ -1245,11 +1245,6 @@ The FROM statement is used to select the source of the event. If the message is 
 
 #### Decoding and encoding functions
 
-
-
-
-
-
 {% emqxce %}
 
 | Function | Purpose                             |        Parameters         | Returned value    |

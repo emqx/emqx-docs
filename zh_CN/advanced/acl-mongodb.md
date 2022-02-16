@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -23,7 +23,7 @@ MongoDB ACL 使用外部 MongoDB 数据库存储 ACL 规则，可以存储大量
 emqx_auth_mongo
 ```
 
-::: tip 
+::: tip
 emqx_auth_mongo 插件同时包含认证功能，可通过注释禁用。
 :::
 
@@ -167,11 +167,11 @@ MongoDB ACL 一条规则中定义了发布、订阅和发布/订阅的信息，�
 - subscribe：允许订阅的主题数值，支持通配符
 - pubsub：允许发布订阅的主题数值，支持通配符
 
-::: tip 
+::: tip
 主题可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
   - %u：用户名
   - %c：Client ID
-::: 
+:::
 
 
 默认配置下示例数据：
@@ -288,7 +288,13 @@ db.mqtt_acl.find({
 - %c：Client ID
 
 
-::: tip 
+::: tip
 MongoDB ACL 规则需严格使用上述数据结构。
-MongoDB ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
+
+MongoDB ACL 中添加的所有规则都是 **允许** 规则。即白名单。
+
+MongoDB 中对应 topic 的规则为空时将交由下一个 acl 插件继续检查，否则将立即终止认证链并返回。
+规则非空且未匹配到相应的 pub/sub 权限时，将返回认证失败（拒绝相应的 pub/sub 行为）并终止认证链。
+
+同时启用多个 auth/ACL 插件时，建议将 MongoDB ACL 认证置于其他启用的 auth/ACL 插件后。
 :::
