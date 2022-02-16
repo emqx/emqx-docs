@@ -41,7 +41,31 @@ ref:
 |log|以 e 为底对数|1. 被操作数|值|
 |log10|以 10 为底对数|1. 被操作数|值|
 |log2|以 2 为底对数|1. 被操作数|值|
-```
+
+```erlang
+abs(-12) = 12
+cos(1.5) = 0.0707372016677029
+cosh(1.5) = 2.352409615243247
+acos(0.0707372016677029) = 1.5
+acosh(2.352409615243247) = 1.5
+sin(0.5) = 0.479425538604203
+sinh(0.5) = 0.5210953054937474
+asin(0.479425538604203) = 0.5
+asinh(0.5210953054937474) = 0.5
+tan(1.4) = 5.797883715482887
+tanh(1.4) = 0.8853516482022625
+atan(5.797883715482887) = 1.4
+atanh(0.8853516482022625) = 1.4000000000000001
+ceil(1.34) = 2
+floor(1.34) = 1
+round(1.34) = 1
+round(1.54) = 2
+exp(10) = 22026.465794806718
+power(2, 10) = 1024
+sqrt(2) = 1.4142135623730951
+fmod(-32, 5) = -2
+log10(1000) = 3
+log2(1024) = 10
 ```
 
 ## 数据类型判断函数
@@ -57,7 +81,18 @@ ref:
 |is_num|判断变量是否为数字类型，包括 Integer 和 Float 类型|Data|Boolean 类型的数据。|
 |is_map|判断变量是否为 Map 类型|Data|Boolean 类型的数据。|
 |is_array|判断变量是否为 Array 类型|Data|Boolean 类型的数据。|
-```
+
+```erlang
+is_null(undefined) = true
+is_not_null(1) = true
+is_str(1) = false
+is_str('val') = true
+is_bool(true) = true
+is_int(1) = true
+is_float(1) = false
+is_float(1.234) = true
+is_num(2.3) = true
+is_num('val') = false
 ```
 
 ## 数据类型转换函数
@@ -71,7 +106,13 @@ ref:
 |int|将数据转换为整数类型|Data|整数类型的数据。无法转换将会导致 SQL 匹配失败|
 |float|将数据转换为浮点型类型|Data|浮点型类型的数据。无法转换将会导致 SQL 匹配失败|
 |map|将数据转换为 Map 类型|Data|Map 类型的数据。无法转换将会导致 SQL 匹配失败|
-```
+
+```erlang
+str(1234) = '1234'
+str_utf8(1234) = '1234'
+bool('true') = true
+int('1234') = 1234
+float('3.14') = 3.14
 ```
 
 
@@ -189,7 +230,6 @@ find('eeabcabcee', 'abc', 'trailing') = 'abcee'
 map_get('a', json_decode( '{ "a" : 1 }' )) = 1
 map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
 map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
-
 ```
 
 
@@ -262,4 +302,3 @@ base64_decode('c29tZSB2YWw=') = 'some val'
 json_encode(json_decode( '{ "a" : 1 }' )) = '{"a":1}'
 bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
-

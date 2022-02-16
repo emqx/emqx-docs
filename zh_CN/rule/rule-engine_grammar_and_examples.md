@@ -15,46 +15,8 @@ ref:
 
 # 规则引擎语法与示列
 
-使用 EMQ X 的规则引擎可以灵活地处理消息和事件。使用规则引擎可以方便地实现诸如将消息转换成指定格式，然后存入数据库表，或者发送到消息队列等。
-
-与 EMQ X 规则引擎相关的概念包括: 规则(rule)、动作(action)、资源(resource) 和 资源类型(resource-type)。
-
-规则、动作、资源的关系:
-```
-规则: {
-    SQL 语句,
-    动作列表: [
-        {
-            动作1,
-            动作参数,
-            绑定资源: {
-                资源配置
-            }
-        },
-        {
-            动作2,
-            动作参数,
-            绑定资源: {
-                资源配置
-            }
-         }
-    ]
-}
-```
-- 规则(Rule): 规则由 SQL 语句和动作列表组成。动作列表包含一个或多个动作及其参数。
-- SQL 语句用于筛选或转换消息中的数据。
-- 动作(Action) 是 SQL 语句匹配通过之后，所执行的任务。动作定义了一个针对数据的操作。
-  动作可以绑定资源，也可以不绑定。例如，“inspect” 动作不需要绑定资源，它只是简单打印数据内容和动作参数。而 “data_to_webserver” 动作需要绑定一个 web_hook 类型的资源，此资源中配置了 URL。
-- 资源(Resource): 资源是通过资源类型为模板实例化出来的对象，保存了与资源相关的配置(比如数据库连接地址和端口、用户名和密码等) 和系统资源(如文件句柄，连接套接字等)。
-- 资源类型 (Resource Type): 资源类型是资源的静态定义，描述了此类型资源需要的配置项。
-
-::: tip
-动作和资源类型是由 emqx 或插件的代码提供的，不能通过 API 和 CLI 动态创建。
-:::
-
-## SQL 语句
-### SQL 语法
-**FROM、SELECT 和 WHERE 子句:**
+## SQL 语法
+### FROM、SELECT 和 WHERE 子句
 
 规则引擎的 SQL 语句基本格式为:
 
@@ -66,33 +28,12 @@ SELECT <字段名> FROM <主题> [WHERE <条件>]
 - `SELECT` 子句用于对数据进行变换，并选择出感兴趣的字段
 - `WHERE` 子句用于对 SELECT 选择出来的某个字段施加条件过滤
 
-**FOREACH、DO 和 INCASE 子句:**
-
-如果对于一个数组数据，想针对数组中的每个元素分别执行一些操作并执行 Actions，需要使用 `FOREACH-DO-INCASE` 语法。其基本格式为:
-
 ```sql
-FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件>]
-```
+## SELECT 语句用于决定最终的输出结果里的字段。比如:
+## 下面 SQL 的输出结果中将只有两个字段 "a" 和 "b":
 
-- `FOREACH` 子句用于选择需要做 foreach 操作的字段，注意选择出的字段必须为数组类型
-- `DO` 子句用于对 FOREACH 选择出来的数组中的每个元素进行变换，并选择出感兴趣的字段
-- `INCASE` 子句用于对 DO 选择出来的某个字段施加条件过滤
-
-其中 DO 和 INCASE 子句都是可选的。DO 相当于针对当前循环中对象的 SELECT 子句，而 INCASE 相当于针对当前循环中对象的 WHERE 语句。
-
-### SQL 关键字和符号
-##### SELECT - FROM - WHERE 语句
-SELECT 语句用于决定最终的输出结果里的字段。比如:
-
-下面 SQL 的输出结果中将只有两个字段 "a" 和 "b":
-
-```
 SELECT a, b FROM "t/#"
-```
 
-WHERE 语句用于对本事件中可用字段，或 SELECT 语句中定义的字段进行条件过滤。比如:
-
-```
 # 选取 username 为 'abc' 的终端发来的消息，输出结果为所有可用字段:
 
 SELECT * FROM "#" WHERE username = 'abc'
@@ -114,7 +55,33 @@ SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
 
 FROM 语句用于选择事件来源。如果是消息发布则填写消息的主题，如果是事件则填写对应的事件主题。
 
-#### 运算符号
+### FOREACH、DO 和 INCASE 子句
+
+如果对于一个数组数据，想针对数组中的每个元素分别执行一些操作并执行 Actions，需要使用 `FOREACH-DO-INCASE` 语法。其基本格式为:
+
+```sql
+FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件>]
+```
+
+- `FOREACH` 子句用于选择需要做 foreach 操作的字段，注意选择出的字段必须为数组类型
+- `DO` 子句用于对 FOREACH 选择出来的数组中的每个元素进行变换，并选择出感兴趣的字段
+- `INCASE` 子句用于对 DO 选择出来的某个字段施加条件过滤
+
+```sql
+
+FOREACH
+    payload.sensors as e ## 选择出的字段必须为数组类型
+DO                       ## DO相当于针对当前循环中对象的 SELECT 子句, 决定最终的输出结果里的字段
+    clientid,
+    e.name as name,
+    e.idx as idx
+INCASE                  ## INCASE 相当于针对当前循环中对象的 WHERE 语句
+    e.idx >= 1          ## 对DO选择出来的某个字段施加条件过滤
+FROM "t/#"              ## 子句将规则挂载到某个主题上
+```
+其中 DO 和 INCASE 子句都是可选的。
+
+### 运算符号
 | 函数名 |   函数作用            |   返回值   |
 | ------ | ------------------- | ---------- |
 | `+`    | 加法，或字符串拼接     | 加和，或拼接之后的字符串 |
@@ -126,28 +93,18 @@ FROM 语句用于选择事件来源。如果是消息发布则填写消息的主
 | `=`    | 比较两者是否完全相等。可用于比较变量和主题 | true/false |
 | `=~`   | 比较主题(topic)是否能够匹配到主题过滤器(topic filter)。只能用于主题匹配 | true/false |
 
+### 比较符号
 
-## 事件和事件主题
-规则引擎的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
+| 函数名 |   函数作用            |   返回值   |
+| ------ | ------------------- | ---------- |
+| `>` |大于 | true/false |
+| `<` | 小于 | true/false |
+| `<=` |小于等于 | true/false |
+| `>=` | 大于等于 | true/false |
+| `<>` | 不等于| true/false |
+| `!=` | 不等于 | true/false |
 
-事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
-如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
-
-所有支持的事件及其可用字段详见: [规则事件](#rule-sql-events)。
-
-
-#### FROM 子句可用的事件主题
-| 事件主题名                    | 释义     |
-| ----------------------------- | :------- |
-| $events/message_delivered    | 消息投递 |
-| $events/message_acked        | 消息确认 |
-| $events/message_dropped      | 消息丢弃 |
-| $events/client_connected     | 连接完成 |
-| $events/client_disconnected  | 连接断开 |
-| $events/session_subscribed   | 订阅     |
-| $events/session_unsubscribed | 取消订阅 |
-
-## SQL 语句示例:
+## SQL 语句示例
 ### 基本语法举例
 
 - 从 topic 为 "t/a" 的消息中提取所有字段:
@@ -225,7 +182,7 @@ SELECT pub_props.'User-Property'.foo as foo FROM "t/#"
 - 尽量不要给 payload 创建别名，否则会影响运行性能。即尽量不要这么写：`SELECT payload as p`
 :::
 
-#### 遍历语法(FOREACH-DO-INCASE) 举例
+### 遍历语法(FOREACH-DO-INCASE) 举例
 
 假设有 ClientID 为 `c_steve`、主题为 `t/1` 的消息，消息体为 JSON 格式，其中 sensors 字段为包含多个 Object 的数组:
 
@@ -390,7 +347,7 @@ FOREACH
 ...
 ```
 
-#### CASE-WHEN 语法示例
+### CASE-WHEN 语法示例
 
 **示例1: 将消息中 x 字段的值范围限定在 0~7 之间。**
 
@@ -415,7 +372,7 @@ FROM "t/#"
 {"x": 7}
 ```
 
-#### 数组操作语法举例
+### 数组操作语法举例
 
 **示例1: 创建一个数组，赋值给变量 a:**
 
@@ -530,5 +487,24 @@ FROM
 }
 ```
 
+## 事件和事件主题
+规则引擎的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
+
+事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
+如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
+
+所有支持的事件及其可用字段详见: [规则事件](#rule-sql-events)。
+
+
+### FROM 子句可用的事件主题
+| 事件主题名                    | 释义     |
+| ----------------------------- | :------- |
+| $events/message_delivered    | 消息投递 |
+| $events/message_acked        | 消息确认 |
+| $events/message_dropped      | 消息丢弃 |
+| $events/client_connected     | 连接完成 |
+| $events/client_disconnected  | 连接断开 |
+| $events/session_subscribed   | 订阅     |
+| $events/session_unsubscribed | 取消订阅 |
 
 [下一部分，SELECT 和 WHERE 子句可用的字段](rule-engine_field.md)
