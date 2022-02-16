@@ -2,7 +2,7 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to InfluxDB](../rule/backend_influxdb.md) to setup Save data to InfluxDB in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to InfluxDB](../rule/backend_influxdb.md) to setup Save data to InfluxDB in rule engine.
 
 :::
 
@@ -97,7 +97,7 @@ follows:
 
 | Placeholder | Description                                                                         |
 | ----------- | ----------------------------------------------------------------------------------- |
-| $id         | MQTT Message UUID, assigned by EMQ X                                                |
+| $id         | MQTT Message UUID, assigned by EMQX                                                |
 | $clientid   | Client ID used by the Client                                                        |
 | $username   | Username used by the Client                                                         |
 | $peerhost   | IP of Client                                                                        |
@@ -105,7 +105,7 @@ follows:
 | $topic      | Topic of MQTT Message                                                               |
 | $payload    | Payload of MQTT Message, must be valid Json data                                    |
 | $<Number\> | It must be used with $paylaod to retrieve data from Json Array                      |
-| $timestamp  | The timestamp EMQ X sets when preparing to forward messages, precision: Nanoseconds |
+| $timestamp  | The timestamp EMQX sets when preparing to forward messages, precision: Nanoseconds |
 
 **$payload and $<Number\>:**
 

@@ -14,7 +14,7 @@ ref:
 ---
 
 # 常见错误
-## EMQ X 无法连接 MySQL 8.0
+## EMQX 无法连接 MySQL 8.0
 
 **标签:** [*MySQL*](tags.md#mysql)  [*认证*](tags.md#认证)
 
@@ -74,13 +74,13 @@ ref:
 {application_start_failure,kernel,{{shutdown,{failed_to_start_child,kernel_safe_sup,{on_load_function_failed,crypto}}}, ..}
 ```
 
-它表示，EMQ X 依赖的 Erlang/OTP 中的 `crypto` 应用启动失败。
+它表示，EMQX 依赖的 Erlang/OTP 中的 `crypto` 应用启动失败。
 
 ### 解决方法
 
 #### Linux
 
-进入到 EMQ X 的安装目录（如果使用包管理工具安装 EMQ X，则应该进入与 EMQ X 的 `lib` 目录同级的位置）
+进入到 EMQX 的安装目录（如果使用包管理工具安装 EMQX，则应该进入与 EMQX 的 `lib` 目录同级的位置）
 
 ```bash
 ## 安装包安装
@@ -128,12 +128,12 @@ $ ln -s /usr/local/lib64/libssl.so.1.1 /usr/lib64/libssl.so.1.1
 $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 ```
 
-完成后，执行在 EMQ X 的 lib 同级目录下执行 `ldd lib/crypto-*/priv/lib/crypto.so` ，检查是否已能正确识别。如果不在有 `not found` 的 `.so` 库，即可正常启动 EMQ X。
+完成后，执行在 EMQX 的 lib 同级目录下执行 `ldd lib/crypto-*/priv/lib/crypto.so` ，检查是否已能正确识别。如果不在有 `not found` 的 `.so` 库，即可正常启动 EMQX。
 
 
 #### macOS
 
-进入到 EMQ X 的安装目录：
+进入到 EMQX 的安装目录：
 
 ```bash
 ## 安装包安装
@@ -167,7 +167,7 @@ ls: /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib: No such file or director
 $ brew install openssl@1.1
 ```
 
-安装完成后，即可正常启动 EMQ X。
+安装完成后，即可正常启动 EMQX。
 
 ## Windows 缺失 MSVCR120.dll
 

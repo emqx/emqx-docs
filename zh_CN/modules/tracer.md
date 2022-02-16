@@ -7,7 +7,7 @@
 
 Trace 日志追踪模块默认关闭，可以通过dashboard页面进行开启和停止。
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡：
 
 ![image-202112140001](./assets/trace_module.png)
 

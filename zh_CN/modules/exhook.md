@@ -1,6 +1,6 @@
 # 多语言扩展 - 钩子
 
-在 EMQ X e4.2.0 中，我们提供了多语言扩展的支持。其中 **多语言扩展钩子** 模块允许使用其他编程语言（例如：Python，Java 等）直接向 EMQ X 系统挂载钩子，以接收并处理 EMQ X 系统的钩子事件，达到扩展和定制 EMQ X 的目的。例如，用户可以使用其他编程语言来自定义：
+在 EMQX e4.2.0 中，我们提供了多语言扩展的支持。其中 **多语言扩展钩子** 模块允许使用其他编程语言（例如：Python，Java 等）直接向 EMQX 系统挂载钩子，以接收并处理 EMQX 系统的钩子事件，达到扩展和定制 EMQX 的目的。例如，用户可以使用其他编程语言来自定义：
 
 - 客户端接入的认证授权
 - 发布/订阅的 ACL 鉴权
@@ -14,7 +14,7 @@
 架构如下图：
 
 ```
-  EMQ X
+  EMQX
 +========================+                 +========+==========+
 |    ExHook              |                 |        |          |
 |   +----------------+   |      gRPC       | gRPC   |  User's  |
@@ -24,9 +24,9 @@
 +========================+                 +========+==========+
 ```
 
-它表明：EMQ X 中的 ExHook 模块作为一个 gRPC 客户端，将系统中所有的钩子事件发送到用户的 gRPC 服务端。
+它表明：EMQX 中的 ExHook 模块作为一个 gRPC 客户端，将系统中所有的钩子事件发送到用户的 gRPC 服务端。
 
-和 EMQ X 原生的钩子一致，它也支持链式的方式计算和返回：
+和 EMQX 原生的钩子一致，它也支持链式的方式计算和返回：
 
 ![chain_of_responsiblity](../advanced/assets/chain_of_responsiblity.png)
 
@@ -93,7 +93,7 @@ service HookProvider {
 钩子事件部分：
 
 - `OnClient*`，`OnSession*`，`OnMessage*` 为前缀的方法与 [钩子](../advanced/hooks.md) 的当中的方法一一对应。它们有着相同的调用时机和相似的参数列表。
-- 仅 `OnClientAuthenticate`，`OnClientCheckAcl`，`OnMessagePublish` 允许携带返回值到 EMQ X 系统，其它回调则不支持。
+- 仅 `OnClientAuthenticate`，`OnClientCheckAcl`，`OnMessagePublish` 允许携带返回值到 EMQX 系统，其它回调则不支持。
 
 其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
@@ -108,7 +108,7 @@ service HookProvider {
 2. 使用对应编程语言的 gRPC 框架，生成 `exhook.proto` 的 gRPC 服务端的代码。
 3. 按需实现 exhook.proto 当中定义的接口。
 
-开发完成后，需将该服务部署到与 EMQ X 能够通信的服务器上，并保证端口的开放。
+开发完成后，需将该服务部署到与 EMQX 能够通信的服务器上，并保证端口的开放。
 
 其中各个语言的 gRPC 框架可参考：[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
@@ -117,7 +117,7 @@ service HookProvider {
 
 在成功部署 `HookProvider` 服务后，通过 dashboard 页面可以开启多语言钩子扩展模块，并配置其服务地址即可正常使用。
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![Modules](./assets/modules.png)
 

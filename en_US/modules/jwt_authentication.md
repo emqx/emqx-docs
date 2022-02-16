@@ -4,7 +4,7 @@
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200928161310952](./assets/modules.png)
 
@@ -26,7 +26,7 @@ Finally, click the "Add" button to add the module successfully.
 
 ## Authentication principle
 
-The client uses Token as the user name or password (depending on the module configuration). When initiating a connection, EMQ X uses the key and certificate in the configuration for decryption. If the decryption is successful, the authentication is successful, otherwise the authentication fails.
+The client uses Token as the user name or password (depending on the module configuration). When initiating a connection, EMQX uses the key and certificate in the configuration for decryption. If the decryption is successful, the authentication is successful, otherwise the authentication fails.
 
 After JWT authentication is enabled in the default configuration, you can connect with any username + the following password:
 

@@ -17,7 +17,7 @@ ref:
 
 ## Summary
 
-EMQ X Enterprise Edition will provide an 18-month maintenance cycle for the major release of the product from the release date, and we will continue to maintain the last minor release of the last two major release branches.
+EMQX Enterprise Edition will provide an 18-month maintenance cycle for the major release of the product from the release date, and we will continue to maintain the last minor release of the last two major release branches.
 
 ## Versions
 
@@ -27,9 +27,9 @@ EMQ X Enterprise Edition will provide an 18-month maintenance cycle for the majo
 
 ## Maintenance policies
 
-Our goal is to maintain the latest minor version of the current major release, as well as the latest minor version of the previous major release. We have observed that some users frequently upgrade to keep up with our version tributaries. These users can always use the latest minor tributary release and get fixes through the maintenance release they choose to deploy. For example, these users can keep up with our EMQ X releases: 4.0.0, 4.0.1, 4.2.0, etc.
+Our goal is to maintain the latest minor version of the current major release, as well as the latest minor version of the previous major release. We have observed that some users frequently upgrade to keep up with our version tributaries. These users can always use the latest minor tributary release and get fixes through the maintenance release they choose to deploy. For example, these users can keep up with our EMQX releases: 4.0.0, 4.0.1, 4.2.0, etc.
 
-We know that not all users will upgrade soon after we release a new version. For the convenience of users in this category, we will continue to maintain the latest minor release of the last major release. In the case of EMQ X 3.x, we will continue to provide maintenance for the 3.x.x series. In this way, users in this category can make only a few minor changes to the software they are currently running to complete the fix. Our maintenance of the most recent minor release will continue until the next major release. For example, our maintenance of EMQ X 3.x.x will continue until the official release of EMQ X 5.0.0. After the release of EMQ X 5.0.0, we will continue to maintain the recently released 4.x series and begin to maintain the 5.0. X minor series, followed by the 5.1.x minor series, and the 5.2.x minor series.
+We know that not all users will upgrade soon after we release a new version. For the convenience of users in this category, we will continue to maintain the latest minor release of the last major release. In the case of EMQX 3.x, we will continue to provide maintenance for the 3.x.x series. In this way, users in this category can make only a few minor changes to the software they are currently running to complete the fix. Our maintenance of the most recent minor release will continue until the next major release. For example, our maintenance of EMQX 3.x.x will continue until the official release of EMQX 5.0.0. After the release of EMQX 5.0.0, we will continue to maintain the recently released 4.x series and begin to maintain the 5.0. X minor series, followed by the 5.1.x minor series, and the 5.2.x minor series.
 
 We sometimes migrate fixes backward to other tributary versions of minor releases. For example, when multiple branches have the potential for a serious security breach, we make a prudent decision to move backward, but we want to keep that scenario to a minimum.
 

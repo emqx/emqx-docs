@@ -1,18 +1,18 @@
 
 ## Hot upgrade
 
-Since version 4.2.0, EMQ X Broker supports hot upgrade.
+Since version 4.2.0, EMQX Broker supports hot upgrade.
 
-By using the hot upgrade feature, users can quickly and safely upgrade the EMQ X Broker in the production environment, and avoid the decrease in system availability caused by restarting the service.
+By using the hot upgrade feature, users can quickly and safely upgrade the EMQX Broker in the production environment, and avoid the decrease in system availability caused by restarting the service.
 
-Currently EMQ X Broker only supports hot upgrade of Patch version (Patch version is the third digit of the version number).
+Currently EMQX Broker only supports hot upgrade of Patch version (Patch version is the third digit of the version number).
 That is, it currently supports hot upgrades from 4.2.0 -> 4.2.1, 4.2.0 -> 4.2.2, ..., etc., but 4.2.x cannot be hot upgraded to 4.3.0 or 5.0.
 
 Currently, Windows, MacOSX does not support hot upgrade feature.
 
 ## Hot upgrade steps
 
-1. View the currently installed version list of EMQ X Broker.
+1. View the currently installed version list of EMQX Broker.
 
 ```bash
 
@@ -22,11 +22,11 @@ Installed versions:
 * 4.2.0	permanent
 ```
 
-2. Download the software package to be upgraded from the EMQ X website.
+2. Download the software package to be upgraded from the EMQX website.
 
 Visit https://www.emqx.com/en/downloads?product=broker, Select the corresponding version and operating system type, and then select the **"zip"** package type.
 
-3. Find the installation directory of EMQ X:
+3. Find the installation directory of EMQX:
 
 ```bash
 
@@ -37,7 +37,7 @@ $ echo ${EMQX_ROOT_DIR}
 
 ```
 
-4. Put the downloaded zip package in the `releases` directory under the EMQ X installation directory:
+4. Put the downloaded zip package in the `releases` directory under the EMQX installation directory:
 
 ```bash
 

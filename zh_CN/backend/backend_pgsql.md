@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 PostgreSQL](../rule/backend_pgsql.md)规则引擎中创建 保存数据到 PostgreSQL
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 PostgreSQL](../rule/backend_pgsql.md)规则引擎中创建 保存数据到 PostgreSQL
 
 :::
 
@@ -88,7 +88,7 @@ backend.pgsql.hook.message.acked.1       = {"topic": "#", "action": {"function":
 PostgreSQL 存储支持用户采用SQL语句配置 Action，例如:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 sql 语句(支持多条sql语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 sql 语句(支持多条sql语句)
 backend.pgsql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 

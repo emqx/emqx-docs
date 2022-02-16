@@ -14,7 +14,7 @@ $ redis-server
 
 Create rules:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
 Then fill in the rule SQL:
 

@@ -298,7 +298,7 @@ When using the k8s cluster, specify the Kubernetes API Server. If there are mult
 
 #### Description
 
-When using k8s cluster, specify the service name of EMQ X Broker in Kubernetes.
+When using k8s cluster, specify the service name of EMQX Broker in Kubernetes.
 
 
 
@@ -1215,7 +1215,7 @@ Whether to support shared subscriptions.
 
 #### Description
 
-Whether to ignore the message sent by itself. If it is ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
+Whether to ignore the message sent by itself. If it is ignored, it means that EMQX Broker will not deliver this message to the sender of the message.
 
 
 
@@ -1472,7 +1472,7 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 
 #### Description
 
-Allow EMQ X Broker to force the QoS level of the message upgrading to the subscribed QoS level when publishing the message.
+Allow EMQX Broker to force the QoS level of the message upgrading to the subscribed QoS level when publishing the message.
 
 
 
@@ -1496,7 +1496,7 @@ Inflight window size: The inflight window is used to store unacknowledged QoS 1 
 
 #### Description
 
-Message retransmission interval: EMQ X Broker checks whether message retransmission is required at each interval.
+Message retransmission interval: EMQX Broker checks whether message retransmission is required at each interval.
 
 
 
@@ -1508,7 +1508,7 @@ Message retransmission interval: EMQ X Broker checks whether message retransmiss
 
 #### Description
 
-The maximum receiving window for QoS 2 messages, which configures how many QoS 2 messages from the client can be processed by EMQ X Broker simultaneously. `0` means no limit.
+The maximum receiving window for QoS 2 messages, which configures how many QoS 2 messages from the client can be processed by EMQX Broker simultaneously. `0` means no limit.
 
 
 
@@ -1612,14 +1612,14 @@ Whether to enable `Flapping` check.
 
 #### Description
 
-After topic mount point is configured, all subscribed and published topics will be prefixed by EMQ X Broker.
+After topic mount point is configured, all subscribed and published topics will be prefixed by EMQX Broker.
 
 The available placeholders are:
 
 - `%c`：Client ID.
 - `%u`：Username.
 
-For example, if the mount point is set to `user/%c/`. , when the client with client ID `tom` publishes the topic `open` message, the topic actually routed in EMQ X Broker is `user/tom/open`.
+For example, if the mount point is set to `user/%c/`. , when the client with client ID `tom` publishes the topic `open` message, the topic actually routed in EMQX Broker is `user/tom/open`.
 
 
 
@@ -1643,7 +1643,7 @@ Whether to use the client's Username as its Client ID.
 
 #### Description
 
-Whether to ignore the message sent by yourself. If ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
+Whether to ignore the message sent by yourself. If ignored, it means that EMQX Broker will not deliver this message to the sender of the message.
 
 
 
@@ -1783,7 +1783,7 @@ Inflight window size: The flight window is used to store unanswered QoS 1 and Qo
 
 #### Description
 
-The maximum receiving window for QoS 2 messages, that configures how many QoS 2 messages from the client can be processed by EMQ X Broker simultaneously. `0` means no limit.
+The maximum receiving window for QoS 2 messages, that configures how many QoS 2 messages from the client can be processed by EMQX Broker simultaneously. `0` means no limit.
 
 
 
@@ -1849,14 +1849,14 @@ For example, `32000|32MB` means that when the process accumulates `32000` messag
 
 #### Description
 
-After topic mount point is configured, all subscribed and published topics will be prefixed by EMQ X Broker.
+After topic mount point is configured, all subscribed and published topics will be prefixed by EMQX Broker.
 
 The available placeholders are:
 
 - `%c`：Client ID.
 - `%u`：Username.
 
-For example, if the mount point is set to `user/%c/`. , when the client with client ID `tom` publishes the topic `open` message, the topic actually routed in EMQ X Broker is `user/tom/open`.
+For example, if the mount point is set to `user/%c/`. , when the client with client ID `tom` publishes the topic `open` message, the topic actually routed in EMQX Broker is `user/tom/open`.
 
 
 
@@ -1868,7 +1868,7 @@ For example, if the mount point is set to `user/%c/`. , when the client with cli
 
 #### Description
 
-Whether to ignore the message sent by itself. If ignored, it means that EMQ X Broker will not deliver this message to the sender of the message.
+Whether to ignore the message sent by itself. If ignored, it means that EMQX Broker will not deliver this message to the sender of the message.
 
 
 
@@ -2025,7 +2025,7 @@ It means that all TCP connections except `192.168.0.1` are allowed.
 
 Whether the listener enables `Proxy Protocol` support.
 
-If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get the client's real source IP address and port, you need to enable this configuration.
+If the EMQX cluster is deployed behind HAProxy or Nginx, and you need to get the client's real source IP address and port, you need to enable this configuration.
 
 `Proxy Protcol` : [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
@@ -2039,7 +2039,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 #### Description
 
-Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
+Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQX Broker will close its connection.
 
 
 
@@ -2059,7 +2059,7 @@ Use the client certificate to override the value of the Username field. The opti
 - md5: MD5 hash of the DER-encoded binary
 
 Note: Under TCP listener, this configuration is only available if the load balancing server terminates the SSL deployment;
-and the load balancing server needs to be configured to send the content of the certificate domain to EMQ X.
+and the load balancing server needs to be configured to send the content of the certificate domain to EMQX.
 For example, for HAProxy, see
 [send-proxy-v2-ssl](http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#5.2-send-proxy-v2-ssl)
 
@@ -2512,7 +2512,7 @@ Listener rate limit, with the format of `<limit>,<duration>`.
 
 Whether the listener enables `Proxy Protocol` support.
 
-If the EMQ X cluster is deployed behind HAProxy or Nginx, and it is required to get the client's real source IP address and port, you need to enable this configuration.
+If the EMQX cluster is deployed behind HAProxy or Nginx, and it is required to get the client's real source IP address and port, you need to enable this configuration.
 
 `Proxy Protcol` reference: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
@@ -2526,7 +2526,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and it is required to 
 
 #### Description
 
-Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
+Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQX Broker will close its connection.
 
 
 
@@ -2886,7 +2886,7 @@ Configure the listening address of the MQTT/WS listener named `external`.
 
 #### Description
 
-WebSocket's MQTT protocol path. So the address of EMQ X Broker's WebSocket is: `ws://{ip}:{port}/mqtt`.
+WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is: `ws://{ip}:{port}/mqtt`.
 
 
 
@@ -3019,7 +3019,7 @@ Specify the supported subprotocols, separated by commas.
 
 #### Description
 
-If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
+If the EMQX cluster is deployed behind HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
 
 
 
@@ -3031,7 +3031,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the confi
 
 #### Description
 
-If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the configuration to get the real port of the client.
+If the EMQX cluster is deployed behind HAProxy or Nginx, you can open the configuration to get the real port of the client.
 
 
 
@@ -3045,7 +3045,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, you can open the confi
 
 Whether the listener enables `Proxy Protocol` support.
 
-If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get the client's real source IP address and port, you need to open this configuration.
+If the EMQX cluster is deployed behind HAProxy or Nginx, and you need to get the client's real source IP address and port, you need to open this configuration.
 
 `Proxy Protcol` reference: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
@@ -3059,7 +3059,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 #### Description
 
-Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
+Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQX Broker will close its connection.
 
 
 
@@ -3443,7 +3443,7 @@ Specify the supported subprotocols, separated by commas.
 
 #### Description
 
-If the EMQ X cluster is deployed in HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
+If the EMQX cluster is deployed in HAProxy or Nginx, you can open the configuration to obtain the real IP address of the client.
 
 
 
@@ -3457,7 +3457,7 @@ If the EMQ X cluster is deployed in HAProxy or Nginx, you can open the configura
 
 Whether the listener enables `Proxy Protocol` support.
 
-If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get the client's real source IP address and port, you need to open this configuration.
+If the EMQX cluster is deployed behind HAProxy or Nginx, and you need to get the client's real source IP address and port, you need to open this configuration.
 
 `Proxy Protcol` reference:[https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 
@@ -3471,7 +3471,7 @@ If the EMQ X cluster is deployed behind HAProxy or Nginx, and you need to get th
 
 #### Description
 
-Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQ X Broker will close its connection.
+Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is received within this time, EMQX Broker will close its connection.
 
 
 
@@ -4203,7 +4203,7 @@ Memory usage check cycle.
 
 #### Description
 
-When the memory allocated by EMQ X Broker for all processes as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
+When the memory allocated by EMQX Broker for all processes as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
 
 
 
@@ -4215,7 +4215,7 @@ When the memory allocated by EMQ X Broker for all processes as a percentage of s
 
 #### Description
 
-When the memory allocated by EMQ X Broker for a single process as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
+When the memory allocated by EMQX Broker for a single process as a percentage of system memory exceeds `os_mon.procmem_high_watermark`, an alarm will be triggered.
 
 
 
@@ -5710,7 +5710,7 @@ ACL query commands. Available placeholders are:
 #### Description
 
 Bridge address, supports two formats, for example:
-- `emqx @ 192.168.0.100`: EMQ X Broker node name, which means that the message of this node is bridged to another EMQ X node.
+- `emqx @ 192.168.0.100`: EMQX Broker node name, which means that the message of this node is bridged to another EMQX node.
 - `192.168.0.100: 1883`: IP address and port,which means that the message of the node is bridged to another MQTT server through an MQTT connection.
 
 
@@ -5814,7 +5814,7 @@ The password of the MQTT bridge client.
 #### Description
 
 Bridge forwarding rules. For example:
-- `topic1/#, topic2/#`：`emqx_bridge_mqtt` will forward all topic messages in EMQ X Broker that match `topic1/#`，`topic2/#` .
+- `topic1/#, topic2/#`：`emqx_bridge_mqtt` will forward all topic messages in EMQX Broker that match `topic1/#`，`topic2/#` .
 
 
 
@@ -5994,7 +5994,7 @@ QoS 1/2 message retransmission interval.
 
 #### Description
 
-The batch size of the EMQ X bridge. The EMQ X bridge mode of `emqx_bridge_mqtt` supports batch sending of messages to increase throughput.
+The batch size of the EMQX bridge. The EMQX bridge mode of `emqx_bridge_mqtt` supports batch sending of messages to increase throughput.
 
 
 
@@ -7170,7 +7170,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 #### Description
 
-`emqx_sn` username to connect to EMQ X Broker.
+`emqx_sn` username to connect to EMQX Broker.
 
 
 
@@ -7182,7 +7182,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 #### Description
 
-`emqx_sn` password to connect to EMQ X Broker.
+`emqx_sn` password to connect to EMQX Broker.
 
 
 

@@ -2,15 +2,15 @@
 
 ## Introduction
 
-The configuration files of EMQ X Broker usually have the suffix `.conf`. You can find these configuration files in the `etc` directory.
+The configuration files of EMQX Broker usually have the suffix `.conf`. You can find these configuration files in the `etc` directory.
 
 | File        | Description            |
 | ------------------ | ------------------------- |
-| etc/emqx.conf      | EMQ X Broker Configuration File |
-| etc/acl.conf       | EMQ X Broker default ACL File |
+| etc/emqx.conf      | EMQX Broker Configuration File |
+| etc/acl.conf       | EMQX Broker default ACL File |
 | etc/plugins/*.conf | Configuration Files of Plugins |
 
-It should be noted that for the EMQ X Broker installed by different methods, the path of the `etc` directory may be different. For details, please refer to [directory structure](directory.md#).
+It should be noted that for the EMQX Broker installed by different methods, the path of the `etc` directory may be different. For details, please refer to [directory structure](directory.md#).
 
 ## Grammar rules
 
@@ -88,15 +88,15 @@ You can arbitrarily combine these time units, such as `1w13ms`, or you can use f
 
 ## Default configuration
 
-In the configuration file of EMQ X Broker, you will see a lot of configuration items that are commented out, which means that these configuration items will use their default values. Usually we will list the default values of these configurations.
+In the configuration file of EMQX Broker, you will see a lot of configuration items that are commented out, which means that these configuration items will use their default values. Usually we will list the default values of these configurations.
 
 ## Zone & Listener
 
-EMQ X Broker provides a lot of configuration items, and supports global configuration and local configuration. For example, EMQ X Broker provides an anonymous login function, which allows clients to connect to the broker without a user name and password. Usually this feature is disabled by default in the user's production environment, but the user may want this feature enabled in the intranet environment. Since version 3.0, EMQ X Broker has provided this possibility to users through Zone and Listener.
+EMQX Broker provides a lot of configuration items, and supports global configuration and local configuration. For example, EMQX Broker provides an anonymous login function, which allows clients to connect to the broker without a user name and password. Usually this feature is disabled by default in the user's production environment, but the user may want this feature enabled in the intranet environment. Since version 3.0, EMQX Broker has provided this possibility to users through Zone and Listener.
 
 ### Listener
 
-Listener is mainly used to configure listening ports and related parameters of different protocols. EMQ X Broker supports configuring multiple Listeners to listen to multiple protocols or ports at the same time. The following are the supported Listeners:
+Listener is mainly used to configure listening ports and related parameters of different protocols. EMQX Broker supports configuring multiple Listeners to listen to multiple protocols or ports at the same time. The following are the supported Listeners:
 
 | Listener             | Description                                  |
 | ------------------------- | ------------------------------------------------------- |
@@ -105,7 +105,7 @@ Listener is mainly used to configure listening ports and related parameters of d
 | Websocket Listener        | A listener for MQTT over WebSockets                     |
 | Secure Websocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
 
-EMQ X Broker provides 5 Listeners by default, and they will occupy the following ports:
+EMQX Broker provides 5 Listeners by default, and they will occupy the following ports:
 
 | Port | Description                             |
 | ----- | ------------------------------------------ |

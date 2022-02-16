@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 MySQL](../rule/backend_mysql.md)规则引擎中创建 保存数据到 MySQL
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 MySQL](../rule/backend_mysql.md)规则引擎中创建 保存数据到 MySQL
 
 :::
 
@@ -85,7 +85,7 @@ backend.mysql.hook.message.acked.1       = {"topic": "#", "action": {"function":
 MySQL 存储支持用户采用 SQL 语句配置 Action:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 sql 语句(支持多条 sql 语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 sql 语句(支持多条 sql 语句)
 backend.mysql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 

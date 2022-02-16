@@ -15,7 +15,7 @@ ref: undefined
 
 # Configuration from environment variable
 
-By default, EMQ X maps environment variables with prefix ``EMQX_``
+By default, EMQX maps environment variables with prefix ``EMQX_``
 to key-value pairs in configuration files.
 
 Mapping rules from environment variable name to config key

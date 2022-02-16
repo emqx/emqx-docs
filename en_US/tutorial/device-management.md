@@ -15,7 +15,7 @@ ref: undefined
 
 # Device management
 
-With the help of client management and topic subscription, message publishing management interface and plug-ins such as authentication, ACL, WebHook provided by EMQ X [Http API](../advanced/http-api.md), we can quickly build a device and message management system to build a network access platform.
+With the help of client management and topic subscription, message publishing management interface and plug-ins such as authentication, ACL, WebHook provided by EMQX [Http API](../advanced/http-api.md), we can quickly build a device and message management system to build a network access platform.
 
 
 
@@ -23,11 +23,11 @@ With the help of client management and topic subscription, message publishing ma
 
 Use the [authentication](../advanced/auth.md)  function to implement device connection authentication.
 
-The management system can directly read and write external authentication databases or change the internal authentication data of EMQ X through APIs to realize dynamic management of device connection authentication.
+The management system can directly read and write external authentication databases or change the internal authentication data of EMQX through APIs to realize dynamic management of device connection authentication.
 
 ## Online status and connection history management
 
-When the device is connected or disconnected, EMQ X can send the online and offline information to the management system HTTP API through the Webhook plug-in and [rule engine](../rule/rule-engine.md) to realize the device online status rewriting and device connection/disconnection history recording and other functions.
+When the device is connected or disconnected, EMQX can send the online and offline information to the management system HTTP API through the Webhook plug-in and [rule engine](../rule/rule-engine.md) to realize the device online status rewriting and device connection/disconnection history recording and other functions.
 
 Use the disconnecting device API to achieve online device kick out and session clean operations.
 

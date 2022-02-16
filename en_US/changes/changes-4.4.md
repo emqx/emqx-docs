@@ -19,13 +19,13 @@ ref:
 
 *Release Date: 2021-12-21*
 
-EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
+EMQX 4.4-beta.1 is released now, it mainly includes the following changes:
 
 **Important changes:**
 
-- Starting from 4.4, EMQ X releases are named with Erlang/OTP release in the package name. e.g. `emqx-4.4.0-otp24.1.5-3-centos7-arm64.rpm`
+- Starting from 4.4, EMQX releases are named with Erlang/OTP release in the package name. e.g. `emqx-4.4.0-otp24.1.5-3-centos7-arm64.rpm`
 
-- **For Debian/Ubuntu users**, Debian/Ubuntu package (deb) installed EMQ X now now run on systemd. This is to use systemd's supervision functionality to ensure that EMQ X service restarts after a crash. The package installation service upgrade from init.d to systemd has been verified, but it is still recommended that you verify and confirm again before deploying to the production environment, at least to ensure that systemd is available in your system
+- **For Debian/Ubuntu users**, Debian/Ubuntu package (deb) installed EMQX now now run on systemd. This is to use systemd's supervision functionality to ensure that EMQX service restarts after a crash. The package installation service upgrade from init.d to systemd has been verified, but it is still recommended that you verify and confirm again before deploying to the production environment, at least to ensure that systemd is available in your system
 
 - MongoDB authentication supports DNS SRV and TXT Records resolution, which can seamlessly connect with MongoDB Altas
 
@@ -49,7 +49,7 @@ EMQ X 4.4-beta.1 is released now, it mainly includes the following changes:
 
 - Improve the error log content when the Proxy Protocol message is received but the `proxy_protocol` configuration is not turned on
 
-- Add additional message attributes to the message reported by the gateway. Messages from gateways such as CoAP, LwM2M, Stomp, ExProto, etc., when converted to EMQ X messages, add fields such as protocol name, protocol version, user name, client IP, etc., which can be used for multi-language hook extension (ExHook)
+- Add additional message attributes to the message reported by the gateway. Messages from gateways such as CoAP, LwM2M, Stomp, ExProto, etc., when converted to EMQX messages, add fields such as protocol name, protocol version, user name, client IP, etc., which can be used for multi-language hook extension (ExHook)
 
 - HTTP client performance improvement
 

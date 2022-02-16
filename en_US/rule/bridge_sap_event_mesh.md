@@ -1,13 +1,13 @@
 # Bridge Data to SAP Event Mesh
 
-EMQ X Rule Engine supports sending messages to [SAP Event Mesh](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US) through HTTP request (`httprest`).
+EMQX Rule Engine supports sending messages to [SAP Event Mesh](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US) through HTTP request (`httprest`).
 
 Event Mesh is an important message exchange component of [SAP BTP](https://www.sap.com/products/business-technology-platform.html).
 
 The SAP BTP includes all the technology combinations, such as SAP HANA (in memory computing platform),
 SAP Analytics Cloud (analysis cloud), SAP Integration Suite and SAP Extension Suite.
 
-The IoT data of EMQ X can be sent to these products of SAP BTP through this bridge.
+The IoT data of EMQX can be sent to these products of SAP BTP through this bridge.
 
 ## Prepare the SAP Event Mesh environment
 
@@ -73,7 +73,7 @@ Then we create a message queue named "my_queue_name" in the SAP Event Mesh.
 
 ## Create a rule
 
-Open the [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the rules tab on the left.
+Open the [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the rules tab on the left.
 
 ### Fill in the following rule SQL:
 

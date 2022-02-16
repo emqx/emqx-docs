@@ -1,12 +1,12 @@
 # 桥接数据到 SAP Event Mesh
 
-EMQ X 规则引擎支持通过 HTTP 请求方式（`httprest`）将消息发送到 [SAP Event Mesh](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US)。
+EMQX 规则引擎支持通过 HTTP 请求方式（`httprest`）将消息发送到 [SAP Event Mesh](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US)。
 
 Event Mesh 是 [SAP BTP](https://www.sap.com/products/business-technology-platform.html) 重要的消息交换组件。
 SAP BTP 囊括了 SAP 的所有技术组合，例如 SAP HANA（内存计算平台）、 SAP Analytics Cloud（分析云）、
 SAP Integration 套件 （集成套件）和 SAP Extension 套件（扩展套件）。
 
-EMQ X 的物联网数据可以通过此通道进入到 SAP BTP 平台的诸多产品中。
+EMQX 的物联网数据可以通过此通道进入到 SAP BTP 平台的诸多产品中。
 
 ## 准备 SAP Event Mesh 环境
 
@@ -72,7 +72,7 @@ EMQ X 的物联网数据可以通过此通道进入到 SAP BTP 平台的诸多�
 
 ## 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 ### 填写规则 SQL:
 

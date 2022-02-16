@@ -1,10 +1,10 @@
-# EMQ X MQTT 微信小程序接入
+# EMQX MQTT 微信小程序接入
 
 
-微信小程序支持通过 WebSocket 进行即时通信，EMQ X 的 MQTT Over WebSocket 能够完全兼容使用在微信小程序上。
+微信小程序支持通过 WebSocket 进行即时通信，EMQX 的 MQTT Over WebSocket 能够完全兼容使用在微信小程序上。
 
 ::: tip
-由于微信小程序的规范限制，EMQ X 使用微信小程序接入时需要注意以下几点：
+由于微信小程序的规范限制，EMQX 使用微信小程序接入时需要注意以下几点：
 
 - 必须使用已经通过[域名备案](https://baike.baidu.com/item/%E5%9F%9F%E5%90%8D%E5%A4%87%E6%A1%88)的**域名**接入
 - 域名需要在[小程序管理后台](https://mp.weixin.qq.com/wxamp/devprofile/get_profile)域名/IP 白名单中(开发 -> 开发设置 -> 服务器域名 -> socket 合法域名)
@@ -14,7 +14,7 @@
 
 ## 参考资料
 
-- EMQ X [使用 WebSocket 连接 MQTT 服务器](https://www.emqx.com/zh/blog/connect-to-mqtt-broker-with-websocket)
+- EMQX [使用 WebSocket 连接 MQTT 服务器](https://www.emqx.com/zh/blog/connect-to-mqtt-broker-with-websocket)
 - CSDN [Nginx 反向代理 WebSocket](https://www.xncoding.com/2018/03/12/fullstack/nginx-websocket.html)
 - 微信小程序 MQTT 接入[Demo](https://github.com/iAoe444/WeChatMiniEsp8266)
 
@@ -58,4 +58,4 @@ server {
 
 3、开源社区提供了小程序 MQTT 接入的 Demo：[https://github.com/iAoe444/WeChatMiniEsp8266](https://github.com/iAoe444/WeChatMiniEsp8266) 下载解压到一个文件夹后，用微信小程序开发者工具，打开 `index.js` 文件，**将 MQTT 地址、用户名和密码改为实际参数即可**。
 
-按照以上 3 步的安装配置，你的微信小程序已经能够成功连接到 EMQ X 服务器了。
+按照以上 3 步的安装配置，你的微信小程序已经能够成功连接到 EMQX 服务器了。

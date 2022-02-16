@@ -11,7 +11,7 @@
 +---+                                                  PUB  +-----------+
 | D |  INCOMING  +------------+    PUB     +---------+   -->| subscriber|
 | E |----------->|            |----------->|         |--/   +-----------+
-| V |            | emqx-jt808 |            |  EMQ X  |
+| V |            | emqx-jt808 |            |  EMQX  |
 | I |<-----------|            |<-----------|         |<--   +-----------+
 | C |  OUTGOING  +------------+    PUB     +---------+   \--| publisher |
 | E |                                                  PUB  +-----------+
@@ -24,7 +24,7 @@
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -66,8 +66,8 @@ The implementation of emqx-jt808 supports anonymous access authentication:
 | Allow anonymous        | Whether to allow anonymous user login                        |
 | Registray URL          | JT/T808 terminal registered HTTP interface address           |
 | Authentication URL     | JT/T808 terminal access authentication HTTP interface address |
-| Downlink Message Topic | Upstream topic. Uplink message to the message topic in the EMQ X system%c: ClientId of the connected client, %p: Phone |
-| Uplink Message Topic   | Downstream topic. Uplink message to the message topic in the EMQ X system%c: ClientId of the connected client, %p: Phone |
+| Downlink Message Topic | Upstream topic. Uplink message to the message topic in the EMQX system%c: ClientId of the connected client, %p: Phone |
+| Uplink Message Topic   | Downstream topic. Uplink message to the message topic in the EMQX system%c: ClientId of the connected client, %p: Phone |
 | Max Frame Length       | Maximum processing size of a single JT/T808 protocol message |
 
 
