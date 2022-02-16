@@ -424,8 +424,8 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | event               | Event type, fixed at "message.publish"                    |
 | :------------------ | :-------------------------------------------------------- |
 | id                  | MQTT message ID                                           |
-| clientid            | Client ID                                                 |
-| username            | Username                                                  |
+| clientid            | Client ID of the sender                                   |
+| username            | Username of the sender                                    |
 | payload             | MQTT payload                                              |
 | peerhost            | Client IPAddress                                          |
 | topic               | MQTT topic                                                |
@@ -442,10 +442,10 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | event               | Event type, fixed at "message.delivered"      |
 | ------------------- | --------------------------------------------- |
 | id                  | MQTT message ID                               |
-| from\_clientid      | from_clientid                                 |
-| from\_username      | from\_username                                |
-| clientid            | clientid                                      |
-| username            | Current MQTT username                         |
+| from\_clientid      | Client ID of the sender                       |
+| from\_username      | Username of the sender                        |
+| clientid            | Client ID of the receiver                     |
+| username            | Username of the receiver                      |
 | payload             | MQTT payload                                  |
 | peerhost            | client IPAddress                              |
 | topic               | MQTT topic                                    |
@@ -460,10 +460,10 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | event               | Event type, fixed at "message.acked"          |
 | :------------------ | :-------------------------------------------- |
 | id                  | MQTT message id                               |
-| from\_clientid      | from_clientid                                 |
-| from\_username      | from\_username                                |
-| clientid            | clientid                                      |
-| username            | Current MQTT username                         |
+| from\_clientid      | Client ID of the sender                       |
+| from\_username      | Username of the sender                        |
+| clientid            | Client ID of the receiver                     |
+| username            | Username of the receiver                      |
 | payload             | MQTT payload                                  |
 | peerhost            | client IPAddress                              |
 | topic               | MQTT topic                                    |
@@ -481,8 +481,8 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 | :------------------ | :-------------------------------------------- |
 | id                  | MQTT message id                               |
 | reason              | reason                                        |
-| clientid            | clientid                                      |
-| username            | Current MQTT username                         |
+| clientid            | Client ID of the sender                       |
+| username            | Username of the sender                        |
 | payload             | MQTT payload                                  |
 | peerhost            | Client IPAddress                              |
 | topic               | MQTT topic                                    |
