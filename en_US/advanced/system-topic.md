@@ -1,6 +1,6 @@
 # $SYS - System Topic
 
-The EMQ X Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
+The EMQX Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
 
  The `$SYS` topic path begins with `$SYS/brokers/{node}/`. `{node}` is the name of the node where the event/message is generated, for example:
 
@@ -19,11 +19,25 @@ broker.sys_interval = 1m
 ::: tip
 
 
+{% emqxce %}
+
+::: tip
+
+{% emqxce %}
+
 By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to [build-in ACL](./acl-file.md) to modify the ACL rules for publish and subscription.
 
+{% endemqxce %}
 
 
-Most of the data of the $SYS topic in EMQ X Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through  [HTTP API - Statistics Metrics](./http-api.md#endpoint-metrics).
+{% emqxee %}
+
+By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to build-in ACL to modify the ACL rules for publish and subscription.
+
+{% endemqxee %}
+
+
+Most of the data of the $SYS topic in EMQX Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through  [HTTP API - Statistics Metrics](./http-api.md#endpoint-metrics).
 
 :::
 
@@ -32,10 +46,10 @@ Most of the data of the $SYS topic in EMQ X Broker can be obtained through other
 | Topic                      | Description       |
 | ----------------------------- | -------------------- |
 | $SYS/brokers                  | cluster node list |
-| $SYS/brokers/\${node}/version  | EMQ X Broker version |
-| $SYS/brokers/\${node}/uptime   | EMQ X Broker startup time |
-| $SYS/brokers/\${node}/datetime | EMQ X Broker time |
-| $SYS/brokers/\${node}/sysdescr | EMQ X Broker description |
+| $SYS/brokers/\${node}/version  | EMQX Broker version |
+| $SYS/brokers/\${node}/uptime   | EMQX Broker startup time |
+| $SYS/brokers/\${node}/datetime | EMQX Broker time |
+| $SYS/brokers/\${node}/sysdescr | EMQX Broker description |
 
 ## Client Online and Offline Events
 

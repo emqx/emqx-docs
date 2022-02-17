@@ -2,7 +2,7 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to Redis](../rule/backend_redis.md) to setup Save data to Redis in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to Redis](../rule/backend_redis.md) to setup Save data to Redis in rule engine.
 
 :::
 
@@ -106,7 +106,7 @@ Redis backend supports raw 'commands' in 'action',
 e.g.:
 
 ```bash
-## After a client connected to the EMQ X server, it executes a redis command (multiple redis commands also supported)
+## After a client connected to the EMQX server, it executes a redis command (multiple redis commands also supported)
 backend.redis.hook.client.connected.3 = {"action": {"commands": ["SET conn:${clientid} clientid"]}, "pool": "pool1"}
 ```
 
@@ -245,7 +245,7 @@ HGETALL mqtt:sub:test
 ```
 ## Redis SUB/UNSUB Publish
 
-When a device subscribes / unsubscribes to topics, EMQ X broker publish
+When a device subscribes / unsubscribes to topics, EMQX broker publish
 an event to the Redis:
 
 ```bash

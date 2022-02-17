@@ -2,11 +2,11 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[EMQX 桥接](../rule/bridge_emqx.md)规则引擎中创建 EMQX 桥接
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[EMQX 桥接](../rule/bridge_emqx.md)规则引擎中创建 EMQX 桥接
 
 :::
 
-EMQ X 桥接转发 MQTT 消息到远程 EMQ X:
+EMQX 桥接转发 MQTT 消息到远程 EMQX:
 
 ![image](./assets/bridge_rpc.png)
 

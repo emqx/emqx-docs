@@ -14,7 +14,6 @@ Open EMQ X Dashboard, click on the "Module" on the left.
 
 Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 
-
 <a id="org417d240"></a>
 
 ## Implementation note

@@ -2,15 +2,15 @@
 
 ## Introduction
 
-EMQ X Dashboard is a web console provided by EMQ X. You can view the
+EMQX Dashboard is a web console provided by EMQX. You can view the
 running status of nodes and cluster, metrics, online status and
 subscriptions of clients through the Dashboard. You can also configure
 the plug-in on the Dashboard, stop and start the specified plug-in,
-manage the HTTP API key and most configurations of the EMQ X cluster.
+manage the HTTP API key and most configurations of the EMQX cluster.
 
 ## Quick Start
 
-If EMQ X is installed on this machine, use your browser to open the
+If EMQX is installed on this machine, use your browser to open the
 address <http://127.0.0.1:18083>. To log in, enter the default user name
 `admin` and the default password `public` to log in to Dashboard. If you
 forget to account information, click the **Forgot Password** button on
@@ -21,8 +21,8 @@ The Dashboard interface is shown in the following figure. It contains
 the left navigation bar, top control bar, and content area. The top
 control bar (red frame area) has three functions:
 
-  - Alarm: EMQ X alarm info. The number of alarms triggered by excessive
-    resource usage and EMQ X internal errors is displayed. Click to view
+  - Alarm: EMQX alarm info. The number of alarms triggered by excessive
+    resource usage and EMQX internal errors is displayed. Click to view
     the alarm list.
   - User: the currently logged in Dashboard user, which can be used to
     log out and change passwords;
@@ -47,14 +47,14 @@ subscriptions, and the current number of connections.
 ### Node
 
 Click the node drop-down list to switch to view the basic information of
-the node, including EMQ X version, runtime, resource occupation,
+the node, including EMQX version, runtime, resource occupation,
 connection, and subscription data. Some data is defined as follows:
 
   - Memory: The current memory/maximum memory used by the Erlang VM,
     **where the maximum memory is automatically applied to the system by
-    EMQ X depending on the resource usage**.
+    EMQX depending on the resource usage**.
   - Max Fds: Allow the current session/process to open the number of
-    file handles. If this value is too small, it will limit the EMQ X
+    file handles. If this value is too small, it will limit the EMQX
     concurrency performance. When it is far less than the maximum number
     of connections authorized by the license, please refer to the tuning
     or contact the EMQ technical staff to modify;
@@ -82,7 +82,7 @@ details page, view the **basic information** of the current node, the
 
 #### Listener
 
-The listener is the list of the current EMQ X listening network ports.
+The listener is the list of the current EMQX listening network ports.
 The field information is as follows:
 
   - Protocol: listening network/application protocols, including
@@ -91,7 +91,7 @@ The field information is as follows:
       - mqtt:tcp: MQTT TCP protocols, the default is 102400
       - <http:dashboard>: HTTP protocol used by Dashboard, the default
         is 512
-      - <http:management>: HTTP protocol used by EMQ X REST API, the
+      - <http:management>: HTTP protocol used by EMQX REST API, the
         default is 512
       - mqtt:ws :MQTT over WebSocket, the default is 102400
       - mqtt:wss: MQTT over WebSocket TLS, the default is 102400
@@ -194,11 +194,11 @@ databases, stream processing, and API gateways.
 The Rule Engine not only provides a clear and flexible configurable
 business integration solution, but also simplifies the business
 development process, improves user usability, and reduces the degree of
-coupling between business systems and EMQ X. Excellent infrastructure.
+coupling between business systems and EMQX. Excellent infrastructure.
 
   - ID: Unique ID within the cluster, which can be used in CLI and REST
     API.
-  - Topic: The MQTT topic or EMQ X event topic that the Rule matches.
+  - Topic: The MQTT topic or EMQX event topic that the Rule matches.
   - Monitor: Click to display the execution statistics of the selected
     Rule, including the number of rule hits and executions, and the
     number of success/failed actions
@@ -208,7 +208,7 @@ triggered.
 
 ### Create Rule
 
-EMQ X will trigger the Rule Engine when the message is published and the
+EMQX will trigger the Rule Engine when the message is published and the
 event is triggered, and the rules meeting the triggering conditions will
 execute their respective SQL statements to filter and process the
 context information of the message and event.
@@ -237,7 +237,7 @@ SELECT payload.x as x FROM "message.publish" WHERE topic =~ 't/a'
 ```
 
 The Rule Engine uses the **Events** to process the built-in events of
-EMQ X. the built-in events provide more sophisticated message control
+EMQX. the built-in events provide more sophisticated message control
 and client action processing capabilities, which can be used in the
 message arrival records of QoS 1 and QoS 2, the device up and down line
 records and other businesses.
@@ -294,9 +294,9 @@ conversion.
 
 ## Alarm
 
-The alarm shows the basic alarm information of EMQ X, including current
+The alarm shows the basic alarm information of EMQX, including current
 alarm and historical alarm. More advanced alarm, log and monitoring
-management is provided by EMQ X Control Center, please contact EMQ
+management is provided by EMQX Control Center, please contact EMQ
 technicians if
 necessary.
 
@@ -304,7 +304,7 @@ necessary.
 
 ## Plugin
 
-View the list of EMQ X built-in plugins.
+View the list of EMQX built-in plugins.
 
 Unlike the command line plugin management, the plugin starts and stop
 operations on the Dashboard are synchronized to the cluster. If the
@@ -323,7 +323,7 @@ time.
 
 ## Setting
 
-Provides parameter configuration for the EMQ X cluster and supports hot
+Provides parameter configuration for the EMQX cluster and supports hot
 configuration. You can join and leave the cluster on the Dashboard.
 
 ### Basic
@@ -331,7 +331,7 @@ configuration. You can join and leave the cluster on the Dashboard.
 Some basic configuration items that can be hot updated in`emqx.conf` are
 opened in the settings. You can complete most configuration items such
 as whether to enable anonymous authentication, ACL cache events, and ACL
-cache switches without restarting EMQ X.
+cache switches without restarting EMQX.
 
 The basic settings are organized in zones. By default, the external zone
 is associated with the listener on port
@@ -350,7 +350,7 @@ cluster parameter parameters such as static cluster and DNS cluster.
 ### Application
 
 In order to invoke the certificate of REST API, the application can
-query and adjust EMQ X cluster information through REST API, and manage
+query and adjust EMQX cluster information through REST API, and manage
 and operate the equipment.
 
 After the application is created successfully, click the Application ID

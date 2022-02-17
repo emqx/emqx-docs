@@ -17,7 +17,7 @@ $ ./bin/zookeeper-server-start.sh config/zookeeper.properties
 $ ./bin/kafka-server-start.sh config/server.properties
 ```
 
-::: warning
+::: tip
 
 Kafka consumer groups do not support Kafka versions below 0.9
 
@@ -32,7 +32,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 ```
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 Select Kafka consumer group module:
 

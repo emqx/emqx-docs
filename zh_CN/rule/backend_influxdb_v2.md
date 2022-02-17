@@ -10,7 +10,7 @@ docker run -d  -p 8086:8086  influxdb
 
 创建资源
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡，点击创建，资源类型选择 ”InfluxDB HTTP V2 服务“。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “资源” 选项卡，点击创建，资源类型选择 ”InfluxDB HTTP V2 服务“。
 资源包括以下配置：
 
 - InfluxDB 主机：填写主机地址，或是 InfluxDB Cloud 中创建的服务地址；
@@ -33,7 +33,7 @@ InfluxDB Cloud 获取 API Token 示例（本地或 docker 部署，访问部署�
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 

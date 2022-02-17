@@ -16,7 +16,7 @@
           "path": "getting-started/install"
         },
         {
-          "title": "启动 EMQ X",
+          "title": "启动 EMQX",
           "path": "getting-started/start"
         },
         {
@@ -491,7 +491,7 @@
           "path": "getting-started/install"
         },
         {
-          "title": "Start EMQ X",
+          "title": "Start EMQX",
           "path": "getting-started/start"
         },
         {
@@ -699,7 +699,7 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "EMQ X Bridges",
+          "title": "EMQX Bridges",
           "path": "rule/bridge_emqx"
         },
         {

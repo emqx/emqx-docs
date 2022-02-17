@@ -1,10 +1,10 @@
 # Stomp 协议网关
 
-Stomp 协议网关为 EMQ X 提供了 Stomp 协议的接入能力。
+Stomp 协议网关为 EMQX 提供了 Stomp 协议的接入能力。
 
 ## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200928161310952](./assets/modules.png)
 

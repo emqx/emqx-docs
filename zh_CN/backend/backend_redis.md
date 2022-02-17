@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 Redis](../rule/backend_redis.md)规则引擎中创建 保存数据到 Redis
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 Redis](../rule/backend_redis.md)规则引擎中创建 保存数据到 Redis
 
 :::
 
@@ -90,7 +90,7 @@ backend.redis.hook.message.acked.2       = {"topic": "pubsub/#", "action": {"fun
 Redis 存储支持用户采用 Redis Commands 语句配置 Action，例如:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 redis
+## 在客户端连接到 EMQX 服务器后，执行一条 redis
 backend.redis.hook.client.connected.3 = {"action": {"commands": ["SET conn:${clientid} ${clientid}"]}, "pool": "pool1"}
 ```
 

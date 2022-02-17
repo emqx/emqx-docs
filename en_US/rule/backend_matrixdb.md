@@ -22,7 +22,7 @@ CREATE TABLE t_mqtt_msg (
 
 Create a rule:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the menu to the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the menu to the left.
 
 Fill in the rule SQL:
 

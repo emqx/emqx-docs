@@ -15,31 +15,31 @@ ref: undefinedBasic concept
 
 # Introduction
 
-## What's EMQ X?
+## What's EMQX?
 
-EMQ X is an open-source, distributed MQTT messaging broker, it can support up to million level of concurrent MQTT connections.  It can be used for connecting to any devices that support MQTT protocol, and it can also be used for delivering message from server side to client.
-
-
-
-
-## How many products in EMQ X?
-
-
-EMQ X totally has [3 products.](https://www.emqx.com/en/products/emqx) Different products support different level of connections, features and services etc.
-
-- EMQ X Broker: EMQ X open source version, supports the popular IoT protocols, such as MQTT, CoAP and LwM2M.
-- EMQ X Enterprise: EMQ X enterprise version.  It is based on the open source version, and adds data persistence (support Redis, MySQL, MongoDB or PostgreSQL), data bridge to Kafka, LoRaWAN support, EMQ X monitoring, Kubernetes deployment etc. It supports 1M level concurrent MQTT connections.
-- EMQ X Platform: EMQ X Platform version is based on the Enterprise version，and support 10M level concurrent MQTT connections. We provide consulting service for complex IoT platforms, such as cross data center solutions. All kinds of services building an IoT platform can be provided, such as consulting, training, architect design, customized development, platform implementation, testing and operation.
+EMQX is an open-source, distributed MQTT messaging broker, it can support up to million level of concurrent MQTT connections.  It can be used for connecting to any devices that support MQTT protocol, and it can also be used for delivering message from server side to client.
 
 
 
 
-## What's EMQ X authentication and it's use scenario?
+## How many products in EMQX?
+
+
+EMQX totally has [3 products.](https://www.emqx.com/en/products/emqx) Different products support different level of connections, features and services etc.
+
+- EMQX Broker: EMQX open source version, supports the popular IoT protocols, such as MQTT, CoAP and LwM2M.
+- EMQX Enterprise: EMQX enterprise version.  It is based on the open source version, and adds data persistence (support Redis, MySQL, MongoDB or PostgreSQL), data bridge to Kafka, LoRaWAN support, EMQX monitoring, Kubernetes deployment etc. It supports 1M level concurrent MQTT connections.
+- EMQX Platform: EMQX Platform version is based on the Enterprise version，and support 10M level concurrent MQTT connections. We provide consulting service for complex IoT platforms, such as cross data center solutions. All kinds of services building an IoT platform can be provided, such as consulting, training, architect design, customized development, platform implementation, testing and operation.
+
+
+
+
+## What's EMQX authentication and it's use scenario?
 
 **Tags:** [*Auth*](tags.md#auth)
 
 
-When a client connects to EMQ X server,  EMQ X can authenticate it in different ways. It includes following 3 approaches,
+When a client connects to EMQX server,  EMQX can authenticate it in different ways. It includes following 3 approaches,
 
 - Username and password: Per every MQTT client connection, which can be configured at the server, only by passing with correct username and password, the client connection can be established.
 
@@ -47,7 +47,7 @@ When a client connects to EMQ X server,  EMQ X can authenticate it in different 
 
 - Anonymous: Allows anonymous access.
 
-Besides using the configuration file (to configure authentication), EMQ X can also use database and integration with external applications, such as MySQL, PostgreSQL, Redis, MongoDB, HTTP and LDAP.
+Besides using the configuration file (to configure authentication), EMQX can also use database and integration with external applications, such as MySQL, PostgreSQL, Redis, MongoDB, HTTP and LDAP.
 
 
 
@@ -57,7 +57,7 @@ Besides using the configuration file (to configure authentication), EMQ X can al
 **Tags:** [*WebHook*](tags.md#webhook)
 
 
-Hook is an interface provided by EMQ X, which will be triggered when a connection, session or message is established/delivered. EMQ X provides hooks listed in below, which allows user to save these triggered events to database, and user can conveniently query all kinds of information, such as client connect,  disconnect.  
+Hook is an interface provided by EMQX, which will be triggered when a connection, session or message is established/delivered. EMQX provides hooks listed in below, which allows user to save these triggered events to database, and user can conveniently query all kinds of information, such as client connect,  disconnect.  
 
 - client.connected: client online
 - client.disconnected: client offline
@@ -76,22 +76,22 @@ Hook is an interface provided by EMQ X, which will be triggered when a connectio
 
 
 
-## What's mqueue? How to use mqueue in EMQ X?
+## What's mqueue? How to use mqueue in EMQX?
 
 **Tags:** [*Message Queue*](tags.md#message-queue)
 
 
-mqueue is message queue stored in session during the message publish process. If the clean session is set false in mqtt connect packet, then EMQ X would maintain session for the client which conneced to EMQ X even the client has been disconnected from EMQ X. Then the session would receive messages from the subscribed topic and store these messages into mqueue. And when the client online again, these messages would be delivered to client instantly. Because of low priority of qos 0 message in mqtt protocol, EMQ X do not cache qos 0 message into mqueue. However, the mqueue could be configured in `emqx.conf`, if this entry has been configured as `zone.$name.mqueue_store_qos0 = true`, the qos0 mesage would been stored into mqueue, too. mqueue has limit size, it would be configured with `zone.external.max_mqueue_len` to determine the number of messages cached into mqueue. Notice that these messages are stored in memory, so please do not set the mqueue length to 0 (0 means there is no limit for mqueue), otherwise it would risk running out of memory.
+mqueue is message queue stored in session during the message publish process. If the clean session is set false in mqtt connect packet, then EMQX would maintain session for the client which conneced to EMQX even the client has been disconnected from EMQX. Then the session would receive messages from the subscribed topic and store these messages into mqueue. And when the client online again, these messages would be delivered to client instantly. Because of low priority of qos 0 message in mqtt protocol, EMQX do not cache qos 0 message into mqueue. However, the mqueue could be configured in `emqx.conf`, if this entry has been configured as `zone.$name.mqueue_store_qos0 = true`, the qos0 mesage would been stored into mqueue, too. mqueue has limit size, it would be configured with `zone.external.max_mqueue_len` to determine the number of messages cached into mqueue. Notice that these messages are stored in memory, so please do not set the mqueue length to 0 (0 means there is no limit for mqueue), otherwise it would risk running out of memory.
 
 
 
 
-## What's WebSocket? When to use Websocket to connect EMQ X?
+## What's WebSocket? When to use Websocket to connect EMQX?
 
 **Tags:** [*WebSocket*](tags.md#websocket)
 
 
-WebSocket is a full-duplex communication protocol based on HTTP protocol, user can realize dual direction communications between browser and server. Through Websocket, server can push message to web browser. EMQ X provides support of WebSocket, user can realize pub to topics and sub to topic from browsers.
+WebSocket is a full-duplex communication protocol based on HTTP protocol, user can realize dual direction communications between browser and server. Through Websocket, server can push message to web browser. EMQX provides support of WebSocket, user can realize pub to topics and sub to topic from browsers.
 
 
 
@@ -113,7 +113,7 @@ Shared subscription is very useful in data collection and centralized data analy
 **Tags:** [*Retain*](tags.md#retain)
 
 
-Usually an MQTT client receives messages only when it is connected to an EMQ X, if this client is off-line, it will not receive messages. But if a client has a fixed ClientID, and it connects to the broker with clean_seesion = false, the broker will store particular message for it when it is off-line, if the Pub/Sub is done at certain QoS level (broker configuration). These messages will be delivered when this client is reconnected.  
+Usually an MQTT client receives messages only when it is connected to an EMQX, if this client is off-line, it will not receive messages. But if a client has a fixed ClientID, and it connects to the broker with clean_seesion = false, the broker will store particular message for it when it is off-line, if the Pub/Sub is done at certain QoS level (broker configuration). These messages will be delivered when this client is reconnected.  
 
 Off-line message is useful when the connection is not stable, or the application has special requirements on QoS.
 
@@ -130,7 +130,7 @@ Usually an MQTT client has to subscribe to the topics expressly by itself, if it
 Using of Subscription by Broker can ease the management of massive client, and save the computational resource and bandwidth on device.
 
 ::: tip Tip
-Currently this feature is available in the EMQ X Enterprise edition. 
+Currently this feature is available in the EMQX Enterprise edition. 
 :::
 
 
@@ -141,9 +141,9 @@ Currently this feature is available in the EMQ X Enterprise edition.
 **Tags:** [*System Topic*](tags.md#system-topic)
 
 
-The system topics have a prefix of `$SYS/`. Periodically, EMQ X publishes system messages to system topics, these messages include system status, statistics of MQTT, client's online/offline status and so on.
+The system topics have a prefix of `$SYS/`. Periodically, EMQX publishes system messages to system topics, these messages include system status, statistics of MQTT, client's online/offline status and so on.
 
-Here are some examples of system topics, for a complete list of system topic please refer to EMQ X document:
+Here are some examples of system topics, for a complete list of system topic please refer to EMQX document:
 
 - $SYS/brokers:  List of nodes in cluster
 - $SYS/brokers/${node}/clients/${clientid}/connected: this message is published when a client connects
@@ -155,6 +155,6 @@ Here are some examples of system topics, for a complete list of system topic ple
 
 **Tags:** [*Auth*](tags.md#auth)
 
-EMQ X supports anonymous authentication and is enabled by default. After authentication is enabled, clients without username and password will successfully login using anonymous authentication. To change this behavior, you need to modify the `allow_anonymous` configuration item in `emqx.conf`, set it to false, and then restart EMQ X.
+EMQX supports anonymous authentication and is enabled by default. After authentication is enabled, clients without username and password will successfully login using anonymous authentication. To change this behavior, you need to modify the `allow_anonymous` configuration item in `emqx.conf`, set it to false, and then restart EMQX.
 
 Note: If your client is connected to port 11883, you need to modify `zone.internal.allow_anonymous`. For the relevant knowledge of Zone and Listener, please refer to [Configuration](../getting-started/config.md).

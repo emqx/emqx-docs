@@ -15,9 +15,9 @@ ref:
 
 # Extension Protocol
 
-**Extension Protocol** is provided by the **emqx-exproto** plugin, which allows other programming languages (e.g. Python, Java, etc.) to process bytes directly for parsing private protocols and provides a Pub/Sub interface for message exchange with EMQ X.
+**Extension Protocol** is provided by the **emqx-exproto** plugin, which allows other programming languages (e.g. Python, Java, etc.) to process bytes directly for parsing private protocols and provides a Pub/Sub interface for message exchange with EMQX.
 
-This feature gives EMQ X the power of scalability to handle any private protocol in a user-friendly programming language and enjoy the benefits of extremely high concurrent connections brought by the EMQ X.
+This feature gives EMQX the power of scalability to handle any private protocol in a user-friendly programming language and enjoy the benefits of extremely high concurrent connections brought by the EMQX.
 
 
 ## Features
@@ -42,11 +42,11 @@ The interfaces provided by emqx-exproto:
     - Provides the `Send` interface. Called by user's server to **send packets**.
     - Provides the `Close` interface. Called by user's server. **For actively closing the connection**.
 
-2. **Protocol/Session Layer:** This layer primarily **provides the PUB/SUB interface** for message interoperability with the EMQ X. Includes:
-    - Provides the `Authenticate` interface. Called by user's server to register clients into EMQ X.
+2. **Protocol/Session Layer:** This layer primarily **provides the PUB/SUB interface** for message interoperability with the EMQX. Includes:
+    - Provides the `Authenticate` interface. Called by user's server to register clients into EMQX.
     - Provides the `StartTimer` interface. Called by user's server to start a timer such as a heartbeat for the connected process.
-    - Provides the `Publish` interface. Called by user's server to publish messages to the EMQ X.
-    - Provides the `Subscribe` interface. Called by user's server to subscribe to a topic to receive certain downlink messages from the EMQ X.
+    - Provides the `Publish` interface. Called by user's server to publish messages to the EMQX.
+    - Provides the `Subscribe` interface. Called by user's server to subscribe to a topic to receive certain downlink messages from the EMQX.
     - Provides the `Unsubscribe` interface. Called by user's server to unsubscribe from a topic.
     - Calls the `OnTimerTimeout` callback. Used to handle timer timeout events
     - Call the `OnReceivedMessages` callback. Used to receive downlink messages (After a successful subscription to a topic, this method will be called back if there are messages on the topic)
@@ -113,7 +113,7 @@ service ConnectionHandler {
 
 ## Developing Guide
 
-The user needs to implement the gRPC service of `ConnectionHandler` to receive callback events from EMQ X.
+The user needs to implement the gRPC service of `ConnectionHandler` to receive callback events from EMQX.
 
 The main development steps are as following:
 
@@ -121,7 +121,7 @@ The main development steps are as following:
 2. Generate the code for the gRPC server and client side of `exproto.proto` using the gRPC framework for the corresponding programming language.
 3. Implement the interfaces defined in exhook.proto on demand
 
-Once the development is complete, the service needs to be deployed to a server that can communicate with EMQ X and ensure that the ports are open.
+Once the development is complete, the service needs to be deployed to a server that can communicate with EMQX and ensure that the ports are open.
 
 Then modify the server configuration in `etc/plugins/emqx_exproto.conf`, for example:
 

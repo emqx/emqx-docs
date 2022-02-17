@@ -17,7 +17,7 @@ ref:
 
 ## 定义
 
-**钩子(Hooks)** 是 EMQ X 提供的一种机制，它通过拦截模块间的函数调用、消息传递、事件传递来修改或扩展系统功能。
+**钩子(Hooks)** 是 EMQX 提供的一种机制，它通过拦截模块间的函数调用、消息传递、事件传递来修改或扩展系统功能。
 
 简单来讲，该机制目的在于增强软件系统的扩展性、方便与其他三方系统的集成、或者改变其系统原有的默认行为。如：
 
@@ -39,7 +39,7 @@ ref:
 即，如下图所示：
 
 ```
-                     EMQ X Core          Hooks & Plugins
+                     EMQX Core          Hooks & Plugins
                 |<---  Scope  --->|<-------  Scope  -------->|
                 |                 |                          |
   Authenticate  |     Allow       |   emqx_auth_mnesia       | Authenticate
@@ -49,7 +49,7 @@ ref:
                 +-----------------+--------------------------+
 ```
 
-因此，在 EMQ X 中，**钩子 (Hooks)** 这种机制极大地方便了系统的扩展。我们不需要修改 [emqx](https://github.com/emqx/emqx) 核心代码，仅需要在特定的位置埋下 **挂载点 (HookPoint)** ，便能允许外部插件扩展 EMQ X 的各种行为。
+因此，在 EMQX 中，**钩子 (Hooks)** 这种机制极大地方便了系统的扩展。我们不需要修改 [emqx](https://github.com/emqx/emqx) 核心代码，仅需要在特定的位置埋下 **挂载点 (HookPoint)** ，便能允许外部插件扩展 EMQX 的各种行为。
 
 对于实现者来说仅需要关注：
 
@@ -97,14 +97,29 @@ ref:
 接下来 [挂载点](#hookpoint)，[回调函数](#callback) 两节中，对于钩子的所有操作都是依赖于 [emqx](https://github.com/emqx/emqx) 提供的 Erlang 代码级的 API。他们是整个钩子逻辑实现的基础。如需寻求：
 
 
+{% emqxee %}
+
+- 钩子和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
+
+{% endemqxee %}
+
+
+{% emqxce %}
 
 - 钩子和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
 - 钩子与其他语言的应用，参见： [Multipe-Language-Support](lang.md)
 
+{% endemqxce %}
+
+{% emqxee %}
+
+- 钩子和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
+
+{% endemqxee %}
 
 ## 挂载点
 
-EMQ X 以一个客户端在其生命周期内的关键活动为基础，预置了大量的 **挂载点 (HookPoint)**。目前系统中预置的挂载点有：
+EMQX 以一个客户端在其生命周期内的关键活动为基础，预置了大量的 **挂载点 (HookPoint)**。目前系统中预置的挂载点有：
 
 | 名称                 | 说明         | 执行时机                                              |
 | -------------------- | ------------ | ----------------------------------------------------- |
@@ -138,7 +153,7 @@ EMQ X 以一个客户端在其生命周期内的关键活动为基础，预置�
 
 ### 挂载与取消挂载
 
-EMQ X 提供了 API 进行钩子的挂载与取消挂载的操作。
+EMQX 提供了 API 进行钩子的挂载与取消挂载的操作。
 
 **挂载**：
 
