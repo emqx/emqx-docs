@@ -204,7 +204,6 @@ output
 
 Trigger rule when subscriber's message queue is full
 
-### $events/delivery_dropped
 
 |        event        | Event type, fixed at "delivery.dropped" |
 | ------------------- | ------------------------------------ |
@@ -248,7 +247,6 @@ output
 
 Trigger the rule when the terminal is connected successfully
 
-### $events/client_connected
 | event            | Event type, fixed at "client.connected" |
 | ---------------- | :-------------------------------------- |
 | clientid         | clientid                                |
