@@ -271,7 +271,6 @@ sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2
 
 ## 比特操作函数
 
-###`subbits`
 | 函数名 | 函数功能| 参数| 返回值 |
 | ----- | ------ | -- | ----- |
 |subbits| 从二进制数据的起始位置获取指定长度的比特位, 然后转换为无符号整型 (大端). | 1. 二进制数据 <br />2. 要获取的长度(bits) | 无|subbits符号整数 |
@@ -279,9 +278,11 @@ sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2
 |subbits| 从二进制数据的指定下标位置获取指定长度的比特位, 然后按照给定的参数转换为想要的数据类型. 下标是从 1 开始的. | 1. 二进制数据 <br />2. 起始位置的下标 <br />3. 要获取的长度(bits) <br />4. 数据类型，可选值：'integer', 'float', 'bits' <br />5. 符号类型, 只对整型数据有效, 可选值：'unsigned', 'signed', <br />6. 大端还是小端, 只对整型数据有效, 可选值：'big', 'little' | 获取到的数据 |
 
 ```erlang
-subbits('aaa', 10) = 389
-subbits('aaa', 5, 10) = 88
-subbits('aaa', 7, 10, 'integer', 'signed', 'big') = 353
+subbits('abc', 8) = 97
+subbits('abc', 9, 8) = 98
+subbits('abc', 17, 8) = 99
+subbits('abc', 9, 16, 'integer', 'signed', 'big') = 25187
+subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 ```
 
 
