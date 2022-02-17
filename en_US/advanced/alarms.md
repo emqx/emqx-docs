@@ -52,3 +52,11 @@ EMQX Broker allows users to adjust the alarm function to a certain extent to mee
 | alarm.validity_period         | duration | 24h           | The maximum storage time of deactivated alarms, and expired alarms will be cleared |
 
 
+{% emqxee %}
+EMQX Enterprise raises an alarm when the license expiration date is less than 30 days or if the number of connections exceeds the high water mark. The user can adjust the high/low water mark for the number of connections according to the actual situation.
+
+| Configuration item            | Type     | Default value | Description                                                  |
+| ----------------------------- | -------- | ----------- | ------------------------------------------------------------ |
+| license.connection_high_watermark_alarm  | percent  | 80%         | The high water mark of license‘s max connection. The alarm is activated when this threshld is reached. As percentage of alive connections/max connections.  |
+| icense.connection_low_watermark_alarm    | percent  | 75%         | The low water mark of license‘s max connection. The alarm is deactivated when it goes below this threshld. As percentage of alive connections/max connections.  |
+{% endemqxee %}
