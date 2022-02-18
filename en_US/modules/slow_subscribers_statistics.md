@@ -8,7 +8,7 @@ This module ranks subscribers and topics in descending order according to the la
 
 ## Open module
 
-Open EMQ X Dashboard, click on the "Module" on the left.
+Open EMQX Dashboard, click on the "Module" on the left.
 
 ![image](./assets/slow_subscribers_statistics_1.png)
 
@@ -18,7 +18,9 @@ Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 
 ## Implementation note
 
-With this feature enabled, EMQ X will start measuring message transmission latency. The measurement always starts at when a message is received by EMQ X, the end of the measurement is configurable. See more details...
+With this feature enabled, EMQX will start measuring message transmission latency.
+The measurement always starts at when a message is received by EMQX,
+the end of the measurement is configurable.  See more details below in configurations.
 
 The per clientid-topic latency measurements are then ranked in the table view.
 

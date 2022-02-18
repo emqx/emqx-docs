@@ -7732,3 +7732,44 @@ Forward the `on_message_delivered` event.
 #### Description
 
 Forward the `on_message_acked` event.
+
+
+{% emqxee %}
+### license.file
+
+| Type     | Default                              |
+| -------- | ------------------------------------ |
+| string   | `etc/emqx.lic` |
+
+#### Description
+
+Licence file of the node.
+
+<br />
+### license.connection_high_watermark_alarm
+
+| Type     | Default                              |
+| -------- | ------------------------------------ |
+| percent   | 80% |
+
+#### Description
+
+The alarm is raised when this threshld is reached. As percentage of alive connections/max connections.
+- After the alarm occurs, you can refer to [How to update the license?] (../faq/use-guide.md#how-to-update-emq-x-license) for hot update.
+- When the number of connections exceeds the maximum allowed value, new client connections will be rejected, and already connected clients will not be affected.
+
+<br />
+### license.connection_low_watermark_alarm
+
+| Type     | Default                              |
+| -------- | ------------------------------------ |
+| percent   | 75% |
+
+#### Description
+
+The alarm is cleared when it goes below this threshld. As percentage of alive connections/max connections.
+
+
+<br />
+
+{% endemqxee %}
