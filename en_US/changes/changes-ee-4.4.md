@@ -15,6 +15,19 @@ ref:
 
 # Changes
 
+## Version 4.4.1
+
+*Release Date: 2022-02-18*
+
+NOTE: 4.4.1 is in sync with: 4.3.7.
+The compare base of this change set is 4.3.7
+
+### Important changes
+
+- Rules engine supports Lindorm database
+- Support client-level message drop metrics
+- Optimize online Trace log display on Dashboard, support syntax highlighting
+
 ## Version 4.4.0
 
 *Release Date: 2021-12-21*
