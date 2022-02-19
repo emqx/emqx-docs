@@ -299,7 +299,7 @@
           "path": "tutorial/benchmark"
         },
         {
-          "title": "日志追踪",
+          "title": "在线日志追踪",
           "path": "modules/tracer"
         },
         {
@@ -521,6 +521,14 @@
         {
           "title": "Configuration",
           "path": "getting-started/config"
+        },
+        {
+          "title": "Log & Trace",
+          "path": "getting-started/log"
+        },
+        {
+          "title": "Dashboard",
+          "path": "getting-started/dashboard"
         }
       ]
     },
@@ -769,7 +777,7 @@
           "path": "tutorial/benchmark"
         },
         {
-          "title": "Log Tracer",
+          "title": "Online Tracer",
           "path": "modules/tracer"
         },
         {
