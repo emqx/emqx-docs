@@ -20,13 +20,39 @@ ref:
 *Release Date: 2022-02-18*
 
 NOTE: 4.4.1 is in sync with: 4.3.7.
-The compare base of this change set is 4.3.7
+The compare base of this change set is 4.4.0.
 
 ### Important changes
 
+- A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.4.1. Previously only the individual node's local number of connections were checked against the max number of connections allowed by the license. After this fix, the total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation.
+**Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.**
 - Rules engine supports Lindorm database
 - Support client-level message drop metrics
 - Optimize online Trace log display on Dashboard, support syntax highlighting
+
+### Minor changes
+
+- Support alarm about the usage rate of license connections. By default, the number of connections reaches 80% of the allowed number of licenses, and the alarm is raised. When it is less than 75%, the alarm is cleared. User can also customize in `emqx.conf`: `license.connection_high_watermark_alarm` , `license.connection_low_watermark_alarm`
+- Support alarm about license expiration, when the validity period is less than 30 days, the alarm will be raised
+- Rule engine supports the configuration of rules and actions for the event of abnormal loss of client messages to enhance the user's custom processing capabilities in this scenario
+- Improve the relevant metrics during the execution of the rule engine SQL matching
+- Fuzzy search on client supports special characters such as `*`, `(`, `)`
+- Improve ACL-related metrics to solve the issue that the count does not increase due to hitting the ACL cache
+- Added `connected_at` field to webhook event notifications
+- Log client state before terminating client due to holding the lock too long
+
+### Bug fixes
+
+- Fix the issue that data import and export were not available in some cases
+- The module update mechanism is improved to solve the issue that the module is unavailable after the update fails
+- Fix the issue that the rule engine did not perform type checking when executing the size comparison statement
+- Fix the issue that the related counts are cleared after updating the rule engine action
+- Fixed the issue that the metrics interface does not return authentication metrics such as `client.acl.deny` by default
+- Fixed the issue that the subscription query interface did not return paginated data
+- Fix the issue of parsing failure when STOMP handles TCP sticky packets
+- Fix the issue where the session creation time option was not available when filtering clients
+- Fix the issue where memory alarms might not be triggered after restarting
+- Fix the crash of import data when user data exists in `emqx_auth_mnesia` plugin
 
 ## Version 4.4.0
 
@@ -34,7 +60,7 @@ The compare base of this change set is 4.3.7
 
 EMQX Enterprise 4.4.0 mainly includes the following changes:
 
-**Important changes:**
+### Important changes
 
 - Starting from 4.4, EMQX releases are named with Erlang/OTP release in the package name. e.g. `emqx-ee-4.4.0-otp24.1.5-3-centos7-arm64.rpm`
 
@@ -58,7 +84,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 
 - TLS for cluster backplane (RPC) connections. See [clustering document](../advanced/cluster.md#using-tls-for-backplane-connections) for details.
 
-**Minor changes:**
+### Minor changes
 
 - Dashboard supports viewing the number of active client connections
 
@@ -86,7 +112,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 
 - Add openssl-1.1 to RPM dependency
 
-**Bug fixes:**
+### Bug fixes
 
 - Fix the issue that the client process becomes unresponsive due to the blockage of RPC calls between nodes
 
