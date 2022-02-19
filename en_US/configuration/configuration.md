@@ -7754,9 +7754,10 @@ Licence file of the node.
 
 #### Description
 
-The alarm is raised when this threshld is reached. As percentage of alive connections/max connections.
+The alarm is raised when this threshold is reached. As percentage of alive connections/max connections.
+
 - After the alarm occurs, you can refer to [How to update the license?] (../faq/use-guide.md#how-to-update-emq-x-license) for hot update.
-- When the number of connections exceeds the maximum allowed value, new client connections will be rejected, and already connected clients will not be affected.
+- When the number of connections exceeds the maximum allowed value, new client connections will be rejected, but the already connected clients will not be affected.
 
 <br />
 ### license.connection_low_watermark_alarm
