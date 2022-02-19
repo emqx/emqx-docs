@@ -19,8 +19,9 @@ Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 ## Implementation note
 
 With this feature enabled, EMQX will start measuring message transmission latency.
-The measurement always starts at when a message is received by EMQX,
-the end of the measurement is configurable.  See more details below in configurations.
+The measurement always starts when a message is received by EMQX,
+the end of the measurement is configurable.
+See more details below in configurations.
 
 The per clientid-topic latency measurements are then ranked in the table view.
 
@@ -44,15 +45,15 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
     The ways to calculate the latency are as follows:
 
-    1.  whole
+    1.  `whole`
 
         From the time the message arrives at EMQX until the message completes transmission
 
-    2.  internal
+    2.  `internal`
 
         From when the message arrives at EMQX until when EMQX starts delivering the message
 
-    3.  response
+    3.  `response`
 
         From the time EMQX starts delivering the message, until the message completes transmission
 
