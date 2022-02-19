@@ -123,14 +123,6 @@
         {
           "title": "数据导入导出",
           "path": "advanced/data-import-and-export"
-        },
-        {
-          "title": "日志追踪",
-          "path": "modules/tracer"
-        },
-        {
-          "title": "慢订阅者统计",
-          "path": "modules/slow_subscribers_statistics"
         }
       ]
     },
@@ -305,6 +297,14 @@
         {
           "title": "性能测试",
           "path": "tutorial/benchmark"
+        },
+        {
+          "title": "日志追踪",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "慢订阅者统计",
+          "path": "modules/slow_subscribers_statistics"
         }
       ]
     },
@@ -521,14 +521,6 @@
         {
           "title": "Configuration",
           "path": "getting-started/config"
-        },
-        {
-          "title": "Log & Trace",
-          "path": "getting-started/log"
-        },
-        {
-          "title": "Dashboard",
-          "path": "getting-started/dashboard"
         }
       ]
     },
@@ -606,14 +598,6 @@
         {
           "title": "Config and Data Backup & Restore",
           "path": "advanced/config-and-data-backup-restore"
-        },
-        {
-          "title": "Log Tracer",
-          "path": "modules/tracer"
-        },
-        {
-          "title": "Slow Subscriber Statistics",
-          "path": "modules/slow_subscribers_statistics"
         }
       ]
     },
@@ -783,6 +767,14 @@
         {
           "title": "Benchmark",
           "path": "tutorial/benchmark"
+        },
+        {
+          "title": "Log Tracer",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "Slow Subscriber Statistics",
+          "path": "modules/slow_subscribers_statistics"
         }
       ]
     },
