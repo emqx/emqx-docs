@@ -19,7 +19,11 @@ ref:
 
 *Release Date: 2022-02-18*
 
-NOTE: 4.4.0 is in sync with: 4.3.12.
+NOTE:
+
+- 4.4.0 is in sync with: 4.3.12.
+- The build of Windows package has some issues in the current version, we will fix it in the next version
+
 The compare base of this change set is 4.3.12
 
 ### Important changes
