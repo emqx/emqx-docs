@@ -26,10 +26,14 @@ See [EMQX Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a co
 ## Preview
 
 ```sh
-./preview.sh 8080
+# for community
+./preview.sh ce 8080
+
+# for enterprise
+./preview.sh ee 8080
 ```
 
-Now, open <http://localhost:8080/en/emqx/latest/>, if `directory.json` has been updated, you can rerun `docker container run` to update the docs.
+Now, open <http://localhost:8080/docs/en/latest/> or <http://localhost:8080/en/enterprise/latest/>, if `directory.json` and `directory_ee.json` has been updated, you can re-run the above command to update the docs.
 
 ## Release a New Version
 

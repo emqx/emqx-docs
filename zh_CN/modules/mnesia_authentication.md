@@ -1170,7 +1170,7 @@ $ ./bin/emqx_ctl user list
 emqx_username
 ```
 
-### user add <Username> <Password>`
+### `user add <Username> <Password>`
 
 添加 username 身份验证规则
 

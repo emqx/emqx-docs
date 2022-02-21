@@ -895,7 +895,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 <br />
 
-### log.<level>.file
+### log.\<level>.file
 
 | Type   | Default |
 | ------ | ------- |
@@ -3941,8 +3941,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 设置系统心跳消息的发布间隔。系统心跳消息包括下面两个主题：
 
-- "$SYS/brokers/<node>/uptime"
-- "$SYS/brokers/<node>/datetime"
+- "$SYS/brokers/\<node>/uptime"
+- "$SYS/brokers/\<node>/datetime"
 
 <br />
 
@@ -4508,7 +4508,7 @@ CA 证书文件路径。
 
 <br />
 
-### auth.jwt.verify_claims <claims>
+### auth.jwt.verify_claims.\<claims>
 
 | Type   | Default |
 | ------ | ------- |
@@ -7004,7 +7004,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 
 <br />
 
-### rule-engine.events.<event-name>
+### rule-engine.events.\<event-name>
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -7176,7 +7176,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 <br />
 
-### prometheus.collector.<N>
+### prometheus.collector.\<N>
 
 | Type   | Default           |
 | ------ | ----------------- |
