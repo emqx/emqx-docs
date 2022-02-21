@@ -24,8 +24,8 @@ The compare base of this change set is 4.4.0.
 
 ### Important changes
 
-- The slow subscription feature is improved. It supports counting the time spent in the process of message transmission, and recording and displaying time-consuming clients and topics.
 - A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.4.1. Previously only the individual node's local number of connections were checked against the max number of connections allowed by the license. After this fix, the total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation.
+- The slow subscription feature is improved. It supports counting the time spent in the process of message transmission, and recording and displaying time-consuming clients and topics.
 **Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.**
 - Rules engine supports Lindorm database
 - Support client-level message drop metrics
