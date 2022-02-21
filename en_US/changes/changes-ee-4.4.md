@@ -20,13 +20,16 @@ ref:
 *Release Date: 2022-02-18*
 
 NOTE: 4.4.1 is in sync with: 4.3.7.
-The compare base of this change set is 4.3.7
+The compare base of this change set is 4.4.0
 
 ### Important changes
 
+- The slow subscription feature is improved. It supports counting the time spent in the process of message transmission, and recording and displaying time-consuming clients and topics.
 - Rules engine supports Lindorm database
 - Support client-level message drop metrics
 - Optimize online Trace log display on Dashboard, support syntax highlighting
+
+For more changes, please refer to the change log of version 4.3.7.
 
 ## Version 4.4.0
 

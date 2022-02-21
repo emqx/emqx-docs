@@ -45,6 +45,10 @@ The compare base of this change set is 4.3.12
 
 - TLS for cluster backplane (RPC) connections. See clustering document for more details.
 
+- Add new feature for `slow subscription` to count the time spent in the process of message transmission, and record and display the time-consuming clients and topics.
+
+- Add new feature for `online log tracing` to support real-time tracing of client events and viewing on the dashboard.
+
 ### Minor changes
 
 - Bumped default boot wait time from 15 seconds to 150 seconds
