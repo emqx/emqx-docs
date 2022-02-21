@@ -6414,9 +6414,11 @@ Licensed under the Apache License, Version 2.0 Now.
 Improve the design of cluster, support to join or leave the cluster
 (\#449):
 
-`` ` $ ./bin/emqttd_ctl cluster cluster join <Node> #Join the cluster
+```bash
+$ ./bin/emqttd_ctl cluster cluster join <Node> #Join the cluster
 cluster leave #Leave the cluster cluster remove <Node> #Remove the node
-from cluster cluster status #Cluster status``\`
+from cluster cluster status #Cluster status
+```
 
 Improve the design of Trie and Route, only the wildcard topics stored in
 Trie.
