@@ -15,6 +15,12 @@ ref:
 
 # Changes
 
+## Version 4.4.1
+
+*Release Date: 2022-02-21*
+
+This patch release only includes a CI change for the Windows package.
+
 ## Version 4.4.0
 
 *Release Date: 2022-02-18*
