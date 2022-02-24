@@ -14,12 +14,16 @@ ref:
 ---
 
 # 日志与追踪
+
 ## 控制日志输出
+
 EMQX 支持将日志输出到控制台或者日志文件，或者同时使用两者。可在 `emqx.conf` 中配置：
+
 ```
 log.to = file
 ```
-`log.to` 默认值是 file，可选的值为：
+
+`log.to` 有以下可选值：
 
 - **off:** 完全关闭日志功能
 
@@ -29,7 +33,10 @@ log.to = file
 
 - **both:** 同时将日志输出到文件和标准输出(emqx 控制台)
 
+从 4.3.0 版本开始，如果使用 Docker 部署 EMQX，默认只能通过 `docker logs` 命令查看 EMQX 日志。如需继续按日志文件的方式查看，可以在启动容器时将环境变量 `EMQX_LOG__TO` 设置为 file 或者 both。
+
 ## 日志级别
+
 EMQX 的日志分 8 个等级 ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt))，由低到高分别为：
 
 ```bash
@@ -45,6 +52,7 @@ log.level = warning
 此配置将所有 log handler 的配置设置为 warning。
 
 ## 日志文件和日志滚动
+
 EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/log/emqx` (二进制包安装)。可在 `emqx.conf` 中配置：
 
 ```bash
@@ -72,6 +80,7 @@ log.rotation.count = 5
 ```
 
 ## 针对日志级别输出日志文件
+
 如果想把大于或等于某个级别的日志写入到单独的文件，可以在 `emqx.conf` 中配置 `log.<level>.file`：
 
 将 info 及 info 以上的日志单独输出到 `info.log.N` 文件中：
@@ -87,6 +96,7 @@ log.error.file = error.log
 ```
 
 ## 日志格式
+
 可在 `emqx.conf` 中修改单个日志消息的最大字符长度，如长度超过限制则截断日志消息并用 `...` 填充。默认不限制长度：
 
 将单个日志消息的最大字符长度设置为 8192:
@@ -138,6 +148,7 @@ log.chars_limit = 8192
 注意此日志消息中，client_info 字段不存在。
 
 ## 日志级别和 log handlers
+
 EMQX 使用了分层的日志系统，在日志级别上，包括全局日志级别 (primary log level)、以及各 log hanlder 的日志级别。
 
 ```bash
@@ -179,6 +190,7 @@ LogHandler(id=default, level=warning, destination=console, status=started)
 Primary Log Level 相当于一个自来水管道系统的总开关，一旦关闭则各个分支管道都不再有水流通过。这个机制保证了日志系统的高性能运作。
 
 ## 运行时修改日志级别
+
 你可以使用 EMQX 的命令行工具 `emqx_ctl` 在运行时修改 emqx 的日志级别：
 
 ### 修改全局日志级别：
@@ -222,6 +234,7 @@ $ emqx_ctl log handlers start default
 ```
 
 ## 日志追踪
+
 EMQX 支持针对 ClientID 或 Topic 过滤日志并输出到文件。在使用日志追踪功能之前，必须将 primary log level 设置为 debug：
 
 ```bash
@@ -253,6 +266,7 @@ trace topic t/# successfully
 :::
 
 ### 日志追踪的原理
+
 日志追踪的原理是给 emqx 安装一个新的 log handler，并设置 handler 的过滤条件。在 [日志级别和 log handlers](#log-level-and-log-handlers) 小节，我们讨论过 log handler 的细节。
 
 比如使用如下命令启用 client 日志追踪：
