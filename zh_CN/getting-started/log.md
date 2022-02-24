@@ -23,7 +23,7 @@ EMQX 支持将日志输出到控制台或者日志文件，或者同时使用两
 log.to = file
 ```
 
-`log.to` 有以下可选值：
+`log.to` 的默认值为 `file`，它有以下可选值：
 
 - **off:** 完全关闭日志功能
 
@@ -33,7 +33,7 @@ log.to = file
 
 - **both:** 同时将日志输出到文件和标准输出(emqx 控制台)
 
-从 4.3.0 版本开始，如果使用 Docker 部署 EMQX，默认只能通过 `docker logs` 命令查看 EMQX 日志。如需继续按日志文件的方式查看，可以在启动容器时将环境变量 `EMQX_LOG__TO` 设置为 file 或者 both。
+从 4.3.0 版本开始，如果使用 Docker 部署 EMQX，默认只能通过 `docker logs` 命令查看 EMQX 日志。如需继续按日志文件的方式查看，可以在启动容器时将环境变量 `EMQX_LOG__TO` 设置为 `file` 或者 `both`。
 
 ## 日志级别
 

@@ -1,10 +1,14 @@
-# Log & Trace 
-## Control log output 
+# Log & Trace
+
+## Control log output
+
 EMQX Broker supports log output to the console or log file, or both, which can be configured in `emqx.conf`:
+
 ```
 log.to = file
 ```
-The default value of `log.to` is file, and the optional values are:
+
+The default value of `log.to` is `file`, which has the following optional values:
 
 - **off:** Disable log function completely
 
@@ -14,7 +18,10 @@ The default value of `log.to` is file, and the optional values are:
 
 - **both:** Both output logs to emqx console and output log to file
 
-## Log level 
+Starting from version 4.3.0, if you deploy EMQX using Docker, you can only view EMQX logs through the `docker logs` command by default. To continue viewing the log file, you can set the environment variable `EMQX_LOG__TO` to `file` or `both` when starting the container.
+
+## Log level
+
 The log of EMQX Broker is divided into 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), which are shown from low to high as follows:
 
 ```bash
@@ -30,6 +37,7 @@ log.level = warning
 This configuration sets all log handler to warning.
 
 ## log file and log rotation
+
 The default log file directory of EMQX Broker is in `./log` (zip installation) or `/var/log/emqx` (binary installation). It can be configured in `emqx.conf`:
 
 ```bash
@@ -57,6 +65,7 @@ log.rotation.count = 5
 ```
 
 ## Output log file for log level
+
 If you want to write logs greater than or equal to a certain level to a separate file, you can configure `log.<level>.file` in `emqx.conf`:
 
 Separately output logs of info and above level  to `info.log.N` file:
@@ -71,7 +80,8 @@ Separately output logs of error and above level  to `error.log.N` file:
 log.error.file = error.log
 ```
 
-## Log format 
+## Log format
+
 The maximum character length of a single log message can be modified in `emqx.conf`. If the length exceeds the limit, the log message is truncated and filled with` ... `. The default configuration is not to limit the length:
 
 Set the maximum character length of a single log message to 8192:
@@ -91,7 +101,7 @@ The format of the log message (the fields are separated by spaces):
 - **module_info:** optional field, only exists if this log message is related to a module. Its format is:[Module Info]
 - **msg:** log message content. The format is arbitrary and can contain spaces.
 
-### Log message example 1：
+### Log message example 1:
 
 ```bash
 2020-02-18 16:10:03.872 [debug] <<"mqttjs_9e49354bb3">>@127.0.0.1:57105 [MQTT/WS] SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)
@@ -106,7 +116,7 @@ The fields in this log message are:
 - **module_info:** `[MQTT/WS]`
 - **msg:** `SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)`
 
-### Log message example 2：
+### Log message example 2:
 
 ```bash
 2020-02-18 16:10:08.474 [warning] [Alarm Handler] New Alarm: system_memory_high_watermark, Alarm Info: []
@@ -122,7 +132,8 @@ The fields in this log message are:
 
 Note that in this log message, the client_info field does not exist.
 
-## log level and log handlers 
+## log level and log handlers
+
 EMQX Broker uses a hierarchical log system. At the log level, it includes primary log level and the log level of each log hanlder.
 
 ```bash
@@ -163,7 +174,8 @@ The "log.level" mentioned in the  [Log Level](#log-levels) section is the modifi
 
 Primary Log Level is equivalent to the main switch of a tap water pipe system. Once closed, no water flow will pass through each branch pipe. This mechanism ensures the high-performance operation of the logging system.
 
-## Modify log level at runtime 
+## Modify log level at runtime
+
 You can use EMQX Broker's command line tool `emqx_ctl` to modify the emqx log level at runtime:
 
 ### Modify the global log level:
@@ -190,7 +202,8 @@ For example, set log handler `file` to debug:
 $ emqx_ctl log handlers set-level file debug
 ```
 
-## Log trace 
+## Log trace
+
 EMQX Broker supports filtering logs for ClientID or Topic and outputting to files. Before using the log tracing function, the primary log level must be set to debug:
 
 ```bash
@@ -222,6 +235,7 @@ Even if `log.level` is set to error in `emqx.conf`,  debug level information of 
 :::
 
 ### The principle of log tracing
+
 The principle of log tracing is to install a new log handler for emqx and set the filter conditions of the handler. In the [Log Levels and log handlers](#log-level-and-log-handlers) section, we discussed the details of log handlers.
 
 For example, use the following command to enable client log tracing:
