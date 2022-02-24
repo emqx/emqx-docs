@@ -874,7 +874,7 @@ Set the total number of log files. If this number is exceeded, the next log file
 
 
 
-### log.<level>.file
+### log.\<level>.file
 
 | Type   | Default |
 | ------ | ------- |
@@ -1033,7 +1033,7 @@ What to do after the ACL check fails.
 
 Specify the `Flapping` inspection strategy.
 
-Format: <threshold>,<duration>,<banned>`.
+Format: `<threshold>,<duration>,<banned>`.
 
 For example, `30, 1m, 5m`, it means that if the client disconnects 30 times within 1 minute, then login is prohibited for the next 5 minutes
 
@@ -3916,8 +3916,8 @@ Set the system topic (`$SYS`) message release interval.
 
 Set the system heartbeat message release interval. The system heartbeat message includes the following two topics:
 
-- "$SYS/brokers/<node>/uptime"
-- "$SYS/brokers/<node>/datetime"
+- "$SYS/brokers/\<node>/uptime"
+- "$SYS/brokers/\<node>/datetime"
 
 
 
@@ -4483,7 +4483,7 @@ Enable or disable Claims verification.
 
 
 
-### auth.jwt.verify_claims.<claims>
+### auth.jwt.verify_claims.\<claims>
 
 | Type   | Default |
 | ------ | ------- |
@@ -6971,7 +6971,7 @@ Ignore system messages ($SYS). The rule engine will not process system messages 
 
 
 
-### rule_engine.events.<event-name>
+### rule_engine.events.\<event-name>
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -7144,7 +7144,7 @@ Specify the collection interval of Statsd data in milliseconds.
 
 
 
-### prometheus.collector.<N>
+### prometheus.collector.\<N>
 
 | Type   | Default       |
 | ------ | ------------- |
