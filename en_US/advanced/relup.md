@@ -1,5 +1,5 @@
 
-## Hot upgrade
+## Release Upgrade
 
 Since version 4.2.0, EMQX Broker supports hot upgrade.
 
