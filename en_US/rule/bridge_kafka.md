@@ -3,7 +3,7 @@
 Setup a Kafka, taking Mac OSX for instance:
 
 ```bash
-$ wget http://apache.claz.org/kafka/2.3.0/kafka_2.12-2.3.0.tgz
+$ wget https://archive.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz
 
 $ tar -xzf  kafka_2.12-2.3.0.tgz
 
