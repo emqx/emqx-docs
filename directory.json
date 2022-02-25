@@ -319,6 +319,10 @@
       "path": "advanced/relup"
     },
     {
+       "title": "安装补丁包",
+       "path": "advanced/patches"
+    },
+    {
       "title": "FAQ 常见问题解答",
       "children": [
         {
@@ -775,6 +779,10 @@
     {
       "title": "Release Hot Upgrade",
       "path": "advanced/relup"
+    },
+    {
+       "title": "Apply Patches",
+       "path": "advanced/patches"
     },
     {
       "title": "Multi-language Extension",
