@@ -7,8 +7,6 @@ The SQL statements of the rule engine can handle both messages (message publishi
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
 If you want emqx to publish the event message, you can configure it in the `emqx_rule_engine.conf` file.
 
-For all supported events and available fields, please see  [rule event](#rule-sql-events).
-
 ### Event topic available for FROM clause
 
 | Event topic name              | Explanation          |

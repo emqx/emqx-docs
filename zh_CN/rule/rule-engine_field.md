@@ -22,9 +22,6 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
 如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
 
-所有支持的事件及其可用字段详见: [规则事件](#rule-sql-events)。
-
-
 ### FROM 子句可用的事件主题
 | 事件主题名                    | 释义     |
 | ----------------------------- | :------- |
