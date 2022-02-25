@@ -13,14 +13,14 @@ category:
 ref:
 ---
 
-## 在运行时给 emqx 打 Patch
+## 在运行时安装 EMQX 补丁包
 
-如果一个 Bug 修复只更新了少数几个 module，在已经知道需要更新的 module 列表的情况下，可以使用 Patch 方式升级 EMQX。
+如果一个 Bug 修复只更新了少数几个 module，在已经知道需要更新的 module 列表的情况下，可以使用补丁包方式升级 EMQX。
 
 注意：如果可以使用版本热升级的方式，则首选版本热升级。只有版本热升级不可用，并且你了解在生产环境中
-打 Patch 的后果的情况下，才可以使用此方式解决问题。
+安装补丁包的后果的情况下，才可以使用此方式解决问题。
 
-## 打 Patch 的步骤
+## 安装 EMQX 补丁包的步骤
 
 1. 从 EMQX 开发者那里获取本次需要更新的 modules 列表。比如：
 
@@ -77,7 +77,7 @@ ref:
     /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/emqx_rule_engine.beam
     ```
 
-    备份原 beam 文件到 /tmp 目录:
+    备份原 beam 文件到 `/tmp` 目录:
 
     ```bash
     $ cp /usr/lib/emqx/lib/emqx-4.4.0/ebin/emqx.beam \
@@ -91,7 +91,23 @@ ref:
     $ cp -f ./emqx/lib/emqx_rule_engine-4.4.1/ebin/emqx_rule_engine.beam /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/
     ```
 
-6. 运行时加载新的 beam 文件:
+6. 加载新的 beam 文件:
+
+    ```bash
+    $ emqx eval 'c:lm().'
+    [{module, emqx},
+     {module, emqx_rule_engine}]
+    ```
+
+## 回滚补丁包
+
+1. 把安装补丁包时备份好的文件复制回原来的目录：
+
+    ```bash
+    $ cp -f /tmp/emqx.beam /usr/lib/emqx/lib/emqx-4.4.0/ebin/
+    $ cp -f /tmp/emqx_rule_engine.beam /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/
+    ```
+2. 重新加载 beam 文件:
 
     ```bash
     $ emqx eval 'c:lm().'

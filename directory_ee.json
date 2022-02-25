@@ -527,7 +527,7 @@
       "path": "advanced/relup"
     },
     {
-      "title": "打补丁",
+      "title": "安装补丁包",
       "path": "advanced/patches"
     },
     {

@@ -1,10 +1,10 @@
-# Patch emqx at runtime
+# Patch EMQX at Runtime
 
 If a bug fix only updates a few modules, you can use patch to upgrade emqx if you know what modules to be updated.
 
 Note: If you can use release upgrade, then release upgrade is preferred. You should apply patches only when release upgrade is not available, and you're sure you know what you are doing.
 
-## Steps of patching
+## Steps of Patching
 
 1. Get the list of modules to be updated from emqx developers. For example:
 
@@ -76,6 +76,22 @@ Pay attention to selecting the correct software version number, OTP version numb
     ```
 
 6. Load new files at runtime:
+
+    ```bash
+    $ emqx eval 'c:lm().'
+    [{module, emqx},
+     {module, emqx_rule_engine}]
+    ```
+
+## Rollback the Patches
+
+1. Copy the backup files back to the original directory:
+
+    ```bash
+    $ cp -f /tmp/emqx.beam /usr/lib/emqx/lib/emqx-4.4.0/ebin/
+    $ cp -f /tmp/emqx_rule_engine.beam /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/
+    ```
+2. reload the beam files:
 
     ```bash
     $ emqx eval 'c:lm().'
