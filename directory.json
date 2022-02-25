@@ -323,6 +323,10 @@
       "path": "advanced/relup"
     },
     {
+      "title": "打补丁",
+      "path": "advanced/patches"
+    },
+    {
       "title": "FAQ 常见问题解答",
       "children": [
         {
@@ -774,6 +778,10 @@
     {
       "title": "Release Hot Upgrade",
       "path": "advanced/relup"
+    },
+    {
+      "title": "Apply Patches",
+      "path": "advanced/patches"
     },
     {
       "title": "SDK & Tools",
