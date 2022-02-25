@@ -5,7 +5,7 @@ The Kafka consumer group uses external Kafka as a message queue, which can conve
 Set up the Kafka environment, taking MacOS X as an example:
 
 ```bash
-wget http://apache.claz.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
+wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
 tar -xzf  kafka_2.13-2.8.0.tgz
 

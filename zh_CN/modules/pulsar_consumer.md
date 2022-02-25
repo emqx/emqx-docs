@@ -5,7 +5,7 @@ Pulsar 消费组使用外部 Pulsar 作为消息队列，可以从 Pulsar 中消
 搭建 Pulsar 环境，以 MacOS X 为例:
 
 ```bash
-$ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
+$ wget https://archive.apache.org/dist/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
 
 $ tar xvfz apache-pulsar-2.3.2-bin.tar.gz
 

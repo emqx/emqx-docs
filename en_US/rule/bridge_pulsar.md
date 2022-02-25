@@ -3,7 +3,7 @@
 Setup a Pulsar, taking Mac OSX for instance:
 
 ```bash
-$ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
+$ wget https://archive.apache.org/dist/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
 
 $ tar xvfz apache-pulsar-2.3.2-bin.tar.gz
 
