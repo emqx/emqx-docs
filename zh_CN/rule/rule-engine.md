@@ -63,7 +63,7 @@ SELECT payload.x as x FROM "t/a"
 SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = 'emqx'
 ```
 
-规则引擎数据和 SQL 语句格式，[事件主题](#event-topics) 列表详细教程参见 [SQL 手册](#rule-sql)。
+规则引擎数据和 SQL 语句格式，[事件主题](./rule-engine_field.md#%E4%BA%8B%E4%BB%B6%E5%92%8C%E4%BA%8B%E4%BB%B6%E4%B8%BB%E9%A2%98) 列表详细教程参见 [SQL 手册](./rule-engine_grammar_and_examples.md)。
 
 ## 规则引擎组成
 

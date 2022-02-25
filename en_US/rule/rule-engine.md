@@ -38,7 +38,7 @@ Select the client connection event, filter the device whose Username is `emqx` a
 SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = 'emqx'
 ```
 
-For rule engine data, SQL statement format and [event topic](#event-topics) list, please refer to [SQL manual](#sql-statement) for detailed tutorials.
+For rule engine data, SQL statement format and [event topic](./rule-engine_field.md#event-topic-available-for-from-clause) list, please refer to [SQL manual](./rule-engine_grammar_and_examples.md#rule-engine-sql-statement) for detailed tutorials.
 
 ## Rule engine composition
 
