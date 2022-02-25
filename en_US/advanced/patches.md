@@ -9,8 +9,8 @@ Note: If you can use release upgrade, then release upgrade is preferred. You sho
 1. Get the list of modules to be updated from emqx developers. For example:
 
     ```
-    emqx. beam
-    emqx_ rule_ engine. beam
+    emqx.beam
+    emqx_rule_engine.beam
     ```
 
 2. Get the corresponding software package from emqx official website or emqx developer.
