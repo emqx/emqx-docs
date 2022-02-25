@@ -2,7 +2,7 @@
 
 搭建 Kafka 环境，以 MacOS X 为例:
 ```bash
-wget http://apache.claz.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
+wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
 tar -xzf  kafka_2.13-2.8.0.tgz
 
