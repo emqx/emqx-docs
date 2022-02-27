@@ -98,7 +98,6 @@ sysctl -w net.ipv4.tcp_wmem='1024 4096 16777216'
 TCP connection tracking:
 
 ```
-sysctl -w net.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 ```
