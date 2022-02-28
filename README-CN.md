@@ -28,10 +28,14 @@ EMQX 是一款完全开源，高度可伸缩，高可用的分布式 [MQTT](http
 ## 预览
 
 ```sh
-./preview.sh 8080
+# 开源版
+./preview.sh ce 8080
+
+# 企业版
+./preview.sh ee 8080
 ```
 
-现在浏览器打开 <http://localhost:8080/zh/emqx/latest/>, 如果更新了 `directory.json` 文件, 你需要重新运行 `docker container run` 命令。
+现在浏览器打开 <http://localhost:8080/docs/zh/latest/> 或者 <http://localhost:8080/zh/enterprise/latest/>, 如果更新了 `directory.json` 和 `directory_ee.json` 文件, 你需要重新运行上面的命令。
 
 ## 联系我们
 

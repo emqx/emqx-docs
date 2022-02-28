@@ -48,7 +48,7 @@ $ ./bin/emqx_ctl mgmt list
 app_id: 901abdba8eb8c, secret: MjgzMzQ5MjM1MzUzMTc4MjgyMjE3NzU4ODcwMDg0NjQ4OTG, name: hello, desc: , status: true, expired: undefined
 ```
 
-### mgmt insert <AppId> <Name>
+### mgmt insert \<AppId> \<Name>
 
 添加 HTTP API 的应用程序:
 
@@ -57,7 +57,7 @@ $ ./bin/emqx_ctl mgmt insert dbcb6e023370b world
 AppSecret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
 ```
 
-### mgmt update <AppId> <status>
+### mgmt update \<AppId> \<status>
 
 更新 HTTP API 的应用程序:
 
@@ -66,7 +66,7 @@ $ ./bin/emqx_ctl mgmt update dbcb6e023370b stop
 update successfully.
 ```
 
-### mgmt lookup <AppId>
+### mgmt lookup \<AppId>
 
 获取 HTTP API 的应用程序详情:
 
@@ -80,7 +80,7 @@ status: stop
 expired: undefined
 ```
 
-### mgmt delete <AppId>
+### mgmt delete \<AppId>
 
 删除 HTTP API 的应用程序:
 
@@ -333,8 +333,8 @@ ok
 | 命令                        | 描述                      |
 | --------------------------- | ------------------------- |
 | acl cache-clean all         | 清除集群中所有的 ACL 缓存 |
-| acl cache-clean node <Node> | 清除指定节点的 ACL 缓存   |
-| acl cache-clean <ClientId>  | 清除指定客户端的 ACL 缓存 |
+| acl cache-clean node \<Node> | 清除指定节点的 ACL 缓存   |
+| acl cache-clean \<ClientId>  | 清除指定客户端的 ACL 缓存 |
 
 ## clients 命令
 
@@ -377,7 +377,7 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 | connected\_at             | 客户端连接时间戳                                         |
 | disconnected_at           | 客户端断开连接时间戳（仅当断开连接还保留会话时才会出现） |
 
-### clients show <ClientId>
+### clients show \<ClientId>
 
 查询指定 ClientId 的客户端:
 
@@ -386,7 +386,7 @@ $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 ```
 
-### clients kick <ClientId>
+### clients kick \<ClientId>
 
 踢除指定 ClientId 的客户端:
 
@@ -416,7 +416,7 @@ t2/# -> emqx2@127.0.0.1
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
 
-### routes show <Topic>
+### routes show \<Topic>
 
 查询指定 Topic d的路由:
 
@@ -446,7 +446,7 @@ mosqsub/91042-airlee.lo -> t/y:1
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions show <ClientId>
+### subscriptions show \<ClientId>
 
 查询某个 Client 的订阅:
 
@@ -455,7 +455,7 @@ $ ./bin/emqx_ctl subscriptions show 'mosqsub/90475-airlee.lo'
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions add <ClientId> <Topic> <QoS>
+### subscriptions add \<ClientId> \<Topic> \<QoS>
 
 手动添加订阅关系:
 
@@ -464,7 +464,7 @@ $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
 ok
 ```
 
-### subscriptions del <ClientId> <Topic>
+### subscriptions del \<ClientId> \<Topic>
 
 手动删除订阅关系:
 
@@ -507,7 +507,7 @@ Plugin(emqx_auth_ldap, description=EMQX Authentication/ACL with LDAP, active=fal
 | description | 插件描述   |
 | active      | 是否已加载 |
 
-### plugins load <Plugin>
+### plugins load \<Plugin>
 
 加载插件:
 
@@ -516,7 +516,7 @@ $ ./bin/emqx_ctl plugins load emqx_lua_hook
 Plugin emqx_lua_hook loaded successfully.
 ```
 
-### plugins unload <Plugin>
+### plugins unload \<Plugin>
 
 卸载插件:
 
@@ -525,7 +525,7 @@ $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 Plugin emqx_lua_hook unloaded successfully.
 ```
 
-### plugins reload <Plugin>
+### plugins reload \<Plugin>
 
 重载插件:
 
@@ -704,7 +704,7 @@ log 命令用于设置日志等级。访问 [Documentation of logger](http://erl
 
 日志的等级由低到高分别为：`debug | info | notice | warning | error | critical | alert | emergency`，日志等级越低，系统输出的日志数量越多，消耗的系统资源越大。为提高系统运行性能，默认的主日志等级是 error。
 
-### log set-level <Level>
+### log set-level \<Level>
 
 设置主日志等级和所有 Handlers 日志等级:
 
@@ -722,7 +722,7 @@ $ ./bin/emqx_ctl log primary-level
 debug
 ```
 
-### log primary-level <Level>
+### log primary-level \<Level>
 
 设置主日志等级:
 
@@ -742,7 +742,7 @@ LogHandler(id=file, level=warning, destination=log/emqx.log, status=started)
 LogHandler(id=default, level=warning, destination=console, status=started)
 ```
 
-### log handlers start <HandlerId>
+### log handlers start \<HandlerId>
 
 启动 log handler `'default'`:
 
@@ -751,7 +751,7 @@ $ ./bin/emqx_ctl log handlers start default
 log handler default started
 ```
 
-### log handlers stop <HandlerId>
+### log handlers stop \<HandlerId>
 
 停止 log handler `'default'`:
 
@@ -760,7 +760,7 @@ $ ./bin/emqx_ctl log handlers stop default
 log handler default stopped
 ```
 
-### log handlers set-level <HandlerId> <Level>
+### log handlers set-level \<HandlerId> \<Level>
 
 设置指定 Handler 的日志等级:
 
@@ -781,7 +781,7 @@ trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，
 | `trace start topic <Topic> <File> [<Level>]    ` | 开启 Topic 追踪，存储指定等级的日志到文件  |
 | `trace stop topic <Topic>                      ` | 关闭 Topic 追踪                            |
 
-### trace start client <ClientId> <File> [ <Level> ]
+### trace start client \<ClientId> \<File> [ \<Level> ]
 
 开启 Client 追踪:
 
@@ -796,7 +796,7 @@ $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 trace clientid clientid2 successfully
 ```
 
-### trace stop client <ClientId>
+### trace stop client \<ClientId>
 
 关闭 Client 追踪:
 
@@ -805,7 +805,7 @@ $ ./bin/emqx_ctl trace stop client clientid
 stop tracing clientid clientid successfully
 ```
 
-### trace start topic <Topic> <File> [ <Level> ]
+### trace start topic \<Topic> \<File> [ \<Level> ]
 
 开启 Topic 追踪:
 
@@ -820,7 +820,7 @@ $ ./bin/emqx_ctl trace start topic topic2 log/topic2_trace.log error
 trace topic topic2 successfully
 ```
 
-### trace stop topic <Topic>
+### trace stop topic \<Topic>
 
 关闭 Topic 追踪:
 
@@ -846,9 +846,9 @@ listeners 命令用于查询开启的 TCP 服务监听器。
 | 命令                             | 描述                 |
 | -------------------------------- | -------------------- |
 | listeners                        | # List listeners     |
-| listeners stop    <Identifier>   | # Stop a listener    |
-| listeners stop    <Proto> <Port> | # Stop a listener    |
-| listeners restart <Identifier>   | # Restart a listener |
+| listeners stop    \<Identifier>   | # Stop a listener    |
+| listeners stop    \<Proto> \<Port> | # Stop a listener    |
+| listeners restart \<Identifier>   | # Restart a listener |
 
 ### listeners list
 
@@ -980,7 +980,7 @@ $ ./bin/emqx_ctl retainer clean
 Cleaned 3 retained messages
 ```
 
-### retainer clean <Topic>
+### retainer clean \<Topic>
 
 清除指定的主题下的保留的消息:
 
@@ -999,7 +999,7 @@ Cleaned 1 retained messages
 | `admins passwd <Username> <Password>     ` | 重置 admin 密码 |
 | `admins del <Username>                   ` | 删除 admin 账号 |
 
-### admins add <Username> <Password> <Tags>
+### admins add \<Username> \<Password> \<Tags>
 
 创建 admin 账户:
 
@@ -1008,7 +1008,7 @@ $ ./bin/emqx_ctl admins add root public test
 ok
 ```
 
-### admins passwd <Username> <Password>
+### admins passwd \<Username> \<Password>
 
 重置 admin 账户密码:
 
@@ -1017,7 +1017,7 @@ $ ./bin/emqx_ctl admins passwd root private
 ok
 ```
 
-### admins del <Username>
+### admins del \<Username>
 
 删除 admin 账户:
 
@@ -1322,14 +1322,14 @@ ok
 | acl list clientid                                    | List clientid acls|
 | acl list username                                    | List username acls|
 | acl list _all                                        | List $all acls|
-| acl show clientid <Clientid>                         | Lookup clientid acl detail|
-| acl show username <Username>                         | Lookup username acl detail|
-| acl aad clientid <Clientid> <Topic> <Action> <Access>| Add clientid acl|
-| acl add Username <Username> <Topic> <Action> <Access>| Add username acl|
-| acl add _all <Topic> <Action> <Access>               | Add $all acl|
-| acl del clientid <Clientid> <Topic>                  | Delete clientid acl|
-| acl del username <Username> <Topic>                  | Delete username acl|
-| acl del _all <Topic>                                 | Delete $all acl|
+| acl show clientid \<Clientid>                         | Lookup clientid acl detail|
+| acl show username \<Username>                         | Lookup username acl detail|
+| acl aad clientid \<Clientid> \<Topic> \<Action> \<Access>| Add clientid acl|
+| acl add Username \<Username> \<Topic> \<Action> \<Access>| Add username acl|
+| acl add _all \<Topic> \<Action> \<Access>               | Add $all acl|
+| acl del clientid \<Clientid> \<Topic>                  | Delete clientid acl|
+| acl del username \<Username> \<Topic>                  | Delete username acl|
+| acl del _all \<Topic>                                 | Delete $all acl|
 
 #### acl list
 
