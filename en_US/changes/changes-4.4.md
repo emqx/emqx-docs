@@ -34,8 +34,8 @@ The compare base of this change set is 4.3.12
 
 ### Important changes
 
-- **For Debian/Ubuntu users**, Debian/Ubuntu package (deb) installed EMQ X is now started from systemd.
-  This is to use systemd's supervision functionality to ensure that EMQ X service restarts after a crash.
+- **For Debian/Ubuntu users**, Debian/Ubuntu package (deb) installed EMQX is now started from systemd.
+  This is to use systemd's supervision functionality to ensure that EMQX service restarts after a crash.
   The package installation service upgrade from init.d to systemd has been verified,
   it is still recommended that you verify and confirm again before deploying to the production environment,
   at least to ensure that systemd is available in your system
@@ -79,7 +79,7 @@ The compare base of this change set is 4.3.12
 - Improve the error log content when the Proxy Protocol message is received without `proxy_protocol` configured.
 
 - Add additional message attributes to the message reported by the gateway.
-  Messages from gateways such as CoAP, LwM2M, Stomp, ExProto, etc., when converted to EMQ X messages,
+  Messages from gateways such as CoAP, LwM2M, Stomp, ExProto, etc., when converted to EMQX messages,
   add fields such as protocol name, protocol version, user name, client IP, etc.,
   which can be used for multi-language hook extension (ExHook)
 
