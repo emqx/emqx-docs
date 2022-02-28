@@ -31,15 +31,15 @@ true
 ['node2@127.0.0.1','node3@127.0.0.1','node4@127.0.0.1']
 ```
 
-## EMQ X 分布集群设计
+## EMQX 分布集群设计
 
-EMQ X 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
+EMQX 消息服务器集群基于 Erlang/OTP 分布式设计，集群原理可简述为下述两条规则:
 
 MQTT 客户端订阅主题时，所在节点订阅成功后广播通知其他节点：某个主题(Topic)被本节点订阅。
 
 MQTT 客户端发布消息时，所在节点会根据消息主题(Topic)，检索订阅并路由消息到相关节点。
 
-EMQ X 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如:
+EMQX 消息服务器同一集群的所有节点，都会复制一份主题(Topic) -> 节点(Node)映射的路由表，例如:
 
 ```bash
 topic1 -> node1, node2
@@ -49,7 +49,7 @@ topic3 -> node2, node4
 
 ### 主题树(Topic Trie)与路由表(Route Table)
 
-EMQ X 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
+EMQX 消息服务器每个集群节点，都保存一份主题树(Topic Trie)和路由表。
 
 例如下述主题订阅关系:
 
@@ -88,11 +88,11 @@ client1 -> node1: Publish[t/a]
 
 
 ## 节点发现与自动集群
-EMQ X 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
+EMQX 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
 Autoheal)、自动删除宕机节点 (Autoclean)。
 
-EMQ X 支持多种节点发现策略:
+EMQX 支持多种节点发现策略:
 
 | 策略     | 说明                |
 | ------ | ----------------- |
@@ -104,7 +104,7 @@ EMQ X 支持多种节点发现策略:
 | k8s    | Kubernetes 服务自动集群 |
 
 ### 手动(manual) 方式管理集群介绍
-假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X 集群:
+假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQX 集群:
 
 |                节点名                 | 主机名 (FQDN)  |   IP 地址    |
 | ------------------------------------ | ------------- | ------------ |
@@ -181,6 +181,11 @@ $ ./bin/emqx_ctl cluster leave
 $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
+#### 单机伪分布式
+
+对于只有个人电脑或者一台服务器的用户来说，可以使用伪分布式集群。请注意，我们若要在单机上启动两个或多个 emqx 实例，为避免端口冲突，我们需要对其它节点的监听端口做出调整。
+
+基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
 
 ## 防火墙设置
 
@@ -214,7 +219,7 @@ ListeningPort = BasePort + Offset
 举例来说, 如果 `emqx.conf` 里配置了节点名：`node.name = emqx@192.168.0.12`，那么监听端口为 `4370`，
 但对于 `emqx1` (或者 `emqx-1`) 端口就是 `4371`，以此类推。
 
-### The Cluster PRC Port
+### The Cluster RPC Port
 
 每个节点还需要监听一个 RPC 端口，也需要被防火墙也放开。跟上面说的`ekka 模式`下的集群发现端口一样，这个 RPC 端口也是约定式的。
 

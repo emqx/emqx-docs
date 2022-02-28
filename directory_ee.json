@@ -4,11 +4,11 @@
       "title": "产品概览",
       "children": [
         {
-          "title": "EMQ X 消息服务器简介",
+          "title": "EMQX 消息服务器简介",
           "path": "./"
         },
         {
-          "title": "EMQ X 消息服务器功能列表",
+          "title": "EMQX 消息服务器功能列表",
           "path": "introduction/checklist"
         }
       ]
@@ -21,7 +21,7 @@
           "path": "getting-started/install-ee"
         },
         {
-          "title": "启动 EMQ X",
+          "title": "启动 EMQX",
           "path": "getting-started/start"
         },
         {
@@ -223,7 +223,7 @@
           "path": "modules/recon"
         },
         {
-          "title": "EMQ X Prometheus Agent",
+          "title": "EMQX Prometheus Agent",
           "path": "modules/prometheus"
         },
         {
@@ -255,6 +255,14 @@
           "path": "modules/retainer"
         },
         {
+          "title": "日志追踪",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "慢订阅者统计",
+          "path": "modules/slow_subscribers_statistics"
+        },
+        {
           "title": "MQTT 消息延迟发布",
           "path": "modules/delayed_publish"
         }
@@ -266,6 +274,18 @@
         {
           "title": "规则引擎",
           "path": "rule/rule-engine"
+        },
+        {
+          "title": "规则引擎语法与示列",
+          "path": "rule/rule-engine_grammar_and_examples"
+        },
+        {
+          "title": "规则 SQL 语句中可用的字段",
+          "path": "rule/rule-engine_field"
+        },
+        {
+          "title": "SQL 语句中可用的函数",
+          "path": "rule/rule-engine_buildin_function"
         },
         {
           "title": "创建规则",
@@ -319,6 +339,10 @@
               "path": "rule/backend_influxdb"
             },
             {
+              "title": "保存数据到 InfluxDB V2",
+              "path": "rule/backend_influxdb_v2"
+            },
+            {
               "title": "保存数据到 TimescaleDB",
               "path": "rule/backend_timescaledb"
             },
@@ -335,8 +359,16 @@
               "path": "rule/backend_dolphindb"
             },
             {
+              "title": "保存数据到 MatrixDB",
+              "path": "rule/backend_matrixdb"
+            },
+            {
               "title": "保存数据到 TDengine",
               "path": "rule/backend_tdengine"
+            },
+            {
+              "title": "保存数据到 Lindorm",
+              "path": "rule/backend_lindorm"
             }
           ]
         },
@@ -360,11 +392,15 @@
               "path": "rule/bridge_rocketmq"
             },
             {
+              "title": "桥接数据到 SAP Event Mesh",
+              "path": "rule/bridge_sap_event_mesh"
+            },
+            {
               "title": "桥接数据到 MQTT Broker",
               "path": "rule/bridge_mqtt"
             },
             {
-              "title": "桥接数据到 EMQ X",
+              "title": "桥接数据到 EMQX",
               "path": "rule/bridge_emqx"
             }
           ]
@@ -576,6 +612,10 @@
       "path": "advanced/relup"
     },
     {
+       "title": "安装补丁包",
+       "path": "advanced/patches"
+    },
+    {
       "title": "FAQ 常见问题解答",
       "children": [
         {
@@ -683,7 +723,7 @@
       "children": [
         {
           "title": "变更日志",
-          "path": "changes/changes-ee-4.3"
+          "path": "changes/changes-ee-4.4"
         },
         {
           "title": "生命周期 EOL",
@@ -691,7 +731,7 @@
         },
         {
           "title": "升级指南",
-          "path": "changes/upgrade-4.3"
+          "path": "changes/upgrade-4.4"
         }
       ]
     },
@@ -714,7 +754,7 @@
       "title": "Introduction",
       "children": [
         {
-          "title": "EMQ X Broker",
+          "title": "EMQX Broker",
           "path": "./"
         },
         {
@@ -731,7 +771,7 @@
           "path": "getting-started/install-ee"
         },
         {
-          "title": "Start EMQ X",
+          "title": "Start EMQX",
           "path": "getting-started/start"
         },
         {
@@ -929,7 +969,7 @@
           "path": "modules/recon"
         },
         {
-          "title": "EMQ X Prometheus Agent",
+          "title": "EMQX Prometheus Agent",
           "path": "modules/prometheus"
         },
         {
@@ -957,6 +997,14 @@
           "path": "modules/retainer"
         },
         {
+          "title": "Log Tracer",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "Slow Subscriber Statistics",
+          "path": "modules/slow_subscribers_statistics"
+        },
+        {
           "title": "MQTT Delayed Publish",
           "path": "modules/delayed_publish"
         }
@@ -968,6 +1016,18 @@
         {
           "title": "Rule Engine",
           "path": "rule/rule-engine"
+        },
+        {
+          "title": "Rule engine SQL statement",
+          "path": "rule/rule-engine_grammar_and_examples"
+        },
+        {
+          "title": "Available fields in rule engine SQL statements",
+          "path": "rule/rule-engine_field"
+        },
+        {
+          "title": "Functions available in SQL statements",
+          "path": "rule/rule-engine_buildin_function"
         },
         {
           "title": "Create rules",
@@ -1021,8 +1081,16 @@
               "path": "rule/backend_influxdb"
             },
             {
+              "title": "Save data to InfluxDB V2",
+              "path": "rule/backend_influxdb_v2"
+            },
+            {
               "title": "Save data to TimescaleDB",
               "path": "rule/backend_timescaledb"
+            },
+            {
+              "title": "Save data to TimescaleDB",
+              "path": "rule/backend_influxdb_v2"
             },
             {
               "title": "Save data to Oracle DB",
@@ -1037,8 +1105,16 @@
               "path": "rule/backend_dolphindb"
             },
             {
+              "title": "Save data to MatrixDB",
+              "path": "rule/backend_matrixdb"
+            },
+            {
               "title": "Save data to TDengine",
               "path": "rule/backend_tdengine"
+            },
+            {
+              "title": "Save data to Lindorm",
+              "path": "rule/backend_lindorm"
             }
           ]
         },
@@ -1062,11 +1138,15 @@
               "path": "rule/bridge_rocketmq"
             },
             {
+              "title": "Bridge data to SAP Event Mesh",
+              "path": "rule/bridge_sap_event_mesh"
+            },
+            {
               "title": "Bridge data to MQTT Broker",
               "path": "rule/bridge_mqtt"
             },
             {
-              "title": "Bridge data to EMQ X",
+              "title": "Bridge data to EMQX",
               "path": "rule/bridge_emqx"
             }
           ]
@@ -1253,6 +1333,10 @@
       "path": "advanced/relup"
     },
     {
+       "title": "Apply Patches",
+       "path": "advanced/patches"
+    },
+    {
       "title": "FAQ",
       "children": [
         {
@@ -1323,7 +1407,7 @@
       "children": [
         {
           "title": "Change log",
-          "path": "changes/changes-ee-4.3"
+          "path": "changes/changes-ee-4.4"
         },
         {
           "title": "End of life dates",
@@ -1331,7 +1415,7 @@
         },
         {
           "title": "Upgrade guide",
-          "path": "changes/upgrade-4.3"
+          "path": "changes/upgrade-4.4"
         }
       ]
     },

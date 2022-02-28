@@ -64,11 +64,12 @@ Under the default configuration of the PostgreSQL authentication plugin, you nee
 
 ```sql
 CREATE TABLE mqtt_user (
-  id SERIAL primary key,
-  is_superuser boolean,
-  username character varying(100),
-  password character varying(100),
-  salt character varying(40)
+  id SERIAL PRIMARY KEY,
+  username CHARACTER VARYING(100),
+  password CHARACTER VARYING(100),
+  salt CHARACTER VARYING(40),
+  is_superuser BOOLEAN,
+  UNIQUE (username)
 )
 ```
 
@@ -85,14 +86,17 @@ VALUES
 
 ```sql
 CREATE TABLE mqtt_acl (
-  id SERIAL primary key,
-  allow integer,
-  ipaddr character varying(60),
-  username character varying(100),
-  clientid character varying(100),
-  access  integer,
-  topic character varying(100)
-)
+  id SERIAL PRIMARY KEY,
+  allow INTEGER,
+  ipaddr CHARACTER VARYING(60),
+  username CHARACTER VARYING(100),
+  clientid CHARACTER VARYING(100),
+  access  INTEGER,
+  topic CHARACTER VARYING(100)
+);
+CREATE INDEX ipaddr ON mqtt_acl (ipaddr);
+CREATE INDEX username ON mqtt_acl (username);
+CREATE INDEX clientid ON mqtt_acl (clientid);
 ```
 
 Rule table field description:
@@ -118,10 +122,10 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, '10.59.1.100', NULL, NULL, 1, '$SYS/#');
 
 -- Deny client to subscribe to the topic of /smarthome/+/temperature
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, NULL, NULL, 1, '/smarthome/+/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1, '/smarthome/+/temperature');
 
 -- Allow clients to subscribe to the topic of /smarthome/${clientid}/temperature with their own Client ID
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, NULL, NULL, 1, '/smarthome/%c/temperature');
+INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1, '/smarthome/%c/temperature');
 ```
 
 After enabling PostgreSQL ACL and successfully connecting with the username emqx, the client should have permissions on the topics it wants to subscribe to/publish.
@@ -134,7 +138,7 @@ This is the table structure used by default configuration. After being familiar 
 
 ## Superuser  SQL（super_query）
 
-When performing ACL authentication, EMQ X Broker will use the current client information to execute the user-configured superuser SQL to query whether the client is a superuser. ACL SQL is skipped when the client is superuser.
+When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser SQL to query whether the client is a superuser. ACL SQL is skipped when the client is superuser.
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
@@ -142,7 +146,7 @@ When performing ACL authentication, EMQ X Broker will use the current client inf
 auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
 ```
 
-You can use the following placeholders in SQL and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in SQL and EMQX Broker will automatically populate with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -161,7 +165,7 @@ If superuser functionality is not needed, it can be more efficient when commenti
 
 ## ACL SQL（acl_query）
 
-When performing ACL authentication, EMQ X Broker will use the current client information to populate and execute the user-configured superuser SQL. If superuser SQL is not enabled or the client is not a superuser, ACL SQL is used to query the client's ACL rules in the database.
+When performing ACL authentication, EMQX Broker will use the current client information to populate and execute the user-configured superuser SQL. If superuser SQL is not enabled or the client is not a superuser, ACL SQL is used to query the client's ACL rules in the database.
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
@@ -169,7 +173,7 @@ When performing ACL authentication, EMQ X Broker will use the current client inf
 auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 ```
 
-You can use the following placeholders in ACL SQL and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in ACL SQL and EMQX Broker will automatically populate with client information when executed:
 
 - %a：Client address
 - %u：Username

@@ -15,11 +15,11 @@ ref:
 
 # 命令行接口
 
-EMQ X 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQ X 进行管理、配置、查询。
+EMQX 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQX 进行管理、配置、查询。
 
 ## status 命令
 
-查询 EMQ X 运行状态:
+查询 EMQX 运行状态:
 
 ```bash
 $ ./bin/emqx_ctl status
@@ -48,7 +48,7 @@ $ ./bin/emqx_ctl mgmt list
 app_id: 901abdba8eb8c, secret: MjgzMzQ5MjM1MzUzMTc4MjgyMjE3NzU4ODcwMDg0NjQ4OTG, name: hello, desc: , status: true, expired: undefined
 ```
 
-### mgmt insert <AppId> <Name>
+### mgmt insert \<AppId> \<Name>
 
 添加 HTTP API 的应用程序:
 
@@ -57,7 +57,7 @@ $ ./bin/emqx_ctl mgmt insert dbcb6e023370b world
 AppSecret: MjgzMzQ5MjYyMTY3ODk4MjA5NzMwODExODMxMDM1NDk0NDA
 ```
 
-### mgmt update <AppId> <status>
+### mgmt update \<AppId> \<status>
 
 更新 HTTP API 的应用程序:
 
@@ -66,7 +66,7 @@ $ ./bin/emqx_ctl mgmt update dbcb6e023370b stop
 update successfully.
 ```
 
-### mgmt lookup <AppId>
+### mgmt lookup \<AppId>
 
 获取 HTTP API 的应用程序详情:
 
@@ -80,7 +80,7 @@ status: stop
 expired: undefined
 ```
 
-### mgmt delete <AppId>
+### mgmt delete \<AppId>
 
 删除 HTTP API 的应用程序:
 
@@ -95,15 +95,15 @@ broker 命令查询服务器基本信息，启动时间，统计数据与性能�
 
 | 命令             | 描述                                                                                            |
 | ---------------- | ----------------------------------------------------------------------------------------------- |
-| `broker`         | 查询 EMQ X 描述、版本、启动时间                                                                 |
+| `broker`         | 查询 EMQX 描述、版本、启动时间                                                                 |
 | `broker stats`   | 查询连接 (Connection)、会话 (Session)、主题 (Topic)、订阅 (Subscription)、路由 (Route) 统计信息 |
 | `broker metrics` | 查询 MQTT 报文 (Packet)、消息 (Message) 收发统计                                                |
 
-查询 EMQ X 基本信息，包括版本、启动时间等:
+查询 EMQX 基本信息，包括版本、启动时间等:
 
 ```bash
 $ ./bin/emqx_ctl broker
-sysdescr  : EMQ X Broker
+sysdescr  : EMQX Broker
 version   : 4.0.0
 uptime    : 4 minutes, 52 seconds
 datetime  : 2020-02-21 09:39:58
@@ -233,7 +233,7 @@ session.terminated            : 0
 
 ## cluster 命令
 
-cluster 命令可以管理由多个 EMQ X 节点（进程）组成的集群:
+cluster 命令可以管理由多个 EMQX 节点（进程）组成的集群:
 
 | 命令                          | 描述           |
 | ----------------------------- | -------------- |
@@ -244,7 +244,9 @@ cluster 命令可以管理由多个 EMQ X 节点（进程）组成的集群:
 
 示例:
 
-为更好地展示 cluster 命令，我们先在本机启动两个节点并组成集群，为避免端口冲突，我们对 emqx2 节点的监听端口做出了调整，例如 MQTT/TCP 监听端口由默认的 1883 改为了 2883，详情请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
+为更好地展示 cluster 命令，我们可以先在单机上启动两个节点并组成集群，这称之为伪分布式启动模式。由于我们要在单机上启动两个 emqx 实例，为避免端口冲突，我们需要对其它节点的监听端口做出调整。
+
+基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
 
 启动 emqx1 :
 
@@ -275,7 +277,7 @@ Cluster status: [{running_nodes,['emqx2@127.0.0.1','emqx1@127.0.0.1']}]
 ```
 
 集群消息路由测试:
-MQTT 命令行工具使用由 EMQ X 团队开发的 [emqtt](https://github.com/emqx/emqtt/releases) 客户端。
+MQTT 命令行工具使用由 EMQX 团队开发的 [emqtt](https://github.com/emqx/emqtt/releases) 客户端。
 
 ```bash
 # emqx1 节点（1883 端口）订阅主题 x
@@ -306,7 +308,7 @@ $ cd emqx2 && ./bin/emqx_ctl cluster leave
 $ cd emqx1 && ./bin/emqx_ctl cluster force-leave emqx2@127.0.0.1
 ```
 
-注意，EMQ X 不支持一个已经在一个集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致，但支持加入过集群的节点在离开该集群后加入另一个集群。
+注意，EMQX 不支持一个已经在一个集群中的节点加入另外一个集群，因为这会导致两个集群数据不一致，但支持加入过集群的节点在离开该集群后加入另一个集群。
 
 ## acl 命令
 
@@ -331,8 +333,8 @@ ok
 | 命令                        | 描述                      |
 | --------------------------- | ------------------------- |
 | acl cache-clean all         | 清除集群中所有的 ACL 缓存 |
-| acl cache-clean node <Node> | 清除指定节点的 ACL 缓存   |
-| acl cache-clean <ClientId>  | 清除指定客户端的 ACL 缓存 |
+| acl cache-clean node \<Node> | 清除指定节点的 ACL 缓存   |
+| acl cache-clean \<ClientId>  | 清除指定客户端的 ACL 缓存 |
 
 ## clients 命令
 
@@ -367,7 +369,7 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 | subscriptions             | 当前订阅数量                                             |
 | inflight                  | 当前正在下发的 QoS 1 和 QoS 2 的消息总数                 |
 | awaiting\_rel             | 等待客户端发送 PUBREL 的 QoS2 消息数                     |
-| delivered\_msgs           | EMQ X 向此客户端转发的消息数量 (包含重传)                |
+| delivered\_msgs           | EMQX 向此客户端转发的消息数量 (包含重传)                |
 | enqueued\_msgs            | 消息队列当前长度                                         |
 | dropped\_msgs             | 消息队列达到最大长度后丢弃的消息数量                     |
 | connected                 | 是否在线                                                 |
@@ -375,7 +377,7 @@ Client (mosqsub/44011-airlee.lo, username=test2, peername=127.0.0.1:64961, clean
 | connected\_at             | 客户端连接时间戳                                         |
 | disconnected_at           | 客户端断开连接时间戳（仅当断开连接还保留会话时才会出现） |
 
-### clients show <ClientId>
+### clients show \<ClientId>
 
 查询指定 ClientId 的客户端:
 
@@ -384,7 +386,7 @@ $ ./bin/emqx_ctl clients show "mosqsub/43832-airlee.lo"
 Client (mosqsub/43832-airlee.lo, username=test1, peername=127.0.0.1:62747, clean_start=false, keepalive=60, session_expiry_interval=7200, subscriptions=0, inflight=0, awaiting_rel=0, delivered_msgs=0, enqueued_msgs=0, dropped_msgs=0, connected=true, created_at=1576479557, connected_at=1576479557)
 ```
 
-### clients kick <ClientId>
+### clients kick \<ClientId>
 
 踢除指定 ClientId 的客户端:
 
@@ -397,7 +399,7 @@ ok
 
 routes 命令用于查询路由信息。
 
-EMQ X 中路由是指主题与节点的映射关系，用于在多个节点之间路由消息。
+EMQX 中路由是指主题与节点的映射关系，用于在多个节点之间路由消息。
 
 | 命令                  | 描述                  |
 | --------------------- | --------------------- |
@@ -414,7 +416,7 @@ t2/# -> emqx2@127.0.0.1
 t/+/x -> emqx2@127.0.0.1,emqx@127.0.0.1
 ```
 
-### routes show <Topic>
+### routes show \<Topic>
 
 查询指定 Topic d的路由:
 
@@ -444,7 +446,7 @@ mosqsub/91042-airlee.lo -> t/y:1
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions show <ClientId>
+### subscriptions show \<ClientId>
 
 查询某个 Client 的订阅:
 
@@ -453,7 +455,7 @@ $ ./bin/emqx_ctl subscriptions show 'mosqsub/90475-airlee.lo'
 mosqsub/90475-airlee.lo -> t/+/x:2
 ```
 
-### subscriptions add <ClientId> <Topic> <QoS>
+### subscriptions add \<ClientId> \<Topic> \<QoS>
 
 手动添加订阅关系:
 
@@ -462,7 +464,7 @@ $ ./bin/emqx_ctl subscriptions add 'mosqsub/90475-airlee.lo' '/world' 1
 ok
 ```
 
-### subscriptions del <ClientId> <Topic>
+### subscriptions del \<ClientId> \<Topic>
 
 手动删除订阅关系:
 
@@ -473,7 +475,7 @@ ok
 
 ## plugins 命令
 
-plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩展认证、定制功能，插件配置位于 `etc/plugins/` 目录下。
+plugins 命令用于加载、卸载、查询插件应用。EMQX 通过插件扩展认证、定制功能，插件配置位于 `etc/plugins/` 目录下。
 
 | 命令                       | 描述                  |
 | -------------------------- | --------------------- |
@@ -491,9 +493,9 @@ plugins 命令用于加载、卸载、查询插件应用。EMQ X 通过插件扩
 ```bash
 $ ./bin/emqx_ctl plugins list
 ...
-Plugin(emqx_auth_http, description=EMQ X Authentication/ACL with HTTP API, active=false)
-Plugin(emqx_auth_jwt, description=EMQ X Authentication with JWT, active=false)
-Plugin(emqx_auth_ldap, description=EMQ X Authentication/ACL with LDAP, active=false)
+Plugin(emqx_auth_http, description=EMQX Authentication/ACL with HTTP API, active=false)
+Plugin(emqx_auth_jwt, description=EMQX Authentication with JWT, active=false)
+Plugin(emqx_auth_ldap, description=EMQX Authentication/ACL with LDAP, active=false)
 ...
 ```
 
@@ -505,7 +507,7 @@ Plugin(emqx_auth_ldap, description=EMQ X Authentication/ACL with LDAP, active=fa
 | description | 插件描述   |
 | active      | 是否已加载 |
 
-### plugins load <Plugin>
+### plugins load \<Plugin>
 
 加载插件:
 
@@ -514,7 +516,7 @@ $ ./bin/emqx_ctl plugins load emqx_lua_hook
 Plugin emqx_lua_hook loaded successfully.
 ```
 
-### plugins unload <Plugin>
+### plugins unload \<Plugin>
 
 卸载插件:
 
@@ -523,7 +525,7 @@ $ ./bin/emqx_ctl plugins unload emqx_lua_hook
 Plugin emqx_lua_hook unloaded successfully.
 ```
 
-### plugins reload <Plugin>
+### plugins reload \<Plugin>
 
 重载插件:
 
@@ -534,7 +536,7 @@ Plugin emqx_lua_hook reloaded successfully.
 
 ## modules 命令
 
-自 v4.1 之后，引入了 `modules` 命令用于在运行时管理 EMQ X 内置的模块。
+自 v4.1 之后，引入了 `modules` 命令用于在运行时管理 EMQX 内置的模块。
 
 | 命令                       | 描述                      |
 | -------------------------- | ------------------------- |
@@ -549,12 +551,12 @@ Plugin emqx_lua_hook reloaded successfully.
 
 ```bash
 $ ./bin/emqx_ctl modules list
-Module(emqx_mod_delayed, description=EMQ X Delayed Publish Module, active=false)
-Module(emqx_mod_topic_metrics, description=EMQ X Topic Metrics Module, active=false)
-Module(emqx_mod_subscription, description=EMQ X Subscription Module, active=false)
-Module(emqx_mod_acl_internal, description=EMQ X Internal ACL Module, active=true)
-Module(emqx_mod_rewrite, description=EMQ X Topic Rewrite Module, active=false)
-Module(emqx_mod_presence, description=EMQ X Presence Module, active=true)
+Module(emqx_mod_delayed, description=EMQX Delayed Publish Module, active=false)
+Module(emqx_mod_topic_metrics, description=EMQX Topic Metrics Module, active=false)
+Module(emqx_mod_subscription, description=EMQX Subscription Module, active=false)
+Module(emqx_mod_acl_internal, description=EMQX Internal ACL Module, active=true)
+Module(emqx_mod_rewrite, description=EMQX Topic Rewrite Module, active=false)
+Module(emqx_mod_presence, description=EMQX Presence Module, active=true)
 ```
 
 ### modules load
@@ -702,7 +704,7 @@ log 命令用于设置日志等级。访问 [Documentation of logger](http://erl
 
 日志的等级由低到高分别为：`debug | info | notice | warning | error | critical | alert | emergency`，日志等级越低，系统输出的日志数量越多，消耗的系统资源越大。为提高系统运行性能，默认的主日志等级是 error。
 
-### log set-level <Level>
+### log set-level \<Level>
 
 设置主日志等级和所有 Handlers 日志等级:
 
@@ -720,7 +722,7 @@ $ ./bin/emqx_ctl log primary-level
 debug
 ```
 
-### log primary-level <Level>
+### log primary-level \<Level>
 
 设置主日志等级:
 
@@ -740,7 +742,7 @@ LogHandler(id=file, level=warning, destination=log/emqx.log, status=started)
 LogHandler(id=default, level=warning, destination=console, status=started)
 ```
 
-### log handlers start <HandlerId>
+### log handlers start \<HandlerId>
 
 启动 log handler `'default'`:
 
@@ -749,7 +751,7 @@ $ ./bin/emqx_ctl log handlers start default
 log handler default started
 ```
 
-### log handlers stop <HandlerId>
+### log handlers stop \<HandlerId>
 
 停止 log handler `'default'`:
 
@@ -758,7 +760,7 @@ $ ./bin/emqx_ctl log handlers stop default
 log handler default stopped
 ```
 
-### log handlers set-level <HandlerId> <Level>
+### log handlers set-level \<HandlerId> \<Level>
 
 设置指定 Handler 的日志等级:
 
@@ -779,7 +781,7 @@ trace 命令用于追踪某个 Client 或 Topic，打印日志信息到文件，
 | `trace start topic <Topic> <File> [<Level>]    ` | 开启 Topic 追踪，存储指定等级的日志到文件  |
 | `trace stop topic <Topic>                      ` | 关闭 Topic 追踪                            |
 
-### trace start client <ClientId> <File> [ <Level> ]
+### trace start client \<ClientId> \<File> [ \<Level> ]
 
 开启 Client 追踪:
 
@@ -794,7 +796,7 @@ $ ./bin/emqx_ctl trace start client clientid2 log/clientid2_trace.log error
 trace clientid clientid2 successfully
 ```
 
-### trace stop client <ClientId>
+### trace stop client \<ClientId>
 
 关闭 Client 追踪:
 
@@ -803,7 +805,7 @@ $ ./bin/emqx_ctl trace stop client clientid
 stop tracing clientid clientid successfully
 ```
 
-### trace start topic <Topic> <File> [ <Level> ]
+### trace start topic \<Topic> \<File> [ \<Level> ]
 
 开启 Topic 追踪:
 
@@ -818,7 +820,7 @@ $ ./bin/emqx_ctl trace start topic topic2 log/topic2_trace.log error
 trace topic topic2 successfully
 ```
 
-### trace stop topic <Topic>
+### trace stop topic \<Topic>
 
 关闭 Topic 追踪:
 
@@ -844,9 +846,9 @@ listeners 命令用于查询开启的 TCP 服务监听器。
 | 命令                             | 描述                 |
 | -------------------------------- | -------------------- |
 | listeners                        | # List listeners     |
-| listeners stop    <Identifier>   | # Stop a listener    |
-| listeners stop    <Proto> <Port> | # Stop a listener    |
-| listeners restart <Identifier>   | # Restart a listener |
+| listeners stop    \<Identifier>   | # Stop a listener    |
+| listeners stop    \<Proto> \<Port> | # Stop a listener    |
+| listeners restart \<Identifier>   | # Restart a listener |
 
 ### listeners list
 
@@ -927,7 +929,7 @@ Start http:dashboard listener on 0.0.0.0:18083 successfully.
 
 ## recon 命令
 
-EMQ X 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
+EMQX 的 recon 命令基于 Erlang Recon 库实现，用于帮助 DevOps 人员诊断生产节点中的问题，普通用户无需关心。使用 recon 命令会耗费一定的性能，请谨慎使用。
 
 | 命令                       | 描述                                                                                                         |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -978,7 +980,7 @@ $ ./bin/emqx_ctl retainer clean
 Cleaned 3 retained messages
 ```
 
-### retainer clean <Topic>
+### retainer clean \<Topic>
 
 清除指定的主题下的保留的消息:
 
@@ -997,7 +999,7 @@ Cleaned 1 retained messages
 | `admins passwd <Username> <Password>     ` | 重置 admin 密码 |
 | `admins del <Username>                   ` | 删除 admin 账号 |
 
-### admins add <Username> <Password> <Tags>
+### admins add \<Username> \<Password> \<Tags>
 
 创建 admin 账户:
 
@@ -1006,7 +1008,7 @@ $ ./bin/emqx_ctl admins add root public test
 ok
 ```
 
-### admins passwd <Username> <Password>
+### admins passwd \<Username> \<Password>
 
 重置 admin 账户密码:
 
@@ -1015,7 +1017,7 @@ $ ./bin/emqx_ctl admins passwd root private
 ok
 ```
 
-### admins del <Username>
+### admins del \<Username>
 
 删除 admin 账户:
 
@@ -1091,7 +1093,7 @@ ok
 
 
 ::: tip
-动作可以由 EMQ X 内置(称为系统内置动作)，或者由 EMQ X 插件编写，但不能通过 CLI/API 添加或删除。
+动作可以由 EMQX 内置(称为系统内置动作)，或者由 EMQX 插件编写，但不能通过 CLI/API 添加或删除。
 :::
 
 #### rule-actions show
@@ -1173,7 +1175,7 @@ ok
 | resource-types show `<Type>` | Show a resource-type    |
 
 ::: tip
-资源类型可以由 EMQ X 内置(称为系统内置资源类型)，或者由 EMQ X 插件编写，但不能通过 CLI/API 添加或删除。
+资源类型可以由 EMQX 内置(称为系统内置资源类型)，或者由 EMQX 插件编写，但不能通过 CLI/API 添加或删除。
 :::
 
 #### resource-types list
@@ -1219,7 +1221,7 @@ resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL
 - 可用: 资源可用
 - 不可用: 资源不可用(比如数据库连接断开)
 
-## EMQ X 内置数据库 Auth 与 ACL 规则
+## EMQX 内置数据库 Auth 与 ACL 规则
 
 此命令只有在开启 emqx_auth_mnesia 插件后生效
 
@@ -1320,14 +1322,14 @@ ok
 | acl list clientid                                    | List clientid acls|
 | acl list username                                    | List username acls|
 | acl list _all                                        | List $all acls|
-| acl show clientid <Clientid>                         | Lookup clientid acl detail|
-| acl show username <Username>                         | Lookup username acl detail|
-| acl aad clientid <Clientid> <Topic> <Action> <Access>| Add clientid acl|
-| acl add Username <Username> <Topic> <Action> <Access>| Add username acl|
-| acl add _all <Topic> <Action> <Access>               | Add $all acl|
-| acl del clientid <Clientid> <Topic>                  | Delete clientid acl|
-| acl del username <Username> <Topic>                  | Delete username acl|
-| acl del _all <Topic>                                 | Delete $all acl|
+| acl show clientid \<Clientid>                         | Lookup clientid acl detail|
+| acl show username \<Username>                         | Lookup username acl detail|
+| acl aad clientid \<Clientid> \<Topic> \<Action> \<Access>| Add clientid acl|
+| acl add Username \<Username> \<Topic> \<Action> \<Access>| Add username acl|
+| acl add _all \<Topic> \<Action> \<Access>               | Add $all acl|
+| acl del clientid \<Clientid> \<Topic>                  | Delete clientid acl|
+| acl del username \<Username> \<Topic>                  | Delete username acl|
+| acl del _all \<Topic>                                 | Delete $all acl|
 
 #### acl list
 

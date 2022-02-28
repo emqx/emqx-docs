@@ -1,9 +1,9 @@
 # Create a cluster
 
 ## Node Discovery and Autocluster 
-EMQ X supports Autocluster based on the Ekka library. Ekka is a cluster management library developed for Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster, Network Partition Autoheal and Autoclean.
+EMQX supports Autocluster based on the Ekka library. Ekka is a cluster management library developed for Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster, Network Partition Autoheal and Autoclean.
 
-EMQ X supports multiple node discovery strategies:
+EMQX supports multiple node discovery strategies:
 
 | Strategy | Description      |
 | ------ | ----------------- |
@@ -15,7 +15,7 @@ EMQ X supports multiple node discovery strategies:
 | k8s    | Autocluster of Kubernetes service |
 
 ### Introduction to cluster management  through manual method
-Suppose you are going to deploy an EMQ X cluster on two servers of s1.emqx.io, s2.emqx.io:
+Suppose you are going to deploy an EMQX cluster on two servers of s1.emqx.io, s2.emqx.io:
 
 |                Node name                | Hostname (FQDN) |   IP address   |
 | ------------------------------------ | ------------- | ------------ |
@@ -98,6 +98,12 @@ Or delete the emqx@s2.emqx.io node from the cluster on s1.emqx.io:
 $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
+#### Start a cluster on single machine
+
+For users who only have one server, the pseudo-distributed starting mode can be used. Please notice that if we want to start two or more nodes on one machine, we must adjust the listening port of the other node to avoid the port conflicts.
+
+The basic process is to copy another emqx folder and name it emqx2. After that, we let all the listening ports of the original emqx to be added by an offset as the listening ports of the emqx2 node. For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 as the MQTT/TCP listening port for emqx2. Please refer to [Cluster Script](https://github.com/terry-xiaoyu/one_more_emqx) regarding to the above operations and also refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
+
 
 ## Firewall settings
 
@@ -125,7 +131,7 @@ where `BasePort` is 4370 (which is not made configurable), and `Offset` is the n
 For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the
 node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
 
-### The Cluster PRC Port
+### The Cluster RPC Port
 
 Each emqx node also listens on a (conventional) port for the RPC channels, which should
 also be allowed by the firewall. The port mapping rule is similar to the node discovery

@@ -3,7 +3,7 @@
 Setup a Pulsar, taking Mac OSX for instance:
 
 ```bash
-$ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
+$ wget https://archive.apache.org/dist/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
 
 $ tar xvfz apache-pulsar-2.3.2-bin.tar.gz
 
@@ -22,7 +22,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 
 Create a rule:
 
-Go to [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:

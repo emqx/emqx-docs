@@ -15,7 +15,7 @@ ref:
 
 # Extension Hook
 
-The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQ X's [Hooks](hooks.md) using other programming languages.
+The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX's [Hooks](hooks.md) using other programming languages.
 
 In this way, other programming languages can handle emqx events for the purpose of customizing and extending emqx. For example, users can use other programming languages to implement:
 
@@ -32,7 +32,7 @@ The **emqx-exhook** plugin uses [gRPC](https://www.grpc.io) as the communication
 The architecture is as illustrated below:
 
 ```
-  EMQ X
+  EMQX
 +========================+                 +========+==========+
 |    ExHook              |                 |        |          |
 |   +----------------+   |      gRPC       | gRPC   |  User's  |
@@ -42,9 +42,9 @@ The architecture is as illustrated below:
 +========================+                 +========+==========+
 ```
 
-It indicates that EMQ X acts as a gRPC client, sending hook events from EMQ X to the user's gRPC server.
+It indicates that EMQX acts as a gRPC client, sending hook events from EMQX to the user's gRPC server.
 
-Consistent with EMQ X's native hooks, it also supports a chained approach to calculating and returning.
+Consistent with EMQX's native hooks, it also supports a chained approach to calculating and returning.
 
 ![chain_of_responsiblity](./assets/chain_of_responsiblity.png)
 
@@ -114,13 +114,13 @@ The HookProvider part:
 The hook events part:
 
 - The methods prefixed with `OnClient`, `OnSession`, and `OnMessage` correspond to the methods in [hooks](hooks.md). They have the same call timing and a similar argument list.
-- Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return values to EMQ X, other callbacks are not supported.
+- Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return values to EMQX, other callbacks are not supported.
 
 For details of the interface and parameter data structures refer to: [exhook.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exhook/priv/protos/exhook.proto)
 
 ## Developing Guide
 
-The user needs to implement the gRPC service of `HookProvider` to receive callback events from EMQ X.
+The user needs to implement the gRPC service of `HookProvider` to receive callback events from EMQX.
 
 The main development steps are as following:
 
@@ -128,7 +128,7 @@ The main development steps are as following:
 2. Generate the code for the gRPC server side of `exhook.proto` using the gRPC framework for the corresponding programming language.
 3. Implement the interfaces defined in exhook.proto on demand
 
-Once the development is complete, the service needs to be deployed to a server that can communicate with EMQ X and ensure that the ports are open.
+Once the development is complete, the service needs to be deployed to a server that can communicate with EMQX and ensure that the ports are open.
 
 Then modify the server configuration in `etc/plugins/emqx_exhook.conf`, for example:
 

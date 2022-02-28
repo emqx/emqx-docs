@@ -77,7 +77,60 @@ Erlang 节点间通过 cookie 进行互连认证。cookie 是一个字符串，�
 
 详见: <http://erlang.org/doc/reference_manual/distributed.html>
 
-### EMQ X 集群协议设置
+### 节点间RPC使用TLS
+
+为保障节点间通信的安全性，可以为节点间的RPC连接开启TLS。
+TLS 可能会到指节点的CPU使用率上升。
+
+1. 创建一个自签名的根证书
+
+```
+# Create self-signed root CA:
+openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key -out rootCA.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
+```
+
+2. 使用第一步的根证书签发节点证书
+
+```
+# Create a private key:
+openssl genrsa -out domain.key 2048
+# Create openssl extfile:
+cat <<EOF > domain.ext
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = backplane
+EOF
+# Create a CSR:
+openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
+# Sign the CSR with the Root CA:
+openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
+```
+请注意，集群中的所有节点必须使用同一个跟证书。
+
+3. 为每个节点，将生成的私钥以及证书文件 `domain.pem`, `domain.key` 和 `rootCA.pem` 放置在 `/var/lib/emqx/ssl`。
+   请保证 `emqx` 用户是这些文件的所有者，并设置权限为 `600`.
+
+4. 如果版本是企业版 4.4.0, 需要在 `releases/4.4.0/emqx.schema` 末尾增加如下配置
+
+```
+{mapping, "rpc.default_client_driver", "gen_rpc.default_client_driver",
+[{default, tcp}, {datatype, {enum, [tcp, ssl]}}]}.
+```
+
+5. 在企业版的 `etc/rpc.conf`, 或开源版的 `etc/emqx.conf` 中加入如下配置:
+
+```
+rpc.driver=ssl
+rpc.default_client_driver=ssl
+rpc.certfile=/var/lib/emqx/ssl/domain.pem
+rpc.cacertfile=/var/lib/emqx/ssl/rootCA.pem
+rpc.keyfile=/var/lib/emqx/ssl/domain.key
+rpc.enable_ssl=5369
+```
+
+### EMQX 集群协议设置
 
 Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `etc/emqx.conf`
 中配置连接方式:
@@ -87,17 +140,17 @@ Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `
 | cluster.proto_dist | enum | `inet_tcp` | 分布式协议，可选值：<br />  - inet_tcp: 使用 TCP IPv4<br/>  - inet6_tcp: 使用 TCP IPv6<br/>  - inet_tls: 使用 TLS |
 | node.ssl_dist_optfile | 文件路径 | `etc/ssl_dist.conf` | 当 `cluster.proto_dist` 选定为 inet_tls 时，需要配置 `etc/ssl_dist.conf` 文件，指定 TLS 证书等 |
 
-## EMQ X 分布式集群设计
+## EMQX 分布式集群设计
 
-EMQ X 分布式的基本功能是将消息转发和投递给各节点上的订阅者，如下图所示：
+EMQX 分布式的基本功能是将消息转发和投递给各节点上的订阅者，如下图所示：
 
 ![image](../assets/design_9.png)
 
-为实现此过程，EMQ X 维护了几个与之相关的数据结构：订阅表，路由表，主题树。
+为实现此过程，EMQX 维护了几个与之相关的数据结构：订阅表，路由表，主题树。
 
 ### 订阅表: 主题 - 订阅者
 
-MQTT 客户端订阅主题时，EMQ X 会维护主题(Topic) -\> 订阅者(Subscriber) 映射的**订阅表**。订阅表只存在于订阅者所在的 EMQ X 节点上，例如:
+MQTT 客户端订阅主题时，EMQX 会维护主题(Topic) -\> 订阅者(Subscriber) 映射的**订阅表**。订阅表只存在于订阅者所在的 EMQX 节点上，例如:
 
 ```bash
 node1:
@@ -122,7 +175,7 @@ topic3 -> node2, node4
 
 ### 主题树: 带统配符的主题匹配
 
-除路由表之外，EMQ X 集群中的每个节点也会维护一份**主题树**(Topic Trie) 的备份。
+除路由表之外，EMQX 集群中的每个节点也会维护一份**主题树**(Topic Trie) 的备份。
 
 例如下述主题订阅关系:
 
@@ -132,7 +185,7 @@ topic3 -> node2, node4
 | client2 | node2 | t/# |
 | client3 | node3 | t/+/x, t/a |
 
-在所有订阅完成时，EMQ X 中会维护如下主题树 (Topic Trie) 和路由表 (Route Table):
+在所有订阅完成时，EMQX 中会维护如下主题树 (Topic Trie) 和路由表 (Route Table):
 
 ![image](../assets/cluster_2.png)
 
@@ -151,15 +204,15 @@ topic3 -> node2, node4
 
 ### 数据分片与共享方式
 
-EMQ X 的订阅表在集群中是分片(partitioned)的，而主题树和路由表是共享(replicated)的。
+EMQX 的订阅表在集群中是分片(partitioned)的，而主题树和路由表是共享(replicated)的。
 
 ## 节点发现与自动集群
 
-EMQ X 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
+EMQX 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
 Autoheal)、自动删除宕机节点 (Autoclean)。
 
-EMQ X 支持多种节点发现策略:
+EMQX 支持多种节点发现策略:
 
 | 策略     | 说明                |
 | ------ | ----------------- |
@@ -237,7 +290,7 @@ cluster.k8s.app_name = ekka
 
 ### 手动(manual) 方式管理集群介绍
 
-假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQ X 集群:
+假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQX 集群:
 
 |                节点名                 | 主机名 (FQDN)  |   IP 地址    |
 | ------------------------------------ | ------------- | ------------ |
@@ -321,9 +374,15 @@ $ ./bin/emqx_ctl cluster leave
 $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
+#### 单机伪分布式
+
+对于只有个人电脑或者一台服务器的用户来说，可以使用伪分布式集群。请注意，我们若要在单机上启动两个或多个 emqx 实例，为避免端口冲突，我们需要对其它节点的监听端口做出调整。
+
+基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
+
 ## 集群脑裂与自动愈合
 
-*EMQ X* 支持集群脑裂自动恢复(Network Partition Autoheal)，可在 `etc/emqx.conf` 中配置:
+*EMQX* 支持集群脑裂自动恢复(Network Partition Autoheal)，可在 `etc/emqx.conf` 中配置:
 
 ```bash
 cluster.autoheal = on
@@ -339,7 +398,7 @@ cluster.autoheal = on
 
 ## 集群节点自动清除
 
-*EMQ X* 支持从集群自动删除宕机节点 (Autoclean)，可在 `etc/emqx.conf` 中配置:
+*EMQX* 支持从集群自动删除宕机节点 (Autoclean)，可在 `etc/emqx.conf` 中配置:
 
 ```bash
 cluster.autoclean = 5m
@@ -385,61 +444,3 @@ RPC 端口的规则跟`ekka 模式`下的集群发现端口类似，只不过 `B
 
 就是说，如果 `emqx.conf` 里配置了节点名：`node.name = emqx@192.168.0.12`，那么监听端口为 `5370`，
 但对于 `emqx1` (或者 `emqx-1`) 端口就是 `5371`，以此类推。
-
-## 异步的数据库复制 (RLOG)
-
-::危险
-这个功能是高度实验性的。
-如果你想帮助我们测试和调试它，欢迎启用它。
-:::
-
-EMQ X 的一些功能依赖于开源的[Mnesia](http://erlang.org/doc/apps/mnesia/Mnesia_overview.html)数据库。
-Mnesia使用全网格拓扑结构进行事务复制。
-虽然在小型集群中速度极快，但当集群中的节点数量变多时，可能会遇到一些扩展性问题。
-同时，它也变得更容易受到网络分裂的影响。
-为了解决这些问题，EMQ X支持Mnesia的一个实验性扩展，称为 "RLOG"。
-这个扩展可以用于大型EMQ X集群（4个节点以上）。
-
-### RLOG原理
-
-RLOG扩展的工作原理是将集群中的节点分离成两个逻辑组。
-
-- 核心节点
-- 复制者节点
-
-#### 核心节点
-
-核心节点是数据库的SOT (Source Of Truth) 
-它们包含最新的表的一致复制，它们直接负责高可用性。
-注意：不建议将核心节点放入自动伸缩组。
-
-虽然在集群中可以有任何数量的核心节点，但推荐使用2个或3个节点。
-
-#### Replicants
-
-复制者可以处理MQTT流量，但他们将Mnesia事务协调委托给核心节点。
-复制者被动地、异步地复制来自核心节点的数据。
-它们可以同时从几个不同的核心节点接收数据，但是，它们尽量选择负载最小的核心节点。
-
-可以把复制者放到一个自动伸缩组中。
-
-::警告
-新的复制者的加入集群需要时间，这个过程会给核心节点带来额外的负载。
-请不要使用太激进的自动伸缩配置，以避免频繁的复制者重新启动。
-:::
-
-集群中的数据流如下图所示（简化）。
-
-！[image](./assets/rlog_cluster.png)
-
-### 启用RLog功能
-
-假设我们把`emqx@core1.internal`和`emqx@core2.internal` 配置成core节点
-
-应该在`etc/emqx.conf`文件中做以下修改。
-
-1. 如果要改变现有的配置部署， 需要停止集群中的所有节点
-1. 在集群中的所有节点上设置`cluster.db_backend`参数为`rlog`。
-1. 在`emqx@core1.internal`和`emqx@core2.internal`上将`cluster.rlog.role`参数设为`core`，在所有其他节点上设为`replicant`。
-1. 在所有节点上设置`cluster.rlog.core_nodes`参数为`emqx@core1.internal,emqx@core2.internal`。
-1. 启动整个集群

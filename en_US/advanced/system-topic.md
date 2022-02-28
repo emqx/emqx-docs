@@ -1,6 +1,6 @@
 # $SYS - System Topic
 
-The EMQ X Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
+The EMQX Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
 
  The `$SYS` topic path begins with `$SYS/brokers/{node}/`. `{node}` is the name of the node where the event/message is generated, for example:
 
@@ -15,9 +15,13 @@ $SYS/brokers/emqx@127.0.0.1/uptime
 ```bash
 broker.sys_interval = 1m
 ```
+
+::: tip
+
+
 {% emqxce %}
 
-::: danger
+::: tip
 
 {% emqxce %}
 
@@ -25,13 +29,15 @@ By default, only MQTT clients on localhost is allowed to subscribe to the $SYS t
 
 {% endemqxce %}
 
+
 {% emqxee %}
 
 By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to build-in ACL to modify the ACL rules for publish and subscription.
 
 {% endemqxee %}
 
-Most of the data of the $SYS topic in EMQ X Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through  [HTTP API - Statistics Metrics](./http-api.md#endpoint-metrics).
+
+Most of the data of the $SYS topic in EMQX Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through  [HTTP API - Statistics Metrics](./http-api.md#endpoint-metrics).
 
 :::
 
@@ -40,10 +46,10 @@ Most of the data of the $SYS topic in EMQ X Broker can be obtained through other
 | Topic                      | Description       |
 | ----------------------------- | -------------------- |
 | $SYS/brokers                  | cluster node list |
-| $SYS/brokers/\${node}/version  | EMQ X Broker version |
-| $SYS/brokers/\${node}/uptime   | EMQ X Broker startup time |
-| $SYS/brokers/\${node}/datetime | EMQ X Broker time |
-| $SYS/brokers/\${node}/sysdescr | EMQ X Broker description |
+| $SYS/brokers/\${node}/version  | EMQX Broker version |
+| $SYS/brokers/\${node}/uptime   | EMQX Broker startup time |
+| $SYS/brokers/\${node}/datetime | EMQX Broker time |
+| $SYS/brokers/\${node}/sysdescr | EMQX Broker description |
 
 ## Client Online and Offline Events
 
@@ -58,18 +64,18 @@ Most of the data of the $SYS topic in EMQ X Broker can be obtained through other
 
 ```bash
 {
-    "username":"undefined",
-    "ts":1582687922392,
-    "sockport":1883,
-    "proto_ver":5,
-    "proto_name":"MQTT",
-    "keepalive":300,
-    "ipaddress":"127.0.0.1",
-    "expiry_interval":0,
-    "connected_at":1582687922,
-    "connack":0,
-    "clientid":"emqtt-8348fe27a87976ad4db3",
-    "clean_start":true
+    "username": "foo",
+    "ts": 1625572213873,
+    "sockport": 1883,
+    "proto_ver": 4,
+    "proto_name": "MQTT",
+    "keepalive": 60,
+    "ipaddress": "127.0.0.1",
+    "expiry_interval": 0,
+    "connected_at": 1625572213873,
+    "connack": 0,
+    "clientid": "emqtt-8348fe27a87976ad4db3",
+    "clean_start": true
 }
 ```
 
@@ -77,11 +83,15 @@ Most of the data of the $SYS topic in EMQ X Broker can be obtained through other
 
 ```bash
 {
-    "username":"undefined",
-    "ts":1582688032203,
-    "reason":"tcp_closed",
-    "disconnected_at":1582688032,
-    "clientid":"emqtt-8348fe27a87976ad4db3"
+    "username": "foo",
+    "ts": 1625572213873,
+    "sockport": 1883,
+    "reason": "tcp_closed",
+    "proto_ver": 4,
+    "proto_name": "MQTT",
+    "ipaddress": "127.0.0.1",
+    "disconnected_at": 1625572213873,
+    "clientid": "emqtt-8348fe27a87976ad4db3"
 }
 ```
 

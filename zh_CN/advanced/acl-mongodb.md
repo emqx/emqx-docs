@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -23,7 +23,7 @@ MongoDB ACL 使用外部 MongoDB 数据库存储 ACL 规则，可以存储大量
 emqx_auth_mongo
 ```
 
-::: tip 
+::: tip
 emqx_auth_mongo 插件同时包含认证功能，可通过注释禁用。
 :::
 
@@ -35,16 +35,33 @@ MongoDB 基础连接信息，需要保证集群内所有节点均能访问。
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
 
-## MongoDB 架构类型
+## MongoDB 部署类型
 ##
 ## Value: single | unknown | sharded | rs
 auth.mongo.type = single
 
-## rs 模式需要设置 rs name
+## 是否启用 SRV 和 TXT 记录解析
+auth.mongo.srv_record = false
+
+## 如果您的 MongoDB 以副本集方式部署，则需要指定相应的副本集名称
+##
+## 如果启用了 SRV 记录，即 auth.mongo.srv_record 设置为 true，
+## 且您的 MongoDB 服务器域名添加了包含 replicaSet 选项的 DNS TXT 记录，
+## 那么可以忽略此配置项
 ## auth.mongo.rs_set_name =
 
-## 服务器列表，集群模式下使用逗号分隔每个服务器
-## Examples: 127.0.0.1:27017,127.0.0.2:27017...
+## MongoDB 服务器地址列表
+##
+## 如果你的 URI 具有以下格式：
+## mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
+## 请将 auth.mongo.server 配置为 host1[:port1][,...hostN[:portN]]
+##
+## 如果你的 URI 具有以下格式：
+## mongodb+srv://server.example.com
+## 请将 auth.mongo.server 配置为 server.example.com，并将 srv_record
+## 设置为 true，EMQX 将自动查询 SRV 和 TXT 记录以获取服务列表和 replicaSet 等选项
+##
+## 现已支持 IPv6 和域名
 auth.mongo.server = 127.0.0.1:27017
 
 auth.mongo.pool = 8
@@ -53,6 +70,11 @@ auth.mongo.login =
 
 auth.mongo.password =
 
+## 指定用于授权的数据库，没有指定时默认为 admin
+##
+## 如果启用了 SRV 记录，即 auth.mongo.srv_record 设置为 true，
+## 且您的 MongoDB 服务器域名添加了包含 authSource 选项的 DNS TXT 记录，
+## 那么可以忽略此配置项
 ## auth.mongo.auth_source = admin
 
 auth.mongo.database = mqtt
@@ -68,14 +90,15 @@ auth.mongo.query_timeout = 5s
 
 ## auth.mongo.ssl_opts.cacertfile =
 
-## MongoDB write mode.
+## MongoDB 写模式
 ##
-## Value: unsafe | safe
+## 可设置为 unsafe 或 safe。设置为 safe 时会等待 MongoDB Server 的响应并返回给调用者。未指定时将使用默认值 unsafe。
 ## auth.mongo.w_mode =
 
-## Mongo read mode.
+
+## MongoDB 读模式
 ##
-## Value: master | slave_ok
+## 可设置为 master 或 slave_ok，设置为 master 时表示每次查询都将从主节点读取最新数据。未指定时将使用默认值 master。
 ## auth.mongo.r_mode =
 
 ## MongoDB 拓扑配置，一般情况下用不到，详见 MongoDB 官网文档
@@ -144,11 +167,11 @@ MongoDB ACL 一条规则中定义了发布、订阅和发布/订阅的信息，�
 - subscribe：允许订阅的主题数值，支持通配符
 - pubsub：允许发布订阅的主题数值，支持通配符
 
-::: tip 
+::: tip
 主题可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
   - %u：用户名
   - %c：Client ID
-::: 
+:::
 
 
 默认配置下示例数据：
@@ -171,7 +194,7 @@ db.mqtt_acl.insert({
 
 ## 超级用户查询（super_query）
 
-进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户查询，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询。
+进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户查询，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询。
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -199,7 +222,7 @@ db.mqtt_user.find({
 })
 ```
 
-你可以在查询条件中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在查询条件中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
@@ -216,7 +239,7 @@ db.mqtt_user.find({
 
 ## ACL 查询（acl_query）
 
-进行 ACL 鉴权时，EMQ X 将使用当前客户端信息填充并执行用户配置的超级用户查询，如果没有启用超级用户查询或客户端不是超级用户，则使用 ACL 查询 查询出该客户端在数据库中的 ACL 规则。
+进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户查询，如果没有启用超级用户查询或客户端不是超级用户，则使用 ACL 查询 查询出该客户端在数据库中的 ACL 规则。
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -259,13 +282,19 @@ db.mqtt_acl.find({
 ```
 
 
-你可以在 ACL 查询中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在 ACL 查询中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
 
 
-::: danger 
+::: tip
 MongoDB ACL 规则需严格使用上述数据结构。
-MongoDB ACL 中添加的所有规则都是 允许 规则，可以搭配 `etc/emqx.conf` 中 `acl_nomatch = deny` 使用。
+
+MongoDB ACL 中添加的所有规则都是 **允许** 规则。即白名单。
+
+MongoDB 中对应 topic 的规则为空时将交由下一个 acl 插件继续检查，否则将立即终止认证链并返回。
+规则非空且未匹配到相应的 pub/sub 权限时，将返回认证失败（拒绝相应的 pub/sub 行为）并终止认证链。
+
+同时启用多个 auth/ACL 插件时，建议将 MongoDB ACL 认证置于其他启用的 auth/ACL 插件后。
 :::

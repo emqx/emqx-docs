@@ -1,19 +1,19 @@
 # HTTP API
 
-EMQ X 提供了 HTTP API 以实现与外部系统的集成，例如查询客户端信息、发布消息和创建规则等。
+EMQX 提供了 HTTP API 以实现与外部系统的集成，例如查询客户端信息、发布消息和创建规则等。
 
-EMQ X 的 HTTP API 服务默认监听 8081 端口，可通过 `etc/plugins/emqx_management.conf` 配置文件修改监听端口，或启用 HTTPS 监听。[EMQ X 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0) 以后的所有 API 调用均以 `api/v4` 开头。
+EMQX 的 HTTP API 服务默认监听 8081 端口，可通过 `etc/plugins/emqx_management.conf` 配置文件修改监听端口，或启用 HTTPS 监听。[EMQX 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0) 以后的所有 API 调用均以 `api/v4` 开头。
 
 ## 接口安全
 
-EMQ X 的 HTTP API 使用 [Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication) 方式，`id` 和 `password` 须分别填写 AppID 和 AppSecret。
+EMQX 的 HTTP API 使用 [Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication) 方式，`id` 和 `password` 须分别填写 AppID 和 AppSecret。
 默认的 AppID 和 AppSecret 是：`admin/public`。你可以在 Dashboard 的左侧菜单栏里，选择 "管理" -> "应用" 来修改和添加 AppID/AppSecret。
 
 ## 响应码
 
 ### HTTP 状态码 (status codes)
 
-EMQ X 接口在调用成功时总是返回 200 OK，响应内容则以 JSON 格式返回。
+EMQX 接口在调用成功时总是返回 200 OK，响应内容则以 JSON 格式返回。
 
 可能的状态码如下：
 
@@ -27,7 +27,7 @@ EMQ X 接口在调用成功时总是返回 200 OK，响应内容则以 JSON 格�
 
 ### 返回码 (result codes)
 
-EMQ X 接口的响应消息体为 JSON 格式，其中总是包含返回码 `code`。
+EMQX 接口的响应消息体为 JSON 格式，其中总是包含返回码 `code`。
 
 可能的返回码如下：
 
@@ -56,7 +56,7 @@ EMQ X 接口的响应消息体为 JSON 格式，其中总是包含返回码 `cod
 
 ### GET /api/v4
 
-返回 EMQ X 支持的所有 Endpoints。
+返回 EMQX 支持的所有 Endpoints。
 
 **Parameters:** 无
 
@@ -100,10 +100,10 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4"
 | data.datetime    | String    | 当前时间，格式为 "YYYY-MM-DD HH:mm:ss"                       |
 | data.node        | String    | 节点名称                                                     |
 | data.node_status | String    | 节点状态                                                     |
-| data.otp_release | String    | EMQ X 使用的 Erlang/OTP 版本                          |
+| data.otp_release | String    | EMQX 使用的 Erlang/OTP 版本                          |
 | data.sysdescr    | String    | 软件描述                                                     |
-| data.uptime      | String    | EMQ X 运行时间，格式为 "H hours, m minutes, s seconds" |
-| data.version     | String    | EMQ X 版本                                           |
+| data.uptime      | String    | EMQX 运行时间，格式为 "H hours, m minutes, s seconds" |
+| data.version     | String    | EMQX 版本                                           |
 
 **Examples:**
 
@@ -112,7 +112,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4"
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers"
 
-{"data":[{"version":"develop","uptime":"4 hours, 21 minutes, 19 seconds","sysdescr":"EMQ X Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-19 15:27:24"}],"code":0}
+{"data":[{"version":"develop","uptime":"4 hours, 21 minutes, 19 seconds","sysdescr":"EMQX Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-19 15:27:24"}],"code":0}
 ```
 
 获取节点 emqx@127.0.0.1 的基本信息：
@@ -120,7 +120,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers"
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers/emqx@127.0.0.1"
 
-{"data":{"version":"develop","uptime":"1 minutes, 51 seconds","sysdescr":"EMQ X Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-20 14:11:31"},"code":0}
+{"data":{"version":"develop","uptime":"1 minutes, 51 seconds","sysdescr":"EMQX Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-20 14:11:31"},"code":0}
 ```
 
 ## 节点
@@ -150,11 +150,11 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers/e
 | data.memory_used       | String    | VM 已占用的内存大小                 |
 | data.node              | String    | 节点名称                            |
 | data.node_status       | String    | 节点状态                            |
-| data.otp_release       | String    | EMQ X 使用的 Erlang/OTP 版本 |
+| data.otp_release       | String    | EMQX 使用的 Erlang/OTP 版本 |
 | data.process_available | Integer   | 可用的进程数量                      |
 | data.process_used      | Integer   | 已占用的进程数量                    |
-| data.uptime            | String    | EMQ X 运行时间               |
-| data.version           | String    | EMQ X 版本                   |
+| data.uptime            | String    | EMQX 运行时间               |
+| data.version           | String    | EMQX 版本                   |
 
 **Examples:**
 
@@ -239,7 +239,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | data[0].mqueue_dropped    | Integer   | 消息队列因超出长度而丢弃的消息数量 |
 | data[0].awaiting_rel      | Integer   | 未确认的 PUBREC 报文数量 |
 | data[0].max_awaiting_rel  | Integer   | 允许存在未确认的 PUBREC 报文的最大数量 |
-| data[0].recv_oct          | Integer   | EMQ X Broker（下同）接收的字节数量 |
+| data[0].recv_oct          | Integer   | EMQX Broker（下同）接收的字节数量 |
 | data[0].recv_cnt          | Integer   | 接收的 TCP 报文数量 |
 | data[0].recv_pkt          | Integer   | 接收的 MQTT 报文数量 |
 | data[0].recv_msg          | Integer   | 接收的 PUBLISH 报文数量 |
@@ -372,30 +372,6 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"recv_cnt":4,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":3,"created_at":"2020-02-20 13:38:51","reductions":5994,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":3,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":0,"mqueue_len":0,"recv_oct":33,"connected_at":"2020-02-20 13:38:51","clean_start":true,"clientid":"example","connected":true,"port":54889,"send_oct":8,"zone":"external"}],"code":0}
 ```
 
-### DELETE /api/v4/nodes/{node}/clients/{clientid}
-
-类似 [DELETE /api/v4/clients/{clientid}](#endpoint-delete-a-client)，踢除指定节点下的指定客户端。
-
-**Path Parameters:**
-
-| Name   | Type | Required | Description |
-| ------ | --------- | -------- |  ---- |
-| clientid  | String | True | ClientID |
-
-**Success Response Body (JSON):**
-
-| Name | Type | Description |
-| ---- | --------- | ----------- |
-| code | Integer   | 0         |
-
-**Examples:**
-
-```bash
-$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/clients/example"
-
-{"code":0}
-```
-
 ### GET /api/v4/clients/username/{username}
 
 通过 Username 查询客户端的信息。由于可能存在多个客户端使用相同的用户名的情况，所以可能同时返回多个客户端信息。
@@ -499,6 +475,38 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients/e
 
 ```bash
 $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/clients/example/acl_cache"
+
+{"code":0}
+```
+
+### PUT /api/v4/clients/{clientid}/keepalive
+
+设置指定客户端的keepalive时间（秒）。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                            |
+| -------- | ------- | :------: | -------------------------------------- |
+| interval | Integer |   True   | 秒：0～65535，0表示不启动keepalive检查 |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+更新指定客户端（example）keepalive为10秒
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
 
 {"code":0}
 ```
@@ -716,6 +724,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes/a%
 | encoding | String    | Optional | plain   | 消息正文使用的编码方式，目前仅支持 `plain` 与 `base64` 两种 |
 | qos      | Integer   | Optional | 0       | QoS 等级 |
 | retain   | Boolean   | Optional | false   | 是否为保留消息 |
+| user_properties   | Object   | Optional | {} | PUBLISH 消息里的 User Property 字段 (MQTT 5.0) |
 
 **Success Response Body (JSON):**
 
@@ -726,7 +735,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes/a%
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d '{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"}'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d \
+'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}'
 
 {"code":0}
 ```
@@ -806,6 +816,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 | [0].encoding | String    | Optional | plain   | 消息正文使用的编码方式，目前仅支持 `plain` 与 `base64` 两种 |
 | [0].qos      | Integer   | Optional | 0       | QoS 等级 |
 | [0].retain   | Boolean   | Optional | false   | 是否为保留消息 |
+| [0].user_properties   | Object   | Optional | {} | PUBLISH 消息里的 User Property 字段 (MQTT 5.0) |
 
 **Success Response Body (JSON):**
 
@@ -816,9 +827,9 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example"}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}]'
 
-{"code":0}
+{"data":[{"topic":"a/b/c","code":0},{"topic":"a/b/c","code":0}],"code":0}
 ```
 
 ## 主题批量订阅
@@ -906,7 +917,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/plugins"
 
-{"data":[{"plugins":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Authentication with ClientId/Password","active":false}, ...],"node":"emqx@127.0.0.1"}],"code":0}
+{"data":[{"plugins":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQX Authentication with ClientId/Password","active":false}, ...],"node":"emqx@127.0.0.1"}],"code":0}
 ```
 
 ### GET /api/v4/nodes/{node}/plugins
@@ -932,7 +943,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/plugins"
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/plugins"
 
-{"data":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Authentication with ClientId/Password","active":false}, ...],"code":0}
+{"data":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQX Authentication with ClientId/Password","active":false}, ...],"code":0}
 ```
 
 ### PUT /api/v4/nodes/{node}/plugins/{plugin}/load
@@ -1092,7 +1103,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/modules"
 
-{"data":[{"node":"emqx@127.0.0.1","modules":[{"name":"emqx_mod_delayed","description":"EMQ X Delayed Publish Module","active":true},{"name":"emqx_mod_topic_metrics","description":"EMQ X Topic Metrics Module","active":false},{"name":"emqx_mod_subscription","description":"EMQ X Subscription Module","active":false},{"name":"emqx_mod_acl_internal","description":"EMQ X Internal ACL Module","active":true},{"name":"emqx_mod_rewrite","description":"EMQ X Topic Rewrite Module","active":false},{"name":"emqx_mod_presence","description":"EMQ X Presence Module","active":true}]}],"code":0}
+{"data":[{"node":"emqx@127.0.0.1","modules":[{"name":"emqx_mod_delayed","description":"EMQX Delayed Publish Module","active":true},{"name":"emqx_mod_topic_metrics","description":"EMQX Topic Metrics Module","active":false},{"name":"emqx_mod_subscription","description":"EMQX Subscription Module","active":false},{"name":"emqx_mod_acl_internal","description":"EMQX Internal ACL Module","active":true},{"name":"emqx_mod_rewrite","description":"EMQX Topic Rewrite Module","active":false},{"name":"emqx_mod_presence","description":"EMQX Presence Module","active":true}]}],"code":0}
 ```
 
 ### GET /api/v4/nodes/{node}/modules
@@ -1176,10 +1187,10 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 
 | Name | Type | Description |
 | ----------------| --------- | -------------------- |
-| actions.failure                 | Integer   | 规则引擎 action 成功失败次数 |
-| actions.success                 | Integer   | 规则引擎 action 执行失败次数 |
-| bytes.received                  | Integer   | EMQ X 接收的字节数 |
-| bytes.sent                      | Integer   | EMQ X 在此连接上发送的字节数 |
+| actions.failure                 | Integer   | 规则引擎 action 执行失败次数 |
+| actions.success                 | Integer   | 规则引擎 action 执行成功次数 |
+| bytes.received                  | Integer   | EMQX 接收的字节数 |
+| bytes.sent                      | Integer   | EMQX 在此连接上发送的字节数 |
 | client.authenticate             | Integer   | 客户端认证次数 |
 | client.auth.anonymous           | Integer   | 匿名登录的客户端数量 |
 | client.connect                  | Integer   | 客户端连接次数 |
@@ -1195,9 +1206,9 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 | delivery.dropped.expired        | Integer   | 发送时由于消息过期而被丢弃的消息数量 |
 | delivery.dropped.no_local       | Integer   | 发送时由于 `No Local` 订阅选项而被丢弃的消息数量 |
 | delivery.dropped                | Integer   | 发送时丢弃的消息总数 |
-| messages.delayed                | Integer   | EMQ X 存储的延迟发布的消息数量 |
-| messages.delivered              | Integer   | EMQ X 内部转发到订阅进程的消息数量 |
-| messages.dropped                | Integer   | EMQ X 内部转发到订阅进程前丢弃的消息总数 |
+| messages.delayed                | Integer   | EMQX 存储的延迟发布的消息数量 |
+| messages.delivered              | Integer   | EMQX 内部转发到订阅进程的消息数量 |
+| messages.dropped                | Integer   | EMQX 内部转发到订阅进程前丢弃的消息总数 |
 | messages.dropped.expired        | Integer   | 接收时由于消息过期而被丢弃的消息数量 |
 | messages.dropped.no_subscribers | Integer   | 由于没有订阅者而被丢弃的消息数量 |
 | messages.forward                | Integer   | 向其他节点转发的消息数量 |
@@ -1210,7 +1221,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/modules/e
 | messages.qos2.sent              | Integer   | 发送给客户端的 QoS 2 消息数量 |
 | messages.received               | Integer   | 接收来自客户端的消息数量，等于 `messages.qos0.received`，`messages.qos1.received` 与 `messages.qos2.received` 之和 |
 | messages.sent                   | Integer   | 发送给客户端的消息数量，等于 `messages.qos0.sent`，`messages.qos1.sent` 与 `messages.qos2.sent` 之和 |
-| messages.retained               | Integer   | EMQ X 存储的保留消息数量 |
+| messages.retained               | Integer   | EMQX 存储的保留消息数量 |
 | messages.acked                  | Integer   | 接收的 PUBACK 和 PUBREC 报文数量 |
 | packets.received                | Integer   | 接收的报文数量 |
 | packets.sent                    | Integer   | 发送的报文数量 |
@@ -2294,6 +2305,7 @@ $ curl -XDELETE --basic -u admin:public 'http://localhost:8081/api/v4/resources/
 
 {"code":0}
 ```
+
 
 {% emqxce %}
 

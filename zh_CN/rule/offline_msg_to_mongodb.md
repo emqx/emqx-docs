@@ -26,7 +26,7 @@ db.createCollection("mqtt_msg");
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -57,7 +57,7 @@ SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE
 
 弹出一个“创建资源”对话框
 
-![](./assets/rule-engine/mongo_offline_msg_04.png)
+![image-20211129162926730](./assets/rule-engine/mongo_offline_msg_04.png)
 
 填写资源配置:
 

@@ -26,7 +26,7 @@ pip install paho-mqtt
 
 ## Paho Python usage example
 
-This example contains the complete code of Paho Python in Python connecting to EMQ X Broker, sending and receiving messages:
+This example contains the complete code of Paho Python in Python connecting to EMQX Broker, sending and receiving messages:
 
 
 ```python

@@ -12,7 +12,7 @@ After the installation is complete, start MySQL.
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200928161310952](./assets/modules.png)
 
@@ -50,7 +50,7 @@ Field description:
 -salt: password and salt string
 -is_superuser: Is it a superuser
 
-When performing identity authentication, EMQ X will use the current client information to fill and execute the authentication SQL configured by the user, and query the authentication data of the client in the database.
+When performing identity authentication, EMQX will use the current client information to fill and execute the authentication SQL configured by the user, and query the authentication data of the client in the database.
 
 ```sql
 select password from mqtt_user where username ='%u' limit 1
@@ -66,8 +66,8 @@ Field description
 
 The authentication SQL can be adjusted according to business needs, such as adding multiple query conditions and using database preprocessing functions to implement more business-related functions. But in any case, the authentication SQL needs to meet the following conditions:
 
-1. The query result must contain the password field, which EMQ X uses to compare with the client password
-2. If the salting configuration is enabled, the salt field must be included in the query result, and EMQ X uses this field as the salt value
+1. The query result must contain the password field, which EMQX uses to compare with the client password
+2. If the salting configuration is enabled, the salt field must be included in the query result, and EMQX uses this field as the salt value
 3. There can only be one query result, if there are multiple results, only the first one is taken as valid data
 
 The sample data in the default configuration is as follows:
@@ -86,6 +86,12 @@ You can use AS syntax in SQL to specify a password for field renaming, or set th
 
 :::
 
+#### Advanced
+
+In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
+
+If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.
+
 ### Access Control List
 
 ```sql
@@ -97,7 +103,10 @@ CREATE TABLE `mqtt_acl` (
   `clientid` varchar(100) DEFAULT NULL COMMENT'ClientId',
   ʻAccess` int(2) NOT NULL COMMENT '1: subscribe, 2: publish, 3: pubsub',
   `topic` varchar(100) NOT NULL DEFAULT'' COMMENT'Topic Filter',
-  PRIMARY KEY (ʻid`)
+  PRIMARY KEY (ʻid`),
+  INDEX (ipaddr),
+  INDEX (username),
+  INDEX (clientid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
@@ -116,7 +125,7 @@ The principle of access control is to find entries related to the client from My
 select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr ='%a' or username ='%u' or username ='$all' or clientid ='%c'
 ```
 
-The following placeholders can be used in the authentication SQL, and EMQ X will be automatically filled with client information when executed:
+The following placeholders can be used in the authentication SQL, and EMQX will be automatically filled with client information when executed:
 
 -%u: username
 -%c: clientid
@@ -149,7 +158,7 @@ Super users can subscribe and publish any topic. The default SQL is as follows:
 select is_superuser from mqtt_user where username ='%u' limit 1
 ```
 
-You can use the following placeholders in SQL, and EMQ X will be automatically filled with client information during execution:
+You can use the following placeholders in SQL, and EMQX will be automatically filled with client information during execution:
 
 -%u: username
 -%c: clientid

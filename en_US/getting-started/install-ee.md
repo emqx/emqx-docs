@@ -15,7 +15,7 @@ ref: undefined
 
 # Installation
 
-Operating systems currently supported by EMQ X Broker:
+Operating systems currently supported by EMQX Broker:
 
 + Centos6
 + Centos7
@@ -31,7 +31,6 @@ Operating systems currently supported by EMQ X Broker:
 + macOS 10.13
 + macOS 10.14
 + macOS 10.15
-+ Windows Server 2019
 
 ## One-click installation of shell script (Linux)
 
@@ -57,7 +56,7 @@ sudo ./install_emqx.sh emqx-ee
       $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ee/redhat/centos/7/emqx-ee.repo
       ```
     
-3.   Install the latest version of EMQ X 
+3.   Install the latest version of EMQX 
   
       ```
       $ sudo yum install emqx-ee
@@ -65,7 +64,7 @@ sudo ./install_emqx.sh emqx-ee
     
       If prompted to accept the GPG key, confirm that the key complies with fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53 and accept the fingerprint.
     
-4.   Install a specific version of EMQ X 
+4.   Install a specific version of EMQX 
 
        1.   Query available version 
       
@@ -83,7 +82,7 @@ sudo ./install_emqx.sh emqx-ee
             $ sudo yum install emqx-ee-4.0.0
             ```
 
-5.   Start EMQ X 
+5.   Start EMQX 
   
       -  Directly start 
         
@@ -108,14 +107,14 @@ sudo ./install_emqx.sh emqx-ee
         $ sudo service emqx start
         ```
 
-6.  Stop EMQ X Broker
+6.  Stop EMQX Broker
 
     ```
     $ emqx stop
     ok
     ```
 
-7.  Remove EMQ X Broker
+7.  Remove EMQX Broker
 
     ```
     $ sudo yum remove emqx-ee
@@ -134,7 +133,7 @@ sudo ./install_emqx.sh emqx-ee
           software-properties-common
       ```
 
-2.   Add the GPG key for EMQ X 
+2.   Add the GPG key for EMQX 
   
       ```
       $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
@@ -159,7 +158,7 @@ sudo ./install_emqx.sh emqx-ee
         stable"
     ```
     
-    The lsb_release -cs subcommand returns the name of the Ubuntu distribution, such as xenial. Sometimes, in a distribution like Linux Mint, you might need to change $(lsb_release -cs) to the parent Ubuntu distribution. For example, if you are using Linux Mint Tessa, you can use bionic. EMQ X does not provide any guarantees for untested and unsupported Ubuntu distribution. 
+    The lsb_release -cs subcommand returns the name of the Ubuntu distribution, such as xenial. Sometimes, in a distribution like Linux Mint, you might need to change $(lsb_release -cs) to the parent Ubuntu distribution. For example, if you are using Linux Mint Tessa, you can use bionic. EMQX does not provide any guarantees for untested and unsupported Ubuntu distribution. 
     
 4.  Update apt package index 
   
@@ -167,15 +166,15 @@ sudo ./install_emqx.sh emqx-ee
     $ sudo apt update
     ```
 
-5.  Install the latest version of EMQ X 
+5.  Install the latest version of EMQX 
   
     ```
     $ sudo apt install emqx-ee
     ```
     
-     In the case where multiple EMQ X repositories are enabled, and the apt install and apt update commands is not specified with a version number, the latest version of EMQ X is installed. This could be a problem for users with stability needs. 
+     In the case where multiple EMQX repositories are enabled, and the apt install and apt update commands is not specified with a version number, the latest version of EMQX is installed. This could be a problem for users with stability needs. 
     
-6.  Install a specific version of EMQ X 
+6.  Install a specific version of EMQX 
   
     1.   Query available version 
       
@@ -193,7 +192,7 @@ sudo ./install_emqx.sh emqx-ee
           $ sudo apt install emqx-ee=4.0.0
           ```
 
-7.  Start EMQ X Broker
+7.  Start EMQX Broker
   
       - Directly start 
         
@@ -218,14 +217,14 @@ sudo ./install_emqx.sh emqx-ee
         $ sudo service emqx start
         ```
 
-8.  Stop EMQ X Broker
+8.  Stop EMQX Broker
 
     ```
     $ emqx stop
     ok
     ```
 
-9.  Remove EMQ X Broker
+9.  Remove EMQX Broker
 
     ```
     $ sudo apt remove emqx-ee
@@ -246,13 +245,13 @@ sudo ./install_emqx.sh emqx-ee
     $ sudo zypper ar -f -c https://repos.emqx.io/emqx-ee/redhat/opensuse/leap/stable emqx
     ```
 
-3.  Install the latest version of EMQ X Broker
+3.  Install the latest version of EMQX Broker
   
     ```
     $ sudo zypper in emqx-ee
     ```
 
-4.  Install a specific version of EMQ X 
+4.  Install a specific version of EMQX 
   
     1.  Query available versions
       
@@ -274,7 +273,7 @@ sudo ./install_emqx.sh emqx-ee
           $ sudo zypper in emqx-ee-4.0.0
           ```
 
-5.  Start EMQ X Broker
+5.  Start EMQX Broker
   
       - Directly start 
         
@@ -299,14 +298,14 @@ sudo ./install_emqx.sh emqx-ee
         $ sudo service emqx start
         ```
 
-6.  Stop EMQ X Broker
+6.  Stop EMQX Broker
 
     ```
     $ emqx stop
     ok
     ```
 
-7.  Remove EMQ X Broker
+7.  Remove EMQX Broker
 
     ```
     $ sudo zypper rm emqx-ee
@@ -314,9 +313,9 @@ sudo ./install_emqx.sh emqx-ee
 
 ## Binary package installation (Linux)
 
-1.  Use [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) or [Github](https://github.com/emqx/emqx/releases) for download EMQ X Broker packages。
+1.  Use [emqx.io](https://www.emqx.com/en/downloads/broker?osType=Linux) or [Github](https://github.com/emqx/emqx/releases) for download EMQX Broker packages。
   
-2. Install EMQ X Broker:
+2. Install EMQX Broker:
 
     + RPM 包:
 
@@ -335,7 +334,7 @@ sudo ./install_emqx.sh emqx-ee
       $ sudo dpkg -i emqx-ee-ubuntu18.04-v4.0.0_amd64.deb
       ```
 
-3. Start EMQ X Broker
+3. Start EMQX Broker
 
       - quick start
         
@@ -359,14 +358,14 @@ sudo ./install_emqx.sh emqx-ee
         $ sudo service emqx start
         ```
 
-4.  Stop EMQ X Broker
+4.  Stop EMQX Broker
 
     ```
     $ emqx stop
     ok
     ```
 
-5.  Uninstall EMQ X Broker
+5.  Uninstall EMQX Broker
 
     + DEB:
 
@@ -387,9 +386,9 @@ sudo ./install_emqx.sh emqx-ee
       ```
 
 
-## ZIP (Linux、MaxOS、Windows)
+## ZIP (Linux、MaxOS)
 
-1.  Download the zip package of the EMQ X Broker version to be installed from [emqx.io](https://www.emqx.io/downloads/broker?osType=Linux) or [Github](https://github.com/emqx/emqx/releases).
+1.  Download the zip package of the EMQX Broker version to be installed from [emqx.io](https://www.emqx.com/en/downloads/broker?osType=Linux) or [Github](https://github.com/emqx/emqx/releases).
   
 2.   Unzip the installation file: 
   
@@ -397,7 +396,7 @@ sudo ./install_emqx.sh emqx-ee
       $ unzip emqx-ee-ubuntu18.04-v4.0.0.zip
       ```
 
-3.  Start EMQ X Broker
+3.  Start EMQX Broker
   
     ```
     $ ./bin/emqx start
@@ -408,18 +407,18 @@ sudo ./install_emqx.sh emqx-ee
     emqx v4.0.0 is running
     ```
 
-4.  Stop EMQ X Broker
+4.  Stop EMQX Broker
 
     ```
     $ ./bin/emqx stop
     ok
     ```
 
-5.  Remove EMQ X Broker
+5.  Remove EMQX Broker
 
-    Simply delete the EMQ X Broker directory
+    Simply delete the EMQX Broker directory
 
-## Install EMQ X in Docker (Contain a simple docker-compose cluster)
+## Install EMQX in Docker (Contain a simple docker-compose cluster)
 
 ### Run a single container
 
@@ -431,10 +430,10 @@ sudo ./install_emqx.sh emqx-ee
         $ docker pull emqx/emqx-ee:v4.0.0
         ```
       
-      - Download the Docker image from [emqx.io](https://www.emqx.io/downloads/enterprise?osType=Linux) and load it manually
+      - Download the Docker image from [emqx.io](https://www.emqx.com/en/downloads/enterprise?osType=Linux) and load it manually
         
         ```
-        $ wget -O emqx-docker.zip https://www.emqx.io/downloads/enterprise/v4.0.0/emqx-docker-v4.0.0-alpine3.10-amd64.zip
+        $ wget -O emqx-docker.zip https://www.emqx.com/en/downloads/enterprise/v4.0.0/emqx-docker-v4.0.0-alpine3.10-amd64.zip
         $ unzip emqx-docker.zip
         $ docker load < emqx-docker-v4.0.0
         ```
@@ -524,7 +523,7 @@ sudo ./install_emqx.sh emqx-ee
                      stopped_nodes => []}
    ```
 
-For more information about EMQ X Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
+For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
 
 ## Install and cluster via Helm (K8S、K3S)
 
@@ -535,23 +534,23 @@ For more information about EMQ X Broker Docker, please visit [Docker Hub](https:
   $ helm repo update
   ```
 
-2. Query EMQ X Broker
+2. Query EMQX Broker
 
   ```
   helm search repo emqx
   NAME         CHART VERSION APP VERSION DESCRIPTION
-  emqx/emqx    v4.0.0        v4.0.0      A Helm chart for EMQ X
-  emqx/emqx-ee v4.0.0        v4.0.0      A Helm chart for EMQ X
+  emqx/emqx    v4.0.0        v4.0.0      A Helm chart for EMQX
+  emqx/emqx-ee v4.0.0        v4.0.0      A Helm chart for EMQX
   emqx/kuiper  0.1.1         0.1.1       A lightweight IoT edge analytic software
   ```
 
-3. Start EMQ X Broker cluster
+3. Start EMQX Broker cluster
 
   ```
   $ helm install my-emqx emqx/emqx-ee
   ```
 
-4.  View EMQ X Broker cluster situation
+4.  View EMQX Broker cluster situation
 
   ```
   $ kubectl get pods

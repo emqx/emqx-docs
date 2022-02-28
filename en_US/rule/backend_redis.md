@@ -14,7 +14,7 @@ $ redis-server
 
 Create a rule:
 
-Go to [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 

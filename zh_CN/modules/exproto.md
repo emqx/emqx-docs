@@ -1,8 +1,8 @@
 # 多语言扩展 - 协议接入
 
-在 EMQ X e4.2.0 中，我们提供了多语言扩展的支持。其中 **多语言扩展协议接入** 模块允许其他编程语言（例如：Python，Java 等）直接处理字节数据报文实现自定义协议的解析，并提供 Pub/Sub 接口实现与系统的消息交换。
+在 EMQX e4.2.0 中，我们提供了多语言扩展的支持。其中 **多语言扩展协议接入** 模块允许其他编程语言（例如：Python，Java 等）直接处理字节数据报文实现自定义协议的解析，并提供 Pub/Sub 接口实现与系统的消息交换。
 
-该功能给 EMQ X 带来的扩展性十分的强大，它能以用户熟悉的编程语言处理任何的私有协议，并享受由 EMQ X 系统带来的极高并发连接的优点。
+该功能给 EMQX 带来的扩展性十分的强大，它能以用户熟悉的编程语言处理任何的私有协议，并享受由 EMQX 系统带来的极高并发连接的优点。
 
 ## 特性
 
@@ -26,12 +26,12 @@
     - 提供 `Send` 接口。供外部模块调用，**用于发送数据包**。
     - 提供 `Close` 接口。供外部模块调用，**用于主动关闭连接**。
 
-2. **协议/会话层：** 该部分主要**提供 PUB/SUB 接口**，以实现与 EMQ X Broker 系统的消息互通。包括：
+2. **协议/会话层：** 该部分主要**提供 PUB/SUB 接口**，以实现与 EMQX Broker 系统的消息互通。包括：
 
     - 提供 `Authenticate` 接口。供外部模块调用，用于向集群注册客户端。
     - 提供 `StartTimer` 接口。供外部模块调用，用于为该连接进程启动心跳等定时器。
-    - 提供 `Publish` 接口。供外部模块调用，用于发布消息 EMQ X Broker 中。
-    - 提供 `Subscribe` 接口。供外部模块调用，用于订阅某主题，以实现从 EMQ X Broker 中接收某些下行消息。
+    - 提供 `Publish` 接口。供外部模块调用，用于发布消息 EMQX Broker 中。
+    - 提供 `Subscribe` 接口。供外部模块调用，用于订阅某主题，以实现从 EMQX Broker 中接收某些下行消息。
     - 提供 `Unsubscribe` 接口。供外部模块调用，用于取消订阅某主题。
     - 调用 `OnTimerTimeout` 回调。用于处理定时器超时的事件。
     - 调用 `OnReceivedMessages` 回调。用于接收下行消息（在订阅主题成功后，如果主题上有消息，便会回调该方法）
@@ -103,7 +103,7 @@ service ConnectionHandler {
 2. 使用对应编程语言的 gRPC 框架，生成 `exproto.proto` 的 gRPC 服务端的代码。
 3. 实现 exproto.proto 当中 `ConnectionHandler` 服务的接口。
 
-开发完成后，需将该服务部署到与 EMQ X 能够通信的服务器上，并保证端口的开放。
+开发完成后，需将该服务部署到与 EMQX 能够通信的服务器上，并保证端口的开放。
 
 其中各个语言的 gRPC 框架可参考：[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
@@ -116,7 +116,7 @@ service ConnectionHandler {
 2. 配置 **监听器(Listener)**，提供 TCP/UDP/SSL/DTLS 的地址监听。用于监听、接收设备的连接。
 3. 为每个监听器指定一个 `ConnectionHandler` 的服务地址。用于发送各种事件回调到用户的服务。
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![Modules](./assets/modules.png)
 

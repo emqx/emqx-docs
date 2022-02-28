@@ -15,18 +15,18 @@ ref:
 
 ## 版本热升级
 
-自 4.2.0 版本之后，EMQ X Broker 支持版本热升级。
+自 4.2.0 版本之后，EMQX Broker 支持版本热升级。
 
-使用版本热升级功能，用户可以快速、安全地升级生产环境的 EMQ X Broker，并避免了因重启服务导致的系统可用性降低。
+使用版本热升级功能，用户可以快速、安全地升级生产环境的 EMQX Broker，并避免了因重启服务导致的系统可用性降低。
 
-目前 EMQ X Broker 仅支持 Patch 版本（Patch 版本是版本号的第三位）的热升级。
+目前 EMQX Broker 仅支持 Patch 版本（Patch 版本是版本号的第三位）的热升级。
 即，目前支持 4.2.0 -> 4.2.1，4.2.0 -> 4.2.2，... 等的热升级，但 4.2.x 无法热升级到 4.3.0 或者 5.0。
 
-目前 EMQ X for Windows 暂不支持热升级功能。
+目前 Windows、MacOSX 暂不支持热升级功能。
 
 ## 热升级步骤
 
-1. 查看当前已安装的 EMQ X Broker 的版本列表。
+1. 查看当前已安装的 EMQX Broker 的版本列表。
 
 ```bash
 
@@ -36,11 +36,11 @@ Installed versions:
 * 4.2.0	permanent
 ```
 
-2. 从 EMQ X 官网下载要升级的软件包。
+2. 从 EMQX 官网下载要升级的软件包。
 
-访问 [https://www.emqx.io/downloads#broker](https://www.emqx.io/downloads#broker) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
+访问 [https://www.emqx.com/en/downloads?product=broker](https://www.emqx.com/en/downloads?product=broker) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
 
-3. 找到 EMQ X 的安装目录：
+3. 找到 EMQX 的安装目录：
 
 ```bash
 
@@ -51,7 +51,7 @@ $ echo ${EMQX_ROOT_DIR}
 
 ```
 
-4. 将下载的 zip 包放到 EMQ X 安装目录下的 `releases` 目录下：
+4. 将下载的 zip 包放到 EMQX 安装目录下的 `releases` 目录下：
 
 ```bash
 

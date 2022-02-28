@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 MongoDB](../rule/backend_mongodb.md)规则引擎中创建 保存数据到 MongoDB
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 MongoDB](../rule/backend_mongodb.md)规则引擎中创建 保存数据到 MongoDB
 
 :::
 
@@ -15,13 +15,31 @@ EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前�
 支持配置多台 MongoDB 服务器连接池:
 
 ```bash
-## MongoDB 集群类型: single | unknown | sharded | rs
+## MongoDB 部署类型: single | unknown | sharded | rs
 backend.mongo.pool1.type = single
 
-## 如果 type = rs; 需要配置 setname
+## 是否启用 SRV 和 TXT 记录解析
+backend.mongo.pool1.srv_record = false
+
+## 如果您的 MongoDB 以副本集方式部署，则需要指定相应的副本集名称
+##
+## 如果启用了 srv_record，即 backend.mongo.<Pool>.srv_record 设置为 true，
+## 且您的 MongoDB 服务器域名添加了包含 replicaSet 选项的 DNS TXT 记录，
+## 那么可以忽略此配置项
 ## backend.mongo.pool1.rs_set_name = testrs
 
 ## MongoDB 服务器地址列表
+##
+## 如果你的 URI 具有以下格式：
+## mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
+## 请将 backend.mongo.<Pool>.server 配置为 host1[:port1][,...hostN[:portN]]
+##
+## 如果你的 URI 具有以下格式：
+## mongodb+srv://server.example.com
+## 请将 backend.mongo.<Pool>.server 配置为 server.example.com，并将 srv_record
+## 设置为 true，EMQX 将自动查询 SRV 和 TXT 记录以获取服务列表和 replicaSet 等选项
+##
+## 现已支持 IPv6 和域名
 backend.mongo.pool1.server = 127.0.0.1:27017
 
 ## MongoDB 连接池大小
@@ -34,7 +52,11 @@ backend.mongo.pool1.database = mqtt
 ## backend.mongo.pool1.login =  emqtt
 ## backend.mongo.pool1.password = emqtt
 
-## MongoDB 认证源
+## 指定用于授权的数据库，没有指定时默认为 admin
+##
+## 如果启用了 srv_record，即 backend.mongo.<Pool>.srv_record 设置为 true，
+## 且您的 MongoDB 服务器域名添加了包含 authSource 选项的 DNS TXT 记录，
+## 那么可以忽略此配置项
 ## backend.mongo.pool1.auth_source = admin
 
 ## 是否开启 SSL
@@ -299,7 +321,6 @@ db.mqtt_retain.findOne({topic: "t/retain"})
 ./bin/emqx_ctl plugins load emqx_backend_mongo
 ```
 
-
 ## 配置 Cassandra 服务器
 
 配置文件: emqx_backend_cassa.conf
@@ -407,7 +428,7 @@ backend.cassa.hook.message.acked.1       = {"topic": "#", "action": {"function":
 在 etc/plugins/emqx_backend_cassa.conf 中添加如下配置:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 cql 语句(支持多条 cql 语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 cql 语句(支持多条 cql 语句)
 backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -581,5 +602,3 @@ CREATE TABLE mqtt.acked (
 ```bash
 ./bin/emqx_ctl plugins load emqx_backend_cassa
 ```
-
-

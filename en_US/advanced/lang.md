@@ -15,7 +15,7 @@ ref: undefined
 
 # Multi-language support
 
-Since 4.1, EMQ X provides **multi-language support**. It allows users to use Python, Java or other programming languages to handle EMQ X's [hooks](./hooks.md), or parse your private protocol on TCP/UDP transport. In this way, you can customize EMQ X with other programming languages.
+Since 4.1, EMQX provides **multi-language support**. It allows users to use Python, Java or other programming languages to handle EMQX's [hooks](./hooks.md), or parse your private protocol on TCP/UDP transport. In this way, you can customize EMQX with other programming languages.
 
 ::: tip Tip
 
@@ -27,7 +27,7 @@ Since 4.1, EMQ X provides **multi-language support**. It allows users to use Pyt
 
 ## Extension Hook
 
-The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQ X's [Hooks](hooks.md) using other programming languages. For example:
+The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX's [Hooks](hooks.md) using other programming languages. For example:
 
 - Check the login permission for a client.
 - Check the PUB/SUB operation privileges for a client.
@@ -41,11 +41,11 @@ The **Extension Protocol** is supported by the **emqx-exproto** plugin. It allow
 
 - Establish a connection based on TCP/SSL/UDP/DTLS 
 - Subscribe a topic to receive messages and deliver it to your client
-- Parse bytes and publish it to EMQ X
+- Parse bytes and publish it to EMQX
 
 
 ## Historical Legacy
 
-Prior to EMQ X 4.1, only Lua support was included, and it was implemented by `emqx-lua-hook`. This plugin only supports handling of hooks, not protocol access.
+Prior to EMQX 4.1, only Lua support was included, and it was implemented by `emqx-lua-hook`. This plugin only supports handling of hooks, not protocol access.
 
 See: [Lua Support](lang-lua.md).

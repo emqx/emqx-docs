@@ -1,10 +1,10 @@
 # Telemetry
 
 ::: tip
-Telemetry was added to EMQ X in version 4.2-rc.1.
+Telemetry was added to EMQX in version 4.2-rc.1.
 :::
 
-EMQ collects information about the usage of EMQ X through telemetry. This function is designed to provide us with comprehensive information about users and communities, as well as an understanding of how EMQ X is used. Sharing these metrics with us can help us better understand how you use our products and can continuously help us improve our products.
+EMQ collects information about the usage of EMQX through telemetry. This function is designed to provide us with comprehensive information about users and communities, as well as an understanding of how EMQX is used. Sharing these metrics with us can help us better understand how you use our products and can continuously help us improve our products.
 
 These statistics do not contain individual data, such as server model, hardware number, IP address, and will never be shared with anyone else.
 
@@ -43,7 +43,7 @@ Telemetry reports data to by encrypting HTTP requests https://telemetry.emqx.io/
 
 **Telemetry is enabled by default**. Any people may feel uncomfortable collecting such data. You can disable it in the simplest way before startup and during operation.
 
-## Disable before start EMQ X
+## Disable before start EMQX
 
 Edit `data/loaded_plugins` file, and remove the line of emqx_telemetry. (Note that there is a "." character at the end of the line）, which means that the telemetry plug-in will never start.
 

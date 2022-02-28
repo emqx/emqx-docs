@@ -47,7 +47,7 @@ The LwM2M protocol predefines 8 kinds of Objects to meet the basic requirements,
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -74,8 +74,8 @@ Click to confirm to the configuration parameter page:
 After clicking Add, the module is added:
 ![image-20200927213049265](./assets/proto_lwm2m6.png)
 
-EMQX-LWM2M is a gateway module of EMQ X server, which implements most of the functions of LwM2M. MQTT client can pass EMQX-LWM2M
-Access devices that support LwM2M. The device can also report notification to EMQX-LWM2M to collect data for EMQ X back-end services.
+EMQX-LWM2M is a gateway module of EMQX server, which implements most of the functions of LwM2M. MQTT client can pass EMQX-LWM2M
+Access devices that support LwM2M. The device can also report notification to EMQX-LWM2M to collect data for EMQX back-end services.
 
 ### Configuration parameters
 

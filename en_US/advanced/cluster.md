@@ -58,7 +58,60 @@ Cookies are used for interconnection authentication between Erlang nodes. A cook
 
 See <http://erlang.org/doc/reference_manual/distributed.html> for details.
 
-### EMQ X Broker Cluster protocol settings
+### Using TLS for backplane connections
+
+It is possible to enable TLS encryption for the backplane connections. It comes at the cost of increased CPU load, though.
+
+1. Create a root CA using `openssl` tool:
+
+   ```
+   # Create self-signed root CA:
+   openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key -out rootCA.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
+   ```
+
+2. Generate CA-signed certificates for the nodes using the rootCA.pem created at step 1:
+
+   ```
+   # Create a private key:
+   openssl genrsa -out domain.key 2048
+   # Create openssl extfile:
+   cat <<EOF > domain.ext
+   authorityKeyIdentifier=keyid,issuer
+   basicConstraints=CA:FALSE
+   subjectAltName = @alt_names
+   [alt_names]
+   DNS.1 = backplane
+   EOF
+   # Create a CSR:
+   openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
+   # Sign the CSR with the Root CA:
+   openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
+   ```
+   All the nodes in the cluster must use certificates signed by the same CA.
+
+3. Put the generated `domain.pem`, `domain.key` and `rootCA.pem` files to `/var/lib/emqx/ssl` on each node of the cluster.
+   Make sure the emqx user can read these files, and permissions are set to `600`.
+
+4. For Enterprise edition 4.4.0, add the following configuration to the end of `./releases/4.4.0/emqx.schema`
+
+   ```
+   {mapping, "rpc.default_client_driver", "gen_rpc.default_client_driver",
+    [{default, tcp}, {datatype, {enum, [tcp, ssl]}}]}.
+   ```
+
+5. Add the following configuration. `etc/rpc.conf` for Enterprise edition, and `emqx.conf` for community edition:
+
+   ```
+   rpc.driver=ssl
+   rpc.default_client_driver=ssl
+   rpc.certfile=/var/lib/emqx/ssl/domain.pem
+   rpc.cacertfile=/var/lib/emqx/ssl/rootCA.pem
+   rpc.keyfile=/var/lib/emqx/ssl/domain.key
+   rpc.enable_ssl=5369
+   ```
+
+### EMQX Broker Cluster protocol settings
+
 Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, and the connection method can be configured in`etc/emqx.conf`:
 
 | Configuration name | Type | Default value | Description |
@@ -66,15 +119,15 @@ Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS, an
 | cluster.proto_dist | enum | `inet_tcp` | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
 | node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate. |
 
-## EMQ X Broker Distributed cluster design
-The basic function of EMQ X Broker distribution is to forward and publish messages to subscribers on each node, as shown in the following figure:
+## EMQX Broker Distributed cluster design
+The basic function of EMQX Broker distribution is to forward and publish messages to subscribers on each node, as shown in the following figure:
 
 ![image](../assets/design_9.png)
 
-To achieve this, EMQ X Broker maintains several data structures related to it: subscription tables, routing tables, and topic trees.
+To achieve this, EMQX Broker maintains several data structures related to it: subscription tables, routing tables, and topic trees.
 
 ### Subscription Table: Topics-Subscribers
-When an MQTT client subscribes to a topic, EMQ X Broker maintains a **Subscription Table** for the Topic-\> Subscriber mapping. The subscription table only exists on the EMQ X Broker node where the subscriber is located, for example:
+When an MQTT client subscribes to a topic, EMQX Broker maintains a **Subscription Table** for the Topic-\> Subscriber mapping. The subscription table only exists on the EMQX Broker node where the subscriber is located, for example:
 
 ```bash
 node1:
@@ -97,7 +150,7 @@ topic3 -> node2, node4
 ```
 
 ### Topic tree: topic matching with wildcards
-In addition to the routing table, each node in the EMQ X Broker cluster also maintains a backup of the **Topic Trie.**
+In addition to the routing table, each node in the EMQX Broker cluster also maintains a backup of the **Topic Trie.**
 
 The following topic-subscription relationship is an example:
 
@@ -107,7 +160,7 @@ The following topic-subscription relationship is an example:
 | client2 | node2 | t/# |
 | client3 | node3 | t/+/x, t/a |
 
-When all subscriptions are completed, EMQ X Broker maintains the following Topic Trie and Route Table:
+When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
 
 ![image](../assets/cluster_2.png)
 
@@ -124,12 +177,12 @@ For example, when client1 publishes a message to the topic `t/a`. The routing an
 6. Message forwarding and distribution are finished.
 
 ### Data partition and sharing
-EMQ X Broker's subscription table is partitioned in the cluster, while the topic tree and routing table are replicated.
+EMQX Broker's subscription table is partitioned in the cluster, while the topic tree and routing table are replicated.
 
 ## Node discovery and automatic clustering
-EMQ X Broker supports Autocluster based on Ekka library. Ekka is a cluster management library developed for Erlang / OTP applications. It supports Service Discovery, Autocluster, Network Partition Autoheal, and Autoclean of  Erlang node.
+EMQX Broker supports Autocluster based on Ekka library. Ekka is a cluster management library developed for Erlang / OTP applications. It supports Service Discovery, Autocluster, Network Partition Autoheal, and Autoclean of  Erlang node.
 
-EMQ X supports multiple node discovery strategies:
+EMQX supports multiple node discovery strategies:
 
 | strategy | Description                       |
 | -------- | --------------------------------- |
@@ -198,7 +251,7 @@ cluster.k8s.app_name = ekka
 ```
 
 ### Introduction to manual cluster management
-Deploy EMQ X Broker cluster on two servers of s1.emqx.io, s2.emqx.io:
+Deploy EMQX Broker cluster on two servers of s1.emqx.io, s2.emqx.io:
 
 |                Node name                | Server |   IP address   |
 | ------------------------------------ | ------------- | ------------ |
@@ -286,8 +339,15 @@ Or remove the emqx@s2.emqx.io node from the cluster on s1.emqx.io:
 $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ```
 
+#### Start a cluster on single machine
+
+For users who only have one server, the pseudo-distributed starting mode can be used. Please notice that if we want to start two or more nodes on one machine, we must adjust the listening port of the other node to avoid the port conflicts.
+
+The basic process is to copy another emqx folder and name it emqx2. After that, we let all the listening ports of the original emqx to be added by an offset as the listening ports of the emqx2 node. For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 as the MQTT/TCP listening port for emqx2. Please refer to [Cluster Script](https://github.com/terry-xiaoyu/one_more_emqx) regarding to the above operations and also refer to [Configuration Instructions](../getting-started/config.md) and  [Configuration Items](../configuration/configuration.md) for details.
+
 ## Network Partition Autoheal
-*EMQ X* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
+
+*EMQX* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
 
 ```bash
 cluster.autoheal = on
@@ -302,7 +362,7 @@ Network Partition Autoheal Process:
 5. The Coordinator node restarts the minority partition node to restore the cluster.
 
 ## Autoclean of Cluster nodes
-*EMQ X* supports Autoclean frol cluster , which can be configured in `etc/emqx.conf` :
+*EMQX* supports Autoclean frol cluster , which can be configured in `etc/emqx.conf` :
 
 ```bash
 cluster.autoclean = 5m
@@ -341,61 +401,3 @@ also be allowed by the firewall. The port mapping rule is similar to the node di
 ports in `ekka mode`, but with the `BasePort = 5370`. That is, having
 `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370`,
 and port `5371` for `emqx1` (or `emqx-1`), and so on.
-
-## Asynchronous database replication
-
-::: danger
-This feature is highly experimental.
-You can enable it if you want to help us testing and tuning it.
-:::
-
-Some EMQ X features rely on the open-source [Mnesia](http://erlang.org/doc/apps/mnesia/Mnesia_overview.html) database.
-Mnesia uses full-mesh topology for transaction replication.
-While being blazing-fast in the small clusters, it has some scalability issues when the number of nodes in the cluster becomes large.
-Also it becomes more vulnerable to network splits.
-To address these issues, EMQ X supports an experimental extension to Mnesia called `RLOG`.
-This extension can be used in large EMQ X clusters (4 nodes and more).
-
-### RLOG principles
-
-RLOG extension works by separating nodes in the cluster into two logical groups:
-
-- core nodes
-- replicate nodes
-
-#### Core nodes
-
-Core nodes are the source of truth for the database.
-They contain up-to-date consistent replicas of the tables and they are directly responsible for high availability.
-Note: it is not recommended to put core nodes into auto-scaling groups.
-
-While it is possible to have any number of core nodes in the cluster, the recommended starting point is 2 or 3.
-
-#### Replicants
-
-Replicants can handle MQTT traffic, but they delegate mnesia transaction coordination to the core nodes.
-Replicant nodes passively and asynchronously replicate data from the core nodes.
-They can receive data from several different core nodes simultaneously, however, they try to choose core nodes with the least load.
-
-It is possible to put replicate nodes into an auto-scaling group.
-
-::: warning
-It takes time for the new replicant to join the cluster, and this process puts additional load on the core nodes.
-Don't use too aggressive autoscaling settings to avoid frequent replicant restarts.
-:::
-
-Flow of the data in the cluster is illustrated in the following diagram (simplified):
-
-![image](./assets/rlog_cluster.png)
-
-### Enabling RLOG feature
-
-Let's suppose we delegate `core` role to nodes `emqx@core1.internal` and `emqx@core2.internal`.
-
-The following changes should be done in the `etc/emqx.conf` file:
-
-1. Stop all the nodes in the cluster, if modifying an existing deployment
-1. Set `cluster.db_backend` parameter to `rlog` on all nodes in the cluster
-1. Set `cluster.rlog.role` parameter to `core` on `emqx@core1.internal` and `emqx@core2.internal`, and to `replicant` on all the other nodes
-1. Set `cluster.rlog.core_nodes` parameter to `emqx@core1.internal,emqx@core2.internal` on all the nodes
-1. Start the cluster

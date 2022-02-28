@@ -10,14 +10,15 @@ $ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
 ```sql
 SELECT
-    payload as p,
-    p.metric as metric, p.tags as tags, p.value as value
+    payload.metric as metric,
+    payload.tags as tags,
+    payload.value as value
 FROM
     "#"
 ```

@@ -34,7 +34,7 @@ CREATE TABLE `mqtt_sub` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-::: danger
+::: tip
 
 订阅关系表结构不能修改，请使用上面SQL语句创建
 
@@ -42,7 +42,7 @@ CREATE TABLE `mqtt_sub` (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 

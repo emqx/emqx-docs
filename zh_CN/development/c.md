@@ -27,7 +27,7 @@ Eclipse Paho Embedded C 可以在桌面操作系统上使用，但主要针对 [
 
 ## Paho C 使用示例
 
-MQTT C 语言相关两个客户端库的比较、下载、使用方式等详细说明请移步至项目主页查看，本示例包含 C 语言的 Paho C 连接 EMQ X Broker，并进行消息收发完整代码：
+MQTT C 语言相关两个客户端库的比较、下载、使用方式等详细说明请移步至项目主页查看，本示例包含 C 语言的 Paho C 连接 EMQX Broker，并进行消息收发完整代码：
 
 ```c
 #include "stdio.h"

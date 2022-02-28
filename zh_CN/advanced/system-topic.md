@@ -15,7 +15,7 @@ ref:
 
 # $SYS 系统主题
 
-EMQ X 周期性发布自身运行状态、消息统计、客户端上下线事件到以 `$SYS/` 开头系统主题。
+EMQX 周期性发布自身运行状态、消息统计、客户端上下线事件到以 `$SYS/` 开头系统主题。
 
 $SYS 主题路径以 `$SYS/brokers/{node}/` 开头。`{node}` 是指产生该 `事件 / 消息` 所在的节点名称，例如:
 
@@ -33,12 +33,12 @@ broker.sys_interval = 1m
 
 {% emqxce %}
 
-::: danger
-EMQ X 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [内置 ACL](./acl-file.md) 修改发布订阅 ACL 规则。
+::: tip
+EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [内置 ACL](./acl-file.md) 修改发布订阅 ACL 规则。
 
 {% endemqxce %}
 
-EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [Webhook](./webhook.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#endpoint-metrics) 获取。
+EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [Webhook](./webhook.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#endpoint-metrics) 获取。
 :::
 
 
@@ -47,10 +47,10 @@ EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更�
 | 主题                          | 说明                 |
 | ----------------------------- | -------------------- |
 | $SYS/brokers                  | 集群节点列表         |
-| $SYS/brokers/\${node}/version  | EMQ X 版本     |
-| $SYS/brokers/\${node}/uptime   | EMQ X 运行时间 |
-| $SYS/brokers/\${node}/datetime | EMQ X 系统时间     |
-| $SYS/brokers/\${node}/sysdescr | EMQ X 描述     |
+| $SYS/brokers/\${node}/version  | EMQX 版本     |
+| $SYS/brokers/\${node}/uptime   | EMQX 运行时间 |
+| $SYS/brokers/\${node}/datetime | EMQX 系统时间     |
+| $SYS/brokers/\${node}/sysdescr | EMQX 描述     |
 
 ## 客户端上下线事件
 
@@ -58,25 +58,25 @@ EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更�
 
 | 主题 (Topic)              | 说明                                     |
 | ------------------------ | ---------------------------------------- |
-| ${clientid}/connected    | 上线事件。当任意客户端上线时，EMQ X 就会发布该主题的消息 |
-| ${clientid}/disconnected | 下线事件。当任意客户端下线时，EMQ X 就会发布该主题的消息 |
+| ${clientid}/connected    | 上线事件。当任意客户端上线时，EMQX 就会发布该主题的消息 |
+| ${clientid}/disconnected | 下线事件。当任意客户端下线时，EMQX 就会发布该主题的消息 |
 
 `connected` 事件消息的 Payload 解析成 JSON 格式如下:
 
 ```bash
 {
-    "username":"undefined",
-    "ts":1582687922392,
-    "sockport":1883,
-    "proto_ver":5,
-    "proto_name":"MQTT",
-    "keepalive":300,
-    "ipaddress":"127.0.0.1",
-    "expiry_interval":0,
-    "connected_at":1582687922,
-    "connack":0,
-    "clientid":"emqtt-8348fe27a87976ad4db3",
-    "clean_start":true
+    "username": "foo",
+    "ts": 1625572213873,
+    "sockport": 1883,
+    "proto_ver": 4,
+    "proto_name": "MQTT",
+    "keepalive": 60,
+    "ipaddress": "127.0.0.1",
+    "expiry_interval": 0,
+    "connected_at": 1625572213873,
+    "connack": 0,
+    "clientid": "emqtt-8348fe27a87976ad4db3",
+    "clean_start": true
 }
 ```
 
@@ -84,11 +84,15 @@ EMQ X 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更�
 
 ```bash
 {
-    "username":"undefined",
-    "ts":1582688032203,
-    "reason":"tcp_closed",
-    "disconnected_at":1582688032,
-    "clientid":"emqtt-8348fe27a87976ad4db3"
+    "username": "foo",
+    "ts": 1625572213873,
+    "sockport": 1883,
+    "reason": "tcp_closed",
+    "proto_ver": 4,
+    "proto_name": "MQTT",
+    "ipaddress": "127.0.0.1",
+    "disconnected_at": 1625572213873,
+    "clientid": "emqtt-8348fe27a87976ad4db3"
 }
 ```
 

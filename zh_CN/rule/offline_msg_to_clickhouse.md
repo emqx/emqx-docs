@@ -37,7 +37,7 @@ create table mqtt_msg (
 	arrived Int64) engine = MergeTree() ORDER BY msgid;
 ```
 
-::: danger
+::: tip
 
 消息表结构不能修改，请使用上面SQL语句创建
 
@@ -45,7 +45,7 @@ create table mqtt_msg (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 

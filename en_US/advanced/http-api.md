@@ -1,16 +1,16 @@
 # HTTP API 
-EMQ X Broker provides HTTP APIs for integration with external systems, such as querying client information, publishing messages, and creating rules.
+EMQX Broker provides HTTP APIs for integration with external systems, such as querying client information, publishing messages, and creating rules.
 
-EMQ X Broker's HTTP API service listens on port 8081 by default. You can modify the listening port through the configuration file of  `etc/plugins/emqx_management.conf`, or enable HTTPS listening. All API calls start with `api/v4` after [EMQ X Broker 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0).
+EMQX Broker's HTTP API service listens on port 8081 by default. You can modify the listening port through the configuration file of  `etc/plugins/emqx_management.conf`, or enable HTTPS listening. All API calls start with `api/v4` after [EMQX Broker 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0).
 
 ## Interface security 
-EMQ X Broker's HTTP API uses the method of [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). The `id` and ` password` must be filled with AppID and AppSecret respectively.
+EMQX Broker's HTTP API uses the method of [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). The `id` and ` password` must be filled with AppID and AppSecret respectively.
 The default AppID and AppSecret are: `admin/public`. You can modify and add AppID / AppSecret in the left menu bar of Dashboard by selecting "Manage"-> "Apps".
 
 ## Response code 
 ### HTTP status codes
 
-The EMQ X Broker interface always returns 200 OK when the call is successful, and the response content is returned in JSON format.
+The EMQX Broker interface always returns 200 OK when the call is successful, and the response content is returned in JSON format.
 
 The possible status codes are as follows:
 
@@ -24,7 +24,7 @@ The possible status codes are as follows:
 
 ### result codes
 
-The response message body of the EMQ X Broker interface is in JSON format, which always contains the returned `code`.
+The response message body of the EMQX Broker interface is in JSON format, which always contains the returned `code`.
 
 The possible returned codes are as follows:
 
@@ -50,7 +50,7 @@ The possible returned codes are as follows:
 ## API Endpoints 
 ### /api/v4 
 #### GET /api/v4 
-Return all Endpoints supported by EMQ X Broker.
+Return all Endpoints supported by EMQX Broker.
 
 **Parameters:** None
 
@@ -92,10 +92,10 @@ Return basic information of all nodes in the cluster.
 | data.datetime    | String    | Current time, in the format of "YYYY-MM-DD HH: mm: ss" |
 | data.node        | String    | Node name                                             |
 | data.node_status | String    | Node status                                           |
-| data.otp_release | String    | Erlang/OTP version used by EMQ X Broker |
+| data.otp_release | String    | Erlang/OTP version used by EMQX Broker |
 | data.sysdescr    | String    | Software description                                 |
-| data.uptime      | String    | EMQ X Broker runtime, in the format of "H hours, m minutes, s seconds" |
-| data.version     | String    | EMQ X Broker version                                     |
+| data.uptime      | String    | EMQX Broker runtime, in the format of "H hours, m minutes, s seconds" |
+| data.version     | String    | EMQX Broker version                                     |
 
 **Examples:**
 
@@ -104,7 +104,7 @@ Get the basic information of all nodes:
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers"
 
-{"data":[{"version":"develop","uptime":"4 hours, 21 minutes, 19 seconds","sysdescr":"EMQ X Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-19 15:27:24"}],"code":0}
+{"data":[{"version":"develop","uptime":"4 hours, 21 minutes, 19 seconds","sysdescr":"EMQX Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-19 15:27:24"}],"code":0}
 ```
 
 Get the basic information of node emqx@127.0.0.1 :
@@ -112,7 +112,7 @@ Get the basic information of node emqx@127.0.0.1 :
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers/emqx@127.0.0.1"
 
-{"data":{"version":"develop","uptime":"1 minutes, 51 seconds","sysdescr":"EMQ X Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-20 14:11:31"},"code":0}
+{"data":{"version":"develop","uptime":"1 minutes, 51 seconds","sysdescr":"EMQX Broker","otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","datetime":"2020-02-20 14:11:31"},"code":0}
 ```
 
 ### Node
@@ -140,11 +140,11 @@ Return the status of the node.
 | data.memory_used       | String    | VM occupied system memory |
 | data.node              | String    | Node name                    |
 | data.node_status       | String    | Node status                  |
-| data.otp_release       | String    | Erlang/OTP version used by EMQ X Broker |
+| data.otp_release       | String    | Erlang/OTP version used by EMQX Broker |
 | data.process_available | Integer   | Number of available processes |
 | data.process_used      | Integer   | Number of used processes |
-| data.uptime            | String    | EMQ X Broker runtime         |
-| data.version           | String    | EMQ X Broker version             |
+| data.uptime            | String    | EMQX Broker runtime         |
+| data.version           | String    | EMQX Broker version             |
 
 **Examples:**
 
@@ -225,7 +225,7 @@ After version 4.1, multiple conditions and fuzzy queries are supported. The quer
 | data[0].mqueue_dropped    | Integer   | Number of messages dropped by the message queue due to exceeding the length |
 | data[0].awaiting_rel      | Integer   | Number of awaiting PUBREC packet |
 | data[0].max_awaiting_rel  | Integer   | Maximum allowed number of awaiting PUBREC packet |
-| data[0].recv_oct          | Integer   | Number of bytes received by EMQ X Broker (the same below) |
+| data[0].recv_oct          | Integer   | Number of bytes received by EMQX Broker (the same below) |
 | data[0].recv_cnt          | Integer   | Number of TCP packets received |
 | data[0].recv_pkt          | Integer   | Number of MQTT packets received |
 | data[0].recv_msg          | Integer   | Number of PUBLISH packets received |
@@ -354,29 +354,6 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"recv_cnt":4,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":3,"created_at":"2020-02-20 13:38:51","reductions":5994,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":3,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":0,"mqueue_len":0,"recv_oct":33,"connected_at":"2020-02-20 13:38:51","clean_start":true,"clientid":"example","connected":true,"port":54889,"send_oct":8,"zone":"external"}],"code":0}
 ```
 
-#### DELETE /api/v4/nodes/{node}/clients/{clientid} 
-Similar with [DELETE /api/v4/clients/{clientid}](#endpoint-delete-a-client)，kick out the specified client under the specified node.
-
-**Path Parameters:**
-
-| Name   | Type | Required | Description |
-| ------ | --------- | -------- |  ---- |
-| clientid  | String | True | ClientID |
-
-**Success Response Body (JSON):**
-
-| Name | Type | Description |
-| ---- | --------- | ----------- |
-| code | Integer   | 0         |
-
-**Examples:**
-
-```bash
-$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/clients/example"
-
-{"code":0}
-```
-
 #### GET /api/v4/clients/username/{username} 
 Query client information by Username. Since there may be multiple clients using the same user name, multiple client information may be returned at the same time.
 
@@ -480,7 +457,40 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 {"code":0}
 ```
 
+### PUT /api/v4/clients/{clientid}/keepalive
+
+Set the keepalive time (in seconds) for the specified client.
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                                           |
+| -------- | ------- | :------: | ----------------------------------------------------- |
+| interval | Integer |   True   | seconds：0～65535，0 means keepalive check is disable |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+Update the specified client(example) Keepalive to 10 seconds
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
+
+{"code":0}
+```
+
 ### Subscription Information
+
 #### GET /api/v4/subscriptions 
 Returns all subscription information under the cluster, and supports paging mechanism
 
@@ -682,6 +692,7 @@ Publish MQTT message。
 | encoding | String    | Optional | plain   | The encoding used in the message body. Currently only plain and base64 are supported. |
 | qos      | Integer   | Optional | 0       | QoS level |
 | retain   | Boolean   | Optional | false   | Whether it is a retained message |
+| user_properties   | Object   | Optional | {}   | The User Property of the PUBLISH message (MQTT 5.0) |
 
 **Success Response Body (JSON):**
 
@@ -692,7 +703,8 @@ Publish MQTT message。
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d '{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"}'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d \
+'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}'
 
 {"code":0}
 ```
@@ -767,7 +779,7 @@ Publish MQTT messages in batch.
 | [0].encoding | String  | Optional | plain   | The encoding method used in the message body, only `plain` and `base64` are supported currently |
 | [0].qos      | Integer | Optional | 0       | QoS level                                                    |
 | [0].retain   | Boolean | Optional | false   | Whether it is a retained message or not                      |
-
+| [0].user_properties   | Object   | Optional | {}   | The User Property of the PUBLISH message (MQTT 5.0) |
 **Success Response Body (JSON):**
 
 | Name | Type    | Description |
@@ -777,9 +789,9 @@ Publish MQTT messages in batch.
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example"}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}]'
 
-{"code":0}
+{"data":[{"topic":"a/b/c","code":0},{"topic":"a/b/c","code":0}],"code":0}
 ```
 
 ### Topic subscription in batch
@@ -862,7 +874,7 @@ Returns information of all plugins in the cluster.
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/plugins"
 
-{"data":[{"plugins":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Broker Authentication with ClientId/Password","active":false}, ...],"node":"emqx@127.0.0.1"}],"code":0}
+{"data":[{"plugins":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQX Broker Authentication with ClientId/Password","active":false}, ...],"node":"emqx@127.0.0.1"}],"code":0}
 ```
 
 #### GET /api/v4/nodes/{node}/plugins 
@@ -887,7 +899,7 @@ Similar with [GET /api/v4/plugins](#endpoint-get-plugins), return the plugin inf
 ```bash
 $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/plugins"
 
-{"data":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQ X Broker Authentication with ClientId/Password","active":false}, ...],"code":0}
+{"data":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQX Broker Authentication with ClientId/Password","active":false}, ...],"code":0}
 ```
 
 #### PUT /api/v4/nodes/{node}/plugins/{plugin}/load {#load_plugin}
@@ -1071,8 +1083,8 @@ Returns all statistical  metrics under the cluster
 | ----------------| --------- | -------------------- |
 | actions.failure                 | Integer   | Number of failure executions of the rule engine action |
 | actions.success                 | Integer   | Number of successful executions of the rule engine action |
-| bytes.received                  | Integer   | Number of bytes received by EMQ X Broker |
-| bytes.sent                      | Integer   | Number of bytes sent by EMQ X Broker on this connection |
+| bytes.received                  | Integer   | Number of bytes received by EMQX Broker |
+| bytes.sent                      | Integer   | Number of bytes sent by EMQX Broker on this connection |
 | client.authenticate             | Integer   | Number of client authentications |
 | client.auth.anonymous           | Integer   | Number of clients who log in anonymously |
 | client.connect                  | Integer   | Number of client connections |
@@ -1088,9 +1100,9 @@ Returns all statistical  metrics under the cluster
 | delivery.dropped.expired        | Integer   | Number of messages dropped due to message expiration on sending |
 | delivery.dropped.no_local       | Integer   | Number of messages that were dropped due to the No Local subscription option when sending |
 | delivery.dropped                | Integer   | Total number of discarded messages when sending |
-| messages.delayed                | Integer   | Number of delay- published messages stored by EMQ X Broker |
-| messages.delivered              | Integer   | Number of messages forwarded to the subscription process internally by EMQ X Broker |
-| messages.dropped                | Integer   | Total number of messages dropped by EMQ X Broker before forwarding to the subscription process |
+| messages.delayed                | Integer   | Number of delay- published messages stored by EMQX Broker |
+| messages.delivered              | Integer   | Number of messages forwarded to the subscription process internally by EMQX Broker |
+| messages.dropped                | Integer   | Total number of messages dropped by EMQX Broker before forwarding to the subscription process |
 | messages.dropped.expired        | Integer   | Number of messages dropped due to message expiration when receiving |
 | messages.dropped.no_subscribers | Integer   | Number of messages dropped due to no subscribers |
 | messages.forward                | Integer   | Number of messages forwarded to other nodes |
@@ -1103,7 +1115,7 @@ Returns all statistical  metrics under the cluster
 | messages.qos2.sent              | Integer   | Number of QoS 2 messages sent to clients |
 | messages.received               | Integer   | Number of messages received from the client, equal to the sum of `messages.qos0.received`，`messages.qos1.received` and `messages.qos2.received` |
 | messages.sent                   | Integer   | Number of messages sent to the client, equal to the sum of `messages.qos0.sent`，`messages.qos1.sent` and `messages.qos2.sent` |
-| messages.retained               | Integer   | Number of retained messages stored by EMQ X Broker |
+| messages.retained               | Integer   | Number of retained messages stored by EMQX Broker |
 | messages.acked                  | Integer   | Number of received PUBACK and PUBREC packet |
 | packets.received                | Integer   | Number of received packet |
 | packets.sent                    | Integer   | Number of sent packet |

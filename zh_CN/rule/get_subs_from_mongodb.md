@@ -26,7 +26,7 @@ db.createCollection("mqtt_sub");
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 
@@ -52,7 +52,7 @@ SELECT * FROM "$events/client_connected"
 
 弹出“创建资源”对话框
 
-![](./assets/rule-engine/mongo_sub_04.png)
+![image-20211129162757828](./assets/rule-engine/mongo_sub_04.png)
 
 填写资源配置:
 

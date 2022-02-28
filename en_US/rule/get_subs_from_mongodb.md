@@ -26,7 +26,7 @@ db.createCollection("mqtt_sub");
 
 Create rules:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
 Then fill in the rule SQL:
 
@@ -34,13 +34,13 @@ Then fill in the rule SQL:
 SELECT * FROM "$events/client_connected"
 ```
 
-![](./assets/rule-engine/mongo_sub_01.png)
+![image-20211214142714391](./assets/rule-engine/mongo_sub_01.png)
 
 Related actions:
 
 Select "Add Action" on the "Response Action" interface, and then select "Get Subscription List from MongoDB" in the "Add Action" drop-down box
 
-![](./assets/rule-engine/mongo_sub_02.png)
+![image-20211214142813615](./assets/rule-engine/mongo_sub_02.png)
 
 Fill in the action parameters:
 
@@ -48,11 +48,11 @@ The action of "Get subscription list from MongoDB" requires one parameter:
 
 1). Associated resources. The resource drop-down box is empty now, and you can click "New" in the upper right corner to create a MongoDB  resource:
 
-![](./assets/rule-engine/mongo_sub_03.png)
+![image-20211214142840878](./assets/rule-engine/mongo_sub_03.png)
 
 The "Create Resource" dialog box pops up
 
-![](./assets/rule-engine/mongo_sub_04.png)
+![image-20211214142951416](./assets/rule-engine/mongo_sub_04.png)
 
 Fill in the resource configuration:
 
@@ -60,15 +60,15 @@ Fill in the real MongoDB  server address and the values corresponding to other c
 
 Finally click the "OK" button.
 
-![](./assets/rule-engine/mongo_sub_05.png)
+![image-20211214143043056](./assets/rule-engine/mongo_sub_05.png)
 
 Return to the response action interface and click "OK".
 
-![](./assets/rule-engine/mongo_sub_06.png)
+![image-20211214143347354](./assets/rule-engine/mongo_sub_06.png)
 
 Return to the rule creation interface and click "Create".
 
-![](./assets/rule-engine/mongo_sub_07.png)
+![image-20211214143412422](./assets/rule-engine/mongo_sub_07.png)
 
 The rule has been created, and you can insert a subscription relationship into MongoDB through "mongo":
 
@@ -80,8 +80,8 @@ db.mqtt_sub.insert({clientid: "test", topic: "t1", qos: 1})
 
 Log in to the device whose clientid is test via Dashboard:
 
-![](./assets/rule-engine/mongo_sub_09.png)
+![image-20211214143449950](./assets/rule-engine/mongo_sub_09.png)
 
 Check the "Subscription" list, and you can see that the Broker obtains the subscription relationship from MongoDB and subscribes as the agent device:
 
-![](./assets/rule-engine/mongo_sub_10.png)
+![image-20211214143528939](./assets/rule-engine/mongo_sub_10.png)
