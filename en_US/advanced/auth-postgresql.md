@@ -66,11 +66,12 @@ In the default configuration of PostgreSQL authentication, you need to ensure th
 
 ```sql
 CREATE TABLE mqtt_user (
-  id SERIAL primary key,
-  is_superuser boolean,
-  username character varying(100),
-  password character varying(100),
-  salt character varying(40)
+  id SERIAL PRIMARY KEY,
+  username CHARACTER VARYING(100),
+  password CHARACTER VARYING(100),
+  salt CHARACTER VARYING(40),
+  is_superuser BOOLEAN,
+  UNIQUE (username)
 )
 ```
 
@@ -108,7 +109,7 @@ auth.pgsql.password_hash = sha256
 
 ## auth_query
 
-During authentication, EMQ X Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
+During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
@@ -118,7 +119,7 @@ auth.pgsql.auth_query = select password from mqtt_user where username = '%u' lim
 
 
 
-You can use the following placeholders in the SQL authentication, and EMQ X Broker will be automatically populated with client information when executed:
+You can use the following placeholders in the SQL authentication, and EMQX Broker will be automatically populated with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -129,11 +130,16 @@ You can use the following placeholders in the SQL authentication, and EMQ X Brok
 
 You can adjust the authentication SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication  must meet the following conditions:
 
-1. The query result must include the password field, which is used by EMQ X Broker to compare with the client password
-2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQ X Broker as the salt value
+1. The query result must include the password field, which is used by EMQX Broker to compare with the client password
+2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQX Broker as the salt value
 3. There can only be one query result. When there are multiple results, only the first one is taken as valid data.
 
 ::: tip 
 You can use AS syntax in SQL to specify passwords for field renaming, or set the salt value to a fixed value.
 :::
 
+### Advanced
+
+In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
+
+If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.

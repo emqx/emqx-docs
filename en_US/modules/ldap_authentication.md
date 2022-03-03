@@ -3,7 +3,7 @@ LDAP authentication/access control uses an external OpenLDAP server as the authe
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200928161310952](./assets/modules.png)
 
@@ -124,7 +124,7 @@ After enabling LDAP authentication, you can connect via username: mqttuser0001 a
 
 `mqttPubSubTopic` allows to subscribe/publish the topic (multiple can be configured)
 
-::: danger
+::: tip
 
 The current version only supports OpenLDAP, not Microsoft Active Directory.
 

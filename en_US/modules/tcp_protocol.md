@@ -2,7 +2,7 @@
 
 ## Protocol Introduction
 
-EMQ X provides the **emqx-tcp** module as an access module close to the end side. According to the relationship between its functional logic and the entire system, the entire message exchange process can be divided into three parts: terminal side, platform side and Other side:
+EMQX provides the **emqx-tcp** module as an access module close to the end side. According to the relationship between its functional logic and the entire system, the entire message exchange process can be divided into three parts: terminal side, platform side and Other side:
 
 ```bash
 |<-- Terminal -->|<--------- Broker Side --------->|<---  Others  --->|
@@ -11,7 +11,7 @@ EMQ X provides the **emqx-tcp** module as an access module close to the end side
 +---+                                                PUB  +-----------+
 | D |  INCOMING  +----------+    PUB     +---------+   -->| subscriber|
 | E |----------->|          |----------->|         |--/   +-----------+
-| V |            | emqx-tcp |            |  EMQ X  |
+| V |            | emqx-tcp |            |  EMQX  |
 | I |<-----------|          |<-----------|         |<--   +-----------+
 | C |  OUTGOING  +----------+    PUB     +---------+   \--| publisher |
 | E |                                                PUB  +-----------+
@@ -19,12 +19,12 @@ EMQ X provides the **emqx-tcp** module as an access module close to the end side
 ```
 
 1. On the terminal side, access through the TCP private protocol defined by this module, and then implement data reporting or receive downlink messages.
-2. On the platform side, the main body is the emqx-tcp module and the EMQ X system. emqx-tcp is responsible for the encoding and decoding of messages, and the agent subscribes to downlink topics. Realize to convert the uplink message into the MQTT message PUBLISH in the EMQ X system to the entire system; convert the downlink MQTT message into the message structure of the TCP private protocol, and send it to the terminal.
+2. On the platform side, the main body is the emqx-tcp module and the EMQX system. emqx-tcp is responsible for the encoding and decoding of messages, and the agent subscribes to downlink topics. Realize to convert the uplink message into the MQTT message PUBLISH in the EMQX system to the entire system; convert the downlink MQTT message into the message structure of the TCP private protocol, and send it to the terminal.
 3. The other side can subscribe to the topic of the upstream PUBLISH message appearing in 2 to receive the upstream message. Or to publish a message to a specific downlink topic to send data to the terminal side.
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 

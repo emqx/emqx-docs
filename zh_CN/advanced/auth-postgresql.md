@@ -66,11 +66,12 @@ PostgreSQL 认证默认配置下需要确保数据库中有下表：
 
 ```sql
 CREATE TABLE mqtt_user (
-  id SERIAL primary key,
-  is_superuser boolean,
-  username character varying(100),
-  password character varying(100),
-  salt character varying(40)
+  id SERIAL PRIMARY KEY,
+  username CHARACTER VARYING(100),
+  password CHARACTER VARYING(100),
+  salt CHARACTER VARYING(40),
+  is_superuser BOOLEAN,
+  UNIQUE (username)
 )
 ```
 
@@ -108,7 +109,7 @@ auth.pgsql.password_hash = sha256
 
 ## 认证 SQL（auth_query）
 
-进行身份认证时，EMQ X 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
+进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
@@ -118,7 +119,7 @@ auth.pgsql.auth_query = select password from mqtt_user where username = '%u' lim
 
 
 
-你可以在认证 SQL 中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在认证 SQL 中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
@@ -129,11 +130,16 @@ auth.pgsql.auth_query = select password from mqtt_user where username = '%u' lim
 
 你可以根据业务需要调整认证 SQL，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下认证 SQL 需要满足以下条件：
 
-1. 查询结果中必须包含 password 字段，EMQ X 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQ X 使用该字段作为 salt（盐）值
+1. 查询结果中必须包含 password 字段，EMQX 使用该字段与客户端密码比对
+2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQX 使用该字段作为 salt（盐）值
 3. 查询结果只能有一条，多条结果时只取第一条作为有效数据
 
 ::: tip 
 可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
 :::
 
+### 进阶
+
+默认表结构中，我们将 username 字段设为了唯一索引（UNIQUE），与默认的查询语句（`select password from mqtt_user where username = '%u' limit 1`）配合使用可以获得非常不错的查询性能。
+
+如果默认查询条件不能满足您的需要，例如你需要根据 Client ID 查询相应的 Password Hash 和 Salt，请确保将 Client ID 设置为索引；又或者您想要对 Username、Client ID 或者其他更多字段进行多条件查询，建议设置正确的单索引或是联合索引。总之，设置正确的表结构和查询语句，尽可能不要让索引失效而影响查询性能。

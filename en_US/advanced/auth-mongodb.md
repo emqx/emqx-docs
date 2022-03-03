@@ -145,7 +145,7 @@ auth.mongo.password_hash = sha256
 
 ## auth_selector
 
-During authentication, EMQ X Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
+During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
 
 MongoDB supported configuration collection name, password field, and selector command
 
@@ -161,7 +161,7 @@ auth.mongo.auth_query.password_field = password
 auth.mongo.auth_query.selector = username=%u
 ```
 
-You can use the following placeholders in the selector, and EMQ X Broker will be automatically populated with client information when executed:
+You can use the following placeholders in the selector, and EMQX Broker will be automatically populated with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -170,6 +170,6 @@ You can use the following placeholders in the selector, and EMQ X Broker will be
 
 You can adjust the authentication query according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication query must meet the following conditions:
 
-1. The query result must include the password field, which is used by EMQ X Broker to compare with the client password
-2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQ X Broker as the salt value
+1. The query result must include the password field, which is used by EMQX Broker to compare with the client password
+2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQX Broker as the salt value
 3. MongoDB uses the findOne query command to ensure that the query results you expect are shown in the first data

@@ -25,7 +25,7 @@ emqx_auth_jwt
 
 ## 认证原理
 
-客户端使用 Token 作为用户名或密码（取决于插件配置），发起连接时 EMQ X 使用配置中的密钥、证书进行解密，如果能成功解密则认证成功，否则认证失败。
+客户端使用 Token 作为用户名或密码（取决于插件配置），发起连接时 EMQX 使用配置中的密钥、证书进行解密，如果能成功解密则认证成功，否则认证失败。
 
 默认配置下启用 JWT 认证后，你可以通过任意用户名+以下密码进行连接：
 
@@ -53,7 +53,7 @@ auth.jwt.secret = emqxsecret
 
 ## JWKs 的服务器地址
 ##
-## EMQ X 会从 JWKs 服务器获取密钥列表，并用于验证 Token
+## EMQX 会从 JWKs 服务器获取密钥列表，并用于验证 Token
 ##
 ## JWKs 规范见: http://self-issued.info/docs/draft-ietf-jose-json-web-key.html
 #auth.jwt.jwks = https://127.0.0.1:8080/jwks
@@ -137,7 +137,7 @@ JWT 认证支持以三种方式配置密钥，这三种方式分别对应三种�
 - `auth.jwt.jwks`：配置为 [JWKs](http://self-issued.info/docs/draft-ietf-jose-json-web-key.html) 服务器地址，从 JWKs 服务器中获取可用的密钥列表。
 
 
-该三类密钥允许同时配置。EMQ X 在验证 Token 时会按 `auth.jwt.secret`，`auth.jwt.pubkey`，`auth.jwt.jwks` 顺序检查。
+该三类密钥允许同时配置。EMQX 在验证 Token 时会按 `auth.jwt.secret`，`auth.jwt.pubkey`，`auth.jwt.jwks` 顺序检查。
 
 
 ::: danger 

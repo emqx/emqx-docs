@@ -2,26 +2,21 @@
   "cn": [
     {
       "title": "产品概览",
-      "children": [
-        {
-          "title": "EMQ X 消息服务器简介",
-          "path": "./"
-        },
-        {
-          "title": "EMQ X 消息服务器功能列表",
-          "path": "introduction/checklist"
-        }
-      ]
+      "path": "./"
     },
     {
       "title": "开始使用",
       "children": [
         {
+          "title": "开始使用",
+          "path": "getting-started/getting-started"
+        },
+        {
           "title": "安装",
           "path": "getting-started/install"
         },
         {
-          "title": "启动 EMQ X",
+          "title": "启动 EMQX",
           "path": "getting-started/start"
         },
         {
@@ -324,6 +319,10 @@
       "path": "advanced/relup"
     },
     {
+       "title": "安装补丁包",
+       "path": "advanced/patches"
+    },
+    {
       "title": "FAQ 常见问题解答",
       "children": [
         {
@@ -474,26 +473,21 @@
   "en": [
     {
       "title": "Introduction",
-      "children": [
-        {
-          "title": "EMQ X Broker",
-          "path": "./"
-        },
-        {
-          "title": "Features List",
-          "path": "introduction/checklist"
-        }
-      ]
+      "path": "./"
     },
     {
-      "title": "Get Started",
+      "title": "Getting Started",
       "children": [
+        {
+          "title": "Getting Started",
+          "path": "getting-started/getting-started"
+        },
         {
           "title": "Installation",
           "path": "getting-started/install"
         },
         {
-          "title": "Start EMQ X",
+          "title": "Start EMQX",
           "path": "getting-started/start"
         },
         {
@@ -592,6 +586,10 @@
         {
           "title": "Import/Export Data",
           "path": "advanced/data-import-and-export"
+        },
+        {
+          "title": "Config and Data Backup & Restore",
+          "path": "advanced/config-and-data-backup-restore"
         }
       ]
     },
@@ -697,7 +695,7 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "EMQ X Bridges",
+          "title": "EMQX Bridges",
           "path": "rule/bridge_emqx"
         },
         {
@@ -728,8 +726,12 @@
       ]
     },
     {
-      "title": "DevOps",
+      "title": "Management and Ops",
       "children": [
+        {
+          "title": "Device management",
+          "path": "tutorial/device-management"
+        },
         {
           "title": "System tuning",
           "path": "tutorial/tune"
@@ -754,7 +756,16 @@
     },
     {
       "title": "Configuration",
-      "path": "configuration/configuration"
+      "children": [
+        {
+          "title": "Configuration",
+          "path": "configuration/configuration"
+        },
+        {
+          "title": "Environment variables",
+          "path": "configuration/environment-variable"
+        }
+      ]
     },
     {
       "title": "Command",
@@ -768,6 +779,10 @@
     {
       "title": "Release Hot Upgrade",
       "path": "advanced/relup"
+    },
+    {
+       "title": "Apply Patches",
+       "path": "advanced/patches"
     },
     {
       "title": "Multi-language Extension",

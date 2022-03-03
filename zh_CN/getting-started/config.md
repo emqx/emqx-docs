@@ -17,31 +17,32 @@ ref:
 
 ## 简介
 
-EMQ X 的配置文件通常以 `.conf` 作为后缀名，你可以在 `etc` 目录找到这些配置文件，主要配置文件包括：
+EMQX 的配置文件通常以 `.conf` 作为后缀名，你可以在 `etc` 目录找到这些配置文件，主要配置文件包括：
 
 {% emqxee %}
 
 | 配置文件           | 说明                      |
 | ------------------ | ------------------------- |
-| etc/emqx.conf      | EMQ X 基础配置文件  |
-| etc/cluster.conf      | EMQ X 集群相关配置文件  |
-| etc/rpc.conf      | EMQ X 远程调用配置文件  |
-| etc/logger.conf      | EMQ X 日志配置文件  |
-| etc/zones.conf      | EMQ X Zone配置文件  |
-| etc/listeners.conf      | EMQ X 监听端口配置文件  |
-| etc/sys_mon.conf      | EMQ X 告警监控配置文件  |
-| etc/acl.conf       | EMQ X 默认 ACL 规则配置文件 |
-| etc/plugins/*.conf | EMQ X 扩展插件配置文件      |
+| etc/emqx.conf      | EMQX 基础配置文件  |
+| etc/cluster.conf      | EMQX 集群相关配置文件  |
+| etc/rpc.conf      | EMQX 远程调用配置文件  |
+| etc/logger.conf      | EMQX 日志配置文件  |
+| etc/zones.conf      | EMQX Zone配置文件  |
+| etc/listeners.conf      | EMQX 监听端口配置文件  |
+| etc/sys_mon.conf      | EMQX 告警监控配置文件  |
+| etc/acl.conf       | EMQX 默认 ACL 规则配置文件 |
+| etc/plugins/*.conf | EMQX 扩展插件配置文件      |
 
 {% endemqxee %}
+
 
 {% emqxce %}
 
 | 配置文件           | 说明                      |
 | ------------------ | ------------------------- |
-| etc/emqx.conf      | EMQ X 配置文件  |
-| etc/acl.conf       | EMQ X 默认 ACL 规则配置文件 |
-| etc/plugins/*.conf | EMQ X 扩展插件配置文件      |
+| etc/emqx.conf      | EMQX 配置文件  |
+| etc/acl.conf       | EMQX 默认 ACL 规则配置文件 |
+| etc/plugins/*.conf | EMQX 扩展插件配置文件      |
 
 {% endemqxce %}
 
@@ -53,7 +54,7 @@ EMQ X 的配置文件通常以 `.conf` 作为后缀名，你可以在 `etc` 目�
 - 采用类似 sysctl 的 k = v 通用格式
 - 单个配置项的所有信息都在同一行内，换行意味着创建一个新的配置项
 - 键可以通过 `.` 进行分层，支持按树形结构管理配置项
-- 值的类型可以是 `integer`, `fload`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
+- 值的类型可以是 `integer`, `float`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
 - 任何以＃开头的行均被视为注释
 
 **示例：**
@@ -82,7 +83,7 @@ mqtt.max_packet_size = 1MB
 
 **ip**
 
-当你看到某个配置项的数据类型为 `ip` 时，意味着你可以使用 `<IP>:<Port>` 的形式来设置该配置项，例如 `0.0.0.0:1883`。
+当你看到某个配置项的数据类型为 `ip` 时，意味着你可以使用 `{ip}:{port}` 的形式来设置该配置项，例如 `0.0.0.0:1883`。
 
 **string**
 
@@ -128,15 +129,15 @@ dir = "tmp"
 
 ## 默认配置
 
-在 EMQ X 的配置文件中，你会看到很多被注释掉的配置项，这意味着这些配置项会使用他们的默认值，通常我们会列出这些配置的默认值。
+在 EMQX 的配置文件中，你会看到很多被注释掉的配置项，这意味着这些配置项会使用他们的默认值，通常我们会列出这些配置的默认值。
 
 ## Zone & Listener
 
-EMQ X 提供了非常多的配置项，并支持全局配置和局部配置。例如，EMQ X 提供了匿名访问的功能，即允许客户端不需要用户名与密码就能连接 Broker，通常在用户的生产环境中，此功能被默认关闭，但用户可能又希望在他的内网环境中启用此功能。从 3.0 版本开始，EMQ X 就通过 Zone 与 Listener 为用户提供了这种可能。
+EMQX 提供了非常多的配置项，并支持全局配置和局部配置。例如，EMQX 提供了匿名访问的功能，即允许客户端不需要用户名与密码就能连接 Broker，通常在用户的生产环境中，此功能被默认关闭，但用户可能又希望在他的内网环境中启用此功能。从 3.0 版本开始，EMQX 就通过 Zone 与 Listener 为用户提供了这种可能。
 
 ### Listener
 
-Listener 主要用于配置不同协议的监听端口和相关参数，EMQ X 支持配置多个 Listener 以同时监听多个协议或端口，以下是支持的 Listener：
+Listener 主要用于配置不同协议的监听端口和相关参数，EMQX 支持配置多个 Listener 以同时监听多个协议或端口，以下是支持的 Listener：
 
 | 监听器                     | 说明                                             |
 | ------------------------- | ------------------------------------------------------- |
@@ -145,7 +146,7 @@ Listener 主要用于配置不同协议的监听端口和相关参数，EMQ X �
 | Websocket Listener        | A listener for MQTT over WebSockets                     |
 | Secure Websocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
 
-EMQ X 默认提供 5 个 Listener，它们将占用以下端口：
+EMQX 默认提供 5 个 Listener，它们将占用以下端口：
 
 | 端口   | 说明                                       |
 | ----- | ------------------------------------------ |
@@ -173,4 +174,4 @@ listener.tcp.example = 12345
 
 ## 配置更新
 
-配置项会在 EMQ X Broker 与扩展插件被启动时读取并载入，EMQ X Broker 目前尚不支持运行时更新配置，但由于扩展插件支持动态加载和卸载，因此可以在修改插件配置后重新加载插件来应用最新的配置项。
+配置项会在 EMQX Broker 与扩展插件被启动时读取并载入，EMQX Broker 目前尚不支持运行时更新配置，但由于扩展插件支持动态加载和卸载，因此可以在修改插件配置后重新加载插件来应用最新的配置项。

@@ -2,13 +2,13 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 InfluxDB](../rule/backend_influxdb.md)规则引擎中创建 保存数据到 InfluxDB
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 InfluxDB](../rule/backend_influxdb.md)规则引擎中创建 保存数据到 InfluxDB
 
 :::
 
 ## InfluxDB 配置
 
-EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
+EMQX 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
 
 ```bash
 [[udp]]
@@ -18,7 +18,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
   database = "emqx"
 
   # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
-  # EMQ X 默认时间戳是毫秒
+  # EMQX 默认时间戳是毫秒
   precision = "ms"
 
   # 其他配置根据需要自行修改
@@ -154,7 +154,7 @@ MQTT 消息中的数据。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -162,7 +162,7 @@ MQTT 消息中的数据。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 纳秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 纳秒            |
 
 **$payload 与 $<Number\>:**
 

@@ -34,19 +34,9 @@ CREATE TABLE `mqtt_msg` (
   PRIMARY KEY (`id`),
   INDEX topic_index(`id`, `topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
-CREATE TABLE `mqtt_acked` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `clientid` varchar(64) DEFAULT NULL,
-  `topic` varchar(180) DEFAULT NULL,
-  `mid` int(11) unsigned DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mqtt_acked_key` (`clientid`,`topic`),
-  INDEX topic_index(`id`, `topic`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-::: danger
+::: tip
 
 The message table structure cannot be modified. Please use the above SQL statement to create
 
@@ -54,7 +44,7 @@ The message table structure cannot be modified. Please use the above SQL stateme
 
 Create rules:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
 Then fill in the rule SQL:
 

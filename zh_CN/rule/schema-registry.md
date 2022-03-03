@@ -5,7 +5,7 @@
 
 Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并返回结果。Schema Registry 配合规则引擎，可适配各种场景的设备接入和规则设计。
 
-EMQ X Schema Registry 目前可支持三种格式的编解码：[Avro](https://avro.apache.org)，[Protobuf](https://developers.google.com/protocol-buffers/)，以及自定义编码。其中 
+EMQX Schema Registry 目前可支持三种格式的编解码：[Avro](https://avro.apache.org)，[Protobuf](https://developers.google.com/protocol-buffers/)，以及自定义编码。其中 
 Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 Map 格式。解码后的数据可直接被规则引擎和其他插件使用。用户自定义的 (3rd-party)编解码服务通过 HTTP 或 TCP 回调的方式，进行更加贴近业务需求的编解码。
 
 ::: tip
@@ -52,9 +52,9 @@ schema_decode(SchemaName, RawData) -> Data
 
 ## 编解码 + 规则引擎
 
-EMQ X 的消息处理层面可分为消息路由(Messaging)、规则引擎(Rule Engine)、数据格式转换(Data Conversion) 三个部分。
+EMQX 的消息处理层面可分为消息路由(Messaging)、规则引擎(Rule Engine)、数据格式转换(Data Conversion) 三个部分。
 
-EMQ X 的 PUB/SUB 系统将消息路由到指定的主题。规则引擎可以灵活地配置数据的业务规则，按规则匹配消息，然后指定相应动作。数据格式转换发生在规则匹配的过程之前，先将数据转换为可参与规则匹配的 Map 格式，然后进行匹配。
+EMQX 的 PUB/SUB 系统将消息路由到指定的主题。规则引擎可以灵活地配置数据的业务规则，按规则匹配消息，然后指定相应动作。数据格式转换发生在规则匹配的过程之前，先将数据转换为可参与规则匹配的 Map 格式，然后进行匹配。
 
 ![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
 
@@ -108,7 +108,7 @@ SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 
 #### 创建 Schema
 
-在 EMQ X 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 Protobuf Schema:
+在 EMQX 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 Protobuf Schema:
 
 1. 名称：protobuf_person
 
@@ -203,7 +203,7 @@ t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 
 #### 创建 Schema
 
-在 EMQ X 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 Avro Schema:
+在 EMQX 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 Avro Schema:
 
 1. 名称：avro_user
 
@@ -295,7 +295,7 @@ publish to topic: t/1, payload: b'\nShawn\x00\xb4\n\x00\x06red'
 
 #### 创建 Schema
 
-在 EMQ X 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 3rd-Party Schema:
+在 EMQX 的 [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) 界面，使用下面的参数创建一个 3rd-Party Schema:
 
 1. 名称：my_parser
 2. 编解码类型：3rd-party

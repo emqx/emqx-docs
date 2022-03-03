@@ -2,7 +2,7 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to PostgreSQL](../rule/backend_pgsql.md) to setup Save data to PostgreSQL in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to PostgreSQL](../rule/backend_pgsql.md) to setup Save data to PostgreSQL in rule engine.
 
 :::
 
@@ -115,7 +115,7 @@ PostgreSQL backend supports SQL in
 'action':
 
 ```bash
-## After a client is connected to the EMQ X server, it executes a SQL command (multiple command also supported)
+## After a client is connected to the EMQX server, it executes a SQL command (multiple command also supported)
 backend.pgsql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 

@@ -1,12 +1,14 @@
 # Backends
 
+
 {% emqxce %}
 
-::: danger
-Data storage is an exclusive feature of EMQ X Enterprise.
+::: tip
+Data storage is an exclusive feature of EMQX Enterprise.
 :::
 
 {% endemqxce %}
+
 
 ## MQTT Message Persistence
 
@@ -36,17 +38,17 @@ Data storage is an exclusive feature of EMQ X Enterprise.
 
 ### Client Connection State
 
-EMQ X supports retaining the client's connection state in Redis or DB.
+EMQX supports retaining the client's connection state in Redis or DB.
 
 ### Client Subscription by Broker
 
-EMQ X Persistence supports subscription by broker. When a client goes
+EMQX Persistence supports subscription by broker. When a client goes
 online, the persistence module loads the subscriptions of the client
 from Redis or Databases.
 
 ### List of Persistence Plugins
 
-EMQ X allowes storing messages in Redis, MySQL, PostgreSQL, MongoDB,
+EMQX allowes storing messages in Redis, MySQL, PostgreSQL, MongoDB,
 Cassandra, DynamoDB, InfluxDB, OpenTSDB and
 Timescale:
 

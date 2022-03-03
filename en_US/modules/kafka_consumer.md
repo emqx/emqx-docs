@@ -5,7 +5,7 @@ The Kafka consumer group uses external Kafka as a message queue, which can conve
 Set up the Kafka environment, taking MacOS X as an example:
 
 ```bash
-wget http://apache.claz.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
+wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
 tar -xzf  kafka_2.13-2.8.0.tgz
 
@@ -17,7 +17,7 @@ $ ./bin/zookeeper-server-start.sh config/zookeeper.properties
 $ ./bin/kafka-server-start.sh config/server.properties
 ```
 
-::: danger
+::: warning
 
 Kafka consumer groups do not support Kafka versions below 0.9
 
@@ -32,7 +32,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 ```
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 Select Kafka consumer group module:
 

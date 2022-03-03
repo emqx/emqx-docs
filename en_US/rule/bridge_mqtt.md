@@ -1,6 +1,6 @@
 # Bridge data to MQTT Broker
 
-Setup anther MQTT broker using mosquitto, change the port to 2883.
+Setup another MQTT broker using mosquitto, change the port to 2883.
     Taking Mac OSX for instance:
 
 ```bash
@@ -16,7 +16,7 @@ $ brew services start mosquitto
 
 Create a rule:
 
-Go to [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:

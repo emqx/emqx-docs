@@ -41,10 +41,10 @@
   - Send data to web service
 
 <strong class="emqxce">
-The following are the unique features of EMQ X Enterprise
+The following are the unique features of EMQX Enterprise
 </strong>
 
-- Scalable RPC architecture: Separate Erlang's own cluster channel from EMQ X nodes data channel
+- Scalable RPC architecture: Separate Erlang's own cluster channel from EMQX nodes data channel
 - Data persistence
   - Redis stores subscription relationships, device online status, MQTT messages, retained messages, and publishes SUB/UNSUB events
   - MySQL stores subscription relationships, device online status, MQTT messages and retained messages
@@ -56,10 +56,10 @@ The following are the unique features of EMQ X Enterprise
   - OpenTDSB stores MQTT timing messages
   - TimescaleDB stores MQTT timing messages
 - Message bridge
-  - Kafka bridge: EMQ X built-in Bridge directly forwards MQTT messages and device online and offline events to Kafka
-  - RabbitMQ bridge: EMQ X built-in Bridge directly forwards MQTT messages and device online and offline events to RabbitMQ
-  - Pulsar bridge: EMQ X built-in Bridge directly forwards MQTT messages and device online and offline events to Pulsar
-  - RocketMQ bridge: EMQ X built-in Bridge directly forwards MQTT messages and device online and offline events to RocketMQ
+  - Kafka bridge: EMQX built-in Bridge directly forwards MQTT messages and device online and offline events to Kafka
+  - RabbitMQ bridge: EMQX built-in Bridge directly forwards MQTT messages and device online and offline events to RabbitMQ
+  - Pulsar bridge: EMQX built-in Bridge directly forwards MQTT messages and device online and offline events to Pulsar
+  - RocketMQ bridge: EMQX built-in Bridge directly forwards MQTT messages and device online and offline events to RocketMQ
 - Rule engine
   - Message codec
   - Bridge data to Kafka
@@ -75,13 +75,15 @@ The following are the unique features of EMQ X Enterprise
   - Save data to InfluxDB
   - Save data to Timescale
   - Save data to Cassandra
-- Schema Registry: provide data encoding and decoding capabilities for EMQ X events and messages
+- Schema Registry: provide data encoding and decoding capabilities for EMQX events and messages
+
+
 
 {% emqxce %}
 
-[EMQ X Enterprise](https://www.emqx.io/products/enterprise) is a powerful enterprise-level IoT MQTT messaging platform built by the people who develop the open source EMQ X Broker.
+[EMQX Enterprise](https://www.emqx.com/en/products/emqx) is a powerful enterprise-level IoT MQTT messaging platform built by the people who develop the open source EMQX Broker.
 
-EMQ X Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP multi-protocol processing, and low-latency real-time communication. It maintains the simplicity and high performance of EMQ X Broker, while adding many enterprise-level features:
+EMQX Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP multi-protocol processing, and low-latency real-time communication. It maintains the simplicity and high performance of EMQX Broker, while adding many enterprise-level features:
 
 - The connection performance is enhanced to millions or tens of millions. It supports private protocol and industry protocol customization, is compatible with old network equipment access based on TCP / UDP private protocol, and supports full network multi-protocol equipment access;
 - It supports Redis, MySQL, PostgreSQL, MongoDB and other database message data persistence, with message conversion and written to multiple time series databases of InfluxDB, OpenTSDB, TimescaleDB. It supports automatic loading subscriptions from Redis or database, without the need for the initiation from client;
@@ -89,10 +91,11 @@ EMQ X Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP 
 - With global professional team technical support. Our team covers 5 branches in North America, Europe, and China. There are professional founding teams from Huawei, IBM, Amazon, and nearly ten partners in Europe, North America, and India, providing First-class technical support and consulting services.
 
 ::: tip
-Thank you for your support of EMQ X Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io。
+Thank you for your support of EMQX Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io。
 :::
 
 {% endemqxce %}
+
 
 {% emqxee %}
 
@@ -107,9 +110,10 @@ Thank you for your support of EMQ X Broker. If you need business services, pleas
 
 {% endemqxce %}
 
+
 ### Message data storage
 
-EMQ X Enterprise Version supports storing subscription relationships, MQTT messages, device status to Redis, MySQL, PostgreSQL, MongoDB, Cassandra, TimescaleDB, InfluxDB, DynamoDB, OpenTDSB databases:
+EMQX Enterprise Version supports storing subscription relationships, MQTT messages, device status to Redis, MySQL, PostgreSQL, MongoDB, Cassandra, TimescaleDB, InfluxDB, DynamoDB, OpenTDSB databases:
 
 ![image](./assets/overview_4.png)
 
@@ -117,15 +121,15 @@ For data storage related configuration, please refer to "Data Storage" chapter f
 
 ### Message bridge and forward
 
-EMQ X Enterprise version supports directly forwarding MQTT messages to RabbitMQ, Kafka, Pulsar, RocketMQ, MQTTBroker, which can be used as a million-level IoT access server (IoT Hub):
+EMQX Enterprise version supports directly forwarding MQTT messages to RabbitMQ, Kafka, Pulsar, RocketMQ, MQTTBroker, which can be used as a million-level IoT access server (IoT Hub):
 
 ![image](./assets/overview_5.png)
 
 ### Rule engine
 
-EMQ X rules engine can flexibly process messages and events.
+EMQX rules engine can flexibly process messages and events.
 
-EMQ X Enterprise version rules engine supports message re-publishing, bridging data to Kafka, Pulsar, RocketMQ, RabbitMQ, MQTT Broker, saving data to MySQL, PostgreSQL, Redis, MongoDB, DynamoDB, Cassandra, InfluxDB, OpenTSDB, TimescaleDB, and sending data to WebServer :
+EMQX Enterprise version rules engine supports message re-publishing, bridging data to Kafka, Pulsar, RocketMQ, RabbitMQ, MQTT Broker, saving data to MySQL, PostgreSQL, Redis, MongoDB, DynamoDB, Cassandra, InfluxDB, OpenTSDB, TimescaleDB, and sending data to WebServer :
 
 ![image](./assets/overview_6.png)
 
@@ -143,8 +147,8 @@ For codec related configuration, please refer to "Codec" chapter for details.
 
 {% emqxce %}
 
-## Comparison of different versions of EMQ X
+## Comparison of different versions of EMQX
 
-![EMQ X Broker vs EMQ X Enterprise](./assets/3441587031341_.pic_hd.jpg)
+![EMQX Broker vs EMQX Enterprise](./assets/3441587031341_.pic_hd.jpg)
 
 {% endemqxce %}

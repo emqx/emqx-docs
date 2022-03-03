@@ -35,7 +35,7 @@ CREATE TABLE mqtt_sub(
 );
 ```
 
-::: danger
+::: tip
 
 The subscription relationship table structure cannot be modified. Please use the above SQL statement to create
 
@@ -43,7 +43,7 @@ The subscription relationship table structure cannot be modified. Please use the
 
 Create rules:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
 Then fill in the rule SQL:
 

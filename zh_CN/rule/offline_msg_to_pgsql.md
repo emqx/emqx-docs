@@ -37,17 +37,9 @@ CREATE TABLE mqtt_msg (
   payload text,
   arrived timestamp without time zone
 );
-CREATE TABLE mqtt_acked (
-  id SERIAL8 primary key,
-  clientid character varying(64),
-  topic character varying(64),
-  mid integer,
-  created timestamp without time zone,
-  UNIQUE (clientid, topic)
-);
 ```
 
-::: danger
+::: tip
 
 消息表结构不能修改，请使用上面SQL语句创建
 
@@ -55,7 +47,7 @@ CREATE TABLE mqtt_acked (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 

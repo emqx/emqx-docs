@@ -1,15 +1,15 @@
 # Rule Engine
 
-EMQ X Broker Rule Engine (Hereinafter referred to as rule engine) is used to configure EMQ X Broker message flow and device event processing and response rules. The rule engine not only provides a clear and flexible "configuration-style" business integration solution, simplifies the business development process, improves ease of use for user, and reduces the coupling between the business system and EMQ X Broker, but also provides a better infrastructure for the private function customization of EMQ X broker.
+EMQX Broker Rule Engine (Hereinafter referred to as rule engine) is used to configure EMQX Broker message flow and device event processing and response rules. The rule engine not only provides a clear and flexible "configuration-style" business integration solution, simplifies the business development process, improves ease of use for user, and reduces the coupling between the business system and EMQX Broker, but also provides a better infrastructure for the private function customization of EMQX broker.
 
 ![image-20190506171815028](../assets/image-20190506171815028.jpg)
 
-EMQ X Broker will trigger the rule engine when **publishing message or triggering  event**, and the rules that meet the triggering conditions will execute their own SQL statements to filter and process the context information of messages and events.
+EMQX Broker will trigger the rule engine when **publishing message or triggering  event**, and the rules that meet the triggering conditions will execute their own SQL statements to filter and process the context information of messages and events.
 
 ::: tip
-Applicable version:**EMQ X Broker v3.1.0+**
+Applicable version:**EMQX Broker v3.1.0+**
 
-Compatibility Tip: EMQ X Broker v4.0 makes major adjustments to the SQL syntax of the rule engine. For v3.x upgrade users, please refer to  [Migration Guide](./rule-engine.md#migration-guide) for compatibility.
+Compatibility Tip: EMQX Broker v4.0 makes major adjustments to the SQL syntax of the rule engine. For v3.x upgrade users, please refer to  [Migration Guide](./rule-engine.md#migration-guide) for compatibility.
 :::
 
 ## Publish message
@@ -30,7 +30,7 @@ SELECT payload.x as x FROM "t/a"
 
 ## Event trigger
 
-The rule engine uses a virtual topic beginning with **$events/** to process EMQ X Broker built-in events. The built-in events provide finer message control and client action processing capabilities, which can be used in the business of QoS 1 QoS 2 messages arrival recording, device online and offline recording.
+The rule engine uses a virtual topic beginning with **$events/** to process EMQX Broker built-in events. The built-in events provide finer message control and client action processing capabilities, which can be used in the business of QoS 1 QoS 2 messages arrival recording, device online and offline recording.
 
 Select the client connection event, filter the device whose Username is `emqx` and obtain the connection information:
 
@@ -57,7 +57,7 @@ The following figure is a simple rule, which is used to process the data at the 
 - Action listening: In the development of intelligent door lock for smart home, the function of the door lock will be abnormal because of offline resulting by the network or power failure, man-made damage and other reasons. Through using rule engine configuration to monitor offline events, it can push the fault information to the application service and realize the ability of first time fault detection in the access layer.
 - Data filtering: Truck fleet management of vehicle network. Vehicle sensors collect and report a large amount of operational data. The application platform only focuses on data with a vehicle speed greater than 40 km/h. In this scenario, the rule engine can be used to conditionally filter messages to the service, and data that satisfies the condition can be written to the business message queue .
 - Message routing: In the intelligent billing application, the terminal device distinguishes the service type by different topics. The message of billing service can be connected to the billing message queue by configuring the rule engine, and the non-billing information can be connected to other message queues to realize the routing configuration of business messages.
-- Message encoding and decoding: In the application scenarios such as public protocol/proprietary TCP protocol access and industrial control, the encoding and decoding of binary/special format message body can be done through the local processing function of the rule engine (which can be customized and developed on EMQ X). Relevant messages can also be routed through the rule engine to external computing resources such as function computing for processing (processing logic can be developed by users), and the messages can be converted into JSON format that is easy for business processing, which simplifies the difficulty of project integration and improves the ability of rapid development and delivery of applications.
+- Message encoding and decoding: In the application scenarios such as public protocol/proprietary TCP protocol access and industrial control, the encoding and decoding of binary/special format message body can be done through the local processing function of the rule engine (which can be customized and developed on EMQX). Relevant messages can also be routed through the rule engine to external computing resources such as function computing for processing (processing logic can be developed by users), and the messages can be converted into JSON format that is easy for business processing, which simplifies the difficulty of project integration and improves the ability of rapid development and delivery of applications.
 
 ## Migration Guide
 
@@ -84,9 +84,9 @@ The old version of SQL syntax conversion function is provided in Dashboard to co
 
 ## Rule engine composition
 
-EMQ X Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such function as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
+EMQX Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such function as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
 
-The concepts related to the EMQ X Broker rule engine include: rules, actions, resources, and resource-types.
+The concepts related to the EMQX Broker rule engine include: rules, actions, resources, and resource-types.
 
 The relationship between rules, actions and resources:
 ```
@@ -180,11 +180,11 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     ```
 - Extract the x field from the payload of message with any topic and create the alias x for use in the WHERE clause. The WHERE clause is restricted as x = 1. Note that the payload must be in JSON format. Example: This SQL statement can match the payload `{"x": 1}`, but can not match to the payload `{"x": 2}`:
     ```sql
-  SELECT payload as p FROM "#" WHERE p.x = 1
+  SELECT payload FROM "#" WHERE payload.x = 1
   ```
 - Similar to the SQL statement above, but nested extract the data in the payload, this SQL statement can match the payload{"x": {"y": 1}}`:
     ```sql
-    SELECT payload as a FROM "#" WHERE a.x.y = 1
+    SELECT payload FROM "#" WHERE payload.x.y = 1
     ```
 -  Try to connect when clientid = 'c1', extract its source IP address and port number:
     ```sql
@@ -207,7 +207,9 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     SELECT * FROM "t/1", "t/2".
     ```
 - You can use the `"." `Symbol to nest select payloads
-- :::
+- If possible, don't create alias for payload, as this would cause performance degradations.
+  i.e. Do not use `SELECT payload as p`
+:::
 
 #### Examples of FOREACH-DO-INCASE
 
@@ -504,7 +506,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 
 | event            | Event type, fixed at "client.disconnected"                   |
 | ---------------- | :----------------------------------------------------------- |
-| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: bad protocol<br/>internal_error: malformed message parsing error<br/> |
+| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: the peer has closed the network connection<br/>internal_error: malformed message or other unknown errors<br/> |
 | clientid         | client ID                                                    |
 | username         | Current MQTT username                                        |
 | peername         | IPAddress and Port of terminal                               |
@@ -1220,7 +1222,16 @@ The FROM statement is used to select the source of the event. If the message is 
 </tbody>
 </table>
 
+#### Bit functions
+
+| Function  | Purpose                                                                                                                                                                  | Parameters                                                                                                                                                                                                                                                             | Returned value       | Example                                               |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|-------------------------------------------------------|
+| `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).                                                      | 1. The binary 2. The length of bits to get                                                                                                                                                                                                                             | The unsigned integer | `subbits(payload, 10)`                                |
+| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1.                | 1. The binary 2. The offset 3. The length of bits to get                                                                                                                                                                                                          | The unsigned integer | `subbits(payload, 1, 10)`                             |
+| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to a data type according to the arguments provided. Offsets are start from 1. | 1. The binary 2. The offset 3. The length of bits to get 4. Data Type, can be one of 'integer', 'float', 'bits' 5. Signedness, only works for integers, can be one of 'unsigned', 'signed', 6. Endianness, only works for integers, can be one of 'big', 'little' | The data got from the binary | `subbits(payload, 1, 10, 'integer', 'signed', 'big')` |
+
 #### Decoding and encoding functions
+
 
 
 
@@ -1235,10 +1246,12 @@ The FROM statement is used to select the source of the event. If the message is 
 | `bin2hexstr` | Binary to Hex String | The binary | The hex string |
 | `hexstr2bin` | Binary to Hex String | The hex string | The binary |
 
+
 {% endemqxce %}
 
 
 {% emqxee %}
+
 
 | Function | Purpose                             |        Parameters         | Returned value |
 | -------- | ------------------------------------|------------------------- | --------------------------- |

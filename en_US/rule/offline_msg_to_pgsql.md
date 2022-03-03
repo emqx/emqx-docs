@@ -37,17 +37,9 @@ CREATE TABLE mqtt_msg (
   payload text,
   arrived timestamp without time zone
 );
-CREATE TABLE mqtt_acked (
-  id SERIAL8 primary key,
-  clientid character varying(64),
-  topic character varying(64),
-  mid integer,
-  created timestamp without time zone,
-  UNIQUE (clientid, topic)
-);
 ```
 
-::: danger
+::: tip
 
 The message table structure cannot be modified. Please use the above SQL statement to create
 
@@ -55,7 +47,7 @@ The message table structure cannot be modified. Please use the above SQL stateme
 
 Create rules:
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab on the left.
 
 Then fill in the rule SQL:
 

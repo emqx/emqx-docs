@@ -1,15 +1,14 @@
 # Rule engine example
 
 {% emqxce %}
-
-::: danger
-Only the following operations are applicable in EMQ X Broker:
+::: tip
+Only the following operations are applicable in EMQX Broker:
 - Check (debug)
 - Send data to web service
 - Bridge data to MQTT Broker
 
 
-The rest are exclusive to EMQ X Enterprise.
+The rest are exclusive to EMQX Enterprise.
 :::
 
 {% endemqxce %}
@@ -96,7 +95,7 @@ $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9901; d
 
 Create a rule:
 
-Go to [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:

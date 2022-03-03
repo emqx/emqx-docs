@@ -1,10 +1,10 @@
 # CoAP 协议网关
 
-CoAP 协议网关为 EMQ X 提供了 CoAP 协议的接入能力。它允许符合某种定义的 CoAP 消息格式向 EMQ X 执行发布，订阅，和接收消息等操作。
+CoAP 协议网关为 EMQX 提供了 CoAP 协议的接入能力。它允许符合某种定义的 CoAP 消息格式向 EMQX 执行发布，订阅，和接收消息等操作。
 
 ## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200928161310952](./assets/modules.png)
 
@@ -32,7 +32,7 @@ CoAP 协议网关为 EMQ X 提供了 CoAP 协议的接入能力。它允许符�
 
 ### 客户端
 
-[libcoap](http://github.com/obgm/libcoap) 是一个非常易用的 CoAP 客户端库，此处我们使用它作为 CoAP 客户端来测试 EMQ X CoAP 接入网关的功能。
+[libcoap](http://github.com/obgm/libcoap) 是一个非常易用的 CoAP 客户端库，此处我们使用它作为 CoAP 客户端来测试 EMQX CoAP 接入网关的功能。
 
 ```
 git clone http://github.com/obgm/libcoap
@@ -76,7 +76,7 @@ libcoap/examples/coap-client -m get -s 10 "coap://127.0.0.1/mqtt/topic1?c=client
 
 #### CoAP Client Observe Operation
 
-在 EMQ X CoAP 接入网关中，可以使用 CoAP 的 Observe 操作实现一个订阅主题的操作：
+在 EMQX CoAP 接入网关中，可以使用 CoAP 的 Observe 操作实现一个订阅主题的操作：
 
 ```
 GET  coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password}    with OBSERVE=0
@@ -162,7 +162,7 @@ CoAP 接入网关不支持 `POST` 和 `DELETE` 方法。
 
 CoAP URI 中的 ClientId, Username, Password, Topic是 MQTT 中的概念。也就是说，CoAP 接入网关是通过借用 MQTT 中的名词概念，试图将 CoAP 信息融入到 MQTT 系统中。
 
-EMQ X 的 认证，访问控制，钩子等功能也适用于 CoAP 接入网关。比如：
+EMQX 的 认证，访问控制，钩子等功能也适用于 CoAP 接入网关。比如：
 
 - 如果 用户名/密码 没有被授权, CoAP 客户端就会得到一个 `uauthorized` 的错误
 - 如果 用户名/客户端ID 不允许发布特定的主题，CoAP 消息实际上会被丢弃，尽管 CoAP 客户端会从接入网关上得到一个 Acknoledgement
