@@ -159,7 +159,7 @@
           "path": "modules/mongo_authentication"
         },
         {
-          "title": "PKSFile 认证",
+          "title": "PSK File 认证",
           "path": "modules/psk_authentication"
         },
         {
@@ -909,7 +909,7 @@
           "path": "modules/mongo_authentication"
         },
         {
-          "title": "PKSFile AUTH",
+          "title": "PSK File AUTH",
           "path": "modules/psk_authentication"
         },
         {

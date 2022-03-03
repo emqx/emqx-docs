@@ -202,10 +202,10 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | proto_ver         | Integer| False    | 客户端协议版本 |
 | _like_clientid    | String | False    | 客户端标识符，子串方式模糊查找 |
 | _like_username    | String | False    | 客户端用户名，子串方式模糊查找 |
-| _gte_created_at   | Integer| False    | 客户端会话创建时间，小于等于查找 |
-| _lte_created_at   | Integer| False    | 客户端会话创建时间，大于等于查找 |
-| _gte_connected_at | Integer| False    | 客户端连接创建时间，小于等于查找 |
-| _lte_connected_at | Integer| False    | 客户端连接创建时间，大于等于查找 |
+| _gte_created_at   | Integer| False    | 客户端会话创建时间，大于等于查找 |
+| _lte_created_at   | Integer| False    | 客户端会话创建时间，小于等于查找 |
+| _gte_connected_at | Integer| False    | 客户端连接创建时间，大于等于查找 |
+| _lte_connected_at | Integer| False    | 客户端连接创建时间，小于等于查找 |
 
 
 **Success Response Body (JSON):**
