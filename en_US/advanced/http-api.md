@@ -189,10 +189,10 @@ After version 4.1, multiple conditions and fuzzy queries are supported. The quer
 | proto_ver         | Integer | False    | Client protocol version                                      |
 | _like_clientid    | String  | False    | Fuzzy search of client identifier by substring method        |
 | _like_username    | String  | False    | Client user name, fuzzy search by substring                  |
-| _gte_created_at   | Integer | False    | Search client session creation time by  less than or equal method |
-| _lte_created_at   | Integer | False    | Search client session creation time by  greater than or equal method |
-| _gte_connected_at | Integer | False    | Search client connection creation time by  less than or equal method |
-| _lte_connected_at | Integer | False    | Search client connection creation time by  greater than or equal method |
+| _gte_created_at   | Integer | False    | Search client session creation time by greater than or equal method |
+| _lte_created_at   | Integer | False    | Search client session creation time by less than or equal method |
+| _gte_connected_at | Integer | False    | Search client connection creation time by greater than or equal method |
+| _lte_connected_at | Integer | False    | Search client connection creation time by less than or equal method |
 
 **Success Response Body (JSON):**
 
