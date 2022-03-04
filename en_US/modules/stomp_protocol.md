@@ -8,25 +8,25 @@ Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" ta
 
 ![image-20200928161310952](./assets/modules.png)
 
-Click "Select", and then select "CoAP Access Gateway":
+Click "Select", and then select "Stomp Access Gateway":
 
-![Create CoAP Protocol Gateway](./assets/stomp_1.png)
+![Create Stomp Protocol Gateway](./assets/stomp_1.png)
 
 Configure related basic parameters:
 
-![Configure CoAP Protocol Gateway](./assets/stomp_2.png)
+![Configure Stomp Protocol Gateway](./assets/stomp_2.png)
 
 Add listening port:
 
-![Configure CoAP Protocol Gateway](./assets/stomp_3.png)
+![Configure Stomp Protocol Gateway](./assets/stomp_3.png)
 
 Configure monitoring parameters:
 
-![Configure CoAP Protocol Gateway](./assets/stomp_4.png)
+![Configure Stomp Protocol Gateway](./assets/stomp_4.png)
 
 Click "OK" to complete the configuration of the listener, and then click "Add" to complete the creation of the module:
 
-![Complete CoAP Protocol Gateway](./assets/stomp_5.png)
+![Complete Stomp Protocol Gateway](./assets/stomp_5.png)
 
 ### Configuration parameters
 
