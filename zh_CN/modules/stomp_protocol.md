@@ -8,25 +8,25 @@ Stomp 协议网关为 EMQ X 提供了 Stomp 协议的接入能力。
 
 ![image-20200928161310952](./assets/modules.png)
 
-点击 “选择”，然后选择 “CoAP 接入网关”：
+点击 “选择”，然后选择 “Stomp 接入网关”：
 
-![Create CoAP Protocol Gateway](./assets/stomp_1.png)
+![Create Stomp Protocol Gateway](./assets/stomp_1.png)
 
 配置相关基础参数：
 
-![Configure CoAP Protocol Gateway](./assets/stomp_2.png)
+![Configure Stomp Protocol Gateway](./assets/stomp_2.png)
 
 添加监听端口：
 
-![Configure CoAP Protocol Gateway](./assets/stomp_3.png)
+![Configure Stomp Protocol Gateway](./assets/stomp_3.png)
 
 配置监听参数：
 
-![Configure CoAP Protocol Gateway](./assets/stomp_4.png)
+![Configure Stomp Protocol Gateway](./assets/stomp_4.png)
 
 点击 “确定” 完成监听器的配置，然后点击 “添加” 完成模块的创建： 
 
-![Complete CoAP Protocol Gateway](./assets/stomp_5.png)
+![Complete Stomp Protocol Gateway](./assets/stomp_5.png)
 
 ### 配置参数
 
