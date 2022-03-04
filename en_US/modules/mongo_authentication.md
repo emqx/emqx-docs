@@ -1,10 +1,10 @@
 # MongoDB Authentication/ACL
 
-MongoDB Authentication/ACL uses an external MongoBD database as a data source, which can store a large amount of data and at the same time integrate with external device management systems.
+MongoDB Authentication/ACL uses an external MongoDB database as a data source, which can store a large amount of data and at the same time integrate with external device management systems.
 
 ## Install MongoDB
 
-Open the MongoDB official website address: https://www.mongodb.com/try/download/communit, select the version you need, here we use the MacOS V4.4.1 version:
+Open the MongoDB official website address: https://www.mongodb.com/try/download/community, select the version you need, here we use the macOS 4.4.1 version:
 
 ![image-20200928112030369](./assets/auth_mongo1.png)
 
