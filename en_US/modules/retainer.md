@@ -21,7 +21,8 @@ Configure related parameters
 
 | Configuration item       | Type  | Optional value      | Default value | Description                                               |
 | ------------------------------ | -------- | ------------------------ | ------ | ------------------------------------------------------------ |
-| Storage Type          | enum     | `ram`, `disc`, `disc_only` | ram |ram: only stored in memory; <br /> disc: stored in memory and hard disk; <br /> disc_only: only stored in hard disk|
-| Max Retained Messages | integer  | \>= 0                    | 0      | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics. |
-| Max Payload Size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX broker will treat the retained reserved message as a normal message. |
-| Expiry Interval       | duration |                          | ０     | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
+| Storage Type           | enum     | `ram`, `disc`, `disc_only` | ram |ram: only stored in memory; <br /> disc: stored in memory and hard disk; <br /> disc_only: only stored in hard disk|
+| Max Retained Messages  | integer  | \>= 0                    | 0      | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics. |
+| Max Payload Size       | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX broker will treat the retained reserved message as a normal message. |
+| Expiry Interval        | duration |                          | 0     | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
+| Stop Publish Clear Msg | boolean  | `true`, `false`          | false | Whether to prevent publish of clean retained message |
