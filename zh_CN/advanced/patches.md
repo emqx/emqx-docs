@@ -1,19 +1,4 @@
----
-# 编写日期
-date: 2022-02-25 10:18:09
-# 作者 Github 名称
-author: terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
-## 在运行时安装 EMQX 补丁包
+# 在运行时安装 EMQX 补丁包
 
 如果一个 Bug 修复只更新了少数几个 module，在已经知道需要更新的 module 列表的情况下，可以使用补丁包方式升级 EMQX。
 

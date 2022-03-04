@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-21 16:06:34
-# 作者 Github 名称
-author: terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
-
 # Enterprise functions
 
 [EMQX Enterprise](https://www.emqx.com/en/products/emqx) is a powerful enterprise-level IoT MQTT messaging platform built by the people who develop the open source EMQX Broker.

@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-25 18:39:23
-# 作者 Github 名称
-author: terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 分布式集群
 
 ## 分布式 Erlang

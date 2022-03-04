@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 基本命令
 
 EMQX 提供了 `emqx` 命令行工具，方便用户对 EMQX 进行启动、关闭、进入控制台等操作。

@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref: undefined
----
-
 # MySQL ACL
 
 An external MySQL database is used to store ACL rules for MySQL ACL, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems.

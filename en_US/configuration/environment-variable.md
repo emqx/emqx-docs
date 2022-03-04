@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2021-03-02 17:19:10
-# 作者 Github 名称
-author: z8674558
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
-
 # Configuration from environment variable
 
 By default, EMQX maps environment variables with prefix ``EMQX_``

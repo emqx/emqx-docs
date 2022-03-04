@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-20 17:46:13
-# 作者 Github 名称
-author: wivwiv, terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 规则引擎语法与示列
 
 ## SQL 语法

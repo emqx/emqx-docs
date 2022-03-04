@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
-
 # MQTT JavaScript 客户端库
 
 [MQTT.js](https://www.npmjs.com/package/mqtt) 是 JavaScript 编写的，实现了 MQTT 协议客户端功能的模块，可以在浏览器 和 Node.js 环境中使用。

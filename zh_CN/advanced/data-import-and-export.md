@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-05-09 17:15:26
-# 作者 Github 名称
-author: tigercl
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 数据导入导出
 
 EMQX Broker 为用户提供了数据导入导出功能，以满足服务器升级、迁移以及数据备份等需要。数据导入导出功能支持将当前运行的 EMQX Broker 中的黑名单、规则引擎配置等存储在 EMQX Broker 默认数据库 Mnesia 中的数据以 Json 格式导出至本地文件。当然用户无需关心导出文件中的数据内容。导出文件可以导入至其他 EMQX Broker 的运行实例，EMQX Broker 可以是相同版本，也可以是不同版本，但目前仅支持 `4.1.0` 及之后的版本。

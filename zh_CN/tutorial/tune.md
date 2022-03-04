@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 系统调优
 
 *EMQX* 消息服务器 4.x 版本 MQTT 连接压力测试到 130 万，在一台 8 核心、32G 内存的 CentOS 服务器上。

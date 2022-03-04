@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-09-12 09:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 多语言 - 钩子扩展
 
 多语言的 **钩子扩展** 由 **emqx-exhook** 插件进行支持。它允许用户使用其它编程（例如：Python, Java 等）直接向 EMQX 挂载钩子，以接收并处理 EMQX 系统的事件，达到扩展和定制 EMQX 的目的。例如，用户可以使用其他编程语言来实现：

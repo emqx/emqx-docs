@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
-
 # Topic rewrite
 
 The topic rewrite function of EMQX Broker supports rewriting topic A to topic B when the client subscribes to topics, publishes messages, and unsubscribes according to user-configured rules.

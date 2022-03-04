@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-19 09:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 发布订阅 ACL
 
 **发布订阅 ACL** 指对 **发布 (PUBLISH)/订阅 (SUBSCRIBE)** 操作的 **权限控制**。例如拒绝用户名为 `Anna` 向 `open/elsa/door` 发布消息。

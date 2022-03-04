@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-26 17:00:52
-# 作者 Github 名称
-author: turtle, terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 消息桥接
 
 EMQX 支持两种桥接方式:

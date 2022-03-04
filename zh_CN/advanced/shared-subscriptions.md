@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-20 11:57:30
-# 作者 Github 名称
-author: terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 共享订阅
 
 共享订阅是在多个订阅者之间实现负载均衡的订阅方式：

@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # Mnesia 认证
 
 Mnesia 认证使用 EMQX 内置 Mnesia 数据库存储客户端 Client ID/Username 与密码，支持通过 HTTP API 管理认证数据。

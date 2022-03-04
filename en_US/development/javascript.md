@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
-
 # MQTT JavaScript client library
 
 [MQTT.js](https://www.npmjs.com/package/mqtt) is a module written in JavaScript that implements the MQTT protocol client function and can be used in browsers and Node.js environments.

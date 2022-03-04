@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
-
 # Proxy subscriptions
 
 The proxy subscription function of EMQX Broker allows the client to automatically establish the user's preset subscription relationship without sending additional SUBSCRIBE packets when the connection is established.

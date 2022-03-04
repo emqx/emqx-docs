@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-09-12 09:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 多语言 - Lua
 
 在 EMQX 4.1 之前。我们仅提供 Lua 的多语言支持。它的架构与 4.1 之后的多语言架构不同，它会将整个语言的运行时包含在 Erlang VM 中：

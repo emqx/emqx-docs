@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
-
 # MQTT Java client library
 
 [Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) is an MQTT client library written in Java(MQTT Java Client), which can be used in JVM or other Java compatible platforms (such as Android ).

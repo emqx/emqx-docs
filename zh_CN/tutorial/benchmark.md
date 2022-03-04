@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 性能测试
 
 [emqtt_bench](https://github.com/emqx/emqtt_bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议性能测试工具，如需大规模场景、深度定制化的测试服务推荐使用 EMQ 合作伙伴 [XMeter](https://www.xmeter.net/) 测试服务。

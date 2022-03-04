@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-09-12 09:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 多语言 - 协议接入
 
 **多语言 - 协议接入** 由 **emqx-exproto** 插件提供，它允许其他编程语言（例如：Python，Java 等）直接处理字节数据报文实现自定义协议的解析，并提供 Pub/Sub 接口实现与系统的消息交换。

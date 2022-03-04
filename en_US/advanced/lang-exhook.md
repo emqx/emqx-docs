@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2021-03-09 09:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # Extension Hook
 
 The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX's [Hooks](hooks.md) using other programming languages.

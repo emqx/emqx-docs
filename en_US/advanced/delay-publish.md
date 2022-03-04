@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: 
----
-
 # Delayed publish
 
 The delay-publish function of EMQX Broker can implement the function of delaying the PUBLISH packet publishing according to the time interval configured by the user. When a client publishes a message to EMQX Broker with the special topic prefix  `$delayed/{DelayInteval}` , the delay-publish function is triggered.

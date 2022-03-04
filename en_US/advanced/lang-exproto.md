@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2021-03-09 13:56:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # Extension Protocol
 
 **Extension Protocol** is provided by the **emqx-exproto** plugin, which allows other programming languages (e.g. Python, Java, etc.) to process bytes directly for parsing private protocols and provides a Pub/Sub interface for message exchange with EMQX.

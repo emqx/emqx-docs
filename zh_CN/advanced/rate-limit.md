@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-21 11:06:13
-# 作者 Github 名称
-author: HJianBo & terry-xiaoyu
-# 关键字
-keywords: rate-limit
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 速率限制
 EMQX 提供对接入速度、消息速度的限制：当客户端连接请求速度超过指定限制的时候，暂停新连接的建立；当消息接收速度超过指定限制的时候，暂停接收消息。
 

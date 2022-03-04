@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-20 17:46:13
-# 作者 Github 名称
-author: wivwiv, terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 规则 SQL 语句中可用的字段
 SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clientid`, `username` 和 `event` 是通用字段，每种事件类型都有。
 

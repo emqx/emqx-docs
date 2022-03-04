@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-21 09:28:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref: undefined
----
-
-
 # emqx-lua-hook
 
 Before EMQX 4.1. We only provide multi-language support for Lua. Its architecture is different from the above mentioned, which will include the entire language runtime in the Erlang VM:

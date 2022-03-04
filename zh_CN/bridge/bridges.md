@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
-
 ## MQTT 桥接
 
 EMQX 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服务:

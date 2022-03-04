@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2022-01-25 09:53:20
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 快速开始
 
 本章节将指导您从下载安装开始，快速开始使用 EMQX。

@@ -1,19 +1,3 @@
----
-
-# 编写日期
-date: 2020-05-09 17:15:26
-# 作者 Github 名称
-author: tigercl
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 内置模块
 
 EMQX Broker 将主题重写、代理订阅等功能通过内置模块的形式提供，支持用户随时启停模块来启停相应功能。目前内置模块已支持以下功能：

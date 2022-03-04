@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
-
 # MQTT Go 客户端库
 
 [Eclipse Paho MQTT Go Client](https://github.com/eclipse/paho.mqtt.golang) 为 Eclipse Paho 项目下的 Go 语言版客户端库，该库能够连接到 MQTT Broker 以发布消息，订阅主题并接收已发布的消息，支持完全异步的操作模式。

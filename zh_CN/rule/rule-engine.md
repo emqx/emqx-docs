@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-20 17:46:13
-# 作者 Github 名称
-author: wivwiv, terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 规则引擎
 
 EMQX Rule Engine (以下简称规则引擎) 用于配置 EMQX 消息流与设备事件的处理、响应规则。规则引擎不仅提供了清晰、灵活的 "配置式" 的业务集成方案，简化了业务开发流程，提升用户易用性，降低业务系统与 EMQX 的耦合度；也为 EMQX 的私有功能定制提供了一个更优秀的基础架构。

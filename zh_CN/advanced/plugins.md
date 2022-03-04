@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-18 17:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 插件
 
 EMQX 发行包中，包含了大量的官方插件，提供了一些基础的、或各类扩展的功能。

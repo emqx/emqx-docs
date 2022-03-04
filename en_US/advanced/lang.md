@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2021-03-08 18:08:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
-
 # Multi-language support
 
 Since 4.1, EMQX provides **multi-language support**. It allows users to use Python, Java or other programming languages to handle EMQX's [hooks](./hooks.md), or parse your private protocol on TCP/UDP transport. In this way, you can customize EMQX with other programming languages.

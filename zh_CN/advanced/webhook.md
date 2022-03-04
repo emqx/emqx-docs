@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # WebHook
 
 WebHook 是由 [emqx_web_hook](https://github.com/emqx/emqx-web-hook) 插件提供的 **将 EMQX 中的钩子事件通知到某个 Web 服务** 的功能。

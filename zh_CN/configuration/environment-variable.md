@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2021-03-02 17:19:10
-# 作者 Github 名称
-author: zmstone
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref: undefined
----
-
 # 使用环境变量修改配置
 
 默认情况下 EMQX 使用带有 `EMQX_` 的前缀的环境变量来覆盖配置文件中的配置项

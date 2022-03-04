@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # MySQL 认证
 
 MySQL 认证使用外部 MySQL 数据库作为认证数据源，可以存储大量数据，同时方便与外部设备管理系统集成。

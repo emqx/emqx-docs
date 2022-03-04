@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-25 09:15:26
-# 作者 Github 名称
-author: hjianbo
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
-
 # Prometheus 监控告警
 
 {% emqxce %}

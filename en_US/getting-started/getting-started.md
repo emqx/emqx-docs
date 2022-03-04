@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2022-01-25 09:53:20
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # Getting Started
 
 Starting from download and installation, this section will take you to quickly get started with EMQX.

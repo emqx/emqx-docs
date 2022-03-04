@@ -1,19 +1,3 @@
----
-# 编写日期
-date: 2020-02-25 17:15:26
-# 作者 Github 名称
-author: tigercl
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
-
 # Dashboard
 
 EMQX Dashboard（EMQX 管理控制台，以下简称 Dashboard) 是 EMQX 提供的一个后端 Web控制台，用户可通过 Web

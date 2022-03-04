@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # MQTT 客户端库
 
 本页选取各个编程语言中热门 MQTT 客户端库进行介绍说明，提供连接、发布、订阅、取消订阅基本功能代码示例。

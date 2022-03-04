@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
-
 # HTTP
 
 HTTP authentication uses an external self-built HTTP application authentication data source, and determines the authentication result based on the data returned by the HTTP API, which can implement complex authentication logic.

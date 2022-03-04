@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-07-25 14:50:09
-# 作者 Github 名称
-author: terry-xiaoyu
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 ## 版本热升级
 
 自 4.2.0 版本之后，EMQX Broker 支持版本热升级。

@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
-
 # 命令行接口
 
 EMQX 提供了 `./bin/emqx_ctl` 的管理命令行，用于用户对 EMQX 进行管理、配置、查询。

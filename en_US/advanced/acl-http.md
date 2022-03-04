@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
-
 # HTTP ACL
 
 An external self-built HTTP application authentication data source is used for HTTP authentication, and the authentication result is judged based on the data returned by the HTTP API, which can implement complex ACL verification logic.

@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # EMQX 消息服务器功能列表
 
 - 完整的 MQTT V3.1/V3.1.1 及 V5.0 协议规范支持

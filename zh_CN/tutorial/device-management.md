@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 设备管理
 
 借助 EMQX [管理监控 API](../advanced/http-api.md) 提供的客户端管理及主题订阅、消息发布管理接口以及认证、ACL、WebHook 等插件，能够快速搭建设备与消息的管理系统，构建联网接入平台。

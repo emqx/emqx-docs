@@ -1,18 +1,3 @@
----
-# 编写日期
-date: 2020-09-30 09:45:01
-# 作者 Github 名称
-author: tigercl
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 主题指标统计
 
 EMQX Broker 提供了主题指标统计功能，可以统计指定主题下的消息收发数量、速率等指标。您可以通过 Dashboard 的 Topic Metrics 页面查看和使用这一功能，也可以通过 HTTP API 完成相应操作。
