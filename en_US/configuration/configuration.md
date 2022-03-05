@@ -6098,7 +6098,7 @@ When using DTLS, specify the Cipher list supported by the DTLS server.
 
 #### Description
 
-Default user authentication data of Dashboard . `Dashboard.default_user.login` and `dashboard.default_user.password` must exist at tge sane tune.
+Default user authentication data of Dashboard. `dashboard.default_user.login` and `dashboard.default_user.password` must exist at the same time.
 
 
 
