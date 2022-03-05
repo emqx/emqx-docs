@@ -18,7 +18,7 @@ ref:
 
 {% emqxce %}
 
-EMQX 提供 [emqx_prometheus](https://github.com/emqx/emqx-statsd) 插件，用于将系统的监控数据输出到第三方的监控系统中。
+EMQX 提供 `emqx_prometheus` 插件，用于将系统的监控数据输出到第三方的监控系统中。
 
 
 以 [Prometheus](https://prometheus.io) 为例：
