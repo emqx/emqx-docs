@@ -15,11 +15,33 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.12
+
+*Release Date: 2022-02-11*
+
+### Enhancement
+
+- Rule engine supports the configuration of rules and actions for the event of abnormal loss of client messages to enhance the user's custom processing capabilities in this scenario
+- Improve the relevant metrics during the execution of the rule engine SQL matching
+- Fuzzy search on client supports special characters such as `*`, `(`, `)`
+- Improve ACL-related metrics to solve the issue that the count does not increase due to hitting the ACL cache
+- Added `connected_at` field to webhook event notifications
+- Log client state before terminating client due to holding the lock too long
+
+### Bug fixes
+
+- Fixed the issue that the metrics interface does not return authentication metrics such as `client.acl.deny` by default
+- Fixed the issue that the subscription query interface did not return paginated data
+- Fix the issue of parsing failure when STOMP handles TCP sticky packets
+- Fix the issue where the session creation time option was not available when filtering clients
+- Fix the issue where memory alarms might not be triggered after restarting
+- Fix the crash of import data when user data exists in `emqx_auth_mnesia` plugin
+
 ## Version 4.3.11
 
 *Release Date: 2021-12-17*
 
-EMQ X 4.3.11 is released now, it mainly includes the following changes:
+EMQX 4.3.11 is released now, it mainly includes the following changes:
 
 ### Enhancement
 
@@ -35,7 +57,7 @@ EMQ X 4.3.11 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-11-11*
 
-EMQ X 4.3.10 is released now, it mainly includes the following changes:
+EMQX 4.3.10 is released now, it mainly includes the following changes:
 
 **Bug fixes (Important):**
 
@@ -57,7 +79,7 @@ EMQ X 4.3.10 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-11-04*
 
-EMQ X 4.3.9 is released now, it mainly includes the following changes:
+EMQX 4.3.9 is released now, it mainly includes the following changes:
 
 **Bug fixes (Important):**
 
@@ -121,7 +143,7 @@ EMQ X 4.3.9 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-08-10*
 
-EMQ X 4.3.8 is released now, it mainly includes the following changes:
+EMQX 4.3.8 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
@@ -137,7 +159,7 @@ EMQ X 4.3.8 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5460](https://github.com/emqx/emqx/pull/5460)
 
-- Fix the issue that the k8s deployment EMQ X cluster cannot be restarted correctly in some cases
+- Fix the issue that the k8s deployment EMQX cluster cannot be restarted correctly in some cases
 
   Github PR: [emqx#5646](https://github.com/emqx/emqx/pull/5646), [emqx#5428](https://github.com/emqx/emqx/pull/5428)
 
@@ -161,7 +183,7 @@ EMQ X 4.3.8 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-08-09*
 
-EMQ X 4.3.7 is released now, it mainly includes the following changes:
+EMQX 4.3.7 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
@@ -181,7 +203,7 @@ EMQ X 4.3.7 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-07-28*
 
-EMQ X 4.3.6 is released now, it mainly includes the following changes:
+EMQX 4.3.6 is released now, it mainly includes the following changes:
 
 **Enhancement:**
 
@@ -197,7 +219,7 @@ EMQ X 4.3.6 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-06-28*
 
-EMQ X 4.3.5 is released now, it mainly includes the following changes:
+EMQX 4.3.5 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
@@ -209,7 +231,7 @@ EMQ X 4.3.5 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-06-23*
 
-EMQ X 4.3.4 is released now, it mainly includes the following changes:
+EMQX 4.3.4 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
@@ -238,7 +260,7 @@ EMQ X 4.3.4 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-06-05*
 
-EMQ X 4.3.3 is released now, it mainly includes the following changes:
+EMQX 4.3.3 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -274,7 +296,7 @@ EMQ X 4.3.3 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-05-27*
 
-EMQ X 4.3.2 is released now, it mainly includes the following changes:
+EMQX 4.3.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -305,7 +327,7 @@ EMQ X 4.3.2 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-05-14*
 
-EMQ X 4.3.1 is released now, it mainly includes the following changes:
+EMQX 4.3.1 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -337,7 +359,7 @@ EMQ X 4.3.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-05-06*
 
-EMQ X 4.3.0 is released now, it mainly includes the following changes:
+EMQX 4.3.0 is released now, it mainly includes the following changes:
 
 ### Features and Enhancement
 
@@ -357,7 +379,7 @@ EMQ X 4.3.0 is released now, it mainly includes the following changes:
 
 #### Security
 
-- Protect EMQ X Broker from cross-site WebSocket hijacking attacks
+- Protect EMQX Broker from cross-site WebSocket hijacking attacks
 - SSL supports `verify` and `server_name_indication` configuration
 - Support the configuration of the maximum length of the certificate chain and the password of the private key file
 - Use TLS v1.3 by default, TLS v1.3 configs has no effect if started on OTP 22
@@ -367,7 +389,7 @@ EMQ X 4.3.0 is released now, it mainly includes the following changes:
 
 - Added update resource functionality for rule engine
 - Rule engine SQL function supports conversion between unix timestamp and rfc3339 format time
-- Keep retrying the resources that failed to connect after the EMQ X Broker is started
+- Keep retrying the resources that failed to connect after the EMQX Broker is started
 - Websocket listener supports selecting supported subprotocols from the subprotocols list
 - WebSocket connection supports obtaining real IP and Port
 - Support the default authentication method caching_sha2_password of MySQL 8.0
@@ -422,7 +444,7 @@ EMQ X 4.3.0 is released now, it mainly includes the following changes:
 - The inconsistency between topic rewriting and ACL execution order when publishing and subscribing
 - The WebSocket connection cannot use the peer certificate as the username
 - The authentication data cannot be imported
-- EMQ X may fail to start in Docker
+- EMQX may fail to start in Docker
 - Fixed delayed connection process OOM kill
 - The MQTT-SN connection with Clean Session being false did not publish a will message when it was disconnected abnormally
 
@@ -430,7 +452,7 @@ EMQ X 4.3.0 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-04-26*
 
-EMQ X 4.3-rc.5 is released now, it mainly includes the following changes:
+EMQX 4.3-rc.5 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -455,7 +477,7 @@ EMQ X 4.3-rc.5 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
-- Fix the issue that EMQ X may fail to start in Docker
+- Fix the issue that EMQX may fail to start in Docker
 
   Github PR: [emqx#4670](https://github.com/emqx/emqx/pull/4670), [emqx#4675](https://github.com/emqx/emqx/pull/4675), [emqx#4657](https://github.com/emqx/emqx/pull/4657)
 
@@ -464,7 +486,7 @@ EMQ X 4.3-rc.5 is released now, it mainly includes the following changes:
   Github Issue: [emqx#4642](https://github.com/emqx/emqx/issues/4642)
   Github PR: [emqx#4643](https://github.com/emqx/emqx/pull/4643)
 
-- Fix the issue caused by reporting telemetry data when EMQ X is not fully started
+- Fix the issue caused by reporting telemetry data when EMQX is not fully started
 
   Github PR: [emqx#4627](https://github.com/emqx/emqx/pull/4627)
 
@@ -476,7 +498,7 @@ EMQ X 4.3-rc.5 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-04-16*
 
-EMQ X 4.3-rc.4 is released now, it mainly includes the following changes:
+EMQX 4.3-rc.4 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -537,7 +559,7 @@ EMQ X 4.3-rc.4 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-03-30*
 
-EMQ X 4.3-rc.3 is released now, it mainly includes the following changes:
+EMQX 4.3-rc.3 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -567,7 +589,7 @@ EMQ X 4.3-rc.3 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-03-26*
 
-EMQ X 4.3-rc.2 is released now, it mainly includes the following changes:
+EMQX 4.3-rc.2 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -581,7 +603,7 @@ EMQ X 4.3-rc.2 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-03-23*
 
-EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
+EMQX 4.3-rc.1 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -623,7 +645,7 @@ EMQ X 4.3-rc.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-03-03*
 
-EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
+EMQX 4.3-beta.1 is released now, it mainly includes the following changes:
 
 ### emqx
 
@@ -653,7 +675,7 @@ EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4194](https://github.com/emqx/emqx/pull/4194)
 
-- Keep retrying the resources that failed to connect after the EMQ X Broker is started
+- Keep retrying the resources that failed to connect after the EMQX Broker is started
 
   Github PR: [emqx#4125](https://github.com/emqx/emqx/pull/4125)
 
@@ -671,14 +693,14 @@ EMQ X 4.3-beta.1 is released now, it mainly includes the following changes:
 
 *Release Date: 2021-01-29*
 
-EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
+EMQX 4.3-alpha.1 is released now, it mainly includes the following changes:
 
 *Features*
 
 - Added update resource logic for rule engine
 - Enhance Webhook and HTTP authentication performance
 - The underlying implementation of the multi-language extension function is changed from erlport to gRPC
-- Protect EMQ X Broker from cross-site WebSocket hijacking attacks
+- Protect EMQX Broker from cross-site WebSocket hijacking attacks
 - Project adjusted to umbrella structure
 - Solve the problem that the nodes in the cluster environment must be started in the first startup sequence, otherwise you need to wait for the front node to start
 - Websocket listener supports selecting supported subprotocols from the subprotocols list
@@ -687,7 +709,7 @@ EMQ X 4.3-alpha.1 is released now, it mainly includes the following changes:
 - Support the configuration of the maximum length of the certificate chain and the password of the private key file
 - Support import and export of Authentication & ACL information in Mnesia
 - Shared subscription supports Hash distribution of messages by source topic
-- EMQ X Broker in docker now starts in foreground mode
+- EMQX Broker in docker now starts in foreground mode
 
 *BUG*
 

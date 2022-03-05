@@ -13,7 +13,7 @@ category:
 ref:
 ---
 
-# EMQ X 消息服务器功能列表
+# EMQX 消息服务器功能列表
 
 - 完整的 MQTT V3.1/V3.1.1 及 V5.0 协议规范支持
   - QoS0, QoS1, QoS2 消息支持
@@ -56,10 +56,10 @@ ref:
   - 发送数据到 Web 服务
 
 <strong>
-以下是 EMQ X Enterprise 特有功能
+以下是 EMQX Enterprise 特有功能
 </strong>
 
-- Scalable RPC 架构: 分离 Erlang 自身的集群通道与 EMQ X 节点间的数据通道
+- Scalable RPC 架构: 分离 Erlang 自身的集群通道与 EMQX 节点间的数据通道
 - 数据持久化
   - Redis 存储订阅关系、设备在线状态、MQTT 消息、保留消息，发布 SUB/UNSUB 事件
   - MySQL 存储订阅关系、设备在线状态、MQTT 消息、保留消息
@@ -71,10 +71,10 @@ ref:
   - OpenTDSB 存储 MQTT 时序消息
   - TimescaleDB 存储 MQTT 时序消息
 - 消息桥接
-  - Kafka 桥接：EMQ X 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 Kafka
-  - RabbitMQ 桥接：EMQ X 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 RabbitMQ
-  - Pulsar 桥接：EMQ X 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 Pulsar
-  - RocketMQ 桥接：EMQ X 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 RocketMQ
+  - Kafka 桥接：EMQX 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 Kafka
+  - RabbitMQ 桥接：EMQX 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 RabbitMQ
+  - Pulsar 桥接：EMQX 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 Pulsar
+  - RocketMQ 桥接：EMQX 内置 Bridge 直接转发 MQTT 消息、设备上下线事件到 RocketMQ
 - 规则引擎
   - 消息编解码
   - 桥接数据到 Kafka
@@ -102,14 +102,16 @@ ref:
   - 从 PostgreSQL 中获取订阅关系
   - 从 Cassandra 中获取订阅关系
   - 从 MongoDB 中获取订阅关系
-- Schema Registry：将 EMQ X 的事件、消息 提供了数据编解码能力
+- Schema Registry：将 EMQX 的事件、消息 提供了数据编解码能力
 
 
-## EMQ X Enterprise
+{% emqxce %}
 
-[EMQ X Enterprise](https://www.emqx.com/zh/products/emqx) 是一个强大的企业级物联网 MQTT 消息平台，由开发开源 EMQ X 的人员构建。
+## EMQX Enterprise
 
-EMQ X Enterprise 支持百万级物联网设备一站式接入、MQTT&CoAP 多协议处理、低时延实时消息通信。它保持了 EMQ X 的简单性和高性能，同时增加了许多企业特性：
+[EMQX Enterprise](https://www.emqx.com/zh/products/emqx) 是一个强大的企业级物联网 MQTT 消息平台，由开发开源 EMQX 的人员构建。
+
+EMQX Enterprise 支持百万级物联网设备一站式接入、MQTT&CoAP 多协议处理、低时延实时消息通信。它保持了 EMQX 的简单性和高性能，同时增加了许多企业特性：
 
   - 连接性能增强到百万级、千万级，支持私有协议及行业协议定制，基于 TCP/UDP 私有协议的旧网设备接入兼容，支持全网络多协议设备接入；
   - 支持 Redis, MySQL, PostgreSQL, MongoDB 多种数据库消息数据持久化，消息转换写入 InfluxDB, OpenTSDB, TimescaleDB 多种时序数据库，支持自动从 Redis 或数据库加载订阅，无需客户端主动发起；
@@ -118,18 +120,25 @@ EMQ X Enterprise 支持百万级物联网设备一站式接入、MQTT&CoAP 多�
 
 
 ::: tip
-感谢你对 EMQ X 的支持，如果有企业服务需要，请联系我们的销售人员 sales-cn@emqx.io。
+感谢你对 EMQX 的支持，如果有企业服务需要，请联系我们的销售人员 sales-cn@emqx.io。
 :::
 
-
-
-
 ## 企业版功能
+
+{% endemqxce %}
+
+
+
+{% emqxee %}
+
+## 功能说明
+
+{% endemqxee %}
 
 
 ### 消息数据存储
 
-EMQ X 企业版支持存储订阅关系、MQTT 消息、设备状态到
+EMQX 企业版支持存储订阅关系、MQTT 消息、设备状态到
 Redis、MySQL、PostgreSQL、MongoDB、Cassandra、TimescaleDB、InfluxDB、DynamoDB、OpenTDSB
 数据库:
 
@@ -139,16 +148,16 @@ Redis、MySQL、PostgreSQL、MongoDB、Cassandra、TimescaleDB、InfluxDB、Dyna
 
 ### 消息桥接转发
 
-EMQ X 企业版支持直接转发 MQTT 消息到 RabbitMQ、Kafka、Pulsar、RocketMQ、MQTT
+EMQX 企业版支持直接转发 MQTT 消息到 RabbitMQ、Kafka、Pulsar、RocketMQ、MQTT
 Broker，可作为百万级的物联网接入服务器(IoT Hub):
 
 ![image](./assets/overview_5.png)
 
 ### 规则引擎
 
-EMQ X 规则引擎可以灵活地处理消息和事件。
+EMQX 规则引擎可以灵活地处理消息和事件。
 
-EMQ X 企业版规则引擎支持消息重新发布；桥接数据到
+EMQX 企业版规则引擎支持消息重新发布；桥接数据到
 Kafka、Pulsar、RocketMQ、RabbitMQ、MQTT Broker；保存数据到
 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB、Cassandra、InfluxDB、OpenTSDB、TimescaleDB；发送数据到
 WebServer:
@@ -170,8 +179,10 @@ Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进
 编解码相关配置，详见"编解码"章节。
 
 
+{% emqxce %}
 
-## EMQ X 不同版本对比
+## EMQX 不同版本对比
 
-详细对比以及价格参见 [EMQ X 定价](https://www.emqx.com/zh/products/emqx)。
+详细对比以及价格参见 [EMQX 定价](https://www.emqx.com/zh/products/emqx)。
 
+{% endemqxce %}

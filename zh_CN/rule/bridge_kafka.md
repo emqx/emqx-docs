@@ -2,7 +2,7 @@
 
 搭建 Kafka 环境，以 MacOS X 为例:
 ```bash
-wget http://apache.claz.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
+wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
 tar -xzf  kafka_2.13-2.8.0.tgz
 
@@ -27,7 +27,7 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 

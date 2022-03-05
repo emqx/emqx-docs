@@ -14,12 +14,12 @@ ref:
 ---
 
 ::: tip
-EMQ X Broker 中仅适用以下操作：
+EMQX Broker 中仅适用以下操作：
 - 检查 (调试)
 - 发送数据到 Web 服务
 - 桥接数据到 MQTT Broker
 - 保存数据到 TDengine(使用 发送数据到 Web 服务 实现)
-其余均是 EMQ X Enterprise 专属功能。
+其余均是 EMQX Enterprise 专属功能。
 :::
 
 ## 检查 (调试)

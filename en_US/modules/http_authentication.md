@@ -4,7 +4,7 @@ HTTP Authentication/ACL uses an external self-built HTTP application authenticat
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 
@@ -23,7 +23,7 @@ After clicking add, the module is added
 
 ## HTTP authentication principle
 
-EMQ X uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP statusCode).
+EMQX uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP statusCode).
 
  -Authentication failed: The API returns status codes other than 200
  -Successful authentication: API returns 200 status code
@@ -32,7 +32,7 @@ EMQ X uses the relevant information of the current client as parameters in the d
 
 ## Authentication request
 
-When performing identity authentication, EMQ X will use the current client information to fill in and initiate the authentication query request configured by the user, and query the authentication data of the client on the HTTP server.
+When performing identity authentication, EMQX will use the current client information to fill in and initiate the authentication query request configured by the user, and query the authentication data of the client on the HTTP server.
 
 ```bash
 
@@ -49,7 +49,7 @@ clientid=%c,username=%u,password=%P
 
 When the HTTP request method is GET, the request parameters will be passed in the form of URL query string; POST request will submit the request parameters in the form of ordinary form (content-type is x-www-form-urlencoded).
 
-You can use the following placeholders in the authentication request. EMQ X will automatically fill in the client information when requesting:
+You can use the following placeholders in the authentication request. EMQX will automatically fill in the client information when requesting:
 
 -%u: username
 -%c: Client ID
@@ -67,7 +67,7 @@ It is recommended to use the POST and PUT methods. When using the GET method, th
 
 ## HTTP access control principle
 
-EMQ X uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP statusCode).
+EMQX uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP statusCode).
 
  -No permission: The API returns status codes other than 200
  -Authorization is successful: API returns 200 status code
@@ -77,7 +77,7 @@ EMQ X uses current client-related information as parameters in device publishing
 
 HTTP API basic request information, configuration certificate, request header and retry rules.
 
-When publishing and subscribing authentication, EMQ X will use the current client information to fill in and initiate the ACL authorization query request configured by the user, and query the authorization data of the client on the HTTP server.
+When publishing and subscribing authentication, EMQX will use the current client information to fill in and initiate the ACL authorization query request configured by the user, and query the authorization data of the client on the HTTP server.
 
 ## superuser request
 
@@ -117,7 +117,7 @@ access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
 
 When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; POST and PUT requests will submit the request parameters in the form of ordinary forms (content-type is x-www-form-urlencoded).
 
-You can use the following placeholders in the authentication request. EMQ X will automatically fill in the client information when requesting:
+You can use the following placeholders in the authentication request. EMQX will automatically fill in the client information when requesting:
 
 -%A: Operation type, '1' subscription; '2' release
 -%u: client user name

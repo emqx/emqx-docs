@@ -17,7 +17,7 @@ ref:
 
 以下内容仅针对从 4.2 升级到 4.3 的用户。
 
-由于数据库架构和 Broker 间 API 更改，EMQ X 4.3 节点将无法加入 4.2 集群。
+由于数据库架构和 Broker 间 API 更改，EMQX 4.3 节点将无法加入 4.2 集群。
 
 推荐按以下步骤完成升级：
 
@@ -72,7 +72,7 @@ $ emqx_ctl data import <filename> --env '{"auth.mnesia.as":"clientid"}'
 
 ### 重要的配置变更
 
-- EMQ X 现在默认尝试使用 TLS 1.3，请确保 openssl 是最新的(1.1.1)，否则可能需要更改 SSL 相关配置，例如从 `listener.ssl.external.tls_versions` 的列表中删除 `tlsv1.3`
+- EMQX 现在默认尝试使用 TLS 1.3，请确保 openssl 是最新的(1.1.1)，否则可能需要更改 SSL 相关配置，例如从 `listener.ssl.external.tls_versions` 的列表中删除 `tlsv1.3`
 - 新增 `listener.ws.$zone.check_origin_enable` `listener.ws.$zone.allow_origin_absence` 和 `listener.ws.$zone.check_origins` 配置以获得更好的 WebSocket 安全性。
 - 配置项 `listener.ws.$name.verify_protocol_header` 由 `listener.ws.external.fail_if_no_subprotocol` 和 `listener.ws.external.supported_subprotocols` 替代。
 - 配置项 `node.heartbeat` 不能被环境变量 `EMQX_NODE__HEARTBEAT` 覆盖，待修复，[Github Issue#5929](https://github.com/emqx/emqx/issues/5929)

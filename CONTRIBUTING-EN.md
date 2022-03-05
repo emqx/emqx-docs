@@ -1,28 +1,33 @@
-# EMQ X Documentation Contributing Guide
+# EMQX Documentation Contributing Guide
 
-Thank you for your contributions to EMQ X open-source project.
+Thank you for your contributions to EMQX open-source project.
 
 ## Table of Contents
 
-- [Documentation Writing Guide](#documentation-writing-guide)
-- [How to contribute](#how-to-contribute)
-  - [Feedback questions](#feedback-questions)
-  - [Online editing](#online-editing)
-  - [Local editing](#local-editing)
-- [PR automatic check](#pr-automatic-check)
-- [How to get help](#how-to-get-help)
+- [EMQX Documentation Contributing Guide](#emq-x-documentation-contributing-guide)
+  - [Table of Contents](#table-of-contents)
+  - [Documentation Writing Guide](#documentation-writing-guide)
+  - [How to contribute](#how-to-contribute)
+    - [Request a change](#request-a-change)
+    - [Online editing](#online-editing)
+      - [Fork](#fork)
+      - [Commit](#commit)
+      - [Pull request](#pull-request)
+    - [Local editing](#local-editing)
+  - [PR automatic check](#pr-automatic-check)
+  - [How to get help](#how-to-get-help)
 
 
 ## Documentation Writing Guide
 
-To ensure consistency throughout all EMQ X documentation,
+To ensure consistency throughout all EMQX documentation,
 we kindly request all contributors reference our [Documentation Writing Guide](./DOCS-WRITING-GUIDE-EN.md).
 This guideline provides detailed instructions on document **directory configuration** and **Markdown writing specifications**.
 
 
 ## How to contribute
 
-EMQ X's documentation is published at [https://docs.emqx.io/](https://docs.emqx.io/).
+EMQX's documentation is published at [https://docs.emqx.io/](https://docs.emqx.io/).
 You can make contributions in several different ways listed below.
 
 > **Note:** You will need a GitHub account to make contributions.
@@ -82,7 +87,7 @@ We recommend first-time contributors to directly use the [Online editing](#onlin
    ```
 
 1. Checkout the earliest branch which is subject to the change.
-   e.g. if an issue is found in EMQ X 4.3, checkout `release-4.3` with command `git checkout --track upstream/release-4.3`
+   e.g. if an issue is found in EMQX 4.3, checkout `release-4.3` with command `git checkout --track upstream/release-4.3`
 
 1. Optional: Checkout a work-branch `git checkout -b my-first-pr-branch-for-emqx-4.3`
 
@@ -109,4 +114,3 @@ If you encounter any problems when contributing to the documentation, you can co
 - Slack: [https://slack-invite.emqx.io/](https://slack-invite.emqx.io/)
 
 - Submit the GitHub Issue directly: [https://github.com/emqx/emqx-docs/issues/new](https://github.com/emqx/emqx-docs/issues/new).
-

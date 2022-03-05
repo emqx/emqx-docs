@@ -1,6 +1,6 @@
-# PSK 认证
+# PSKFile 认证
 
-如果希望使用 PSK 认证，需要将 [TLS 认证](#auth-tls) 中的 `listener.ssl.external.ciphers` 注释掉，然后配置 `listener.ssl.external.psk_ciphers`：
+如果希望使用 PSKFile 认证，需要将 `emqx.conf` 的 `listener.ssl.external.ciphers` 注释掉，然后配置 `listener.ssl.external.psk_ciphers`：
 
 ```bash
 #listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,...
@@ -10,7 +10,7 @@ listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3D
 
 ## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200927213049265](./assets/modules.png)
 

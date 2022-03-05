@@ -3,7 +3,7 @@
 Setup a Kafka, taking Mac OSX for instance:
 
 ```bash
-wget http://apache.claz.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
+wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
 tar -xzf  kafka_2.13-2.8.0.tgz
 
@@ -29,7 +29,7 @@ Created topic testTopic.
 
 Create a rule:
 
-Go to [EMQ X Dashboard](http://127.0.0.1:18083/#/rules), select the
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:

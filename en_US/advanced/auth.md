@@ -2,45 +2,67 @@
 
 Authentication is an important part of most applications. MQTT protocol supports username/password authentication. Enabling authentication can effectively prevent illegal client connections.
 
-Authentication in EMQ X Broker means that when a client connects to EMQ X Broker, the server configuration  is used to control the client's permission to connect to the server.
+Authentication in EMQX Broker means that when a client connects to EMQX Broker, the server configuration  is used to control the client's permission to connect to the server.
 
-EMQ X Broker's authentication support includes two levels:
+EMQX Broker's authentication support includes two levels:
 
-- The MQTT protocol specifies the user name and password in the CONNECT packet by itself. EMQ X Broker supports multiple forms of authentication based on Username, ClientID, HTTP, JWT, LDAP, and various databases such as MongoDB, MySQL, PostgreSQL, Redis through plugins.
+- The MQTT protocol specifies the user name and password in the CONNECT packet by itself. EMQX Broker supports multiple forms of authentication based on Username, ClientID, HTTP, JWT, LDAP, and various databases such as MongoDB, MySQL, PostgreSQL, Redis through plugins.
 - At the transport layer, TLS guarantees client-to-server authentication using client certificates and ensures that the server verifies the server certificate to the client. PSK-based TLS/DTLS authentication is also supported.
 
-This authentication methods supported by EMQ X and the configuration methods of the corresponding plugins are introduced in this article.
+This authentication methods supported by EMQX and the configuration methods of the corresponding plugins are introduced in this article.
 
 ## Authentication method
 
-EMQ X supports the use of built-in data sources (files, built-in databases), JWT, external mainstream databases, and custom HTTP APIs as authentication data sources.
+EMQX supports the use of built-in data sources (files, built-in databases), JWT, external mainstream databases, and custom HTTP APIs as authentication data sources.
 
 The data source connection and authentication logic are implemented through plugins. Each plugin corresponds to an authentication method, and the corresponding plugin needs to be enabled before use.
 
 When the client connects, the plugin implements the identity authentication of the client by checking whether its username/clientid and password are consistent with the information of the specified data source.
 
-Authentication methods supported by EMQ X:
+Authentication methods supported by EMQX:
 
 **Built-in data source**
 
 
+{% emqxee %}
+
+* [Built-in Auth](../modules/mnesia_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
 
 * [Mnesia (username/clientid) authentication](./auth-mnesia.md)
 
+{% endemqxce %}
 
-The configuration file and the built-in database of EMQ X are used to provide an authenticated data source, which is managed through the HTTP API and is simple and lightweight.
+
+The configuration file and the built-in database of EMQX are used to provide an authenticated data source, which is managed through the HTTP API and is simple and lightweight.
 
 
 
 **External Database**
 
 
+{% emqxee %}
+
+* [MySQL authentication](../modules/mysql_authentication.md)
+* [PostgreSQL authentication](../modules/pgsql_authentication.md)
+* [Redis authentication](../modules/redis_authentication.md)
+* [MongoDB authentication](../modules/mongo_authentication.md)
+* [LDAP authentication](../modules/ldap_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
 
 * [LDAP authentication](./auth-ldap.md)
 * [MySQL authentication](./auth-mysql.md)
 * [PostgreSQL authentication](./auth-postgresql.md)
 * [Redis authentication](./auth-redis.md)
 * [MongoDB authentication](./auth-mongodb.md)
+
+{% endemqxce %}
 
 
 The external database can store a large amount of data, while facilitating integration with external device management systems.
@@ -49,10 +71,19 @@ The external database can store a large amount of data, while facilitating integ
 
 Others
 
+{% emqxee %}
 
+* [HTTP authentication](../modules/http_authentication.md)
+* [JWT authentication](../modules/jwt_authentication.md)
+
+{% endemqxee %}
+
+{% emqxce %}
 
 * [HTTP authentication](./auth-http.md)
 * [JWT authentication](./auth-jwt.md)
+
+{% endemqxce %}
 
 
 JWT authentication can issue authentication information in batches, and HTTP authentication can implement complex authentication logic.
@@ -76,7 +107,7 @@ Any authentication method will eventually return a result:
 
 ## Anonymous Authentication
 
-Anonymous authentication is enabled in the EMQ X default configuration and any client can access EMQ X. When the authentication plug-in is not enabled or the authentication plug-in does not explicitly allow/deny(ignore) the connection request, EMQ X will decide whether to allow the client to connect based on whether the anonymous authentication is enabled.
+Anonymous authentication is enabled in the EMQX default configuration and any client can access EMQX. When the authentication plug-in is not enabled or the authentication plug-in does not explicitly allow/deny(ignore) the connection request, EMQX will decide whether to allow the client to connect based on whether the anonymous authentication is enabled.
 
 Configure the anonymous authentication:
 
@@ -96,7 +127,7 @@ Disable anonymous authentication in production environments.
 
 ## Password salting rules and hash methods
 
-The hash method can be enabled in most EMQ X authentication plugins. Only the password cipher text is saved in the data source to ensure data security.
+The hash method can be enabled in most EMQX authentication plugins. Only the password cipher text is saved in the data source to ensure data security.
 
 When the hash method is enabled, the user can specify a salt for each client and configure a salting rule. The password stored in the database is the cipher text processed according to the salting rule and hash method.
 
@@ -128,7 +159,7 @@ auth.mysql.password_hash = sha256,salt
 2. Use the same salting rules and hash method as MySQL authentication to process client information to get cipher text
 3. Write the client information to the database. The client password should be cipher text information.
 
-### EMQ X authentication process
+### EMQX authentication process
 
 1. The authentication data such as password (ciphertext) and salt are queried according to the configured authentication SQL combined with the information passed in by the client. If there is no query result, the authentication will terminate and the ignore result will be returned
 2. The cipher text is calculated according to the configured salting rule and hash method. If no hash method is enabled,  this step is skipped.
@@ -146,7 +177,7 @@ The authentication can be performed normally when the salting rules and hash met
 
 ## Authentication chain
 
-When multiple authentication methods are enabled at the same time, EMQ X will perform chain authentication in the order in which the plugins are opened:
+When multiple authentication methods are enabled at the same time, EMQX will perform chain authentication in the order in which the plugins are opened:
 - Once authentication succeeds, terminate the authentication chain and allow clients to access
 - Once authentication fails, terminate the authentication chain and prohibit client access
 - If Failing to pass until the last authentication method,  it is determined according to  **anonymous authentication** configuration
@@ -181,7 +212,7 @@ listener.ssl.external.certfile = etc/certs/cert.pem
 listener.ssl.external.cacertfile = etc/certs/cacert.pem
 ```
 
-Note that the `key.pem`,` cert.pem` and `cacert.pem` under the default directory of ` etc/certs` are self-signed certificates generated by EMQ X Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client.
+Note that the `key.pem`,` cert.pem` and `cacert.pem` under the default directory of ` etc/certs` are self-signed certificates generated by EMQX Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client.
 
 The cipher list supported by the server needs to be specified explicitly. The default list is consistent with Mozilla's server cipher list:
 

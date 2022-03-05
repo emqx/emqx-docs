@@ -16,7 +16,7 @@
           "path": "getting-started/install"
         },
         {
-          "title": "启动 EMQ X",
+          "title": "启动 EMQX",
           "path": "getting-started/start"
         },
         {
@@ -319,6 +319,10 @@
       "path": "advanced/relup"
     },
     {
+       "title": "安装补丁包",
+       "path": "advanced/patches"
+    },
+    {
       "title": "FAQ 常见问题解答",
       "children": [
         {
@@ -483,7 +487,7 @@
           "path": "getting-started/install"
         },
         {
-          "title": "Start EMQ X",
+          "title": "Start EMQX",
           "path": "getting-started/start"
         },
         {
@@ -691,7 +695,7 @@
           "path": "rule/rule-example"
         },
         {
-          "title": "EMQ X Bridges",
+          "title": "EMQX Bridges",
           "path": "rule/bridge_emqx"
         },
         {
@@ -722,7 +726,7 @@
       ]
     },
     {
-      "title": "DevOps",
+      "title": "Management and Ops",
       "children": [
         {
           "title": "Device management",
@@ -775,6 +779,10 @@
     {
       "title": "Release Hot Upgrade",
       "path": "advanced/relup"
+    },
+    {
+       "title": "Apply Patches",
+       "path": "advanced/patches"
     },
     {
       "title": "Multi-language Extension",

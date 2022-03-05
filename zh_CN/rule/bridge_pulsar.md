@@ -3,7 +3,7 @@
 搭建 Pulsar 环境，以 MacOS X 为例:
 
 ```bash
-$ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
+$ wget https://archive.apache.org/dist/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
 
 $ tar xvfz apache-pulsar-2.3.2-bin.tar.gz
 
@@ -21,7 +21,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 

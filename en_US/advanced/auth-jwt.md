@@ -25,7 +25,7 @@ emqx_auth_jwt
 
 ## Authentication principle
 
-The client uses Token as the user name or password (depending on the plugin configuration). When initiating the connection, EMQ X Broker uses the key and certificate in the configuration to decrypt. If it can be successfully decrypted, the authentication successes, otherwise the authentication fails.
+The client uses Token as the user name or password (depending on the plugin configuration). When initiating the connection, EMQX Broker uses the key and certificate in the configuration to decrypt. If it can be successfully decrypted, the authentication successes, otherwise the authentication fails.
 
 After JWT authentication is enabled by default, you can connect with the following password and any username:
 
@@ -55,7 +55,7 @@ auth.jwt.secret = emqxsecret
 
 ## JWKs server address
 ##
-## EMQ X will get the key list from JWKs server and use it to verify the Token
+## EMQX will get the key list from JWKs server and use it to verify the Token
 ##
 ## About the JWKs, see: http://self-issued.info/docs/draft-ietf-jose-json-web-key.html
 #auth.jwt.jwks = https://127.0.0.1:8080/jwks
@@ -93,7 +93,7 @@ The field where the client carries the JWT Token, used to configure where the cl
 
 ### auth.jwt.verify_claims
 
-If you enable the `auth.jwt.verify_claims` option, EMQ Xwill verify the validity of the data in the Payload after verifying the validity of the JWT.
+If you enable the `auth.jwt.verify_claims` option, EMQXwill verify the validity of the data in the Payload after verifying the validity of the JWT.
 
 suppose your Payload is:
 
@@ -136,7 +136,7 @@ JWT authentication supports three ways to configure keys, which correspond to th
 - `auth.jwt.jwks`: configured as [JWKs](http://self-issued.info/docs/draft-ietf-jose-json-web-key.html) server address to get the list of available keys from the JWKs server.
 
 
-The three types of keys are allowed to be configured simultaneously. EMQ X checks the Token in the order of `auth.jwt.secret`, `auth.jwt.pubkey`, `auth.jwt.jwks`.
+The three types of keys are allowed to be configured simultaneously. EMQX checks the Token in the order of `auth.jwt.secret`, `auth.jwt.pubkey`, `auth.jwt.jwks`.
 
 
 ::: danger

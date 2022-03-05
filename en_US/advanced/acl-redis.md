@@ -102,7 +102,7 @@ After enabling Redis ACL and successfully connecting with the username emqx, the
 
 ## Super user query command（super cmd）
 
-When performing ACL authentication, EMQ X Broker will use the current client information to execute the user-configured superuser query command to query whether the client is a superuser. ACL query command is skipped when the client is superuser.
+When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser query command to query whether the client is a superuser. ACL query command is skipped when the client is superuser.
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -110,7 +110,7 @@ When performing ACL authentication, EMQ X Broker will use the current client inf
 auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
 ```
 
-You can use the following placeholders in query command and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in query command and EMQX Broker will automatically populate with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -128,7 +128,7 @@ If superuser functionality is not needed, it can be more efficient when commenti
 
 ## ACL query command（acl cmd）
 
-When performing ACL authentication, EMQ X Broker will use the current client information to populate and execute the user-configured superuser SQL. If superuser SQL is not enabled or the client is not a superuser, ACL SQL is used to query the client's ACL rules in the database.
+When performing ACL authentication, EMQX Broker will use the current client information to populate and execute the user-configured superuser SQL. If superuser SQL is not enabled or the client is not a superuser, ACL SQL is used to query the client's ACL rules in the database.
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -136,7 +136,7 @@ When performing ACL authentication, EMQ X Broker will use the current client inf
 auth.redis.acl_cmd = HGETALL mqtt_acl:%u
 ```
 
-You can use the following placeholders in ACL SQL and EMQ X Broker will automatically populate with client information when executed:
+You can use the following placeholders in ACL SQL and EMQX Broker will automatically populate with client information when executed:
 
 - %u：Username
 - %c：Client ID
@@ -145,5 +145,16 @@ You can adjust the ACL query command according to business requirement. However,
 
 1. Topic is used as key and access is used as value in hash
 
-::: tip 
-The above data structures   need to be used strictly for Redis ACL rules.All rules added in Redis ACL are `allow` rules, which can be used with `acl_nomatch = deny` in` etc / emqx.conf`. :::
+::: tip
+The above data structures need to be used strictly for Redis ACL rules.
+
+ACL rules from redis are all **allow** rules. i.e. a whitelist.
+
+When a client's rules list is empty, EMQX continues to check the next auth/ACL plugin.
+Otherwise the check returns immediately without proceeding to the next auth/ACL plugins.
+
+When the rule is non-empty and does not match the corresponding pub/sub permission,
+an authentication failure will be returned (the corresponding pub/sub behavior will be denied) and the authentication chain will be terminated.
+
+When more than one auth/ACL plugins are in use, it is recommended to position Redis ACL after other auth/ACL plugins in the enabled plugins list.
+:::

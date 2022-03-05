@@ -15,9 +15,9 @@ ref:
 
 # 系统调优
 
-*EMQ X* 消息服务器 4.x 版本 MQTT 连接压力测试到 130 万，在一台 8 核心、32G 内存的 CentOS 服务器上。
+*EMQX* 消息服务器 4.x 版本 MQTT 连接压力测试到 130 万，在一台 8 核心、32G 内存的 CentOS 服务器上。
 
-100 万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， *EMQ X* 消息服务器参数设置如下:
+100 万连接测试所需的 Linux 内核参数，网络协议栈参数，Erlang 虚拟机参数， *EMQX* 消息服务器参数设置如下:
 
 ## Linux 操作系统参数
 
@@ -68,21 +68,20 @@ sysctl -w net.core.wmem_default=262144
 sysctl -w net.core.rmem_max=16777216
 sysctl -w net.core.wmem_max=16777216
 sysctl -w net.core.optmem_max=16777216
-    
+
 #sysctl -w net.ipv4.tcp_mem='16777216 16777216 16777216'
 sysctl -w net.ipv4.tcp_rmem='1024 4096 16777216'
 sysctl -w net.ipv4.tcp_wmem='1024 4096 16777216'
 ```
 TCP 连接追踪设置:
 ```bash
-sysctl -w net.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 ```
 TIME-WAIT Socket 最大数量、回收与重用设置:
 ```bash
 sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
-    
+
 # 注意：不建议开启該设置，NAT 模式下可能引起连接 RST
 # sysctl -w net.ipv4.tcp_tw_recycle=1
 # sysctl -w net.ipv4.tcp_tw_reuse=1
@@ -104,12 +103,12 @@ node.process_limit = 2097152
 node.max_ports = 1048576
 ```
 
-## EMQ X 消息服务器参数
+## EMQX 消息服务器参数
 
 设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。
 
-EMQ X 社区版 配置文件 emqx/etc/emqx.confa
-EMQ X 企业版 配置文件 emqx/etc/listeners.conf
+EMQX 社区版 配置文件 emqx/etc/emqx.confa
+EMQX 企业版 配置文件 emqx/etc/listeners.conf
 
 ```bash
 ## TCP Listener

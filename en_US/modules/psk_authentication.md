@@ -1,8 +1,8 @@
-# PSK Authentication
+# PSKFile Authentication
 
 ## PSK certification
 
-If you want to use PSK authentication, you need to comment out `listener.ssl.external.ciphers` in [TLS authentication](#auth-tls), and then configure `listener.ssl.external.psk_ciphers`:
+If you want to use PSKFile authentication, you need to comment out `listener.ssl.external.ciphers` in `emqx.conf`, and then configure `listener.ssl.external.psk_ciphers`:
 
 ```bash
 #listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,...
@@ -12,7 +12,7 @@ listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3D
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 

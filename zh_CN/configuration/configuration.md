@@ -299,7 +299,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 #### 说明
 
-当使用 k8s 方式集群时，指定 Kubernetes 中 EMQ X 的服务名。
+当使用 k8s 方式集群时，指定 Kubernetes 中 EMQX 的服务名。
 
 <br />
 
@@ -895,7 +895,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 
 <br />
 
-### log.<level>.file
+### log.\<level>.file
 
 | Type   | Default |
 | ------ | ------- |
@@ -1177,7 +1177,7 @@ Topic层级过多可能导致订阅时的性能问题。
 
 #### 说明
 
-是否忽略自己发送的消息。如果忽略，则表明 EMQ X 不会向消息的发送端投递此消息。
+是否忽略自己发送的消息。如果忽略，则表明 EMQX 不会向消息的发送端投递此消息。
 
 <br />
 
@@ -1412,7 +1412,7 @@ Topic层级过多可能导致订阅时的性能问题。
 
 #### 说明
 
-Keepalive 退避指数。EMQ X 如果在 `Keepalive * backoff * 2` 的时间内未收到客户端的任何数据报文，则认为客户端已心跳超时。
+Keepalive 退避指数。EMQX 如果在 `Keepalive * backoff * 2` 的时间内未收到客户端的任何数据报文，则认为客户端已心跳超时。
 
 <br />
 
@@ -1436,7 +1436,7 @@ Keepalive 退避指数。EMQ X 如果在 `Keepalive * backoff * 2` 的时间内�
 
 #### 说明
 
-允许 EMQ X 在投递消息时，强制升级消息的 QoS 等级为订阅的 QoS 等级。
+允许 EMQX 在投递消息时，强制升级消息的 QoS 等级为订阅的 QoS 等级。
 
 <br />
 
@@ -1460,7 +1460,7 @@ Keepalive 退避指数。EMQ X 如果在 `Keepalive * backoff * 2` 的时间内�
 
 #### 说明
 
-消息重发间隔。EMQ X 在每个间隔检查是否需要进行消息重发。
+消息重发间隔。EMQX 在每个间隔检查是否需要进行消息重发。
 
 <br />
 
@@ -1472,7 +1472,7 @@ Keepalive 退避指数。EMQ X 如果在 `Keepalive * backoff * 2` 的时间内�
 
 #### 说明
 
-QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
+QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
 
 <br />
 
@@ -1576,13 +1576,13 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 #### 说明
 
-主题挂载点。配置后，所有订阅和发布的主题在 EMQ X 都会为其增加一个前缀。
+主题挂载点。配置后，所有订阅和发布的主题在 EMQX 都会为其增加一个前缀。
 
 其中可用的占位符有：
 - `%c`：表示客户端的 Client ID。
 - `%u`：表示客户端的 Username。
 
-例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQ X 中路由的主题是 `user/tom/open`。
+例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQX 中路由的主题是 `user/tom/open`。
 
 <br />
 
@@ -1606,7 +1606,7 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 #### 说明
 
-是否忽略自己发送的消息。如果忽略，则表明 EMQ X 不会向消息的发送端投递此消息。
+是否忽略自己发送的消息。如果忽略，则表明 EMQX 不会向消息的发送端投递此消息。
 
 <br />
 
@@ -1748,7 +1748,7 @@ ACL 检查失败后，执行的操作。
 
 #### 说明
 
-QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
+QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
 
 <br />
 
@@ -1814,13 +1814,13 @@ QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客�
 
 #### 说明
 
-主题挂载点。配置后，所有订阅和发布的主题在 EMQ X 都会为其增加一个前缀。
+主题挂载点。配置后，所有订阅和发布的主题在 EMQX 都会为其增加一个前缀。
 
 其中可用的占位符有：
 - `%c`：表示客户端的 Client ID。
 - `%u`：表示客户端的 Username。
 
-例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQ X 中路由的主题是 `user/tom/open`。
+例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQX 中路由的主题是 `user/tom/open`。
 
 <br />
 
@@ -1832,7 +1832,7 @@ QoS 2 消息的最大接收窗口，配置 EMQ X 能够同时处理多少从客�
 
 #### 说明
 
-是否忽略自己发送的消息。如果忽略，则表明 EMQ X 不会向消息的发送端投递此消息。
+是否忽略自己发送的消息。如果忽略，则表明 EMQX 不会向消息的发送端投递此消息。
 
 <br />
 
@@ -1991,7 +1991,7 @@ listener.tcp.external.access.2 = allow all
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
-如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
+如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
 
 `Proxy Protcol` 参考: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
@@ -2005,7 +2005,7 @@ listener.tcp.external.access.2 = allow all
 
 #### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
 <br />
 
@@ -2025,7 +2025,7 @@ listener.tcp.external.access.2 = allow all
 - md5：DER 格式证书的 MD5 哈希值
 
 注意：在 TCP 的监听器下，该配置仅在负载均衡服务器终结 SSL 的部署情况下可以用；且负载均衡服务器需要配置
-Proxy Protocol 将证书域的内容给发送至 EMQ X。例如 HAProxy 的配置可参考
+Proxy Protocol 将证书域的内容给发送至 EMQX。例如 HAProxy 的配置可参考
 [send-proxy-v2-ssl](http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#5.2-send-proxy-v2-ssl)
 
 <br />
@@ -2481,7 +2481,7 @@ listener.ssl.external.access.2 = allow all
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
-如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
+如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
 
 `Proxy Protcol` 参考: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
@@ -2495,7 +2495,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
 <br />
 
@@ -2857,7 +2857,7 @@ TCP 缓冲区大小 (用户级)。
 
 #### 说明
 
-WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws://{ip}:{port}/mqtt`。
+WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws://{ip}:{port}/mqtt`。
 
 <br />
 
@@ -2981,7 +2981,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws
 
 #### 说明
 
-如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，则可打开该配置获取客户端真实的 IP 地址。
+如果 EMQX 集群部署在 HAProxy 或 Nginx 后，则可打开该配置获取客户端真实的 IP 地址。
 
 <br />
 
@@ -2993,7 +2993,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws
 
 #### 说明
 
-如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，则可打开该配置获取客户端真实的端口。
+如果 EMQX 集群部署在 HAProxy 或 Nginx 后，则可打开该配置获取客户端真实的端口。
 
 <br />
 
@@ -3007,7 +3007,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
-如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
+如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
 
 `Proxy Protcol` 参考: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
@@ -3021,7 +3021,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQ X 的 WebSocket 的地址是： `ws
 
 #### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
 <br />
 
@@ -3409,7 +3409,7 @@ listener.wss.external.access.2 = allow all
 
 #### 说明
 
-如果 EMQ X 集群部署在 HAProxy 或 Nginx，则可打开该配置获取客户端真实的 IP 地址。
+如果 EMQX 集群部署在 HAProxy 或 Nginx，则可打开该配置获取客户端真实的 IP 地址。
 
 <br />
 
@@ -3423,7 +3423,7 @@ listener.wss.external.access.2 = allow all
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
-如果 EMQ X 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
+如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开此配置。
 
 `Proxy Protcol` 参考：[https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
@@ -3437,7 +3437,7 @@ listener.wss.external.access.2 = allow all
 
 #### 说明
 
-设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQ X 会关闭其连接。
+设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
 <br />
 
@@ -3941,8 +3941,8 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 设置系统心跳消息的发布间隔。系统心跳消息包括下面两个主题：
 
-- "$SYS/brokers/<node>/uptime"
-- "$SYS/brokers/<node>/datetime"
+- "$SYS/brokers/\<node>/uptime"
+- "$SYS/brokers/\<node>/datetime"
 
 <br />
 
@@ -4167,7 +4167,7 @@ CPU 占用率回落到 `os_mon.cpu_low_watermark` 以下时将清除告警。
 
 #### 说明
 
-EMQ X 为所有进程分配的内存占系统内存的百分比超过 `os_mon.sysmem_high_watermark` 时将触发告警。
+EMQX 为所有进程分配的内存占系统内存的百分比超过 `os_mon.sysmem_high_watermark` 时将触发告警。
 
 <br />
 
@@ -4179,7 +4179,7 @@ EMQ X 为所有进程分配的内存占系统内存的百分比超过 `os_mon.sy
 
 #### 说明
 
-EMQ X 为单个进程分配的内存占系统内存的百分比超过 `os_mon.procmem_high_watermark` 时将触发告警。
+EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.procmem_high_watermark` 时将触发告警。
 
 <br />
 
@@ -4508,7 +4508,7 @@ CA 证书文件路径。
 
 <br />
 
-### auth.jwt.verify_claims <claims>
+### auth.jwt.verify_claims.\<claims>
 
 | Type   | Default |
 | ------ | ------- |
@@ -5674,7 +5674,7 @@ ACL 查询命令。可用的占位符有：
 #### 说明
 
 桥接地址，支持两种格式，例如：
-- `emqx@192.168.0.100`：EMQ X 节点名称，它表示将该节点的消息桥接到另外一个 EMQ X 节点。
+- `emqx@192.168.0.100`：EMQX 节点名称，它表示将该节点的消息桥接到另外一个 EMQX 节点。
 - `192.168.0.100:1883`：IP 地址和端口，它表示将该节点的消息通过一个 MQTT 连接桥接到另外一个 MQTT 服务器。
 
 <br />
@@ -5776,7 +5776,7 @@ MQTT 桥接客户端的密码。
 #### 说明
 
 桥接转发规则。例如：
-- `topic1/#, topic2/#`：`emqx_bridge_mqtt` 会将 EMQ X 中所以与 `topic1/#`，`topic2/#` 匹配的主题消息进行转发。
+- `topic1/#, topic2/#`：`emqx_bridge_mqtt` 会将 EMQX 中所以与 `topic1/#`，`topic2/#` 匹配的主题消息进行转发。
 
 <br />
 
@@ -5956,7 +5956,7 @@ QoS 1/2 消息重发间隔。
 
 #### 说明
 
-EMQ X 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQ X 桥接模式支持批量发送消息以提搞吞吐。
+EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持批量发送消息以提搞吞吐。
 
 <br />
 
@@ -7004,7 +7004,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 
 <br />
 
-### rule-engine.events.<event-name>
+### rule-engine.events.\<event-name>
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
@@ -7134,7 +7134,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 #### 说明
 
-`emqx_sn` 连接至 EMQ X 的用户名。
+`emqx_sn` 连接至 EMQX 的用户名。
 
 <br />
 
@@ -7146,7 +7146,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 #### 说明
 
-`emqx_sn` 连接至 EMQ X 的密码。
+`emqx_sn` 连接至 EMQX 的密码。
 
 <br />
 
@@ -7176,7 +7176,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 <br />
 
-### prometheus.collector.<N>
+### prometheus.collector.\<N>
 
 | Type   | Default           |
 | ------ | ----------------- |
@@ -7696,3 +7696,44 @@ HTTP 连接进程池大小。
 #### 说明
 
 转发 `消息已应答` 事件。
+
+
+{% emqxee %}
+### license.file
+
+| Type     | Default                              |
+| -------- | ------------------------------------ |
+| string   | `etc/emqx.lic` |
+
+#### 说明
+
+企业版证书存放的路径。
+
+<br />
+### license.connection_high_watermark_alarm
+
+| Type     | Default                              |
+| -------- | ------------------------------------ |
+| percent   | 80% |
+
+#### 说明
+
+连接数高水位线告警，达到企业版证书允许实时在线连接数的百分比。超出水位线时会产生告警，不影响实际使用，
+- 发生告警后，可以参照[如何更新证书？](../faq/use-guide.md#怎样更新 EMQX license?)进行热更新。
+- 当连接数超过最大允许值时，新客户端会被拒绝连接，已连接的客户端不受影响。
+
+<br />
+### license.connection_low_watermark_alarm
+
+| Type     | Default                              |
+| -------- | ------------------------------------ |
+| percent   | 75% |
+
+#### 说明
+
+连接数低水位线告警，低于达到企业版证书允许实时在线连接数的百分比则解除告警。
+
+
+<br />
+
+{% endemqxee %}

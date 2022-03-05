@@ -18,38 +18,38 @@ ref:
 
 ## Enterprise
 
-- [What's the major difference between EMQ X enterprise and broker?](enterprise.md#what's-the-major-difference-between-emq-x-enterprise-and-broker)
-- [Does EMQ X provide consulting service?](enterprise.md#does-emq-x-provide-consulting-service)
+- [What's the major difference between EMQX enterprise and broker?](enterprise.md#what's-the-major-difference-between-emq-x-enterprise-and-broker)
+- [Does EMQX provide consulting service?](enterprise.md#does-emq-x-provide-consulting-service)
 
 
 
 ## Update
 
-- [How to update EMQ X license?](use-guide.md#how-to-update-emq-x-license)
+- [How to update EMQX license?](use-guide.md#how-to-update-emq-x-license)
 
 
 
 ## Protocol
 
-- [Can EMQ X support customized protocols? How to implement?](use-guide.md#can-emq-x-support-customized-protocols-how-to-implement)
+- [Can EMQX support customized protocols? How to implement?](use-guide.md#can-emq-x-support-customized-protocols-how-to-implement)
 
 
 
 ## Extends
 
-- [Can EMQ X support customized protocols? How to implement?](use-guide.md#can-emq-x-support-customized-protocols-how-to-implement)
+- [Can EMQX support customized protocols? How to implement?](use-guide.md#can-emq-x-support-customized-protocols-how-to-implement)
 
 
 
 ## Resource estimation
 
-- [How to estimate resource usage of EMQ X?](deployment.md#how-to-estimate-resource-usage-of-emq-x)
+- [How to estimate resource usage of EMQX?](deployment.md#how-to-estimate-resource-usage-of-emq-x)
 
 
 
 ## Auth
 
-- [EMQ X cannot connect to Mysql8.0](error.md#emq-x-cannot-connect-to-mysql8.0)
+- [EMQX cannot connect to Mysql8.0](error.md#emq-x-cannot-connect-to-mysql8.0)
 
 
 
@@ -69,19 +69,19 @@ ref:
 
 ## Message Queue
 
-- [What's mqueue? How to use mqueue in EMQ X?](faq.md#what's-mqueue-how-to-use-mqueue-in-emq-x)
+- [What's mqueue? How to use mqueue in EMQX?](faq.md#what's-mqueue-how-to-use-mqueue-in-emq-x)
 
 
 
 ## WebSocket
 
-- [What's WebSocket? When to use Websocket to connect EMQ X?](faq.md#what's-websocket-when-to-use-websocket-to-connect-emq-x)
+- [What's WebSocket? When to use Websocket to connect EMQX?](faq.md#what's-websocket-when-to-use-websocket-to-connect-emq-x)
 
 
 
 ## ACL
 
-- [I want to control topics can be used for specific clients, how to configure it in EMQ X?](use-guide.md#i-want-to-control-topics-can-be-used-for-specific-clients,-how-to-configure-it-in-emq-x)
+- [I want to control topics can be used for specific clients, how to configure it in EMQX?](use-guide.md#i-want-to-control-topics-can-be-used-for-specific-clients,-how-to-configure-it-in-emq-x)
 
 
 
@@ -99,7 +99,7 @@ ref:
 
 ## Rate Limit
 
-- [Can EMQ X support traffic control?](use-guide.md#can-emq-x-support-traffic-control)
+- [Can EMQX support traffic control?](use-guide.md#can-emq-x-support-traffic-control)
 
 
 
@@ -119,62 +119,62 @@ ref:
 
 - [When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?](deployment.md#when-i-was-executing-stress-test,-the-connection-number-and-throughput-are-lower-than-expected.-how-can-i-tune-the-system-to-make-full-use-of-it)
 - [My connections number is small, do I still need to deploy multiple nodes in production?](deployment.md#my-connections-number-is-small,-do-i-still-need-to-deploy-multiple-nodes-in-production)
-- [Use of ssl resumption session in EMQ X](use-guide.md#use-of-ssl-resumption-session-in-emq-x)
+- [Use of ssl resumption session in EMQX](use-guide.md#use-of-ssl-resumption-session-in-emq-x)
 
 
 
 ## Persistence
 
-- [Can I forward MQTT messages EMQ X to other MQTT broker, like RabbitMQ?](use-guide.md#can-i-forward-mqtt-messages-emq-x-to-other-mqtt-broker,-like-rabbitmq)
+- [Can I forward MQTT messages EMQX to other MQTT broker, like RabbitMQ?](use-guide.md#can-i-forward-mqtt-messages-emq-x-to-other-mqtt-broker,-like-rabbitmq)
 
 
 
 ## REAT API
 
-- [Can I disconnect an MQTT connection from EMQ X server?](use-guide.md#can-i-disconnect-an-mqtt-connection-from-emq-x-server)
+- [Can I disconnect an MQTT connection from EMQX server?](use-guide.md#can-i-disconnect-an-mqtt-connection-from-emq-x-server)
 
 
 
 ## Dashboard
 
-- [Can I disconnect an MQTT connection from EMQ X server?](use-guide.md#can-i-disconnect-an-mqtt-connection-from-emq-x-server)
+- [Can I disconnect an MQTT connection from EMQX server?](use-guide.md#can-i-disconnect-an-mqtt-connection-from-emq-x-server)
 
 
 
 ## Kafka
 
-- [Can EMQ X forward messages to Kafka?](use-guide.md#can-emq-x-forward-messages-to-kafka)
-- [I use Kafka bridge in EMQ X enterprise, when will the MQTT Ack packet sent back to client?  Is the time when message arriving EMQ X or after getting Ack message from Kafka?](use-guide.md#i-use-kafka-bridge-in-emq-x-enterprise,-when-will-the-mqtt-ack-packet-sent-back-to-client--is-the-time-when-message-arriving-emq-x-or-after-getting-ack-message-from-kafka)
+- [Can EMQX forward messages to Kafka?](use-guide.md#can-emq-x-forward-messages-to-kafka)
+- [I use Kafka bridge in EMQX enterprise, when will the MQTT Ack packet sent back to client?  Is the time when message arriving EMQX or after getting Ack message from Kafka?](use-guide.md#i-use-kafka-bridge-in-emq-x-enterprise,-when-will-the-mqtt-ack-packet-sent-back-to-client--is-the-time-when-message-arriving-emq-x-or-after-getting-ack-message-from-kafka)
 
 
 
 ## Bridge
 
-- [Can other MQTT broker (for example Mosquitto) forward messages to EMQ X?](use-guide.md#can-other-mqtt-broker-(for-example-mosquitto)-forward-messages-to-emq-x)
+- [Can other MQTT broker (for example Mosquitto) forward messages to EMQX?](use-guide.md#can-other-mqtt-broker-(for-example-mosquitto)-forward-messages-to-emq-x)
 
 
 
 ## Cluster
 
-- [Does EMQ X support cluster auto discovery? What clustering methods are supported?](use-guide.md#does-emq-x-support-cluster-auto-discovery-what-clustering-methods-are-supported)
+- [Does EMQX support cluster auto discovery? What clustering methods are supported?](use-guide.md#does-emq-x-support-cluster-auto-discovery-what-clustering-methods-are-supported)
 
 
 
 ## RabbitMQ
 
-- [Can I forward MQTT messages EMQ X to other MQTT broker, like RabbitMQ?](use-guide.md#can-i-forward-mqtt-messages-emq-x-to-other-mqtt-broker,-like-rabbitmq)
+- [Can I forward MQTT messages EMQX to other MQTT broker, like RabbitMQ?](use-guide.md#can-i-forward-mqtt-messages-emq-x-to-other-mqtt-broker,-like-rabbitmq)
 
 
 
 ## Cloud
 
-- [Can I forward messages from EMQ X to MQTT services hosted on public cloud?](use-guide.md#can-i-forward-messages-from-emq-x-to-mqtt-services-hosted-on-public-cloud)
+- [Can I forward messages from EMQX to MQTT services hosted on public cloud?](use-guide.md#can-i-forward-messages-from-emq-x-to-mqtt-services-hosted-on-public-cloud)
 
 
 
 ## Mosquitto
 
-- [Can other MQTT broker (for example Mosquitto) forward messages to EMQ X?](use-guide.md#can-other-mqtt-broker-(for-example-mosquitto)-forward-messages-to-emq-x)
+- [Can other MQTT broker (for example Mosquitto) forward messages to EMQX?](use-guide.md#can-other-mqtt-broker-(for-example-mosquitto)-forward-messages-to-emq-x)
 
 
 
@@ -187,19 +187,19 @@ ref:
 ## Debug
 
 - [When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?](deployment.md#when-i-was-executing-stress-test,-the-connection-number-and-throughput-are-lower-than-expected.-how-can-i-tune-the-system-to-make-full-use-of-it)
-- [How to troubleshoot if EMQ X can't start after installation?](use-guide.md#how-to-troubleshoot-if-emq-x-can't-start-after-installation)
+- [How to troubleshoot if EMQX can't start after installation?](use-guide.md#how-to-troubleshoot-if-emq-x-can't-start-after-installation)
 
 
 
 ## TLS
 
-- [Does EMQ X support encrypted connection? What is the recommended deployment?](use-guide.md#does-emq-x-support-encrypted-connection-what-is-the-recommended-deployment)
+- [Does EMQX support encrypted connection? What is the recommended deployment?](use-guide.md#does-emq-x-support-encrypted-connection-what-is-the-recommended-deployment)
 
 
 
 ## MySQL
 
-- [EMQ X cannot connect to Mysql8.0](error.md#emq-x-cannot-connect-to-mysql8.0)
+- [EMQX cannot connect to Mysql8.0](error.md#emq-x-cannot-connect-to-mysql8.0)
 
 
 
