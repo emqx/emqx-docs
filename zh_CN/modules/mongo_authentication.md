@@ -1,10 +1,10 @@
 # MongoDB 认证/访问控制
 
-MongoDB 认证/访问控制使⽤外部 MongoBD 数据库作为数据源，可以存储⼤量数据，同时⽅便与外部设备管理系统集成。
+MongoDB 认证/访问控制使⽤外部 MongoDB 数据库作为数据源，可以存储⼤量数据，同时⽅便与外部设备管理系统集成。
 
 ## 安装MongoDB
 
-打开MongoDB官网地址:https://www.mongodb.com/try/download/communit, 选择你需要的版本,这里我们用MacOS V4.4.1版本:
+打开 MongoDB 官网地址: https://www.mongodb.com/try/download/community, 选择你需要的版本,这里我们用macOS 4.4.1 版本:
 
 ![image-20200928112030369](./assets/auth_mongo1.png)
 

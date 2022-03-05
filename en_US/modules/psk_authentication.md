@@ -1,8 +1,8 @@
-# PSK Authentication
+# PSKFile Authentication
 
 ## PSK certification
 
-If you want to use PSK authentication, you need to comment out `listener.ssl.external.ciphers` in [TLS authentication](#auth-tls), and then configure `listener.ssl.external.psk_ciphers`:
+If you want to use PSKFile authentication, you need to comment out `listener.ssl.external.ciphers` in `emqx.conf`, and then configure `listener.ssl.external.psk_ciphers`:
 
 ```bash
 #listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,...
