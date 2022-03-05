@@ -120,7 +120,9 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang VM Tuning
 
-Tuning and optimize the Erlang VM in etc/emq.conf file: :
+
+Tuning and optimize the Erlang VM in etc/emqx.conf file
+
 
 ```bash
 ## Erlang Process Limit
@@ -133,10 +135,12 @@ node.max_ports = 2097152
 ## EMQX Broker Tuning
 
 Tune the acceptor pool, max_clients limit and socket options.
-
-For EMQX Community edition, find listeners config in `etc/emqx.conf`
-
-For EMQX Enterprise eidtion, find listeners config in `etc/listeners.conf`
+{% emqxce %}
+Find listeners config in `etc/emqx.conf`
+{% endemqxce %}
+{% emqxee %}
+Find listeners config in `etc/listeners.conf`
+{% endemqxee %}
 
 ```bash
 ## TCP Listener

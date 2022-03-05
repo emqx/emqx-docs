@@ -396,6 +396,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 3.  启动 EMQX Broker
 
     ```
+    $ cd ./emqx
     $ ./bin/emqx start
     emqx 4.0.0 is started successfully!
 
