@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 Timescale](../rule/backend_timescaledb.md)规则引擎中创建 保存数据到 Timescale
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 Timescale](../rule/backend_timescaledb.md)规则引擎中创建 保存数据到 Timescale
 
 :::
 
@@ -113,7 +113,7 @@ $2, $3)`。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -121,7 +121,7 @@ $2, $3)`。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
 **$payload 与 $<Number\>:**
 

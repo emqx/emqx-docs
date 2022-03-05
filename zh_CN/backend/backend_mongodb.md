@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQ X 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 MongoDB](../rule/backend_mongodb.md)规则引擎中创建 保存数据到 MongoDB
+EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前往使用[保存数据到 MongoDB](../rule/backend_mongodb.md)规则引擎中创建 保存数据到 MongoDB
 
 :::
 
@@ -407,7 +407,7 @@ backend.cassa.hook.message.acked.1       = {"topic": "#", "action": {"function":
 在 etc/plugins/emqx_backend_cassa.conf 中添加如下配置:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 cql 语句(支持多条 cql 语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 cql 语句(支持多条 cql 语句)
 backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 

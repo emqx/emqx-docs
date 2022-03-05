@@ -12,7 +12,7 @@ MySQL 认证/访问控制使⽤外部 MySQL 数据库作为数据源，可以存
 
 ## 创建模块
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200928161310952](./assets/modules.png)
 
@@ -50,7 +50,7 @@ CREATE TABLE `mqtt_user` (
 - salt：密码加盐字符串
 - is_superuser：是否是超级用户
 
-进行身份认证时，EMQ X 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
+进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
 
 ```sql
 select password from mqtt_user where username = '%u' limit 1
@@ -66,8 +66,8 @@ select password from mqtt_user where username = '%u' limit 1
 
 可以根据业务需要调整认证 SQL，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下认证 SQL 需要满足以下条件：
 
-1. 查询结果中必须包含 password 字段，EMQ X 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQ X 使用该字段作为 salt（盐）值
+1. 查询结果中必须包含 password 字段，EMQX 使用该字段与客户端密码比对
+2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQX 使用该字段作为 salt（盐）值
 3. 查询结果只能有一条，多条结果时只取第一条作为有效数据
 
 默认配置下示例数据如下：
@@ -86,6 +86,12 @@ VALUES
 
 :::
 
+#### 进阶
+
+默认表结构中，我们将 username 字段设为了唯一索引（UNIQUE），与默认的查询语句（`select password from mqtt_user where username = '%u' limit 1`）配合使用可以获得非常不错的查询性能。
+
+如果默认查询条件不能满足您的需要，例如你需要根据 Client ID 查询相应的 Password Hash 和 Salt，请确保将 Client ID 设置为索引；又或者您想要对 Username、Client ID 或者其他更多字段进行多条件查询，建议设置正确的单索引或是联合索引。总之，设置正确的表结构和查询语句，尽可能不要让索引失效而影响查询性能。
+
 ### 访问控制表
 
 ```sql
@@ -97,7 +103,10 @@ CREATE TABLE `mqtt_acl` (
   `clientid` varchar(100) DEFAULT NULL COMMENT 'ClientId',
   `access` int(2) NOT NULL COMMENT '1: subscribe, 2: publish, 3: pubsub',
   `topic` varchar(100) NOT NULL DEFAULT '' COMMENT 'Topic Filter',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX (ipaddr),
+  INDEX (username),
+  INDEX (clientid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
@@ -116,7 +125,7 @@ CREATE TABLE `mqtt_acl` (
 select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
 ```
 
-可以在认证 SQL 中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+可以在认证 SQL 中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：clientid
@@ -149,7 +158,7 @@ INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (
 select is_superuser from mqtt_user where username = '%u' limit 1
 ```
 
-你可以在 SQL 中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在 SQL 中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：clientid

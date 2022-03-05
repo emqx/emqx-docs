@@ -61,7 +61,7 @@ EMQ 文档使用 Markdown 格式编写，并使用 [Vuepress](https://vuepress.v
       "title": "Introduction",
       "children": [
         {
-          "title": "EMQ X Broker",
+          "title": "EMQX Broker",
           "path": "./"
         },
         {

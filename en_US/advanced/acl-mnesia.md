@@ -8,14 +8,14 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
 
 # Mnesia ACL
 
-Mnesia ACL uses the built-in Mnesia database of EMQ X to store ACL rules, which can store data and dynamically manage ACLs to facilitate integration with external device management systems.
+Mnesia ACL uses the built-in Mnesia database of EMQX to store ACL rules, which can store data and dynamically manage ACLs to facilitate integration with external device management systems.
 
 Plugin:
 
@@ -33,9 +33,10 @@ emqx_auth_mnesia
 	"clientid":"client1",
 	"topic":"testtopic/1",
 	"action":"pub",
-	"allow": true
+	"access": "allow"
 }
 ```
+
 
 Rule field description:
 
@@ -56,118 +57,326 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
 
 ### Add ACL rule
 
-API definition:
++ Clientid ACL：
 
-```bash
-# Request
-POST api/v4/emqx_acl
-{
-	"login":"emqx",
-	"topic":"Topic/A",
-	"action":"pub",
-	"allow": true
-}
+  ```bash
+  # Request
+  POST api/v4/acl
+  {
+    "clientid":"emqx_c",
+    "topic":"Topic/A",
+    "action":"pub",
+    "access": "allow"
+  }
 
-# Response
-{
-    "data": {
-        "emqx": "ok"
-    },
-    "code": 0
-}
-```
+  # Response
+  {
+      "data": {
+          "clientid":"emqx_c",
+          "topic":"Topic/A",
+          "action":"pub",
+          "access": "allow"
+          "result": "ok"
+      },
+      "code": 0
+  }
+  ```
++ Username ACL：
+
+  ```bash
+  # Request
+  POST api/v4/acl
+  {
+    "username":"emqx_u",
+    "topic":"Topic/A",
+    "action":"pub",
+    "access": "allow"
+  }
+
+  # Response
+  {
+      "data": {
+          "username":"emqx_u",
+          "topic":"Topic/A",
+          "action":"pub",
+          "access": "allow"
+          "result": "ok"
+      },
+      "code": 0
+  }
+  ```
++ $all ACL:
+
+  ```bash
+  # Request
+  POST api/v4/acl
+  {
+    "topic":"Topic/A",
+    "action":"pub",
+    "access": "allow"
+  }
+
+  # Response
+  {
+      "data": {
+          "all": "$all",
+          "topic":"Topic/A",
+          "action":"pub",
+          "access": "allow"
+          "result": "ok"
+      },
+      "code": 0
+  }
+  ```
 
 ### Add ACL rules in batch
 
-API definition:
-
 ```bash
 # Request
-POST api/v4/emqx_acl
+POST api/v4/acl
 [
   {
-	"login":"emqx_1",
-	"topic":"Topic/A",
-	"action":"pub",
-	"allow": true
-  },
-  {
-    "login":"emqx_2",
+    "clientid":"emqx_c_1",
     "topic":"Topic/A",
     "action":"pub",
-    "allow": true
+    "access": "allow"
+  },
+  {
+    "username":"emqx_u_1",
+    "topic":"Topic/A",
+    "action":"sub",
+    "access": "allow"
+  },
+  {
+    "topic":"Topic/+",
+    "action":"pubsub",
+    "access": "deny"
   }
 ]
 
 # Response
 {
-    "data": {
-        "emqx_2": "ok",
-        "emqx_1": "ok"
-    },
+    "data": [
+      {
+        "clientid":"emqx_c_1",
+        "topic":"Topic/A",
+        "action":"pub",
+        "access": "allow",
+        "result": "ok"
+      },
+      {
+        "username":"emqx_u_1",
+        "topic":"Topic/A",
+        "action":"pub",
+        "access": "allow"
+        "result": "ok"
+      },
+      {
+        "all": "$all",
+        "topic":"Topic/+",
+        "action":"pubsub",
+        "access": "deny"
+      },
+    ],
     "code": 0
 }
 ```
 
 ### Check the added ACL rules
 
-API definition:
++ Clientid ACL：
 
-```bash
-# Request
-GET api/v4/emqx_acl
+  ```bash
+  # Request
+  GET api/v4/acl/clientid
 
-# Response
-{
-  "meta": {
-    "page": 1,
-    "limit": 10,
-    "count": 1
-  },
-  "data": [
-    {
-      "topic": "Topic/A",
-      "login": "emqx",
-      "action": "pub"
-    }
-  ],
-  "code": 0
-}
-```
-
-### Check the specified ACL rule
-
-API definition:
-
-```bash
-# Request
-GET api/v4/emqx_acl/${login}
-
-# Response
-{
-    "data": {
-        "topic": "Topic/A",
-        "login": "emqx",
-        "allow": true,
-        "action": "pub"
+  # Response
+  {
+    "meta": {
+      "page": 1,
+      "limit": 10,
+      "count": 1
     },
+    "data": [
+      {
+        "clientid": "emqx_c",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "clientid": "emqx_c_1",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "clientid": "emqx_c_2",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      }
+    ],
     "code": 0
-}
-```
+  }
+  ```
+
++ Username ACL：
+
+  ```bash
+  # Request
+  GET api/v4/acl/username
+
+  # Response
+  {
+    "meta": {
+      "page": 1,
+      "limit": 10,
+      "count": 1
+    },
+    "data": [
+      {
+        "username": "emqx_u",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "username": "emqx_u_1",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "username": "emqx_u_2",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      }
+    ],
+    "code": 0
+  }
+  ```
+
++ $all ACL：
+
+  ```bash
+  # Request
+  GET api/v4/acl/$all
+
+  # Response
+  {
+    "meta": {
+      "page": 1,
+      "limit": 10,
+      "count": 1
+    },
+    "data": [
+      {
+        "all": "$all",
+        "topic": "Topic/A",
+        "action": "pub",
+        "access": "allow"
+      },
+      {
+        "all": "$all",
+        "topic": "Topic/+",
+        "action": "pubsub",
+        "access": "deny"
+      }
+    ],
+    "code": 0
+  }
+  ```
+
+### Check Username/Clientid specific ACL rules
+
++ Clientid ACL:
+
+  ```bash
+  # Request
+  GET api/v4/acl/clientid/emqx_c
+
+  # Response
+  {
+      "data": [
+        {
+          "topic": "Topic/A",
+          "clientid": "emqx_c",
+          "access": "allow",
+          "action": "pub"
+        },
+        {
+          "topic": "Topic/B",
+          "clientid": "emqx_c",
+          "access": "allow",
+          "action": "pub"
+        }
+      ],
+      "code": 0
+  }
+  ```
++ Username ACL:
+
+  ```bash
+  # Request
+  GET api/v4/acl/username/emqx_u
+
+  # Response
+  {
+      "data": [
+        {
+          "topic": "Topic/A",
+          "username": "emqx_u",
+          "access": "allow",
+          "action": "pub"
+        },
+        {
+          "topic": "Topic/B",
+          "username": "emqx_u",
+          "access": "allow",
+          "action": "pub"
+        }
+      ],
+      "code": 0
+  }
+  ```
 
 ### Delete ACL rule
 
-Delete the specified ACL rule：
++ Client ACL
 
-API definition:
+  ```bash
+  # Request
+  # Please note that ${topic} needs to be encoded with UrlEncode
+  DELETE api/v4/acl/clientid/${clientid}/topic/${topic}
 
-```bash
-# Request
-# Please note that ${topic} needs to be encoded with UrlEncode
-DELETE api/v4/emqx_acl/${login}/${topic}
+  # Response
+  {
+      "code": 0
+  }
+  ```
++ Username ACL
 
-# Response
-{
-    "code": 0
-}
-```
+  ```bash
+  # Request
+  # Please note that ${topic} needs to be encoded with UrlEncode
+  DELETE api/v4/acl/username/${username}/topic/${topic}
+
+  # Response
+  {
+      "code": 0
+  }
+  ```
++ $all ACL
+
+  ```bash
+  # Request
+  # Please note that ${topic} needs to be encoded with UrlEncode
+  DELETE api/v4/acl/$all/topic/${topic}
+
+  # Response
+  {
+      "code": 0
+  }
+  ```

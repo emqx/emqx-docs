@@ -31,9 +31,9 @@ To enable HTTP ACL, the following needs to be configured in `etc/plugins/emqx_au
 
 ## ACL Authentication principle
 
-EMQ X Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP statusCode .
+EMQX Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP statusCode .
 
- - Authorization denied: API returns 4xx status code
+ - Authorization denied: The API returns status codes other than 200
  - Authorization succeeded: API returns 200 status code
  - Authorization ignored: API returns 200 status code with the message body of ignore
 
@@ -62,7 +62,7 @@ auth.http.request.retry_interval = 1s
 auth.http.request.retry_backoff = 2.0
 ```
 
-When performing publish/subscribe authentication, EMQ X Broker will use the current client information and initiate a user-configured ACL authorization query request to query the client's authorization data on the HTTP server.
+When performing publish/subscribe authentication, EMQX Broker will use the current client information and initiate a user-configured ACL authorization query request to query the client's authorization data on the HTTP server.
 
 ## superuser Request
 
@@ -104,7 +104,7 @@ auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,
 
 When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; POST and PUT requests will submit the request parameters in the form of a common form (content-type is x-www-form-urlencoded).
 
-You can use the following placeholders in the authentication request, and EMQ X Broker will be automatically populated with client information when requested:
+You can use the following placeholders in the authentication request, and EMQX Broker will be automatically populated with client information when requested:
 
 - %u:User name
 - %c:Client ID
@@ -115,7 +115,7 @@ You can use the following placeholders in the authentication request, and EMQ X 
 - %C:TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
 - %d:TLS certificate subject, valid only for TLS connections
 
-::: danger 
+::: warning 
 The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
 
 :::

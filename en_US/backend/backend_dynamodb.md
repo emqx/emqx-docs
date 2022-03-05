@@ -2,7 +2,7 @@
 
 ::: tip
 
-After EMQ X version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to DynamoDB](../rule/backend_dynamodb.md) to setup Save data to DynamoDB in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Save data to DynamoDB](../rule/backend_dynamodb.md) to setup Save data to DynamoDB in rule engine.
 
 :::
 

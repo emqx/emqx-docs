@@ -1,6 +1,6 @@
 # Multi-language extension-hook
 
-In EMQ X Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extension Hook** module allows the use of other programming languages ​​(such as Python, Java, etc.) to directly mount hooks to the EMQ X system to receive and process the hook events of the EMQ X system to achieve the expansion and customization of EMQ X purpose. For example, users can customize using other programming languages:
+In EMQX Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extension Hook** module allows the use of other programming languages ​​(such as Python, Java, etc.) to directly mount hooks to the EMQX system to receive and process the hook events of the EMQX system to achieve the expansion and customization of EMQX purpose. For example, users can customize using other programming languages:
 
 -Authentication and authorization of client access
 -ACL authentication for publish/subscribe
@@ -14,7 +14,7 @@ In EMQ X Enterprise 4.2.0, we provide multi-language extension support. Among th
 The architecture is as follows:
 
 ```
-  EMQ X
+  EMQX
 +========================+                 +========+==========+
 |    ExHook              |                 |        |          |
 |   +----------------+   |      gRPC       | gRPC   |  User's  |
@@ -24,9 +24,9 @@ The architecture is as follows:
 +========================+                 +========+==========+
 ```
 
-It shows: The ExHook module in EMQ X acts as a gRPC client, sending all hook events in the system to the user's gRPC server.
+It shows: The ExHook module in EMQX acts as a gRPC client, sending all hook events in the system to the user's gRPC server.
 
-Consistent with EMQ X's native hook, it also supports chained calculation and return:
+Consistent with EMQX's native hook, it also supports chained calculation and return:
 
 ![chain_of_responsiblity](../advanced/assets/chain_of_responsiblity.png)
 
@@ -93,7 +93,7 @@ The HookProvider part:
 Hook event part:
 
 -Methods prefixed with ʻOnClient*`, ʻOnSession*`, ʻOnMessage*` correspond to the methods in [hooks](../advanced/hooks.md) one-to-one. They have the same calling timing and similar parameter lists.
--Only ʻOnClientAuthenticate`, ʻOnClientCheckAcl`, ʻOnMessagePublish` are allowed to carry the return value to the EMQ X system, other callbacks are not supported.
+-Only ʻOnClientAuthenticate`, ʻOnClientCheckAcl`, ʻOnMessagePublish` are allowed to carry the return value to the EMQX system, other callbacks are not supported.
 
 For details of the interface and parameter data structure, please refer to: [exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
@@ -108,7 +108,7 @@ The steps are as follows:
 2. Use the gRPC framework of the corresponding programming language to generate the gRPC server code of ʻexhook.proto`.
 3. Implement the interface defined in exhook.proto as needed.
 
-After the development is completed, the service needs to be deployed to a server that can communicate with EMQ X, and the port is open.
+After the development is completed, the service needs to be deployed to a server that can communicate with EMQX, and the port is open.
 
 The gRPC framework of each language can refer to: [grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
@@ -117,7 +117,7 @@ The gRPC framework of each language can refer to: [grpc-ecosystem/awesome-grpc](
 
 After successfully deploying the `HookProvider` service, you can open the multilingual hook extension module through the dashboard page and configure its service address to use it normally.
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![Modules](./assets/modules.png)
 

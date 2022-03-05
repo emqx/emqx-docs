@@ -5,7 +5,7 @@ The Pulsar consumer group uses an external Pulsar as a message queue, which can 
 Set up the Pulsar environment, taking MacOS X as an example:
 
 ```bash
-$ wget http://apache.mirrors.hoobly.com/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
+$ wget https://archive.apache.org/dist/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
 
 $ tar xvfz apache-pulsar-2.3.2-bin.tar.gz
 
@@ -22,7 +22,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 
 ## Create module
 
-Open [EMQ X Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
 ![](./assets/modules.png)
 
@@ -46,7 +46,7 @@ Fill in the relevant parameters:
 
 6). Pulsar flow control threshold (Pulsar flow control threshold, configure how many messages Pulsar sends to consumers and block Pulsar Consumer)
 
-7). EMQ X reset flow control threshold percentage (Pulsar flow control threshold reset percentage. This configuration allows consumers to reset the `Pulsar flow control threshold` in advance after processing a certain number of messages. For example, `Pulsar flow control threshold `Is 1000, `Threshold reset percentage` is 80%, then reset)
+7). EMQX reset flow control threshold percentage (Pulsar flow control threshold reset percentage. This configuration allows consumers to reset the `Pulsar flow control threshold` in advance after processing a certain number of messages. For example, `Pulsar flow control threshold `Is 1000, `Threshold reset percentage` is 80%, then reset)
 
 
 After clicking Add, the module is added:

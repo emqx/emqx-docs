@@ -33,19 +33,9 @@ CREATE TABLE `mqtt_msg` (
   PRIMARY KEY (`id`),
   INDEX topic_index(`id`, `topic`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
-CREATE TABLE `mqtt_acked` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `clientid` varchar(64) DEFAULT NULL,
-  `topic` varchar(180) DEFAULT NULL,
-  `mid` int(11) unsigned DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mqtt_acked_key` (`clientid`,`topic`),
-  INDEX topic_index(`id`, `topic`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 ```
 
-::: danger
+::: tip
 
 消息表结构不能修改，请使用上面SQL语句创建
 
@@ -53,7 +43,7 @@ CREATE TABLE `mqtt_acked` (
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的“规则”选项卡。
 
 然后填写规则 SQL:
 

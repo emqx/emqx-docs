@@ -63,13 +63,15 @@ redis> hgetall mqtt_user:emqx
 默认配置下示例数据如下：
 
 ```bash
-HMSET mqtt_user:emqx password public salt wivwiv
+HMSET mqtt_user:emqx
+  password public
+  salt wivwiv
 ```
 
 启用 Redis 认证后，你可以通过用户名： emqx，密码：public 连接。
 
 
-::: tip 
+::: tip
 这是默认配置使用的数据结构，熟悉该插件的使用后你可以使用任何满足条件的数据结构进行认证。
 :::
 
@@ -87,7 +89,7 @@ auth.redis.password_hash = plain
 
 ## 认证查询命令（auth query cmd）
 
-进行身份认证时，EMQ X 将使用当前客户端信息填充并执行用户配置的认证查询命令，查询出该客户端在 Redis 中的认证数据。
+进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证查询命令，查询出该客户端在 Redis 中的认证数据。
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -95,7 +97,7 @@ auth.redis.password_hash = plain
 auth.redis.auth_cmd = HMGET mqtt_user:%u password
 ```
 
-你可以在命令中使用以下占位符，执行时 EMQ X 将自动填充为客户端信息：
+你可以在命令中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
 
 - %u：用户名
 - %c：Client ID
@@ -105,8 +107,5 @@ auth.redis.auth_cmd = HMGET mqtt_user:%u password
 
 你可以根据业务需要调整认证查询命令，使用任意 [Redis 支持的命令](http://redisdoc.com/index.html)，但是任何情况下认证查询命令需要满足以下条件：
 
-1. 查询结果中第一个数据必须为 password，EMQ X 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中第二个数据必须是 salt 字段，EMQ X 使用该字段作为 salt（盐）值
-
-
-
+1. 查询结果中第一个数据必须为 password，EMQX 使用该字段与客户端密码比对
+2. 如果启用了加盐配置，查询结果中第二个数据必须是 salt 字段，EMQX 使用该字段作为 salt（盐）值

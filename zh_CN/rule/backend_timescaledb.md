@@ -38,16 +38,15 @@ SELECT create_hypertable('conditions', 'time');
 
 创建规则:
 
-打开 [EMQ X Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
 
 ```sql
 SELECT
-    payload as p,
-    p.temp as temp,
-    p.humidity as humidity,
-    p.location as location
+    payload.temp as temp,
+    payload.humidity as humidity,
+    payload.location as location
 FROM
     "#"
 ```

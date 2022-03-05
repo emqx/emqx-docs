@@ -15,30 +15,41 @@ ref:
 
 # Business Service
 
-## What's the major difference between EMQ X enterprise and broker?
+## What's the major difference between EMQX enterprise and broker?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 
 
-EMQ X Enterprise (enterprise version) is based on Broker (open source version), it includes all of the features of open source version.  Comparing to open source version, it has following difference:
+EMQX Enterprise is based on the community edition, it includes all of the features from comunity edition. More features are added:
 
-- Concurrent connection level: the stable concurrent connection level for open source version is 100k, while enterprise version is 1M.
+
 - Data persistence: Enterprise version supports to persist data to several kinds of databases, includes the popular relational database, such as MySQL, PostgreSQL; Memory database, such as Redis; Non-SQL DB, such as MongoDB.
-- Kafka bridge: Forward MQTT message to Kafka clusters through internal bridge plugins, application can consume Kafka message to implement the streaming data process.
-- RabbitMQ bridge: Support to forward MQTT message to RabbitMQ, application can consume RabbitMQ message to integrate with 3rd party system.
-- System monitoring (EMQ X Control Center)
 
-  - EMQ X cluster monitor: Include statistics of connections, topics, message & sessions.
+- Kafka bridge: Forward MQTT message to Kafka clusters through internal bridge plugins, application can consume Kafka message to implement the streaming data process.
+
+- RabbitMQ bridge: Forward MQTT message to RabbitMQ, application can consume RabbitMQ message to integrate with 3rd party system.
+
+- More rule-engine Integrations: Various data integration with databases and streaming platforms, to name a few
+
+  - Streaming platforms: Kafka, Pulsar, RocketMQ (or AMQP in general), SAP Event Mesh,
+
+  - Relational Databases: MySQL, PostgreSQL, Oracle, SQL Server,
+
+  - NoSQL Databases: MongoDB, redis, DynamoDB, Cassandra, ClickHouse
+
+  - Time-eries Databases: InfluxDB, TimescaleDB, OpenTSDB
+
+- Runtime Config Change: Configurations which can be set on-the-fly without restarting the service can be changed from dashboard UI, while the community edition always require restarts.
+
+- System monitoring (EMQX Control Center)
+
+  - EMQX cluster monitor: Including statistics of connections, topics, message & sessions.
 
   - Erlang VM monitor: Erlang process, threads, memory, distributed database & distributed locks etc.
 
   - Host monitor: Measurements of CPU, memory, disk, network and operating system.
-- security: By configuration of TLS, DTLS connections and certifications to get higher secured connections.
 
-
-
-
-## Does EMQ X provide consulting service?
+## Does EMQX provide consulting service?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 

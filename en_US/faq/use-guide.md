@@ -14,21 +14,21 @@ ref:
 ---
 
 # Use Guide
-## How to use EMQ X?
+## How to use EMQX?
 
 
-EMQ X Broker is free and it can be download at [https://www.emqx.io/downloads#broker](https://www.emqx.io/downloads#enterprise#broker).
+EMQX Broker is free and it can be download at [https://www.emqx.com/en/downloads?product=broker](https://www.emqx.com/en/downloads?product=broker).
 
-EMQ X Enterprise can be downloaded and evaluated for free.  You can download it from [https://www.emqx.io/downloads#enterprise](https://www.emqx.io/downloads#enterprise), and then apply trial license at [https://www.emqx.io/licenses#trial](https://www.emqx.io/licenses#trial).
+EMQX Enterprise can be downloaded and evaluated for free.  You can download it from [https://www.emqx.com/en/downloads?product=enterprise](https://www.emqx.com/en/downloads?product=enterprise), and then apply trial license at [https://www.emqx.com/en/licenses#trial](https://www.emqx.com/en/licenses#trial).
 
-Also you can use the EMQ X enterprise version through public cloud service.
+Also you can use the EMQX enterprise version through public cloud service.
 
 - [AWS](https://aws.amazon.com/marketplace/pp/B07N2ZFVLX?qid=1552872864456&)
 
 
 
 
-## How to update EMQ X license?
+## How to update EMQX license?
 
 **Tags:** [*Update*](tags.md#update)
 
@@ -64,7 +64,7 @@ docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
 
 
 
-## Can EMQ X support customized protocols? How to implement?
+## Can EMQX support customized protocols? How to implement?
 
 **Tags:** [*Protocol*](tags.md#protocol)  [*Extends*](tags.md#extends)
 
@@ -79,7 +79,7 @@ TODO...
 **Tags:** [*WebHook*](tags.md#webhook)  [*System Topic*](tags.md#system-topic)
 
 
-EMQ X supports to capture device online and offline events through below 3 approaches,
+EMQX supports to capture device online and offline events through below 3 approaches,
 
 - Web Hook
 
@@ -95,14 +95,14 @@ EMQ X supports to capture device online and offline events through below 3 appro
 
 
 
-## I want to control topics can be used for specific clients, how to configure it in EMQ X?
+## I want to control topics can be used for specific clients, how to configure it in EMQX?
 
 **Tags:** [*ACL*](tags.md#acl)  [*Pub/Sub*](tags.md#pub-sub)
 
 
-EMQ X can constrain clients used topics to realize device access controls. To use this feature, ACL (Access Control List) should be enabled, disable anonymous access and set `acl_nomatch` to 'deny' (For the convenience of debugging, the last 2 options are enabled by default, and please close them).
+EMQX can constrain clients used topics to realize device access controls. To use this feature, ACL (Access Control List) should be enabled, disable anonymous access and set `acl_nomatch` to 'deny' (For the convenience of debugging, the last 2 options are enabled by default, and please close them).
 
-ACL can be configured in configuration file, or backend databases. Below is one of sample line for ACL control file, the meaning is user 'dashboard' can subscribe '$SYS/#' topic. ACL configuration in backend databases is similar, refer to EMQ X document for more detailed configurations.
+ACL can be configured in configuration file, or backend databases. Below is one of sample line for ACL control file, the meaning is user 'dashboard' can subscribe '$SYS/#' topic. ACL configuration in backend databases is similar, refer to EMQX document for more detailed configurations.
 
 ```
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
@@ -111,12 +111,12 @@ ACL can be configured in configuration file, or backend databases. Below is one 
 
 
 
-## Can EMQ X support traffic control?
+## Can EMQX support traffic control?
 
 **Tags:** [*Rate Limit*](tags.md#rate-limit)
 
 
-Yes. Currently EMQ X supports to control connection rate and message publish rate. Refer to below for sample configuration.
+Yes. Currently EMQX supports to control connection rate and message publish rate. Refer to below for sample configuration.
 
 ```
 ## Value: Number
@@ -129,31 +129,31 @@ listener.tcp.external.rate_limit = 1024,4096
 
 
 
-## How does the EMQ X achieve high concurrency and high availability?
+## How does the EMQX achieve high concurrency and high availability?
 
 **Tags:** [*Performance*](tags.md#performance)
 
 
-High concurrency and availability are design goals of EMQ X. To achieve these goals, several technologies are applied:
+High concurrency and availability are design goals of EMQX. To achieve these goals, several technologies are applied:
 
 - Making maximum use of the soft-realtime, high concurrent and fault-tolerant Erlang/OTP platform;
 - Full asynchronous architecture;
 - Layered design of connection, session, route and cluster;
 - Separated messaging and control panel;
 
-With the well design and implementation, a single EMQ X cluster can handle million level connections.
+With the well design and implementation, a single EMQX cluster can handle million level connections.
 
-EMQ X supports clustering. The EMQ X performance can be scale-out with the increased number of nodes in cluster, and the MQTT service will not be interrupted when a single node is down.
-
-
+EMQX supports clustering. The EMQX performance can be scale-out with the increased number of nodes in cluster, and the MQTT service will not be interrupted when a single node is down.
 
 
-## Can EMQ X store messages to database?
+
+
+## Can EMQX store messages to database?
 
 **Tags:** [*Persistence*](tags.md#persistence)
 
 
-The EMQ X Enterprise edition supports data persistence. Supported databases are:
+The EMQX Enterprise edition supports data persistence. Supported databases are:
 
 - Redis
 - MongoDB
@@ -164,14 +164,14 @@ The EMQ X Enterprise edition supports data persistence. Supported databases are:
 
 
 
-## Can I disconnect an MQTT connection from EMQ X server?
+## Can I disconnect an MQTT connection from EMQX server?
 
 **Tags:** [*REAT API*](tags.md#reat-api)  [*Dashboard*](tags.md#dashboard)
 
 
-Yes. You can do it by invoking REST API provied by EMQ X, but the implementation is different in EMQ X 2.x and 3.x: 
+Yes. You can do it by invoking REST API provied by EMQX, but the implementation is different in EMQX 2.x and 3.x: 
 
-- EMQ X customized protocol in 2.x versions.
+- EMQX customized protocol in 2.x versions.
 - Follow the process defined in MQTT 5.0 protocol after version 3.0. 
 
 Refer to below for API invocation: 
@@ -179,7 +179,7 @@ Refer to below for API invocation:
 ```html
 HTTP Method: DELETE 
 URL：api/[v2|v3]/clients/{clientid} 
-<!--Please notice the 2nd section in URL, and use the correct version number according to your EMQ X version. -->
+<!--Please notice the 2nd section in URL, and use the correct version number according to your EMQX version. -->
 
 Returned response: 
 {
@@ -191,17 +191,17 @@ Returned response:
 
 
 
-## Can EMQ X forward messages to Kafka?
+## Can EMQX forward messages to Kafka?
 
 **Tags:** [*Kafka*](tags.md#kafka)  [*Bridge*](tags.md#bridge)  [*Persistence*](tags.md#persistence)
 
 
-The EMQ X Enterprise edition integrates a Kafka bridge, it can bridge data to Kafka.
+The EMQX Enterprise edition integrates a Kafka bridge, it can bridge data to Kafka.
 
 
 
 
-## I use Kafka bridge in EMQ X enterprise, when will the MQTT Ack packet sent back to client?  Is the time when message arriving EMQ X or after getting Ack message from Kafka?
+## I use Kafka bridge in EMQX enterprise, when will the MQTT Ack packet sent back to client?  Is the time when message arriving EMQX or after getting Ack message from Kafka?
 
 **Tags:** [*Kafka*](tags.md#kafka)
 
@@ -214,24 +214,24 @@ bridge.kafka.produce = sync
 ```
 
 - Sync: MQTT Ack packet will be sent back to client after receiving Ack from Kafka.
-- Async: MQTT Ack packet will be sent back to client right after EMQ X receiving the message, and EMQ X will not wait the Ack returned from Kafka.
+- Async: MQTT Ack packet will be sent back to client right after EMQX receiving the message, and EMQX will not wait the Ack returned from Kafka.
 
-If the backend Kafka server is not available, then the message will be accumulated in EMQ X broker.
+If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
 
-- The message will be cached in memory before EMQ X 2.4.3 version, if the memeory is exhausted, then the EMQ X server will be down. 
-- The message will be cached in disk after EMQ X 2.4.3 version, message will probably lost if the disk is full. 
+- The message will be cached in memory before EMQX 2.4.3 version, if the memeory is exhausted, then the EMQX server will be down. 
+- The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full. 
 
 So we suggest you to closely monitor Kafka server, and recover Kafka service as soon as possible when it has any questions.
 
 
 
 
-## Does EMQ X support cluster auto discovery? What clustering methods are supported?
+## Does EMQX support cluster auto discovery? What clustering methods are supported?
 
 **Tags:** [*Cluster*](tags.md#cluster)
 
 
-EMQ X supports cluster auto discovery. EMQ X clustering can be done manually or automatically.
+EMQX supports cluster auto discovery. EMQX clustering can be done manually or automatically.
 
 Currently supported clustering methods:
 
@@ -245,32 +245,32 @@ Currently supported clustering methods:
 
 
 
-## Can I forward MQTT messages EMQ X to other MQTT broker, like RabbitMQ?
+## Can I forward MQTT messages EMQX to other MQTT broker, like RabbitMQ?
 
 **Tags:** [*RabbitMQ*](tags.md#rabbitmq)  [*Bridge*](tags.md#bridge)  [*Persistence*](tags.md#persistence)
 
 
-EMQ X support forward messages to other MQTT broker. Using MQTT bridge, EMQ X can forward messages of interested topics to other broker.
+EMQX support forward messages to other MQTT broker. Using MQTT bridge, EMQX can forward messages of interested topics to other broker.
 
 
 
 
-## Can I forward messages from EMQ X to MQTT services hosted on public cloud?
+## Can I forward messages from EMQX to MQTT services hosted on public cloud?
 
 **Tags:** [*Bridge*](tags.md#bridge)  [*Cloud*](tags.md#cloud)
 
 
-EMQ X can forward messages to IoT Hub hosted on public cloud, this is a feature of EMQ X bridge.
+EMQX can forward messages to IoT Hub hosted on public cloud, this is a feature of EMQX bridge.
 
 
 
 
-## Can other MQTT broker (for example Mosquitto) forward messages to EMQ X?
+## Can other MQTT broker (for example Mosquitto) forward messages to EMQX?
 
 **Tags:** [*Mosquitto*](tags.md#mosquitto)  [*Bridge*](tags.md#bridge)
 
 
-EMQ X can receive messages from other broker, but it depends also on the implementation of other brokers, Mosquitto can forward messages to EMQ X, please refer to [TODO](https://www.emqx.io)。
+EMQX can receive messages from other broker, but it depends also on the implementation of other brokers, Mosquitto can forward messages to EMQX, please refer to [TODO](https://www.emqx.io)。
 
 
 
@@ -280,7 +280,7 @@ EMQ X can receive messages from other broker, but it depends also on the impleme
 **Tags:** [*Trace*](tags.md#trace)
 
 
-EMQ X support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx_ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to EMQ X document.
+EMQX support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx_ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to EMQX document.
 
 ```
 ./bin/emqx_ctl trace topic "topic" "trace_topic.log"
@@ -289,17 +289,17 @@ EMQ X support the tracing of messages from particular client or under particular
 
 
 
-## Does EMQ X support encrypted connection? What is the recommended deployment?
+## Does EMQX support encrypted connection? What is the recommended deployment?
 
 **Tags:** [*TLS*](tags.md#tls)
 
 
-EMQ X Support SSL/TLS. In production, we recommend to terminate the TLS connection by Load Balancer. By this way, the connection between device and server(load balancer) use secured connection, and connection between load balancer and EMQ X nodes use general TCP connection.
+EMQX Support SSL/TLS. In production, we recommend to terminate the TLS connection by Load Balancer. By this way, the connection between device and server(load balancer) use secured connection, and connection between load balancer and EMQX nodes use general TCP connection.
 
 
 
 
-## How to troubleshoot if EMQ X can't start after installation?
+## How to troubleshoot if EMQX can't start after installation?
 
 **Tags:** [*Debug*](tags.md#debug)
 
@@ -364,7 +364,7 @@ Execute `$ emqx console` to view the output.
   Start mqtt:ws listener on 0.0.0.0:8083 successfully.
   Start mqtt:ssl listener on 0.0.0.0:8883 successfully.
   Start mqtt:wss listener on 0.0.0.0:8084 successfully.
-  EMQ X Broker 3.2.1 is running now!
+  EMQX Broker 3.2.1 is running now!
   "The license certificate is expired!"
   2019-07-23 05:52:51.355 [critical] The license certificate is expired!
   2019-07-23 05:52:51.355 [critical] The license certificate is expired! System shutdown!
@@ -377,12 +377,12 @@ Execute `$ emqx console` to view the output.
   [os_mon] cpu supervisor port (cpu_sup): Erlang has closed
 ```
 
-  **Solution:** Go to [emqx.io](https://emqx.io) to apply for a license or install the open source version of EMQ X Broker
+  **Solution:** Go to [emqx.io](https://emqx.io) to apply for a license or install the open source version of EMQX Broker
 
 
 
 
-## Use of ssl resumption session in EMQ X
+## Use of ssl resumption session in EMQX
 
 **Tags:** [*Performance*](tags.md#performance)
 
@@ -407,7 +407,7 @@ Client disconnect link error code list:
 
 - `normal`： MQTT client is normally disconnected
 
-- `einval`：EMQ X wants to send a message to the client, but the Socket has been disconnected
+- `einval`：EMQX wants to send a message to the client, but the Socket has been disconnected
 
 - `function_clause`：MQTT packet format error
 
