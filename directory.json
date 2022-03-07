@@ -1,4 +1,486 @@
 {
+  "en": [
+    {
+      "title": "Introduction",
+      "path": "./"
+    },
+    {
+      "title": "Getting Started",
+      "children": [
+        {
+          "title": "Getting Started",
+          "path": "getting-started/getting-started"
+        },
+        {
+          "title": "Installation",
+          "path": "getting-started/install"
+        },
+        {
+          "title": "Start EMQX",
+          "path": "getting-started/start"
+        },
+        {
+          "title": "Basic Command",
+          "path": "getting-started/command-line"
+        },
+        {
+          "title": "Create Cluster",
+          "path": "getting-started/cluster"
+        },
+        {
+          "title": "Directory",
+          "path": "getting-started/directory"
+        },
+        {
+          "title": "Configuration",
+          "path": "getting-started/config"
+        },
+        {
+          "title": "Log & Trace",
+          "path": "getting-started/log"
+        },
+        {
+          "title": "Dashboard",
+          "path": "getting-started/dashboard"
+        }
+      ]
+    },
+    {
+      "title": "User Guide",
+      "children": [
+        {
+          "title": "Retained",
+          "path": "advanced/retained"
+        },
+        {
+          "title": "Shared subscription",
+          "path": "advanced/shared-subscriptions"
+        },
+        {
+          "title": "Delay publish",
+          "path": "advanced/delay-publish"
+        },
+        {
+          "title": "Proxy Subscriptions",
+          "path": "advanced/proxy-subscriptions"
+        },
+        {
+          "title": "Bridge",
+          "path": "advanced/bridge"
+        },
+        {
+          "title": "Topic Rewrite",
+          "path": "advanced/topic-rewrite"
+        },
+        {
+          "title": "$SYS - System Topic",
+          "path": "advanced/system-topic"
+        },
+        {
+          "title": "Blacklist",
+          "path": "advanced/blacklist"
+        },
+        {
+          "title": "WebHook",
+          "path": "advanced/webhook"
+        },
+        {
+          "title": "Distributed Cluster",
+          "path": "advanced/cluster"
+        },
+        {
+          "title": "Hook",
+          "path": "advanced/hooks"
+        },
+        {
+          "title": "Metrics",
+          "path": "advanced/metrics-and-stats"
+        },
+        {
+          "title": "Rate limit",
+          "path": "advanced/rate-limit"
+        },
+        {
+          "title": "Inflight and Queue",
+          "path": "advanced/inflight-window-and-message-queue"
+        },
+        {
+          "title": "Message retransmission",
+          "path": "advanced/retransmission"
+        },
+        {
+          "title": "Alarm",
+          "path": "advanced/alarms"
+        },
+        {
+          "title": "Import/Export Data",
+          "path": "advanced/data-import-and-export"
+        },
+        {
+          "title": "Config and Data Backup & Restore",
+          "path": "advanced/config-and-data-backup-restore"
+        }
+      ]
+    },
+    {
+      "title": "Authentication",
+      "children": [
+        {
+          "title": "Introduction",
+          "path": "advanced/auth"
+        },
+        {
+          "title": "Mnesia",
+          "path": "advanced/auth-mnesia"
+        },
+        {
+          "title": "HTTP",
+          "path": "advanced/auth-http"
+        },
+        {
+          "title": "JWT",
+          "path": "advanced/auth-jwt"
+        },
+        {
+          "title": "LDAP",
+          "path": "advanced/auth-ldap"
+        },
+        {
+          "title": "MySQL",
+          "path": "advanced/auth-mysql"
+        },
+        {
+          "title": "PostgreSQL",
+          "path": "advanced/auth-postgresql"
+        },
+        {
+          "title": "Redis",
+          "path": "advanced/auth-redis"
+        },
+        {
+          "title": "MongoDB",
+          "path": "advanced/auth-mongodb"
+        }
+      ]
+    },
+    {
+      "title": "ACL",
+      "children": [
+        {
+          "title": "Introduction",
+          "path": "advanced/acl"
+        },
+        {
+          "title": "Internal ACL",
+          "path": "advanced/acl-file"
+        },
+        {
+          "title": "Mnesia ACL",
+          "path": "advanced/acl-mnesia"
+        },
+        {
+          "title": "HTTP ACL",
+          "path": "advanced/acl-http"
+        },
+        {
+          "title": "MySQL ACL",
+          "path": "advanced/acl-mysql"
+        },
+        {
+          "title": "PostgreSQL ACL",
+          "path": "advanced/acl-postgres"
+        },
+        {
+          "title": "Redis ACL",
+          "path": "advanced/acl-redis"
+        },
+        {
+          "title": "MongoDB ACL",
+          "path": "advanced/acl-mongodb"
+        }
+      ]
+    },
+    {
+      "title": "Plugin",
+      "path": "advanced/plugins"
+    },
+    {
+      "title": "Rule Engine",
+      "children": [
+        {
+          "title": "Rule Engine",
+          "path": "rule/rule-engine"
+        },
+        {
+          "title": "Rule engine SQL statement",
+          "path": "rule/rule-engine_grammar_and_examples"
+        },
+        {
+          "title": "Available fields in rule engine SQL statements",
+          "path": "rule/rule-engine_field"
+        },
+        {
+          "title": "Functions available in SQL statements",
+          "path": "rule/rule-engine_buildin_function"
+        },
+        {
+          "title": "Create rules",
+          "path": "rule/rule-create"
+        },
+        {
+          "title": "Update resource",
+          "path": "rule/how_to_update_resources"
+        },
+        {
+          "title": "Create Inspect Rules",
+          "path": "rule/rule-example"
+        },
+        {
+          "title": "EMQX Bridges",
+          "path": "rule/bridge_emqx"
+        },
+        {
+          "title": "MQTT Broker Bridges",
+          "path": "rule/bridge_mqtt"
+        }
+      ]
+    },
+    {
+      "title": "Backend",
+      "path": "backend/backend"
+    },
+    {
+      "title": "Bridges",
+      "children": [
+        {
+          "title": "Bridge Introduction",
+          "path": "bridge/bridge"
+        },
+        {
+          "title": "MQTT Bridge",
+          "path": "bridge/bridge-mqtt"
+        },
+        {
+          "title": "RPC Bridge",
+          "path": "bridge/bridge-rpc"
+        }
+      ]
+    },
+    {
+      "title": "Management and Ops",
+      "children": [
+        {
+          "title": "Device management",
+          "path": "tutorial/device-management"
+        },
+        {
+          "title": "System tuning",
+          "path": "tutorial/tune"
+        },
+        {
+          "title": "Production deployment",
+          "path": "tutorial/deploy"
+        },
+        {
+          "title": "Prometheus Monitoring",
+          "path": "tutorial/prometheus"
+        },
+        {
+          "title": "Benchmark",
+          "path": "tutorial/benchmark"
+        },
+        {
+          "title": "Online Tracer",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "Slow Subscriber Statistics",
+          "path": "modules/slow_subscribers_statistics"
+        }
+      ]
+    },
+    {
+      "title": "HTTP API",
+      "path": "advanced/http-api"
+    },
+    {
+      "title": "Configuration",
+      "children": [
+        {
+          "title": "Configuration",
+          "path": "configuration/configuration"
+        },
+        {
+          "title": "Environment variables",
+          "path": "configuration/environment-variable"
+        }
+      ]
+    },
+    {
+      "title": "Command",
+      "children": [
+        {
+          "title": "CLI",
+          "path": "advanced/cli"
+        }
+      ]
+    },
+    {
+      "title": "Release Hot Upgrade",
+      "path": "advanced/relup"
+    },
+    {
+       "title": "Apply Patches",
+       "path": "advanced/patches"
+    },
+    {
+      "title": "Multi-language Extension",
+      "children": [
+        {
+          "title": "Introduction",
+          "path": "advanced/lang"
+        },
+        {
+          "title": "Extension Hook",
+          "path": "advanced/lang-exhook"
+        },
+        {
+          "title": "Extension Proto",
+          "path": "advanced/lang-exproto"
+        },
+        {
+          "title": "Lua",
+          "path": "advanced/lang-lua"
+        }
+      ]
+    },
+
+    {
+      "title": "SDK & Tools",
+      "children": [
+        {
+          "title": "MQTT Client Library",
+          "path": "development/client"
+        },
+        {
+          "title": "MQTT C Client Library",
+          "path": "development/c"
+        },
+        {
+          "title": "MQTT Java Client Library",
+          "path": "development/java"
+        },
+        {
+          "title": "MQTT Go Client Library",
+          "path": "development/go"
+        },
+        {
+          "title": "MQTT Erlang Client Library",
+          "path": "development/erlang"
+        },
+        {
+          "title": "MQTT JavaScript Client Library",
+          "path": "development/javascript"
+        },
+        {
+          "title": "MQTT Python Client Library",
+          "path": "development/python"
+        },
+        {
+          "title": "Others",
+          "path": "development/resource"
+        }
+      ]
+    },
+    {
+      "title": "Telemetry",
+      "path": "advanced/telemetry"
+    },
+    {
+      "title": "FAQ",
+      "children": [
+        {
+          "title": "Introduction",
+          "path": "faq/faq"
+        },
+        {
+          "title": "Use guide",
+          "path": "faq/use-guide"
+        },
+        {
+          "title": "Installation and deployment",
+          "path": "faq/deployment"
+        },
+        {
+          "title": "Common errors",
+          "path": "faq/error"
+        },
+        {
+          "title": "Business services",
+          "path": "faq/enterprise"
+        },
+        {
+          "title": "Tags",
+          "path": "faq/tags"
+        }
+      ]
+    },
+    {
+      "title": "Changes",
+      "children": [
+        {
+          "title": "Change log",
+          "path": "changes/changes-4.4"
+        },
+        {
+          "title": "Upgrade guide",
+          "path": "changes/upgrade-4.4"
+        }
+      ]
+    },
+    {
+      "title": "Resource",
+      "children": [
+        {
+          "title": "Design",
+          "path": "design/design"
+        },
+        {
+          "title": "Awsome",
+          "path": "awesome/awesome"
+        }
+      ]
+    },
+    {
+      "title": "Protocols",
+      "children": [
+        {
+          "title": "LwM2M gateway",
+          "path": "modules/lwm2m_protocol"
+        },
+        {
+          "title": "MQTT-SN gateway",
+          "path": "modules/mqtt_sn_protocol"
+        },
+        {
+          "title": "TCP gateway",
+          "path": "modules/tcp_protocol"
+        },
+        {
+          "title": "JT/T808 gateway",
+          "path": "modules/jt808_protocol"
+        },
+        {
+          "title": "CoAP gateway",
+          "path": "modules/coap_protocol"
+        },
+        {
+          "title": "Stomp gateway",
+          "path": "modules/stomp_protocol"
+        }
+      ]
+    }
+  ],
   "cn": [
     {
       "title": "产品概览",
@@ -486,488 +968,6 @@
         {
           "title": "资源",
           "path": "awesome/awesome"
-        }
-      ]
-    }
-  ],
-  "en": [
-    {
-      "title": "Introduction",
-      "path": "./"
-    },
-    {
-      "title": "Getting Started",
-      "children": [
-        {
-          "title": "Getting Started",
-          "path": "getting-started/getting-started"
-        },
-        {
-          "title": "Installation",
-          "path": "getting-started/install"
-        },
-        {
-          "title": "Start EMQX",
-          "path": "getting-started/start"
-        },
-        {
-          "title": "Basic Command",
-          "path": "getting-started/command-line"
-        },
-        {
-          "title": "Create Cluster",
-          "path": "getting-started/cluster"
-        },
-        {
-          "title": "Directory",
-          "path": "getting-started/directory"
-        },
-        {
-          "title": "Configuration",
-          "path": "getting-started/config"
-        },
-        {
-          "title": "Log & Trace",
-          "path": "getting-started/log"
-        },
-        {
-          "title": "Dashboard",
-          "path": "getting-started/dashboard"
-        }
-      ]
-    },
-    {
-      "title": "User Guide",
-      "children": [
-        {
-          "title": "Retained",
-          "path": "advanced/retained"
-        },
-        {
-          "title": "Shared subscription",
-          "path": "advanced/shared-subscriptions"
-        },
-        {
-          "title": "Delay publish",
-          "path": "advanced/delay-publish"
-        },
-        {
-          "title": "Proxy Subscriptions",
-          "path": "advanced/proxy-subscriptions"
-        },
-        {
-          "title": "Bridge",
-          "path": "advanced/bridge"
-        },
-        {
-          "title": "Topic Rewrite",
-          "path": "advanced/topic-rewrite"
-        },
-        {
-          "title": "$SYS - System Topic",
-          "path": "advanced/system-topic"
-        },
-        {
-          "title": "Blacklist",
-          "path": "advanced/blacklist"
-        },
-        {
-          "title": "WebHook",
-          "path": "advanced/webhook"
-        },
-        {
-          "title": "Distributed Cluster",
-          "path": "advanced/cluster"
-        },
-        {
-          "title": "Hook",
-          "path": "advanced/hooks"
-        },
-        {
-          "title": "Metrics",
-          "path": "advanced/metrics-and-stats"
-        },
-        {
-          "title": "Rate limit",
-          "path": "advanced/rate-limit"
-        },
-        {
-          "title": "Inflight and Queue",
-          "path": "advanced/inflight-window-and-message-queue"
-        },
-        {
-          "title": "Message retransmission",
-          "path": "advanced/retransmission"
-        },
-        {
-          "title": "Alarm",
-          "path": "advanced/alarms"
-        },
-        {
-          "title": "Import/Export Data",
-          "path": "advanced/data-import-and-export"
-        },
-        {
-          "title": "Config and Data Backup & Restore",
-          "path": "advanced/config-and-data-backup-restore"
-        }
-      ]
-    },
-    {
-      "title": "Authentication",
-      "children": [
-        {
-          "title": "Introduction",
-          "path": "advanced/auth"
-        },
-        {
-          "title": "Mnesia",
-          "path": "advanced/auth-mnesia"
-        },
-        {
-          "title": "HTTP",
-          "path": "advanced/auth-http"
-        },
-        {
-          "title": "JWT",
-          "path": "advanced/auth-jwt"
-        },
-        {
-          "title": "LDAP",
-          "path": "advanced/auth-ldap"
-        },
-        {
-          "title": "MySQL",
-          "path": "advanced/auth-mysql"
-        },
-        {
-          "title": "PostgreSQL",
-          "path": "advanced/auth-postgresql"
-        },
-        {
-          "title": "Redis",
-          "path": "advanced/auth-redis"
-        },
-        {
-          "title": "MongoDB",
-          "path": "advanced/auth-mongodb"
-        }
-      ]
-    },
-    {
-      "title": "ACL",
-      "children": [
-        {
-          "title": "Introduction",
-          "path": "advanced/acl"
-        },
-        {
-          "title": "Internal ACL",
-          "path": "advanced/acl-file"
-        },
-        {
-          "title": "Mnesia ACL",
-          "path": "advanced/acl-mnesia"
-        },
-        {
-          "title": "HTTP ACL",
-          "path": "advanced/acl-http"
-        },
-        {
-          "title": "MySQL ACL",
-          "path": "advanced/acl-mysql"
-        },
-        {
-          "title": "PostgreSQL ACL",
-          "path": "advanced/acl-postgres"
-        },
-        {
-          "title": "Redis ACL",
-          "path": "advanced/acl-redis"
-        },
-        {
-          "title": "MongoDB ACL",
-          "path": "advanced/acl-mongodb"
-        }
-      ]
-    },
-    {
-      "title": "Plugin",
-      "path": "advanced/plugins"
-    },
-    {
-      "title": "Rule Engine",
-      "children": [
-        {
-          "title": "Rule Engine",
-          "path": "rule/rule-engine"
-        },
-        {
-          "title": "Rule engine SQL statement",
-          "path": "rule/rule-engine_grammar_and_examples"
-        },
-        {
-          "title": "Available fields in rule engine SQL statements",
-          "path": "rule/rule-engine_field"
-        },
-        {
-          "title": "Functions available in SQL statements",
-          "path": "rule/rule-engine_buildin_function"
-        },
-        {
-          "title": "Create rules",
-          "path": "rule/rule-create"
-        },
-        {
-          "title": "Update resource",
-          "path": "rule/how_to_update_resources"
-        },
-        {
-          "title": "Create Inspect Rules",
-          "path": "rule/rule-example"
-        },
-        {
-          "title": "EMQX Bridges",
-          "path": "rule/bridge_emqx"
-        },
-        {
-          "title": "MQTT Broker Bridges",
-          "path": "rule/bridge_mqtt"
-        }
-      ]
-    },
-    {
-      "title": "Backend",
-      "path": "backend/backend"
-    },
-    {
-      "title": "Bridges",
-      "children": [
-        {
-          "title": "Bridge Introduction",
-          "path": "bridge/bridge"
-        },
-        {
-          "title": "MQTT Bridge",
-          "path": "bridge/bridge-mqtt"
-        },
-        {
-          "title": "RPC Bridge",
-          "path": "bridge/bridge-rpc"
-        }
-      ]
-    },
-    {
-      "title": "Management and Ops",
-      "children": [
-        {
-          "title": "Device management",
-          "path": "tutorial/device-management"
-        },
-        {
-          "title": "System tuning",
-          "path": "tutorial/tune"
-        },
-        {
-          "title": "Production deployment",
-          "path": "tutorial/deploy"
-        },
-        {
-          "title": "Prometheus Monitoring",
-          "path": "tutorial/prometheus"
-        },
-        {
-          "title": "Benchmark",
-          "path": "tutorial/benchmark"
-        },
-        {
-          "title": "Online Tracer",
-          "path": "modules/tracer"
-        },
-        {
-          "title": "Slow Subscriber Statistics",
-          "path": "modules/slow_subscribers_statistics"
-        }
-      ]
-    },
-    {
-      "title": "HTTP API",
-      "path": "advanced/http-api"
-    },
-    {
-      "title": "Configuration",
-      "children": [
-        {
-          "title": "Configuration",
-          "path": "configuration/configuration"
-        },
-        {
-          "title": "Environment variables",
-          "path": "configuration/environment-variable"
-        }
-      ]
-    },
-    {
-      "title": "Command",
-      "children": [
-        {
-          "title": "CLI",
-          "path": "advanced/cli"
-        }
-      ]
-    },
-    {
-      "title": "Release Hot Upgrade",
-      "path": "advanced/relup"
-    },
-    {
-       "title": "Apply Patches",
-       "path": "advanced/patches"
-    },
-    {
-      "title": "Multi-language Extension",
-      "children": [
-        {
-          "title": "Introduction",
-          "path": "advanced/lang"
-        },
-        {
-          "title": "Extension Hook",
-          "path": "advanced/lang-exhook"
-        },
-        {
-          "title": "Extension Proto",
-          "path": "advanced/lang-exproto"
-        },
-        {
-          "title": "Lua",
-          "path": "advanced/lang-lua"
-        }
-      ]
-    },
-
-    {
-      "title": "SDK & Tools",
-      "children": [
-        {
-          "title": "MQTT Client Library",
-          "path": "development/client"
-        },
-        {
-          "title": "MQTT C Client Library",
-          "path": "development/c"
-        },
-        {
-          "title": "MQTT Java Client Library",
-          "path": "development/java"
-        },
-        {
-          "title": "MQTT Go Client Library",
-          "path": "development/go"
-        },
-        {
-          "title": "MQTT Erlang Client Library",
-          "path": "development/erlang"
-        },
-        {
-          "title": "MQTT JavaScript Client Library",
-          "path": "development/javascript"
-        },
-        {
-          "title": "MQTT Python Client Library",
-          "path": "development/python"
-        },
-        {
-          "title": "Others",
-          "path": "development/resource"
-        }
-      ]
-    },
-    {
-      "title": "Telemetry",
-      "path": "advanced/telemetry"
-    },
-    {
-      "title": "FAQ",
-      "children": [
-        {
-          "title": "Introduction",
-          "path": "faq/faq"
-        },
-        {
-          "title": "Use guide",
-          "path": "faq/use-guide"
-        },
-        {
-          "title": "Installation and deployment",
-          "path": "faq/deployment"
-        },
-        {
-          "title": "Common errors",
-          "path": "faq/error"
-        },
-        {
-          "title": "Business services",
-          "path": "faq/enterprise"
-        },
-        {
-          "title": "Tags",
-          "path": "faq/tags"
-        }
-      ]
-    },
-    {
-      "title": "Changes",
-      "children": [
-        {
-          "title": "Change log",
-          "path": "changes/changes-4.4"
-        },
-        {
-          "title": "Upgrade guide",
-          "path": "changes/upgrade-4.4"
-        }
-      ]
-    },
-    {
-      "title": "Resource",
-      "children": [
-        {
-          "title": "Design",
-          "path": "design/design"
-        },
-        {
-          "title": "Awsome",
-          "path": "awesome/awesome"
-        }
-      ]
-    },
-    {
-      "title": "Protocols",
-      "children": [
-        {
-          "title": "LwM2M gateway",
-          "path": "modules/lwm2m_protocol"
-        },
-        {
-          "title": "MQTT-SN gateway",
-          "path": "modules/mqtt_sn_protocol"
-        },
-        {
-          "title": "TCP gateway",
-          "path": "modules/tcp_protocol"
-        },
-        {
-          "title": "JT/T808 gateway",
-          "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "CoAP gateway",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp gateway",
-          "path": "modules/stomp_protocol"
         }
       ]
     }
