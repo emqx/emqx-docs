@@ -463,20 +463,6 @@
       ]
     },
     {
-      "title": "版本发布",
-      "children": [
-        {
-          "title": "变更日志",
-          "path": "changes/changes-4.4"
-        },
-        {
-          "title": "升级指南",
-          "path": "changes/upgrade-4.4"
-
-        }
-      ]
-    },
-    {
       "title": "相关资料",
       "children": [
         {
@@ -917,19 +903,6 @@
         {
           "title": "Tags",
           "path": "faq/tags"
-        }
-      ]
-    },
-    {
-      "title": "Changes",
-      "children": [
-        {
-          "title": "Change log",
-          "path": "changes/changes-4.4"
-        },
-        {
-          "title": "Upgrade guide",
-          "path": "changes/upgrade-4.4"
         }
       ]
     },
