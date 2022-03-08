@@ -1,4 +1,4 @@
-# Extension Protocol
+# gRPC Protocol Extension
 
 **Extension Protocol** is provided by the **emqx-exproto** plugin, which allows other programming languages (e.g. Python, Java, etc.) to process bytes directly for parsing private protocols and provides a Pub/Sub interface for message exchange with EMQX.
 

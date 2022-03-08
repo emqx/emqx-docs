@@ -1,4 +1,3 @@
-
 # Slow subscribers statistics
 
 This module ranks subscribers and topics in descending order according to the latency of message transmission

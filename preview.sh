@@ -16,6 +16,7 @@ THIS_DIR="$(cd "$(dirname "$(readlink "$0" || echo "$0")")"; pwd -P)"
 docker rm emqx-doc-preview || true
 
 if [ "$PRODUCT" = "ce" ]; then
+    python3 "$THIS_DIR/gen.py" ce > directory.json
     docker run -p ${PORT}:8080 -it --name emqx-doc-preview \
         -v "$THIS_DIR"/directory.json:/app/docs/.vuepress/config/directory.json \
         -v "$THIS_DIR"/en_US:/app/docs/en/latest \
@@ -24,6 +25,7 @@ if [ "$PRODUCT" = "ce" ]; then
         -e VERSION=latest \
     ghcr.io/emqx/emqx-io-docs-frontend:latest
 else
+    python3 "$THIS_DIR/gen.py" ee > directory_ee.json
     docker run -p ${PORT}:8080 -it --name emqx-doc-preview \
         -v "$THIS_DIR"/directory_ee.json:/app/docs/.vuepress/config/directory.json \
         -v "$THIS_DIR"/en_US:/app/docs/en/enterprise/latest \

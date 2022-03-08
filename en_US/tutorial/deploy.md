@@ -1,4 +1,4 @@
-# Cluster Load Balancing
+# Load Balancing
 
 During development, we usually use compressed packages to start services with the form of a single node. However, production operation requires a simpler and more stable way. This page mainly explains how to deploy your EMQX service from best practices of deployment architecture.
 

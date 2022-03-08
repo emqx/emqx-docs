@@ -1,0 +1,192 @@
+---
+
+# How it is organised
+#
+# - Each doc node is a yaml dict
+# - A doc node is either a grouping node or a content node
+# - A doc node may have edition: ee for enterprise only content
+#
+# Grouping node
+# - Must have a 'title_en' (English), 'title_cn' (Chinese) is optional wehn no need to translate. e.g. FAQ
+# - Parent nodes must NOT have a 'path'
+#
+# Content node can be one of:
+# - Just the path to the markdown file (the first lien of which is extracted as its title)
+#   the path is relative inside the per-language sub-dir i.e. en_US and zh_CN
+# - A node with 'title_en' 'title_cn' and 'path'
+
+- title_en: Introduction
+  title_cn: 概览
+  path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
+
+- title_en: Quick Start
+  title_cn: 快速开始
+  path: getting-started/getting-started
+
+- title_en: Deployment & Provisioning
+  title_cn: 安装与部署
+  children:
+    - tutorial/tune
+    - getting-started/install
+    - getting-started/directory
+    - getting-started/start
+    - advanced/relup
+    - advanced/patches
+    - getting-started/cluster # TODO merge down
+    - advanced/cluster # TODO merge up
+    - tutorial/load-balancing
+
+- title_en: Management Interfaces
+  title_cn: 管理接口
+  children:
+    - getting-started/config ## TODO merge down
+    - configuration/configuration ## TODO merge up
+    - configuration/environment-variable
+    - advanced/http-api
+    - advanced/cli # TODO: merge down
+    - getting-started/command-line # TODO: merge up
+    - getting-started/dashboard
+
+- title_en: Security
+  title_cn: 安全
+  children:
+    - title_en: Authentication
+      title_cn: 认证
+      children:
+        - advanced/auth
+        - advanced/auth-mnesia
+        - advanced/auth-http
+        - advanced/auth-jwt
+        - advanced/auth-ldap
+        - advanced/auth-mysql
+        - advanced/auth-postgresql
+        - advanced/auth-redis
+        - advanced/auth-mongodb
+    - title_en: Authorisation (ACL)
+      title_cn: 鉴权（ACL）
+      children:
+        - advanced/acl
+        - advanced/acl-file
+        - advanced/acl-mnesia
+        - advanced/acl-http
+        - advanced/acl-mysql
+        - advanced/acl-postgres
+        - advanced/acl-redis
+        - advanced/acl-mongodb
+    - advanced/blacklist
+
+- title_en: Observability
+  title_cn: 监控与运维
+  children:
+    - getting-started/log
+    - tutorial/prometheus
+    - modules/tracer
+    - modules/slow_subscribers_statistics
+    - advanced/metrics-and-stats
+    - advanced/alarms
+    - advanced/telemetry
+
+- title_en: Reliability
+  title_cn: 可靠性
+  children:
+    - advanced/rate-limit
+    - advanced/config-and-data-backup-restore
+
+- title_en: Advanced MQTT Features
+  title_cn: MQTT 高级特性
+  children:
+    - advanced/retained
+    - advanced/shared-subscriptions
+    - advanced/delayed-publish
+    - advanced/auto-subscriptions
+    - advanced/topic-rewrite
+    - advanced/system-topic
+
+- title_en: Data Integration (Rule Engine)
+  title_cn: 数据集成（规则引擎）
+  children:
+    - rule/rule-engine
+    - rule/rule-engine_grammar_and_examples
+    - rule/rule-engine_field
+    - rule/rule-engine_buildin_function
+    - rule/rule-create
+    - rule/how_to_update_resources
+    - rule/rule-example
+
+- title_en: Gateway
+  title_cn: 网关
+  children:
+    - modules/lwm2m_protocol
+    - modules/mqtt_sn_protocol
+    - modules/tcp_protocol
+    - modules/jt808_protocol
+    - modules/coap_protocol
+    - modules/stomp_protocol
+
+- title_en: Cluster Link
+  title_cn: 集群互联
+  children:
+    - bridge/bridge
+    - advanced/bridge ## TODO merge down
+    - bridge/bridge-mqtt ## TODO merge up
+
+- title_en: Plugins & Extensions
+  title_cn: 插件与扩展
+  children:
+    # TODO: add Introduction
+    # TODO: add plugin development doc
+    - advanced/hooks
+    - advanced/webhook
+    - advanced/lang-exhook
+    - advanced/lang-exproto
+
+- title_en: Persistence Backends
+  title_cn: 数据持久化
+  edition: ee
+  children:
+    - backend/backend
+    - backend/backend_cassandra
+    - backend/backend_dynamodb
+    - backend/backend_influxdb
+    - backend/backend_mongodb
+    - backend/backend_mysql
+    - backend/backend_opentsdb
+    - backend/backend_pgsql
+    - backend/backend_redis
+    - backend/backend_timescale
+
+- title_en: Misc Functionality # TODO: better title?
+  title_cn: 其他功能
+  children:
+    - tutorial/device-management
+
+- title_en: Design & Implementation
+  title_cn: 设计与实现
+  children:
+    - advanced/inflight-window-and-message-queue
+    - advanced/retransmission
+    - title_en: SDK & Tools
+      title_cn: SDK与工具
+      children:
+        - development/client
+        - development/c
+        - development/java
+        - development/go
+        - development/erlang
+        - development/javascript
+        - development/python
+    - development/resource
+    - design/design
+
+- title_en: Load tests
+  title_cn: 压力测试
+  children:
+    - tutorial/benchmark
+
+- title_en: FAQ
+  children:
+    - faq/faq
+    - faq/use-guide
+    - faq/deployment
+    - faq/error
+    - faq/enterprise

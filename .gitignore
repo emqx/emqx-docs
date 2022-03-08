@@ -7,3 +7,5 @@ book.pdf
 *.pdf
 .DS_Store
 /.idea/
+directory.json
+directory_ee.json

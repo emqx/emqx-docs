@@ -1,4 +1,4 @@
-## MQTT 桥接
+# MQTT 桥接
 
 EMQX 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服务:
 
@@ -6,7 +6,7 @@ EMQX 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服
 
 mqtt bridge 桥接插件配置文件: etc/plugins/emqx_bridge_mqtt.conf。
 
-### 配置 MQTT 桥接的 Broker 地址
+## 配置 MQTT 桥接的 Broker 地址
 
 ```bash
 ## 桥接地址： 使用节点名则用于 rpc 桥接，使用 host:port 用于 mqtt 连接
@@ -60,7 +60,7 @@ bridge.mqtt.aws.keepalive = 60s
 bridge.mqtt.aws.tls_versions = tlsv1.2,tlsv1.1,tlsv1
 ```
 
-### 配置 MQTT 桥接转发和订阅主题
+## 配置 MQTT 桥接转发和订阅主题
 
 ```bash
 ## 桥接的 mountpoint(挂载点)
@@ -82,7 +82,7 @@ bridge.mqtt.aws.subscription.2.topic = cmd/topic2
 bridge.mqtt.aws.subscription.2.qos = 1
 ```
 
-### MQTT 桥接转发和订阅主题说明
+## MQTT 桥接转发和订阅主题说明
 
 挂载点 Mountpoint: mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
 sensor1/hello 的消息, 到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
@@ -92,13 +92,13 @@ sensor1/hello 的消息, 到达远程节点时主题为 bridge/aws/emqx1@192.168
 订阅主题 Subscription: 本地 EMQX 通过订阅远程 MQTT Broker 的主题来将远程 MQTT Broker
 上的消息同步到本地。
 
-### 启用 bridge_mqtt 桥接插件
+## 启用 bridge_mqtt 桥接插件
 
 ```bash
 ./bin/emqx_ctl plugins load emqx_bridge_mqtt
 ```
 
-### 桥接 CLI 命令
+## 桥接 CLI 命令
 
 ```bash
 $ cd emqx1/ && ./bin/emqx_ctl bridges
@@ -112,28 +112,28 @@ bridges subscriptions <Name>                    # Show a bridge subscriptions to
 bridges add-subscription <Name> <Topic> <Qos>   # Add bridge subscriptions topic
 ```
 
-### 列出全部 bridge 状态
+## 列出全部 bridge 状态
 
 ```bash
 $ ./bin/emqx_ctl bridges list
 name: emqx     status: Stopped
 ```
 
-### 启动指定 bridge
+## 启动指定 bridge
 
 ```bash
 $ ./bin/emqx_ctl bridges start emqx
 Start bridge successfully.
 ```
 
-### 停止指定 bridge
+## 停止指定 bridge
 
 ```bash
 $ ./bin/emqx_ctl bridges stop emqx
 Stop bridge successfully.
 ```
 
-### 列出指定 bridge 的转发主题
+## 列出指定 bridge 的转发主题
 
 ```bash
 $ ./bin/emqx_ctl bridges forwards emqx
@@ -141,21 +141,21 @@ topic:   topic1/#
 topic:   topic2/#
 ```
 
-### 添加指定 bridge 的转发主题
+## 添加指定 bridge 的转发主题
 
 ```bash
 $ ./bin/emqx_ctl bridges add-forwards emqx topic3/#
 Add-forward topic successfully.
 ```
 
-### 删除指定 bridge 的转发主题
+## 删除指定 bridge 的转发主题
 
 ```bash
 $ ./bin/emqx_ctl bridges del-forwards emqx topic3/#
 Del-forward topic successfully.
 ```
 
-### 列出指定 bridge 的订阅
+## 列出指定 bridge 的订阅
 
 ```bash
 $ ./bin/emqx_ctl bridges subscriptions emqx
@@ -163,14 +163,14 @@ topic: cmd/topic1, qos: 1
 topic: cmd/topic2, qos: 1
 ```
 
-### 添加指定 bridge 的订阅主题
+## 添加指定 bridge 的订阅主题
 
 ```bash
 $ ./bin/emqx_ctl bridges add-subscription emqx cmd/topic3 1
 Add-subscription topic successfully.
 ```
 
-### 删除指定 bridge 的订阅主题
+## 删除指定 bridge 的订阅主题
 
 ```bash
 $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic3
@@ -185,13 +185,13 @@ EMQX 桥接转发 MQTT 消息到远程 EMQX:
 
 rpc bridge 桥接插件配置文件: etc/plugins/emqx_bridge_mqtt.conf
 
-### 配置 RPC 桥接的 Broker 地址
+## 配置 RPC 桥接的 Broker 地址
 
 ```bash
 bridge.mqtt.emqx.address = emqx2@192.168.1.2
 ```
 
-### 配置 MQTT 桥接转发和订阅主题
+## 配置 MQTT 桥接转发和订阅主题
 
 ```bash
 ## 桥接的 mountpoint(挂载点)
@@ -201,14 +201,14 @@ bridge.mqtt.emqx.mountpoint = bridge/emqx1/${node}/
 bridge.mqtt.emqx.forwards = topic1/#,topic2/#
 ```
 
-### MQTT 桥接转发和订阅主题说明
+## MQTT 桥接转发和订阅主题说明
 
 挂载点 Mountpoint: mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
 sensor1/hello 的消息, 到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
 
 转发主题 Forwards: 转发到本地 EMQX 指定 forwards 主题上的消息都会被转发到远程 MQTT Broker 上。
 
-### 桥接 CLI 命令
+## 桥接 CLI 命令
 
 桥接 CLI 的使用方式与 mqtt bridge 相同。
 
@@ -220,7 +220,7 @@ EMQX 桥接转发 MQTT 消息到 Kafka 集群，Apache Kafka是一个快速、�
 
 Kafka 桥接插件配置文件: etc/plugins/emqx_bridge_kafka.conf。
 
-### 配置 Kafka 集群地址
+## 配置 Kafka 集群地址
 
 ```bash
 ## Kafka 服务器地址
@@ -275,7 +275,7 @@ bridge.kafka.sock.sndbuf = 1MB
 ## bridge.kafka.sock.read_packets = 20
 ```
 
-### 配置 Kafka 桥接规则
+## 配置 Kafka 桥接规则
 
 ```bash
 ## Bridge Kafka Hooks
@@ -317,7 +317,7 @@ bridge.kafka.hook.message.acked.1        = {"filter": "#",  "topic": "message_ac
 ## Example: bridge.kafka.hook.message.publish.1 = {"filter":"#", "topic":"message_publish", "format":"json"}
 ```
 
-### Kafka 桥接规则说明
+## Kafka 桥接规则说明
 
 | 事件                                       | 说明           |
 | ---------------------------------------- | ------------ |
@@ -329,7 +329,7 @@ bridge.kafka.hook.message.acked.1        = {"filter": "#",  "topic": "message_ac
 | bridge.kafka.hook.message.delivered.1    | delivered 消息 |
 | bridge.kafka.hook.message.acked.1        | ACK 消息       |
 
-### 客户端上下线事件转发 Kafka
+## 客户端上下线事件转发 Kafka
 
 设备上线 EMQX 转发上线事件消息到 Kafka:
 
@@ -356,7 +356,7 @@ value = {
 }
 ```
 
-### 客户端订阅主题事件转发 Kafka
+## 客户端订阅主题事件转发 Kafka
 
 ```bash
 topic = session_subscribed
@@ -370,7 +370,7 @@ value = {
 }
 ```
 
-### 客户端取消订阅主题事件转发 Kafka
+## 客户端取消订阅主题事件转发 Kafka
 
 ```bash
 topic = session_unsubscribed
@@ -384,7 +384,7 @@ value = {
 }
 ```
 
-### MQTT 消息转发到 Kafka
+## MQTT 消息转发到 Kafka
 
 ```bash
 topic = message_publish
@@ -400,7 +400,7 @@ value = {
 }
 ```
 
-### MQTT 消息派发 (Deliver) 事件转发 Kafka
+## MQTT 消息派发 (Deliver) 事件转发 Kafka
 
 ```bash
 topic = message_delivered
@@ -417,7 +417,7 @@ value = {
 }
 ```
 
-### MQTT 消息确认 (Ack) 事件转发 Kafka
+## MQTT 消息确认 (Ack) 事件转发 Kafka
 
 ```bash
 topic = message_acked
@@ -434,7 +434,7 @@ value = {
 }
 ```
 
-### Kafka 消费示例
+## Kafka 消费示例
 
 Kafka 读取 MQTT 客户端上下线事件消息:
 
@@ -471,7 +471,7 @@ kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic message_acke
 payload 数据格式。
 :::
 
-### 启用 Kafka 桥接插件
+## 启用 Kafka 桥接插件
 
 ```bash
 ./bin/emqx_ctl plugins load emqx_bridge_kafka
@@ -487,7 +487,7 @@ EMQX 桥接转发 MQTT 消息到 RabbitMQ 集群:
 
 RabbitMQ 桥接插件配置文件: etc/plugins/emqx_bridge_rabbit.conf。
 
-### 配置 RabbitMQ 桥接地址
+## 配置 RabbitMQ 桥接地址
 
 ```bash
 ## RabbitMQ 的服务器地址
@@ -521,7 +521,7 @@ bridge.rabbit.1.heartbeat = 0
 # bridge.rabbit.2.heartbeat = 0
 ```
 
-### 配置 RabbitMQ 桥接规则
+## 配置 RabbitMQ 桥接规则
 
 ```bash
 ## Bridge Hooks
@@ -536,7 +536,7 @@ bridge.rabbit.hook.message.publish.2 = {"topic": "#", "action": "on_message_publ
 bridge.rabbit.hook.message.acked.1 = {"topic": "#", "action": "on_message_acked", "rabbit": 1, "exchange": "topic:emq.acked"}
 ```
 
-### 客户端订阅主题事件转发 RabbitMQ
+## 客户端订阅主题事件转发 RabbitMQ
 
 ```bash
 routing_key = subscribe
@@ -545,7 +545,7 @@ headers = [{<<"x-emq-client-id">>, binary, ClientId}]
 payload = jsx:encode([{Topic, proplists:get_value(qos, Opts)} || {Topic, Opts} <- TopicTable])
 ```
 
-### 客户端取消订阅事件转发 RabbitMQ
+## 客户端取消订阅事件转发 RabbitMQ
 
 ```bash
 routing_key = unsubscribe
@@ -554,7 +554,7 @@ headers = [{<<"x-emq-client-id">>, binary, ClientId}]
 payload = jsx:encode([Topic || {Topic, _Opts} <- TopicTable]),
 ```
 
-### MQTT 消息转发 RabbitMQ
+## MQTT 消息转发 RabbitMQ
 
 ```bash
 routing_key = binary:replace(binary:replace(Topic, <<"/">>, <<".">>, [global]),<<"+">>, <<"*">>, [global])
@@ -566,7 +566,7 @@ headers = [{<<"x-emq-publish-qos">>, byte, Qos},
 payload = Payload
 ```
 
-### MQTT 消息确认 (Ack) 事件转发 RabbitMQ
+## MQTT 消息确认 (Ack) 事件转发 RabbitMQ
 
 ```bash
 routing_key = puback
@@ -575,7 +575,7 @@ headers = [{<<"x-emq-msg-acked">>, binary, ClientId}],
 payload = emqx_base62:encode(Id)
 ```
 
-### RabbitMQ 订阅消费 MQTT 消息示例
+## RabbitMQ 订阅消费 MQTT 消息示例
 
 Python RabbitMQ消费者代码示例:
 
@@ -606,7 +606,7 @@ channel.start_consuming()
 
 [https://github.com/rabbitmq/rabbitmq-tutorials](https://github.com/rabbitmq/rabbitmq-tutorials)
 
-### 启用 RabbitMQ 桥接插件
+## 启用 RabbitMQ 桥接插件
 
 ```bash
 ./bin/emqx_ctl plugins load emqx_bridge_rabbit
@@ -620,7 +620,7 @@ EMQX 桥接转发 MQTT 消息到 Pulsar 集群:
 
 Pulsar 桥接插件配置文件: etc/plugins/emqx_bridge_pulsar.conf。
 
-### 配置 Pulsar 集群地址
+## 配置 Pulsar 集群地址
 
 ```bash
 ## Pulsar 服务器集群配置
@@ -648,7 +648,7 @@ bridge.pulsar.sock.sndbuf = 1MB
 ## bridge.pulsar.sock.read_packets = 20
 ```
 
-### 配置 Pulsar 桥接规则
+## 配置 Pulsar 桥接规则
 
 ```bash
 ## Bridge Pulsar Hooks
@@ -690,7 +690,7 @@ bridge.pulsar.hook.message.acked.1        = {"filter": "#",  "topic": "message_a
 ## Example: bridge.pulsar.hook.message.publish.1 = {"filter":"#", "topic":"message_publish", "format":"json"}
 ```
 
-### Pulsar 桥接规则说明
+## Pulsar 桥接规则说明
 
 <table style="width:85%;">
 <colgroup>
@@ -735,7 +735,7 @@ bridge.pulsar.hook.message.acked.1        = {"filter": "#",  "topic": "message_a
 </tbody>
 </table>
 
-### 客户端上下线事件转发 Pulsar
+## 客户端上下线事件转发 Pulsar
 
 设备上线 EMQX 转发上线事件消息到 Pulsar:
 
@@ -762,7 +762,7 @@ value = {
         }
 ```
 
-### 客户端订阅主题事件转发 Pulsar
+## 客户端订阅主题事件转发 Pulsar
 
 ```bash
 topic = session_subscribed
@@ -776,7 +776,7 @@ value = {
         }
 ```
 
-### 客户端取消订阅主题事件转发 Pulsar
+## 客户端取消订阅主题事件转发 Pulsar
 
 ```bash
 topic = session_unsubscribed
@@ -790,7 +790,7 @@ value = {
         }
 ```
 
-### MQTT 消息转发到 Pulsar
+## MQTT 消息转发到 Pulsar
 
 ```bash
 topic = message_publish
@@ -806,7 +806,7 @@ value = {
         }
 ```
 
-### MQTT 消息派发 (Deliver) 事件转发 Pulsar
+## MQTT 消息派发 (Deliver) 事件转发 Pulsar
 
 ```bash
 topic = message_delivered
@@ -823,7 +823,7 @@ value = {
         }
 ```
 
-### MQTT 消息确认 (Ack) 事件转发 Pulsar
+## MQTT 消息确认 (Ack) 事件转发 Pulsar
 
 ```bash
 topic = message_acked
@@ -840,7 +840,7 @@ value = {
         }
 ```
 
-### Pulsar 消费示例
+## Pulsar 消费示例
 
 Pulsar 读取 MQTT 客户端上下线事件消息:
 
@@ -875,7 +875,7 @@ pulsar-client consume message_acked  -s "message_acked" -n 1000
 默认 payload 被 base64 编码，可通过修改配置 bridge.pulsar.encode_payload_type 指定 payload 数据格式。
 :::
 
-### 启用 Pulsar 桥接插件
+## 启用 Pulsar 桥接插件
 
 ```bash
 ./bin/emqx_ctl plugins load emqx_bridge_pulsar
@@ -891,7 +891,7 @@ EMQX 桥接转发 MQTT 消息到 RocketMQ 集群:
 
 RocketMQ 桥接插件配置文件: etc/plugins/emqx_bridge_rocket.conf。
 
-### 配置 RocketMQ 集群地址
+## 配置 RocketMQ 集群地址
 
 ```bash
 ## RocketMQ 服务器集群配置
@@ -918,7 +918,7 @@ bridge.rocket.sock.sndbuf = 1MB
 ## bridge.rocket.sock.read_packets = 20
 ```
 
-### 配置 RocketMQ 桥接规则
+## 配置 RocketMQ 桥接规则
 
 ```bash
 ## Bridge RocketMQ Hooks
@@ -947,7 +947,7 @@ bridge.rocket.hook.message.delivered.1    = {"filter": "#",  "topic": "MessageDe
 bridge.rocket.hook.message.acked.1        = {"filter": "#",  "topic": "MessageAcked"}
 ```
 
-### RocketMQ 桥接规则说明
+## RocketMQ 桥接规则说明
 
 <table style="width:85%;">
 <colgroup>
@@ -992,7 +992,7 @@ bridge.rocket.hook.message.acked.1        = {"filter": "#",  "topic": "MessageAc
 </tbody>
 </table>
 
-### 客户端上下线事件转发 RocketMQ
+## 客户端上下线事件转发 RocketMQ
 
 设备上线 EMQX 转发上线事件消息到 RocketMQ:
 
@@ -1019,7 +1019,7 @@ value = {
         }
 ```
 
-### 客户端订阅主题事件转发 RocketMQ
+## 客户端订阅主题事件转发 RocketMQ
 
 ```bash
 topic = "SessionSubscribed"
@@ -1033,7 +1033,7 @@ value = {
         }
 ```
 
-### 客户端取消订阅主题事件转发 RocketMQ
+## 客户端取消订阅主题事件转发 RocketMQ
 
 ```bash
 topic = "SessionUnsubscribed"
@@ -1047,7 +1047,7 @@ value = {
         }
 ```
 
-### MQTT 消息转发到 RocketMQ
+## MQTT 消息转发到 RocketMQ
 
 ```bash
 topic = "MessagePublish"
@@ -1063,7 +1063,7 @@ value = {
         }
 ```
 
-### MQTT 消息派发 (Deliver) 事件转发 RocketMQ
+## MQTT 消息派发 (Deliver) 事件转发 RocketMQ
 
 ```bash
 topic = "MessageDeliver"
@@ -1080,7 +1080,7 @@ value = {
         }
 ```
 
-### MQTT 消息确认 (Ack) 事件转发 RocketMQ
+## MQTT 消息确认 (Ack) 事件转发 RocketMQ
 
 ```bash
 topic = "MessageAcked"
@@ -1097,7 +1097,7 @@ value = {
         }
 ```
 
-### RocketMQ 消费示例
+## RocketMQ 消费示例
 
 RocketMQ 读取 MQTT 客户端上下线事件消息:
 
@@ -1134,7 +1134,7 @@ bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer MessageAcked
 payload 数据格式。
 :::
 
-### 启用 RocketMQ 桥接插件
+## 启用 RocketMQ 桥接插件
 
 ```bash
 ./bin/emqx_ctl plugins load emqx_bridge_rocket

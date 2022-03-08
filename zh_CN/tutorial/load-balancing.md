@@ -1,4 +1,4 @@
-# 生产部署
+# 集群负载均衡
 
 在开发时我们通常使用压缩包方式以单节点的形式启动服务，生产运行需要一个更加简单稳定的方式。本页主要从部署架构最佳实践讲解如何部署你的 EMQX 服务。
 
@@ -19,7 +19,6 @@ EMQX 集群可作为物联网接入服务（IoT Hub）部署，目前 EMQ 在青
 典型部署架构：
 
 ![](./_assets/deploy_1.png)
-
 
 
 ### LB (负载均衡)
@@ -121,7 +120,7 @@ EMQX 节点集群使用的 TCP 端口:
 2. VPC 网络内创建 EMQX 集群 ' 私有网络 '，例如: 192.168.0.0/24
 
 3. 私有网络内创建两台 EMQX 主机，指定上面创建的 VPC 网络，例如:
-  
+
 | 节点  | IP 地址     |
 | ----- | ----------- |
 | emqx1 | 192.168.0.2 |
@@ -172,7 +171,7 @@ HAProxy 作为 LB 部署 EMQX 集群，并终结 SSL 连接:
 | emqx2 | 192.168.0.3 |
 
 2. 配置 /etc/haproxy/haproxy.cfg，示例：
-  
+
 ```yaml
 listen mqtt-ssl
   bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
@@ -180,7 +179,7 @@ listen mqtt-ssl
   maxconn 50000
   timeout client 600s
   default_backend emqx_cluster
-        
+
 backend emqx_cluster
   mode tcp
   balance source
@@ -204,7 +203,7 @@ Nginx 产品作为 EMQX 集群 LB，并终结 SSL 连接:
 | emqx2 | 192.168.0.3 |
 
 3. 配置 /etc/nginx/nginx.conf，示例:
-  
+
 ```bash
 stream {
   upstream stream_backend {

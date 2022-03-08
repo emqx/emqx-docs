@@ -43,9 +43,7 @@ The final presentation of the documentation can be divided into three parts:
 
 ### Configuration files
 
-The menu configuration file is `directory.json` (`directory_ee.json` for Enterprise) in the document root directory. This is shown below:
-
-![directory](./assets/directory.jpg)
+The menu configuration file is `dir.yaml` in the document root directory. This is shown below:
 
 ### Configuration examples
 

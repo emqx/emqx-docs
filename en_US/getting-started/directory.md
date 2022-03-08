@@ -1,4 +1,4 @@
-# Directory
+# Directory Structures
 
 The directory structure of EMQX Broker obtained by different installation methods will be different:
 
