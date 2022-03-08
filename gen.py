@@ -54,7 +54,6 @@ with open(r'dir.yaml', encoding='utf-8') as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     all = yaml.load(file, Loader=yaml.FullLoader)
-    #json.dump(dir, sys.stdout, indent=2, ensure_ascii=False)
     en = parse(all, 'en', sys.argv[1])
     cn = parse(all, 'cn', sys.argv[1])
     res ={'en': en, 'cn': cn}
