@@ -75,33 +75,6 @@
         - advanced/acl-mongodb
     - advanced/blacklist
 
-- title_en: Observability
-  title_cn: 监控与运维
-  children:
-    - getting-started/log
-    - tutorial/prometheus
-    - modules/tracer
-    - modules/slow_subscribers_statistics
-    - advanced/metrics-and-stats
-    - advanced/alarms
-    - advanced/telemetry
-
-- title_en: Reliability
-  title_cn: 可靠性
-  children:
-    - advanced/rate-limit
-    - advanced/config-and-data-backup-restore
-
-- title_en: Advanced MQTT Features
-  title_cn: MQTT 高级特性
-  children:
-    - advanced/retained
-    - advanced/shared-subscriptions
-    - advanced/delayed-publish
-    - advanced/auto-subscriptions
-    - advanced/topic-rewrite
-    - advanced/system-topic
-
 - title_en: Data Integration (Rule Engine)
   title_cn: 数据集成（规则引擎）
   children:
@@ -130,6 +103,33 @@
     - advanced/bridge ## TODO merge down
     - bridge/bridge-mqtt ## TODO merge up
 
+- title_en: Observability
+  title_cn: 运行监测
+  children:
+    - getting-started/log
+    - tutorial/prometheus
+    - modules/tracer
+    - modules/slow_subscribers_statistics
+    - advanced/metrics-and-stats
+    - advanced/alarms
+    - advanced/telemetry
+
+- title_en: Reliability
+  title_cn: 可靠性
+  children:
+    - advanced/rate-limit
+    - advanced/config-and-data-backup-restore
+
+- title_en: Advanced MQTT Features
+  title_cn: MQTT 高级特性
+  children:
+    - advanced/retained
+    - advanced/shared-subscriptions
+    - advanced/delayed-publish
+    - advanced/auto-subscriptions
+    - advanced/topic-rewrite
+    - advanced/system-topic
+
 - title_en: Plugins & Extensions
   title_cn: 插件与扩展
   children:
@@ -155,14 +155,10 @@
     - backend/backend_redis
     - backend/backend_timescale
 
-- title_en: Misc Functionality # TODO: better title?
-  title_cn: 其他功能
-  children:
-    - tutorial/device-management
-
 - title_en: Design & Implementation
   title_cn: 设计与实现
   children:
+    - design/design
     - advanced/inflight-window-and-message-queue
     - advanced/retransmission
     - title_en: SDK & Tools
@@ -176,9 +172,8 @@
         - development/javascript
         - development/python
     - development/resource
-    - design/design
 
-- title_en: Load tests
+- title_en: Load Tests
   title_cn: 压力测试
   children:
     - tutorial/benchmark
