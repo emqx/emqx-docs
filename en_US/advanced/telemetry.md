@@ -43,12 +43,12 @@ Telemetry reports data to by encrypting HTTP requests https://telemetry.emqx.io/
 
 **Telemetry is enabled by default**. Any people may feel uncomfortable collecting such data. You can disable it in the simplest way before startup and during operation.
 
-## Disable before start EMQX
+## Disable before starting EMQX
 
 Edit `data/loaded_plugins` file, and remove the line of emqx_telemetry. (Note that there is a "." character at the end of the line）, which means that the telemetry plug-in will never start.
 
-## Disable in running
+## Disable while running EMQX
 
-Stop the emqx_telemetry plugin in the command line: ./bin/emqx_ctl plugins unload emqx_telemetry
+Stop the emqx_telemetry plugin by running the command: ./bin/emqx_ctl plugins unload emqx_telemetry
 
-Stop emqx_telemetry plugin in the Dashboard: Open http://localhost:18083 to enter Dashboard, enter the plugin page, find emqx_telemetry and click Stop button.
+Stop emqx_telemetry plugin from the Dashboard: Open http://localhost:18083 to enter Dashboard, enter the plugin page, find emqx_telemetry and click the Stop button.
