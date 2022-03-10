@@ -22,14 +22,14 @@ EMQX is an open-source, distributed [MQTT](https://mqtt.org/) messaging broker t
 
 
 
-## What products do we offer?
+## Which products do we offer?
 
 
-EMQX has [3 products](https://www.emqx.com/en/products/emqx) in total. The different products support different number of connections, features and services etc.
+EMQX has [3 products](https://www.emqx.com/en/products/emqx) in total. The different products support different number of connections, features, services, etc.
 
 - EMQX Broker: EMQX open source version. It supports the popular IoT protocols MQTT, CoAP and LwM2M.
 - EMQX Enterprise: EMQX enterprise version. It is based on the open source version, and adds data persistence (support Redis, MySQL, MongoDB or PostgreSQL), data bridge to Kafka, LoRaWAN support, EMQX monitoring, Kubernetes deployment etc. It supports 1 million concurrent MQTT connections.
-- EMQX Platform: EMQX Platform version is based on the Enterprise version, and support 10 million concurrent MQTT connections. We provide consulting service for complex IoT platforms, such as cross data center solutions. All kinds of services building an IoT platform can be provided, such as consulting, training, architect design, customized development, platform implementation, testing and operation.
+- EMQX Platform: EMQX Platform version is based on the Enterprise version, and supports 10 million concurrent MQTT connections. We provide consulting service for complex IoT platforms, such as cross data center solutions. All kinds of services building an IoT platform can be provided, such as consulting, training, architect design, customized development, platform implementation, testing and operation.
 
 
 
@@ -57,7 +57,7 @@ Besides using the configuration file (to configure authentication), EMQX can als
 **Tags:** [*WebHook*](tags.md#webhook)
 
 
-A Hook is an interface provided by EMQX, which will be triggered when a connection, session or message is established/delivered. EMQX provides the hook types listed below. Hooks allows a user to, for example, save events to database. This could be useful if one want to gather different kinds of information, such as when a client connect and disconnect.  
+A Hook is an interface provided by EMQX, which will be triggered when a connection, session or message is established/delivered. EMQX provides the hook types listed below. Hooks allows a user to, for example, save events to a database. This could be useful if one wants to gather different kinds of information, such as when a client connects and disconnects.  
 
 - client.connected: client online
 - client.disconnected: client offline
@@ -76,12 +76,12 @@ A Hook is an interface provided by EMQX, which will be triggered when a connecti
 
 
 
-## What's an mqueue? How to configure mqueues in EMQX?
+## What's a mqueue? How to configure mqueues in EMQX?
 
 **Tags:** [*Message Queue*](tags.md#message-queue)
 
 
-An mqueue is a message queue that store messages for a session. If the clean session flag is set to false in the MQTT connect packet, then EMQX would maintain the session for the client even when the client has been disconnected from EMQX. Then the session would receive messages from the subscribed topic and store these messages into the sessions mqueue. And when the client is online again, these messages would be delivered to the client instantly. Because of low priority of QOS 0 message in mqtt protocol, EMQX do not save QOS 0 message in the mqueue. However, this behavior can be overriden by setting `zone.$name.mqueue_store_qos0 = true` in `emqx.conf`. With the `zone.$name.mqueue_store_qos0 = true`, even a QOS 0 mesage would been saved in the mqueue. The maximum size of the mqueue can be configured with the setting `zone.external.max_mqueue_len`. Notice that the mqueue is stored in memory, so please do not set the mqueue length to 0 (0 means there is no limit for mqueue), otherwise the system would risk running out of memory.
+A mqueue is a message queue that store messages for a session. If the clean session flag is set to false in the MQTT connect packet, then EMQX would maintain the session for the client even when the client has been disconnected from EMQX. Then the session would receive messages from the subscribed topic and store these messages into the sessions mqueue. And when the client is online again, these messages would be delivered to the client instantly. Because of low priority of QOS 0 message in mqtt protocol, EMQX do not save QOS 0 message in the mqueue. However, this behavior can be overriden by setting `zone.$name.mqueue_store_qos0 = true` in `emqx.conf`. With the `zone.$name.mqueue_store_qos0 = true`, even a QOS 0 mesage would been saved in the mqueue. The maximum size of the mqueue can be configured with the setting `zone.external.max_mqueue_len`. Notice that the mqueue is stored in memory, so please do not set the mqueue length to 0 (0 means there is no limit for mqueue), otherwise the system would risk running out of memory.
 
 
 
