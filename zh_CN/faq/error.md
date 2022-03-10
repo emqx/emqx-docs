@@ -160,7 +160,6 @@ $ ls /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib
 ls: /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib: No such file or directory
 ```
 
-
 若不存在该文件，则需安装与 `otool` 打印出来的对应的 OPENSSL  版本，例如此处显示的为 `openssl@1.1`：
 
 ```bash
@@ -186,3 +185,47 @@ Windows 执行  `./bin/emqx console` 弹出错误窗口：
 ### 解决方法
 
 安装 [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
+
+## SSL 连接失败
+
+### 现象
+
+客户端无法与 EMQX 建立 SSL 连接。
+
+### 解决方法
+
+可以借助 EMQX 日志中的关键字来进行简单的问题排查，EMQX 日志相关内容请参考：[日志与追踪](../getting-started/log.md)。
+
+1. certificate_expired
+   
+   日志中出现 `certificate_expired` 关键字，说明证书已经过期，请及时续签。
+
+2. no_suitable_cipher
+
+   日志中出现 `no_suitable_cipher` 关键字，说明握手过程中没有找到合适的密码套件，可能原因有证书类型与密码套件不匹配、没有找到服务端和客户端同时支持的密码套件等等。
+
+3. handshake_failure
+
+   日志中出现 `handshake_failure` 关键字，原因有很多，可能要结合客户端的报错来分析，例如，可能是客户端发现连接的服务器地址与服务器证书中的域名不匹配。
+
+4. unknown_ca
+
+   日志中出现 `unknown_ca` 关键字，意味着证书校验失败，常见原因有遗漏了中间 CA 证书、未指定 Root CA 证书或者指定了错误的 Root CA 证书。在双向认证中我们可以根据日志中的其他信息来判断是服务端还是客户端的证书配置出错。如果是服务端证书存在问题，那么报错日志通常为：
+
+   ```
+   {ssl_error,{tls_alert,{unknown_ca,"TLS server: In state certify received CLIENT ALERT: Fatal - Unknown CA\n"}}}
+   ```
+
+   看到 `CLIENT ALERT` 就可以得知，这是来自客户端的警告信息，服务端证书未能通过客户端的检查。
+
+   如果是客户端证书存在问题，那么报错日志通常为：
+
+   ```
+   {ssl_error,{tls_alert,{unknown_ca,"TLS server: In state certify at ssl_handshake.erl:1887 generated SERVER ALERT: Fatal - Unknown CA\n"}}}
+   ```
+
+   看到 `SERVER ALERT` 就能够得知，表示服务端在检查客户端证书时发现该证书无法通过认证，而客户端将收到来自服务端的警告信息。
+
+5. protocol_version
+
+   日志中出现 `protocol_version` 关键字，说明客户端与服务器支持的 TLS 协议版本不匹配。
