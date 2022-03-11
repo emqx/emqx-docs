@@ -50,7 +50,7 @@ When executing `./emqtt_bench pub --help`, you will get the available parameter 
 | --username        | -u           | -               | None; optional | Client username                                              |
 | --password        | -P           | -               | None; optional | Client password                                              |
 | --topic           | -t           | -               | None; required | Published topics; support placeholders:<br />`%c`： ClientId<br />`%u`： Username<br />`%i`：Client's sequence number |
-| --szie            | -s           | -               | 256            | Message Payload size; unit: bytes                            |
+| --size            | -s           | -               | 256            | Message Payload size; unit: bytes                            |
 | --qos             | -q           | -               | 0              | Qos level                                                    |
 | --retain          | -r           | true<br />false | false          | Whether the message sets the Retain flag                     |
 | --keepalive       | -k           | -               | 300            | Client keepalive time                                        |
