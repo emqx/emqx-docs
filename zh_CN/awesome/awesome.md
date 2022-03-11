@@ -33,8 +33,8 @@ ref:
 
   - [EMQX Slack](https://slack-invite.emqx.io)
   - [Twitter](https://twitter.com/EMQTech)
-  - [Forum](https://groups.google.com/d/forum/emqtt)
-  - [Medium](https://medium.com/@emqtt)
+  - [问答社区](https://askemq.com/c/emqx)
+  - [Medium](https://medium.com/@emqx)
   - [Reddit](https://www.reddit.com/r/emqx/)
 
 欢迎你将任何 bug、问题和功能请求提交到 [emqx/emqx](https://github.com/emqx/emqx/issues)。
