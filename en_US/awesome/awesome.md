@@ -34,7 +34,7 @@ You can contact the EMQ community and developers through the following channels:
   - [EMQX Slack](https://slack-invite.emqx.io)
   - [Twitter](https://twitter.com/EMQTech)
   - [Forum](https://github.com/emqx/emqx/issues)
-  - [Medium](https://medium.com/@emqx)
+  - [Medium](https://emqx.medium.com)
   - [Reddit](https://www.reddit.com/r/emqx/)
 
 You are welcome to submit any bugs, issues and feature requests to [emqx/emqx](https://github.com/emqx/emqx/issues)。
