@@ -213,10 +213,10 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 
 System Topic Prefix: `$SYS/brokers/${node}/alarms/`
 
-| Topic | Description           |
+| Topic | Description        |
 | ----------- | ------------ |
-| alert       | newly generated alarm |
-| clear       | cleared alarm |
+| activate    | newly generated alarm |
+| deactivate  | cleared alarm |
 
 ## Sysmon - system monitoring
 

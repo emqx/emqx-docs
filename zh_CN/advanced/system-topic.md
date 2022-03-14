@@ -202,10 +202,10 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 
 系统主题 (Topic) 前缀: `$SYS/brokers/${node}/alarms/`
 
-| 主题 (Topic) | 说明         |
+| 主题 (Topic) | 说明        |
 | ----------- | ------------ |
-| alert       | 新产生的告警 |
-| clear       | 被清除的告警 |
+| activate    | 新产生的告警 |
+| deactivate  | 被清除的告警 |
 
 ## Sysmon - 系统监控
 
