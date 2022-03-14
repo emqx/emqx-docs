@@ -186,3 +186,47 @@ This program cannot be started because MSVCR120.dll is missing from the computer
 ### Solution
 
 Install [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
+
+## SSL Connection Error
+
+### Phenomenon
+
+The client cannot establish an SSL connection with EMQX.
+
+### Solution
+
+You can use the keywords in the EMQX log to perform simple troubleshooting. For the EMQX log related content, please refer to: [Log and Trace](../getting-started/log.md).
+
+1. certificate_expired
+   
+   The `certificate_expired` keyword appears in the log, indicating that the certificate has expired, please renew it in time.
+
+2. no_suitable_cipher
+
+   The `no_suitable_cipher` keyword appears in the log, indicating that a suitable cipher suite was not found during the handshake process. The possible reasons are that the certificate type does not match the cipher suite, the cipher suite supported by both the server and the client was not found, and so on.
+
+3. handshake_failure
+
+   The `handshake_failure` keyword appears in the log. There are many reasons, which may be analyzed in conjunction with the error reported by the client. For example, the client may find that the connected server address does not match the domain name in the server certificate.
+
+4. unknown_ca
+
+   The `unknown_ca` keyword appears in the log, which means that the certificate verification fails. Common reasons are that the intermediate CA certificate is omitted, the Root CA certificate is not specified, or the wrong Root CA certificate is specified. In the two-way authentication, we can judge whether the certificate configuration of the server or the client is wrong according to other information in the log. If there is a problem with the server certificate, the error log is usually:
+
+   ```
+   {ssl_error,{tls_alert,{unknown_ca,"TLS server: In state certify received CLIENT ALERT: Fatal - Unknown CA\n"}}}
+   ```
+
+   When you see `CLIENT ALERT`, you can know that this is a warning message from the client, and the server certificate fails the client's check.
+
+   If there is a problem with the client certificate, the error log is usually:
+
+   ```
+   {ssl_error,{tls_alert,{unknown_ca,"TLS server: In state certify at ssl_handshake.erl:1887 generated SERVER ALERT: Fatal - Unknown CA\n"}}}
+   ```
+
+   When you see `SERVER ALERT`, you can know that the server finds that the certificate cannot pass the authentication when checking the client certificate, and the client will receive a warning message from the server.
+
+5. protocol_version
+
+   The `protocol_version` keyword appears in the log, indicating a mismatch between the TLS protocol versions supported by the client and server.

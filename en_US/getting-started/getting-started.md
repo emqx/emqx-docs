@@ -164,7 +164,7 @@ EMQX supports standard MQTT protocol. After startup, you can access the MQTT cli
 
 ### Dashboard Websocket tool
 
-Open Dashboard and enter the page of **Tools -> Websocket**, where you can use the MQTT over Websokcet client to quickly access EMQX.
+Open Dashboard and enter the page of **Tools -> Websocket**, where you can use the MQTT over WebSocket client to quickly access EMQX.
 
 The Websocket page provides you with a simple but effective WebSocket client tool, which includes the functions of connection, subscription, and publishing, as well as checking the packet data sent and received by yourself.
 
@@ -218,7 +218,7 @@ The built-in rule engine based on SQL can extract, filter, enrich, and convert I
 
 ### HTTP API
 
-HTTP API is a frequently used function in IoT platform development and EMQX operation and maintenance. HTTP API can realize integration with external systems, such as querying and managing client information, broker subscription, publishing messages and creating rules.
+The HTTP API is a frequently used function in IoT platform development and EMQX operation and maintenance. The HTTP API can realize integration with external systems, such as querying and managing client information, broker subscription, publishing messages and creating rules.
 
 - [HTTP API](../advanced/http-api.md): include HTTP API access point and access authentication method.
 - [Basic Information](../advanced/http-api.md#endpoint-brokers): Get basic information such as EMQX version and running status.
@@ -230,7 +230,7 @@ HTTP API is a frequently used function in IoT platform development and EMQX oper
 - [Topic Subscription](../advanced/http-api.md#endpoint-subscribe): Dynamically manage the client subscription list, without the need for the client to actively initiate subscription/unsubscription.
 - [Plugins](../advanced/http-api.md#endpoint-plugins): Status management of plugins with start and stop operations.
 
-For access authentication methods and more APIs, please refer to [HTTP API](../advanced/http-api.md#数据遥测).
+For accessing  authentication methods and more APIs, please refer to [HTTP API](../advanced/http-api.md#数据遥测).
 
 ### Operation, maintenance and deployment
 

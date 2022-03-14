@@ -90,7 +90,7 @@ Return to the rule creation interface and click "Create".
 The rule has been created, and you can insert a subscription relationship into PostgreSQL through "psql":
 
 ```
-insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1)'
+insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1)
 ```
 
 ![](./assets/rule-engine/pg_sub_08.png)
