@@ -90,7 +90,7 @@ SELECT * FROM "$events/client_connected"
 规则已经创建完成，通过 “psql” 往PostgreSQL插入一条订阅关系
 
 ```
-insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1)'
+insert into mqtt_sub(clientid, topic, qos) values('test', 't1', 1)
 ```
 
 ![](./assets/rule-engine/pg_sub_08.png)
