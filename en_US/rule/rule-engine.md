@@ -42,7 +42,7 @@ For rule engine data, SQL statement format and [event topic](#event-topics) list
 
 ## Minimum rule
 
-The rule describes the three configurations of **where data comes from ,  how to filter and process data, and where to processed results goes**, which means an available rule contains three elements:
+The rule describes the three configurations of **where data comes from ,  how to filter and process data, and where processed results goes**, which means an available rule contains three elements:
 
 - Triggered event: The rule is triggered by an event. When triggered, the event inputs the context information (data source) of the event into the rule, and the event type is specified through the FROM clause of SQL;
 - Processing rules (SQL): Use SELECT clause and WHERE clause and built-in processing functions to filter and process data from context information;
@@ -52,16 +52,16 @@ The following figure is a simple rule, which is used to process the data at the 
 
 ![image-20190604103907875](../assets/image-20190604103907875.png)
 
-## Examples of typical application scenarios for rule engine
+## Examples of typical applications for the rule engine
 
-- Action listening: In the development of intelligent door lock for smart home, the function of the door lock will be abnormal because of offline resulting by the network or power failure, man-made damage and other reasons. Through using rule engine configuration to monitor offline events, it can push the fault information to the application service and realize the ability of first time fault detection in the access layer.
-- Data filtering: Truck fleet management of vehicle network. Vehicle sensors collect and report a large amount of operational data. The application platform only focuses on data with a vehicle speed greater than 40 km/h. In this scenario, the rule engine can be used to conditionally filter messages to the service, and data that satisfies the condition can be written to the business message queue .
-- Message routing: In the intelligent billing application, the terminal device distinguishes the service type by different topics. The message of billing service can be connected to the billing message queue by configuring the rule engine, and the non-billing information can be connected to other message queues to realize the routing configuration of business messages.
-- Message encoding and decoding: In the application scenarios such as public protocol/proprietary TCP protocol access and industrial control, the encoding and decoding of binary/special format message body can be done through the local processing function of the rule engine (which can be customized and developed on EMQX). Relevant messages can also be routed through the rule engine to external computing resources such as function computing for processing (processing logic can be developed by users), and the messages can be converted into JSON format that is easy for business processing, which simplifies the difficulty of project integration and improves the ability of rapid development and delivery of applications.
+- Action listening: In the development of an intelligent door lock for a smart home, the function of the door lock will be abnormal when it is offline due to network or power failure, man-made damage and other reasons. Through using rule engine configuration to monitor offline events, it can push the fault information to the application service and realize the ability of first time fault detection in the access layer.
+- Data filtering: Truck fleet management of a vehicle network. Vehicle sensors collect and report a large amount of operational data. The application platform only focuses on data with a vehicle speed greater than 40 km/h. In this scenario, the rule engine can be used to conditionally filter messages to the service, and data that satisfies the condition can be written to the business message queue.
+- Message routing: In an intelligent billing application, the terminal device distinguishes the service type by different topics. The messages of the billing service can be connected to the billing message queue by configuring the rule engine, and the non-billing information can be connected to other message queues to realize the routing configuration of business messages.
+- Message encoding and decoding: In application scenarios with public protocol/proprietary TCP protocol access and industrial control, the encoding and decoding of a binary/special format message body can be done through the local processing function of the rule engine (which can be customized and developed on EMQX). Relevant messages can also be routed through the rule engine to external computing resources such as function computing for processing (processing logic can be developed by users), and the messages can be converted into JSON format that is easy for business processing, which simplifies the difficulty of project integration and improves the ability to do rapid development and delivery of applications.
 
 ## Migration Guide
 
-In version 4.0, the SQL syntax of the rule engine is easier to use. In version 3. X, the event name needs to be specified after the **FROM** clause. After 4.0 version, we introduce the concept of **event topic** . By default, the **message publish** event no longer needs to be specified. 
+In version 4.0, the SQL syntax of the rule engine is easier to use. In version 3.X, the event name needs to be specified after the **FROM** clause. After 4.0 version, we introduce the concept of **event topic**. By default, the **message publish** event no longer needs to be specified. 
 
 ```sql
 ## 3.x
@@ -79,12 +79,12 @@ SELECT * FROM "$events/client_connected"
 ```
 
 ::: tip
-The old version of SQL syntax conversion function is provided in Dashboard to complete SQL upgrade and migration. 
+A conversion function that converts from the old version of the SQL syntax to the new version is provided in the Dashboard to ease SQL upgrade and migration. 
 :::
 
 ## Rule engine composition
 
-EMQX Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such function as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
+EMQX Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such functions as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
 
 The concepts related to the EMQX Broker rule engine include: rules, actions, resources, and resource-types.
 
@@ -153,7 +153,7 @@ The SQL statements of the rule engine can handle both messages (message publishi
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
 If you want emqx to publish the event message, you can configure it in the `emqx_rule_engine.conf` file.
 
-For all supported events and available fields, please see  [rule event](#rule-sql-events).
+For all supported events and available fields, please see [Event topics available for FROM clause](#event-topic-available-for-from-clause).
 
 ### SQL statement example: 
 **Basic syntax examples**
@@ -186,7 +186,7 @@ For all supported events and available fields, please see  [rule event](#rule-sq
     ```sql
     SELECT payload FROM "#" WHERE payload.x.y = 1
     ```
--  Try to connect when clientid = 'c1', extract its source IP address and port number:
+-  Find the connection where clientid = 'c1', extract its source IP address and port number:
     ```sql
     SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
     ```
@@ -378,7 +378,7 @@ FOREACH
 
 #### CASE-WHEN Syntax example
 
-**Example 1: Limit the value of the x field in the message to the range of 0 ~ 7.**
+**Example 1: Limit the value of the x field in the message to be in the range 0 - 7.**
 
 ```sql
 SELECT
@@ -401,7 +401,7 @@ Then the above SQL output is:
 {"x": 7}
 ```
 
-### Event topic available for FROM clause
+### Event topics available for the FROM clause
 | Event topic name              | Explanation          |
 | ----------------------------- | :------------------- |
 | $events/message\_delivered    | message delivery     |
@@ -741,7 +741,7 @@ The FROM statement is used to select the source of the event. If the message is 
 <td>power</td>
 <td>Exponential operation</td>
 <td><ol type="1">
-<li>Left operand x 2. Right operand y</li>
+<li>Left operand X 2. Right operand Y</li>
 </ol></td>
 <td>Y power of X</td>
 </tr>
