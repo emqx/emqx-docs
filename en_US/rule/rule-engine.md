@@ -42,7 +42,7 @@ For rule engine data, SQL statement format and [event topic](#event-topics) list
 
 ## Minimum rule
 
-The rule describes the three configurations of **where data comes from ,  how to filter and process data, and where processed results goes**, which means an available rule contains three elements:
+The rule describes the three configurations of **where data comes from,  how to filter and process data, and where processed results go to**, which means an available rule contains three elements:
 
 - Triggered event: The rule is triggered by an event. When triggered, the event inputs the context information (data source) of the event into the rule, and the event type is specified through the FROM clause of SQL;
 - Processing rules (SQL): Use SELECT clause and WHERE clause and built-in processing functions to filter and process data from context information;
@@ -84,7 +84,7 @@ A conversion function that converts from the old version of the SQL syntax to th
 
 ## Rule engine composition
 
-EMQX Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such functions as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
+EMQX Broker's rule engine can be used to flexibly process messages and events. By using the rule engine, it can easily achieve such functionalities as converting the message into a specified format, and then stored in a database table, or sent to the message queue.
 
 The concepts related to the EMQX Broker rule engine include: rules, actions, resources, and resource-types.
 
