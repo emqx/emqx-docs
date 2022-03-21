@@ -84,7 +84,7 @@ Enable or disable the automatic recovery mechanism of cluster brain splitting.
 
 #### Description
 
-Specify how long to delete short-line nodes from the cluster.
+Specify how long to delete offline nodes from the cluster.
 
 
 
