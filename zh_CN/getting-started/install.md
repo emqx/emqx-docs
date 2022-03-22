@@ -17,310 +17,20 @@ ref:
 
 EMQX 目前支持的操作系统:
 
-+ CentOS 6
-+ CentOS 7
-+ CentOS 8
-+ OpenSUSE tumbleweed
++ CentOS 7 (EL7)
++ CentOS 8 (EL8)
++ Raspbian 10
 + Debian 9
 + Debian 10
 + Ubuntu 16.04
 + Ubuntu 18.04
 + Ubuntu 20.04
-+ macOS 10.13
-+ macOS 10.14
-+ macOS 10.15
++ macOS 10
 + Windows Server 2019
 
-::: tip
-产品部署建议 Linux 服务器，不推荐 Windows 服务器。
-:::
+## RPM/DEB包安装 (Linux)
 
-## Shell 脚本一键安装 (Linux)
-
-```bash
-curl https://repos.emqx.io/install_emqx.sh | bash
-```
-
-## 包管理器安装 (Linux)
-
-### CentOS
-
-1.  安装所需要的依赖包
-
-    ```
-    $ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-    ```
-
-2.  使用以下命令设置稳定存储库，以 CentOS 7 为例
-
-    ```
-    $ sudo yum-config-manager --add-repo https://repos.emqx.io/emqx-ce/redhat/centos/7/emqx-ce.repo
-    ```
-
-3.  安装最新版本的 EMQX Broker
-
-    ```
-    $ sudo yum install emqx
-    ```
-
-    如果提示接受 GPG 密钥，请确认密钥符合 fc84 1ba6 3775 5ca8 487b 1e3c c0b4 0946 3e64 0d53，并接受该指纹。
-
-4.  安装特定版本的 EMQX Broker
-
-    1.  查询可用版本
-
-        ```
-        $ yum list emqx --showduplicates | sort -r
-
-        emqx.x86_64                     4.0.0-1.el7                        emqx-stable
-        emqx.x86_64                     3.0.1-1.el7                        emqx-stable
-        emqx.x86_64                     3.0.0-1.el7                        emqx-stable
-        ```
-
-    2.  根据第二列中的版本字符串安装特定版本，例如 4.0.0
-
-        ```
-        $ sudo yum install emqx-4.0.0
-        ```
-
-5.  启动 EMQX Broker
-
-      - 直接启动
-
-        ```
-        $ emqx start
-        emqx 4.0.0 is started successfully!
-
-        $ emqx_ctl status
-        Node 'emqx@127.0.0.1' is started
-        emqx v4.0.0 is running
-        ```
-
-      - systemctl 启动
-
-        ```
-        $ sudo systemctl start emqx
-        ```
-
-      - service 启动
-
-        ```
-        $ sudo service emqx start
-        ```
-
-6.  停止 EMQX Broker
-
-    ```
-    $ emqx stop
-    ok
-    ```
-
-7.  卸载 EMQX Broker
-
-    ```
-    $ sudo yum remove emqx
-    ```
-
-### Ubuntu、Debian
-
-1.  安装所需要的依赖包
-
-    ```
-    $ sudo apt update && sudo apt install -y \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg-agent \
-        software-properties-common
-    ```
-
-2.  添加 EMQX 的官方 GPG 密钥
-
-    ```
-    $ curl -fsSL https://repos.emqx.io/gpg.pub | sudo apt-key add -
-    ```
-
-    验证密钥
-
-    ```
-    $ sudo apt-key fingerprint 3E640D53
-
-    pub   rsa2048 2019-04-10 [SC]
-        FC84 1BA6 3775 5CA8 487B  1E3C C0B4 0946 3E64 0D53
-    uid           [ unknown] emqx team <support@emqx.io>
-    ```
-
-3.  使用以下命令设置 stable 存储库。 如果要添加 unstable 存储库，请在以下命令中的单词 stable 之后添加单词
-    unstable。
-
-    ```
-    $ sudo add-apt-repository \
-        "deb [arch=amd64] https://repos.emqx.io/emqx-ce/deb/ubuntu/ \
-        ./$(lsb_release -cs) \
-        stable"
-    ```
-
-    lsb\_release -cs 子命令返回发行版的名称，例如 xenial。 有时，在像 Linux Mint
-    这样的发行版中，您可能需要将 $(lsb\_release -cs) 更改为您的父发行版。
-    例如，如果您使用的是 Linux Mint Tessa，则可以使用 bionic。 EMQX Broker
-    不对未经测试和不受支持的发行版提供任何保证。
-
-4.  更新 apt 包索引
-
-    ```
-    $ sudo apt update
-    ```
-
-5.  安装最新版本的 EMQX Broker
-
-    ```
-    $ sudo apt install emqx
-    ```
-
-    在启用了多个 EMQX 仓库的情况下，如果 apt install 和 apt update
-    命令没有指定版本号，那么会自动安装最新版的 EMQ
-    X Broker。这对于有稳定性需求的用户来说是一个问题。
-
-6.  安装特定版本的 EMQX Broker
-
-    1.  查询可用版本
-
-        ```
-        $ sudo apt-cache madison emqx
-
-        emqx |      4.0.0 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
-        emqx |      3.0.1 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
-        emqx |      3.0.0 | https://repos.emqx.io/emqx-ce/deb/ubuntu bionic/stable amd64 Packages
-        ```
-
-    2.  使用第二列中的版本字符串安装特定版本，例如 4.0.0
-
-        ```
-        $ sudo apt install emqx=4.0.0
-        ```
-
-7.  启动 EMQX Broker
-
-      - 直接启动
-
-        ```
-        $ emqx start
-        emqx 4.0.0 is started successfully!
-
-        $ emqx_ctl status
-        Node 'emqx@127.0.0.1' is started
-        emqx v4.0.0 is running
-        ```
-
-      - systemctl 启动
-
-        ```
-        $ sudo systemctl start emqx
-        ```
-
-      - service 启动
-
-        ```
-        $ sudo service emqx start
-        ```
-
-8.  停止 EMQX Broker
-
-    ```
-    $ emqx stop
-    ok
-    ```
-
-9.  卸载 EMQX Broker
-
-    ```
-    $ sudo apt remove emqx
-    ```
-
-### OpenSUSE
-
-1.  下载 GPG 公钥并导入。
-
-    ```
-    $ curl -L -o /tmp/gpg.pub https://repos.emqx.io/gpg.pub
-    $ sudo rpmkeys --import /tmp/gpg.pub
-    ```
-
-2.  添加储存库地址
-
-    ```
-    $ sudo zypper ar -f -c https://repos.emqx.io/emqx-ce/redhat/opensuse/leap/stable emqx
-    ```
-
-3.  安装最新版本的 EMQX Broker
-
-    ```
-    $ sudo zypper in emqx
-    ```
-
-4.  安装特定版本的 EMQX Broker
-
-    1.  查询可用版本
-
-        ```
-        $ sudo zypper pa emqx
-
-        Loading repository data...
-        Reading installed packages...
-        S | Repository | Name | Version  | Arch
-        --+------------+------+----------+-------
-          | emqx       | emqx | 4.0.0-1  | x86_64
-          | emqx       | emqx | 3.0.1-1  | x86_64
-          | emqx       | emqx | 3.0.0-1  | x86_64
-        ```
-
-    2.  使用 Version 安装特定版本，例如 4.0.0
-
-        ```
-        $ sudo zypper in emqx-4.0.0
-        ```
-
-5.  启动 EMQX Broker
-
-      - 直接启动
-
-        ```
-        $ emqx start
-        emqx 4.0.0 is started successfully!
-
-        $ emqx_ctl status
-        Node 'emqx@127.0.0.1' is started
-        emqx v4.0.0 is running
-        ```
-
-      - systemctl 启动
-
-        ```
-        $ sudo systemctl start emqx
-        ```
-
-      - service 启动
-
-        ```
-        $ sudo service emqx start
-        ```
-
-6.  停止 EMQX Broker
-
-    ```
-    $ emqx stop
-    ok
-    ```
-
-7.  卸载 EMQX Broker
-
-    ```
-    $ sudo zypper rm emqx
-    ```
-
-## 二进制包安装 (Linux)
-
-1.  通过 [emqx.io](https://www.emqx.com/en/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQX 版本的二进制包。
+1. 访问 [emqx.com](https://www.emqx.com/zh/try?product=broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载EMQX 版本的二进制包。
 
 2. 安装 EMQX Broker，将下面的路径更改为您下载 EMQX 软件包的路径。
 
@@ -383,9 +93,13 @@ curl https://repos.emqx.io/install_emqx.sh | bash
       $ sudo yum remove emqx
       ```
 
-## ZIP 压缩包安装 (Linux、MaxOS、Windows)
+## ZIP 压缩包安装 (Linux、MacOS、Windows)
 
-1.  通过 [emqx.io](https://www.emqx.com/en/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 版本的 zip 包。
+::: warning
+ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
+:::
+
+1.  访问 [emqx.com](https://www.emqx.com/zh/try?product=broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
 
@@ -464,14 +178,6 @@ curl https://repos.emqx.io/install_emqx.sh | bash
 
         ```
         $ docker pull emqx/emqx:v4.0.0
-        ```
-
-      - 通过 [emqx.io](https://www.emqx.com/en/downloads/broker?osType=Linux) 或 [Github](https://github.com/emqx/emqx/releases) 下载 Docker 镜像，并手动加载
-
-        ```
-        $ wget -O emqx-docker.zip https://www.emqx.com/en/downloads/broker/v4.0.0/emqx-docker-v4.0.0-alpine3.10-amd64.zip
-        $ unzip emqx-docker.zip
-        $ docker load < emqx-docker-v4.0.0
         ```
 
 2.  启动 docker 容器
