@@ -6,28 +6,14 @@ Starting from download and installation, this document is to guide you to quickl
 
 EMQX as a software is released in different editions.
 
-- [Community](https://www.emqx.com/en/try?product=broker)
 - [Enterprise](https://www.emqx.com/en/try?product=enterprise)
-- [Edge](https://github.com/emqx/emqx/releases)
+- [Community](https://www.emqx.com/en/try?product=broker)
 
 EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
 which runs EMQX Enterprise edition.
 You can customize the deployment to suit your business development plans the best and get started quickly.
 
 :::: tabs type:card
-
-::: tab EMQX Community Edition
-The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
-
-- Fully open-sourced under APL 2.0
-- MQTT 3.1.1 and MQTT 5.0 spec
-- Highly available, masterless clustering
-- High concurrency with low latency
-- Extensible gateways and plugins
-- Data integration by calling HTTP APIs
-
-[Download](https://www.emqx.com/en/try?product=broker)
-:::
 
 ::: tab EMQX Cloud
 Connecting your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerating your IoT application development without the burden of self-managing the infrastructure.
@@ -53,6 +39,19 @@ reliable data transport, processing, and integration for business-critical IoT s
 - Global technical support team
 
 [Try Free](https://www.emqx.com/en/try?product=enterprise)
+:::
+
+::: tab EMQX Community Edition
+The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
+
+- Fully open-sourced under APL 2.0
+- MQTT 3.1.1 and MQTT 5.0 spec
+- Highly available, masterless clustering
+- High concurrency with low latency
+- Extensible gateways and plugins
+- Data integration by calling HTTP APIs
+
+[Download](https://www.emqx.com/en/try?product=broker)
 :::
 
 ::::
@@ -89,7 +88,7 @@ docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p
 ```
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
-please refer to [Running with Docker (including a simple docker-compose cluster)](./install.md#install-emq-x-in-docker-contain-a-simple-docker-compose-cluster).
+please refer to [Running with Docker (including a simple docker-compose cluster)](../deploy/install.md#install-emq-x-in-docker-contain-a-simple-docker-compose-cluster).
 
 ### Running EMQX in Kubernetes
 
@@ -120,12 +119,12 @@ A minimum of 2 cores and 4GB RAM can run the EMQX Enterprise.
 EMQX has prebuilt packages downloadable for Enterprise Linux(RedHat, CentOS, Rockylinux)
 as well as Debian, Ubuntu, and MacOS.
 
-- [CentOS installation](./install.md#centos)
-- [Ubuntu, Debian installation](./install.md#ubuntu-debian)
-- [MacOS, Windows, Linux ZIP installation](./install.md#zip-linux-macos-windows)
+- [RedHat, CentOS, RockyLinux, AmazonLinux  installation](../deploy/install.md#centos)
+- [Ubuntu, Debian installation](../deploy/install.md#ubuntu-debian)
+- [MacOS, Windows, Linux tar.gz installation](../deploy/install.md#tgz)
 
 For other platforms which are not in the prebuilt list,
-you may [build the runnables from source code](./install.md#source-code-compilation-and-installation) or
+you may [build the runnables from source code](../deploy/install.md#source-code-compilation-and-installation) or
 simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 ## Start EMQX
@@ -162,7 +161,7 @@ Check if the service is working properly:
 sudo systemctl status emqx
 ```
 
-### Start EMQX using ZIP installation package
+### Start EMQX using tar.gz package
 
 Switch to the EMQX decompression directory and execute the following command to start EMQX:
 
@@ -186,7 +185,7 @@ You can use the following client tools or client libraries to access EMQX
 
 EMQX dashboard comes with a builtin, websocket based MQTT client.
 
-Open Dashboard and enter the page of **Tools -> Websocket**,
+Open Dashboard and enter the page of **Diagnose -> Websocket**,
 where you can use the MQTT over Websokcet client to quickly access EMQX.
 
 The Websocket page provides you with a simple but effective WebSocket client tool,
@@ -272,7 +271,7 @@ various SQL / NoSQL / time-series databases and enterprise systems, such as SAP.
 
 - [Rule Engine](../rule/rule-engine.md): The concept and basic usage of rule engine.
 - [Create Rule](../rule/rule-create.md): How to create a rule.
-- [Example](../rule/rule-example.md#send data to-web-service): Tutorial on using various data
+- [Example](../rule/rule-example.md#send-data-to-web-service): Tutorial on using various data
   sources for rule engine.
 
 ### HTTP API
