@@ -75,8 +75,8 @@
         - advanced/acl-mongodb
     - advanced/blacklist
 
-- title_en: Data Integration (Rule Engine)
-  title_cn: 数据集成（规则引擎）
+- title_en: IoT Rule & Data Bridge
+  title_cn: 规则引擎与数据桥接
   children:
     - rule/rule-engine
     - rule/rule-engine_grammar_and_examples
