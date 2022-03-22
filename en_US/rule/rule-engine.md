@@ -1266,6 +1266,15 @@ The FROM statement is used to select the source of the event. If the message is 
 
 {% endemqxee %}
 
+#### Compresses and Uncompresses functions
+
+| Function | Purpose |        Parameters         | Returned value |
+| -------- | -------------- |--------------- | --------------------|
+| `gzip` | Compresses data with gzip | Raw binary data | Compressed binary data |
+| `gunzip` | Uncompresses data with gunzip | Compressed binary data | Raw binary data |
+| `zip` | Compresses data with zip |  Raw binary data | Compressed binary data |
+| `unzip` | Uncompresses data with unzip | Compressed binary data | Raw binary data |
+
 
 ### Test SQL statements in Dashboard
 The SQL statement test function is provided in the Dashboard interface, and the SQL test results are shown through the given SQL statement and event parameters.
