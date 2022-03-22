@@ -38,9 +38,9 @@ Select the client connection event, filter the device whose Username is `emqx` a
 SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = 'emqx'
 ```
 
-For rule engine data, SQL statement format and [event topic](#event-topics) list, please refer to [SQL manual](#sql-statement) for detailed tutorials.
+For rule engine data, SQL statement format and [event topic](./rule-engine_field.md#event-topic-available-for-from-clause) list, please refer to [SQL manual](./rule-engine_grammar_and_examples.md#rule-engine-sql-statement) for detailed tutorials.
 
-## Minimum rule
+## Rule engine composition
 
 The rule describes the three configurations of **where data comes from,  how to filter and process data, and where processed results go to**, which means an available rule contains three elements:
 
@@ -120,6 +120,7 @@ Rule: {
 ::: tip
 Actions and resource types are provided by emqx or plugin code and cannot be created dynamically through API and CLI.
 :::
+
 
 ## SQL statement 
 ### SQL syntax
@@ -324,59 +325,28 @@ The FOREACH statement will perform a "message republish" action for each object 
 
 In DO and INCASE statements, you can use `item` to access the object of the current loop, or you can customize a variable name by using the `as` syntax in FOREACH. So the SQL statement in this example can be written as:
 
-```sql
-FOREACH
-    payload.sensors as s
-DO
-    clientid,
-    s.name as name,
-    s.idx as idx
-INCASE
-    s.idx >= 1
-FROM "t/#"
-```
+- Action listening: In the development of intelligent door lock for smart home, the function of the door lock will be abnormal because of offline resulting by the network or power failure, man-made damage and other reasons. Through using rule engine configuration to monitor offline events, it can push the fault information to the application service and realize the ability of first time fault detection in the access layer.
+- Data filtering: Truck fleet management of vehicle network. Vehicle sensors collect and report a large amount of operational data. The application platform only focuses on data with a vehicle speed greater than 40 km/h. In this scenario, the rule engine can be used to conditionally filter messages to the service, and data that satisfies the condition can be written to the business message queue .
+- Message routing: In the intelligent billing application, the terminal device distinguishes the service type by different topics. The message of billing service can be connected to the billing message queue by configuring the rule engine, and the non-billing information can be connected to other message queues to realize the routing configuration of business messages.
+- Message encoding and decoding: In the application scenarios such as public protocol/proprietary TCP protocol access and industrial control, the encoding and decoding of binary/special format message body can be done through the local processing function of the rule engine (which can be customized and developed on EMQX). Relevant messages can also be routed through the rule engine to external computing resources such as function computing for processing (processing logic can be developed by users), and the messages can be converted into JSON format that is easy for business processing, which simplifies the difficulty of project integration and improves the ability of rapid development and delivery of applications.
 
-**Example 3: Based on Example 2, remove the `c_` prefix of `c_steve` in the clientid field**
+### Test SQL statements in Dashboard
+The SQL statement test function is provided in the Dashboard interface, and the SQL test results are shown through the given SQL statement and event parameters.
 
-Various SQL functions can be called in the FOREACH and DO statements. If you want to change `c_steve` into `steve`, you can change the SQL in Example 2 into:
+1.  On the rule creating interface, enter **rule SQL** and enable the **SQL test** switch:
 
-```sql
-FOREACH
-    payload.sensors as s
-DO
-    nth(2, tokens(clientid,'_')) as clientid,
-    s.name as name,
-    s.idx as idx
-INCASE
-    s.idx >= 1
-FROM "t/#"
-```
+    ![image](../assets/sql-test-1@2x.png)
 
-In addition, multiple expressions can also be placed in the FOREACH clause, as long as the last expression specifies the array to traverse. For example, we can change the message body, and there is one more layer of Object outside the sensors:
+2. Modify the field of the simulated event, or use the default configuration, and click the **Test** button:
 
-```json
-{
-    "date": "2020-04-24",
-    "data": {
-        "sensors": [
-            {"name": "a", "idx":0},
-            {"name": "b", "idx":1},
-            {"name": "c", "idx":2}
-        ]
-    }
-}
-```
+   ![image](../assets/sql-test-2@2x.png)
 
-Then FOREACH can select data before deciding which array to be traversed:
+3. The result of SQL processing will be displayed in the **Test Output** text box:
 
-```sql
-FOREACH
-    payload.data as data
-    data.sensors as s
-...
-```
+   ![image](../assets/sql-test-3@2x.png)
 
-#### CASE-WHEN Syntax example
+## Migration Guide
+
 
 **Example 1: Limit the value of the x field in the message to be in the range 0 - 7.**
 
@@ -565,9 +535,14 @@ SELECT clientid as cid FROM "#" WHERE cid = 'abc'
 
 SELECT clientid as cid FROM "#" WHERE username = 'abc'
 
-## But the following SQL statement will not work, because the variable xyz is neither an available field in the message publishing event nor defined in the SELECT statement:
+## 4.0 and later
+## The message.publish event is processed by default, and MQTT topics are filtered directly after FROM
+## The above SQL is equivalent to:
+SELECT * FROM 't/#'
 
-SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
+## Other events are filtered by event topics
+SELECT * FROM "$events/message_acked" where topic =~ 't/#'
+SELECT * FROM "$events/client_connected"
 ```
 
 The FROM statement is used to select the source of the event. If the message is published, fill in the topic of the message, if it is an event, fill in the corresponding event topic.
@@ -1280,4 +1255,5 @@ The SQL statement test function is provided in the Dashboard interface, and the 
 
 3. The result of SQL processing will be displayed in the **Test Output** text box:
 
-   ![image](../assets/sql-test-3@2x.png)
+
+[Rule engine statement and examples](rule-engine_grammar_and_examples.md)

@@ -117,7 +117,7 @@ EMQX Broker divides metrics into Metrics and Stats. Metrics usually refer to dat
 | client.auth.failure   | Integer   | Number of client authentication failures, available after at least one authentication plugin is enabled |
 | client.auth.ignore    | Integer   | Number of authentication ignores, available after at least one authentication plugin is enabled. When multiple authentication plugins are enabled at the same time, a login event may trigger multiple ignore counts. After all authentication plugins are ignored, the client may successfully log in anonymously |
 | client.acl.allow      | Integer   | Number of client ACL verification passes, available after at least one ACL plugin is enabled |
-| client.acl.deny       | Integer   |Number of client ACL verification failures, available after at least one ACL plugin is enabled  |
+| client.acl.deny       | Integer   | Number of client ACL verification failures, available after at least one ACL plugin is enabled  |
 | client.acl.ignore     | Integer   | ACL verification ignore times, available after at least one ACL plugin is enabled. When multiple ACL plugins are enabled at the same time, a publish/subscribe event may trigger multiple ignore counts. After all ACL plug-ins are ignored, the publish/subscribe operation may succeed because acl_nomatch is true |
 | session.created       | Integer   | `session.created` hook trigger times                      |
 | session.discarded     | Integer   | `session.discarded` hook trigger times                    |

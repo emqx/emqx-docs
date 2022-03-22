@@ -1,89 +1,136 @@
 # 保存数据到 MongoDB
 
-搭建 MongoDB 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
+为方便演示部分功能，后续内容我们将基于 MongoDB Cloud 展开，不过以其他方式部署 MongoDB 的用户依然通过本文档了解学习规则引擎 MongoDB 资源和动作的使用。
 
-```bash
-$ brew install mongodb
-$ brew services start mongodb
+我们首先在 MongoDB Cloud 上以副本集方式部署一个名为 Cluster0 的集群实例：
 
-## 新增 root/public 用户
-$ use mqtt;
-$ db.createUser({user: "root", pwd: "public", roles: [{role: "readWrite", db: "mqtt"}]});
+![image-20211126152843438](./assets/rule-engine/mongo_data_to_store1.png)
 
-## 修改配置，关闭匿名认证
-$ vim /usr/local/etc/mongod.conf
+在本示例中，该集群实例包含了一个主节点和两个从节点：
 
-    security:
-    authorization: enabled
+![image-20211126153431253](./assets/rule-engine/mongo_data_to_store2.png)
 
-$ brew services restart mongodb
+在进入下一步之前，我们还需要在 `Database Access` 和 `Network Access` 页面配置用户密码和 IP 访问白名单以确保能成功访问。
+
+## 创建资源
+
+完成以上工作后，接下来我们将在 EMQX Dashboard 中完成 MongoDB 资源和规则的创建。
+
+首先打开 EMQX Dashboard，进入规则引擎的资源页面，点击左上角的创建按钮，将弹出 **创建资源** 表单，在表单中的 **资源类型** 下拉框中我们可以看到 **MongoDB 单节点模式**、**MongoDB Relica Set 模式**和 **MongoDB Sharded 模式**三个资源类型，分别对应 MongoDB 的三种部署方式。
+
+![image-20211126200858453](./assets/rule-engine/mongo_data_to_store3.png)
+
+这里我们选择 **MongoDB Replica Set 模式**，然后根据 MongoDB Server 的实际情况完成相关参数的配置即可。
+
+以下为 MongoDB 资源的部分参数说明：
+
+- **SRV 记录**，是否查询 SRV 和 TXT 记录以获取服务器列表和 authSource、replicaSet 选项。
+- **MongoDB 服务器**，指定服务器列表或添加了 DNS SRV 和 TXT 记录的域名。
+- **数据库名称**，MongoDB 数据库名称。
+- **连接池大小**，配置连接进程池大小，合理配置连接池大小以获取最佳性能。
+- **用户名、密码**，身份验证凭据。
+- **连接认证源**，指定用于授权的数据库，默认为 admin。如果启用了 SRV 记录，且您的 MongoDB 服务器域名添加了包含 authSource 选项的的 DNS TXT 记录，将优先使用该记录中的 authSource 选项。
+- **写模式**，可设置为 unsafe 或 safe，设置为 safe 时会等待 MongoDB Server 的响应并返回给调用者。未指定时将使用默认值 safe。
+- **读模式**，可设置为 master 或 slave_ok，设置为 master 时表示每次查询都将从主节点读取最新数据。未指定时将使用默认值 master。
+- **副本集名称**，如果您的 MongoDB 以副本集方式部署，则需要指定相应的副本集名称。但如果 **SRV 记录** 设置为 true，且您的 MongoDB 服务器域名添加了包含 replicaSet 选项的 DNS TXT 记录，那么可以忽略此配置项。
+- **开启 SSL**，是否启用 TLS 连接，设置为 true 时会出现更多 TLS 相关配置，请按需配置。注意：连接至 MongoDB Cloud 时必须开启 SSL。
+
+![image-20211126201826084](./assets/rule-engine/mongo_data_to_store4.png)
+
+根据是否启用 SRV Record，我们可以使用以下两种方式配置 MongoDB 资源：
+
+### 启用 SRV Record
+
+MongoDB Cloud 默认提供了一个已经添加了 SRV 和 TXT 记录的域名以供连接。
+
+我们在 MongoDB Cloud 的 Databases 页面点击 Cluster0 实例的 Connect 按钮，三个连接方式任选其一，然后就可以看到当前实例需要使用的连接字符串，其中光标选中的部分就是我们稍后需要配置到 EMQX 规则引擎 MongoDB 资源的 **MongoDB 服务器** 字段的内容。
+
+![image-20211129104759799](./assets/rule-engine/mongo_data_to_store5.png)
+
+现在，我们继续完成 MongoDB 资源的配置，这里我主要进行了以下修改：
+
+1. 将 **SRV 记录** 设置为 true，然后将 **MongoDB 服务器** 设置为我们刚刚获取的域名。
+2. 将 **数据库名称** 设置为 test，这是 MongoDB Cloud 的默认数据库，你可以按需配置。
+3. 配置 **用户名** 和 **密码**，你需要按实际情况配置。
+4. **连接认证源** 和 **副本集名称** 保持为空，EMQX 会自动查询 DNS TXT 记录。
+5. 将 **开启 SSL** 设置为 true，这是 MongoDB Cloud 的连接要求，其他方式部署时请按需配置。
+
+![image-20211129112203066](./assets/rule-engine/mongo_data_to_store6.png)
+
+最后，我们点击 **创建资源** 表单最下方的 **确定** 按钮以完成创建，此时一个新的 MongoDB 资源实例就在 EMQX 中创建成功了：
+
+![image-20211129113336183](./assets/rule-engine/mongo_data_to_store7.png)
+
+### 不启用 SRV Record
+
+如果我们选择不启用 SRV Record，那么在副本集和分片模式下我们就需要将 MongoDB 集群的所有节点地址都填写到 **MongoDB 服务器** 选项中，并且在副本集模式下还必须指定副本集名称。
+
+为了快速获取这些配置信息，我们可以使用 `nslookup` 命令来查询 DNS 记录：
+
+```
+$ nslookup
+> set type=SRV 
+> _mongodb._tcp.cluster0.j0ehi.mongodb.net
+Server:         26.26.26.53
+Address:        26.26.26.53#53
+
+Non-authoritative answer:
+_mongodb._tcp.cluster0.j0ehi.mongodb.net        service = 0 0 27017 cluster0-shard-00-01.j0ehi.mongodb.net.
+_mongodb._tcp.cluster0.j0ehi.mongodb.net        service = 0 0 27017 cluster0-shard-00-02.j0ehi.mongodb.net.
+_mongodb._tcp.cluster0.j0ehi.mongodb.net        service = 0 0 27017 cluster0-shard-00-00.j0ehi.mongodb.net.
+
+Authoritative answers can be found from:
+> set type=TXT 
+> cluster0.j0ehi.mongodb.net
+Server:         26.26.26.53
+Address:        26.26.26.53#53
+
+Non-authoritative answer:
+cluster0.j0ehi.mongodb.net      text = "authSource=admin&replicaSet=atlas-r36spx-shard-0"
 ```
 
-初始化 MongoDB 表:
+然后将查询到的服务器列表按 `host[:port][,...hostN[:portN]]` 格式填写到 **MongoDB 服务器** 选项中，并且按照查询到的 TXT 记录内容来配置 **认证数据源** 和 **副本集名称**：
 
-```bash
-$ mongo 127.0.0.1/mqtt -uroot -ppublic
-db.createCollection("t_mqtt_msg");
+![image-20211129143723391](./assets/rule-engine/mongo_data_to_store8.png)
+
+最后，我们同样点击 **创建资源** 表单最下方的 **确定** 按钮以完成创建。
+
+## 创建规则
+
+### 1. 配置 SQL
+
+资源创建完成后，我们还需创建相应的规则。点击规则页面左上角的 **创建** 按钮进入 **创建规则** 页面，输入以下 SQL：
+
+```
+SELECT
+	id as msgid,
+	topic,
+	qos,
+	payload,
+	publish_received_at as arrived
+FROM
+	"t/#"
 ```
 
-创建规则:
+这个 SQL 表示所有主题与主题过滤器 `t/#` 匹配的消息都将触发这条规则，例如 `t/1`，`t/1/2` 等，并且使用筛选出来的 msgid，topic 等数据执行后续的动作。
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
+![image-20211129150342611](./assets/rule-engine/mongo_data_to_store9.png)
 
-填写规则 SQL:
+### 2. 添加响应动作
 
-```bash
-SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/#"
-```
+点击 **添加动作** 按钮，**动作类型** 选择数据持久话和保存数据到 MongoDB，然后在 **使用资源** 下拉列表选择一个我们刚刚创建的资源。**Collection** 按需配置，这里我配置为 demo。**消息内容模板 ** 保持为空，表示将 SQL 筛选出来的数据，以 Key-Value 列表的形式转换为 Json 数据写入 MongoDB。每条规则里面都可以添加多个响应动作，这里我们只需要用到一个响应动作，所以添加完以下动作时，就可以点击页面最下方的 **创建** 按钮完成规则的创建。
 
-![image](./assets/rule-engine/mongodb_data_to_store1.png)
+![image-20211129151712310](./assets/rule-engine/mongo_data_to_store10.png)
 
-关联动作:
+## 测试验证
 
-在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 MongoDB”。
+我们直接使用 Dashboard 中的 MQTT 客户端工具来发布一条消息。本示例中我们将消息主题改为 `t/1` 以命中我们设置的规则，Payload 和 QoS 保持不变，然后点击 **发布**。
 
-![image](./assets/rule-engine/mongo-action-0@2x.png)
+![image-20211129155548290](./assets/rule-engine/mongo_data_to_store11.png)
 
-填写动作参数:
+消息发布成功后，我们就可以在 MongoDB Cloud 的 Cluster0 集群实例的 Collections 页面看到刚刚写入的数据：
 
-“保存数据到 MongoDB” 动作需要三个参数：
-
-1). 关联资源的 ID。初始状况下，资源下拉框为空，现点击右上角的 “新建资源” 来创建一个 MongoDB 单节点 资源。
-
-![image](./assets/rule-engine/mongodb_data_to_store2.png)
-
-填写资源配置:
-
-数据库名称 填写 “mqtt”，用户名填写 “root”，密码填写 “public”，连接认证源填写 “mqtt”
-其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
-
-![image](./assets/rule-engine/mongo-resoure-1.png)
-
-点击 “新建” 按钮，完成资源的创建。
-
-2). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t_mqtt\_msg”
-
-3). Payload Tmpl 模板。这个例子里我们向 MongoDB 插入一条数据，模板为空, 插入的数据是上面SQL语句select出来的结果用json格式写入到MongoDB中
+![image-20211129160418285](./assets/rule-engine/mongo_data_to_store12.png)
 
 
-![](./assets/rule-engine/mongodb_data_to_store3.png)
 
-在点击 “新建” 完成规则创建
-
-![image](./assets/rule-engine/mongodb_data_to_store4.png)
-
-现在发送一条数据，测试该规则:
-
-```bash
-Topic: "t/mongo"
-QoS: 1
-Payload: "hello"
-```
-
-然后检查 MongoDB 表，可以看到该消息已成功保存:
-
-![image](./assets/rule-engine/mongo-rule-result@2x.png)
-
-在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
-
-![image](./assets/rule-engine/mongo-rule-result@3x.png)
