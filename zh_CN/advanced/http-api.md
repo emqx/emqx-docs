@@ -510,6 +510,12 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/e
 
 {"code":0}
 ```
+除了通过 Query String 传参外，还可以使用 Body 。
+```bash
+curl   -u admin:public -X 'PUT' http://127.0.0.1:18083/api/v4/clients/test/keepalive -d '{"interval": 10}'
+
+{"code":0}
+```
 
 ## 订阅信息
 

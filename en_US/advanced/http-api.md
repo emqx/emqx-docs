@@ -488,7 +488,13 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/e
 
 {"code":0}
 ```
+In addition to the above Query String, we also support passing through Body.
 
+```bash
+curl   -u admin:public -X 'PUT' http://127.0.0.1:18083/api/v4/clients/test/keepalive -d '{"interval": 10}'
+
+{"code":0}
+```
 ### Subscription Information
 
 #### GET /api/v4/subscriptions 
