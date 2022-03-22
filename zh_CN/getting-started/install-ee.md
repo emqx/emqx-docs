@@ -20,8 +20,8 @@ EMQX 消息服务器每个版本会发布 CentOS、Ubuntu、Debian 平台程序�
 
 ### 使用 rpm 包安装 EMQX
 
-1.  通过 [emqx.com](https://www.emqx.com/zh/downloads/enterprise) 选择 CentOS
-    版本，然后下载要安装的 EMQX 版本的 rpm 包。
+1. 访问[emqx.com](https://www.emqx.com/zh/try?product=enterprise) 选择 CentOS
+   版本，然后下载要安装的 EMQX 版本的 rpm 包。
 
 2.  安装 EMQX
 
@@ -66,7 +66,7 @@ EMQX 消息服务器每个版本会发布 CentOS、Ubuntu、Debian 平台程序�
 ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
 :::
 
-1.  通过 [emqx.com](https://www.emqx.com/zh/downloads/enterprise) 选择 Centos
+1.  通过 [emqx.com](https://www.emqx.com/en/try?product=enterprise) 选择 Centos
     版本，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
@@ -99,7 +99,7 @@ ZIP包适用于测试和热更，如果不知道如何手动安装所有可能�
 
 ### 使用 deb 包安装 EMQX
 
-1.  通过 [emqx.com](https://www.emqx.com/zh/downloads/enterprise) 选择 Ubuntu
+1.  通过 [emqx.com](https://www.emqx.com/en/try?product=enterprise) 选择 Ubuntu
     版本，然后下载要安装的 EMQX 版本的 deb 包。
 
 2.  安装 EMQX
@@ -148,7 +148,7 @@ $ sudo service emqx start
 ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
 :::
 
-1.  通过 [emqx.com](https://www.emqx.com/zh/downloads/enterprise) 选择 Ubuntu
+1.  通过 [emqx.com](https://www.emqx.com/en/try?product=enterprise) 选择 Ubuntu
     版本，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
@@ -182,7 +182,7 @@ emqx 4.0.0 is running
 
 ### 使用 deb 包安装 EMQX
 
-1.  通过 [emqx.com](https://www.emqx.com/zh/downloads/enterprise) 选择 Debian
+1.  通过 [emqx.com](https://www.emqx.com/en/try?product=enterprise) 选择 Debian
     版本，然后下载要安装的 EMQX 版本的 deb 包。
 
 2.  安装 EMQX
@@ -233,7 +233,7 @@ emqx 4.0.0 is running
 ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
 :::
 
-1.  通过 [emqx.com](https://www.emqx.com/zh/downloads/enterprise) 选择 Debian
+1.  通过 [emqx.com](https://www.emqx.com/en/try?product=enterprise) 选择 Debian
     版本，然后下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
@@ -264,7 +264,7 @@ ZIP包适用于测试和热更，如果不知道如何手动安装所有可能�
 
 ### 使用 ZIP 包安装 EMQX
 
-1.  通过 [emqx.com](https://www.emqx.com/zh/downloads/enterprise) ，选择 EMQX
+1.  通过 [emqx.com](https://www.emqx.com/en/try?product=enterprise) ，选择 EMQX
     版本，然后下载要安装的 zip 包。
 
 2.  解压压缩包

@@ -30,7 +30,7 @@ EMQX 目前支持的操作系统:
 
 ## RPM/DEB包安装 (Linux)
 
-1.  通过 [emqx.com](https://www.emqx.com/en/downloads/broker) 或 [Github](https://github.com/emqx/emqx/releases) 选择系统发行版，然后下载要安装的 EMQX 版本的二进制包。
+1. 访问 [emqx.com](https://www.emqx.com/zh/try?product=broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载EMQX 版本的二进制包。
 
 2. 安装 EMQX Broker，将下面的路径更改为您下载 EMQX 软件包的路径。
 
@@ -93,13 +93,13 @@ EMQX 目前支持的操作系统:
       $ sudo yum remove emqx
       ```
 
-## ZIP 压缩包安装 (Linux、MaxOS、Windows)
+## ZIP 压缩包安装 (Linux、MacOS、Windows)
 
 ::: warning
 ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
 :::
 
-1.  通过 [emqx.com](https://www.emqx.com/en/downloads/broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 版本的 zip 包。
+1.  访问 [emqx.com](https://www.emqx.com/zh/try?product=broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 版本的 zip 包。
 
 2.  解压程序包
 

@@ -30,7 +30,7 @@ EMQX binary packages are released on below operating systems:
 
 ## Package Installation (Linux)
 
-1.  Use [emqx.com](https://www.emqx.com/en/downloads/broker) or [Github](https://github.com/emqx/emqx/releases) for download EMQX Broker packages。
+1.  Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
 
 2. Install EMQX Broker:
 
@@ -93,13 +93,13 @@ EMQX binary packages are released on below operating systems:
       ```
 
 
-## ZIP (Linux、MaxOS、Windows)
+## ZIP (Linux、MacOS、Windows)
 
 ::: warning
 ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install zip packages for production unless you know how to manually resolve all the runtime dependencies.
 :::
 
-1.  Download the zip package of the EMQX Broker version to be installed from [emqx.com](https://www.emqx.com/en/downloads/broker) or [Github](https://github.com/emqx/emqx/releases).
+1.  Download EMQX zip package from [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases).
 
 2.   Unzip the installation file:
 
