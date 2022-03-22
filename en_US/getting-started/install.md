@@ -360,7 +360,7 @@ curl https://repos.emqx.io/install_emqx.sh | bash
       ```
 
 
-## ZIP (Linux、MaxOS、Windows)
+## ZIP (Linux, MaxOS, Windows)
 
 1.  Download the zip package of the EMQX Broker version to be installed from [emqx.io](https://www.emqx.com/en/downloads/broker?osType=Linux) or [Github](https://github.com/emqx/emqx/releases).
 
