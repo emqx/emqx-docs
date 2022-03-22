@@ -584,6 +584,10 @@
           "path": "advanced/hooks"
         },
         {
+          "title": "Internal Modules",
+          "path": "advanced/internal-modules"
+        },
+        {
           "title": "Metrics",
           "path": "advanced/metrics-and-stats"
         },

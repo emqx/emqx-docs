@@ -2,10 +2,10 @@
 
 {% emqxce %}
 ::: tip
-Only the following operations are applicable in EMQX Broker:
+Only the following operations are applicable in the community edition of the EMQX Broker:
 - Check (debug)
-- Send data to web service
-- Bridge data to MQTT Broker
+- Send data to a web service
+- Bridge data to a MQTT Broker
 
 
 The rest are exclusive to EMQX Enterprise.
@@ -42,7 +42,7 @@ The first two args are mandatory:
 
 - SQL: SELECT \* FROM "message.publish" WHERE topic = 't/a'
 - Action List: \[{"name":"inspect", "params": {"a": 1}}\]. Action List
-  is of tye JSON Array. "name" is the name of the action, "params" is
+  is of type JSON Array. "name" is the name of the action, "params" is
   the parameters of the action. Note that the action `inspect` does
   not need a resource.
 

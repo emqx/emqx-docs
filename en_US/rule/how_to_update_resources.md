@@ -34,7 +34,7 @@ emqx_ctl resources update $ID -d $Desc -c $Config
 
 The first parameter after `update` is the resource ID, the `-d` parameter is "description" and the `-c` parameter is the ***JSON string*** format of the specific resource parameter:
 
-For example：
+For example:
 
 ```json
 {
@@ -49,13 +49,13 @@ For example：
 }
 ```
 
-It's string format is：
+It's string format is:
 
 ```shell
 "{\"verify\":false,\"url\":\"http://www.demo.com\",\"request_timeout\":5,\"pool_size\":32,\"keyfile\":\"\",\"connect_timeout\":5,\"certfile\":\"\",\"cacertfile\":\"\"}"
 ```
 
-Full command ：
+Full command:
 
 ```shell
 emqx_ctl resources update resource:001 -d "hello" -c "{\"verify\":false,\"url\":\"http://www.demo.com\",\"request_timeout\":5,\"pool_size\":32,\"keyfile\":\"\",\"connect_timeout\":5,\"certfile\":\"\",\"cacertfile\":\"\"}"
