@@ -93,14 +93,12 @@ node.max_ports = 1048576
 
 设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。
 
-EMQX 社区版 配置文件 emqx/etc/emqx.confa
-EMQX 企业版 配置文件 emqx/etc/listeners.conf
+例如，TCP 监听器可使用如下配置。
 
 ```bash
 ## TCP Listener
-listener.tcp.external = 0.0.0.0:1883
-listener.tcp.external.acceptors = 64
-listener.tcp.external.max_connections = 1024000
+listeners.tcp.$name.acceptors = 64
+listeners.tcp.$name.max_connections = 1024000
 ```
 
 ## 测试客户端设置

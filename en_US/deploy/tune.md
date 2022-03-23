@@ -1,6 +1,6 @@
 # Tuning guide
 
-For EMQX Message Server 4.x version, MQTT connection stress test reached 1.3 million on an 8-core, 32G memory CentOS server.
+Since 4.2, EMQX had been stress tested with 1.3 million on an 8-core, 32G memory CentOS server.
 
 This guide includes in general tuning suggestions for one EMQX broker to serve about 1 million clients.
 
@@ -133,17 +133,14 @@ node.max_ports = 2097152
 
 ## EMQX Broker Tuning
 
-Tune the acceptor pool, max_clients limit and socket options.
+Tune the acceptor pool size and `max_connections` limit in `etc/emqx.conf`.
 
-For EMQX Community edition, find listeners config in `etc/emqx.conf`
-
-For EMQX Enterprise eidtion, find listeners config in `etc/listeners.conf`
+E.g, for TCP listener:
 
 ```bash
 ## TCP Listener
-listener.tcp.external = 0.0.0.0:1883
-listener.tcp.external.acceptors = 64
-listener.tcp.external.max_connections = 1024000
+listeners.tcp.$name.acceptors = 64
+listeners.tcp.$name.max_connections = 1024000
 ```
 
 ## Client Machine Tuning
