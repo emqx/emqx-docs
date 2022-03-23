@@ -1425,6 +1425,8 @@ For example, after some new trusted certificates are added to `cacertfile`
 or server certificate `certfile` renewal for SSL listeners, you can use this command
 to make the new certificate file take effect instead of restarting EMQX's SSL listener.
 
+**NOTE** The updates of the cache do not affect currently established TLS connections.
+
 
 | Command                         | Description                                 |
 | ------------------------------- | ------------------------------------------- |
