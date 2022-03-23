@@ -1317,23 +1317,23 @@ ok
 
 ### acl 命令
 
-| 命令                         | 描述                    |
-| ---------------------------- | ----------------------- |
-| acl list clientid                                    | List clientid acls|
-| acl list username                                    | List username acls|
-| acl list _all                                        | List $all acls|
-| acl show clientid \<Clientid>                         | Lookup clientid acl detail|
-| acl show username \<Username>                         | Lookup username acl detail|
-| acl aad clientid \<Clientid> \<Topic> \<Action> \<Access>| Add clientid acl|
-| acl add Username \<Username> \<Topic> \<Action> \<Access>| Add username acl|
-| acl add _all \<Topic> \<Action> \<Access>               | Add $all acl|
-| acl del clientid \<Clientid> \<Topic>                  | Delete clientid acl|
-| acl del username \<Username> \<Topic>                  | Delete username acl|
-| acl del _all \<Topic>                                 | Delete $all acl|
+| 命令                                                     | 描述                       |
+| -------------------------------------------------------- | -------------------------- |
+| `acl list clientid                                     ` | List clientid acls         |
+| `acl list username                                     ` | List username acls         |
+| `acl list _all                                         ` | List $all acls             |
+| `acl show clientid <Clientid>                          ` | Lookup clientid acl detail |
+| `acl show username <Username>                          ` | Lookup username acl detail |
+| `acl aad clientid <Clientid> <Topic> <Action> <Access> ` | Add clientid acl           |
+| `acl add Username <Username> <Topic> <Action> <Access> ` | Add username acl           |
+| `acl add _all <Topic> <Action> <Access>                ` | Add $all acl               |
+| `acl del clientid <Clientid> <Topic>                   ` | Delete clientid acl        |
+| `acl del username <Username> <Topic>                   ` | Delete username acl        |
+| `acl del _all \<Topic>                                 ` | Delete $all acl            |
 
 #### acl list
 
-+ acl list clientid
++ acl list `clientid`
 
   列出 clientid 的 ACL 规则
 
@@ -1342,7 +1342,7 @@ ok
   Acl(clientid = <<"emqx_clientid">> topic = <<"Topic/A">> action = pub access = allow)
   ```
 
-+ acl list username
++ acl list `username`
 
   列出 username 的 ACL 规则
 
@@ -1351,7 +1351,7 @@ ok
   Acl(username = <<"emqx_username">> topic = <<"Topic/B">> action = sub access = deny)
   ```
 
-+ acl list _all
++ acl list `_all`
 
   列出 $all 的 ACL 规则
 
@@ -1400,7 +1400,7 @@ ok
   ok
   ```
 
-+ acl aad _all `<Topic>` `<Action>` `<Access>`
++ acl aad `_all` `<Topic>` `<Action>` `<Access>`
 
   增加一条 $all 的 ACL 规则
 
@@ -1429,7 +1429,7 @@ ok
   ok
   ```
 
-+ acl del _all `<Topic>`
++ acl del `_all` `<Topic>`
 
   删除一条 $all 的 ACL 规则
 
@@ -1437,3 +1437,20 @@ ok
   ./bin/emqx_ctl acl del _all Topic/C
   ok
   ```
+
+## pem_cache 命令
+
+`pem_cache` 命令用于清理所有 SSL 相关证书的缓存。例如，在替换了 SSL 监听器的证书
+文件后，你可以使用该命令让新的证书文件生效，而不是重启 EMQX 的 SSL 监听器。
+
+| 命令                            | 描述                                 |
+| ------------------------------- | ------------------------------------ |
+| `pem_cache clean              ` | 清理所有节点的 x509 的证书缓存       |
+| `pem_cache clean node <Node>  ` | 清理指定节点的 x509 的证书缓存       |
+
+
+::: tip
+
+该命令在 v4.3.13 版本中引入。在这之前都版本都不支持该命令
+
+:::
