@@ -1,6 +1,6 @@
 # Tuning guide
 
-For EMQX Message Server 4.x version, MQTT connection stress test reached 1.3 million on an 8-core, 32G memory CentOS server.
+Since 4.2 EMQX had been stress-tested with 1.3 million on an 8-core, 32G memory CentOS server.
 
 This guide includes in general tuning suggestions for one EMQX broker to serve about 1 million clients.
 
