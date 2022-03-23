@@ -1,107 +1,82 @@
 # Directory Structures
 
-The directory structure of EMQX Broker obtained by different installation methods will be different:
+Depending on the type of installation, the location of the directories needed by EMQX may vary.
 
-| Description                            | ZIP          | Binary                   | Homebrew (MacOS)                     |
-| -------------------------------------- | ------------ | ------------------------ | ----------------------------------- |
-| Executable file directory              | `./bin`      | `/usr/lib/emqx/bin`      | `/usr/local/bin`                    |
-| Data files                             | `./data`     | `/var/lib/emqx/data`     | `/usr/local/Cellar/emqx/*/data`     |
-| Erlang Virtual machine files           | `./erts-*`   | `/usr/lib/emqx/erts-*`   | `/usr/local/Cellar/emqx/*/erts-`    |
-| Configuration file directory           | `./etc`      | `/etc/emqx/etc`          | `/usr/local/Cellar/emqx/*/etc`      |
-| Dependency directory                   | `./lib`      | `/usr/lib/emqx/lib`      | `/usr/local/Cellar/emqx/*/lib`      |
-| Log file                               | `./log`      | `/var/log/emqx`          | `/usr/local/Cellar/emqx/*/log`      |
-| Start related scripts and schema files | `./releases` | `/usr/lib/emqx/releases` | `/usr/local/Cellar/emqx/*/releases` |
+| Description         | tar.gz       | RPM/DEB                  |
+| --------------------| ------------ | ------------------------ |
+| Config files        | `./etc`      | `/etc/emqx/etc`          |
+| Database and files  | `./data`     | `/var/lib/emqx/data`     |
+| Log files           | `./log`      | `/var/log/emqx`          |
+| Boot instructions   | `./releases` | `/usr/lib/emqx/releases` |
+| Executables         | `./bin`      | `/usr/lib/emqx/bin`      |
+| Erlang code         | `./lib`      | `/usr/lib/emqx/lib`      |
+| Erlang runtime      | `./erts-*`   | `/usr/lib/emqx/erts-*`   |
 
-In the above directories,  `bin`, `etc`, `data` and`log` are commonly used by users.
+The directories are all created at installation time,
 
-## bin directory
+Except for `etc`, `data` and `log`, all other directories are quite static and rarly have to
+be changed before an upgrade.
 
-**emqx、emqx.cmd**
+:::: tip Tip
+It is recommended that the `data` directory is mounted with a high performance hard drive.
+::::
 
-The executable file of EMQX Broker can be found in [Basic Command](./command-line.md).
+## etc: config files
 
-**emqx_ctl、emqx_ctl.cmd**
+EMQX only reads the files in this directory.
 
-The executable file of EMQX Broker management command, you can check [Management Command CLI](../advanced/cli.md) for specific use.
+* `emqx.conf`: the bootstaping config file for EMQX
+* `vm.args`: The boot arguments for Erlang virtual machine
+* `certs/`: X.509 keys ore certificate files for EMQX SSL listeners or SSL clients when
+  integrating with external systems. e.g. HTTPS client for webhooks
 
-## etc directory
+## data: database and files
 
-EMQX Broker is set by configuration files in the `etc` directory. The main configuration files include:
+This directory is for EMQX to persisit its state.
 
-| Configuration file | Description            |
-| -------------- | ------------------------- |
-| emqx.conf      | EMQX Broker configuration file |
-| acl.conf       | EMQX Broker default ACL rule configuration file |
-| plugins/*.conf | EMQX Broker various plug-in configuration files |
-| certs          | EMQX Broker SSL certificate file |
+:::: tip Tip
+In EMQX documents, this directory is often referred to as `data_dir`.
+::::
 
-The specific configuration content of EMQX Broker can be viewed in [Configuration Item](../configuration/configuration.md).
+A list of the sub-directories
 
-## data directory
+* `authz`: ACL rules uploaded from HTTP API or dashboard.
+* `certs`: Certificate files uploaded from HTTP API or dashboard.
+* `configs`: Generated config file at boot, or config overrides when changed from API or CLI.
+* `mnesia`: The built-in database. Inside this directory, there should be one and only one sub-directory named
+   after the node, e.g. `emqx@127.0.0.1`. In case the node is renamed, the old directory should be deleted
+   or moved to elsewhere.
+* `patches`: Put `.beam` files here for EMQX to load as a hot-patch. Handy to remedy urgent issues.
+* `trace`: Online tracing log files.
 
-EMQX Broker stores the running data in the `data` directory. The main files include:
+In case a EMQX node is intended to be static and long-living,
+it is recommended that all sub directories (except for `trace`) should have a proper backup.
 
-**configs/app.*.config**
+We try to elaborate more about some of the sub-directories as below
 
-EMQX Broker reads the configuration in `etc/emqx.conf` and `etc/plugins/*.conf`, converts it to the Erlang native configuration file format, and reads the configuration at runtime.
+### mnesia
 
-**loaded_plugins**
+Mnesia the database, is also often being referred to as the `built-in database` in EMQX documents.
 
-The `loaded_plugins` file records the list of plug-ins that was started by EMQX Broker by default. You can modify this file to add or delete plug-ins. The startup item format in `loaded_plugins` is `{<Plugin Name>, <Enabled>}. `, the `<Enabled> `field is a Boolean type, and EMQX Broker will determine whether to start this plugin according to the value of `<Enabled> `. For more information about plugins, please see [plug-ins](../advanced/plugins.md).
+EMQX uses stores and distributes its state in this database.
+To name a fiew:
 
+* Connected clients
+* MQTT topics
+* Routing information, when clustered, it helps to map MQTT topics to a peer node in the cluster
+* Alarms
 
-{% emqxce %}
+### configs
 
-```bash
-$ cat loaded_plugins
-{emqx_management,true}.
-{emqx_recon,true}.
-{emqx_retainer,true}.
-{emqx_dashboard,true}.
-{emqx_rule_engine,true}.
-{emqx_bridge_mqtt,false}.
-```
+Not be confused with the `etc` directory.
 
-{% endemqxce %}
+The `etc` directory can be read-only for EMQX. From the config file(s) in `etc` EMQX bootstraps
+some intermediate configs each time when it reboots. The intermediate config files are stored
+in `<data_dir>/configs`.
 
-
-{% emqxee %}
-
-```bash
-$ cat loaded_plugins
-{emqx_management, true}.
-{emqx_recon, true}.
-{emqx_retainer, true}.
-{emqx_conf, true}.
-{emqx_dashboard, true}.
-{emqx_schema_registry, true}.
-{emqx_rule_engine, true}.
-{emqx_bridge_mqtt, false}.
-{emqx_cube, false}.
-```
-
-{% endemqxee %}
-
-
-**mnesia**
-
-Mnesia database is a distributed DBMS in Erlang, which can directly store various data structures of Erlang.
-
-EMQX Broker uses the Mnesia database to store its own running data, such as alarm records, resources and rules created by the rule engine, Dashbaord user information, etc. These data will be stored under the `mnesia` directory. Once the directory is deleted, EMQX Broker will lose all business data.
-
-You can query the system information of the Mnesia database in EMQX Broker through the `emqx_ctl mnesia` command. For details, please see [Management Command CLI](../advanced/cli.md).
-
+EMQX provides HTTP APIs for sysadmins to change configs at runtime. If such changes are to be
+persisted, this `configs` dirs is where the override configs reside.
 
 ## log directory
 
-**emqx.log.***
-
-For the log file generated when EMQX Broker is running, please check [Log and Trace](./log.md).
-
-**crash.dump**
-
-The crash dump file of EMQX Broker can be modified through `etc/emqx.conf` , and the specific content can be viewed in [configuration item](../configuration/configuration.md).
-
-**erlang.log.***
-
-It can control the copy of the console log when EMQX Broker is started in the background with `emqx start`.    
+When EMQX is configured to log to file, the files are written to this sub-directory.
