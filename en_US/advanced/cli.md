@@ -1421,7 +1421,8 @@ ok
 ## pem_cache command
 
 The `pem_cache` command is used to clear the cache of all PEM certificates.
-For example, after replacing the SSL listener's certificate file, you can use this command
+For example, after some new trusted certificates are added to `cacertfile`
+or server certificate `certfile` renewal for SSL listeners, you can use this command
 to make the new certificate file take effect instead of restarting EMQX's SSL listener.
 
 
