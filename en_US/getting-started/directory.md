@@ -2,15 +2,15 @@
 
 The directory structure of EMQX Broker obtained by different installation methods will be different:
 
-| Description                            | ZIP          | Binary                   | Homebrew (MacOS)                     |
-| -------------------------------------- | ------------ | ------------------------ | ----------------------------------- |
-| Executable file directory              | `./bin`      | `/usr/lib/emqx/bin`      | `/usr/local/bin`                    |
-| Data files                             | `./data`     | `/var/lib/emqx/data`     | `/usr/local/Cellar/emqx/*/data`     |
-| Erlang Virtual machine files           | `./erts-*`   | `/usr/lib/emqx/erts-*`   | `/usr/local/Cellar/emqx/*/erts-`    |
-| Configuration file directory           | `./etc`      | `/etc/emqx/etc`          | `/usr/local/Cellar/emqx/*/etc`      |
-| Dependency directory                   | `./lib`      | `/usr/lib/emqx/lib`      | `/usr/local/Cellar/emqx/*/lib`      |
-| Log file                               | `./log`      | `/var/log/emqx`          | `/usr/local/Cellar/emqx/*/log`      |
-| Start related scripts and schema files | `./releases` | `/usr/lib/emqx/releases` | `/usr/local/Cellar/emqx/*/releases` |
+| Description                            | ZIP          | Binary                   |
+| -------------------------------------- | ------------ | ------------------------ |
+| Executable file directory              | `./bin`      | `/usr/lib/emqx/bin`      |
+| Data files                             | `./data`     | `/var/lib/emqx/data`     |
+| Erlang Virtual machine files           | `./erts-*`   | `/usr/lib/emqx/erts-*`   |
+| Configuration file directory           | `./etc`      | `/etc/emqx/etc`          |
+| Dependency directory                   | `./lib`      | `/usr/lib/emqx/lib`      |
+| Log file                               | `./log`      | `/var/log/emqx`          |
+| Start related scripts and schema files | `./releases` | `/usr/lib/emqx/releases` |
 
 In the above directories,  `bin`, `etc`, `data` and`log` are commonly used by users.
 
