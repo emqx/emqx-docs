@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -70,7 +70,7 @@ The syntax rules of `acl.conf` are included in the comments at the top. Those fa
     * `deny`
 - The second position of the tuple indicates the user to which the rule takes effect. The format that can be used is:
     * `{user, "dashboard"}`：The rule only takes effect for users whose Username  is dashboard
-    * `{clientid, "dashboard"}`：The rule only takes effect for users whose ClientId is dashboard
+    * `{client, "dashboard"}`：The rule only takes effect for users whose ClientId is dashboard
     * `{ipaddr, "127.0.0.1"}`：The rule only takes effect for users whose Source Address is "127.0.0.1"
     * `all`：The rule takes effect for all users
 - The third position of the tuple indicates the operation controlled by the rule with the possible value:
