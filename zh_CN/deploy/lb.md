@@ -18,7 +18,7 @@ EMQX 集群可作为物联网接入服务（IoT Hub）部署，目前 EMQ 在青
 
 典型部署架构：
 
-![](./_assets/deploy_1.png)
+![](./_assets/lb_1.png)
 
 
 ### LB (负载均衡)
@@ -77,7 +77,6 @@ EMQX 节点集群使用的 TCP 端口:
 
 | 端口 | 说明                         |
 |------|----------------------------|
-| 4369 | 集群节点发现端口 (EPMD 模式) |
 | 4370 | 集群节点发现端口             |
 | 5370 | 集群节点 PRC 通道            |
 
@@ -90,7 +89,7 @@ EMQX 节点集群使用的 TCP 端口:
 2. VPC 网络内创建 EMQX 集群 ' 私有网络 '，例如: 192.168.0.0/24
 
 3. 私有网络内创建两台 EMQX 主机，例如:
-  
+
 | 节点  | IP 地址     |
 | ----- | ----------- |
 | emqx1 | 192.168.0.2 |
@@ -103,11 +102,11 @@ EMQX 节点集群使用的 TCP 端口:
 
 6. 在 LB 上创建 MQTT TCP 监听器:
 
-![image](./_assets/deploy_2.png)
+![image](./_assets/lb_2.png)
 
 或创建 SSL 监听器，并终结 SSL 在 LB :
 
-![image](./_assets/deploy_3.png)
+![image](./_assets/lb_3.png)
 
 7. MQTT 客户端连接 LB 公网地址测试。
 
@@ -135,11 +134,11 @@ EMQX 节点集群使用的 TCP 端口:
 
 7. 在 ELB 上创建 MQTT TCP 监听器:
 
-![image](./_assets/deploy_4-20200225175403693.png)
+![image](./_assets/lb_4-20200225175403693.png)
 
 或创建 SSL 监听器，并终结 SSL 在 LB :
 
-![image](./_assets/deploy_5.png)
+![image](./_assets/lb_5.png)
 
 8. MQTT 客户端连接 LB 公网地址测试。
 

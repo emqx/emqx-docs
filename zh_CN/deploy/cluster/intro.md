@@ -80,14 +80,14 @@ connection with all the nodes in the cluster.
 
 At this point, the four nodes have completed the mesh structure shown in the following figure:
 
-![image](../assets/cluster_1.png)
+![image](../../assets/cluster_1.png)
 
 ## EMQX Broker Distributed cluster design
 
 The basic function of EMQX Broker distribution is to forward and publish messages to
 subscribers on each node, as shown in the following figure.
 
-![image](../assets/design_9.png)
+![image](../../assets/design_9.png)
 
 To achieve this, EMQX Broker maintains several data structures related to it: subscription
 tables, routing tables, and topic trees.
@@ -134,7 +134,7 @@ The following topic-subscription relationship is an example:
 
 When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
 
-![image](../assets/cluster_2.png)
+![image](../../assets/cluster_2.png)
 
 ### Message Distribution Process
 

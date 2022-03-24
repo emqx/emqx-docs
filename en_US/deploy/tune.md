@@ -1,4 +1,4 @@
-# Tuning guide
+# Linux OS Tuning
 
 Since 4.2, EMQX had been stress tested with 1.3 million on an 8-core, 32G memory CentOS server.
 

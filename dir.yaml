@@ -30,11 +30,14 @@
     - deploy/dirs
     - deploy/tune
     - deploy/relup
-    - deploy/cluster
-    - deploy/cluster-security
-    - deploy/cluster-manual
-    - deploy/cluster-auto
-    - tutorial/load-balancing
+    - title_en: Clustering
+      title_cn: 集群
+      children:
+        - deploy/cluster/intro
+        - deploy/cluster/security
+        - deploy/cluster/manual
+        - deploy/cluster/auto
+    - deploy/lb
 
 - title_en: Management Interfaces
   title_cn: 管理接口
