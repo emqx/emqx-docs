@@ -1,16 +1,32 @@
 # Mmaual Clustering
 
-Suppose you are going to deploy an EMQX cluster on two servers
-`s1.emqx.io` and `s2.emqx.io`
+EMQX nodes are identified by their names.
 
-|             Node name                | Hostname (FQDN) | IP address   |
-| ------------------------------------ | --------------- | ------------ |
-| emqx@s1.emqx.io or emqx@192.168.0.10 | s1.emqx.io      | 192.168.0.10 |
-| emqx@s2.emqx.io or emqx@192.168.0.20 | s2.emqx.io      | 192.168.0.20 |
+A node name consists of two parts, node part and host partk, separated with `@`.
+
+The host part must either be the IP address or the FQDN which has dots,
+for example `myhost.example.domaon`.
+
+In this document, we use two nodes to demonstrate manual clustering steps.
+
+Suppose you are going to deploy an EMQX cluster on two servers `s1.emqx.io` and `s2.emqx.io`
+
+| FQDN       |   Node name       |
+| ---------- | ----------------- |
+| s1.emqx.io |  emqx@s1.emqx.io  |
+| s2.emqx.io |  emqx@s2.emqx.io  |
+
+Or if you have rather static IP assignments for the hosts.
+
+| FQDN         |   Node name       |
+| ------------ | ----------------- |
+| 192.168.0.10 |  emqx@s1.emqx.io  |
+| 192.168.0.20 |  emqx@s2.emqx.io  |
 
 ::: tip Tip
-EMQX's node name consists of two parts, node part and host part separated with `@`.
-The host part must either be the IP address or the FQDN (i.e. including dots)
+EMQX node names are immutable as it is baked into the database
+and data files. It is recommended to use static FQDNs for EMQX node names,
+especially when the network environment does provide static IPs.
 :::
 
 ## Configure emqx@s1.emqx.io node
@@ -23,7 +39,7 @@ node.name = emqx@s1.emqx.io
 node.name = emqx@192.168.0.10
 ```
 
-You can also configure through environment variables:
+You can also override node name with environment variable:
 
 ```bash
 env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
@@ -80,7 +96,7 @@ $ ./bin/emqx_ctl cluster status
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-## Laving a cluster
+## Leaving a cluster
 
 There are two ways for a node to leave a cluster:
 
