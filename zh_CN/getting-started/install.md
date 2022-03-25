@@ -130,44 +130,6 @@ ZIP包适用于测试和热更，如果不知道如何手动安装所有可能�
 
     直接删除 EMQX 目录即可
 
-## 通过 Homebrew 安装 (MacOS)
-
-1.  添加 EMQX 的 tap
-
-    ```
-    $ brew tap emqx/emqx
-    ```
-
-2.  安装 EMQX Broker
-
-    ```
-    $ brew install emqx
-    ```
-
-3.  启动 EMQX Broker
-
-    ```
-    $ emqx start
-    emqx 4.0.0 is started successfully!
-
-    $ emqx_ctl status
-    Node 'emqx@127.0.0.1' is started
-    emqx v4.0.0 is running
-    ```
-
-4.  停止 EMQX Broker
-
-    ```
-    $ emqx stop
-    ok
-    ```
-
-5.  卸载 EMQX Broker
-
-    ```
-    $ brew uninstall emqx
-    ```
-
 ## 通过 Docker 运行 (包含简单的 docker-compose 集群)
 
 ### 运行单个容器
