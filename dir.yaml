@@ -29,7 +29,6 @@
     - deploy/install
     - deploy/dirs
     - deploy/tune
-    - deploy/relup
     - title_en: Clustering
       title_cn: 集群
       children:
@@ -37,7 +36,8 @@
         - deploy/cluster/security
         - deploy/cluster/manual
         - deploy/cluster/auto
-    - deploy/lb
+        - deploy/lb
+    - deploy/relup
 
 - title_en: Management Interfaces
   title_cn: 管理接口
