@@ -484,7 +484,7 @@ Set the keepalive time (in seconds) for the specified client.
 Update the specified client(example) Keepalive to 10 seconds
 
 ```bash
-$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval=10"
 
 {"code":0}
 ```
