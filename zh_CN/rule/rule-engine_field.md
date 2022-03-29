@@ -30,6 +30,8 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 | $events/message_dropped      | 消息丢弃 |
 | $events/client_connected     | 连接完成 |
 | $events/client_disconnected  | 连接断开 |
+| $events/client_connack       | 连接确认 |
+| $events/client_check_acl_complete | 鉴权结果 |
 | $events/session_subscribed   | 订阅     |
 | $events/session_unsubscribed | 取消订阅 |
 
@@ -327,6 +329,130 @@ FROM
   "reason": "normal",
   "node": "emqx@127.0.0.1",
   "disconnected_at": 1645003578536,
+  "clientid": "c_emqx"
+}
+```
+
+## $events/client_connack (连接确认)
+
+当服务端向客户端发送CONNACK报文时触发规则, reason_code 包含各种错误原因代码
+
+| event            | 事件类型，固定为 "client.connack"                |
+| ---------------- | :---------------------------------------------- |
+| reason_code      | 各种原因代码                                      |
+| clientid         | 消息目的 Client ID                               |
+| username         | 消息目的用户名                                   |
+| peername         | 终端的 IPAddress 和 Port                        |
+| sockname         | emqx 监听的 IPAddress 和 Port                   |
+| proto_name       | 协议名字                                        |
+| proto_ver        | 协议版本                                        |
+| keepalive        | MQTT 保活间隔                                   |
+| clean_start      | MQTT clean_start                               |
+| expiry_interval  | MQTT Session 过期时间                           |
+| connected_at     | 终端连接完成时间 (s)                             |
+| conn_props       | CONNECT Properties (仅适用于 MQTT 5.0)          |
+| timestamp        | 事件触发时间 (ms)                               |
+| node             | 事件触发所在节点                                |
+
+
+MQTT v5.0 协议将返回码重命名为原因码，增加了一个原因码来指示更多类型的错误([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack))。
+因此reasono_code 在MQTT v3.1.1与MQTT v5.0中有很大的不同。
+
+MQTT v3.1.1
+| reason_code                    | 描述      |
+| ------------------------------ | --------- |
+| connection_accepted            | 已接受连接 |
+| unacceptable_protocol_version  | 服务器不支持客户端请求的 MQTT 协议 |
+| client_identifier_not_valid    | 客户端 ID 是正确的 UTF-8 字符串，但服务器不允许 |
+| server_unavaliable             | 网络连接已建立，但 MQTT 服务不可用 |
+| malformed_username_or_password | 用户名或密码中的数据格式错误 |
+| unauthorized_client            | 客户端连接未授权 |
+
+MQTT v5.0
+| reason_code                   | 描述 |
+| ----------------------------- | ----|
+| success                       | 连接成功 |
+| unspecified_error             | 未指定的错误 |
+| malformed_packet              | 畸形数据包 |
+| protocol_error                | 协议错误 |
+| implementation_specific_error | 实现特定错误 |
+| unsupported_protocol_version  | 不支持的协议版本 |
+| client_identifier_not_valid   | 客户端标识符无效 |
+| bad_username_or_password      | 错误的用户名或密码 |
+| not_authorized                | 未经授权 |
+| server_unavailable            | 服务器无法使用 |
+| server_busy                   | 服务器繁忙 |
+| banned                        | 禁止访问 |
+| bad_authentication_method     | 错误的身份验证方法 |
+| topic_name_invalid            | 主题名称无效 |
+| packet_too_large              | 数据包太大 |
+| quota_exceeded                | 超出配额 |
+| retain_not_supported          | 不支持的retain |
+| qos_not_supported             | 不支持的qos |
+| use_another_server            | 使用另一台服务器 |
+| server_moved                  | 服务器迁移了 |
+| connection_rate_exceeded      | 超出连接速率 |
+
+示例
+```sql
+SELECT
+  clientid,
+  username,
+  reason,
+  connected_at,
+  node
+FROM
+  "$events/client_connack"
+```
+输出
+```json
+{
+  "username": "u_emqx",
+  "reason": "success",
+  "node": "emqx@127.0.0.1",
+  "connected_at": 1645003578536,
+  "clientid": "c_emqx"
+}
+```
+
+## $events/client_check_acl_complete (鉴权结果)
+
+当客户端鉴权结束时触发规则
+
+| event           | 事件类型，固定为 "client.check_acl_complete"                       |
+| --------------- | :----------------------------------------------------------- |
+| clientid	      | 消息目的 Client ID       |
+| username	      | 消息目的用户名           |
+| peerhost	      | 客户端的 IPAddress       |
+| topic	          | MQTT 主题               |
+| action	      | publish or subscribe, 发布或者订阅事件 |
+| result          | allow or deny，鉴权结果            |
+| is_cache        | true or false，鉴权时数据的来源 <br/>is_cache为true时，鉴权数据来源于cache <br/>is_cache为false时，鉴权数据来源于插件           |
+| timestamp	      | 事件触发时间 (ms)       |
+| node	          | 事件触发所在节点        |
+
+示例
+```sql
+SELECT
+  clientid,
+  username,
+  topic,
+  action,
+  result,
+  is_cache,
+  node
+FROM
+  "$events/client_check_acl_complete"
+```
+输出
+```json
+{
+  "username": "u_emqx",
+  "topic": "t/a",
+  "action": "publish",
+  "result": "allow",
+  "is_cache": "false",
+  "node": "emqx@127.0.0.1",
   "clientid": "c_emqx"
 }
 ```
