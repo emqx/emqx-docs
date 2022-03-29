@@ -506,7 +506,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 更新指定客户端（example）keepalive为10秒
 
 ```bash
-$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval\=10"
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval=10"
 
 {"code":0}
 ```
