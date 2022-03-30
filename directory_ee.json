@@ -268,6 +268,18 @@
           "path": "rule/rule-engine"
         },
         {
+          "title": "规则引擎语法与示列",
+          "path": "rule/rule-engine_grammar_and_examples"
+        },
+        {
+          "title": "规则 SQL 语句中可用的字段",
+          "path": "rule/rule-engine_field"
+        },
+        {
+          "title": "SQL 语句中可用的函数",
+          "path": "rule/rule-engine_buildin_function"
+        },
+        {
           "title": "创建规则",
           "path": "rule/rule-create"
         },
@@ -976,6 +988,18 @@
         {
           "title": "Rule Engine",
           "path": "rule/rule-engine"
+        },
+        {
+          "title": "Rule engine SQL statement",
+          "path": "rule/rule-engine_grammar_and_examples"
+        },
+        {
+          "title": "Available fields in rule engine SQL statements",
+          "path": "rule/rule-engine_field"
+        },
+        {
+          "title": "Functions available in SQL statements",
+          "path": "rule/rule-engine_buildin_function"
         },
         {
           "title": "Create rules",
