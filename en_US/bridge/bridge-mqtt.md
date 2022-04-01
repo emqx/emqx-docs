@@ -153,14 +153,14 @@ topic:   topic2/#
 ## Add Forwarded Topic for Specified Bridge
 
 ```bash
-$ ./bin/emqx_ctl bridges add-forwards emqx topic3/#
+$ ./bin/emqx_ctl bridges add-forward emqx topic3/#
 Add-forward topic successfully.
 ```
 
 ## Delete Forwarded Topic for Specified Bridge
 
 ```bash
-$ ./bin/emqx_ctl bridges del-forwards emqx topic3/#
+$ ./bin/emqx_ctl bridges del-forward emqx topic3/#
 Del-forward topic successfully.
 ```
 
