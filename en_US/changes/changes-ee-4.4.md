@@ -27,7 +27,6 @@ ref:
 
 ### Enhancement
 
-- Windows package support for building on Erlang/OTP 24.
 - Add Pulsar proxy support for rule engine bridging data to Pulsar.
 - Add OOM protection for Kafka producers.
 - Add command line interface `emqx_ctl pem_cache clean` to allow forcibly clear x509 certificate cache to reload immediately after certificate file update.
