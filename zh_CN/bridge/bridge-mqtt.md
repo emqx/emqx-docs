@@ -150,7 +150,7 @@ topic:   topic2/#
 ## 添加指定 bridge 的转发主题
 
 ```bash
-$ ./bin/emqx_ctl bridges add-forwards emqx topic3/#
+$ ./bin/emqx_ctl bridges add-forward emqx topic3/#
 Add-forward topic successfully.
 ```
 

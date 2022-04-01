@@ -330,11 +330,11 @@ ok
 
 After v4.3, the command to clean up the ACL cache has been introduced:
 
-| Commads                     | Description                       |
-| --------------------------- | --------------------------------- |
-| acl cache-clean all         | Clears acl cache on all nodes     |
-| acl cache-clean node \<Node> | Clears acl cache on given node    |
-| acl cache-clean \<ClientId>  | Clears acl cache for given client |
+| Commads                        | Description                       |
+| ------------------------------ | --------------------------------- |
+| `acl cache-clean all         ` | Clears acl cache on all nodes     |
+| `acl cache-clean node <Node> ` | Clears acl cache on given node    |
+| `acl cache-clean <ClientId>  ` | Clears acl cache for given client |
 
 
 ## clients command
@@ -1297,23 +1297,23 @@ ok
 
 ### acl command
 
-| Command                      | Description            |
-| ---------------------------- | ----------------------- |
-| acl list clientid                                    | List clientid acls|
-| acl list username                                    | List username acls|
-| acl list _all                                        | List $all acls|
-| acl show clientid <Clientid>                         | Lookup clientid acl detail|
-| acl show username <Username>                         | Lookup username acl detail|
-| acl aad clientid <Clientid> <Topic> <Action> <Access>| Add clientid acl|
-| acl add Username <Username> <Topic> <Action> <Access>| Add username acl|
-| acl add _all <Topic> <Action> <Access>               | Add $all acl|
-| acl del clientid <Clientid> <Topic>                  | Delete clientid acl|
-| acl del username <Username> <Topic>                  | Delete username acl|
-| acl del _all <Topic>                                 | Delete $all acl|
+| Command                                                 | Description                |
+| ------------------------------------------------------- | -------------------------- |
+| `acl list clientid                                    ` | List clientid acls         |
+| `acl list username                                    ` | List username acls         |
+| `acl list _all                                        ` | List $all acls             |
+| `acl show clientid <Clientid>                         ` | Lookup clientid acl detail |
+| `acl show username <Username>                         ` | Lookup username acl detail |
+| `acl aad clientid <Clientid> <Topic> <Action> <Access>` | Add clientid acl           |
+| `acl add Username <Username> <Topic> <Action> <Access>` | Add username acl           |
+| `acl add _all <Topic> <Action> <Access>               ` | Add $all acl               |
+| `acl del clientid <Clientid> <Topic>                  ` | Delete clientid acl        |
+| `acl del username <Username> <Topic>                  ` | Delete username acl        |
+| `acl del _all <Topic>                                 ` | Delete $all acl            |
 
 #### acl list
 
-+ acl list clientid
++ acl list `clientid`
 
   List clientid acls
 
@@ -1322,7 +1322,7 @@ ok
   Acl(clientid = <<"emqx_clientid">> topic = <<"Topic/A">> action = pub access = allow)
   ```
 
-+ acl list username
++ acl list `username`
 
   List username acls
 
@@ -1331,7 +1331,7 @@ ok
   Acl(username = <<"emqx_username">> topic = <<"Topic/B">> action = sub access = deny)
   ```
 
-+ acl list _all
++ acl list `_all`
 
   List $all acls
 
@@ -1380,7 +1380,7 @@ ok
   ok
   ```
 
-+ acl aad _all `<Topic>` `<Action>` `<Access>`
++ acl aad `_all` `<Topic>` `<Action>` `<Access>`
 
   Add $all acl
 
@@ -1409,7 +1409,7 @@ ok
   ok
   ```
 
-+ acl del _all `<Topic>`
++ acl del `_all` `<Topic>`
 
   Delete $all acl
 
@@ -1417,3 +1417,25 @@ ok
   ./bin/emqx_ctl acl del _all Topic/C
   ok
   ```
+
+## pem_cache command
+
+The `pem_cache` command is used to clear the cache of all PEM certificates.
+For example, after some new trusted certificates are added to `cacertfile`
+or server certificate `certfile` renewal for SSL listeners, you can use this command
+to make the new certificate file take effect instead of restarting EMQX's SSL listener.
+
+**NOTE** The updates of the cache do not affect currently established TLS connections.
+
+
+| Command                         | Description                                 |
+| ------------------------------- | ------------------------------------------- |
+| `pem_cache clean              ` | Clears x509 certificate cache on all nodes  |
+| `pem_cache clean node <Node>  ` | Clears x509 certificate cache on given node |
+
+
+::: tip
+
+This command was introduced in v4.3.13. It was not supported in any version prior to this.
+
+:::
