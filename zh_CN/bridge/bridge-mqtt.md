@@ -157,7 +157,7 @@ Add-forward topic successfully.
 ## 删除指定 bridge 的转发主题
 
 ```bash
-$ ./bin/emqx_ctl bridges del-forwards emqx topic3/#
+$ ./bin/emqx_ctl bridges del-forward emqx topic3/#
 Del-forward topic successfully.
 ```
 
