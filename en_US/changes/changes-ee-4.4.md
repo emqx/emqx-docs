@@ -14,6 +14,7 @@ ref:
 ---
 
 # Changes
+
 ## Version 4.4.2
 
 *Release Date: 2022-04-01*
@@ -46,6 +47,7 @@ ref:
 - Fix the issue that the alternate action could not be triggered when the action of the rule engine persisting data to Oracle and Lindorm (only synchronous operation) failed to execute.
 - Fix an issue where rule engine data persistence to Oracle failed but the success count still increased.
 - Fix the issue that some zone configurations could not be cleared.
+- Fix an issue where changes to some monitoring and alarm configurations were invalid after restarting.
 - Fix the issue that `Schema Registry` is not available in the cluster environment.
 - Fix the issue that the LwM2M client list query API returned incorrect data in a cluster environment, which resulted in the inability to access the LwM2M gateway module management page.
 - Fix the issue that the JT/T 808 location report frame was parsed incorrectly.
