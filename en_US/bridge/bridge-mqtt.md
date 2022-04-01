@@ -160,7 +160,7 @@ Add-forward topic successfully.
 ## Delete Forwarded Topic for Specified Bridge
 
 ```bash
-$ ./bin/emqx_ctl bridges del-forwards emqx topic3/#
+$ ./bin/emqx_ctl bridges del-forward emqx topic3/#
 Del-forward topic successfully.
 ```
 
