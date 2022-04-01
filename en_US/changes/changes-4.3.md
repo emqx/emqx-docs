@@ -43,6 +43,7 @@ ref: undefined
 - Fix the issue of `{error, eexist}` error when re-run after hot upgrade failed.
 - Fix an issue where publishing to a non-existing topic alias would crash the connection.
 - Fix 500 error when querying lwm2m client list on another node via HTTP API.
+- Fix HTTP API for subscribing topics crashes when invalid QoS are passed in.
 - Fix the issue that the connection count was not updated because the related resources were not released when the connection process accessed through the ExProto exited abnormally.
 - Fix an issue where the value of `server_keepalive` configuration item would be incorrectly applied to MQTT v3.1.1 clients.
 - Fix Stomp client not firing `$event/client_connection` event messages.
