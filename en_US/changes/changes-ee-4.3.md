@@ -15,6 +15,58 @@ ref: undefined
 
 # Release version
 
+## Version 4.3.8
+
+*Release Date: 2022-04-01*
+
+### Important changes
+
+- For Docker images, the configuration directory `/opt/emqx/etc` has been removed from the VOLUME list, making it easier for users to rebuild images with changed configurations.
+- CentOS 7 Erlang runtime rebuilt on OpenSSL-1.1.1n (previously 1.0), prior to v4.3.13, EMQX will fail to handshake and trigger `malformed_handshake_data` exception when clients use certain cipher suites.
+- CentOS 8 Erlang runtime system rebuilt on RockyLinux 8. `centos8` will remain in the package name for backward compatibility.
+
+### Enhancement
+
+- Add Pulsar proxy support for rule engine bridging data to Pulsar.
+- Add OOM protection for Kafka producers.
+- Add command line interface `emqx_ctl pem_cache clean` to allow forcibly clear x509 certificate cache to reload immediately after certificate file update.
+- Refactored ExProto so that anonymous clients can also be displayed on Dashboard.
+- Topic configuration items in bridges can now use `${node}` placeholders.
+- Add validation of UTF-8 strings in MQTT packets in strict mode. When set to `true`, invalid UTF-8 strings will cause the client to disconnect.
+- MQTT-SN gateway supports initiative to synchronize registered topics after session resumed.
+- Improve the writing precision of rule engine floating point data from 10 decimal places to 17 decimal places.
+- EMQX will prompt how to modify the initial password of Dashboard at startup.
+
+### Bug fixes
+
+- Fix `MQTT Subscriber` module not being able to use two-way SSL connection.
+- Fix the issue that `PSKFile` module failed to start.
+- Fix the issue that `Kafka Consumer Group` module could not process binary data.
+- Fix the issue that `Log Trace` could not be stopped.
+- Fix the issue that the alternate action could not be triggered when the action of the rule engine persisting data to Oracle and Lindorm (only synchronous operation) failed to execute.
+- Fix an issue where rule engine data persistence to Oracle failed but the success count still increased.
+- Fix the issue that some zone configurations could not be cleared.
+- Fix the issue that `Schema Registry` is not available in the cluster environment.
+- Fix the issue that the LwM2M client list query API returned incorrect data in a cluster environment, which resulted in the inability to access the LwM2M gateway module management page.
+- Fix the issue that the JT/T 808 location report frame was parsed incorrectly.
+- Fix the issue that the el8 installation package cannot be started on Amazon Linux 2022, the error content is `errno=13 Permission denied`.
+- Fix an issue where the client could not reconnect if the connection process was blocked in some cases. Now waiting for more than 15 seconds without a response will force the old connection process to be closed.
+- Fix the issue of query resource request timeout when rule engine resource is unavailable.
+- Fix the issue of `{error, eexist}` error when re-run after hot upgrade failed.
+- Fix an issue where publishing to a non-existing topic alias would crash the connection.
+- Fix 500 error when querying lwm2m client list on another node via HTTP API.
+- Fix HTTP API for subscribing topics crashes when invalid QoS are passed in.
+- Fix the issue that the connection count was not updated because the related resources were not released when the connection process accessed through the ExProto exited abnormally.
+- Fix an issue where the value of `server_keepalive` configuration item would be incorrectly applied to MQTT v3.1.1 clients.
+- Fix Stomp client not firing `$event/client_connection` event messages.
+- Fix the issue that the system memory alarm was incorrectly activated when EMQX was started.
+- Fixed an issue where messages that failed to be delivered due to unregistered topics were not retransmitted when topics were successfully registered with the MQTT-SN client.
+- Fix EMQX startup output error log when duplicate plugins are configured in `loaded_plugins` file.
+- Fix MongoDB related features outputting excessive error logs when configured incorrectly.
+- Add format check for Dashboard User and AppID, special characters such as `/` are not allowed.
+- Corrected the reason code in the DISCONNECT packet returned when kicking the client to `0x98`.
+- Auto subscriptions will ignore empty topics.
+
 ## 4.3.7 Release
 
 *Release Date: 2022-02-11*
