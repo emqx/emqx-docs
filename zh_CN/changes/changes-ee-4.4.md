@@ -27,7 +27,6 @@ ref:
 
 ### 功能增强
 
-- Windows 包支持基于 Erlang/OTP 24 构建。
 - 规则引擎桥接数据到 Pulsar 新增对 Pulsar proxy 的支持。
 - 为 Kafka 生产者增加 OOM 保护。
 - 新增命令行接口 `emqx_ctl pem_cache clean`，允许强制清除 x509 证书缓存，以在证书文件更新后立即重新加载。
