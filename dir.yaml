@@ -42,13 +42,10 @@
 - title_en: Management Interfaces
   title_cn: 管理接口
   children:
-    - getting-started/config ## TODO merge down
-    - configuration/configuration ## TODO merge up
-    - configuration/environment-variable
-    - advanced/http-api
-    - advanced/cli # TODO: merge down
-    - getting-started/command-line # TODO: merge up
-    - getting-started/dashboard
+    - admin/cfg # Configuration file
+    - admin/api # Swagger API doc
+    - admin/dashboard
+    - admin/cli
 
 - title_en: Security
   title_cn: 安全
