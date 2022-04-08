@@ -15,7 +15,7 @@ In the above picture, three subscribers subscribe to the same topic `$share/g/to
 | Example         | Prefix      | Real topic name |
 | --------------- | ----------- | --------------- |
 | $queue/t/1      | $queue/     | t/1             |
-| $share/abc/t/1 | $share/abc | t/1             |
+| $share/abc/t/1  | $share/abc  | t/1             |
 
 
 ### Shared subscription with groups
