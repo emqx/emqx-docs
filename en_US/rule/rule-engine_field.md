@@ -1,7 +1,7 @@
 # Available fields in rule engine SQL statements
 The fields available in the SELECT and WHERE clauses are related to the type of event. Among them, `clientid`, `username` and ` event` are common fields that is contained by each type of event.
 
-## Rule Engine SQL handle Message Publish
+## Use Rule Engine SQL to Handle Message Publishing
 The SQL statement of the rules engine can handle the message publishing. In a rule statement, the user can specify one or more topics with the FROM clause, and the rule will be triggered when any message is published to the specified topic.
 
 | Field               | Explanation                                               |
@@ -45,7 +45,7 @@ output
 }
 ```
 
-## Rule Engine SQL handle Events 
+## Use Rule Engine SQL to Handle Events
 The SQL statements of the rule engine can handle both messages (message publishing) and events (client online and offline, client subscription, etc.). For messages, the FROM clause is directly followed by the topic name; for events, the FROM clause is followed by the event topic.
 
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
