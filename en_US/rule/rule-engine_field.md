@@ -16,6 +16,8 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 | $events/message\_dropped      | Message dropped      |
 | $events/client\_connected     | Connection complete  |
 | $events/client\_disconnected  | Disconnect           |
+| $events/client\_connack       | Connection ack       |
+| $events/client\_check_acl_complete | ACL check complete |
 | $events/session\_subscribed   | Subscribe            |
 | $events/session\_unsubscribed | Unsubcribe           |
 
@@ -317,6 +319,128 @@ output
   "reason": "normal",
   "node": "emqx@127.0.0.1",
   "disconnected_at": 1645003578536,
+  "clientid": "c_emqx"
+}
+```
+
+## $events/client_connack
+
+The rule event is triggered when the server sends a CONNACK packet to the client. reason_code contains the error reason code.
+
+| event            | Event type, fixed at "client.connack"         |
+| ---------------- | :-------------------------------------------- |
+| reason_code      | Reason code                                   |
+| clientid         | Client ID of the sender                       |
+| username         | Username of the sender                        |
+| peername         | IPAddress and Port of terminal                |
+| sockname         | IPAddress and Port listened by emqx           |
+| proto_name       | protocol name                                 |
+| proto_ver        | protocol version                              |
+| keepalive        | MQTT keepalive interval                       |
+| clean_start      | MQTT clean_start                              |
+| expiry_interval  | MQTT Session Expiration time                  |
+| connected_at     | Terminal connection completion time (s)       |
+| conn_props       | The CONNECT Properties (MQTT 5.0 only)        |
+| timestamp        | Event trigger time(millisecond)               |
+| node             | Node name of the trigger event                |
+
+
+The MQTT v5.0 protocol renames the return code to a reason code, adding a reason code to indicate more types of errors([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)).
+
+MQTT v3.1.1
+| reason_code | description |
+| ----------- | ------------|
+| connection_accepted            |Connection accepted |
+| unacceptable_protocol_version  | The server does not support the MQTT protocol requested by the client |
+| client_identifier_not_valid    | The client ID is the correct UTF-8 string, but is not allowed by the server |
+| server_unavaliable             | Network connection has been established, but MQTT service is unavailable |
+| malformed_username_or_password | The data in the username or password is in the wrong format |
+| unauthorized_client            | Client connection is not authorized |
+
+MQTT v5.0
+| reason_code                   | description |
+| ----------------------------- | ----------- |
+| success                       | connect success |
+| unspecified_error             | Unspecified error |
+| malformed_packet              | Malformed Packet |
+| protocol_error                | Protocol Error	|
+| implementation_specific_error | Implementation specific error |
+| unsupported_protocol_version  | Unsupported Protocol Version |
+| client_identifier_not_valid   | Client Identifier not valid |
+| bad_username_or_password      | Bad User Name or Password |
+| not_authorized                | Not authorized	 |
+| server_unavailable            | Server unavailable |
+| server_busy                   | Server busy |
+| banned                        | Banned |
+| bad_authentication_method     | Bad authentication method |
+| topic_name_invalid            | Topic Name invalid |
+| packet_too_large              | Packet too large |
+| quota_exceeded                | Quota exceeded |
+| retain_not_supported          | Retain not supported |
+| qos_not_supported             | QoS not supported |
+| use_another_server            | Use another server |
+| server_moved                  | Server moved |
+| connection_rate_exceeded      | Connection rate exceeded |
+
+example
+```sql
+SELECT
+  clientid,
+  username,
+  reason,
+  connected_at,
+  node
+FROM
+  "$events/client_connack"
+```
+output
+```json
+{
+  "username": "u_emqx",
+  "reason": "success",
+  "node": "emqx@127.0.0.1",
+  "connected_at": 1645003578536,
+  "clientid": "c_emqx"
+}
+```
+## $events/client_check_acl_complete
+
+The rule event is triggered when the client check acl complete.
+
+| event           | Event type, fixed at "client.check_acl_complete" |
+| --------------- | :----------------------------------------------- |
+| clientid        | Client ID of the sender                          |
+| username        | Username of the sender                           |
+| peerhost        | Client IPAddress                                 |
+| topic           | MQTT topic                                       |
+| action          | publish or subscribe                             |
+| result          | allow or deny, acl check result                                    |
+| is_cache        | true or false <br/>When is_cache is true, the acl data comes from the cache <br/>When is_cache is false, the acl data comes from the plugs |
+| timestamp       | Timestamp (ms)                                   |
+| node            | Node name of the trigger event                   |
+
+example
+```sql
+SELECT
+  clientid,
+  username,
+  topic,
+  action,
+  result,
+  is_cache,
+  node
+FROM
+  "$events/client_check_acl_complete"
+```
+output
+```json
+{
+  "username": "u_emqx",
+  "topic": "t/a",
+  "action": "publish",
+  "result": "allow",
+  "is_cache": "false",
+  "node": "emqx@127.0.0.1",
   "clientid": "c_emqx"
 }
 ```
