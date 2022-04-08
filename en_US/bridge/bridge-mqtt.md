@@ -185,3 +185,18 @@ Add-subscription topic successfully.
 $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic3
 Del-subscription topic successfully.
 ```
+
+## Duplicate deliveries
+
+When using EMQX in cluster mode, bridge is started on every node.
+This makes each message bridged to the target N times (where N is a number of started nodes in cluster).
+To avoid this, one can use [shared subscription](../advanced/shared-subscriptions.md) mechanism which ensures that only one of bridges receives the message.
+
+```bash
+## Sets the local strategy
+## for shared subscription group with name local_bridge
+broker.local_bridge.shared_subscription_strategy = local
+
+## Subscribes bridge to shared topic
+bridge.mqtt.my_bridge.forwards = $share/local_bridge/topic1/#
+```
