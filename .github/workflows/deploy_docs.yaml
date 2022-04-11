@@ -61,9 +61,9 @@ jobs:
         cd docs-files
         if [[ $DOCS_TYPE == "broker" ]];
         then
-          python3 .ci/remove_unused.py directory.json $(pwd)
+          python3 .github/scripts/remove_unused.py directory.json $(pwd)
         else
-          python3 .ci/remove_unused.py directory_ee.json $(pwd)
+          python3 .github/scripts/remove_unused.py directory_ee.json $(pwd)
         fi
 
     - name: move ce files
@@ -103,7 +103,7 @@ jobs:
         else
           version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
         fi
-        python3 .ci/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
+        python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         latest_version=$(cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json  | jq -r '.[0]')
         echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
@@ -155,12 +155,22 @@ jobs:
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
-    - name: update search index
-      if: env.LATEST_VERSION == env.VERSION
-      uses: Swilder-M/docsearch-scraper-simple@v2
+    - name: update ee search index
+      if: env.LATEST_VERSION == env.VERSION && env.DOCS_TYPE == 'enterprise'
+      uses: Swilder-M/docsearch-scraper-simple@v3
       env:
         APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
         API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+      with:
+        docs_type: ${{ env.DOCS_TYPE }}
+        docs_version: ${{ env.VERSION }}
+
+    - name: update ce search index
+      if: env.LATEST_VERSION == env.VERSION && env.DOCS_TYPE == 'broker'
+      uses: Swilder-M/docsearch-scraper-simple@v3
+      env:
+        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_CE }}
+        API_KEY: ${{ secrets.ALGOLIA_API_KEY_CE }}
       with:
         docs_type: ${{ env.DOCS_TYPE }}
         docs_version: ${{ env.VERSION }}
