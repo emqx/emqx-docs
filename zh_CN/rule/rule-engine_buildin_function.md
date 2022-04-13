@@ -268,6 +268,27 @@ md5('some val') = '1b68352b3e9c2de52ffd322e30bffcc4'
 sha('some val') = 'f85ba28ff5ea84a0cbfa118319acb0c5e58ee2b9'
 sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2b71993'
 ```
+## 压缩解压缩函数
+
+| 函数名 | 函数功能 |        参数         | 返回值 |
+| -------- | -------------- |--------------- | --------------------|
+| `gzip` | 压缩数据，结果包含 gz 数据头和校验和  | 原始的二进制数据 | 压缩后的二进制数据 |
+| `gunzip` | 解压缩数据，原始数据中包含 gz 数据头和校验和 | 压缩后的二进制数据 | 原始的二进制数据 |
+| `zip` | 压缩数据，结果不包含 zlib 数据头和校验和 | 原始的二进制数据 | 压缩后的二进制数据 |
+| `unzip` | 解压缩数据，原始数据中不包含 zlib 数据头和校验和 | 压缩后的二进制数据 | 原始的二进制数据 |
+| `zip_compress` |  压缩数据，结果包含 zlib 数据头和校验和 | 原始的二进制数据 | 压缩后的二进制数据 |
+| `zip_uncompress` | 解压缩数据，原始数据中包含 zlib 数据头和校验和  | 压缩后的二进制数据 | 原始的二进制数据 |
+
+```erlang
+bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
+gunzip(hexstr2bin('1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000')) = 'hello world'
+
+bin2hexstr(zip('hello world')) = 'CB48CDC9C95728CF2FCA490100'
+unzip(hexstr2bin('CB48CDC9C95728CF2FCA490100')) = 'hello world'
+
+bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045D'
+zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
+```
 
 ## 比特操作函数
 

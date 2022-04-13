@@ -200,6 +200,28 @@ sha('some val') = 'f85ba28ff5ea84a0cbfa118319acb0c5e58ee2b9'
 sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2b71993'
 ```
 
+## Compresses and Uncompresses functions
+
+| Function | Purpose |        Parameters         | Returned value |
+| -------- | -------------- |--------------- | --------------------|
+| `gzip` | Compresses data with gz headers and checksum. | Raw binary data | Compressed binary data |
+| `gunzip` | Uncompresses data with gz headers and checksum. | Compressed binary data | Raw binary data |
+| `zip` | Compresses data without zlib headers and checksum. |  Raw binary data | Compressed binary data |
+| `unzip` | Uncompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data |
+| `zip_compress` | Compresses data with zlib headers and checksum. |  Raw binary data | Compressed binary data |
+| `zip_uncompress` | Uncompresses data with zlib headers and checksum. | Compressed binary data | Raw binary data |
+
+```erlang
+bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
+gunzip(hexstr2bin('1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000')) = 'hello world'
+
+bin2hexstr(zip('hello world')) = 'CB48CDC9C95728CF2FCA490100'
+unzip(hexstr2bin('CB48CDC9C95728CF2FCA490100')) = 'hello world'
+
+bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045D'
+zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
+```
+
 ## Bit functions
 
 | Function  | Purpose| Parameters| Returned value | 

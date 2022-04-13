@@ -102,6 +102,33 @@ node.process_limit = 2097152
 ## Sets the maximum number of simultaneously existing ports for this system
 node.max_ports = 1048576
 ```
+## docker 参数调优
+
+通常调优应该在docker的主机上做，但是如果一定要从docker内部做，可以参考如下例子:
+
+```
+docker run -d --name emqx -p 18083:18083 -p 1883:1883 -p 4369:4369 \
+    --sysctl fs.file-max=2097152 \
+    --sysctl fs.nr_open=2097152 \
+    --sysctl net.core.somaxconn=32768 \
+    --sysctl net.ipv4.tcp_max_syn_backlog=16384 \
+    --sysctl net.core.netdev_max_backlog=16384 \
+    --sysctl net.ipv4.ip_local_port_range=1000 65535 \
+    --sysctl net.core.rmem_default=262144 \
+    --sysctl net.core.wmem_default=262144 \
+    --sysctl net.core.rmem_max=16777216 \
+    --sysctl net.core.wmem_max=16777216 \
+    --sysctl net.core.optmem_max=16777216 \
+    --sysctl net.ipv4.tcp_rmem=1024 4096 16777216 \
+    --sysctl net.ipv4.tcp_wmem=1024 4096 16777216 \
+    --sysctl net.ipv4.tcp_max_tw_buckets=1048576 \
+    --sysctl net.ipv4.tcp_fin_timeout=15 \
+    emqx/emqx:latest
+```
+
+::: 友情提示
+不要使用 `--privileged` 或者将系统内核目录挂载到docker中进行调优。
+:::
 
 ## EMQX 消息服务器参数
 
