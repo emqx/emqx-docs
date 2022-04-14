@@ -14,7 +14,7 @@ Let's discuss data backup and restore for disaster recovery.
 ### Config files
 
 When using morden provisioning tools for EMQX deployment, configuration changes
-are mostly managed by the tools, and even source controled in for example a git repo.
+are mostly managed by the tools, and even source controlled in for example a git repo.
 
 In case manual config changes are made to the config files, it's a good idea to have them backed up.
 

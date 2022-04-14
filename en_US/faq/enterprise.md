@@ -20,7 +20,7 @@ ref:
 **Tags:** [*Enterprise*](tags.md#enterprise)
 
 
-EMQX Enterprise is based on the community edition, it includes all of the features from comunity edition. More features are added:
+EMQX Enterprise is based on the community edition, it includes all of the features from community edition. More features are added:
 
 
 - Data persistence: Enterprise version supports to persist data to several kinds of databases, includes the popular relational database, such as MySQL, PostgreSQL; Memory database, such as Redis; Non-SQL DB, such as MongoDB.

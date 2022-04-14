@@ -86,7 +86,7 @@ EMQX Enteprise 商业销售时不提供源代码，不支持客户自行开发�
 
 **使用 Dashboard 启停插件**
 
-若开启了 Dashbord 的插件，可以直接通过访问 `http://localhost:18083/plugins` 中的插件管理页面启停插件。
+若开启了 Dashboard 的插件，可以直接通过访问 `http://localhost:18083/plugins` 中的插件管理页面启停插件。
 
 **使用管理 API 启停插件**
 

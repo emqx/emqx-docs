@@ -46,7 +46,7 @@ Select "message.publish", then type in the following SQL:
 SELECT
      msgid as id, topic, payload
     FROM
-      "message.pubish"
+      "message.publish"
 ```
 
 

@@ -61,7 +61,7 @@ EMQX 公司主要提供[三个产品](https://www.emqx.com/zh/products/emqx)，�
 
 - EMQX Broker：EMQX 开源版，提供 MQTT 协议、CoAP 和 LwM2M 等常见物联网协议的支持；
 
-- EMQX Enterprise：EMQX 企业版，在开源版基础上，增加了数据持久化 Redis、MySQL、MongoDB 或 PostgreSQL，数据桥接转发 Kafka，LoRaWAN 支持，监控管理，Kubernates 部署等方面的支持；支持百万级并发连接；
+- EMQX Enterprise：EMQX 企业版，在开源版基础上，增加了数据持久化 Redis、MySQL、MongoDB 或 PostgreSQL，数据桥接转发 Kafka，LoRaWAN 支持，监控管理，Kubernetes 部署等方面的支持；支持百万级并发连接；
 
 - EMQX Platform：EMQX 平台版，在企业版基础上，支持千万级的连接和跨数据中心的解决方案，提供物联网平台全生命周期中需要的各种服务（咨询、培训、架构设计、定制开发、平台建设、功能测试与运维服务）。
 

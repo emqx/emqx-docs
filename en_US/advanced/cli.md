@@ -330,7 +330,7 @@ ok
 
 After v4.3, the command to clean up the ACL cache has been introduced:
 
-| Commads                        | Description                       |
+| Commands                       | Description                       |
 | ------------------------------ | --------------------------------- |
 | `acl cache-clean all         ` | Clears acl cache on all nodes     |
 | `acl cache-clean node <Node> ` | Clears acl cache on given node    |
@@ -698,8 +698,8 @@ The log command is used to set the log level. Visit [Documentation of logger](ht
 | `log set-level <Level>                     ` | Set the primary log level and all Handlers log levels |
 | `log primary-level                         ` | Check the primary log level                           |
 | `log primary-lelvel <Level>                ` | Set the primary log level                             |
-| `log handlers list                         ` | View all Hanlders currently installed                 |
-| `log handlers set-level <HandlerId> <Level>` | Set the log level with the specified Hanlder          |
+| `log handlers list                         ` | View all Handlers currently installed                 |
+| `log handlers set-level <HandlerId> <Level>` | Set the log level with the specified Handler          |
 
 The levels of the logs from low to high are: `debug | info | notice | warning | error | critical | alert | emergency`. The lower the log level, the more logs the system outputs, and the more system resources it consumes. To improve system performance, the default primary log level is error.
 
@@ -732,7 +732,7 @@ info
 
 ### log handlers list
 
-View all Hanlders currently installed:
+View all Handlers currently installed:
 
 ```bash
 $ ./bin/emqx_ctl log handlers list
@@ -743,7 +743,7 @@ LogHandler (id=default, level=debug, destination=console)
 
 ### log handlers set-level \<HandlerId> \<Level>
 
-Set the log level with the specified Hanlder:
+Set the log level with the specified Handler:
 
 ```bash
 $ ./bin/emqx_ctl log handlers set-level emqx_logger_handler error
@@ -769,7 +769,7 @@ Start client trace:
 ```bash
 $ ./bin/emqx_ctl log primary-level debug
 debug
- 
+
 $ ./bin/emqx_ctl trace start client clientid log/clientid_trace.log
 trace clientid clientid successfully
 
@@ -1046,7 +1046,7 @@ The above example creates a rule with the ID `rule:9a6a725d`. There is only one 
 List all current rules:
 ```bash
 $ ./bin/emqx_ctl rules list
- 
+
 rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
 ```
 #### rules show
@@ -1055,7 +1055,7 @@ Query rules:
 ```bash
 ## Query rule with RuleID 'rule:9a6a725d'
 $ ./bin/emqx_ctl rules show 'rule:9a6a725d'
- 
+
 rule(id='rule:9a6a725d', for='['t/a']', rawsql='select * from "t/a"', actions=[{"metrics":...,"name":"inspect","params":...}], metrics=..., enabled='true', description='Rule for debug')
 ```
 #### rules delete
@@ -1064,7 +1064,7 @@ Delete rule:
 ```bash
 ## Delete rule with RuleID 'rule:9a6a725d'
 $ ./bin/emqx_ctl rules delete 'rule:9a6a725d'
- 
+
 ok
 ```
 ### rule-actions command
@@ -1130,7 +1130,7 @@ resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http:
 List resources of a certain type:
 ```bash
 $ ./bin/emqx_ctl resources list --type='web_hook'
- 
+
 resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
 ```
 #### resources show
@@ -1138,7 +1138,7 @@ resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http:
 Query resource:
 ```bash
 $ ./bin/emqx_ctl resources show 'resource:a7a38187'
- 
+
 resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http://host-name/chats">>}, status=#{is_alive => false}, description='forward msgs to host-name/chats')
 ```
 #### resources delete
@@ -1146,7 +1146,7 @@ resource(id='resource:a7a38187', type='web_hook', config=#{<<"url">> => <<"http:
 Delete resource:
 ```bash
 $ ./bin/emqx_ctl resources delete 'resource:a7a38187'
- 
+
 ok
 ```
 ### resource-types command
@@ -1165,7 +1165,7 @@ Resource type can be built-in by EMQX Broker (called system built-in resource ty
 List all current resource types:
 ```bash
 ./bin/emqx_ctl resource-types list
- 
+
 resource_type(name='backend_mongo_rs', provider='emqx_backend_mongo', title ='MongoDB Replica Set Mode', description='MongoDB Replica Set Mode')
 resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassandra', description='Cassandra Database')
 ...
@@ -1175,7 +1175,7 @@ resource_type(name='backend_cassa', provider='emqx_backend_cassa', title ='Cassa
 Query resource type:
 ```bash
 $ ./bin/emqx_ctl resource-types show backend_mysql
- 
+
 resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
 ```
 ## Status, statistical indicators and alerts related to the rules engine

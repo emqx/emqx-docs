@@ -2307,7 +2307,7 @@ Bug fixes:
 
 Enhancements:
 
-  - Support for IPv6 access to Dashbaord
+  - Support for IPv6 access to Dashboard
     
     Github PR:
     [emqx/emqx-dashboard\#162](https://github.com/emqx/emqx-dashboard/pull/162)
@@ -2335,7 +2335,7 @@ Bug fixes:
 *Release Date: 2019-10-28*
 
 EMQX 3.2.4 is now available. This version mainly adds IPv6 support for
-Dashbaord and REST APIs, and fixes some bugs.
+Dashboard and REST APIs, and fixes some bugs.
 
 Bug fixes:
 
@@ -2362,7 +2362,7 @@ Bug fixes:
 
 Enhancements:
 
-  - Support for IPv6 access to Dashbaord
+  - Support for IPv6 access to Dashboard
     
     Github PR:
     [emqx/emqx-dashboard\#161](https://github.com/emqx/emqx-dashboard/pull/161)
@@ -2541,7 +2541,7 @@ Enhancements:
 
 Bug fixes:
 
-  - Fix the issue that encouter crash when Websocket sessions go offline
+  - Fix the issue that encounter crash when Websocket sessions go offline
     abnormally
     
     Github PR: [emqx/emqx\#2697](https://github.com/emqx/emqx/pull/2697)
@@ -3477,7 +3477,7 @@ Bug fixes:
     
     Github PR: [emqx/emqx\#2353](https://github.com/emqx/emqx/pull/2353)
 
-  - Fix allow\_anonymous behavoir error
+  - Fix allow\_anonymous behavior error
     
     Github PR: [emqx/emqx\#2355](https://github.com/emqx/emqx/pull/2355)
 
@@ -3891,7 +3891,7 @@ refactoring some modules and tuning the erlang vm args.
 
 Enhancements:
 
-  - Move addtional vm args to a separate vm.args file
+  - Move additional vm args to a separate vm.args file
     
     Github PR:
     [emqx/emqx\#2033](https://github.com/emqx/emqx/pull/2033),
@@ -4758,7 +4758,7 @@ core components.
     2.x. When an oversized message is received, it will be dropped, and
     broker will disconnect without informing about the reason. Now with
     MQTT 5.0 specification, client and broker can specify maximum
-    messsage size limitation through CONNECT/CONNECT ACK packets.
+    message size limitation through CONNECT/CONNECT ACK packets.
 
   - Optional server feature availability (TODO)
     
@@ -5147,7 +5147,7 @@ Support node cookie value with = characters. (emq-relx\#146)
 
 ### mochiweb
 
-Improve Req:get(peername) funciton to support x-forwarded-for and
+Improve Req:get(peername) function to support x-forwarded-for and
 x-remote-port. (emqtt/mochiweb\#9)
 
 ## Version 2.3.0 "Passenger's Log"
@@ -5258,7 +5258,7 @@ Supoort both EN and CN languages.
 
 Released a new sexy dashboard.
 
-Add more RESTful APIs for manangement and monitoring.
+Add more RESTful APIs for management and monitoring.
 
 Configuring the broker through CLI or API without having to restart.
 
@@ -5319,7 +5319,7 @@ Add HTTP API for hot configuration.
 *Release Date: 2017-08-12*
 
 EMQ R2.3-beta.2, a development release, is available now\! This release
-introduces new HTTP Managment API, and supports Hot configuration of
+introduces new HTTP Management API, and supports Hot configuration of
 some parameters and plugins.
 
 The plugins which support Hot configuration:
@@ -5519,7 +5519,7 @@ Call emit\_stats when force GC (emqttd\#1071)
 Update the default value of 'mqtt.mqueue.max\_length' to 1000
 (emqttd\#1074)
 
-Update emq-auth-mongo READEME (emq-auth-mongo\#66)
+Update emq-auth-mongo README (emq-auth-mongo\#66)
 
 Update default password field (emq-auth-mongo\#67)
 
@@ -5556,7 +5556,7 @@ Allow for Content-Type:application/json in HTTP Publish API
 
 emqttd\_http.erl:data conversion (emqttd\#1059)
 
-Seperate emq\_sn from emqttd (emq-sn\#24)
+Separate emq\_sn from emqttd (emq-sn\#24)
 
 Check St0's type, making it easier to debug crash problems
 (emq-lua-hook\#6)
@@ -5779,7 +5779,7 @@ EMQ 2.1+ Requires Erlang/OTP R19+ to build.
 :::
 
 
-Since 2.1.0 release, we will tag EMQ versions accoding to the [Semantic
+Since 2.1.0 release, we will tag EMQ versions according to the [Semantic
 Versioning 2.0.0](http://semver.org) principles. And we will release EMQ
 versions monthly, odd number releases for bugfix and optimization, and
 even number releases for bugfix and new features.
@@ -5802,7 +5802,7 @@ tags.
 
 emqttd\#916: Add 'mqtt\_msg\_from()' type
 
-emq-auth-http\#15: ACL endpoint isnt called
+emq-auth-http\#15: ACL endpoint isn't called
 
 ## Version 2.1-beta
 
@@ -5848,7 +5848,7 @@ log.syslog.level = error
 ```
 ### Upgrade QoS
 
-Support to upgrade QoS accoding to the subscription:
+Support to upgrade QoS according to the subscription:
 ```
 mqtt.session.upgrade_qos = on
 ```
@@ -6284,12 +6284,12 @@ management strategy since 2.0. There will be two or three 'Preview
 Release' named beta1, beta2 or beta3, and then one or two 'Release
 Candidate' named rc1, rc2 before a Major version is production ready.
 
-### Seperate Rel from Application
+### Separate Rel from Application
 
 We split the emqttd 1.x project into two projects since 2.0-beta1
 release to resolve the plugins' dependency issue.
 
-A new project named [emqttd-relx](https://github.com/emqtt/emqttd-relx) is created and responsible for buiding the emqttd application and the plugins:
+A new project named [emqttd-relx](https://github.com/emqtt/emqttd-relx) is created and responsible for building the emqttd application and the plugins:
 ```bash
 git clone https://github.com/emqtt/emqttd-relx.git
     
@@ -6309,7 +6309,7 @@ You can check the 'Makefile' and 'relx.config' in the release project of the bor
 | ----------- | ----------------------- |
 | stable      | 1.x Stable Branch       |
 | master      | 2.x Master Branch       |
-| emq10       | 1.x Developement Branch |
+| emq10       | 1.x Development Branch |
 | emq20       | 2.x Development Branch  |
 | emq30       | 3.x Development Branch  |
 | issue\#{id} | BugFix Branch           |
@@ -6792,7 +6792,7 @@ consume about 15G Memory and 200% CPU.
 
 *Release Date: 2015-11-28*
 
-Bugfix: Plugin pathes error under windows (\#387)
+Bugfix: Plugin paths error under windows (\#387)
 
 Improve: Too many error logs "\[error\] Session ..... Unexpected EXIT:
 client\_pid=<0.14137.35\>, exit\_pid=<0.30829.22\>, reason=nop..."
@@ -7308,7 +7308,7 @@ WebSocket(SSL)\](<https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket>)
 Now\!
 
 \[Plugin
-Achitecture\](<https://github.com/emqtt/emqttd/wiki/Plugin%20Design>)
+Architecture\](<https://github.com/emqtt/emqttd/wiki/Plugin%20Design>)
 based on OTP application
 
 \[Trace MQTT Packets or
@@ -7379,7 +7379,7 @@ Wiki\](<https://github.com/emqtt/emqttd/wiki/ACL-Design>)
 Authentication with username, clientid Now: \[Authentication
 Wiki\](<https://github.com/emqtt/emqttd/wiki/Authentication>)
 
-Seperate common MQTT library to 'emqtt' application
+Separate common MQTT library to 'emqtt' application
 
 Redesign message pubsub, route and retain modules
 
@@ -7603,7 +7603,7 @@ NOTICE: Full MQTT 3.1.1 support now\!
 
 Feature: Passed org.eclipse.paho.mqtt.testing/interoperability tests
 
-Feature: Qos0, Qos1 and Qos2 publish and suscribe
+Feature: Qos0, Qos1 and Qos2 publish and subscribe
 
 Feature: session(clean\_sess=false) management and offline messages
 
@@ -7639,7 +7639,7 @@ Makefile: deps -\> get-deps
 
 rebar.config: fix mochiweb git url
 
-tag emqtt release accoding to \[Semantic
+tag emqtt release according to \[Semantic
 Versioning\](<http://semver.org/>)
 
 max clientId length is 1024 now.

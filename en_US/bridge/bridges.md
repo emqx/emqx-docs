@@ -235,7 +235,7 @@ etc/plugins/emqx\_bridge\_kafka.conf
 ## bridge.kafka.servers = 127.0.0.1:9092,127.0.0.2:9092,127.0.0.3:9092
 bridge.kafka.servers = 127.0.0.1:9092
 
-## Kafka Parition Strategy. option value: per_partition | per_broker
+## Kafka Partition Strategy. option value: per_partition | per_broker
 bridge.kafka.connection_strategy = per_partition
 
 bridge.kafka.min_metadata_refresh_interval = 5S

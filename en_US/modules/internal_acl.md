@@ -5,7 +5,7 @@ The builtin ACL sets rules through files, which is simple and lightweight enough
 
 ## Builtin ACL File
 
-Builtin ACL module is enabled by default, it could be updated or stoped by dashboard but can not be deleted.
+Builtin ACL module is enabled by default, it could be updated or stopped by dashboard but can not be deleted.
 
 ![image-20200927213049265](./assets/acl_file4.png)
 
