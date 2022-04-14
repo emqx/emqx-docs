@@ -57,7 +57,7 @@ FROM
 规则创建好之后，就可以模拟数据进行测试了。所以首先需要编写一个自己的编解码服务。
 
 下面的代码使用 Python 语言实现了一个 gRPC 编解码服务。
-为简单起见，这个服务在加密时对原始字符做 base64_encode，解密时对字符串进行 base64_decode
+为简单起见，这个服务在编码时，只是对收到的字符串做 base64_encode，解码时进行 base64_decode。
 详见 [完整代码](https://github.com/terry-xiaoyu/emqx-schema-grpc-python-server):
 
 ```python
