@@ -15,6 +15,47 @@ ref:
 
 # Changes
 
+## Version 4.4.3
+
+*Release Date: 2022-04-18*
+
+### Enhancement
+
+- Schema registry now supports decoding arbitrary binary payloads to JSON data using gRPC services
+- Support for connecting to Pulsar using TLS
+- Add `mongo_date` function for SQL in rule engine, which supports saving timestamps as MongoDB Date objects
+- Rule engine supports resetting metrics of the specified rule
+- Add connection confirmation and authorization completion events to the rule engine
+- Rule engine supports copying rule for fast reuse
+- SQL in rule engine supports zip, gzip and other compression and decompression functions
+- Improve the error message when rule engine fails to parse payload
+- Improve the connection test for some resources in rule engine
+- Support setting execution priority for ExHook
+- ExHook callback interface adds a Protobuf field `RequestMeta meta` to return the EMQX cluster name
+- Support `local` policy for shared subscriptions, which will preferentially send messages to shared subscribers under the node where messages flow in. In some scenarios, the efficiency of shared message scheduling will be improved, especially when the MQTT bridge is configured as a shared subscription
+- `RSA-PSK-AES256-GCM-SHA384`, `RSA-PSK-AES256-CBC-SHA384`, `RSA-PSK-AES128-GCM-SHA256` and `RSA-PSK-AES128-CBC- SHA256` four new TLS PSK cipher suites are supported, removing two insecure cipher suites `PSK-3DES-EDE-CBC-SHA` and `PSK-RC4-SHA` from the default configuration
+- Diagnostic logging for `wait_for_table` of mnesia
+  - Prints check points of mnesia internal stats
+  - Prints check points of per table loading stats, help to locate the problem of long table loading time.
+- Subscribing to an empty topic is prohibited in strict mode
+- Generate default files when `loaded_modules` and `loaded_plugins` files do not exist
+
+### Bug fixes
+
+- Fix the issue that the TLS configuration item `server_name_indication` is set to disable and does not take effect
+- Fix potential process leak issue in MongoDB driver
+- Fix the issue that the password of the default Dashboard user modified via the CLI command would be reset after the node leaves the cluster
+- Silence grep and sed warnings in `docker-entrypoint.sh`
+- Fix the backup file cannot be deleted and downloaded when the API path contains ISO8859-1 escape characters
+- Fix the issue that the Redis driver would crash when DNS resolution failed, etc
+- Fix the issue that the MQTT Bridge plugin cannot be started when only the subscription topic is configured but QoS is not configured
+- When creating a rule, if a rule with the same ID already exists, the rules engine will now report an error instead of replacing the existing rule
+- Fix the issue that the HTTP driver process pool may not be deleted
+- Fix the issue that the module parameters could not be updated again after failing to update
+- Fix the incorrect type of some fields in the GB/T 32960 access gateway module in Dashboard
+- Fix the issue that the configuration of Bridge resources such as Kafka and Pulsar could not be updated
+- Fix the issue that JT/T 808 client authentication fails when anonymous authentication is enabled
+
 ## Version 4.4.2
 
 *Release Date: 2022-04-01*
