@@ -15,6 +15,41 @@ ref:
 
 # 版本发布
 
+## 4.4.3 版本
+
+*发布日期: 2022-04-18*
+
+### 功能增强
+
+- 规则引擎支持重置指定规则的统计指标
+- 规则引擎新增连接确认和鉴权完成事件
+- 规则引擎支持拷贝规则以快速复用
+- 规则引擎 SQL 支持 zip、gzip 等压缩和解压缩函数
+- 改进规则引擎在解析 Payload 失败时的错误提示
+- 优化规则引擎部分资源的连接测试
+- 支持为 ExHook 设置执行优先级
+- ExHook 回调接口新增 `RequestMeta meta` Protobuf 字段用于返回 EMQX 集群名称
+- 为共享订阅添加 `local` 策略，这将优先向消息流入的节点下的共享订阅者发送消息。在某些场景下会提升共享消息调度的效率，尤其是在 MQTT 桥接配置为共享订阅时
+- 为 TLS 新增对 `RSA-PSK-AES256-GCM-SHA384`、`RSA-PSK-AES256-CBC-SHA384`、`RSA-PSK-AES128-GCM-SHA256`、`RSA-PSK-AES128-CBC-SHA256` 四个 PSK 加密套件的支持，从默认配置中移除 `PSK-3DES-EDE-CBC-SHA` 和 `PSK-RC4-SHA` 这两个不安全的加密套件
+- 打印 Mnesia `wait_for_table` 诊断日志
+  - 打印 Mnesia 内部统计的检查点
+  - 打印每个表加载统计的检查点，帮助定位表加载时间长的问题
+- 严格模式下禁止订阅为空的主题
+- 当 `loaded_modules` 和 `loaded_plugins` 文件不存在时生成默认文件
+
+### 错误修复
+
+- 修复 TLS 配置项 `server_name_indication` 设置为 disable 不生效的问题
+- 修复 MongoDB 驱动潜在的进程泄漏问题
+- 修复通过 CLI 命令修改的 Dashboard 默认用户的密码会在节点离开集群后重置的问题
+- 静默 `docker-entrypoint.sh` 中的 grep 和 sed 命令的运行错误日志
+- 修复 API 路径包含 ISO8859-1 转义字符时，备份文件无法被正确删除和下载
+- 修复 Redis 驱动在 DNS 解析失败等情况下会引发崩溃的问题
+- 修复规则引擎发送数据到 Web 服务动作中 Headers 字段配置不生效的问题
+- 修复 MQTT Bridge 插件仅配置订阅主题但未配置 QoS 时无法启动的问题
+- 创建规则时如果已经有使用相同 ID 的规则存在，现在规则引擎将报错而不是替换已有规则
+- 修复 HTTP 驱动进程池可能无法删除的问题
+
 ## 4.4.2 版本
 
 *发布日期: 2022-04-01*
