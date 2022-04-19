@@ -487,4 +487,4 @@ FROM
 }
 ```
 
-[下一部分，规则 SQL 语句中可用的字段](rule-engine_field.md)
+[下一部分，规则 SQL 语句中可用的字段](./rule-engine_field.md)

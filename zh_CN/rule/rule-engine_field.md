@@ -19,24 +19,7 @@ SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clienti
 ## 使用规则引擎 SQL 语句处理消息发布
 规则引擎的 SQL 语句可以处理消息发布。 在一个规则语句中，用户可以用 FROM 子句指定一个或者多个主题，当任何消息发布到指定的主题时都会触发该规则。
 
-### FROM 子句可用的事件主题
-| 事件主题名                    | 释义     |
-| ----------------------------- | :------- |
-| $events/message_delivered    | 消息投递 |
-| $events/message_acked        | 消息确认 |
-| $events/message_dropped      | 消息丢弃 |
-| $events/client_connected     | 连接完成 |
-| $events/client_disconnected  | 连接断开 |
-| $events/client_connack       | 连接确认 |
-| $events/client_check_acl_complete | 鉴权结果 |
-| $events/session_subscribed   | 订阅     |
-| $events/session_unsubscribed | 取消订阅 |
-
-## 普通主题 (消息发布)
-
-当消息在FROM指定的主题上发布时触发规则
-
-|        event        |  事件类型，固定为 "message.publish"   |
+|        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                          |
 | clientid            | 消息来源 Client ID                     |
@@ -83,8 +66,6 @@ FROM
 事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
 如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
 
-
-
 ### FROM 子句可用的事件主题
 | 事件主题名                    | 释义     |
 | ----------------------------- | :------- |
@@ -93,6 +74,8 @@ FROM
 | $events/message_dropped      | 消息丢弃 |
 | $events/client_connected     | 连接完成 |
 | $events/client_disconnected  | 连接断开 |
+| $events/client_connack       | 连接确认 |
+| $events/client_check_acl_complete | 鉴权结果 |
 | $events/session_subscribed   | 订阅     |
 | $events/session_unsubscribed | 取消订阅 |
 
@@ -349,12 +332,11 @@ FROM
 }
 ```
 
-<<<<<<< HEAD
-## $events/client_connack (连接确认)
+### $events/client_connack (连接确认)
 
 当服务端向客户端发送CONNACK报文时触发规则, reason_code 包含各种错误原因代码
 
-| event            | 事件类型，固定为 "client.connack"                |
+|        字段      |  解释                                 |
 | ---------------- | :---------------------------------------------- |
 | reason_code      | 各种原因代码                                      |
 | clientid         | 消息目的 Client ID                               |
@@ -432,12 +414,12 @@ FROM
 }
 ```
 
-## $events/client_check_acl_complete (鉴权结果)
+### $events/client_check_acl_complete (鉴权结果)
 
 当客户端鉴权结束时触发规则
 
-| event           | 事件类型，固定为 "client.check_acl_complete"                       |
-| --------------- | :----------------------------------------------------------- |
+|        字段      |  解释                                 |
+| --------------- | :----------------------------------- |
 | clientid	      | 消息目的 Client ID       |
 | username	      | 消息目的用户名           |
 | peerhost	      | 客户端的 IPAddress       |
@@ -474,10 +456,8 @@ FROM
 }
 ```
 
-## $events/session_subscribed (终端订阅成功)
-=======
 ### $events/session_subscribed (终端订阅成功)
->>>>>>> origin/release-4.3
+
 
 当终端订阅成功时触发规则
 
@@ -547,4 +527,4 @@ FROM
 }
 ```
 
-[下一部分，规则引擎内置函数](rule-engine_buildin_function.md)
+[下一部分，规则引擎内置函数](./rule-engine_buildin_function.md)
