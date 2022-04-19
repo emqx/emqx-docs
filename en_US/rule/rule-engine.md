@@ -134,4 +134,4 @@ SELECT * FROM "$events/client_connected"
 The old version of SQL syntax conversion function is provided in Dashboard to complete SQL upgrade and migration. 
 :::
 
-[Rule engine statement and examples](rule-engine_grammar_and_examples.md)
+[Rule engine statement and examples](./rule-engine_grammar_and_examples.md)
