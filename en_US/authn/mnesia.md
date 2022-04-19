@@ -1,4 +1,4 @@
-# Mnesia  Authentication
+# Builtin Database
 
 Mnesia authentication uses the built-in Mnesia database of EMQX to store client Client ID/Username and password, and supports management of authentication data through HTTP API.
 

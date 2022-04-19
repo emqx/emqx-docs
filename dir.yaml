@@ -53,15 +53,14 @@
     - title_en: Authentication
       title_cn: 认证
       children:
-        - advanced/auth
-        - advanced/auth-mnesia
-        - advanced/auth-http
-        - advanced/auth-jwt
-        - advanced/auth-ldap
-        - advanced/auth-mysql
-        - advanced/auth-postgresql
-        - advanced/auth-redis
-        - advanced/auth-mongodb
+        - authn/authn
+        - authn/mnesia
+        - authn/http
+        - authn/jwt
+        - authn/mysql
+        - authn/postgresql
+        - authn/redis
+        - authn/mongodb
     - title_en: Authorisation (ACL)
       title_cn: 鉴权（ACL）
       children:
