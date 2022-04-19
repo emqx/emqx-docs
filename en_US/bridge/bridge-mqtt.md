@@ -186,7 +186,7 @@ $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic3
 Del-subscription topic successfully.
 ```
 
-## Duplicate deliveries
+## Use shared local subscription
 
 When using EMQX in cluster mode, bridge is started on every node.
 This makes each message bridged to the target N times (where N is a number of started nodes in cluster).
