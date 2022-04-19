@@ -4,24 +4,7 @@ The fields available in the SELECT and WHERE clauses are related to the type of 
 ## Use Rule Engine SQL to Handle Message Publishing
 The SQL statement of the rules engine can handle the message publishing. In a rule statement, the user can specify one or more topics with the FROM clause, and the rule will be triggered when any message is published to the specified topic.
 
-| Event topic name              | Explanation          |
-| ----------------------------- | :------------------- |
-| $events/message\_delivered    | message delivery     |
-| $events/message\_acked        | message acknowledged |
-| $events/message\_dropped      | Message dropped      |
-| $events/client\_connected     | Connection complete  |
-| $events/client\_disconnected  | Disconnect           |
-| $events/client\_connack       | Connection ack       |
-| $events/client\_check_acl_complete | ACL check complete |
-| $events/session\_subscribed   | Subscribe            |
-| $events/session\_unsubscribed | Unsubcribe           |
-
-
-## Message Publish
-
-Trigger the rule when a message is published on the topic specified by FROM
-
-| event               | Event type, only for "message.publish"                    |
+| Field               | Explanation                                   |
 | :------------------ | :-------------------------------------------------------- |
 | id                  | MQTT message ID                                           |
 | clientid            | Client ID of the sender                                   |
@@ -77,9 +60,10 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 | $events/message\_dropped      | Message dropped      |
 | $events/client\_connected     | Connection complete  |
 | $events/client\_disconnected  | Disconnect           |
+| $events/client\_connack       | Connection ack       |
+| $events/client\_check_acl_complete | ACL check complete |
 | $events/session\_subscribed   | Subscribe            |
 | $events/session\_unsubscribed | Unsubcribe           |
-
 
 ### $events/message_delivered
 
@@ -343,7 +327,7 @@ output
 
 The rule event is triggered when the server sends a CONNACK packet to the client. reason_code contains the error reason code.
 
-| event            | Event type, fixed at "client.connack"         |
+| Field            | Explanation                                   |
 | ---------------- | :-------------------------------------------- |
 | reason_code      | Reason code                                   |
 | clientid         | Client ID of the sender                       |
@@ -423,7 +407,7 @@ output
 
 The rule event is triggered when the client check acl complete.
 
-| event           | Event type, fixed at "client.check_acl_complete" |
+| Field           | Explanation                                   |
 | --------------- | :----------------------------------------------- |
 | clientid        | Client ID of the sender                          |
 | username        | Username of the sender                           |
@@ -532,4 +516,4 @@ output
 }
 ```
 
-[Rule engine buildin functions](rule-engine_buildin_function.md)
+[Rule engine buildin functions](./rule-engine_buildin_function.md)
