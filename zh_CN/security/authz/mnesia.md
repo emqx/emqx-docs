@@ -1,16 +1,14 @@
-# Mnesia ACL
+# 内置数据库
 
-Mnesia ACL uses the built-in Mnesia database of EMQX to store ACL rules, which can store data and dynamically manage ACLs to facilitate integration with external device management systems.
+Mnesia ACL 使用 EMQX 内置的 Mnesia 数据库存储 ACL 规则，可以存储数据、动态管理 ACL，方便与外部设备管理系统集成
 
-Plugin:
+插件：
 
 ```bash
 emqx_auth_mnesia
 ```
 
-## ACL rules
-
-### ACL Rule Structure Body
+## ACL 规则结构体
 
 ```json
 {
@@ -22,25 +20,23 @@ emqx_auth_mnesia
 }
 ```
 
+规则字段说明：
 
-Rule field description:
+- clientid：客户端的 Client ID.
+- username: 客户端的 Username.
+- topic：控制的主题，可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
+  - %u：用户名
+  - %c：Client ID
+- action：操作行为，可选值：pub | sub | pubsub
+- Access：是否允许，可选值：allow | deny
 
-- username: Match the client's Username.
-- clientid: Match the client's Client.
-- topic: Control topics, you can use wildcards, and you can add placeholders to topics to match client information, such as `t/%c`, then the topic will be replaced with the client ID of the current client when matching
-  - %u: Username
-  - %c: Client ID
-- action: Operation action, optional value: pub | sub | pubsub
-- allow: Whether allow
+`username`和`clientid`是可选的，当两个都没有提供时，该规则适用于所有的客户端
 
-`username` and `clientid` are optional fields, when both a missing, the rule applies to all clients.
+Mnesia ACL 默认不设规则，你可以使用 HTTP API 和 `emqx_ctl` 管理 ACL 规则。
 
-Mnesia ACL does not set rules by default, and you can use the HTTP API to manage ACL rules.
+## 使用 HTTP API 管理 ACL 规则
 
-
-## Use the HTTP API to manage ACL rules
-
-### Add ACL rule
+### 添加 ACL 规则
 
 + Clientid ACL：
 
@@ -114,7 +110,7 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
   }
   ```
 
-### Add ACL rules in batch
+### 批量添加 ACL 规则
 
 ```bash
 # Request
@@ -167,7 +163,7 @@ POST api/v4/acl
 }
 ```
 
-### Check the added ACL rules
+### 查看已经添加的 ACL 规则
 
 + Clientid ACL：
 
@@ -274,7 +270,7 @@ POST api/v4/acl
   }
   ```
 
-### Check Username/Clientid specific ACL rules
+### 查看指定 ACL 规则
 
 + Clientid ACL:
 
@@ -327,13 +323,13 @@ POST api/v4/acl
   }
   ```
 
-### Delete ACL rule
+### 删除 ACL 规则
 
 + Client ACL
 
   ```bash
   # Request
-  # Please note that ${topic} needs to be encoded with UrlEncode
+  # 请注意 ${topic} 需要使用 UrlEncode 编码
   DELETE api/v4/acl/clientid/${clientid}/topic/${topic}
 
   # Response
@@ -345,7 +341,7 @@ POST api/v4/acl
 
   ```bash
   # Request
-  # Please note that ${topic} needs to be encoded with UrlEncode
+  # 请注意 ${topic} 需要使用 UrlEncode 编码
   DELETE api/v4/acl/username/${username}/topic/${topic}
 
   # Response
@@ -357,7 +353,7 @@ POST api/v4/acl
 
   ```bash
   # Request
-  # Please note that ${topic} needs to be encoded with UrlEncode
+  # 请注意 ${topic} 需要使用 UrlEncode 编码
   DELETE api/v4/acl/$all/topic/${topic}
 
   # Response

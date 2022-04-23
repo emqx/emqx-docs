@@ -53,26 +53,26 @@
     - title_en: Authentication
       title_cn: 认证
       children:
-        - authn/authn
-        - authn/mnesia
-        - authn/http
-        - authn/jwt
-        - authn/mysql
-        - authn/postgresql
-        - authn/redis
-        - authn/mongodb
+        - security/authn/authn
+        - security/authn/mnesia
+        - security/authn/http
+        - security/authn/jwt
+        - security/authn/mysql
+        - security/authn/postgresql
+        - security/authn/redis
+        - security/authn/mongodb
     - title_en: Authorisation (ACL)
       title_cn: 鉴权（ACL）
       children:
-        - advanced/acl
-        - advanced/acl-file
-        - advanced/acl-mnesia
-        - advanced/acl-http
-        - advanced/acl-mysql
-        - advanced/acl-postgres
-        - advanced/acl-redis
-        - advanced/acl-mongodb
-    - advanced/blacklist
+        - security/authz/acl
+        - security/authz/file
+        - security/authz/mnesia
+        - security/authz/http
+        - security/authz/mysql
+        - security/authz/postgresql
+        - security/authz/redis
+        - security/authz/mongodb
+    - security/blacklist
 
 - title_en: IoT Rule & Data Bridge
   title_cn: 规则引擎与数据桥接
