@@ -88,12 +88,12 @@
 - title_en: Gateway
   title_cn: 网关
   children:
-    - modules/lwm2m_protocol
-    - modules/mqtt_sn_protocol
-    - modules/tcp_protocol
-    - modules/jt808_protocol
-    - modules/coap_protocol
-    - modules/stomp_protocol
+    - gateway/lwm2m
+    - gateway/mqtt_sn
+    - gateway/tcp
+    - gateway/jt808
+    - gateway/coap
+    - gateway/stomp
 
 - title_en: Cluster Link
   title_cn: 集群互联
