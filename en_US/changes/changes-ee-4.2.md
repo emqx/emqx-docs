@@ -17,18 +17,53 @@ ref: undefined
 
 ## 4.2.11 Release
 
-*Release Date: 2022-03-TODO*
+*Release Date: 2022-04-26*
 
-### Important
+### Important changes
 
-A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.2.11. Previously only the individual node's local number of connections were checked against the max number of connections allowed by the license. After this fix, the total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation.
-
-Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.
+- A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.2.11. Previously only the individual node's local number of connections were checked against the max number of connections allowed by the license. After this fix, the total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation. **Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.**
 
 ### Enhancement
 
+- MQTT-SN gateway supports initiative to synchronize registered topics after session resumed.
+- Improve the relevant metrics during the execution of the rule engine SQL matching
+- Improve the error message when rule engine fails to parse payload
+
 ### Bug fixes
 
+#### Rule Engine
+
+- Fix the issue that rule engine data persistence to Oracle failed but the success count still increased
+- Fix the issue that the alternate action could not be triggered when the action of the rule engine persisting data to Oracle (only synchronous operation) failed to execute
+- Fix the issue that enabling system messages would cause rule engine's Kakfa action to crash
+- Fix the issue of query resource request timeout when rule engine resource is unavailable
+
+#### Protocol
+
+- Fix the issue that the configuration item `server_keepalive` would be incorrectly applied to MQTT v3.1.1 clients
+- Fix the issue that the JT/T 808 location report frame was parsed incorrectly
+- Fix the issue that messages that failed to be delivered due to unregistered topics were not retransmitted when topics were successfully registered with the MQTT-SN client
+
+#### REST API & CLI
+
+- Fix the issue that incorrect query results were returned when querying subscriptions using multiple condition
+- Fix the issue that the subscription query interface did not return paginated data
+- Add the format check for Dashboard User and AppID to avoid User and AppID containing some special characters cannot be deleted
+- Fix the issue that the metrics interface does not return authentication metrics such as client.acl.deny by default
+- Fix the issue that the LwM2M client list query API returned incorrect data in a cluster environment, which resulted in the inability to access the LwM2M gateway module management page
+
+#### Dashboard
+
+- Fix the issue that the session creation time option was not available when filtering clients
+- Fix multiple UI display issues
+
+#### Other
+
+- Fix various issues of hot config, such as the configuration cannot be cleared, the updated configuration is invalid after restarting, etc
+- Fix the issue that the MQTT Bridge plugin cannot be started when only the subscription topic is configured but QoS is not configured
+- Fix an issue with plugin default startup list, now duplicate plugin startup items in `loaded_plugins` file will be ignored
+- Fix the issue that auto subscriptions might subscribe to an empty topic
+- Fix the issue that Message ID displayed garbled characters in some logs
 
 ## 4.2.10 Version
 
