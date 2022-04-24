@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@main
   
     - name: check directory config
-      run: python3 .github/workflows/directory_check.py directory.json $(pwd)
+      run: python3 .github/scripts/directory_check.py directory.json $(pwd)
 
   enterprise_directory_check:
     runs-on: ubuntu-latest
@@ -30,4 +30,4 @@ jobs:
       uses: actions/checkout@main
   
     - name: check enterprise directory config
-      run: python3 .github/workflows/directory_check.py directory_ee.json $(pwd)
+      run: python3 .github/scripts/directory_check.py directory_ee.json $(pwd)
