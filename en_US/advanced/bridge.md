@@ -1,10 +1,8 @@
-# Bridge
-EMQX Broker supports two bridging methods:
+# MQTT Bridging
 
-- -RPC bridging: A bridge method that uses Erlang RPC protocol, only available between EMQX Broker
-- MQTT Bridging: A bridge method that uses the MQTT protocol as a client to connect to a remote broker, and can bridge to other MQTT brokers and EMQX Broker
-
-The concept is shown in the following figure:
+An MQTT bridge in a EMQX node is essentially an MQTT client
+which can publish (forward) message to a remote MQTT broker,
+or subscribe (pull) messages from a remote MQTT broker.
 
 ![image](../assets/bridge.png)
 
@@ -12,65 +10,18 @@ Publishers can publish messages to remote brokers via bridging:
 
 ![image](../assets/bridges_3.png)
 
-EMQX Broker distinguishes different bridges based on different names. Bridge can be added in `etc/plugins/emqx_bridge_mqtt.conf` :
+EMQX Broker distinguishes different bridges based on different names.
+Bridge can be added in `etc/emqx.conf` :
 
 ```bash
 bridge.mqtt.aws.address = 211.182.34.1:1883
 
-bridge.mqtt.huawei.address = 54.33.120.8:1883
+bridge.mqtt.azure.address = 54.33.120.8:1883
 ```
 
-This configuration declares two bridges with the name of `aws` and ` huawei`, which respectively point to the responding service address using MQTT bridging method.
+This configuration declares two bridges with the name of `aws` and `azure`, which respectively point to the responding service address using MQTT bridging method.
 
-If the value of this configuration is the node name of another EMQX Broker, the RPC bridging method is used:
-```bash
-bridge.mqtt.emqx2.address = emqx2@57.122.76.34
-```
-To use the bridge function, you need to enable the emqx_bridge_mqtt plugin:
-
-```bash
-$ emqx_ctl plugins load emqx_bridge_mqtt
-
-ok
-```
-
-## Advantages and disadvantages of RPC bridging
-The advantage of RPC bridging is that it does not involve the MQTT protocol codec and is more efficient than MQTT bridging.
-
-The disadvantage of RPC bridging
-
-- RPC bridging can only bridge two EMQX Brokers together (the version must be the same), and cannot bridge EMQX Broker to other MQTT Brokers
-- RPC bridging can only forward local messages to remote bridge nodes, and cannot synchronize messages from remote bridge nodes to local nodes
-
-## RPC bridging example 
-Suppose there are two emqx nodes:
-
-| Name |        Node        | MQTT Port |
-| ----- | ------------------- | --------- |
-| emqx1 | <emqx1@192.168.1.1> | 1883      |
-| emqx2 | <emqx2@192.168.1.2> | 1883      |
-
-Now, we are going to bridge `emqx1` to ` emqx2`. First we need to add the Bridge configuration in the  configuration file `etc/plugins/emqx_bridge_mqtt.conf`  of emqx1 and point to emqx2:
-
-```bash
-bridge.mqtt.emqx2.address = emqx2@192.168.1.2
-```
-
-Next, we will define the `forwards` rule, so that messages sent by this node to ` sensor1 / # `and` sensor2 / # ` will be forwarded to ` emqx2`:
-
-```bash
-bridge.mqtt.emqx2.forwards = sensor1/#,sensor2/#
-```
-
-If you want to add specific prefix to the topics before forwarding the message to `emqx2` , you can set the mount point:
-
-```bash
-bridge.mqtt.emqx2.mountpoint = bridge/emqx2/${node}/
-```
-
-The mount point is good for `emqx2` to distinguish between bridged messages and local messages. For example, in the above configuration, the message with the original topic of `sensor1/hello` that will change into  `bridge/emqx2/emqx1@192.168.1.1/sensor1/hello` after being forwarded to ` emqx2`. 
-
-## MQTT bridging example  
+## MQTT bridging example
 For MQTT bridging, it makes EMQX Broker connect as a MQTT client to a remote MQTT broker.
 
 First you need to configure the MQTT client parameters:
@@ -147,21 +98,26 @@ bridge.mqtt.aws.retry_interval = 20s
 bridge.mqtt.aws.max_inflight_batches = 32
 ```
 
-If you want to add a specific prefix to the topic forwarding the message to `aws` , you can set the mount point. For details, see the  [RPC Bridge Example](#rpc-bridge-example) section:
+If you want to add a specific prefix to the topic forwarding the message to `aws`,
+you can set the mount point.
 
 ```bash
 bridge.mqtt.aws.mountpoint = bridge/aws/${node}/
 ```
 
-If you want your local broker to "pull" messages from remote brokers, you can subscribe to certain topics from remote brokers:
+If you want your local broker to "pull" messages from remote brokers,
+you can subscribe to certain topics from remote brokers:
 
 ```bash
 bridge.mqtt.aws.subscription.1.topic = cmd/topic1
 bridge.mqtt.aws.subscription.1.qos = 1
 ```
 
-### EMQX Broker's bridge cache configuration 
-EMQX Broker's Bridge has a message cache mechanism. When the Bridge is disconnected, the message of the forwards topic is cached. When the bridge is restored, the message is re-forwarded to the remote node. The caching mechanism applies to both RPC and MQTT bridges.
+### Publishing bridge message buffer
+
+EMQX Broker's Bridge has a message buffering mechanism.
+When the Bridge is disconnected, the messages of the forwards topic are buffered.
+The buffered messages are (re)sent to the remote broker when connection recovers.
 
 Set the total cache queue size:
 
@@ -175,7 +131,8 @@ Cache messages to a certain path to the disk (Only cache to memory if not set):
 bridge.mqtt.emqx2.queue.replayq_dir = data/emqx_emqx2_bridge/
 ```
 
-Set the size of a single cache file. If it exceeds, a new file will be created to store the message queue:
+Set the size of a single cache file. If it exceeds, a new file will be created
+to store the message queue:
 
 ```bash
 bridge.mqtt.emqx2.queue.replayq_seg_bytes = 10MB

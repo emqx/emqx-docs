@@ -95,29 +95,21 @@
     - gateway/coap
     - gateway/stomp
 
-- title_en: Cluster Link
-  title_cn: 集群互联
-  children:
-    - bridge/bridge
-    - advanced/bridge ## TODO merge down
-    - bridge/bridge-mqtt ## TODO merge up
-
 - title_en: Observability
   title_cn: 运行监测
   children:
-    - getting-started/log
-    - tutorial/prometheus
-    - modules/tracer
-    - modules/slow_subscribers_statistics
-    - advanced/metrics-and-stats
-    - advanced/alarms
-    - advanced/telemetry
+    - observability/log
+    - observability/prometheus
+    - observability/tracer
+    - observability/slow_subscribers_statistics
+    - observability/metrics-and-stats
+    - observability/alarms
 
 - title_en: Reliability
   title_cn: 可靠性
   children:
-    - advanced/rate-limit
-    - advanced/config-and-data-backup-restore
+    - reliability/rate-limit
+    - reliability/config-and-data-backup-restore
 
 - title_en: Advanced MQTT Features
   title_cn: MQTT 高级特性
@@ -172,10 +164,10 @@
         - development/python
     - development/resource
 
-- title_en: Load Tests
-  title_cn: 压力测试
+- title_en: Load Verification
+  title_cn: 压力验证
   children:
-    - tutorial/benchmark
+    - verif/benchmark
 
 - title_en: FAQ
   children:
