@@ -37,6 +37,7 @@ ref: undefined
 - Fix the issue that the alternate action could not be triggered when the action of the rule engine persisting data to Oracle (only synchronous operation) failed to execute
 - Fix the issue that enabling system messages would cause rule engine's Kakfa action to crash
 - Fix the issue of query resource request timeout when rule engine resource is unavailable
+- If a rule with the same ID already exists when creating a rule, , rule engine will now report an error instead of replacing the existing rule
 
 #### Protocol
 
