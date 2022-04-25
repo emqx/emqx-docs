@@ -241,8 +241,6 @@ subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 
 ## Decoding and encoding functions
 
-{% emqxce %}
-
 | Function | Purpose                             |        Parameters         | Returned value    |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
 | `base64_encode` | BASE64 encode   | The binary to be encoded | The encoded base64-formatted string |
@@ -252,30 +250,58 @@ subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 | `bin2hexstr` | Binary to Hex String | The binary | The hex string |
 | `hexstr2bin` | Binary to Hex String | The hex string | The binary |
 
-
-{% endemqxce %}
-
-
-{% emqxee %}
-
-
-| Function | Purpose                             |        Parameters         | Returned value |
-| -------- | ------------------------------------|------------------------- | --------------------------- |
-| `base64_encode` | BASE64 encode   | The binary to be encoded | The encoded base64-formatted string |
-| `base64_decode` | BASE64 decode   | The base64-formatted string to be decoded | The decoded binary |
-| `json_encode` | JSON encode   | The data to be encoded | The JSON string |
-| `json_decode` | JSON decode   | The JSON string to be decoded | The decoded data |
-| `schema_encode` | Encode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
-| `schema_decode` | Decode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
-| `bin2hexstr` | Binary to Hex String | The binary | The hex string |
-| `hexstr2bin` | Binary to Hex String | The hex string | The binary |
-
-{% endemqxee %}
-
-
 ```erlang
 base64_encode('some val') = 'c29tZSB2YWw='
 base64_decode('c29tZSB2YWw=') = 'some val'
 json_encode(json_decode( '{ "a" : 1 }' )) = '{"a":1}'
 bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
+
+{% emqxee %}
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|------------------------- | --------------------------- |
+| `schema_encode` | Encode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
+| `schema_decode` | Decode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
+
+For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md)
+{% endemqxee %}
+
+## Time functions
+
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|-------------------------- | --------------------------- |
+| `now_timestamp` | Return the unix epoch of now in second | - | The unix epoch |
+| `now_timestamp` | Return the unix epoch of now, in given time unit | 1. The time unit | The unix epoch |
+| `now_rfc3339` | Create a RFC3339 time string of now in second | - | the time string of format RFC3339 |
+| `now_rfc3339` | Create a RFC3339 time string of now, in given time unit | 1. The time unit | the time string of format RFC3339 |
+| `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string | 1. The unix epoch in second | the time string of format RFC3339 |
+| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch 2. The time unit | the time string of format RFC3339 |
+| `rfc3339_to_unix_ts` | Convert a RFC3339 time string (in second) to unix epoch | 1. the time string of format RFC3339 | The unix epoch |
+| `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit | 1. the time string of format RFC3339 2. The time unit | The unix epoch |
+
+```SQL
+now_timestamp() = 1650874276
+now_timestamp('millisecond') = 1650874318331
+now_rfc3339() = '2022-04-25T16:08:41+08:00'
+now_rfc3339('millisecond') = '2022-04-25T16:10:10.652+08:00'
+unix_ts_to_rfc3339(1650874276) = '2022-04-25T16:11:16+08:00'
+unix_ts_to_rfc3339(1650874318331, 'millisecond') = '2022-04-25T16:11:58.331+08:00'
+rfc3339_to_unix_ts('2022-04-25T16:11:16+08:00') = 1650874276
+rfc3339_to_unix_ts('2022-04-25T16:11:58.331+08:00', 'millisecond') = 1650874318331
+```
+
+{% emqxee %}
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|-------------------------- | --------------------------- |
+| `mongo_date` | Create a mongodb ISODate type of now | - | the ISODate |
+| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. unix epoch in millisecond | the ISODate |
+| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. unix epoch 2. time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' | the ISODate |
+
+```SQL
+mongo_date() = 'ISODate("2012-12-19T06:01:17.171Z")'
+mongo_date(timestamp) = 'ISODate("2012-12-19T06:01:17.171Z")'
+mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
+```
+{% endemqxee %}
+
+The time unit can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond'.

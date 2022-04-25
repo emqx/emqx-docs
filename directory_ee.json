@@ -465,7 +465,28 @@
         },
         {
           "title": "编解码",
-          "path": "rule/schema-registry"
+          "children": [
+            {
+              "title": "编解码简介",
+              "path": "rule/schema-registry"
+            },
+            {
+              "title": "Avro 编解码举例",
+              "path": "rule/schema-registry-examp-avro"
+            },
+            {
+              "title": "Protobuf 编解码举例",
+              "path": "rule/schema-registry-examp-protobuf"
+            },
+            {
+              "title": "HTTP 编解码举例",
+              "path": "rule/schema-registry-examp-3rdparty-http"
+            },
+            {
+              "title": "gRPC 编解码举例",
+              "path": "rule/schema-registry-examp-3rdparty-grpc"
+            }
+          ]
         }
       ]
     },
@@ -1202,8 +1223,29 @@
           ]
         },
         {
-          "title": "Schema",
-          "path": "rule/schema-registry"
+          "title": "Schema Codecs",
+          "children": [
+            {
+              "title": "Introduction to Schema Codecs",
+              "path": "rule/schema-registry"
+            },
+            {
+              "title": "Custom codec example - Avro",
+              "path": "rule/schema-registry-examp-avro"
+            },
+            {
+              "title": "Custom codec example - Protobuf",
+              "path": "rule/schema-registry-examp-protobuf"
+            },
+            {
+              "title": "3rd-Party Custom codec example - HTTP",
+              "path": "rule/schema-registry-examp-3rdparty-http"
+            },
+            {
+              "title": "3rd-Party Custom codec example - gRPC",
+              "path": "rule/schema-registry-examp-3rdparty-grpc"
+            }
+          ]
         }
       ]
     },

@@ -92,7 +92,7 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 
 对于使用 Kubernetes 的用户，EMQX 提供了 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator)。该 Operator 可以帮助您在 Kubernetes 环境下快速部署一个可用于生产环境的，功能完备的 EMQX 集群。
 
-EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具，用于 EMQX 集群的自动化部署和生命周期管理。您可以查阅[文档](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md)来了解如何使用 Operator 部署 EMQX。
+EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具，用于 EMQX 集群的自动化部署和生命周期管理。您可以查阅[文档](https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html)来了解如何使用 Operator 部署 EMQX。
 
 ### Terraform 安装部署
 

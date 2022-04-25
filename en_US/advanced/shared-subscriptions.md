@@ -15,7 +15,7 @@ In the above picture, three subscribers subscribe to the same topic `$share/g/to
 | Example         | Prefix      | Real topic name |
 | --------------- | ----------- | --------------- |
 | $queue/t/1      | $queue/     | t/1             |
-| $share/abc/t/1 | $share/abc | t/1             |
+| $share/abc/t/1  | $share/abc  | t/1             |
 
 
 ### Shared subscription with groups
@@ -64,6 +64,9 @@ EMQX Broker's shared subscription supports balancing strategy and distribution o
 # balancing strategy
 broker.shared_subscription_strategy = random
 
+# Per-group balancing strategy
+broker.$group_name.shared_subscription_strategy = local
+
 # Applicable to QoS1 QoS2 messages, when enabled, message will be distributed to another group when one group is offline
 broker.shared_dispatch_ack_enabled = false
 ```
@@ -75,6 +78,7 @@ broker.shared_dispatch_ack_enabled = false
 | round_robin | According to the order of subscription |
 | sticky      | Always sent to the last selected subscriber |
 | hash        | According to the hash value of the publisher ClientID |
+| local       | Selects random subscriber connected to the node which received the message. If no such subscribers present, selects a random cluster-wise |
 
 ::: tip
 Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate, otherwise it will cause errors such as message accumulation and client crash.
