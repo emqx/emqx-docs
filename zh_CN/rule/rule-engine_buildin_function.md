@@ -324,3 +324,55 @@ base64_decode('c29tZSB2YWw=') = 'some val'
 json_encode(json_decode( '{ "a" : 1 }' )) = '{"a":1}'
 bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
+
+{% emqxee %}
+
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|------------------------- | --------------------------- |
+| `schema_encode` | 通过 Schema 做编码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要编码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 编码后的数据 |
+| `schema_decode` | 通过 Schema 做解码. 使用前需要先创建 Schema | 1. Schema registry 里定义的 Schema ID 2. 要解码的数据 3..N. 其他的参数，有哪些参数取决于 Schema 的类型 | 解码后的数据 |
+
+函数 schema_encode() 和 schema_decode() 的示例请参见 [schema registry](schema-registry.md)
+
+{% endemqxee %}
+
+
+## Time functions
+
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|-------------------------- | --------------------------- |
+| `now_timestamp` | 返回当前时间的 Unix 秒级时间戳 | - | Unix 时间戳 |
+| `now_timestamp` | 指定时间单位，返回当前时间的 Unix 时间戳 | 1. 时间单位 | Unix 时间戳 |
+| `now_rfc3339` | 生成当前时间的 RFC3339 字符串，秒级 | - | RFC3339 时间字符串 |
+| `now_rfc3339` | 指定时间单位，生成当前时间的 RFC3339 字符串 | 1. 时间单位 | RFC3339 时间字符串 |
+| `unix_ts_to_rfc3339` | 将秒级 Unix 时间戳转换为 RFC3339 时间字符串 | 1. Unix 时间戳，秒级 | RFC3339 时间字符串 |
+| `unix_ts_to_rfc3339` | 指定时间单位，将 Unix 时间戳转换为 RFC3339 时间字符串 | 1. Unix 时间戳 2. 时间单位 | RFC3339 时间字符串 |
+| `rfc3339_to_unix_ts` | 将秒级 RFC3339 时间字符串转换为 Unix 时间戳 | 1. RFC3339 时间字符串 | Unix 时间戳 |
+| `rfc3339_to_unix_ts` | 指定时间单位，将 RFC3339 时间字符串转换为 Unix 时间戳 | 1. RFC3339 时间字符串 2. 时间单位 | Unix 时间戳 |
+
+```SQL
+now_timestamp() = 1650874276
+now_timestamp('millisecond') = 1650874318331
+now_rfc3339() = '2022-04-25T16:08:41+08:00'
+now_rfc3339('millisecond') = '2022-04-25T16:10:10.652+08:00'
+unix_ts_to_rfc3339(1650874276) = '2022-04-25T16:11:16+08:00'
+unix_ts_to_rfc3339(1650874318331, 'millisecond') = '2022-04-25T16:11:58.331+08:00'
+rfc3339_to_unix_ts('2022-04-25T16:11:16+08:00') = 1650874276
+rfc3339_to_unix_ts('2022-04-25T16:11:58.331+08:00', 'millisecond') = 1650874318331
+```
+
+{% emqxee %}
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|-------------------------- | --------------------------- |
+| `mongo_date` | 生成当前时间的 mongodb ISODate 类型 | - | ISODate 类型的时间 |
+| `mongo_date` | 生成指定 Unix 时间戳的 mongodb ISODate 类型，毫秒级 | 1. 毫秒级 Unix 时间戳 | ISODate 类型的时间 |
+| `mongo_date` | 指定时间单位，生成指定 Unix 时间戳的 mongodb ISODate 类型 | 1. Unix 时间戳 2. 时间单位 | ISODate 类型的时间 |
+
+```SQL
+mongo_date() = 'ISODate("2012-12-19T06:01:17.171Z")'
+mongo_date(timestamp) = 'ISODate("2012-12-19T06:01:17.171Z")'
+mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
+```
+{% endemqxee %}
+
+时间单位可以是以下其中之一：'second', 'millisecond', 'microsecond' or 'nanosecond'.
