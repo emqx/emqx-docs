@@ -355,7 +355,7 @@ FROM
 
 
 MQTT v5.0 协议将返回码重命名为原因码，增加了一个原因码来指示更多类型的错误([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack))。
-因此reasono_code 在MQTT v3.1.1与MQTT v5.0中有很大的不同。
+因此reason_code 在MQTT v3.1.1与MQTT v5.0中有很大的不同。
 
 MQTT v3.1.1
 | reason_code                    | 描述      |
