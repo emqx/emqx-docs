@@ -23,6 +23,8 @@ ref: undefined
 
 - A cluster-wide total connections calculation bug was fixed in in Enterprise edition 4.2.11. Previously only the individual node's local number of connections were checked against the max number of connections allowed by the license. After this fix, the total number of connections is aggregated cluster-wide every 5 seconds. An extra 10% overrun is allowed to compensate the delays in aggregation. **Users planning to upgrade should be aware of the possibility that this change may cause clients to reach the license limit and not be able to connect.**
 
+> Note: The WebSocket listener will be restarted when e4.2.0 and e4.2.1 are hot-upgraded to a higher version, so WebSocket connections will be disconnected for a short time, please pay attention when upgrading.
+
 ### Enhancement
 
 - MQTT-SN gateway supports initiative to synchronize registered topics after session resumed.
