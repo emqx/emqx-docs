@@ -23,6 +23,9 @@
   title_cn: 快速开始
   path: getting-started/getting-started
 
+
+## Infrastructure
+
 - title_en: Deployment & Provisioning
   title_cn: 安装与部署
   children:
@@ -42,10 +45,10 @@
 - title_en: Management Interfaces
   title_cn: 管理接口
   children:
-    - admin/cfg # Configuration file
-    - admin/api # Swagger API doc
     - admin/dashboard
     - admin/cli
+    - admin/api # Swagger API doc
+    - admin/cfg # Configuration file
 
 - title_en: Security
   title_cn: 安全
@@ -74,27 +77,6 @@
         - security/authz/mongodb
     - security/blacklist
 
-- title_en: IoT Rule & Data Bridge
-  title_cn: 规则引擎与数据桥接
-  children:
-    - rule/rule-engine
-    - rule/rule-engine_grammar_and_examples
-    - rule/rule-engine_field
-    - rule/rule-engine_buildin_function
-    - rule/rule-create
-    - rule/how_to_update_resources
-    - rule/rule-example
-
-- title_en: Gateway
-  title_cn: 网关
-  children:
-    - gateway/lwm2m
-    - gateway/mqtt_sn
-    - gateway/tcp
-    - gateway/jt808
-    - gateway/coap
-    - gateway/stomp
-
 - title_en: Observability
   title_cn: 运行监测
   children:
@@ -111,6 +93,31 @@
     - reliability/rate-limit
     - reliability/config-and-data-backup-restore
 
+## Data integration
+
+- title_en: IoT Rule & Data Bridge
+  title_cn: 规则引擎与数据桥接
+  children:
+    - rule/rule-engine
+    - rule/rule-engine_grammar_and_examples
+    - rule/rule-engine_field
+    - rule/rule-engine_buildin_function
+    - rule/rule-create
+    - rule/how_to_update_resources
+    - rule/rule-example
+
+## Device connectivity
+
+- title_en: Gateway
+  title_cn: 网关
+  children:
+    - gateway/lwm2m
+    - gateway/mqtt_sn
+    - gateway/tcp
+    - gateway/jt808
+    - gateway/coap
+    - gateway/stomp
+
 - title_en: Advanced MQTT Features
   title_cn: MQTT 高级特性
   children:
@@ -120,16 +127,6 @@
     - advanced/auto-subscriptions
     - advanced/topic-rewrite
     - advanced/system-topic
-
-- title_en: Plugins & Extensions
-  title_cn: 插件与扩展
-  children:
-    # TODO: add Introduction
-    # TODO: add plugin development doc
-    - advanced/hooks
-    - advanced/webhook
-    - advanced/lang-exhook
-    - advanced/lang-exproto
 
 - title_en: Persistence Backends
   title_cn: 数据持久化
@@ -145,6 +142,18 @@
     - backend/backend_pgsql
     - backend/backend_redis
     - backend/backend_timescale
+
+## Developers & Testers
+
+- title_en: Plugins & Extensions
+  title_cn: 插件与扩展
+  children:
+    # TODO: add Introduction
+    # TODO: add plugin development doc
+    - advanced/hooks
+    - advanced/webhook
+    - advanced/lang-exhook
+    - advanced/lang-exproto
 
 - title_en: Design & Implementation
   title_cn: 设计与实现
