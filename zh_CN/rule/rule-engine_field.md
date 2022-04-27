@@ -348,7 +348,6 @@ FROM
 | keepalive        | MQTT 保活间隔                                   |
 | clean_start      | MQTT clean_start                               |
 | expiry_interval  | MQTT Session 过期时间                           |
-| connected_at     | 终端连接完成时间 (s)                             |
 | conn_props       | CONNECT Properties (仅适用于 MQTT 5.0)          |
 | timestamp        | 事件触发时间 (ms)                               |
 | node             | 事件触发所在节点                                |
@@ -398,7 +397,6 @@ SELECT
   clientid,
   username,
   reason,
-  connected_at,
   node
 FROM
   "$events/client_connack"
