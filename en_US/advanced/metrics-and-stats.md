@@ -100,10 +100,6 @@ EMQ X Broker divides metrics into Metrics and Stats. Metrics usually refer to da
 
 | Name                  | Data Type | Description                                               |
 | --------------------- | --------- | --------------------------------------------------------- |
-| actions.success       | Integer   | Number of successful executions of the rule engine action |
-| actions.error         | Integer   | Number of failed rule engine actions                      |
-| actions.exception     | Integer   | Number of exceptional rule engine actions                 |
-| rules.matched         | Integer   | Number of matched rules                                   |
 | client.auth.anonymous | Integer   | The number of client's final anonymous login              |
 | client.connect        | Integer   | `client.connect` hook trigger times                       |
 | client.authenticate   | Integer   | `client.authenticate` hook trigger times                  |

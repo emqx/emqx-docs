@@ -117,10 +117,6 @@ EMQ X 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只�
 
 | Name                  | Data Type | Description                        |
 | --------------------- | --------- | ---------------------------------- |
-| actions.success       | Integer   | 规则引擎 action 执行成功次数       |
-| actions.error         | Integer   | 规则引擎 action 执行失败次数       |
-| actions.exception     | Integer   | 规则引擎 action 运行异常次数       |
-| rules.matched         | Integer   | 规则的匹配次数                     |
 | client.auth.anonymous | Integer   | 客户端最终匿名形式登录的次数       |
 | client.connect        | Integer   | `client.connect` 钩子触发次数      |
 | client.authenticate   | Integer   | `client.authenticate` 钩子触发次数 |
