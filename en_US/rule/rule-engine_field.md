@@ -339,7 +339,6 @@ The rule event is triggered when the server sends a CONNACK packet to the client
 | keepalive        | MQTT keepalive interval                       |
 | clean_start      | MQTT clean_start                              |
 | expiry_interval  | MQTT Session Expiration time                  |
-| connected_at     | Terminal connection completion time (s)       |
 | conn_props       | The CONNECT Properties (MQTT 5.0 only)        |
 | timestamp        | Event trigger time(millisecond)               |
 | node             | Node name of the trigger event                |
@@ -388,7 +387,6 @@ SELECT
   clientid,
   username,
   reason,
-  connected_at,
   node
 FROM
   "$events/client_connack"
