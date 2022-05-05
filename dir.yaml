@@ -76,16 +76,17 @@
         - security/authz/redis
         - security/authz/mongodb
     - security/blacklist
+      # TODO: TLS/SSL overview
 
 - title_en: Observability
   title_cn: 运行监测
   children:
-    - observability/log
     - observability/prometheus
+    - observability/log
     - observability/tracer
+    - observability/alarms
     - observability/slow_subscribers_statistics
     - observability/metrics-and-stats
-    - observability/alarms
 
 - title_en: Reliability
   title_cn: 可靠性
@@ -177,11 +178,3 @@
   title_cn: 压力验证
   children:
     - verif/benchmark
-
-- title_en: FAQ
-  children:
-    - faq/faq
-    - faq/use-guide
-    - faq/deployment
-    - faq/error
-    - faq/enterprise
