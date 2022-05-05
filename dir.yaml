@@ -40,7 +40,7 @@
         - deploy/cluster/manual
         - deploy/cluster/auto
         - deploy/lb
-    - deploy/relup
+  # - deploy/relup
 
 - title_en: Management Interfaces
   title_cn: 管理接口
