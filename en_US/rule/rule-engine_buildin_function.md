@@ -257,3 +257,44 @@ base64_decode('c29tZSB2YWw=') = 'some val'
 json_encode(json_decode( '{ "a" : 1 }' )) = '{"a":1}'
 bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
+
+## Time functions
+
+| Function | Purpose  | Parameters     | Returned value |
+| -------- | -------- |--------------- | -------------- |
+| `format_date` | Get the time and output the time string in the specified format | 1. time precision <br />2. time offset <br />3. time format string | string |
+| `format_date` | Output string with integer timestamp in specified format | 1. time precision<br />2.  time offset<br />3. time format string<br />4. timestamp | string |
+| `date_to_unix_ts` | Parse a string using the specified format | 1. time precision<br />2.  time offset<br />3. time format string<br />4. string | integer |
+
+Time Precision
+
+second,
+millisecond,
+micorsecond,
+nanosecond,
+
+Time Offset
+
+The user can specify the time zone of the output time through this string, For example, the East Eight time zone can be represented by "+08:00". If the input is empty, the system default time zone will be used.
+
+Time Format String
+
+The user can specify the output style through the format string.
+
+| Parameters | Description |
+| ---- | ---- |
+| %y | year |
+| %m | month |
+| %d | day |
+| %H | hour， 24-hour clock |
+| %M | minute |
+| %S | second，the time precision parameter will affect its output |
+| %Z | time zone，the time offset parameter will affect its output |
+
+The user can parse the time string using the specified format.
+
+```erlang
+format_date('nanosecond', '+08:00', '%y-%m-%d %H:%M:%S%Z') = '2022-04-15 19:05:55.930812260+08:00'
+format_date('nanosecond', '+08:00', '%y-%m-%d %H:%M:%S%Z', 1650020755930812200) = '2022-04-15 19:05:55.930812200+08:00'
+date_to_unix_ts('nanosecond', '+08:00', '%y-%m-%d %H:%M:%S%Z', '2022-04-15 19:05:55.930812260+08:00') = 1650020755930812200
+```
