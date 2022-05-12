@@ -2,6 +2,10 @@
 
 EMQX 4.3 and 4.4 nodes co-exist in the same cluster.
 Hence it's possible to apply a rolling upgrade of a EMQX cluster.
+**Note that it is the latest version of 4.4**
+For example: connection_low_watermark_alarm configured for e4.3.7 e4.4.1 feature.
+If you upgrade from e4.3.7 to e4.4.0, it will not be recognized and you need to upgrade to e4.4.1.
+So it is recommended to upgrade to the latest version of 4.4.
 
 The upgrade steps of each EMQX node are summarised below:
 
