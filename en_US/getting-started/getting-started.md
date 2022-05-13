@@ -1,10 +1,10 @@
 # Getting Started
 
-Starting from download and installation, this section will take you to quickly get started with EMQX.
+Starting from download and installation, this section will take you through quickly getting started with EMQX.
 
 ## Select EMQX Edition
 
-EMQX as a software is released in two different editions: Community and Enterprise. EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud) which runs EMQX Enterprise edition. You can customize the deployment to suit your business development plans the best and get started quickly.
+EMQX as a software is released in two different editions: Community and Enterprise. EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud) which runs EMQX Enterprise edition. You can customize the deployment to suit your business development plans and is the best way to get started quickly.
 
 :::: tabs type:card
 
@@ -21,7 +21,7 @@ The world's most scalable distributed MQTT broker with a high-performance real-t
 :::
 
 ::: tab EMQX Cloud
-Connecting your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerating your IoT application development without the burden of self-managing the infrastructure.
+Connects your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerate your IoT application development without the burden of self-managing the infrastructure.
 
 - Fully managed MQTT 5.0 service
 - Powerful SQL-based rule engine
@@ -33,7 +33,7 @@ Connecting your IoT devices to everything with reliable, real-time IoT data tran
 :::
 
 ::: tab EMQX Enterprise Edition 
-The world’s leading **Cloud-Native IoT Messaging Platform** with an all-in-one distributed MQTT broker and SQL-based IoT rule engine, powering high-performance, reliable data transport, processing, and integration for business-critical IoT solutions.
+The world’s leading **Cloud-Native IoT Messaging Platform** with an all-in-one distributed MQTT broker and SQL-based IoT rule engine which provides high-performance, reliable data transport, processing, and integration for business-critical IoT solutions.
 
 - Support for multiple IoT protocols
 - Powerful SQL-based rule engine
@@ -50,7 +50,7 @@ The world’s leading **Cloud-Native IoT Messaging Platform** with an all-in-one
 
 ### Deploy in EMQX Cloud
 
-EMQX Cloud is the first fully managed MQTT 5.0 public cloud service in the world. With the support of EMQX Cloud, you can create an EMQX cluster on the cloud and use all the features of EMQX Enterprise. This allows you to spend more time on business connections and less time for EMQX operation, maintenance, and management.
+EMQX Cloud is the first fully managed MQTT 5.0 public cloud service in the world. With the support of EMQX Cloud, you can create an EMQX cluster in the cloud and use all the features of EMQX Enterprise. This allows you to spend more time on business connections and less time on EMQX operation, maintenance, and management.
 
 - [Create and login EMQX cloud account](https://docs.emqx.com/en/cloud/latest/quick_start/introduction.html)
 - [Create a free trial deployment](https://docs.emqx.com/en/cloud/latest/quick_start/create_free_trial.html)
@@ -75,7 +75,7 @@ For more information about Docker installation and building a cluster quickly wi
 
 ### Install EMQX on Kubernetes
 
-For users using Kubernetes, EMQX provides [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator). This Operator can help you quickly deploy an EMQX cluster with complete functions that can be used in a production environment in Kubernetes environment.
+For users using Kubernetes, EMQX provides [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator). This Operator can help you quickly deploy an EMQX cluster with complete functions that can be used for a production installation in Kubernetes environment.
 
 EMQX Kubernetes Operator is an application orchestration tool based on Kubernetes native API, which is used for automatic deployment and lifecycle management of EMQX clusters. You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md) to learn how to deploy EMQX using the Operator.
 
@@ -90,7 +90,7 @@ For more information about Terraform installation and deployment, please refer t
 
 ### Run in a virtual machine or physical machine
 
-EMQX Enterprise can be deployed directly to bare metal servers or virtual machines. A minimum of 2 core and 4GB machine can run the EMQX Enterprise. It can support CentOS/Debian/Ubuntu/MacOS operating systems.
+EMQX Enterprise can be deployed directly to bare metal servers or virtual machines. A machine with a minimum of 2 cores and 4GB of RAM can run an EMQX Enterprise installation. It can support CentOS/Debian/Ubuntu/MacOS operating systems.
 
 - [Shell script one-click installation (Linux)](./install.md#one-click-installation-of-shell-script-linux)
 - [CentOS installation](./install.md#centos)
@@ -145,13 +145,13 @@ In development mode, you can use the console command to start EMQX on the consol
 
 ## Quick experience of EMQX
 
-EMQX supports standard MQTT protocol. After startup, you can access the MQTT client. You can use the following client tools or client libraries to access EMQX for message communication to complete the testing and verification of certain scenarios or functions.
+EMQX supports standard MQTT protocol. After startup you can access the MQTT client. You can use the following client tools or client libraries to access EMQX for message communication to complete the testing and verification of certain scenarios or functions.
 
 ### Dashboard Websocket tool
 
 Open Dashboard and enter the page of **Tools -> Websocket**, where you can use the MQTT over Websokcet client to quickly access EMQX.
 
-The Websocket page provides you with a simple but effective WebSocket client tool, which includes the functions of connection, subscription, and publishing, as well as checking the packet data sent and received by yourself.
+The Websocket page provides you with a simple but effective WebSocket client tool which includes the functions of connection, subscription, and publishing, as well as checking the packet data sent and received by yourself.
 
 ![emqx-mqtt-websocket-tool-en](./assets/emqx-mqtt-websocket-tool-en.png)
 
@@ -159,7 +159,7 @@ The Websocket page provides you with a simple but effective WebSocket client too
 
 MQTT X is an elegant cross-platform MQTT 5.0 open source desktop client tool that supports running on macOS, Linux, and Windows.
 
-MQTT X has many features, provides a concise graphical interface and operation logic, supports MQTT/MQTT over Websocket access and one-way/two-way SSL authentication, and supports Payload format conversion, simulation of test data with a custom script, automatic subscription of $SYS topic, viewing Traffic statistics and so on.
+MQTT X has many features and provides a concise graphical interface and is simple to operate. It supports MQTT/MQTT over Websocket with one-way/two-way SSL authentication, Payload format conversion, simulation of test data with a custom script, automatic subscription of $SYS topic, viewing Traffic statistics, and more.
 
 For download and use, please refer to the [MQTT X website](https://mqttx.app).
 
@@ -188,14 +188,14 @@ After completing the installation, startup, and access test, you can continue to
 
 ### Authentication
 
-Authentication is an important part of most applications, and enabling authentication can effectively prevent illegal client connections. Pub/Sub ACLs can control the permissions for Pub/Sub operations of the client.
+Authentication is an important part of most applications, and enabling authentication can effectively prevent malicious client connections. Pub/Sub ACLs can control the permissions for Pub/Sub operations of the client.
 
 - [Authentication Introduction](../advanced/auth.md): select built-in plugin, external database, JWT or HTTP service as the authentication data source to verify whether the client connection is legal.
 - [Pub/Sub ACL](../advanced/acl.md): Select built-in plugin, external database, or HTTP service as the ACL data source to verify the client's Pub/Sub permissions.
 
 ### Rule Engine
 
-The built-in rule engine based on SQL can extract, filter, enrich, and convert IoT data between devices and business systems in real-time, and forward IoT data to Webhooks and other MQTT Brokers without coding. For the enterprise version, it can also be integrated with Kafka, various SQL / NoSQL / time-series databases and enterprise systems, such as SAP.
+The built-in rule engine based on SQL can extract, filter, enrich, and convert IoT data between devices and business systems in real-time, and forward IoT data to Webhooks and other MQTT Brokers without coding. For the enterprise version, it can also be integrated with Kafka, various SQL / NoSQL / time-series databases, and enterprise systems such as SAP.
 
 - [Rule Engine](../rule/rule-engine.md): The concept and basic usage of rule engine.
 - [Create Rule](../rule/rule-create.md): How to create a rule.
@@ -203,7 +203,7 @@ The built-in rule engine based on SQL can extract, filter, enrich, and convert I
 
 ### HTTP API
 
-HTTP API is a frequently used function in IoT platform development and EMQX operation and maintenance. HTTP API can realize integration with external systems, such as querying and managing client information, broker subscription, publishing messages and creating rules.
+HTTP API is a frequently used function in IoT platform development and EMQX operation and maintenance. HTTP API can enable integration with external systems, such as querying and managing client information, broker subscription, publishing messages and creating rules.
 
 - [HTTP API](../advanced/http-api.md): include HTTP API access point and access authentication method.
 - [Basic Information](../advanced/http-api.md#endpoint-brokers): Get basic information such as EMQX version and running status.
