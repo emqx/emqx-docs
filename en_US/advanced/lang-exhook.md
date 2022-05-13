@@ -1,4 +1,4 @@
-# Extension Hook
+# gRPC Hook Extension
 
 The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX's [Hooks](hooks.md) using other programming languages.
 

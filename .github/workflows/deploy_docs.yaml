@@ -56,6 +56,12 @@ jobs:
       with:
         node-version: 14.15
 
+    - name: generate directory.json
+      run: |
+        cd docs-files
+        ./gen.py ce | tee directory.json
+        ./gen.py ee | tee directory_ee.json
+
     - name: remove unused files
       run: |
         cd docs-files

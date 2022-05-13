@@ -4,21 +4,14 @@
 
 ## 版本选择
 
-EMQX 提供开源版和企业版下载安装，也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
+EMQX 有如下版本
+
+- [企业版](https://www.emqx.com/en/try?product=enterprise)
+- [开源社区版](https://www.emqx.com/en/try?product=broker)
+
+EMQ 也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
 
 :::: tabs type:card
-
-::: tab EMQX 开源版
-大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
-
-- 基于 APL 2.0 开放源码协议
-- 完整 MQTT 3.x 和 5.0 规范
-- Masterless 高可用集群架构
-- 高并发、低时延、高性能
-- 可扩展的网关和插件体系
-
-[下载安装](https://www.emqx.io/zh/downloads)
-:::
 
 ::: tab EMQX Cloud
 通过可靠、实时的物联网数据移动、处理和集成，连接您的海量物联网设备。加快您的物联网应用开发，免除基础设施管理维护负担。
@@ -44,6 +37,19 @@ EMQX 提供开源版和企业版下载安装，也提供了全托管的 MQTT 云
 
 [**免费试用**](https://www.emqx.com/zh/try?product=enterprise)
 :::
+
+::: tab EMQX 开源社区版
+大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
+
+- 基于 APL 2.0 开放源码协议
+- 完整 MQTT 3.x 和 5.0 规范
+- Masterless 高可用集群架构
+- 高并发、低时延、高性能
+- 可扩展的网关和插件体系
+
+[下载安装](https://www.emqx.io/zh/downloads)
+:::
+
 ::::
 
 ## 安装 EMQX
@@ -71,7 +77,7 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 1docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
-更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](./install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
+更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](../deploy/install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
 
 ### Kubernetes 安装部署
 
@@ -85,7 +91,7 @@ EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具�
 
 - [在阿里云上部署](https://github.com/emqx/tf-alicloud)
 
-- [在 AWS 上部署](https://github.com/emqx/tf-aws)  
+- [在 AWS 上部署](https://github.com/emqx/tf-aws)
 
 更多有关 Terraform 安装部署的信息请参考 [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform)。
 
@@ -93,12 +99,11 @@ EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具�
 
 EMQX 可以直接部署在物理服务器或者虚拟机上。最小仅需 2 核 4G 的机器即可运行 EMQX 程序。可支持 CentOS, Debian, Ubuntu, MacOS 等操作系统。
 
-- [Shell 脚本一键安装 (Linux)](./install.md#shell-脚本一键安装-linux)
-- [CentOS 系统安装](./install.md#centos)
-- [Ubuntu、Debian 安装](./install.md#ubuntu、debian)
-- [MacOS、Windows、Linux ZIP 包安装](./install.md#zip-压缩包安装-linux、maxos、windows)
+- [RedHat、CentOS、 RockyLinux、AmazonLinux 系统安装](../deploy/install.md#centos)
+- [Ubuntu、Debian 安装](../deploy/install.md#ubuntu、debian)
+- [MacOS、Windows、Linux tgz 包安装](../deploy/install.md#tgz-压缩包安装)
 
-如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](./install.md#源码编译安装) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。
+如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](../deploy/install.md#源码编译安装) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。
 
 ## 启动 EMQX
 
@@ -130,7 +135,7 @@ sudo systemctl start emqx
 sudo systemctl status emqx
 ```
 
-### ZIP 安装包启动
+### tgz 安装包启动
 
 切换到 EMQX 解压目录，执行以下命令启动 EMQX：
 
@@ -158,11 +163,11 @@ Websocket 页面为您提供了一个简易但有效的 WebSocket 客户端工�
 
 ### MQTT X 桌面客户端工具
 
-MQTT X 是一款优雅的跨平台 MQTT 5.0 开源桌面客户端工具，支持在 macOS, Linux 和 Windows 上运行。
+MQTTX 是一款优雅的跨平台 MQTT 5.0 开源桌面客户端工具，支持在 macOS, Linux 和 Windows 上运行。
 
-MQTT X 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 MQTT/MQTT over Websocket 接入以及单/双向 SSL 认证，同时支持 Payload 格式转换、自定义脚本模拟测试数据、 $SYS 主题自动订阅查看流量统计等诸多实用功能。
+MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 MQTT/MQTT over Websocket 接入以及单/双向 SSL 认证，同时支持 Payload 格式转换、自定义脚本模拟测试数据、 $SYS 主题自动订阅查看流量统计等诸多实用功能。
 
-下载与使用可参考 [MQTT X 官网](https://mqttx.app/zh)。
+下载与使用可参考 [MQTTX 官网](https://mqttx.app/zh)。
 
 ![emqx-mqttx](./assets/emqx-mqttx.jpeg)
 
@@ -182,7 +187,23 @@ MQTT X 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 
 
 ### 客户端库项目工程代码示例
 
-MQTT 客户端库接入示例工程项目代码，涵盖 [Android](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Android)、[Csharp-MqttNet](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Csharp-MqttNet)、[ESP32](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-ESP32)、[ESP8266](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-ESP8266)、[Electron](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Electron)、[Flutter](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Flutter)、[Go](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Go)、[Java](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Java)、[PHP](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-PHP)、[Qt](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Qt)、[SpringBoot](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-SpringBoot)、[Vue.js](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Vue.js)、[swift](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-swift)、[wechat-miniprogram](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-wechat-miniprogram) 等数十种主流编程语言和技术，详细列表请查看 [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples)。
+MQTT 客户端库接入示例工程项目代码，涵盖
+
+- [Android](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Android)
+- [Csharp-MqttNet](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Csharp-MqttNet)
+- [ESP32](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-ESP32)
+- [ESP8266](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-ESP8266)
+- [Electron](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Electron)
+- [Flutter](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Flutter)
+- [Go](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Go)
+- [Java](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Java)
+- [PHP](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-PHP)
+- [Qt](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Qt)
+- [SpringBoot](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-SpringBoot)
+- [Vue.js](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Vue.js)
+- [swift](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-swift)
+- [wechat-miniprogram](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-wechat-miniprogram) 等数十种主流编程语言和技术，详细列表请查看
+- [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples)
 
 ## 进阶操作
 

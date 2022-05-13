@@ -33,7 +33,7 @@ See [EMQX Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a co
 ./preview.sh ee 8080
 ```
 
-Now, open <http://localhost:8080/docs/en/latest/> or <http://localhost:8080/en/enterprise/latest/>, if `directory.json` and `directory_ee.json` has been updated, you can re-run the above command to update the docs.
+Now, open <http://localhost:8080/docs/en/latest/> or <http://localhost:8080/en/enterprise/latest/>, if dir.yaml has been updated, you can re-run the above command to update the docs.
 
 ## Release a New Version
 

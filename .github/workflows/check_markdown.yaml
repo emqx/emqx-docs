@@ -19,15 +19,19 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@main
-  
+
     - name: check directory config
-      run: python3 .github/workflows/directory_check.py directory.json $(pwd)
+      run: |
+        python3 ./gen.py ce | tee directory.json
+        python3 .github/workflows/directory_check.py directory.json $(pwd)
 
   enterprise_directory_check:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
       uses: actions/checkout@main
-  
+
     - name: check enterprise directory config
-      run: python3 .github/workflows/directory_check.py directory_ee.json $(pwd)
+      run: |
+        python3 ./gen.py ee | tee directory_ee.json
+        python3 .github/workflows/directory_check.py directory_ee.json $(pwd)

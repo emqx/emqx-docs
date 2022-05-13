@@ -42,9 +42,7 @@ EMQ 文档使用 Markdown 格式编写，并使用 [Vuepress](https://vuepress.v
 
 ### 配置文件
 
-目录配置文件为文档根目录下的 `directory.json`（企业版为 `directory_ee.json`）。如下所示：
-
-![directory](./assets/directory.jpg)
+目录配置文件为文档根目录下的 dir.yaml：
 
 ### 配置示例
 

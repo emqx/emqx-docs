@@ -1,16 +1,26 @@
 # Message retransmission
 
-Message retransmission is part of the MQTT protocol standard specification.
+Message retransmission is part of the MQTT protocol specification.
 
-The protocol stipulates that the PUBLISH packets sent to the peer by the **server** and **client** as communication parties must meet their **Quality of Service levels** requirements , such as:
+The protocol stipulates that the PUBLISH packets sent to the peer
+by the **server** and **client** as communication parties must meet
+their **Quality of Service levels** requirements , such as:
 
-- QoS 1: it means that **the message is delivered at least once;** that is, the sender will always resend the message unless it receives confirmation from the peer. This means that the same QoS 1 message may be received multiple times in the upper layer(the application layer of the service) of the MQTT protocol.
-- QoS 2: it means **the message is delivered exactly once;** that is, the message will only be received once at the upper layer.
+- QoS 1: it means that **the message is delivered at least once;
+  ** that is, the sender will always resend the message unless it receives
+  confirmation from the peer. This means that the same QoS 1 message may
+  be received multiple times in the upper layer(the application layer of
+  the service) of the MQTT protocol.
+- QoS 2: it means **the message is delivered exactly once;** that is,
+  the message will only be received once at the upper layer.
 
-Although PUBLISH packets of QoS 1 and QoS 2 will be resent at the MQTT protocol stack layer, you must remember:
+Although PUBLISH packets of QoS 1 and QoS 2 will be resent at the MQTT protocol
+stack layer, you must remember:
 
-- After retransmission of QoS 1 messages happens, these retransmitted PUBLISH packets will also be received at the upper layer of the MQTT protocol stack.
-- No matter how QoS 2 message is retransmitted, only one PUBLISH packet will be received in the upper layer of the MQTT protocol stack,
+- After retransmission of QoS 1 messages happens, these retransmitted PUBLISH
+  packets will also be received at the upper layer of the MQTT protocol stack.
+- No matter how QoS 2 message is retransmitted, only one PUBLISH packet will be
+  received in the upper layer of the MQTT protocol stack,
 
 ## Basic configuration
 
