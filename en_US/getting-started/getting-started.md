@@ -1,6 +1,6 @@
 # Getting Started
 
-Starting from download and installation, this document is to guide you to quickly get a EMQX node up and running.
+Starting from download and installation, this document guides you through quickly getting an EMQX node up and running.
 
 ## Select EMQX Edition
 
@@ -11,12 +11,12 @@ EMQX as a software is released in different editions.
 
 EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
 which runs EMQX Enterprise edition.
-You can customize the deployment to suit your business development plans the best and get started quickly.
+You can customize the deployment to perfectly suit your business development plans and get started quickly.
 
 :::: tabs type:card
 
 ::: tab EMQX Cloud
-Connecting your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerating your IoT application development without the burden of self-managing the infrastructure.
+Connect your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerate your IoT application development without the burden of self-managing the infrastructure.
 
 - Fully managed MQTT 5.0 service
 - Powerful SQL-based rule engine
@@ -29,7 +29,7 @@ Connecting your IoT devices to everything with reliable, real-time IoT data tran
 
 ::: tab EMQX Enterprise Edition
 The world’s leading **Cloud-Native IoT Messaging Platform** with an all-in-one
-distributed MQTT broker and SQL-based IoT rule engine, powering high-performance,
+distributed MQTT broker and SQL-based IoT rule engine. It combines high-performance with
 reliable data transport, processing, and integration for business-critical IoT solutions.
 
 - Support for multiple IoT protocols
@@ -61,10 +61,10 @@ The world's most scalable distributed MQTT broker with a high-performance real-t
 ### Start EMQX Cloud
 
 EMQX Cloud is the first fully managed MQTT 5.0 public cloud service in the world.
-With the support of EMQX Cloud, you can create an EMQX cluster on the cloud and use
+With the support of EMQX Cloud you can create an EMQX cluster in the cloud and use
 all the features of EMQX Enterprise.
 
-This allows you to spend more time on business connections and less time for EMQX operation,
+This allows you to spend more time on business connections and less time on EMQX operation,
 maintenance, and management.
 
 - [Create and login EMQX cloud account](https://docs.emqx.com/en/cloud/latest/quick_start/introduction.html)
@@ -73,7 +73,7 @@ maintenance, and management.
 ### Running EMQX in containers
 
 Learn more about the docker image on [Docker Hub](https://hub.docker.com/r/emqx/emqx).
-Container deployment is the quickest way to start experimenting with EMQX
+Container deployment is the quickest way to start experimenting with EMQX.
 
 1. Get the Docker image
 
@@ -103,7 +103,7 @@ You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/
 Deploy all infrastructure including EMQX Enterprise clusters on the mainstream public cloud with
 one click through Terraform.
 
-The fastest way to deploy EMQX Enterprise clusters on the public cloud
+The fastest way to deploy EMQX Enterprise clusters on the public cloud.
 
 - [Deploy on AWS](https://github.com/emqx/tf-aws)
 - [Deploy on Alibaba Cloud](https://github.com/emqx/tf-alicloud)
@@ -114,7 +114,7 @@ For more information about Terraform installation and deployment, please refer t
 ### Run in a VM or on bare metal
 
 EMQX Enterprise can be deployed directly to bare metal servers or virtual machines.
-A minimum of 2 cores and 4GB RAM can run the EMQX Enterprise.
+A minimum of 2 cores and 4GB RAM can run an EMQX Enterprise installation.
 
 EMQX has prebuilt packages downloadable for Enterprise Linux(RedHat, CentOS, Rockylinux)
 as well as Debian, Ubuntu, and MacOS.
@@ -129,7 +129,7 @@ simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 ## Start EMQX
 
-After the installation, you can start EMQX through the command of systemctl or emqx.
+After the installation, you can start EMQX through via systemctl or the emqx binary directly.
 For more startup methods and precautions, please refer to [Starting EMQX](./start.md).
 
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
@@ -163,7 +163,7 @@ sudo systemctl status emqx
 
 ### Start EMQX using tar.gz package
 
-Switch to the EMQX decompression directory and execute the following command to start EMQX:
+Switch to the directory where EMQX was unzipped and execute the following command to start EMQX:
 
 ```bash
 ./bin/emqx start
@@ -178,12 +178,12 @@ the startup and runtime logs printed to the console.
 
 ## Quick verification using an MQTT client
 
-After startup, you can quickly verify if EMQX is working by any MQTT client.
+After startup, you can quickly verify if EMQX is working with any MQTT client.
 You can use the following client tools or client libraries to access EMQX
 
 ### Dashboard Websocket tool
 
-EMQX dashboard comes with a built-in, websocket based MQTT client.
+EMQX dashboard comes with a built-in websocket based MQTT client.
 
 Visit dashboard URL in a web browser and enter the page of **Diagnose -> Websocket**,
 where you can use the MQTT over Websokcet client to quickly access EMQX.
@@ -198,10 +198,10 @@ which can be used for publishing, subscribing, and inspecting the messages.
 MQTTX is an elegant cross-platform MQTT 5.0 open source desktop client tool that
 supports running on macOS, Linux, and Windows.
 
-MQTTX has many features, provides a concise graphical interface and operation logic,
-supports MQTT/MQTT over Websocket access and one-way/two-way SSL authentication,
-and supports Payload format conversion, simulation of test data with a custom script,
-automatic subscription of $SYS topic, viewing Traffic statistics and so on.
+MQTTX has many features. It provides a concise graphical interface with intuitive operational functionality.
+It supports MQTT/MQTT over Websocket access with one-way/two-way SSL authentication,
+and supports Payload format conversion, simulation of test data with a custom scripts,
+automatic subscription of $SYS topic, viewing Traffic statistics, and more.
 
 For download and use, please refer to the [MQTT X website](https://mqttx.app).
 
@@ -250,10 +250,10 @@ you can now continue to read the following documents for a proper in-production 
 ### Authentication
 
 Authentication is an important part of most applications,
-and enabling authentication can effectively fence off malicious client connections.
+and enabling authentication can effectively prevent malicious client connections.
 
 Authorization rules, or Access Control List (ACL) can be configured to ensure only
-legit clients are permitted to publish or subscribe to certain topics.
+legitimate clients are permitted to publish or subscribe to certain topics.
 
 - [Authentication Introduction](../advanced/auth.md): Select a built-in plugin, to integrate
   with internal or external database, JWT or HTTP service as the authentication data source.
@@ -263,11 +263,11 @@ legit clients are permitted to publish or subscribe to certain topics.
 ### Rule Engine
 
 The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between
-devices and data platofrms in real-time, and forward the data to Webhooks or other MQTT Brokers
+devices and data platforms in real-time, and forward the data to Webhooks or other MQTT Brokers
 without having to implement MQTT clients to do the job.
 
 EMQX enterprise eidtion can also integrate with Kafka,
-various SQL / NoSQL / time-series databases and enterprise systems, such as SAP.
+various SQL / NoSQL / time-series databases, and enterprise systems such as SAP.
 
 - [Rule Engine](../rule/rule-engine.md): The concept and basic usage of rule engine.
 - [Create Rule](../rule/rule-create.md): How to create a rule.
@@ -277,14 +277,14 @@ various SQL / NoSQL / time-series databases and enterprise systems, such as SAP.
 ### HTTP API
 
 HTTP API is a frequently used function in IoT platform development and EMQX operation and
-maintenance. HTTP API can realize integration with external systems, such as querying and
+maintenance. HTTP API facilitates integration with external systems, such as querying and
 managing client information, broker subscription, publishing messages and creating rules.
 
 - [HTTP API](../advanced/http-api.md): include HTTP API access point and access
   authentication method.
 - [Basic Information](../advanced/http-api.md#endpoint-brokers): Get basic information such as
   EMQX version and running status.
-- [Node](../advanced/http-api.md#endpoint-nodes): Get the information of EMQX node.
+- [Node](../advanced/http-api.md#endpoint-nodes): Get the information for an EMQX node.
 - [Client](../advanced/http-api.md#endpoint-clients): View online client information and support
   kicking out the client.
 - [Subscription Information](../advanced/http-api.md#endpoint-subscriptions): View the
@@ -300,7 +300,7 @@ managing client information, broker subscription, publishing messages and creati
 
 ### Operation, maintenance and deployment
 
-It contains official usage guidelines and best practices.
+For official usage guidelines and best practices please read the following guides.
 
 - [Device Management](../tutorial/device-management.md)
 - [System Tuning](../tutorial/tune.md)
