@@ -4,10 +4,11 @@ EMQX Broker provides users with metrics monitoring functions, allowing users and
 
 EMQX Broker provides users with multiple ways to view metrics and status. Most directly, users can see this data on the Overview page of EMQX Dashboard.
 
-If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. For specific operations, see [HTTP API](./http-api.md#endpoint-metrics) and [$SYS system topic](./system-topic.md#).
+<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
+If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. For specific operations, see HTTP API and [$SYS system topic](../advanced/system-topic.md#).
 
 ::: tip
-EMQX Broker provides the [emqx_statsd](https://github.com/emqx/emqx-statsd) plug-in, which is used to output the system's monitoring data to a third-party monitoring system. You can refer to [Prometheus Monitoring Alarm](../tutorial/prometheus.md) for an example.
+EMQX Broker provides the [emqx_statsd](https://github.com/emqx/emqx-statsd) plug-in, which is used to output the system's monitoring data to a third-party monitoring system. You can refer to [Prometheus Monitoring Alarm](../observability/prometheus.md) for an example.
 :::
 
 ## Metrics & Stats

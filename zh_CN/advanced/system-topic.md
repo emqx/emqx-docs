@@ -19,7 +19,7 @@ broker.sys_interval = 1m
 {% emqxce %}
 
 ::: tip
-EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [内置 ACL](./acl-file.md) 修改发布订阅 ACL 规则。
+EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [内置 ACL](../security/authz/file.md) 修改发布订阅 ACL 规则。
 
 {% endemqxce %}
 

@@ -21,7 +21,7 @@ Mnesia 认证默认使用 sha256 进行密码哈希加密，可在 `etc/plugins/
 auth.mnesia.password_hash = sha256
 ```
 
-配置[哈希方法](./auth.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQX 内置数据库中。
+配置[哈希方法](./authn.md#加盐规则与哈希方法)后，新增的预设认证数据与通过 HTTP API 添加的认证数据将以哈希密文存储在 EMQX 内置数据库中。
 
 ## 预设认证数据
 

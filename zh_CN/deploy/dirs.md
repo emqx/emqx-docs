@@ -23,7 +23,7 @@ EMQX 的可执行文件，具体使用可以查看 [基本命令](./command-line
 
 **emqx_ctl、emqx_ctl.cmd**
 
-EMQX 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](../advanced/cli.md)。
+EMQX 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](../admin/cli.md)。
 
 ## etc 目录
 
@@ -83,14 +83,14 @@ Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Er
 
 EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规则引擎已创建的资源和规则、Dashbaord 用户信息等数据，这些数据都将被存储在 `mnesia` 目录下，因此一旦删除该目录，将导致 EMQX 丢失所有业务数据。
 
-可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../advanced/cli.md)。
+可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。
 
 
 ## log 目录
 
 **emqx.log.***
 
-EMQX 运行时产生的日志文件，具体请查看 [日志与追踪](./log.md)。
+EMQX 运行时产生的日志文件，具体请查看 [日志与追踪](../observability/log.md)。
 
 **crash.dump**
 

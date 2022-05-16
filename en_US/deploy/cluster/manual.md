@@ -1,11 +1,11 @@
-# Mmaual Clustering
+# Manual Clustering
 
 EMQX nodes are identified by their names.
 
-A node name consists of two parts, node part and host partk, separated with `@`.
+A node name consists of two parts, node part and host part, separated with `@`.
 
 The host part must either be the IP address or the FQDN which has dots,
-for example `myhost.example.domaon`.
+for example `myhost.example.domain`.
 
 In this document, we use two nodes to demonstrate manual clustering steps.
 
@@ -39,7 +39,7 @@ node.name = emqx@s1.emqx.io
 node.name = emqx@192.168.0.10
 ```
 
-You can also override node name with environment variable:
+You can also override node name with an environment variable:
 
 ```bash
 env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
@@ -85,7 +85,7 @@ e.g. if a `s3.emqx.io` is to join the clsuter of `s1` and `s2`,
 the join command should be executed on `s3` but **NOT** on `s1` or `s2`.
 
 ::: warning Warning
-Joinning another cluster will cause the node to leave the current.
+Joining another cluster will cause the node to leave any current cluster it may be part of.
 :::
 
 Query the cluster status on any node:
@@ -118,11 +118,10 @@ $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 ### Start a cluster on single machine
 
 For users who only have one server, the pseudo-distributed starting mode can be used.
-Please notice that if we want to start two or more nodes on one machine, we must adjust
-the listening port of the other node to avoid the port conflicts.
+Please note that if we want to start two or more nodes on one machine, we must adjust
+the listening port of the other node to avoid port conflicts.
 
 The basic process is to copy another emqx folder and name it emqx2.
 After that, we let all the listening ports of the original emqx to be added by an offset
 as the listening ports of the emqx2 node.
-For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 as
-the MQTT/TCP listening port for emqx2.
+For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 for emqx2.

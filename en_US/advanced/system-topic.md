@@ -25,7 +25,7 @@ broker.sys_interval = 1m
 
 {% emqxce %}
 
-By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to [build-in ACL](./acl-file.md) to modify the ACL rules for publish and subscription.
+By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to [build-in ACL](../security/authz/file.md) to modify the ACL rules for publish and subscription.
 
 {% endemqxce %}
 
@@ -36,8 +36,8 @@ By default, only MQTT clients on localhost is allowed to subscribe to the $SYS t
 
 {% endemqxee %}
 
-
-Most of the data of the $SYS topic in EMQX Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through  [HTTP API - Statistics Metrics](./http-api.md#endpoint-metrics).
+<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
+Most of the data of the $SYS topic in EMQX Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through HTTP API - Statistics Metrics.
 
 :::
 

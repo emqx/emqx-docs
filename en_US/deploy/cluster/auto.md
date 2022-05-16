@@ -5,7 +5,7 @@
 ::: tip Erlang
 EMQX's clustering is based on the Ekka library.
 [Ekka] (https://github.com/emqx/ekka) is a cluster management library developed for
-Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster,
+Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster, and
 Network partition autoheal and autoclean.
 :::
 

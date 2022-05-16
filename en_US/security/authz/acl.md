@@ -20,14 +20,14 @@ When a client subscribes to a topic or publishes a message, the plugin implement
 
 {% emqxee %}
 
-* [Built-in ACL](../modules/mnesia_authentication.md)
+* [Built-in ACL](./file.md)
 
 {% endemqxee %}
 
 {% emqxce %}
 
-* [Built-in ACL](./acl-file.md)
-* [Mnesia ACL](./acl-mnesia.md)
+* [Built-in ACL](./file.md)
+* [Mnesia ACL](./mnesia.md)
 
 {% endemqxce %}
 
@@ -39,20 +39,19 @@ The configuration file is used to provide an authentication data source, which i
 
 {% emqxee %}
 
-* [MySQL ACL](../modules/mysql_authentication.md)
-* [PostgreSQL ACL](../modules/pgsql_authentication.md)
-* [Redis ACL](../modules/redis_authentication.md)
-* [MongoDB ACL](../modules/mongo_authentication.md)
-* [LDAP ACL](../modules/ldap_authentication.md)
+* [MySQL ACL](./mysql.md)
+* [PostgreSQL ACL](./postgresql.md)
+* [Redis ACL](./redis.md)
+* [MongoDB ACL](./mongodb.md)
 
 {% endemqxee %}
 
 {% emqxce %}
 
-* [MySQL ACL](./acl-mysql.md)
-* [PostgreSQL ACL](./acl-postgres.md)
-* [Redis ACL](./acl-redis.md)
-* [MongoDB ACL](./acl-mongodb.md)
+* [MySQL ACL](./mysql.md)
+* [PostgreSQL ACL](./postgresql.md)
+* [Redis ACL](./redis.md)
+* [MongoDB ACL](./mongodb.md)
 
 {% endemqxce %}
 
@@ -66,13 +65,13 @@ The external database can store a large amount of data and dynamically manage AC
 
 {% emqxee %}
 
-* [HTTP ACL](../modules/http_authentication.md)
+* [HTTP ACL](./http.md)
 
 {% endemqxee %}
 
 {% emqxce %}
 
-* [HTTP ACL](./acl-http.md)
+* [HTTP ACL](./http.md)
 
 {% endemqxce %}
 
@@ -155,13 +154,13 @@ acl_nomatch = allow
 
 {% emqxce %}
 
-Configure the default  [ACL file](./acl-file.md) and use the file to define the default ACL rule:
+Configure the default [ACL file](./file.md) and use the file to define the default ACL rule:
 
 {% endemqxce %}
 
 {% emqxee %}
 
-Configure the default, use the file to define the default ACL rule:
+Configure the default [ACL file](./file.md) and use the file to define the default ACL rule:
 
 {% endemqxee %}
 
@@ -221,7 +220,7 @@ acl_cache_ttl = 1m
 
 After updating the ACL rule, some clients cannot take effect immediately because the cache already exists. You need to manually clear all ACL caches to make them taking effect immediately :
 
-Refer to [HTTP API - CLear ACL cache](http-api.md#endpoint-get-acl-cache)
+Refer to [HTTP API - CLear ACL cache](http.md#endpoint-get-acl-cache)
 
 
 ## ACL Authentication Chain

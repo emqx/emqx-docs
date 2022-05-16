@@ -82,7 +82,7 @@ This is the table structure used by default configuration. After being familiar 
 
 ## Salting rules and hash methods
 
-PostgreSQL authentication support to configure [Salting rules and hash methods](./auth.md#password-salting-rules-and-hash-methods)：
+PostgreSQL authentication support to configure [Salting rules and hash methods](./authn.md#password-salting-rules-and-hash-methods)：
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf

@@ -1,30 +1,27 @@
-# Prometheus
+# EMQX Prometheus Agent
 
-EMQX Broker provides [emqx_statsd](https://github.com/emqx/emqx-statsd) plug-in, which is used to output the monitoring data of the system to the third-party monitoring system.
+EMQX Prometheus Agent supports pushing data to Pushgateway, and then pulling it by Promethues Server for storage.
 
-Take  [Prometheus](https://prometheus.io) as an example:
+## Create module
 
-`emqx_statsd` supports pushing data to Pushgateway, which is then pulled by Promethues Server for storage.
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
-::: tip Tip
-`emqx_statsd` does not support the pull operation of Prometheus.
-:::
+![image-20200927213049265](./assets/modules.png)
 
-## Configuration
+Choose EMQX Prometheus Agent
 
-The `emqx_statsd` plugin internally starts a timer to collect the monitoring data in EMQX Broker every interval.
+![image-20200927213049265](./assets/prometheus_agent_1.png)
 
-For the specific fields and meanings of the monitoring data pushed by `emqx_statsd`, see [Metrics & Stats](../advanced/metrics-and-stats.md)
+Configure related parameters
 
-The configuration file is located in `etc/plugins/emqx_statsd.conf`, where:
+![image-20200927213049265](./assets/prometheus_agent_2.png)
 
-| Configuration       | Type    | Optional value | Default value         | Description                     |
-| ------------------- | ------- | -------------- | --------------------- | ------------------------------- |
-| push.gateway.server | string  | -              | http://127.0.0.1:9091 | Prometheus' PushGateway address |
-| interval            | integer | > 0            | 5000                  | Push interval, unit: ms         |
+After clicking add, the module is added
 
-### Grafana Data template
+![image-20200927213049265](./assets/prometheus_agent_3.png)
 
-The `emqx_statsd` plugin provides Grafana ’s Dashboard template files. These templates contain the display of all EMQX Broker monitoring data. Users can directly import them into Grafana and select icons that display the monitoring status of EMQX Broker.
+### Grafana Data Template
 
-The template file is located:[emqx_statsd/grafana_template](https://github.com/emqx/emqx-statsd/tree/master/grafana_template)。
+The ʻemqx_prometheus` plugin provides template files for Grafana's Dashboard. These templates contain the display of all EMQX monitoring data. Users can directly import it into Grafana to display the icon of EMQX monitoring status.
+
+The template file is located at: [emqx_prometheus/grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template).

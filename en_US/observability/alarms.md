@@ -15,9 +15,10 @@ The Payload of the alarm notification message is in Json format and contains the
 
 Taking the alarm of high system memory usage  as an example, you will receive a message in the following format:
 
-<!-- ![alarms_avtivate_msg](./assets/alarms_avtivate_msg.png) -->
+<!-- ![alarms_activate_msg](./assets/alarms_activate_msg.png) -->
 
-The alarm will not be generated repeatedly. That is to say, if the high CPU usage alarm has been activated, the same alarm will not appear during its activation. The alarm will be automatically deactivated when the monitored item returns to normal. However, it also supports manual deactivation by the user (if the user clearly does not care about the alarm). Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard, and they can also use the [HTTP API](./http-api.md#endpoint-alarms) provided by EMQX Broker to Query and manage alarms.
+<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
+The alarm will not be generated repeatedly. That is to say, if the high CPU usage alarm has been activated, the same alarm will not appear during its activation. The alarm will be automatically deactivated when the monitored item returns to normal. However, it also supports manual deactivation by the user (if the user clearly does not care about the alarm). Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard, and they can also use the HTTP API provided by EMQX Broker to Query and manage alarms.
 
 EMQX Broker allows users to adjust the alarm function to a certain extent to meet actual needs. The following configuration items are currently opened:
 

@@ -26,13 +26,13 @@ Authentication methods supported by EMQX:
 
 {% emqxee %}
 
-* [Built-in Auth](../modules/mnesia_authentication.md)
+* [Built-in Auth](./mnesia.md)
 
 {% endemqxee %}
 
 {% emqxce %}
 
-* [Mnesia (username/clientid) authentication](./auth-mnesia.md)
+* [Mnesia (username/clientid) authentication](./mnesia.md)
 
 {% endemqxce %}
 
@@ -46,21 +46,19 @@ The configuration file and the built-in database of EMQX are used to provide an 
 
 {% emqxee %}
 
-* [MySQL authentication](../modules/mysql_authentication.md)
-* [PostgreSQL authentication](../modules/pgsql_authentication.md)
-* [Redis authentication](../modules/redis_authentication.md)
-* [MongoDB authentication](../modules/mongo_authentication.md)
-* [LDAP authentication](../modules/ldap_authentication.md)
+* [MySQL authentication](./mysql.md)
+* [PostgreSQL authentication](./postgresql.md)
+* [Redis authentication](./redis.md)
+* [MongoDB authentication](./mongodb.md)
 
 {% endemqxee %}
 
 {% emqxce %}
 
-* [LDAP authentication](./auth-ldap.md)
-* [MySQL authentication](./auth-mysql.md)
-* [PostgreSQL authentication](./auth-postgresql.md)
-* [Redis authentication](./auth-redis.md)
-* [MongoDB authentication](./auth-mongodb.md)
+* [MySQL authentication](./mysql.md)
+* [PostgreSQL authentication](./postgresql.md)
+* [Redis authentication](./redis.md)
+* [MongoDB authentication](./mongodb.md)
 
 {% endemqxce %}
 
@@ -73,15 +71,15 @@ Others
 
 {% emqxee %}
 
-* [HTTP authentication](../modules/http_authentication.md)
-* [JWT authentication](../modules/jwt_authentication.md)
+* [HTTP authentication](./http.md)
+* [JWT authentication](./jwt.md)
 
 {% endemqxee %}
 
 {% emqxce %}
 
-* [HTTP authentication](./auth-http.md)
-* [JWT authentication](./auth-jwt.md)
+* [HTTP authentication](./http.md)
+* [JWT authentication](./jwt.md)
 
 {% endemqxce %}
 
@@ -92,7 +90,7 @@ JWT authentication can issue authentication information in batches, and HTTP aut
 
 ::: tip
 
-After changing the plugin configuration, you need to restart the plugin to take effect. Some authentication plugins include [ACL function](./acl.md).
+After changing the plugin configuration, you need to restart the plugin to take effect. Some authentication plugins include [ACL function](../authz/acl.md).
 
 :::
 

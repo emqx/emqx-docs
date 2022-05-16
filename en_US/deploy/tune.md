@@ -1,12 +1,12 @@
 # Linux OS Tuning
 
-Since 4.2, EMQX had been stress tested with 1.3 million on an 8-core, 32G memory CentOS server.
+Since 4.2, EMQX had been stress tested with 1.3 million clients on an 8-core, 32G memory CentOS server.
 
 This guide includes in general tuning suggestions for one EMQX broker to serve about 1 million clients.
 
 ## Turn off swap
 
-Linux swap partitions may cause nondeterministic memory latency to Erlang virtual machine,
+Linux swap partitions may cause nondeterministic memory latency to an Erlang virtual machine,
 which in turn significantly affects the system stability.
 It is recommended to turn off swap permanently.
 
@@ -46,7 +46,7 @@ DefaultLimitNOFILE=2097152
 
 ### emqx.service
 
-Set the maximum number of file handles for emqx service in e.g. one of below paths depending
+Set the maximum number of file handles for emqx service in one of below paths depending
 on which linux distribution is in use.
 
 - `/usr/lib/systemd/system/emqx.service`
@@ -67,7 +67,7 @@ Persist the maximum number of opened file handles for users in `/etc/security/li
 
 ## TCP Network Tuning
 
-Increase number of incoming connections backlog:
+Increase the number of incoming connections backlog:
 
 ```
 sysctl -w net.core.somaxconn=32768

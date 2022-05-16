@@ -1,7 +1,7 @@
 # Cluster Security
 
-When to comes to security of the EMQX cluster, there are mainly
-two aspects to consider.
+When to comes to security of the EMQX cluster there two primary
+aspects to consider.
 
 * Secure the ports each node listens on for clustering.
 * Keep the Erlang cookie secret, see `node.cookie` config.
@@ -47,7 +47,7 @@ That is, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the n
 listen on port `5370`, and port `5371` for `emqx1` (or `emqx-1`), and so on.
 
 ::: tip
-EMQX in docker container uses static port `5369` for cluster RPC.
+EMQX in a docker container uses static port `5369` for cluster RPC.
 :::
 
 ### Using TLS for Cluster PRC connections

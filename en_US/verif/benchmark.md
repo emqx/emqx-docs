@@ -153,7 +153,7 @@ The topology structure is as follows:
 
 ### Tuning
 
-Both the client's press and the server's machine need to perform system parameter tuning, refer to [Tuning guide](../tutorial/tune.md).
+Both the client's press and the server's machine need to perform system parameter tuning, refer to [Tuning guide](../deploy/tune.md).
 
 
 ### Connection test

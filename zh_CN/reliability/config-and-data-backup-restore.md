@@ -7,7 +7,6 @@ Let's discuss data backup and restore for disaster recovery.
 ## Terminologies
 
 [Mnesia](https://en.wikipedia.org/wiki/Mnesia): The name of the built-in database inside each EMQX node.
-[Data export import](./data-import-and-export.md): A command line tool to support data export & import using a JSON file as the transient drop.
 
 ## Files
 
