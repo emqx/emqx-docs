@@ -2390,3 +2390,36 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/telemetry
 ```
 
 {% endemqxce %}
+
+{% emqxee %}
+
+### License
+
+EMQX 软件许可管理。
+
+#### POST /api/v4/license/upload
+
+将一个新的许可证文件上传到集群。 许可证被验证，然后被复制到集群中的所有节点并重新加载。 新的内容被写入节点中配置的相同的文件路径，旧的许可证内容被备份到一个文件，该文件后缀为发生变化时的时间戳。
+
+**Body (bytes)**
+
+要上传的许可证内容。
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description            |
+| ------- | --------- | ---------------------- |
+| code    | Integer   | 0                      |
+| message | String    | "ok"                   |
+
+**Examples:**
+
+上传一个许可证文件。
+
+```sh
+$ curl -XPOST --basic -u admin:public -d @<(jq -sR < path/to/new.license) 'http://localhost:8081/api/v4/license/upload'
+
+{"code":0,"message":"ok"}
+```
+
+{% endemqxee %}
