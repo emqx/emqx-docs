@@ -165,7 +165,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
 
   ```bash
   # Request
-  GET api/v4/auth_clientid
+  GET api/v4/auth_clientid?_like_clientid=emqx_c
 
   # Response
   {
@@ -187,7 +187,7 @@ The preset authentication data cannot be modified or deleted through the API, pl
 
   ```bash
   # Request
-  GET api/v4/auth_username
+  GET api/v4/auth_username?_like_username=emqx_u
 
   # Response
   {
