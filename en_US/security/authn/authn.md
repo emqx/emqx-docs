@@ -1,17 +1,36 @@
 # Introduction
 
-Authentication is an important part of most applications. MQTT protocol supports username/password authentication. Enabling authentication can effectively prevent illegal client connections.
+Authentication is an important part of most applications. MQTT protocol supports username/password authentication as
+well as some enhanced methods, like SCRAM authentication. Enabling authentication can effectively prevent illegal client connections.
 
-Authentication in EMQX Broker means that when a client connects to EMQX Broker, the server configuration  is used to control the client's permission to connect to the server.
+Authentication in EMQX Broker means that when a client connects to EMQX Broker, the server configuration is used to control the client's permission to connect to the server.
 
 EMQX Broker's authentication support includes two levels:
 
-- The MQTT protocol specifies the user name and password in the CONNECT packet by itself. EMQX Broker supports multiple forms of authentication based on Username, ClientID, HTTP, JWT, LDAP, and various databases such as MongoDB, MySQL, PostgreSQL, Redis through plugins.
+- The MQTT protocol itself specifies authentication primitives. EMQX Broker supports multiple variants of MQTT-level authentication:
+  * username/password authentication with various backends (MongoDB, MySQL, PostgreSQL, Redis and built-in database);
+  * SCRAM authentication with built-in database;
+  * JWT authentication;
+  * authentication via custom HTTP API.
 - At the transport layer, TLS guarantees client-to-server authentication using client certificates and ensures that the server verifies the server certificate to the client. PSK-based TLS/DTLS authentication is also supported.
 
-This authentication methods supported by EMQX and the configuration methods of the corresponding plugins are introduced in this article.
+In this article we describe EMQX authentication and its configuration concepts.
 
-## Authentication method
+## Authentication sources and authentication chains
+
+Authentication source is an EMQX module that implements authentication. The following authentication sources are
+available by default:
+
+| mechanism        | backend            | description |
+| ----             | ------------------ | ----------- |
+| password_based   | built_in_database  |
+| password_based   | mysql              |
+| password_based   | postgresql         |
+| password_based   | mongodb            |
+| password_based   | redis              |
+| password_based   | http               |
+| jwt              |                    |
+| scram            | built_in_database  |
 
 EMQX supports the use of built-in data sources (files, built-in databases), JWT, external mainstream databases, and custom HTTP APIs as authentication data sources.
 
@@ -218,7 +237,7 @@ The cipher list supported by the server needs to be specified explicitly. The de
 listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
 ```
 
-## PSK authentication 
+## PSK authentication
 If you want to use PSK authentication, you need to comment out `listener.ssl.external.ciphers` in [TLS Authentication](#auth-tls), and then configure ` listener.ssl.external.psk_ciphers`:
 
 ```bash
