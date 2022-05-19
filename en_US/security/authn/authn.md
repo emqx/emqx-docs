@@ -16,245 +16,272 @@ EMQX Broker's authentication support includes two levels:
 
 In this article we describe EMQX authentication and its configuration concepts.
 
-## Authentication sources and authentication chains
+## Authentication sources
 
-Authentication source is an EMQX module that implements authentication. The following authentication sources are
+_Authentication source_ (or simply _authenticator_) is an EMQX module that implements MQTT authentication. The following authenticators are
 available by default:
 
-| mechanism        | backend            | description |
-| ----             | ------------------ | ----------- |
-| password_based   | built_in_database  |
-| password_based   | mysql              |
-| password_based   | postgresql         |
-| password_based   | mongodb            |
-| password_based   | redis              |
-| password_based   | http               |
-| jwt              |                    |
-| scram            | built_in_database  |
+| mechanism        | backend            | description                                                                   |
+| ----             | ------------------ | ----------------------------------------------------------------------------- |
+| password_based   | built_in_database  | [Authenticaton with Mnesia database as credential storage](./mnesia.md)       |
+| password_based   | mysql              | [Authenticaton with MySQL database as credential storage](mysql.md)           |
+| password_based   | postgresql         | [Authenticaton with PostgreSQL database as credential storage](postgresql.md) |
+| password_based   | mongodb            | [Authenticaton with MongoDB database as credential storage](./mongodb.md)     |
+| password_based   | redis              | [Authenticaton with Redis database as credential storage](./redis.md)         |
+| password_based   | http               | [Authenticaton using external HTTP API for credential verification](./http.md)|
+| jwt              |                    | [Authenticaton using JWT](./jwt.md)                                           |
+| scram            | built_in_database  | [Authenticaton using SCRAM](./scram.md)                                       |
 
-EMQX supports the use of built-in data sources (files, built-in databases), JWT, external mainstream databases, and custom HTTP APIs as authentication data sources.
+Each authenticator has its own configuration options.
 
-The data source connection and authentication logic are implemented through plugins. Each plugin corresponds to an authentication method, and the corresponding plugin needs to be enabled before use.
+Example:
 
-When the client connects, the plugin implements the identity authentication of the client by checking whether its username/clientid and password are consistent with the information of the specified data source.
-
-Authentication methods supported by EMQX:
-
-**Built-in data source**
-
-
-{% emqxee %}
-
-* [Built-in Auth](./mnesia.md)
-
-{% endemqxee %}
-
-{% emqxce %}
-
-* [Mnesia (username/clientid) authentication](./mnesia.md)
-
-{% endemqxce %}
-
-
-The configuration file and the built-in database of EMQX are used to provide an authenticated data source, which is managed through the HTTP API and is simple and lightweight.
-
-
-
-**External Database**
-
-
-{% emqxee %}
-
-* [MySQL authentication](./mysql.md)
-* [PostgreSQL authentication](./postgresql.md)
-* [Redis authentication](./redis.md)
-* [MongoDB authentication](./mongodb.md)
-
-{% endemqxee %}
-
-{% emqxce %}
-
-* [MySQL authentication](./mysql.md)
-* [PostgreSQL authentication](./postgresql.md)
-* [Redis authentication](./redis.md)
-* [MongoDB authentication](./mongodb.md)
-
-{% endemqxce %}
-
-
-The external database can store a large amount of data, while facilitating integration with external device management systems.
-
-
-
-Others
-
-{% emqxee %}
-
-* [HTTP authentication](./http.md)
-* [JWT authentication](./jwt.md)
-
-{% endemqxee %}
-
-{% emqxce %}
-
-* [HTTP authentication](./http.md)
-* [JWT authentication](./jwt.md)
-
-{% endemqxce %}
-
-
-JWT authentication can issue authentication information in batches, and HTTP authentication can implement complex authentication logic.
-
-
-
-::: tip
-
-After changing the plugin configuration, you need to restart the plugin to take effect. Some authentication plugins include [ACL function](../authz/acl.md).
-
-:::
-
-
-## Authentication results
-
-Any authentication method will eventually return a result:
-
-- Authentication succeeded: the client authentication succeeded after comparison
-- Authentication failed: the client authentication fails after comparison, which is because the password in the data source does not match the current password
-- Ignore: The authentication data is not found with the current authentication method, and the result cannot be determined explicitly. The next method of authentication chain or anonymous authentication is used to determine the result.
-
-## Anonymous Authentication
-
-Anonymous authentication is enabled in the EMQX default configuration and any client can access EMQX. When the authentication plug-in is not enabled or the authentication plug-in does not explicitly allow/deny(ignore) the connection request, EMQX will decide whether to allow the client to connect based on whether the anonymous authentication is enabled.
-
-Configure the anonymous authentication:
-
-```bash
-# etc/emqx.conf
-
-## Value: true | false
-allow_anonymous = true
+```hocon
+{
+  mechanism = password_based
+  password_hash_algorithm = {
+    name = plain
+    salt_position = suffix
+  }
+  enable = true
+  backend = redis
+  cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+  database = 1
+  password = public
+  redis_type = single
+  server = "127.0.0.1:6379"
+}
 ```
 
-::: danger
+When a client connects, the configured authenticators perform identity verification of the client by checking
+whether its `username`/`clientid` and `password` are consistent with the data pertaining to the authenticator.
 
-Disable anonymous authentication in production environments.
+## Authentication chains
 
-:::
+When authenticating a client, EMQX may try to perfom identity verification using several authenticators
+sequentially. Each authenticator may either return autentication success/failure or pass verification to
+the next authenticator in the sequence. Such sequences are called _authentication chains_.
 
+Conditions on which verification is passed further in the chain depends on the authenticator and described
+in its documentation.
 
-## Password salting rules and hash methods
+Each authentication chain can contain only one authenticator of each type.
 
-The hash method can be enabled in most EMQX authentication plugins. Only the password cipher text is saved in the data source to ensure data security.
+Configured authentication chains can be updated or rearranged dynamically. Each authenticator
+can be _enabled_ or _disabled_.
 
-When the hash method is enabled, the user can specify a salt for each client and configure a salting rule. The password stored in the database is the cipher text processed according to the salting rule and hash method.
+Example:
 
-Taking MySQL authentication as an example：
+```hocon
+authentication = [
+  {
+    mechanism = password_based
+    password_hash_algorithm = {
+      name = plain
+      salt_position = suffix
+    }
+    enable = true
+    backend = redis
+    cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+    database = 1
+    password = public
+    redis_type = single
+    server = "127.0.0.1:6379"
+  },
+  {
+    mechanism = password_based
+    backend = built_in_database
+    user_id_type = username
+    password_hash_algorithm = {
+        name = sha256
+        salt_position = suffix
+    }
+    enable = false
+  }
+]
 
-**Salting rules and hash method configuration:**
-
-```bash
-# etc/plugins/emqx_auth_mysql.conf
-
-## only hash is used without salt
-auth.mysql.password_hash = sha256
-
-## salt prefix: use sha256 to encrypt salt + password
-auth.mysql.password_hash = salt,sha256
-
-## salt suffix: encrypted password using sha256 + salt
-auth.mysql.password_hash = sha256,salt
-
-## pbkdf2 with macfun iterations dklen
-## macfun: md4, md5, ripemd160, sha, sha224, sha256, sha384, sha512
-## auth.mysql.password_hash = pbkdf2,sha256,1000,20
 ```
-<!-- TODO 翻译最后一句 -->
 
-### How to generate authentication information
+An authentication chain without any enabled authenticators allows anonymous access.
 
-1. Assign user name, Client ID, password, and salt for each client
-2. Use the same salting rules and hash method as MySQL authentication to process client information to get cipher text
-3. Write the client information to the database. The client password should be cipher text information.
+Authentication chains can be configured globally per protocol as well as per individual protocol listeners:
 
-### EMQX authentication process
+```hocon
+# emqx.conf
 
-1. The authentication data such as password (ciphertext) and salt are queried according to the configured authentication SQL combined with the information passed in by the client. If there is no query result, the authentication will terminate and the ignore result will be returned
-2. The cipher text is calculated according to the configured salting rule and hash method. If no hash method is enabled,  this step is skipped.
-3. Compare the cipher text stored in the database with the cipher text calculated by the current client. If the comparison is successful, the authentication succeeds. Otherwise, the authentication fails.
+# Global chain for MQTT protocol
+authentication = [
+  ...
+]
 
-MySQL authentication function logic diagram:
+listeners.quic.default {
+  ...
+  # Specific chain for `quic.default` MQTT listener
+  authentication = [
+    ...
+  ]
+}
 
-![image-20200217154254202](./assets/image-20200217154254202.png)
+gateway.stomp {
+  ...
 
-::: tip
-The authentication can be performed normally when the salting rules and hash method of the written data are consistent with the configuration of the corresponding plugin. It will invalidate existing authentication data when changing the hashing method.
-:::
+  # Global chain for STOMP protocol
+  authentication: [
+    ...
+  ]
 
+  listeners.tcp.default {
+    ...
+    # Specific chain for `tcp.default` STOMP listener
+    authentication: [
+      ...
+    ]
+  }
+}
 
+```
 
-## Authentication chain
+When a client connects to a listener it is authenticated with listener-specific chain. If there is no
+chain specified for the listener, then the global chain for the listener protocol is used.
 
-When multiple authentication methods are enabled at the same time, EMQX will perform chain authentication in the order in which the plugins are opened:
-- Once authentication succeeds, terminate the authentication chain and allow clients to access
-- Once authentication fails, terminate the authentication chain and prohibit client access
-- If Failing to pass until the last authentication method,  it is determined according to  **anonymous authentication** configuration
-  - Allow client access when anonymous authentication is enabled
-  - Deny client access when anonymous authentication is disabled
+If a chain contains a single authenticator, its configuration can be used as chain configuration.
+I.e. `[ ]` brackets may be ommited:
 
+```hocon
+authentication = {
+    mechanism = password_based
+    backend = built_in_database
+    user_id_type = username
+    password_hash_algorithm = {
+        name = sha256
+        salt_position = suffix
+    }
+    enable = false
+}
+```
 
+## Password hashing
 
-![_images/guide_2.png](./assets/guide_2.png)
+Password-based authenticators with database backend (`built_in_database`, `mysql`, `mongodb`, `redis`, `postgresql`)
+support multiple password hashing algorithms.
 
-<!-- replace -->
+The algorithm of password verification is the following:
+* Authenticator extracts hashed password and salt from the database using provided queries/selectors.
+* Hashes password provided by the client with configured hashing algorithm and fetched salt.
+* Securely compares the resulting hash with the hash extracted from the database.
 
-::: tip
+The following password hashing algorithms are supported:
 
-It can improve client authentication efficiency when enabling only one authentication plugin at the same time
+```hocon
+# simple algorithms:
+password_hash_algorithm = {
+  name = sha256             # plain, md5, sha, sha512
+  salt_position = suffix    # prefix, disable
+}
 
-:::
+# bcrypt
+password_hash_algorithm = {
+  name = bcrypt
+}
+
+# pbkdf2
+password_hash_algorithm = {
+  name = pbkdf2
+  mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
+  iterations = 4096
+  dk_length = 256           # optional
+}
+```
+
+For password-based authenticaors that allow user creation through EMQX API (`built_in_database`)
+there are additional parameters required for hash creation:
+
+```hocon
+# bcrypt
+password_hash_algorithm = {
+  name = bcrypt
+  salt_rounds = 10          # used for user creation
+}
+```
+
+## HTTP API
+
 
 
 ## TLS authentication
-The default port for MQTT TLS is 8883:
 
-```bash
-listener.ssl.external = 8883
+To enable TLS authentication for clients, one may add an `ssl` listener
+with `verify_peer` verify option set.
+The default `ssl` MQTT listener is run on 8883 port:
+
+```hocon
+listeners.ssl.default {
+  bind = "0.0.0.0:8883"
+
+  access_rules = [
+    "allow all"
+  ]
+
+  proxy_protocol = false
+  proxy_protocol_timeout = 3s
+
+  ssl.keyfile = "etc/certs/key.pem"
+  ssl.certfile = "etc/certs/cert.pem"
+  ssl.cacertfile = "etc/certs/cacert.pem"
+
+  # to verify client certs
+  ssl.verify = verify_peer
+
+  ssl.versions = ["tlsv1.3", "tlsv1.2", "tlsv1.1", "tlsv1"]
+  tcp.backlog = 1024
+  tcp.buffer = 4KB
+}
 ```
 
-Configure certificates and CAs:
-
-```bash
-listener.ssl.external.keyfile = etc/certs/key.pem
-listener.ssl.external.certfile = etc/certs/cert.pem
-listener.ssl.external.cacertfile = etc/certs/cacert.pem
-```
-
-Note that the `key.pem`,` cert.pem` and `cacert.pem` under the default directory of ` etc/certs` are self-signed certificates generated by EMQX Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client.
-
-The cipher list supported by the server needs to be specified explicitly. The default list is consistent with Mozilla's server cipher list:
-
-```bash
-listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
-```
+Note that the `key.pem`,` cert.pem` and `cacert.pem` under the default directory of `etc/certs` are self-signed certificates generated by EMQX Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client. For production use, securely issued certificates must be used.
 
 ## PSK authentication
-If you want to use PSK authentication, you need to comment out `listener.ssl.external.ciphers` in [TLS Authentication](#auth-tls), and then configure ` listener.ssl.external.psk_ciphers`:
 
-```bash
-#listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,...
-listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA
+To enable PSK authentication, one should enable `psk_authentication` section in `emqx.conf`:
+
+```hocon
+psk_authentication {
+    ## Whether to enable the PSK feature.
+    enable = true
+
+    ## If init file is specified, emqx will import PSKs from the file
+    ## into the built-in database at startup for use by the runtime.
+    ##
+    ## The file has to be structured line-by-line, each line must be in
+    ## the format: <PSKIdentity>:<SharedSecret>
+    init_file = "data/init.psk"
+
+    ## Specifies the separator for PSKIdentity and SharedSecret in the init file.
+    ## The default is colon (:)
+    separator = ":"
+
+    ## The size of each chunk used to import to the built-in database from psk file
+    ## chunk_size = 50
+}
+```
+
+File with psk identities and keys (`data/init.psk`) should be created:
+
+```
+myclient1:8c701116e9127c57a99d5563709af3deaca75563e2c4dd0865701ae839fb6d79
+myclient2:d1e617d3b963757bfc21dad3fea169716c3a2f053f23decaea5cdfaabd04bfc4
+...
+```
+
+`ssl` listener should be configured to use PSK ciphers:
+
+```
+listeners.ssl.default {
+  ...
+  ssl.versions = ["tlsv1.2"]
+  ssl.ciphers = "RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,RSA-PSK-RC4-SHA,RSA-PSK-DES-CBC3-SHA"
+  ...
+}
 
 ```
 
-Then enable the emqx_psk_file plugin:
-
-```bash
-$ emqx_ctl plugins load emqx_psk_file
-```
-
-The configuration file for PSK is `etc/psk.txt`. A colon`: ` is used to separate the PSK ID and PSK:
-
-```bash
-client1:1234
-client2:abcd
-```
