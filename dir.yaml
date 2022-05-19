@@ -39,7 +39,7 @@
         - deploy/cluster/security
         - deploy/cluster/manual
         - deploy/cluster/auto
-        - deploy/lb
+        - deploy/cluster/lb
   # - deploy/relup
 
 - title_en: Management Interfaces

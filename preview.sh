@@ -13,7 +13,7 @@ PORT="${2:-8080}"
 
 THIS_DIR="$(cd "$(dirname "$(readlink "$0" || echo "$0")")"; pwd -P)"
 
-docker rm emqx-doc-preview || true
+docker rm emqx-doc-preview > /dev/null 2>&1 || true
 
 if [ "$PRODUCT" = "ce" ]; then
     python3 "$THIS_DIR/gen.py" ce > directory.json
