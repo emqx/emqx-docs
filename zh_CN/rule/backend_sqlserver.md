@@ -58,9 +58,9 @@ Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
-Ubuntu上配置 odbc 驱动:
+Ubuntu上配置 odbc 驱动（以 Ubuntu20.04 为例，其他版本请参考 odbc 官方文档）:
 ```
-$ apt-get install unixodbc unixodbc-dev unixodbc-bin tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
+$ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
 $ vim /etc/odbcinst.ini
 # 加入以下内容
 [ms-sql]
