@@ -10,6 +10,12 @@ EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前�
 
 ## 配置 PostgreSQL 服务器
 
+::: tip
+
+支持 PostgreSQL 13 及以下版本
+
+:::
+
 支持配置多台PostgreSQL服务器连接池:
 
 ```bash

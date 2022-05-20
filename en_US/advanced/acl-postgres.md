@@ -35,6 +35,12 @@ PostgreSQL basic connection information needs to be accessible to all nodes in t
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
 
+::: tip
+
+Support PostgreSQL 13 and below versions
+
+:::
+
 ## server address
 auth.pgsql.server = 127.0.0.1:5432
 
