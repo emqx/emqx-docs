@@ -737,7 +737,7 @@ EOF
 
 To enable TLS authentication for clients, one may add a `ssl` listener
 with `verify_peer` verify option set.
-The default `ssl` MQTT listener is run on the 8883 port:
+The default `ssl` MQTT listener runs on the 8883 port:
 
 ```hocon
 listeners.ssl.default {
