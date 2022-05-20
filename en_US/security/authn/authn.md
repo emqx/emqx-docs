@@ -9,12 +9,12 @@ EMQX Broker's authentication support includes two levels:
 
 - The MQTT protocol itself specifies authentication primitives. EMQX Broker supports multiple variants of MQTT-level authentication:
   * username/password authentication with various backends (MongoDB, MySQL, PostgreSQL, Redis and built-in database);
-  * SCRAM authentication with built-in database;
+  * SCRAM authentication with the built-in database;
   * JWT authentication;
   * authentication via custom HTTP API.
 - At the transport layer, TLS guarantees client-to-server authentication using client certificates and ensures that the server verifies the server certificate to the client. PSK-based TLS/DTLS authentication is also supported.
 
-In this article we describe EMQX authentication and its configuration concepts.
+In this document, we describe EMQX authentication and its configuration concepts.
 
 ## Authentication sources
 
@@ -58,11 +58,11 @@ whether its `username`/`clientid` and `password` are consistent with the data pe
 
 ## Authentication chains
 
-When authenticating a client, EMQX may try to perfom identity verification using several authenticators
-sequentially. Each authenticator may either return autentication success/failure or pass verification to
+When authenticating a client, EMQX may try to perform identity verification using several authenticators
+sequentially. Each authenticator may either return authentication success/failure or pass verification to
 the next authenticator in the sequence. Such sequences are called _authentication chains_.
 
-Conditions on which verification is passed further in the chain depends on the authenticator and described
+Conditions on which verification is passed further in the chain depend on the authenticator and described
 in its documentation.
 
 Each authentication chain can contain only one authenticator of each type.
@@ -141,11 +141,11 @@ gateway.stomp {
 
 ```
 
-When a client connects to a listener it is authenticated with listener-specific chain. If there is no
+When a client connects to a listener it is authenticated with the listener-specific chain. If there is no
 chain specified for the listener, then the global chain for the listener protocol is used.
 
 If a chain contains a single authenticator, its configuration can be used as chain configuration.
-I.e. `[ ]` brackets may be ommited:
+I.e. `[ ]` brackets may be omitted:
 
 ```hocon
 authentication {
@@ -162,12 +162,12 @@ authentication {
 
 ## Password hashing
 
-Password-based authenticators with database backend (`built_in_database`, `mysql`, `mongodb`, `redis`, `postgresql`)
+Password-based authenticators with a database backend (`built_in_database`, `mysql`, `mongodb`, `redis`, `postgresql`)
 support multiple password hashing algorithms.
 
-The algorithm of password verification is the following:
+The algorithm for password verification is the following:
 * Authenticator extracts hashed password and salt from the database using provided queries/selectors.
-* Hashes password provided by the client with configured hashing algorithm and fetched salt.
+* Hashes password provided by the client with the configured hashing algorithm and fetched salt.
 * Securely compares the resulting hash with the hash extracted from the database.
 
 The following password hashing algorithms are supported:
@@ -193,7 +193,7 @@ password_hash_algorithm {
 }
 ```
 
-For password-based authenticaors that allow user creation through EMQX API (`built_in_database`)
+For password-based authenticators that allow user creation through EMQX API (`built_in_database`)
 there are additional parameters required for hash creation:
 
 ```hocon
@@ -228,7 +228,7 @@ scram:built_in_database
 ```
 
 ::: tip
-When used in URLs, authenticator ids should be url-encoded: `password_based%3Abuilt_in_database`.
+When used in URLs, authenticator ids should be URL-encoded: `password_based%3Abuilt_in_database`.
 :::
 
 ### Global chain API
@@ -237,7 +237,7 @@ Global chain API operates with MQTT global (default) authentication chain.
 
 #### GET /api/v5/authentication
 
-Get global MQTT authentication chain.
+Get the global MQTT authentication chain.
 
 ```bash
 ## Request
@@ -266,7 +266,7 @@ http://localhost:18083/api/v5/authentication
 #### POST /api/v5/authentication
 
 Add authenticator to the global MQTT authentication chain.
-Documentation for concrete authenticator fields can be found in its own
+Documentation for concrete authenticator fields can be found on its own
 documentation page.
 
 ```bash
@@ -475,7 +475,7 @@ EOF
 
 ### Listener chain API
 
-Listener chain API allows to operate with authentication chains of specific MQTT listeners by
+Listener chain API allows operating with authentication chains of specific MQTT listeners by
 listener ids.
 
 Listener ids name convention is the following:
@@ -491,13 +491,13 @@ listeners.quic.default {
 is `quic:default`.
 
 ::: tip
-When used in URLs, listener ids should be url-encoded: `quic%3Adefault`.
+When used in URLs, listener ids should be URL-encoded: `quic%3Adefault`.
 :::
 
 
 #### GET /api/v5/listeners/{listener_id}/authentication
 
-Get MQTT listener authentication chain.
+Get an MQTT listener authentication chain.
 
 ```bash
 ## Request
@@ -526,7 +526,7 @@ http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication
 #### POST /api/v5/listeners/{listener_id}/authentication
 
 Add authenticator to an MQTT listener authentication chain.
-Documentation for concrete authenticator fields can be found in its own
+Documentation for concrete authenticator fields can be found on its own
 documentation page.
 
 ```bash
@@ -565,7 +565,7 @@ EOF
 
 #### GET /api/v5/listeners/{listener_id}/authentication/{id}
 
-Get configuration of an authenticator from an MQTT listener authentication chain.
+Get the configuration of an authenticator from an MQTT listener authentication chain.
 
 ```bash
 ## Request
@@ -591,7 +591,7 @@ http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication/password_ba
 
 #### DELETE /api/v5/listeners/{listener_id}/authentication/{id}
 
-Delete authenticator from an MQTT listener authentication chain.
+Delete an authenticator from an MQTT listener authentication chain.
 
 ```bash
 ## Request
@@ -607,7 +607,7 @@ http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication/password_ba
 
 #### PUT /api/v5/listeners/{listener_id}/authentication/{id}
 
-Update configuration of an authenticator from an MQTT listener authentication chain.
+Update the configuration of an authenticator from an MQTT listener authentication chain.
 
 ```bash
 ## Request
@@ -737,7 +737,7 @@ EOF
 
 To enable TLS authentication for clients, one may add an `ssl` listener
 with `verify_peer` verify option set.
-The default `ssl` MQTT listener is run on 8883 port:
+The default `ssl` MQTT listener is run on the 8883 port:
 
 ```hocon
 listeners.ssl.default {
@@ -763,7 +763,7 @@ listeners.ssl.default {
 }
 ```
 
-Note that the `key.pem`,` cert.pem` and `cacert.pem` under the default directory of `etc/certs` are self-signed certificates generated by EMQX Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client. For production use, securely issued certificates must be used.
+Note that the `key.pem`,` cert.pem`, and `cacert.pem` under the default directory of `etc/certs` are self-signed certificates generated by EMQX Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client. For production use, securely issued certificates must be used.
 
 ## PSK authentication
 
