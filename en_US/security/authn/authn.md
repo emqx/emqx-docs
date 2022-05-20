@@ -735,7 +735,7 @@ EOF
 
 ## TLS authentication
 
-To enable TLS authentication for clients, one may add an `ssl` listener
+To enable TLS authentication for clients, one may add a `ssl` listener
 with `verify_peer` verify option set.
 The default `ssl` MQTT listener is run on the 8883 port:
 
