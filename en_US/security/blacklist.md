@@ -1,4 +1,4 @@
-# Blacklisting/Banning ClientDI, user name or IP
+# Blacklisting/Banning ClientID, user name or IP
 
 EMQX Broker provides users with a blacklisting/banning functionality.
 
