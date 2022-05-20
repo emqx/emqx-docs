@@ -452,7 +452,7 @@ The following move commands are available:
   ```json
   {"position": "rear"}
   ```
-* Place to the position preceding some other authenticator:
+* Place at the position preceding some other authenticator:
   ```json
   {"position": "before:password_based:built_in_database"}
   ```
