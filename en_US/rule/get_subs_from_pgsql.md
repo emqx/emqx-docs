@@ -1,5 +1,11 @@
 # Get subscription relationship from PostgreSQL 
 
+::: tip
+
+Support PostgreSQL 13 and below versions
+
+:::
+
 Set up the PostgreSQL database, and take MacOS X as an example:
 ```bash
 $ brew install postgresql
