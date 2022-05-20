@@ -206,7 +206,532 @@ password_hash_algorithm = {
 
 ## HTTP API
 
+Authentication API allows to manipulate authentication chains and
+concrete authenticators.
 
+Authenticators are identified by their id formed as:
+```
+<mechanism>:<backend>
+```
+or just
+```
+<mechanism>
+```
+if there is no backend.
+
+For example:
+
+```
+password_based:built_in_database
+jwt
+scram:built_in_database
+```
+
+::: tip
+When used in URLs, authenticator ids should be url-encoded: `password_based%3Abuilt_in_database`.
+:::
+
+### Global chain API
+
+Global chain API operates with MQTT global (default) authentication chain.
+
+#### GET /api/v5/authentication
+
+Get global MQTT authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X GET \
+http://localhost:18083/api/v5/authentication
+
+## Response
+[
+  {
+    "backend":"built_in_database",
+    "enable":true,
+    "id":"password_based:built_in_database",
+    "mechanism":"password_based",
+    "password_hash_algorithm":{
+      "name":"sha256",
+      "salt_position":"suffix"
+    },
+    "user_id_type":"username"
+  }
+]
+```
+
+#### POST /api/v5/authentication
+
+Add authenticator to the global MQTT authentication chain.
+Documentation for concrete authenticator fields can be found in its own
+documentation page.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X POST \
+-H "Content-Type: application/json" \
+http://localhost:18083/api/v5/authentication \
+-d @- <<'EOF'
+{
+  "mechanism": "password_based",
+  "backend": "built_in_database",
+  "user_id_type": "username",
+  "password_hash_algorithm": {
+    "name": "sha256",
+    "salt_position": "suffix"
+  }
+}
+EOF
+
+## Response
+{
+  "backend":"built_in_database",
+  "enable":true,
+  "id":"password_based:built_in_database",
+  "mechanism":"password_based",
+  "password_hash_algorithm":{
+    "name":"sha256",
+    "salt_position":"suffix"
+  },
+  "user_id_type":"username"
+}
+```
+
+#### DELETE /api/v5/authentication/{id}
+
+Delete an authenticator from the global MQTT authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X GET \
+http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database
+
+## Response
+{
+  "backend":"built_in_database",
+  "enable":true,
+  "id":"password_based:built_in_database",
+  "mechanism":"password_based",
+  "password_hash_algorithm":{
+    "name":"sha256",
+    "salt_position":"suffix"
+  },
+  "user_id_type":"username"
+}
+```
+
+#### DELETE /api/v5/authentication/{id}
+
+Delete authenticator from the global MQTT authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X DELETE \
+http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database
+
+## Response
+## 204 No Content
+```
+
+#### PUT /api/v5/authentication/{id}
+
+Update configuration of an authenticator from the global MQTT authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X PUT \
+-H "Content-Type: application/json" \
+http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database \
+-d @- <<'EOF'
+{
+  "mechanism": "password_based",
+  "backend": "built_in_database",
+  "user_id_type": "clientid",
+  "password_hash_algorithm": {
+    "name": "sha512",
+    "salt_position": "prefix"
+  }
+}
+EOF
+
+## Response
+{
+  "backend":"built_in_database",
+  "enable":true,
+  "id":"password_based:built_in_database",
+  "mechanism":"password_based",
+  "password_hash_algorithm":{
+    "name":"sha512",
+    "salt_position":"prefix"
+  },"
+  user_id_type":"clientid"
+}
+```
+
+#### GET /api/v5/authentication/{id}/status
+
+Get statistics of an authenticator from the global MQTT authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X GET \
+http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/status
+
+## Response
+{
+  "metrics": {
+    "failed": 0,
+    "nomatch": 0,
+    "rate": 0,
+    "rate_last5m": 0,
+    "rate_max": 0,
+    "success": 0,
+    "total": 0
+  },
+  "node_error": [],
+  "node_metrics": [
+    {
+      "metrics": {
+        "failed": 0,
+        "nomatch": 0,
+        "rate": 0,
+        "rate_last5m": 0,
+        "rate_max": 0,
+        "success": 0,
+        "total": 0
+      },
+      "node": "emqx@127.0.0.1"
+    }
+  ],
+  "node_resource_metrics": [
+    {
+      "metrics": {},
+      "node": "emqx@127.0.0.1"
+    }
+  ],
+  "node_status": [
+    {
+      "node": "emqx@127.0.0.1",
+      "status": "connected"
+    }
+  ],
+  "resource_metrics": {},
+  "status": "connected"
+}
+```
+
+#### POST /api/v5/authentication/{id}/move
+
+Move an authenticator within the global chain.
+
+The following move commands are available:
+
+* Move an authenticator to the beginning of the chain (it will be applied first during authentication):
+  ```json
+  {"position": "front"}
+  ```
+* Move to the end of the chain (it will be applied last during authentication):
+  ```json
+  {"position": "rear"}
+  ```
+* Place to the position preceding some other authenticator:
+  ```json
+  {"position": "before:password_based:built_in_database"}
+  ```
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X POST \
+-H "Content-Type: application/json" \
+http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/move \
+-d @- <<'EOF'
+{"position": "front"}
+EOF
+
+## Response
+## 204 No Content
+```
+
+### Listener chain API
+
+Listener chain API allows to operate with authentication chains of specific MQTT listeners by
+listener ids.
+
+Listener ids name convention is the following:
+```
+<transport_protocol>:<name>
+```
+For example, `listener_id` for the listener
+```hocon
+listeners.quic.default {
+  ...
+}
+```
+is `quic:default`.
+
+::: tip
+When used in URLs, listener ids should be url-encoded: `quic%3Adefault`.
+:::
+
+
+#### GET /api/v5/listeners/{listener_id}/authentication
+
+Get MQTT listener authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X GET \
+http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication
+
+## Response
+[
+  {
+    "backend":"built_in_database",
+    "enable":true,
+    "id":"password_based:built_in_database",
+    "mechanism":"password_based",
+    "password_hash_algorithm":{
+      "name":"sha256",
+      "salt_position":"suffix"
+    },
+    "user_id_type":"username"
+  }
+]
+```
+
+#### POST /api/v5/listeners/{listener_id}/authentication
+
+Add authenticator to an MQTT listener authentication chain.
+Documentation for concrete authenticator fields can be found in its own
+documentation page.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X POST \
+-H "Content-Type: application/json" \
+http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication \
+-d @- <<'EOF'
+{
+  "mechanism": "password_based",
+  "backend": "built_in_database",
+  "user_id_type": "username",
+  "password_hash_algorithm": {
+    "name": "sha256",
+    "salt_position": "suffix"
+  }
+}
+EOF
+
+## Response
+{
+  "backend":"built_in_database",
+  "enable":true,
+  "id":"password_based:built_in_database",
+  "mechanism":"password_based",
+  "password_hash_algorithm":{
+    "name":"sha256",
+    "salt_position":"suffix"
+  },
+  "user_id_type":"username"
+}
+```
+
+#### GET /api/v5/listeners/{listener_id}/authentication/{id}
+
+Get configuration of an authenticator from an MQTT listener authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X GET \
+http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication/password_based%3Abuilt_in_database
+
+## Response
+{
+  "backend":"built_in_database",
+  "enable":true,
+  "id":"password_based:built_in_database",
+  "mechanism":"password_based",
+  "password_hash_algorithm":{
+    "name":"sha256",
+    "salt_position":"suffix"
+  },
+  "user_id_type":"username"
+}
+```
+
+#### DELETE /api/v5/listeners/{listener_id}/authentication/{id}
+
+Delete authenticator from an MQTT listener authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X DELETE \
+http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication/password_based%3Abuilt_in_database
+
+## Response
+## 204 No Content
+```
+
+#### PUT /api/v5/listeners/{listener_id}/authentication/{id}
+
+Update configuration of an authenticator from an MQTT listener authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X PUT \
+-H "Content-Type: application/json" \
+http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication/password_based%3Abuilt_in_database \
+-d @- <<'EOF'
+{
+  "mechanism": "password_based",
+  "backend": "built_in_database",
+  "user_id_type": "clientid",
+  "password_hash_algorithm": {
+    "name": "sha512",
+    "salt_position": "prefix"
+  }
+}
+EOF
+
+## Response
+{
+  "backend":"built_in_database",
+  "enable":true,
+  "id":"password_based:built_in_database",
+  "mechanism":"password_based",
+  "password_hash_algorithm":{
+    "name":"sha512",
+    "salt_position":"prefix"
+  },"
+  user_id_type":"clientid"
+}
+```
+
+#### GET /api/v5/listeners/{listener_id}/authentication/{id}/status
+
+Get statistics of an authenticator from an MQTT listener authentication chain.
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X GET \
+http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication/password_based%3Abuilt_in_database/status
+
+## Response
+{
+  "metrics": {
+    "failed": 0,
+    "nomatch": 0,
+    "rate": 0,
+    "rate_last5m": 0,
+    "rate_max": 0,
+    "success": 0,
+    "total": 0
+  },
+  "node_error": [],
+  "node_metrics": [
+    {
+      "metrics": {
+        "failed": 0,
+        "nomatch": 0,
+        "rate": 0,
+        "rate_last5m": 0,
+        "rate_max": 0,
+        "success": 0,
+        "total": 0
+      },
+      "node": "emqx@127.0.0.1"
+    }
+  ],
+  "node_resource_metrics": [
+    {
+      "metrics": {},
+      "node": "emqx@127.0.0.1"
+    }
+  ],
+  "node_status": [
+    {
+      "node": "emqx@127.0.0.1",
+      "status": "connected"
+    }
+  ],
+  "resource_metrics": {},
+  "status": "connected"
+}
+```
+
+#### POST /api/v5/listeners/{listener_id}/authentication/{id}/move
+
+Move an authenticator within an MQTT listener authentication chain.
+
+The following move commands are available:
+
+* Move an authenticator to the beginning of the chain (it will be applied first during authentication):
+  ```json
+  {"position": "front"}
+  ```
+* Move to the end of the chain (it will be applied last during authentication):
+  ```json
+  {"position": "rear"}
+  ```
+* Place to the position preceding some other authenticator:
+  ```json
+  {"position": "before:password_based:built_in_database"}
+  ```
+
+```bash
+## Request
+curl -i \
+--basic \
+-u admin:public \
+-X POST \
+-H "Content-Type: application/json" \
+http://localhost:18083/api/v5/listeners/tcp%3Adefault/authentication/password_based%3Abuilt_in_database/move \
+-d @- <<'EOF'
+{"position": "front"}
+EOF
+
+## Response
+## 204 No Content
+```
 
 ## TLS authentication
 
