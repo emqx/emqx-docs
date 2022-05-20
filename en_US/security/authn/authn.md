@@ -39,7 +39,7 @@ Example:
 ```hocon
 {
   mechanism = password_based
-  password_hash_algorithm = {
+  password_hash_algorithm {
     name = plain
     salt_position = suffix
   }
@@ -76,7 +76,7 @@ Example:
 authentication = [
   {
     mechanism = password_based
-    password_hash_algorithm = {
+    password_hash_algorithm {
       name = plain
       salt_position = suffix
     }
@@ -92,7 +92,7 @@ authentication = [
     mechanism = password_based
     backend = built_in_database
     user_id_type = username
-    password_hash_algorithm = {
+    password_hash_algorithm {
         name = sha256
         salt_position = suffix
     }
@@ -126,14 +126,14 @@ gateway.stomp {
   ...
 
   # Global chain for STOMP protocol
-  authentication: [
+  authentication = [
     ...
   ]
 
   listeners.tcp.default {
     ...
     # Specific chain for `tcp.default` STOMP listener
-    authentication: [
+    authentication = [
       ...
     ]
   }
@@ -148,11 +148,11 @@ If a chain contains a single authenticator, its configuration can be used as cha
 I.e. `[ ]` brackets may be ommited:
 
 ```hocon
-authentication = {
+authentication {
     mechanism = password_based
     backend = built_in_database
     user_id_type = username
-    password_hash_algorithm = {
+    password_hash_algorithm {
         name = sha256
         salt_position = suffix
     }
@@ -174,18 +174,18 @@ The following password hashing algorithms are supported:
 
 ```hocon
 # simple algorithms:
-password_hash_algorithm = {
+password_hash_algorithm {
   name = sha256             # plain, md5, sha, sha512
   salt_position = suffix    # prefix, disable
 }
 
 # bcrypt
-password_hash_algorithm = {
+password_hash_algorithm {
   name = bcrypt
 }
 
 # pbkdf2
-password_hash_algorithm = {
+password_hash_algorithm {
   name = pbkdf2
   mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
   iterations = 4096
@@ -198,7 +198,7 @@ there are additional parameters required for hash creation:
 
 ```hocon
 # bcrypt
-password_hash_algorithm = {
+password_hash_algorithm {
   name = bcrypt
   salt_rounds = 10          # used for user creation
 }
