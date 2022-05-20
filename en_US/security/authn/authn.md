@@ -18,8 +18,11 @@ In this document, we describe EMQX authentication and its configuration concepts
 
 ## Authentication sources
 
-_Authentication source_ (or simply _authenticator_) is an EMQX module that implements MQTT authentication. The following authenticators are
-available by default:
+_Authentication source_ (or simply _authenticator_) is an EMQX module that implements MQTT authentication.
+Authenticators are identified by their _mechanism_ (i.e. algorithm of authentication) and _backend_ (data source
+for credentials).
+
+The following authenticators areavailable by default:
 
 | mechanism        | backend            | description                                                                   |
 | ----             | ------------------ | ----------------------------------------------------------------------------- |
@@ -140,6 +143,9 @@ gateway.stomp {
 }
 
 ```
+
+Listener-specific chains completely override the global chains, i.e. if a listener has its own chain global chain
+isn't used at all for clients connecting to the listener.
 
 When a client connects to a listener it is authenticated with the listener-specific chain. If there is no
 chain specified for the listener, then the global chain for the listener protocol is used.
