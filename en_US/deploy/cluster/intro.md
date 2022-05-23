@@ -80,7 +80,7 @@ connection with all the nodes in the cluster.
 
 At this point, the four nodes have completed the mesh structure shown in the following figure:
 
-![image](../../assets/cluster_1.png)
+![image](./assets/cluster_1.png)
 
 ## EMQX Broker Distributed cluster design
 
@@ -89,7 +89,7 @@ subscribers on each node, as shown in the following figure.
 
 ![image](../../assets/design_9.png)
 
-To achieve this, EMQX Broker maintains several data structures related to it: subscription
+To achieve this, EMQX Broker maintains several data structures: subscription
 tables, routing tables, and topic trees.
 
 ### Subscription Table: Topics-Subscribers
@@ -134,7 +134,7 @@ The following topic-subscription relationship is an example:
 
 When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
 
-![image](../../assets/cluster_2.png)
+![image](./assets/cluster_2.png)
 
 ### Message Distribution Process
 
@@ -146,17 +146,17 @@ relevant subscriber.
 For example, when client1 publishes a message to the topic `t/a`.
 The routing and distribution of the message between nodes are as follows:
 
-1. client1 publishes a message with the topic `t/a` to the node1
+1. Client1 publishes a message with the topic `t/a` to the node1.
 2. By querying the topic tree, node1 learns that `t/a` matches two existing topics
-   of ` t/a` and `t/#`.
+   of `t/a` and `t/#`.
 3. By querying the route table, node1 learns that topic `t/a` has subscribers only
-   on node3, and topic` t/# `has subscribers only on node2.
+   on node3, and topic `t/#` has subscribers only on node2.
    So node1 forwards the message to node2 and node3.
-4. After node2 receives the forwarded  `t/a` message,
+4. After node2 receives the forwarded `t/a` message,
    it queries the local subscription table to obtain the subscribers who have subscribed to
-   ` t/# ` on this node and distributes the message to them.
-5. After node3 receives the forwarded  `t/a` message, it queries the local subscription table
-   to obtain the subscribers who have subscribed to ` t/a ` on this node and distributes
+   `t/#` on that node and distributes the message to them.
+5. After node3 receives the forwarded `t/a` message, it queries the local subscription table
+   to obtain the subscribers who have subscribed to `t/a` on that node and distributes
    the message to them.
 6. Message forwarding and distribution are finished.
 
@@ -228,6 +228,6 @@ after the configured time interval.
 
 After a bit of learning, it's time to start clustering EMQX nodes.
 
-* Learn more about the [security](./cluster-security.md) aspects of EMQX clusters.
-* The classic [Manual clustering](./cluster-manual.md)
-* The smarter [Auto clustering](./cluster-auto.md)
+* Learn more about the [security](./security.md) aspects of EMQX clusters.
+* The classic [Manual clustering](./manual.md)
+* The smarter [Auto clustering](./auto.md)

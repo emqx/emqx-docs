@@ -22,6 +22,8 @@
 - title_en: Quick Start
   title_cn: 快速开始
   path: getting-started/getting-started
+  children:
+    - getting-started/dashboard
 
 
 ## Infrastructure
@@ -48,7 +50,7 @@
     - admin/dashboard
     - admin/cli
     - admin/api # Swagger API doc
-    - admin/cfg # Configuration file
+    - admin/file # Configuration file
 
 - title_en: Security
   title_cn: 安全
@@ -106,6 +108,16 @@
     - rule/rule-create
     - rule/how_to_update_resources
     - rule/rule-example
+    - rule/backend_cassandra
+    - rule/backend_dynamodb
+    - rule/backend_influxdb
+    - rule/backend_mongodb
+    - rule/backend_mysql
+    - rule/backend_opentsdb
+    - rule/backend_pgsql
+    - rule/backend_redis
+    - rule/backend_timescaledb
+    - rule/schema-registry
 
 ## Device connectivity
 
@@ -151,10 +163,12 @@
   children:
     # TODO: add Introduction
     # TODO: add plugin development doc
+    - advanced/plugins
     - advanced/hooks
     - advanced/webhook
     - advanced/lang-exhook
     - advanced/lang-exproto
+    - advanced/lang-lua
 
 - title_en: Design & Implementation
   title_cn: 设计与实现

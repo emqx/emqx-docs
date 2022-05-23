@@ -18,8 +18,8 @@ EMQX 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 **配置文件/内置数据源**
 
 {% emqxce %}
-* [内置 ACL](./acl-file.md)
-* [Mnesia ACL](./acl-mnesia.md)
+* [内置 ACL](./file.md)
+* [Mnesia ACL](./mnesia.md)
 
 {% endemqxce %}
 
@@ -51,10 +51,10 @@ EMQX 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 {% emqxce %}
 
-* [MySQL ACL](./acl-mysql.md)
-* [PostgreSQL ACL](./acl-postgres.md)
-* [Redis ACL](./acl-redis.md)
-* [MongoDB ACL](./acl-mongodb.md)
+* [MySQL ACL](./mysql.md)
+* [PostgreSQL ACL](./postgresql.md)
+* [Redis ACL](./redis.md)
+* [MongoDB ACL](./mongodb.md)
 
 {% endemqxce %}
 
@@ -74,7 +74,7 @@ EMQX 支持使用配置文件、外部主流数据库和自定义 HTTP API 作�
 
 {% emqxce %}
 
-* [HTTP ACL](./acl-http.md)
+* [HTTP ACL](./http.md)
 
 {% endemqxce %}
 
@@ -107,7 +107,7 @@ ACL 是允许与拒绝条件的集合，EMQX 中使用以下元素描述 ACL 规
 
 {% emqxce %}
 
-同时具有多条 ACL 规则时，EMQX 将按照规则排序进行合并，以 [ACL 文件](./acl-file.md) 中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
+同时具有多条 ACL 规则时，EMQX 将按照规则排序进行合并，以 [ACL 文件](./file.md) 中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
 
 {% endemqxce %}
 
@@ -157,7 +157,7 @@ acl_nomatch = allow
 
 {% emqxce %}
 
-配置默认 [ACL 文件](./acl-file.md)，使用文件定义默认 ACL 规则：
+配置默认 [ACL 文件](./file.md)，使用文件定义默认 ACL 规则：
 
 {% endemqxce %}
 
@@ -220,7 +220,7 @@ acl_cache_ttl = 1m
 
 在更新 ACL 规则后，某些客户端由于已经存在缓存，则无法立即生效。若要立即生效，则需手动清除所有的 ACL 缓存：
 
-参见 [HTTP API - 清除 ACL 缓存](http-api.md#endpoint-get-acl-cache)
+参见 [HTTP API - 清除 ACL 缓存](http.md#endpoint-get-acl-cache)
 
 
 ## ACL 鉴权链

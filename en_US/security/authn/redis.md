@@ -60,7 +60,7 @@ This is the data structure used by default configuration. After being familiar w
 
 ## Salting rules and hash methods
 
-Redis authentication supports the configuration of [salting rules and hash methods](./auth.md#password-salting-rules-and-hash-methods), and plaintext passwords are stored without processing by default:
+Redis authentication supports the configuration of [salting rules and hash methods](./authn.md#password-salting-rules-and-hash-methods), and plaintext passwords are stored without processing by default:
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf

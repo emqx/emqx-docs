@@ -7,7 +7,6 @@ Let's discuss data backup and restore for disaster recovery.
 ## Terminologies
 
 [Mnesia](https://en.wikipedia.org/wiki/Mnesia): The name of the built-in database inside each EMQX node.
-[Data export import](./data-import-and-export.md): A command line tool to support data export & import using a JSON file as the transient drop.
 
 ## Files
 
@@ -26,17 +25,7 @@ The config files are possibly located in below places, but it differ depending o
 
 ## Mnesia Database
 
-There are two approaches to create a backup of the Mnesia database.
-
-### Export 'mnesia' data
-
-The commands introduced in [Data import and export](./data-import-and-export.md),
-can be used backup the database to a JSON file using the export command,
-and restore whth the import command.
-
-When recovering a EMQX cluster from the exported file, the new EMQX cluster
-should be started with at empty state, and the import command should
-repopulate the database for all nodes in the cluster.
+The Mnesia database can be easily backed up while the cluster is running.
 
 ### Backup 'mnesia' dir
 

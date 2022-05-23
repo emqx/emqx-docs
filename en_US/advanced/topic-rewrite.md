@@ -2,7 +2,7 @@
 
 The topic rewrite function of EMQX Broker supports rewriting topic A to topic B when the client subscribes to topics, publishes messages, and unsubscribes according to user-configured rules.
 
-EMQX Broker's [retained message](./retained.md) and [delayed publish](./delay-publish.md) can be used in conjunction with topic rewriting. For example, when users want to use the delayed publish function, they can use topic rewrite function to rewrite the related topic to the topic format for delayed publication if it is not convenient for modifying the topic published by the client.
+EMQX Broker's [retained message](./retained.md) and [delayed publish](./delayed-publish.md) can be used in conjunction with topic rewriting. For example, when users want to use the delayed publish function, they can use topic rewrite function to rewrite the related topic to the topic format for delayed publication if it is not convenient for modifying the topic published by the client.
 
 Since the ACL check will be performed before the topic is rewritten, just make sure that the topic can pass the ACL check before rewriting.
 

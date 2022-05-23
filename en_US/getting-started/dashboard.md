@@ -20,7 +20,7 @@ When EMQX Broker runs successfully on your local computer and EMQX Dashboard is 
 
 ## Configure Dashboard
 
-You can view or modify the configuration of EMQX Dashboard in  `etc/plugins/emqx_dashboard.conf`. Note that `etc` here does not refer to the system directory, see [directory structure](directory.md#) for details.
+You can view or modify the configuration of EMQX Dashboard in  `etc/plugins/emqx_dashboard.conf`. Note that `etc` here does not refer to the system directory, see [directory structure](../deploy/dirs.md) for details.
 
 EMQX Dashboard configuration items can be divided into two parts of default user and listener:
 
@@ -32,9 +32,9 @@ It should be noted that once you change the password of the default user through
 
 **Listeners**
 
-EMQX Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners with a listening port of 18083 are enabled by default. For the introduction of Listeners, please refer to [Configuration Instructions](config.md#).
+EMQX Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners with a listening port of 18083 are enabled by default. For the introduction of Listeners, please refer to [Configuration Instructions](../admin/file.md).
 
-For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../configuration/configuration.md).
+For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../admin/file.md).
 
 ## Dashboard interface
 
@@ -57,7 +57,8 @@ EMQX Dashboard provides a very rich data monitoring project, that completely cov
 
 As the default display page of Dashboard, `Overview` provides detailed information of EMQX Broker ’s current nodes and key information of other nodes in the cluster to help users quickly get the status of each node.
 
-![image](../assets/dashboard-overview.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-overview.png)
 
 #### Clients
 
@@ -65,11 +66,13 @@ The `Clients` page provides a list of clients connected to the specified node, a
 
 The `Clients` page uses a snapshot to display the client list. Therefore, when the client status changes, the page does not automatically refresh, and you need to manually refresh the browser to get the latest client data.
 
-![image](../assets/dashboard-clients.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-clients.png)
 
 If you can not get the information you need in the client list, you can click `Client ID` to view the detailed information of the client.
 
-![image](../assets/dashboard-clients-basic-info.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-clients-basic-info.png)
 
 We divided the various fields in the client details into connection, session and metrics. The following is the description of each field:
 
@@ -121,13 +124,15 @@ Metric
 
 In the `Subscriptions` tab of the client details, you can view the subscription information of the current client, and create or cancel subscriptions:
 
-![image](../assets/dashboard-clients-subscriptions.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-clients-subscriptions.png)
 
 #### Subscriptions
 
 The `Subscriptions` page provides all subscription information under the specified node, and supports users to query all subscriptions of the specified client through the `Client ID`.
 
-![image](../assets/dashboard-subscriptions.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-subscriptions.png)
 
 ### RULE ENGINE
 
@@ -143,17 +148,20 @@ Currently, the EMQX Dashboard's `MANAGEMENT` navigation item mainly includes an 
 
 The `Plugins` page lists all the plug-ins that EMQX Broker can find, including the official plug-ins of EMQX and the plug-ins that you developed in accordance with the official standards of EMQX. You can check the current running status of the plug-ins and start and stop the plug-ins at any time on this page.
 
-![image](../assets/dashboard-plugins.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-plugins.png)
 
 You can see that in addition to [emqx-dashboard](https://github.com/emqx/emqx-dashboard), EMQX Broker will also start  other 4 plugins by default:
 
-![image](../assets/dashboard-running-plugins.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-running-plugins.png)
 
 #### Applications
 
 The `Applications` page lists the currently created applications. You can perform operations such as creating applications, temporarily disabling or starting access permissions for an application on this page. EMQX Broker will create a default application with AppID of `admin` and AppSecret of `publish` for users to access for the first time:
 
-![image](../assets/dashboard-applications.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-applications.png)
 
 You can click the `New App` button in the upper right corner of the `Application` page to create a new application, where AppID and AppSecret are required. After the creation is complete, you can click the `View` button to view the application details, and AppSecret will also be displayed in the details. The following is a description of the relevant fields:
 
@@ -174,13 +182,15 @@ Currently, the `TOOLS`  navigation item of EMQX Dashboard mainly includes WebSoc
 
 The `Websocket` page provides you with a simple but effective WebSocket client tool, which includes connection, subscription and publishing functions. At the same time, you can view the message data you send and receive, we hope it can help you quickly complete test verification of certain scenarios or functions:
 
-![image](../assets/dashboard-websocket.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-websocket.png)
 
 #### HTTP API
 
 The `HTTP API` page lists all the HTTP APIs currently supported by EMQX Broker and their descriptions:
 
-![image](../assets/dashboard-http-api.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-http-api.png)
 
 ### ADMIN
 
@@ -188,16 +198,19 @@ The `HTTP API` page lists all the HTTP APIs currently supported by EMQX Broker a
 
 You can view and manage users who can access and operate Dashboard on the `Users` page:
 
-![image](../assets/dashboard-users.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-users.png)
 
 #### Settings
 
 Currently, EMQX Dashboard only supports the modification of the topic and language settings:
 
-![image](../assets/dashboard-settings.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-settings.png)
 
 #### Help
 
 If you encounter any problems in using EMQX Broker, we provide you with links to FAQ and other documents on the `Help` page. If our existing documents still cannot solve your problem, you can go to our open source community on Github to consult our technical staff.
 
-![image](../assets/dashboard-help.png)
+<!-- TODO: Take new screenshot -->
+![image](./assets/dashboard-help.png)

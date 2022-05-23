@@ -142,7 +142,7 @@ db.mqtt_user.insert({
 
 ## 加盐规则与哈希方法
 
-MongoDB 认证支持配置[加盐规则与哈希方法](./auth.md#加盐规则与哈希方法)：
+MongoDB 认证支持配置[加盐规则与哈希方法](./authn.md#加盐规则与哈希方法)：
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf

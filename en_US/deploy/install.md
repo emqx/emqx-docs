@@ -16,7 +16,7 @@ EMQX binary packages are released on below operating systems:
 ## Package Installation (Linux)
 
 :::warning
-EMQX starts as `emqx@127.0.0.1` by default, the node name will be written
+EMQX starts as `emqx@127.0.0.1` by default and the node name will be written
 as a part of the builtin database.
 Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a different name.
 :::
@@ -81,7 +81,7 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
 ## tgz
 
 ::: warning
-tar.gz packages are released for quick testing and hot-beam upgrade.
+tar.gz packages are released for quick testing and hot-beam upgrades.
 Do NOT install tar.gz packages for production unless
 you know how to manually resolve all the runtime dependencies.
 :::
@@ -204,7 +204,7 @@ you know how to manually resolve all the runtime dependencies.
                      stopped_nodes => []}
    ```
 
-For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx) or [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
+For more information about EMQX Broker Docker please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx) or [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
 ## Install and cluster via Helm (K8S, K3S)
 

@@ -12,7 +12,7 @@ For specific usage of the HTTP API, see  the `/banned` API document.
 ::: tip
 The blacklist is only applicable to a small number of client bans.
 If there are a large number of clients requiring authentication management,
-please use the [authentication](./auth.md)  function.。
+please use the [authentication](./authn/authn.md)  function.。
 :::
 
 Based on the blacklist function, EMQX supports automatic banning of clients that are frequently

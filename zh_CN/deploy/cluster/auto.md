@@ -54,7 +54,7 @@ true
 
 可以看到 node2、node3、node4 都已与 node1 建立了分布式连接，四个节点组成了一个集群。注意每当一个新的节点加入集群时，它会与集群中所有的节点都建立一个 TCP 连接。至此，四个节点完成了如下图所示的网状结构:
 
-![image](../assets/cluster_1.png)
+![image](./assets/cluster_1.png)
 
 ### 安全
 
@@ -129,7 +129,7 @@ Erlang 集群中各节点可通过 TCPv4、TCPv6 或 TLS 方式连接，可在 `
 
 EMQX 分布式的基本功能是将消息转发和投递给各节点上的订阅者，如下图所示：
 
-![image](../assets/design_9.png)
+![image](../../assets/design_9.png)
 
 为实现此过程，EMQX 维护了几个与之相关的数据结构：订阅表，路由表，主题树。
 
@@ -172,7 +172,7 @@ topic3 -> node2, node4
 
 在所有订阅完成时，EMQX 中会维护如下主题树 (Topic Trie) 和路由表 (Route Table):
 
-![image](../assets/cluster_2.png)
+![image](./assets/cluster_2.png)
 
 ### 消息派发过程
 

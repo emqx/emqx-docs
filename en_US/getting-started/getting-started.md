@@ -129,8 +129,8 @@ simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 ## Start EMQX
 
-After the installation, you can start EMQX through via systemctl or the emqx binary directly.
-For more startup methods and precautions, please refer to [Starting EMQX](./start.md).
+After the installation, you can start EMQX through the command of systemctl or emqx.
+For more startup methods and precautions, keep reading below.
 
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
 (replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md)
@@ -255,9 +255,9 @@ and enabling authentication can effectively prevent malicious client connections
 Authorization rules, or Access Control List (ACL) can be configured to ensure only
 legitimate clients are permitted to publish or subscribe to certain topics.
 
-- [Authentication Introduction](../advanced/auth.md): Select a built-in plugin, to integrate
+- [Authentication Introduction](../security/authn/authn.md): Select a built-in plugin, to integrate
   with internal or external database, JWT or HTTP service as the authentication data source.
-- [Authorization / ACL](../advanced/acl.md): Select a built-in plugin, to integrate with
+- [Authorization / ACL](../security/authz/acl.md): Select a built-in plugin, to integrate with
   internal or external database, or HTTP service as the ACL data source.
 
 ### Rule Engine
@@ -280,40 +280,31 @@ HTTP API is a frequently used function in IoT platform development and EMQX oper
 maintenance. HTTP API facilitates integration with external systems, such as querying and
 managing client information, broker subscription, publishing messages and creating rules.
 
-- [HTTP API](../advanced/http-api.md): include HTTP API access point and access
+<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
+- HTTP API: include HTTP API access point and access
   authentication method.
-- [Basic Information](../advanced/http-api.md#endpoint-brokers): Get basic information such as
+- Basic Information: Get basic information such as
   EMQX version and running status.
-- [Node](../advanced/http-api.md#endpoint-nodes): Get the information for an EMQX node.
-- [Client](../advanced/http-api.md#endpoint-clients): View online client information and support
+- Node: Get the information of EMQX node.
+- Client: View online client information and support
   kicking out the client.
-- [Subscription Information](../advanced/http-api.md#endpoint-subscriptions): View the
+- Subscription Information: View the
   subscription topic list and subscription relationship.
-- [Routes](../advanced/http-api.md#endpoint-routes): View subscribed topics.
-- [Message Publishing](../advanced/http-api.md#endpoint-publish): Call EMQX through HTTP to
+- Routes: View subscribed topics.
+- Message Publishing: Call EMQX through HTTP to
   publish MQTT messages, with a reliable way for applications to communicate with clients.
-- [Topic Subscription](../advanced/http-api.md#endpoint-subscribe): Dynamically manage the client
+- Topic Subscription: Dynamically manage the client
   subscription list, without the need for the client to actively initiate
   subscription/unsubscription.
-- [Plugins](../advanced/http-api.md#endpoint-plugins): Status management of plugins with
+- Plugins: Status management of plugins with
   start and stop operations.
 
 ### Operation, maintenance and deployment
 
 For official usage guidelines and best practices please read the following guides.
 
-- [Device Management](../tutorial/device-management.md)
-- [System Tuning](../tutorial/tune.md)
-- [Production Deployment](../tutorial/deploy.md)
-- [Prometheus Monitoring and alert](../tutorial/prometheus.md)
-- [Benchmark](../tutorial/benchmark.md)
-
-### FAQ
-
-In [FAQ (Frequently Asked Questions)](../faq/faq.md), we regularly collect and sort out the
-common problems and frequently encountered errors of EMQX users, such as topic number limit,
-external resource connection errors, startup failure reasons, etc.
-
-In addition, you can visit [EMQ Q&A Community](https://askemq.com/) to put forward and answer
-questions about the use of EMQX and EMQ-related products, and exchange experience of IoT-related
-technologies with EMQX users.
+<!-- - [Device Management](../tutorial/device-management.md) -->
+- [System Tuning](../deploy/tune.md)
+- [Production Deployment](../deploy/install.md)
+- [Prometheus Monitoring and alert](../observability/prometheus.md)
+- [Benchmark](../verif/benchmark.md)

@@ -119,7 +119,7 @@ This is the collection structure used by default configuration. After being fami
 
 ## Salting rules and hash methods
 
-MongoDB authentication support to configure [Salting rules and hash methods](./auth.md#password-salting-rules-and-hash-methods)：
+MongoDB authentication support to configure [Salting rules and hash methods](./authn.md#password-salting-rules-and-hash-methods)：
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf

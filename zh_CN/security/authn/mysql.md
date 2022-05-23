@@ -73,7 +73,7 @@ VALUES
 
 ## 加盐规则与哈希方法
 
-MySQL 认证支持配置[加盐规则与哈希方法](./auth.md#加盐规则与哈希方法)：
+MySQL 认证支持配置[加盐规则与哈希方法](./authn.md#加盐规则与哈希方法)：
 
 ```bash
 # etc/plugins/emqx_auth_mysql.conf

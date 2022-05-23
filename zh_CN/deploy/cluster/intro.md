@@ -80,7 +80,7 @@ connection with all the nodes in the cluster.
 
 At this point, the four nodes have completed the mesh structure shown in the following figure:
 
-![image](../../assets/cluster_1.png)
+![image](./assets/cluster_1.png)
 
 ## EMQX Broker Distributed cluster design
 
@@ -134,7 +134,7 @@ The following topic-subscription relationship is an example:
 
 When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
 
-![image](../../assets/cluster_2.png)
+![image](./assets/cluster_2.png)
 
 ### Message Distribution Process
 
@@ -228,6 +228,6 @@ after the configured time interval.
 
 After a bit of learning, it's time to start clustering EMQX nodes.
 
-* Learn more about the [security](./cluster-security.md) aspects of EMQX clusters.
-* The classic [Manual clustering](./cluster-manual.md)
-* The smarter [Auto clustering](./cluster-auto.md)
+* Learn more about the [security](./security.md) aspects of EMQX clusters.
+* The classic [Manual clustering](./manual.md)
+* The smarter [Auto clustering](./auto.md)

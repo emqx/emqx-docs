@@ -213,8 +213,8 @@ MQTT 客户端库接入示例工程项目代码，涵盖
 
 身份认证与是大多数应用的重要组成部分，启用身份认证能有效阻止非法客户端的连接。发布订阅 ACL 可以对客户端发布 /订阅操作进行权限控制。
 
-- [认证简介](../advanced/auth.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
-- [发布订阅 ACL](../advanced/acl.md)：选择内置插件、外部数据库、或者 HTTP 服务作为 ACL 数据源，验证客户端发布订阅权限。
+- [认证简介](../security/authn/authn.md)：选择内置插件、外部数据库、JWT 或者 HTTP 服务作为认证数据源，验证客户端连接合法性。
+- [发布订阅 ACL](../security/authz/acl.md)：选择内置插件、外部数据库、或者 HTTP 服务作为 ACL 数据源，验证客户端发布订阅权限。
 
 ### 规则引擎
 
@@ -245,10 +245,10 @@ HTTP API 是物联网平台开发与 EMQX 运维中频繁使用的功能，HTTP 
 包含官方使用指南、最佳实践等信息。
 
 - [设备管理](../tutorial/device-management.md)
-- [系统调优](../tutorial/tune.md)
+- [系统调优](../deploy/tune.md)
 - [生产部署](../tutorial/deploy.md)
-- [Prometheus 监控告警](../tutorial/prometheus.md)
-- [性能测试](../tutorial/benchmark.md)
+- [Prometheus 监控告警](../observability/prometheus.md)
+- [性能测试](../verif/benchmark.md)
 
 ### 常见问题解答
 

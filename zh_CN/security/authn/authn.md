@@ -34,7 +34,7 @@ EMQX 支持的认证方式：
 
 {% emqxce %}
 
-* [Mnesia (用户名/Client ID）认证](./auth-mnesia.md)
+* [Mnesia (用户名/Client ID）认证](./mnesia.md)
 
 {% endemqxce %}
 
@@ -58,11 +58,11 @@ EMQX 支持的认证方式：
 
 {% emqxce %}
 
-* [LDAP 认证](./auth-ldap.md)
-* [MySQL 认证](./auth-mysql.md)
-* [PostgreSQL 认证](./auth-postgresql.md)
-* [Redis 认证](./auth-redis.md)
-* [MongoDB 认证](./auth-mongodb.md)
+* [LDAP 认证](./ldap.md)
+* [MySQL 认证](./mysql.md)
+* [PostgreSQL 认证](./postgresql.md)
+* [Redis 认证](./redis.md)
+* [MongoDB 认证](./mongodb.md)
 
 {% endemqxce %}
 
@@ -83,8 +83,8 @@ EMQX 支持的认证方式：
 
 {% emqxce %}
 
-* [HTTP 认证](./auth-http.md)
-* [JWT 认证](./auth-jwt.md)
+* [HTTP 认证](./http.md)
+* [JWT 认证](./jwt.md)
 
 {% endemqxce %}
 
@@ -94,7 +94,7 @@ JWT 认证可以批量签发认证信息，HTTP 认证能够实现复杂的认�
 
 ::: tip 
 
-更改插件配置后需要重启插件才能生效，部分认证鉴权插件包含 [ACL 功能](./acl.md)。
+更改插件配置后需要重启插件才能生效，部分认证鉴权插件包含 [ACL 功能](../authz/acl.md)。
 
 :::
 

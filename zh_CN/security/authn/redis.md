@@ -63,7 +63,7 @@ HMSET mqtt_user:emqx
 
 ## 加盐规则与哈希方法
 
-Redis 认证支持配置[加盐规则与哈希方法](./auth.md#加盐规则与哈希方法)，默认存储明文密码不做处理：
+Redis 认证支持配置[加盐规则与哈希方法](./authn.md#加盐规则与哈希方法)，默认存储明文密码不做处理：
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf

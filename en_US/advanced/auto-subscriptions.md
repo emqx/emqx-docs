@@ -3,7 +3,8 @@
 The proxy subscription function of EMQX Broker allows the client to automatically establish the user's preset subscription relationship without sending additional SUBSCRIBE packets when the connection is established.
 
 ::: tip
-You can use the Http API to subscribe and unsubscribe to connected devices, see [topic subscription](./http-api.md#endpoint-subscribe) and  [topic unscription](./http-api.md#endpoint-do-unsubscribe)
+<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
+You can use the Http API to subscribe and unsubscribe to connected devices, see topic subscription and  topic unscription
 :::
 
 
