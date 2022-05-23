@@ -6,23 +6,27 @@
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
 
-![image-20200928161310952](./assets/modules.png)
+![Modules](./assets/modules.png)
 
 Click "Select", and then select the JWT authentication module
 
-![image-20200928141305205](./assets/auth_jwt1.png)
+![Modules JWT Selected](./assets/auth_jwt1.png)
 
 You need to configure the basic connection parameter table such as JWT key, authentication source, and public key (optional).
 
-![image-20200928141327836](./assets/auth_jwt2.png)
+![JWT Module Settings](./assets/auth_jwt2.png)
 
 If you need to add custom verification fields, you can refer to the following configuration:
 
-![image-20200928141558866](./assets/auth_jwt3.png)
+![JWT Module Claims](./assets/auth_jwt3.png)
+
+You can also set claim name for ACL rules:
+
+![JWT Module ACL Claim Name](./assets/auth_jwt31.png)
 
 Finally, click the "Add" button to add the module successfully.
 
-![image-20200928141558866](./assets/auth_jwt4.png)
+![Modules JWT Added](./assets/auth_jwt4.png)
 
 ## Authentication principle
 

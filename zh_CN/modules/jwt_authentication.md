@@ -6,23 +6,27 @@
 
 打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
-![image-20200928161310952](./assets/modules.png)
+![Modules](./assets/modules.png)
 
 点击"选择",然后选择 JWT 认证模块
 
-![image-20200928141305205](./assets/auth_jwt1.png)
+![Modules JWT Selected](./assets/auth_jwt1.png)
 
 需要配置JWT密钥，认证源，公钥（可选）等基本连接参数表。
 
-![image-20200928141327836](./assets/auth_jwt2.png)
+![JWT Module Settings](./assets/auth_jwt2.png)
 
 如果需要添加自定义验证字段，可参考如下配置：
 
-![image-20200928141558866](./assets/auth_jwt3.png)
+![JWT Module Claims](./assets/auth_jwt3.png)
+
+您还可以为 ACL 规则设置声明名称：
+
+![JWT Module ACL Claim Name](./assets/auth_jwt31.png)
 
 最后点击“添加”按钮模块即可添加成功。
 
-![image-20200928141558866](./assets/auth_jwt4.png)
+![Modules JWT Added](./assets/auth_jwt4.png)
 
 ## 认证原理
 

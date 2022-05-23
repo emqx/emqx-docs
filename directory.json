@@ -200,6 +200,10 @@
           "path": "advanced/acl-http"
         },
         {
+          "title": "JWT",
+          "path": "advanced/acl-jwt"
+        },
+        {
           "title": "MySQL ACL",
           "path": "advanced/acl-mysql"
         },
@@ -676,6 +680,10 @@
         {
           "title": "HTTP ACL",
           "path": "advanced/acl-http"
+        },
+        {
+          "title": "JWT",
+          "path": "advanced/acl-jwt"
         },
         {
           "title": "MySQL ACL",
