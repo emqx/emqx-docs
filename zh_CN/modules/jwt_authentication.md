@@ -20,7 +20,7 @@
 
 ![JWT Module Claims](./assets/auth_jwt3.png)
 
-您还可以为 ACL 规则设置声明名称：
+还可以设置 JWT 所携带的 ACL 规则的字段名称：
 
 ![JWT Module ACL Claim Name](./assets/auth_jwt31.png)
 

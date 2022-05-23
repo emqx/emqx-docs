@@ -33,10 +33,10 @@ emqx_auth_jwt
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGUiOiJodHRwczovL3dpdndpdi5jb20ifSwiZXhwIjoxNTgyMjU1MzYwNjQyMDAwMCwiaWF0IjoxNTgyMjU1MzYwfQ.FdyAx2fYahm6h3g47m88ttyINzptzKy_speimyUcma4
 ```
 
-## JWT 授权
+## JWT ACL
 
 JWT 身份验证插件可以从身份验证令牌中提取 ACL 规则。 后面会用到这些 ACL 规则
-授权客户的行动。 请参阅 [JWT ACL](./acl-jwt.md)。
+授权客户的发布/订阅操作。 请参阅 [JWT ACL](./acl-jwt.md)。
 
 ## 配置项
 

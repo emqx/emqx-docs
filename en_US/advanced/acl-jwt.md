@@ -93,5 +93,6 @@ a client with an expired JWT has to reconnect with a fresh JWT.
 To make ACL rules valid forever, a client may not provide `exp` claim at all.
 
 ::: warning
-Using long-living JWTs is not considered secure.
+1. Using long-living JWTs is not considered secure.
+2. Turning on ACL caching may invalidate the expiration time check.
 :::
