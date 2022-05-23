@@ -2417,7 +2417,7 @@ EMQX 软件许可管理。
 上传一个许可证文件。
 
 ```sh
-$ curl -XPOST --basic -u admin:public -d @<(jq -sR < path/to/new.license) 'http://localhost:8081/api/v4/license/upload'
+$ curl -XPOST --basic -u admin:public -d @<(jq -sR '{license: .}' < path/to/new.license) 'http://localhost:8081/api/v4/license/upload'
 
 {"code":0,"message":"ok"}
 ```
