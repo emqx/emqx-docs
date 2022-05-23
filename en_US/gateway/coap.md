@@ -1,38 +1,38 @@
-# CoAP Protocol Gateway
+# CoAP 协议网关
 
-The CoAP protocol gateway provides EMQX with the access capability of the CoAP protocol. It allows publishing, subscribing, and receiving messages to EMQX in accordance with a certain defined CoAP message format.
+CoAP 协议网关为 EMQX 提供了 CoAP 协议的接入能力。它允许符合某种定义的 CoAP 消息格式向 EMQX 执行发布，订阅，和接收消息等操作。
 
-## Create module
+## 创建模块
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200928161310952](./assets/modules.png)
 
-Click "Select", and then select "CoAP Access Gateway":
+点击 “选择”，然后选择 “CoAP 接入网关”：
 
 ![Create CoAP Protocol Gateway](./assets/coap_add.jpg)
 
-Configure related basic parameters:
+配置相关基础参数：
 
 ![Configure CoAP Protocol Gateway](./assets/coap_conf1.jpg)
 
-Add listening port:
+添加监听端口：
 
 ![Configure CoAP Protocol Gateway](./assets/coap_conf2.jpg)
 
-Configure monitoring parameters:
+配置监听参数：
 
 ![Configure CoAP Protocol Gateway](./assets/coap_conf3.jpg)
 
-Click "OK" to complete the configuration of the listener, and then click "Add" to complete the creation of the module:
+点击 “确定” 完成监听器的配置，然后点击 “添加” 完成模块的创建： 
 
 ![Complete CoAP Protocol Gateway](./assets/coap_conf4.jpg)
 
-## Usage example
+## 使用示例
 
-### Client
+### 客户端
 
-[libcoap](http://github.com/obgm/libcoap) is a very easy-to-use CoAP client library. Here we use it as a CoAP client to test the function of EMQX CoAP access gateway.
+[libcoap](http://github.com/obgm/libcoap) 是一个非常易用的 CoAP 客户端库，此处我们使用它作为 CoAP 客户端来测试 EMQX CoAP 接入网关的功能。
 
 ```
 git clone http://github.com/obgm/libcoap
@@ -42,138 +42,138 @@ cd libcoap
 make
 ```
 
-### PUBLISH example
+### PUBLISH 示例
 
-Use `libcoap` to post a message:
+使用 `libcoap` 发布一条消息：
 
 ```bash
-libcoap/examples/coap-client -m put -e 1234 "coap://127.0.0.1/mqtt/topic1?c=client1&u=tom&p=secret"
+libcoap/examples/coap-client -m put -e 1234  "coap://127.0.0.1/mqtt/topic1?c=client1&u=tom&p=secret"
 ```
 
--The topic name is: "topic1" (not "/topic1")
--Client ID is: "client1"
--Username: "tom"
--The password is: "secret"
--Payload is: "1234"
+- 主题名称为："topic1"  (不是 "/topic1")
+- Client ID 为："client1"
+- 用户名为："tom"
+- 密码为："secret"
+- Payload 为："1234"
 
-### SUBSCRIBE example
+### SUBSCRIBE 示例
 
-Use `libcoap` to subscribe to a topic:
+使用 `libcoap` 订阅一个主题：
 
 ```
 libcoap/examples/coap-client -m get -s 10 "coap://127.0.0.1/mqtt/topic1?c=client1&u=tom&p=secret"
 ```
 
--The topic name is: "topic1" (not "/topic1")
--Client ID is: "client1"
--Username: "tom"
--The password is: "secret"
--Duration of subscription: 10 seconds
+- 主题名称为："topic1"  (不是 "/topic1")
+- Client ID 为："client1"
+- 用户名为："tom"
+- 密码为："secret"
+- 订阅的持续时间为：10 秒
 
-During this period, if a message is generated on the topic of `topic1`, `libcoap` will receive the message.
+在这个期间，如果 `topic1` 主题上有消息产生，`libcoap` 便会收到该条消息。
 
-### Communication interface description
+### 通信接口说明
 
 #### CoAP Client Observe Operation
 
-In the EMQX CoAP access gateway, you can use the Observe operation of CoAP to implement a topic subscription operation:
+在 EMQX CoAP 接入网关中，可以使用 CoAP 的 Observe 操作实现一个订阅主题的操作：
 
 ```
-GET coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password} with OBSERVE=0
+GET  coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password}    with OBSERVE=0
 ```
 
--"Mqtt" in the path is required
--Replace {topicname}, {clientid}, {username} and {password} with your real values
--{topicname} and {clientid} are required
--If clientid does not exist, "bad_request" will be returned
--{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
--{username} and {password} are optional
--If {username} and {password} are incorrect, an unauthorized error will be returned
--The subscribed QoS level is always 1
+- 路径中的 "mqtt "为必填项
+- 将 {topicname}、{clientid}、{username} 和 {password} 替换为你的真实值
+- {topicname} 和 {clientid} 为必填项
+- 如果 clientid 不存在，将返回 "bad_request"
+- URI 中的 {topicname} 应该用 percent-encoded，以防止特殊字符，如 + 和 #
+- {username} 和 {password} 是可选的
+- 如果 {username} 和 {password} 不正确，将返回一个 uauthorized 错误
+- 订阅的 QoS 等级恒定为 1
 
 
 #### CoAP Client Unobserve Operation
 
-Use the Unobserve operation to unsubscribe the topic:
+使用 Unobserve 操作，取消订阅主题：
 
 ```
-GET coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password} with OBSERVE=1
+GET  coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password}    with OBSERVE=1
 ```
 
--"Mqtt" in the path is required
--Replace {topicname}, {clientid}, {username} and {password} with your real values
--{topicname} and {clientid} are required
--If clientid does not exist, "bad_request" will be returned
--{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
--{username} and {password} are optional
--If {username} and {password} are incorrect, an unauthorized error will be returned
+- 路径中的 "mqtt "为必填项
+- 将 {topicname}、{clientid}、{username} 和 {password} 替换为你的真实值
+- {topicname} 和 {clientid} 为必填项
+- 如果 clientid 不存在，将返回 "bad_request"
+- URI 中的 {topicname} 应该用 percent-encoded，以防止特殊字符，如 + 和 #
+- {username} 和 {password} 是可选的
+- 如果 {username} 和 {password} 不正确，将返回一个 uauthorized 错误
 
 #### CoAP Client Notification Operation
 
-The access gateway will receive the message on the subscription topic and deliver it to the CoAP client in the form of Observe-notification:
+接入网关会将订阅主题上收到到消息，以 `observe-notification` 的方式投递到 CoAP 客户端：
 
 
--Its payload is exactly the payload in the MQTT message
--The payload data type is "application/octet-stream"
+- 它的 payload 正是 MQTT 消息中的的 payload
+- payload 数据类型为 "application/octet-stream"
 
 
 #### CoAP Client Publish Operation
 
-Use CoAP PUT command to perform a PUBLISH operation:
+使用 CoAP 的 PUT 命令执行一次 PUBLISH 操作：
 
 ```
-PUT coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password}
+PUT  coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password}
 ```
--"Mqtt" in the path is required
--Replace {topicname}, {clientid}, {username} and {password} with your real values
--{topicname} and {clientid} are required
--If clientid does not exist, "bad_request" will be returned
--{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
--{username} and {password} are optional
--If {username} and {password} are incorrect, an unauthorized error will be returned
--The payload can be any binary data
--The payload data type is "application/octet-stream"
--Post information will be sent as qos0
+- 路径中的 "mqtt "为必填项
+- 将 {topicname}、{clientid}、{username} 和 {password} 替换为你的真实值
+- {topicname} 和 {clientid} 为必填项
+- 如果 clientid 不存在，将返回 "bad_request"
+- URI 中的 {topicname} 应该用 percent-encoded，以防止特殊字符，如 + 和 #
+- {username} 和 {password} 是可选的
+- 如果 {username} 和 {password} 不正确，将返回一个 uauthorized 错误
+- payload 可以是任何二进制数据
+- payload 数据类型为 "application/octet-stream"
+- 发布信息将以 qos0 发送
 
 
-#### CoAP Client Keep Alive
+#### CoAP Client 保活
 
-The device should periodically issue GET commands as a ping operation to keep the session online
+设备应定期发出 GET 命令，作为 ping 操作保持会话在线
 
 ```
-GET coap://localhost/mqtt/{any_topicname}?c={clientid}&u={username}&p={password}
+GET  coap://localhost/mqtt/{any_topicname}?c={clientid}&u={username}&p={password}
 ```
 
--"Mqtt" in the path is required
--Replace {topicname}, {clientid}, {username} and {password} with your real values
--{topicname} and {clientid} are required
--If clientid does not exist, "bad_request" will be returned
--{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
--{username} and {password} are optional
--If {username} and {password} are incorrect, an unauthorized error will be returned
--The client should do keepalive work regularly to keep the session online, especially for devices in the NAT network
+- 路径中的 "mqtt "为必填项
+- 将 {topicname}、{clientid}、{username} 和 {password} 替换为你的真实值
+- {topicname} 和 {clientid} 为必填项
+- 如果 clientid 不存在，将返回 "bad_request"
+- URI 中的 {topicname} 应该用 percent-encoded，以防止特殊字符，如 + 和 #
+- {username} 和 {password} 是可选的
+- 如果 {username} 和 {password} 不正确，将返回一个 uauthorized 错误
+- 客户端应该定期做 keepalive 工作，以保持会话在线，尤其是在 NAT 网络中的设备
 
 
-### Remarks
+### 备注
 
-CoAP access gateway does not support `POST` and `DELETE` methods.
+CoAP 接入网关不支持 `POST` 和 `DELETE` 方法。
 
-The subject name in the URI must be URI encoded first (reference: RFC 7252-section 6.4)
+在 URI 中的主题名称必须先经过 URI 编码处理(参考：RFC 7252 - section 6.4)
 
-ClientId, Username, Password, Topic in CoAP URI are concepts in MQTT. In other words, the CoAP access gateway tries to incorporate CoAP information into the MQTT system by borrowing the concept of nouns in MQTT.
+CoAP URI 中的 ClientId, Username, Password, Topic是 MQTT 中的概念。也就是说，CoAP 接入网关是通过借用 MQTT 中的名词概念，试图将 CoAP 信息融入到 MQTT 系统中。
 
-The authentication, access control, hook and other functions of EMQX are also applicable to the CoAP access gateway. such as:
+EMQX 的 认证，访问控制，钩子等功能也适用于 CoAP 接入网关。比如：
 
--If the username/password is not authorized, the CoAP client will get an `unauthorized` error
--If the username/client ID is not allowed to publish a specific topic, the CoAP message will actually be discarded, although the CoAP client will get an Acknowledgement from the access gateway
--If a CoAP message is published, `message.publish` hook can also capture this message
+- 如果 用户名/密码 没有被授权, CoAP 客户端就会得到一个 `uauthorized` 的错误
+- 如果 用户名/客户端ID 不允许发布特定的主题，CoAP 消息实际上会被丢弃，尽管 CoAP 客户端会从接入网关上得到一个 Acknoledgement
+- 如果一个 CoAP 消息被发布，'message.publish' 钩子也能够捕获这个消息
 
 ### Well-known locations
 --------------------
 
-The well-known of the CoAP access gateway found constant return "</mqtt>,</ps>"
+CoAP 接入网关的 well-known 发现恒定的返回 "</mqtt>,</ps>"
 
-E.g:
+例如：
 ```
 libcoap/examples/coap-client -m get "coap://127.0.0.1/.well-known/core"
 ```

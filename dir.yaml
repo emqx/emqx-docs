@@ -142,15 +142,16 @@
 
 ## Device connectivity
 
-#- title_en: Gateway
-#  title_cn: 网关
-#  children:
-#    - gateway/lwm2m
-#    - gateway/mqtt_sn
-#    - gateway/tcp
-#    - gateway/jt808
-#    - gateway/coap
-#    - gateway/stomp
+- title_en: Gateway
+  title_cn: 网关
+  children:
+    - gateway/intro
+    - gateway/lwm2m
+    - gateway/mqttsn
+    - gateway/coap
+    - gateway/stomp
+    #- gateway/jt808
+    #- gateway/tcp
 
 - title_en: Advanced MQTT Features
   title_cn: MQTT 高级特性

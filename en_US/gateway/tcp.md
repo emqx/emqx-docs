@@ -1,8 +1,8 @@
-# TCP protocol gateway
+# TCP 协议网关
 
-## Protocol Introduction
+## 协议介绍
 
-EMQX provides the **emqx-tcp** module as an access module close to the end side. According to the relationship between its functional logic and the entire system, the entire message exchange process can be divided into three parts: terminal side, platform side and Other side:
+EMQX 提供 **emqx-tcp** 模块作为一个靠近端侧的一个接入模块，按照其功能逻辑和整个系统的关系，将整个消息交换的过程可以分成三个部分：终端侧，平台侧和其它侧：
 
 ```bash
 |<-- Terminal -->|<--------- Broker Side --------->|<---  Others  --->|
@@ -18,48 +18,243 @@ EMQX provides the **emqx-tcp** module as an access module close to the end side.
 +---+
 ```
 
-1. On the terminal side, access through the TCP private protocol defined by this module, and then implement data reporting or receive downlink messages.
-2. On the platform side, the main body is the emqx-tcp module and the EMQX system. emqx-tcp is responsible for the encoding and decoding of messages, and the agent subscribes to downlink topics. Realize to convert the uplink message into the MQTT message PUBLISH in the EMQX system to the entire system; convert the downlink MQTT message into the message structure of the TCP private protocol, and send it to the terminal.
-3. The other side can subscribe to the topic of the upstream PUBLISH message appearing in 2 to receive the upstream message. Or to publish a message to a specific downlink topic to send data to the terminal side.
+1. 终端侧，通过本模块定义的 TCP 私有协议进行接入，然后实现数据的上报，或者接收下行的消息。
+2. 平台侧，主体是 emqx-tcp 模块和  EMQX 系统。emqx-tcp 负责报文的编解码，代理订阅下行主题。实现将上行消息转为 EMQX 系统中的 MQTT 消息 PUBLISH 到整个系统中；将下行的 MQTT 消息转化为 TCP 私有协议的报文结构，下发到终端。
+3. 其它侧，可以对 2 中出现的上行的 PUBLISH 消息的主题进行订阅，以接收上行消息。或对发布消息到具体的下行的主题，以发送数据到终端侧。
 
-## Create module
+## 创建模块
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
 
 ![image-20200927213049265](./assets/modules.png)
 
-Select TCP private protocol to access the gateway:
+选择 TCP 私有协议接入网关:
 
 ![image-20200927213049265](./assets/proto_tcp1.png)
 
-Configure related basic parameters:
+配置相关基础参数:
 
 ![image-20200927213049265](./assets/proto_tcp2.png)
 
-Add listening port:
+添加监听端口:
 
 ![image-20200927213049265](./assets/proto_tcp3.png)
 
-Configure monitoring parameters:
+配置监听参数:
 
 ![image-20200927213049265](./assets/proto_tcp4.png)
 
-Click to confirm to the configuration parameter page:
+点击确认到配置参数页面:
 
 ![image-20200927213049265](./assets/proto_tcp5.png)
 
-After clicking Add, the module is added:
+点击添加后，模块添加完成:
 ![image-20200927213049265](./assets/proto_tcp6.png)
 
-### Configuration parameters
+### 配置参数
+
+| 配置项                      |       说明                           |
+| --------------------------- | ---------------------------------- |
+| 空闲超时时间            | 闲置时间。超过该时间未收到 CONNECT 帧, 将直接关闭该 TCP 连接 |
+| 上行主题            | 上行主题。上行消息到 EMQ 系统中的消息主题%c: 接入客户端的 ClientId,%u: 接入客户端的 Username|
+| 下行主题            | 下行主题。上行消息到 EMQ 系统中的消息主题%c: 接入客户端的 ClientId,%u: 接入客户端的 Username|
+| 报文最大长度            | 最大处理的单个 TCP 私有协议报文大小           |
+| 强制 GC 策略            | 强制 GC, 当进程已处理 1000 消息或发送数据超过 1M           |
+| 强制关闭策略            | 强制关闭连接, 当进程堆积 8000 消息或堆栈内存超过 800M           |
 
 
 
-| Configuration         | Description                                                  |
-| --------------------- | ------------------------------------------------------------ |
-| Idle Timeout          | Idle time. If the CONNECT frame is not received after this time, the TCP connection will be closed directly |
-| Uplink Topic          | Up topic. Uplink message to the message subject in the EMQ system%c: ClientId of the access client, %u: Username of the access client |
-| Downlink Topic        | Down topic. Uplink message to the message subject in the EMQ system%c: ClientId of the access client, %u: Username of the access client |
-| Max Packet Size       | Maximum processing size of a single TCP private protocol message |
-| Force GC Policy       | Mandatory GC, when the process has processed 1000 messages or sent more than 1M data |
-| Force Shutdown Policy | Forced to close the connection, when the process accumulates 8000 messages or the stack memory exceeds 800M |
+## 私有 TCP 协议 - v1
+
+### 设计准则
+
+私有 TCP 协议的设计原则有三:
+1. **轻量**: 尽量减少头部、控制字段的字节大小
+2. **简洁**: 私有 TCP 协议，主要功能定位在透传上层应用/协议的数据报文。所以功能应当简洁，专注透明传输即可
+3. **可靠**: 保证消息有序可达
+
+
+
+### 报文结构
+
+报文主要有俩部分构成: **固定头部(FixedHeader)** + **有效载荷(Payload)**
+
+其中固定头部固定 1 字节；有效载荷为变长，且前面有 2 个字节标识整个 Payload 的长度:
+
+```bash
+         1 Byte         2 Bytes        N Bytes
+    +--------------+----------------+--------------+
+    | Fixed Header | Len of Payload |  Payload     |
+    +--------------+----------------+--------------+
+```
+**部分类型报文中不含 Payload; 则整个报文仅只有 1 个字节的固定头部**
+
+#### 数据类型
+
+本协议设计到的数据类型
+
+| Name    | Bytes | Description                                                  |
+| ------- | ----- | ------------------------------------------------------------ |
+| UINT(x) | x     | 固定 x 字节的 无符号整型                                     |
+| BIN(n)  | 变长  | 带 2 字节标示长度的变长二进制。n 取值为 0 到 65535 **内容为空时，需使用 2 个字节，来标识长度值0** |
+| STR(n)  | 变长  | 带 2 字节标示长度的变长字符串。n 取值为 0 到 65535; 空串表达方式同上。 |
+| BIN     | _     | 不带长度标识的二进制串                                       |
+
+
+
+#### 固定头部
+
+固定头部有俩部分组成:  **帧类型**、**标志位**
+
+```bash
+       7     6     5     4    3    2    1    0
+    +------------------------------------------+
+    |        4 Bits        |      4 Bits       |
+    +------------------------------------------+
+    |<--   Frame Type   -->|<--    Flags    -->|
+```
+
+**帧类型(Frame Type)** 有以下几种可选值
+
+| Name       | Value | Direction of Flow  | Description  |
+| ---------- | ----- | ------------------ | ------------ |
+| CONNECT    | 1     | Client --> Server  | 连接报文     |
+| CONNACK    | 2     | Server --> Client  | 连接应答     |
+| DATATRANS  | 3     | Client <==> Server | 透明传输     |
+| PING       | 4     | Client --> Server  | 心跳报文     |
+| PONG       | 5     | Server --> Client  | 心跳应答     |
+| DISCONNECT | 6     | Client --> Server  | 主动断开连接 |
+| Reserved   | 7-15  | 保留               | 保留字段     |
+
+
+**标志位(Flags)** 针对每个类型的报文，标志位代表的含义都不相同。
+
+
+
+### 报文详解
+
+#### CONNECT 帧
+连接报文. **帧类型为 2#0001**. 标志位 4 Bits 代表协议 **版本号(Version)** 目前为 1 即 2#0001。因此 CONNECT 帧固定头部为 **0x11**
+
+
+而，Payload 中包含连接用的所有字段。则必须按照以下顺序给出，否则为非法报文，立即断开 TCP 链接：
+
+```bash
+    Len       Keepalive[x] ClientId[x]  Username  Password
+    UINT(2)   UINT(1)      STR(n)       STR(n)    STR(n)
+```
+
+
+
+其中 Keepalive 和 ClientId 为必填字段；Username 与 Password 可不带。
+
+因此，一个 Keepalive 为 60; ClientId 为 'abcd'; Username 和 Password 均为空时，报文的内容为:
+
+```bash
+    0x11 00 07 3c 00 04 61 62 63 64
+```
+
+
+若是 Username 和 Password 不为空且假设都为 'abcd' 的情况下，报文内容为:
+
+```bash
+    0x11 00 13 3c 00 04 61 62 63 64 00 04 61 62 63 64 00 04 61 62 63 64
+```
+
+
+
+#### CONNACK 帧
+
+连接应答报文. **帧类型为 2#0010**. 标志位 4 Bits 为应答连接结果(ACK Code)。可以为以下枚举值：
+
+| Name       | Value | Description      |
+| ---------- | ----- | ---------------- |
+| SUCCESSFUL | 0     | 连接成功         |
+| AUTHFAILED | 1     | 认证失败         |
+| ILLEGALVER | 2     | 不支持的协议版本 |
+| Reserved   | 3-15  | 保留字段         |
+
+
+
+而，Payload 字段，为连接应答后传递的 **Message**; 该串可为空串。
+
+```bash
+Message
+STR(n)
+```
+
+所以，当连接成功时，并返回 ``Connect Sucessfully`` 时，报文内容为:
+
+```bash
+    0x20 00 14 43 6f 6e 6e 65 63 74 20 53 75 63 63 65 73 73 66 75 6c 6c 79
+```
+
+若是，返回 ``认证失败`` 且 Message 为空时::
+
+```bash
+    0x21 00 00
+```
+
+
+#### DATATRANS 帧
+
+数据传输帧. **帧类型为 2#0011**. 标志位 前 2 Bits 表达 **消息质量等级(Qos)** 目前恒为0；后两位为保留位。所以DATATRANS **帧固定头部恒为 0x30**
+
+Payload 内容为为透传的 **数据字段**
+
+```bash
+Len     Payload
+UINT(2) BIN
+
+```
+
+
+注：由于 Len 固定为 2 字节，所以最大仅支持 65535 字节的负载。
+
+因此，如果透传 ``abcd`` 这个字符串时，该报文的内容为:
+
+```bash
+    0x30 00 04 61 62 63 63
+
+```
+
+
+
+#### PING 帧
+
+心跳帧. **帧类型为 2#0100**. 标志位 Flags 固定为 0。即固定头部 **固定为：0x40**
+
+Payload 为空
+
+因此，一个 PING 帧仅有一个字节:
+
+```bash
+    0x40
+
+```
+
+
+
+#### PONG 帧
+
+心跳应答帧. **帧类型为 2#0101**. 标志位 Flags 固定为 0。即固定头部 **固定为：0x50**
+
+Payload 为空
+
+因此，一个 PONG 帧仅有一个字节:
+```bash
+    0x50
+```
+
+
+#### DISCONNECT 帧
+
+断开连接帧. **帧类型为 2#0111**. Flags 为空。即固定头部 **固定为：0x60**
+
+Payload 为空
+
+因此，DISCONNECT 帧仅有 1 个字节:
+
+```bash
+    0x60
+```

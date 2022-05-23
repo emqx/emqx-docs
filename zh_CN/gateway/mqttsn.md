@@ -1,5 +1,65 @@
 # MQTT-SN 协议网关
 
+## 简介
+
+MQTT-SN 网关基于 [MQTT-SN v1.2](https://www.oasis-open.org/committees/download.php/66091/MQTT-SN_spec_v1.2.pdf) 版本实现。
+
+## 快速开始
+
+EMQX 5.0 中，可以通过 Dashboard 配置并启用 MQTT-SN 网关。
+
+也可以通过 HTTP-API 来启用，例如：
+```
+curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
+  -u admin:public \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "mqttsn",
+  "enable": true,
+  "gateway_id": 1,
+  "mountpoint": "mqttsn/",
+  "listeners": [
+    {
+      "type": "udp",
+      "bind": "1884",
+      "name": "default",
+      "max_conn_rate": 1000,
+      "max_connections": 1024000
+    }
+  ]
+}'
+```
+
+或在 emqx.conf 中配置启用，例如：
+
+```hocon
+gateway.mqttsn {
+
+  mountpoint = "mqtt/sn"
+
+  gateway_id = 1
+
+  broadcast = true
+
+  enable_qos3 = true
+
+  listeners.udp.default {
+    bind = 1884
+    max_connections = 10240000
+    max_conn_rate = 1000
+  }
+}
+```
+
+## 认证
+
+由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](#todo) 
+
+其客户端信息生成规则如下：
+- Client ID：为 CONNECT 报文中的 Client ID 字段。
+- Username：默认为空
+- Password：默认为空
+
 ## 协议介绍
 
 MQTT-SN 的信令和 MQTT 大部分都相同，比如都有 Will, 都有 Connect/Subscribe/Publish 命令.
@@ -7,10 +67,10 @@ MQTT-SN 的信令和 MQTT 大部分都相同，比如都有 Will, 都有 Connect
 MQTT-SN 最大的不同是，Topic 使用 TopicId 来代替，而 TopicId 是一个16比特的数字。每一个数字对应一个
 Topic, 设备和云端需要使用 REGISTER 命令映射 TopicId 和 Topic 的对应关系。
 
-MQTT-SN 可以随时更改 Will 的内容, 甚至可以取消。而 MQTT 只允许在 CONNECT 时设定 Will 的内容,
+MQTT-SN 可以随时更改 Will 的内容, 甚至可以取消. 而 MQTT 只允许在 CONNECT 时设定 Will 的内容,
 而且不允许更改.
 
-MQTT-SN 的网络中有网关这种设备，它负责把 MQTT-SN 转换成 MQTT，和云端的 MQTT Broker 通信。MQTT-SN
+MQTT-SN 的网络中有网关这种设备，它负责把 MQTT-SN 转换成 MQTT，和云端的 MQTT Broker 通信. MQTT-SN
 的协议支持自动发现网关的功能。
 
 MQTT-SN 还支持设备的睡眠功能，如果设备进入睡眠状态，无法接收 UDP 数据，网关将把下行的 PUBLISH
