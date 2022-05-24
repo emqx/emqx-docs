@@ -6,11 +6,11 @@
 
 打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的“模块”选项卡，选择“添加模块”：
 
-![](./assets/auth_jwt1.png)
+![Modules](./assets/auth_jwt1.png)
 
 然后选择“认证鉴权”下的“JWT 认证”：
 
-![](./assets/auth_jwt2.png)
+![Modules JWT Selected](./assets/auth_jwt2.png)
 
 JWT 认证提供了以下配置项：
 
@@ -23,13 +23,13 @@ JWT 认证提供了以下配置项：
    1. `%u`：将在运行时被替换为客户端连接时使用的 Username。
    2. `%c`：将在运行时被替换为客户端连接时使用的 Client ID。
 
-> 注意：如果同时配置了密钥、公钥、JWKS 服务器地址，EMQX 在验证 JWT 时会按照密钥、公钥、JWKS 的顺序进行检查。
+> 注意：EMQX 会按照 `Secret`、`Pubkey` 和 `JWKs Addr` 的固定顺序验证 JWT。没有配置的字段将被忽略。
 
-![](./assets/auth_jwt3.png)
+![JWT Module Settings](./assets/auth_jwt3.png)
 
 配置完成后点击“添加”按钮即可成功添加 JWT 认证模块。
 
-![](./assets/auth_jwt4.png)
+![Modules JWT Added](./assets/auth_jwt4.png)
 
 ## 认证原理
 

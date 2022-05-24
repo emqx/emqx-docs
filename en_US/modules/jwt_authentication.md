@@ -6,11 +6,11 @@
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, select "Add Module":
 
-![](./assets/auth_jwt1.png)
+![Modules](./assets/auth_jwt1.png)
 
 Then select "JWT Authentication" under "Authentication":
 
-![](./assets/auth_jwt2.png)
+![Modules JWT Selected](./assets/auth_jwt2.png)
 
 JWT authentication provides the following configuration items:
 
@@ -25,11 +25,11 @@ JWT authentication provides the following configuration items:
 
 > Note: When verifying JWT the values for `Secret`, `Pubkey`, and `JWKs Addr` are checked in that specific order. Keys with missing values will be ignored.
 
-![](./assets/auth_jwt3.png)
+![JWT Module Settings](./assets/auth_jwt3.png)
 
 After the configuration is complete, click the "Add" button to successfully add the JWT authentication module.
 
-![](./assets/auth_jwt4.png)
+![Modules JWT Added](./assets/auth_jwt4.png)
 
 ## Authentication principle
 
