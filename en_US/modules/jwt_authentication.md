@@ -4,7 +4,7 @@
 
 ## Create module
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, select "Add Module"
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, select "Add Module":
 
 ![](./assets/auth_jwt1.png)
 
@@ -14,16 +14,16 @@ Then select "JWT Authentication" under "Authentication":
 
 JWT authentication provides the following configuration items:
 
-1. From. The field that stores the JWT when the client connects, currently supports the selection of username or password.
-2. Secret. The key used when issuing the JWT, which will be used to verify whether the JWT received by EMQX is legal, and is applicable to the JWT issued by the HMAC algorithm.
-3. Pubkey. It will be used to verify whether the JWT received by EMQX is legal, and is applicable to the JWT issued by RSA or ECDSA algorithm.
-4. JWKs Addr. EMQX will periodically query the latest public key list from the JWKS server and use it to verify whether the received JWT is legitimate, and is applicable to JWTs issued by RSA or ECDSA algorithms.
-5. Verify Claims. Whether to verify that the claims in the JWT payload are consistent with the claims.
-6. Claims. A list of claims fields used to verify that the claims in the JWT payload are valid. The most common usage is to add a key-value pair with a key of `username` and a value of `%u`, `%u` as a placeholder that will be replaced at runtime with the Username that the client will actually use when connecting. The replaced value will be used to compare with the value of the same-key claim of the JWT Payload to have a one-to-one correspondence between JWT and Username. The following two placeholders are currently supported in the declaration field list:
-    1. `%u`, will be replaced at runtime with the Username used by the client when connecting
-    2. `%c`, will be replaced at runtime with the Client ID used by the client when connecting
+1. From: The field that stores the JWT when the client connects. It currently supports the selection of username or password.
+2. Secret: The key used when issuing the JWT. It will be used to verify whether the JWT received by EMQX is legal and is applicable to the JWT issued by the HMAC algorithm.
+3. Pubkey: It will be used to verify whether the JWT received by EMQX is legal, and is applicable to the JWT issued by RSA or ECDSA algorithm.
+4. JWKs Addr: EMQX will periodically query the latest public key list from the JWKS server and use it to verify whether the received JWT is legitimate, and is applicable to JWTs issued by RSA or ECDSA algorithms.
+5. Verify Claims: Whether to verify that the claims in the JWT payload are consistent with the claims.
+6. Claims: A list of claims fields used to verify that the claims in the JWT payload are valid. The most common usage is to add a key-value pair with a key of `username` and a value of `%u`, `%u` as a placeholder that will be replaced at runtime with the Username that the client will actually use when connecting. The replaced value will be used to compare with the value of the same-key claim of the JWT Payload to have a one-to-one correspondence between JWT and Username. The following two placeholders are currently supported in the declaration field list:
+    1. `%u`: It will be replaced at runtime with the Username used by the client when connecting.
+    2. `%c`: It will be replaced at runtime with the Client ID used by the client when connecting.
 
-> Note: If `Secret`, `Pubkey`, and `JWKs Addr` are configured at the same time, EMQX will check the order of secret, public key, and JWKS when verifying JWT.
+> Note: When verifying JWT the values for `Secret`, `Pubkey`, and `JWKs Addr` are checked in that specific order. Keys with missing values will be ignored.
 
 ![](./assets/auth_jwt3.png)
 
