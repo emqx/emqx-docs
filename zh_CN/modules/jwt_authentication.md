@@ -4,33 +4,36 @@
 
 ## 创建模块
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的“模块”选项卡，选择“添加模块”：
 
-![Modules](./assets/modules.png)
+![Modules](./assets/auth_jwt1.png)
 
-点击"选择",然后选择 JWT 认证模块
+然后选择“认证鉴权”下的“JWT 认证”：
 
-![Modules JWT Selected](./assets/auth_jwt1.png)
+![Modules JWT Selected](./assets/auth_jwt2.png)
 
-需要配置JWT密钥，认证源，公钥（可选）等基本连接参数表。
+JWT 认证提供了以下配置项：
 
-![JWT Module Settings](./assets/auth_jwt2.png)
+1. 认证来源：客户端连接时存放 JWT 的字段，目前支持选择 username 或 password。
+2. 密钥：签发 JWT 时使用的密钥。这里将用于验证 EMQX 收到的 JWT 是否合法，适用于 HMAC 算法签发的 JWT。
+3. 公钥文件：将用于验证 EMQX 收到的 JWT 是否合法，适用于 RSA 或 ECDSA 算法签发的 JWT。
+4. JWKS 服务器地址：EMQX 将从 JWKS 服务器定期查询最新的公钥列表，并用于验证收到的 JWT 是否合法，适用于 RSA 或 ECDSA 算法签发的 JWT。
+5. 验证声明字段：是否需要验证 JWT Payload 中的声明与“声明字段列表”一致。
+6. 声明字段列表：用于验证 JWT Payload 中的声明是否合法。最常见的用法是，添加一个键为 `username` 值为 `%u` 的键值对，`%u` 作为占位符将在运行时被替换为客户端实际连接时使用的 Username，替换后的值将被用于与 JWT Payload 的同键声明的值比较，以起到 JWT 与 Username 一一对应的效果。声明字段列表中目前支持以下两种占位符：
+   1. `%u`：将在运行时被替换为客户端连接时使用的 Username。
+   2. `%c`：将在运行时被替换为客户端连接时使用的 Client ID。
 
-如果需要添加自定义验证字段，可参考如下配置：
+> 注意：EMQX 会按照 `Secret`、`Pubkey` 和 `JWKs Addr` 的固定顺序验证 JWT。没有配置的字段将被忽略。
 
-![JWT Module Claims](./assets/auth_jwt3.png)
+![JWT Module Settings](./assets/auth_jwt3.png)
 
-还可以设置 JWT 所携带的 ACL 规则的字段名称：
-
-![JWT Module ACL Claim Name](./assets/auth_jwt31.png)
-
-最后点击“添加”按钮模块即可添加成功。
+配置完成后点击“添加”按钮即可成功添加 JWT 认证模块。
 
 ![Modules JWT Added](./assets/auth_jwt4.png)
 
 ## 认证原理
 
-客户端使用 Token 作为用户名或密码（取决于模块配置），发起连接时 EMQX 使用配置中的密钥、证书进行解密，如果能成功解密则认证成功，否则认证失败。
+客户端使用用户名或密码字段携带 JWT（取决于模块配置），发起连接时 EMQX 使用配置中的密钥、证书进行解密，如果能成功解密则认证成功，否则认证失败。
 
 默认配置下启用 JWT 认证后，你可以通过任意用户名+以下密码进行连接：
 
@@ -44,10 +47,3 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGU
 
 :::
 
-## JWT参数含义
-
-- 密钥：JWT密钥，用来加密JWT字符串。
-
-- 认证来源：客户端携带 JWT 的位置，用于配置客户端 JWT 字符串携带位置，可选 username 与 password。
-- 公钥文件：需要上传的JWT公钥文件。
-- 签名格式：默认是der格式，可选择为JWT原生格式，选项为"raw"。
