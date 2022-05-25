@@ -18,8 +18,7 @@ Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 ## Implementation note
 
 With this feature enabled, EMQX will start measuring message transmission latency.
-The measurement always starts when a message is received by EMQX,
-the end of the measurement is configurable.
+The measurement always starts when a message is received by EMQX, and the end of the measurement is configurable.
 See more details below in configurations.
 
 The per clientid-topic latency measurements are then ranked in the table view.
@@ -38,7 +37,7 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
 -   expire\_interval
 
-    *expire interval* controls the effective time of each ranking record. If the a client-topic has no higher latency inserted for such long time, the record expires. For example if expire interval is 5 minutes, and client1-topic1 had a latency 500ms recorded (ranked top-K) at T1, and for the next 5 minutes, if there is no further measurements greater than 500, the ranking recorded will be deleted shortly after T1+5min
+    *expire interval* controls the effective time of each ranking record. If the a client-topic has no higher latency inserted for such long time, the record expires. For example if expire interval is 5 minutes, and client1-topic1 had a latency 500ms recorded (ranked top-K) at T1, and for the next 5 minutes there are no further measurements greater than 500, the ranking recorded will be deleted shortly after T1+5min
 
 -   stats\_type
 
