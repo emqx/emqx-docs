@@ -42,12 +42,14 @@ Example:
 ```hocon
 {
   mechanism = password_based
+  backend = redis
+  enable = true
+
   password_hash_algorithm {
     name = plain
     salt_position = suffix
   }
-  enable = true
-  backend = redis
+
   cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
   database = 1
   password = public
@@ -199,7 +201,7 @@ password_hash_algorithm {
 }
 ```
 
-For password-based authenticators that allow user creation through EMQX API (`built_in_database`)
+For password-based authenticators that allow user creation through EMQX API (`password_based:built_in_database`)
 there are additional parameters required for hash creation:
 
 ```hocon
@@ -209,6 +211,39 @@ password_hash_algorithm {
   salt_rounds = 10          # used for user creation
 }
 ```
+
+## Authentication placeholders
+
+Many authenticators allow using _placeholders_ in their configuration.
+Placeholders work as template varables that are filled with the corresponding
+client's information when performing authentication.
+
+The following placeholders are available:
+* `${clientid}` — Client ID of the connecting client, either passed explicitly by the client or automatically generated.
+* `${username}` — `username` value of `CONNECT` MQTT packet.
+* `${password}` — `password` value of `CONNECT` MQTT packet.
+* `${peerhost}` — Client IP address. EMQX supports [Proxy protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), so a user can make use of this value even if EMQX is behind some TCP proxy or load balancer.
+* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
+* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
+
+Example of use (in Redis password-based authenticator):
+
+```hocon
+{
+  mechanism = password_based
+  backend = redis
+
+  ... other parameters ...
+
+  cmd = "HMGET users:${clientid} password_hash salt is_superuser"
+}
+```
+
+When a client with clientid `id2718` tries to connect, a Redis query
+```
+HMGET users:id2718 password_hash salt is_superuser
+```
+is peformed to search credentials.
 
 ## HTTP API
 
