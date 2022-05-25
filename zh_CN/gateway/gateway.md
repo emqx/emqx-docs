@@ -54,12 +54,12 @@
 
 对于 PUB/SUB 类型的协议网关，例如 MQTT-SN，Stomp 通常定义了主题和消息负责的概念；则：
 - 网关在处理其消息收发时直接使用客户端指定的主题和消息内容，即可接入到 EMQX 的消息系统。
-- 需要在 [授权（Authorization）]() 中为其配置主题发布订阅权限。
+- 需要在 [授权（Authorization）](#todo) 中为其配置主题发布订阅权限。
 
 但对于非 PUB/SUB 类型的协议，它缺少对主题、发布、订阅等概念的定义；则
 - 需要为其指定消息主题。例如 LwM2M 网关，用户可以配置各个类型消息的主题。
 - 需要为其设计消息内容的格式。每种类型的网关都可能会使用不同的消息格式。
-- 需要在 [授权（Authorization）]() 中为其配置主题发布订阅权限。
+- 需要在 [授权（Authorization）](#todo) 中为其配置主题发布订阅权限。
 
 > 注：认证（Authentication）是可以在网关中进行配置，并且分属于每个网关自身他们之间是相互独立的；
 > 但是网关中不存在单独的授权（Authorization）概念，如果需要给某网关的客户端主题设置权限，需要在全局的授权中进行配置。
@@ -72,33 +72,10 @@
 
 5.0 中，网关可以直接在 Dashboard 中进行启用和配置。
 
-也可以在 emqx.conf 中直接进行配置，例如：
-
-```
-gateway.stomp {
-
-  mountpoint = "stomp/"
-
-  authentication: {
-    mechanism = password_based
-    backend = built_in_database
-    user_id_type = clientid
-  }
-
-  listeners.tcp.default {
-    bind = 61613
-    acceptors = 16
-    max_connections = 1024000
-    max_conn_rate = 1000
-  }
-}
-```
-
-详情参考：[配置文档-网关配置](#todo)
-
 也使用 HTTP API 进行管理，例如：
 ```
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
+  -u admin:public \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "stomp",
@@ -118,7 +95,68 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 
 详细参考：[HTTP Swagger Documents - Gateway](#todo)
 
-> 注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+也可以在 emqx.conf 中直接进行配置，例如：
+
+```hocon
+gateway.stomp {
+
+  mountpoint = "stomp/"
+
+  listeners.tcp.default {
+    bind = 61613
+    acceptors = 16
+    max_connections = 1024000
+    max_conn_rate = 1000
+  }
+}
+```
+
+详情参考：[配置文档-网关配置](#todo)
+
+::: tip
+注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+:::
+
+### 监听器级认证和消息隔离
+
+除了可以在网关层给不同的网关配置不同的认证器和主题挂载点。也支持为不同监听器单独配置 `mountpoint` 和 `authentication` 来重载网关级的这两项配置。 这样的话，可以通过启用多个监听器，并为其配置不同的主题挂载点和认证逻辑。以 Stomp 网关为例：
+
+```hocon
+gateway.stomp {
+
+  listeners.tcp.default {
+    bind = 61613
+    ## 例如，为 61613 端口的监听器配置基于内置数据库的认证器
+    authentication {
+      mechanism = password_based
+      backend = built_in_database
+      user_id_type = username
+    }
+  }
+
+  listeners.tcp.default2 {
+    bind = 61614
+    ## 例如，为 61614 端口的监听器配置基于 HTTP Server 的认证器
+    authentication {
+      mechanism = password_based
+      backend = http
+      method = post
+      url = "http://127.0.0.1:9000/stomp/auth"
+      headers {
+        content-type = "application/json"
+      }
+      body {
+        username = "${username}"
+        password = "${password}"
+      }
+    }
+  }
+}
+```
+
+::: tip
+注：在 EMQX 5.0  中给每个监听器配置不同的认证器功能，仅在配置文件中支持；暂未在 HTTP API 和 Dashboard 中支持。
+:::
 
 ### 钩子和事件
 
