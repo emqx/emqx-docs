@@ -1,130 +1,119 @@
 # PostgreSQL
 
-PostgreSQL authentication uses an external PostgreSQL database as the authentication data source, which can store a large amount of data and facilitate integration with external device management systems.
+This authenticator implements password verification algorithm and uses PostgreSQL database as credential storage.
 
-Plugin:
+## Storage schema
 
-```bash
-emqx_auth_pgsql
-```
+PostgreSQL authenticator supports almost arbitrary storage schema. It is up to the user to decide how to store credentials
+and access them: use one or multiple tables, views, etc.
 
-::: tip 
-The emqx_auth_pgsql also includes ACL feature, which can be disabled via comments
-:::
+The user should only provide a templated query that selects credentials as a single row containing
+`password_hash`, `salt`, and `is_superuser` columns. `password_hash` column is required, other columns
+are optional. The absence of `salt` column is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
+interpreted as its false value.
 
-
-
-To enable PostgreSQL authentication, you need to configure the following in `etc/plugins/emqx_auth_pgsql.conf` 
-
-## PostgreSQL connection information
-
-For PostgreSQL basic connection information, it needs to ensure that all nodes in the cluster can access.
-
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
-
-## Server address
-auth.pgsql.server = 127.0.0.1:5432
-
-## Connection pool size
-auth.pgsql.pool = 8
-
-auth.pgsql.username = root
-
-auth.pgsql.password = public
-
-auth.pgsql.database = mqtt
-
-auth.pgsql.encoding = utf8
-
-## TLS configuration
-## auth.pgsql.ssl = false
-## auth.pgsql.ssl_opts.keyfile =
-## auth.pgsql.ssl_opts.certfile =
-```
-
-
-
-## Default table structure
-
-In the default configuration of PostgreSQL authentication, you need to ensure that the following table is in the database:
+Example table structure for storing credentials:
 
 ```sql
 CREATE TABLE mqtt_user (
-  id SERIAL PRIMARY KEY,
-  username CHARACTER VARYING(100),
-  password CHARACTER VARYING(100),
-  salt CHARACTER VARYING(40),
-  is_superuser BOOLEAN,
-  UNIQUE (username)
-)
+    id serial PRIMARY KEY,
+    username text NOT NULL UNIQUE,
+    password_hash  text NOT NULL,
+    salt text NOT NULL,
+    is_superuser boolean DEFAULT false,
+    created timestamp with time zone DEFAULT NOW()
+);
 ```
 
+In this table, MQTT users are identified by `username`.
 
-
-The sample data in the default configuration is as follows:
-
+Example of adding a user with username `user123`, password `secret`, prefixed salt `salt`, and is_superuser `true`:
 ```sql
-INSERT INTO mqtt_user (username, password, salt, is_superuser)
-VALUES
-	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL, false);
+postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
+INSERT 0 1
 ```
 
-After PostgreSQL authentication is enabled, you can connect with username: emqx, password: public.
+The corresponding query template is:
+```
+query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
+```
 
-
-
-::: tip 
-This is the table structure used by default configuration. After being familiar with the use of the plugin, you can use any data table that meets the conditions for authentication
+::: warning
+When there is a significant number of users in the system make sure that the tables used by the query are optimized
+and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database
+and on the EMQX broker itself.
 :::
 
+## Configuration
 
+PostgreSQL authentication is identified with `mechanism = password_based` and `backend = postgresql`.
 
-## Salting rules and hash methods
+Sample configuration:
 
-PostgreSQL authentication support to configure [Salting rules and hash methods](./authn.md#password-salting-rules-and-hash-methods)：
+```hocon
+{
+  mechanism = password_based
+  backend = postgresql
+  enable = true
 
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
+  password_hash_algorithm {
+    name = sha256
+    salt_position = suffix
+  }
 
-auth.pgsql.password_hash = sha256
+  database = mqtt
+  username = postgres
+  password = public
+  server = "127.0.0.1:5432"
+  query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+}
 ```
 
+### `password_hash_algorithm`
 
+Standard [password hashing options](./authn.md#password-hashing).
 
-## auth_query
+### `query`
 
-During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
+Required string value with PostgreSQL query template for fetching credentials. Supports [placeholders](./authn.md#authentication-placeholders).
 
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
-
-auth.pgsql.auth_query = select password from mqtt_user where username = '%u' limit 1
+For security reasons, placeholder values are not interpolated directly, but through PostgreSQL placeholders.
+I.e. a query
+```sql
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} AND peerhost = ${peerhost} LIMIT 1
 ```
+is first translated into
+```sql
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = $1 AND peerhost = $2 LIMIT 1
+```
+prepared statement and then executed with `${username}` and `${peerhost}` values.
 
+### `server`
 
+Required string value with PostgreSQL server address (`host:port`).
 
-You can use the following placeholders in the SQL authentication, and EMQX Broker will be automatically populated with client information when executed:
+### `database`
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+Required string value with PostgreSQL database name to use.
 
+### `username`
 
+Optional string value with PostgreSQL user.
 
-You can adjust the authentication SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication  must meet the following conditions:
+### `password`
 
-1. The query result must include the password field, which is used by EMQX Broker to compare with the client password
-2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQX Broker as the salt value
-3. There can only be one query result. When there are multiple results, only the first one is taken as valid data.
+Optional string value with PostgreSQL user password.
 
-::: tip 
-You can use AS syntax in SQL to specify passwords for field renaming, or set the salt value to a fixed value.
-:::
+#### `auto_reconnect`
 
-### Advanced
+Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
+Redis on client failure.
 
-In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
+### `pool_size`
 
-If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.
+Optional integer value defining the number of concurrent connections from an EMQX node to a PostgreSQL server.
+The default value is 8.
+
+### `ssl`
+
+Standard [SSL options](./ssl.md) for [secure connecting to PostgreSQL](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
