@@ -1,53 +1,24 @@
 # MySQL
 
-MySQL authentication uses an external MySQL database as the authentication data source, which can store a large amount of data and facilitate integration with external device management systems.
+This authenticator implements password verification algorithm and uses MySQL database as credential storage.
 
-Plugin:
+## Storage schema
 
-```bash
-emqx_auth_mysql
-```
+MySQL authenticator supports almost arbitrary storage schema. It is up to the user to decide how to store credentials
+and access them: use one or multiple tables, views, etc.
 
-::: tip 
-The emqx_auth_mysql plugin also includes ACL feature, which can be disabled via comments
-:::
+The user should only provide a templated query that selects credentials as a single row containing
+`password_hash`, `salt`, and `is_superuser` columns. `password_hash` column is required, other columns
+are optional. The absence of `salt` column is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
+interpreted as its false value.
 
-
-To enable MySQL authentication, you need to configure the following in  `etc/plugins/emqx_auth_mysql.conf` :
-
-## MySQL Connection information
-
-For MySQL basic connection information, it needs to ensure that all nodes in the cluster can access.
-
-```bash
-# etc/plugins/emqx_auth_mysql.conf
-
-## server address
-auth.mysql.server = 127.0.0.1:3306
-
-## Connection pool size
-auth.mysql.pool = 8
-
-auth.mysql.username = emqx
-
-auth.mysql.password = public
-
-auth.mysql.database = mqtt
-
-auth.mysql.query_timeout = 5s
-```
-
-
-
-## Default table structure
-
-In the default configuration of MySQL authentication, you need to ensure that the following table is in the database:
+Example table structure for storing credentials:
 
 ```sql
 CREATE TABLE `mqtt_user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
-  `password` varchar(100) DEFAULT NULL,
+  `password_hash` varchar(100) DEFAULT NULL,
   `salt` varchar(35) DEFAULT NULL,
   `is_superuser` tinyint(1) DEFAULT 0,
   `created` datetime DEFAULT NULL,
@@ -56,78 +27,95 @@ CREATE TABLE `mqtt_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
+In this table, MQTT users are identified by `username`.
 
-
-The sample data in the default configuration is as follows:
-
-```sql
-INSERT INTO `mqtt_user` ( `username`, `password`, `salt`)
-VALUES
-	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL);
+Example of adding a user with username `user123`, password `secret`, prefixed salt `salt`, and is_superuser `true`:
+```
+mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', 1);
+Query OK, 1 row affected (0,01 sec)
 ```
 
-After MySQL authentication is enabled, you can connect with username: emqx, password: public.
+The corresponding query template is:
+```
+query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
+```
 
-
-
-::: tip 
-This is the table structure used by default configuration. After being familiar with the use of the plugin, you can use any data table that meets the conditions for authentication
+::: warning
+When there is a significant number of users in the system make sure that the tables used by the query are optimized
+and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database
+and on the EMQX broker itself.
 :::
 
+## Configuration
 
+MySQL authentication is identified with `mechanism = password_based` and `backend = mysql`.
 
-## Salting rules and hash methods
+Sample configuration:
 
-MySQL authentication support to configure [Salting rules and hash methods](./authn.md#password-salting-rules-and-hash-methods)：
+```hocon
+{
+  mechanism = password_based
+  backend = mysql
+  enable = true
 
-```bash
-# etc/plugins/emqx_auth_mysql.conf
+  password_hash_algorithm {
+    name = sha256
+    salt_position = suffix
+  }
 
-auth.mysql.password_hash = sha256
+  database = mqtt
+  username = root
+  password = public
+  server = "127.0.0.1:3306"
+  query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+}
 ```
 
+### `password_hash_algorithm`
 
-## auth_query
+Standard [password hashing options](./authn.md#password-hashing).
 
-During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
+### `query`
 
-```bash
-# etc/plugins/emqx_auth_mysql.conf
+Required string value with MySQL query template for fetching credentials. Supports [placeholders](./authn.md#authentication-placeholders).
 
-auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
-```
-
-
-
-You can use the following placeholders in the SQL authentication, and EMQX Broker will be automatically populated with client information when executed:
-
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
-
-
-
-You can adjust the authentication SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication  must meet the following conditions:
-
-1. The query result must include the password field, which is used by EMQX Broker to compare with the client password
-2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQX Broker as the salt value
-3. There can only be one query result. When there are multiple results, only the first one is taken as valid data.
-
-::: tip 
-You can use AS syntax in SQL to specify passwords for field renaming, or set the salt value to a fixed value
-:::
-
-### Advanced
-
-In the default table structure, we set the username field as a unique index (UNIQUE), and use it with the default query statement (`select password from mqtt_user where username ='%u' limit 1`) to get very good query performance.
-
-If the default query conditions do not meet your needs, for example, you need to query the corresponding `Password Hash` and `Salt` based on the `Client ID`, please make sure to set the `Client ID` as an index; Or you want to perform multi-condition queries on `Username`, `Client ID`, or other fields. It is recommended to set the correct single-column index or multiple-column index. In short, set the correct table structure and query statement, and try not to let the index fail and affect the query performance.
-
-## Special Instructions
-
-For MySQL 8.0 and later version, it uses `caching_sha2_password` as the default authentication plug-in. Due to the limit of client driver, you must change it to the ` mysql_native_password` plugin:
-
+For security reasons, placeholder values are not interpolated directly, but through MySQL placeholders.
+I.e. a query
 ```sql
-ALTER USER 'your_username'@'your_host' IDENTIFIED WITH mysql_native_password BY 'your_password';
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} AND peerhost = ${peerhost} LIMIT 1
 ```
+is first translated into
+```sql
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ? AND peerhost = ? LIMIT 1
+```
+prepared statement and then executed with `${username}` and `${peerhost}` values.
+
+### `server`
+
+Required string value with MySQL server address (`host:port`).
+
+### `database`
+
+Required string value with MySQL database name to use.
+
+### `username`
+
+Optional string value with MySQL user.
+
+### `password`
+
+Optional string value with MySQL user password.
+
+#### `auto_reconnect`
+
+Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
+Redis on client failure.
+
+### `pool_size`
+
+Optional integer value defining the number of concurrent connections from an EMQX node to a MySQL server.
+The default value is 8.
+
+### `ssl`
+
+Standard [SSL options](./ssl.md) for [secure connecting to MySQL](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
