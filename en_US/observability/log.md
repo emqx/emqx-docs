@@ -22,7 +22,7 @@ Starting from version 4.3.0, if you deploy EMQX using Docker, you can only view 
 
 ## Log level
 
-The log of EMQX Broker is divided into 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), which are shown from low to high as follows:
+The logging of EMQX Broker is divided into 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), which are shown from low to high as follows:
 
 ```bash
 debug < info < notice < warning < error < critical < alert < emergency
@@ -44,12 +44,12 @@ The default log file directory of EMQX Broker is in `./log` (zip installation) o
 log.dir = log
 ```
 
-When file logging is enabled (log.to = file or both), there will be the following files in the log directory:
+When file logging is enabled (log.to = file or both), the following files will appear in the log directory:
 
 - **emqx.log.N:** log file prefixed with emqx.log, that contains all the log messages of EMQX Broker, such as `emqx.log.1`,` emqx.log.2` ...
 - **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information。
 - **run_erl.log:** The system file used to record startup information when starting EMQX Broker in the background with `emqx start`.
-- **erlang.log.N:** log file prefixed with erlang.log, which is a copy file of the console log when EMQX Broker is started in the background with `emqx start` , such as `erlang.log.1`,` erlang.log.2` ...
+- **erlang.log.N:** log file prefixed with erlang.log, which is a copy file of the console log when EMQX Broker is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
 
 The prefix of the log file can be modified in `emqx.conf`, the default is` emqx.log`:
 
@@ -57,7 +57,7 @@ The prefix of the log file can be modified in `emqx.conf`, the default is` emqx.
 log.file = emqx.log
 ```
 
-EMQX Broker will rotate log files by default when the single log file exceeds 10MB. There can be up to 5 log files: the first log file is emqx.log.1, the second is emqx.log.2, and so on. When the last log file also reaches 10MB, it will be overwritten from the log file with the smallest sequence number. The file size limit and the maximum number of log files can be modified in `emqx.conf`:
+EMQX Broker will rotate log files by default when the single log file exceeds 10MB. There can be up to 5 log files: the first log file is emqx.log.1, the second is emqx.log.2, and so on. When the last log file also reaches 10MB the first log file, emqx.log.1, will be overwritten and the sequence will begin again with each additional log file being overwritten in turn. The file size limit and the maximum number of log files can be modified in `emqx.conf`:
 
 ```bash
 log.rotation.size = 10MB
@@ -82,7 +82,7 @@ log.error.file = error.log
 
 ## Log format
 
-The maximum character length of a single log message can be modified in `emqx.conf`. If the length exceeds the limit, the log message is truncated and filled with` ... `. The default configuration is not to limit the length:
+The maximum character length of a single log message can be modified in `emqx.conf`. If the length exceeds the limit, the log message is truncated and filled with` ... `. The default configuration is not to limit the length.
 
 Set the maximum character length of a single log message to 8192:
 
@@ -97,8 +97,8 @@ The format of the log message (the fields are separated by spaces):
 - **date:** Local data. The format is: YYYY-MM-DD
 - **time:** Local time, accurate to milliseconds. The format is: hh:mm:ss.ms
 - **level:** log level, wrapped in brackets. The format is:[Level]
-- **client_info:** optional field, only exists if this log message is related to a client The format is: ClientId@Peername or ClientId or Peername
-- **module_info:** optional field, only exists if this log message is related to a module. Its format is:[Module Info]
+- **client_info:** optional field, only exists if this log message is related to a client. The format is: ClientId@Peername or ClientId or Peername
+- **module_info:** optional field, only exists if this log message is related to a module. The format is:[Module Info]
 - **msg:** log message content. The format is arbitrary and can contain spaces.
 
 ### Log message example 1:
@@ -130,11 +130,11 @@ The fields in this log message are:
 - **module_info:** `[Alarm Handler]`
 - **msg:** `New Alarm: system_memory_high_watermark, Alarm Info: []`
 
-Note that in this log message, the client_info field does not exist.
+Note that in this log message the client_info field does not exist.
 
 ## log level and log handlers
 
-EMQX Broker uses a hierarchical log system. At the log level, it includes primary log level and the log level of each log hanlder.
+EMQX Broker uses a hierarchical log system. At the log level, it includes primary log level and the log level of each log handler.
 
 ```bash
      [Primary Level]        -- global log level and filters
@@ -158,11 +158,11 @@ LogHandler(id=file, level=debug, destination=log/emqx.log)
 LogHandler(id=default, level=debug, destination=console)
 ```
 
-- file: The log handler responsible for output to the log file. There is no special filtering conditions, that is, all log messages are output as long as the level meets the requirements. The output destination is a log file.
-- default: the log handler responsible for output to the console. There is no special filtering conditions, that is, all log messages are output as long as the level meets the requirements. The output destination is the console.
+- file: The log handler responsible for output to the log file. There are no special filtering conditions, that is, all log messages are output as long as the level meets the requirements. The output destination is a log file.
+- default: the log handler responsible for output to the console. There are no special filtering conditions, that is, all log messages are output as long as the level meets the requirements. The output destination is the console.
 - ssl_handler: ssl's log handler. Its filter condition is set to output when the log is from the ssl module. The output destination is the console.
 
-Before the log message is output, we should check whether the message level is higher than the primary log level. After passing the check, the log message flows into each log handler. Then, we should check the log level of each handler. If the log message is higher than the handler level, the corresponding handler performs Filter conditions. When it is passed, output is performed.
+Before the log message is output, we should check whether the message level is higher than the primary log level. After passing the check the log message flows into each log handler. Then, we should check the log level of each handler. If the log message is higher than the handler level, the corresponding handler performs Filter conditions. When it is passed, output is performed.
 
 
 Imagine a scenario where the primary log level is set to info, the log handler `default` is set to debug, and the log handler `file` is set to warning:
@@ -172,11 +172,11 @@ Imagine a scenario where the primary log level is set to info, the log handler `
 
 The "log.level" mentioned in the  [Log Level](#log-levels) section is the modified global log level. This includes the primary log level and the log level of each handler, all of which is set to the same value.
 
-Primary Log Level is equivalent to the main switch of a tap water pipe system. Once closed, no water flow will pass through each branch pipe. This mechanism ensures the high-performance operation of the logging system.
+The Primary Log level is the first one checked for any and all log messages. This makes it easy to prevent lower level logs, such as `debug`, from making it through the pipe to the different handlers. This mechanism ensures the high-performance operation of the logging system by reducing the number of messages individual handlers have to process in a production system.
 
 ## Modify log level at runtime
 
-You can use EMQX Broker's command line tool `emqx_ctl` to modify the emqx log level at runtime:
+You can use EMQX Broker's command line tool `emqx_ctl` to modify the emqx log level at runtime.
 
 ### Modify the global log level:
 
@@ -231,7 +231,7 @@ trace topic t/# successfully
 ```
 
 ::: tip
-Even if `log.level` is set to error in `emqx.conf`,  debug level information of a client or topic can still be printed out with the message tracing function.  This is very useful in a production environment.
+Even if `log.level` is set to error in `emqx.conf`, debug level information of a client or topic can still be printed out with the message tracing function. This is very useful in a production environment.
 :::
 
 ### The principle of log tracing
@@ -251,7 +251,7 @@ $ emqx_ctl trace list
 Trace(clientid=my_client, level=debug, destination="log/my_client.log")
 ```
 
-In the background, emqx will install a new log handler and specify the filter conditions as follows: Only when the ClientID is "my_client", the log will be output:
+In the background, EMQX will install a new log handler and specify the filter conditions as follows: The log will be written only when the ClientID is "my_client":
 
 ```bash
 $ emqx_ctl log handlers list
@@ -259,7 +259,7 @@ LogHandler(id=trace_clientid_my_client, level=debug, destination=log/my_client.l
 ...
 ```
 
-The id of the newly added log handler here is trace_clientid_my_client, and the handler level is debug. This is why before trace, we must set the primary log level to debug.
+The id of the newly added log handler here is trace_clientid_my_client, and the handler level is debug. This is why before trace we must set the primary log level to debug.
 
 If the default primary log level (warning) is used, this log handler will never output the log messages below warning level.
 
