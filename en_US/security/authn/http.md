@@ -202,7 +202,7 @@ Optional values controlling the correspoding request thresholds. The default val
 
 ### `pool_size`
 
-Optional value defining number of concurrent connections from an EMQX node to the external API.
+Optional integer value defining number of concurrent connections from an EMQX node to the external API.
 The default value is 8.
 
 ### `ssl`
