@@ -1,160 +1,219 @@
 # MongoDB
 
-MongoDB authentication uses an external MongoDB database as the authentication data source, which can store a large amount of data and facilitate integration with external device management systems.
+This authenticator implements password verification algorithm and uses MongoDB database as credential storage.
 
-Plugin:
+## Storage Schema
 
-```bash
-emqx_auth_mongo
-```
+MongoDB authenticator supports storing credentials as MongoDB documents. A user provides the collection name and a
+filter template for selecting the relevant document.
 
-::: tip 
-The emqx_auth_mongo plugin also includes ACL feature, which can be disabled via comments
-:::
+The document should contain fields with values for `password_hash`, `salt`, and `is_superuser`.
+The field names are configured.
+The value for `password_hash` is required, other values are optional.
+The absence of `salt` value is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
+interpreted as its false value.
 
-
-
-To enable MongoDB authentication, you need to configure the following in `etc/plugins/emqx_auth_mongo.conf` :
-
-## MongoDB Connection information
-
-For MongoDB basic connection information, it needs to ensure that all nodes in the cluster can access.
-
-```bash
-# etc/plugins/emqx_auth_mongo.conf
-
-## MongoDB Architecture type
-##
-## Value: single | unknown | sharded | rs
-auth.mongo.type = single
-
-##rs mode needs to set rs name
-## auth.mongo.rs_set_name =
-
-## Server list, which is separated by comma in cluster mode
-## Examples: 127.0.0.1:27017,127.0.0.2:27017...
-auth.mongo.server = 127.0.0.1:27017
-
-auth.mongo.pool = 8
-
-auth.mongo.login =
-
-auth.mongo.password =
-
-## auth.mongo.auth_source = admin
-
-auth.mongo.database = mqtt
-
-auth.mongo.query_timeout = 5s
-
-## SSL option
-# auth.mongo.ssl = false
-
-## auth.mongo.ssl_opts.keyfile =
-
-## auth.mongo.ssl_opts.certfile =
-
-## auth.mongo.ssl_opts.cacertfile =
-
-## MongoDB write mode.
-##
-## Value: unsafe | safe
-## auth.mongo.w_mode =
-
-## Mongo read mode.
-##
-## Value: master | slave_ok
-## auth.mongo.r_mode =
-
-## MongoDB topology configuration, which is not used generally. See MongoDB official ##website documentation
-auth.mongo.topology.pool_size = 1
-auth.mongo.topology.max_overflow = 0
-## auth.mongo.topology.overflow_ttl = 1000
-## auth.mongo.topology.overflow_check_period = 1000
-## auth.mongo.topology.local_threshold_ms = 1000
-## auth.mongo.topology.connect_timeout_ms = 20000
-## auth.mongo.topology.socket_timeout_ms = 100
-## auth.mongo.topology.server_selection_timeout_ms = 30000
-## auth.mongo.topology.wait_queue_timeout_ms = 1000
-## auth.mongo.topology.heartbeat_frequency_ms = 10000
-## auth.mongo.topology.min_heartbeat_frequency_ms = 1000
-
-```
-
-
-## Default data structure
-
-In the default configuration of MongoDB authentication, you need to ensure that the database has the following collections:
-
-```json
+Example of adding a document for a user with username `user123`, password `secret`, prefixed salt `salt`, and `is_superuser` true:
+```js
+> db.mqtt_user.insertOne(
+  {
+      "username": "user123",
+      "s": "salt",
+      "is": true,
+      "ph": "bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35"
+  }
+);
 {
-  username: "user",
-  password: "password hash",
-  salt: "password salt",
-  is_superuser: false,
-  created: "2020-02-20 12:12:14"
+  acknowledged: true,
+  insertedId: ObjectId("6290aa4959fbb6cf748c0148")
 }
 ```
 
-The sample data in the default configuration is as follows:
+The corresponding config parameters are:
+```
+password_hash_algorithm {
+    name = sha256
+    salt_position = prefix
+}
 
-```bash
-use mqtt
+collection = "mqtt_user"
+filter { username = "${username}" }
 
-db.mqtt_user.insert({
-  "username": "emqx",
-  "password": "efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7",
-  "is_superuser": false,
-  "salt": ""
-})
+password_hash_field = "ph"
+salt_field = "s"
+is_superuser_field = "is"
+
 ```
 
-After MongoDB authentication is enabled, you can connect with username: emqx, password: public.
-
-::: tip 
-This is the collection structure used by default configuration. After being familiar with the use of the plugin, you can use any collection that meets the conditions for authentication.
+::: warning
+When there is a significant number of users in the system make sure that the collections used by the selector are optimized
+and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database
+and on the EMQX broker itself.
 :::
 
+## Configuration
 
+MongoDB authentication is identified with `mechanism = password_based` and `backend = mongodb`.
 
-## Salting rules and hash methods
+The authenticator supports connecting to MongoDB running in three different modes:
+* Standalone MongoDB server:
+  ```hocon
+  {
+    mechanism = password_based
+    backend = mongodb
+    enable = true
 
-MongoDB authentication support to configure [Salting rules and hash methods](./authn.md#password-salting-rules-and-hash-methods)：
+    password_hash_algorithm {
+      name = sha256
+      salt_position = suffix
+    }
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+    collection = "mqtt_user"
+    filter { username = "${username}" }
 
-auth.mongo.password_hash = sha256
+    mongo_type = single
+    server = "127.0.0.1:27017"
+
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
+  }
+  ```
+*  MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
+```hocon
+{
+  mechanism = password_based
+  backend = mongodb
+  enable = true
+
+  password_hash_algorithm {
+    name = sha256
+    salt_position = suffix
+  }
+
+  collection = "mqtt_user"
+  filter { username = "${username}" }
+
+  mongo_type = rs
+  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+  replica_set_name = "rs0"
+
+  database = "mqtt"
+  username = "emqx"
+  password = "secret"
+}
+```
+*  MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
+```hocon
+{
+  mechanism = password_based
+  backend = mongodb
+  enable = true
+
+  password_hash_algorithm {
+    name = sha256
+    salt_position = suffix
+  }
+
+  collection = "mqtt_user"
+  filter { username = "${username}" }
+
+  mongo_type = sharded
+  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+
+  database = "mqtt"
+  username = "emqx"
+  password = "secret"
+}
 ```
 
+### Common Configuration Options
 
-## auth_selector
+#### `password_hash_algorithm`
 
-During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
+Standard [password hashing options](./authn.md#password-hashing).
 
-MongoDB supported configuration collection name, password field, and selector command
+#### `filter`
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+A map interpreted as MongoDB selector for credential lookup.
+Supports [placeholders](./authn.md#authentication-placeholders).
 
-auth.mongo.auth_query.collection = mqtt_user
+#### `database`
 
-## If salting is enabled, it needs to be configured as password,salt
-## Value:  password | password,salt
-auth.mongo.auth_query.password_field = password
+Required string value with MongoDB database name to use.
 
-auth.mongo.auth_query.selector = username=%u
-```
+#### `username`
 
-You can use the following placeholders in the selector, and EMQX Broker will be automatically populated with client information when executed:
+Optional string value with MongoDB user.
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+#### `password`
 
-You can adjust the authentication query according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication query must meet the following conditions:
+Optional string value with MongoDB user password.
 
-1. The query result must include the password field, which is used by EMQX Broker to compare with the client password
-2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQX Broker as the salt value
-3. MongoDB uses the findOne query command to ensure that the query results you expect are shown in the first data
+#### `pool_size`
+
+Optional integer value defining the number of concurrent connections from an EMQX node to a MongoDB server.
+The default value is 8.
+
+#### `ssl`
+
+Standard [SSL options](./ssl.md) for [secure connecting to MongoDB](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
+
+#### `srv_record`
+
+Optional boolean value, the default value is `false`. If set to `true`, EMQX will try to
+fetch information about MongoDB hosts, `replica_set_name` (for `rs` type), and `auth_source` from
+DNS records of the specified server(s). See [DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
+
+#### `topology`
+
+An optional map of some fine-grained MongoDB driver settings.
+
+* `pool_size` — integer value, the initial size of the internal connection pool.
+* `max_overflow` — integer value, number of overflow workers be created, when all workers from the internal pool are busy.
+* `overflow_ttl` — duration, number of milliseconds for overflow workers to stay in the internal pool before terminating.
+* `overflow_check_period` — duration, `overflow_ttl` check period for workers (in milliseconds).
+* `local_threshold_ms` — ms duration, secondaries only which RTTs fit in the window from lower RTT to lower RTT + `local_threshold_ms` could be selected for handling user's requests.
+* `connect_timeout_ms` — ms duration, timeout for establishing TCP connections.
+* `server_selection_timeout_ms` — ms duration, max time appropriate server should be selected by.
+* `wait_queue_timeout_ms` — ms duration, max time for waiting for a worker to be available in the internal pool.
+* `heartbeat_frequency_ms` — ms duration, default delay between Topology rescans.
+* `min_heartbeat_frequency_ms` — ms duration, the minimum delay between Topology rescans.
+
+### Standalone MongoDB Options
+
+#### `server`
+
+MongoDB server address to connect or to us as a seed, required.
+
+#### `w_mode`
+
+Write mode, `unsafe` (default) or `safe`. The safe mode makes a `getLastError` request after every write in the sequence. If the reply says it failed then the rest of the sequence is aborted. Alternatively, unsafe mode issues every write without confirmation, so if a write fails you won't know about it and the remaining operations will be executed. This is unsafe but faster because there is no round-trip delay.
+
+### MongoDB ReplicaSet Options
+
+#### `servers`
+
+MongoDB server addresses to connect or to us as seeds, required.
+
+#### `w_mode`
+
+Write mode, the same as for [Standalone MongoDB](#wmode).
+
+#### `r_mode`
+
+Read mode, `master` (default) or `slave_ok`. `master` means that every query in a sequence must read only fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. `slave_ok` means every query is allowed to read stale data from a slave/secondary (fresh data from a master is fine too).
+
+#### `replica_set_name`
+
+Replica set name to use, required. Can be overwritten with seeds if `srv_record` is set to `true`.
+
+### MongoDB Cluster Options
+
+#### `servers`
+
+MongoDB server addresses to connect or to us as seeds, required.
+
+#### `w_mode`
+
+Write mode, the same as for [Standalone MongoDB](#wmode).

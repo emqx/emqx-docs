@@ -33,8 +33,13 @@ postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VA
 INSERT 0 1
 ```
 
-The corresponding query template is:
+The corresponding config parameters are:
 ```
+password_hash_algorithm {
+    name = sha256
+    salt_position = prefix
+}
+
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
