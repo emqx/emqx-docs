@@ -1,12 +1,12 @@
 # User Management API
 
-Some [authenticators](./authn.md#authentication-sources) (with ``built_in_database` backend`) store credential data in EMQX internal database (Mnesia):
+Some [authenticators](./authn.md#authentication-sources) (with `built_in_database` backend) store credential data in EMQX internal database (Mnesia):
 
 * `password_based:built_in_database`
 * `scram:built_in_database`
 
 For this authenticators users can be managed through HTTP API.
-It allows to create, update, remove, list and import user credentials.
+It allows to create, update, remove, and list user credentials.
 
 To use user-management API for an authenticator, the authenticator must be set up for the used
 [chain](./authn.md#authentication-chains).
@@ -15,29 +15,26 @@ To use user-management API for an authenticator, the authenticator must be set u
 Each authentication chain has it own set of users.
 :::
 
-## POST /authentication/{id}/import_users
+## API Endpoints
 
-Also `POST /listeners/{listener_id}/authentication/{id}/import_users"` for a concrete listener.
+Endpoint for the users of the global MQTT chain is `/api/v5/authentication/{id}/users`.
+Endpoint for the uses of a concrete MQTT listener chain is `/api/v5/listeners/{listener_id}/authentication/{id}/`.
+Endpoint for the users of a global `gateway` protocol chain is `/api/v5/gateway/{protocol}/authentication`.
+Endpoint for the uses of a `gateway` protocol listener chain is `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`.
 
-```bash
-## Request
-curl -i \
---basic \
--u admin:public \
--X POST \
--H "Content-Type: application/json" \
-http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/import_users \
--d @- <<'EOF'
-{
-  "filename": "user-credentials.csv"
-}
-EOF
+See [authentication API documentation](./authn.md#http-api) for identificator conventions.
 
-## Response
-## 204 No Content
-```
+## Importing Users
 
-`filename` should be a node-local path of a file with credentials.
+User import is supported for the `password_based:built_in_database` authenticator.
+
+The endpoints for importing users into the corresponding chains are:
+* `/api/v5/authentication/{id}/import_users`
+* `/api/v5/listeners/{listener_id}/authentication/{id}/import_users`
+* `/api/v5/gateway/{protocol}/authentication/import_users`
+* `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
+
+The accepted `filename` parameter should be a node-local path of a file with credentials.
 
 The following file formats (identified by file extention) are supported:
 * CSV (`{"filename": "some-filename.csv"}`:
@@ -63,149 +60,4 @@ The following file formats (identified by file extention) are supported:
     }
   ]
   ```
-
-## GET /authentication/{id}/users
-
-Also `GET /listeners/{listener_id}/authentication/{id}/users"` for a concrete listener.
-
-List chain users.
-
-Possible parameters are:
-* `page`, `limit` — pagination parameters (pages start from 1);
-* `like_username` — limit users to having the specified substring pattern in their `username`;
-* `like_clientid` — limit users to having the specified substring pattern in their `clientid`;
-* `is_superuser` — limit users to having the specified `is_superuser` value.
-
-```bash
-## Request
-curl -i \
---basic \
--u admin:public \
--X GET \
-http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/users?page=1&limit=1&like_username=myuser3&is_superuser=true
-
-## Response
-{
-  "data": [
-    {
-      "is_superuser": true,
-      "user_id": "myuser3"
-    }
-  ],
-  "meta": {
-    "count": 1,
-    "limit": 1,
-    "page": 1
-  }
-}
-```
-
-## POST /authentication/{id}/users
-
-Also `POST /listeners/{listener_id}/authentication/{id}/users"` for a concrete listener.
-
-Create a user in a chain.
-
-```bash
-## Request
-curl -i \
---basic \
--u admin:public \
--X POST \
--H "Content-Type: application/json" \
-http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/users \
--d @- <<'EOF'
-{
-  "user_id": "user2",
-  "password": "secret",
-  "is_superuser": false
-}
-EOF
-
-## Response
-## 201 Created
-{
-  "is_superuser": false,
-  "user_id": "user2"
-}
-```
-
-`user_id` denotes `username` for authenticators configured with `user_id_type = username` and `clientid` for
-the ones configured with `user_id_type = clientid`.
-
-`is_superuser` field is optional and is `false` by default.
-
-## GET /authentication/{id}/users/{user_id}
-
-Also `GET /listeners/{listener_id}/authentication/{id}/users/{user_id}"` for a concrete listener.
-
-Get information about particular user credentials.
-
-```bash
-## Request
-curl -i \
---basic \
--u admin:public \
--X GET \
-http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/users/user2 \
-
-## Response
-{
-  "is_superuser": false,
-  "user_id": "user2"
-}
-```
-
-Note:
-* there is no `password` or `password_hash` field in the answer;
-* `user_id` URL path parameter should be URL-encoded.
-
-## PUT /authentication/{id}/users/{user_id}
-
-Also `PUT /listeners/{listener_id}/authentication/{id}/users/{user_id}"` for a concrete listener.
-
-Update a user in a chain.
-
-```bash
-## Request
-curl -i \
---basic \
--u admin:public \
--X PUT \
--H "Content-Type: application/json" \
-http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/users/user2 \
--d @- <<'EOF'
-{
-  "password": "secretnew",
-  "is_superuser": false
-}
-EOF
-
-## Response
-{
-  "is_superuser": false,
-  "user_id": "user2"
-}
-```
-
-Note: `user_id` URL path parameter should be URL-encoded.
-
-## DELETE /authentication/{id}/users/{user_id}
-
-Also `DELETE /listeners/{listener_id}/authentication/{id}/users/{user_id}"` for a concrete listener.
-
-Delete a user from a chain.
-
-```bash
-## Request
-curl -i \
---basic \
--u admin:public \
--X DELETE \
-http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/users/user2
-
-## Response
-## 204 No Content
-```
-
 
