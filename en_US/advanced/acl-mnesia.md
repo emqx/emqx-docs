@@ -188,7 +188,7 @@ POST api/v4/acl
 
   ```bash
   # Request
-  GET api/v4/acl/clientid
+  GET api/v4/acl/clientid?_like_clientid=emqx_c
 
   # Response
   {
@@ -225,7 +225,7 @@ POST api/v4/acl
 
   ```bash
   # Request
-  GET api/v4/acl/username
+  GET api/v4/acl/username?_like_username=emqx_u
 
   # Response
   {

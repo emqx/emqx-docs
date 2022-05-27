@@ -193,6 +193,10 @@ After version 4.1, multiple conditions and fuzzy queries are supported. The quer
 | _lte_created_at   | Integer | False    | Search client session creation time by less than or equal method |
 | _gte_connected_at | Integer | False    | Search client connection creation time by greater than or equal method |
 | _lte_connected_at | Integer | False    | Search client connection creation time by less than or equal method |
+| _gte_mqueue_len   | Integer | False    | Current length of message queue by greater than or equal method |
+| _lte_mqueue_len   | Integer | False    | Current length of message queue by less than or equal method |
+| _gte_mqueue_dropped  | Integer| False  | Number of messages dropped by the message queue due to exceeding the length by greater than or equal method ｜
+| _lte_mqueue_dropped  | Integer| False  | Number of messages dropped by the message queue due to exceeding the length by less than or equal method｜
 
 **Success Response Body (JSON):**
 
