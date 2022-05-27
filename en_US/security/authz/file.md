@@ -9,14 +9,13 @@ etc/acl.conf
 ```
 
 ::: tip
-The built-in ACL has the lowest priority and can be overridden by the ACL plugin. If you want to disable it, you can comment all the rules. After the rules file is changed, EMQX Broker needs to be restarted to make them taking effect.
-
+The built-in ACL has the lowest priority and can be overridden by the ACL plugin. If you want to disable it, you can comment all the rules. After the rules file is changed, EMQX Broker needs to be restarted for them to take effect.
 :::
 
 
 ## Define ACL
 
-The built-in ACL is the lowest priority rule table. If it is not hit after all the ACL checks are completed, the default ACL rule is checked.
+The file ACL is the lowest priority rule table. If it is not hit after all the ACL checks are completed, the default ACL rule is checked.
 
 The rules file is described in Erlang syntax:
 
@@ -39,7 +38,7 @@ The rules file is described in Erlang syntax:
 3. The third rule allows clients with IP address `127.0.0.1` to publish / subscribe to the topics ` $SYS/# `and `#`, which makes a special case for the second rule
 4. The fourth rule allows clients with the username `dashboard` to subscribe to the topic ` $SYS/#`, which makes a special case for the second rule
 
-It can be seen that the default ACL is mainly to restrict the client's permissions on the system topic `$SYS/#` and the all wildcard topic `#`.
+The file ACL is mainly to restrict the client's permissions on the system topic `$SYS/#` and the all wildcard topic `#`.
 
 
 ## acl.conf Writing rules
@@ -49,12 +48,12 @@ The rules in the `acl.conf` file are matched from top to bottom in writing order
 The syntax rules of `acl.conf` are included in the comments at the top. Those familiar with Erlang syntax can read the comments at the top of the file directly or refer to the following descriptions:
 
 - Line comments are expressed as `%%`.
-- Each rule consists of four tuples and ends with `.`.
+- Each rule consists of a tuple with four elements and ends with `.`.
 - The first position of the tuple indicates that after the rule is successfully hit, the permission control operation is performed. The possible values are:
     * `allow`
     * `deny`
 - The second position of the tuple indicates the user to which the rule takes effect. The format that can be used is:
-    * `{user, "dashboard"}`：The rule only takes effect for users whose Username  is dashboard
+    * `{user, "dashboard"}`：The rule only takes effect for users whose Username is dashboard
     * `{clientid, "dashboard"}`：The rule only takes effect for users whose ClientId is dashboard
     * `{ipaddr, "127.0.0.1"}`：The rule only takes effect for users whose Source Address is "127.0.0.1"
     * `all`：The rule takes effect for all users
@@ -69,7 +68,7 @@ The syntax rules of `acl.conf` are included in the comments at the top. Those fa
     - `{allow, all}`：Allow all operations
     - `{deny, all}`：Deny all operations
 
-After the `acl.conf` modification is completed, it will not be automatically loaded into the EMQX Broker system, but needs to be performed manually:
+After the `acl.conf` modification is completed, it will not be automatically loaded into the EMQX Broker system. Loading needs to be performed manually:
 
 ```bash
 ./bin/emqx_ctl modules reload emqx_mod_acl_internal
@@ -92,6 +91,6 @@ Means that a client with ID 'light' is **Allowed** to **Subscribe and Publish** 
 
 
 ::: tip
-Only a few simple and general rules is contained in acl.conf that make it a system-based ACL principle. If you need to support complex, large amounts of ACL content, you should implement it in an authentication plugin.
-
+The file ACL backend is handy when there are only a small number of general rules, or a small number of username/ClientID based rules.
+For large number of per username/CliendID rules, another database ACL backend is recommended as an extension or replacement of the file backend.
 :::

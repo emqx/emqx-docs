@@ -1,15 +1,15 @@
 # Introduction
 
-Authentication is an important part of most applications. MQTT protocol supports username/password authentication. Enabling authentication can effectively prevent illegal client connections.
+Authentication is an important part of most applications. MQTT protocol supports username/password authentication. Enabling authentication can effectively prevent unwanted or malicious client connections.
 
-Authentication in EMQX Broker means that when a client connects to EMQX Broker, the server configuration  is used to control the client's permission to connect to the server.
+Authentication in EMQX Broker means that when a client connects to EMQX Broker, the server configuration is used to control the client's permission to connect to the server.
 
 EMQX Broker's authentication support includes two levels:
 
-- The MQTT protocol specifies the user name and password in the CONNECT packet by itself. EMQX Broker supports multiple forms of authentication based on Username, ClientID, HTTP, JWT, LDAP, and various databases such as MongoDB, MySQL, PostgreSQL, Redis through plugins.
+- The MQTT protocol specifies the user name and password in the CONNECT packet by itself. EMQX Broker supports multiple forms of authentication based on Username, ClientID, HTTP, JWT, LDAP, and various databases such as MongoDB, MySQL, PostgreSQL, and Redis through plugins.
 - At the transport layer, TLS guarantees client-to-server authentication using client certificates and ensures that the server verifies the server certificate to the client. PSK-based TLS/DTLS authentication is also supported.
 
-This authentication methods supported by EMQX and the configuration methods of the corresponding plugins are introduced in this article.
+The authentication methods supported by EMQX and the configuration methods of the corresponding plugins are introduced in this article.
 
 ## Authentication method
 
@@ -66,7 +66,6 @@ The configuration file and the built-in database of EMQX are used to provide an 
 The external database can store a large amount of data, while facilitating integration with external device management systems.
 
 
-
 Others
 
 {% emqxee %}
@@ -87,7 +86,6 @@ Others
 JWT authentication can issue authentication information in batches, and HTTP authentication can implement complex authentication logic.
 
 
-
 ::: tip
 
 After changing the plugin configuration, you need to restart the plugin to take effect. Some authentication plugins include [ACL function](../authz/acl.md).
@@ -99,13 +97,13 @@ After changing the plugin configuration, you need to restart the plugin to take 
 
 Any authentication method will eventually return a result:
 
-- Authentication succeeded: the client authentication succeeded after comparison
-- Authentication failed: the client authentication fails after comparison, which is because the password in the data source does not match the current password
+- Authentication succeeded: The client authentication succeeded after comparison.
+- Authentication failed: The client authentication fails after comparison, which is because the password in the data source does not match the current password.
 - Ignore: The authentication data is not found with the current authentication method, and the result cannot be determined explicitly. The next method of authentication chain or anonymous authentication is used to determine the result.
 
 ## Anonymous Authentication
 
-Anonymous authentication is enabled in the EMQX default configuration and any client can access EMQX. When the authentication plug-in is not enabled or the authentication plug-in does not explicitly allow/deny(ignore) the connection request, EMQX will decide whether to allow the client to connect based on whether the anonymous authentication is enabled.
+Anonymous authentication is enabled in the EMQX default configuration and with it enabled any client can access EMQX. When the authentication plug-in is not enabled or the authentication plug-in does not explicitly allow/deny the connection request but instead returns ignore, EMQX will decide whether to allow the client to connect based on whether the anonymous authentication is enabled.
 
 Configure the anonymous authentication:
 
@@ -153,14 +151,14 @@ auth.mysql.password_hash = sha256,salt
 
 ### How to generate authentication information
 
-1. Assign user name, Client ID, password, and salt for each client
-2. Use the same salting rules and hash method as MySQL authentication to process client information to get cipher text
+1. Assign user name, Client ID, password, and salt for each client.
+2. Use the same salting rules and hash method as MySQL authentication to process client information to get cipher text.
 3. Write the client information to the database. The client password should be cipher text information.
 
 ### EMQX authentication process
 
-1. The authentication data such as password (ciphertext) and salt are queried according to the configured authentication SQL combined with the information passed in by the client. If there is no query result, the authentication will terminate and the ignore result will be returned
-2. The cipher text is calculated according to the configured salting rule and hash method. If no hash method is enabled,  this step is skipped.
+1. The authentication data such as password (ciphertext) and salt are queried according to the configured authentication SQL combined with the information passed in by the client. If there is no query result, the authentication will terminate and the ignore result will be returned.
+2. The cipher text is calculated according to the configured salting rule and hash method. If no hash method is enabled, this step is skipped.
 3. Compare the cipher text stored in the database with the cipher text calculated by the current client. If the comparison is successful, the authentication succeeds. Otherwise, the authentication fails.
 
 MySQL authentication function logic diagram:
@@ -168,7 +166,7 @@ MySQL authentication function logic diagram:
 ![image-20200217154254202](./assets/image-20200217154254202.png)
 
 ::: tip
-The authentication can be performed normally when the salting rules and hash method of the written data are consistent with the configuration of the corresponding plugin. It will invalidate existing authentication data when changing the hashing method.
+Authentication can be performed normally when the salting rules and hash method of the written data are consistent with the configuration of the corresponding plugin. Changing the hashing method will invalidate existing authentication data.
 :::
 
 
@@ -176,11 +174,11 @@ The authentication can be performed normally when the salting rules and hash met
 ## Authentication chain
 
 When multiple authentication methods are enabled at the same time, EMQX will perform chain authentication in the order in which the plugins are opened:
-- Once authentication succeeds, terminate the authentication chain and allow clients to access
-- Once authentication fails, terminate the authentication chain and prohibit client access
-- If Failing to pass until the last authentication method,  it is determined according to  **anonymous authentication** configuration
-  - Allow client access when anonymous authentication is enabled
-  - Deny client access when anonymous authentication is disabled
+- Once authentication succeeds in any one of the methods, the authentication chain is terminated the client is allowed access.
+- Once authentication fails in any one of the methods, the authentication chain is terminated the client is denied access.
+- If all enabled authentication methods ignore the authentication request, or there are no configured methods, success or failure is determined according to the  **anonymous authentication** configuration.
+  - Allow client access when anonymous authentication is enabled.
+  - Deny client access when anonymous authentication is disabled.
 
 
 
@@ -190,7 +188,7 @@ When multiple authentication methods are enabled at the same time, EMQX will per
 
 ::: tip
 
-It can improve client authentication efficiency when enabling only one authentication plugin at the same time
+Client authentication efficiency can be improved by having only one authentication plugin enabled at a time.
 
 :::
 
@@ -210,7 +208,7 @@ listener.ssl.external.certfile = etc/certs/cert.pem
 listener.ssl.external.cacertfile = etc/certs/cacert.pem
 ```
 
-Note that the `key.pem`,` cert.pem` and `cacert.pem` under the default directory of ` etc/certs` are self-signed certificates generated by EMQX Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client.
+Note that the `key.pem`,` cert.pem` and `cacert.pem` under the default directory of `etc/certs` are self-signed certificates generated by EMQX Broker. Therefore, when testing with a client that supports TLS, you need to configure the above CA certificate `etc/certs/cacert.pem` to the client.
 
 The cipher list supported by the server needs to be specified explicitly. The default list is consistent with Mozilla's server cipher list:
 

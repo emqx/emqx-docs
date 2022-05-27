@@ -1,6 +1,6 @@
 # PostgreSQL ACL
 
-An external PostgreSQL database is used to store ACL rules for PostgreSQL ACL, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems.
+For PostgreSQL ACL, an external PostgreSQL database is used to store ACL rules. This allows for storing a large amount of data and dynamically managing ACLs for easy integration with external device management systems.
 
 Plugin:
 
@@ -9,13 +9,13 @@ emqx_auth_pgsql
 ```
 
 ::: tip 
-The emqx_auth_mysql plugin also includes authentication feature, which can be disabled via comments.
+The emqx_auth_pgsql plugin also includes authentication which can be disabled via comments.
 :::
 
 
 ## PostgreSQL Connection information
 
-PostgreSQL basic connection information needs to be accessible to all nodes in the cluster.
+All nodes in the EMQX cluster must be able to access the PostgreSQL database using the provided connection configuration.
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
@@ -92,8 +92,8 @@ Rule table field description:
 - clientid: Client ID of the connected client
 - access: Allowed operations: subscribe (1), publish (2), both subscribe and publish (3)
 - topic: Topics to be controlled, which can use wildcards, and placeholders can be added to the topic to match client information. For example, the topic will be replaced with the client ID of the current client when matching `t/%c`
-  - %u：Username
-  - %c：Client ID
+  - %u： Username
+  - %c： Client ID
 
 
 
@@ -133,18 +133,18 @@ auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u
 
 You can use the following placeholders in SQL and EMQX Broker will automatically populate with client information when executed:
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+- %u： Username
+- %c： Client ID
+- %C： TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
+- %d： TLS certificate subject, valid only for TLS connections
 
-You can adjust the super user SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser SQL needs to meet the following conditions:
+You can adjust the superuser SQL according to business needs to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser SQL needs to meet the following conditions:
 
-1. The query result must include the is_superuser field, which should be explicitly true
+1. The query result must include the is_superuser field, which should be explicitly true or false.
 2. There can be only one query result. When there are multiple results, only the first one is taken as valid data.
 
 ::: tip 
-If superuser functionality is not needed, it can be more efficient when commenting and disabling this option 
+If superuser functionality is not needed it can be more efficient to disable this option by commenting it out.
 :::
 
 

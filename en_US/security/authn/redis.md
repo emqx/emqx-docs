@@ -19,7 +19,7 @@ To enable Redis authentication, you need to configure the following in `etc/plug
 
 ## Redis connection information
 
-For Redis basic connection information, it needs to ensure that all nodes in the cluster can access.
+For Redis basic connection information, it needs to ensure that all nodes in the EMQX cluster can access Redis.
 
 ```bash
 # etc/plugins/emqx_auth_redis.conf
@@ -51,7 +51,7 @@ The sample data in the default configuration is as follows:
 HMSET mqtt_user:emqx password public salt wivwiv
 ```
 
-After Redis  authentication is enabled, you can connect with username: emqx, password: public.
+After Redis authentication is enabled, you can connect with username: emqx, password: public.
 
 ::: tip 
 This is the data structure used by default configuration. After being familiar with the use of the plugin, you can use any data structure that meets the conditions for authentication

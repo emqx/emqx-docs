@@ -14,10 +14,10 @@ emqx_auth_mnesia
 
 ```json
 {
-	"username":"emqx",
-	"clientid":"client1",
-	"topic":"testtopic/1",
-	"action":"pub",
+	"username": "emqx",
+	"clientid": "client1",
+	"topic": "testtopic/1",
+	"action": "pub",
 	"access": "allow"
 }
 ```
@@ -31,9 +31,9 @@ Rule field description:
   - %u: Username
   - %c: Client ID
 - action: Operation action, optional value: pub | sub | pubsub
-- allow: Whether allow
+- access: Whether to allow, deny, or ignore
 
-`username` and `clientid` are optional fields, when both a missing, the rule applies to all clients.
+`username` and `clientid` are optional fields, when both are missing the rule applies to all clients.
 
 Mnesia ACL does not set rules by default, and you can use the HTTP API to manage ACL rules.
 
@@ -48,22 +48,22 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
   # Request
   POST api/v4/acl
   {
-    "clientid":"emqx_c",
-    "topic":"Topic/A",
-    "action":"pub",
+    "clientid": "emqx_c",
+    "topic": "Topic/A",
+    "action": "pub",
     "access": "allow"
   }
 
   # Response
   {
       "data": {
-          "clientid":"emqx_c",
-          "topic":"Topic/A",
-          "action":"pub",
+          "clientid": "emqx_c",
+          "topic": "Topic/A",
+          "action": "pub",
           "access": "allow"
           "result": "ok"
       },
-      "code": 0
+      "code":0
   }
   ```
 + Username ACL：
@@ -72,18 +72,18 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
   # Request
   POST api/v4/acl
   {
-    "username":"emqx_u",
-    "topic":"Topic/A",
-    "action":"pub",
+    "username": "emqx_u",
+    "topic": "Topic/A",
+    "action": "pub",
     "access": "allow"
   }
 
   # Response
   {
       "data": {
-          "username":"emqx_u",
-          "topic":"Topic/A",
-          "action":"pub",
+          "username": "emqx_u",
+          "topic": "Topic/A",
+          "action": "pub",
           "access": "allow"
           "result": "ok"
       },
@@ -96,8 +96,8 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
   # Request
   POST api/v4/acl
   {
-    "topic":"Topic/A",
-    "action":"pub",
+    "topic": "Topic/A",
+    "action": "pub",
     "access": "allow"
   }
 
@@ -105,12 +105,12 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
   {
       "data": {
           "all": "$all",
-          "topic":"Topic/A",
-          "action":"pub",
+          "topic": "Topic/A",
+          "action": "pub",
           "access": "allow"
           "result": "ok"
       },
-      "code": 0
+      "code":0
   }
   ```
 
@@ -121,20 +121,20 @@ Mnesia ACL does not set rules by default, and you can use the HTTP API to manage
 POST api/v4/acl
 [
   {
-    "clientid":"emqx_c_1",
-    "topic":"Topic/A",
-    "action":"pub",
+    "clientid": "emqx_c_1",
+    "topic": "Topic/A",
+    "action": "pub",
     "access": "allow"
   },
   {
-    "username":"emqx_u_1",
-    "topic":"Topic/A",
-    "action":"sub",
+    "username": "emqx_u_1",
+    "topic": "Topic/A",
+    "action": "sub",
     "access": "allow"
   },
   {
-    "topic":"Topic/+",
-    "action":"pubsub",
+    "topic": "Topic/+",
+    "action": "pubsub",
     "access": "deny"
   }
 ]
@@ -143,27 +143,27 @@ POST api/v4/acl
 {
     "data": [
       {
-        "clientid":"emqx_c_1",
-        "topic":"Topic/A",
-        "action":"pub",
+        "clientid": "emqx_c_1",
+        "topic": "Topic/A",
+        "action": "pub",
         "access": "allow",
         "result": "ok"
       },
       {
-        "username":"emqx_u_1",
-        "topic":"Topic/A",
-        "action":"pub",
+        "username": "emqx_u_1",
+        "topic": "Topic/A",
+        "action": "pub",
         "access": "allow"
         "result": "ok"
       },
       {
         "all": "$all",
-        "topic":"Topic/+",
-        "action":"pubsub",
+        "topic": "Topic/+",
+        "action": "pubsub",
         "access": "deny"
       },
     ],
-    "code": 0
+    "code":0
 }
 ```
 

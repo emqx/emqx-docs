@@ -9,16 +9,15 @@ emqx_auth_mongo
 ```
 
 ::: tip 
-The emqx_auth_mongo plugin also includes ACL feature, which can be disabled via comments
+The emqx_auth_mongo plugin also includes ACL feature, which can be disabled via comments.
 :::
 
 
-
-To enable MongoDB authentication, you need to configure the following in `etc/plugins/emqx_auth_mongo.conf` :
+To enable MongoDB authentication, you need to configure the following in `etc/plugins/emqx_auth_mongo.conf`:
 
 ## MongoDB Connection information
 
-For MongoDB basic connection information, it needs to ensure that all nodes in the cluster can access.
+For MongoDB basic connection information, it needs to ensure that all nodes in the EMQX cluster can access MongoDB.
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -132,7 +131,7 @@ auth.mongo.password_hash = sha256
 
 During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication SQL to query the client's authentication data in the database.
 
-MongoDB supported configuration collection name, password field, and selector command
+MongoDB supports configuring the collection name, password field, and selector command
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -153,8 +152,8 @@ You can use the following placeholders in the selector, and EMQX Broker will be 
 - %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
 - %d：TLS certificate subject, valid only for TLS connections
 
-You can adjust the authentication query according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication query must meet the following conditions:
+You can adjust the authentication query according to business needs to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the authentication query must meet the following conditions:
 
-1. The query result must include the password field, which is used by EMQX Broker to compare with the client password
-2. If the salting configuration is enabled, the query result must include the salt field, which is used by EMQX Broker as the salt value
-3. MongoDB uses the findOne query command to ensure that the query results you expect are shown in the first data
+1. The query result must include the password field, which is used by EMQX Broker to compare with the client password.
+2. If the salting configuration is enabled, the query result must include the salt field which is used by EMQX Broker as the salt value.
+3. MongoDB uses the findOne query command to ensure that the query results you expect are shown in the first data.

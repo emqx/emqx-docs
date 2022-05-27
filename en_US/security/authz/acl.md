@@ -1,8 +1,8 @@
 # Introduction
 
-**Publish/Subscribe ACL** refers to **permission control**  for  **PUBLISH/SUBSCRIBE** operations. For example, the user name with the name `Anna` is prohibited to publish messages to ` open / elsa / door`.
+**Publish/Subscribe ACL** refers to **permission control** for **PUBLISH/SUBSCRIBE** operations. For example, the user name with the name `Anna` being prohibited from publishing messages to `open / elsa / door`.
 
-EMQX supports the permission management of client through client publish/subscribe ACLs. This chapter describes the publish/subscribe ACLs supported by EMQX and the configuration methods of corresponding plugins.
+EMQX supports the permission management of clients through client publish/subscribe ACLs. This chapter describes the publish/subscribe ACLs supported by EMQX and the configuration methods of corresponding plugins.
 
 
 ## ACL Plugins
@@ -56,7 +56,7 @@ The configuration file is used to provide an authentication data source, which i
 {% endemqxce %}
 
 
-The external database can store a large amount of data and dynamically manage ACLs to facilitate integration with external device management systems.
+An external database can store a large amount of data and dynamically manage ACLs to facilitate integration with external device management systems.
 
 
 
@@ -82,7 +82,7 @@ HTTP ACL enables complex ACL management.
 
 ::: tip
 
-The ACL function is included in the authentication plugin. After changing the plugin configuration, you need to restart the plugin to take effect.
+The ACL function is included in the authentication plugin. After changing the plugin configuration you need to restart the plugin to take effect.
 
 :::
 
@@ -99,13 +99,13 @@ ACL is a collection of allowing and denying conditions. The following elements a
 
 {% emqxee %}
 
-When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from bottom to top:
+When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the ACL file as an example, it loads the rule from bottom to top:
 
 {% endemqxee %}
 
 {% emqxce %}
 
-When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from bottom to top:
+When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the ACL file as an example, it loads the rule from bottom to top:
 
 {% endemqxce %}
 
@@ -129,7 +129,7 @@ When there are multiple ACL rules at the same time, EMQX will merge them in orde
 
 ## Authentication results
 
-Any  ACL authentication eventually returns a result:
+Any ACL authentication eventually returns a result:
 
 - Allow: Client operation is allowed after checking
 - Deny: Client operations are denied after inspection
@@ -171,7 +171,7 @@ Configure the default [ACL file](./file.md) and use the file to define the defau
 acl_file = etc/acl.conf
 ```
 
-Configure the response action when ACL authentication is  **deny**, the device will be disconnected if it is `ignore`:
+Configure the response action when ACL authentication is **deny**, the device will be disconnected if it is `ignore`:
 
 ```bash
 # etc/emqx.conf
@@ -191,9 +191,9 @@ In MQTT v3.1 and v3.1.1 protocols, the server returns without any packet error a
 
 Clients can have a "Superuser" identity, which has the highest permissions without being restricted by ACLs.
 
-1. After the superuser function is enabled in the authentication plugin, EMQX will check whether the client  has superuser identity first when publishing the subscription
+1. After the superuser function is enabled in the authentication plugin, EMQX will check whether the client has superuser identity first when publishing the subscription
 
-2. When the client is a super user, the authentication is passed and subsequent ACL checks are skipped
+2. When the client is a superuser, the authentication is passed and subsequent ACL checks are skipped
 
 
 ## ACL Cache
@@ -218,7 +218,7 @@ acl_cache_ttl = 1m
 
 ### Clear cache
 
-After updating the ACL rule, some clients cannot take effect immediately because the cache already exists. You need to manually clear all ACL caches to make them taking effect immediately :
+After updating the ACL rule, the new or modified rules cannot take effect immediately because the cache already exists. You need to manually clear all ACL caches to make them taking effect immediately :
 
 Refer to [HTTP API - CLear ACL cache](http.md#endpoint-get-acl-cache)
 
@@ -226,9 +226,9 @@ Refer to [HTTP API - CLear ACL cache](http.md#endpoint-get-acl-cache)
 ## ACL Authentication Chain
 
 When multiple ACL plugins are enabled at the same time, EMQX will perform chain authentication in the order in which the plugins are opened:
-- -Once authentication passed, terminate the chain and allow clients to pass authentication
+- Once authentication passed, terminate the chain and allow clients to pass authentication
 - Once authorization fails, terminate the chain and deny clients from passing authentication
-- if keep failing until the last ACL plugin, judge according to the **default authentication** configuration
+- If ignored until the last ACL plugin, judge according to the **default authentication** configuration
   - Allow client to pass authentication when default authentication is *allow*
   - Deny clients from passing authentication When default authentication is *deny*
 

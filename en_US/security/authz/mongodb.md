@@ -1,6 +1,6 @@
 # MongoDB ACL
 
-For MongoDB ACL, an external MongoDB database is used to store ACL rules, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems
+For MongoDB ACL, an external MongoDB database is used to store ACL rules. This allows for storing a large amount of data and dynamically managing ACLs for easy integration with external device management systems.
 
 Plugin:
 
@@ -9,13 +9,13 @@ emqx_auth_mongo
 ```
 
 ::: tip
-The emqx_auth_mongo plugin also includes authentication, which can be disabled via comments
+The emqx_auth_mongo plugin also includes authentication which can be disabled via comments.
 :::
 
 
 ## MongoDB connection information
 
-MongoDB basic connection information needs to ensure that all nodes in the cluster can be accessed.
+All nodes in the EMQX cluster must be able to access MongoDB using the provided connection configuration.
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -119,18 +119,18 @@ db.mqtt_user.insert({
 }
 ```
 
-MongoDB ACL rule defines the publish, subscribe, and publish/subscribe information, and  all **allow** lists are included in the rule.
+MongoDB ACL rule defines the publish, subscribe, and publish/subscribe information, and all **allow** lists are included in the rule.
 
 Rule field description:
 
-- username: the user name of the connected client
-- clientid: the Client ID of the connected client
-- publish: the number of topics allowed to be published, supports wildcards
-- subscribe: the number of topics allowed to be subscribed to, supports wildcards
-- pubsub: the number of topics allowed to be published  and subscribed to, supports wildcards
+- username: The user name of the connected client
+- clientid: The Client ID of the connected client
+- publish: The number of topics allowed to be published, supports wildcards
+- subscribe: The number of topics allowed to be subscribed to, supports wildcards
+- pubsub: The number of topics allowed to be published and subscribed to, supports wildcards
 
 ::: tip
-Wildcards can be used for topic, and placeholders can be added to the topic to match client information. For example,  the topic will be replaced with the client ID of the current client when matching `t/%c`.
+Wildcards can be used for topic, and placeholders can be added to the topic to match client information. For example, the topic will be replaced with the client ID of the current client when matching `t/%c`.
 
   - %u：user name
   - %c：Client ID
@@ -158,7 +158,7 @@ After enabling MongoDB ACL and successfully connecting with the username emqx, t
 
 ## super_query
 
-When performing ACL authentication, EMQX Broker will use the current client information to execute a user-configured superuser query to query whether the client is a superuser. ACL queries are skipped when the client is a superuser.
+When performing ACL authentication, EMQX Broker will use the current client information to execute a user-configured superuser query to check whether the client is a superuser. ACL queries are skipped when the client is a superuser.
 
 ```bash
 # etc/plugins/emqx_auth_mongo.conf
@@ -188,15 +188,15 @@ db.mqtt_user.find({
 
 You can use the following placeholders in your query conditions, and EMQX Broker will automatically populate with client information when executed:
 
-- %u：user name
-- %c：Client ID
+- %u： Username
+- %c： Client ID
 
-You can adjust the super user query according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query needs to meet the following conditions:
+You can adjust the superuser query according to business needs to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query needs to meet the following conditions:
 
-1. The query result must include the is_superuser field, which should be explicitly true
+1. The query result must include the is_superuser field, which should be explicitly true or false
 
 ::: tip
-If superuser functionality is not needed, it can be more efficient when commenting and disabling this option
+If superuser functionality is not needed it can be more efficient to disable this option by commenting it out.
 :::
 
 
@@ -247,8 +247,8 @@ db.mqtt_acl.find({
 
 You can use the following placeholders in ACL queries, and EMQX Broker will automatically populate with client information when executed:
 
-- %u：username
-- %c：Client ID
+- %u： Username
+- %c： Client ID
 
 ::: tip
 MongoDB ACL rules need to use the above data structures strictly.
@@ -259,7 +259,7 @@ When a client's rules list is empty, EMQX continues to check the next auth/ACL p
 Otherwise the check returns immediately without proceeding to the next auth/ACL plugins.
 
 When the rule is non-empty and does not match the corresponding pub/sub permission,
-an ath/ACL failure will be returned (the corresponding pub/sub behavior will be denied) and the auth/ACL chain will be terminated.
+an auth/ACL failure will be returned (the corresponding pub/sub behavior will be denied) and the auth/ACL chain will be terminated.
 
-When more than one auth/ACL plugins are in use, it is recommended to position MongoDB ACL after other auth/ACL plugins in the enabled plugins list.
+MongoDB is a whitelist-only auth backend. This means that not finding a matching entry is automatically a `deny` result. As such, when more than one auth/ACL plugin is in use, it is recommended to position Redis ACL after other auth/ACL plugins in the enabled plugins list.
 :::

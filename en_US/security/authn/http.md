@@ -1,6 +1,6 @@
 # HTTP
 
-HTTP authentication uses an external self-built HTTP application authentication data source, and determines the authentication result based on the data returned by the HTTP API, which can implement complex authentication logic.
+HTTP authentication uses an external self-built HTTP application authentication data source, and determines the authentication result based on the data returned by the HTTP API, which can implement custom authentication logic.
 
 Plugin:
 
@@ -17,9 +17,9 @@ The emqx_auth_http plugin also includes ACL feature, which can be disabled via c
 
 EMQX Broker uses the current client related information as a parameter in the device connection event, initiates a request query permission to the user-defined authentication service, and processes the authentication request through the returned HTTP **statusCode**.
 
- - Authentication failed: API returns status code of 4xx
- - Authentication succeeded: API returns status code of 200
- - Authentication ignored : API returns status code of 200 with message body of ignore
+ - Authentication failed: API returns status code of 4xx.
+ - Authentication succeeded: API returns status code of 200.
+ - Authentication ignored : API returns status code of 200 with message body of ignore.
 
 ## Salting rules and hash methods
 
@@ -47,7 +47,7 @@ auth.http.auth_req.headers.content-type = application/x-www-form-urlencoded
 auth.http.auth_req.params = clientid=%c,username=%u,password=%P
 ```
 
-When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; Under POST and PUT requests, it will submit the request parameters in the form of Json or ordinary form (determined by the value of content-type).
+When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string. Under POST and PUT requests, it will submit the request parameters in the form of Json or ordinary form (determined by the value of content-type).
 
 You can use the following placeholders in the authentication request, and EMQX Broker will be automatically populated with client information when requested:
 

@@ -26,7 +26,6 @@ auth.mnesia.password_hash = sha256
 After configuring [Hash Method](./authn.md#Password salting rules and hash methods), the newly added preset authentication data and authentication data added through the HTTP API will be stored in the EMQX built-in database in the format of hash ciphertext.
 
 
-
 ## Preset authentication data
 
 You can preset authentication data through the configuration file and edit the configuration file: `etc/plugins/emqx_auth_mnesia.conf`

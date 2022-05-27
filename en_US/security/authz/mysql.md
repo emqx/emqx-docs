@@ -1,6 +1,6 @@
 # MySQL ACL
 
-An external MySQL database is used to store ACL rules for MySQL ACL, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems.
+For MySQL ACL, an external MySQL database is used to store ACL rules. This allows for storing a large amount of data and dynamically managing ACLs for easy integration with external device management systems.
 
 Plugin:
 
@@ -9,13 +9,13 @@ emqx_auth_mysql
 ```
 
 ::: tip
-The emqx_auth_mysql plugin also includes authentication feature, which can be disabled via comments.
+The emqx_auth_mysql plugin also includes authentication which can be disabled via comments.
 :::
 
 
 ## MySQL Connection information
 
-MySQL basic connection information needs to be accessible to all nodes in the cluster.
+All nodes in the EMQX cluster must be able to access the MySQL database using the provided connection configuration.
 
 ```bash
 # etc/plugins/emqx_auth_mysql.conf
@@ -131,18 +131,18 @@ auth.mysql.super_query = select is_superuser from mqtt_user where username = '%u
 
 You can use the following placeholders in SQL and EMQX Broker will automatically populate with client information when executed:
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+- %u： Username
+- %c： Client ID
+- %C： TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
+- %d： TLS certificate subject, valid only for TLS connections
 
 You can adjust the super user SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser SQL needs to meet the following conditions:
 
-1. The query result must include the is_superuser field, which should be explicitly true
+1. The query result must include the is_superuser field, which should be explicitly true or false.
 2. There can be only one query result. When there are multiple results, only the first one is taken as valid data.
 
 ::: tip
-If superuser functionality is not needed, it can be more efficient when commenting and disabling this option
+If superuser functionality is not needed it can be more efficient to disable this option by commenting it out.
 :::
 
 
@@ -158,14 +158,14 @@ auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic f
 
 You can use the following placeholders in SQL and EMQX Broker will automatically populate with client information when executed:
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+- %u： Username
+- %c： Client ID
+- %C： TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
+- %d： TLS certificate subject, valid only for TLS connections
 
-You can adjust the ACL SQL according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the ACL SQL needs to meet the following conditions:
+You can adjust the ACL SQL according to business needs to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the ACL SQL needs to meet the following conditions:
 
-1. The query result must include the fields of allow, access, topic, clientid, username, ipaddr. If the fields is not involved in the comparison, the `$ all` string or the database` NULL` value should be used.
+1. The query result must include the fields of allow, access, topic, clientid, username, ipaddr. If the fields are not involved in the comparison, the `$ all` string or the database` NULL` value should be used.
 2. There can be multiple query results. When multiple results are matched, they are matched from top to bottom.
 
 ::: tip
@@ -175,7 +175,7 @@ You can adjust query conditions and specify sorting methods in SQL to achieve mo
 
 ## Special Instructions
 
-For MySQL 8.0 and later version, `caching_sha2_password` is used as the default authentication plugin. Due to the  limit of client driver, you must change it to the ` mysql_native_password` plugin:
+For MySQL 8.0 and later version, `caching_sha2_password` is used as the default authentication plugin. Due to a limitation of the client driver you must change it to the ` mysql_native_password` plugin:
 
 ```sql
 ALTER USER 'your_username'@'your_host' IDENTIFIED WITH mysql_native_password BY 'your_password';

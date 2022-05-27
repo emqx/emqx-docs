@@ -9,14 +9,14 @@ emqx_auth_http
 ```
 
 ::: tip 
-The emqx_auth_http plugin also includes authentication function, which can be disabled via comments.
+The emqx_auth_http plugin also includes an authentication function, which can be disabled via comments.
 :::
 
 To enable HTTP ACL, the following needs to be configured in `etc/plugins/emqx_auth_http.conf`:
 
 ## ACL Authentication principle
 
-EMQX Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP statusCode .
+EMQX Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP statusCode.
 
  - Authorization denied: The API returns status codes other than 200
  - Authorization succeeded: API returns 200 status code
@@ -49,9 +49,9 @@ auth.http.request.retry_backoff = 2.0
 
 When performing publish/subscribe authentication, EMQX Broker will use the current client information and initiate a user-configured ACL authorization query request to query the client's authorization data on the HTTP server.
 
-## superuser Request
+## Superuser Request
 
-Check whether the client is a super user at first. If the client is a super user, the ACL query will be skipped.
+Check whether the client is a superuser at first. If the client is a superuser, the ACL query will be skipped.
 
 ```bash
 # etc/plugins/emqx_auth_http.conf
@@ -102,5 +102,4 @@ You can use the following placeholders in the authentication request, and EMQX B
 
 ::: warning 
 The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
-
 :::

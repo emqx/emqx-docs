@@ -74,13 +74,13 @@ auth.jwt.verify_claims = off
 ```
 ### auth.jwt.from
 
-The field where the client carries the JWT Token, used to configure where the client carries the JWT string, optional fields are username and password.
+The field where the client carries the JWT Token. Optional fields are username and password.
 
 ### auth.jwt.verify_claims
 
-If you enable the `auth.jwt.verify_claims` option, EMQXwill verify the validity of the data in the Payload after verifying the validity of the JWT.
+If you enable the `auth.jwt.verify_claims` option, EMQX will validate the data in the Payload after validating the JWT.
 
-suppose your Payload is:
+Suppose your Payload is:
 
 ```json
 {
@@ -125,7 +125,7 @@ The three types of keys are allowed to be configured simultaneously. EMQX checks
 
 
 ::: danger
-JWT contains authentication information by itself. Once leaked, anyone can get all the permissions of the token. It is recommended to enable TLS encrypted transmission when using JWT.
+JWT contains authentication information within the token itself. Once leaked, anyone can get all the permissions of the token. It is recommended to enable TLS encrypted transmission when using JWT.
 
-During the use of JWT, a token cannot be invalidated before it expires. Please properly set the validity time and keep the encryption information well.
+During the use of JWT, a token cannot be invalidated before it expires. Please properly set the validity time and keep the encryption information secure.
 :::
