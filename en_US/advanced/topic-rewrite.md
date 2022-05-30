@@ -1,14 +1,14 @@
 # Topic rewrite
 
-The topic rewrite function of EMQX Broker supports rewriting topic A to topic B when the client subscribes to topics, publishes messages, and unsubscribes according to user-configured rules.
+The topic rewrite feature of EMQX Broker supports rewriting topic A to topic B when the client subscribes to topics, publishes messages, and unsubscribes according to user-configured rules.
 
-EMQX Broker's [retained message](./retained.md) and [delayed publish](./delayed-publish.md) can be used in conjunction with topic rewriting. For example, when users want to use the delayed publish function, they can use topic rewrite function to rewrite the related topic to the topic format for delayed publication if it is not convenient for modifying the topic published by the client.
+EMQX Broker's [retained message](./retained.md) and [delayed publish](./delayed-publish.md) can be used in conjunction with topic rewriting. For example, when users want to use the delayed publish function, they can use topic rewrite function to rewrite the related topic to the topic format for delayed publication if it is not convenient to modify the topic on the client.
 
 Since the ACL check will be performed before the topic is rewritten, just make sure that the topic can pass the ACL check before rewriting.
 
 ## Enable topic rewrite
 
-The topic rewrite function is disabled by default. To enable this function, you need to modify the `module.rewrite` configuration item in the ` etc/emqx.conf` file. The default `off` means disabled, if you want to enable it, please change it to ` on`.
+The topic rewrite feature is disabled by default. To enable this feature, you need to modify the `module.rewrite` configuration item in the ` etc/emqx.conf` file. The default value `off` means disabled, if you want to enable it, please change it to ` on`.
 
 ```bash
 module.rewrite = off
@@ -21,10 +21,10 @@ EMQX Broker's topic rewrite rules need to be configured by the user. The user ca
 The format of rewrite rule for each topic is as follows:
 
 ```bash
-module.rewrite.rule.<number> = Topic filter Regular expression Target expression
+module.rewrite.rule.<number> = <Topic filter> <Regular expression> <Target expression>
 ```
 
-Each rewrite rule consists of a topic filter, regular expression, and target expression separated by spaces. On the premise that the topic rewrite function is enabled, when receiving MQTT packet such as PUBLISH messages with a topic, EMQX Broker will use the topic in the packet to sequentially match the topic filter part of the rules in the configuration file. Once the match is successful, the regular expression is used to extract the information in the topic, and then replaced to the target expression to form a new topic.
+Each rewrite rule consists of a topic filter, regular expression, and target expression separated by spaces. On the premise that the topic rewrite function is enabled, when receiving MQTT packet such as PUBLISH messages with a topic, EMQX Broker will use the topic in the packet to sequentially match the topic filter part of the rules in the configuration file. Once the match is successful the regular expression is used to extract the information in the topic, and then the old topic is replaced by the target expression to form a new topic.
 
 The target expression can use variables in the format of `$N` to match the elements extracted from the regular expression. The value of `$N` is the Nth element extracted from the regular expression, for example, `$1` is the first element extracted by the regular expression.
 
