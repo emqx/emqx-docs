@@ -67,7 +67,7 @@ backend.cassa.hook.session.subscribed.2  = {"action": {"function": "on_retain_lo
 backend.cassa.hook.message.publish.1     = {"topic": "#", "action": {"function": "on_message_publish"}, "pool": "pool1"}
 
 ## Delete Acked Record
-backend.cassa.hook.session.unsubscribed.1= {"topic": "#", "action": {"cql": ["delete from acked where client_id = ${clientid} and topic = ${topic}"]}, "pool": "pool1"}
+backend.cassa.hook.session.unsubscribed.1= {"topic": "#", "action": {"cql": ["delete from acked where clientid = ${clientid} and topic = ${topic}"]}, "pool": "pool1"}
 
 ## Store Retain Message
 backend.cassa.hook.message.publish.2     = {"topic": "#", "action": {"function": "on_message_retain"}, "pool": "pool1"}
@@ -135,7 +135,7 @@ KeySpace:
 
 ```sql
 CREATE KEYSPACE mqtt WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
-USR mqtt;
+USE mqtt;
 ```
 
 Import Cassandra tables:
@@ -154,34 +154,37 @@ KeySpace is free of choice
 
 ```sql
 CREATE TABLE mqtt.client (
-    client_id text,
+    clientid text,
     node text,
     state int,
     connected timestamp,
     disconnected timestamp,
-    PRIMARY KEY(client_id)
+    PRIMARY KEY(clientid)
 );
 ```
+
 Query a client's connection state:
 
 ```sql
 select * from mqtt.client where clientid = ${clientid};
 ```
+
 If client 'test' is online:
 
 ```bash
 select * from mqtt.client where clientid = 'test';
 
-    client_id | connected                       | disconnected  | node          | state
+    clientid | connected                       | disconnected  | node          | state
 -----------+---------------------------------+---------------+---------------+-------
         test | 2017-02-14 08:27:29.872000+0000 |          null | emqx@127.0.0.1|     1
 ```
+
 Client 'test' is offline:
 
 ```bash
 select * from mqtt.client where clientid = 'test';
 
-    client_id | connected                       | disconnected                    | node          | state
+    clientid | connected                       | disconnected                    | node          | state
 -----------+---------------------------------+---------------------------------+---------------+-------
         test | 2017-02-14 08:27:29.872000+0000 | 2017-02-14 08:27:35.872000+0000 | emqx@127.0.0.1|     0
 ```
@@ -192,18 +195,18 @@ select * from mqtt.client where clientid = 'test';
 
 ```sql
 CREATE TABLE mqtt.sub (
-    client_id text,
+    clientid text,
     topic text,
     qos int,
-    PRIMARY KEY(client_id, topic)
+    PRIMARY KEY(clientid, topic)
 );
 ```
 
 Client 'test' subscribes to topic 'test\_topic1' and
     'test\_topic2':
 ```sql
-insert into mqtt.sub(client_id, topic, qos) values('test', 'test_topic1', 1);
-insert into mqtt.sub(client_id, topic, qos) values('test', 'test_topic2', 2);
+insert into mqtt.sub(clientid, topic, qos) values('test', 'test_topic1', 1);
+insert into mqtt.sub(clientid, topic, qos) values('test', 'test_topic2', 2);
 ```
 
 Query subscriptions of a client:
@@ -216,7 +219,7 @@ Query subscriptions of client 'test':
 ```bash
 select * from mqtt_sub where clientid = 'test';
 
-    client_id | topic       | qos
+    clientid | topic       | qos
 -----------+-------------+-----
         test | test_topic1 |   1
         test | test_topic2 |   2
@@ -286,10 +289,10 @@ select * from mqtt_retain where topic = 'retain';
 
 ```sql
 CREATE TABLE mqtt.acked (
-    client_id text,
+    clientid text,
     topic text,
     msgid text,
-    PRIMARY KEY(client_id, topic)
+    PRIMARY KEY(clientid, topic)
 );
 ```
 
