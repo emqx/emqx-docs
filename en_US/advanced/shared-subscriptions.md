@@ -10,7 +10,7 @@ Shared subscription is a subscription method that achieves load balancing among 
                                                    [subscriber3] got msg3
 ```
 
-In the above picture, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method, where ` topic` is the real topic name they subscribed to, and `$share/g/`  is a shared subscription Prefix. EMQX Broker supports shared subscription prefixes in two formats:
+In the above picture, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method, where ` topic` is the real topic name they subscribed to, and `$share/g/` is a shared subscription Prefix. EMQX Broker supports shared subscription prefixes in two formats:
 
 | Example         | Prefix      | Real topic name |
 | --------------- | ----------- | --------------- |
@@ -22,7 +22,7 @@ In the above picture, three subscribers subscribe to the same topic `$share/g/to
 
 Shared subscriptions prefixed with `$ share/<group-name>` are shared subscriptions with groups:
 
-group-name can be any string. Subscribers who belong to the same group will receive messages with load balancing, but EMQX Broker will broadcast messages to different groups.
+group-name can be any string. Subscribers who belong to the same group will receive messages with load balancing, but EMQX Broker will broadcast messages to different groups at the same time.
 
 For example, suppose that subscribers s1, s2, and s3 belong to group g1, and subscribers s4 and s5 belong to group g2. Then when EMQX Broker publishes a message msg1 to this topic:
 
@@ -77,5 +77,5 @@ broker.shared_dispatch_ack_enabled = false
 | hash        | According to the hash value of the publisher ClientID |
 
 ::: tip
-Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate, otherwise it will cause errors such as message accumulation and client crash.
+Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate to avoid errors such as message accumulation and client crash.
 :::
