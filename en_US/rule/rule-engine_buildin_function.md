@@ -310,7 +310,7 @@ The time unit can be one of 'second', 'millisecond', 'microsecond' or 'nanosecon
 
 | Function | Purpose  | Parameters     | Returned value |
 | -------- | -------- |--------------- | -------------- |
-| `format_date` | Get the time and output the time string in the specified format | 1. time precision <br />2. time offset <br />3. time format string | string |
+| `format_date` | Get and output the time string in the specified format | 1. time precision <br />2. time offset <br />3. time format string | string |
 | `format_date` | Output string with integer timestamp in specified format | 1. time precision<br />2.  time offset<br />3. time format string<br />4. timestamp | string |
 | `date_to_unix_ts` | Parse a string using the specified format | 1. time precision<br />2.  time offset<br />3. time format string<br />4. string | integer |
 
@@ -318,12 +318,12 @@ Time Precision
 
 second,
 millisecond,
-micorsecond,
+microsecond,
 nanosecond,
 
 Time Offset
 
-The user can specify the time zone of the output time through this string, For example, the East Eight time zone can be represented by "+08:00". If the input is empty, the system default time zone will be used.
+The user can specify the time zone of the output time through this string. For example, the East Eight time zone can be represented by "+08:00". If the input is empty the system default time zone will be used.
 
 Time Format String
 

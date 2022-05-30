@@ -391,7 +391,7 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 | ----------- | ----------- |
 | second      | 时间精确到秒 |
 | millisecond | 时间精确到毫秒 |
-| micorsecond | 时间精确到微秒 |
+| microsecond | 时间精确到微秒 |
 | nanosecond  | 时间精确到纳秒 |
 
 时间偏移
