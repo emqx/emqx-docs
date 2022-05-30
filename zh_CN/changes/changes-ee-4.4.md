@@ -28,12 +28,12 @@ ref:
 - 规则引擎 Oracle 资源新增 `service_name` 选项以支持 Oracle Database RAC
 - 支持将 JWT 用于鉴权，现在 MQTT 客户端可以使用包含发布订阅白名单的特定声明进行授权
 - 改进认证相关指标使更易理解，现在 `client.authenticate = client.auth.success + client.auth.failure`
-- 支持 REST API 的监听器绑定到指定的网卡接口上
+- 支持将 REST API 的监听器绑定到指定的网络接口上
 - 上传 License 将自动同步至整个集群，无需每个节点单独上传，提供 HTTP API
 - 支持对使用内置数据库作为数据源的认证鉴权中的用户数据进行多条件查询和模糊查询
 - 支持将消息队列长度以及丢弃消息数量作为条件查询客户端
 - 支持配置日志时间格式以兼容旧版本中的时间格式
-- 当 `use_username_as_clientid` 配置为 `true` 且客户端连接时未指定 `username`，现在将拒绝连接并返回 `Client Identifier not valid` 原因码
+- 当 `use_username_as_clientid` 配置为 `true` 且客户端连接时未指定 `username`，现在将拒绝连接并返回 `0x85` 原因码
 - 提高 AppSecret 的随机性能
 - 通过 CLI 进行备份恢复时，不再要求备份文件必须位于 EMQX 数据目录的 `backup` 文件夹下
 - 现在不兼容版本之间的热升级将被拒绝
@@ -47,7 +47,7 @@ ref:
 - 修复规则引擎 SQL 函数 `hexstr_to_bin/1` 无法处理半字节的问题
 - 修复规则引擎资源删除时告警未被清除的问题
 - 修复 Dashboard HTTPS 监听器的 `verify` 选项未生效的问题
-- 修复共享订阅投递 QoS 1 消息时未正确处理客户端会话关闭的情况而导致消息丢失的问题
+- 修复共享订阅投递 QoS 1 消息过程中对端会话关闭导致消息丢失的问题
 - 修复日志跟踪功能跟踪大报文时堆大小增长过快而触发连接进程强制关闭策略的问题
 - 修复模块禁用时未正确卸载相关钩子导致功能异常的问题
 - 修复 MQTT-SN 客户端重传 QoS 2 消息时会被断开连接的问题
