@@ -1,13 +1,13 @@
-# HTTP API 
+# HTTP API
 EMQX Broker provides HTTP APIs for integration with external systems, such as querying client information, publishing messages, and creating rules.
 
 EMQX Broker's HTTP API service listens on port 8081 by default. You can modify the listening port through the configuration file of  `etc/plugins/emqx_management.conf`, or enable HTTPS listening. All API calls start with `api/v4` after [EMQX Broker 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0).
 
-## Interface security 
+## Interface security
 EMQX Broker's HTTP API uses the method of [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). The `id` and ` password` must be filled with AppID and AppSecret respectively.
 The default AppID and AppSecret are: `admin/public`. You can modify and add AppID / AppSecret in the left menu bar of Dashboard by selecting "Manage"-> "Apps".
 
-## Response code 
+## Response code
 ### HTTP status codes
 
 The EMQX Broker interface always returns 200 OK when the call is successful, and the response content is returned in JSON format.
@@ -47,9 +47,9 @@ The possible returned codes are as follows:
 | 114  | Old password is wrong |
 | 115  | Illegal subject |
 
-## API Endpoints 
-### /api/v4 
-#### GET /api/v4 
+## API Endpoints
+### /api/v4
+#### GET /api/v4
 Return all Endpoints supported by EMQX Broker.
 
 **Parameters:** None
@@ -73,8 +73,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4"
 {"data":[{"path":"/auth_clientid","name":"list_clientid","method":"GET","descr":"List available clientid in the cluster"}, ...],"code":0}
 ```
 
-### Broker Basic Information 
-#### GET /api/v4/brokers/{node} 
+### Broker Basic Information
+#### GET /api/v4/brokers/{node}
 Return basic information of all nodes in the cluster.
 
 **Path Parameters:**
@@ -116,7 +116,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/brokers/e
 ```
 
 ### Node
-#### GET /api/v4/nodes/{node} 
+#### GET /api/v4/nodes/{node}
 Return the status of the node.
 
 **Path Parameters:**
@@ -164,8 +164,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":{"version":"develop","uptime":"2 minutes, 21 seconds","process_used":310,"process_available":2097152,"otp_release":"R21/10.3.5","node_status":"Running","node":"emqx@127.0.0.1","memory_used":101379168,"memory_total":123342848,"max_fds":10240,"load5":"2.50","load15":"2.61","load1":"1.99","connections":0},"code":0}
 ```
 
-### Client 
-#### GET /api/v4/clients 
+### Client
+#### GET /api/v4/clients
 Returns the information of all clients under the cluster, and supports paging.
 
 **Query String Parameters:**
@@ -254,7 +254,7 @@ Note: After 4.1, the contents of the returned `meta` were modified:
 - `count`：It still represents the total number. However, in multi-condition/fuzzy query, it is fixed at -1.
 - `hasnext`：It is a newly added field indicating whether there is a next page.
 
-#### GET /api/v4/clients/{clientid} 
+#### GET /api/v4/clients/{clientid}
 Returns information for the specified client
 
 **Path Parameters:**
@@ -280,7 +280,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients/e
 {"data":[{"recv_cnt":2,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":0,"created_at":"2020-02-20 13:38:51","reductions":3978,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":0,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":1,"mqueue_len":0,"recv_oct":29,"connected_at":"2020-02-20 13:38:51","clean_start":true,"clientid":"example","connected":true,"port":54889,"send_oct":0,"zone":"external"}],"code":0}
 ```
 
-#### DELETE /api/v4/clients/{clientid} 
+#### DELETE /api/v4/clients/{clientid}
 Kick out the specified client. Note that this operation will terminate the connection with the session.
 
 **Path Parameters:**
@@ -305,7 +305,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 {"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/clients 
+#### GET /api/v4/nodes/{node}/clients
 similar with [GET /api/v4/clients](#endpoint-get-clients), Returns information about all clients under the specified node, and supports paging.
 
 **Query String Parameters:**
@@ -330,7 +330,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"meta":{"page":1,"limit":10,"count":1},"data":[{"recv_cnt":2,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":0,"created_at":"2020-02-19 18:25:18","reductions":4137,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":0,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":1,"mqueue_len":0,"recv_oct":29,"connected_at":"2020-02-19 18:25:18","clean_start":true,"clientid":"example","connected":true,"port":49509,"send_oct":0,"zone":"external"}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/clients/{clientid} 
+#### GET /api/v4/nodes/{node}/clients/{clientid}
 Similar with [GET /api/v4/clients/{clientid}](#endpoint-get-a-client)，return information about the specified client under the specified node.
 
 **Path Parameters:**
@@ -354,7 +354,30 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"recv_cnt":4,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":3,"created_at":"2020-02-20 13:38:51","reductions":5994,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":3,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":0,"mqueue_len":0,"recv_oct":33,"connected_at":"2020-02-20 13:38:51","clean_start":true,"clientid":"example","connected":true,"port":54889,"send_oct":8,"zone":"external"}],"code":0}
 ```
 
-#### GET /api/v4/clients/username/{username} 
+#### DELETE /api/v4/nodes/{node}/clients/{clientid}
+Similar with [DELETE /api/v4/clients/{clientid}](#endpoint-delete-a-client)，kick out the specified client under the specified node.
+
+**Path Parameters:**
+
+| Name   | Type | Required | Description |
+| ------ | --------- | -------- |  ---- |
+| clientid  | String | True | ClientID |
+
+**Success Response Body (JSON):**
+
+| Name | Type | Description |
+| ---- | --------- | ----------- |
+| code | Integer   | 0         |
+
+**Examples:**
+
+```bash
+$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/clients/example"
+
+{"code":0}
+```
+
+#### GET /api/v4/clients/username/{username}
 Query client information by Username. Since there may be multiple clients using the same user name, multiple client information may be returned at the same time.
 
 **Path Parameters:**
@@ -378,7 +401,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients/u
 {"data":[{"clean_start":true,"awaiting_rel":0,"recv_msg":0,"proto_name":"MQTT","recv_cnt":2,"mailbox_len":0,"node":"emqx@127.0.0.1","mqueue_len":0,"max_subscriptions":0,"created_at":"2020-02-20 13:50:11","is_bridge":false,"heap_size":2586,"proto_ver":4,"subscriptions_cnt":0,"clientid":"example","expiry_interval":0,"send_msg":0,"inflight":0,"reductions":4673,"send_pkt":1,"zone":"external","send_cnt":1,"ip_address":"127.0.0.1","keepalive":60,"max_inflight":32,"recv_oct":29,"recv_pkt":1,"max_awaiting_rel":100,"username":"steve","connected_at":"2020-02-20 13:50:11","connected":true,"port":56429,"send_oct":4,"mqueue_dropped":0,"max_mqueue":1000}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/clients/username/{username} 
+#### GET /api/v4/nodes/{node}/clients/username/{username}
 Similar with [GET /api/v4/clients/username/{username}](#endpoint-get-clients-by-username), query the information of the specified client through Username under the specified node.
 
 **Path Parameters:**
@@ -402,7 +425,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"clean_start":true,"awaiting_rel":0,"recv_msg":0,"proto_name":"MQTT","recv_cnt":6,"mailbox_len":0,"node":"emqx@127.0.0.1","mqueue_len":0,"max_subscriptions":0,"created_at":"2020-02-20 13:50:11","is_bridge":false,"heap_size":1598,"proto_ver":4,"subscriptions_cnt":0,"clientid":"example","expiry_interval":0,"send_msg":0,"inflight":0,"reductions":7615,"send_pkt":5,"zone":"external","send_cnt":5,"ip_address":"127.0.0.1","keepalive":60,"max_inflight":32,"recv_oct":37,"recv_pkt":1,"max_awaiting_rel":100,"username":"test","connected_at":"2020-02-20 13:50:11","connected":true,"port":56429,"send_oct":12,"mqueue_dropped":0,"max_mqueue":1000}],"code":0}
 ```
 
-#### GET /api/v4/clients/{clientid}/acl_cache 
+#### GET /api/v4/clients/{clientid}/acl_cache
 Query the ACL cache of the specified client.
 
 **Path Parameters:**
@@ -432,7 +455,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients/e
 {"data":[{"updated_time":1582180824571,"topic":"test","result":"allow","access":"publish"}],"code":0}
 ```
 
-#### DELETE /api/v4/clients/{clientid}/acl_cache 
+#### DELETE /api/v4/clients/{clientid}/acl_cache
 Delete the ACL cache of the specified client。
 
 **Path Parameters:**
@@ -497,7 +520,8 @@ curl   -u admin:public -X 'PUT' http://127.0.0.1:18083/api/v4/clients/test/keepa
 ```
 ### Subscription Information
 
-#### GET /api/v4/subscriptions 
+#### GET /api/v4/subscriptions
+
 Returns all subscription information under the cluster, and supports paging mechanism
 
 **Query String Parameters:**
@@ -542,7 +566,7 @@ Note: After 4.1, the contents of the returned `meta` were modified:
 - `count`：It still represents the total number, but in multi-condition/fuzzy query, it is fixed at -1.
 - `hasnext`：It is a newly added field indicating whether there is a next page.
 
-#### GET /api/v4/subscriptions/{clientid} 
+#### GET /api/v4/subscriptions/{clientid}
 Return the subscription information of the specified client in the cluster.
 
 **Path Parameters:**
@@ -570,7 +594,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/subscript
 {"data":[{"topic":"a/b/c","qos":1,"node":"emqx@127.0.0.1","clientid":"123"}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/subscriptions 
+#### GET /api/v4/nodes/{node}/subscriptions
 Similar with [GET /api/v4/subscriptions](#endpoint-get-subscriptions)，returns all subscription information under the specified node, and supports paging mechanism.
 
 **Query String Parameters:**
@@ -600,7 +624,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"meta":{"page":1,"limit":10000,"count":2},"data":[{"topic":"a/+/c","qos":0,"node":"emqx@127.0.0.1","clientid":"78082755-e8eb-4a87-bab7-8277541513f0"},{"topic":"a/b/c","qos":1,"node":"emqx@127.0.0.1","clientid":"7a1dfceb-89c0-4f7e-992b-dfeb09329f01"}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/subscriptions/{clientid} 
+#### GET /api/v4/nodes/{node}/subscriptions/{clientid}
 Similar with [GET /api/v4/subscriptions/{clientid}](#endpoint-get-subscriptions-by-clientid), query all subscription information of a clientid under the specified node, and support paging mechanism.
 
 **Path Parameters:**
@@ -628,8 +652,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"topic":"a/+/c","qos":0,"node":"emqx@127.0.0.1","clientid":"sample"}],"code":0}
 ```
 
-### Routes 
-#### GET /api/v4/routes 
+### Routes
+#### GET /api/v4/routes
 List all routes, support pagination.
 
 **Query String Parameters:**
@@ -657,7 +681,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes"
 {"meta":{"page":1,"limit":10000,"count":2},"data":[{"topic":"a/+/c","node":"emqx@127.0.0.1"},{"topic":"a/b/c","node":"emqx@127.0.0.1"}],"code":0}
 ```
 
-#### GET /api/v4/routes/{topic} 
+#### GET /api/v4/routes/{topic}
 List all routes of a topic.
 
 **Path Parameters:**
@@ -683,8 +707,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes/a%
 {"data":[{"topic":"a/b/c","node":"emqx@127.0.0.1"}],"code":0}
 ```
 
-### Publish message 
-#### POST /api/v4/mqtt/publish 
+### Publish message
+#### POST /api/v4/mqtt/publish
 Publish MQTT message。
 
 **Parameters (json):**
@@ -715,8 +739,8 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/pub
 {"code":0}
 ```
 
-### Subscribe to topic 
-#### POST /api/v4/mqtt/subscribe 
+### Subscribe to topic
+#### POST /api/v4/mqtt/subscribe
 Subscribe to MQTT topic
 
 **Parameters (json):**
@@ -744,7 +768,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/sub
 {"code":0}
 ```
 
-#### POST /api/v4/mqtt/unsubscribe 
+#### POST /api/v4/mqtt/unsubscribe
 Unsubscribe.
 
 **Parameters (json):**
@@ -770,8 +794,8 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 {"code":0}
 ```
 
-### Message publish in batch 
-#### POST /api/v4/mqtt/publish_batch 
+### Message publish in batch
+#### POST /api/v4/mqtt/publish_batch
 Publish MQTT messages in batch.
 
 **Parameters (json):**
@@ -801,7 +825,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/pub
 ```
 
 ### Topic subscription in batch
-#### POST /api/v4/mqtt/subscribe_batch 
+#### POST /api/v4/mqtt/subscribe_batch
 Subscribe to MQTT topics in batch.
 
 **Parameters (json):**
@@ -829,7 +853,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/sub
 {"code":0}
 ```
 
-#### POST /api/v4/mqtt/unsubscribe_batch 
+#### POST /api/v4/mqtt/unsubscribe_batch
 Unsubscribe in batch.
 
 **Parameters (json):**
@@ -856,7 +880,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 ```
 
 ### plugins
-#### GET /api/v4/plugins 
+#### GET /api/v4/plugins
 Returns information of all plugins in the cluster.
 
 **Path Parameters:** None
@@ -883,7 +907,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/plugins"
 {"data":[{"plugins":[{"version":"develop","type":"auth","name":"emqx_auth_clientid","description":"EMQX Broker Authentication with ClientId/Password","active":false}, ...],"node":"emqx@127.0.0.1"}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/plugins 
+#### GET /api/v4/nodes/{node}/plugins
 Similar with [GET /api/v4/plugins](#endpoint-get-plugins), return the plugin information under the specified node
 
 **Path Parameters:** None
@@ -927,7 +951,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/nodes/emq
 {"code":0}
 ```
 
-#### PUT /api/v4/nodes/{node}/plugins/{plugin}/unload 
+#### PUT /api/v4/nodes/{node}/plugins/{plugin}/unload
 Unload the specified plugin under the specified node.
 
 **Parameters:** None
@@ -946,7 +970,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/nodes/emq
 {"code":0}
 ```
 
-#### PUT /api/v4/nodes/{node}/plugins/{plugin}/reload 
+#### PUT /api/v4/nodes/{node}/plugins/{plugin}/reload
 Reloads the specified plugin under the specified node.
 
 **Parameters:** None
@@ -965,8 +989,8 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/nodes/emq
 {"code":0}
 ```
 
-### listeners 
-#### GET /api/v4/listeners 
+### listeners
+#### GET /api/v4/listeners
 Returns information about all listeners in the cluster.
 
 **Path Parameters:** 无
@@ -1023,7 +1047,7 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/listeners
 {"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/listeners 
+#### GET /api/v4/nodes/{node}/listeners
 Similar with [GET /api/v4/listeners](#endpoint-get-listeners), returns the listener information for the specified node.
 
 **Success **Response Body (JSON):**
@@ -1068,8 +1092,8 @@ $ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/listeners
 ```
 
 
-### Metrics 
-#### GET /api/v4/metrics 
+### Metrics
+#### GET /api/v4/metrics
 Returns all statistical  metrics under the cluster
 
 **Path Parameters:** None
@@ -1178,7 +1202,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/metrics"
 {"data":[{"node":"emqx@127.0.0.1","metrics":{"messages.dropped.no_subscribers":0,"packets.connack.sent":13,"bytes.received":805,"messages.received":0,"packets.unsuback.sent":0,"messages.delivered":0,"client.disconnected":0,"packets.puback.sent":0,"packets.subscribe.auth_error":0,"delivery.dropped.queue_full":0,"messages.forward":0,"delivery.dropped.qos0_msg":0,"delivery.dropped.expired":0,"bytes.sent":52,"messages.sent":0,"delivery.dropped.no_local":0,"packets.pubrec.received":0,"packets.pubcomp.received":0,"client.check_acl":0,"packets.puback.received":0,"session.takeovered":0,"messages.dropped.expired":0,"actions.success":0,"messages.qos1.sent":0,"messages.retained":0,"packets.pubcomp.inuse":0,"packets.pubrec.sent":0,"packets.received":13,"messages.acked":0,"session.terminated":0,"packets.sent":13,"packets.unsubscribe.error":0,"client.connect":13,"packets.pubrec.missed":0,"packets.auth.sent":0,"packets.disconnect.received":0,"messages.qos2.sent":0,"client.auth.anonymous":13,"packets.auth.received":0,"packets.unsubscribe.received":0,"packets.publish.auth_error":0,"client.connected":13,"rules.matched":0,"packets.disconnect.sent":0,"session.created":13,"packets.pingreq.received":0,"messages.dropped":0,"actions.failure":0,"packets.publish.sent":0,"session.resumed":0,"packets.connack.auth_error":0,"packets.pubrel.sent":0,"delivery.dropped":0,"packets.pubcomp.sent":0,"messages.qos2.received":0,"messages.qos0.received":0,"packets.publish.inuse":0,"client.unsubscribe":0,"packets.pubrel.received":0,"client.connack":13,"packets.connack.error":0,"packets.publish.dropped":0,"packets.publish.received":0,"client.subscribe":0,"packets.subscribe.error":0,"packets.suback.sent":0,"packets.pubcomp.missed":0,"messages.qos1.received":0,"delivery.dropped.too_large":0,"packets.pingresp.sent":0,"packets.pubrel.missed":0,"messages.qos0.sent":0,"packets.connect.received":13,"packets.puback.missed":0,"packets.subscribe.received":0,"packets.puback.inuse":0,"client.authenticate":13,"messages.publish":0,"packets.pubrec.inuse":0,"packets.publish.error":0,"messages.delayed":0,"session.discarded":0}}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/metrics 
+#### GET /api/v4/nodes/{node}/metrics
 Similar with [GET /api/v4/metrics](#endpoint-get-metrics), returns all monitoring indicator data under the specified node.
 
 **Path Parameters:** None
@@ -1198,8 +1222,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":{"bytes.received":0,"client.connected":0,"packets.pingreq.received":0,"messages.delayed":0,"rules.matched":0,"actions.failure":0,"packets.puback.sent":0,"packets.pingresp.sent":0,"packets.publish.auth_error":0,"client.check_acl":0,"delivery.dropped.queue_full":0,"actions.success":0,"packets.publish.error":0,"packets.pubcomp.received":0,"bytes.sent":0,"packets.pubrec.inuse":0,"packets.pubrec.missed":0,"packets.pubrel.sent":0,"delivery.dropped.too_large":0,"packets.pubcomp.missed":0,"packets.subscribe.error":0,"packets.suback.sent":0,"messages.qos2.sent":0,"messages.qos1.sent":0,"packets.pubrel.missed":0,"messages.publish":0,"messages.forward":0,"packets.auth.received":0,"delivery.dropped":0,"packets.sent":0,"packets.puback.inuse":0,"delivery.dropped.qos0_msg":0,"packets.publish.dropped":0,"packets.disconnect.sent":0,"packets.auth.sent":0,"packets.unsubscribe.received":0,"session.takeovered":0,"messages.delivered":0,"client.auth.anonymous":0,"packets.connack.error":0,"packets.connack.sent":0,"packets.subscribe.auth_error":0,"packets.unsuback.sent":0,"packets.pubcomp.sent":0,"packets.publish.sent":0,"client.connack":0,"packets.publish.received":0,"client.subscribe":0,"session.created":0,"delivery.dropped.expired":0,"client.unsubscribe":0,"packets.received":0,"packets.pubrel.received":0,"packets.unsubscribe.error":0,"messages.qos0.sent":0,"packets.connack.auth_error":0,"session.resumed":0,"delivery.dropped.no_local":0,"packets.puback.missed":0,"packets.pubcomp.inuse":0,"packets.pubrec.sent":0,"messages.dropped.expired":0,"messages.dropped.no_subscribers":0,"session.discarded":0,"messages.sent":0,"messages.received":0,"packets.puback.received":0,"messages.qos0.received":0,"messages.acked":0,"client.connect":0,"packets.disconnect.received":0,"client.disconnected":0,"messages.retained":3,"session.terminated":0,"packets.publish.inuse":0,"packets.pubrec.received":0,"messages.qos2.received":0,"messages.dropped":0,"packets.connect.received":0,"client.authenticate":0,"packets.subscribe.received":0,"messages.qos1.received":0},"code":0}
 ```
 
-### Status 
-#### GET /api/v4/stats 
+### Status
+#### GET /api/v4/stats
 Return all status data in the cluster.
 
 **Path Parameters:** None
@@ -1246,7 +1270,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/stats"
 {"data":[{"stats":{"topics.max":0,"topics.count":0,"subscriptions.shared.max":0,"subscriptions.shared.count":0,"subscriptions.max":0,"subscriptions.count":0,"subscribers.max":0,"subscribers.count":0,"suboptions.max":0,"suboptions.count":0,"sessions.max":0,"sessions.count":0,"rules.max":0,"rules.count":0,"routes.max":0,"routes.count":0,"retained.max":3,"retained.count":3,"resources.max":0,"resources.count":0,"connections.max":0,"connections.count":0,"channels.max":0,"channels.count":0,"actions.max":5,"actions.count":5},"node":"emqx@127.0.0.1"}],"code":0}
 ```
 
-#### GET /api/v4/nodes/{node}/stats 
+#### GET /api/v4/nodes/{node}/stats
 Similar with [GET /api/v4/stats](#endpoint-get-stats), returns status data on the specified node.
 
 **Path Parameters:** None
@@ -1266,8 +1290,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":{"topics.max":0,"topics.count":0,"subscriptions.shared.max":0,"subscriptions.shared.count":0,"subscriptions.max":0,"subscriptions.count":0,"subscribers.max":0,"subscribers.count":0,"suboptions.max":0,"suboptions.count":0,"sessions.max":0,"sessions.count":0,"rules.max":0,"rules.count":0,"routes.max":0,"routes.count":0,"retained.max":3,"retained.count":3,"resources.max":0,"resources.count":0,"connections.max":0,"connections.count":0,"channels.max":0,"channels.count":0,"actions.max":5,"actions.count":5},"code":0}
 ```
 
-### Alarm 
-#### GET /api/v4/alarms/present 
+### Alarm
+#### GET /api/v4/alarms/present
 Return the current alarm information in the cluster.
 
 **Path Parameters:** None
@@ -1291,7 +1315,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/pr
 {"data":[{"node":"emqx@127.0.0.1","alarms":[{"id":"cpu_high_watermark","desc":"88.30833333333334"}]}],"code":0}
 ```
 
-#### GET /api/v4/alarms/present/{node} 
+#### GET /api/v4/alarms/present/{node}
 Returns the current alarm information under the specified node. For interface parameters and returns, see [GET /api/v4/stats](#endpoint-get-alarms-present)。
 
 **Examples:**
@@ -1302,7 +1326,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/pr
 {"data":[{"id":"cpu_high_watermark","desc":"91.68333333333332"}],"code":0}
 ```
 
-#### GET /api/v4/alarms/history 
+#### GET /api/v4/alarms/history
 Returns historical alarm information under the cluster.
 
 **Path Parameters:** None
@@ -1327,7 +1351,7 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/alarms/hi
 {"data":[{"node":"emqx@127.0.0.1","alarms":[{"id":"cpu_high_watermark","desc":"93.27055293970582","clear_at":"2020-02-21 13:50:10"}]}],"code":0}
 ```
 
-#### GET /api/v4/alarms/history/{node} 
+#### GET /api/v4/alarms/history/{node}
 Returns historical alarm information under the specified node. For interface parameters and returns, see [GET /api/v4/alarms/history](#endpoint-get-alarms-history)。
 
 **Examples:**
@@ -1383,8 +1407,8 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/node/e
 {"code":0}
 ```
 
-### Blacklist 
-#### GET /api/v4/banned 
+### Blacklist
+#### GET /api/v4/banned
 Get the blacklist
 
 **Query String Parameters:**
@@ -1409,7 +1433,7 @@ $ curl -i --basic -u admin:public -vX GET "http://localhost:8081/api/v4/banned"
 {"meta":{"page":1,"limit":10000,"count":1},"data":[{"who":"example","until":1582265833,"reason":"undefined","by":"user","at":1582265533,"as":"clientid"}],"code":0}
 ```
 
-#### POST /api/v4/banned 
+#### POST /api/v4/banned
 Add object to blacklist
 
 **Parameters (json):**
@@ -1465,7 +1489,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/banned
 ### Rule
 Query rule engine actions
 
-#### GET /api/v4/rules/{rule_id} 
+#### GET /api/v4/rules/{rule_id}
 Get the details of a rule, including the rule's SQL, Topics list, action list, etc. It also returns the value of the statistical index for the current rule and action.
 
 **Path Parameters:**
@@ -1491,7 +1515,7 @@ Get the details of a rule, including the rule's SQL, Topics list, action list, e
 | - data.actions[0].name | String      | Action name, consistent with actions.name in the request |
 | - data.actions[0].metrics | Array       | Metrics, see Rule Metrics on Dashboard for details |
 
-#### POST /api/v4/rules 
+#### POST /api/v4/rules
 Create a rule and return the rule ID.
 
 **Parameters (json):**
@@ -1521,7 +1545,7 @@ Create a rule and return the rule ID.
 | - data.actions[0].name    | String    | Action name, consistent with actions.name in the request |
 | - data.actions[0].metrics | Array     | Metrics, see Rule Metrics on Dashboard for details |
 
-#### PUT /api/v4/rules/{rule_id} 
+#### PUT /api/v4/rules/{rule_id}
 Update the rule and return the rule ID.
 
 **Parameters (json):**
@@ -1551,7 +1575,7 @@ Update the rule and return the rule ID.
 | - data.actions[0].name    | String  | Action name, consistent with actions.name in the request     |
 | - data.actions[0].metrics | Array   | Metrics, see Rule Metrics on Dashboard for details           |
 
-#### DELETE /api/v4/rules/{rule_id} 
+#### DELETE /api/v4/rules/{rule_id}
 Delete the rule
 
 **Parameters:** None
@@ -1621,10 +1645,10 @@ $ curl -XDELETE --basic -u admin:public 'http://localhost:8081/api/v4/rules/rule
 {"code":0}
 ```
 
-### Actions 
+### Actions
 Query the actions of the rule engine. Note that actions can only be provided by emqx and cannot be added.
 
-#### GET api/v4/actions/{action_name} 
+#### GET api/v4/actions/{action_name}
 Get the details of an action, including the action name, parameter list, etc.
 
 **Path Parameters:**
@@ -1663,10 +1687,10 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/actions'
 {"data":[{"types":[],"title":{"zh":"空动作 (调试)","en":"Do Nothing (debug)"},"params":{},"name":"do_nothing","for":"$any","description":{"zh":"此动作什么都不做，并且不会失败 (用以调试)","en":"This action does nothing and never fails. It's for debug purpose"},"app":"emqx_rule_engine"}, ...],"code":0}
 ```
 
-### Resource Type 
+### Resource Type
 Query the rule engine's resource type. Note that resource types can only be provided by emqx and cannot be added
 
-#### GET api/v4/resource_types/{resource_type_name} 
+#### GET api/v4/resource_types/{resource_type_name}
 Get the details of an action, including the action name, parameter list, etc.
 
 **Path Parameters:**
@@ -1704,10 +1728,10 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/resource_types'
 {"data":[{"title":{"zh":"WebHook","en":"WebHook"},"provider":"emqx_web_hook","params":{"url":{"type":"string","title":{"zh":"请求 URL","en":"Request URL"},"required":true,"format":"url","description":{"zh":"请求 URL","en":"Request URL"}},"method":{"type":"string","title":{"zh":"请求方法","en":"Request Method"},"enum":["PUT","POST"],"description":{"zh":"请求方法","en":"Request Method"},"default":"POST"},"headers":{"type":"object","title":{"zh":"请求头","en":"Request Header"},"schema":{},"description":{"zh":"请求头","en":"Request Header"},"default":{}}},"name":"web_hook","description":{"zh":"WebHook","en":"WebHook"}}, ...],"code":0}
 ```
 
-### Resource 
+### Resource
 Manage the resources of the rules engine. A resource is an instance of a resource type and is used to maintain related resources such as database connections.
 
-#### GET api/v4/resources/{resource_id} 
+#### GET api/v4/resources/{resource_id}
 Gets the details of the specified resource.
 
 **Path Parameters:**
@@ -1728,7 +1752,7 @@ Gets the details of the specified resource.
 | - data.status      | Array     | Status information for the resource. See the status of resources on the Dashboard for details. |
 | - data.description | Object    | A description of the resource, in both English and Chinese. |
 
-#### POST /api/v4/resources 
+#### POST /api/v4/resources
 Create a rule and return the resource ID.
 
 **Parameters (json):**
@@ -1750,7 +1774,7 @@ Create a rule and return the resource ID.
 | - data.config      | Object    | Configuration of resources, and parameters are expressed in key-value form. <br /> For details, please refer to the following examples |
 | - data.description | Object    | A description of the resource, in both English and Chinese.。 |
 
-#### DELETE /api/v4/resources/{resource_id} 
+#### DELETE /api/v4/resources/{resource_id}
 Delete the resource
 
 **Parameters:** None
@@ -1802,3 +1826,36 @@ $ curl -XDELETE --basic -u admin:public 'http://localhost:8081/api/v4/resources/
 
 {"code":0}
 ```
+
+{% emqxee %}
+
+### License
+
+Facilities for managing the EMQX license.
+
+#### POST /api/v4/license/upload
+
+Uploads a new license file to the cluster.  The license is validated, then it is copied to all nodes in the cluster and reloaded.  The new contents are written to the same file path configured in the node, and the old license contents are backed up to a file in the same base directory as the configured license path, suffixed by the timestamp when the change occurred.
+
+**Body (bytes)**
+
+The license contents to be uploaded.
+
+**Success Response Body (JSON):**
+
+| Name    | Type      | Description            |
+| ------- | --------- | ---------------------- |
+| code    | Integer   | 0                      |
+| message | String    | "ok"                   |
+
+**Examples:**
+
+Upload a license file:
+
+```sh
+$ curl -XPOST --basic -u admin:public -d @<(jq -sR < path/to/new.license) 'http://localhost:8081/api/v4/license/upload'
+
+{"code":0,"message":"ok"}
+```
+
+{% endemqxee %}
