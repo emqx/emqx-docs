@@ -4,16 +4,33 @@ Starting from download and installation, this document guides you through quickl
 
 ## Select EMQX Edition
 
+{% emqxce %}
 EMQX as a software is released in different editions.
 
 - [Enterprise](https://www.emqx.com/en/try?product=enterprise)
 - [Community](https://www.emqx.com/en/try?product=broker)
 
-EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
-which runs EMQX Enterprise edition.
+{% emqxce %}
+
+EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud) which runs EMQX Enterprise edition.
 You can customize the deployment to perfectly suit your business development plans and get started quickly.
 
 :::: tabs type:card
+
+{% endemqxce %}
+::: tab EMQX Community Edition
+The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
+
+- Fully open-sourced under APL 2.0
+- MQTT 3.1.1 and MQTT 5.0 spec
+- Highly available, masterless clustering
+- High concurrency with low latency
+- Extensible gateways and plugins
+- Data integration by calling HTTP APIs
+
+[Download](https://www.emqx.com/en/try?product=broker)
+:::
+{% endemqxce %}
 
 ::: tab EMQX Cloud
 Connect your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerate your IoT application development without the burden of self-managing the infrastructure.
@@ -41,19 +58,6 @@ reliable data transport, processing, and integration for business-critical IoT s
 [Try Free](https://www.emqx.com/en/try?product=enterprise)
 :::
 
-::: tab EMQX Community Edition
-The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
-
-- Fully open-sourced under APL 2.0
-- MQTT 3.1.1 and MQTT 5.0 spec
-- Highly available, masterless clustering
-- High concurrency with low latency
-- Extensible gateways and plugins
-- Data integration by calling HTTP APIs
-
-[Download](https://www.emqx.com/en/try?product=broker)
-:::
-
 ::::
 
 ## Install EMQX
@@ -75,23 +79,17 @@ maintenance, and management.
 Learn more about the docker image on [Docker Hub](https://hub.docker.com/r/emqx/emqx).
 Container deployment is the quickest way to start experimenting with EMQX.
 
-1. Get the Docker image
+Start Docker container:
 
 ```bash
-docker pull emqx/emqx:latest
-```
-
-1. Start Docker container
-
-```bash
-docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx
 ```
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
 please refer to [Running with Docker (including a simple docker-compose cluster)](../deploy/install.md#install-emq-x-in-docker-contain-a-simple-docker-compose-cluster).
 
 ### Running EMQX in Kubernetes
-
+<!-- TODO @wivwiv Update K8s link when EMQX Operator 5.0 document ready -->
 For Kubernetes, EMQ offers [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator).
 
 EMQX Kubernetes Operator is an application orchestration tool based on Kubernetes native API,
@@ -99,7 +97,7 @@ which is used for automatic deployment and lifecycle management of EMQX clusters
 You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md) to learn how to deploy EMQX using the Operator.
 
 ### Deploy EMQX with Terraform
-
+<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 Deploy all infrastructure including EMQX Enterprise clusters on the mainstream public cloud with
 one click through Terraform.
 
@@ -113,10 +111,10 @@ For more information about Terraform installation and deployment, please refer t
 
 ### Run in a VM or on bare metal
 
-EMQX Enterprise can be deployed directly to bare metal servers or virtual machines.
-A minimum of 2 cores and 4GB RAM can run an EMQX Enterprise installation.
+EMQX can be deployed directly to bare metal servers or virtual machines.
+A minimum of 2 cores and 4GB RAM can run an EMQX installation.
 
-EMQX has prebuilt packages downloadable for Enterprise Linux(RedHat, CentOS, Rockylinux)
+EMQX has prebuilt packages downloadable for Linux(RedHat, CentOS, Rockylinux)
 as well as Debian, Ubuntu, and MacOS.
 
 - [RedHat, CentOS, RockyLinux, AmazonLinux  installation](../deploy/install.md#centos)
@@ -133,7 +131,7 @@ After the installation, you can start EMQX through the command of systemctl or e
 For more startup methods and precautions, keep reading below.
 
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
-(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md)
+(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](../admin/dashboard.md)
 management console for device connection and related indicator monitoring and management.
 
 ### Start EMQX in the background
@@ -181,18 +179,17 @@ the startup and runtime logs printed to the console.
 After startup, you can quickly verify if EMQX is working with any MQTT client.
 You can use the following client tools or client libraries to access EMQX
 
-### Dashboard Websocket tool
+### Dashboard WebSocket tool
 
-EMQX dashboard comes with a built-in websocket based MQTT client.
+EMQX dashboard comes with a built-in WebSocket based MQTT client.
 
-Visit dashboard URL in a web browser and enter the page of **Diagnose -> Websocket**,
-where you can use the MQTT over Websokcet client to quickly access EMQX.
+Visit dashboard URL in a web browser and enter the page of **Diagnose -> WebSocket Client**,
+where you can use the MQTT over WebSokcet client to quickly access EMQX.
 
-The Websocket page provides you with a simple but effective WebSocket client tool,
+The WebSocket page provides you with a simple but effective WebSocket client tool,
 which can be used for publishing, subscribing, and inspecting the messages.
 
-![emqx-mqtt-websocket-tool-en](./assets/emqx-mqtt-websocket-tool-en.png)
-
+<!-- TODO @wivwiv Update screenshot -->
 ### MQTTX desktop client tool
 
 MQTTX is an elegant cross-platform MQTT 5.0 open source desktop client tool that
@@ -222,8 +219,7 @@ For developers, we have compiled a list of popular MQTT clients for your referen
 
 ### Client example code
 
-For MQTT client library example code, we try to cover as many mainstream programming languages
-and platforms as possible, including
+For MQTT client library example code, we try to cover as many mainstream programming languages and platforms as possible, see [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples).
 
 - [Android](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Android)
 - [Csharp-MqttNet](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Csharp-MqttNet)
@@ -239,8 +235,6 @@ and platforms as possible, including
 - [Vue.js](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Vue.js)
 - [swift](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-swift)
 - [wechat-miniprogram](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-wechat-miniprogram)
-
-For a more detailed list, please refer to [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples)
 
 ## Advanced operation
 
@@ -274,36 +268,19 @@ various SQL / NoSQL / time-series databases, and enterprise systems such as SAP.
 - [Example](../rule/rule-example.md#send-data-to-web-service): Tutorial on using various data
   sources for rule engine.
 
-### HTTP API
+### Management Interfaces
 
-HTTP API is a frequently used function in IoT platform development and EMQX operation and
-maintenance. HTTP API facilitates integration with external systems, such as querying and
-managing client information, broker subscription, publishing messages and creating rules.
+Manage clusters via Web and CLI, REST API.
 
-<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
-- HTTP API: include HTTP API access point and access
-  authentication method.
-- Basic Information: Get basic information such as
-  EMQX version and running status.
-- Node: Get the information of EMQX node.
-- Client: View online client information and support
-  kicking out the client.
-- Subscription Information: View the
-  subscription topic list and subscription relationship.
-- Routes: View subscribed topics.
-- Message Publishing: Call EMQX through HTTP to
-  publish MQTT messages, with a reliable way for applications to communicate with clients.
-- Topic Subscription: Dynamically manage the client
-  subscription list, without the need for the client to actively initiate
-  subscription/unsubscription.
-- Plugins: Status management of plugins with
-  start and stop operations.
+- [Dashboard](../admin/dashboard.md)：Dashboard User Manual.
+- [CLI](../admin/cli.md)
+- [REST API](../admin/api.md): REST API documentation for the OpenAPI 3.0 specification.
+- [Configuration Files](../admin/file.md)
 
 ### Operation, maintenance and deployment
 
 For official usage guidelines and best practices please read the following guides.
 
-<!-- - [Device Management](../tutorial/device-management.md) -->
 - [System Tuning](../deploy/tune.md)
 - [Production Deployment](../deploy/install.md)
 - [Prometheus Monitoring and alert](../observability/prometheus.md)

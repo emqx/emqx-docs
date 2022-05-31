@@ -76,9 +76,9 @@ Add more features to MQTT:
 - Enterprise: TODO
 {endemqxee}
 
-{emqxce}
+{% emqxce %}
 > The Enterprise Edition supports more data platforms such as Kafka, MySQL, Redis, InfluxDB, Oracle, SAP Event Mesh, etc., see [TODO]
-{endemqxce}
+{% endemqxce %}
 
 ### Reliability
 
