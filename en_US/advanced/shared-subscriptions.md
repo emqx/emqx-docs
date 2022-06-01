@@ -15,7 +15,7 @@ In the above picture, three subscribers subscribe to the same topic `$share/g/to
 | Example         | Prefix      | Real topic name |
 | --------------- | ----------- | --------------- |
 | $queue/t/1      | $queue/     | t/1             |
-| $share/abc/t/1 | $share/abc | t/1             |
+| $share/abc/t/1  | $share/abc  | t/1             |
 
 
 ### Shared subscription with groups
@@ -42,6 +42,8 @@ For example, suppose that subscribers s1, s2, and s3 belong to group g1, and sub
                                       [s5] got msg1
 ```
 
+Subscribtion strategies can be specified globally or per-group. To specify subscribtion strategy per group, use `broker.shared_subscription_group.$group.strategy` option.
+
 ### Shared subscription without group
 
 Shared subscriptions prefixed with `$queue/` are shared subscriptions without groups. It is a special case of `$share` subscription, which is quite similar to all subscribers in a subscription group:
@@ -58,23 +60,26 @@ Shared subscriptions prefixed with `$queue/` are shared subscriptions without gr
 
 EMQX Broker's shared subscription supports balancing strategy and distribution of Ack configuration:
 
-```bash
-# etc/emqx.conf
-
-# balancing strategy
-broker.shared_subscription_strategy = random
-
-# Applicable to QoS1 QoS2 messages, when enabled, message will be distributed to another group when one group is offline
-broker.shared_dispatch_ack_enabled = false
+```hocon
+broker {
+  # balancing strategy
+  shared_subscription_strategy: random
+  
+  # Applicable to QoS1 QoS2 messages, when enabled,
+  # message will be distributed to another subscriber when selected subscriber is offline
+  shared_dispatch_ack_enabled = false
+}
 ```
 <!-- TODO 待确认 -->
 
-| Balancing strategy |             Description             |
-| :---------- | :--------------------------- |
-| random      | Select randomly among all subscribers |
-| round_robin | According to the order of subscription |
-| sticky      | Always sent to the last selected subscriber |
-| hash        | According to the hash value of the publisher ClientID |
+| Balancing strategy |             Description                                                                                                         |
+| :----------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| random             | Select randomly among all subscribers                                                                                           |
+| round_robin        | According to the order of subscription                                                                                          |
+| sticky             | Always sent to the last selected subscriber                                                                                     |
+| hash_clientid      | According to the hash value of the publisher ClientID                                                                           |
+| hash_topic         | According to the hash value of the message topic                                                                                |
+| local              | Sends message to a random subscriber of the node received the message. If no local subscribers are present, sends to a random one cluster in the cluster. |
 
 ::: tip
 Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate to avoid errors such as message accumulation and client crash.
