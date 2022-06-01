@@ -44,3 +44,4 @@ The following table is based on the above policy. Occasionally, if we release a 
 | 4.1.x       | 2020-07-18       | 2022-01-17   | 4.2.0                 |
 | 4.2.x       | 2020-10-13       | 2022-04-12   | 4.3.0                 |
 | 4.3.x       | 2021-05-19       | 2022-11-18   | 6.0.0                 |
+| 4.4.x | 2021-12-21 | 2023-06-20 | 6.0.0 |
