@@ -2400,7 +2400,7 @@ EMQX 软件许可管理。
 
 #### POST /api/v4/license/upload
 
-将一个新的许可证文件上传到集群。 许可证被验证，然后被复制到集群中的所有节点并重新加载。 新的内容被写入节点中配置的相同的文件路径，旧的许可证内容被备份到一个文件，该文件后缀为发生变化时的时间戳。
+将一个新的许可证文件上传到集群。许可证被验证，然后被复制到集群中的所有节点并重新加载。新的内容被写入节点中配置的相同的文件路径，旧的许可证内容被备份到一个文件，该文件后缀为发生变化时的时间戳。
 
 **Body (bytes)**
 
@@ -2411,7 +2411,6 @@ EMQX 软件许可管理。
 | Name    | Type      | Description            |
 | ------- | --------- | ---------------------- |
 | code    | Integer   | 0                      |
-| message | String    | "ok"                   |
 
 **Examples:**
 
@@ -2420,7 +2419,7 @@ EMQX 软件许可管理。
 ```sh
 $ curl -XPOST --basic -u admin:public -d @<(jq -sR '{license: .}' < path/to/new.license) 'http://localhost:8081/api/v4/license/upload'
 
-{"code":0,"message":"ok"}
+{"code":0}
 ```
 
 {% endemqxee %}
