@@ -91,6 +91,7 @@ is_num('val') = false
 |bool|Convert data to Boolean type|Data|Boolean data. Failure to convert will cause SQL matching to fail|
 |int|Convert data to integer type|Data|Integer type data. Failure to convert will cause SQL matching to fail|
 |float|Convert data to floating type|Data|Floating type data. Failure to convert will cause SQL matching to fail|
+|float2str|Convert a float to string using the given precision|1. Float Number 2. Precision| String |
 |map|Convert data to Map type|Data|Map type data. Failure to convert will cause SQL matching to fail|
 
 
@@ -100,6 +101,8 @@ str_utf8(1234) = '1234'
 bool('true') = true
 int('1234') = 1234
 float('3.14') = 3.14
+float2str(20.2, 10) = '20.2'
+float2str(20.2, 17) = '20.19999999999999928'
 ```
 
 
