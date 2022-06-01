@@ -1805,7 +1805,6 @@ The license contents to be uploaded.
 | Name    | Type      | Description            |
 | ------- | --------- | ---------------------- |
 | code    | Integer   | 0                      |
-| message | String    | "ok"                   |
 
 **Examples:**
 
@@ -1814,7 +1813,7 @@ Upload a license file:
 ```sh
 $ curl -XPOST --basic -u admin:public -d @<(jq -sR '{license: .}' < path/to/new.license) 'http://localhost:8081/api/v4/license/upload'
 
-{"code":0,"message":"ok"}
+{"code":0}
 ```
 
 {% endemqxee %}
