@@ -16,9 +16,9 @@ ssl {
         "TLS_AES_128_GCM_SHA256",
         "TLS_CHACHA20_POLY1305_SHA256",
         "TLS_AES_128_CCM_SHA256",
-        "TLS_AES_128_CCM_8_SHA256",
+        "TLS_AES_128_CCM_8_SHA256"
     ]
-    depth = 10,
+    depth = 10
     enable = true
     reuse_sessions = true
     secure_renegotiate = true
