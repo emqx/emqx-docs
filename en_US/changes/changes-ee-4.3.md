@@ -42,7 +42,7 @@ ref: undefined
 
 - Fix the issue that the client could not get the message after going online when using the PostgreSQL offline message plugin
 - Fix the issue that the rules engine could not successfully establish a TLS connection with Pulsar in some cases
-- Fix the issue that rule engine's SQL function `hexstr_to_bin/1` could not handle half byte
+- Fix the issue that rule engine's SQL function `hexstr_to_bin/1` could not handle half-byte
 - Fix the issue that the alarm was not cleared when the rule engine resource was deleted
 - Fix Dashboard HTTPS listener's `verify` option not taking effect
 - Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
