@@ -27,16 +27,16 @@ ref: undefined
 - Add `service_name` option to Oracle resource of rule engine to support Oracle Database RAC
 - Support for using JWT for authorization, now MQTT clients can authorize using specific claims that include a pub-sub whitelist
 - Improved authentication related metrics to make it easier to understand, now `client.authenticate = client.auth.success + client.auth.failure`
-- Support binding the listener of the REST API to the specified network interface
+- Support binding the listener of the REST API to a specified network interface
 - Upload license will be automatically synchronized to the entire cluster, no need for each node to upload separately, provide HTTP API
 - Support multi-condition query and fuzzy query for user data in authentication and authorization using built-in database as data source
 - Supports querying clients using the length of the message queue and the number of dropped messages as conditions
 - Support to configure the log time format to be compatible with the time format in older versions
 - When `use_username_as_clientid` is configured to `true` and the client connects without specifying a `username`, the connection is now rejected with a reason code `0x85`
-- Improve random performance of AppSecret
+- Full randomisation of app secrets (previously partially randomised)
 - Hot upgrades between incompatible versions will now be rejected
-- Now EMQX's startup path will allow to contain spaces
-- Add check for node name
+- Allow white spaces in EMQX's installation path
+- Boot script fail fast on invalid node name (improve error message readability)
 
 ### Bug fixes
 

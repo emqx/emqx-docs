@@ -25,19 +25,19 @@ ref: undefined
 - Add the `float2str/2` function to the SQL of rule engine to support specifying the output precision of floating point numbers
 - Support for using JWT for authorization, now MQTT clients can authorize using specific claims that include a pub-sub whitelist
 - Improved authentication related metrics to make it easier to understand, now `client.authenticate = client.auth.success + client.auth.failure`
-- Support binding the listener of the REST API to the specified network interface
+- Support binding the listener of the REST API to a specified network interface
 - Support multi-condition query and fuzzy query for user data in authentication and authorization using built-in database as data source
 - Supports querying clients using the length of the message queue and the number of dropped messages as conditions
 - Support to configure the log time format to be compatible with the time format in older versions
 - When `use_username_as_clientid` is configured to `true` and the client connects without specifying a `username`, the connection is now rejected with a reason code `0x85`
-- Improve random performance of AppSecret
+- Full randomisation of app secrets (previously partially randomised)
 - Hot upgrades between incompatible versions will now be rejected
-- Now EMQX's startup path will allow to contain spaces
-- Add check for node name
+- Allow white spaces in EMQX's installation path
+- Boot script fail fast on invalid node name (improve error message readability)
 
 ### Bug fixes
 
-- Fix the issue that rule engine's SQL function `hexstr_to_bin/1` could not handle half byte
+- Fix the issue that rule engine's SQL function `hexstr_to_bin/1` could not handle half-byte
 - Fix the issue that the alarm was not cleared when the rule engine resource was deleted
 - Fix Dashboard HTTPS listener's `verify` option not taking effect
 - Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
