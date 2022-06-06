@@ -1,5 +1,11 @@
 # Save data to PostgreSQL
 
+::: tip
+
+Support PostgreSQL 13 and below versions
+
+:::
+
 Setup a PostgreSQL database, taking Mac OSX for instance:
 
 ```bash

@@ -77,13 +77,13 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 1. 获取 Docker 镜像
 
 ```bash
-1docker pull emqx/emqx:latest
+docker pull emqx/emqx:latest
 ```
 
 1. 启动 Docker 容器
 
 ```bash
-1docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
 更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](./install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
