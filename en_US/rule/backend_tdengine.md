@@ -47,7 +47,14 @@ Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules). Click `Rule`.
 Write SQL:
 
 ```sql
-SELECT * FROM "t/#"
+SELECT
+
+  *,
+  now_timestamp('millisecond')  as ts
+
+FROM
+
+  "#"
 ```
 
 ![image](./assets/rule-engine/TDengine/td_new_reul.png)
@@ -69,7 +76,7 @@ Action parameters:
 1. SQL template. In this example we insert a data to TDengine, note that we should specify the database name in the SQL and the character type should be enclosed in single quotes, the SQL template:
 
 ```sql
-insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (now, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
+insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
 ```
 
 2. Now that the resource drop-down box is empty, you can create a TDengine resource by clicking on `Create` in the upper right corner:
@@ -112,8 +119,8 @@ Click `Data persist`, Choice `Data to Web Server`.
 5. Body: Request Body. In this example we are inserting a piece of data into TDengine, which should carry the INSERT SQL within the request body, noting that we should specify the database name in the SQL and the character type should be enclosed in single quotes, with the message content template as follows
 
 ```sql
--- Note: the topic is added as an identifier because in this example we will have two resources written to TDengine at the same time, and the identifier distinguishes between the data written natively and by the Web Server
-insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (now, '${id}', 'http server ${topic}', ${qos}, '${payload}', ${timestamp})
+-- Note: the topic is added as an identifier because in this example we will have two resources written to TDengine, and the identifier distinguishes between the data written natively and by the Web Server
+insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', 'http server ${topic}', ${qos}, '${payload}', ${timestamp})
 ```
 
 ![image](./assets/rule-engine/TDengine/create_data_towebserver.png)
