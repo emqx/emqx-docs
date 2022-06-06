@@ -6147,11 +6147,13 @@ Default user authentication data of Dashboard. `dashboard.default_user.login` an
 | Type    | Default |
 | ------- | ------- |
 | integer | 18083   |
+| string  | 0.0.0.0:18083 |
 
 #### Description
 
 The listening port of the HTTP listener.
-
+</br>
+Use the `ip:port` format to specify which network interface to listen to, default `0.0.0.0:18083` will listening on all network interfaces.
 
 
 ### dashboard.listener.http.acceptors
@@ -6688,12 +6690,13 @@ Default AppSecret.
 | Type    | Default |
 | ------- | ------- |
 | integer | 8081    |
+| string  | 0.0.0.0:8081    |
 
 #### Description
 
 The listening port of the HTTP listener.
-
-
+</br>
+Use the `ip:port` format to specify which network interface to listen to, default `0.0.0.0:8081` will listening on all network interfaces.
 
 ### management.listener.http.acceptors
 
@@ -6784,10 +6787,13 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 | Type    | Default | Example |
 | ------- | ------- | ------- |
 | integer | -       | 8081    |
+| string  | -       | 0.0.0.0:8081 |
 
 #### Description
 
 The listening port of the HTTPS listener.
+</br>
+Use the `ip:port` format to specify which network interface to listen to, default `0.0.0.0:8081` will listening on all network interfaces.
 
 ### management.listener.https.acceptors
 
