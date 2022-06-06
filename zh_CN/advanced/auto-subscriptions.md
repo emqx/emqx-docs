@@ -1,65 +1,92 @@
-# 代理订阅
+# 自动订阅
 
-EMQX 的代理订阅功能使得客户端在连接建立时，不需要发送额外的 SUBSCRIBE 报文，便能自动建立用户预设的订阅关系。
+当设备连接到 EMQX 成功之后，不需要发送额外的订阅请求（ SUBSCRIBE 报文），EMQX 为设备完成预设的订阅关系。
+此功能由 EMQX 4 版本中 `MQTT 代理订阅` 功能改进而来。
 
-## 开启代理订阅功能
+## 配置项
 
-代理订阅功能由 `emqx_mod_subscription` 内置模块提供，此功能默认关闭，支持在 EMQX Broker 运行期间动态启停，请参见 [内置模块](./internal-modules.md)。
+### 配置项定义
 
-## 配置代理订阅规则
+| 字段           | 含义               | 取值范围                          | 默认值 |
+| -------------- | ------------------ | --------------------------------- | ------ |
+| auto_subscribe | 自动订阅配置项集合 | topics                            | topics |
+| topics         | 订阅选项           | 订阅选项列表，参考下表 `订阅选项` | []     |
 
-代理订阅功能开启之后还需要配置相应的规则，EMQX 的代理订阅规则支持用户自行配置，用户可以自行添加多条代理订阅规则，代理订阅规则支持用户配置 Topic 和订阅选项（QoS、No Local、Retain As Published、Retain Handling），其中 Topic 为必填项，订阅选项如果不配置的话 EMQX 会应用默认的配置。
+#### 订阅选项
 
-代理订阅规则的格式如下：
+| 字段  | 含义                                                                                                             | 取值范围                                                                                                            | 默认值 |
+| ----- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
+| topic | 必填，主题，订阅标识符                                                                                           | 字符串，支持占位符                                                                                                  | 无     |
+| qos   | 非必填，服务质量（ QoS ）                                                                                        | 0，1，2 服务端可以向客户端发送的应用消息的最大 QoS 等级                                                             | 0      |
+| rh    | 非必填，仅在设备使用 MQTT 5.0 版本协议时生效；当订阅建立时，是否发送保留消息                                     | 0：订阅建立时发送保留消息；</br>1：订阅建立时，若该订阅当前不存在则发送保留消息；</br>2：订阅建立时不要发送保留消息 | 0      |
+| rap   | 非必填，仅在设备使用 MQTT 5.0 版本协议时生效；向此订阅转发应用消息时，是否保持消息被发布时设置的保留(RETAIN)标志 | 0：表示向订阅转发应用消息时把保留标志设置为 0；</br>1：表示向此订阅转发应用消息时保持消息被发布时设置的保留标志     | 0      |
+| nl    | 非必填，仅在设备使用 MQTT 5.0 版本协议时生效；应用消息是否能够被转发到发布此消息的客户端                         | 0：表示应用消息可以被转发给发布此消息的客户端;</br>1：表示应用消息不能被转发给发布此消息的客户端                    | 0      |
 
-```bash
-## 代理订阅的主题
-module.subscription.<number>.topic = <topic>
+#### 订阅主题占位符
 
-## 代理订阅的订阅选项：QoS
-## 可选值: 0、1、2
-## 默认值：1
-module.subscription.<number>.qos = <qos>
+| 占位符      | 含义                            |
+| ----------- | ------------------------------- |
+| ${clientid} | 设备 ID                         |
+| ${username} | 设备连接使用的用户名            |
+| ${ip}       | 设备 TCP 连接本地 IP 地址       |
+| ${port}     | 设备 TCP 连接本地端口号（Port） |
 
-## 代理订阅的订阅选项：No Local
-## 可选值: 0、1
-## 默认值：0
-module.subscription.<number>.nl = <nl>
+#### 快速上手
 
-## 代理订阅的订阅选项：Retain As Published
-## 可选值: 0、1
-## 默认值：0
-module.subscription.<number>.rap = <rap>
+将下面的配置项添加到配置文件中
 
-## 代理订阅的订阅选项：Retain Handling
-## 可选值: 0、1、2
-## 默认值：0
-module.subscription.<number>.rh = <rh>
+```hocon
+auto_subscribe {
+    topics = [
+        {
+            topic = "c/${clientid}"
+        },
+        {
+            topic = "client/${clientid}/username/${username}/host/${host}/port/${port}"
+            qos   = 1
+            rh    = 0
+            rap   = 0
+            nl    = 0
+        }
+    ]
+}
 ```
 
-需要注意的是，订阅选项中的 No Local、Retain As Published、Retain Handling 仅支持 MQTT V5 协议，当客户端以 MQTT V3 或 MQTT V3.1.1 连接时，代理订阅配置中仅有 Topic 与 QoS 的配置生效。
-
-在配置代理订阅的主题时，EMQX 提供了 `%c` 和 `%u` 两个占位符供用户使用，EMQX 会在执行代理订阅时将配置中的 `%c` 和 `%u` 分别替换为客户端的 `Client ID` 和 `Username`，需要注意的是，`%c` 和 `%u` 必须占用一整个主题层级。
-
-例如，在 `etc/emqx.conf` 文件中添加以下代理订阅规则：
-
-```bash
-module.subscription.1.topic = client/%c
-
-module.subscription.2.topic = user/%u
-module.subscription.2.qos = 2
-module.subscription.2.nl  = 1
-module.subscription.2.rap = 1
-module.subscription.2.rh  = 1
+```text
++---------------------------+             +----------------+
+| clientid: demo_client1    |             |  EMQX Broker   |
+| username: admin           |             |                |
+| local host: 192.168.1.234 |<----------->|                |
+| local port: 55678         |             |                |
++---------------------------+             +----------------+
 ```
 
-配置 A、B 两个客户端，客户端 A 的 `Client ID` 为 `testclientA`，`Username` 为 `testerA`，客户端 B 的 `Client ID` 为 `testclientB`，`Username` 为 `testerB`。
+设备使用 MQTT 5.0 以下版本时，登录成功后可以获得以下订阅：
 
-A 客户端使用 MQTT V3.1.1 协议连接 EMQX，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 QoS 为 1 的 `client/testclientA` 和 QoS 为 2 的 `user/testerA` 这两个主题，因为连接协议为 MQTT V3.1.1，所以配置中的 No Local、Retain As Published、Retain Handling 不生效。
+```text
+topic: c/demo_client1
+qos: 0
+```
 
-B 客户端使用 MQTT V5 协议连接 EMQX，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 `client/testclientB` 和 `user/testerB` 这两个主题，其中 `client/testclientB` 的订阅选项为 Qos = 1，No Local、Retain As Published、Retain Handling 均为 0；`user/testerB` 的订阅选项为 Qos = 2、No Local = 1、Retain As Published = 1 、Retain Handling = 1。
+```text
+topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
+qos: 1
+```
 
-## 动态代理订阅
+设备使用 MQTT 5.0 版本时，登录成功后可以获得以下订阅：
 
-EMQX Enterprise 版本中支持动态代理订阅，即通过外部数据库设置主题列表在设备连接时读取列表实现代理订阅。
+```text
+topic: c/demo_client1
+qos: 0
+rh: 0
+rap: 0
+nl: 0
+```
 
+```text
+topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
+qos: 1
+rh: 0
+rap: 0
+nl: 0
+```
