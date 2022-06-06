@@ -42,7 +42,14 @@ CREATE TABLE t_mqtt_msg (
 填写规则 SQL:
 
 ```sql
-SELECT * FROM "t/#"
+SELECT
+
+  *,
+  now_timestamp('millisecond')  as ts
+
+FROM
+
+  "#"
 ```
 
 ![image](./assets/rule-engine/rule_sql.png)
@@ -64,7 +71,7 @@ SELECT * FROM "t/#"
 1. SQL 模板。这个例子里我们向 TDengine 插入一条数据，注意我们应当在 SQL 中指定数据库名，字符类型也要用单引号括起来，SQL 模板为：
 
 ```sql
-insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (now, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
+insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
 ```
 
 2. 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 TDengine资源:
@@ -107,8 +114,8 @@ EMQX 规则引擎中有功能强大的***\*发送数据到 Web 服务功能\****
   这个例子里我们向 TDengine 插入一条数据，应当在请求体内拼接携带 INSERT SQL 。注意我们应当在 SQL 中指定数据库名，字符类型也要用单引号括起来，消息内容模板为：
 
 ```sql
--- 注意：topic 处添加了作为标识，因为此示例中我们会有两个资源同时写入 TDengine，标识区分了原生方式与 Web Server 写入的数据
-insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (now, '${id}', 'http server ${topic}', ${qos}, '${payload}', ${timestamp})
+-- 注意：topic 处添加了作为标识，因为此示例中我们会有两个资源写入 TDengine，标识区分了原生方式与 Web Server 写入的数据
+insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', 'http server ${topic}', ${qos}, '${payload}', ${timestamp})
 ```
 
 ![image](./assets/rule-engine/TDengine/create_data_towebserver.png)
