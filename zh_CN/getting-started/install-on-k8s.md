@@ -69,7 +69,7 @@
                   stopped_nodes => []}
     ```
 
-{% emqxce %}
+{% endemqxce %}
 
 {% emqxee %}
 4. 部署 EMQX Enterprise
@@ -105,4 +105,4 @@
                   stopped_nodes => []}
     ```
 
-{% emqxee %}
+{% endemqxee %}
