@@ -1,6 +1,8 @@
 # 保存数据到 Alibaba Tablestore 数据库
 
-Create a database instance (please refer to the official Tablestore documentation for the steps to create an instance).
+## Create a database instance
+
+> Please refer to the official Tablestore documentation for the steps to create an instance.
 
 </br>Click `Instances` . `Time Series Table`. `Create Time Series Table`.
 
