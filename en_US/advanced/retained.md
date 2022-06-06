@@ -17,7 +17,7 @@ The message read and deliver rate can be controlled. When a client subscribes to
 
 ## Configuration
 
-EMQX Broker's retained message feature is implemented by the `emqx_retainer` plugin, which is enabled by default. By modifying the configuration of the ` emqx_retainer` plugin you can adjust the storage location of the retained messages in EMQX Broker, adjust the number of preserved retained messages and the maximum length of Payload, and adjust the expiration time of retained messages. For more information about the EMQX Broker plug-in, see [plugin](./plugins.md).
+EMQX has the retainer enabled by default. By modifying the configuration in the `retainer` namespace, you can adjust the storage location of the retained messages in EMQX Broker, adjust the number of preserved retained messages and the size limit of the messages, and adjust the expiration time of retained messages.
 
 The `emqx_retainer` plugin is enabled by default, and the configuration path of the plugin is `etc/plugins/emqx_retainer.conf`.
 
@@ -33,6 +33,3 @@ The `emqx_retainer` plugin is enabled by default, and the configuration path of 
 | retainer.backend.storage_type              | enum     | `ram`, `disc`               | `ram`         | ram: only stored in memory; <br /> disc: stored in memory and hard disk.                                                                                                                                                                                     |
 | retainer.backend.max_retained_messages     | integer  | \>= 0                       | 1             | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics.                           |
 
-::: tip
-EMQX Enterprise can store retained messages in various external databases
-:::
