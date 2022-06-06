@@ -23,7 +23,7 @@ Prior to version 5, this feature is also known as "proxy subscription".
 | qos   | Not Required. Subscription QoS                                                                               | 0 or 1 or 2. Refer to the MQTT QoS definition                   | 0                |
 | rh    | Not Required. MQTT version 5.0. Whether to send retain message when a subscription is created.               | 0: Not send the retain message </br>1: Send  the retain message | 0                |
 | rap   | Not Required. MQTT version 5.0. When forwarding messages, Whether to send with retain flag                   | 0: Set retain 0</br>1: Keep retain flag                         | 0                |
-| nl    | Not Required. MQTT version 5.0. whether the  message can be forwarded to the client when published by itself | 0: Forwarded to self</br>1: Not forwarded to self               | 0                |
+| nl    | Not Required. MQTT version 5.0. whether the message can be forwarded to the client when published by itself | 0: Forwarded to self</br>1: Not forwarded to self               | 0                |
 
 ##### Subscription Placeholders
 
