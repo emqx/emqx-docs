@@ -6,14 +6,14 @@ HTTP authenticator delegates authentication to a custom HTTP API.
 
 * In authenticator settings, an HTTP request pattern is specified.
 * When an MQTT client connects to the broker, the configured request template is rendered and the resulting request is emitted.
-* Received 200 or 204 HTTP status is interpreted as authentication succes. Other statuses indicate authentication failure.
+* Received 200 or 204 HTTP status is interpreted as authentication success. Other statuses indicate authentication failure.
 Successful HTTP status can also contain a JSON or www-form-urlencoded map with `is_superuser` boolean field
-that indicates superuser priveleges for the client.
+that indicates superuser privileges for the client.
 
 ::: danger
-`POST` method is recommended. When using the `GET` method, some sensitive information (like plain text password) can be exposed through HTTP server logging.
+`POST` method is recommended. When using the `GET` method, some sensitive information (like plain text passwords) can be exposed through HTTP server logging.
 
-For untrusted environments HTTPS should be used.
+For untrusted environments, HTTPS should be used.
 :::
 
 ## Configuration
@@ -86,7 +86,7 @@ For `https://` urls `ssl` configuration must be enabled:
 
 ### `body`
 
-Optional arbitary map for sending to the external API. For `post` requests it is sent as a JSON or www-form-urlencoded
+Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON or www-form-urlencoded
 body. For `get` requests it is encoded as query parameters. The map keys and values can contain [placeholders](./authn.md#authentication-placeholders).
 
 For different configurations `body` map will be encoded differently.
@@ -156,7 +156,7 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
 
 ### `headers`
 
-Map with arbitrary HTTP headers for external request, optional.
+Map with arbitrary HTTP headers for external requests, optional.
 
 For `get` requests the default value is
 ```hocon
@@ -191,7 +191,7 @@ Optional, default value is `true`.
 
 ### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
 
-Optional values controlling the correspoding request thresholds. The default values are:
+Optional values controlling the corresponding request thresholds. The default values are:
 
 ```hocon
   connect_timeout = 15s
@@ -202,7 +202,7 @@ Optional values controlling the correspoding request thresholds. The default val
 
 ### `pool_size`
 
-Optional integer value defining number of concurrent connections from an EMQX node to the external API.
+Optional integer value defining the number of concurrent connections from an EMQX node to the external API.
 The default value is 8.
 
 ### `ssl`
