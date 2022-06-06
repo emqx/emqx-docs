@@ -2,7 +2,9 @@
 
 ## Auto Subscribe
 
-When a device is successfully connected to EMQX, no additional subscription requests (SUBSCRIBE messages) need to be sent and EMQX completes the pre-defined subscription relationship for the device. This feature is improved from the MQTT proxy subscription feature in EMQX version 4.
+With Auto Subscription enabled, after a client is successfully connected to EMQX, it may not need to send `SUBSCRIBE` requests to EMQX, because EMQX will complete the pre-defined subscription for the client. 
+
+Prior to version 5, this feature is also known as "proxy subscription".
 
 ### Configuration
 
