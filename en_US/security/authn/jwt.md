@@ -177,7 +177,7 @@ For `http://` endpoints should be disabled, for `https://` endpoints should be e
 Possible options are:
 * `enable` — boolean, specifies whether to use SSL. Default is `false`.
 * `verify` — `verify_none` or `verify_peer`. Specifies whether to verify endpoint server name.
-* `server_name_indication` — optional string with an explicit [SNI](wikipedia.org/wiki/Server_Name_Indication) value for the endpoint.
+* `server_name_indication` — optional string with an explicit [SNI](https://wikipedia.org/wiki/Server_Name_Indication) value for the endpoint.
 
 #### `cacertfile`, `certfile`, and `keyfile`
 String fields with filenames of the corresponding pem-encrypted keys/certificates for endpoint connection.

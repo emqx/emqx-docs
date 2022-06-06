@@ -207,5 +207,5 @@ The default value is 8.
 
 ### `ssl`
 
-Standard [SSL options](./ssl.md) for connecting to the external API.
+Standard [SSL options](../ssl.md) for connecting to the external API.
 
