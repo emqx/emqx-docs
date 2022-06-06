@@ -1,11 +1,11 @@
 # MySQL
 
-This authenticator implements password verification algorithm and uses MySQL database as credential storage.
+This authenticator implements the password verification algorithm and uses MySQL database as credential storage.
 
 ## Storage schema
 
-MySQL authenticator supports almost arbitrary storage schema. It is up to the user to decide how to store credentials
-and access them: use one or multiple tables, views, etc.
+MySQL authenticator supports almost any storage schema. It is up to the user to decide how to store credentials
+and access them: using one or multiple tables, views, etc.
 
 The user should only provide a templated query that selects credentials as a single row containing
 `password_hash`, `salt`, and `is_superuser` columns. `password_hash` column is required, other columns
@@ -46,7 +46,7 @@ query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username 
 ```
 
 ::: warning
-When there is a significant number of users in the system make sure that the tables used by the query are optimized
+When there are a significant number of users in the system make sure that the tables used by the query are optimized
 and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database
 and on the EMQX broker itself.
 :::
@@ -114,7 +114,7 @@ Optional string value with MySQL user password.
 #### `auto_reconnect`
 
 Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
-Redis on client failure.
+MySQL on client failure.
 
 ### `pool_size`
 

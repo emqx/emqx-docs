@@ -1,12 +1,12 @@
 # Built-in Database
 
-This authenticator implements password verification algorithm and uses the built-in Mnesia database of EMQX to store client credentials (_users_).
+This authenticator implements the password verification algorithm and uses the built-in Mnesia database of EMQX to store client credentials (_users_).
 
 Mnesia authentication does not depend on external data sources, and it is simple and lightweight to use.
 
 ## Configuration
 
-Mnesia authentication identified with `mechanism = password_based` and `backend = built_in_database`.
+Mnesia authentication is identified with `mechanism = password_based` and `backend = built_in_database`.
 
 ```hocon
 {

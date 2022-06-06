@@ -6,7 +6,7 @@ Some [authenticators](./authn.md#authentication-sources) (with `built_in_databas
 * `scram:built_in_database`
 
 For these authenticators, users can be managed through REST API.
-It allows to create, update, remove, and list user credentials.
+It allows EMQX administrators to create, update, remove, and list user credentials.
 
 To use user-management API for an authenticator, the authenticator must be set up for the used
 [chain](./authn.md#authentication-chains).

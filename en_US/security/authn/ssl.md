@@ -29,7 +29,7 @@ ssl {
 }
 ```
 
-All SSL parameters are optional. Also, for the resources that support SSL, the very `ssl` configuration section is optional too. Its absense denotes that TLS layer shouldn't be used, i.e. is equivalent to
+All SSL parameters are optional. Also, for the resources that support SSL, the very `ssl` configuration section is optional too. Its absence denotes that TLS layer shouldn't be used, i.e. is equivalent to
 ```
 ssl {
     enable = false

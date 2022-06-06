@@ -1,6 +1,6 @@
 # Redis
 
-This authenticator implements password verification algorithm and uses Redis database as credential storage.
+This authenticator implements the password verification algorithm and uses Redis database as credential storage.
 
 ## Storage schema
 

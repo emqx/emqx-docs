@@ -5,7 +5,7 @@ This authenticator implements [SCRAM](https://en.wikipedia.org/wiki/Salted_Chall
 SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTT
 packages during connection.
 
-Mnesia authentication does not depend on external data sources, and it is simple and lightweight to use.
+SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
 
 ## Configuration
 

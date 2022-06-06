@@ -1,6 +1,6 @@
 # MongoDB
 
-This authenticator implements password verification algorithm and uses MongoDB database as credential storage.
+This authenticator implements the password verification algorithm and uses MongoDB database as credential storage.
 
 ## Storage Schema
 
@@ -8,7 +8,7 @@ MongoDB authenticator supports storing credentials as MongoDB documents. A user 
 filter template for selecting the relevant document.
 
 The document should contain fields with values for `password_hash`, `salt`, and `is_superuser`.
-The field names are configured.
+The field names are configurable.
 The value for `password_hash` is required, other values are optional.
 The absence of `salt` value is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
 interpreted as its false value.
@@ -46,7 +46,7 @@ is_superuser_field = "is"
 ```
 
 ::: warning
-When there is a significant number of users in the system make sure that the collections used by the selector are optimized
+When there are a significant number of users in the system make sure that the collections used by the selector are optimized
 and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database
 and on the EMQX broker itself.
 :::

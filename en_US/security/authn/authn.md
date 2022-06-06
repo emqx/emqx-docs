@@ -146,7 +146,7 @@ gateway.stomp {
 
 ```
 
-Listener-specific chains completely override the global chains, i.e. if a listener has its own chain global chain
+Listener-specific chains completely override the global chains, i.e. if a listener has its own chain, then the global chain
 isn't used at all for clients connecting to the listener.
 
 When a client connects to a listener it is authenticated with the listener-specific chain. If there is no
@@ -314,8 +314,9 @@ When used in URLs, listener ids should be URL-encoded: `quic%3Adefault`.
 
 ## TLS authentication
 
-To enable TLS authentication for clients, one may add a `ssl` listener
-with `verify_peer` verify option set.
+To enable TLS authentication for clients, one may add an `ssl` listener
+and set its `ssl.verify` option to `verify_peer`.
+
 The default `ssl` MQTT listener runs on the 8883 port:
 
 ```hocon
