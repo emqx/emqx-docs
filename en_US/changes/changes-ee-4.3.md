@@ -15,6 +15,45 @@ ref: undefined
 
 # Release version
 
+## Version 4.3.10
+
+*Release Date: 2022-06-01*
+
+### Enhancement
+
+- Add more time transformation functions to the SQL of rule engine
+- Add the `float2str/2` function to the SQL of rule engine to support specifying the output precision of floating point numbers
+- Rule engine supports connecting to Pulsar using Basic and JWT authentication
+- Add `service_name` option to Oracle resource of rule engine to support Oracle Database RAC
+- Support for using JWT for authorization, now MQTT clients can authorize using specific claims that include a pub-sub whitelist
+- Improved authentication related metrics to make it easier to understand, now `client.authenticate = client.auth.success + client.auth.failure`
+- Support binding the listener of the REST API to a specified network interface
+- Upload license will be automatically synchronized to the entire cluster, no need for each node to upload separately, provide HTTP API
+- Support multi-condition query and fuzzy query for user data in authentication and authorization using built-in database as data source
+- Supports querying clients using the length of the message queue and the number of dropped messages as conditions
+- Support to configure the log time format to be compatible with the time format in older versions
+- When `use_username_as_clientid` is configured to `true` and the client connects without specifying a `username`, the connection is now rejected with a reason code `0x85`
+- Full randomisation of app secrets (previously partially randomised)
+- Hot upgrades between incompatible versions will now be rejected
+- Allow white spaces in EMQX's installation path
+- Boot script fail fast on invalid node name (improve error message readability)
+
+### Bug fixes
+
+- Fix the issue that the client could not get the message after going online when using the PostgreSQL offline message plugin
+- Fix the issue that the rules engine could not successfully establish a TLS connection with Pulsar in some cases
+- Fix the issue that rule engine's SQL function `hexstr_to_bin/1` could not handle half-byte
+- Fix the issue that the alarm was not cleared when the rule engine resource was deleted
+- Fix Dashboard HTTPS listener's `verify` option not taking effect
+- Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
+- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closeing the connection process
+- Fix the issue that the relevant hooks were not properly uninstalled when the module was disabled, resulting in abnormal functions
+- Fix the issue that the MQTT-SN client would be disconnected when retransmitting QoS 2 messages
+- Fix the issue that modules that were turned off in the backup file would be automatically enabled after restoring the backup
+- Fix the issue that the returned results did not match the query conditions when querying subscriptions with multiple conditions
+- Fix rule engine resource connection test not working
+- Fix multiple Dashboard display issues
+
 ## Version 4.3.9
 
 *Release Date: 2022-04-18*
