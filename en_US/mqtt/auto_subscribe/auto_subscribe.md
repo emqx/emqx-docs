@@ -64,7 +64,7 @@ auto_subscribe {
 +---------------------------+             +----------------+
 ```
 
-When the client using versions lower than 5, the following subscriptions are available after connected.
+When the client uses versions lower than 5, the following subscriptions are available after connection.
 
 ```text
 topic: c/demo_client1
