@@ -8,7 +8,6 @@
 
 ![img](./assets/rule-engine/tablestore/instance_manage.png)
 
-
 ## Manage Time Series Table
 
 Click on the `Time Series Table` created in the previous step to enter the timeline management UI.
@@ -63,7 +62,7 @@ Parameter List
 | --- | --- |
 | Measurement | Tablestore Measurement |
 | Data Source | Tablestore Data Source, default is empty string |
-| TimeStamp(microsecond) |In microsecondMQTT messages in EMQX are timestamped with millisecond precision by default and cannot be used directly. Fill in the blank value,the default value is the microsecond timestamp of the message arriving at EMQX |
+| TimeStamp(microsecond) |In microsecond. MQTT messages in EMQX are timestamped with millisecond precision by default and cannot be used directly. Fill in the blank value,the default value is the microsecond timestamp of the message arriving at EMQX |
 | TimeSeries Cache | Tablestore identifies whether the current data needs to be created or updated with timeline metadata. Enabled by default |
 | Sync Write | Enable batch writing, or single simultaneous writing. The fallback actions is not triggered when batch writing |
 | Async Batch Size | Maximum number of data entries for batch writing, only effective when `Sync Write` is false |

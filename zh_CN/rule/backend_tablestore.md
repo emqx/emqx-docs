@@ -6,6 +6,8 @@
 
 ![img](./assets/rule-engine/tablestore/instance_manage.png)
 
+## 创建时间线
+
 点击上一步中创建的时序表，进入时序表管理。点击数据管理，创建时间线，按照业务设计创建出时间线。
 （此步骤可以跳过，当写入不存在的时间线时，Tablestore 会自动创建出新的时间线，示例中不对时间线操作）
 
