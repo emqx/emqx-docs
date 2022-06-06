@@ -11,7 +11,7 @@ Create a database instance (please refer to the official Tablestore documentatio
 
 Click on the `Time Series Table` created in the previous step to enter the timeline management UI.
 Click `Data Management`, `Query Data`, and `Add Time Series` according to the business design.
-(This step can be skipped, Tablestore will automatically create a new `Time Series` when writing data that does not exist, the example does not operate on `Time Series`)
+(This step can be skipped, Tablestore will automatically create a new `Time Series` when writing data that does not exist. The example does not operate on `Time Series`)
 
 ![img](./assets/rule-engine/tablestore/timeline_mamge.png)
 
