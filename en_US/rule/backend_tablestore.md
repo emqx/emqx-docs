@@ -52,7 +52,7 @@ FROM
 
 ### Create Action
 
-`Table Name` and `ata Source` name, please fill in the `Table Name` and `Data Source` name as created (`Data Source` name can be empty string).
+`Table Name` and `Data Source` name, please fill in the `Table Name` and `Data Source` name as created (`Data Source` name can be empty string).
 
 ![img](./assets/rule-engine/tablestore/create_action.png)
 
