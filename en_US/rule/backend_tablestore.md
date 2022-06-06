@@ -78,7 +78,7 @@ Tablestore supported data types:
 - string
 - binary
 
-These formats can be automatically recognized and classified by the rules engine. String-type data, however, is handled as binary data by default to ensure best compatibility. If you need to specify a field value as a string, you can fill the field into the `String Fields` when you create the action. After that, the engine will handle the field value in the string format.
+These types can be automatically recognized and classified by the rules engine. String data, however, is handled as a binary by default to ensure the best compatibility. If you need to specify a field value as a string, you can fill the field into the `String Fields` when you create the action. After that, the engine will handle the field value as a string.
 
 ![img](./assets/rule-engine/tablestore/create_str_action.png)
 
