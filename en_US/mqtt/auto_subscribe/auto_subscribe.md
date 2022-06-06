@@ -76,7 +76,7 @@ topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
 qos: 1
 ```
 
-When the client using versions 5, the following subscriptions are available after connected.
+When the client uses version 5, the following subscriptions are available after connection.
 
 ```text
 topic: c/demo_client1
