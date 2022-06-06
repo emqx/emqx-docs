@@ -24,7 +24,7 @@ emqx_auth_pgsql
 ```
 
 ::: tip 
-The emqx_auth_mysql plugin also includes authentication feature, which can be disabled via comments.
+The emqx_auth_pgsql plugin also includes authentication feature, which can be disabled via comments.
 :::
 
 

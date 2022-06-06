@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -33,6 +33,10 @@ emqx_auth_jwt
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGUiOiJodHRwczovL3dpdndpdi5jb20ifSwiZXhwIjoxNTgyMjU1MzYwNjQyMDAwMCwiaWF0IjoxNTgyMjU1MzYwfQ.FdyAx2fYahm6h3g47m88ttyINzptzKy_speimyUcma4
 ```
 
+## JWT ACL
+
+JWT 身份验证插件可以从身份验证令牌中提取 ACL 规则。 后面会用到这些 ACL 规则
+授权客户的发布/订阅操作。 请参阅 [JWT ACL](./acl-jwt.md)。
 
 ## 配置项
 
@@ -140,7 +144,7 @@ JWT 认证支持以三种方式配置密钥，这三种方式分别对应三种�
 该三类密钥允许同时配置。EMQX 在验证 Token 时会按 `auth.jwt.secret`，`auth.jwt.pubkey`，`auth.jwt.jwks` 顺序检查。
 
 
-::: danger 
+::: danger
 JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限，使用 JWT 时建议启用 TLS 加密传输。
 JWT 使用过程中无法在过期前废止某个 Token，请妥善设置有效时长并保管好密钥等加密信息。
 :::

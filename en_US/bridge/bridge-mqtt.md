@@ -25,7 +25,7 @@ bridge.mqtt.aws.proto_ver = mqttv4
 bridge.mqtt.aws.bridge_mode = true
 
 ## The ClientId of a remote bridge
-bridge.mqtt.aws.client_id = bridge_aws
+bridge.mqtt.aws.clientid = bridge_aws
 
 ## The Clean start flag of a remote bridge
 ## NOTE: Some IoT platforms require clean_start must be set to 'true'

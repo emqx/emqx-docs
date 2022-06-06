@@ -4,7 +4,6 @@
 
 The configuration files of EMQX Broker usually have the suffix `.conf`. You can find these configuration files in the `etc` directory.
 
-
 {% emqxee %}
 
 | File               | Description |

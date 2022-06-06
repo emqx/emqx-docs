@@ -55,7 +55,7 @@ backend.cassa.hook.session.subscribed.2  = {"action": {"function": "on_retain_lo
 backend.cassa.hook.message.publish.1     = {"topic": "#", "action": {"function": "on_message_publish"}, "pool": "pool1"}
 
 ## Delete Acked Record
-backend.cassa.hook.session.unsubscribed.1= {"topic": "#", action": {"cql": ["delete from acked where client_id = ${clientid} and topic = ${topic}"]}, "pool": "pool1"}
+backend.cassa.hook.session.unsubscribed.1= {"topic": "#", "action": {"cql": ["delete from acked where clientid = ${clientid} and topic = ${topic}"]}, "pool": "pool1"}
 
 ## Store Retain Message
 backend.cassa.hook.message.publish.2     = {"topic": "#", "action": {"function": "on_message_retain"}, "pool": "pool1"}
@@ -121,7 +121,7 @@ backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(cl
 
 ```bash
 CREATE KEYSPACE mqtt WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
-USR mqtt;
+USE mqtt;
 ```
 
 ## 导入 Cassandra 表结构
@@ -136,7 +136,7 @@ cqlsh -e "SOURCE 'emqx_backend_cassa.cql'"
 
 ```sql
 CREATE TABLE mqtt.client (
-  client_id text PRIMARY KEY,
+  clientid text PRIMARY KEY,
   connected timestamp,
   disconnected timestamp,
   node text,
@@ -147,15 +147,15 @@ CREATE TABLE mqtt.client (
 查询设备在线状态:
 
 ```bash
-select * from mqtt.client where client_id = ${clientid};
+select * from mqtt.client where clientid = ${clientid};
 ```
 
 例如 ClientId 为 test 的客户端上线:
 
 ```bash
-select * from mqtt.client where client_id = 'test';
+select * from mqtt.client where clientid = 'test';
 
- client_id | connected                       | disconnected  | node            | state
+ clientid  | connected                       | disconnected  | node            | state
 -----------+---------------------------------+---------------+-----------------+-------
       test | 2017-02-14 08:27:29.872000+0000 |          null | emqx@127.0.0.1|   1
 ```
@@ -163,9 +163,9 @@ select * from mqtt.client where client_id = 'test';
 例如ClientId为test客户端下线:
 
 ```bash
-select * from mqtt.client where client_id = 'test';
+select * from mqtt.client where clientid = 'test';
 
- client_id | connected                       | disconnected                    | node            | state
+ clientid  | connected                       | disconnected                    | node            | state
 -----------+---------------------------------+---------------------------------+-----------------+-------
       test | 2017-02-14 08:27:29.872000+0000 | 2017-02-14 08:27:35.872000+0000 | emqx@127.0.0.1|     0
 ```
@@ -176,10 +176,10 @@ select * from mqtt.client where client_id = 'test';
 
 ```sql
 CREATE TABLE mqtt.sub (
-  client_id text,
+  clientid text,
   topic text,
   qos int,
-  PRIMARY KEY (client_id, topic)
+  PRIMARY KEY (clientid, topic)
 );
 ```
 
@@ -187,8 +187,8 @@ CREATE TABLE mqtt.sub (
 test_topic2:
 
 ```sql
-insert into mqtt.sub(client_id, topic, qos) values('test', 'test_topic1', 1);
-insert into mqtt.sub(client_id, topic, qos) values('test', 'test_topic2', 2);
+insert into mqtt.sub(clientid, topic, qos) values('test', 'test_topic1', 1);
+insert into mqtt.sub(clientid, topic, qos) values('test', 'test_topic2', 2);
 ```
 
 某个客户端订阅主题:
@@ -202,7 +202,7 @@ select * from mqtt_sub where clientid = ${clientid};
 ```bash
 select * from mqtt_sub where clientid = 'test';
 
- client_id | topic       | qos
+ clientid  | topic       | qos
 -----------+-------------+------
       test | test_topic1 |   1
       test | test_topic2 |   2
@@ -275,10 +275,10 @@ select * from mqtt_retain where topic = 't/retain';
 
 ```sql
 CREATE TABLE mqtt.acked (
-  client_id text,
+  clientid text,
   topic text,
   msgid text,
-  PRIMARY KEY (client_id, topic)
+  PRIMARY KEY (clientid, topic)
 );
 ```
 

@@ -82,7 +82,7 @@ TIME-WAIT Socket 最大数量、回收与重用设置:
 ```bash
 sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
 
-# 注意：不建议开启該设置，NAT 模式下可能引起连接 RST
+# 注意：不建议开启该设置，NAT 模式下可能引起连接 RST
 # sysctl -w net.ipv4.tcp_tw_recycle=1
 # sysctl -w net.ipv4.tcp_tw_reuse=1
 ```

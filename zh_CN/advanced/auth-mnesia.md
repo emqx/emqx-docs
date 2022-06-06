@@ -162,29 +162,30 @@ auth.user.2.password = public
 
   ```bash
   # Request
-  GET api/v4/auth_clientid
+  GET api/v4/auth_clientid?_like_clientid=emqx_c
   
   # Response
   {
     "meta": {
       "page": 1,
-      "limit": 10,
+      "limit": 100,
       "count": 1
     },
     "data": [
-    			"clinetid": "emqx_c",
-    			"clinetid": "emqx_c_1",
-    			"clinetid": "emqx_c_2"
-    		],
+          "clientid": "emqx_c",
+          "clientid": "emqx_c_1",
+          "clientid": "emqx_c_2"
+        ],
     "code": 0
   }
   ```
+模糊查找特定 ClientID 的列表，可开启 `_like_clientid`可选参数。
 
 + Username
 
   ```bash
   # Request
-  GET api/v4/auth_username
+  GET api/v4/auth_username?_like_username=emqx_u
   
   # Response
   {
@@ -201,6 +202,7 @@ auth.user.2.password = public
     "code": 0
   }
   ```
+模糊查找特定 ClientID 的列表，可添加 `_like_username`可选参数。
 
 ### 更改已添加的认证数据
 

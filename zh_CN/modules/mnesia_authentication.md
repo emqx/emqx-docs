@@ -206,6 +206,14 @@ curl -i \
 
 查看已经添加的认证数据。
 
+**Query String Parameters:**
+
+支持模糊查询，其包含的查询参数有：
+
+| Name              | Type   | Required |  Description |
+| ----------------- | ------ | -------- | ------------ |
+| _like_clientid    | String | False    | 客户端标识符，子串方式模糊查找 |
+
 **Success Response Body (JSON):**
 
 | Name               | Type    | Description |
@@ -213,7 +221,7 @@ curl -i \
 | code               | Integer | 0           |
 | meta               | Object  | 规则对象    |
 | data               | Object  | 规则对象    |
-| - data.[].clinetid | String  | Client ID   |
+| - data.[].clientid | String  | Client ID   |
 
 **Example**
 
@@ -223,7 +231,7 @@ $ curl -i \
   --basic \
   -u admin:public \
   -X GET \
-  http://localhost:8081/api/v4/auth_clientid
+  http://localhost:8081/api/v4/auth_clientid?_like_clientid=emqx
 
 ## Request
 {
@@ -251,6 +259,13 @@ $ curl -i \
 
 查看已经添加的认证数据。
 
+**Query String Parameters:**
+支持模糊查询，其包含的查询参数有：
+
+| Name              | Type   | Required |  Description |
+| ----------------- | ------ | -------- | ------------ |
+| _like_username    | String | False    | 客户端用户名，子串方式模糊查找 |
+
 **Success Response Body (JSON):**
 
 | Name               | Type    | Description |
@@ -268,7 +283,7 @@ curl -i \
   --basic \
   -u admin:public \
   -X GET \
-  http://localhost:8081/api/v4/auth_username
+  http://localhost:8081/api/v4/auth_username?_like_username=emqx
 
 ## Request
 {
@@ -749,9 +764,21 @@ curl -i \
 }
 ```
 
-#### GET api/v4/acl/clinetid
+#### GET api/v4/acl/clientid
 
 查看已经添加的 ACL 规则
+
+**Query String Parameters:**
+
+支持多条件和模糊查询，其包含的查询参数有：
+
+| Name              | Type   | Required |  Description |
+| ----------------- | ------ | -------- | ------------ |
+| access            | Enum   | False    | 是否允许 `deny`, `allow` |
+| action            | Enum   | False    | 动作<br/>可取值有：`pub`,`sub`,`pubsub`|
+| topic             | String | False    | MQTT 主题 |
+| _like_clientid    | String | False    | 客户端标识符，子串方式模糊查找 |
+
 
 **Success Response Body (JSON):**
 
@@ -761,8 +788,8 @@ curl -i \
 | data                | Object  | 规则对象     |
 | - data.[].clientid  | String  | Clientid    |
 | - data.[].topic     | String  | 主题         |
-| - data.[].action    | String  | 动作         |
-| - data.[].access    | String  | 是否允许      |
+| - data.[].action    | Enum    | 动作 `pub`, `sub`,`pubsub`  |
+| - data.[].access    | Enum    | 是否允许`deny`,`allow` |
 
 **Examples**
 
@@ -808,6 +835,16 @@ curl -i \
 #### GET api/v4/acl/username
 
 查看已经添加的 ACL 规则
+**Query String Parameters:**
+
+支持多条件和模糊查询，其包含的查询参数有：
+
+| Name              | Type   | Required |  Description |
+| ----------------- | ------ | -------- | ------------ |
+| access            | Enum   | False    | 权限 `deny`, `allow` |
+| action            | Enum   | False    | 动作<br/>可取值有：`pub`,`sub`,`pubsub`|
+| topic             | String | False    | MQTT 主题 |
+| _like_username    | String | False    | 客户端标识符，子串方式模糊查找 |
 
 **Success Response Body (JSON):**
 
@@ -817,8 +854,8 @@ curl -i \
 | data                | Object  | 规则对象     |
 | - data.[].username  | String  | Username    |
 | - data.[].topic     | String  | 主题         |
-| - data.[].action    | String  | 动作         |
-| - data.[].access    | String  | 是否允许      |
+| - data.[].action    | Enum    | 动作 `pub`, `sub`,`pubsub`  |
+| - data.[].access    | Enum    | 是否允许`deny`,`allow` |
 
 **Examples**
 
