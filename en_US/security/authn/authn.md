@@ -245,7 +245,7 @@ HMGET users:id2718 password_hash salt is_superuser
 ```
 is peformed to search credentials.
 
-## HTTP API
+## REST API
 
 Authentication API allows to manipulate authentication chains and
 concrete authenticators.

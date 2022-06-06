@@ -5,19 +5,19 @@ Some [authenticators](./authn.md#authentication-sources) (with `built_in_databas
 * `password_based:built_in_database`
 * `scram:built_in_database`
 
-For this authenticators users can be managed through HTTP API.
+For these authenticators, users can be managed through REST API.
 It allows to create, update, remove, and list user credentials.
 
 To use user-management API for an authenticator, the authenticator must be set up for the used
 [chain](./authn.md#authentication-chains).
 
 ::: warning
-Each authentication chain has it own set of users.
+Each authentication chain has its own set of users.
 :::
 
 ## API Endpoints
 
-Endpoint for the users of the global MQTT chain is `/api/v5/authentication/{id}/users`.
+The endpoint for the users of the global MQTT chain is `/api/v5/authentication/{id}/users`.
 Endpoint for the uses of a concrete MQTT listener chain is `/api/v5/listeners/{listener_id}/authentication/{id}/`.
 Endpoint for the users of a global `gateway` protocol chain is `/api/v5/gateway/{protocol}/authentication`.
 Endpoint for the uses of a `gateway` protocol listener chain is `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`.
