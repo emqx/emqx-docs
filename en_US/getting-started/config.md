@@ -30,7 +30,6 @@ The configuration files of EMQX Broker usually have the suffix `.conf`. You can 
 
 {% endemqxce %}
 
-
 It should be noted that for the EMQX Broker installed by different methods, the path of the `etc` directory may be different. For details, please refer to [directory structure](directory.md#).
 
 ## Grammar rules

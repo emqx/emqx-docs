@@ -53,7 +53,7 @@ EMQX Broker allows users to adjust the alarm function to a certain extent to mee
 
 
 {% emqxee %}
-EMQX Enterprise raises an alarm when the license expiration date is less than 30 days or if the number of connections exceeds the high water mark. The user can adjust the high/low water mark for the number of connections according to the actual situation.
+EMQX Enterprise raises an alarm when the license expires in less than 30 days, or if the number of connections exceeds the high watermark. User can adjust the high/low watermark for the number of connections according to the actual situation.
 
 | Configuration item            | Type     | Default value | Description                                                  |
 | ----------------------------- | -------- | ----------- | ------------------------------------------------------------ |

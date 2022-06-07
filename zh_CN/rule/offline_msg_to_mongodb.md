@@ -57,7 +57,7 @@ SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE
 
 弹出一个“创建资源”对话框
 
-![](./assets/rule-engine/mongo_offline_msg_04.png)
+![image-20211129162926730](./assets/rule-engine/mongo_offline_msg_04.png)
 
 填写资源配置:
 

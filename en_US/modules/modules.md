@@ -34,6 +34,7 @@ The modules currently provided by the EMQX include:
 - Develop and Maintenance 
   - Recon
   - Prometheus Agent
+  - Trace
 - Internal Modules
   - Topic metrics
   - MQTT enhanced certification
