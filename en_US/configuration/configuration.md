@@ -6113,7 +6113,7 @@ Default user authentication data of Dashboard. `dashboard.default_user.login` an
 
 The listening port of the HTTP listener.
 </br>
-Use the `ip:port` format to specify which network interface to listen to, default `0.0.0.0:18083` will listening on all network interfaces.
+Use the `ip:port` format to specify which network interface and port to listen to. Defaults to `0.0.0.0:18083`, which listens on all network interfaces.
 
 
 ### dashboard.listener.http.acceptors
