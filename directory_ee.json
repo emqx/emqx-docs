@@ -375,7 +375,7 @@
               "path": "rule/backend_lindorm"
             },
             {
-              "title": "Save data to Tablestore",
+              "title": "保存数据到 Tablestore",
               "path": "rule/backend_tablestore"
             }
           ]
