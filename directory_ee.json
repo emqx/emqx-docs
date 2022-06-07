@@ -373,6 +373,10 @@
             {
               "title": "保存数据到 Lindorm",
               "path": "rule/backend_lindorm"
+            },
+            {
+              "title": "Save data to Tablestore",
+              "path": "rule/backend_tablestore"
             }
           ]
         },
@@ -1118,10 +1122,6 @@
               "path": "rule/backend_timescaledb"
             },
             {
-              "title": "Save data to TimescaleDB",
-              "path": "rule/backend_influxdb_v2"
-            },
-            {
               "title": "Save data to Oracle DB",
               "path": "rule/backend_oracle"
             },
@@ -1144,6 +1144,10 @@
             {
               "title": "Save data to Lindorm",
               "path": "rule/backend_lindorm"
+            },
+            {
+              "title": "Save data to Tablestore",
+              "path": "rule/backend_tablestore"
             }
           ]
         },
