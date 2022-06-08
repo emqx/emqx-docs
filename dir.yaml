@@ -113,6 +113,7 @@
   title_cn: 数据桥接 （规则引擎）
   children:
     - rule/rule-engine
+    - rule/rule-engine_configs
     - rule/rule-engine_grammar_and_examples
     - rule/rule-engine_field
     - rule/rule-engine_builtin_function
