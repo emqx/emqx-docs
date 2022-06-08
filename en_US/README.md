@@ -10,8 +10,8 @@ MQTT is a lightweight message exchange protocol using publish-subscribe pattern.
 
 ## Design goals
 
-1. Connect Any Device: Connect any device via the open standard IoT protocols MQTT, CoAP, and LwM2M. Compatible with all MQTT clients. Tested with open-source libraries like Eclipse Paho and custom-built MQTT clients.
-2. At Any Scale: In our tests a single node can support up to 2 million connections. Effortlessly handle tens of millions of concurrent MQTT connections with an EMQX cluster.
+1. Connect Any Device: Connect any device via the open standard IoT protocols MQTT, CoAP, and LwM2M. Compatible with all MQTT clients. Tested with open-source libraries like Eclipse Paho and custom MQTT clients.
+2. At Any Scale: In our tests a single node can support up to 2 million connections. Effortlessly handle tens of millions concurrent MQTT connections with an EMQX cluster.
 3. Secured Communication: Secured communication with MQTT over TLS/SSL and various authentication mechanisms using username/password, JWT, PSK, X.509 certificates, and more.
 4. Real-time Event Processing: Low-code event processing with rich SQL queries powered by the built-in IoT rule engine. Stream millions of real-time IoT events, from device-to-cloud and cloud-to-devices.
 5. Ops-Friendly & Great Observability: Easily manage EMQX Community via CLI, HTTP API, and an elegant dashboard. Monitor and alert with Datadog, Statsd, Prometheus, and Granfana.
@@ -54,11 +54,11 @@ Add more features to MQTT:
 
 ### Security
 
-- Authentication based on user name/password, Support using built-in database, Redis, MySQL, PostgreSQL, MongoDB, HTTP as data source
-- Authentication based JWT, Support JWKs
+- Authentication based on user name/password supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB, or HTTP as data sources
+- Authentication based JWT supported using JWKs
 - Enhanced Authentication
 - PSK authentication
-- Access control (Authorization) based on client ID, IP address, user name, Support using built-in database, Redis, MySQL, PostgreSQL, MongoDB, HTTP as data source
+- Access control (Authorization) based on client ID, IP address, and user name supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB, or HTTP as data sources
 - API to blacklisting clients
 
 ### Scalability
@@ -69,7 +69,7 @@ Add more features to MQTT:
 
 ### Data Integration
 
-- SQL syntax rule-engine to extract, filter, enrich, and transform MQTT message or internal events to external data platform
+- SQL syntax rule-engine to extract, filter, enrich, and transform MQTT message or internal events to formats expected by external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT(such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
 - Supports integration with other apps using WebHook
 {emqxee}

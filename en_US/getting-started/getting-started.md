@@ -183,8 +183,8 @@ You can use the following client tools or client libraries to access EMQX
 
 EMQX dashboard comes with a built-in WebSocket based MQTT client.
 
-Visit dashboard URL in a web browser and enter the page of **Diagnose -> WebSocket Client**,
-where you can use the MQTT over WebSokcet client to quickly access EMQX.
+Visit the dashboard URL in a web browser and enter the page of **Diagnose -> WebSocket Client**,
+where you can use the MQTT over WebSocket client to quickly access EMQX.
 
 The WebSocket page provides you with a simple but effective WebSocket client tool,
 which can be used for publishing, subscribing, and inspecting the messages.
