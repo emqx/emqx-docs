@@ -84,11 +84,19 @@ The syntax rules of `acl.conf` are included in the comments at the top. Those fa
     - `{allow, all}`：Allow all operations
     - `{deny, all}`：Deny all operations
 
+{% emqxee %}
+::: warning
+If you directly modify the `acl.conf` file, the changes won't take effect until the broker is restarted.  If you want to change the rules without restarting the broker, you must use the dashboard UI to edit the contents.  By using the dashboard, the changes will take effect as soon as you apply the changes.
+:::
+{% endemqxee %}
+
+{% emqxce %}
 After the `acl.conf` modification is completed, it will not be automatically loaded into the EMQX Broker system, but needs to be performed manually:
 
 ```bash
 ./bin/emqx_ctl modules reload emqx_mod_acl_internal
 ```
+{% endemqxce %}
 
 ## Placeholders
 

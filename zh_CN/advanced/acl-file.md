@@ -87,11 +87,19 @@ etc/acl.conf
     - `{allow, all}`：允许所有操作
     - `{deny, all}`：拒绝所有操作
 
+{% emqxee %}
+::: warning
+如果你直接修改`acl.conf`文件，在经纪商重新启动之前，这些修改不会生效。 如果你想在不重启经纪商的情况下改变规则，你必须使用仪表板用户界面来编辑内容。 通过使用仪表盘，一旦你应用这些改变，这些改变就会生效。
+:::
+{% endemqxee %}
+
+{% emqxce %}
 在 `acl.conf` 修改完成后，并不会自动加载至 EMQX 系统。需要手动执行：
 
 ```bash
 ./bin/emqx_ctl modules reload emqx_mod_acl_internal
 ```
+{% endemqxce %}
 
 ## 占位符
 
