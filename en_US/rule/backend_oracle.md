@@ -42,6 +42,8 @@ Fill in the resource configuration:
 
 ![image](./assets/rule-engine/oracle_action_3.png)
 
+Note: for the connection to Oracle Real Applications Cluster (RAC) to work properly, the "Service Name" field must be filled correctly.  If left empty, it defaults to the Database SID.
+
 Click the "New" button.
 
 Return to the response action interface and click "OK".
