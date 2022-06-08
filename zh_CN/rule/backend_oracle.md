@@ -42,7 +42,7 @@ INSERT INTO T_MQTT_MSG (MSGID, TOPIC, QOS, PAYLOAD) values ('${id}', '${topic}',
 
 ![image](./assets/rule-engine/oracle_action_3.png)
 
-注意：为了使与Oracle Real Applications Cluster（RAC）的连接正常工作，"服务名称 "字段必须正确填写。 如果留空，它默认为数据库SID。
+注意：为了使与Oracle Real Applications Cluster（RAC）的连接正常工作，“服务名称” 字段必须正确填写。 如果留空，它默认为数据库SID。
 
 点击 “新建” 按钮。
 
