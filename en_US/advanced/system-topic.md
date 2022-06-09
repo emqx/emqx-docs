@@ -13,7 +13,9 @@ $SYS/brokers/emqx@127.0.0.1/uptime
 $SYS system message publish interval is configured in `etc/emqx.conf`:
 
 ```bash
-broker.sys_interval = 1m
+broker {
+  sys_interval: 1m
+}
 ```
 
 ::: tip
@@ -25,24 +27,24 @@ Most of the data of the $SYS topic in EMQX Broker can be obtained through other 
 
 ## Cluster status information
 
-| Topic                      | Description       |
-| ----------------------------- | -------------------- |
-| $SYS/brokers                  | cluster node list |
-| $SYS/brokers/\${node}/version  | EMQX Broker version |
+| Topic                          | Description              |
+| ------------------------------ | ------------------------ |
+| $SYS/brokers                   | cluster node list        |
+| $SYS/brokers/\${node}/version  | EMQX Broker version      |
 | $SYS/brokers/\${node}/uptime   | EMQX Broker startup time |
-| $SYS/brokers/\${node}/datetime | EMQX Broker time |
-| $SYS/brokers/\${node}/sysdescr | EMQX Broker description |
+| $SYS/brokers/\${node}/datetime | EMQX Broker time         |
+| $SYS/brokers/\${node}/sysdescr | EMQX Broker description  |
 
 ## Client Online and Offline Events
 
 `$SYS` topic prefix: `$SYS/brokers/${node}/clients/`
 
-| Topic              | Description                          |
-| ------------------------ | ---------------------------------------- |
+| Topic                    | Description                                                       |
+| ------------------------ | ----------------------------------------------------------------- |
 | ${clientid}/connected    | Online event. This message is published when a client goes online |
 | ${clientid}/disconnected | Offline event. This message is published when a client is offline |
 
- The Payload of the ‘connected’ event message can be parsed into JSON format:
+ The Payload of the `connected` event message can be parsed into JSON format:
 
 ```bash
 {
@@ -61,7 +63,7 @@ Most of the data of the $SYS topic in EMQX Broker can be obtained through other 
 }
 ```
 
- The Payload of the ‘disconnected’ event message can be parsed into JSON format:
+ The Payload of the `disconnected` event message can be parsed into JSON format:
 
 ```bash
 {
@@ -83,37 +85,37 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 
 ### Client statistics
 
-| Topic       | Description |
-| ----------------- | -------------- |
+| Topic             | Description                     |
+| ----------------- | ------------------------------- |
 | connections/count | Total number of current clients |
-| connections/max   | Maximum number of clients |
+| connections/max   | Maximum number of clients       |
 
 ### Subscription statistics
 
-| Topic                | Description  |
-| -------------------------- | ---------------- |
-| suboptions/count           | number of current subscription options |
+| Topic                      | Description                                  |
+| -------------------------- | -------------------------------------------- |
+| suboptions/count           | number of current subscription options       |
 | suboptions/max             | total number of maximum subscription options |
-| subscribers/count          | number of current subscribers |
-| subscribers/max            | maximum number of subscriptions |
-| subscriptions/count        | total number of current subscription |
-| subscriptions/max          | maximum number of subscriptions |
+| subscribers/count          | number of current subscribers                |
+| subscribers/max            | maximum number of subscriptions              |
+| subscriptions/count        | total number of current subscription         |
+| subscriptions/max          | maximum number of subscriptions              |
 | subscriptions/shared/count | total number of current shared subscriptions |
-| subscriptions/shared/max   | maximum number of shared subscriptions |
+| subscriptions/shared/max   | maximum number of shared subscriptions       |
 
 ### Topic statistics
 
-| Topic  | Description |
-| ------------ | --------------- |
+| Topic        | Description                    |
+| ------------ | ------------------------------ |
 | topics/count | total number of current topics |
-| topics/max   | maximum number of topics |
+| topics/max   | maximum number of topics       |
 
 ### Routes statistics
 
-| Topic  | Description  |
-| ------------ | ---------------- |
+| Topic        | Description                    |
+| ------------ | ------------------------------ |
 | routes/count | total number of current Routes |
-| routes/max   | maximum number of Routes |
+| routes/max   | maximum number of Routes       |
 
  The topics/count and topics/max are numerically equal to routes/count and routes/max.
 
@@ -124,9 +126,9 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 ### sent and received bytes statistics
 
 | Topic          | Description                |
-| -------------- | ------------ |
+| -------------- | -------------------------- |
 | bytes/received | Accumulated received bytes |
-| bytes/sent     | Accumulated sent bytes |
+| bytes/sent     | Accumulated sent bytes     |
 
 ### sent and received MQTT packets statistics
 
@@ -195,19 +197,19 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 
 System Topic Prefix: `$SYS/brokers/${node}/alarms/`
 
-| Topic | Description           |
-| ----------- | ------------ |
+| Topic       | Description           |
+| ----------- | --------------------- |
 | alert       | newly generated alarm |
-| clear       | cleared alarm |
+| clear       | cleared alarm         |
 
 ## Sysmon - system monitoring
 
 System Topic Prefix: `$SYS/brokers/${node}/sysmon/`
 
 | Topic          | Description                         |
-| -------------- | ----------------- |
-| long_gc        | GC Overtime alarm |
+| -------------- | ----------------------------------- |
+| long_gc        | GC Overtime alarm                   |
 | long_schedule  | Alarm for Excessive Scheduling Time |
-| large_heap     | ALarm for Heap Memory Occupancy |
-| busy_port      | Alarm for Port busy |
-| busy_dist_port | Alarm for Dist Port busy |
+| large_heap     | ALarm for Heap Memory Occupancy     |
+| busy_port      | Alarm for Port busy                 |
+| busy_dist_port | Alarm for Dist Port busy            |
