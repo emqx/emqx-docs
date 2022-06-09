@@ -42,7 +42,7 @@ For example, suppose that subscribers s1, s2, and s3 belong to group g1, and sub
                                       [s5] got msg1
 ```
 
-Subscribtion strategies can be specified globally or per-group. To specify subscribtion strategy per group, use `broker.shared_subscription_group.$group.strategy` option.
+Subscription strategies can be specified globally or per-group. To specify subscription strategy per group, use `broker.shared_subscription_group.$group.strategy` option.
 
 ### Shared subscription without group
 
