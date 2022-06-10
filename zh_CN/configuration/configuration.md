@@ -6176,10 +6176,14 @@ Dashboard 默认用户的认证数据。`dashboard.default_user.login` 与 `dash
 | Type    | Default |
 | ------- | ------- |
 | integer | 18083   |
+| string  | 0.0.0.0:18083 |
+
 
 #### 说明
 
 HTTP 监听器的监听端口。
+</br>
+使用 `ip:port` 监听指定网卡端口。默认 `0.0.0.0:18083` 会监听所有网卡的 18083 端口。
 
 <br />
 
@@ -6720,10 +6724,13 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | Type    | Default |
 | ------- | ------- |
 | integer | 8081    |
+| string  | 0.0.0.0:8081 |
 
 #### 说明
 
 HTTP 监听器的监听端口。
+</br>
+使用 `ip:port` 监听指定网卡端口。默认 `0.0.0.0:8081` 会监听所有网卡的 8081 端口。
 
 <br />
 
@@ -6816,10 +6823,14 @@ HTTP 报文发送超时后，是否关闭该连接。
 | Type    | Default | Example |
 | ------- | ------- | ------- |
 | integer | -       | 8081    |
+| string  | -       | 0.0.0.0:8081 |
+
 
 #### 说明
 
 HTTPS 监听器的监听端口。
+</br>
+使用 `ip:port` 监听指定网卡端口。默认 `0.0.0.0:8081` 会监听所有网卡的 8081 端口。
 
 ### management.listener.https.acceptors
 
