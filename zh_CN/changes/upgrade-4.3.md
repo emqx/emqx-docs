@@ -38,7 +38,7 @@ ref:
 * 配置文件中 `node.data_dir` 指向的位置
 * 在docker中运行的默认位置: `/opt/emqx/data` （通常是一个挂在的外部volume）
 * 直接使用 zip 安装包的默认位置: `<install-path>/data`
-* 使用RPM或DEB安装包安装的默认位置：`/var/lib/emqx/data`
+* 使用RPM或DEB安装包安装的默认位置：`/var/lib/emqx/`
 
 ### 复制 Data 目录
 
