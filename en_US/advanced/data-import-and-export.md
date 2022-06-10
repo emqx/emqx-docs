@@ -40,13 +40,13 @@ EMQX Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-
 
     ```
     $ ./emqx_ctl data export
-    The emqx data has been successfully exported to /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json.
+    The emqx data has been successfully exported to /var/lib/emqx/emqx-export-2020-5-15-17-39-0.json.
     ```
 
 2. Save the exported file, and we save the exported file to the tmp directory here.
 
    ```
-   $ cp /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json /tmp
+   $ cp /var/lib/emqx/emqx-export-2020-5-15-17-39-0.json /tmp
    ```
 
 3. Reinstall EMQX Broker and start it
@@ -80,7 +80,7 @@ EMQX Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-
    {"data":{"size":388,"filename":"emqx-export-2020-9-4-10-24-16.json","created_at":"2020-9-4 10:24:16"},"code":0}
    ```
 
-   > The exported data file is located at the directory of `.../emqx/data` or `/var/lib/emqx/data`
+   > The exported data file is located at the directory of `.../emqx/data` or `/var/lib/emqx/`
 
 2. Download data file
 

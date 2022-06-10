@@ -52,7 +52,7 @@ Depending on installation and configuration, `data` dir can be located in below 
 * Where the `node.data_dir` config key points to in `emqx.conf`
 * `/opt/emqx/data` when running in docker (typically a mounted volume)
 * `<install-path>/data` when installed from zip package extraction
-* `/var/lib/emqx/data` when installed from RPM or DEB packages
+* `/var/lib/emqx/` when installed from RPM or DEB packages
 
 ## What about Persisted Sessions ?
 
