@@ -89,12 +89,34 @@ Do NOT install tar.gz packages for production unless
 you know how to manually resolve all the runtime dependencies.
 :::
 
+::: warning
+The EMQX digital signature work on macOS has not been completed, and the installation and startup of the tgz package may be blocked by [Gatekeeper](https://support.apple.com/zh-cn/guide/security/sec5599b66df/web).
+
+When you encounter a prompt like **“erl” cannot be opened because the developer cannot be verified** or **“erlang_jq_port” cannot be opened because the developer cannot be verified** at startup, handle it as follows:
+
+- Way one: Go to the **Security and Privacy** settings of macOS and check the app that is allowed to be downloaded from **Any source** and restart EMQX
+
+- Way two: Remove the extended attribute `com.apple.quarantine` of tgz file or folder:
+
+  ```shell
+  xattr -d com.apple.quarantine emqx-full-package-name.tar.gz
+  # or
+  xattr -r -d com.apple.quarantine ./emqx
+  ```
+
+Please verify the SHA256 of the file when using this operation to ensure the integrity of the installation package, so as not to introduce additional security risks.
+:::
+
 {% emqxce %}
 
 1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
+
 {% endemqxce %}
+
 {% emqxee %}
+
 1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise)
+
 {% endemqxee %}
 
 2. Extract the package:
@@ -126,11 +148,9 @@ you know how to manually resolve all the runtime dependencies.
 
 1.  Get docker image
 
-      - From [Docker Hub](https://hub.docker.com/r/emqx/emqx)
-
-        ```shell
-        docker pull emqx/emqx:5.0.0
-        ```
+    ```shell
+    docker pull emqx/emqx:5.0.0
+    ```
 
 2.  Start docker container
 

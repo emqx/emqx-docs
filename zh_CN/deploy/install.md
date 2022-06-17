@@ -84,14 +84,34 @@ EMQX 默认以节点名称 `emqx@127.0.0.1` 启动，该名称是内置数据库
 ## tgz 压缩包安装 (Linux, macOS, Windows)
 
 ::: warning
-tar.gz 包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
+tar.gz 包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用。
+:::
+
+::: warning
+macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动时可能会被 [Gatekeeper 保护机制](https://support.apple.com/zh-cn/guide/security/sec5599b66df/web) 拦截。
+
+当你在启动时遇到 「**无法打开“erl”，因为无法验证开发者**」  或 「**无法打开“erlang_jq_port”，因为无法验证开发者**」 类似的弹框提示时，请按以下方式处理：
+
+- 方法一：到 macOS **安全性与隐私** 设置中勾选允许从 **任何来源** 下载的 App，重新启动 EMQX
+- 方法二：手动移除 tgz 压缩包或文件夹 Gatekeeper 相关 `com.apple.quarantine` 附加属性：
+
+  ```shell
+  xattr -d com.apple.quarantine emqx-full-package-name.tar.gz
+  # or
+  xattr -r -d com.apple.quarantine ./emqx
+  ```
+
+使用此操作时请校验文件 SHA256 确保安装包完整性，以免带来额外的安全风险。
 :::
 
 {% emqxce %}
 
 1. 访问 [emqx.com](https://www.emqx.com/zh/try?product=broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 的 tar.gz 包。
+
 {% endemqxce %}
+
 {% emqxee %}
+
 1. 访问 [emqx.com](https://www.emqx.com/zh/try?product=enterprise) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 版本的 tar.gz 包。
 {% endemqxee %}
 
@@ -125,11 +145,9 @@ tar.gz 包适用于测试和热更，如果不知道如何手动安装所有可�
 
 1.  获取 docker 镜像
 
-      - 通过 [Docker Hub](https://hub.docker.com/_/emqx) 获取
-
-        ```shell
-        docker pull emqx/emqx:5.0.0
-        ```
+    ```shell
+    docker pull emqx/emqx:5.0.0
+    ```
 
 2.  启动 docker 容器
 
