@@ -22,10 +22,13 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
 :::
 
 {% emqxce %}
-1.  Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
+
+1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
 {% endemqxce %}
+
 {% emqxee %}
-1.  Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise) or [Github](https://github.com/emqx/emqx/releases)
+
+1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise) or [Github](https://github.com/emqx/emqx/releases)
 {% endemqxee %}
 
 2. Install EMQX Broker:
@@ -33,34 +36,34 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
     + RPM package (RedHat/CentOS/RockyLinux/AmazonLinux):
 
       ```shell
-      $ sudo yum install path/to/emqx-full-package-name.rpm
+      sudo yum install path/to/emqx-full-package-name.rpm
       ```
 
     + DEB package (Ubuntu/Debian/Raspbian):
 
-      ```bash
-      $ sudo apt install path/to/emqx-full-package-name.deb
+      ```shell
+      sudo apt install path/to/emqx-full-package-name.deb
       ```
 
 3. Start EMQX and check status
 
       - quick start
 
-        ```bash
-        $ sudo su - emqx
-        $ emqx start
-        $ emqx_ctl status
+        ```shell
+        sudo su - emqx
+        emqx start
+        emqx_ctl status
         ```
 
       - systemctl
 
-        ```bash
-        $ sudo systemctl start emqx
+        ```shell
+        sudo systemctl start emqx
         ```
 
 4.  Stop EMQX Broker
 
-    ```bash
+    ```shell
     $ emqx stop
     ```
 
@@ -68,17 +71,17 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
 
     + DEB:
 
-      ```bash
-      $ sudo apt remove --purge emqx
+      ```shell
+      sudo apt remove --purge emqx
       ```
 
     + RPM:
 
-      ```bash
-      $ sudo yum remove emqx
+      ```shell
+      sudo yum remove emqx
       ```
 
-## tgz
+## tgz (Linux, macOS, Windows)
 
 ::: warning
 tar.gz packages are released for quick testing and hot-beam upgrades.
@@ -87,33 +90,33 @@ you know how to manually resolve all the runtime dependencies.
 :::
 
 {% emqxce %}
-1.  Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
+
+1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
 {% endemqxce %}
 {% emqxee %}
-1.  Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise) or [Github](https://github.com/emqx/emqx/releases)
+1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise)
 {% endemqxee %}
 
-2.   Extract the package:
+2. Extract the package:
 
      ```shell
-     $ tar -zxf emqx-full-package-name.tar.gz
+     tar -zxf emqx-full-package-name.tar.gz
      ```
 
-3.  Start EMQX and check status
+3. Start EMQX and check status
 
-    ```bash
-    $ ./bin/emqx start
-    $ ./bin/emqx_ctl status
+    ```shell
+    ./bin/emqx start
+    ./bin/emqx_ctl status
     ```
 
-4.  Stop EMQX Broker
+4. Stop EMQX Broker
 
-    ```bash
-    $ ./bin/emqx stop
-    ok
+    ```shell
+    ./bin/emqx stop
     ```
 
-5.  Remove EMQX Broker
+5. Remove EMQX Broker
 
     Simply delete the EMQX Broker directory
 
@@ -125,26 +128,26 @@ you know how to manually resolve all the runtime dependencies.
 
       - From [Docker Hub](https://hub.docker.com/r/emqx/emqx)
 
-        ```bash
-        $ docker pull emqx/emqx:v4.0.0
+        ```shell
+        docker pull emqx/emqx:5.0.0
         ```
 
 2.  Start docker container
 
-    ```bash
-    $ docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:v4.0.0
+    ```shell
+    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.0
     ```
 
 ### Create a simple static cluster by docker-compose
 
 1. Create `docker-compose.yaml` file
 
-   ```bash
+   ```yml
    version: '3'
 
    services:
      emqx1:
-       image: emqx/emqx:5.0
+       image: emqx/emqx:5.0.0
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
@@ -160,7 +163,7 @@ you know how to manually resolve all the runtime dependencies.
            - node1.emqx.io
 
      emqx2:
-       image: emqx/emqx:5.0
+       image: emqx/emqx:5.0.0
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
@@ -175,30 +178,20 @@ you know how to manually resolve all the runtime dependencies.
            aliases:
            - node2.emqx.io
 
-     client:
-       image: python:3.7.2-alpine3.9
-       depends_on:
-         - emqx1
-         - emqx2
-       tty: true
-       networks:
-           emqx-bridge:
-
    networks:
      emqx-bridge:
        driver: bridge
-
    ```
 
 2. Start docker-compose cluster
 
-   ```bash
-   $ docker-compose -p my_emqx up -d
+   ```shell
+   docker-compose -p my_emqx up -d
    ```
 
 3. View cluster
 
-   ```bash
+   ```shell
    $ docker exec -it my_emqx_emqx1_1 sh -c "emqx_ctl cluster status"
    Cluster status: #{running_nodes => ['emqx@node1.emqx.io','emqx@node2.emqx.io'],
                      stopped_nodes => []}
@@ -210,15 +203,15 @@ For more information about EMQX Broker Docker please visit [Docker Hub](https://
 
 1. Add helm repository
 
-  ```bash
-  $ helm repo add emqx https://repos.emqx.io/charts
-  $ helm repo update
+  ```shell
+  helm repo add emqx https://repos.emqx.io/charts
+  helm repo update
   ```
 
 2. Query EMQX Broker
 
-  ```bash
-  helm search repo emqx
+  ```shell
+  $ helm search repo emqx
   NAME         CHART VERSION APP VERSION DESCRIPTION
   emqx/emqx    v4.0.0        v4.0.0      A Helm chart for EMQX
   emqx/emqx-ee v4.0.0        v4.0.0      A Helm chart for EMQX
@@ -227,13 +220,13 @@ For more information about EMQX Broker Docker please visit [Docker Hub](https://
 
 3. Start EMQX Broker cluster
 
-  ```bash
-  $ helm install my-emqx emqx/emqx
+  ```shell
+  helm install my-emqx emqx/emqx
   ```
 
-4.  View EMQX Broker cluster situation
+4. View EMQX Broker cluster situation
 
-  ```bash
+  ```shell
   $ kubectl get pods
   NAME       READY  STATUS             RESTARTS  AGE
   my-emqx-0  1/1     Running   0          56s
@@ -252,26 +245,30 @@ For more information about EMQX Broker Docker please visit [Docker Hub](https://
 
 1. Get the source code
 
-```bash
-$ git clone https://github.com/emqx/emqx.git
+```shell
+git clone https://github.com/emqx/emqx.git
 ```
 
 2. Checkout to latest tag
 
-```bash
-$ cd emqx
-$ git checkout $(git describe --abbrev=0 --tags)
+```shell
+cd emqx
+git checkout $(git describe --abbrev=0 --tags)
 ```
 
 3. Compile and run
 
 {% emqxce %}
-```bash
-$ make run
+
+```shell
+make run
 ```
+
 {% endemqxce %}
 {% emqxee %}
-```bash
-$ env PROFILE=emqx-enterprise make run
+
+```shell
+env PROFILE=emqx-enterprise make run
 ```
+
 {% endemqxee %}
