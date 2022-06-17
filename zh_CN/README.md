@@ -74,10 +74,6 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
 - 企业版: TODO
 {endemqxee}
 
-{% emqxce %}
-> 企业版中支持更多数据平台如 Kafka，MySQL, Redis, InfluxDB，Oracle, SAP Event Mesh 等等，请查看：[TODO]
-{% endemqxce %}
-
 ### 可靠性
 
 - 过载保护

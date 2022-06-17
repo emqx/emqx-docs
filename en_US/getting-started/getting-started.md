@@ -22,7 +22,7 @@ You can customize the deployment to perfectly suit your business development pla
 The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
 
 - Fully open-sourced under APL 2.0
-- MQTT 3.1.1 and MQTT 5.0 spec
+- MQTT 3.1.0, MQTT 3.1.1 and MQTT 5.0 spec, supports MQTT-SN
 - Highly available, masterless clustering
 - High concurrency with low latency
 - Extensible gateways and plugins

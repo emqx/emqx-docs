@@ -6,7 +6,7 @@ Erlang/OTP is an excellent Soft-Realtime, Low-Latency and Distributed developmen
 
 MQTT is a lightweight message exchange protocol using publish-subscribe pattern.
 
-*EMQX* is the world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at massive scale.
+*EMQX* is a highly scalable distributed MQTT Broker" with a high-performance real-time message processing engine, powering event streaming for IoT devices at massive scale.
 
 ## Design goals
 
@@ -75,10 +75,6 @@ Add more features to MQTT:
 {emqxee}
 - Enterprise: TODO
 {endemqxee}
-
-{% emqxce %}
-> The Enterprise Edition supports more data platforms such as Kafka, MySQL, Redis, InfluxDB, Oracle, SAP Event Mesh, etc., see [TODO]
-{% endemqxce %}
 
 ### Reliability
 
