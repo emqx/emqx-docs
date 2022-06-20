@@ -94,7 +94,6 @@ The EMQX digital signature work on macOS has not been completed, and the install
 
 When you encounter a prompt like **“erl” cannot be opened because the developer cannot be verified** or **“erlang_jq_port” cannot be opened because the developer cannot be verified** at startup, solve this as follows:
 
-- Way one: Go to the **Security and Privacy** settings of macOS and check the app that is allowed to be downloaded from **Any source** and restart EMQX
 
 Remove the extended attribute `com.apple.quarantine` of tgz file or folder:
 
