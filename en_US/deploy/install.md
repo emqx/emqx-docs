@@ -92,7 +92,7 @@ you know how to manually resolve all the runtime dependencies.
 ::: warning
 The EMQX digital signature work on macOS has not been completed, and the installation and startup of the tgz package may be blocked by [Gatekeeper](https://support.apple.com/zh-cn/guide/security/sec5599b66df/web).
 
-When you encounter a prompt like **“erl” cannot be opened because the developer cannot be verified** or **“erlang_jq_port” cannot be opened because the developer cannot be verified** at startup, handle it as follows:
+When you encounter a prompt like **“erl” cannot be opened because the developer cannot be verified** or **“erlang_jq_port” cannot be opened because the developer cannot be verified** at startup, solve this as follows:
 
 - Way one: Go to the **Security and Privacy** settings of macOS and check the app that is allowed to be downloaded from **Any source** and restart EMQX
 
