@@ -96,7 +96,7 @@ When you encounter a prompt like **“erl” cannot be opened because the develo
 
 - Way one: Go to the **Security and Privacy** settings of macOS and check the app that is allowed to be downloaded from **Any source** and restart EMQX
 
-- Way two: Remove the extended attribute `com.apple.quarantine` of tgz file or folder:
+Remove the extended attribute `com.apple.quarantine` of tgz file or folder:
 
   ```shell
   xattr -d com.apple.quarantine emqx-full-package-name.tar.gz
