@@ -280,7 +280,7 @@ Manage clusters via Web and CLI, REST API.
 - [Dashboard](../admin/dashboard.md)：Dashboard User Manual.
 - [CLI](../admin/cli.md)
 - [REST API](../admin/api.md): REST API documentation for the OpenAPI 3.0 specification.
-- [Configuration Files](../admin/file.md)
+- [Configuration Files](../admin/cfg.md)
 
 ### Operation, maintenance and deployment
 

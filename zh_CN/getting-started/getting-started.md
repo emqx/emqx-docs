@@ -231,7 +231,7 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 - [Dashboard](../admin/dashboard.md)：Dashboard 使用手册。
 - [CLI](../admin/cli.md)：通过 CLI 管理集群。
 - [REST API](../admin/api.md)：符合 OpenAPI 3.0 规范的 REST API 文档。
-- [配置文件](../admin/file.md)：配置文件与配置项文档。
+- [配置文件](../admin/cfg.md)：配置文件与配置项文档。
 
 ### 运维部署
 

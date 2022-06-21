@@ -20,7 +20,7 @@ With the help of WebHooks, many services such as device going online, online and
 
 ## Configuration item
 
-The WebHook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, the detailed description of configuration items can be found in [Configuration Item](../admin/file.md).
+The WebHook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, the detailed description of configuration items can be found in [Configuration Item](../admin/cfg.md).
 
 ## Trigger rule
 
