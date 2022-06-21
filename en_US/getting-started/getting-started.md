@@ -8,7 +8,7 @@ Starting from download and installation, this document guides you through quickl
 EMQX as a software is released in different editions.
 
 - [Enterprise](https://www.emqx.com/en/try?product=enterprise)
-- [Community](https://www.emqx.com/en/try?product=broker)
+- [Opensource](https://www.emqx.com/en/try?product=broker)
 
 {% emqxce %}
 
@@ -18,7 +18,7 @@ You can customize the deployment to perfectly suit your business development pla
 :::: tabs type:card
 
 {% endemqxce %}
-::: tab EMQX Community Edition
+::: tab EMQX Opensource Edition
 The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
 
 - Fully open-sourced under APL 2.0

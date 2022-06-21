@@ -39,7 +39,7 @@ Now, open <http://localhost:8080/docs/en/latest/> or <http://localhost:8080/en/e
 
 Both community and enterprise edition documents are managed in the same repo and same `release-Major.Minor` branch.
 
-Community and Enterprise may have different content so they may release at different pace.
+Opensource and Enterprise may have different content so they may release at different pace.
 
 ### Cut a new release for community edition
 
@@ -55,7 +55,7 @@ NEW_TAG="$(./cut-release.sh ee)"
 git push origin "${NEW_TAG}"
 ```
 
-## Community
+## Opensource
 
 You can reach the EMQ community and developers via the following channels.
 
