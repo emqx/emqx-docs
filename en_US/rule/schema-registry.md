@@ -114,7 +114,7 @@ In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of 
 
 3. Schema: The following protobuf schema defines a Person message.
 
-```protobuf
+```
 message Person {
   required string name = 1;
   required int32 id = 2;
@@ -209,7 +209,7 @@ In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of 
 
 3. Schema:
 
-```protobuf
+```
 {
 "type":"record",
 "fields":[

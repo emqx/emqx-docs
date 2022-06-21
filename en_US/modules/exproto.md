@@ -45,7 +45,7 @@ From the gRPC perspective, ExProto will act as a client to send callback request
 
 For details, see: [exproto.proto](https://github.com/emqx/emqx-exproto/blob/dev/e4.2.0/priv/protos/exproto.proto), for example, the definition of the interface is:
 
-```protobuff
+```
 syntax = "proto3";
 
 package emqx.exproto.v1;

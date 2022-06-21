@@ -116,7 +116,7 @@ SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 
 3. Schema：下面的 protobuf schema 定义了一个 Person 消息。
 
-```protobuf
+```
 message Person {
   required string name = 1;
   required int32 id = 2;
@@ -211,7 +211,7 @@ t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 
 3. Schema:
 
-```protobuf
+```
 {
 "type":"record",
 "fields":[

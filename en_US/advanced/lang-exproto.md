@@ -47,7 +47,7 @@ The services defination see: [exproto.proto](https://github.com/emqx/emqx/blob/v
 
 For examples:
 
-```protobuff
+```
 syntax = "proto3";
 
 package emqx.exproto.v1;
