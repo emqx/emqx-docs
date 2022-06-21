@@ -1,29 +1,29 @@
 # Save data to ClickHouse
 
-搭建 ClickHouse 数据库，并设置用户名密码为 default/public，以 CentOS 为例:
+Steup the ClickHouse database, and set username/password to default/public. Taking CentOS as example:
 
 ```bash
-## 安装依赖
+## install dependencies
 sudo yum install -y epel-release
 
-## 下载并运行packagecloud.io提供的安装shell脚本
+## download and run the installation script provided by packagecloud.io
 curl -s https://packagecloud.io/install/repositories/altinity/clickhouse/script.rpm.sh | sudo bash
 
-## 安装ClickHouse服务器和客户端
+## install ClickHouse server and client
 sudo yum install -y clickhouse-server clickhouse-client
 
-## 启动ClickHouse服务器
+## start the ClickHouse server
 clickhouse-server
 
-## 启动ClickHouse客户端程序
+## start the ClickHouse client
 clickhouse-client
 ```
 
-创建 “test” 数据库:
+Create the `test` database:
 ```bash
 create database test;
 ```
-创建 t_mqtt_msg 表:
+create `t_mqtt_msg` table:
 
 ```sql
 use test;
@@ -32,11 +32,9 @@ create table t_mqtt_msg (msgid Nullable(String), topic Nullable(String), clienti
 
 ![](./assets/rule-engine/clickhouse_0.png)
 
-创建规则:
+**Create the rule:**
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
-
-填写规则 SQL:
+Go to the [EMQX Dashboard](http://127.0.0.1:18083/#/rules), and type in the follwing SQL:
 
 ```sql
 SELECT * FROM "#"
@@ -44,30 +42,23 @@ SELECT * FROM "#"
 
 ![image](./assets/rule-engine/clickhouse_1.png)
 
-关联动作:
+**Select an action:**
 
-在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 ClickHouse”。
+Add an action and select "Data to ClickHouse" from the dropdown list.
 
 ![image](./assets/rule-engine/clickhouse_2.png)
 
-填写动作参数:
+Provide the arguments of the action:
 
-“保存数据到 ClickHouse” 动作需要两个参数：
+1). The resource id. We create a new clickhouse resource now:
 
-1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 ClickHouse 资源:
-
-![image](./assets/rule-engine/clickhouse_3.png)
-
-选择 “ClickHouse 资源”。
-
-填写资源配置:
+Click "create" right to the resource Id text box, and then select "clickhouse" and fill in the following paramenters:
 
 ![image](./assets/rule-engine/clickhouse_4.png)
 
-点击 “新建” 按钮。
+Click the "Confirm" button.
 
-2). SQL 模板。这个例子里我们向 ClickHouse 插入一条数据，SQL
-​    模板为:
+2). The SQL template. In this example we insert an message to clickhouse:
 
 ```sql
 insert into test.t_mqtt_msg(msgid, clientid, topic, payload) values ('${id}', '${clientid}', '${topic}', '${payload}')
@@ -75,15 +66,11 @@ insert into test.t_mqtt_msg(msgid, clientid, topic, payload) values ('${id}', '$
 
 ![image](./assets/rule-engine/clickhouse_5.png)
 
-返回响应动作界面，点击 “确认”。
+Keep all other arguments unchanged and confirm the action creation.
 
-![image](./assets/rule-engine/clickhouse_6.png)
+Then click "Create" to confirm the rule creation.
 
-在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
-
-![image](./assets/rule-engine/clickhouse_7.png)
-
-规则已经创建完成，现在发一条数据:
+Now the rule has been created, we send an testing message to the broker:
 
 ```bash
 Topic: "t/a"
@@ -91,7 +78,6 @@ QoS: 1
 Payload: "hello"
 ```
 
-然后检查 ClickHouse 表，新的 record 是否添加成功:
+And then we can verify if the message is inserted to the clickhouse table:
 
 ![image](./assets/rule-engine/clickhouse_8.png)
-
