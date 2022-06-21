@@ -101,8 +101,8 @@
 
 ## Data integration
 
-- title_en: IoT Rule & Data Bridge
-  title_cn: 规则引擎与数据桥接
+- title_en: Data Integration (Rule Engine)
+  title_cn: 数据桥接 （规则引擎）
   children:
     - rule/rule-engine
     - rule/rule-engine_grammar_and_examples
