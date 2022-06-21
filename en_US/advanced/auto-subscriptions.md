@@ -1,50 +1,93 @@
-# Auto subscriptions
+# Auto Subscribe
 
-The auto subscription feature of EMQX Broker allows the client to automatically establish the user's preset subscription relationship without sending additional SUBSCRIBE packets when the connection is established.
+With Auto Subscription enabled, after a client is successfully connected to EMQX, it may not need to send `SUBSCRIBE` requests to EMQX, because EMQX will complete the pre-defined subscription for the client. 
 
-::: tip
-<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
-You can use the Http API to subscribe and unsubscribe to connected devices, see topic subscription and topic unscription
-:::
+Prior to version 5, this feature is also known as "proxy subscription".
 
+## Configuration
 
-## Built-in auto subscription
+### Configuration Definition
 
-Through the built-in auto subscription module you can specify auto subscription rules through the configuration file to achieve auto subscription, which is suitable for regular and static auto subscription requirements.
+| Field          | Definition                    | Range                                                       | Default |
+| -------------- | ----------------------------- | ----------------------------------------------------------- | ------- |
+| auto_subscribe | Auto subscribe configurations | topics                                                      | topics  |
+| topics         | Subscription Options          | Subscription configurations list. See `Subscription Option` | []      |
 
-### Enable auto subscription feature
+#### Subscription Option
 
-The auto subscription feature is disabled by default. To enable this feature, you need to modify the `module.subscription` configuration item in the `etc/emqx.conf` file. The default `off` means disabled. If you want to enable it, please change it to ` on`.
+| Field | Definition                                                                                                   | Range                                                           | Default          |
+| ----- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- | ---------------- |
+| topic | Required. Topic                                                                                              | String, placeholders supported                                  | No default value |
+| qos   | Not Required. Subscription QoS                                                                               | 0 or 1 or 2. Refer to the MQTT QoS definition                   | 0                |
+| rh    | Not Required. MQTT version 5.0. Whether to send retain message when a subscription is created.               | 0: Not send the retain message </br>1: Send  the retain message | 0                |
+| rap   | Not Required. MQTT version 5.0. When forwarding messages, Whether to send with retain flag                   | 0: Set retain 0</br>1: Keep retain flag                         | 0                |
+| nl    | Not Required. MQTT version 5.0. Whether the message can be forwarded to the client when published by itself | 0: Forwarded to self</br>1: Not forwarded to self               | 0                |
 
-```bash
-module.subscription = off
+#### Subscription Placeholders
+
+| Placeholder | Definition                             |
+| ----------- | -------------------------------------- |
+| ${clientid} | Client ID                              |
+| ${username} | Client Username                        |
+| ${ip}       | Client TCP connection local IP address |
+| ${port}     | Client TCP connection local Port       |
+
+### Quick Start
+
+Add the following configuration items to the configuration file
+
+```hocon
+auto_subscribe {
+    topics = [
+        {
+            topic = "c/${clientid}"
+        },
+        {
+            topic = "client/${clientid}/username/${username}/host/${host}/port/${port}"
+            qos   = 1
+            rh    = 0
+            rap   = 0
+            nl    = 0
+        }
+    ]
+}
 ```
 
-### Configure auto subscription rules
-
-Of course, just enabling does not mean that the auto subscription has already worked. You need to configure the corresponding rules. The user can add multiple auto subscription rules and each rule should specify the Topic and QoS. There is no limit for the number of rules. The format of auto subscription rules is as follows:
-
-```bash
-module.subscription.<number>.topic = <topic>
-module.subscription.<number>.qos = <qos>
+```text
++---------------------------+             +----------------+
+| clientid: demo_client1    |             |  EMQX Broker   |
+| username: admin           |             |                |
+| local host: 192.168.1.234 |<----------->|                |
+| local port: 55678         |             |                |
++---------------------------+             +----------------+
 ```
 
-When configuring the topic of auto subscription, EMQX Broker provides two placeholders of  `%c` and `%u` for users to use, and EMQX Broker will replace the `%c` and `%u` in the configuration with the client's `Client ID` and `Username` respectively when performing auto subscription. It should be noted that `%c` and `%u` must occupy an entire topic level.
+When the client uses versions lower than 5, the following subscriptions are available after connection.
 
-For example, the following auto subscription rules are added in the `etc/emqx.conf` file:
-
-```bash
-module.subscription.1.topic = client/%c
-module.subscription.1.qos = 1
-
-module.subscription.2.topic = user/%u
-module.subscription.2.qos = 2
+```text
+topic: c/demo_client1
+qos: 0
 ```
 
-When a client connects to EMQX Broker, if the client's `Client ID` is `testclient` and `Username` is `tester`, according to the configuration rules above, the auto subscription function will actively help the client subscribe to the topics of `client/testclient`(QoS is 1) and `user/tester`(QoS is 2)
+```text
+topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
+qos: 1
+```
 
+When the client uses version 5, the following subscriptions are available after connection.
 
-## Dynamic auto subscription
+```text
+topic: c/demo_client1
+qos: 0
+rh: 0
+rap: 0
+nl: 0
+```
 
-The EMQX Enterprise version supports dynamic auto subscription. An external database is used to set the topic list and the list is read when the device is connected to establish the auto subscription.
-
+```text
+topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
+qos: 1
+rh: 0
+rap: 0
+nl: 0
+```
