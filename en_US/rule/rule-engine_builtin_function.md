@@ -202,7 +202,7 @@ sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2
 
 ## Bit functions
 
-| Function  | Purpose| Parameters| Returned value | 
+| Function  | Purpose| Parameters| Returned value |
 |-----------|-------------|--------|----------------------|
 | `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).  | 1. The binary <br />2. The length of bits to get | The unsigned integer |
 | `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get| The unsigned integer |
@@ -270,7 +270,7 @@ Time Precision
 
 second,
 millisecond,
-micorsecond,
+microsecond,
 nanosecond,
 
 Time Offset

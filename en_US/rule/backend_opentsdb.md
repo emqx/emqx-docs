@@ -1,6 +1,6 @@
 # Save data to OpenTSDB
 
-Setup a OpenTSDB database, taking Mac OSX for instance:
+Setup a OpenTSDB database, taking MacOS X for instance:
 
 ```bash
 $ docker pull petergrace/opentsdb-docker

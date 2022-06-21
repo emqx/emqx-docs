@@ -1,6 +1,6 @@
 # Save data to Cassandra
 
-Setup a Cassandra database, and changes the root/password to root/public, taking Mac OSX for instance:
+Setup a Cassandra database, and changes the root/password to root/public, taking MacOS X for instance:
 
 ```bash
 $ brew install cassandra

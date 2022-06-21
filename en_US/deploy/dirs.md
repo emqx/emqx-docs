@@ -25,14 +25,14 @@ It is recommended that the `data` directory is mounted on a high performance har
 
 EMQX only reads the files in this directory.
 
-* `emqx.conf`: the bootstaping config file for EMQX
+* `emqx.conf`: the bootstrapping config file for EMQX
 * `vm.args`: The boot arguments for Erlang virtual machine
 * `certs/`: X.509 keys are certificate files for EMQX SSL listeners or SSL clients when
   integrating with external systems. e.g. HTTPS client for webhooks
 
 ## data: database and files
 
-This directory is for EMQX to persisit its state.
+This directory is for EMQX to persist its state.
 
 :::: tip Tip
 In EMQX documents this directory is often referred to as `data_dir`.
@@ -75,7 +75,7 @@ some intermediate configs each time when it reboots. The intermediate config fil
 in `<data_dir>/configs`.
 
 EMQX provides HTTP APIs for sysadmins to change configs at runtime. If such changes are to be
-persisted, this `configs` dirs is where the override configs reside.
+persisted, this `configs` directory is where the override configs reside.
 
 ## log directory
 

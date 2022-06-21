@@ -2,7 +2,7 @@
 
 ## Foreword
 
-In terms of the design of EMQX Broker, it firstly separates the FrontEnd and Backend, and secondly separates the  Message Flow Plane and Monitor/Control Plane :
+In terms of the design of EMQX Broker, it firstly separates the frontend and backend, and secondly separates the  Message Flow Plane and Monitor/Control Plane :
 
 ![image](../assets/design_1.png)
 
@@ -16,7 +16,7 @@ EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 mi
 
 EMQX Broker is a fully asynchronous architecture based on the Erlang/OTP platform: asynchronous TCP connection processing, asynchronous Topic subscription, and asynchronous message publishing. Only for the resource load limitation part, it adopts synchronous design, such as TCP connection creation and Mnesia database transaction execution.
 
-In the EMQX 3.0 version, from the Publisher to the Subscriber, a MQTT message flows   with a series of Erlang processes Mailbox flows asynchronously inside the EMQXBroker:
+In the EMQX 3.0 version, from the Publisher to the Subscriber, a MQTT message flows   with a series of Erlang processes Mailbox flows asynchronously inside the EMQX Broker:
 
 ![image](../assets/design_2.png)
 
@@ -61,7 +61,7 @@ EMQX Broker is more like a network Router or a Switch in concept, rather than th
 3. Hooks and Plugins: Each layer of the system provides extensible hooks and supports server expansion with plugin.
 
 
- 
+
 
 ## Connection Layer design
 
@@ -96,7 +96,7 @@ Global unique time series message ID structure:
 
 ![image](../assets/design_5.png)
 
-1. 64bits timestamp: erlang: system_time if Erlang \> = R18, otherwise os: timestamp
+1. 64bits timestamp: `erlang:system_time`
 2. Erlang node ID: encoded as 2 bytes
 3. Erlang process PID: encoded as 4 bytes
 4. Process internal serial number: 2-byte process internal serial number
@@ -147,7 +147,7 @@ The distribution layer forwards routed MQTT messages between nodes in the cluste
 
 ## Erlang design
 
-1. Use Pool, Pool, Pool ... Recommende GProc library: <https://github.com/uwiger/gproc>
+1. Use Pool, Pool, Pool ... Recommended GProc library: <https://github.com/uwiger/gproc>
 2. Asynchronous, asynchronous, asynchronous message ... asynchronous message between connection layer and the routing layer, and the synchronous request is used for load protection
 3. Avoid process Mailbox accumulating messages
 4. The Socket connection and session process through which the message flows must be Hibernate, and actively recover the binary handle
@@ -156,6 +156,5 @@ The distribution layer forwards routed MQTT messages between nodes in the cluste
 7. Avoid ETS table non-key value field select, match
 8. Avoid large amounts of data ETS read and write, for each time of ETS read and write, it will copy memory, and you can use lookup_element, update_counter
 9. Properly open the ETS table {write_concurrency, true}
-10. Protect Mnesia database transactions, minimize the number of transactions, and avoid transaction overload 
-11. Avoid match, select for non-index or non-key value field of Mnesia data table 
-
+10. Protect Mnesia database transactions, minimize the number of transactions, and avoid transaction overload
+11. Avoid match, select for non-index or non-key value field of Mnesia data table

@@ -259,7 +259,7 @@ When a client's rules list is empty, EMQX continues to check the next auth/ACL p
 Otherwise the check returns immediately without proceeding to the next auth/ACL plugins.
 
 When the rule is non-empty and does not match the corresponding pub/sub permission,
-an ath/ACL failure will be returned (the corresponding pub/sub behavior will be denied) and the auth/ACL chain will be terminated.
+an auth/ACL failure will be returned (the corresponding pub/sub behavior will be denied) and the auth/ACL chain will be terminated.
 
 When more than one auth/ACL plugins are in use, it is recommended to position MongoDB ACL after other auth/ACL plugins in the enabled plugins list.
 :::

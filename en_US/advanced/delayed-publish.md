@@ -18,4 +18,4 @@ E.g:
 - `$delayed/60/a/b`: Publish MQTT message to the topic `a/b` after 1 minute
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
 
-This feature is provided by the `emqx-delay-publish` plugin, which is disabled by default. You need to enable the plugin to use this feature. To elearn how to nable the functionality please refer to [Plugins](./plugins.md). If you need to use this feature for a long time then it is recommended that you set the plugin to start by default, see [directory structure](../deploy/dirs.md) for more information.
+This feature is provided by the `emqx-delay-publish` plugin, which is disabled by default. You need to enable the plugin to use this feature. To learn how to enable the functionality please refer to [Plugins](./plugins.md). If you need to use this feature for a long time then it is recommended that you set the plugin to start by default, see [directory structure](../deploy/dirs.md) for more information.

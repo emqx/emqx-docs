@@ -12,15 +12,15 @@ Let's discuss data backup and restore for disaster recovery.
 
 ### Config files
 
-When using morden provisioning tools for EMQX deployment, configuration changes
-are mostly managed by the tools, and even source controled in for example a git repo.
+When using modern provisioning tools for EMQX deployment, configuration changes
+are mostly managed by the tools, and even source controlled in for example a git repo.
 
 In case manual config changes are made to the config files, it's a good idea to have them backed up.
 
 The config files are possibly located in below places, but it differ depending on installation
 
 * Default to `/etc/emqx` when installed from RPM or DEB packages
-* Default to `/opt/emqx/etc` shen running in docker container
+* Default to `/opt/emqx/etc` when running in docker container
 * In `/path/to/install/dir/etc` when directly extracted from zip package.
 
 ## Mnesia Database
@@ -29,7 +29,7 @@ The Mnesia database can be easily backed up while the cluster is running.
 
 ### Backup 'mnesia' dir
 
-In EMQX Mnesia database, tables are stored in the `mnesia` sub directory in EMQX's `data` directory.
+In EMQX Mnesia database, tables are stored in the `mnesia` sub directory in EMQX `data` directory.
 Backing up the database can be as simple as making a copy of all the files in the `mnesia` directory.
 
 The database schema (which is also stored in `mnesia` directory) is unique per EMQX node, meaning

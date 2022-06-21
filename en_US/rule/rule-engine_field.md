@@ -1,7 +1,7 @@
 # Available fields in rule engine SQL statements
 The fields available in the SELECT and WHERE clauses are related to the type of event. Among them, `clientid`, `username` and ` event` are common fields that is contained by each type of event.
 
-## Events and event topics 
+## Events and event topics
 The SQL statements of the rule engine can handle both messages (message publishing) and events (client online and offline, client subscription, etc.). For messages, the FROM clause is directly followed by the topic name; for events, the FROM clause is followed by the event topic.
 
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
@@ -17,7 +17,7 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 | $events/client\_connected     | Connection complete  |
 | $events/client\_disconnected  | Disconnect           |
 | $events/session\_subscribed   | Subscribe            |
-| $events/session\_unsubscribed | Unsubcribe           |
+| $events/session\_unsubscribed | Unsubscribe           |
 
 
 ## Message Publish
@@ -392,4 +392,4 @@ output
 }
 ```
 
-[Rule engine buildin functions](rule-engine_buildin_function.md)
+[Rule engine builtin functions](rule-engine_builtin_function.md)

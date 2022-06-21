@@ -74,7 +74,7 @@ period:
 
 ![image-20200304161147766](./assets/dashboard-ee/image-20200304161147766.png)
 
-### Nde details
+### Node details
 
 Click the **View More** button below the node data to open the node
 details page, view the **basic information** of the current node, the
@@ -317,7 +317,7 @@ started.
 
 ## Tool
 
-It provides MQTT over WebScoket client test tool, which can realize the
+It provides MQTT over WebSocket client test tool, which can realize the
 publish and subscribe test of multiple mqtt connections at the same
 time.
 

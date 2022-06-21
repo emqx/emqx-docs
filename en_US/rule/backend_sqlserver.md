@@ -1,6 +1,6 @@
 # Save data to SQLServer
 
-Set up a SQLServer database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
+Set up a SQLServer database and set the user name and password to SC/mqtt_public. Take MacOS X as an example:
 
 ```bash
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=mqtt_public' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
@@ -57,7 +57,7 @@ Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
-Configure odbc dirver in Ubuntu:
+Configure odbc driver in Ubuntu:
 ```
 $ apt-get install unixodbc unixodbc-dev unixodbc-bin tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
 $ vim /etc/odbcinst.ini

@@ -14,13 +14,13 @@ Taking the client.connected event as an example, the event delivery process is a
 
 ::: tip
 WebHook processes events in one-way pattern. It only supports pushing events in EMQX Broker to Web services, and does not care about the return of Web services.
-With the help of Webhooks, many services such as device going online, online and offline recording, subscription and message storage, and message delivery confirmation can be completed.
+With the help of WebHooks, many services such as device going online, online and offline recording, subscription and message storage, and message delivery confirmation can be completed.
 
 :::
 
 ## Configuration item
 
-The webhook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, the detailed description of configuration items can be found in [Configuration Item](../admin/file.md).
+The WebHook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, the detailed description of configuration items can be found in [Configuration Item](../admin/file.md).
 
 ## Trigger rule
 
@@ -50,8 +50,8 @@ The following events are currently supported:
 | client.unsubscribe   | unsubscribe                   | After receiving the unsubscription message                   |
 | session.subscribed   | Session subscribed            | After completing the subscription operation                  |
 | session.unsubscribed | session unsubscribed          | After completing the unsubscription operation                |
-| message.publish      | message published             | Before the server rpublishes (routes) the message            |
-| message.delivered    | message deliveried            | Before the message is ready to be delivered to the client    |
+| message.publish      | message published             | Before the server republishes (routes) the message            |
+| message.delivered    | message delivered            | Before the message is ready to be delivered to the client    |
 | message.acked        | message acknowledged          | After the server received the message ACK from the client    |
 | message.dropped      | message dropped               | After the published message is dropped                       |
 
@@ -73,7 +73,7 @@ web.hook.rule.message.publish.1 = {"action": "on_message_publish", "topic": "a/b
 web.hook.rule.message.publish.2 = {"action": "on_message_publish", "topic": "foo/#"}
 ```
 
-In this way, Webhook will only forward messages matching the topics of  `a/b/c` and `foo/#`, such as `foo/bar`, etc., instead of forwarding `a/b/d` or `fo/bar`.
+In this way, Webhook will only forward messages matching the topics of  `a/b/c` and `foo/#`, such as `foo/bar`, etc., instead of forwarding `a/b/d` or `foo/bar`.
 
 
 ## Webhook event parameters

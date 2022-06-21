@@ -44,5 +44,5 @@ EMQX Enterprise raises an alarm when the license expires in less than 30 days, o
 | Configuration item            | Type     | Default value | Description                                                  |
 | ----------------------------- | -------- | ----------- | ------------------------------------------------------------ |
 | license.connection_high_watermark_alarm  | percent  | 80%         | The high water mark of license‘s max connections. The alarm is activated when this threshold is reached. Measured as a percentage of alive connections/max connections.  |
-| icense.connection_low_watermark_alarm    | percent  | 75%         | The low water mark of license‘s max connections. The alarm is deactivated when it goes below this threshold. Measured as a percentage of alive connections/max connections.  |
+| license.connection_low_watermark_alarm    | percent  | 75%         | The low water mark of license‘s max connections. The alarm is deactivated when it goes below this threshold. Measured as a percentage of alive connections/max connections.  |
 {% endemqxee %}

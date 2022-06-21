@@ -63,7 +63,7 @@ The schematic diagram of the process is as follows:
 - Two packets are involved; there are two sending actions totally, one at the sender and one at the receiver; both packets hold the same PacketId.
 - If the end of the line is marked with an *, it means that the sender may initiate a retransmission if the waiting for the confirmation message is time out.
 
-It can be seen that **QoS 1 messages only need to retransmit PUBLISH messages** 
+It can be seen that **QoS 1 messages only need to retransmit PUBLISH messages**
 
 #### QoS 2
 
@@ -83,7 +83,7 @@ QoS 2 requires the message to be delivered only once; so when it is implemented,
 - 4 packets are involved; there are 4 sending actions totally, 2 times for each of the sender and receiver; these 4 packets all hold the same PacketId.
 - If the end of the line is marked with an *, it means that the sender may initiate a retransmission if the waiting for the confirmation message is time out.
 
-It can be seen that **QoS 2 messages only need to retransmit PUBLISH packet and PUBREL packet** 
+It can be seen that **QoS 2 messages only need to retransmit PUBLISH packet and PUBREL packet**
 
 In summary:
 
@@ -151,5 +151,4 @@ This section lists all the configurations used in the above mechanism. They are 
 | max_mqueue_len    | integer  | >= 0            | 1000   | Message queue length                        |
 | max_inflight      | integer  | >= 0            | 0      | Inflight window size; default `0` means no limit |
 | max_awaiting_rel  | integer  | >= 0            | 0      | Maximum reception; default `0` means no limit |
-| await_rel_timeout | durtaion | >  0            | 300s   | The maximum value of timeout in `Max Receive` to wait for release; if they are exceeded, the messages are discarded directly |
-
+| await_rel_timeout | duration | >  0            | 300s   | The maximum value of timeout in `Max Receive` to wait for release; if they are exceeded, the messages are discarded directly |

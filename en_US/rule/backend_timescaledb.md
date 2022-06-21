@@ -1,6 +1,6 @@
 # Save data to TimescaleDB
 
-Setup a TimescaleDB database, taking Mac OSX for instance:
+Setup a TimescaleDB database, taking MacOS X for instance:
 
 ```bash
 $ docker pull timescale/timescaledb
@@ -64,7 +64,7 @@ Two parameters is required by action "Data to TimescaleDB":
 
 1). SQL template. SQL template is the sql command you'd like to run
 when the action is triggered. In this example we'll insert a message
-into timescaledb, so type in the following sql
+into TimescaleDB, so type in the following sql
 template:
 
 ```sql

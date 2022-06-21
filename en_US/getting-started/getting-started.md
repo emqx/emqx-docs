@@ -93,7 +93,7 @@ please refer to [Running with Docker (including a simple docker-compose cluster)
 For Kubernetes, EMQ offers [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator).
 
 EMQX Kubernetes Operator is an application orchestration tool based on Kubernetes native API,
-which is used for automatic deployment and lifecycle management of EMQX clusters.
+which is used for automatic deployment and life cycle management of EMQX clusters.
 You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md) to learn how to deploy EMQX using the Operator.
 
 ### Deploy EMQX with Terraform
@@ -114,7 +114,7 @@ For more information about Terraform installation and deployment, please refer t
 EMQX can be deployed directly to bare metal servers or virtual machines.
 A minimum of 2 cores and 4GB RAM can run an EMQX installation.
 
-EMQX has prebuilt packages downloadable for Linux(RedHat, CentOS, Rockylinux)
+EMQX has prebuilt packages downloadable for Linux (RedHat, CentOS, RockyLinux)
 as well as Debian, Ubuntu, and MacOS.
 
 - [RedHat, CentOS, RockyLinux, AmazonLinux  installation](../deploy/install.md#centos)
@@ -122,7 +122,7 @@ as well as Debian, Ubuntu, and MacOS.
 - [MacOS, Windows, Linux tar.gz installation](../deploy/install.md#tgz)
 
 For other platforms which are not in the prebuilt list,
-you may [build the runnables from source code](../deploy/install.md#source-code-compilation-and-installation) or
+you may [build the executables from source code](../deploy/install.md#source-code-compilation-and-installation) or
 simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 ## Start EMQX
@@ -196,7 +196,7 @@ MQTTX is an elegant cross-platform MQTT 5.0 open source desktop client tool that
 supports running on macOS, Linux, and Windows.
 
 MQTTX has many features. It provides a concise graphical interface with intuitive operational functionality.
-It supports MQTT/MQTT over Websocket access with one-way/two-way SSL authentication,
+It supports MQTT/MQTT over WebSocket access with one-way/two-way SSL authentication,
 and supports Payload format conversion, simulation of test data with a custom scripts,
 automatic subscription of $SYS topic, viewing Traffic statistics, and more.
 
@@ -260,7 +260,7 @@ The built-in SQL based rule-engine can extract, filter, enrich, and convert mess
 devices and data platforms in real-time, and forward the data to Webhooks or other MQTT Brokers
 without having to implement MQTT clients to do the job.
 
-EMQX enterprise eidtion can also integrate with Kafka,
+EMQX enterprise edition can also integrate with Kafka,
 various SQL / NoSQL / time-series databases, and enterprise systems such as SAP.
 
 - [Rule Engine](../rule/rule-engine.md): The concept and basic usage of rule engine.

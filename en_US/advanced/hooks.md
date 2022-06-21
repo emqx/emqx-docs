@@ -2,23 +2,23 @@
 
 ## Definition
 
-**Hooks** are a mechanism provided by EMQX Broker, which modifies or extends system functions by intercepting function calls, message passing, and event passing between modules.
+**Hooks** is a mechanism provided by EMQX Broker, which modifies or extends system functions by intercepting function calls, message passing, and event passing between modules.
 
-In simple terms, the purpose of this mechanism is to enhance the scalability of the software system, facilitate integration with the three-party systems, or change the original default behavior of its system. Such as:
+In simple terms, the purpose of this mechanism is to enhance the flexibility of the software system, facilitate integration with the 3rd-party systems, or change the original default behavior of the system. Such as:
 
 ![Hooks-In-System](./assets/hooks_in_system.png)
 
 When the **Hooks** mechanism does not exist in the system, the entire event processing flow (from the input of the event, to the handler and the result) is invisible and cannot be modified for the external system .
 
-In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified .
+In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified.
 
-The authentication plugin commonly used in the system is implemented according to this logic. Take the simplest  plugin of [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_mnesia) as an example:
+The authentication plugin commonly used in the system is implemented according to this logic. Take the simplest plugin of [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_mnesia) as an example:
 
-When only the `emqx_auth_mnesia` authentication plugin is enabled and anonymous authentication is disabled, according to the processing logic of the event according in the figure above, the logic of the authentication module at this time is:
+When only the `emqx_auth_mnesia` authentication plugin is enabled and anonymous authentication is disabled, according to the processing logic of the event (see figure above), the logic of the authentication module at this time is:
 
 1. Receive user authentication request (Authenticate)
 2. Read the parameter of *Whether to allow anonymous login*  and get ***deny*** result
-3. Execute the hook of the authentication event , that is, call back to the `emqx_auth_mnesia` plugin, assume this authentication is valid, and get **allow** result
+3. Execute the hook of the authentication event, that is, call back to the `emqx_auth_mnesia` plugin, assume this authentication is valid, and get **allow** result
 4. Return **Authentication succeeded**, and successfully access the system
 
 It is shown in the following figure:
@@ -34,9 +34,9 @@ It is shown in the following figure:
                 +-----------------+--------------------------+
 ```
 
-Therefore, in EMQX Broker, the mechanism of **Hooks** greatly facilitates the extension of the system. We don't need to modify the  [emqx](https://github.com/emqx/emqx) core code, but only need to bury the **HookPoint** in a specific location to allow external plugins to extend EMQX Broker with various behaviors.
+Therefore, in EMQX Broker, the mechanism of **Hooks** greatly enhances the flexibility of the system. We don't need to modify the [emqx](https://github.com/emqx/emqx) core code, but only need to place the **HookPoint** in a specific location to allow external plugins to extend EMQX Broker with various behaviors.
 
-For implementers, it only needs to pay attention to:
+The implementer of the plugin only needs to pay attention to:
 
 1. The location of **HookPoint**: Including its role, timing of execution, and how to mount and cancel mount.
 2. Implementation of **callback function**: including the number of input parameters, role, data structure of the callback function, and the meaning of the returned value.
@@ -65,20 +65,20 @@ Therefore, we can get a design sketch of the chain:
 ![Callback Functions Chain Design](./assets/chain_of_responsiblity.png)
 
 The meaning of the figure is:
-1. The input parameters of the chain are read-only `Args` and the parameter ` Acc` for function modification on the chain
+1. The input parameters of the chain are read-only `Args` and the parameter `Acc` for function modification on the chain
 2. Regardless of how the execution of chain is terminated, its return value is the new `Acc`
 3. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
 4. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
 5. The callback function returns with:
-    - `ok`: ignore this operation, continue the chain execution with read-only ` Args` and `Acc` returned by the previous function
-    - `{ok, NewAcc}`: performe some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`  
+    - `ok`: ignore this operation, continue the chain execution with read-only `Args` and `Acc` returned by the previous function
+    - `{ok, NewAcc}`: perform some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`
 6. The callback function also returns with:
     - `stop`: Stop the transfer of the chain and immediately return the result of ` Acc` from the previous function
-    - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification 
+    - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification
 
 The above is the main design concept of the callback function chain, which regulates the execution logic of the callback function on the hook.
 
-In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation. 
+In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.
 
 
 {% emqxce %}
@@ -185,4 +185,3 @@ The input parameters and returned value of the callback function are shown in th
 
 
 For the application of these hooks, see:[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
-

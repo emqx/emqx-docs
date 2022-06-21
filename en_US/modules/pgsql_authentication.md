@@ -4,7 +4,7 @@ PostgreSQL Authentication/ACL uses an external PostgreSQL database as a data sou
 
 ## Install PostgreSQL
 
-Open the PostgreSQL official website: https://www.postgresql.org/download/, select the version you need, here we choose the PostgreSQL version as macos-10.13
+Open the PostgreSQL official website: https://www.postgresql.org/download/, select the version you need, here we choose the PostgreSQL version as macOS-10.13
 
 ![image-20200928140039111](./assets/auth_pg1.png)
 

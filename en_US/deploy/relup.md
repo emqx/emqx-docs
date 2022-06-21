@@ -9,7 +9,7 @@ By using the hot upgrade feature, users can quickly and safely upgrade the EMQX 
 Currently EMQX Broker only supports hot upgrade of Patch version (Patch version is the third digit of the version number).
 That is, it currently supports hot upgrades from 4.2.0 -> 4.2.1, 4.2.0 -> 4.2.2, ..., etc., but 4.2.x cannot be hot upgraded to 4.3.0 or 5.0.
 
-Currently, Windows and MacOSX do not support hot upgrade feature.
+Currently, Windows and MacOS do not support hot upgrade feature.
 
 ## Hot upgrade steps
 
@@ -104,7 +104,7 @@ Installed versions:
 
 ```
 
-After the system has been running stably for a period of time, if you decide to make the new version permant, you can execute the `install` command again:
+After the system has been running stably for a period of time, if you decide to make the new version permanent, you can execute the `install` command again:
 
 ```bash
 
@@ -115,7 +115,7 @@ Made release permanent: "4.2.1"
 
 ```
 
-## Downgrade to pervious versions
+## Downgrade to previous versions
 
 If you find a problem and want to roll back after the upgrade, you can execute the version downgrade command.
 For example, the following example will roll back emqx to version 4.2.0:

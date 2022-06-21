@@ -160,7 +160,7 @@ LogHandler(id=default, level=debug, destination=console)
 
 - file: The log handler responsible for output to the log file. There are no special filtering conditions, that is, all log messages are output as long as the level meets the requirements. The output destination is a log file.
 - default: the log handler responsible for output to the console. There are no special filtering conditions, that is, all log messages are output as long as the level meets the requirements. The output destination is the console.
-- ssl_handler: ssl's log handler. Its filter condition is set to output when the log is from the ssl module. The output destination is the console.
+- ssl_handler: SSL log handler. Its filter condition is set to output when the log is from the ssl module. The output destination is the console.
 
 Before the log message is output, we should check whether the message level is higher than the primary log level. After passing the check the log message flows into each log handler. Then, we should check the log level of each handler. If the log message is higher than the handler level, the corresponding handler performs Filter conditions. When it is passed, output is performed.
 

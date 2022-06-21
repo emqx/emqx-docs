@@ -53,7 +53,7 @@ After clicking Add, the module is added:
 
 ![](./assets/pulsar_consumer4.png)
 
-The resource has been created, now use Dashboard's websocket tool to subscribe to the MQTT topic "TestTopic":
+The resource has been created, now use Dashboard's WebSocket tool to subscribe to the MQTT topic "TestTopic":
 
 ![](./assets/pulsar_consumer5.png)
 
@@ -65,6 +65,6 @@ Use pulsar-cli to produce a message:
 
 ![](./assets/pulsar_consumer6.png)
 
-The websocket tool of Dashboard received the message "hello-pulsar" produced by pulsar:
+The WebSocket tool of Dashboard received the message "hello-pulsar" produced by pulsar:
 
 ![](./assets/pulsar_consumer7.png)

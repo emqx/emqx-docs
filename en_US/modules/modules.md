@@ -31,7 +31,7 @@ The modules currently provided by the EMQX include:
 - Language Extension
   - Protocol access
   - Hook
-- Develop and Maintenance 
+- Develop and Maintenance
   - Recon
   - Prometheus Agent
   - Trace
@@ -41,7 +41,7 @@ The modules currently provided by the EMQX include:
   - MQTT online and offline notification
   - MQTT broker subscription
   - MQTT topic rewrite
-  - MQTT retainr messages
+  - MQTT retainer messages
   - MQTT delayed publish
 
 
@@ -49,7 +49,7 @@ The modules currently provided by the EMQX include:
 
 Currently there are two ways to start the module:
 
-1. Load modules with system 
+1. Load modules with system
 2. Use Dashboard to start and stop the module
 
 **Enable loading modules with system**

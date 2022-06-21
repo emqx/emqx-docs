@@ -88,7 +88,7 @@ GET coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password} wit
 -If clientid does not exist, "bad_request" will be returned
 -{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
 -{username} and {password} are optional
--If {username} and {password} are incorrect, an uauthorized error will be returned
+-If {username} and {password} are incorrect, an unauthorized error will be returned
 -The subscribed QoS level is always 1
 
 
@@ -106,7 +106,7 @@ GET coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password} wit
 -If clientid does not exist, "bad_request" will be returned
 -{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
 -{username} and {password} are optional
--If {username} and {password} are incorrect, an uauthorized error will be returned
+-If {username} and {password} are incorrect, an unauthorized error will be returned
 
 #### CoAP Client Notification Operation
 
@@ -119,7 +119,7 @@ The access gateway will receive the message on the subscription topic and delive
 
 #### CoAP Client Publish Operation
 
-Use CoAP's PUT command to perform a PUBLISH operation:
+Use CoAP PUT command to perform a PUBLISH operation:
 
 ```
 PUT coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password}
@@ -130,7 +130,7 @@ PUT coap://localhost/mqtt/{topicname}?c={clientid}&u={username}&p={password}
 -If clientid does not exist, "bad_request" will be returned
 -{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
 -{username} and {password} are optional
--If {username} and {password} are incorrect, an uauthorized error will be returned
+-If {username} and {password} are incorrect, an unauthorized error will be returned
 -The payload can be any binary data
 -The payload data type is "application/octet-stream"
 -Post information will be sent as qos0
@@ -150,7 +150,7 @@ GET coap://localhost/mqtt/{any_topicname}?c={clientid}&u={username}&p={password}
 -If clientid does not exist, "bad_request" will be returned
 -{Topicname} in the URI should be percent-encoded to prevent special characters such as + and #
 -{username} and {password} are optional
--If {username} and {password} are incorrect, an uauthorized error will be returned
+-If {username} and {password} are incorrect, an unauthorized error will be returned
 -The client should do keepalive work regularly to keep the session online, especially for devices in the NAT network
 
 
@@ -164,9 +164,9 @@ ClientId, Username, Password, Topic in CoAP URI are concepts in MQTT. In other w
 
 The authentication, access control, hook and other functions of EMQX are also applicable to the CoAP access gateway. such as:
 
--If the username/password is not authorized, the CoAP client will get an ʻuauthorized` error
--If the username/client ID is not allowed to publish a specific topic, the CoAP message will actually be discarded, although the CoAP client will get an Acknoledgement from the access gateway
--If a CoAP message is published, the'message.publish' hook can also capture this message
+-If the username/password is not authorized, the CoAP client will get an `unauthorized` error
+-If the username/client ID is not allowed to publish a specific topic, the CoAP message will actually be discarded, although the CoAP client will get an Acknowledgement from the access gateway
+-If a CoAP message is published, `message.publish` hook can also capture this message
 
 ### Well-known locations
 --------------------

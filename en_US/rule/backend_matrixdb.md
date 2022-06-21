@@ -1,4 +1,4 @@
-# Sava data to MatrixDB
+# Save data to MatrixDB
 
 Build the MatrixDB database, set the user name and password to root/public, and create a database named mqtt.
 
@@ -54,7 +54,7 @@ Click the **New** button on the right side of **Use Resource** to enter the **Cr
 
 **User, Password**, authentication credentials.
 
-**Eable Reconnect**, whether to enable automatic reconnection.
+**Enable Reconnect**, whether to enable automatic reconnection.
 
 **Pool Size**, connection process pool size, which will help obtain the best performance with reasonable configuration.
 

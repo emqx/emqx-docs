@@ -47,7 +47,7 @@ DefaultLimitNOFILE=2097152
 ### emqx.service
 
 Set the maximum number of file handles for emqx service in one of below paths depending
-on which linux distribution is in use.
+on which Linux distribution is in use.
 
 - `/usr/lib/systemd/system/emqx.service`
 - `/lib/systemd/system/emqx.service`

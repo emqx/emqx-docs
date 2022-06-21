@@ -52,7 +52,7 @@ A common use case is to use the rule engine to call the encoding and decoding in
 
 The message processing level of EMQX can be divided into three parts: Messaging, Rule Engine, and Data Conversion.
 
-EMQX's PUB/SUB system routes messages to specified topics. The rule engine has the flexibility to configure business rules for the data, match messages to the rules and then specify the corresponding action. Data format conversion occurs before the rule matching process, converting the data into a Map format that can participate in rule matching, and then matching it.
+EMQX PUB/SUB system routes messages to specified topics. The rule engine has the flexibility to configure business rules for the data, match messages to the rules and then specify the corresponding action. Data format conversion occurs before the rule matching process, converting the data into a Map format that can participate in rule matching, and then matching it.
 
 ![SchemaAndRuleEngine](./assets/SchemaAndRuleEngine.png)
 
@@ -169,7 +169,7 @@ def publish_msg(client):
 
 #### Checking rule execution results
 
-1)  In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "person/#".
+1)  In the Dashboard's [WebSocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "person/#".
 
 2)  Install the python dependency and execute the device-side code:
 
@@ -183,7 +183,7 @@ publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 t/1 b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
 ```
 
-3) Check that a message with the topic `person/Shawn` is received on the Websocket side:
+3) Check that a message with the topic `person/Shawn` is received on the WebSocket side:
 
 ```bash
 {"email":"liuxy@emqx.io","id":1,"name":"Shawn"}
@@ -266,7 +266,7 @@ def publish_msg(client):
 
 #### Checking rule execution results
 
-1)  In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "avro_user/#".
+1)  In the Dashboard's [WebSocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and subscribe to "avro_user/#".
 
 2)  Install the python dependency and execute the device-side code:
 
@@ -279,7 +279,7 @@ Connected with result code 0
 publish to topic: t/1, payload: b'\nShawn\x00\xb4\n\x00\x06red'
 ```
 
-3) Check that a message with the topic `avro_user/Shawn` is received on the Websocket side:
+3) Check that a message with the topic `avro_user/Shawn` is received on the WebSocket side:
 
 ```
 {"favorite_color":"red","favorite_number":666,"name":"Shawn"}
@@ -392,9 +392,9 @@ $ python3 http_parser_server.py
 
 #### Checking rule execution results
 
-Since this example is relatively simple, we'll use the MQTT Websocket client directly to simulate sending a message on the device side.
+Since this example is relatively simple, we'll use the MQTT WebSocket client directly to simulate sending a message on the device side.
 
-1) In the Dashboard's [Websocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and publish a message to "t/1" with the text "hello".
+1) In the Dashboard's [WebSocket](http://127.0.0.1:18083/#/websocket) tools, log in to an MQTT Client and publish a message to "t/1" with the text "hello".
 
 2) Check what is printed in the emqx console (erlang shell):
 

@@ -364,7 +364,7 @@ FROM
 | qos       | MQTT 消息的 QoS                         |
 | unsub_props | UNSUBSCRIBE Properties (仅适用于 5.0)  |
 | timestamp | 事件触发时间 (ms)                       |
-| node      | 事件触发所在节点         
+| node      | 事件触发所在节点
 
 示例
 ```sql
@@ -386,4 +386,4 @@ FROM
 }
 ```
 
-[下一部分，规则引擎内置函数](rule-engine_buildin_function.md)
+[下一部分，规则引擎内置函数](rule-engine_builtin_function.md)

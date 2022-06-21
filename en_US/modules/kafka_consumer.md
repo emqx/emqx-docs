@@ -58,7 +58,7 @@ Fill in the relevant parameters:
 
 6). Kafka Max Bytes (the maximum number of bytes of messages consumed each time from Kafka)
 
-7). Kafka Offset Reset Policy (reset Offset policy, reset_to_latest | reset_by_subdcriber)
+7). Kafka Offset Reset Policy (reset Offset policy, reset_to_latest | reset_by_subscriber)
 
 7). Is Kafka consumer reconnected?
 
@@ -66,7 +66,7 @@ After clicking Add, the module is added:
 
 ![](./assets/kafka_consumer4.png)
 
-The resource has been created, now use Dashboard's websocket tool to subscribe to the MQTT topic "TestTopic":
+The resource has been created, now use Dashboard's WebSocket tool to subscribe to the MQTT topic "TestTopic":
 
 ![](./assets/kafka_consumer5.png)
 
@@ -78,6 +78,6 @@ Use the kafka command line to produce a message:
 
 ![](./assets/kafka_consumer6.png)
 
-The websocket tool of Dashboard received the message "hello-kafka" produced by Kafka:
+The WebSocket tool of Dashboard received the message "hello-kafka" produced by Kafka:
 
 ![](./assets/kafka_consumer7.png)

@@ -34,7 +34,7 @@ The authentication data can be managed through the dashboard
 
 ![image-20200928141558866](./assets/auth_mnesia_5.png)
 
-When the client connects to EMQX, the builtin database authentication will obtain the Clientid and Username in the CONNENT message, and then match the password recorded in the database. Once the match is successful, the authentication is successful.
+When the client connects to EMQX, the builtin database authentication will obtain the Clientid and Username in the CONNECT message, and then match the password recorded in the database. Once the match is successful, the authentication is successful.
 
 The builtin database authentication also supports HTTP API operations. For details, please refer to [Mnesia Authentication](https://docs.emqx.io/en/broker/latest/advanced/auth-mnesia.html).
 

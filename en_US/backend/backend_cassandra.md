@@ -120,7 +120,7 @@ includes:
 
 ## Configure 'action' with CQL
 
-Cassandra backend supports CLQ in
+Cassandra backend supports CQL in
 'action':
 
 ```bash

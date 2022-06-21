@@ -23,7 +23,7 @@ After clicking add, the module is added
 
 ## HTTP authentication principle
 
-EMQX uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP statusCode).
+EMQX uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP status code).
 
  -Authentication failed: The API returns status codes other than 200
  -Successful authentication: API returns 200 status code
@@ -47,7 +47,7 @@ POST
 clientid=%c,username=%u,password=%P
 ```
 
-When the HTTP request method is GET, the request parameters will be passed in the form of URL query string; POST request will submit the request parameters in the form of ordinary form (content-type is x-www-form-urlencoded).
+When the HTTP request method is GET, the request parameters will be passed in the form of URL query string; POST request will submit the request parameters in the form of ordinary form (content-type is `x-www-form-urlencoded`).
 
 You can use the following placeholders in the authentication request. EMQX will automatically fill in the client information when requesting:
 
@@ -67,7 +67,7 @@ It is recommended to use the POST and PUT methods. When using the GET method, th
 
 ## HTTP access control principle
 
-EMQX uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP statusCode).
+EMQX uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP status code).
 
  -No permission: The API returns status codes other than 200
  -Authorization is successful: API returns 200 status code

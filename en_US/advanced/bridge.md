@@ -32,7 +32,7 @@ Remote Broker Address:
 bridge.mqtt.aws.address = 211.182.34.1:1883
 ```
 
-MQTT protocol version, which can be one of  `mqttv3`, ` mqttv4`  or  `mqttv5`:
+MQTT protocol version, which can be one of  `mqttv3`, `mqttv4`  or  `mqttv5`:
 
 ```bash
 bridge.mqtt.aws.proto_ver = mqttv4
@@ -56,7 +56,7 @@ The password field of the MQTT client:
 bridge.mqtt.aws.password = passwd
 ```
 
-Keepalive configuration:
+Keep-alive configuration:
 
 ```bash
 bridge.mqtt.aws.keepalive = 60s
@@ -68,7 +68,7 @@ The client's clean_start field. Some IoT Hubs require that the clean_start (or c
 bridge.mqtt.aws.clean_start = true
 ```
 
-The reconnection interval can be set:
+The re-connection interval can be set:
 
 ```bash
 bridge.mqtt.aws.reconnect_interval = 30s

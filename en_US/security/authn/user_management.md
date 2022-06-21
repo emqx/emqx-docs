@@ -22,7 +22,7 @@ Endpoint for the uses of a concrete MQTT listener chain is `/api/v5/listeners/{l
 Endpoint for the users of a global `gateway` protocol chain is `/api/v5/gateway/{protocol}/authentication`.
 Endpoint for the uses of a `gateway` protocol listener chain is `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`.
 
-See [authentication API documentation](./authn.md#http-api) for identificator conventions.
+See [authentication API documentation](./authn.md#http-api) for identifier conventions.
 
 ## Importing Users
 
@@ -36,7 +36,7 @@ The endpoints for importing users into the corresponding chains are:
 
 The accepted `filename` parameter should be a node-local path of a file with credentials.
 
-The following file formats (identified by file extention) are supported:
+The following file formats (identified by file extension) are supported:
 * CSV (`{"filename": "some-filename.csv"}`:
   ```csv
   user_id,password_hash,salt,is_superuser
@@ -60,4 +60,3 @@ The following file formats (identified by file extention) are supported:
     }
   ]
   ```
-

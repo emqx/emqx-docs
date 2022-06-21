@@ -70,9 +70,9 @@ DO                       ## The Do clause is used to select fields in the output
     e.idx as idx
 INCASE
     e.idx >= 1          ## apply conditional filtering to a field selected
-FROM "t/#"              ## mounts rules to a topic 
+FROM "t/#"              ## mounts rules to a topic
 ```
-The DO and INCASE clauses are optional. 
+The DO and INCASE clauses are optional.
 
 
 #### Operational symbol
@@ -100,18 +100,18 @@ The DO and INCASE clauses are optional.
 | `!=` | not equal | true/false |
 
 
-## SQL statement example: 
+## SQL statement example:
 ### Basic syntax examples
 
--  Extract all fields from the messages with a topic of "t/a": 
+-  Extract all fields from the messages with a topic of "t/a":
     ```sql
     SELECT * FROM "t/a"
     ```
--  Extract all fields from the messages with a topic of "t/a" or "t/b": 
+-  Extract all fields from the messages with a topic of "t/a" or "t/b":
     ```sql
     SELECT * FROM "t/a","t/b"
     ```
--  Extract all fields from the message with a topic that can match 't/#'. 
+-  Extract all fields from the message with a topic that can match 't/#'.
     ```sql
     SELECT * FROM "t/#"
     ```
@@ -156,7 +156,7 @@ The DO and INCASE clauses are optional.
     SELECT * FROM "t/1", "t/2".
     ```
 - You can use the `"." `Symbol to nest select payloads
-- If possible, don't create alias for payload, as this would cause performance degradations.
+- If possible, don't create alias for payload, as this would cause performance degradation.
   i.e. Do not use `SELECT payload as p`
 :::
 
@@ -175,7 +175,7 @@ Suppose there is a message with ClientID of `c_steve` and topic of ` t/1`. The m
 }
 ```
 
-**Example 1: It is required that each object in sensors is re-published as a data input to the topic of `sensors/${idx}` with the content of `${name}`. That means the final rule engine will issue 3 messages:** 
+**Example 1: It is required that each object in sensors is re-published as a data input to the topic of `sensors/${idx}` with the content of `${name}`. That means the final rule engine will issue 3 messages:**
 
 1) Topic: sensors/0
    Content: a
@@ -222,7 +222,7 @@ In this SQL, the FOREACH clause specifies the array sensors that need to be trav
 
 The FOREACH statement will perform a "message republish" action for each object in the result array, so the republish action will be performed 3 times.
 
-**Example 2: It is required that each object in sensors with ids value greater than or equal to 1 is re-published as a data input to the topic of `sensors/${idx}` with the content of  `clientid=${clientid},name=${name},date=${date}`. That means the final rule engine will issue 2 messages:** 
+**Example 2: It is required that each object in sensors with ids value greater than or equal to 1 is re-published as a data input to the topic of `sensors/${idx}` with the content of  `clientid=${clientid},name=${name},date=${date}`. That means the final rule engine will issue 2 messages:**
 
 1) Topic: sensors/1
    Content: clientid=c_steve,name=b,date=2020-04-24

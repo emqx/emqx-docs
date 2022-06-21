@@ -13,7 +13,7 @@ EMQX Broker enables the of retaining messages by default. You can modify `mqtt.r
 The message read and deliver rate can be controlled. When a client subscribes to a wildcard topic, many retained messages may be loaded. If you don't want these message to be loaded into the memory all at once, you can use `retainer.flow_control` options to control this behaviour. The processing flow is as follows:
 1. Load `batch_read_number` of retained message from storage
 2. Deliver `batch_deliver_number` of messages
-3. Repeat, until all retianed messages are delivered
+3. Repeat, until all retained messages are delivered
 
 ## Configuration
 
@@ -32,4 +32,3 @@ The `emqx_retainer` plugin is enabled by default, and the configuration path of 
 | retainer.flow_control.batch_deliver_number | integer  | from 0 to 1000              | 0             | The number of retained messages that can be delivered in one batch. Note that if this value is too big, it may cause performance issues.                                                                                                                     |
 | retainer.backend.storage_type              | enum     | `ram`, `disc`               | `ram`         | ram: only stored in memory; <br /> disc: stored in memory and hard disk.                                                                                                                                                                                     |
 | retainer.backend.max_retained_messages     | integer  | \>= 0                       | 1             | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics.                           |
-

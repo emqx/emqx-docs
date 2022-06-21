@@ -26,9 +26,9 @@ The architecture is as follows:
 
 It shows: The ExHook module in EMQX acts as a gRPC client, sending all hook events in the system to the user's gRPC server.
 
-Consistent with EMQX's native hook, it also supports chained calculation and return:
+Consistent with EMQX native hook, it also supports chained calculation and return:
 
-![chain_of_responsiblity](../advanced/assets/chain_of_responsiblity.png)
+![chain_of_responsibility](../advanced/assets/chain_of_responsiblity.png)
 
 ## Interface design
 
@@ -87,7 +87,7 @@ service HookProvider {
 
 The HookProvider part:
 
-- `OnProviderLoaded`: Define how the HookProvider is loaded and return the list of hooks that need to be mounted. Only the hooks in this list will be called back to the HookProivder service.
+- `OnProviderLoaded`: Define how the HookProvider is loaded and return the list of hooks that need to be mounted. Only the hooks in this list will be called back to the HookProvider service.
 - `OnProviderUnloaded`: Define how the HookProvider is unloaded, only for notification.
 
 Hook event part:
