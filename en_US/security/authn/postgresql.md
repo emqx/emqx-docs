@@ -55,7 +55,7 @@ PostgreSQL authentication is identified with `mechanism = password_based` and `b
 
 Sample configuration:
 
-```hocon
+```
 {
   mechanism = password_based
   backend = postgresql

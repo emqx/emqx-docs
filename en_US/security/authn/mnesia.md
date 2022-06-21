@@ -8,7 +8,7 @@ Mnesia authentication does not depend on external data sources, and it is simple
 
 Mnesia authentication is identified with `mechanism = password_based` and `backend = built_in_database`.
 
-```hocon
+```
 {
     mechanism = password_based
     backend = built_in_database

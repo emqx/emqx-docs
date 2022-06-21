@@ -40,7 +40,7 @@ Each authenticator has its own configuration options.
 
 Example:
 
-```hocon
+```
 {
   mechanism = password_based
   backend = redis
@@ -78,7 +78,7 @@ can be _enabled_ or _disabled_.
 
 Example:
 
-```hocon
+```
 authentication = [
   {
     mechanism = password_based
@@ -112,7 +112,7 @@ An authentication chain without any enabled authenticators allows anonymous acce
 
 Authentication chains can be configured globally per protocol as well as per individual protocol listeners:
 
-```hocon
+```
 # emqx.conf
 
 # Global chain for MQTT protocol
@@ -156,7 +156,7 @@ chain specified for the listener, then the global chain for the listener protoco
 If a chain contains a single authenticator, its configuration can be used as chain configuration.
 I.e. `[ ]` brackets may be omitted:
 
-```hocon
+```
 authentication {
     mechanism = password_based
     backend = built_in_database
@@ -185,7 +185,7 @@ The algorithm for password verification is the following:
 
 The following password hashing algorithms are supported:
 
-```hocon
+```
 # simple algorithms:
 password_hash_algorithm {
   name = sha256             # plain, md5, sha, sha512
@@ -209,7 +209,7 @@ password_hash_algorithm {
 For password-based authenticators that allow user creation through EMQX API (`password_based:built_in_database`)
 there are additional parameters required for hash creation:
 
-```hocon
+```
 # bcrypt
 password_hash_algorithm {
   name = bcrypt
@@ -233,7 +233,7 @@ The following placeholders are available:
 
 Example of use (in Redis password-based authenticator):
 
-```hocon
+```
 {
   mechanism = password_based
   backend = redis
@@ -291,7 +291,7 @@ Listener id name convention for MQTT chains is the following:
 <transport_protocol>:<name>
 ```
 For example, `listener_id` for the listener
-```hocon
+```
 listeners.quic.default {
   ...
 }
@@ -303,7 +303,7 @@ Listener id name convention for gateway chains is the following:
 <protocol>:<transport_protocol>:<name>
 ```
 For example, `listener_id` for the listener
-```hocon
+```
 gateway.stomp {
   ...
   listeners.tcp.def {

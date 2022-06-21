@@ -24,7 +24,7 @@ HTTP `POST` and `GET` requests are supported. Each of them has some specific opt
 
 Example of an HTTP authenticator configured with `POST` request:
 
-```hocon
+```
 {
     mechanism = password_based
     backend = http
@@ -45,7 +45,7 @@ Example of an HTTP authenticator configured with `POST` request:
 
 Example of an HTTP authenticator configured with `GET` request:
 
-```hocon
+```
 {
     mechanism = password_based
     backend = http
@@ -73,7 +73,7 @@ HTTP url for external authentication requests, required. It may cantain [placeho
 
 For `https://` urls `ssl` configuration must be enabled:
 
-```hocon
+```
 {
     ...
     url = "https://127.0.0.1:32333/auth/${peercert}?clientid=${clientid}"
@@ -94,7 +94,7 @@ For different configurations `body` map will be encoded differently.
 Assume an MQTT client connects with clientid `id123`, username `iamuser`, and password `secret`.
 
 * `GET` request:
-    ```hocon
+    ```
     {
         method = get
         url = "http://127.0.0.1:32333/auth/${clientid}"
@@ -110,7 +110,7 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
     ... Headers ...
     ```
 * `POST` JSON request:
-    ```hocon
+    ```
     {
         method = post
         url = "http://127.0.0.1:32333/auth/${clientid}"
@@ -132,7 +132,7 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
     {"username":"iamuser","password":"secret"}
     ```
 * `POST` www-form-urlencoded request:
-    ```hocon
+    ```
     {
         method = post
         url = "http://127.0.0.1:32333/auth/${clientid}"
@@ -159,7 +159,7 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
 Map with arbitrary HTTP headers for external requests, optional.
 
 For `get` requests the default value is
-```hocon
+```
 {
     "accept" = "application/json"
     "cache-control" = "no-cache"
@@ -170,7 +170,7 @@ For `get` requests the default value is
 Headers cannot contain `content-type` header for `get` requests.
 
 For `post` requests the default value is
-```hocon
+```
 {
     "accept" = "application/json"
     "cache-control" = "no-cache"
@@ -193,7 +193,7 @@ Optional, default value is `true`.
 
 Optional values controlling the corresponding request thresholds. The default values are:
 
-```hocon
+```
   connect_timeout = 15s
   max_retries = 5
   request_timeout = 5s

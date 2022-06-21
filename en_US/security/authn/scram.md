@@ -11,7 +11,7 @@ SCRAM authentication does not depend on external data sources, and it is simple 
 
 SCRAM authentication is identified with `mechanism = scram` and `backend = built_in_database`.
 
-```hocon
+```
 {
     mechanism = scram
     backend = built_in_database

@@ -36,7 +36,7 @@ Prior to version 5, this feature is also known as "proxy subscription".
 
 Add the following configuration items to the configuration file
 
-```hocon
+```
 auto_subscribe {
     topics = [
         {

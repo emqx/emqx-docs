@@ -35,7 +35,7 @@
 
 将下面的配置项添加到配置文件中
 
-```hocon
+```
 auto_subscribe {
     topics = [
         {

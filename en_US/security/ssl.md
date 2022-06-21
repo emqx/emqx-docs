@@ -10,7 +10,7 @@ and set its `ssl.verify` option to `verify_peer`.
 
 The default `ssl` MQTT listener runs on the 8883 port:
 
-```hocon
+```
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
 
@@ -40,7 +40,7 @@ Note that the `key.pem`,` cert.pem`, and `cacert.pem` under the default director
 
 To enable PSK authentication, one should enable `psk_authentication` section in `emqx.conf`:
 
-```hocon
+```
 psk_authentication {
     ## Whether to enable the PSK feature.
     enable = true

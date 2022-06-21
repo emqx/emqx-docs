@@ -57,7 +57,7 @@ MongoDB authentication is identified with `mechanism = password_based` and `back
 
 The authenticator supports connecting to MongoDB running in three different modes:
 * Standalone MongoDB server:
-  ```hocon
+  ```
   {
     mechanism = password_based
     backend = mongodb
@@ -80,7 +80,7 @@ The authenticator supports connecting to MongoDB running in three different mode
   }
   ```
 *  MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
-```hocon
+```
 {
   mechanism = password_based
   backend = mongodb
@@ -104,7 +104,7 @@ The authenticator supports connecting to MongoDB running in three different mode
 }
 ```
 *  MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
-```hocon
+```
 {
   mechanism = password_based
   backend = mongodb

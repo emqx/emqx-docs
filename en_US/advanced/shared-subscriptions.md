@@ -60,7 +60,7 @@ Shared subscriptions prefixed with `$queue/` are shared subscriptions without gr
 
 EMQX Broker's shared subscription supports balancing strategy and distribution of Ack configuration:
 
-```hocon
+```
 broker {
   # balancing strategy
   shared_subscription_strategy: random

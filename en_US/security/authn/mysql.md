@@ -57,7 +57,7 @@ MySQL authentication is identified with `mechanism = password_based` and `backen
 
 Sample configuration:
 
-```hocon
+```
 {
   mechanism = password_based
   backend = mysql

@@ -17,7 +17,7 @@ Example of adding a user with username `user123`, password `secret`, prefixed sa
 ```
 
 The corresponding config params are:
-```hocon
+```
 password_hash_algorithm {
     name = sha256
     salt_position = prefix
@@ -33,7 +33,7 @@ Redis authentication is identified with `mechanism = password_based` and `backen
 EMQX supports working with three kinds of Redis installation.
 
 * Standalone Redis.
-  ```hocon
+  ```
   {
     mechanism = password_based
     backend = redis
@@ -54,7 +54,7 @@ EMQX supports working with three kinds of Redis installation.
   }
   ```
 * [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
-  ```hocon
+  ```
   {
     mechanism = password_based
     backend = redis
@@ -76,7 +76,7 @@ EMQX supports working with three kinds of Redis installation.
   }
   ```
 * [Redis Cluster](https://redis.io/docs/manual/scaling/).
-  ```hocon
+  ```
   {
     mechanism = password_based
     backend = redis

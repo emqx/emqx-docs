@@ -31,7 +31,7 @@ Decoded payload:
 ```
 
 The corresponding JWT authenticator settings:
-```hocon
+```
 {
   mechanism = jwt,
   use_jwks = false
