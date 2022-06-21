@@ -2,18 +2,20 @@
 
 EMQX Broker provides users with a blacklisting/banning functionality.
 
-Administrator can add specified clients to the blacklist from the management HTTP API
+Administrator can add specified clients to the blacklist from the management REST API
 to deny access of the client.
 
-In addition to the client identifier, it also supports direct ban of user names or source IP addresses.
+The endpoint for the API is `/api/v5/banned`.
 
-For specific usage of the HTTP API, see  the `/banned` API document.
+In addition to the client identifier, it also supports direct ban of user names or source IP addresses.
 
 ::: tip
 The blacklist is only applicable to a small number of client bans.
 If there are a large number of clients requiring authentication management,
-please use the [authentication](./authn/authn.md)  function.。
+please use the [authentication](./authn/authn.md) function.
 :::
+
+## Flapping Clients
 
 Based on the blacklist function, EMQX supports automatic banning of clients that are frequently
 logged in for a short period of time, and rejects these clients for a period of time
@@ -23,21 +25,33 @@ It should be noted that the automatic ban only bans the client identifier,
 not the user name and IP address.
 That is to say, a malicious client may still able to attack if they change client identifier for each attempt.
 
-This feature is disabled by default, set `enable_flapping_detect` configuration item to `on` in `emqx.conf` to enable it.
+This feature is disabled by default, set `enable` for `flapping_detect` section to `true` in `emqx.conf` to enable it.
 
 ```bash
-zone.external.enable_flapping_detect = off
+flapping_detect {
+
+  enable = false
+
+}
 ```
 
 The user can adjust the trigger threshold and the ban time with below configs
 
 ```bash
-flapping_detect_policy = "30, 1m, 5m"
+flapping_detect {
+
+  enable = true
+
+  ## The max disconnect allowed of a MQTT Client in `window_time`
+  max_count = 15
+
+  ## The time window for flapping detect
+  window_time = 1m
+
+  ## How long the clientid will be banned
+  ban_time = 5m
+
+}
 ```
 
-The value of this configuration item is separated by `,`,
-which repectively indicates the number of times that the client is offline,
-the detection time range, and the ban time.
-
-In the above example, the config means that if a client goes offline 30 times in 1 minute,
-then this client identifie is banned for 5 minutes.
+These settings may be specified individually for each zone.

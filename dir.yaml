@@ -59,13 +59,15 @@
       title_cn: 认证
       children:
         - security/authn/authn
+        - security/authn/user_management
         - security/authn/mnesia
-        - security/authn/http
-        - security/authn/jwt
         - security/authn/mysql
         - security/authn/postgresql
         - security/authn/redis
         - security/authn/mongodb
+        - security/authn/http
+        - security/authn/jwt
+        - security/authn/scram
     - title_en: Authorisation (ACL)
       title_cn: 鉴权（ACL）
       children:
@@ -78,7 +80,7 @@
         - security/authz/redis
         - security/authz/mongodb
     - security/blacklist
-      # TODO: TLS/SSL overview
+    - security/ssl
 
 - title_en: Observability
   title_cn: 运行监测

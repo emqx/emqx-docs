@@ -1,66 +1,211 @@
 # HTTP
 
-HTTP authentication uses an external self-built HTTP application authentication data source, and determines the authentication result based on the data returned by the HTTP API, which can implement complex authentication logic.
-
-Plugin:
-
-```bash
-emqx_auth_http
-```
-
-::: tip 
-The emqx_auth_http plugin also includes ACL feature, which can be disabled via comments.
-:::
-
+HTTP authenticator delegates authentication to a custom HTTP API.
 
 ## Authentication principle
 
-EMQX Broker uses the current client related information as a parameter in the device connection event, initiates a request query permission to the user-defined authentication service, and processes the authentication request through the returned HTTP **statusCode**.
+* In authenticator settings, an HTTP request pattern is specified.
+* When an MQTT client connects to the broker, the configured request template is rendered and the resulting request is emitted.
+* Receiving a 200 or 204 HTTP status is interpreted as authentication success. Other statuses indicate authentication failure.
+A successful HTTP response can also contain a JSON or www-form-urlencoded map with `is_superuser` boolean field
+that indicates superuser privileges for the client.
 
- - Authentication failed: API returns status code of 4xx
- - Authentication succeeded: API returns status code of 200
- - Authentication ignored : API returns status code of 200 with message body of ignore
+::: danger
+`POST` method is recommended. When using the `GET` method, some sensitive information (like plain text passwords) can be exposed through HTTP server logging.
 
-## Salting rules and hash methods
+For untrusted environments, HTTPS should be used.
+:::
 
-HTTP passes a clear text password in the request. The salting rules and hash method depend on the HTTP application.
+## Configuration
 
-## Authentication request
+HTTP authentication is identified with `mechanism = http` and `backend = built_in_database`.
 
-During authentication, EMQX Broker will use the current client information to populate and initiate a user-configured authentication query request to query the client's authentication data on the HTTP server.
+HTTP `POST` and `GET` requests are supported. Each of them has some specific options.
 
-```bash
-# etc/plugins/emqx_auth_http.conf
+Example of an HTTP authenticator configured with `POST` request:
 
-## Request address
-auth.http.auth_req.url = http://127.0.0.1:80/mqtt/auth
+```hocon
+{
+    mechanism = password_based
+    backend = http
+    enable = true
 
-## HTTP request method
-## Value: post | get | put
-auth.http.auth_req.method = post
-
-## HTTP Request Headers for Auth Request, Content-Type header is configured by default.
-## The possible values of the Content-Type header: application/x-www-form-urlencoded, application/json
-auth.http.auth_req.headers.content-type = application/x-www-form-urlencoded
-
-## Request parameter
-auth.http.auth_req.params = clientid=%c,username=%u,password=%P
+    method = post
+    url = "http://127.0.0.1:32333/auth/${peercert}?clientid=${clientid}"
+    body {
+        username = "${username}"
+        password = "${password}"
+    }
+    headers {
+        "Content-Type" = "application/json"
+        "X-Request-Source" = "EMQX"
+    }
+}
 ```
 
-When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; Under POST and PUT requests, it will submit the request parameters in the form of Json or ordinary form (determined by the value of content-type).
+Example of an HTTP authenticator configured with `GET` request:
 
-You can use the following placeholders in the authentication request, and EMQX Broker will be automatically populated with client information when requested:
+```hocon
+{
+    mechanism = password_based
+    backend = http
+    enable = true
 
-- %u：Username
-- %c：Client ID
-- %a：Client IP address
-- %r：Client Access Protocol
-- %P：Clear text password
-- %p：Client port
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+    method = get
+    url = "http://127.0.0.1:32333/auth"
+    body {
+        username = "${username}"
+        password = "${password}"
+    }
+    headers {
+        "X-Request-Source" = "EMQX"
+    }
+}
+```
 
-::: danger 
-The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
-:::
+### `method`
+
+Required field with possible values `get` or `post`. Denoting the corresponding HTTP request method used.
+
+### `url`
+
+HTTP url for external authentication requests, required. It may cantain [placeholders](./authn.md#authentication-placeholders).
+
+For `https://` urls `ssl` configuration must be enabled:
+
+```hocon
+{
+    ...
+    url = "https://127.0.0.1:32333/auth/${peercert}?clientid=${clientid}"
+    ssl {
+        enable = true
+    }
+}
+
+```
+
+### `body`
+
+Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON or www-form-urlencoded
+body. For `get` requests it is encoded as query parameters. The map keys and values can contain [placeholders](./authn.md#authentication-placeholders).
+
+For different configurations `body` map will be encoded differently.
+
+Assume an MQTT client connects with clientid `id123`, username `iamuser`, and password `secret`.
+
+* `GET` request:
+    ```hocon
+    {
+        method = get
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            password = "${password}"
+        }
+    }
+    ```
+    The resulting request will be:
+    ```
+    GET /auth/id123?username=iamuser&password=secret HTTP/1.1
+    ... Headers ...
+    ```
+* `POST` JSON request:
+    ```hocon
+    {
+        method = post
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            password = "${password}"
+        }
+        headers {
+            "content-type": "application/json"
+        }
+    }
+    ```
+    The resulting request will be:
+    ```
+    POST /auth/id123 HTTP/1.1
+    Content-Type: application/json
+    ... Other headers ...
+
+    {"username":"iamuser","password":"secret"}
+    ```
+* `POST` www-form-urlencoded request:
+    ```hocon
+    {
+        method = post
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            password = "${password}"
+        }
+        headers {
+            "content-type": "application/x-www-form-urlencoded"
+        }
+    }
+    ```
+    The resulting request will be:
+    ```
+    POST /auth/id123 HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded
+    ... Other headers ...
+
+    username=iamuser&password=secret
+    ```
+
+### `headers`
+
+Map with arbitrary HTTP headers for external requests, optional.
+
+For `get` requests the default value is
+```hocon
+{
+    "accept" = "application/json"
+    "cache-control" = "no-cache"
+    "connection" = "keep-alive"
+    "keep-alive" = "timeout=30, max=1000"
+}
+```
+Headers cannot contain `content-type` header for `get` requests.
+
+For `post` requests the default value is
+```hocon
+{
+    "accept" = "application/json"
+    "cache-control" = "no-cache"
+    "connection" = "keep-alive"
+    "keep-alive" = "timeout=30, max=1000"
+    "content-type" = "application/json"
+}
+```
+
+`content-type` header value defines `body` encoding method for `post` requests. Possible values are:
+* `application/json` for JSON;
+* `application/x-www-form-urlencoded` for x-www-form-urlencoded format.
+
+### `enable_pipelining`
+
+Boolean value indicating whether to enable [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
+Optional, default value is `true`.
+
+### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
+
+Optional values controlling the corresponding request thresholds. The default values are:
+
+```hocon
+  connect_timeout = 15s
+  max_retries = 5
+  request_timeout = 5s
+  retry_interval = 1s
+```
+
+### `pool_size`
+
+Optional integer value defining the number of concurrent connections from an EMQX node to the external API.
+The default value is 8.
+
+### `ssl`
+
+Standard [SSL options](../ssl.md) for connecting to the external API.
 

@@ -1,131 +1,184 @@
 # JWT
 
-[JWT](https://jwt.io/) is a Token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information. It can issue authentication information in batches while holding keys, which is an easiest authentication method.
+[JWT](https://jwt.io/) is a token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information.
 
-Plugin:
+## Authentication Principle
 
-```bash
-emqx_auth_jwt
+A client sends JWT as a password. When accepting the connection, EMQX Broker uses the configured key or secret to verify
+JWT signature. If the signature is not successfully verified, the authentication fails. On success, the JWT authenticator
+verifies JWT _claims_ (payload "fields") like `exp` (expiration time), etc. for validity. A user may
+provide some additional checks. If all the checks succeed, the authentication succeeds too. Otherwise, the authentication fails.
+
+Sample JWT:
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTQyNTQ2MDEsInVzZXJuYW1lIjoibXl1c2VyIn0.yi1FSkrLbd9qv4-TrfEa8opiQ9NqShgvMT2lG3pzhgA
 ```
 
-## Authentication principle
-
-The client uses Token as the user name or password (depending on the plugin configuration). When initiating the connection, EMQX Broker uses the key and certificate in the configuration to decrypt. If it can be successfully decrypted, the authentication successes, otherwise the authentication fails.
-
-After JWT authentication is enabled by default, you can connect with the following password and any username:
-
-```bash
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGUiOiJodHRwczovL3dpdndpdi5jb20ifSwiZXhwIjoxNTgyMjU1MzYwNjQyMDAwMCwiaWF0IjoxNTgyMjU1MzYwfQ.FdyAx2fYahm6h3g47m88ttyINzptzKy_speimyUcma4
-```
-
-
-## Configuration item
-
-If you want to use JWT Auth you need open `etc/plugins/emqx_auth_jwt.conf` and edit as：
-
-To enable JWT authentication, the following needs to be configured in `etc/plugins/emqx_auth_jwt.conf`:
-
-```bash
-# etc/plugins/emqx_auth_jwt.conf
-
-## Secret Key
-##
-## The key to verify the JWT Token using HMAC algorithm
-auth.jwt.secret = emqxsecret
-
-## RSA or ECDSA public key file
-##
-## The public key file to verify the JWT Token using RSA or ECDSA algorithm
-#auth.jwt.pubkey = etc/certs/jwt_public_key.pem
-
-## JWKs server address
-##
-## EMQX will get the key list from JWKs server and use it to verify the Token
-##
-## About the JWKs, see: http://self-issued.info/docs/draft-ietf-jose-json-web-key.html
-#auth.jwt.jwks = https://127.0.0.1:8080/jwks
-
-## JWKs refresh interval
-##
-#auth.jwt.jwks.refresh_interval = 5m
-
-## The way the client carries the token
-## Value: username | password
-auth.jwt.from = password
-
-## Enable to verify claims fields
-##
-## Value: on | off
-auth.jwt.verify_claims = off
-
-## The checklist of claims to validate
-##
-## Configuration format: auth.jwt.verify_claims.$name = $expected
-##   - $name: the name of the field in the JWT payload to be verified
-##   - $expected: the expected value
-##
-## The available placeholders for $expected:
-##   - %u: username
-##   - %c: clientid
-##
-## For example, to verify that the username in the JWT payload is the same
-## as the client (MQTT protocol) username
-#auth.jwt.verify_claims.username = %u
-```
-### auth.jwt.from
-
-The field where the client carries the JWT Token, used to configure where the client carries the JWT string, optional fields are username and password.
-
-### auth.jwt.verify_claims
-
-If you enable the `auth.jwt.verify_claims` option, EMQXwill verify the validity of the data in the Payload after verifying the validity of the JWT.
-
-suppose your Payload is:
-
+The decoded header is:
 ```json
 {
-  "username": "emqx_client_username"
+  "alg": "HS256",
+  "typ": "JWT"
 }
 ```
 
-You can use the following configuration to verify that client `username` is **equal to** `emqx_client_username` when the client carries this Token.
-
-```properties
-## Variables:
-## - %u: username
-## - %c: clientid
-auth.jwt.verify_claims.username = %u
+Decoded payload:
+```
+{
+  "exp": 1654254601,
+  "username": "myuser"
+}
 ```
 
-Support for verification using fixed values or current client information:
-- %u: current client username
-- %c: current client client id
-
-## Key and Algorithm support
-
-JWT authentication supports three ways to configure keys, which correspond to three types of algorithm support.
-
-- `auth.jwt.secret`: a symmetric encryption method that validates the JWT Token field. It supports the following algorithms:
-    - HS256 - HMAC, using the SHA-256 hash algorithm.
-    - HS384 - HMAC, using the SHA-384 hash algorithm.
-    - HS512 - HMAC, using the SHA-512 hash algorithm.
-
-- `auth.jwt.pubkey`: authenticates the JWT Token field using asymmetric encryption. It supports the following algorithms.
-    - RS256 - RSA, using the SHA-256 hash algorithm.
-    - RS384 - RSA, using the SHA-384 hash algorithm.
-    - RS512 - RSA, using the SHA-512 hash algorithm.
-    - ES256 - ECDSA, using the P-256 curve.
-    - ES384 - ECDSA, using the P-384 curve.
-    - ES512 - ECDSA, using the P-512 curve.
-
-- `auth.jwt.jwks`: configured as [JWKs](http://self-issued.info/docs/draft-ietf-jose-json-web-key.html) server address to get the list of available keys from the JWKs server.
-
-
-The three types of keys are allowed to be configured simultaneously. EMQX checks the Token in the order of `auth.jwt.secret`, `auth.jwt.pubkey`, `auth.jwt.jwks`.
-
+The corresponding JWT authenticator settings:
+```hocon
+{
+  mechanism = jwt,
+  use_jwks = false
+  algorithm = "hmac-based"
+  secret = "abcdef"
+  verify_claims {
+    "username" = "${username}"
+  }
+}
+```
 
 ::: danger
-JWT contains authentication information by itself. Once leaked, anyone can get all the permissions of the token. It is recommended to enable TLS encrypted transmission when using JWT.
-
-During the use of JWT, a token cannot be invalidated before it expires. Please properly set the validity time and keep the encryption information well.
+An individual token cannot be invalidated before it expires. Please properly set the validity time (`exp` claim).
 :::
+
+
+## JWT Authorization
+
+JWT Authenticator can extract ACL rules from the token and keep them associated with the connection.
+If provided, the rules will be used for authorizing further operations.
+
+The format for ACL rules is:
+```json
+{
+  "exp": 1654254601,
+  "username": "myuser",
+  "acl": {
+    "pub": [
+      "eq testpub1/${username}",
+      "testpub2/${clientid}",
+      "testpub3/#"
+    ],
+    "sub": [
+      "eq testsub1/${username}",
+      "testsub2/${clientid}",
+      "testsub3/#"
+    ],
+    "all": [
+      "eq testall1/${username}",
+      "testall2/${clientid}",
+      "testall3/#"
+    ]
+  }
+}
+```
+`pub`, `sub`, and `all` lists serve as topic whitelists for the corresponding operation types. Topic entries
+allow wildcards and placeholders (`${clientid}` and `${username}`). To suppress placeholder interpolation, one may use the
+demonstrated `eq` syntax: `"eq topic/without/interpolation/${clientid}"`.
+
+## Configuration
+
+PostgreSQL authentication is identified with `mechanism = jwt`.
+
+JWT authenticator supports three modes:
+* `hmac-based` — use a fixed symmetric secret to verify JWT signatures (`algorithm = "hmac-based"` and `use_jwks = false`)
+  {
+    mechanism = jwt
+    algorithm = "hmac-based"
+    use_jwks = false
+    secret = "abcdef"
+    verify_claims {
+      "username" = "${username}"
+    }
+  }
+* `public-key` — use a fixed public key to verify JWT signatures (`algorithm = "public-key"` and `use_jwks = false`)
+  {
+    mechanism = jwt
+    algorithm = "public-key"
+    use_jwks = false
+    public_key = "path/to/public_key.pem"
+    verify_claims {
+      "username" = "${username}"
+    }
+  }
+* `jwks` — use public keys that are regularly fetched from a key server (`algorithm = "public-key"` and `use_jwks = true`)
+  ```
+  {
+    mechanism = jwt
+    algorithm = "public-key"
+    use_jwks = true
+    ssl {
+      enable = true
+      verify = verify_peer
+      server_name_indication = "jwks-server.alguna-empresa.com"
+      keyfile = "data/certs/client.key"
+      certfile = "data/certs/client.crt"
+      cacertfile = "data/certs/ca.crt"
+    }
+    verify_claims {
+      "username" = "${username}"
+    }
+    endpoint = "https://10.212.43.12:8080/jwks.json"
+    refresh_interval = 1000
+  }
+
+### Common Options
+
+#### `algorithm`
+Required field, one of `hmac-based` or `public-key`.
+
+#### `use_jwks`
+
+Required boolean field. For `hmac-based` must be `false`. For the `public-key` algorithm
+identifies whether to use a predefined public key or to fetch keys from a JWKS server.
+
+### `hmac-based` Options
+
+#### `secret`
+
+Required string field with a symmetric secret used to verify JWT signatures.
+
+#### `secret_base64_encoded`
+
+Optional boolean field. A true value indicates that provided `secret` is Base64 encoded.
+The default value is `false`.
+
+### `public-key` Options (no JWKS server)
+
+#### `public_key`
+
+Required string field with a path to a pem-encoded public key for JWT verification.
+
+### `public-key` Options (with JWKS server)
+
+#### `endpoint`
+
+Required string field with JWKS server URL.
+
+#### `refresh_interval`
+
+Optional field with a positive integer value. Specifies the frequency (in seconds) of key updates from the JWKS server.
+
+#### `pool_size`
+
+Optional field with a positive integer value. Specifies the number of concurrent connections to the JWKS server.
+The default value is `8`.
+
+#### `ssl`
+
+Map with SSL options for connecting to the endpoint. Optional, the default is `{enable = false}`.
+
+For `http://` endpoints should be disabled, for `https://` endpoints should be enabled and specify correct SSL options.
+Possible options are:
+* `enable` — boolean, specifies whether to use SSL. Default is `false`.
+* `verify` — `verify_none` or `verify_peer`. Specifies whether to verify endpoint server name.
+* `server_name_indication` — optional string with an explicit [SNI](https://wikipedia.org/wiki/Server_Name_Indication) value for the endpoint.
+
+#### `cacertfile`, `certfile`, and `keyfile`
+String fields with filenames of the corresponding pem-encrypted keys/certificates for endpoint connection.
+

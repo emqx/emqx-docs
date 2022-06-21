@@ -1,95 +1,163 @@
 # Redis
 
-Redis authentication uses an external Redis database as the authentication data source, which can store a large amount of data and facilitate integration with external device management systems.
+This authenticator implements the password verification algorithm and uses Redis database as credential storage.
 
-Plugin:
+## Storage schema
 
-```bash
-emqx_auth_redis
+Redis authentication works with credentials stored as Redis [hashes](https://redis.io/docs/manual/data-types/#hashes)
+with predefined field names: `password_hash`, `salt`, `is_superuser`. `password_hash` field is required, other fields
+are optional. The absence of `salt` field is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
+interpreted as its false value.
+
+Example of adding a user with username `user123`, password `secret`, prefixed salt `salt` and is_superuser `true`:
+```
+>redis-cli
+127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash ac63a624e7074776d677dd61a003b8c803eb11db004d0ec6ae032a5d7c9c5caf
+(integer) 3
 ```
 
-::: tip 
-The emqx_auth_redis lso includes ACL feature, which can be disabled via comments
-:::
+The corresponding config params are:
+```hocon
+password_hash_algorithm {
+    name = sha256
+    salt_position = prefix
+}
 
-
-
-
-To enable Redis authentication, you need to configure the following in `etc/plugins/emqx_auth_redis.conf` ：
-
-## Redis connection information
-
-For Redis basic connection information, it needs to ensure that all nodes in the cluster can access.
-
-```bash
-# etc/plugins/emqx_auth_redis.conf
-
-## Server address
-auth.redis.server = 127.0.0.1:6379
-
-## Connection pool size
-auth.redis.pool = 8
-
-auth.redis.database = 0
-
-auth.redis.password = 
+cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
-## Default table structure
+## Configuration
 
-A hash table is used to store authentication data by default for Redis authentication, and `mqtt_user:` is used as the Redis key prefix. The data structure is as follows:
+Redis authentication is identified with `mechanism = password_based` and `backend = redis`.
 
-```bash
-redis> hgetall mqtt_user:emqx
-  password public
-  salt wivwiv
-```
+EMQX supports working with three kinds of Redis installation.
 
-The sample data in the default configuration is as follows:
+* Standalone Redis.
+  ```hocon
+  {
+    mechanism = password_based
+    backend = redis
+    enable = true
 
-```bash
-HMSET mqtt_user:emqx password public salt wivwiv
-```
+    redis_type = single
+    server = "127.0.0.1:6379"
 
-After Redis  authentication is enabled, you can connect with username: emqx, password: public.
+    password_hash_algorithm {
+        name = sha256
+        salt_position = suffix
+    }
 
-::: tip 
-This is the data structure used by default configuration. After being familiar with the use of the plugin, you can use any data structure that meets the conditions for authentication
-:::
+    cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+    database = 1
+    password = "public"
+    auto_reconnect = true
+  }
+  ```
+* [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
+  ```hocon
+  {
+    mechanism = password_based
+    backend = redis
+    enable = true
 
+    redis_type = sentinel
+    servers = "10.123.13.11:6379,10.123.13.12:6379"
+    sentinel = "mymaster"
 
-## Salting rules and hash methods
+    password_hash_algorithm {
+        name = sha256
+        salt_position = suffix
+    }
 
-Redis authentication supports the configuration of [salting rules and hash methods](./authn.md#password-salting-rules-and-hash-methods), and plaintext passwords are stored without processing by default:
+    cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+    database = 1
+    password = "public"
+    auto_reconnect = true
+  }
+  ```
+* [Redis Cluster](https://redis.io/docs/manual/scaling/).
+  ```hocon
+  {
+    mechanism = password_based
+    backend = redis
+    enable = true
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+    redis_type = cluster
+    servers = "10.123.13.11:6379,10.123.13.12:6379"
 
-auth.redis.password_hash = plain
-```
+    password_hash_algorithm {
+        name = sha256
+        salt_position = suffix
+    }
 
+    cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+    database = 1
+    password = "public"
+    auto_reconnect = true
+  }
+  ```
 
-## auth query cmd
+### Common configuration parameters
 
-During authentication, EMQX Broker will use the current client information to populate and execute the user-configured authentication query command to query the client's authentication data in the Redis.
+#### `redis_type`
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+One of `single`, `cluster`, or `sentinel`, required. Defines Redis installation type:
+standalone Redis, [Redis Cluster](https://redis.io/docs/manual/scaling/), or
+[Redis Sentinel](https://redis.io/docs/manual/sentinel/) respectively.
 
-auth.redis.auth_cmd = HMGET mqtt_user:%u password
-```
+#### `password_hash_algorithm`
 
-You can use the following placeholders in the command, and EMQX Broker will be automatically populated with client information when executed:
+Standard [password hashing options](./authn.md#password-hashing).
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+#### `cmd`
 
-You can adjust the authentication query command according to your business needs and use any  [Redis supported command](http://redisdoc.com/index.html). However, in any case, the authentication query command must meet the following conditions:
+Required string value with the command used for fetching credentials. Supported command formats are:
+* `HMGET KEY_TEMPLATE ...Fields...` where possible fields are `password_hash`, `salt`, `is_superuser`. `password_hash` is
+required to be present;
+* `HGET KEY_TEMPLATE password_hash`.
 
-1. The first data in the query result must be password. EMQX Broker will use this field to compare with the client password.
-2. If the salting configuration is enabled, the second data in the query result must be the salt field. EMQX Broker will use this field as the salt value.
+`KEY_TEMPLATE` supports [placeholders](./authn.md#authentication-placeholders).
 
+#### `database`
 
+Redis database index to use, required.
 
+#### `password`
+
+Password used for Redis [authentication](https://redis.io/docs/manual/security/#authentication), optional.
+
+#### `auto_reconnect`
+
+Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
+Redis on client failure.
+
+#### `pool_size`
+
+Optional integer value defining the number of concurrent connections from an EMQX node to Redis.
+The default value is 8.
+
+#### `ssl`
+
+Standard [SSL options](../ssl.md) for [secure connecting to Redis](https://redis.io/docs/manual/security/encryption/).
+
+### Standalone Redis options (`redis_type = single`).
+
+#### `server`
+
+Required `host:port` string value, the address of the Redis server.
+
+### Redis Cluster options (`redis_type = cluster`).
+
+#### `servers`
+
+Required string value with comma-separated list of Redis Cluster endpoints: `host1:port1,host2:port2,...`.
+
+### Redis Sentinel options (`redis_type = sentinel`).
+
+#### `servers`
+
+Required string value with comma-separated list of Redis Sentinel endpoints: `host1:port1,host2:port2,...`.
+
+#### `sentinel`
+
+Required string value with [master name](https://redis.io/docs/manual/sentinel/#configuring-sentinel) to use from Sentinel configuration.
