@@ -22,7 +22,7 @@ After clicking add, the module is added
 
 ## topic rewriting rules
 
-The rewrite rules are divided into Pub rules and Sub rules. Pub rules match the topics carried in PUSHLISH packets, and Sub rules match the topics carried in SUBSCRIBE and UNSUBSCRIBE packets.
+The rewrite rules are divided into Pub rules and Sub rules. Pub rules match the topics carried in PUBLISH packets, and Sub rules match the topics carried in SUBSCRIBE and UNSUBSCRIBE packets.
 
 Each rewrite rule consists of three parts: subject filter, regular expression, and target expression. Under the premise that the subject rewriting function is enabled, when EMQX receives a subject-based MQTT message such as a PUBLISH message, it will use the subject of the message to sequentially match the subject filter part of the rule in the configuration file. If the match is successful, the regular expression is used to extract the information in the subject, and then replaced with the target expression to form a new subject.
 

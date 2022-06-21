@@ -1,6 +1,6 @@
 # Save data to MySQL
 
-Setup a MySQL database, and changes the username/password to root/public, taking Mac OSX for instance:
+Setup a MySQL database, and changes the username/password to root/public, taking MacOS X for instance:
 
 ```bash
 $ brew install mysql

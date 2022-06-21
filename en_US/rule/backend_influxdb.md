@@ -1,6 +1,6 @@
 # Save data to InfluxDB
 
-Setup a InfluxDB database, taking Mac OSX for instance:
+Setup a InfluxDB database, taking MacOS X for instance:
 
 ```bash
 $ docker pull influxdb

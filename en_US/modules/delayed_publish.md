@@ -12,7 +12,7 @@ Select delayed publish module, no need to configure parameters, directly open
 ![image-20200927213049265](./assets/delay_publish.png)
 
 ## Introduction to delayed publish
-The delayed publication function of EMQX can realize the function of delaying the publication of PUBLISH packets according to the time interval configured by the user. When the client uses the special subject prefix `$delayed/{DelayInteval}` to publish messages to EMQX, the delayed publishing function will be triggered.
+The delayed publication function of EMQX can realize the function of delaying the publication of PUBLISH packets according to the time interval configured by the user. When the client uses the special subject prefix `$delayed/{DelayInterval}` to publish messages to EMQX, the delayed publishing function will be triggered.
 
 The specific format of the delayed publish topic is as follows:
 

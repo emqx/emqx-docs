@@ -24,7 +24,7 @@ You can view or modify the configuration of EMQX Dashboard in  `etc/plugins/emqx
 
 EMQX Dashboard configuration items can be divided into two parts of default user and listener:
 
-**Default User** 
+**Default User**
 
 EMQX Dashboard can configure multiple users, but only the default user can be configured in the configuration file.
 
@@ -106,8 +106,8 @@ Connection
 | Maximum Inflight Window Size        | Maximum size of inflight window  |
 | Message Queue Size                 | Current message queue size, please refer to [InFlight Window and Message Queue](../advanced/inflight-window-and-message-queue.md#) |
 | Maximum Message Queue Size         | Maximum size of message queue |
-| Uncomfirmed PUBREC Packets         | Number of unconfirmed PUBREC messages |
-| Maximum Uncomfirmed PUBREC Packets | Maximum number of unconfirmed PUBREC messages allowed |
+| Unconfirmed PUBREC Packets         | Number of unconfirmed PUBREC messages |
+| Maximum Unconfirmed PUBREC Packets | Maximum number of unconfirmed PUBREC messages allowed |
 
 Metric
 
@@ -142,7 +142,7 @@ Due to the complexity of the related concepts of the rule engine, the operations
 
 ### MANAGEMENT
 
-Currently, the EMQX Dashboard's `MANAGEMENT` navigation item mainly includes an monitoring management page for extension plug-in  and management page of AppID and AppSerect for HTTP API authentication.
+Currently, the EMQX Dashboard's `MANAGEMENT` navigation item mainly includes an monitoring management page for extension plug-in  and management page of AppID and AppSecret for HTTP API authentication.
 
 #### Plugins
 
@@ -178,9 +178,9 @@ You can click the `New App` button in the upper right corner of the `Application
 
 Currently, the `TOOLS`  navigation item of EMQX Dashboard mainly includes WebSocket client tool page and HTTP API quick check page.
 
-#### Websocket
+#### WebSocket
 
-The `Websocket` page provides you with a simple but effective WebSocket client tool, which includes connection, subscription and publishing functions. At the same time, you can view the message data you send and receive, we hope it can help you quickly complete test verification of certain scenarios or functions:
+The `WebSocket` page provides you with a simple but effective WebSocket client tool, which includes connection, subscription and publishing functions. At the same time, you can view the message data you send and receive, we hope it can help you quickly complete test verification of certain scenarios or functions:
 
 <!-- TODO: Take new screenshot -->
 

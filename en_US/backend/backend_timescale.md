@@ -85,7 +85,7 @@ templates for the same topic, likes:
 ```json
 {
     <Topic 1>: <Template 1>,
-    <Topic 2>: <Template 2> 
+    <Topic 2>: <Template 2>
 }
 ```
 
@@ -127,7 +127,7 @@ follows:
 | $qos        | QoS of MQTT Message                                                                 |
 | $topic      | Topic of MQTT Message                                                               |
 | $payload    | Payload of MQTT Message, must be valid Json data                                    |
-| $<Number\> | It must be used with $paylaod to retrieve data from Json Array                      |
+| $<Number\> | It must be used with $payload to retrieve data from Json Array                      |
 | $timestamp  | The timestamp EMQX sets when preparing to forward messages, precision: Nanoseconds |
 
 **$payload and $<Number\>:**

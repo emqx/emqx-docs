@@ -210,6 +210,6 @@ System Topic Prefix: `$SYS/brokers/${node}/sysmon/`
 | -------------- | ----------------------------------- |
 | long_gc        | GC Overtime alarm                   |
 | long_schedule  | Alarm for Excessive Scheduling Time |
-| large_heap     | ALarm for Heap Memory Occupancy     |
+| large_heap     | Alarm for Heap Memory Occupancy     |
 | busy_port      | Alarm for Port busy                 |
 | busy_dist_port | Alarm for Dist Port busy            |

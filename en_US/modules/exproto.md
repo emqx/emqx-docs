@@ -112,7 +112,7 @@ The gRPC framework of each language can be referred to: [grpc-ecosystem/awesome-
 
 After successfully deploying the gRPC service, you can open the multi-language extension protocol access module through the dashboard page, and configure the following three parts to use it successfully:
 
-1. The listening address of ExProto's `ConnectionApdapter` service. Used to receive gRPC requests.
+1. The listening address of ExProto `ConnectionAdapter` service. Used to receive gRPC requests.
 2. Configure **Listener (Listener)** to provide TCP/UDP/SSL/DTLS address monitoring. Used to monitor and receive device connections.
 3. Specify a service address of `ConnectionHandler` for each listener. A service used to send various event callbacks to users.
 

@@ -25,7 +25,7 @@ Install using CDN (browser):
 </script>
 ```
 
-In the environment where Node.js is installed, you can use MQTT.js global ly in the form of a command line of `npm i mqtt -g` command.
+In the environment where Node.js is installed, you can use MQTT.js globally in the form of a command line of `npm i mqtt -g` command.
 
 ```bash
 npm i mqtt -g
@@ -44,7 +44,7 @@ mqtt help
 
 ## MQTT.js usage example
 
-This example contains the complete code of MQTT.js in JavaScrip language connecting EMQX Broker, sending and receiving messages:
+This example contains the complete code of MQTT.js in JavaScript language connecting EMQX Broker, sending and receiving messages:
 
 ```javascript
 // const mqtt = require('mqtt')

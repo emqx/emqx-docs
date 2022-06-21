@@ -42,7 +42,7 @@ The first two args are mandatory:
 
 - SQL: SELECT \* FROM "message.publish" WHERE topic = 't/a'
 - Action List: \[{"name":"inspect", "params": {"a": 1}}\]. Action List
-  is of tye JSON Array. "name" is the name of the action, "params" is
+  is of type JSON Array. "name" is the name of the action, "params" is
   the parameters of the action. Note that the action `inspect` does
   not need a resource.
 
@@ -79,7 +79,7 @@ Action Init Params: #{<<"a">> => 1}
 
 - `Selected Data` listed the fields that selected by the SQL.All
   available fields will be listed here, as we used `select *`.
-- `Envs` is the environment varibles that can be used internally in
+- `Envs` is the environment variables that can be used internally in
   the action.
 - `Action Init Params` is the params we passed to the action.
 
@@ -88,7 +88,7 @@ Action Init Params: #{<<"a">> => 1}
 
 ## Send data to WebHook
 
-Setup a Web Service, here we setup a simple web service using the linux tool `nc`:
+Setup a Web Service, here we setup a simple web service using the Linux tool `nc`:
 ```bash
 $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9901; done;
 ```

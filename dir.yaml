@@ -107,7 +107,7 @@
     - rule/rule-engine
     - rule/rule-engine_grammar_and_examples
     - rule/rule-engine_field
-    - rule/rule-engine_buildin_function
+    - rule/rule-engine_builtin_function
     - rule/rule-create
     - rule/how_to_update_resources
     - rule/rule-example

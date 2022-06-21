@@ -226,7 +226,7 @@ EMQX bridges and forwards MQTT messages to Kafka cluster:
 ![image](./assets/bridges_1.png)
 
 Config file for Kafka bridge plugin:
-etc/plugins/emqx\_bridge\_kafka.conf
+`etc/plugins/emqx_bridge_kafka.conf`
 
 ### Configure Kafka Cluster
 

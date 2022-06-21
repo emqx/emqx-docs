@@ -14,15 +14,15 @@ Input your new params and click `Confirm` button
 
 ![image-20210301140356148](./assets/rule-engine/update_resource_3.png)
 
-At this time, you will be prompted whether to confirm the modification, just click the `Confirm` button. The following figure shows the modified effect: 
+At this time, you will be prompted whether to confirm the modification, just click the `Confirm` button. The following figure shows the modified effect:
 ![image-20210301140450539](./assets/rule-engine/update_resource_4.png)
 
 At this time the "description" information has been updated.
 
 
-## By cli
+## By CLI
 
-To update through the command line, you need to know the ID of the resource in advance: 
+To update through the command line, you need to know the ID of the resource in advance:
 
 ![image-20210301140900098](./assets/rule-engine/update_resource_5.png)
 

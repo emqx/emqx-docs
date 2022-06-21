@@ -1,6 +1,6 @@
 # Save data to PostgreSQL
 
-Setup a PostgreSQL database, taking Mac OSX for instance:
+Setup a PostgreSQL database, taking MacOS X for instance:
 
 ```bash
 $ brew install postgresql

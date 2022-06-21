@@ -48,7 +48,7 @@ from Redis or Databases.
 
 ### List of Persistence Plugins
 
-EMQX allowes storing messages in Redis, MySQL, PostgreSQL, MongoDB,
+EMQX allows storing messages in Redis, MySQL, PostgreSQL, MongoDB,
 Cassandra, DynamoDB, InfluxDB, OpenTSDB and
 Timescale:
 

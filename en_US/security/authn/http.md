@@ -7,7 +7,7 @@ HTTP authenticator delegates authentication to a custom HTTP API.
 * In authenticator settings, an HTTP request pattern is specified.
 * When an MQTT client connects to the broker, the configured request template is rendered and the resulting request is emitted.
 * Receiving a 200 or 204 HTTP status is interpreted as authentication success. Other statuses indicate authentication failure.
-A successful HTTP response can also contain a JSON or www-form-urlencoded map with `is_superuser` boolean field
+A successful HTTP response can also contain a JSON or `www-form-urlencoded` map with `is_superuser` boolean field
 that indicates superuser privileges for the client.
 
 ::: danger
@@ -69,7 +69,7 @@ Required field with possible values `get` or `post`. Denoting the corresponding 
 
 ### `url`
 
-HTTP url for external authentication requests, required. It may cantain [placeholders](./authn.md#authentication-placeholders).
+HTTP url for external authentication requests, required. It may contain [placeholders](./authn.md#authentication-placeholders).
 
 For `https://` urls `ssl` configuration must be enabled:
 
@@ -208,4 +208,3 @@ The default value is 8.
 ### `ssl`
 
 Standard [SSL options](../ssl.md) for connecting to the external API.
-

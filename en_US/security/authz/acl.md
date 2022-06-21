@@ -220,7 +220,7 @@ acl_cache_ttl = 1m
 
 After updating the ACL rule, some clients cannot take effect immediately because the cache already exists. You need to manually clear all ACL caches to make them taking effect immediately :
 
-Refer to [HTTP API - CLear ACL cache](http.md#endpoint-get-acl-cache)
+Refer to [HTTP API - Clear ACL cache](http.md#endpoint-get-acl-cache)
 
 
 ## ACL Authentication Chain
@@ -242,5 +242,3 @@ When multiple ACL plugins are enabled at the same time, EMQX will perform chain 
 Enabling only one ACL plugin at the time can improve client ACL checking performance.
 
 :::
-
-

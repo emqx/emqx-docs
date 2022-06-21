@@ -1,6 +1,6 @@
 # Save data to DynamoDB
 
-Setup a DynamoDB database, taking Mac OSX for instance:
+Setup a DynamoDB database, taking MacOS X for instance:
 
 ```bash
 $ brew install dynamodb-local
@@ -68,7 +68,7 @@ Four parameters is required by action "Data to DynamoDB":
 2). Hash Key. Here set it to "msgid".
 
 3). DynamoDB Range Key. Leave it empty as we didn't define a range key
-in the dynamodb definition file.
+in the DynamoDB definition file.
 
 ![image](./assets/rule-engine/dynamo_action_1.png)
 

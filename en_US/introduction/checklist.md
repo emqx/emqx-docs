@@ -53,7 +53,7 @@ The following are the unique features of EMQX Enterprise
   - Cassandra  stores subscription relationships, device online status, MQTT messages and retained messages
   - DynamoDB  stores subscription relationships, device online status, MQTT messages and retained messages
   - InfluxDB stores MQTT timing messages
-  - OpenTDSB stores MQTT timing messages
+  - OpenTSDB stores MQTT timing messages
   - TimescaleDB stores MQTT timing messages
 - Message bridge
   - Kafka bridge: EMQX built-in Bridge directly forwards MQTT messages and device online and offline events to Kafka
@@ -113,7 +113,7 @@ Thank you for your support of EMQX Broker. If you need business services, please
 
 ### Message data storage
 
-EMQX Enterprise Version supports storing subscription relationships, MQTT messages, device status to Redis, MySQL, PostgreSQL, MongoDB, Cassandra, TimescaleDB, InfluxDB, DynamoDB, OpenTDSB databases:
+EMQX Enterprise Version supports storing subscription relationships, MQTT messages, device status to Redis, MySQL, PostgreSQL, MongoDB, Cassandra, TimescaleDB, InfluxDB, DynamoDB, OpenTSDB databases:
 
 ![image](./assets/overview_4.png)
 
@@ -129,7 +129,7 @@ EMQX Enterprise version supports directly forwarding MQTT messages to RabbitMQ, 
 
 EMQX rules engine can flexibly process messages and events.
 
-EMQX Enterprise version rules engine supports message re-publishing, bridging data to Kafka, Pulsar, RocketMQ, RabbitMQ, MQTT Broker, saving data to MySQL, PostgreSQL, Redis, MongoDB, DynamoDB, Cassandra, InfluxDB, OpenTSDB, TimescaleDB, and sending data to WebServer :
+EMQX Enterprise version rules engine supports message re-publishing, bridging data to Kafka, Pulsar, RocketMQ, RabbitMQ, MQTT Broker, saving data to MySQL, PostgreSQL, Redis, MongoDB, DynamoDB, Cassandra, InfluxDB, OpenTSDB, TimescaleDB, and sending data to web server:
 
 ![image](./assets/overview_6.png)
 

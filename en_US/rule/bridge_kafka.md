@@ -1,6 +1,6 @@
 # Bridge data to Kafka
 
-Setup a Kafka, taking Mac OSX for instance:
+Setup a Kafka, taking MacOS X for instance:
 
 ```bash
 wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz

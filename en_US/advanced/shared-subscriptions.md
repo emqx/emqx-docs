@@ -56,15 +56,15 @@ Shared subscriptions prefixed with `$queue/` are shared subscriptions without gr
                                        [s3] got msg3
 ```
 
-### Balancing strategy and distribution of Ack configuration
+### Balancing strategy and distribution of ACK configuration
 
-EMQX Broker's shared subscription supports balancing strategy and distribution of Ack configuration:
+EMQX Broker's shared subscription supports balancing strategy and distribution of ACK configuration:
 
 ```
 broker {
   # balancing strategy
   shared_subscription_strategy: random
-  
+
   # Applicable to QoS1 QoS2 messages, when enabled,
   # message will be distributed to another subscriber when selected subscriber is offline
   shared_dispatch_ack_enabled = false

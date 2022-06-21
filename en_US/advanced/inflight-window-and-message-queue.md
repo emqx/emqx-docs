@@ -1,8 +1,8 @@
-# Inflight and Queue
+# In-flight and Queue
 
 ## Introduction
 
-To improve message throughput efficiency and reduce the impact of network fluctuations, EMQX Broker allows multiple unacknowledged QoS 1 and QoS 2 packets to exist on the network link at the same time. These sent but unconfirmed packets will be stored in the Inflight Window until acknowledgment is complete.
+To improve message throughput and reduce the impact of network fluctuations, EMQX Broker allows multiple unacknowledged QoS 1 and QoS 2 packets to exist on the network link at the same time. These sent but unconfirmed packets will be stored in the Inflight Window until acknowledgment is complete.
 
 When the number of concurrently existing packets in the network exceeds the limit, that is, the length limit of Inflight Window is reached(see `max_inflight`), EMQX Broker will no longer send subsequent messages, but will store these packets in the Message Queue. Once a message is acknowledged in the Inflight Window, the message in the Message Queue will be sent in first-in, first-out order and stored in the Inflight Window.
 
@@ -27,10 +27,3 @@ It is not difficult to see that `Receive Maximum` is actually the same as the In
 | max_inflight        | integer | >= 0            | 32 *(external)*,<br /> 128 *(internal)*    | Inflight Window length limit, 0 means no limit               |
 | max_mqueue_len      | integer | >= 0            | 1000 *(external)*,<br />10000 *(internal)* | Message Queue length limit, 0 means no limit                 |
 | mqueue_store_qos0   | enum    | `true`, `false` | true                                       | Whether the EMQX Broker store QoS 0 messages to the Message Queue when the client is offline |
-
-
-
-
-
-
-

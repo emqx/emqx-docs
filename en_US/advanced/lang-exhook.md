@@ -1,6 +1,6 @@
 # gRPC Hook Extension
 
-The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX's [Hooks](hooks.md) using other programming languages.
+The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX [Hooks](hooks.md) using other programming languages.
 
 In this way, other programming languages can handle emqx events for the purpose of customizing and extending emqx. For example, users can use other programming languages to implement:
 
@@ -29,9 +29,9 @@ The architecture is as illustrated below:
 
 It indicates that EMQX acts as a gRPC client, sending hook events from EMQX to the user's gRPC server.
 
-Consistent with EMQX's native hooks, it also supports a chained approach to calculating and returning.
+Consistent with EMQX native hooks, it also supports a chained approach to calculating and returning.
 
-![chain_of_responsiblity](./assets/chain_of_responsiblity.png)
+![chain_of_responsibility](./assets/chain_of_responsiblity.png)
 
 
 ## APIs
@@ -94,7 +94,7 @@ service HookProvider {
 The HookProvider part:
 
 - `OnProviderLoaded`: Defines how the HookProvider will be loaded. This method returns the list of hooks that need to be mounted. Only the hooks in this list will be called back to the user's HookProvider service.
-- `OnProviderUnloaded`: Notify the user that the HookProvier has been uninstalled from emqx
+- `OnProviderUnloaded`: Notify the user that the HookProvider has been uninstalled from emqx
 
 The hook events part:
 

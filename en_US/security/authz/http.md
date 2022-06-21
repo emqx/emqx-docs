@@ -8,7 +8,7 @@ Plugin:
 emqx_auth_http
 ```
 
-::: tip 
+::: tip
 The emqx_auth_http plugin also includes authentication function, which can be disabled via comments.
 :::
 
@@ -16,7 +16,7 @@ To enable HTTP ACL, the following needs to be configured in `etc/plugins/emqx_au
 
 ## ACL Authentication principle
 
-EMQX Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP statusCode .
+EMQX Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP status code .
 
  - Authorization denied: The API returns status codes other than 200
  - Authorization succeeded: API returns 200 status code
@@ -87,7 +87,7 @@ auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,
 
 ## Request description
 
-When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; POST and PUT requests will submit the request parameters in the form of a common form (content-type is x-www-form-urlencoded).
+When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; POST and PUT requests will submit the request parameters in the form of a common form (content-type is `x-www-form-urlencoded`).
 
 You can use the following placeholders in the authentication request, and EMQX Broker will be automatically populated with client information when requested:
 
@@ -100,7 +100,7 @@ You can use the following placeholders in the authentication request, and EMQX B
 - %C:TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
 - %d:TLS certificate subject, valid only for TLS connections
 
-::: warning 
+::: warning
 The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
 
 :::

@@ -1,6 +1,6 @@
 # Save data to Redis
 
-Setup a Redis database, taking Mac OSX for instance:
+Setup a Redis database, taking MacOS X for instance:
 
 ```bash
 $ wget http://download.redis.io/releases/redis-4.0.14.tar.gz

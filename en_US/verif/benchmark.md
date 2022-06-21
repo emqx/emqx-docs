@@ -50,7 +50,7 @@ When executing `./emqtt_bench pub --help`, you will get the available parameter 
 | --username        | -u           | -               | None; optional | Client username                                              |
 | --password        | -P           | -               | None; optional | Client password                                              |
 | --topic           | -t           | -               | None; required | Published topics; support placeholders:<br />`%c`： ClientId<br />`%u`： Username<br />`%i`：Client's sequence number |
-| --szie            | -s           | -               | 256            | Message Payload size; unit: bytes                            |
+| --size            | -s           | -               | 256            | Message Payload size; unit: bytes                            |
 | --qos             | -q           | -               | 0              | Qos level                                                    |
 | --retain          | -r           | true<br />false | false          | Whether the message sets the Retain flag                     |
 | --keepalive       | -k           | -               | 300            | Client keepalive time                                        |
@@ -58,7 +58,7 @@ When executing `./emqtt_bench pub --help`, you will get the available parameter 
 | --ssl             | -S           | true<br />false | false          | Whether to enable SSL                                        |
 | --certfile        | -            | -               | None           | Client SSL certificate                                       |
 | --keyfile         | -            | -               | None           | Client SSL key file                                          |
-| --ws              | -            | true<br />false | false          | Whether to establish a connection via Websocket              |
+| --ws              | -            | true<br />false | false          | Whether to establish a connection via WebSocket              |
 | --ifaddr          | -            | -               | None           | Specifies the local network card used by the client connection |
 
 
@@ -130,7 +130,7 @@ We verify the use of the tool in 2 most typical scenarios:
 
 A total of three 8C16G servers need to be prepared, one for EMQX Broker and two for client presses:
 
-- System: `CentOS Linux release 7.7.1908 (Core)` 
+- System: `CentOS Linux release 7.7.1908 (Core)`
 
 - **CPU:**  `Intel Xeon Processor (Skylake)` Main frequency: `2693.670 MHZ`
 
@@ -147,7 +147,7 @@ The topology structure is as follows:
 	+-----------------------+        \----->  |		    EMQX Broker			 |
 	+-----------------------+        /----->  |       192.168.0.99	  	 |
 	| bench2: 192.168.0.200 | -------					+--------------------------+
-	+-----------------------+ 
+	+-----------------------+
 ```
 
 
@@ -231,4 +231,3 @@ Then, go back to the subscribing client on `bench1`, you can see the current rat
 ```bash
 recv(28006): total=2102563, rate=99725(msg/sec)
 ```
-

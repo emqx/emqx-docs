@@ -1,6 +1,6 @@
 # Bridge data to Pulsar
 
-Setup a Pulsar, taking Mac OSX for instance:
+Setup a Pulsar, taking MacOS X for instance:
 
 ```bash
 $ wget https://archive.apache.org/dist/pulsar/pulsar-2.3.2/apache-pulsar-2.3.2-bin.tar.gz
@@ -98,4 +98,3 @@ And from the rule list, verify that the "Matched" column has increased
 to 1:
 
 ![image](./assets/rule-engine/pulsar_rule_overview_1.png)
-

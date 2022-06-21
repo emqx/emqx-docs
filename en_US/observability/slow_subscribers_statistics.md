@@ -63,11 +63,11 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
     2.  QoS1
 
-        When EMQX receives *puback* from the client
+        When EMQX receives *PUBACK* from the client
 
     3.  Qos2
 
-        When EMQX receives *pubcomp* from the client
+        When EMQX receives *PUBCOMP* from the client
 
 Note: The open source version is configured in emqx.conf
 

@@ -20,7 +20,7 @@ The following configurations are included in the resource:
 - InfluxDB organization name: the name of the organization filled in when creating the service;
 - InfluxDB Token: API Token corresponding to database permissions, which can be found in the InfluxDB console;
 - Timestamp accuracy: milliseconds by default;
-- Process pool size: The size of the connection process pool, which can be adjusted according to the amount of concurrency of the business (it is recommended to increase one process per 10,000 concurrencies when there is no bottleneck in the network speed);
+- Process pool size: The size of the connection process pool, which can be adjusted according to the amount of concurrency of the business (it is recommended to have one process per 10,000 concurrent clients when there is no bottleneck in the network speed);
 - Enable HTTPS: enable the certificate according to the installation and service configuration (For InfluxDB Cloud, please enable this option, but no additional certificate configuration is required);
 
 Example of obtaining organization name by InfluxDB Cloud (For local or docker deployment, you can enter the console by accessing port 8086 of the deployment address):
@@ -86,4 +86,3 @@ In the rule list, you can see that the number of matches of the rule just create
 Query the results in the InfluxDB console:
 
 ![image](./assets/rule-engine/influxdbv2_result.png)
-

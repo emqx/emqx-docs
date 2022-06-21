@@ -23,18 +23,18 @@ _Authentication source_ (or simply _authenticator_) is an EMQX module that imple
 Authenticators are identified by their _mechanism_ (i.e. algorithm of authentication) and _backend_ (data source
 for credentials).
 
-The following authenticators areavailable by default:
+The following authenticators are available by default:
 
 | mechanism        | backend            | description                                                                   |
 | ----             | ------------------ | ----------------------------------------------------------------------------- |
-| password_based   | built_in_database  | [Authenticaton with Mnesia database as credential storage](./mnesia.md)       |
-| password_based   | mysql              | [Authenticaton with MySQL database as credential storage](mysql.md)           |
-| password_based   | postgresql         | [Authenticaton with PostgreSQL database as credential storage](postgresql.md) |
-| password_based   | mongodb            | [Authenticaton with MongoDB database as credential storage](./mongodb.md)     |
-| password_based   | redis              | [Authenticaton with Redis database as credential storage](./redis.md)         |
-| password_based   | http               | [Authenticaton using external HTTP API for credential verification](./http.md)|
-| jwt              |                    | [Authenticaton using JWT](./jwt.md)                                           |
-| scram            | built_in_database  | [Authenticaton using SCRAM](./scram.md)                                       |
+| password_based   | built_in_database  | [Authentication with Mnesia database as credential storage](./mnesia.md)       |
+| password_based   | mysql              | [Authentication with MySQL database as credential storage](mysql.md)           |
+| password_based   | PostgreSQL         | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
+| password_based   | MongoDB            | [Authentication with MongoDB database as credential storage](./mongodb.md)     |
+| password_based   | redis              | [Authentication with Redis database as credential storage](./redis.md)         |
+| password_based   | http               | [Authentication using external HTTP API for credential verification](./http.md)|
+| jwt              |                    | [Authentication using JWT](./jwt.md)                                           |
+| scram            | built_in_database  | [Authentication using SCRAM](./scram.md)                                       |
 
 Each authenticator has its own configuration options.
 
@@ -220,7 +220,7 @@ password_hash_algorithm {
 ## Authentication placeholders
 
 Many authenticators allow using _placeholders_ in their configuration.
-Placeholders work as template varables that are filled with the corresponding
+Placeholders work as template variables that are filled with the corresponding
 client's information when performing authentication.
 
 The following placeholders are available:
@@ -248,7 +248,7 @@ When a client with clientid `id2718` tries to connect, a Redis query
 ```
 HMGET users:id2718 password_hash salt is_superuser
 ```
-is peformed to search credentials.
+is performed to search credentials.
 
 ## REST API
 
@@ -316,5 +316,3 @@ is `stomp:tcp:def`.
 ::: tip
 When used in URLs, listener ids should be URL-encoded: `quic%3Adefault`.
 :::
-
-

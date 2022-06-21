@@ -1,6 +1,6 @@
 # EMQX Prometheus Agent
 
-EMQX Prometheus Agent supports pushing data to Pushgateway, and then pulling it by Promethues Server for storage.
+EMQX Prometheus Agent supports pushing data to pushgateway, and then pulling it by Prometheus Server for storage.
 
 ## Create module
 
@@ -22,6 +22,6 @@ After clicking add, the module is added
 
 ### Grafana Data Template
 
-The ʻemqx_prometheus` plugin provides template files for Grafana's Dashboard. These templates contain the display of all EMQX monitoring data. Users can directly import it into Grafana to display the icon of EMQX monitoring status.
+The ʻemqx_prometheus` plugin provides template files for Grafana Dashboard. These templates contain the display of all EMQX monitoring data. Users can directly import it into Grafana to display the icon of EMQX monitoring status.
 
-The template file is located at: [emqx_prometheus/grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template).
+The template file is located at: [emqx_prometheus/Grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template).
