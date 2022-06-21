@@ -1,8 +1,8 @@
 # $SYS - System Topic
 
-The EMQX Broker periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
+EMQX periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
 
-The `$SYS` topic path begins with `$SYS/brokers/{node}/`. `{node}` is the name of the node where the event/message is generated, for example:
+The `$SYS` topic path begins with `$SYS/brokers/{node}/`, where `{node}` is the name of the node where the event/message is generated, for example:
 
 ```bash
 $SYS/brokers/emqx@127.0.0.1/version
@@ -22,7 +22,8 @@ broker {
 By default, only MQTT clients on localhost are allowed to subscribe to the $SYS topic. Please refer to [file ACL](../security/authz/file.md) to modify the ACL rules for publish and subscribe.
 
 <!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
-Most of the data of the $SYS topic in EMQX Broker can be obtained through other methods with lower Couplings. The device online and offline status can be obtained through [Webhook](./webhook.md)), and the node and cluster status can be obtained through HTTP API - Statistics Metrics.
+Most of the data of the $SYS topic in EMQX can be obtained through other methods with lower Couplings.
+The device online and offline status can be captured and processed in the Rule Engine.
 :::
 
 ## Cluster status information

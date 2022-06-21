@@ -134,7 +134,7 @@ After the installation, you can start EMQX through the command of systemctl or e
 For more startup methods and precautions, keep reading below.
 
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
-(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](../admin/dashboard.md)
+(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md)
 management console for device connection and related indicator monitoring and management.
 
 ### Start EMQX in the background
@@ -277,7 +277,7 @@ various SQL / NoSQL / time-series databases, and enterprise systems such as SAP.
 
 Manage clusters via Web and CLI, REST API.
 
-- [Dashboard](../admin/dashboard.md)：Dashboard User Manual.
+- [Dashboard](./dashboard.md)：Dashboard User Manual.
 - [CLI](../admin/cli.md)
 - [REST API](../admin/api.md): REST API documentation for the OpenAPI 3.0 specification.
 - [Configuration Files](../admin/cfg.md)

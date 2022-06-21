@@ -108,7 +108,7 @@ EMQX 可以直接部署在物理服务器或者虚拟机上。最小仅需 2 核
 
 安装成功后，可通过 `systemctl` 或 `emqx` 命令来启动 EMQX。
 
-EMQX 成功启动之后可以通过浏览器打开 [http://localhost:18083/](http://localhost:18083/)（将 localhost 替换为您实际 IP 地址）以访问 [EMQX Dashboard](../admin/dashboard.md) 管理控制台，进行设备连接与相关指标监控管理。
+EMQX 成功启动之后可以通过浏览器打开 [http://localhost:18083/](http://localhost:18083/)（将 localhost 替换为您实际 IP 地址）以访问 [EMQX Dashboard](./dashboard.md) 管理控制台，进行设备连接与相关指标监控管理。
 
 ### 后台启动 EMQX
 
@@ -228,7 +228,7 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 
 通过 Web 页面与 CLI, REST API 管理集群。
 
-- [Dashboard](../admin/dashboard.md)：Dashboard 使用手册。
+- [Dashboard](./dashboard.md)：Dashboard 使用手册。
 - [CLI](../admin/cli.md)：通过 CLI 管理集群。
 - [REST API](../admin/api.md)：符合 OpenAPI 3.0 规范的 REST API 文档。
 - [配置文件](../admin/cfg.md)：配置文件与配置项文档。

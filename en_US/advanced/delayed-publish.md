@@ -1,8 +1,12 @@
 # Delayed publish
 
-The delay-publish function of EMQX Broker can implement the function of delaying the PUBLISH packet publishing according to the time interval configured by the user. When a client publishes a message to EMQX Broker with the special topic prefix `$delayed/{DelayInteval}`, the delay-publish function is triggered.
+MQTT messages are usually sent to subscribers as soon as possible by the MQTT broker,
+however, in some cases, clients may wish for some delay, or even in a more organised way: to schedule publishes.
 
-The specific format of the delay-publish topic is as follows:
+The 'scehduling' is represented as the duration of delay from the PUBLISH packet is received by EMQX.
+When a client publishes a message to EMQX with the special topic prefix `$delayed/{DelayInteval}`, the delay-publish is triggered.
+
+The specific format of the delay-publish topic is as below:
 
 ```bash
 $delayed/{DelayInterval}/{TopicName}
@@ -17,5 +21,3 @@ E.g:
 - `$delayed/15/x/y`: Publish MQTT message to the topic `x/y` after 15 seconds
 - `$delayed/60/a/b`: Publish MQTT message to the topic `a/b` after 1 minute
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
-
-This feature is provided by the `emqx-delay-publish` plugin, which is disabled by default. You need to enable the plugin to use this feature. To learn how to enable the functionality please refer to [Plugins](./plugins.md). If you need to use this feature for a long time then it is recommended that you set the plugin to start by default, see [directory structure](../deploy/dirs.md) for more information.
