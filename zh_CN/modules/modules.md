@@ -91,5 +91,5 @@ EMQX 发行包中提供了丰富了功能模块，包括 认证鉴权、协议�
 
 **使用 Dashboard 启停模块**
 
-若开启了 Dashbord 的模块，可以直接通过访问 `http://localhost:18083/modules` 中的模块管理页面启停模块。
+若开启了 Dashboard 的模块，可以直接通过访问 `http://localhost:18083/modules` 中的模块管理页面启停模块。
 

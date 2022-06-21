@@ -114,7 +114,7 @@ Made release permanent: "4.2.1"
 
 ```
 
-## Downgrade to pervious versions
+## Downgrade to previous versions
 
 If you find a problem and want to roll back after the upgrade, you can execute the version downgrade command.
 For example, the following example will roll back emqx to version 4.2.0:

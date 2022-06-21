@@ -79,7 +79,7 @@ Action Init Params: #{<<"a">> => 1}
 
 - `Selected Data` listed the fields that selected by the SQL.All
   available fields will be listed here, as we used `select *`.
-- `Envs` is the environment varibles that can be used internally in
+- `Envs` is the environment variables that can be used internally in
   the action.
 - `Action Init Params` is the params we passed to the action.
 

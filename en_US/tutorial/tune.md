@@ -161,7 +161,7 @@ docker run -d --name emqx -p 18083:18083 -p 1883:1883 \
 ```
 
 ::: REMEMBER
-The best practice is NOT to run docker `--privileged` and NOT to mount system volumes to the container for kernel tunning.
+The best practice is NOT to run docker `--privileged` and NOT to mount system volumes to the container for kernel tuning.
 :::
 
 ## EMQX Broker Tuning

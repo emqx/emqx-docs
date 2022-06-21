@@ -149,7 +149,7 @@ log.chars_limit = 8192
 
 ## 日志级别和 log handlers
 
-EMQX 使用了分层的日志系统，在日志级别上，包括全局日志级别 (primary log level)、以及各 log hanlder 的日志级别。
+EMQX 使用了分层的日志系统，在日志级别上，包括全局日志级别 (primary log level)、以及各 log handler 的日志级别。
 
 ```bash
      [Primary Level]        -- global log level and filters

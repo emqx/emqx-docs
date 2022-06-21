@@ -265,7 +265,7 @@ legit clients are permitted to publish or subscribe to certain topics.
 ### Rule Engine
 
 The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between
-devices and data platofrms in real-time, and forward the data to Webhooks or other MQTT Brokers
+devices and data platforms in real-time, and forward the data to Webhooks or other MQTT Brokers
 without having to implement MQTT clients to do the job.
 
 EMQX enterprise eidtion can also integrate with Kafka,
