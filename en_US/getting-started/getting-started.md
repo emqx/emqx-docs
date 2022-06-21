@@ -62,7 +62,7 @@ reliable data transport, processing, and integration for business-critical IoT s
 
 ## Install EMQX
 
-### Start EMQX Cloud
+### EMQX Cloud -- Service hosted by EMQ
 
 EMQX Cloud is the first fully managed MQTT 5.0 public cloud service in the world.
 With the support of EMQX Cloud you can create an EMQX cluster in the cloud and use
@@ -82,21 +82,24 @@ Container deployment is the quickest way to start experimenting with EMQX.
 Start Docker container:
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx
+docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
-please refer to [Running with Docker (including a simple docker-compose cluster)](../deploy/install.md#install-emq-x-in-docker-contain-a-simple-docker-compose-cluster).
+please refer to [Running with Docker (including a simple docker-compose cluster)](../deploy/install.md#running-emqx-in-docker).
 
 ### Running EMQX in Kubernetes
+
 <!-- TODO @wivwiv Update K8s link when EMQX Operator 5.0 document ready -->
 For Kubernetes, EMQ offers [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator).
 
 EMQX Kubernetes Operator is an application orchestration tool based on Kubernetes native API,
 which is used for automatic deployment and life cycle management of EMQX clusters.
+
 You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md) to learn how to deploy EMQX using the Operator.
 
 ### Deploy EMQX with Terraform
+
 <!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 Deploy all infrastructure including EMQX Enterprise clusters on the mainstream public cloud with
 one click through Terraform.
@@ -135,6 +138,8 @@ After EMQX is started successfully, you can visit [http://localhost:18083/](http
 management console for device connection and related indicator monitoring and management.
 
 ### Start EMQX in the background
+
+Below command starts EMQX in background (daemon mode)
 
 ```bash
 emqx start

@@ -141,7 +141,7 @@ Please verify the SHA256 of the file when using this operation to ensure the int
 
     Simply delete the EMQX Broker directory
 
-## Running EMQX in Docker (Contain a simple docker-compose cluster)
+## Running EMQX in Docker
 
 ### Run a single container
 
