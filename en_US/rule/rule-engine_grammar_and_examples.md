@@ -350,4 +350,4 @@ Then the above SQL output is:
 {"x": 7}
 ```
 
-[Available fields in regular SQL statements](rule-engine_field.md)
+[Available fields in regular SQL statements](./rule-engine_field.md)

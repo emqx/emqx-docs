@@ -25,7 +25,7 @@ bridge.mqtt.aws.proto_ver = mqttv4
 bridge.mqtt.aws.bridge_mode = true
 
 ## The ClientId of a remote bridge
-bridge.mqtt.aws.client_id = bridge_aws
+bridge.mqtt.aws.clientid = bridge_aws
 
 ## The Clean start flag of a remote bridge
 ## NOTE: Some IoT platforms require clean_start must be set to 'true'
@@ -184,4 +184,19 @@ Add-subscription topic successfully.
 ```bash
 $ ./bin/emqx_ctl bridges del-subscription emqx cmd/topic3
 Del-subscription topic successfully.
+```
+
+## Use shared local subscription
+
+When using EMQX in cluster mode, bridge is started on every node.
+This makes each message bridged to the target N times (where N is a number of started nodes in cluster).
+To avoid this, one can use [shared subscription](../advanced/shared-subscriptions.md) mechanism which ensures that only one of bridges receives the message.
+
+```bash
+## Sets the local strategy
+## for shared subscription group with name local_bridge
+broker.local_bridge.shared_subscription_strategy = local
+
+## Subscribes bridge to shared topic
+bridge.mqtt.my_bridge.forwards = $share/local_bridge/topic1/#
 ```

@@ -16,6 +16,10 @@
           "path": "getting-started/install"
         },
         {
+          "title": "基于 k8s 部署 EMQX 集群",
+          "path": "getting-started/install-on-k8s"
+        },
+        {
           "title": "启动 EMQX",
           "path": "getting-started/start"
         },
@@ -194,6 +198,10 @@
         {
           "title": "HTTP ACL",
           "path": "advanced/acl-http"
+        },
+        {
+          "title": "JWT",
+          "path": "advanced/acl-jwt"
         },
         {
           "title": "MySQL ACL",
@@ -507,6 +515,10 @@
           "path": "getting-started/install"
         },
         {
+          "title": "Install EMQX Cluster On K8s",
+          "path": "getting-started/install-on-k8s"
+        },
+        {
           "title": "Start EMQX",
           "path": "getting-started/start"
         },
@@ -676,6 +688,10 @@
         {
           "title": "HTTP ACL",
           "path": "advanced/acl-http"
+        },
+        {
+          "title": "JWT",
+          "path": "advanced/acl-jwt"
         },
         {
           "title": "MySQL ACL",

@@ -57,12 +57,12 @@ Resource" to the top right, and then select "Pulsar":
 
 Configure the resource:
 ```
-Set the " Pulsar Server" to "127.0.0.1:6650"(multiple servers should
-be separated by comma), and keep all other configs as default, and
-click on the "Testing Connection" button to make sure the connection
-can be created successfully, and then click on the "Create" button.
+Set the "Pulsar Server" to "pulsar://pulsar-broker1:6650" (multiple servers should be comma-separated), and keep the default values for all other configurations. Click the "Test" button to make sure the connection can be created successfully, and then click the "Create" button.
+
+`Pulsar Server` should be comma-separated Pulsar URLs, in format: `pulsar://<hostname>:<port>`, or `pulsar+ssl://<hostname>:<port>` if TLS is enabled on the Pulsar side.
+
 ```
-![image](./assets/rule-engine/pulsar_resource_0.png)
+![image](./assets/rule-engine/en_pulsar_auth_none.jpg)
 
 Back to the "Actions" dialog, and then click on the "Confirm"
     button.
@@ -99,3 +99,14 @@ to 1:
 
 ![image](./assets/rule-engine/pulsar_rule_overview_1.png)
 
+## Use basic/token authentication for pulsar
+
+Starting at EMQX Enterprise 4.3.10 and 4.4.4, we support `basic` and `token` authentication when connecting to Pulsar.
+
+For example, to enable `token` authentication, select `token` from the `Authentication Type` dropdown-box:
+
+![image](./assets/rule-engine/en_pulsar_auth.jpg)
+
+And then provide the JWT in the bottom of the dialog box:
+
+![image](./assets/rule-engine/en_pulsar_auth_token.jpg)

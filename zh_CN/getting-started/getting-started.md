@@ -77,13 +77,13 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 1. 获取 Docker 镜像
 
 ```bash
-1docker pull emqx/emqx:latest
+docker pull emqx/emqx:latest
 ```
 
 1. 启动 Docker 容器
 
 ```bash
-1docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
 更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](./install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
@@ -92,7 +92,7 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 
 对于使用 Kubernetes 的用户，EMQX 提供了 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator)。该 Operator 可以帮助您在 Kubernetes 环境下快速部署一个可用于生产环境的，功能完备的 EMQX 集群。
 
-EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具，用于 EMQX 集群的自动化部署和生命周期管理。您可以查阅[文档](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md)来了解如何使用 Operator 部署 EMQX。
+EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具，用于 EMQX 集群的自动化部署和生命周期管理。您可以查阅[文档](https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html)来了解如何使用 Operator 部署 EMQX。
 
 ### Terraform 安装部署
 

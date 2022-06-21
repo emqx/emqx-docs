@@ -68,6 +68,8 @@ SELECT * FROM "t/#"
 ![image](./assets/rule-engine/kafka-action-1@2x.png)
 
 返回规则创建界面，点击 “新建”。
+</br>按照Kafka的业务数据，填写 `Kafka 主题` `Produce 类型` `Produce 策略`  `Strategy Key`  `磁盘缓存`，
+其中，`消息内容模板` 字段，支持变量。若使用空模板（默认），消息内容为 JSON 格式的所有字段。
 
 ![image](./assets/rule-engine/kafka-rulesql-1@2x.png)
 

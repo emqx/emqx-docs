@@ -998,6 +998,46 @@ If set to `false`, information like stacktraces in crash logs may span multiple 
 
 Choose log format. `text` for free text, and `json` for structured logging.
 
+### log.formatter.text.date.format
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `rfc3339` | FORMAT  | `rfc3339`  |
+
+NOTE: This config is available start from EMQX Opensource 4.3.15, 4.4.4 and EMQX
+Enterprise 4.3.10, 4.4.4.
+
+#### Description
+
+The timestamp format for the `text` logger. Can be one of `rfc3339` or a FORMAT string.
+
+Supported specifiers in the FORMAT string are:
+
+| Specifiers | Annotation  | Format Example |
+| ---- | --------------- | ------- |
+| %Y | year | 2022 |
+| %m | month (01..12) | 11 |
+| %d | day of month | 01 |
+| %H | hour (00..23) | 06 |
+| %M | minute (00..59) | 43  |
+| %S | second (00..60) | 31 |
+| %N | nanoseconds (000000000..999999999) | 019085000  |
+| %6N | microseconds (00000..999999) | 019085 |
+| %3N | milliseconds (000..999) | 019 |
+| %z | +HHMM numeric time zone | -0400 |
+| %:z | +HH:MM numeric time zone | -04:00 |
+| %::z | +HH:MM:SS numeric time zone | -04:00:00 |
+
+Examples:
+
+```
+## 2022-06-02T14:23:09.230000 +08:00
+log.formatter.text.date.format = %Y-%m-%dT%H:%M:%S.%6N %:z
+
+## To make the timestamp look the same as that of version 4.2.x (2022-06-02 14:24:36.124):
+log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
+```
+
 ## authacl
 
 ### allow_anonymous
@@ -6175,11 +6215,13 @@ Default user authentication data of Dashboard. `dashboard.default_user.login` an
 | Type    | Default |
 | ------- | ------- |
 | integer | 18083   |
+| string  | 0.0.0.0:18083 |
 
 #### Description
 
 The listening port of the HTTP listener.
-
+</br>
+Use the `ip:port` format to specify which network interface and port to listen to. Defaults to `0.0.0.0:18083`, which listens on all network interfaces.
 
 
 ### dashboard.listener.http.acceptors
@@ -6716,12 +6758,13 @@ Default AppSecret.
 | Type    | Default |
 | ------- | ------- |
 | integer | 8081    |
+| string  | 0.0.0.0:8081    |
 
 #### Description
 
 The listening port of the HTTP listener.
-
-
+</br>
+Use the `ip:port` format to specify which network interface to listen to, default `0.0.0.0:8081` will listening on all network interfaces.
 
 ### management.listener.http.acceptors
 
@@ -6812,10 +6855,13 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 | Type    | Default | Example |
 | ------- | ------- | ------- |
 | integer | -       | 8081    |
+| string  | -       | 0.0.0.0:8081 |
 
 #### Description
 
 The listening port of the HTTPS listener.
+</br>
+Use the `ip:port` format to specify which network interface to listen to, default `0.0.0.0:8081` will listening on all network interfaces.
 
 ### management.listener.https.acceptors
 

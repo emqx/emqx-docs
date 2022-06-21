@@ -4,11 +4,31 @@
 
 The configuration files of EMQX Broker usually have the suffix `.conf`. You can find these configuration files in the `etc` directory.
 
+{% emqxee %}
+
+| File               | Description |
+| ------------------ | ------------------------- |
+| etc/emqx.conf      | EMQX Broker Configuration File |
+| etc/cluster.conf   | EMQX Cluster-related Configuration File |
+| etc/rpc.conf       | EMQX Remote Procedure Call Configuration File |
+| etc/logger.conf    | EMQX Logging Configuration File |
+| etc/zones.conf     | EMQX Zone Configuration File |
+| etc/listeners.conf | EMQX Listeners Configuration File |
+| etc/sys_mon.conf   | EMQX System Monitoring configuration file |
+| etc/acl.conf       | EMQX Broker default ACL file |
+| etc/plugins/*.conf | Configuration Files of Plugins |
+
+{% endemqxee %}
+
+{% emqxce %}
+
 | File        | Description            |
 | ------------------ | ------------------------- |
 | etc/emqx.conf      | EMQX Broker Configuration File |
 | etc/acl.conf       | EMQX Broker default ACL File |
 | etc/plugins/*.conf | Configuration Files of Plugins |
+
+{% endemqxce %}
 
 It should be noted that for the EMQX Broker installed by different methods, the path of the `etc` directory may be different. For details, please refer to [directory structure](directory.md#).
 
@@ -57,7 +77,7 @@ dir = tmp
 *No!!!*
 
 ```bash
-dir = "tmp"		
+dir = "tmp"
 ```
 
 **atom**

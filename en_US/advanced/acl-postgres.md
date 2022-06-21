@@ -24,7 +24,7 @@ emqx_auth_pgsql
 ```
 
 ::: tip 
-The emqx_auth_mysql plugin also includes authentication feature, which can be disabled via comments.
+The emqx_auth_pgsql plugin also includes authentication feature, which can be disabled via comments.
 :::
 
 
@@ -34,6 +34,12 @@ PostgreSQL basic connection information needs to be accessible to all nodes in t
 
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
+
+::: tip
+
+Support PostgreSQL 13 and below versions
+
+:::
 
 ## server address
 auth.pgsql.server = 127.0.0.1:5432

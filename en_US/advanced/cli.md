@@ -115,8 +115,6 @@ Query statistics of connections, topics, subscriptions, routes between server an
 
 ```bash
 $ ./bin/emqx_ctl broker stats
-actions.count                 : 5
-actions.max                   : 5
 channels.count                : 0
 channels.max                  : 0
 connections.count             : 0
@@ -127,8 +125,6 @@ retained.count                : 3
 retained.max                  : 3
 routes.count                  : 0
 routes.max                    : 0
-rules.count                   : 0
-rules.max                     : 0
 sessions.count                : 0
 sessions.max                  : 0
 suboptions.count              : 0
@@ -149,7 +145,6 @@ Query server traffic (Bytes), MQTT Packets, messages sending and receiving stati
 
 ```bash
 $ ./bin/emqx_ctl broker metrics
-actions.success               : 0
 bytes.received                : 0
 bytes.sent                    : 0
 client.auth.anonymous         : 0
@@ -223,7 +218,6 @@ packets.subscribe.received    : 0
 packets.unsuback.sent         : 0
 packets.unsubscribe.error     : 0
 packets.unsubscribe.received  : 0
-rules.matched                 : 0
 session.created               : 0
 session.discarded             : 0
 session.resumed               : 0

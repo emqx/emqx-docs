@@ -37,6 +37,11 @@ SELECT * FROM "t/#"
 
    填写真实的 mosquitto 服务器地址，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
+</br>注意：</br>
+
+`附加 GUID` 选项，设置为 `true` 时，MQTT 连接使用的 clientid 增加随机后缀以保证全局唯一性。
+设置为 `false` 时，会导致 clientid 使用同一个，连接池中线程互踢，EMQX 多个节点之间的桥接也会互踢，推荐仅在单节点 EMQX 且连接池大小为 1 时开启此选项。
+
 最后点击 “新建” 按钮。
 
 ![image](./assets/rule-engine/mqtt-resource-1.png)

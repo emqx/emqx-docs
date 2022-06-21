@@ -15,6 +15,84 @@ ref: undefined
 
 # Release version
 
+## Version 4.3.10
+
+*Release Date: 2022-06-01*
+
+### Enhancement
+
+- Add more time transformation functions to the SQL of rule engine
+- Add the `float2str/2` function to the SQL of rule engine to support specifying the output precision of floating point numbers
+- Rule engine supports connecting to Pulsar using Basic and JWT authentication
+- Add `service_name` option to Oracle resource of rule engine to support Oracle Database RAC
+- Support for using JWT for authorization, now MQTT clients can authorize using specific claims that include a pub-sub whitelist
+- Improved authentication related metrics to make it easier to understand, now `client.authenticate = client.auth.success + client.auth.failure`
+- Support binding the listener of the REST API to a specified network interface
+- Upload license will be automatically synchronized to the entire cluster, no need for each node to upload separately, provide HTTP API
+- Support multi-condition query and fuzzy query for user data in authentication and authorization using built-in database as data source
+- Supports querying clients using the length of the message queue and the number of dropped messages as conditions
+- Support to configure the log time format to be compatible with the time format in older versions
+- When `use_username_as_clientid` is configured to `true` and the client connects without specifying a `username`, the connection is now rejected with a reason code `0x85`
+- Full randomisation of app secrets (previously partially randomised)
+- Hot upgrades between incompatible versions will now be rejected
+- Allow white spaces in EMQX's installation path
+- Boot script fail fast on invalid node name (improve error message readability)
+
+### Bug fixes
+
+- Fix the issue that the client could not get the message after going online when using the PostgreSQL offline message plugin
+- Fix the issue that the rules engine could not successfully establish a TLS connection with Pulsar in some cases
+- Fix the issue that rule engine's SQL function `hexstr_to_bin/1` could not handle half-byte
+- Fix the issue that the alarm was not cleared when the rule engine resource was deleted
+- Fix Dashboard HTTPS listener's `verify` option not taking effect
+- Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
+- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closeing the connection process
+- Fix the issue that the relevant hooks were not properly uninstalled when the module was disabled, resulting in abnormal functions
+- Fix the issue that the MQTT-SN client would be disconnected when retransmitting QoS 2 messages
+- Fix the issue that modules that were turned off in the backup file would be automatically enabled after restoring the backup
+- Fix the issue that the returned results did not match the query conditions when querying subscriptions with multiple conditions
+- Fix rule engine resource connection test not working
+- Fix multiple Dashboard display issues
+
+## Version 4.3.9
+
+*Release Date: 2022-04-18*
+
+### Enhancement
+
+- Schema registry now supports decoding arbitrary binary payloads to JSON data using gRPC services
+- Support for connecting to Pulsar using TLS
+- Add `mongo_date` function for SQL in rule engine, which supports saving timestamps as MongoDB Date objects
+- Rule engine supports copying rule for fast reuse
+- SQL in rule engine supports zip, gzip and other compression and decompression functions
+- Improve the error message when rule engine fails to parse payload
+- Improve the connection test for some resources in rule engine
+- Support setting execution priority for ExHook
+- ExHook callback interface adds a Protobuf field `RequestMeta meta` to return the EMQX cluster name
+- Support `local` policy for shared subscriptions, which will preferentially send messages to shared subscribers under the node where messages flow in. In some scenarios, the efficiency of shared message scheduling will be improved, especially when the MQTT bridge is configured as a shared subscription
+- `RSA-PSK-AES256-GCM-SHA384`, `RSA-PSK-AES256-CBC-SHA384`, `RSA-PSK-AES128-GCM-SHA256` and `RSA-PSK-AES128-CBC- SHA256` four new TLS PSK cipher suites are supported, removing two insecure cipher suites `PSK-3DES-EDE-CBC-SHA` and `PSK-RC4-SHA` from the default configuration
+- Diagnostic logging for `wait_for_table` of mnesia
+  - Prints check points of mnesia internal stats
+  - Prints check points of per table loading stats, help to locate the problem of long table loading time.
+- Subscribing to an empty topic is prohibited in strict mode
+- Generate default files when `loaded_modules` and `loaded_plugins` files do not exist
+
+### Bug fixes
+
+- Fix the issue that the TLS configuration item `server_name_indication` is set to disable and does not take effect
+- Fix potential process leak issue in MongoDB driver
+- Fix the issue that the password of the default Dashboard user modified via the CLI command would be reset after the node leaves the cluster
+- Silence grep and sed warnings in `docker-entrypoint.sh`
+- Fix the backup file cannot be deleted and downloaded when the API path contains ISO8859-1 escape characters
+- Fix the issue that the Redis driver would crash when DNS resolution failed, etc
+- Fix the issue that the MQTT Bridge plugin cannot be started when only the subscription topic is configured but QoS is not configured
+- When creating a rule, if a rule with the same ID already exists, the rules engine will now report an error instead of replacing the existing rule
+- Fix the issue that the HTTP driver process pool may not be deleted
+- Fix the issue that the module parameters could not be updated again after failing to update
+- Fix the incorrect type of some fields in the GB/T 32960 access gateway module in Dashboard
+- Fix the issue that the configuration of Bridge resources such as Kafka and Pulsar could not be updated
+- Fix the issue that JT/T 808 client authentication fails when anonymous authentication is enabled
+
 ## Version 4.3.8
 
 *Release Date: 2022-04-01*

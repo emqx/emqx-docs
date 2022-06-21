@@ -117,10 +117,6 @@ EMQX 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只会
 
 | Name                  | Data Type | Description                        |
 | --------------------- | --------- | ---------------------------------- |
-| actions.success       | Integer   | 规则引擎 action 执行成功次数       |
-| actions.error         | Integer   | 规则引擎 action 执行失败次数       |
-| actions.exception     | Integer   | 规则引擎 action 运行异常次数       |
-| rules.matched         | Integer   | 规则的匹配次数                     |
 | client.auth.anonymous | Integer   | 客户端最终匿名形式登录的次数       |
 | client.connect        | Integer   | `client.connect` 钩子触发次数      |
 | client.authenticate   | Integer   | `client.authenticate` 钩子触发次数 |
@@ -130,12 +126,12 @@ EMQX 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只会
 | client.check_acl      | Integer   | `client.check_acl` 钩子触发次数    |
 | client.subscribe      | Integer   | `client.subscribe` 钩子触发次数    |
 | client.unsubscribe    | Integer   | `client.unsubscribe` 钩子触发次数  |
-| client.auth.success   | Integer   | 客户端认证成功次数，至少启用一个认证插件后可用 |
-| client.auth.failure   | Integer   | 客户端认证失败次数，至少启用一个认证插件后可用  |
-| client.auth.ignore    | Integer   | 认证忽略次数，至少启用一个认证插件后可用，同时启用多个认证插件时，一次登录事件可能触发多次 ignore 计数，所有认证插件都 ignore 后，客户端可能以匿名方式成功登录 |
-| client.acl.allow      | Integer   | 客户端 ACL 校验通过次数，至少启用一个 ACL 插件后可用 |
-| client.acl.deny       | Integer   | 客户端 ACL 校验失败次数，至少启用一个 ACL 插件后可用  |
-| client.acl.ignore     | Integer   | ACL 校验忽略次数，至少启用一个 ACL 插件后可用，同时启用多个 ACL 插件时，一次发布/订阅事件可能触发多次 ignore 计数，所有 ACL插件都 ignore 后，发布/订阅操作可能因 acl_nomatch = true 成功 |
+| client.auth.success   | Integer   | 客户端认证成功次数                 |
+| client.auth.success.anonymous | Integer   | 匿名认证成功次数           |
+| client.auth.failure   | Integer   | 客户端认证失败次数                 |
+| client.acl.allow      | Integer   | 客户端 ACL 校验通过次数            |
+| client.acl.deny       | Integer   | 客户端 ACL 校验失败次数            |
+| client.acl.cache_hit  | Integer   | ACL 校验缓存命中次数               |
 | session.created       | Integer   | `session.created` 钩子触发次数     |
 | session.discarded     | Integer   | `session.discarded` 钩子触发次数   |
 | session.resumed       | Integer   | `session.resumed` 钩子触发次数     |

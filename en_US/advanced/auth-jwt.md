@@ -33,6 +33,10 @@ After JWT authentication is enabled by default, you can connect with the followi
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGUiOiJodHRwczovL3dpdndpdi5jb20ifSwiZXhwIjoxNTgyMjU1MzYwNjQyMDAwMCwiaWF0IjoxNTgyMjU1MzYwfQ.FdyAx2fYahm6h3g47m88ttyINzptzKy_speimyUcma4
 ```
 
+## JWT Authorization
+
+JWT authentication plugin can extract ACL rules from authentication tokens. These ACL rules will be later used
+to authorize client's actions. See [JWT ACL](./acl-jwt.md).
 
 ## Configuration item
 

@@ -52,10 +52,12 @@ SELECT * FROM "t/#"
 填写资源配置:
 
    填写真实的 Pulsar 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
+   
+   服务器地址是逗号分隔的多个 Pulsar URL, URL 格式为 `pulsar://<hostname>:<port>`，如果 Pulsar 端开启了 TLS 的话，则格式为 `pulsar+ssl://<hostname>:<port>`。
 
 最后点击 “新建” 按钮。
 
-![image](./assets/rule-engine/pulsar-resource-2@2x.png)
+![image](./assets/rule-engine/zh_pulsar_auth_none.jpg)
 
 返回响应动作界面，点击 “确认”。
 
@@ -86,3 +88,15 @@ $ ./bin/pulsar-client consume testTopic  -s "sub-name" -n 1000
 在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
 
 ![image](./assets/rule-engine/pulsar-rulelist-0@2x.png)
+
+## 使用 Pulsar basic/token 认证
+
+EMQX 企业版 4.3.10 以及 4.4.4 以后，我们支持了 Pulsar 的 `basic` 和 `token` 认证.
+
+比如, 要启用 `token` 认证, 从 `Authentication Type` 下拉框选择 `token`:
+
+![image](./assets/rule-engine/zh_pulsar_auth.jpg)
+
+然后在对话框的下方提供 JWT:
+
+![image](./assets/rule-engine/zh_pulsar_auth_token.jpg)
