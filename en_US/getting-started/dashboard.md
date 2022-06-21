@@ -32,9 +32,9 @@ It should be noted that once you change the password of the default user through
 
 **Listeners**
 
-EMQX Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners with a listening port of 18083 are enabled by default. For the introduction of Listeners, please refer to [Configuration Instructions](../admin/file.md).
+EMQX Dashboard supports both HTTP and HTTPS Listeners, but only HTTP Listeners with a listening port of 18083 are enabled by default. For the introduction of Listeners, please refer to [Configuration Instructions](../admin/cfg.md).
 
-For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../admin/file.md).
+For the detailed configuration item description of Dashboard, please refer to [Configuration Item](../admin/cfg.md).
 
 ## Dashboard interface
 

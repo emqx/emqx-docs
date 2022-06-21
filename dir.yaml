@@ -51,7 +51,7 @@
     - admin/dashboard
     - admin/cli
     - admin/api # Swagger API doc
-    - admin/file # Configuration file
+    - admin/cfg # Configuration file
 
 - title_en: Security
   title_cn: 安全
