@@ -1,18 +1,97 @@
 # 产品概览 (5.0 文档正在建设中)
 
-*EMQX* 是基于 Erlang/OTP 平台开发的开源物联网 MQTT 消息服务器。
+*EMQX* 是一款基于 Erlang/OTP 平台开发的，大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，提供高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
 
-Erlang/OTP是出色的软实时 (Soft-Realtime)、低延时 (Low-Latency)、分布式 (Distributed)的语言平台。
+Erlang/OTP 是出色的软实时 (Soft-Realtime)、低延时 (Low-Latency)、分布式 (Distributed)的语言平台。
 
 MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息协议。
 
-EMQX 设计目标是实现高可靠，并支持承载海量物联网终端的 MQTT 连接，支持在海量物联网设备间低延时消息路由:
+## 设计目标
 
-1. 稳定承载大规模的 MQTT 客户端连接，单服务器节点支持 200 万连接。
-1. 分布式节点集群，快速低延时的消息路由。
-1. 消息服务器内扩展，支持定制多种认证方式、高效存储消息到后端数据库。
-1. 完善的认证鉴权系统, 例如调用HTTP API，或者查询数据看，如 Postgres 和 MongoDB 等。
-1. 完整物联网协议支持，MQTT、MQTT-SN、CoAP、LwM2M、WebSocket 或私有协议支持。
-1. 可扩展性强，支持通过插件，或者 gRPC 回调的方式对EMQX进行扩展
+1. 连接任何设备：通过开放标准物联网协议 MQTT、CoAP 和 LwM2M 连接任何设备。支持来自开源社区的所有 MQTT 客户端，如 Eclipse Paho 或定制的 MQTT 库。
+2. 支持任意规模：单服务器节点支持 200 万并发连接，通过集群扩展，可以毫不费力地支持 1 亿并发连接。
+3. 确保通信安全，通过 TLS/SSL 和多样化的认证机制确保与 MQTT 服务器进行安全通信，包括用户名/密码、JWT、PSK 和 X.509 证书。
+4. 实时数据处理, 通过内置规则引擎提供的丰富 SQL 查询进行低代码事件处理，以数百万条/秒的速度实时处理设备与云端之间双向移动的 MQTT 消息数据。
+5. 轻松管理与监控，通过 CLI、HTTP API 和一个优雅的 Dashboard 轻松管理 EMQX 集群。支持使用 Datadog、Statsd、Prometheus 和 Granfana 进行监控和报警。
+6. 灵活扩展与定制，通过网关与插件对 EMQX 集群进行扩展与定制，快速实现与云服务、企业系统的数据集成以及专有的物联网协议。
+7. Run Anywhere，采用基于 Kubernetes 的云原生架构。可运行在私有云、混合云和公有云（如华为云、腾讯云、阿里云和 AWS）。
 
-## TODO: sync English version
+## 功能概览
+
+Below is a brief/incomplete highlighting a part of the features EMQX provides.
+
+### 连接
+
+- 完整支持 MQTT V3.1/V3.1.1 and V5.0 协议规范
+  - QoS0, QoS1, QoS2 消息支持
+  - 持久会话和离线消息支持
+  - 保留消息(Retained)支持
+  - 遗嘱消息(Will Message)支持
+  - 共享订阅($share/<group\>/topic)支持
+  - `$SYS/` 系统主题支持
+- TCP/SSL
+- MQTT/WebSocket/SSL
+- MQTT Over QUIC(预览中)
+- HTTP 消息发布接口
+- 网关
+  - CoAP
+  - LwM2M
+  - MQTT-SN
+  - Stomp
+  - Stomp/SockJS
+{% emqxee %}
+  - GB/T 32960
+  - JT/T 808
+{% endemqxee %}
+
+为 MQTT 增加更多特性：
+
+- 延迟发布 ($delay/topic)
+- 代理订阅
+- 主题重写
+
+### 安全
+
+- 基于用户名/密码的身份认证，支持使用内置数据库、Redis, MySQL, PostgreSQL, MongoDB, HTTP 作为数据源
+- 基于 JWT 的身份认证与权限控制，支持 JWKs
+- MQTT 5.0 增强认证
+- PSK 身份验证
+- 基于 client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL，PostgreSQL，MongoDB，HTTP 作为数据源
+- 客户端黑名单支持
+
+### 可伸缩性
+
+- 多节点集群 (Cluster)
+- 支持手动, mcast, dns, etcd, k8s 集群发现方式集群
+- 多服务器节点桥接 (Bridge)
+
+### 数据集成
+
+- 内置规则引擎，通过 SQL 语法实时提取、过滤、丰富和转换消息或内部事件并将其传输到外部数据平台
+- 通过 MQTT 与其他 Broker 或物联网平台进行双向数据桥接
+- 通过 WebHook 与其他系统集成
+{emqxee}
+- 企业版: TODO
+{endemqxee}
+
+### 可靠性
+
+- 过载保护
+- 消息速率限制
+- 连接速率限制
+
+### 可观测性
+
+- 客户端在线状态查询
+- 集群状态与指标查询
+- Prometheus/StatsD 集成
+- 自动网络分区恢复
+- 在线日志追踪(Log Trace)
+- Erlang 运行时追踪工具
+
+### 可扩展性
+
+- 插件
+- 钩子
+- gRPC 钩子扩展
+- gRPC协议扩展

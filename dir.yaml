@@ -19,10 +19,11 @@
   title_cn: 概览
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
 
-- title_en: Quick Start
+- title_en: Getting Started
   title_cn: 快速开始
   path: getting-started/getting-started
   children:
+    - getting-started/getting-started
     - getting-started/dashboard
 
 

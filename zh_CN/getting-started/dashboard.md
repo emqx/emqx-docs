@@ -173,7 +173,7 @@ EMQX Dashboard 提供了非常丰富的数据监控项目，完整地覆盖了�
 
 `Websocket` 页面为您提供了一个简易但有效的 WebSocket 客户端工具，它包含了连接、订阅和发布功能，同时还能查看自己发送和接收的报文数据，我们期望它可以帮助您快速地完成某些场景或功能的测试验证：
 
-![image](../assets/dashboard-websocket.png)
+<!-- TODO 新截图 -->
 
 #### HTTP API
 

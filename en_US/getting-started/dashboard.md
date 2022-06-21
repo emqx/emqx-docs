@@ -183,7 +183,6 @@ Currently, the `TOOLS`  navigation item of EMQX Dashboard mainly includes WebSoc
 The `Websocket` page provides you with a simple but effective WebSocket client tool, which includes connection, subscription and publishing functions. At the same time, you can view the message data you send and receive, we hope it can help you quickly complete test verification of certain scenarios or functions:
 
 <!-- TODO: Take new screenshot -->
-![image](./assets/dashboard-websocket.png)
 
 #### HTTP API
 
