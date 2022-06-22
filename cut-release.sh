@@ -12,7 +12,7 @@ case $EDITION in
         PREFIX='e'
         ;;
     *)
-        echo "Usage: $0 ce|ee # ce for community edition, ee for enterprise"
+        echo "Usage: $0 ce|ee # ce for EMQX, ee for EMQX Enterprise"
         exit 1
 esac
 

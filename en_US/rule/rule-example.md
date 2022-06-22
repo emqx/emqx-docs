@@ -2,7 +2,7 @@
 
 {% emqxce %}
 ::: tip
-Only the following operations are applicable in the community edition of the EMQX Broker:
+Only the following operations are applicable in EMQX:
 - Check (debug)
 - Send data to a web service
 - Bridge data to a MQTT Broker

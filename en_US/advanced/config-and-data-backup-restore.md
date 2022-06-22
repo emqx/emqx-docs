@@ -57,6 +57,6 @@ Depending on installation and configuration, `data` dir can be located in below 
 ## What about Persisted Sessions ?
 
 Prior to v5.0, EMQX nodes are rather stateless by themselves, in the sense that persistent
-session states are delegated to external databases (enterprise edition feature).
+session states are delegated to external databases (EMQX Enterprise feature).
 
 So, for persisted sessions, there is nothing to backup from where the EMQX nodes are running.

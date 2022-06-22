@@ -130,7 +130,7 @@ Usually an MQTT client has to subscribe to the topics explicitly by itself, if i
 Usage of Subscription by Broker can ease the management of massive clients, and save computational resources and bandwidth for devices.
 
 ::: tip Tip
-Currently this feature is available in the EMQX Enterprise edition. 
+Currently this feature is available in the EMQX Enterprise. 
 :::
 
 

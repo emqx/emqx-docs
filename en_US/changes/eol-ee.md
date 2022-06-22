@@ -17,7 +17,7 @@ ref:
 
 ## Summary
 
-EMQX Enterprise Edition will provide an 18-month maintenance cycle for the major release of the product from the release date, and we will continue to maintain the last minor release of the last two major release branches.
+EMQX Enterprise will provide an 18-month maintenance cycle for the major release of the product from the release date, and we will continue to maintain the last minor release of the last two major release branches.
 
 ## Versions
 

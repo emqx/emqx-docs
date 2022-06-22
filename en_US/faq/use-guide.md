@@ -153,7 +153,7 @@ EMQX supports clustering. The EMQX performance can be scale-out with the increas
 **Tags:** [*Persistence*](tags.md#persistence)
 
 
-The EMQX Enterprise edition supports data persistence. Supported databases are:
+The EMQX Enterprise supports data persistence. Supported databases are:
 
 - Redis
 - MongoDB
@@ -196,7 +196,7 @@ Returned response:
 **Tags:** [*Kafka*](tags.md#kafka)  [*Bridge*](tags.md#bridge)  [*Persistence*](tags.md#persistence)
 
 
-The EMQX Enterprise edition integrates a Kafka bridge, it can bridge data to Kafka.
+The EMQX Enterprise integrates a Kafka bridge, it can bridge data to Kafka.
 
 
 
