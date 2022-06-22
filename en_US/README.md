@@ -41,10 +41,8 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
   - MQTT-SN
   - Stomp
   - Stomp/SockJS
-{% emqxee %}
-  - GB/T 32960
-  - JT/T 808
-{% endemqxee %}
+  - GB/T 32960 (Enterprise edition) <!--cannot use 'emqxee' macro inside list-->
+  - JT/T 808 (Enterprise edition)
 
 Add more features to MQTT:
 
