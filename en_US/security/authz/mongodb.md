@@ -1,265 +1,196 @@
-# MongoDB ACL
+# MongoDB
 
-For MongoDB ACL, an external MongoDB database is used to store ACL rules, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems
+This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+MmongoDB database.
 
-Plugin:
+## Storage Schema
 
-```bash
-emqx_auth_mongo
-```
+MongoDB authenticator supports storing ACL rules as MongoDB documents. A user provides the collection name and a
+filter template for selecting the relevant documents.
 
-::: tip
-The emqx_auth_mongo plugin also includes authentication, which can be disabled via comments
-:::
+The documents should contain `permission`, `action`, and `topics` fields.
+* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
+* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
+* `topics` value specifies the topic filters for topics relevant to the rule. Should be a list of strings that support wildcards and [topic placeholders](./authz.md#topic-placeholders).
 
+Example of adding an ACL rule for a user `user123` that allows publishing to topics `data/user123/#`:
 
-## MongoDB connection information
-
-MongoDB basic connection information needs to ensure that all nodes in the cluster can be accessed.
-
-```bash
-# etc/plugins/emqx_auth_mongo.conf
-
-## MongoDB Architecture type
-##
-## Value: single | unknown | sharded | rs
-auth.mongo.type = single
-
-## rs mode needs to set rs name
-## auth.mongo.rs_set_name =
-
-## Server list, separated by comma in cluster mode
-## Examples: 127.0.0.1:27017,127.0.0.2:27017...
-auth.mongo.server = 127.0.0.1:27017
-
-auth.mongo.pool = 8
-
-auth.mongo.login =
-
-auth.mongo.password =
-
-## auth.mongo.auth_source = admin
-
-auth.mongo.database = mqtt
-
-auth.mongo.query_timeout = 5s
-
-## SSL option
-# auth.mongo.ssl = false
-
-## auth.mongo.ssl_opts.keyfile =
-
-## auth.mongo.ssl_opts.certfile =
-
-## auth.mongo.ssl_opts.cacertfile =
-
-## MongoDB write mode.
-##
-## Value: unsafe | safe
-## auth.mongo.w_mode =
-
-## Mongo read mode.
-##
-## Value: master | slave_ok
-## auth.mongo.r_mode =
-
-## MongoDB topology configuration, generally not used, see MongoDB website documentation for details
-auth.mongo.topology.pool_size = 1
-auth.mongo.topology.max_overflow = 0
-## auth.mongo.topology.overflow_ttl = 1000
-## auth.mongo.topology.overflow_check_period = 1000
-## auth.mongo.topology.local_threshold_ms = 1000
-## auth.mongo.topology.connect_timeout_ms = 20000
-## auth.mongo.topology.socket_timeout_ms = 100
-## auth.mongo.topology.server_selection_timeout_ms = 30000
-## auth.mongo.topology.wait_queue_timeout_ms = 1000
-## auth.mongo.topology.heartbeat_frequency_ms = 10000
-## auth.mongo.topology.min_heartbeat_frequency_ms = 1000
-```
-
-
-## Default data structure
-
-In the default configuration of MongoDB authentication, you need to ensure that the following collections are included in the database:
-
-### Authentication / Super Collection
-
-```sql
+```js
+> db.mqtt_acl.insertOne(
+  {
+      "username": "user123",
+      "permission": "allow",
+      "action": "publish",
+      "topics": ["data/user123/#"]
+  }
+);
 {
-  username: "user",
-  password: "password hash",
-  salt: "password salt",
-  is_superuser: false,
-  created: "2020-02-20 12:12:14"
+  acknowledged: true,
+  insertedId: ObjectId("62b4a1a0e693ae0233bc3e98")
 }
 ```
 
-Sample data:
+The corresponding config parameters are:
+```
+collection = "mqtt_acl"
+filter { username = "${username}" }
 
-```bash
-use mqtt
-
-db.mqtt_user.insert({
-  "username": "emqx",
-  "password": "efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7",
-  "is_superuser": false,
-  "salt": ""
-})
 ```
 
-### ACL rule collection
+::: warning
+When there are a significant number of users in the system make sure that the collections used by the selector are optimized
+and that effective indexes are used. Otherwise ACL lookup will produce excessive load on the database
+and on the EMQX broker itself.
+:::
 
-```json
+## Configuration
+
+The MySQL authorizer is identified by type `mongodb`.
+
+The authenticator supports connecting to MongoDB running in three different modes:
+* Standalone MongoDB server:
+  ```
+  {
+    type = mongodb
+    enable = true
+
+    collection = "mqtt_user"
+    filter { username = "${username}" }
+
+    mongo_type = single
+    server = "127.0.0.1:27017"
+
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
+  }
+  ```
+*  MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
+```
 {
-    username: "username",
-    clientid: "clientid",
-    publish: ["topic1", "topic2", ...],
-    subscribe: ["subtop1", "subtop2", ...],
-    pubsub: ["topic/#", "topic1", ...]
+  type = mongodb
+  enable = true
+
+  collection = "mqtt_user"
+  filter { username = "${username}" }
+
+  mongo_type = rs
+  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+  replica_set_name = "rs0"
+
+  database = "mqtt"
+  username = "emqx"
+  password = "secret"
+}
+```
+*  MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
+```
+{
+  type = mongodb
+  enable = true
+
+  collection = "mqtt_user"
+  filter { username = "${username}" }
+
+  mongo_type = sharded
+  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+
+  database = "mqtt"
+  username = "emqx"
+  password = "secret"
 }
 ```
 
-MongoDB ACL rule defines the publish, subscribe, and publish/subscribe information, and  all **allow** lists are included in the rule.
+### Common Configuration Options
 
-Rule field description:
+#### `collection`
 
-- username: the user name of the connected client
-- clientid: the Client ID of the connected client
-- publish: the number of topics allowed to be published, supports wildcards
-- subscribe: the number of topics allowed to be subscribed to, supports wildcards
-- pubsub: the number of topics allowed to be published  and subscribed to, supports wildcards
+Required string value with the name of MongoDB collection where ACL rules are stored.
 
-::: tip
-Wildcards can be used for topic, and placeholders can be added to the topic to match client information. For example,  the topic will be replaced with the client ID of the current client when matching `t/%c`.
+#### `filter`
 
-  - %u：user name
-  - %c：Client ID
-:::
+A map interpreted as MongoDB selector for ACL rule lookup.
+Supports [placeholders](./authz.md#authentication-placeholders):
+* `${clientid}` — clientid of the client.
+* `${username}` — username of the client.
+* `${peerhost}` — client IP address.
 
+#### `database`
 
-Sample data in the default configuration:
+Required string value with MongoDB database name to use.
 
-```bash
-use mqtt
+#### `username`
 
-## All users cannot subscribe and publish system topics
-## Clients are allowed to subscribe to the topic of /smarthome/${clientid}/temperature with their own Client ID
+Optional string value with MongoDB user.
 
-db.mqtt_acl.insert({
-  username: "$all",
-  clientid: "$all",
-  publish: ["#"],
-  subscribe: ["/smarthome/%c/temperature"]
-})
-```
+#### `password`
 
-After enabling MongoDB ACL and successfully connecting with the username emqx, the client should have the appropriate topic permissions for the data.
+Optional string value with MongoDB user password.
 
+#### `pool_size`
 
-## super_query
+Optional integer value defining the number of concurrent connections from an EMQX node to a MongoDB server.
+The default value is 8.
 
-When performing ACL authentication, EMQX Broker will use the current client information to execute a user-configured superuser query to query whether the client is a superuser. ACL queries are skipped when the client is a superuser.
+#### `ssl`
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+Standard [SSL options](../ssl.md) for [secure connecting to MongoDB](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
 
-## Enable superuser
-auth.mongo.super_query = on
+#### `srv_record`
 
-##collections for super queries
-auth.mongo.super_query.collection = mqtt_user
+Optional boolean value, the default value is `false`. If set to `true`, EMQX will try to
+fetch information about MongoDB hosts, `replica_set_name` (for `rs` type), and `auth_source` from
+DNS records of the specified server(s). See [DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
 
-##Field for super user
-auth.mongo.super_query.super_field = is_superuser
+#### `topology`
 
-## Superuser query selector, commas can be used to seperate multiple conditions
-#auth.mongo.super_query.selector = username=%u, clientid=$all
-auth.mongo.super_query.selector = username=%u
-```
+An optional map of some fine-grained MongoDB driver settings.
 
-MongoDB `and` query is used in the actual query under multiple conditions of the same **selector**:
+* `pool_size` — integer value, the initial size of the internal connection pool.
+* `max_overflow` — integer value, number of overflow workers be created, when all workers from the internal pool are busy.
+* `overflow_ttl` — duration, number of milliseconds for overflow workers to stay in the internal pool before terminating.
+* `overflow_check_period` — duration, `overflow_ttl` check period for workers (in milliseconds).
+* `local_threshold_ms` — ms duration, secondaries only which RTTs fit in the window from lower RTT to lower RTT + `local_threshold_ms` could be selected for handling user's requests.
+* `connect_timeout_ms` — ms duration, timeout for establishing TCP connections.
+* `server_selection_timeout_ms` — ms duration, max time appropriate server should be selected by.
+* `wait_queue_timeout_ms` — ms duration, max time for waiting for a worker to be available in the internal pool.
+* `heartbeat_frequency_ms` — ms duration, default delay between Topology rescans.
+* `min_heartbeat_frequency_ms` — ms duration, the minimum delay between Topology rescans.
 
-```bash
-db.mqtt_user.find({
-  "username": "wivwiv"
-  "clientid": "$all"
-})
-```
+### Standalone MongoDB Options
 
-You can use the following placeholders in your query conditions, and EMQX Broker will automatically populate with client information when executed:
+#### `server`
 
-- %u：user name
-- %c：Client ID
+MongoDB server address to connect or to us as a seed, required.
 
-You can adjust the super user query according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query needs to meet the following conditions:
+#### `w_mode`
 
-1. The query result must include the is_superuser field, which should be explicitly true
+Write mode, `unsafe` (default) or `safe`. The safe mode makes a `getLastError` request after every write in the sequence. If the reply says it failed then the rest of the sequence is aborted. Alternatively, unsafe mode issues every write without confirmation, so if a write fails you won't know about it and the remaining operations will be executed. This is unsafe but faster because there is no round-trip delay.
 
-::: tip
-If superuser functionality is not needed, it can be more efficient when commenting and disabling this option
-:::
+### MongoDB ReplicaSet Options
 
+#### `servers`
 
-## acl_query
+MongoDB server addresses to connect or to us as seeds, required.
 
-When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser query. If superuser query is not enabled or the client is not a superuser, ACL query will be used to find out the ACL rules of client in the database.
+#### `w_mode`
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+Write mode, the same as for [Standalone MongoDB](#wmode).
 
-auth.mongo.acl_query = on
+#### `r_mode`
 
-auth.mongo.acl_query.collection = mqtt_acl
+Read mode, `master` (default) or `slave_ok`. `master` means that every query in a sequence must read only fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. `slave_ok` means every query is allowed to read stale data from a slave/secondary (fresh data from a master is fine too).
 
-## Query selector, commas can be used to seperate multiple conditions
-## auth.mongo.acl_query.selector = username=%u,clientid=%c
-auth.mongo.acl_query.selector = username=%u
+#### `replica_set_name`
 
-## Using multiple query selectors
-## auth.mongo.acl_query.selector.1 = username=$all
-## auth.mongo.acl_query.selector.2 = username=%u
-```
+Replica set name to use, required. Can be overwritten with seeds if `srv_record` is set to `true`.
 
-MongoDB `and` query is used in the actual query under multiple **conditions**  of the same selector:
+### MongoDB Cluster Options
 
-```bash
-db.mqtt_acl.find({
-  "username": "emqx"
-  "clientid": "$all"
-})
-```
+#### `servers`
 
-MongoDB `or` query is used in actual query under multiple **selectors**:
+MongoDB server addresses to connect or to us as seeds, required.
 
-```bash
-db.mqtt_acl.find({
-  "$or": [
-    {
-      "username": "$all"
-    },
-    {
-      "username": "emqx"
-    }
-  ]
-})
-```
+#### `w_mode`
 
-
-You can use the following placeholders in ACL queries, and EMQX Broker will automatically populate with client information when executed:
-
-- %u：username
-- %c：Client ID
-
-::: tip
-MongoDB ACL rules need to use the above data structures strictly.
-
-All rules added in MongoDB ACL are **allow** rules. i.e. a whitelist.
-
-When a client's rules list is empty, EMQX continues to check the next auth/ACL plugin.
-Otherwise the check returns immediately without proceeding to the next auth/ACL plugins.
-
-When the rule is non-empty and does not match the corresponding pub/sub permission,
-an auth/ACL failure will be returned (the corresponding pub/sub behavior will be denied) and the auth/ACL chain will be terminated.
-
-When more than one auth/ACL plugins are in use, it is recommended to position MongoDB ACL after other auth/ACL plugins in the enabled plugins list.
-:::
+Write mode, the same as for [Standalone MongoDB](#wmode).
