@@ -1,8 +1,8 @@
-## Shared subscription
+## Shared Subscription
 
-Shared subscription is a subscription method that achieves load balancing among multiple subscribers:
+Shared subscription is a subscription method that achieves load balancing among multiple subscribers.
 
-```bash
+```
                                                    [subscriber1] got msg1
              msg1, msg2, msg3                    /
 [publisher]  ---------------->  "$share/g/topic"  -- [subscriber2] got msg2
@@ -10,27 +10,24 @@ Shared subscription is a subscription method that achieves load balancing among 
                                                    [subscriber3] got msg3
 ```
 
-In the above picture, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method, where ` topic` is the real topic name they subscribed to, and `$share/g/` is a shared subscription Prefix. EMQX Broker supports shared subscription prefixes in two formats:
-
-| Example         | Prefix      | Real topic name |
-| --------------- | ----------- | --------------- |
-| $queue/t/1      | $queue/     | t/1             |
-| $share/abc/t/1  | $share/abc  | t/1             |
+In the above diagram, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method,
+where ` topic` is the real topic name they subscribed to, and `$share/g/` is a shared subscription prefix.
 
 
-### Shared subscription with groups
+Shared subscriptions prefixed with `$share/<group-name>` are shared subscriptions with groups.
+The group name can be any string.
+Subscribers who belong to the same group will receive messages with load balancing,
+but EMQX will broadcast messages to different groups at the same time.
 
-Shared subscriptions prefixed with `$ share/<group-name>` are shared subscriptions with groups:
+For example, if subscribers `s1`, `s2`, and `s3` are members of group `g1`,
+and subscribers `s4` and `s5` are members of group `g2`, and all subscribers subscribe to topic `t1`.
+When EMQX Broker publishes a message `msg1` to topic `t1`:
 
-group-name can be any string. Subscribers who belong to the same group will receive messages with load balancing, but EMQX Broker will broadcast messages to different groups at the same time.
+- EMQX will send `msg1` to both groups `g1` and `g2`
+- Only one of `s1`, `s2`, `s3` will receive `msg1`
+- Only one of `s4` and `s5` will receive `msg1`
 
-For example, suppose that subscribers s1, s2, and s3 belong to group g1, and subscribers s4 and s5 belong to group g2. Then when EMQX Broker publishes a message msg1 to this topic:
-
-- EMQX Broker will send msg1 to both groups g1 and g2
-- Only one of s1, s2, s3 will receive msg1
-- Only one of s4 and s5 will receive msg1
-
-```bash
+```
                                        [s1]
            msg1                      /
 [emqx]  ------>  "$share/g1/topic"    - [s2] got msg1
@@ -42,45 +39,40 @@ For example, suppose that subscribers s1, s2, and s3 belong to group g1, and sub
                                       [s5] got msg1
 ```
 
-Subscription strategies can be specified globally or per-group. To specify subscription strategy per group, use `broker.shared_subscription_group.$group.strategy` option.
+In MQTT specification, balancing strategy is not covered.
+EMQX supports a few different balancing strategies with the help from configuration.
 
-### Shared subscription without group
+Balancing strategies can be specified globally or per-group.
 
-Shared subscriptions prefixed with `$queue/` are shared subscriptions without groups. It is a special case of `$share` subscription, which is quite similar to all subscribers in a subscription group:
+* Global strategy can be set in `broker.shared_subscription_strategy` configuration.
+* Configure `broker.shared_subscription_group.$group_name.strategy` for per-group strategy
 
-```bash
-                                       [s1] got msg1
-        msg1,msg2,msg3               /
-[emqx]  --------------->  "$queue/topic" - [s2] got msg2
-                                     \
-                                       [s3] got msg3
-```
+For more information about the dispatch strategies, please refer to configuration document.
 
-### Balancing strategy and distribution of ACK configuration
+### Discussion on message loss
 
-EMQX Broker's shared subscription supports balancing strategy and distribution of ACK configuration:
+EMQX sends messages to subscribers' sessions.
 
-```
-broker {
-  # balancing strategy
-  shared_subscription_strategy: random
+When session is persisted (clean_session=false) the subscriber can recover the data stream
+right after reconnect without lossing messages.
 
-  # Applicable to QoS1 QoS2 messages, when enabled,
-  # message will be distributed to another subscriber when selected subscriber is offline
-  shared_dispatch_ack_enabled = false
-}
-```
-<!-- TODO 待确认 -->
+This is a bit contradicting with the 'load balancing' idea, since often when shared subscription
+is in use, if a subscriber is offline, the other subscribers in the group are expected to take
+over the data stream. Otherwise if the subscriber is offline for long enough the session
+message buffer will eventually overflow and result in message loss.
 
-| Balancing strategy |             Description                                                                                                         |
-| :----------------- | :------------------------------------------------------------------------------------------------------------------------------ |
-| random             | Select randomly among all subscribers                                                                                           |
-| round_robin        | According to the order of subscription                                                                                          |
-| sticky             | Always sent to the last selected subscriber                                                                                     |
-| hash_clientid      | According to the hash value of the publisher ClientID                                                                           |
-| hash_topic         | According to the hash value of the message topic                                                                                |
-| local              | Sends message to a random subscriber of the node received the message. If no local subscribers are present, sends to a random one cluster in the cluster. |
+Due to above reasons, persisted sessions are usually not common for shared subscribers,
+but there is nothing stopping you from doing it.
 
-::: tip
-Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate to avoid errors such as message accumulation and client crash.
-:::
+The configuratio `broker.shared_dispatch_ack_enabled` is introduced to improve
+load sharing in case of persisted sessions. When set to `true`, EMQX will try to dispatch
+messages to other memember in the group if one is offline.
+
+More on exceptional flows.
+
+* Once a message is dispatched to a subscriber session, the message will stay in the session
+  buffer but not re-dispatched immediately.
+* The pending messages in a session is re-dispatched to other members in the group when
+  a session terminates.
+* When all members are offline, the message is dispatched to the configured strategy
+* When there is no alive session in a shared group, the message is discarded
