@@ -1,6 +1,8 @@
 # Auto Subscribe
 
-With Auto Subscription enabled, after a client is successfully connected to EMQX, it may not need to send `SUBSCRIBE` requests to EMQX, because EMQX will complete the pre-defined subscription for the client.
+With Auto Subscription enabled, after a client is successfully connected to EMQX,
+it may not need to send `SUBSCRIBE` requests to EMQX,
+because EMQX will complete the pre-defined subscriptions for the client.
 
 Prior to version 5, this feature is also known as "proxy subscription".
 
