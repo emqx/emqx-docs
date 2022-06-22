@@ -1,9 +1,9 @@
-# Delayed publish
+# Delayed Publish
 
 MQTT messages are usually sent to subscribers as soon as possible by the MQTT broker,
-however, in some cases, clients may wish for some delay, or even in a more organised way: to schedule publishes.
+however, in some cases, clients may wish for some delay, or even in a more organized way: to schedule publishes.
 
-The 'scehduling' is represented as the duration of delay from the PUBLISH packet is received by EMQX.
+The 'scheduling' is represented as the duration of delay from the PUBLISH packet is received by EMQX.
 When a client publishes a message to EMQX with the special topic prefix `$delayed/{DelayInteval}`, the delay-publish is triggered.
 
 The specific format of the delay-publish topic is as below:

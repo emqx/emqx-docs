@@ -20,7 +20,7 @@ Currently, Windows and MacOS do not support hot upgrade feature.
 $ emqx versions
 
 Installed versions:
-* 4.2.0	permanent
+* 5.0.0	permanent
 ```
 
 2. Download the software package to be upgraded from the EMQX website.

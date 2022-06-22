@@ -29,10 +29,10 @@ If EMQX receives a retained message when the feature is turned off, it will repl
 The message read and deliver rate can be controlled.
 When a client subscribes to a wildcard topic, it may match a large number of topics having messages retained.
 Without flow control, the all matched messages will be copied into the subscriber's process memory space,
-this may cause the subscriber Erlang process (the actor) to allocate excessive amout of RAM and risk at
+this may cause the subscriber Erlang process (the actor) to allocate excessive amount of RAM and risk at
 shutdown forced by the `force_shutdown` policy.
 
-To make it less agressive, `retainer.flow_control` settings can be used.
+To make it less aggressive, `retainer.flow_control` settings can be used.
 The processing flow is as follows:
 
 1. Load `batch_read_number` of retained message from the retainer storage

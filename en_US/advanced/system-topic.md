@@ -21,7 +21,7 @@ broker {
 ::: tip
 By default, only MQTT clients on localhost are allowed to subscribe to the $SYS topic. Please refer to [file ACL](../security/authz/file.md) to modify the ACL rules for publish and subscribe.
 
-<!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
+
 Most of the data of the $SYS topic in EMQX can be obtained through other methods with lower Couplings.
 The device online and offline status can be captured and processed in the Rule Engine.
 :::
@@ -192,7 +192,7 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | messages/retained               | Accumulative retained messages                   |
 | messages/delayed                | Accumulative delayed messages                    |
 | messages/delivered              | Accumulative delivered messages                  |
-| messages/acked                  | Accumulative acked messages                      |
+| messages/acked                  | Accumulative acknowledged messages               |
 
 ## Alarms - system alarms
 

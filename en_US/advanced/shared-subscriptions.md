@@ -54,7 +54,7 @@ For more information about the dispatch strategies, please refer to configuratio
 EMQX sends messages to subscribers' sessions.
 
 When session is persisted (clean_session=false) the subscriber can recover the data stream
-right after reconnect without lossing messages.
+right after reconnect without losing messages.
 
 This is a bit contradicting with the 'load balancing' idea, since often when shared subscription
 is in use, if a subscriber is offline, the other subscribers in the group are expected to take
@@ -64,9 +64,9 @@ message buffer will eventually overflow and result in message loss.
 Due to above reasons, persisted sessions are usually not common for shared subscribers,
 but there is nothing stopping you from doing it.
 
-The configuratio `broker.shared_dispatch_ack_enabled` is introduced to improve
+The configuration `broker.shared_dispatch_ack_enabled` is introduced to improve
 load sharing in case of persisted sessions. When set to `true`, EMQX will try to dispatch
-messages to other memember in the group if one is offline.
+messages to other members in the group if one is offline.
 
 More on exceptional flows.
 

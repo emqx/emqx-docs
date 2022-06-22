@@ -64,7 +64,7 @@ used to sync config changes between the nodes in the cluster.
 
 EMQX management API can be served by any of the 'core' nodes in the cluster, when a management
 API is called (e.g., from the dashboard) to change configuration, this change is first applied
-on the serviing node, then replicated (asynchronously) to other nodes in the cluster.
+on the serving node, then replicated (asynchronously) to other nodes in the cluster.
 If for some reason, this replication can not apply in a peer node, this command can be used
 to inspect and even fix the replication so it can move forward.
 
@@ -108,7 +108,7 @@ create or update indices for retained messages.
 This command is to join a node to a cluster.
 Please note that the `join` instruction is 'requesting' rather not 'inviting'.
 That is, the `emqx ctl cluster join <OneOfTheClusteredNodes>` is the be executed
-on the joinning node, but not from any of the nodes in the cluster.
+on the joining node, but not from any of the nodes in the cluster.
 
 ### clients
 
@@ -125,7 +125,7 @@ It may take a long time to `list` all when there is a large number of clients.
 
 `emqx ctl topics`
 
-This command is previously (in 4.x releses) known as the `routes` command.
+This command is previously (in 4.x releases) known as the `routes` command.
 It's to list/describe subscribed topics (or topic filters) in the cluster.
 
 :::warning
@@ -204,14 +204,14 @@ after for example a certificate renewal.
 
 `emqx ctl olp`
 
-OLP stnads for overload protection.
+OLP stands for overload protection.
 The `olp` command is to check overload status, and also the enable/disabled system
 overload protection.
 
 For more details see `overload_protection` configuration doc.
 
 ::: note
-`olp` is by default not enalbed, enabling from CLI does not persist it to the configs.
+`olp` is by default not enabled, enabling from CLI does not persist it to the configs.
 :::
 
 ## gateway-registry
@@ -220,7 +220,7 @@ For more details see `overload_protection` configuration doc.
 
 List the registered gateways in the system.
 
-Currently thre are by default 5 registered gateways:
+Currently there are by default 5 registered gateways:
 
 * coap
 * exproto
@@ -243,7 +243,7 @@ This command can be used to inspect or manage gateway loading/running status.
 
 `emqx ctl gateway-metrics`
 
-Inspect gateaay metrics.
+Inspect gateway metrics.
 
 ### rules
 

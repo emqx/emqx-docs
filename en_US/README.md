@@ -62,7 +62,7 @@ Add more features to MQTT:
 ### Scalability
 
 - Multi-server node cluster (Cluster)
-- Support manual, mcast, dns, etcd, k8s and other cluster discovery methods
+- Support `manual`, `mcast`, `dns`, `etcd`, `k8s` cluster discovery methods
 - Multi-server node bridge (Bridge)
 
 ### Data Integration
@@ -70,9 +70,7 @@ Add more features to MQTT:
 - SQL syntax rule-engine to extract, filter, enrich, and transform MQTT message or internal events to formats expected by external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT(such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
 - Supports integration with other apps using WebHook
-{emqxee}
-- Enterprise: TODO
-{endemqxee}
+
 
 ### Reliability
 

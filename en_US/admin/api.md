@@ -7,7 +7,7 @@ When EMQX is started in localhost, you can visit
 http://localhost:18083/api-docs/index.html
 to view the API document, and also experiment with the management APIs from the Swagger UI.
 
-The `/api-docs` endpoint does not require login, however to go furthre from there,
+The `/api-docs` endpoint does not require login, however to go further from there,
 you'll need to go through a few simple steps setup the management API authentication.
 
 The reset of this document is to guide you through the steps.
@@ -21,9 +21,9 @@ You may add or change `dashboard.default_password` in `emqx.conf` to bootstrap t
 You also set environment variable `EMQX_DASHBOARD__DEFAULT_PASSWORD` to bootstrap the default user.
 
 ::: warning
-EMQX administrative users are stored in its builtin database, once the database is bootstraped
+EMQX administrative users are stored in its builtin database, once the database is bootstrapped
 changing the config or environment variable will not take effect.
-After bootstraped, the only way to change a usre's password is to use CLI command:
+After bootstrapped, the only way to change a user's password is to use CLI command:
 `emqx ctl admins passwd admin new-password`
 :::
 
