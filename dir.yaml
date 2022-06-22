@@ -150,6 +150,7 @@
     - advanced/auto-subscriptions
     - advanced/topic-rewrite
     - advanced/system-topic
+    - advanced/quic
 
 - title_en: Persistence Backends
   title_cn: 数据持久化
