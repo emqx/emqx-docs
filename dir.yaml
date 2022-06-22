@@ -11,7 +11,7 @@
 # - Parent nodes must NOT have a 'path'
 #
 # Content node can be one of:
-# - Just the path to the markdown file (the first lien of which is extracted as its title)
+# - Just the path to the markdown file (the first line of which is extracted as its title)
 #   the path is relative inside the per-language sub-dir i.e. en_US and zh_CN
 # - A node with 'title_en' 'title_cn' and 'path'
 
@@ -44,12 +44,20 @@
         - deploy/cluster/lb
   # - deploy/relup
 
-- title_en: Management Interfaces
+- title_en: Configuration
+  title_cn: 配置
+  children:
+    - title_en: Configuraion Files
+      title_cn: 配置文件
+      path: admin/cfg # Configuration file
+
+- title_en: Management
   title_cn: 管理接口
   children:
-    - admin/cli
+    - title_en: Command Line Interface
+      title_cn: 命令行接口
+      path: admin/cli
     - admin/api # Swagger API doc
-    - admin/cfg # Configuration file
 
 - title_en: Security
   title_cn: 安全

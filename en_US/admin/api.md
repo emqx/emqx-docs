@@ -48,15 +48,14 @@ You may create 'app' `key:secret` pairs from the dashboard or by calling the
 
 ```
 curl -u 'admin:public' \
-     -X 'POST' \ 'http://localhost:18083/api/v5/api_key' \
+     -X 'POST' 'http://localhost:18083/api/v5/api_key' \
      -H 'accept: application/json' \
      -H 'Content-Type: application/json' \
      -d '{
             "name": "EMQX-API-KEY-3",
             "expired_at": "2022-12-05T02:01:34.186Z",
             "desc": "for testing",
-            "enable": true,
-            "expired": true
+            "enable": true
         }'
 ```
 

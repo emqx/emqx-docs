@@ -1,4 +1,4 @@
-# Introduction (5.0 doc is under construction)
+# Introduction
 
 *EMQX* is an Open-Source, Cloud-Native, Distributed MQTT Broker for IoT based on the Erlang/OTP platform.
 

@@ -1,4 +1,4 @@
-# EMQX Configuration
+# Configuration Files
 
 <!--5.0.1-2525659d-->
 EMQX configuration file is in [HOCON](https://github.com/emqx/hocon) format.
