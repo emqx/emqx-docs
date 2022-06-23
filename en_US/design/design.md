@@ -25,7 +25,7 @@ In terms of the design of EMQX Broker, it firstly separates the FrontEnd and Bac
 
 With Multi-core servers and modern operating system kernel, it can easily support 1 million TCP connections. The core issue is how to deal with business bottlenecks at the application level.
 
-EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: <http://docs.emqtt.cn/zh_CN/latest/tune.html>
+EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: [System Tuning](../tutorial/tune.md)
 
 ### Fully asynchronous architecture
 
@@ -48,7 +48,7 @@ Kafka made a correct design on the above problem, which is a message server base
 
 After EMQX separates message routing and message storage responsibilities in the design, the function of data replication, disaster recovery and even application integration can be implemented flexibly at the data level.
 
-In EMQX Enterprise Edition products, through rule engines or plugins, messages can be persisted to both databases such as Redis, MongoDB, Cassandra, MySQL, PostgreSQL, and message queues such as RabbitMQ, Kafka.
+In EMQX Enterprise products, through rule engines or plugins, messages can be persisted to both databases such as Redis, MongoDB, Cassandra, MySQL, PostgreSQL, and message queues such as RabbitMQ, Kafka.
 
 ## System structure
 

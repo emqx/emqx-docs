@@ -2,7 +2,7 @@
 
 EMQX provides users with data import and export function to meet the needs of server upgrade, migration and data backup. The data import and export function supports exporting the data (such as the blacklist, rule engine configuration) stored in Mnesia , the default database of EMQ x broker, to the local file in JSON format. Of course, the user does not need to care about the data content in the exported file. The exported file can be imported into other running instances of EMQ x broker. The EMQ x broker can be the same version or different versions, but it currently only supports `4.1.0` and later versions..
 
-EMQX Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-export), [HTTP API](./http-api.md#endpoint-data- import-and-export) and Dashboard's visual interface (Enterprise Edition) for data import and export functions. The data currently supported for import and export are as follows:
+EMQX provides [Command Line Interface](./cli.md#endpoint-data-import-and-export), [HTTP API](./http-api.md#endpoint-data- import-and-export) and Dashboard's visual interface (EMQX Enterprise) for data import and export functions. The data currently supported for import and export are as follows:
 
 
 {% emqxce %}
@@ -40,13 +40,13 @@ EMQX Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-
 
     ```
     $ ./emqx_ctl data export
-    The emqx data has been successfully exported to /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json.
+    The emqx data has been successfully exported to /var/lib/emqx/emqx-export-2020-5-15-17-39-0.json.
     ```
 
 2. Save the exported file, and we save the exported file to the tmp directory here.
 
    ```
-   $ cp /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json /tmp
+   $ cp /var/lib/emqx/emqx-export-2020-5-15-17-39-0.json /tmp
    ```
 
 3. Reinstall EMQX Broker and start it
@@ -80,7 +80,7 @@ EMQX Broker provides [Command Line Interface](./cli.md#endpoint-data-import-and-
    {"data":{"size":388,"filename":"emqx-export-2020-9-4-10-24-16.json","created_at":"2020-9-4 10:24:16"},"code":0}
    ```
 
-   > The exported data file is located at the directory of `.../emqx/data` or `/var/lib/emqx/data`
+   > The exported data file is located at the directory of `.../emqx/data` or `/var/lib/emqx/`
 
 2. Download data file
 

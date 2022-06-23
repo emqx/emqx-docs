@@ -37,13 +37,13 @@ EMQX Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endpo
 
     ```bash
     $ ./emqx_ctl data export
-    The emqx data has been successfully exported to /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json.
+    The emqx data has been successfully exported to /var/lib/emqx/emqx-export-2020-5-15-17-39-0.json.
     ```
 
 2. 保存导出文件，这里将导出文件保存到 tmp 目录
 
    ```bash
-   $ cp /var/lib/emqx/data/emqx-export-2020-5-15-17-39-0.json /tmp
+   $ cp /var/lib/emqx/emqx-export-2020-5-15-17-39-0.json /tmp
    ```
 
 3. 重新安装 EMQX Broker 并启动
@@ -77,7 +77,7 @@ EMQX Broker 为数据导入导出功能提供了[命令行接口](./cli.md#endpo
    {"data":{"size":388,"filename":"emqx-export-2020-9-4-10-24-16.json","created_at":"2020-9-4 10:24:16"},"code":0}
    ```
 
-   > 导出的数据文件位于 `.../emqx/data` 或 `/var/lib/emqx/data` 目录
+   > 导出的数据文件位于 `.../emqx/data` 或 `/var/lib/emqx/` 目录
 
 2. 下载数据文件
 

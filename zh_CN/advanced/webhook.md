@@ -68,7 +68,6 @@ web.hook.rule.message.publish.2 = {"action": "on_message_publish", "topic": "foo
 | message.publish      | 消息发布     | 服务端在发布（路由）消息前                            |
 | message.delivered    | 消息投递     | 消息准备投递到客户端前                                |
 | message.acked        | 消息回执     | 服务端在收到客户端发回的消息 ACK 后                   |
-| message.dropped      | 消息丢弃     | 发布出的消息被丢弃后                                  |
 
 ### Number
 

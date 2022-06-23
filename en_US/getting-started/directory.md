@@ -5,9 +5,9 @@ The directory structure of EMQX Broker obtained by different installation method
 | Description                            | ZIP          | Binary                   |
 | -------------------------------------- | ------------ | ------------------------ |
 | Executable file directory              | `./bin`      | `/usr/lib/emqx/bin`      |
-| Data files                             | `./data`     | `/var/lib/emqx/data`     |
+| Data files                             | `./data`     | `/var/lib/emqx/`         |
 | Erlang Virtual machine files           | `./erts-*`   | `/usr/lib/emqx/erts-*`   |
-| Configuration file directory           | `./etc`      | `/etc/emqx/etc`          |
+| Configuration file directory           | `./etc`      | `/etc/emqx/`             |
 | Dependency directory                   | `./lib`      | `/usr/lib/emqx/lib`      |
 | Log file                               | `./log`      | `/var/log/emqx`          |
 | Start related scripts and schema files | `./releases` | `/usr/lib/emqx/releases` |
