@@ -1,4 +1,4 @@
-# Embedded database
+# Cluster Scalability
 
 EMQX uses an embedded [Mria](https://github.com/emqx/mria) database to store the following information:
 
@@ -11,7 +11,7 @@ EMQX uses an embedded [Mria](https://github.com/emqx/mria) database to store the
 Mria tables are replicated across all EMQX nodes.
 It also helps with the fault-tolerance: the data is safe, as long as at least one node in the cluster is alive.
 
-If the size of the EMQX cluster is below 5 nodes, typically no tuning of the embedded database is required.
+If the size of the EMQX cluster is below 5 nodes, typically no database scalability tuning is required.
 
 However, for horizontal scalability it is recommended to split the nodes in the cluster into two groups:
 
@@ -48,7 +48,7 @@ In EMQX 5.0 all nodes assume core role by default, so without any tweaks the clu
 
 To make use of the new replication protocol, set `EMQX_NODE__DB_ROLE` environment variable or `node.db_role` setting in `emqx.conf` to `replicant` on some of the nodes in the cluster, this way they will assume replicant role. Note that there must be at least one core node in the cluster, we recommend 3 cores + N replicants setup as the starting point.
 
-Core nodes may accept MQTT traffic, or they can serve purely as the database server for the replicants, depending on the usecase.
+Core nodes may accept MQTT traffic, or they can disable all MQTT listeners to serve purely as the database server for the replicants, depending on the usecase.
 
 - In a small cluster (3 nodes or less in total) it doesn't make economical sense to use replicants, so core nodes take all the traffic.
 - In a very large cluster (10 nodes or more) it makes sense to move away traffic from the core nodes.
@@ -62,8 +62,8 @@ Monitoring of the Mria performance can be done using Prometheus metrics or using
 #### Core
 - `emqx_mria_last_intercepted_trans`: Number of transactions received by the shard since the node start. Note that this value can be different on different core nodes.
 - `emqx_mria_weight`: A value used for load balancing. It changes depending on the momentary load of the core node.
-- `emqx_mria_replicants`: Number of replicants connected to the core node, replicating data for the given shard.
-- `emqx_mria_server_mql`: Number of unprocessed transactions, waiting to be sent to the replicants. Less is better. If this metric tends to grow, more core nodes are needed.
+- `emqx_mria_replicants`: Number of replicants connected to the core node. Numbers are grouped per shard.
+- `emqx_mria_server_mql`: Number of unprocessed transactions, waiting to be sent to the replicants. Less is better. If this metric tends to grow, then it's probably time to add more computing resource for the exiting core nodes, or even add more core nodes.
 
 #### Replicant
 - `emqx_mria_lag`: Replicant lag, indicating how far behind the upstream core node the replicant lags. Less is better.
@@ -74,4 +74,4 @@ Monitoring of the Mria performance can be done using Prometheus metrics or using
 
 ### Console commands
 
-`mria_rlog:status().` command can be executed in the EMQX Erlang shell to get more extensive information about the state of the embedded database.
+`emqx eval 'mria_rlog:status().'` command can be executed to get more extensive information about the state of the embedded database.
