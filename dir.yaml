@@ -42,6 +42,7 @@
         - deploy/cluster/manual
         - deploy/cluster/auto
         - deploy/cluster/lb
+        - deploy/cluster/db
   # - deploy/relup
 
 - title_en: Configuration

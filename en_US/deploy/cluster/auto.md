@@ -9,16 +9,16 @@ Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster, and
 Network partition autoheal and autoclean.
 :::
 
-EMQX supports multiple node discovery strategies:
+EMQX supports multiple autocluster strategies:
 
 | Strategy | Description       |
 | -------- | ----------------- |
 | manual   | Create a cluster through manual command |
-| static   | Autocluster of static node list |
-| mcast    | Autocluster with UDP multicast mode |
-| dns      | Autocluster of DNS A record |
-| etcd     | Autocluster through etcd |
-| k8s      | Autocluster of Kubernetes service |
+| static   | Discovery based on a static node list |
+| mcast    | Discovery with UDP multicast mode |
+| dns      | Discovery based on DNS records |
+| etcd     | Discovery via etcd |
+| k8s      | Discovery via Kubernetes service |
 
 ### static
 Configure a fixed node list to automatically discover and create clusters:
@@ -48,7 +48,16 @@ Automatically discover and create clusters based on DNS A records:
 ```bash
 cluster.discovery = dns
 cluster.dns.name = localhost
-cluster.dns.app  = ekka
+```
+
+### DNS SRV records
+
+Automatically discover and create clusters based on DNS SRV records:
+
+```bash
+cluster.discovery = dns
+cluster.dns.record_type = srv
+cluster.dns.name = localhost
 ```
 
 ### etcd
@@ -69,7 +78,7 @@ Automatically discover and create clusters based on [Kubernetes](https://kuberne
 ```bash
 cluster.discovery = k8s
 cluster.k8s.apiserver = http://10.110.111.204:8080
-cluster.k8s.service_name = ekka
+cluster.k8s.service_name = emqx
 cluster.k8s.address_type = ip
-cluster.k8s.app_name = ekka
+cluster.k8s.app_name = emqx
 ```
