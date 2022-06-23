@@ -15,21 +15,21 @@ ref:
 
 # Business Service
 
-## What's the major difference between EMQX enterprise and broker?
+## What's the major difference between EMQX Enterprise and EMQX?
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 
 
-EMQX Enterprise is based on EMQX, it includes all of the features from comunity edition. More features are added:
+EMQX Enterprise is based on EMQX, it includes all of the features from EMQX. More features are added:
 
 
-- Data persistence: Enterprise version supports to persist data to several kinds of databases, includes the popular relational database, such as MySQL, PostgreSQL; Memory database, such as Redis; Non-SQL DB, such as MongoDB.
+- Data persistence: EMQX Enterprise supports to persist data to several kinds of databases, includes the popular relational database, such as MySQL, PostgreSQL; Memory database, such as Redis; Non-SQL DB, such as MongoDB.
 
 - Kafka bridge: Forward MQTT message to Kafka clusters through internal bridge plugins, application can consume Kafka message to implement the streaming data process.
 
 - RabbitMQ bridge: Forward MQTT message to RabbitMQ, application can consume RabbitMQ message to integrate with 3rd party system.
 
-- More rule-engine Integrations: Various data integration with databases and streaming platforms, to name a few
+- More rule engine integrations: Various data integration with databases and streaming platforms, to name a few
 
   - Streaming platforms: Kafka, Pulsar, RocketMQ (or AMQP in general), SAP Event Mesh,
 
@@ -39,7 +39,7 @@ EMQX Enterprise is based on EMQX, it includes all of the features from comunity 
 
   - Time-eries Databases: InfluxDB, TimescaleDB, OpenTSDB
 
-- Runtime Config Change: Configurations which can be set on-the-fly without restarting the service can be changed from dashboard UI, while the community edition always require restarts.
+- Runtime Config Change: Configurations which can be set on-the-fly without restarting the service can be changed from dashboard UI, while EMQX always require restarts.
 
 - System monitoring (EMQX Control Center)
 
