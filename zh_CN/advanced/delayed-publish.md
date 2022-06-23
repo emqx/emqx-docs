@@ -19,3 +19,16 @@ $delayed/{DelayInterval}/{TopicName}
 - `$delayed/3600/$SYS/topic`: 1 小时后将 MQTT 消息发布到 `$SYS/topic`。
 
 延迟发布功能由 `emqx_mod_delayed` 内置模块提供，此功能默认关闭，支持动态启停，可在【模块】选项中点击启用，请参见 [modules 命令](../admin/cli.md#modules-%E5%91%BD%E4%BB%A4)。
+
+## 配置延迟发布
+
+```bash
+delayed {
+    enable = true
+    max_delayed_messages = 12435
+}
+```
+
+`enable`: 表示开启或关闭延迟发布功能。
+
+`max_delayed_messages`: 表示同时存在的延迟发的消息的最大数量。
