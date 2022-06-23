@@ -513,7 +513,7 @@ EMQX 4.3.0 is released now, it mainly includes the following changes:
 - Support Json format log
 - Support IPv6 auto probe
 - Environment variable override configuration files can be used for all distributions (previously only for docker)
-- Certificate upload from dashboard has been made available for open-source edition (previously only for enterprise edition)
+- Certificate upload from dashboard has been made available for EMQX (previously only for EMQX Enterprise)
 
 ### Bugs Fix
 

@@ -26,10 +26,10 @@ See [EMQX Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a co
 ## Preview
 
 ```sh
-# for community
+# for EMQX
 ./preview.sh ce 8080
 
-# for enterprise
+# for EMQX Enterprise
 ./preview.sh ee 8080
 ```
 
@@ -37,18 +37,18 @@ Now, open <http://localhost:8080/docs/en/latest/> or <http://localhost:8080/en/e
 
 ## Release a New Version
 
-Both community and enterprise edition documents are managed in the same repo and same `release-Major.Minor` branch.
+Both EMQX and EMQX Enterprise documents are managed in the same repo and same `release-Major.Minor` branch.
 
-Community and Enterprise may have different content so they may release at different pace.
+EMQX and EMQX Enterprise may have different content so they may release at different pace.
 
-### Cut a new release for community edition
+### Cut a new release for EMQX
 
 ```sh
 NEW_TAG="$(./cut-release.sh ce)"
 git push origin "${NEW_TAG}"
 ```
 
-### Cut a New Release for Enterprise Edition
+### Cut a New Release for EMQX Enterprise
 
 ```sh
 NEW_TAG="$(./cut-release.sh ee)"

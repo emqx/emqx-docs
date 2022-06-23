@@ -8,7 +8,7 @@ EMQX uses Erlang to implement DolphinDB's client API, which transmits data to Do
 
 Currently, EMQX only adapts to DolphinDB 1.20.7 version.
 
-Taking the Linux version as an example, you can go to the official website to download the latest version of the Linux64 installation package from the community:https://www.dolphindb.cn/downloads.html
+Taking the Linux version as an example, you can go to the official website to download the latest version of the Linux64 installation package from the community: https://www.dolphindb.cn/downloads.html
 
 Upload the server directory of the installation package to the server directory `/opts/app/dolphindb`, and test whether the startup is normal:
 
