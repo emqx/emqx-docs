@@ -19,9 +19,7 @@ ref:
 
 **Tags:** [*Enterprise*](tags.md#enterprise)
 
-
 EMQX Enterprise is based on EMQX, it includes all of the features from EMQX. More features are added:
-
 
 - Data persistence: EMQX Enterprise supports to persist data to several kinds of databases, includes the popular relational database, such as MySQL, PostgreSQL; Memory database, such as Redis; Non-SQL DB, such as MongoDB.
 

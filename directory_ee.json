@@ -259,6 +259,14 @@
           "path": "modules/retainer"
         },
         {
+          "title": "日志追踪",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "慢订阅者统计",
+          "path": "modules/slow_subscribers_statistics"
+        },
+        {
           "title": "MQTT 消息延迟发布",
           "path": "modules/delayed_publish"
         }
@@ -335,6 +343,10 @@
               "path": "rule/backend_influxdb"
             },
             {
+              "title": "保存数据到 InfluxDB V2",
+              "path": "rule/backend_influxdb_v2"
+            },
+            {
               "title": "保存数据到 TimescaleDB",
               "path": "rule/backend_timescaledb"
             },
@@ -351,12 +363,20 @@
               "path": "rule/backend_dolphindb"
             },
             {
+              "title": "保存数据到 MatrixDB",
+              "path": "rule/backend_matrixdb"
+            },
+            {
               "title": "保存数据到 TDengine",
               "path": "rule/backend_tdengine"
             },
             {
               "title": "保存数据到 Lindorm",
               "path": "rule/backend_lindorm"
+            },
+            {
+              "title": "保存数据到 Tablestore",
+              "path": "rule/backend_tablestore"
             }
           ]
         },
@@ -378,6 +398,10 @@
             {
               "title": "桥接数据到 RocketMQ",
               "path": "rule/bridge_rocketmq"
+            },
+            {
+              "title": "桥接数据到 SAP Event Mesh",
+              "path": "rule/bridge_sap_event_mesh"
             },
             {
               "title": "桥接数据到 MQTT Broker",
@@ -728,7 +752,7 @@
       "children": [
         {
           "title": "变更日志",
-          "path": "changes/changes-ee-4.3"
+          "path": "changes/changes-ee-4.4"
         },
         {
           "title": "生命周期 EOL",
@@ -736,7 +760,7 @@
         },
         {
           "title": "升级指南",
-          "path": "changes/upgrade-4.3"
+          "path": "changes/upgrade-4.4"
         }
       ]
     },
@@ -1006,6 +1030,14 @@
           "path": "modules/retainer"
         },
         {
+          "title": "Log Tracer",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "Slow Subscriber Statistics",
+          "path": "modules/slow_subscribers_statistics"
+        },
+        {
           "title": "MQTT Delayed Publish",
           "path": "modules/delayed_publish"
         }
@@ -1082,6 +1114,10 @@
               "path": "rule/backend_influxdb"
             },
             {
+              "title": "Save data to InfluxDB V2",
+              "path": "rule/backend_influxdb_v2"
+            },
+            {
               "title": "Save data to TimescaleDB",
               "path": "rule/backend_timescaledb"
             },
@@ -1098,12 +1134,20 @@
               "path": "rule/backend_dolphindb"
             },
             {
+              "title": "Save data to MatrixDB",
+              "path": "rule/backend_matrixdb"
+            },
+            {
               "title": "Save data to TDengine",
               "path": "rule/backend_tdengine"
             },
             {
               "title": "Save data to Lindorm",
               "path": "rule/backend_lindorm"
+            },
+            {
+              "title": "Save data to Tablestore",
+              "path": "rule/backend_tablestore"
             }
           ]
         },
@@ -1125,6 +1169,10 @@
             {
               "title": "Bridge data to RocketMQ",
               "path": "rule/bridge_rocketmq"
+            },
+            {
+              "title": "Bridge data to SAP Event Mesh",
+              "path": "rule/bridge_sap_event_mesh"
             },
             {
               "title": "Bridge data to MQTT Broker",
@@ -1413,7 +1461,7 @@
       "children": [
         {
           "title": "Change log",
-          "path": "changes/changes-ee-4.3"
+          "path": "changes/changes-ee-4.4"
         },
         {
           "title": "End of life dates",
@@ -1421,7 +1469,7 @@
         },
         {
           "title": "Upgrade guide",
-          "path": "changes/upgrade-4.3"
+          "path": "changes/upgrade-4.4"
         }
       ]
     },
@@ -1433,7 +1481,7 @@
           "path": "design/design"
         },
         {
-          "title": "Awsome",
+          "title": "Awesome",
           "path": "awesome/awesome"
         }
       ]

@@ -17,7 +17,7 @@ backend.influxdb.pool1.server = 127.0.0.1:8089
 ## InfluxDB Pool Size
 backend.influxdb.pool1.pool_size = 5
 
-## Wether to add timestamp automatically
+## Whether to add timestamp automatically
 backend.influxdb.pool1.set_timestamp = true
 
 backend.influxdb.hook.message.publish.1 = {"topic": "#", "action": {"function": "on_message_publish"}, "pool": "pool1"}

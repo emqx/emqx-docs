@@ -2260,7 +2260,7 @@ EMQX 4.0-beta.3 版本发布。此版本主要针对错误修复以及测试覆�
 
 功能增强:
 
-  - 支持使用 IPv6 访问 Dashbaord
+  - 支持使用 IPv6 访问 Dashboard
     
     Github PR:
     [emqx/emqx-dashboard\#162](https://github.com/emqx/emqx-dashboard/pull/162)
@@ -2286,7 +2286,7 @@ EMQX 4.0-beta.3 版本发布。此版本主要针对错误修复以及测试覆�
 
 *发布日期: 2019-10-28*
 
-EMQX 3.2.4 版本发布。此版本主要为 Dashbaord 和 REST API 添加了 IPv6 支持，并修复了一些错误。
+EMQX 3.2.4 版本发布。此版本主要为 Dashboard 和 REST API 添加了 IPv6 支持，并修复了一些错误。
 
 错误修复:
 
@@ -2313,7 +2313,7 @@ EMQX 3.2.4 版本发布。此版本主要为 Dashbaord 和 REST API 添加了 IP
 
 功能增强:
 
-  - 支持使用 IPv6 访问 Dashbaord
+  - 支持使用 IPv6 访问 Dashboard
     
     Github PR:
     [emqx/emqx-dashboard\#161](https://github.com/emqx/emqx-dashboard/pull/161)
@@ -4977,7 +4977,7 @@ Support node cookie value with = characters. (emq-relx\#146)
 
 ### mochiweb
 
-Improve Req:get(peername) funciton to support x-forwarded-for and
+Improve Req:get(peername) function to support x-forwarded-for and
 x-remote-port. (emqtt/mochiweb\#9)
 
 ## 2.3.0 版本 "Passenger's Log"
@@ -5085,7 +5085,7 @@ Supoort both EN and CN languages.
 
 Released a new sexy dashboard.
 
-Add more RESTful APIs for manangement and monitoring.
+Add more RESTful APIs for management and monitoring.
 
 Configuring the broker through CLI or API without having to restart.
 
@@ -5335,7 +5335,7 @@ Call emit\_stats when force GC (emqttd\#1071)
 Update the default value of 'mqtt.mqueue.max\_length' to 1000
 (emqttd\#1074)
 
-Update emq-auth-mongo READEME (emq-auth-mongo\#66)
+Update emq-auth-mongo README (emq-auth-mongo\#66)
 
 Update default password field (emq-auth-mongo\#67)
 
@@ -5372,7 +5372,7 @@ Allow for Content-Type:application/json in HTTP Publish API
 
 emqttd\_http.erl:data conversion (emqttd\#1059)
 
-Seperate emq\_sn from emqttd (emq-sn\#24)
+Separate emq\_sn from emqttd (emq-sn\#24)
 
 Check St0's type, making it easier to debug crash problems
 (emq-lua-hook\#6)
@@ -5606,7 +5606,7 @@ Hooks API支持注册带Tag的回调函数，解决相同模块函数多次Hook�
 
 emqttd\#916: Add 'mqtt\_msg\_from()' type
 
-emq-auth-http\#15: ACL endpoint isnt called
+emq-auth-http\#15: ACL endpoint isn't called
 
 ## 2.1-beta 版本
 
@@ -6546,7 +6546,7 @@ consume about 15G Memory and 200% CPU.
 
 *发布日期: 2015-11-28*
 
-Bugfix: Plugin pathes error under windows (\#387)
+Bugfix: Plugin paths error under windows (\#387)
 
 Improve: Too many error logs "\[error\] Session ..... Unexpected EXIT:
 client\_pid=<0.14137.35\>, exit\_pid=<0.30829.22\>, reason=nop..."
@@ -7062,7 +7062,7 @@ WebSocket(SSL)\](<https://github.com/emqtt/emqttd/wiki/MQTT-Over-WebSocket>)
 Now\!
 
 \[Plugin
-Achitecture\](<https://github.com/emqtt/emqttd/wiki/Plugin%20Design>)
+Architecture\](<https://github.com/emqtt/emqttd/wiki/Plugin%20Design>)
 based on OTP application
 
 \[Trace MQTT Packets or
@@ -7133,7 +7133,7 @@ Wiki\](<https://github.com/emqtt/emqttd/wiki/ACL-Design>)
 Authentication with username, clientid Now: \[Authentication
 Wiki\](<https://github.com/emqtt/emqttd/wiki/Authentication>)
 
-Seperate common MQTT library to 'emqtt' application
+Separate common MQTT library to 'emqtt' application
 
 Redesign message pubsub, route and retain modules
 
@@ -7356,7 +7356,7 @@ NOTICE: Full MQTT 3.1.1 support now\!
 
 Feature: Passed org.eclipse.paho.mqtt.testing/interoperability tests
 
-Feature: Qos0, Qos1 and Qos2 publish and suscribe
+Feature: Qos0, Qos1 and Qos2 publish and subscribe
 
 Feature: session(clean\_sess=false) management and offline messages
 
@@ -7392,7 +7392,7 @@ Makefile: deps -\> get-deps
 
 rebar.config: fix mochiweb git url
 
-tag emqtt release accoding to \[Semantic
+tag emqtt release according to \[Semantic
 Versioning\](<http://semver.org/>)
 
 max clientId length is 1024 now.

@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -654,6 +654,74 @@ NOTE: this config only takes effect when `rpc.port_discovery` is set to `manual`
 
 Set the number of RPC communication channels initiated by this node to each remote node. Set to 1 to ensure the order of messages. Keep the default value (half the number of CPU cores) to improve RPC throughput.
 
+### rpc.driver
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| enum    | `tcp`, `ssl`   | `tcp` |
+
+#### Description
+
+Transport-layer protocol used for communication between the brokers.
+
+### rpc.default_client_driver
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| enum    | `tcp`, `ssl`   | `tcp` |
+
+#### Description
+
+Transport-layer protocol used for communication between the brokers (client side).
+This parameter should match the value of `rpc.driver`.
+
+
+### rpc.enable_ssl
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| integer | 1024 - 65535   | 5369 |
+
+#### Description
+
+Listening port used by RPC local service.
+Note that this config only takes effect when rpc.port_discovery is set to manual and driver is set to ssl.
+
+### rpc.certfile
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| string  |                |                 |
+
+#### Description
+
+Path to TLS certificate file used to validate identity of the cluster nodes.
+This configuration is mandatory when `rpc.driver` is set to `ssl`, otherwise it doesn't take any effect.
+
+
+### rpc.cacertfile
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| string  |                |                 |
+
+#### Description
+
+Path to certification authority TLS certificate file used to validate `rpc.certfile`.
+This configuration is mandatory when `rpc.driver` is set to `ssl`, otherwise it doesn't take any effect.
+
+
+### rpc.keyfile
+
+| Type    | Optional Value | Default         |
+| ------- | -------------- | --------------- |
+| string  |                |                 |
+
+#### Description
+
+Path to the private key file for the `rpc.certfile`.
+This configuration is mandatory when `rpc.driver` is set to `ssl`, otherwise it doesn't take any effect.
+Note: contents of this file are secret, so it's necessary to set permissions to `600`.
 
 
 ### rpc.connect_timeout
@@ -7224,7 +7292,7 @@ Specify the local port where the Stomp plugin listens.
 
 #### Description
 
-Specify the size of the thread pool for Stomp service Acceptor 
+Specify the size of the thread pool for Stomp service Acceptor
 
 
 
@@ -7732,9 +7800,10 @@ Licence file of the node.
 
 #### Description
 
-The alarm is raised when this threshld is reached. As percentage of alive connections/max connections.
+The alarm is raised when this threshold is reached. As percentage of alive connections/max connections.
+
 - After the alarm occurs, you can refer to [How to update the license?] (../faq/use-guide.md#how-to-update-emq-x-license) for hot update.
-- When the number of connections exceeds the maximum allowed value, new client connections will be rejected, and already connected clients will not be affected.
+- When the number of connections exceeds the maximum allowed value, new client connections will be rejected, but the already connected clients will not be affected.
 
 <br />
 ### license.connection_low_watermark_alarm

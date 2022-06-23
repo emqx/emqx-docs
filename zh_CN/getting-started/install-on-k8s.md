@@ -47,7 +47,7 @@
     metadata:
       name: emqx
     spec:
-      image: emqx/emqx:4.3.11
+      image: emqx/emqx:4.4.3
     EOF
     ```
 
@@ -60,7 +60,7 @@
     emqx-1 1/1 Running 0 22s 
     emqx-2 1/1 Running 0 22s 
     $ kubectl exec -it emqx-0 -- emqx_ctl status 
-    Node 'emqx@emqx-0.emqx-headless.default.svc.cluster.local' 4.3.11 is started
+    Node 'emqx@emqx-0.emqx-headless.default.svc.cluster.local' 4.4.3 is started
     $ kubectl exec -it emqx-0 -- emqx_ctl cluster status 
     Cluster status: #{running_nodes =>
                       ['emqx@emqx-0.emqx-headless.default.svc.cluster.local',
@@ -83,7 +83,7 @@
     metadata:
       name: emqx-ee
     spec:
-      image: emqx/emqx-ee:4.3.6
+      image: emqx/emqx-ee:4.4.3
     EOF
     ```
 
@@ -96,7 +96,7 @@
    emqx-ee-1 1/1 Running 0 22s 
    emqx-ee-2 1/1 Running 0 22s
    $ kubectl exec -it emqx-ee-0 -- emqx_ctl status 
-   Node 'emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local' 4.3.6 is started
+   Node 'emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local' 4.4.3 is started
    $ kubectl exec -it emqx-ee-0 -- emqx_ctl cluster status 
    Cluster status: #{running_nodes =>
                       ['emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local',

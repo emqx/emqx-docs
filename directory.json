@@ -305,6 +305,14 @@
         {
           "title": "性能测试",
           "path": "tutorial/benchmark"
+        },
+        {
+          "title": "在线日志追踪",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "慢订阅者统计",
+          "path": "modules/slow_subscribers_statistics"
         }
       ]
     },
@@ -467,11 +475,11 @@
       "children": [
         {
           "title": "变更日志",
-          "path": "changes/changes-4.3"
+          "path": "changes/changes-4.4"
         },
         {
           "title": "升级指南",
-          "path": "changes/upgrade-4.3"
+          "path": "changes/upgrade-4.4"
 
         }
       ]
@@ -791,6 +799,14 @@
         {
           "title": "Benchmark",
           "path": "tutorial/benchmark"
+        },
+        {
+          "title": "Online Tracer",
+          "path": "modules/tracer"
+        },
+        {
+          "title": "Slow Subscriber Statistics",
+          "path": "modules/slow_subscribers_statistics"
         }
       ]
     },
@@ -925,11 +941,11 @@
       "children": [
         {
           "title": "Change log",
-          "path": "changes/changes-4.3"
+          "path": "changes/changes-4.4"
         },
         {
           "title": "Upgrade guide",
-          "path": "changes/upgrade-4.3"
+          "path": "changes/upgrade-4.4"
         }
       ]
     },
@@ -941,13 +957,13 @@
           "path": "design/design"
         },
         {
-          "title": "Awsome",
+          "title": "Awesome",
           "path": "awesome/awesome"
         }
       ]
     },
     {
-      "title": "Protocol Introduction",
+      "title": "Protocols",
       "children": [
         {
           "title": "LwM2M gateway",

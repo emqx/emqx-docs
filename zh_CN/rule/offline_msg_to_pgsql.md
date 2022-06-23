@@ -1,5 +1,11 @@
 # 离线消息保存到 PostgreSQL
 
+::: tip
+
+支持 PostgreSQL 13 及以下版本
+
+:::
+
 搭建 PostgreSQL 数据库，以 MacOS X 为例:
 ```bash
 $ brew install postgresql
