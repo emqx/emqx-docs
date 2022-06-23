@@ -726,7 +726,20 @@ Publish MQTT message。
 | encoding | String    | Optional | plain   | The encoding used in the message body. Currently only plain and base64 are supported. |
 | qos      | Integer   | Optional | 0       | QoS level |
 | retain   | Boolean   | Optional | false   | Whether it is a retained message |
-| user_properties   | Object   | Optional | {}   | The User Property of the PUBLISH message (MQTT 5.0) |
+| properties   | Object   | Optional | {}   | The Properties of the PUBLISH message |
+
+Properties：
+
+| Name     | Type | Description｜
+| -------- | --------- | -------- |
+| payload_format_indicator  | Integer   | 0 (0x00) Byte Indicates that the Payload is unspecified bytes, which is equivalent to not sending a Payload Format Indicator.  1 (0x01) Byte Indicates that the Payload is UTF-8 Encoded Character Data. The UTF-8 data in the Payload MUST be well-formed UTF-8 as defined by the Unicode specification and restated in RFC 3629|
+| message_expiry_interval   | integer  | Identifier of the Message Expiry Interval. If the Message Expiry Interval has passed and the Server has not managed to start onward delivery to a matching subscriber, then it MUST delete the copy of the message for that subscriber |
+| response_topic            | String   | Identifier of the Response Topic.The Response Topic MUST be a UTF-8 Encoded, It MUST NOT contain wildcard characters.|
+| correlation_data          | String   | Identifier of the Correlation Data. The Server MUST send the Correlation Data unaltered to all subscribers receiving the Application Message|
+| subscription_identifier   | Integer   | Identifier of the Subscription Identifier. It can have the value of 1 to 268,435,455. It is a Protocol Error if the Subscription Identifier has a value of 0. Multiple Subscription Identifiers will be included if the publication
+is the result of a match to more than one subscription, in this case their order is not significant. |
+| content_type              | String   | The Content Type MUST be a UTF-8 Encoded String |
+| user_properties           | Object   | Identifier of the User Property. The Server send all User Properties unaltered in a PUBLISH packet when forwarding the Application Message to a Client |
 
 **Success Response Body (JSON):**
 
@@ -738,7 +751,7 @@ Publish MQTT message。
 
 ```bash
 $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d \
-'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}'
+'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "properties": {"user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}, "content_type": "text/plain"}}'
 
 {"code":0}
 ```
@@ -813,7 +826,7 @@ Publish MQTT messages in batch.
 | [0].encoding | String  | Optional | plain   | The encoding method used in the message body, only `plain` and `base64` are supported currently |
 | [0].qos      | Integer | Optional | 0       | QoS level                                                    |
 | [0].retain   | Boolean | Optional | false   | Whether it is a retained message or not                      |
-| [0].user_properties   | Object   | Optional | {}   | The User Property of the PUBLISH message (MQTT 5.0) |
+| [0].properties   | Object   | Optional | {}   | The Properties of the PUBLISH message|
 **Success Response Body (JSON):**
 
 | Name | Type    | Description |
@@ -823,7 +836,7 @@ Publish MQTT messages in batch.
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","properties": {"user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","properties":{"user_properties": { "id": 10010, "name": "emqx", "foo": "bar"},"content_type": "text/plain"}}]'
 
 {"data":[{"topic":"a/b/c","code":0},{"topic":"a/b/c","code":0}],"code":0}
 ```
