@@ -80,5 +80,4 @@ cluster.discovery = k8s
 cluster.k8s.apiserver = http://10.110.111.204:8080
 cluster.k8s.service_name = emqx
 cluster.k8s.address_type = ip
-cluster.k8s.app_name = emqx
 ```

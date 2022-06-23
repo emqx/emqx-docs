@@ -267,7 +267,6 @@ cluster.discovery = k8s
 cluster.k8s.apiserver = http://10.110.111.204:8080
 cluster.k8s.service_name = emqx
 cluster.k8s.address_type = ip
-cluster.k8s.app_name = emqx
 ```
 
 > Kubernetes 不建议使用 Fannel 网络插件，推荐使用 Calico 网络插件。
