@@ -30,7 +30,7 @@ The '%%` prefix identifies comment strings.
 Example:
 
 ```erlang
-%% Allow "dashboard" users to subscribe to "$SYS/#" topics
+%% Allow MQTT client using username "dashboard"  to subscribe to "$SYS/#" topics
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 %% Allow users with IP address "127.0.0.1" to publish/subscribe to topics "$SYS/#", "#"
