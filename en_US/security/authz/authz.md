@@ -62,6 +62,7 @@ against the rules. Therefore, ACL cache may be enabled to cache authorization re
 
 ::: warning
 Caching improves performance significantly, so adjusting the default values to the relevant ones is essential.
+You can find more information about cache configuration below.
 :::
 
 ## Authorization placeholders
