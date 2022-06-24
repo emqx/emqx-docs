@@ -3,6 +3,10 @@
 This authorizer implements ACL checks through matching pub/sub requests against a predefined list of rules configured in
 a file.
 
+::: tip Tip
+Starting from 5.0, file-based ACL rules can be edited and reloaded from EMQX dashboard UI.
+:::
+
 File-based ACL is simple and lightweight. It is suitable to configure generic rules. For hundreds or more per-client rules, it is recommended to use other authorization sources, and file-based ACL can be the safety guard put at the end of the authorization chain.
 
 ## Configuration
