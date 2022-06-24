@@ -44,7 +44,7 @@ Example:
 }
 ```
 
-## Authorization Chain
+## Authorization chain
 
 Configured authorizers form a global chain. When a client makes a publish/subscribe request, authorizers are
 sequentially used to find access lists for the client. If an authorizer finds ACL rules, the request is checked
@@ -52,8 +52,13 @@ against them and gets allowed/denied. If ACL rules are not found, then the next 
 
 If no authorizer finds any ACL rules, then the default permission is applied.
 
-The first element of the chain is always the implicit authorizer that matches the request against the ACL rules
-returned by the authentication (if there are any).
+Unlike [authentication](../authn/authn.md#authentication-chains), authorization has only one global chain.
+
+## Implicit authorization
+
+Each _authentication_ backend can additionally provide ACL rules as a result of the authentication. These rules, if present, are applied before any other authorizers.
+
+See, for example, [JWT authorization](../authn/jwt.md#jwt-authorization).
 
 ## ACL Cache
 

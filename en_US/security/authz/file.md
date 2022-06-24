@@ -80,8 +80,3 @@ Additionally, there are two special rules:
     - `{deny, all}` — deny all operations.
 
 These rules are usually used as default at the end of the configuration.
-
-::: tip
-File-based authorization is most suitable for a small number of general rules. If you have many client-specific ACL rules
-consider using other authorization sources.
-:::
