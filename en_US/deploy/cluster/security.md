@@ -1,6 +1,6 @@
 # Cluster Security
 
-When to comes to security of the EMQX cluster there two primary
+When it comes to the security of the EMQX cluster there two primary
 aspects to consider.
 
 * Secure the ports each node listens on for clustering.

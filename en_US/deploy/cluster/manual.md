@@ -20,13 +20,13 @@ Or if you have rather static IP assignments for the hosts.
 
 | FQDN         |   Node name       |
 | ------------ | ----------------- |
-| 192.168.0.10 |  emqx@s1.emqx.io  |
-| 192.168.0.20 |  emqx@s2.emqx.io  |
+| 192.168.0.10 |  emqx@192.168.0.10  |
+| 192.168.0.20 |  emqx@192.168.0.20  |
 
 ::: tip Tip
-EMQX node names are immutable as it is baked into the database
-and data files. It is recommended to use static FQDNs for EMQX node names,
-especially when the network environment does provide static IPs.
+EMQX node names are immutable, as they are baked into the database schema
+and data files. It is strongly recommended to use static FQDNs for EMQX node names,
+especially when the network environment provides static IPs.
 :::
 
 ## Configure emqx@s1.emqx.io node
@@ -45,8 +45,8 @@ You can also override node name with an environment variable:
 env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
 ```
 
-::: tip Tip
-After the node joins the cluster, the node name cannot be changed.
+::: warning Warning
+After the node joins the cluster, the node name must not be changed.
 :::
 
 ## Configure emqx@s2.emqx.io Node
@@ -81,7 +81,7 @@ to one of the nodes in the cluster to join.
 But **NOT** for the nodes in the cluster to invite an outsider node
 to join.
 
-e.g. if a `s3.emqx.io` is to join the clsuter of `s1` and `s2`,
+e.g. if a `s3.emqx.io` is to join the cluster of `s1` and `s2`,
 the join command should be executed on `s3` but **NOT** on `s1` or `s2`.
 
 ::: warning Warning
