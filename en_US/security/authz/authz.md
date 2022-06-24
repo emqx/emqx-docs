@@ -94,7 +94,7 @@ Example of use in Redis authorizer:
 }
 ```
 
-## Topic placeholders
+### Placeholders in ACL rules
 
 When ACL rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.
 The following placeholders are available:
