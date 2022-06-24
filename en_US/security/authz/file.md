@@ -3,8 +3,7 @@
 This authorizer implements ACL checks through matching pub/sub requests against a predefined list of rules configured in
 a file.
 
-This is a simple and lightweight mechanism. It is suitable for projects with a limited number of rules that do not change
-frequently.
+File-based ACL is simple and lightweight. It is suitable to configure generic rules. For hundreds or more per-client rules, it is recommended to use other authorization sources, and file-based ACL can be the safety guard put at the end of the authorization chain.
 
 ## Configuration
 
