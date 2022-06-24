@@ -48,7 +48,7 @@ Example:
 
 Configured authorizers form a global chain. When a client makes a publish/subscribe request, authorizers are
 sequentially used to find access lists for the client. If an authorizer finds ACL rules, the request is checked
-against them and gets accepted/rejected. If ACL rules are not found, then the next authorizer from the chain is used.
+against them and gets allowed/denied. If ACL rules are not found, then the next authorizer from the chain is used.
 
 If no authorizer finds any ACL rules, then the default permission is applied.
 
