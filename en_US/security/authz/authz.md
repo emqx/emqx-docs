@@ -68,8 +68,11 @@ You can find more information about cache configuration below.
 ## Authorization placeholders
 
 Many authorizers allow using _placeholders_ in their configuration.
-Placeholders work as template variables filled with the corresponding
-client's information when performing authentication.
+Placeholders work as template variables filled with the corresponding runtime information.
+
+### Placeholders in configurations
+
+Configuration templates can be filled with client information such ad client ID and user name at runtime.
 
 The following placeholders are available:
 * `${clientid}` — clientid of the client.
