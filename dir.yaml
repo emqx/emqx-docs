@@ -155,20 +155,20 @@
     - advanced/system-topic
     - advanced/quic
 
-- title_en: Persistence Backends
-  title_cn: 数据持久化
-  edition: ee
-  children:
-    - backend/backend
-    - backend/backend_cassandra
-    - backend/backend_dynamodb
-    - backend/backend_influxdb
-    - backend/backend_mongodb
-    - backend/backend_mysql
-    - backend/backend_opentsdb
-    - backend/backend_pgsql
-    - backend/backend_redis
-    - backend/backend_timescale
+#- title_en: Persistence Backends
+#  title_cn: 数据持久化
+#  edition: ee
+#  children:
+#    - backend/backend
+#    - backend/backend_cassandra
+#    - backend/backend_dynamodb
+#    - backend/backend_influxdb
+#    - backend/backend_mongodb
+#    - backend/backend_mysql
+#    - backend/backend_opentsdb
+#    - backend/backend_pgsql
+#    - backend/backend_redis
+#    - backend/backend_timescale
 
 ## Developers & Testers
 
