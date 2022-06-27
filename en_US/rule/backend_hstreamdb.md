@@ -6,7 +6,7 @@ HStreamDB is a streaming database designed for streaming data, with complete lif
 
 For more details, please refer to [HStream official website](https://hstream.io/)。
 
-## Create HStreamDB Serve
+## Create HStreamDB Server
 
 [Deployment reference document](https://hstream.io/docs/en/latest/start/quickstart-with-docker.html). Can use docker local deployment, or cloud hosting deployment.
 Use the command to create hstream-client:
