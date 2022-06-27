@@ -131,6 +131,11 @@
       title_cn: 示例和教程
       children:
         - data-integration/rule-configs
+    - title_en: Schema Registry
+      title_cn: Schema 注册
+      edition: ee
+      children:
+        - data-integration/schema-registry
 
 ## Device connectivity
 
