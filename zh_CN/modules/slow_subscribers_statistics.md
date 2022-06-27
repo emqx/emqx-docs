@@ -9,7 +9,18 @@
 
 打开 EMQX Dashboard，点击左侧的 “模块” 选项卡，选择添加：
 
+{% emqxce %}
+
 ![image](./assets/slow_subscribers_statistics_1.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+![image](./assets/slow_subscribers_statistics_1_ee.png)
+
+{% endemqxee %}
+
 
 选择 ****慢订阅统计**** 模块, 然后点击 *启动* 即可
 
@@ -74,9 +85,27 @@
 
 ## 慢订阅记录
 
+{% emqxce %}
+
 ![image](./assets/slow_subscribers_statistics_3.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+![image](./assets/slow_subscribers_statistics_3_ee.png)
+
+{% endemqxee %}
 
 这个标签页下会按照时延, 从高到底依次显示订阅者和主题信息, 点击 *Client ID* 将会显示订阅者详情, 可以通过订阅者详情来进行问题分析
 和查找.
 
 ![image](./assets/slow_subscribers_statistics_4.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+![image](./assets/slow_subscribers_statistics_4_ee.png)
+
+{% endemqxee %}
