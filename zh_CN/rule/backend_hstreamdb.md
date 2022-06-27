@@ -1,6 +1,6 @@
 # 保存数据到 HStream DB
 
-HStreamDB 是一款专为流式数据设计的， 针对大规模实时数据流的接入、存储、处理、 分发等环节进行全生命周期管理的流数据库。它使用标准 SQL (及其流式拓展）作为主要 接口语言，以实时性作为主要特征，旨在简化数据流的运维管理以及实时应用的开发
+HStreamDB 是一款专为流式数据设计的， 针对大规模实时数据流的接入、存储、处理、 分发等环节进行全生命周期管理的流数据库。它使用标准 SQL (及其流式拓展）作为主要接口语言，以实时性作为主要特征，旨在简化数据流的运维管理以及实时应用的开发
 
 ![image](./assets/rule-engine/HStreamDB/HStream.png)
 
@@ -8,7 +8,7 @@ HStreamDB 是一款专为流式数据设计的， 针对大规模实时数据流
 
 ## 创建 HStreamDB 服务
 
-[部署参考文档](https://hstream.io/docs/en/latest/start/quickstart-with-docker.html)，可使用docker本地部署，或云主机部署。
+[部署参考文档](https://hstream.io/docs/en/latest/start/quickstart-with-docker.html)，可使用 docker 本地部署，或云主机部署。
 使用命令创建出 hstream-client :
 
 ```bash
@@ -81,7 +81,7 @@ FROM
 
 ![image](./assets/rule-engine/HStreamDB/create_rule.png)
 
-现在使用最先进的 MQTT 桌面客户端 `MQTTX` 连接至 EMQX，发送一条数据。
+现在使用 MQTT 桌面客户端 `MQTTX` 连接至 EMQX，发送一条数据。
 
 ![image](./assets/rule-engine/HStreamDB/send_msg.png)
 
