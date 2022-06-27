@@ -33,7 +33,6 @@ EMQX 通过 `etc` 目录下配置文件进行设置，主要配置文件包括:
 | -------------- | ------------------------- |
 | emqx.conf      | EMQX 配置文件  |
 | acl.conf       | EMQX 默认 ACL 规则配置文件 |
-| plugins/*.conf | EMQX 各类插件配置文件    |
 | certs          | EMQX SSL 证书文件       |
 
 {% emqxce %}
@@ -45,36 +44,12 @@ EMQX 将运行数据存储在 `data` 目录下，主要的文件包括:
 
 **configs/app.*.config**
 
-EMQX 读取 `etc/emqx.conf` 和 `etc/plugins/*.conf` 中的配置后，转换为 Erlang 原生配置文件格式，并在运行时读取其中的配置。
+EMQX 读取 `etc/emqx.conf` 和 `data/configs/cluster-override.conf` `data/configs/local-override.conf` 中的配置后，转换为 Erlang 原生配置文件格式，并在运行时读取其中的配置。
 
-**loaded_plugins**
 
-`loaded_plugins` 文件记录了 EMQX 默认启动的插件列表，可以修改此文件以增删默认启动的插件。`loaded_plugins` 中启动项格式为 `{<Plugin Name>, <Enabled>}.`，`<Enabled>` 字段为布尔类型，EMQX 会在启动时根据 `<Enabled>` 的值判断是否需要启动该插件。关于插件的更多内容，请查看 [插件](../advanced/plugins.md)。
-
-```bash
-$ cat loaded_plugins
-{emqx_management,true}.
-{emqx_recon,true}.
-{emqx_retainer,true}.
-{emqx_dashboard,true}.
-{emqx_rule_engine,true}.
-{emqx_bridge_mqtt,false}.
-```
 
 {% endemqxce %}
 
-
-{% emqxee %}
-
-```bash
-$ cat loaded_plugins
-{emqx_management, true}.
-{emqx_dashboard, true}.
-{emqx_schema_registry, true}.
-{emqx_rule_engine, true}.
-```
-
-{% endemqxee %}
 
 
 **mnesia**
@@ -85,6 +60,9 @@ EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规�
 
 可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。
 
+**trace**
+
+EMQX 支对指定 ClientID 或 Topic 或 IP 实时过滤日志，用于调试和排查错误。具体请查看 [Trace 日志追踪](../observability/tracer.md)
 
 ## log 目录
 
