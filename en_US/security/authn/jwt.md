@@ -79,7 +79,7 @@ The format for ACL rules is:
 ```
 `pub`, `sub`, and `all` lists serve as topic whitelists for the corresponding operation types. Topic entries
 allow wildcards and placeholders (`${clientid}` and `${username}`). To suppress placeholder interpolation, one may use the
-demonstrated `eq` syntax: `"eq topic/without/interpolation/${clientid}"`.
+demonstrated `eq` syntax: `"eq topic/without/interpolation/${clientid}"`. See [topic placeholders](../authz/authz.md#topic-placeholders).
 
 ## Configuration
 

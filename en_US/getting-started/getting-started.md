@@ -254,9 +254,9 @@ and enabling authentication can effectively prevent malicious client connections
 Authorization rules, or Access Control List (ACL) can be configured to ensure only
 legitimate clients are permitted to publish or subscribe to certain topics.
 
-- [Authentication Introduction](../security/authn/authn.md): Select a built-in plugin, to integrate
+- [Authentication Introduction](../security/authn/authn.md): Select a backend to integrate
   with internal or external database, JWT or HTTP service as the authentication data source.
-- [Authorization / ACL](../security/authz/acl.md): Select a built-in plugin, to integrate with
+- [Authorization / ACL](../security/authz/authz.md): Select a backend to integrate with
   internal or external database, or HTTP service as the ACL data source.
 
 ### Management Interfaces

@@ -79,7 +79,7 @@
     - title_en: Authorisation (ACL)
       title_cn: 鉴权（ACL）
       children:
-        - security/authz/acl
+        - security/authz/authz
         - security/authz/file
         - security/authz/mnesia
         - security/authz/http

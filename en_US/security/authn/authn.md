@@ -28,9 +28,9 @@ The following authenticators are available by default:
 | mechanism        | backend            | description                                                                   |
 | ----             | ------------------ | ----------------------------------------------------------------------------- |
 | password_based   | built_in_database  | [Authentication with Mnesia database as credential storage](./mnesia.md)       |
-| password_based   | mysql              | [Authentication with MySQL database as credential storage](mysql.md)           |
-| password_based   | PostgreSQL         | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
-| password_based   | MongoDB            | [Authentication with MongoDB database as credential storage](./mongodb.md)     |
+| password_based   | mysql              | [Authentication with MySQL database as credential storage](./mysql.md)           |
+| password_based   | postgresql         | [Authentication with PostgreSQL database as credential storage](./postgresql.md) |
+| password_based   | mongodb            | [Authentication with MongoDB database as credential storage](./mongodb.md)     |
 | password_based   | redis              | [Authentication with Redis database as credential storage](./redis.md)         |
 | password_based   | http               | [Authentication using external HTTP API for credential verification](./http.md)|
 | jwt              |                    | [Authentication using JWT](./jwt.md)                                           |

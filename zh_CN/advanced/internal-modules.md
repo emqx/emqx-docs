@@ -7,7 +7,7 @@ EMQX Broker 将主题重写、代理订阅等功能通过内置模块的形式�
 | `emqx_mod_delayed`       | [延迟发布](./delayed-publish.md)         |
 | `emqx_mod_topic_metrics` | [主题指标统计](./metrics-and-stats.md) |
 | `emqx_mod_subscription`  | [代理订阅](./proxy-subscriptions.md)    |
-| `emqx_mod_acl_internal`  | [内置 ACL](../security/authz/acl.md)                |
+| `emqx_mod_acl_internal`  | [内置 ACL](../security/authz/authz.md)                |
 | `emqx_mod_rewrite`       | [主题重写](./topic-rewrite.md)         |
 | `emqx_mod_presence`      | 上下线通知                             |
 
