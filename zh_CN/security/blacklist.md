@@ -34,3 +34,5 @@ zone.external.flapping_detect {
   ban_time = "5m"
 }
 ```
+
+这个配置可以为每个 zone 进行单独设置。
