@@ -349,5 +349,3 @@ Then the above SQL output is:
 ```json
 {"x": 7}
 ```
-
-[Available fields in regular SQL statements](rule-engine_field.md)

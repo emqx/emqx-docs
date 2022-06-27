@@ -3,7 +3,7 @@
 ## SQL 语法
 ### FROM、SELECT 和 WHERE 子句
 
-规则引擎的 SQL 语句基本格式为:
+规则的 SQL 语句基本格式为:
 
 ```sql
 SELECT <字段名> FROM <主题> [WHERE <条件>]
@@ -182,7 +182,7 @@ SELECT pub_props.'User-Property'.foo as foo FROM "t/#"
 }
 ```
 
-**示例1: 要求将 sensors 里的各个对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `${name}`。即最终规则引擎将会发出 3 条消息:**
+**示例1: 要求将 sensors 里的各个对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `${name}`。即最终规则将会发出 3 条消息:**
 
 1) 主题：sensors/0
    内容：a
@@ -229,7 +229,7 @@ FROM "t/#"
 
 FOREACH 语句将会对于结果数组里的每个对象分别执行 "消息重新发布" 动作，所以将会执行重新发布动作 3 次。
 
-**示例2: 要求将 sensors 里的 `idx` 值大于或等于 1 的对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `clientid=${clientid},name=${name},date=${date}`。即最终规则引擎将会发出 2 条消息:**
+**示例2: 要求将 sensors 里的 `idx` 值大于或等于 1 的对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `clientid=${clientid},name=${name},date=${date}`。即最终规则将会发出 2 条消息:**
 
 1) 主题：sensors/1
    内容：clientid=c_steve,name=b,date=2020-04-24
@@ -471,5 +471,3 @@ FROM
   }
 }
 ```
-
-[下一部分，规则 SQL 语句中可用的字段](rule-engine_field.md)

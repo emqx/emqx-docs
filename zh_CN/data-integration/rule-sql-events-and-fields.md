@@ -1,28 +1,12 @@
-# 可用的事件和字段
+# 规则 SQL 中的事件类型和字段
+
 SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clientid`, `username` 和 `event` 是通用字段，每种事件类型都有。
 
-## 事件和事件主题
-规则引擎的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
+## 使用规则 SQL 语句处理消息发布
 
-事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
-如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
+规则的 SQL 语句可以处理消息发布。 在一个规则语句中，用户可以用 FROM 子句指定一个或者多个主题，当任何消息发布到指定的主题时都会触发该规则。
 
-### FROM 子句可用的事件主题
-| 事件主题名                    | 释义     |
-| ----------------------------- | :------- |
-| $events/message_delivered    | 消息投递 |
-| $events/message_acked        | 消息确认 |
-| $events/message_dropped      | 消息丢弃 |
-| $events/client_connected     | 连接完成 |
-| $events/client_disconnected  | 连接断开 |
-| $events/session_subscribed   | 订阅     |
-| $events/session_unsubscribed | 取消订阅 |
-
-## 普通主题 (消息发布)
-
-当消息在FROM指定的主题上发布时触发规则
-
-|        event        |  事件类型，固定为 "message.publish"   |
+|        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                          |
 | clientid            | 消息来源 Client ID                     |
@@ -63,12 +47,30 @@ FROM
 }
 ```
 
-## $events/message_delivered (消息投递)
+## 使用规则 SQL 语句处理事件
+
+规则的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
+
+事件消息的主题以 `"$events/"` 开头，比如 `"$events/client_connected",` `"$events/session_subscribed"。`
+如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
+
+### FROM 子句可用的事件主题
+| 事件主题名                    | 释义     |
+| ----------------------------- | :------- |
+| $events/message_delivered    | 消息投递 |
+| $events/message_acked        | 消息确认 |
+| $events/message_dropped      | 消息丢弃 |
+| $events/client_connected     | 连接完成 |
+| $events/client_disconnected  | 连接断开 |
+| $events/session_subscribed   | 订阅     |
+| $events/session_unsubscribed | 取消订阅 |
+
+### $events/message_delivered (消息投递)
 
 当消息被放入底层socket时触发规则
 
-|        event        | 事件类型，固定为 "message.delivered" |
-| ------------------- | ------------------------------------ |
+|        字段         |  解释                                 |
+| :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                         |
 | from_clientid       | 消息来源 Client ID                   |
 | from_username       | 消息来源用户名                       |
@@ -107,12 +109,12 @@ FROM
   "from_clientid": "c_emqx_1"
 }
 ```
-## $events/message_acked (消息确认)
+### $events/message_acked (消息确认)
 
 当消息发送到客户端，并收到客户端回复的ack时触发规则，仅QOS1，QOS2会触发
 
-|        event        |  事件类型，固定为 "message.acked"   |
-| :------------------ | :---------------------------------- |
+|        字段         |  解释                                 |
+| :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                        |
 | from_clientid       | 消息来源 Client ID                  |
 | from_username       | 消息来源用户名                      |
@@ -153,12 +155,12 @@ FROM
 }
 ```
 
-## $events/message_dropped (消息在转发的过程中被丢弃)
+### $events/message_dropped (消息在转发的过程中被丢弃)
 
 当一条消息无任何订阅者时触发规则
 
-|        event        | 事件类型，固定为 "message.dropped"  |
-| :------------------ | :---------------------------------- |
+|        字段         |  解释                                 |
+| :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                        |
 | reason              | 消息丢弃原因，可能的原因：<br/>no_subscribers: 没有订阅者|
 | clientid            | 消息来源 Client ID                  |
@@ -194,12 +196,12 @@ FROM
 }
 ```
 
-## $events/delivery_dropped (消息在投递的过程中被丢弃)
+### $events/delivery_dropped (消息在投递的过程中被丢弃)
 
-当订阅者的消息队列已满时触发
+当订阅者的消息队列已满时触发规则
 
-|        event        | 事件类型，固定为 "delivery.dropped" |
-| ------------------- | ------------------------------------ |
+|        字段         |  解释                                 |
+| :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                         |
 | reason              | 消息丢弃原因，可能的原因：<br/>queue_full: 消息队列已满(QoS>0)<br/>no_local: 不允许客户端接收自己发布的消息<br/>expired: 消息或者会话过期<br/>qos0_msg: QoS0 的消息因为消息队列已满被丢弃|
 | from_clientid       | 消息来源 Client ID                   |
@@ -236,12 +238,12 @@ FROM "$events/delivery_dropped"
   "from_clientid": "c_emqx_1"
 }
 ```
-## $events/client_connected (终端连接成功)
+### $events/client_connected (终端连接成功)
 
 当终端连接成功时触发规则
 
-|      event      | 事件类型，固定为 "client.connected" |
-| --------------- | :---------------------------------- |
+|        字段         |  解释                                 |
+| :------------------ | :------------------------------------ |
 | clientid        | 消息目的 Client ID                  |
 | username        | 消息目的用户名                      |
 | mountpoint      | 主题挂载点(主题前缀)                |
@@ -278,12 +280,12 @@ FROM
 }
 ```
 
-## $events/client_disconnected (终端连接断开)
+### $events/client_disconnected (终端连接断开)
 
 当终端连接断开时触发规则
 
-| event           | 事件类型，固定为 "client.disconnected"                       |
-| --------------- | :----------------------------------------------------------- |
+|        字段         |  解释                                 |
+| :------------------ | :------------------------------------ |
 | reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout: keepalive 超时<br/>not_authorized:  认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed: 对端关闭了网络连接<br/>internal_error: 畸形报文或其他未知错误<br/> |
 | clientid        | 消息目的 Client ID                                           |
 | username        | 消息目的用户名                                               |
@@ -316,12 +318,12 @@ FROM
 }
 ```
 
-## $events/session_subscribed (终端订阅成功)
+### $events/session_subscribed (终端订阅成功)
 
 当终端订阅成功时触发规则
 
-|   event   | 事件类型，固定为 "session.subscribed" |
-| --------- | ------------------------------------- |
+|        字段         |  解释                       |
+| :------------------ | :--------------------------|
 | clientid  | 消息目的 Client ID                    |
 | username  | 消息目的用户名                        |
 | peerhost  | 客户端的 IPAddress                    |
@@ -351,12 +353,12 @@ FROM
 }
 ```
 
-## $events/session_unsubscribed (取消终端订阅成功)
+### $events/session_unsubscribed (取消终端订阅成功)
 
-当取消终端订阅成功时触发
+当取消终端订阅成功时触发规则
 
-|   event   | 事件类型，固定为 "session.unsubscribed" |
-| :-------- | :-------------------------------------- |
+|        字段         |  解释                         |
+| :------------------ | :---------------------------- |
 | clientid  | 消息目的 Client ID                      |
 | username  | 消息目的用户名                          |
 | peerhost  | 客户端的 IPAddress                      |
@@ -385,5 +387,3 @@ FROM
   "clientid": "c_emqx"
 }
 ```
-
-[下一部分，规则引擎内置函数](rule-engine_builtin_function.md)

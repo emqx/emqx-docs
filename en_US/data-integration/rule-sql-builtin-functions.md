@@ -1,4 +1,5 @@
 # Functions available in SQL statements
+
 ## Mathematical functions
 
 |function name|Purpose|parameter|Returned value|
@@ -91,6 +92,7 @@ is_num('val') = false
 |bool|Convert data to Boolean type|Data|Boolean data. Failure to convert will cause SQL matching to fail|
 |int|Convert data to integer type|Data|Integer type data. Failure to convert will cause SQL matching to fail|
 |float|Convert data to floating type|Data|Floating type data. Failure to convert will cause SQL matching to fail|
+|float2str|Convert a float to string using the given precision|1. Float Number 2. Precision| String |
 |map|Convert data to Map type|Data|Map type data. Failure to convert will cause SQL matching to fail|
 
 
@@ -100,6 +102,8 @@ str_utf8(1234) = '1234'
 bool('true') = true
 int('1234') = 1234
 float('3.14') = 3.14
+float2str(20.2, 10) = '20.2'
+float2str(20.2, 17) = '20.19999999999999928'
 ```
 
 
@@ -200,6 +204,28 @@ sha('some val') = 'f85ba28ff5ea84a0cbfa118319acb0c5e58ee2b9'
 sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2b71993'
 ```
 
+## Compresses and Uncompresses functions
+
+| Function | Purpose |        Parameters         | Returned value |
+| -------- | -------------- |--------------- | --------------------|
+| `gzip` | Compresses data with gz headers and checksum. | Raw binary data | Compressed binary data |
+| `gunzip` | Uncompresses data with gz headers and checksum. | Compressed binary data | Raw binary data |
+| `zip` | Compresses data without zlib headers and checksum. |  Raw binary data | Compressed binary data |
+| `unzip` | Uncompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data |
+| `zip_compress` | Compresses data with zlib headers and checksum. |  Raw binary data | Compressed binary data |
+| `zip_uncompress` | Uncompresses data with zlib headers and checksum. | Compressed binary data | Raw binary data |
+
+```erlang
+bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
+gunzip(hexstr2bin('1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000')) = 'hello world'
+
+bin2hexstr(zip('hello world')) = 'CB48CDC9C95728CF2FCA490100'
+unzip(hexstr2bin('CB48CDC9C95728CF2FCA490100')) = 'hello world'
+
+bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045D'
+zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
+```
+
 ## Bit functions
 
 | Function  | Purpose| Parameters| Returned value |
@@ -219,8 +245,6 @@ subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 
 ## Decoding and encoding functions
 
-{% emqxce %}
-
 | Function | Purpose                             |        Parameters         | Returned value    |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
 | `base64_encode` | BASE64 encode   | The binary to be encoded | The encoded base64-formatted string |
@@ -230,27 +254,6 @@ subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 | `bin2hexstr` | Binary to Hex String | The binary | The hex string |
 | `hexstr2bin` | Binary to Hex String | The hex string | The binary |
 
-
-{% endemqxce %}
-
-
-{% emqxee %}
-
-
-| Function | Purpose                             |        Parameters         | Returned value |
-| -------- | ------------------------------------|------------------------- | --------------------------- |
-| `base64_encode` | BASE64 encode   | The binary to be encoded | The encoded base64-formatted string |
-| `base64_decode` | BASE64 decode   | The base64-formatted string to be decoded | The decoded binary |
-| `json_encode` | JSON encode   | The data to be encoded | The JSON string |
-| `json_decode` | JSON decode   | The JSON string to be decoded | The decoded data |
-| `schema_encode` | Encode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
-| `schema_decode` | Decode according to schema. This requires the [schema registry](schema-registry.md) | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
-| `bin2hexstr` | Binary to Hex String | The binary | The hex string |
-| `hexstr2bin` | Binary to Hex String | The hex string | The binary |
-
-{% endemqxee %}
-
-
 ```erlang
 base64_encode('some val') = 'c29tZSB2YWw='
 base64_decode('c29tZSB2YWw=') = 'some val'
@@ -258,43 +261,98 @@ json_encode(json_decode( '{ "a" : 1 }' )) = '{"a":1}'
 bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
 
-## Time functions
+{% emqxee %}
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|------------------------- | --------------------------- |
+| `schema_encode` | Encode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
+| `schema_decode` | Decode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
 
-| Function | Purpose  | Parameters     | Returned value |
-| -------- | -------- |--------------- | -------------- |
-| `format_date` | Get the time and output the time string in the specified format | 1. time precision <br />2. time offset <br />3. time format string | string |
-| `format_date` | Output string with integer timestamp in specified format | 1. time precision<br />2.  time offset<br />3. time format string<br />4. timestamp | string |
-| `date_to_unix_ts` | Parse a string using the specified format | 1. time precision<br />2.  time offset<br />3. time format string<br />4. string | integer |
+For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md)
+{% endemqxee %}
 
-Time Precision
+## Time and date functions
 
-second,
-millisecond,
-microsecond,
-nanosecond,
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|-------------------------- | --------------------------- |
+| `now_timestamp` | Return the unix epoch of now in second | - | The unix epoch |
+| `now_timestamp` | Return the unix epoch of now, in given time unit | 1. The time unit | The unix epoch |
+| `now_rfc3339` | Create a RFC3339 time string of now in second | - | The time string of format RFC3339 |
+| `now_rfc3339` | Create a RFC3339 time string of now, in given time unit | 1. The time unit | The time string of format RFC3339 |
+| `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string | 1. The unix epoch in second | The time string of format RFC3339 |
+| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch </br>2. The time unit | The time string of format RFC3339 |
+| `rfc3339_to_unix_ts` | Convert a RFC3339 time string (in second) to unix epoch | 1. The time string of format RFC3339 | The unix epoch |
+| `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit | 1. The time string of format RFC3339 </br>2. The time unit | The unix epoch |
+| `format_date` | Timestamp to formatted time | 1. The time unit (refer to The time unit)</br>2. The time offset (refer to time offset definition)</br>3. The date format (refer to time string codec format)</br>4. The timestamp (optional parameter, default is current time)| Formatted time |
+| `date_to_unix_ts` | Formatted time to timestamp | 1. The time unit (refer to the following table for definition) </br>2. The time offset (optional, when not filled, use the time offset in the formatted time string, refer to the time offset definition) </br>3. The date format (refer to time string codec format) </br>4. The formatted time string | The unix epoch |
 
-Time Offset
+The time unit
 
-The user can specify the time zone of the output time through this string, For example, the East Eight time zone can be represented by "+08:00". If the input is empty, the system default time zone will be used.
+| Name | Precision | Example |
+| -- | -- | -- |
+| `second` | second | 1653557821 |
+| `millisecond` | millisecond | 1653557852982 |
+| `microsecond` | microsecond | 1653557892926417 |
+| `nanosecond` | nanosecond | 1653557916474793000 |
 
-Time Format String
+Time string format
 
-The user can specify the output style through the format string.
+| Placeholder | Definition | Range |
+| -- | -- | -- |
+| `%Y` | year | 0000 - 9999 |
+| `%m` | month | 01 - 12 |
+| `%d` | day | 01 - 31 |
+| `%H` | hour | 00 - 12 |
+| `%M` | minute | 00 - 59 |
+| `%S` | second | 01 - 59 |
+| `%N` | nanosecond | 000000000 - 999999999 |
+| `%3N` | millisecond | 000000 - 999999 |
+| `%6N` | microsecond | 000 - 000 |
+| `%z` | time offset [+\|-]HHMM | -1159 to +1159 |
+| `%:z` | time offset [+\|-]HH:MM | -11:59 to +11:59 |
+| `%::z` | time offset [+\|-]HH:MM:SS | -11:59:59 to +11:59:59 |
 
-| Parameters | Description |
-| ---- | ---- |
-| %y | year |
-| %m | month |
-| %d | day |
-| %H | hour， 24-hour clock |
-| %M | minute |
-| %S | second，the time precision parameter will affect its output |
-| %Z | time zone，the time offset parameter will affect its output |
+The time offset
 
-The user can parse the time string using the specified format.
+| Offset | Definition | Examples |
+| -- | -- | -- |
+| `z` | UTC Zulu Time | `+00:00` |
+| `Z` | UTC Zulu Time. Same as `z` | `+00:00` |
+| `local` | System Time | Automatic </br>Beijing `+08:00`</br> Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
+| `[+\|-]HHMM` | `%z` | Beijing `+0800` </br>Zulu `+0000` </br>Stockholm, Sweden `+0200` </br>Los Angeles `-0800` |
+| `[+\|-]HH:MM` | `%:z` | Beijing `+08:00` </br>Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
+| `[+\|-]HH:MM:SS` | `%::z` | Beijing `+08:00:00` </br>Zulu `+00:00:00` </br>Stockholm, Sweden `+02:00:00` </br>Los Angeles `-08:00:00` |
+| integer() | Seconds | Beijing 28800 </br>Zulu 0 </br>Stockholm, Sweden 7200 </br>Los Angeles -28800 |
 
-```erlang
-format_date('nanosecond', '+08:00', '%y-%m-%d %H:%M:%S%Z') = '2022-04-15 19:05:55.930812260+08:00'
-format_date('nanosecond', '+08:00', '%y-%m-%d %H:%M:%S%Z', 1650020755930812200) = '2022-04-15 19:05:55.930812200+08:00'
-date_to_unix_ts('nanosecond', '+08:00', '%y-%m-%d %H:%M:%S%Z', '2022-04-15 19:05:55.930812260+08:00') = 1650020755930812200
+```SQL
+now_timestamp() = 1650874276
+now_timestamp('millisecond') = 1650874318331
+now_rfc3339() = '2022-04-25T16:08:41+08:00'
+now_rfc3339('millisecond') = '2022-04-25T16:10:10.652+08:00'
+unix_ts_to_rfc3339(1650874276) = '2022-04-25T16:11:16+08:00'
+unix_ts_to_rfc3339(1650874318331, 'millisecond') = '2022-04-25T16:11:58.331+08:00'
+rfc3339_to_unix_ts('2022-04-25T16:11:16+08:00') = 1650874276
+rfc3339_to_unix_ts('2022-04-25T16:11:58.331+08:00', 'millisecond') = 1650874318331
+format_date('second', '+0800', '%Y-%m-%d %H:%M:%S%:z', 1653561612) = '2022-05-26 18:40:12+08:00'
+format_date('second', 'local', '%Y-%m-%d %H:%M:%S%:z') = "2022-05-26 18:48:01+08:00"
+format_date('second', 0, '%Y-%m-%d %H:%M:%S%:z') = '2022-05-26 10:42:41+00:00'
+date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2022-05-26 18:40:12+08:00') = 1653561612
+date_to_unix_ts('second', 'local', '%Y-%m-%d %H-%M-%S', '2022-05-26 18:40:12') = 1653561612
+date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 1653561612
 ```
+
+{% emqxee %}
+| Function | Purpose                             |        Parameters         | Returned value |
+| -------- | ------------------------------------|-------------------------- | --------------------------- |
+| `mongo_date` | Create a mongodb ISODate type of now | - | the ISODate |
+| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. unix epoch in millisecond | the ISODate |
+| `mongo_date` | Create a mongodb ISODate type from the given unix epoch in given time unit | 1. unix epoch 2. time unit, can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond' | the ISODate |
+
+The time unit can be one of 'second', 'millisecond', 'microsecond' or 'nanosecond'.
+
+```SQL
+mongo_date() = 'ISODate("2012-12-19T06:01:17.171Z")'
+mongo_date(timestamp) = 'ISODate("2012-12-19T06:01:17.171Z")'
+mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
+```
+
+{% endemqxee %}
