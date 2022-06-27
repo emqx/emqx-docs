@@ -50,18 +50,35 @@ listen on port `5370`, and port `5371` for `emqx1` (or `emqx-1`), and so on.
 EMQX in a docker container uses static port `5369` for cluster RPC.
 :::
 
-### Using TLS for Cluster PRC connections
+### Using TLS for Cluster RPC connections
 
-It is possible to enable TLS encryption for the backplane connections. It comes at the cost of increased CPU load, though.
+::: warning
+TLS comes at the cost of increased CPU load and RAM usage
+:::
+
+To configure TLS for cluster RPC below configs should be set in emqx.conf
+
+Ensure the following configs in `emqx.conf`.
+
+```
+rpc {
+  driver = ssl
+  certfile = /path/to/cert/domain.pem
+  cacertfile = /path/to/cert/ca.pem
+  keyfile = /path/to/cert/domain.key
+}
+```
+
+Below are the steps to gnerate certificates and a self-signed CA.
 
 1. Create a root CA using `openssl` tool:
 
    ```
    # Create self-signed root CA:
-   openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key -out rootCA.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
+   openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout ca.key -out ca.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
    ```
 
-2. Generate CA-signed certificates for the nodes using the rootCA.pem created at step 1:
+2. Generate CA-signed certificates for the nodes using the ca.pem created at step 1:
 
    ```
    # Create a private key:
@@ -77,20 +94,21 @@ It is possible to enable TLS encryption for the backplane connections. It comes 
    # Create a CSR:
    openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
    # Sign the CSR with the Root CA:
-   openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
+   openssl x509 -req -CA ca.pem -CAkey ca.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
    ```
    All the nodes in the cluster must use certificates signed by the same CA.
 
-3. Put the generated `domain.pem`, `domain.key` and `rootCA.pem` files to `/var/lib/emqx/ssl` on each node of the cluster.
+3. Put the generated `domain.pem`, `domain.key` and `ca.pem` files on each node of the cluster.
    Make sure the emqx user can read these files, and permissions are set to `600`.
 
-4. Ensure the following configs in `emqx.conf`.
+### Using TSL for Erlang distribution
 
-   ```
-   rpc.driver=ssl
-   rpc.default_client_driver=ssl
-   rpc.certfile=/var/lib/emqx/ssl/domain.pem
-   rpc.cacertfile=/var/lib/emqx/ssl/rootCA.pem
-   rpc.keyfile=/var/lib/emqx/ssl/domain.key
-   rpc.enable_ssl=5369 # TODO this is not added to 5.0 yet
-   ```
+::: warning
+TLS comes at the cost of increased CPU load and RAM usage
+:::
+
+Erlang distribution is used by EMQX nodes to sync database updates
+and ad-hoc cluster-wide such as collecting runtime metrics etc.
+
+* Make sure to verify the ssl_dist.conf file has the right paths to keys and certificates.
+* Ensure config `cluster.proto_dist` is set to `inet_tls`.

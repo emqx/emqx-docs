@@ -82,7 +82,7 @@ $ emqx ctl cluster_call tnxid 2
           tnx_id => 2}}
 ```
 
-::: warning
+::: warning Warning
 The `skip` and `fast_forward` commands may result in diverged configs between the nodes in the cluster.
 :::
 
@@ -210,8 +210,8 @@ overload protection.
 
 For more details see `overload_protection` configuration doc.
 
-::: note
-`olp` is by default not enabled, enabling from CLI does not persist it to the configs.
+::: tip
+`olp` is not enabled by default, enabling from CLI does not persist it to the configs.
 :::
 
 ## gateway-registry

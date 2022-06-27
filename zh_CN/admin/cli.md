@@ -82,7 +82,7 @@ $ emqx ctl cluster_call tnxid 2
           tnx_id => 2}}
 ```
 
-::: warning
+::: warning Warning
 The `skip` and `fast_forward` commands may result in diverged configs between the nodes in the cluster.
 :::
 
