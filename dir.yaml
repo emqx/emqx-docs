@@ -109,26 +109,33 @@
 
 ## Data integration
 
-- title_en: Data Integration (Rule Engine)
-  title_cn: 数据桥接 （规则引擎）
+- title_en: Data Integration
+  title_cn: 数据集成
   children:
-    - rule/rule-engine
-    - rule/rule-engine_grammar_and_examples
-    - rule/rule-engine_field
-    - rule/rule-engine_builtin_function
-    - rule/rule-create
-    - rule/how_to_update_resources
-    - rule/rule-example
-    # - rule/backend_cassandra
-    # - rule/backend_dynamodb
-    # - rule/backend_influxdb
-    # - rule/backend_mongodb
-    # - rule/backend_mysql
-    # - rule/backend_opentsdb
-    # - rule/backend_pgsql
-    # - rule/backend_redis
-    # - rule/backend_timescaledb
-    # - rule/schema-registry
+    - data-integration/introduction
+    - title_en: Rules
+      title_cn: 规则
+      children:
+        - data-integration/rules
+        - data-integration/rule-actions
+        - data-integration/rule-sql-grammar-and-examples
+        - data-integration/rule-sql-events-and-fields
+        - data-integration/rule-sql-builtin-functions
+    - title_en: Data Bridges
+      title_cn: 数据桥接
+      children:
+        - data-integration/data-bridges
+        - data-integration/data-bridge-mqtt
+        - data-integration/data-bridge-webhook
+    - title_en: Examples and Tutorials
+      title_cn: 示例和教程
+      children:
+        - data-integration/rule-configs
+    - title_en: Schema Registry
+      title_cn: Schema 注册
+      edition: ee
+      children:
+        - data-integration/schema-registry
 
 ## Device connectivity
 
@@ -153,20 +160,20 @@
     - advanced/system-topic
     - advanced/quic
 
-- title_en: Persistence Backends
-  title_cn: 数据持久化
-  edition: ee
-  children:
-    - backend/backend
-    - backend/backend_cassandra
-    - backend/backend_dynamodb
-    - backend/backend_influxdb
-    - backend/backend_mongodb
-    - backend/backend_mysql
-    - backend/backend_opentsdb
-    - backend/backend_pgsql
-    - backend/backend_redis
-    - backend/backend_timescale
+#- title_en: Persistence Backends
+#  title_cn: 数据持久化
+#  edition: ee
+#  children:
+#    - backend/backend
+#    - backend/backend_cassandra
+#    - backend/backend_dynamodb
+#    - backend/backend_influxdb
+#    - backend/backend_mongodb
+#    - backend/backend_mysql
+#    - backend/backend_opentsdb
+#    - backend/backend_pgsql
+#    - backend/backend_redis
+#    - backend/backend_timescale
 
 ## Developers & Testers
 
