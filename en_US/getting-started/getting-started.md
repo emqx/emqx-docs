@@ -259,20 +259,6 @@ legitimate clients are permitted to publish or subscribe to certain topics.
 - [Authorization / ACL](../security/authz/acl.md): Select a built-in plugin, to integrate with
   internal or external database, or HTTP service as the ACL data source.
 
-### Rule Engine
-
-The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between
-devices and data platforms in real-time, and forward the data to Webhooks or other MQTT Brokers
-without having to implement MQTT clients to do the job.
-
-EMQX enterprise edition can also integrate with Kafka,
-various SQL / NoSQL / time-series databases, and enterprise systems such as SAP.
-
-- [Rule Engine](../rule/rule-engine.md): The concept and basic usage of rule engine.
-- [Create Rule](../rule/rule-create.md): How to create a rule.
-- [Example](../rule/rule-example.md#send-data-to-web-service): Tutorial on using various data
-  sources for rule engine.
-
 ### Management Interfaces
 
 Manage clusters via Web and CLI, REST API.
