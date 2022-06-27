@@ -89,7 +89,7 @@ FROM
 
 ![image](./assets/rule-engine/HStreamDB/rule_res.png)
 
-这时数据已经写入HStreamDB，使用任意消费方式，将消息消费出来。文档中使用的是基于 HStream golang SDK 编写的简单消费工具，读者可自行按照熟悉的编程语言编写消费端。可见消费日志如下：
+这时数据已经写入 HStreamDB，使用任意消费方式，将消息消费出来。文档中使用的是基于 HStream golang SDK 编写的简单消费工具，读者可自行按照熟悉的编程语言编写消费端。可见消费日志如下：
 
 ```shell
 {"level":"info","ts":1656311005.5250711,"msg":"[f1]","recordId":"[BatchId: 8589934593, BatchIndex: 0, ShardId: 1317059070792293]","payload":"Hello HSreamDB !"}
