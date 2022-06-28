@@ -62,6 +62,7 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
 ### `method`
 
 具有 `get` 和 `post` 可选值的必填字段，表示使用相应的 HTTP 请求方法。
+
 ### `url`
 
 用于外部认证请求的 HTTP URL，它可能包含 [placeholders](./authn.md#authentication-placeholders)。
@@ -88,75 +89,75 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
 
 1. `GET` 请求配置如下：
 
-    ```
-    {
-        method = get
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            password = "${password}"
-        }
-    }
-    ```
-
-    最终的请求将是：
-
-    ```
-    GET /auth/id123?username=iamuser&password=secret HTTP/1.1
-    ... Headers ...
-    ```
+   ```
+   {
+       method = get
+       url = "http://127.0.0.1:32333/auth/${clientid}"
+       body {
+           username = "${username}"
+           password = "${password}"
+       }
+   }
+   ```
+   
+   最终的请求将是：
+   
+   ```
+   GET /auth/id123?username=iamuser&password=secret HTTP/1.1
+   ... Headers ...
+   ```
 
 2. `POST` JSON 格式的请求配置如下：
 
-    ```
-    {
-        method = post
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            password = "${password}"
-        }
-        headers {
-            "content-type": "application/json"
-        }
-    }
-    ```
-
-    最终的请求将是：
-
-    ```
-    POST /auth/id123 HTTP/1.1
-    Content-Type: application/json
-    ... Other headers ...
-
-    {"username":"iamuser","password":"secret"}
-    ```
+   ```
+   {
+       method = post
+       url = "http://127.0.0.1:32333/auth/${clientid}"
+       body {
+           username = "${username}"
+           password = "${password}"
+       }
+       headers {
+           "content-type": "application/json"
+       }
+   }
+   ```
+   
+   最终的请求将是：
+   
+   ```
+   POST /auth/id123 HTTP/1.1
+   Content-Type: application/json
+   ... Other headers ...
+   
+   {"username":"iamuser","password":"secret"}
+   ```
 
 3. `POST` `www-form-urlencoded` 格式的请求配置如下：
 
-    ```
-    {
-        method = post
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            password = "${password}"
-        }
-        headers {
-            "content-type": "application/x-www-form-urlencoded"
-        }
-    }
-    ```
-
-    最终的请求将是：
-
-    ```
-    POST /auth/id123 HTTP/1.1
-    Content-Type: application/x-www-form-urlencoded
-    ... Other headers ...
-
-    username=iamuser&password=secret
-    ```
+   ```
+   {
+       method = post
+       url = "http://127.0.0.1:32333/auth/${clientid}"
+       body {
+           username = "${username}"
+           password = "${password}"
+       }
+       headers {
+           "content-type": "application/x-www-form-urlencoded"
+       }
+   }
+   ```
+   
+   最终的请求将是：
+   
+   ```
+   POST /auth/id123 HTTP/1.1
+   Content-Type: application/x-www-form-urlencoded
+   ... Other headers ...
+   
+   username=iamuser&password=secret
+   ```
 
 ### `headers`
 

@@ -120,4 +120,4 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = $1 AND 
 
 ### `ssl`
 
-标准 [SSL 选项](../ssl.md)。
+用于 [安全连接到 PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html) 的标准 [SSL 选项](../ssl.md)。

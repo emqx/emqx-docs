@@ -65,7 +65,7 @@ EMQX 支持同一协议下的所有监听器共用一套认证配置（我们称
 
 EMQX 提供了 3 种使用认证的方式，分别为：配置文件、HTTP API 和 Dashboard。
 
-#### 配置文件
+### 配置文件
 
 以下示例主要展示了配置文件中全局认证和监听器认证的配置方式，前文已经提过，我们可以为 MQTT 客户端配置多个认证器以组成认证链，配置项 `authentication` 的数组格式也表明了这一点。认证器在数组中的顺序便是它的运行顺序。
 
@@ -145,7 +145,7 @@ authentication = {
 
 为了帮助用户更好地配置自己需要的认证器，我们提供了配置说明文档，里面包含了每种认证器的所有配置字段的详细说明。
 
-#### HTTP API
+### HTTP API
 
 与配置文件相比，HTTP API 使用起来更加方便，并且支持运行时更新，能够自动将配置改动同步至整个集群。
 
@@ -197,7 +197,7 @@ authentication = {
 PUT /api/v5/authentication/password_based%3Abuilt_in_database
 ```
 
-#### Dashboard
+### Dashboard
 
 虽然 Dashboard 底层也是调用了 HTTP API，但是提供了相对更加易用的可视化操作页面，不需要投入太多的学习成本。
 
