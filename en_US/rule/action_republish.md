@@ -1,6 +1,8 @@
-# Republish
+# Republish Action
 
-The subscriber of the message needs to obtain more information in the message, such as the source of the message (publisher ClientID, Username, etc.), the properties of the message itself (time of publication, nodes into which the message flows, etc.), and the original message does not carry this information, it is necessary to use the republishing function to reorganize the message information by EMQX to achieve the business behavior without upgrading or changing the old device The re-publishing function is used to reorganize the message information by EMQX to achieve compatibility with new business requirements without upgrading or changing the business behavior of the old device.
+The republish action is used to reissue a new MQTT message. The `Topic`, `QoS`, `Retain`, and `Payload` of the new message can be specified by parameters.
+
+Note that the message republish action does not terminate the delivery of old messages. For example, if a message "t/1" is received by the republish action and then a new "t/2" message is reissued, the delivery of the "t/1" message is not terminated, and clients subscribed to the "t/1" topic can still receive the message.
 
 ## Create Rule
 
