@@ -2,7 +2,7 @@
 
 The republish action is used to reissue a new MQTT message. The `Topic`, `QoS`, `Retain`, and `Payload` of the new message can be specified by parameters.
 
-Note that the message republish action does not terminate the delivery of old messages. For example, if a message "t/1" is received by the republish action and then a new "t/2" message is reissued, the delivery of the "t/1" message is not terminated, and clients subscribed to the "t/1" topic can still receive the message.
+Note that the message republish action does not terminate the delivery of the original messages. For example, if a message "t/1" is received by the republish action and then a new "t/2" message is published per this rule, the delivery of the "t/1" message is not terminated, and clients subscribed to the "t/1" topic can still receive the original message.
 
 ## Create Rule
 
