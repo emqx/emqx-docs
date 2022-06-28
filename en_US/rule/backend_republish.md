@@ -1,0 +1,44 @@
+# Republish
+
+The subscriber of the message needs to obtain more information in the message, such as the source of the message (publisher ClientID, Username, etc.), the properties of the message itself (time of publication, nodes into which the message flows, etc.), and the original message does not carry this information, it is necessary to use the republishing function to reorganize the message information by EMQX to achieve the business behavior without upgrading or changing the old device The re-publishing function is used to reorganize the message information by EMQX to achieve compatibility with new business requirements without upgrading or changing the business behavior of the old device.
+
+## Create Rule
+
+Click on Rules Engine - Rules - Create, and enter SQL.
+
+```SQL
+SELECT
+
+    *
+
+FROM
+
+  "t/1"
+```
+
+The SQL in the document is only for example, please write the actual requirements according to the business.
+
+## Create Action
+
+Click Add Action, select Data Forwarding, Message Redistribution, enter the destination subject and other parameters, and refer to the following table for parameter definitions.
+
+| Parameter | Definition | Type |
+| --- | --- | --- |
+| Target Topic | The topic of the `republish` message can be used as a placeholder variable. The use of `${repub/to/${clientid}}` in the documentation, when used in conjunction with the rule SQL, indicates the use of the publisher's clientid as a suffix. For custom business rules SQL, other variables can be used instead | String |
+| Target QoS | The QoS level of the `republish` message, using 0, 1 or 2, or a placeholder variable can be used. The `${qos}` used in the documentation, when used in conjunction with the rule SQL, indicates that the QoS level of the original message is used. Custom business rule SQL, other Integer type variables can be used instead | Integer or placeholder variable |
+| Target Retain | The Retain message identifier of the `republish` message can be used as a placeholder variable. The `${flags.retain}` used in the documentation, when used in conjunction with the rule SQL, indicates that the Retain identifier of the original message is used. For custom business rules SQL, you can use other Boolean type variables instead | Boolean or placeholder variable |
+| Payload Template | The message content of the `republish` message can use placeholder variables. The `${payload}` used in the documentation, when used in conjunction with the rule SQL, indicates that the Payload content of the original message is used. Custom business rules SQL, you can use other variables instead | String |
+
+Note that when the QoS and Retain use placeholder variables and the parameters obtained from the message information are not legal (i.e. QoS is not 0, 1 or 2, Retain is not true or false), the message is discarded and the action is marked as failed.
+
+![image](./assets/rule-engine/republish/action.png)
+
+## Usage
+
+Using the desktop MQTT client MQTTX, set the clientid to `123456`, connect to the device and subscribe to `repub/to/#`.
+
+![image](./assets/rule-engine/republish/mqtt_sub.png)
+
+Post a message and you can see that client received a message with topic `repub/to/123456`.
+
+![image](./assets/rule-engine/republish/mqtt_recv.png)
