@@ -125,7 +125,7 @@ SELECT username FROM "#" WHERE username='Steven'
 - 从任意 topic 的 JSON 消息体(payload) 中提取 x 字段，并创建别名 x 以便在 WHERE 子句中使用。WHERE 子句限定条件为 x = 1。下面这个 SQL 语句可以匹配到消息体 {"x": 1}, 但不能匹配到消息体 {"x": 2}:
 
 ```sql
-SELECT payload FROM "#" WHERE payload.x = 1
+SELECT payload.x as x FROM "#" WHERE x = 1
 ```
 
 - 类似于上面的 SQL 语句，但嵌套地提取消息体中的数据，下面的 SQL 语句可以匹配到 JSON 消息体 {"x": {"y": 1}}:

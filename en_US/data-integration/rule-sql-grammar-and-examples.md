@@ -1,5 +1,7 @@
-# Rule engine SQL statement
+# SQL syntax and examples
+
 ## SQL syntax
+
 ### FROM, SELECT, and WHERE clauses
 
 The basic format of the SQL statement of the rule engine is:
@@ -125,8 +127,8 @@ The DO and INCASE clauses are optional.
     ```
 - Extract the x field from the payload of message with any topic and create the alias x for use in the WHERE clause. The WHERE clause is restricted as x = 1. Note that the payload must be in JSON format. Example: This SQL statement can match the payload `{"x": 1}`, but can not match to the payload `{"x": 2}`:
     ```sql
-  SELECT payload FROM "#" WHERE payload.x = 1
-  ```
+    SELECT payload.x as x FROM "#" WHERE x = 1
+    ```
 - Similar to the SQL statement above, but nested extract the data in the payload, this SQL statement can match the payload{"x": {"y": 1}}`:
     ```sql
     SELECT payload FROM "#" WHERE payload.x.y = 1
