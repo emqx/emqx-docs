@@ -65,7 +65,7 @@ Also, currently only the MQTT listener supports the use of multiple authenticato
 
 EMQX provides 3 ways to use authentication, namely: Configuration file, HTTP API and Dashboard.
 
-#### Configuration file
+### Configuration file
 
 The following example mainly shows the configuration method of global authentication and authentication of listener in the configuration file. As mentioned above, we can configure multiple authenticators for the MQTT client to form an authentication chain, the array format of the configuration item `authentication` also indicates this. The order of the authenticators in the array is the order in which they are run.
 
@@ -145,7 +145,7 @@ authentication = {
 
 In order to help users better configure the authenticators they need, we provide a configuration description document, which contains a detailed description of all the configuration fields of each authenticator.
 
-#### HTTP API
+### HTTP API
 
 Compared with the configuration file, the HTTP API is more convenient to use and supports runtime updates, which can automatically synchronize configuration changes to the entire cluster.
 
@@ -197,7 +197,7 @@ Note that both authenticator IDs and listener IDs need to follow URL encoding co
 PUT /api/v5/authentication/password_based%3Abuilt_in_database
 ````
 
-#### Dashboard
+### Dashboard
 
 Although the bottom layer of Dashboard also calls the HTTP API, it provides a relatively easier-to-use visual operation page without investing too much learning cost.
 

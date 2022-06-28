@@ -94,75 +94,75 @@ Assume an MQTT client connects with client ID `id123`, username `iamuser`, and p
 
 1. `GET` request:
 
-    ```
-    {
-        method = get
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            password = "${password}"
-        }
-    }
-    ```
-
-    The resulting request will be:
-
-    ```
-    GET /auth/id123?username=iamuser&password=secret HTTP/1.1
-    ... Headers ...
-    ```
+   ```
+   {
+       method = get
+       url = "http://127.0.0.1:32333/auth/${clientid}"
+       body {
+           username = "${username}"
+           password = "${password}"
+       }
+   }
+   ```
+   
+   The resulting request will be:
+   
+   ```
+   GET /auth/id123?username=iamuser&password=secret HTTP/1.1
+   ... Headers ...
+   ```
 
 2. `POST` JSON request:
 
-    ```
-    {
-        method = post
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            password = "${password}"
-        }
-        headers {
-            "content-type": "application/json"
-        }
-    }
-    ```
-
-    The resulting request will be:
-
-    ```
-    POST /auth/id123 HTTP/1.1
-    Content-Type: application/json
-    ... Other headers ...
-
-    {"username":"iamuser","password":"secret"}
-    ```
+   ```
+   {
+       method = post
+       url = "http://127.0.0.1:32333/auth/${clientid}"
+       body {
+           username = "${username}"
+           password = "${password}"
+       }
+       headers {
+           "content-type": "application/json"
+       }
+   }
+   ```
+   
+   The resulting request will be:
+   
+   ```
+   POST /auth/id123 HTTP/1.1
+   Content-Type: application/json
+   ... Other headers ...
+   
+   {"username":"iamuser","password":"secret"}
+   ```
 
 3. `POST` www-form-urlencoded request:
 
-    ```
-    {
-        method = post
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            password = "${password}"
-        }
-        headers {
-            "content-type": "application/x-www-form-urlencoded"
-        }
-    }
-    ```
-
-    The resulting request will be:
-
-    ```
-    POST /auth/id123 HTTP/1.1
-    Content-Type: application/x-www-form-urlencoded
-    ... Other headers ...
-
-    username=iamuser&password=secret
-    ```
+   ```
+   {
+       method = post
+       url = "http://127.0.0.1:32333/auth/${clientid}"
+       body {
+           username = "${username}"
+           password = "${password}"
+       }
+       headers {
+           "content-type": "application/x-www-form-urlencoded"
+       }
+   }
+   ```
+   
+   The resulting request will be:
+   
+   ```
+   POST /auth/id123 HTTP/1.1
+   Content-Type: application/x-www-form-urlencoded
+   ... Other headers ...
+   
+   username=iamuser&password=secret
+   ```
 
 ### `headers`
 
