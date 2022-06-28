@@ -92,6 +92,11 @@ See rule monitor.
 ![image](./assets/rule-engine/HStreamDB/rule_res.png)
 
 At this point the data is written to HStreamDB and the message is consumed using any consumption method. The documentation uses a simple consumption tool based on the HStream golang SDK, and the reader is free to write the consumption side according to a familiar programming language. The consumption log can be seen as follows.
+Test tool see [fetcher](https://github.com/hstreamdb/fetcher).
+
+```shell
+./fetcher -s f1 -n demo_stream -p 127.0.0.1:6570 -c cons1 -v
+```
 
 ```shell
 {"level":"info","ts":1656311005.5250711,"msg":"[f1]","recordId":"[BatchId: 8589934593, BatchIndex: 0, ShardId: 1317059070792293]","payload":"Hello HSreamDB !"}
