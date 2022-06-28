@@ -2,10 +2,8 @@
 
 EMQX Broker provides users with a blacklisting/banning functionality.
 
-Administrator can add specified clients to the blacklist from the management REST API
+Administrator can add specified clients to the blacklist by the Dashboard
 to deny access of the client.
-
-The endpoint for the API is `/api/v5/banned`.
 
 In addition to the client identifier, it also supports direct ban of user names or source IP addresses.
 
@@ -14,6 +12,16 @@ The blacklist is only applicable to a small number of client bans.
 If there are a large number of clients requiring authentication management,
 please use the [authentication](./authn/authn.md) function.
 :::
+
+## Usage
+
+1. Open the blacklist page
+
+![image](./assets/blacklist_frame.png)
+
+2. Click the "Create" button to add
+
+![image](./assets/blacklist_create.png)
 
 ## Flapping Clients
 
@@ -25,20 +33,10 @@ It should be noted that the automatic ban only bans the client identifier,
 not the user name and IP address.
 That is to say, a malicious client may still able to attack if they change client identifier for each attempt.
 
-This feature is disabled by default, set `enable` for `flapping_detect` section to `true` in `emqx.conf` to enable it.
+This feature is disabled by default, and users can enable it by adding the following configuration to the `emqx.conf` file:
 
 ```bash
-flapping_detect {
-
-  enable = false
-
-}
-```
-
-The user can adjust the trigger threshold and the ban time with below configs
-
-```bash
-flapping_detect {
+zone.external.flapping_detect {
 
   enable = true
 

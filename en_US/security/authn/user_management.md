@@ -35,16 +35,27 @@ The endpoints for importing users into the corresponding chains are:
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
-The accepted `filename` parameter should be a node-local path of a file with credentials.
+The request should be a multipart form-data `POST`.
+
+Example:
+
+```
+curl -v -u admin:public -X 'POST' \
+    -H 'Content-Type: multipart/form-data' \
+    -F 'filename=@/tmp/myusers.csv' \
+    'http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/import_users'
+```
 
 The following file formats (identified by file extension) are supported:
-* CSV (`{"filename": "some-filename.csv"}`:
+
+* .csv
   ```csv
   user_id,password_hash,salt,is_superuser
   myuser3,b6c743545a7817ae8c8f624371d5f5f0373234bb0ff36b8ffbf19bce0e06ab75,de1024f462fb83910fd13151bd4bd235,true
   myuser4,ee68c985a69208b6eda8c6c9b4c7c2d2b15ee2352cdd64a903171710a99182e8,ad773b5be9dd0613fe6c2f4d8c403139,false
   ```
-* JSON (`{"filename": "some-filename.json"}`:
+
+* .json
   ```json
   [
     {

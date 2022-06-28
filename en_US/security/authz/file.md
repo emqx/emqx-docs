@@ -1,27 +1,39 @@
-# ACL file
+# File
 
-The built-in ACL sets rules through files, which is simple and lightweight to use. It is suitable for projects with predictable number of rules, no change or small change requirements.
+This authorizer implements ACL checks through matching pub/sub requests against a predefined list of rules configured in
+a file.
 
-ACL rules file:
-
-```bash
-etc/acl.conf
-```
-
-::: tip
-The built-in ACL has the lowest priority and can be overridden by the ACL plugin. If you want to disable it, you can comment all the rules. After the rules file is changed, EMQX Broker needs to be restarted to make them taking effect.
-
+::: tip Tip
+Starting from 5.0, file-based ACL rules can be edited and reloaded from EMQX dashboard UI.
 :::
 
+File-based ACL is simple and lightweight. It is suitable to configure generic rules. For hundreds or more per-client rules, it is recommended to use other authorization sources, and file-based ACL can be the safety guard put at the end of the authorization chain.
 
-## Define ACL
+## Configuration
 
-The built-in ACL is the lowest priority rule table. If it is not hit after all the ACL checks are completed, the default ACL rule is checked.
+The file-based authorizer is identified by type `file`.
 
-The rules file is described in Erlang syntax:
+Sample configuration:
+
+```
+{
+    type = file
+    enable = true
+
+    path = "etc/acl.conf"
+}
+```
+
+## ACL file format
+
+ACL configuration file is a list of Erlang [tuples](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) ending with a period. A _tuple_ is a comma-separated list of expressions. The whole list is enclosed in curly braces.
+
+The '%%` prefix identifies comment strings.
+
+Example:
 
 ```erlang
-%% Allow "dashboard" users to subscribe to "$SYS/#" topics
+%% Allow MQTT client using username "dashboard"  to subscribe to "$SYS/#" topics
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 %% Allow users with IP address "127.0.0.1" to publish/subscribe to topics "$SYS/#", "#"
@@ -34,64 +46,37 @@ The rules file is described in Erlang syntax:
 {allow, all}.
 ```
 
-1. The first rule allows clients to publish and subscribe to all topics
-2. The second rule prohibits all clients from subscribing to the topics `$SYS/#` and `#`
-3. The third rule allows clients with IP address `127.0.0.1` to publish / subscribe to the topics ` $SYS/# `and `#`, which makes a special case for the second rule
-4. The fourth rule allows clients with the username `dashboard` to subscribe to the topic ` $SYS/#`, which makes a special case for the second rule
-
-It can be seen that the default ACL is mainly to restrict the client's permissions on the system topic `$SYS/#` and the all wildcard topic `#`.
-
-
-## acl.conf Writing rules
-
-The rules in the `acl.conf` file are matched from top to bottom in writing order.
-
-The syntax rules of `acl.conf` are included in the comments at the top. Those familiar with Erlang syntax can read the comments at the top of the file directly or refer to the following descriptions:
+The rules are matched from top to bottom. If a rule matches, its permission is applied, and the remaining rules are ignored.
 
 - Line comments are expressed as `%%`.
-- Each rule consists of four tuples and ends with `.`.
-- The first position of the tuple indicates that after the rule is successfully hit, the permission control operation is performed. The possible values are:
+- Each rule consists of a tuple that ends with `.`.
+- The first position in a tuple indicates the permission applied if the rule is successfully hit. The possible values are:
     * `allow`
     * `deny`
-- The second position of the tuple indicates the user to which the rule takes effect. The format that can be used is:
-    * `{user, "dashboard"}`：The rule only takes effect for users whose Username  is dashboard
-    * `{clientid, "dashboard"}`：The rule only takes effect for users whose ClientId is dashboard
-    * `{ipaddr, "127.0.0.1"}`：The rule only takes effect for users whose Source Address is "127.0.0.1"
-    * `all`：The rule takes effect for all users
-- The third position of the tuple indicates the operation controlled by the rule with the possible value:
-    * `publish`：The rule applies to PUBLISH operations
-    * `subscribe`：The rule applies to SUBSCRIBE operations
-    * `pubsub`：The rule applies to both PUBLISH and SUBSCRIBE operations
-- The fourth position of the tuple means the list of topics restricted by the rule. The content is given in the form of an array. For example:
-    * `"$SYS/#"`：a **Topic Filter** which means that the rule is applied to topics that match `$SYS/#`; for example rules created for "$SYS/#" applies to publish/subscribe actions on topic "$SYS/a/b/c", and subscribe actions on topic "$SYS/#"
-    * `{eq, "#"}`：It indicates full equivalence of characters. The rule is only applied for topic `#` but not for `/a/b/c`, etc.
-- In addition, there are two special rules:
-    - `{allow, all}`：Allow all operations
-    - `{deny, all}`：Deny all operations
+- The second position of a tuple describes clients for which the rule takes effect. The following terms and their combinations can be used to specify the clients:
+    * `{username, "dashboard"}` — clients with username `dashboard`.
+    * `{username, {re, "^dash"}}` — clients with username matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`.
+    * `{user, ...}` — the same as `{username, ...}`.
+    * `{clientid, "dashboard"}` — clients with clientid `dashboard`.
+    * `{clientid, {re, "^dash"}}` — clients with clientid matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`.
+    * `{client, ...}` — the same as `{clientid, ...}`.
+    * `{ipaddr, "127.0.0.1"}` — clients connecting from IP address `127.0.0.1`. Netmasks are allowed. If EMQX is behind a TCP proxy, `proxy_protocol` should be enabled for the client's MQTT listener.
+    * `{ipaddrs, ["127.0.0.1", ..., ]}` — clients connecting from one of the specified IP addresses `127.0.0.1, ..., `. Netmasks are allowed.
+    * `all` — any clients.
+    * `{'and', First, Second}` — clients satisfying both `First` and `Second` specifications.
+    * `{'or', First, Second}` — clients satisfying either of `First` and `Second` specifications.
+- The third position of the tuple indicates the operation for which the rule is applicable.
+    * `publish` — the rule applies to publish operations.
+    * `subscribe` — the rule applies to subscribe operations.
+    * `all` — the rule applies to both publish and subscribe operations.
+- The fourth position of the tuple specifies the topics to which the rule applies. The topics are specified with a list op _patterns_. The following patterns are available:
+    * A string value, like `"$SYS/#"`. It is a standard topic filter allowing wildcards. Topic filters match topics according to the [MQTT specification rules](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180920). For example, `$SYS/#` matches topics `$SYS/foo`, `$SYS/foo/bar` for publish and topics
+    `$SYS/foo`, `$SYS/foo/#`, and `$SYS/#` for subscribe. Topic [placeholders](./authz.md#topic-placeholders) are
+    also available.
+    * An `eq` tuple, like `{eq, "foo/#"}`. It indicates full equivalence of topic characters. This pattern matches exactly `foo/#` topic for all operations. Wildcards or placeholders are not taken into account, i.e., topic `foo/bar` is not matched.
 
-After the `acl.conf` modification is completed, it will not be automatically loaded into the EMQX Broker system, but needs to be performed manually:
+Additionally, there are two special rules:
+    - `{allow, all}` — allow all operations.
+    - `{deny, all}` — deny all operations.
 
-```bash
-./bin/emqx_ctl modules reload emqx_mod_acl_internal
-```
-
-## Placeholders
-
-The built-in `acl.conf` supports only the following placeholders in the subject's field (the 4th position of the tuple).
-
-- `%c`: For Client ID, which is replaced by the client ID when the rule takes effect.
-- `%u`: For username, which is replaced by the client's username when the rule takes effect.
-
-E.g:
-
-```erlang
-{allow, all, pubsub, ["sensor/%c/ctrl"]}.
-```
-
-Means that a client with ID 'light' is **Allowed** to **Subscribe and Publish** to the `sensor/light/ctrl` topic.
-
-
-::: tip
-Only a few simple and general rules is contained in acl.conf that make it a system-based ACL principle. If you need to support complex, large amounts of ACL content, you should implement it in an authentication plugin.
-
-:::
+These rules are usually used as default at the end of the configuration.

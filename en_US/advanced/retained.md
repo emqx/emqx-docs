@@ -20,8 +20,9 @@ subscribers may need get the latest reading immediately after subscribed, withou
 In EMQX, the retainer is enabled by default. To turn it off, you can set `mqtt.retain_available = false` globally for the entire broker
 or `zones.$name.mqtt.retain_available = false` to turn it off only for a given config group.
 
-::: note
-If EMQX receives a retained message when the feature is turned off, it will reply with a DISCONNECT packet with a reason code 0x9A (retained message is not supported).
+::: warning
+If EMQX receives a retained message when the feature is turned off,
+it will reply a DISCONNECT message with reason code 0x9A (retained message is not supported).
 :::
 
 ## Flow Control

@@ -133,6 +133,10 @@ The authenticator supports connecting to MongoDB running in three different mode
 
 Standard [password hashing options](./authn.md#password-hashing).
 
+#### `collection`
+
+Required string value with the name of MongoDB collection where ACL rules are stored.
+
 #### `filter`
 
 A map interpreted as MongoDB selector for credential lookup.

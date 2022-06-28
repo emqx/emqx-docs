@@ -1,145 +1,139 @@
-# Redis ACL
+# Redis
 
-An external Redis database is used to store ACL rules for Redis ACL, which can store a large amount of data and dynamically manage ACLs for easy integration with external device management systems.
+This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+Redis database.
 
-Plugin:
+The user should provide a templated Redis command that returns a key-value list with topic filters as keys and actions(`publish`, `subscribe`, or `all`) as values.
 
-```bash
-emqx_auth_redis
+For example, rules can be stored as Redis [hashes](https://redis.io/docs/manual/data-types/#hashes):
+
+```
+>redis-cli
+127.0.0.1:6379> HSET users:someuser foo/# subscribe
+(integer) 1
+127.0.0.1:6379> HSET users:someuser bar/baz publish
+(integer) 1
 ```
 
-::: tip 
-The emqx_auth_mysql plugin also includes authentication feature, which can be disabled via comments.
-:::
-
-
-## Redis connection information
-
-Redis basic connection information needs to be accessible to all nodes in the cluster.
-
-```bash
-# etc/plugins/emqx_auth_redis.conf
-
-## Server address
-auth.redis.server = 127.0.0.1:6379
-
-## Connection pool size
-auth.redis.pool = 8
-
-auth.redis.database = 0
-
-auth.redis.password = 
+The corresponding config parameters are:
+```
+cmd = "HGET users:${username}"
 ```
 
+Fetched rules are used as permissive ones, i.e., a request is accepted if topic filter and action match.
 
-## Default data structure
+## Configuration
 
-Under the default configuration of the Redis  authentication plugin, a hash table is used to store authentication data, and `mqtt_user:` is used as the Redis key prefix. The data structure is as follows:
+The Redis authorizer is identified by type `redis`.
 
-### Authentication / Superuser
+EMQX supports working with three kinds of Redis installation.
 
-```bash
-redis> hgetall mqtt_user:emqx
-  password public
-  salt wivwiv
-```
+* Standalone Redis.
+  ```
+  {
+      type = redis
+      enable = true
 
-Under the default configuration, Sample data is as follows:
+      redis_type = single
+      server = "127.0.0.1:6379"
 
-```bash
-HMSET mqtt_user:emqx password public salt wivwiv
-```
+      cmd = "HGETALL mqtt_user:${username}"
+      database => 1
+      password = public
+      server = "127.0.0.1:6379"
 
-### ACL rule table
+  }
+  ```
+* [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
+  ```
+  {
+      type = redis
+      enable = true
 
-```bash
-## Format
-HSET mqtt_acl:[username clientid] [topic] [access]
+      redis_type = sentinel
+      servers = "10.123.13.11:6379,10.123.13.12:6379"
+      sentinel = "mymaster"
 
-## Structure
-redis> hgetall mqtt_acl:emqx
-  testtopic/1 1
-```
+      cmd = "HGETALL mqtt_user:${username}"
+      database => 1
+      password = public
 
-A rule of Redis ACL defines publish, subscribe, or publish/subscribe information. All lists in the rule are **allow** lists.
+  }
+  ```
+* [Redis Cluster](https://redis.io/docs/manual/scaling/).
+  ```
+  {
+      type = redis
+      enable = true
 
-Rule field description:
+      redis_type = cluster
+      servers = "10.123.13.11:6379,10.123.13.12:6379"
 
-- ipaddr: Set IP address
-- username: User name for connecting to the client. If the value is set to `$ all`, the rule applies to all users.
-- clientid: Client ID of the connected client
-- access: Allowed operations: subscribe (1), publish (2), both subscribe and publish (3)
-- topic: Topics to be controlled, which can use wildcards, and placeholders can be added to the topic to match client information. For example, the topic will be replaced with the client ID of the current client when matching `t/%c`
-  - %u：Username
-  - %c：Client ID
-  
+      cmd = "HGETALL mqtt_user:${username}"
+      database => 1
+      password = public
+  }
+  ```
 
-Under the default configuration, Sample data is as follows:
+### Common configuration parameters
 
-```bash
-HSET mqtt_acl:emqx # 1
-HSET mqtt_acl:testtopic/2 2
-```
+#### `redis_type`
 
-After enabling Redis ACL and successfully connecting with the username emqx, the client should have permissions on the topics it wants to subscribe/publish.
+One of `single`, `cluster`, or `sentinel`, required. Defines Redis installation type:
+standalone Redis, [Redis Cluster](https://redis.io/docs/manual/scaling/), or
+[Redis Sentinel](https://redis.io/docs/manual/sentinel/) respectively.
 
+#### `cmd`
 
+Required string value with the command used for fetching ACL rules. The following placeolders are supported for `cmd` value:
+* `${clientid}` — Client ID of the client.
+* `${username}` — username of the client.
+* `${peerhost}` — client IP address.
+* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
+* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
 
-## Super user query command（super cmd）
+[Topic placeholders](./authz.md#topic-placeholders) are allowed in topic filters.
 
-When performing ACL authentication, EMQX Broker will use the current client information to execute the user-configured superuser query command to query whether the client is a superuser. ACL query command is skipped when the client is superuser.
+#### `database`
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+Redis database index to use, required.
 
-auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
-```
+#### `password`
 
-You can use the following placeholders in query command and EMQX Broker will automatically populate with client information when executed:
+Password used for Redis [authentication](https://redis.io/docs/manual/security/#authentication), optional.
 
-- %u：Username
-- %c：Client ID
-- %C：TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d：TLS certificate subject, valid only for TLS connections
+#### `auto_reconnect`
 
-You can adjust the super user query command according to business to achieve more business-related functions, such as adding multiple query conditions and using database preprocessing functions. However, in any case, the superuser query command needs to meet the following conditions:
+Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
+Redis on client failure.
 
-1. The first data in the query results must be the is_superuser data
+#### `pool_size`
 
-::: tip 
-If superuser functionality is not needed, it can be more efficient when commenting and disabling this option .
-:::
+Optional integer value defining the number of concurrent connections from an EMQX node to Redis.
+The default value is 8.
 
+#### `ssl`
 
-## ACL query command（acl cmd）
+Standard [SSL options](../ssl.md) for [secure connecting to Redis](https://redis.io/docs/manual/security/encryption/).
 
-When performing ACL authentication, EMQX Broker will use the current client information to populate and execute the user-configured superuser SQL. If superuser SQL is not enabled or the client is not a superuser, ACL SQL is used to query the client's ACL rules in the database.
+### Standalone Redis options (`redis_type = single`).
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+#### `server`
 
-auth.redis.acl_cmd = HGETALL mqtt_acl:%u
-```
+Required `host:port` string value, the address of the Redis server.
 
-You can use the following placeholders in ACL SQL and EMQX Broker will automatically populate with client information when executed:
+### Redis Cluster options (`redis_type = cluster`).
 
-- %u：Username
-- %c：Client ID
+#### `servers`
 
-You can adjust the ACL query command according to business requirement. However, in any case, the ACL query command  needs to meet the following conditions:
+Required string value with comma-separated list of Redis Cluster endpoints: `host1:port1,host2:port2,...`.
 
-1. Topic is used as key and access is used as value in hash
+### Redis Sentinel options (`redis_type = sentinel`).
 
-::: tip
-The above data structures need to be used strictly for Redis ACL rules.
+#### `servers`
 
-ACL rules from redis are all **allow** rules. i.e. a whitelist.
+Required string value with comma-separated list of Redis Sentinel endpoints: `host1:port1,host2:port2,...`.
 
-When a client's rules list is empty, EMQX continues to check the next auth/ACL plugin.
-Otherwise the check returns immediately without proceeding to the next auth/ACL plugins.
+#### `sentinel`
 
-When the rule is non-empty and does not match the corresponding pub/sub permission,
-an authentication failure will be returned (the corresponding pub/sub behavior will be denied) and the authentication chain will be terminated.
-
-When more than one auth/ACL plugins are in use, it is recommended to position Redis ACL after other auth/ACL plugins in the enabled plugins list.
-:::
+Required string value with [master name](https://redis.io/docs/manual/sentinel/#configuring-sentinel) to use from Sentinel configuration.

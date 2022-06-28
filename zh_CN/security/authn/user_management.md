@@ -34,11 +34,20 @@
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
-`filename` 参数应该是带有凭据的文件的节点本地路径。
+用户导入请求是一个请求体为 `multipart/form-data` 类型的 POST 请求。
+
+示例：
+
+```
+curl -v -u admin:public -X 'POST' \
+    -H 'Content-Type: multipart/form-data' \
+    -F 'filename=@/tmp/myusers.csv' \
+    'http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/import_users'
+```
 
 目前支持以下文件类型：
 
-- CSV (`{"filename": "some-filename.csv"}`:
+- `.csv`
 
   ```csv
   user_id,password_hash,salt,is_superuser
@@ -46,7 +55,7 @@
   myuser4,ee68c985a69208b6eda8c6c9b4c7c2d2b15ee2352cdd64a903171710a99182e8,ad773b5be9dd0613fe6c2f4d8c403139,false
   ```
 
-- JSON (`{"filename": "some-filename.json"}`:
+- `.json`
 
   ```json
   [

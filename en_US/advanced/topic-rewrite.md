@@ -24,19 +24,20 @@ so, use this feature with caution.
 The format of rewrite rule for each topic is as follows:
 
 ```bash
-modules {
-  rewrite = [
-    {
-      action:       all
-      source_topic: x/#
-      dest_topic:   x/y/z/$1
-      re:           ^x/y/(.+)$
-    }
-  ]
-}
+rewrite = [
+  {
+    action:       "all"
+    source_topic: "x/#"
+    dest_topic:   "x/y/z/$1"
+    re:           "^x/y/(.+)$"
+  }
+]
 ```
 
-Each rewrite rule consists of a filter, regular expression, and target expression separated by spaces.
+Each rewrite rule consists of a filter, regular expression.
+
+The rewrite rules are divided into `publish`, `subscribe` and `all` rules. The `publish` rule matches the topics carried by PUBLISH messages, and the `subscribe` rule matches the topics carried by SUBSCRIBE and UNSUBSCRIBE messages. The `all` rule is valid for topics carried by PUBLISH, SUBSCRIBE and UNSUBSCRIBE messages.
+
 On the premise that the topic rewrite is enabled, when receiving MQTT packet such as PUBLISH messages with a topic,
 EMQX will use the topic in the packet to sequentially match the topic filter part of the rules in the configuration file.
 Once the match is successful the regular expression is used to extract the information in the topic,
@@ -46,7 +47,7 @@ The target expression can use variables in the format of `$N` to match the eleme
 The value of `$N` is the Nth element extracted from the regular expression,
 for example, `$1` is the first element extracted by the regular expression.
 
-It should be noted that EMQX reads the rewrite rules in the configuration file in reverse order.
+It should be noted that EMQX reads the rewrite rules in order of the configuration file.
 When a topic can match the topic filters of multiple topic rewrite rules at the same time,
 EMQX uses the first matching rule to rewrite the topic.
 
@@ -59,28 +60,26 @@ Therefore, users need to carefully design MQTT packet topics and topic rewrite r
 Assume that the following topic rewrite rules have been added to the `etc/emqx.conf` file:
 
 ```bash
-modules {
-  rewrite = [
-    {
-      action:       all
-      source_topic: y/+/z/#
-      dest_topic:   y/z/$2
-      re:           ^y/(.+)/z/(.+)$
-    }
-    {
-      action:       all
-      source_topic: x/#
-      dest_topic:   z/y/x/$1
-      re:           ^x/y/(.+)$
-    }
-    {
-      action:       all
-      source_topic: x/y/+
-      dest_topic:   z/y/$1
-      re:           ^x/y/(\d+)$
-    }
-  ]
-}
+rewrite = [
+  {
+    action:       "all"
+    source_topic: "y/+/z/#"
+    dest_topic:   "y/z/$2"
+    re:           "^y/(.+)/z/(.+)$"
+  }
+  {
+    action:       "all"
+    source_topic: "x/#"
+    dest_topic:   "z/y/x/$1"
+    re:           "^x/y/(.+)$"
+  }
+  {
+    action:       "all"
+    source_topic: "x/y/+"
+    dest_topic:   "z/y/$1"
+    re:           "^x/y/(\d+)$"
+  }
+]
 ```
 
 At this time we subscribe to five topics:  `y/a/z/b`, `y/def`, `x/1/2`, `x/y/2`, and `x/y/z` :

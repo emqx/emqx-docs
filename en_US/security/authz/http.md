@@ -1,106 +1,218 @@
-# HTTP ACL
+# HTTP
 
-An external self-built HTTP application authentication data source is used for HTTP authentication, and the authentication result is judged based on the data returned by the HTTP API, which can implement complex ACL verification logic.
+HTTP authorizer delegates authorization to a custom HTTP API.
 
-Plugin:
+## Authorization principle
 
-```bash
-emqx_auth_http
-```
+* In authorizer settings, an HTTP request pattern is specified.
+* When an MQTT client makes a publish/subscribe request to the broker, the configured request template is rendered and the resulting request is emitted.
+* Receiving a 200 or 204 HTTP status is interpreted as authorization success. Other statuses indicate authorization failure.
 
-::: tip
-The emqx_auth_http plugin also includes authentication function, which can be disabled via comments.
+::: danger
+`POST` method is recommended. When using the `GET` method, some sensitive information can be exposed through HTTP server logging.
+
+For untrusted environments, HTTPS should be used.
 :::
 
-To enable HTTP ACL, the following needs to be configured in `etc/plugins/emqx_auth_http.conf`:
+## Configuration
 
-## ACL Authentication principle
+The HTTP authorizer is identified by type `http`.
 
-EMQX Broker uses the current client related information as parameters in publish/subscribe events, initiates request permissions to user-defined authentication services, and processes ACL authentication requests through the returned HTTP status code .
+HTTP `POST` and `GET` requests are supported. Each of them has some specific options.
 
- - Authorization denied: The API returns status codes other than 200
- - Authorization succeeded: API returns 200 status code
- - Authorization ignored: API returns 200 status code with the message body of ignore
-
-## HTTP Request Information
-
-Basic request information, configure certificates, request headers, and retry rules of HTTP API.
-
-```bash
-# etc/plugins/emqx_auth_http.conf
-
-## Certificate information required to enable HTTPS
-## auth.http.ssl.cacertfile = etc/certs/ca.pem
-
-## auth.http.ssl.certfile = etc/certs/client-cert.pem
-
-## auth.http.ssl.keyfile = etc/certs/client-key.pem
-
-## Request header setup
-## auth.http.header.Accept = */*
-
-## Retry setup
-auth.http.request.retry_times = 3
-
-auth.http.request.retry_interval = 1s
-
-auth.http.request.retry_backoff = 2.0
-```
-
-When performing publish/subscribe authentication, EMQX Broker will use the current client information and initiate a user-configured ACL authorization query request to query the client's authorization data on the HTTP server.
-
-## superuser Request
-
-Check whether the client is a super user at first. If the client is a super user, the ACL query will be skipped.
-
-```bash
-# etc/plugins/emqx_auth_http.conf
-
-## Request address
-auth.http.super_req = http://127.0.0.1:8991/mqtt/superuser
-
-## HTTP request method
-## Value: post | get | put
-auth.http.super_req.method = post
-
-## Request parameter
-auth.http.super_req.params = clientid=%c,username=%u
-```
-
-
-## ACL authorization query request
-
-```bash
-# etc/plugins/emqx_auth_http.conf
-
-## Request address
-auth.http.acl_req = http://127.0.0.1:8991/mqtt/acl
-
-## HTTP request method
-## Value: post | get | put
-auth.http.acl_req.method = get
-
-## Request parameter
-auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
+Example of an HTTP authorizer configured with `POST` request:
 
 ```
+{
+    type = http
+    enable = true
 
-## Request description
+    method = post
+    url = "http://127.0.0.1:32333/authz/${peercert}?clientid=${clientid}"
+    body {
+        username = "${username}"
+        topic = "${topic}"
+        action = "${action}"
+    }
+    headers {
+        "Content-Type" = "application/json"
+        "X-Request-Source" = "EMQX"
+    }
+}
+```
 
-When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; POST and PUT requests will submit the request parameters in the form of a common form (content-type is `x-www-form-urlencoded`).
+Example of an HTTP authorizer configured with `GET` request:
 
-You can use the following placeholders in the authentication request, and EMQX Broker will be automatically populated with client information when requested:
+```
+{
+    type = http
+    enable = true
 
-- %u:User name
-- %c:Client ID
-- %a:Client IP address
-- %r:Client Access Protocol
-- %P:Clear text password
-- %p:Client Port
-- %C:TLS certificate common name (the domain name or subdomain name of the certificate), valid only for TLS connections
-- %d:TLS certificate subject, valid only for TLS connections
+    method = get
+    url = "http://127.0.0.1:32333/authz"
+    body {
+        username = "${username}"
+        topic = "${topic}"
+        action = "${action}"
+    }
+    headers {
+        "X-Request-Source" = "EMQX"
+    }
+}
+```
 
-::: warning
-The POST and PUT methods are recommended. When using the GET method, the clear text password may be recorded with the URL in the server log during transmission.
+### `method`
 
-:::
+Required field with possible values `get` or `post`. Denoting the corresponding HTTP request method used.
+
+### `url`
+
+HTTP url for external authorization requests, required. It may contain [placeholders](./authz.md#authorization-placeholders):
+* `${clientid}` — clientid of the client.
+* `${username}` — username of the client.
+* `${peerhost}` — client IP address.
+* `${proto_name}` — name of the protocol used my the client.
+* `${mountpoint}` — client listener's mountpoint.
+* `${action}` — action that is being authorized.
+* `${topic}` — topic access to which is authorized.
+
+For `https://` urls `ssl` configuration must be enabled:
+
+```
+{
+    ...
+    url = "https://127.0.0.1:32333/auth/${peercert}?clientid=${clientid}"
+    ssl {
+        enable = true
+    }
+}
+
+```
+
+### `body`
+
+Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON or www-form-urlencoded
+body. For `get` requests it is encoded as query parameters. The map keys and values can contain [placeholders](./authz.md#authorization-placeholders).
+
+For different configurations `body` map will be encoded differently.
+
+Assume an MQTT client is connected with clientid `id123`, username `iamuser` and tries to publish to `foo/bar` topic.
+
+* `GET` request:
+    ```
+    {
+        method = get
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            topic = "${topic}"
+            action = "${action}"
+        }
+    }
+    ```
+    The resulting request will be:
+    ```
+    GET /auth/id123?username=iamuser&topic=foo%2Fbar&action=publish HTTP/1.1
+    ... Headers ...
+    ```
+* `POST` JSON request:
+    ```
+    {
+        method = post
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            topic = "${topic}"
+            action = "${action}"
+        }
+        headers {
+            "content-type": "application/json"
+        }
+    }
+    ```
+    The resulting request will be:
+    ```
+    POST /auth/id123 HTTP/1.1
+    Content-Type: application/json
+    ... Other headers ...
+
+    {"username":"iamuser","topic":"foo/bar", "action": "publish"}
+    ```
+* `POST` www-form-urlencoded request:
+    ```
+    {
+        method = post
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            topic = "${topic}"
+            action = "${action}"
+        }
+        headers {
+            "content-type": "application/x-www-form-urlencoded"
+        }
+    }
+    ```
+    The resulting request will be:
+    ```
+    POST /auth/id123 HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded
+    ... Other headers ...
+
+    username=iamuser&topic=foo%2Fbar&action=publish
+    ```
+
+### `headers`
+
+Map with arbitrary HTTP headers for external requests, optional.
+
+For `get` requests the default value is
+```
+{
+    "accept" = "application/json"
+    "cache-control" = "no-cache"
+    "connection" = "keep-alive"
+    "keep-alive" = "timeout=30, max=1000"
+}
+```
+Headers cannot contain `content-type` header for `get` requests.
+
+For `post` requests the default value is
+```
+{
+    "accept" = "application/json"
+    "cache-control" = "no-cache"
+    "connection" = "keep-alive"
+    "keep-alive" = "timeout=30, max=1000"
+    "content-type" = "application/json"
+}
+```
+
+`content-type` header value defines `body` encoding method for `post` requests. Possible values are:
+* `application/json` for JSON;
+* `application/x-www-form-urlencoded` for x-www-form-urlencoded format.
+
+### `enable_pipelining`
+
+Boolean value indicating whether to enable [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
+Optional, default value is `true`.
+
+### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
+
+Optional values controlling the corresponding request thresholds. The default values are:
+
+```
+  connect_timeout = 15s
+  max_retries = 5
+  request_timeout = 30s
+  retry_interval = 1s
+```
+
+### `pool_size`
+
+Optional integer value defining the number of concurrent connections from an EMQX node to the external API.
+The default value is 8.
+
+### `ssl`
+
+Standard [SSL options](../ssl.md) for connecting to the external API.

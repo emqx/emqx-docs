@@ -26,7 +26,6 @@ EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [
 EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [Webhook](./webhook.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#endpoint-metrics) 获取。
 :::
 
-
 ## 集群状态信息
 
 | 主题                          | 说明                 |
@@ -35,7 +34,7 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 | $SYS/brokers/\${node}/version  | EMQX 版本     |
 | $SYS/brokers/\${node}/uptime   | EMQX 运行时间 |
 | $SYS/brokers/\${node}/datetime | EMQX 系统时间     |
-| $SYS/brokers/\${node}/sysdescr | EMQX 描述     |
+| $SYS/brokers/\${node}/sysdescr | EMQX 系统信息     |
 
 ## 客户端上下线事件
 
@@ -81,7 +80,7 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 }
 ```
 
-## 系统统计 (Statistics)
+## 系统统计
 
 系统主题前缀: `$SYS/brokers/${node}/stats/`
 
@@ -94,47 +93,47 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 
 ### 订阅统计
 
-| 主题 (Topic)                | 说明             |
+| 主题                       | 说明             |
 | -------------------------- | ---------------- |
 | suboptions/count           | 当前订阅选项个数 |
 | suboptions/max             | 订阅选项总数历史最大值 |
 | subscribers/count          | 当前订阅者数量   |
-| subscribers/max            | 订阅者总数历史最大值   |
+| subscribers/max            | 订阅者总数历史最大值 |
 | subscriptions/count        | 当前订阅总数     |
-| subscriptions/max          | 订阅数量历史最大值     |
+| subscriptions/max          | 订阅数量历史最大值 |
 | subscriptions/shared/count | 当前共享订阅个数 |
 | subscriptions/shared/max   | 当前共享订阅总数 |
 
 ### 主题统计
 
-| 主题 (Topic)  | 说明            |
+| 主题          | 说明            |
 | ------------ | --------------- |
 | topics/count | 当前 Topic 总数 |
 | topics/max   | Topic 数量历史最大值 |
 
 ### 路由统计
 
-| 主题 (Topic)  | 说明             |
+| 主题          | 说明             |
 | ------------ | ---------------- |
 | routes/count | 当前 Routes 总数 |
 | routes/max   | Routes 数量历史最大值 |
 
 `topics/count` 和 `topics/max` 与 `routes/count` 和 `routes/max` 数值上是相等的。
 
-## 收发流量 / 报文 / 消息统计
+## 收发流量、报文、消息统计
 
-系统主题 (Topic) 前缀: `$SYS/brokers/${node}/metrics/`
+系统主题前缀: `$SYS/brokers/${node}/metrics/`
 
 ### 收发流量统计
 
-| 主题 (Topic)    | 说明         |
+| 主题            | 说明         |
 | -------------- | ------------ |
 | bytes/received | 累计接收流量 |
 | bytes/sent     | 累计发送流量 |
 
 ### MQTT 报文收发统计
 
-| 主题 (Topic)                 | 说明                           |
+| 主题                         | 说明                           |
 | --------------------------- | ------------------------------ |
 | packets/received            | 累计接收 MQTT 报文             |
 | packets/sent                | 累计发送 MQTT 报文             |
@@ -166,7 +165,7 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 
 ### MQTT 消息收发统计
 
-| 主题 (Topic)            | 说明               |
+| 主题                    | 说明               |
 | ---------------------- | ------------------ |
 | messages/received      | 累计接收消息       |
 | messages/sent          | 累计发送消息       |
@@ -183,20 +182,20 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 | messages/qos2/expired  | QoS 2 过期消息总数  |
 | messages/qos2/dropped  | QoS 2 丢弃消息总数  |
 
-## Alarms - 系统告警
+## 系统告警
 
-系统主题 (Topic) 前缀: `$SYS/brokers/${node}/alarms/`
+系统主题前缀: `$SYS/brokers/${node}/alarms/`
 
-| 主题 (Topic) | 说明         |
+| 主题         | 说明         |
 | ----------- | ------------ |
 | alert       | 新产生的告警 |
 | clear       | 被清除的告警 |
 
-## Sysmon - 系统监控
+## 系统监控
 
-系统主题 (Topic) 前缀: `$SYS/brokers/${node}/sysmon/`
+系统主题前缀: `$SYS/brokers/${node}/sysmon/`
 
-| 主题 (Topic)    | 说明              |
+| 主题            | 说明              |
 | -------------- | ----------------- |
 | long_gc        | GC 时间过长警告   |
 | long_schedule  | 调度时间过长警告  |
