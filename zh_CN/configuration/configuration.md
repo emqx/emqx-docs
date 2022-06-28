@@ -574,6 +574,17 @@ emqx@172-16-122-33.default.pod.cluster.local
 当一个节点持续无响应多久之后，认为其已经宕机并断开连接。详情请参见 [http://www.erlang.org/doc/man/kernel_app.html#net_ticktime](http://www.erlang.org/doc/man/kernel_app.html#net_ticktime)。
 
 <br />
+### node.dist_use_interface
+
+| Type    | Default |
+| --------| ------- |
+| ipaddr  | 0.0.0.0 |
+
+#### 说明
+
+节点间通讯网卡，默认使用 `0.0.0.0` 指定监听所有的网卡，或在指定需要监听网卡的 IP。
+
+<br />
 
 ### node.dist_listen_min
 
@@ -642,7 +653,19 @@ otherwise `stateless`.
 
 <br />
 
-### node.tcp_server_port
+### rpc.tcp_server_ip
+
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| ipaddr | [0-255].[0-255].[0-255].[0-255] | 0.0.0.0 |
+
+#### 说明
+
+设置 RPC 本地服务使用的监听网卡。默认使用 `0.0.0.0` 指定监听所有的网卡，或在指定需要监听网卡的 IP。
+
+<br />
+
+### rpc.tcp_server_port
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
