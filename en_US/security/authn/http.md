@@ -5,7 +5,7 @@ HTTP authenticator delegates authentication to a custom HTTP API.
 ## Authentication principle
 
 * In authenticator settings, an HTTP request pattern is specified.
-* When an MQTT client connects to the broker, the configured request template is rendered and the resulting request is emitted.
+* When an MQTT client connects to EMQX, the configured request template is rendered and the resulting request is emitted.
 * Receiving a 200 or 204 HTTP status is interpreted as authentication success. Other statuses indicate authentication failure.
 A successful HTTP response can also contain a JSON or `www-form-urlencoded` map with `is_superuser` boolean field
 that indicates superuser privileges for the client.
@@ -18,7 +18,7 @@ For untrusted environments, HTTPS should be used.
 
 ## Configuration
 
-HTTP authentication is identified with `mechanism = http` and `backend = built_in_database`.
+HTTP authentication is identified with `mechanism = password_based` and `backend = http`.
 
 HTTP `POST` and `GET` requests are supported. Each of them has some specific options.
 
@@ -69,9 +69,9 @@ Required field with possible values `get` or `post`. Denoting the corresponding 
 
 ### `url`
 
-HTTP url for external authentication requests, required. It may contain [placeholders](./authn.md#authentication-placeholders).
+HTTP URL for external authentication requests, required. It may contain [placeholders](./authn.md#authentication-placeholders).
 
-For `https://` urls `ssl` configuration must be enabled:
+For URLs with scheme `https` the `ssl` configuration must be enabled:
 
 ```
 {
@@ -81,7 +81,6 @@ For `https://` urls `ssl` configuration must be enabled:
         enable = true
     }
 }
-
 ```
 
 ### `body`
@@ -91,9 +90,10 @@ body. For `get` requests it is encoded as query parameters. The map keys and val
 
 For different configurations `body` map will be encoded differently.
 
-Assume an MQTT client connects with clientid `id123`, username `iamuser`, and password `secret`.
+Assume an MQTT client connects with client ID `id123`, username `iamuser`, and password `secret`.
 
-* `GET` request:
+1. `GET` request:
+
     ```
     {
         method = get
@@ -104,12 +104,16 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
         }
     }
     ```
+
     The resulting request will be:
+
     ```
     GET /auth/id123?username=iamuser&password=secret HTTP/1.1
     ... Headers ...
     ```
-* `POST` JSON request:
+
+2. `POST` JSON request:
+
     ```
     {
         method = post
@@ -123,7 +127,9 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
         }
     }
     ```
+
     The resulting request will be:
+
     ```
     POST /auth/id123 HTTP/1.1
     Content-Type: application/json
@@ -131,7 +137,9 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
 
     {"username":"iamuser","password":"secret"}
     ```
-* `POST` www-form-urlencoded request:
+
+3. `POST` www-form-urlencoded request:
+
     ```
     {
         method = post
@@ -145,7 +153,9 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
         }
     }
     ```
+
     The resulting request will be:
+
     ```
     POST /auth/id123 HTTP/1.1
     Content-Type: application/x-www-form-urlencoded
@@ -158,7 +168,8 @@ Assume an MQTT client connects with clientid `id123`, username `iamuser`, and pa
 
 Map with arbitrary HTTP headers for external requests, optional.
 
-For `get` requests the default value is
+For `GET` requests the default value is
+
 ```
 {
     "accept" = "application/json"
@@ -167,9 +178,11 @@ For `get` requests the default value is
     "keep-alive" = "timeout=30, max=1000"
 }
 ```
-Headers cannot contain `content-type` header for `get` requests.
 
-For `post` requests the default value is
+Headers cannot contain `content-type` header for `GET` requests.
+
+For `POST` requests the default value is
+
 ```
 {
     "accept" = "application/json"
@@ -180,9 +193,9 @@ For `post` requests the default value is
 }
 ```
 
-`content-type` header value defines `body` encoding method for `post` requests. Possible values are:
-* `application/json` for JSON;
-* `application/x-www-form-urlencoded` for x-www-form-urlencoded format.
+`content-type` header value defines `body` encoding method for `POST` requests. Possible values are:
+- `application/json` for JSON;
+- `application/x-www-form-urlencoded` for x-www-form-urlencoded format.
 
 ### `enable_pipelining`
 
@@ -194,10 +207,10 @@ Optional, default value is `true`.
 Optional values controlling the corresponding request thresholds. The default values are:
 
 ```
-  connect_timeout = 15s
-  max_retries = 5
-  request_timeout = 5s
-  retry_interval = 1s
+connect_timeout = 15s
+max_retries = 5
+request_timeout = 5s
+retry_interval = 1s
 ```
 
 ### `pool_size`

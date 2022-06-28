@@ -2,8 +2,8 @@
 
 Some [authenticators](./authn.md#authentication-sources) (with `built_in_database` backend) store credential data in EMQX internal database (Mnesia):
 
-* `password_based:built_in_database`
-* `scram:built_in_database`
+- `password_based:built_in_database`
+- `scram:built_in_database`
 
 For these authenticators, users can be managed through REST API.
 It allows EMQX administrators to create, update, remove, and list user credentials.
@@ -29,10 +29,11 @@ See [authentication API documentation](./authn.md#http-api) for identifier conve
 User import is supported for the `password_based:built_in_database` authenticator.
 
 The endpoints for importing users into the corresponding chains are:
-* `/api/v5/authentication/{id}/import_users`
-* `/api/v5/listeners/{listener_id}/authentication/{id}/import_users`
-* `/api/v5/gateway/{protocol}/authentication/import_users`
-* `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
+
+- `/api/v5/authentication/{id}/import_users`
+- `/api/v5/listeners/{listener_id}/authentication/{id}/import_users`
+- `/api/v5/gateway/{protocol}/authentication/import_users`
+- `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
 The accepted `filename` parameter should be a node-local path of a file with credentials.
 

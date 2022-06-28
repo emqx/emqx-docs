@@ -1,15 +1,14 @@
-# SCRAM
+# SCRAM 认证
 
-This authenticator implements [SCRAM](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) authentication and uses the built-in Mnesia database of EMQX to store client credentials (_users_).
+该认证器实现了 [SCRAM](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) 认证，并使用 EMQX 内置的 Mnesia 数据库存储客户端凭据（_users_）。
 
-SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTT
-packages during connection.
+SCRAM 认证是一种比密码认证更复杂的机制，它依赖与 MQTT 5.0 提供的增强认证机制，需要在连接期间交换额外的 MQTT 报文。
 
-SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
+SCRAM 认证不依赖外部数据源，使用简单轻量。
 
-## Configuration
+## 配置
 
-SCRAM authentication is identified with `mechanism = scram` and `backend = built_in_database`.
+SCRAM 认证由 `mechanism = scram` and `backend = built_in_database` 标识.
 
 ```
 {
@@ -24,14 +23,15 @@ SCRAM authentication is identified with `mechanism = scram` and `backend = built
 
 ### `algorithm`
 
-Possible values:
-* `sha256` for `SCRAM-SHA-256` method;
-* `sha512` for `SCRAM-SHA-512` method.
+可选值：
+
+- `sha256` 用于 `SCRAM-SHA-256` 方法；
+- `sha512` 用法 `SCRAM-SHA-512` 方法。
 
 ### `iteration_count`
 
-Iteration-count parameter for SCRAM, optional. The default value is 4096.
+可选的整型配置，用于指定迭代次数，默认值为 4096。
 
-## Credential management
+## 用户管理
 
-Users can be managed through [HTTP API](./user_management.md).
+用户可以通过 [HTTP API](./user_management.md) 进行管理。

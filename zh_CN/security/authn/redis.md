@@ -1,96 +1,167 @@
-# Redis 认证
+# 使用 Redis 的密码认证
 
-Redis 认证使用外部 Redis 数据库作为认证数据源，可以存储大量数据，同时方便与外部设备管理系统集成。
+该认证器实现了密码验证算法，并使用 Redis 数据库作为凭证存储。
 
-插件：
+## 存储架构
 
-```bash
-emqx_auth_redis
+Redis 认证器适用于存储到 Redis [hashes](https://redis.io/docs/manual/data-types/#hashes) 中的凭据，并且使用预定义的字段名称：`password_hash`、`salt`、`is_superuser`。 `password_hash` 字段是必需的，其他字段是可选的。`salt` 字段的缺失被解释为空盐（`salt = ""`）；`is_superuser` 的缺失将被设置为默认值 `false`。
+
+添加用户名为 `user123`、密码为 `secret`、盐值 `salt` 和超级用户标识为 `true` 的用户示例：
+
+```
+>redis-cli
+127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash ac63a624e7074776d677dd61a003b8c803eb11db004d0ec6ae032a5d7c9c5caf
+(integer) 3
 ```
 
-::: tip 
-emqx_auth_redis 插件同时包含 ACL 功能，可通过注释禁用。
-:::
+相关的配置参数为：
 
+```
+password_hash_algorithm {
+    name = sha256
+    salt_position = prefix
+}
 
-
-
-要启用 Redis 认证，需要在 `etc/plugins/emqx_auth_redis.conf` 中配置以下内容：
-
-## Redis 连接信息
-
-Redis 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_redis.conf
-
-## 服务器地址
-auth.redis.server = 127.0.0.1:6379
-
-## 连接池大小
-auth.redis.pool = 8
-
-auth.redis.database = 0
-
-auth.redis.password = 
+cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
-## 默认数据结构
+## 配置
 
-Redis 认证默认配置下使用哈希表存储认证数据，使用 `mqtt_user:` 作为 Redis 键前缀，数据结构如下：
+Redis 认证器由 `mechanism = password_based` 和 `backend = redis` 标识。
 
-```bash
-redis> hgetall mqtt_user:emqx
-  password public
-  salt wivwiv
-```
+EMQX 支持 3 种 Redis 部署方式：
 
-默认配置下示例数据如下：
+- Standalone Redis。
 
-```bash
-HMSET mqtt_user:emqx
-  password public
-  salt wivwiv
-```
+  ```
+  {
+    mechanism = password_based
+    backend = redis
+    enable = true
 
-启用 Redis 认证后，你可以通过用户名： emqx，密码：public 连接。
+    redis_type = single
+    server = "127.0.0.1:6379"
 
+    password_hash_algorithm {
+        name = sha256
+        salt_position = suffix
+    }
 
-::: tip
-这是默认配置使用的数据结构，熟悉该插件的使用后你可以使用任何满足条件的数据结构进行认证。
-:::
+    cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+    database = 1
+    password = "public"
+    auto_reconnect = true
+  }
+  ```
 
+- [Redis Sentinel](https://redis.io/docs/manual/sentinel/)。
 
-## 加盐规则与哈希方法
+  ```
+  {
+    mechanism = password_based
+    backend = redis
+    enable = true
 
-Redis 认证支持配置[加盐规则与哈希方法](./authn.md#加盐规则与哈希方法)，默认存储明文密码不做处理：
+    redis_type = sentinel
+    servers = "10.123.13.11:6379,10.123.13.12:6379"
+    sentinel = "mymaster"
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+    password_hash_algorithm {
+        name = sha256
+        salt_position = suffix
+    }
 
-auth.redis.password_hash = plain
-```
+    cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+    database = 1
+    password = "public"
+    auto_reconnect = true
+  }
+  ```
 
+- [Redis Cluster](https://redis.io/docs/manual/scaling/)。
 
-## 认证查询命令（auth query cmd）
+  ```
+  {
+    mechanism = password_based
+    backend = redis
+    enable = true
 
-进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证查询命令，查询出该客户端在 Redis 中的认证数据。
+    redis_type = cluster
+    servers = "10.123.13.11:6379,10.123.13.12:6379"
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+    password_hash_algorithm {
+        name = sha256
+        salt_position = suffix
+    }
 
-auth.redis.auth_cmd = HMGET mqtt_user:%u password
-```
+    cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
+    database = 1
+    password = "public"
+    auto_reconnect = true
+  }
+  ```
 
-你可以在命令中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+### 通用配置参数
 
-- %u：用户名
-- %c：Client ID
-- %C：TLS 证书公用名（证书的域名或子域名），仅当 TLS 连接时有效
-- %d：TLS 证书 subject，仅当 TLS 连接时有效
+#### `redis_type`
 
+可选值为 `single`、 `cluster` 和 `sentinel`，分别对应 Redis 的 3 种部署类型：
 
-你可以根据业务需要调整认证查询命令，使用任意 [Redis 支持的命令](http://redisdoc.com/index.html)，但是任何情况下认证查询命令需要满足以下条件：
+1. Standalone Redis
+2. [Redis Cluster](https://redis.io/docs/manual/scaling/)
+3. [Redis Sentinel](https://redis.io/docs/manual/sentinel/)
 
-1. 查询结果中第一个数据必须为 password，EMQX 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中第二个数据必须是 salt 字段，EMQX 使用该字段作为 salt（盐）值
+#### `password_hash_algorithm`
+
+标准 [密码散列选项](./authn.md#密码散列)。
+
+#### `cmd`
+
+用户凭据的查询命令，支持以下 Redis 命令：
+
+- `HMGET KEY_TEMPLATE ...Fields...`，其中可能的字段是 `password_hash`、`salt`、`is_superuser`。 
+- `HGET KEY_TEMPLATE password_hash`。
+
+`KEY_TEMPLATE` 支持 [placeholders](./authn.md#authentication-placeholders)。`password_hash` 是必须的。
+
+#### `database`
+
+必选的整型配置。指定 Redis 数据库的 Index。
+
+#### `password`
+
+用于 Redis [认证]((https://redis.io/docs/manual/security/#authentication)) 的密码。
+
+#### `auto_reconnect`
+
+可选的布尔类型配置。默认值为 `true`。指定 EMQX 是否自动重新连接到 Redis。
+
+#### `pool_size`
+
+可选的整型配置。指定从 EMQX 节点到 Redis 的并发连接数。默认值为 8。
+
+#### `ssl`
+
+用于 [安全连接至 Redis](https://redis.io/docs/manual/security/encryption/) 的标准 [SSL options](../ssl.md)。
+
+### Standalone Redis options (`redis_type = single`).
+
+#### `server`
+
+必选的字符串类型配置，格式为 `host:port`，用于指定 Redis 服务端地址。
+
+### Redis Cluster options (`redis_type = cluster`).
+
+#### `servers`
+
+必选的字符串类型配置，格式为 `host1:port1,host2:port2,...`，用于指定 Redis Cluster 端点地址列表。
+
+### Redis Sentinel options (`redis_type = sentinel`).
+
+#### `servers`
+
+必选的字符串类型配置，格式为 `host1:port1,host2:port2,...`，用于指定 Redis Sentinel 端点地址列表。
+
+#### `sentinel`
+
+必选的字符串类型配置。用于指定 Redis Sentinel 配置需要的 [主服务器名称](https://redis.io/docs/manual/sentinel/#configuring-sentinel)。

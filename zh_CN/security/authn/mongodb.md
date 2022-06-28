@@ -1,184 +1,214 @@
-# MongoDB 认证
+# 使用 MongoDB 的密码认证
 
-MongoDB 认证使用外部 MongoDB 数据库作为认证数据源，可以存储大量数据，同时方便与外部设备管理系统集成。
+该认证器实现了密码验证算法，并使用 MongoDB 数据库作为凭证存储。
 
-插件：
+## 存储架构
 
-```bash
-emqx_auth_mongo
-```
+MongoDB 密码认证器支持将凭据存储为 MongoDB 文档。用户提供集合名称和过滤器模板以选择相关文档。
 
-::: tip 
-emqx_auth_mongo 插件同时包含 ACL 功能，可通过注释禁用。
-:::
+该文档应包含具有 `password_hash`、`salt` 和 `is_superuser` 值的字段。 字段名称是可配置的。`password_hash` 的值是必需的，其他值是可选的。没有 `salt` 将被解释为空盐（`salt = ""`）；`is_superuser` 缺失将按照默认值 `false` 处理。
 
+为用户名 `user123`、密码 `secret`、盐值 `salt` 和超级用户标识为 true 的用户添加文档的示例：
 
-
-要启用 MongoDB 认证，需要在 `etc/plugins/emqx_auth_mongo.conf` 中配置以下内容：
-
-## MongoDB 连接信息
-
-MongoDB 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_mongo.conf
-
-## MongoDB 部署类型
-##
-## Value: single | unknown | sharded | rs
-auth.mongo.type = single
-
-## 是否启用 SRV 和 TXT 记录解析
-auth.mongo.srv_record = false
-
-## 如果您的 MongoDB 以副本集方式部署，则需要指定相应的副本集名称
-##
-## 如果启用了 SRV 记录，即 auth.mongo.srv_record 设置为 true，
-## 且您的 MongoDB 服务器域名添加了包含 replicaSet 选项的 DNS TXT 记录，
-## 那么可以忽略此配置项
-## auth.mongo.rs_set_name =
-
-## MongoDB 服务器地址列表
-##
-## 如果你的 URI 具有以下格式：
-## mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
-## 请将 auth.mongo.server 配置为 host1[:port1][,...hostN[:portN]]
-##
-## 如果你的 URI 具有以下格式：
-## mongodb+srv://server.example.com
-## 请将 auth.mongo.server 配置为 server.example.com，并将 srv_record
-## 设置为 true，EMQX 将自动查询 SRV 和 TXT 记录以获取服务列表和 replicaSet 等选项
-##
-## 现已支持 IPv6 和域名
-auth.mongo.server = 127.0.0.1:27017
-
-auth.mongo.pool = 8
-
-auth.mongo.login =
-
-auth.mongo.password =
-
-## 指定用于授权的数据库，没有指定时默认为 admin
-##
-## 如果启用了 SRV 记录，即 auth.mongo.srv_record 设置为 true，
-## 且您的 MongoDB 服务器域名添加了包含 authSource 选项的 DNS TXT 记录，
-## 那么可以忽略此配置项
-## auth.mongo.auth_source = admin
-
-auth.mongo.database = mqtt
-
-auth.mongo.query_timeout = 5s
-
-## SSL 选项
-# auth.mongo.ssl = false
-
-## auth.mongo.ssl_opts.keyfile =
-
-## auth.mongo.ssl_opts.certfile =
-
-## auth.mongo.ssl_opts.cacertfile =
-
-## MongoDB 写模式
-##
-## 可设置为 unsafe 或 safe。设置为 safe 时会等待 MongoDB Server 的响应并返回给调用者。未指定时将使用默认值 unsafe。
-## auth.mongo.w_mode =
-
-## MongoDB 读模式
-##
-## 可设置为 master 或 slave_ok，设置为 master 时表示每次查询都将从主节点读取最新数据。未指定时将使用默认值 master。
-## auth.mongo.r_mode =
-
-## MongoDB 拓扑配置，一般情况下用不到，详见 MongoDB 官网文档
-auth.mongo.topology.pool_size = 1
-auth.mongo.topology.max_overflow = 0
-## auth.mongo.topology.overflow_ttl = 1000
-## auth.mongo.topology.overflow_check_period = 1000
-## auth.mongo.topology.local_threshold_ms = 1000
-## auth.mongo.topology.connect_timeout_ms = 20000
-## auth.mongo.topology.socket_timeout_ms = 100
-## auth.mongo.topology.server_selection_timeout_ms = 30000
-## auth.mongo.topology.wait_queue_timeout_ms = 1000
-## auth.mongo.topology.heartbeat_frequency_ms = 10000
-## auth.mongo.topology.min_heartbeat_frequency_ms = 1000
-
-```
-
-
-## 默认数据结构
-
-MongoDB 认证默认配置下需要确保数据库中有如下集合：
-
-```json
+```js
+> db.mqtt_user.insertOne(
+  {
+      "username": "user123",
+      "s": "salt",
+      "is": true,
+      "ph": "bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35"
+  }
+);
 {
-  username: "user",
-  password: "password hash",
-  salt: "password salt",
-  is_superuser: false,
-  created: "2020-02-20 12:12:14"
+  acknowledged: true,
+  insertedId: ObjectId("6290aa4959fbb6cf748c0148")
 }
 ```
 
-默认配置下示例数据如下：
+对应的配置参数为：
 
-```bash
-use mqtt
+```
+password_hash_algorithm {
+    name = sha256
+    salt_position = prefix
+}
 
-db.mqtt_user.insert({
-  "username": "emqx",
-  "password": "efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7",
-  "is_superuser": false,
-  "salt": ""
-})
+collection = "mqtt_user"
+filter { username = "${username}" }
+
+password_hash_field = "ph"
+salt_field = "s"
+is_superuser_field = "is"
 ```
 
-启用 MongoDB 认证后，你可以通过用户名： emqx，密码：public 连接。
-
-
-::: tip 
-这是默认配置使用的集合结构，熟悉该插件的使用后你可以使用任何满足条件的集合进行认证。
+::: warning
+当系统中有大量用户时，请确保选择器使用的集合已优化并使用有效的索引。 否则连接 MQTT 客户端会对数据库和 EMQX 本身产生过多的负载。
 :::
 
+## 配置
 
+MongoDB 密码认证器由 `mechanism = password_based` 和 `backend = mongodb` 标识。
 
-## 加盐规则与哈希方法
+此认证器支持 MongoDB 的 3 种部署类型：
 
-MongoDB 认证支持配置[加盐规则与哈希方法](./authn.md#加盐规则与哈希方法)：
+- Standalone MongoDB server:
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+  ```
+  {
+    mechanism = password_based
+    backend = mongodb
+    enable = true
 
-auth.mongo.password_hash = sha256
-```
+    password_hash_algorithm {
+      name = sha256
+      salt_position = suffix
+    }
 
+    collection = "mqtt_user"
+    filter { username = "${username}" }
 
-## 认证查询（auth_selector）
+    mongo_type = single
+    server = "127.0.0.1:27017"
 
-进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
+  }
+  ```
+- MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
 
-MongoDB 支持配置集合名称、密码字段、selector 命令
+  ```
+  {
+    mechanism = password_based
+    backend = mongodb
+    enable = true
+  
+    password_hash_algorithm {
+      name = sha256
+      salt_position = suffix
+    }
+  
+    collection = "mqtt_user"
+    filter { username = "${username}" }
+  
+    mongo_type = rs
+    servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+    replica_set_name = "rs0"
+  
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
+  }
+  ```
+- MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+  ```
+  {
+    mechanism = password_based
+    backend = mongodb
+    enable = true
+  
+    password_hash_algorithm {
+      name = sha256
+      salt_position = suffix
+    }
+  
+    collection = "mqtt_user"
+    filter { username = "${username}" }
+  
+    mongo_type = sharded
+    servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+  
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
+  }
+  ```
 
-auth.mongo.auth_query.collection = mqtt_user
+### 通用配置选项
 
-## 如果启用了加盐处理，此处需配置为 password,salt
-## Value:  password | password,salt
-auth.mongo.auth_query.password_field = password
+#### `password_hash_algorithm`
 
-auth.mongo.auth_query.selector = username=%u
-```
+标准 [密码散列选项](./authn.md#密码散列)。
 
-你可以在认证查询（selector）中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+#### `filter`
 
-- %u：用户名
-- %c：Client ID
-- %C：TLS 证书公用名（证书的域名或子域名），仅当 TLS 连接时有效
-- %d：TLS 证书 subject，仅当 TLS 连接时有效
+A map interpreted as MongoDB selector for credential lookup.
+Supports [placeholders](./authn.md#authentication-placeholders).
 
+#### `database`
 
-你可以根据业务需要调整认证查询，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下认证查询需要满足以下条件：
+必选的字符串类型配置，用于指定 MongoDB 的数据库名称。
 
-1. 查询结果中必须包含 password 字段，EMQX 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQX 使用该字段作为 salt（盐）值
-3. MongoDB 使用 findOne 查询命令，确保你期望的查询结果能够出现在第一条数据中
+#### `username`
+
+可选的字符串类型配置，用于指定 MongoDB 用户。
+
+#### `password`
+
+可选的字符串类型配置，用于指定 MongoDB 用户密码。
+
+#### `pool_size`
+
+可选的整型配置，用于定义从 EMQX 节点到 MongoDB 服务器的并发连接数。默认值为 8。
+
+#### `ssl`
+
+标准 [SSL 选项](../ssl.md) 。
+
+#### `srv_record`
+
+可选的布尔类型配置，默认值为 `false`。 如果设置为 `true`，EMQX 将尝试从 DNS 记录中获取 MongoDB 主机、Replica Set 名称、Auth Source 等信息。参见 [DNS 种子列表连接格式](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format)。
+
+#### `topology`
+
+可选的 map 类型配置，包含了一些细粒度 MongoDB 驱动程序设置：
+
+- `pool_size` — 整数类型，内部连接池的初始大小。
+- `max_overflow` — 整数类型，当内部池中的所有工作进程都忙时，能够溢出创建的工作进程的数量。
+- `overflow_ttl` — 时长，溢出的工作进程在终止之前留在内部池中的毫秒数。
+- `overflow_check_period` — 时长，工作进程的 `overflow_ttl` 的检查周期（以毫秒为单位）。
+- `local_threshold_ms` — 以毫秒为单位的时长，只能选择 RTT 适合从较低 RTT 到较低 RTT + `local_threshold_ms` 的窗口中的辅助节点来处理用户的请求。
+- `connect_timeout_ms` — 以毫秒为单位的时长，建立 TCP 连接的超时时间。
+- `server_selection_timeout_ms` — 以毫秒为单位的时长，选择适当服务器的最长时间。
+- `wait_queue_timeout_ms` — 以毫秒为单位的时长，等待工作进程在内部池中可用的最长时间。
+- `heartbeat_frequency_ms` — 以毫秒为单位的时长，Topology 重新扫描之间的默认延迟。
+- `min_heartbeat_frequency_ms` — 以毫秒为单位的时长，Topology 重新扫描之间的最小延迟。
+
+### Standalone MongoDB 选项
+
+#### `server`
+
+必选的字符串类型配置，用于连接或被用作 seed 的 MongoDB 服务器地址。
+
+#### `w_mode`
+
+写入模式，`unsafe`（默认）或 `safe`。 安全模式在序列中的每次写入后都会发出 `getLastError` 请求。如果回复说它失败，那么序列的其余部分将被中止。不安全模式会在不确认的情况下发出每次写入，因此如果写入失败，您将不会知道它，并且将执行剩余的操作。这是不安全的，但速度更快，因为没有往返延迟。
+
+### MongoDB ReplicaSet 选项
+
+#### `servers`
+
+必选的字符串类型配置，用逗号分隔，指定用于连接或被用作 seeds 的 MongoDB 服务器地址列表。
+
+#### `w_mode`
+
+写模式, 与 [Standalone MongoDB](#wmode) 相同。
+
+#### `r_mode`
+
+读取模式，`master`（默认）或 `slave_ok`。`master` 意味着序列中的每个查询都必须从主服务器读取新数据。 如果连接的服务器不是主服务器，则第一次读取将失败，其余操作将中止。`slave_ok` 表示允许每个查询从从服务器读取陈旧数据（来自主服务器的新数据也可以）。
+
+#### `replica_set_name`
+
+必选的字符串类型配置，用于指定 Replica Set 名称。但是当 `srv_record` 配置为 `true` 时，即从 DNS 记录中查询这些配置信息，可以不设置此字段。
+
+### MongoDB Cluster 选项
+
+#### `servers`
+
+必选的字符串类型配置，用逗号分隔，指定用于连接或被用作 seeds 的 MongoDB 服务器地址列表。
+
+#### `w_mode`
+
+写模式, 与 [Standalone MongoDB](#wmode) 相同。

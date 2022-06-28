@@ -1,15 +1,13 @@
-# Redis
+# Password Authentication Using Redis
 
 This authenticator implements the password verification algorithm and uses Redis database as credential storage.
 
 ## Storage schema
 
-Redis authentication works with credentials stored as Redis [hashes](https://redis.io/docs/manual/data-types/#hashes)
-with predefined field names: `password_hash`, `salt`, `is_superuser`. `password_hash` field is required, other fields
-are optional. The absence of `salt` field is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
-interpreted as its false value.
+Redis authentication works with credentials stored as Redis [hashes](https://redis.io/docs/manual/data-types/#hashes) with predefined field names: `password_hash`, `salt`, `is_superuser`. `password_hash` field is required, other fields are optional. The absence of `salt` field is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is interpreted as its false value.
 
 Example of adding a user with username `user123`, password `secret`, prefixed salt `salt` and is_superuser `true`:
+
 ```
 >redis-cli
 127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash ac63a624e7074776d677dd61a003b8c803eb11db004d0ec6ae032a5d7c9c5caf
@@ -17,6 +15,7 @@ Example of adding a user with username `user123`, password `secret`, prefixed sa
 ```
 
 The corresponding config params are:
+
 ```
 password_hash_algorithm {
     name = sha256
@@ -112,9 +111,10 @@ Standard [password hashing options](./authn.md#password-hashing).
 #### `cmd`
 
 Required string value with the command used for fetching credentials. Supported command formats are:
-* `HMGET KEY_TEMPLATE ...Fields...` where possible fields are `password_hash`, `salt`, `is_superuser`. `password_hash` is
+
+- `HMGET KEY_TEMPLATE ...Fields...` where possible fields are `password_hash`, `salt`, `is_superuser`. `password_hash` is
 required to be present;
-* `HGET KEY_TEMPLATE password_hash`.
+- `HGET KEY_TEMPLATE password_hash`.
 
 `KEY_TEMPLATE` supports [placeholders](./authn.md#authentication-placeholders).
 

@@ -1,19 +1,15 @@
-# MongoDB
+# Password Authentication Using MongoDB
 
 This authenticator implements the password verification algorithm and uses MongoDB database as credential storage.
 
 ## Storage Schema
 
-MongoDB authenticator supports storing credentials as MongoDB documents. A user provides the collection name and a
-filter template for selecting the relevant document.
+MongoDB authenticator supports storing credentials as MongoDB documents. A user provides the collection name and a filter template for selecting the relevant document.
 
-The document should contain fields with values for `password_hash`, `salt`, and `is_superuser`.
-The field names are configurable.
-The value for `password_hash` is required, other values are optional.
-The absence of `salt` value is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
-interpreted as its false value.
+The document should contain fields with values for `password_hash`, `salt`, and `is_superuser`. The field names are configurable. The value for `password_hash` is required, other values are optional. The absence of `salt` value is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is interpreted as its false value.
 
 Example of adding a document for a user with username `user123`, password `secret`, prefixed salt `salt`, and `is_superuser` true:
+
 ```js
 > db.mqtt_user.insertOne(
   {
@@ -30,6 +26,7 @@ Example of adding a document for a user with username `user123`, password `secre
 ```
 
 The corresponding config parameters are:
+
 ```
 password_hash_algorithm {
     name = sha256
@@ -42,13 +39,12 @@ filter { username = "${username}" }
 password_hash_field = "ph"
 salt_field = "s"
 is_superuser_field = "is"
-
 ```
 
 ::: warning
 When there are a significant number of users in the system make sure that the collections used by the selector are optimized
 and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database
-and on the EMQX broker itself.
+and on the EMQX itself.
 :::
 
 ## Configuration
@@ -56,7 +52,9 @@ and on the EMQX broker itself.
 MongoDB authentication is identified with `mechanism = password_based` and `backend = mongodb`.
 
 The authenticator supports connecting to MongoDB running in three different modes:
-* Standalone MongoDB server:
+
+- Standalone MongoDB server:
+
   ```
   {
     mechanism = password_based
@@ -79,53 +77,55 @@ The authenticator supports connecting to MongoDB running in three different mode
     password = "secret"
   }
   ```
-*  MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
-```
-{
-  mechanism = password_based
-  backend = mongodb
-  enable = true
+- MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
 
-  password_hash_algorithm {
-    name = sha256
-    salt_position = suffix
+  ```
+  {
+    mechanism = password_based
+    backend = mongodb
+    enable = true
+  
+    password_hash_algorithm {
+      name = sha256
+      salt_position = suffix
+    }
+  
+    collection = "mqtt_user"
+    filter { username = "${username}" }
+  
+    mongo_type = rs
+    servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+    replica_set_name = "rs0"
+  
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
   }
+  ```
+- MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
 
-  collection = "mqtt_user"
-  filter { username = "${username}" }
-
-  mongo_type = rs
-  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
-  replica_set_name = "rs0"
-
-  database = "mqtt"
-  username = "emqx"
-  password = "secret"
-}
-```
-*  MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
-```
-{
-  mechanism = password_based
-  backend = mongodb
-  enable = true
-
-  password_hash_algorithm {
-    name = sha256
-    salt_position = suffix
+  ```
+  {
+    mechanism = password_based
+    backend = mongodb
+    enable = true
+  
+    password_hash_algorithm {
+      name = sha256
+      salt_position = suffix
+    }
+  
+    collection = "mqtt_user"
+    filter { username = "${username}" }
+  
+    mongo_type = sharded
+    servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+  
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
   }
-
-  collection = "mqtt_user"
-  filter { username = "${username}" }
-
-  mongo_type = sharded
-  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
-
-  database = "mqtt"
-  username = "emqx"
-  password = "secret"
-}
-```
+  ```
 
 ### Common Configuration Options
 

@@ -1,130 +1,123 @@
-# PostgreSQL 认证
+# 使用 PostgreSQL 的密码认证
 
-PostgreSQL 认证使用外部 PostgreSQL 数据库作为认证数据源，可以存储大量数据，同时方便与外部设备管理系统集成。
+该认证器实现了密码验证算法，并使用 PostgreSQL 数据库作为凭证存储。
 
-插件：
+## 存储架构
 
-```bash
-emqx_auth_pgsql
-```
+PostgreSQL 认证器支持几乎任何存储模式。由用户决定如何存储凭据和访问它们：使用一个或多个表、视图等。
 
-::: tip 
-emqx_auth_pgsql 插件同时包含 ACL 功能，可通过注释禁用。
-:::
+用户只应提供一个模板化查询，该查询将凭证选择为包含 `password_hash`、`salt` 和 `is_superuser` 列的单行。`password_hash` 列是必需的，其他列是可选的。`salt` 列的缺失被解释为空盐（`salt = ""`）；`is_superuser` 的缺失将被设置为默认值 `false`。
 
-
-
-要启用 PostgreSQL 认证，需要在 `etc/plugins/emqx_auth_pgsql.conf` 中配置以下内容：
-
-## PostgreSQL 连接信息
-
-PostgreSQL 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
-
-## 服务器地址
-auth.pgsql.server = 127.0.0.1:5432
-
-## 连接池大小
-auth.pgsql.pool = 8
-
-auth.pgsql.username = root
-
-auth.pgsql.password = public
-
-auth.pgsql.database = mqtt
-
-auth.pgsql.encoding = utf8
-
-## TLS 配置
-## auth.pgsql.ssl = false
-## auth.pgsql.ssl_opts.keyfile =
-## auth.pgsql.ssl_opts.certfile =
-```
-
-
-
-## 默认表结构
-
-PostgreSQL 认证默认配置下需要确保数据库中有下表：
+用于存储凭据的示例表结构：
 
 ```sql
 CREATE TABLE mqtt_user (
-  id SERIAL PRIMARY KEY,
-  username CHARACTER VARYING(100),
-  password CHARACTER VARYING(100),
-  salt CHARACTER VARYING(40),
-  is_superuser BOOLEAN,
-  UNIQUE (username)
-)
+    id serial PRIMARY KEY,
+    username text NOT NULL UNIQUE,
+    password_hash  text NOT NULL,
+    salt text NOT NULL,
+    is_superuser boolean DEFAULT false,
+    created timestamp with time zone DEFAULT NOW()
+);
 ```
 
+在这个表中，MQTT 用户由“用户名”标识。
 
-
-默认配置下示例数据如下：
+添加用户名为 `user123`、密码为 `secret`、盐值为 `salt`和超级用户标识为 `true` 的用户示例：
 
 ```sql
-INSERT INTO mqtt_user (username, password, salt, is_superuser)
-VALUES
-	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL, false);
+postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
+INSERT 0 1
 ```
 
-启用 PostgreSQL 认证后，你可以通过用户名： emqx，密码：public 连接。
+对应的配置参数为：
 
+```
+password_hash_algorithm {
+    name = sha256
+    salt_position = prefix
+}
 
+query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
+```
 
-::: tip 
-这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行认证。
+::: warning
+当系统中有大量用户时，请确保查询使用的表已经过优化，并且使用了有效的索引。 否则连接 MQTT 客户端会对数据库和 EMQX 本身产生过多的负载。
 :::
 
+## 配置
 
+PostgreSQL 密码认证器由 `mechanism = password_based` 和 `backend = postgresql` 标识。
 
-## 加盐规则与哈希方法
+配置示例：
 
-PostgreSQL 认证支持配置[加盐规则与哈希方法](./authn.md#加盐规则与哈希方法)：
+```
+{
+  mechanism = password_based
+  backend = postgresql
+  enable = true
 
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
+  password_hash_algorithm {
+    name = sha256
+    salt_position = suffix
+  }
 
-auth.pgsql.password_hash = sha256
+  database = mqtt
+  username = postgres
+  password = public
+  server = "127.0.0.1:5432"
+  query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+}
 ```
 
+### `password_hash_algorithm`
 
+标准的 [密码散列选项](./authn.md#密码散列)。
 
-## 认证 SQL（auth_query）
+### `query`
 
-进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
+必选的字符串类型配置。用于指定 PostgreSQL 查询语句模板。支持 [占位符](./authn.md#认证占位符)。
 
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
+出于安全原因，占位符值不是直接插入的，而是通过 PostgreSQL 占位符插入的。
 
-auth.pgsql.auth_query = select password from mqtt_user where username = '%u' limit 1
+例如，以下查询语句：
+
+```sql
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} AND peerhost = ${peerhost} LIMIT 1
 ```
 
+将首先被转换为以下 Prepared statement：
 
+```sql
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = $1 AND peerhost = $2 LIMIT 1
+```
 
-你可以在认证 SQL 中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+然后使用 `${username}` 和 `${peerhost}` 执行查询。
 
-- %u：用户名
-- %c：Client ID
-- %C：TLS 证书公用名（证书的域名或子域名），仅当 TLS 连接时有效
-- %d：TLS 证书 subject，仅当 TLS 连接时有效
+### `server`
 
+必选的字符串类型配置，格式为 `host:port`，用于指定 PostgreSQL 服务器地址。
 
+### `database`
 
-你可以根据业务需要调整认证 SQL，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下认证 SQL 需要满足以下条件：
+必选的字符串类型配置，用于指定 PostgreSQL 数据库名称。
 
-1. 查询结果中必须包含 password 字段，EMQX 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQX 使用该字段作为 salt（盐）值
-3. 查询结果只能有一条，多条结果时只取第一条作为有效数据
+### `username`
 
-::: tip 
-可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
-:::
+可选的字符串类型配置，用于指定 PostgreSQL 用户。
 
-### 进阶
+### `password`
 
-默认表结构中，我们将 username 字段设为了唯一索引（UNIQUE），与默认的查询语句（`select password from mqtt_user where username = '%u' limit 1`）配合使用可以获得非常不错的查询性能。
+可选的字符串类型配置，用户指定 PostgreSQL 用户密码。
 
-如果默认查询条件不能满足您的需要，例如你需要根据 Client ID 查询相应的 Password Hash 和 Salt，请确保将 Client ID 设置为索引；又或者您想要对 Username、Client ID 或者其他更多字段进行多条件查询，建议设置正确的单索引或是联合索引。总之，设置正确的表结构和查询语句，尽可能不要让索引失效而影响查询性能。
+#### `auto_reconnect`
+
+可选的布尔类型字段。指定连接中断时 EMQX 是否自动重新连接到 PostgreSQL。默认值为 `true`。
+
+### `pool_size`
+
+可选的整型字段。指定从 EMQX 节点到 PostgreSQL 的并发连接数。默认值为 8。
+
+### `ssl`
+
+标准 [SSL 选项](../ssl.md)。

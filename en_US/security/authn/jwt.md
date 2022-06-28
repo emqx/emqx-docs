@@ -1,4 +1,4 @@
-# JWT
+# JWT Authenticaton
 
 [JWT](https://jwt.io/) is a token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information.
 

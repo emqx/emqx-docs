@@ -1,49 +1,53 @@
-# User Management API
+# 用户管理 API
 
-Some [authenticators](./authn.md#authentication-sources) (with `built_in_database` backend) store credential data in EMQX internal database (Mnesia):
+一些 [认证器](./authn.md#认证器) (具有 `built_in_database` 后端) 将用户凭据存储在 EMQX 的内置数据库（Mnesia）中：
 
-* `password_based:built_in_database`
-* `scram:built_in_database`
+- `password_based:built_in_database`
+- `scram:built_in_database`
 
-For these authenticators, users can be managed through REST API.
-It allows EMQX administrators to create, update, remove, and list user credentials.
-
-To use user-management API for an authenticator, the authenticator must be set up for the used
-[chain](./authn.md#authentication-chains).
+对于这些认证器，EMQX 提供了相关的 HTTP API 来管理用户凭据，支持创建、更新、删除和列出用户凭据。
 
 ::: warning
-Each authentication chain has its own set of users.
+认证器之间的用户相互独立。
 :::
 
-## API Endpoints
+## API 端点
 
-The endpoint for the users of the global MQTT chain is `/api/v5/authentication/{id}/users`.
-Endpoint for the uses of a concrete MQTT listener chain is `/api/v5/listeners/{listener_id}/authentication/{id}/`.
-Endpoint for the users of a global `gateway` protocol chain is `/api/v5/gateway/{protocol}/authentication`.
-Endpoint for the uses of a `gateway` protocol listener chain is `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`.
+用于 MQTT 全局认证的用户管理的 API 端点为 `/api/v5/authentication/{id}/users`。
 
-See [authentication API documentation](./authn.md#http-api) for identificator conventions.
+用于 MQTT 监听器认证的用户管理的 API 端点为 `/api/v5/listeners/{listener_id}/authentication/{id}/`。
 
-## Importing Users
+用于管理其他接入协议的全局认证的用户管理的 API 端点为 `/api/v5/gateway/{protocol}/authentication`。
 
-User import is supported for the `password_based:built_in_database` authenticator.
+用于管理其他接入协议的监听器认证的用户管理的 API 端点为 `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`。
 
-The endpoints for importing users into the corresponding chains are:
-* `/api/v5/authentication/{id}/import_users`
-* `/api/v5/listeners/{listener_id}/authentication/{id}/import_users`
-* `/api/v5/gateway/{protocol}/authentication/import_users`
-* `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
+有关标识符的约定，请参阅 [认证 API 文档](./authn.md#http-api)。
 
-The accepted `filename` parameter should be a node-local path of a file with credentials.
+## 导入用户
 
-The following file formats (identified by file extention) are supported:
-* CSV (`{"filename": "some-filename.csv"}`:
+使用内置数据库的密码认证器支持用户导入。
+
+用于导入用户的 API 端点为:
+
+- `/api/v5/authentication/{id}/import_users`
+- `/api/v5/listeners/{listener_id}/authentication/{id}/import_users`
+- `/api/v5/gateway/{protocol}/authentication/import_users`
+- `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
+
+`filename` 参数应该是带有凭据的文件的节点本地路径。
+
+目前支持以下文件类型：
+
+- CSV (`{"filename": "some-filename.csv"}`:
+
   ```csv
   user_id,password_hash,salt,is_superuser
   myuser3,b6c743545a7817ae8c8f624371d5f5f0373234bb0ff36b8ffbf19bce0e06ab75,de1024f462fb83910fd13151bd4bd235,true
   myuser4,ee68c985a69208b6eda8c6c9b4c7c2d2b15ee2352cdd64a903171710a99182e8,ad773b5be9dd0613fe6c2f4d8c403139,false
   ```
-* JSON (`{"filename": "some-filename.json"}`:
+
+- JSON (`{"filename": "some-filename.json"}`:
+
   ```json
   [
     {

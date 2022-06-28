@@ -1,50 +1,20 @@
-# MySQL 认证
+# 使用 MySQL 的密码认证
 
-MySQL 认证使用外部 MySQL 数据库作为认证数据源，可以存储大量数据，同时方便与外部设备管理系统集成。
+该认证器实现了密码验证算法，并使用 MySQL 数据库作为凭证存储。
 
-插件：
+## 存储架构
 
-```bash
-emqx_auth_mysql
-```
+MySQL 认证器支持几乎任何存储模式。由用户决定如何存储凭据并访问它们：使用一个或多个表、视图等。
 
-::: tip 
-emqx_auth_mysql 插件同时包含 ACL 功能，可通过注释禁用。
-:::
+用户只应提供一个模板化查询，该查询将凭证选择为包含 `password_hash`、`salt` 和 `is_superuser` 列的单行。 `password_hash` 列是必需的，其他列是可选的。`salt` 列的缺失被解释为空盐（`salt = ""`）； `is_superuser` 缺失会被设置为默认值 `false`。
 
-
-要启用 MySQL 认证，需要在 `etc/plugins/emqx_auth_mysql.conf` 中配置以下内容：
-
-## MySQL 连接信息
-
-配置 MySQL 服务相关的连接地址，用户名密码和数据库：
-
-```bash
-## 服务器地址
-auth.mysql.server = 127.0.0.1:3306
-
-## 连接池大小
-auth.mysql.pool = 8
-
-auth.mysql.username = emqx
-
-auth.mysql.password = public
-
-auth.mysql.database = mqtt
-
-auth.mysql.query_timeout = 5s
-```
-
-
-## 默认表结构
-
-MySQL 认证默认配置下需要确保数据库中有下表：
+用于存储凭据的示例表结构：
 
 ```sql
 CREATE TABLE `mqtt_user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
-  `password` varchar(100) DEFAULT NULL,
+  `password_hash` varchar(100) DEFAULT NULL,
   `salt` varchar(35) DEFAULT NULL,
   `is_superuser` tinyint(1) DEFAULT 0,
   `created` datetime DEFAULT NULL,
@@ -53,77 +23,100 @@ CREATE TABLE `mqtt_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-默认配置下示例数据如下：
+在此表中，MQTT 用户由“用户名”标识。
+
+添加用户名为 `user123`、密码为 `secret`、盐值为 `salt` 和超级用户标志为 `true` 的用户示例：
+
+```
+mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', 1);
+Query OK, 1 row affected (0,01 sec)
+```
+
+对应的配置参数为：
+
+```
+password_hash_algorithm {
+    name = sha256
+    salt_position = prefix
+}
+
+query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
+```
+
+注意，当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引。否则连接 MQTT 客户端会对数据库和 EMQX 本身产生过多的负载。
+
+## 配置
+
+使用 MySQL 的密码认证器由 `mechanism = password_based` 和 `backend = mysql` 标识。
+
+配置示例：
+
+```
+{
+  mechanism = password_based
+  backend = mysql
+  enable = true
+
+  password_hash_algorithm {
+    name = sha256
+    salt_position = suffix
+  }
+
+  database = mqtt
+  username = root
+  password = public
+  server = "127.0.0.1:3306"
+  query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+}
+```
+
+### `password_hash_algorithm`
+
+标准的 [密码散列选项](./authn.md#密码散列)。
+
+### `query`
+
+用于查询身份凭据的 MySQL 查询语句模板，这是一个必填项，支持使用 [占位符](./authn.md#认证占位符)。
+
+出于安全原因，占位符值不是直接插入的，而是通过 MySQL 占位符插入的。
+
+例如，以下查询语句：
 
 ```sql
-INSERT INTO `mqtt_user` ( `username`, `password`, `salt`)
-VALUES
-	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL);
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} AND peerhost = ${peerhost} LIMIT 1
 ```
 
-启用 MySQL 认证后，你可以通过用户名： emqx，密码：public 连接。
-
-
-
-::: tip 
-这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行认证。
-:::
-
-
-
-## 加盐规则与哈希方法
-
-MySQL 认证支持配置[加盐规则与哈希方法](./authn.md#加盐规则与哈希方法)：
-
-```bash
-# etc/plugins/emqx_auth_mysql.conf
-
-auth.mysql.password_hash = sha256
-```
-
-
-## 认证 SQL（auth_query）
-
-进行身份认证时，EMQX 将使用当前客户端信息填充并执行用户配置的认证 SQL，查询出该客户端在数据库中的认证数据。
-
-```bash
-# etc/plugins/emqx_auth_mysql.conf
-
-auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
-```
-
-
-
-你可以在认证 SQL 中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
-
-- %u：用户名
-- %c：Client ID
-- %C：TLS 证书公用名（证书的域名或子域名），仅当 TLS 连接时有效
-- %d：TLS 证书 subject，仅当 TLS 连接时有效
-
-
-
-你可以根据业务需要调整认证 SQL，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下认证 SQL 需要满足以下条件：
-
-1. 查询结果中必须包含 password 字段，EMQX 使用该字段与客户端密码比对
-2. 如果启用了加盐配置，查询结果中必须包含 salt 字段，EMQX 使用该字段作为 salt（盐）值
-3. 查询结果只能有一条，多条结果时只取第一条作为有效数据
-
-::: tip 
-可以在 SQL 中使用 AS 语法为字段重命名指定 password，或者将 salt 值设为固定值。
-:::
-
-### 进阶
-
-默认表结构中，我们将 username 字段设为了唯一索引（UNIQUE），与默认的查询语句（`select password from mqtt_user where username = '%u' limit 1`）配合使用可以获得非常不错的查询性能。
-
-如果默认查询条件不能满足您的需要，例如你需要根据 Client ID 查询相应的 Password Hash 和 Salt，请确保将 Client ID 设置为索引；又或者您想要对 Username、Client ID 或者其他更多字段进行多条件查询，建议设置正确的单列索引或是联合索引。总之，设置正确的表结构和查询语句，尽可能不要让索引失效而影响查询性能。
-
-## 特殊说明
-
-MySQL 8.0 及以后版本使用了 `caching_sha2_password` 作为默认身份验证插件，受限于客户端驱动你必须将其更改为 `mysql_native_password` 插件：
+将首先被转换为以下 Prepared statement：
 
 ```sql
-ALTER USER 'your_username'@'your_host' IDENTIFIED WITH mysql_native_password BY 'your_password';
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ? AND peerhost = ? LIMIT 1
 ```
 
+然后使用 `${username}` 和 `${peerhost}` 执行查询。
+
+### `server`
+
+MySQL 服务器地址 (`host:port`) ，必填项。
+
+### `database`
+
+MySQL 数据库名称，必填项。
+
+### `username`
+
+MySQL 用户，可选。
+### `password`
+
+MySQL 用户密码，可选。
+
+#### `auto_reconnect`
+
+可选的布尔类型字段。指定连接中断时 EMQX 是否自动重新连接到 MySQL。默认值为 `true`。
+
+### `pool_size`
+
+可选的整型字段。指定从 EMQX 节点到 MySQL 的并发连接数。默认值为 8。
+
+### `ssl`
+
+用于 [安全连接至 MySQL](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html) 的标准 [SSL 选项](../ssl.md)。
