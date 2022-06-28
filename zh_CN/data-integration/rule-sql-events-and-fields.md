@@ -1,14 +1,75 @@
-# SQL 事件类型和字段
+# SQL 数据源和字段
 
-SELECT 和 WHERE 子句可用的字段与事件的类型相关。其中 `clientid`, `username` 和 `event` 是通用字段，每种事件类型都有。
+规则的 SQL 语句可以处理的数据源有：MQTT 消息、MQTT 事件，或者是数据桥接。
 
-## 数据桥接事件
+SQL 语句使用 `FROM` 来指定数据源，在 `SELECT` 和 `WHERE` 子句中可以引用相应的字段。
+数据源类型不同，可以使用的字段也不同。
 
-数据桥接作为规则的数据源的时候，
+## 数据桥接
+
+规则使用 `$bridges/` 开头的主题来表示数据桥接的消息或事件。
+格式为：`$bridges/<type>:<name>`。
+
+其中 `<type>:<name>` 部分是数据桥接的 ID，`<type>` 是数据桥接的类型，`<name>` 是数据桥接的名字。
+比如 `$bridges/mqtt:my_mqtt_bridge`。
+
+### "$bridges/mqtt:*" (MQTT 桥接)
+
+当该 MQTT 桥接从远程 MQTT Broker 接收到消息时触发规则
+
+|        字段         |  解释                                 |
+| :------------------ | :------------------------------------ |
+| id                  | MQTT 消息 ID                         |
+| server              | 远程 MQTT Broker 的地址，例如 "broker.emqx.io:1883" |
+| payload             | MQTT 消息体                          |
+| topic               | MQTT 主题                            |
+| qos                 | MQTT 消息的 QoS                      |
+| dup                 | MQTT 消息的 DUP Flag                 |
+| retain              | MQTT 消息的 Retain Flag              |
+| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
+| message_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)  |
+
+示例
+```sql
+SELECT
+  *
+FROM
+  "$bridges/mqtt:my_mqtt_bridge"
+```
+
+输出:
+```json
+{
+  "id": "0005E27C1D24E44FF440000017520000",
+  "server": "broker.emqx.io:1883",
+  "payload": "hello",
+  "topic": "t/a",
+  "qos": 1,
+  "dup": false,
+  "retain": false,
+  "pub_props": {
+    "Message-Expiry-Interval": 30,
+    "Payload-Format-Indicator": 0,
+    "User-Property": {
+      "foo": "bar"
+    },
+    "User-Property-Pairs": [
+      {
+        "key": "foo"
+      },
+      {
+        "value": "bar"
+      }
+    ]
+  },
+  "message_received_at": 1645002753259,
+}
+```
 
 ## MQTT 消息
 
-规则的 SQL 语句可以处理消息发布。 在一个规则语句中，用户可以用 FROM 子句指定一个或者多个主题，当任何消息发布到指定的主题时都会触发该规则。
+规则的 SQL 语句可以处理消息发布。 在一个规则语句中，用户可以用 FROM 子句指定一个或者多个主题，
+当任何消息发布到指定的主题时都会触发该规则。
 
 |        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
@@ -90,7 +151,7 @@ FROM
 | $events/session_subscribed   | 订阅     |
 | $events/session_unsubscribed | 取消订阅 |
 
-### $events/message_delivered (消息投递)
+### "$events/message_delivered" (消息投递)
 
 当消息被放入底层socket时触发规则
 
@@ -134,7 +195,7 @@ FROM
   "from_clientid": "c_emqx_1"
 }
 ```
-### $events/message_acked (消息确认)
+### "$events/message_acked" (消息确认)
 
 当消息发送到客户端，并收到客户端回复的ack时触发规则，仅QOS1，QOS2会触发
 
@@ -180,7 +241,7 @@ FROM
 }
 ```
 
-### $events/message_dropped (消息在转发的过程中被丢弃)
+### "$events/message_dropped" (消息在转发的过程中被丢弃)
 
 当一条消息无任何订阅者时触发规则
 
@@ -221,7 +282,7 @@ FROM
 }
 ```
 
-### $events/delivery_dropped (消息在投递的过程中被丢弃)
+### "$events/delivery_dropped" (消息在投递的过程中被丢弃)
 
 当订阅者的消息队列已满时触发规则
 
@@ -263,7 +324,7 @@ FROM "$events/delivery_dropped"
   "from_clientid": "c_emqx_1"
 }
 ```
-### $events/client_connected (终端连接成功)
+### "$events/client_connected" (终端连接成功)
 
 当终端连接成功时触发规则
 
@@ -305,7 +366,7 @@ FROM
 }
 ```
 
-### $events/client_disconnected (终端连接断开)
+### "$events/client_disconnected" (终端连接断开)
 
 当终端连接断开时触发规则
 
@@ -343,7 +404,7 @@ FROM
 }
 ```
 
-### $events/client_connack (连接确认)
+### "$events/client_connack" (连接确认)
 
 当服务端向客户端发送CONNACK报文时触发规则, reason_code 包含各种错误原因代码
 
@@ -423,7 +484,7 @@ FROM
 }
 ```
 
-### $events/client_check_acl_complete (鉴权结果)
+### "$events/client_check_acl_complete" (鉴权结果)
 
 当客户端鉴权结束时触发规则
 
@@ -465,7 +526,7 @@ FROM
 }
 ```
 
-### $events/session_subscribed (终端订阅成功)
+### "$events/session_subscribed" (终端订阅成功)
 
 当终端订阅成功时触发规则
 
@@ -500,7 +561,7 @@ FROM
 }
 ```
 
-### $events/session_unsubscribed (取消终端订阅成功)
+### "$events/session_unsubscribed" (取消终端订阅成功)
 
 当取消终端订阅成功时触发规则
 

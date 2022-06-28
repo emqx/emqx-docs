@@ -1,8 +1,73 @@
-# SQL events and fields
+# SQL data sources and fields
 
-The fields available in the SELECT and WHERE clauses are related to the type of event. Among them, `clientid`, `username` and ` event` are common fields that is contained by each type of event.
+The data sources that SQL statements can process are **MQTT Messages**, **MQTT Events**, or **Data Bridges**.
 
-## Use SQL to Handle Message Publishing
+The SQL statement uses `FROM` clause to specify the data source, and the corresponding fields can be referenced in the `SELECT` and `where` clauses.
+
+Different data source types have different fields.
+
+## Data Bridges
+
+Rules use topics prefixed by `$bridges/` to present messages or events triggered by a data bridge.
+The format is: `$bridges/<type>:<name>`。
+
+Where `<type>:<name>` is the bridge Id, `<type>` is the bridge type, `<name>` is the bridge name.
+Such as `$bridges/mqtt:my_mqtt_bridge`.
+
+### "$bridges/mqtt:*" (MQTT Bridge)
+
+Triggered by an MQTT Bridge when a message is received from the remote MQTT broker.
+
+|       Field         |  Explanation                           |
+| :------------------ | :------------------------------------ |
+| id                  | MQTT message ID                         |
+| server              | Server name of the remove MQTT broker, such as "broker.emqx.io:1883" |
+| payload             | MQTT payload                          |
+| topic               | MQTT topic                            |
+| qos                 | MQTT QoS                      |
+| dup                 | MQTT DUP flag                 |
+| retain              | MQTT Retain Flag              |
+| pub_props           | PUBLISH Properties (only for MQTT 5.0) |
+| message_received_at | The timestamp when the message is received (ms)  |
+
+示例
+```sql
+SELECT
+  *
+FROM
+  "$bridges/mqtt:my_mqtt_bridge"
+```
+
+输出:
+```json
+{
+  "id": "0005E27C1D24E44FF440000017520000",
+  "server": "broker.emqx.io:1883",
+  "payload": "hello",
+  "topic": "t/a",
+  "qos": 1,
+  "dup": false,
+  "retain": false,
+  "pub_props": {
+    "Message-Expiry-Interval": 30,
+    "Payload-Format-Indicator": 0,
+    "User-Property": {
+      "foo": "bar"
+    },
+    "User-Property-Pairs": [
+      {
+        "key": "foo"
+      },
+      {
+        "value": "bar"
+      }
+    ]
+  },
+  "message_received_at": 1645002753259,
+}
+```
+
+## MQTT Message
 The SQL statement of the rules engine can handle the message publishing. In a rule statement, the user can specify one or more topics with the FROM clause, and the rule will be triggered when any message is published to the specified topic.
 
 | Field               | Explanation                                               |
@@ -46,7 +111,7 @@ output
 }
 ```
 
-## Use SQL to Handle Events
+## MQTT Events
 The SQL statements of the rule engine can handle both messages (message publishing) and events (client online and offline, client subscription, etc.). For messages, the FROM clause is directly followed by the topic name; for events, the FROM clause is followed by the event topic.
 
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
@@ -67,7 +132,7 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 | $events/session\_unsubscribed | Unsubcribe           |
 
 
-### $events/message_delivered
+### "$events/message_delivered"
 
 Trigger the rule when a message is put into the underlying socket
 
@@ -112,7 +177,7 @@ output
   "from_clientid": "c_emqx_1"
 }
 ```
-### $events/message_acked
+### "$events/message_acked"
 
 The rule is triggered when the message is sent to the client and an ack is received from the client. Only QOS1 and QOS2 messages will be triggered
 
@@ -160,7 +225,7 @@ output
 }
 ```
 
-### $events/message_dropped
+### "$events/message_dropped"
 
 Trigger rule when a message has no subscribers
 
@@ -202,7 +267,7 @@ output
 }
 ```
 
-### $events/delivery_dropped
+### "$events/delivery_dropped"
 
 Trigger rule when subscriber's message queue is full
 
@@ -245,7 +310,7 @@ output
   "from_clientid": "c_emqx_1"
 }
 ```
-### $events/client_connected
+### "$events/client_connected"
 
 Trigger the rule when the terminal is connected successfully
 
@@ -287,7 +352,7 @@ output
 }
 ```
 
-## $events/client_disconnected
+### "$events/client_disconnected"
 
 Trigger rule when terminal connection is lost
 
@@ -325,7 +390,7 @@ output
 }
 ```
 
-## $events/client_connack
+### "$events/client_connack"
 
 The rule event is triggered when the server sends a CONNACK packet to the client. reason_code contains the error reason code.
 
@@ -403,7 +468,7 @@ output
   "clientid": "c_emqx"
 }
 ```
-## $events/client_check_acl_complete
+### "$events/client_check_acl_complete"
 
 The rule event is triggered when the client check acl complete.
 
@@ -445,7 +510,7 @@ output
 }
 ```
 
-## $events/session_subscribed
+### "$events/session_subscribed"
 
 Trigger the rule when the terminal subscribes successfully
 
@@ -480,7 +545,7 @@ output
 }
 ```
 
-## $events/session_unsubscribed
+### "$events/session_unsubscribed"
 
 Triggered when the terminal subscription is cancelled successfully
 
