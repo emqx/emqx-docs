@@ -18,8 +18,6 @@ FROM
   "t/1"
 ```
 
-The SQL in the document is only for example, please write the actual requirements according to the business.
-
 ## Create Action
 
 Click Add Action, select Data Forwarding, Message Redistribution, enter the destination subject and other parameters, and refer to the following table for parameter definitions.
