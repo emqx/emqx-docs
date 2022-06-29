@@ -117,6 +117,7 @@
       title_cn: 规则
       children:
         - data-integration/rules
+        - data-integration/rule-get-started
         - data-integration/rule-actions
         - data-integration/rule-sql-grammar-and-examples
         - data-integration/rule-sql-events-and-fields
