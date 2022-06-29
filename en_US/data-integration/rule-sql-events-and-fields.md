@@ -14,7 +14,7 @@ The format is: `$bridges/<type>:<name>`。
 Where `<type>:<name>` is the bridge Id, `<type>` is the bridge type, `<name>` is the bridge name.
 Such as `$bridges/mqtt:my_mqtt_bridge`.
 
-### "$bridges/mqtt:*" (MQTT Bridge)
+### MQTT Bridge Events ("$bridges/mqtt:*")
 
 Triggered by an MQTT Bridge when a message is received from the remote MQTT broker.
 
@@ -127,7 +127,7 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 | $events/client\_connected     | Connection complete  |
 | $events/client\_disconnected  | Disconnect           |
 | $events/client\_connack       | Connection ack       |
-| $events/client\_check_acl_complete | ACL check complete |
+| $events/client\_check_authz_complete | ACL check complete |
 | $events/session\_subscribed   | Subscribe            |
 | $events/session\_unsubscribed | Unsubcribe           |
 
@@ -468,7 +468,7 @@ output
   "clientid": "c_emqx"
 }
 ```
-### "$events/client_check_acl_complete"
+### "$events/client_check_authz_complete"
 
 The rule event is triggered when the client check acl complete.
 
@@ -495,7 +495,7 @@ SELECT
   is_cache,
   node
 FROM
-  "$events/client_check_acl_complete"
+  "$events/client_check_authz_complete"
 ```
 output
 ```json

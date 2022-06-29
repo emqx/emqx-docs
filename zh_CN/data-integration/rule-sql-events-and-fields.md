@@ -13,7 +13,7 @@ SQL 语句使用 `FROM` 来指定数据源，在 `SELECT` 和 `WHERE` 子句中�
 其中 `<type>:<name>` 部分是数据桥接的 ID，`<type>` 是数据桥接的类型，`<name>` 是数据桥接的名字。
 比如 `$bridges/mqtt:my_mqtt_bridge`。
 
-### "$bridges/mqtt:*" (MQTT 桥接)
+### MQTT 桥接事件 ("$bridges/mqtt:*")
 
 当该 MQTT 桥接从远程 MQTT Broker 接收到消息时触发规则
 
@@ -147,11 +147,11 @@ FROM
 | $events/client_connected     | 连接完成 |
 | $events/client_disconnected  | 连接断开 |
 | $events/client_connack       | 连接确认 |
-| $events/client_check_acl_complete | 鉴权结果 |
+| $events/client_check_authz_complete | 鉴权完成 |
 | $events/session_subscribed   | 订阅     |
 | $events/session_unsubscribed | 取消订阅 |
 
-### "$events/message_delivered" (消息投递)
+### 消息投递事件 ("$events/message_delivered")
 
 当消息被放入底层socket时触发规则
 
@@ -195,7 +195,7 @@ FROM
   "from_clientid": "c_emqx_1"
 }
 ```
-### "$events/message_acked" (消息确认)
+### 消息确认事件 ("$events/message_acked")
 
 当消息发送到客户端，并收到客户端回复的ack时触发规则，仅QOS1，QOS2会触发
 
@@ -241,7 +241,7 @@ FROM
 }
 ```
 
-### "$events/message_dropped" (消息在转发的过程中被丢弃)
+### 消息在转发的过程中被丢弃事件 ("$events/message_dropped")
 
 当一条消息无任何订阅者时触发规则
 
@@ -282,7 +282,7 @@ FROM
 }
 ```
 
-### "$events/delivery_dropped" (消息在投递的过程中被丢弃)
+### 消息在投递的过程中被丢弃事件 ("$events/delivery_dropped")
 
 当订阅者的消息队列已满时触发规则
 
@@ -324,7 +324,7 @@ FROM "$events/delivery_dropped"
   "from_clientid": "c_emqx_1"
 }
 ```
-### "$events/client_connected" (终端连接成功)
+### 终端连接成功事件 ("$events/client_connected")
 
 当终端连接成功时触发规则
 
@@ -366,7 +366,7 @@ FROM
 }
 ```
 
-### "$events/client_disconnected" (终端连接断开)
+### 终端连接断开事件 ("$events/client_disconnected")
 
 当终端连接断开时触发规则
 
@@ -404,7 +404,7 @@ FROM
 }
 ```
 
-### "$events/client_connack" (连接确认)
+### 连接确认事件 ("$events/client_connack")
 
 当服务端向客户端发送CONNACK报文时触发规则, reason_code 包含各种错误原因代码
 
@@ -484,7 +484,7 @@ FROM
 }
 ```
 
-### "$events/client_check_acl_complete" (鉴权结果)
+### 鉴权完成事件 ("$events/client_check_authz_complete")
 
 当客户端鉴权结束时触发规则
 
@@ -495,7 +495,7 @@ FROM
 | peerhost	      | 客户端的 IPAddress       |
 | topic	          | MQTT 主题               |
 | action	      | publish or subscribe, 发布或者订阅事件 |
-| result          | allow or deny，鉴权结果            |
+| result          | allow or deny，鉴权完成            |
 | is_cache        | true or false，鉴权时数据的来源 <br/>is_cache为true时，鉴权数据来源于cache <br/>is_cache为false时，鉴权数据来源于插件           |
 | timestamp	      | 事件触发时间 (ms)       |
 | node	          | 事件触发所在节点        |
@@ -511,7 +511,7 @@ SELECT
   is_cache,
   node
 FROM
-  "$events/client_check_acl_complete"
+  "$events/client_check_authz_complete"
 ```
 输出
 ```json
@@ -526,7 +526,7 @@ FROM
 }
 ```
 
-### "$events/session_subscribed" (终端订阅成功)
+### 终端订阅成功事件 ("$events/session_subscribed")
 
 当终端订阅成功时触发规则
 
@@ -561,7 +561,7 @@ FROM
 }
 ```
 
-### "$events/session_unsubscribed" (取消终端订阅成功)
+### 取消终端订阅成功事件 ("$events/session_unsubscribed")
 
 当取消终端订阅成功时触发规则
 

@@ -51,45 +51,6 @@ WHERE
 - 数据桥接：数据桥接是通往外部数据系统的通道，规则可以直接使用数据桥接的 ID 作为动作，将规则的输出交给数据桥接处理。
 关于数据桥接的细节，详见 [数据桥接](./data-bridges.md)。
 
-## 规则快速入门
-
-我们用一个示例展示如何使用 Dashboard 创建一条简单的规则。
-这条规则监听主题为 "t/#" 的消息，并发送出另一条主题为 "a/1" 的消息：
-
-在 Dashboard 上，选择数据集成 -> 规则 -> 创建，进入创建规则的界面：
-
-![image](./assets/rules/cn_rule_overview_basic_sql.png)
-
-保持默认的规则名和 SQL 语句不变，点击 “添加动作” 按钮，按照如下参数添加一个 `消息重发布` 动作：
-
-```
-Topic: "a/1"
-QoS: 0
-Payload: ${payload}
-```
-
-![image](./assets/rules/cn_rule_overview_add_action_republish.png)
-
-然后用同样的操作，再添加一个 `console 输出` 动作。 
-
-最后点击页面下方的创建按钮。规则就创建完成了。在左侧的 Flows 页面上可以查看规则的拓扑图：
-
-![image](./assets/rules/cn_rule_overview_flow.png)
-
-现在我们测试一下这个规则，使用 MQTTX 登录一个 MQTT 客户端，订阅 "a/1" 主题，然后发送一条 "t/1" 消息：
-
-![image](./assets/rules/cn_rule_overview_mqttx.png)
-
-这个客户端会收到规则转发的 "a/1" 消息。
-
-## 在 Dashboard 上测试 SQL 语句
-
-EMQX 提供了在 Dashboard 上测试 SQL 语句的功能。在规则创建页面，点击 “测试 SQL”，通过给定的 SQL 语句和事件参数，即时展示 SQL 的测试结果。
-
-![image](./assets/rules/cn_rule_testsql.png)
-
-SQL 的处理结果会以 JSON 的形式呈现在 **输出结果** 文本框里。在后续的动作（内置动作或者数据桥接）里面，可以 `${key}` 的形式引用 SQL 处理结果里的字段。
-
 ## 规则的典型应用场景举例
 
 - 动作监听：智慧家庭智能门锁开发中，门锁会因为网络、电源故障、人为破坏等原因离线导致功能异常，使用规则配置监听离线事件向应用服务推送该故障信息，可以在接入层实现第一时间的故障检测的能力；
