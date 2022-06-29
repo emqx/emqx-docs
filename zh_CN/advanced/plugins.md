@@ -126,21 +126,21 @@
 
 #### 安装/启动插件
 
-  <img src="../assets/plugins_upload.png" alt="plugins_upload" style="zoom:80%;" />
+  <img src="./assets/plugins_upload.png" alt="plugins_upload" style="zoom:80%;" />
 
   
 
-  <img src="../assets/plugins_start.png" alt="plugins_start" style="zoom:80%;" />
+  <img src="./assets/plugins_start.png" alt="plugins_start" style="zoom:80%;" />
 
   确认插件各项信息无误后，直接点击启动按钮。
 
 
-  <img src="../assets/plugins_start_ok.png" alt="plugins_start_ok" style="zoom:80%;" />
+  <img src="./assets/plugins_start_ok.png" alt="plugins_start_ok" style="zoom:80%;" />
 
 
 使用MQTTX客户端验证功能是否正常：当 clientId 为`1$`时拒绝连接。
 
-<img src="../assets/connect_failed.png" alt="connect_failed" style="zoom:80%;" />
+<img src="./assets/connect_failed.png" alt="connect_failed" style="zoom:80%;" />
 
 接下来，你可以尝试使用多个MQTTX客户端连接后，互相给对方发消息。
 
@@ -149,5 +149,5 @@
 当你不需要插件，可以在 Dashboard 上轻松卸载插件。
 如果是升级插件，目前还未支持热升级插件，需要在 Dashboard 上重新安装。
 
-<img src="../assets/plugins_uninstall.png" alt="plugins_uninstall" style="zoom:80%;" />
+<img src="./assets/plugins_uninstall.png" alt="plugins_uninstall" style="zoom:80%;" />
 
