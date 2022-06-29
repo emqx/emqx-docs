@@ -1,67 +1,80 @@
-# Cluster Security
+# 集群安全
 
-When to comes to security of the EMQX cluster, there are mainly
-two aspects to consider.
+当涉及到EMQX集群的安全时，主要有有两个方面需要考虑。
 
-* Secure the ports each node listens on for clustering.
-* Keep the Erlang cookie secret, see `node.cookie` config.
+* 确保每个节点在集群中监听的端口安全。
+* 对Erlang的 cookie进行保密, 见`node.cookie`配置。
 
-::: tip Tip
-It's a good practice keep the clustering ports internal by configuring
-firewall rules e.g. AWS security groups, or iptables.
+::: tip 
+一个好的实践是，通过配置防火墙规则来保持集群端口的内部防火墙规则，如AWS安全组，或iptables。
 :::
 
-## Intra-cluster communication ports
+## 集群内通信端口
 
-To form a cluster, EMQX nodes need to connect to each other through some conventional
-port numbers.
+为了形成一个集群，EMQX节点需要通过一些常规端口进行互联
 
-If there is a firewall between the cluster nodes, the conventional listening ports
-should be allowed for other nodes in the cluster to reach.
+如果集群节点之间有防火墙，常规监听端口应该允许集群中的其他节点连通。
 
-There are two different channels for EMQX nodes to communicate with each other.
+EMQX节点之间有**两种不同的通道**进行通信。
 
-### The Erlang Distribution Ports
-
-::: tip Tip
-EMQX uses a conventional port mapping mechanism,
-but does **NOT** use [Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/doc/man/epmd.html)
-:::
-
-Erlang distribution port: `ListeningPort = BasePort + Offset`,
-where `BasePort` is 4370 (which is not made configurable), and `Offset` is the numeric
-suffix of the node's name. If the node name does not have a numeric suffix, `Offsset` is 0.
-
-For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the
-node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
-
-### The Cluster RPC Port
-
-By default, each emqx node also listens on a (conventional) port for the RPC channels,
-which should be allowed by the firewall.
-
-The port mapping rule is similar to the port mapping rules for Erlang distribution,
-only `BasePort` is `5370`.
-
-That is, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node
-listen on port `5370`, and port `5371` for `emqx1` (or `emqx-1`), and so on.
+### Erlang 分布式传输端口
 
 ::: tip
-EMQX in docker container uses static port `5369` for cluster RPC.
+EMQX使用一个传统的端口映射机制。
+但并**不使用**[Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/doc/man/epmd.html)
 :::
 
-### Using TLS for Cluster PRC connections
+Erlang分布端口。`ListeningPort = BasePort + Offset`。
+其中`BasePort`是4370(默认不可以配置)，`Offset`是节点名称的后缀。
+如果节点名称没有数字后缀，`Offsset`就是0。
 
-It is possible to enable TLS encryption for the backplane connections. It comes at the cost of increased CPU load, though.
+例如，在`emqx.conf`中的`node.name = emqx@192.168.0.12`应该使
+节点的监听端口为`4370`，而`emqx1`（或`emqx-1`）的端口为`4371`，以此类推。
 
-1. Create a root CA using `openssl` tool:
+### 集群RPC端口
+
+默认情况下，每个emqx节点有一个RPC监听端口。
+防火墙应该配置成允许访问。
+
+端口映射规则类似于Erlang分布式端口映射规则。
+只有 "BasePort "是 "5370"。
+
+也就是说，在`emqx.conf`中的`node.name = emqx@192.168.0.12`应该使节点的
+监听端口`5370`，端口`5371`用于`emqx1`（或`emqx-1`），以此类推。
+
+::: tip
+docker容器中的EMQX使用静态端口`5369`进行集群RPC。
+:::
+
+### 使用TLS为集群RPC传输层
+
+::: warning
+TLS是以增加CPU负载和RAM使用为代价的。
+:::
+
+要为集群RPC配置TLS，应在emqx.conf中设置以下配置
+
+确保在`emqx.conf`中的配置如下
+
+```
+rpc {
+  driver = ssl
+  certfile = /path/to/cert/domain.pem
+  cacertfile = /path/to/cert/ca.pem
+  keyfile = /path/to/cert/domain.key
+}
+```
+
+以下是创建证书和自签名CA的步骤。
+
+1. 使用`openssl`工具创建一个根CA。
 
    ```
    # Create self-signed root CA:
    openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key -out rootCA.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
    ```
 
-2. Generate CA-signed certificates for the nodes using the rootCA.pem created at step 1:
+2. 使用在步骤1创建的rootCA.pem为节点生成CA签名的证书。
 
    ```
    # Create a private key:
@@ -79,18 +92,22 @@ It is possible to enable TLS encryption for the backplane connections. It comes 
    # Sign the CSR with the Root CA:
    openssl x509 -req -CA rootCA.pem -CAkey rootCA.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
    ```
-   All the nodes in the cluster must use certificates signed by the same CA.
+   
+   集群中的所有节点必须使用由同一CA签署的证书。
 
-3. Put the generated `domain.pem`, `domain.key` and `rootCA.pem` files to `/var/lib/emqx/ssl` on each node of the cluster.
-   Make sure the emqx user can read these files, and permissions are set to `600`.
+3. 把生成的`domain.pem`、`domain.key`和`rootCA.pem`文件放到集群的每个节点上的`/var/lib/emqx/ssl`。
+   确保emqx用户可以读取这些文件，并且权限设置为`600`。 
 
-4. Ensure the following configs in `emqx.conf`.
 
-   ```
-   rpc.driver=ssl
-   rpc.default_client_driver=ssl
-   rpc.certfile=/var/lib/emqx/ssl/domain.pem
-   rpc.cacertfile=/var/lib/emqx/ssl/rootCA.pem
-   rpc.keyfile=/var/lib/emqx/ssl/domain.key
-   rpc.enable_ssl=5369 # TODO this is not added to 5.0 yet
-   ```
+### 为Erlang分布式协议使用TLS
+
+::: warning
+TLS是以增加CPU负载和RAM使用为代价的
+:::
+
+Erlang分布被EMQX节点用来同步数据库更新
+以及在整个集群中的临时性，如收集运行时指标等。
+
+* 确保`ssl_dist.conf`文件有正确的密钥和证书的路径。
+* 确保配置`cluster.proto_dist`被设置为`inet_tls`。
+
