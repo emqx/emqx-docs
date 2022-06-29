@@ -43,6 +43,7 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
 
 使用 GET 请求配置的 HTTP 认证器示例：
 
+```
 {
     mechanism = password_based
     backend = http
@@ -58,6 +59,7 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
         "X-Request-Source" = "EMQX"
     }
 }
+```
 
 ### `method`
 
