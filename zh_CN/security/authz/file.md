@@ -1,99 +1,82 @@
-# 内置 ACL
+# File
 
-内置 ACL 通过文件设置规则，使用上足够简单轻量，适用于规则数量可预测、无变动需求或变动较小的项目。
+This authorizer implements ACL checks through matching pub/sub requests against a predefined list of rules configured in
+a file.
 
-ACL 规则文件：
-
-```bash
-etc/acl.conf
-```
-
-::: tip
-内置 ACL 优先级最低，可以被 ACL 插件覆盖，如需禁用全部注释即可。规则文件更改后需重启 EMQX 以应用生效。
+::: tip Tip
+Starting from 5.0, file-based ACL rules can be edited and reloaded from EMQX dashboard UI.
 :::
 
+File-based ACL is simple and lightweight. It is suitable to configure generic rules. For hundreds or more per-client rules, it is recommended to use other authorization sources, and file-based ACL can be the safety guard put at the end of the authorization chain.
 
-## 定义 ACL
+## Configuration
 
-内置 ACL 是优先级最低规则表，在所有的 ACL 检查完成后，如果仍然未命中则检查默认的 ACL 规则。
+The file-based authorizer is identified by type `file`.
 
-该规则文件以 Erlang 语法的格式进行描述：
+Sample configuration:
+
+```
+{
+    type = file
+    enable = true
+
+    path = "etc/acl.conf"
+}
+```
+
+## ACL file format
+
+ACL configuration file is a list of Erlang [tuples](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) ending with a period. A _tuple_ is a comma-separated list of expressions. The whole list is enclosed in curly braces.
+
+The '%%` prefix identifies comment strings.
+
+Example:
 
 ```erlang
-%% 允许 "dashboard" 用户 订阅 "$SYS/#" 主题
+%% Allow MQTT client using username "dashboard"  to subscribe to "$SYS/#" topics
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
-%% 允许 IP 地址为 "127.0.0.1" 的用户 发布/订阅 "$SYS/#"，"#" 主题
+%% Allow users with IP address "127.0.0.1" to publish/subscribe to topics "$SYS/#", "#"
 {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
 
-%% 拒绝 "所有用户" 订阅 "$SYS/#" "#" 主题
+%% Deny "All Users" subscribe to "$SYS/#" "#" Topics
 {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
 
-%% 允许其它任意的发布订阅操作
+%% Allow any other publish/subscribe operation
 {allow, all}.
 ```
 
-1. 第一条规则允许客户端发布订阅所有主题
-2. 第二条规则禁止全部客户端订阅 `$SYS/#` 与 `#` 主题
-3. 第三条规则允许 ip 地址为 `127.0.0.1` 的客户端发布/订阅 `$SYS/#` 与 `#` 主题，为第二条开了特例
-4. 第四条规则允许用户名为 `dashboard` 的客户端订阅 `$SYS/#` 主题，为第二条开了特例
+The rules are matched from top to bottom. If a rule matches, its permission is applied, and the remaining rules are ignored.
 
-可知，默认的 ACL 主要是为了限制客户端对系统主题 `$SYS/#` 和全通配主题 `#` 的权限。
+- Line comments are expressed as `%%`.
+- Each rule consists of a tuple that ends with `.`.
+- The first position in a tuple indicates the permission applied if the rule is successfully hit. The possible values are:
+    * `allow`
+    * `deny`
+- The second position of a tuple describes clients for which the rule takes effect. The following terms and their combinations can be used to specify the clients:
+    * `{username, "dashboard"}` — clients with username `dashboard`.
+    * `{username, {re, "^dash"}}` — clients with username matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`.
+    * `{user, ...}` — the same as `{username, ...}`.
+    * `{clientid, "dashboard"}` — clients with clientid `dashboard`.
+    * `{clientid, {re, "^dash"}}` — clients with clientid matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`.
+    * `{client, ...}` — the same as `{clientid, ...}`.
+    * `{ipaddr, "127.0.0.1"}` — clients connecting from IP address `127.0.0.1`. Netmasks are allowed. If EMQX is behind a TCP proxy, `proxy_protocol` should be enabled for the client's MQTT listener.
+    * `{ipaddrs, ["127.0.0.1", ..., ]}` — clients connecting from one of the specified IP addresses `127.0.0.1, ..., `. Netmasks are allowed.
+    * `all` — any clients.
+    * `{'and', First, Second}` — clients satisfying both `First` and `Second` specifications.
+    * `{'or', First, Second}` — clients satisfying either of `First` and `Second` specifications.
+- The third position of the tuple indicates the operation for which the rule is applicable.
+    * `publish` — the rule applies to publish operations.
+    * `subscribe` — the rule applies to subscribe operations.
+    * `all` — the rule applies to both publish and subscribe operations.
+- The fourth position of the tuple specifies the topics to which the rule applies. The topics are specified with a list op _patterns_. The following patterns are available:
+    * A string value, like `"$SYS/#"`. It is a standard topic filter allowing wildcards. Topic filters match topics according to the [MQTT specification rules](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180920). For example, `$SYS/#` matches topics `$SYS/foo`, `$SYS/foo/bar` for publish and topics
+    `$SYS/foo`, `$SYS/foo/#`, and `$SYS/#` for subscribe. Topic [placeholders](./authz.md#topic-placeholders) are
+    also available.
+    * An `eq` tuple, like `{eq, "foo/#"}`. It indicates full equivalence of topic characters. This pattern matches exactly `foo/#` topic for all operations. Wildcards or placeholders are not taken into account, i.e., topic `foo/bar` is not matched.
 
+Additionally, there are two special rules:
+    - `{allow, all}` — allow all operations.
+    - `{deny, all}` — deny all operations.
 
-## acl.conf 编写规则
-
-`acl.conf` 文件中的规则按书写顺序从上往下匹配。
-
-`acl.conf` 的语法规则包含在顶部的注释中，熟悉 Erlang 语法的可直接阅读文件顶部的注释。或参考以下的释义：
-
-- 以 `%%` 表示行注释。
-- 每条规则由四元组组成，以 `.` 结束。
-- 元组第一位：表示规则命中成功后，执行权限控制操作，可取值为：
-    * `allow`：表示 `允许`
-    * `deny`： 表示 `拒绝`
-
-- 元组第二位：表示规则所生效的用户，可使用的格式为：
-    * `{user, "dashboard"}`：表明规则仅对 *用户名 (Username)* 为 "dashboard" 的用户生效
-    * `{clientid, "dashboard"}`：表明规则仅对 *客户端标识 (ClientId)* 为 "dashboard" 的用户生效
-    * `{ipaddr, "127.0.0.1"}`：表明规则仅对 *源地址* 为 "127.0.0.1" 的用户生效
-    * `all`：表明规则对所有的用户都生效
-
-- 元组第三位：表示规则所控制的操作，可取值为：
-    * `publish`：表明规则应用在 PUBLISH 操作上
-    * `subscribe`：表明规则应用在 SUBSCRIBE 操作上
-    * `pubsub`：表明规则对 PUBLISH 和 SUBSCRIBE 操作都有效
-
-- 元组第四位：表示规则所限制的主题列表，内容以数组的格式给出，例如：
-    * `"$SYS/#"`：为一个 **主题过滤器 (Topic Filter)**；表示规则可命中与 `$SYS/#` 匹配的主题；如：可命中 "$SYS/#"，也可命中 "$SYS/a/b/c"
-    * `{eq, "#"}`：表示字符的全等，规则仅可命中主题为 `#` 的字串，不能命中 `/a/b/c` 等
-
-- 除此之外还存在两条特殊的规则：
-    - `{allow, all}`：允许所有操作
-    - `{deny, all}`：拒绝所有操作
-
-在 `acl.conf` 修改完成后，并不会自动加载至 EMQX 系统。需要手动执行：
-
-```bash
-./bin/emqx_ctl modules reload emqx_mod_acl_internal
-```
-
-## 占位符
-
-内置的 `acl.conf` 在主题的域（元组的第四位）仅支持以下占位符：
-
-- `%c`： 表示客户端 ID，在规则生效时它将被替换为实际的客户端 ID。
-- `%u`： 表示客户端的用户名，在规则生效时将被替换为实际的客户端用户名。
-
-例如：
-
-```erlang
-{allow, all, pubsub, ["sensor/%c/ctrl"]}.
-```
-
-表示，**允许** 客户端 ID 为 `light` 的客户端 **订阅和发布** 到 `sensor/light/ctrl` 主题。
-
-
-::: tip
-acl.conf 中应只包含一些简单而通用的规则，使其成为系统基础的 ACL 原则。如果需要支持复杂、大量的 ACL 内容，你应该在认证插件中去实现它。
-:::
+These rules are usually used as default at the end of the configuration.

@@ -1,285 +1,196 @@
-# MongoDB ACL
+# MongoDB
 
-MongoDB ACL 使用外部 MongoDB 数据库存储 ACL 规则，可以存储大量数据、动态管理 ACL，方便与外部设备管理系统集成
+This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+MmongoDB database.
 
-插件：
+## Storage Schema
 
-```bash
-emqx_auth_mongo
-```
+MongoDB authenticator supports storing ACL rules as MongoDB documents. A user provides the collection name and a
+filter template for selecting the relevant documents.
 
-::: tip
-emqx_auth_mongo 插件同时包含认证功能，可通过注释禁用。
-:::
+The documents should contain `permission`, `action`, and `topics` fields.
+* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
+* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
+* `topics` value specifies the topic filters for topics relevant to the rule. Should be a list of strings that support wildcards and [topic placeholders](./authz.md#topic-placeholders).
 
+Example of adding an ACL rule for a user `user123` that allows publishing to topics `data/user123/#`:
 
-## MongoDB 连接信息
-
-MongoDB 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_mongo.conf
-
-## MongoDB 部署类型
-##
-## Value: single | unknown | sharded | rs
-auth.mongo.type = single
-
-## 是否启用 SRV 和 TXT 记录解析
-auth.mongo.srv_record = false
-
-## 如果您的 MongoDB 以副本集方式部署，则需要指定相应的副本集名称
-##
-## 如果启用了 SRV 记录，即 auth.mongo.srv_record 设置为 true，
-## 且您的 MongoDB 服务器域名添加了包含 replicaSet 选项的 DNS TXT 记录，
-## 那么可以忽略此配置项
-## auth.mongo.rs_set_name =
-
-## MongoDB 服务器地址列表
-##
-## 如果你的 URI 具有以下格式：
-## mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
-## 请将 auth.mongo.server 配置为 host1[:port1][,...hostN[:portN]]
-##
-## 如果你的 URI 具有以下格式：
-## mongodb+srv://server.example.com
-## 请将 auth.mongo.server 配置为 server.example.com，并将 srv_record
-## 设置为 true，EMQX 将自动查询 SRV 和 TXT 记录以获取服务列表和 replicaSet 等选项
-##
-## 现已支持 IPv6 和域名
-auth.mongo.server = 127.0.0.1:27017
-
-auth.mongo.pool = 8
-
-auth.mongo.login =
-
-auth.mongo.password =
-
-## 指定用于授权的数据库，没有指定时默认为 admin
-##
-## 如果启用了 SRV 记录，即 auth.mongo.srv_record 设置为 true，
-## 且您的 MongoDB 服务器域名添加了包含 authSource 选项的 DNS TXT 记录，
-## 那么可以忽略此配置项
-## auth.mongo.auth_source = admin
-
-auth.mongo.database = mqtt
-
-auth.mongo.query_timeout = 5s
-
-## SSL 选项
-# auth.mongo.ssl = false
-
-## auth.mongo.ssl_opts.keyfile =
-
-## auth.mongo.ssl_opts.certfile =
-
-## auth.mongo.ssl_opts.cacertfile =
-
-## MongoDB 写模式
-##
-## 可设置为 unsafe 或 safe。设置为 safe 时会等待 MongoDB Server 的响应并返回给调用者。未指定时将使用默认值 unsafe。
-## auth.mongo.w_mode =
-
-
-## MongoDB 读模式
-##
-## 可设置为 master 或 slave_ok，设置为 master 时表示每次查询都将从主节点读取最新数据。未指定时将使用默认值 master。
-## auth.mongo.r_mode =
-
-## MongoDB 拓扑配置，一般情况下用不到，详见 MongoDB 官网文档
-auth.mongo.topology.pool_size = 1
-auth.mongo.topology.max_overflow = 0
-## auth.mongo.topology.overflow_ttl = 1000
-## auth.mongo.topology.overflow_check_period = 1000
-## auth.mongo.topology.local_threshold_ms = 1000
-## auth.mongo.topology.connect_timeout_ms = 20000
-## auth.mongo.topology.socket_timeout_ms = 100
-## auth.mongo.topology.server_selection_timeout_ms = 30000
-## auth.mongo.topology.wait_queue_timeout_ms = 1000
-## auth.mongo.topology.heartbeat_frequency_ms = 10000
-## auth.mongo.topology.min_heartbeat_frequency_ms = 1000
-```
-
-
-## 默认数据结构
-
-MongoDB 认证默认配置下需要确保数据库中有如下集合：
-
-### 认证/超级集合
-
-```sql
+```js
+> db.mqtt_acl.insertOne(
+  {
+      "username": "user123",
+      "permission": "allow",
+      "action": "publish",
+      "topics": ["data/user123/#"]
+  }
+);
 {
-  username: "user",
-  password: "password hash",
-  salt: "password salt",
-  is_superuser: false,
-  created: "2020-02-20 12:12:14"
+  acknowledged: true,
+  insertedId: ObjectId("62b4a1a0e693ae0233bc3e98")
 }
 ```
 
-示例数据：
+The corresponding config parameters are:
+```
+collection = "mqtt_acl"
+filter { username = "${username}" }
 
-```bash
-use mqtt
-
-db.mqtt_user.insert({
-  "username": "emqx",
-  "password": "efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7",
-  "is_superuser": false,
-  "salt": ""
-})
 ```
 
-### ACL 规则集合
+::: warning
+When there are a significant number of users in the system make sure that the collections used by the selector are optimized
+and that effective indexes are used. Otherwise ACL lookup will produce excessive load on the database
+and on the EMQX broker itself.
+:::
 
-```json
+## Configuration
+
+The MySQL authorizer is identified by type `mongodb`.
+
+The authenticator supports connecting to MongoDB running in three different modes:
+* Standalone MongoDB server:
+  ```
+  {
+    type = mongodb
+    enable = true
+
+    collection = "mqtt_user"
+    filter { username = "${username}" }
+
+    mongo_type = single
+    server = "127.0.0.1:27017"
+
+    database = "mqtt"
+    username = "emqx"
+    password = "secret"
+  }
+  ```
+*  MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
+```
 {
-    username: "username",
-    clientid: "clientid",
-    publish: ["topic1", "topic2", ...],
-    subscribe: ["subtop1", "subtop2", ...],
-    pubsub: ["topic/#", "topic1", ...]
+  type = mongodb
+  enable = true
+
+  collection = "mqtt_user"
+  filter { username = "${username}" }
+
+  mongo_type = rs
+  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+  replica_set_name = "rs0"
+
+  database = "mqtt"
+  username = "emqx"
+  password = "secret"
+}
+```
+*  MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
+```
+{
+  type = mongodb
+  enable = true
+
+  collection = "mqtt_user"
+  filter { username = "${username}" }
+
+  mongo_type = sharded
+  servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
+
+  database = "mqtt"
+  username = "emqx"
+  password = "secret"
 }
 ```
 
-MongoDB ACL 一条规则中定义了发布、订阅和发布/订阅的信息，在规则中的都是**允许**列表。
+### Common Configuration Options
 
-规则字段说明：
+#### `collection`
 
-- username：连接客户端的用户名
-- clientid：连接客户端的 Client ID
-- publish：允许发布的主题数值，支持通配符
-- subscribe：允许订阅的主题数值，支持通配符
-- pubsub：允许发布订阅的主题数值，支持通配符
+Required string value with the name of MongoDB collection where ACL rules are stored.
 
-::: tip
-主题可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
-  - %u：用户名
-  - %c：Client ID
-:::
+#### `filter`
 
+A map interpreted as MongoDB selector for ACL rule lookup.
+Supports [placeholders](./authz.md#authentication-placeholders):
+* `${clientid}` — clientid of the client.
+* `${username}` — username of the client.
+* `${peerhost}` — client IP address.
 
-默认配置下示例数据：
+#### `database`
 
-```bash
-use mqtt
+Required string value with MongoDB database name to use.
 
-## 所有用户不可以订阅、发布系统主题
-## 允许客户端订阅包含自身 Client ID 的 /smarthome/${clientid}/temperature 主题
-db.mqtt_acl.insert({
-  username: "$all",
-  clientid: "$all",
-  publish: ["#"],
-  subscribe: ["/smarthome/%c/temperature"]
-})
-```
+#### `username`
 
-启用 MongoDB ACL 后并以用户名 emqx 成功连接后，客户端应当数据具有相应的主题权限。
+Optional string value with MongoDB user.
 
+#### `password`
 
-## 超级用户查询（super_query）
+Optional string value with MongoDB user password.
 
-进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户查询，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询。
+#### `pool_size`
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+Optional integer value defining the number of concurrent connections from an EMQX node to a MongoDB server.
+The default value is 8.
 
-## 启用超级用户
-auth.mongo.super_query = on
+#### `ssl`
 
-## 超级查询使用集合
-auth.mongo.super_query.collection = mqtt_user
+Standard [SSL options](../ssl.md) for [secure connecting to MongoDB](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
 
-## 超级用户使用字段
-auth.mongo.super_query.super_field = is_superuser
+#### `srv_record`
 
-## 超级用户查询选择器，多个条件使用逗号分隔
-#auth.mongo.super_query.selector = username=%u, clientid=$all
-auth.mongo.super_query.selector = username=%u
-```
+Optional boolean value, the default value is `false`. If set to `true`, EMQX will try to
+fetch information about MongoDB hosts, `replica_set_name` (for `rs` type), and `auth_source` from
+DNS records of the specified server(s). See [DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
 
-同一个**选择器**的多个条件时实际查询中使用 MongoDB `and` 查询：
+#### `topology`
 
-```bash
-db.mqtt_user.find({ 
-  "username": "wivwiv"
-  "clientid": "$all"
-})
-```
+An optional map of some fine-grained MongoDB driver settings.
 
-你可以在查询条件中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+* `pool_size` — integer value, the initial size of the internal connection pool.
+* `max_overflow` — integer value, number of overflow workers be created, when all workers from the internal pool are busy.
+* `overflow_ttl` — duration, number of milliseconds for overflow workers to stay in the internal pool before terminating.
+* `overflow_check_period` — duration, `overflow_ttl` check period for workers (in milliseconds).
+* `local_threshold_ms` — ms duration, secondaries only which RTTs fit in the window from lower RTT to lower RTT + `local_threshold_ms` could be selected for handling user's requests.
+* `connect_timeout_ms` — ms duration, timeout for establishing TCP connections.
+* `server_selection_timeout_ms` — ms duration, max time appropriate server should be selected by.
+* `wait_queue_timeout_ms` — ms duration, max time for waiting for a worker to be available in the internal pool.
+* `heartbeat_frequency_ms` — ms duration, default delay between Topology rescans.
+* `min_heartbeat_frequency_ms` — ms duration, the minimum delay between Topology rescans.
 
-- %u：用户名
-- %c：Client ID
+### Standalone MongoDB Options
 
-你可以根据业务需要调整超级用户查询，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下超级用户查询需要满足以下条件：
+#### `server`
 
-1. 查询结果中必须包含 is_superuser 字段，is_superuser 应该显式的为 true
+MongoDB server address to connect or to us as a seed, required.
 
+#### `w_mode`
 
-::: tip 
-如果不需要超级用户功能，注释并禁用该选项能有效提高效率
-:::
+Write mode, `unsafe` (default) or `safe`. The safe mode makes a `getLastError` request after every write in the sequence. If the reply says it failed then the rest of the sequence is aborted. Alternatively, unsafe mode issues every write without confirmation, so if a write fails you won't know about it and the remaining operations will be executed. This is unsafe but faster because there is no round-trip delay.
 
+### MongoDB ReplicaSet Options
 
-## ACL 查询（acl_query）
+#### `servers`
 
-进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户查询，如果没有启用超级用户查询或客户端不是超级用户，则使用 ACL 查询 查询出该客户端在数据库中的 ACL 规则。
+MongoDB server addresses to connect or to us as seeds, required.
 
-```bash
-# etc/plugins/emqx_auth_mongo.conf
+#### `w_mode`
 
-auth.mongo.acl_query = on
+Write mode, the same as for [Standalone MongoDB](#wmode).
 
-auth.mongo.acl_query.collection = mqtt_acl
+#### `r_mode`
 
-## 查询选择器，多个条件时使用逗号分隔
-## auth.mongo.acl_query.selector = username=%u,clientid=%c
-auth.mongo.acl_query.selector = username=%u
+Read mode, `master` (default) or `slave_ok`. `master` means that every query in a sequence must read only fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. `slave_ok` means every query is allowed to read stale data from a slave/secondary (fresh data from a master is fine too).
 
-## 使用多个查询选择器
-## auth.mongo.acl_query.selector.1 = username=$all
-## auth.mongo.acl_query.selector.2 = username=%u
-```
+#### `replica_set_name`
 
-同一个选择器的多个**条件**时实际查询中使用 MongoDB `and` 查询：
+Replica set name to use, required. Can be overwritten with seeds if `srv_record` is set to `true`.
 
-```bash
-db.mqtt_acl.find({ 
-  "username": "emqx"
-  "clientid": "$all"
-})
-```
+### MongoDB Cluster Options
 
-多个**选择器**时实际查询中使用 MongoDB `or` 查询：
+#### `servers`
 
-```bash
-db.mqtt_acl.find({
-  "$or": [
-    {
-      "username": "$all"
-    },
-    {
-      "username": "emqx"
-    }
-  ]
-})
-```
+MongoDB server addresses to connect or to us as seeds, required.
 
+#### `w_mode`
 
-你可以在 ACL 查询中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
-
-- %u：用户名
-- %c：Client ID
-
-
-::: tip
-MongoDB ACL 规则需严格使用上述数据结构。
-
-MongoDB ACL 中添加的所有规则都是 **允许** 规则。即白名单。
-
-MongoDB 中对应 topic 的规则为空时将交由下一个 acl 插件继续检查，否则将立即终止认证链并返回。
-规则非空且未匹配到相应的 pub/sub 权限时，将返回认证失败（拒绝相应的 pub/sub 行为）并终止认证链。
-
-同时启用多个 auth/ACL 插件时，建议将 MongoDB ACL 认证置于其他启用的 auth/ACL 插件后。
-:::
+Write mode, the same as for [Standalone MongoDB](#wmode).

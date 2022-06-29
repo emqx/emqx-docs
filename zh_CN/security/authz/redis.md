@@ -1,127 +1,139 @@
-# Redis ACL
+# Redis
 
+This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+Redis database.
 
-Redis ACL 使用外部 Redis 数据库存储 ACL 规则，可以存储大量数据、动态管理 ACL，方便与外部设备管理系统集成
+The user should provide a templated Redis command that returns a key-value list with topic filters as keys and actions(`publish`, `subscribe`, or `all`) as values.
 
-插件：
+For example, rules can be stored as Redis [hashes](https://redis.io/docs/manual/data-types/#hashes):
 
-```bash
-emqx_auth_redis
+```
+>redis-cli
+127.0.0.1:6379> HSET users:someuser foo/# subscribe
+(integer) 1
+127.0.0.1:6379> HSET users:someuser bar/baz publish
+(integer) 1
 ```
 
-::: tip
-emqx_auth_redis 插件同时包含认证功能，可通过注释禁用。
-:::
-
-
-## Redis 连接信息
-
-Redis 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_redis.conf
-
-## 服务器地址
-auth.redis.server = 127.0.0.1:6379
-
-## 连接池大小
-auth.redis.pool = 8
-
-auth.redis.database = 0
-
-auth.redis.password =
+The corresponding config parameters are:
+```
+cmd = "HGET users:${username}"
 ```
 
+Fetched rules are used as permissive ones, i.e., a request is accepted if topic filter and action match.
 
-## 默认数据结构
+## Configuration
 
-Redis 认证插件默认配置下使用哈希表存储认证数据，使用 `mqtt_acl:` 作为 Redis 键前缀。
+The Redis authorizer is identified by type `redis`.
 
-### ACL 规则数据
+EMQX supports working with three kinds of Redis installation.
 
-```bash
-## 格式
-HSET mqtt_acl:[username clientid] [topic] [access]
+* Standalone Redis.
+  ```
+  {
+      type = redis
+      enable = true
 
-## 结构
-redis> hgetall mqtt_acl:emqx
-  testtopic/1 1
-```
+      redis_type = single
+      server = "127.0.0.1:6379"
 
-Redis ACL 一条规则中定义了发布、订阅或发布/订阅的信息，在规则中的都是**允许**列表，即白名单规则。
-对应主题有权且时将直接
+      cmd = "HGETALL mqtt_user:${username}"
+      database => 1
+      password = public
+      server = "127.0.0.1:6379"
 
-规则字段说明：
+  }
+  ```
+* [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
+  ```
+  {
+      type = redis
+      enable = true
 
-  - %u：用户名
-  - %c：Client ID
+      redis_type = sentinel
+      servers = "10.123.13.11:6379,10.123.13.12:6379"
+      sentinel = "mymaster"
 
-默认配置下示例数据：
+      cmd = "HGETALL mqtt_user:${username}"
+      database => 1
+      password = public
 
-```bash
-HSET mqtt_acl:emqx # 1
-HSET mqtt_acl:testtopic/2 2
-```
+  }
+  ```
+* [Redis Cluster](https://redis.io/docs/manual/scaling/).
+  ```
+  {
+      type = redis
+      enable = true
 
-启用 Redis ACL 后并以用户名 emqx 成功连接后，客户端应当数据具有相应的主题权限。
+      redis_type = cluster
+      servers = "10.123.13.11:6379,10.123.13.12:6379"
 
+      cmd = "HGETALL mqtt_user:${username}"
+      database => 1
+      password = public
+  }
+  ```
 
+### Common configuration parameters
 
-## 超级用户查询命令（super cmd）
+#### `redis_type`
 
-进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户查询命令，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL 查询命令。
+One of `single`, `cluster`, or `sentinel`, required. Defines Redis installation type:
+standalone Redis, [Redis Cluster](https://redis.io/docs/manual/scaling/), or
+[Redis Sentinel](https://redis.io/docs/manual/sentinel/) respectively.
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+#### `cmd`
 
-auth.redis.super_cmd = HGET mqtt_user:%u is_superuser
-```
+Required string value with the command used for fetching ACL rules. The following placeolders are supported for `cmd` value:
+* `${clientid}` — Client ID of the client.
+* `${username}` — username of the client.
+* `${peerhost}` — client IP address.
+* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
+* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
 
-你可以在命令中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+[Topic placeholders](./authz.md#topic-placeholders) are allowed in topic filters.
 
-- %u：用户名
-- %c：Client ID
-- %C：TLS 证书公用名（证书的域名或子域名），仅当 TLS 连接时有效
-- %d：TLS 证书 subject，仅当 TLS 连接时有效
+#### `database`
 
+Redis database index to use, required.
 
-你可以根据业务需要调整超级用户查询命令，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下超级用户查询命令需要满足以下条件：
+#### `password`
 
-1. 查询结果中第一个数据必须为 is_superuser 数据
+Password used for Redis [authentication](https://redis.io/docs/manual/security/#authentication), optional.
 
+#### `auto_reconnect`
 
-::: tip
-如果不需要超级用户功能，注释并禁用该选项能有效提高效率
-:::
+Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
+Redis on client failure.
 
+#### `pool_size`
 
-## ACL 查询命令（acl cmd）
+Optional integer value defining the number of concurrent connections from an EMQX node to Redis.
+The default value is 8.
 
-进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，如果没有启用超级用户 SQL 或客户端不是超级用户，则使用 ACL 查询命令查询出该客户端在数据库中的 ACL 规则。
+#### `ssl`
 
-```bash
-# etc/plugins/emqx_auth_redis.conf
+Standard [SSL options](../ssl.md) for [secure connecting to Redis](https://redis.io/docs/manual/security/encryption/).
 
-auth.redis.acl_cmd = HGETALL mqtt_acl:%u
-```
+### Standalone Redis options (`redis_type = single`).
 
-你可以在 ACL 查询命令中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+#### `server`
 
-- %u：用户名
-- %c：Client ID
+Required `host:port` string value, the address of the Redis server.
 
-你可以根据业务需要调整 ACL 查询命令，但是任何情况下 ACL 查询命令需要满足以下条件：
+### Redis Cluster options (`redis_type = cluster`).
 
-1. 哈希中使用 topic 作为键，access 作为值
+#### `servers`
 
+Required string value with comma-separated list of Redis Cluster endpoints: `host1:port1,host2:port2,...`.
 
-::: tip
-Redis ACL 规则需严格使用上述数据结构。
+### Redis Sentinel options (`redis_type = sentinel`).
 
-Redis ACL 中添加的所有规则都是 **允许** 规则。即白名单。
+#### `servers`
 
-Redis 中某个客户端的规则列表为空时将交由下一个 acl 插件继续检查，否则将立即终止认证链并返回认证结果。
-规则非空且未匹配到相应的 pub/sub 权限时，将返回认证失败（拒绝相应的 pub/sub 行为）并终止认证链。
+Required string value with comma-separated list of Redis Sentinel endpoints: `host1:port1,host2:port2,...`.
 
-同时启用多个 auth/ACL 插件时，建议将 Redis ACL 认证置于其他启用的 auth/ACL 插件后。
-:::
+#### `sentinel`
+
+Required string value with [master name](https://redis.io/docs/manual/sentinel/#configuring-sentinel) to use from Sentinel configuration.

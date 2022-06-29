@@ -1,178 +1,107 @@
-# PostgreSQL ACL
+# PostgreSQL
 
-PostgreSQL ACL 使用外部 PostgreSQL 数据库存储 ACL 规则，可以存储大量数据、动态管理 ACL，方便与外部设备管理系统集成。
+This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+PostgreSQL database.
 
-插件：
+PostgreSQL authorizer supports almost any storage schema. It is up to the user to decide how to store acl rules
+and access them: using one or multiple tables, views, etc.
 
-```bash
-emqx_auth_pgsql
-```
+The user should only provide a templated query that selects acl rules as rows containing
+`permission`, `action`, and `topic` columns.
+* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
+* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
+* `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and
+[topic placeholders](./authz.md#topic-placeholders).
 
-::: tip 
-emqx_auth_pgsql 插件同时包含认证功能，可通过注释禁用。
-:::
-
-
-## PostgreSQL 连接信息
-
-PostgreSQL 基础连接信息，需要保证集群内所有节点均能访问。
-
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
-
-## 服务器地址
-auth.pgsql.server = 127.0.0.1:5432
-
-## 连接池大小
-auth.pgsql.pool = 8
-
-auth.pgsql.username = root
-
-auth.pgsql.password = public
-
-auth.pgsql.database = mqtt
-
-auth.pgsql.encoding = utf8
-
-## TLS 配置
-## auth.pgsql.ssl = false
-## auth.pgsql.ssl_opts.keyfile =
-## auth.pgsql.ssl_opts.certfile =
-```
-
-
-## 默认表结构
-
-PostgreSQL 认证插件默认配置下需要确保数据库中有以下两张数据表，用于存储认证规则信息：
-
-### 认证/超级用户表
+Example table structure for storing credentials:
 
 ```sql
-CREATE TABLE mqtt_user (
-  id SERIAL PRIMARY KEY,
-  username CHARACTER VARYING(100),
-  password CHARACTER VARYING(100),
-  salt CHARACTER VARYING(40),
-  is_superuser BOOLEAN,
-  UNIQUE (username)
-)
-```
-
-示例数据：
-
-```sql
--- 客户端信息
-INSERT INTO mqtt_user (username, password, salt, is_superuser)
-VALUES
-	('emqx', 'efa1f375d76194fa51a3556a97e641e61685f914d446979da50a551a4333ffd7', NULL, false);
-```
-
-### ACL 规则表
-
-```sql
-CREATE TABLE mqtt_acl (
-  id SERIAL PRIMARY KEY,
-  allow INTEGER,
-  ipaddr CHARACTER VARYING(60),
-  username CHARACTER VARYING(100),
-  clientid CHARACTER VARYING(100),
-  access  INTEGER,
-  topic CHARACTER VARYING(100)
+CREATE TABLE mqtt_acl(
+  id serial PRIMARY KEY,
+  username text NOT NULL,
+  permission text NOT NULL,
+  action text NOT NULL,
+  topic text NOT NULL
 );
-CREATE INDEX ipaddr ON mqtt_acl (ipaddr);
-CREATE INDEX username ON mqtt_acl (username);
-CREATE INDEX clientid ON mqtt_acl (clientid);
+CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
 ```
 
-规则表字段说明：
+Example of adding an ACL rule for a user `user123` that allows publishing to topics `data/user123/#`:
+```
+postgres=# INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('user123', 'allow', 'publish', 'data/user123/#');
+INSERT 0 1
+```
 
-- allow：禁止（0），允许（1）
-- ipaddr：设置 IP 地址
-- username：连接客户端的用户名，此处的值如果设置为 `$all`  表示该规则适用于所有的用户
-- clientid：连接客户端的 Client ID
-- access：允许的操作：订阅（1），发布（2），订阅发布都可以（3）
-- topic：控制的主题，可以使用通配符，并且可以在主题中加入占位符来匹配客户端信息，例如 `t/%c` 则在匹配时主题将会替换为当前客户端的 Client ID
-  - %u：用户名
-  - %c：Client ID
-  
+The corresponding config parameters are:
+```
+query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+```
 
+## Configuration
 
-默认配置下示例数据：
+The PostgreSQL authorizer is identified by type `postgresql`.
 
+Sample configuration:
+
+```
+{
+  type = postgresql
+  enable = true
+
+  database = "mqtt"
+  username = "postgres"
+  password = "public"
+  server = "127.0.0.1:5432"
+  query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+}
+```
+
+### `query`
+
+Required string value with PostgreSQL query template for fetching ACL rules. Supports [placeholders](./authz.md#authorization-placeholders):
+* `${clientid}` — Client ID of the client.
+* `${username}` — username of the client.
+* `${peerhost}` — client IP address.
+* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
+* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
+
+For security reasons, placeholder values are not interpolated directly, but through PostgreSQL placeholders.
+I.e. a query
 ```sql
--- 所有用户不可以订阅系统主题
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1, '$SYS/#');
-
--- 允许 10.59.1.100 上的客户端订阅系统主题
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, '10.59.1.100', NULL, NULL, 1, '$SYS/#');
-
--- 禁止客户端订阅 /smarthome/+/temperature 主题
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (0, NULL, '$all', NULL, 1, '/smarthome/+/temperature');
-
--- 允许客户端订阅包含自身 Client ID 的 /smarthome/${clientid}/temperature 主题
-INSERT INTO mqtt_acl (allow, ipaddr, username, clientid, access, topic) VALUES (1, NULL, '$all', NULL, 1, '/smarthome/%c/temperature');
+SELECT permission, action, topic FROM acl WHERE username = ${username}
 ```
-
-启用 PostgreSQL ACL 后并以用户名 emqx 成功连接后，客户端应当数据具有相应的主题权限。
-
-
-::: tip 
-这是默认配置使用的表结构，熟悉该插件的使用后你可以使用任何满足条件的数据表进行 ACL 规则存储。
-:::
-
-
-
-## 超级用户 SQL（super_query）
-
-进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，查询客户端是否为超级用户。客户端为超级用户时将跳过 ACL SQL。
-
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
-
-auth.pgsql.super_query = select is_superuser from mqtt_user where username = '%u' limit 1
+is first translated into
+```sql
+SELECT permission, action, topic FROM acl WHERE username = $1
 ```
+prepared statement and then executed with `${username}` value.
 
-你可以在 SQL 中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+### `server`
 
-- %u：用户名
-- %c：Client ID
-- %C：TLS 证书公用名（证书的域名或子域名），仅当 TLS 连接时有效
-- %d：TLS 证书 subject，仅当 TLS 连接时有效
+Required string value with PostgreSQL server address (`host:port`).
 
+### `database`
 
+Required string value with PostgreSQL database name to use.
 
-你可以根据业务需要调整超级用户 SQL，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下超级用户 SQL 需要满足以下条件：
+### `username`
 
-1. 查询结果中必须包含 is_superuser 字段，is_superuser 应该显式的为 true
-2. 查询结果只能有一条，多条结果时只取第一条作为有效数据
+Optional string value with PostgreSQL user.
 
-::: tip 
-如果不需要超级用户功能，注释并禁用该选项能有效提高效率
-:::
+### `password`
 
+Optional string value with PostgreSQL user password.
 
-## ACL SQL（acl_query）
+#### `auto_reconnect`
 
-进行 ACL 鉴权时，EMQX 将使用当前客户端信息填充并执行用户配置的超级用户 SQL，如果没有启用超级用户 SQL 或客户端不是超级用户，则使用 ACL SQL 查询出该客户端在数据库中的 ACL 规则。
+Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
+PostgreSQL on client failure.
 
-```bash
-# etc/plugins/emqx_auth_pgsql.conf
+### `pool_size`
 
-auth.pgsql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'
-```
+Optional integer value defining the number of concurrent connections from an EMQX node to a PostgreSQL server.
+The default value is 8.
 
-你可以在 ACL SQL 中使用以下占位符，执行时 EMQX 将自动填充为客户端信息：
+### `ssl`
 
-- %a：客户端地址
-- %u：用户名
-- %c：Client ID
-
-
-你可以根据业务需要调整 ACL SQL，如添加多个查询条件、使用数据库预处理函数，以实现更多业务相关的功能。但是任何情况下 ACL SQL 需要满足以下条件：
-
-1. 查询结果中必须包含 allow、access、topic、clientid、username、ipaddr 字段，如果字段不想参与比对则使用 `$all` 字符串或者数据库 `NULL` 值
-2. 查询结果可以有多条，多条结果时按照从上到下的顺序进行匹配
-
-::: tip 
-可以在 SQL 中调整查询条件、指定排序方式实现更高效率的查询。
-:::
+Standard [SSL options](../ssl.md) for [secure connecting to PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html).
