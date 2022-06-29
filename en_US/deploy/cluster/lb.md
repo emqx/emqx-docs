@@ -2,6 +2,15 @@
 
 During development, we usually use compressed packages to start services with the form of a single node. However, production operation requires a simpler and more stable way. This page focuses on how to deploy your EMQX service using best practices for a production deployment.
 
+::: tip
+
+If the EMQX cluster is deployed behind HAProxy or Nginx, and you need to get the real source IP address and port of the clients, you need to turn on the Proxy Protocol configuration with the following configuration item: [EMQX listener proxy_protocol](../../admin/cfg.md)
+
+`Proxy Protcol` Reference: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
+Nginx uses Proxy Prorcol Reference: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
+
+:::
+
 ## Deployment architecture
 
 EMQX cluster can be deployed as an IoT access service (IoT Hub). Currently, EMQ provides free software images out of the box on cloud service providers such as QingCloud, Aliyun, and AWS. For special hardware platforms and system versions such as Raspberry Pi and Linux ARM, source code compilation and installation can be used.
@@ -64,12 +73,12 @@ Firewalls should make the relevant ports accessible for public according to the 
 
 TCP ports used by EMQX node cluster:
 
-| Port | Description                     |
-|------|---------------------------------|
-| 4370 | Node discovery port             |
-| 5370 | Cluster PRC                     |
+| Port | Description                   |
+|------|-------------------------------|
+| 4370 | Cluster node distribution port |
+| 5370 | Cluster RPC                    |
 
-If deployed between nodes, firewalls should be configured that the above ports are accessible between the nodes.
+If firewall is deployed for security of inter-cluster communication, it should be configured that the above ports are accessible between the nodes.
 
 
 ## Deploying on QingCloud
