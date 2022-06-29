@@ -58,8 +58,7 @@ cluster {
     discovery_strategy = dns
     dns {
         name = "localhost"
-        app = emqx
-        type = a
+        record_type = a
     }
 }
 ```
@@ -73,8 +72,7 @@ cluster {
     discovery_strategy = dns
     dns {
         name = "localhost"
-        app = emqx
-        type = srv
+        record_type = srv
     }
 }
 ```
@@ -111,3 +109,7 @@ cluster {
     }
 }
 ```
+
+::: tip
+The Fannel networking plugin is not recommended for Kubernetes; the Calico networking plugin is recommended.
+:::
