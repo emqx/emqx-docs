@@ -19,14 +19,49 @@ Sample configuration:
 }
 ```
 
-## ACL rule structure
+## Data Management
 
-Rules for the authorizer are managed through `/api/v5/authorization/sources/built_in_database` API endpoint.
+Rules can be managed from the dashboard UI "Access Contorl" -> "Authorization" -> "Built-in Database" -> "Users"
+and click on the "+Add" button to add new clients and its rules.
+
+Rules are also managed through `/api/v5/authorization/sources/built_in_database` APIs.
 
 Each rule is applied to
 * a particular client identified by username, `/api/v5/authorization/sources/built_in_database/username` endpoint;
 * a particular client identified by clientid, `/api/v5/authorization/sources/built_in_database/clientid` endpoint;
 * all clients, `/api/v5/authorization/sources/built_in_database/all` endpoint.
+
+You can find more details and examples in document API (Swagger UI) available at http://dashboard-host:1883/api-docs
+below is a quick example for how to create rules for a client (`client1`):
+
+```
+curl -X 'POST' \
+  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '[
+  {
+    "clientid": "client1",
+    "rules": [
+      {
+        "action": "publish",
+        "permission": "allow",
+        "topic": "test/toopic/1"
+      },
+      {
+        "action": "subscribe",
+        "permission": "allow",
+        "topic": "test/toopic/2"
+      },
+      {
+        "action": "all",
+        "permission": "deny",
+        "topic": "eq test/#"
+      }
+    ]
+  }
+]'
+```
 
 Rules contain:
 * permission, `allow` or `deny`;

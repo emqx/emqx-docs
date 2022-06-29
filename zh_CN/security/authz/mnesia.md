@@ -1,16 +1,11 @@
-# Built-in Database
+# 内置数据库
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
-built-id database (Mnesia).
+您可以将客户端的鉴权规则存储在EMQX的内置数据库中。
+该方案的好处是开销小，因为它不需要去访问外部数据库，或者HTTP服务器，而是直接从本地（内存中）快速搜索匹配的规则。
 
-The advantage of this method is that it does not require any external dependencies and allows manipulating
-client's ACL rules through a REST API.
+## 配置
 
-## Configuration
-
-The built-in database authorizer is identified by type `built_in_database`.
-
-Sample configuration:
+该鉴权器的配置必需有 `type = built_in_database`。
 
 ```
 {
@@ -19,16 +14,49 @@ Sample configuration:
 }
 ```
 
-## ACL rule structure
+## 规则管理
 
-Rules for the authorizer are managed through `/api/v5/authorization/sources/built_in_database` API endpoint.
+鉴权规则可以在仪表盘的 “访问控制” -> “授权” -> “Built-in Database” -> 用户管理 中通过点击 “+添加”按钮来输入。
 
-Each rule is applied to
-* a particular client identified by username, `/api/v5/authorization/sources/built_in_database/username` endpoint;
-* a particular client identified by clientid, `/api/v5/authorization/sources/built_in_database/clientid` endpoint;
-* all clients, `/api/v5/authorization/sources/built_in_database/all` endpoint.
+也可以通过这个API来进行管理 `/api/v5/authorization/sources/built_in_database`。
 
-Rules contain:
-* permission, `allow` or `deny`;
-* action, i.e., the relevant operation: `publish`, `subscribe`, or `all`;
-* topic filter, possibly with wildcards or [placeholders](authz.md#topic-placeholders).
+每条规则可以适用于：
+
+* 使用用户名对客户端进行匹配：`/api/v5/authorization/sources/built_in_database/username`
+* 使用客户端ID对客户端进行匹配： `/api/v5/authorization/sources/built_in_database/clientid`;
+* 所有的客户端：`/api/v5/authorization/sources/built_in_database/all`.
+
+API 文档中可以找到更多的信息和例子。
+下面是使用其中一个API为一个客户端（`client1`）创建规则的例子。
+```
+curl -X 'POST' \
+  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '[
+  {
+    "clientid": "client1",
+    "rules": [
+      {
+        "action": "publish",
+        "permission": "allow",
+        "topic": "test/toopic/1"
+      },
+      {
+        "action": "subscribe",
+        "permission": "allow",
+        "topic": "test/toopic/2"
+      },
+      {
+        "action": "all",
+        "permission": "deny",
+        "topic": "eq test/#"
+      }
+    ]
+  }
+]'
+```
+每个规则需要包括如下信息：
+* permission: `allow` 或者 `deny`;
+* action: 客户端执行的操作 `publish`，`subscribe`，或 `all`;
+* topic: 主题，主题过滤器（通配符主题），或者带[占位符](authz.md#主题占位符)的主题。
