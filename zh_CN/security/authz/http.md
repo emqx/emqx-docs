@@ -1,26 +1,25 @@
 # HTTP
 
-HTTP authorizer delegates authorization to a custom HTTP API.
+HTTP鉴权器将鉴权的请求委托给外部HTTP服务器。
 
-## Authorization principle
+## 基本原理
 
-* In authorizer settings, an HTTP request pattern is specified.
-* When an MQTT client makes a publish/subscribe request to the broker, the configured request template is rendered and the resulting request is emitted.
-* Receiving a 200 or 204 HTTP status is interpreted as authorization success. Other statuses indicate authorization failure.
+* 在鉴权器的配置中，预先定义好HTTP服务器的URL以及请求的模版。
+* 当一个客户端需要执行发布或者订阅操作时候，EMQX根据预先定义的模版来构造一个HTTP请求，并发送给配置的HTTP服务器。
+* 通过判断服务器返回的HTTP状态码，例如200 或 204 表示鉴权成功（允许请求）而其他的状态码，例如403表示鉴权失败（拒绝请求）
 
 ::: danger
-`POST` method is recommended. When using the `GET` method, some sensitive information can be exposed through HTTP server logging.
-
-For untrusted environments, HTTPS should be used.
+推荐使用HTTP的 `POST`方法。如果使用 `GET` 方法，一些HTTP服务器可能会把这些携带敏感信息的HTTP请求记录到日志里。
+若HTTP 服务器不在内网中，推荐使用HTTPS。
 :::
 
-## Configuration
+## 配置
 
-The HTTP authorizer is identified by type `http`.
+HTTP鉴权必需使用 `type=http`的配置。
 
-HTTP `POST` and `GET` requests are supported. Each of them has some specific options.
+HTTP 的`POST` 和 `GET` 方法都是支持的，但是各自有不一样的配置字段。
 
-Example of an HTTP authorizer configured with `POST` request:
+一个使用`POST` 方法的例子如下：
 
 ```
 {
@@ -41,7 +40,7 @@ Example of an HTTP authorizer configured with `POST` request:
 }
 ```
 
-Example of an HTTP authorizer configured with `GET` request:
+使用 `GET` 方法的例子如下：
 
 ```
 {
@@ -63,20 +62,21 @@ Example of an HTTP authorizer configured with `GET` request:
 
 ### `method`
 
-Required field with possible values `get` or `post`. Denoting the corresponding HTTP request method used.
+该配置为必填字段，用于指定http方法，可以是 `get` 或者 `post`。 
 
 ### `url`
 
-HTTP url for external authorization requests, required. It may contain [placeholders](./authz.md#authorization-placeholders):
-* `${clientid}` — clientid of the client.
-* `${username}` — username of the client.
-* `${peerhost}` — client IP address.
-* `${proto_name}` — name of the protocol used my the client.
-* `${mountpoint}` — client listener's mountpoint.
-* `${action}` — action that is being authorized.
-* `${topic}` — topic access to which is authorized.
+发送HTTP请求的URL，可以使用如下[占位符](./authz.md#authorization-placeholders):
 
-For `https://` urls `ssl` configuration must be enabled:
+* `${clientid}` — 客户端的ID。
+* `${username}` — 客户端登录是用的用户名。
+* `${peerhost}` — 客户端的源IP地址。
+* `${proto_name}` — 客户端使用的协议名称。例如 `MQTT`，`CoAP` 等。
+* `${mountpoint}` — 网关监听器的挂载点（主题前缀）。
+* `${action}` — 当前执行的动作请求，例如 `publish`，`subscribe`。
+* `${topic}` — 当前请求想要发布或订阅的主题（或主题过滤器）
+
+如果URL前缀是 `https://`，那么需要加上 `ssl` 相关的配置，例如：
 
 ```
 {
@@ -91,12 +91,15 @@ For `https://` urls `ssl` configuration must be enabled:
 
 ### `body`
 
-Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON or www-form-urlencoded
-body. For `get` requests it is encoded as query parameters. The map keys and values can contain [placeholders](./authz.md#authorization-placeholders).
+该配置项可选。用于构造一个HTTP请求的body。
+如果是 `post` 请求，这个配置项会被 encode 成一个 JSON 或者 `www-form-urlencoded` 的字符串。
+如果是 `get` 请求，这个配置项会被翻译成 HTTP 的query-string。
+这些字段的名字和值中都可以使用[占位符](./authz.md#鉴权器配置中的占位符).
 
-For different configurations `body` map will be encoded differently.
+根据配置项的不同 `body` 的序列化方式也可能不同。
 
-Assume an MQTT client is connected with clientid `id123`, username `iamuser` and tries to publish to `foo/bar` topic.
+例如，如果一个MQTT客户端使用的 clientid 是 `id123`，用户名（username）是`iamuser` 并且尝试发布消息到 `foo/bar` 主题，
+那么在不同的配置下， 可能构造的HTTP请求如下：
 
 * `GET` request:
     ```
@@ -110,7 +113,7 @@ Assume an MQTT client is connected with clientid `id123`, username `iamuser` and
         }
     }
     ```
-    The resulting request will be:
+    最终的HTTP请求会是下面这样：
     ```
     GET /auth/id123?username=iamuser&topic=foo%2Fbar&action=publish HTTP/1.1
     ... Headers ...
@@ -130,7 +133,7 @@ Assume an MQTT client is connected with clientid `id123`, username `iamuser` and
         }
     }
     ```
-    The resulting request will be:
+    最终的HTTP请求会是下面这样：
     ```
     POST /auth/id123 HTTP/1.1
     Content-Type: application/json
@@ -153,7 +156,7 @@ Assume an MQTT client is connected with clientid `id123`, username `iamuser` and
         }
     }
     ```
-    The resulting request will be:
+    最终的HTTP请求会是下面这样：
     ```
     POST /auth/id123 HTTP/1.1
     Content-Type: application/x-www-form-urlencoded
@@ -164,9 +167,9 @@ Assume an MQTT client is connected with clientid `id123`, username `iamuser` and
 
 ### `headers`
 
-Map with arbitrary HTTP headers for external requests, optional.
+根据配置来构造的HTTP头会是如下情况。
 
-For `get` requests the default value is
+对于 `get` 方法，默认的HTTP报头如下
 ```
 {
     "accept" = "application/json"
@@ -175,9 +178,9 @@ For `get` requests the default value is
     "keep-alive" = "timeout=30, max=1000"
 }
 ```
-Headers cannot contain `content-type` header for `get` requests.
+`get` 请求不得携带 `Content-Type` 的HTTP 头。
 
-For `post` requests the default value is
+对于 `post` 请求，默认的HTTP报头如下
 ```
 {
     "accept" = "application/json"
@@ -188,25 +191,14 @@ For `post` requests the default value is
 }
 ```
 
-`content-type` header value defines `body` encoding method for `post` requests. Possible values are:
-* `application/json` for JSON;
-* `application/x-www-form-urlencoded` for x-www-form-urlencoded format.
+`content-type` 可以为 `post` 请求指定 `body` 的序列化格式，可能的值有：
+* `application/json` 序列化成JSON;
+* `application/x-www-form-urlencoded` 序列化成 `x-www-form-urlencoded` 格式的字符串。
 
 ### `enable_pipelining`
 
-Boolean value indicating whether to enable [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
-Optional, default value is `true`.
+一个整形数字（默认100）用于指定流水线请求的最大数量[HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
 
-### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
-
-Optional values controlling the corresponding request thresholds. The default values are:
-
-```
-  connect_timeout = 15s
-  max_retries = 5
-  request_timeout = 30s
-  retry_interval = 1s
-```
 
 ### `pool_size`
 
@@ -216,3 +208,14 @@ The default value is 8.
 ### `ssl`
 
 Standard [SSL options](../ssl.md) for connecting to the external API.
+
+### 更多配置项
+
+以下都是可选字段，
+
+```
+  connect_timeout = 15s # 连接超时
+  max_retries = 5 # 最大重试次数
+  request_timeout = 30s # 请求超时限制
+  retry_interval = 1s # 重试中间间隔
+```

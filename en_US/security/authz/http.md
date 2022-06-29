@@ -71,8 +71,8 @@ HTTP url for external authorization requests, required. It may contain [placehol
 * `${clientid}` — clientid of the client.
 * `${username}` — username of the client.
 * `${peerhost}` — client IP address.
-* `${proto_name}` — name of the protocol used my the client.
-* `${mountpoint}` — client listener's mountpoint.
+* `${proto_name}` — Name of the protocol used by the client, such as `MQTT` and `CoAP` etc.
+* `${mountpoint}` — Gateway listener's mountpoint.
 * `${action}` — action that is being authorized.
 * `${topic}` — topic access to which is authorized.
 
@@ -194,19 +194,7 @@ For `post` requests the default value is
 
 ### `enable_pipelining`
 
-Boolean value indicating whether to enable [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
-Optional, default value is `true`.
-
-### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
-
-Optional values controlling the corresponding request thresholds. The default values are:
-
-```
-  connect_timeout = 15s
-  max_retries = 5
-  request_timeout = 30s
-  retry_interval = 1s
-```
+A positive integer value (default = 100) indicating the maximum number of send-ahead HTTP streams [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
 
 ### `pool_size`
 
@@ -216,3 +204,14 @@ The default value is 8.
 ### `ssl`
 
 Standard [SSL options](../ssl.md) for connecting to the external API.
+
+### More configs
+
+Optional values controlling the corresponding request thresholds. The default values are:
+
+```
+  connect_timeout = 15s
+  max_retries = 5
+  request_timeout = 30s
+  retry_interval = 1s
+```
