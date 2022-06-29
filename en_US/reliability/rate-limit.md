@@ -5,12 +5,12 @@ The hierarchical rate limiter is a multi-level rate and flow control system base
 
 <a id="org00546cf"></a>
 
-# Terminologies
+## Terminologies
 
 
 <a id="orgf5b4d69"></a>
 
-## Resource
+### Resource
 
 The system currently supports rate control services for the following resources:
 
@@ -25,21 +25,21 @@ The system currently supports rate control services for the following resources:
 
 <a id="org700e263"></a>
 
-## Producer/Consumer model
+### Producer/Consumer model
 
 The whole system is divided into two parts: `producer` and `consumer`
 
 
 <a id="org693255d"></a>
 
-### Producer
+#### Producer
 
 The producer is the `rate control service` in the system, which is used to manage and control the generation and allocation of resource tokens
 
 
 <a id="org0b1fde9"></a>
 
-### Consumer
+#### Consumer
 
 Consumers are entities that consume resources. Before consuming resources, they must apply for the same amount of tokens.
 
@@ -48,7 +48,7 @@ The system provides three `rate control levels` for resource consumption
 
 <a id="org310b56a"></a>
 
-## Rate control levels
+### Rate control levels
 
 - **Node level:** resource rate control on the current EMQX node
 - **Service level:** rate control for resources on a certain type of service/module
@@ -69,12 +69,12 @@ The system provides three `rate control levels` for resource consumption
 
 <a id="org66b1ab7"></a>
 
-# Useage
+## Useage
 
 
 <a id="org7e70e34"></a>
 
-## Setting
+### Setting
 
 1. Open the setting interface on Dashboard and select the type to be set
 2. Set the settings as required, then click `Save`
@@ -84,7 +84,7 @@ The system provides three `rate control levels` for resource consumption
 
 <a id="org8e67475"></a>
 
-### Levels Correspondence
+#### Levels Correspondence
 
 Each resource has three levels of rate control. Use `message_in` as an example, the correspondence between levels and settings is as follows:
 
@@ -102,14 +102,14 @@ Each resource has three levels of rate control. Use `message_in` as an example, 
 
 <a id="orgc8037f1"></a>
 
-## Use
+### Use
 
 After the rate control service is set, it will not affect other functions. If a service (listener, retainer, etc.) wants to use the rate control service, it needs to be set in the corresponding place.
 
 
 <a id="org94c5efd"></a>
 
-### Listener
+#### Listener
 
 1. Open the `Listener` interface on the dashboard
 
@@ -131,7 +131,7 @@ After the rate control service is set, it will not affect other functions. If a 
 
 <a id="org1d79363"></a>
 
-### Retainer
+#### Retainer
 
 1. Open the `retainer` interface on the dashboard
 
