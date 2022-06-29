@@ -4,9 +4,9 @@ Real-time filtering logs for the ClientID or Topic or IP for debugging.
 
 ## Create module
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/log-trace), click the "Diagnose/Log Trace" tab on the left, and choose to add:
 
-![image-202112140001](./assets/trace_module.png)
+![image-202112140001](./assets/trace.png)
 
 Select the trace module, no need to configure parameters, directly open
 
@@ -52,3 +52,5 @@ The log contains all the information about the current IP interaction with the E
 3. You can choose to stop logging manually, or wait until the end time to stop automatically.
 4. The size of the log file viewed in the list is the sum of the uncompressed file sizes.
 5. The EMQX cluster will continue an outstanding trace after restart.
+6. If the dashboard download timeout, you can find the log file directly on the server's `data/trace`.
+

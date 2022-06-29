@@ -5,11 +5,9 @@
 
 ## 创建模块
 
-Trace 日志追踪模块默认关闭，可以通过dashboard页面进行开启和停止。
+打开 [EMQX Dashboard](http://127.0.0.1:18083/#/log-trace)，点击左侧的 “问题分析/日志追踪” 选项卡：
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡：
-
-![image-202112140001](./assets/trace_module.png)
+![image-202112140001](./assets/trace.png)
 
 可以创建追踪指定 ClientID 或 Topic 或 IP 客户端的日志。
 ## 追踪指定 ClientID
@@ -54,3 +52,4 @@ Trace 日志追踪模块默认关闭，可以通过dashboard页面进行开启�
 3. 可以选择手动停止记录，或等到结束时间时自动停止。
 4. 列表中查看到的日志文件大小为未压缩过的文件大小总和。
 5. EMQX 集群重启后，会继续未完成的追踪。
+6. 如果 dashboard 下载超时，可以直接在服务器的`/data/trace`上找到该日志文件。
