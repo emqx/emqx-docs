@@ -36,7 +36,7 @@ The world's most scalable distributed MQTT broker with a high-performance real-t
 Connect your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerate your IoT application development without the burden of self-managing the infrastructure.
 
 - Fully managed MQTT 5.0 service
-- Powerful SQL-based rule engine
+- Powerful SQL-based data integrations
 - Integration with various databases
 - Highly available, fault-tolerant
 - Run anywhere, pay as you go
@@ -50,7 +50,7 @@ distributed MQTT broker and SQL-based IoT rule engine. It combines high-performa
 reliable data transport, processing, and integration for business-critical IoT solutions.
 
 - Support for multiple IoT protocols
-- Powerful SQL-based rule engine
+- Powerful SQL-based data integrations
 - Rich data persistence and bridging choices
 - Management & monitoring center
 - Global technical support team
@@ -82,7 +82,7 @@ Container deployment is the quickest way to start experimenting with EMQX.
 Start Docker container:
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
@@ -246,7 +246,7 @@ For MQTT client library example code, we try to cover as many mainstream program
 After completing the installation, startup, and access test,
 you can now continue to read the following documents for a proper in-production setup.
 
-### Authentication
+### Access Control
 
 Authentication is an important part of most applications,
 and enabling authentication can effectively prevent malicious client connections.
@@ -258,6 +258,14 @@ legitimate clients are permitted to publish or subscribe to certain topics.
   with internal or external database, JWT or HTTP service as the authentication data source.
 - [Authorization / ACL](../security/authz/authz.md): Select a backend to integrate with
   internal or external database, or HTTP service as the ACL data source.
+
+### Data Integration
+
+Data integration is the data processing and distribution component of EMQX based on the publish-subscribe model. Data integration can easily integrate IoT data with Kafka, RDS, various SQL / NoSQL / time-series databases, and enterprise systems such as Oracle and SAP.
+
+- [Data Integration](../data-integration/introduction.md).
+- [Rule](../data-integration/rules.md).
+- [Data Bridge](../data-integration/data-bridges.md).
 
 ### Management Interfaces
 

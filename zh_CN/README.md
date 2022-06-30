@@ -11,14 +11,14 @@ MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息
 1. 连接任何设备：通过开放标准物联网协议 MQTT、CoAP 和 LwM2M 连接任何设备。支持来自开源社区的所有 MQTT 客户端，如 Eclipse Paho 或定制的 MQTT 库。
 2. 支持任意规模：单服务器节点支持 200 万并发连接，通过集群扩展，可以毫不费力地支持 1 亿并发连接。
 3. 确保通信安全，通过 TLS/SSL 和多样化的认证机制确保与 MQTT 服务器进行安全通信，包括用户名/密码、JWT、PSK 和 X.509 证书。
-4. 实时数据处理, 通过内置规则引擎提供的丰富 SQL 查询进行低代码事件处理，以数百万条/秒的速度实时处理设备与云端之间双向移动的 MQTT 消息数据。
+4. 实时数据处理, 通过内置数据集成提供的丰富 SQL 查询进行低代码事件处理，以数百万条/秒的速度实时处理设备与云端之间双向移动的 MQTT 消息数据。
 5. 轻松管理与监控，通过 CLI、HTTP API 和一个优雅的 Dashboard 轻松管理 EMQX 集群。支持使用 Datadog、Statsd、Prometheus 和 Granfana 进行监控和报警。
 6. 灵活扩展与定制，通过网关与插件对 EMQX 集群进行扩展与定制，快速实现与云服务、企业系统的数据集成以及专有的物联网协议。
 7. Run Anywhere，采用基于 Kubernetes 的云原生架构。可运行在私有云、混合云和公有云（如华为云、腾讯云、阿里云和 AWS）。
 
 ## 功能概览
 
-Below is a brief/incomplete highlighting a part of the features EMQX provides.
+以下是 EMQX 主要功能列表。
 
 ### 连接
 
@@ -39,10 +39,8 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
   - MQTT-SN
   - Stomp
   - Stomp/SockJS
-{% emqxee %}
-  - GB/T 32960
-  - JT/T 808
-{% endemqxee %}
+  - GB/T 32960（企业版）
+  - JT/T 808（企业版）
 
 为 MQTT 增加更多特性：
 
@@ -67,9 +65,10 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
 
 ### 数据集成
 
-- 内置规则引擎，通过 SQL 语法实时提取、过滤、丰富和转换消息或内部事件并将其传输到外部数据平台
-- 通过 MQTT 与其他 Broker 或物联网平台进行双向数据桥接
-- 通过 Webhook 与其他系统集成
+
+- 内置数据集成，通过 SQL 语法实时提取、过滤、丰富和转换消息或内部事件并将其传输到外部数据平台
+- 通过 MQTT 与其他 Broker 或物联网平台进行双向数据桥接（如 EMQX Cloud，AWS IoT Core，Azure IoT Hub）
+- 通过 Webhook 与其他应用集成
 {emqxee}
 - 企业版: TODO
 {endemqxee}
