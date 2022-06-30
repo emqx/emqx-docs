@@ -338,7 +338,12 @@ MQTT 桥接插件(emqx_bridge_mqtt) 已被移除，请使用数据集成中的 M
 
 ## Prometheus
 
-Prometheus 桥接插件(emqx_prometheus) 已被移除，请通过 `prometheus {}` 配置项或 Dashboard **仪表盘** 页面进行配置。
+旧的 Prometheus 插件 (emqx_prometheus) 已被移除。
+在5.0中，Prometheus 的数据拉取服务默认开启，且无需认证就可以拉取数据。
+可以使用 curl 命令来查看：curl -f "127.0.0.1:18083/api/v5/prometheus/stats"
+
+如果您想要使用 push-gateway，您可以在 prometheus {...} 配置块中启用它。
+或者在仪表盘中修改配置并启用。
 
 指标变动情况：
 
