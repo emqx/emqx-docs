@@ -6,17 +6,17 @@ Starting from download and installation, this document is to guide you to quickl
 
 EMQX as a software is released in different editions.
 
-- [Community](https://www.emqx.com/en/try?product=broker)
-- [Enterprise](https://www.emqx.com/en/try?product=enterprise)
-- [Edge](https://github.com/emqx/emqx/releases)
+- [EMQX](https://www.emqx.com/en/try?product=broker)
+- [EMQX Enterprise](https://www.emqx.com/en/try?product=enterprise)
+- [EMQX Edge](https://github.com/emqx/emqx/releases)
 
 EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
-which runs EMQX Enterprise edition.
+which runs EMQX Enterprise.
 You can customize the deployment to suit your business development plans the best and get started quickly.
 
 :::: tabs type:card
 
-::: tab EMQX Community Edition
+::: tab EMQX
 The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
 
 - Fully open-sourced under APL 2.0
@@ -41,7 +41,7 @@ Connecting your IoT devices to everything with reliable, real-time IoT data tran
 [Get Started Free](https://www.emqx.com/en/try?product=cloud)
 :::
 
-::: tab EMQX Enterprise Edition
+::: tab EMQX Enterprise
 The world’s leading **Cloud-Native IoT Messaging Platform** with an all-in-one
 distributed MQTT broker and SQL-based IoT rule engine, powering high-performance,
 reliable data transport, processing, and integration for business-critical IoT solutions.
@@ -265,7 +265,7 @@ legit clients are permitted to publish or subscribe to certain topics.
 ### Rule Engine
 
 The built-in SQL based rule-engine can extract, filter, enrich, and convert messages between
-devices and data platofrms in real-time, and forward the data to Webhooks or other MQTT Brokers
+devices and data platforms in real-time, and forward the data to Webhooks or other MQTT Brokers
 without having to implement MQTT clients to do the job.
 
 EMQX enterprise eidtion can also integrate with Kafka,

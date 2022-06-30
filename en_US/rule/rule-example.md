@@ -2,7 +2,7 @@
 
 {% emqxce %}
 ::: tip
-Only the following operations are applicable in the community edition of the EMQX Broker:
+Only the following operations are applicable in EMQX:
 - Check (debug)
 - Send data to a web service
 - Bridge data to a MQTT Broker
@@ -79,7 +79,7 @@ Action Init Params: #{<<"a">> => 1}
 
 - `Selected Data` listed the fields that selected by the SQL.All
   available fields will be listed here, as we used `select *`.
-- `Envs` is the environment varibles that can be used internally in
+- `Envs` is the environment variables that can be used internally in
   the action.
 - `Action Init Params` is the params we passed to the action.
 

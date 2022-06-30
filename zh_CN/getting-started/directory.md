@@ -20,9 +20,9 @@ ref:
 | 描述                        | 使用 ZIP 压缩包安装                 | 使用二进制包安装                  | Homebrew(MacOS)安装                  |
 | --------------------------- | -------------------------------- | ----------------------------- | -----------------------------         |
 | 可执行文件目录              | `./bin`                          | `/usr/lib/emqx/bin`           | `/usr/local/bin`                        |
-| 数据文件                    | `./data`                         | `/var/lib/emqx/data`          | `/usr/local/Cellar/emqx/*/data`        |
+| 数据文件                    | `./data`                         | `/var/lib/emqx/`              | `/usr/local/Cellar/emqx/*/data`        |
 | Erlang 虚拟机文件           | `./erts-*`                       | `/usr/lib/emqx/erts-*`        | `/usr/local/Cellar/emqx/*/erts-`       |
-| 配置文件目录                | `./etc`                          | `/etc/emqx/etc`               | `/usr/local/Cellar/emqx/*/etc`          |
+| 配置文件目录                | `./etc`                          | `/etc/emqx/`                  | `/usr/local/Cellar/emqx/*/etc`          |
 | 依赖项目录                  | `./lib`                          | `/usr/lib/emqx/lib`           | `/usr/local/Cellar/emqx/*/lib`         |
 | 日志文件                    | `./log`                          | `/var/log/emqx`               | `/usr/local/Cellar/emqx/*/log`         |
 | 启动相关的脚本、schema 文件 | `./releases`                     | `/usr/lib/emqx/releases`      | `/usr/local/Cellar/emqx/*/releases`      |
@@ -96,7 +96,7 @@ $ cat loaded_plugins
 
 Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Erlang 的各种数据结构。
 
-EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规则引擎已创建的资源和规则、Dashbaord 用户信息等数据，这些数据都将被存储在 `mnesia` 目录下，因此一旦删除该目录，将导致 EMQX 丢失所有业务数据。
+EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规则引擎已创建的资源和规则、Dashboard 用户信息等数据，这些数据都将被存储在 `mnesia` 目录下，因此一旦删除该目录，将导致 EMQX 丢失所有业务数据。
 
 可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../advanced/cli.md)。
 

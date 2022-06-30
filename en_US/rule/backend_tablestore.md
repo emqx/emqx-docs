@@ -1,4 +1,4 @@
-# 保存数据到 Alibaba Tablestore 数据库
+# Save data to Alibaba Tablestore
 
 ## Create a database instance
 

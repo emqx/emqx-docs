@@ -282,7 +282,7 @@ EMQX 4.3.8 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5436](https://github.com/emqx/emqx/pull/5436)
 
-> Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Vesion](https://docs.emqx.io/en/broker/v4.3/faq/error.html#incorrect-openssl-version)
+> Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Version](https://docs.emqx.io/en/broker/v4.3/faq/error.html#incorrect-openssl-version)
 
 ## Version 4.3.7
 
@@ -513,7 +513,7 @@ EMQX 4.3.0 is released now, it mainly includes the following changes:
 - Support Json format log
 - Support IPv6 auto probe
 - Environment variable override configuration files can be used for all distributions (previously only for docker)
-- Certificate upload from dashboard has been made available for open-source edition (previously only for enterprise edition)
+- Certificate upload from dashboard has been made available for EMQX (previously only for EMQX Enterprise)
 
 ### Bugs Fix
 

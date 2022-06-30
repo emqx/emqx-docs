@@ -10,7 +10,17 @@ This module ranks subscribers and topics in descending order according to the la
 
 Open EMQX Dashboard, click on the "Module" on the left.
 
+{% emqxce %}
+
 ![image](./assets/slow_subscribers_statistics_1.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+![image](./assets/slow_subscribers_statistics_1_ee.png)
+
+{% endemqxee %}
 
 Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 
@@ -77,8 +87,30 @@ Note: The open source version is configured in emqx.conf
 
 ## Slow subscribers record
 
+{% emqxce %}
+
 ![image](./assets/slow_subscribers_statistics_3.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+![image](./assets/slow_subscribers_statistics_3_ee.png)
+
+{% endemqxee %}
+
 
 Under this tab, the subscriber information will be displayed in descending order according to the time latency. After Clicking *Client ID*, it will display the subscriber details, where you can analyze and find the problem.
 
+{% emqxce %}
+
 ![image](./assets/slow_subscribers_statistics_4.png)
+
+{% endemqxce %}
+
+{% emqxee %}
+
+![image](./assets/slow_subscribers_statistics_4_ee.png)
+
+{% endemqxee %}
+

@@ -40,7 +40,7 @@ CREATE TABLE t_mqtt_msg (
     msgid text,
     topic text,
     qos int,
-    payload text,
+    payload blob,
     retain int,
     arrived timestamp,
     PRIMARY KEY (msgid, topic)

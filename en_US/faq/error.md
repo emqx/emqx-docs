@@ -77,7 +77,7 @@ It indicates that the "crypto" application in Erlang/OTP that EMQX depends on fa
 
 Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group that creates, maintains, and manages a high quality set of additional packages for Enterprise Linux.
 
-1. To install the RPM repos, execut `yum install epel-release`
+1. To install the RPM repos, execute `yum install epel-release`
 1. If failed to install, follow the instructions here: https://docs.fedoraproject.org/en-US/epel/#_el7 to ensure the yum repos are added, and try step 1 again
 1. Execute `yum install openssl11` to install openssl-1.1
 

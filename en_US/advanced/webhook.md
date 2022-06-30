@@ -53,7 +53,6 @@ The following events are currently supported:
 | message.publish      | message published             | Before the server rpublishes (routes) the message            |
 | message.delivered    | message deliveried            | Before the message is ready to be delivered to the client    |
 | message.acked        | message acknowledged          | After the server received the message ACK from the client    |
-| message.dropped      | message dropped               | After the published message is dropped                       |
 
 ### Number
 

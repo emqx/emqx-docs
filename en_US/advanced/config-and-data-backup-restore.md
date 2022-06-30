@@ -14,7 +14,7 @@ Let's discuss data backup and restore for disaster recovery.
 ### Config files
 
 When using morden provisioning tools for EMQX deployment, configuration changes
-are mostly managed by the tools, and even source controled in for example a git repo.
+are mostly managed by the tools, and even source controlled in for example a git repo.
 
 In case manual config changes are made to the config files, it's a good idea to have them backed up.
 
@@ -52,11 +52,11 @@ Depending on installation and configuration, `data` dir can be located in below 
 * Where the `node.data_dir` config key points to in `emqx.conf`
 * `/opt/emqx/data` when running in docker (typically a mounted volume)
 * `<install-path>/data` when installed from zip package extraction
-* `/var/lib/emqx/data` when installed from RPM or DEB packages
+* `/var/lib/emqx/` when installed from RPM or DEB packages
 
 ## What about Persisted Sessions ?
 
 Prior to v5.0, EMQX nodes are rather stateless by themselves, in the sense that persistent
-session states are delegated to external databases (enterprise edition feature).
+session states are delegated to external databases (EMQX Enterprise feature).
 
 So, for persisted sessions, there is nothing to backup from where the EMQX nodes are running.

@@ -27,7 +27,7 @@ Plane) 与监控管理平面 (Monitor/Control Plane):
 多核服务器和现代操作系统内核层面，可以很轻松支持 100 万 TCP 连接，核心问题是应用层面如何处理业务瓶颈。
 
 EMQX 在业务和应用层面，解决了单节点承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang
-虚拟机参数参见: <http://docs.emqtt.cn/zh_CN/latest/tune.html>。
+虚拟机参数参见: [系统调优](../tutorial/tune.md)。
 
 ### 全异步架构
 

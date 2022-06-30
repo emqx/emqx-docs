@@ -14,16 +14,16 @@ ref:
 ---
 
 # 商业服务
-## EMQX 企业版（Enterprise）和开源版（Broker）的主要区别是什么？
+## EMQX Enterprise 和 EMQX 的主要区别是什么？
 
 **标签:** [*企业版*](tags.md#企业版)
 
 
-EMQX 企业版基于开源版，包含了开源版的所有功能。与开源版相比，主要有以下方面的区别：
+EMQX Enterprise 基于 EMQX，包含了 EMQX 的所有功能。与 EMQX 相比，主要有以下方面的区别：
 
-- 接入设备量级：开源版的稳定接入为 10 万，而企业版为 100 万。
+- 接入设备量级：EMQX 的稳定接入为 10 万，而 EMQX Enterprise 为 100 万。
 
-- 数据持久化：企业版支持将消息转储到各类持久化数据库中，包括流行的关系型数据库，比如 MySQL、PostgresSQL；内存数据库 Redis；非关系型数据库 MongoDB 等；
+- 数据持久化：EMQX Enterprise 支持将消息转储到各类持久化数据库中，包括流行的关系型数据库，比如 MySQL、PostgresSQL；内存数据库 Redis；非关系型数据库 MongoDB 等；
 
 - Kafka 数据桥接：通过内置桥接插件高效转发 MQTT 消息到 Kafka 集群，用户可以通过消费 Kafka 消息来实现实时流式数据的处理；
 

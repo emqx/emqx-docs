@@ -57,7 +57,8 @@ Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
-Configure odbc dirver in Ubuntu (Take Ubuntu 20.04 as an example, for other versions please refer to the odbc official documentation):
+Configure odbc driver in Ubuntu (Take Ubuntu 20.04 as an example, for other versions please refer to the odbc official documentation):
+
 ```
 $ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
 $ vim /etc/odbcinst.ini

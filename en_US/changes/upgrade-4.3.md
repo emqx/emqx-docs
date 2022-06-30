@@ -27,7 +27,7 @@ on different installation and configuration.
 * Where the `node.data_dir` config key points to in `emqx.conf`
 * `/opt/emqx/data` when running in docker (typically a mounted volume)
 * `<install-path>/data` when installed from zip package extraction
-* `/var/lib/emqx/data` when installed from RPM or DEB packages
+* `/var/lib/emqx/` when installed from RPM or DEB packages
 
 ### Copy Data directory
 
@@ -69,8 +69,8 @@ Or by editing the import file using the same format.
 - EMQX now tries to use tlsv1.3 by default, please make sure openssl is up to date (1.1.1), otherwise SSL related configs such as `listener.ssl.external.tls_versions` may have to be changed and remove tls1.3 from the list.
 - New configs `listener.ws.$zone.check_origin_enable` ,`listener.ws.$zone.allow_origin_absence` and `listener.ws.$zone.check_origins` for better websocket security.
 - Config `listener.ws.$name.verify_protocol_header` is replaced by `listener.ws.external.fail_if_no_subprotocol` and `listener.ws.external.supported_subprotocols`
-- Config `node.heartbeat` cannot be overriden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)
-- Set `log.formatter=json` to log in JSON format, it may requre more CPU resources.
+- Config `node.heartbeat` cannot be overridden from environment variable `EMQX_NODE__HEARTBEAT`. To be fixed [#5929](https://github.com/emqx/emqx/issues/5929)
+- Set `log.formatter=json` to log in JSON format, it may require more CPU resources.
 - Set `log.single_line=true` to collect log entries in single lines.
 - Config `rpc.tcp_client_num` now is set to 1 by default.
 
