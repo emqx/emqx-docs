@@ -69,7 +69,7 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
 
 - 内置规则引擎，通过 SQL 语法实时提取、过滤、丰富和转换消息或内部事件并将其传输到外部数据平台
 - 通过 MQTT 与其他 Broker 或物联网平台进行双向数据桥接
-- 通过 WebHook 与其他系统集成
+- 通过 Webhook 与其他系统集成
 {emqxee}
 - 企业版: TODO
 {endemqxee}

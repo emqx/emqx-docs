@@ -28,10 +28,12 @@ bridges.webhook.my_webhook {
 除了 `url` 参数之外，下面几个参数都可以使用占位符：`method`，`body`，`headers`。
 但注意在 `url` 参数里只能在路径部分使用占位符，而 `scheme://host:port` 部分不能使用占位符。
 
-可用的占位符字段，详见：[规则 SQL 中的事件类型和字段](./rule-sql-events-and-fields.md#使用规则-sql-语句处理消息发布)
-里的 "使用规则 SQL 语句处理消息发布" 章节。
+可用的占位符字段，详见：[规则 SQL 中的事件类型和字段](./rule-sql-events-and-fields.md#使用规则-sql-语句处理消息发布)。
 
 ## 示例：使用 Dashboard 创建 Webhook
 
 详见 [数据桥接简介](./data-bridges.md)。
-注意 5.0.0 Dashboard 暂不支持脱离规则，单独使用 Webhook。
+
+::: tip
+注意 5.0.0 Dashboard 暂不支持脱离规则，单独使用 Webhook。请使用配置文件创建独立运行的 Webhook。
+:::
