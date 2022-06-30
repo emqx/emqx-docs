@@ -20,6 +20,10 @@ In order to reduce the possibility of JWT leakage and theft, in addition to sett
 
 This is an optional function, we define a private Claim `acl`, which is used to carry the access rules of publish and subscribe in the JWT to control the permissions of the client after login.
 
+::: tip
+ACL rules returned by JWT will be checked before all Authorizers.
+:::
+
 Claim `acl` defines 3 optional fields, `pub`, `sub` and `all`, which are used to specify the whitelist of publish, subscribe and publish-subscribe topics respectively. Topic wildcards and placeholders are allowed in topic entries (currently only `${clientid}` and `${username}` are supported). Since there may be cases where topic content conflicts with placeholder syntax, we also provide the `eq` syntax to cancel placeholder interpolation. Example:
 
 ```json

@@ -13,7 +13,7 @@ HTTP 认证使用外部自建 HTTP 应用认证数据源，根据 HTTP API 返�
 示例：
 
 ```
-HTTP/1.1 200OK
+HTTP/1.1 200 OK
 Content-Type: application/json
 ...
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 ```
 
 ```
-HTTP/1.1 200OK
+HTTP/1.1 200 OK
 Content-Type: application/x-www-form-urlencoded
 ...
 

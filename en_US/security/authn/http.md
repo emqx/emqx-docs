@@ -15,7 +15,7 @@ The encoding format of the HTTP response can be `application/json` and `applicat
 Example:
 
 ```
-HTTP/1.1 200OK
+HTTP/1.1 200 OK
 Content-Type: application/json
 ...
 
@@ -23,7 +23,7 @@ Content-Type: application/json
 ```
 
 ```
-HTTP/1.1 200OK
+HTTP/1.1 200 OK
 Content-Type: application/x-www-form-urlencoded
 ...
 
