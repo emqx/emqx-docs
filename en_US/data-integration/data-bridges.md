@@ -16,9 +16,6 @@ We use an example to show how to use dashboard to create a simple webhook that b
 
 ### Setup a Simple HTTP Server
 
-首先我们使用 Python 搭建一个简单的 HTTP 服务。这个 HTTP 服务接收 POST / 请求，
-简单打印请求内容后返回 200 OK：
-
 First, we use Python to build a simple HTTP service. This HTTP service receives `POST /` requests,
 It returns `200 OK` after simply printing the requested content:
 
@@ -46,8 +43,6 @@ python3 http_server.py
 ```
 
 ### Create Webhook and Bind it to the Rule
-
-现在我们访问 Dashboard，选择左边栏 “数据集成” - “数据桥接”：
 
 Now let's visit the dashboard and select "Data Integration" - "Data Bridge" in the sidebar on the left:
 

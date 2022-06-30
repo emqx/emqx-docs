@@ -23,11 +23,6 @@ For an example of creating a message republish action, see: [Get Started](./rule
 
 ## The "console" Action 
 
-“控制台输出”动作用于查看规则的输出结果，结果将以日志的形式打印到控制台里。
-
-如果用是 `emqx console` 启动的 EMQX，结果将打印到前台。
-如果用是 `emqx start` 启动的 EMQX，结果将打印到 EMQX 日志路径下的 `erlang.log.*` 文件里。
-
 The console output action is used to view the output results of rules. The results will be printed to the console in the form of logs.
 
 If the emqx is started by the `emqx console`, the results will be printed to the foreground.
