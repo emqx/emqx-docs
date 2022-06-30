@@ -368,7 +368,7 @@ Changes:
 | -                                  | emqx_mria_replicants                            | New         |
 | -                                  | emqx_mria_server_mql                            | New         |
 | -                                  | emqx_mria_weight                                | New         |
-| emqx_routes_count                  | -                                               | Removed     |
+| emqx_routes_count                  | emqx_topics_count                                               | Renamed     |
 | emqx_routes_max                    | -                                               | Removed     |
 | emqx_session_takeovered            | emqx_session_takenover                          | Renamed     |
 | erlang_vm_ets_tables               | -                                               | Removed     |
