@@ -31,34 +31,34 @@ By default, the following listeners will no longer be provided:
 
 The previous official plug-ins have been migrated to EMQX as built-in functions. Plug-ins developed by users on version 4.x need to be adapted before they can be used in EMQX 5.0. The following is a comparison table between official plug-ins and existing functions:
 
-| 4.x              | 5.0                                          |
-| ---------------- | -------------------------------------------- |
-| emqx_auth_http   | AuthN/AuthZ - HTTP data source               |
-| emqx_auth_jwt    | AuthN - JWT                                   |
-| emqx_auth_mnesia | AuthN/AuthZ - Built-in database              |
-| emqx_auth_mongo  | AuthN/AuthZ - MongoDB data source            |
-| emqx_auth_mysql  | AuthN/AuthZ - MySQL data source              |
-| emqx_auth_pgsql  | AuthN/AuthZ - PostgreSQL data source         |
-| emqx_auth_redis  | AuthN/AuthZ - Redis data source              |
-| emqx_sasl        | AuthN/AuthZ - MQTT 5 Enhanced Authentication |
-| emqx_auth_ldap   | -                                            |
-| emqx_rule_engine | Data Integration                             |
-| emqx_bridge_mqtt | Data Bridge - MQTT Sink/MQTT Source          |
-| emqx_web_hook    | Data Bridge - WebHook                        |
-| emqx_coap        | CoAP Gateway                                 |
-| emqx_dashboard   | Dasboard                                     |
-| emqx_exhook      | ExHook                                       |
-| emqx_exproto     | ExProto Gateway                              |
-| emqx_lwm2m       | LwM2M Gateway                                |
-| emqx_sn          | MQTT-SN Gateway                              |
-| emqx_stomp       | STOMP Gateway                                |
-| emqx_lua_hook    | -                                            |
-| emqx_management  | -                                            |
-| emqx_prometheus  | Prometheus                                   |
-| emqx_psk_file    | AuthN - PSK (`psk_authentication.enable = true`)  |
-| emqx_recon       | Old features still available from CLI `emqx_ctl observer`|
-| emqx_retainer    | Retain                                       |
-| emqx_telemetry   | Telemetry                                    |
+| 4.x              | 5.0                                                       |
+| ---------------- | --------------------------------------------------------- |
+| emqx_auth_http   | AuthN/AuthZ - HTTP data source                            |
+| emqx_auth_jwt    | AuthN - JWT                                               |
+| emqx_auth_mnesia | AuthN/AuthZ - Built-in database                           |
+| emqx_auth_mongo  | AuthN/AuthZ - MongoDB data source                         |
+| emqx_auth_mysql  | AuthN/AuthZ - MySQL data source                           |
+| emqx_auth_pgsql  | AuthN/AuthZ - PostgreSQL data source                      |
+| emqx_auth_redis  | AuthN/AuthZ - Redis data source                           |
+| emqx_sasl        | AuthN/AuthZ - MQTT 5 Enhanced Authentication              |
+| emqx_auth_ldap   | -                                                         |
+| emqx_rule_engine | Data Integration                                          |
+| emqx_bridge_mqtt | Data Bridge - MQTT Sink/MQTT Source                       |
+| emqx_web_hook    | Data Bridge - WebHook                                     |
+| emqx_coap        | CoAP Gateway                                              |
+| emqx_dashboard   | Dasboard                                                  |
+| emqx_exhook      | ExHook                                                    |
+| emqx_exproto     | ExProto Gateway                                           |
+| emqx_lwm2m       | LwM2M Gateway                                             |
+| emqx_sn          | MQTT-SN Gateway                                           |
+| emqx_stomp       | STOMP Gateway                                             |
+| emqx_lua_hook    | -                                                         |
+| emqx_management  | -                                                         |
+| emqx_prometheus  | Prometheus                                                |
+| emqx_psk_file    | AuthN - PSK (`psk_authentication.enable = true`)          |
+| emqx_recon       | Old features still available from CLI `emqx_ctl observer` |
+| emqx_retainer    | Retain                                                    |
+| emqx_telemetry   | Telemetry                                                 |
 
 ## HTTP API
 
@@ -222,7 +222,7 @@ authentication = [
 
 #### Redis
 
-1. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET`, `HMGET` query commands, must use `password` or `password_hash` as password field name;
+1. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET`, `HMGET` query commands, must use `password_hash` or `password`(compatible with 4.x version) as password field name;
 2. Remove the superuser query, if you need the superuser, please add the `is_superuser` field to the Redis query command.
 
 ```shell
@@ -232,10 +232,10 @@ GET emqx_user:${username}
 HMGET emqx_user:${username} passwd
 
 # good
-HMGET emqx_user:${username} password
+HMGET emqx_user:${username} password_hash
 
 # good
-HMGET emqx_user:${username} password is_superuser
+HMGET emqx_user:${username} password_hash is_superuser
 ```
 
 #### LDAP

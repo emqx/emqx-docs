@@ -209,7 +209,7 @@ authentication = [
 
 #### Redis 变动
 
-1. 仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password` 或 `password_hash` 作为密码字段名；
+1. 仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password_hash` 或 `password_hash`(兼容 4.x)作为密码字段名；
 2. 移除超级用户(superuser)查询，如需超级用户功能请在 Redis 查询命令中添加 `is_superuser` 字段。
 
 ```shell
@@ -219,10 +219,10 @@ GET emqx_user:${username}
 HMGET emqx_user:${username} passwd
 
 # good
-HMGET emqx_user:${username} password
+HMGET emqx_user:${username} password_hash
 
 # good
-HMGET emqx_user:${username} password is_superuser
+HMGET emqx_user:${username} password_hash is_superuser
 ```
 
 #### LDAP 变动
