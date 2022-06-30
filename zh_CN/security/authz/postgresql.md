@@ -1,19 +1,16 @@
 # PostgreSQL
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
-PostgreSQL database.
+PostgreSQL Authorizer 支持客户端的授权规则存储在 PostgreSQL 数据库中。
 
-PostgreSQL authorizer supports almost any storage schema. It is up to the user to decide how to store acl rules
-and access them: using one or multiple tables, views, etc.
+PostgreSQL Authorizer 支持几乎任何存储模式。由用户决定如何存储 访问它们：使用一个或多个表、视图等。
 
-The user should only provide a templated query that selects acl rules as rows containing
-`permission`, `action`, and `topic` columns.
-* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
-* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
-* `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and
-[topic placeholders](./authz.md#topic-placeholders).
+用户应该只提供一个模板化查询，该查询选择匹配的规则，并返回规则中的 `permission`、`action` 和 `topic` 列，该规则定义了当前用户对于规则中声明的主题具有什么样的操作权限，例如：允许发布、拒绝订阅等。
 
-Example table structure for storing credentials:
+- `permission` 用于指定操作权限，可选值有 `allow` 和 `deny`。
+- `action` 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`。
+- `topic` 用于指定当前规则适用的主题，可以使用主题过滤器和 [主题占位符](./authz.md#topic-placeholders)。
+
+用于存储权限规则的示例表结构：
 
 ```sql
 CREATE TABLE mqtt_acl(
@@ -26,22 +23,24 @@ CREATE TABLE mqtt_acl(
 CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
 ```
 
-Example of adding an ACL rule for a user `user123` that allows publishing to topics `data/user123/#`:
+为用户 `user123` 添加允许发布到主题 `data/user123/#` 的权限规则的示例：
+
 ```
 postgres=# INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('user123', 'allow', 'publish', 'data/user123/#');
 INSERT 0 1
 ```
 
-The corresponding config parameters are:
+对应的配置参数为：
+
 ```
 query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 ```
 
-## Configuration
+## 配置
 
-The PostgreSQL authorizer is identified by type `postgresql`.
+PostgreSQL authorizer 由 `type=postgresql` 标识。
 
-Sample configuration:
+示例：
 
 ```
 {
@@ -58,50 +57,49 @@ Sample configuration:
 
 ### `query`
 
-Required string value with PostgreSQL query template for fetching ACL rules. Supports [placeholders](./authz.md#authorization-placeholders):
-* `${clientid}` — Client ID of the client.
-* `${username}` — username of the client.
-* `${peerhost}` — client IP address.
-* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
-* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
+必选的字符串类型配置，用于指定 MySQL 数据库中权限规则的查询模板，支持 [占位符](./authz.md#authorization-placeholders)。
 
-For security reasons, placeholder values are not interpolated directly, but through PostgreSQL placeholders.
-I.e. a query
+出于安全原因，占位符值不是直接插入的，而是通过 PostgreSQL 占位符插入的。
+
+例如，以下查询语句：
+
 ```sql
 SELECT permission, action, topic FROM acl WHERE username = ${username}
 ```
-is first translated into
+
+将首先被转换为以下 Prepared statement：
+
 ```sql
 SELECT permission, action, topic FROM acl WHERE username = $1
 ```
-prepared statement and then executed with `${username}` value.
+
+然后使用 `${username}` 执行查询。
 
 ### `server`
 
-Required string value with PostgreSQL server address (`host:port`).
+必选的字符串类型配置，用于指定 PostgreSQL 服务器地址，格式为 `host:port`。
 
 ### `database`
 
-Required string value with PostgreSQL database name to use.
+必选的字符串类型配置，用于指定 PostgreSQL 数据库名称。
 
 ### `username`
 
-Optional string value with PostgreSQL user.
+可选的字符串类型配置，用于指定 PostgreSQL 用户名。
 
 ### `password`
 
-Optional string value with PostgreSQL user password.
+可选的字符串类型配置，用于指定 PostgreSQL 用户密码。
 
 #### `auto_reconnect`
 
-Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
-PostgreSQL on client failure.
+可选的布尔类型配置，用于指定 EMQX 是否会在连接断开时自动重新连接到 PostgreSQL，默认值为 `true`。
+
 
 ### `pool_size`
 
-Optional integer value defining the number of concurrent connections from an EMQX node to a PostgreSQL server.
-The default value is 8.
+可选的整型配置，用于指定 EMQX 节点到 PostgreSQL 服务器的并发连接数，默认值为 8。
 
 ### `ssl`
 
-Standard [SSL options](../ssl.md) for [secure connecting to PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html).
+用于 [安全连接到 PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html) 的标准 [SSL 选项](../ssl.md)。

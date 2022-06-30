@@ -1,11 +1,10 @@
 # Redis
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
-Redis database.
+Redis Authorizer 支持客户端的授权规则存储在 Redis 数据库中。
 
-The user should provide a templated Redis command that returns a key-value list with topic filters as keys and actions(`publish`, `subscribe`, or `all`) as values.
+用户应该提供一个 Redis 命令模板，返回一个键值列表，以主题过滤器为键，以允许执行的操作为值（`publish`，`subscribe` 或 `all`）。
 
-For example, rules can be stored as Redis [hashes](https://redis.io/docs/manual/data-types/#hashes):
+例如，规则可以存储为 Redis 的 [hashes](https://redis.io/docs/manual/data-types/#hashes)：
 
 ```
 >redis-cli
@@ -15,20 +14,22 @@ For example, rules can be stored as Redis [hashes](https://redis.io/docs/manual/
 (integer) 1
 ```
 
-The corresponding config parameters are:
+对应的配置项为：
+
 ```
 cmd = "HGET users:${username}"
 ```
 
-Fetched rules are used as permissive ones, i.e., a request is accepted if topic filter and action match.
+获取到的规则用作许可规则，即如果主题过滤器和操作匹配，则接受请求。
 
-## Configuration
+## 配置
 
-The Redis authorizer is identified by type `redis`.
+Redis authorizer 由 `type=redis` 标识。
 
-EMQX supports working with three kinds of Redis installation.
+EMQX 支持 3 种 Redis 部署方式。
 
 * Standalone Redis.
+
   ```
   {
       type = redis
@@ -44,7 +45,9 @@ EMQX supports working with three kinds of Redis installation.
 
   }
   ```
+
 * [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
+
   ```
   {
       type = redis
@@ -60,7 +63,9 @@ EMQX supports working with three kinds of Redis installation.
 
   }
   ```
+
 * [Redis Cluster](https://redis.io/docs/manual/scaling/).
+
   ```
   {
       type = redis
@@ -75,65 +80,58 @@ EMQX supports working with three kinds of Redis installation.
   }
   ```
 
-### Common configuration parameters
+### 通用配置参数
 
 #### `redis_type`
 
-One of `single`, `cluster`, or `sentinel`, required. Defines Redis installation type:
-standalone Redis, [Redis Cluster](https://redis.io/docs/manual/scaling/), or
-[Redis Sentinel](https://redis.io/docs/manual/sentinel/) respectively.
+可选值为 `single`、 `cluster` 和 `sentinel`，分别对应 Redis 的 3 种部署类型：
+
+1. Standalone Redis
+2. [Redis Cluster](https://redis.io/docs/manual/scaling/)
+3. [Redis Sentinel](https://redis.io/docs/manual/sentinel/)
 
 #### `cmd`
 
-Required string value with the command used for fetching ACL rules. The following placeolders are supported for `cmd` value:
-* `${clientid}` — Client ID of the client.
-* `${username}` — username of the client.
-* `${peerhost}` — client IP address.
-* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
-* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
-
-[Topic placeholders](./authz.md#topic-placeholders) are allowed in topic filters.
+必选的字符串类型配置项。用于指定查询权限规则的命令，支持使用占位符。主题过滤器中允许使用 [主题占位符](./authz.md#topic-placeholders)。
 
 #### `database`
 
-Redis database index to use, required.
+必选的整型配置。指定 Redis 数据库的 Index。
 
 #### `password`
 
-Password used for Redis [authentication](https://redis.io/docs/manual/security/#authentication), optional.
+可选的字符串类型配置。指定用于 Redis [认证]((https://redis.io/docs/manual/security/#authentication)) 的密码。
 
 #### `auto_reconnect`
 
-Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
-Redis on client failure.
+可选的布尔类型配置。默认值为 `true`。指定 EMQX 是否自动重新连接到 Redis。
 
 #### `pool_size`
 
-Optional integer value defining the number of concurrent connections from an EMQX node to Redis.
-The default value is 8.
+可选的整型配置。指定从 EMQX 节点到 Redis 的并发连接数。默认值为 8。
 
 #### `ssl`
 
-Standard [SSL options](../ssl.md) for [secure connecting to Redis](https://redis.io/docs/manual/security/encryption/).
+用于 [安全连接至 Redis](https://redis.io/docs/manual/security/encryption/) 的标准 [SSL options](../ssl.md)。
 
 ### Standalone Redis options (`redis_type = single`).
 
 #### `server`
 
-Required `host:port` string value, the address of the Redis server.
+必选的字符串类型配置，格式为 `host:port`，用于指定 Redis 服务端地址。
 
 ### Redis Cluster options (`redis_type = cluster`).
 
 #### `servers`
 
-Required string value with comma-separated list of Redis Cluster endpoints: `host1:port1,host2:port2,...`.
+必选的字符串类型配置，格式为 `host1:port1,host2:port2,...`，用于指定 Redis Cluster 端点地址列表。
 
 ### Redis Sentinel options (`redis_type = sentinel`).
 
 #### `servers`
 
-Required string value with comma-separated list of Redis Sentinel endpoints: `host1:port1,host2:port2,...`.
+必选的字符串类型配置，格式为 `host1:port1,host2:port2,...`，用于指定 Redis Sentinel 端点地址列表。
 
 #### `sentinel`
 
-Required string value with [master name](https://redis.io/docs/manual/sentinel/#configuring-sentinel) to use from Sentinel configuration.
+必选的字符串类型配置。用于指定 Redis Sentinel 配置需要的 [主服务器名称](https://redis.io/docs/manual/sentinel/#configuring-sentinel)。
