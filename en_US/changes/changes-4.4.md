@@ -15,6 +15,32 @@ ref:
 
 # Changes
 
+## Version 4.4.5
+
+*Release Date: 2022-06-30*
+
+### Enhancement
+
+- QoS and Retain flag in rule engine's message republish actions can now use placeholders
+- Supports exclusive subscriptions, that is, only one subscriber is allowed for a topic
+- Dashboard and management API's HTTPS listeners can now use password-protected private key files, providing `key_password` configuration item
+- Support for placeholders `%u` and `%c` in topic rewrite rules
+- Support setting MQTT 5.0 properties in the API request for message publishing, such as message expiry interval, response topic, etc.
+- Optimize the UI when creating rule engine resources, such as folding some uncommon options, etc.
+- Opened 4 TCP-related configuration items: KeepAlive, TCP_NODELAY, SO_RCVBUF and SO_SNDBUF for the underlying gRPC connection of ExHook
+
+### Bug fixes
+
+- Fix the issue of inaccurate memory calculation in Linux OS, and calculate the memory usage of the current OS instead of the memory usage of EMQX
+- Fix the issue that the old disconnect event of ExHook would be triggered later than the new connect event when the client reconnects
+- Fix the issue that the execution order of topic rewriting and delayed publish is not fixed, now it is fixed to execute topic rewriting first
+- Fix the issue that rule engine could not encode MQTT 5.0 user properties
+- Fix the issue that the count of `connack.auth_error` is inaccurate when the client uses a protocol version below MQTT v5.0 to access
+- Fix the issue that the UDP listeners of LwM2M and CoAP gateways could not bind to the specified network interface
+- Fix Dashboard not starting after removing the default Dashboard user in the configuration file
+- Fix `client.subscribe` hook not being able to reject subscriptions
+- If the placeholder in the ACL rule is not replaced, the client's publish or subscribe operation will be rejected
+
 ## Version 4.4.4
 
 *Release Date: 2022-06-01*
