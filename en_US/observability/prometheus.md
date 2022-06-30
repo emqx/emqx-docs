@@ -4,7 +4,7 @@ EMQX REST API exposes a Prometheus metrics endpoint: `http://127.0.0.1:18083/api
 
 EMQX also supports pushing metrics to `pushgateway`, that can be enabled by adding the following configuration to `etc/emqx.conf`:
 
-```yaml
+```
 prometheus {
 
   ## URL of Prometheus server

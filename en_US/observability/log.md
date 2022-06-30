@@ -25,7 +25,7 @@ EMQX supports outputting logs to console or log file, outputting console and fil
 
 When using the foreground start ( `. /bin/emqx console` or `/bin/emqx/foreground`), the console output of `warning` level logs is enabled and the log file output is disabled. Output to the console can make it easier for development debugging. Its configuration path is `log.console_handler`, and all configuration items are described as follows:
 
-```yaml
+```
 log.console_handler {
     ## Enable this log handler.   
     enable = false
@@ -86,7 +86,7 @@ log.console_handler {
 
 The default log file directory of EMQX is `./log` (for zip package installation) or `/var/log/emqx` (for binary package installation). The configuration of the file  log handler is mostly the same as that of the console handler, except for the additional file write control configuration, which is listed below.
 
-```yaml
+```
  log.file_handlers.default {  
       ## Enable this file logging handler
       enable = true
@@ -117,7 +117,7 @@ When file logging is enabled (log.to = file or both), the following files will a
 
 If you want to write logs greater than or equal to a certain level to a separate file, you can configure `emqx.conf`  as :
 
-```yaml
+```
 log.file_handlers.my_info_log {  
       enable = true
       level = info
@@ -145,29 +145,26 @@ The format of the log message (the fields are separated by spaces):
 ### Log message example 1:
 
 ```bash
-2020-02-18 16:10:03.872 [debug] <<"mqttjs_9e49354bb3">>@127.0.0.1:57105 SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)
+2022-06-30T16:07:47.689512+08:00 [debug] clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT
 ```
 
 The fields in this log message are:
 
-- **date:** `2020-02-18`
-- **time:** `16:10:03.872`
+- **datetime:** `2022-06-30T15:59:19.438914+08:00`
 - **level:** `[debug]`
-- **client_info:** `<<"mqttjs_9e49354bb3">>@127.0.0.1:57105`
-- **msg:** `SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)`
+- **flat log-content:** `clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT`
+
+This log indicates that EMQX received a `PINGREQ(Q0,R0,D0)` packet at `2022-06-30T16:07:47.689512+08:00` with clientid `test`. The IP of the client is `127.0.0.1:64391`.
 
 ### Log message example 2:
 
 ```bash
-2020-02-18 16:10:08.474 [warning] New Alarm: system_memory_high_watermark, Alarm Info: []
+2022-06-30T16:25:32.446873+08:00 [debug] line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr
 ```
 
 The fields in this log message are:
 
-- **date:** `2020-02-18`
-- **time:** `16:10:08.474`
-- **level:** `[warning]`
-- **msg:** `New Alarm: system_memory_high_watermark, Alarm Info: []`
-
-Note that in this log message the client_info field does not exist.
+- **date-time:** `2022-06-30T16:25:32.446873+08:00`
+- **level:** `[debug]`
+- **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
 

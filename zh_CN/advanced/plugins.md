@@ -79,7 +79,7 @@
 
   **TIPS**：一定要先把配置中的`authorization.no_match` 设置为`deny`，它默认是`allow`.
 
-  ```yaml
+  ```
   authorization {
     no_match: deny
   }

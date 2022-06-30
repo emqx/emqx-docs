@@ -25,7 +25,7 @@ EMQX 支持将日志输出到控制台或者日志文件，输出控制台和文
 
 当使用前台启动( `./bin/emqx console` 或`/bin/emqx/foreground` )时，默认开启控制台输出`warning`级别的日志，关闭日志文件输出。输出到控制台可以方便开发调试。它的配置路径为`log.console_handler`，详细的配置项说明如下：
 
-```yaml
+```
 log.console_handler { 
     ## 是否开始控制台输出日志，前台模式下会默认开启   
     enable = false
@@ -76,7 +76,7 @@ log.console_handler {
 
 EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/log/emqx` (二进制包安装)。文件输出日志的配置与控制台输出的配置大部分是相同的，只是多了文件写入的控制配置，下面只列出除控制台输出外新增加的配置项：
 
-```yaml
+```
     log.file_handlers.default {  
       ## 启用此文件日志处理进程
       enable = true
@@ -111,7 +111,7 @@ EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/lo
 
 将 info 及 info 以上的日志单独输出到 `info.log.N` 文件中：
 
-```yaml
+```
    log.file_handlers.my_info_log {  
       enable = true
       level = info
@@ -128,39 +128,35 @@ EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/lo
 
 日志消息的格式为(各个字段之间用空格分隔)：
 
-**date time level client_info module_info msg**
+**date time level key-value-struct**
 
-- **date:** 当地时间的日期。格式为：YYYY-MM-DD
-- **time:** 当地时间，精确到毫秒。格式为：hh:mm:ss.ms
-- **level:** 日志级别，使用中括号包裹。格式为：[Level]
-- **client_info:** 可选字段，仅当此日志消息与某个客户端相关时存在。其格式为：ClientId@Peername 或 ClientId 或 Peername
-- **msg:** 日志消息内容。格式任意，可包含空格。
+- **date-time:** 当地时间的日期。格式为：`RFC3339`
+- **level:** 日志级别，使用中括号包裹。格式为：`[Level]`
+- **flat log-content** 扁平化日志消息内容。
 
 ### 日志消息举例 1：
 
 ```bash
-2020-02-18 16:10:03.872 [debug] <<"mqttjs_9e49354bb3">>@127.0.0.1:57105 SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)
+2022-06-30T16:07:47.689512+08:00 [debug] clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT
 ```
 
 此日志消息里各个字段分别为:
 
-- **date:** `2020-02-18`
-- **time:** `16:10:03.872`
+- **datetime:** `2022-06-30T15:59:19.438914+08:00`
 - **level:** `[debug]`
-- **client_info:** `<<"mqttjs_9e49354bb3">>@127.0.0.1:57105`
-- **msg:** `SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)`
+- **flat log-content:** `clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT`
+
+这条日志表示 EMQX 在`2022-06-30T16:07:47.689512+08:00`时 clientid 为 `test`客户端收到了一个`PINGREQ(Q0,R0,D0)`包。对应客户端的IP为`127.0.0.1:64391`。
 
 ### 日志消息举例 2：
 
 ```bash
-2020-02-18 16:10:08.474 [warning] New Alarm: system_memory_high_watermark, Alarm Info: []
+2022-06-30T16:25:32.446873+08:00 [debug] line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr
 ```
 
 此日志消息里各个字段分别为:
 
-- **date:** `2020-02-18`
-- **time:** `16:10:08.474`
-- **level:** `[warning]`
-- **msg:** `New Alarm: system_memory_high_watermark, Alarm Info: []`
+- **date-time:** `2022-06-30T16:25:32.446873+08:00`
+- **level:** `[debug]`
+- **flat log-content:** `line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr`
 
-注意此日志消息中，client_info 字段不存在。

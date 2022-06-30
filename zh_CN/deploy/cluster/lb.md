@@ -171,7 +171,7 @@ HAProxy 作为 LB 部署 EMQX 集群，并终结 SSL 连接:
 
 2. 配置 /etc/haproxy/haproxy.cfg，示例：
 
-```yaml
+```
 listen mqtt-ssl
   bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
   mode tcp

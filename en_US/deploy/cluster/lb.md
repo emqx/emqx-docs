@@ -152,7 +152,7 @@ If deployed between nodes, firewalls should be configured that the above ports a
 
 2. Configure /etc/haproxy/haproxy.cfg: 
 
-```yaml
+```
 listen mqtt-ssl
   bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
   mode tcp
