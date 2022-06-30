@@ -25,13 +25,20 @@ password_hash_algorithm {
 cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
+::: tip
+The name `password_hash` conveys our preference for storing hashed passwords. But given that Redis doesn't have a MySQL-like as syntax, we keep `password` compatible.
+
+So, we can also configure `cmd` as `HMGET mqtt:${username} password salt is_superuser`.
+:::
+
 ## Configuration
 
 Redis authentication is identified with `mechanism = password_based` and `backend = redis`.
 
 EMQX supports working with three kinds of Redis installation.
 
-* Standalone Redis.
+- Standalone Redis.
+
   ```
   {
     mechanism = password_based
@@ -52,7 +59,9 @@ EMQX supports working with three kinds of Redis installation.
     auto_reconnect = true
   }
   ```
-* [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
+
+- [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
+
   ```
   {
     mechanism = password_based
@@ -74,7 +83,9 @@ EMQX supports working with three kinds of Redis installation.
     auto_reconnect = true
   }
   ```
-* [Redis Cluster](https://redis.io/docs/manual/scaling/).
+
+- [Redis Cluster](https://redis.io/docs/manual/scaling/).
+
   ```
   {
     mechanism = password_based

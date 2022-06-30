@@ -4,11 +4,33 @@ HTTP authenticator delegates authentication to a custom HTTP API.
 
 ## Authentication principle
 
-* In authenticator settings, an HTTP request pattern is specified.
-* When an MQTT client connects to EMQX, the configured request template is rendered and the resulting request is emitted.
-* Receiving a 200 or 204 HTTP status is interpreted as authentication success. Other statuses indicate authentication failure.
-A successful HTTP response can also contain a JSON or `www-form-urlencoded` map with `is_superuser` boolean field
-that indicates superuser privileges for the client.
+- In authenticator settings, an HTTP request pattern is specified.
+- When an MQTT client connects to EMQX, the configured request template is rendered and the resulting request is emitted.
+- Receiving a 200 or 204 HTTP status is interpreted as authentication success. A 4xx status code returned by the HTTP server means authentication failure and termination, and the client will be refused to connect. If other status codes are returned or other problems occur (such as request timeout, etc.), EMQX will switch to the next authenticator for the authentication process. If the current HTTP authenticator is the last authenticator on the chain, the authentication fails and the client will be refused to connect.
+
+A successful HTTP response can also contain a boolean `is_superuser` field to indicate whether the client has superuser privileges.
+
+The encoding format of the HTTP response can be `application/json` and `application/x-www-form-urlencoded`, and the HTTP authenticator will automatically select the decoding method according to the `Content-Type` in the response.
+
+Example:
+
+```
+HTTP/1.1 200OK
+Content-Type: application/json
+...
+
+{"is_superuser": true}
+```
+
+```
+HTTP/1.1 200OK
+Content-Type: application/x-www-form-urlencoded
+...
+
+is_superuser=true
+```
+
+
 
 ::: danger
 `POST` method is recommended. When using the `GET` method, some sensitive information (like plain text passwords) can be exposed through HTTP server logging.

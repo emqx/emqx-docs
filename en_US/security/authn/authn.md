@@ -2,13 +2,19 @@
 
 Authentication is an essential part of most applications. MQTT protocol supports username/password authentication as well as enhanced authentication such as SASL/SCRAM authentication. Enabling authentication can effectively prevent illegal client connections.
 
-EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identity, such as username, password or client identifier. In some scenarios, users may choose to use some fields in the TLS certificate (such as CN) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed form (which is also highly recommended).
+EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identity, such as username, password or client identifier. In some scenarios, users may choose to use some fields in the TLS certificate (such as the certificate common name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed form (which is also highly recommended).
 
 The basic working principle of password authentication in EMQX is: when the client connects, EMQX will use the query statement you specify to query the database for the hashed password corresponding to the identity credentials provided by the client, and then match it with the hash value of the client's connection password. Once the match is successful, EMQX will allow the client to login.
 
-EMQX provides integration support with various backend databases, including MySQL, PostgreSQL, MongoDB and Redis. At the same time, EMQX also supports users to store their identity credentials in the built-in database (Mnesia). Compared with using an external database, this method provides a very simple configuration process and data management capabilities integrated into EMQX. For first-time users of EMQX, it is a good entry solution.
+EMQX provides integration with various backend databases, including MySQL, PostgreSQL, MongoDB and Redis. At the same time, EMQX also supports users to store their identity credentials in the built-in database (Mnesia).
 
-In addition to the authentication completed by EMQX, we also support the transfer of authentication work to other external services, such as HTTP server developed and deployed by users themselves. As long as the HTTP server returns an authentication response that conforms to the specification, EMQX can allow or deny the client's login based on the response. Since there is far more client information that can be sent to the HTTP server than a simple combination of username and password, this will allow users to develop complex authentication services for themselves.
+Compared with using an external database, this method provides a very simple configuration process and user management interface. For example, you can manage users from Dashboard UI, or batch import users from a CSV or JSON file.
+
+The built-in database is also the most performant authentication data source, since the data resides both in disk and RAM at runtime.
+
+In addition to the authentication completed by EMQX, EMQX can also be configured to delegate authentication work to other external services, such as HTTP server developed and deployed by users themselves.
+
+As long as the HTTP server returns an authentication response that conforms to the specification, EMQX can allow or deny the client's login based on the response. Since there is far more client information that can be sent to the HTTP server than a simple combination of username and password, this will allow users to develop complex authentication services for themselves.
 
 EMQX also supports users to deploy an independent authentication service, which verifies the legitimacy of the client and issues JWT, and then the client can use the JWT to complete the login on the EMQX side.
 

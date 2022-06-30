@@ -25,6 +25,12 @@ password_hash_algorithm {
 cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
+::: tip
+`password_hash` 这一名称传递了我们对存储散列密码的青睐。但是鉴于 Redis 没有类似 MySQL 的 as 语法，我们保留了对 `password` 的兼容。
+
+所以，我们也可以将 `cmd` 配置为 `HMGET mqtt:${username} password salt is_superuser`。
+:::
+
 ## 配置
 
 Redis 认证器由 `mechanism = password_based` 和 `backend = redis` 标识。
