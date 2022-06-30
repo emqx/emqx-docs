@@ -351,7 +351,7 @@ Prometheus 桥接插件(emqx_prometheus) 已被移除，请通过 `prometheus {}
 | -                                  | emqx_mria_server_mql                            | 新增 |
 | -                                  | emqx_mria_weight                                | 新增 |
 | emqx_routes_count                  | -                                               | 移除 |
-| emqx_routes_max                    | -                                               | 移除 |
+| emqx_routes_max                    | emqx_topics_max                                               | 更名 |
 | emqx_session_takeovered            | emqx_session_takenover                          | 更名 |
 | erlang_vm_ets_tables               | -                                               | 移除 |
 | -                                  | erlang_vm_memory_dets_tables                    | 新增 |
