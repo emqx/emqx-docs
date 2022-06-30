@@ -126,7 +126,6 @@
       title_cn: 数据桥接
       children:
         - data-integration/data-bridges
-        - data-integration/data-bridge-mqtt
         - data-integration/data-bridge-webhook
     - title_en: Examples and Tutorials
       title_cn: 示例和教程
