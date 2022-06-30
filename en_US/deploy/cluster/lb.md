@@ -161,7 +161,7 @@ If firewall is deployed for security of inter-cluster communication, it should b
 
 2. Configure /etc/haproxy/haproxy.cfg: 
 
-```yaml
+```
 listen mqtt-ssl
   bind *:8883 ssl crt /etc/ssl/emqx/emq.pem no-sslv3
   mode tcp

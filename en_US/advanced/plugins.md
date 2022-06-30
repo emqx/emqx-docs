@@ -73,7 +73,7 @@ With the above 2 hook functions, we only let the clients whose clientid format m
 
   *TIPS*: Be sure to set `authorization.no_match` to `deny` in the configuration first, it defaults to `allow`.
 
-```yaml
+```
 authorization {
   no_match: deny
 }
