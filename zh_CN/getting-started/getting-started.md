@@ -17,7 +17,7 @@ EMQX 有如下版本：
 :::: tabs type:card
 
 {% emqxce %}
-::: tab EMQX 开源社区版
+::: tab EMQX 开源版
 大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
 
 - 基于 APL 2.0 开放源码协议
@@ -34,7 +34,7 @@ EMQX 有如下版本：
 通过可靠、实时的物联网数据移动、处理和集成，连接您的海量物联网设备。加快您的物联网应用开发，免除基础设施管理维护负担。
 
 - 全托管的 MQTT 5.0 服务
-- 基于 SQL 的 IoT 规则引擎
+- 基于 SQL 的 IoT 数据集成
 - 多种数据库与云服务集成
 - 关键业务的高可用高可靠
 - 在任何地方运行，随用随付
@@ -47,7 +47,7 @@ EMQX 有如下版本：
 **「随处运行，无限连接，任意集成」** 云原生分布式物联网接入平台，一体化的分布式 MQTT 消息服务和强大的 IoT 规则引擎，为高可靠、高性能的物联网实时数据移动、处理和集成提供动力，助力企业快速构建关键业务的 IoT 平台与应用。
 
 - 标准或专有多协议支持
-- 基于 SQL 的 IoT 规则引擎
+- 基于 SQL 的 IoT 数据集成
 - 数据持久化与数据桥接
 - 管理与监控中心
 - 7x24 小时技术支持服务
@@ -73,7 +73,7 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 启动 Docker 容器：
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
 更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](../deploy/install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
@@ -216,13 +216,13 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 - [认证](../security/authn/authn.md)：支持用户名/密码, JWT, MQTT 5.0 增强认证不同的认证方式，支持使用内置数据库、Redis、MySQL，PostgreSQL，MongoDB，HTTP 作为数据源。
 - [授权](../security/authz/authz.md)：基于 client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL，PostgreSQL，MongoDB，HTTP 作为数据源。
 
-### 规则引擎与数据桥接
+### 数据集成
 
-基于 SQL 的内置规则引擎，可以实时提取、过滤、丰富和转换设备与业务系统之间的 IoT 数据，无需编写代码即可将物联网数据转发到 WebHook、其他 MQTT Broker 中，在企业版中还能够与 Kafka、各类 SQL/NoSQL/时序数据库以及 SAP 等企业系统集成。
+数据集成是 EMQX 在发布订阅模型的基础之上的数据处理与分发组件，通过简单的、可视化的配置，即可将消息流以及设备事件与 Kafka、RabbitMQ 等消息中间件，以及各类 SQL / NoSQL / 时序数据库等数据系统集成。
 
-- [规则引擎](../rule/rule-engine.md)：规则引擎的概念、基础使用方式。
-- [创建规则](../rule/rule-create.md)：如何创建一条规则。
-- [使用示例](../rule/rule-example.md#发送数据到-web-服务)：规则引擎使用各类数据源的教程。
+- [数据集成](../data-integration/introduction.md)。
+- [规则](../data-integration/rules.md)。
+- [数据桥接](../data-integration/data-bridges.md)。
 
 ### 管理接口
 
