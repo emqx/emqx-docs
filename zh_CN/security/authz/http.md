@@ -1,105 +1,232 @@
-# HTTP ACL
+# HTTP
 
-HTTP 认证使用外部自建 HTTP 应用认证授权数据源，根据 HTTP API 返回的数据判定授权结果，能够实现复杂的 ACL 校验逻辑。
+HTTP Authorizer 将授权的请求委托给外部 HTTP 服务器。
 
-插件：
+## 基本原理
 
-```bash
-emqx_auth_http
-```
+* 在 Authorizer 的配置中，预先定义好 HTTP 服务器的URL以及请求的模版。
+* 当一个客户端需要执行发布或者订阅操作时候，EMQX 根据预先定义的模版来构造一个 HTTP 请求，并发送给配置的 HTTP 服务器。
+* 通过判断服务器返回的 HTTP 状态码，例如 200 或 204 表示授权成功（允许请求）而其他的状态码，例如 403 表示授权失败（拒绝请求）
 
-::: tip 
-emqx_auth_http 插件同时包含认证功能，可通过注释禁用。
+::: danger
+推荐使用 HTTP 的 `POST `方法。如果使用 `GET` 方法，一些 HTTP 服务器可能会把这些携带敏感信息的 HTTP 请求记录到日志里。
+若 HTTP 服务器不在内网中，推荐使用 HTTPS。
 :::
 
+## 配置
 
-要启用 HTTP ACL，需要在 `etc/plugins/emqx_auth_http.conf` 中配置以下内容：
+HTTP 授权必需使用 `type=http`的配置。
 
-## ACL 授权原理
+HTTP 的 `POST` 和 `GET` 方法都是支持的，但是各自有不一样的配置字段。
 
-EMQX 在设备发布、订阅事件中使用当前客户端相关信息作为参数，向用户自定义的认证服务发起请求权限，通过返回的 HTTP **响应状态码** (HTTP statusCode) 来处理 ACL 授权请求。
-
- - 无权限：API 返回分 200 状态码
- - 授权成功：API 返回 200 状态码
- - 忽略授权：API 返回 200 状态码且消息体 ignore
-
-## HTTP 请求信息
-
-HTTP API 基础请求信息，配置证书、请求头与重试规则。
-
-```bash
-# etc/plugins/emqx_auth_http.conf
-
-## 启用 HTTPS 所需证书信息
-## auth.http.ssl.cacertfile = etc/certs/ca.pem
-
-## auth.http.ssl.certfile = etc/certs/client-cert.pem
-
-## auth.http.ssl.keyfile = etc/certs/client-key.pem
-
-## 请求头设置
-## auth.http.header.Accept = */*
-
-## 重试设置
-auth.http.request.retry_times = 3
-
-auth.http.request.retry_interval = 1s
-
-auth.http.request.retry_backoff = 2.0
-```
-
-进行发布、订阅认证时，EMQX 将使用当前客户端信息填充并发起用户配置的 ACL 授权查询请求，查询出该客户端在 HTTP 服务器端的授权数据。
-
-## superuser 请求
-
-首先查询客户端是否为超级用户，客户端为超级用户时将跳过 ACL 查询。
-
-```bash
-# etc/plugins/emqx_auth_http.conf
-
-## 请求地址
-auth.http.super_req = http://127.0.0.1:8991/mqtt/superuser
-
-## HTTP 请求方法
-## Value: post | get | put
-auth.http.super_req.method = post
-
-## 请求参数
-auth.http.super_req.params = clientid=%c,username=%u
-```
-
-
-## ACL 授权查询请求
-
-```bash
-# etc/plugins/emqx_auth_http.conf
-
-## 请求地址
-auth.http.acl_req = http://127.0.0.1:8991/mqtt/acl
-
-## HTTP 请求方法
-## Value: post | get | put
-auth.http.acl_req.method = get
-
-## 请求参数
-auth.http.acl_req.params = access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
+一个使用 `POST` 方法的例子如下：
 
 ```
+{
+    type = http
+    enable = true
 
-## 请求说明
+    method = post
+    url = "http://127.0.0.1:32333/authz/${peercert}?clientid=${clientid}"
+    body {
+        username = "${username}"
+        topic = "${topic}"
+        action = "${action}"
+    }
+    headers {
+        "Content-Type" = "application/json"
+        "X-Request-Source" = "EMQX"
+    }
+}
+```
 
-HTTP 请求方法为 GET 时，请求参数将以 URL 查询字符串的形式传递；POST、PUT 请求则将请求参数以普通表单形式提交（content-type 为 x-www-form-urlencoded）。
+使用 `GET` 方法的例子如下：
 
-你可以在认证请求中使用以下占位符，请求时 EMQX 将自动填充为客户端信息：
+```
+{
+    type = http
+    enable = true
 
-- %A：操作类型，'1' 订阅；'2' 发布
-- %u：客户端用户名
-- %c：Client ID
-- %a：客户端 IP 地址
-- %r：客户端接入协议
-- %m：Mountpoint
-- %t：主题
+    method = get
+    url = "http://127.0.0.1:32333/authz"
+    body {
+        username = "${username}"
+        topic = "${topic}"
+        action = "${action}"
+    }
+    headers {
+        "X-Request-Source" = "EMQX"
+    }
+}
+```
 
-::: danger 
-推荐使用 POST 与 PUT 方法，使用 GET 方法时明文密码可能会随 URL 被记录到传输过程中的服务器日志中。
-:::
+### `method`
+
+该配置为必填字段，用于指定 http 方法，可以是 `get` 或者 `post`。 
+
+### `url`
+
+发送 HTTP 请求的 URL，可以使用如下[占位符](./authz.md#authorization-placeholders):
+
+* `${clientid}` — 客户端的 ID。
+* `${username}` — 客户端登录是用的用户名。
+* `${peerhost}` — 客户端的源 IP 地址。
+* `${proto_name}` — 客户端使用的协议名称。例如 `MQTT`，`CoAP` 等。
+* `${mountpoint}` — 网关监听器的挂载点（主题前缀）。
+* `${action}` — 当前执行的动作请求，例如 `publish`，`subscribe`。
+* `${topic}` — 当前请求想要发布或订阅的主题（或主题过滤器）
+
+如果URL前缀是 `https://`，那么需要加上 `ssl` 相关的配置，例如：
+
+```
+{
+    ...
+    url = "https://127.0.0.1:32333/auth/${peercert}?clientid=${clientid}"
+    ssl {
+        enable = true
+    }
+}
+
+```
+
+### `body`
+
+该配置项可选。用于构造一个 HTTP 请求的 body。
+如果是 `post` 请求，这个配置项会被编码成一个 JSON 或者 `www-form-urlencoded` 的字符串。
+如果是 `get` 请求，这个配置项会被翻译成 HTTP 的查询字符串。
+这些字段的名字和值中都可以使用[占位符](./authz.md#Authorizer 配置中的占位符).
+
+根据配置项的不同 `body` 的序列化方式也可能不同。
+
+例如，如果一个 MQTT 客户端使用的 clientid 是 `id123`，用户名（username）是 `iamuser` 并且尝试发布消息到 `foo/bar` 主题，
+那么在不同的配置下， 可能构造的 HTTP 请求如下：
+
+* `GET` request:
+    ```
+    {
+        method = get
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            topic = "${topic}"
+            action = "${action}"
+        }
+    }
+    ```
+
+    最终的 HTTP 请求会是下面这样：
+
+    ```
+    GET /auth/id123?username=iamuser&topic=foo%2Fbar&action=publish HTTP/1.1
+    ... Headers ...
+    ```
+
+* `POST` JSON request:
+
+    ```
+    {
+        method = post
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            topic = "${topic}"
+            action = "${action}"
+        }
+        headers {
+            "content-type": "application/json"
+        }
+    }
+    ```
+
+    最终的 HTTP 请求会是下面这样：
+
+    ```
+    POST /auth/id123 HTTP/1.1
+    Content-Type: application/json
+    ... Other headers ...
+
+    {"username":"iamuser","topic":"foo/bar", "action": "publish"}
+    ```
+
+* `POST` www-form-urlencoded request:
+    ```
+    {
+        method = post
+        url = "http://127.0.0.1:32333/auth/${clientid}"
+        body {
+            username = "${username}"
+            topic = "${topic}"
+            action = "${action}"
+        }
+        headers {
+            "content-type": "application/x-www-form-urlencoded"
+        }
+    }
+    ```
+
+    最终的 HTTP 请求会是下面这样：
+
+    ```
+    POST /auth/id123 HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded
+    ... Other headers ...
+
+    username=iamuser&topic=foo%2Fbar&action=publish
+    ```
+
+### `headers`
+
+根据配置来构造的 HTTP 头会是如下情况。
+
+对于 `get` 方法，默认的 HTTP 报头如下
+
+```
+{
+    "accept" = "application/json"
+    "cache-control" = "no-cache"
+    "connection" = "keep-alive"
+    "keep-alive" = "timeout=30, max=1000"
+}
+```
+
+`get` 请求不得携带 `Content-Type` 的 HTTP 头。
+
+对于 `post` 请求，默认的 HTTP 报头如下
+```
+{
+    "accept" = "application/json"
+    "cache-control" = "no-cache"
+    "connection" = "keep-alive"
+    "keep-alive" = "timeout=30, max=1000"
+    "content-type" = "application/json"
+}
+```
+
+`content-type` 可以为 `post` 请求指定 `body` 的序列化格式，可能的值有：
+
+* `application/json` 序列化成 JSON;
+* `application/x-www-form-urlencoded` 序列化成 `x-www-form-urlencoded` 格式的字符串。
+
+### `enable_pipelining`
+
+一个整形数字（默认100）用于指定流水线请求的最大数量 [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
+
+
+### `pool_size`
+
+可选的整型配置，用于指定 EMQX 节点到 HTTP 服务器的并发连接数，默认值为 8。
+
+### `ssl`
+
+用于连接到外部 HTTP 服务器的标准 [SSL 选项](../ssl.md)。
+
+### 更多配置项
+
+以下都是可选字段，
+
+```
+  connect_timeout = 15s # 连接超时
+  max_retries = 5 # 最大重试次数
+  request_timeout = 30s # 请求超时限制
+  retry_interval = 1s # 重试中间间隔
+```

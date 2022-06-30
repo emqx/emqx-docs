@@ -5,7 +5,7 @@ MmongoDB database.
 
 ## Storage Schema
 
-MongoDB authenticator supports storing ACL rules as MongoDB documents. A user provides the collection name and a
+MongoDB authorizer supports storing ACL rules as MongoDB documents. A user provides the collection name and a
 filter template for selecting the relevant documents.
 
 The documents should contain `permission`, `action`, and `topics` fields.
@@ -45,7 +45,7 @@ and on the EMQX broker itself.
 
 ## Configuration
 
-The MySQL authorizer is identified by type `mongodb`.
+The MongoDB authorizer is identified by type `mongodb`.
 
 The authenticator supports connecting to MongoDB running in three different modes:
 * Standalone MongoDB server:
@@ -165,7 +165,7 @@ MongoDB server address to connect or to us as a seed, required.
 
 #### `w_mode`
 
-Write mode, `unsafe` (default) or `safe`. The safe mode makes a `getLastError` request after every write in the sequence. If the reply says it failed then the rest of the sequence is aborted. Alternatively, unsafe mode issues every write without confirmation, so if a write fails you won't know about it and the remaining operations will be executed. This is unsafe but faster because there is no round-trip delay.
+Not used in Authorizers.
 
 ### MongoDB ReplicaSet Options
 
@@ -175,7 +175,7 @@ MongoDB server addresses to connect or to us as seeds, required.
 
 #### `w_mode`
 
-Write mode, the same as for [Standalone MongoDB](#wmode).
+Not used in Authorizers.
 
 #### `r_mode`
 
@@ -193,4 +193,4 @@ MongoDB server addresses to connect or to us as seeds, required.
 
 #### `w_mode`
 
-Write mode, the same as for [Standalone MongoDB](#wmode).
+Not used in Authorizers.

@@ -65,7 +65,7 @@ See, for example, [JWT authorization](../authn/jwt.md#jwt-authorization).
 If a client sends requests intensively, it may be resource-consuming to fetch ACL rules for each request and match it
 against the rules. Therefore, ACL cache may be enabled to cache authorization results for a particular time.
 
-::: warning
+::: tip Tip
 Caching improves performance significantly, so adjusting the default values to the relevant ones is essential.
 You can find more information about cache configuration below.
 :::
@@ -103,7 +103,7 @@ Example of use in Redis authorizer:
 
 When ACL rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.
 The following placeholders are available:
-* `${clientid}` — Client ID of the connecting client, either passed explicitly by the client or automatically generated.
+* `${clientid}` — Client ID of the connecting client, when used in ACL rules, the MQTT client should assign a client ID before connect, but not let EMQX generate and assign a random one.
 * `${username}` — `username` value used by the client for authentication.
 
 Placeholders can be used as topic segments, like `a/b/${username}/c/d`, but not `a/b${username}c/d`.
@@ -150,7 +150,7 @@ If set to `disconnect`, the client connection is dropped.
 ### `cache`
 
 Optional value with caching settings.
-* `cache.enable` — optional boolean value, default is `true`. Specifies whether to enable caching.
+* `cache.enable` — optional boolean value, default is `true`. Specifies whether to enable caching. When authentication JWT is the only data source of ACL data, then it is recommended to configure this field `false`.
 * `cache.max_size` — optional integer value, default is 32. Specifies the maximum number of elements in the cache. Older records are evicted from the cache when the specified number is exceeded.
 * `cache.ttl` — optional duration value, default is `1m`. Specifies how long cached values are kept in the cache.
 
