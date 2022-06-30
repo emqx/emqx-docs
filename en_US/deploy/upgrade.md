@@ -1,7 +1,7 @@
 # Upgrade Guide
 
-This article provides guidelines for migrating from EMQX 4.x to 5.0.0 version.
-Although EMQX 5.0 does not provide Backward Compatibility, there is not much change in the way most functions are used. You can upgrade by manual migration.
+This document provides guidelines for migrating from EMQX 4.x to 5.0.
+EMQX 5.0 is not backward compatible with 4.x in management APIs and clustering APIs, however most of the functionalities are not significantly changed.
 
 To learn about the new features we have added in EMQX 5.0, checkout [5.0.0 Release](https://www.emqx.com/en/changelogs/broker/5.0.0).
 
@@ -26,7 +26,16 @@ Reference steps
 
 ## Log
 
-Log output format adjusted, please checkout [Log & Trace](../observability/log.md).
+Comparing with 4.x, the biggest change in log is the format.
+In 4.x, the log text is mostly free text aiming for good human readability.
+Starting from 5.0, we moved to structured logging without losing readability.
+For instance, most of the log fields uses underscore as word separators,
+which makes it in general more search-friendly, also helps log indexing tools
+to index the logs more effectively.
+
+`2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
+
+Find more details in [Log & Trace](../observability/log.md).
 
 ## Default listeners
 
@@ -44,7 +53,7 @@ The previous official plug-ins have been migrated to EMQX as built-in functions.
 | 4.x              | 5.0                                          |
 | ---------------- | -------------------------------------------- |
 | emqx_auth_http   | AuthN/AuthZ - HTTP data source               |
-| emqx_auth_jwt    | 认证 - JWT                                   |
+| emqx_auth_jwt    | AuthN - JWT                                   |
 | emqx_auth_mnesia | AuthN/AuthZ - Built-in database              |
 | emqx_auth_mongo  | AuthN/AuthZ - MongoDB data source            |
 | emqx_auth_mysql  | AuthN/AuthZ - MySQL data source              |
@@ -65,16 +74,18 @@ The previous official plug-ins have been migrated to EMQX as built-in functions.
 | emqx_lua_hook    | -                                            |
 | emqx_management  | -                                            |
 | emqx_prometheus  | Prometheus                                   |
-| emqx_psk_file    | -                                            |
-| emqx_recon       | -                                            |
+| emqx_psk_file    | AuthN - PSK (`psk_authentication.enable = true`)  |
+| emqx_recon       | Old features still available from CLI `emqx_ctl observer`|
 | emqx_retainer    | Retain                                       |
 | emqx_telemetry   | Telemetry                                    |
 
 ## HTTP API
 
-Previously, "Appication" was used to manage API access credentials, which has now been renamed "API Key". And Secret Key is only returned once when it is successfully created and cannot be obtained again later.
+Previously, "Appication" was used to manage API access credentials, which has now been renamed to "API Key". And Secret Key is only returned once when it is successfully created, but cannot be obtained again later.
 
-Port 8081 has been merged into port 18083, and the basic path of API access has been switched from `/api/v4` to `/api/v5`, please call the API through this port and path; time-related data will use [RFC3339](https: //datatracker.ietf.org/doc/html/rfc3339) format.
+Port 8081 has been merged into port 18083, and the basic path of API access has been switched from `/api/v4` to `/api/v5`, please call the API through this port and path.
+
+String timestamps are now in [RFC3339](https: //datatracker.ietf.org/doc/html/rfc3339) format.
 
 ### Data Format Changes
 
