@@ -119,7 +119,7 @@ EMQX 5.0 supports aggregation of monitoring data for the entire cluster, as well
 | session.takenover   | Sessions/Takenover       | Integer   | `session.takenover` hook trigger times     |
 | session.terminated  | Sessions/Terminated      | Integer   | `session.terminated` hook trigger times    |
 
-#### Authnentication & Authorization
+#### Authentication & Authorization
 
 | Key                         | Name (in Dashboard)  | Data Type | Description                                                                 |
 | --------------------------- | -------------------- | --------- | --------------------------------------------------------------------------- |
