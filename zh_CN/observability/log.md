@@ -1,24 +1,8 @@
-# 日志与追踪
+# 日志
 
-## 控制日志输出
+日志为系统进行排错，优化系统的性能提供可靠的信息来源，日志即可记录业务问题，比如登录错误，异常访问等。还能记录操作系统或网络中所发生事件的信息，包括性能、故障检测。
 
-EMQX 支持将日志输出到控制台或者日志文件，或者同时使用两者。可在 `emqx.conf` 中配置：
-
-```
-log.to = file
-```
-
-`log.to` 的默认值为 `file`，它有以下可选值：
-
-- **off:** 完全关闭日志功能
-
-- **file:** 仅将日志输出到文件
-
-- **console:** 仅将日志输出到标准输出(emqx 控制台)
-
-- **both:** 同时将日志输出到文件和标准输出(emqx 控制台)
-
-从 4.3.0 版本开始，如果使用 Docker 部署 EMQX，默认只能通过 `docker logs` 命令查看 EMQX 日志。如需继续按日志文件的方式查看，可以在启动容器时将环境变量 `EMQX_LOG__TO` 设置为 `file` 或者 `both`。
+EMQX在日志数据过多或日志写入过慢时，默认启动过载保护机制，最大限度的保证正常业务不被日志影响。
 
 ## 日志级别
 
@@ -28,67 +12,119 @@ EMQX 的日志分 8 个等级 ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt))
 debug < info < notice < warning < error < critical < alert < emergency
 ```
 
-EMQX 的默认日志级别为 warning，可在 `emqx.conf` 中修改：
+EMQX 的默认日志级别为 warning。
 
-```bash
-log.level = warning
+通过以下两种方式进行日志配置修改。
+
+1. 在 `emqx.conf` 中配置`log`下的配置项，重启节点后生效。
+2. 在 dashboard 上功能配置/日志中进行配置，保存后生效，无需重启节点，推荐使用。
+
+EMQX 支持将日志输出到控制台或者日志文件，输出控制台和文件互不影响，也可同时设置。
+
+## 控制台输出日志
+
+当使用前台启动( `./bin/emqx console` 或`/bin/emqx/foreground` )时，默认开启控制台输出`warning`级别的日志，关闭日志文件输出。输出到控制台可以方便开发调试。它的配置路径为`log.console_handler`，详细的配置项说明如下：
+
+```yaml
+log.console_handler { 
+    ## 是否开始控制台输出日志，前台模式下会默认开启   
+    enable = false
+    ## 日志等级
+    level = warning
+    ## 日志中的时间戳使用的时间偏移量，比如：+2:00 或system 或utc
+    time_offset =  system
+    ## 设置单个日志消息的最大长度。 如果超过此长度，则日志消息将被截断。最小可设置的长度为100。
+    chars_limit = unlimited
+    ## 日志格式类型：text 或者 json格式
+    formatter = text
+    ## 如果设置为 true，则单行打印日志。 否则，日志消息可能跨越多行。
+    single_line = true
+    ## 过载保护机制：只要缓冲的日志事件的数量低于这个值，所有的日志事件都会被异步处理。
+    ## 这意味着，日志落地速度不会影响正常的业务进程，因为它们不需要等待日志处理进程的响应。
+    ## 如果消息队列的增长超过了这个值，处理程序开始同步处理日志事件。
+    ## 也就是说，发送事件的客户进程必须等待响应。当处理程序将消息队列减少到低于sync_mode_qlen阈值的水平时，异步操作就会恢复。
+    ## 默认为100条信息，当等待的日志事件大于100条时，就开始同步处理日志。
+    sync_mode_qlen = 100
+    ## 当缓冲的日志事件数大于此值时，新的日志事件将被丢弃。
+    drop_mode_qlen = 3000
+    ## 如果缓冲日志事件的数量增长大于此阈值，则会发生冲刷（删除）操作。 日志处理进程会丢弃缓冲的日志消息。
+    ## 来缓解自身不会由于内存瀑涨而影响其它业务进程。日志内容会提醒有多少事件被删除。
+    flush_qlen = 8000
+    overload_kill {
+      ## 日志处理进程过载时为保护业务能正常，强制杀死日志处理进程。
+      enable = true
+      ## 日志处理进程允许使用的最大内存
+      mem_size = 30MB
+      ## 允许的最大队列长度
+      qlen = 20000
+      ## 如果处理进程终止，它会在以指定的时间后后自动重新启动。 `infinity` 不自动重启。
+      restart_after = 5s
+     }
+    burst_limit {
+      ## 启用日志限流保护机制
+      enable = true
+      ## 在 `window_time` 间隔内处理的最大日志事件数。 达到限制后，将丢弃连续事件，直到 `window_time` 结束。
+      max_count = 10000
+      window_time = 1s
+     }  
+    ## Erlang 内部格式日志序列化的最大深度。
+    max_depth = 100
+   }
 ```
 
-此配置将所有 log handler 的配置设置为 warning。
+## 文件输出日志
 
-## 日志文件和日志滚动
+EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/log/emqx` (二进制包安装)。文件输出日志的配置与控制台输出的配置大部分是相同的，只是多了文件写入的控制配置，下面只列出除控制台输出外新增加的配置项：
 
-EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/log/emqx` (二进制包安装)。可在 `emqx.conf` 中配置：
-
-```bash
-log.dir = log
+```yaml
+    log.file_handlers.default {  
+      ## 启用此文件日志处理进程
+      enable = true
+      ## 日志等级
+      level = warning
+      ## 文件路径
+      file = "log/emqx.log"     
+      rotation {        
+        ## 启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。
+        ## 系统会默认生成emqx.log.siz/emqx.log.idx，用于记录日志位置，请不要手动修改这两个文件。
+        ## 如果不启用则所有日志只写入到一个文件中。
+        enable = true
+        ## 轮换的最大日志文件数。
+        count = 10
+        }
+      ## 此参数控制日志文件轮换。 `infinity` 意味着日志文件将无限增长，否则日志文件将在达到 `max_size`（以字节为单位）时进行轮换。
+      ## 与 rotation.count配合使用。如果 count 为 10。
+      max_size = 50MB      
+ }
 ```
 
-在文件日志启用的情况下 (log.to = file 或 both)，日志目录下会有如下几种文件:
+在文件日志启用后，日志目录下会有如下几种文件:
 
 - **emqx.log.N:** 以 emqx.log 为前缀的文件为日志文件，包含了 EMQX 的所有日志消息。比如 `emqx.log.1`, `emqx.log.2` ...
-- **emqx.log.siz 和 emqx.log.idx:** 用于记录日志滚动信息的系统文件。
+- **emqx.log.siz 和 emqx.log.idx:** 用于记录日志滚动信息的系统文件，请不要手动修改。
 - **run_erl.log:** 以 `emqx start` 方式后台启动 EMQX 时，用于记录启动信息的系统文件。
 - **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。比如 `erlang.log.1`, `erlang.log.2` ...
 
-可在 `emqx.conf` 中修改日志文件的前缀，默认为 `emqx.log`：
-
-```bash
-log.file = emqx.log
-```
-
-EMQX 默认在单日志文件超过 10MB 的情况下，滚动日志文件，最多可有 5 个日志文件：第 1 个日志文件为 emqx.log.1，第 2 个为 emqx.log.2，并以此类推。当最后一个日志文件也写满 10MB 的时候，将从序号最小的日志的文件开始覆盖。文件大小限制和最大日志文件个数可在 `emqx.conf` 中修改：
-
-```bash
-log.rotation.size = 10MB
-log.rotation.count = 5
-```
-
 ## 针对日志级别输出日志文件
 
-如果想把大于或等于某个级别的日志写入到单独的文件，可以在 `emqx.conf` 中配置 `log.<level>.file`：
+如果想把大于或等于某个级别的日志写入到单独的文件，可以在 `emqx.conf` 中配置 
 
 将 info 及 info 以上的日志单独输出到 `info.log.N` 文件中：
 
-```bash
-log.info.file = info.log
-```
-
-将 error 及 error 以上的日志单独输出到 `error.log.N` 文件中
-
-```bash
-log.error.file = error.log
+```yaml
+   log.file_handlers.my_info_log {  
+      enable = true
+      level = info
+      file = "log/info.log"     
+      rotation {        
+        enable = true
+        count = 10
+        }
+      max_size = 50MB      
+ }
 ```
 
 ## 日志格式
-
-可在 `emqx.conf` 中修改单个日志消息的最大字符长度，如长度超过限制则截断日志消息并用 `...` 填充。默认不限制长度：
-
-将单个日志消息的最大字符长度设置为 8192:
-
-```bash
-log.chars_limit = 8192
-```
 
 日志消息的格式为(各个字段之间用空格分隔)：
 
@@ -98,13 +134,12 @@ log.chars_limit = 8192
 - **time:** 当地时间，精确到毫秒。格式为：hh:mm:ss.ms
 - **level:** 日志级别，使用中括号包裹。格式为：[Level]
 - **client_info:** 可选字段，仅当此日志消息与某个客户端相关时存在。其格式为：ClientId@Peername 或 ClientId 或 Peername
-- **module_info:** 可选字段，仅当此日志消息与某个模块相关时存在。其格式为：[Module Info]
 - **msg:** 日志消息内容。格式任意，可包含空格。
 
 ### 日志消息举例 1：
 
 ```bash
-2020-02-18 16:10:03.872 [debug] <<"mqttjs_9e49354bb3">>@127.0.0.1:57105 [MQTT/WS] SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)
+2020-02-18 16:10:03.872 [debug] <<"mqttjs_9e49354bb3">>@127.0.0.1:57105 SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)
 ```
 
 此日志消息里各个字段分别为:
@@ -113,13 +148,12 @@ log.chars_limit = 8192
 - **time:** `16:10:03.872`
 - **level:** `[debug]`
 - **client_info:** `<<"mqttjs_9e49354bb3">>@127.0.0.1:57105`
-- **module_info:** `[MQTT/WS]`
 - **msg:** `SEND CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0)`
 
 ### 日志消息举例 2：
 
 ```bash
-2020-02-18 16:10:08.474 [warning] [Alarm Handler] New Alarm: system_memory_high_watermark, Alarm Info: []
+2020-02-18 16:10:08.474 [warning] New Alarm: system_memory_high_watermark, Alarm Info: []
 ```
 
 此日志消息里各个字段分别为:
@@ -127,156 +161,6 @@ log.chars_limit = 8192
 - **date:** `2020-02-18`
 - **time:** `16:10:08.474`
 - **level:** `[warning]`
-- **module_info:** `[Alarm Handler]`
 - **msg:** `New Alarm: system_memory_high_watermark, Alarm Info: []`
 
 注意此日志消息中，client_info 字段不存在。
-
-## 日志级别和 log handlers
-
-EMQX 使用了分层的日志系统，在日志级别上，包括全局日志级别 (primary log level)、以及各 log hanlder 的日志级别。
-
-```bash
-     [Primary Level]        -- global log level and filters
-           / \
-[Handler 1]  [Handler 2]    -- log levels and filters at each handler
-```
-
-log handler 是负责日志处理和输出的工作进程，它由 log handler id 唯一标识，并负有如下任务：
-
-- 接收什么级别的日志
-- 如何过滤日志消息
-- 将日志输出到什么地方
-
-我们来看一下 emqx 默认安装的 log handlers:
-
-```bash
-$ emqx_ctl log handlers list
-
-LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
-LogHandler(id=file, level=warning, destination=log/emqx.log, status=started)
-LogHandler(id=default, level=warning, destination=console, status=started)
-```
-
-- file: 负责输出到日志文件的 log handler。它没有设置特殊过滤条件，即所有日志消息只要级别满足要求就输出。输出目的地为日志文件。
-- default: 负责输出到控制台的 log handler。它没有设置特殊过滤条件，即所有日志消息只要级别满足要求就输出。输出目的地为控制台。
-- ssl_handler: ssl 的 log handler。它的过滤条件设置为当日志是来自 ssl 模块时输出。输出目的地为控制台。
-
-日志消息输出前，首先检查消息是否高于 primary log level，日志消息通过检查后流入各 log handler，再检查各 handler 的日志级别，如果日志消息也高于 handler level，则由对应的 handler 执行相应的过滤条件，过滤条件通过则输出。
-
-
-设想一个场景，假设 primary log level 设置为 info，log handler `default` (负责输出到控制台) 的级别设置为 debug，log handler `file` (负责输出到文件) 的级别设置为 warning：
-
-- 虽然 console 日志是 debug 级别，但此时 console 日志只能输出 info 以及 info 以上的消息，因为经过 primary level 过滤之后，流到 default 和 file 的日志只剩下 info 及以上的级别；
-- emqx.log.N 文件里面，包含了 warning 以及 warning 以上的日志消息。
-
-在 [日志级别](#log-levels) 章节中提到的 `log.level` 是修改了全局的日志级别。这包括 primary log level 和各个 handlers 的日志级别，都设置为了同一个值。
-
-Primary Log Level 相当于一个自来水管道系统的总开关，一旦关闭则各个分支管道都不再有水流通过。这个机制保证了日志系统的高性能运作。
-
-## 运行时修改日志级别
-
-你可以使用 EMQX 的命令行工具 `emqx_ctl` 在运行时修改 emqx 的日志级别：
-
-### 修改全局日志级别：
-
-例如，将 primary log level 以及所有 log handlers 的级别设置为 debug：
-
-```bash
-$ emqx_ctl log set-level debug
-```
-
-### 修改主日志级别：
-
-例如，将 primary log level 设置为 debug:
-
-```bash
-$ emqx_ctl log primary-level debug
-```
-
-### 修改某个 log handler 的日志级别：
-
-例如，将 log handler `file` 设置为 debug:
-
-```bash
-$ emqx_ctl log handlers set-level file debug
-```
-
-### 停止某个 log handler：
-
-例如，为了让日志不再输出到 console，可以停止 log handler `default`:
-
-```bash
-$ emqx_ctl log handlers stop default
-```
-
-### 启动某个已经停止的 log handler：
-
-例如，启动上面已停止的 log handler `default`:
-
-```bash
-$ emqx_ctl log handlers start default
-```
-
-## 日志追踪
-
-EMQX 支持针对 ClientID 或 Topic 过滤日志并输出到文件。在使用日志追踪功能之前，必须将 primary log level 设置为 debug：
-
-```bash
-$ emqx_ctl log primary-level debug
-```
-
-开启 ClientID 日志追踪，将所有 ClientID 为 'my_client' 的日志都输出到 log/my_client.log:
-
-```bash
-$ emqx_ctl log primary-level debug
-debug
-
-$ emqx_ctl trace start client my_client log/my_client.log
-trace clientid my_client successfully
-```
-
-开启 Topic 日志追踪，将主题能匹配到 't/#' 的消息发布日志输出到 log/topic_t.log:
-
-```bash
-$ emqx_ctl log primary-level debug
-debug
-
-$ emqx_ctl trace start topic 't/#' log/topic_t.log
-trace topic t/# successfully
-```
-
-::: tip
-即使 `emqx.conf` 中，`log.level` 设置为 error，使用消息追踪功能仍然能够打印出某 client 或 topic 的 debug 级别的信息。这在生产环境中非常有用。
-:::
-
-### 日志追踪的原理
-
-日志追踪的原理是给 emqx 安装一个新的 log handler，并设置 handler 的过滤条件。在 [日志级别和 log handlers](#log-level-and-log-handlers) 小节，我们讨论过 log handler 的细节。
-
-比如使用如下命令启用 client 日志追踪：
-
-```bash
-$ emqx_ctl log primary-level debug && emqx_ctl trace start client my_client log/my_client.log
-```
-
-然后查询已经开启的追踪:
-
-```bash
-$ emqx_ctl trace list
-Trace(clientid=my_client, level=debug, destination="log/my_client.log", status=started)
-```
-
-在后台，emqx 会安装一个新的 log handler，并给其指定过滤条件为：仅当 ClientID 为 "my_client" 的时候，输出日志：
-
-```bash
-$ emqx_ctl log handlers list
-LogHandler(id=trace_clientid_my_client, level=debug, destination=log/my_client.log, status=started)
-...
-```
-
-这里看到新添加的 log handler 的 id 为 trace_clientid_my_client，并且 handler level 为 debug。这就是为什么在 trace 之前，我们必须将 primary log level 设置为 debug。
-
-如果使用默认的 primary log level (warning)，这个log handler 永远不会输出 warning 以下的日志消息。
-
-另外，由于我们是启用了一个新的 log handler，所以我们的日志追踪不受控制台日志和 emqx.log.N 文件日志的级别的约束。即使 log.level = warning，我们任然可以追踪到 my_client 的 debug 级别的日志。

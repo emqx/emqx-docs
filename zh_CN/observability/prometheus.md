@@ -3,7 +3,7 @@
 EMQX 提供以下 REST API 供Prometheus 采集系统指标
 http://127.0.0.1:18083/api/v5/prometheus/stats
 
-EMQX还支持向pushgateway推送指标，可以通过在`etc/emqx.conf`中添加以下配置来启用。
+EMQX 还支持向 `pushgateway` 推送指标，可以通过在 `etc/emqx.conf` 中添加以下配置来启用。默认为关闭状态。
 
 ```yaml
 prometheus {
