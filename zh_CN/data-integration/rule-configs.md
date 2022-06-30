@@ -71,20 +71,19 @@ rule_engine {
 
 ```js
 bridges.mqtt.my_egress_mqtt_bridge {
-    connector = "mqtt:my_mqtt_connector"
+    connector = {
+        server = "broker.emqx.io:1883"
+        username = "username1"
+        password = ""
+        ssl.enable = false
+    }
+
     direction = egress
 
     remote_topic = "from_emqx/${topic}"
     remote_qos = "${qos}"
     payload = "${payload}"
     retain = false
-}
-
-connectors.mqtt.my_mqtt_connector {
-    server = "192.168.2.100:1883"
-    username = "username1"
-    password = ""
-    ssl.enable = false
 }
 ```
 
@@ -94,8 +93,7 @@ connectors.mqtt.my_mqtt_connector {
 `bridges.mqtt.my_egress_mqtt_bridge` 则创建了一个类型为 `mqtt`、名字为 `my_mqtt_bridge` 的数据桥接，
 其 ID 为 `<type>:<name>`，即 `mqtt:my_mqtt_bridge`。这个 ID 正是被前面的规则当做动作引用的。
 
-同时这个 MQTT 桥接引用了一个 connector: `mqtt:my_mqtt_connector`，里面配置了 mqtt 连接相关的配置。
-这个 connector 配置可以被多个 MQTT 桥接引用。
+我们使用 `connector` 字段配置了 MQTT 连接相关的信息，比如服务地址和端口，以及用户名密码等。
 
 关于数据桥接的细节，详见 [数据桥接](./data-bridges.md)
 
