@@ -4,30 +4,31 @@ EMQX 为用户提供了指标监控功能，允许用户以及运维人员根据
 
 EMQX 为用户提供了多种查看指标与状态的手段。最直接的，用户可以在 EMQX Dashboard 的 Overview 页面看到这些数据。
 
-如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，具体操作方法分别参见 [HTTP API](./http-api.md#endpoint-metrics) 与 [$SYS 系统主题](../advanced/system-topic.md#)。
+![Metrics in Dashboard](./assets/dashboard-metrics.jpg)
+
+如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，参见 [HTTP API](../admin/api.md) 与 [$SYS 系统主题](../advanced/system-topic.md)。
 
 ::: tip
-EMQX 提供 [emqx_statsd](https://github.com/emqx/emqx-statsd) 插件，用于将系统的监控数据输出到第三方的监控系统中，使用示例参考 [Prometheus 监控告警](../observability/prometheus.md)。
+EMQX 提供与三方监控系统的集成，例如 StatsD 和 Prometheus. 参见：[Prometheus 监控告警](../observability/prometheus.md)。
 :::
 
 ## Metrics & Stats
 
 EMQX 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只会单调递增的数据，例如发送字节数量、发送报文数量。EMQX 目前提供的 Metrics 覆盖了字节、报文、消息和事件四个维度。Stats 则通常指那些成对出现的数据，包括当前值和历史最大值，例如当前订阅数量和订阅历史最大数量。
 
-从 v4.1.0 版本开始，EMQX 增加了针对指定主题的 Metrics 统计，包括消息收发数量和**收发速率**。我们提供了新建主题统计、取消主题统计和返回指定主题统计信息的 HTTP API，参见 [HTTP API](./http-api.md#endpoint-topic-metrics)，你也可以直接在 Dashboard -> Analysis -> Topic Metrics 页面进行相关操作。
-
 ### Metrics
 
-### 字节
+#### 字节 (Bytes)
 
-| Name           | Data Type | Description  |
-| -------------- | --------- | ------------ |
-| bytes.received | Integer   | 接收字节数量 |
-| bytes.sent     | Integer   | 发送字节数量 |
+| Key            | Data Type | Description              |
+| -------------- | --------- | ------------------------ |
+| bytes.received | Integer   | 已接收字节数             |
+| bytes.sent     | Integer   | 已发送字节数             |
 
-### 报文
 
-| Name                         | Data Type | Description                                                  |
+#### 报文 (Packets)
+
+| Key                          | Data Type | Description                                                  |
 | ---------------------------- | --------- | ------------------------------------------------------------ |
 | packets.received             | Integer   | 接收的报文数量                                               |
 | packets.sent                 | Integer   | 发送的报文数量                                               |
@@ -70,9 +71,9 @@ EMQX 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只会
 | packets.auth.received        | Integer   | 接收的 AUTH 报文数量                                         |
 | packets.auth.sent            | Integer   | 发送的 AUTH 报文数量                                         |
 
-### 消息 (PUBLISH 报文)
+#### 消息 (PUBLISH 报文)
 
-| Name                            | Data Type | Description                                                  |
+| Key                             | Data Type | Description                                                  |
 | ------------------------------- | --------- | ------------------------------------------------------------ |
 | delivery.dropped.too_large      | Integer   | 发送时由于长度超过限制而被丢弃的消息数量                     |
 | delivery.dropped.queue_full     | Integer   | 发送时由于消息队列满而被丢弃的 QoS 不为 0 的消息数量         |
@@ -80,59 +81,60 @@ EMQX 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只会
 | delivery.dropped.expired        | Integer   | 发送时由于消息过期而被丢弃的消息数量                         |
 | delivery.dropped.no_local       | Integer   | 发送时由于 `No Local` 订阅选项而被丢弃的消息数量             |
 | delivery.dropped                | Integer   | 发送时丢弃的消息总数                                         |
-| messages.delayed                | Integer   | EMQX 存储的延迟发布的消息数量                        |
-| messages.delivered              | Integer   | EMQX 内部转发到订阅进程的消息数量                    |
-| messages.dropped                | Integer   | EMQX 内部转发到订阅进程前丢弃的消息总数              |
-| messages.dropped.expired        | Integer   | 接收时由于消息过期而被丢弃的消息数量                         |
+| messages.delayed                | Integer   | EMQX 存储的延迟发布的消息数量                                |
+| messages.delivered              | Integer   | EMQX 内部转发到订阅进程的消息数量                            |
+| messages.dropped                | Integer   | EMQX 内部转发到订阅进程前丢弃的消息总数                      |
 | messages.dropped.no_subscribers | Integer   | 由于没有订阅者而被丢弃的消息数量                             |
+| messages.dropped.await_pubrel_timeout | Integer | 由于等待 PUBREL 报文超时                                 |
 | messages.forward                | Integer   | 向其他节点转发的消息数量                                     |
 | messages.publish                | Integer   | 除系统消息外发布的消息数量                                   |
 | messages.qos0.received          | Integer   | 接收来自客户端的 QoS 0 消息数量                              |
-| messages.qos2.received          | Integer   | 接收来自客户端的 QoS 1 消息数量                              |
-| messages.qos1.received          | Integer   | 接收来自客户端的 QoS 2 消息数量                              |
+| messages.qos1.received          | Integer   | 接收来自客户端的 QoS 1 消息数量                              |
+| messages.qos2.received          | Integer   | 接收来自客户端的 QoS 2 消息数量                              |
 | messages.qos0.sent              | Integer   | 发送给客户端的 QoS 0 消息数量                                |
 | messages.qos1.sent              | Integer   | 发送给客户端的 QoS 1 消息数量                                |
 | messages.qos2.sent              | Integer   | 发送给客户端的 QoS 2 消息数量                                |
 | messages.received               | Integer   | 接收来自客户端的消息数量，等于 `messages.qos0.received`，`messages.qos1.received` 与 `messages.qos2.received` 之和 |
 | messages.sent                   | Integer   | 发送给客户端的消息数量，等于 `messages.qos0.sent`，`messages.qos1.sent` 与 `messages.qos2.sent` 之和 |
-| messages.retained               | Integer   | EMQX 存储的保留消息数量                              |
 | messages.acked                  | Integer   | 已经应答的消息数量                                           |
 
-### 事件
+#### 事件
 
-| Name                  | Data Type | Description                        |
+| Key                   | Data Type | Description                        |
 | --------------------- | --------- | ---------------------------------- |
-| actions.success       | Integer   | 规则引擎 action 执行成功次数       |
-| actions.error         | Integer   | 规则引擎 action 执行失败次数       |
-| actions.exception     | Integer   | 规则引擎 action 运行异常次数       |
-| rules.matched         | Integer   | 规则的匹配次数                     |
-| client.auth.anonymous | Integer   | 客户端最终匿名形式登录的次数       |
 | client.connect        | Integer   | `client.connect` 钩子触发次数      |
 | client.authenticate   | Integer   | `client.authenticate` 钩子触发次数 |
 | client.connack        | Integer   | `client.connack` 钩子触发次数      |
 | client.connected      | Integer   | `client.connected` 钩子触发次数    |
 | client.disconnected   | Integer   | `client.disconnected` 钩子触发次数 |
-| client.check_acl      | Integer   | `client.check_acl` 钩子触发次数    |
+| client.authorize      | Integer   | `client.authorize` 钩子触发次数    |
 | client.subscribe      | Integer   | `client.subscribe` 钩子触发次数    |
 | client.unsubscribe    | Integer   | `client.unsubscribe` 钩子触发次数  |
-| client.auth.success   | Integer   | 客户端认证成功次数，至少启用一个认证插件后可用 |
-| client.auth.failure   | Integer   | 客户端认证失败次数，至少启用一个认证插件后可用  |
-| client.auth.ignore    | Integer   | 认证忽略次数，至少启用一个认证插件后可用，同时启用多个认证插件时，一次登录事件可能触发多次 ignore 计数，所有认证插件都 ignore 后，客户端可能以匿名方式成功登录 |
-| client.acl.allow      | Integer   | 客户端 ACL 校验通过次数，至少启用一个 ACL 插件后可用 |
-| client.acl.deny       | Integer   | 客户端 ACL 校验失败次数，至少启用一个 ACL 插件后可用  |
-| client.acl.ignore     | Integer   | ACL 校验忽略次数，至少启用一个 ACL 插件后可用，同时启用多个 ACL 插件时，一次发布/订阅事件可能触发多次 ignore 计数，所有 ACL插件都 ignore 后，发布/订阅操作可能因 acl_nomatch = true 成功 |
 | session.created       | Integer   | `session.created` 钩子触发次数     |
 | session.discarded     | Integer   | `session.discarded` 钩子触发次数   |
 | session.resumed       | Integer   | `session.resumed` 钩子触发次数     |
 | session.takenover     | Integer   | `session.takenover` 钩子触发次数  |
 | session.terminated    | Integer   | `session.terminated` 钩子触发次数  |
 
-## Stats
+#### 认证和授权
 
-| Name                       | Data Type | Description                |
+| Key                         | Data Type | Description                                                                 |
+| --------------------------- | --------- | --------------------------------------------------------------------------- |
+| authorization.allow         | Integer   | 授权总的通过次数（包括命中缓存，和规则未匹配时默认通过的）                  |
+| authorization.deny          | Integer   | 总的拒绝授权次数（包括命中缓存，和规则未匹配时默认通过的）                  |
+| authorization.matched.allow | Integer   | 由于匹配已有规则而授权通过的次数                                            |
+| authorization.matched.deny  | Integer   | 由于匹配已有规则而拒绝授权的次数                                            |
+| authorization.nomatch       | Integer   | 授权未匹配任何规则的次数                                                    |
+| authorization.cache_hit     | Integer   | 授权命中缓存的次数                                                          |
+
+### Stats
+
+| Key                        | Data Type | Description                |
 | -------------------------- | --------- | -------------------------- |
 | connections.count          | Integer   | 当前连接数量               |
 | connections.max            | Integer   | 连接数量的历史最大值       |
+| live_connections.count     | Integer   | 当前活跃连接数量           |
+| live_connections.max       | Integer   | 活跃连接历史最大值         |
 | channels.count             | Integer   | 即 `sessions.count`        |
 | channels.max               | Integer   | 即 `session.max`           |
 | sessions.count             | Integer   | 当前会话数量               |
@@ -147,7 +149,7 @@ EMQX 将指标分为了 Metrics 与 Stats 两种。Metrics 通常指那些只会
 | subscriptions.max          | Integer   | 订阅数量的历史最大值       |
 | subscriptions.shared.count | Integer   | 当前共享订阅数量           |
 | subscriptions.shared.max   | Integer   | 共享订阅数量的历史最大值   |
-| routes.count               | Integer   | 当前路由数量               |
-| routes.max                 | Integer   | 路由数量的历史最大值       |
 | retained.count             | Integer   | 当前保留消息数量           |
 | retained.max               | Integer   | 保留消息的历史最大值       |
+| delayed.count              | Integer   | 当前延迟发布消息数量       |
+| delayed.max                | Integer   | 延迟发布下行哦的历史最大值 |
