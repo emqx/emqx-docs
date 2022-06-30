@@ -11333,7 +11333,7 @@ MQTT Bridge 配置
 
 - webhook: <code>{$name -> [bridge:config](#bridge-config)}</code>
 
-  转发消息到 HTTP 服务器的 WebHook
+  转发消息到 HTTP 服务器的 Webhook
 
 - mqtt: <code>{$name -> [ingress](#ingress) | [egress](#egress)}</code>
 

@@ -1,7 +1,7 @@
 # Create rules
 
 ## Create rules using Dashboard
-### Create WebHook rules
+### Create Webhook rules
 0.  Setup a Web Service, here we setup a simple web service using the Linux tool `nc`:
 
    ```bash
@@ -37,7 +37,7 @@
 
    ![image](../assets/webhook-action-2.png)
 
-   then select “WebHook”:
+   then select “Webhook”:
 
    ![image](../assets/webhook-resource-1.png)
 
@@ -131,14 +131,14 @@ $ tail -f log/erlang.log.1
 - `Envs` is the environment variables that can be used internally in the action.
 - `Action Init Params` is the params we passed to the action.
 
-### Create WebHook Rule
+### Create Webhook Rule
 Create a rule: Forward all the messages that send from client_id=’Steven’, to the Web Server at ‘[http://127.0.0.1:9910](http://127.0.0.1:9910/)’:
 
 - The filter SQL: SELECT username as u, payload FROM "message.publish" where
   u='Steven';
 - Actions: “Forward to ‘[http://127.0.0.1:9910](http://127.0.0.1:9910/)’”;
 - Resource Type: web_hook;
-- Resource: “The WebHook resource at ‘[http://127.0.0.1:9910](http://127.0.0.1:9910/)’”.
+- Resource: “The Webhook resource at ‘[http://127.0.0.1:9910](http://127.0.0.1:9910/)’”.
 
 0.  Create a simple Web service using Linux tool `nc`:
 
@@ -146,14 +146,14 @@ Create a rule: Forward all the messages that send from client_id=’Steven’, t
     $ while true; do echo -e "HTTP/1.1 200 OK\n\n $(date)" | nc -l 127.0.0.1 9910; done;
     ```
 
-1.  Create a resource of resource type “WebHook”, and configure the URL:
+1.  Create a resource of resource type “Webhook”, and configure the URL:
 
     1).  List all available resource types, make sure ‘web_hook’ exists:
 
     ```bash
     $ ./bin/emqx_ctl resource-types list
 
-    resource_type(name='web_hook', provider='emqx_web_hook', params=#{...}}, on_create={emqx_web_hook_actions,on_resource_create}, description='WebHook Resource')
+    resource_type(name='web_hook', provider='emqx_web_hook', params=#{...}}, on_create={emqx_web_hook_actions,on_resource_create}, description='Webhook Resource')
     ...
     ```
 

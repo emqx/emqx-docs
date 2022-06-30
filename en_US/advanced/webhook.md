@@ -1,8 +1,8 @@
-# WebHook
+# Webhook
 
-WebHook is a plugin provided by the [emqx_web_hook](https://github.com/emqx/emqx-web-hook) plugin with the function of notifying a web service of hook events in EMQX Broker.
+Webhook is a plugin provided by the [emqx_web_hook](https://github.com/emqx/emqx-web-hook) plugin with the function of notifying a web service of hook events in EMQX Broker.
 
-The internal implementation of WebHook is based on  [hooks](./hooks.md), but it is closer to the top level. It obtains various events in EMQX Broker through the callback function mounted on the hook, and forwards them to the web server configured in emqx_web_hook.
+The internal implementation of Webhook is based on  [hooks](./hooks.md), but it is closer to the top level. It obtains various events in EMQX Broker through the callback function mounted on the hook, and forwards them to the web server configured in emqx_web_hook.
 
 Taking the client.connected event as an example, the event delivery process is as follows:
 
@@ -13,14 +13,14 @@ Taking the client.connected event as an example, the event delivery process is a
 ```
 
 ::: tip
-WebHook processes events in one-way pattern. It only supports pushing events in EMQX Broker to Web services, and does not care about the return of Web services.
+Webhook processes events in one-way pattern. It only supports pushing events in EMQX Broker to Web services, and does not care about the return of Web services.
 With the help of WebHooks, many services such as device going online, online and offline recording, subscription and message storage, and message delivery confirmation can be completed.
 
 :::
 
 ## Configuration item
 
-The WebHook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, the detailed description of configuration items can be found in [Configuration Item](../admin/cfg.md).
+The Webhook configuration file is located in: `etc/plugins/emqx_web_hook.conf`, the detailed description of configuration items can be found in [Configuration Item](../admin/cfg.md).
 
 ## Trigger rule
 

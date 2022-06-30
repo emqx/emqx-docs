@@ -86,7 +86,7 @@ Action Init Params: #{<<"a">> => 1}
 
 
 
-## Send data to WebHook
+## Send data to Webhook
 
 Setup a Web Service, here we setup a simple web service using the Linux tool `nc`:
 ```bash
@@ -119,7 +119,7 @@ Bind a resource to the action:
 
 Since the dropdown list "Resource" is empty for now, we create a new
 resource by clicking on the "New Resource" to the top right, and then
-select "WebHook":
+select "Webhook":
 
 ![image](./assets/rule-engine/webhook_action_1.png)
 
