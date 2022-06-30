@@ -1,11 +1,11 @@
 # 内置数据库
 
-您可以将客户端的鉴权规则存储在EMQX的内置数据库中。
+您可以将客户端的授权规则存储在EMQX的内置数据库中。
 该方案的好处是开销小，因为它不需要去访问外部数据库，或者HTTP服务器，而是直接从本地（内存中）快速搜索匹配的规则。
 
 ## 配置
 
-该鉴权器的配置必需有 `type = built_in_database`。
+该Authorizer的配置必需有 `type = built_in_database`。
 
 ```
 {
@@ -16,7 +16,7 @@
 
 ## 规则管理
 
-鉴权规则可以在仪表盘的 “访问控制” -> “授权” -> “Built-in Database” -> 用户管理 中通过点击 “+添加”按钮来输入。
+授权规则可以在仪表盘的 “访问控制” -> “授权” -> “Built-in Database” -> 用户管理 中通过点击 “+添加”按钮来输入。
 
 也可以通过这个API来进行管理 `/api/v5/authorization/sources/built_in_database`。
 

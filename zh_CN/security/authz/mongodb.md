@@ -1,19 +1,18 @@
 # MongoDB
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
-MmongoDB database.
+EMQX支持从MongoDB中读取于定义的一系列规则来对客户端的发布和订阅等操作进行授权。
 
-## Storage Schema
+## 存储方式
 
-MongoDB authenticator supports storing ACL rules as MongoDB documents. A user provides the collection name and a
-filter template for selecting the relevant documents.
+MongoDB authorizer 可以将 ACL 规则存储到 MongoDB 中。
+管理员可以指定一个 collection 和 filter 模版来对客户端进行查找和匹配。
 
-The documents should contain `permission`, `action`, and `topics` fields.
-* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
-* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
-* `topics` value specifies the topic filters for topics relevant to the rule. Should be a list of strings that support wildcards and [topic placeholders](./authz.md#topic-placeholders).
+每个MongoDB的记录应该包含`permission`, `action`, 和 `topics` 这些字段。
+* `permission`： 可以是 `deny` 或 `allow`，用于指定授权的结果。
+* `action`： 可以是`publish`， `subscribe`， 或 `all`，用于指定该规则适用于哪些客户端请求。
+* `topics`： 用于指定该规则适用的发布或订阅主题，或订阅的主题过滤器。比如是一个字符串数组，支持[占位符](./authz.md#主题占位符).
 
-Example of adding an ACL rule for a user `user123` that allows publishing to topics `data/user123/#`:
+下面举一个使用的例子，让用户名为 `user123`的客户端有权订阅主题 `data/user123/#`：
 
 ```js
 > db.mqtt_acl.insertOne(
@@ -30,7 +29,7 @@ Example of adding an ACL rule for a user `user123` that allows publishing to top
 }
 ```
 
-The corresponding config parameters are:
+相应的链接配置参数如下：
 ```
 collection = "mqtt_acl"
 filter { username = "${username}" }
@@ -38,17 +37,16 @@ filter { username = "${username}" }
 ```
 
 ::: warning
-When there are a significant number of users in the system make sure that the collections used by the selector are optimized
-and that effective indexes are used. Otherwise ACL lookup will produce excessive load on the database
-and on the EMQX broker itself.
+当需要存储的客户端数量很大时，有必要为这些数据创建索引。否则授权信息的查询会导致MongoDB和EMQX的系统压力增加。
 :::
 
-## Configuration
+## 配置
 
-The MySQL authorizer is identified by type `mongodb`.
+MongoDB Authorizer 必需有 `type = mongodb`。
 
-The authenticator supports connecting to MongoDB running in three different modes:
-* Standalone MongoDB server:
+有三种不同的连接模式：
+
+* Standalone：
   ```
   {
     type = mongodb
@@ -65,7 +63,7 @@ The authenticator supports connecting to MongoDB running in three different mode
     password = "secret"
   }
   ```
-*  MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
+*  [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/)：
 ```
 {
   type = mongodb
@@ -83,7 +81,7 @@ The authenticator supports connecting to MongoDB running in three different mode
   password = "secret"
 }
 ```
-*  MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
+*  [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/)：
 ```
 {
   type = mongodb
@@ -101,73 +99,75 @@ The authenticator supports connecting to MongoDB running in three different mode
 }
 ```
 
-### Common Configuration Options
+### 详细的配置参数
 
 #### `collection`
 
-Required string value with the name of MongoDB collection where ACL rules are stored.
+必填字段，指定MongoDB中用于存储授权信息的Collection。
 
 #### `filter`
 
-A map interpreted as MongoDB selector for ACL rule lookup.
-Supports [placeholders](./authz.md#authentication-placeholders):
-* `${clientid}` — clientid of the client.
-* `${username}` — username of the client.
-* `${peerhost}` — client IP address.
+用于指定MongoDB查询时使用哪些字段进行过滤。
+这些字段名称没有限制，值可以使用以下这些[占位符](./authz.md#Authorizer配置中的占位符):
+* `${clientid}` — 客户端ID
+* `${username}` — 客户端登录时使用的用户名
+* `${peerhost}` — 客户端的源IP地址
 
 #### `database`
 
-Required string value with MongoDB database name to use.
+指定在哪个MongoDB数据库中查询授权数据。
 
 #### `username`
 
-Optional string value with MongoDB user.
+指定访问MongoDB数据库时使用的用户名。
 
 #### `password`
 
-Optional string value with MongoDB user password.
+指定访问MongodDB数据库时使用的密码。
 
 #### `pool_size`
 
-Optional integer value defining the number of concurrent connections from an EMQX node to a MongoDB server.
-The default value is 8.
+指定MongoDB的连接池的大小。默认值是8。
 
 #### `ssl`
 
-Standard [SSL options](../ssl.md) for [secure connecting to MongoDB](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
+[SSL](../ssl.md)客户端参数。
 
 #### `srv_record`
 
-Optional boolean value, the default value is `false`. If set to `true`, EMQX will try to
-fetch information about MongoDB hosts, `replica_set_name` (for `rs` type), and `auth_source` from
-DNS records of the specified server(s). See [DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
+可选的布尔类型参数。默认是 `false` 。该配置设置成 `true` 时，EMQX会从从DNS记录中查找指定的MongoDB地址和端口。
+详情请参考[DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
 
 #### `topology`
 
-An optional map of some fine-grained MongoDB driver settings.
+指定MongDB连接参数的更多字段。
 
-* `pool_size` — integer value, the initial size of the internal connection pool.
-* `max_overflow` — integer value, number of overflow workers be created, when all workers from the internal pool are busy.
-* `overflow_ttl` — duration, number of milliseconds for overflow workers to stay in the internal pool before terminating.
-* `overflow_check_period` — duration, `overflow_ttl` check period for workers (in milliseconds).
+* `pool_size` — 连接池大小。
+* `max_overflow` — 当连接池中所有的连接都忙时，可以额外创建的连接数上限。
+* `overflow_ttl` — 额外创建的连接允许存活的时间。
+* `overflow_check_period` — 时间间隔（毫秒），用于指定间隔多久做一次 `overflow_ttl` 的检查。
+* `connect_timeout_ms` — 时间间隔（毫秒），用于指定连接初始化最长的等待时间。
+* `server_selection_timeout_ms` — 时间间隔（毫秒），用于指定发现一个MongoDB服务器的时间。
+<!--
+TODO
 * `local_threshold_ms` — ms duration, secondaries only which RTTs fit in the window from lower RTT to lower RTT + `local_threshold_ms` could be selected for handling user's requests.
-* `connect_timeout_ms` — ms duration, timeout for establishing TCP connections.
-* `server_selection_timeout_ms` — ms duration, max time appropriate server should be selected by.
 * `wait_queue_timeout_ms` — ms duration, max time for waiting for a worker to be available in the internal pool.
 * `heartbeat_frequency_ms` — ms duration, default delay between Topology rescans.
 * `min_heartbeat_frequency_ms` — ms duration, the minimum delay between Topology rescans.
+-->
 
-### Standalone MongoDB Options
+### MongoDB单机模式
 
 #### `server`
 
-MongoDB server address to connect or to us as a seed, required.
+MongoDB服务器的FQDN或者IP地址和端口号
+
 
 #### `w_mode`
 
-Write mode, `unsafe` (default) or `safe`. The safe mode makes a `getLastError` request after every write in the sequence. If the reply says it failed then the rest of the sequence is aborted. Alternatively, unsafe mode issues every write without confirmation, so if a write fails you won't know about it and the remaining operations will be executed. This is unsafe but faster because there is no round-trip delay.
+该配置在授权中用不到。
 
-### MongoDB ReplicaSet Options
+### MongoDB ReplicaSet模式
 
 #### `servers`
 
@@ -175,22 +175,24 @@ MongoDB server addresses to connect or to us as seeds, required.
 
 #### `w_mode`
 
-Write mode, the same as for [Standalone MongoDB](#wmode).
+该配置在授权中用不到。
 
 #### `r_mode`
 
-Read mode, `master` (default) or `slave_ok`. `master` means that every query in a sequence must read only fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. `slave_ok` means every query is allowed to read stale data from a slave/secondary (fresh data from a master is fine too).
+指定读模式，默认为 `master`。
+设置为 `master` 时，所有的读操作都会返回最新的数据。如果连接的服务器不是主节点，那么读取将会失败。
+设置为 `slave_ok` 时，如果连接到的MongoDB是一个备节点，则可能会读到过期的数据。
 
 #### `replica_set_name`
 
-Replica set name to use, required. Can be overwritten with seeds if `srv_record` is set to `true`.
+MongoDB的Replica set名称，此参数为必填项。但在`srv_record` 设置为`true` 时，可能会被发现的信息覆写。
 
-### MongoDB Cluster Options
+### MongoDB Cluster模式
 
 #### `servers`
 
-MongoDB server addresses to connect or to us as seeds, required.
+必填字段，用于指定可用于连接的所有MongoDB服务器的FQDN和端口号，使用逗号分隔。
 
 #### `w_mode`
 
-Write mode, the same as for [Standalone MongoDB](#wmode).
+该配置在授权中用不到。
