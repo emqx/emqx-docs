@@ -125,3 +125,7 @@ The basic process is to copy another emqx folder and name it emqx2.
 After that, we let all the listening ports of the original emqx to be added by an offset
 as the listening ports of the emqx2 node.
 For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 for emqx2.
+
+[script](https://github.com/terry-xiaoyu/one_more_emqx).
+
+Refer to [cfg](../../admin/cfg.md)。
