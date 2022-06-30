@@ -351,7 +351,12 @@ The MQTT bridge plugin (emqx_bridge_mqtt) has been removed, please use the MQTT 
 
 ## Prometheus
 
-The Prometheus bridge plugin (emqx_prometheus) has been removed, please configure it through the `prometheus {}` configuration item or the Dashboard **Dashboard** page.
+Prometheus scraping endpoint is by default enabled and there is no authentication required to scrap the metrics.
+
+You can use `curl` command to inspect the metrics: `curl -f "127.0.0.1:18083/api/v5/prometheus/stats"`
+
+If you wish to enable push-gateway, it is configurable from `prometheus {...}` config block. 
+Or you could as well configure and enable it from the Dashboard.
 
 Changes:
 
