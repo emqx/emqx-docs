@@ -14,24 +14,24 @@
       + 添加 EMQX Helm 仓库
 
       ```shell
-      helm repo add emqx https://repos.emqx.io/charts 
+      helm repo add emqx https://repos.emqx.io/charts
       helm repo update
       ```
 
       + 用 Helm 安装 EMQX Operator 控制器
 
       ```shell
-      $ helm install emqx-operator emqx/emqx-operator \ 
-        --set installCRDs=true \ 
-        --namespace emqx-operator-system \ 
+      $ helm install emqx-operator emqx/emqx-operator \
+        --set installCRDs=true \
+        --namespace emqx-operator-system \
         --create-namespace
       ```
 
 3. 检查 EMQX Operator 控制器状态
 
     ```shell
-    $ kubectl get pods -l "control-plane=controller-manager" -n emqx-operator-system 
-    NAME READY STATUS RESTARTS AGE 
+    $ kubectl get pods -l "control-plane=controller-manager" -n emqx-operator-system
+    NAME READY STATUS RESTARTS AGE
     emqx-operator-controller-manager-68b866c8bf-kd4g6 1/1 Running 0 15s
     ```
 
@@ -54,14 +54,14 @@
 + 检查 EMQX 状态
 
    ```shell
-   $ kubectl get pods 
-    NAME READY STATUS RESTARTS AGE 
-    emqx-0 1/1 Running 0 22s 
-    emqx-1 1/1 Running 0 22s 
-    emqx-2 1/1 Running 0 22s 
-    $ kubectl exec -it emqx-0 -- emqx_ctl status 
+   $ kubectl get pods
+    NAME READY STATUS RESTARTS AGE
+    emqx-0 1/1 Running 0 22s
+    emqx-1 1/1 Running 0 22s
+    emqx-2 1/1 Running 0 22s
+    $ kubectl exec -it emqx-0 -- emqx_ctl status
     Node 'emqx@emqx-0.emqx-headless.default.svc.cluster.local' 4.4.3 is started
-    $ kubectl exec -it emqx-0 -- emqx_ctl cluster status 
+    $ kubectl exec -it emqx-0 -- emqx_ctl cluster status
     Cluster status: #{running_nodes =>
                       ['emqx@emqx-0.emqx-headless.default.svc.cluster.local',
                        'emqx@emqx-1.emqx-headless.default.svc.cluster.local',
@@ -90,14 +90,14 @@
 + 检查 EMQX 状态
 
    ```shell
-   $ kubectl get pods 
-   NAME READY STATUS RESTARTS AGE 
-   emqx-ee-0 1/1 Running 0 22s 
-   emqx-ee-1 1/1 Running 0 22s 
+   $ kubectl get pods
+   NAME READY STATUS RESTARTS AGE
+   emqx-ee-0 1/1 Running 0 22s
+   emqx-ee-1 1/1 Running 0 22s
    emqx-ee-2 1/1 Running 0 22s
-   $ kubectl exec -it emqx-ee-0 -- emqx_ctl status 
+   $ kubectl exec -it emqx-ee-0 -- emqx_ctl status
    Node 'emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local' 4.4.3 is started
-   $ kubectl exec -it emqx-ee-0 -- emqx_ctl cluster status 
+   $ kubectl exec -it emqx-ee-0 -- emqx_ctl cluster status
    Cluster status: #{running_nodes =>
                       ['emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local',
                        'emqx-ee@emqx-ee-1.emqx-ee-headless.default.svc.cluster.local',
