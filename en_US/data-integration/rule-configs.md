@@ -190,7 +190,7 @@ bridges.mqtt.my_mqtt_source {
 
 We use the `bridges` namespace to create data bridges.
 
-The `bridges.mqtt.my_mqtt_source` creates a data bridge with type `mqtt` and name `my_mqtt_source`。So
+The `bridges.mqtt.my_mqtt_source` creates a data bridge with type `mqtt` and name `my_mqtt_source`.So
 its ID is `mqtt:my_mqtt_source`.
 
 The `connector` field configures MQTT connection related configurations, such as the server address, username and password.

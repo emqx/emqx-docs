@@ -12,7 +12,7 @@ The rules are used to process messages or events, and the data bridge is used to
 
 Based on the publish/subscribe model, EMQX provides rules to handle messages or events, such as data format conversion, message encoding and decoding, and business logic processing.
 
-For more information about rules, see [Rules](./rules.md)。
+For more information about rules, see [Rules](./rules.md).
 
 ## Data Bridges
 
@@ -20,7 +20,7 @@ A data bridge is a channel used to connect EMQX and external data systems.
 Through data bridges, users can send messages from EMQX to external data systems in real time,
 or pull data from the external data system and send it to a topic of EMQX.
 
-For more information about data bridges, see [Data Bridges](./data-bridges.md)。
+For more information about data bridges, see [Data Bridges](./data-bridges.md).
 
 ## Flow Charts
 
