@@ -4,24 +4,6 @@
 
 要了解我们在 EMQX 5.0 中增加的新功能，请查看 [5.0.0 Release](https://www.emqx.com/zh/changelogs/broker/5.0.0)。
 
-## 配置文件
-
-从 5.0 版本开始，EMQX 将使用 [HOCON](https://lightbend.github.io/config/) 作为配置文件格式。
-
-我们提供了一种新的配置方案：**没有显式设置的配置项将使用默认值**。因此，精简后的默认配置文件 `emqx.conf` 现在不到 100 行。
-
-用户仍然可以使用旧的语法进行配置，但配置结构已经调整且部分配置项已经更名，请参照[配置文件](../admin/cfg.md)手动迁移配置项。
-
-::: tip
-参考性操作步骤
-
-1. 找出当前 4.x 集群中变更过的配置项
-   1. 从安装包中获取默认的 `emqx.conf` 文件
-   2. 从运行的集群中取出 `emqx.conf` 文件
-   3. 使用[文本对比工具](https://text-compare.com/)进行对比，获得变更后的配置项（对比前请确保配置数据脱敏）
-2. 参照配置文档，将变更过的配置项手动迁移至 5.0 集群中
-:::
-
 ## 日志
 
 日志输出格式进行了调整，请参照[日志](../observability/log.md)。
@@ -39,34 +21,34 @@
 
 此前的官方插件已迁移到 EMQX 中成为内置功能，用户在 4.x 版本上开发的插件需要重新适配。以下是官方插件与现有功能对照表：
 
-| 4.x              | 5.0                              |
-| ---------------- | -------------------------------- |
-| emqx_auth_http   | 认证/授权 - HTTP 数据源          |
-| emqx_auth_jwt    | 认证 - JWT                       |
-| emqx_auth_mnesia | 认证/授权 - 内置数据库           |
-| emqx_auth_mongo  | 认证/授权 - MongoDB 数据源       |
-| emqx_auth_mysql  | 认证/授权 - MySQL 数据源         |
-| emqx_auth_pgsql  | 认证/授权 - PostgreSQL 数据源    |
-| emqx_auth_redis  | 认证/授权 - Redis 数据源         |
-| emqx_sasl        | 认证/授权 - 增强认证             |
-| emqx_auth_ldap   | -                                |
-| emqx_rule_engine | 数据集成功能                     |
-| emqx_bridge_mqtt | 数据桥接 - MQTT Sink/MQTT Source |
-| emqx_web_hook    | 数据桥接 - WebHook               |
-| emqx_coap        | CoAP 网关                        |
-| emqx_dashboard   | Dasboard                         |
-| emqx_exhook      | ExHook 功能                      |
-| emqx_exproto     | ExProto 网关                     |
-| emqx_lwm2m       | LwM2M 网关                       |
-| emqx_sn          | MQTT-SN 网关                     |
-| emqx_stomp       | STOMP 网关                       |
-| emqx_lua_hook    | -                                |
-| emqx_management  | -                                |
-| emqx_prometheus  | Prometheus 功能                  |
-| emqx_psk_file    | -                                |
-| emqx_recon       | -                                |
-| emqx_retainer    | Retain 功能                      |
-| emqx_telemetry   | 遥测功能                         |
+| 4.x              | 5.0                                           |
+| ---------------- | --------------------------------------------- |
+| emqx_auth_http   | 认证/授权 - HTTP 数据源                       |
+| emqx_auth_jwt    | 认证 - JWT                                    |
+| emqx_auth_mnesia | 认证/授权 - 内置数据库                        |
+| emqx_auth_mongo  | 认证/授权 - MongoDB 数据源                    |
+| emqx_auth_mysql  | 认证/授权 - MySQL 数据源                      |
+| emqx_auth_pgsql  | 认证/授权 - PostgreSQL 数据源                 |
+| emqx_auth_redis  | 认证/授权 - Redis 数据源                      |
+| emqx_sasl        | 认证/授权 - 增强认证                          |
+| emqx_auth_ldap   | -                                             |
+| emqx_rule_engine | 数据集成功能                                  |
+| emqx_bridge_mqtt | 数据桥接 - MQTT Sink/MQTT Source              |
+| emqx_web_hook    | 数据桥接 - WebHook                            |
+| emqx_coap        | CoAP 网关                                     |
+| emqx_dashboard   | Dasboard                                      |
+| emqx_exhook      | ExHook 功能                                   |
+| emqx_exproto     | ExProto 网关                                  |
+| emqx_lwm2m       | LwM2M 网关                                    |
+| emqx_sn          | MQTT-SN 网关                                  |
+| emqx_stomp       | STOMP 网关                                    |
+| emqx_lua_hook    | -                                             |
+| emqx_management  | -                                             |
+| emqx_prometheus  | Prometheus 功能                               |
+| emqx_psk_file    | 认证 PSK (`psk_authentication.enable = true`) |
+| emqx_recon       | 通过 `emqx_ctl observer` 命令提供             |
+| emqx_retainer    | Retain 功能                                   |
+| emqx_telemetry   | 遥测功能                                      |
 
 ## HTTP API
 

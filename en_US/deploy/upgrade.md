@@ -5,25 +5,6 @@ EMQX 5.0 is not backward compatible with 4.x in management APIs and clustering A
 
 To learn about the new features we have added in EMQX 5.0, checkout [5.0.0 Release](https://www.emqx.com/en/changelogs/broker/5.0.0).
 
-## Configuration
-
-Starting from version 5, EMQX will use HOCON for the configuration syntax.
-
-We provide a new way to configure: **If no value is explicitly set, the configuration item will use the default value**.
-Because of this, the default configuration file `emqx.conf` is now less than 100 lines including comments.
-
-Users can still use the old syntax to configure, but the configuration structure has been adjusted and some configuration items have been renamed. Please refer to [Configuration File](../admin/cfg.md) to manually migrate configuration items.
-
-::: tip
-Reference steps
-
-1. Find out which configuration items have changed in the current 4.x cluster
-   1. Get the default `emqx.conf` file from the installation package
-   2. Get the `emqx.conf` file from the running cluster
-   3. Use [Text Comparison Tool](https://text-compare.com/) to compare and get the changed configuration items (please make sure the data has been desensitized)
-2. Refer to the configuration documentation to manually migrate the changed configuration items to the 5.0 cluster
-:::
-
 ## Log
 
 Comparing with 4.x, the biggest change in log is the format.
