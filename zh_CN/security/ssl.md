@@ -111,7 +111,7 @@ PSK 仅支持 tlsv1.2 及以下的版本。
 
 ```
 authentication {
-  url = "http://127.0.0.1:8080"
+  url = "https://127.0.0.1:8080"
   backend = "http"
 
   ...
