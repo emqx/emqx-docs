@@ -66,7 +66,7 @@ Previously, "Appication" was used to manage API access credentials, which has no
 
 Port 8081 has been merged into port 18083, and the basic path of API access has been switched from `/api/v4` to `/api/v5`, please call the API through this port and path.
 
-String timestamps are now in [RFC3339](https: //datatracker.ietf.org/doc/html/rfc3339) format.
+String timestamps are now in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format.
 
 ### Data Format Changes
 
