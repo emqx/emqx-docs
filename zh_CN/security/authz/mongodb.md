@@ -1,18 +1,18 @@
 # MongoDB
 
-EMQX支持从MongoDB中读取于定义的一系列规则来对客户端的发布和订阅等操作进行授权。
+EMQX 支持从 MongoDB 中读取于定义的一系列规则来对客户端的发布和订阅等操作进行授权。
 
 ## 存储方式
 
 MongoDB authorizer 可以将 ACL 规则存储到 MongoDB 中。
 管理员可以指定一个 collection 和 filter 模版来对客户端进行查找和匹配。
 
-每个MongoDB的记录应该包含`permission`, `action`, 和 `topics` 这些字段。
+每个 MongoDB 的记录应该包含 `permission`, `action`, 和 `topics` 这些字段。
 * `permission`： 可以是 `deny` 或 `allow`，用于指定授权的结果。
-* `action`： 可以是`publish`， `subscribe`， 或 `all`，用于指定该规则适用于哪些客户端请求。
+* `action`： 可以是 `publish`， `subscribe`， 或 `all`，用于指定该规则适用于哪些客户端请求。
 * `topics`： 用于指定该规则适用的发布或订阅主题，或订阅的主题过滤器。比如是一个字符串数组，支持[占位符](./authz.md#主题占位符).
 
-下面举一个使用的例子，让用户名为 `user123`的客户端有权订阅主题 `data/user123/#`：
+下面举一个使用的例子，让用户名为 `user123` 的客户端有权订阅主题 `data/user123/#`：
 
 ```js
 > db.mqtt_acl.insertOne(
@@ -30,6 +30,7 @@ MongoDB authorizer 可以将 ACL 规则存储到 MongoDB 中。
 ```
 
 相应的链接配置参数如下：
+
 ```
 collection = "mqtt_acl"
 filter { username = "${username}" }
@@ -37,7 +38,7 @@ filter { username = "${username}" }
 ```
 
 ::: warning
-当需要存储的客户端数量很大时，有必要为这些数据创建索引。否则授权信息的查询会导致MongoDB和EMQX的系统压力增加。
+当需要存储的客户端数量很大时，有必要为这些数据创建索引。否则授权信息的查询会导致 MongoDB 和 EMQX 的系统压力增加。
 :::
 
 ## 配置
@@ -63,7 +64,9 @@ MongoDB Authorizer 必需有 `type = mongodb`。
     password = "secret"
   }
   ```
+
 *  [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/)：
+
 ```
 {
   type = mongodb
@@ -81,7 +84,9 @@ MongoDB Authorizer 必需有 `type = mongodb`。
   password = "secret"
 }
 ```
+
 *  [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/)：
+
 ```
 {
   type = mongodb
@@ -103,31 +108,31 @@ MongoDB Authorizer 必需有 `type = mongodb`。
 
 #### `collection`
 
-必填字段，指定MongoDB中用于存储授权信息的Collection。
+必填字段，指定 MongoDB 中用于存储授权信息的 Collection。
 
 #### `filter`
 
-用于指定MongoDB查询时使用哪些字段进行过滤。
+用于指定 MongoDB 查询时使用哪些字段进行过滤。
 这些字段名称没有限制，值可以使用以下这些[占位符](./authz.md#Authorizer配置中的占位符):
-* `${clientid}` — 客户端ID
+* `${clientid}` — 客户端 ID
 * `${username}` — 客户端登录时使用的用户名
-* `${peerhost}` — 客户端的源IP地址
+* `${peerhost}` — 客户端的源 IP 地址
 
 #### `database`
 
-指定在哪个MongoDB数据库中查询授权数据。
+指定在哪个 MongoDB 数据库中查询授权数据。
 
 #### `username`
 
-指定访问MongoDB数据库时使用的用户名。
+指定访问 MongoDB 数据库时使用的用户名。
 
 #### `password`
 
-指定访问MongodDB数据库时使用的密码。
+指定访问 MongodDB 数据库时使用的密码。
 
 #### `pool_size`
 
-指定MongoDB的连接池的大小。默认值是8。
+指定 MongoDB 的连接池的大小。默认值是 8。
 
 #### `ssl`
 
@@ -135,12 +140,13 @@ MongoDB Authorizer 必需有 `type = mongodb`。
 
 #### `srv_record`
 
-可选的布尔类型参数。默认是 `false` 。该配置设置成 `true` 时，EMQX会从从DNS记录中查找指定的MongoDB地址和端口。
+可选的布尔类型参数。默认是 `false` 。该配置设置成 `true` 时，EMQX 会从 DNS 记录中查找指定的 MongoDB 地址和端口。
+
 详情请参考[DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
 
 #### `topology`
 
-指定MongDB连接参数的更多字段。
+指定 MongDB 连接参数的更多字段。
 
 * `pool_size` — 连接池大小。
 * `max_overflow` — 当连接池中所有的连接都忙时，可以额外创建的连接数上限。
@@ -156,11 +162,11 @@ TODO
 * `min_heartbeat_frequency_ms` — ms duration, the minimum delay between Topology rescans.
 -->
 
-### MongoDB单机模式
+### MongoDB 单机模式
 
 #### `server`
 
-MongoDB服务器的FQDN或者IP地址和端口号
+MongoDB 服务器的 FQDN 或者 IP 地址和端口号
 
 
 #### `w_mode`
@@ -171,7 +177,7 @@ MongoDB服务器的FQDN或者IP地址和端口号
 
 #### `servers`
 
-MongoDB server addresses to connect or to us as seeds, required.
+必选的字符串类型配置，用逗号分隔，指定用于连接或被用作 seeds 的 MongoDB 服务器地址列表。
 
 #### `w_mode`
 
@@ -181,17 +187,17 @@ MongoDB server addresses to connect or to us as seeds, required.
 
 指定读模式，默认为 `master`。
 设置为 `master` 时，所有的读操作都会返回最新的数据。如果连接的服务器不是主节点，那么读取将会失败。
-设置为 `slave_ok` 时，如果连接到的MongoDB是一个备节点，则可能会读到过期的数据。
+设置为 `slave_ok` 时，如果连接到的 MongoDB 是一个备节点，则可能会读到过期的数据。
 
 #### `replica_set_name`
 
-MongoDB的Replica set名称，此参数为必填项。但在`srv_record` 设置为`true` 时，可能会被发现的信息覆写。
+MongoDB 的 Replica set 名称，此参数为必填项。但在 `srv_record` 设置为 `true` 时，可能会被发现的信息覆写。
 
-### MongoDB Cluster模式
+### MongoDB Cluster 模式
 
 #### `servers`
 
-必填字段，用于指定可用于连接的所有MongoDB服务器的FQDN和端口号，使用逗号分隔。
+必填字段，用于指定可用于连接的所有 MongoDB 服务器的 FQDN 和端口号，使用逗号分隔。
 
 #### `w_mode`
 
