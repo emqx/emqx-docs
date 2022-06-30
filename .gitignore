@@ -9,3 +9,4 @@ book.pdf
 /.idea/
 directory.json
 directory_ee.json
+*.sw[op]
