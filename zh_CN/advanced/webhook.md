@@ -1,8 +1,8 @@
-# WebHook
+# Webhook
 
-WebHook 是由 [emqx_web_hook](https://github.com/emqx/emqx-web-hook) 插件提供的 **将 EMQX 中的钩子事件通知到某个 Web 服务** 的功能。
+Webhook 是由 [emqx_web_hook](https://github.com/emqx/emqx-web-hook) 插件提供的 **将 EMQX 中的钩子事件通知到某个 Web 服务** 的功能。
 
-WebHook 的内部实现是基于 [钩子](./hooks.md)，但它更靠近顶层一些。它通过在钩子上的挂载回调函数，获取到 EMQX 中的各种事件，并转发至 emqx_web_hook 中配置的 Web 服务器。
+Webhook 的内部实现是基于 [钩子](./hooks.md)，但它更靠近顶层一些。它通过在钩子上的挂载回调函数，获取到 EMQX 中的各种事件，并转发至 emqx_web_hook 中配置的 Web 服务器。
 
 以 客户端成功接入(client.connected) 事件为例，其事件的传递流程如下：
 
@@ -13,7 +13,7 @@ WebHook 的内部实现是基于 [钩子](./hooks.md)，但它更靠近顶层一
 ```
 
 ::: tip
-WebHook 对于事件的处理是单向的，**它仅支持将 EMQX 中的事件推送给 Web 服务，并不关心 Web 服务的返回**。
+Webhook 对于事件的处理是单向的，**它仅支持将 EMQX 中的事件推送给 Web 服务，并不关心 Web 服务的返回**。
 借助 Webhook 可以完成设备在线、上下线记录，订阅与消息存储、消息送达确认等诸多业务。
 :::
 

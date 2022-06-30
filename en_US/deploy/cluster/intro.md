@@ -128,11 +128,11 @@ backup of the **Topic Trie.**
 
 The following topic-subscription relationship is an example:
 
-| Client | Node | Subscribed topic |
-| ----- | --- | ------- |
-| client1 | node1 | t/+/x, t/+/y |
-| client2 | node2 | t/# |
-| client3 | node3 | t/+/x, t/a |
+| Client  | Node  | Subscribed topic |
+|---------|-------|------------------|
+| client1 | node1 | t/+/x, t/+/y     |
+| client2 | node2 | t/#              |
+| client3 | node3 | t/+/x, t/a       |
 
 When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
 
@@ -178,24 +178,24 @@ Network partition autoheal and autoclean.
 
 EMQX supports multiple node discovery strategies:
 
-| Strategy | Description       |
-| -------- | ----------------- |
+| Strategy | Description                             |
+|----------|-----------------------------------------|
 | manual   | Create a cluster through manual command |
-| static   | Autocluster of static node list |
-| mcast    | Autocluster with UDP multicast mode |
-| dns      | Autocluster of DNS A record |
-| etcd     | Autocluster through etcd |
-| k8s      | Autocluster of Kubernetes service |
+| static   | Autocluster of static node list         |
+| mcast    | Autocluster with UDP multicast mode     |
+| dns      | Autocluster of DNS A record             |
+| etcd     | Autocluster through etcd                |
+| k8s      | Autocluster of Kubernetes service       |
 
 ### EMQX Broker Cluster protocol settings
 
-Each node in the Erlang cluster can be connected through TCPv4, TCPv6 or TLS,
+Each node in the Erlang cluster can be connected through TCP or TLS,
 and the connection method can be configured in`etc/emqx.conf`:
 
-| Configuration name | Type | Default value | Description |
-| ----- | --- | ----- | ---- |
-| cluster.proto_dist | enum | `inet_tcp` | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
-| node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate. |
+| Configuration name    | Type      | Default value       | Description                                                                                                                                         |
+|-----------------------|-----------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| cluster.proto_dist    | enum      | `inet_tcp`          | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
+| node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate.            |
 
 ## Network Partition Autoheal
 

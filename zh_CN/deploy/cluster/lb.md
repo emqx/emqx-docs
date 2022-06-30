@@ -3,7 +3,7 @@
 在开发时我们通常使用压缩包方式以单节点的形式启动服务，生产运行需要一个更加简单稳定的方式。本页主要从部署架构最佳实践讲解如何部署你的 EMQX 服务。
 
 ::: tip
-如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开 Proxy Protocol 配置，配置项：[EMQX 监听器 proxy_protocol](../configuration/configuration.md#listenertcpexternalproxyprotocol)
+如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开 Proxy Protocol 配置，配置项：[EMQX 监听器 proxy_protocol](../../admin/cfg.md)
 
 `Proxy Protcol` 参考: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
@@ -14,7 +14,7 @@ Nginx 使用 Proxy Prorcol 参考: [https://docs.nginx.com/nginx/admin-guide/loa
 
 ## 部署架构
 
-EMQX 集群可作为物联网接入服务（IoT Hub）部署，目前 EMQ 在青云、阿里云、AWS 等云服务提供商上均提供开箱即用的免费软件镜像，对于特殊硬件平台和系统版本如树莓派、Linux ARM，可使用源码编译安装。
+EMQX 集群可作为物联网接入服务（IoT Hub）部署，目前 EMQ 在青云、阿里云、AWS 等云服务提供商上均提供免费软件镜像，对于特殊硬件平台和系统版本如树莓派、Linux ARM，可使用源码编译安装。
 
 典型部署架构：
 
@@ -30,7 +30,7 @@ LB (负载均衡器) 负责分发设备的 MQTT 连接与消息到 EMQX 集群�
 公有云厂商 LB 产品:
 
 | 云计算厂商                       | 是否支持 TLS 终结 | LB 产品介绍                                                |
-| -------------------------------- | ----------------- | ---------------------------------------------------------- |
+|----------------------------------|-------------------|------------------------------------------------------------|
 | [青云](https://qingcloud.com)    | 是                | <https://docs.qingcloud.com/product/network/loadbalancer/> |
 | [AWS](https://aws.amazon.com)    | 是                | <https://aws.amazon.com/cn/elasticloadbalancing/>          |
 | [阿里云](https://www.aliyun.com) | 否                | <https://www.aliyun.com/product/slb>                       |
@@ -75,10 +75,11 @@ EMQX 默认开启的 MQTT 服务 TCP 端口:
 
 EMQX 节点集群使用的 TCP 端口:
 
-| 端口 | 说明                         |
-|------|----------------------------|
-| 4370 | 集群节点发现端口             |
-| 5370 | 集群节点 PRC 通道            |
+| 端口  | 说明                |
+|------|--------------------|
+| 4370 | 集群分布式传输端口    |
+| 5370 | f集群节点 RPC 通道   |
+
 
 集群节点间如有防护墙，需开启上述 TCP 端口互访权限。
 
@@ -121,7 +122,7 @@ EMQX 节点集群使用的 TCP 端口:
 3. 私有网络内创建两台 EMQX 主机，指定上面创建的 VPC 网络，例如:
 
 | 节点  | IP 地址     |
-| ----- | ----------- |
+|-------|-------------|
 | emqx1 | 192.168.0.2 |
 | emqx2 | 192.168.0.3 |
 
@@ -141,7 +142,6 @@ EMQX 节点集群使用的 TCP 端口:
 ![image](./assets/lb_5.png)
 
 8. MQTT 客户端连接 LB 公网地址测试。
-
 
 
 ## 私有网络部署

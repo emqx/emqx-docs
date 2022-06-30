@@ -11772,7 +11772,7 @@ Configuration for MQTT bridges.
 
 - webhook: <code>{$name -> [bridge:config](#bridge-config)}</code>
 
-  WebHook to an HTTP server.
+  Webhook to an HTTP server.
 
 - mqtt: <code>{$name -> [ingress](#ingress) | [egress](#egress)}</code>
 

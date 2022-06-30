@@ -48,9 +48,9 @@ rule_engine {
 在动作里，可以使用 `${some_key}` 的形式来引用 SQL 结果中的变量。因为这里 SQL 语句使用 `SELECT *`
 输出了所有可用的字段，所以我们可以使用 `${payload}` 来获取原来消息里的消息内容，
 或者使用 `${clientid}` 来获取发送消息的客户端 ID 等等。
-规则支持的事件类型以及可用字段请参见：[事件主题和可用字段](./rule-engine_field.md)
+规则支持的事件类型以及可用字段请参见：[事件主题和可用字段](./rule-sql-events-and-fields.md)
 
-关于内置动作的细节，详见 [内置动作](./rule-engine_builtin_actions.md)
+关于内置动作的细节，详见 [内置动作](./rule-actions.md)
 
 ### 引用数据桥接作为动作
 
@@ -60,18 +60,24 @@ rule_engine {
 rule_engine {
     rules.my_rule_id {
         sql = "SELECT * FROM \"t/#\""
-        actions = ["mqtt:my_mqtt_bridge"]
+        actions = ["mqtt:my_egress_mqtt_bridge"]
     }
 }
 ```
 
-其中 `mqtt:my_mqtt_bridge` 是一个数据桥接的 ID，其类型为 `mqtt`、名字为 `my_mqtt_bridge`。
+其中 `mqtt:my_egress_mqtt_bridge` 是一个数据桥接的 ID，其类型为 `mqtt`、名字为 `my_egress_mqtt_bridge`。
 
 使用数据桥接之前，须要预先创建：
 
 ```js
 bridges.mqtt.my_egress_mqtt_bridge {
-    connector = "mqtt:my_mqtt_connector"
+    connector = {
+        server = "broker.emqx.io:1883"
+        username = "username1"
+        password = ""
+        ssl.enable = false
+    }
+
     direction = egress
 
     remote_topic = "from_emqx/${topic}"
@@ -79,23 +85,15 @@ bridges.mqtt.my_egress_mqtt_bridge {
     payload = "${payload}"
     retain = false
 }
-
-connectors.mqtt.my_mqtt_connector {
-    server = "192.168.2.100:1883"
-    username = "username1"
-    password = ""
-    ssl.enable = false
-}
 ```
 
 上面的配置比之前规则的配置稍微复杂了一些，但其实他只是创建了一个 MQTT 桥接。
 
 我们使用 `bridges` 命名空间用来创建数据桥接，
-`bridges.mqtt.my_egress_mqtt_bridge` 则创建了一个类型为 `mqtt`、名字为 `my_mqtt_bridge` 的数据桥接，
-其 ID 为 `<type>:<name>`，即 `mqtt:my_mqtt_bridge`。这个 ID 正是被前面的规则当做动作引用的。
+`bridges.mqtt.my_egress_mqtt_bridge` 则创建了一个类型为 `mqtt`、名字为 `my_egress_mqtt_bridge` 的数据桥接，
+其 ID 为 `<type>:<name>`，即 `mqtt:my_egress_mqtt_bridge`。这个 ID 正是被前面的规则当做动作引用的。
 
-同时这个 MQTT 桥接引用了一个 connector: `mqtt:my_mqtt_connector`，里面配置了 mqtt 连接相关的配置。
-这个 connector 配置可以被多个 MQTT 桥接引用。
+我们使用 `connector` 字段配置了 MQTT 连接相关的信息，比如服务地址和端口，以及用户名密码等。
 
 关于数据桥接的细节，详见 [数据桥接](./data-bridges.md)
 
@@ -149,7 +147,7 @@ rule_engine {
 这个规则从事件上下文中选取出 "clientid" 和 "connected_at" 两个字段，然后调用 `console` 动作把 SQL 的输出打印到 emqx 控制台。
 
 除了客户端上下线事件以外，规则还支持订阅和取消订阅、消息投递等事件。
-规则支持的事件类型以及可用字段请参见：[事件主题和可用字段](./rule-engine_field.md)
+规则支持的事件类型以及可用字段请参见：[事件主题和可用字段](./rule-sql-events-and-fields.md)
 
 ## 配置使用数据桥接作为数据源的规则
 
@@ -174,17 +172,15 @@ SQL 语句里指定了一个数据桥接主题：`$bridges/mqtt:my_mqtt_source`�
 
 ```js
 bridges.mqtt.my_mqtt_source {
-    connector = "mqtt:my_mqtt_connector"
+    connector = {
+        server = "192.168.2.100:1883"
+        username = "username1"
+        password = ""
+        ssl.enable = false
+    }
     direction = ingress
     remote_topic = "aws/#"
     remote_qos = 1
-}
-
-connectors.mqtt.my_mqtt_connector {
-    server = "192.168.2.100:1883"
-    username = "username1"
-    password = ""
-    ssl.enable = false
 }
 ```
 
@@ -192,7 +188,7 @@ connectors.mqtt.my_mqtt_connector {
 `bridges.mqtt.my_mqtt_source` 则创建了一个类型为 `mqtt`、名字为 `my_mqtt_source` 的数据桥接，
 其 ID 为 `<type>:<name>`，即 `mqtt:my_mqtt_source`。
 
-这个 MQTT 桥接引用了一个 connector: `mqtt:my_mqtt_connector`，里面配置了 mqtt 连接相关的配置。
+其中 `connector` 字段配置了 mqtt 连接相关的配置，比如服务地址和用户名密码等。
 关于数据桥接的细节，详见 [数据桥接](./data-bridges.md)。
 
 该规则在最后调用了 `console` 动作，这是一个调试动作，会把 SQL 语句筛选出的所有字段打印到 emqx 控制台里。

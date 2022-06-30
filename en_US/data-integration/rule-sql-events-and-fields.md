@@ -9,7 +9,7 @@ Different data source types have different fields.
 ## Data Bridges
 
 Rules use topics prefixed by `$bridges/` to present messages or events triggered by a data bridge.
-The format is: `$bridges/<type>:<name>`。
+The format is: `$bridges/<type>:<name>`.
 
 Where `<type>:<name>` is the bridge Id, `<type>` is the bridge type, `<name>` is the bridge name.
 Such as `$bridges/mqtt:my_mqtt_bridge`.

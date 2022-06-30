@@ -69,7 +69,7 @@ Add more features to MQTT:
 
 - SQL syntax data integrations to extract, filter, enrich, and transform MQTT message or internal events to formats expected by external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT(such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
-- Supports integration with other apps using WebHook
+- Supports integration with other apps using Webhook
 
 ### Reliability
 

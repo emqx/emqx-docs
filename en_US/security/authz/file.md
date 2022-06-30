@@ -16,19 +16,30 @@ The file-based authorizer is identified by type `file`.
 Sample configuration:
 
 ```
-{
-    type = file
-    enable = true
-
-    path = "etc/acl.conf"
+authorization {
+  deny_action = ignore
+  no_match = allow
+  sources = [
+    {
+      type = file
+      enable = true
+      path = "etc/acl.conf"
+    }
+  ]
 }
 ```
+
+::: warning Warning
+The initial file provided by the `path` config is not mutable to EMQX.
+If rules are updated from the dashboard UI or management API, the new rules
+will be stored in `data/authz/acl.conf`, and this original config will no longer be loaded.
+:::
 
 ## ACL file format
 
 ACL configuration file is a list of Erlang [tuples](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) ending with a period. A _tuple_ is a comma-separated list of expressions. The whole list is enclosed in curly braces.
 
-The '%%` prefix identifies comment strings.
+The `%` prefix identifies comment strings.
 
 Example:
 
@@ -48,8 +59,6 @@ Example:
 
 The rules are matched from top to bottom. If a rule matches, its permission is applied, and the remaining rules are ignored.
 
-- Line comments are expressed as `%%`.
-- Each rule consists of a tuple that ends with `.`.
 - The first position in a tuple indicates the permission applied if the rule is successfully hit. The possible values are:
     * `allow`
     * `deny`

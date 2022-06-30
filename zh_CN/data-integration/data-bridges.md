@@ -6,7 +6,7 @@
 通过数据桥接，用户可以实时地将消息从 EMQX 发送到外部数据系统，或者从外部数据系统拉取数据并发送到 EMQX 的某个主题。
 
 ::: tip
-EMQX 开源版中仅支持 MQTT 桥接 和 WebHook，企业版支持的数据桥接请详见：[企业数据集成](https://www.emqx.com/zh/integrations)
+EMQX 开源版中仅支持 MQTT 桥接 和 Webhook，企业版支持的数据桥接请详见：[企业数据集成](https://www.emqx.com/zh/integrations)
 :::
 
 ## 数据桥接快速入门
@@ -15,7 +15,7 @@ EMQX 开源版中仅支持 MQTT 桥接 和 WebHook，企业版支持的数据桥
 
 ### 搭建简易 HTTP 服务
 
-首先我们使用 Python 搭建一个简单的 HTTP 服务。这个 HTTP 服务接收 POST / 请求，
+首先我们使用 Python 搭建一个简单的 HTTP 服务。这个 HTTP 服务接收 `POST /` 请求，
 简单打印请求内容后返回 200 OK：
 
 ```

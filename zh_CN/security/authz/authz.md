@@ -1,246 +1,170 @@
-# 发布订阅 ACL
+# 简介
 
-**发布订阅 ACL** 指对 **发布 (PUBLISH)/订阅 (SUBSCRIBE)** 操作的 **权限控制**。例如拒绝用户名为 `Anna` 向 `open/elsa/door` 发布消息。
+MQTT 授权（authorization）是指对 MQTT 客户端的发布和订阅操作进行 _权限控制_。
+控制的内容主要是哪些客户端可以发布或者订阅哪些 MQTT 主题。
 
-EMQX 支持通过客户端发布订阅 ACL 进行客户端权限的管理，本章节介绍了 EMQX 支持的发布订阅 ACL 以及对应插件的配置方法。
+EMQX 支持集中类型的授权。
+* 权限列表（亦即 _ACL_）。可以从例如 MongoDB， MySQL，PostgreSQL，Redis，或者 EMQX 的内置数据库中读取这个列表。
+* 加载一个包含全局的 ACL 的文件。
+* 动态访问一个 HTTP 后端服务，并通过该 HTTP 调用的返回值来客户端是否有访问的权限。
+* 通过提取认证过程中携带的授权数据，例如 JWT 的某个字段。
 
+## 授权数据源
 
-## ACL 插件
+_授权数据源_ （或称 _Authorizer_） 是 EMQX 中实现权限空值的一个模块。
+每个控制器都有一个类型，EMQX 内部也把它用作唯一的标识符。
 
-EMQX 支持使用配置文件、外部主流数据库和自定义 HTTP API 作为 ACL 数据源。
+EMQX 默认提供如下这些 Authorizer：
 
-连接数据源、进行访问控制功能是通过插件实现的，使用前需要启用相应的插件。
+| 类型（ID）| 描述 |
+| ---- | --- |
+| built_in_database  | [使用内置数据库存授权数据](./mnesia.md) |
+| mysql              | [使用MySQL存放授权数据](./mysql.md) |
+| postgresql         | [使用PostgreSQL存放授权数据](./postgresql.md) |
+| mongodb            | [使用MongoDB存放授权数据](./mongodb.md) |
+| redis              | [使用Redis存放授权数据](./redis.md) |
+| http               | [通过访问外部HTTP服务来获取授权信息](./http.md) |
+| file               | [将授权信息存放在文件中](./file.md) |
 
-客户端订阅主题、发布消息时插件通过检查目标主题（Topic）是否在指定数据源允许/禁止列表内来实现对客户端的发布、订阅权限管理。
+每个控制器都有自己的配置。
 
+例如，下面是一个 MySQL 的例子：
 
+```
+{
+    enable => true
 
-**配置文件/内置数据源**
+    type = mysql
+    database = "mqtt"
+    username = "root"
+    password = "public"
 
-{% emqxce %}
-* [内置 ACL](./file.md)
-* [Mnesia ACL](./mnesia.md)
+    query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+    server = "10.12.43.12:3306"
+}
+```
 
-{% endemqxce %}
+## 授权链
 
+一组 Authorizer，可以组成一个授权链。当一个客户端进行发布或者订阅操作的时候，EMQX 会按顺序逐个检查，
+如果一个 Authorizer 能够找到该客户端的授权规则（ACL），那么就会对这个规则进行匹配。
+匹配的结果要么是允许（allow），要么是拒绝（deny）。如果没有找到适用于该客户端的规则，
+那么就会继续到授权链中的下一个 Authorizer 进行检查。
 
+如果整个链都没能找到适用于该客户端的规则（ACL），那么就使用默认规则。
 
-{% emqxee %}
+跟[认证链](../authn/authn.md#authentication-chains)不太一样的地方是：授权链是全局唯一的。
 
-* [内置数据库 认证/访问控制](../modules/mnesia_authentication.md)
+## 认证器提供的授权规则
 
-{% endemqxee %}
+有些认证器的认证结果中，有携带授权数据的能力，当这个数据存在的时候，这些规则的检查会发生在全局授权链之前。
+例如，[JWT](../authn/jwt.md#jwt-authorization)。
 
+## 授权数据的缓存
 
-使用配置文件提供认证数据源，适用于变动较小的 ACL 管理。
+如果一个客户端大量的发送请求，就会对授权数据后端产生访问压力。
+因此 EMQX 为授权数据引入了缓存。
 
-
-
-**外部数据库**
-
-{% emqxee %}
-
-* [MySQL 认证/访问控制](../modules/mysql_authentication.md)
-* [PostgreSQL 认证/访问控制](../modules/pgsql_authentication.md)
-* [Redis 认证/访问控制](../modules/redis_authentication.md)
-* [MongoDB 认证/访问控制](../modules/mongo_authentication.md)
-* [LDAP 认证/访问控制](../modules/ldap_authentication.md)
-
-{% endemqxee %}
-
-
-{% emqxce %}
-
-* [MySQL ACL](./mysql.md)
-* [PostgreSQL ACL](./postgresql.md)
-* [Redis ACL](./redis.md)
-* [MongoDB ACL](./mongodb.md)
-
-{% endemqxce %}
-
-
-外部数据库可以存储大量数据、动态管理 ACL，方便与外部设备管理系统集成。
-
-
-
-**其他**
-
-
-{% emqxee %}
-
-* [HTTP 认证/访问控制](../modules/http_authentication.md)
-
-{% endemqxee %}
-
-{% emqxce %}
-
-* [HTTP ACL](./http.md)
-
-{% endemqxce %}
-
-
-HTTP ACL 能够实现复杂的 ACL 管理。
-
-::: tip
-
-ACL 功能包含在认证鉴权插件中，更改插件配置后需要**重启插件**才能生效，
-
+::: tip Tip
+缓存的配置参数会大大影响系统性能，所以调整缓存参数变得非常重要。请参考文档下文中的配置章节。
 :::
 
-## 规则详解
+## 规则占位符
 
-ACL 是允许与拒绝条件的集合，EMQX 中使用以下元素描述 ACL 规则：
+多数 Authorizer 支持在授权规则中使用占位符。
+占位符就像是一个模版，在运行时根据客户端信息进行替换，得到真正使用的授权规则。
 
-```bash
-## Allow-Deny Who Pub-Sub Topic
+### Authorizer 配置中的占位符
 
-"允许(Allow) / 拒绝(Deny)"  "谁(Who)"  "订阅(Subscribe) / 发布(Publish)" "主题列表(Topics)"
+配置中的占位符会在运行时进行替换并使用在后端数据库或服务的链接或者请求中。
+下面是 EMQX 支持的占位符：
+* `${clientid}` — 客户端的 clientid。
+* `${username}` — 客户端的用户名（username）。
+* `${peerhost}` — 客户端的源 IP 地址。
+* `${cert_subject}` — 客户端 x.509 证书中的主题名（Subject）。
+* `${cert_common_name}` 客户端 x.509 证书中的通用名（Common Name）.
+
+Redis Authorizer 配置中使用占位符的例子：
+
+```
+{
+  enable = true
+  type = redis
+
+  ... other parameters ...
+
+  cmd = "HGETALL mqtt_user:${username}"
+}
 ```
 
+### 主题占位符
 
-{% emqxee %}
+在 Authorizer 后端返回的规则中，MQTT 主题是字符串格式。这些字符串会被当作模版进行占位符的替换。
+在授权规则中可以使用的占位符如下：
 
-同时具有多条 ACL 规则时，EMQX 将按照规则排序进行合并，以 ACL 文件中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
+* `${clientid}` — MQTT 客户端的 Client ID。当在规则中使用 Client ID，这个 ID 应由客户端在连接 EMQX 前就指定，而不是让 EMQX 随机生成。
+* `${username}` — 使用客户端用户名 对规则进行替换。
 
-{% endemqxee %}
+占位符只能用于替换主题的整个字段，例如 `a/b/${username}/c/d`，但是不能用于替换字段的一部分，例如 `a/b${username}c/d`。
 
+为了避免占位符跟想要的主题冲突的问题，EMQX 5.0 中引入了一个 `eq` 语法，例如 `eq a/b/${username}/c/d`。
+这样规则将会不做替换，而是保持 MQTT 主题 `a/b/${username}/c/d` 不变。
 
-{% emqxce %}
+## 配置结构
 
-同时具有多条 ACL 规则时，EMQX 将按照规则排序进行合并，以 [ACL 文件](./file.md) 中的默认 ACL 为例，ACL 文件中配置了默认的 ACL 规则，规则从下至上加载：
+授权配置结构大致如下。
 
-{% endemqxce %}
-
-
-1. 第一条规则允许客户端发布订阅所有主题
-2. 第二条规则禁止全部客户端订阅 `$SYS/#` 与 `#` 主题
-3. 第三条规则允许 ip 地址为 `127.0.0.1` 的客户端发布/订阅 `$SYS/#` 与 `#` 主题，为第二条开了特例
-4. 第四条规则允许用户名为 `dashboard` 的客户端订阅 `$SYS/#` 主题，为第二条开了特例
-
-```erlang
-{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
-
-{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
-
-{deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
-
-{allow, all}.
+```
+authorization {
+  sources = [
+    { ...   },
+    { ...   }
+  ]
+  no_match = allow
+  deny_action = ignore
+  cache {
+    enable = true
+    max_size = 1024
+    duration = 1m
+  }
+}
 ```
 
+### `sources`
 
+带顺序的数组（非必需字段）。每个数组元素是一个 Authorizer 的数据源相关配置。
+数组中的每个元素都有一个 `enable` 字段，可用于快速启停切换。
+如果该配置项缺失，则当作空链处理。
 
-## 授权结果
+每个 Authorizer 的详细配置，可以参考相应的配置文件文档。
 
-任何一次 ACL 授权最终都会返回一个结果：
+### `no_match`
 
-- 允许：经过检查允许客户端进行操作
-- 禁止：经过检查禁止客户端操作
-- 忽略（ignore）：未查找到 ACL 权限信息，无法显式判断结果是允许还是禁止，交由下一 ACL 插件或默认 ACL 规则来判断
+可选值，可以设置为 `allow` 或 `deny`。缺省值是 `allow`。
+当 EMQX 无法从认证链中为某个客户端匹配到任何规则时候，将会使用这个默认的规则。
 
+### `deny_action`
 
+可选值，可以设置为 `ignore` 或 `disconnect`。默认值是 `ignore`。
+这个配置用于指定当拒绝访问发生时，应该如何对待这个客户端的 MQTT 连接。
+如果配置成 `ignore`，那么这个操作会被丢弃，例如，如果是一个发布动作，那么这消息会被丢弃；如果是一个订阅操作，那么订阅请求会被拒绝。
+如果配置成 `disconnect`，那么这个客户端将会被断开连接。
 
-## 全局配置
+### `cache`
 
-默认配置中 ACL 是开放授权的，即授权结果为**忽略（ignore）**时**允许**客户端通过授权。
+ACL 缓存的配置。
 
-通过 `etc/emqx.conf` 中的 ACL 配置可以更改该属性：
+* `cache.enable` — 默认是 `true`。为 ACL 开启缓存。如果仅使用认证 JWT 中提供 授权信息，这建议关闭缓存。
+* `cache.max_size` — 默认值 `32`。此配置规定每个客户端允许缓存的 ACL 规则数量。当超过上限时，老的记录将会被删掉。
+* `cache.ttl` — 默认 `1m`（一分钟）。 该配置规定 ACL 规则缓存有效时间。
 
-```bash
-# etc/emqx.conf
+## 使用 API 对授权参数进行配置
 
-## ACL 未匹配时默认授权
-## Value: allow | deny
-acl_nomatch = allow
-```
+EMQX 为授权参数暴露如下 REST API 来支持进行运行时动态修改。
 
+* `/api/v5/authorization/settings` — 对通用授权参数进行修改，例如 `no_match`， `deny_action`，和 `cache`；
+* `/api/v5/authorization/sources` — 用于管理授权链；
+* `/api/v5/authorization/cache` — 用于强制清除授权数据缓存；
+* `/api/v5/authorization/sources/built_in_database` — 用于动态增加或删除内置数据库的条目。
 
-
-{% emqxce %}
-
-配置默认 [ACL 文件](./file.md)，使用文件定义默认 ACL 规则：
-
-{% endemqxce %}
-
-{% emqxee %}
-
-配置默认 ACL 文件，使用文件定义默认 ACL 规则：
-
-{% endemqxee %}
-
-
-```bash
-# etc/emqx.conf
-
-acl_file = etc/acl.conf
-```
-
-配置 ACL 授权结果为**禁止**的响应动作，为 `disconnect` 时将断开设备：
-
-```bash
-# etc/emqx.conf
-
-## Value: ignore | disconnect
-acl_deny_action = ignore
-```
-
-::: tip
-在 MQTT v3.1 和 v3.1.1 协议中，发布操作被拒绝后服务器无任何报文错误返回，这是协议设计的一个缺陷。但在 MQTT v5.0 协议上已经支持应答一个相应的错误报文。
-:::
-
-
-## 超级用户（superuser）
-
-客户端可拥有“超级用户”身份，超级用户拥有最高权限不受 ACL 限制。
-
-1. 认证鉴权插件启用超级用户功能后，发布订阅时 EMQX 将优先检查客户端超级用户身份
-2. 客户端为超级用户时，通过授权并跳过后续 ACL 检查
-
-
-## ACL 缓存
-
-ACL 缓存允许客户端在命中某条 ACL 规则后，便将其缓存至内存中，以便下次直接使用，客户端发布、订阅频率较高的情况下开启 ACL 缓存可以提高 ACL 检查性能。
-
-在 `etc/emqx.conf` 可以配置 ACL 缓存大小与缓存时间：
-
-```bash
-# etc/emqx.conf
-
-## 是否启用
-enable_acl_cache = on
-
-## 单个客户端最大缓存规则数量
-acl_cache_max_size = 32
-
-## 缓存失效时间，超时后缓存将被清除
-acl_cache_ttl = 1m
-```
-
-
-### 清除缓存
-
-在更新 ACL 规则后，某些客户端由于已经存在缓存，则无法立即生效。若要立即生效，则需手动清除所有的 ACL 缓存：
-
-参见 [HTTP API - 清除 ACL 缓存](http.md#endpoint-get-acl-cache)
-
-
-## ACL 鉴权链
-
-当同时启用多个 ACL 插件时，EMQX 将按照插件开启先后顺序进行链式鉴权：
-- 一通过授权，终止链并允许客户端通过验证
-- 一旦授权失败，终止链并禁止客户端通过验证
-- 直到最后一个 ACL 插件仍未通过，根据**默认授权**配置判定
-  - 默认授权为允许时，允许客户端通过验证
-  - 默认授权为禁止时，禁止客户端通过验证
-
-
-![_images/guide_3.png](./assets/guide_3.png)
-
-<!-- replace -->
-
-::: tip
-
-同时只启用一个 ACL 插件可以提高客户端 ACL 检查性能。
-
-:::
-
-
+详细的 API 文档，请参考 `/api-docs/index.html`，例如本地部署时：http://localhost:18083/api-docs/index.html

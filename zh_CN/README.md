@@ -65,9 +65,13 @@ MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息
 
 ### 数据集成
 
+
 - 内置数据集成，通过 SQL 语法实时提取、过滤、丰富和转换消息或内部事件并将其传输到外部数据平台
 - 通过 MQTT 与其他 Broker 或物联网平台进行双向数据桥接（如 EMQX Cloud，AWS IoT Core，Azure IoT Hub）
-- 通过 WebHook 与其他应用集成
+- 通过 Webhook 与其他应用集成
+{emqxee}
+- 企业版: TODO
+{endemqxee}
 
 ### 可靠性
 
