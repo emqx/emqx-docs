@@ -192,7 +192,7 @@ Users can use the data import API to import data from older versions into EMQX 5
 **Success response status code:**
 
 ```shell
-200 or 204
+200
 ```
 
 The authenticator will be ignored if the request fails or returns another status code.
@@ -353,7 +353,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 **Success response status code:**
 
 ```shell
-200 or 204
+200
 ```
 
 Other status codes or this authorizer will be `ignore` if the request fails.

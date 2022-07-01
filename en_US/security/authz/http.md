@@ -7,12 +7,23 @@ HTTP authorizer delegates authorization to a custom HTTP API.
 * In authorizer settings, an HTTP request pattern is specified.
 * When an MQTT client makes a publish/subscribe request to the broker, the configured request template is rendered and the resulting request is emitted.
 * Receiving a 200 or 204 HTTP status is interpreted as authorization success. Other statuses indicate authorization failure.
+* Whether Pub/Sub authorization is granted by the HTTP status code or message body returned by the server.
 
 ::: danger
 `POST` method is recommended. When using the `GET` method, some sensitive information can be exposed through HTTP server logging.
 
 For untrusted environments, HTTPS should be used.
 :::
+
+## Required HTTP Response Format
+
+- Response `Content-Type` can be `application/x-www-form-urlencoded` or `application/json`.
+- If the HTTP Status Code is `200`, the authorization result is granted by HTTP Body. It depends on the value of the `result` field:
+    - `allow`: Allow Publish or Subscribe.
+    - `deny`: Deny Publish or Subscribe.
+    - `ignore`: Ignore this request, It will be handed over to the next authorizer.
+- If the HTTP Status Code is `204`, it means that this Publish or Subscribe request is allowed.
+
 
 ## Configuration
 
