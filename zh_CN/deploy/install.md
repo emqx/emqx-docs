@@ -22,7 +22,7 @@ EMQX 默认以节点名称 `emqx@127.0.0.1` 启动，该名称是内置数据库
 
 {% emqxce %}
 
-1. 访问 [emqx.com](https://www.emqx.com/zh/try?product=broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载 EMQX 的二进制包。
+1. 访问 [emqx.io](https://www.emqx.io/zh/downloads) 或 [Github](https://github.com/emqx/emqx/releases) 下载 EMQX 的二进制包。
 {% endemqxce %}
 
 {% emqxee %}
@@ -106,7 +106,7 @@ macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动
 
 {% emqxce %}
 
-1. 访问 [emqx.com](https://www.emqx.com/zh/try?product=broker) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 的 tar.gz 包。
+1. 访问 [emqx.io](https://www.emqx.io/zh/downloads) 或 [Github](https://github.com/emqx/emqx/releases) 下载要安装的 EMQX 的 tar.gz 包。
 
 {% endemqxce %}
 
