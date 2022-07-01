@@ -13,7 +13,7 @@ MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息
 3. **通信安全**：通过 TLS/SSL 和多样化的认证机制确保与 MQTT 服务器进行安全通信，包括用户名/密码、JWT、PSK 和 X.509 证书。
 
 4. **实时数据处理**： 通过内置数据集成提供的丰富 SQL 查询进行低代码事件处理，以数百万条/秒的速度实时处理设备与云端之间双向移动的 MQTT 消息数据。
-5. **轻松管理与监控**：通过 CLI、HTTP API 和一个优雅的 Dashboard 轻松管理 EMQX 集群。支持使用 Datadog、Statsd、Prometheus 和 Granfana 进行监控和报警。
+5. **轻松管理与监控**：通过 CLI、HTTP API 和一个优雅的 Dashboard 轻松管理 EMQX 集群。支持使用 Datadog、StatsD、Prometheus 和 Granfana 进行监控和报警。
 6. **灵活扩展与定制**：通过网关与插件对 EMQX 集群进行扩展与定制，快速实现与云服务、企业系统的数据集成以及专有的物联网协议。
 7. **Run Anywhere**：采用基于 Kubernetes 的云原生架构。可运行在私有云、混合云和公有云（如华为云、腾讯云、阿里云和 AWS）。
 
@@ -50,11 +50,11 @@ MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息
 
 ### 安全
 
-- 基于用户名/密码的身份认证，支持使用内置数据库、Redis, MySQL, PostgreSQL, MongoDB, HTTP 作为数据源
+- 基于用户名/密码的身份认证，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供认证服务。
 - 基于 JWT 的身份认证与权限控制，支持 JWKs
 - MQTT 5.0 增强认证
 - PSK 身份验证
-- 基于 client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL，PostgreSQL，MongoDB，HTTP 作为数据源
+- 基于 Client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供授权服务
 - 客户端黑名单支持
 
 ### 可伸缩性
