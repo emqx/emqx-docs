@@ -135,7 +135,7 @@ SSL 客户端配置参考：[broker:ssl_client_opts](../admin/cfg.md#broker-ssl-
 
 ### Ciphers
 
-无论是SSL 监听器或 SSL 客户端，它们可配置的 `ciphers` 为：
+无论是 SSL 监听器或 SSL 客户端，它们可配置的 `ciphers` 为：
 
 ```
 # TLS 1.3:
