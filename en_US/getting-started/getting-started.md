@@ -221,6 +221,7 @@ For developers, we have compiled a list of popular MQTT clients for your referen
 - [MQTT Erlang client library](../development/erlang.md)
 - [MQTT JavaScript client library](../development/javascript.md)
 - [MQTT Python client library](../development/python.md)
+- [MQTT Wechat app](../development/wechat-miniprogram.md)
 
 ### Client example code
 
