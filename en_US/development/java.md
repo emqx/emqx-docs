@@ -100,7 +100,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class OnMessageCallback implements MqttCallback {
     public void connectionLost(Throwable cause) {
         // After the connection is lost, it usually reconnects here
-        System.out.println("disconnect，you can reconnect");
+        System.out.println("disconnect, you can reconnect");
     }
 
     public void messageArrived(String topic, MqttMessage message) throws Exception {

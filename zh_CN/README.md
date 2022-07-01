@@ -23,16 +23,18 @@ MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息
 
 ### 连接
 
-- 完整支持 MQTT v3.1/v3.1.1 and v5.0 协议规范
+- 完整支持 MQTT v3.1、v3.1.1 and v5.0 协议规范
   - QoS0, QoS1, QoS2 消息支持
   - 持久会话和离线消息支持
-  - 保留消息(Retained)支持
-  - 遗嘱消息(Will Message)支持
+  - 保留消息（Retained Message）支持
+  - 遗嘱消息（Will Message）支持
   - 共享订阅支持
   - `$SYS/` 系统主题支持
-- TCP/SSL
-- MQTT/WebSocket/SSL
-- MQTT Over QUIC(预览中)
+- MQTT 支持 4 种传输协议
+  - TCP
+  - TLS
+  - WebSocket
+  - QUIC（实验性）
 - HTTP 消息发布接口
 - 网关
   - CoAP
@@ -68,10 +70,10 @@ MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息
 
 - 内置数据集成，通过 SQL 语法实时提取、过滤、丰富和转换消息或内部事件并将其传输到外部数据平台
 - 通过 MQTT 与其他 Broker 或物联网平台进行双向数据桥接（如 EMQX Cloud，AWS IoT Core，Azure IoT Hub）
-- 通过 Webhook 与其他应用集成
-{emqxee}
+- 通过 WebHook 与其他应用集成
+{% emqxee %}
 - 企业版: TODO
-{endemqxee}
+{% endemqxee %}
 
 ### 可靠性
 
@@ -93,4 +95,4 @@ MQTT 是轻量的 (Lightweight)、发布订阅模式 (PubSub) 的物联网消息
 - 插件
 - 钩子
 - gRPC 钩子扩展
-- gRPC协议扩展
+- gRPC 协议扩展
