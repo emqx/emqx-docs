@@ -1,7 +1,7 @@
 # Introduction to Rules
 
 EMQX provides rules based on SQL syntax for processing and converting messages or events, such as converting data types, encoding or decoding messages, conditional branch judgment, etc.
-Rules are built into EMQS, and there is no overhead of message serialization and network transmission, so it runs very efficiently.
+Rules are built into EMQX, and there is no overhead of message serialization and network transmission, so it runs very efficiently.
 
 ## Composition of Rules
 
@@ -12,7 +12,7 @@ The rules describe **data source**, **data processing process**, and **processin
 
 - **data processing**: rules describe the data processing process through SQL statements and functions. The WHERE clause of SQL is used to filter data, the SELECT clause and SQL function are used to extract and transform data;
 
-- **processing result destination**: a rule can define one or more actions to process SQL output results. If the SQL execution passes, the rules will perform corresponding actions in sequence, such as storing the processing results in the database or republishing them to another mqtt topic.
+- **processing result destination**: a rule can define one or more actions to process SQL output results. If the SQL execution passes, the rules will perform corresponding actions in sequence, such as storing the processing results in the database or republishing them to another MQTT topic.
 
 ```
 ┌─────────────────┐           ┌────────────────────┐           ┌───────────────────────┐
@@ -38,17 +38,17 @@ WHERE
 In the above SQL:
 
 - Data Source: the messages with topic `t/#`;
-- Data Processing Process: If the client ID of the message is `foo`, select the `data` field from the message content and assign it to the new variable `d`
+- Data Processing: If the client ID of the message is `foo`, select the `data` field from the message content and assign it to the new variable `d`
 
 ::: warning
 The dot (".") syntax requires that the data must be of JSON or Map type. If it is of other data types, SQL functions must be used for data type conversion.
 :::
 
-For the SQL statement format and usage of rules, see [SQL syntax](./rule-sql-grammar-and-examples.md).
+For the SQL syntax and usages, see [SQL syntax](./rule-sql-grammar-and-examples.md).
 
 ### Actions
 
-Actions are components used to process the output results of rules and determine the final destination of data. 详见 [actions](./rule-actions.md)
+Actions are components used to process the output results of rules and determine the final destination of data. See [actions](./rule-actions.md) for details.
 
 ## Examples of Typical Use Cases of Rules
 

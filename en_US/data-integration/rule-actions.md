@@ -4,7 +4,7 @@ Actions are components used to process the output results of rules and determine
 
 The current rule supports the following two actions:
 
-- Built-in Actions: Currently, there are only two supported built-in actions: Message republish(`republish`) and console output(`console`).
+- Built-in Actions: Currently, there are only two supported built-in actions: `republish` and `console`.
 
 - Data Bridges: A data bridge is a channel to the external data system. Rules can directly use the ID of data bridge as the action, sending the output of the rule to the data bridge for further processing. For details of data bridge, see [data bridges](./data-bridges.md).
 
@@ -25,13 +25,13 @@ For an example of creating a message republish action, see: [Get Started](./rule
 
 The console output action is used to view the output results of rules. The results will be printed to the console in the form of logs.
 
-If the emqx is started by the `emqx console`, the results will be printed to the foreground.
+If the emqx is started with `emqx console`, the results will be printed to the foreground.
 If the emqx is started with `emqx start`, the results will be printed to `erlang log.*` under the log dir of EMQX.
 
-Format of the output:
+### Output Format
 
-It prints the `[rule action]` header and the rule ID in the first line.
-Printing from the second line is divided into two parts:
+In the first line it prints the `[rule action]` header followed by the rule ID.
+The outputs from the second line is divided into two parts:
 
 - The `Action Data` section is the output result of the rule. The fields contained in `Action Data` can be referenced in the form of `${field name}` in the action parameters.
 
