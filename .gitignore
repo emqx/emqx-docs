@@ -10,3 +10,10 @@ book.pdf
 directory.json
 directory_ee.json
 *.sw[op]
+# Emacs Backup files
+*~
+# Emacs temporary files
+.#*
+*#
+# For direnv
+.envrc
