@@ -110,7 +110,7 @@ EMQX Broker is based on a client's key activities during its life cycle, and pre
 | client.connected     | Connection succeed          | After client authentication is completed and successfully connected to the system |
 | client.disconnected  | Disconnect                  | Connection layer of client is ready to close                 |
 | client.authenticate  | Connection authentication   | After `client.connect` is executed                           |
-| client.check_acl     | ACL authentication          | Before publish/subscribe`  operation is executed             |
+| client.authorize     | Pub/Sub authorization       | Before publish/subscribe`  operation is executed             |
 | client.subscribe     | Subscribe to topic          | After receiving the subscription message, and before executing `client.check_acl` |
 | client.unsubscribe   | Unsubscribe                 | After receiving the unsubscribe packet                       |
 | session.created      | Session creation            | When a `client.connected` is completed and a new session is created |
@@ -168,7 +168,7 @@ The input parameters and returned value of the callback function are shown in th
 | client.connected     | `ClientInfo`:  Client information parameters<br>`ConnInfo`： Client connection layer parameters | -                   |
 | client.disconnected  | `ClientInfo`：Client information parameters<br>`ConnInfo`：Client connection layer parameters<br>`ReasonCode`：Reason code | -                   |
 | client.authenticate  | `ClientInfo`：Client information parameters<br>`AuthResult`：Authentication results | New `AuthResult` |
-| client.check_acl     | `ClientInfo`：Client information parameters<br>`Topic`：Publish/subscribe topic<br>`PubSub`:  Publish/subscribe<br>`ACLResult`：Authentication result | New `ACLResult` |
+| client.authorize     | `ClientInfo`：Client information parameters<br>`Topic`：Publish/subscribe topic<br>`PubSub`:  Publish/subscribe<br>`AuthzResult`：Authentication result | New `AuthzResult` |
 | client.subscribe     | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`：List of topics of subscription | New `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 unsubscription messages<br/>`TopicFilters`：List of topics of unsubscription | New `TopicFilters` |
 | session.created      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |

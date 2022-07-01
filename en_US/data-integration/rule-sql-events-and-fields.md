@@ -127,7 +127,7 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 | $events/client\_connected     | Connection complete  |
 | $events/client\_disconnected  | Disconnect           |
 | $events/client\_connack       | Connection ack       |
-| $events/client\_check_authz_complete | ACL check complete |
+| $events/client\_check_authz_complete | Authorization check complete |
 | $events/session\_subscribed   | Subscribe            |
 | $events/session\_unsubscribed | Unsubcribe           |
 

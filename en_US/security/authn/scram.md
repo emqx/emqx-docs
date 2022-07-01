@@ -6,6 +6,10 @@ SCRAM is a more complicated mechanism than password verification. It requires ex
 
 SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
 
+::: tip
+SCRAM Authentication only supports MQTT v5.0 connection.
+:::
+
 ## Configuration
 
 SCRAM authentication is identified with `mechanism = scram` and `backend = built_in_database`.

@@ -2,8 +2,8 @@
 
 In EMQX Enterprise 4.2.0, we provide multi-language extension support. Among them, the **Multilingual Extension Hook** module allows the use of other programming languages ​​(such as Python, Java, etc.) to directly mount hooks to the EMQX system to receive and process the hook events of the EMQX system to achieve the expansion and customization of EMQX purpose. For example, users can customize using other programming languages:
 
--Authentication and authorization of client access
--ACL authentication for publish/subscribe
+-Authentication for client connecting
+-Authorization for publish/subscribe
 -Persistence and bridging of messages
 -Publish/subscribe, or notification processing of client online and offline events
 

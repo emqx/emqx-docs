@@ -68,7 +68,6 @@
       title_cn: 认证
       children:
         - security/authn/authn
-        - security/authn/user_management
         - security/authn/mnesia
         - security/authn/mysql
         - security/authn/postgresql
@@ -77,8 +76,9 @@
         - security/authn/http
         - security/authn/jwt
         - security/authn/scram
-    - title_en: Authorization (ACL)
-      title_cn: 鉴权（ACL）
+        - security/authn/user_management
+    - title_en: Authorization
+      title_cn: 鉴权
       children:
         - security/authz/authz
         - security/authz/file

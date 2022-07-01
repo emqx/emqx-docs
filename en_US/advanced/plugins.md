@@ -79,7 +79,7 @@ authorization {
 }
 ```
 
-*PS*: The same rule can more commonly be implemented through [ACL File access control]((../modules/internal_acl.md)).
+*PS*: The same rule can more commonly be implemented through [Authorization](../security/authz/authz.md).
 
 ### Packaged plugin
   Modify the version information of the plugin via `rebar.config` with:
