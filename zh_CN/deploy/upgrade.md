@@ -173,12 +173,27 @@ authentication = [
 
 #### HTTP 变动
 
-1. 认证失败响应状态码变更为 `400 <= statusCode < 500`，认证成功响应状态码为 `statusCode = 200` 或 `statusCode = 204`，其他任意状态码或请求失败均为 `ignore`；
-2. 移除超级用户(superuser)查询，如需超级用户功能请在认证成功的响应 body 里面通过 JSON 设置：
+1. 使用响应 Body 里面的 JSON 字段而非响应状态码(HTTP response status codes)判断认证结果；
+2. 移除超级用户(superuser)查询，如需超级用户功能请在响应 body 里面通过 JSON 设置。
+
+**成功响应状态码:**
+
+```shell
+200 或 204
+```
+
+其他状态码或请求失败则忽略该认证器。
+
+**成功响应 Body (JSON):**
+
+| 名称          | 类型 | 必选  | 说明                        |
+| ------------- | ---- | ----- | --------------------------- |
+| result        | 枚举 | true  | `allow | deny | ignore` |
+| is_supseruser | 布尔 | false | 默认为 false                |
 
 ```json
-# key 为 is_supseruser，value 支持 true/false, 1/0（其他数据或不设则为 false）
 {
+  "result": "allow",
   "is_supseruser": true
 }
 ```
@@ -209,7 +224,7 @@ authentication = [
 
 #### Redis 变动
 
-1. 仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password_hash` 或 `password_hash`(兼容 4.x)作为密码字段名；
+1. 仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password_hash` 或 `password`(兼容 4.x)作为密码字段名；
 2. 移除超级用户(superuser)查询，如需超级用户功能请在 Redis 查询命令中添加 `is_superuser` 字段。
 
 ```shell
@@ -320,7 +335,27 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 #### HTTP 变动
 
-无变动。
+1. 使用响应 Body 里面的 JSON 字段而非响应状态码(HTTP response status codes)判断认证结果。
+
+**成功响应状态码:**
+
+```shell
+200 或 204
+```
+
+其他状态码或请求失败则忽略该授权检查器。
+
+**成功响应 Body (JSON):**
+
+| 名称   | 类型 | 必选 | 说明                    |
+| ------ | ---- | ---- | ----------------------- |
+| result | 枚举 | true | `allow | deny | ignore` |
+
+```json
+{
+  "result": "deny"
+}
+```
 
 ## 规则引擎
 

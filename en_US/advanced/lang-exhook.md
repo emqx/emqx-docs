@@ -4,8 +4,8 @@ The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows use
 
 In this way, other programming languages can handle emqx events for the purpose of customizing and extending emqx. For example, users can use other programming languages to implement:
 
-- Authorization for client access
-- ACL authentication for publishing/subscribing
+- Authentication for client connecting
+- Authorization for publishing/subscribing
 - Persistence and bridging for messages
 - Process client connected/disconnected events
 

@@ -6,6 +6,10 @@ SCRAM 认证是一种比密码认证更复杂的机制，它依赖与 MQTT 5.0 �
 
 SCRAM 认证不依赖外部数据源，使用简单轻量。
 
+::: tip
+SCRAM 认证仅支持使用 MQTT v5.0 的连接。
+:::
+
 ## 配置
 
 SCRAM 认证由 `mechanism = scram` and `backend = built_in_database` 标识.

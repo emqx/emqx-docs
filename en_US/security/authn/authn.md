@@ -35,7 +35,7 @@ According to the authentication mechanism and backend used, there are currently 
 | Mechanism       | Backend           | Description                                                  |
 | --------------- | ----------------- | ------------------------------------------------------------ |
 | Passsword-Based | Built-in Database | [Authentication with Mnesia database as credential storage](./mnesia.md) |
-| Passsword-Based | Mysql             | [Authentication with MySQL database as credential storage](mysql.md) |
+| Passsword-Based | MySQL             | [Authentication with MySQL database as credential storage](mysql.md) |
 | Passsword-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
 | Passsword-Based | MongoDB           | [Authentication with MongoDB database as credential storage](./mongodb.md) |
 | Passsword-Based | Redis             | [Authentication with Redis database as credential storage](./redis.md) |

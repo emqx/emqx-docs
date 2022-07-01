@@ -10,7 +10,7 @@ EMQX's [retained message](./retained.md) and [delayed publish](./delayed-publish
 For example, when users want to use the delayed publish, they can use topic rewrite to redirect the message to a desired topic.
 
 ::: warning
-ACL checks are performed before the topic is rewritten.
+Authorization checks are performed before the topic is rewritten.
 :::
 
 ## Configure topic rewrite rules

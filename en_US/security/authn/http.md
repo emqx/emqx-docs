@@ -1,4 +1,4 @@
-# HTTP
+# Password Authentication Using HTTP
 
 HTTP authenticator delegates authentication to a custom HTTP API.
 

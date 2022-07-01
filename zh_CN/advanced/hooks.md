@@ -113,7 +113,7 @@ EMQX 以一个客户端在其生命周期内的关键活动为基础，预置了
 | client.connected     | 成功接入     | 客户端认证完成并成功接入系统后                        |
 | client.disconnected  | 连接断开     | 客户端连接层在准备关闭时                              |
 | client.authenticate  | 连接认证     | 执行完 `client.connect` 后                            |
-| client.check_acl     | ACL 鉴权     | 执行 `发布/订阅` 操作前                               |
+| client.authorize     | 发布订阅鉴权 | 执行 `发布/订阅` 操作前                               |
 | client.subscribe     | 订阅主题     | 收到订阅报文后，执行 `client.check_acl` 鉴权前        |
 | client.unsubscribe   | 取消订阅     | 收到取消订阅报文后                                    |
 | session.created      | 会话创建     | `client.connected` 执行完成，且创建新的会话后         |
@@ -174,7 +174,7 @@ emqx:unhook(Name, {Module, Function}).
 | client.connected     | `ClientInfo`:  客户端信息参数<br>`ConnInfo`： 客户端连接层参数 | -                   |
 | client.disconnected  | `ClientInfo`：客户端信息参数<br>`ConnInfo`：客户端连接层参数<br>`ReasonCode`：错误码 | -                   |
 | client.authenticate  | `ClientInfo`：客户端信息参数<br>`AuthResult`：认证结果       | 新的 `AuthResult`   |
-| client.check_acl     | `ClientInfo`：客户端信息参数<br>`Topic`：发布/订阅的主题<br>`PubSub`:  发布或订阅<br>`ACLResult`：鉴权结果 | 新的 `ACLResult`    |
+| client.authorize     | `ClientInfo`：客户端信息参数<br>`Topic`：发布/订阅的主题<br>`PubSub`:  发布或订阅<br>`AuthzResult`：鉴权结果 | 新的 `AuthzResult`    |
 | client.subscribe     | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 订阅报文的 Properties 参数<br>`TopicFilters`：需订阅的主题列表 | 新的 `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br/>`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |
 | session.created      | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |

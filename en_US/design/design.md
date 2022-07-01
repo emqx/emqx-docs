@@ -57,10 +57,8 @@ EMQX Broker is more like a network Router or a Switch in concept, rather than th
 2. Session Layer: Process MQTT PUBLISH/SUBSCRIBE Packets received from client, and deliver MQTT messages to client.
 3. Routing(Distributed) Layer: Route MQTT messages among clustered nodes.
 4. Distributed Layer: Distributed MQTT messages routed between distributed nodes.
-2. Authentication and access control (ACL): The connection layer supports extensible authentication and access control modules.
+2. Authentication and Authorization(ACL): The connection layer supports extensible authentication and access control modules.
 3. Hooks and Plugins: Each layer of the system provides extensible hooks and supports server expansion with plugin.
-
-
 
 
 ## Connection Layer design

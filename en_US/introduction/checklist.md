@@ -15,7 +15,7 @@
 - LDAP authentication
 - Redis, MySQL, PostgreSQL, MongoDB, HTTP authentication integration
 - Browser cookie authentication
-- Access control (ACL) based on client ID, IP address, user name
+- Authorization (ACL) based on client ID, IP address, user name
 - Multi-server node cluster (Cluster)
 - Support manual, mcast, dns, etcd, k8s and other cluster discovery methods
 - Automatic network partition healing

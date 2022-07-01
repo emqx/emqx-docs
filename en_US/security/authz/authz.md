@@ -14,17 +14,17 @@ EMQX supports different kinds of authorization:
 _Authorization source_ (or simply _authorizer_) is an EMQX module that implements MQTT authorization.
 Authorizers are identified by their _type_, a unique identifier.
 
-The following authenticators are available by default:
+The following authorizers are available by default:
 
 | type               | description                                                                   |
 | ------------------ | ----------------------------------------------------------------------------- |
-| built_in_database  | [Authorization with Mnesia database as ACL storage](./mnesia.md)              |
-| mysql              | [Authorization with MySQL database as ACL storage](./mysql.md)                  |
-| postgresql         | [Authorization with PostgreSQL database as ACL storage](./postgresql.md)        |
-| mongodb            | [Authorization with MongoDB database as ACL storage](./mongodb.md)            |
-| redis              | [Authorization with Redis database as ACL storage](./redis.md)                |
+| built_in_database  | [Authorization with Mnesia database as rules storage](./mnesia.md)            |
+| mysql              | [Authorization with MySQL database as rules storage](./mysql.md)              |
+| postgresql         | [Authorization with PostgreSQL database as rules storage](./postgresql.md)    |
+| mongodb            | [Authorization with MongoDB database as rules storage](./mongodb.md)          |
+| redis              | [Authorization with Redis database as rules storage](./redis.md)              |
 | http               | [Authorization using external HTTP API to determine permissions](./http.md)   |
-| file               | [Authorization using static ACL configured in a file](./file.md)              |
+| file               | [Authorization using static rules configured in a file](./file.md)            |
 
 Each authorizer has its own configuration options.
 
@@ -47,23 +47,23 @@ Example:
 ## Authorization chain
 
 Configured authorizers form a global chain. When a client makes a publish/subscribe request, authorizers are
-sequentially used to find access lists for the client. If an authorizer finds ACL rules, the request is checked
-against them and gets allowed/denied. If ACL rules are not found, then the next authorizer from the chain is used.
+sequentially used to find access lists for the client. If an authorizer finds authorization rules, the request is checked
+against them and gets allowed/denied. If authorization rules are not found, then the next authorizer from the chain is used.
 
-If no authorizer finds any ACL rules, then the default permission is applied.
+If no authorizer finds any authorization rules, then the default permission is applied.
 
 Unlike [authentication](../authn/authn.md#authentication-chains), authorization has only one global chain.
 
 ## Implicit authorization
 
-Each _authentication_ backend can additionally provide ACL rules as a result of the authentication. These rules, if present, are applied before any other authorizers.
+Each _authentication_ backend can additionally provide rules as a result of the authentication. These rules, if present, are applied before any other authorizers.
 
 See, for example, [JWT authorization](../authn/jwt.md#jwt-authorization).
 
-## ACL Cache
+## Authorization Cache
 
-If a client sends requests intensively, it may be resource-consuming to fetch ACL rules for each request and match it
-against the rules. Therefore, ACL cache may be enabled to cache authorization results for a particular time.
+If a client sends requests intensively, it may be resource-consuming to fetch authorization rules for each request and match it
+against the rules. Therefore, authorization cache may be enabled to cache authorization results for a particular time.
 
 ::: tip Tip
 Caching improves performance significantly, so adjusting the default values to the relevant ones is essential.
@@ -101,9 +101,9 @@ Example of use in Redis authorizer:
 
 ### Topic Placeholders
 
-When ACL rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.
+When authentication rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.
 The following placeholders are available:
-* `${clientid}` — Client ID of the connecting client, when used in ACL rules, the MQTT client should assign a client ID before connect, but not let EMQX generate and assign a random one.
+* `${clientid}` — Client ID of the connecting client, when used in authorization rules, the MQTT client should assign a client ID before connect, but not let EMQX generate and assign a random one.
 * `${username}` — `username` value used by the client for authentication.
 
 Placeholders can be used as topic segments, like `a/b/${username}/c/d`, but not `a/b${username}c/d`.
@@ -140,7 +140,7 @@ For individual authorizer config formats, see the documentation for the correspo
 ### `no_match`
 
 Optional value, `allow` or `deny`. The default value is `allow`. Determines the default action for a publish/subscribe
-request if none of the configured authorizers found any ACL rules.
+request if none of the configured authorizers found any authorization rules.
 
 ### `deny_action`
 
@@ -150,15 +150,15 @@ If set to `disconnect`, the client connection is dropped.
 ### `cache`
 
 Optional value with caching settings.
-* `cache.enable` — optional boolean value, default is `true`. Specifies whether to enable caching. When authentication JWT is the only data source of ACL data, then it is recommended to configure this field `false`.
+* `cache.enable` — optional boolean value, default is `true`. Specifies whether to enable caching. When authentication JWT is the only data source of authentication data, then it is recommended to configure this field `false`.
 * `cache.max_size` — optional integer value, default is 32. Specifies the maximum number of elements in the cache. Older records are evicted from the cache when the specified number is exceeded.
 * `cache.ttl` — optional duration value, default is `1m`. Specifies how long cached values are kept in the cache.
 
 ## REST API
 
-There are several API endpoints for managing authorizstion:
+There are several API endpoints for managing authorization:
 * `/api/v5/authorization/settings` — for general params, `no_match`, `deny_action`, and `cache`;
 * `/api/v5/authorization/sources` — for managing and arranging authorizers;
-* `/api/v5/authorization/cache` — for cleaning ACL cache;
-* `/api/v5/authorization/sources/built_in_database` — for managing ACL rules of `built_in_database` authorizer.
+* `/api/v5/authorization/cache` — for cleaning authorization cache;
+* `/api/v5/authorization/sources/built_in_database` — for managing authorization rules of `built_in_database` authorizer.
 

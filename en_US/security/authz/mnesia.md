@@ -1,10 +1,10 @@
 # Built-in Database
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 built-id database (Mnesia).
 
 The advantage of this method is that it does not require any external dependencies and allows manipulating
-client's ACL rules through a REST API.
+client's authorization rules through a REST API.
 
 ## Configuration
 
