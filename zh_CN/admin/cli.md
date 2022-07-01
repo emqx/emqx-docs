@@ -1,9 +1,9 @@
-# CLI
+# 命令行
 
-## Main script
+## 启动脚本
 
-The main boot script of EMQX is a bash script which can also be used to
-execute some of the administrative commands.
+EMQX 的主启动脚本也支持运行一些基本的管理命令。
+帮助信息如下：
 
 ```bash
 $ emqx help
@@ -26,49 +26,51 @@ More:
 Execute 'emqx COMMAND help' for more information
 ```
 
-## The ctl Commands
+## ctl 命令
 
-The `emqx ctl COMMAND ARGS ...` (or equivalently `emqx_ctl COMMAND ARGS ...`) commands
-require EMQX node to be up and running.
+所有的 `ctl` 命令 `emqx ctl COMMAND ARGS ...` (或者等效地： `emqx_ctl COMMAND ARGS ...`) 
+都需要 EMQX 服务启动之后才能运行。
 
-It starts up a (hidden) Erlang node, connects to the local EMQX Erlang node
-and issues Erlang RPC calls to get the commands executed.
+`ctl` 命令通过启动一个隐藏的 Erlang 节点的方式，远程连接到指定的 EMQX 节点，并执行
+一个 Erlang 远程调用然后打印返回的结果。
 
-Below is a list of all supported commands without copy-pasting a lot of the
-descriptive information from the usage outputs.
+下面列举了所有 `ctl` 命令的子命令，和相应的简介。
+本文档旨在介绍命令的功能。命令的详细参数介绍可以用 `help` 指令查看。
 
 ### status
 
 `emqx ctl status`
 
-This command is a quick inspection to see if the broker is up and running.
+快速查看当前运行的节点是否运行。
 
 ### broker
 
-`emqx celt broker`
+`emqx ctl broker`
 
-This command is to inspect the local broker running status, statistics and metrics.
+查看当前节点的运行的版本状态以及运行时长。
 
 ### observer
 
 `emqx ctl observer`
 
-This command provides Erlang virtual machine insights including a realtime view like linux's 'top' top command.
+可以用于查看运行时状态。展示一个类似于 linux 的 `top` 命令的界面。
 
 ### cluster_call
 
 `emqx ctl cluster_call`
 
-This command is mostly for troubleshooting when there is something wrong with cluster-calls
-used to sync config changes between the nodes in the cluster.
+该命令用于查看、调查甚至修改集群配置修改的同步状态。
 
-EMQX management API can be served by any of the 'core' nodes in the cluster, when a management
-API is called (e.g., from the dashboard) to change configuration, this change is first applied
-on the serviing node, then replicated (asynchronously) to other nodes in the cluster.
-If for some reason, this replication can not apply in a peer node, this command can be used
-to inspect and even fix the replication so it can move forward.
+EMQX 的 HTTP API 可以用于修改很多配置，当一个 API 被调用，例如从控制台界面的操作，来修改配置时，
+在收到这个请求的节点会先将修改的内容在本地写入 `data/configs/cluster-override.conf`，然后
+同样的操作会被记录在数据库中，并异步地转发到集群中的其他节点。
 
-For example, to inspect the 2nd config change (disabled SSL listener from dashboard).
+当由于某种原因，无法在另一个节点成功执行同样的修改，那么这个命令就可以很方便的查看这个异步复制的状态，
+甚至可以强制跳过一个失败的复制。
+
+EMQX 会为每个集群范围的配置修改生成一个ID，（tnxid），这个 ID 会在集群范围内严格递增，
+每个修改，例如从控制台中修改一个配置之后，都会记录在数据库中。
+下面这个例子，展示的是查看第二（tnxid=2）个修改的内容（着是一个启用 TLS 监听器的操作）。
 
 ```
 $ emqx ctl cluster_call tnxid 2
@@ -83,41 +85,40 @@ $ emqx ctl cluster_call tnxid 2
 ```
 
 ::: warning Warning
-The `skip` and `fast_forward` commands may result in diverged configs between the nodes in the cluster.
+`skip` 指令和 `fast_forward` 指令会迫使本地节点跳过一些（失败）的操作
+这可能会导致集群内节点之间的配置不一致。
 :::
 
 ### admins
 
 `emqx ctl admins`
 
-The `admins` command can be used to create/update/delete administrative users.
+这个命令用于创建，修改，删除管理员账户。
 
 ### retainer
 
 `emqx ctl retainer`
 
-The `retainer` command can be used to inspect or manage retained messages.
-It also comes with a `emqx ctl retainer reindex` command which can be used to
-create or update indices for retained messages.
-
+这个命令可以用于查看和管理 retain 的消息。
+也可以用于为 retain 表创建索引：`emqx ctl retainer reindex` 。
 
 ### cluster
 
 `emqx ctl cluster`
 
-This command is to join a node to a cluster.
-Please note that the `join` instruction is 'requesting' rather not 'inviting'.
-That is, the `emqx ctl cluster join <OneOfTheClusteredNodes>` is the be executed
-on the joinning node, but not from any of the nodes in the cluster.
+这个命令可以查看和管理节点的集群状态。
+请注意，EMQX 加入集群的指令 `join` 是向参数中指定的节点发送一个 “请求”，而不“邀请”。
+也就是说，`emqx ctl cluster join <OneOfTheClusteredNodes>` 指令用于请求加入
+`OnOfTheClusteredNodes` 所在的集群，而不是让这个节点加入自己所在的集群。
 
 ### clients
 
 `emqx ctl clients`
 
-This command is to list/show/kick connected clients.
+可以用于查看和管理客户端。
 
-:::warning
-It may take a long time to `list` all when there is a large number of clients.
+::: warning
+如果系统中连接了大量的客户端 `list` 指令可能会比较耗时且耗资源。
 :::
 
 
@@ -125,65 +126,73 @@ It may take a long time to `list` all when there is a large number of clients.
 
 `emqx ctl topics`
 
-This command is previously (in 4.x releses) known as the `routes` command.
-It's to list/describe subscribed topics (or topic filters) in the cluster.
+这个命令在 4.x 系列中是 `route`，可用于查看当前系统中所有订阅的主题。
 
-:::warning
-It may take a long time to `list` all when there is large number of topics.
+::: warning
+如果集群中有大量的主题订阅，`list` 指令可能会比较耗时且耗资源。
 :::
 
 ### subscriptions
 
 `emqx ctl subscriptions`
 
-This command is to list/show/add/delete client's subscriptions.
+这个命令可以用于查看，增加或者删除某个客户端的订阅。
 
 :::warning
-It may take a long time to `list` all when there is large number of subscriptions.
+当系统中有大量的订阅客户端时，`list` 指令可能比较耗时且耗资源。
 :::
 
 ### plugins
 
 `emqx ctl plugins`
 
-This command is used to manage plugin installation.
+该命令用于查看和管理插件。
 
 ### vm
 
 `emqx ctl vm`
 
-Inspect statistic data collected from the Erlang virtual machine.
+用于查看 Erlang 虚拟机的运行时状态和指标。
 
 ### mnesia
 
 `emqx ctl mnesia`
 
-Prints mnesia runtime status and metrics.
+用于查看内置数据库（Mnesia）的运行状态和指标。
 
 ### log
 
 `emqx ctl log`
 
-This command can be used to manage log handlers states, such as setting logging level etc.
+用于管理日志参数，例如日志级别等。
 
 ### trace and traces
 
 `emqx ctl trace`
 
-This command is used to trace (and log) events of a given client or topic etc.
+用于对一个给定的客户端或主题进行日志追踪。
+
+::: tip
+建议在命令行中使用绝对路径指定追踪日志的文件。例如：
+`emqx ctl trace start client foobar /abs/path/to/trace.log debug`
+:::
+
+::: tip
+也可以在控制台界面中管理追踪日志。参考[tracer 文档](../observability/tracer.md)
+:::
 
 `emqx ctl traces`
 
-This command is like the `trace` command, but applies on all nodes in the cluster.
+这个命令跟 `trace` 命令一样，但是会在整个集群所有节点中都开始或停止一个 tracer。
 
 ### listeners
 
 `emqx ctl listeners`
 
-List or start/stop listeners
+管理监听器。
 
 ::: warning
-Stopping or restarting a listener causes all the connected clients to disconnect.
+停止监听器会导致所有通过该监听器接入的客户端都断开连接。
 :::
 
 
@@ -191,36 +200,34 @@ Stopping or restarting a listener causes all the connected clients to disconnect
 
 `emqx ctl authz cache-clean`
 
-This command is useful when you want to force evict cached authz (ACL) data.
+这个命令用于强制所有客户端的授权（ACL）缓存立刻失效。
 
 ### pem_cache
 
 `emqx ctl pem_cache`
 
-This command is to force EMQX reload updated pem (x509 keys and certificates) files
-after for example a certificate renewal.
+这个命令可以用于清除 x509 pem 证书的缓存。
 
 ### olp
 
 `emqx ctl olp`
 
-OLP stnads for overload protection.
-The `olp` command is to check overload status, and also the enable/disabled system
-overload protection.
+OLP 是 “overload protection” 的缩写。
+`olp` 命令可以用于检查系统过载的状态，也可以用于关闭或开启系统过载保护。
 
-For more details see `overload_protection` configuration doc.
+可以在 `overload_protection` 的配置文档中查看更多信息。
 
 ::: note
-`olp` is by default not enalbed, enabling from CLI does not persist it to the configs.
+`olp` 是默认开启的，如果从命令行改变这个状态，这个改变只能持续到系统重启。重启之后会回到配置文件中的状态。
 :::
 
 ## gateway-registry
 
 `emqx ctl gateway-registry`
 
-List the registered gateways in the system.
+查看当前系统中支持的网关。
 
-Currently thre are by default 5 registered gateways:
+当前默认支持的网关有如下 5 种：
 
 * coap
 * exproto
@@ -228,26 +235,24 @@ Currently thre are by default 5 registered gateways:
 * mqttsn
 * stomp
 
-EMQX is designed to be plugable, so that more gateways can be installed as plugins
-and register to EMQX at runtime.
-Once registered, a gateway can be managed with management APIs and CLIs (see `gateway` command below)
+EMQX 的网关设计成可插拔。所以网关应用可以在启动/运行时注册到 EMQX 系统中。
+一旦注册之后，就可以用 HTTP API 或者命令行来对网关进行管理了。
 
 ### gateway
 
 `emqx ctl gateway`
 
-This command can be used to inspect or manage gateway loading/running status.
-
+用于查看和管理网关的启停状态。
 
 ### gateway-metrics
 
 `emqx ctl gateway-metrics`
 
-Inspect gateaay metrics.
+查看网关的指标。
 
 ### rules
 
 `emqx ctl rules`
 
-List rules crated in the Rule Engine.
-CLI is only for inspection, Rule and action managements are managed from dashboard.
+可用于查看系统中创建的所有的规则。
+注意，命令行仅仅用于查看，规则的创建和更新等管理操作必需要在控制台的界面中操作。
