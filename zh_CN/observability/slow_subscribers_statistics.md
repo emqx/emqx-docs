@@ -7,11 +7,9 @@
 
 ## 开启模块
 
-打开 EMQX Dashboard，点击左侧的 “模块” 选项卡，选择添加：
+打开 EMQX Dashboard，在`问题分析`中选择`慢订阅`，然后点击`开启`即可：
 
 ![image](./assets/slow_subscribers_statistics_1.png)
-
-选择 ****慢订阅统计**** 模块, 然后点击 *启动* 即可
 
 
 <a id="org417d240"></a>
