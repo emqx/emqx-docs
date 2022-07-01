@@ -66,7 +66,7 @@ HTTP 的 `POST` 和 `GET` 方法都是支持的，但是各自有不一样的配
 
 ### `url`
 
-发送 HTTP 请求的 URL，可以使用如下[占位符](./authz.md#authorization-placeholders):
+发送 HTTP 请求的 URL，可以使用如下[占位符](./authz.md#authorizer-配置中的占位符):
 
 * `${clientid}` — 客户端的 ID。
 * `${username}` — 客户端登录是用的用户名。
@@ -94,7 +94,7 @@ HTTP 的 `POST` 和 `GET` 方法都是支持的，但是各自有不一样的配
 该配置项可选。用于构造一个 HTTP 请求的 body。
 如果是 `post` 请求，这个配置项会被编码成一个 JSON 或者 `www-form-urlencoded` 的字符串。
 如果是 `get` 请求，这个配置项会被翻译成 HTTP 的查询字符串。
-这些字段的名字和值中都可以使用[占位符](./authz.md#Authorizer 配置中的占位符).
+这些字段的名字和值中都可以使用[占位符](./authz.md#authorizer-配置中的占位符).
 
 根据配置项的不同 `body` 的序列化方式也可能不同。
 

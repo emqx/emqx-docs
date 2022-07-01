@@ -4,7 +4,7 @@ EMQX 为用户提供了指标监控功能，允许用户以及运维人员根据
 
 EMQX 为用户提供了多种查看指标与状态的手段。最直接的，用户可以在 EMQX Dashboard 的 Overview 页面看到这些数据。
 
-![Metrics in Dashboard](./assets/dashboard-metrics.jpg)
+![Metrics in Dashboard](./assets/dashboard-metrics.png)
 
 如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，参见 [HTTP API](../admin/api.md) 与 [$SYS 系统主题](../advanced/system-topic.md)。
 

@@ -66,4 +66,4 @@ curl -X 'POST' \
 Rules contain:
 * permission, `allow` or `deny`;
 * action, i.e., the relevant operation: `publish`, `subscribe`, or `all`;
-* topic filter, possibly with wildcards or [placeholders](authz.md#topic-placeholders).
+* topic filter, possibly with wildcards or [topic placeholders](authz.md#topic-placeholders).
