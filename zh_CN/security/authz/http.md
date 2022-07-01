@@ -6,12 +6,22 @@ HTTP Authorizer 将授权的请求委托给外部 HTTP 服务器。
 
 * 在 Authorizer 的配置中，预先定义好 HTTP 服务器的URL以及请求的模版。
 * 当一个客户端需要执行发布或者订阅操作时候，EMQX 根据预先定义的模版来构造一个 HTTP 请求，并发送给配置的 HTTP 服务器。
-* 通过判断服务器返回的 HTTP 状态码，例如 200 或 204 表示授权成功（允许请求）而其他的状态码，例如 403 表示授权失败（拒绝请求）
+* 通过判断服务器返回的 HTTP 状态码或者消息体来判定是否对发布/订阅请求授权。
 
 ::: danger
 推荐使用 HTTP 的 `POST `方法。如果使用 `GET` 方法，一些 HTTP 服务器可能会把这些携带敏感信息的 HTTP 请求记录到日志里。
 若 HTTP 服务器不在内网中，推荐使用 HTTPS。
 :::
+
+## 应答格式
+
+- `Content-Type` 支持 `application/x-www-form-urlencoded` 和 `application/json`
+- 当前 HTTP 返回状态码为 `200` 时，认证结果取决于 HTTP Body 中的 `result` 字段：
+    - `allow`：允许此次发布/订阅。
+    - `deny`：拒绝此次发布/订阅。
+    - `ignore`：忽略本次请求，把它移交给下一个 Authorizer 处理。
+- HTTP 返回状态码 `204` 表示允许此次发布/订阅请求。
+
 
 ## 配置
 
