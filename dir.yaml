@@ -197,7 +197,7 @@
     - advanced/inflight-window-and-message-queue
     - advanced/retransmission
     - title_en: SDK & Tools
-      title_cn: SDK与工具
+      title_cn: SDK 与工具
       children:
         - development/client
         - development/c

@@ -1,4 +1,4 @@
-# Alarm
+# 告警
 
 EMQX Broker 内置监控与告警功能，目前支持监控 CPU 占用率、（系统、进程）内存占用率、进程数量、规则引擎资源状态、集群脑裂与愈合并进行告警。激活和取消告警都将产生一条警告日志并由 Broker 发布一个主题为 `$SYS/brokers/<Node>/alarms/activate` 或 `$SYS/brokers/<Node>/alarms/deactivate` 的 MQTT 消息，用户可以通过订阅 `$SYS/brokers/+/alarms/avtivate` 和 `$SYS/brokers/+/alarms/deactivate` 主题来获取告警通知。
 

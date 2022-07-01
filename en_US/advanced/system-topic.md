@@ -1,4 +1,4 @@
-# $SYS - System Topic
+# System Topic
 
 EMQX periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
 
