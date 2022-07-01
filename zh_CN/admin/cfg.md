@@ -11712,7 +11712,7 @@ HTTP Bridge 配置
   * default: 
   `"15s"`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS 1/QoS 2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
   - `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,

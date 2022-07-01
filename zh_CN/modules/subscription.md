@@ -60,4 +60,4 @@ EMQX 的代理订阅功能使得客户端在连接建立时，不需要发送额
 
 A 客户端使用 MQTT V3.1.1 协议连接 EMQX，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 QoS 为 1 的 `client/testclientA` 和 QoS 为 2 的 `user/testerA` 这两个主题，因为连接协议为 MQTT V3.1.1，所以配置中的 No Local、Retain As Published、Retain Handling 不生效。
 
-B 客户端使用 MQTT V5 协议连接 EMQX，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 `client/testclientB` 和 `user/testerB` 这两个主题，其中 `client/testclientB` 的订阅选项为 Qos = 1，No Local、Retain As Published、Retain Handling 均为 0；`user/testerB` 的订阅选项为 Qos = 2、No Local = 1、Retain As Published = 1 、Retain Handling = 1。
+B 客户端使用 MQTT V5 协议连接 EMQX，根据上文的配置规则，代理订阅功能会主动帮客户端订阅 `client/testclientB` 和 `user/testerB` 这两个主题，其中 `client/testclientB` 的订阅选项为 QoS = 1，No Local、Retain As Published、Retain Handling 均为 0；`user/testerB` 的订阅选项为 QoS = 2、No Local = 1、Retain As Published = 1 、Retain Handling = 1。

@@ -1,7 +1,7 @@
 # EMQX 消息服务器功能列表
 
 - 完整的 MQTT V3.1/V3.1.1 及 V5.0 协议规范支持
-  - QoS0, QoS1, QoS2 消息支持
+  - QoS 0, QoS 1, QoS 2 消息支持
   - 持久会话与离线消息支持
   - Retained 消息支持
   - Last Will 消息支持
