@@ -21,7 +21,7 @@ For untrusted environments, HTTPS should be used.
 - If the HTTP Status Code is `200`, the authorization result is granted by HTTP Body. It depends on the value of the `result` field:
     - `allow`: Allow Publish or Subscribe.
     - `deny`: Deny Publish or Subscribe.
-    - `ignore`: Ignore this request, It will be handed over to the next authorizer.
+    - `ignore`: Ignore this request, it will be handed over to the next authorizer.
 - If the HTTP Status Code is `204`, it means that this Publish or Subscribe request is allowed.
 
 
