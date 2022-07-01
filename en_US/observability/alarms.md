@@ -18,7 +18,11 @@ Taking the alarm of high system memory usage as an example, you will receive a m
 <!-- ![alarms_activate_msg](./assets/alarms_activate_msg.png) -->
 
 <!-- Update links to include a link to {{ your-emqx-dashboard-endpoint }}  -->
-An alarm will not be generated repeatedly. That means if the high CPU usage alarm has been activated the same alarm will not appear again while high CPU is maintained. The alarm will be automatically deactivated when the monitored metric returns to normal. However, it also supports manual deactivation by the user (if the user clearly does not care about the alarm). Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard, and they can also use the HTTP API provided by EMQX Broker to Query and manage alarms.
+An alarm will not be generated repeatedly. That means if the high CPU usage alarm has been activated the same alarm will not appear again while high CPU is maintained.
+The alarm will be automatically deactivated when the monitored metric returns to normal.
+However, it also supports manual deactivation by the user (if the user clearly does not care about the alarm).
+Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard, 
+and they can also use the HTTP API provided by EMQX to Query and manage alarms.
 
 EMQX Broker allows users to adjust the alarm function to a certain extent to meet actual needs. The following configuration items are currently available:
 
