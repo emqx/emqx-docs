@@ -253,6 +253,10 @@
           "path": "rule/rule-example"
         },
         {
+          "title": "消息重新发布",
+          "path": "rule/action_republish"
+        },
+        {
           "title": "数据桥接到 EMQX",
           "path": "rule/bridge_emqx"
         },
@@ -745,6 +749,10 @@
         {
           "title": "Create Inspect Rules",
           "path": "rule/rule-example"
+        },
+        {
+          "title": "Republish",
+          "path": "rule/action_republish"
         },
         {
           "title": "EMQX Bridges",

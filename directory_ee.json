@@ -304,6 +304,10 @@
           "path": "rule/rule-example"
         },
         {
+          "title": "消息重新发布",
+          "path": "rule/action_republish"
+        },
+        {
           "title": "数据存储",
           "children": [
             {
@@ -373,6 +377,10 @@
             {
               "title": "保存数据到 Lindorm",
               "path": "rule/backend_lindorm"
+            },
+            {
+              "title": "数据保存到 HStreamDB",
+              "path": "rule/backend_hstreamdb"
             },
             {
               "title": "保存数据到 Tablestore",
@@ -1075,6 +1083,10 @@
           "path": "rule/rule-example"
         },
         {
+          "title": "Republish",
+          "path": "rule/action_republish"
+        },
+        {
           "title": "Backends",
           "children": [
             {
@@ -1144,6 +1156,10 @@
             {
               "title": "Save data to Lindorm",
               "path": "rule/backend_lindorm"
+            },
+            {
+              "title": "Save data to HStreamDB",
+              "path": "rule/backend_hstreamdb"
             },
             {
               "title": "Save data to Tablestore",
