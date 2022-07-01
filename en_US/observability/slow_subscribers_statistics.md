@@ -7,11 +7,9 @@ This module ranks subscribers and topics in descending order according to the la
 
 ## Open module
 
-Open EMQX Dashboard, click on the "Module" on the left.
+Open EMQX Dashboard, click on the `Diagnose` and select `Slow Subscriptions`, then `Enable` it.
 
 ![image](./assets/slow_subscribers_statistics_1.png)
-
-Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 
 <a id="org417d240"></a>
 
