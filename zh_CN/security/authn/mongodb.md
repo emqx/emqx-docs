@@ -134,7 +134,7 @@ MongoDB 密码认证器由 `mechanism = password_based` 和 `backend = mongodb` 
 #### `filter`
 
 A map interpreted as MongoDB selector for credential lookup.
-Supports [placeholders](./authn.md#authentication-placeholders).
+Supports [placeholders](./authn.md#认证占位符).
 
 #### `database`
 

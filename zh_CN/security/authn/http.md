@@ -85,7 +85,7 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
 
 ### `url`
 
-用于外部认证请求的 HTTP URL，它可能包含 [placeholders](./authn.md#authentication-placeholders)。
+用于外部认证请求的 HTTP URL，它可能包含 [placeholders](./authn.md#认证占位符)。
 
 对于 Scheme 为 `https` 的 URLs `ssl` 配置必须启用：
 
