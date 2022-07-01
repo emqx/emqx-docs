@@ -23,7 +23,7 @@ jobs:
     - name: check directory config
       run: |
         python3 ./gen.py ce | tee directory.json
-        python3 .github/workflows/directory_check.py directory.json $(pwd)
+        python3 .github/scripts/directory_check.py directory.json $(pwd)
 
   enterprise_directory_check:
     runs-on: ubuntu-latest
@@ -34,4 +34,4 @@ jobs:
     - name: check enterprise directory config
       run: |
         python3 ./gen.py ee | tee directory_ee.json
-        python3 .github/workflows/directory_check.py directory_ee.json $(pwd)
+        python3 .github/scripts/directory_check.py directory_ee.json $(pwd)
