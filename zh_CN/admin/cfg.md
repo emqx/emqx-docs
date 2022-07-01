@@ -7976,7 +7976,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   `true`
 
   启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。
-  
+
   系统会默认生成 `*.siz/*.idx` 用于记录日志位置，请不要手动修改这两个文件。
 
 - count: <code>1..2048</code>
@@ -8007,11 +8007,8 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `"emqx@127.0.0.1"`
 
-<<<<<<< HEAD
   节点名。格式为 \<name\>\@\<host\>。其中 \<host\> 可以是 IP 地址，也可以是 FQDN。
-=======
-  节点名。格式为 `\<name>@\<host>`。其中 `<host>` 可以是 IP 地址，也可以是 FQDN。
->>>>>>> 895049183c3af666c65a66a38d7486e041644895
+
   详见 http://erlang.org/doc/reference_manual/distributed.html。
             
 
