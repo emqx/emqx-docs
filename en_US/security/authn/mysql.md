@@ -24,6 +24,11 @@ CREATE TABLE `mqtt_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
+::: warning
+The above example has an implicit `UNIQUE` index created.
+When using a different schema, it is important to make sure an index is created on the column(s) used in your queries.
+:::
+
 In this table, MQTT users are identified by `username`.
 
 Example of adding a user with username `user123`, password `secret`, prefixed salt `salt`, and is_superuser `true`:

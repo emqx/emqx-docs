@@ -23,6 +23,11 @@ CREATE TABLE `mqtt_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
+::: warning
+上面的示例创建了一个隐式的 `UNIQUE` 索引。
+当使用不同的模式时，确保在查询中使用的列上创建索引很重要。
+:::
+
 在此表中，MQTT 用户由“用户名”标识。
 
 添加用户名为 `user123`、密码为 `secret`、盐值为 `salt` 和超级用户标志为 `true` 的用户示例：
