@@ -15,7 +15,7 @@ As the most scalable MQTT broker, EMQX can help you connect any device, at any s
 
 ## Features List
 
-Below is a brief/incomplete highlighting a part of the features EMQX provides.
+Below is a brief/incomplete feature list, highlighting the features EMQX provides.
 
 ### Connectivity
 
