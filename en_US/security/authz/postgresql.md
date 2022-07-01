@@ -1,6 +1,6 @@
 # PostgreSQL
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 PostgreSQL database.
 
 PostgreSQL authorizer supports almost any storage schema. It is up to the user to decide how to store acl rules
@@ -26,7 +26,7 @@ CREATE TABLE mqtt_acl(
 CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
 ```
 
-Example of adding an ACL rule for a user `user123` that allows publishing to topics `data/user123/#`:
+Example of adding an authorization rule for a user `user123` that allows publishing to topics `data/user123/#`:
 ```
 postgres=# INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('user123', 'allow', 'publish', 'data/user123/#');
 INSERT 0 1
@@ -58,7 +58,7 @@ Sample configuration:
 
 ### `query`
 
-Required string value with PostgreSQL query template for fetching ACL rules. Supports [placeholders](./authz.md#authorization-placeholders):
+Required string value with PostgreSQL query template for fetching authorization rules. Supports [placeholders](./authz.md#authorization-placeholders):
 * `${clientid}` — Client ID of the client.
 * `${username}` — username of the client.
 * `${peerhost}` — client IP address.

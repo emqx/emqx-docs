@@ -1,6 +1,6 @@
 # Redis
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 Redis database.
 
 The user should provide a templated Redis command that returns a key-value list with topic filters as keys and actions(`publish`, `subscribe`, or `all`) as values.
@@ -85,7 +85,7 @@ standalone Redis, [Redis Cluster](https://redis.io/docs/manual/scaling/), or
 
 #### `cmd`
 
-Required string value with the command used for fetching ACL rules. The following placeolders are supported for `cmd` value:
+Required string value with the command used for fetching authorization rules. The following placeolders are supported for `cmd` value:
 * `${clientid}` — Client ID of the client.
 * `${username}` — username of the client.
 * `${peerhost}` — client IP address.

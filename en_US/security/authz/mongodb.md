@@ -1,11 +1,11 @@
 # MongoDB
 
-This authorizer implements ACL checks through matching pub/sub requests against lists of rules stored in the
+This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 MmongoDB database.
 
 ## Storage Schema
 
-MongoDB authorizer supports storing ACL rules as MongoDB documents. A user provides the collection name and a
+MongoDB authorizer supports storing authorization rules as MongoDB documents. A user provides the collection name and a
 filter template for selecting the relevant documents.
 
 The documents should contain `permission`, `action`, and `topics` fields.
@@ -13,7 +13,7 @@ The documents should contain `permission`, `action`, and `topics` fields.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topics` value specifies the topic filters for topics relevant to the rule. Should be a list of strings that support wildcards and [topic placeholders](./authz.md#topic-placeholders).
 
-Example of adding an ACL rule for a user `user123` that allows publishing to topics `data/user123/#`:
+Example of adding an authorization rule for a user `user123` that allows publishing to topics `data/user123/#`:
 
 ```js
 > db.mqtt_acl.insertOne(
@@ -39,7 +39,7 @@ filter { username = "${username}" }
 
 ::: warning
 When there are a significant number of users in the system make sure that the collections used by the selector are optimized
-and that effective indexes are used. Otherwise ACL lookup will produce excessive load on the database
+and that effective indexes are used. Otherwise authorization lookup will produce excessive load on the database
 and on the EMQX broker itself.
 :::
 
@@ -105,11 +105,11 @@ The authenticator supports connecting to MongoDB running in three different mode
 
 #### `collection`
 
-Required string value with the name of MongoDB collection where ACL rules are stored.
+Required string value with the name of MongoDB collection where authorization rules are stored.
 
 #### `filter`
 
-A map interpreted as MongoDB selector for ACL rule lookup.
+A map interpreted as MongoDB selector for authorization rule lookup.
 Supports [placeholders](./authz.md#authentication-placeholders):
 * `${clientid}` — clientid of the client.
 * `${username}` — username of the client.

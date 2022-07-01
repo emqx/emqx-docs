@@ -40,7 +40,7 @@ In EMQX documents this directory is often referred to as `data_dir`.
 
 A list of the sub-directories
 
-* `authz`: ACL rules uploaded from HTTP API or dashboard.
+* `authz`: File authorization rules uploaded from HTTP API or dashboard.
 * `certs`: Certificate files uploaded from HTTP API or dashboard.
 * `configs`: Generated config file at boot, or config overrides when changed from API or CLI.
 * `mnesia`: The built-in database. Inside this directory there should be one and only one sub-directory named

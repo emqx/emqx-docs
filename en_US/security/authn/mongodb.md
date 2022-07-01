@@ -135,7 +135,7 @@ Standard [password hashing options](./authn.md#password-hashing).
 
 #### `collection`
 
-Required string value with the name of MongoDB collection where ACL rules are stored.
+Required string value with the name of MongoDB collection where authentication rules are stored.
 
 #### `filter`
 

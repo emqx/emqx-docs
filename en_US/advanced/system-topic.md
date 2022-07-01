@@ -19,7 +19,7 @@ broker {
 ```
 
 ::: tip
-By default, only MQTT clients on localhost are allowed to subscribe to the $SYS topic. Please refer to [file ACL](../security/authz/file.md) to modify the ACL rules for publish and subscribe.
+By default, only MQTT clients on localhost are allowed to subscribe to the $SYS topic. Please refer to [File Authorization](../security/authz/file.md) to modify the ACL rules for publish and subscribe.
 
 
 Most of the data of the $SYS topic in EMQX can be obtained through other methods with lower Couplings.
