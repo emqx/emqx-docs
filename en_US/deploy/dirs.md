@@ -11,10 +11,11 @@ Depending on the type of installation the location of the directories needed by 
 | Executables         | `./bin`      | `/usr/lib/emqx/bin`      |
 | Erlang code         | `./lib`      | `/usr/lib/emqx/lib`      |
 | Erlang runtime      | `./erts-*`   | `/usr/lib/emqx/erts-*`   |
+| Plugins             | `./plugins`  | `/usr/lib/emqx/plugins`  |
 
 The directories are all created at installation time.
 
-Except for `etc`, `data` and `log`, all other directories are static and rarely have to
+Except for `etc`, `data`, `log`, `plugins`, all other directories are static and rarely have to
 be changed before an upgrade.
 
 :::: tip Tip

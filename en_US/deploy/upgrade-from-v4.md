@@ -1,4 +1,4 @@
-# Upgrade Guide
+# Migrate from V4
 
 This document provides guidelines for migrating from EMQX 4.x to 5.0.
 EMQX 5.0 is not backward compatible with 4.x in management APIs and clustering APIs, however most of the functionalities are not significantly changed.

@@ -27,6 +27,6 @@ EMQX 的 Dashboard 监听可以被关闭，EMQX 可以不依赖 dashboard 运行
 
 ## 配置仪表板
 
-你可以在[配置文档](.../admin/cfg.md)中找到更多关于如何配置 Dashboard 监听器的信息。
+你可以在[配置文档](../admin/cfg.md)中找到更多关于如何配置 Dashboard 监听器的信息。
 
 <!--TODO: maybe add some screenshots-->

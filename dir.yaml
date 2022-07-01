@@ -43,7 +43,7 @@
         - deploy/cluster/auto
         - deploy/cluster/lb
         - deploy/cluster/db
-    - deploy/upgrade
+    - deploy/upgrade-from-v4
   # - deploy/relup
 
 - title_en: Configuration

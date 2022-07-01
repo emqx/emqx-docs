@@ -100,7 +100,7 @@ EMQX 支持 3 种 Redis 部署方式。
 
 #### `password`
 
-可选的字符串类型配置。指定用于 Redis [认证]((https://redis.io/docs/manual/security/#authentication)) 的密码。
+可选的字符串类型配置。指定用于 Redis [认证](https://redis.io/docs/manual/security/#authentication) 的密码。
 
 #### `auto_reconnect`
 

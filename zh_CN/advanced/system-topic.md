@@ -23,7 +23,8 @@ EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [
 
 {% endemqxce %}
 
-EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [Webhook](./webhook.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#endpoint-metrics) 获取。
+EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，
+设备上下线状态可通过规则引擎获取。
 :::
 
 ## 集群状态信息
