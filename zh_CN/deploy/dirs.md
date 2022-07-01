@@ -20,7 +20,7 @@
 
 **emqx、emqx.cmd**
 
-EMQX 的可执行文件，具体使用可以查看 [基本命令](./.md)。
+EMQX 的可执行文件，具体使用可以查看 [基本命令](../admin/cli.md)。
 
 **emqx_ctl、emqx_ctl.cmd**
 

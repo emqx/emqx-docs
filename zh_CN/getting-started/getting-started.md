@@ -183,10 +183,6 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 - [MQTT JavaScript 客户端库](../development/javascript.md)
 - [MQTT Python 客户端库](../development/python.md)
 
-<!--
-- [MQTT 微信小程序接入](../development/wechat-miniprogram.md)
-!-->
-
 ### 客户端库项目工程代码示例
 
 [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples) 中提供了 MQTT 客户端库接入示例和工程项目代码示例：

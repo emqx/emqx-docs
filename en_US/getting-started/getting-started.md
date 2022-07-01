@@ -222,10 +222,6 @@ For developers, we have compiled a list of popular MQTT clients for your referen
 - [MQTT JavaScript client library](../development/javascript.md)
 - [MQTT Python client library](../development/python.md)
 
-<!--
-- [MQTT Wechat app](../development/wechat-miniprogram.md)
-!-->
-
 ### Client example code
 
 For MQTT client library example code, we try to cover as many mainstream programming languages and platforms as possible, see [MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples).
