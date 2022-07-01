@@ -5,25 +5,22 @@ set -euo pipefail
 EDITION="${1:-}"
 
 case $EDITION in
-    ce|com*)
+    ce|open*)
         PREFIX='v'
         ;;
     ee|ent*)
         PREFIX='e'
         ;;
     *)
-        echo "Usage: $0 ce|ee # ce for community edition, ee for enterprise"
+        echo "Usage: $0 ce|ee # ce for opensource edition, ee for enterprise"
         exit 1
 esac
 
 branch="$(git branch | grep -E "^\*" | tr -d "* ")"
 
 case $branch in
-    'release-4.3')
-        VSN='4.3'
-        ;;
-    'release-4.4')
-        VSN='4.4'
+    'release-5.0')
+        VSN='5.0'
         ;;
     *)
         echo "can not cut release on branch $branch"
