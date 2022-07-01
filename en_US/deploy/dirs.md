@@ -15,7 +15,7 @@ Depending on the type of installation the location of the directories needed by 
 
 The directories are all created at installation time.
 
-Except for `etc`, `data`, `log` `plugins`, all other directories are static and rarely have to
+Except for `etc`, `data`, `log`, `plugins`, all other directories are static and rarely have to
 be changed before an upgrade.
 
 :::: tip Tip
