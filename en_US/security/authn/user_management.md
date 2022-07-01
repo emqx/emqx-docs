@@ -1,6 +1,6 @@
 # User Management API
 
-Some [authenticators](./authn.md#authentication-sources) (with `built_in_database` backend) store credential data in EMQX internal database (Mnesia):
+Some [authenticators](./authn.md#authenticator) (with `built_in_database` backend) store credential data in EMQX internal database (Mnesia):
 
 - `password_based:built_in_database`
 - `scram:built_in_database`
@@ -9,7 +9,7 @@ For these authenticators, users can be managed through REST API.
 It allows EMQX administrators to create, update, remove, and list user credentials.
 
 To use user-management API for an authenticator, the authenticator must be set up for the used
-[chain](./authn.md#authentication-chains).
+[chain](./authn.md#authentication-chain).
 
 ::: warning
 Each authentication chain has its own set of users.

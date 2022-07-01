@@ -128,7 +128,7 @@ EMQX 支持 3 种 Redis 部署方式：
 - `HMGET KEY_TEMPLATE ...Fields...`，其中可能的字段是 `password_hash`、`salt`、`is_superuser`。 
 - `HGET KEY_TEMPLATE password_hash`。
 
-`KEY_TEMPLATE` 支持 [placeholders](./authn.md#authentication-placeholders)。`password_hash` 是必须的。
+`KEY_TEMPLATE` 支持 [placeholders](./authn.md#认证占位符)。`password_hash` 是必须的。
 
 #### `database`
 

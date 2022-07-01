@@ -99,7 +99,7 @@ Example of use in Redis authorizer:
 }
 ```
 
-### Placeholders in authentication rules
+### Topic Placeholders
 
 When authentication rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.
 The following placeholders are available:

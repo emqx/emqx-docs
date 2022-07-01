@@ -82,7 +82,7 @@ ACL 文件的内容，是一个 Erlang[元组](https://www.erlang.org/doc/refere
     * `all` — 任意，即：当客户端想要发布或者订阅时。
 - 元组的第四个元素用于指定当前规则适用的 MQTT 主题或主题过滤器。
     * 字符串 `"$SYS/#"`。这是一个通用的主题过滤器（或通配符订阅），主题的匹配跟 [MQTT协议](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180920)规范的一致。例如，`$SYS/#` 可以为发布动作匹配到 `$SYS/foo` 和 `$SYS/foo/bar`，也可以为订阅动作匹配到
-    `$SYS/foo`，`$SYS/foo/#`，和`$SYS/#`。也可以使用[主题占位符](./authz.md#topic-placeholders)。
+    `$SYS/foo`，`$SYS/foo/#`，和`$SYS/#`。也可以使用[主题占位符](./authz.md#主题占位符)。
     * 主题过滤器与配合 `eq` 字段构成一个元祖，例如 `{eq, "foo/#"}`，可用于表示不将该主题当作通配符来使用。该例子中，如果一个客户端订阅 `foo/#` 这个主题，这该规则匹配，而如果订阅的是主题是 `foo/bar` 匹配不到。
 
 另外还有 2 种特殊的规则：

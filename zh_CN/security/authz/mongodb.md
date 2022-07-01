@@ -113,7 +113,7 @@ MongoDB Authorizer 必需有 `type = mongodb`。
 #### `filter`
 
 用于指定 MongoDB 查询时使用哪些字段进行过滤。
-这些字段名称没有限制，值可以使用以下这些[占位符](./authz.md#Authorizer配置中的占位符):
+这些字段名称没有限制，值可以使用以下这些[占位符](./authz.md#authorizer-配置中的占位符):
 * `${clientid}` — 客户端 ID
 * `${username}` — 客户端登录时使用的用户名
 * `${peerhost}` — 客户端的源 IP 地址

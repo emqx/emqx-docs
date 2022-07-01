@@ -8,7 +8,7 @@ MySQL Authorizer 支持几乎任何存储模式。由用户决定如何存储 �
 
 - `permission` 用于指定操作权限，可选值有 `allow` 和 `deny`。
 - `action` 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`。
-- `topic` 用于指定当前规则适用的主题，可以使用主题过滤器和 [主题占位符](./authz.md#topic-placeholders)。
+- `topic` 用于指定当前规则适用的主题，可以使用主题过滤器和 [主题占位符](./authz.md#主题占位符)。
 
 用于存储权限规则的示例表结构：
 
@@ -58,7 +58,7 @@ MySQL authorizer 由 `type=mysql` 标识。
 
 ### `query`
 
-必选的字符串类型配置，用于指定 MySQL 数据库中权限规则的查询模板，支持 [占位符](./authz.md#authorization-placeholders)。
+必选的字符串类型配置，用于指定 MySQL 数据库中权限规则的查询模板，支持 [占位符](./authz.md#authorizer-配置中的占位符)。
 
 出于安全原因，占位符值不是直接插入的，而是通过 MySQL 占位符插入的。
 
