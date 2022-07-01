@@ -1,12 +1,10 @@
-# Built-in Database
+# Password Authentication Using Built-in Database 
 
-This authenticator implements the password verification algorithm and uses the built-in Mnesia database of EMQX to store client credentials (_users_).
-
-Mnesia authentication does not depend on external data sources, and it is simple and lightweight to use.
+The built-in database (Mnesia) is used as the storage medium for client identity credentials, and there is no need to deploy additional databases, which is simple and lightweight enough to use.
 
 ## Configuration
 
-Mnesia authentication is identified with `mechanism = password_based` and `backend = built_in_database`.
+Password authentication using built-in database is identified with `mechanism = password_based` and `backend = built_in_database`.
 
 ```
 {
@@ -26,10 +24,11 @@ Mnesia authentication is identified with `mechanism = password_based` and `backe
 ### `user_id_type`
 
 Possible values:
-* `username`
-* `clientid`
 
-This option specifies which MQTT `CONNECT` field to use for searching users: `username` or `clientid`.
+- `username`
+- `clientid`
+
+This option is used to specify the type of user ID stored in the built-in database, and also to indicate whether the authenticator should use the `Username` or `Client Identifier` in the MQTT `CONNECT` packet to retrieve the database and authenticate the client.
 
 ### `password_hash_algorithm`
 

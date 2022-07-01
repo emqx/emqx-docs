@@ -1,16 +1,12 @@
-# PostgreSQL
+# Password Authentication Using PostgreSQL
 
 This authenticator implements the password verification algorithm and uses PostgreSQL database as credential storage.
 
 ## Storage schema
 
-PostgreSQL authenticator supports almost any storage schema. It is up to the user to decide how to store credentials
-and access them: use one or multiple tables, views, etc.
+PostgreSQL authenticator supports almost any storage schema. It is up to the user to decide how to store credentials and access them: use one or multiple tables, views, etc.
 
-The user should only provide a templated query that selects credentials as a single row containing
-`password_hash`, `salt`, and `is_superuser` columns. `password_hash` column is required, other columns
-are optional. The absence of `salt` column is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is
-interpreted as its false value.
+The user should only provide a templated query that selects credentials as a single row containing `password_hash`, `salt`, and `is_superuser` columns. `password_hash` column is required, other columns are optional. The absence of `salt` column is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is interpreted as its false value.
 
 Example table structure for storing credentials:
 
@@ -25,15 +21,22 @@ CREATE TABLE mqtt_user (
 );
 ```
 
+::: warning
+The above example has an implicit `UNIQUE` index created.
+When using a different schema, it is important to make sure an index is created on the column(s) used in your queries.
+:::
+
 In this table, MQTT users are identified by `username`.
 
 Example of adding a user with username `user123`, password `secret`, prefixed salt `salt`, and is_superuser `true`:
+
 ```sql
 postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
 INSERT 0 1
 ```
 
 The corresponding config parameters are:
+
 ```
 password_hash_algorithm {
     name = sha256
@@ -44,9 +47,7 @@ query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username 
 ```
 
 ::: warning
-When there are a significant number of users in the system make sure that the tables used by the query are optimized
-and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database
-and on the EMQX broker itself.
+When there are a significant number of users in the system make sure that the tables used by the query are optimized and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database and on the EMQX itself.
 :::
 
 ## Configuration

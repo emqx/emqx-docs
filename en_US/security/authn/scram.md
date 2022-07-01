@@ -1,9 +1,8 @@
-# SCRAM
+# SCRAM Authentication
 
 This authenticator implements [SCRAM](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) authentication and uses the built-in Mnesia database of EMQX to store client credentials (_users_).
 
-SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTT
-packages during connection.
+SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTTpackages during connection.
 
 SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
 
