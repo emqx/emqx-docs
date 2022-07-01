@@ -6,31 +6,32 @@ HTTP authenticator delegates authentication to a custom HTTP API.
 
 - In authenticator settings, an HTTP request pattern is specified.
 - When an MQTT client connects to EMQX, the configured request template is rendered and the resulting request is emitted.
-- Receiving a 200 or 204 HTTP status is interpreted as authentication success. A 4xx status code returned by the HTTP server means authentication failure and termination, and the client will be refused to connect. If other status codes are returned or other problems occur (such as request timeout, etc.), EMQX will switch to the next authenticator for the authentication process. If the current HTTP authenticator is the last authenticator on the chain, the authentication fails and the client will be refused to connect.
-
-A successful HTTP response can also contain a boolean `is_superuser` field to indicate whether the client has superuser privileges.
-
-The encoding format of the HTTP response can be `application/json` and `application/x-www-form-urlencoded`, and the HTTP authenticator will automatically select the decoding method according to the `Content-Type` in the response.
-
-Example:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-...
-
-{"is_superuser": true}
-```
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/x-www-form-urlencoded
-...
-
-is_superuser=true
-```
-
-
+- HTTP Status Code is used to determine whether the the authentication request is received by authentication server and successfully executed.
+  - Authentication result should be returned with HTTP Status Code 200 or 204. The authentication result and whether it is a super user is indicated by the specific field value `resulet` and `is_superuser`.</br>
+  - Other response codes will be considered as HTTP authentication request execution failure, Such as 4xx, 5xx ... </br>
+    EMQX will switch to the next authenticator for the authentication process with default value `ignore`. If the current HTTP authenticator is the last authenticator on the chain, the authentication fails and the client will be refused to connect.
+- The encoding format of the HTTP response can be `application/json` and `application/x-www-form-urlencoded`, and the HTTP authenticator will automatically select the decoding method according to the `Content-Type` in the response. </br>
+  **Example**:</br>
+  - ***HTTP Status Code 200***</br>
+    ```json
+    HTTP/1.1 200 OK
+    Headers: Content-Type: application/json
+    ...
+    Body:
+    {
+        "result": "allow" | "deny" | "ignore", // Default `"ignore"`
+        "is_superuser": true | false // Default `false`
+    }
+    ```
+    or
+    ```json
+    HTTP/1.1 200 OK
+    Headers:
+    Content-Type: application/x-www-form-urlencoded
+    ...
+    Body:
+    result=allow&is_superuser=true
+    ```
 
 ::: danger
 `POST` method is recommended. When using the `GET` method, some sensitive information (like plain text passwords) can be exposed through HTTP server logging.
@@ -126,9 +127,9 @@ Assume an MQTT client connects with client ID `id123`, username `iamuser`, and p
        }
    }
    ```
-   
+
    The resulting request will be:
-   
+
    ```
    GET /auth/id123?username=iamuser&password=secret HTTP/1.1
    ... Headers ...
@@ -149,14 +150,14 @@ Assume an MQTT client connects with client ID `id123`, username `iamuser`, and p
        }
    }
    ```
-   
+
    The resulting request will be:
-   
+
    ```
    POST /auth/id123 HTTP/1.1
    Content-Type: application/json
    ... Other headers ...
-   
+
    {"username":"iamuser","password":"secret"}
    ```
 
@@ -175,14 +176,14 @@ Assume an MQTT client connects with client ID `id123`, username `iamuser`, and p
        }
    }
    ```
-   
+
    The resulting request will be:
-   
+
    ```
    POST /auth/id123 HTTP/1.1
    Content-Type: application/x-www-form-urlencoded
    ... Other headers ...
-   
+
    username=iamuser&password=secret
    ```
 

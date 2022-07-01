@@ -4,31 +4,39 @@ HTTP 认证使用外部自建 HTTP 应用认证数据源，根据 HTTP API 返�
 
 ## 认证原理
 
-- 在认证器的设置中，会指定 HTTP 请求模式。
+- 在认证器的设置中，指定 HTTP 请求模式。
 - 当 MQTT 客户端连接到 EMQX 时，HTTP 认证器会根据配置的请求模板渲染并发送生成的请求。
-- EMQX 收到 HTTP 服务器返回的 200 或 204 HTTP 状态码，则表示认证成功。HTTP 服务器返回 4xx 状态码即表示认证失败和终止，客户端将被拒绝连接。返回其他状态码或出现其他问题（例如请求超时等），EMQX 将切换到下一个认证器进行认证流程，如果当前的 HTTP 认证器是链上的最后一个认证器，则认证失败，客户端将被拒绝连接。
+- HTTP **响应状态码** (HTTP Status Code) 被用于判断认证请求是否被认证服务器接收执行。</br>
+  - 认证结果应通过 Status Code 200 或 204 进行返回。</br>
+    认证结果、是否为超级用户将分别由 Response Body 内的 `result` 和 `is_superuser` 字段值指示。</br>
+  - 其他响应码将被认为 HTTP 认证请求执行失败。如 4xx、5xx 等。</br>
+    此时认证结果使用缺省值 `"ignore"`，继续执行认证链。如果当前的 HTTP 认证器是链上的最后一个认证器，则认证失败，客户端将被拒绝连接。
+- HTTP 响应的编码格式可以是 `application/json` 和 `application/x-www-form-urlencoded`，HTTP 认证器会自动根据响应中的 `Content-Type` 选择解码方式。</br>
+  **示例**</br>
+  - ***HTTP Status Code 200***</br>
+    ```json
+    HTTP/1.1 200 OK
+    Headers: Content-Type: application/json
+    ...
+    Body:
+    {
+        "result": "allow" | "deny" | "ignore", // Default `"ignore"`
+        "is_superuser": true | false // Default `false`
+    }
+    ```
+    或
+    ```json
+    HTTP/1.1 200 OK
+    Headers:
+    Content-Type: application/x-www-form-urlencoded
+    ...
+    Body:
+    result=allow&is_superuser=true
+    ```
 
-成功的 HTTP 响应中还可以包含布尔类型的 `is_superuser` 字段来表示该客户端是否具有超级用户权限。HTTP 响应的编码格式可以是 `application/json` 和 `application/x-www-form-urlencoded`，HTTP 认证器会自动根据响应中的 `Content-Type` 选择解码方式。
-
-示例：
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-...
-
-{"is_superuser": true}
-```
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/x-www-form-urlencoded
-...
-
-is_superuser=true
-```
-
+::: danger
 推荐使用 `POST` 方法。 使用 `GET` 方法时，一些敏感信息（如纯文本密码）可以通过 HTTP 服务器日志记录暴露。
+:::
 
 对于不受信任的环境，应使用 HTTPS。
 
