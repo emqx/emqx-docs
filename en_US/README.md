@@ -14,7 +14,7 @@ MQTT is a lightweight message exchange protocol using publish-subscribe pattern.
 2. **At Any Scale**: In our tests a single node can support up to 2 million connections. Effortlessly handle tens of millions concurrent MQTT connections with an EMQX cluster (Version 5 reached 100 million connections record).
 3. **Secured Communication**: Secured communication with MQTT over TLS/SSL and various authentication mechanisms using username/password, JWT, PSK, X.509 certificates, and more.
 4. **Real-time Event Processing**: Low-code event processing with rich SQL queries powered by the built-in data integrations. Stream millions of real-time IoT events, from device-to-cloud and cloud-to-devices.
-5. **Ops-Friendly & Great Observability**: Easily manage EMQX via CLI, HTTP API, and an elegant dashboard. Monitor and alert with Datadog, Statsd, Prometheus, and Grafana.
+5. **Ops-Friendly & Great Observability**: Easily manage EMQX via CLI, HTTP API, and an elegant dashboard. Monitor and alert with Datadog, StatsD, Prometheus, and Grafana.
 6. **Gateways & Plugins**: Extend and customize the EMQX with Gateways and Plugins. Easily implement proprietary IoT protocols or integrate with micro-services and enterprise DBMS.
 7. **Run Anywhere**: Adopt cloud-native architecture based on Kubernetes. Run anywhere in private, hybrid, and public clouds like AWS, GCP, and Microsoft Azure, from a single server to massive clusters.
 
@@ -51,12 +51,12 @@ Add more features to MQTT:
 
 ### Security
 
-- Authentication based on user name/password supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB, or HTTP as data sources
+- Authentication based on username/password supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB as data sources, and HTTP server to provide authentication services
 - Authentication based JWT supported using JWKs
 - Enhanced Authentication for MQTT 5.0
 - PSK authentication
-- Access control (Authorization) based on client ID, IP address, and user name supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB, or HTTP as data sources
-- API to blacklisting clients
+- Access control (Authorization) based on Client ID, IP address, and username supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB as data sources, and HTTP Server to provide authorization services
+- API to ban clients
 
 ### Scalability
 
