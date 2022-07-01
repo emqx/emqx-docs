@@ -169,7 +169,7 @@ The EMQX Enterprise supports data persistence. Supported databases are:
 **Tags:** [*REAT API*](tags.md#reat-api)  [*Dashboard*](tags.md#dashboard)
 
 
-Yes. You can do it by invoking REST API provied by EMQX, but the implementation is different in EMQX 2.x and 3.x: 
+Yes. You can do it by invoking REST API provided by EMQX, but the implementation is different in EMQX 2.x and 3.x: 
 
 - EMQX customized protocol in 2.x versions.
 - Follow the process defined in MQTT 5.0 protocol after version 3.0. 
@@ -218,7 +218,7 @@ bridge.kafka.produce = sync
 
 If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
 
-- The message will be cached in memory before EMQX 2.4.3 version, if the memeory is exhausted, then the EMQX server will be down. 
+- The message will be cached in memory before EMQX 2.4.3 version, if the memory is exhausted, then the EMQX server will be down. 
 - The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full. 
 
 So we suggest you to closely monitor Kafka server, and recover Kafka service as soon as possible when it has any questions.

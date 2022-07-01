@@ -10,6 +10,12 @@ Config file: emqx\_backend\_pgsql.conf
 
 ## Configure PostgreSQL Server
 
+::: tip
+
+Support PostgreSQL 13 and below versions
+
+:::
+
 Connection pool of multiple PostgreSQL servers is supported:
 
 ```bash

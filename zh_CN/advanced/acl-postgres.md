@@ -32,6 +32,12 @@ emqx_auth_pgsql 插件同时包含认证功能，可通过注释禁用。
 
 PostgreSQL 基础连接信息，需要保证集群内所有节点均能访问。
 
+::: tip
+
+支持 PostgreSQL 13 及以下版本
+
+:::
+
 ```bash
 # etc/plugins/emqx_auth_pgsql.conf
 

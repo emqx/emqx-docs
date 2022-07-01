@@ -187,7 +187,7 @@ auth.mongo.super_query.collection = mqtt_user
 ##Field for super user
 auth.mongo.super_query.super_field = is_superuser
 
-## Superuser query selector, commas can be used to seperate multiple conditions
+## Superuser query selector, commas can be used to separate multiple conditions
 #auth.mongo.super_query.selector = username=%u, clientid=$all
 auth.mongo.super_query.selector = username=%u
 ```
@@ -226,7 +226,7 @@ auth.mongo.acl_query = on
 
 auth.mongo.acl_query.collection = mqtt_acl
 
-## Query selector, commas can be used to seperate multiple conditions
+## Query selector, commas can be used to separate multiple conditions
 ## auth.mongo.acl_query.selector = username=%u,clientid=%c
 auth.mongo.acl_query.selector = username=%u
 

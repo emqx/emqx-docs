@@ -376,30 +376,6 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 {"data":[{"recv_cnt":4,"max_subscriptions":0,"node":"emqx@127.0.0.1","proto_ver":4,"recv_pkt":1,"inflight":0,"max_mqueue":1000,"heap_size":2586,"username":"test","proto_name":"MQTT","subscriptions_cnt":0,"send_pkt":3,"created_at":"2020-02-20 13:38:51","reductions":5994,"ip_address":"127.0.0.1","send_msg":0,"send_cnt":3,"expiry_interval":0,"keepalive":60,"mqueue_dropped":0,"is_bridge":false,"max_inflight":32,"recv_msg":0,"max_awaiting_rel":100,"awaiting_rel":0,"mailbox_len":0,"mqueue_len":0,"recv_oct":33,"connected_at":"2020-02-20 13:38:51","clean_start":true,"clientid":"example","connected":true,"port":54889,"send_oct":8,"zone":"external"}],"code":0}
 ```
 
-### DELETE /api/v4/nodes/{node}/clients/{clientid}
-
-类似 [DELETE /api/v4/clients/{clientid}](#endpoint-delete-a-client)，踢除指定节点下的指定客户端。
-
-**Path Parameters:**
-
-| Name   | Type | Required | Description |
-| ------ | --------- | -------- |  ---- |
-| clientid  | String | True | ClientID |
-
-**Success Response Body (JSON):**
-
-| Name | Type | Description |
-| ---- | --------- | ----------- |
-| code | Integer   | 0         |
-
-**Examples:**
-
-```bash
-$ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/nodes/emqx@127.0.0.1/clients/example"
-
-{"code":0}
-```
-
 ### GET /api/v4/clients/username/{username}
 
 通过 Username 查询客户端的信息。由于可能存在多个客户端使用相同的用户名的情况，所以可能同时返回多个客户端信息。
@@ -503,6 +479,44 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/clients/e
 
 ```bash
 $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/clients/example/acl_cache"
+
+{"code":0}
+```
+
+### PUT /api/v4/clients/{clientid}/keepalive
+
+设置指定客户端的keepalive时间（秒）。
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                            |
+| -------- | ------- | :------: | -------------------------------------- |
+| interval | Integer |   True   | 秒：0～65535，0表示不启动keepalive检查 |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+更新指定客户端（example）keepalive为10秒
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval=10"
+
+{"code":0}
+```
+除了通过 Query String 传参外，还可以使用 Body 。
+```bash
+curl   -u admin:public -X 'PUT' http://127.0.0.1:18083/api/v4/clients/test/keepalive -d '{"interval": 10}'
 
 {"code":0}
 ```
@@ -720,6 +734,20 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes/a%
 | encoding | String    | Optional | plain   | 消息正文使用的编码方式，目前仅支持 `plain` 与 `base64` 两种 |
 | qos      | Integer   | Optional | 0       | QoS 等级 |
 | retain   | Boolean   | Optional | false   | 是否为保留消息 |
+| properties   | Object   | Optional | {} | PUBLISH 消息里的 Property 字段 |
+
+Properties取值：
+
+| Name     | Type | Description｜
+| -------- | --------- | -------- |
+| payload_format_indicator  | Integer   | 载荷格式指示标识符，0说明载荷是未指定格式的字节，相当于没有发送载荷格式指示，说明载荷是 UTF-8 编码的字符数据。载荷中的 UTF-8 数据必须是按照 Unicode 的规范和 RFC 3629 的重申进行编码|
+| message_expiry_interval   | integer  | 消息过期间隔标识符，以秒为单位，如果已过期，服务端还没有开始向匹配的订阅者交付该消息时，则服务端必须删除该订阅者的消息副本，不设置，则消息不会过期。 |
+| response_topic            | String   | 响应主题标识符， UTF-8 编码的字符串，用作响应消息的主题名，响应主题不能包含通配符，包含多个响应主题将
+ 造成协议错误(Protocol Error)。响应主题的存在将消息标识为请求报文。服务端在收到应用消息时必须将响应主题原封不动的发送给所有的订阅者 |
+| correlation_data          | String   | 对比数据标识符，服务端在收到应用消息时必须原封不动的把对比数据发送给所有的订阅者。对比数据只对请求消息(Request Message)的发送端和响应消息(Response Message)的接收端有意义。 |
+| subscription_identifier   | Integer   | 订阅标识符标识符，订阅标识符取值范围从 1 到 268,435,455。订阅标识符的值为 0 将造成协议错误。如果某条发布消息匹配了多个订阅，则将包含多个订阅标识符。这种情况下他们的顺序并不重要。 |
+| content_type              | String   | 内容类型标识符，以 UTF-8 格式编码的字符串，用来描述应用消息的内容，服务端必须把收到的应用消息中的内容类型原封不动的发送给所有的订阅者 |
+| user_properties           | Object   | 用户属性(User Property)允许出现多次，以表示多个名字/值对，服务端在转发应用消息到客户端时必须原封不动的把所有的用户属性放在 PUBLISH 报文中 |
 
 **Success Response Body (JSON):**
 
@@ -730,7 +758,8 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/routes/a%
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d '{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"}'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d \
+'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "properties": {"user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}, "content_type": "text/plain"}}'
 
 {"code":0}
 ```
@@ -810,6 +839,7 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 | [0].encoding | String    | Optional | plain   | 消息正文使用的编码方式，目前仅支持 `plain` 与 `base64` 两种 |
 | [0].qos      | Integer   | Optional | 0       | QoS 等级 |
 | [0].retain   | Boolean   | Optional | false   | 是否为保留消息 |
+| [0].properties   | Object   | Optional | {} | PUBLISH 消息里的 properties 字段 |
 
 **Success Response Body (JSON):**
 
@@ -820,9 +850,9 @@ $ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/uns
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example"}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","properties": {"user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","properties":{"user_properties": { "id": 10010, "name": "emqx", "foo": "bar"},"content_type": "text/plain"}}]'
 
-{"code":0}
+{"data":[{"topic":"a/b/c","code":0},{"topic":"a/b/c","code":0}],"code":0}
 ```
 
 ## 主题批量订阅

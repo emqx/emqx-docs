@@ -235,7 +235,7 @@ CREATE TABLE mqtt.msg (
     sender text,
     qos int,
     retain int,
-    payload text,
+    payload blob,
     arrived timestamp,
     PRIMARY KEY(topic, msgid)
     ) WITH CLUSTERING ORDER BY (msgid DESC);

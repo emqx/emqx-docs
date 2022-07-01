@@ -39,36 +39,32 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 
 选择 Kafka 消费组模块:
 
-![](./assets/kafka_consumer1.png)
-
+![img](./assets/kafka_consumer1.png)
 
 填写相关参数:
 
-![](./assets/kafka_consumer3.png)
+![img](./assets/kafka_consumer3.png)
 
-1). Kafka 服务器地址
-
-2). Kafka consumer 连接池大小
-
-3). Kafka 的订阅主题
-
-4). MQTT 的消息主题
-
-5). MQTT 的主题服务质量
-
-6). Kafka Max Bytes (每次从 Kafka 里消费消息的最大字节数)
-
-7). Kafka Offset Reset Policy (重置Offset策略,reset_to_latest | reset_by_subdcriber)
-
-7). Kafka consumer 是否重连
+- Kafka 服务器地址
+- Kafka consumer 连接池大小
+- Kafka 的订阅主题
+- MQTT 的消息主题
+- MQTT 的主题服务质量
+- MQTT PayLoad，可选使用 Kafka message.value 或者 message 全部信息
+- 二进制 key 编码模式，UTF-8 或 base64，消息中 key 的编码方式，如果 key 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式
+- 二进制 value 编码模式，UTF-8 或 base64，消息中 value 的编码方式，如果 value 值为非字符串或可能产生字符集编码异常的值，推荐使用 base64 模式
+- Kafka Max Bytes (每次从 Kafka 里消费消息的最大字节数)
+- Kafka Offset Reset Policy (重置Offset策略,reset_to_latest | reset_by_subdcriber)
+- Kafka consumer 是否重连
+- SSL 连接参数
 
 点击添加后，模块添加完成:
 
-![](./assets/kafka_consumer4.png)
+![img](./assets/kafka_consumer4.png)
 
 资源已经创建完成，现在用Dashboard的websocket工具订阅MQTT的主题 "TestTopic":
 
-![](./assets/kafka_consumer5.png)
+![img](./assets/kafka_consumer5.png)
 
 使用kafka 命令行 生产一条消息:
 
@@ -76,8 +72,8 @@ $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --part
 ./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic TestTopic
 ```
 
-![](./assets/kafka_consumer6.png)
+![img](./assets/kafka_consumer6.png)
 
 Dashboard的websocket工具接收到了Kafka 生产的消息"hello-kafka":
 
-![](./assets/kafka_consumer7.png)
+![img](./assets/kafka_consumer7.png)
