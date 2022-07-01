@@ -201,12 +201,12 @@ The authenticator will be ignored if the request fails or returns another status
 
 | Name          | Type    | Required | Description                 |
 | ------------- | ------- | -------- | --------------------------- |
-| result        | Enum    | true     | `success | failed | ignore` |
+| result        | Enum    | true     | `allow | deny | ignore` |
 | is_supseruser | Boolean | false    |                             |
 
 ```json
 {
-  "result": "success",
+  "result": "allow",
   "is_supseruser": true
 }
 ```

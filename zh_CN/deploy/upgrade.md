@@ -188,12 +188,12 @@ authentication = [
 
 | 名称          | 类型 | 必选  | 说明                        |
 | ------------- | ---- | ----- | --------------------------- |
-| result        | 枚举 | true  | `success | failed | ignore` |
+| result        | 枚举 | true  | `allow | deny | ignore` |
 | is_supseruser | 布尔 | false | 默认为 false                |
 
 ```json
 {
-  "result": "success",
+  "result": "allow",
   "is_supseruser": true
 }
 ```
