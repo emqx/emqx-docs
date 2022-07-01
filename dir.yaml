@@ -77,7 +77,7 @@
         - security/authn/http
         - security/authn/jwt
         - security/authn/scram
-    - title_en: Authorisation (ACL)
+    - title_en: Authorization (ACL)
       title_cn: 鉴权（ACL）
       children:
         - security/authz/authz
@@ -101,10 +101,10 @@
     - observability/slow_subscribers_statistics
     - observability/metrics-and-stats
 
-- title_en: Reliability
-  title_cn: 可靠性
-  children:
-    - reliability/rate-limit
+#- title_en: Reliability
+#  title_cn: 可靠性
+#  children:
+#    - reliability/rate-limit
 #    - reliability/olp
 #    - reliability/config-and-data-backup-restore
 
@@ -140,15 +140,15 @@
 
 ## Device connectivity
 
-- title_en: Gateway
-  title_cn: 网关
-  children:
-    - gateway/lwm2m
-    - gateway/mqtt_sn
-    - gateway/tcp
-    - gateway/jt808
-    - gateway/coap
-    - gateway/stomp
+#- title_en: Gateway
+#  title_cn: 网关
+#  children:
+#    - gateway/lwm2m
+#    - gateway/mqtt_sn
+#    - gateway/tcp
+#    - gateway/jt808
+#    - gateway/coap
+#    - gateway/stomp
 
 - title_en: Advanced MQTT Features
   title_cn: MQTT 高级特性

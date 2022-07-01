@@ -24,11 +24,13 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
 {% emqxce %}
 
 1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
+
 {% endemqxce %}
 
 {% emqxee %}
 
 1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise) or [Github](https://github.com/emqx/emqx/releases)
+
 {% endemqxee %}
 
 2. Install EMQX Broker:
