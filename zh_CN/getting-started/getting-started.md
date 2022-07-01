@@ -182,7 +182,10 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 - [MQTT Erlang 客户端库](../development/erlang.md)
 - [MQTT JavaScript 客户端库](../development/javascript.md)
 - [MQTT Python 客户端库](../development/python.md)
+
+<!--
 - [MQTT 微信小程序接入](../development/wechat-miniprogram.md)
+!-->
 
 ### 客户端库项目工程代码示例
 
@@ -201,7 +204,10 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 - [SpringBoot](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-SpringBoot)
 - [Vue.js](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Vue.js)
 - [swift](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-swift)
+
+<!--
 - [wechat-miniprogram](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-wechat-miniprogram)
+!-->
 
 ## 进阶操作
 

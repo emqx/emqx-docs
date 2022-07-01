@@ -221,7 +221,10 @@ For developers, we have compiled a list of popular MQTT clients for your referen
 - [MQTT Erlang client library](../development/erlang.md)
 - [MQTT JavaScript client library](../development/javascript.md)
 - [MQTT Python client library](../development/python.md)
+
+<!--
 - [MQTT Wechat app](../development/wechat-miniprogram.md)
+!-->
 
 ### Client example code
 
@@ -240,7 +243,10 @@ For MQTT client library example code, we try to cover as many mainstream program
 - [SpringBoot](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-SpringBoot)
 - [Vue.js](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Vue.js)
 - [swift](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-swift)
+
+<!--
 - [wechat-miniprogram](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-wechat-miniprogram)
+-->
 
 ## Advanced operation
 

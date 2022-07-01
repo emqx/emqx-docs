@@ -206,7 +206,6 @@
         - development/erlang
         - development/javascript
         - development/python
-        - development/wechat-miniprogram
     - development/resource
 
 - title_en: Load Verification
