@@ -55,7 +55,7 @@ For details of the built-in actions, see: [actions](./rule-actions.md)
 
 ### Reference Data Bridges as Actions
 
-To use data bridging as an action, you need to configure the ID of data bridge in the `actions` field:
+To use data bridge as an action, you need to configure the ID of data bridge in the `actions` field:
 
 ```js{1-3,5-6}
 rule_engine {
@@ -155,7 +155,7 @@ For the event types supported by the rule and the available fields, see: [events
 
 ## Configure Rules that use Data Bridges as Data Sources
 
-Some data bridges (such as the MQTT bridge) can also be used as the data source of rules. Rules use **data bridging topics** starting with **$bridges/** to handle events triggered by data bridging. An example of a rule that uses "MQTT bridge" as a data source is given below.
+Some data bridges (such as the MQTT bridge) can also be used as the data source of rules. Rules use **data bridge topics** starting with **$bridges/** to handle events triggered by data bridge. An example of a rule that uses "MQTT bridge" as a data source is given below.
 
 Add the following configs to the end of the `emqx.conf` file, 
 

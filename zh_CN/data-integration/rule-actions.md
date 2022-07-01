@@ -29,7 +29,7 @@
 如果用是 `emqx console` 启动的 EMQX，结果将打印到前台。
 如果用是 `emqx start` 启动的 EMQX，结果将打印到 EMQX 日志路径下的 `erlang.log.*` 文件里。
 
-输出格式：
+### 输出格式
 
 输出第一行打印 `[rule action]` 头和规则的 ID。
 从第二行开始打印分为两部分：
