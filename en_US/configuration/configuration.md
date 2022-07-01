@@ -571,6 +571,16 @@ System tuning parameters. This configuration will override the `-kernel net_tick
 Specifying how long time when a node has been unresponsive, it is considered to be down and disconnected. For details, see [http://www.erlang.org/doc/man/kernel_app.html#net_ticktime](http://www.erlang.org/doc/man/kernel_app.html#net_ticktime).
 
 
+### node.dist_use_interface
+
+| Type    | Default |
+| --------| ------- |
+| ipaddr  | 0.0.0.0 |
+
+#### Description
+
+The default is to use `0.0.0.0` to specify all network-interfaces to listen to, or to specify the IP of the network-interface to listen to.
+
 
 ### node.dist_listen_min
 
@@ -632,6 +642,17 @@ then the listening port will be `5370 + <N>`
 
 Default is `manual` when started from docker (environment variable override from docker-entrypoint)
 otherwise `stateless`.
+
+### rpc.tcp_server_ip
+
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| ipaddr | [0-255].[0-255].[0-255].[0-255] | 0.0.0.0 |
+
+#### Description
+
+Set the listening network-interface used by RPC local service. Use `0.0.0.0` to listen to all network-interfaces.
+NOTE: this config only takes effect when `rpc.port_discovery` is set to `manual`
 
 ### rpc.tcp_server_port
 

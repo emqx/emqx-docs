@@ -15,6 +15,43 @@ ref: undefined
 
 # Release version
 
+## Version 4.3.11
+
+*Release Date: 2022-06-30*
+
+### Enhancement
+
+- Rule engine supports persisting data to HStreamDB
+- QoS and Retain flag in rule engine's message republish actions can now use placeholders
+- Supports exclusive subscriptions, that is, only one subscriber is allowed for a topic
+- Dashboard and management API's HTTPS listeners can now use password-protected private key files, providing `key_password` configuration item
+- Support for placeholders `%u` and `%c` in topic rewrite rules
+- Support setting MQTT 5.0 properties in the API request for message publishing, such as message expiry interval, response topic, etc.
+- Optimize the UI when creating rule engine resources, such as folding some uncommon options, etc.
+- Opened 4 TCP-related configuration items: KeepAlive, TCP_NODELAY, SO_RCVBUF and SO_SNDBUF for the underlying gRPC connection of ExHook
+
+### Bug fixes
+
+- Fix the issue of inaccurate memory calculation in Linux OS, and calculate the memory usage of the current OS instead of the memory usage of EMQX
+- Fix the issue that the old disconnect event of ExHook would be triggered later than the new connect event when the client reconnects
+- Improve the JWT authentication module's judgment logic for startup status in a cluster environment
+- Extend the timeout of DynamoDB resource status query of rule engine to avoid the problem that some overseas resources may not be available
+- Fix the issue that the timestamp is not updated when the PostgreSQL data storage plugin persists messages and updates message consumption
+- Fix the issue that the rules engine's Tablestore, Lindorm and InfluxDB resources did not check connection status when creating
+- Fix rule engine not checking connection status when creating Tablestore, Lindorm and InfluxDB resources
+- Fix rule engine not updating metrics correctly when writing to TDEngine resource fails
+- Fix the issue that the Cassandra message store plugin persisted retained messages to multiple tables, causing duplicate messages
+- Fix the issue that Kafka resources exported from versions prior to 4.3.0 (only when the Produce policy is set to `first_key_dispatch`) could not be imported into 4.3.0 and later
+- Fix the issue that the execution order of topic rewriting and delayed publish is not fixed, now it is fixed to execute topic rewriting first
+- Improve the null value handling when rule engine persists data to InfluxDB and Tablestore, now null values will not be written
+- Fix the issue that rule engine could not encode MQTT 5.0 user properties
+- Fix the issue that the count of `connack.auth_error` is inaccurate when the client uses a protocol version below MQTT v5.0 to access
+- Fix the issue that the UDP listeners of LwM2M and CoAP gateways could not bind to the specified network interface
+- Fix Dashboard not starting after removing the default Dashboard user in the configuration file
+- Fix `client.subscribe` hook not being able to reject subscriptions
+- If the placeholder in the ACL rule is not replaced, the client's publish or subscribe operation will be rejected
+- Fix the issue that TLS was enabled but no TLS connection was actually established with Pulsar
+
 ## Version 4.3.10
 
 *Release Date: 2022-06-01*
