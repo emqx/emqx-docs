@@ -172,6 +172,15 @@ This command can be used to manage log handlers states, such as setting logging 
 
 This command is used to trace (and log) events of a given client or topic etc.
 
+::: tip
+It's recommended to use absolute paths for trace log files when start from command line.
+`emqx ctl trace start client foobar /abs/path/to/trace.log debug`
+:::
+
+::: tip
+You can also manage traces from the dashboard UI. See [tracer](../observability/tracer.md)
+:::
+
 `emqx ctl traces`
 
 This command is like the `trace` command, but applies on all nodes in the cluster.

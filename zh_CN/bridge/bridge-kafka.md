@@ -30,7 +30,7 @@ bridge.kafka.produce = sync
 bridge.kafka.produce.sync_timeout = 3S
 
 ## 指定 replayq 在磁盘上存储消息的基本目录。
-## 如果该配置项缺失活着设置为 undefined, replayq 将以使用内存的
+## 如果该配置项缺失或者设置为 undefined, replayq 将以使用内存的
 ## 的方式工作。也就是说，消息不在磁盘上排队 -- 在这种情况下，send
 ## 和 send_async API 的调用者负责处理在应用程序、网络或 kafka
 ## 干扰时可能丢失的消息。
