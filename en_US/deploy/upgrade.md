@@ -186,12 +186,27 @@ Users can use the data import API to import data from older versions into EMQX 5
 
 #### HTTP
 
-1. The status code of the failure response is changed to `400 <= statusCode < 500`, the status code of the successful authentication response is `statusCode = 200` or `statusCode = 204`, and any other status code or request failure is `ignore`;
-2. Remove the super user query configuration. If you need the super user function, please set it through JSON in the response body of successful authentication:
+1. Use the JSON fields inside the response body instead of the HTTP response status codes to decide on the authentication result;
+2. Remove the super user query configuration. If you need the super user function, please set it through JSON in the response body of successful authentication.
+
+**Success response status code:**
+
+```shell
+200 or 204
+```
+
+The authenticator will be ignored if the request fails or returns another status code.
+
+**Success Response Body (JSON):**
+
+| Name          | Type    | Required | Description                 |
+| ------------- | ------- | -------- | --------------------------- |
+| result        | Enum    | true     | `allow | deny | ignore` |
+| is_supseruser | Boolean | false    |                             |
 
 ```json
-# The key is is_supseruser, value can be true/false, 1/0 (other data or not set to false)
 {
+  "result": "allow",
   "is_supseruser": true
 }
 ```
@@ -333,7 +348,27 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 #### HTTP
 
-No changes.
+1. Use the JSON fields inside the response body instead of the HTTP response status codes to decide on the authentication result.
+
+**Success response status code:**
+
+```shell
+200 or 204
+```
+
+Other status codes or this authorizer will be `ignore` if the request fails.
+
+**Success Response Body (JSON):**
+
+| Name          | Type    | Required | Description                 |
+| ------------- | ------- | -------- | --------------------------- |
+| result        | Enum    | true     | `allow | deny | ignore` |
+
+```json
+{
+  "result": "deny"
+}
+```
 
 ## Rule Engine
 
