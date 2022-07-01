@@ -19,16 +19,18 @@ EMQX 是一款大规模可弹性伸缩的云原生分布式物联网 MQTT 消息
 
 ### 连接
 
-- 完整支持 MQTT v3.1/v3.1.1 and v5.0 协议规范
-  - QoS0, QoS1, QoS2 消息支持
+- 完整支持 MQTT v3.1、v3.1.1 and v5.0 协议规范
+  - QoS 0, QoS 1, QoS 2 消息支持
   - 持久会话和离线消息支持
-  - 保留消息(Retained)支持
-  - 遗嘱消息(Will Message)支持
+  - 保留消息（Retained Message）支持
+  - 遗嘱消息（Will Message）支持
   - 共享订阅支持
   - `$SYS/` 系统主题支持
-- TCP/SSL
-- MQTT/WebSocket/SSL
-- MQTT Over QUIC(预览中)
+- MQTT 支持 4 种传输协议
+  - TCP
+  - TLS
+  - WebSocket
+  - QUIC（实验性）
 - HTTP 消息发布接口
 - 网关
   - CoAP
@@ -46,11 +48,11 @@ EMQX 是一款大规模可弹性伸缩的云原生分布式物联网 MQTT 消息
 
 ### 安全
 
-- 基于用户名/密码的身份认证，支持使用内置数据库、Redis, MySQL, PostgreSQL, MongoDB, HTTP 作为数据源
+- 基于用户名/密码的身份认证，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供认证服务。
 - 基于 JWT 的身份认证与权限控制，支持 JWKs
 - MQTT 5.0 增强认证
 - PSK 身份验证
-- 基于 client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL，PostgreSQL，MongoDB，HTTP 作为数据源
+- 基于 Client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供授权服务
 - 客户端黑名单支持
 
 ### 可伸缩性
@@ -85,4 +87,4 @@ EMQX 是一款大规模可弹性伸缩的云原生分布式物联网 MQTT 消息
 - 插件
 - 钩子
 - gRPC 钩子扩展
-- gRPC协议扩展
+- gRPC 协议扩展

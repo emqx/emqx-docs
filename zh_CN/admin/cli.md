@@ -45,7 +45,7 @@ This command is a quick inspection to see if the broker is up and running.
 
 ### broker
 
-`emqx celt broker`
+`emqx ctl broker`
 
 This command is to inspect the local broker running status, statistics and metrics.
 

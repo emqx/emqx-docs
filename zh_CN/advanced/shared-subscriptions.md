@@ -65,7 +65,7 @@ EMQX 的共享订阅支持均衡策略与派发 Ack 配置：
 # 均衡策略
 broker.shared_subscription_strategy = random
 
-# 适用于 QoS1 QoS2 消息，启用时在其中一个组离线时，将派发给另一个组
+# 适用于 QoS 1 QoS 2 消息，启用时在其中一个组离线时，将派发给另一个组
 broker.shared_dispatch_ack_enabled = false
 ```
 <!-- TODO 待确认 -->

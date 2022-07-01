@@ -23,13 +23,13 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
 
 {% emqxce %}
 
-1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
+1. Download EMQX package [emqx.io](https://www.emqx.io/downloads) or [Github](https://github.com/emqx/emqx/releases)
 
 {% endemqxce %}
 
 {% emqxee %}
 
-1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise) or [Github](https://github.com/emqx/emqx/releases)
+1. Download EMQX package [emqx.com](https://www.emqx.com/en/try?product=enterprise) or [Github](https://github.com/emqx/emqx/releases)
 
 {% endemqxee %}
 
@@ -110,13 +110,13 @@ Please verify the SHA256 of the file when using this operation to ensure the int
 
 {% emqxce %}
 
-1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=broker) or [Github](https://github.com/emqx/emqx/releases)
+1. Download EMQX package [emqx.io](https://www.emqx.io/downloads) or [Github](https://github.com/emqx/emqx/releases)
 
 {% endemqxce %}
 
 {% emqxee %}
 
-1. Download EMQX package [emqx.com](https://www.emqx.com/en/downloads/try?product=enterprise)
+1. Download EMQX package [emqx.com](https://www.emqx.com/en/try?product=enterprise)
 
 {% endemqxee %}
 

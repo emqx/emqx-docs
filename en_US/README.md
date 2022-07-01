@@ -19,16 +19,18 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
 
 ### Connectivity
 
-- Full MQTT V3.1/V3.1.1 and V5.0 protocol specification support
-  - QoS0, QoS1, QoS2 message support
+- Full MQTT v3.1, v3.1.1 and v5.0 protocol specification support
+  - QoS 0, QoS 1, QoS 2 message support
   - Persistent conversation and offline message support
   - Retained message support
   - Last Will message support
   - Shared subscription support
   - `$SYS/` system topic support
-- TCP/SSL
-- MQTT/WebSocket/SSL
-- MQTT Over QUIC(In Preview)
+- MQTT supports 4 transport protocols
+  - TCP
+  - TLS
+  - WebSocket
+  - QUIC (Experimental)
 - HTTP message publishing interface support
 - Gateways
   - CoAP
@@ -46,12 +48,12 @@ Add more features to MQTT:
 
 ### Security
 
-- Authentication based on user name/password supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB, or HTTP as data sources
+- Authentication based on username/password supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB as data sources, and HTTP server to provide authentication services
 - Authentication based JWT supported using JWKs
 - Enhanced Authentication for MQTT 5.0
 - PSK authentication
-- Access control (Authorization) based on client ID, IP address, and user name supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB, or HTTP as data sources
-- API to blacklisting clients
+- Access control (Authorization) based on Client ID, IP address, and username supported using built-in database, Redis, MySQL, PostgreSQL, MongoDB as data sources, and HTTP Server to provide authorization services
+- API to ban clients
 
 ### Scalability
 
@@ -63,7 +65,7 @@ Add more features to MQTT:
 
 - SQL syntax data integrations to extract, filter, enrich, and transform MQTT message or internal events to formats expected by external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT(such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
-- Supports integration with other apps using Webhook
+- Supports integration with other apps using WebHook
 
 ### Reliability
 

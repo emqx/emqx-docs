@@ -1,7 +1,7 @@
 # Features List
 
 - Full MQTT V3.1 / V3.1.1 and V5.0 protocol specification support
-  - QoS0, QoS1, QoS2 message support
+  - QoS 0, QoS 1, QoS 2 message support
   - Persistent conversation and offline message support
   - Retained message support
   - Last Will message support
@@ -91,7 +91,7 @@ EMQX Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP m
 - With global professional team technical support. Our team covers 5 branches in North America, Europe, and China. There are professional founding teams from Huawei, IBM, Amazon, and nearly ten partners in Europe, North America, and India, providing First-class technical support and consulting services.
 
 ::: tip
-Thank you for your support of EMQX Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io。
+Thank you for your support of EMQX Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io.
 :::
 
 {% endemqxce %}

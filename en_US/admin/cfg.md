@@ -5155,7 +5155,7 @@ with a certain defined CoAP message format.
   The type of delivered coap message can be set to:
     - non: Non-confirmable;
     - con: Confirmable;
-    - qos: Mapping from QoS type of received message, QoS0 -> non, QoS1,2 -> con
+    - qos: Mapping from QoS type of received message, QoS 0 -> non, QoS 1,2 -> con
 
 
 - subscribe_qos: <code>qos0 | qos1 | qos2 | coap</code>
@@ -5839,7 +5839,7 @@ The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
   * default: 
   `true`
 
-  Allows connectionless clients to publish messages with a Qos of -1.
+  Allows connectionless clients to publish messages with a QoS of -1.
   This feature is defined for very simple client implementations which do not support any other features except this one. There is no connection setup nor tear down, no registration nor subscription. The client just sends its 'PUBLISH' messages to a GW
 
 - subs_resume: <code>boolean()</code>
@@ -12035,7 +12035,7 @@ Generic configuration for the connector.
   * default: 
   `"15s"`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS 1/QoS 2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
   - `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,

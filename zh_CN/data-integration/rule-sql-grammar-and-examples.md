@@ -140,13 +140,13 @@ SELECT payload FROM "#" WHERE payload.x.y = 1
 SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
 ```
 
-- 筛选所有订阅 't/#' 主题且订阅级别为 QoS1 的 clientid:
+- 筛选所有订阅 't/#' 主题且订阅级别为 QoS 1 的 clientid:
 
 ```sql
 SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
 ```
 
-- 筛选所有订阅主题能匹配到 't/#' 且订阅级别为 QoS1 的 clientid。注意与上例不同的是，这里用的是主题匹配操作符 **'=~'**，所以会匹配订阅 't' 或 't/+/a' 的订阅事件:
+- 筛选所有订阅主题能匹配到 't/#' 且订阅级别为 QoS 1 的 clientid。注意与上例不同的是，这里用的是主题匹配操作符 **'=~'**，所以会匹配订阅 't' 或 't/+/a' 的订阅事件:
 
 ```sql
 SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1

@@ -1,4 +1,4 @@
-# $SYS - System Topic
+# System Topic
 
 EMQX periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
 
@@ -178,12 +178,12 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | ------------------------------- | ------------------------------------------------ |
 | messages/received               | Accumulative received messages                   |
 | messages/sent                   | Accumulative sent messages                       |
-| messages/qos0/received          | Accumulative received messages of QoS0           |
-| messages/qos0/sent              | Accumulative sent messages of QoS0               |
-| messages/qos1/received          | Accumulative received messages QoS1              |
-| messages/qos1/sent              | Accumulative sent messages QoS1                  |
-| messages/qos2/received          | Accumulative received messages of QoS2           |
-| messages/qos2/sent              | Accumulative sent messages of QoS2               |
+| messages/qos0/received          | Accumulative received messages of QoS 0           |
+| messages/qos0/sent              | Accumulative sent messages of QoS 0               |
+| messages/qos1/received          | Accumulative received messages QoS 1              |
+| messages/qos1/sent              | Accumulative sent messages QoS 1                  |
+| messages/qos2/received          | Accumulative received messages of QoS 2           |
+| messages/qos2/sent              | Accumulative sent messages of QoS 2               |
 | messages/publish                | Accumulative PUBLISH messages                    |
 | messages/dropped                | Total number of dropped messages                 |
 | messages/dropped/expired        | Total number of dropped messages (Expired)       |

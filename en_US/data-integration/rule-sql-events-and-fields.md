@@ -275,7 +275,7 @@ Trigger rule when subscriber's message queue is full
 | Field               | Explanation                                   |
 | :------------------ | :-------------------------------------------- |
 | id                  | MQTT message id                               |
-| reason              | reason for dropping, possible reasons: <br/>queue_full: the message queue is full(QoS>0)<br/>no_local: it's not allowed for the client to received messages published by themselves<br/>expired: the message or the session is expired<br/>qos0_msg: the message queue is full(QoS0)|
+| reason              | reason for dropping, possible reasons: <br/>queue_full: the message queue is full(QoS>0)<br/>no_local: it's not allowed for the client to received messages published by themselves<br/>expired: the message or the session is expired<br/>qos0_msg: the message queue is full(QoS 0)|
 | from\_clientid      | Client ID of the sender                       |
 | from\_username      | Username of the sender                        |
 | clientid            | Client ID of the receiver                     |
@@ -358,7 +358,7 @@ Trigger rule when terminal connection is lost
 
 | Field            | Explanation                                   |
 | :--------------- | :-------------------------------------------- |
-| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: the peer has closed the network connection<br/>internal_error: malformed message or other unknown errors<br/> |
+| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed, or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: the peer has closed the network connection<br/>internal_error: malformed message or other unknown errors<br/> |
 | clientid         | client ID                                                    |
 | username         | Current MQTT username                                        |
 | peername         | IPAddress and Port of terminal                               |

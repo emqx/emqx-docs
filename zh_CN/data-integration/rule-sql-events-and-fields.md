@@ -289,7 +289,7 @@ FROM
 |        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                         |
-| reason              | 消息丢弃原因，可能的原因：<br/>queue_full: 消息队列已满(QoS>0)<br/>no_local: 不允许客户端接收自己发布的消息<br/>expired: 消息或者会话过期<br/>qos0_msg: QoS0 的消息因为消息队列已满被丢弃|
+| reason              | 消息丢弃原因，可能的原因：<br/>queue_full: 消息队列已满(QoS>0)<br/>no_local: 不允许客户端接收自己发布的消息<br/>expired: 消息或者会话过期<br/>qos0_msg: QoS 0 的消息因为消息队列已满被丢弃|
 | from_clientid       | 消息来源 Client ID                   |
 | from_username       | 消息来源用户名                       |
 | clientid            | 消息目的 Client ID                   |

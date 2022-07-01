@@ -109,7 +109,7 @@ The default log file directory of EMQX is `./log` (for zip package installation)
 When file logging is enabled (log.to = file or both), the following files will appear in the log directory:
 
 - **emqx.log.N:** log file prefixed with emqx.log, that contains all the log messages of EMQX Broker, such as `emqx.log.1`,` emqx.log.2` ...
-- **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information。
+- **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information.
 - **run_erl.log:** The system file used to record startup information when starting EMQX Broker in the background with `emqx start`.
 - **erlang.log.N:** log file prefixed with erlang.log, which is a copy file of the console log when EMQX Broker is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
 

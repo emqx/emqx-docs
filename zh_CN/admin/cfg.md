@@ -7193,7 +7193,9 @@ DNS SRV 记录服务发现。
   `"emqxcl"`
 
   指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
-  v2/keys/<prefix>/<cluster.name>/<node.name> </br>
+  ```
+  v2/keys/<prefix>/<cluster.name>/<node.name>
+  ```
   当 cluster.discovery_strategy 为 etcd 时，此配置项才有效。
         
 
@@ -7250,7 +7252,7 @@ Kubernetes 服务发现。
   `ip`
 
   当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。
-  指定 <code>cluster.k8s.address_type</code. 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
+  指定 <code>cluster.k8s.address_type</code>. 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
   的IP地址。
 
 
@@ -7971,8 +7973,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   `true`
 
   启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。
-  系统会默认生成<code>*.siz/*.idx<code>用于记录日志位置，请不要手动修改这两个文件。
-
+  系统会默认生成`*.siz/*.idx`用于记录日志位置，请不要手动修改这两个文件。
 
 - count: <code>1..2048</code>
   * default: 
@@ -8002,7 +8003,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `"emqx@127.0.0.1"`
 
-  节点名。格式为 \<name>@\<host>。其中 <host> 可以是 IP 地址，也可以是 FQDN。
+  节点名。格式为 `\<name>@\<host>`。其中 `<host>` 可以是 IP 地址，也可以是 FQDN。
   详见 http://erlang.org/doc/reference_manual/distributed.html。
             
 
@@ -11712,7 +11713,7 @@ HTTP Bridge 配置
   * default: 
   `"15s"`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS 1/QoS 2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
   - `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,

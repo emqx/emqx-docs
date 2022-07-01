@@ -7,11 +7,9 @@ This module ranks subscribers and topics in descending order according to the la
 
 ## Open module
 
-Open EMQX Dashboard, click on the "Module" on the left.
+Open EMQX Dashboard, click on the `Diagnose` and select `Slow Subscriptions`, then `Enable` it.
 
 ![image](./assets/slow_subscribers_statistics_1.png)
-
-Then, select the **Slow Subscribers Statistics** module, and then click *Enable*
 
 <a id="org417d240"></a>
 
@@ -57,15 +55,15 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
     Definition of message completion transmission:
 
-    1.  QoS0
+    1.  QoS 0
 
         When EMQX starts to deliver
 
-    2.  QoS1
+    2.  QoS 1
 
         When EMQX receives *PUBACK* from the client
 
-    3.  Qos2
+    3.  QoS 2
 
         When EMQX receives *PUBCOMP* from the client
 

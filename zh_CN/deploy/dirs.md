@@ -62,7 +62,7 @@ EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、规�
 
 **trace**
 
-EMQX 支对指定 ClientID 或 Topic 或 IP 实时过滤日志，用于调试和排查错误。具体请查看 [Trace 日志追踪](../observability/tracer.md)
+EMQX 支对指定 ClientID 或 Topic 或 IP 实时过滤日志，用于调试和排查错误。具体请查看 [日志追踪](../observability/tracer.md)
 
 ## log 目录
 
