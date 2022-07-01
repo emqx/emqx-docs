@@ -9,7 +9,7 @@ EMQX Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP m
 - Message bridging of message and stream middleware: forwarding of messages to Kafka stream processing middleware with 100,000/s High-performance and highly reliable , seamless integration with enterprise message middleware of RabbitMQ, Pulsar ;
 - With global professional team technical support. Our team covers 5 branches in North America, Europe, and China. There are professional founding teams from Huawei, IBM, Amazon, and nearly ten partners in Europe, North America, and India, providing First-class technical support and consulting services.
 
-Thank you for your support of EMQX Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io。
+Thank you for your support of EMQX Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io.
 
 
 

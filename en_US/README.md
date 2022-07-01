@@ -24,16 +24,18 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
 
 ### Connectivity
 
-- Full MQTT V3.1/V3.1.1 and V5.0 protocol specification support
+- Full MQTT v3.1, v3.1.1 and v5.0 protocol specification support
   - QoS0, QoS1, QoS2 message support
   - Persistent conversation and offline message support
   - Retained message support
   - Last Will message support
   - Shared subscription support
   - `$SYS/` system topic support
-- TCP/SSL
-- MQTT/WebSocket/SSL
-- MQTT Over QUIC(In Preview)
+- MQTT supports 4 transport protocols
+  - TCP
+  - TLS
+  - WebSocket
+  - QUIC (Experimental)
 - HTTP message publishing interface support
 - Gateways
   - CoAP
@@ -68,7 +70,7 @@ Add more features to MQTT:
 
 - SQL syntax data integrations to extract, filter, enrich, and transform MQTT message or internal events to formats expected by external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT(such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
-- Supports integration with other apps using Webhook
+- Supports integration with other apps using WebHook
 
 ### Reliability
 

@@ -162,11 +162,11 @@ opts includes
 | username    | string  | client Username, When not existed, the value is "undefined" |
 | topic       | string  | unsubscribed topic |
 
-**session.subscribed**: same as `client.subscribe`，action is `session_subscribed`
+**session.subscribed**: same as `client.subscribe`, action is `session_subscribed`
 
-**session.unsubscribed**: same as `client.unsubscribe`，action is `session_unsubscribe`
+**session.unsubscribed**: same as `client.unsubscribe`, action is `session_unsubscribe`
 
-**session.terminated**: same as `client.disconnected`，action is `session_terminated`
+**session.terminated**: same as `client.disconnected`, action is `session_terminated`
 
 **message.publish**
 
