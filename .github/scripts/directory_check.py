@@ -78,7 +78,7 @@ if __name__ == '__main__':
     if os.path.exists(f'{docs_path}/{directory_file}'):
         md_file_list = []
         config_dict = json.load(open(f'{docs_path}/{directory_file}'))
-        # md_file_list += get_md_files(config_dict['cn'], 'zh_CN')
+        md_file_list += get_md_files(config_dict['cn'], 'zh_CN')
         md_file_list += get_md_files(config_dict['en'], 'en_US')
 
         for file_path, dir_list, file_list in os.walk(docs_path):

@@ -67,9 +67,9 @@ jobs:
         cd docs-files
         if [[ $DOCS_TYPE == "broker" ]];
         then
-          python3 .ci/remove_unused.py directory.json $(pwd)
+          python3 .github/scripts/remove_unused.py directory.json $(pwd)
         else
-          python3 .ci/remove_unused.py directory_ee.json $(pwd)
+          python3 .github/scripts/remove_unused.py directory_ee.json $(pwd)
         fi
 
     - name: move ce files
@@ -109,7 +109,7 @@ jobs:
         else
           version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
         fi
-        python3 .ci/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
+        python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         latest_version=$(cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json  | jq -r '.[0]')
         echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
@@ -125,17 +125,17 @@ jobs:
         cd frontend/docs/.vuepress/
         wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
         chmod 755 ./ossutil64
-        ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.OSS_ACCESSKEY_ID }} -k ${{ secrets.OSS_ACCESSKEY_SECRET }} -L CH
-        ./ossutil64 cp -r dist/ oss://${{ secrets.OSS_BUCKET }}/docs/ -u
+        ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_OSS_ACCESSKEY_ID }} -k ${{ secrets.ALI_OSS_ACCESSKEY_SECRET }} -L CH
+        ./ossutil64 cp -r dist/ oss://emqx-io-docs/docs/ -u
 
     - name: upload ee file
       if: env.DOCS_TYPE == 'enterprise'
       run: |
         pip3 install coscmd
-        coscmd config -a ${{ secrets.COS_ID }} -s ${{ secrets.COS_KEY }} -b ${{ secrets.COS_NAME }} -r ${{ secrets.COS_REGION }}
+        coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-1302406139 -r ap-shanghai
         coscmd delete -r -f en/${DOCS_TYPE}/${VERSION} || true
         coscmd delete -r -f zh/${DOCS_TYPE}/${VERSION} || true
-        coscmd config -a ${{ secrets.COS_ID }} -s ${{ secrets.COS_KEY }} -b ${{ secrets.COS_NAME }} -e cos.accelerate.myqcloud.com
+        coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-1302406139 -e cos.accelerate.myqcloud.com
         cd frontend/docs/.vuepress/dist/
         zip -rq docs-dist-${DOCS_TYPE}-${VERSION}.zip ./
         coscmd upload docs-dist-${DOCS_TYPE}-${VERSION}.zip docs-zip/
@@ -145,52 +145,38 @@ jobs:
       if: env.DOCS_TYPE == 'enterprise'
       run: |
         pip3 install tccli
-        tccli configure set secretId ${{ secrets.COS_ID }}
-        tccli configure set secretKey ${{ secrets.COS_KEY }}
-        tccli configure set region ${{ secrets.COS_REGION }}
+        tccli configure set secretId ${{ secrets.TENCENT_COS_ID }}
+        tccli configure set secretKey ${{ secrets.TENCENT_COS_KEY }}
+        tccli configure set region ap-shanghai
         tccli cdn UpdateDomainConfig --cli-unfold-argument --Domain docs.emqx.com \
             --UrlRedirect.Switch on \
             --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.0.Pattern "/zh/enterprise/latest/*" \
-            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/index.html" \
+            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/\$1" \
             --UrlRedirect.PathRules.0.RedirectHost https://docs.emqx.com \
             --UrlRedirect.PathRules.1.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.1.Pattern "/en/enterprise/latest/*" \
-            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/index.html" \
+            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/\$1" \
             --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
-    - name: clone docsearch
-      if: env.LATEST_VERSION == env.VERSION
-      uses: actions/checkout@v2
-      with:
-        repository: 'Swilder-M/docsearch-scraper-simple'
-        path: docsearch
-
-    - name: install pipenv
-      if: env.LATEST_VERSION == env.VERSION
-      run: |
-          python -m pip install --upgrade pipenv wheel
-
-    - id: cache-pipenv
-      if: env.LATEST_VERSION == env.VERSION
-      uses: actions/cache@v1
-      with:
-        path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-
-    - name: install dependencies
-      if: env.LATEST_VERSION == env.VERSION && steps.cache-pipenv.outputs.cache-hit != 'true'
-      run: |
-        cd docsearch
-        pipenv install --keep-outdated
-
-    - name: update current version
-      if: env.LATEST_VERSION == env.VERSION
+    - name: update ee search index
+      if: env.LATEST_VERSION == env.VERSION && env.DOCS_TYPE == 'enterprise'
+      uses: Swilder-M/docsearch-scraper-simple@v3
       env:
-        APPLICATION_ID: ${{ secrets.DOCS_APPLICATION_ID }}
-        API_KEY: ${{ secrets.DOCS_API_KEY }}
-      run: |
-        cd docsearch
-        pipenv run python -m src.index config ${DOCS_TYPE} ${VERSION}
+        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+        API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+      with:
+        docs_type: ${{ env.DOCS_TYPE }}
+        docs_version: ${{ env.VERSION }}
+
+    - name: update ce search index
+      if: env.LATEST_VERSION == env.VERSION && env.DOCS_TYPE == 'broker'
+      uses: Swilder-M/docsearch-scraper-simple@v3
+      env:
+        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_CE }}
+        API_KEY: ${{ secrets.ALGOLIA_API_KEY_CE }}
+      with:
+        docs_type: ${{ env.DOCS_TYPE }}
+        docs_version: ${{ env.VERSION }}
