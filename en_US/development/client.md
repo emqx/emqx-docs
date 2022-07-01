@@ -29,7 +29,7 @@ Taking a client to connect, publish, and process messages as an example, the ste
   
 - **Subscribe to a topic**: You can subscribe to the topic after the connection is established successfully, and you need to specify the topic information
   - Specify topic filter, support topic wildcards `+` and `#`  when subscribing
-  - Specify QoS, and the option of Qos 0 1 2 can be selected according to the client library and broker implementation. Please note that some brokers and cloud service providers do not support some QoS levels. For example, AWS IoT, Alibaba Cloud IoT Suite, and Azure IoT Hub do not support QoS 2 level 
+  - Specify QoS, and the option of QoS 0 1 2 can be selected according to the client library and broker implementation. Please note that some brokers and cloud service providers do not support some QoS levels. For example, AWS IoT, Alibaba Cloud IoT Suite, and Azure IoT Hub do not support QoS 2 level 
   - Topic subscription may fail due to network problems, Broker side ACL rules restrictions
 
 - **Receive messages and process:**

@@ -118,7 +118,7 @@ bridges forwards <Name>                         # Show a bridge forward topic
 bridges add-forward <Name> <Topic>              # Add bridge forward topic
 bridges del-forward <Name> <Topic>              # Delete bridge forward topic
 bridges subscriptions <Name>                    # Show a bridge subscriptions topic
-bridges add-subscription <Name> <Topic> <Qos>   # Add bridge subscriptions topic
+bridges add-subscription <Name> <Topic> <QoS>   # Add bridge subscriptions topic
 ```
 
 ## List Status of All Bridges

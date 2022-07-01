@@ -51,7 +51,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 | --password        | -P   | -               | 无；非必选 | 客户端密码                                                   |
 | --topic           | -t   | -               | 无；必选   | 发布的主题；支持站位符：<br />`%c`：表示 ClientId<br />`%u`：表示 Username<br />`%i`：表示客户端的序列数 |
 | --szie            | -s   | -               | 256        | 消息 Payload 的大小；单位：字节                              |
-| --qos             | -q   | -               | 0          | Qos 等级                                                     |
+| --qos             | -q   | -               | 0          | QoS 等级                                                     |
 | --retain          | -r   | true<br />false | false      | 消息是否设置 Retain 标志                                     |
 | --keepalive       | -k   | -               | 300        | 客户端心跳时间                                               |
 | --clean           | -C   | true<br />false | true       | 是否以清除会话的方式建立连接                                 |

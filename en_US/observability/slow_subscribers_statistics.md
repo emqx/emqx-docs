@@ -57,15 +57,15 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
     Definition of message completion transmission:
 
-    1.  QoS0
+    1.  QoS 0
 
         When EMQX starts to deliver
 
-    2.  QoS1
+    2.  QoS 1
 
         When EMQX receives *PUBACK* from the client
 
-    3.  Qos2
+    3.  QoS 2
 
         When EMQX receives *PUBCOMP* from the client
 

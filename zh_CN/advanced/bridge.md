@@ -146,7 +146,7 @@ bridge.mqtt.aws.tls_versions = tlsv1.2,tlsv1.1,tlsv1
 bridge.mqtt.aws.forwards = sensor1/#,sensor2/#
 ```
 
-还可指定 QoS1 与 QoS2 消息的重传间隔以及批量发送报文数:
+还可指定 QoS 1 与 QoS 2 消息的重传间隔以及批量发送报文数:
 
 ```bash
 bridge.mqtt.aws.retry_interval = 20s

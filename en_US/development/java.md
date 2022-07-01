@@ -106,7 +106,7 @@ public class OnMessageCallback implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         // The messages obtained after subscribe will be executed here
         System.out.println("Received message topic:" + topic);
-        System.out.println("Received message Qos:" + message.getQos());
+        System.out.println("Received message QoS:" + message.getQos());
         System.out.println("Received message content:" + new String(message.getPayload()));
     }
 

@@ -137,11 +137,11 @@ The DO and INCASE clauses are optional.
     ```sql
     SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
     ```
-- Filter all clientids that subscribe to the 't/#' topic and have a subscription level of QoS1 :
+- Filter all clientids that subscribe to the 't/#' topic and have a subscription level of QoS 1 :
     ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
     ```
-- Filter all clientids that subscribe to the 't/#' topic and subscription level is QoS1. Note that the strict equality operator '=~' is used here, so it does not match subscription requests with the topic 't' or 't/+/a' :
+- Filter all clientids that subscribe to the 't/#' topic and subscription level is QoS 1. Note that the strict equality operator '=~' is used here, so it does not match subscription requests with the topic 't' or 't/+/a' :
     ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
     ```

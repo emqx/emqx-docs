@@ -91,7 +91,7 @@ Next, we define the `forwards` rule, so that messages sent by this node to ` sen
 bridge.mqtt.aws.forwards = sensor1/#,sensor2/#
 ```
 
-You can also specify the retry interval for QoS1 and QoS2 messages and the number of packet sent in bulk:
+You can also specify the retry interval for QoS 1 and QoS 2 messages and the number of packet sent in bulk:
 
 ```bash
 bridge.mqtt.aws.retry_interval = 20s

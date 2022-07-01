@@ -275,7 +275,7 @@ Trigger rule when subscriber's message queue is full
 | Field               | Explanation                                   |
 | :------------------ | :-------------------------------------------- |
 | id                  | MQTT message id                               |
-| reason              | reason for dropping, possible reasons: <br/>queue_full: the message queue is full(QoS>0)<br/>no_local: it's not allowed for the client to received messages published by themselves<br/>expired: the message or the session is expired<br/>qos0_msg: the message queue is full(QoS0)|
+| reason              | reason for dropping, possible reasons: <br/>queue_full: the message queue is full(QoS>0)<br/>no_local: it's not allowed for the client to received messages published by themselves<br/>expired: the message or the session is expired<br/>qos0_msg: the message queue is full(QoS 0)|
 | from\_clientid      | Client ID of the sender                       |
 | from\_username      | Username of the sender                        |
 | clientid            | Client ID of the receiver                     |

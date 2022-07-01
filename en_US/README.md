@@ -25,7 +25,7 @@ Below is a brief/incomplete highlighting a part of the features EMQX provides.
 ### Connectivity
 
 - Full MQTT v3.1, v3.1.1 and v5.0 protocol specification support
-  - QoS0, QoS1, QoS2 message support
+  - QoS 0, QoS 1, QoS 2 message support
   - Persistent conversation and offline message support
   - Retained message support
   - Last Will message support
