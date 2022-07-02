@@ -99,11 +99,11 @@ API 有较大变动，以下是常用的 API 变动对照表，现存的部分 A
 | ------------------------------- | --------------------------------------- | -------- | -------------------- |
 | **发布/订阅操作**               |                                         |          |                      |
 | `POST /mqtt/publish`            | `POST /publish`                         | 兼容     |                      |
-| `POST /mqtt/publish_batch`      | `POST /publish_bulk`                    | 兼容     |                      |
+| `POST /mqtt/publish_batch`      | `POST /publish/bulk`                    | 兼容     |                      |
 | `POST /mqtt/subscribe`          | `POST /clients/{clientid}/subscribe`    | 兼容     |                      |
-| `POST /mqtt/subscribe_batch`    | -                                       | 兼容     |                      |
+| `POST /mqtt/subscribe_batch`    | `POST /clients/{clientid}/subscribe/bulk` | 兼容     |                      |
 | `POST /mqtt/unsubscribe`        | `POST /clients/{clientid}/unsubscribe`  | 兼容     |                      |
-| `POST /mqtt/unsubscribe_batch`  | -                                       | 兼容     |                      |
+| `POST /mqtt/unsubscribe_batch`  | `POST /clients/{clientid}/unsubscribe/bulk` | 兼容     |                      |
 | **连接/主题/订阅**              |                                         |          |                      |
 | `GET /clients`                  | `GET /clients`                          | 部分兼容 |                      |
 | `GET /routes{/topic}`           | `GET /topics{/topic}`                   | 不兼容   | routes 更名为 topics |
