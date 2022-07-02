@@ -107,29 +107,29 @@ Compatibility Notes:
 - Incompatible: API paths and fields have changed
 :::
 
-| 4.x                              | 5.0                                     | Compatibility        | Notes                   |
-| -------------------------------- | --------------------------------------- | -------------------- | ----------------------- |
-| **Publish/Subscribe**            |                                         |                      |                         |
-| `POST /mqtt/publish`             | `POST /publish`                         | Compatibility        |                         |
-| `POST /mqtt/publish_batch`       | `POST /publish_bulk`                    | Compatibility        |                         |
-| `POST /mqtt/subscribe`           | `POST /clients/{clientid}/subscribe`    | Compatibility        |                         |
-| `POST /mqtt/subscribe_batch`     | -                                       | Compatibility        |                         |
-| `POST /mqtt/unsubscribe`         | `POST /clients/{clientid}/unsubscribe`  | Compatibility        |                         |
-| `POST /mqtt/unsubscribe_batch`   | -                                       | Compatibility        |                         |
-| **Clients/Topics/Subscriptions** |                                         |                      |                         |
-| `GET /clients`                   | `GET /clients`                          | Partially compatible |                         |
-| `GET /routes{/topic}`            | `GET /topics{/topic}`                   | Incompatible         | routes rename to topics |
-| `GET /subscriptions`             | `GET /subscriptions`                    | Partially compatible |                         |
-| `GET /subscriptions/{clientid}`  | `GET /clients/{clientid}/subscriptions` | Incompatible         |                         |
-| **Node/Stats/Metrics**           |                                         |                      |                         |
-| `GET /nodes`                     | `GET /nodes`                            | Partially compatible |                         |
-| `GET /brokers`                   | -                                       | Incompatible         | merged to `GET /nodes`  |
-| `GET /stats`                     | `GET /stats`                            | Partially compatible |                         |
-| `GET /metrics`                   | `GET /metrics`                          | Partially compatible |                         |
-| **Users/Alarms**                 |                                         |                      |                         |
-| `GET /users`                     | `GET /users`                            | Partially compatible |                         |
-| `GET /alarms{/activated}`        | `GET /alarms?activated={true,false}`    | Incompatible         |                         |
-| `GET /alarms{/deactivated}`      | `GET /alarms?activated={true,false}`    | Incompatible         |                         |
+| 4.x                              | 5.0                                         | Compatibility        | Notes                   |
+| -------------------------------- | ------------------------------------------- | -------------------- | ----------------------- |
+| **Publish/Subscribe**            |                                             |                      |                         |
+| `POST /mqtt/publish`             | `POST /publish`                             | Compatibility        |                         |
+| `POST /mqtt/publish_batch`       | `POST /publish/bulk`                        | Compatibility        |                         |
+| `POST /mqtt/subscribe`           | `POST /clients/{clientid}/subscribe`        | Compatibility        |                         |
+| `POST /mqtt/subscribe_batch`     | `POST /clients/{clientid}/subscribe/bulk`   | Compatibility        |                         |
+| `POST /mqtt/unsubscribe`         | `POST /clients/{clientid}/unsubscribe`      | Compatibility        |                         |
+| `POST /mqtt/unsubscribe_batch`   | `POST /clients/{clientid}/unsubscribe/bulk` | Compatibility        |                         |
+| **Clients/Topics/Subscriptions** |                                             |                      |                         |
+| `GET /clients`                   | `GET /clients`                              | Partially compatible |                         |
+| `GET /routes{/topic}`            | `GET /topics{/topic}`                       | Incompatible         | routes rename to topics |
+| `GET /subscriptions`             | `GET /subscriptions`                        | Partially compatible |                         |
+| `GET /subscriptions/{clientid}`  | `GET /clients/{clientid}/subscriptions`     | Incompatible         |                         |
+| **Node/Stats/Metrics**           |                                             |                      |                         |
+| `GET /nodes`                     | `GET /nodes`                                | Partially compatible |                         |
+| `GET /brokers`                   | -                                           | Incompatible         | merged to `GET /nodes`  |
+| `GET /stats`                     | `GET /stats`                                | Partially compatible |                         |
+| `GET /metrics`                   | `GET /metrics`                              | Partially compatible |                         |
+| **Users/Alarms**                 |                                             |                      |                         |
+| `GET /users`                     | `GET /users`                                | Partially compatible |                         |
+| `GET /alarms{/activated}`        | `GET /alarms?activated={true,false}`        | Incompatible         |                         |
+| `GET /alarms{/deactivated}`      | `GET /alarms?activated={true,false}`        | Incompatible         |                         |
 
 ## Auth/ACL
 
