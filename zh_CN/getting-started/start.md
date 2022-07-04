@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref:
 ---
@@ -51,7 +51,7 @@ EMQX v4.0.0 is started successfully!
 
 ## 查看 EMQX 的状态
 
-EMQX 正常启动: 
+EMQX 正常启动:
 
 ```bash
 $ emqx_ctl status
@@ -101,8 +101,4 @@ EMQX Enterprise 需要 License 文件才能正常启动，请联系销售人员�
 
 - 替换默认证书目录下的 License 文件（`etc/emqx.lic`），当然你也可以选择变更证书文件的读取路径，修改 `etc/emqx.conf` 文件中的 `license.file`，并确保 License 文件位于更新后的读取路径且 EMQX Enterprise 拥有读取权限，然后启动 EMQX Enterprise。EMQX Enterprise 的启动方式与 EMQX 相同，见下文。
 
-- 如果是正在运行的 EMQX Enterprise 需要更新 License 文件，那么可以使用 `emqx_ctl license reload [license 文件所在路径]` 命令直接更新 License 文件，无需重启 EMQX Enterprise。
-
-::: tip
-`emqx_ctl license reload` 命令加载的证书仅在 EMQX Enterprise 本次运行期间生效，如果需要永久更新 License 证书的路径，依然需要替换旧证书或修改配置文件。
-:::
+- 如果正在运行的EMQX企业集群需要更新许可证文件，可以使用`emqx_ctl license reload [path of the license file]`命令直接更新许可证文件，而无需重启任何节点。 需要注意的是，`emqx_ctl license reload`命令加载的证书将应用于整个EMQX集群，它将被保存在每个节点的`licenses`子目录下的EMQX的数据目录中（即：`data/licenses/emqx.lic`）。 即使经纪商被重新启动，这个新的许可证文件也会被加载和应用。

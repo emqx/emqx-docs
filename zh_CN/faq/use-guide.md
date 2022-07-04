@@ -64,6 +64,9 @@ emqx_ctl license reload /etc/emqx/emqx.lic
 docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
 ```
 
+::: tip
+在一个多节点的集群中，`emqx_ctl license reload`命令只需要在其中一个节点上执行，因为许可证将被复制并应用到所有成员。 每个成员都将在为EMQX配置的数据目录下包含一份新的许可证。
+:::
 
 
 
@@ -189,8 +192,8 @@ EMQX 企业版支持消息持久化，可以将消息保存到数据库，开源
 调用的 API 如下所示：
 
 ```html
-HTTP 方法：DELETE 
-URL：api/[v2|v3]/clients/{clientid} 
+HTTP 方法：DELETE
+URL：api/[v2|v3]/clients/{clientid}
 <!--请注意区分 URL 中第二部分的版本号，请根据使用的版本号来决定 -->
 
 返回内容：
@@ -349,21 +352,21 @@ EMQX 支持加密连接。在生产环境部署时，推荐的方案是使用负
   /usr/lib/emqx
   /usr/bin/emqx: line 510: logger: command not found
   ```
-  
+
   **解决办法：**
-  
+
   + `Centos/Redhat`
-  
+
     ```
     $ yum install rsyslog
     ```
-  
+
   + `Ubuntu/Debian`
-  
+
     ```
     $ apt-get install bsdutils
     ```
-  
+
 +	`openssl` 缺失
 
 ```
@@ -372,10 +375,10 @@ EMQX 支持加密连接。在生产环境部署时，推荐的方案是使用负
     Root: /emqx
     /emqx
     Erlang/OTP 21 [erts-10.3] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:32] [hipe]
-    
+
     {"Kernel pid terminated",application_controller,"{application_start_failure,kernel,{{shutdown,{failed_to_start_child,kernel_safe_sup,{on_load_function_failed,crypto}}},{kernel,start,[normal,[]]}}}"}
     Kernel pid terminated (application_controller) ({application_start_failure,kernel,{{shutdown,{failed_to_start_child,kernel_safe_sup,{on_load_function_failed,crypto}}},{kernel,start,[normal,[]]}}})
-    
+
     Crash dump is being written to: log/crash.dump...done
 ```
 
@@ -390,7 +393,7 @@ EMQX 支持加密连接。在生产环境部署时，推荐的方案是使用负
   Root: /usr/lib/emqx
   /usr/lib/emqx
   Erlang/OTP 21 [erts-10.3.5.1] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:32] [hipe]
-  
+
   Starting emqx on node emqx@127.0.0.1
   Start http:management listener on 8080 successfully.
   Start http:dashboard listener on 18083 successfully.
