@@ -17,13 +17,14 @@ For untrusted environments, HTTPS should be used.
 
 ## Required HTTP Response Format
 
-- Response `Content-Type` can be `application/x-www-form-urlencoded` or `application/json`.
+- Response `Content-Type` must be `application/json`.
 - If the HTTP Status Code is `200`, the authorization result is granted by HTTP Body. It depends on the value of the `result` field:
     - `allow`: Allow Publish or Subscribe.
     - `deny`: Deny Publish or Subscribe.
     - `ignore`: Ignore this request, it will be handed over to the next authorizer.
 - If the HTTP Status Code is `204`, it means that this Publish or Subscribe request is allowed.
 
+<!--- NOTE: the code supports `application/x-www-form-urlencoded` too, but it is not very easy to extend in the future, hence hidden from doc -->
 
 ## Configuration
 
@@ -102,8 +103,8 @@ For `https://` urls `ssl` configuration must be enabled:
 
 ### `body`
 
-Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON or www-form-urlencoded
-body. For `get` requests it is encoded as query parameters. The map keys and values can contain [placeholders](./authz.md#authorization-placeholders).
+Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON body.
+For `get` requests it is encoded as query parameters. The map keys and values can contain [placeholders](./authz.md#authorization-placeholders).
 
 For different configurations `body` map will be encoded differently.
 
@@ -149,30 +150,6 @@ Assume an MQTT client is connected with clientid `id123`, username `iamuser` and
 
     {"username":"iamuser","topic":"foo/bar", "action": "publish"}
     ```
-* `POST` www-form-urlencoded request:
-    ```
-    {
-        method = post
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            topic = "${topic}"
-            action = "${action}"
-        }
-        headers {
-            "content-type": "application/x-www-form-urlencoded"
-        }
-    }
-    ```
-    The resulting request will be:
-    ```
-    POST /auth/id123 HTTP/1.1
-    Content-Type: application/x-www-form-urlencoded
-    ... Other headers ...
-
-    username=iamuser&topic=foo%2Fbar&action=publish
-    ```
-
 ### `headers`
 
 Map with arbitrary HTTP headers for external requests, optional.
@@ -199,13 +176,12 @@ For `post` requests the default value is
 }
 ```
 
-`content-type` header value defines `body` encoding method for `post` requests. Possible values are:
-* `application/json` for JSON;
-* `application/x-www-form-urlencoded` for x-www-form-urlencoded format.
+`content-type` header value defines `body` encoding method for `post` requests, it must be `application/json`.
 
 ### `enable_pipelining`
 
-A positive integer value (default = 100) indicating the maximum number of send-ahead HTTP streams [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
+A non-negative integer set maximum allowed async HTTP requests [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
+Optional, default value is `100`, set `0` to disable.
 
 ### `pool_size`
 

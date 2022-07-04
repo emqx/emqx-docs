@@ -10,28 +10,27 @@ HTTP authenticator delegates authentication to a custom HTTP API.
   - Authentication result should be returned with HTTP Status Code 200 or 204. The authentication result and whether it is a super user is indicated by the specific field value `resulet` and `is_superuser`.</br>
   - Other response codes will be considered as HTTP authentication request execution failure, Such as 4xx, 5xx ... </br>
     EMQX will switch to the next authenticator for the authentication process with default value `ignore`. If the current HTTP authenticator is the last authenticator on the chain, the authentication fails and the client will be refused to connect.
-- The encoding format of the HTTP response can be `application/json` and `application/x-www-form-urlencoded`, and the HTTP authenticator will automatically select the decoding method according to the `Content-Type` in the response. </br>
-  **Example**:</br>
-  - ***HTTP Status Code 200***</br>
-    ```json
-    HTTP/1.1 200 OK
-    Headers: Content-Type: application/json
-    ...
-    Body:
-    {
-        "result": "allow" | "deny" | "ignore", // Default `"ignore"`
-        "is_superuser": true | false // Default `false`
-    }
-    ```
-    or
-    ```json
-    HTTP/1.1 200 OK
-    Headers:
-    Content-Type: application/x-www-form-urlencoded
-    ...
-    Body:
-    result=allow&is_superuser=true
-    ```
+- The encoding format of the HTTP response must be `application/json`, and the HTTP authenticator will automatically select the decoding method according to the `Content-Type` in the response. </br>
+
+<!--- NOTE: the code supports `application/x-www-form-urlencoded` too, but it is not very easy to extend in the future, hence hidden from doc -->
+
+::: tip Migrating from EMQX 4.x
+In EMQX 4.x, only HTTP status code is used, but body is discarded, for example, `200` for `allow` and `403` for `deny`.
+Due to the lack of expressiveness, it has been redesigned to make use of HTTP body.
+:::
+
+### HTTP response example
+
+```json
+HTTP/1.1 200 OK
+Headers: Content-Type: application/json
+...
+Body:
+{
+    "result": "allow" | "deny" | "ignore", // Default `"ignore"`
+    "is_superuser": true | false // Default `false`
+}
+```
 
 ::: danger
 `POST` method is recommended. When using the `GET` method, some sensitive information (like plain text passwords) can be exposed through HTTP server logging.
@@ -108,10 +107,9 @@ For URLs with scheme `https` the `ssl` configuration must be enabled:
 
 ### `body`
 
-Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON or www-form-urlencoded
-body. For `get` requests it is encoded as query parameters. The map keys and values can contain [placeholders](./authn.md#authentication-placeholders).
-
-For different configurations `body` map will be encoded differently.
+Optional arbitrary map for sending to the external API. For `post` requests it is sent as a JSON body.
+For `get` requests it is encoded as query parameters.
+The map keys and values can contain [placeholders](./authn.md#authentication-placeholders).
 
 Assume an MQTT client connects with client ID `id123`, username `iamuser`, and password `secret`.
 
@@ -161,32 +159,6 @@ Assume an MQTT client connects with client ID `id123`, username `iamuser`, and p
    {"username":"iamuser","password":"secret"}
    ```
 
-3. `POST` www-form-urlencoded request:
-
-   ```
-   {
-       method = post
-       url = "http://127.0.0.1:32333/auth/${clientid}"
-       body {
-           username = "${username}"
-           password = "${password}"
-       }
-       headers {
-           "content-type": "application/x-www-form-urlencoded"
-       }
-   }
-   ```
-
-   The resulting request will be:
-
-   ```
-   POST /auth/id123 HTTP/1.1
-   Content-Type: application/x-www-form-urlencoded
-   ... Other headers ...
-
-   username=iamuser&password=secret
-   ```
-
 ### `headers`
 
 Map with arbitrary HTTP headers for external requests, optional.
@@ -216,14 +188,12 @@ For `POST` requests the default value is
 }
 ```
 
-`content-type` header value defines `body` encoding method for `POST` requests. Possible values are:
-- `application/json` for JSON;
-- `application/x-www-form-urlencoded` for x-www-form-urlencoded format.
+`content-type` header value defines `body` encoding method for `POST` requests, it must be `application/json`.
 
 ### `enable_pipelining`
 
-Boolean value indicating whether to enable [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
-Optional, default value is `true`.
+A non-negative integer set maximum allowed async HTTP requests [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
+Optional, default value is `100`, set `0` to disable.
 
 ### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
 

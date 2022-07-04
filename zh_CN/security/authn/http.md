@@ -11,28 +11,27 @@ HTTP 认证使用外部自建 HTTP 应用认证数据源，根据 HTTP API 返�
     认证结果、是否为超级用户将分别由 Response Body 内的 `result` 和 `is_superuser` 字段值指示。</br>
   - 其他响应码将被认为 HTTP 认证请求执行失败。如 4xx、5xx 等。</br>
     此时认证结果使用缺省值 `"ignore"`，继续执行认证链。如果当前的 HTTP 认证器是链上的最后一个认证器，则认证失败，客户端将被拒绝连接。
-- HTTP 响应的编码格式可以是 `application/json` 和 `application/x-www-form-urlencoded`，HTTP 认证器会自动根据响应中的 `Content-Type` 选择解码方式。</br>
-  **示例**</br>
-  - ***HTTP Status Code 200***</br>
-    ```json
-    HTTP/1.1 200 OK
-    Headers: Content-Type: application/json
-    ...
-    Body:
-    {
-        "result": "allow" | "deny" | "ignore", // Default `"ignore"`
-        "is_superuser": true | false // Default `false`
-    }
-    ```
-    或
-    ```json
-    HTTP/1.1 200 OK
-    Headers:
-    Content-Type: application/x-www-form-urlencoded
-    ...
-    Body:
-    result=allow&is_superuser=true
-    ```
+- HTTP 响应的编码格式可以是 `application/json`。
+
+::: tip 从EMQX 4.x 迁移过来
+在 4.x 中，EMQX 仅用到了 HTTP API 返回的状态码，而内容则被丢弃。
+例如 `200` 表示 `allow`，`403` 表示 `deny`。
+
+因为缺乏丰富的表达能力，在 5.0 中对这块进行了不兼容的重构。
+:::
+
+### 示例
+
+```json
+HTTP/1.1 200 OK
+Headers: Content-Type: application/json
+...
+Body:
+{
+    "result": "allow" | "deny" | "ignore", // Default `"ignore"`
+    "is_superuser": true | false // Default `false`
+}
+```
 
 ::: danger
 推荐使用 `POST` 方法。 使用 `GET` 方法时，一些敏感信息（如纯文本密码）可以通过 HTTP 服务器日志记录暴露。
@@ -109,9 +108,8 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
 
 ### `body`
 
-请求模板。对于 `post` 请求，它以 JSON 或 www-form-urlencoded 形式在请求体中发送。对于 `get` 请求，它被编码为 URL 中的查询参数。映射键和值可以包含 [placeholders](./authn.md#认证占位符)。
-
-对于不同的配置，`body` 映射将被不同地编码。
+请求模板。对于 `post` 请求，它以 JSON 形式在请求体中发送。
+对于 `get` 请求，它被编码为 URL 中的查询参数。映射键和值可以包含 [placeholders](./authn.md#认证占位符)。
 
 假设一个 MQTT 客户端使用客户端标识符 `id123`、用户名 `iamuser` 和密码 `secret` 连接。
 
@@ -127,9 +125,9 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
        }
    }
    ```
-   
+
    最终的请求将是：
-   
+
    ```
    GET /auth/id123?username=iamuser&password=secret HTTP/1.1
    ... Headers ...
@@ -150,41 +148,15 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
        }
    }
    ```
-   
+
    最终的请求将是：
-   
+
    ```
    POST /auth/id123 HTTP/1.1
    Content-Type: application/json
    ... Other headers ...
-   
+
    {"username":"iamuser","password":"secret"}
-   ```
-
-3. `POST` `www-form-urlencoded` 格式的请求配置如下：
-
-   ```
-   {
-       method = post
-       url = "http://127.0.0.1:32333/auth/${clientid}"
-       body {
-           username = "${username}"
-           password = "${password}"
-       }
-       headers {
-           "content-type": "application/x-www-form-urlencoded"
-       }
-   }
-   ```
-   
-   最终的请求将是：
-   
-   ```
-   POST /auth/id123 HTTP/1.1
-   Content-Type: application/x-www-form-urlencoded
-   ... Other headers ...
-   
-   username=iamuser&password=secret
    ```
 
 ### `headers`
@@ -216,11 +188,11 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
 }
 ```
 
-`content-type` Header 的值定义了 `POST` 请求的 `body` 编码方法。可选值有 `application/json` 和 `application/x-www-form-urlencoded`。
+`content-type` Header 的值定义了 `POST` 请求的 `body` 编码方，必需为`application/json`。
 
 ### `enable_pipelining`
 
-布尔类型，表明是否启用 [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `true`。
+自然数，用于指定异步 HTTP 请求管线的最大数量[HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `100`。设置为 `0` 时候关闭。
 
 ### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
 
