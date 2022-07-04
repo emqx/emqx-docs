@@ -71,11 +71,6 @@ EMQX Enterprise requires a license file to start normally. EMQX Broker can skip 
 
     ![](./static/apply_license.png)
 
-3. Replace the license file (`etc/emqx.lic`) in the default certificate directory. You can also choose to change the read path of the certificate file, modify `license.file` in the `etc/emqx.conf` file, and make sure that the license file is in the updated read path and EMQX Enterprise has read permission. Then, start EMQX Enterprise. EMQX Enterprise is started in the same way as EMQX Broker, which can be seen below.
+3. Replace the license file (`etc/emqx.lic`) in the default certificate directory. You can also choose to change the read path of the certificate file, modify `license.file` in the `etc/emqx.conf` file, and make sure that the license file is in the updated read path and EMQX Enterprise has read permission. Then, start EMQX Enterprise. EMQX Enterprise is started in the same way as EMQX Broker.
 
-4. If the running EMQX Enterprise needs to update the license file, you can use the `emqx_ctl license reload [path of the license file]` command to directly update the license file without restarting EMQX Enterprise. It should be noted that the certificate loaded by the `emqx_ctl license reload` command will only take effect during this run of EMQX Enterprise. If you need to permanently update the license certificate path, you still need to replace the old certificate or modify the configuration file, which can be seen from the previous step.
-
-
-::: danger
-The certificate loaded by the `emqx_ctl license reload` command will only take effect during this runtime of EMQX Enterprise. If you need to permanently update the path of the License certificate, you still need to replace the old certificate or modify the configuration file.
-:::
+4. If the running EMQX Enterprise cluster needs to update the license file, you can use the `emqx_ctl license reload [path of the license file]` command to directly update the license file without restarting any nodes.  It should be noted that the certificate loaded by the `emqx_ctl license reload` command will be applied to the whole EMQX cluster, and it will be saved in EMQX's data directory under the `licenses` subdirectory (i.e.: `data/licenses/emqx.lic`) in each node.  Even if the broker is restarted, this new license file will be loaded and applied.
