@@ -1,6 +1,6 @@
 # 配置文件
 
-<!--5.0.1-3df86508-->
+<!--5.0.2-bb854a96-->
 EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) .
 HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常适用于易于人类读写的配置数据存储。
 
@@ -433,9 +433,9 @@ authentication=[{enable=true}]
   如果在启动 EMQX 节点前预先配置该路径，
   那么可以将该文件置于任何 EMQX 可以访问到的位置。
 
-  如果从 EMQX Dashboard 或 management API 创建规则集，
-  那么文件将会自动生成在 `authz` 目录下，该目录位于 EMQX 的 `data_dir` 子目录下，
-  并且之后新的规则集将会覆写旧文件。
+  如果从 EMQX Dashboard 或 HTTP API 创建或修改了规则集，
+  那么EMQX将会生成一个新的文件并将它存放在 `data_dir` 下的 `authz` 子目录中,
+  并从此弃用旧的文件。
 
 
 ## authz:http_get
@@ -489,7 +489,7 @@ authentication=[{enable=true}]
   * default: 
   `100`
 
-  是否连续发送 HTTP 请求，当设置为 0 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -594,7 +594,7 @@ authentication=[{enable=true}]
   * default: 
   `100`
 
-  是否连续发送 HTTP 请求，当设置为 0 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -2308,6 +2308,12 @@ in <code>zone</code> configs
   `true`
 
   是否启用对 MQTT 共享订阅的支持。
+
+- exclusive_subscription: <code>boolean()</code>
+  * default: 
+  `false`
+
+  是否启用对 MQTT 排它订阅的支持。
 
 - ignore_loop_deliver: <code>boolean()</code>
   * default: 
@@ -7193,13 +7199,7 @@ DNS SRV 记录服务发现。
   `"emqxcl"`
 
   指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
-<<<<<<< HEAD
-  v2/keys/\<prefix\>/\<cluster.name\>/\<node.name\> </br>
-=======
-  ```
-  v2/keys/<prefix>/<cluster.name>/<node.name>
-  ```
->>>>>>> 895049183c3af666c65a66a38d7486e041644895
+  v2/keys/<prefix>/<cluster.name>/<node.name> </br>
   当 cluster.discovery_strategy 为 etcd 时，此配置项才有效。
         
 
@@ -7256,8 +7256,9 @@ Kubernetes 服务发现。
   `ip`
 
   当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。
+  指定 <code>cluster.k8s.address_type</code. 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
+  的IP地址。
 
-  指定 <code>cluster.k8s.address_type</code> 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
 
 - namespace: <code>string()</code>
   * default: 
@@ -7976,8 +7977,8 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   `true`
 
   启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。
+  系统会默认生成<code>*.siz/*.idx<code>用于记录日志位置，请不要手动修改这两个文件。
 
-  系统会默认生成 `*.siz/*.idx` 用于记录日志位置，请不要手动修改这两个文件。
 
 - count: <code>1..2048</code>
   * default: 
@@ -8007,8 +8008,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `"emqx@127.0.0.1"`
 
-  节点名。格式为 \<name\>\@\<host\>。其中 \<host\> 可以是 IP 地址，也可以是 FQDN。
-
+  节点名。格式为 \<name>@\<host>。其中 <host> 可以是 IP 地址，也可以是 FQDN。
   详见 http://erlang.org/doc/reference_manual/distributed.html。
             
 
@@ -8679,6 +8679,10 @@ in <code>zone</code> configs
 
   是否启用对 MQTT 共享订阅的支持。
 
+- exclusive_subscription: <code>boolean()</code>
+
+  是否启用对 MQTT 排它订阅的支持。
+
 - ignore_loop_deliver: <code>boolean()</code>
 
   是否为 MQTT v3.1.1/v3.1.0 客户端忽略投递自己发布的消息，类似于 MQTT 5.0 中的 <code>No Local</code> 订阅选项
@@ -9327,7 +9331,7 @@ Settings for PBKDF2 password hashing algorithm.
   * default: 
   `100`
 
-  是否连续发送 HTTP 请求，当设置为 0 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -9479,7 +9483,7 @@ Settings for PBKDF2 password hashing algorithm.
   * default: 
   `100`
 
-  是否连续发送 HTTP 请求，当设置为 0 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -11462,7 +11466,7 @@ HTTP Bridge 配置
   * default: 
   `100`
 
-  是否连续发送 HTTP 请求，当设置为 0 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - request: <code>[connector-http:request](#connector-http-request)</code>
 
@@ -11718,7 +11722,7 @@ HTTP Bridge 配置
   * default: 
   `"15s"`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS 1/QoS 2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
   - `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,

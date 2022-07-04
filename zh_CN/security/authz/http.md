@@ -190,7 +190,7 @@ HTTP 的 `POST` 和 `GET` 方法都是支持的，但是各自有不一样的配
 
 ### `enable_pipelining`
 
-自然数，用于指定异步 HTTP 请求管线的最大数量[HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `100`。设置为 `0` 时候关闭。
+正整数，用于指定异步 HTTP 请求管线的最大数量[HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `100`。设置为 `1` 时关闭。
 
 ### `pool_size`
 

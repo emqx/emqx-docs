@@ -192,7 +192,7 @@ HTTP 认证由 `mechanism = password_based` 和 `backend = http` 标识。
 
 ### `enable_pipelining`
 
-自然数，用于指定异步 HTTP 请求管线的最大数量[HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `100`。设置为 `0` 时候关闭。
+正整数，用于指定异步 HTTP 请求管线的最大数量[HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `100`。设置为 `1` 时关闭。
 
 ### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
 
