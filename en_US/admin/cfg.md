@@ -1,6 +1,6 @@
 # Configuration File
 
-<!--5.0.1-3df86508-->
+<!--5.0.2-bb854a96-->
 EMQX configuration file is in [HOCON](https://github.com/emqx/hocon) format.
 HOCON, or Human-Optimized Config Object Notation is a format for human-readable data,
 and a superset of JSON.
@@ -463,10 +463,11 @@ Authorization using a static file.
   Path to the file which contains the ACL rules.
   If the file provisioned before starting EMQX node,
   it can be placed anywhere as long as EMQX has read access to it.
+  That is, EMQX will treat it as read only.
 
-  In case the rule-set is created from EMQX Dashboard or management API,
-  the file will be placed in `authz` subdirectory inside EMQX's `data_dir`,
-  and the new rules will override all rules from the old config file.
+  In case the rule-set is created or updated from EMQX Dashboard or HTTP API,
+  a new file will be created and placed in `authz` subdirectory inside EMQX's `data_dir`,
+  and the old file will not be used anymore.
 
 
 
@@ -521,7 +522,7 @@ Authorization using an external HTTP server (via GET requests).
   * default: 
   `100`
 
-  Whether to send HTTP requests continuously, when set to 0, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -626,7 +627,7 @@ Authorization using an external HTTP server (via POST requests).
   * default: 
   `100`
 
-  Whether to send HTTP requests continuously, when set to 0, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -2406,6 +2407,12 @@ in <code>zone</code> configs
 
   Whether to enable support for MQTT shared subscription.
 
+- exclusive_subscription: <code>boolean()</code>
+  * default: 
+  `false`
+
+  Whether to enable support for MQTT exclusive subscription.
+
 - ignore_loop_deliver: <code>boolean()</code>
   * default: 
   `false`
@@ -2696,7 +2703,7 @@ Settings for the MQTT over QUIC listener.
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
+  Set <code>true</code> (default) to enable client authentication on this listener.
   When set to <code>false</code> clients will be allowed to connect without authentication.
 
 
@@ -2793,7 +2800,7 @@ Settings for the MQTT over SSL listener.
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
+  Set <code>true</code> (default) to enable client authentication on this listener.
   When set to <code>false</code> clients will be allowed to connect without authentication.
 
 
@@ -2932,7 +2939,7 @@ Settings for the MQTT over TCP listener.
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
+  Set <code>true</code> (default) to enable client authentication on this listener.
   When set to <code>false</code> clients will be allowed to connect without authentication.
 
 
@@ -3067,7 +3074,7 @@ Settings for the MQTT over WebSocket listener.
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
+  Set <code>true</code> (default) to enable client authentication on this listener.
   When set to <code>false</code> clients will be allowed to connect without authentication.
 
 
@@ -3206,7 +3213,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
+  Set <code>true</code> (default) to enable client authentication on this listener.
   When set to <code>false</code> clients will be allowed to connect without authentication.
 
 
@@ -5155,7 +5162,7 @@ with a certain defined CoAP message format.
   The type of delivered coap message can be set to:
     - non: Non-confirmable;
     - con: Confirmable;
-    - qos: Mapping from QoS type of received message, QoS 0 -> non, QoS 1,2 -> con
+    - qos: Mapping from QoS type of received message, QoS0 -> non, QoS1,2 -> con
 
 
 - subscribe_qos: <code>qos0 | qos1 | qos2 | coap</code>
@@ -5839,7 +5846,7 @@ The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
   * default: 
   `true`
 
-  Allows connectionless clients to publish messages with a QoS of -1.
+  Allows connectionless clients to publish messages with a Qos of -1.
   This feature is defined for very simple client implementations which do not support any other features except this one. There is no connection setup nor tear down, no registration nor subscription. The client just sends its 'PUBLISH' messages to a GW
 
 - subs_resume: <code>boolean()</code>
@@ -7527,7 +7534,7 @@ Configuration for an HTTP bridge.
   * default: 
   `100`
 
-  Whether to send HTTP requests continuously, when set to 0, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 - request: <code>[connector-http:request](#connector-http-request)</code>
 
@@ -9131,6 +9138,10 @@ in <code>zone</code> configs
 
   Whether to enable support for MQTT shared subscription.
 
+- exclusive_subscription: <code>boolean()</code>
+
+  Whether to enable support for MQTT exclusive subscription.
+
 - ignore_loop_deliver: <code>boolean()</code>
 
   Ignore loop delivery of messages for MQTT v3.1.1/v3.1.0, similar to <code>No Local</code> subscription option in MQTT 5.0
@@ -9779,7 +9790,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
   * default: 
   `100`
 
-  Whether to send HTTP requests continuously, when set to 0, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -9931,7 +9942,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
   * default: 
   `100`
 
-  Whether to send HTTP requests continuously, when set to 0, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
+  A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 - max_retries: <code>non_neg_integer()</code>
   * default: 
@@ -12035,7 +12046,7 @@ Generic configuration for the connector.
   * default: 
   `"15s"`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS 1/QoS 2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
   - `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,

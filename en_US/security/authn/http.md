@@ -192,8 +192,8 @@ For `POST` requests the default value is
 
 ### `enable_pipelining`
 
-A non-negative integer set maximum allowed async HTTP requests [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
-Optional, default value is `100`, set `0` to disable.
+A positive integer set maximum allowed async HTTP requests [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
+Optional, default value is `100`, set `1` to disable.
 
 ### `connect_timeout`, `request_timeout`, `retry_interval` and `max_retries`
 
