@@ -32,6 +32,12 @@ HTTP authenticator delegates authentication to a custom HTTP API.
     Body:
     result=allow&is_superuser=true
     ```
+::: tip Migrating from EMQX 4.x
+In EMQX 4.x, only HTTP status code is used, but body is discarded, for example, `200` for `allow` and `403` for `deny`.
+Due to the lack of expressiveness, it has been redesigned to make use of HTTP body.
+
+THe new design is not backward compatible to 4.x.
+:::
 
 ::: danger
 `POST` method is recommended. When using the `GET` method, some sensitive information (like plain text passwords) can be exposed through HTTP server logging.

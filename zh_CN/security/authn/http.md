@@ -34,6 +34,13 @@ HTTP 认证使用外部自建 HTTP 应用认证数据源，根据 HTTP API 返�
     result=allow&is_superuser=true
     ```
 
+::: tip 从EMQX 4.x 迁移过来
+在 4.x 中，EMQX 仅用到了 HTTP API 返回的状态码，而内容则被丢弃。
+例如 `200` 表示 `allow`，`403` 表示 `deny`。
+
+因为缺乏丰富的表达能力，在 5.0 中对这块进行了不兼容的重构。
+:::
+
 ::: danger
 推荐使用 `POST` 方法。 使用 `GET` 方法时，一些敏感信息（如纯文本密码）可以通过 HTTP 服务器日志记录暴露。
 :::
