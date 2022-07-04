@@ -33,22 +33,22 @@ Also you can use the EMQX enterprise version through public cloud service.
 **Tags:** [*Update*](tags.md#update)
 
 
-You need to two steps：
+You need to two steps:
 
 1. After clicking "Download License", browse to the "license.zip" file that you downloaded.
 
-2. Copy the two files(emqx.lic, emqx.key) in the zip file to the EMQX license directory.
-  - If your installation package is a zip file, the licenses are under "emqx/etc/"; 
+2. Copy the two files (emqx.lic, emqx.key) in the zip file to the EMQX license directory.
+  - If your installation package is a zip file, the licenses are under "emqx/etc/";
   - For DEB/RPM package, the licenses are under "/etc/emqx/";
   - For Docker image, the licenses are under "/opt/emqx/etc/".
 
-After the copy is completed, the license needs to be reloaded from the command line to complete the update：
+After the copy is completed, the license needs to be reloaded from the command line to complete the update:
 
 ```
 emqx_ctl license reload [license file path]
 ```
 
-The update commands for different installation modes：
+The update commands for different installation modes:
 
 ```
 ## zip packages
@@ -61,7 +61,9 @@ emqx_ctl license reload /etc/emqx/emqx.lic
 docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
 ```
 
-
+::: tip
+On a multi-node cluster, the `emqx_ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members.  Each one will contain a copy of the new license under the configured data directory for EMQX.
+:::
 
 
 ## Can EMQX support customized protocols? How to implement?
@@ -169,19 +171,19 @@ The EMQX Enterprise supports data persistence. Supported databases are:
 **Tags:** [*REAT API*](tags.md#reat-api)  [*Dashboard*](tags.md#dashboard)
 
 
-Yes. You can do it by invoking REST API provied by EMQX, but the implementation is different in EMQX 2.x and 3.x: 
+Yes. You can do it by invoking REST API provied by EMQX, but the implementation is different in EMQX 2.x and 3.x:
 
 - EMQX customized protocol in 2.x versions.
-- Follow the process defined in MQTT 5.0 protocol after version 3.0. 
+- Follow the process defined in MQTT 5.0 protocol after version 3.0.
 
-Refer to below for API invocation: 
+Refer to below for API invocation:
 
 ```html
-HTTP Method: DELETE 
-URL：api/[v2|v3]/clients/{clientid} 
+HTTP Method: DELETE
+URL：api/[v2|v3]/clients/{clientid}
 <!--Please notice the 2nd section in URL, and use the correct version number according to your EMQX version. -->
 
-Returned response: 
+Returned response:
 {
     "code": 0,
     "result": []
@@ -218,8 +220,8 @@ bridge.kafka.produce = sync
 
 If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
 
-- The message will be cached in memory before EMQX 2.4.3 version, if the memeory is exhausted, then the EMQX server will be down. 
-- The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full. 
+- The message will be cached in memory before EMQX 2.4.3 version, if the memeory is exhausted, then the EMQX server will be down.
+- The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full.
 
 So we suggest you to closely monitor Kafka server, and recover Kafka service as soon as possible when it has any questions.
 
@@ -338,10 +340,10 @@ Execute `$ emqx console` to view the output.
     Root: /emqx
     /emqx
     Erlang/OTP 21 [erts-10.3] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:32] [hipe]
-    
+
     {"Kernel pid terminated",application_controller,"{application_start_failure,kernel,{{shutdown,{failed_to_start_child,kernel_safe_sup,{on_load_function_failed,crypto}}},{kernel,start,[normal,[]]}}}"}
     Kernel pid terminated (application_controller) ({application_start_failure,kernel,{{shutdown,{failed_to_start_child,kernel_safe_sup,{on_load_function_failed,crypto}}},{kernel,start,[normal,[]]}}})
-    
+
     Crash dump is being written to: log/crash.dump...done
 ```
 
@@ -355,7 +357,7 @@ Execute `$ emqx console` to view the output.
   Root: /usr/lib/emqx
   /usr/lib/emqx
   Erlang/OTP 21 [erts-10.3.5.1] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:32] [hipe]
-  
+
   Starting emqx on node emqx@127.0.0.1
   Start http:management listener on 8080 successfully.
   Start http:dashboard listener on 18083 successfully.
