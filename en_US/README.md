@@ -1,17 +1,17 @@
 # Introduction
 
-*EMQX* (Erlang/Enterprise/Elastic MQTT Broker) is an open source IoT MQTT message broker based on the Erlang/OTP platform.
+**EMQX** is an Open-source MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at massive scale.
 
-Erlang/OTP is an excellent Soft-Realtime, Low-Latency and Distributed development platform.
+As the most scalable MQTT broker, EMQX can help you connect any device, at any scale. Move and process your IoT data anywhere.
 
-MQTT is a lightweight message exchange protocol using publish-subscribe pattern.
+## Benefits
 
-*EMQX* is designed for massive clients access and realizes fast and low-latency message routing between massive physical network devices:
-
-1. Stable to host large-scale MQTT client connections, and a single server node supports 2 million connections.
-2. Distributed cluster, fast and low-latency message routing, and single-cluster supports tens of thousands of routes.
-3. Extensible, support customized plugins, such as authentication and other functions.
-4. Comprehensive IoT protocol support, including MQTT, MQTT-SN, CoAP, LwM2M, and other TCP/UDP based proprietary protocol.
+- **Massive Scale**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster.
+- **High Performance**: Move and process millions of MQTT messages per second in a single broker.
+- **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
+- **Fully MQTT 5.0**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
+- **High Availability**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
+- **Cloud-Native & K8s**: Easy to deploy on-premises or in public clouds with Kubernetes Operator and Terraform.
 
 ## Features List
 
