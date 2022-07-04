@@ -15,7 +15,7 @@ HTTP Authorizer 将授权的请求委托给外部 HTTP 服务器。
 
 ## 应答格式
 
-- `Content-Type` 支持 `application/x-www-form-urlencoded` 和 `application/json`
+- `Content-Type` 必需是 `application/json`
 - 当前 HTTP 返回状态码为 `200` 时，认证结果取决于 HTTP Body 中的 `result` 字段：
     - `allow`：允许此次发布/订阅。
     - `deny`：拒绝此次发布/订阅。
@@ -102,7 +102,7 @@ HTTP 的 `POST` 和 `GET` 方法都是支持的，但是各自有不一样的配
 ### `body`
 
 该配置项可选。用于构造一个 HTTP 请求的 body。
-如果是 `post` 请求，这个配置项会被编码成一个 JSON 或者 `www-form-urlencoded` 的字符串。
+如果是 `post` 请求，这个配置项会被编码成一个 JSON。
 如果是 `get` 请求，这个配置项会被翻译成 HTTP 的查询字符串。
 这些字段的名字和值中都可以使用[占位符](./authz.md#authorizer-配置中的占位符).
 
@@ -158,32 +158,6 @@ HTTP 的 `POST` 和 `GET` 方法都是支持的，但是各自有不一样的配
     {"username":"iamuser","topic":"foo/bar", "action": "publish"}
     ```
 
-* `POST` www-form-urlencoded request:
-    ```
-    {
-        method = post
-        url = "http://127.0.0.1:32333/auth/${clientid}"
-        body {
-            username = "${username}"
-            topic = "${topic}"
-            action = "${action}"
-        }
-        headers {
-            "content-type": "application/x-www-form-urlencoded"
-        }
-    }
-    ```
-
-    最终的 HTTP 请求会是下面这样：
-
-    ```
-    POST /auth/id123 HTTP/1.1
-    Content-Type: application/x-www-form-urlencoded
-    ... Other headers ...
-
-    username=iamuser&topic=foo%2Fbar&action=publish
-    ```
-
 ### `headers`
 
 根据配置来构造的 HTTP 头会是如下情况。
@@ -212,15 +186,11 @@ HTTP 的 `POST` 和 `GET` 方法都是支持的，但是各自有不一样的配
 }
 ```
 
-`content-type` 可以为 `post` 请求指定 `body` 的序列化格式，可能的值有：
-
-* `application/json` 序列化成 JSON;
-* `application/x-www-form-urlencoded` 序列化成 `x-www-form-urlencoded` 格式的字符串。
+`content-type` 可以为 `post` 请求指定 `body` 的序列化格式，必需为 `application/json`。
 
 ### `enable_pipelining`
 
-一个整形数字（默认100）用于指定流水线请求的最大数量 [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining).
-
+自然数，用于指定异步 HTTP 请求管线的最大数量[HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `100`。设置为 `0` 时候关闭。
 
 ### `pool_size`
 
