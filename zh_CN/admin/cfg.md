@@ -1,14 +1,14 @@
 # 配置文件
 
 <!--5.0.2-bb854a96-->
-EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) .
+EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) 。
 HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常适用于易于人类读写的配置数据存储。
 
 ## 分层结构
 
 EMQX的配置文件可分为三层，自底向上依次是：
 
-1. 不可变的基础层 `emqx.conf` 加上 `EMQX_` 前缀的环境变量.</br>
+1. 不可变的基础层 `emqx.conf` 加上 `EMQX_` 前缀的环境变量。</br>
    修改这一层的配置之后，需要重启节点来使之生效。
 1. 集群范围重载层：`$EMQX_NODE__DATA_DIR/configs/cluster-override.conf`
 1. 节点本地重载层：`$EMQX_NODE__DATA_DIR/configs/local-override.conf`
@@ -25,7 +25,7 @@ EMQX的配置文件可分为三层，自底向上依次是：
 则不能被添加到重载文件中 `*-override.conf` 中。
 :::
 
-更多的重载规则，请参考下文 [配置重载规则](#配置重载规则).
+更多的重载规则，请参考下文 [配置重载规则](#配置重载规则)。
 
 ## 配置文件语法
 
@@ -69,11 +69,11 @@ node.cookie = "mysecret"
 
 ### 复杂数据类型
 
-EMQX的配置文件中，有4中复杂数据结构类型，它们分别是：
+EMQX的配置文件中，有4种复杂数据结构类型，它们分别是：
 
 1. Struct：结构体都是有类型名称的，结构体中可以有任意多个字段。
    结构体和字段的名称由不带特殊字符的全小些字母组成，名称中可以带数字，但不得以数字开头，多个单词可用下划线分隔。
-1. Map: Map与Struct（结构体）类似，但是内部的字段不是预先定义好的.
+1. Map: Map与Struct（结构体）类似，但是内部的字段不是预先定义好的。
 1. Union: 联合 `MemberType1 | MemberType2 | ...`，可以理解为：“不是这个，就是那个”
 1. Array: 数组 `[ElementType]`
 
@@ -93,27 +93,27 @@ myarray.2 = 75
 有很多不同的原始类型，仅举几个例子。
 
 * 原子 `atom()`
-* 布尔 `boolean()`.
-* 字符串 `string()'。
-* 整形 `integer()'。
-* 浮点数 `float()'.
-* 数值 `number()'。
+* 布尔 `boolean()`
+* 字符串 `string()`
+* 整形 `integer()`
+* 浮点数 `float()`
+* 数值 `number()`
 * 二进制编码的字符串 `binary()` # 是 `string()` 的另一种格式
 * 时间间隔 `emqx_schema:duration()` # 时间间隔，是 `integer()` 的另一种格式
 * ...
 
 ::: tip Tip
 原始类型的名称大多是自我描述的，所以不需要过多的注释。
-但是有一些不是那么直观的数据类型，则需要配合字段的描述文档进行理解
+但是有一些不是那么直观的数据类型，则需要配合字段的描述文档进行理解。
 :::
 
 
 ### 配置路径
 
 如果我们把EMQX的配置值理解成一个类似目录树的结构，那么类似于文件系统中使用斜杠或反斜杠进行层级分割，
-EMQX使用的配置路径的层级分割符是 `'.'`
+EMQX使用的配置路径的层级分割符是 `'.'`。
 
-被`'.'`号分割的每一段，则是Struct（结构体）的字段，或Map的key.
+被`'.'`号分割的每一段，则是Struct（结构体）的字段，或Map的key。
 
 下面有几个例子：
 
@@ -125,7 +125,7 @@ authentication.1.enable = true
 
 ### 环境变量重载
 
-因为`'.'` 分隔符不能使用于环境变量，所以我们需要使用另一个分割符。EMQX选用的是双下划线`__`。
+因为 `'.'` 分隔符不能使用于环境变量，所以我们需要使用另一个分割符。EMQX选用的是双下划线 `__`。
 为了与其他的环境变量有所区分，EMQX还增加了一个前缀 `EMQX_` 来用作环境变量命名空间。
 
 例如 `node.name` 的重载变量名是 `EMQX_NODE__NAME`。
@@ -161,8 +161,8 @@ HOCON的值是分层覆盖的，普遍规则如下：
 
 #### 结构体
 
-合并覆盖规则。在如下配置中，最后一行的 `debug` 值会覆盖覆盖原先`level`字段的 `error` 值
-但是`enable` 字段保持不变。
+合并覆盖规则。在如下配置中，最后一行的 `debug` 值会覆盖覆盖原先 `level` 字段的 `error` 值
+但是 `enable` 字段保持不变。
 ```
 log {
     console_handler{
@@ -179,7 +179,7 @@ log.console_handler.level=debug
 #### Map
 
 Map与结构体类似，也是合并覆盖规则。
-如下例子中，`zone1` 的 `max_packet_size` 可以在文件后面覆写.
+如下例子中，`zone1` 的 `max_packet_size` 可以在文件后面覆写。
 
 ```
 zone {
@@ -233,7 +233,7 @@ authentication=[{enable=true}]
 
 - zones: <code>{$name -> [broker:zone](#broker-zone)}</code>
 
-  <code>zone</code> 是按<code>name</code> 分组的一组配置。
+  <code>zone</code> 是按 <code>name</code> 分组的一组配置。
   对于灵活的配置映射，可以将 <code>name</code> 设置为侦听器的 <code>zone</code> 配置。
   注：名为 <code>default</code> 的内置区域是自动创建的，无法删除。
 
@@ -244,7 +244,7 @@ authentication=[{enable=true}]
 
 - authentication: <code>[[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)]</code>
 
-  全局 MQTT 监听器的默认认证配置。 为每个监听器配置认证参考监听器器配置中的<code>authentication</code> 配置。
+  全局 MQTT 监听器的默认认证配置。 为每个监听器配置认证参考监听器器配置中的 <code>authentication</code> 配置。
 
   该配置可以被配置为：
   <ul>
@@ -253,7 +253,7 @@ authentication=[{enable=true}]
     <li>配置为认证器数组</li>
   </ul>
 
-  当配置为认证链后，登录凭证会按照配置的顺序进行检查，直到做出<code>allow</code> 或 <code>deny</code>的结果。
+  当配置为认证链后，登录凭证会按照配置的顺序进行检查，直到做出 <code>allow</code> 或 <code>deny</code> 的结果。
 
   如果在所有的认证器都执行完后，还是没有结果，登录将被拒绝。
 
@@ -650,7 +650,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mnesia
-使用内部数据库鉴权 (mnesia).
+使用内部数据库鉴权 (mnesia)
 
 
 **Config paths**
@@ -1386,8 +1386,8 @@ Settings for the alarms.
   `[log, publish]`
 
   警报激活时触发的动作。</br>
-  目前，支持以下操作：<code>log</code> 和 <code>publish</code>.
-  <code>log</code> 将告警写入日志 (控制台或者文件).
+  目前，支持以下操作：<code>log</code> 和 <code>publish</code>。
+  <code>log</code> 将告警写入日志 (控制台或者文件)。
   <code>publish</code> 将告警作为 MQTT 消息发布到系统主题:
   <code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
   <code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>
@@ -1941,7 +1941,7 @@ Socket options for SSL connections.
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> 或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
   </br>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
@@ -1949,7 +1949,7 @@ Socket options for SSL connections.
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
@@ -2110,7 +2110,7 @@ Socket options for WebSocket/SSL connections.
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> 或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
   </br>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
@@ -2118,14 +2118,14 @@ Socket options for WebSocket/SSL connections.
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
   </br>
   注：PSK 的 Ciphers 不支持 tlsv1.3</br>
-  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在 <code>ssl.versions</code> 中禁用。
 
   </br>
   PSK 密码套件：
@@ -2157,7 +2157,7 @@ Socket options for WebSocket/SSL connections.
 
   如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
 
-  注意：TLS 1.3不支持<code>dhfile</code>选项。
+  注意：TLS 1.3不支持 <code>dhfile</code> 选项。
 
 
 - fail_if_no_peer_cert: <code>boolean()</code>
@@ -2402,7 +2402,7 @@ in <code>zone</code> configs
   默认优先级表为空，即所有的主题优先级相同。
 
   注：优先主题名称中不支持使用逗号和等号。
-  注：不在此列表中的主题，被视为最高/最低优先级，这取决于<code>mqtt.mqueue_default_priority</code> 的配置
+  注：不在此列表中的主题，被视为最高/最低优先级，这取决于 <code>mqtt.mqueue_default_priority</code> 的配置
 
   示例：
   配置 <code>"topic/1" > "topic/2"</code>:
@@ -2413,7 +2413,7 @@ in <code>zone</code> configs
   * default: 
   `lowest`
 
-  默认的主题优先级，不在 <code>主题优先级</code>（<code>mqueue_priorities</code>） 中的主题将会使用该优先级。
+  默认的主题优先级，不在 <code>主题优先级</code>（<code>mqueue_priorities</code>）中的主题将会使用该优先级。
 
 - mqueue_store_qos0: <code>boolean()</code>
   * default: 
@@ -2426,7 +2426,7 @@ in <code>zone</code> configs
   `false`
 
   是否使用用户名作为客户端 ID。
-  此设置的作用时间晚于 <code>使用对端证书作为用户名</code>（<code>peer_cert_as_username</code>） 和 <code>使用对端证书作为客户端 ID</code>（<code>peer_cert_as_clientid</code>）。
+  此设置的作用时间晚于 <code>使用对端证书作为用户名</code>（<code>peer_cert_as_username</code>）和 <code>使用对端证书作为客户端 ID</code>（<code>peer_cert_as_clientid</code>）。
 
 
 - peer_cert_as_username: <code>disabled | cn | dn | crt | pem | md5</code>
@@ -2487,7 +2487,7 @@ Settings for the MQTT over QUIC listener.
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> 或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
   </br>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
@@ -2495,14 +2495,14 @@ Settings for the MQTT over QUIC listener.
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
   </br>
   注：PSK 的 Ciphers 不支持 tlsv1.3</br>
-  如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+  如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在 <code>ssl.versions</code> 中禁用。
 
   </br>
   PSK 密码套件：
@@ -2562,7 +2562,7 @@ Settings for the MQTT over QUIC listener.
   例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
   类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为 <code>""</code> 以禁用该功能</br>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2590,7 +2590,7 @@ Settings for the MQTT over QUIC listener.
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+  配置 <code>true</code>（默认值）启用客户端进行身份认证。
   配置 <code>false</code> 时，将不对客户端做任何认证。
 
 
@@ -2652,7 +2652,7 @@ Settings for the MQTT over SSL listener.
   例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
   类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为 <code>""</code> 以禁用该功能</br>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2680,7 +2680,7 @@ Settings for the MQTT over SSL listener.
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+  配置 <code>true</code>（默认值）启用客户端进行身份认证。
   配置 <code>false</code> 时，将不对客户端做任何认证。
 
 
@@ -2782,7 +2782,7 @@ Settings for the MQTT over TCP listener.
   例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
   类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为 <code>""</code> 以禁用该功能</br>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2810,7 +2810,7 @@ Settings for the MQTT over TCP listener.
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+  配置 <code>true</code>（默认值）启用客户端进行身份认证。
   配置 <code>false</code> 时，将不对客户端做任何认证。
 
 
@@ -2908,7 +2908,7 @@ Settings for the MQTT over WebSocket listener.
   例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
   类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为 <code>""</code> 以禁用该功能</br>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2936,7 +2936,7 @@ Settings for the MQTT over WebSocket listener.
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+  配置 <code>true</code>（默认值）启用客户端进行身份认证。
   配置 <code>false</code> 时，将不对客户端做任何认证。
 
 
@@ -3038,7 +3038,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
   类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为 <code>""</code> 以禁用该功能</br>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -3066,7 +3066,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+  配置 <code>true</code>（默认值）启用客户端进行身份认证。
   配置 <code>false</code> 时，将不对客户端做任何认证。
 
 
@@ -3478,14 +3478,14 @@ Socket options for SSL clients.
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
   </br>
   注：PSK 的 Ciphers 不支持 tlsv1.3</br>
-  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在 <code>ssl.versions</code> 中禁用。
 
   </br>
   PSK 密码套件：
@@ -4463,7 +4463,7 @@ EMQX仪表板配置
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> 或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
   </br>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
@@ -4471,14 +4471,14 @@ EMQX仪表板配置
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
   </br>
   注：PSK 的 Ciphers 不支持 tlsv1.3</br>
-  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在 <code>ssl.versions</code> 中禁用。
 
   </br>
   PSK 密码套件：
@@ -4785,7 +4785,7 @@ SSL client configuration.
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> 或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
   </br>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
@@ -4793,14 +4793,14 @@ SSL client configuration.
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
   </br>
   注：PSK 的 Ciphers 不支持 tlsv1.3</br>
-  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在 <code>ssl.versions</code> 中禁用。
 
   </br>
   PSK 密码套件：
@@ -5045,14 +5045,14 @@ Settings for the DTLS listener.
   * default: 
   `true`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+  配置 <code>true</code>（默认值）启用客户端进行身份认证。
   配置 <code>false</code> 时，将不对客户端做任何认证。
 
 - mountpoint: <code>binary()</code>
 
   发布或订阅时，在所有主题前增加前缀字符串。
   当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
-  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有主题名称 `t`。设置为 `""` 以禁用该功能。
   挂载点字符串中可用的变量：
      - <code>${clientid}</code>：clientid
      - <code>${username}</code>：用户名
@@ -5096,19 +5096,19 @@ Settings for the DTLS protocol.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
-  此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  受信任的 PEM 格式 CA 证书捆绑文件</br>
+  此文件中的证书用于验证 TLS 对等方的证书。
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
+  PEM 格式证书链文件</br>
   此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
+  虽然根 CA 证书是可选的，但它应该放在
   如果要添加文件，请将其删除。
 
 
@@ -5139,7 +5139,7 @@ Settings for the DTLS protocol.
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为 0，则对等方必须由受信任的根 CA 直接签名；如果 1，路径可以是 PEER、CA、ROOT-CA；如果是 2，则路径可以是 PEER、CA、CA、ROOT-CA 等等。默认值为 10。
 
 
 - password: <code>string()</code>
@@ -5154,7 +5154,7 @@ Settings for the DTLS protocol.
   `[dtlsv1.2, dtlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有 TLS/DTLS 版本</br>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
@@ -5165,7 +5165,7 @@ Settings for the DTLS protocol.
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
+  <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> 或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
   </br>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
@@ -5173,14 +5173,14 @@ Settings for the DTLS protocol.
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
   </br>
   注：PSK 的 Ciphers 不支持 tlsv1.3</br>
-  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在 <code>ssl.versions</code> 中禁用。
 
   </br>
   PSK 密码套件：
@@ -5210,9 +5210,9 @@ Settings for the DTLS protocol.
 - dhfile: <code>string()</code>
 
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
+  如果协商使用 Diffie-Hellman 密钥交换的密码套件，则服务器将使用包含 PEM 编码的 Diffie-Hellman 参数的文件的路径。如果未指定，则使用默认参数</br>
 
-  注意：TLS 1.3不支持<code>dhfile</code>选项。
+  注意：TLS 1.3 不支持 <code>dhfile</code> 选项。
 
 
 - fail_if_no_peer_cert: <code>boolean()</code>
@@ -5221,8 +5221,8 @@ Settings for the DTLS protocol.
 
 
   TLS/DTLS 服务器与 {verify，verify_peer} 一起使用。
-  如果设置为true，则如果客户端没有要发送的证书，即发送空证书，服务器将失败。
-  如果设置为false，则仅当客户端发送无效证书（空证书被视为有效证书）时才会失败。
+  如果设置为 true，则如果客户端没有要发送的证书，即发送空证书，服务器将失败。
+  如果设置为 false，则仅当客户端发送无效证书（空证书被视为有效证书）时才会失败。
 
 
 - honor_cipher_order: <code>boolean()</code>
@@ -5441,8 +5441,8 @@ The LwM2M protocol gateway.
   * default: 
   `"22s"`
 
-  在QMode模式下，LwM2M网关认为网络链接有效的时间窗口的值。
-  例如，在收到客户端的更新信息后，在这个时间窗口内的任何信息都会直接发送到LwM2M客户端，而超过这个时间窗口的所有信息都会暂时储存在内存中
+  在 QMode 模式下，LwM2M 网关认为网络链接有效的时间窗口的值。
+  例如，在收到客户端的更新信息后，在这个时间窗口内的任何信息都会直接发送到 LwM2M 客户端，而超过这个时间窗口的所有信息都会暂时储存在内存中
 
 - auto_observe: <code>boolean()</code>
   * default: 
@@ -5731,14 +5731,14 @@ Settings for the SSL listener.
   * default: 
   `true`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
+  配置 <code>true</code>（默认值）启用客户端进行身份认证。
   配置 <code>false</code> 时，将不对客户端做任何认证。
 
 - mountpoint: <code>binary()</code>
 
   发布或订阅时，在所有主题前增加前缀字符串。
   当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
-  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有主题名称 `t`。设置为 `""` 以禁用该功能。
   挂载点字符串中可用的变量：
      - <code>${clientid}</code>：clientid
      - <code>${username}</code>：用户名
@@ -5776,19 +5776,19 @@ SSL configuration for the server.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
-  此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  受信任的 PEM 格式 CA 证书捆绑文件</br>
+  此文件中的证书用于验证 TLS 对等方的证书。
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
+  PEM 格式证书链文件</br>
   此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
+  虽然根 CA 证书是可选的，但它应该放在
   如果要添加文件，请将其删除。
 
 
@@ -5819,7 +5819,7 @@ SSL configuration for the server.
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为 0，则对等方必须由受信任的根 CA 直接签名；如果 1，路径可以是 PEER、CA、ROOT-CA；如果是 2，则路径可以是 PEER、CA、CA、ROOT-CA 等等。默认值为 10。
 
 
 - password: <code>string()</code>
@@ -5834,7 +5834,7 @@ SSL configuration for the server.
   `[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有 TLS/DTLS 版本</br>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
@@ -5853,14 +5853,14 @@ SSL configuration for the server.
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
   EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
-  注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+  注意：某些密码套件仅与特定的 TLS <code>版本</code> 兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
   </br>
   注：PSK 的 Ciphers 不支持 tlsv1.3</br>
-  如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+  如果打算使用 PSK 密码套件 <code>tlsv1.3</code>。应在 <code>ssl.versions</code> 中禁用。
 
   </br>
   PSK 密码套件：
@@ -5890,9 +5890,9 @@ SSL configuration for the server.
 - dhfile: <code>string()</code>
 
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
+  如果协商使用 Diffie-Hellman 密钥交换的密码套件，则服务器将使用包含 PEM 编码的 Diffie-Hellman 参数的文件的路径。如果未指定，则使用默认参数</br>
 
-  注意：TLS 1.3不支持<code>dhfile</code>选项。
+  注意：TLS 1.3 不支持 <code>dhfile</code> 选项。
 
 
 - fail_if_no_peer_cert: <code>boolean()</code>
@@ -6108,7 +6108,7 @@ Settings for the TCP listener.
 
   发布或订阅时，在所有主题前增加前缀字符串。
   当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
-  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有主题名称 `t`。 设置为 `""` 以禁用该功能。
   挂载点字符串中可用的变量：
      - <code>${clientid}</code>：clientid
      - <code>${username}</code>：用户名
@@ -6282,7 +6282,7 @@ Settings for the UDP listener.
 
   发布或订阅时，在所有主题前增加前缀字符串。
   当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。
-  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
+  例如，如果客户端 A 在 `listeners.tcp.\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，则客户端实际上订阅了 `some_tenant/t` 主题。类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有主题名称 `t`。 设置为 `""` 以禁用该功能。
   挂载点字符串中可用的变量：
      - <code>${clientid}</code>：clientid
      - <code>${username}</code>：用户名
@@ -6963,7 +6963,7 @@ Settings for the telemetry module.
 
   用户提供的函数。 格式应为：'{module}:{function}'。
   其中 {module} 是 Erlang 回调模块， {function} 是 Erlang 函数。
-  要编写自己的函数，请检查源文件：<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> 中的示例函数 <code>console</code> 和<code>republish</code> 。
+  要编写自己的函数，请检查源文件：<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> 中的示例函数 <code>console</code> 和 <code>republish</code>。
 
 
 - args: <code>map()</code>
@@ -6972,7 +6972,7 @@ Settings for the telemetry module.
 
 
   用户提供的参数将作为函数 module:function/3 的第三个参数，
-  请检查源文件：<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> 中的示例函数 <code>console</code> 和<code>republish</code> 。
+  请检查源文件：<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> 中的示例函数 <code>console</code> 和 <code>republish</code>。
 
 
 
@@ -7015,7 +7015,7 @@ MQTT Bridge 配置
 - connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
 
 
-  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>.</br>
+  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>。</br>
   在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。</br>
 
 - local_topic: <code>binary()</code>
@@ -7091,12 +7091,12 @@ MQTT Bridge 配置
 - connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
 
 
-  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>.</br>
+  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>。</br>
   在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。</br>
 
 - remote_topic: <code>binary()</code>
 
-  从远程broker的哪个topic接收消息
+  从远程 broker 的哪个 topic 接收消息
 
 - remote_qos: <code>qos() | binary()</code>
   * default: 
@@ -7107,7 +7107,7 @@ MQTT Bridge 配置
 - local_topic: <code>binary()</code>
 
 
-  向本地broker的哪个topic发送消息。</br>
+  向本地 broker 的哪个 topic 发送消息。</br>
   允许使用带有变量的模板。
 
 
@@ -7161,7 +7161,7 @@ DNS SRV 记录服务发现。
   `"localhost"`
 
   指定 DNS A 记录的名字。emqx 会通过访问这个 DNS A 记录来获取 IP 地址列表。
-  当<code>cluster.discovery_strategy</code> 为 <code>dns</code> 时有效。
+  当 <code>cluster.discovery_strategy</code> 为 <code>dns</code> 时有效。
 
 
 - record_type: <code>a | srv</code>
@@ -7256,8 +7256,7 @@ Kubernetes 服务发现。
   `ip`
 
   当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。
-  指定 <code>cluster.k8s.address_type</code. 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
-  的IP地址。
+  指定 <code>cluster.k8s.address_type</code> 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点的 IP 地址。
 
 
 - namespace: <code>string()</code>
@@ -7380,7 +7379,7 @@ UDP 组播服务发现。
   * default: 
   `[]`
 
-  集群中的EMQX节点名称列表，
+  集群中的 EMQX 节点名称列表，
   指定固定的节点列表，多个节点间使用逗号 , 分隔。
   当 cluster.discovery_strategy 为 static 时，此配置项才有效。
   适合于节点数量较少且固定的集群。
@@ -7409,7 +7408,7 @@ UDP 组播服务发现。
   `allow`
 
 
-  如果用户或客户端不匹配ACL规则，或者从可配置授权源(比如内置数据库、HTTP API 或 PostgreSQL 等。)内未找
+  如果用户或客户端不匹配ACL规则，或者从可配置授权源（比如内置数据库、HTTP API 或 PostgreSQL 等。）内未找
   到此类用户或客户端时，模式的认访问控制操作。
   在“授权”中查找更多详细信息。
 
@@ -7431,15 +7430,15 @@ UDP 组播服务发现。
   `[]`
 
 
-  鉴权数据源.</br>
-  鉴权(ACL)数据源的列表.
-  它被设计为一个数组,而不是一个散列映射,
-  所以可以作为链式访问控制.</br>
+  鉴权数据源。</br>
+  鉴权（ACL）数据源的列表。
+  它被设计为一个数组，而不是一个散列映射，
+  所以可以作为链式访问控制。</br>
 
-  当授权一个 'publish' 或 'subscribe' 行为时,
+  当授权一个 'publish' 或 'subscribe' 行为时，
   该配置列表中的所有数据源将按顺序进行检查。
-  如果在某个客户端未找到时(使用 ClientID 或 Username),
-  将会移动到下一个数据源. 直至得到 'allow' 或 'deny' 的结果.</br>
+  如果在某个客户端未找到时（使用 ClientID 或 Username），
+  将会移动到下一个数据源。直至得到 'allow' 或 'deny' 的结果。</br>
 
   如果在任何数据源中都未找到对应的客户端信息,
   配置的默认行为 ('authorization.no_match') 将生效.</br>
@@ -7495,10 +7494,10 @@ EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了
   `mria.core_nodes`
 
   当前节点连接的核心节点列表。</br>
-  注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>
-  并且设置<code>role</code>为<code>replicant</code>时生效。</br>
+  注意：该参数仅在设置 <code>backend</code> 时生效到 <code>rlog</code>
+  并且设置 <code>role</code> 为 <code>replicant</code> 时生效。</br>
   该值需要在手动或静态集群发现机制下设置。</br>
-  如果使用了自动集群发现机制（如<code>etcd</code>），则不需要设置该值。
+  如果使用了自动集群发现机制（如 <code>etcd</code>），则不需要设置该值。
             
 
 - autoclean: <code>emqx_schema:duration()</code>
@@ -7635,13 +7634,13 @@ EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了
   * default: 
   `unlimited`
 
-  设置单个日志消息的最大长度。 如果超过此长度，则日志消息将被截断。最小可设置的长度为100。
+  设置单个日志消息的最大长度。如果超过此长度，则日志消息将被截断。最小可设置的长度为 100。
 
 - formatter: <code>text | json</code>
   * default: 
   `text`
 
-  选择日志格式类型。 <code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。
+  选择日志格式类型。<code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。
 
 - single_line: <code>boolean()</code>
   * default: 
@@ -7656,26 +7655,26 @@ EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了
   只要缓冲的日志事件的数量低于这个值，所有的日志事件都会被异步处理。
   这意味着，日志落地速度不会影响正常的业务进程，因为它们不需要等待日志处理进程的响应。
   如果消息队列的增长超过了这个值，处理程序开始同步处理日志事件。也就是说，发送事件的客户进程必须等待响应。
-  当处理程序将消息队列减少到低于sync_mode_qlen阈值的水平时，异步操作就会恢复。
-  默认为100条信息，当等待的日志事件大于100条时，就开始同步处理日志。
+  当处理程序将消息队列减少到低于 sync_mode_qlen 阈值的水平时，异步操作就会恢复。
+  默认为 100 条信息，当等待的日志事件大于 100 条时，就开始同步处理日志。
 
 - drop_mode_qlen: <code>pos_integer()</code>
   * default: 
   `3000`
 
   当缓冲的日志事件数大于此值时，新的日志事件将被丢弃。起到过载保护的功能。
-  为了使过载保护算法正常工作必须要：<code> sync_mode_qlen =< drop_mode_qlen =< flush_qlen </code> 且 drop_mode_qlen > 1
+  为了使过载保护算法正常工作必须要：<code>sync_mode_qlen =< drop_mode_qlen =< flush_qlen</code> 且 drop_mode_qlen > 1
   要禁用某些模式，请执行以下操作。
-  - 如果sync_mode_qlen被设置为0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。
-  - 如果sync_mode_qlen被设置为与drop_mode_qlen相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用drop或flushing。
-  - 如果drop_mode_qlen被设置为与flush_qlen相同的值，则drop模式被禁用，永远不会发生。
+  - 如果 sync_mode_qlen 被设置为 0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。
+  - 如果 sync_mode_qlen 被设置为与 drop_mode_qlen 相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用 drop 或 flushing。
+  - 如果 drop_mode_qlen 被设置为与 flush_qlen 相同的值，则 drop 模式被禁用，永远不会发生。
 
 
 - flush_qlen: <code>pos_integer()</code>
   * default: 
   `8000`
 
-  如果缓冲日志事件的数量增长大于此阈值，则会发生冲刷（删除）操作。 日志处理进程会丢弃缓冲的日志消息。
+  如果缓冲日志事件的数量增长大于此阈值，则会发生冲刷（删除）操作。日志处理进程会丢弃缓冲的日志消息。
   来缓解自身不会由于内存瀑涨而影响其它业务进程。日志内容会提醒有多少事件被删除。
 
 - overload_kill: <code>[log_overload_kill](#log_overload_kill)</code>
@@ -7763,7 +7762,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `10000`
 
-  在 `window_time` 间隔内处理的最大日志事件数。 达到限制后，将丢弃连续事件，直到 `window_time` 结束。
+  在 `window_time` 间隔内处理的最大日志事件数。达到限制后，将丢弃连续事件，直到 `window_time` 结束。
 
 - window_time: <code>emqx_schema:duration()</code>
   * default: 
@@ -7801,8 +7800,8 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `"50MB"`
 
-  此参数控制日志文件轮换。 `infinity` 意味着日志文件将无限增长，否则日志文件将在达到 `max_size`（以字节为单位）时进行轮换。
-  与 rotation count配合使用。如果 counter 为 10，则是10个文件轮换。
+  此参数控制日志文件轮换。`infinity` 意味着日志文件将无限增长，否则日志文件将在达到 `max_size`（以字节为单位）时进行轮换。
+  与 rotation count 配合使用。如果 counter 为 10，则是 10 个文件轮换。
 
 
 - enable: <code>boolean()</code>
@@ -7837,19 +7836,19 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `unlimited`
 
-  设置单个日志消息的最大长度。 如果超过此长度，则日志消息将被截断。最小可设置的长度为100。
+  设置单个日志消息的最大长度。 如果超过此长度，则日志消息将被截断。最小可设置的长度为 100。
 
 - formatter: <code>text | json</code>
   * default: 
   `text`
 
-  选择日志格式类型。 <code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。
+  选择日志格式类型。<code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。
 
 - single_line: <code>boolean()</code>
   * default: 
   `true`
 
-  如果设置为 true，则单行打印日志。 否则，日志消息可能跨越多行。
+  如果设置为 true，则单行打印日志。否则，日志消息可能跨越多行。
 
 - sync_mode_qlen: <code>non_neg_integer()</code>
   * default: 
@@ -7858,26 +7857,26 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   只要缓冲的日志事件的数量低于这个值，所有的日志事件都会被异步处理。
   这意味着，日志落地速度不会影响正常的业务进程，因为它们不需要等待日志处理进程的响应。
   如果消息队列的增长超过了这个值，处理程序开始同步处理日志事件。也就是说，发送事件的客户进程必须等待响应。
-  当处理程序将消息队列减少到低于sync_mode_qlen阈值的水平时，异步操作就会恢复。
-  默认为100条信息，当等待的日志事件大于100条时，就开始同步处理日志。
+  当处理程序将消息队列减少到低于 sync_mode_qlen 阈值的水平时，异步操作就会恢复。
+  默认为 100 条信息，当等待的日志事件大于 100 条时，就开始同步处理日志。
 
 - drop_mode_qlen: <code>pos_integer()</code>
   * default: 
   `3000`
 
   当缓冲的日志事件数大于此值时，新的日志事件将被丢弃。起到过载保护的功能。
-  为了使过载保护算法正常工作必须要：<code> sync_mode_qlen =< drop_mode_qlen =< flush_qlen </code> 且 drop_mode_qlen > 1
+  为了使过载保护算法正常工作必须要：<code>sync_mode_qlen =< drop_mode_qlen =< flush_qlen</code> 且 drop_mode_qlen > 1
   要禁用某些模式，请执行以下操作。
-  - 如果sync_mode_qlen被设置为0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。
-  - 如果sync_mode_qlen被设置为与drop_mode_qlen相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用drop或flushing。
-  - 如果drop_mode_qlen被设置为与flush_qlen相同的值，则drop模式被禁用，永远不会发生。
+  - 如果 sync_mode_qlen 被设置为 0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。
+  - 如果 sync_mode_qlen 被设置为与 drop_mode_qlen 相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用 drop 或 flushing。
+  - 如果 drop_mode_qlen 被设置为与 flush_qlen 相同的值，则 drop 模式被禁用，永远不会发生。
 
 
 - flush_qlen: <code>pos_integer()</code>
   * default: 
   `8000`
 
-  如果缓冲日志事件的数量增长大于此阈值，则会发生冲刷（删除）操作。 日志处理进程会丢弃缓冲的日志消息。
+  如果缓冲日志事件的数量增长大于此阈值，则会发生冲刷（删除）操作。日志处理进程会丢弃缓冲的日志消息。
   来缓解自身不会由于内存瀑涨而影响其它业务进程。日志内容会提醒有多少事件被删除。
 
 - overload_kill: <code>[log_overload_kill](#log_overload_kill)</code>
@@ -7949,7 +7948,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `"5s"`
 
-  如果处理进程终止，它会在以指定的时间后后自动重新启动。 `infinity` 不自动重启。
+  如果处理进程终止，它会在以指定的时间后后自动重新启动。`infinity` 不自动重启。
 
 
 ## log_rotation
@@ -7977,7 +7976,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   `true`
 
   启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。
-  系统会默认生成<code>*.siz/*.idx<code>用于记录日志位置，请不要手动修改这两个文件。
+  系统会默认生成 <code>*.siz/*.idx<code> 用于记录日志位置，请不要手动修改这两个文件。
 
 
 - count: <code>1..2048</code>
@@ -8026,7 +8025,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * mapping: 
   `vm_args.+P`
 
-  Erlang系统同时存在的最大进程数。
+  Erlang 系统同时存在的最大进程数。
   实际选择的最大值可能比设置的数字大得多。
   参考: https://www.erlang.org/doc/man/erl.html
             
@@ -8037,7 +8036,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * mapping: 
   `vm_args.+Q`
 
-  Erlang系统同时存在的最大端口数。
+  Erlang 系统同时存在的最大端口数。
   实际选择的最大值可能比设置的数字大得多。
   参考: https://www.erlang.org/doc/man/erl.html
             
@@ -8048,7 +8047,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * mapping: 
   `vm_args.+zdbbl`
 
-  Erlang分布式缓冲区的繁忙阈值，单位是KB。
+  Erlang 分布式缓冲区的繁忙阈值，单位是KB。
 
 - max_ets_tables: <code>pos_integer()</code>
   * default: 
@@ -8064,7 +8063,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
 
 
   节点数据存放目录，可能会自动创建的子目录如下：</br>
-  - `mnesia/<node_name>`。EMQX的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。</br>
+  - `mnesia/<node_name>`。EMQX 的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。</br>
   如果节点要被重新命名（例如，`emqx@10.0.1.1`）。旧目录应该首先被删除。</br>
   - `configs`。在启动时生成的配置，以及集群/本地覆盖的配置。</br>
   - `patches`: 热补丁文件将被放在这里。</br>
@@ -8136,7 +8135,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * mapping: 
   `emqx_machine.applications`
 
-  当新EMQX 加入集群时，应重启的Erlang应用程序的列表。
+  当新 EMQX 加入集群时，应重启的 Erlang 应用程序的列表。
 
 - etc_dir: <code>string()</code>
 
@@ -8152,8 +8151,8 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * mapping: 
   `mria.db_backend`
 
-   rlog是默认的数据库，他适用于大规模的集群。
-  mnesia是备选数据库，在小集群中提供了很好的性能。
+  rlog 是默认的数据库，它适用于大规模的集群。
+  mnesia 是备选数据库，在小集群中提供了很好的性能。
         
 
 - db_role: <code>core | replicant</code>
@@ -8167,7 +8166,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   <code>core</code> 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。</br>
   <code>repliant</code> 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余</br>
   建议复制节点多于核心节点。</br>
-  注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>。
+  注意：该参数仅在设置 <code>backend</code> 时生效到 <code>rlog</code>。
             
 
 - rpc_module: <code>gen_rpc | rpc</code>
@@ -8209,7 +8208,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   * default: 
   `async`
 
-  在 <code>sync</code> 模式下，发送端等待接收端的 ack信号。
+  在 <code>sync</code> 模式下，发送端等待接收端的 ack 信号。
 
 - driver: <code>tcp | ssl</code>
   * default: 
@@ -8234,8 +8233,8 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   `gen_rpc.port_discovery`
 
   <code>manual</code>: 通过 <code>tcp_server_port</code> 来发现端口。
-  </br><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 <code>
-  emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
+  </br><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。
+  如果节点名称是 <code>emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
            
 
 - tcp_server_port: <code>integer()</code>
@@ -8255,8 +8254,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   `gen_rpc.ssl_server_port`
 
   RPC 本地服务使用的监听SSL端口。</br>
-  只有当 rpc.port_discovery 设置为 manual 且 <code> dirver </code> 设置为 <code>ssl</code>，
-  此配置才会生效。
+  只有当 rpc.port_discovery 设置为 manual 且 <code>dirver</code> 设置为 <code>ssl</code>，此配置才会生效。
         
 
 - tcp_client_num: <code>1..256</code>
