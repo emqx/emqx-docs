@@ -8,7 +8,7 @@ http://localhost:18083/api-docs/index.html
 to view the API document, and also experiment with the management APIs from the Swagger UI.
 
 The `/api-docs` endpoint does not require login, however to go further from there,
-you'll need to go through a few simple steps setup the management API authentication.
+you'll need to go through a few simple steps to setup the management API authentication.
 
 The reset of this document is to guide you through the steps.
 
