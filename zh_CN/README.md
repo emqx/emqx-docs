@@ -48,11 +48,11 @@ EMQX 是一款大规模可弹性伸缩的云原生分布式物联网 MQTT 消息
 
 ### 安全
 
-- 基于用户名/密码的身份认证，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供认证服务。
+- 基于用户名/密码的身份认证，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供认证服务
 - 基于 JWT 的身份认证与权限控制，支持 JWKs
 - MQTT 5.0 增强认证
 - PSK 身份验证
-- 基于 Client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供授权服务
+- 基于 Client ID、IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB 作为数据源，也支持使用 HTTP Server 提供授权服务
 - 客户端黑名单支持
 
 ### 可伸缩性

@@ -23,11 +23,13 @@ EMQX 默认以节点名称 `emqx@127.0.0.1` 启动，该名称是内置数据库
 {% emqxce %}
 
 1. 访问 [emqx.io](https://www.emqx.io/zh/downloads) 或 [Github](https://github.com/emqx/emqx/releases) 下载 EMQX 的二进制包。
+
 {% endemqxce %}
 
 {% emqxee %}
 
 1. 访问 [emqx.com](https://www.emqx.com/zh/try?product=enterprise) 下载 EMQX 的二进制包。
+
 {% endemqxee %}
 
 2. 安装 EMQX Broker，将下面的路径更改为您下载 EMQX 软件包的路径。
@@ -41,7 +43,7 @@ EMQX 默认以节点名称 `emqx@127.0.0.1` 启动，该名称是内置数据库
     + DEB 包 (Ubuntu/Debian/Raspbian):
 
       ```shell
-      sudo apt install emqx-full-package-name.deb
+      sudo apt install ./emqx-full-package-name.deb
       ```
 
 3. 启动 EMQX Broker

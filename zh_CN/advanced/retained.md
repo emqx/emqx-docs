@@ -1,7 +1,6 @@
 # 保留消息
 
-EMQX 中处理 MQTT 的保留消息 (Retained messages) 的组建叫做 Retainer
-这个名字在 EMQX 的文档和技术资料中会经常用到。
+EMQX 中处理 MQTT 的保留消息 (Retained messages) 的组件叫做 Retainer，这个名字在 EMQX 的文档和技术资料中会经常用到。
 
 ## 简介
 

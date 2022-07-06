@@ -202,7 +202,7 @@ MongoDB server addresses to connect or to us as seeds, required.
 
 #### `w_mode`
 
-Write mode, the same as for [Standalone MongoDB](#wmode).
+Write mode, the same as for [Standalone MongoDB](#standalone-mongodb-options).
 
 #### `r_mode`
 
@@ -220,4 +220,4 @@ MongoDB server addresses to connect or to us as seeds, required.
 
 #### `w_mode`
 
-Write mode, the same as for [Standalone MongoDB](#wmode).
+Write mode, the same as for [Standalone MongoDB](#standalone-mongodb-options).

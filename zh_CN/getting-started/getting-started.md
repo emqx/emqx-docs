@@ -7,8 +7,8 @@
 {% emqxce %}
 EMQX 有如下版本：
 
-- [开源版](https://www.emqx.com/en/try?product=broker)
-- [企业版](https://www.emqx.com/en/try?product=enterprise)
+- [开源版](https://www.emqx.com/zh/try?product=broker)
+- [企业版](https://www.emqx.com/zh/try?product=enterprise)
 
 {% endemqxce %}
 
@@ -215,8 +215,8 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 
 访问控制与是大多数应用的重要组成部分，启用身份认证(Authentication)能有效阻止非法客户端的连接。授权(Authorization)可以对客户端发布/订阅操作进行精细的权限控制。
 
-- [认证](../security/authn/authn.md)：支持用户名/密码, JWT, MQTT 5.0 增强认证不同的认证方式，支持使用内置数据库、Redis、MySQL，PostgreSQL，MongoDB，HTTP 作为数据源。
-- [授权](../security/authz/authz.md)：基于 client ID, IP 地址，用户名的访问控制，支持使用内置数据库、Redis、MySQL，PostgreSQL，MongoDB，HTTP 作为数据源。
+- [认证](../security/authn/authn.md)：支持用户名/密码认证、JWT 认证、MQTT 5.0 增强认证三种不同的认证方式，其他密码认证支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB、HTTP Server 作为数据源。
+- [授权](../security/authz/authz.md)：基于 Client ID、用户名或 IP 地址的访问控制，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB、HTTP Server 作为数据源。
 
 ### 数据集成
 
