@@ -1,4 +1,4 @@
-# 从 Redis 中获取订阅关系
+# 从 ClickHouse 中获取订阅关系
 
 搭建 ClickHouse 数据库，并设置用户名密码为 default/public，以 CentOS 为例:
 
