@@ -1,39 +1,34 @@
 # 使用内置数据库（Mnesia）的密码认证
 
-使用内置数据库（Mnesia）作为客户端身份凭据的存储介质，无需额外部署其他数据库，在使用上足够简单轻量。
+EMQX 支持使用内置数据库（Mnesia）作为客户端身份凭据的存储介质，无需用户额外部署其他数据库，能够做到开箱即用。使用内置数据库也是 EMQX 的默认推荐方案，因为它为身份验证提供了最佳性能。
 
-## 配置
+## 认证原理
 
-使用内置数据库的密码认证由 `mechanism = password_based` 和 `backend = built_in_database` 标识。
+密码认证通常需要由用户提供身份 ID 和对应的密码，身份 ID 用于标识用户的身份，可以是用户名、客户端标识符或者证书通用名称等。身份 ID 与密码的正确组合，只在用户和认证系统之间共享，因此认证系统可以通过比较用户提供的密码和存储在自己数据库中的密码来验证用户所声明身份的真实性。
 
-```
-{
-    mechanism = password_based
-    backend = built_in_database
-    enable = true
+### 避免存储明文密码
 
-    password_hash_algorithm {
-        name = sha256
-        salt_position = suffix
-    }
+为了完成身份验证，用户与认证系统之间需要共享一些信息，例如密码。但这意味着原本应该保密的密码现在被多方持有，这会显著增加密码泄漏的概率，因为攻击者攻击任意一方都有可能窃取到密码。
 
-    user_id_type = username
-}
-```
+因此，我们不建议在认证系统的数据库中以明文的形式存储密码。因为一旦遭遇拖库，这些密码将完全暴露在攻击者面前。我们更建议生成一个随机的盐，然后在数据库中存储这个盐和对密码加盐后散列得到的值。这样即便攻击者窃取到了数据库中的数据，他既不能拿着这个散列值来进行登录，也很难根据散列值反推出真正的密码。
 
-### `user_id_type`
+## 创建使用内置数据库的密码认证
 
-可选值：
+您可以使用 EMQX Dashboard 来创建使用内置数据库的密码认证。
 
-- `username`
-- `clientid`
+在 [Dashboard > 访问控制 > 认证](http://127.0.0.1:18083/#/authentication) 页面单击**创建**，选择**认证方式**为 `Password-Based`，**数据源**为 `Built-in Database`，然后就会进入具体的配置页面：
 
-此选项用于指定内置数据库中存储的用户 ID 的类型，也用于表明认证器应该使用 MQTT `CONNECT` 报文中的 `Username` 还是 `Client Identifier` 来检索数据库并验证客户端的身份。
+![image-20220705145510242](/Users/zhouzibo/Library/Application Support/typora-user-images/image-20220705145510242.png)
 
-### `password_hash_algorithm`
+**账号类型**用于指定 EMQX 应当使用哪个字段作为客户端的身份 ID 进行认证，可选值有 `username` 和 `clientid`。对于 MQTT 客户端来说，分别对应 CONNECT 报文中的 Username 和 Client Identifier 字段。
 
-`password_hash_algorithm` 指定标准的 [散列选项](./authn.md#密码散列).
+**密码加密方式**用于指定存储密码时使用的散列算法，支持 md5、sha、bcrypt、pbkdf2 等。
 
-## 用户管理
+当选择 bcrypt 算法时，会有tar
 
-使用内置数据库的密码认证可以通过 [HTTP API](./user_management.md) 管理用户.
+**加盐方式**用于指定盐和密码的组合方式：在密码尾部加盐还是在密码头部加盐。只有在用户需要将凭据从外部存储迁移到 EMQX 内置数据库中时，才可能需要更改这一选项。
+
+## 向内置数据库添加凭据
+
+## 从外部存储迁移到 EMQX 内置数据库
+
