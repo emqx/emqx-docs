@@ -399,7 +399,7 @@ authentication=[{enable=true}]
 
 
 ## authz:file
-使用静态文件鉴权
+使用静态文件授权
 
 
 **Config paths**
@@ -438,7 +438,7 @@ authentication=[{enable=true}]
 
 
 ## authz:http_get
-使用外部 HTTP 服务器鉴权(GET 请求)。
+使用外部 HTTP 服务器授权(GET 请求)。
 
 
 **Config paths**
@@ -466,7 +466,7 @@ authentication=[{enable=true}]
 
 - url: <code>binary()</code>
 
-  鉴权 HTTP 服务器地址。
+  HTTP 服务器地址。
 
 - request_timeout: <code>string()</code>
   * default: 
@@ -543,7 +543,7 @@ authentication=[{enable=true}]
 
 
 ## authz:http_post
-使用外部 HTTP 服务器鉴权(POST 请求)。
+使用外部 HTTP 服务器授权(POST 请求)。
 
 
 **Config paths**
@@ -571,7 +571,7 @@ authentication=[{enable=true}]
 
 - url: <code>binary()</code>
 
-  鉴权 HTTP 服务器地址。
+  HTTP 服务器地址。
 
 - request_timeout: <code>string()</code>
   * default: 
@@ -649,7 +649,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mnesia
-使用内部数据库鉴权 (mnesia).
+使用内部数据库授权 (mnesia).
 
 
 **Config paths**
@@ -677,7 +677,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mongo_rs
-使用 MongoDB 鉴权(副本集模式)
+使用 MongoDB 授权(副本集模式)
 
 
 **Config paths**
@@ -705,7 +705,7 @@ authentication=[{enable=true}]
 
 - collection: <code>atom()</code>
 
-  `MongoDB` 鉴权数据集
+  `MongoDB` 授权数据集
 
 - filter: <code>map()</code>
   * default: 
@@ -789,7 +789,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mongo_sharded
-使用 MongoDB 鉴权(分片集群模式)
+使用 MongoDB 授权(分片集群模式)
 
 
 **Config paths**
@@ -817,7 +817,7 @@ authentication=[{enable=true}]
 
 - collection: <code>atom()</code>
 
-  `MongoDB` 鉴权数据集
+  `MongoDB` 授权数据集
 
 - filter: <code>map()</code>
   * default: 
@@ -891,7 +891,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mongo_single
-使用 MongoDB 鉴权(单实例)
+使用 MongoDB 授权(单实例)
 
 
 **Config paths**
@@ -919,7 +919,7 @@ authentication=[{enable=true}]
 
 - collection: <code>atom()</code>
 
-  `MongoDB` 鉴权数据集
+  `MongoDB` 授权数据集
 
 - filter: <code>map()</code>
   * default: 
@@ -992,7 +992,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mysql
-使用 MySOL 数据库鉴权
+使用 MySOL 数据库授权
 
 
 **Config paths**
@@ -1066,7 +1066,7 @@ authentication=[{enable=true}]
 
 
 ## authz:postgresql
-使用 PostgreSQL 数据库鉴权
+使用 PostgreSQL 数据库授权
 
 
 **Config paths**
@@ -1140,7 +1140,7 @@ authentication=[{enable=true}]
 
 
 ## authz:redis_cluster
-使用 Redis 鉴权(集群模式)
+使用 Redis 授权(集群模式)
 
 
 **Config paths**
@@ -1214,7 +1214,7 @@ authentication=[{enable=true}]
 
 
 ## authz:redis_sentinel
-使用 Redis 鉴权(哨兵模式)
+使用 Redis 授权(哨兵模式)
 
 
 **Config paths**
@@ -1292,7 +1292,7 @@ authentication=[{enable=true}]
 
 
 ## authz:redis_single
-使用 Redis 鉴权(单实例)
+使用 Redis 授权(单实例)
 
 
 **Config paths**
@@ -7430,8 +7430,8 @@ UDP 组播服务发现。
   `[]`
 
 
-  鉴权数据源.</br>
-  鉴权(ACL)数据源的列表.
+  授权数据源.</br>
+  授权(ACL)数据源的列表.
   它被设计为一个数组,而不是一个散列映射,
   所以可以作为链式访问控制.</br>
 
