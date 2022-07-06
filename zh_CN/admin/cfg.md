@@ -22,7 +22,7 @@ EMQX的配置文件可分为三层，自底向上依次是：
 :::tip Tip
 有些配置项是不能被重载的（例如 `node.name`）.
 配置项如果有 `mapping: path.to.boot.config.key` 这个属性，
-则不能被添加到重载文件中 `*-override.conf` 中。
+则不能被添加到重载文件 `*-override.conf` 中。
 :::
 
 更多的重载规则，请参考下文 [配置重载规则](#配置重载规则).
@@ -93,13 +93,13 @@ myarray.2 = 75
 有很多不同的原始类型，仅举几个例子。
 
 * 原子 `atom()`
-* 布尔 `boolean()`.
-* 字符串 `string()'。
-* 整形 `integer()'。
-* 浮点数 `float()'.
-* 数值 `number()'。
-* 二进制编码的字符串 `binary()` # 是 `string()` 的另一种格式
-* 时间间隔 `emqx_schema:duration()` # 时间间隔，是 `integer()` 的另一种格式
+* 布尔 `boolean()`
+* 字符串 `string()`
+* 整形 `integer()`
+* 浮点数 `float()`
+* 数值 `number()`
+* 二进制编码的字符串 `binary()` 是 `string()` 的另一种格式
+* 时间间隔 `emqx_schema:duration()` 是 `integer()` 的另一种格式
 * ...
 
 ::: tip Tip
@@ -161,8 +161,7 @@ HOCON的值是分层覆盖的，普遍规则如下：
 
 #### 结构体
 
-合并覆盖规则。在如下配置中，最后一行的 `debug` 值会覆盖覆盖原先`level`字段的 `error` 值
-但是`enable` 字段保持不变。
+合并覆盖规则。在如下配置中，最后一行的 `debug` 值会覆盖覆盖原先 `level` 字段的 `error` 值，但是 `enable` 字段保持不变。
 ```
 log {
     console_handler{
@@ -171,7 +170,7 @@ log {
     }
 }
 
-## 控制台日志打印先定义为`error`级，后被覆写成`debug`级
+## 控制台日志打印先定义为 `error` 级别，后被覆写成 `debug` 级别
 
 log.console_handler.level=debug
 ```
@@ -1768,7 +1767,7 @@ After the limit is reached, successive `CONNECT` requests are forbidden
   * default: 
   `"5m"`
 
-  抖动的客户端将会被禁止登陆多长时间
+  抖动的客户端将会被禁止登录多长时间
 
 
 ## broker:force_gc
@@ -8556,7 +8555,7 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 
 - ban_time: <code>emqx_schema:duration()</code>
 
-  抖动的客户端将会被禁止登陆多长时间
+  抖动的客户端将会被禁止登录多长时间
 
 
 ## zone:force_gc
@@ -11298,7 +11297,7 @@ Settings for Salted Challenge Response Authentication Mechanism
 
 
 ## auto_subscribe
-设备登陆成功之后，通过预设的订阅表示符，为设备自动完成订阅。支持使用占位符。
+设备登录成功之后，通过预设的订阅表示符，为设备自动完成订阅。支持使用占位符。
 
 
 **Config paths**
@@ -11318,7 +11317,7 @@ Settings for Salted Challenge Response Authentication Mechanism
   * default: 
   `[]`
 
-  设备登陆成功之后，通过预设的订阅表示符，为设备自动完成订阅。支持使用占位符。
+  设备登录成功之后，通过预设的订阅表示符，为设备自动完成订阅。支持使用占位符。
 
 
 ## auto_subscribe:topic

@@ -193,7 +193,7 @@ Supports [placeholders](./authn.md#认证占位符).
 
 #### `w_mode`
 
-写模式, 与 [Standalone MongoDB](#wmode) 相同。
+写模式, 与 [Standalone MongoDB](#standalone-mongodb-options) 相同。
 
 #### `r_mode`
 
@@ -211,4 +211,4 @@ Supports [placeholders](./authn.md#认证占位符).
 
 #### `w_mode`
 
-写模式, 与 [Standalone MongoDB](#wmode) 相同。
+写模式, 与 [Standalone MongoDB](#standalone-mongodb-options) 相同。

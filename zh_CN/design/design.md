@@ -147,7 +147,7 @@ MQTT 协议定义了一个 16bits 的报文 ID (PacketId)，用于客户端到�
 | emqx_session_registry      | mnesia | 全局会话注册表       |
 | emqx_alarm_history         | mnesia | 告警历史表         |
 | emqx_alarm                 | mnesia | 告警表           |
-| emqx_banned                | mnesia | 禁止登陆表         |
+| emqx_banned                | mnesia | 禁止登录表         |
 | emqx_route                 | mnesia | 路由表           |
 | emqx_trie                  | mnesia | Trie 表        |
 | emqx_trie_node             | mnesia | Trie Node 表   |

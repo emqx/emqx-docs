@@ -31,4 +31,4 @@ delayed {
 
 `enable`: 表示开启或关闭延迟发布功能。
 
-`max_delayed_messages`: 表示同时存在的延迟发的消息的最大数量。
+`max_delayed_messages`: 表示允许同时存在的延迟发布的消息的最大数量。

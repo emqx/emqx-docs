@@ -70,7 +70,7 @@ EMQX 的 HTTP API 可以用于修改很多配置，当一个 API 被调用，例
 
 EMQX 会为每个集群范围的配置修改生成一个ID，（tnxid），这个 ID 会在集群范围内严格递增，
 每个修改，例如从控制台中修改一个配置之后，都会记录在数据库中。
-下面这个例子，展示的是查看第二（tnxid=2）个修改的内容（着是一个启用 TLS 监听器的操作）。
+下面这个例子，展示的是查看第二（tnxid=2）个修改的内容（这是一个启用 TLS 监听器的操作）。
 
 ```
 $ emqx ctl cluster_call tnxid 2
@@ -109,7 +109,7 @@ $ emqx ctl cluster_call tnxid 2
 这个命令可以查看和管理节点的集群状态。
 请注意，EMQX 加入集群的指令 `join` 是向参数中指定的节点发送一个 “请求”，而不“邀请”。
 也就是说，`emqx ctl cluster join <OneOfTheClusteredNodes>` 指令用于请求加入
-`OnOfTheClusteredNodes` 所在的集群，而不是让这个节点加入自己所在的集群。
+`OneOfTheClusteredNodes` 所在的集群，而不是让这个节点加入自己所在的集群。
 
 ### clients
 
@@ -215,9 +215,9 @@ $ emqx ctl cluster_call tnxid 2
 OLP 是 “overload protection” 的缩写。
 `olp` 命令可以用于检查系统过载的状态，也可以用于关闭或开启系统过载保护。
 
-可以在 `overload_protection` 的配置文档中查看更多信息。
+您可以在 `overload_protection` 的配置文档中查看更多信息。
 
-::: note
+::: tip
 `olp` 是默认开启的，如果从命令行改变这个状态，这个改变只能持续到系统重启。重启之后会回到配置文件中的状态。
 :::
 

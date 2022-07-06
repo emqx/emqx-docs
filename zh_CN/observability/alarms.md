@@ -29,7 +29,7 @@ EMQX Broker 允许用户对告警功能进行一定程度的调整以适应实�
 | os_mon.cpu_check_interval     | duration | 60s         | CPU 占用率的检查间隔                                         |
 | os_mon.cpu_high_watermark     | percent  | 80%         | CPU 占用率高水位，即 CPU 占用率达到多少时激活告警            |
 | os_mon.cpu_low_watermark      | percent  | 60%         | CPU 占用率低水位，即 CPU 占用率降低到多少时取消告警          |
-| os_mon.mem_check_interval     | duration | 60%         | 内存占用率的检查间隔                                         |
+| os_mon.mem_check_interval     | duration | 60s         | 内存占用率的检查间隔                                         |
 | os_mon.sysmem_high_watermark  | percent  | 70%         | 系统内存占用率高水位，即申请的总内存占比达到多少时激活告警   |
 | os_mon.procmem_high_watermark | percent  | 5%          | 进程内存占用率高水位，即单个进程申请的内存占比达到多少时激活告警 |
 | vm_mon.check_interval         | duration | 30s         | 进程数量的检查间隔                                           |
