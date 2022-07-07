@@ -6,17 +6,13 @@ EMQX supports the simplest and most popular password authentication, which requi
 
 The basic working principle of password authentication in EMQX is: when the client connects, EMQX will use the query statement you specify to query the database for the hashed password corresponding to the identity credentials provided by the client, and then match it with the hash value of the client's connection password. Once the match is successful, EMQX will allow the client to login.
 
-EMQX provides integration with various backend databases, including MySQL, PostgreSQL, MongoDB and Redis. At the same time, EMQX also supports users to store their identity credentials in the built-in database (Mnesia).
-
-Compared with using an external database, this method provides a very simple configuration process and user management interface. For example, you can manage users from Dashboard UI, or batch import users from a CSV or JSON file.
-
-The built-in database is also the most performant authentication data source, since the data resides both in disk and RAM at runtime.
+EMQX provides integration with various backend databases, including MySQL, PostgreSQL, MongoDB and Redis. At the same time, EMQX also supports users to store their identity credentials in the built-in database (Mnesia). Compared with using an external database, this method provides a very simple configuration process and user management interface. For example, you can manage users from Dashboard UI, or batch import users from a CSV or JSON file. The built-in database is also the highest performance authentication data source, because the EMQX runtime will load the data for authentication from disk into memory.
 
 In addition to the authentication completed by EMQX, EMQX can also be configured to delegate authentication work to other external services, such as HTTP server developed and deployed by users themselves.
 
 As long as the HTTP server returns an authentication response that conforms to the specification, EMQX can allow or deny the client's login based on the response. Since there is far more client information that can be sent to the HTTP server than a simple combination of username and password, this will allow users to develop complex authentication services for themselves.
 
-EMQX also supports users to deploy an independent authentication service, which verifies the legitimacy of the client and issues JWT, and then the client can use the JWT to complete the login on the EMQX side.
+EMQX also supports the client to directly initiate an authentication request to the authentication service deployed by the user. The authentication service verifies the legitimacy of the client and issues a JWT, and then the client uses the JWT to login to EMQX. At this time, EMQX only verifies the legitimacy of the JWT and checks whether the information in the JWT claims are match the current client.
 
 In addition, EMQX also supports enhanced authentication, which is an extension of MQTT 5.0 to password authentication. It is more like an authentication framework that allows the use of various more secure authentication mechanisms, such as SCRAM authentication, Kerberos authentication, etc. At present, EMQX already supports SCRAM authentication and provides support for SCRAM user management through the built-in database.
 
