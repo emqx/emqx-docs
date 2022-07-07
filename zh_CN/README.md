@@ -20,7 +20,7 @@ EMQX 是一款大规模可弹性伸缩的云原生分布式物联网 MQTT 消息
 ### 连接
 
 - 完整支持 MQTT v3.1、v3.1.1 and v5.0 协议规范
-  - QoS 0, QoS 1, QoS 2 消息支持
+  - QoS 0、QoS 1、QoS 2 消息支持
   - 持久会话和离线消息支持
   - 保留消息（Retained Message）支持
   - 遗嘱消息（Will Message）支持
@@ -58,7 +58,7 @@ EMQX 是一款大规模可弹性伸缩的云原生分布式物联网 MQTT 消息
 ### 可伸缩性
 
 - 多节点集群 (Cluster)
-- 支持手动, mcast, dns, etcd, k8s 集群发现方式集群
+- 支持手动、mcast、dns、etcd、k8s 集群发现方式集群
 - 多服务器节点桥接 (Bridge)
 
 ### 数据集成

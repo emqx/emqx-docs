@@ -128,7 +128,7 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
 
 虽然，存在重复的报文消息。但这是完全符合协议的规范的，每个报文第一次出现的位置都是有序的，并且重复收到的报文 `2` `3` 的报文中，会携带一个标识位，表明其为重发报文。
 
-MQTT 协议和 EMQX 将这个主题认为是 `有序的主题 (Ordered Topic)` 参见: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)。
+MQTT 协议和 EMQX 将这个主题认为是 `有序的主题 (Ordered Topic)` 参见：[MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)。
 
 它确保 **相同的主题和 QoS 下，消息是按顺序投递和应答的**。
 

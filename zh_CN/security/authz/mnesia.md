@@ -57,6 +57,6 @@ curl -X 'POST' \
 ]'
 ```
 每个规则需要包括如下信息：
-* permission: `allow` 或者 `deny`;
-* action: 客户端执行的操作 `publish`，`subscribe`，或 `all`;
-* topic: 主题，主题过滤器（通配符主题），或者带[占位符](authz.md#主题占位符)的主题。
+* permission：`allow` 或者 `deny`;
+* action：客户端执行的操作 `publish`，`subscribe`，或 `all`;
+* topic：主题，主题过滤器（通配符主题），或者带[占位符](authz.md#主题占位符)的主题。

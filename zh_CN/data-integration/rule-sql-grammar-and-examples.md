@@ -29,7 +29,7 @@ SELECT * FROM "#" WHERE username = 'abc'
 SELECT clientid as cid FROM "#" WHERE cid = 'abc'
 
 ## 选取 username 为 'abc' 的终端发来的消息，输出结果将只有 cid 一个字段。
-## 注意虽然 SELECT 语句中只选取了 cid 一个字段，所有消息发布事件中的可用字段 (比如 clientid, username 等) 仍然可以在 WHERE 语句中使用:
+## 注意虽然 SELECT 语句中只选取了 cid 一个字段，所有消息发布事件中的可用字段 (比如 clientid、username 等) 仍然可以在 WHERE 语句中使用:
 
 SELECT clientid as cid FROM "#" WHERE username = 'abc'
 
@@ -56,7 +56,7 @@ FOREACH <字段名> [DO <条件>] [INCASE <条件>] FROM <主题> [WHERE <条件
 
 FOREACH
     payload.sensors as e ## 选择出的字段必须为数组类型
-DO                       ## DO相当于针对当前循环中对象的 SELECT 子句, 决定最终的输出结果里的字段
+DO                       ## DO 相当于针对当前循环中对象的 SELECT 子句，决定最终的输出结果里的字段
     clientid,
     e.name as name,
     e.idx as idx
@@ -110,7 +110,7 @@ SELECT * FROM "t/a","t/b"
 SELECT * FROM "t/#"
 ```
 
-- 从 topic 能够匹配到 't/#' 的消息中提取 qos, username 和 clientid 字段:
+- 从 topic 能够匹配到 't/#' 的消息中提取 qos、username 和 clientid 字段:
 
 ```sql
 SELECT qos, username, clientid FROM "t/#"
@@ -122,7 +122,7 @@ SELECT qos, username, clientid FROM "t/#"
 SELECT username FROM "#" WHERE username='Steven'
 ```
 
-- 从任意 topic 的 JSON 消息体(payload) 中提取 x 字段，并创建别名 x 以便在 WHERE 子句中使用。WHERE 子句限定条件为 x = 1。下面这个 SQL 语句可以匹配到消息体 {"x": 1}, 但不能匹配到消息体 {"x": 2}:
+- 从任意 topic 的 JSON 消息体(payload) 中提取 x 字段，并创建别名 x 以便在 WHERE 子句中使用。WHERE 子句限定条件为 x = 1。下面这个 SQL 语句可以匹配到消息体 {"x": 1}，但不能匹配到消息体 {"x": 2}:
 
 ```sql
 SELECT payload.x as x FROM "#" WHERE x = 1
@@ -182,7 +182,7 @@ SELECT pub_props.'User-Property'.foo as foo FROM "t/#"
 }
 ```
 
-**示例1: 要求将 sensors 里的各个对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `${name}`。即最终规则将会发出 3 条消息:**
+**示例 1：要求将 sensors 里的各个对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `${name}`。即最终规则将会发出 3 条消息:**
 
 1) 主题：sensors/0
    内容：a
@@ -229,7 +229,7 @@ FROM "t/#"
 
 FOREACH 语句将会对于结果数组里的每个对象分别执行 "消息重新发布" 动作，所以将会执行重新发布动作 3 次。
 
-**示例2: 要求将 sensors 里的 `idx` 值大于或等于 1 的对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `clientid=${clientid},name=${name},date=${date}`。即最终规则将会发出 2 条消息:**
+**示例 2：要求将 sensors 里的 `idx` 值大于或等于 1 的对象，分别作为数据输入重新发布消息到 `sensors/${idx}` 主题，内容为 `clientid=${clientid},name=${name},date=${date}`。即最终规则将会发出 2 条消息:**
 
 1) 主题：sensors/1
    内容：clientid=c_steve,name=b,date=2020-04-24
@@ -292,7 +292,7 @@ INCASE
 FROM "t/#"
 ```
 
-**示例3: 在示例2 的基础上，去掉 clientid 字段 `c_steve` 中的 `c_` 前缀**
+**示例 3：在示例 2 的基础上，去掉 clientid 字段 `c_steve` 中的 `c_` 前缀**
 
 在 FOREACH 和 DO 语句中可以调用各类 SQL 函数，若要将 `c_steve` 变为 `steve`，则可以把例2 中的 SQL 改为：
 
@@ -334,7 +334,7 @@ FOREACH
 
 ### CASE-WHEN 语法示例
 
-**示例1: 将消息中 x 字段的值范围限定在 0~7 之间。**
+**示例 1：将消息中 x 字段的值范围限定在 0~7 之间。**
 
 ```sql
 SELECT
@@ -359,7 +359,7 @@ FROM "t/#"
 
 ### 数组操作语法举例
 
-**示例1: 创建一个数组，赋值给变量 a:**
+**示例 1：创建一个数组，赋值给变量 a:**
 
 ```sql
 SELECT
@@ -376,7 +376,7 @@ FROM
 }
 ```
 
-**示例2: 从数组中取出第 N 个元素。下标为负数时，表示从数组的右边取:**
+**示例 2：从数组中取出第 N 个元素。下标为负数时，表示从数组的右边取:**
 
 ```sql
 SELECT
@@ -397,7 +397,7 @@ FROM
 }
 ```
 
-**示例3: 从 JSON 格式的 payload 中嵌套的获取值:**
+**示例 3：从 JSON 格式的 payload 中嵌套的获取值:**
 
 ```sql
 SELECT
@@ -421,7 +421,7 @@ FROM
 {"id": 1}
 ```
 
-**示例4: 数组范围(range)操作:**
+**示例 4：数组范围(range)操作:**
 
 ```sql
 SELECT
@@ -440,7 +440,7 @@ FROM
 }
 ```
 
-**示例5: 使用下标语法修改数组中的某个元素:**
+**示例 5：使用下标语法修改数组中的某个元素:**
 
 ```sql
 SELECT

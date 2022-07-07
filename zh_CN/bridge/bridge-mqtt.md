@@ -10,7 +10,7 @@ EMQX 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服
 
 ![image](./assets/bridge_mqtt.png)
 
-mqtt bridge 桥接插件配置文件: etc/plugins/emqx_bridge_mqtt.conf。
+mqtt bridge 桥接插件配置文件：`etc/plugins/emqx_bridge_mqtt.conf`。
 
 ## 配置 MQTT 桥接的 Broker 地址
 
@@ -19,7 +19,7 @@ mqtt bridge 桥接插件配置文件: etc/plugins/emqx_bridge_mqtt.conf。
 bridge.mqtt.aws.address = 127.0.0.1:1883
 
 ## 桥接的协议版本
-## 枚举值: mqttv3 | mqttv4 | mqttv5
+## 枚举值：mqttv3 | mqttv4 | mqttv5
 bridge.mqtt.aws.proto_ver = mqttv4
 
 ## mqtt 连接是否启用桥接模式
@@ -29,7 +29,7 @@ bridge.mqtt.aws.bridge_mode = true
 bridge.mqtt.aws.client_id = bridge_aws
 
 ## mqtt 客户端的 clean_start 字段
-## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
+## 注：有些 MQTT Broker 需要将 clean_start 值设成 `true`
 bridge.mqtt.aws.clean_start = true
 
 ## mqtt 客户端的 username 字段
@@ -90,12 +90,12 @@ bridge.mqtt.aws.subscription.2.qos = 1
 
 ## MQTT 桥接转发和订阅主题说明
 
-挂载点 Mountpoint: mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
-sensor1/hello 的消息, 到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
+挂载点 Mountpoint：mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
+sensor1/hello 的消息，到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
 
-转发主题 Forwards: 转发到本地 EMQX 指定 forwards 主题上的消息都会被转发到远程 MQTT Broker 上。
+转发主题 Forwards：转发到本地 EMQX 指定 forwards 主题上的消息都会被转发到远程 MQTT Broker 上。
 
-订阅主题 Subscription: 本地 EMQX 通过订阅远程 MQTT Broker 的主题来将远程 MQTT Broker
+订阅主题 Subscription：本地 EMQX 通过订阅远程 MQTT Broker 的主题来将远程 MQTT Broker
 上的消息同步到本地。
 
 ## 启用 bridge_mqtt 桥接插件

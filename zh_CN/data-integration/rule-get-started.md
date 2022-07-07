@@ -11,9 +11,9 @@
 ## 添加消息重发布动作
 保持默认的规则名和 SQL 语句不变，点击 “添加动作” 按钮，按照如下参数添加一个 `消息重发布` 动作：
 
-- Topic: "a/1"
-- QoS: 0
-- Payload: ${payload}
+- Topic："a/1"
+- QoS：0
+- Payload：${payload}
 
 ![image](./assets/rules/cn_rule_overview_add_action_republish.png)
 

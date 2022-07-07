@@ -10,7 +10,7 @@ EMQX 桥接转发 MQTT 消息到 Kafka 集群，Apache Kafka是一个快速、�
 
 ![image](./assets/bridge_kafka.png)
 
-Kafka 桥接插件配置文件: etc/plugins/emqx_bridge_kafka.conf。
+Kafka 桥接插件配置文件：`etc/plugins/emqx_bridge_kafka.conf`。
 
 ## 配置 Kafka 集群地址
 
@@ -19,18 +19,18 @@ Kafka 桥接插件配置文件: etc/plugins/emqx_bridge_kafka.conf。
 ## bridge.kafka.servers = 127.0.0.1:9092,127.0.0.2:9092,127.0.0.3:9092
 bridge.kafka.servers = 127.0.0.1:9092
 
-## Kafka 分区策略。可选值: per_partition | per_broker
+## Kafka 分区策略。可选值：per_partition | per_broker
 bridge.kafka.connection_strategy = per_partition
 
 bridge.kafka.min_metadata_refresh_interval = 5S
 
-## Produce 写类型。可选值: sync | async
+## Produce 写类型。可选值：sync | async
 bridge.kafka.produce = sync
 
 bridge.kafka.produce.sync_timeout = 3S
 
 ## 指定 replayq 在磁盘上存储消息的基本目录。
-## 如果该配置项缺失或者设置为 undefined, replayq 将以使用内存的
+## 如果该配置项缺失或者设置为 undefined，replayq 将以使用内存的
 ## 的方式工作。也就是说，消息不在磁盘上排队 -- 在这种情况下，send
 ## 和 send_async API 的调用者负责处理在应用程序、网络或 kafka
 ## 干扰时可能丢失的消息。

@@ -1,31 +1,31 @@
 # 配置文件
 
 <!--5.0.2-bb854a96-->
-EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) .
+EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) 。
 HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常适用于易于人类读写的配置数据存储。
 
 ## 分层结构
 
 EMQX的配置文件可分为三层，自底向上依次是：
 
-1. 不可变的基础层 `emqx.conf` 加上 `EMQX_` 前缀的环境变量.</br>
+1. 不可变的基础层 `emqx.conf` 加上 `EMQX_` 前缀的环境变量。</br>
    修改这一层的配置之后，需要重启节点来使之生效。
 1. 集群范围重载层：`$EMQX_NODE__DATA_DIR/configs/cluster-override.conf`
 1. 节点本地重载层：`$EMQX_NODE__DATA_DIR/configs/local-override.conf`
 
-如果环境变量 `$EMQX_NODE__DATA_DIR` 没有设置，那么该目录会从 emqx.conf 的 `node.data_dir`配置中读取。
+如果环境变量 `$EMQX_NODE__DATA_DIR` 没有设置，那么该目录会从 `emqx.conf` 的 `node.data_dir`配置中读取。
 
 配置文件 `cluster-override.conf` 的内容会在运行时被EMQX重写。
 这些重写发生在 dashboard UI，管理HTTP API，或者CLI对集群配置进行修改时。
 当EMQX运行在集群中时，一个EMQX节点重启之后，会从集群中其他节点复制该文件内容到本地。
 
 :::tip Tip
-有些配置项是不能被重载的（例如 `node.name`）.
+有些配置项是不能被重载的（例如 `node.name`）。
 配置项如果有 `mapping: path.to.boot.config.key` 这个属性，
 则不能被添加到重载文件 `*-override.conf` 中。
 :::
 
-更多的重载规则，请参考下文 [配置重载规则](#配置重载规则).
+更多的重载规则，请参考下文 [配置重载规则](#配置重载规则)。
 
 ## 配置文件语法
 
@@ -73,9 +73,9 @@ EMQX的配置文件中，有4中复杂数据结构类型，它们分别是：
 
 1. Struct：结构体都是有类型名称的，结构体中可以有任意多个字段。
    结构体和字段的名称由不带特殊字符的全小些字母组成，名称中可以带数字，但不得以数字开头，多个单词可用下划线分隔。
-1. Map: Map与Struct（结构体）类似，但是内部的字段不是预先定义好的.
-1. Union: 联合 `MemberType1 | MemberType2 | ...`，可以理解为：“不是这个，就是那个”
-1. Array: 数组 `[ElementType]`
+1. Map：Map与Struct（结构体）类似，但是内部的字段不是预先定义好的。
+1. Union：联合 `MemberType1 | MemberType2 | ...`，可以理解为：“不是这个，就是那个”
+1. Array：数组 `[ElementType]`
 
 ::: tip Tip
 如果Map的字段名称是纯数字，它会被解释成一个数组。
@@ -113,7 +113,7 @@ myarray.2 = 75
 如果我们把EMQX的配置值理解成一个类似目录树的结构，那么类似于文件系统中使用斜杠或反斜杠进行层级分割，
 EMQX使用的配置路径的层级分割符是 `'.'`
 
-被`'.'`号分割的每一段，则是Struct（结构体）的字段，或Map的key.
+被`'.'`号分割的每一段，则是 Struct（结构体）的字段，或 Map 的 key。
 
 下面有几个例子：
 
@@ -147,7 +147,7 @@ export EMQX_LISTENERS__SSL__L1__AUTHENTICATION__SSL__CIPHERS="[\"TLS_AES_256_GCM
 [warning] unknown_env_vars: ["EMQX_AUTHENTICATION__ENABLED"]
 ```
 
-这是因为正确的字段名称是 `enable`，而不是 `enabled`.
+这是因为正确的字段名称是 `enable`，而不是 `enabled`。
 :::
 
 ### 配置重载规则
@@ -178,7 +178,7 @@ log.console_handler.level=debug
 #### Map
 
 Map与结构体类似，也是合并覆盖规则。
-如下例子中，`zone1` 的 `max_packet_size` 可以在文件后面覆写.
+如下例子中，`zone1` 的 `max_packet_size` 可以在文件后面覆写。
 
 ```
 zone {
@@ -247,7 +247,7 @@ authentication=[{enable=true}]
 
   该配置可以被配置为：
   <ul>
-    <li><code>[]</code>: 默认值，允许所以登录请求
+    <li><code>[]</code>：默认值，允许所以登录请求
     <li>配置为单认证器，例如 <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
     <li>配置为认证器数组</li>
   </ul>
@@ -433,7 +433,7 @@ authentication=[{enable=true}]
   那么可以将该文件置于任何 EMQX 可以访问到的位置。
 
   如果从 EMQX Dashboard 或 HTTP API 创建或修改了规则集，
-  那么EMQX将会生成一个新的文件并将它存放在 `data_dir` 下的 `authz` 子目录中,
+  那么EMQX将会生成一个新的文件并将它存放在 `data_dir` 下的 `authz` 子目录中，
   并从此弃用旧的文件。
 
 
@@ -649,7 +649,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mnesia
-使用内部数据库鉴权 (mnesia).
+使用内部数据库鉴权 (mnesia)。
 
 
 **Config paths**
@@ -1599,7 +1599,7 @@ and `<Username>` is the username or `unknown_user`.
   清除警报前的最短时间。
 
   只有当队列中没有挂起的数据，并且连接至少被堵塞了 "min_alarm_sustain_duration" 毫秒时，
-  报警才会被清除。这是为了避免太频繁地清除和再次发出警报.
+  报警才会被清除。这是为了避免太频繁地清除和再次发出警报。
 
 
 ## broker:deflate_opts
@@ -4924,7 +4924,7 @@ with a certain defined CoAP message format.
 
   客户端订阅请求的默认 QoS 等级。
   当 CoAP 客户端发起订阅请求时，如果未携带 `qos` 参数则会使用该默认值。默认值可设置为：
-    - qos0, qos1, qos2: 设置为固定的 QoS 等级
+    - qos0、qos1、qos2: 设置为固定的 QoS 等级
     - coap: 依据订阅操作的 CoAP 报文类型来动态决定
       * 当订阅请求为 `non-confirmable` 类型时，取值为 qos0
       * 当订阅请求为 `confirmable` 类型时，取值为 qos1
@@ -4936,7 +4936,7 @@ with a certain defined CoAP message format.
 
   客户端发布请求的默认 QoS 等级。
   当 CoAP 客户端发起发布请求时，如果未携带 `qos` 参数则会使用该默认值。默认值可设置为：
-    - qos0, qos1, qos2: 设置为固定的 QoS 等级
+    - qos0、qos1、qos2: 设置为固定的 QoS 等级
     - coap: 依据发布操作的 CoAP 报文类型来动态决定
       * 当发布请求为 `non-confirmable` 类型时，取值为 qos0
       * 当发布请求为 `confirmable` 类型时，取值为 qos1
@@ -6785,19 +6785,22 @@ Settings for the telemetry module.
 内置 'republish' 动作的参数。
 可以在参数中使用变量。
 变量是规则中选择的字段。 例如规则 SQL 定义如下：
-<code>
-    SELECT clientid, qos, payload FROM "t/1"
-</code>
+
+```
+SELECT clientid, qos, payload FROM "t/1"
+```
+
 然后有 3 个变量可用：<code>clientid</code>、<code>qos</code> 和 <code>payload</code>。 如果我们将参数设置为：
-<code>
-    {
-        topic = "t/${clientid}"
-        qos = "${qos}"
-        payload = "msg: ${payload}"
-    }
-</code>
-当收到一条消息 payload = `hello`, qos = 1, clientid = `Steve` 时，将重新发布一条新的 MQTT 消息到主题 `t/Steve`
-消息内容为 payload = `msg: hello`, and `qos = 1
+
+```
+{
+    topic = "t/${clientid}"
+    qos = "${qos}"
+    payload = "msg: ${payload}"
+}
+```
+
+当收到一条 Payload 为 `hello`，QoS 为 1，Client ID 为 `Steve` 的消息时，将重新发布一条新的 MQTT 消息到主题 `t/Steve`，该消息的 Payload 为 `msg: hello`，QoS 为 1。
 
 
 **Config paths**
@@ -7255,7 +7258,7 @@ Kubernetes 服务发现。
   `ip`
 
   当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。
-  指定 <code>cluster.k8s.address_type</code. 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
+  指定 <code>cluster.k8s.address_type</code> 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
   的IP地址。
 
 
@@ -7430,22 +7433,22 @@ UDP 组播服务发现。
   `[]`
 
 
-  鉴权数据源.</br>
-  鉴权(ACL)数据源的列表.
-  它被设计为一个数组,而不是一个散列映射,
-  所以可以作为链式访问控制.</br>
+  鉴权数据源。</br>
+  鉴权(ACL)数据源的列表。
+  它被设计为一个数组，而不是一个散列映射，
+  所以可以作为链式访问控制。</br>
 
-  当授权一个 'publish' 或 'subscribe' 行为时,
+  当授权一个 'publish' 或 'subscribe' 行为时，
   该配置列表中的所有数据源将按顺序进行检查。
-  如果在某个客户端未找到时(使用 ClientID 或 Username),
-  将会移动到下一个数据源. 直至得到 'allow' 或 'deny' 的结果.</br>
+  如果在某个客户端未找到时(使用 ClientID 或 Username)，
+  将会移动到下一个数据源。直至得到 'allow' 或 'deny' 的结果。</br>
 
-  如果在任何数据源中都未找到对应的客户端信息,
-  配置的默认行为 ('authorization.no_match') 将生效.</br>
+  如果在任何数据源中都未找到对应的客户端信息，
+  配置的默认行为 ('authorization.no_match') 将生效。</br>
 
   注意:
-  数据源使用 'type' 进行标识.
-  使用同一类型的数据源多于一次不被允许.
+  数据源使用 'type' 进行标识。
+  使用同一类型的数据源多于一次不被允许。
 
 
 
@@ -8764,7 +8767,7 @@ in <code>zone</code> configs
 
 - peer_cert_as_username: <code>disabled | cn | dn | crt | pem | md5</code>
 
-  使用对端证书中的 CN, DN 字段或整个证书内容来作为用户名。仅适用于 TLS 连接。
+  使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名。仅适用于 TLS 连接。
   目前支持配置为以下内容：
   - <code>cn</code>: 取证书的 CN 字段作为 Username
   - <code>dn</code>: 取证书的 DN 字段作为 Username
@@ -8775,7 +8778,7 @@ in <code>zone</code> configs
 
 - peer_cert_as_clientid: <code>disabled | cn | dn | crt | pem | md5</code>
 
-  使用对端证书中的 CN, DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接。
+  使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接。
   目前支持配置为以下内容：
   - <code>cn</code>: 取证书的 CN 字段作为 Client ID
   - <code>dn</code>: 取证书的 DN 字段作为 Client ID
@@ -9693,7 +9696,7 @@ Settings for PBKDF2 password hashing algorithm.
 
 - endpoint: <code>string()</code>
 
-  JWKS 端点, 它是一个以 JWKS 格式返回服务端的公钥集的只读端点。
+  JWKS 端点，它是一个以 JWKS 格式返回服务端的公钥集的只读端点。
 
 - pool_size: <code>pos_integer()</code>
   * default: 
@@ -10784,7 +10787,7 @@ SSL 配置。
 
 PSK 是 “Pre-Shared-Keys” 的缩写。
 
-注意: 确保 SSL 监听器仅启用了 'tlsv1.2', 并且配置了PSK 密码套件，例如 'RSA-PSK-AES256-GCM-SHA384'。
+注意: 确保 SSL 监听器仅启用了 'tlsv1.2'，并且配置了PSK 密码套件，例如 'RSA-PSK-AES256-GCM-SHA384'。
 
 可以通过查看监听器中的 SSL 选项，了解更多详细信息。
 
@@ -11820,7 +11823,7 @@ HTTP Bridge 配置
   * default: 
   `"plugins"`
 
-  插件安装包的目录, 不要自己创建, 只能由emqx用户创建与修改
+  插件安装包的目录，不要自己创建，只能由emqx用户创建与修改
 
 - check_interval: <code>emqx_schema:duration()</code>
   * default: 
