@@ -248,7 +248,7 @@ FROM
 |        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                        |
-| reason              | 消息丢弃原因，可能的原因：<br/>no_subscribers: 没有订阅者|
+| reason              | 消息丢弃原因，可能的原因：<br/>no_subscribers：没有订阅者|
 | clientid            | 消息来源 Client ID                  |
 | username            | 消息来源用户名                      |
 | payload             | MQTT 消息体                         |
@@ -289,7 +289,7 @@ FROM
 |        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                         |
-| reason              | 消息丢弃原因，可能的原因：<br/>queue_full: 消息队列已满(QoS>0)<br/>no_local: 不允许客户端接收自己发布的消息<br/>expired: 消息或者会话过期<br/>qos0_msg: QoS 0 的消息因为消息队列已满被丢弃|
+| reason              | 消息丢弃原因，可能的原因：<br/>queue_full：消息队列已满(QoS>0)<br/>no_local：不允许客户端接收自己发布的消息<br/>expired：消息或者会话过期<br/>qos0_msg：QoS 0 的消息因为消息队列已满被丢弃|
 | from_clientid       | 消息来源 Client ID                   |
 | from_username       | 消息来源用户名                       |
 | clientid            | 消息目的 Client ID                   |
@@ -372,7 +372,7 @@ FROM
 
 |        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
-| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout: keepalive 超时<br/>not_authorized:  认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed: 对端关闭了网络连接<br/>internal_error: 畸形报文或其他未知错误<br/> |
+| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout：keepalive 超时<br/>not_authorized：认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed：对端关闭了网络连接<br/>internal_error：畸形报文或其他未知错误<br/> |
 | clientid        | 消息目的 Client ID                                           |
 | username        | 消息目的用户名                                               |
 | peername        | 终端的 IPAddress 和 Port                                     |
@@ -406,7 +406,7 @@ FROM
 
 ### 连接确认事件 ("$events/client_connack")
 
-当服务端向客户端发送CONNACK报文时触发规则, reason_code 包含各种错误原因代码
+当服务端向客户端发送CONNACK报文时触发规则，reason_code 包含各种错误原因代码
 
 |        字段      |  解释                                 |
 | ---------------- | :---------------------------------------------- |
@@ -494,7 +494,7 @@ FROM
 | username	      | 消息目的用户名           |
 | peerhost	      | 客户端的 IPAddress       |
 | topic	          | MQTT 主题               |
-| action	      | publish or subscribe, 发布或者订阅事件 |
+| action	      | publish or subscribe，发布或者订阅事件 |
 | result          | allow or deny，鉴权完成            |
 | is_cache        | true or false，鉴权时数据的来源 <br/>is_cache为true时，鉴权数据来源于cache <br/>is_cache为false时，鉴权数据来源于插件           |
 | timestamp	      | 事件触发时间 (ms)       |

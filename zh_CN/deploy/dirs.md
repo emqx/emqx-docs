@@ -14,7 +14,7 @@
 | 插件                        | `./plugins`              | `/usr/lib/emqx/plugins`       |
 
 这些目录都是在安装时就创建好的。
-除了 `etc` `data`, `log` 和 `plugins`, 其他的目录通常都是静态的，只在升级或重装时才会改变。
+除了 `etc`、`data`、`log` 和 `plugins`，其他的目录通常都是静态的，只在升级或重装时才会改变。
 
 ## bin 目录
 
@@ -30,9 +30,9 @@ EMQX 管理命令的可执行文件，具体使用可以查看  [管理命令 CL
 
 EMQX 通过 `etc` 目录下配置文件进行设置，主要配置文件包括:
 
-* `emqx.conf`: EMQX 的主配置文件。
-* `vm.args`: Erlang 虚拟机的运行参数。
-* `certs/`: X.509 的密钥和证书文件。这些文件被用于 EMQX 的 SSL/TLS 监听器。
+* `emqx.conf`：EMQX 的主配置文件。
+* `vm.args`：Erlang 虚拟机的运行参数。
+* `certs/`：X.509 的密钥和证书文件。这些文件被用于 EMQX 的 SSL/TLS 监听器。
   也被用与与外部系统集成时建立 SSL/TLS 连接。
 
 ## data 目录

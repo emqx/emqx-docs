@@ -59,17 +59,17 @@ Mria的表会被复制到所有EMQX节点上。
 
 ### Prometheus 系统指标
 #### 核心节点
-- `emqx_mria_last_intercepted_trans`: 自节点启动以来，分片区收到的事务数量。注意，这个值在不同的核心节点上可能不同。
-- `emqx_mria_weight`: 一个用于负载平衡的值。它的变化取决于核心节点的瞬间负载。
-- `emqx_mria_replicants`: 连接到核心节点的复制节点数量。
-- `emqx_mria_server_mql`: 未处理的事务数量，等待发送至复制者节点。越少越好。如果这个指标有增长的趋势，则可能需要为当前的核心节点增加算力资源，或添加更多的核心节点。
+- `emqx_mria_last_intercepted_trans`：自节点启动以来，分片区收到的事务数量。注意，这个值在不同的核心节点上可能不同。
+- `emqx_mria_weight`：一个用于负载平衡的值。它的变化取决于核心节点的瞬间负载。
+- `emqx_mria_replicants`：连接到核心节点的复制节点数量。
+- `emqx_mria_server_mql`：未处理的事务数量，等待发送至复制者节点。越少越好。如果这个指标有增长的趋势，则可能需要为当前的核心节点增加算力资源，或添加更多的核心节点。
 
 #### 复制者节点
 - `emqx_mria_lag`。复制者节点滞后，表示复制者节点滞后上游核心节点的程度。越少越好。
-- `emqx_mria_bootstrap_time`: 复制者节点启动过程中花费的时间。这个值在复制者节点的正常运行过程中不会改变。
-- `emqx_mria_bootstrap_num_keys`: 在初始复制过程中从核心节点复制的数据库记录的数量。这个值在复制者节点的正常运行中不会改变。
-- `emqx_mria_message_queue_len`: 复制进程的消息队列长度。应该一直保持在0左右。
-- `emqx_mria_replayq_len`: 复制者节点的内部重放队列的长度。越少越好。
+- `emqx_mria_bootstrap_time`：复制者节点启动过程中花费的时间。这个值在复制者节点的正常运行过程中不会改变。
+- `emqx_mria_bootstrap_num_keys`：在初始复制过程中从核心节点复制的数据库记录的数量。这个值在复制者节点的正常运行中不会改变。
+- `emqx_mria_message_queue_len`：复制进程的消息队列长度。应该一直保持在0左右。
+- `emqx_mria_replayq_len`：复制者节点的内部重放队列的长度。越少越好。
 
 ### 控制台命令
 

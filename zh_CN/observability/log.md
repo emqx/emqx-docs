@@ -100,10 +100,10 @@ EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/lo
 
 在文件日志启用后，日志目录下会有如下几种文件:
 
-- **emqx.log.N:** 以 emqx.log 为前缀的文件为日志文件，包含了 EMQX 的所有日志消息。比如 `emqx.log.1`, `emqx.log.2` ...
+- **emqx.log.N:** 以 emqx.log 为前缀的文件为日志文件，包含了 EMQX 的所有日志消息。比如 `emqx.log.1`、`emqx.log.2` ...
 - **emqx.log.siz 和 emqx.log.idx:** 用于记录日志滚动信息的系统文件，请不要手动修改。
 - **run_erl.log:** 以 `emqx start` 方式后台启动 EMQX 时，用于记录启动信息的系统文件。
-- **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。比如 `erlang.log.1`, `erlang.log.2` ...
+- **erlang.log.N:** 以 erlang.log 为前缀的文件为日志文件，是以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。比如 `erlang.log.1`、`erlang.log.2` ...
 
 ## 针对日志级别输出日志文件
 
@@ -146,7 +146,7 @@ EMQX 的默认日志文件目录在 `./log` (zip包解压安装) 或者 `/var/lo
 - **level:** `[debug]`
 - **flat log-content:** `clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT`
 
-这条日志表示 EMQX 在`2022-06-30T16:07:47.689512+08:00`时 clientid 为 `test`客户端收到了一个`PINGREQ(Q0,R0,D0)`包。对应客户端的IP为`127.0.0.1:64391`。
+这条日志表示 EMQX 在 `2022-06-30T16:07:47.689512+08:00` 时 Client ID 为 `test` 客户端收到了一个 `PINGREQ(Q0,R0,D0)` 包。对应客户端的 IP 为 `127.0.0.1:64391`。
 
 ### 日志消息举例 2：
 

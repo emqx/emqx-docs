@@ -9,7 +9,7 @@ EMQX 为用户提供了多种查看指标与状态的手段。最直接的，用
 如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，参见 [HTTP API](../admin/api.md) 与 [$SYS 系统主题](../advanced/system-topic.md)。
 
 ::: tip
-EMQX 提供与三方监控系统的集成，例如 StatsD 和 Prometheus. 参见：[Prometheus 监控告警](../observability/prometheus.md)。
+EMQX 提供与三方监控系统的集成，例如 StatsD 和 Prometheus。参见：[Prometheus 监控告警](../observability/prometheus.md)。
 :::
 
 ## Metrics & Stats

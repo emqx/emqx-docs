@@ -4,7 +4,7 @@ EMQX 桥接转发 MQTT 消息到 MQTT Broker，支持桥接至常见 MQTT 云服
 
 ![image](./assets/bridge_mqtt.png)
 
-mqtt bridge 桥接插件配置文件: etc/plugins/emqx_bridge_mqtt.conf。
+mqtt bridge 桥接插件配置文件：`etc/plugins/emqx_bridge_mqtt.conf`。
 
 ## 配置 MQTT 桥接的 Broker 地址
 
@@ -13,7 +13,7 @@ mqtt bridge 桥接插件配置文件: etc/plugins/emqx_bridge_mqtt.conf。
 bridge.mqtt.aws.address = 127.0.0.1:1883
 
 ## 桥接的协议版本
-## 枚举值: mqttv3 | mqttv4 | mqttv5
+## 枚举值：mqttv3 | mqttv4 | mqttv5
 bridge.mqtt.aws.proto_ver = mqttv4
 
 ## mqtt 连接是否启用桥接模式
@@ -23,7 +23,7 @@ bridge.mqtt.aws.bridge_mode = true
 bridge.mqtt.aws.client_id = bridge_aws
 
 ## mqtt 客户端的 clean_start 字段
-## 注: 有些 MQTT Broker 需要将 clean_start 值设成 `true`
+## 注：有些 MQTT Broker 需要将 clean_start 值设成 `true`
 bridge.mqtt.aws.clean_start = true
 
 ## mqtt 客户端的 username 字段
@@ -84,12 +84,12 @@ bridge.mqtt.aws.subscription.2.qos = 1
 
 ## MQTT 桥接转发和订阅主题说明
 
-挂载点 Mountpoint: mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
-sensor1/hello 的消息, 到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
+挂载点 Mountpoint：mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
+sensor1/hello 的消息，到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
 
-转发主题 Forwards: 转发到本地 EMQX 指定 forwards 主题上的消息都会被转发到远程 MQTT Broker 上。
+转发主题 Forwards：转发到本地 EMQX 指定 forwards 主题上的消息都会被转发到远程 MQTT Broker 上。
 
-订阅主题 Subscription: 本地 EMQX 通过订阅远程 MQTT Broker 的主题来将远程 MQTT Broker
+订阅主题 Subscription：本地 EMQX 通过订阅远程 MQTT Broker 的主题来将远程 MQTT Broker
 上的消息同步到本地。
 
 ## 启用 bridge_mqtt 桥接插件
@@ -183,7 +183,7 @@ EMQX 桥接转发 MQTT 消息到远程 EMQX:
 
 ![image](./assets/bridge_rpc.png)
 
-rpc bridge 桥接插件配置文件: etc/plugins/emqx_bridge_mqtt.conf
+rpc bridge 桥接插件配置文件：`etc/plugins/emqx_bridge_mqtt.conf`
 
 ## 配置 RPC 桥接的 Broker 地址
 
@@ -203,10 +203,10 @@ bridge.mqtt.emqx.forwards = topic1/#,topic2/#
 
 ## MQTT 桥接转发和订阅主题说明
 
-挂载点 Mountpoint: mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
-sensor1/hello 的消息, 到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
+挂载点 Mountpoint：mountpoint 用于在转发消息时加上主题前缀，该配置选项须配合 forwards 使用，转发主题为
+sensor1/hello 的消息，到达远程节点时主题为 bridge/aws/emqx1@192.168.1.1/sensor1/hello。
 
-转发主题 Forwards: 转发到本地 EMQX 指定 forwards 主题上的消息都会被转发到远程 MQTT Broker 上。
+转发主题 Forwards：转发到本地 EMQX 指定 forwards 主题上的消息都会被转发到远程 MQTT Broker 上。
 
 ## 桥接 CLI 命令
 
@@ -238,13 +238,13 @@ bridge.kafka.produce = sync
 bridge.kafka.produce.sync_timeout = 3S
 
 ## 指定 replayq 在磁盘上存储消息的基本目录。
-## 如果该配置项缺失或者设置为 undefined, replayq 将以使用内存的
+## 如果该配置项缺失或者设置为 undefined，replayq 将以使用内存的
 ## 的方式工作。也就是说，消息不在磁盘上排队 -- 在这种情况下，send
 ## 和 send_async API 的调用者负责处理在应用程序、网络或 kafka
 ## 干扰时可能丢失的消息。
 ## bridge.kafka.replayq_dir = /tmp/emqx_bridge_kafka/
 
-## default=10MB, replayq 分段大小。
+## default=10MB，replayq 分段大小。
 ## bridge.kafka.producer.replayq_seg_bytes = 10MB
 
 ## producer required_acks. 可选值: all_isr | leader_only | none.
@@ -266,7 +266,7 @@ bridge.kafka.producer.max_send_ahead = 0
 ## 默认为无压缩
 ## bridge.kafka.producer.compression = no_compression
 
-## 默认值为 base64, 可选值: base64 | plain
+## 默认值为 base64，可选值: base64 | plain
 ## bridge.kafka.encode_payload_type = base64
 
 ## bridge.kafka.sock.buffer = 32KB

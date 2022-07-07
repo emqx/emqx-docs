@@ -2,9 +2,9 @@
 
 EMQX 支持两种桥接方式:
 
-- RPC 桥接: 使用 Erlang RPC 协议的桥接方式，只能在 EMQX 间使用
+- RPC 桥接：使用 Erlang RPC 协议的桥接方式，只能在 EMQX 间使用
 
-- MQTT 桥接: 使用 MQTT 协议、作为客户端连接到远程 Broker 的桥接方式，可桥接到其他 MQTT Broker 以及 EMQX Broker
+- MQTT 桥接：使用 MQTT 协议、作为客户端连接到远程 Broker 的桥接方式，可桥接到其他 MQTT Broker 以及 EMQX Broker
 
 其概念如下图所示:
 

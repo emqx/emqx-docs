@@ -130,11 +130,11 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 共需准备三台 8C16G 服务器，一台为 EMQX Broker，两台为 客户端压力机。其中：
 
-- **系统**: `CentOS Linux release 7.7.1908 (Core)` 
+- **系统：**`CentOS Linux release 7.7.1908 (Core)` 
 
-- **CPU:**  `Intel Xeon Processor (Skylake)` 主频: `2693.670 MHZ`
+- **CPU：**`Intel Xeon Processor (Skylake)` 主频: `2693.670 MHZ`
 
-- **服务端：** `emqx-centos7-v4.0.2.zip`
+- **服务端：**`emqx-centos7-v4.0.2.zip`
 
 - **压力机：**`emqtt-bench v0.3.1`
   - 每台压力机分别配置 10 张网卡，用于连接测试中建立大量的 MQTT 客户端连接

@@ -123,9 +123,9 @@ rule_engine {
 
 该配置创建了一个名为 "my_republish_rule" 的规则。这个规则从主题为 `t/a` 的消息内容中筛选出 `x` 字段，并赋值给 `y`。
 
-其中 `actions` 参数定义了规则执行成功时会触发的动作: 重新发布（republish）。
+其中 `actions` 参数定义了规则执行成功时会触发的动作：重新发布（republish）。
 
-现在如果发送一条内容为 `{"x": 1}`，QoS 为 0 的消息（JSON 格式）到主题 `t/a`, 就会匹配到该规则。
+现在如果发送一条内容为 `{"x": 1}`，QoS 为 0 的消息（JSON 格式）到主题 `t/a`，就会匹配到该规则。
 规则首先执行 SQL 语句，从消息上下文中选取 `qos` 字段，并提取 `payload` 里的 `x` 字段赋值给变量 `y`，最后触发 `republish` 动作发送一条消息到主题 `t/b`，消息内容为字符串 `y: 1`（因为 `payload.x = 1`），QoS 为 0。
 
 ## 配置处理事件的规则
@@ -193,4 +193,4 @@ bridges.mqtt.my_mqtt_source {
 
 该规则在最后调用了 `console` 动作，这是一个调试动作，会把 SQL 语句筛选出的所有字段打印到 emqx 控制台里。
 因为这里 SQL 语句使用 `SELECT *` 输出了所有可用的字段，所以他会打印从远程 MQTT Broker 收到的消息相关的
-所有字段都打印出来，比如 payload, qos, topic 等等。
+所有字段都打印出来，比如 payload、qos、topic 等等。

@@ -111,4 +111,4 @@ ulimit -n 100000
 ```
 ### emqtt_bench
 
-并发连接测试工具: <http://github.com/emqx/emqtt_bench>
+并发连接测试工具：<http://github.com/emqx/emqtt_bench>
