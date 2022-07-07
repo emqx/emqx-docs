@@ -67,6 +67,10 @@ This feature is mainly used to meet the relatively complex authentication requir
 
 Also, currently only the MQTT listener supports the use of multiple authenticators, and the gateway listener only supports the use of a single authenticator.
 
+## Super User
+
+Usually, authentication only verifies whether the client's identity is legal, and whether the client has the right to publish and subscribe to certain topics needs to be judged by the authorization system. But EMQX also allows users to set super user permissions for some special clients, thus skipping all subsequent permission checks. Superuser determination occurs during the authentication phase, as indicated by the `is_superuser` field in the result of a database query, HTTP response, or JWT claims.
+
 ## How to use
 
 EMQX provides 3 ways to use authentication, namely: Configuration file, HTTP API and Dashboard.
