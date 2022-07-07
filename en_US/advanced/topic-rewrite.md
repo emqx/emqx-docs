@@ -47,6 +47,8 @@ The target expression can use variables in the format of `$N` to match the eleme
 The value of `$N` is the Nth element extracted from the regular expression,
 for example, `$1` is the first element extracted by the regular expression.
 
+And the target expression alose support use `${clientid}` to represent the `client ID` and `${username}` to represent the client `username`.
+
 It should be noted that EMQX reads the rewrite rules in order of the configuration file.
 When a topic can match the topic filters of multiple topic rewrite rules at the same time,
 EMQX uses the first matching rule to rewrite the topic.
