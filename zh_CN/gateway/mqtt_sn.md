@@ -7,10 +7,10 @@ MQTT-SN 的信令和 MQTT 大部分都相同，比如都有 Will, 都有 Connect
 MQTT-SN 最大的不同是，Topic 使用 TopicId 来代替，而 TopicId 是一个16比特的数字。每一个数字对应一个
 Topic, 设备和云端需要使用 REGISTER 命令映射 TopicId 和 Topic 的对应关系。
 
-MQTT-SN 可以随时更改 Will 的内容, 甚至可以取消. 而 MQTT 只允许在 CONNECT 时设定 Will 的内容,
+MQTT-SN 可以随时更改 Will 的内容, 甚至可以取消。而 MQTT 只允许在 CONNECT 时设定 Will 的内容,
 而且不允许更改.
 
-MQTT-SN 的网络中有网关这种设备，它负责把 MQTT-SN 转换成 MQTT，和云端的 MQTT Broker 通信. MQTT-SN
+MQTT-SN 的网络中有网关这种设备，它负责把 MQTT-SN 转换成 MQTT，和云端的 MQTT Broker 通信。MQTT-SN
 的协议支持自动发现网关的功能。
 
 MQTT-SN 还支持设备的睡眠功能，如果设备进入睡眠状态，无法接收 UDP 数据，网关将把下行的 PUBLISH

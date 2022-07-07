@@ -5,9 +5,9 @@
 ::: tip
 如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需打开 Proxy Protocol 配置，配置项：[EMQX 监听器 proxy_protocol](../../admin/cfg.md)
 
-`Proxy Protcol` 参考: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
+`Proxy Protcol` 参考：[https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)。
 
-Nginx 使用 Proxy Prorcol 参考: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
+Nginx 使用 Proxy Prorcol 参考：[https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
 
 :::
 
@@ -87,7 +87,7 @@ EMQX 节点集群使用的 TCP 端口:
 
 1. 创建 VPC 网络。
 
-2. VPC 网络内创建 EMQX 集群 ' 私有网络 '，例如: 192.168.0.0/24
+2. VPC 网络内创建 EMQX 集群 ' 私有网络 '，例如：192.168.0.0/24
 
 3. 私有网络内创建两台 EMQX 主机，例如:
 
@@ -117,7 +117,7 @@ EMQX 节点集群使用的 TCP 端口:
 
 1. 创建 VPC 网络。
 
-2. VPC 网络内创建 EMQX 集群 ' 私有网络 '，例如: 192.168.0.0/24
+2. VPC 网络内创建 EMQX 集群 ' 私有网络 '，例如：192.168.0.0/24
 
 3. 私有网络内创建两台 EMQX 主机，指定上面创建的 VPC 网络，例如:
 
@@ -127,7 +127,7 @@ EMQX 节点集群使用的 TCP 端口:
 | emqx2 | 192.168.0.3 |
 
 
-4. 在安全组中，开放 MQTT 服务的 TCP 端口，比如 1883, 8883。
+4. 在安全组中，开放 MQTT 服务的 TCP 端口，比如 1883、8883。
 
 5. 安装并集群 EMQX 主机，具体配置请参考安装集群章节。
 
@@ -151,7 +151,7 @@ EMQX 节点集群使用的 TCP 端口:
 EMQX 集群直接挂 DNS 轮询，设备通过域名或者 IP 地址列表访问:
 
 1. 部署 EMQX 集群
-2. EMQX 节点防火墙开启外部 MQTT 访问端口，例如 1883, 8883
+2. EMQX 节点防火墙开启外部 MQTT 访问端口，例如 1883、8883
 3. 设备通过 IP 地址列表或域名访问 EMQX 集群
 
 ::: tip

@@ -83,7 +83,7 @@ EMQX 默认以节点名称 `emqx@127.0.0.1` 启动，该名称是内置数据库
       sudo yum remove emqx
       ```
 
-## tgz 压缩包安装 (Linux, macOS, Windows)
+## tgz 压缩包安装（Linux、macOS、Windows）
 
 ::: warning
 tar.gz 包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用。

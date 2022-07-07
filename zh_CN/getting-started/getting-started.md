@@ -21,7 +21,7 @@ EMQX 有如下版本：
 大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
 
 - 基于 APL 2.0 开放源码协议
-- 完整 MQTT 3.1.0, 3.1.1 和 5.0 规范，支持 MQTT-SN
+- 完整 MQTT 3.1.0、3.1.1 和 5.0 规范，支持 MQTT-SN
 - Masterless 高可用集群架构
 - 高并发、低时延、高性能
 - 可扩展的网关和插件体系
@@ -96,7 +96,7 @@ EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具�
 
 ### 在虚拟机或物理机中运行
 
-EMQX 可以直接部署在物理服务器或者虚拟机上。最小仅需 2 核 4G 的机器即可运行 EMQX 程序。可支持 CentOS, Debian, Ubuntu, MacOS 等操作系统。
+EMQX 可以直接部署在物理服务器或者虚拟机上。最小仅需 2 核 4G 的机器即可运行 EMQX 程序。可支持 CentOS、Debian、Ubuntu、macOS 等操作系统。
 
 - [RedHat、CentOS、 RockyLinux、AmazonLinux 系统安装](../deploy/install.md#centos)
 - [Ubuntu、Debian 安装](../deploy/install.md#ubuntu、debian)
@@ -162,7 +162,7 @@ WebSocket 客户端页面为您提供了一个简易但有效的 MQTT 测试工�
 
 ### MQTT X 桌面客户端工具
 
-MQTTX 是一款优雅的跨平台 MQTT 5.0 开源桌面客户端工具，支持在 macOS, Linux 和 Windows 上运行。
+MQTTX 是一款优雅的跨平台 MQTT 5.0 开源桌面客户端工具，支持在 macOS、Linux 和 Windows 上运行。
 
 MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 MQTT/MQTT over Websocket 接入以及单/双向 SSL 认证，同时支持 Payload 格式转换、自定义脚本模拟测试数据、 `$SYS` 系统主题自动订阅查看流量统计等诸多实用功能。
 
@@ -228,7 +228,7 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 
 ### 管理接口
 
-通过 Web 页面与 CLI, REST API 管理集群。
+通过 Web 页面与 CLI、REST API 管理集群。
 
 - [Dashboard](./dashboard.md)：Dashboard 使用手册。
 - [CLI](../admin/cli.md)：通过 CLI 管理集群。

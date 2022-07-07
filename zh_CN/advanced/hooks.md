@@ -143,8 +143,8 @@ EMQX 提供了 API 进行钩子的挂载与取消挂载的操作。
 **挂载**：
 
 ```erlang
-%% Name: 钩子的名称（挂载点）如：'client.authenticate'
-%% {Module, Function, Args}: 回调函数的模块、方法、和附加参数
+%% Name：钩子的名称（挂载点）如：'client.authenticate'
+%% {Module, Function, Args}：回调函数的模块、方法、和附加参数
 %% Priority：优先级，整数; 不提供则默认为 0
 emqx:hook(Name, {Module, Function, Args}, Priority).
 ```
@@ -154,8 +154,8 @@ emqx:hook(Name, {Module, Function, Args}, Priority).
 **取消挂载**：
 
 ```erlang
-%% Name: 钩子的名称（挂载点）如：'client.authenticate'
-%% {Module, Function}: 回调函数的模块、方法
+%% Name：钩子的名称（挂载点）如：'client.authenticate'
+%% {Module, Function}：回调函数的模块、方法
 emqx:unhook(Name, {Module, Function}).
 ```
 
@@ -170,11 +170,11 @@ emqx:unhook(Name, {Module, Function}).
 | 名称                 | 入参                                                         | 返回                |
 | -------------------- | ------------------------------------------------------------ | ------------------- |
 | client.connect       | `ConnInfo`：客户端连接层参数<br>`Props`：MQTT v5.0  连接报文的 Properties 属性 | 新的 `Props`        |
-| client.connack       | `ConnInfo`：客户端连接层参数 <br>`Rc`：返回码<br>`Props`: MQTT v5.0  连接应答报文的 Properties 属性 | 新的 `Props`        |
-| client.connected     | `ClientInfo`:  客户端信息参数<br>`ConnInfo`： 客户端连接层参数 | -                   |
+| client.connack       | `ConnInfo`：客户端连接层参数 <br>`Rc`：返回码<br>`Props`：MQTT v5.0  连接应答报文的 Properties 属性 | 新的 `Props`        |
+| client.connected     | `ClientInfo`：客户端信息参数<br>`ConnInfo`： 客户端连接层参数 | -                   |
 | client.disconnected  | `ClientInfo`：客户端信息参数<br>`ConnInfo`：客户端连接层参数<br>`ReasonCode`：错误码 | -                   |
 | client.authenticate  | `ClientInfo`：客户端信息参数<br>`AuthResult`：认证结果       | 新的 `AuthResult`   |
-| client.authorize     | `ClientInfo`：客户端信息参数<br>`Topic`：发布/订阅的主题<br>`PubSub`:  发布或订阅<br>`AuthzResult`：授权结果 | 新的 `AuthzResult`    |
+| client.authorize     | `ClientInfo`：客户端信息参数<br>`Topic`：发布/订阅的主题<br>`PubSub`：发布或订阅<br>`AuthzResult`：授权结果 | 新的 `AuthzResult`    |
 | client.subscribe     | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 订阅报文的 Properties 参数<br>`TopicFilters`：需订阅的主题列表 | 新的 `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br/>`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |
 | session.created      | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |

@@ -12,7 +12,7 @@ Plane) 与监控管理平面 (Monitor/Control Plane):
 多核服务器和现代操作系统内核层面，可以很轻松支持 100 万 TCP 连接，核心问题是应用层面如何处理业务瓶颈。
 
 EMQX 在业务和应用层面，解决了单节点承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang
-虚拟机参数参见: <http://docs.emqtt.cn/zh_CN/latest/tune.html>。
+虚拟机参数参见：<http://docs.emqtt.cn/zh_CN/latest/tune.html>。
 
 ### 全异步架构
 
@@ -76,7 +76,7 @@ IP 地址或 MPLS 标签路由报文，EMQX 按主题树 (Topic Trie) 发布订�
 
 1. 基于 [eSockd](https://github.com/emqx/esockd) 框架的异步 TCP 服务端
 2. TCP Acceptor 池与异步 TCP Accept
-3. TCP/SSL, WebSocket/SSL 连接支持
+3. TCP/SSL、WebSocket/SSL 连接支持
 4. 最大并发连接数限制
 5. 基于 IP 地址 (CIDR) 访问控制
 6. 基于 Leaky Bucket 的流控
@@ -104,10 +104,10 @@ MQTT 协议定义了一个 16bits 的报文 ID (PacketId)，用于客户端到�
 
 ![image](../assets/design_5.png)
 
-1. 64bits 时间戳: erlang:system_time if Erlang \>= R18, otherwise os:timestamp
-2. Erlang 节点 ID: 编码为2字节
-3. Erlang 进程 PID: 编码为4字节
-4. 进程内部序列号: 2字节的进程内部序列号
+1. 64bits 时间戳：erlang:system_time if Erlang \>= R18, otherwise os:timestamp
+2. Erlang 节点 ID：编码为 2 字节
+3. Erlang 进程 PID：编码为 4 字节
+4. 进程内部序列号：2 字节的进程内部序列号
 
 端到端消息发布订阅 (Pub/Sub) 过程中，发布报文 ID 与报文 QoS 终结在会话层，由唯一 ID 标识的 MQTT 消息对象在节点间路由:
 
@@ -155,7 +155,7 @@ MQTT 协议定义了一个 16bits 的报文 ID (PacketId)，用于客户端到�
 
 ## Erlang 设计相关
 
-1. 使用 Pool, Pool, Pool... 推荐 GProc 库: <https://github.com/uwiger/gproc>
+1. 使用 Pool, Pool, Pool... 推荐 GProc 库：<https://github.com/uwiger/gproc>
 2. 异步，异步，异步消息...连接层到路由层异步消息，同步请求用于负载保护
 3. 避免进程 Mailbox 累积消息
 4. 消息流经的 Socket 连接、会话进程必须 Hibernate，主动回收 binary 句柄

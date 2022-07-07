@@ -9,7 +9,7 @@ EMQX 节点由其节点名所标识。
 
 在本文档中，我们使用两个节点来演示手动集群步骤。
 
-假设要在两台服务器 s1.emqx.io, s2.emqx.io 上部署 EMQX 集群:
+假设要在两台服务器 s1.emqx.io、s2.emqx.io 上部署 EMQX 集群:
 
 | 节点名          | 主机名 (FQDN) |
 |-----------------|---------------|
@@ -23,7 +23,7 @@ EMQX 节点由其节点名所标识。
 | emqx@192.168.0.10 | 192.168.0.10 |
 | emqx@192.168.0.20 | 192.168.0.20 |
 
-**注意：** 节点名格式为 <Name@Host>, Host 必须是 IP 地址或 FQDN (主机名。域名)
+**注意：** 节点名格式为 <Name@Host>，Host 必须是 IP 地址或 FQDN (主机名。域名)
 
 ::: tip Tip
 EMQX 节点名是不可变的，因为它们被内嵌到数据库
@@ -103,8 +103,8 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 节点退出集群，两种方式:
 
-1. leave: 让本节点退出集群
-2. force-leave: 在集群内移除节点
+1. leave：让本节点退出集群
+2. force-leave：在集群内移除节点
 
 让 `emqx@s2.emqx.io` 主动退出集群:
 

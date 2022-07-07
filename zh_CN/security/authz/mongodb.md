@@ -7,7 +7,7 @@ EMQX 支持从 MongoDB 中读取于定义的一系列规则来对客户端的发
 MongoDB authorizer 可以将 ACL 规则存储到 MongoDB 中。
 管理员可以指定一个 collection 和 filter 模版来对客户端进行查找和匹配。
 
-每个 MongoDB 的记录应该包含 `permission`, `action`, 和 `topics` 这些字段。
+每个 MongoDB 的记录应该包含 `permission`、`action` 和 `topics` 这些字段。
 * `permission`： 可以是 `deny` 或 `allow`，用于指定授权的结果。
 * `action`： 可以是 `publish`， `subscribe`， 或 `all`，用于指定该规则适用于哪些客户端请求。
 * `topics`： 用于指定该规则适用的发布或订阅主题，或订阅的主题过滤器。比如是一个字符串数组，支持[占位符](./authz.md#主题占位符).

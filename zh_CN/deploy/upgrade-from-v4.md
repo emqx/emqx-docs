@@ -361,7 +361,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 规则引擎已更名为[数据集成](../data-integration/introduction.md)，包含规则与数据桥接功能。
 
-规则 SQL 完全兼容 4.x 的语法，但规则下的动作拆分为内置动作(republish, console)与数据桥接(WebHook, MQTT Sink, MQTT Source)，以便实现"动作"的复用。
+规则 SQL 完全兼容 4.x 的语法，但规则下的动作拆分为内置动作(republish、console)与数据桥接(WebHook、MQTT Sink、MQTT Source)，以便实现"动作"的复用。
 
 ## WebHook
 
@@ -417,7 +417,7 @@ MQTT 桥接插件(emqx_bridge_mqtt) 已被移除，请使用数据集成中的 M
 
 ## 网关/多协议接入
 
-其他协议(LwM2M,CoAP,STOMP,MQTT-SN)的客户端将不再映射为 MQTT 客户端，无法通过 Dashboard 客户端页面和 `GET /clients` API 获取。
+其他协议（LwM2M、CoAP、STOMP、MQTT-SN）的客户端将不再映射为 MQTT 客户端，无法通过 Dashboard 客户端页面和 `GET /clients` API 获取。
 用户可以前往网关页面详情页面或通过 `GET /gateway/{name}/clients` API 获取。
 
 ## 遥测
