@@ -28,6 +28,8 @@ Each rewrite rule consists of three parts: subject filter, regular expression, a
 
 Variables in the format of `$N` can be used in the target expression to match the elements extracted from the regular expression. The value of `$N` is the Nth element extracted from the regular expression. For example, `$1` is the regular expression. The first element extracted by the expression.
 
+And the target expression alose support use `$c` to represent the `client ID` and `$u` to represent the client `username`.
+
 It should be noted that EMQX uses reverse order to read the rewrite rules in the configuration file. When a topic can match the topic filter of multiple topic rewrite rules at the same time, EMQX will only use the first rule it matches. Rewrite. If the regular expression in this rule does not match the subject of the MQTT message, the rewriting will fail, and no other rules will be attempted for rewriting. Therefore, users need to carefully design MQTT message topics and topic rewriting rules when using them.
 
 ## topic rewrite example
