@@ -78,7 +78,7 @@
         - security/authn/scram
         - security/authn/user_management
     - title_en: Authorization
-      title_cn: 鉴权
+      title_cn: 授权
       children:
         - security/authz/authz
         - security/authz/file

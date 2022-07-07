@@ -174,7 +174,7 @@ emqx:unhook(Name, {Module, Function}).
 | client.connected     | `ClientInfo`：客户端信息参数<br>`ConnInfo`： 客户端连接层参数 | -                   |
 | client.disconnected  | `ClientInfo`：客户端信息参数<br>`ConnInfo`：客户端连接层参数<br>`ReasonCode`：错误码 | -                   |
 | client.authenticate  | `ClientInfo`：客户端信息参数<br>`AuthResult`：认证结果       | 新的 `AuthResult`   |
-| client.authorize     | `ClientInfo`：客户端信息参数<br>`Topic`：发布/订阅的主题<br>`PubSub`：发布或订阅<br>`AuthzResult`：鉴权结果 | 新的 `AuthzResult`    |
+| client.authorize     | `ClientInfo`：客户端信息参数<br>`Topic`：发布/订阅的主题<br>`PubSub`：发布或订阅<br>`AuthzResult`：授权结果 | 新的 `AuthzResult`    |
 | client.subscribe     | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 订阅报文的 Properties 参数<br>`TopicFilters`：需订阅的主题列表 | 新的 `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：客户端信息参数<br/>`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br/>`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |
 | session.created      | `ClientInfo`：客户端信息参数<br/>`SessInfo`：会话信息        | -                   |
