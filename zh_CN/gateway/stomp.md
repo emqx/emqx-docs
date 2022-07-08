@@ -9,7 +9,7 @@ Stomp 网关基于 [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 Stomp 网关。
 
 也可以通过 HTTP-API 来启用，例如：
-```
+```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
   -H 'Content-Type: application/json' \
@@ -46,22 +46,22 @@ gateway.stomp {
 ```
 
 ::: tip
-注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-Stomp 网关支持 TCP, SSL 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](#todo)
+Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../admin/cfg.md)
 
 
 ## 认证
 
 由于 Stomp 协议的连接报文已定义了用户名和密码的概念，所以它支持以下多种认证器类型，例如：
-- [内置数据库认证](#todo)
-- [MySQL 认证](#todo)
-- [MongoDB 认证](#todo)
-- [PostgreSQL 认证](#todo)
-- [Redis 认证](#todo)
-- [HTTP Server 认证](#todo)
-- [JWT 认证](#todo)
+- [内置数据库认证](../security/authn/mnesia.md)
+- [MySQL 认证](../security/authn/mysql.md)
+- [MongoDB 认证](../security/authn/mongo.md)
+- [PostgreSQL 认证](../security/authn/postgresql.md)
+- [Redis 认证](../security/authn/redis.md)
+- [HTTP Server 认证](../security/authn/http.md)
+- [JWT 认证](../security/authn/jwt.md)
 
 Stomp 网关使用 STOMP 协议的 CONNECT 或 STOMP 报文中的信息来生成客户端的认证信息。默认情况下：
 
@@ -106,7 +106,7 @@ gateway.stomp {
 
 与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示允许所有的 Stomp 客户端都具有接入的权限。
 
-其他类型的认证器的配置格式参考：[安全- 认证器](#todo)
+其他类型的认证器的配置格式参考：[安全- 认证器](../security/authn/authn.md)
 
 ## 发布订阅
 
@@ -116,15 +116,14 @@ Stomp 协议完全兼容发布订阅的消息模式，Stomp 网关使用：
 - Stomp 协议的 SUBSCRIBE 报文作为订阅请求。其主题为 SUBSCRIBE 报文中的 `destination` 字段，QoS 固定为 0。且支持 MQTT 协议中定义的通配符。
 - Stomp 协议的 UNSUBSCRIBE 报文作为取消订阅请求。其主题为 UNSUBSCRIBE 报文中的`destination` 字段。
 
-网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](#todo) 中管理。
+网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../security/authz/authz.md) 中管理。
 
 ## 用户层接口
 
-<!-- 是否可以列举该网关特有的配置格式 -->
-- 详细配置参考：[网关配置 - Stomp 网关](#todo)
-- 详细 HTTP API 接口参考：[HTTP API - 网关](#todo)
+- 详细配置说明参考：[网关配置 - Stomp 网关](../admin/cfg.md)
+- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 ## 客户端库
 
-- [Erlang: Stomp](#todo)
-- ...
+- [erlang-stomp-client](https://github.com/KodiEhf/erlang-stomp-client)
+- [stomp.py](https://github.com/jasonrbriggs/stomp.py)

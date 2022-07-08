@@ -145,7 +145,7 @@
 - title_en: Gateway
   title_cn: 网关
   children:
-    - gateway/intro
+    - gateway/gateway
     - gateway/lwm2m
     - gateway/mqttsn
     - gateway/coap

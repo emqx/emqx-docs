@@ -51,74 +51,89 @@ gateway.mqttsn {
 }
 ```
 
+::: tip
+注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+:::
+
+Stomp 网关支持 TCP, SSL 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../admin/cfg.md)
+
 ## 认证
 
-由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](#todo) 
+由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](../security/authn/http.md)
 
 其客户端信息生成规则如下：
 - Client ID：为 CONNECT 报文中的 Client ID 字段。
 - Username：默认为空
 - Password：默认为空
 
-## 协议介绍
+例如，通过 HTTP-API 为 MQTT-SN 网关创建一个 HTTP 认证：
+```bash
+curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
+  -u admin:public \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "method": "post",
+  "url": "http://127.0.0.1:8080",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "clientid": "${clientid}"
+  },
+  "pool_size": 8,
+  "connect_timeout": "5s",
+  "request_timeout": "5s",
+  "enable_pipelining": 100,
+  "ssl": {
+    "enable": false,
+    "verify": "verify_none"
+  },
+  "backend": "http",
+  "mechanism": "password_based",
+  "enable": true
+}'
+```
 
-MQTT-SN 的信令和 MQTT 大部分都相同，比如都有 Will, 都有 Connect/Subscribe/Publish 命令.
+或通过配置文件，为 MQTT-SN 网关添加一个 HTTP 认证：
 
-MQTT-SN 最大的不同是，Topic 使用 TopicId 来代替，而 TopicId 是一个16比特的数字。每一个数字对应一个
-Topic, 设备和云端需要使用 REGISTER 命令映射 TopicId 和 Topic 的对应关系。
+```hocon
+gateway.mqttsn {
+  authentication {
+    enable = true
+    backend = "http"
+    mechanism = "password_based"
+    method = "post"
+    connect_timeout = "5s"
+    enable_pipelining = 100
+    url = "http://127.0.0.1:8080"
+    headers {
+      "content-type" = "application/json"
+    }
+    body {
+      clientid = "${clientid}"
+    }
+    pool_size = 8
+    request_timeout = "5s"
+    ssl.enable = false
+  }
+}
+```
 
-MQTT-SN 可以随时更改 Will 的内容, 甚至可以取消. 而 MQTT 只允许在 CONNECT 时设定 Will 的内容,
-而且不允许更改.
+## 发布订阅
 
-MQTT-SN 的网络中有网关这种设备，它负责把 MQTT-SN 转换成 MQTT，和云端的 MQTT Broker 通信. MQTT-SN
-的协议支持自动发现网关的功能。
+MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行额外的定义，例如：
+- MQTT-SN 协议的 PUBLISH 报文，作为消息发布，其主题和 QoS 都由该报文指定。
+- MQTT-SN 协议的 SUBSCRIBE 报文，作为订阅操作，其主题和 QoS 都由该报文指定。
+- MQTT-SN 协议的 UNSUBSCRIBE 报文，作为取消订阅操作，其主题由该报文指定。
 
-MQTT-SN 还支持设备的睡眠功能，如果设备进入睡眠状态，无法接收 UDP 数据，网关将把下行的 PUBLISH
-消息缓存起来，直到设备苏醒后再传送。
+网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../security/authz/authz.md) 中管理。
 
-EMQX-SN 是 EMQX 的一个网关接入模块，实现了 MQTT-SN 的大部分功能，它相当于一个在云端的 MQTT-SN 网关，直接和 EMQ
-X Broker 相连。
+## 用户层接口
 
-## 创建模块
+- 详细配置说明参考：[网关配置 - MQTT-SN 网关](../admin/cfg.md)
+- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
-打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
+## 客户端库
 
-![image-20200927213049265](./assets/modules.png)
-
-选择 MQTT-SN 接入网关模块:
-
-![image-20200927213049265](./assets/proto_mqtt_sn1.png)
-
-配置相关基础参数:
-
-![image-20200927213049265](./assets/proto_mqtt_sn2.png)
-
-添加监听端口:
-
-![image-20200927213049265](./assets/proto_mqtt_sn3.png)
-
-配置监听参数:
-
-![image-20200927213049265](./assets/proto_mqtt_sn4.png)
-
-点击确认到配置参数页面:
-
-![image-20200927213049265](./assets/proto_mqtt_sn5.png)
-
-点击添加后，模块添加完成:
-![image-20200927213049265](./assets/proto_mqtt_sn6.png)
-
-### 配置参数
-
-| 配置项                      |       说明                           |
-| --------------------------- | ---------------------------------- |
-| 用户名            | 可选的参数，指定所有 MQTT-SN 连接的用户名，用于 EMQX 鉴权模块 |
-| 密码            | 可选的参数，和 username 一起使用于 EMQX 鉴权模块           |
-
-
-### MQTT-SN 客户端库
-
-1.  <https://github.com/eclipse/paho.mqtt-sn.embedded-c/>
-2.  <https://github.com/ty4tw/MQTT-SN>
-3.  <https://github.com/njh/mqtt-sn-tools>
-4.  <https://github.com/arobenko/mqtt-sn>
+- [paho.mqtt-sn.embedded-c](https://github.com/eclipse/paho.mqtt-sn.embedded-c)
+- [mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)
