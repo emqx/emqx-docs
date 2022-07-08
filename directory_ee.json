@@ -82,6 +82,10 @@
           "path": "advanced/shared-subscriptions"
         },
         {
+          "title": "排它订阅",
+          "path": "advanced/exclusive-subscriptions"
+        },
+        {
           "title": "$SYS 系统主题",
           "path": "advanced/system-topic"
         },
@@ -867,6 +871,10 @@
         {
           "title": "Shared subscription",
           "path": "advanced/shared-subscriptions"
+        },
+        {
+          "title": "Exclusive subscriptions",
+          "path": "advanced/exclusive-subscriptions"
         },
         {
           "title": "$SYS - System Topic",

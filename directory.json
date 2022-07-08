@@ -60,6 +60,10 @@
           "title": "共享订阅",
           "path": "advanced/shared-subscriptions"
         },
+	{
+          "title": "排它订阅",
+          "path": "advanced/exclusive-subscriptions"
+        },
         {
           "title": "延迟发布",
           "path": "advanced/delay-publish"
@@ -562,6 +566,10 @@
         {
           "title": "Shared subscription",
           "path": "advanced/shared-subscriptions"
+        },
+	{
+          "title": "Exclusive subscriptions",
+          "path": "advanced/exclusive-subscriptions"
         },
         {
           "title": "Delay publish",
