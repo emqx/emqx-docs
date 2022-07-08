@@ -220,13 +220,8 @@ bridge.kafka.produce = sync
 
 If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
 
-<<<<<<< HEAD
 - The message will be cached in memory before EMQX 2.4.3 version, if the memory is exhausted, then the EMQX server will be down. 
 - The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full. 
-=======
-- The message will be cached in memory before EMQX 2.4.3 version, if the memeory is exhausted, then the EMQX server will be down.
-- The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full.
->>>>>>> origin/release-4.3
 
 So we suggest you to closely monitor Kafka server, and recover Kafka service as soon as possible when it has any questions.
 
