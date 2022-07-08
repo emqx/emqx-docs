@@ -12,6 +12,13 @@ When a client **A** subscribes to `$exclusive/t/1`, other clients will fail to s
 
 **Note**: Exclusive subscriptions must be prefixed with `$exclusive/`, in the above example, other clients can still successfully subscribe via `t/1`.
 
+## Subscription error code
+
+| Code            | Reason        | 
+| --------------- | ----------- | 
+| 0x8F     | use `$exclusive/` without exclusive subscription enable  | 
+| 0x97 | A client has already subscribed to this topic  |
+
 
 ## Configuration settings
 
