@@ -11,29 +11,50 @@ on:
       - e*
 
 jobs:
-  deploy:
+  prepare:
     runs-on: ubuntu-20.04
-    if: github.repository_owner == 'emqx'
+    outputs:
+      versions: ${{ steps.set_versions.outputs.versions}}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: set_versions
+        id: set_versions
+        run: |
+          current_branch=$(echo ${{ github.ref }} | sed -r  "s ^refs/heads/|^refs/tags/(.*) \1 g")
+          if [[ $current_branch == v* ]];
+          then
+            tag_list=$(git tag | egrep "^v.*$" | xargs echo -n)
+          else
+            tag_list=$(git tag | egrep "^e.*$" | xargs echo -n)
+          fi
+          version_list=$(python3 .github/scripts/build_versions.py $current_branch $tag_list)
+          echo "::set-output name=versions::$version_list"
+
+  deploy:
+    needs: prepare
+    strategy:
+      matrix: ${{fromJSON(needs.prepare.outputs.versions)}}
+    runs-on: ubuntu-20.04
     steps:
     - name: clone docs
       uses: actions/checkout@v2
       with:
+        ref: ${{ matrix.tag }}
         fetch-depth: 0
         path: docs-files
 
     - name: set env
       run: |
-         BRANCH=$(echo ${{ github.ref }} | sed -r  "s ^refs/heads/|^refs/tags/(.*) \1 g")
-         echo "DOCS_BRANCH=$BRANCH" >> $GITHUB_ENV
-         version=${BRANCH%%-*}
-         if [[ $BRANCH == v* ]];
-         then
-           echo "DOCS_TYPE=broker" >> $GITHUB_ENV
-         else
-           version=${version/e/v}
-           echo "DOCS_TYPE=enterprise" >> $GITHUB_ENV
-         fi
-         echo "VERSION=$version" >> $GITHUB_ENV
+        real_version=$(echo ${{ matrix.tag }} | sed -r "s/^(.*)-.*$/\1/")
+        real_version=${real_version/e/v}
+        echo "DOCS_TYPE=${{ matrix.docs_type }}" >> $GITHUB_ENV
+        echo "DOCS_BRANCH=${{ matrix.tag }}" >> $GITHUB_ENV
+        echo "VERSION=${{ matrix.version }}" >> $GITHUB_ENV
+        echo "REAL_VERSION=$real_version" >> $GITHUB_ENV
+        echo "CANONICAL_VERSION=${{ matrix.canonical_version }}" >> $GITHUB_ENV
+        echo "LATEST_VERSION=${{ matrix.latest_version }}" >> $GITHUB_ENV
 
     - name: clone ce frontend
       uses: actions/checkout@v2
@@ -105,8 +126,6 @@ jobs:
         fi
         python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
-        latest_version=$(cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json  | jq -r '.[0]')
-        echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
 
     - name: build docs
       run: |
