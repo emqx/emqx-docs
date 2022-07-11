@@ -47,6 +47,13 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/rocket-resource-0@2x.png)
 
+按照 RocketMQ ACL 的配置填写。
+ACL 信息请咨询服务提供商，本地或私有部署，可以在配置文件中查看，配置文件路径需要按照部署方式的不同改变前缀。
+
+```bash
+${rocket_path}/conf/plain_acl.yml
+```
+
 填写资源配置:
 
    填写真实的 RocketMQ 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
