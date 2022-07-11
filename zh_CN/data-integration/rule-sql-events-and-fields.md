@@ -341,7 +341,7 @@ FROM "$events/delivery_dropped"
 | clean_start     | MQTT clean_start                    |
 | expiry_interval | MQTT Session 过期时间               |
 | is_bridge       | 是否为 MQTT bridge 连接             |
-| connected_at    | 终端连接完成时间 (单位：秒)                |
+| connected_at    | 终端连接完成时间 (单位：毫秒)                |
 | conn_props      | CONNECT Properties (仅适用于 MQTT 5.0) |
 | timestamp       | 事件触发时间 (单位：毫秒)                   |
 | node            | 事件触发所在节点                    |
@@ -377,7 +377,7 @@ FROM
 | username        | 消息目的用户名                                               |
 | peername        | 终端的 IPAddress 和 Port                                     |
 | sockname        | emqx 监听的 IPAddress 和 Port                                |
-| disconnected_at | 终端连接断开时间 (单位：秒)                                         |
+| disconnected_at | 终端连接断开时间 (单位：毫秒)                                         |
 | disconn_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                    |
 | timestamp       | 事件触发时间 (单位：毫秒)                                            |
 | node            | 事件触发所在节点                                             |

@@ -104,7 +104,7 @@ float2str(20.2, 10) = '20.2'
 float2str(20.2, 17) = '20.19999999999999928'
 ```
 
-注意浮点型转换为字符串的时候，输出结果会受到精度的影响，详情见：https://floating-point-gui.de/
+注意浮点型转换为字符串的时候，输出结果会受到精度的影响，详情见：[floating-point-guide](https://floating-point-gui.de/)
 
 ## 字符串函数
 

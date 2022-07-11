@@ -134,7 +134,7 @@ SELECT payload.x as x FROM "#" WHERE x = 1
 SELECT payload FROM "#" WHERE payload.x.y = 1
 ```
 
-- 在 clientid = 'c1' 尝试连接时，提取其来源 IP 地址和端口号:
+- 在 clientid = 'c1' 连接成功时，提取其来源 IP 地址和端口号:
 
 ```sql
 SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
