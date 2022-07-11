@@ -15,6 +15,14 @@ ref: undefined
 
 # Release version
 
+## 4.2.12 Release
+
+*Release Date: 2022-07-11*
+
+### Bug fixes
+
+- Fix the issue that the hot configuration function cannot continue to be used after hot upgrade
+
 ## 4.2.11 Release
 
 *Release Date: 2022-04-26*
