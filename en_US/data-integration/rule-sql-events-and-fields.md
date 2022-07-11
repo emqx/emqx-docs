@@ -30,7 +30,7 @@ Triggered by an MQTT Bridge when a message is received from the remote MQTT brok
 | pub_props           | PUBLISH Properties (only for MQTT 5.0) |
 | message_received_at | The timestamp when the message is received (ms)  |
 
-示例
+Example:
 ```sql
 SELECT
   *
@@ -38,7 +38,7 @@ FROM
   "$bridges/mqtt:my_mqtt_bridge"
 ```
 
-输出:
+Output:
 ```json
 {
   "id": "0005E27C1D24E44FF440000017520000",
@@ -86,7 +86,7 @@ The SQL statement of the rules engine can handle the message publishing. In a ru
 | publish_received_at | Time when PUBLISH message reaches Broker (ms)             |
 | node                | Node name of the trigger event                            |
 
-example
+Example:
 ```sql
 SELECT
   payload.msg as msg,
@@ -99,7 +99,7 @@ FROM
   "t/#"
 ```
 
-output
+Output:
 ```json
 {
   "username": "u_emqx",
@@ -150,11 +150,11 @@ Trigger the rule when a message is put into the underlying socket
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
-| timestamp           | Event trigger time(millisecond)               |
+| timestamp           | Event trigger time(ms)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
 
-example
+Example:
 ```sql
 SELECT
   from_clientid,
@@ -166,7 +166,7 @@ SELECT
 FROM
   "$events/message_delivered"
 ```
-output
+Output:
 ```json
 {
   "topic": "t/a",
@@ -196,11 +196,11 @@ The rule is triggered when the message is sent to the client and an ack is recei
 | flags               | flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
 | puback_props        | The PUBACK Properties (MQTT 5.0 only)         |
-| timestamp           | Event trigger time(millisecond)               |
+| timestamp           | Event trigger time(ms)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
 
-example
+Example:
 ```sql
 SELECT
   from_clientid,
@@ -213,7 +213,7 @@ FROM
   "$events/message_acked"
 ```
 
-output
+Output:
 ```json
 {
   "topic": "t/a",
@@ -241,11 +241,11 @@ Trigger rule when a message has no subscribers
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
-| timestamp           | Event trigger time(millisecond)               |
+| timestamp           | Event trigger time(ms)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
 
-example
+Example:
 ```sql
 SELECT
   reason,
@@ -256,7 +256,7 @@ SELECT
 FROM
   "$events/message_dropped"
 ```
-output
+Output:
 ```json
 {
   "topic": "t/a",
@@ -286,11 +286,11 @@ Trigger rule when subscriber's message queue is full
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
-| timestamp           | Event trigger time(millisecond)               |
+| timestamp           | Event trigger time(ms)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
 
-example
+Example:
 ```sql
 SELECT
   from_clientid,
@@ -300,7 +300,7 @@ SELECT
   qos
 FROM "$events/delivery_dropped"
 ```
-output
+Output:
 ```json
 {
   "topic": "t/a",
@@ -327,12 +327,12 @@ Trigger the rule when the terminal is connected successfully
 | clean\_start     | MQTT clean\_start                       |
 | expiry\_interval | MQTT Session Expiration time            |
 | is\_bridge       | whether it is MQTT bridge connection    |
-| connected\_at    | Terminal connection completion time (s) |
+| connected\_at    | Terminal connection completion time (ms) |
 | conn_props       | The CONNECT Properties (MQTT 5.0 only)  |
-| timestamp        | Event trigger time(millisecond)         |
+| timestamp        | Event trigger time(ms)         |
 | node             | Node name of the trigger event          |
 
-example
+Example:
 ```sql
 SELECT
   clientid,
@@ -342,7 +342,7 @@ SELECT
 FROM
   "$events/client_connected"
 ```
-output
+Output:
 ```json
 {
   "username": "u_emqx",
@@ -363,12 +363,12 @@ Trigger rule when terminal connection is lost
 | username         | Current MQTT username                                        |
 | peername         | IPAddress and Port of terminal                               |
 | sockname         | IPAddress and Port listened by emqx                          |
-| disconnected\_at | Terminal disconnection completion time (s)                   |
+| disconnected\_at | Terminal disconnection completion time (ms)                   |
 | disconn_props    | The DISCONNECT Properties (MQTT 5.0 only)                    |
-| timestamp        | Event trigger time(millisecond)                              |
+| timestamp        | Event trigger time(ms)                              |
 | node             | Node name of the trigger event                               |
 
-example
+Example:
 ```sql
 SELECT
   clientid,
@@ -379,7 +379,7 @@ SELECT
 FROM
   "$events/client_disconnected"
 ```
-output
+Output:
 ```json
 {
   "username": "u_emqx",
@@ -407,7 +407,7 @@ The rule event is triggered when the server sends a CONNACK packet to the client
 | clean_start      | MQTT clean_start                              |
 | expiry_interval  | MQTT Session Expiration time                  |
 | conn_props       | The CONNECT Properties (MQTT 5.0 only)        |
-| timestamp        | Event trigger time(millisecond)               |
+| timestamp        | Event trigger time(ms)               |
 | node             | Node name of the trigger event                |
 
 
@@ -448,7 +448,7 @@ MQTT v5.0
 | server_moved                  | Server moved |
 | connection_rate_exceeded      | Connection rate exceeded |
 
-example
+Example:
 ```sql
 SELECT
   clientid,
@@ -458,7 +458,7 @@ SELECT
 FROM
   "$events/client_connack"
 ```
-output
+Output:
 ```json
 {
   "username": "u_emqx",
@@ -484,7 +484,7 @@ The rule event is triggered when the client check acl complete.
 | timestamp       | Timestamp (ms)                                   |
 | node            | Node name of the trigger event                   |
 
-example
+Example:
 ```sql
 SELECT
   clientid,
@@ -497,7 +497,7 @@ SELECT
 FROM
   "$events/client_check_authz_complete"
 ```
-output
+Output:
 ```json
 {
   "username": "u_emqx",
@@ -522,10 +522,10 @@ Trigger the rule when the terminal subscribes successfully
 | topic     | MQTT topic                                |
 | qos       | Enumeration of message QoS 0,1,2          |
 | sub_props | The SUBSCRIBE Properties (MQTT 5.0 only)  |
-| timestamp | Event trigger time(millisecond)           |
+| timestamp | Event trigger time(ms)           |
 | node      | Node name of the trigger event            |
 
-example
+Example:
 ```sql
 SELECT
   clientid,
@@ -535,7 +535,7 @@ SELECT
 FROM
   "$events/session_subscribed"
 ```
-output
+Output:
 ```json
 {
   "username": "u_emqx",
@@ -557,11 +557,11 @@ Triggered when the terminal subscription is cancelled successfully
 | topic     | MQTT topic                                  |
 | qos       | Enumeration of message QoS 0,1,2            |
 | unsub_props | The UNSUBSCRIBE Properties (MQTT 5.0 only)  |
-| timestamp | Event trigger time(millisecond)             |
+| timestamp | Event trigger time(ms)             |
 | node      | Node name of the trigger event              |
 
 
-example
+Example:
 ```sql
 SELECT
   clientid,
@@ -571,7 +571,7 @@ SELECT
 FROM
   "$events/session_unsubscribed"
 ```
-output
+Output:
 ```json
 {
   "username": "u_emqx",

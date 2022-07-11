@@ -106,6 +106,8 @@ float2str(20.2, 10) = '20.2'
 float2str(20.2, 17) = '20.19999999999999928'
 ```
 
+Note that when converting a floating-point type to a string, the output result will be affected by the precision.
+For details, see: [floating-point-guide](https://floating-point-gui.de/)
 
 ## String functions
 

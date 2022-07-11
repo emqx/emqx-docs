@@ -19,7 +19,7 @@ The "republish" action does not prevent the delivery of the original message. Fo
 In the "republish" action, you can customize the payload, topic, QoS and other parameters of the message,
 and fields in the rule output can be referenced as values of these parameters in the form of `${field name}`.
 
-For an example of creating a message republish action, see: [Get Started](./rule-get-started.md)
+For an example of creating a message republish action, see: [Get Started](./rule-get-started.md#add-a-republish-action)
 
 ## The "console" Action 
 

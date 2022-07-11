@@ -133,7 +133,7 @@ The DO and INCASE clauses are optional.
     ```sql
     SELECT payload FROM "#" WHERE payload.x.y = 1
     ```
--  Try to connect when clientid = 'c1', extract its source IP address and port number:
+-  If a MQTT client with clientid = 'c1' connected, extract its source IP address and port number:
     ```sql
     SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
     ```
