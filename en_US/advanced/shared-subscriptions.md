@@ -1,8 +1,8 @@
-## Shared Subscription
+# Shared Subscription
 
 Shared subscription is a subscription method that achieves load balancing among multiple subscribers.
 
-```
+```txt
                                                    [subscriber1] got msg1
              msg1, msg2, msg3                    /
 [publisher]  ---------------->  "$share/g/topic"  -- [subscriber2] got msg2
@@ -13,6 +13,12 @@ Shared subscription is a subscription method that achieves load balancing among 
 In the above diagram, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method,
 where ` topic` is the real topic name they subscribed to, and `$share/g/` is a shared subscription prefix.
 
+| Example         | Prefix      | Topic Name |
+| --------------- | ----------- | ---------- |
+| $queue/t/1      | $queue/     | t/1        |
+| $share/abc/t/1  | $share/abc  | t/1        |
+
+## Shared subscriptions in group
 
 Shared subscriptions prefixed with `$share/<group-name>` are shared subscriptions with groups.
 The group name can be any string.
@@ -27,7 +33,7 @@ When EMQX Broker publishes a message `msg1` to topic `t1`:
 - Only one of `s1`, `s2`, `s3` will receive `msg1`
 - Only one of `s4` and `s5` will receive `msg1`
 
-```
+```txt
                                        [s1]
            msg1                      /
 [emqx]  ------>  "$share/g1/topic"    - [s2] got msg1
@@ -39,15 +45,44 @@ When EMQX Broker publishes a message `msg1` to topic `t1`:
                                       [s5] got msg1
 ```
 
+## Shared subscriptions without group
+
+Shared subscriptions prefixed with `$queue/` is a shared subscription without a group. It is a special case of a `$share` subscription, which is equivalent to having all subscribers in one  group.
+
+```txt
+                                       [s1] got msg1
+        msg1,msg2,msg3               /
+[emqx]  --------------->  "$queue/topic" - [s2] got msg2
+                                     \
+                                       [s3] got msg3
+```
+
+## Load Balancing Policy and Dispatch ACK Configuration
+
 In MQTT specification, balancing strategy is not covered.
 EMQX supports a few different balancing strategies with the help from configuration.
 
 Balancing strategies can be specified globally or per-group.
 
-* Global strategy can be set in `broker.shared_subscription_strategy` configuration.
-* Configure `broker.shared_subscription_group.$group_name.strategy` for per-group strategy
+- Global strategy can be set in `broker.shared_subscription_strategy` configuration.
+- Configure `broker.shared_subscription_group.$group_name.strategy` for per-group strategy
 
-For more information about the dispatch strategies, please refer to configuration document.
+```txt
+# etc/emqx.conf
+
+# Load Balance
+broker.shared_subscription_strategy = random
+
+# When the client is offline, or the message level is QoS1 or QoS2, and the device does not reply to the ACK for any reason, the message will send to the other devices in the group.
+broker.shared_dispatch_ack_enabled = false
+```
+
+| Load Balance | Description                                 |
+| :----------  | :------------------------------------------ |
+| random       | Random selection among all subscribers      |
+| round_robin  | In order of subscription                    |
+| sticky       | Always send to the last selected subscriber |
+| hash         | Hash by publisher ClientID                  |
 
 ### Discussion on message loss
 
@@ -70,9 +105,9 @@ messages to other members in the group if one is offline.
 
 More on exceptional flows.
 
-* Once a message is dispatched to a subscriber session, the message will stay in the session
+- Once a message is dispatched to a subscriber session, the message will stay in the session
   buffer but not re-dispatched immediately.
-* The pending messages in a session is re-dispatched to other members in the group when
+- The pending messages in a session is re-dispatched to other members in the group when
   a session terminates.
-* When all members are offline, the message is dispatched to the configured strategy
-* When there is no alive session in a shared group, the message is discarded
+- When all members are offline, the message is dispatched to the configured strategy
+- When there is no alive session in a shared group, the message is discarded
