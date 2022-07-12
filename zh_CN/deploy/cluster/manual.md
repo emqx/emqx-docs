@@ -67,11 +67,12 @@ node.name = emqx@192.168.0.20
 两个节点启动后，在`s2.emqx.io`上执行如下命令：
 
 ```bash
-$ ./bin/emqx_ctl 集群加入 emqx@s1.emqx.io
+$ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
 
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
+
 ::: tip tip
 `s2.emqx.io` 加入 `s1.emqx.io` 组成集群后，
 它的本地数据将被清除，来自节点`s1.emqx.io`的数据
