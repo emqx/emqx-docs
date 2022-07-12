@@ -208,10 +208,10 @@ System Topic Prefix: `$SYS/brokers/${node}/alarms/`
 
 System Topic Prefix: `$SYS/brokers/${node}/sysmon/`
 
-| Topic          | Description                         |
-| -------------- | ----------------------------------- |
-| long_gc        | GC Overtime alarm                   |
-| long_schedule  | Alarm for Excessive Scheduling Time |
-| large_heap     | Alarm for Heap Memory Occupancy     |
-| busy_port      | Alarm for Port busy                 |
-| busy_dist_port | Alarm for Dist Port busy            |
+| Topic          | Description                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| long_gc        | The garbage collector takes too long and the system garbage collector is overloaded                           |
+| long_schedule  | A thread or listening port take too long to schedule                                                          |
+| large_heap     | Excessive memory usage in a thread                                                                            |
+| busy_port      | Sending data to a port blocks and the port is over-occupied                                                   |
+| busy_dist_port | Distributed communication ports used for inter-node communication are blocked and the ports are over-occupied |
