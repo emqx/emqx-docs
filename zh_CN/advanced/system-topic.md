@@ -198,8 +198,8 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 
 | 主题            | 说明              |
 | -------------- | ----------------- |
-| long_gc        | GC 时间过长警告   |
-| long_schedule  | 调度时间过长警告  |
-| large_heap     | Heap 内存占用警告 |
-| busy_port      | Port 忙警告       |
-| busy_dist_port | Dist Port 忙警告  |
+| long_gc        | 垃圾回收器时间过长，系统垃圾回收器负载过高 |
+| long_schedule  | 线程或者监听端口调度时间过长 |
+| large_heap     | 某个线程内存占用过高 |
+| busy_port      | 向某个端口发送消息阻塞，端口占用过高 |
+| busy_dist_port | 节点间通讯使用的分布式通讯端口阻塞，端口占用过高 |
