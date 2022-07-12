@@ -10,7 +10,7 @@ In terms of the design of EMQX Broker, it firstly separates the frontend and bac
 
 With Multi-core servers and modern operating system kernel, it can easily support 1 million TCP connections. The core issue is how to deal with business bottlenecks at the application level.
 
-EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: <http://docs.emqtt.cn/zh_CN/latest/tune.html>
+EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: [Linux OS Tuning](../deploy/tune.md)
 
 ### Fully asynchronous architecture
 
@@ -26,7 +26,7 @@ EMQX open source products do not support message persistence within the server, 
 
 Traditional MQ servers with built-in message persistence, such as the widely used JMS server ActiveMQ, have redesigned the persistence part in almost every major version. There are two design issues with built-in message persistence:
 
-1.  How to balance the use of memory and disk? Message routing is based on memory, while message storage is based on disk.
+1. How to balance the use of memory and disk? Message routing is based on memory, while message storage is based on disk.
 2. In a multi-server distributed cluster architecture, how to place Queue and how to copy Queue messages?
 
 Kafka made a correct design on the above problem, which is a message server based entirely on disk-distributed Commit Log.
@@ -57,9 +57,8 @@ EMQX Broker is more like a network Router or a Switch in concept, rather than th
 2. Session Layer: Process MQTT PUBLISH/SUBSCRIBE Packets received from client, and deliver MQTT messages to client.
 3. Routing(Distributed) Layer: Route MQTT messages among clustered nodes.
 4. Distributed Layer: Distributed MQTT messages routed between distributed nodes.
-2. Authentication and Authorization(ACL): The connection layer supports extensible authentication and access control modules.
-3. Hooks and Plugins: Each layer of the system provides extensible hooks and supports server expansion with plugin.
-
+5. Authentication and Authorization(ACL): The connection layer supports extensible authentication and access control modules.
+6. Hooks and Plugins: Each layer of the system provides extensible hooks and supports server expansion with plugin.
 
 ## Connection Layer design
 

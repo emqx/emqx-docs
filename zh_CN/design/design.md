@@ -12,7 +12,7 @@ Plane) 与监控管理平面 (Monitor/Control Plane):
 多核服务器和现代操作系统内核层面，可以很轻松支持 100 万 TCP 连接，核心问题是应用层面如何处理业务瓶颈。
 
 EMQX 在业务和应用层面，解决了单节点承载100万连接的各类瓶颈问题。连接测试的操作系统内核、TCP 协议栈、Erlang
-虚拟机参数参见：<http://docs.emqtt.cn/zh_CN/latest/tune.html>。
+虚拟机参数参见：[系统调优](../deploy/tune.md)。
 
 ### 全异步架构
 
@@ -33,8 +33,8 @@ EMQX 开源产品不支持服务器内部消息持久化，这是一个架构设
 传统内置消息持久化的 MQ 服务器，比如广泛使用的 JMS 服务器
 ActiveMQ，几乎每个大版本都在重新设计持久化部分。内置消息持久化在设计上有两个问题:
 
-1.  如何权衡内存与磁盘的使用？消息路由是基于内存的，而消息存储是基于磁盘的。
-2.  多服务器分布集群架构下，如何放置 Queue 如何复制 Queue 的消息？
+1. 如何权衡内存与磁盘的使用？消息路由是基于内存的，而消息存储是基于磁盘的。
+2. 多服务器分布集群架构下，如何放置 Queue 如何复制 Queue 的消息？
 
 Kafka 在上述问题上，做出了正确的设计：一个完全基于磁盘分布式 Commit Log 的消息服务器。
 
@@ -104,7 +104,7 @@ MQTT 协议定义了一个 16bits 的报文 ID (PacketId)，用于客户端到�
 
 ![image](../assets/design_5.png)
 
-1. 64bits 时间戳：erlang:system_time if Erlang \>= R18, otherwise os:timestamp
+1. 64bits 时间戳：`erlang:system_time`
 2. Erlang 节点 ID：编码为 2 字节
 3. Erlang 进程 PID：编码为 4 字节
 4. 进程内部序列号：2 字节的进程内部序列号
