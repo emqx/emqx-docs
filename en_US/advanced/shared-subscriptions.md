@@ -16,7 +16,7 @@ where ` topic` is the real topic name they subscribed to, and `$share/g/` is a s
 | Example         | Prefix      | Topic Name |
 | --------------- | ----------- | ---------- |
 | $queue/t/1      | $queue/     | t/1        |
-| $share/abc/t/1  | $share/abc  | t/1        |
+| $share/abc/t/1  | $share/abc/ | t/1        |
 
 ## Shared subscriptions in group
 
