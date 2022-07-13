@@ -105,6 +105,7 @@ jobs:
         mkdir -p frontend/docs/.vuepress/public/api/
         cp -r docs-files/en_US/* frontend/docs/en/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${VERSION}/
+        cp -r docs-files/swagger/* frontend/docs/.vuepress/public/api/
         cp docs-files/directory.json frontend/docs/.vuepress/config/directory.json
 
     - name: move ee files

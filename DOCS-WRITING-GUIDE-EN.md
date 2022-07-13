@@ -217,3 +217,10 @@ or
 contents {% endemqxee %}
 ```
 
+### OpenAPI support
+OpenApi can be inserted anywhere in the document, path is the OpenAPI description definition file, this file needs to be placed in the swagger folder of the document root
+```markdown
+<ClientOnly>
+  <OpenApi path="swagger.json" />
+</ClientOnly>
+```
