@@ -208,10 +208,10 @@ System Topic Prefix: `$SYS/brokers/${node}/alarms/`
 
 System Topic Prefix: `$SYS/brokers/${node}/sysmon/`
 
-| Topic          | Description                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| long_gc        | The garbage collector takes too long and the system garbage collector is overloaded                           |
-| long_schedule  | A thread or listening port take too long to schedule                                                          |
-| large_heap     | Excessive memory usage in a thread                                                                            |
-| busy_port      | Sending data to a port blocks and the port is over-occupied                                                   |
-| busy_dist_port | Distributed communication ports used for inter-node communication are blocked and the ports are over-occupied |
+| Topic          | Description                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------- |
+| long_gc        | Garbage collection takes too long                                                                    |
+| long_schedule  | Process scheduling takes too long, taking up too many time slices of the scheduler                   |
+| large_heap     | Process memory usage is too high                                                                     |
+| busy_port      | The process sends a message to a busy port and the process is hung                                   |
+| busy_dist_port | The distributed communication port used for inter-node communication is busy and the process is hung |
