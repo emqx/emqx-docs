@@ -7,7 +7,7 @@ The internal implementation of Webhook is based on  [hooks](./hooks.md), but it 
 Taking the client.connected event as an example, the event delivery process is as follows:
 
 ```bash
-    Client      |    EMQX     |  emqx_web_hook |   HTTP       +------------+
+    Client      |    EMQX      |  emqx_web_hook |   HTTP       +------------+
   =============>| - - - - - - -> - - - - - - - ->===========>  | Web Server |
                 |    Broker    |                |  Request     +------------+
 ```
@@ -40,20 +40,20 @@ web.hook.rule.message.publish.2 = {"action": "on_message_publish", "topic": "foo
 The following events are currently supported:
 
 
-| Name                 | Description                   | Execution timing                                             |
-| -------------------- | ----------------------------- | ------------------------------------------------------------ |
-| client.connect       | Processing connection packets | When the server receives the client's connection packet      |
-| client.connack       | Issue connection acknowledge  | When the server is ready to send connack packet              |
-| client.connected     | connected                     | After the client authentication is completed and successfully connected to the system |
-| client.disconnected  | disconnected                  | When the client connection layer is about to close           |
-| client.subscribe     | subscribe                     | After receiving the subscription message,and before executing `client.check_acl` authentication |
-| client.unsubscribe   | unsubscribe                   | After receiving the unsubscription message                   |
-| session.subscribed   | Session subscribed            | After completing the subscription operation                  |
-| session.unsubscribed | session unsubscribed          | After completing the unsubscription operation                |
-| message.publish      | message published             | Before the server republishes (routes) the message            |
-| message.delivered    | message delivered            | Before the message is ready to be delivered to the client    |
-| message.acked        | message acknowledged          | After the server received the message ACK from the client    |
-| message.dropped      | message dropped               | After the published message is dropped                       |
+| Name                 | Description                   | Execution timing                                                                                |
+|----------------------|-------------------------------|-------------------------------------------------------------------------------------------------|
+| client.connect       | Processing connection packets | When the server receives the client's connection packet                                         |
+| client.connack       | Issue connection acknowledge  | When the server is ready to send connack packet                                                 |
+| client.connected     | connected                     | After the client authentication is completed and successfully connected to the system           |
+| client.disconnected  | disconnected                  | When the client connection layer is about to close                                              |
+| client.subscribe     | subscribe                     | After receiving the subscription message,and before executing `client.authorize` authentication |
+| client.unsubscribe   | unsubscribe                   | After receiving the unsubscription message                                                      |
+| session.subscribed   | Session subscribed            | After completing the subscription operation                                                     |
+| session.unsubscribed | session unsubscribed          | After completing the unsubscription operation                                                   |
+| message.publish      | message published             | Before the server republishes (routes) the message                                              |
+| message.delivered    | message delivered             | Before the message is ready to be delivered to the client                                       |
+| message.acked        | message acknowledged          | After the server received the message ACK from the client                                       |
+| message.dropped      | message dropped               | After the published message is dropped                                                          |
 
 ### Number
 
@@ -91,76 +91,76 @@ For different events, the content of the request body is different. The followin
 
 **client.connect**
 
-| Key        |  Type  | Description |
-| ---------- | ------- | ----- |
-| action     | string  | event name<br>fixed at："client_connect" |
-| clientid   | string | client ClientId                                             |
-| username   | string  | client Username, When not existed, the value is "undefined" |
-| ipaddress  | string  | client source IP address |
-| keepalive  | integer | Heartbeat keepalive time applied by client |
-| proto_ver  | integer | Protocol version number |
+| Key       | Type    | Description                                                 |
+|-----------|---------|-------------------------------------------------------------|
+| action    | string  | event name<br>fixed at："client_connect"                    |
+| clientid  | string  | client ClientId                                             |
+| username  | string  | client Username, When not existed, the value is "undefined" |
+| ipaddress | string  | client source IP address                                    |
+| keepalive | integer | Heartbeat keepalive time applied by client                  |
+| proto_ver | integer | Protocol version number                                     |
 
 
 **client.connack**
 
-| Key        | Type    | Description                                                 |
-| ---------- | ------- | ----- |
-| action     | string  | event name<br/>fixed at: "client_connack" |
-| clientid   | string  | client ClientId |
-| username   | string  | client Username, When not existed, the value is "undefined" |
-| ipaddress  | string  | client source IP address |
-| keepalive  | integer | Heartbeat keepalive time applied by client |
-| proto_ver  | integer | Protocol version number |
-| conn_ack   | string  | "success" means success, other means failure |
+| Key       | Type    | Description                                                 |
+|-----------|---------|-------------------------------------------------------------|
+| action    | string  | event name<br/>fixed at: "client_connack"                   |
+| clientid  | string  | client ClientId                                             |
+| username  | string  | client Username, When not existed, the value is "undefined" |
+| ipaddress | string  | client source IP address                                    |
+| keepalive | integer | Heartbeat keepalive time applied by client                  |
+| proto_ver | integer | Protocol version number                                     |
+| conn_ack  | string  | "success" means success, other means failure                |
 
 
 **client.connected**
 
-| Key         | Type    | Description                                                 |
-| ----------- | ------- | ----- |
-| action      | string  | event name<br>fixed at:"client_connected" |
-| clientid    | string  | client ClientId |
-| username    | string  | client Username, When not existed, the value is "undefined" |
-| ipaddress   | string  | client source IP address |
-| keepalive   | integer | Heartbeat keepalive time applied by client |
-| proto_ver   | integer | Protocol version number |
-| connected_at| integer | Timestamp (second) |
+| Key          | Type    | Description                                                 |
+|--------------|---------|-------------------------------------------------------------|
+| action       | string  | event name<br>fixed at:"client_connected"                   |
+| clientid     | string  | client ClientId                                             |
+| username     | string  | client Username, When not existed, the value is "undefined" |
+| ipaddress    | string  | client source IP address                                    |
+| keepalive    | integer | Heartbeat keepalive time applied by client                  |
+| proto_ver    | integer | Protocol version number                                     |
+| connected_at | integer | Timestamp (second)                                          |
 
 
 **client.disconnected**
 
-| Key         | Type   | Description                                                 |
-| ----------- | ------- | ----- |
-| action      | string  | event name<br>fixed at: "client_disconnected"               |
-| clientid    | string  | client ClientId |
-| username    | string  | client Username, When not existed, the value is "undefined" |
-| reason      | string  | error reason |
+| Key      | Type   | Description                                                 |
+|----------|--------|-------------------------------------------------------------|
+| action   | string | event name<br>fixed at: "client_disconnected"               |
+| clientid | string | client ClientId                                             |
+| username | string | client Username, When not existed, the value is "undefined" |
+| reason   | string | error reason                                                |
 
 
 **client.subscribe**
 
-| Key         | Type   | Description                                                 |
-| ----------- | ------- | ----- |
-| action      | string  | event name<br/>fixed at: "client_subscribe" |
-| clientid    | string  | Client ClientId |
-| username    | string  | Client Username, When not existed, the value is "undefined" |
-| topic       | string  | Topics to be subscribed |
-| opts        | json    | Subscription parameters |
+| Key      | Type   | Description                                                 |
+|----------|--------|-------------------------------------------------------------|
+| action   | string | event name<br/>fixed at: "client_subscribe"                 |
+| clientid | string | Client ClientId                                             |
+| username | string | Client Username, When not existed, the value is "undefined" |
+| topic    | string | Topics to be subscribed                                     |
+| opts     | json   | Subscription parameters                                     |
 
 opts includes
 
-| Key  | Type | Description                                      |
-| ---- | ---- | ---- |
-| qos  | enum | QoS level, and the optional value is `0` `1` `2` |
+| Key | Type | Description                                      |
+|-----|------|--------------------------------------------------|
+| qos | enum | QoS level, and the optional value is `0` `1` `2` |
 
 **client.unsubscribe**
 
-| Key         | Type   | Description                                                 |
-| ----------- | ------- | ----- |
-| action      | string  | event name<br/>fixed at:"client_unsubscribe" |
-| clientid    | string  | client ClientId |
-| username    | string  | client Username, When not existed, the value is "undefined" |
-| topic       | string  | unsubscribed topic |
+| Key      | Type   | Description                                                 |
+|----------|--------|-------------------------------------------------------------|
+| action   | string | event name<br/>fixed at:"client_unsubscribe"                |
+| clientid | string | client ClientId                                             |
+| username | string | client Username, When not existed, the value is "undefined" |
+| topic    | string | unsubscribed topic                                          |
 
 **session.subscribed**: same as `client.subscribe`, action is `session_subscribed`
 
@@ -170,44 +170,44 @@ opts includes
 
 **message.publish**
 
-| Key            | Type    | Description                                                  |
-| -------------- | ------- | ----- |
-| action         | string  | event name<br/>fixed at: "message_publish" |
-| from_client_id | string  | Publisher's ClientId |
+| Key            | Type    | Description                                                      |
+|----------------|---------|------------------------------------------------------------------|
+| action         | string  | event name<br/>fixed at: "message_publish"                       |
+| from_client_id | string  | Publisher's ClientId                                             |
 | from_username  | string  | Publisher's Username, When not existed, the value is "undefined" |
-| topic          | string  | Unsubscribed topic |
-| qos            | enum    | QoS level, and the optional value is `0` `1` `2` |
-| retain         | bool    | Whether it is a Retain message |
-| payload        | string  | Message Payload |
-| ts             | integer | Timestamp (second) |
+| topic          | string  | Unsubscribed topic                                               |
+| qos            | enum    | QoS level, and the optional value is `0` `1` `2`                 |
+| retain         | bool    | Whether it is a Retain message                                   |
+| payload        | string  | Message Payload                                                  |
+| ts             | integer | Timestamp (second)                                               |
 
 
 **message.delivered**
 
-| Key            | Type    | Description                                                  |
-| -------------- | ------- | ----- |
-| action         | string  | event name<br/>fixed at: "message_delivered" |
-| clientid       | string  | Receiver's ClientId |
-| username       | string  | Receiver's Username, When not existed, the value is "undefined" |
-| from_client_id | string  | Publisher's ClientId |
+| Key            | Type    | Description                                                      |
+|----------------|---------|------------------------------------------------------------------|
+| action         | string  | event name<br/>fixed at: "message_delivered"                     |
+| clientid       | string  | Receiver's ClientId                                              |
+| username       | string  | Receiver's Username, When not existed, the value is "undefined"  |
+| from_client_id | string  | Publisher's ClientId                                             |
 | from_username  | string  | Publisher's Username, When not existed, the value is "undefined" |
-| topic          | string  | Unsubscribed topic |
-| qos            | enum    | QoS level, and the optional value is `0` `1` `2` |
-| retain         | bool    | Whether it is a Retain message |
-| payload        | string  | Message Payload |
-| ts             | integer | Timestamp (second) |
+| topic          | string  | Unsubscribed topic                                               |
+| qos            | enum    | QoS level, and the optional value is `0` `1` `2`                 |
+| retain         | bool    | Whether it is a Retain message                                   |
+| payload        | string  | Message Payload                                                  |
+| ts             | integer | Timestamp (second)                                               |
 
 
 **message.acked**
 
-| Key            |  Type   | Description  |
-| -------------- | ------- | ----- |
-| action         | string  | event name<br/>fixed at: "message_acked" |
-| clientid       | string  | Receiver's ClientId |
-| from_client_id | string  | Publisher's ClientId |
+| Key            | Type    | Description                                                      |
+|----------------|---------|------------------------------------------------------------------|
+| action         | string  | event name<br/>fixed at: "message_acked"                         |
+| clientid       | string  | Receiver's ClientId                                              |
+| from_client_id | string  | Publisher's ClientId                                             |
 | from_username  | string  | Publisher's Username, When not existed, the value is "undefined" |
-| topic          | string  | Unsubscribed topic |
-| qos            | enum    | QoS level, and the optional value is `0` `1` `2` |
-| retain         | bool    | Whether it is a Retain message |
-| payload        | string  | Message Payload |
-| ts             | integer | Timestamp (second) |
+| topic          | string  | Unsubscribed topic                                               |
+| qos            | enum    | QoS level, and the optional value is `0` `1` `2`                 |
+| retain         | bool    | Whether it is a Retain message                                   |
+| payload        | string  | Message Payload                                                  |
+| ts             | integer | Timestamp (second)                                               |

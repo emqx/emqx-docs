@@ -103,27 +103,27 @@ In the following two sections of [HookPoint](#hookpoint) and [callback function]
 
 EMQX Broker is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
 
-| Name                 | Description                 | Execution Timing                                             |
-| -------------------- | --------------------------- | ------------------------------------------------------------ |
-| client.connect       | Process connection packet   | When the server receives the connection packet from the client |
-| client.connack       | Issue connection response   | When the server is ready to issue a connection response message |
-| client.connected     | Connection succeed          | After client authentication is completed and successfully connected to the system |
-| client.disconnected  | Disconnect                  | Connection layer of client is ready to close                 |
-| client.authenticate  | Connection authentication   | After `client.connect` is executed                           |
-| client.authorize     | Pub/Sub authorization       | Before publish/subscribe`  operation is executed             |
-| client.subscribe     | Subscribe to topic          | After receiving the subscription message, and before executing `client.check_acl` |
-| client.unsubscribe   | Unsubscribe                 | After receiving the unsubscribe packet                       |
-| session.created      | Session creation            | When a `client.connected` is completed and a new session is created |
-| session.subscribed   | Session subscription topics | After the subscription operation is completed                |
-| session.unsubscribed | Session unsubscription      | After the unsubscription operation is completed              |
+| Name                 | Description                 | Execution Timing                                                                            |
+|----------------------|-----------------------------|---------------------------------------------------------------------------------------------|
+| client.connect       | Process connection packet   | When the server receives the connection packet from the client                              |
+| client.connack       | Issue connection response   | When the server is ready to issue a connection response message                             |
+| client.connected     | Connection succeed          | After client authentication is completed and successfully connected to the system           |
+| client.disconnected  | Disconnect                  | Connection layer of client is ready to close                                                |
+| client.authenticate  | Connection authentication   | After `client.connect` is executed                                                          |
+| client.authorize     | Pub/Sub authorization       | Before `publish/subscribe` operation is executed                                            |
+| client.subscribe     | Subscribe to topic          | After receiving the subscription message, and before executing `client.authorize`           |
+| client.unsubscribe   | Unsubscribe                 | After receiving the unsubscribe packet                                                      |
+| session.created      | Session creation            | When a `client.connected` is completed and a new session is created                         |
+| session.subscribed   | Session subscription topics | After the subscription operation is completed                                               |
+| session.unsubscribed | Session unsubscription      | After the unsubscription operation is completed                                             |
 | session.resumed      | Session resume              | when `client.connected` is executed and the old session information is successfully resumed |
-| session.discarded    | Session discarded           | After the session was terminated due to discarding           |
-| session.takenover    | Session takenover           | After the session was terminated due to take-over            |
-| session.terminated   | Session terminated          | After the session was terminated due to other reason         |
-| message.publish      | Message published           | Before the server publishes (routes) the message             |
-| message.delivered    | Message delivered           | Before the message is ready to be delivered to the client    |
-| message.acked        | Message acked               | After the message ACK is received from the client            |
-| message.dropped      | Message dropped             | After the published messages are discarded                   |
+| session.discarded    | Session discarded           | After the session was terminated due to **discarded**                                       |
+| session.takenover    | Session takenover           | After the session was terminated due to **takenover**                                       |
+| session.terminated   | Session terminated          | After the session was terminated due to other reason                                        |
+| message.publish      | Message published           | Before the server publishes (routes) the message                                            |
+| message.delivered    | Message delivered           | Before the message is ready to be delivered to the client                                   |
+| message.acked        | Message acked               | After the message ACK is received from the client                                           |
+| message.dropped      | Message dropped             | After the published messages are discarded                                                  |
 
 
 ::: tip
@@ -161,27 +161,27 @@ The input parameters and returned value of the callback function are shown in th
 (For parameter data structure, see:[emqx_types.erl](https://github.com/emqx/emqx/blob/main-v4.3/src/emqx_types.erl))
 
 
-| Name              | input parameter                                          | Returned value    |
-| -------------------- | ------------------------------------------------------------ | ------------------- |
-| client.connect       | `ConnInfo`：Client connection layer parameters<br>`Props`：Properties of MQTT v5.0 connection packets | New `Props`      |
-| client.connack       | `ConnInfo`：Client connection layer parameters <br>`Rc`：returned code<br>`Props`: Properties of MQTT v5.0 connection response packets | New `Props`     |
-| client.connected     | `ClientInfo`:  Client information parameters<br>`ConnInfo`： Client connection layer parameters | -                   |
-| client.disconnected  | `ClientInfo`：Client information parameters<br>`ConnInfo`：Client connection layer parameters<br>`ReasonCode`：Reason code | -                   |
-| client.authenticate  | `ClientInfo`：Client information parameters<br>`AuthResult`：Authentication results | New `AuthResult` |
-| client.authorize     | `ClientInfo`：Client information parameters<br>`Topic`：Publish/subscribe topic<br>`PubSub`:  Publish/subscribe<br>`AuthzResult`：Authentication result | New `AuthzResult` |
-| client.subscribe     | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`：List of topics of subscription | New `TopicFilters` |
+| Name                 | input parameter                                                                                                                                                          | Returned value     |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|
+| client.connect       | `ConnInfo`：Client connection layer parameters<br>`Props`：Properties of MQTT v5.0 connection packets                                                                    | New `Props`        |
+| client.connack       | `ConnInfo`：Client connection layer parameters <br>`Rc`：returned code<br>`Props`: Properties of MQTT v5.0 connection response packets                                   | New `Props`        |
+| client.connected     | `ClientInfo`:  Client information parameters<br>`ConnInfo`： Client connection layer parameters                                                                          | -                  |
+| client.disconnected  | `ClientInfo`：Client information parameters<br>`ConnInfo`：Client connection layer parameters<br>`ReasonCode`：Reason code                                               | -                  |
+| client.authenticate  | `ClientInfo`：Client information parameters<br>`AuthNResult`：Authentication results                                                                                     | New `AuthNResult`  |
+| client.authorize     | `ClientInfo`：Client information parameters<br>`Topic`：Publish/subscribe topic<br>`PubSub`:  Publish/subscribe<br>`AuthZResult`：Authentication result                  | New `AuthZResult`  |
+| client.subscribe     | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`：List of topics of subscription      | New `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 unsubscription messages<br/>`TopicFilters`：List of topics of unsubscription | New `TopicFilters` |
-| session.created      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
-| session.subscribed   | `ClientInfo`：Client information parameters<br/>`Topic`：subscribed topic<br>`SubOpts`：Configuration options for subscribe operations | -                   |
-| session.unsubscribed | `ClientInfo`：Client information parameters<br/>`Topic`：unsubscribed topic<br/>`SubOpts`：Configuration options for unsubscribe operations | -                   |
-| session.resumed      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
-| session.discarded    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information | -                   |
-| session.takenover    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information |                     |
-| session.terminated   | `ClientInfo`：Client information parameters<br/>`Reason`：Termination reason <br>`SessInfo`：Session information | -   |
-| message.publish      | `Message`：Message object                            | New `Message`   |
-| message.delivered    | `ClientInfo`：Client information parameters<br/>`Message`：Message object | New `Message`   |
-| message.acked        | `ClientInfo`：Client information parameters<br/>`Message`：Message object | -                   |
-| message.dropped      | `Message`：Message object<br>`By`：Dropped by<br>`Reason`：Drop reason | -                   |
+| session.created      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          | -                  |
+| session.subscribed   | `ClientInfo`：Client information parameters<br/>`Topic`：subscribed topic<br>`SubOpts`：Configuration options for subscribe operations                                   | -                  |
+| session.unsubscribed | `ClientInfo`：Client information parameters<br/>`Topic`：unsubscribed topic<br/>`SubOpts`：Configuration options for unsubscribe operations                              | -                  |
+| session.resumed      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          | -                  |
+| session.discarded    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          | -                  |
+| session.takenover    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          |                    |
+| session.terminated   | `ClientInfo`：Client information parameters<br/>`Reason`：Termination reason <br>`SessInfo`：Session information                                                         | -                  |
+| message.publish      | `Message`：Message object                                                                                                                                                | New `Message`      |
+| message.delivered    | `ClientInfo`：Client information parameters<br/>`Message`：Message object                                                                                                | New `Message`      |
+| message.acked        | `ClientInfo`：Client information parameters<br/>`Message`：Message object                                                                                                | -                  |
+| message.dropped      | `Message`：Message object<br>`By`：Dropped by<br>`Reason`：Drop reason                                                                                                   | -                  |
 
 
 For the application of these hooks, see:[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
