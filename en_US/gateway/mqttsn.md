@@ -9,7 +9,7 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 In EMQX 5.0, MQTT-SN gateways can be configured and enabled through the Dashboard.
 
 It can also be enabled via the HTTP-API, e.g:
-```
+```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
   -H 'Content-Type: application/json' \
@@ -32,7 +32,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 
 or configured in emqx.conf, e.g:
 
-```hocon
+```properties
 gateway.mqttsn {
 
   mountpoint = "mqtt/sn"
@@ -95,7 +95,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
 
 Or add an HTTP authentication for MQTT-SN gateway via emqx.conf:
 
-```hocon
+```properties
 gateway.mqttsn {
   authentication {
     enable = true

@@ -31,7 +31,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 
 or configured in emqx.conf, e.g:
 
-```hocon
+```properties
 gateway.stomp {
 
   mountpoint = "stomp/"
@@ -90,10 +90,10 @@ curl -X 'POST' \
 
 Or add a built-in database authentication by `emqx.conf`:
 
-```hocon
+```properties
 gateway.stomp {
 
-  authentication: {
+  authentication {
     backend = built_in_database
     mechanism = password_based
     password_hash_algorithm {

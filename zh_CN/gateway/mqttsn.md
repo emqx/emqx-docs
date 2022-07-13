@@ -9,7 +9,7 @@ MQTT-SN 网关基于 [MQTT-SN v1.2](https://www.oasis-open.org/committees/downlo
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 MQTT-SN 网关。
 
 也可以通过 HTTP-API 来启用，例如：
-```
+```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
   -H 'Content-Type: application/json' \
@@ -32,7 +32,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 
 或在 emqx.conf 中配置启用，例如：
 
-```hocon
+```properties
 gateway.mqttsn {
 
   mountpoint = "mqtt/sn"
@@ -96,7 +96,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
 
 或通过配置文件，为 MQTT-SN 网关添加一个 HTTP 认证：
 
-```hocon
+```properties
 gateway.mqttsn {
   authentication {
     enable = true

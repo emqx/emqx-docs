@@ -31,7 +31,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 
 或在 emqx.conf 中配置启用，例如：
 
-```hocon
+```properties
 gateway.stomp {
 
   mountpoint = "stomp/"
@@ -89,10 +89,10 @@ curl -X 'POST' \
 ```
 
 或通过配置为 Stomp 网关添加一个内置数据库认证：
-```hocon
+```properties
 gateway.stomp {
 
-  authentication: {
+  authentication {
     backend = built_in_database
     mechanism = password_based
     password_hash_algorithm {
