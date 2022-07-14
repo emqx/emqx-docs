@@ -12,14 +12,22 @@ When the **Hooks** mechanism does not exist in the system, the entire event proc
 
 In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified.
 
-The authentication plugin commonly used in the system is implemented according to this logic. Take the simplest plugin of [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_mnesia) as an example:
+The authentication/authorization commonly used in the system is implemented according to this logic. Take the simplest [Built-in Database](../security/authn/mnesia.md) as an example:
 
-When only the `emqx_auth_mnesia` authentication plugin is enabled and anonymous authentication is disabled, according to the processing logic of the event (see figure above), the logic of the authentication module at this time is:
+When only the `Built-in Database` authentication is enabled, according to the processing logic of the event (see figure above), the logic of the authentication module at this time is:
 
 1. Receive user authentication request (Authenticate)
-2. Read the parameter of *Whether to allow anonymous login*  and get ***deny*** result
-3. Execute the hook of the authentication event, that is, call back to the `emqx_auth_mnesia` plugin, assume this authentication is valid, and get **allow** result
-4. Return **Authentication succeeded**, and successfully access the system
+2. Execute the hook of the authentication event with `ClientInfo` and default `AccIn`.
+```erlang
+%% Default AccIn
+{ok, #{is_superuser => false}}
+```
+3. Call back to the `emqx_authn_mnesia` module, assume this authentication is valid, and get **allow, is_superuser** result.
+```erlang
+%% AuthNResult
+{ok, #{is_superuser => true}}
+```
+4. Return **Authentication succeeded**, and successfully access the system as a superuser
 
 It is shown in the following figure:
 
@@ -27,14 +35,14 @@ It is shown in the following figure:
                      EMQX Core          Hooks & Plugins
                 |<---  Scope  --->|<-------  Scope  -------->|
                 |                 |                          |
-  Authenticate  |     Allow       |   emqx_auth_mnesia       | Authenticate
- =============> > - - - - - - No -> - - - - - - - - - - -Yes->==============> Success
-     Request    |    Anonymous?   |     authenticate?        |     Result
+  Authenticate  |    InitAcc      |   emqx_authn_mnesia      |   Authenticate
+ =============> > - - - - - - - - > - - - - - - - - - - - - Yes ==============> Success
+     Request    |  (Init Result)  |     authenticate?        |      Result
                 |                 |                          |
                 +-----------------+--------------------------+
 ```
 
-Therefore, in EMQX Broker, the mechanism of **Hooks** greatly enhances the flexibility of the system. We don't need to modify the [emqx](https://github.com/emqx/emqx) core code, but only need to place the **HookPoint** in a specific location to allow external plugins to extend EMQX Broker with various behaviors.
+Therefore, in EMQX Broker, the mechanism of **Hooks** greatly enhances the flexibility of the system. We can only hook a function on **HookPoint** that EMQX provided on specific location, to extend EMQX Broker with various behaviors. And no need to modify the [emqx](https://github.com/emqx/emqx) core code.
 
 The implementer of the plugin only needs to pay attention to:
 
@@ -54,18 +62,26 @@ We call this chain composed of multiple callback functions executed sequentially
  **Callback Functions Chain** is Currently implemented according to the concept of [Chain-of-Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). In order to satisfy the functionality and flexibility of the hook, it must have the following attributes:
 
 - The callback functions on the **Callback Functions Chain** must be executed in certain order.
-- There must be an input and output for the **Callback Functions Chain** (output is not necessary in notification events, such as "a client has successfully logged in").
-- **Callback Functions Chain** is transitive, meaning that the chain will input the input parameters of the chain to the first callback function, and the returned value of the first callback function will be passed to the second callback function until the last function, whose returned value is the returned value of the entire chain.
+- There must be one/some initialization parameters and, optionally, a cumulative value for modification by the **Callback Functions Chain**. And the output is also non-mandatory. For example, in a notification class event, the initialization parameter output is non-mandatory. For example, "A client has successfully logged in".
+- **Callback Functions Chain** is transitive. And to allow more flexibility in the use of hooks, we have designed two modes of handling the return values of callback functions in the chain.
+  - **Result Transitive**</br>
+    It means that each callback function in the chain accepts the entry of the chain, and the return of the previous callback function (which can be interpreted as a cumulative value) as arguments. Until the last function, the return value of the last function is then the return value of the whole chain. Specially, the chain is called with an initial value for the cumulative value to be used by the first callback function in the chain.
+  - **Result Ignored**
+  Each function in the chain only cares about the chain's entry, and will ignore the return value of the previous callback function. And the chain will have a fixed return value of `ok`.</br>
+  This is actually a special case of the first type of **return value passing**. That is, the initial accumulation value is `ok`, and each callback function in the chain only cares about the incoming parameters of the chain and keeps the accumulation value as `ok` unchanged.</br>
+  Most of notification event follows this logic. So that we provide the general **Callback Functions Chain** execution module.
 - **Callback Functions Chain** needs to allow the functions with it to *terminate the chain in advance* and *ignore this operation.*
-  - **Termination in advance:** After the execution of this function is completed, the execution of the chain is directly terminated. All subsequent callback functions on the chain are ignored. For example, an authentication plugin believes that such clients do not need to check other authentication plug-ins after they are allowed to log in, so they need to be terminated in advance.
-    - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function. For example, when there are multiple authentication plug-ins, an authentication plug-in believes that such clients do not belong to its authentication scope, and it does not need to modify the authentication results. This operation should be ignored and the returned value of the previous function should be passed directly to the next function on the chain.
+  - **Termination in advance:** After the execution of this function is completed, the execution of the chain is directly terminated. All subsequent callback functions on the chain are ignored.</br>
+    For example, an authentication believes that such clients do not need to check other authentication plug-ins after they are allowed to log in, so they need to be terminated in advance.
+    - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function.</br>
+    For example, when there are multiple authentication plug-ins, an authentication plug-in believes that such clients do not belong to its authentication scope, and it does not need to modify the authentication results. This operation should be ignored and the returned value of the previous function should be passed directly to the next function on the chain.
 
 Therefore, we can get a design sketch of the chain:
 
 ![Callback Functions Chain Design](./assets/chain_of_responsiblity.png)
 
 The meaning of the figure is:
-1. The input parameters of the chain are read-only `Args` and the parameter `Acc` for function modification on the chain
+1. The input parameters of the chain are read-only `InitArgs` and the parameter `InitAcc` for function modification on the chain
 2. Regardless of how the execution of chain is terminated, its return value is the new `Acc`
 3. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
 4. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
@@ -78,7 +94,7 @@ The meaning of the figure is:
 
 The above is the main design concept of the callback function chain, which regulates the execution logic of the callback function on the hook.
 
-In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.
+In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.<!-- See also: -->
 
 
 {% emqxce %}
@@ -158,8 +174,7 @@ emqx:unhook(Name, {Module, Function}).
 ## Callback function
 The input parameters and returned value of the callback function are shown in the following table:
 
-(For parameter data structure, see:[emqx_types.erl](https://github.com/emqx/emqx/blob/main-v4.3/src/emqx_types.erl))
-
+(For parameter data structure, see:[emqx_types.erl](https://github.com/emqx/emqx/tree/master/apps/emqx/src/emqx_types.erl))
 
 | Name                 | input parameter                                                                                                                                                          | Returned value     |
 |----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|
@@ -182,6 +197,5 @@ The input parameters and returned value of the callback function are shown in th
 | message.delivered    | `ClientInfo`：Client information parameters<br/>`Message`：Message object                                                                                                | New `Message`      |
 | message.acked        | `ClientInfo`：Client information parameters<br/>`Message`：Message object                                                                                                | -                  |
 | message.dropped      | `Message`：Message object<br>`By`：Dropped by<br>`Reason`：Drop reason                                                                                                   | -                  |
-
 
 For the application of these hooks, see:[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
