@@ -1457,7 +1457,7 @@ Get rule list, supports paging and filter, including the rule's SQL, Topics list
 | Name   | Type | Required | Description |
 | ------ | --------- | -------- | ------- |  ---- |
 | enable_paging | Boolean | False | Whether to enable paging with page/limit metadata |
-| enabled | Boolean   | False |        | Filter condition: whether the rule is enabled or not |
+| enabled | Boolean   | False | Filter condition: whether the rule is enabled or not |
 | for     | String | False | return topic exact match rule |
 | _like_id | String | False | Fuzzy search by id substring |
 | _like_for | String | False | Fuzzy search by Topic substring |
