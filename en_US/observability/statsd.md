@@ -19,7 +19,7 @@ statsd {
 
 ```
 
-You need to restart emqx server after modifying the configuration items to take effect.
+You need to restart EMQX server after modifying the configuration items to take effect.
 
 ## Dashboard Update
 

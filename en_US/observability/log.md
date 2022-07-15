@@ -84,7 +84,7 @@ log.console_handler {
 
 ## File Log Handler
 
-The default log file directory of EMQX is `./log` (for zip package installation) or `/var/log/emqx` (for binary package installation). The configuration of the file  log handler is mostly the same as that of the console handler, except for the additional file write control configuration, which is listed below.
+The default log file directory of EMQX is `./log` (for zip package installation) or `/var/log/emqx` (for RPM or DEB package installation). The configuration of the file  log handler is mostly the same as that of the console handler, except for the additional file write control configuration, which is listed below.
 
 ```
  log.file_handlers.default {  
