@@ -9,7 +9,7 @@ EMQX Broker provides users with multiple ways to view metrics and status. Most d
 If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. You can refer to [HTTP API](../admin/api.md) and [$SYS system topic](../advanced/system-topic.md#).
 
 ::: tip
-EMQX provides integration with third-party monitoring systems, such as StatsD and Prometheus. You can refer to [Prometheus Monitoring Alarm](../observability/prometheus.md) for an example.
+EMQX provides integration with third-party monitoring systems, such as StatsD and Prometheus. You can refer to [Prometheus Monitoring Alarm](../observability/prometheus.md) and [StatsD](../observability/statsd.md) for an example.
 :::
 
 ## Metrics & Stats
