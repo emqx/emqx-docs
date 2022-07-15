@@ -18,7 +18,7 @@ EMQX 开源版中仅支持 MQTT 桥接 和 Webhook，企业版支持的数据桥
 首先我们使用 Python 搭建一个简单的 HTTP 服务。这个 HTTP 服务接收 `POST /` 请求，
 简单打印请求内容后返回 200 OK：
 
-```
+```python
 from flask import Flask, json, request
 
 api = Flask(__name__)
@@ -77,7 +77,7 @@ SELECT * FROM "t/#"
 
 然后验证消息已经被发送到了 HTTP 服务端：
 
-```
+```shell
 python3 http_server.py
  * Serving Flask app 'http_server' (lazy loading)
  * Environment: production
