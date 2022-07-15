@@ -95,6 +95,7 @@
   title_cn: 运行监测
   children:
     - observability/prometheus
+    - observability/statsd
     - observability/log
     - observability/tracer
     - observability/alarms
