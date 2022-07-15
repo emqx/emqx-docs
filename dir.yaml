@@ -188,7 +188,6 @@
 #     # TODO: add plugin development doc
 #     - advanced/plugins
     - advanced/hooks
-#     - advanced/webhook
 #     - advanced/lang-exhook
 #     - advanced/lang-exproto
 #     - advanced/lang-lua

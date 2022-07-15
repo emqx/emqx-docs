@@ -4,13 +4,6 @@ EMQX extensions are implemented by adding callbacks to various hook points.
 
 See [Hooks](hooks.md) for more information.
 
-## Webhook
-
-Webhook implements some of the hook callbacks by translating the calls into
-HTTP requests and forward the requests to the configured HTTP endpoints.
-
-See [Webhook](webhook)
-
 ## Multi-language support
 
 Since 4.1, EMQX provides **multi-language support**. It allows users to use Python, Java or other programming languages to handle EMQX [hooks](./hooks.md), or parse your private protocol on TCP/UDP transport. In this way, you can customize EMQX with other programming languages.
