@@ -1,6 +1,6 @@
-# SSL(TLS)
+# SSL/TLS
 
-当接收 MQTT 客户端连接或连接到外部资源时，EMQX 支持以 SSL(TLS) 的方式
+当接收 MQTT 客户端连接或连接到外部资源时，EMQX 支持以 SSL/TLS 的方式
 建立安全的连接。
 
 ## MQTT SSL 监听器

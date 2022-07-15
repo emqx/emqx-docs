@@ -3,8 +3,7 @@
 EMQX exposes a HTTP management API which by default listens on port 18083.
 The APIs are described by OpenAPI (Swagger) 3.0 specification.
 
-When EMQX is started in localhost, you can visit
-http://localhost:18083/api-docs/index.html
+When EMQX is started in localhost, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html)
 to view the API document, and also experiment with the management APIs from the Swagger UI.
 
 The `/api-docs` endpoint does not require login, however to go further from there,
@@ -46,7 +45,7 @@ is prohibited to login dashboard, manage users or other API Keys.
 You may create 'app' `key:secret` pairs from the dashboard or by calling the
 `api_key` API like below:
 
-```
+```bash
 curl -u 'admin:public' \
      -X 'POST' 'http://localhost:18083/api/v5/api_key' \
      -H 'accept: application/json' \
@@ -61,7 +60,7 @@ curl -u 'admin:public' \
 
 An example response:
 
-```
+```bash
 {
   "api_key": "a87465f14ca0d420",
   "api_secret": "LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN",
@@ -77,7 +76,9 @@ An example response:
 Then the `api_key` and `api_secret` can be used to access management APIs
 using HTTP basic auth. For instance:
 
-```
+```bash
 curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
-     -X 'GET' 'http://localhost:18083/api/v5/nodes' -H 'accept: text/plain'
+     -X 'GET' 'http://localhost:18083/api/v5/nodes'
 ```
+
+The `api_secret` is only returned once when it is created, please save it in time.

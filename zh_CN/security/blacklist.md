@@ -23,8 +23,9 @@ EMQX 为用户提供了黑名单功能，用户可以通过 Dashboard 将指定�
 需要注意的是，自动封禁功能只封禁客户端标识符，并不封禁用户名和 IP 地址，即该机器只要更换客户端标识符就能够继续登录。
 
 此功能默认关闭，用户可以在 `emqx.conf` 配置文件中添加如下配置进行开启:
+
 ```bash
-zone.external.flapping_detect {
+flapping_detect {
   enable = true
   # 客户端最大离线次数
   max_count = 15

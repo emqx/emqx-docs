@@ -36,7 +36,7 @@ That is to say, a malicious client may still able to attack if they change clien
 This feature is disabled by default, and users can enable it by adding the following configuration to the `emqx.conf` file:
 
 ```bash
-zone.external.flapping_detect {
+flapping_detect {
 
   enable = true
 

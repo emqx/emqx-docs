@@ -11,6 +11,7 @@ EMQX binary packages are released on below operating systems:
 + Ubuntu 18.04
 + Ubuntu 20.04
 + macOS 10
++ macOS 11
 + Windows Server 2019
 
 ## Package Installation (Linux)
@@ -33,7 +34,7 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
 
 {% endemqxee %}
 
-2. Install EMQX Broker:
+2. Install EMQX:
 
     + RPM package (RedHat/CentOS/RockyLinux/AmazonLinux):
 
@@ -63,13 +64,13 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
         sudo systemctl start emqx
         ```
 
-4.  Stop EMQX Broker
+4.  Stop EMQX
 
     ```shell
     $ emqx stop
     ```
 
-5.  Uninstall EMQX Broker
+5.  Uninstall EMQX
 
     + DEB:
 
@@ -133,15 +134,15 @@ Please verify the SHA256 of the file when using this operation to ensure the int
     ./bin/emqx_ctl status
     ```
 
-4. Stop EMQX Broker
+4. Stop EMQX
 
     ```shell
     ./bin/emqx stop
     ```
 
-5. Remove EMQX Broker
+5. Remove EMQX
 
-    Simply delete the EMQX Broker directory
+    Simply delete the EMQX directory
 
 ## Running EMQX in Docker
 
@@ -218,7 +219,7 @@ Please verify the SHA256 of the file when using this operation to ensure the int
                      stopped_nodes => []}
    ```
 
-For more information about EMQX Broker Docker please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx) or [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
+For more information about EMQX Docker please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx) or [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
 ## Install and cluster via Helm (K8S, K3S)
 
@@ -229,7 +230,7 @@ For more information about EMQX Broker Docker please visit [Docker Hub](https://
   helm repo update
   ```
 
-2. Query EMQX Broker
+2. Query EMQX
 
   ```shell
   $ helm search repo emqx
@@ -239,13 +240,13 @@ For more information about EMQX Broker Docker please visit [Docker Hub](https://
   emqx/kuiper  0.1.1         0.1.1       A lightweight IoT edge analytic software
   ```
 
-3. Start EMQX Broker cluster
+3. Start EMQX cluster
 
   ```shell
   helm install my-emqx emqx/emqx
   ```
 
-4. View EMQX Broker cluster situation
+4. View EMQX cluster situation
 
   ```shell
   $ kubectl get pods
