@@ -10,6 +10,11 @@ listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3D
 
 ```
 
+But the PSK Ciphers is not supported by `tlsv1.3`, we should set the `tls_version` as:
+```bash
+listener.ssl.external.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+```
+
 ## Create module
 
 Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
