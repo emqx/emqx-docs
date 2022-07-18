@@ -1,10 +1,10 @@
-# MQTT
+# MQTT Bridge
 
 MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，也可以是支持 MQTT 协议的其他服务。MQTT 桥接既可以订阅外部服务的消息，也可以发布消息到外部服务。但仅支持单向的工作模式，只能成为生产者，或消费者。如果需要双向桥接，需要创建多个方向不同的 MQTT 桥接，来完成数据的双向流通。
 
 ## 使用配置文件创建 MQTT Bridge
 
-### `ingress` 类型 MQTT Bridge 配置参数列表
+### 进方向 MQTT Bridge 配置参数列表
 
 从外部服务桥接消息到本地。
 
@@ -20,7 +20,7 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 | payload | 发布到本地的 Payload | String |  是 | - |
 | connector | MQTT 连接器 | connector() |  是 | Connecter 配置参数列表 |
 
-### `egress` 类型 MQTT Bridge 配置参数列表
+### 出方向 MQTT Bridge 配置参数列表
 
 将本地消息桥接至外部服务。
 
@@ -28,12 +28,12 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 | -- | -- | -- | -- | -- |
 | enable | 开启或关闭桥接 | Boolean |  是 | - |
 | direction  | 桥接方向：</br>ingress 表示从外部服务订阅消息，发布到本地</br>egress 表示将消息从本地发布到外部服务 | String | 是 | egress |
-| connector | MQTT 连接器 | connector() |  是 | 参考 Connecter 配置参数列表 |
 | remote_topic | 发布到外部服务的 Topic | String | 是 |  - |
 | remote_qos |  发布到外部服务 QoS | Integer |  是 | 0 \| 1 \| 2 |
 | retain | 发布到外部服务的 Retain 标记 | Boolean |  是 | - |
-| local_topic | 获取数据的本地 Topic | String | 是 | - |
 | payload | 发布到外部服务的 Payload | String |  是 | - |
+| local_topic | 获取数据的本地 Topic | String | 是 | - |
+| connector | MQTT 连接器 | connector() |  是 | 参考 Connecter 配置参数列表 |
 
 ### Connecter 配置参数列表
 
@@ -71,7 +71,7 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 
 预先启动一个 EMQX 节点，作为消息桥接使用的外部服务，本文中使用的是在 IP 为 `192.168.1.234` 上部署的 EMQX 节点。下文中使用 `ingress` 与 `egress` 桥接演示，都是以此节点作为外部服务。本地服务的 IP 地址为 `127.0.0.1`。
 
-编辑 `emqx.conf`，添加一个桥接配置，使用上面 `ingress` 与 `egress` 桥接配置示例中的配置信息，实例中创建了两个桥接，分别为 `mqtt_bridge_ingress` 与 `mqtt_bridge_egress`。启动本地 EMQX。
+编辑 `emqx.conf`，添加一个桥接配置，使用下面 `ingress` 与 `egress` 的配置示例，示例中创建了两个桥接，分别为 `mqtt_bridge_ingress` 与 `mqtt_bridge_egress`。启动本地 EMQX。
 
 ```js
 bridges {
@@ -222,6 +222,8 @@ bridges {
 
 ![image](./assets/rules/mqtt_bridge/local_pub.png)
 
-查看本地连接，消息已经由 MQTT Bridge 桥接至外部服务。
+查看外部服务连接，消息已经由 MQTT Bridge 桥接至外部服务。
 
 ![image](./assets/rules/mqtt_bridge/remote_recv.png)
+
+## 与规则配合使用
