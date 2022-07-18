@@ -154,7 +154,7 @@ bridges {
 注意 5.0.0 Dashboard 暂不支持脱离规则，单独使用 MQTT Bridge。仅可使用配置文件创建
 :::
 
-### `ingress` 桥接消息流转
+### 进方向的桥接消息流转
 
 ```txt
  +-------------------------+
@@ -190,7 +190,7 @@ bridges {
 
 ![image](./assets/rules/mqtt_bridge/local_recv.png)
 
-### `egress` 桥接消息流转
+### 出方向的桥接消息流转
 
 ```txt
  +-------------------------+
