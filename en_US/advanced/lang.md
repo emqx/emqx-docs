@@ -24,19 +24,19 @@ The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows use
 - Check the PUB/SUB operation privileges for a client.
 - Bridge or Store a message
 
-See: [Extension Hook](lang-exhook.md).
+See: [Extension Hook](./lang-exhook.md).
 
-### Extension Protocol
+<!-- ### Extension Protocol -->
 
-The **Extension Protocol** is supported by the **emqx-exproto** plugin. It allows users to implement their private access protocol using other programming languages. In the `emqx-exproto`, you can:
+<!-- The **Extension Protocol** is supported by the **emqx-exproto** plugin. It allows users to implement their private access protocol using other programming languages. In the `emqx-exproto`, you can: -->
 
-- Establish a connection based on TCP/SSL/UDP/DTLS
-- Subscribe a topic to receive messages and deliver it to your client
-- Parse bytes and publish it to EMQX
+<!-- - Establish a connection based on TCP/SSL/UDP/DTLS -->
+<!-- - Subscribe a topic to receive messages and deliver it to your client -->
+<!-- - Parse bytes and publish it to EMQX -->
 
 
-### Legacy solutions
+<!-- ### Legacy solutions -->
 
-Prior to EMQX 4.1, only Lua support was included, and it was implemented by `emqx-lua-hook`. This plugin only supports handling of hooks, not protocol access.
+<!-- Prior to EMQX 4.1, only Lua support was included, and it was implemented by `emqx-lua-hook`. This plugin only supports handling of hooks, not protocol access. -->
 
-See: [Lua Support](lang-lua.md).
+<!-- See: [Lua Support](lang-lua.md). -->

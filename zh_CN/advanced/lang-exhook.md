@@ -29,7 +29,7 @@
 
 和 EMQX 原生的钩子一致，它也支持链式的方式计算和返回：
 
-![chain_of_responsiblity](./assets/chain_of_responsiblity.png)
+[回调链(Callback Functions Chain)](./hooks.md#回调链)
 
 
 ## 接口设计
@@ -39,7 +39,7 @@
 ```
 syntax = "proto3";
 
-package emqx.exhook.v1;
+package emqx.exhook.v2;
 
 service HookProvider {
 
@@ -57,7 +57,7 @@ service HookProvider {
 
   rpc OnClientAuthenticate(ClientAuthenticateRequest) returns (ValuedResponse) {};
 
-  rpc OnClientCheckAcl(ClientCheckAclRequest) returns (ValuedResponse) {};
+  rpc OnClientAuthorize(ClientAuthorizeRequest) returns (ValuedResponse) {};
 
   rpc OnClientSubscribe(ClientSubscribeRequest) returns (EmptySuccess) {};
 
@@ -73,7 +73,7 @@ service HookProvider {
 
   rpc OnSessionDiscarded(SessionDiscardedRequest) returns (EmptySuccess) {};
 
-  rpc OnSessionTakeovered(SessionTakeoveredRequest) returns (EmptySuccess) {};
+  rpc OnSessionTakenover(SessionTakenoverRequest) returns (EmptySuccess) {};
 
   rpc OnSessionTerminated(SessionTerminatedRequest) returns (EmptySuccess) {};
 
@@ -97,7 +97,7 @@ service HookProvider {
 - `OnClient*`，`OnSession*`，`OnMessage*` 为前缀的方法与 [钩子](hooks.md) 的当中的方法一一对应。它们有着相同的调用时机和相似的参数列表。
 - 仅 `OnClientAuthenticate`，`OnClientCheckAcl`，`OnMessagePublish` 允许携带返回值到 EMQX 系统，其它回调则不支持。
 
-其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exhook/priv/protos/exhook.proto)
+其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
 
 ## 开发指南
@@ -112,14 +112,7 @@ service HookProvider {
 
 开发完成后，需将该服务部署到与 EMQX 能够通信的服务器上，并保证端口的开放。
 
-然后修改 `etc/plugins/emqx_exhook.conf` 中的服务器配置，例如：
-
-```
-exhook.server.default.url = http://127.0.0.1:9000
-```
-
-启动 `emqx_exhook` 插件，观察输出。
-
+你可以使用 [EMQX Dashboard](http://127.0.0.1:18083/#/exhook) 来对 ExHook 服务进行管理和监控
 
 其中各个语言的 gRPC 框架可参考：[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 

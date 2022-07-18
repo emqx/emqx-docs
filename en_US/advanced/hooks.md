@@ -11,8 +11,12 @@ In simple terms, the purpose of this mechanism is to enhance the flexibility of 
 When the **Hooks** mechanism does not exist in the system, the entire event processing flow (from the input of the event, to the handler and the result) is invisible and cannot be modified for the external system .
 
 In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified.
+There are several functions that are implemented using the hook feature as follows.
+1. You can use the hook system to perform multi-step streaming processing (encoding/decoding, etc.) of messages when they are published. That is, the rules engine provides the message codec function.
+2. Caching of messages at message publishing time according to configuration.
+3. Delayed message publishing using the hook's blocking mechanism.
 
-The authentication/authorization commonly used in the system is implemented according to this logic. Take the simplest [Built-in Database](../security/authn/mnesia.md) as an example:
+The authentication/authorization commonly used in the system is implemented according to this logic. Take the [ExHook](./lang-exhook.md) as an example:
 
 When only the `Built-in Database` authentication is enabled, according to the processing logic of the event (see figure above), the logic of the authentication module at this time is:
 
@@ -22,7 +26,7 @@ When only the `Built-in Database` authentication is enabled, according to the pr
 %% Default AccIn
 {ok, #{is_superuser => false}}
 ```
-3. Call back to the `emqx_authn_mnesia` module, assume this authentication is valid, and get **allow, is_superuser** result.
+3. Call back to the `emqx_exhook` module, assume this authentication is valid, and get **allow, is_superuser** result.
 ```erlang
 %% AuthNResult
 {ok, #{is_superuser => true}}
@@ -34,10 +38,10 @@ It is shown in the following figure:
 ```
                      EMQX Core          Hooks & Plugins
                 |<---  Scope  --->|<-------  Scope  -------->|
-                |                 |                          |
-  Authenticate  |    InitAcc      |   emqx_authn_mnesia      |   Authenticate
+                |                 |       emqx_exhook        |
+  Authenticate  |    InitAcc      |      (user's code)       |   Authenticate
  =============> > - - - - - - - - > - - - - - - - - - - - - Yes ==============> Success
-     Request    |  (Init Result)  |     authenticate?        |      Result
+     Request    |  (Init Result)  |      authenticate?       |      Result
                 |                 |                          |
                 +-----------------+--------------------------+
 ```
@@ -59,58 +63,75 @@ There may be multiple plugins on a single **HookPoint** that need to care about 
 
 We call this chain composed of multiple callback functions executed sequentially **Callback Functions Chain**.
 
- **Callback Functions Chain** is Currently implemented according to the concept of [Chain-of-Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). In order to satisfy the functionality and flexibility of the hook, it must have the following attributes:
+ **Callback Functions Chain** is Currently implemented according to the concept of [Chain-of-Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). In order to satisfy the functionality and flexibility of the hook, it have the following attributes:
 
-- The callback functions on the **Callback Functions Chain** must be executed in certain order.
-- There must be one/some initialization parameters and, optionally, a cumulative value for modification by the **Callback Functions Chain**. And the output is also non-mandatory. For example, in a notification class event, the initialization parameter output is non-mandatory. For example, "A client has successfully logged in".
-- **Callback Functions Chain** is transitive. And to allow more flexibility in the use of hooks, we have designed two modes of handling the return values of callback functions in the chain.
+- **Ordered**: The callback functions on the **Callback Functions Chain** must be executed in certain order.
+- **In Parameter** There must be one/some initialization parameters and, optionally, a cumulative value for modification by the **Callback Functions Chain**.
+- **Output Result** Each function in the chain must have an output, and `ok` should be used as the function return value for callback functions that do not care about the result of execution. For example, in a notification class event, "A client has successfully logged in" does not require a return value.
+- **Transitive** The result of callback functions in the chain is transitive. And to allow more flexibility in the use of hooks, we have designed **two modes** of handling the return values of callback functions in the chain.
   - **Result Transitive**</br>
     It means that each callback function in the chain accepts the entry of the chain, and the return of the previous callback function (which can be interpreted as a cumulative value) as arguments. Until the last function, the return value of the last function is then the return value of the whole chain. Specially, the chain is called with an initial value for the cumulative value to be used by the first callback function in the chain.
-  - **Result Ignored**
-  Each function in the chain only cares about the chain's entry, and will ignore the return value of the previous callback function. And the chain will have a fixed return value of `ok`.</br>
-  This is actually a special case of the first type of **return value passing**. That is, the initial accumulation value is `ok`, and each callback function in the chain only cares about the incoming parameters of the chain and keeps the accumulation value as `ok` unchanged.</br>
-  Most of notification event follows this logic. So that we provide the general **Callback Functions Chain** execution module.
+  - **Result Transparent**</br>
+    Each function in the chain only cares about the chain's entry, and will ignore the return value of the previous callback function. And the chain will have a fixed return value of `ok`.</br>
+    This is actually a special case of the first type of **Result Transitive**. That is, the initial accumulation value is `ok`, and each callback function in the chain only cares about the incoming parameters of the chain and keeps the accumulation value as `ok` unchanged.</br>
+    Most of notification event follows this logic. So that we provide the general **Callback Functions Chain** execution module.
 - **Callback Functions Chain** needs to allow the functions with it to *terminate the chain in advance* and *ignore this operation.*
   - **Termination in advance:** After the execution of this function is completed, the execution of the chain is directly terminated. All subsequent callback functions on the chain are ignored.</br>
     For example, an authentication believes that such clients do not need to check other authentication plug-ins after they are allowed to log in, so they need to be terminated in advance.
-    - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function.</br>
+  - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function.</br>
     For example, when there are multiple authentication plug-ins, an authentication plug-in believes that such clients do not belong to its authentication scope, and it does not need to modify the authentication results. This operation should be ignored and the returned value of the previous function should be passed directly to the next function on the chain.
 
-Therefore, we can get a design sketch of the chain:
+Therefore, we can obtain two program flow diagrams for the execution chain based on the two ways of handling the return value of the callback function on the chain.
 
-![Callback Functions Chain Design](./assets/chain_of_responsiblity.png)
+### Result Transitiv
+```
+Chain execution direction ===>>>
 
+                                 ┌------ ok ------┐                 ┌------ ok ------┐                 ┌------ ok ------┐
+                                 |   (Args, Acc)  |                 |   (Args, Acc)  |                 |   (Args, Acc)  |
+(Args, InitAcc) -----> Fun1 ---->┤                ├-----> Fun2 ---->┤                ├-----> Fun3 ---->┤                ├-> [NO MORE FUNCS]
+                        |        |                |        |        |                |        |        |                |        |
+                        |        └- {ok, NewAcc} -┘        |        └- {ok, NewAcc} -┘        |        └- {ok, NewAcc} -┘        |
+                  ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐
+                  |           |                      |           |                      |           |                      |           |
+                stop     {stop, NewAcc}            stop     {stop, NewAcc}            stop     {stop, NewAcc}             ok      {ok, NewAcc}
+                  |           |                      |           |                      |           |                      |           |
+                 Acc       NewAcc                   Acc        NewAcc                  Acc        NewAcc                  Acc        NewAcc
+                  └-----┬-----┘                      └-----┬-----┘                      └-----┬-----┘                      └-----┬-----┘
+                        |                                  |                                  |                                  |
+ Result <---------------┴<---------------------------------┴<---------------------------------┴<---------------------------------┘
+```
 The meaning of the figure is:
-1. The input parameters of the chain are read-only `InitArgs` and the parameter `InitAcc` for function modification on the chain
-2. Regardless of how the execution of chain is terminated, its return value is the new `Acc`
-3. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
-4. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
-5. The callback function returns with:
-    - `ok`: ignore this operation, continue the chain execution with read-only `Args` and `Acc` returned by the previous function
-    - `{ok, NewAcc}`: perform some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`
-6. The callback function also returns with:
-    - `stop`: Stop the transfer of the chain and immediately return the result of ` Acc` from the previous function
-    - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification
+1. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
+2. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
+3. The input parameters of the chain are read-only `Args` and the parameter `InitAcc` for function modification on the chain.
+4. Regardless of how the execution of chain is terminated, the chain always returns a value, which depends on the return form.
+   - The callback function returns with:
+     - `ok`: ignore this operation, continue the chain execution with read-only `Args` and `Acc` returned by the previous function
+     - `{ok, NewAcc}`: perform some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`
+   - The callback function also returns with:
+     - `stop`: Stop the transfer of the chain and immediately return the result of ` Acc` from the previous function
+     - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification
+
+### Result Transparent
+```
+Chain execution direction ===>>>
+
+(Args) --------------> Fun1 -----------> ok ------------> Fun2 -----------> ok ------------> Fun3 -----------> ok --------> [NO MORE FUNCS]
+                        |              (Args)              |              (Args)              |              (Args)              |
+                       stop                               stop                               stop                               ok
+                        |                                  |                                  |                                  |
+                       ok                                 ok                                 ok                                 ok
+ Result <---------------┴<---------------------------------┴<---------------------------------┴<---------------------------------┘
+```
+
+Comparing this with the first execution mode, you can see that the execution mode that ignores the return value in the chain is actually a special case of the pass return value mode.
+This is equivalent to the case where the `InitAcc` value is `ok` and every callback function mounted on the chain returns `ok | {ok, ok} | stop | {stop, ok}`.
 
 The above is the main design concept of the callback function chain, which regulates the execution logic of the callback function on the hook.
 
-In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.<!-- See also: -->
-
-<!-- {% emqxce %} -->
-
-<!-- - For hooks and other language applications, Refer to: [Extension Hook](./lang-exhook.md) -->
-<!-- - Only Lua is currently supported, Refer to: [emqx_lua_hook](./lang-lua.md) -->
-
-<!-- {% endemqxce %} -->
-
-
-<!-- {% emqxee %} -->
-
-<!-- - For hooks and other language applications, Refer to: [Extension Hook](./lang-exhook.md) -->
-<!-- - Only Lua is currently supported, Refer to: [emqx_lua_hook](./lang-lua.md) -->
-
-<!-- {% endemqxee %} -->
-
+In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.
+- For hooks and other language applications, Refer to: [Extension Hook](./lang-exhook.md)
 
 ## HookPoint
 
