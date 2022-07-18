@@ -8,6 +8,11 @@ listener.ssl.external.psk_ciphers = PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3D
 
 ```
 
+由于 PSK 不支持 `tlsv1.3`，因此需要设置 `tls_versions` 为：
+```bash
+listener.ssl.external.tls_versions = tlsv1.2,tlsv1.1,tlsv1
+```
+
 ## 创建模块
 
 打开 [EMQX Dashboard](http://127.0.0.1:18083/#/modules)，点击左侧的 “模块” 选项卡，选择添加：
