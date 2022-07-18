@@ -225,3 +225,116 @@ Publish a message to the local service, using Topic `local/topic/egress`.
 View the external service connection, the message has been bridged to the external service by the MQTT Bridge.
 
 ![image](./assets/rules/mqtt_bridge/remote_recv.png)
+
+## Works with rules
+
+MQTT Bridge can be used either alone or in conjunction with rules for more powerful and flexible data processing capabilities.
+
+- When the bridge is ingress direction, it can be used as the data source of the rule
+- When the bridge is egress direction, it can be used as the actions of the rule
+
+```txt
+ Egress & Rule                                  Ingress & Rule
+
+ +-------------------------+    +--------+      +-------------------------+    +--------+
+ | Remote                  |    |        |      | Remote                  |    |        |
+ | EMQX Broker             |--->| Client |      | EMQX Broker             |<---| Client |
+ |                         |    |        |      |                         |    |        |
+ +-------------------------+    +--------+      +-------------------------+    +--------+
+             ^                                                |
+             |                                                |
+             |                                                V
+  +-----------------------+                      +-----------------------+
+  |  MQTT Bridge Egress   |                      |  MQTT Bridge Ingress  |
+  +-----------------------+                      +-----------------------+
+             ^                                                |
+             |                                                V
+          Actions                                        Data source
+             |                                                V
+  +-----------------------+                      +-----------------------+
+  |  Rule                 |                      |  Rule                 |----> Other Actions
+  +-----------------------+                      +-----------------------+
+             ^                                                |
+             |                                                V
+  +------------------------+    +--------+       +------------------------+    +--------+
+  | Local                  |    |        |       | Local                  |    |        |
+  | EMQX Broker            |<---| Client |       | EMQX Broker            |--->| Client |
+  |                        |    |        |       |                        |    |        |
+  +------------------------+    +--------+       +------------------------+    +--------+
+
+```
+
+### Ingress MQTT Bridge with rule
+
+Use the `console` command to start EMQX. To make it easier to observe the output of the rules, we will use the console output as a check for the rule messages.
+The path to start EMQX needs to be changed according to the deployment method.
+
+```bash
+./bin/emqx console
+```
+
+Login to EMQX Dashboard, click `Data Integration` - `Rules` - `Create` on the right side, edit SQL.
+
+```SQL
+SELECT
+  *
+FROM
+  "$bridges/mqtt:mqtt_bridge_ingress"
+```
+
+Click on the left side, `Add Action`, and select Console Output.
+
+![image](./assets/rules/mqtt_bridge/create_rule.png)
+
+At this point, we publish a message with Topic `remote/topic/ingress` on the external service.
+
+![image](./assets/rules/mqtt_bridge/remote_pub_rule.png)
+
+Looking at the EMQX console, you can see that the rule has consumed the data for the bridge.
+
+```erlang
+[rule action] rule_egress
+        Action Data: #{dup => false,
+                       event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
+                       id => <<"0005E40E4C3F8BE7F443000009580002">>,
+                       message_received_at => 1658124943461,
+                       metadata => #{rule_id => <<"rule_egress">>},
+                       node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
+                       pub_props => #{},qos => 0,retain => false,
+                       server => <<"192.168.1.234:1883">>,
+                       timestamp => 1658124943461, 
+                       topic => <<"remote/topic/ingress">>}
+        Envs: #{dup => false,event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
+                id => <<"0005E40E4C3F8BE7F443000009580002">>,
+                message_received_at => 1658124943461,
+                metadata => #{rule_id => <<"rule_egress">>},
+                node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
+                pub_props => #{},qos => 0,retain => false,
+                server => <<"192.168.1.234:1883">>,
+                timestamp => 1658124943461,
+                topic => <<"remote/topic/ingress">>}
+```
+
+### Egress MQTT Bridge with rule
+
+Login to EMQX Dashboard, click `Data Integration` - `Rules` - `Create` on the right side, edit SQL.
+
+```SQL
+SELECT
+  *
+FROM
+  "rule/demo/local/topic"
+```
+
+Click Add Action on the left, select `use data bridge forwarding`, drop down and select the created bridge `mqtt:mqtt_bridge_egress`.
+Click on `Add`, `Create`.
+
+![image](./assets/rules/mqtt_bridge/create_rule_egress.png)
+
+Use the desktop MQTT client MQTTX to publish a message with a Topic of `rule/demo/local/topic`.
+
+![image](./assets/rules/mqtt_bridge/local_rule_pub.png)
+
+The data bridged to the external service has been received.
+
+![image](./assets/rules/mqtt_bridge/remote_rule_recv.png)

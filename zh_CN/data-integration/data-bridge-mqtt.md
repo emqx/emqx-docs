@@ -227,3 +227,114 @@ bridges {
 ![image](./assets/rules/mqtt_bridge/remote_recv.png)
 
 ## 与规则配合使用
+
+MQTT Bridge 既可以单独使用，也可以与规则配合使用，以获取更强大、更灵活的数据处理功能。
+
+- 当桥接为进方向时，可以作为规则的数据源
+- 当桥接为出方向时，可以作为规则的处理动作
+
+```txt
+ Egress & Rule                                  Ingress & Rule
+
+ +-------------------------+    +--------+      +-------------------------+    +--------+
+ | Remote                  |    |        |      | Remote                  |    |        |
+ | EMQX Broker             |--->| Client |      | EMQX Broker             |<---| Client |
+ |                         |    |        |      |                         |    |        |
+ +-------------------------+    +--------+      +-------------------------+    +--------+
+             ^                                                |
+             |                                                |
+             |                                                V
+  +-----------------------+                      +-----------------------+
+  |  MQTT Bridge Egress   |                      |  MQTT Bridge Ingress  |
+  +-----------------------+                      +-----------------------+
+             ^                                                |
+             |                                                V
+          Actions                                        Data source
+             |                                                V
+  +-----------------------+                      +-----------------------+
+  |  Rule                 |                      |  Rule                 |----> Other Actions
+  +-----------------------+                      +-----------------------+
+             ^                                                |
+             |                                                V
+  +------------------------+    +--------+       +------------------------+    +--------+
+  | Local                  |    |        |       | Local                  |    |        |
+  | EMQX Broker            |<---| Client |       | EMQX Broker            |--->| Client |
+  |                        |    |        |       |                        |    |        |
+  +------------------------+    +--------+       +------------------------+    +--------+
+
+```
+
+### 进方向的 MQTT Bridge 与规则配合使用
+
+使用 console 命令启动 EMQX，为了更方便的观察规则的输出，我们会使用控制台输出作为规则消息的检查。
+启动 EMQX 的路径需要按照部署方式改变。
+
+```bash
+./bin/emqx console
+```
+
+登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
+
+```SQL
+SELECT
+  *
+FROM
+  "$bridges/mqtt:mqtt_bridge_ingress"
+```
+
+点击左侧，`添加动作`，选择控制台输出。
+
+![image](./assets/rules/mqtt_bridge/create_rule.png)
+
+这时，我们在外部服务上发布一条 Topic 为 `remote/topic/ingress` 的消息。
+
+![image](./assets/rules/mqtt_bridge/remote_pub_rule.png)
+
+观察 EMQX 控制台，可见规则已经消费到了桥接的数据。
+
+```erlang
+[rule action] rule_egress
+        Action Data: #{dup => false,
+                       event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
+                       id => <<"0005E40E4C3F8BE7F443000009580002">>,
+                       message_received_at => 1658124943461,
+                       metadata => #{rule_id => <<"rule_egress">>},
+                       node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
+                       pub_props => #{},qos => 0,retain => false,
+                       server => <<"192.168.1.234:1883">>,
+                       timestamp => 1658124943461, 
+                       topic => <<"remote/topic/ingress">>}
+        Envs: #{dup => false,event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
+                id => <<"0005E40E4C3F8BE7F443000009580002">>,
+                message_received_at => 1658124943461,
+                metadata => #{rule_id => <<"rule_egress">>},
+                node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
+                pub_props => #{},qos => 0,retain => false,
+                server => <<"192.168.1.234:1883">>,
+                timestamp => 1658124943461,
+                topic => <<"remote/topic/ingress">>}
+```
+
+### 出方向的 MQTT Bridge 与规则配合使用
+
+登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
+
+```SQL
+SELECT
+  *
+FROM
+  "rule/demo/local/topic"
+```
+
+点击左侧添加动作，选择`使用数据桥接转发`，下拉选择创建好的桥接 `mqtt:mqtt_bridge_egress`。
+点击`添加`，`创建`。
+
+![image](./assets/rules/mqtt_bridge/create_rule_egress.png)
+
+使用桌面 MQTT 客户端 MQTTX 发布一条 Topic 为 `rule/demo/local/topic` 的消息。
+
+![image](./assets/rules/mqtt_bridge/local_rule_pub.png)
+
+桥接到外部服务的数据已经收到。
+
+![image](./assets/rules/mqtt_bridge/remote_rule_recv.png)
