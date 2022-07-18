@@ -1,5 +1,7 @@
 # 利用 EMQX Operator 部署 EMQX 集群
 
+EMQX Operator 最新信息, 请访问 [github](https://github.com/emqx/emqx-operator/blob/main/docs/zh_CN/getting-started/getting-started.md)
+
 1. 使用 [cert-manager](https://github.com/cert-manager/cert-manager) 给 webhook 服务提供证书，可以参考 [cert-manager 文档](https://cert-manager.io/docs/installation/) 安装
 
 2. 可以通过如下两种方式之一来安装 Operator Controller：
@@ -7,7 +9,7 @@
     + 使用静态文件安装
 
     ```shell
-    curl -f -L "https://github.com/emqx/emqx-operator/releases/download/1.1.7/emqx-operator-controller.yaml" | kubectl apply -f -
+    curl -f -L "https://github.com/emqx/emqx-operator/releases/download/1.1.10/emqx-operator-controller.yaml" | kubectl apply -f -
     ```
 
     + 使用 Helm 安装
