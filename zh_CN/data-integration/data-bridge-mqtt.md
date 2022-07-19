@@ -69,9 +69,9 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 
 ## 使用 Bridge
 
-预先启动一个 EMQX 节点，作为消息桥接使用的外部服务，本文中使用的是在 IP 为 `192.168.1.234` 上部署的 EMQX 节点。下文中使用 `ingress` 与 `egress` 桥接演示，都是以此节点作为外部服务。本地服务的 IP 地址为 `127.0.0.1`。
-
-编辑 `emqx.conf`，添加一个桥接配置，使用下面 `ingress` 与 `egress` 的配置示例，示例中创建了两个桥接，分别为 `mqtt_bridge_ingress` 与 `mqtt_bridge_egress`。启动本地 EMQX。
+1. 准备两个 EMQX 节点，分别为 Local 节点和 Remote 节点，Local 节点使用本地 IP 127.0.0.1，Remote 节点使用 IP 192.168.1.234。
+2. 编辑 Local 节点的配置，打开 `emqx.conf`，添加桥接配置。下面的配置示例种，创建了一个进方向的桥 `mqtt_bridge_ingress` 和一个出方向的桥 `mqtt_bridge_egress`
+3. 启动两个 EMQX 节点，Local 节点使用 console 命令启动，因为规则集成演示中，需要使用控制台观察输出。
 
 ```js
 bridges {
@@ -86,19 +86,9 @@ bridges {
         password = "pwd1"
         proto_ver = "v4"
         reconnect_interval = "10s"
-        replayq {offload = false, seg_bytes = "100MB"}
         retry_interval = "1s"
         server = "192.168.1.234:1883"
-        ssl {
-          ciphers = ["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256"]
-          depth = 10
-          enable = false
-          reuse_sessions = true
-          secure_renegotiate = true
-          user_lookup_fun = "emqx_tls_psk:lookup"
-          verify = "verify_none"
-          versions = ["tlsv1.3", "tlsv1.2", "tlsv1.1", "tlsv1"]
-        }
+        ssl {enable = false}
         username = "user1"
       }
       direction = "ingress"
@@ -117,23 +107,13 @@ bridges {
         keepalive = "60s"
         max_inflight = 32
         mode = "cluster_shareload"
+        username = "emqx"
         password = "emqx"
         proto_ver = "v4"
         reconnect_interval = "15s"
-        replayq {offload = false, seg_bytes = "100MB"}
         retry_interval = "15s"
         server = "192.168.1.234:1883"
-        ssl {
-          ciphers = ["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256"]
-          depth = 10
-          enable = false
-          reuse_sessions = true
-          secure_renegotiate = true
-          user_lookup_fun = "emqx_tls_psk:lookup"
-          verify = "verify_none"
-          versions = ["tlsv1.3", "tlsv1.2", "tlsv1.1", "tlsv1"]
-        }
-        username = "emqx"
+        ssl { enable = false }
       }
       direction = "egress"
       enable = true
@@ -156,75 +136,77 @@ bridges {
 
 ### 进方向的桥接消息流转
 
+1. 进方向的桥接会在 Remote 节点上订阅 `local/topic/ingress` 主题
+2. 创建两个连接 ClientA, ClientB，分别连接 Remote 节点和 Local 节点
+3. Client B 订阅 Topic `local/topic/ingress`
+4. Client A 发布一条 Topic 为 `remote/topic/ingress` 的消息
+5. 桥接客户端收到订阅消息，使用 Topic `local/topic/ingress`，将消息内容转发至 Local 节点
+6. Client B 收到订阅消息
+
 ```txt
+ +-------------------------+  Publish Message
+ | Remote                  |  Topic remote/topic/ingress  +----------+
+ | EMQX Broker         .---|<-----------------------------| Client A |
+ |                     |   |                              +----------+
+ |                     V   |
  +-------------------------+
- | Remote                  |          +--------+
- | EMQX Broker             |<---------| Client |
- |                         |          +--------+
- +-------------------------+
-             |
-             |
-             V
-  +----------------------+
-  |  MQTT Bridge Ingress |
-  +----------------------+
-             |
-             V
-  +------------------------+
-  | Local                  |          +--------+
-  | EMQX Broker            |--------->| Client |
-  |                        |          +--------+
-  +------------------------+
+                       |
+                       |
+ Subscribe             | Send to subscriber
+ Topic                 |
+ remote/topic/ingress  |
+                       |
+                       V
+   +----------------------+
+   |  MQTT Bridge Ingress |
+   +----------------------+
+                       |
+ Publish to local broker
+ Topic local/topic/ingress
+                       |
+                       V
+ +------------------------+  Subscribe
+ | Local               |  |  local/topic/ingress          +----------+
+ | EMQX Broker         .->|------------------------------>| Client B |
+ |                        |  Send to subscriber           +----------+
+ +------------------------+
 
 ```
-
-使用桌面 MQTT 客户端 MQTTX，创建两个连接，分别连接本地与外部服务。并在本地订阅 `local/topic/ingress`。
-
-![image](./assets/rules/mqtt_bridge/local_sub.png)
-
-向外部服务发布一条消息，Topic 为 `remote/topic/ingress`。
-
-![image](./assets/rules/mqtt_bridge/remote_pub.png)
-
-查看本地连接，消息已经由 MQTT Bridge 桥接至本地。
-
-![image](./assets/rules/mqtt_bridge/local_recv.png)
 
 ### 出方向的桥接消息流转
 
+1. 客户端 A 订阅 Remote 节点上的 Topic `remote/topic/egress`
+2. 客户端 B 在 Local 节点上发布一条 Topic 为 `local/topic/egress` 的消息
+3. 桥接获取到消息数据，转发至 Remote 节点的 Topic `remote/topic/egress`
+4. 客户端 A 收到桥接的消息
+
 ```txt
+ +-------------------------+  Subscribe
+ | Remote                  |  remote/topic/egress          +----------+
+ | EMQX Broker      .----->|------------------------------>| Client A |
+ |                  |      |  Send to subscriber           +----------+
  +-------------------------+
- | Remote                  |          +--------+
- | EMQX Broker             |--------->| Client |
- |                         |          +--------+
- +-------------------------+
-             ^
-             |
-             |
-  +----------------------+
-  |  MQTT Bridge Ingress |
-  +----------------------+
-             ^
-             |
-  +------------------------+
-  | Local                  |          +--------+
-  | EMQX Broker            |<---------| Client |
-  |                        |          +--------+
-  +------------------------+
+                    ^
+                    |
+ Publish to remote topic
+ remote/topic/egress
+                    |
+   +----------------------+
+   |  MQTT Bridge Egress  |
+   +----------------------+
+                    ^
+                    |
+ From local topic   |
+ local/topic/egress |
+                    |
+ +------------------------+
+ |                  ^     |
+ | Local            |     |  Topic local/topic/egress    +----------+
+ | EMQX Broker      .-----|<-----------------------------| Client B |
+ |                        |                              +----------+
+ +------------------------+
 
 ```
-
-使用桌面 MQTT 客户端 MQTTX，创建两个连接，分别连接本地与外部服务。并在外部服务上订阅 `remote/topic/egress`。
-
-![image](./assets/rules/mqtt_bridge/remote_sub.png)
-
-向本地服务发布一条消息，使用的 Topic 为 `local/topic/egress`。
-
-![image](./assets/rules/mqtt_bridge/local_pub.png)
-
-查看外部服务连接，消息已经由 MQTT Bridge 桥接至外部服务。
-
-![image](./assets/rules/mqtt_bridge/remote_recv.png)
 
 ## 与规则配合使用
 
@@ -233,47 +215,15 @@ MQTT Bridge 既可以单独使用，也可以与规则配合使用，以获取�
 - 当桥接为进方向时，可以作为规则的数据源
 - 当桥接为出方向时，可以作为规则的处理动作
 
-```txt
- Egress & Rule                                  Ingress & Rule
-
- +-------------------------+    +--------+      +-------------------------+    +--------+
- | Remote                  |    |        |      | Remote                  |    |        |
- | EMQX Broker             |--->| Client |      | EMQX Broker             |<---| Client |
- |                         |    |        |      |                         |    |        |
- +-------------------------+    +--------+      +-------------------------+    +--------+
-             ^                                                |
-             |                                                |
-             |                                                V
-  +-----------------------+                      +-----------------------+
-  |  MQTT Bridge Egress   |                      |  MQTT Bridge Ingress  |
-  +-----------------------+                      +-----------------------+
-             ^                                                |
-             |                                                V
-          Actions                                        Data source
-             |                                                V
-  +-----------------------+                      +-----------------------+
-  |  Rule                 |                      |  Rule                 |----> Other Actions
-  +-----------------------+                      +-----------------------+
-             ^                                                |
-             |                                                V
-  +------------------------+    +--------+       +------------------------+    +--------+
-  | Local                  |    |        |       | Local                  |    |        |
-  | EMQX Broker            |<---| Client |       | EMQX Broker            |--->| Client |
-  |                        |    |        |       |                        |    |        |
-  +------------------------+    +--------+       +------------------------+    +--------+
-
-```
-
 ### 进方向的 MQTT Bridge 与规则配合使用
 
-使用 console 命令启动 EMQX，为了更方便的观察规则的输出，我们会使用控制台输出作为规则消息的检查。
-启动 EMQX 的路径需要按照部署方式改变。
+1. 使用 console 命令启动 EMQX，为了更方便的观察规则的输出，我们会使用控制台输出作为规则消息的检查。
 
 ```bash
 ./bin/emqx console
 ```
 
-登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
+2. 登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
 
 ```SQL
 SELECT
@@ -286,11 +236,8 @@ FROM
 
 ![image](./assets/rules/mqtt_bridge/create_rule.png)
 
-这时，我们在外部服务上发布一条 Topic 为 `remote/topic/ingress` 的消息。
-
-![image](./assets/rules/mqtt_bridge/remote_pub_rule.png)
-
-观察 EMQX 控制台，可见规则已经消费到了桥接的数据。
+3. Remote 节点上发布一条 Topic 为 `remote/topic/ingress` 的消息
+4. 消息通过桥接，发送到 Local 节点的规则，并打印到控制台中
 
 ```erlang
 [rule action] rule_egress
@@ -302,7 +249,7 @@ FROM
                        node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
                        pub_props => #{},qos => 0,retain => false,
                        server => <<"192.168.1.234:1883">>,
-                       timestamp => 1658124943461, 
+                       timestamp => 1658124943461,
                        topic => <<"remote/topic/ingress">>}
         Envs: #{dup => false,event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
                 id => <<"0005E40E4C3F8BE7F443000009580002">>,
@@ -315,9 +262,43 @@ FROM
                 topic => <<"remote/topic/ingress">>}
 ```
 
+```txt
+ +-------------------------+ Publish
+ | Remote                  | remote/topic/ingress  +----------+
+ | EMQX Broker      .------|<----------------------| Client A |
+ |                  |      |                       +----------+
+ +-------------------------+
+                    |
+Subscribe           | Send to subscriber
+Remote Topic        |
+remote/topic/ingress|
+                    V
+  +-----------------------+
+  | MQTT Bridge Ingress   |
+  +-----------------------+
+                    |
+                    | Publish to local topic
+                    | local/topic/ingress
+                    |
+                    V
+  +-----------------------+
+  | Rule            |     |     +---------------+
+  |                 +-----|---->| Other Actions |
+  |                 |     |     +---------------+
+  +-----------------------+
+                    |
+                    V
+  +------------------------+ Subscribe
+  | Local           |      | local/topic/ingress   +----------+
+  | EMQX Broker     .------|---------------------->| Client B |
+  |                        | Send to subscriber    +----------+
+  +------------------------+
+
+```
+
 ### 出方向的 MQTT Bridge 与规则配合使用
 
-登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
+1. 创建规则。v登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
 
 ```SQL
 SELECT
@@ -328,13 +309,40 @@ FROM
 
 点击左侧添加动作，选择`使用数据桥接转发`，下拉选择创建好的桥接 `mqtt:mqtt_bridge_egress`。
 点击`添加`，`创建`。
-
 ![image](./assets/rules/mqtt_bridge/create_rule_egress.png)
 
-使用桌面 MQTT 客户端 MQTTX 发布一条 Topic 为 `rule/demo/local/topic` 的消息。
+2. Client B 在 Local 接点上发布一条 Topic 为 `rule/demo/local/topic` 的消息
+3. 消息通过规则，发送到出方向的桥
+4. 出方向的桥将消息转发到 Remote 节点
+5. Client A 收到 Topic 为 `remote/topic/egress` 的消息
 
-![image](./assets/rules/mqtt_bridge/local_rule_pub.png)
-
-桥接到外部服务的数据已经收到。
-
-![image](./assets/rules/mqtt_bridge/remote_rule_recv.png)
+```txt
++-------------------------+ Subscribe
+| Remote                  | remote/topic/egress   +----------+
+| EMQX Broker      .------|---------------------->| Client A |
+|                  |      | Send to subscriber    +----------+
++-------------------------+
+                   ^
+                   | Publish to remote topic
+                   | remote/topic/egress
+                   |
+ +-----------------------+
+ | MQTT Bridge Egress    |
+ +-----------------------+
+                   ^
+           Actions |
+                   |
+                   |
+ +-----------------------+
+ | Rule            |     |
+ |                 |     |
+ |                 |     |
+ +-----------------------+
+                   ^
+                   |
+ +------------------------+ Publish
+ | Local           |      | rule/demo/local/topic +----------+
+ | EMQX Broker     .------|<----------------------| Client B |
+ |                        |                       +----------+
+ +------------------------+
+```
