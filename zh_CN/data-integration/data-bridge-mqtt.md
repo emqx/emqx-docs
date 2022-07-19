@@ -14,10 +14,10 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 | direction  | 桥接方向：</br>ingress 表示从外部服务订阅消息，发布到本地</br>egress 表示将消息从本地发布到外部服务 | String | 是 | ingress |
 | remote_topic | 订阅外部服务的 Topic | String | 是 |  - |
 | remote_qos | 订阅的外部服务 QoS | Integer |  是 | 0 \| 1 \| 2 |
-| local_topic | 发布到本地的 Topic | String | 是 | - |
-| local_qos | 发布到本地的 QoS | Integer |  是 | 0 \| 1 \| 2 |
-| retain | 发布到本地的 Retain 标记 | Boolean |  是 | - |
-| payload | 发布到本地的 Payload | String |  是 | - |
+| local_topic | 发布到本地的 Topic，支持 ${field} 格式的占位符 | String | 是 | - |
+| local_qos | 发布到本地的 QoS，支持 ${field} 格式的占位符 | Integer |  是 | 0 \| 1 \| 2 |
+| retain | 发布到本地的 Retain 标记，支持 ${field} 格式的占位符 | Boolean |  是 | - |
+| payload | 发布到本地的 Payload，支持 ${field} 格式的占位符 | String |  是 | - |
 | connector | MQTT 连接器 | connector() |  是 | Connecter 配置参数列表 |
 
 ### 出方向 MQTT Bridge 配置参数列表
@@ -28,21 +28,21 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 | -- | -- | -- | -- | -- |
 | enable | 开启或关闭桥接 | Boolean |  是 | - |
 | direction  | 桥接方向：</br>ingress 表示从外部服务订阅消息，发布到本地</br>egress 表示将消息从本地发布到外部服务 | String | 是 | egress |
-| remote_topic | 发布到外部服务的 Topic | String | 是 |  - |
-| remote_qos |  发布到外部服务 QoS | Integer |  是 | 0 \| 1 \| 2 |
-| retain | 发布到外部服务的 Retain 标记 | Boolean |  是 | - |
-| payload | 发布到外部服务的 Payload | String |  是 | - |
+| remote_topic | 发布到外部服务的 Topic，支持 ${field} 格式的占位符 | String | 是 |  - |
+| remote_qos |  发布到外部服务 QoS，支持 ${field} 格式的占位符 | Integer |  是 | 0 \| 1 \| 2 |
+| retain | 发布到外部服务的 Retain 标记，支持 ${field} 格式的占位符 | Boolean |  是 | - |
+| payload | 发布到外部服务的 Payload，支持 ${field} 格式的占位符 | String |  是 | - |
 | local_topic | 获取数据的本地 Topic | String | 是 | - |
 | connector | MQTT 连接器 | connector() |  是 | 参考 Connecter 配置参数列表 |
 
-### Connecter 配置参数列表
+### Connector 配置参数列表
 
 桥接使用的连接器。
 
 | 参数名 | 描述 | 类型 | 必填 | 取值范围 |
 | -- | -- | -- | -- | -- |
-| server | 外部服务地址，ip:port | String | 是 | [0-255].[0-255].[0-255].[0-255]:[0-65535] |
-| mode | 连接器模式 | String | 否 | cluster_shareload |
+| server | 外部服务地址，ip:port 或者 hostname:port | String | 是 | [0-255].[0-255].[0-255].[0-255]:[0-65535] |
+| mode | cluster_shareload：集群里每个节点都建立一个 MQTT 连接与远程 Broker 相连</br>cluster_singleton：整个集群里只有一个节点建立 MQTT 连接与远程 Broker 相连 | Enum | 否 | cluster_shareload \| cluster_singleton |
 | reconnect_interval | 自动重连间隔时间 | Integer | 否 | - |
 | proto_ver | 协议版本 | String | 否 |  v3 \| v4 \| v5 |
 | bridge_mode | 桥接模式，仅在外部服务为 EMQX 时生效，可以提高订阅的并发性能 | Boolean | 否 | - |
@@ -50,18 +50,9 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 | password | 连接使用的密码 | String | 否 | - |
 | clean_start | 设置连接使用的 clean_session 属性 | Boolean | 否 | - |
 | keepalive | 连接心跳周期 | Integer | 否 | - |
-| retry_interval | 重试间隔 | Integer | 否 | - |
+| retry_interval | QoS1/QoS2 消息发送失败后的重试间隔 | Integer | 否 | - |
 | max_inflight | 最大消息窗口数量，在 MQTT V5 协议中为 `Receive Maximum` | Integer | 否 | - |
-| replayq | 本地消息缓存 | replayq() | 否 | 参考 replayq 配置参数列表 |
 | ssl | 加密连接证书配置 | ssl() | 否 | - |
-
-### replayq 配置参数列表
-
-| 参数名 | 描述 | 类型 | 必填 | 取值范围 |
-| -- | -- | -- | -- | -- |
-| dir | 本地缓存的文件目录，设置为 `false` 表示关闭 | String \| `false` | 否 | String \| false |
-| seg_bytes | 本地缓存的文件大小限制，当超出限制后，会创建一个新的文件来保存新的缓存消息 | String | 否 | - |
-| offload | 是否开启过载模式，开启后消息会先使用内存来保存，仅当缓存的数据超过 `seg_bytes` 设置的上线后，才会写入文件 | Boolean | 否 | - |
 
 ### SSL 配置
 
@@ -70,7 +61,7 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 ## 使用 Bridge
 
 1. 准备两个 EMQX 节点，分别为 Local 节点和 Remote 节点，Local 节点使用本地 IP 127.0.0.1，Remote 节点使用 IP 192.168.1.234。
-2. 编辑 Local 节点的配置，打开 `emqx.conf`，添加桥接配置。下面的配置示例种，创建了一个进方向的桥 `mqtt_bridge_ingress` 和一个出方向的桥 `mqtt_bridge_egress`
+2. 编辑 Local 节点的配置，打开 `emqx.conf`，添加桥接配置。下面的配置示例中，创建了一个进方向的桥 `mqtt_bridge_ingress` 和一个出方向的桥 `mqtt_bridge_egress`
 3. 启动两个 EMQX 节点，Local 节点使用 console 命令启动，因为规则集成演示中，需要使用控制台观察输出。
 
 ```js
@@ -136,8 +127,8 @@ bridges {
 
 ### 进方向的桥接消息流转
 
-1. 进方向的桥接会在 Remote 节点上订阅 `local/topic/ingress` 主题
-2. 创建两个连接 ClientA, ClientB，分别连接 Remote 节点和 Local 节点
+1. 进方向的桥接会在 Remote 节点上订阅 `remote/topic/ingress` 主题
+2. 创建两个连接 Client A, Client B，分别连接 Remote 节点和 Local 节点
 3. Client B 订阅 Topic `local/topic/ingress`
 4. Client A 发布一条 Topic 为 `remote/topic/ingress` 的消息
 5. 桥接客户端收到订阅消息，使用 Topic `local/topic/ingress`，将消息内容转发至 Local 节点
@@ -150,19 +141,19 @@ bridges {
  |                     |   |                              +----------+
  |                     V   |
  +-------------------------+
-                       |
-                       |
+        ^              |
+        |              |
  Subscribe             | Send to subscriber
- Topic                 |
+ Topic  |              |
  remote/topic/ingress  |
-                       |
-                       V
+        |              |
+        |              V
    +----------------------+
    |  MQTT Bridge Ingress |
    +----------------------+
                        |
- Publish to local broker
- Topic local/topic/ingress
+                       | Publish to local broker
+                       | Topic local/topic/ingress
                        |
                        V
  +------------------------+  Subscribe
@@ -188,19 +179,19 @@ bridges {
  +-------------------------+
                     ^
                     |
- Publish to remote topic
- remote/topic/egress
+                    | Publish to remote topic
+                    | remote/topic/egress
                     |
    +----------------------+
    |  MQTT Bridge Egress  |
    +----------------------+
                     ^
                     |
- From local topic   |
- local/topic/egress |
+                    | From local topic
+                    | local/topic/egress
                     |
  +------------------------+
- |                  ^     |
+ |                  ^     |  Publish
  | Local            |     |  Topic local/topic/egress    +----------+
  | EMQX Broker      .-----|<-----------------------------| Client B |
  |                        |                              +----------+
@@ -268,11 +259,11 @@ FROM
  | EMQX Broker      .------|<----------------------| Client A |
  |                  |      |                       +----------+
  +-------------------------+
-                    |
+       ^            |
 Subscribe           | Send to subscriber
 Remote Topic        |
 remote/topic/ingress|
-                    V
+       |            V
   +-----------------------+
   | MQTT Bridge Ingress   |
   +-----------------------+
@@ -298,7 +289,7 @@ remote/topic/ingress|
 
 ### 出方向的 MQTT Bridge 与规则配合使用
 
-1. 创建规则。v登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
+1. 创建规则。登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
 
 ```SQL
 SELECT
@@ -330,13 +321,11 @@ FROM
  | MQTT Bridge Egress    |
  +-----------------------+
                    ^
-           Actions |
                    |
+           Actions |
                    |
  +-----------------------+
  | Rule            |     |
- |                 |     |
- |                 |     |
  +-----------------------+
                    ^
                    |
