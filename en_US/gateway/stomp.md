@@ -58,7 +58,7 @@ it supports a variety of authenticator types, such as:
 
 - [Built-in Database Authentication](../security/authn/mnesia.md)
 - [MySQL Authentication](../security/authn/mysql.md)
-- [MongoDB Authentication](../security/authn/mongo.md)
+- [MongoDB Authentication](../security/authn/mongodb.md)
 - [PostgreSQL Authentication](../security/authn/postgresql.md)
 - [Redis Authentication](../security/authn/redis.md)
 - [HTTP Server Authentication](../security/authn/http.md)

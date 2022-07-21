@@ -12,12 +12,7 @@ which made using them difficult to understand.
 In 5.0, EMQX defines a unified conceptual and operational model for them to make
 them easier to use.
 
-
-Quick Start: [Stomp](./stomp.md)、[MQTT-SN](./mqttsn.md)、[CoAP](./coap.md)、[LwM2M](./lwm2m.md)、[ExProto](./exproto.md)
-
-{% emqxee %}
-Enterprise Gateway Quick Start: [JT/T 808](./jt808.md), [GB/T 32960](gbt32960.md)
-{% endemqxee %}
+Quick Start: [Stomp](./stomp.md), [MQTT-SN](./mqttsn.md)
 
 ## Design
 
@@ -193,5 +188,3 @@ Client connection related hooks with the following supportability:
 | `client.unsubscribe`   | Optional  | Originally used for MQTT protocol, only supported by partial gateways     |
 
 Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each tye of gateway.
-
-For EMQX hooks refer to: [Hook System](../advanced/hooks.md)

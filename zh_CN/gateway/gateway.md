@@ -5,11 +5,7 @@
 在 EMQX 5.0 之前，非 MQTT 协议的接入分别由不同的接入插件实现（例如，`emqx_lwm2m` 插件用于处理 LwM2M 的协议接入）
 这些插件之间存在设计和实现上差异，这导致使用这些接入插件会很难以理解。 在 5.0 中，EMQX 为其定义了统一的概念和操作模型以降低使用难度。
 
-常用的网关快速开始：[Stomp](./stomp.md)、[MQTT-SN](./mqttsn.md)、[CoAP](./coap.md)、[LwM2M](./lwm2m.md)、[ExProto](./exproto.md)
-
-{% emqxee %}
-企业版网关快速开始：[JT/T 808](./jt808.md), [GB/T 32960](gbt32960.md)
-{% endemqxee %}
+常用的网关快速开始：[Stomp](./stomp.md)、[MQTT-SN](./mqttsn.md)
 
 ## 设计
 
@@ -183,5 +179,3 @@ gateway.stomp {
 | `client.unsubscribe`   | 可选   | 原用于 MQTT 协议；仅部分网关支持     |
 
 会话和消息相关的钩子无协议间的异构问题，所以在网关中这些钩子都完全支持。
-
-关于 EMQX 的钩子支持参考：[Hook System](../advanced/hooks.md)

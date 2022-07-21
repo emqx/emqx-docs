@@ -57,7 +57,7 @@ Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列
 由于 Stomp 协议的连接报文已定义了用户名和密码的概念，所以它支持以下多种认证器类型，例如：
 - [内置数据库认证](../security/authn/mnesia.md)
 - [MySQL 认证](../security/authn/mysql.md)
-- [MongoDB 认证](../security/authn/mongo.md)
+- [MongoDB 认证](../security/authn/mongodb.md)
 - [PostgreSQL 认证](../security/authn/postgresql.md)
 - [Redis 认证](../security/authn/redis.md)
 - [HTTP Server 认证](../security/authn/http.md)
