@@ -71,7 +71,7 @@ Stomp 网关使用 STOMP 协议的 CONNECT 或 STOMP 报文中的信息来生成
 
 例如，通过 HTTP-API 为 Stomp 网关创建一个内置数据库认证：
 
-```
+```bash
 curl -X 'POST' \
   'http://127.0.0.1:18083/api/v5/gateway/stomp/authentication' \
   -u admin:public
@@ -88,7 +88,7 @@ curl -X 'POST' \
 }'
 ```
 
-或通过配置为 Stomp 网关添加一个内置数据认证：
+或通过配置为 Stomp 网关添加一个内置数据库认证：
 ```hocon
 gateway.stomp {
 
