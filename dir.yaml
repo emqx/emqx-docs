@@ -146,12 +146,12 @@
   title_cn: 网关
   children:
     - gateway/gateway
-    - gateway/lwm2m
+   #- gateway/lwm2m
     - gateway/mqttsn
-    - gateway/coap
+   #- gateway/coap
     - gateway/stomp
-    #- gateway/jt808
-    #- gateway/tcp
+   #- gateway/jt808
+   #- gateway/tcp
 
 - title_en: Advanced MQTT Features
   title_cn: MQTT 高级特性
