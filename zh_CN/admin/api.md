@@ -4,7 +4,7 @@ EMQX 为管理员提供一系列对REST API 接口。这个 API 服务默认在�
 API 文档遵循以 OpenAPI (Swagger) 3.0 规范。
 
 EMQX 服务启动后，您可以访问 http://localhost:18083/api-docs/index.html 来
-查看 API 的文档。还可以直接在 Swagger UI 上常识执行一些 API。
+查看 API 的文档。还可以直接在 Swagger UI 上尝试执行一些 API。
 
 `/api-docs` 这个端点不需要登录。但是如果从这里出发来调用一些 REST API 的话，
 您将会需要先完成一些基本的配置工作。
