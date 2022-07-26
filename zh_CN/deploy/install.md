@@ -167,11 +167,12 @@ macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动
 
    services:
      emqx1:
-       image: emqx/emqx:5.0.0
+       image: emqx/emqx:5.0.3
+       container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io,emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -183,11 +184,11 @@ macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动
            - node1.emqx.io
 
      emqx2:
-       image: emqx/emqx:5.0.0
+       image: emqx/emqx:5.0.3
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io,emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -206,13 +207,13 @@ macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动
 2. 启动 docker-compose 集群
 
    ```shell
-   docker-compose -p my_emqx up -d
+   docker-compose up -d
    ```
 
 3. 查看集群
 
    ```shell
-   $ docker exec -it my_emqx_emqx1_1 sh -c "emqx_ctl cluster status"
+   $ docker exec -it emqx1 sh -c "emqx_ctl cluster status"
    Cluster status: #{running_nodes => ['emqx@node1.emqx.io','emqx@node2.emqx.io'],
                      stopped_nodes => []}
    ```

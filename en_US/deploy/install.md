@@ -169,11 +169,12 @@ Please verify the SHA256 of the file when using this operation to ensure the int
 
    services:
      emqx1:
-       image: emqx/emqx:5.0.0
+       image: emqx/emqx:5.0.3
+       container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io,emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -185,11 +186,12 @@ Please verify the SHA256 of the file when using this operation to ensure the int
            - node1.emqx.io
 
      emqx2:
-       image: emqx/emqx:5.0.0
+       image: emqx/emqx:5.0.3
+       container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io, emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -208,13 +210,13 @@ Please verify the SHA256 of the file when using this operation to ensure the int
 2. Start docker-compose cluster
 
    ```shell
-   docker-compose -p my_emqx up -d
+   docker-compose up -d
    ```
 
 3. View cluster
 
    ```shell
-   $ docker exec -it my_emqx_emqx1_1 sh -c "emqx_ctl cluster status"
+   $ docker exec -it emqx1 sh -c "emqx_ctl cluster status"
    Cluster status: #{running_nodes => ['emqx@node1.emqx.io','emqx@node2.emqx.io'],
                      stopped_nodes => []}
    ```
