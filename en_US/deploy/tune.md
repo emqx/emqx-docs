@@ -1,8 +1,6 @@
 # Linux OS Tuning
 
-Since 4.2, EMQX had been stress tested with 1.3 million clients on an 8-core, 32G memory CentOS server.
-
-This guide includes in general tuning suggestions for one EMQX broker to serve about 1 million clients.
+This guide includes in general tuning suggestions for benckmark and deployment.
 
 ## Turn off swap
 
@@ -17,7 +15,7 @@ To turn off swap permanently, comment out the `swap` line in `/etc/fstab` and re
 
 The system-wide limit on max opened file handles:
 
-```
+```bash
 # 2 millions system-wide
 sysctl -w fs.file-max=2097152
 sysctl -w fs.nr_open=2097152
@@ -26,7 +24,7 @@ echo 2097152 > /proc/sys/fs/nr_open
 
 The limit on opened file handles for current session:
 
-```
+```bash
 ulimit -n 2097152
 ```
 
@@ -34,13 +32,13 @@ ulimit -n 2097152
 
 Persist 'fs.file-max' configuration to `/etc/sysctl.conf`:
 
-```
+```bash
 fs.file-max = 2097152
 ```
 
 Set the maximum number of file handles for the service in `/etc/systemd/system.conf`:
 
-```
+```bash
 DefaultLimitNOFILE=2097152
 ```
 
@@ -52,7 +50,7 @@ on which Linux distribution is in use.
 - `/usr/lib/systemd/system/emqx.service`
 - `/lib/systemd/system/emqx.service`
 
-```
+```bash
 LimitNOFILE=2097152
 ```
 
@@ -60,7 +58,7 @@ LimitNOFILE=2097152
 
 Persist the maximum number of opened file handles for users in `/etc/security/limits.conf`:
 
-```
+```bash
 *      soft   nofile      2097152
 *      hard   nofile      2097152
 ```
@@ -69,7 +67,7 @@ Persist the maximum number of opened file handles for users in `/etc/security/li
 
 Increase the number of incoming connections backlog:
 
-```
+```bash
 sysctl -w net.core.somaxconn=32768
 sysctl -w net.ipv4.tcp_max_syn_backlog=16384
 sysctl -w net.core.netdev_max_backlog=16384
@@ -77,13 +75,13 @@ sysctl -w net.core.netdev_max_backlog=16384
 
 Local port range
 
-```
+```bash
 sysctl -w net.ipv4.ip_local_port_range='1000 65535'
 ```
 
 TCP Socket read/write buffer:
 
-```
+```bash
 sysctl -w net.core.rmem_default=262144
 sysctl -w net.core.wmem_default=262144
 sysctl -w net.core.rmem_max=16777216
@@ -97,7 +95,7 @@ sysctl -w net.ipv4.tcp_wmem='1024 4096 16777216'
 
 TCP connection tracking:
 
-```
+```bash
 sysctl -w net.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
@@ -105,7 +103,7 @@ sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 
 TIME-WAIT Bucket Pool, Recycling and Reuse:
 
-```
+```bash
 sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
 
 # Enabling following option is not recommended. It could cause connection reset under NAT
@@ -115,7 +113,7 @@ sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
 
 Timeout for FIN-WAIT-2 Sockets:
 
-```
+```bash
 sysctl -w net.ipv4.tcp_fin_timeout=15
 ```
 
@@ -145,12 +143,14 @@ listeners.tcp.$name.max_connections = 1024000
 
 ## Client Machine Tuning
 
- Tune the client machine to benchmark emqttd broker:
-```
+Tune the client machine to benchmark emqttd broker:
+
+```bash
 sysctl -w net.ipv4.ip_local_port_range="500 65535"
 echo 1000000 > /proc/sys/fs/nr_open
 ulimit -n 100000
 ```
+
 ### emqtt_bench
 
- Test tool for concurrent connections:  <http://github.com/emqx/emqtt_bench>
+ Test tool for concurrent connections: [emqtt_bench](http://github.com/emqx/emqtt_bench)

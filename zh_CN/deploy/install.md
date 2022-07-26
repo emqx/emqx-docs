@@ -11,6 +11,7 @@ EMQX 目前支持的操作系统:
 + Ubuntu 18.04
 + Ubuntu 20.04
 + macOS 10
++ macOS 11
 + Windows Server 2019
 
 ## RPM/DEB包安装 (Linux)
@@ -32,7 +33,7 @@ EMQX 默认以节点名称 `emqx@127.0.0.1` 启动，该名称是内置数据库
 
 {% endemqxee %}
 
-2. 安装 EMQX Broker，将下面的路径更改为您下载 EMQX 软件包的路径。
+2. 安装 EMQX，将下面的路径更改为您下载 EMQX 软件包的路径。
 
     + RPM 包 (RedHat/CentOS/RockyLinux/AmazonLinux):
 
@@ -46,7 +47,7 @@ EMQX 默认以节点名称 `emqx@127.0.0.1` 启动，该名称是内置数据库
       sudo apt install ./emqx-full-package-name.deb
       ```
 
-3. 启动 EMQX Broker
+3. 启动 EMQX
 
       - 直接启动
 

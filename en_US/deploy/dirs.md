@@ -33,7 +33,7 @@ EMQX only reads the files in this directory.
 
 ## data: database and files
 
-This directory is for EMQX to persist its state.
+This directory is for EMQX to persist its state. Please make sure EMQX has read/write permissions for all files in this directory.
 
 :::: tip Tip
 In EMQX documents this directory is often referred to as `data_dir`.

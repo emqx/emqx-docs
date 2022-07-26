@@ -50,22 +50,44 @@ To make use of the new replication protocol, set `EMQX_NODE__DB_ROLE` environmen
 
 Core nodes may accept MQTT traffic, or they can disable all MQTT listeners to serve purely as the database server for the replicants, depending on the usecase.
 
-- In a small cluster (3 nodes or less in total) it doesn't make economical sense to use replicants, so core nodes take all the traffic.
+- In a small cluster (3 nodes or less in total) it doesn't make economical sense to use replicants, so core nodes take all the traffic. This is a easy way to use EMQX.
 - In a very large cluster (10 nodes or more) it makes sense to move away traffic from the core nodes.
 - In a medium cluster it really depends on many factors, so experimentation is needed.
+
+## Network and hardware
+
+### Network
+
+The network latency between Core nodes is recommended to be below 10ms, and the cluster will not be available if it is higher than 100ms.
+Please deploy Core nodes under the same private network.
+It is also suggested to deploy under the same private network between Replicant and Core nodes, but the network requirements can be slightly lower.
+
+### CPU/Memory
+
+Core nodes require more memory and have lower CPU consumption without taking over connections. Replicant nodes, consistent with 4.x, can be deployed on a total connection and message throughput basis.
+
+## Exception Handling
+
+Core nodes are transparent to Replicant nodes, and when a Core node is down, Replicant nodes will automatically connect to other Core nodes.
+The client is not disconnect at this mount, but may cause a delay in routing updates.
+
+When a Replicant node is down, all clients connected to that node are disconnected. However, because Replicant is stateless, it does not affect the stability of other nodes, at which point the client can connect to another available Replicant node through the reconnect mechanism.
 
 ## Monitoring and troubleshooting
 
 Monitoring of the Mria performance can be done using Prometheus metrics or using Erlang console.
 
 ### Prometheus metrics
+
 #### Core
+
 - `emqx_mria_last_intercepted_trans`: Number of transactions received by the shard since the node start. Note that this value can be different on different core nodes.
 - `emqx_mria_weight`: A value used for load balancing. It changes depending on the momentary load of the core node.
 - `emqx_mria_replicants`: Number of replicants connected to the core node. Numbers are grouped per shard.
 - `emqx_mria_server_mql`: Number of unprocessed transactions, waiting to be sent to the replicants. Less is better. If this metric tends to grow, then it's probably time to add more computing resource for the exiting core nodes, or even add more core nodes.
 
 #### Replicant
+
 - `emqx_mria_lag`: Replicant lag, indicating how far behind the upstream core node the replicant lags. Less is better.
 - `emqx_mria_bootstrap_time`: Time spent during bootstrapping of the replicant. This value doesn't change during normal operation of the replicant
 - `emqx_mria_bootstrap_num_keys`: Number of database records copied from the core node during bootstrap. This value doesn't change during normal operation of the replicant

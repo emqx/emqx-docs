@@ -1,15 +1,14 @@
 # HTTP API
 
-EMQX 为管理员提供一系列对REST API 接口。这个 API 服务默认在监听器 18083 上提供。
-API 文档遵循以 OpenAPI (Swagger) 3.0 规范。
+EMQX 提供了管理监控 REST API，这些 API 遵循 OpenAPI (Swagger) 3.0 规范。
+
 
 EMQX 服务启动后，您可以访问 http://localhost:18083/api-docs/index.html 来
 查看 API 的文档。还可以直接在 Swagger UI 上尝试执行一些 API。
 
-`/api-docs` 这个端点不需要登录。但是如果从这里出发来调用一些 REST API 的话，
-您将会需要先完成一些基本的配置工作。
+`/api-docs` 端点不需要登录，如果需要进一步操作，您需要完成一些基本的配置工作。
 
-这篇文档的接下来的内容主要介绍这些配置工作的步骤。
+本章节指导您完成 API 调用前的准备操作。
 
 ## 修改默认密码
 
@@ -44,10 +43,10 @@ EMQX 的管理员用户名和密码是保存在内置数据库中的。
 
 ### API 密钥
 
-您可以在仪表盘的 “系统设置” -> “API 密钥” 界面点击创建，
+您可以在 Dashboard “系统设置” -> “API 密钥” 界面点击创建，
 也可以通过如下的 API 调用来创建一个新的 API 密钥。
 
-```
+```bash
 curl -u 'admin:public' \
      -X 'POST' \ 'http://localhost:18083/api/v5/api_key' \
      -H 'accept: application/json' \
@@ -61,9 +60,9 @@ curl -u 'admin:public' \
         }'
 ```
 
-下面是 EMQX 对这个创建请求的回复。
+返回结果中包含认证密钥信息：
 
-```
+```bash
 {
   "api_key": "a87465f14ca0d420",
   "api_secret": "LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN",
@@ -76,8 +75,11 @@ curl -u 'admin:public' \
 }
 ```
 
-回复中的 `api_key` 和 `api_secret` 可以用于访问 REST API 时的 Basic 认证。例如：
-```
+结果中的 `api_key` 和 `api_secret` 可以用于访问 REST API 时的 Basic 认证，例如：
+
+```bash
 curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
      -X 'GET' 'http://localhost:18083/api/v5/nodes' -H 'accept: text/plain'
 ```
+
+请注意 `api_secret` 仅在创建时返回一次，请及时保存。

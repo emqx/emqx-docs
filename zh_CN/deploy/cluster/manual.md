@@ -72,6 +72,7 @@ $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
+
 ::: tip tip
 `s2.emqx.io` 加入 `s1.emqx.io` 组成集群后，
 它的本地数据将被清除，来自节点`s1.emqx.io`的数据

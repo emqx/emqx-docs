@@ -1,7 +1,7 @@
-# SSL(TLS)
+# SSL/TLS
 
 When accepting a MQTT Client or connecting to external resources like a database,
-EMQX can establish secure connections via SSL(TLS).
+EMQX can establish secure connections via SSL/TLS.
 
 ## SSL Listener for MQTT
 
