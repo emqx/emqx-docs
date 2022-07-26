@@ -15,7 +15,7 @@ prometheus {
   push_gateway_server: "http://127.0.0.1:9091"
 
 
-  ## 数据报告间隔，以毫秒计。
+  ## 数据报告间隔。
   ## @path prometheus.interval
   ## @type emqx_schema:duration_ms()
   ## @default 15s
@@ -29,6 +29,12 @@ prometheus {
   enable: true
 }
 ```
+
+
+## Dashboard 更新
+
+EMQX在v5.0.4后，也支持通过 Dashboard 中的**功能配置/监控集成**下直接修改，保存后直接生效，无需重启节点。
+
 
 ## Grafana 数据模板
 

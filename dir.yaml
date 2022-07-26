@@ -95,6 +95,7 @@
   title_cn: 运行监测
   children:
     - observability/prometheus
+    - observability/statsd
     - observability/log
     - observability/tracer
     - observability/alarms
@@ -128,6 +129,7 @@
       children:
         - data-integration/data-bridges
         - data-integration/data-bridge-webhook
+        - data-integration/data-bridge-mqtt
     - title_en: Examples and Tutorials
       title_cn: 示例和教程
       children:
@@ -140,15 +142,16 @@
 
 ## Device connectivity
 
-#- title_en: Gateway
-#  title_cn: 网关
-#  children:
-#    - gateway/lwm2m
-#    - gateway/mqtt_sn
-#    - gateway/tcp
-#    - gateway/jt808
-#    - gateway/coap
-#    - gateway/stomp
+- title_en: Gateway
+  title_cn: 网关
+  children:
+    - gateway/gateway
+   #- gateway/lwm2m
+    - gateway/mqttsn
+   #- gateway/coap
+    - gateway/stomp
+   #- gateway/jt808
+   #- gateway/tcp
 
 - title_en: Advanced MQTT Features
   title_cn: MQTT 高级特性

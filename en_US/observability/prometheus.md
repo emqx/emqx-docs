@@ -14,7 +14,7 @@ prometheus {
   push_gateway_server: "http://127.0.0.1:9091"
 
 
-  ## Data reporting interval, in milliseconds.
+  ## Data reporting interval.
   ## @path prometheus.interval
   ## @type emqx_schema:duration_ms()
   ## @default 15s
@@ -28,6 +28,9 @@ prometheus {
   enable: true
 }
 ```
+## Dashboard Update
+
+After v5.0.4, EMQX also supports direct modification via Dashboard‘s **Configuration/Monitoring Integration**, which takes effect directly after saving, without restarting the node.
 
 
 ## Grafana Data Template
