@@ -1,40 +1,129 @@
-# Stomp Protocol Gateway
+# Stomp Gateway
 
-The Stomp protocol gateway provides EMQX with the access capability of the Stomp protocol.
+## Introduction
 
-## Create module
+The Stomp gateway is based on the [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.html) and is compatible with the Stomp v1.0 and v1.1 specification.
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+## Quick Start
 
-![image-20200928161310952](./assets/modules.png)
+In EMQX 5.0, Stomp gateways can be configured and enabled through the Dashboard.
 
-Click "Select", and then select "CoAP Access Gateway":
+It can also be enabled via the HTTP-API, e.g:
+```bash
+curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
+  -u admin:public \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "stomp",
+  "enable": true,
+  "mountpoint": "stomp/",
+  "listeners": [
+    {
+      "type": "tcp",
+      "name": "default",
+      "bind": "61613",
+      "max_conn_rate": 1000,
+      "max_connections": 1024000
+    }
+  ]
+}'
+```
 
-![Create CoAP Protocol Gateway](./assets/stomp_1.png)
+or configured in emqx.conf, e.g:
 
-Configure related basic parameters:
+```hocon
+gateway.stomp {
 
-![Configure CoAP Protocol Gateway](./assets/stomp_2.png)
+  mountpoint = "stomp/"
 
-Add listening port:
+  listeners.tcp.default {
+    bind = 61613
+    acceptors = 16
+    max_connections = 1024000
+    max_conn_rate = 1000
+  }
+}
+```
 
-![Configure CoAP Protocol Gateway](./assets/stomp_3.png)
+::: tip
+Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
+:::
 
-Configure monitoring parameters:
+The Stomp gateway only supports TCP and SSL type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../admin/cfg.md)
 
-![Configure CoAP Protocol Gateway](./assets/stomp_4.png)
+## Authentication
 
-Click "OK" to complete the configuration of the listener, and then click "Add" to complete the creation of the module:
+As the concept of username and password is already defined in the connection message of the Stomp protocol,
+it supports a variety of authenticator types, such as:
 
-![Complete CoAP Protocol Gateway](./assets/stomp_5.png)
+- [Built-in Database Authentication](../security/authn/mnesia.md)
+- [MySQL Authentication](../security/authn/mysql.md)
+- [MongoDB Authentication](../security/authn/mongodb.md)
+- [PostgreSQL Authentication](../security/authn/postgresql.md)
+- [Redis Authentication](../security/authn/redis.md)
+- [HTTP Server Authentication](../security/authn/http.md)
+- [JWT Authentication](../security/authn/jwt.md)
 
-### Configuration parameters
+Stomp gateway uses the information in the CONNECT or STOMP message of STOMP protocol to generate the authentication fields for the client:
 
-| Configuration item                | Description                                         |
-| --------------------------------- | --------------------------------------------------- |
-| Allow anonymous                   | Whether to allow anonymous login                    |
-| Default Username                  | Specify the Username used for login in Stomp module |
-| Default password                  | Specify the password used for Stomp module login    |
-| Maximum Headers                   | Maximum number of Stomp frame headers               |
-| Max Header Length                 | Maximum length of Stomp frame headers               |
-| Max Body Length                   | Maximum length of Stomp frame body                  |
+- Client ID: is a randomly generated string.
+- Username: is the value of the `login` field in the CONNECT or STOMP message headers.
+- Password: The value of the `passcode` field in the CONNECT or STOMP message headers.
+
+For example, to create a built-in database authentication for a Stomp gateway via HTTP-API:
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:18083/api/v5/gateway/stomp/authentication' \
+  -u admin:public
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "backend": "built_in_database",
+  "mechanism": "password_based",
+  "password_hash_algorithm": {
+    "name": "sha256",
+    "salt_position": "suffix"
+  },
+  "user_id_type": "username"
+}'
+```
+
+Or add a built-in database authentication by `emqx.conf`:
+
+```hocon
+gateway.stomp {
+
+  authentication: {
+    backend = built_in_database
+    mechanism = password_based
+    password_hash_algorithm {
+      name = sha256
+      salt_position = suffix
+    }
+    user_id_type = username
+  }
+}
+```
+
+Unlike the MQTT protocol, **the gateway only supports the creation of an authenticator, not a list of authenticators (or an authentication chain)**. When no authenticator is enabled, it means that all Stomp clients are allowed to log in.
+
+For the configuration format of other types of authenticators refer to: [Security - Authenticator](../security/authn/authn.md)
+
+## Publish/Subscribe
+
+The Stomp protocol is fully compatible with the PUB/SUB messaging model, and the Stomp gateway uses:
+- The SEND message of the Stomp protocol is used as a message publishing. The topic is the `destination` field in the SEND message, the message content is the message body content of the SEND message, and the QoS is fixed to 0.
+- The SUBSCRIBE message of the Stomp protocol is used as a subscribing request. The topic is the `destination` field of the SUBSCRIBE message, the QoS is fixed to 0, and the wildcards defined in the MQTT protocol are supported.
+- The UNSUBSCRIBE message of the Stomp protocol is used as an unsubscribe request. The topic is the `destination` field in the UNSUBSCRIBE message.
+
+There is no special authorization configurations within Stomp gateway, and its permission control for topics needs to be configured [Authorization](../security/authz/authz.md).
+
+## User Interfaces
+
+- Detailed confguration options: [Configuration - Stomp Gateway](../admin/cfg.md)
+- Detailed HTTP APIs description: [HTTP API - Gateway](../admin/api.md)
+
+## Client libraries
+
+- [erlang-stomp-client](https://github.com/KodiEhf/erlang-stomp-client)
+- [stomp.py](https://github.com/jasonrbriggs/stomp.py)
