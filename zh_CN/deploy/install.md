@@ -171,7 +171,7 @@ macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io,emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
@@ -187,7 +187,7 @@ macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io,emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
        healthcheck:
          test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
          interval: 5s
