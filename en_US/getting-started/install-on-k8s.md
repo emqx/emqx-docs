@@ -1,5 +1,7 @@
 # Install EMQX Cluster with EMQX Operator
 
+For more information about latest EMQX Operator, please access [github](https://github.com/emqx/emqx-operator/blob/main/docs/en_US/getting-started/getting-started.md)
+
 1. Use [cert-manager](https://github.com/cert-manager/cert-manager) for provisioning the certificates for the webhook server. Please follow the [cert-manager documentation](https://cert-manager.io/docs/installation/) to install it。
 
 2. Install Operator Controller Manager service in one of the following ways：
@@ -7,7 +9,7 @@
     + Install with default static files
 
     ```shell
-    curl -f -L "https://github.com/emqx/emqx-operator/releases/download/1.1.7/emqx-operator-controller.yaml" | kubectl apply -f -
+    curl -f -L "https://github.com/emqx/emqx-operator/releases/download/1.1.10/emqx-operator-controller.yaml" | kubectl apply -f -
     ```
 
     + Install with Helm
