@@ -1,5 +1,7 @@
 # Install EMQX Cluster with EMQX Operator
 
+For more information about latest EMQX Operator, please access [github](https://github.com/emqx/emqx-operator/blob/main/docs/en_US/getting-started/getting-started.md).
+
 1. Use [cert-manager](https://github.com/cert-manager/cert-manager) for provisioning the certificates for the webhook server. Please follow the [cert-manager documentation](https://cert-manager.io/docs/installation/) to install it。
 
 2. Install Operator Controller Manager service in one of the following ways：
@@ -7,7 +9,7 @@
     + Install with default static files
 
     ```shell
-    curl -f -L "https://github.com/emqx/emqx-operator/releases/download/1.2.1/emqx-operator-controller.yaml" | kubectl apply -f -
+    curl -f -L "https://github.com/emqx/emqx-operator/releases/download/1.2.2/emqx-operator-controller.yaml" | kubectl apply -f -
     ```
 
     + Install with Helm
@@ -46,8 +48,11 @@
     kind: EmqxBroker
     metadata:
       name: emqx
+      labels:
+        "foo": "bar"
     spec:
-      image: emqx/emqx:4.4.5
+      emqxTemplate:
+        image: emqx/emqx:4.4.5
     EOF
     ```
 
@@ -56,12 +61,12 @@
    ```shell
    $ kubectl get pods 
     NAME READY STATUS RESTARTS AGE 
-    emqx-0 1/1 Running 0 22s 
-    emqx-1 1/1 Running 0 22s 
-    emqx-2 1/1 Running 0 22s 
-    $ kubectl exec -it emqx-0 -- emqx_ctl status 
+    emqx-0 2/2 Running 0 22s 
+    emqx-1 2/2 Running 0 22s 
+    emqx-2 2/2 Running 0 22s 
+    $ kubectl exec -it emqx-0 -c emqx -- emqx_ctl status 
     Node 'emqx@emqx-0.emqx-headless.default.svc.cluster.local' 4.4.5 is started
-    $ kubectl exec -it emqx-0 -- emqx_ctl cluster status 
+    $ kubectl exec -it emqx-0 -c emqx -- emqx_ctl cluster status 
     Cluster status: #{running_nodes =>
                       ['emqx@emqx-0.emqx-headless.default.svc.cluster.local',
                        'emqx@emqx-1.emqx-headless.default.svc.cluster.local',
@@ -82,8 +87,11 @@
     kind: EmqxEnterprise
     metadata:
       name: emqx-ee
+      labels:
+        "foo": "bar"
     spec:
-      image: emqx/emqx-ee:4.4.5
+      emqxTemplate:
+        image: emqx/emqx-ee:4.4.5
     EOF
     ```
 
@@ -92,12 +100,12 @@
    ```shell
    $ kubectl get pods 
    NAME READY STATUS RESTARTS AGE 
-   emqx-ee-0 1/1 Running 0 22s 
-   emqx-ee-1 1/1 Running 0 22s 
-   emqx-ee-2 1/1 Running 0 22s
-   $ kubectl exec -it emqx-ee-0 -- emqx_ctl status 
+   emqx-ee-0 2/2 Running 0 22s 
+   emqx-ee-1 2/2 Running 0 22s 
+   emqx-ee-2 2/2 Running 0 22s
+   $ kubectl exec -it emqx-ee-0 -c emqx -- emqx_ctl status 
    Node 'emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local' 4.4.5 is started
-   $ kubectl exec -it emqx-ee-0 -- emqx_ctl cluster status 
+   $ kubectl exec -it emqx-ee-0 -c emqx -- emqx_ctl cluster status 
    Cluster status: #{running_nodes =>
                       ['emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local',
                        'emqx-ee@emqx-ee-1.emqx-ee-headless.default.svc.cluster.local',
