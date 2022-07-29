@@ -15,6 +15,24 @@ ref:
 
 # Changes
 
+## Version 4.4.6
+
+*Release Date: 2022-07-29*
+
+### Enhancement
+
+- Supports searching and paging of rules in rule engine
+- Provides CLI `./bin/emqx check_conf` to actively check if the configuration is correct
+- Optimizing Shared Subscription Performance
+
+### Bug fixes
+
+- Fix the issue that once the old version of EMQX is uninstalled after hot upgrade, EMQX will not be able to start again
+- Fix the issue that the keep-alive check for UDP clients in the Multilingual Protocol Extension was incorrect, causing clients not to expire
+- Fix the issue that the client information in the Multilingual Protocol Extension was not updated in time
+- Fix the issue that when the client specified Clean Session as false to reconnect, the shared subscription message in the flight window would be re-dispatched to the old session process
+- Fix the issue that the `emqx_lua_hook` plugin cannot cancel the message publishing
+
 ## Version 4.4.5
 
 *Release Date: 2022-06-30*
