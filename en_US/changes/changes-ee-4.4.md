@@ -23,7 +23,7 @@ ref:
 
 - Rules engine supports RocketMQ with ACL enabled
 - Supports searching and paging of rules in rule engine
-- Kafka in Rules Engine now supports SASL/SCRAM authentication and SASL/GSSAPI authentication
+- Kafka in Rules Engine now supports SASL/SCRAM authentication and SASL/GSSAPI authentication. Note that the `cyrus-sasl-gssapi` dependency needs to be installed before using SASL/GSSAPI authentication
 - Provides CLI `./bin/emqx check_conf` to actively check if the configuration is correct
 - Optimize the write performance of TDEngine in the rule engine
 - Support for clearing historical alarms on Dashboard

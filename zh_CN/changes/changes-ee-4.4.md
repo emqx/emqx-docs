@@ -23,7 +23,7 @@ ref:
 
 - 规则引擎支持启用了 ACL 的 RocketMQ
 - 支持对规则引擎中的规则进行搜索和分页
-- 规则引擎中的 Kafka 现已支持 SASL/SCRAM 认证和 SASL/GSSAPI 认证
+- 规则引擎中的 Kafka 现已支持 SASL/SCRAM 认证和 SASL/GSSAPI 认证，注意使用 SASL/GSSAPI 认证前需要安装 `cyrus-sasl-gssapi` 依赖
 - 提供 CLI `./bin/emqx check_conf` 以主动检查配置是否正确
 - 优化规则引擎中 TDEngine 的写入性能
 - 支持在 Dashboard 上清除历史告警
