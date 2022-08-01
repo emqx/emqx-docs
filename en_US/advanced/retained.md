@@ -19,7 +19,7 @@ In this way, the client will be prohibited from sending PUBLISH packets with the
 
 The service stores and manages retained messages sent by clients and sends them to the corresponding subscribers.
 
-## The Service
+## Quick Start 
 
 ### Setup
 
@@ -34,12 +34,10 @@ Open the Dashboard, select the `MQTT` item in the `Configuration`, and then sele
 | Storage         | enum     | `ram`, `disc` | ram |ram: only stored in memory; <br /> disc: stored in memory and hard disk. |
 | Max Retained Messages | integer  | \>= 0                    | 0      | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics. |
 | Max Payload Size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX broker will treat the retained reserved message as a normal message. |
-| Expire       | duration |                          | ０     | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
-| Clean Interval  | duration |                          | ０     | Interval to clean up expired messages. |
+| Expire       | duration |                          | 0    | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
+| Clean Interval  | duration |                          | 0    | Interval to clean up expired messages. |
 
 <!---
-
-TODO wait new limiter
 
 ## Flow Control
 
