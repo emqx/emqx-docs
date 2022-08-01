@@ -103,37 +103,37 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 
 | Topic       | Description |
 | ----------------- | -------------- |
-| connections/count | Total number of current clients |
-| connections/max   | Maximum number of clients |
+| connections.count | Total number of current clients |
+| connections.max   | Maximum number of clients |
 
 ### Subscription statistics
 
 | Topic                | Description  |
 | -------------------------- | ---------------- |
-| suboptions/count           | number of current subscription options |
-| suboptions/max             | total number of maximum subscription options |
-| subscribers/count          | number of current subscribers |
-| subscribers/max            | maximum number of subscriptions |
-| subscriptions/count        | total number of current subscription |
-| subscriptions/max          | maximum number of subscriptions |
-| subscriptions/shared/count | total number of current shared subscriptions |
-| subscriptions/shared/max   | maximum number of shared subscriptions |
+| suboptions.count           | number of current subscription options |
+| suboptions.max             | total number of maximum subscription options |
+| subscribers.count          | number of current subscribers |
+| subscribers.max            | maximum number of subscriptions |
+| subscriptions.count        | total number of current subscription |
+| subscriptions.max          | maximum number of subscriptions |
+| subscriptions.shared.count | total number of current shared subscriptions |
+| subscriptions.shared.max   | maximum number of shared subscriptions |
 
 ### Topic statistics
 
 | Topic  | Description |
 | ------------ | --------------- |
-| topics/count | total number of current topics |
-| topics/max   | maximum number of topics |
+| topics.count | total number of current topics |
+| topics.max   | maximum number of topics |
 
 ### Routes statistics
 
 | Topic  | Description  |
 | ------------ | ---------------- |
-| routes/count | total number of current Routes |
-| routes/max   | maximum number of Routes |
+| routes.count | total number of current Routes |
+| routes.max   | maximum number of Routes |
 
- The topics/count and topics/max are numerically equal to routes/count and routes/max.
+ The topics.count and topics.max are numerically equal to routes.count and routes.max.
 
 ### Throughput (bytes/packets/message) statistics
 

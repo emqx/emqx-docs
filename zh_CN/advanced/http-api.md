@@ -1988,6 +1988,46 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 ## 规则
 查询规则引擎的动作
 
+### GET /api/v4/rules/
+获取规则列表，支持分页及模糊查找。包括规则的 SQL、Topics 列表、动作列表等。还会返回当前规则和动作的统计指标的值。
+
+**Query String Parameters:**
+
+| Name   | Type | Required | Description |
+| ------ | --------- | -------- | ------- |  ---- |
+| enable_paging | Boolean | False | 是否支持分布功能，如果开启，则返回带分页的元信息 |
+| enabled | Boolean   | False | 过滤条件：规则是否开启状态 |
+| for     | String | False | 返回 topic 完全匹配的规则 |
+| _like_id | String | False | 根据 id 子串方式模糊查找 |
+| _like_for | String | False | 根据 Topic 子串方式模糊查找 |
+| _match_for | String | False | 根据 Topic 匹配查询，比如: t/# 包括 t/1, t/2 |
+| _like_description | String | False | 根据描述子串方式模糊查找 |
+| _page  | Integer   | False | 页码 |
+| _limit | Integer   | False | 每页显示的数据条数，未指定时由 `emqx-management` 插件的配置项 `max_row_limit` 决定 |
+
+
+**Success Response Body (JSON):**
+
+| Name | Type | Description |
+| ---- | --------- | ----------- |
+| code | Integer   | 0         |
+| meta       | Object    | 分页信息，只在 enable_paging 为 true 时生效 |
+| meta.page  | Integer   | 页码                 |
+| meta.limit | Integer   | 每页显示的数据条数 |
+| meta.count | Integer   | 数据总条数         |
+| data | Array of Objects | 规则详情|
+| data[0].id              | String      | Rule ID                                          |
+| data[0].rawsql          | String      | SQL 语句，与请求中的 rawsql 一致                 |
+| data[0].for             | String      | Topic 列表，表示哪些 topic 可以匹配到此规则      |
+| data[0].metrics         | Array       | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
+| data[0].description     | String      | 规则的描述信息，与请求中的 description 一致      |
+| data[0].created_at      | Integer     | 创建时间，以微秒为单位的 UNIX 时间戳 |
+| data[0].actions         | Array       | 动作列表                                         |
+| data[0].actions[0].id | String      | Action ID                                        |
+| data[0].actions[0].params | Object | 动作参数，与请求中的 actions.params 一致         |
+| data[0].actions[0].name | String      | 动作名字，与请求中的 actions.name 一致           |
+| data[0].actions[0].metrics | Array       | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
+
 ### GET /api/v4/rules/{rule_id}
 获取某个规则的详情，包括规则的 SQL、Topics 列表、动作列表等。还会返回当前规则和动作的统计指标的值。
 
@@ -2008,6 +2048,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 | - data.for             | String      | Topic 列表，表示哪些 topic 可以匹配到此规则      |
 | - data.metrics         | Array       | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
 | - data.description     | String      | 规则的描述信息，与请求中的 description 一致      |
+| - data.created_at      | Integer     | 创建时间，以微秒为单位的 UNIX 时间戳 |
 | - data.actions         | Array       | 动作列表                                         |
 | - data.actions[0].id | String      | Action ID                                        |
 | - data.actions[0].params | Object | 动作参数，与请求中的 actions.params 一致         |
@@ -2038,6 +2079,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 | - data.for                 | String    | Topic 列表，表示哪些 topic 可以匹配到此规则      |
 | - data.metrics             | Array     | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
 | - data.description         | String    | 规则的描述信息，与请求中的 description 一致      |
+| - data.created_at      | Integer     | 创建时间，以微秒为单位的 UNIX 时间戳 |
 | - data.actions             | Array     | 动作列表，每个动作是一个 Object                  |
 | - data.actions[0].id      | String    | Action ID                                        |
 | - data.actions[0].params  | Object    | 动作参数，与请求中的 actions.params 一致         |
@@ -2068,6 +2110,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 | - data.for                 | String    | Topic 列表，表示哪些 topic 可以匹配到此规则      |
 | - data.metrics             | Array     | 统计指标，具体可参看 Dashboard 上的 Rule Metrics |
 | - data.description         | String    | 规则的描述信息，与请求中的 description 一致      |
+| - data.created_at      | Integer     | 创建时间，以微秒为单位的 UNIX 时间戳 |
 | - data.actions             | Array     | 动作列表，每个动作是一个 Object                  |
 | - data.actions[0].id      | String    | Action ID                                        |
 | - data.actions[0].params  | Object    | 动作参数，与请求中的 actions.params 一致         |

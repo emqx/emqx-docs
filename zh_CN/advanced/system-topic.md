@@ -104,37 +104,37 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 
 | 主题 (Topic)       | 说明           |
 | ----------------- | -------------- |
-| connections/count | 当前客户端总数 |
-| connections/max   | 客户端数量历史最大值 |
+| connections.count | 当前客户端总数 |
+| connections.max   | 客户端数量历史最大值 |
 
 ### 订阅统计
 
 | 主题 (Topic)                | 说明             |
 | -------------------------- | ---------------- |
-| suboptions/count           | 当前订阅选项个数 |
-| suboptions/max             | 订阅选项总数历史最大值 |
-| subscribers/count          | 当前订阅者数量   |
-| subscribers/max            | 订阅者总数历史最大值   |
-| subscriptions/count        | 当前订阅总数     |
-| subscriptions/max          | 订阅数量历史最大值     |
-| subscriptions/shared/count | 当前共享订阅个数 |
-| subscriptions/shared/max   | 当前共享订阅总数 |
+| suboptions.count           | 当前订阅选项个数 |
+| suboptions.max             | 订阅选项总数历史最大值 |
+| subscribers.count          | 当前订阅者数量   |
+| subscribers.max            | 订阅者总数历史最大值   |
+| subscriptions.count        | 当前订阅总数     |
+| subscriptions.max          | 订阅数量历史最大值     |
+| subscriptions.shared.count | 当前共享订阅个数 |
+| subscriptions.shared.max   | 当前共享订阅总数 |
 
 ### 主题统计
 
 | 主题 (Topic)  | 说明            |
 | ------------ | --------------- |
-| topics/count | 当前 Topic 总数 |
-| topics/max   | Topic 数量历史最大值 |
+| topics.count | 当前 Topic 总数 |
+| topics.max   | Topic 数量历史最大值 |
 
 ### 路由统计
 
 | 主题 (Topic)  | 说明             |
 | ------------ | ---------------- |
-| routes/count | 当前 Routes 总数 |
-| routes/max   | Routes 数量历史最大值 |
+| routes.count | 当前 Routes 总数 |
+| routes.max   | Routes 数量历史最大值 |
 
-`topics/count` 和 `topics/max` 与 `routes/count` 和 `routes/max` 数值上是相等的。
+`topics.count` 和 `topics.max` 与 `routes.count` 和 `routes.max` 数值上是相等的。
 
 ## 收发流量 / 报文 / 消息统计
 

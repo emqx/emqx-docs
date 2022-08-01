@@ -1503,6 +1503,48 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/banned
 ### Rule
 Query rule engine actions
 
+
+### GET /api/v4/rules/
+Get rule list, supports paging and filter, including the rule's SQL, Topics list, action list, etc. It also returns the value of the statistical index for the current rule and action.
+
+**Query String Parameters:**
+
+| Name   | Type | Required | Description |
+| ------ | --------- | -------- | ------- |  ---- |
+| enable_paging | Boolean | False | Whether to enable paging with page/limit metadata |
+| enabled | Boolean   | False | Filter condition: whether the rule is enabled or not |
+| for     | String | False | return topic exact match rule |
+| _like_id | String | False | Fuzzy search by id substring |
+| _like_for | String | False | Fuzzy search by Topic substring |
+| _match_for | String | False | Matching query based on Topic, e.g.: t/# including t/1, t/2 |
+| _like_description | String | False | Fuzzy search by description substring |
+| _page  | Integer   | False | page |
+| _limit | Integer   | False |  The number of data displayed per page. If not specified, it is determined by the configuration item `max_row_limit` of the` emqx-management` plugin |
+
+
+**Success Response Body (JSON):**
+
+| Name | Type | Description |
+| ---- | --------- | ----------- |
+| code | Integer   | 0         |
+| meta       | Object    | Paging information, only return when enable_paging is true |
+| meta.page  | Integer   | Page number      |
+| meta.limit | Integer   | Number of data displayed per page |
+| meta.count | Integer   | Total number of data |
+| data | Array of Objects | rule detail|
+| data[0].id              | String      | Rule ID                                          |
+| data[0].rawsql          | String      | SQL statement, consistent with rawsql in the request |
+| data[0].for             | String      | Topic list, indicates which topics can be matched by this rule |
+| data[0].metrics         | Array       | Metrics, see Rule Metrics on Dashboard for details |
+| data[0].description     | String      | The description of the rule, consistent with the description in the request |
+| data[0].created_at      | Integer     | UNIX timestamp in microseconds |
+| data[0].actions         | Array       | Action list                               |
+| data[0].actions[0].id | String      | Action ID                                        |
+| data[0].actions[0].params | Object | Action parameters, consistent with actions.params in the request |
+| data[0].actions[0].name | String      | Action name, consistent with actions.name in the request |
+| data[0].actions[0].metrics | Array       | Metrics, see Rule Metrics on Dashboard for details |
+
+
 #### GET /api/v4/rules/{rule_id}
 Get the details of a rule, including the rule's SQL, Topics list, action list, etc. It also returns the value of the statistical index for the current rule and action.
 
@@ -1523,6 +1565,7 @@ Get the details of a rule, including the rule's SQL, Topics list, action list, e
 | - data.for             | String      | Topic list, indicates which topics can be matched by this rule |
 | - data.metrics         | Array       | Metrics, see Rule Metrics on Dashboard for details |
 | - data.description     | String      | The description of the rule, consistent with the description in the request |
+| - data.created_at      | Integer     | UNIX timestamp in microseconds |
 | - data.actions         | Array       | Action list                               |
 | - data.actions[0].id | String      | Action ID                                        |
 | - data.actions[0].params | Object | Action parameters, consistent with actions.params in the request |
@@ -1553,6 +1596,7 @@ Create a rule and return the rule ID.
 | - data.for                 | String    | Topic list, indicates which topics can be matched by this rule |
 | - data.metrics             | Array     | Metrics, see Rule Metrics on Dashboard for details |
 | - data.description         | String    | The description of the rule, consistent with the description in the request |
+| - data.created_at      | Integer     | UNIX timestamp in microseconds |
 | - data.actions             | Array     | Action list, and each action is an Object |
 | - data.actions[0].id      | String    | Action ID                                        |
 | - data.actions[0].params  | Object    | Action parameters, consistent with actions.params in the request |
@@ -1583,6 +1627,7 @@ Update the rule and return the rule ID.
 | - data.for                | String  | Topic list, indicates which topics can be matched by this rule |
 | - data.metrics            | Array   | Metrics, see Rule Metrics on Dashboard for details           |
 | - data.description        | String  | The description of the rule, consistent with the description in the request |
+| - data.created_at      | Integer     | UNIX timestamp in microseconds |
 | - data.actions            | Array   | Action list, and each action is an Object                    |
 | - data.actions[0].id      | String  | Action ID                                                    |
 | - data.actions[0].params  | Object  | Action parameters, consistent with actions.params in the request |

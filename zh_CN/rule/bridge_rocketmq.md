@@ -51,6 +51,13 @@ SELECT * FROM "t/#"
 
    填写真实的 RocketMQ 服务器地址，多个地址用,分隔，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
+按照 RocketMQ ACL 的配置填写。
+ACL 信息请咨询服务提供商，本地或私有部署，可以在配置文件中查看，配置文件路径需要按照部署方式的不同改变前缀。
+
+```bash
+${rocket_path}/conf/plain_acl.yml
+```
+
 最后点击 “新建” 按钮。
 
 ![image](./assets/rule-engine/rocket-resource-2@2x.png)
@@ -74,6 +81,7 @@ Payload: "hello"
 ```
 
 然后通过 RocketMQ 命令去查看消息是否生产成功:
+
 ```bash
 $ ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer TopicTest
 ```

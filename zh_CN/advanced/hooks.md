@@ -27,7 +27,7 @@ ref:
 
 而在这个过程中加入一个可挂载函数的点 (HookPoint)，允许外部插件挂载多个回调函数，形成一个调用链。达到对内部事件处理过程的扩展和修改。
 
-系统中常用到的认证插件则是按照该逻辑进行实现的。以最简单的 [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_mnesia) 为例：
+系统中常用到的认证插件则是按照该逻辑进行实现的。以最简单的 [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_auth_mnesia) 为例：
 
 在只开启 `emqx_auth_mnesia` 认证插件，且关闭匿名用户登录时。按照上图对事件的处理逻辑可知，此时认证模块的逻辑为：
 

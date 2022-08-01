@@ -12,6 +12,13 @@
 
 **注意**: 排它订阅必须使用 `$exclusive/` 前缀，在上面的示例中，其他客户端依然可以通过 `t/1` 成功进行订阅。 
 
+## 订阅失败错误码
+
+| 错误码            | 原因        | 
+| --------------- | ----------- | 
+| 0x8F     | 使用了 `$exclusive/`，但并未开启排它订阅  | 
+| 0x97 | 已经有客户端订阅了该主题 |
+
 
 ## 配置设置
 
@@ -23,4 +30,4 @@
 | zone.external.exclusive_subscription | boolean | 未设置 | 排它订阅在 external zone 上的开关   |
 | zone.internal.exclusive_subscription | boolean | 未设置 | 排它订阅在 internal zone 上的开关 |
 
-在 zone 上如果没有设置 `exclusive_subscription` 的值，EMQX 将会使用 `mqtt.exclusive_subscription` 来判断功能是否开启
+在 zone 上如果没有设置 `exclusive_subscription` 的值，EMQX 将会使用 `mqtt.exclusive_subscription` 来判断功能是否开启。

@@ -12,7 +12,7 @@ When the **Hooks** mechanism does not exist in the system, the entire event proc
 
 In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified .
 
-The authentication plugin commonly used in the system is implemented according to this logic. Take the simplest  plugin of [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/master/apps/emqx_auth_mnesia) as an example:
+The authentication plugin commonly used in the system is implemented according to this logic. Take the simplest  plugin of [emqx_auth_mnesia](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_auth_mnesia) as an example:
 
 When only the `emqx_auth_mnesia` authentication plugin is enabled and anonymous authentication is disabled, according to the processing logic of the event according in the figure above, the logic of the authentication module at this time is:
 

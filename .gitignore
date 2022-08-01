@@ -6,4 +6,5 @@ book.pdf
 *.lock
 *.pdf
 .DS_Store
+.envrc
 /.idea/
