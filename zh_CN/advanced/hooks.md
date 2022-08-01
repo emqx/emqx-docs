@@ -111,6 +111,11 @@ ref:
 
 {% endemqxce %}
 
+{% emqxee %}
+
+- 钩子和 HTTP 服务器的应用，参见： [WebHook](webhook.md)
+
+{% endemqxee %}
 
 ## 挂载点
 
@@ -137,6 +142,7 @@ EMQX 以一个客户端在其生命周期内的关键活动为基础，预置了
 | message.delivered    | 消息投递     | 消息准备投递到客户端前                                |
 | message.acked        | 消息回执     | 服务端在收到客户端发回的消息 ACK 后                   |
 | message.dropped      | 消息丢弃     | 发布出的消息被丢弃后                                  |
+| message.slow_subs_stats | 订阅者平均消息传输时延过高     |  QoS1或QoS2消息传输完成时         |
 
 
 ::: tip

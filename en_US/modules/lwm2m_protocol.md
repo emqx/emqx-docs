@@ -82,7 +82,7 @@ Access devices that support LwM2M. The device can also report notification to EM
 | Configuration     | Description                                                  |
 | ----------------- | ------------------------------------------------------------ |
 | Minimum Lifetime  | Minimum lifetime allowed to be set for registration/update, in seconds |
-| Maxinum Lifetime  | Maximum lifetime allowed to be set for registration/update, in seconds |
+| Maximum Lifetime  | Maximum lifetime allowed to be set for registration/update, in seconds |
 | QMode Time Window | QMode time window, indicating how long the downstream command sent to the client will be cached, in seconds |
 | Auto Observe      | After successful registration, whether the objectlist reported by Observe is automatically reported |
 | Mountpoint        | topic Prefix                                                 |

@@ -134,7 +134,7 @@ Note that in this log message, the client_info field does not exist.
 
 ## log level and log handlers
 
-EMQX Broker uses a hierarchical log system. At the log level, it includes primary log level and the log level of each log hanlder.
+EMQX Broker uses a hierarchical log system. At the log level, it includes primary log level and the log level of each log handler.
 
 ```bash
      [Primary Level]        -- global log level and filters

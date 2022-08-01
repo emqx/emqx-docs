@@ -89,7 +89,212 @@ Rule: {
 Actions and resource types are provided by emqx or plugin code and cannot be created dynamically through API and CLI.
 :::
 
+## SQL statement 
+### SQL syntax
+**FROM, SELECT, and WHERE clauses:**
+
+The basic format of the SQL statement of the rule engine is:
+```sql
+SELECT <fields> FROM <topic> [WHERE <any>]
+```
+- The `FROM` clause mounts rules to a topic
+- The `SELECT` clause is used to select fields in the output
+- The `WHERE` clause is used to filter messages based on conditions
+
+**FOREACH, DO and INCASE clauses:**
+
+If you want to perform some operations and actions for each element of an array data, you need to use the `FOREACH-DO-INCASE` syntax. The basic format is:
+
+```sql
+FOREACH <Field name> [DO <Condition>] [INCASE <Condition>] FROM <Topic> [WHERE <Condition>]
+```
+
+- The `FOREACH` clause is used to select the field that needs to perform foreach operation. Note that the selected field must be an array type
+- The `DO` clause is used to transform each element in the array selected by FOREACH and select the field of interest
+- The `INCASE` clause is used to apply conditional filtering to a field selected by DO
+
+The DO and INCASE clauses are optional. DO is equivalent to the SELECT clause for objects in the current loop, while INCASE is equivalent to the WHERE statement for objects in the current loop.
+
 ## Examples of typical application scenarios for rule engine
+
+- Action listening: In the development of intelligent door lock for smart home, the function of the door lock will be abnormal because of offline resulting by the network or power failure, man-made damage and other reasons. Through using rule engine configuration to monitor offline events, it can push the fault information to the application service and realize the ability of first time fault detection in the access layer.
+- Data filtering: Truck fleet management of vehicle network. Vehicle sensors collect and report a large amount of operational data. The application platform only focuses on data with a vehicle speed greater than 40 km/h. In this scenario, the rule engine can be used to conditionally filter messages to the service, and data that satisfies the condition can be written to the business message queue .
+- Message routing: In the intelligent billing application, the terminal device distinguishes the service type by different topics. The message of billing service can be connected to the billing message queue by configuring the rule engine, and the non-billing information can be connected to other message queues to realize the routing configuration of business messages.
+- Message encoding and decoding: In the application scenarios such as public protocol/proprietary TCP protocol access and industrial control, the encoding and decoding of binary/special format message body can be done through the local processing function of the rule engine (which can be customized and developed on EMQX). Relevant messages can also be routed through the rule engine to external computing resources such as function computing for processing (processing logic can be developed by users), and the messages can be converted into JSON format that is easy for business processing, which simplifies the difficulty of project integration and improves the ability of rapid development and delivery of applications.
+
+The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
+If you want emqx to publish the event message, you can configure it in the `emqx_rule_engine.conf` file.
+
+For all supported events and available fields, please see [Event topics available for FROM clause](#event-topic-available-for-from-clause).
+
+### SQL statement example: 
+**Basic syntax examples**
+
+-  Extract all fields from the messages with a topic of "t/a": 
+    ```sql
+    SELECT * FROM "t/a"
+    ```
+-  Extract all fields from the messages with a topic of "t/a" or "t/b": 
+    ```sql
+    SELECT * FROM "t/a","t/b"
+    ```
+-  Extract all fields from the message with a topic that can match 't/#'. 
+    ```sql
+    SELECT * FROM "t/#"
+    ```
+-  Extract the qos, username, and clientid fields from the message with a topic that can match 't/#' :
+    ```sql
+    SELECT qos, username, clientid FROM "t/#"
+    ```
+-  Extract the username field from any topic message with the filter criteria of username = 'Steven':
+    ```sql
+    SELECT username FROM "#" WHERE username='Steven'
+    ```
+- Extract the x field from the payload of message with any topic and create the alias x for use in the WHERE clause. The WHERE clause is restricted as x = 1. Note that the payload must be in JSON format. Example: This SQL statement can match the payload `{"x": 1}`, but can not match to the payload `{"x": 2}`:
+    ```sql
+  SELECT payload FROM "#" WHERE payload.x = 1
+  ```
+- Similar to the SQL statement above, but nested extract the data in the payload, this SQL statement can match the payload{"x": {"y": 1}}`:
+    ```sql
+    SELECT payload FROM "#" WHERE payload.x.y = 1
+    ```
+-  Find the connection where clientid = 'c1', extract its source IP address and port number:
+    ```sql
+    SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
+    ```
+- Filter all clientids that subscribe to the 't/#' topic and have a subscription level of QoS1 :
+    ```sql
+    SELECT clientid FROM "$events/session_subscribed" WHERE topic = 't/#' and qos = 1
+    ```
+- Filter all clientids that subscribe to the 't/#' topic and subscription level is QoS1. Note that the strict equality operator '=~' is used here, so it does not match subscription requests with the topic 't' or 't/+/a' :
+    ```sql
+    SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
+    ```
+
+::: tip
+- Topic after the FROM clause need to be enclosed in double quotes `""`.
+- The WHERE clause is followed by the filter condition. If a string is used, it needs to be enclosed in single quotes `'' `.
+- If there are multiple topics in the FROM clause, they need to be separated by commas `","`. For example,
+    ```sql
+    SELECT * FROM "t/1", "t/2".
+    ```
+- You can use the `"." `Symbol to nest select payloads
+- If possible, don't create alias for payload, as this would cause performance degradations.
+  i.e. Do not use `SELECT payload as p`
+:::
+
+#### Examples of FOREACH-DO-INCASE
+
+Suppose there is a message with ClientID of `c_steve` and topic of ` t/1`. The message body is in JSON format, and the sensors field is an array containing multiple Objects:
+
+```json
+{
+    "date": "2020-04-24",
+    "sensors": [
+        {"name": "a", "idx":0},
+        {"name": "b", "idx":1},
+        {"name": "c", "idx":2}
+    ]
+}
+```
+
+**Example 1: It is required that each object in sensors is re-published as a data input to the topic of `sensors/${idx}` with the content of `${name}`. That means the final rule engine will issue 3 messages:** 
+
+1) Topic: sensors/0
+   Content: a
+2) Topic: sensors/1
+   Content: b
+3) Topic: sensors/2
+   Content: c
+
+To complete this rule, we need to configure the following actions:
+
+- Action type: message republish
+- Target topic: sensors/$ {idx}
+- Target QoS: 0
+- Message content template: $ {name}
+
+And the following SQL statement:
+
+```sql
+FOREACH
+    payload.sensors
+FROM "t/#"
+```
+
+**Example analysis: **
+
+In this SQL, the FOREACH clause specifies the array sensors that need to be traversed, then the selection result is:
+
+```json
+[
+  {
+    "name": "a",
+    "idx": 0
+  },
+  {
+    "name": "b",
+    "idx": 1
+  },
+  {
+    "name": "c",
+    "idx": 2
+  }
+]
+```
+
+The FOREACH statement will perform a "message republish" action for each object in the result array, so the republish action will be performed 3 times.
+
+**Example 2: It is required that each object in sensors with ids value greater than or equal to 1 is re-published as a data input to the topic of `sensors/${idx}` with the content of  `clientid=${clientid},name=${name},date=${date}`. That means the final rule engine will issue 2 messages:** 
+
+1) Topic: sensors/1
+   Content: clientid=c_steve,name=b,date=2020-04-24
+2) Topic: sensors/2
+   Content: clientid=c_steve,name=c,date=2020-04-24
+
+To complete this rule, we need to configure the following actions:
+
+- Action type: message republish
+- Target topic: sensors/$ {idx}
+- Target QoS: 0
+- Message content template: clientid=${clientid},name=${name},date=${date}
+
+And the following SQL statement:
+
+```sql
+FOREACH
+    payload.sensors
+DO
+    clientid,
+    item.name as name,
+    item.idx as idx
+INCASE
+    item.idx >= 1
+FROM "t/#"
+```
+
+**Example analysis: **
+
+In this SQL, the FOREACH clause specifies the array `sensors` that need to be traversed; the DO clause selects the fields required for each operation, and we select the outer clientid field here, and the two fields of `name` and `idx` of the current sensor object. Note that  item  represents the object of this loop in the sensors array. The INCASE clause is a filtering condition for the fields in the DO statement, only if idx> = 1 meets the condition. So the selection result of SQL is:
+
+```json
+[
+  {
+    "name": "b",
+    "idx": 1,
+    "clientid": "c_emqx"
+  },
+  {
+    "name": "c",
+    "idx": 2,
+    "clientid": "c_emqx"
+  }
+]
+```
+
+The FOREACH statement will perform a "message republish" action for each object in the result array, so the republish action will be performed twice.
+
+In DO and INCASE statements, you can use `item` to access the object of the current loop, or you can customize a variable name by using the `as` syntax in FOREACH. So the SQL statement in this example can be written as:
 
 - Action listening: In the development of intelligent door lock for smart home, the function of the door lock will be abnormal because of offline resulting by the network or power failure, man-made damage and other reasons. Through using rule engine configuration to monitor offline events, it can push the fault information to the application service and realize the ability of first time fault detection in the access layer.
 - Data filtering: Truck fleet management of vehicle network. Vehicle sensors collect and report a large amount of operational data. The application platform only focuses on data with a vehicle speed greater than 40 km/h. In this scenario, the rule engine can be used to conditionally filter messages to the service, and data that satisfies the condition can be written to the business message queue .

@@ -58,7 +58,7 @@ From a gRPC perspective, ExProto acts as a client to send callback requests to t
 
 ![Extension Protocol gRPC Arch](../modules/assets/exproto-grpc-arch.jpg)
 
-The services defination see: [exproto.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exproto/priv/protos/exproto.proto)
+The services definition see: [exproto.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exproto/priv/protos/exproto.proto)
 
 For examples:
 
@@ -67,8 +67,8 @@ syntax = "proto3";
 
 package emqx.exproto.v1;
 
-// The Broker side serivce. It provides a set of APIs to
-// handle a protcol access
+// The Broker side service. It provides a set of APIs to
+// handle a protocol access
 service ConnectionAdapter {
 
   // -- socket layer

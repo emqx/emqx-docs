@@ -484,8 +484,48 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/client
 {"code":0}
 ```
 
+### PUT /api/v4/clients/{clientid}/keepalive
+
+Set the keepalive time (in seconds) for the specified client.
+
+**Path Parameters:**
+
+| Name     | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| clientid | String | True     | ClientID    |
+
+**Query String Parameters:**
+
+| Name     | Type    | Required | Description                                           |
+| -------- | ------- | :------: | ----------------------------------------------------- |
+| interval | Integer |   True   | seconds：0～65535，0 means keepalive check is disable |
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0           |
+
+**Examples:**
+
+Update the specified client(example) Keepalive to 10 seconds
+
+```bash
+$ curl -i --basic -u admin:public -X PUT "http://localhost:8081/api/v4/clients/example/keepalive?interval=10"
+
+{"code":0}
+```
+In addition to the above Query String, we also support passing through Body.
+
+```bash
+curl   -u admin:public -X 'PUT' http://127.0.0.1:18083/api/v4/clients/test/keepalive -d '{"interval": 10}'
+
+{"code":0}
+```
 ### Subscription Information
+
 #### GET /api/v4/subscriptions
+
 Returns all subscription information under the cluster, and supports paging mechanism
 
 **Query String Parameters:**
@@ -686,6 +726,20 @@ Publish MQTT message。
 | encoding | String    | Optional | plain   | The encoding used in the message body. Currently only plain and base64 are supported. |
 | qos      | Integer   | Optional | 0       | QoS level |
 | retain   | Boolean   | Optional | false   | Whether it is a retained message |
+| properties   | Object   | Optional | {}   | The Properties of the PUBLISH message |
+
+Properties：
+
+| Name     | Type | Description｜
+| -------- | --------- | -------- |
+| payload_format_indicator  | Integer   | 0 (0x00) Byte Indicates that the Payload is unspecified bytes, which is equivalent to not sending a Payload Format Indicator.  1 (0x01) Byte Indicates that the Payload is UTF-8 Encoded Character Data. The UTF-8 data in the Payload MUST be well-formed UTF-8 as defined by the Unicode specification and restated in RFC 3629|
+| message_expiry_interval   | integer  | Identifier of the Message Expiry Interval. If the Message Expiry Interval has passed and the Server has not managed to start onward delivery to a matching subscriber, then it MUST delete the copy of the message for that subscriber |
+| response_topic            | String   | Identifier of the Response Topic.The Response Topic MUST be a UTF-8 Encoded, It MUST NOT contain wildcard characters.|
+| correlation_data          | String   | Identifier of the Correlation Data. The Server MUST send the Correlation Data unaltered to all subscribers receiving the Application Message|
+| subscription_identifier   | Integer   | Identifier of the Subscription Identifier. It can have the value of 1 to 268,435,455. It is a Protocol Error if the Subscription Identifier has a value of 0. Multiple Subscription Identifiers will be included if the publication
+is the result of a match to more than one subscription, in this case their order is not significant. |
+| content_type              | String   | The Content Type MUST be a UTF-8 Encoded String |
+| user_properties           | Object   | Identifier of the User Property. The Server send all User Properties unaltered in a PUBLISH packet when forwarding the Application Message to a Client |
 
 **Success Response Body (JSON):**
 
@@ -696,7 +750,8 @@ Publish MQTT message。
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d '{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"}'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish" -d \
+'{"topic":"a/b/c", "payload":"Hello World", "qos":1, "retain":false, "clientid":"example", "properties": {"user_properties": { "id": 10010, "name": "emqx", "foo": "bar"}, "content_type": "text/plain"}}'
 
 {"code":0}
 ```
@@ -771,7 +826,7 @@ Publish MQTT messages in batch.
 | [0].encoding | String  | Optional | plain   | The encoding method used in the message body, only `plain` and `base64` are supported currently |
 | [0].qos      | Integer | Optional | 0       | QoS level                                                    |
 | [0].retain   | Boolean | Optional | false   | Whether it is a retained message or not                      |
-
+| [0].properties   | Object   | Optional | {}   | The Properties of the PUBLISH message|
 **Success Response Body (JSON):**
 
 | Name | Type    | Description |
@@ -781,9 +836,9 @@ Publish MQTT messages in batch.
 **Examples:**
 
 ```bash
-$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example"},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example"}]'
+$ curl -i --basic -u admin:public -X POST "http://localhost:8081/api/v4/mqtt/publish_batch" -d '[{"topic":"a/b/c","payload":"Hello World","qos":1,"retain":false,"clientid":"example","properties": {"user_properties":{"id": 10010, "name": "emqx", "foo": "bar"}}},{"topic":"a/b/c","payload":"Hello World Again","qos":0,"retain":false,"clientid":"example","properties":{"user_properties": { "id": 10010, "name": "emqx", "foo": "bar"},"content_type": "text/plain"}}]'
 
-{"code":0}
+{"data":[{"topic":"a/b/c","code":0},{"topic":"a/b/c","code":0}],"code":0}
 ```
 
 ### Topic subscription in batch

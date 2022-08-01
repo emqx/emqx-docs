@@ -71,7 +71,7 @@ The meaning of the figure is:
 4. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
 5. The callback function returns with:
     - `ok`: ignore this operation, continue the chain execution with read-only ` Args` and `Acc` returned by the previous function
-    - `{ok, NewAcc}`: performe some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`  
+    - `{ok, NewAcc}`: perform some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`  
 6. The callback function also returns with:
     - `stop`: Stop the transfer of the chain and immediately return the result of ` Acc` from the previous function
     - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification 

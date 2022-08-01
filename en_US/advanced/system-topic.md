@@ -25,14 +25,14 @@ broker.sys_interval = 1m
 
 {% emqxce %}
 
-By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to [build-in ACL](./acl-file.md) to modify the ACL rules for publish and subscription.
+By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to [built-in ACL](./acl-file.md) to modify the ACL rules for publish and subscription.
 
 {% endemqxce %}
 
 
 {% emqxee %}
 
-By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to build-in ACL to modify the ACL rules for publish and subscription.
+By default, only MQTT clients on localhost is allowed to subscribe to the $SYS topic. Please refer to built-in ACL to modify the ACL rules for publish and subscription.
 
 {% endemqxee %}
 
