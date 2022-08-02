@@ -1965,7 +1965,7 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 
 | Name   | Type | Required | Description |
 | ------ | --------- | -------- | ------- |  ---- |
-| enable_paging | Boolean | False | 是否支持分布功能，如果开启，则返回带分页的元信息 |
+| enable_paging | Boolean | False | 是否支持分页功能，如果开启，则返回带分页的元信息 |
 | enabled | Boolean   | False | 过滤条件：规则是否开启状态 |
 | for     | String | False | 返回 topic 完全匹配的规则 |
 | _like_id | String | False | 根据 id 子串方式模糊查找 |

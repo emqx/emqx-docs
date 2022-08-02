@@ -26,4 +26,8 @@ EMQX Broker provides the `emqx` command line tool, which is convenient for users
 
     Ping EMQX Broker
 
++  `emqx check_conf`
+
+   Check if the configuration file format is ok.  You may run this command before starting to check if the configuration file format is correct.
+
 The above commands are commonly used by users. In addition, the `emqx` command has some [other options](../advanced/cli.md) for the convenience of developers (ordinary users do not need to care about those).
