@@ -15,6 +15,35 @@ ref:
 
 # Changes
 
+## Version 4.4.6
+
+*Release Date: 2022-07-29*
+
+### Enhancement
+
+- Rules engine supports RocketMQ with ACL enabled
+- Supports searching and paging of rules in rule engine
+- Kafka in Rules Engine now supports SASL/SCRAM authentication and SASL/GSSAPI authentication. Note that the `cyrus-sasl-gssapi` dependency needs to be installed before using SASL/GSSAPI authentication
+- Provides CLI `./bin/emqx check_conf` to actively check if the configuration is correct
+- Optimize the write performance of TDEngine in the rule engine
+- Support for clearing historical alarms on Dashboard
+- Optimizing Shared Subscription Performance
+- Add `db_name` field to the action of rule engine writing data to TDEngine to improve support for super table
+
+### Bug fixes
+
+- Fix the issue that the action count is wrong when the rule engine writes to TDEngine
+- Fix the issue that the process pool size setting does not take effect when the rule engine writes to HStreamDB
+- Fix the issue that an error was reported when querying the subscription list after the GB/T 32960 plugin was enabled
+- Fix the issue that incompatible configuration items when restoring a 4.2 backup to 4.4 with hot configuration enabled
+- Fix the issue that once the old version of EMQX is uninstalled after hot upgrade, EMQX will not be able to start again
+- Fix the issue that the keep-alive check for UDP clients in the Multilingual Protocol Extension was incorrect, causing clients not to expire
+- Fix the issue that the client information in the Multilingual Protocol Extension was not updated in time
+- Fix the issue that the license update does not take effect when running after hot upgrade to e4.4.4 and later versions
+- Fix the issue that when the client specified Clean Session as false to reconnect, the shared subscription message in the flight window would be re-dispatched to the old session process
+- Fix the issue that the new node did not use the cluster license after joining the cluster
+- Fix the issue that the `emqx_lua_hook` plugin cannot cancel the message publishing
+
 ## Version 4.4.5
 
 *Release Date: 2022-06-30*
