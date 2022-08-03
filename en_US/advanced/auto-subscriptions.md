@@ -56,12 +56,12 @@ auto_subscribe {
 ```
 
 ```text
-+---------------------------+             +----------------+
-| clientid: demo_client1    |             |  EMQX Broker   |
-| username: admin           |             |                |
-| local host: 192.168.1.234 |<----------->|                |
-| local port: 55678         |             |                |
-+---------------------------+             +----------------+
++---------------------------+               +----------------+
+| clientid: demo_client1    |               |  EMQX Broker   |
+| username: admin           |               |                |
+| local host: 192.168.1.234 | <-----------> |                |
+| local port: 55678         |               |                |
++---------------------------+               +----------------+
 ```
 
 When the client uses versions lower than 5, the following subscriptions are available after connection.
