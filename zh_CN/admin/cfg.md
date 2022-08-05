@@ -8009,7 +8009,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `"emqx@127.0.0.1"`
 
-  节点名。格式为 \<name>@\<host>。其中 <host> 可以是 IP 地址，也可以是 FQDN。
+  节点名。格式为 `<name>@<host>`。其中 `<host>` 可以是 IP 地址，也可以是 FQDN。
   详见 http://erlang.org/doc/reference_manual/distributed.html。
             
 
