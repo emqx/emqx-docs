@@ -7200,7 +7200,7 @@ DNS SRV 记录服务发现。
   `"emqxcl"`
 
   指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
-  v2/keys/<prefix>/<cluster.name>/<node.name> </br>
+  `v2/keys/<prefix>/<cluster.name>/<node.name>` </br>
   当 cluster.discovery_strategy 为 etcd 时，此配置项才有效。
         
 
@@ -7978,7 +7978,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   `true`
 
   启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。
-  系统会默认生成<code>*.siz/*.idx<code>用于记录日志位置，请不要手动修改这两个文件。
+  系统会默认生成<code>*.siz/*.idx</code>用于记录日志位置，请不要手动修改这两个文件。
 
 
 - count: <code>1..2048</code>
