@@ -21,6 +21,7 @@ if [ "$PRODUCT" = "ce" ]; then
         -v "$THIS_DIR"/directory.json:/app/docs/.vuepress/config/directory.json \
         -v "$THIS_DIR"/en_US:/app/docs/en/latest \
         -v "$THIS_DIR"/zh_CN:/app/docs/zh/latest \
+        -v "$THIS_DIR"/swagger:/app/docs/.vuepress/public/api \
         -e DOCS_TYPE=broker \
         -e VERSION=latest \
     ghcr.io/emqx/emqx-io-docs-frontend:latest

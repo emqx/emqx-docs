@@ -218,3 +218,10 @@ or
 contents {% endemqxee %}
 ```
 
+### OpenAPI 支持
+文档任意位置均可插入 OpenApi，path 为 OpenAPI 描述定义文件，此文件需要放到文档根目录 swagger 文件夹下，用法：
+```markdown
+<ClientOnly>
+  <OpenApi path="swagger.json" />
+</ClientOnly>
+```
