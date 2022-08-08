@@ -83,3 +83,7 @@ curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
 ```
 
 请注意 `api_secret` 仅在创建时返回一次，请及时保存。
+
+<ClientOnly>
+  <OpenApi path="swagger.json" />
+</ClientOnly>
