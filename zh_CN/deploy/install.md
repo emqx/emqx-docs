@@ -14,6 +14,84 @@ EMQX 目前支持的操作系统:
 + macOS 11
 + Windows Server 2019
 
+
+## 通过 Docker 运行 (包含简单的 docker-compose 集群)
+
+### 运行单个容器
+
+1.  获取 docker 镜像
+
+    ```shell
+    docker pull emqx/emqx:5.0.0
+    ```
+
+2.  启动 docker 容器
+
+    ```shell
+    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.0
+    ```
+
+### 使用 docker-compose 创建简单的 static 集群
+
+1. 创建 `docker-compose.yaml` 文件
+
+   ```yml
+   version: '3'
+
+   services:
+     emqx1:
+       image: emqx/emqx:5.0.0
+       environment:
+       - "EMQX_NODE_NAME=emqx@node1.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
+       healthcheck:
+         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+         interval: 5s
+         timeout: 25s
+         retries: 5
+       networks:
+         emqx-bridge:
+           aliases:
+           - node1.emqx.io
+
+     emqx2:
+       image: emqx/emqx:5.0.0
+       environment:
+       - "EMQX_NODE_NAME=emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
+       healthcheck:
+         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+         interval: 5s
+         timeout: 25s
+         retries: 5
+       networks:
+         emqx-bridge:
+           aliases:
+           - node2.emqx.io
+
+   networks:
+     emqx-bridge:
+       driver: bridge
+   ```
+
+2. 启动 docker-compose 集群
+
+   ```shell
+   docker-compose -p my_emqx up -d
+   ```
+
+3. 查看集群
+
+   ```shell
+   $ docker exec -it my_emqx_emqx1_1 sh -c "emqx_ctl cluster status"
+   Cluster status: #{running_nodes => ['emqx@node1.emqx.io','emqx@node2.emqx.io'],
+                     stopped_nodes => []}
+   ```
+
+更多关于 EMQX Docker 的信息请查看 [Docker Hub](https://hub.docker.com/_/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
+
 ## RPM/DEB包安装 (Linux)
 
 :::warning
@@ -141,83 +219,6 @@ macOS 上 EMQX 数字签名工作还未完成，使用 tgz 压缩包安装启动
 5. 卸载 EMQX Broker
 
     直接删除 EMQX 目录即可
-
-## 通过 Docker 运行 (包含简单的 docker-compose 集群)
-
-### 运行单个容器
-
-1.  获取 docker 镜像
-
-    ```shell
-    docker pull emqx/emqx:5.0.0
-    ```
-
-2.  启动 docker 容器
-
-    ```shell
-    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.0
-    ```
-
-### 使用 docker-compose 创建简单的 static 集群
-
-1. 创建 `docker-compose.yaml` 文件
-
-   ```yml
-   version: '3'
-
-   services:
-     emqx1:
-       image: emqx/emqx:5.0.0
-       environment:
-       - "EMQX_NODE_NAME=emqx@node1.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
-       healthcheck:
-         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
-         interval: 5s
-         timeout: 25s
-         retries: 5
-       networks:
-         emqx-bridge:
-           aliases:
-           - node1.emqx.io
-
-     emqx2:
-       image: emqx/emqx:5.0.0
-       environment:
-       - "EMQX_NODE_NAME=emqx@node2.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
-       healthcheck:
-         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
-         interval: 5s
-         timeout: 25s
-         retries: 5
-       networks:
-         emqx-bridge:
-           aliases:
-           - node2.emqx.io
-
-   networks:
-     emqx-bridge:
-       driver: bridge
-   ```
-
-2. 启动 docker-compose 集群
-
-   ```shell
-   docker-compose -p my_emqx up -d
-   ```
-
-3. 查看集群
-
-   ```shell
-   $ docker exec -it my_emqx_emqx1_1 sh -c "emqx_ctl cluster status"
-   Cluster status: #{running_nodes => ['emqx@node1.emqx.io','emqx@node2.emqx.io'],
-                     stopped_nodes => []}
-   ```
-
-更多关于 EMQX Docker 的信息请查看 [Docker Hub](https://hub.docker.com/_/emqx) 或 [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
 ## 通过 Helm 安装并集群 (K8S、K3S)
 
