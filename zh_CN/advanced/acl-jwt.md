@@ -35,7 +35,7 @@ emqx_auth_jwt 授权特性与认证特性紧密耦合。
 # etc/plugins/emqx_auth_jwt.conf
 
 ## Server address
-auth.jwt.acl_clame_name = acl
+auth.jwt.acl_claim_name = acl
 
 ```
 
