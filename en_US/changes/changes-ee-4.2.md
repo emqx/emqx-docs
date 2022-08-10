@@ -15,6 +15,31 @@ ref: undefined
 
 # Release version
 
+## 4.2.13 Release
+
+*Release Date: 2022-08-10*
+
+### Enhancement
+
+- Hot upgrades between incompatible versions will now be rejected
+- Support binding the listener of the HTTP API to a specified network interface
+- Boot script fail fast on invalid node name, improve error message readability
+
+### Bug fixes
+
+- Fix the issue that hot configuration items did not take effect after restoring from backup
+- Fix the issue that the rule engine data is not replicated to disk in the cluster, resulting in the problem that the rule engine data will be lost after restarting the cluster after the only node that writes data to disk leaves the cluster
+- Fix the issue that the rule engine would get a 500 error when performing a connection test on an unavailable resource
+- Fix connection test always passing when creating MongoDB resource in rules engine
+- Fix rule engine not updating metrics correctly when writing to TDEngine resource fails
+- Extend the timeout of DynamoDB resource status query of rule engine to avoid the problem that some overseas resources may not be available
+- If the placeholder in the ACL rule is not replaced, the client's publish or subscribe operation will be rejected
+- Fix the issue that the execution order of topic rewriting and delayed publish is not fixed, now it is fixed to execute topic rewriting first
+- Fix the issue that modules that were turned off in the backup file would be automatically enabled after restoring the backup
+- Fix the issue that the MQTT-SN client would be disconnected when retransmitting QoS 2 messages
+- Fix Dashboard HTTPS listener's `verify` option not taking effect
+- Fix multiple Dashboard display issues
+
 ## 4.2.12 Release
 
 *Release Date: 2022-07-11*
