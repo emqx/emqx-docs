@@ -115,16 +115,19 @@ EMQX 默认提供 4 个监听器，它们将占用以下端口：
 
 由于默认配置的存在，我们能够非常快速地展示如何添加新的监听器，以 TCP 监听器为例，我们只需要在 `emqx.conf` 中添加以下一条配置即可：
 
+```
     listeners.tcp.demo.bind = "0.0.0.0:1883"
+```
 
 当然，我们也可以使用更加详细的方式对监听器进行配置，例如：
 
+```
     listeners.tcp.demo {
         bind = "0.0.0.0:1883"
         max_connections = 1024000
         proxy_protocol = true
     }
-
+```
 
 <a id="org796d08a"></a>
 
@@ -134,6 +137,8 @@ EMQX 默认提供 4 个监听器，它们将占用以下端口：
 
 添加一个名为 `demo` 的监听器:
 
+
+```
     curl -X 'POST' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
          -H 'accept: application/json' \
@@ -164,25 +169,32 @@ EMQX 默认提供 4 个监听器，它们将占用以下端口：
       "type": "tcp",
       "zone": "default"
     }'
+```
 
 启动 `demo`:
 
+```
     curl -X 'POST' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/start' \
          -H 'accept: */*' \
          -d ''
+```
 
 停止:
 
+```
     curl -X 'POST' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/stop' \
          -H 'accept: */*' \
          -d ''
+```
 
 删除:
 
+```
     curl -X 'DELETE' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
          -H 'accept: */*'
+```
 
 在 API 文档中有，有更多和更详细的监听器 API 信息，这里就不再一一列举了。

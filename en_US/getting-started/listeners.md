@@ -115,16 +115,20 @@ The naming rule of the Listener configuration item is `listener.<Protocol>.<List
 
 Due to the existence of the default configuration, we can quickly show how to add a new Listener. Taking TCP Listener as an example, we only need to add the following configuration in `emqx.conf`:
 
+```
     listeners.tcp.demo.bind = "0.0.0.0:1883"
+```
+
 
 Of course, we can also configure the listener in a more detailed way, for example:
 
+```
     listeners.tcp.demo {
         bind = "0.0.0.0:1883"
         max_connections = 1024000
         proxy_protocol = true
     }
-
+```
 
 <a id="org796d08a"></a>
 
@@ -134,6 +138,7 @@ In addition to supporting settings using configuration, listener also support op
 
 Add a listener which named `demo`:
 
+```
     curl -X 'POST' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
          -H 'accept: application/json' \
@@ -164,25 +169,32 @@ Add a listener which named `demo`:
       "type": "tcp",
       "zone": "default"
     }'
+```
 
 Start the `demo` listener:
 
+```
     curl -X 'POST' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/start' \
          -H 'accept: */*' \
          -d ''
+```
 
 Stop it:
 
+```
     curl -X 'POST' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/stop' \
          -H 'accept: */*' \
          -d ''
+```
 
 Delete it:
 
+```
     curl -X 'DELETE' \
          'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
          -H 'accept: */*'
+```
 
 There is more detailed listener API information in the API documentation, you can check it for more information.
