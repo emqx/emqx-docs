@@ -2,8 +2,7 @@
 
 EMQX 提供了管理监控 REST API，这些 API 遵循 OpenAPI (Swagger) 3.0 规范。
 
-
-EMQX 服务启动后，您可以访问 http://localhost:18083/api-docs/index.html 来
+EMQX 服务启动后，您可以访问 <http://localhost:18083/api-docs/index.html> 来
 查看 API 的文档。还可以直接在 Swagger UI 上尝试执行一些 API。
 
 `/api-docs` 端点不需要登录，如果需要进一步操作，您需要完成一些基本的配置工作。
