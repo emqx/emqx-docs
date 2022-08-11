@@ -38,7 +38,7 @@
 
 示例：
 
-```
+```shell
 curl -v -u admin:public -X 'POST' \
     -H 'Content-Type: multipart/form-data' \
     -F 'filename=@/tmp/myusers.csv' \
@@ -73,4 +73,3 @@ curl -v -u admin:public -X 'POST' \
     }
   ]
   ```
-

@@ -76,7 +76,7 @@ EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
-更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](../deploy/install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
+更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](./deploy/install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
 
 ### Kubernetes 安装部署
 <!-- TODO @wivwiv Update K8s link when EMQX Operator 5.0 document ready -->
@@ -98,17 +98,17 @@ EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具�
 
 EMQX 可以直接部署在物理服务器或者虚拟机上。最小仅需 2 核 4G 的机器即可运行 EMQX 程序。可支持 CentOS、Debian、Ubuntu、macOS 等操作系统。
 
-- [RedHat、CentOS、 RockyLinux、AmazonLinux 系统安装](../deploy/install.md#centos)
-- [Ubuntu、Debian 安装](../deploy/install.md#ubuntu、debian)
-- [MacOS、Windows、Linux tgz 包安装](../deploy/install.md#tgz-压缩包安装)
+- [RedHat、CentOS、 RockyLinux、AmazonLinux 系统安装](./deploy/install.md#centos)
+- [Ubuntu、Debian 安装](./deploy/install.md#ubuntu、debian)
+- [MacOS、Windows、Linux tgz 包安装](./deploy/install.md#tgz-压缩包安装)
 
-如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](../deploy/install.md#源码编译安装) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。
+如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](./deploy/install.md#源码编译安装) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。
 
 ## 启动 EMQX
 
 安装成功后，可通过 `systemctl` 或 `emqx` 命令来启动 EMQX。
 
-EMQX 成功启动之后可以通过浏览器打开 [http://localhost:18083/](http://localhost:18083/)（将 localhost 替换为您实际 IP 地址）以访问 [EMQX Dashboard](./dashboard.md) 管理控制台，进行设备连接与相关指标监控管理。
+EMQX 成功启动之后可以通过浏览器打开 [http://localhost:18083/](http://localhost:18083/)（将 localhost 替换为您实际 IP 地址）以访问 [EMQX Dashboard](./dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
 ### 后台启动 EMQX
 
@@ -176,12 +176,12 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 
 ### 客户端库介绍
 
-- [MQTT C 客户端库](../development/c.md)
-- [MQTT Java 客户端库](../development/java.md)
-- [MQTT Go 客户端库](../development/go.md)
-- [MQTT Erlang 客户端库](../development/erlang.md)
-- [MQTT JavaScript 客户端库](../development/javascript.md)
-- [MQTT Python 客户端库](../development/python.md)
+- [MQTT C 客户端库](./development/c.md)
+- [MQTT Java 客户端库](./development/java.md)
+- [MQTT Go 客户端库](./development/go.md)
+- [MQTT Erlang 客户端库](./development/erlang.md)
+- [MQTT JavaScript 客户端库](./development/javascript.md)
+- [MQTT Python 客户端库](./development/python.md)
 
 ### 客户端库项目工程代码示例
 
@@ -215,34 +215,34 @@ MQTTX 有诸多特性，提供了简洁的图形界面和操作逻辑，支持 M
 
 访问控制与是大多数应用的重要组成部分，启用身份认证(Authentication)能有效阻止非法客户端的连接。授权(Authorization)可以对客户端发布/订阅操作进行精细的权限控制。
 
-- [认证](../security/authn/authn.md)：支持用户名/密码认证、JWT 认证、MQTT 5.0 增强认证三种不同的认证方式，其他密码认证支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB、HTTP Server 作为数据源。
-- [授权](../security/authz/authz.md)：基于 Client ID、用户名或 IP 地址的访问控制，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB、HTTP Server 作为数据源。
+- [认证](./security/authn/authn.md)：支持用户名/密码认证、JWT 认证、MQTT 5.0 增强认证三种不同的认证方式，其他密码认证支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB、HTTP Server 作为数据源。
+- [授权](./security/authz/authz.md)：基于 Client ID、用户名或 IP 地址的访问控制，支持使用内置数据库、Redis、MySQL、PostgreSQL、MongoDB、HTTP Server 作为数据源。
 
 ### 数据集成
 
 数据集成是 EMQX 在发布订阅模型的基础之上的数据处理与分发组件，通过简单的、可视化的配置，即可将消息流以及设备事件与 Kafka、RabbitMQ 等消息中间件，以及各类 SQL / NoSQL / 时序数据库等数据系统集成。
 
-- [数据集成](../data-integration/introduction.md)。
-- [规则](../data-integration/rules.md)。
-- [数据桥接](../data-integration/data-bridges.md)。
+- [数据集成](./data-integration/introduction.md)。
+- [规则](./data-integration/rules.md)。
+- [数据桥接](./data-integration/data-bridges.md)。
 
 ### 管理接口
 
 通过 Web 页面与 CLI、REST API 管理集群。
 
-- [Dashboard](./dashboard.md)：Dashboard 使用手册。
-- [CLI](../admin/cli.md)：通过 CLI 管理集群。
-- [REST API](../admin/api.md)：符合 OpenAPI 3.0 规范的 REST API 文档。
-- [配置文件](../admin/cfg.md)：配置文件与配置项文档。
+- [Dashboard](./dashboard/introduction.md)：Dashboard 使用手册。
+- [CLI](./admin/cli.md)：通过 CLI 管理集群。
+- [REST API](./admin/api.md)：符合 OpenAPI 3.0 规范的 REST API 文档。
+- [配置文件](./admin/cfg.md)：配置文件与配置项文档。
 
 ### 运维部署
 
 有关官方使用指南和最佳实践，请阅读以下指南。
 
-- [系统调优](../deploy/tune.md)
-- [生产部署](../deploy/install.md)
-- [Prometheus 监控和警报](../observability/prometheus.md)
-- [性能测试](../verif/benchmark.md)
+- [系统调优](./deploy/tune.md)
+- [生产部署](./deploy/install.md)
+- [Prometheus 监控和警报](./observability/prometheus.md)
+- [性能测试](./verif/benchmark.md)
 
 ### 常见问题解答
 

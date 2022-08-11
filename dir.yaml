@@ -21,10 +21,7 @@
 
 - title_en: Getting Started
   title_cn: 快速开始
-  path: getting-started/getting-started
-  children:
-    - getting-started/getting-started
-    - getting-started/dashboard
+  path: getting-started
 
 ## Infrastructure
 
@@ -178,6 +175,13 @@
 #    - backend/backend_pgsql
 #    - backend/backend_redis
 #    - backend/backend_timescale
+
+## Dashboard
+
+- title_en: Dashboard
+  title_cn: Dashboard
+  children:
+    - dashboard/introduction
 
 ## Developers & Testers
 

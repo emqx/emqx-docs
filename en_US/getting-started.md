@@ -86,7 +86,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 ```
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
-please refer to [Running with Docker (including a simple docker-compose cluster)](../deploy/install.md#running-emqx-in-docker).
+please refer to [Running with Docker (including a simple docker-compose cluster)](./deploy/install.md#running-emqx-in-docker).
 
 ### Running EMQX in Kubernetes
 
@@ -120,12 +120,12 @@ A minimum of 2 cores and 4GB RAM can run an EMQX installation.
 EMQX has prebuilt packages downloadable for Linux (RedHat, CentOS, RockyLinux)
 as well as Debian, Ubuntu, and MacOS.
 
-- [RedHat, CentOS, RockyLinux, AmazonLinux  installation](../deploy/install.md#centos)
-- [Ubuntu, Debian installation](../deploy/install.md#ubuntu-debian)
-- [MacOS, Windows, Linux tar.gz installation](../deploy/install.md#tgz)
+- [RedHat, CentOS, RockyLinux, AmazonLinux  installation](./deploy/install.md#centos)
+- [Ubuntu, Debian installation](./deploy/install.md#ubuntu-debian)
+- [MacOS, Windows, Linux tar.gz installation](./deploy/install.md#tgz)
 
 For other platforms which are not in the prebuilt list,
-you may [build the executables from source code](../deploy/install.md#source-code-compilation-and-installation) or
+you may [build the executables from source code](./deploy/install.md#source-code-compilation-and-installation) or
 simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 ## Start EMQX
@@ -134,7 +134,7 @@ After the installation, you can start EMQX through the command of systemctl or e
 For more startup methods and precautions, keep reading below.
 
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
-(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md)
+(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard/introduction.md)
 management console for device connection and related indicator monitoring and management.
 
 ### Start EMQX in the background
@@ -215,12 +215,12 @@ For developers, we have compiled a list of popular MQTT clients for your referen
 
 ### MQTT Client libraries
 
-- [MQTT C client library](../development/c.md)
-- [MQTT Java client library](../development/java.md)
-- [MQTT Go client library](../development/go.md)
-- [MQTT Erlang client library](../development/erlang.md)
-- [MQTT JavaScript client library](../development/javascript.md)
-- [MQTT Python client library](../development/python.md)
+- [MQTT C client library](./development/c.md)
+- [MQTT Java client library](./development/java.md)
+- [MQTT Go client library](./development/go.md)
+- [MQTT Erlang client library](./development/erlang.md)
+- [MQTT JavaScript client library](./development/javascript.md)
+- [MQTT Python client library](./development/python.md)
 
 ### Client example code
 
@@ -257,33 +257,33 @@ and enabling authentication can effectively prevent malicious client connections
 Authorization rules, or Access Control List (ACL) can be configured to ensure only
 legitimate clients are permitted to publish or subscribe to certain topics.
 
-- [Authentication Introduction](../security/authn/authn.md): Select a backend to integrate
+- [Authentication Introduction](./security/authn/authn.md): Select a backend to integrate
   with internal or external database, JWT or HTTP service as the authentication data source.
-- [Authorization / ACL](../security/authz/authz.md): Select a backend to integrate with
+- [Authorization / ACL](./security/authz/authz.md): Select a backend to integrate with
   internal or external database, or HTTP service as the ACL data source.
 
 ### Data Integration
 
 Data integration is the data processing and distribution component of EMQX based on the publish-subscribe model. Data integration can easily integrate IoT data with Kafka, RDS, various SQL / NoSQL / time-series databases, and enterprise systems such as Oracle and SAP.
 
-- [Data Integration](../data-integration/introduction.md).
-- [Rule](../data-integration/rules.md).
-- [Data Bridge](../data-integration/data-bridges.md).
+- [Data Integration](./data-integration/introduction.md).
+- [Rule](./data-integration/rules.md).
+- [Data Bridge](./data-integration/data-bridges.md).
 
 ### Management Interfaces
 
 Manage clusters via Web and CLI, REST API.
 
-- [Dashboard](./dashboard.md)：Dashboard User Manual.
-- [CLI](../admin/cli.md)
-- [REST API](../admin/api.md): REST API documentation for the OpenAPI 3.0 specification.
-- [Configuration Files](../admin/cfg.md)
+- [Dashboard](./dashboard/introduction.md)：Dashboard User Manual.
+- [CLI](./admin/cli.md)
+- [REST API](./admin/api.md): REST API documentation for the OpenAPI 3.0 specification.
+- [Configuration Files](./admin/cfg.md)
 
 ### Operation, maintenance and deployment
 
 For official usage guidelines and best practices please read the following guides.
 
-- [System Tuning](../deploy/tune.md)
-- [Production Deployment](../deploy/install.md)
-- [Prometheus Monitoring and alert](../observability/prometheus.md)
-- [Benchmark](../verif/benchmark.md)
+- [System Tuning](./deploy/tune.md)
+- [Production Deployment](./deploy/install.md)
+- [Prometheus Monitoring and alert](./observability/prometheus.md)
+- [Benchmark](./verif/benchmark.md)

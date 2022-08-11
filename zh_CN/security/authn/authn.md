@@ -282,4 +282,3 @@ password_hash_algorithm {
 ```
 
 当客户端 ID 为 `id2718` 的客户端尝试连接时，Redis 查询 `HMGET users:id2718 password_hash salt is_superuser` 将被执行以搜索凭据。
-
