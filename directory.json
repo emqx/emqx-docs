@@ -606,6 +606,10 @@
         {
           "title": "Config and Data Backup & Restore",
           "path": "advanced/config-and-data-backup-restore"
+        },
+        {
+          "title": "Cluster Rebalancing",
+          "path": "advanced/rebalancing"
         }
       ]
     },
