@@ -15,6 +15,19 @@ ref:
 
 # Changes
 
+## Version 4.4.7
+
+*Release Date: 2022-08-11*
+
+### Important Changes
+
+- As of version 4.4.7, we will no longer provide packages for macOS 10
+
+### Enhancements
+
+- Allows the connection process to be configured to be garbage collected after the TLS handshake is complete to reduce memory footprint, which can reduce memory consumption by about 35% per SSL connection, but increases CPU consumption accordingly
+- Allows configuring the log level of the TLS handshake log to view the detailed handshake process
+
 ## Version 4.4.6
 
 *Release Date: 2022-07-29*
