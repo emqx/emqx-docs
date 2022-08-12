@@ -15,6 +15,24 @@ ref: undefined
 
 # Release version
 
+## Version 4.3.13
+
+*Release Date: 2022-08-11*
+
+### Important Changes
+
+- From the next release, we will stop supporting macOS 10 and provide an installation package for macOS 11
+
+### Enhancements
+
+- Allows the connection process to be configured to be garbage collected after the TLS handshake is complete to reduce memory footprint, which can reduce memory consumption by about 35% per SSL connection, but increases CPU consumption accordingly
+- Allows configuring the log level of the TLS handshake log to view the detailed handshake process
+
+### Bug fixes
+
+- Upgraded the OTP version used to address the low probability of random process unresponsiveness caused by OTP bugs
+- Fix the issue that EMQX could not be started when deployed through Helm Chart after unmounting the `loaded_modules` file in ConfigMap
+
 ## Version 4.3.12
 
 *Release Date: 2022-07-29*
