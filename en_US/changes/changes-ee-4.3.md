@@ -21,6 +21,7 @@ ref: undefined
 
 ### Important Changes
 
+- Upgraded the OTP version used to solve the low probability of random process unresponsiveness caused by OTP bugs. Users who are still using 4.3 are recommended to upgrade to this version
 - From the next release, we will stop supporting macOS 10 and provide an installation package for macOS 11
 
 ### Enhancements
@@ -30,7 +31,6 @@ ref: undefined
 
 ### Bug fixes
 
-- Upgraded the OTP version used to address the low probability of random process unresponsiveness caused by OTP bugs
 - Fix the issue that EMQX could not be started when deployed through Helm Chart after unmounting the `loaded_modules` file in ConfigMap
 
 ## Version 4.3.12
