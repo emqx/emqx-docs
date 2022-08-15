@@ -21,7 +21,7 @@ EMQX 提供对接入速度、消息速度的限制：当客户端连接请求速
 |               配置项                |      类型       | 默认值 |                 描述                 |
 | ----------------------------------- | --------------- | ------ | ------------------------------------ |
 | listener.tcp.external.max_conn_rate | Number          | 1000   | 本节点上允许的最大连接速率 (conn/s)  |
-| zone.external.rate_limit.conn_messagess_in | Number,Duration | 无限制 | 单连接上允许的最大发布速率 (msg/s)   |
+| zone.external.rate_limit.conn_messages_in | Number,Duration | 无限制 | 单连接上允许的最大发布速率 (msg/s)   |
 | zone.external.rate_limit.conn_bytes_in | Size,Duration | 无限制 | 单连接上允许的最大报文速率 (bytes/s) |
 
 - **max_conn_rate** 是单个 emqx 节点上连接建立的速度限制。`1000` 代表秒最多允许 1000 个客户端接入。
