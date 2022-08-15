@@ -35,7 +35,7 @@ To enable authorization via JWT one should specify claim name for searching ACL 
 # etc/plugins/emqx_auth_jwt.conf
 
 ## Server address
-auth.jwt.acl_clame_name = acl
+auth.jwt.acl_claim_name = acl
 
 ```
 
