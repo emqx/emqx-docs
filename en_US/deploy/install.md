@@ -14,6 +14,85 @@ EMQX binary packages are released on below operating systems:
 + macOS 11
 + Windows Server 2019
 
+## Running EMQX in Docker
+
+### Run a single container
+
+1.  Get docker image
+
+    ```shell
+    docker pull emqx/emqx:5.0.4
+    ```
+
+2.  Start docker container
+
+    ```shell
+    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.4
+    ```
+
+### Create a simple static cluster by docker-compose
+
+1. Create `docker-compose.yaml` file
+
+   ```yml
+   version: '3'
+
+   services:
+     emqx1:
+       image: emqx/emqx:5.0.4
+       container_name: emqx1
+       environment:
+       - "EMQX_NODE_NAME=emqx@node1.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
+       healthcheck:
+         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+         interval: 5s
+         timeout: 25s
+         retries: 5
+       networks:
+         emqx-bridge:
+           aliases:
+           - node1.emqx.io
+
+     emqx2:
+       image: emqx/emqx:5.0.4
+       container_name: emqx2
+       environment:
+       - "EMQX_NODE_NAME=emqx@node2.emqx.io"
+       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
+       healthcheck:
+         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
+         interval: 5s
+         timeout: 25s
+         retries: 5
+       networks:
+         emqx-bridge:
+           aliases:
+           - node2.emqx.io
+
+   networks:
+     emqx-bridge:
+       driver: bridge
+   ```
+
+2. Start docker-compose cluster
+
+   ```shell
+   docker-compose up -d
+   ```
+
+3. View cluster
+
+   ```shell
+   $ docker exec -it emqx1 sh -c "emqx_ctl cluster status"
+   Cluster status: #{running_nodes => ['emqx@node1.emqx.io','emqx@node2.emqx.io'],
+                     stopped_nodes => []}
+   ```
+
+For more information about EMQX Docker please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx) or [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
+
 ## Package Installation (Linux)
 
 :::warning
@@ -143,85 +222,6 @@ Please verify the SHA256 of the file when using this operation to ensure the int
 5. Remove EMQX
 
     Simply delete the EMQX directory
-
-## Running EMQX in Docker
-
-### Run a single container
-
-1.  Get docker image
-
-    ```shell
-    docker pull emqx/emqx:5.0.0
-    ```
-
-2.  Start docker container
-
-    ```shell
-    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.0
-    ```
-
-### Create a simple static cluster by docker-compose
-
-1. Create `docker-compose.yaml` file
-
-   ```yml
-   version: '3'
-
-   services:
-     emqx1:
-       image: emqx/emqx:5.0.3
-       container_name: emqx1
-       environment:
-       - "EMQX_NODE_NAME=emqx@node1.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
-       healthcheck:
-         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
-         interval: 5s
-         timeout: 25s
-         retries: 5
-       networks:
-         emqx-bridge:
-           aliases:
-           - node1.emqx.io
-
-     emqx2:
-       image: emqx/emqx:5.0.3
-       container_name: emqx2
-       environment:
-       - "EMQX_NODE_NAME=emqx@node2.emqx.io"
-       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-       - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
-       healthcheck:
-         test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
-         interval: 5s
-         timeout: 25s
-         retries: 5
-       networks:
-         emqx-bridge:
-           aliases:
-           - node2.emqx.io
-
-   networks:
-     emqx-bridge:
-       driver: bridge
-   ```
-
-2. Start docker-compose cluster
-
-   ```shell
-   docker-compose up -d
-   ```
-
-3. View cluster
-
-   ```shell
-   $ docker exec -it emqx1 sh -c "emqx_ctl cluster status"
-   Cluster status: #{running_nodes => ['emqx@node1.emqx.io','emqx@node2.emqx.io'],
-                     stopped_nodes => []}
-   ```
-
-For more information about EMQX Docker please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx) or [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
 ## Install and cluster via Helm (K8S, K3S)
 

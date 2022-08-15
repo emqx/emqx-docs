@@ -31,7 +31,7 @@ Each rule is applied to
 * a particular client identified by clientid, `/api/v5/authorization/sources/built_in_database/clientid` endpoint;
 * all clients, `/api/v5/authorization/sources/built_in_database/all` endpoint.
 
-You can find more details and examples in document API (Swagger UI) available at http://dashboard-host:1883/api-docs
+You can find more details and examples in document API (Swagger UI) available at http://dashboard-host:18083/api-docs
 below is a quick example for how to create rules for a client (`client1`):
 
 ```

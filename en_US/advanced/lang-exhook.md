@@ -31,7 +31,7 @@ It indicates that EMQX acts as a gRPC client, sending hook events from EMQX to t
 
 Consistent with EMQX native hooks, it also supports a chained approach to calculating and returning.
 
-![chain_of_responsibility](./assets/chain_of_responsiblity.png)
+[Callback Functions Chain](./hooks.md#callback-functions-chain)
 
 
 ## APIs
@@ -43,7 +43,7 @@ These interfaces are defined as a gRPC service called `HookProvider`:
 ```
 syntax = "proto3";
 
-package emqx.exhook.v1;
+package emqx.exhook.v2;
 
 service HookProvider {
 
@@ -61,7 +61,7 @@ service HookProvider {
 
   rpc OnClientAuthenticate(ClientAuthenticateRequest) returns (ValuedResponse) {};
 
-  rpc OnClientCheckAcl(ClientCheckAclRequest) returns (ValuedResponse) {};
+  rpc OnClientAuthorize(ClientAuthorizeRequest) returns (ValuedResponse) {};
 
   rpc OnClientSubscribe(ClientSubscribeRequest) returns (EmptySuccess) {};
 
@@ -77,7 +77,7 @@ service HookProvider {
 
   rpc OnSessionDiscarded(SessionDiscardedRequest) returns (EmptySuccess) {};
 
-  rpc OnSessionTakeovered(SessionTakeoveredRequest) returns (EmptySuccess) {};
+  rpc OnSessionTakenover(SessionTakenoverRequest) returns (EmptySuccess) {};
 
   rpc OnSessionTerminated(SessionTerminatedRequest) returns (EmptySuccess) {};
 
@@ -101,7 +101,7 @@ The hook events part:
 - The methods prefixed with `OnClient`, `OnSession`, and `OnMessage` correspond to the methods in [hooks](hooks.md). They have the same call timing and a similar argument list.
 - Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return values to EMQX, other callbacks are not supported.
 
-For details of the interface and parameter data structures refer to: [exhook.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exhook/priv/protos/exhook.proto)
+For details of the interface and parameter data structures refer to: [exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
 ## Developing Guide
 
@@ -115,13 +115,7 @@ The main development steps are as following:
 
 Once the development is complete, the service needs to be deployed to a server that can communicate with EMQX and ensure that the ports are open.
 
-Then modify the server configuration in `etc/plugins/emqx_exhook.conf`, for example:
-
-```
-exhook.server.default.url = http://127.0.0.1:9000
-```
-
-Start the `emqx_exhook` plugin and observe the output.
+You can use the [EMQX Dashboard](http://127.0.0.1:18083/#/exhook) to manage and monitor the ExHook service
 
 One of the gRPC frameworks for each language can be found at: [grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 

@@ -181,15 +181,15 @@
 
 ## Developers & Testers
 
-# - title_en: Plugins & Extensions
-#   title_cn: 插件与扩展
-#   children:
+- title_en: Plugins & Extensions
+  title_cn: 插件与扩展
+  children:
 #     # TODO: add Introduction
 #     # TODO: add plugin development doc
 #     - advanced/plugins
-#     - advanced/hooks
-#     - advanced/webhook
-#     - advanced/lang-exhook
+    - advanced/hooks
+    # - advanced/lang
+    - advanced/lang-exhook
 #     - advanced/lang-exproto
 #     - advanced/lang-lua
 

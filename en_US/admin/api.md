@@ -82,3 +82,7 @@ curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
 ```
 
 The `api_secret` is only returned once when it is created, please save it in time.
+
+<ClientOnly>
+  <OpenApi path="swagger.json" />
+</ClientOnly>

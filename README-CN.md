@@ -1,8 +1,8 @@
 # EMQX 文档
 
-[![Slack](https://img.shields.io/badge/Slack-EMQ%20X-39AE85?logo=slack)](https://slack-invite.emqx.io/)
+[![Slack](https://img.shields.io/badge/Slack-EMQ-39AE85?logo=slack)](https://slack-invite.emqx.io/)
 [![Twitter](https://img.shields.io/badge/Twitter-EMQ-1DA1F2?logo=twitter)](https://twitter.com/EMQTech)
-[![Reddit](https://img.shields.io/badge/Reddit-EMQ%20X-orange?logo=reddit)](https://www.reddit.com/r/emqx/)
+[![Reddit](https://img.shields.io/badge/Reddit-EMQX-orange?logo=reddit)](https://www.reddit.com/r/emqx/)
 
 [![最棒的物联网 MQTT 开源团队期待您的加入](https://static.emqx.net/images/github_readme_cn_bg.png)](https://careers.emqx.cn/)
 
