@@ -7,7 +7,7 @@ HTTP authenticator delegates authentication to a custom HTTP API.
 - In authenticator settings, an HTTP request pattern is specified.
 - When an MQTT client connects to EMQX, the configured request template is rendered and the resulting request is emitted.
 - HTTP Status Code is used to determine whether the the authentication request is received by authentication server and successfully executed.
-  - Authentication result should be returned with HTTP Status Code 200 or 204. The authentication result and whether it is a super user is indicated by the specific field value `resulet` and `is_superuser`.</br>
+  - Authentication result should be returned with HTTP Status Code 200 or 204. The authentication result and whether it is a super user is indicated by the specific field value `result` and `is_superuser`.</br>
   - Other response codes will be considered as HTTP authentication request execution failure, Such as 4xx, 5xx ... </br>
     EMQX will switch to the next authenticator for the authentication process with default value `ignore`. If the current HTTP authenticator is the last authenticator on the chain, the authentication fails and the client will be refused to connect.
 - The encoding format of the HTTP response must be `application/json`, and the HTTP authenticator will automatically select the decoding method according to the `Content-Type` in the response. </br>
