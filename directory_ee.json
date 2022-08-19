@@ -8,6 +8,10 @@
       "title": "开始使用",
       "children": [
         {
+          "title": "开始使用",
+          "path": "getting-started/getting-started"
+        },
+        {
           "title": "安装",
           "path": "getting-started/install-ee"
         },
@@ -765,6 +769,10 @@
     {
       "title": "Get Started",
       "children": [
+        {
+          "title": "Getting Started",
+          "path": "getting-started/getting-started"
+        },
         {
           "title": "Installation",
           "path": "getting-started/install-ee"

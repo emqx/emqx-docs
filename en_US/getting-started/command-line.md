@@ -1,32 +1,32 @@
 # Basic commands
 
-EMQX Broker provides the `emqx` command line tool, which is convenient for users to start, stop, and enter the console of EMQX Broker.
+EMQX provides the `emqx` command line tool to start, stop, and enter the console of EMQX.
 
-+   `emqx start`
++ `emqx start`
 
     Start the EMQX Broker
 
-+   `emqx stop`
++ `emqx stop`
 
     Stop the EMQX Broker
 
-+   `emqx restart`
++ `emqx restart`
 
     Restart the EMQX Broker
 
-+   `emqx console`
++ `emqx console`
 
     Start the EMQX Broker with console
 
-+   `emqx foreground`
++ `emqx foreground`
 
     Start EMQX Broker with console. Unlike `emqx console` , `emqx foreground` does not support entering Erlang commands;
 
-+   `emqx ping`
++ `emqx ping`
 
     Ping EMQX Broker
 
-+  `emqx check_conf`
++ `emqx check_conf`
 
    Check if the configuration file format is ok.  You may run this command before starting to check if the configuration file format is correct.
 
