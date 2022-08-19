@@ -15,7 +15,7 @@ $ cd apache-pulsar-2.3.2
 $ ./bin/pulsar standalone
 ```
 
-Create Pulsar theme:
+Create Pulsar topic:
 ```bash
 $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 ```
@@ -42,7 +42,7 @@ Fill in the relevant parameters:
 
 4). MQTT message subject
 
-5). MQTT theme service quality
+5). MQTT topic service quality
 
 6). Pulsar flow control threshold (Pulsar flow control threshold, configure how many messages Pulsar sends to consumers and block Pulsar Consumer)
 

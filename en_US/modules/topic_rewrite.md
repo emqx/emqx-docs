@@ -38,7 +38,7 @@ Add the topic rewriting rules in the above figure and subscribe to `y/a/z/b`, `y
 
 + When the client subscribes to the topic of `y/def`, `y/def` does not match any topic filter, so no topic rewriting is performed, and the topic of `y/def` is directly subscribed.
 
-+ When the client subscribes to the topic `y/a/z/b`, `y/a/z/b` matches the topic filter of `y/+/z/#`, and EMQX executes `module.rewrite.sub. rule.1` rule, the element `[a, b]` is matched through regular regular expressions, and the second element that is matched is brought into `y/z/$2`, which actually subscribes to `y/z/b` theme.
++ When the client subscribes to the topic `y/a/z/b`, `y/a/z/b` matches the topic filter of `y/+/z/#`, and EMQX executes `module.rewrite.sub. rule.1` rule, the element `[a, b]` is matched through regular regular expressions, and the second element that is matched is brought into `y/z/$2`, which actually subscribes to `y/z/b` topic.
 
 + When the client sends a message to the `x/1/2` topic, `x/1/2` matches the `x/#` topic filter, and EMQX executes the `module.rewrite.pub.rule.1` rule, If the element is not matched by the regular expression, the subject rewriting is not performed, so the message is sent directly to the `x/1/2` subject.
 
