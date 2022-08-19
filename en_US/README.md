@@ -4,24 +4,29 @@
 EMQX is an Open-source MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at massive scale.
 
 As the most scalable MQTT broker, EMQX can help you connect any device, at any scale. Move and process your IoT data anywhere.
+
 {% endemqxce %}
 
 {% emqxee %}
 EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platform to connect, move and process your data in business-critical scenarios for the IoT era.
+
 {% endemqxee %}
 
 ## Benefits
 
 {% emqxce %}
+
 - **Massive Scale**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster.
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
 - **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - **Fully MQTT 5.0**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
 - **High Availability**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
 - **Cloud-Native & K8s**: Easy to deploy on-premises or in public clouds with Kubernetes Operator and Terraform.
+
 {% endemqxce %}
 
-{% endemqxee %}
+{% eemqxee %}
+
 ### 100% MQTT Compliant
 
 - 100% MQTT Compliant
@@ -59,8 +64,8 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 - 7 branches in USA, Europe, Japan and China.
 - More than ten partners in Europe, USA and India.
 - 24/7 worldwide technical support service.
-{% endemqxee %}
 
+{% endemqxee %}
 
 ## Features List
 
@@ -88,6 +93,7 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
   - Stomp
   - GB/T 32960 (Enterprise edition) <!--cannot use 'emqxee' macro inside list-->
   - JT/T 808 (Enterprise edition)
+  - OCPP (Enterprise edition)
 
 Add more features to MQTT:
 
