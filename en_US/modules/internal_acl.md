@@ -45,7 +45,7 @@ The rules file is described in the format of Erlang syntax:
 
 4. The fourth rule allows clients with a username of `dashboard` to subscribe to the topic of `$SYS/#`, opening a special case for the second
 
-It can be seen that the default ACL is mainly to restrict the client's authority to the system theme `$SYS/#` and the all-wildcard theme `#`.
+It can be seen that the default ACL is mainly to restrict the client's authority to the system topic `$SYS/#` and the all-wildcard topic `#`.
 
 ## acl.conf writing rules
 
