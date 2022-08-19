@@ -54,7 +54,7 @@ Fill in the relevant parameters:
 
 4). MQTT message subject
 
-5). MQTT theme service quality
+5). MQTT topic service quality
 
 6). Kafka Max Bytes (the maximum number of bytes of messages consumed each time from Kafka)
 
