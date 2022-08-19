@@ -2,13 +2,13 @@
 
 ## 简介
 
-CoAP 网关以 [Publish-Subscribe Broker for the CoAP ](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 为标准，实现了发布、订阅、和消息接收功能。
+CoAP 网关以 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 为标准，实现了发布、订阅、和消息接收功能。
 
-为了安全性的考虑，CoAP 网关实现了 **连接模式** 以提供客户端接入认证功能来限制未授权的 CoAP 客户端接入系统。
+出于安全性的考虑，CoAP 网关实现了 **连接模式** 以提供客户端接入认证功能来限制未授权的 CoAP 客户端接入系统。
 
 ## 快速开始
 
-EMQX 5.0 中，可以通过 Dashboard 配置并启用 CoAP 网关。
+EMQX 5.0 可以通过 Dashboard 配置并启用 CoAP 网关。
 
 也可以通过 HTTP-API 来启用，例如：
 ```bash
@@ -32,7 +32,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 }'
 ```
 
-或在 emqx.conf 中配置启用，例如：
+或在 `emqx.conf` 中配置启用，例如：
 ```properties
 gateway.coap {
 
@@ -49,10 +49,10 @@ gateway.coap {
 ```
 
 ::: tip
-通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+通过配置文件来配置网关，需要在每个节点上手动同步配置文件；而通过 Dashboard 或者 HTTP API 管理则会自动同步至整个集群。
 :::
 
-CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../admin/cfg.md)
+CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](../admin/cfg.md)
 
 ## 工作模式
 
@@ -134,14 +134,14 @@ gateway.coap {
 }
 ```
 
-与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示允许所有的 CoAP 客户端都具有接入的权限。
+与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示所有的 CoAP 客户端都具有接入的权限。
 
-其他类型的认证器的配置格式参考：[安全- 认证器](../security/authn/authn.md)
+其他类型的认证器的配置格式参考：[安全 - 认证器](../security/authn/authn.md)
 
 
 ## 发布订阅
 
-CoAP 网关基于 [Publish-Subscribe Broker for the CoAP ](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 协议中定义的请求路径和请求方法
+CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 协议中定义的请求路径和请求方法
 实现了发布订阅的接口。
 
 详情参考下文中的 [消息发布](#消息发布)、[订阅主题](#订阅主题)、[取消订阅](#取消订阅)
@@ -199,7 +199,7 @@ coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&usernam
 ```
 
 ::: tip
-连接创建成功后，可以使用 Dashboard，HTTP-API 或 CLI 检查 CoAP 网关的客户端列表，是否已存在该客户端。
+连接创建成功后，可以使用 Dashboard，HTTP API 或 CLI 检查 CoAP 网关的客户端列表中是否已存在该客户端。
 :::
 
 
@@ -274,8 +274,8 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 - 方法（Method）：`POST`
 - 请求路径（URI）：`ps/{+topic}{?QueryString*}`，其中：
   -  `{+topic}` 为需要发布的主题，例如向 `coap/test` 主题发布消息，那么请求路径为 `ps/coap/test`
-  - `{?QueryString*}`为请求参数
-    - `clientid`： `连接模式`下为必填参数，`无连接模式`下为可选参数。
+  - `{?QueryString*}` 为请求参数
+    - `clientid`： `连接模式` 下为必填参数，`无连接模式` 下为可选参数。
     - `token`： 仅用于 `连接模式`，必填参数；
     - `retain`：是否作为保留消息进行发布；布尔类型，可选参数，默认为 `false`。
     - `qos`：消息 QoS，用于标识该消息的 QoS 等级，仅影响 MQTT 客户端如何接收该消息；枚举类型，可选值为 `0`、 `1`、 `2`
