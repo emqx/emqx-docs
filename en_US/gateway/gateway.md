@@ -12,7 +12,7 @@ which made using them difficult to understand.
 In 5.0, EMQX defines a unified conceptual and operational model for them to make
 them easier to use.
 
-Quick Start: [Stomp](./stomp.md), [MQTT-SN](./mqttsn.md)
+Quick Start: [Stomp](./stomp.md), [MQTT-SN](./mqttsn.md), [CoAP](./coap.md)
 
 ## Design
 
@@ -52,7 +52,11 @@ In 5.0, gateways can be configured with authenticators and use the above client 
 - If no authenticator is configured it is assumed that any client is allowed to log in.
 - Due to the different client information formats of different gateways, there is a difference in the type of authenticator that can be configured, but each gateway supports HTTP-based authentication.
 
-Note: Setting authenticators for different listeners is also supported in the configuration file.
+:::tip
+Setting authenticators for different listeners in a gateway is also supported in the configuration file.
+This means that different listening ports are allowed under one gateway
+can be configured for different authentication methods and data sources.
+:::
 
 ### Publish/Subscribe Authorization
 
@@ -80,8 +84,13 @@ Detailed descriptions can be found in the documentation of each gateway.
 
 In 5.0, gateways can be enabled and configured directly in the Dashboard.
 
-It is also managed using the HTTP API, e.g.
-```
+It is also managed using the HTTP API or emqx.conf, e.g:
+
+:::: tabs type:card
+
+::: tab HTTP API
+
+```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
   -H 'Content-Type: application/json' \
@@ -101,10 +110,11 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 }'
 ```
 
-Detailed reference: [HTTP API - Gateway](../admin/api.md)
+:::
 
-It can also be configured in emqx.conf, e.g:
-```hocon
+::: tab Configuration
+
+```properties
 gateway.stomp {
 
   mountpoint = "stomp/"
@@ -118,7 +128,13 @@ gateway.stomp {
 }
 ```
 
-Detailed reference: [Configuration - Gateway](../admin/cfg.md)
+:::
+
+::::
+
+Detailed reference:
+- [HTTP API - Gateway](../admin/api.md)
+- [Configuration - Gateway](../admin/cfg.md)
 
 ::: tip
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
@@ -130,7 +146,7 @@ Apart from the ability to configure different authenticators and topic mountpoin
 
 It is also supported to configure `mountpoint` and `authentication` for different listeners to override the gateway level options.
 In this way, multiple listeners can be configured different topic mountpoints and authenticators. e.g:
-```hocon
+```properties
 gateway.stomp {
 
   listeners.tcp.default {

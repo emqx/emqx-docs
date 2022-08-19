@@ -8,7 +8,12 @@ Stomp 网关基于 [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.
 
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 Stomp 网关。
 
-也可以通过 HTTP-API 来启用，例如：
+也可以通过 HTTP API 或 emqx.conf 来启用，例如：
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
@@ -28,10 +33,11 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   ]
 }'
 ```
+:::
 
-或在 emqx.conf 中配置启用，例如：
+::: tab Configuration
 
-```hocon
+```properties
 gateway.stomp {
 
   mountpoint = "stomp/"
@@ -44,6 +50,10 @@ gateway.stomp {
   }
 }
 ```
+:::
+
+::::
+
 
 ::: tip
 通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
@@ -69,7 +79,11 @@ Stomp 网关使用 STOMP 协议的 CONNECT 或 STOMP 报文中的信息来生成
 - Username：为 CONNECT 或 STOMP 报文 Headers 中的 `login` 字段的值。
 - Password：为 CONNECT 或 STOMP 报文 Headers 中的 `passcode` 字段的值。
 
-例如，通过 HTTP-API 为 Stomp 网关创建一个内置数据库认证：
+例如，通过 HTTP API 或 emqx.conf 为 Stomp 网关创建一个内置数据库认证：
+
+:::: tabs type:card
+
+::: tab HTTP API
 
 ```bash
 curl -X 'POST' \
@@ -87,12 +101,14 @@ curl -X 'POST' \
   "user_id_type": "username"
 }'
 ```
+:::
 
-或通过配置为 Stomp 网关添加一个内置数据库认证：
-```hocon
+::: tab Configuration
+
+```properties
 gateway.stomp {
 
-  authentication: {
+  authentication {
     backend = built_in_database
     mechanism = password_based
     password_hash_algorithm {
@@ -103,6 +119,10 @@ gateway.stomp {
   }
 }
 ```
+:::
+
+::::
+
 
 与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示允许所有的 Stomp 客户端都具有接入的权限。
 

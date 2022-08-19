@@ -146,10 +146,10 @@
   title_cn: 网关
   children:
     - gateway/gateway
-   #- gateway/lwm2m
-    - gateway/mqttsn
-   #- gateway/coap
     - gateway/stomp
+    - gateway/mqttsn
+    - gateway/coap
+   #- gateway/lwm2m
    #- gateway/jt808
    #- gateway/tcp
 

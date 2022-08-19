@@ -5,7 +5,7 @@
 在 EMQX 5.0 之前，非 MQTT 协议的接入分别由不同的接入插件实现（例如，`emqx_lwm2m` 插件用于处理 LwM2M 的协议接入）
 这些插件之间存在设计和实现上差异，这导致使用这些接入插件会很难以理解。 在 5.0 中，EMQX 为其定义了统一的概念和操作模型以降低使用难度。
 
-常用的网关快速开始：[Stomp](./stomp.md)、[MQTT-SN](./mqttsn.md)
+常用的网关快速开始：[Stomp](./stomp.md)、[MQTT-SN](./mqttsn.md)、[CoAP](./coap.md)
 
 ## 设计
 
@@ -36,16 +36,18 @@
 网关会给每个连接构建客户端信息，它要求：
 
 - 无论哪种网关，其客户端信息都包含通用字段例如 Client ID，Username，Password 等（即使该协议无该字段的定义，网关会为其设置合适的默认值）
-- 同时，每种网关也有其特定的客户端信息，例如 LwM2M 有 Endpoint Name 和 Life Time 等。
-- 每种网关的 Client ID 允许重复，但同一网关下重复的 Client ID 登录会踢出旧的会话。
+- 同时，不同的网关也有其特定的客户端属性，例如 LwM2M 有 Endpoint Name 和 Life Time 等属性。
+- 不同网关下的 Client ID 允许重复，但同一网关下重复的 Client ID 登录会踢出旧的连接。
 
 5.0 中，网关可配置认证器、并使用上述的客户端信息进行登录授权：
 
 - 每个网关都可以独立的配置认证器，它们之间配置和数据是隔离的。
-- 如果不配置认证器则认为允许任何客户端登录。
-- 由于不同的网关的客户端信息格式不同，导致对其可配置的认证器类型是存在差别，但每个网关都支持基于 HTTP 的认证。
+- 某网关如果不配置认证器则认为允许任何客户端登录。
+- 由于不同的网关的客户端信息格式不同，导致所支持的认证器类型是存在差别，但每个网关都支持基于 HTTP 的认证。
 
-注：在配置文件中，还支持为为不同监听器设置认证器。
+:::tip
+在配置文件中，还支持配置监听器级别的认证器；这表示允许一个网关下不同的监听端口可以配置为不同的认证方式和数据来源.
+:::
 
 ### 发布订阅和权限控制
 
@@ -73,8 +75,13 @@
 
 5.0 中，网关可以直接在 Dashboard 中进行启用和配置。
 
-也使用 HTTP API 进行管理，例如：
-```
+也使用 HTTP API 或 emqx.conf 进行管理，例如：
+
+:::: tabs type:card
+
+::: tab HTTP API
+
+```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
   -H 'Content-Type: application/json' \
@@ -94,11 +101,11 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 }'
 ```
 
-详细参考：[HTTP API - Gateway](../admin/api.md)
+:::
 
-也可以在 emqx.conf 中直接进行配置，例如：
+::: tab Configuration
 
-```hocon
+```properties
 gateway.stomp {
 
   mountpoint = "stomp/"
@@ -112,7 +119,13 @@ gateway.stomp {
 }
 ```
 
-详情参考：[配置文档-网关配置](../admin/cfg.md)
+:::
+
+::::
+
+详细参考：
+- [HTTP API - Gateway](../admin/api.md)
+- [配置文档-网关配置](../admin/cfg.md)
 
 ::: tip
 通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。
@@ -122,7 +135,7 @@ gateway.stomp {
 
 除了可以在网关层给不同的网关配置不同的认证器和主题挂载点。也支持为不同监听器单独配置 `mountpoint` 和 `authentication` 来重载网关级的这两项配置。 这样的话，可以通过启用多个监听器，并为其配置不同的主题挂载点和认证逻辑。以 Stomp 网关为例：
 
-```hocon
+```properties
 gateway.stomp {
 
   listeners.tcp.default {
