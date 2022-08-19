@@ -1,6 +1,6 @@
 # CoAP Gateway
 
-## Introduction 
+## Introduction
 
 The CoAP gateway implements publish, subscribe, and receive messages as standard with [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09).
 
@@ -11,7 +11,12 @@ For security reasons, the CoAP gateway implements **Connection Mode** to provide
 
 In EMQX 5.0, CoAP gateways can be configured and enabled through the Dashboard.
 
-It can also be enabled via the HTTP-API, e.g:
+It can also be enabled via the HTTP API, and emqx.conf e.g:
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
@@ -32,8 +37,9 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   ]
 }'
 ```
+:::
 
-or configured in emqx.conf, e.g:
+::: tab Configuration
 
 ```properties
 gateway.coap {
@@ -49,6 +55,10 @@ gateway.coap {
   }
 }
 ```
+:::
+
+::::
+
 
 ::: tip
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
@@ -102,7 +112,12 @@ The client ID, username, and password are provided by the client's [Create Conne
 - [HTTP Server Authentication](../security/authn/http.md)
 - [JWT Authentication](../security/authn/jwt.md)
 
-For example, to create a built-in database authentication for CoAP gateway via HTTP-API:
+For example, to create a built-in database authentication for CoAP gateway via HTTP API, or emqx.conf:
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' \
   'http://127.0.0.1:18083/api/v5/gateway/coap/authentication' \
@@ -119,8 +134,9 @@ curl -X 'POST' \
   "user_id_type": "username"
 }'
 ```
+:::
 
-Or add a built-in database authentication by `emqx.conf`:
+::: tab Configuration
 
 ```properties
 gateway.coap {
@@ -136,6 +152,11 @@ gateway.coap {
   }
 }
 ```
+
+:::
+
+::::
+
 
 Unlike the MQTT protocol, **the gateway only supports the creation of an authenticator, not a list of authenticators (or an authentication chain)**. When no authenticator is enabled, it means that all CoAP clients are allowed to log in.
 
@@ -201,7 +222,7 @@ coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&usernam
 ```
 
 :::tip
-After the connection is successfully created, you can use Dashboard, HTTP-API or CLI to check the client list in the CoAP gateway.
+After the connection is successfully created, you can use Dashboard, HTTP API or CLI to check the client list in the CoAP gateway.
 :::
 
 

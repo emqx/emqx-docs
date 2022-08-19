@@ -8,7 +8,12 @@ The Stomp gateway is based on the [Stomp v1.2](https://stomp.github.io/stomp-spe
 
 In EMQX 5.0, Stomp gateways can be configured and enabled through the Dashboard.
 
-It can also be enabled via the HTTP-API, e.g:
+It can also be enabled via the HTTP API or emqx.conf,  e.g:
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
@@ -29,7 +34,9 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 }'
 ```
 
-or configured in emqx.conf, e.g:
+:::
+
+::: tab Configuration
 
 ```properties
 gateway.stomp {
@@ -44,6 +51,11 @@ gateway.stomp {
   }
 }
 ```
+
+:::
+
+::::
+
 
 ::: tip
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
@@ -70,7 +82,12 @@ Stomp gateway uses the information in the CONNECT or STOMP message of STOMP prot
 - Username: is the value of the `login` field in the CONNECT or STOMP message headers.
 - Password: The value of the `passcode` field in the CONNECT or STOMP message headers.
 
-For example, to create a built-in database authentication for a Stomp gateway via HTTP-API:
+For example, to create a built-in database authentication for a Stomp gateway via HTTP API or emqx.conf:
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' \
   'http://127.0.0.1:18083/api/v5/gateway/stomp/authentication' \
@@ -88,7 +105,9 @@ curl -X 'POST' \
 }'
 ```
 
-Or add a built-in database authentication by `emqx.conf`:
+:::
+
+::: tab Configuration
 
 ```properties
 gateway.stomp {
@@ -104,6 +123,10 @@ gateway.stomp {
   }
 }
 ```
+:::
+
+::::
+
 
 Unlike the MQTT protocol, **the gateway only supports the creation of an authenticator, not a list of authenticators (or an authentication chain)**. When no authenticator is enabled, it means that all Stomp clients are allowed to log in.
 

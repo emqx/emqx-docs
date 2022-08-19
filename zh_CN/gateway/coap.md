@@ -10,7 +10,12 @@ CoAP 网关以 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.
 
 EMQX 5.0 可以通过 Dashboard 配置并启用 CoAP 网关。
 
-也可以通过 HTTP-API 来启用，例如：
+也可以通过 HTTP API 或 emqx.conf 来启用，例如：
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
@@ -32,7 +37,10 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 }'
 ```
 
-或在 `emqx.conf` 中配置启用，例如：
+:::
+
+::: tab Configuration
+
 ```properties
 gateway.coap {
 
@@ -47,6 +55,10 @@ gateway.coap {
   }
 }
 ```
+
+:::
+
+::::
 
 ::: tip
 通过配置文件来配置网关，需要在每个节点上手动同步配置文件；而通过 Dashboard 或者 HTTP API 管理则会自动同步至整个集群。
@@ -98,7 +110,11 @@ gateway.coap {
 - [HTTP Server 认证](../security/authn/http.md)
 - [JWT 认证](../security/authn/jwt.md)
 
-例如，通过 HTTP-API 为 CoAP 网关创建一个内置数据库认证：
+例如，通过 HTTP API 或 emqx.conf 为 CoAP 网关创建一个内置数据库认证：
+
+:::: tabs type:card
+
+::: tab HTTP API
 
 ```bash
 curl -X 'POST' \
@@ -117,7 +133,9 @@ curl -X 'POST' \
 }'
 ```
 
-或通过配置为 CoAP 网关添加一个内置数据库认证：
+:::
+
+::: tab Configuration
 
 ```properties
 gateway.coap {
@@ -133,6 +151,11 @@ gateway.coap {
   }
 }
 ```
+
+:::
+
+::::
+
 
 与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示所有的 CoAP 客户端都具有接入的权限。
 

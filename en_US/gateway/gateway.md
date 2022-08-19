@@ -84,7 +84,12 @@ Detailed descriptions can be found in the documentation of each gateway.
 
 In 5.0, gateways can be enabled and configured directly in the Dashboard.
 
-It is also managed using the HTTP API, e.g.
+It is also managed using the HTTP API or emqx.conf, e.g:
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
@@ -105,9 +110,10 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 }'
 ```
 
-Detailed reference: [HTTP API - Gateway](../admin/api.md)
+:::
 
-It can also be configured in emqx.conf, e.g:
+::: tab Configuration
+
 ```properties
 gateway.stomp {
 
@@ -122,7 +128,13 @@ gateway.stomp {
 }
 ```
 
-Detailed reference: [Configuration - Gateway](../admin/cfg.md)
+:::
+
+::::
+
+Detailed reference:
+- [HTTP API - Gateway](../admin/api.md)
+- [Configuration - Gateway](../admin/cfg.md)
 
 ::: tip
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.

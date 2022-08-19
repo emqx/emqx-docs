@@ -8,7 +8,12 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 
 In EMQX 5.0, MQTT-SN gateways can be configured and enabled through the Dashboard.
 
-It can also be enabled via the HTTP-API, e.g:
+It can also be enabled via the HTTP API or emqx.conf, e.g:
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
@@ -29,8 +34,9 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   ]
 }'
 ```
+:::
 
-or configured in emqx.conf, e.g:
+::: tab Configuration
 
 ```properties
 gateway.mqttsn {
@@ -49,6 +55,10 @@ gateway.mqttsn {
   }
 }
 ```
+:::
+
+::::
+
 
 ::: tip
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
@@ -65,7 +75,11 @@ The client information generation rules are as follows:
 - Username: undefined
 - Password: undefined
 
-For example, to create an HTTP authentication for MQTT-SN gateway via HTTP-API:
+For example, to create an HTTP authentication for MQTT-SN gateway via HTTP API or emqx.conf:
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
   -u admin:public \
@@ -92,8 +106,9 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
   "enable": true
 }'
 ```
+:::
 
-Or add an HTTP authentication for MQTT-SN gateway via emqx.conf:
+::: tab Configuration
 
 ```properties
 gateway.mqttsn {
@@ -117,6 +132,11 @@ gateway.mqttsn {
   }
 }
 ```
+:::
+
+::::
+
+
 ## Publish/Subscribe
 
 The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:

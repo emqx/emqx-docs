@@ -75,7 +75,12 @@
 
 5.0 中，网关可以直接在 Dashboard 中进行启用和配置。
 
-也使用 HTTP API 进行管理，例如：
+也使用 HTTP API 或 emqx.conf 进行管理，例如：
+
+:::: tabs type:card
+
+::: tab HTTP API
+
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
   -u admin:public \
@@ -96,9 +101,9 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
 }'
 ```
 
-详细参考：[HTTP API - Gateway](../admin/api.md)
+:::
 
-也可以在 emqx.conf 中直接进行配置，例如：
+::: tab Configuration
 
 ```properties
 gateway.stomp {
@@ -114,7 +119,13 @@ gateway.stomp {
 }
 ```
 
-详情参考：[配置文档-网关配置](../admin/cfg.md)
+:::
+
+::::
+
+详细参考：
+- [HTTP API - Gateway](../admin/api.md)
+- [配置文档-网关配置](../admin/cfg.md)
 
 ::: tip
 通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。
