@@ -2,19 +2,36 @@
 
 Starting from download and installation, this document is to guide you to quickly get a EMQX node up and running.
 
+{% emqxce %}
+
 ## Select EMQX Edition
 
 EMQX as a software is released in different editions.
 
 - [EMQX](https://www.emqx.com/en/try?product=broker)
 - [EMQX Enterprise](https://www.emqx.com/en/try?product=enterprise)
-- [EMQX Edge](https://github.com/emqx/emqx/releases)
 
 EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
 which runs EMQX Enterprise.
 You can customize the deployment to suit your business development plans the best and get started quickly.
 
+{% endemqxce %}
+
+{% emqxee %}
+
+## Deployment Mode
+
+EMQX as a software provides the self-managed version [EMQX Enterprise](https://www.emqx.com/en/try?product=enterprise).
+
+EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
+which runs EMQX Enterprise.
+You can customize the deployment to suit your business development plans the best and get started quickly.
+
+{% endemqxee %}
+
 :::: tabs type:card
+
+{% emqxce %}
 
 ::: tab EMQX
 The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
@@ -28,6 +45,8 @@ The world's most scalable distributed MQTT broker with a high-performance real-t
 
 [Download](https://www.emqx.com/en/try?product=broker)
 :::
+
+{% endemqxce %}
 
 ::: tab EMQX Cloud
 Connecting your IoT devices to everything with reliable, real-time IoT data transport, processing, and integration. Accelerating your IoT application development without the burden of self-managing the infrastructure.
@@ -73,6 +92,8 @@ maintenance, and management.
 
 ### Running EMQX in containers
 
+{% emqxe %}
+
 Learn more about the docker image on [Docker Hub](https://hub.docker.com/r/emqx/emqx).
 Container deployment is the quickest way to start experimenting with EMQX
 
@@ -90,6 +111,28 @@ docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
 please refer to [Running with Docker (including a simple docker-compose cluster)](./install.md#install-emq-x-in-docker-contain-a-simple-docker-compose-cluster).
+
+{% endemqxce %}
+
+<!-- enterprise -->
+{% emqxee %}
+
+Learn more about the docker image on [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee).
+Container deployment is the quickest way to start experimenting with EMQX
+
+1. Get the Docker image
+
+```bash
+docker pull emqx/emqx-ee:latest
+```
+
+1. Start Docker container
+
+```bash
+docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+```
+
+{% endemqxee %}
 
 ### Running EMQX in Kubernetes
 
@@ -115,18 +158,21 @@ For more information about Terraform installation and deployment, please refer t
 
 ### Run in a VM or on bare metal
 
-EMQX Enterprise can be deployed directly to bare metal servers or virtual machines.
-A minimum of 2 cores and 4GB RAM can run the EMQX Enterprise.
+EMQX can be deployed directly to bare metal servers or virtual machines.
+A minimum of 2 cores and 4GB RAM can run the EMQX.
 
-EMQX has prebuilt packages downloadable for Enterprise Linux(RedHat, CentOS, Rockylinux)
+EMQX has prebuilt packages downloadable for Linux(RedHat, CentOS, Rockylinux)
 as well as Debian, Ubuntu, and MacOS.
+
+{% emqxce %}
 
 - [CentOS installation](./install.md#centos)
 - [Ubuntu, Debian installation](./install.md#ubuntu-debian)
 - [MacOS, Windows, Linux ZIP installation](./install.md#zip-linux-macos-windows)
+{% endemqxce %}
 
 For other platforms which are not in the prebuilt list,
-you may [build the runnables from source code](./install.md#source-code-compilation-and-installation) or
+you may {% emqxce %}[build the runnables from source code](./install.md#source-code-compilation-and-installation) or{% endemqxce %}
 simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 ## Start EMQX
@@ -134,9 +180,17 @@ simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 After the installation, you can start EMQX through the command of systemctl or emqx.
 For more startup methods and precautions, please refer to [Starting EMQX](./start.md).
 
+ {% emqxce %}
 After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
-(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md)
-management console for device connection and related indicator monitoring and management.
+(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard.md)for device connection and related indicator monitoring and management.
+
+{% endemqxce %}
+
+{% emqxee %}
+After EMQX is started successfully, you can visit [http://localhost:18083/](http://localhost:18083/)
+(replace localhost with your actual IP address) through a browser to access [EMQX Dashboard](./dashboard-ee.md)for device connection and related indicator monitoring and management.
+
+{% endemqxee %}
 
 ### Start EMQX in the background
 
