@@ -11,101 +11,22 @@
 
 以下是支持的协议类型：
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">监听器</th>
-<th scope="col" class="org-left">说明</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td class="org-left">TCP Listener</td>
-<td class="org-left">A listener for MQTT which uses TCP</td>
-</tr>
-
-
-<tr>
-<td class="org-left">SSL Listener</td>
-<td class="org-left">A secure listener for MQTT which uses TLS</td>
-</tr>
-
-
-<tr>
-<td class="org-left">Websocket Listener</td>
-<td class="org-left">A listener for MQTT over WebSockets</td>
-</tr>
-
-
-<tr>
-<td class="org-left">Secure Websocket Listener</td>
-<td class="org-left">A secure listener for MQTT over secure WebSockets (TLS)</td>
-</tr>
-
-
-<tr>
-<td class="org-left">QUIC Listener</td>
-<td class="org-left">A listener for MQTT over Quick UDP Internet Connections</td>
-</tr>
-</tbody>
-</table>
+| 监听器                     | 说明                                             |
+| ------------------------- | ------------------------------------------------------- |
+| TCP Listener              | A listener for MQTT which uses TCP                      |
+| SSL Listener              | A secure listener for MQTT which uses TLS               |
+| Websocket Listener        | A listener for MQTT over WebSockets                     |
+| Secure Websocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
+| QUIC Listener             | A secure listener for MQTT over secure WebSockets       |
 
 EMQX 默认提供 4 个监听器，它们将占用以下端口：
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-right" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-right">端口</th>
-<th scope="col" class="org-left">说明</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td class="org-right">8883</td>
-<td class="org-left">MQTT/SSL 协议端口</td>
-</tr>
-
-
-<tr>
-<td class="org-right">1883</td>
-<td class="org-left">MQTT/TCP 协议端口</td>
-</tr>
-
-
-<tr>
-<td class="org-right">8083</td>
-<td class="org-left">MQTT/WS 协议端口</td>
-</tr>
-
-
-<tr>
-<td class="org-right">8084</td>
-<td class="org-left">MQTT/WSS 协议端口</td>
-</tr>
-</tbody>
-</table>
-
-
-<a id="org69700c5"></a>
-
-## 快速开始
-
+| 端口             | 说明                    |
+| ----------------| ----------------------- |
+| 8883            | MQTT/SSL protocol port  |
+| 1883            | MQTT/TCP protocol port  |
+| 8083            | MQTT/WS protocol port   |
+| 8084            | MQTT/WSS protocol port  |
 
 <a id="org67b1907"></a>
 
@@ -116,17 +37,17 @@ EMQX 默认提供 4 个监听器，它们将占用以下端口：
 由于默认配置的存在，我们能够非常快速地展示如何添加新的监听器，以 TCP 监听器为例，我们只需要在 `emqx.conf` 中添加以下一条配置即可：
 
 ```
-    listeners.tcp.demo.bind = "0.0.0.0:1883"
+listeners.tcp.demo.bind = "0.0.0.0:1883"
 ```
 
 当然，我们也可以使用更加详细的方式对监听器进行配置，例如：
 
 ```
-    listeners.tcp.demo {
-        bind = "0.0.0.0:1883"
-        max_connections = 1024000
-        proxy_protocol = true
-    }
+listeners.tcp.demo {
+    bind = "0.0.0.0:1883"
+    max_connections = 1024000
+    proxy_protocol = true
+}
 ```
 
 <a id="org796d08a"></a>
@@ -139,62 +60,62 @@ EMQX 默认提供 4 个监听器，它们将占用以下端口：
 
 
 ```
-    curl -X 'POST' \
-         'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
-         -H 'accept: application/json' \
-         -H 'Content-Type: application/json' \
-         -d '{
-      "acceptors": 16,
-      "access_rules": [
-        "allow all"
-      ],
-      "bind": "0.0.0.0:1884",
-      "current_connections": 10240,
-      "id": "tcp:demo",
-      "max_connections": 204800,
-      "mountpoint": "/",
-      "proxy_protocol": false,
-      "proxy_protocol_timeout": "3s",
-      "running": true,
-      "tcp_options": {
-        "active_n": 100,
-        "backlog": 1024,
-        "buffer": "4KB",
-        "high_watermark": "1MB",
-        "nodelay": false,
-        "reuseaddr": true,
-        "send_timeout": "15s",
-        "send_timeout_close": true
-      },
-      "type": "tcp",
-      "zone": "default"
-    }'
+curl -X 'POST' \
+     'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{
+  "acceptors": 16,
+  "access_rules": [
+    "allow all"
+  ],
+  "bind": "0.0.0.0:1884",
+  "current_connections": 10240,
+  "id": "tcp:demo",
+  "max_connections": 204800,
+  "mountpoint": "/",
+  "proxy_protocol": false,
+  "proxy_protocol_timeout": "3s",
+  "running": true,
+  "tcp_options": {
+    "active_n": 100,
+    "backlog": 1024,
+    "buffer": "4KB",
+    "high_watermark": "1MB",
+    "nodelay": false,
+    "reuseaddr": true,
+    "send_timeout": "15s",
+    "send_timeout_close": true
+  },
+  "type": "tcp",
+  "zone": "default"
+}'
 ```
 
 启动 `demo`:
 
 ```
-    curl -X 'POST' \
-         'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/start' \
-         -H 'accept: */*' \
-         -d ''
+curl -X 'POST' \
+     'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/start' \
+     -H 'accept: */*' \
+     -d ''
 ```
 
 停止:
 
 ```
-    curl -X 'POST' \
-         'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/stop' \
-         -H 'accept: */*' \
-         -d ''
+curl -X 'POST' \
+     'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/stop' \
+     -H 'accept: */*' \
+     -d ''
 ```
 
 删除:
 
 ```
-    curl -X 'DELETE' \
-         'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
-         -H 'accept: */*'
+curl -X 'DELETE' \
+     'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
+     -H 'accept: */*'
 ```
 
 在 API 文档中有，有更多和更详细的监听器 API 信息，这里就不再一一列举了。
