@@ -49,7 +49,7 @@ EMQX 的默认日志级别为 warning，可在 `emqx.conf` 中修改：
 log.level = warning
 ```
 
-此配置将所有 log handler 的配置设置为 warning。
+此配置将所有 log handler 的日志级别配置设置为 warning。
 
 ## 日志文件和日志滚动
 

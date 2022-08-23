@@ -1,5 +1,7 @@
 # Configuration
 
+This section is used to introduce the basics of EMQX configuration files, if you need to see the configuration documentation, please refer to [Configuration](../configuration/configuration.md).
+
 ## Introduction
 
 The configuration files of EMQX Broker usually have the suffix `.conf`. You can find these configuration files in the `etc` directory.
@@ -30,15 +32,14 @@ The configuration files of EMQX Broker usually have the suffix `.conf`. You can 
 
 {% endemqxce %}
 
-
-It should be noted that for the EMQX Broker installed by different methods, the path of the `etc` directory may be different. For details, please refer to [directory structure](directory.md#).
+The etc directory path depends on which way EMQX is installed. For details, please refer to [directory structure](directory.md#).
 
 ## Grammar rules
 
-- Use k = v common format like sysctl
+- Use `k = v` format like sysctl
 - All information for a single configuration item is on the same line, and a new line means creating a new configuration item
-- The key can be layered by `.`, support configuration items managed by tree structure
-- Value types can be `integer`, `float`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
+- The keys can be layered using `.` to support a tree structure
+- The value data types can be `integer`, `float`, `percent`, `enum`, `ip`, `string`, `atom`, `flag`, `duration` and `bytesize`
 - Any line beginning with # is considered as a comment
 
 **Example:**
@@ -83,7 +84,7 @@ dir = "tmp"
 
 **atom**
 
-A value of type `atom` will eventually be converted into Erlang ’s `atom`, but its using method in the `*.conf` file is exactly the same as `string`.
+A value of type `atom` will eventually be converted into Erlang `atom`, but its using method in the `*.conf` file is exactly the same as `string`.
 
 **flag**
 

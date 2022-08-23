@@ -60,7 +60,7 @@
           "title": "共享订阅",
           "path": "advanced/shared-subscriptions"
         },
-	{
+        {
           "title": "排它订阅",
           "path": "advanced/exclusive-subscriptions"
         },
@@ -347,8 +347,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "安装补丁包",
-       "path": "advanced/patches"
+      "title": "安装补丁包",
+      "path": "advanced/patches"
     },
     {
       "title": "FAQ 常见问题解答",
@@ -480,7 +480,6 @@
         {
           "title": "升级指南",
           "path": "changes/upgrade-4.3"
-
         }
       ]
     },
@@ -527,11 +526,11 @@
           "path": "getting-started/command-line"
         },
         {
-          "title": "Create Cluster",
+          "title": "Clustering",
           "path": "getting-started/cluster"
         },
         {
-          "title": "Directory",
+          "title": "Directory Structures",
           "path": "getting-started/directory"
         },
         {
@@ -559,7 +558,7 @@
           "title": "Shared subscription",
           "path": "advanced/shared-subscriptions"
         },
-	{
+        {
           "title": "Exclusive subscriptions",
           "path": "advanced/exclusive-subscriptions"
         },
@@ -841,8 +840,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "Apply Patches",
-       "path": "advanced/patches"
+      "title": "Apply Patches",
+      "path": "advanced/patches"
     },
     {
       "title": "Multi-language Extension",

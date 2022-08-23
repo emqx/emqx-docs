@@ -16,8 +16,7 @@ ref:
 
 # Dashboard
 
-EMQX Dashboard（EMQX 管理控制台，以下简称 Dashboard) 是 EMQX 提供的一个后端 Web控制台，用户可通过 Web
-控制台查看服务器节点和集群的运行状态、统计指标，客户端的在线情况和订阅关系等信息，并进行插件配置与停启，HTTP API 密钥管理，EMQX 集群的热配置管理和 MQTT 连接测试等操作。
+EMQX Dashboard（EMQX 管理控制台，以下简称 Dashboard) 是 EMQX 提供的一个后端 Web 应用，用户可以在浏览器上通过 Dashboard 查看服务器节点和集群的运行状态、统计指标，客户端的在线情况和订阅关系等信息，并进行插件配置与停启，HTTP API 密钥管理，EMQX 集群的热配置管理和 MQTT 连接测试等操作。
 
 ## 基本使用
 

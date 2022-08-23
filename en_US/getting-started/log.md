@@ -34,7 +34,7 @@ The default log level of EMQX Broker is warning, which can be modified in `emqx.
 log.level = warning
 ```
 
-This configuration sets all log handler to warning.
+This configuration sets all log handler level to warning.
 
 ## log file and log rotation
 
@@ -174,11 +174,11 @@ The "log.level" mentioned in the  [Log Level](#log-levels) section is the modifi
 
 Primary Log Level is equivalent to the main switch of a tap water pipe system. Once closed, no water flow will pass through each branch pipe. This mechanism ensures the high-performance operation of the logging system.
 
-## Modify log level at runtime
+## Change log level at runtime
 
-You can use EMQX Broker's command line tool `emqx_ctl` to modify the emqx log level at runtime:
+You can use EMQX Broker's command line tool `emqx_ctl` to change the emqx log level at runtime:
 
-### Modify the global log level:
+### Change the global log level:
 
 For example, set the level of primary log level and all log handlers to debug:
 
@@ -186,7 +186,7 @@ For example, set the level of primary log level and all log handlers to debug:
 $ emqx_ctl log set-level debug
 ```
 
-### Modify the primary log level:
+### Change the primary log level:
 
 For example, set the primary log level to debug:
 
@@ -194,7 +194,7 @@ For example, set the primary log level to debug:
 $ emqx_ctl log primary-level debug
 ```
 
-### Modify the log level of a log handler:
+### Change the log level of a log handler:
 
 For example, set log handler `file` to debug:
 

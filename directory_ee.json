@@ -624,8 +624,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "安装补丁包",
-       "path": "advanced/patches"
+      "title": "安装补丁包",
+      "path": "advanced/patches"
     },
     {
       "title": "FAQ 常见问题解答",
@@ -790,11 +790,11 @@
           "path": "getting-started/command-line"
         },
         {
-          "title": "Distributed Cluster",
+          "title": "Clustering",
           "path": "getting-started/cluster"
         },
         {
-          "title": "Directory",
+          "title": "Directory Structures",
           "path": "getting-started/directory"
         },
         {
@@ -1353,8 +1353,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "Apply Patches",
-       "path": "advanced/patches"
+      "title": "Apply Patches",
+      "path": "advanced/patches"
     },
     {
       "title": "FAQ",

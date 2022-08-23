@@ -15,18 +15,17 @@ ref:
 
 # 认证
 
-
-身份认证是大多数应用的重要组成部分，MQTT 协议支持用户名密码认证，启用身份认证能有效阻止非法客户端的连接。
+身份认证是大多数应用的重要组成部分，启用身份认证能有效阻止非法客户端的连接。
 
 EMQX 中的认证指的是当一个客户端连接到 EMQX 的时候，通过服务器端的配置来控制客户端连接服务器的权限。
 
 EMQX 的认证支持包括两个层面：
 
-- MQTT 协议本身在 CONNECT 报文中指定用户名和密码，EMQX 以插件形式支持基于 Username、ClientID、HTTP、JWT、LDAP 及各类数据库如 MongoDB、MySQL、PostgreSQL、Redis 等多种形式的认证。
+- MQTT 协议规范允许在 CONNECT 报文中指定用户名和密码，EMQX 以插件形式支持基于 Username、ClientID、HTTP、JWT、LDAP 及各类数据库如 MongoDB、MySQL、PostgreSQL、Redis 等多种形式的认证。
 
-- 在传输层上，TLS 可以保证使用客户端证书的客户端到服务器的身份验证，并确保服务器向客户端验证服务器证书。也支持基于 PSK 的 TLS/DTLS 认证。
+- 在传输层上，TLS 可以保证使用客户端证书的客户端到服务器的身份验证(X.509 证书认证)，并确保服务器向客户端验证服务器证书。也支持基于 PSK 的 TLS/DTLS 认证。
 
-本章节介绍了 EMQX 支持的认证方式以及对应插件的配置方法。
+本章节介绍了 EMQX 支持的认证方式以及对应的配置方法。
 
 ## 认证方式
 
@@ -135,7 +134,7 @@ EMQ  X 默认配置中启用了匿名认证，任何客户端都能接入 EMQX�
 allow_anonymous = true
 ```
 
-::: danger 
+::: danger
 
 生产环境中请禁用匿名认证。
 

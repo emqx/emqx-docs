@@ -2,7 +2,7 @@
 
 ## Introduction
 
-EMQX Dashboard is a web console provided by EMQX. You can view the
+EMQX Dashboard is a web application provided by EMQX. You can view the
 running status of nodes and cluster, metrics, online status and
 subscriptions of clients through the Dashboard. You can also configure
 the plug-in on the Dashboard, stop and start the specified plug-in,
