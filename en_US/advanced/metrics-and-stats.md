@@ -6,10 +6,6 @@ EMQX Broker provides users with multiple ways to view metrics and status. Most d
 
 If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. For specific operations, see [HTTP API](./http-api.md#endpoint-metrics) and [$SYS system topic](./system-topic.md#).
 
-::: tip
-EMQX Broker provides the [emqx_statsd](https://github.com/emqx/emqx-statsd) plug-in, which is used to output the system's monitoring data to a third-party monitoring system. You can refer to [Prometheus Monitoring Alarm](../tutorial/prometheus.md) for an example.
-:::
-
 ## Metrics & Stats
 
 EMQX Broker divides metrics into Metrics and Stats. Metrics usually refer to data that will only increase monotonically, such as the number of sent bytes and the number of sent messages. Metrics currently provided by EMQX Broker covers the four dimensions of bytes, packets, messages, and events. Stats usually refers to data that appears in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscription.

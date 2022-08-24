@@ -1,6 +1,6 @@
 # Introduction
 
-**Publish/Subscribe ACL** refers to **permission control**  for  **PUBLISH/SUBSCRIBE** operations. For example, the user name with the name `Anna` is prohibited to publish messages to ` open / elsa / door`.
+**Publish/Subscribe ACL** refers to **permission control**  for  **PUBLISH/SUBSCRIBE** operations. For example, the user name with the name `Anna` is prohibited to publish messages to `open/elsa/door`.
 
 EMQX supports the permission management of client through client publish/subscribe ACLs. This chapter describes the publish/subscribe ACLs supported by EMQX and the configuration methods of corresponding plugins.
 

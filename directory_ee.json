@@ -8,9 +8,18 @@
       "title": "开始使用",
       "children": [
         {
-          "title": "开始使用",
+          "title": "快速开始",
           "path": "getting-started/getting-started"
         },
+        {
+          "title": "Dashboard",
+          "path": "getting-started/dashboard-ee"
+        }
+      ]
+    },
+    {
+      "title": "安装与部署",
+      "children": [
         {
           "title": "安装",
           "path": "getting-started/install-ee"
@@ -24,53 +33,144 @@
           "path": "getting-started/start"
         },
         {
-          "title": "基本命令",
-          "path": "getting-started/command-line"
+          "title": "目录结构",
+          "path": "getting-started/directory"
+        },
+        {
+          "title": "系统调优",
+          "path": "tutorial/tune"
         },
         {
           "title": "分布式集群",
           "path": "getting-started/cluster"
         },
         {
-          "title": "目录结构",
-          "path": "getting-started/directory"
+          "title": "生产部署",
+          "path": "tutorial/deploy"
         },
         {
-          "title": "配置说明",
-          "path": "getting-started/config"
+          "title": "数据导入导出",
+          "path": "advanced/data-import-and-export"
         },
+        {
+          "title": "版本热升级",
+          "path": "advanced/relup"
+        },
+        {
+          "title": "安装补丁包",
+          "path": "advanced/patches"
+        },
+        {
+          "title": "性能测试",
+          "path": "tutorial/benchmark"
+        }
+      ]
+    },
+    {
+      "title": "安全",
+      "children": [
+        {
+          "title": "认证/访问控制",
+          "children": [
+            {
+              "title": "认证",
+              "path": "advanced/auth"
+            },
+            {
+              "title": "发布订阅 ACL",
+              "path": "advanced/acl"
+            },
+            {
+              "title": "内置访问控制",
+              "path": "modules/internal_acl"
+            },
+            {
+              "title": "MySQL 认证/访问控制",
+              "path": "modules/mysql_authentication"
+            },
+            {
+              "title": "PostgreSQL 认证/访问控制",
+              "path": "modules/pgsql_authentication"
+            },
+            {
+              "title": "Redis 认证/访问控制",
+              "path": "modules/redis_authentication"
+            },
+            {
+              "title": "HTTP 认证/访问控制",
+              "path": "modules/http_authentication"
+            },
+            {
+              "title": "内置数据库 认证/访问控制",
+              "path": "modules/mnesia_authentication"
+            },
+            {
+              "title": "MongoDB 认证/访问控制",
+              "path": "modules/mongo_authentication"
+            },
+            {
+              "title": "PSK File 认证",
+              "path": "modules/psk_authentication"
+            },
+            {
+              "title": "LDAP 认证/访问控制",
+              "path": "modules/ldap_authentication"
+            },
+            {
+              "title": "JWT 认证",
+              "path": "modules/jwt_authentication"
+            },
+            {
+              "title": "MQTT 增强认证",
+              "path": "modules/auth_sasl"
+            }
+          ]
+        },
+        {
+          "title": "黑名单",
+          "path": "advanced/blacklist"
+        },
+        {
+          "title": "速率限制",
+          "path": "advanced/rate-limit"
+        }
+      ]
+    },
+    {
+      "title": "运行监测",
+      "children": [
         {
           "title": "日志与追踪",
           "path": "getting-started/log"
         },
         {
-          "title": "Dashboard",
-          "path": "getting-started/dashboard-ee"
+          "title": "指标监控",
+          "path": "advanced/metrics-and-stats"
+        },
+        {
+          "title": "Prometheus 监控告警",
+          "path": "tutorial/prometheus"
+        },
+        {
+          "title": "EMQX Prometheus Agent",
+          "path": "modules/prometheus"
+        },
+        {
+          "title": "告警",
+          "path": "advanced/alarms"
+        },
+        {
+          "title": "主题指标统计",
+          "path": "modules/topic_metrics"
         }
       ]
     },
     {
-      "title": "用户指南",
+      "title": "MQTT 高级特性",
       "children": [
         {
-          "title": "认证鉴权",
-          "path": "advanced/auth"
-        },
-        {
-          "title": "发布订阅 ACL",
-          "path": "advanced/acl"
-        },
-        {
-          "title": "规则引擎",
-          "path": "rule/rule-engine"
-        },
-        {
-          "title": "数据存储",
-          "path": "backend/backend"
-        },
-        {
-          "title": "消息桥接",
-          "path": "bridge/bridge"
+          "title": "MQTT 保留消息",
+          "path": "modules/retainer"
         },
         {
           "title": "共享订阅",
@@ -81,190 +181,25 @@
           "path": "advanced/exclusive-subscriptions"
         },
         {
-          "title": "$SYS 系统主题",
-          "path": "advanced/system-topic"
-        },
-        {
-          "title": "黑名单",
-          "path": "advanced/blacklist"
-        },
-        {
-          "title": "WebHook",
-          "path": "advanced/webhook"
-        },
-        {
-          "title": "分布集群",
-          "path": "advanced/cluster"
-        },
-        {
-          "title": "钩子",
-          "path": "advanced/hooks"
-        },
-        {
-          "title": "指标监控",
-          "path": "advanced/metrics-and-stats"
-        },
-        {
-          "title": "速率限制",
-          "path": "advanced/rate-limit"
-        },
-        {
-          "title": "飞行窗口与消息队列",
-          "path": "advanced/inflight-window-and-message-queue"
-        },
-        {
-          "title": "消息重传",
-          "path": "advanced/retransmission"
-        },
-        {
-          "title": "告警",
-          "path": "advanced/alarms"
-        },
-        {
-          "title": "数据导入导出",
-          "path": "advanced/data-import-and-export"
-        }
-      ]
-    },
-    {
-      "title": "模块管理",
-      "children": [
-        {
-          "title": "模块介绍",
-          "path": "modules/modules"
-        },
-        {
-          "title": "内置访问控制",
-          "path": "modules/internal_acl"
-        },
-        {
-          "title": "MySQL 认证/访问控制",
-          "path": "modules/mysql_authentication"
-        },
-        {
-          "title": "PostgreSQL 认证/访问控制",
-          "path": "modules/pgsql_authentication"
-        },
-        {
-          "title": "Redis 认证/访问控制",
-          "path": "modules/redis_authentication"
-        },
-        {
-          "title": "HTTP 认证/访问控制",
-          "path": "modules/http_authentication"
-        },
-        {
-          "title": "内置数据库 认证/访问控制",
-          "path": "modules/mnesia_authentication"
-        },
-        {
-          "title": "MongoDB 认证/访问控制",
-          "path": "modules/mongo_authentication"
-        },
-        {
-          "title": "PSK File 认证",
-          "path": "modules/psk_authentication"
-        },
-        {
-          "title": "LDAP 认证/访问控制",
-          "path": "modules/ldap_authentication"
-        },
-        {
-          "title": "JWT 认证",
-          "path": "modules/jwt_authentication"
-        },
-        {
-          "title": "LwM2M 网关",
-          "path": "modules/lwm2m_protocol"
-        },
-        {
-          "title": "MQTT-SN 网关",
-          "path": "modules/mqtt_sn_protocol"
-        },
-        {
-          "title": "TCP 网关",
-          "path": "modules/tcp_protocol"
-        },
-        {
-          "title": "JT/T808 网关",
-          "path": "modules/jt808_protocol"
-        },
-        {
-          "title": "GB/T32960 网关",
-          "path": "modules/gbt32960_protocol"
-        },
-        {
-          "title": "CoAP 网关",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp 网关",
-          "path": "modules/stomp_protocol"
-        },
-        {
-          "title": "Kafka 消费组",
-          "path": "modules/kafka_consumer"
-        },
-        {
-          "title": "Pulsar 消费组",
-          "path": "modules/pulsar_consumer"
-        },
-        {
-          "title": "MQTT Subscriber",
-          "path": "modules/mqtt_subscriber"
-        },
-        {
-          "title": "多语言扩展协议接入",
-          "path": "modules/exproto"
-        },
-        {
-          "title": "多语言扩展钩子",
-          "path": "modules/exhook"
-        },
-        {
-          "title": "Recon",
-          "path": "modules/recon"
-        },
-        {
-          "title": "EMQX Prometheus Agent",
-          "path": "modules/prometheus"
-        },
-        {
-          "title": "热配置",
-          "path": "modules/hot_confs"
-        },
-        {
-          "title": "主题指标统计",
-          "path": "modules/topic_metrics"
-        },
-        {
-          "title": "MQTT 增强认证",
-          "path": "modules/auth_sasl"
-        },
-        {
-          "title": "上下线通知",
-          "path": "modules/presence"
-        },
-        {
           "title": "MQTT 代理订阅",
           "path": "modules/subscription"
         },
         {
-          "title": "主题重写",
-          "path": "modules/topic_rewrite"
-        },
-        {
-          "title": "MQTT 保留消息",
-          "path": "modules/retainer"
+          "title": "$SYS 系统主题",
+          "path": "advanced/system-topic"
         },
         {
           "title": "MQTT 消息延迟发布",
           "path": "modules/delayed_publish"
+        },
+        {
+          "title": "主题重写",
+          "path": "modules/topic_rewrite"
         }
       ]
     },
     {
-      "title": "规则引擎",
+      "title": "规则引擎(数据集成)",
       "children": [
         {
           "title": "规则引擎",
@@ -482,7 +417,69 @@
       ]
     },
     {
-      "title": "插件管理",
+      "title": "HTTP API",
+      "path": "advanced/http-api"
+    },
+    {
+      "title": "命令行接口",
+      "path": "advanced/cli"
+    },
+    {
+      "title": "参数配置",
+      "children": [
+        {
+          "title": "配置说明",
+          "path": "getting-started/config"
+        },
+        {
+          "title": "配置项",
+          "path": "configuration/configuration"
+        },
+        {
+          "title": "环境变量",
+          "path": "configuration/environment-variable"
+        }
+      ]
+    },
+    {
+      "title": "网关",
+      "children": [
+        {
+          "title": "MQTT-SN 网关",
+          "path": "modules/mqtt_sn_protocol"
+        },
+        {
+          "title": "LwM2M 网关",
+          "path": "modules/lwm2m_protocol"
+        },
+        {
+          "title": "TCP 网关",
+          "path": "modules/tcp_protocol"
+        },
+        {
+          "title": "JT/T808 网关",
+          "path": "modules/jt808_protocol"
+        },
+        {
+          "title": "GB/T32960 网关",
+          "path": "modules/gbt32960_protocol"
+        },
+        {
+          "title": "CoAP 网关",
+          "path": "modules/coap_protocol"
+        },
+        {
+          "title": "Stomp 网关",
+          "path": "modules/stomp_protocol"
+        },
+        {
+          "title": "多语言扩展协议接入",
+          "path": "modules/exproto"
+        }
+      ]
+    },
+    {
+      "title": "插件与扩展",
       "children": [
         {
           "title": "插件介绍",
@@ -537,7 +534,7 @@
           "title": "消息桥接插件",
           "children": [
             {
-              "title": "消息桥接简介",
+              "title": "消息桥接设计",
               "path": "bridge/bridge"
             },
             {
@@ -565,94 +562,68 @@
               "path": "bridge/bridge-rocketmq"
             }
           ]
+        },
+        {
+          "title": "WebHook",
+          "path": "advanced/webhook"
+        },
+        {
+          "title": "钩子",
+          "path": "advanced/hooks"
+        },
+        {
+          "title": "多语言扩展钩子",
+          "path": "modules/exhook"
         }
       ]
     },
     {
-      "title": "运维操作",
+      "title": "模块管理",
       "children": [
         {
-          "title": "设备管理",
-          "path": "tutorial/device-management"
+          "title": "模块介绍",
+          "path": "modules/modules"
         },
         {
-          "title": "系统调优",
-          "path": "tutorial/tune"
+          "title": "Kafka 消费组",
+          "path": "modules/kafka_consumer"
         },
         {
-          "title": "生产部署",
-          "path": "tutorial/deploy"
+          "title": "Pulsar 消费组",
+          "path": "modules/pulsar_consumer"
         },
         {
-          "title": "Prometheus 监控告警",
-          "path": "tutorial/prometheus"
+          "title": "MQTT Subscriber",
+          "path": "modules/mqtt_subscriber"
         },
         {
-          "title": "性能测试",
-          "path": "tutorial/benchmark"
+          "title": "Recon",
+          "path": "modules/recon"
+        },
+        {
+          "title": "热配置",
+          "path": "modules/hot_confs"
+        },
+        {
+          "title": "上下线通知",
+          "path": "modules/presence"
         }
       ]
     },
     {
-      "title": "HTTP API",
-      "path": "advanced/http-api"
-    },
-    {
-      "title": "参数配置",
+      "title": "设计与实现",
       "children": [
         {
-          "title": "参数配置列表",
-          "path": "configuration/configuration"
+          "title": "架构设计",
+          "path": "design/design"
         },
         {
-          "title": "环境变量",
-          "path": "configuration/environment-variable"
-        }
-      ]
-    },
-    {
-      "title": "命令行接口",
-      "children": [
-        {
-          "title": "命令行",
-          "path": "advanced/cli"
-        }
-      ]
-    },
-    {
-      "title": "版本热升级",
-      "path": "advanced/relup"
-    },
-    {
-      "title": "安装补丁包",
-      "path": "advanced/patches"
-    },
-    {
-      "title": "FAQ 常见问题解答",
-      "children": [
-        {
-          "title": "入门概念",
-          "path": "faq/faq"
+          "title": "飞行窗口与消息队列",
+          "path": "advanced/inflight-window-and-message-queue"
         },
         {
-          "title": "使用教程",
-          "path": "faq/use-guide"
-        },
-        {
-          "title": "安装部署",
-          "path": "faq/deployment"
-        },
-        {
-          "title": "常见错误",
-          "path": "faq/error"
-        },
-        {
-          "title": "商业服务",
-          "path": "faq/enterprise"
-        },
-        {
-          "title": "FAQ 标签",
-          "path": "faq/tags"
+          "title": "消息重传",
+          "path": "advanced/retransmission"
         }
       ]
     },
@@ -698,35 +669,31 @@
       ]
     },
     {
-      "title": "协议介绍",
+      "title": "FAQ 常见问题解答",
       "children": [
         {
-          "title": "MQTT 协议",
-          "path": "development/protocol"
+          "title": "入门概念",
+          "path": "faq/faq"
         },
         {
-          "title": "LwM2M 网关",
-          "path": "modules/lwm2m_protocol"
+          "title": "使用教程",
+          "path": "faq/use-guide"
         },
         {
-          "title": "MQTT-SN 网关",
-          "path": "modules/mqtt_sn_protocol"
+          "title": "安装部署",
+          "path": "faq/deployment"
         },
         {
-          "title": "TCP 网关",
-          "path": "modules/tcp_protocol"
+          "title": "常见错误",
+          "path": "faq/error"
         },
         {
-          "title": "JT/T808 网关",
-          "path": "modules/jt808_protocol"
+          "title": "商业服务",
+          "path": "faq/enterprise"
         },
         {
-          "title": "CoAP 网关",
-          "path": "modules/coap_protocol"
-        },
-        {
-          "title": "Stomp 网关",
-          "path": "modules/stomp_protocol"
+          "title": "FAQ 标签",
+          "path": "faq/tags"
         }
       ]
     },
@@ -751,8 +718,8 @@
       "title": "相关资料",
       "children": [
         {
-          "title": "架构设计",
-          "path": "design/design"
+          "title": "协议介绍",
+          "path": "development/protocol"
         },
         {
           "title": "资源",
@@ -1326,6 +1293,14 @@
           "path": "tutorial/prometheus"
         },
         {
+          "title": "Release Hot Upgrade",
+          "path": "advanced/relup"
+        },
+        {
+          "title": "Apply Patches",
+          "path": "advanced/patches"
+        },
+        {
           "title": "Benchmark",
           "path": "tutorial/benchmark"
         }
@@ -1347,14 +1322,6 @@
           "path": "advanced/cli"
         }
       ]
-    },
-    {
-      "title": "Release Hot Upgrade",
-      "path": "advanced/relup"
-    },
-    {
-      "title": "Apply Patches",
-      "path": "advanced/patches"
     },
     {
       "title": "FAQ",
