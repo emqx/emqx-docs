@@ -2,80 +2,89 @@
 
 ## Protocol Introduction
 
-The full name of LwM2M is Lightweight Machine-To-Machine, which is developed by Open Mobile Alliance (OMA)
-A defined set of lightweight protocols suitable for the Internet of Things, which provides device management and communication functions, especially suitable for terminal devices with limited resources. The agreement can be in
-[Here](http://www.openmobilealliance.org/wp/) to download.
+LwM2M (Lightweight Machine-To-Machine) is a protocol from the Open Mobile Alliance (OMA) for machine to machine (M2M) or Internet of things device (IoT), it provides device management and communication functions, especially suitable for terminal devices with limited resources.
 
-LwM2M is based on the REST architecture, using CoAP as the underlying transport protocol, carried in UDP or SMS
-Therefore, the message structure is simple and compact, and it is also applicable in environments where network resources are limited and the device is always online.
+For more information, see [OMA SpecWorks](http://openmobilealliance.org/iot/lightweight-m2m-lwm2m.)
 
-The main entities of LwM2M include LwM2M Server and LwM2M Client.
+LwM2M is built on [Constrained Application Protocol](https://www.rfc-editor.org/rfc/rfc7252) (CoAP), carried over UDP or SMS, based on REST architecture,
+so the message structure is simple and compact to worker better in environments where network resources are limited and the device is always online.
 
-LwM2M Server serves as a server and is deployed at the M2M service provider or network service provider. LwM2M defines two types of servers
+There are two roles in the LwM2M protocol:
 
-  -One is LwM2M BOOTSTRAP SERVER. The emqx-lwm2m plug-in does not implement the server function.
-  -One is LwM2M SERVER, emqx-lwm2m realizes the function of this server on UDP, but SMS does not.
+- LwM2M Server
 
-LwM2M Client acts as a client and is deployed on each LwM2M device.
+  LwM2M has two kind services and deployed at the M2M service providers or network service providers:
+
+  1. LwM2M bootstrap server, emqx-lwm2m plugin does not implement this server.
+  2. LwM2M server, emqx-lwm2m plugin implements the function of this server on UDP, while SMS does not.
+
+- LwM2M Client
+
+    LwM2M Client acts as a client and is deployed on each LwM2M device.
 
 Between LwM2M Server and LwM2M Client, the LwM2M protocol defines 4 interfaces.
 
-1. Bootstrap interface Bootstrap: provide LwM2M client with registration to LwM2M
-    The necessary information of the server, such as server access information, resource information supported by the client, etc.
-2. Client Registration Interface Client Registration: Connect LwM2M client and LwM2M server, connect LwM2M
-    The relevant information of the client is stored on the LwM2M server. Only after completing the registration, LwM2M
-    The communication and management between the client and the server becomes possible.
-3. Device management and service implementation interface Device Management and Service Enablement: the master of this interface is LwM2M
-    The server sends instructions to the client, and the client responds to the instructions and sends the response message to the server.
-4. Information reporting interface Information Reporting: Allow LwM2M
-    The server subscribes to the client for resource information, and the client receives the subscription and reports its resource changes to the server according to the agreed mode.
+1. Bootstrap interface
 
-LwM2M abstracts the services on the device into Object and Resource, and defines the attributes and functions of various Objects in XML files. allowable
-[Here](http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html)
-Find various definitions of XML.
+    Provide the LwM2M client with the necessary information to register with the LwM2M server, such as sever access information, resource information supported by the client, etc.
 
-The LwM2M protocol predefines 8 kinds of Objects to meet the basic requirements, namely:
+2. Client Registration Interface
 
-  -Security object
-  -Server object
-  -Access Control access control object
-  -Device object
-  -Connectivity Monitoring Connectivity monitoring object
-  -Firmware firmware object
-  -Location object
-  -Connectivity Statistics Connectivity statistics object
+    Connect the LwM2M client and the LwM2M server, and stored the information about connection of the LwM2M client. Communication and management between LwM2M client and server is only possible after registration is completed.
 
-## Create module
+3. Device management and service implementation interface
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+    Allows the server to access and modify LwM2M client object instances and resources.
+
+4. Information reporting interface
+
+    Allows the server to subscribe resource information to the client, and the client reports its resource changes to the server in the agreed mode.
+
+LwM2M abstracts the services on the device into `Object` and `Resource`, and defines the attributes and functions of various objects in XML files. See
+[Here](http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html) for details.
+
+
+The LwM2M protocol predefines 8 kinds of objects, namely:
+
+  - Security object
+  - Server object
+  - Access Control access control object
+  - Device object
+  - Connectivity Monitoring Connectivity monitoring object
+  - Firmware firmware object
+  - Location object
+  - Connectivity Statistics Connectivity statistics object
+
+## Quick Start
+
+Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the `Modules` tab on the left, and choose to add:
 
 ![image-20200927213049265](./assets/modules.png)
 
-Select LwM2M protocol to access the gateway:
+Select the `LwM2M Gateway`
 
 ![image-20200927213049265](./assets/proto_lwm2m1.png)
 
-Configure related basic parameters:
+Configure basic parameters:
 
 ![image-20200927213049265](./assets/proto_lwm2m2.png)
 
-Add listening port:
+Add a listener:
 
 ![image-20200927213049265](./assets/proto_lwm2m3.png)
 
-Configure monitoring parameters:
+Configure listener parameters:
 
 ![image-20200927213049265](./assets/proto_lwm2m4.png)
 
-Click to confirm to the configuration parameter page:
+Click `confirm` to enter the configuration parameter page:
 
 ![image-20200927213049265](./assets/proto_lwm2m5.png)
 
-After clicking Add, the module is added:
+After clicking `Add`, the module is added:
 ![image-20200927213049265](./assets/proto_lwm2m6.png)
 
-EMQX-LWM2M is a gateway module of EMQX server, which implements most of the functions of LwM2M. MQTT client can pass EMQX-LWM2M
-Access devices that support LwM2M. The device can also report notification to EMQX-LWM2M to collect data for EMQX back-end services.
+EMQX-LwM2M is a gateway module of EMQX server, it implements most of the functions of LwM2M. MQTT client can access LwM2M-enabled devices through EMQX-LWM2M and devices can also report notifications to EMQX-LwM2M to collect data for EMQX backend services.
 
 ### Configuration parameters
 
@@ -84,24 +93,24 @@ Access devices that support LwM2M. The device can also report notification to EM
 | Minimum Lifetime  | Minimum lifetime allowed to be set for registration/update, in seconds |
 | Maximum Lifetime  | Maximum lifetime allowed to be set for registration/update, in seconds |
 | QMode Time Window | QMode time window, indicating how long the downstream command sent to the client will be cached, in seconds |
-| Auto Observe      | After successful registration, whether the objectlist reported by Observe is automatically reported |
+| Auto Observe      | After successful registration, whether to automatically observe the objectlist |
 | Mountpoint        | topic Prefix                                                 |
-| Command Topic     | Downstream command topic %e indicates the value endport name |
-| Response Topic    | Upstream response topic %e means endport name                |
-| Register Topic    | Register message topic %e means endport name                 |
-| Notify Topic      | Uplink notification topic %e means endport name              |
-| Update Topic      | Update message topic %e means endport name                   |
-| XML Directory     | The directory where the XML files are stored. These XMLs are used to define the LwM2M Object |
+| Command Topic     | Downstream command topic, %e means endport name              |
+| Response Topic    | Upstream response topic, %e means endport name                |
+| Register Topic    | Register message topic, %e means endport name                 |
+| Notify Topic      | Uplink notification topic, %e means endport name              |
+| Update Topic      | Update message topic, %e means endport name                   |
+| XML Directory     | The directory of the XML files, these XMLs are used to define LwM2M objects |
 
 ### MQTT and LwM2M conversion
 
-From the MQTT client, you can send Command to the LwM2M device. The command from MQTT to LwM2M uses the following topic
+From MQTT client can send command to the LwM2M device, the MQTT to LwM2M command uses the following topic:
 
 ```bash
 "lwm2m/{?device_end_point_name}/command".
 ```
 
-The MQTT Payload is a string in json format, which specifies the command to be sent. For more details, please refer to the emqx-lwm2m documentation.
+The MQTT payload is a json formatted string specifying the command to send, See [emqx-lwm2m](https://github.com/emqx/emqx-lwm2m) for details.
 
 The reply of the LwM2M device is sent with the following topic
 
@@ -109,4 +118,4 @@ The reply of the LwM2M device is sent with the following topic
 "lwm2m/{?device_end_point_name}/response".
 ```
 
-MQTT Payload is also a string in json format. For more details, please refer to the documentation of emqx-lwm2m.
+MQTT Payload is also a json formatted string, See [emqx-lwm2m](https://github.com/emqx/emqx-lwm2m) for details.
