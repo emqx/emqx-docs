@@ -21,25 +21,34 @@ Taking the alarm of high system memory usage as an example, you will receive a m
 An alarm will not be generated repeatedly. That means if the high CPU usage alarm has been activated the same alarm will not appear again while high CPU is maintained.
 The alarm will be automatically deactivated when the monitored metric returns to normal.
 However, it also supports manual deactivation by the user (if the user clearly does not care about the alarm).
-Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard, 
+Users can view current alarms (activated alarms) and historical alarms (deactivated alarms) on the Dashboard,
 and they can also use the HTTP API provided by EMQX to Query and manage alarms.
 
 EMQX Broker allows users to adjust the alarm function to a certain extent to meet actual needs. The following configuration items are currently available:
 
-| Configuration item            | Type     | Default value | Description                                                  |
-| ----------------------------- | -------- | ------------- | ------------------------------------------------------------ |
-| os_mon.cpu_check_interval     | duration | 60s           | Check interval for CPU usage                                 |
-| os_mon.cpu_high_watermark     | percent  | 80%           | The high watermark of the CPU usage, which is the threshold to activate the alarm |
-| os_mon.cpu_low_watermark      | percent  | 60%           | The low watermark of the CPU usage, which is the threshold to deactivate the alarm |
-| os_mon.mem_check_interval     | duration | 60s           | Check interval for memory usage                              |
-| os_mon.sysmem_high_watermark  | percent  | 70%           | The high water mark of the system memory usage. The alarm is activated when the total memory occupied by the application reaches this value |
-| os_mon.procmem_high_watermark | percent  | 5%            | The high water mark of the process memory usage. The alarm will be activated when the memory occupied by a single process reaches this value. |
-| vm_mon.check_interval         | duration | 30s           | Check interval for the number of processes                   |
-| vm_mon.process_high_watermark | percent  | 80%           | The high watermark of the process occupancy rate, that is, the alarm is activated when the ratio of the number of created processes to the maximum number limit reaches this value |
-| vm_mon.process_low_watermark  | percent  | 60%           | The low water mark of the process occupancy rate, that is, the alarm is deactivated when the ratio of the number of created processes to the maximum number limit drops to this value |
-| alarm.actions                 | string   | log,publish   | The action triggered when the alarm is activated. It currently only supports log and publish, which is to output log and publish system messages |
-| alarm.size_limit              | integer  | 1000          | The maximum number of saved alarms that has been deactivated. After the limit is reached, these alarms will be cleared according to the FIFO principle |
-| alarm.validity_period         | duration | 24h           | The maximum storage time of deactivated alarms, and expired alarms will be cleared |
+| Configuration item              | Type              | Default Value                    | Description                                      |
+|-----------------------------------|-------------------|---------------------------|----------------------------------------------------------------------------|
+| sysmon.os.cpu_check_interval      | duration          | 60s                       | Check interval for CPU usage |
+| sysmon.os.cpu_high_watermark      | percent           | 80%                       | The high watermark of the CPU usage, which is the threshold to activate the alarm|
+| sysmon.os.cpu_low_watermark       | percent           | 60%                       | The low watermark of the CPU usage, which is the threshold to deactivate the alarm|
+| sysmon.os.mem_check_interval      | duration          | 60s                       | Check interval for memory usage |
+| sysmon.os.sysmem_high_watermark   | percent           | 70%                       | The high water mark of the system memory usage. The alarm is activated when the total memory occupied by the application reaches this value|
+| sysmon.os.procmem_high_watermark  | percent           | 5%                        | The high water mark of the process memory usage. The alarm will be activated when the memory occupied by a single process reaches this value |
+| sysmonn.vm.process_check_interval | duration          | 30s                       | Check interval for the number of processes |
+| sysmon.vm.process_high_watermark  | percent           | 80%                       | The high watermark of the process occupancy rate, that is, the alarm is activated when the ratio of the number of created processes to the maximum number limit reaches this value |
+| sysmon.vm.process_low_watermark   | percent           | 60%                       | The low water mark of the process occupancy rate, that is, the alarm is deactivated when the ratio of the number of created processes to the maximum number limit drops to this value |
+| sysmonn.vm.long_gc                | disabled/duration | disabled                  | Enable Long GC monitoring |
+| sysmon.vm.long_schedule           | disabled/duration | disabled                  | Enable Long Schedule monitoring |
+| sysmon.vm.large_heap              | disabled/bytesize | disabled                  | Enable Large Heap monitoring |
+| sysmon.vm.busy_port               | boolean           | true                      | Enable Busy Distribution Port monitoring |
+| sysmonn.top.num_items             | integer           | 10                        | The number of top processes per monitoring group|
+| sysmon.top.sample_interlval       | duration          | 2s                        | Specifies how often process top should be collected |
+| sysmon.top.max_procs              | integer           | 1000000                   | Stop collecting data when the number of processes in the VM exceeds this value  |
+| sysmonn.top.db_hostname           | string            | ""                        | Hostname of the PostgreSQL database that collects the data points |
+| sysmonn.top.db_port               | integer           | 5432                      | Port of the PostgreSQL database that collects the data points|
+| sysmon.top.db_username            | string            | "system_monitor"          | Username of the PostgreSQL database |
+| sysmon.top.db_password            | string            | "system_monitor_password" | EMQX user password in the PostgreSQL database |
+| sysmon.top.db_name                | string            | "postgres"                | PostgreSQL database name |
 
 
 {% emqxee %}
