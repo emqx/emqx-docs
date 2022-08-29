@@ -15,6 +15,32 @@ ref:
 
 # 版本发布
 
+## 4.4.8 版本
+
+*发布日期: 2022-08-29*
+
+### 功能增强
+
+- 新增 `GET /trace/:name/detail` API 以查看日志追踪文件信息
+- 改进 LwM2M 报文解析失败时的日志
+- 改进规则引擎错误日志，动作执行失败时的日志中将包含规则 ID
+- 改进 `loaded_modules` 和 `loaded_plugins` 文件不存在时的提醒日志
+- Dashboard 新增修改默认密码的引导
+
+### 错误修复
+
+- 修复 `client.disconnected` 在某些情况下不会触发的问题
+- 修复内置数据库认证未区分客户端 ID 和用户名的认证数据的分页统计的问题
+- 修复 Redis 驱动进程泄漏的问题
+- 修复规则引擎 MQTT 桥接至 AWS IOT 连接超时的问题
+- 修复监听器未就绪时 `GET /listener` 请求崩溃的问题
+- 修复 e4.4.1 版本后规则引擎 SQL 中任意变量与空值比较总是返回 false 的问题
+- 修复错误地将 `emqx_modules` 应用作为插件管理的问题
+- 修复 ExHook 的执行优先级高于规则引擎时，被 ExHook Message Hook 过滤的主题将无法触发规则引擎的问题
+- 修复 ExHook 管理进程因 supervisor 关闭超时而被强制杀死的问题
+- 修复 ExProto `client.connect` 钩子中 Client ID 参数未定义的问题
+- 修复客户端被踢除时 ExProto 不会触发断开连接事件的问题
+
 ## 4.4.7 版本
 
 *发布日期: 2022-08-11*
