@@ -34,7 +34,7 @@ ref:
 - Fix Redis driver process leak problem
 - Fix rule engine MQTT bridge to AWS IOT connection timeout issue
 - Fix `GET /listener` request crashing when listener is not ready
-- Fix the issue that the comparison between any variable and null value in the rule engine SQL always returns false after e4.4.1
+- Fix the issue that the comparison between any variable and null value in the rule engine SQL always returns false after v4.4.1
 - Fix incorrectly managing `emqx_modules` applications as plugins
 - Fix the issue that when the execution priority of ExHook is higher than that of the rule engine, the topic filtered by the ExHook Message Hook will not trigger the rule engine
 - Fix the issue that the ExHook management process was forcibly killed due to the supervisor shutdown timeout

@@ -34,7 +34,7 @@ ref:
 - 修复 Redis 驱动进程泄漏的问题
 - 修复规则引擎 MQTT 桥接至 AWS IOT 连接超时的问题
 - 修复监听器未就绪时 `GET /listener` 请求崩溃的问题
-- 修复 e4.4.1 版本后规则引擎 SQL 中任意变量与空值比较总是返回 false 的问题
+- 修复 v4.4.1 版本后规则引擎 SQL 中任意变量与空值比较总是返回 false 的问题
 - 修复错误地将 `emqx_modules` 应用作为插件管理的问题
 - 修复 ExHook 的执行优先级高于规则引擎时，被 ExHook Message Hook 过滤的主题将无法触发规则引擎的问题
 - 修复 ExHook 管理进程因 supervisor 关闭超时而被强制杀死的问题
