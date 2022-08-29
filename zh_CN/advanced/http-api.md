@@ -206,10 +206,10 @@ $ curl -i --basic -u admin:public -X GET "http://localhost:8081/api/v4/nodes/emq
 | _lte_created_at   | Integer| False    | 客户端会话创建时间，小于等于查找 |
 | _gte_connected_at | Integer| False    | 客户端连接创建时间，大于等于查找 |
 | _lte_connected_at | Integer| False    | 客户端连接创建时间，小于等于查找 |
-| __gte_mqueue_len  | Integer| False    | 客户端消息队列当前长度， 大于等于查找 ｜
-| __lte_mqueue_len  | Integer| False    | 客户端消息队列当前长度， 大于等于查找 ｜
-| __gte_mqueue_dropped  | Integer| False    | 消息队列因超出长度而丢弃的消息数量丢弃个数， 大于等于查找 ｜
-| __lte_mqueue_dropped  | Integer| False    | 消息队列因超出长度而丢弃的消息数量丢弃个数， 小于等于查找 ｜
+| _gte_mqueue_len  | Integer| False    | 客户端消息队列当前长度，大于等于查找 ｜
+| _lte_mqueue_len  | Integer| False    | 客户端消息队列当前长度，大于等于查找 ｜
+| _gte_mqueue_dropped  | Integer| False    | 消息队列因超出长度而丢弃的消息数量丢弃个数，大于等于查找 ｜
+| _lte_mqueue_dropped  | Integer| False    | 消息队列因超出长度而丢弃的消息数量丢弃个数，小于等于查找 ｜
 
 
 **Success Response Body (JSON):**
