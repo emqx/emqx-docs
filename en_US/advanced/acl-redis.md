@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -23,7 +23,7 @@ Plugin:
 emqx_auth_redis
 ```
 
-::: tip 
+::: tip
 The emqx_auth_mysql plugin also includes authentication feature, which can be disabled via comments.
 :::
 
@@ -43,26 +43,7 @@ auth.redis.pool = 8
 
 auth.redis.database = 0
 
-auth.redis.password = 
-```
-
-
-## Default data structure
-
-Under the default configuration of the Redis  authentication plugin, a hash table is used to store authentication data, and `mqtt_user:` is used as the Redis key prefix. The data structure is as follows:
-
-### Authentication / Superuser
-
-```bash
-redis> hgetall mqtt_user:emqx
-  password public
-  salt wivwiv
-```
-
-Under the default configuration, Sample data is as follows:
-
-```bash
-HMSET mqtt_user:emqx password public salt wivwiv
+auth.redis.password =
 ```
 
 ### ACL rule table
@@ -80,25 +61,22 @@ A rule of Redis ACL defines publish, subscribe, or publish/subscribe information
 
 Rule field description:
 
-- ipaddr: Set IP address
-- username: User name for connecting to the client. If the value is set to `$ all`, the rule applies to all users.
-- clientid: Client ID of the connected client
-- access: Allowed operations: subscribe (1), publish (2), both subscribe and publish (3)
+- username: User name of the connecting client.
+- clientid: Client ID of the connecting client.
 - topic: Topics to be controlled, which can use wildcards, and placeholders can be added to the topic to match client information. For example, the topic will be replaced with the client ID of the current client when matching `t/%c`
   - %u：Username
   - %c：Client ID
-  
+- access: Allowed operations: subscribe (1), publish (2), both subscribe and publish (3)
+
 
 Under the default configuration, Sample data is as follows:
 
 ```bash
 HSET mqtt_acl:emqx # 1
-HSET mqtt_acl:testtopic/2 2
+HSET mqtt_acl:emqx testtopic/2 2
 ```
 
-After enabling Redis ACL and successfully connecting with the username emqx, the client should have permissions on the topics it wants to subscribe/publish.
-
-
+After enabling Redis ACL and successfully connecting with the username `emqx`. The client should have the subscription permission of all topics (excluding system topics) and the publish permission of `testtopic/2`.
 
 ## Super user query command（super cmd）
 
@@ -121,7 +99,7 @@ You can adjust the super user query command according to business to achieve mor
 
 1. The first data in the query results must be the is_superuser data
 
-::: tip 
+::: tip
 If superuser functionality is not needed, it can be more efficient when commenting and disabling this option .
 :::
 

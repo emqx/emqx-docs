@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -23,11 +23,9 @@ Plugin:
 emqx_auth_redis
 ```
 
-::: tip 
+::: tip
 The emqx_auth_redis lso includes ACL feature, which can be disabled via comments
 :::
-
-
 
 
 To enable Redis authentication, you need to configure the following in `etc/plugins/emqx_auth_redis.conf` ：
@@ -47,7 +45,7 @@ auth.redis.pool = 8
 
 auth.redis.database = 0
 
-auth.redis.password = 
+auth.redis.password =
 ```
 
 ## Default table structure
@@ -68,7 +66,7 @@ HMSET mqtt_user:emqx password public salt wivwiv
 
 After Redis  authentication is enabled, you can connect with username: emqx, password: public.
 
-::: tip 
+::: tip
 This is the data structure used by default configuration. After being familiar with the use of the plugin, you can use any data structure that meets the conditions for authentication
 :::
 
@@ -105,6 +103,3 @@ You can adjust the authentication query command according to your business needs
 
 1. The first data in the query result must be password. EMQX Broker will use this field to compare with the client password.
 2. If the salting configuration is enabled, the second data in the query result must be the salt field. EMQX Broker will use this field as the salt value.
-
-
-
