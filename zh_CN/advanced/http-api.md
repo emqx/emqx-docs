@@ -1963,17 +1963,17 @@ $ curl -i --basic -u admin:public -X DELETE "http://localhost:8081/api/v4/data/f
 
 **Query String Parameters:**
 
-| Name   | Type | Required | Description |
-| ------ | --------- | -------- | ------- |  ---- |
-| enable_paging | Boolean | False | 是否支持分页功能，如果开启，则返回带分页的元信息 |
-| enabled | Boolean   | False | 过滤条件：规则是否开启状态 |
-| for     | String | False | 返回 topic 完全匹配的规则 |
-| _like_id | String | False | 根据 id 子串方式模糊查找 |
-| _like_for | String | False | 根据 Topic 子串方式模糊查找 |
-| _match_for | String | False | 根据 Topic 匹配查询，比如: t/# 包括 t/1, t/2 |
-| _like_description | String | False | 根据描述子串方式模糊查找 |
-| _page  | Integer   | False | 页码 |
-| _limit | Integer   | False | 每页显示的数据条数，未指定时由 `emqx-management` 插件的配置项 `max_row_limit` 决定 |
+| Name              | Type    | Required | Description                                                                        |
+|-------------------|---------|----------|------------------------------------------------------------------------------------|
+| enable_paging     | Boolean | False    | 是否支持分页功能，如果开启，则返回带分页的元信息                                   |
+| enabled           | Boolean | False    | 过滤条件：规则是否开启状态                                                         |
+| for               | String  | False    | 返回 topic 完全匹配的规则                                                          |
+| _like_id          | String  | False    | 根据 id 子串方式模糊查找                                                           |
+| _like_for         | String  | False    | 根据 Topic 子串方式模糊查找                                                        |
+| _match_for        | String  | False    | 根据 Topic 匹配查询，比如: t/# 包括 t/1, t/2                                       |
+| _like_description | String  | False    | 根据描述子串方式模糊查找                                                           |
+| _page             | Integer | False    | 页码                                                                               |
+| _limit            | Integer | False    | 每页显示的数据条数，未指定时由 `emqx-management` 插件的配置项 `max_row_limit` 决定 |
 
 
 **Success Response Body (JSON):**
@@ -2248,9 +2248,9 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/resource_types'
 
 **Path Parameters:**
 
-| Name        | Type | Required | Description                                                  |
-| ----------- | --------- | ----------- | ------------------------------------------------------------ |
-| resource_id | String    | False       | 可选，资源类型 ID。如不指定 resource_id 则<br />以数组形式返回当前所有的资源。 |
+| Name        | Type   | Required | Description                                                                    |
+|-------------|--------|----------|--------------------------------------------------------------------------------|
+| resource_id | String | False    | 可选，资源类型 ID。如不指定 resource_id 则<br />以数组形式返回当前所有的资源。 |
 
 **Success Response Body (JSON):**
 
@@ -2269,22 +2269,37 @@ $ curl --basic -u admin:public 'http://localhost:8081/api/v4/resource_types'
 
 **Parameters (json):**
 
-| Name        | Type | Required | Description |
-| ----------- | --------- | ----------- | --- |
-| type        | String    | True        | 资源类型名。指定要使用哪个资源类型创建资源。               |
-| config      | Object    | True        | 资源参数。要跟对应的资源类型的 params 里指定的格式相一致。 |
-| description | String    | False       | 可选，资源描述                                             |
+| Name        | Type   | Required | Description                                                |
+|-------------|--------|----------|------------------------------------------------------------|
+| type        | String | True     | 资源类型名。指定要使用哪个资源类型创建资源。               |
+| config      | Object | True     | 资源参数。要跟对应的资源类型的 params 里指定的格式相一致。 |
+| description | String | False    | 可选，资源描述                                             |
 
 **Success Response Body (JSON):**
 
-| Name               | Type | Description                                                  |
-| ------------------ | --------- | ------------------------------------------------------------ |
-| code               | Integer   | 0                                                            |
-| data               | Object    | 规则对象                                                     |
-| - data.id          | String    | 资源 ID                                                      |
-| - data.type        | String    | 资源所从属的资源类型的名字。                                 |
-| - data.config      | Object    | 资源的配置。参数以 key-value 形式表示。<br />详情可参看后面的示例 |
-| - data.description | Object    | 资源的描述信息，中英文。                                     |
+| Name               | Type    | Description                                                       |
+|--------------------|---------|-------------------------------------------------------------------|
+| code               | Integer | 0                                                                 |
+| data               | Object  | 规则对象                                                          |
+| - data.id          | String  | 资源 ID                                                           |
+| - data.type        | String  | 资源所从属的资源类型的名字。                                      |
+| - data.config      | Object  | 资源的配置。参数以 key-value 形式表示。<br />详情可参看后面的示例 |
+| - data.description | Object  | 资源的描述信息，中英文。                                          |
+
+### GET api/v4/resources
+获取所有资源的详细信息。
+
+**Success Response Body (JSON):**
+
+| Name               | Type    | Description                                                       |
+|--------------------|---------|-------------------------------------------------------------------|
+| code               | Integer | 0                                                                 |
+| data               | Array   | 规则对象列表                                                      |
+| - data.id          | String  | 资源 ID                                                           |
+| - data.type        | String  | 资源所从属的资源类型的名字。                                      |
+| - data.config      | Object  | 资源的配置。参数以 key-value 形式表示。<br />详情可参看后面的示例 |
+| - data.status      | Array   | 资源的状态信息。详情请参看 Dashboard 上资源的状态。               |
+| - data.description | Object  | 资源的描述信息，中英文。                                          |
 
 ### DELETE /api/v4/resources/{resource_id}
 删除资源。
