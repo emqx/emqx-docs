@@ -182,6 +182,7 @@
   title_cn: Dashboard
   children:
     - dashboard/introduction
+    - dashboard/dashboard
 
 ## Developers & Testers
 
