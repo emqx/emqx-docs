@@ -183,6 +183,13 @@
   children:
     - dashboard/introduction
     - dashboard/dashboard
+    - dashboard/connections/connections
+    - title_en: Subscriptions
+      title_cn: 主题订阅
+      children: 
+        - dashboard/subscriptions/subscriptions
+        - dashboard/subscriptions/topics
+
 
 ## Developers & Testers
 
