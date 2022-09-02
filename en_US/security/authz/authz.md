@@ -77,7 +77,7 @@ Placeholders work as template variables filled with the corresponding runtime in
 
 ### Placeholders in configurations
 
-Configuration templates can be filled with client information such ad client ID and user name at runtime.
+Configuration templates can be filled with client information such as client ID and user name at runtime.
 
 The following placeholders are available:
 * `${clientid}` — clientid of the client.
