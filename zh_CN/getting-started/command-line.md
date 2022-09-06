@@ -39,6 +39,11 @@ EMQX 提供了 `emqx` 命令行工具，方便用户对 EMQX 进行启动、关�
 
 +   `emqx ping`
 
-    Ping EMQX Broker。
+    Ping EMQX Broker, 检查当前节点是否通信正常；
+
++   `emqx check_conf`
+
+    检查配置文件格式是否正常，如果你修改了配置文件，推荐在启动前先执行此命令，来检查配置文件的格式是否符合要求。
+
 
 以上命令为用户常用命令，此外 `emqx` 命令还有一些[其他选项](../advanced/cli.md)为方便开发者使用，普通用户无需关心。

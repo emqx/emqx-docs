@@ -54,6 +54,7 @@ Redis 认证插件默认配置下使用哈希表存储认证数据，使用 `mqt
 
 ### ACL 规则数据
 
+
 ```bash
 ## 格式
 HSET mqtt_acl:[username clientid] [topic] [access]
@@ -62,23 +63,24 @@ HSET mqtt_acl:[username clientid] [topic] [access]
 redis> hgetall mqtt_acl:emqx
   testtopic/1 1
 ```
-
 Redis ACL 一条规则中定义了发布、订阅或发布/订阅的信息，在规则中的都是**允许**列表，即白名单规则。
-对应主题有权且时将直接
-
 规则字段说明：
 
+- username: 需鉴权客户端的用户名。
+- clientid: 需鉴权客户如的客户端 ID 。
+- topic: 需鉴权的主题过滤器，可以主题通配符，占位符。例如主题 `t/%c` 将被当前客户端的实际 ClientID 替换后再进行主题匹配。
   - %u：用户名
-  - %c：Client ID
+  - %c：客户端 ID
+- access: 允许的操作，`1` 为仅允许订阅，`2` 为仅允许发布，`3` 为允许订阅和发布。
 
-默认配置下示例数据：
 
+使用默认配置时，在 Redis 中写入如下示例数据：
 ```bash
 HSET mqtt_acl:emqx # 1
-HSET mqtt_acl:testtopic/2 2
+HSET mqtt_acl:emqx testtopic/2 2
 ```
 
-启用 Redis ACL 后并以用户名 emqx 成功连接后，客户端应当数据具有相应的主题权限。
+启用 Redis ACL 后并以用户名 `emqx` 成功连接后，拥有所有主题的订阅权限（不包括系统主题在内），拥有 `testtopic/2` 的发布权限。
 
 
 

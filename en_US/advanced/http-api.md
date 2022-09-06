@@ -1824,14 +1824,28 @@ Create a rule and return the resource ID.
 
 **Success Response Body (JSON):**
 
-| Name               | Type | Description                                                  |
-| ------------------ | --------- | ------------------------------------------------------------ |
-| code               | Integer   | 0                                                            |
-| data               | Object    | Rule object                                           |
-| - data.id          | String    | Resource ID                                               |
-| - data.type        | String    | The name of the resource type to which the resource belongs |
-| - data.config      | Object    | Configuration of resources, and parameters are expressed in key-value form. <br /> For details, please refer to the following examples |
-| - data.description | Object    | A description of the resource, in both English and Chinese.。 |
+| Name               | Type    | Description                                                                                                                            |
+|--------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------|
+| code               | Integer | 0                                                                                                                                      |
+| data               | Object  | Rule object                                                                                                                            |
+| - data.id          | String  | Resource ID                                                                                                                            |
+| - data.type        | String  | The name of the resource type to which the resource belongs                                                                            |
+| - data.config      | Object  | Configuration of resources, and parameters are expressed in key-value form. <br /> For details, please refer to the following examples |
+| - data.description | Object  | A description of the resource, in both English and Chinese.。                                                                          |
+
+### GET api/v4/resources
+Gets the details of all resource.
+
+**Success Response Body (JSON):**
+
+| Name               | Type    | Description                                                                                                                            |
+|--------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------|
+| code               | Integer | 0                                                                                                                                      |
+| data               | Array   | Rule object Array                                                                                                                      |
+| - data.id          | String  | Resource ID                                                                                                                            |
+| - data.type        | String  | The name of the resource type to which the resource belongs                                                                            |
+| - data.config      | Object  | Configuration of resources, and parameters are expressed in key-value form. <br /> For details, please refer to the following examples |
+| - data.description | Object  | A description of the resource, in both English and Chinese.。                                                                          |
 
 #### DELETE /api/v4/resources/{resource_id}
 Delete the resource
@@ -1840,9 +1854,9 @@ Delete the resource
 
 **Success Response Body (JSON):**
 
-| Name | Type | Description |
-| ---- | --------- | ----------- |
-| code | Integer   | 0           |
+| Name | Type    | Description |
+|------|---------|-------------|
+| code | Integer | 0           |
 
 **Examples:**
 

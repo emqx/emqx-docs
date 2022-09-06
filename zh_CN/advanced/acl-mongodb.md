@@ -189,7 +189,7 @@ db.mqtt_acl.insert({
 })
 ```
 
-启用 MongoDB ACL 后并以用户名 emqx 成功连接后，客户端应当数据具有相应的主题权限。
+启用 MongoDB ACL 后并以用户名 emqx 成功连接后，客户端应当具有相应的主题权限。
 
 
 ## 超级用户查询（super_query）
