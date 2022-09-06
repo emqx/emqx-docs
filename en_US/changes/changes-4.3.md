@@ -15,6 +15,32 @@ ref: undefined
 
 # Changes
 
+## Version 4.3.19
+
+*Release Date: 2022-08-29*
+
+### Enhancements
+
+- Improve the log when LwM2M packet parsing fails
+- Improve the rule engine error log, the log will contain the rule ID when the action execution fails
+- Improve log when `loaded_modules` and `loaded_plugins` files do not exist
+- Add a guide for changing the default password on Dashboard
+
+### Bug fixes
+
+- Fix `client.disconnected` event not trigger in some cases
+- Fix the issue that the built-in database authentication did not distinguish the pagination statistics of the authentication data of the client ID and username
+- Fix Redis driver process leak problem
+- Fix rule engine MQTT bridge to AWS IOT connection timeout issue
+- Fix `GET /listener` request crashing when listener is not ready
+- Fix the issue that the comparison between any variable and null value in the rule engine SQL always returns false after v4.3.12
+- Fix incorrectly managing `emqx_modules` applications as plugins
+- Fix the issue that when the execution priority of ExHook is higher than that of the rule engine, the topic filtered by the ExHook Message Hook will not trigger the rule engine
+- Fix the issue that the ExHook management process was forcibly killed due to the supervisor shutdown timeout
+- Fix the issue that the Client ID parameter in ExProto `client.connect` hook is not defined
+- Fix ExProto not triggering disconnect event when client is kicked
+
+
 ## Version 4.3.18
 
 *Release Date: 2022-08-11*
