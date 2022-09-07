@@ -97,6 +97,69 @@ EMQX 允许在认证阶段为客户端设置**超级用户**角色以及预设**
 
 权限预设目前仅 JWT 认证支持，允许通过 JWT Payload 携带当前客户端拥有的发布订阅权限列表，并在认证成功后预设到客户端。
 
+## 密码散列
+
+EMQX 支持多种密码散列算法以满足不同用户的安全性要求，用户可以在外部数据源中存储加盐、散列后的密码，密码散列算法配置在认证时的原理如下：
+
+1. 认证器使用配置的查询语句从数据库中查询符合条件的身份凭证，包括散列密码和盐值；
+2. 根据认证器配置的散列算法和查询到的盐值，对客户端连接时提供的密码进行散列；
+3. 将第 1 步从数据库查询到的散列密码和第 2 步计算出的散列值进行比较，一致则说明客户端的身份合法。
+
+以下为 EMQX 目前支持的散列算法：
+
+```hocon
+# simple algorithms
+password_hash_algorithm {
+  name = sha256             # plain, md5, sha, sha512
+  salt_position = suffix    # prefix, disable
+}
+
+# bcrypt
+password_hash_algorithm {
+  name = bcrypt
+}
+
+# pbkdf2
+password_hash_algorithm {
+  name = pbkdf2
+  mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
+  iterations = 4096
+  dk_length = 256           # optional
+}
+```
+
+我们建议用户使用加盐与密码散列的方式存储认证数据，明文密码会降低连接安全性应当禁止使用。
+
+## 认证占位符
+
+EMQX 允许使用占位符动态构造认证数据查询语句、HTTP 请求，占位符会在认证器执行时替换为真实的客户端信息，以构造出与当前客户端匹配的查询语句或 HTTP 请求。
+
+以 MySQL 认证器为例，默认的查询 SQL 中使用了 `${username}` 占位符：
+
+```sql
+SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1
+```
+
+当用户名为 `emqx_u` 的客户端连接认证时，实际执行认证数据查询 SQL 将被替换为：
+
+```sql
+SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
+```
+
+目前 EMQX 支持以下占位符：
+
+- `${clientid}`: 将在运行时被替换为客户端 ID。客户端 ID 一般由客户端在 `CONNECT` 报文中显式指定，如果启用了 `use_username_as_clientid` 或 `peer_cert_as_clientid`，则会在连接时被用户名、证书中的字段或证书内容所覆盖。
+
+- `${username}`: 将在运行时被替换为用户名。用户名来自 `CONNECT` 报文中的 `Username` 字段。如果启用了 `peer_cert_as_username`，则会在连接时被证书中的字段或证书内容所覆盖。
+
+- `${password}`: 将在运行时被替换为密码。密码来自 `CONNECT` 报文中的 `Password` 字段。
+
+- `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
+
+- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
+
+- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name），仅适用于 TLS 连接。
+
 ## 配置方式
 
 EMQX 提供了 3 种使用认证的配置方式，分别为：配置文件、HTTP API 和 Dashboard。
@@ -188,13 +251,13 @@ authentication = {
 
 EMQX 提供的认证 API 允许对认证链和认证器进行管理，例如为全局认证创建一个认证器，以及更新指定认证器的配置。
 
-- 用于管理 MQTT 全局认证的 API 端点为 `/api/v5/authentication`。
+- `/api/v5/authentication`: 管理 MQTT 全局认证
 
-- 用于管理 MQTT 监听器认证的 API 端点为 `/api/v5/listeners/{listener_id}/authentication`。
+- `/api/v5/listeners/{listener_id}/authentication`: 管理 MQTT 监听器认证
 
-- 用于管理其他接入协议的全局认证的 API 端点为 `/api/v5/gateway/{protocol}/authentication`。
+- `/api/v5/gateway/{protocol}/authentication`: 管理网关的全局认证
 
-- 用于管理其他接入协议的监听器认证的 API 端点为 `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`。
+- `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 管理网关监听器认证
 
 如果想要对指定认证器进行操作，则需要在上面这些端点后面追加一个认证器 ID，例如 `/api/v5/authentication/{id}`。为了便于维护，这里的 ID 并不是 EMQX 自动生成然后由 API 返回的，而是遵循了一套预先定义的规范：
 
@@ -243,67 +306,3 @@ Dashboard 底层调用了 HTTP API，提供了相对更加易用的可视化操�
 ![Dashboard 选择认证方式](./assets/authn-dashboard-1.png)
 
 ![Dashboard 认证器列表](./assets/authn-dashboard-2.png)
-
-## 密码散列
-
-EMQX 支持多种密码散列算法以满足不同用户的安全性要求，用户可以在外部数据源中存储加盐、散列后的密码，密码散列算法配置在认证时的原理如下：
-
-1. 认证器使用配置的查询语句从数据库中查询符合条件的身份凭证，包括散列密码和盐值；
-2. 根据认证器配置的散列算法和查询到的盐值，对客户端连接时提供的密码进行散列；
-3. 将第 1 步从数据库查询到的散列密码和第 2 步计算出的散列值进行比较，一致则说明客户端的身份合法。
-
-以下为 EMQX 目前支持的散列算法：
-
-```hocon
-# simple algorithms
-password_hash_algorithm {
-  name = sha256             # plain, md5, sha, sha512
-  salt_position = suffix    # prefix, disable
-}
-
-# bcrypt
-password_hash_algorithm {
-  name = bcrypt
-}
-
-# pbkdf2
-password_hash_algorithm {
-  name = pbkdf2
-  mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
-  iterations = 4096
-  dk_length = 256           # optional
-}
-```
-
-我们建议用户使用加盐与密码散列的方式存储认证数据，明文密码会降低连接安全性应当禁止使用。
-
-## 认证占位符
-
-EMQX 允许使用占位符动态构造认证数据查询语句、HTTP 请求，占位符会在认证器执行时替换为真实的客户端信息，以构造出与当前客户端匹配的查询语句或 HTTP 请求。
-
-
-以 MySQL 认证器为例，默认的查询 SQL 中使用了 `${username}` 占位符：
-
-```sql
-SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1
-```
-
-当用户名为 `emqx_u` 的客户端连接认证时，实际执行认证数据查询 SQL 将被替换为：
-
-```sql
-SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
-```
-
-目前 EMQX 支持以下占位符：
-
-- `${clientid}`: 将在运行时被替换为客户端 ID。客户端 ID 一般由客户端在 `CONNECT` 报文中显式指定，如果启用了 `use_username_as_clientid` 或 `peer_cert_as_clientid`，则会在连接时被用户名、证书中的字段或证书内容所覆盖。
-
-- `${username}`: 将在运行时被替换为用户名。用户名来自 `CONNECT` 报文中的 `Username` 字段。如果启用了 `peer_cert_as_username`，则会在连接时被证书中的字段或证书内容所覆盖。
-
-- `${password}`: 将在运行时被替换为密码。密码来自 `CONNECT` 报文中的 `Password` 字段。
-
-- `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
-
-- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
-
-- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name），仅适用于 TLS 连接。

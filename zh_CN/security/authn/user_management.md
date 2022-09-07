@@ -1,17 +1,17 @@
 # 用户管理 API
 
-一些 [认证器](./authn.md#认证器) (具有 `built_in_database` 后端) 将用户凭据存储在 EMQX 的内置数据库（Mnesia）中：
+以下 [认证器](./authn.md#认证器) 使用内置数据库（Mnesia）来实现认证数据的存储：
 
 - `password_based:built_in_database`
 - `scram:built_in_database`
 
 对于这些认证器，EMQX 提供了相关的 HTTP API 来管理用户凭据，支持创建、更新、删除和列出用户凭据。
 
-::: warning
-认证器之间的用户相互独立。
+::: tip
+认证器之间的数据相互独立。
 :::
 
-## API 端点
+## REST API
 
 用于 MQTT 全局认证的用户管理的 API 端点为 `/api/v5/authentication/{id}/users`。
 
@@ -38,7 +38,7 @@
 
 示例：
 
-```
+```bash
 curl -v -u admin:public -X 'POST' \
     -H 'Content-Type: multipart/form-data' \
     -F 'filename=@/tmp/myusers.csv' \
@@ -73,4 +73,3 @@ curl -v -u admin:public -X 'POST' \
     }
   ]
   ```
-
