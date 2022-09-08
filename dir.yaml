@@ -189,7 +189,10 @@
       children: 
         - dashboard/subscriptions/subscriptions
         - dashboard/subscriptions/topics
-
+    - title_en: Access Control
+      title_cn: 访问控制
+      children:
+        - dashboard/authn
 
 ## Developers & Testers
 
