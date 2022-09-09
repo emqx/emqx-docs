@@ -10,7 +10,7 @@
 
 ## 数据结构与查询指令
 
-Redis 认证器适用于存储到 Redis [hashes](https://redis.io/docs/manual/data-types/#hashes) 中的凭据，用户需要提供一个查询指令模板，且确保查询结果包含以下字段：
+Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-types/#hashes) 存储认证数据，用户需要提供一个查询指令模板，且确保查询结果包含以下字段：
 
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
@@ -42,8 +42,6 @@ cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
 :::
 
 ## 配置项
-
-
 
 此认证器支持 3 种部署模式的 Redis，详细配置请参考 [authn-redis:standalone](../../admin/cfg.md#authn-redis:standalone)、[authn-redis:sentinel](../../admin/cfg.md#authn-redis:sentinel) 与 [authn-redis:cluster](../../admin/cfg.md#authn-redis:cluster)。
 

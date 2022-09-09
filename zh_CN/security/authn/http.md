@@ -10,7 +10,7 @@ HTTP 认证使用外部自建 HTTP 应用作为数据源，根据 HTTP API 返�
 
 ## 请求格式与返回结果
 
-当 MQTT 客户端连接到 EMQX 时，HTTP 认证器会根据配置的请求模板构造并发送请求。用户需要在认证服务中实现认证逻辑并按以下要求返回结果：
+当客户端连接到 EMQX 时，HTTP 认证器会根据配置的请求模板构造并发送请求。用户需要在认证服务中实现认证逻辑并按以下要求返回结果：
 
 - 响应编码格式 `content-type` 必须是 `application/json`
 - 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 4xx/5xx 状态码时判定结果为 `ignore`，继续执行认证链
@@ -161,7 +161,7 @@ Content-Type: application/json
 
 ### headers
 
-用于配置 HTTP 认证请求中的 Headers，可选。
+配置 HTTP 认证请求中的 Headers，可选。
 
 对于 `GET` 请求有以下默认 Headers：
 
