@@ -193,6 +193,7 @@
       title_cn: 访问控制
       children:
         - dashboard/authn
+        - dashboard/blacklist
 
 ## Developers & Testers
 
