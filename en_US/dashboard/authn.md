@@ -85,7 +85,7 @@ You can get the latest JWKS from the `JWKS Endpoint` periodically, which is esse
 
 For more details about JWT, please visit [JWT Authentication](../security/authn/jwt.md).
 
-After completing the configuration, just click `Create`.
+After completing the configuration, just click `Create`. Note: It is not available to reselect a backend that has been used for authentication.
 
 ## List
 
