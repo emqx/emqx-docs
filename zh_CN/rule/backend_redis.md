@@ -18,7 +18,7 @@ $ redis-server
 
 填写规则 SQL:
 
-```bash
+```sql
 SELECT * FROM "t/#"
 ```
 

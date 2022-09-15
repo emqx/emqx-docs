@@ -7104,7 +7104,7 @@ rule-engine.events.client_connected = on, qos1
 
 如果禁用此选项，事件消息将不会发布，但事件规则仍然可以使用。例如，即使 `rule_engine.events.client_connected = off`，以下规则仍然可以使用:
 
-```
+```SQl
 SELECT * FROM "$events/client_connected"
 ```
 

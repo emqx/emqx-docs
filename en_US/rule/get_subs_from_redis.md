@@ -18,7 +18,7 @@ Open [EMQX Dashboard](http://127.0.0.1:18083/#/rules) and select the "Rules" tab
 
 Then fill in the rule SQL:
 
-```bash
+```sql
 SELECT * FROM "$events/client_connected"
 ```
 

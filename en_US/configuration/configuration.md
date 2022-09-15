@@ -7065,7 +7065,7 @@ If this option is enabled, the rules engine will publish system messages using t
 
 If this option is disabled, event messages will not be published, but event rules can still be used. For example, even if `rule_engine.events.client_connected = off`, the following rules can still be used:
 
-```
+```sql
 SELECT * FROM "$events/client_connected"
 ```
 

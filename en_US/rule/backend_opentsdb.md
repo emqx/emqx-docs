@@ -15,7 +15,7 @@ Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 
 Select "message.publish", then type in the following SQL:
 
-```bash
+```sql
 SELECT
     payload.metric as metric, payload.tags as tags, payload.value as value
 FROM

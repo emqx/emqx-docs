@@ -57,7 +57,7 @@ FROM说明
 
 ​	**$events/message_acked**: 订阅者回复消息ACK后触发删除已经被接收的离线消息
 
-```bash
+```sql
 SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE topic =~ 't/#'
 ```
 
