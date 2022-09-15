@@ -99,6 +99,11 @@ Example of use in Redis authorizer:
 }
 ```
 
+::: warning
+If a value for a placeholder is absent then the placeholder is rendered as an ampty string. For example, a template
+`HGETALL mqtt_user:${username}` will be rendered as `HGETALL mqtt_user:` if a username is not provided by an MQTT client.
+:::
+
 ### Topic Placeholders
 
 When authentication rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.

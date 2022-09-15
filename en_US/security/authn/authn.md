@@ -78,7 +78,7 @@ The following example mainly shows the configuration method of global authentica
 ```
 # emqx.conf
 
-# Specific global authentication chain for all MQTT listeners 
+# Specific global authentication chain for all MQTT listeners
 authentication = [
   ...
 ]
@@ -120,7 +120,7 @@ authentication = {
   redis_type = single
   database = 1
   password = public
-  
+
   cmd = "HMGET mqtt_user:${username} password_hash salt is_superuser"
   password_hash_algorithm {
     name = plain
@@ -140,7 +140,7 @@ authentication = {
   mechanism = password_based
   backend = built_in_database
   enable = false
-  
+
   user_id_type = username
   password_hash_algorithm {
     name = sha256
@@ -284,3 +284,8 @@ Example of use (in Redis password-based authenticator):
 ```
 
 When a client with clientid `id2718` tries to connect, a Redis query `HMGET users:id2718 password_hash salt is_superuser` is performed to search credentials.
+
+::: warning
+If a value for a placeholder is absent then the placeholder is rendered as an ampty string. For example, a template
+`HMGET users:${username} password_hash salt is_superuser` will be rendered as `HMGET users: password_hash salt is_superuser` if a username is not provided by an MQTT client.
+:::
