@@ -20,7 +20,7 @@ clickhouse-client
 ```
 
 创建 “mqtt” 数据库:
-```bash
+```sql
 create database mqtt;
 ```
 创建 mqtt_sub 表:
@@ -46,7 +46,7 @@ create table mqtt_sub (
 
 然后填写规则 SQL:
 
-```bash
+```sql
 SELECT * FROM "$events/client_connected"
 ```
 

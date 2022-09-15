@@ -25,7 +25,7 @@ $ ./bin/pulsar-admin topics create-partitioned-topic -p 5 testTopic
 
 填写规则 SQL:
 
-```bash
+```sql
 SELECT * FROM "t/#"
 ```
 
