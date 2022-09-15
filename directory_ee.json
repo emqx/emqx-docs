@@ -343,6 +343,10 @@
               "path": "rule/backend_influxdb"
             },
             {
+              "title": "保存数据到 InfluxDB V2",
+              "path": "rule/backend_influxdb_v2"
+            },
+            {
               "title": "保存数据到 TimescaleDB",
               "path": "rule/backend_timescaledb"
             },
@@ -1100,6 +1104,10 @@
             {
               "title": "Save data to InfluxDB",
               "path": "rule/backend_influxdb"
+            },
+            {
+              "title": "Save data to InfluxDB V2",
+              "path": "rule/backend_influxdb_v2"
             },
             {
               "title": "Save data to TimescaleDB",
