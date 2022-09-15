@@ -1,9 +1,4 @@
-<a id="org198b209"></a>
-
 # Listener
-
-
-<a id="orgd4251a1"></a>
 
 ## Introduction
 
@@ -23,17 +18,12 @@ EMQX Broker provides 4 Listeners by default, and they will occupy the following 
 
 | Port            | Description             |
 | ----------------| ----------------------- |
-| 8883            | MQTT/SSL protocol port  |
 | 1883            | MQTT/TCP protocol port  |
+| 8883            | MQTT/SSL protocol port  |
 | 8083            | MQTT/WS protocol port   |
 | 8084            | MQTT/WSS protocol port  |
 
-<a id="org69700c5"></a>
-
 ## Quick Start
-
-
-<a id="org67b1907"></a>
 
 ### Configuration
 
@@ -56,17 +46,17 @@ listeners.tcp.demo {
 }
 ```
 
-<a id="org796d08a"></a>
-
 ### API
 
 In addition to supporting settings using configuration, listener also support operations such as adding, deleting, modifying, starting, and stopping through HTTP API, for example:
 
-Add a listener which named `demo`:
+Add a `TCP` listener which named `demo`:
+
+API: `POST http://127.0.0.1:1883/api/v5/listeners`
 
 ```
 curl -X 'POST' \
-     'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
+     'http://127.0.0.1:18083/api/v5/listeners' \
      -H 'accept: application/json' \
      -H 'Content-Type: application/json' \
      -d '{
@@ -76,7 +66,7 @@ curl -X 'POST' \
   ],
   "bind": "0.0.0.0:1884",
   "current_connections": 10240,
-  "id": "tcp:demo",
+  "name": "demo",
   "max_connections": 204800,
   "mountpoint": "/",
   "proxy_protocol": false,
@@ -99,6 +89,8 @@ curl -X 'POST' \
 
 Start the `demo` listener:
 
+API: `POST http://127.0.0.1:1883/api/v5/listeners/{type}:{name}/start`
+
 ```
 curl -X 'POST' \
      'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/start' \
@@ -107,6 +99,9 @@ curl -X 'POST' \
 ```
 
 Stop it:
+
+API: `POST http://127.0.0.1:1883/api/v5/listeners/{type}:{name}/stop`
+
 
 ```
 curl -X 'POST' \
@@ -117,10 +112,13 @@ curl -X 'POST' \
 
 Delete it:
 
+API: `POST http://127.0.0.1:1883/api/v5/listeners/{type}:{name}`
+
+
 ```
 curl -X 'DELETE' \
      'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
      -H 'accept: */*'
 ```
 
-There is more detailed listener API information in the API documentation, you can check it for more information.
+For more API and details, please see [API](api.md)

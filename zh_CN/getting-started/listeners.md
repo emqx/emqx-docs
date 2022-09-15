@@ -1,9 +1,4 @@
-<a id="org198b209"></a>
-
 # 监听器
-
-
-<a id="orgd4251a1"></a>
 
 ## 简介
 
@@ -23,18 +18,16 @@ EMQX 默认提供 4 个监听器，它们将占用以下端口：
 
 | 端口             | 说明                    |
 | ----------------| ----------------------- |
-| 8883            | MQTT/SSL protocol port  |
 | 1883            | MQTT/TCP protocol port  |
+| 8883            | MQTT/SSL protocol port  |
 | 8083            | MQTT/WS protocol port   |
 | 8084            | MQTT/WSS protocol port  |
-
-<a id="org67b1907"></a>
 
 ### 通过配置进行添加
 
 监听器配置项的命名规则为 `listener.<Protocol>.<Listener Name>.xxx`， `<Protocol>` 即 Listener 使用的协议。 `<Listener Name>` 可以随意命名，但建议是全小写的英文单词， `xxx` 则是具体的配置项。不同协议的 Listener 的 `<Listener Name>` 可以重复。
 
-由于默认配置的存在，我们能够非常快速地展示如何添加新的监听器，以 TCP 监听器为例，我们只需要在 `emqx.conf` 中添加以下一条配置即可：
+由于默认配置的存在，我们能够非常快速地添加新的监听器，以 TCP 监听器为例，我们只需要在 `emqx.conf` 中添加以下一条配置即可：
 
 ```
 listeners.tcp.demo.bind = "0.0.0.0:1883"
@@ -50,18 +43,17 @@ listeners.tcp.demo {
 }
 ```
 
-<a id="org796d08a"></a>
-
 ### 使用 API 进行操作
 
 监听器除了支持使用配置文件进行设置外，还支持通过 HTTP API 进行添加、删除、修改、启动、停止等操作，例如：
 
-添加一个名为 `demo` 的监听器:
+添加一个名为 `demo` 的 TCP 监听器:
 
+API: `POST http://127.0.0.1:1883/api/v5/listeners`
 
 ```
 curl -X 'POST' \
-     'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
+     'http://127.0.0.1:18083/api/v5/listeners' \
      -H 'accept: application/json' \
      -H 'Content-Type: application/json' \
      -d '{
@@ -71,7 +63,7 @@ curl -X 'POST' \
   ],
   "bind": "0.0.0.0:1884",
   "current_connections": 10240,
-  "id": "tcp:demo",
+  "name": "demo",
   "max_connections": 204800,
   "mountpoint": "/",
   "proxy_protocol": false,
@@ -94,6 +86,8 @@ curl -X 'POST' \
 
 启动 `demo`:
 
+API: `POST http://127.0.0.1:1883/api/v5/listeners/{type}:{name}/start`
+
 ```
 curl -X 'POST' \
      'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo/start' \
@@ -102,6 +96,8 @@ curl -X 'POST' \
 ```
 
 停止:
+
+API: `POST http://127.0.0.1:1883/api/v5/listeners/{type}:{name}/stop`
 
 ```
 curl -X 'POST' \
@@ -112,10 +108,12 @@ curl -X 'POST' \
 
 删除:
 
+API: `POST http://127.0.0.1:1883/api/v5/listeners/{type}:{name}`
+
 ```
 curl -X 'DELETE' \
      'http://127.0.0.1:18083/api/v5/listeners/tcp%3Ademo' \
      -H 'accept: */*'
 ```
 
-在 API 文档中有，有更多和更详细的监听器 API 信息，这里就不再一一列举了。
+更详细的监听器 API 信息，请参见 [API 文档](api.md)
