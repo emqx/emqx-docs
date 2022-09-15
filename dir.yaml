@@ -195,6 +195,10 @@
         - dashboard/authn
         - dashboard/authz
         - dashboard/blacklist
+    - title_en: Data Integration
+      title_cn: 数据集成
+      children:
+        - dashboard/bridge
 
 ## Developers & Testers
 
