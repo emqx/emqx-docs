@@ -283,3 +283,8 @@ password_hash_algorithm {
 
 当客户端 ID 为 `id2718` 的客户端尝试连接时，Redis 查询 `HMGET users:id2718 password_hash salt is_superuser` 将被执行以搜索凭据。
 
+::: warning
+如果该占位符的值不存在时，它最终会被替换为一个空字符串。例如，当客户端未提供用户名时：
+
+`HMGET users:${username} password_hash salt is_superuser` 会被替换为 `HMGET users: password_hash salt is_superuser`
+:::
