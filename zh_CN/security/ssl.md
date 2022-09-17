@@ -31,8 +31,8 @@ listeners.ssl.default {
   ssl_options.verify = verify_peer
 
   ssl_options.versions = ["tlsv1.3", "tlsv1.2", "tlsv1.1", "tlsv1"]
-  tcp.backlog = 1024
-  tcp.buffer = 4KB
+  tcp_options.backlog = 1024
+  tcp_options.buffer = 4KB
 }
 ```
 
