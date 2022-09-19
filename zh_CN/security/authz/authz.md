@@ -97,6 +97,12 @@ Redis Authorizer 配置中使用占位符的例子：
 }
 ```
 
+::: warning
+如果该占位符的值不存在时，它最终会被替换为一个空字符串。例如，当客户端未提供用户名时：
+
+`HMGET users:${username} password_hash salt is_superuser` 会被替换为 `HMGET users: password_hash salt is_superuser`
+:::
+
 ### 主题占位符
 
 在 Authorizer 后端返回的规则中，MQTT 主题是字符串格式。这些字符串会被当作模版进行占位符的替换。
