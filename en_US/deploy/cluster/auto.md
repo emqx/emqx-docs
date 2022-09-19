@@ -20,19 +20,19 @@ EMQX supports multiple autocluster strategies:
 | etcd     | Discovery via etcd                      |
 | k8s      | Discovery via Kubernetes service        |
 
-### static
+### `static`
 Configure a fixed node list to automatically discover and create clusters:
 
 ```bash
 cluster {
     discovery_strategy = static
     static {
-        seeds = ["emqx@s1.emqx.io", "emqx@s2.emqx.io"] 
+        seeds = ["emqx@s1.emqx.io", "emqx@s2.emqx.io"]
     }
 }
 ```
 
-### mcast
+### `mcast`
 
 Automatically discover and create clusters based on UDP multicast:
 
@@ -92,7 +92,7 @@ cluster {
 }
 ```
 
-### kubernetes
+### Kubernetes
 
 Automatically discover and create clusters based on [Kubernetes](https://kubernetes.io/):
 

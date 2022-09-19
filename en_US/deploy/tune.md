@@ -2,14 +2,13 @@
 
 This guide includes in general tuning suggestions for benckmark and deployment.
 
-## Turn off swap
+## Turn off Swap
 
-Linux swap partitions may cause nondeterministic memory latency to an Erlang virtual machine,
-which in turn significantly affects the system stability.
-It is recommended to turn off swap permanently.
+Linux swap partitions may cause nondeterministic memory latency to an Erlang virtual machine, significantly affecting the system stability.
+It is recommended to turn off the swap permanently.
 
-To turn off swap immediately, execute command `sudo swapoff -a`.
-To turn off swap permanently, comment out the `swap` line in `/etc/fstab` and reboot the host
+To turn off swap immediately, execute the command `sudo swapoff -a`.
+To turn off swap permanently, comment out the `swap` line in `/etc/fstab` and reboot the host.
 
 ## Linux Kernel Tuning
 
@@ -22,13 +21,13 @@ sysctl -w fs.nr_open=2097152
 echo 2097152 > /proc/sys/fs/nr_open
 ```
 
-The limit on opened file handles for current session:
+The limit on opened file handles for the current session:
 
 ```bash
 ulimit -n 2097152
 ```
 
-### /etc/sysctl.conf
+### `/etc/sysctl.conf`
 
 Persist 'fs.file-max' configuration to `/etc/sysctl.conf`:
 
@@ -42,10 +41,9 @@ Set the maximum number of file handles for the service in `/etc/systemd/system.c
 DefaultLimitNOFILE=2097152
 ```
 
-### emqx.service
+### `emqx.service`
 
-Set the maximum number of file handles for emqx service in one of below paths depending
-on which Linux distribution is in use.
+Set the maximum number of file handles for emqx service in one of the below paths depending on which Linux distribution is used.
 
 - `/usr/lib/systemd/system/emqx.service`
 - `/lib/systemd/system/emqx.service`
@@ -54,7 +52,7 @@ on which Linux distribution is in use.
 LimitNOFILE=2097152
 ```
 
-### /etc/security/limits.conf
+### `/etc/security/limits.conf`
 
 Persist the maximum number of opened file handles for users in `/etc/security/limits.conf`:
 
@@ -101,7 +99,7 @@ sysctl -w net.netfilter.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 ```
 
-TIME-WAIT Bucket Pool, Recycling and Reuse:
+TIME-WAIT Bucket Pool, Recycling, and Reuse:
 
 ```bash
 sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
@@ -119,7 +117,7 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang VM Tuning
 
-Tuning and optimize the Erlang VM in etc/emq.conf file: :
+Tune and optimize the Erlang VM in etc/emq.conf file: :
 
 ```bash
 ## Erlang Process Limit
@@ -133,7 +131,7 @@ node.max_ports = 2097152
 
 Tune the acceptor pool size and `max_connections` limit in `etc/emqx.conf`.
 
-E.g, for TCP listener:
+E.g, for TCP listeners:
 
 ```bash
 ## TCP Listener
@@ -143,14 +141,15 @@ listeners.tcp.$name.max_connections = 1024000
 
 ## Client Machine Tuning
 
-Tune the client machine to benchmark emqttd broker:
+Tune the client machine to benchmark EMQX broker:
 
-```bash
+```
 sysctl -w net.ipv4.ip_local_port_range="500 65535"
 echo 1000000 > /proc/sys/fs/nr_open
 ulimit -n 100000
 ```
 
-### emqtt_bench
 
- Test tool for concurrent connections: [emqtt_bench](http://github.com/emqx/emqtt_bench)
+### MQTT Benchmarking
+
+Test tools for concurrent connections: [emqtt_bench](https://github.com/emqx/emqtt_bench).
