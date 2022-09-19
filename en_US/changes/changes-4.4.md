@@ -15,6 +15,22 @@ ref:
 
 # Changes
 
+## Version 4.4.9
+
+*Release Date: 2022-09-17*
+
+### Enhancements
+
+- The `exp`, `nbf` and `iat` claims in JWT authentication support non-integer timestamps
+
+### Bug fixes
+
+- Fix rule engine update behaviour which may initialize actions for disabled rules
+- Fix inaccurate delayed publish due to OS time changes
+- Fix the issue that the IP address bound to the Dashboard listener did not take effect
+- Fix the issue that shared subscriptions might get stuck in an infinite loop when `shared_dispatch_ack_enabled` is set to true
+- Fix the issue that the rule engine SQL crashes when subject matching null values
+
 ## Version 4.4.8
 
 *Release Date: 2022-08-29*
