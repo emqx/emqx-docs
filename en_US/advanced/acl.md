@@ -100,21 +100,22 @@ ACL is a collection of allowing and denying conditions. The following elements a
 
 {% emqxee %}
 
-When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from bottom to top:
+When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from top to bottom:
 
 {% endemqxee %}
 
 {% emqxce %}
 
-When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from bottom to top:
+When there are multiple ACL rules at the same time, EMQX will merge them in order according to the rules. Taking the default ACL in ACL file as an example, it loads the rule from top to bottom:
 
 {% endemqxce %}
 
 
-1. The first rule allows clients to publish and subscribe to all topics
-2. The second rule prohibits all clients from subscribing to the topics `$SYS/#` and `#`
-3. The third rule allows clients with IP address `127.0.0.1` to publish/subscribe to the topics ` $SYS/# `and `# `, which makes a special case for the second rule
-4. The fourth rule allows clients with the username `dashboard` to subscribe to the topic ` $SYS/# `, which makes a special case for the second rule
+1. The first rule allows clients with the username `dashboard` to subscribe to the topic ` $SYS/# `, which makes a special case for the second rule 
+2. The second rule allows clients with IP address `127.0.0.1` to publish/subscribe to the topics ` $SYS/# `and `# `, which makes a special case for the second rule
+3. The third rule prohibits all clients from subscribing to the topics `$SYS/#` and `#`
+4. The fourth rule allows clients to publish and subscribe to all topics
+
 
 ```erlang
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
