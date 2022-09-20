@@ -1,62 +1,53 @@
 # Cluster Security
 
-When it comes to the security of the EMQX cluster there two primary
+When it comes to the security of the EMQX cluster, there two primary
 aspects to consider.
 
 * Secure the ports each node listens on for clustering.
-* Keep the Erlang cookie secret, see `node.cookie` config.
+* Keep the Erlang cookie secret. See` node.cookie` config.
 
 ::: tip Tip
-It's a good practice keep the clustering ports internal by configuring
-firewall rules e.g. AWS security groups, or iptables.
+It's a good practice to keep the clustering ports internal by configuring
+firewall rules e.g., AWS security groups or iptables.
 :::
 
-## Intra-cluster communication ports
+## Intra-cluster Communication Ports
 
-To form a cluster, EMQX nodes need to connect to each other through some conventional
-port numbers.
+To form a cluster, EMQX nodes need to connect to each other through some conventional port numbers.
 
-If there is a firewall between the cluster nodes, the conventional listening ports
-should be allowed for other nodes in the cluster to reach.
+If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach.
 
 There are two different channels for EMQX nodes to communicate with each other.
 
 ### The Erlang Distribution Ports
 
 ::: tip Tip
-EMQX uses a conventional port mapping mechanism,
-but does **NOT** use [Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/doc/man/epmd.html)
+EMQX uses a conventional port mapping mechanism, but does **NOT** use [Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/doc/man/epmd.html)
 :::
 
-Erlang distribution port: `ListeningPort = BasePort + Offset`,
-where `BasePort` is 4370 (which is not made configurable), and `Offset` is the numeric
-suffix of the node's name. If the node name does not have a numeric suffix, `Offsset` is 0.
+Erlang distribution port: `ListeningPort = BasePort + Offset`, where `BasePort` is 4370 (which is not made configurable), and `Offset` is the numeric suffix of the node's name. If the node name does not have a numeric suffix, `Offsset` is 0.
 
-For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the
-node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
+For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
 
 ### The Cluster RPC Port
 
-By default, each emqx node also listens on a (conventional) port for the RPC channels,
-which should be allowed by the firewall.
+By default, each emqx node also listens on a (conventional) port for the RPC channels, which should be allowed by the firewall.
 
-The port mapping rule is similar to the port mapping rules for Erlang distribution,
-only `BasePort` is `5370`.
+The port mapping rule is similar to the port mapping rules for Erlang distribution, only `BasePort` is `5370`.
 
-That is, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node
-listen on port `5370`, and port `5371` for `emqx1` (or `emqx-1`), and so on.
+That is, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370`, and port `5371` for `emqx1` (or `emqx-1`), and so on.
 
 ::: tip
 EMQX in a docker container uses static port `5369` for cluster RPC.
 :::
 
-### Using TLS for Cluster RPC connections
+### Using TLS for Cluster RPC Connections
 
 ::: warning
 TLS comes at the cost of increased CPU load and RAM usage
 :::
 
-To configure TLS for cluster RPC below configs should be set in emqx.conf
+To configure TLS for cluster RPC below configs should be set in `emqx.conf`.
 
 Ensure the following configs in `emqx.conf`.
 
@@ -69,7 +60,7 @@ rpc {
 }
 ```
 
-Below are the steps to gnerate certificates and a self-signed CA.
+Below are the steps to generate certificates and a self-signed CA.
 
 1. Create a root CA using `openssl` tool:
 
@@ -78,7 +69,7 @@ Below are the steps to gnerate certificates and a self-signed CA.
    openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout ca.key -out ca.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
    ```
 
-2. Generate CA-signed certificates for the nodes using the ca.pem created at step 1:
+2. Generate CA-signed certificates for the nodes using the `ca.pem` created at step 1:
 
    ```
    # Create a private key:
@@ -98,17 +89,16 @@ Below are the steps to gnerate certificates and a self-signed CA.
    ```
    All the nodes in the cluster must use certificates signed by the same CA.
 
-3. Put the generated `domain.pem`, `domain.key` and `ca.pem` files on each node of the cluster.
-   Make sure the emqx user can read these files, and permissions are set to `600`.
+3. Put the generated `domain.pem`, `domain.key`, and `ca.pem` files on each cluster node.
+   Ensure the emqx user can read these files, and permissions are set to `600`.
 
-### Using TSL for Erlang distribution
+### Using TLS for Erlang distribution
 
 ::: warning
 TLS comes at the cost of increased CPU load and RAM usage
 :::
 
-Erlang distribution is used by EMQX nodes to sync database updates
-and ad-hoc cluster-wide such as collecting runtime metrics etc.
+Erlang distribution is used by EMQX nodes to sync database updates and ad-hoc cluster-wide such as collecting runtime metrics etc.
 
 * Make sure to verify the ssl_dist.conf file has the right paths to keys and certificates.
 * Ensure config `cluster.proto_dist` is set to `inet_tls`.

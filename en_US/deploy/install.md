@@ -1,18 +1,21 @@
 # Installation
 
-EMQX binary packages are released on below operating systems:
+EMQX binary packages are released on the below operating systems:
 
 + EL7 (RedHat 7, CentOS 7)
 + EL8 (RedHat 8, RockyLinux 8, AmazonLinux 2022)
 + Raspbian 10
 + Debian 9
 + Debian 10
++ Debian 11
 + Ubuntu 16.04
 + Ubuntu 18.04
 + Ubuntu 20.04
-+ macOS 10
 + macOS 11
 + Windows Server 2019
+
+For EL8 and Ubuntu 20.04 there are also packages built with [Elixir](https://elixir-lang.org/)'s [Mix](https://hexdocs.pm/mix/Mix.html).
+They support plugins written in Elixir and have debug console powered with [IEx](https://hexdocs.pm/iex/IEx.html).
 
 ## Running EMQX in Docker
 
@@ -96,8 +99,7 @@ For more information about EMQX Docker please visit [Docker Hub](https://hub.doc
 ## Package Installation (Linux)
 
 :::warning
-EMQX starts as `emqx@127.0.0.1` by default and the node name will be written
-as a part of the builtin database.
+EMQX starts as `emqx@127.0.0.1` by default, and the node name will be written as a part of the built-in database.
 Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a different name.
 :::
 
@@ -127,7 +129,7 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
       sudo apt install path/to/emqx-full-package-name.deb
       ```
 
-3. Start EMQX and check status
+3. Start EMQX and check the status
 
       - quick start
 
@@ -143,13 +145,13 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
         sudo systemctl start emqx
         ```
 
-4.  Stop EMQX
+4. Stop EMQX
 
     ```shell
     $ emqx stop
     ```
 
-5.  Uninstall EMQX
+5. Uninstall EMQX
 
     + DEB:
 
@@ -163,21 +165,21 @@ Purge database directory `/var/lib/emqx/data/mnesia` before starting it with a d
       sudo yum remove emqx
       ```
 
-## tgz (Linux, macOS, Windows)
+## `tar.gz` (Linux, macOS, Windows)
 
 ::: warning
-tar.gz packages are released for quick testing and hot-beam upgrades.
-Do NOT install tar.gz packages for production unless
+`tar.gz` packages are released for quick testing and hot-beam upgrades.
+Do NOT install `tar.gz` packages for production unless
 you know how to manually resolve all the runtime dependencies.
 :::
 
 ::: warning
-The EMQX digital signature work on macOS has not been completed, and the installation and startup of the tgz package may be blocked by [Gatekeeper](https://support.apple.com/zh-cn/guide/security/sec5599b66df/web).
+The EMQX digital signature work on macOS has not been completed, and the installation and startup of the `tar.gz` package may be blocked by [Gatekeeper](https://support.apple.com/zh-cn/guide/security/sec5599b66df/web).
 
 When you encounter a prompt like **“erl” cannot be opened because the developer cannot be verified** or **“erlang_jq_port” cannot be opened because the developer cannot be verified** at startup, solve this as follows:
 
 
-Remove the extended attribute `com.apple.quarantine` of tgz file or folder:
+Remove the extended attribute `com.apple.quarantine` of `tar.gz` file or folder:
 
   ```shell
   xattr -d com.apple.quarantine emqx-full-package-name.tar.gz
@@ -185,7 +187,7 @@ Remove the extended attribute `com.apple.quarantine` of tgz file or folder:
   xattr -r -d com.apple.quarantine ./emqx
   ```
 
-Please verify the SHA256 of the file when using this operation to ensure the integrity of the installation package, so as not to introduce additional security risks.
+Please verify the SHA256 of the file when using this operation to ensure the integrity of the installation package so as not to introduce additional security risks.
 :::
 
 {% emqxce %}
@@ -206,7 +208,7 @@ Please verify the SHA256 of the file when using this operation to ensure the int
      tar -zxf emqx-full-package-name.tar.gz
      ```
 
-3. Start EMQX and check status
+3. Start EMQX and check the status
 
     ```shell
     ./bin/emqx start
@@ -236,10 +238,11 @@ Please verify the SHA256 of the file when using this operation to ensure the int
 
   ```shell
   $ helm search repo emqx
-  NAME         CHART VERSION APP VERSION DESCRIPTION
-  emqx/emqx    v4.0.0        v4.0.0      A Helm chart for EMQX
-  emqx/emqx-ee v4.0.0        v4.0.0      A Helm chart for EMQX
-  emqx/kuiper  0.1.1         0.1.1       A lightweight IoT edge analytic software
+  NAME                CHART VERSION APP VERSION DESCRIPTION
+  emqx/emqx           5.0.3         5.0.3       A Helm chart for EMQX
+  emqx/emqx-ee        4.4.5         4.4.5       A Helm chart for EMQ X
+  emqx/emqx-operator  1.0.7         1.2.2       A Helm chart for EMQX Operator Controller
+  emqx/kuiper         0.9.0         0.9.0       A lightweight IoT edge analytic software
   ```
 
 3. Start EMQX cluster

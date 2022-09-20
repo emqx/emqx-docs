@@ -10,8 +10,7 @@ ourselves with Erlang/OTP.
 Erlang/OTP is originally a programming language platform designed by Ericsson
 for the development of telecommunication equipment systems.
 
-Telecommunication equipment (routers, access gateways) is typically a distributed
-system that connects the main control board and multiple business boards through
+Telecommunication equipment (routers, access gateways) is typically a distributed system that connects the main control board and multiple business boards through
 the backplane.
 
 ## Distributed Erlang
@@ -19,7 +18,7 @@ the backplane.
 The distributed programs of the Erlang/OTP platform are composed of distributed
 interconnected Erlang runtime systems.
 Each Erlang runtime system is called a node.
-Nodes are interconnected by TCP to form a network (or a cluster in this context).
+Nodes are interconnected with TCP to form a network (or a cluster in this context).
 
 Erlang nodes are identified by a unique node name, which consists of two parts
 separated by `@`:
@@ -29,8 +28,7 @@ separated by `@`:
 ```
 
 Communication between nodes is addressed by node name.
-For example, start four shell terminals locally, and then use the `-name` parameter
-to start four Erlang nodes respectively:
+For example, start four shell terminals locally and then use the `-name` parameter to start four Erlang nodes, respectively:
 
 ```bash
 erl -name node1@127.0.0.1 -setcookie my_nodes
@@ -145,21 +143,19 @@ and forwards the message to the relevant node according to the message topic,
 and then the relevant node retrieves the local subscription table and sends the message to the
 relevant subscriber.
 
-For example, when client1 publishes a message to the topic `t/a`.
+For example, when `client1` publishes a message to the topic `t/a`.
 The routing and distribution of the message between nodes are as follows:
 
-1. Client1 publishes a message with the topic `t/a` to the node1.
-2. By querying the topic tree, node1 learns that `t/a` matches two existing topics
+1. Client1 publishes a message with the topic `t/a` to the `node1`.
+2. By querying the topic tree, `node1` learns that `t/a` matches two existing subscriptions
    of `t/a` and `t/#`.
-3. By querying the route table, node1 learns that topic `t/a` has subscribers only
-   on node3, and topic `t/#` has subscribers only on node2.
-   So node1 forwards the message to node2 and node3.
+3. By querying the route table, `node1` learns that topic `t/a` has subscribers only
+   on `node3`, and topic `t/#` has subscribers only on `node2`.
+   So `node1` forwards the message to `node2` and `node3`.
 4. After node2 receives the forwarded `t/a` message,
    it queries the local subscription table to obtain the subscribers who have subscribed to
    `t/#` on that node and distributes the message to them.
-5. After node3 receives the forwarded `t/a` message, it queries the local subscription table
-   to obtain the subscribers who have subscribed to `t/a` on that node and distributes
-   the message to them.
+5. After `node3` receives the forwarded `t/a` message, it queries the local subscription table to obtain the subscribers who have subscribed to `t/a` on that node and distributes the message to them.
 6. Message forwarding and distribution are finished.
 
 ### Data partition and sharing
@@ -190,7 +186,7 @@ EMQX supports multiple node discovery strategies:
 ### EMQX Broker Cluster protocol settings
 
 Each node in the Erlang cluster can be connected through TCP or TLS,
-and the connection method can be configured in`etc/emqx.conf`:
+and the connection method can be configured in `etc/emqx.conf`:
 
 | Configuration name    | Type      | Default value       | Description                                                                                                                                         |
 |-----------------------|-----------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -199,7 +195,7 @@ and the connection method can be configured in`etc/emqx.conf`:
 
 ## Network Partition Autoheal
 
-*EMQX* supports Network Partition Autoheal, which can be configure in `etc/emqx.conf`:
+*EMQX* supports Network Partition Autoheal, which can be configured in `etc/emqx.conf`:
 
 ```bash
 cluster.autoheal = on
@@ -210,8 +206,8 @@ Network Partition Autoheal Process:
 1. The node performs Network Partition confirmation 3 seconds after receiving the
    `inconsistent_database` event from Mnesia;
 2. After the node confirms that the Network Partition has occurred,
-   it reports the message to the Leader node (the earliest start node in the cluster);
-3. After the Leader node delays for a period of time, it create a
+   it reports the message to the Leader node (the oldest node in the cluster by uptime);
+3. After the Leader node delays for a period of time, it creates a
    SplitView when all nodes are online;
 4. The Leader node selects the self-healing Coordinator node in the majority partition;
 5. The Coordinator node restarts the minority partition node to restore the cluster.
@@ -223,12 +219,12 @@ Network Partition Autoheal Process:
 ```bash
 cluster.autoclean = 5m
 ```
-With this enabled, the disconnected node is automaticaly removed from the cluster
+With this enabled, the disconnected node is automatically removed from the cluster
 after the configured time interval.
 
 ## What's Next
 
-After a bit of learning, it's time to start clustering EMQX nodes.
+After some learning, it's time to start clustering EMQX nodes.
 
 * Learn more about the [security](./security.md) aspects of EMQX clusters.
 * The classic [Manual clustering](./manual.md)
