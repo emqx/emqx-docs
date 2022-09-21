@@ -37,4 +37,4 @@ After v5.0.4, EMQX also supports direct modification via Dashboard‘s **Configu
 
 EMQX provides template files for Grafana Dashboard. These templates contain the display of all EMQX monitoring data. Users can directly import them into Grafana, and then display the status monitoring chart of EMQX.
 
-The template file is located at: [emqx_prometheus/Grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template).
+The template file is located at: [Grafana Template](https://github.com/emqx/emqx/tree/master/apps/emqx_prometheus/grafana_template).
