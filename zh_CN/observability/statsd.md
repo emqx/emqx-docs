@@ -1,14 +1,13 @@
 # StatsD
 
-EMQX 可通过`etc/emqx.conf`配置向 [StatsD](https://github.com/statsd/statsd) 服务器定时推送系统指标。
-
+EMQX 支持向 [StatsD](https://github.com/statsd/statsd) 服务器周期性推送系统指标。此功能可以通过配置文件开启：
 
 ```
 statsd {
-  ## 开启或关闭 Statsd 数据推送
+  ## 开启或关闭 StatsD 数据推送
   enable = false
 
-  ## Statsd 服务器地址
+  ## StatsD 服务器地址
   server = "127.0.0.1:8125"
 
   ## 数据收集间隔
@@ -22,7 +21,7 @@ statsd {
 
 修改配置项后需要重启 EMQX 服务器生效。
 
-## Dashboard 更新
+## 通过 Dashboard 配置
 
-EMQX在v5.0.4后，也支持通过 Dashboard 中的**功能配置/监控集成**下直接修改，保存后直接生效，无需重启节点。
+EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的 **功能配置/监控集成** 直接修改，保存后直接生效，无需重启节点。
 

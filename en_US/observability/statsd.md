@@ -1,6 +1,8 @@
 # StatsD
 
-EMQX can be configured to push system metrics to the [StatsD](https://github.com/statsd/statsd) server via `etc/emqx.conf`.
+EMQX can be configured to push system metrics to the  via `etc/emqx.conf`.
+
+EMQX supports periodic push system metrics to the [StatsD](https://github.com/statsd/statsd) server. This function can be opened by configuration file:
 
 ```
 statsd {
@@ -21,7 +23,7 @@ statsd {
 
 You need to restart EMQX server after modifying the configuration items to take effect.
 
-## Dashboard Update
+## Configure through dashboard
 
 After v5.0.4, EMQX also supports direct modification via Dashboard‘s **Configuration/Monitoring Integration**, which takes effect directly after saving, without restarting the node.
 
