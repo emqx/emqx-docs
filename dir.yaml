@@ -199,6 +199,7 @@
       title_cn: 数据集成
       children:
         - dashboard/bridge
+        - dashboard/rules
 
 ## Developers & Testers
 

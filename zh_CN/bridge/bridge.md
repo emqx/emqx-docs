@@ -30,7 +30,6 @@ Publisher --> | Node1 | --Bridge Forward--> | Node2 | --Bridge Forward--> | Node
 | emqx_bridge_pulsar | emqx_bridge_pulsar.conf | Pulsar 消息队列      |
 | emqx_bridge_rocket | emqx_bridge_rocket.conf | RocketMQ 消息队列    |
 
-
 {% emqxce %}
 
 ::: tip

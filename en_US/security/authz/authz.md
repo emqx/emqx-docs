@@ -4,6 +4,7 @@ MQTT authorization refers to _permission control_ for publish/subscribe operatio
 determines which clients can publish/subscribe to which topics.
 
 EMQX supports different kinds of authorization:
+
 * Authorization based on access lists(_ACLs_) fetched from a database (MongoDB, MySQL, PostgreSQL, Redis, and built-in database).
 * Based on the global static access-list configured in a file.
 * Based on the result of an HTTP request to an external HTTP API.
@@ -80,6 +81,7 @@ Placeholders work as template variables filled with the corresponding runtime in
 Configuration templates can be filled with client information such as client ID and user name at runtime.
 
 The following placeholders are available:
+
 * `${clientid}` — clientid of the client.
 * `${username}` — username of the client.
 * `${peerhost}` — client IP address.
@@ -108,6 +110,7 @@ If a value for a placeholder is absent then the placeholder is rendered as an am
 
 When authentication rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.
 The following placeholders are available:
+
 * `${clientid}` — Client ID of the connecting client, when used in authorization rules, the MQTT client should assign a client ID before connect, but not let EMQX generate and assign a random one.
 * `${username}` — `username` value used by the client for authentication.
 
@@ -155,6 +158,7 @@ If set to `disconnect`, the client connection is dropped.
 ### `cache`
 
 Optional value with caching settings.
+
 * `cache.enable` — optional boolean value, default is `true`. Specifies whether to enable caching. When authentication JWT is the only data source of authentication data, then it is recommended to configure this field `false`.
 * `cache.max_size` — optional integer value, default is 32. Specifies the maximum number of elements in the cache. Older records are evicted from the cache when the specified number is exceeded.
 * `cache.ttl` — optional duration value, default is `1m`. Specifies how long cached values are kept in the cache.
@@ -162,8 +166,8 @@ Optional value with caching settings.
 ## REST API
 
 There are several API endpoints for managing authorization:
+
 * `/api/v5/authorization/settings` — for general params, `no_match`, `deny_action`, and `cache`;
 * `/api/v5/authorization/sources` — for managing and arranging authorizers;
 * `/api/v5/authorization/cache` — for cleaning authorization cache;
 * `/api/v5/authorization/sources/built_in_database` — for managing authorization rules of `built_in_database` authorizer.
-
