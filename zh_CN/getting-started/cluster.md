@@ -89,7 +89,7 @@ client1 -> node1: Publish[t/a]
 
 ## 节点发现与自动集群
 EMQX 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
-Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
+Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、网络分区自动愈合 (Network Partition
 Autoheal)、自动删除宕机节点 (Autoclean)。
 
 EMQX 支持多种节点发现策略:
