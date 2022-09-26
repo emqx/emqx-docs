@@ -209,7 +209,7 @@ EMQX 的订阅表在集群中是分片(partitioned)的，而主题树和路由�
 ## 节点发现与自动集群
 
 EMQX 支持基于 Ekka 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持
-Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition
+Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、网络分区自动愈合 (Network Partition
 Autoheal)、自动删除宕机节点 (Autoclean)。
 
 EMQX 支持多种节点发现策略:
@@ -380,19 +380,19 @@ $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 
 基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置说明](../getting-started/config.md) 与 [配置项](../configuration/configuration.md)。
 
-## 集群脑裂与自动愈合
+## 网络分区与自动愈合
 
-*EMQX* 支持集群脑裂自动恢复(Network Partition Autoheal)，可在 `etc/emqx.conf` 中配置:
+*EMQX* 支持网络分区自动恢复(Network Partition Autoheal)，可在 `etc/emqx.conf` 中配置:
 
 ```bash
 cluster.autoheal = on
 ```
 
-集群脑裂自动恢复流程:
+网络分区自动恢复流程:
 
-1. 节点收到 Mnesia 的 `inconsistent_database` 事件 3 秒后进行集群脑裂确认；
-2. 节点确认集群脑裂发生后，向 Leader 节点 (集群中最早启动节点) 上报脑裂消息；
-3. Leader 节点延迟一段时间后，在全部节点在线状态下创建脑裂视图 (SplitView)；
+1. 节点收到 Mnesia 的 `inconsistent_database` 事件 3 秒后进行集群网络分区确认；
+2. 节点确认集群网络分区发生后，向 Leader 节点 (集群中最早启动节点) 上报网络分区消息；
+3. Leader 节点延迟一段时间后，在全部节点在线状态下创建网络分区视图 (SplitView)；
 4. Leader 节点在多数派 (majority) 分区选择集群自愈的 Coordinator 节点；
 5. Coordinator 节点重启少数派 (minority) 分区节点恢复集群。
 

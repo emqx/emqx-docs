@@ -72,8 +72,7 @@ Cluster node discovery method. Available values are:
 
 #### Description
 
-Enable or disable the automatic recovery mechanism of cluster brain splitting.
-
+Enable or disable the automatic recovery mechanism for cluster network partitions.
 
 
 ### cluster.autoclean

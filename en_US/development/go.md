@@ -89,4 +89,4 @@ func main() {
 
 ## Paho Golang MQTT 5.0 support
 
-Currently, Paho Golang is still adapting to MQTT 5.0 and has not yet fully supported it.
+MQTT 5.0 support can refer to [eclipse/paho.golang](https://github.com/eclipse/paho.golang)
