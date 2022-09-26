@@ -31,7 +31,7 @@ The default SQL statement is `SELECT * FROM "t/#"`, which means that when the cl
 
 When the SQL statement is completed, you can select the event or data source that triggers the rule in the Debug area at the bottom of the page, enter the simulated test data, and click the `Execute SQL` button under the SQL editor to see the execution output data in the result box at the bottom of the page.
 
-You can test the output data of the rule through the Debug every time you change the SQL statement to ensure the correctness of the rule. Note: If the `413` error prompt appears when executing SQL, it may be due to the mismatch with the test data, and when the data source does not match the SQL statement, the corresponding event or data source will be prompted to be selected. Updated data source events will automatically update the test data to the corresponding data.
+You can test the output data of the rule through the Debug every time you change the SQL statement to ensure the correctness of the rule. Note: If the `412` error code prompt appears when executing SQL, it may be due to the mismatch with the test data, and when the data source does not match the SQL statement, the corresponding event or data source will be prompted to be selected. Updated data source events will automatically update the test data to the corresponding data.
 
 After the data source is selected, you can view the corresponding SQL statement and documentation on the right button. You can also reset the test data, format the JSON data, and switch the test data to the form mode. In the form mode, you can directly enter the corresponding field values to simulate the data.
 
@@ -55,7 +55,7 @@ There is also a way to use data bridges as data sources, using the `$bridges/*` 
 
 - Data Bridge ($bridge/\<type>:\<name>)
 
-The corresponding data source needs to be consistent with the SQL statement in the editor. When you need to use some message events or data bridges to get data, you need to fill in the corresponding event topic (the content in the brackets) into the SQL statement after the `FROM` keyword. For more details about data source and event explanations, please refer to [SQL Data Source and Fields](../data-integration/rule-sql-events-and-fields.md).
+The corresponding data source needs to be consistent with the SQL statement in the editor. When you need to use some message events or data bridges to get data, you need to fill in the corresponding event topic (the content in the brackets) into the SQL statement after the `FROM` keyword, and rules support the use of multiple events. For more details about data source and event explanations, please refer to [SQL Data Source and Fields](../data-integration/rule-sql-events-and-fields.md).
 
 ![image](./assets/rule-test.png)
 
