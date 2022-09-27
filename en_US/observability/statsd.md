@@ -23,7 +23,7 @@ statsd {
 
 You need to restart EMQX server after modifying the configuration items to take effect.
 
-## Configure through dashboard
+## Configure Through Dashboard
 
 After v5.0.4, EMQX also supports direct modification via Dashboard‘s **Configuration/Monitoring Integration**, which takes effect directly after saving, without restarting the node.
 

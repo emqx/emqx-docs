@@ -28,7 +28,7 @@ prometheus {
   enable: true
 }
 ```
-## Configure through dashboard
+## Configure Through Dashboard
 
 After v5.0.4, EMQX also supports direct modification via Dashboard‘s **Configuration/Monitoring Integration**, which takes effect directly after saving, without restarting the node.
 
