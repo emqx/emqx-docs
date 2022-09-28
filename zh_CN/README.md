@@ -20,13 +20,13 @@ MQTT-SN、CoAP 协议已在 2.0-rc.1 版本发布，LwM2M、LoRaWan 协议在 3.
 
 EMQ X 项目支持与联系:
 
-| 官网:    | [ https://www.emqx.io ](https://www.emqx.io)                   |
-| -------- | -------------------------------------------------------------- |
-| 项目:    | [ https://github.com/emqx/emqx ](https://github.com/emqx/emqx) |
-| 微信:    | emqttd                                                         |
-| 微博:    | [ http://weibo.com/emqtt ](http://weibo.com/emqtt)             |
-| Twitter: | @emqtt                                                         |
-| 公司:    | 杭州映云科技有限公司                                           |
-| 联系:    | hong@emqx.io \< hong@emqx.io >                                 |
+| 官网     | [https://www.emqx.io/zh](https://www.emqx.io/zh)             |
+| -------- | ------------------------------------------------------------ |
+| 项目     | [https://github.com/emqx/emqx](https://github.com/emqx/emqx) |
+| 论坛     | [EMQ 官方论坛](https://askemq.com/c/emqx/5)                  |
+| bilibili | [关注我们](https://space.bilibili.com/522222081)             |
+| Twitter  | [@EMQTech](https://twitter.com/EMQTech)                      |
+| 公司     | [杭州映云科技有限公司](https://www.emqx.com/zh/about)        |
+| 联系     | [联系我们](https://www.emqx.com/zh/contact)                  |
 
-![image](./_static/images/weixin.jpg)
+![EMQ 中文社区](https://assets.emqx.com/images/bd306cac54ff7d20cf7e1ff9b39c639a.png?imageMogr2/thumbnail/200x)
