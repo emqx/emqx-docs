@@ -12,14 +12,14 @@ The emqttd project provides a scalable, enterprise grade, extensible open-source
 
 Sensors, Mobiles, Web Browsers and Application Servers could be connected by emqttd brokers with asynchronous PUB/SUB MQTT messages.
 
-| Homepage:     | [ https://www.emqx.io ](https://www.emqx.io)                                         |
-| ------------- | ------------------------------------------------------------------------------------ |
-| Downloads:    | [ https://www.emqx.io/downloads ](https://www.emqx.io/downloads)                     |
-| GitHub:       | [ https://github.com/emqtt ](https://github.com/emqtt)                               |
-| Twitter:      | @emqtt                                                                               |
-| Forum:        | [ https://groups.google.com/d/forum/emqtt ](https://groups.google.com/d/forum/emqtt) |
-| Mailing List: | emqtt@googlegroups.com                                                               |
-| Author:       | Feng Lee \< feng@emqx.io >                                                           |
+| Homepage | [https://www.emqx.io](https://www.emqx.io/)                  |
+| -------- | ------------------------------------------------------------ |
+| Project  | [https://github.com/emqx/emqx](https://github.com/emqx/emqx) |
+| Forum    | [https://www.emqx.io/forum/](https://www.emqx.io/forum/)     |
+| Youtube  | [Youtube Channel](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q) |
+| Twitter  | [@EMQTech](https://twitter.com/EMQTech)                      |
+| Company  | [EMQ Technologies Inc.](https://www.emqx.com/en/about)       |
+| Contact  | [Contact Us](https://www.emqx.com/en/contact)                |
 
 ::: tip Tip
 MQTT-SN，CoAP Protocols are planned to 1.x release.
