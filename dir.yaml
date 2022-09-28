@@ -200,6 +200,8 @@
       children:
         - dashboard/bridge
         - dashboard/rules
+        - dashboard/flows
+    - dashboard/configuration
 
 ## Developers & Testers
 
