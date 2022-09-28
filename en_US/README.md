@@ -17,17 +17,13 @@ Please visit [ emqx.io ](https://www.emqx.io) for more service. Follow us on Twi
 ![image](./_static/images/emqtt.png)
 
 
-*EMQ X* Support and Contact: 
+*EMQX* Support and Contact: 
 
-Homepage: |  [ https://www.emqx.io ](https://www.emqx.io)                   
-----------|-----------------------------------------------------------------
-Project:  |  [ https://github.com/emqx/emqx ](https://github.com/emqx/emqx) 
-Wechat:   |  emqttd                                                         
-weibo:    |  [ http://weibo.com/emqtt ](http://weibo.com/emqtt)             
-Twitter:  |  @emqtt                                                         
-Company:  |  Hangzhou EMQ Technologies Co., Ltd.                            
-contact:  |  hong@emqx.io \< hong@emqx.io >                                  
-
-
-
-![image](./_static/images/weixin.jpg)
+| Homepage | [https://www.emqx.io](https://www.emqx.io/)                  |
+| -------- | ------------------------------------------------------------ |
+| Project  | [https://github.com/emqx/emqx](https://github.com/emqx/emqx) |
+| Forum    | [https://www.emqx.io/forum/](https://www.emqx.io/forum/)     |
+| Youtube  | [Youtube Channel](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q) |
+| Twitter  | [@EMQTech](https://twitter.com/EMQTech)                      |
+| Company  | [EMQ Technologies Inc.](https://www.emqx.com/en/about)       |
+| contact  | [Contact Us](https://www.emqx.com/en/contact)                |
