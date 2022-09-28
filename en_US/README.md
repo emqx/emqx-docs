@@ -14,15 +14,14 @@ Please visit [ emqx.io ](https://www.emqx.io) for more service. Follow us on Twi
 
 ![image](./_static/images/emqtt.png)
 
-| Homepage:     | [ https://www.emqx.io ](https://www.emqx.io)                                         |
-| ------------- | ------------------------------------------------------------------------------------ |
-| Downloads:    | [ https://www.emqx.io/downloads ](https://www.emqx.io/downloads)                     |
-| GitHub:       | [ https://github.com/emqtt ](https://github.com/emqtt)                               |
-| Twitter:      | @emqtt                                                                               |
-| Forum:        | [ https://groups.google.com/d/forum/emqtt ](https://groups.google.com/d/forum/emqtt) |
-| Mailing List: | emqtt@googlegroups.com                                                               |
-| Author:       | Feng Lee \< feng@emqx.io >                                                           |
-
+| Homepage | [https://www.emqx.io](https://www.emqx.io/)                  |
+| -------- | ------------------------------------------------------------ |
+| Project  | [https://github.com/emqx/emqx](https://github.com/emqx/emqx) |
+| Forum    | [https://www.emqx.io/forum/](https://www.emqx.io/forum/)     |
+| Youtube  | [Youtube Channel](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q) |
+| Twitter  | [@EMQTech](https://twitter.com/EMQTech)                      |
+| Company  | [EMQ Technologies Inc.](https://www.emqx.com/en/about)       |
+| contact  | [Contact Us](https://www.emqx.com/en/contact)                |
 
 ## License
 
