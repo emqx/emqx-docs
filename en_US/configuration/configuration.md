@@ -4062,15 +4062,15 @@ Options `tab` and `global` are recommended for large scale clusters (e.g. more t
 when network latency between the nodes is at milliseconds level.
 NOTE: It requires entire cluster to be stopped before changing this config.
 
-## broker.perf.trie_compaction = true
+## broker.perf.trie_compaction = false
 
 | Type    | Optional Value  | Default |
 | ------- | --------------- | ------- |
-| enum    | `true`, `false` | `true`  |
+| enum    | `true`, `false` | `false`  |
 
 ### Description
 
-Set to `true` (default) to compact the routing information table for wildcard topics.
+Set to `true` to compact the routing information table for wildcard topics.
 Compaction is optimized for writes, handles high rate subscription requests quicker,
 it also requires half of the RAM comparing to non-compacted.
 Non-compaction is optimized for reads (e.g. large number of topic levels in publish requests).
