@@ -105,16 +105,14 @@ Any authentication method will eventually return a result:
 - Authentication failed: the client authentication fails after comparison, which is because the password in the data source does not match the current password
 - Ignore: The authentication data is not found with the current authentication method, and the result cannot be determined explicitly. The next method of authentication chain or anonymous authentication is used to determine the result.
 
-## Anonymous Authentication
+## Anonymous Login
 
-Anonymous authentication is enabled in the EMQX default configuration and any client can access EMQX. When the authentication plug-in is not enabled or the authentication plug-in does not explicitly allow/deny(ignore) the connection request, EMQX will decide whether to allow the client to connect based on whether the anonymous authentication is enabled.
-
-Configure the anonymous authentication:
+By default, EMQX allows clients to connect without authentication.
 
 ```bash
 # etc/emqx.conf
 
-## Value: true | false
+## Value: true | false | false_quick_deny
 allow_anonymous = true
 ```
 
@@ -124,6 +122,22 @@ Disable anonymous authentication in production environments.
 
 :::
 
+When set to `true` (to 'allow') or `false` (to 'deny'),
+it takes effect when any of the following conditions is met:
+
+- When there is no authentication plug-in enabled.
+- All authentication plug-ins returned 'ignore' (i.e. not explicitly 'allow' or 'deny').
+
+This means, even when set to `false`,
+the anonymous-check is done after going through the authentication plug-ins.
+
+This is due to the fact that some authentication backends may have the precedence to decide if
+this client is anonymous or not.
+
+The drawback of this behaviour is, it may cause unnecessary overhead if anonymous is not allowed after all.
+As an enhancement, `false_quick_deny` option was added in v4.3.17 (Enterprise e4.3.12).
+This new config can be used to quickly deny all anonymous clients
+(having no username provided in connection request) without involving any of the authentication plug-ins.
 
 ## Password salting rules and hash methods
 

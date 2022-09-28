@@ -16,7 +16,7 @@ In the [Dashboard](http://127.0.0.1:18083/#/schemas/0?oper=create) interface of 
 
 All other configurations remain default.
 
-Item 5 (i.e.codec configuration) above is optional and is a string, the content of which is related to the service of the codec service.
+Item 5 (i.e. codec configuration) above is optional and is a string, the content of which is related to the service of the codec service.
 
 ## Creating rules
 
