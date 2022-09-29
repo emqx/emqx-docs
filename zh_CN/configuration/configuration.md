@@ -4093,11 +4093,23 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 <br />
 
-## broker.perf.trie_compaction = true
+## broker.perf.trie_compaction
+
+{% emqxee %}
+
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `false`  |
+
+{% endemqxee %}
+
+{% emqxce %}
 
 | Type    | Optional Value  | Default |
 | ------- | --------------- | ------- |
 | enum    | `true`, `false` | `true`  |
+
+{% endemqxce %}
 
 ### Description
 
@@ -4105,7 +4117,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 压缩可优化写操作，降低高并发量的订阅请求响应时间，内存使用量也只有非压缩时的一半。
 非压缩优化读操作，适用于发布主题层数较多的场景。
 
-注意: 将该配置从 `fase` 改成 `true` 时，集群中的节点可依次重启来是配置生效。
+注意: 将该配置从 `fase` 改成 `true` 时，集群中的节点可依次重启来使配置生效。
 从 `true` 改为 `false` 时，需要将集群中所有的节点重启，否则会发生有些消息
 无法被路由的情况。
 
