@@ -26,4 +26,4 @@ Please visit [ emqx.io ](https://www.emqx.io) for more service. Follow us on Twi
 | Youtube  | [Youtube Channel](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q) |
 | Twitter  | [@EMQTech](https://twitter.com/EMQTech)                      |
 | Company  | [EMQ Technologies Inc.](https://www.emqx.com/en/about)       |
-| contact  | [Contact Us](https://www.emqx.com/en/contact)                |
+| Contact  | [Contact Us](https://www.emqx.com/en/contact)                |
