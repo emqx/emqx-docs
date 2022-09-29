@@ -57,7 +57,7 @@ Rule rule:803de6db created
 $ tail -f log/erlang.log.1
 
 (emqx@127.0.0.1)1> [inspect]
-    Selected Data: #{client_id => <<"shawn">>,event => 'message.publish',
+    Selected Data: #{clientid => <<"shawn">>,event => 'message.publish',
                     flags => #{dup => false},
                     id => <<"5898704A55D6AF4430000083D0002">>,
                     payload => <<"hello">>,

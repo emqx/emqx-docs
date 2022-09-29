@@ -42,16 +42,13 @@ Two parameters is required by action "Data to Redis":
 triggered. In this example we'll insert a message into redis, so type in the following command:
 
 ```bash
-HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} retain ${retain} ts ${timestamp}
+HMSET mqtt:msg:${id} id ${id} from ${clientid} qos ${qos} topic ${topic} payload ${payload} retain ${retain} ts ${timestamp}
 ```
 
 ![image](./assets/rule-engine/redis_action_1.png)
 
 2). Bind a resource to the action. Since the dropdown list "Resource"
-is empty for now, we create a new resource by clicking on the "New
-Resource" to the top right, and then select "Redis Single Mode":
-
-![image](./assets/rule-engine/redis_action_2.png)
+is empty for now, we create a new resource by clicking on the "Create" to the right, and then select "Redis Single Mode":
 
 Configure the resource:
 ```
@@ -63,8 +60,6 @@ connection can be created successfully, and then click on the
 ![image](./assets/rule-engine/redis_resource_0.png)
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
-
-![image](./assets/rule-engine/redis_action_3.png)
 
 Back to the creating rule page, then click on "Create" button. The
     rule we created will be show in the rule list:
