@@ -4093,11 +4093,23 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 <br />
 
-## broker.perf.trie_compaction = false
+## broker.perf.trie_compaction
+
+{% emqxee %}
 
 | Type    | Optional Value  | Default |
 | ------- | --------------- | ------- |
 | enum    | `true`, `false` | `false`  |
+
+{% endemqxee %}
+
+{% emqxce %}
+
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
+
+{% endemqxce %}
 
 ### Description
 

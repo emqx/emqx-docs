@@ -4062,11 +4062,23 @@ Options `tab` and `global` are recommended for large scale clusters (e.g. more t
 when network latency between the nodes is at milliseconds level.
 NOTE: It requires entire cluster to be stopped before changing this config.
 
-## broker.perf.trie_compaction = false
+## broker.perf.trie_compaction
+
+{% emqxee %}
 
 | Type    | Optional Value  | Default |
 | ------- | --------------- | ------- |
 | enum    | `true`, `false` | `false`  |
+
+{% endemqxee %}
+
+{% emqxce %}
+
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `true`  |
+
+{% endemqxce %}
 
 ### Description
 
