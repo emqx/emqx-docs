@@ -247,7 +247,7 @@ authentication=[{enable=true}]
 
   该配置可以被配置为：
   <ul>
-    <li><code>[]</code>：默认值，允许所以登录请求
+    <li><code>[]</code>：默认值，允许所有的登录请求
     <li>配置为单认证器，例如 <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
     <li>配置为认证器数组</li>
   </ul>
