@@ -1,4 +1,108 @@
 {
+    "tags": [
+        {
+            "name": "Error Codes"
+        },
+        {
+            "name": "Metrics"
+        },
+        {
+            "name": "Nodes"
+        },
+        {
+            "name": "Status"
+        },
+        {
+            "name": "Clients"
+        },
+        {
+            "name": "Publish"
+        },
+        {
+            "name": "Subscriptions"
+        },
+        {
+            "name": "Topics"
+        },
+        {
+            "name": "Authentication"
+        },
+        {
+            "name": "Authorization"
+        },
+        {
+            "name": "Banned"
+        },
+        {
+            "name": "Bridges"
+        },
+        {
+            "name": "Connectors"
+        },
+        {
+            "name": "Rules"
+        },
+        {
+            "name": "Listeners"
+        },
+        {
+            "name": "Listener Authentication"
+        },
+        {
+            "name": "MQTT"
+        },
+        {
+            "name": "Retainer"
+        },
+        {
+            "name": "Auto Subscribe"
+        },
+        {
+            "name": "System Topics"
+        },
+        {
+            "name": "Config"
+        },
+        {
+            "name": "Cluster"
+        },
+        {
+            "name": "Monitor"
+        },
+        {
+            "name": "Gateway"
+        },
+        {
+            "name": "LwM2M Gateway"
+        },
+        {
+            "name": "CoAP Gateway"
+        },
+        {
+            "name": "ExHook"
+        },
+        {
+            "name": "Plugins"
+        },
+        {
+            "name": "Alarms"
+        },
+        {
+            "name": "Slow Subscriptions"
+        },
+        {
+            "name": "Trace"
+        },
+        {
+            "name": "Dashboard"
+        },
+        {
+            "name": "API Keys"
+        },
+        {
+            "name": "Telemetry"
+        }
+    ],
     "components":{
         "parameters":{
             "api_key.name":{
@@ -2786,7 +2890,7 @@
                 ],
                 "properties":{
                     "as":{
-                        "description":"Banned type clientid, username, peerhost",
+                        "description":"Ban method, which can be client ID, username or IP address.",
                         "enum":[
                             "clientid",
                             "username",
@@ -2796,22 +2900,22 @@
                         "type":"string"
                     },
                     "who":{
-                        "description":"Client info as banned type",
+                        "description":"Ban object, specific client ID, username or IP address.",
                         "example":"Banned name",
                         "type":"string"
                     },
                     "by":{
-                        "description":"Commander",
+                        "description":"Initiator of the ban.",
                         "example":"mgmt_api",
                         "type":"string"
                     },
                     "reason":{
-                        "description":"Banned reason",
+                        "description":"Banned reason, record the reason why the current object was banned.",
                         "example":"Too many requests",
                         "type":"string"
                     },
                     "at":{
-                        "description":"Create banned time, rfc3339, now if not specified",
+                        "description":"The start time of the ban, the format is rfc3339, the default is the time when the operation was initiated.",
                         "example":"2021-10-25T21:48:47+08:00",
                         "oneOf":[
                             {
@@ -2827,7 +2931,7 @@
                         ]
                     },
                     "until":{
-                        "description":"Cancel banned time, rfc3339, now + 5 minute if not specified",
+                        "description":"The end time of the ban, the formula is rfc3339, the default is the time when the operation was initiated + 5 minutes.",
                         "example":"2021-10-25T21:53:47+08:00",
                         "oneOf":[
                             {
@@ -4632,24 +4736,24 @@
                 "properties":{
                     "enable":{
                         "default":false,
-                        "description":"Turn StatsD data pushing on or off",
+                        "description":"Enable or disable StatsD metrics collection and push service.",
                         "type":"boolean"
                     },
                     "server":{
                         "default":"127.0.0.1:8125",
-                        "description":"URL of StatsD server",
+                        "description":"StatsD server address.",
                         "example":"127.0.0.1:80",
                         "type":"string"
                     },
                     "sample_time_interval":{
                         "default":"10s",
-                        "description":"Data collection interval.",
+                        "description":"The sampling interval for metrics.",
                         "example":"32s",
                         "type":"string"
                     },
                     "flush_time_interval":{
                         "default":"10s",
-                        "description":"Data reporting interval.",
+                        "description":"The push interval for metrics.",
                         "example":"32s",
                         "type":"string"
                     }
@@ -9344,39 +9448,39 @@
             "emqx_mgmt_api_alarms.alarm":{
                 "properties":{
                     "node":{
-                        "description":"Alarm in node",
+                        "description":"The name of the node that triggered this alarm.",
                         "example":"emqx@127.0.0.1",
                         "type":"string"
                     },
                     "name":{
-                        "description":"Alarm in node",
+                        "description":"The name of the node that triggered this alarm.",
                         "example":"high_system_memory_usage",
                         "type":"string"
                     },
                     "message":{
-                        "description":"Alarm readable information",
+                        "description":"Alarm message, which describes the alarm content in a human-readable format.",
                         "example":"System memory usage is higher than 70%",
                         "type":"string"
                     },
                     "details":{
-                        "description":"Alarm details information",
+                        "description":"Alarm details, provides more alarm information, mainly for program processing.",
                         "example":{
                             "high_watermark":70
                         },
                         "type":"object"
                     },
                     "duration":{
-                        "description":"Alarms duration time; UNIX time stamp, millisecond",
+                        "description":"Indicates how long the alarm has lasted, in milliseconds.",
                         "example":297056,
                         "type":"integer"
                     },
                     "activate_at":{
-                        "description":"Alarms activate time, RFC 3339",
+                        "description":"Alarm start time, using rfc3339 standard time format.",
                         "example":"2021-10-25T11:52:52.548+08:00",
                         "type":"string"
                     },
                     "deactivate_at":{
-                        "description":"Alarms deactivate time, RFC 3339",
+                        "description":"Alarm end time, using rfc3339 standard time format.",
                         "example":"2021-10-31T10:52:52.548+08:00",
                         "type":"string"
                     }
@@ -17068,7 +17172,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "post":{
@@ -17196,7 +17300,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -17666,7 +17770,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             },
             "put":{
@@ -17730,7 +17834,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             }
         },
@@ -18322,7 +18426,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             },
             "get":{
@@ -18526,7 +18630,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             },
             "put":{
@@ -18914,7 +19018,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             }
         },
@@ -19054,7 +19158,7 @@
                     }
                 ],
                 "tags":[
-                    "Exhooks"
+                    "ExHook"
                 ]
             },
             "get":{
@@ -19118,7 +19222,7 @@
                     }
                 ],
                 "tags":[
-                    "Exhooks"
+                    "ExHook"
                 ]
             },
             "put":{
@@ -19250,7 +19354,7 @@
                     }
                 ],
                 "tags":[
-                    "Exhooks"
+                    "ExHook"
                 ]
             }
         },
@@ -19377,7 +19481,7 @@
                     }
                 ],
                 "tags":[
-                    "Auto subscribe"
+                    "Auto Subscribe"
                 ]
             },
             "put":{
@@ -19441,7 +19545,7 @@
                     }
                 ],
                 "tags":[
-                    "Auto subscribe"
+                    "Auto Subscribe"
                 ]
             }
         },
@@ -19636,7 +19740,7 @@
                     }
                 ],
                 "tags":[
-                    "Lwm2m"
+                    "LwM2M Gateway"
                 ]
             }
         },
@@ -19726,7 +19830,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             },
             "get":{
@@ -19821,7 +19925,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             }
         },
@@ -19903,7 +20007,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "get":{
@@ -20121,7 +20225,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "post":{
@@ -20473,7 +20577,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "put":{
@@ -20825,7 +20929,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -21088,7 +21192,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "post":{
@@ -21242,7 +21346,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -21685,7 +21789,7 @@
                     }
                 ],
                 "tags":[
-                    "System topics"
+                    "System Topics"
                 ]
             },
             "put":{
@@ -21747,7 +21851,7 @@
                     }
                 ],
                 "tags":[
-                    "System topics"
+                    "System Topics"
                 ]
             }
         },
@@ -22191,7 +22295,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -22380,7 +22484,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -22444,7 +22548,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -23339,7 +23443,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             },
             "put":{
@@ -23409,7 +23513,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             }
         },
@@ -23468,7 +23572,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             },
             "get":{
@@ -23532,7 +23636,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             }
         },
@@ -24528,7 +24632,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -24652,7 +24756,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -24709,7 +24813,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -24773,7 +24877,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -24979,7 +25083,7 @@
                     }
                 ],
                 "tags":[
-                    "Lwm2m"
+                    "LwM2M Gateway"
                 ]
             }
         },
@@ -25061,7 +25165,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "get":{
@@ -25313,7 +25417,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "put":{
@@ -25688,7 +25792,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -25795,7 +25899,7 @@
                     }
                 ],
                 "tags":[
-                    "Lwm2m"
+                    "LwM2M Gateway"
                 ]
             }
         },
@@ -26166,7 +26270,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -26723,7 +26827,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -26787,7 +26891,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -26924,7 +27028,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "post":{
@@ -27062,7 +27166,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -27220,7 +27324,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -27277,7 +27381,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -27341,7 +27445,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -28401,7 +28505,7 @@
                     }
                 ],
                 "tags":[
-                    "Lwm2m"
+                    "LwM2M Gateway"
                 ]
             }
         },
@@ -28458,7 +28562,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -28522,7 +28626,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -28801,7 +28905,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -28865,7 +28969,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -28957,7 +29061,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "get":{
@@ -29069,7 +29173,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "put":{
@@ -29205,7 +29309,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -29267,7 +29371,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -29341,7 +29445,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -29554,7 +29658,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -29618,13 +29722,13 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
         "/statsd":{
             "get":{
-                "description":"Get statsd config",
+                "description":"List the configuration of StatsD metrics collection and push service.",
                 "parameters":[
 
                 ],
@@ -29663,7 +29767,7 @@
                 ]
             },
             "put":{
-                "description":"Set statsd config",
+                "description":"Update the configuration of StatsD metrics collection and push service.",
                 "parameters":[
 
                 ],
@@ -29719,13 +29823,13 @@
         },
         "/alarms":{
             "delete":{
-                "description":"Remove all deactivated alarms",
+                "description":"Remove all historical alarms.",
                 "parameters":[
 
                 ],
                 "responses":{
                     "204":{
-                        "description":"Remove all deactivated alarms ok"
+                        "description":"Historical alarms have been cleared successfully."
                     }
                 },
                 "security":[
@@ -29745,7 +29849,7 @@
                 ]
             },
             "get":{
-                "description":"List alarms",
+                "description":"List currently activated alarms or historical alarms, determined by query parameters.",
                 "parameters":[
                     {
                         "$ref":"#/components/parameters/public.page"
@@ -29754,7 +29858,7 @@
                         "$ref":"#/components/parameters/public.limit"
                     },
                     {
-                        "description":"Activate alarms, or deactivate alarms. Default is false",
+                        "description":"It is used to specify the alarm type of the query. When true, it returns the currently activated alarm, and when it is false, it returns the historical alarm. The default is false.",
                         "in":"query",
                         "name":"activated",
                         "required":false,
@@ -29973,7 +30077,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "post":{
@@ -30390,7 +30494,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -30582,7 +30686,7 @@
 
                 ],
                 "tags":[
-                    "Error codes"
+                    "Error Codes"
                 ]
             }
         },
@@ -30659,7 +30763,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             },
             "get":{
@@ -30756,7 +30860,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             },
             "put":{
@@ -30899,7 +31003,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             }
         },
@@ -31128,7 +31232,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             }
         },
@@ -32049,7 +32153,7 @@
                     }
                 ],
                 "tags":[
-                    "Exhooks"
+                    "ExHook"
                 ]
             }
         },
@@ -32084,7 +32188,7 @@
                     }
                 ],
                 "tags":[
-                    "Slow subscriptions"
+                    "Slow Subscriptions"
                 ]
             },
             "put":{
@@ -32126,7 +32230,7 @@
                     }
                 ],
                 "tags":[
-                    "Slow subscriptions"
+                    "Slow Subscriptions"
                 ]
             }
         },
@@ -32273,7 +32377,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             },
             "post":{
@@ -32363,7 +32467,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             },
             "put":{
@@ -32435,7 +32539,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             }
         },
@@ -32492,7 +32596,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -32556,7 +32660,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -32623,7 +32727,7 @@
 
                 ],
                 "tags":[
-                    "Error codes"
+                    "Error Codes"
                 ]
             }
         },
@@ -32691,7 +32795,7 @@
                     }
                 ],
                 "tags":[
-                    "Mqtt"
+                    "MQTT"
                 ]
             }
         },
@@ -32904,7 +33008,7 @@
                     }
                 ],
                 "tags":[
-                    "Exhooks"
+                    "ExHook"
                 ]
             },
             "post":{
@@ -33005,7 +33109,7 @@
                     }
                 ],
                 "tags":[
-                    "Exhooks"
+                    "ExHook"
                 ]
             }
         },
@@ -33325,7 +33429,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "post":{
@@ -33733,7 +33837,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -33825,7 +33929,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "get":{
@@ -34053,7 +34157,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "post":{
@@ -34415,7 +34519,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "put":{
@@ -34777,7 +34881,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -34805,7 +34909,7 @@
                     }
                 ],
                 "tags":[
-                    "Slow subscriptions"
+                    "Slow Subscriptions"
                 ]
             },
             "get":{
@@ -34851,7 +34955,7 @@
                     }
                 ],
                 "tags":[
-                    "Slow subscriptions"
+                    "Slow Subscriptions"
                 ]
             }
         },
@@ -35418,7 +35522,7 @@
                     }
                 ],
                 "tags":[
-                    "API keys"
+                    "API Keys"
                 ]
             },
             "post":{
@@ -35528,7 +35632,7 @@
                     }
                 ],
                 "tags":[
-                    "API keys"
+                    "API Keys"
                 ]
             }
         },
@@ -35587,7 +35691,7 @@
         },
         "/banned":{
             "get":{
-                "description":"List banned.",
+                "description":"List all currently banned client IDs, usernames and IP addresses.",
                 "parameters":[
                     {
                         "$ref":"#/components/parameters/public.page"
@@ -35636,7 +35740,7 @@
                 ]
             },
             "post":{
-                "description":"Create banned.",
+                "description":"Add a client ID, username or IP address to the blacklist.",
                 "parameters":[
 
                 ],
@@ -35682,7 +35786,7 @@
                                             "type":"string"
                                         },
                                         "message":{
-                                            "description":"Banned already existed, or bad args.",
+                                            "description":"Bad request, possibly due to wrong parameters or the existence of a banned object.",
                                             "type":"string"
                                         }
                                     },
@@ -36534,10 +36638,10 @@
         },
         "/banned/{as}/{who}":{
             "delete":{
-                "description":"Delete banned",
+                "description":"Remove a client ID, username or IP address from the blacklist.",
                 "parameters":[
                     {
-                        "description":"Banned type clientid, username, peerhost",
+                        "description":"Ban method, which can be client ID, username or IP address.",
                         "example":"username",
                         "in":"path",
                         "name":"as",
@@ -36552,7 +36656,7 @@
                         }
                     },
                     {
-                        "description":"Client info as banned type",
+                        "description":"Ban object, specific client ID, username or IP address.",
                         "example":"Badass",
                         "in":"path",
                         "name":"who",
@@ -36579,7 +36683,7 @@
                                             "type":"string"
                                         },
                                         "message":{
-                                            "description":"Banned not found. May be the banned time has been exceeded",
+                                            "description":"The banned object was not found in the blacklist.",
                                             "type":"string"
                                         }
                                     },
@@ -36683,7 +36787,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -36940,7 +37044,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             }
         },
@@ -36990,7 +37094,7 @@
                     }
                 ],
                 "tags":[
-                    "authorization"
+                    "Authorization"
                 ]
             }
         },
@@ -37153,7 +37257,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             },
             "post":{
@@ -37510,7 +37614,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             }
         },
@@ -37562,7 +37666,7 @@
                     }
                 ],
                 "tags":[
-                    "API keys"
+                    "API Keys"
                 ]
             },
             "get":{
@@ -37686,7 +37790,7 @@
                     }
                 ],
                 "tags":[
-                    "API keys"
+                    "API Keys"
                 ]
             },
             "put":{
@@ -37860,7 +37964,7 @@
                     }
                 ],
                 "tags":[
-                    "API keys"
+                    "API Keys"
                 ]
             }
         },
@@ -38011,7 +38115,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -38373,7 +38477,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -39012,7 +39116,7 @@
                     }
                 ],
                 "tags":[
-                    "authorization"
+                    "Authorization"
                 ]
             },
             "put":{
@@ -39130,7 +39234,7 @@
                     }
                 ],
                 "tags":[
-                    "authorization"
+                    "Authorization"
                 ]
             }
         },
@@ -39187,7 +39291,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             },
             "put":{
@@ -39251,7 +39355,7 @@
                     }
                 ],
                 "tags":[
-                    "Conf"
+                    "Config"
                 ]
             }
         },
@@ -39494,7 +39598,7 @@
                     }
                 ],
                 "tags":[
-                    "Exhooks"
+                    "ExHook"
                 ]
             }
         },
@@ -40239,7 +40343,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "get":{
@@ -40492,7 +40596,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "put":{
@@ -40910,7 +41014,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -41057,7 +41161,7 @@
                     }
                 ],
                 "tags":[
-                    "CoAP gateway"
+                    "CoAP Gateway"
                 ]
             }
         },
@@ -41147,7 +41251,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "get":{
@@ -41342,7 +41446,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -41614,7 +41718,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "get":{
@@ -41736,7 +41840,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             },
             "put":{
@@ -41882,7 +41986,7 @@
                     }
                 ],
                 "tags":[
-                    "gateway"
+                    "Gateway"
                 ]
             }
         },
@@ -42055,7 +42159,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             },
             "post":{
@@ -42191,7 +42295,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             }
         },
@@ -42310,7 +42414,7 @@
                     }
                 ],
                 "tags":[
-                    "Listener authentication"
+                    "Listener Authentication"
                 ]
             }
         },
