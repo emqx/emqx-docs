@@ -1,4 +1,111 @@
 {
+    "tags": [
+        {
+            "name": "Error codes"
+        },
+        {
+            "name": "Metrics"
+        },
+        {
+            "name": "Nodes"
+        },
+        {
+            "name": "Status"
+        },
+        {
+            "name": "Clients"
+        },
+        {
+            "name": "Publish"
+        },
+        {
+            "name": "Subscriptions"
+        },
+        {
+            "name": "Topics"
+        },
+        {
+            "name": "Authentication"
+        },
+        {
+            "name": "Authorization"
+        },
+        {
+            "name": "authorization"
+        },
+        {
+            "name": "Banned"
+        },
+        {
+            "name": "Bridges"
+        },
+        {
+            "name": "Connectors"
+        },
+        {
+            "name": "Rules"
+        },
+        {
+            "name": "Listeners"
+        },
+        {
+            "name": "Listener authentication"
+        },
+        {
+            "name": "Mqtt"
+        },
+        {
+            "name": "Retainer"
+        },
+        {
+            "name": "Auto subscribe"
+        },
+        {
+            "name": "System topics"
+        },
+        {
+            "name": "Conf"
+        },
+        {
+            "name": "Cluster"
+        },
+        {
+            "name": "Monitor"
+        },
+        {
+            "name": "gateway"
+        },
+        {
+            "name": "Lwm2m"
+        },
+        {
+            "name": "CoAP gateway"
+        },
+        {
+            "name": "Exhooks"
+        },
+        {
+            "name": "Plugins"
+        },
+        {
+            "name": "Alarms"
+        },
+        {
+            "name": "Slow subscriptions"
+        },
+        {
+            "name": "Trace"
+        },
+        {
+            "name": "Dashboard"
+        },
+        {
+            "name": "API keys"
+        },
+        {
+            "name": "Telemetry"
+        }
+    ],
     "components":{
         "parameters":{
             "api_key.name":{
