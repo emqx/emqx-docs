@@ -178,10 +178,11 @@ EMQX supports multiple node discovery strategies:
 |----------|-----------------------------------------|
 | manual   | Create a cluster through manual command |
 | static   | Autocluster of static node list         |
-| mcast    | Autocluster with UDP multicast mode     |
 | dns      | Autocluster of DNS A record             |
 | etcd     | Autocluster through etcd                |
 | k8s      | Autocluster of Kubernetes service       |
+
+Note: mcast discovery strategy has been deprecated and will be removed in the future releases.
 
 ### EMQX Broker Cluster protocol settings
 

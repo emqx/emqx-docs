@@ -11,10 +11,11 @@ EMQX 支持多种节点发现策略:
 | 策略     | 说明                |
 | ------ | ----------------- |
 | static | 静态节点列表自动集群        |
-| mcast  | UDP 组播方式自动集群      |
 | dns    | DNS A 记录自动集群      |
 | etcd   | 通过 etcd 自动集群      |
 | k8s    | Kubernetes 服务自动集群 |
+
+注意：mcast发现策略已被废弃，在未来的版本中会被删除。
 
 ### 基于 static 节点列表自动集群
 
@@ -110,4 +111,3 @@ cluster {
 ::: tip
 Kubernetes 不建议使用 Fannel 网络插件，推荐使用 Calico 网络插件。
 :::
-

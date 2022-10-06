@@ -58,7 +58,7 @@ Add more features to MQTT:
 ### Scalability
 
 - Multi-server node cluster (Cluster)
-- Support `manual`, `mcast`, `dns`, `etcd`, `k8s` cluster discovery methods
+- Support `manual`, `dns`, `etcd`, `k8s` cluster discovery methods
 - Multi-server node bridge (Bridge)
 
 ### Data Integration
