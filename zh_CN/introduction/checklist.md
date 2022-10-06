@@ -16,7 +16,7 @@
 - 浏览器 Cookie 认证
 - 基于客户端 ID、IP 地址、用户名的访问控制 (ACL)
 - 多服务器节点集群 (Cluster)
-- 支持 manual、mcast、dns、etcd、k8s 等多种集群发现方式
+- 支持 manual、dns、etcd、k8s 等多种集群发现方式
 - 网络分区自动愈合
 - 消息速率限制
 - 连接速率限制

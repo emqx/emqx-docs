@@ -17,7 +17,7 @@
 - Browser cookie authentication
 - Authorization (ACL) based on client ID, IP address, user name
 - Multi-server node cluster (Cluster)
-- Support manual, mcast, dns, etcd, k8s and other cluster discovery methods
+- Support manual, dns, etcd, k8s and other cluster discovery methods
 - Automatic network partition healing
 - Message rate limit
 - Connection rate limit
