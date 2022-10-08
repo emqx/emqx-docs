@@ -4017,7 +4017,7 @@ Set a dispatch strategy for shared subscribers. Options are:
 
 - **hash_clientid**: Map (hash) publisher ClientID to subscriber.
 - **hash_topic**: Map (hash) source MQTT topic to subscriber.
-- **local**: Selects random subscriber connected to the node which received the message. If no such subscribers present, selects a random cluster-wise
+- **local**: Select a random subscriber in the group locally in the node which is processing the shared-publish request. If there is no such local subscriber, it fallbacks to `random` strategy 
 - **random**: Choose randomly among all subscribers.
 - **round_robin**: Enumerate subscribers in (unsorted) order.
 - **sticky**: First dispatch is random, then stick to it for all subsequent messages.
@@ -4030,7 +4030,7 @@ Set a dispatch strategy for shared subscribers. Options are:
 | ---- | ---------------------------------------------------------------- | -------- |
 | enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | - |
 
-Overrides the dispatch strategy for a shared subscription group named `sample_group`. If not configured, `broker.shared_subscription_strategy` will be used.
+Overrides the dispatch strategy for a shared subscription group named `sample_group`. If not configured, `broker.shared_subscription_strategy` is used,
 
 Where `sample_group` can be configured to any group name.
 
