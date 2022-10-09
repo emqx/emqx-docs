@@ -4020,7 +4020,7 @@ Set a dispatch strategy for shared subscribers. Options are:
 - **local**: Select a random subscriber in the group locally in the node which is processing the shared-publish request. If there is no such local subscriber, it fallbacks to `random` strategy 
 - **random**: Choose randomly among all subscribers.
 - **round_robin**: Enumerate subscribers in (unsorted) order.
-- **sticky**: First dispatch is random, then stick to it for all subsequent messages.
+- **sticky**: First dispatch is random, then stick to it for all subsequent messages until that subscriber goes disconnected or that publisher reconnects.
 
 <br />
 

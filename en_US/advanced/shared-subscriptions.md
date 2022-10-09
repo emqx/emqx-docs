@@ -68,7 +68,7 @@ broker.shared_subscription_strategy = random
 broker.$group_name.shared_subscription_strategy = local
 
 # Works for QoS1 QoS2 messages
-# When enabled, after a shared subscriber is disconnected (but the session is still stored in the server)
+# If enabled, when a shared subscriber is disconnected (but the session is still stored in the server)
 # the follow-up messages is promptly forwarded to other shared subscribers in the group
 broker.shared_dispatch_ack_enabled = false
 ```
@@ -80,7 +80,7 @@ broker.shared_dispatch_ack_enabled = false
 | local         | Selects random subscriber connected to the node which received the message. If no such subscribers present, selects a random cluster-wise |
 | random        | Select randomly among all subscribers |
 | round_robin   | According to the order of subscription |
-| sticky        | Always sent to the last selected subscriber |
+| sticky        | First dispatch is random, then stick to it for all subsequent messages until that subscriber goes disconnected or that publisher reconnects |
 
 ::: tip
 Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate, otherwise it will cause errors such as message accumulation and client crash.
