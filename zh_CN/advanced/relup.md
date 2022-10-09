@@ -21,13 +21,18 @@ ref:
 
 使用版本热升级功能，用户可以快速、安全地升级生产环境的 EMQX，并避免了因重启服务导致的系统可用性降低。
 
-目前 EMQX 仅支持 Patch 版本（Patch 版本是版本号的第三位）的热升级。
-即仅支持 x.y.z 热升级到 x.y.(z+N)，不支持 x.y 热升级到 (x+N).(y+M) 。
-
-目前 Windows、MacOSX 暂不支持热升级功能。
-
 ::: tip
-暂不支持 EMQX 与 EMQX Enterprise 之间的热升级，请谨慎操作。
+目前 Windows、MacOSX 暂不支持热升级功能。
+:::
+
+::: warning
+EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
+即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
+请谨慎操作。
+:::
+
+::: warning
+不允许 EMQX (开源版) 与 EMQX Enterprise 之间的热升级，请谨慎操作。
 :::
 
 ## 热升级步骤
@@ -170,13 +175,18 @@ Uninstalled Release: 4.2.0
 
 使用版本热升级功能，用户可以快速、安全地升级生产环境的 EMQX Enterprise，并避免了因重启服务导致的系统可用性降低。
 
-目前 EMQX Enterprise 仅支持 Patch 版本（Patch 版本是版本号的第三位）的热升级。
-即仅支持 x.y.z 热升级到 x.y.(z+N)，不支持 x.y 热升级到 (x+N).(y+M) 。
-
-目前 Windows、MacOSX 暂不支持热升级功能。
-
 ::: tip
-暂不支持 EMQX 与 EMQX Enterprise 之间的热升级，请谨慎操作。
+目前 Windows、MacOSX 暂不支持热升级功能。
+:::
+
+::: warning
+EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
+即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
+请谨慎操作。
+:::
+
+::: warning
+不允许 EMQX (开源版) 与 EMQX Enterprise 之间的热升级，请谨慎操作。
 :::
 
 ## 热升级步骤
