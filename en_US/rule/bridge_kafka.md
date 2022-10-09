@@ -123,7 +123,7 @@ fields will appear.
 ![image](./assets/rule-engine/kafka_resource_0_0.png)
 
 The fields for the authentication methods PLAIN, SCRAM_SHA_256, and
-SCRAM_SHA_512 are for the Kafka username and password (see picture below).
+SCRAM_SHA_512 are the Kafka username and password (see picture below).
 
 ![image](./assets/rule-engine/kafka_resource_0_1.png)
 
@@ -156,7 +156,7 @@ proceeding:
 * The Kerberos configuration file `/etc/krb5.conf` needs to be in sync between
   all Kerberos clients and servers. One must copy the `/etc/krb5.conf` file to
   all the nodes in a multi-node cluster. Please refer to the
-  [Kerberos documentation for how to configure `/etc/krb5.conf`](https://web.mit.edu/kerberos/krb5-latest/doc/admin/conf_files/krb5_conf.html?highlight=krb5%20conf).
+  [Kerberos documentation](https://web.mit.edu/kerberos/krb5-latest/doc/admin/conf_files/krb5_conf.html?highlight=krb5%20conf) for how to configure `/etc/krb5.conf`.
 * Kerberos is time sensitive, so the hosts running EMQX, the Kerberos Key
   Distribution Center, and Kafka must have their time synchronized.
 
