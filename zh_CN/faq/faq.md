@@ -166,7 +166,7 @@ WebSocket 是一种在基于 HTTP 协议上支持全双工通讯的协议，通�
 共享订阅对于数据采集 / 集中处理类应用非常有用。在这样的场景下，数据的生产者远多余数据的消费者，且同一条数据只需要被任意消费者处理一次。
 
 
-更多使用方式请参考 [共享订阅](https://docs.emqx.io/tutorial/v3/cn/advanced/share_subscribe.html)。
+更多使用方式请参考 [共享订阅](../advanced/shared-subscriptions.md)。
 
 
 
@@ -192,7 +192,11 @@ WebSocket 是一种在基于 HTTP 协议上支持全双工通讯的协议，通�
 
 使用代理订阅可以集中管理大量的客户端的订阅，同时为客户端省略掉订阅这个步骤，可以节省客户端侧的计算资源和网络带宽。
 
-以 Redis 数据库为例，代理订阅在 EMQX 上使用方式请参考 [Redis 实现客户端代理订阅](https://docs.emqx.io/tutorial/v3/cn/backend/redis.html#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%A3%E7%90%86%E8%AE%A2%E9%98%85)
+{% emqxee %}
+
+以 Redis 数据库为例，代理订阅在 EMQX 上使用方式请参考 [Redis 实现客户端代理订阅](../rule/get_subs_from_redis.md)
+
+{% endemqxee %}
 
 ::: tip
 注：目前 EMQX 企业版支持代理订阅。
