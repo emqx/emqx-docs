@@ -99,9 +99,9 @@ jobs:
         cd docs-files
         if [[ $DOCS_TYPE == "broker" ]];
         then
-          version_list=$(git tag | egrep "v.*$" | xargs echo -n)
+          version_list=$(git tag | egrep "^v.*$" | xargs echo -n)
         else
-          version_list=$(git tag | egrep "e.*$" | xargs echo -n)
+          version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
         fi
         python3 .ci/generate_version.py $version_list > ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
         cat ../frontend/docs/.vuepress/public/api/${DOCS_TYPE}_versions.json
@@ -156,8 +156,8 @@ jobs:
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
     - name: update ee search index
-      if: env.LATEST_VERSION == env.VERSION && env.DOCS_TYPE == 'enterprise'
-      uses: Swilder-M/docsearch-scraper-simple@v3
+      if: env.DOCS_TYPE == 'enterprise'
+      uses: Swilder-M/docsearch-scraper-simple@v4
       env:
         APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
         API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
@@ -166,8 +166,8 @@ jobs:
         docs_version: ${{ env.VERSION }}
 
     - name: update ce search index
-      if: env.LATEST_VERSION == env.VERSION && env.DOCS_TYPE == 'broker'
-      uses: Swilder-M/docsearch-scraper-simple@v3
+      if: env.DOCS_TYPE == 'broker'
+      uses: Swilder-M/docsearch-scraper-simple@v4
       env:
         APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_CE }}
         API_KEY: ${{ secrets.ALGOLIA_API_KEY_CE }}
