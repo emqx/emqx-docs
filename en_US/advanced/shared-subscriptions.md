@@ -67,18 +67,20 @@ broker.shared_subscription_strategy = random
 # Per-group balancing strategy
 broker.$group_name.shared_subscription_strategy = local
 
-# Applicable to QoS1 QoS2 messages, when enabled, message will be distributed to another group when one group is offline
+# Works for QoS1 QoS2 messages
+# If enabled, when a shared subscriber is disconnected (but the session is still stored in the server)
+# the follow-up messages is promptly forwarded to other shared subscribers in the group
 broker.shared_dispatch_ack_enabled = false
 ```
-<!-- TODO 待确认 -->
 
 | Balancing strategy |             Description             |
-| :---------- | :--------------------------- |
-| random      | Select randomly among all subscribers |
-| round_robin | According to the order of subscription |
-| sticky      | Always sent to the last selected subscriber |
-| hash        | According to the hash value of the publisher ClientID |
-| local       | Selects random subscriber connected to the node which received the message. If no such subscribers present, selects a random cluster-wise |
+| :------------ | :------------------------------------------------------------------- |
+| hash_clientid | According to the hash value of the publisher ClientID |
+| hash_topic    | According to the hash value of the message's topic name |
+| local         | Selects random subscriber connected to the node which received the message. If no such subscribers present, selects a random cluster-wise |
+| random        | Select randomly among all subscribers |
+| round_robin   | According to the order of subscription |
+| sticky        | First dispatch is random, then stick to it for all subsequent messages until that subscriber goes disconnected or that publisher reconnects |
 
 ::: tip
 Whether it is a single client subscription or a shared subscription, pay attention to the client performance and message reception rate, otherwise it will cause errors such as message accumulation and client crash.

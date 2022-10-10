@@ -4009,17 +4009,34 @@ Set the type of session cluster lock. The session cluster lock is used to preven
 
 | Type | Optional Value                                                   | Default  |
 | ---- | ---------------------------------------------------------------- | -------- |
-| enum | `random`, `round_robin`, `sticky`, `hash_clientid`, `hash_topic` | `random` |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | - |
 
 #### Description
 
 Set a dispatch strategy for shared subscribers. Options are:
 
-- **random**: Choose randomly among all subscribers.
-- **round_robin**: Enumerate subscribers in (unsorted) order.
-- **sticky**: First dispatch is random, then stick to it for all subsequent messages.
 - **hash_clientid**: Map (hash) publisher ClientID to subscriber.
 - **hash_topic**: Map (hash) source MQTT topic to subscriber.
+- **local**: Select a random subscriber in the group locally in the node which is processing the shared-publish request. If there is no such local subscriber, it fallbacks to `random` strategy 
+- **random**: Choose randomly among all subscribers.
+- **round_robin**: Enumerate subscribers in (unsorted) order.
+- **sticky**: First dispatch is random, then stick to it for all subsequent messages until that subscriber goes disconnected or that publisher reconnects.
+
+<br />
+
+### broker.sample_group.shared_subscription_strategy
+
+| Type | Optional Value                                                   | Default  |
+| ---- | ---------------------------------------------------------------- | -------- |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | - |
+
+Overrides the dispatch strategy for a shared subscription group named `sample_group`. If not configured, `broker.shared_subscription_strategy` is used,
+
+Where `sample_group` can be configured to any group name.
+
+The available strategies are the same as `broker.shared_subscription_strategy`.
+
+<br />
 
 ### broker.shared_dispatch_ack_enabled
 
