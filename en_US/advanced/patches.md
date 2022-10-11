@@ -1,100 +1,62 @@
-# Patch EMQX at Runtime
+# Hot-Patch EMQX at Runtime
 
-If a bug fix only updates a few modules, you can use patch to upgrade emqx if you know what modules to be updated.
+Starting from 4.3, EMQX supports an easier (comparing to 4.2) hot-patch mechanism.
+Hot-patch is an ad-hoc patch mechanism comparing to [Hot Upgrade](./relup.md#hot-upgrade-steps).
+For certain urgent issues, a hot-patch can be applied before the fix is included in a (future) official release.
 
-Note: If you can use release upgrade, then release upgrade is preferred. You should apply patches only when release upgrade is not available, and you're sure you know what you are doing.
+::: tip NOTE
+It's recommended to upgrade to the offical release which included the patched fixes.
+The patched modules should be deleted before upgrading.
+:::
 
-## Steps of Patching
+## Steps to Patch
 
-1. Get the list of modules to be updated from emqx developers. For example:
+1. Get the list of modules to be updated from EMQX support team. For example:
 
-    ```
-    emqx.beam
-    emqx_rule_engine.beam
-    ```
+```
+emqx.beam
+emqx_rule_engine.beam
+```
 
-2. Get the corresponding software package from emqx official website or emqx developer.
+2. Copy the files to `data/patches` directory
 
-Visit [open source download address](https://www.emqx.com/en/try?product=broker) or [enterprise download address](https://www.emqx.com/en/try?product=enterprise) to download the corresponding version of the zip package.
+```bash
+cp /path/to/patch/emqx.beam data/patches
+cp /path/to/patch/emqx_rule_engine.beam data/patches
+```
 
-Pay attention to selecting the correct software version number, OTP version number and operating system type, and select **zip** package type.
+The exact path to the `data/patches` directory depends on configuration and installation.
+Typically, it is:
 
-3. Unzip the downloaded zip package and find the modules to be updated:
+* Where the environment variable `EMQX_NODE__DATA_DIR` points to
+* Where the `node.data_dir` config key points to in `emqx.conf`
+* `/opt/emqx/data` when running in docker (typically a mounted volume)
+* `<install-path>/data` when installed from zip package extraction
+* `/var/lib/emqx/` when installed from RPM or DEB packages
 
-    ```bash
-    $ unzip -q emqx-ee-4.4.1-otp24.1.5-3-ubuntu20.04-amd64.zip
-    ```
+3. Load new files at runtime:
 
-    Suppose we want to update the `emqx.beam` and `emqx_rule_engine.beam`, then find them in the extracted directory:
+```bash
+$ emqx eval 'c:lm().'
+[{module, emqx},
+{module, emqx_rule_engine}]
+```
 
-    ```bash
-    $ find ./emqx -name "emqx.beam"
-    ./emqx/lib/emqx-4.4.1/ebin/emqx.beam
+## Rollback the Patched Modules
 
-    $ find ./emqx -name "emqx_rule_engine.beam"
-    ./emqx/lib/emqx_rule_engine-4.4.1/ebin/emqx_rule_engine.beam
-    ```
+In case the patch does not work as expected, or if one wish to go back to the state before patching, below are the steps to rollback.
 
-4. Ensure that emqx is started:
+1. Delete the patched modules from the `data/patches` directory
 
-    ```bash
-    $ emqx_ctl status
-    Node 'emqx@127.0.0.1' 4.4.1 is started
-    ```
+```bash
+$ mv data/patches/emqx.beam /tmp/
+$ mv data/patches/emqx_rule_engine.beam /tmp/
+```
 
-5. Find the corresponding location of beam file, backup and replace the old beams:
-
-    Locate the emqx installation directory:
-
-    ```bash
-    $ emqx root_dir
-    "/usr/lib/emqx"
-    ```
-
-    Find the path of the old beam file in the `lib` directory under the installation directory:
-
-    ```bash
-    $ find /usr/lib/emqx/lib -name "emqx.beam"
-    /usr/lib/emqx/lib/emqx-4.4.0/ebin/emqx.beam
-
-    $ find /usr/lib/emqx/lib -name "emqx_rule_engine.beam"
-    /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/emqx_rule_engine.beam
-    ```
-
-    Back up the old beam file to the `/tmp` Directory:
-
-    ```bash
-    $ cp /usr/lib/emqx/lib/emqx-4.4.0/ebin/emqx.beam \
-        /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/emqx_rule_engine.beam /tmp
-    ```
-
-    Overwrite the corresponding files with the new beam file:
-
-    ```bash
-    $ cp -f ./emqx/lib/emqx-4.4.1/ebin/emqx.beam /usr/lib/emqx/lib/emqx-4.4.0/ebin/
-    $ cp -f ./emqx/lib/emqx_rule_engine-4.4.1/ebin/emqx_rule_engine.beam /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/
-    ```
-
-6. Load new files at runtime:
-
-    ```bash
-    $ emqx eval 'c:lm().'
-    [{module, emqx},
-     {module, emqx_rule_engine}]
-    ```
-
-## Rollback the Patches
-
-1. Copy the backup files back to the original directory:
-
-    ```bash
-    $ cp -f /tmp/emqx.beam /usr/lib/emqx/lib/emqx-4.4.0/ebin/
-    $ cp -f /tmp/emqx_rule_engine.beam /usr/lib/emqx/lib/emqx_rule_engine-4.4.0/ebin/
-    ```
 2. reload the beam files:
 
-    ```bash
-    $ emqx eval 'c:lm().'
-    [{module, emqx},
-     {module, emqx_rule_engine}]
-    ```
+```bash
+$ emqx eval 'c:lm().'
+[{module, emqx},
+{module, emqx_rule_engine}]
+```
