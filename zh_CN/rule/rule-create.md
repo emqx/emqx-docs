@@ -3,7 +3,7 @@
 ### 创建 WebHook 规则
 0. 搭建 Web 服务，这里使用 `nc` 命令做一个简单的Web 服务:
 
-::: tip 
+::: tip
 nc 命令在部分 Linux 操作系统上有问题，无法与 EMQX 发起的 HTTP 请求连接握手成功，第 7 步可能无法正常进行。
 :::
 
@@ -79,7 +79,7 @@ nc 命令在部分 Linux 操作系统上有问题，无法与 EMQX 发起的 HTT
   ![image](../assets/webhook-result-1.png)
 
 ## 通过 CLI 创建简单规则
-### 创建 Inspect 规则 
+### 创建 Inspect 规则
 创建一个测试规则，当有消息发送到 't/a' 主题时，打印消息内容以及动作参数细节。
 
 - 规则的筛选 SQL 语句为: SELECT * FROM "t/a";
@@ -112,7 +112,7 @@ Rule rule:803de6db created
 $ tail -f log/erlang.log.1
 
 (emqx@127.0.0.1)1> [inspect]
-    Selected Data: #{client_id => <<"shawn">>,event => 'message.publish',
+    Selected Data: #{clientid => <<"shawn">>,event => 'message.publish',
                       flags => #{dup => false,retain => false},
                       id => <<"5898704A55D6AF4430000083D0002">>,
                       payload => <<"hello">>,
@@ -138,7 +138,7 @@ $ tail -f log/erlang.log.1
 - `Envs` 是动作内部可以使用的环境变量。
 - `Action Init Params` 是初始化动作的时候，我们传递给动作的参数。
 
-### 创建 WebHook 规则 
+### 创建 WebHook 规则
 创建一个规则，将所有发送自 client\_id='Steven' 的消息，转发到地址为 '<http://127.0.0.1:9910>' 的
 Web 服务器:
 

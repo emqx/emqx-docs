@@ -38,7 +38,7 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/redis-resource-0@2x.png)
 
-选择 Redis 单节点模式资源”。
+选择 Redis 单节点模式资源。
 
 填写资源配置:
 
@@ -53,14 +53,12 @@ SELECT * FROM "t/#"
 2). Redis 的命令:
 
 ```bash
-HMSET mqtt:msg:${id} id ${id} from ${client_id} qos ${qos} topic ${topic} payload ${payload} ts ${timestamp}
+HMSET mqtt:msg:${id} id ${id} from ${clientid} qos ${qos} topic ${topic} payload ${payload} ts ${timestamp}
 ```
 
 ![image](./assets/rule-engine/redis-action-1@2x.png)
 
 返回规则创建界面，点击 “新建”。
-
-![image](./assets/rule-engine/redis-rulesql-1@2x.png)
 
 规则已经创建完成，现在发一条数据:
 

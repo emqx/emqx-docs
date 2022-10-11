@@ -7,13 +7,18 @@ Since version 4.2.0, EMQX supports hot upgrade.
 
 By using the hot upgrade feature, users can quickly and safely upgrade the EMQX in the production environment, and avoid the decrease in system availability caused by restarting the service.
 
-Currently EMQX only supports hot upgrade of Patch version (Patch version is the third digit of the version number).
-That is, only the hot upgrade of x.y.z to x.y.(z+N) is supported, and the hot upgrade of x.y to (x+N).(y+M) is not supported.
-
-Currently, Windows, MacOSX does not support hot upgrade feature.
-
 ::: tip
-Hot upgrade between EMQX and EMQX Enterprise is not currently supported, please operate with caution.
+Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
+:::
+
+::: warning
+EMQX only allows hot upgrade between patch versions (the third digit of the version number).
+i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
+Please operate with caution.
+:::
+
+::: warning
+Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
 ## Hot upgrade steps
@@ -157,13 +162,18 @@ Since version 4.2.0, EMQX Enterprise supports hot upgrade.
 
 By using the hot upgrade feature, users can quickly and safely upgrade the EMQX Enterprise in the production environment, and avoid the decrease in system availability caused by restarting the service.
 
-Currently EMQX Enterprise only supports hot upgrade of Patch version (Patch version is the third digit of the version number).
-That is, only the hot upgrade of x.y.z to x.y.(z+N) is supported, and the hot upgrade of x.y to (x+N).(y+M) is not supported.
-
-Currently, Windows, MacOSX does not support hot upgrade feature.
-
 ::: tip
-Hot upgrade between EMQX and EMQX Enterprise is not currently supported, please operate with caution.
+Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
+:::
+
+::: warning
+EMQX only allows hot upgrade between patch versions (the third digit of the version number).
+i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
+Please operate with caution.
+:::
+
+::: warning
+Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
 ## Hot upgrade steps

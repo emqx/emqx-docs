@@ -4036,17 +4036,34 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 | Type | Optional Value                                                   | Default  |
 | ---- | ---------------------------------------------------------------- | -------- |
-| enum | `random`, `round_robin`, `sticky`, `hash_clientid`, `hash_topic` | `random` |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | `random` |
 
 #### 说明
 
 设置共享订阅的分发策略。可选值为:
 
-- **random**: 在所有订阅者中随机选择
-- **round_robin**: 按照一个固定的顺序选择下一个订阅者
-- **sticky**: 首次分发时随机选择一个订阅者，后续消息一直发往这一个订阅者
 - **hash_clientid**: 按照发布者 ClientID 的哈希值
 - **hash_topic**: 按照源消息主题的哈希值
+- **local**: 优先选择和发布者在同一各节点的共享订阅者来派发消息，否则进行随机派发
+- **random**: 在所有订阅者中随机选择
+- **round_robin**: 按照一个固定的顺序选择下一个订阅者
+- **sticky**: 首次分发时随机选择一个订阅者，后续消息一直发往这一个订阅者直到该订阅者离线或该发布者重连。
+
+<br />
+
+### broker.sample_group.shared_subscription_strategy
+
+| Type | Optional Value                                                   | Default  |
+| ---- | ---------------------------------------------------------------- | -------- |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | - |
+
+#### 说明
+
+重载共享订阅组名为 `sample_group` 的派发策略。不配置则以 `broker.shared_subscription_strategy` 为准。
+
+其中 `sample_group` 可以配置为任何组名称。
+
+其可选策略与 `broker.shared_subscription_strategy` 一致。
 
 <br />
 
@@ -4093,11 +4110,23 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 <br />
 
-## broker.perf.trie_compaction = true
+## broker.perf.trie_compaction
+
+{% emqxee %}
+
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| enum    | `true`, `false` | `false`  |
+
+{% endemqxee %}
+
+{% emqxce %}
 
 | Type    | Optional Value  | Default |
 | ------- | --------------- | ------- |
 | enum    | `true`, `false` | `true`  |
+
+{% endemqxce %}
 
 ### Description
 
@@ -4105,7 +4134,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 压缩可优化写操作，降低高并发量的订阅请求响应时间，内存使用量也只有非压缩时的一半。
 非压缩优化读操作，适用于发布主题层数较多的场景。
 
-注意: 将该配置从 `fase` 改成 `true` 时，集群中的节点可依次重启来是配置生效。
+注意: 将该配置从 `fase` 改成 `true` 时，集群中的节点可依次重启来使配置生效。
 从 `true` 改为 `false` 时，需要将集群中所有的节点重启，否则会发生有些消息
 无法被路由的情况。
 
