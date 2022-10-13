@@ -110,3 +110,11 @@ The reply of the LwM2M device is sent with the following topic
 ```
 
 MQTT Payload is also a string in json format. For more details, please refer to the documentation of emqx-lwm2m.
+
+::: warning
+The EMQX LwM2M gateway only supports the following content-formats in the CoAP messages:
+- "text/plain"
+- "application/octet-stream"
+- "application/vnd.oma.lwm2m+tlv"
+- "application/vnd.oma.lwm2m+json"
+:::
