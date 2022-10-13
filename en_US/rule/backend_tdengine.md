@@ -22,7 +22,7 @@ taos
 
 Create database `test`
 
-```bash
+```sql
 create database test;
 ```
 

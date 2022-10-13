@@ -119,7 +119,7 @@ backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(cl
 
 ## Cassandra 创建一个 Keyspace
 
-```bash
+```sql
 CREATE KEYSPACE mqtt WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 USE mqtt;
 ```

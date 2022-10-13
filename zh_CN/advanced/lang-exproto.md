@@ -62,7 +62,7 @@ ref:
 
 例如，其中接口的定义有：
 
-```protobuff
+```protobuf
 syntax = "proto3";
 
 package emqx.exproto.v1;

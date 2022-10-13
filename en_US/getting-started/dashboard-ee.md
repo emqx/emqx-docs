@@ -223,7 +223,7 @@ allocate multiple Actions.
 
 <!-- end list -->
 
-``` sourceCode sql
+``` sql
 SELECT * FROM "message.publish" WHERE topic =~ 't/#'
 ```
 
@@ -232,7 +232,7 @@ SELECT * FROM "message.publish" WHERE topic =~ 't/#'
 
 <!-- end list -->
 
-``` sourceCode sql
+``` sql
 SELECT payload.x as x FROM "message.publish" WHERE topic =~ 't/a'
 ```
 
@@ -248,7 +248,7 @@ information:
 
 <!-- end list -->
 
-``` sourceCode sql
+``` sql
 SELECT clientid, connected_at FROM "client.connected" WHERE username = 'emqx'
 ```
 

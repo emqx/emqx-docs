@@ -53,7 +53,7 @@ CREATE TABLE t_mqtt_msg (
 
 填写规则 SQL:
 
-```bash
+```sql
 SELECT * FROM "t/#"
 ```
 

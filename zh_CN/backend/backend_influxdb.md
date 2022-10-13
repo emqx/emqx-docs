@@ -8,7 +8,7 @@ EMQX 3.1 版本后推出强大的规则引擎用于替换插件，建议您前�
 
 ## InfluxDB 配置
 
-EMQX 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
+EMQX 支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
 
 ```bash
 [[udp]]
@@ -73,13 +73,13 @@ backend.influxdb.pool1.http.https_enabled = false
 ## backend.influxdb.pool1.http.ssl.version = tlsv1.2
 
 ## 密钥文件
-## backend.influxdb.pool1.http.ssl.keyfile = 
+## backend.influxdb.pool1.http.ssl.keyfile =
 
 ## 证书文件
-## backend.influxdb.pool1.http.ssl.certfile = 
+## backend.influxdb.pool1.http.ssl.certfile =
 
 ## CA 证书文件
-## backend.influxdb.pool1.http.ssl.cacertfile = 
+## backend.influxdb.pool1.http.ssl.cacertfile =
 
 ## 存储 PUBLISH 消息
 backend.influxdb.hook.message.publish.1 = {"topic": "#", "action": {"function": "on_message_publish"}, "pool": "pool1"}

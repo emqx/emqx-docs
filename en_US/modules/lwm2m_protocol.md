@@ -385,3 +385,29 @@ emqx_lwm2m needs object definitions to parse data from lwm2m devices. Object def
     - {?MsgType}: String, must be "notify"
     - {?ObserveSeqNum}: Number, value of "Observe" option in CoAP message
     - "content": same to the "content" field contains in the response of "read" command
+
+### MQTT and LwM2M conversion
+
+From the MQTT client, you can send Command to the LwM2M device. The command from MQTT to LwM2M uses the following topic
+
+```bash
+"lwm2m/{?device_end_point_name}/command".
+```
+
+The MQTT Payload is a string in json format, which specifies the command to be sent. For more details, please refer to the emqx-lwm2m documentation.
+
+The reply of the LwM2M device is sent with the following topic
+
+```bash
+"lwm2m/{?device_end_point_name}/response".
+```
+
+MQTT Payload is also a string in json format. For more details, please refer to the documentation of emqx-lwm2m.
+
+::: warning
+The EMQX LwM2M gateway only supports the following content-formats in the CoAP messages:
+- "text/plain"
+- "application/octet-stream"
+- "application/vnd.oma.lwm2m+tlv"
+- "application/vnd.oma.lwm2m+json"
+:::

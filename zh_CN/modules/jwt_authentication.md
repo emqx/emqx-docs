@@ -47,3 +47,56 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGU
 
 :::
 
+## JWT 中的 acl 字段
+
+模块配置参数中的 "ACL Claim Name" 字段可以用于指定从那个 JWT 字段中提取 ACL 信息。
+如果一个 JWT 中不含该字段，则不会对该客户端进行 ACL 检查（其他插件或模块的 ACL 不受影响）。
+
+## 数据结构
+
+```js
+{
+    # ... payload claims ...
+    "acl": {
+        "sub": [
+            "some/topic/for/sub/1",
+            "some/topic/for/sub/2"
+        ],
+        "pub": [
+            "some/topics/for/pub/1",
+            "some/topics/for/pub/2"
+        ]
+    }
+}
+```
+
+`pub` 和 `sub` 用于指定该客户端允许发布和订阅的主题白名单。
+
+可以在主题白名单中使用以下占位符:
+
+- %u：用户名
+- %c：客户端 ID
+
+例如:
+```js
+{
+    # ... payload claims ...
+    "acl": {
+        "pub": [
+            "some/stats/%c"
+        ]
+    }
+}
+```
+
+## ACL 过期
+
+JWT ACL 检查时如果发现这个 Token 已经超期 (`exp` 字段指定)，那么所有的操作都将被禁止。
+客户端必需获取一个新的有效 JWT 在进行重连。
+
+如果想要让一个 JWT 永不超期，可以在 JWT 中不提供 `exp` 字段即可。
+
+::: 警告！！
+1. 使用长期的 JWT 是不安全的。
+2. ACL 缓存开启的情况下，JWT 超期之后一段时间可能还会继续有效，直到缓存失效。
+:::

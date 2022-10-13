@@ -26,7 +26,7 @@ $ cqlsh -uroot -ppublic
 
 创建 "test" 表空间:
 
-```bash
+```sql
 CREATE KEYSPACE test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 ```
 
@@ -49,7 +49,7 @@ CREATE TABLE t_mqtt_msg (
 打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
 填写规则 SQL:
-```bash
+```sql
 SELECT * FROM "t/#"
 ```
 
