@@ -92,5 +92,5 @@ To make ACL rules valid forever, a client may not provide `exp` claim at all.
 
 ::: warning
 1. Using long-living JWTs is not considered secure.
-2. When ACL cache is enabled, the ACL rule's expiration is either when the cache or JWT expires, whichever comes the last.
+2. When ACL cache is enabled, the ACL rule's expiration is either when the cache or JWT expires, whichever is the later.
 :::
