@@ -14,7 +14,7 @@ docker run -d  -p 8086:8086  influxdb
 资源包括以下配置：
 
 - InfluxDB 主机：填写主机地址，或是 InfluxDB Cloud 中创建的服务地址；
-- InfluxDB 端口：本地安装或者docker安装默认端口是8086，InfluxDB Cloud 使用https默认端口443；
+- InfluxDB 端口：本地安装或者docker安装默认端口是8086，InfluxDB Cloud 需要使用https默认端口443；
 - InfluxDB Bucket：数据库/数据集名称；
 - InfluxDB 组织名称：创建服务时填写的组织名称；
 - InfluxDB Token：对应数据库权限的 API Token，可以在 InfluxDB 控制台中找到；

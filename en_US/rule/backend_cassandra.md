@@ -27,7 +27,7 @@ $ cqlsh -uroot -ppublic
 
 Create Keyspace "test":
 
-```bash
+```sql
 CREATE KEYSPACE test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 ```
 
@@ -54,7 +54,7 @@ Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 
 Select "message.publish", then type in the following SQL:
 
-```bash
+```sql
 SELECT
     *
 FROM

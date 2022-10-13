@@ -8,7 +8,7 @@ keywords:
 # 描述
 description:
 # 分类
-category: 
+category:
 # 引用
 ref: undefined
 ---
@@ -138,6 +138,11 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
 
 ## Install EMQX in Docker (Contain a simple docker-compose cluster)
 
+::: warning
+Because emqx stores data in the 'data/mnesia/<node name>' directory, when using the container to start emqx,
+the hostname or FQDN must be used to form the node name of emqx. Otherwise, the data storage directory will be switched, resulting in data loss.
+:::
+
 ### Run a single container
 
 1.  Get docker image
@@ -168,8 +173,6 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
        - "EMQX_HOST=node1.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io, emqx@node2.emqx.io"
-       - "EMQX_ZONE__EXTERNAL__RETRY_INTERVAL=2s"
-       - "EMQX_MQTT__MAX_TOPIC_ALIAS=10"
        volumes:
            - ./tmp/emqx.lic:/opt/emqx/etc/emqx.lic
        healthcheck:
@@ -189,8 +192,6 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
        - "EMQX_HOST=node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=emqx@node1.emqx.io, emqx@node2.emqx.io"
-       - "EMQX_ZONE__EXTERNAL__RETRY_INTERVAL=2s"
-       - "EMQX_MQTT__MAX_TOPIC_ALIAS=10"
        volumes:
            - ./tmp/emqx.lic:/opt/emqx/etc/emqx.lic
        healthcheck:
@@ -202,15 +203,6 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
          emqx-bridge:
            aliases:
            - node2.emqx.io
-
-     client:
-       image: python:3.7.2-alpine3.9
-       depends_on:
-         - emqx1
-         - emqx2
-       tty: true
-       networks:
-           emqx-bridge:
 
    networks:
      emqx-bridge:
@@ -234,7 +226,7 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
 
 For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)
 
-## Install and cluster via Helm (K8S、K3S)
+## Install emqx cluster via Helm (K8S、K3S)
 
 1. Add helm repository
 

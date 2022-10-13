@@ -65,7 +65,7 @@ FROM description
 
 ​	**$events/message_acked**: The subscriber replies to the message ACK to trigger the action of deleting the offline message that has been received
 
-```bash
+```sql
 SELECT * FROM "t/#", "$events/session_subscribed", "$events/message_acked" WHERE topic =~ 't/#'
 ```
 

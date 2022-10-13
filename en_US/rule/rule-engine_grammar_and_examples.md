@@ -14,7 +14,7 @@ The SELECT statement is used to determine the fields in the final output. such a
 
 The following SQL output will have only two fields of "a" and "b":
 
-```
+```sql
 SELECT a, b FROM "t/#"
 ```
 

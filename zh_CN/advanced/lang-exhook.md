@@ -51,7 +51,7 @@ ref:
 
 作为事件的处理端，即 gRPC 的服务端。它需要用户自定义实现需要挂载的钩子列表，和每个钩子事件到达后如何去处理的回调函数。这些接口被定义为一个名为 `HookProvider` 的 gRPC 服务，其需要实现的接口的列表包含：
 
-```protobuff
+```protobuf
 syntax = "proto3";
 
 package emqx.exhook.v1;
@@ -111,9 +111,16 @@ service HookProvider {
 
 - `OnClient*`，`OnSession*`，`OnMessage*` 为前缀的方法与 [钩子](hooks.md) 的当中的方法一一对应。它们有着相同的调用时机和相似的参数列表。
 - 仅 `OnClientAuthenticate`，`OnClientCheckAcl`，`OnMessagePublish` 允许携带返回值到 EMQX 系统，其它回调则不支持。
+- 特定的，对于 message 类型的钩子：`message.publish`, `message.delivered`, `message.acked`, `message.dropped`，可以在返回钩子列表时，为这些钩子携带主题过滤器列表。
+  那么在触发消息事件时，仅有主题能够匹配主题过滤器列表中任意过滤器的消息，会被发送到用户的 gRPC 服务端。</br>
+  通过这样的方式，gRPC 服务端可以仅处理自己关心的主题下的消息，以避免多余的 gRPC 请求消耗。
 
-其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx/blob/v4.3-beta.1/apps/emqx_exhook/priv/protos/exhook.proto)
+其中接口和参数数据结构的详情参考：[exhook.proto](https://github.com/emqx/emqx/blob/main-v4.3/apps/emqx_exhook/priv/protos/exhook.proto)
 
+::: tip
+需要注意的是，EMQX 仅在 HookProvider 被加载时确认一次需要加载的钩子以及 message 钩子所配置的主题过滤器列表，之后的 gRPC 请求都以将以加载时的为准。</br>
+如果需要挂载的钩子列表有变更，或 message 类型钩子所关心的主题过滤器列表有变更，都需要重新加载。即需要在 EMQX 中重启 ExHook 插件/模块。
+:::
 
 ## 开发指南
 

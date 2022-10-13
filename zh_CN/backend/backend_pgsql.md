@@ -114,7 +114,7 @@ createdb mqtt -E UTF8 -e
 
 *mqtt_client* 存储设备在线状态:
 
-```bash
+```sql
 CREATE TABLE mqtt_client(
   id SERIAL8 primary key,
   clientid character varying(64),

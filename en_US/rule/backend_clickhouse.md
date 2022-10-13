@@ -20,7 +20,7 @@ clickhouse-client
 ```
 
 Create the `test` database:
-```bash
+```sql
 create database test;
 ```
 create `t_mqtt_msg` table:
