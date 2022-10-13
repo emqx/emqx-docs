@@ -46,3 +46,59 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGU
 The above JWT Token is only for testing and can be generated with related tools according to your own business needs. An online generation tool is provided here: https://www.jsonwebtoken.io/.
 
 :::
+
+## ACL information stored in claims
+
+The 'ACL Claim Name' filed can be used to to specify which JWT token claim is to be used for ACL rules.
+If the provided claim is not found in the JWT, no ACL check will be applied for this client, unless there
+are other ACL plugins or modules enabled.
+
+## ACL data structure
+
+The data structure of ACL rules is the following:
+
+```js
+{
+    # ... payload claims ...
+    "acl": {
+        "sub": [
+            "some/topic/for/sub/1",
+            "some/topic/for/sub/2"
+        ],
+        "pub": [
+            "some/topics/for/pub/1",
+            "some/topics/for/pub/2"
+        ]
+    }
+}
+```
+
+`pub` and `sub` lists serve as whitelists for the corresponding operations.
+
+You can use the following placeholders in topic whitelists:
+- %u：Username
+- %c：Client ID
+
+For example:
+```js
+{
+    # ... payload claims ...
+    "acl": {
+        "pub": [
+            "some/stats/%c"
+        ]
+    }
+}
+```
+
+## ACL expiration
+
+JWT ACL engine will prohibit all operations after the deadline specified in `exp` JWT claim, so
+a client with an expired JWT has to reconnect with a fresh JWT.
+
+To make ACL rules valid forever, a client may not provide `exp` claim at all.
+
+::: warning
+1. Using long-living JWTs is not considered secure.
+2. When ACL cache is enabled, the ACL rule's expiration is either when the cache or JWT expires, whichever comes the last.
+:::

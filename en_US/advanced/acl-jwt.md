@@ -39,7 +39,9 @@ auth.jwt.acl_claim_name = acl
 
 ```
 
-JWT authorization is not applied if a client does not have the specified claim in its JWT.
+If the provided claim is not found in the JWT, no ACL check will be applied for this client, unless there
+are other ACL plugins or modules enabled.
+
 
 ## Data structure
 
@@ -56,16 +58,12 @@ The data structure of ACL rules is the following:
         "pub": [
             "some/topics/for/pub/1",
             "some/topics/for/pub/2"
-        ],
-        "all": [
-            "some/topics/for/pubsub/1",
-            "some/topics/for/pubsub/2"
         ]
     }
 }
 ```
 
-`pub`, `sub`, and `all` lists serve as whitelists for the corresponding operations.
+`pub` and `sub` lists serve as whitelists for the corresponding operations.
 
 You can use the following placeholders in topic whitelists:
 - %u：Username
@@ -94,5 +92,5 @@ To make ACL rules valid forever, a client may not provide `exp` claim at all.
 
 ::: warning
 1. Using long-living JWTs is not considered secure.
-2. Turning on ACL caching may invalidate the expiration time check.
+2. When ACL cache is enabled, the ACL rule's expiration is either when the cache or JWT expires, whichever comes the last.
 :::
