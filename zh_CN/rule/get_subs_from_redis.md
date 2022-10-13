@@ -18,7 +18,7 @@ $ redis-server
 
 然后填写规则 SQL:
 
-```bash
+```sql
 SELECT * FROM "$events/client_connected"
 ```
 

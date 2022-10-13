@@ -12,7 +12,7 @@ $ influxd -config /usr/local/etc/influxdb.conf
 
 填写规则 SQL:
 
-```bash
+```sql
 SELECT
     payload.host as host,
     payload.location as location,

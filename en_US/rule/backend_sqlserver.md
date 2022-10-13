@@ -14,7 +14,7 @@ $ mysql -u root -h localhost -ppublic
 ```
 
 Create the "test" database:
-```bash
+```sql
 CREATE DATABASE test;
 go;
 ```

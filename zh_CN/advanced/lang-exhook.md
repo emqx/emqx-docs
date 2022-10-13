@@ -51,7 +51,7 @@ ref:
 
 作为事件的处理端，即 gRPC 的服务端。它需要用户自定义实现需要挂载的钩子列表，和每个钩子事件到达后如何去处理的回调函数。这些接口被定义为一个名为 `HookProvider` 的 gRPC 服务，其需要实现的接口的列表包含：
 
-```protobuff
+```protobuf
 syntax = "proto3";
 
 package emqx.exhook.v1;

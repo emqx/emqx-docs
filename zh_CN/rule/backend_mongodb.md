@@ -32,7 +32,7 @@ db.createCollection("t_mqtt_msg");
 
 填写规则 SQL:
 
-```bash
+```sql
 SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/#"
 ```
 

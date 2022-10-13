@@ -4797,7 +4797,7 @@ core components.
 The clustering architecture is evolved. Now a single cluster is able to
 serve ten-millions of concurrent connections.
 
-``` sourceCode properties
+``` properties
 ----------             ----------
 |  EMQX  |<--- MQTT--->|  EMQX  |
 |--------|             |--------|
@@ -5391,7 +5391,7 @@ strategies:
 
 Enable autoheal of Network Partition by default:
 
-``` sourceCode properties
+``` properties
 cluster.autoheal = on
 ```
 
@@ -5410,7 +5410,7 @@ the cluster if autoheal is enabled:
 
 A down node will be removed from the cluster if autoclean is enabled:
 
-``` sourceCode properties
+``` properties
 cluster.autoclean = 5m
 ```
 
@@ -6073,7 +6073,7 @@ MQTT-SN Plugin: <https://github.com/emqtt/emq_sn>
 The release integrated with cuttlefish library, and adopted a more
 user-friendly k = v syntax for the new configuration file:
 
-``` sourceCode properties
+``` properties
 ## Node name
 node.name = emqttd@127.0.0.1
 ...
@@ -6852,7 +6852,7 @@ release\](<https://github.com/emqtt/emqttd/wiki/benchmark-for-0.13.0-release>)
 
 3.1G memory and 50+ CPU/core:
 
-``` sourceCode bash
+``` bash
 Connections: 250K
 Subscribers: 250K
 Topics:      50K
