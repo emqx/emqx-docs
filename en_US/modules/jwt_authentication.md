@@ -96,7 +96,7 @@ For example:
 JWT ACL engine will prohibit all operations after the deadline specified in `exp` JWT claim, so
 a client with an expired JWT has to reconnect with a fresh JWT.
 
-To make ACL rules valid forever, a client may not provide `exp` claim at all.
+To make ACL rules valid forever, a client may omit the `exp` claim.
 
 ::: warning
 1. Using long-living JWTs is not considered secure.
