@@ -87,16 +87,23 @@ service HookProvider {
 
 The HookProvider part:
 
--ʻOnProviderLoaded`: Define how the HookProvider is loaded and return the list of hooks that need to be mounted. Only the hooks in this list will be called back to the HookProivder service.
--ʻOnProviderUnloaded`: Define how the HookProvider is unloaded, only for notification.
+- `OnProviderLoaded`: Defines how the HookProvider is loaded and return the list of hooks that need to be mounted. Only the hooks in this list will be called back to the HookProivder service.
+- `OnProviderUnloaded`: Defines how the HookProvider is unloaded, only for notification.
 
 Hook event part:
 
--Methods prefixed with ʻOnClient*`, ʻOnSession*`, ʻOnMessage*` correspond to the methods in [hooks](../advanced/hooks.md) one-to-one. They have the same calling timing and similar parameter lists.
--Only ʻOnClientAuthenticate`, ʻOnClientCheckAcl`, ʻOnMessagePublish` are allowed to carry the return value to the EMQX system, other callbacks are not supported.
+- Methods prefixed with `OnClient*`, `OnSession*`, `OnMessage*` correspond to the methods in [hooks](../advanced/hooks.md) one-to-one. They have the same calling timing and similar parameter lists.
+- Only `OnClientAuthenticate`, `ClientCheckAcl`, `OnMessagePublish` are allowed to carry the return value to the EMQX system, other callbacks are not supported.
+- Specifically, for message type hooks: `message.publish`, `message.delivered`, `message.acked`, `message.dropped`, it is possible to carry a list of topic filters for these hooks when returning a list of hooks.
+  Then when a message event is triggered, only subject-specific messages that can match any filter in the subject filter list will be sent to the user's gRPC server.
+  In this way, the gRPC server can process messages under only the topics it cares about, to avoid consuming redundant gRPC requests.
 
 For details of the interface and parameter data structure, please refer to: [exhook.proto](https://github.com/emqx/emqx/blob/main-v4.3/apps/emqx_exhook/priv/protos/exhook.proto)
 
+::: tip
+It should be noted that the hooks and the topic filter list configured by the message type hook hooks are confirmed only once when the HookProvider is loaded. And the subsequent gRPC requests will be based on the configured when loading. </br>
+If the list of hooks to be mounted has changed, or the list of topic filters concerned by the message type hook has changed, it needs to be reloaded. That is, the ExHook plugin/module needs to be restarted in EMQX.
+:::
 
 ## Development Guide
 
