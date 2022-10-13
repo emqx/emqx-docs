@@ -21,10 +21,7 @@
 
 - title_en: Getting Started
   title_cn: 快速开始
-  path: getting-started/getting-started
-  children:
-    - getting-started/getting-started
-    - getting-started/dashboard
+  path: getting-started
 
 ## Infrastructure
 
@@ -178,6 +175,33 @@
 #    - backend/backend_pgsql
 #    - backend/backend_redis
 #    - backend/backend_timescale
+
+## Dashboard
+
+- title_en: Dashboard
+  title_cn: Dashboard
+  children:
+    - dashboard/introduction
+    - dashboard/dashboard
+    - dashboard/connections/connections
+    - title_en: Subscriptions
+      title_cn: 主题订阅
+      children: 
+        - dashboard/subscriptions/subscriptions
+        - dashboard/subscriptions/topics
+    - title_en: Access Control
+      title_cn: 访问控制
+      children:
+        - dashboard/authn
+        - dashboard/authz
+        - dashboard/blacklist
+    - title_en: Data Integration
+      title_cn: 数据集成
+      children:
+        - dashboard/bridge
+        - dashboard/rules
+        - dashboard/flows
+    - dashboard/configuration
 
 ## Developers & Testers
 

@@ -103,6 +103,7 @@ PSK 仅支持 tlsv1.2 及以下的版本。
 ![Configure HTTPS Client](./assets/http-tls.jpg)
 
 在创建任何对外部资源的连接时，可以选择启用 TLS 并配置其 SSL 客户端证书。其中：
+
 - 当启用 **验证服务证书** 后，必须填写 **CA Cert** 字段来验证服务器证书的合法性。
 - 当服务器需要验证客户端证书时，则必须填写 **TLS Cert** 和 **TLS Key**。
 - **SNI** 即 Server Name Indication，表示是否验证服务器域名和证书是否一致；为空时表示不验证。
