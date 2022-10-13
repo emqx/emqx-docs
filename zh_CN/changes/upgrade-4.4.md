@@ -32,13 +32,12 @@ ref:
 ## 数据及配置备份
 
 在升级前，应备在每个4.3版本的节点上对 `data` `etc`目录中的数据和配置进行备份。
-根据不同的安装方式和配置，`data` `etc` 目录可能在一下这些位置
-
+根据不同的安装方式和配置，`data` `etc` 目录可能在以下这些位置
 * 环境变量 `EMQX_NODE__DATA_DIR` 指向的位置
 * 配置文件中 `node.data_dir` 指向的位置
-* 在docker中运行的默认位置: `/opt/emqx/data` `opt/emqx/etc` （通常是一个挂在的外部volume）
+* 在 docker 中运行的默认位置: `/opt/emqx/data` `opt/emqx/etc` （通常是一个挂在的外部volume）
 * 直接使用 zip 安装包的默认位置: `<install-path>/data` `<install-path>/etc`
-* 使用RPM或DEB安装包安装的默认位置：`/var/lib/emqx/` `/etc/emqx`
+* 使用 RPM 或 DEB 安装包安装的默认位置：`/var/lib/emqx/` `/etc/emqx`
 
 以 RPM 默认安装为例，你需要
 
