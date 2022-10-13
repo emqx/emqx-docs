@@ -49,7 +49,7 @@ The above JWT Token is only for testing and can be generated with related tools 
 
 ## ACL information stored in claims
 
-The 'ACL Claim Name' filed can be used to to specify which JWT token claim is to be used for ACL rules.
+The 'ACL Claim Name' field can be used to to specify which JWT token claim is to be used for ACL rules.
 If the provided claim is not found in the JWT, no ACL check will be applied for this client, unless there
 are other ACL plugins or modules enabled.
 
