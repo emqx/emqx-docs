@@ -1,6 +1,8 @@
-# Hierarchical Rate Limiter
+# Rate limit
 
-The hierarchical rate limiter is a multi-level rate and flow control system based on the hierarchical token bucket algorithm, it can flexibly and accurately control the usage rate of the corresponding resources in the EMQX node.
+EMQX broker can specifies the limit on access speed and message speed, this is a backpressure scheme that avoids system overload from the entrance and guarantees system stability and predictable throughput.
+
+In 5.0 we introduced a new rate limiter which based on the hierarchical token bucket algorithm, it can flexibly and accurately control the usage rate of the corresponding resources in the EMQX node.
 
 ## Terminologies
 
@@ -8,10 +10,12 @@ The hierarchical rate limiter is a multi-level rate and flow control system base
 
 The system currently supports rate control services for the following resources:
 
-- **bytes\_in:** the incoming byte rate of the message
-- **message\_in:** the incoming rate of messages
-- **connection:** connection rate
-- **message\_routing:** rate of message routing
+| Type            | Description                                           | Post-Overload Behavior          |
+|:----------------|:------------------------------------------------------|:--------------------------------|
+| bytes_in        | Incoming message size in bytes per second             | Pause receiving client messages |
+| message_in      | Incoming messages per second                          | Pause receiving client messages |
+| connection      | Connections per second                                | Pause for new connections       |
+| message_routing | The number of messages deliver by the session per second | Pause session delivery       |
 
 ### Rate Control Hierarchy
 
