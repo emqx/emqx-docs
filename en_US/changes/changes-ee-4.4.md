@@ -1,5 +1,74 @@
 # Releases
 
+## e4.4.10
+
+*Release Date: 2022-10-14*
+
+### Enhancements (ported from v4.3.21)
+
+- TLS listener memory usage optimization [#9005](https://github.com/emqx/emqx/pull/9005).
+  New config `listener.ssl.$NAME.hibernate_after` to hibernate TLS connection process after idling.
+  Hibernation can reduce RAM usage significantly, but may cost more CPU.
+  This configuration is by default disabled.
+  Our preliminary test shows a 50% of RAM usage decline when configured to '5s'.
+
+- TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
+  Eliminate uncertainty that the buffer size is set by OS default.
+
+- Disable authorization for `api/v4/emqx_prometheus` endpoint. [8955](https://github.com/emqx/emqx/pull/8955)
+
+- Added a test to prevent a last will testament message to be
+  published when a client is denied connection. [#8894](https://github.com/emqx/emqx/pull/8894)
+
+- More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
+
+- QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
+  when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
+  Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to true
+  to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
+
+### Bug fixes (ported from v4.4.10)
+
+- Fix the latency statistics error of the slow subscription module when `stats_type` is `internal` or `response`. [#8981](https://github.com/emqx/emqx/pull/8981)
+
+### Bug fixes (ported from v4.3.21)
+
+- Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
+
+- Fix delayed publish inaccurate caused by os time change. [#8908](https://github.com/emqx/emqx/pull/8908)
+
+- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
+  In this change, it also included more changes in redis client:
+  - Improve redis connection error logging [eredis:19](https://github.com/emqx/eredis/pull/19).
+    Also added support for eredis to accept an anonymous function as password instead of
+    passing around plaintext args which may get dumpped to crash logs (hard to predict where).
+    This change also added `format_status` callback for `gen_server` states which hold plaintext
+    password so the process termination log and `sys:get_status` will print '******' instead of
+    the password to console.
+  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+    Same `format_status` callback is added here too for `gen_server`s which hold password in
+    their state.
+
+- Fix shared subscription message re-dispatches [#9094](https://github.com/emqx/emqx/pull/9094).
+  - When discarding QoS 2 inflight messages, there were excessive logs
+  - For wildcard deliveries, the re-dispatch used the wrong topic (the publishing topic,
+    but not the subscribing topic), caused messages to be lost when dispatching.
+
+- Fix shared subscription group member unsubscribe issue when 'sticky' strategy is used.
+  Prior to this fix, if a previously picked member unsubscribes from the group (without reconnect)
+  the message is still dispatched to it.
+  This issue only occurs when unsubscribe with the session kept.
+  Fixed in [#9119](https://github.com/emqx/emqx/pull/9119)
+
+- Fix shared subscription 'sticky' strategy when there is no local subscriptions at all.
+  Prior to this change, it may take a few rounds to randomly pick group members until a local subscriber
+  is hit (and then start sticking to it).
+  After this fix, it will start sticking to whichever randomly picked member even when it is a
+  subscriber from another node in the cluster.
+  Fixed in [#9122](https://github.com/emqx/emqx/pull/9122)
+
+- Fix rule engine fallback actions metrics reset. [#9125](https://github.com/emqx/emqx/pull/9125)
+
 ## e4.4.9
 
 *Release Date: 2022-09-17*
