@@ -1,21 +1,6 @@
----
-# 编写日期
-date: 2021-12-21 09:32:21
-# 作者 Github 名称
-author: tigercl
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
+# Releases
 
-# Changes
-
-## Version 4.4.9
+## v4.4.9
 
 *Release Date: 2022-09-17*
 
@@ -30,7 +15,7 @@ ref:
 - Fix the issue that shared subscriptions might get stuck in an infinite loop when `shared_dispatch_ack_enabled` is set to true
 - Fix the issue that the rule engine SQL crashes when subject matching null values
 
-## Version 4.4.8
+## v4.4.8
 
 *Release Date: 2022-08-29*
 
@@ -56,7 +41,7 @@ ref:
 - Fix the issue that the Client ID parameter in ExProto `client.connect` hook is not defined
 - Fix ExProto not triggering disconnect event when client is kicked
 
-## Version 4.4.7
+## v4.4.7
 
 *Release Date: 2022-08-11*
 
@@ -69,7 +54,7 @@ ref:
 - Allows the connection process to be configured to be garbage collected after the TLS handshake is complete to reduce memory footprint, which can reduce memory consumption by about 35% per SSL connection, but increases CPU consumption accordingly
 - Allows configuring the log level of the TLS handshake log to view the detailed handshake process
 
-## Version 4.4.6
+## v4.4.6
 
 *Release Date: 2022-07-29*
 
@@ -87,7 +72,7 @@ ref:
 - Fix the issue that when the client specified Clean Session as false to reconnect, the shared subscription message in the flight window would be re-dispatched to the old session process
 - Fix the issue that the `emqx_lua_hook` plugin cannot cancel the message publishing
 
-## Version 4.4.5
+## v4.4.5
 
 *Release Date: 2022-06-30*
 
@@ -113,7 +98,7 @@ ref:
 - Fix `client.subscribe` hook not being able to reject subscriptions
 - If the placeholder in the ACL rule is not replaced, the client's publish or subscribe operation will be rejected
 
-## Version 4.4.4
+## v4.4.4
 
 *Release Date: 2022-06-01*
 
@@ -148,7 +133,7 @@ ref:
 - Fix rule engine resource connection test not working
 - Fix multiple Dashboard display issues
 
-## Version 4.4.3
+## v4.4.3
 
 *Release Date: 2022-04-18*
 
@@ -183,7 +168,7 @@ ref:
 - When creating a rule, if a rule with the same ID already exists, the rules engine will now report an error instead of replacing the existing rule
 - Fix the issue that the HTTP driver process pool may not be deleted
 
-## Version 4.4.2
+## v4.4.2
 
 *Release Date: 2022-04-01*
 ### Important changes
@@ -223,13 +208,13 @@ ref:
 - Corrected the reason code in the DISCONNECT packet returned when kicking the client to `0x98`.
 - Auto subscriptions will ignore empty topics.
 
-## Version 4.4.1
+## v4.4.1
 
 *Release Date: 2022-02-21*
 
 This patch release only includes a CI change for the Windows package.
 
-## Version 4.4.0
+## v4.4.0
 
 *Release Date: 2022-02-18*
 
@@ -295,7 +280,7 @@ The compare base of this change set is 4.3.12
 
 - Add openssl-1.1 to RPM dependency
 
-## Version 4.4-beta.1
+## v4.4-beta.1
 
 *Release Date: 2021-12-21*
 

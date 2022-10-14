@@ -1,21 +1,6 @@
----
-# 编写日期
-date: 2021-12-21 09:32:21
-# 作者 Github 名称
-author: tigercl
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category:
-# 引用
-ref:
----
+# Releases
 
-# Changes
-
-## Version 4.4.9
+## e4.4.9
 
 *Release Date: 2022-09-17*
 
@@ -31,7 +16,7 @@ ref:
 - Fix the issue that shared subscriptions might get stuck in an infinite loop when `shared_dispatch_ack_enabled` is set to true
 - Fix the issue that the rule engine SQL crashes when subject matching null values
 
-## Version 4.4.8
+## e4.4.8
 
 *Release Date: 2022-08-29*
 
@@ -62,7 +47,7 @@ ref:
 - Fix the issue that the Client ID parameter in ExProto `client.connect` hook is not defined
 - Fix ExProto not triggering disconnect event when client is kicked
 
-## Version 4.4.7
+## e4.4.7
 
 *Release Date: 2022-08-11*
 
@@ -79,7 +64,7 @@ ref:
 
 - Fix the issue that EMQX could not be started when deployed through Helm Chart after unmounting the `loaded_modules` file in ConfigMap
 
-## Version 4.4.6
+## e4.4.6
 
 *Release Date: 2022-07-29*
 
@@ -108,7 +93,7 @@ ref:
 - Fix the issue that the new node did not use the cluster license after joining the cluster
 - Fix the issue that the `emqx_lua_hook` plugin cannot cancel the message publishing
 
-## Version 4.4.5
+## e4.4.5
 
 *Release Date: 2022-06-30*
 
@@ -146,7 +131,7 @@ ref:
 - If the placeholder in the ACL rule is not replaced, the client's publish or subscribe operation will be rejected
 - Fix the issue that TLS was enabled but no TLS connection was actually established with Pulsar
 
-## Version 4.4.4
+## e4.4.4
 
 *Release Date: 2022-06-01*
 
@@ -190,7 +175,7 @@ ref:
 - Fix rule engine resource connection test not working
 - Fix multiple Dashboard display issues
 
-## Version 4.4.3
+## e4.4.3
 
 *Release Date: 2022-04-18*
 
@@ -231,7 +216,7 @@ ref:
 - Fix the issue that the configuration of Bridge resources such as Kafka and Pulsar could not be updated
 - Fix the issue that JT/T 808 client authentication fails when anonymous authentication is enabled
 
-## Version 4.4.2
+## e4.4.2
 
 *Release Date: 2022-04-01*
 
@@ -284,7 +269,7 @@ ref:
 - Corrected the reason code in the DISCONNECT packet returned when kicking the client to `0x98`.
 - Auto subscriptions will ignore empty topics.
 
-## Version 4.4.1
+## e4.4.1
 
 *Release Date: 2022-02-18*
 
@@ -324,7 +309,7 @@ The compare base of this change set is 4.4.0.
 - Fix the issue where memory alarms might not be triggered after restarting
 - Fix the crash of import data when user data exists in `emqx_auth_mnesia` plugin
 
-## Version 4.4.0
+## e4.4.0
 
 *Release Date: 2021-12-21*
 
