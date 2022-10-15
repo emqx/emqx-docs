@@ -1,21 +1,73 @@
----
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref: undefined
----
+# Releases
 
-# Changes
+## v4.3.21
 
-## Version 4.3.20
+*Release Date: 2022-09-14*
+
+### Enhancements
+
+- TLS listener memory usage optimization [#9005](https://github.com/emqx/emqx/pull/9005).
+  New config `listener.ssl.$NAME.hibernate_after` to hibernate TLS connection process after idling.
+  Hibernation can reduce RAM usage significantly, but may cost more CPU.
+  This configuration is by default disabled.
+  Our preliminary test shows a 50% of RAM usage decline when configured to '5s'.
+
+- TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
+  Eliminate uncertainty that the buffer size is set by OS default.
+
+- Disable authorization for `api/v4/emqx_prometheus` endpoint. [8955](https://github.com/emqx/emqx/pull/8955)
+
+- Added a test to prevent a last will testament message to be
+  published when a client is denied connection. [#8894](https://github.com/emqx/emqx/pull/8894)
+
+- More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
+
+- QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
+  when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
+  Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to true
+  to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
+
+
+### Bug fixes
+
+- Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
+
+- Fix delayed publish inaccurate caused by os time change. [#8908](https://github.com/emqx/emqx/pull/8908)
+
+- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
+  In this change, it also included more changes in redis client:
+  - Improve redis connection error logging [eredis:19](https://github.com/emqx/eredis/pull/19).
+    Also added support for eredis to accept an anonymous function as password instead of
+    passing around plaintext args which may get dumpped to crash logs (hard to predict where).
+    This change also added `format_status` callback for `gen_server` states which hold plaintext
+    password so the process termination log and `sys:get_status` will print '******' instead of
+    the password to console.
+  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+    Same `format_status` callback is added here too for `gen_server`s which hold password in
+    their state.
+
+- Fix shared subscription message re-dispatches [#9094](https://github.com/emqx/emqx/pull/9094).
+  - When discarding QoS 2 inflight messages, there were excessive logs
+  - For wildcard deliveries, the re-dispatch used the wrong topic (the publishing topic,
+    but not the subscribing topic), caused messages to be lost when dispatching.
+
+- Fix shared subscription group member unsubscribe issue when 'sticky' strategy is used.
+  Prior to this fix, if a previously picked member unsubscribes from the group (without reconnect)
+  the message is still dispatched to it.
+  This issue only occurs when unsubscribe with the session kept.
+  Fixed in [#9119](https://github.com/emqx/emqx/pull/9119)
+
+- Fix shared subscription 'sticky' strategy when there is no local subscriptions at all.
+  Prior to this change, it may take a few rounds to randomly pick group members until a local subscriber
+  is hit (and then start sticking to it).
+  After this fix, it will start sticking to whichever randomly picked member even when it is a
+  subscriber from another node in the cluster.
+  Fixed in [#9122](https://github.com/emqx/emqx/pull/9122)
+
+- Fix rule engine fallback actions metrics reset. [#9125](https://github.com/emqx/emqx/pull/9125)
+
+
+## v4.3.20
 
 *Release Date: 2022-09-17*
 
@@ -30,7 +82,7 @@ ref: undefined
 - Fix the issue that shared subscriptions might get stuck in an infinite loop when `shared_dispatch_ack_enabled` is set to true
 - Fix the issue that the rule engine SQL crashes when subject matching null values
 
-## Version 4.3.19
+## v4.3.19
 
 *Release Date: 2022-08-29*
 
@@ -56,7 +108,7 @@ ref: undefined
 - Fix ExProto not triggering disconnect event when client is kicked
 
 
-## Version 4.3.18
+## v4.3.18
 
 *Release Date: 2022-08-11*
 
@@ -70,7 +122,7 @@ ref: undefined
 - Allows the connection process to be configured to be garbage collected after the TLS handshake is complete to reduce memory footprint, which can reduce memory consumption by about 35% per SSL connection, but increases CPU consumption accordingly
 - Allows configuring the log level of the TLS handshake log to view the detailed handshake process
 
-## Version 4.3.17
+## v4.3.17
 
 *Release Date: 2022-07-29*
 
@@ -88,7 +140,7 @@ ref: undefined
 - Fix the issue that when the client specified Clean Session as false to reconnect, the shared subscription message in the flight window would be re-dispatched to the old session process
 - Fix the issue that the `emqx_lua_hook` plugin cannot cancel the message publishing
 
-## Version 4.3.16
+## v4.3.16
 
 *Release Date: 2022-06-30*
 
@@ -114,7 +166,7 @@ ref: undefined
 - Fix `client.subscribe` hook not being able to reject subscriptions
 - If the placeholder in the ACL rule is not replaced, the client's publish or subscribe operation will be rejected
 
-## Version 4.3.15
+## v4.3.15
 
 *Release Date: 2022-06-01*
 
@@ -146,7 +198,7 @@ ref: undefined
 - Fix rule engine resource connection test not working
 - Fix multiple Dashboard display issues
 
-## Version 4.3.14
+## v4.3.14
 
 *Release Date: 2022-04-18*
 
@@ -179,7 +231,7 @@ ref: undefined
 - When creating a rule, if a rule with the same ID already exists, the rules engine will now report an error instead of replacing the existing rule
 - Fix the issue that the HTTP driver process pool may not be deleted
 
-## Version 4.3.13
+## v4.3.13
 
 *Release Date: 2022-04-01*
 
@@ -219,7 +271,7 @@ ref: undefined
 - Corrected the reason code in the DISCONNECT packet returned when kicking the client to `0x98`.
 - Auto subscriptions will ignore empty topics.
 
-## Version 4.3.12
+## v4.3.12
 
 *Release Date: 2022-02-11*
 
@@ -241,7 +293,7 @@ ref: undefined
 - Fix the issue where memory alarms might not be triggered after restarting
 - Fix the crash of import data when user data exists in `emqx_auth_mnesia` plugin
 
-## Version 4.3.11
+## v4.3.11
 
 *Release Date: 2021-12-17*
 
@@ -257,7 +309,7 @@ EMQX 4.3.11 is released now, it mainly includes the following changes:
 - Fix the issue that the Path option of Webhook Action in rule engine doesn't support the use of ${Variable}
 - Fix the issue that the connection failure log will continue to be printed when stopping MQTT Bridge plugin in some cases
 
-## Version 4.3.10
+## v4.3.10
 
 *Release Date: 2021-11-11*
 
@@ -279,7 +331,7 @@ EMQX 4.3.10 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#6065](https://github.com/emqx/emqx/pull/6065)
 
-## Version 4.3.9
+## v4.3.9
 
 *Release Date: 2021-11-04*
 
@@ -343,7 +395,7 @@ EMQX 4.3.9 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5567](https://github.com/emqx/emqx/pull/5567)
 
-## Version 4.3.8
+## v4.3.8
 
 *Release Date: 2021-08-10*
 
@@ -383,7 +435,7 @@ EMQX 4.3.8 is released now, it mainly includes the following changes:
 
 > Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Version](https://docs.emqx.io/en/broker/v4.3/faq/error.html#incorrect-openssl-version)
 
-## Version 4.3.7
+## v4.3.7
 
 *Release Date: 2021-08-09*
 
@@ -419,7 +471,7 @@ EMQX 4.3.6 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5328](https://github.com/emqx/emqx/pull/5328)
 
-## Version 4.3.5
+## v4.3.5
 
 *Release Date: 2021-06-28*
 
@@ -431,7 +483,7 @@ EMQX 4.3.5 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5098](https://github.com/emqx/emqx/pull/5098)
 
-## Version 4.3.4
+## v4.3.4
 
 *Release Date: 2021-06-23*
 
@@ -460,7 +512,7 @@ EMQX 4.3.4 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4979](https://github.com/emqx/emqx/pull/4979)
 
-## Version 4.3.3
+## v4.3.3
 
 *Release Date: 2021-06-05*
 
@@ -496,7 +548,7 @@ EMQX 4.3.3 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4891](https://github.com/emqx/emqx/pull/4891)
 
-## Version 4.3.2
+## v4.3.2
 
 *Release Date: 2021-05-27*
 
@@ -527,7 +579,7 @@ EMQX 4.3.2 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4821](https://github.com/emqx/emqx/pull/4821)
 
-## Version 4.3.1
+## v4.3.1
 
 *Release Date: 2021-05-14*
 
@@ -559,11 +611,9 @@ EMQX 4.3.1 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4778](https://github.com/emqx/emqx/pull/4771)
 
-## Version 4.3.0
+## v4.3.0
 
 *Release Date: 2021-05-06*
-
-EMQX 4.3.0 is released now, it mainly includes the following changes:
 
 ### Features and Enhancement
 
@@ -652,7 +702,7 @@ EMQX 4.3.0 is released now, it mainly includes the following changes:
 - Fixed delayed connection process OOM kill
 - The MQTT-SN connection with Clean Session being false did not publish a will message when it was disconnected abnormally
 
-## Version 4.3-rc.5
+## v4.3-rc.5
 
 *Release Date: 2021-04-26*
 
@@ -698,7 +748,7 @@ EMQX 4.3-rc.5 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4678](https://github.com/emqx/emqx/pull/4678)
 
-## Version 4.3-rc.4
+## v4.3-rc.4
 
 *Release Date: 2021-04-16*
 
@@ -727,7 +777,7 @@ EMQX 4.3-rc.4 is released now, it mainly includes the following changes:
 
   Github Issue: [emqx#3629](https://github.com/emqx/emqx/issues/3629)
   Github PR: [emqx#4513](https://github.com/emqx/emqx/pull/4513), [emqx#4526](https://github.com/emqx/emqx/pull/4526)
-  
+
 - Fix the issue that the multi-language extension hook cannot handle the false value returned
 
   Github PR: [emqx#4542](https://github.com/emqx/emqx/pull/4542)
@@ -759,7 +809,7 @@ EMQX 4.3-rc.4 is released now, it mainly includes the following changes:
   Github Issue: [emqx#4472](https://github.com/emqx/emqx/issues/4472)
   Github PR: [emqx#4503](https://github.com/emqx/emqx/pull/4503)
 
-## Version 4.3-rc.3
+## v4.3-rc.3
 
 *Release Date: 2021-03-30*
 
@@ -789,7 +839,7 @@ EMQX 4.3-rc.3 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4435](https://github.com/emqx/emqx/pull/4435)
 
-## Version 4.3-rc.2
+## v4.3-rc.2
 
 *Release Date: 2021-03-26*
 
@@ -803,7 +853,7 @@ EMQX 4.3-rc.2 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4430](https://github.com/emqx/emqx/pull/4430)
 
-## Version 4.3-rc.1
+## v4.3-rc.1
 
 *Release Date: 2021-03-23*
 
@@ -845,7 +895,7 @@ EMQX 4.3-rc.1 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4377](https://github.com/emqx/emqx/pull/4377)
 
-## Version 4.3-beta.1
+## v4.3-beta.1
 
 *Release Date: 2021-03-03*
 
@@ -893,7 +943,7 @@ EMQX 4.3-beta.1 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#4124](https://github.com/emqx/emqx/pull/4124)
 
-## Version 4.3-alpha.1
+## v4.3-alpha.1
 
 *Release Date: 2021-01-29*
 
