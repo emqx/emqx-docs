@@ -54,11 +54,12 @@
 
 - Fix the `verify` field is missing from the SSL settings of redis-cluster and redis-sentinel resources.
 
-- Fix emqx shows redis-cluster resource alive when Redis conneciton established but not responding.
+- Fixed Redis resource liveness problem issue. Prior to this fix, the resource is considered alive when connection can be established.
+  The fix is to perform a PING query to make sure the service is alive.
 
 - Fix the redis-cluster resource prints too many error logs when redis servers are not avaliable.
 
-- Fix testing the connectivity of redis-cluster resource will broke the current running redis-cluster resources.
+- Fixed an internal Redis resource ID clashing. This clashing may cause resources in use getting deleted when deleting another resource.
 
 - Mask secret/password in the resource/module creation UI.
 
