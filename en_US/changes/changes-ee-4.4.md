@@ -27,6 +27,35 @@
   Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to true
   to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
 
+### Bug fixes (ported from e4.3.16)
+
+- Fix `load_modules` reset after new node joins the cluster.
+  Prior to this fix, if `load_modules` for a cluster has been changed, adding a new node to the cluster with default modules
+  would cause the other nodes to reset to default too.
+  In this fix, the node which is going to join the cluster will copy the `loaded_modules` from the oldest node in the cluster.
+
+- Fix getting subscriptions from backends successfully with QoS values out of range [0, 2].
+  Before this change, when we add subscriptions for clients from backends like Redis or MySQL, we won't validate the QoS.
+  For example if the QoS is an integer -1, the topic was still subscribed successfully with QoS -1,
+  if we send a message to this topic, then an error will occur and the MQTT connection will crash.
+  After this change QoS will be clamped into range [0, 2].
+
+- Fix rule-engine increased 'success' counter when get subscriptions from Redis failed (due to query Redis timeout).
+
+- Fix rule-engine increased 'success' counter when saving offline messages with QoS = 0.
+  We don't allow saving offline messages to backends with QoS = 0, so we need to increase the 'failed' counter instead of the 'success' counter in this case.
+
+- Fix the `verify` field is missing from the SSL settings of redis-cluster and redis-sentinel resources.
+
+- Fixed Redis resource liveness problem issue. Prior to this fix, the resource is considered alive when connection can be established.
+  The fix is to perform a PING query to make sure the service is alive.
+
+- Fix the redis-cluster resource prints too many error logs when redis servers are not avaliable.
+
+- Fixed an internal Redis resource ID clashing. This clashing may cause resources in use getting deleted when deleting another resource.
+
+- Mask secret/password in the resource/module creation UI.
+
 ### Bug fixes (ported from v4.4.10)
 
 - Fix the latency statistics error of the slow subscription module when `stats_type` is `internal` or `response`. [#8981](https://github.com/emqx/emqx/pull/8981)
