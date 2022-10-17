@@ -14,13 +14,13 @@
 - 默认 TLS Socket 缓存大小设置为 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
   这样可以有效的避免某些环境中操作系统提供的默认缓存过大而导致 TLS 连接内存使用量大的问题。
 
-- 关闭对HTTP API `api/v4/emqx_prometheus` 的认证。 [#8955](https://github.com/emqx/emqx/pull/8955)
+- 关闭对 HTTP API `api/v4/emqx_prometheus` 的认证。 [#8955](https://github.com/emqx/emqx/pull/8955) 
   Prometheus 对时序数据抓取不在需要配置认证。
 
 - 更严格的 flapping 检测，认证失败等也会进行计数。 [#9045](https://github.com/emqx/emqx/pull/9045)
 
 - 当共享订阅的会话终结时候，把缓存的 QoS1 和 QoS2 的消息向订阅组的其他成员进行转发。[#9094](https://github.com/emqx/emqx/pull/9094)
-  在这个增强之前，可以通过设置配置项 `broker.shared_dispatch_ack_enabled` 为 `true` 来防止在共享订阅的会话中缓存消息,
+  在这个增强之前，可以通过设置配置项 `broker.shared_dispatch_ack_enabled` 为 `true` 来防止在共享订阅的会话中缓存消息，
   但是这种转发因为需要对每个消息进行应答，会增加额外的系统开销。
 
 - 修复延迟发布可能因为修改系统时间而导致的延迟等问题。 [#8908](https://github.com/emqx/emqx/pull/8908)
@@ -31,19 +31,19 @@
 
 - 隐藏 redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)
   也包含了如下一些改进：
-  - 修复一些其他可能导致密码泄漏的隐患 [eredis:19](https://github.com/emqx/eredis/pull/19).
-  - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+  - 修复一些其他可能导致密码泄漏的隐患 [eredis#19](https://github.com/emqx/eredis/pull/19).
+  - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22) 
     同时对这个库也进行了密码泄漏隐患对修复。
 
 - 修复共享订阅消息转发逻辑 [#9094](https://github.com/emqx/emqx/pull/9094).
   - QoS2 飞行窗口消息丢弃的日志过度打印问题
   - 对于通配符订阅的消息，会话中缓存的消息重发时，因为使用了发布主题（而非通配符主题）来进行重发，
-    导致无法匹配到 共享订阅组内的其他成员。
+    导致无法匹配到共享订阅组内的其他成员。
 
-- 修复共享订阅 `sticky` 策略下，客户端取消订阅后仍然可以收到消息的问题。[#9119](https://github.com/emqx/emqx/pull/9119)
+- 修复共享订阅 `sticky` 策略下，客户端取消订阅后仍然可以收到消息的问题。[#9119](https://github.com/emqx/emqx/pull/9119) 
   这之前的版本中，仅处理了客户端会话终结，而没有处理取消订阅。
 
-- 修复共享订阅 `sticky` 策略在某些情况下退化成 `random` 策略的问题。 [#9122](https://github.com/emqx/emqx/pull/9122)
+- 修复共享订阅 `sticky` 策略在某些情况下退化成 `random` 策略的问题。 [#9122](https://github.com/emqx/emqx/pull/9122) 
   集群环境下，在之前的版本中, 共享订阅组成员的选择在最开始时会随机选取，最终会选中在本节点连接的客户端，并开始粘性转发。
   如果所有的订阅客户端都不在本节点，那么粘性策略就会退化成随机。
   这个修复后，粘性策略将应用于第一个随机选取的客户端，不论该客户端是不是在本节点。
