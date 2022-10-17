@@ -27,16 +27,15 @@
   Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to true
   to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
 
+- Fix delayed publish timing inaccuracy caused by OS time change. [#8908](https://github.com/emqx/emqx/pull/8908)
 
 ### Bug fixes
 
 - Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
 
-- Fix delayed publish inaccurate caused by os time change. [#8908](https://github.com/emqx/emqx/pull/8908)
-
 - Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
   In this change, it also included more changes in redis client:
-  - Improve redis connection error logging [eredis:19](https://github.com/emqx/eredis/pull/19).
+  - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
     Also added support for eredis to accept an anonymous function as password instead of
     passing around plaintext args which may get dumpped to crash logs (hard to predict where).
     This change also added `format_status` callback for `gen_server` states which hold plaintext
@@ -65,7 +64,6 @@
   Fixed in [#9122](https://github.com/emqx/emqx/pull/9122)
 
 - Fix rule engine fallback actions metrics reset. [#9125](https://github.com/emqx/emqx/pull/9125)
-
 
 ## v4.3.20
 

@@ -6,6 +6,11 @@
 
 ### 增强
 
+- 规则引擎增加了更多 Kafka 动作参数的检查。
+  - TCP 发送缓存配置不再允许使用空值。
+  - 转发策略是 'key_dispatch' 同时 "Key" 设置为 "none" 这个配置组合不再被允许。
+    如果使用该组合，保存修改时会得到一个修改错误的提示。
+
 - TLS 监听器内存使用量优化 [#9005](https://github.com/emqx/emqx/pull/9005)。
   新增了配置项 `listener.ssl.$NAME.hibernate_after` (默认不开启），该配置生效后，TLS 连接进程在空闲一段时间后会进入休眠。
   休眠可以较大程度减少内存占用，但是代价是 CPU 利用率会增加。
@@ -17,9 +22,9 @@
 - 关闭对 HTTP API `api/v4/emqx_prometheus` 的认证。 [#8955](https://github.com/emqx/emqx/pull/8955)
   Prometheus 对时序数据抓取不在需要配置认证。
 
-- 更严格的 flapping 检测，认证失败等原因也会进行计数。 [#9045](https://github.com/emqx/emqx/pull/9045)
+- 更严格的 flapping 检测，认证失败等也会进行计数。 [#9045](https://github.com/emqx/emqx/pull/9045)
 
-- 当共享订阅的会话终结时候，把缓存的 QoS1 和 QoS2 的消息向订阅组的其他成员进行转发。[#9094](https://github.com/emqx/emqx/pull/9094)
+- 当共享订阅的会话终结时候，把缓存的 QoS1 和 QoS2 的消息向订阅组的其他成员进行转发。[#9094](https://github.com/emqx/emqx/pull/9094) 
   在这个增强之前，可以通过设置配置项 `broker.shared_dispatch_ack_enabled` 为 `true` 来防止在共享订阅的会话中缓存消息,
   但是这种转发因为需要对每个消息进行应答，会增加额外的系统开销。
 
@@ -54,26 +59,23 @@
 
 - 所有的密码字段都使用敏感信息遮盖输入框。
 
-
-### 修复 (合并自 v4.3.21)
-
 - 修复 HTTP 客户端库启用 SSL 后 Socket 可能会进入 passive 状态。 [#9145](https://github.com/emqx/emqx/pull/9145)
 
-- 隐藏 redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)
+- 隐藏 redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071) 
   也包含了如下一些改进：
-  - 修复一些其他可能导致密码泄漏的隐患 [eredis:19](https://github.com/emqx/eredis/pull/19).
-  - 修复了 eredis_cluster 中连接池命令冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+  - 修复一些其他可能导致密码泄漏的隐患 [eredis#19](https://github.com/emqx/eredis/pull/19)。
+  - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
     同时对这个库也进行了密码泄漏隐患对修复。
 
-- 修复共享订阅消息转发逻辑 [#9094](https://github.com/emqx/emqx/pull/9094).
+- 修复共享订阅消息转发逻辑 [#9094](https://github.com/emqx/emqx/pull/9094)。
   - QoS2 飞行窗口消息丢弃的日志过度打印问题
   - 对于通配符订阅的消息，会话中缓存的消息重发时，因为使用了发布主题（而非通配符主题）来进行重发，
     导致无法匹配到 共享订阅组内的其他成员。
 
-- 修复共享订阅 `sticky` 策略下，客户端取消订阅后仍然可以收到消息的问题。[#9119](https://github.com/emqx/emqx/pull/9119)
+- 修复共享订阅 `sticky` 策略下，客户端取消订阅后仍然可以收到消息的问题。[#9119](https://github.com/emqx/emqx/pull/9119) 
   这之前的版本中，仅处理了客户端会话终结，而没有处理取消订阅。
 
-- 修复共享订阅 `sticky` 策略在某些情况下退化成 `random` 策略的问题。 [#9122](https://github.com/emqx/emqx/pull/9122)
+- 修复共享订阅 `sticky` 策略在某些情况下退化成 `random` 策略的问题。 [#9122](https://github.com/emqx/emqx/pull/9122) 
   集群环境下，在之前的版本中, 共享订阅组成员的选择在最开始时会随机选取，最终会选中在本节点连接的客户端，并开始粘性转发。
   如果所有的订阅客户端都不在本节点，那么粘性策略就会退化成随机。
   这个修复后，粘性策略将应用于第一个随机选取的客户端，不论该客户端是不是在本节点。
