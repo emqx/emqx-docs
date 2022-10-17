@@ -69,7 +69,7 @@ public class App {
             connOpts.setCleanSession(true);
 
             // set callback
-            client.setCallback(new PushCallback());
+            client.setCallback(new OnMessageCallback());
 
             // establish a connection
             System.out.println("Connecting to broker: " + broker);
