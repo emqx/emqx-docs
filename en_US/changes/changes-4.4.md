@@ -4,7 +4,7 @@
 
 *Release Date: 2022-10-14*
 
-### Enhancements (ported from v4.3.21)
+### Enhancements
 
 - TLS listener memory usage optimization [#9005](https://github.com/emqx/emqx/pull/9005).
   New config `listener.ssl.$NAME.hibernate_after` to hibernate TLS connection process after idling.
@@ -17,34 +17,33 @@
 
 - Disable authorization for `api/v4/emqx_prometheus` endpoint. [#8955](https://github.com/emqx/emqx/pull/8955)
 
-- More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
-  Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
-  Find more about flapping detection in [EMQX document](https://www.emqx.io/docs/en/v4.3/configuration/configuration.html#flapping-detect-policy)
+- Added a test to prevent a last will testament message to be
+  published when a client is denied connection. [#8894](https://github.com/emqx/emqx/pull/8894)
 
-- QoS1 and QoS2 messages in session's buffer are re-dispatched to other shared subscription group members
+- More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
+
+- QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
-  Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to true
-  to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
+  Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to `true`
+  to prevent sessions from buffering messages, however this acknowledgement costs extra resources.
+
+- Fix delayed publish timing inaccuracy caused by OS time change. [#8908](https://github.com/emqx/emqx/pull/8908)
 
 ### Bug fixes
 
 - Fix the latency statistics error of the slow subscription module when `stats_type` is `internal` or `response`. [#8981](https://github.com/emqx/emqx/pull/8981)
 
-### Bug fixes (ported from v4.3.21)
-
 - Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
-
-- Fix delayed publish inaccurate caused by os time change. [#8908](https://github.com/emqx/emqx/pull/8908)
 
 - Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
   In this change, it also included more changes in redis client:
-  - Improve redis connection error logging [eredis:19](https://github.com/emqx/eredis/pull/19).
+  - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
     Also added support for eredis to accept an anonymous function as password instead of
     passing around plaintext args which may get dumpped to crash logs (hard to predict where).
     This change also added `format_status` callback for `gen_server` states which hold plaintext
     password so the process termination log and `sys:get_status` will print '******' instead of
     the password to console.
-  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22).
     Same `format_status` callback is added here too for `gen_server`s which hold password in
     their state.
 
