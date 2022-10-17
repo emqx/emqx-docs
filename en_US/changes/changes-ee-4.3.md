@@ -29,8 +29,8 @@
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
-  Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to true
-  to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
+  Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to `true`
+  to prevent sessions from buffering messages, however this acknowledgement costs extra resource.
 
 - Fix delayed publish timing inaccuracy caused by OS time change. [#8908](https://github.com/emqx/emqx/pull/8908)
 
@@ -66,8 +66,13 @@
 - Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
 
 - Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
+<<<<<<< HEAD
   In this change, it also included more changes in redis client:
   - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
+=======
+  More changes in redis client included in this release:
+  - Improve redis connection error logging [eredis:19](https://github.com/emqx/eredis/pull/19).
+>>>>>>> 86745ea8 (docs: refine more change logs)
     Also added support for eredis to accept an anonymous function as password instead of
     passing around plaintext args which may get dumpped to crash logs (hard to predict where).
     This change also added `format_status` callback for `gen_server` states which hold plaintext
@@ -110,7 +115,7 @@
 - Fix rule engine update behaviour which may initialize actions for disabled rules
 - Fix inaccurate delayed publish due to OS time changes
 - Fix the issue that the IP address bound to the Dashboard listener did not take effect
-- Fix the issue that shared subscriptions might get stuck in an infinite loop when `shared_dispatch_ack_enabled` is set to true
+- Fix the issue that shared subscriptions might get stuck in an infinite loop when `shared_dispatch_ack_enabled` is set to `true`
 - Fix the issue that the rule engine SQL crashes when subject matching null values
 
 ## e4.3.14
