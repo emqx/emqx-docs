@@ -69,7 +69,7 @@ public class App {
             connOpts.setCleanSession(true);
 
             // 设置回调
-            client.setCallback(new PushCallback());
+            client.setCallback(new OnMessageCallback());
 
             // 建立连接
             System.out.println("Connecting to broker: " + broker);
