@@ -4,7 +4,7 @@
 
 *发布日期: 2022-10-14*
 
-### 增强 (合并自 v4.3.21)
+### 增强
 
 - TLS 监听器内存使用量优化 [#9005](https://github.com/emqx/emqx/pull/9005)。
   新增了配置项 `listener.ssl.$NAME.hibernate_after` (默认不开启），该配置生效后，TLS 连接进程在空闲一段时间后会进入休眠。
@@ -28,8 +28,6 @@
 ### 修复
 
 - 修复慢订阅追踪模块在 `stats_type` 为 `internal` 或 `response` 时，计算单位使用错误。 [#8981](https://github.com/emqx/emqx/pull/8981)
-
-### 修复 (合并自 v4.3.21)
 
 - 修复 HTTP 客户端库启用 SSL 后 Socket 可能会进入 passive 状态。 [#9145](https://github.com/emqx/emqx/pull/9145)
 
