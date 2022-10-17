@@ -15,7 +15,7 @@
 - TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
   Eliminate uncertainty that the buffer size is set by OS default.
 
-- Disable authorization for `api/v4/emqx_prometheus` endpoint. [8955](https://github.com/emqx/emqx/pull/8955)
+- Disable authorization for `api/v4/emqx_prometheus` endpoint. [#8955](https://github.com/emqx/emqx/pull/8955)
 
 - More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
   Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
