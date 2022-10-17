@@ -60,7 +60,7 @@
 
 - 隐藏 redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)。
   也包含了如下一些改进：
-  - 修复一些其他可能导致密码泄漏的隐患 [eredis:19](https://github.com/emqx/eredis/pull/19)。
+  - 修复一些其他可能导致密码泄漏的隐患 [eredis#19](https://github.com/emqx/eredis/pull/19)。
   - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
     同时对这个库也进行了密码泄漏隐患对修复。
 

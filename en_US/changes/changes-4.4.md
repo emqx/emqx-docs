@@ -21,6 +21,8 @@
   published when a client is denied connection [#8894](https://github.com/emqx/emqx/pull/8894).
 
 - More rigorous checking of flapping to improve stability of the system [#9045](https://github.com/emqx/emqx/pull/9045).
+  Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
+  Find more about flapping detection in [EMQX document](https://www.emqx.io/docs/en/v4.3/configuration/configuration.html#flapping-detect-policy)
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
