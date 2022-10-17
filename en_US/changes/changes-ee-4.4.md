@@ -4,7 +4,12 @@
 
 *Release Date: 2022-10-14*
 
-### Enhancements (ported from v4.3.21)
+### Enhancements
+
+- Added more Kafka action parameter checks
+  - TCP send buffer size and max batch size parameters are not allowed to be left blank from the configration UI.
+  - The combination of "Produce Strategy" set to 'key_dispatch' and the "Key" set to "none" is now not allowed,
+    the dashboard will get an error with text like: "with strategy set to 'key_dispatch', key is not allowed to be 'none'"
 
 - TLS listener memory usage optimization [#9005](https://github.com/emqx/emqx/pull/9005).
   New config `listener.ssl.$NAME.hibernate_after` to hibernate TLS connection process after idling.
@@ -12,22 +17,23 @@
   This configuration is by default disabled.
   Our preliminary test shows a 50% of RAM usage decline when configured to '5s'.
 
-- TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
+- TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007).
   Eliminate uncertainty that the buffer size is set by OS default.
 
-- Disable authorization for `api/v4/emqx_prometheus` endpoint. [#8955](https://github.com/emqx/emqx/pull/8955)
+- Disable authorization for `api/v4/emqx_prometheus` endpoint [#8955](https://github.com/emqx/emqx/pull/8955).
 
 - Added a test to prevent a last will testament message to be
-  published when a client is denied connection. [#8894](https://github.com/emqx/emqx/pull/8894)
+  published when a client is denied connection [#8894](https://github.com/emqx/emqx/pull/8894).
 
-- More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
+- More rigorous checking of flapping to improve stability of the system [#9045](https://github.com/emqx/emqx/pull/9045).
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
-  Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to true
-  to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
+  to prevent sessions from buffering messages, however this acknowledgement costs extra resources.
 
-### Bug fixes (ported from e4.3.16)
+- Fix delayed publish timing inaccuracy caused by OS time change [#8908](https://github.com/emqx/emqx/pull/8908).
+
+### Bug fixes
 
 - Fix `load_modules` reset after new node joins the cluster.
   Prior to this fix, if `load_modules` for a cluster has been changed, adding a new node to the cluster with default modules
@@ -56,25 +62,17 @@
 
 - Mask secret/password in the resource/module creation UI.
 
-### Bug fixes (ported from v4.4.10)
+- Fix HTTP client library to handle SSL socket passive signal [#9145](https://github.com/emqx/emqx/pull/9145).
 
-- Fix the latency statistics error of the slow subscription module when `stats_type` is `internal` or `response`. [#8981](https://github.com/emqx/emqx/pull/8981)
-
-### Bug fixes (ported from v4.3.21)
-
-- Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
-
-- Fix delayed publish inaccurate caused by os time change. [#8908](https://github.com/emqx/emqx/pull/8908)
-
-- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
-  In this change, it also included more changes in redis client:
-  - Improve redis connection error logging [eredis:19](https://github.com/emqx/eredis/pull/19).
+- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071).
+  More changes in redis client included in this release:
+  - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
     Also added support for eredis to accept an anonymous function as password instead of
     passing around plaintext args which may get dumpped to crash logs (hard to predict where).
     This change also added `format_status` callback for `gen_server` states which hold plaintext
     password so the process termination log and `sys:get_status` will print '******' instead of
     the password to console.
-  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22).
     Same `format_status` callback is added here too for `gen_server`s which hold password in
     their state.
 
@@ -96,7 +94,7 @@
   subscriber from another node in the cluster.
   Fixed in [#9122](https://github.com/emqx/emqx/pull/9122)
 
-- Fix rule engine fallback actions metrics reset. [#9125](https://github.com/emqx/emqx/pull/9125)
+- Fix rule engine fallback actions metrics reset [#9125](https://github.com/emqx/emqx/pull/9125).
 
 ## e4.4.9
 
