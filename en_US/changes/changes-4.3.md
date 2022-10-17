@@ -25,7 +25,7 @@
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
   Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to `true`
-  to prevent sessions from buffering messages, however this acknowledgement comes with a cost.
+  to prevent sessions from buffering messages, however this acknowledgement costs extra resources.
 
 - Fix delayed publish timing inaccuracy caused by OS time change. [#8908](https://github.com/emqx/emqx/pull/8908)
 
@@ -41,7 +41,7 @@
     This change also added `format_status` callback for `gen_server` states which hold plaintext
     password so the process termination log and `sys:get_status` will print '******' instead of
     the password to console.
-  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22).
     Same `format_status` callback is added here too for `gen_server`s which hold password in
     their state.
 

@@ -17,13 +17,13 @@
   This configuration is by default disabled.
   Our preliminary test shows a 50% of RAM usage decline when configured to '5s'.
 
-- TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
+- TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007).
   Eliminate uncertainty that the buffer size is set by OS default.
 
 - Disable authorization for `api/v4/emqx_prometheus` endpoint. [#8955](https://github.com/emqx/emqx/pull/8955)
 
 - Added a test to prevent a last will testament message to be
-  published when a client is denied connection. [#8894](https://github.com/emqx/emqx/pull/8894)
+  published when a client is denied connection [#8894](https://github.com/emqx/emqx/pull/8894).
 
 - More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
 
@@ -65,20 +65,15 @@
 
 - Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
 
-- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
-<<<<<<< HEAD
-  In this change, it also included more changes in redis client:
-  - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
-=======
+- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071).
   More changes in redis client included in this release:
-  - Improve redis connection error logging [eredis:19](https://github.com/emqx/eredis/pull/19).
->>>>>>> 86745ea8 (docs: refine more change logs)
+  - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
     Also added support for eredis to accept an anonymous function as password instead of
     passing around plaintext args which may get dumpped to crash logs (hard to predict where).
     This change also added `format_status` callback for `gen_server` states which hold plaintext
     password so the process termination log and `sys:get_status` will print '******' instead of
     the password to console.
-  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
+  - Avoid pool name clashing [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22.
     Same `format_status` callback is added here too for `gen_server`s which hold password in
     their state.
 
