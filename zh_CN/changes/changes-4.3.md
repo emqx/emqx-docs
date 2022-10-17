@@ -14,7 +14,7 @@
 - 默认 TLS Socket 缓存大小设置为 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
   这样可以有效的避免某些环境中操作系统提供的默认缓存过大而导致 TLS 连接内存使用量大的问题。
 
-- 关闭了 API `api/v4/emqx_prometheus` 的认证。 [8955](https://github.com/emqx/emqx/pull/8955)
+- 关闭了 API `api/v4/emqx_prometheus` 的认证。 [#8955](https://github.com/emqx/emqx/pull/8955)
   Prometheus 对时序数据抓取不在需要配置认证。
 
 - 更严格对 flapping 检测，因认证失败等原因连接失败也会进行计数。 [#9045](https://github.com/emqx/emqx/pull/9045)
