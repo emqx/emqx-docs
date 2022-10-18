@@ -32,22 +32,39 @@ EMQX 默认开启保留消息的能力和服务，可以在 `etc/emqx.conf` 中�
 | 定时清理       | duration |       | ０     | 清理回收过期消息的间隔时间。 |
 
 
-<!---
-
 ## 流控
 
-The message read and deliver rate can be controlled.
-When a client subscribes to a wildcard topic, it may match a large number of topics having messages retained.
-Without flow control, the all matched messages will be copied into the subscriber's process memory space,
-this may cause the subscriber Erlang process (the actor) to allocate excessive amount of RAM and risk at
-shutdown forced by the `force_shutdown` policy.
+在保留消息中可以设置消息的读取和派发速率。
 
-To make it less aggressive, `retainer.flow_control` settings can be used.
-The processing flow is as follows:
+当客户端订阅了包含通配符的主题时，它可能会匹配到大量的保留消息，如果没有速率控制，所有匹配到的消息将被一次性发送给订阅者，这可能会导致订阅者的进程因为内存大量激增而被强制关闭。
 
-1. Load `batch_read_number` of retained message from the retainer storage
-1. Deliver `batch_deliver_number` of messages
-1. Repeat, until all retained messages are delivered
+为了降低风险，可以使用 `retainer.flow_control` 设置保留消息的读取和派发速率, 例如:
 
-You may find more detailed information from configuration documents.
--->
+```
+# 每个订阅保留消息的会话每次会加载 10 条消息并投递 10 条消息，所有这些会话的总投递速率被限制为 100/s，而保留消息中的每个工作进程的派发速率被限制为 20/s (大多数情况下，并不需要配置 client 这级)
+retainer {
+  enable = true
+  flow_control {
+    batch_read_number = 10
+    batch_read_deliver = 10
+    batch_read_limiter {
+      rate = "100/s"
+      capacity = 100
+      client {
+        rate = "20/s"
+        capacity = 20
+      }
+    }
+  }
+}
+```
+
+配置说明:
+
+| 字段                  | 类型    | 默认值    | 说明                             |
+|:----------------------|:--------|:----------|:---------------------------------|
+| batch_read_number     | int     | 0         | 每次读取的消息数量(0 表示所有的) |
+| batch_deliver_number  | int     | 0         | 每次派发的消息数量(0 表示所有的) |
+| batch_deliver_limiter | limiter | undefined | 消息派发的速率限制器             |
+
+关于速率限制器的详细设置，请参考[分层速率控制系统](../reliability/rate-limit.md) 中的 `监听器级` 和 `连接级`
