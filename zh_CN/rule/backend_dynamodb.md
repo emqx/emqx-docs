@@ -4,8 +4,10 @@
 
 ```bash
 $ brew install dynamodb-local
-$ dynamodb-local
+$ dynamodb-local -sharedDb
 ```
+
+关于如何本地安装和部署 DynamoDB 和 AWS CLI 的详情, 请参考 [本地部署 DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
 
 创建 DynamoDB 表定义文件 mqtt\_msg.json :
 
@@ -40,10 +42,8 @@ $ aws dynamodb create-table --cli-input-json file://mqtt_msg.json --endpoint-url
 填写规则 SQL:
 
 ```sql
-SELECT id, topic, payload FROM "#"
+SELECT id as msgid, topic, payload FROM "#"
 ```
-
-![image](./assets/rule-engine/dynamo-rulesql-0.png)
 
 关联动作:
 

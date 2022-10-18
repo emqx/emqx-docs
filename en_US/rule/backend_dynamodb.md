@@ -5,8 +5,10 @@ Setup a DynamoDB database, taking Mac OSX for instance:
 ```bash
 $ brew install dynamodb-local
 
-$ dynamodb-local
+$ dynamodb-local -sharedDb
 ```
+
+For details about how to deply DynamoDB and AWS CLI locally, please see [Deploying DynamoDB Locally](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
 
 Initiate the DynamoDB table:
 
@@ -43,14 +45,8 @@ Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
 Select "message.publish", then type in the following SQL:
 
 ```sql
-SELECT
-     msgid as id, topic, payload
-    FROM
-      "message.pubish"
+SELECT id as msgid, topic, payload FROM "#"
 ```
-
-
-![image](./assets/rule-engine/mysql_sql_1.png)
 
 Bind an action:
 
