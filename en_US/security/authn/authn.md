@@ -286,6 +286,6 @@ Example of use (in Redis password-based authenticator):
 When a client with clientid `id2718` tries to connect, a Redis query `HMGET users:id2718 password_hash salt is_superuser` is performed to search credentials.
 
 ::: warning
-If a value for a placeholder is absent then the placeholder is rendered as an ampty string. For example, a template
+If a value for a placeholder is absent then the placeholder is rendered as an empty string. For example, a template
 `HMGET users:${username} password_hash salt is_superuser` will be rendered as `HMGET users: password_hash salt is_superuser` if a username is not provided by an MQTT client.
 :::
