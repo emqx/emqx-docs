@@ -39,10 +39,9 @@ jobs:
       uses: actions/checkout@v2
       if: env.DOCS_TYPE == 'broker'
       with:
-        repository: "Red-Asuka/emqx-io-docs-frontend"
+        repository: "emqx/emqx-io-docs-frontend"
         token: ${{ secrets.CI_GIT_TOKEN }}
         path: frontend
-        ref: "feat/open-api"
 
     - name: clone ee frontend
       uses: actions/checkout@v2
