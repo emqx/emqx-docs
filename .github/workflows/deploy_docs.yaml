@@ -39,9 +39,10 @@ jobs:
       uses: actions/checkout@v2
       if: env.DOCS_TYPE == 'broker'
       with:
-        repository: "emqx/emqx-io-docs-frontend"
+        repository: "Red-Asuka/emqx-io-docs-frontend"
         token: ${{ secrets.CI_GIT_TOKEN }}
         path: frontend
+        ref: "feat/open-api"
 
     - name: clone ee frontend
       uses: actions/checkout@v2
@@ -135,13 +136,21 @@ jobs:
         coscmd upload docs-dist-${DOCS_TYPE}-${VERSION}.zip docs-zip/
         sleep 90
 
-    - name: flush ee cdn
-      if: env.DOCS_TYPE == 'enterprise'
+    - name: set tccli
       run: |
         pip3 install tccli
         tccli configure set secretId ${{ secrets.TENCENT_COS_ID }}
         tccli configure set secretKey ${{ secrets.TENCENT_COS_KEY }}
         tccli configure set region ap-shanghai
+
+    - name: flush ce cdn
+      if: env.DOCS_TYPE == 'broker'
+      run: |
+        tccli cdn PurgePathCache --cli-unfold-argument --Paths https://emqxio-docs.emqx.net/ --FlushType delete
+
+    - name: flush ee cdn
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
         tccli cdn UpdateDomainConfig --cli-unfold-argument --Domain docs.emqx.com \
             --UrlRedirect.Switch on \
             --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
