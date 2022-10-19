@@ -6,14 +6,14 @@ Rate limit is a *backpressure* scheme that avoids system overload from the entra
 | Configuration item                  | Type            | Default value | Description                                                  |
 | ----------------------------------- | --------------- | ------------- | ------------------------------------------------------------ |
 | listener.tcp.external.max_conn_rate | Number          | 1000          | The maximum allowable connection rate on this node (conn/s)  |
-| zone.external.publish_limit         | Number,Duration | No limit      | Maximum allowable publish rate on a single connection (msg/s) |
-| listener.tcp.external.rate_limit    | Size,Duration   | No limit      | Maximum allowable packet rate on a single connection (bytes/s) |
+| zone.external.rate_limit.conn_messages_in         | Number,Duration | No limit      | Maximum allowable publish rate on a single connection (msg/s) |
+| zone.external.rate_limit.conn_bytes_in    | Size,Duration   | No limit      | Maximum allowable packet rate on a single connection (bytes/s) |
 
 - **max_conn_rate** is the rate limit for connection establishment on a single emqx node. `1000` means that 1000 clients can access at most.
-- **publish_limit** is the rate limit for receiving PUBLISH packets on a single connection. `100,10s` means that the maximum PUBLISH message rate allowed on each connection is 100 every 10 seconds.
-- **rate_limit** is the rate limit for receiving TCP packets on a single connection. `100KB,10s` means that the maximum TCP packet rate allowed on each connection is 100KB every 10 seconds.
+- **conn_messages_in** is the rate limit for receiving PUBLISH packets on a single connection. `100,10s` means that the maximum PUBLISH message rate allowed on each connection is 100 every 10 seconds.
+- **conn_bytes_in** is the rate limit for receiving TCP packets on a single connection. `100KB,10s` means that the maximum TCP packet rate allowed on each connection is 100KB every 10 seconds.
 
-`publish_limit` and `rate_limit` both provide limits for a single connection. EMQX Broker currently does not provide a global message rate limit.
+`conn_messages_in` and `conn_bytes_in` both provide limits for a single connection. EMQX Broker currently does not provide a global message rate limit.
 
 ## Rate limit explanation 
 EMQX Broker uses the [Token Bucket](https://en.wikipedia.org/wiki/Token_bucket) algorithm to control all Rate Limits. The logic of the token bucket algorithm is as follows:
@@ -38,7 +38,7 @@ It is easy to think that the maximum rate M is the speed that can consume the fu
 When the following configuration is used for packet rate limiting:
 
 ```
-listener.tcp.external.rate_limit = 100KB,10s
+zone.external.rate_limit.conn_bytes_in = 100KB,10s
 ```
 
 EMQX Broker will initialize the rate-limit processor of each connection with two values:
