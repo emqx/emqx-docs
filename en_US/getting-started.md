@@ -96,7 +96,7 @@ For Kubernetes, EMQ offers [EMQX Kubernetes Operator](https://www.emqx.com/en/em
 EMQX Kubernetes Operator is an application orchestration tool based on Kubernetes native API,
 which is used for automatic deployment and life cycle management of EMQX clusters.
 
-You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md) to learn how to deploy EMQX using the Operator.
+You can refer to the [documentation](https://github.com/emqx/emqx-operator/blob/main/docs/en_US/getting-started/getting-started.md) to learn how to deploy EMQX using the Operator.
 
 ### Deploy EMQX with Terraform
 
