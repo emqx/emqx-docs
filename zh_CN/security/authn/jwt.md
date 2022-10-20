@@ -37,7 +37,7 @@ Claim `acl`  定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用于�
     ],
     "sub": [
       "testsub1/${username}",
-      "testsub2/${clientid}"
+      "testsub2/${clientid}",
       "testsub2/#"
     ],
     "all": [
