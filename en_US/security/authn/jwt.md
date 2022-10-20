@@ -37,7 +37,7 @@ Claim `acl` defines 3 optional fields, `pub`, `sub` and `all`, which are used to
     ],
     "sub": [
       "testsub1/${username}",
-      "testpub2/${clientid}"
+      "testpub2/${clientid}",
       "testsub2/#"
     ],
     "all": [
