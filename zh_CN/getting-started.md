@@ -82,7 +82,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 <!-- TODO @wivwiv Update K8s link when EMQX Operator 5.0 document ready -->
 对于使用 Kubernetes 的用户，EMQX 提供了 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator)。该 Operator 可以帮助您在 Kubernetes 环境下快速部署一个可用于生产环境的，功能完备的 EMQX 集群。
 
-EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具，用于 EMQX 集群的自动化部署和生命周期管理。您可以查阅[文档](https://github.com/emqx/emqx-operator/blob/main/docs/user-guides/get-started.md)来了解如何使用 Operator 部署 EMQX。
+EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具，用于 EMQX 集群的自动化部署和生命周期管理。您可以查阅[文档](https://github.com/emqx/emqx-operator/blob/main/docs/zh_CN/getting-started/getting-started.md)来了解如何使用 Operator 部署 EMQX。
 
 ### Terraform 安装部署
 <!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
