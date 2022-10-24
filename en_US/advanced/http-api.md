@@ -48,6 +48,36 @@ The possible returned codes are as follows:
 | 115  | Illegal subject |
 
 ## API Endpoints
+### Health check
+#### GET /status
+
+Serves as a health check for the node.  Returns a plain text response
+describing the status of the node.  This endpoint requires no
+authentication.
+
+Returns status code 200 if the EMQX application is up and running, 503
+otherwise.
+
+**Examples:**
+
+Application is running:
+
+```bash
+$ curl "http://localhost:8081/status"
+
+Node emqx@127.0.0.1 is started
+emqx is running
+```
+
+When EMQX application is restarting during boot up, or during restart due to join/leave cluster:
+
+```bash
+$ curl "http://localhost:8081/status"
+
+Node emqx@127.0.0.1 is started
+emqx is not_running
+```
+
 ### /api/v4
 #### GET /api/v4
 Return all Endpoints supported by EMQX Broker.
