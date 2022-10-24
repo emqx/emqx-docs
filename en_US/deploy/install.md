@@ -173,23 +173,6 @@ Do NOT install `tar.gz` packages for production unless
 you know how to manually resolve all the runtime dependencies.
 :::
 
-::: warning
-The EMQX digital signature work on macOS has not been completed, and the installation and startup of the `tar.gz` package may be blocked by [Gatekeeper](https://support.apple.com/zh-cn/guide/security/sec5599b66df/web).
-
-When you encounter a prompt like **“erl” cannot be opened because the developer cannot be verified** or **“erlang_jq_port” cannot be opened because the developer cannot be verified** at startup, solve this as follows:
-
-
-Remove the extended attribute `com.apple.quarantine` of `tar.gz` file or folder:
-
-  ```shell
-  xattr -d com.apple.quarantine emqx-full-package-name.tar.gz
-  # or
-  xattr -r -d com.apple.quarantine ./emqx
-  ```
-
-Please verify the SHA256 of the file when using this operation to ensure the integrity of the installation package so as not to introduce additional security risks.
-:::
-
 {% emqxce %}
 
 1. Download EMQX package [emqx.io](https://www.emqx.io/downloads) or [Github](https://github.com/emqx/emqx/releases)
