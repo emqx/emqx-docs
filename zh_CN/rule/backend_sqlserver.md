@@ -8,20 +8,20 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=mqtt_public' -p 1433:1433 -d mcr.m
 
 进入SQLServer容器， 初始化 SQLServer 表:
 
+设置 `sa` 密码
 ```bash
 $ /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P mqtt_public -d master
-$ mysql -u root -h localhost -ppublic
 ```
 
-创建 “test” 数据库:
+创建 “mqtt” 数据库:
 ```bash
-CREATE DATABASE test;
+CREATE DATABASE mqtt;
 go;
 ```
 创建 t_mqtt_msg 表:
 
 ```sql
-USE test;
+USE mqtt;
 go;
 CREATE TABLE t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
                          msgid   VARCHAR(64) NULL,
@@ -99,14 +99,14 @@ SELECT * FROM "t/#"
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
 ```
 
-![image](./assets/rule-engine/sqlserver4.png)
+![image](./assets/rule-engine/sqlserver3.png)
 
 1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 SQLServer 资源:
 
 填写资源配置:
 数据库名填写 “mqtt”，用户名填写 “sa”，密码填写 “mqtt_public”
 
-![image](./assets/rule-engine/sqlserver3.png)
+![image](./assets/rule-engine/sqlserver4.png)
 
 点击 “新建” 按钮。
 
@@ -118,10 +118,6 @@ insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', 
 
 ![image](./assets/rule-engine/sqlserver6.png)
 
-在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
-
-![image](./assets/rule-engine/sqlserver7.png)
-
 规则已经创建完成，现在发一条数据:
 
 ```bash
@@ -129,6 +125,13 @@ Topic: "t/a"
 QoS: 1
 Payload: "hello"
 ```
+
+在规则列表里，点击 “查看” 按钮或规则 ID 连接，可以预览刚才创建的规则:
+
+可以看到规则已经成功执行，统计指标已经增加。
+
+![image](./assets/rule-engine/sqlserver7.png)
+
 
 然后检查 SQLServer 表，新的 record 是否添加成功:
 

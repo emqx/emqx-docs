@@ -16,7 +16,7 @@
   休眠可以较大程度减少内存占用，但是代价是 CPU 利用率会增加。
   测试中使用 '5s' （即 5 秒空闲后休眠）可以减少 50% 的内存使用量。
 
-- 默认 TLS Socket 缓存大小设置为 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
+- 默认 TLS Socket 缓存大小设置为 4KB [#9007](https://github.com/emqx/emqx/pull/9007)。
   这样可以有效的避免某些环境中操作系统提供的默认缓存过大而导致 TLS 连接内存使用量大的问题。
 
 - 关闭对 HTTP API `api/v4/emqx_prometheus` 的认证 [#8955](https://github.com/emqx/emqx/pull/8955)。
@@ -24,7 +24,7 @@
 
 - 更严格的 flapping 检测，认证失败等也会进行计数 [#9045](https://github.com/emqx/emqx/pull/9045)。
 
-- 当共享订阅的会话终结时候，把缓存的 QoS1 和 QoS2 的消息向订阅组的其他成员进行转发 [#9094](https://github.com/emqx/emqx/pull/9094) 。
+- 当共享订阅的会话终结时候，把缓存的 QoS1 和 QoS2 的消息向订阅组的其他成员进行转发[#9094](https://github.com/emqx/emqx/pull/9094) 。
   在这个增强之前，可以通过设置配置项 `broker.shared_dispatch_ack_enabled` 为 `true` 来防止在共享订阅的会话中缓存消息,
   但是这种转发因为需要对每个消息进行应答，会增加额外的系统开销。
 
@@ -72,7 +72,7 @@
   - 对于通配符订阅的消息，会话中缓存的消息重发时，因为使用了发布主题（而非通配符主题）来进行重发，
     导致无法匹配到 共享订阅组内的其他成员。
 
-- 修复共享订阅 `sticky` 策略下，客户端取消订阅后仍然可以收到消息的问题[#9119](https://github.com/emqx/emqx/pull/9119)。
+- 修复共享订阅 `sticky` 策略下，客户端取消订阅后仍然可以收到消息的问题 [#9119](https://github.com/emqx/emqx/pull/9119)。
   这之前的版本中，仅处理了客户端会话终结，而没有处理取消订阅。
 
 - 修复共享订阅 `sticky` 策略在某些情况下退化成 `random` 策略的问题 [#9122](https://github.com/emqx/emqx/pull/9122)。
