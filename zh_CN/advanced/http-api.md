@@ -52,6 +52,31 @@ EMQX 接口的响应消息体为 JSON 格式，其中总是包含返回码 `code
 
 ## API Endpoints
 
+### 健康检查
+#### GET /status
+
+作为节点的健康检查。 返回一个纯文本的响应，描述节点的状态。
+
+如果 EMQX 应用程序已经启动并运行，返回状态代码 200，否则返回 503。
+
+**Examples:**
+
+应用程序正在运行。
+
+```bash
+$ curl "http://localhost:8081/status"
+Node emqx@127.0.0.1 is started
+emqx is running
+```
+
+当 EMQX 还没有完成启动，或者由于加入或离开集群时重新启动时：
+
+```bash
+$ curl "http://localhost:8081/status"
+Node emqx@127.0.0.1 is started
+emqx is not_running
+```
+
 ## /api/v4
 
 ### GET /api/v4
