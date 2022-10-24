@@ -69,7 +69,7 @@ Node emqx@127.0.0.1 is started
 emqx is running
 ```
 
-Application is not running:
+When EMQX application is restarting during boot up, or during restart due to join/leave cluster:
 
 ```bash
 $ curl "http://localhost:8081/status"
