@@ -151,9 +151,9 @@ ref:
 
 ### cluster.mcast.loop
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    |  `on`, `off`   | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -193,7 +193,7 @@ emqx@192.168.0.102
 
 ### cluster.dns.app
 
-|  Type  | Default | Example |
+| Type   | Default | Example |
 | ------ | ------- | ------- |
 | string | -       | `emqx`  |
 
@@ -205,7 +205,7 @@ emqx@192.168.0.102
 
 ### cluster.etcd.server
 
-|  Type  | Default | Example                 |
+| Type   | Default | Example                 |
 | ------ | ------- | ----------------------- |
 | string | -       | `http://127.0.0.1:2379` |
 
@@ -217,7 +217,7 @@ emqx@192.168.0.102
 
 ### cluster.etcd.prefix
 
-|  Type  | Default | Example  |
+| Type   | Default | Example  |
 | ------ | ------- | -------- |
 | string | -       | `emqxcl` |
 
@@ -233,7 +233,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.etcd.node_ttl
 
-|   Type   | Default | Example |
+| Type     | Default | Example |
 | -------- | ------- | ------- |
 | duration | -       | `1m`    |
 
@@ -245,9 +245,9 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.etcd.ssl.keyfile
 
-|   Type   | Default | Example                    |
-| -------- | ------- | -------------------------- |
-| string   |  -      | `etc/certs/client-key.pem` |
+| Type   | Default | Example                    |
+| ------ | ------- | -------------------------- |
+| string | -       | `etc/certs/client-key.pem` |
 
 #### 说明
 
@@ -257,9 +257,9 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.etcd.ssl.certfile
 
-|   Type   | Default | Example                |
-| -------- | ------- | ---------------------- |
-| string   |  -      | `etc/certs/client.pem` |
+| Type   | Default | Example                |
+| ------ | ------- | ---------------------- |
+| string | -       | `etc/certs/client.pem` |
 
 #### 说明
 
@@ -269,9 +269,9 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.etcd.ssl.cacertfile
 
-|   Type   | Default | Example            |
-| -------- | ------- | ------------------ |
-| string   |  -      | `etc/certs/ca.pem` |
+| Type   | Default | Example            |
+| ------ | ------- | ------------------ |
+| string | -       | `etc/certs/ca.pem` |
 
 #### 说明
 
@@ -281,9 +281,9 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.k8s.apiserver
 
-|   Type   | Default | Example                      |
-| -------- | ------- | ---------------------------- |
-| string   | -       | `http://10.110.111.204:8080` |
+| Type   | Default | Example                      |
+| ------ | ------- | ---------------------------- |
+| string | -       | `http://10.110.111.204:8080` |
 
 #### 说明
 
@@ -293,9 +293,9 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.k8s.service_name
 
-|   Type   | Default | Example |
-| -------- | ------- | ------- |
-| string   | -       | `emqx`  |
+| Type   | Default | Example |
+| ------ | ------- | ------- |
+| string | -       | `emqx`  |
 
 #### 说明
 
@@ -305,7 +305,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.k8s.address_type
 
-| Type |  Optional Value         | Default |
+| Type | Optional Value          | Default |
 | ---- | ----------------------- | ------- |
 | enum | `ip`, `dns`, `hostname` | `ip`    |
 
@@ -335,9 +335,9 @@ emqx@172.16.122.33
 
 ### cluster.k8s.app_name
 
-|   Type   | Default | Example |
-| -------- | ------- | ------- |
-| string   |  -      | `emqx`  |
+| Type   | Default | Example |
+| ------ | ------- | ------- |
+| string | -       | `emqx`  |
 
 #### 说明
 
@@ -347,9 +347,9 @@ emqx@172.16.122.33
 
 ### cluster.k8s.suffix
 
-|   Type   | Default | Example             |
-| -------- | ------- | ------------------- |
-| string   | -       | `pod.cluster.local` |
+| Type   | Default | Example             |
+| ------ | ------- | ------------------- |
+| string | -       | `pod.cluster.local` |
 
 #### 说明
 
@@ -427,9 +427,9 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 ### node.heartbeat
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    |  `on`, `off`   | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -455,9 +455,9 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 ### node.process_limit
 
-|   Type   | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| integer  | 1024 - 134217727 | 2097152 |
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| integer | 1024 - 134217727 | 2097152 |
 
 #### 说明
 
@@ -469,9 +469,9 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 ### node.max_ports
 
-|   Type   | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| integer  | 1024 - 134217727 | 1048576 |
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| integer | 1024 - 134217727 | 1048576 |
 
 #### 说明
 
@@ -537,9 +537,9 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 ### node.crash_dump
 
-| Type    | Default          |
-| ------- | ---------------- |
-| string  | `log/crash.dump` |
+| Type   | Default          |
+| ------ | ---------------- |
+| string | `log/crash.dump` |
 
 #### 说明
 
@@ -564,7 +564,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 ### node.dist_net_ticktime
 
 | Type    | Default |
-| --------| ------- |
+| ------- | ------- |
 | integer | 120     |
 
 #### 说明
@@ -576,9 +576,9 @@ emqx@172-16-122-33.default.pod.cluster.local
 <br />
 ### node.dist_use_interface
 
-| Type    | Default |
-| --------| ------- |
-| ipaddr  | 0.0.0.0 |
+| Type   | Default |
+| ------ | ------- |
+| ipaddr | 0.0.0.0 |
 
 #### 说明
 
@@ -639,8 +639,8 @@ RPC 模式。可选同步或异步模式。
 ### rpc.port_discovery
 
 | Type | Optional Value Default |
-| ---- | --------------------- |
-| enum | `manual`, `stateless` |
+| ---- | ---------------------- |
+| enum | `manual`, `stateless`  |
 
 #### 说明
 
@@ -655,8 +655,8 @@ otherwise `stateless`.
 
 ### rpc.tcp_server_ip
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
+| Type   | Optional Value                  | Default |
+| ------ | ------------------------------- | ------- |
 | ipaddr | [0-255].[0-255].[0-255].[0-255] | 0.0.0.0 |
 
 #### 说明
@@ -680,9 +680,9 @@ otherwise `stateless`.
 
 ### rpc.tcp_client_num
 
-| Type    | Optional Value | Default         |
-| ------- | -------------- | --------------- |
-| integer | 1 - 256        | CPU 核心数 / 2   |
+| Type    | Optional Value | Default        |
+| ------- | -------------- | -------------- |
+| integer | 1 - 256        | CPU 核心数 / 2 |
 
 #### 说明
 
@@ -716,7 +716,7 @@ otherwise `stateless`.
 
 ### rpc.authentication_timeout
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `5s`    |
 
@@ -728,7 +728,7 @@ RPC 认证超时时间。尝试认证若远程节点无响应，多久之后放�
 
 ### rpc.call_receive_timeout
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `15s`   |
 
@@ -740,7 +740,7 @@ RPC 同步模式的超时时间。RPC 同步调用若收不到回复，用多久
 
 ### rpc.socket_keepalive_idle
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `900s`  |
 
@@ -752,7 +752,7 @@ RPC 同步模式的超时时间。RPC 同步调用若收不到回复，用多久
 
 ### rpc.socket_keepalive_interval
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `75s`   |
 
@@ -788,7 +788,7 @@ TCP 调优参数。TCP 发送缓冲区大小。
 
 ### rpc.socket_recbuf
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | bytesize | `1MB`   |
 
@@ -800,7 +800,7 @@ TCP 调优参数。TCP 接收缓冲区大小。
 
 ### rpc.socket_buffer
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | bytesize | `1MB`   |
 
@@ -972,9 +972,9 @@ log.error.file = error.log
 
 ### log.formatter
 
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `text`, `json`  | `text`  |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `text`, `json` | `text`  |
 
 #### 说明
 
@@ -982,9 +982,9 @@ log.error.file = error.log
 
 ### log.formatter.text.date.format
 
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `rfc3339` | FORMAT  | `rfc3339`  |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `rfc3339`      | FORMAT  | `rfc3339`  
 
 注意: 这个配置在 EMQX 开源版 4.3.15, 4.4.4 和 EMQX 企业版 4.3.10, 4.4.4 及之后可以使用。
 
@@ -994,20 +994,20 @@ log.error.file = error.log
 
 其中 FORMAT 里支持的控制符如下:
 
-| 控制符 | 说明 | 格式示例 |
-| ---- | --------------- | ------- |
-| %Y | 年 | 2022 |
-| %m | 月 (01..12) | 11 |
-| %d | 日 | 01 |
-| %H | 时 (00..23) | 06 |
-| %M | 分 (00..59) | 43  |
-| %S | 秒 (00..60) | 31 |
-| %N | 纳秒 (000000000..999999999) | 019085000  |
-| %6N | 微秒 (00000..999999) | 019085 |
-| %3N | 毫秒 (000..999) | 019 |
-| %z | +HHMM 数字时区 | -0400 |
-| %:z | +HH:MM 数字时区 | -04:00 |
-| %::z | +HH:MM:SS 数字时区 | -04:00:00 |
+| 控制符 | 说明                        | 格式示例  |
+| ------ | --------------------------- | --------- |
+| %Y     | 年                          | 2022      |
+| %m     | 月 (01..12)                 | 11        |
+| %d     | 日                          | 01        |
+| %H     | 时 (00..23)                 | 06        |
+| %M     | 分 (00..59)                 | 43        |
+| %S     | 秒 (00..60)                 | 31        |
+| %N     | 纳秒 (000000000..999999999) | 019085000 |
+| %6N    | 微秒 (00000..999999)        | 019085    |
+| %3N    | 毫秒 (000..999)             | 019       |
+| %z     | +HHMM 数字时区              | -0400     |
+| %:z    | +HH:MM 数字时区             | -04:00    |
+| %::z   | +HH:MM:SS 数字时区          | -04:00:00 |
 
 举例:
 
@@ -1076,9 +1076,9 @@ ACL 未命中时，允许或者拒绝 发布/订阅 操作。
 
 ### acl_cache_max_size
 
-| Type    | Default  |
-| ------- | -------- |
-| integer | 32       |
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
 
 #### 说明
 
@@ -1100,9 +1100,9 @@ ACL 规则最大缓存时间。
 
 ### acl_deny_action
 
-| Type    | Optional Value         | Default  |
-| ------- | ---------------------- | -------- |
-| enum    | `ignore`, `disconnect` | `ignore` |
+| Type | Optional Value         | Default  |
+| ---- | ---------------------- | -------- |
+| enum | `ignore`, `disconnect` | `ignore` |
 
 #### 说明
 
@@ -1168,9 +1168,9 @@ ACL 检查失败后，执行的操作。
 
 ### mqtt.max_packet_size
 
-| Type      | Default |
-| --------- | ------- |
-| bytesize  | `1MB`   |
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
 
 #### 说明
 
@@ -1194,7 +1194,7 @@ ACL 检查失败后，执行的操作。
 
 | Type    | Default |
 | ------- | ------- |
-| integer | 128       |
+| integer | 128     |
 
 #### 说明
 
@@ -1208,9 +1208,9 @@ Topic层级过多可能导致订阅时的性能问题。
 
 ### mqtt.max_qos_allowed
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `0`, `1`, `2`  | `2`     |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `0`, `1`, `2`  | `2`     |
 
 #### 说明
 
@@ -1343,7 +1343,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 ### zone.external.acl_deny_action
 
 | Type | Optional Value         | Default  |
-| ---- | -------------------- - | -------- |
+| ---- | ---------------------- | -------- |
 | enum | `ignore`, `disconnect` | `ignore` |
 
 #### 说明
@@ -1357,9 +1357,9 @@ ACL 检查失败后，执行的操作。
 
 ### zone.external.force_gc_policy
 
-| Type    | Default      |
-| ------- | ------------ |
-| string  | `16000|16MB` |
+| Type   | Default      |
+| ------ | ------------ |
+| string | `16000|16MB` |
 
 #### 说明
 
@@ -1373,9 +1373,9 @@ ACL 检查失败后，执行的操作。
 
 ### zone.external.force_shutdown_policy
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -1431,9 +1431,9 @@ Topic层级过多可能导致订阅时的性能问题。
 
 ### zone.external.max_qos_allowed
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `0`, `1`, `2`  | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `0`, `1`, `2`  | -       |
 
 #### 说明
 
@@ -1517,7 +1517,7 @@ Keepalive 退避指数。EMQX 如果在 `Keepalive * backoff * 2` 的时间内�
 
 | Type    | Default |
 | ------- | ------- |
-| integer | 0     |
+| integer | 0       |
 
 #### 说明
 
@@ -1527,9 +1527,9 @@ Keepalive 退避指数。EMQX 如果在 `Keepalive * backoff * 2` 的时间内�
 
 ### zone.external.upgrade_qos
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -1631,9 +1631,9 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 ### zone.external.mqueue_default_priority
 
-| Type    | Optional Value      | Default   |
-| ------- | ------------------- | --------- |
-| enum    | `highest`, `lowest` | `highest` |
+| Type | Optional Value      | Default   |
+| ---- | ------------------- | --------- |
+| enum | `highest`, `lowest` | `highest` |
 
 #### 说明
 
@@ -1748,9 +1748,9 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 ### zone.internal.enable_acl
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -1760,9 +1760,9 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 
 ### zone.internal.acl_deny_action
 
-| Type    | Optional Value         | Default  |
-| ------- | ---------------------- | -------- |
-| enum    | `ignore`, `disconnect` | `ignore` |
+| Type | Optional Value         | Default  |
+| ---- | ---------------------- | -------- |
+| enum | `ignore`, `disconnect` | `ignore` |
 
 #### 说明
 
@@ -1775,9 +1775,9 @@ ACL 检查失败后，执行的操作。
 
 ### zone.internal.force_gc_policy
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -1875,9 +1875,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 
 ### zone.internal.enable_flapping_detect
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -1887,9 +1887,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 
 ### zone.internal.force_shutdown_policy
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -1905,9 +1905,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 
 ### zone.internal.mountpoint
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -1961,9 +1961,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 
 ### listener.tcp.external
 
-| Type    | Default        |
-| ------- | -------------- |
-| string  | `0.0.0.0:1883` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `0.0.0.0:1883` |
 
 #### 说明
 
@@ -2027,9 +2027,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 
 ### listener.tcp.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### 说明
 
@@ -2039,9 +2039,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 
 ### listener.tcp.external.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -2055,9 +2055,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 
 ### listener.tcp.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### 说明
 
@@ -2080,9 +2080,9 @@ listener.tcp.external.access.2 = allow all
 
 ### listener.tcp.external.proxy_protocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -2165,9 +2165,9 @@ TCP 报文发送超时时间。
 
 ### listener.tcp.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -2221,9 +2221,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.tcp.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -2259,9 +2259,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.tcp.internal
 
-| Type    | Default           |
-| ------- | ----------------- |
-| string  | `127.0.0.1:11883` |
+| Type   | Default           |
+| ------ | ----------------- |
+| string | `127.0.0.1:11883` |
 
 #### 说明
 
@@ -2325,9 +2325,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.tcp.internal.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `internal` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `internal` |
 
 #### 说明
 
@@ -2337,9 +2337,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.tcp.internal.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -2376,9 +2376,9 @@ TCP 报文发送超时时间。
 
 ### listener.tcp.internal.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -2424,9 +2424,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.tcp.internal.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -2462,9 +2462,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ssl.external
 
-| Type    | Default        |
-| ------- | -------------- |
-| string  | `0.0.0.0:8883` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `0.0.0.0:8883` |
 
 #### 说明
 
@@ -2522,9 +2522,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ssl.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### 说明
 
@@ -2534,9 +2534,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ssl.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### 说明
 
@@ -2558,9 +2558,9 @@ listener.ssl.external.access.2 = allow all
 
 ### listener.ssl.external.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -2570,9 +2570,9 @@ listener.ssl.external.access.2 = allow all
 
 ### listener.ssl.external.proxy_protocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -2598,8 +2598,8 @@ listener.ssl.external.access.2 = allow all
 
 ### listener.ssl.external.tls_versions
 
-| Type   | Default                 |
-| ------ | ----------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
@@ -2622,9 +2622,9 @@ listener.ssl.external.access.2 = allow all
 
 ### listener.ssl.external.depth
 
-| Type     | Default |
-| -------- | ------- |
-| number   | `10`    |
+| Type   | Default |
+| ------ | ------- |
+| number | `10`    |
 
 #### 说明
 
@@ -2634,9 +2634,9 @@ listener.ssl.external.access.2 = allow all
 
 ### listener.ssl.external.key_password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -2719,8 +2719,8 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.ssl.external.ciphers
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### 说明
@@ -2755,9 +2755,9 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.ssl.external.reuse_sessions
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -2767,9 +2767,9 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.ssl.external.honor_cipher_order
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -2836,9 +2836,9 @@ TCP 报文发送超时时间。
 
 ### listener.ssl.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -2892,9 +2892,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ssl.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -2930,9 +2930,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external
 
-| Type    | Default |
-| ------- | ------- |
-| string  | `8083`  |
+| Type   | Default |
+| ------ | ------- |
+| string | `8083`  |
 
 #### 说明
 
@@ -2948,9 +2948,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external.mqtt_path
 
-| Type    | Default |
-| ------- | ------- |
-| string  | `/mqtt` |
+| Type   | Default |
+| ------ | ------- |
+| string | `/mqtt` |
 
 #### 说明
 
@@ -3008,9 +3008,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.rate_limit
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `100KB,10s` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `100KB,10s` |
 
 #### 说明
 
@@ -3024,9 +3024,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### 说明
 
@@ -3036,9 +3036,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### 说明
 
@@ -3048,9 +3048,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.fail_if_no_subprotocol
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `true`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
 
 #### 说明
 
@@ -3060,9 +3060,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.supported_protocols
 
-| Type    | Default                               |
-| ------- | ------------------------------------- |
-| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
 
 #### 说明
 
@@ -3072,9 +3072,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.proxy_address_header
 
-| Type    | Optional Value    | Default |
-| ------- | ----------------- |-------- |
-| string  | `X-Forwarded-For` | -       |
+| Type   | Optional Value    | Default |
+| ------ | ----------------- | ------- |
+| string | `X-Forwarded-For` | -       |
 
 #### 说明
 
@@ -3084,9 +3084,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.proxy_port_header
 
-| Type    | Optional Value     | Default |
-| ------- | ------------------ | ------- |
-| string  | `X-Forwarded-Port` | -       |
+| Type   | Optional Value     | Default |
+| ------ | ------------------ | ------- |
+| string | `X-Forwarded-Port` | -       |
 
 #### 说明
 
@@ -3096,9 +3096,9 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 
 ### listener.ws.external.proxy_protocol
 
-| Type    | Optional Value      | Default |
-| ------- | ------------------- | ------- |
-| enum    | `on`, `off`         | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -3148,9 +3148,9 @@ TCP 报文发送超时时间。
 
 ### listener.ws.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -3196,9 +3196,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -3234,9 +3234,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external.deflate_opts.level
 
-| Type    | Optional Value                                      | Default |
-| ------- | --------------------------------------------------- | ------- |
-| enum    | `none`, `default`, `best_compression`, `best_speed` | -       |
+| Type | Optional Value                                      | Default |
+| ---- | --------------------------------------------------- | ------- |
+| enum | `none`, `default`, `best_compression`, `best_speed` | -       |
 
 #### 说明
 
@@ -3263,9 +3263,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external.deflate_opts.strategy
 
-| Type    | Optional Value                                | Default |
-| ------- | --------------------------------------------- | ------- |
-| enum    | `default`, `filtered`, `huffman_only`, `rle`  | -       |
+| Type | Optional Value                               | Default |
+| ---- | -------------------------------------------- | ------- |
+| enum | `default`, `filtered`, `huffman_only`, `rle` | -       |
 
 #### 说明
 
@@ -3282,9 +3282,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external.deflate_opts.server_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### 说明
 
@@ -3294,9 +3294,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external.deflate_opts.client_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### 说明
 
@@ -3306,9 +3306,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.ws.external.deflate_opts.server_max_window_bits
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| integer | 8 - 15          | -       |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | 8 - 15         | -       |
 
 #### 说明
 
@@ -3356,9 +3356,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### listener.wss.external
 
-| Type    | Default        |
-| ------- | -------------- |
-| string  | `0.0.0.0:8084` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `0.0.0.0:8084` |
 
 #### 说明
 
@@ -3368,9 +3368,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### listener.wss.external.mqtt_path
 
-| Type    | Default |
-| ------- | ------- |
-| string  | `/mqtt` |
+| Type   | Default |
+| ------ | ------- |
+| string | `/mqtt` |
 
 #### 说明
 
@@ -3428,9 +3428,9 @@ WebSocket 的 URL Path。
 
 ### listener.wss.external.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -3440,9 +3440,9 @@ WebSocket 的 URL Path。
 
 ### listener.wss.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### 说明
 
@@ -3452,9 +3452,9 @@ WebSocket 的 URL Path。
 
 ### listener.wss.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### 说明
 
@@ -3476,9 +3476,9 @@ listener.wss.external.access.2 = allow all
 
 ### listener.wss.external.fail_if_no_subprotocol
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `true`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
 
 #### 说明
 
@@ -3488,9 +3488,9 @@ listener.wss.external.access.2 = allow all
 
 ### listener.wss.external.supported_protocols
 
-| Type    | Default                               |
-| ------- | ------------------------------------- |
-| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
 
 #### 说明
 
@@ -3512,9 +3512,9 @@ listener.wss.external.access.2 = allow all
 
 ### listener.wss.external.proxy_protocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -3540,8 +3540,8 @@ listener.wss.external.access.2 = allow all
 
 ### listener.wss.external.tls_versions
 
-| Type   | Default                |
-| ------ | ----------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
@@ -3589,9 +3589,9 @@ listener.wss.external.access.2 = allow all
 
 ### listener.wss.external.depth
 
-| Type     | Default |
-| -------- | ------- |
-| number   | `10`    |
+| Type   | Default |
+| ------ | ------- |
+| number | `10`    |
 
 #### 说明
 
@@ -3601,9 +3601,9 @@ listener.wss.external.access.2 = allow all
 
 ### listener.wss.external.key_password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -3626,7 +3626,7 @@ listener.wss.external.access.2 = allow all
 ### listener.wss.external.verify
 
 | Type | Optional Value               | Default       |
-| ---- | ---------------------------  | ------------- |
+| ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
 #### 说明
@@ -3649,8 +3649,8 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.wss.external.ciphers
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### 说明
@@ -3673,9 +3673,9 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.wss.external.secure_renegotiate
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -3685,9 +3685,9 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.wss.external.reuse_sessions
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -3697,9 +3697,9 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 
 ### listener.wss.external.honor_cipher_order
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -3766,9 +3766,9 @@ TCP 报文发送超时时间。
 
 ### listener.wss.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -3822,9 +3822,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.wss.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### 说明
 
@@ -3846,9 +3846,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.wss.external.compress
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### 说明
 
@@ -3858,9 +3858,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.wss.external.deflate_opts.level
 
-| Type    | Optional Value                                      | Default   |
-| ------- | --------------------------------------------------- | --------- |
-| enum    | `none`, `default`, `best_compression`, `best_speed` | `default` |
+| Type | Optional Value                                      | Default   |
+| ---- | --------------------------------------------------- | --------- |
+| enum | `none`, `default`, `best_compression`, `best_speed` | `default` |
 
 #### 说明
 
@@ -3887,9 +3887,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.wss.external.deflate_opts.strategy
 
-| Type    | Optional Value                                | Default |
-| ------- | --------------------------------------------- | ------- |
-| enum    | `default`, `filtered`, `huffman_only`, `rle`  | -       |
+| Type | Optional Value                               | Default |
+| ---- | -------------------------------------------- | ------- |
+| enum | `default`, `filtered`, `huffman_only`, `rle` | -       |
 
 #### 说明
 
@@ -3906,9 +3906,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.wss.external.deflate_opts.server_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### 说明
 
@@ -3918,9 +3918,9 @@ TCP 缓冲区大小 (用户级)。
 
 ### listener.wss.external.deflate_opts.client_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### 说明
 
@@ -3980,9 +3980,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### plugins.etc_dir
 
-| Type    | Default       |
-| ------- | ------------- |
-| string  | `etc/plugins` |
+| Type   | Default       |
+| ------ | ------------- |
+| string | `etc/plugins` |
 
 #### 说明
 
@@ -3992,9 +3992,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### plugins.loaded_file
 
-| Type    | Default              |
-| ------- | -------------------- |
-| string  | `etc/loaded_plugins` |
+| Type   | Default              |
+| ------ | -------------------- |
+| string | `etc/loaded_plugins` |
 
 #### 说明
 
@@ -4004,9 +4004,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### plugins.expand_plugins_dir
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `plugins/` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `plugins/` |
 
 #### 说明
 
@@ -4018,9 +4018,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### broker.sys_interval
 
-| Type      | Default |
-| --------- | ------- |
-| duration  | `1m`    |
+| Type     | Default |
+| -------- | ------- |
+| duration | `1m`    |
 
 #### 说明
 
@@ -4045,9 +4045,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### broker.enable_session_registry
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### 说明
 
@@ -4069,9 +4069,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### broker.shared_subscription_strategy
 
-| Type | Optional Value                                                   | Default  |
-| ---- | ---------------------------------------------------------------- | -------- |
-| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | `random` |
+| Type | Optional Value                                                             | Default  |
+| ---- | -------------------------------------------------------------------------- | -------- |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`, | `random` |
 
 #### 说明
 
@@ -4088,9 +4088,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### broker.sample_group.shared_subscription_strategy
 
-| Type | Optional Value                                                   | Default  |
-| ---- | ---------------------------------------------------------------- | -------- |
-| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | - |
+| Type | Optional Value                                                             | Default |
+| ---- | -------------------------------------------------------------------------- | ------- |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`, | -       |
 
 #### 说明
 
@@ -4116,9 +4116,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ### broker.route_batch_clean
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -4128,9 +4128,9 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 ## broker.perf.route_lock_type = key
 
-| Type    | Optional Value         | Default |
-| ------- | ---------------------- | ------- |
-| enum    | `key`, `tab`, `global` | `key`   |
+| Type | Optional Value         | Default |
+| ---- | ---------------------- | ------- |
+| enum | `key`, `tab`, `global` | `key`   |
 
 ### Description
 
@@ -4149,17 +4149,17 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 
 {% emqxee %}
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `false`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 {% endemqxee %}
 
 {% emqxce %}
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `true`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
 
 {% endemqxce %}
 
@@ -4349,8 +4349,8 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 
 ### auth.http.auth_req.url
 
-| Type   | Default                           |
-| ------ | --------------------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `http://127.0.0.1:80/mqtt/auth` |
 
 #### 说明
@@ -4388,31 +4388,31 @@ auth.http.auth_req.headers.accept = */*
 
 ### auth.http.auth_req.params
 
-| Type   | Format                                                 | Default                               |
-| ------ | ------------------------------------------------------ | ------------------------------------- |
+| Type   | Format                                                         | Default                               |
+| ------ | -------------------------------------------------------------- | ------------------------------------- |
 | string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符 | `clientid=%c,username=%u,password=%P` |
 
 #### 说明
 
 指定认证请求中携带的数据。使用 GET 方法时 `auth.http.auth_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以查询字符串参数的形式发送。使用 POST 方法时 `auth.http.auth_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以 Request Body 的形式发送。所有的占位符都会被运行时数据所替换，可用的占位符如下：
 
-| 占位符 | 替换内容             |
-| ------ | -------------------- |
-| `%u`   | 用户名 |
-| `%c`   | MQTT Client ID       |
-| `%a`   | 客户端的网络 IP 地址 |
+| 占位符 | 替换内容                                                                  |
+| ------ | ------------------------------------------------------------------------- |
+| `%u`   | 用户名                                                                    |
+| `%c`   | MQTT Client ID                                                            |
+| `%a`   | 客户端的网络 IP 地址                                                      |
 | `%r`   | 客户端使用的协议，可以是：`mqtt`, `mqtt-sn`, `coap`, `lwm2m` 以及 `stomp` |
-| `%P`   | 密码 |
-| `%p`   | 客户端连接的服务端端口 |
-| `%c`   | 客户端证书中的 Common Name |
-| `%d`   | 客户端证书中的 Subject |
+| `%P`   | 密码                                                                      |
+| `%p`   | 客户端连接的服务端端口                                                    |
+| `%c`   | 客户端证书中的 Common Name                                                |
+| `%d`   | 客户端证书中的 Subject                                                    |
 
 <br />
 
 ### auth.http.super_req.url
 
-| Type   | Default                                |
-| ------ | -------------------------------------- |
+| Type   | Default                              |
+| ------ | ------------------------------------ |
 | string | `http://127.0.0.1:80/mqtt/superuser` |
 
 #### 说明
@@ -4450,9 +4450,9 @@ auth.http.super_req.headers.accept = */*
 
 ### auth.http.super_req.params
 
-| Type   | Format                                                       | Default                   |
-| ------ | ------------------------------------------------------------ | ------------------------- |
-| string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符       | `clientid=%c,username=%u` |
+| Type   | Format                                                         | Default                   |
+| ------ | -------------------------------------------------------------- | ------------------------- |
+| string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符 | `clientid=%c,username=%u` |
 
 #### 说明
 
@@ -4501,23 +4501,23 @@ auth.http.acl_req.headers.accept = */*
 
 ### auth.http.acl_req.params
 
-| Type   | Format                                                       | Default                                                              |
-| ------ | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符       | `access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m` |
+| Type   | Format                                                         | Default                                                              |
+| ------ | -------------------------------------------------------------- | -------------------------------------------------------------------- |
+| string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符 | `access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m` |
 
 #### 说明
 
 指定 ACL 验证请求中携带的数据。使用 GET 方法时 `auth.http.acl_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以查询字符串参数的形式发送。使用 POST 方法时 `auth.http.acl_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以 Request Body 的形式发送。所有的占位符都会被运行时数据所替换，可用的占位符如下：
 
-| 占位符 | 替换内容                                                     |
-| ------ | ------------------------------------------------------------ |
-| `%A`   | 需要验证的权限，1 表示订阅，2 表示发布                       |
-| `%u`   | MQTT Client ID                                               |
-| `%c`   | 客户端标识符                                                 |
-| `%a`   | 客户端的网络 IP 地址                                         |
+| 占位符 | 替换内容                                                                  |
+| ------ | ------------------------------------------------------------------------- |
+| `%A`   | 需要验证的权限，1 表示订阅，2 表示发布                                    |
+| `%u`   | MQTT Client ID                                                            |
+| `%c`   | 客户端标识符                                                              |
+| `%a`   | 客户端的网络 IP 地址                                                      |
 | `%r`   | 客户端使用的协议，可以是：`mqtt`, `mqtt-sn`, `coap`, `lwm2m` 以及 `stomp` |
-| `%m`   | 挂载点                                                       |
-| `%t`   | 主题                                                         |
+| `%m`   | 挂载点                                                                    |
+| `%t`   | 主题                                                                      |
 
 <br />
 
@@ -4585,9 +4585,9 @@ CA 证书文件路径。
 
 ### auth.jwt.secret
 
-| Type    | Default      |
-| ------- | ------------ |
-| string  | `emqxsecret` |
+| Type   | Default      |
+| ------ | ------------ |
+| string | `emqxsecret` |
 
 #### 说明
 
@@ -4612,9 +4612,9 @@ CA 证书文件路径。
 
 ### auth.jwt.pubkey
 
-| Type    | Default                        |
-| ------- | ------------------------------ |
-| string  | `etc/certs/jwt_public_key.pem` |
+| Type   | Default                        |
+| ------ | ------------------------------ |
+| string | `etc/certs/jwt_public_key.pem` |
 
 #### 说明
 
@@ -4667,9 +4667,9 @@ auth.jwt.verify_claims.sub = %u
 
 ### auth.ldap.servers
 
-| Type     | Default     |
-| -------- | ----------- |
-| string   | `127.0.0.1` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `127.0.0.1` |
 
 #### 说明
 
@@ -4679,9 +4679,9 @@ LDAP 服务地址。
 
 ### auth.ldap.port
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 389     |
+| Type    | Default |
+| ------- | ------- |
+| integer | 389     |
 
 #### 说明
 
@@ -4691,9 +4691,9 @@ LDAP 服务端口。
 
 ### auth.ldap.pool
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| integer  | > 0            | 8       |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | > 0            | 8       |
 
 #### 说明
 
@@ -4703,9 +4703,9 @@ LDAP 服务端口。
 
 ### auth.ldap.bind_dn
 
-| Type     | Default                 |
-| -------- | ----------------------- |
-| string   | `cn=root,dc=emqx,dc=io` |
+| Type   | Default                 |
+| ------ | ----------------------- |
+| string | `cn=root,dc=emqx,dc=io` |
 
 #### 说明
 
@@ -4715,9 +4715,9 @@ LDAP 服务端口。
 
 ### auth.ldap.bind_password
 
-| Type     | Default  |
-| -------- | -------- |
-| string   | `public` |
+| Type   | Default  |
+| ------ | -------- |
+| string | `public` |
 
 #### 说明
 
@@ -4739,9 +4739,9 @@ LDAP 服务端口。
 
 ### auth.ldap.device_dn
 
-| Type     | Default                    |
-| -------- | -------------------------- |
-| string   | `ou=device,dc=emqx,dc=io`  |
+| Type   | Default                   |
+| ------ | ------------------------- |
+| string | `ou=device,dc=emqx,dc=io` |
 
 #### 说明
 
@@ -4751,9 +4751,9 @@ LDAP 服务端口。
 
 ### auth.ldap.match_objectclass
 
-| Type     | Default     |
-| -------- | ----------- |
-| string   | `mqttUser`  |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `mqttUser` |
 
 #### 说明
 
@@ -4763,9 +4763,9 @@ LDAP 服务端口。
 
 ### auth.ldap.username.attributetype
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `uid`   |
+| Type   | Default |
+| ------ | ------- |
+| string | `uid`   |
 
 #### 说明
 
@@ -4775,9 +4775,9 @@ Username 属性的数据类型。
 
 ### auth.ldap.password.attributetype
 
-| Type     | Default          |
-| -------- | ---------------- |
-| string   | `userPassword`   |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `userPassword` |
 
 #### 说明
 
@@ -4787,9 +4787,9 @@ Password 属性的数据类型。
 
 ### auth.ldap.ssl
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| enum     | `true`, `false`  | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### 说明
 
@@ -4799,9 +4799,9 @@ Password 属性的数据类型。
 
 ### auth.ldap.ssl.certfile
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -4811,9 +4811,9 @@ SSL 服务端证书路径。
 
 ### auth.ldap.ssl.keyfile
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -4823,9 +4823,9 @@ SSL 服务端秘钥文件路径。
 
 ### auth.ldap.ssl.cacertfile
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -4835,9 +4835,9 @@ CA 证书文件路径。
 
 ### auth.ldap.ssl.verify
 
-| Type     | Optional Value                | Default |
-| -------- | ----------------------------- | ------- |
-| enum     | `verify_peer`, `verify_none`  | -       |
+| Type | Optional Value               | Default |
+| ---- | ---------------------------- | ------- |
+| enum | `verify_peer`, `verify_none` | -       |
 
 #### 说明
 
@@ -4850,9 +4850,9 @@ SSL 认证方式：
 
 ### auth.ldap.ssl.fail_if_no_peer_cert
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| enum     | `true`, `false`  | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### 说明
 
@@ -4864,9 +4864,9 @@ SSL 认证方式：
 
 ### auth.mongo.type
 
-| Type | Optional Value                      | Default  |
-| ---- | ----------------------------------- | -------- |
-| enum | `single`, `unknown`, `sharded`, `rs`| `single` |
+| Type | Optional Value                       | Default  |
+| ---- | ------------------------------------ | -------- |
+| enum | `single`, `unknown`, `sharded`, `rs` | `single` |
 
 #### 说明
 
@@ -5069,7 +5069,7 @@ auth.mongo.auth_query.password_field = password,salt
 
 ### auth.mongo.auth_query.password_hash
 
-| Type |               Optional Value              | Default  |
+| Type | Optional Value                            | Default  |
 | ---- | ----------------------------------------- | -------- |
 | enum | `plain`, `md5`, `sha`, `sha256`, `bcrypt` | `sha256` |
 
@@ -5371,7 +5371,7 @@ MySQL 用户名。
 
 | Type   | Default |
 | ------ | ------- |
-| string | -      |
+| string | -       |
 
 #### 说明
 
@@ -5424,7 +5424,7 @@ MySQL 数据查询超时时间。查询超时将等同于未找到用户数据�
 
 ### auth.mysql.password_hash
 
-| Type   | Default  |
+| Type   | Default |
 | ------ | ------- |
 | string | `sh256` |
 
@@ -5456,8 +5456,8 @@ MySQL 数据查询超时时间。查询超时将等同于未找到用户数据�
 
 ### auth.mysql.acl_query
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
 #### 说明
@@ -5548,9 +5548,9 @@ PostgreSQL 数据库字符编码格式。
 
 ### auth.pgsql.ssl
 
-| Type   | Optional Value  | Default |
-| ------ | --------------- | ------- |
-| enum   | `true`, `false` | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### 说明
 
@@ -5620,8 +5620,8 @@ PostgreSQL 数据库字符编码格式。
 
 ### auth.pgsql.super_query
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                            |
+| ------ | ------------------------------------------------------------------ |
 | string | `select is_superuser from mqtt_user where username = '%u' limit 1` |
 
 #### 说明
@@ -5632,8 +5632,8 @@ PostgreSQL 数据库字符编码格式。
 
 ### auth.pgsql.acl_query
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
 #### 说明
@@ -5646,9 +5646,9 @@ ACL 校验时使用的 SQL 选取语句，同 `auth.mysql.acl_query`。
 
 ### auth.redis.type
 
-| Type     | Optional Value                  | Default   |
-| -------- | ------------------------------- | --------- |
-| enum     | `single`, `sentinel`, `cluster` | `single`  |
+| Type | Optional Value                  | Default  |
+| ---- | ------------------------------- | -------- |
+| enum | `single`, `sentinel`, `cluster` | `single` |
 
 #### 说明
 
@@ -5661,9 +5661,9 @@ Redis 服务集群类型：
 
 ### auth.redis.server
 
-| Type     | Default            |
-| -------- | ------------------ |
-| string   | `127.0.0.1:6379`   |
+| Type   | Default          |
+| ------ | ---------------- |
+| string | `127.0.0.1:6379` |
 
 #### 说明
 
@@ -5673,9 +5673,9 @@ Redis 服务地址，如果有多个则以逗号分隔。例如，`192.168.0.1:6
 
 ### auth.redis.sentinel
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -5685,9 +5685,9 @@ Redis sentinel 模式下的集区名称。如果非 `sentinel` 模式，则不�
 
 ### auth.redis.pool
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| integer  | > 0            | 8       |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | > 0            | 8       |
 
 #### 说明
 
@@ -5697,9 +5697,9 @@ Redis sentinel 模式下的集区名称。如果非 `sentinel` 模式，则不�
 
 ### auth.redis.database
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 0       |
+| Type    | Default |
+| ------- | ------- |
+| integer | 0       |
 
 #### 说明
 
@@ -5709,9 +5709,9 @@ Redis sentinel 模式下的集区名称。如果非 `sentinel` 模式，则不�
 
 ### auth.redis.password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -5733,9 +5733,9 @@ Redis 查询超时时间。
 
 ### auth.redis.auth_cmd
 
-| Type     | Default                       |
-| -------- | ----------------------------- |
-| string   | `HMGET mqtt_user:%u password` |
+| Type   | Default                       |
+| ------ | ----------------------------- |
+| string | `HMGET mqtt_user:%u password` |
 
 #### 说明
 
@@ -5749,9 +5749,9 @@ Redis 查询超时时间。
 
 ### auth.redis.password_hash
 
-| Type     | Optional Value                             | Default |
-| -------- | ------------------------------------------ | ------- |
-| enum     | `plain`, `md5`, `sha`, `sha256`, `bcrypt`  | `plain` |
+| Type | Optional Value                            | Default |
+| ---- | ----------------------------------------- | ------- |
+| enum | `plain`, `md5`, `sha`, `sha256`, `bcrypt` | `plain` |
 
 #### 说明
 
@@ -5761,9 +5761,9 @@ Redis 存储的 `password` 字段的编码格式。
 
 ### auth.redis.super_cmd
 
-| Type     | Default                          |
-| -------- | -------------------------------- |
-| string   | `HGET mqtt_user:%u is_superuser` |
+| Type   | Default                          |
+| ------ | -------------------------------- |
+| string | `HGET mqtt_user:%u is_superuser` |
 
 #### 说明
 
@@ -5777,9 +5777,9 @@ Redis 存储的 `password` 字段的编码格式。
 
 ### auth.redis.acl_cmd
 
-| Type     | Default               |
-| -------- | --------------------- |
-| string   | `HGETALL mqtt_acl:%u` |
+| Type   | Default               |
+| ------ | --------------------- |
+| string | `HGETALL mqtt_acl:%u` |
 
 #### 说明
 
@@ -5793,9 +5793,9 @@ ACL 查询命令。可用的占位符有：
 
 ### bridge.mqtt.aws.address
 
-| Type     | Default          |
-| -------- | ---------------- |
-| string   | `127.0.0.1:1883` |
+| Type   | Default          |
+| ------ | ---------------- |
+| string | `127.0.0.1:1883` |
 
 #### 说明
 
@@ -5807,9 +5807,9 @@ ACL 查询命令。可用的占位符有：
 
 ### bridge.mqtt.aws.proto_ver
 
-| Type     | Optional Value               | Default  |
-| -------- | ---------------------------- | -------- |
-| enum     | `mqttv3`, `mqttv4`, `mqttv5` | `mqttv4` |
+| Type | Optional Value               | Default  |
+| ---- | ---------------------------- | -------- |
+| enum | `mqttv3`, `mqttv4`, `mqttv5` | `mqttv4` |
 
 #### 说明
 
@@ -5819,9 +5819,9 @@ MQTT 桥接的客户端协议版本。
 
 ### bridge.mqtt.aws.start_type
 
-| Type     | Optional Value    | Default  |
-| -------- | ----------------- | -------- |
-| eunm     | `manual`, `auto`  | `manual` |
+| Type | Optional Value   | Default  |
+| ---- | ---------------- | -------- |
+| eunm | `manual`, `auto` | `manual` |
 
 #### 说明
 
@@ -5833,9 +5833,9 @@ MQTT 桥接的客户端协议版本。
 
 ### bridge.mqtt.aws.bridge_mode
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| boolean  | `true`, `false`  | `true`  |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| boolean | `true`, `false` | `true`  |
 
 #### 说明
 
@@ -5847,9 +5847,9 @@ MQTT 桥接的客户端协议版本。
 
 ### bridge.mqtt.aws.clientid
 
-| Type     | Default      |
-| -------- | ------------ |
-| string   | `bridge_aws` |
+| Type   | Default      |
+| ------ | ------------ |
+| string | `bridge_aws` |
 
 #### 说明
 
@@ -5859,9 +5859,9 @@ MQTT 桥接的客户端标识。
 
 ### bridge.mqtt.aws.clean_start
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| boolean  | `true`, `false`  | `true`  |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| boolean | `true`, `false` | `true`  |
 
 #### 说明
 
@@ -5871,9 +5871,9 @@ MQTT 桥接的 `clean_start` 标志。它表示客户端是否以 `清楚会话`
 
 ### bridge.mqtt.aws.username
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `user`  |
+| Type   | Default |
+| ------ | ------- |
+| string | `user`  |
 
 #### 说明
 
@@ -5883,9 +5883,9 @@ MQTT 桥接客户端的用户名。
 
 ### bridge.mqtt.aws.password
 
-| Type     | Default  |
-| -------- | -------- |
-| string   | `passwd` |
+| Type   | Default  |
+| ------ | -------- |
+| string | `passwd` |
 
 #### 说明
 
@@ -5895,9 +5895,9 @@ MQTT 桥接客户端的密码。
 
 ### bridge.mqtt.aws.forwards
 
-| Type     | Default             |
-| -------- | ------------------- |
-| string   | `topic1/#,topic2/#` |
+| Type   | Default             |
+| ------ | ------------------- |
+| string | `topic1/#,topic2/#` |
 
 #### 说明
 
@@ -5908,9 +5908,9 @@ MQTT 桥接客户端的密码。
 
 ### bridge.mqtt.aws.forward_mountpoint
 
-| Type     | Default               |
-| -------- | --------------------- |
-| string   | `bridge/aws/${node}/` |
+| Type   | Default               |
+| ------ | --------------------- |
+| string | `bridge/aws/${node}/` |
 
 #### 说明
 
@@ -5920,9 +5920,9 @@ MQTT 桥接客户端的密码。
 
 ### bridge.mqtt.aws.subscription.1.topic
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### 说明
 
@@ -5932,9 +5932,9 @@ MQTT 桥接客户端的密码。
 
 ### bridge.mqtt.aws.subscription.1.qos
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| enum     | `0`, `1`, `2`  | `1`     |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `0`, `1`, `2`  | `1`     |
 
 #### 说明
 
@@ -5944,9 +5944,9 @@ MQTT 桥接客户端的密码。
 
 ### bridge.mqtt.aws.receive_mountpoint
 
-| Type     | Default        |
-| -------- | -------------- |
-| string   | `receive/aws/` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `receive/aws/` |
 
 #### 说明
 
@@ -5956,9 +5956,9 @@ MQTT 桥接客户端的密码。
 
 ### bridge.mqtt.aws.ssl
 
-| Type     | Optional Value  | Default |
-| -------- | --------------- | ------- |
-| boolean  | `true`, `false` | `true`  |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| boolean | `true`, `false` | `true`  |
 
 #### 说明
 
@@ -5968,9 +5968,9 @@ MQTT 桥接客户端是否开启 SSL。
 
 ### bridge.mqtt.aws.cacertfile
 
-| Type     | Default                |
-| -------- | ---------------------- |
-| string   | `etc/certs/cacert.pem` |
+| Type   | Default                |
+| ------ | ---------------------- |
+| string | `etc/certs/cacert.pem` |
 
 #### 说明
 
@@ -5980,9 +5980,9 @@ MQTT 桥接客户端的 CA 证书文件路径。
 
 ### bridge.mqtt.aws.certfile
 
-| Type     | Default                     |
-| -------- | --------------------------- |
-| string   | `etc/certs/client-cert.pem` |
+| Type   | Default                     |
+| ------ | --------------------------- |
+| string | `etc/certs/client-cert.pem` |
 
 #### 说明
 
@@ -5992,9 +5992,9 @@ MQTT 桥接客户端的 SSL 证书文件路径。
 
 ### bridge.mqtt.aws.keyfile
 
-| Type     | Default                    |
-| -------- | -------------------------- |
-| string   | `etc/certs/client-key.pem` |
+| Type   | Default                    |
+| ------ | -------------------------- |
+| string | `etc/certs/client-key.pem` |
 
 #### 说明
 
@@ -6004,9 +6004,9 @@ MQTT 桥接客户端的 SSL 秘钥文件路径。
 
 ### bridge.mqtt.aws.ciphers
 
-| Type     | Default                                                     |
-| -------- | ----------------------------------------------------------- |
-| string   | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384` |
+| Type   | Default                                                     |
+| ------ | ----------------------------------------------------------- |
+| string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384` |
 
 #### 说明
 
@@ -6016,9 +6016,9 @@ SSL 握手支持的加密套件。
 
 ### bridge.mqtt.aws.psk_ciphers
 
-| Type     | Default                                                                  |
-| -------- | ------------------------------------------------------------------------ |
-| string   | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
+| Type   | Default                                                                  |
+| ------ | ------------------------------------------------------------------------ |
+| string | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
 #### 说明
 
@@ -6040,9 +6040,9 @@ MQTT 桥接客户端的心跳间隔。
 
 ### bridge.mqtt.aws.tls_versions
 
-| Type     | Default                 |
-| -------- | ----------------------- |
-| string   | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
+| Type   | Default                         |
+| ------ | ------------------------------- |
+| string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
 
@@ -6076,9 +6076,9 @@ QoS 1/2 消息重发间隔。
 
 ### bridge.mqtt.aws.batch_size
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 32      |
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
 
 #### 说明
 
@@ -6088,9 +6088,9 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 
 ### bridge.mqtt.aws.max_inflight_size
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 32      |
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
 
 #### 说明
 
@@ -6100,9 +6100,9 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 
 ### bridge.mqtt.aws.queue.replayq_dir
 
-| Type     | Default                  |
-| -------- | ----------------------- |
-| string   | `etc/emqx_aws_bridge/`  |
+| Type   | Default                |
+| ------ | ---------------------- |
+| string | `etc/emqx_aws_bridge/` |
 
 #### 说明
 
@@ -6234,8 +6234,8 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 
 ### coap.dtls.ciphers
 
-| Type | Default |
-| ---- | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### 说明
@@ -6260,9 +6260,9 @@ Dashboard 默认用户的认证数据。`dashboard.default_user.login` 与 `dash
 
 ### dashboard.listener.http
 
-| Type    | Default |
-| ------- | ------- |
-| integer | 18083   |
+| Type    | Default       |
+| ------- | ------------- |
+| integer | 18083         |
 | string  | 0.0.0.0:18083 |
 
 
@@ -6458,8 +6458,8 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 
 ### dashboard.listener.https.tls_versions
 
-| Type   | Default                 |
-| ------ | ----------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### 说明
@@ -6470,8 +6470,8 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 
 ### dashboard.listener.https.ciphers
 
-| Type   | Default                                                      |
-| ------ | ------------------------------------------------------------ |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### 说明
@@ -6666,7 +6666,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 ### lwm2m.update_msg_publish_condition
 
 | Type | Optional Value                   | Default                |
-|------|----------------------------------|------------------------|
+| ---- | -------------------------------- | ---------------------- |
 | enum | `contains_object_list`, `always` | `contains_object_list` |
 
 #### Description
@@ -6808,9 +6808,9 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 
 ### management.listener.http
 
-| Type    | Default |
-| ------- | ------- |
-| integer | 8081    |
+| Type    | Default      |
+| ------- | ------------ |
+| integer | 8081         |
 | string  | 0.0.0.0:8081 |
 
 #### 说明
@@ -6859,9 +6859,9 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 
 ### management.listener.http.send_timeout
 
-| Type    | Default |
-| ------- | ------- |
-| duration | `15s`  |
+| Type     | Default |
+| -------- | ------- |
+| duration | `15s`   |
 
 #### 说明
 
@@ -6907,9 +6907,9 @@ HTTP 报文发送超时后，是否关闭该连接。
 
 ### management.listener.https
 
-| Type    | Default | Example |
-| ------- | ------- | ------- |
-| integer | -       | 8081    |
+| Type    | Default | Example      |
+| ------- | ------- | ------------ |
+| integer | -       | 8081         |
 | string  | -       | 0.0.0.0:8081 |
 
 
@@ -6957,9 +6957,9 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 
 ### management.listener.https.send_timeout
 
-| Type    | Default |
-| ------- | ------- |
-| duration | `15s`  |
+| Type     | Default |
+| -------- | ------- |
+| duration | `15s`   |
 
 #### 说明
 
@@ -7178,9 +7178,9 @@ SELECT * FROM "$events/client_connected"
 
 ### mqtt.sn.port
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `1884`  |
+| Type   | Default |
+| ------ | ------- |
+| string | `1884`  |
 
 #### 说明
 
@@ -7202,9 +7202,9 @@ ADVERTISE 消息广播间隔，单位：秒。
 
 ### mqtt.sn.gateway_id
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 1       |
+| Type    | Default |
+| ------- | ------- |
+| integer | 1       |
 
 #### 说明
 
@@ -7214,9 +7214,9 @@ ADVERTISE 中的 MQTT-SN 网关 ID。
 
 ### mqtt.sn.enable_stats
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| enum     | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -7226,9 +7226,9 @@ ADVERTISE 中的 MQTT-SN 网关 ID。
 
 ### mqtt.sn.enable_qos3
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| enum     | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### 说明
 
@@ -7250,9 +7250,9 @@ ADVERTISE 中的 MQTT-SN 网关 ID。
 
 ### mqtt.sn.predefined.topic.0
 
-| Type     | Default    |
-| -------- | ---------- |
-| string   | `reserved` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `reserved` |
 
 #### 说明
 
@@ -7265,9 +7265,9 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ### mqtt.sn.username
 
-| Type     | Default        |
-| -------- | -------------- |
-| string   | `mqtt_sn_user` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `mqtt_sn_user` |
 
 #### 说明
 
@@ -7277,9 +7277,9 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ### mqtt.sn.password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `abc`   |
+| Type   | Default |
+| ------ | ------- |
+| string | `abc`   |
 
 #### 说明
 
@@ -7473,8 +7473,8 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ### stomp.listener.ciphers
 
-| Type | Default |
-| ---- | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### 说明
@@ -7595,9 +7595,9 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ### web.hook.url
 
-| Type   | Default              |
-| ------ | -------------------- |
-| string | http://127.0.0.1:80  |
+| Type   | Default             |
+| ------ | ------------------- |
+| string | http://127.0.0.1:80 |
 
 #### 说明
 
@@ -7622,9 +7622,9 @@ web.hook.headers.accept = */*
 
 ### web.hook.encoding_of_payload_field
 
-| Type     | Optional Value              | Default |
-| -------- | --------------------------- | ------- |
-| enum     | `plain`, `base62`, `base64` | `plain` |
+| Type | Optional Value              | Default |
+| ---- | --------------------------- | ------- |
+| enum | `plain`, `base62`, `base64` | `plain` |
 
 #### 说明
 
@@ -7672,7 +7672,7 @@ CA 证书文件路径。
 
 | Type | Optional Value  | Default |
 | ---- | --------------- | ------- |
-| enum | `true`, `false` | `false`  |
+| enum | `true`, `false` | `false` |
 
 #### 说明
 
@@ -7694,9 +7694,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.client.connect.1
 
-| Type     | Default                           |
-| -------- | --------------------------------- |
-| string   | `{"action": "on_client_connect"}` |
+| Type   | Default                           |
+| ------ | --------------------------------- |
+| string | `{"action": "on_client_connect"}` |
 
 #### 说明
 
@@ -7706,9 +7706,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.client.connack.1
 
-| Type     | Default                           |
-| -------- | --------------------------------- |
-| string   | `{"action": "on_client_connack"}` |
+| Type   | Default                           |
+| ------ | --------------------------------- |
+| string | `{"action": "on_client_connack"}` |
 
 #### 说明
 
@@ -7718,9 +7718,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.client.connected.1
 
-| Type     | Default                             |
-| -------- | ----------------------------------- |
-| string   | `{"action": "on_client_connected"}` |
+| Type   | Default                             |
+| ------ | ----------------------------------- |
+| string | `{"action": "on_client_connected"}` |
 
 #### 说明
 
@@ -7730,9 +7730,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.client.disconnected.1
 
-| Type     | Default                                |
-| -------- | -------------------------------------- |
-| string   | `{"action": "on_client_disconnected"}` |
+| Type   | Default                                |
+| ------ | -------------------------------------- |
+| string | `{"action": "on_client_disconnected"}` |
 
 #### 说明
 
@@ -7742,9 +7742,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.client.subscribe.1
 
-| Type     | Default                             |
-| -------- | ----------------------------------- |
-| string   | `{"action": "on_client_subscribe"}` |
+| Type   | Default                             |
+| ------ | ----------------------------------- |
+| string | `{"action": "on_client_subscribe"}` |
 
 #### 说明
 
@@ -7754,9 +7754,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.client.unsubscribe.1
 
-| Type     | Default                               |
-| -------- | ------------------------------------- |
-| string   | `{"action": "on_client_unsubscribe"}` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `{"action": "on_client_unsubscribe"}` |
 
 #### 说明
 
@@ -7766,9 +7766,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.session.subscribed.1
 
-| Type     | Default                               |
-| -------- | ------------------------------------- |
-| string   | `{"action": "on_session_subscribed"}` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `{"action": "on_session_subscribed"}` |
 
 #### 说明
 
@@ -7778,9 +7778,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.session.unsubscribed.1
 
-| Type     | Default                                 |
-| -------- | --------------------------------------- |
-| string   | `{"action": "on_session_unsubscribed"}` |
+| Type   | Default                                 |
+| ------ | --------------------------------------- |
+| string | `{"action": "on_session_unsubscribed"}` |
 
 #### 说明
 
@@ -7790,9 +7790,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.session.terminated.1
 
-| Type     | Default                               |
-| -------- | ------------------------------------- |
-| string   | `{"action": "on_session_terminated"}` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `{"action": "on_session_terminated"}` |
 
 #### 说明
 
@@ -7802,9 +7802,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.message.publish.1
 
-| Type     | Default                            |
-| -------- | ---------------------------------- |
-| string   | `{"action": "on_message_publish"}` |
+| Type   | Default                            |
+| ------ | ---------------------------------- |
+| string | `{"action": "on_message_publish"}` |
 
 #### 说明
 
@@ -7814,9 +7814,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.message.delivered.1
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| string   | `{"action": "on_message_delivered"}` |
+| Type   | Default                              |
+| ------ | ------------------------------------ |
+| string | `{"action": "on_message_delivered"}` |
 
 #### 说明
 
@@ -7826,9 +7826,9 @@ HTTP 连接进程池大小。
 
 ### web.hook.rule.message.acked.1
 
-| Type     | Default                          |
-| -------- | -------------------------------- |
-| string   | `{"action": "on_message_acked"}` |
+| Type   | Default                          |
+| ------ | -------------------------------- |
+| string | `{"action": "on_message_acked"}` |
 
 #### 说明
 
@@ -7838,9 +7838,9 @@ HTTP 连接进程池大小。
 {% emqxee %}
 ### license.file
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| string   | `etc/emqx.lic` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `etc/emqx.lic` |
 
 #### 说明
 
@@ -7849,9 +7849,9 @@ HTTP 连接进程池大小。
 <br />
 ### license.connection_high_watermark_alarm
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| percent   | 80% |
+| Type    | Default |
+| ------- | ------- |
+| percent | 80%     |
 
 #### 说明
 
@@ -7862,9 +7862,9 @@ HTTP 连接进程池大小。
 <br />
 ### license.connection_low_watermark_alarm
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| percent   | 75% |
+| Type    | Default |
+| ------- | ------- |
+| percent | 75%     |
 
 #### 说明
 
