@@ -149,9 +149,9 @@ When using mcast cluster, specify the Time-To-Live value of multicast.
 
 ### cluster.mcast.loop
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    |  `on`, `off`   | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -191,7 +191,7 @@ emqx@192.168.0.102
 
 ### cluster.dns.app
 
-|  Type  | Default | Example |
+| Type   | Default | Example |
 | ------ | ------- | ------- |
 | string | -       | `emqx`  |
 
@@ -203,7 +203,7 @@ When using dns cluster, it is used to splice the IP list obtained from `cluster.
 
 ### cluster.etcd.server
 
-|  Type  | Default | Example                 |
+| Type   | Default | Example                 |
 | ------ | ------- | ----------------------- |
 | string | -       | `http://127.0.0.1:2379` |
 
@@ -215,7 +215,7 @@ When using etcd cluster, specify the address of etcd service. If there are multi
 
 ### cluster.etcd.prefix
 
-|  Type  | Default | Example  |
+| Type   | Default | Example  |
 | ------ | ------- | -------- |
 | string | -       | `emqxcl` |
 
@@ -231,7 +231,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 
 ### cluster.etcd.node_ttl
 
-|   Type   | Default | Example |
+| Type     | Default | Example |
 | -------- | ------- | ------- |
 | duration | -       | `1m`    |
 
@@ -243,9 +243,9 @@ When using etcd cluster, specify the expiration time of the node path in etcd.
 
 ### cluster.etcd.ssl.keyfile
 
-|   Type   | Default | Example                    |
-| -------- | ------- | -------------------------- |
-| string   |  -      | `etc/certs/client-key.pem` |
+| Type   | Default | Example                    |
+| ------ | ------- | -------------------------- |
+| string | -       | `etc/certs/client-key.pem` |
 
 #### Description
 
@@ -255,9 +255,9 @@ When using SSL to connect to etcd, specify the client's private key file.
 
 ### cluster.etcd.ssl.certfile
 
-|   Type   | Default | Example                |
-| -------- | ------- | ---------------------- |
-| string   |  -      | `etc/certs/client.pem` |
+| Type   | Default | Example                |
+| ------ | ------- | ---------------------- |
+| string | -       | `etc/certs/client.pem` |
 
 #### Description
 
@@ -267,9 +267,9 @@ When using SSL to connect to etcd, specify the SSL client certificate file.
 
 ### cluster.etcd.ssl.cacertfile
 
-|   Type   | Default | Example            |
-| -------- | ------- | ------------------ |
-| string   |  -      | `etc/certs/ca.pem` |
+| Type   | Default | Example            |
+| ------ | ------- | ------------------ |
+| string | -       | `etc/certs/ca.pem` |
 
 #### Description
 
@@ -279,9 +279,9 @@ When using SSL to connect to etcd, specify the CA certificate file for SSL.
 
 ### cluster.k8s.apiserver
 
-|   Type   | Default | Example                      |
-| -------- | ------- | ---------------------------- |
-| string   | -       | `http://10.110.111.204:8080` |
+| Type   | Default | Example                      |
+| ------ | ------- | ---------------------------- |
+| string | -       | `http://10.110.111.204:8080` |
 
 #### Description
 
@@ -291,9 +291,9 @@ When using the k8s cluster, specify the Kubernetes API Server. If there are mult
 
 ### cluster.k8s.service_name
 
-|   Type   | Default | Example |
-| -------- | ------- | ------- |
-| string   | -       | `emqx`  |
+| Type   | Default | Example |
+| ------ | ------- | ------- |
+| string | -       | `emqx`  |
 
 #### Description
 
@@ -303,7 +303,7 @@ When using k8s cluster, specify the service name of EMQX Broker in Kubernetes.
 
 ### cluster.k8s.address_type
 
-| Type |  Optional Value         | Default |
+| Type | Optional Value          | Default |
 | ---- | ----------------------- | ------- |
 | enum | `ip`, `dns`, `hostname` | `ip`    |
 
@@ -333,9 +333,9 @@ emqx@172.16.122.33
 
 ### cluster.k8s.app_name
 
-|   Type   | Default | Example |
-| -------- | ------- | ------- |
-| string   |  -      | `emqx`  |
+| Type   | Default | Example |
+| ------ | ------- | ------- |
+| string | -       | `emqx`  |
 
 #### Description
 
@@ -345,9 +345,9 @@ When using k8s clustering, app_name is used to splice with the obtained Host lis
 
 ### cluster.k8s.suffix
 
-|   Type   | Default | Example             |
-| -------- | ------- | ------------------- |
-| string   | -       | `pod.cluster.local` |
+| Type   | Default | Example             |
+| ------ | ------- | ------------------- |
+| string | -       | `pod.cluster.local` |
 
 #### Description
 
@@ -423,9 +423,9 @@ The node's data directory, which is used to store Mnesia data files.
 
 ### node.heartbeat
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    |  `on`, `off`   | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -451,9 +451,9 @@ Set the number of threads in the asynchronous thread pool in Erlang runtime, see
 
 ### node.process_limit
 
-|   Type   | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| integer  | 1024 - 134217727 | 2097152 |
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| integer | 1024 - 134217727 | 2097152 |
 
 #### Description
 
@@ -465,9 +465,9 @@ Set the maximum number of processes allowed by Erlang, which will affect the num
 
 ### node.max_ports
 
-|   Type   | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| integer  | 1024 - 134217727 | 1048576 |
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| integer | 1024 - 134217727 | 1048576 |
 
 #### Description
 
@@ -533,9 +533,9 @@ Set how many times the generational GC will run before Erlang runs a fullsweep G
 
 ### node.crash_dump
 
-| Type    | Default          |
-| ------- | ---------------- |
-| string  | `log/crash.dump` |
+| Type   | Default          |
+| ------ | ---------------- |
+| string | `log/crash.dump` |
 
 #### Description
 
@@ -560,7 +560,7 @@ If you use SSL to establish an emqx cluster, you need to specify the SSL distrib
 ### node.dist_net_ticktime
 
 | Type    | Default |
-| --------| ------- |
+| ------- | ------- |
 | integer | 120     |
 
 #### Description
@@ -572,9 +572,9 @@ Specifying how long time when a node has been unresponsive, it is considered to 
 
 ### node.dist_use_interface
 
-| Type    | Default |
-| --------| ------- |
-| ipaddr  | 0.0.0.0 |
+| Type   | Default |
+| ------ | ------- |
+| ipaddr | 0.0.0.0 |
 
 #### Description
 
@@ -630,8 +630,8 @@ The maximum number of batch messages sent in asynchronous mode. Note that this c
 ### rpc.port_discovery
 
 | Type | Optional Value Default |
-| ---- | --------------------- |
-| enum | `manual`, `stateless` |
+| ---- | ---------------------- |
+| enum | `manual`, `stateless`  |
 
 #### Description
 
@@ -644,8 +644,8 @@ otherwise `stateless`.
 
 ### rpc.tcp_server_ip
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
+| Type   | Optional Value                  | Default |
+| ------ | ------------------------------- | ------- |
 | ipaddr | [0-255].[0-255].[0-255].[0-255] | 0.0.0.0 |
 
 #### Description
@@ -666,8 +666,8 @@ NOTE: this config only takes effect when `rpc.port_discovery` is set to `manual`
 
 ### rpc.tcp_client_num
 
-| Type    | Optional Value | Default         |
-| ------- | -------------- | --------------- |
+| Type    | Optional Value | Default             |
+| ------- | -------------- | ------------------- |
 | integer | 1 - 256        | CPU core number / 2 |
 
 #### Description
@@ -702,7 +702,7 @@ Timeout for sending, which means how long to give up after sending the message.
 
 ### rpc.authentication_timeout
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `5s`    |
 
@@ -714,7 +714,7 @@ RPC authentication timeout. It means how long it will give up if the remote node
 
 ### rpc.call_receive_timeout
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `15s`   |
 
@@ -726,7 +726,7 @@ The timeout period of RPC synchronous mode. It means how long it will take befor
 
 ### rpc.socket_keepalive_idle
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `900s`  |
 
@@ -738,7 +738,7 @@ It means how long after the last packet was sent, keepalive probe packets are se
 
 ### rpc.socket_keepalive_interval
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | duration | `75s`   |
 
@@ -774,7 +774,7 @@ TCP tuning parameters. TCP sending buffer size.
 
 ### rpc.socket_recbuf
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | bytesize | `1MB`   |
 
@@ -786,7 +786,7 @@ TCP tuning parameters. TCP receiving buffer size.
 
 ### rpc.socket_buffer
 
-|   Type   | Default |
+| Type     | Default |
 | -------- | ------- |
 | bytesize | `1MB`   |
 
@@ -942,9 +942,9 @@ If set to `false`, information like stacktraces in crash logs may span multiple 
 
 ### log.formatter
 
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `text`, `json`  | `text`  |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `text`, `json` | `text`  |
 
 #### Description
 
@@ -952,9 +952,9 @@ Choose log format. `text` for free text, and `json` for structured logging.
 
 ### log.formatter.text.date.format
 
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `rfc3339` | FORMAT  | `rfc3339`  |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `rfc3339`      | FORMAT  | `rfc3339`  
 
 NOTE: This config is available start from EMQX Opensource 4.3.15, 4.4.4 and EMQX
 Enterprise 4.3.10, 4.4.4.
@@ -965,20 +965,20 @@ The timestamp format for the `text` logger. Can be one of `rfc3339` or a FORMAT 
 
 Supported specifiers in the FORMAT string are:
 
-| Specifiers | Annotation  | Format Example |
-| ---- | --------------- | ------- |
-| %Y | year | 2022 |
-| %m | month (01..12) | 11 |
-| %d | day of month | 01 |
-| %H | hour (00..23) | 06 |
-| %M | minute (00..59) | 43  |
-| %S | second (00..60) | 31 |
-| %N | nanoseconds (000000000..999999999) | 019085000  |
-| %6N | microseconds (00000..999999) | 019085 |
-| %3N | milliseconds (000..999) | 019 |
-| %z | +HHMM numeric time zone | -0400 |
-| %:z | +HH:MM numeric time zone | -04:00 |
-| %::z | +HH:MM:SS numeric time zone | -04:00:00 |
+| Specifiers | Annotation                         | Format Example |
+| ---------- | ---------------------------------- | -------------- |
+| %Y         | year                               | 2022           |
+| %m         | month (01..12)                     | 11             |
+| %d         | day of month                       | 01             |
+| %H         | hour (00..23)                      | 06             |
+| %M         | minute (00..59)                    | 43             |
+| %S         | second (00..60)                    | 31             |
+| %N         | nanoseconds (000000000..999999999) | 019085000      |
+| %6N        | microseconds (00000..999999)       | 019085         |
+| %3N        | milliseconds (000..999)            | 019            |
+| %z         | +HHMM numeric time zone            | -0400          |
+| %:z        | +HH:MM numeric time zone           | -04:00         |
+| %::z       | +HH:MM:SS numeric time zone        | -04:00:00      |
 
 Examples:
 
@@ -1046,9 +1046,9 @@ Whether to enable ACL caching.
 
 ### acl_cache_max_size
 
-| Type    | Default  |
-| ------- | -------- |
-| integer | 32       |
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
 
 #### Description
 
@@ -1070,9 +1070,9 @@ Maximum cache time of ACL rule.
 
 ### acl_deny_action
 
-| Type    | Optional Value         | Default  |
-| ------- | ---------------------- | -------- |
-| enum    | `ignore`, `disconnect` | `ignore` |
+| Type | Optional Value         | Default  |
+| ---- | ---------------------- | -------- |
+| enum | `ignore`, `disconnect` | `ignore` |
 
 #### Description
 
@@ -1101,9 +1101,9 @@ For example, `30, 1m, 5m`, it means that if the client disconnects 30 times with
 
 ### mqtt.max_packet_size
 
-| Type      | Default |
-| --------- | ------- |
-| bytesize  | `1MB`   |
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
 
 #### Description
 
@@ -1141,9 +1141,9 @@ Too many topic levels may cause performance problems during subscription.
 
 ### mqtt.max_qos_allowed
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `0`, `1`, `2`  | `2`     |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `0`, `1`, `2`  | `2`     |
 
 #### Description
 
@@ -1274,7 +1274,7 @@ Whether to enable client status statistics.
 ### zone.external.acl_deny_action
 
 | Type | Optional Value         | Default  |
-| ---- | -------------------- - | -------- |
+| ---- | ---------------------- | -------- |
 | enum | `ignore`, `disconnect` | `ignore` |
 
 #### Description
@@ -1288,9 +1288,9 @@ What to do after the ACL check fails.
 
 ### zone.external.force_gc_policy
 
-| Type    | Default      |
-| ------- | ------------ |
-| string  | `16000|16MB` |
+| Type   | Default      |
+| ------ | ------------ |
+| string | `16000|16MB` |
 
 #### Description
 
@@ -1304,9 +1304,9 @@ For example, `16000|16MB` means that when ` 16000` messages are received, or a b
 
 ### zone.external.force_shutdown_policy
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -1362,9 +1362,9 @@ Too many topic levels may cause performance problems during subscription.
 
 ### zone.external.max_qos_allowed
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `0`, `1`, `2`  | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `0`, `1`, `2`  | -       |
 
 #### Description
 
@@ -1448,7 +1448,7 @@ Keepalive backoff index. If no data packet is received from the client within th
 
 | Type    | Default |
 | ------- | ------- |
-| integer | 0     |
+| integer | 0       |
 
 #### Description
 
@@ -1458,9 +1458,9 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 
 ### zone.external.upgrade_qos
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -1562,9 +1562,9 @@ When the length of the message queue is limited, low priority messages will be d
 
 ### zone.external.mqueue_default_priority
 
-| Type    | Optional Value      | Default   |
-| ------- | ------------------- | --------- |
-| enum    | `highest`, `lowest` | `highest` |
+| Type | Optional Value      | Default   |
+| ---- | ------------------- | --------- |
+| enum | `highest`, `lowest` | `highest` |
 
 #### Description
 
@@ -1678,9 +1678,9 @@ Whether to enable client status statistics.
 
 ### zone.internal.enable_acl
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -1690,9 +1690,9 @@ Whether to enable ACL check.
 
 ### zone.internal.acl_deny_action
 
-| Type    | Optional Value         | Default  |
-| ------- | ---------------------- | -------- |
-| enum    | `ignore`, `disconnect` | `ignore` |
+| Type | Optional Value         | Default  |
+| ---- | ---------------------- | -------- |
+| enum | `ignore`, `disconnect` | `ignore` |
 
 #### Description
 
@@ -1705,9 +1705,9 @@ What to do after the ACL check fails.
 
 ### zone.internal.force_gc_policy
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -1805,9 +1805,9 @@ Whether the message queue stores QoS 0 messages.
 
 ### zone.internal.enable_flapping_detect
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -1817,9 +1817,9 @@ Whether to enable `Flapping` check.
 
 ### zone.internal.force_shutdown_policy
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -1835,9 +1835,9 @@ For example, `32000|32MB` means that when the process accumulates `32000` messag
 
 ### zone.internal.mountpoint
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -1890,9 +1890,9 @@ Whether to allow clients under this zone to bypass the authentication step of th
 
 ### listener.tcp.external
 
-| Type    | Default        |
-| ------- | -------------- |
-| string  | `0.0.0.0:1883` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `0.0.0.0:1883` |
 
 #### Description
 
@@ -1956,9 +1956,9 @@ The number of times the listener continues to receive TCP packets.
 
 ### listener.tcp.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### Description
 
@@ -1968,9 +1968,9 @@ The configuration zone to which the listener belongs.
 
 ### listener.tcp.external.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -1984,9 +1984,9 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 ### listener.tcp.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### Description
 
@@ -2009,9 +2009,9 @@ It means that all TCP connections except `192.168.0.1` are allowed.
 
 ### listener.tcp.external.proxy_protocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -2095,9 +2095,9 @@ Timeout for sending TCP packets.
 
 ### listener.tcp.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -2151,9 +2151,9 @@ Reference: [http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.
 
 ### listener.tcp.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -2187,9 +2187,9 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 
 ### listener.tcp.internal
 
-| Type    | Default           |
-| ------- | ----------------- |
-| string  | `127.0.0.1:11883` |
+| Type   | Default           |
+| ------ | ----------------- |
+| string | `127.0.0.1:11883` |
 
 #### Description
 
@@ -2253,9 +2253,9 @@ The number of times the listener continues to receive TCP packets.
 
 ### listener.tcp.internal.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `internal` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `internal` |
 
 #### Description
 
@@ -2265,9 +2265,9 @@ The configuration zone to which the listener belongs.
 
 ### listener.tcp.internal.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -2304,9 +2304,9 @@ Timeout for sending TCP packets.
 
 ### listener.tcp.internal.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -2352,9 +2352,9 @@ TCP buffer size (user level).
 
 ### listener.tcp.internal.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -2388,9 +2388,9 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 
 ### listener.ssl.external
 
-| Type    | Default        |
-| ------- | -------------- |
-| string  | `0.0.0.0:8883` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `0.0.0.0:8883` |
 
 #### Description
 
@@ -2448,9 +2448,9 @@ The number of times the listener continues to receive TCP packets.
 
 ### listener.ssl.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### Description
 
@@ -2460,9 +2460,9 @@ The configuration group to which the listener belongs.
 
 ### listener.ssl.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### Description
 
@@ -2484,9 +2484,9 @@ listener.ssl.external.access.2 = allow all
 
 ### listener.ssl.external.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -2496,9 +2496,9 @@ Listener rate limit, with the format of `<limit>,<duration>`.
 
 ### listener.ssl.external.proxy_protocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -2524,8 +2524,8 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 ### listener.ssl.external.tls_versions
 
-| Type   | Default                 |
-| ------ | ----------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
@@ -2548,9 +2548,9 @@ Specify the timeout period for the SSL handshake process.
 
 ### listener.ssl.external.depth
 
-| Type     | Default |
-| -------- | ------- |
-| number   | `10`    |
+| Type   | Default |
+| ------ | ------- |
+| number | `10`    |
 
 #### Description
 
@@ -2560,9 +2560,9 @@ Maximum number of non-self-issued intermediate certificates that can follow the 
 
 ### listener.ssl.external.key_password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -2647,8 +2647,8 @@ If the client does not have a certificate during the SSL handshake, it determine
 
 ### listener.ssl.external.ciphers
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### Description
@@ -2683,9 +2683,9 @@ Specifies whether to reject renegotiation requests if the client does not follow
 
 ### listener.ssl.external.reuse_sessions
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -2695,9 +2695,9 @@ Specify whether to support SSL session reuse. For details, see[http://erlang.org
 
 ### listener.ssl.external.honor_cipher_order
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -2762,9 +2762,9 @@ Timeout for sending TCP packets.
 
 ### listener.ssl.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -2818,9 +2818,9 @@ Reference:[http://erlang.org/doc/man/inet.html](http://erlang.org/doc/man/inet.h
 
 ### listener.ssl.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -2854,9 +2854,9 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 
 ### listener.ws.external
 
-| Type    | Default |
-| ------- | ------- |
-| string  | `8083`  |
+| Type   | Default |
+| ------ | ------- |
+| string | `8083`  |
 
 #### Description
 
@@ -2872,9 +2872,9 @@ Configure the listening address of the MQTT/WS listener named `external`.
 
 ### listener.ws.external.mqtt_path
 
-| Type    | Default |
-| ------- | ------- |
-| string  | `/mqtt` |
+| Type   | Default |
+| ------ | ------- |
+| string | `/mqtt` |
 
 #### Description
 
@@ -2932,9 +2932,9 @@ The number of times the listener continues to receive TCP packets.
 
 ### listener.ws.external.rate_limit
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `100KB,10s` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `100KB,10s` |
 
 #### Description
 
@@ -2948,9 +2948,9 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 ### listener.ws.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### Description
 
@@ -2960,9 +2960,9 @@ The configuration zone to which the listener belongs.
 
 ### listener.ws.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### Description
 
@@ -2972,9 +2972,9 @@ List of ACL rules of the listener. It is used to set the white/black list of the
 
 ### listener.ws.external.verify_protocol_header
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -2983,9 +2983,9 @@ Whether to verify that the HTTP header carried by WebSocket is correct. **WeChat
 
 ### listener.ws.external.fail_if_no_subprotocol
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `true`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
 
 #### Description
 
@@ -2993,9 +2993,9 @@ If set to true, the server will return an error when the client does not carry t
 
 ### listener.ws.external.supported_subprotocols
 
-| Type    | Default                               |
-| ------- | ------------------------------------- |
-| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
 
 #### Description
 
@@ -3005,9 +3005,9 @@ Specify the supported subprotocols, separated by commas.
 
 ### listener.ws.external.proxy_address_header
 
-| Type    | Optional Value    | Default |
-| ------- | ----------------- |-------- |
-| string  | `X-Forwarded-For` | -       |
+| Type   | Optional Value    | Default |
+| ------ | ----------------- | ------- |
+| string | `X-Forwarded-For` | -       |
 
 #### Description
 
@@ -3017,9 +3017,9 @@ If the EMQX cluster is deployed behind HAProxy or Nginx, you can open the config
 
 ### listener.ws.external.proxy_port_header
 
-| Type    | Optional Value     | Default |
-| ------- | ------------------ | ------- |
-| string  | `X-Forwarded-Port` | -       |
+| Type   | Optional Value     | Default |
+| ------ | ------------------ | ------- |
+| string | `X-Forwarded-Port` | -       |
 
 #### Description
 
@@ -3029,9 +3029,9 @@ If the EMQX cluster is deployed behind HAProxy or Nginx, you can open the config
 
 ### listener.ws.external.proxy_protocol
 
-| Type    | Optional Value      | Default |
-| ------- | ------------------- | ------- |
-| enum    | `on`, `off`         | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -3081,9 +3081,9 @@ Timeout for sending TCP packets.
 
 ### listener.ws.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -3129,9 +3129,9 @@ TCP buffer size (user level).
 
 ### listener.ws.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -3167,9 +3167,9 @@ The configuration items under `defalte_opts` belong to the compression-related p
 
 ### listener.ws.external.deflate_opts.level
 
-| Type    | Optional Value                                      | Default |
-| ------- | --------------------------------------------------- | ------- |
-| enum    | `none`, `default`, `best_compression`, `best_speed` | -       |
+| Type | Optional Value                                      | Default |
+| ---- | --------------------------------------------------- | ------- |
+| enum | `none`, `default`, `best_compression`, `best_speed` | -       |
 
 #### Description
 
@@ -3196,9 +3196,9 @@ If not configured, the default is `8`.
 
 ### listener.ws.external.deflate_opts.strategy
 
-| Type    | Optional Value                                | Default |
-| ------- | --------------------------------------------- | ------- |
-| enum    | `default`, `filtered`, `huffman_only`, `rle`  | -       |
+| Type | Optional Value                               | Default |
+| ---- | -------------------------------------------- | ------- |
+| enum | `default`, `filtered`, `huffman_only`, `rle` | -       |
 
 #### Description
 
@@ -3215,9 +3215,9 @@ These strategies only affect the compression ratio and will not have any impact 
 
 ### listener.ws.external.deflate_opts.server_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### Description
 
@@ -3227,9 +3227,9 @@ Whether to allow the server's compression context to be passed between frames.
 
 ### listener.ws.external.deflate_opts.client_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### Description
 
@@ -3239,9 +3239,9 @@ Whether to allow the client's compression context to be passed between frames.
 
 ### listener.ws.external.deflate_opts.server_max_window_bits
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| integer | 8 - 15          | -       |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | 8 - 15         | -       |
 
 #### Description
 
@@ -3287,9 +3287,9 @@ The maximum allowed length of a single MQTT packet.
 
 ### listener.wss.external
 
-| Type    | Default        |
-| ------- | -------------- |
-| string  | `0.0.0.0:8084` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `0.0.0.0:8084` |
 
 #### Description
 
@@ -3299,9 +3299,9 @@ Configure a WSS (MQTT/WebSocket/SSL) listener named `external`.
 
 ### listener.wss.external.mqtt_path
 
-| Type    | Default |
-| ------- | ------- |
-| string  | `/mqtt` |
+| Type   | Default |
+| ------ | ------- |
+| string | `/mqtt` |
 
 #### Description
 
@@ -3359,9 +3359,9 @@ The number of times the listener continues to receive TCP packets.
 
 ### listener.wss.external.rate_limit
 
-| Type    | Default |
-| ------- | ------- |
-| string  | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -3371,9 +3371,9 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 ### listener.wss.external.zone
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `external` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `external` |
 
 #### Description
 
@@ -3383,9 +3383,9 @@ The configuration group to which the listener belongs.
 
 ### listener.wss.external.access.1
 
-| Type    | Default     |
-| ------- | ----------- |
-| string  | `allow all` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `allow all` |
 
 #### Description
 
@@ -3407,9 +3407,9 @@ listener.wss.external.access.2 = allow all
 
 ### listener.wss.external.fail_if_no_subprotocol
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `true`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
 
 #### Description
 
@@ -3417,9 +3417,9 @@ If set to true, the server will return an error when the client does not carry t
 
 ### listener.wss.external.supported_subprotocols
 
-| Type    | Default                               |
-| ------- | ------------------------------------- |
-| string  | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
 
 #### Description
 
@@ -3441,9 +3441,9 @@ If the EMQX cluster is deployed in HAProxy or Nginx, you can open the configurat
 
 ### listener.wss.external.proxy_protocol
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -3500,8 +3500,8 @@ Use the client certificate to override the value of the ClientID field. The mean
 
 ### listener.wss.external.tls_versions
 
-| Type   | Default                |
-| ------ | ----------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
@@ -3551,9 +3551,9 @@ when `verify` configuration is set to `verify_peer`.
 
 ### listener.wss.external.depth
 
-| Type     | Default |
-| -------- | ------- |
-| number   | `10`    |
+| Type   | Default |
+| ------ | ------- |
+| number | `10`    |
 
 #### Description
 
@@ -3563,9 +3563,9 @@ Maximum number of non-self-issued intermediate certificates that can follow the 
 
 ### listener.wss.external.key_password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -3588,7 +3588,7 @@ If using the Ephemeral Diffie-Hellman algorithm, specify the key file used by th
 ### listener.wss.external.verify
 
 | Type | Optional Value               | Default       |
-| ---- | ---------------------------  | ------------- |
+| ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
 #### Description
@@ -3611,8 +3611,8 @@ If the client does not have a certificate during the SSL handshake, it determine
 
 ### listener.wss.external.ciphers
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### Description
@@ -3635,9 +3635,9 @@ If using the PSK algorithm, specify the PSK Cipher list supported by the server.
 
 ### listener.wss.external.secure_renegotiate
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -3647,9 +3647,9 @@ Specifies whether to reject renegotiation requests if the client does not follow
 
 ### listener.wss.external.reuse_sessions
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -3659,9 +3659,9 @@ Specifies whether to support SSL session reuse. For details, see [http://erlang.
 
 ### listener.wss.external.honor_cipher_order
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -3708,9 +3708,9 @@ Timeout for sending TCP packets.
 
 ### listener.wss.external.send_timeout_close
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -3764,9 +3764,9 @@ Reference:http://erlang.org/doc/man/inet.html
 
 ### listener.wss.external.tune_buffer
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | -       |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
 
 #### Description
 
@@ -3788,9 +3788,9 @@ This is the `TCP_NODELAY` parameter. Enabling this option allows small TCP data 
 
 ### listener.wss.external.compress
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### Description
 
@@ -3800,9 +3800,9 @@ If this option is set to true, Websocket messages will be compressed.
 
 ### listener.wss.external.deflate_opts.level
 
-| Type    | Optional Value                                      | Default   |
-| ------- | --------------------------------------------------- | --------- |
-| enum    | `none`, `default`, `best_compression`, `best_speed` | `default` |
+| Type | Optional Value                                      | Default   |
+| ---- | --------------------------------------------------- | --------- |
+| enum | `none`, `default`, `best_compression`, `best_speed` | `default` |
 
 #### Description
 
@@ -3829,9 +3829,9 @@ If not configured, the default is `8`.
 
 ### listener.wss.external.deflate_opts.strategy
 
-| Type    | Optional Value                                | Default |
-| ------- | --------------------------------------------- | ------- |
-| enum    | `default`, `filtered`, `huffman_only`, `rle`  | -       |
+| Type | Optional Value                               | Default |
+| ---- | -------------------------------------------- | ------- |
+| enum | `default`, `filtered`, `huffman_only`, `rle` | -       |
 
 #### Description
 
@@ -3848,9 +3848,9 @@ These strategies only affect the compression ratio and will not have any impact 
 
 ### listener.wss.external.deflate_opts.server_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### Description
 
@@ -3860,9 +3860,9 @@ Whether to allow the server's compression context to be passed between frames.
 
 ### listener.wss.external.deflate_opts.client_context_takeover
 
-| Type    | Optional Value            | Default |
-| ------- | ------------------------- | ------- |
-| enum    | `takeover`, `no_takeover` | -       |
+| Type | Optional Value            | Default |
+| ---- | ------------------------- | ------- |
+| enum | `takeover`, `no_takeover` | -       |
 
 #### Description
 
@@ -3920,9 +3920,9 @@ The maximum length of a single MQTT packet.
 
 ### plugins.etc_dir
 
-| Type    | Default       |
-| ------- | ------------- |
-| string  | `etc/plugins` |
+| Type   | Default       |
+| ------ | ------------- |
+| string | `etc/plugins` |
 
 #### Description
 
@@ -3932,9 +3932,9 @@ The configuration directory of the plugin.
 
 ### plugins.loaded_file
 
-| Type    | Default              |
-| ------- | -------------------- |
-| string  | `etc/loaded_plugins` |
+| Type   | Default              |
+| ------ | -------------------- |
+| string | `etc/loaded_plugins` |
 
 #### Description
 
@@ -3944,9 +3944,9 @@ The configuration file path of the plugin startup list.
 
 ### plugins.expand_plugins_dir
 
-| Type    | Default    |
-| ------- | ---------- |
-| string  | `plugins/` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `plugins/` |
 
 #### Description
 
@@ -3956,9 +3956,9 @@ External plugin storage directory.
 
 ### broker.sys_interval
 
-| Type      | Default |
-| --------- | ------- |
-| duration  | `1m`    |
+| Type     | Default |
+| -------- | ------- |
+| duration | `1m`    |
 
 #### Description
 
@@ -3983,9 +3983,9 @@ Set the system heartbeat message release interval. The system heartbeat message 
 
 ### broker.enable_session_registry
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `on`    |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
 
 #### Description
 
@@ -4007,9 +4007,9 @@ Set the type of session cluster lock. The session cluster lock is used to preven
 
 ### broker.shared_subscription_strategy
 
-| Type | Optional Value                                                   | Default  |
-| ---- | ---------------------------------------------------------------- | -------- |
-| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | - |
+| Type | Optional Value                                                             | Default |
+| ---- | -------------------------------------------------------------------------- | ------- |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`, | -       |
 
 #### Description
 
@@ -4026,9 +4026,9 @@ Set a dispatch strategy for shared subscribers. Options are:
 
 ### broker.sample_group.shared_subscription_strategy
 
-| Type | Optional Value                                                   | Default  |
-| ---- | ---------------------------------------------------------------- | -------- |
-| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`,  | - |
+| Type | Optional Value                                                             | Default |
+| ---- | -------------------------------------------------------------------------- | ------- |
+| enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`, | -       |
 
 Overrides the dispatch strategy for a shared subscription group named `sample_group`. If not configured, `broker.shared_subscription_strategy` is used,
 
@@ -4052,9 +4052,9 @@ Enable or disable the ACK check function for qos1/qos2 messages in shared subscr
 
 ### broker.route_batch_clean
 
-| Type    | Optional Value | Default |
-| ------- | -------------- | ------- |
-| enum    | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -4063,9 +4063,9 @@ Enable or disable batch cleanup routing information. Batch cleanup routing can b
 
 ## broker.perf.route_lock_type = key
 
-| Type    | Optional Value         | Default |
-| ------- | ---------------------- | ------- |
-| enum    | `key`, `tab`, `global` | `key`   |
+| Type | Optional Value         | Default |
+| ---- | ---------------------- | ------- |
+| enum | `key`, `tab`, `global` | `key`   |
 
 ### Description
 
@@ -4083,17 +4083,17 @@ NOTE: It requires entire cluster to be stopped before changing this config.
 
 {% emqxee %}
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `false`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 {% endemqxee %}
 
 {% emqxce %}
 
-| Type    | Optional Value  | Default |
-| ------- | --------------- | ------- |
-| enum    | `true`, `false` | `true`  |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
 
 {% endemqxce %}
 
@@ -4279,8 +4279,8 @@ When the percentage of the current number of processes in the maximum number of 
 
 ### auth.http.auth_req.url
 
-| Type   | Default                           |
-| ------ | --------------------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `http://127.0.0.1:80/mqtt/auth` |
 
 #### Description
@@ -4317,31 +4317,31 @@ Specify the data in the HTTP request header. `<Key>` Specify the field name in t
 
 ### auth.http.auth_req.params
 
-| Type   | Format                                                       | Default                               |
-| ------ | ------------------------------------------------------------ | ------------------------------------- |
+| Type   | Format                                                                          | Default                               |
+| ------ | ------------------------------------------------------------------------------- | ------------------------------------- |
 | string | `K=v` key-value pairs separated by`, `,` v` can be fixed content or placeholder | `clientid=%c,username=%u,password=%P` |
 
 #### Description
 
 Specify the data carried in the authentication request. When using the GET method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent as query string parameters. When using the POST method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent in the form of Request Body. All placeholders will be replaced by run-time data , and the available placeholders are as follows:
 
-| Placeholder | Replace content |
-| ------ | -------------------- |
-| `%u`   | Username |
-| `%c`   | MQTT Client ID       |
-| `%a`   | Client's network IP address |
-| `%r`   | The protocol used by the client can be:`mqtt`, `mqtt-sn`, `coap`, `lwm2m` and `stomp` |
-| `%P`   | Password |
-| `%p`   | Server port for client connection |
-| `%c`   | Common Name in client certificate |
-| `%d`   | Subject in client certificate |
+| Placeholder | Replace content                                                                       |
+| ----------- | ------------------------------------------------------------------------------------- |
+| `%u`        | Username                                                                              |
+| `%c`        | MQTT Client ID                                                                        |
+| `%a`        | Client's network IP address                                                           |
+| `%r`        | The protocol used by the client can be:`mqtt`, `mqtt-sn`, `coap`, `lwm2m` and `stomp` |
+| `%P`        | Password                                                                              |
+| `%p`        | Server port for client connection                                                     |
+| `%c`        | Common Name in client certificate                                                     |
+| `%d`        | Subject in client certificate                                                         |
 
 
 
 ### auth.http.super_req.url
 
-| Type   | Default                                |
-| ------ | -------------------------------------- |
+| Type   | Default                              |
+| ------ | ------------------------------------ |
 | string | `http://127.0.0.1:80/mqtt/superuser` |
 
 #### Description
@@ -4377,8 +4377,8 @@ Specify the data in the HTTP request header. `<Key>` Specify the field name in t
 
 ### auth.http.super_req.params
 
-| Type   | Format                                                       | Default                   |
-| ------ | ------------------------------------------------------------ | ------------------------- |
+| Type   | Format                                                                          | Default                   |
+| ------ | ------------------------------------------------------------------------------- | ------------------------- |
 | string | `K=v` key-value pairs separated by`, `,` v` can be fixed content or placeholder | `clientid=%c,username=%u` |
 
 #### Description
@@ -4389,8 +4389,8 @@ Specify the data carried in the authentication request. When using the GET metho
 
 ### auth.http.acl_req.url
 
-| Type   | Default                          |
-| ------ | -------------------------------- |
+| Type   | Default                        |
+| ------ | ------------------------------ |
 | string | `http://127.0.0.1:80/mqtt/acl` |
 
 #### Description
@@ -4426,23 +4426,23 @@ Specify the data in the HTTP request header. `<Key>` Specify the field name in t
 
 ### auth.http.acl_req.params
 
-| Type   | Format                                                       | Default                                                      |
-| ------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Type   | Format                                                                          | Default                                                              |
+| ------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | string | `K=v` key-value pairs separated by`, `,` v` can be fixed content or placeholder | `access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m` |
 
 #### Description
 
 Specify the data carried in the authentication request. When using the GET method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent as query string parameters. When using the POST method, the value of `auth.http.auth_req.params` will be converted into `k=v` key-value pairs separated by `&` and sent in the form of Request Body. All placeholders will be replaced by run-time data , and the available placeholders are as follows:
 
-| Placeholder | Replace content                                              |
-| ----------- | ------------------------------------------------------------ |
-| `%A`        | Permission to be verified, 1 means subscription, 2 means publish |
-| `%u`        | MQTT Client ID                                               |
-| `%c`        | Client identifier                                            |
-| `%a`        | Client network IP address                                    |
+| Placeholder | Replace content                                                                        |
+| ----------- | -------------------------------------------------------------------------------------- |
+| `%A`        | Permission to be verified, 1 means subscription, 2 means publish                       |
+| `%u`        | MQTT Client ID                                                                         |
+| `%c`        | Client identifier                                                                      |
+| `%a`        | Client network IP address                                                              |
 | `%r`        | The protocol used by the client can be: `mqtt`, `mqtt-sn`, `coap`, `lwm2m` and `stomp` |
-| `%m`        | Mount point                                                  |
-| `%t`        | Topic                                                        |
+| `%m`        | Mount point                                                                            |
+| `%t`        | Topic                                                                                  |
 
 
 
@@ -4474,7 +4474,7 @@ Connection timeout for HTTP requests. Any setting value equivalent to `0s` means
 
 | Type    | Default |
 | ------- | ------- |
-| integer | 32       |
+| integer | 32      |
 
 #### Description
 
@@ -4523,9 +4523,9 @@ Client private key file path.
 
 ### auth.jwt.secret
 
-| Type    | Default      |
-| ------- | ------------ |
-| string  | `emqxsecret` |
+| Type   | Default      |
+| ------ | ------------ |
+| string | `emqxsecret` |
 
 #### Description
 
@@ -4550,9 +4550,9 @@ Where to get JWT. Optional values are
 
 ### auth.jwt.pubkey
 
-| Type    | Default                        |
-| ------- | ------------------------------ |
-| string  | `etc/certs/jwt_public_key.pem` |
+| Type   | Default                        |
+| ------ | ------------------------------ |
+| string | `etc/certs/jwt_public_key.pem` |
 
 #### Description
 
@@ -4605,9 +4605,9 @@ auth.jwt.verify_claims.sub = %u
 
 ### auth.ldap.servers
 
-| Type     | Default     |
-| -------- | ----------- |
-| string   | `127.0.0.1` |
+| Type   | Default     |
+| ------ | ----------- |
+| string | `127.0.0.1` |
 
 #### Description
 
@@ -4617,9 +4617,9 @@ LDAP service address.
 
 ### auth.ldap.port
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 389     |
+| Type    | Default |
+| ------- | ------- |
+| integer | 389     |
 
 #### Description
 
@@ -4629,9 +4629,9 @@ LDAP service port.
 
 ### auth.ldap.pool
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| integer  | > 0            | 8       |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | > 0            | 8       |
 
 #### Description
 
@@ -4641,9 +4641,9 @@ Connection pool size.
 
 ### auth.ldap.bind_dn
 
-| Type     | Default                 |
-| -------- | ----------------------- |
-| string   | `cn=root,dc=emqx,dc=io` |
+| Type   | Default                 |
+| ------ | ----------------------- |
+| string | `cn=root,dc=emqx,dc=io` |
 
 #### Description
 
@@ -4653,9 +4653,9 @@ The DN for logging into the LDAP service.
 
 ### auth.ldap.bind_password
 
-| Type     | Default  |
-| -------- | -------- |
-| string   | `public` |
+| Type   | Default  |
+| ------ | -------- |
+| string | `public` |
 
 #### Description
 
@@ -4677,9 +4677,9 @@ The query timeout.
 
 ### auth.ldap.device_dn
 
-| Type     | Default                    |
-| -------- | -------------------------- |
-| string   | `ou=device,dc=emqx,dc=io`  |
+| Type   | Default                   |
+| ------ | ------------------------- |
+| string | `ou=device,dc=emqx,dc=io` |
 
 #### Description
 
@@ -4689,9 +4689,9 @@ The DN to which the client belongs.
 
 ### auth.ldap.match_objectclass
 
-| Type     | Default     |
-| -------- | ----------- |
-| string   | `mqttUser`  |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `mqttUser` |
 
 #### Description
 
@@ -4701,9 +4701,9 @@ The name of the client object.
 
 ### auth.ldap.username.attributetype
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `uid`   |
+| Type   | Default |
+| ------ | ------- |
+| string | `uid`   |
 
 #### Description
 
@@ -4713,9 +4713,9 @@ The data type of the Username attribute.
 
 ### auth.ldap.password.attributetype
 
-| Type     | Default          |
-| -------- | ---------------- |
-| string   | `userPassword`   |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `userPassword` |
 
 #### Description
 
@@ -4725,9 +4725,9 @@ The data type of the Password attribute.
 
 ### auth.ldap.ssl
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| enum     | `true`, `false`  | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### Description
 
@@ -4737,9 +4737,9 @@ Whether to enable SSL.
 
 ### auth.ldap.ssl.certfile
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -4749,9 +4749,9 @@ SSL server certificate path.
 
 ### auth.ldap.ssl.keyfile
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -4761,9 +4761,9 @@ SSL server key file path.
 
 ### auth.ldap.ssl.cacertfile
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -4773,9 +4773,9 @@ CA certificate file path.
 
 ### auth.ldap.ssl.verify
 
-| Type     | Optional Value                | Default |
-| -------- | ----------------------------- | ------- |
-| enum     | `verify_peer`, `verify_none`  | -       |
+| Type | Optional Value               | Default |
+| ---- | ---------------------------- | ------- |
+| enum | `verify_peer`, `verify_none` | -       |
 
 #### Description
 
@@ -4788,9 +4788,9 @@ SSL authentication method:
 
 ### auth.ldap.ssl.fail_if_no_peer_cert
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| enum     | `true`, `false`  | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### Description
 
@@ -4802,9 +4802,9 @@ If the client does not provide an SSL certificate, disconnect it.
 
 ### auth.mongo.type
 
-| Type | Optional Value                      | Default  |
-| ---- | ----------------------------------- | -------- |
-| enum | `single`, `unknown`, `sharded`, `rs`| `single` |
+| Type | Optional Value                       | Default  |
+| ---- | ------------------------------------ | -------- |
+| enum | `single`, `unknown`, `sharded`, `rs` | `single` |
 
 #### Description
 
@@ -5001,7 +5001,7 @@ auth.mongo.auth_query.password_field = password,salt
 
 ### auth.mongo.auth_query.password_hash
 
-| Type |               Optional Value              | Default  |
+| Type | Optional Value                            | Default  |
 | ---- | ----------------------------------------- | -------- |
 | enum | `plain`, `md5`, `sha`, `sha256`, `bcrypt` | `sha256` |
 
@@ -5302,7 +5302,7 @@ MySQL username.
 
 | Type   | Default |
 | ------ | ------- |
-| string | -      |
+| string | -       |
 
 #### Description
 
@@ -5344,18 +5344,18 @@ MySQL data query timeout. The query timeout means user data was not found.
 
 The MySQL select statement used during authentication, the selected data will be compared with the password encrypted by the encryption method specified by `auth.mysql.password_hash`, and the client with the same content after the comparison will be allowed to log in. The stored password with salt needs to select the fields corresponding to the salt at the same time, such as `select password, salt from mqtt_user where username = '%u' limit 1`.` Password` and `salt` field names cannot be modified, the table name and the field name in the WHERE clause can change depending on the situation. The WHERE clause supports the following placeholders:
 
-| Placeholder | Description                                                  |
-| ----------- | ------------------------------------------------------------ |
+| Placeholder | Description                                                                       |
+| ----------- | --------------------------------------------------------------------------------- |
 | `%u`        | username specified in the CONNECT packet by the MQTT client that will be replaced |
 | `%c`        | ClientID specified in the CONNECT packet by the MQTT client that will be replaced |
 | `%C`        | Common Name in the client certificate when TLS that will be replaced is connected |
-| `%d`        | Subject in the client certificate when TLS that will be replaced is connected |
+| `%d`        | Subject in the client certificate when TLS that will be replaced is connected     |
 
 
 
 ### auth.mysql.password_hash
 
-| Type   | Default  |
+| Type   | Default |
 | ------ | ------- |
 | string | `sh256` |
 
@@ -5387,19 +5387,19 @@ The SQL select statement used for super user authentication. All table names and
 
 ### auth.mysql.acl_query
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
 #### Description
 
 The SQL selection statement used in ACL verification. All table names and field names in this statement can be modified as appropriate. The placeholders supported in the WHERE clause are as follows:
 
-| Tag | Description                                                  |
-| ------ | ------------------------------------------------------------ |
-| `%a`   | To be replaced with the client IP address                    |
-| `%u`   | To be replaced with the username specified by the MQTT client in the CONNECT packet |
-| `%c`   | To be replaced with the client identifier specified by the MQTT client in the CONNECT packet |
+| Tag  | Description                                                                                  |
+| ---- | -------------------------------------------------------------------------------------------- |
+| `%a` | To be replaced with the client IP address                                                    |
+| `%u` | To be replaced with the username specified by the MQTT client in the CONNECT packet          |
+| `%c` | To be replaced with the client identifier specified by the MQTT client in the CONNECT packet |
 
 
 
@@ -5479,9 +5479,9 @@ PostgreSQL database character encoding format.
 
 ### auth.pgsql.ssl
 
-| Type   | Optional Value  | Default |
-| ------ | --------------- | ------- |
-| enum   | `true`, `false` | `false` |
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
 
 #### Description
 
@@ -5551,8 +5551,8 @@ The encryption method used for the password stored in the database, that is the 
 
 ### auth.pgsql.super_query
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                            |
+| ------ | ------------------------------------------------------------------ |
 | string | `select is_superuser from mqtt_user where username = '%u' limit 1` |
 
 #### Description
@@ -5563,8 +5563,8 @@ The SQL select statement used for super user authentication, that is the same as
 
 ### auth.pgsql.acl_query
 
-| Type   | Default |
-| ------ | ------- |
+| Type   | Default                                                                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
 #### Description
@@ -5577,9 +5577,9 @@ The SQL selection statement used in ACL verification,  the same as `auth.mysql.a
 
 ### auth.redis.type
 
-| Type     | Optional Value                  | Default   |
-| -------- | ------------------------------- | --------- |
-| enum     | `single`, `sentinel`, `cluster` | `single`  |
+| Type | Optional Value                  | Default  |
+| ---- | ------------------------------- | -------- |
+| enum | `single`, `sentinel`, `cluster` | `single` |
 
 #### Description
 
@@ -5592,9 +5592,9 @@ Redis Service cluster type:
 
 ### auth.redis.server
 
-| Type     | Default            |
-| -------- | ------------------ |
-| string   | `127.0.0.1:6379`   |
+| Type   | Default          |
+| ------ | ---------------- |
+| string | `127.0.0.1:6379` |
 
 #### Description
 
@@ -5604,9 +5604,9 @@ Redis service addresses, if there are multiple, they are separated by commas. Fo
 
 ### auth.redis.sentinel
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -5616,9 +5616,9 @@ The cluster name in Redis sentinel mode. If it is not in `sentinel` mode, no con
 
 ### auth.redis.pool
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| integer  | > 0            | 8       |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | > 0            | 8       |
 
 #### Description
 
@@ -5628,9 +5628,9 @@ Connection pool size.
 
 ### auth.redis.database
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 0       |
+| Type    | Default |
+| ------- | ------- |
+| integer | 0       |
 
 #### Description
 
@@ -5640,9 +5640,9 @@ The serial number of the Redis database to be connected.
 
 ### auth.redis.password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -5664,9 +5664,9 @@ Redis query timeout.
 
 ### auth.redis.auth_cmd
 
-| Type     | Default                       |
-| -------- | ----------------------------- |
-| string   | `HMGET mqtt_user:%u password` |
+| Type   | Default                       |
+| ------ | ----------------------------- |
+| string | `HMGET mqtt_user:%u password` |
 
 #### Description
 
@@ -5680,9 +5680,9 @@ Authentication query commands, available placeholders are:
 
 ### auth.redis.password_hash
 
-| Type     | Optional Value                             | Default |
-| -------- | ------------------------------------------ | ------- |
-| enum     | `plain`, `md5`, `sha`, `sha256`, `bcrypt`  | `plain` |
+| Type | Optional Value                            | Default |
+| ---- | ----------------------------------------- | ------- |
+| enum | `plain`, `md5`, `sha`, `sha256`, `bcrypt` | `plain` |
 
 #### Description
 
@@ -5692,9 +5692,9 @@ The encoding format of the `password` field stored by Redis.
 
 ### auth.redis.super_cmd
 
-| Type     | Default                          |
-| -------- | -------------------------------- |
-| string   | `HGET mqtt_user:%u is_superuser` |
+| Type   | Default                          |
+| ------ | -------------------------------- |
+| string | `HGET mqtt_user:%u is_superuser` |
 
 #### Description
 
@@ -5709,9 +5709,9 @@ Authentication query commands for superuser, available placeholders are:
 
 ### auth.redis.acl_cmd
 
-| Type     | Default               |
-| -------- | --------------------- |
-| string   | `HGETALL mqtt_acl:%u` |
+| Type   | Default               |
+| ------ | --------------------- |
+| string | `HGETALL mqtt_acl:%u` |
 
 #### Description
 
@@ -5724,9 +5724,9 @@ ACL query commands. Available placeholders are:
 
 ### bridge.mqtt.aws.address
 
-| Type     | Default          |
-| -------- | ---------------- |
-| string   | `127.0.0.1:1883` |
+| Type   | Default          |
+| ------ | ---------------- |
+| string | `127.0.0.1:1883` |
 
 #### Description
 
@@ -5738,9 +5738,9 @@ Bridge address, supports two formats, for example:
 
 ### bridge.mqtt.aws.proto_ver
 
-| Type     | Optional Value               | Default  |
-| -------- | ---------------------------- | -------- |
-| enum     | `mqttv3`, `mqttv4`, `mqttv5` | `mqttv4` |
+| Type | Optional Value               | Default  |
+| ---- | ---------------------------- | -------- |
+| enum | `mqttv3`, `mqttv4`, `mqttv5` | `mqttv4` |
 
 #### Description
 
@@ -5750,9 +5750,9 @@ The client protocol version of the MQTT bridge.
 
 ### bridge.mqtt.aws.start_type
 
-| Type     | Optional Value    | Default  |
-| -------- | ----------------- | -------- |
-| eunm     | `manual`, `auto`  | `manual` |
+| Type | Optional Value   | Default  |
+| ---- | ---------------- | -------- |
+| eunm | `manual`, `auto` | `manual` |
 
 #### Description
 
@@ -5764,9 +5764,9 @@ Start type:
 
 ### bridge.mqtt.aws.bridge_mode
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| boolean  | `true`, `false`  | `true`  |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| boolean | `true`, `false` | `true`  |
 
 #### Description
 
@@ -5780,9 +5780,9 @@ RabbitMQ currently does not support this flag.
 
 ### bridge.mqtt.aws.clientid
 
-| Type     | Default      |
-| -------- | ------------ |
-| string   | `bridge_aws` |
+| Type   | Default      |
+| ------ | ------------ |
+| string | `bridge_aws` |
 
 #### Description
 
@@ -5792,9 +5792,9 @@ The client ID of the MQTT bridge.
 
 ### bridge.mqtt.aws.clean_start
 
-| Type     | Optional Value   | Default |
-| -------- | ---------------- | ------- |
-| boolean  | `true`, `false`  | `true`  |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| boolean | `true`, `false` | `true`  |
 
 #### Description
 
@@ -5804,9 +5804,9 @@ The `clean_start` flag of the MQTT bridge. It indicates whether the client conne
 
 ### bridge.mqtt.aws.username
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `user`  |
+| Type   | Default |
+| ------ | ------- |
+| string | `user`  |
 
 #### Description
 
@@ -5816,9 +5816,9 @@ The username of the MQTT bridge client.
 
 ### bridge.mqtt.aws.password
 
-| Type     | Default  |
-| -------- | -------- |
-| string   | `passwd` |
+| Type   | Default  |
+| ------ | -------- |
+| string | `passwd` |
 
 #### Description
 
@@ -5828,9 +5828,9 @@ The password of the MQTT bridge client.
 
 ### bridge.mqtt.aws.forwards
 
-| Type     | Default             |
-| -------- | ------------------- |
-| string   | `topic1/#,topic2/#` |
+| Type   | Default             |
+| ------ | ------------------- |
+| string | `topic1/#,topic2/#` |
 
 #### Description
 
@@ -5841,9 +5841,9 @@ Bridge forwarding rules. For example:
 
 ### bridge.mqtt.aws.forward_mountpoint
 
-| Type     | Default               |
-| -------- | --------------------- |
-| string   | `bridge/aws/${node}/` |
+| Type   | Default               |
+| ------ | --------------------- |
+| string | `bridge/aws/${node}/` |
 
 #### Description
 
@@ -5853,9 +5853,9 @@ The prefix of the forwarding topic. When forwarding the message to the target sy
 
 ### bridge.mqtt.aws.subscription.1.topic
 
-| Type     | Default |
-| -------- | ------- |
-| string   | -       |
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
 
 #### Description
 
@@ -5865,9 +5865,9 @@ Topic of the peer system subscribed.
 
 ### bridge.mqtt.aws.subscription.1.qos
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| enum     | `0`, `1`, `2`  | `1`     |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `0`, `1`, `2`  | `1`     |
 
 #### Description
 
@@ -5877,9 +5877,9 @@ QoS of the peer system topic subscribed.
 
 ### bridge.mqtt.aws.receive_mountpoint
 
-| Type     | Default        |
-| -------- | -------------- |
-| string   | `receive/aws/` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `receive/aws/` |
 
 #### Description
 
@@ -5889,9 +5889,9 @@ The topic prefix of the received message.`emqx_bridge_mqtt` supports adding a un
 
 ### bridge.mqtt.aws.ssl
 
-| Type     | Optional Value  | Default |
-| -------- | --------------- | ------- |
-| boolean  | `true`, `false` | `true`  |
+| Type    | Optional Value  | Default |
+| ------- | --------------- | ------- |
+| boolean | `true`, `false` | `true`  |
 
 #### Description
 
@@ -5901,9 +5901,9 @@ Whether the MQTT bridge client enables SSL.
 
 ### bridge.mqtt.aws.cacertfile
 
-| Type     | Default                |
-| -------- | ---------------------- |
-| string   | `etc/certs/cacert.pem` |
+| Type   | Default                |
+| ------ | ---------------------- |
+| string | `etc/certs/cacert.pem` |
 
 #### Description
 
@@ -5913,9 +5913,9 @@ The path of the CA certificate file of the MQTT bridge client.
 
 ### bridge.mqtt.aws.certfile
 
-| Type     | Default                     |
-| -------- | --------------------------- |
-| string   | `etc/certs/client-cert.pem` |
+| Type   | Default                     |
+| ------ | --------------------------- |
+| string | `etc/certs/client-cert.pem` |
 
 #### Description
 
@@ -5925,9 +5925,9 @@ The path of the SSL certificate file of the MQTT bridge client.
 
 ### bridge.mqtt.aws.keyfile
 
-| Type     | Default                    |
-| -------- | -------------------------- |
-| string   | `etc/certs/client-key.pem` |
+| Type   | Default                    |
+| ------ | -------------------------- |
+| string | `etc/certs/client-key.pem` |
 
 #### Description
 
@@ -5937,9 +5937,9 @@ The path of the SSL key file of the MQTT bridge client.
 
 ### bridge.mqtt.aws.ciphers
 
-| Type     | Default                                                     |
-| -------- | ----------------------------------------------------------- |
-| string   | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384` |
+| Type   | Default                                                     |
+| ------ | ----------------------------------------------------------- |
+| string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384` |
 
 #### Description
 
@@ -5949,9 +5949,9 @@ Cipher suite supported by SSL handshake.
 
 ### bridge.mqtt.aws.psk_ciphers
 
-| Type     | Default                                                                  |
-| -------- | ------------------------------------------------------------------------ |
-| string   | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
+| Type   | Default                                                                  |
+| ------ | ------------------------------------------------------------------------ |
+| string | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
 #### Description
 
@@ -5973,9 +5973,9 @@ Heartbeat interval of the MQTT bridge client.
 
 ### bridge.mqtt.aws.tls_versions
 
-| Type     | Default                 |
-| -------- | ----------------------- |
-| string   | `tslv1.3,tlsv1.2,tlsv1.1,tlsv1` |
+| Type   | Default                         |
+| ------ | ------------------------------- |
+| string | `tslv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
 
@@ -6009,9 +6009,9 @@ QoS 1/2 message retransmission interval.
 
 ### bridge.mqtt.aws.batch_size
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 32      |
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
 
 #### Description
 
@@ -6021,9 +6021,9 @@ The batch size of the EMQX bridge. The EMQX bridge mode of `emqx_bridge_mqtt` su
 
 ### bridge.mqtt.aws.max_inflight_size
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 32      |
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
 
 #### Description
 
@@ -6033,9 +6033,9 @@ Inflight window size.
 
 ### bridge.mqtt.aws.queue.replayq_dir
 
-| Type     | Default                  |
-| -------- | ----------------------- |
-| string   | `etc/emqx_aws_bridge/`  |
+| Type   | Default                |
+| ------ | ---------------------- |
+| string | `etc/emqx_aws_bridge/` |
 
 #### Description
 
@@ -6167,8 +6167,8 @@ When using DTLS, if the client does not have a certificate during the DTLS hands
 
 ### coap.dtls.ciphers
 
-| Type | Default |
-| ---- | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### Description
@@ -6193,9 +6193,9 @@ Default user authentication data of Dashboard. `dashboard.default_user.login` an
 
 ### dashboard.listener.http
 
-| Type    | Default |
-| ------- | ------- |
-| integer | 18083   |
+| Type    | Default       |
+| ------- | ------------- |
+| integer | 18083         |
 | string  | 0.0.0.0:18083 |
 
 #### Description
@@ -6390,8 +6390,8 @@ It should be used together with `dashboard.listener.https.verify`. If set to `tr
 
 ### dashboard.listener.https.tls_versions
 
-| Type   | Default                 |
-| ------ | ----------------------- |
+| Type   | Default                         |
+| ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
 #### Description
@@ -6402,8 +6402,8 @@ Specify the TLS protocol version supported by the server. The versions are separ
 
 ### dashboard.listener.https.ciphers
 
-| Type   | Default                                                      |
-| ------ | ------------------------------------------------------------ |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### Description
@@ -6600,7 +6600,7 @@ Which topic the device's upstream update message (update) needs to be published 
 ### lwm2m.update_msg_publish_condition
 
 | Type | Optional Value                   | Default                |
-|------|----------------------------------|------------------------|
+| ---- | -------------------------------- | ---------------------- |
 | enum | `contains_object_list`, `always` | `contains_object_list` |
 
 #### Description
@@ -6736,10 +6736,10 @@ Default AppSecret.
 
 ### management.listener.http
 
-| Type    | Default |
-| ------- | ------- |
-| integer | 8081    |
-| string  | 0.0.0.0:8081    |
+| Type    | Default      |
+| ------- | ------------ |
+| integer | 8081         |
+| string  | 0.0.0.0:8081 |
 
 #### Description
 
@@ -6785,9 +6785,9 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 ### management.listener.http.send_timeout
 
-| Type    | Default |
-| ------- | ------- |
-| duration | `15s`  |
+| Type     | Default |
+| -------- | ------- |
+| duration | `15s`   |
 
 #### Description
 
@@ -6833,9 +6833,9 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 
 ### management.listener.https
 
-| Type    | Default | Example |
-| ------- | ------- | ------- |
-| integer | -       | 8081    |
+| Type    | Default | Example      |
+| ------- | ------- | ------------ |
+| integer | -       | 8081         |
 | string  | -       | 0.0.0.0:8081 |
 
 #### Description
@@ -6882,9 +6882,9 @@ The maximum length of the TCP connection queue. It indicates the maximum number 
 
 ### management.listener.https.send_timeout
 
-| Type    | Default |
-| ------- | ------- |
-| duration | `15s`  |
+| Type     | Default |
+| -------- | ------- |
+| duration | `15s`   |
 
 #### Description
 
@@ -7103,9 +7103,9 @@ SELECT * FROM "$events/client_connected"
 
 ### mqtt.sn.port
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `1884`  |
+| Type   | Default |
+| ------ | ------- |
+| string | `1884`  |
 
 #### Description
 
@@ -7127,9 +7127,9 @@ ADVERTISE message broadcast interval, unit: second.
 
 ### mqtt.sn.gateway_id
 
-| Type     | Default |
-| -------- | ------- |
-| integer  | 1       |
+| Type    | Default |
+| ------- | ------- |
+| integer | 1       |
 
 #### Description
 
@@ -7139,9 +7139,9 @@ MQTT-SN gateway ID in ADVERTISE.
 
 ### mqtt.sn.enable_stats
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| enum     | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -7151,9 +7151,9 @@ Whether to enable client status statistics.
 
 ### mqtt.sn.enable_qos3
 
-| Type     | Optional Value | Default |
-| -------- | -------------- | ------- |
-| enum     | `on`, `off`    | `off`   |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
 
 #### Description
 
@@ -7175,9 +7175,9 @@ The idle time after the establishment, if no message is received within this tim
 
 ### mqtt.sn.predefined.topic.0
 
-| Type     | Default    |
-| -------- | ---------- |
-| string   | `reserved` |
+| Type   | Default    |
+| ------ | ---------- |
+| string | `reserved` |
 
 #### Description
 
@@ -7191,9 +7191,9 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ### mqtt.sn.username
 
-| Type     | Default        |
-| -------- | -------------- |
-| string   | `mqtt_sn_user` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `mqtt_sn_user` |
 
 #### Description
 
@@ -7203,9 +7203,9 @@ mqtt.sn.predefined.topic.1 = foo/bar
 
 ### mqtt.sn.password
 
-| Type     | Default |
-| -------- | ------- |
-| string   | `abc`   |
+| Type   | Default |
+| ------ | ------- |
+| string | `abc`   |
 
 #### Description
 
@@ -7399,8 +7399,8 @@ If using SSL, specify the timeout period for the SSL handshake process.
 
 ### stomp.listener.ciphers
 
-| Type | Default |
-| ---- | ------- |
+| Type   | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
 #### Description
@@ -7548,9 +7548,9 @@ Specify the data in the HTTP request header. `<Key>` Specify the field name in t
 
 ### web.hook.encoding_of_payload_field
 
-| Type     | Optional Value              | Default |
-| -------- | --------------------------- | ------- |
-| enum     | `plain`, `base62`, `base64` | -       |
+| Type | Optional Value              | Default |
+| ---- | --------------------------- | ------- |
+| enum | `plain`, `base62`, `base64` | -       |
 
 #### Description
 
@@ -7598,7 +7598,7 @@ Client private key file path.
 
 | Type | Optional Value  | Default |
 | ---- | --------------- | ------- |
-| enum | `true`, `false` | `false`  |
+| enum | `true`, `false` | `false` |
 
 #### Description
 
@@ -7620,9 +7620,9 @@ HTTP connection process pool size.
 
 ### web.hook.rule.client.connect.1
 
-| Type     | Default                           |
-| -------- | --------------------------------- |
-| string   | `{"action": "on_client_connect"}` |
+| Type   | Default                           |
+| ------ | --------------------------------- |
+| string | `{"action": "on_client_connect"}` |
 
 #### Description
 
@@ -7632,9 +7632,9 @@ Forward the `on_client_connect` event.
 
 ### web.hook.rule.client.connack.1
 
-| Type     | Default                           |
-| -------- | --------------------------------- |
-| string   | `{"action": "on_client_connack"}` |
+| Type   | Default                           |
+| ------ | --------------------------------- |
+| string | `{"action": "on_client_connack"}` |
 
 #### Description
 
@@ -7644,9 +7644,9 @@ Forward the `on_client_connack` event.
 
 ### web.hook.rule.client.connected.1
 
-| Type     | Default                             |
-| -------- | ----------------------------------- |
-| string   | `{"action": "on_client_connected"}` |
+| Type   | Default                             |
+| ------ | ----------------------------------- |
+| string | `{"action": "on_client_connected"}` |
 
 #### Description
 
@@ -7656,9 +7656,9 @@ Forward the `on_client_connected` event.
 
 ### web.hook.rule.client.disconnected.1
 
-| Type     | Default                                |
-| -------- | -------------------------------------- |
-| string   | `{"action": "on_client_disconnected"}` |
+| Type   | Default                                |
+| ------ | -------------------------------------- |
+| string | `{"action": "on_client_disconnected"}` |
 
 #### Description
 
@@ -7668,9 +7668,9 @@ Forward the `on_client_disconnected` event.
 
 ### web.hook.rule.client.subscribe.1
 
-| Type     | Default                             |
-| -------- | ----------------------------------- |
-| string   | `{"action": "on_client_subscribe"}` |
+| Type   | Default                             |
+| ------ | ----------------------------------- |
+| string | `{"action": "on_client_subscribe"}` |
 
 #### Description
 
@@ -7680,9 +7680,9 @@ Forward the `on_client_subscribe` event.
 
 ### web.hook.rule.client.unsubscribe.1
 
-| Type     | Default                               |
-| -------- | ------------------------------------- |
-| string   | `{"action": "on_client_unsubscribe"}` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `{"action": "on_client_unsubscribe"}` |
 
 #### Description
 
@@ -7692,9 +7692,9 @@ Forward the `on_client_unsubscribe` event.
 
 ### web.hook.rule.session.subscribed.1
 
-| Type     | Default                               |
-| -------- | ------------------------------------- |
-| string   | `{"action": "on_session_subscribed"}` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `{"action": "on_session_subscribed"}` |
 
 #### Description
 
@@ -7704,9 +7704,9 @@ Forward the `on_client_subscribe` event.
 
 ### web.hook.rule.session.unsubscribed.1
 
-| Type     | Default                                 |
-| -------- | --------------------------------------- |
-| string   | `{"action": "on_session_unsubscribed"}` |
+| Type   | Default                                 |
+| ------ | --------------------------------------- |
+| string | `{"action": "on_session_unsubscribed"}` |
 
 #### Description
 
@@ -7716,9 +7716,9 @@ Forward the `on_session_unsubscribe` event.
 
 ### web.hook.rule.session.terminated.1
 
-| Type     | Default                               |
-| -------- | ------------------------------------- |
-| string   | `{"action": "on_session_terminated"}` |
+| Type   | Default                               |
+| ------ | ------------------------------------- |
+| string | `{"action": "on_session_terminated"}` |
 
 #### Description
 
@@ -7728,9 +7728,9 @@ Forward the `on_session_terminated` event.
 
 ### web.hook.rule.message.publish.1
 
-| Type     | Default                            |
-| -------- | ---------------------------------- |
-| string   | `{"action": "on_message_publish"}` |
+| Type   | Default                            |
+| ------ | ---------------------------------- |
+| string | `{"action": "on_message_publish"}` |
 
 #### Description
 
@@ -7740,9 +7740,9 @@ Forward the `on_client_publish` event.
 
 ### web.hook.rule.message.delivered.1
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| string   | `{"action": "on_message_delivered"}` |
+| Type   | Default                              |
+| ------ | ------------------------------------ |
+| string | `{"action": "on_message_delivered"}` |
 
 #### Description
 
@@ -7752,9 +7752,9 @@ Forward the `on_message_delivered` event.
 
 ### web.hook.rule.message.acked.1
 
-| Type     | Default                          |
-| -------- | -------------------------------- |
-| string   | `{"action": "on_message_acked"}` |
+| Type   | Default                          |
+| ------ | -------------------------------- |
+| string | `{"action": "on_message_acked"}` |
 
 #### Description
 
@@ -7764,9 +7764,9 @@ Forward the `on_message_acked` event.
 {% emqxee %}
 ### license.file
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| string   | `etc/emqx.lic` |
+| Type   | Default        |
+| ------ | -------------- |
+| string | `etc/emqx.lic` |
 
 #### Description
 
@@ -7775,9 +7775,9 @@ Licence file of the node.
 <br />
 ### license.connection_high_watermark_alarm
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| percent   | 80% |
+| Type    | Default |
+| ------- | ------- |
+| percent | 80%     |
 
 #### Description
 
@@ -7788,9 +7788,9 @@ The alarm is raised when this threshld is reached. As percentage of alive connec
 <br />
 ### license.connection_low_watermark_alarm
 
-| Type     | Default                              |
-| -------- | ------------------------------------ |
-| percent   | 75% |
+| Type    | Default |
+| ------- | ------- |
+| percent | 75%     |
 
 #### Description
 
