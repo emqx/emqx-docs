@@ -56,6 +56,10 @@ ACL 规则的数据结构如下：
         "pub": [
             "some/topics/for/pub/1",
             "some/topics/for/pub/2"
+        ],
+        "all": [
+            "some/topics/for/pubsub/1",
+            "some/topics/for/pubsub/2"
         ]
     }
 }
@@ -86,7 +90,7 @@ JWT ACL 检查时如果发现这个 Token 已经超期 (`exp` 字段指定)，�
 
 如果想要让一个 JWT 永不超期，可以在 JWT 中不提供 `exp` 字段即可。
 
-::: 警告！！
+::: warning
 1. 使用长期的 JWT 是不安全的。
 2. ACL 缓存开启的情况下，JWT 超期之后一段时间可能还会继续有效，直到缓存失效。
 :::
