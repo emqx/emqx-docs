@@ -24,13 +24,13 @@ They support plugins written in Elixir and have debug console powered with [IEx]
 1.  Get docker image
 
     ```shell
-    docker pull emqx/emqx:5.0.4
+    docker pull emqx/emqx:5.0.9
     ```
 
 2.  Start docker container
 
     ```shell
-    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.4
+    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.9
     ```
 
 ### Create a simple static cluster by docker-compose
@@ -42,7 +42,7 @@ They support plugins written in Elixir and have debug console powered with [IEx]
 
    services:
      emqx1:
-       image: emqx/emqx:5.0.4
+       image: emqx/emqx:5.0.9
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.io"
@@ -59,7 +59,7 @@ They support plugins written in Elixir and have debug console powered with [IEx]
            - node1.emqx.io
 
      emqx2:
-       image: emqx/emqx:5.0.4
+       image: emqx/emqx:5.0.9
        container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.io"
@@ -222,7 +222,7 @@ you know how to manually resolve all the runtime dependencies.
   ```shell
   $ helm search repo emqx
   NAME                CHART VERSION APP VERSION DESCRIPTION
-  emqx/emqx           5.0.3         5.0.3       A Helm chart for EMQX
+  emqx/emqx           5.0.9         5.0.9       A Helm chart for EMQX
   emqx/emqx-ee        4.4.5         4.4.5       A Helm chart for EMQ X
   emqx/emqx-operator  1.0.7         1.2.2       A Helm chart for EMQX Operator Controller
   emqx/kuiper         0.9.0         0.9.0       A lightweight IoT edge analytic software
