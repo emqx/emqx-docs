@@ -65,12 +65,16 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImF1dGhvciI6IndpdndpdiIsInNpdGU
         "pub": [
             "some/topics/for/pub/1",
             "some/topics/for/pub/2"
+        ],
+        "all": [
+            "some/topics/for/pubsub/1",
+            "some/topics/for/pubsub/2"
         ]
     }
 }
 ```
 
-`pub` 和 `sub` 用于指定该客户端允许发布和订阅的主题白名单。
+`pub`、`sub` 和 `all` 用于指定该客户端允许发布和订阅的主题白名单。
 
 可以在主题白名单中使用以下占位符:
 
@@ -96,7 +100,7 @@ JWT ACL 检查时如果发现这个 Token 已经超期 (`exp` 字段指定)，�
 
 如果想要让一个 JWT 永不超期，可以在 JWT 中不提供 `exp` 字段即可。
 
-::: 警告！！
+::: warning
 1. 使用长期的 JWT 是不安全的。
 2. ACL 缓存开启的情况下，JWT 超期之后一段时间可能还会继续有效，直到缓存失效。
 :::

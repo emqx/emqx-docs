@@ -68,12 +68,16 @@ The data structure of ACL rules is the following:
         "pub": [
             "some/topics/for/pub/1",
             "some/topics/for/pub/2"
+        ],
+        "all": [
+            "some/topics/for/pubsub/1",
+            "some/topics/for/pubsub/2"
         ]
     }
 }
 ```
 
-`pub` and `sub` lists serve as whitelists for the corresponding operations.
+`pub`, `sub` and `all` lists serve as whitelists for the corresponding operations.
 
 You can use the following placeholders in topic whitelists:
 - %u：Username
