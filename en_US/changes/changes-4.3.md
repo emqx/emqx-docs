@@ -15,10 +15,10 @@
 - TLS listener default buffer size to 4KB [#9007](https://github.com/emqx/emqx/pull/9007)
   Eliminate uncertainty that the buffer size is set by OS default.
 
-- Disable authorization for `api/v4/emqx_prometheus` endpoint. [#8955](https://github.com/emqx/emqx/pull/8955)
+- Disable authorization for `api/v4/emqx_prometheus` endpoint [#8955](https://github.com/emqx/emqx/pull/8955).
 
 - Added a test to prevent a last will testament message to be
-  published when a client is denied connection. [#8894](https://github.com/emqx/emqx/pull/8894)
+  published when a client is denied connection [#8894](https://github.com/emqx/emqx/pull/8894).
 
 - More rigorous checking of flapping to improve stability of the system. [#9045](https://github.com/emqx/emqx/pull/9045)
   Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
@@ -29,11 +29,11 @@
   Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to `true`
   to prevent sessions from buffering messages, however this acknowledgement costs extra resources.
 
-- Fix delayed publish timing inaccuracy caused by OS time change. [#8908](https://github.com/emqx/emqx/pull/8908)
+- Fix delayed publish timing inaccuracy caused by OS time change [#8908](https://github.com/emqx/emqx/pull/8908).
 
 ### Bug fixes
 
-- Fix HTTP client library to handle SSL socket passive signal. [#9145](https://github.com/emqx/emqx/pull/9145)
+- Fix HTTP client library to handle SSL socket passive signal [#9145](https://github.com/emqx/emqx/pull/9145).
 
 - Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071)
   More changes in redis client included in this release:
@@ -65,7 +65,7 @@
   subscriber from another node in the cluster.
   Fixed in [#9122](https://github.com/emqx/emqx/pull/9122)
 
-- Fix rule engine fallback actions metrics reset. [#9125](https://github.com/emqx/emqx/pull/9125)
+- Fix rule engine fallback actions metrics reset [#9125](https://github.com/emqx/emqx/pull/9125).
 
 ## v4.3.20
 

@@ -5,8 +5,10 @@ Setup a DynamoDB database, taking Mac OSX for instance:
 ```bash
 $ brew install dynamodb-local
 
-$ dynamodb-local
+$ dynamodb-local -sharedDb
 ```
+
+For details about how to deply DynamoDB and AWS CLI locally, please see [Deploying DynamoDB Locally](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
 
 Initiate the DynamoDB table:
 
@@ -48,9 +50,6 @@ SELECT
     FROM
       "message.publish"
 ```
-
-
-![image](./assets/rule-engine/mysql_sql_1.png)
 
 Bind an action:
 

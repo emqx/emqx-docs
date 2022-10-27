@@ -32,7 +32,7 @@
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
   Prior to this enhancement, one would have to set `broker.shared_dispatch_ack_enabled` to `true`
-  to prevent sessions from buffering messages, however this acknowledgement costs extra resource.
+  to prevent sessions from buffering messages, however this acknowledgement costs extra resources.
 
 - Fix delayed publish timing inaccuracy caused by OS time change [#8908](https://github.com/emqx/emqx/pull/8908).
 
