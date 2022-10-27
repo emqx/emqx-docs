@@ -1,6 +1,6 @@
 # Configuration Files
 
-<!--5.0.10-g202e4883-->
+<!--5.0.10-g4cadb86b-->
 EMQX configuration files are in [HOCON](https://github.com/emqx/hocon) format.
 HOCON, or Human-Optimized Config Object Notation is a format for human-readable data,
 and a superset of JSON.
@@ -149,7 +149,7 @@ For example, this environment variable sets an array value.
 export EMQX_LISTENERS__SSL__L1__AUTHENTICATION__SSL__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
 ```
 
-However this also means a string value should be quoted if it happen to contain special
+However this also means a string value should be quoted if it happens to contain special
 characters such as `=` and `:`.
 
 For example, a string value `"localhost:1883"` would be 
@@ -251,9 +251,9 @@ authentication=[{enable=true}]
 
 #### TLS/SSL ciphers
 
-Starting from v5.0.6, EMQX no longer pre-populate the ciphers list with a default
+Starting from v5.0.6, EMQX no longer pre-populates the ciphers list with a default
 set of cipher suite names.
-Instead, the default ciphers are applyed at runtime when starting the listener
+Instead, the default ciphers are applied at runtime when starting the listener
 for servers, or when establishing a TLS connection as a client.
 
 Below are the default ciphers selected by EMQX.
@@ -2037,7 +2037,7 @@ Socket options for SSL connections.
 
   All TLS/DTLS versions to be supported.<br/>
   NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-  In case PSK cipher suites are intended, make sure to configured
+  In case PSK cipher suites are intended, make sure to configure
   <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
@@ -2231,7 +2231,7 @@ Socket options for WebSocket/SSL connections.
 
   All TLS/DTLS versions to be supported.<br/>
   NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-  In case PSK cipher suites are intended, make sure to configured
+  In case PSK cipher suites are intended, make sure to configure
   <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
@@ -3676,7 +3676,7 @@ Socket options for SSL clients.
 
   All TLS/DTLS versions to be supported.<br/>
   NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-  In case PSK cipher suites are intended, make sure to configured
+  In case PSK cipher suites are intended, make sure to configure
   <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
@@ -4707,7 +4707,7 @@ Configuration for the dashboard listener (TLS).
 
   All TLS/DTLS versions to be supported.<br/>
   NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-  In case PSK cipher suites are intended, make sure to configured
+  In case PSK cipher suites are intended, make sure to configure
   <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
@@ -5045,7 +5045,7 @@ SSL client configuration.
 
   All TLS/DTLS versions to be supported.<br/>
   NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-  In case PSK cipher suites are intended, make sure to configured
+  In case PSK cipher suites are intended, make sure to configure
   <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
@@ -5438,7 +5438,7 @@ Settings for the DTLS protocol.
 
   All TLS/DTLS versions to be supported.<br/>
   NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-  In case PSK cipher suites are intended, make sure to configured
+  In case PSK cipher suites are intended, make sure to configure
   <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
@@ -6149,7 +6149,7 @@ SSL configuration for the server.
 
   All TLS/DTLS versions to be supported.<br/>
   NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
-  In case PSK cipher suites are intended, make sure to configured
+  In case PSK cipher suites are intended, make sure to configure
   <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
