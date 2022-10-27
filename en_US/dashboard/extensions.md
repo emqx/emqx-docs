@@ -1,6 +1,6 @@
 # Extensions
 
-The extensions module allows users to access non-MQTT protocols and modify extended system functionality.
+With the Extension module, users can use the gateway to access non-MQTT protocol connections and message publishing and receiving, and use the Plugin or ExHook to modify and extend the system.
 
 - **Gateways**: Handles connections, authentication and message sending and receiving for all non-MQTT protocols and provides a unified user layer interface and concept for them.
 - **ExHook**: Provides the ability to modify or extend the system functionality of EMQX using other languages.
