@@ -1,6 +1,6 @@
 # 配置文件
 
-<!--5.0.2-bb854a96-->
+<!--5.0.10-g202e4883-->
 EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) 。
 HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常适用于易于人类读写的配置数据存储。
 
@@ -8,12 +8,12 @@ HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常
 
 EMQX的配置文件可分为三层，自底向上依次是：
 
-1. 不可变的基础层 `emqx.conf` 加上 `EMQX_` 前缀的环境变量。</br>
+1. 不可变的基础层 `emqx.conf` 加上 `EMQX_` 前缀的环境变量。<br/>
    修改这一层的配置之后，需要重启节点来使之生效。
 1. 集群范围重载层：`$EMQX_NODE__DATA_DIR/configs/cluster-override.conf`
 1. 节点本地重载层：`$EMQX_NODE__DATA_DIR/configs/local-override.conf`
 
-如果环境变量 `$EMQX_NODE__DATA_DIR` 没有设置，那么该目录会从 `emqx.conf` 的 `node.data_dir`配置中读取。
+如果环境变量 `$EMQX_NODE__DATA_DIR` 没有设置，那么该目录会从 `emqx.conf` 的 `node.data_dir` 配置中读取。
 
 配置文件 `cluster-override.conf` 的内容会在运行时被EMQX重写。
 这些重写发生在 dashboard UI，管理HTTP API，或者CLI对集群配置进行修改时。
@@ -73,9 +73,9 @@ EMQX的配置文件中，有4中复杂数据结构类型，它们分别是：
 
 1. Struct：结构体都是有类型名称的，结构体中可以有任意多个字段。
    结构体和字段的名称由不带特殊字符的全小些字母组成，名称中可以带数字，但不得以数字开头，多个单词可用下划线分隔。
-1. Map：Map与Struct（结构体）类似，但是内部的字段不是预先定义好的。
-1. Union：联合 `MemberType1 | MemberType2 | ...`，可以理解为：“不是这个，就是那个”
-1. Array：数组 `[ElementType]`
+1. Map: Map 与 Struct（结构体）类似，但是内部的字段不是预先定义好的。
+1. Union: 联合 `MemberType1 | MemberType2 | ...`，可以理解为：“不是这个，就是那个”
+1. Array: 数组 `[ElementType]`
 
 ::: tip Tip
 如果Map的字段名称是纯数字，它会被解释成一个数组。
@@ -92,19 +92,19 @@ myarray.2 = 75
 复杂类型定义了数据 "盒子"，其中可能包含其他复杂数据或原始值。
 有很多不同的原始类型，仅举几个例子。
 
-* 原子 `atom()`
-* 布尔 `boolean()`
-* 字符串 `string()`
-* 整形 `integer()`
-* 浮点数 `float()`
-* 数值 `number()`
-* 二进制编码的字符串 `binary()` 是 `string()` 的另一种格式
-* 时间间隔 `emqx_schema:duration()` 是 `integer()` 的另一种格式
+* 原子 `atom()`。
+* 布尔 `boolean()`。
+* 字符串 `string()`。
+* 整形 `integer()`。
+* 浮点数 `float()`。
+* 数值 `number()`。
+* 二进制编码的字符串 `binary()` 是 `string()` 的另一种格式。
+* 时间间隔 `emqx_schema:duration()` 是 `integer()` 的另一种格式。
 * ...
 
 ::: tip Tip
 原始类型的名称大多是自我描述的，所以不需要过多的注释。
-但是有一些不是那么直观的数据类型，则需要配合字段的描述文档进行理解
+但是有一些不是那么直观的数据类型，则需要配合字段的描述文档进行理解。
 :::
 
 
@@ -113,7 +113,7 @@ myarray.2 = 75
 如果我们把EMQX的配置值理解成一个类似目录树的结构，那么类似于文件系统中使用斜杠或反斜杠进行层级分割，
 EMQX使用的配置路径的层级分割符是 `'.'`
 
-被`'.'`号分割的每一段，则是 Struct（结构体）的字段，或 Map 的 key。
+被 `'.'` 号分割的每一段，则是 Struct（结构体）的字段，或 Map 的 key。
 
 下面有几个例子：
 
@@ -125,18 +125,28 @@ authentication.1.enable = true
 
 ### 环境变量重载
 
-因为`'.'` 分隔符不能使用于环境变量，所以我们需要使用另一个分割符。EMQX选用的是双下划线`__`。
+因为 `'.'`  分隔符不能使用于环境变量，所以我们需要使用另一个分割符。EMQX选用的是双下划线 `__`。
 为了与其他的环境变量有所区分，EMQX还增加了一个前缀 `EMQX_` 来用作环境变量命名空间。
 
 例如 `node.name` 的重载变量名是 `EMQX_NODE__NAME`。
 
-环境变量的值，是解析成HOCON值的。所以这也使得环境变量可以用来传递复杂数据类型的值。
+环境变量的值，是按 HOCON 值解析的，这也使得环境变量可以用来传递复杂数据类型的值。
 
 例如，下面这个环境变量传入一个数组类型的值。
 
 ```
-export EMQX_LISTENERS__SSL__L1__AUTHENTICATION__SSL__CIPHERS="[\"TLS_AES_256_GCM_SHA384\"]"
+export EMQX_LISTENERS__SSL__L1__AUTHENTICATION__SSL__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
 ```
+
+这也意味着有些带特殊字符（例如`:` 和 `=`），则需要用双引号对这个值包起来。
+
+例如`localhost:1883` 会被解析成一个结构体 `{"localhost": 1883}`。
+想要把它当字符串使用时，就必需使用引号，如下：
+
+```
+EMQX_BRIDGES__MQTT__MYBRIDGE__CONNECTOR_SERVER='"localhost:1883"'
+```
+
 
 ::: tip Tip
 未定义的根路径会被EMQX忽略，例如 `EMQX_UNKNOWN_ROOT__FOOBAR` 这个环境变量会被EMQX忽略，
@@ -161,7 +171,7 @@ HOCON的值是分层覆盖的，普遍规则如下：
 
 #### 结构体
 
-合并覆盖规则。在如下配置中，最后一行的 `debug` 值会覆盖覆盖原先 `level` 字段的 `error` 值，但是 `enable` 字段保持不变。
+合并覆盖规则。在如下配置中，最后一行的 `debug` 值会覆盖覆盖原先`level`字段的 `error` 值，但是 `enable` 字段保持不变。
 ```
 log {
     console_handler{
@@ -170,7 +180,7 @@ log {
     }
 }
 
-## 控制台日志打印先定义为 `error` 级别，后被覆写成 `debug` 级别
+## 控制台日志打印先定义为 `error` 级，后被覆写成 `debug` 级
 
 log.console_handler.level=debug
 ```
@@ -219,6 +229,76 @@ authentication=[{enable=true}]
 ```
 :::
 
+#### TLS/SSL ciphers
+
+从 v5.0.6 开始 EMQX 不在配置文件中详细列出所有默认的密码套件名称。
+而是在配置文件中使用一个空列表，然后在运行时替换成默认的密码套件。
+
+下面这些密码套件是 EMQX 默认支持的：
+
+tlsv1.3:
+```
+ciphers =
+  [ "TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256",
+    "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
+    "TLS_AES_128_CCM_8_SHA256"
+  ]
+```
+
+tlsv1.2 或更早
+
+```
+ciphers =
+  [ "ECDHE-ECDSA-AES256-GCM-SHA384",
+    "ECDHE-RSA-AES256-GCM-SHA384",
+    "ECDHE-ECDSA-AES256-SHA384",
+    "ECDHE-RSA-AES256-SHA384",
+    "ECDH-ECDSA-AES256-GCM-SHA384",
+    "ECDH-RSA-AES256-GCM-SHA384",
+    "ECDH-ECDSA-AES256-SHA384",
+    "ECDH-RSA-AES256-SHA384",
+    "DHE-DSS-AES256-GCM-SHA384",
+    "DHE-DSS-AES256-SHA256",
+    "AES256-GCM-SHA384",
+    "AES256-SHA256",
+    "ECDHE-ECDSA-AES128-GCM-SHA256",
+    "ECDHE-RSA-AES128-GCM-SHA256",
+    "ECDHE-ECDSA-AES128-SHA256",
+    "ECDHE-RSA-AES128-SHA256",
+    "ECDH-ECDSA-AES128-GCM-SHA256",
+    "ECDH-RSA-AES128-GCM-SHA256",
+    "ECDH-ECDSA-AES128-SHA256",
+    "ECDH-RSA-AES128-SHA256",
+    "DHE-DSS-AES128-GCM-SHA256",
+    "DHE-DSS-AES128-SHA256",
+    "AES128-GCM-SHA256",
+    "AES128-SHA256",
+    "ECDHE-ECDSA-AES256-SHA",
+    "ECDHE-RSA-AES256-SHA",
+    "DHE-DSS-AES256-SHA",
+    "ECDH-ECDSA-AES256-SHA",
+    "ECDH-RSA-AES256-SHA",
+    "ECDHE-ECDSA-AES128-SHA",
+    "ECDHE-RSA-AES128-SHA",
+    "DHE-DSS-AES128-SHA",
+    "ECDH-ECDSA-AES128-SHA",
+    "ECDH-RSA-AES128-SHA"
+  ]
+```
+
+配置 PSK 认证的监听器
+
+```
+ciphers = [
+  [ "RSA-PSK-AES256-GCM-SHA384",
+    "RSA-PSK-AES256-CBC-SHA384",
+    "RSA-PSK-AES128-GCM-SHA256",
+    "RSA-PSK-AES128-CBC-SHA256",
+    "RSA-PSK-AES256-CBC-SHA",
+    "RSA-PSK-AES128-CBC-SHA"
+  ]
+```
+
 ## Root Config Keys
 
 
@@ -247,7 +327,7 @@ authentication=[{enable=true}]
 
   该配置可以被配置为：
   <ul>
-    <li><code>[]</code>：默认值，允许所有的登录请求
+    <li><code>[]</code>: 默认值，允许所有的登录请求
     <li>配置为单认证器，例如 <code>{enable:true,backend:"built_in_database",mechanism="password_based"}</code></li>
     <li>配置为认证器数组</li>
   </ul>
@@ -259,7 +339,7 @@ authentication=[{enable=true}]
 
 - authorization: <code>[authorization](#authorization)</code>
 
-   授权（ACL）。EMQX 支持完整的客户端访问控制（ACL）。</br> 
+   授权（ACL）。EMQX 支持完整的客户端访问控制（ACL）。<br/> 
 
 - node: <code>[node](#node)</code>
 
@@ -466,7 +546,7 @@ authentication=[{enable=true}]
 
 - url: <code>binary()</code>
 
-  HTTP 服务器地址。
+  授权 HTTP 服务器地址。
 
 - request_timeout: <code>string()</code>
   * default: 
@@ -491,10 +571,8 @@ authentication=[{enable=true}]
   正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
-  * default: 
-  `5`
 
-  请求出错时的最大重试次数。
+  Deprecated since 5.0.4.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
@@ -510,10 +588,8 @@ authentication=[{enable=true}]
 
 
 - retry_interval: <code>emqx_schema:duration()</code>
-  * default: 
-  `"1s"`
 
-  重试之间的间隔时间。
+  Deprecated since 5.0.4.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -571,7 +647,7 @@ authentication=[{enable=true}]
 
 - url: <code>binary()</code>
 
-  HTTP 服务器地址。
+  授权 HTTP 服务器地址。
 
 - request_timeout: <code>string()</code>
   * default: 
@@ -596,10 +672,8 @@ authentication=[{enable=true}]
   正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
-  * default: 
-  `5`
 
-  请求出错时的最大重试次数。
+  Deprecated since 5.0.4.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
@@ -615,10 +689,8 @@ authentication=[{enable=true}]
 
 
 - retry_interval: <code>emqx_schema:duration()</code>
-  * default: 
-  `"1s"`
 
-  重试之间的间隔时间。
+  Deprecated since 5.0.4.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -649,7 +721,8 @@ authentication=[{enable=true}]
 
 
 ## authz:mnesia
-使用内部数据库授权 (mnesia)。
+使用内部数据库授权（mnesia）。
+
 
 **Config paths**
 
@@ -676,7 +749,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mongo_rs
-使用 MongoDB 授权(副本集模式)
+使用 MongoDB 授权（副本集模式）
 
 
 **Config paths**
@@ -704,7 +777,7 @@ authentication=[{enable=true}]
 
 - collection: <code>atom()</code>
 
-  `MongoDB` 授权数据集
+  `MongoDB` 授权数据集。
 
 - filter: <code>map()</code>
   * default: 
@@ -713,8 +786,8 @@ authentication=[{enable=true}]
 
   在查询中定义过滤条件的条件表达式。
   过滤器支持如下占位符：
-  - <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-  - <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+  - <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名
+  - <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 - mongo_type: <code>rs</code>
@@ -788,7 +861,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mongo_sharded
-使用 MongoDB 授权(分片集群模式)
+使用 MongoDB 授权（分片集群模式）。
 
 
 **Config paths**
@@ -816,7 +889,7 @@ authentication=[{enable=true}]
 
 - collection: <code>atom()</code>
 
-  `MongoDB` 授权数据集
+  `MongoDB` 授权数据集。
 
 - filter: <code>map()</code>
   * default: 
@@ -825,8 +898,8 @@ authentication=[{enable=true}]
 
   在查询中定义过滤条件的条件表达式。
   过滤器支持如下占位符：
-  - <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-  - <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+  - <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名
+  - <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 - mongo_type: <code>sharded</code>
@@ -890,7 +963,7 @@ authentication=[{enable=true}]
 
 
 ## authz:mongo_single
-使用 MongoDB 授权(单实例)
+使用 MongoDB 授权（单实例）。
 
 
 **Config paths**
@@ -918,7 +991,7 @@ authentication=[{enable=true}]
 
 - collection: <code>atom()</code>
 
-  `MongoDB` 授权数据集
+  `MongoDB` 授权数据集。
 
 - filter: <code>map()</code>
   * default: 
@@ -927,8 +1000,8 @@ authentication=[{enable=true}]
 
   在查询中定义过滤条件的条件表达式。
   过滤器支持如下占位符：
-  - <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-  - <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+  - <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名
+  - <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 - mongo_type: <code>single</code>
@@ -937,11 +1010,11 @@ authentication=[{enable=true}]
 
   Standalone模式。
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
 
 
@@ -1017,11 +1090,11 @@ authentication=[{enable=true}]
 
   设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 MySQL 默认端口 3306。
 
 
@@ -1061,7 +1134,7 @@ authentication=[{enable=true}]
 
 - query: <code>binary()</code>
 
-  访问控制数据查询语句/查询命令
+  访问控制数据查询语句/查询命令。
 
 
 ## authz:postgresql
@@ -1091,11 +1164,11 @@ authentication=[{enable=true}]
 
   设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 PostgreSQL 默认端口 5432。
 
 
@@ -1135,11 +1208,11 @@ authentication=[{enable=true}]
 
 - query: <code>binary()</code>
 
-  访问控制数据查询语句/查询命令
+  访问控制数据查询语句/查询命令。
 
 
 ## authz:redis_cluster
-使用 Redis 授权(集群模式)
+使用 Redis 授权（集群模式）。
 
 
 **Config paths**
@@ -1213,7 +1286,7 @@ authentication=[{enable=true}]
 
 
 ## authz:redis_sentinel
-使用 Redis 授权(哨兵模式)
+使用 Redis 授权（哨兵模式）。
 
 
 **Config paths**
@@ -1291,7 +1364,7 @@ authentication=[{enable=true}]
 
 
 ## authz:redis_single
-使用 Redis 授权(单实例)
+使用 Redis 授权（单实例）。
 
 
 **Config paths**
@@ -1317,11 +1390,11 @@ authentication=[{enable=true}]
 
   设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
 
 
@@ -1383,8 +1456,7 @@ Settings for the alarms.
   * default: 
   `[log, publish]`
 
-  警报激活时触发的动作。</br>
-  目前，支持以下操作：<code>log</code> 和 <code>publish</code>.
+  警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.
   <code>log</code> 将告警写入日志 (控制台或者文件).
   <code>publish</code> 将告警作为 MQTT 消息发布到系统主题:
   <code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
@@ -1431,21 +1503,21 @@ Message broker options.
   `quorum`
 
   Session 在集群中的锁策略。
-    - `loca`: 仅锁本节点的 Session
-    - `one`: 任选一个其它节点加锁
-    - `quorum`: 选择集群中半数以上的节点加锁
-    - `all`: 选择所有节点加锁
+    - `loca`：仅锁本节点的 Session；
+    - `one`：任选一个其它节点加锁；
+    - `quorum`：选择集群中半数以上的节点加锁；
+    - `all`：选择所有节点加锁。
 
 
-- shared_subscription_strategy: <code>random | round_robin | sticky | local | hash_topic | hash_clientid</code>
+- shared_subscription_strategy: <code>random | round_robin | round_robin_per_group | sticky | local | hash_topic | hash_clientid</code>
   * default: 
   `round_robin`
 
   共享订阅消息派发策略。
-    - `random`: 随机挑选一个共享订阅者派发
-    - `round_robin`: 使用 round-robin 策略派发
-    - `sticky`: 总是使用上次选中的订阅者派发，直到它断开连接
-    - `hash`: 使用发送者的 Client ID 进行 Hash 来选择订阅者
+    - `random`：随机挑选一个共享订阅者派发；
+    - `round_robin`：使用 round-robin 策略派发；
+    - `sticky`：总是使用上次选中的订阅者派发，直到它断开连接；
+    - `hash`：使用发送者的 Client ID 进行 Hash 来选择订阅者。
 
 
 - shared_dispatch_ack_enabled: <code>boolean()</code>
@@ -1496,9 +1568,9 @@ Broker performance tuning parameters.
   建议仅当通配符主题较多时才更改此参数。
 
   注：当从/更改为 `global` 锁时，它要求集群中的所有节点在更改之前停止。
-    - `key`: 为 Mnesia 事务涉及到的每个 key 上锁，建议单节点时使用。
-    - `tab`: 为 Mnesia 事务涉及到的表上锁，建议在集群中使用。
-    - `global`: 所以更新操作都被全局的锁保护，仅建议在超大规模集群中使用。
+    - `key`：为 Mnesia 事务涉及到的每个 key 上锁，建议单节点时使用。
+    - `tab`：为 Mnesia 事务涉及到的表上锁，建议在集群中使用。
+    - `global`：所以更新操作都被全局的锁保护，仅建议在超大规模集群中使用。
 
 
 - trie_compaction: <code>boolean()</code>
@@ -1534,25 +1606,19 @@ Settings for the authorization cache.
   * default: 
   `true`
 
-
   启用或禁用授权缓存。
-
 
 - max_size: <code>1..1048576</code>
   * default: 
   `32`
 
-
   缓存项的最大数量。
-
 
 - ttl: <code>emqx_schema:duration()</code>
   * default: 
   `"1m"`
 
-
   缓存数据的生存时间。
-
 
 
 ## broker:conn_congestion
@@ -1589,16 +1655,13 @@ and `<Username>` is the username or `unknown_user`.
   * default: 
   `true`
 
-  启用或者禁用连接阻塞告警功能
+  启用或者禁用连接阻塞告警功能。
 
 - min_alarm_sustain_duration: <code>emqx_schema:duration()</code>
   * default: 
   `"1m"`
 
-  清除警报前的最短时间。
-
-  只有当队列中没有挂起的数据，并且连接至少被堵塞了 "min_alarm_sustain_duration" 毫秒时，
-  报警才会被清除。这是为了避免太频繁地清除和再次发出警报。
+  清除警报前的最短时间。<br/>只有当队列中没有挂起的数据，并且连接至少被堵塞了 <code>min_alarm_sustain_duration</code> 毫秒时，<br/>报警才会被清除。这是为了避免太频繁地清除和再次发出警报。
 
 
 ## broker:deflate_opts
@@ -1629,7 +1692,7 @@ Compression options.
   `8`
 
 
-  指定压缩状态的大小</br>
+  指定压缩状态的大小<br/>
   较低的值会减少每个连接的内存使用。
 
 
@@ -1637,9 +1700,7 @@ Compression options.
   * default: 
   `default`
 
-
   指定压缩策略。
-
 
 - server_context_takeover: <code>takeover | no_takeover</code>
   * default: 
@@ -1651,25 +1712,19 @@ Compression options.
   * default: 
   `takeover`
 
-
   接管意味着在客户端消息之间保留压缩状态。
-
 
 - server_max_window_bits: <code>8..15</code>
   * default: 
   `15`
 
-
   指定服务器压缩上下文的大小。
-
 
 - client_max_window_bits: <code>8..15</code>
   * default: 
   `15`
 
-
   指定客户端压缩上下文的大小。
-
 
 
 ## broker:event_names
@@ -1748,13 +1803,13 @@ After the limit is reached, successive `CONNECT` requests are forbidden
   * default: 
   `false`
 
-  启用抖动检测功能
+  启用抖动检测功能。
 
 - max_count: <code>integer()</code>
   * default: 
   `15`
 
-  MQTT 客户端在"窗口"时间内允许的最大断开次数
+  MQTT 客户端在“窗口”时间内允许的最大断开次数。
 
 - window_time: <code>emqx_schema:duration()</code>
   * default: 
@@ -1766,7 +1821,13 @@ After the limit is reached, successive `CONNECT` requests are forbidden
   * default: 
   `"5m"`
 
-  抖动的客户端将会被禁止登录多长时间
+  抖动的客户端将会被禁止登录多长时间。
+
+- clean_when_banned: <code>boolean()</code>
+  * default: 
+  `false`
+
+  当客户端被禁时删除其保留、延迟消息注意: 这个操作开销可能较大,且只支持通过 clientid 封禁的用户数据。
 
 
 ## broker:force_gc
@@ -1791,19 +1852,19 @@ Force garbage collection in MQTT connection process after
   * default: 
   `true`
 
-  启用强制垃圾回收
+  启用强制垃圾回收。
 
 - count: <code>0..inf</code>
   * default: 
   `16000`
 
-  在进程收到多少消息之后，对此进程执行垃圾回收
+  在进程收到多少消息之后，对此进程执行垃圾回收。
 
 - bytes: <code>emqx_schema:bytesize()</code>
   * default: 
   `"16MB"`
 
-  在进程处理过多少个字节之后，对此进程执行垃圾回收
+  在进程处理过多少个字节之后，对此进程执行垃圾回收。
 
 
 ## broker:force_shutdown
@@ -1831,19 +1892,19 @@ of the Erlang process, not the `mqueue` of QoS 1 and QoS 2.
   * default: 
   `true`
 
-  启用 `force_shutdown` 功能
+  启用 `force_shutdown` 功能。
 
 - max_message_queue_len: <code>0..inf</code>
   * default: 
   `1000`
 
-  消息队列的最大长度
+  消息队列的最大长度。
 
 - max_heap_size: <code>emqx_schema:wordsize()</code>
   * default: 
   `"32MB"`
 
-  Heap 的总大小
+  Heap 的总大小。
 
 
 ## broker:listener_ssl_opts
@@ -1870,50 +1931,47 @@ Socket options for SSL connections.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
+  受信任的PEM格式 CA  证书捆绑文件<br/>
   此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
-  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
-  如果要添加文件，请将其删除。
+  PEM格式证书链文件<br/>
+  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+  然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+  根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
 - keyfile: <code>binary()</code>
 
-
   PEM格式的私钥文件。
-
 
 - verify: <code>verify_peer | verify_none</code>
   * default: 
   `verify_none`
 
-
   启用或禁用对等验证。
-
 
 - reuse_sessions: <code>boolean()</code>
   * default: 
   `true`
 
-
   启用 TLS 会话重用。
-
 
 - depth: <code>integer()</code>
   * default: 
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+  因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+  如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+  如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
 - password: <code>string()</code>
@@ -1928,49 +1986,47 @@ Socket options for SSL connections.
   `[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有TLS/DTLS版本<br/>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
 - ciphers: <code>[string()]</code>
   * default: 
-  `["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256", "TLS_AES_128_CCM_8_SHA256", "ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384", "ECDHE-ECDSA-AES256-SHA384", "ECDHE-RSA-AES256-SHA384", "ECDH-ECDSA-AES256-GCM-SHA384", "ECDH-RSA-AES256-GCM-SHA384", "ECDH-ECDSA-AES256-SHA384", "ECDH-RSA-AES256-SHA384", "DHE-DSS-AES256-GCM-SHA384", "DHE-DSS-AES256-SHA256", "AES256-GCM-SHA384", "AES256-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-SHA256", "ECDHE-RSA-AES128-SHA256", "ECDH-ECDSA-AES128-GCM-SHA256", "ECDH-RSA-AES128-GCM-SHA256", "ECDH-ECDSA-AES128-SHA256", "ECDH-RSA-AES128-SHA256", "DHE-DSS-AES128-GCM-SHA256", "DHE-DSS-AES128-SHA256", "AES128-GCM-SHA256", "AES128-SHA256", "ECDHE-ECDSA-AES256-SHA", "ECDHE-RSA-AES256-SHA", "DHE-DSS-AES256-SHA", "ECDH-ECDSA-AES256-SHA", "ECDH-RSA-AES256-SHA", "ECDHE-ECDSA-AES128-SHA", "ECDHE-RSA-AES128-SHA", "DHE-DSS-AES128-SHA", "ECDH-ECDSA-AES128-SHA", "ECDH-RSA-AES128-SHA", "RSA-PSK-AES256-GCM-SHA384", "RSA-PSK-AES256-CBC-SHA384", "RSA-PSK-AES128-GCM-SHA256", "RSA-PSK-AES128-CBC-SHA256", "RSA-PSK-AES256-CBC-SHA", "RSA-PSK-AES128-CBC-SHA"]`
+  `[]`
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 
 - user_lookup_fun: <code>string()</code>
   * default: 
   `"emqx_tls_psk:lookup"`
 
-
   用于查找预共享密钥（PSK）标识的 EMQX 内部回调。
-
 
 - secure_renegotiate: <code>boolean()</code>
   * default: 
@@ -1984,7 +2040,7 @@ Socket options for SSL connections.
 - dhfile: <code>string()</code>
 
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
 
   注意：TLS 1.3不支持<code>dhfile</code>选项。
 
@@ -2018,6 +2074,15 @@ Socket options for SSL connections.
   默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
 
 
+- gc_after_handshake: <code>boolean()</code>
+  * default: 
+  `false`
+
+
+  内存使用调优。如果启用，将在TLS/SSL握手完成后立即执行垃圾回收。
+  TLS/SSL握手建立后立即进行GC。
+
+
 
 ## broker:listener_wss_opts
 Socket options for WebSocket/SSL connections.
@@ -2039,50 +2104,47 @@ Socket options for WebSocket/SSL connections.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
+  受信任的PEM格式 CA  证书捆绑文件<br/>
   此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
-  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
-  如果要添加文件，请将其删除。
+  PEM格式证书链文件<br/>
+  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+  然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+  根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
 - keyfile: <code>binary()</code>
 
-
   PEM格式的私钥文件。
-
 
 - verify: <code>verify_peer | verify_none</code>
   * default: 
   `verify_none`
 
-
   启用或禁用对等验证。
-
 
 - reuse_sessions: <code>boolean()</code>
   * default: 
   `true`
 
-
   启用 TLS 会话重用。
-
 
 - depth: <code>integer()</code>
   * default: 
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+  因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+  如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+  如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
 - password: <code>string()</code>
@@ -2097,49 +2159,47 @@ Socket options for WebSocket/SSL connections.
   `[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有TLS/DTLS版本<br/>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
 - ciphers: <code>[string()]</code>
   * default: 
-  `["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256", "TLS_AES_128_CCM_8_SHA256", "ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384", "ECDHE-ECDSA-AES256-SHA384", "ECDHE-RSA-AES256-SHA384", "ECDH-ECDSA-AES256-GCM-SHA384", "ECDH-RSA-AES256-GCM-SHA384", "ECDH-ECDSA-AES256-SHA384", "ECDH-RSA-AES256-SHA384", "DHE-DSS-AES256-GCM-SHA384", "DHE-DSS-AES256-SHA256", "AES256-GCM-SHA384", "AES256-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-SHA256", "ECDHE-RSA-AES128-SHA256", "ECDH-ECDSA-AES128-GCM-SHA256", "ECDH-RSA-AES128-GCM-SHA256", "ECDH-ECDSA-AES128-SHA256", "ECDH-RSA-AES128-SHA256", "DHE-DSS-AES128-GCM-SHA256", "DHE-DSS-AES128-SHA256", "AES128-GCM-SHA256", "AES128-SHA256", "ECDHE-ECDSA-AES256-SHA", "ECDHE-RSA-AES256-SHA", "DHE-DSS-AES256-SHA", "ECDH-ECDSA-AES256-SHA", "ECDH-RSA-AES256-SHA", "ECDHE-ECDSA-AES128-SHA", "ECDHE-RSA-AES128-SHA", "DHE-DSS-AES128-SHA", "ECDH-ECDSA-AES128-SHA", "ECDH-RSA-AES128-SHA", "RSA-PSK-AES256-GCM-SHA384", "RSA-PSK-AES256-CBC-SHA384", "RSA-PSK-AES128-GCM-SHA256", "RSA-PSK-AES128-CBC-SHA256", "RSA-PSK-AES256-CBC-SHA", "RSA-PSK-AES128-CBC-SHA"]`
+  `[]`
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 
 - user_lookup_fun: <code>string()</code>
   * default: 
   `"emqx_tls_psk:lookup"`
 
-
   用于查找预共享密钥（PSK）标识的 EMQX 内部回调。
-
 
 - secure_renegotiate: <code>boolean()</code>
   * default: 
@@ -2153,7 +2213,7 @@ Socket options for WebSocket/SSL connections.
 - dhfile: <code>string()</code>
 
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
 
   注意：TLS 1.3不支持<code>dhfile</code>选项。
 
@@ -2215,28 +2275,27 @@ MQTT listeners identified by their protocol type and assigned names
 
 - tcp: <code>{$name -> [broker:mqtt_tcp_listener](#broker-mqtt_tcp_listener)}</code>
 
-  TCP 监听器
+  TCP 监听器。
 
 - ssl: <code>{$name -> [broker:mqtt_ssl_listener](#broker-mqtt_ssl_listener)}</code>
 
-  SSL 监听器
+  SSL 监听器。
 
 - ws: <code>{$name -> [broker:mqtt_ws_listener](#broker-mqtt_ws_listener)}</code>
 
-  HTTP websocket 监听器
+  HTTP websocket 监听器。
 
 - wss: <code>{$name -> [broker:mqtt_wss_listener](#broker-mqtt_wss_listener)}</code>
 
-  HTTPS websocket 监听器
+  HTTPS websocket 监听器。
 
 - quic: <code>{$name -> [broker:mqtt_quic_listener](#broker-mqtt_quic_listener)}</code>
 
-  QUIC 监听器
+  QUIC 监听器。
 
 
 ## broker:mqtt
-Global MQTT configuration.</br>
-The configs here work as default values which can be overridden
+Global MQTT configuration.<br/>The configs here work as default values which can be overridden
 in <code>zone</code> configs
 
 
@@ -2317,7 +2376,7 @@ in <code>zone</code> configs
   * default: 
   `false`
 
-  是否为 MQTT v3.1.1/v3.1.0 客户端忽略投递自己发布的消息，类似于 MQTT 5.0 中的 <code>No Local</code> 订阅选项
+  是否为 MQTT v3.1.1/v3.1.0 客户端忽略投递自己发布的消息，类似于 MQTT 5.0 中的 <code>No Local</code> 订阅选项。
 
 - strict_mode: <code>boolean()</code>
   * default: 
@@ -2372,13 +2431,13 @@ in <code>zone</code> configs
   * default: 
   `100`
 
-  PUBREL (Client -> Broker) 最大等待队列长度。
+  每个发布者的会话中，都存在一个队列来处理客户端发送的 QoS 2 消息。该队列会存储 QoS 2 消息的报文 ID 直到收到客户端的 PUBREL 或超时，达到队列长度的限制后，新的 QoS 2 消息发布会被拒绝，并返回 `147(0x93)` 错误。
 
 - await_rel_timeout: <code>emqx_schema:duration()</code>
   * default: 
   `"300s"`
 
-  PUBREL (Client -> Broker) 最大等待时间，超时则会被丢弃。
+  客户端发布 QoS 2 消息时，服务器等待 `PUBREL` 的最长时延。超过该时长后服务器会放弃等待，该PACKET ID 会被释放，从而允许后续新的 PUBLISH 消息使用。如果超时后收到 PUBREL，服务器将会产生一条告警日志。注意，向订阅客户端转发消息的动作发生在进入等待之前。
 
 - session_expiry_interval: <code>emqx_schema:duration()</code>
   * default: 
@@ -2431,7 +2490,7 @@ in <code>zone</code> configs
   * default: 
   `disabled`
 
-  使用对端证书中的 CN, DN 字段或整个证书内容来作为用户名。仅适用于 TLS 连接。
+  使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名。仅适用于 TLS 连接。
   目前支持配置为以下内容：
   - <code>cn</code>: 取证书的 CN 字段作为 Username
   - <code>dn</code>: 取证书的 DN 字段作为 Username
@@ -2444,7 +2503,7 @@ in <code>zone</code> configs
   * default: 
   `disabled`
 
-  使用对端证书中的 CN, DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接。
+  使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接。
   目前支持配置为以下内容：
   - <code>cn</code>: 取证书的 CN 字段作为 Client ID
   - <code>dn</code>: 取证书的 DN 字段作为 Client ID
@@ -2473,11 +2532,11 @@ Settings for the MQTT over QUIC listener.
 
 - certfile: <code>string()</code>
 
-  证书文件
+  证书文件。
 
 - keyfile: <code>string()</code>
 
-  私钥文件
+  私钥文件。
 
 - ciphers: <code>[string()]</code>
   * default: 
@@ -2487,44 +2546,56 @@ Settings for the MQTT over QUIC listener.
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
   注：QUIC 监听器不支持 tlsv1.3 的 ciphers
 
 
-- idle_timeout: <code>emqx_schema:duration()</code>
+- idle_timeout: <code>emqx_schema:duration_ms()</code>
   * default: 
-  `"15s"`
+  `0`
+
+  一个连接在被关闭之前可以空闲多长时间。0表示禁用。
+
+- handshake_idle_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"10s"`
+
+  一个握手在被丢弃之前可以空闲多长时间。
+
+- keep_alive_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `0`
 
 
-  关闭在此间隔内未发送 MQTT CONNECT 消息的客户端的传输层连接。
+  发送 PING 帧的频率，以保活连接. 设为 0 表示禁用。
 
 
 - enabled: <code>boolean()</code>
   * default: 
   `true`
 
-  启停监听器
+  启停监听器。
 
 - bind: <code>emqx_schema:ip_port() | integer()</code>
   * default: 
@@ -2544,9 +2615,7 @@ Settings for the MQTT over QUIC listener.
   * default: 
   `infinity`
 
-
   监听器允许的最大并发连接数。
-
 
 - mountpoint: <code>binary()</code>
   * default: 
@@ -2557,10 +2626,10 @@ Settings for the MQTT over QUIC listener.
 
   将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
-  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
+  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为<code>""</code> 以禁用该功能<br/>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2575,9 +2644,14 @@ Settings for the MQTT over QUIC listener.
   监听器所属的配置组。
 
 
-- limiter: <code>{$ratelimit_name -> emqx_limiter_schema:bucket_name()}</code>
+- limiter: <code>[limiter:listener_fields](#limiter-listener_fields)</code>
   * default: 
-  `{connection = "default"}`
+
+  ```
+  {
+    connection {capacity = 1000, rate = "1000/s"}
+  }
+  ```
 
 
   速率限制类型
@@ -2614,7 +2688,7 @@ Settings for the MQTT over SSL listener.
   * default: 
   `true`
 
-  启停监听器
+  启停监听器。
 
 - bind: <code>emqx_schema:ip_port() | integer()</code>
   * default: 
@@ -2634,9 +2708,7 @@ Settings for the MQTT over SSL listener.
   * default: 
   `infinity`
 
-
   监听器允许的最大并发连接数。
-
 
 - mountpoint: <code>binary()</code>
   * default: 
@@ -2647,10 +2719,10 @@ Settings for the MQTT over SSL listener.
 
   将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
-  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
+  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为<code>""</code> 以禁用该功能<br/>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2665,9 +2737,14 @@ Settings for the MQTT over SSL listener.
   监听器所属的配置组。
 
 
-- limiter: <code>{$ratelimit_name -> emqx_limiter_schema:bucket_name()}</code>
+- limiter: <code>[limiter:listener_fields](#limiter-listener_fields)</code>
   * default: 
-  `{connection = "default"}`
+
+  ```
+  {
+    connection {capacity = 1000, rate = "1000/s"}
+  }
+  ```
 
 
   速率限制类型
@@ -2693,7 +2770,7 @@ Settings for the MQTT over SSL listener.
   `false`
 
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 </br>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
   详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -2711,7 +2788,7 @@ Settings for the MQTT over SSL listener.
   监听器认证重载。
 
   认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。
-  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行</br>
+  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。
 
 
 - tcp_options: <code>[broker:tcp_opts](#broker-tcp_opts)</code>
@@ -2744,7 +2821,7 @@ Settings for the MQTT over TCP listener.
   * default: 
   `true`
 
-  启停监听器
+  启停监听器。
 
 - bind: <code>emqx_schema:ip_port() | integer()</code>
   * default: 
@@ -2764,9 +2841,7 @@ Settings for the MQTT over TCP listener.
   * default: 
   `infinity`
 
-
   监听器允许的最大并发连接数。
-
 
 - mountpoint: <code>binary()</code>
   * default: 
@@ -2777,10 +2852,10 @@ Settings for the MQTT over TCP listener.
 
   将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
-  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
+  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为<code>""</code> 以禁用该功能<br/>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2795,9 +2870,14 @@ Settings for the MQTT over TCP listener.
   监听器所属的配置组。
 
 
-- limiter: <code>{$ratelimit_name -> emqx_limiter_schema:bucket_name()}</code>
+- limiter: <code>[limiter:listener_fields](#limiter-listener_fields)</code>
   * default: 
-  `{connection = "default"}`
+
+  ```
+  {
+    connection {capacity = 1000, rate = "1000/s"}
+  }
+  ```
 
 
   速率限制类型
@@ -2823,7 +2903,7 @@ Settings for the MQTT over TCP listener.
   `false`
 
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 </br>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
   详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -2841,7 +2921,7 @@ Settings for the MQTT over TCP listener.
   监听器认证重载。
 
   认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。
-  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行</br>
+  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。
 
 
 - tcp_options: <code>[broker:tcp_opts](#broker-tcp_opts)</code>
@@ -2870,7 +2950,7 @@ Settings for the MQTT over WebSocket listener.
   * default: 
   `true`
 
-  启停监听器
+  启停监听器。
 
 - bind: <code>emqx_schema:ip_port() | integer()</code>
   * default: 
@@ -2890,9 +2970,7 @@ Settings for the MQTT over WebSocket listener.
   * default: 
   `infinity`
 
-
   监听器允许的最大并发连接数。
-
 
 - mountpoint: <code>binary()</code>
   * default: 
@@ -2903,10 +2981,10 @@ Settings for the MQTT over WebSocket listener.
 
   将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
-  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
+  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为<code>""</code> 以禁用该功能<br/>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -2921,9 +2999,14 @@ Settings for the MQTT over WebSocket listener.
   监听器所属的配置组。
 
 
-- limiter: <code>{$ratelimit_name -> emqx_limiter_schema:bucket_name()}</code>
+- limiter: <code>[limiter:listener_fields](#limiter-listener_fields)</code>
   * default: 
-  `{connection = "default"}`
+
+  ```
+  {
+    connection {capacity = 1000, rate = "1000/s"}
+  }
+  ```
 
 
   速率限制类型
@@ -2949,7 +3032,7 @@ Settings for the MQTT over WebSocket listener.
   `false`
 
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 </br>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
   详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -2967,7 +3050,7 @@ Settings for the MQTT over WebSocket listener.
   监听器认证重载。
 
   认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。
-  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行</br>
+  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。
 
 
 - tcp_options: <code>[broker:tcp_opts](#broker-tcp_opts)</code>
@@ -3000,7 +3083,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   * default: 
   `true`
 
-  启停监听器
+  启停监听器。
 
 - bind: <code>emqx_schema:ip_port() | integer()</code>
   * default: 
@@ -3020,9 +3103,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   * default: 
   `infinity`
 
-
   监听器允许的最大并发连接数。
-
 
 - mountpoint: <code>binary()</code>
   * default: 
@@ -3033,10 +3114,10 @@ Settings for the MQTT over WebSocket/SSL listener.
 
   将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。</br>
-  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息</br>
+  例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+  类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-  设置为<code>""</code> 以禁用该功能</br>
+  设置为<code>""</code> 以禁用该功能<br/>
 
   mountpoint 字符串中的变量：
   - <code>${clientid}</code>: clientid
@@ -3051,9 +3132,14 @@ Settings for the MQTT over WebSocket/SSL listener.
   监听器所属的配置组。
 
 
-- limiter: <code>{$ratelimit_name -> emqx_limiter_schema:bucket_name()}</code>
+- limiter: <code>[limiter:listener_fields](#limiter-listener_fields)</code>
   * default: 
-  `{connection = "default"}`
+
+  ```
+  {
+    connection {capacity = 1000, rate = "1000/s"}
+  }
+  ```
 
 
   速率限制类型
@@ -3079,7 +3165,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   `false`
 
 
-  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 </br>
+  如果EMQX集群部署在 HAProxy 或 Nginx 之后，请启用代理协议 V1/2 <br/>
   详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
@@ -3097,7 +3183,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   监听器认证重载。
 
   认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。
-  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行</br>
+  执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。
 
 
 - tcp_options: <code>[broker:tcp_opts](#broker-tcp_opts)</code>
@@ -3135,31 +3221,31 @@ disables some features (such as accepting new connections) when the load is high
   * default: 
   `false`
 
-  是否对系统过载做出反应
+  是否对系统过载做出反应。
 
 - backoff_delay: <code>0..inf</code>
   * default: 
   `1`
 
-  一些不重要的任务可能会延迟执行，以毫秒为单位设置延迟
+  高负载时，一些不重要的任务可能会延迟执行，在这里设置允许延迟的时间。单位为毫秒。
 
 - backoff_gc: <code>boolean()</code>
   * default: 
   `false`
 
-  如有必要，跳过强制GC
+  高负载时，跳过强制 GC。
 
 - backoff_hibernation: <code>boolean()</code>
   * default: 
   `true`
 
-  如有必要，跳过进程休眠
+  高负载时，跳过进程休眠。
 
 - backoff_new_conn: <code>boolean()</code>
   * default: 
   `true`
 
-  如有必要，关闭新进来的连接
+  高负载时，拒绝新进来的客户端连接。
 
 
 ## broker:persistent_session_builtin
@@ -3187,7 +3273,7 @@ Settings for the built-in storage engine of persistent messages.
 
 - session: <code>[broker:persistent_table_mria_opts](#broker-persistent_table_mria_opts)</code>
 
-  用于内建会话表的性能调优参数
+  用于内建会话表的性能调优参数。
 
 - session_messages: <code>[broker:persistent_table_mria_opts](#broker-persistent_table_mria_opts)</code>
 
@@ -3195,7 +3281,7 @@ Settings for the built-in storage engine of persistent messages.
 
 - messages: <code>[broker:persistent_table_mria_opts](#broker-persistent_table_mria_opts)</code>
 
-  用于内建消息表的性能调优参数
+  用于内建消息表的性能调优参数。
 
 
 ## broker:persistent_session_store
@@ -3318,7 +3404,7 @@ Per group dispatch strategy for shared subscription
 
 **Fields**
 
-- strategy: <code>random | round_robin | sticky | local | hash_topic | hash_clientid</code>
+- strategy: <code>random | round_robin | round_robin_per_group | sticky | local | hash_topic | hash_clientid</code>
   * default: 
   `random`
 
@@ -3399,50 +3485,47 @@ Socket options for SSL clients.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
+  受信任的PEM格式 CA  证书捆绑文件<br/>
   此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
-  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
-  如果要添加文件，请将其删除。
+  PEM格式证书链文件<br/>
+  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+  然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+  根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
 - keyfile: <code>binary()</code>
 
-
   PEM格式的私钥文件。
-
 
 - verify: <code>verify_peer | verify_none</code>
   * default: 
   `verify_none`
 
-
   启用或禁用对等验证。
-
 
 - reuse_sessions: <code>boolean()</code>
   * default: 
   `true`
 
-
   启用 TLS 会话重用。
-
 
 - depth: <code>integer()</code>
   * default: 
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+  因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+  如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+  如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
 - password: <code>string()</code>
@@ -3457,49 +3540,47 @@ Socket options for SSL clients.
   `[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有TLS/DTLS版本<br/>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
 - ciphers: <code>[string()]</code>
   * default: 
-  `["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256", "TLS_AES_128_CCM_8_SHA256", "ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384", "ECDHE-ECDSA-AES256-SHA384", "ECDHE-RSA-AES256-SHA384", "ECDH-ECDSA-AES256-GCM-SHA384", "ECDH-RSA-AES256-GCM-SHA384", "ECDH-ECDSA-AES256-SHA384", "ECDH-RSA-AES256-SHA384", "DHE-DSS-AES256-GCM-SHA384", "DHE-DSS-AES256-SHA256", "AES256-GCM-SHA384", "AES256-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-SHA256", "ECDHE-RSA-AES128-SHA256", "ECDH-ECDSA-AES128-GCM-SHA256", "ECDH-RSA-AES128-GCM-SHA256", "ECDH-ECDSA-AES128-SHA256", "ECDH-RSA-AES128-SHA256", "DHE-DSS-AES128-GCM-SHA256", "DHE-DSS-AES128-SHA256", "AES128-GCM-SHA256", "AES128-SHA256", "ECDHE-ECDSA-AES256-SHA", "ECDHE-RSA-AES256-SHA", "DHE-DSS-AES256-SHA", "ECDH-ECDSA-AES256-SHA", "ECDH-RSA-AES256-SHA", "ECDHE-ECDSA-AES128-SHA", "ECDHE-RSA-AES128-SHA", "DHE-DSS-AES128-SHA", "ECDH-ECDSA-AES128-SHA", "ECDH-RSA-AES128-SHA", "RSA-PSK-AES256-GCM-SHA384", "RSA-PSK-AES256-CBC-SHA384", "RSA-PSK-AES128-GCM-SHA256", "RSA-PSK-AES128-CBC-SHA256", "RSA-PSK-AES256-CBC-SHA", "RSA-PSK-AES128-CBC-SHA"]`
+  `[]`
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 
 - user_lookup_fun: <code>string()</code>
   * default: 
   `"emqx_tls_psk:lookup"`
 
-
   用于查找预共享密钥（PSK）标识的 EMQX 内部回调。
-
 
 - secure_renegotiate: <code>boolean()</code>
   * default: 
@@ -3514,18 +3595,18 @@ Socket options for SSL clients.
   * default: 
   `false`
 
-  启用 TLS
+  启用 TLS。
 
 - server_name_indication: <code>disable | string()</code>
 
 
-  指定要在 TLS 服务器名称指示扩展中使用的主机名</br>
+  指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>
   例如，当连接到 "server.example.net" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，
-  例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时</br>
+  例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>
   如果未指定，它将默认为使用的主机名字符串
-  建立连接，除非使用 IP 地址</br>
-  然后，主机名也用于对等机的主机名验证
-  证书</br>特殊值'disable'阻止发送服务器名称指示扩展，并禁用主机名验证检查。
+  建立连接，除非使用 IP 地址<br/>
+  然后，主机名也用于对等机的主机名验证证书<br/>
+  特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
 
 
 
@@ -3551,7 +3632,7 @@ Statistic data such as message receive/send count/rate etc. It provides insights
   * default: 
   `true`
 
-  启用/禁用统计数据收集功能
+  启用/禁用统计数据收集功能。
 
 
 ## broker:sys_topics
@@ -3591,7 +3672,7 @@ The following options control the behavior of `$SYS` topics.
 
 - sys_event_messages: <code>[broker:event_names](#broker-event_names)</code>
 
-  客户端事件消息
+  客户端事件消息。
 
 
 ## broker:sysmon
@@ -3704,7 +3785,7 @@ This part of the configuration is responsible for monitoring
   * mapping: 
   `system_monitor.top_num_items`
 
-  每个监视组的顶级进程数
+  每个监视组的顶级进程数。
 
 - sample_interval: <code>emqx_schema:duration()</code>
   * default: 
@@ -3712,7 +3793,7 @@ This part of the configuration is responsible for monitoring
   * mapping: 
   `system_monitor.top_sample_interval`
 
-  指定应收集进程顶部的频率
+  指定应收集进程顶部的频率。
 
 - max_procs: <code>non_neg_integer()</code>
   * default: 
@@ -3720,7 +3801,7 @@ This part of the configuration is responsible for monitoring
   * mapping: 
   `system_monitor.top_max_procs`
 
-  当VM中的进程数超过此值时，停止收集数据
+  当 VM 中的进程数超过此值时，停止收集数据。
 
 - db_hostname: <code>string()</code>
   * default: 
@@ -3728,7 +3809,7 @@ This part of the configuration is responsible for monitoring
   * mapping: 
   `system_monitor.db_hostname`
 
-  收集数据点的 PostgreSQL 数据库的主机名
+  收集数据点的 PostgreSQL 数据库的主机名。
 
 - db_port: <code>integer()</code>
   * default: 
@@ -3736,7 +3817,7 @@ This part of the configuration is responsible for monitoring
   * mapping: 
   `system_monitor.db_port`
 
-  收集数据点的 PostgreSQL 数据库的端口
+  收集数据点的 PostgreSQL 数据库的端口。
 
 - db_username: <code>string()</code>
   * default: 
@@ -3804,31 +3885,31 @@ This part of the configuration is responsible for collecting
   * default: 
   `disabled`
 
-  启用长垃圾回收监控
+  启用长垃圾回收监控。
 
 - long_schedule: <code>disabled | emqx_schema:duration()</code>
   * default: 
   `"240ms"`
 
-  启用长调度监控
+  启用长调度监控。
 
 - large_heap: <code>disabled | emqx_schema:bytesize()</code>
   * default: 
   `"32MB"`
 
-  启用大 heap 监控
+  启用大 heap 监控。
 
 - busy_dist_port: <code>boolean()</code>
   * default: 
   `true`
 
-  启用分布式端口过忙监控
+  启用分布式端口过忙监控。
 
 - busy_port: <code>boolean()</code>
   * default: 
   `true`
 
-  启用端口过忙监控
+  启用端口过忙监控。
 
 
 ## broker:tcp_opts
@@ -3867,7 +3948,7 @@ TCP listener options.
   `100`
 
 
-  为此套接字指定{active，N}选项</br>
+  为此套接字指定{active，N}选项<br/>
   See: https://erlang.org/doc/man/inet.html#setopts-2
 
 
@@ -3883,9 +3964,7 @@ TCP listener options.
   * default: 
   `"15s"`
 
-
-  连接的TCP发送超时。
-
+  连接的 TCP 发送超时。
 
 - send_timeout_close: <code>boolean()</code>
   * default: 
@@ -3898,13 +3977,13 @@ TCP listener options.
 - recbuf: <code>emqx_schema:bytesize()</code>
 
 
-  连接的 TCP 接收缓冲区（OS内核）。
+  连接的 TCP 接收缓冲区（OS 内核）。
 
 
 - sndbuf: <code>emqx_schema:bytesize()</code>
 
 
-  连接的 TCP 发送缓冲区（OS内核）。
+  连接的 TCP 发送缓冲区（OS 内核）。
 
 
 - buffer: <code>emqx_schema:bytesize()</code>
@@ -3962,10 +4041,10 @@ Real-time filtering logs for the ClientID or Topic or IP for debugging.
   `text`
 
 
-  确定跟踪文件中有效负载格式的格式</br>
+  确定跟踪文件中有效负载格式的格式。<br/>
   `text`：基于文本的协议或纯文本协议。
-  建议在有效负载为JSON编码时使用</br>
-  `hex`：二进制十六进制编码。当有效负载是自定义二进制协议时，建议使用此选项</br>
+  建议在有效负载为JSON编码时使用<br/>
+  `hex`：二进制十六进制编码。当有效负载是自定义二进制协议时，建议使用此选项<br/>
   `hidden`：有效负载被模糊化为 `******`
 
 
@@ -4011,7 +4090,7 @@ WebSocket listener options.
   `false`
 
 
-  如果 <code>true</code>，则使用<code>zlib</code> 压缩 WebSocket 消息</br>
+  如果 <code>true</code>，则使用<code>zlib</code> 压缩 WebSocket 消息<br/>
   <code>deflate_opts</code> 下的配置项属于压缩相关参数配置。
 
 
@@ -4037,7 +4116,7 @@ WebSocket listener options.
 
 
   如果<code>true</code>，当客户端未携带<code>Sec WebSocket Protocol</code>字段时，服务器将返回一个错误。
-  </br>注意：微信小程序需要禁用此验证。
+  <br/>注意：微信小程序需要禁用此验证。
 
 
 - supported_subprotocols: <code>emqx_schema:comma_separated_list()</code>
@@ -4175,7 +4254,7 @@ All the global configs that can be overridden in zones are:
 
 ## connector:connectors
 
-EMQX 连接器的配置。</br>
+EMQX 连接器的配置。<br/>
 连接器维护与外部资源相关的数据，比如 MySQL 数据库。
 
 
@@ -4256,6 +4335,10 @@ EMQX仪表板配置
   `en`
 
   swagger多语言支持
+
+- bootstrap_users_file: <code>binary()</code>
+
+  初始化用户文件
 
 
 ## dashboard:http
@@ -4392,50 +4475,47 @@ EMQX仪表板配置
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
+  受信任的PEM格式 CA  证书捆绑文件<br/>
   此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
-  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
-  如果要添加文件，请将其删除。
+  PEM格式证书链文件<br/>
+  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+  然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+  根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
 - keyfile: <code>binary()</code>
 
-
   PEM格式的私钥文件。
-
 
 - verify: <code>verify_peer | verify_none</code>
   * default: 
   `verify_none`
 
-
   启用或禁用对等验证。
-
 
 - reuse_sessions: <code>boolean()</code>
   * default: 
   `true`
 
-
   启用 TLS 会话重用。
-
 
 - depth: <code>integer()</code>
   * default: 
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+  因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+  如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+  如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
 - password: <code>string()</code>
@@ -4450,49 +4530,47 @@ EMQX仪表板配置
   `[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有TLS/DTLS版本<br/>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
 - ciphers: <code>[string()]</code>
   * default: 
-  `["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256", "TLS_AES_128_CCM_8_SHA256", "ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384", "ECDHE-ECDSA-AES256-SHA384", "ECDHE-RSA-AES256-SHA384", "ECDH-ECDSA-AES256-GCM-SHA384", "ECDH-RSA-AES256-GCM-SHA384", "ECDH-ECDSA-AES256-SHA384", "ECDH-RSA-AES256-SHA384", "DHE-DSS-AES256-GCM-SHA384", "DHE-DSS-AES256-SHA256", "AES256-GCM-SHA384", "AES256-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-SHA256", "ECDHE-RSA-AES128-SHA256", "ECDH-ECDSA-AES128-GCM-SHA256", "ECDH-RSA-AES128-GCM-SHA256", "ECDH-ECDSA-AES128-SHA256", "ECDH-RSA-AES128-SHA256", "DHE-DSS-AES128-GCM-SHA256", "DHE-DSS-AES128-SHA256", "AES128-GCM-SHA256", "AES128-SHA256", "ECDHE-ECDSA-AES256-SHA", "ECDHE-RSA-AES256-SHA", "DHE-DSS-AES256-SHA", "ECDH-ECDSA-AES256-SHA", "ECDH-RSA-AES256-SHA", "ECDHE-ECDSA-AES128-SHA", "ECDHE-RSA-AES128-SHA", "DHE-DSS-AES128-SHA", "ECDH-ECDSA-AES128-SHA", "ECDH-RSA-AES128-SHA", "RSA-PSK-AES256-GCM-SHA384", "RSA-PSK-AES256-CBC-SHA384", "RSA-PSK-AES128-GCM-SHA256", "RSA-PSK-AES128-CBC-SHA256", "RSA-PSK-AES256-CBC-SHA", "RSA-PSK-AES128-CBC-SHA"]`
+  `[]`
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 
 - user_lookup_fun: <code>string()</code>
   * default: 
   `"emqx_tls_psk:lookup"`
 
-
   用于查找预共享密钥（PSK）标识的 EMQX 内部回调。
-
 
 - secure_renegotiate: <code>boolean()</code>
   * default: 
@@ -4506,7 +4584,7 @@ EMQX仪表板配置
 - dhfile: <code>string()</code>
 
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
 
   注意：TLS 1.3不支持<code>dhfile</code>选项。
 
@@ -4714,50 +4792,47 @@ SSL client configuration.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
+  受信任的PEM格式 CA  证书捆绑文件<br/>
   此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
-  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
-  如果要添加文件，请将其删除。
+  PEM格式证书链文件<br/>
+  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+  然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+  根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
 - keyfile: <code>binary()</code>
 
-
   PEM格式的私钥文件。
-
 
 - verify: <code>verify_peer | verify_none</code>
   * default: 
   `verify_none`
 
-
   启用或禁用对等验证。
-
 
 - reuse_sessions: <code>boolean()</code>
   * default: 
   `true`
 
-
   启用 TLS 会话重用。
-
 
 - depth: <code>integer()</code>
   * default: 
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+  因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+  如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+  如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
 - password: <code>string()</code>
@@ -4772,40 +4847,40 @@ SSL client configuration.
   `[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有TLS/DTLS版本<br/>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
 - ciphers: <code>[string()]</code>
   * default: 
-  `["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256", "TLS_AES_128_CCM_8_SHA256", "ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384", "ECDHE-ECDSA-AES256-SHA384", "ECDHE-RSA-AES256-SHA384", "ECDH-ECDSA-AES256-GCM-SHA384", "ECDH-RSA-AES256-GCM-SHA384", "ECDH-ECDSA-AES256-SHA384", "ECDH-RSA-AES256-SHA384", "DHE-DSS-AES256-GCM-SHA384", "DHE-DSS-AES256-SHA256", "AES256-GCM-SHA384", "AES256-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-SHA256", "ECDHE-RSA-AES128-SHA256", "ECDH-ECDSA-AES128-GCM-SHA256", "ECDH-RSA-AES128-GCM-SHA256", "ECDH-ECDSA-AES128-SHA256", "ECDH-RSA-AES128-SHA256", "DHE-DSS-AES128-GCM-SHA256", "DHE-DSS-AES128-SHA256", "AES128-GCM-SHA256", "AES128-SHA256", "ECDHE-ECDSA-AES256-SHA", "ECDHE-RSA-AES256-SHA", "DHE-DSS-AES256-SHA", "ECDH-ECDSA-AES256-SHA", "ECDH-RSA-AES256-SHA", "ECDHE-ECDSA-AES128-SHA", "ECDHE-RSA-AES128-SHA", "DHE-DSS-AES128-SHA", "ECDH-ECDSA-AES128-SHA", "ECDH-RSA-AES128-SHA", "RSA-PSK-AES256-GCM-SHA384", "RSA-PSK-AES256-CBC-SHA384", "RSA-PSK-AES128-GCM-SHA256", "RSA-PSK-AES128-CBC-SHA256", "RSA-PSK-AES256-CBC-SHA", "RSA-PSK-AES128-CBC-SHA"]`
+  `[]`
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 
 - secure_renegotiate: <code>boolean()</code>
@@ -4821,18 +4896,18 @@ SSL client configuration.
   * default: 
   `false`
 
-  启用 TLS
+  启用 TLS。
 
 - server_name_indication: <code>disable | string()</code>
 
 
-  指定要在 TLS 服务器名称指示扩展中使用的主机名</br>
+  指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>
   例如，当连接到 "server.example.net" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，
-  例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时</br>
+  例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>
   如果未指定，它将默认为使用的主机名字符串
-  建立连接，除非使用 IP 地址</br>
-  然后，主机名也用于对等机的主机名验证
-  证书</br>特殊值'disable'阻止发送服务器名称指示扩展，并禁用主机名验证检查。
+  建立连接，除非使用 IP 地址<br/>
+  然后，主机名也用于对等机的主机名验证证书<br/>
+  特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
 
 
 
@@ -4923,7 +4998,7 @@ with a certain defined CoAP message format.
 
   客户端订阅请求的默认 QoS 等级。
   当 CoAP 客户端发起订阅请求时，如果未携带 `qos` 参数则会使用该默认值。默认值可设置为：
-    - qos0、qos1、qos2: 设置为固定的 QoS 等级
+    - qos0、 qos1、qos2: 设置为固定的 QoS 等级
     - coap: 依据订阅操作的 CoAP 报文类型来动态决定
       * 当订阅请求为 `non-confirmable` 类型时，取值为 qos0
       * 当订阅请求为 `confirmable` 类型时，取值为 qos1
@@ -4949,7 +5024,7 @@ with a certain defined CoAP message format.
 
 - listeners: <code>[gateway:udp_listeners](#gateway-udp_listeners)</code>
 
-  配置 UDP 类型的监听器
+  配置 UDP 类型的监听器。
 
 - enable: <code>boolean()</code>
   * default: 
@@ -4977,7 +5052,7 @@ with a certain defined CoAP message format.
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 
 ## gateway:dtls_listener
@@ -5037,7 +5112,7 @@ Settings for the DTLS listener.
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 - enable_authn: <code>boolean()</code>
   * default: 
@@ -5094,50 +5169,47 @@ Settings for the DTLS protocol.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
+  受信任的PEM格式 CA  证书捆绑文件<br/>
   此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
-  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
-  如果要添加文件，请将其删除。
+  PEM格式证书链文件<br/>
+  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+  然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+  根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
 - keyfile: <code>binary()</code>
 
-
   PEM格式的私钥文件。
-
 
 - verify: <code>verify_peer | verify_none</code>
   * default: 
   `verify_none`
 
-
   启用或禁用对等验证。
-
 
 - reuse_sessions: <code>boolean()</code>
   * default: 
   `true`
 
-
   启用 TLS 会话重用。
-
 
 - depth: <code>integer()</code>
   * default: 
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+  因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+  如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+  如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
 - password: <code>string()</code>
@@ -5152,49 +5224,47 @@ Settings for the DTLS protocol.
   `[dtlsv1.2, dtlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有TLS/DTLS版本<br/>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
 - ciphers: <code>[string()]</code>
   * default: 
-  `["ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384", "ECDHE-ECDSA-AES256-SHA384", "ECDHE-RSA-AES256-SHA384", "ECDH-ECDSA-AES256-GCM-SHA384", "ECDH-RSA-AES256-GCM-SHA384", "ECDH-ECDSA-AES256-SHA384", "ECDH-RSA-AES256-SHA384", "DHE-DSS-AES256-GCM-SHA384", "DHE-DSS-AES256-SHA256", "AES256-GCM-SHA384", "AES256-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-SHA256", "ECDHE-RSA-AES128-SHA256", "ECDH-ECDSA-AES128-GCM-SHA256", "ECDH-RSA-AES128-GCM-SHA256", "ECDH-ECDSA-AES128-SHA256", "ECDH-RSA-AES128-SHA256", "DHE-DSS-AES128-GCM-SHA256", "DHE-DSS-AES128-SHA256", "AES128-GCM-SHA256", "AES128-SHA256", "ECDHE-ECDSA-AES256-SHA", "ECDHE-RSA-AES256-SHA", "DHE-DSS-AES256-SHA", "ECDH-ECDSA-AES256-SHA", "ECDH-RSA-AES256-SHA", "ECDHE-ECDSA-AES128-SHA", "ECDHE-RSA-AES128-SHA", "DHE-DSS-AES128-SHA", "ECDH-ECDSA-AES128-SHA", "ECDH-RSA-AES128-SHA", "RSA-PSK-AES256-GCM-SHA384", "RSA-PSK-AES256-CBC-SHA384", "RSA-PSK-AES128-GCM-SHA256", "RSA-PSK-AES128-CBC-SHA256", "RSA-PSK-AES256-CBC-SHA", "RSA-PSK-AES128-CBC-SHA"]`
+  `[]`
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 
 - user_lookup_fun: <code>string()</code>
   * default: 
   `"emqx_tls_psk:lookup"`
 
-
   用于查找预共享密钥（PSK）标识的 EMQX 内部回调。
-
 
 - secure_renegotiate: <code>boolean()</code>
   * default: 
@@ -5208,7 +5278,7 @@ Settings for the DTLS protocol.
 - dhfile: <code>string()</code>
 
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
 
   注意：TLS 1.3不支持<code>dhfile</code>选项。
 
@@ -5240,6 +5310,15 @@ Settings for the DTLS protocol.
   这可能会成为拒绝服务攻击的载体。
   SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项设置为 false，可以严格禁用客户端发起的重新协商。
   默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
+
+
+- gc_after_handshake: <code>boolean()</code>
+  * default: 
+  `false`
+
+
+  内存使用调优。如果启用，将在TLS/SSL握手完成后立即执行垃圾回收。
+  TLS/SSL握手建立后立即进行GC。
 
 
 
@@ -5278,7 +5357,7 @@ Settings for EMQX extension protocol (exproto).
 
 - listeners: <code>[gateway:tcp_udp_listeners](#gateway-tcp_udp_listeners)</code>
 
-  监听器配置
+  监听器配置。
 
 - enable: <code>boolean()</code>
   * default: 
@@ -5306,7 +5385,7 @@ Settings for EMQX extension protocol (exproto).
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 
 ## gateway:exproto_grpc_handler
@@ -5393,7 +5472,7 @@ EMQX Gateway configuration root.
 
 - lwm2m: <code>[gateway:lwm2m](#gateway-lwm2m)</code>
 
-  LwM2M 网关配置。仅支持 v1.0.1 协议
+  LwM2M 网关配置。仅支持 v1.0.1 协议。
 
 - exproto: <code>[gateway:exproto](#gateway-exproto)</code>
 
@@ -5421,32 +5500,32 @@ The LwM2M protocol gateway.
   * default: 
   `"etc/lwm2m_xml"`
 
-  LwM2M Resource 定义的 XML 文件目录路径
+  LwM2M Resource 定义的 XML 文件目录路径。
 
 - lifetime_min: <code>emqx_gateway_schema:duration()</code>
   * default: 
   `"15s"`
 
-  允许 LwM2M 客户端允许设置的心跳最小值
+  允许 LwM2M 客户端允许设置的心跳最小值。
 
 - lifetime_max: <code>emqx_gateway_schema:duration()</code>
   * default: 
   `"86400s"`
 
-  允许 LwM2M 客户端允许设置的心跳最大值
+  允许 LwM2M 客户端允许设置的心跳最大值。
 
 - qmode_time_window: <code>emqx_gateway_schema:duration_s()</code>
   * default: 
   `"22s"`
 
   在QMode模式下，LwM2M网关认为网络链接有效的时间窗口的值。
-  例如，在收到客户端的更新信息后，在这个时间窗口内的任何信息都会直接发送到LwM2M客户端，而超过这个时间窗口的所有信息都会暂时储存在内存中
+  例如，在收到客户端的更新信息后，在这个时间窗口内的任何信息都会直接发送到LwM2M客户端，而超过这个时间窗口的所有信息都会暂时储存在内存中。
 
 - auto_observe: <code>boolean()</code>
   * default: 
   `false`
 
-  自动 Observe REGISTER 数据包的 Object 列表
+  自动 Observe REGISTER 数据包的 Object 列表。
 
 - update_msg_publish_condition: <code>always | contains_object_list</code>
   * default: 
@@ -5454,12 +5533,12 @@ The LwM2M protocol gateway.
 
   发布UPDATE事件消息的策略。
     - always: 只要收到 UPDATE 请求，就发送更新事件。
-    - contains_object_list: 仅当 UPDATE 请求携带 Object 列表时才发送更新事件
+    - contains_object_list: 仅当 UPDATE 请求携带 Object 列表时才发送更新事件。
 
 
 - translators: <code>[gateway:lwm2m_translators](#gateway-lwm2m_translators)</code>
 
-  LwM2M 网关订阅/发布消息的主题映射配置
+  LwM2M 网关订阅/发布消息的主题映射配置。
 
 - mountpoint: <code>binary()</code>
   * default: 
@@ -5469,7 +5548,7 @@ The LwM2M protocol gateway.
 
 - listeners: <code>[gateway:udp_listeners](#gateway-udp_listeners)</code>
 
-  配置 UDP 类型的监听器
+  配置 UDP 类型的监听器。
 
 - enable: <code>boolean()</code>
   * default: 
@@ -5497,7 +5576,7 @@ The LwM2M protocol gateway.
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 
 ## gateway:lwm2m_translators
@@ -5520,24 +5599,24 @@ MQTT topics that correspond to LwM2M events.
 - command: <code>[gateway:translator](#gateway-translator)</code>
 
   下行命令主题。
-  对于每个成功上线的新 LwM2M 客户端，网关会创建一个订阅关系来接收下行消息并将其发送给客户端
+  对于每个成功上线的新 LwM2M 客户端，网关会创建一个订阅关系来接收下行消息并将其发送给客户端。
 
 - response: <code>[gateway:translator](#gateway-translator)</code>
 
-  用于网关发布来自 LwM2M 客户端的确认事件的主题
+  用于网关发布来自 LwM2M 客户端的确认事件的主题。
 
 - notify: <code>[gateway:translator](#gateway-translator)</code>
 
   用于发布来自 LwM2M 客户端的通知事件的主题。
-  在成功 Observe 到 LwM2M 客户端的资源后，如果客户端报告任何资源状态的变化，网关将通过该主题发送通知事件
+  在成功 Observe 到 LwM2M 客户端的资源后，如果客户端报告任何资源状态的变化，网关将通过该主题发送通知事件。
 
 - register: <code>[gateway:translator](#gateway-translator)</code>
 
-  用于发布来自 LwM2M 客户端的注册事件的主题
+  用于发布来自 LwM2M 客户端的注册事件的主题。
 
 - update: <code>[gateway:translator](#gateway-translator)</code>
 
-  用于发布来自LwM2M客户端的更新事件的主题
+  用于发布来自LwM2M客户端的更新事件的主题。
 
 
 ## gateway:mqttsn
@@ -5598,7 +5677,7 @@ The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
 
 - listeners: <code>[gateway:udp_listeners](#gateway-udp_listeners)</code>
 
-  配置 UDP 类型的监听器
+  配置 UDP 类型的监听器。
 
 - enable: <code>boolean()</code>
   * default: 
@@ -5626,7 +5705,7 @@ The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 
 ## gateway:mqttsn_predefined
@@ -5685,7 +5764,7 @@ Settings for the SSL listener.
 
 - tcp_options: <code>[broker:tcp_opts](#broker-tcp_opts)</code>
 
-  TCP Socket 配置
+  TCP Socket 配置。
 
 - proxy_protocol: <code>boolean()</code>
   * default: 
@@ -5723,7 +5802,7 @@ Settings for the SSL listener.
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 - enable_authn: <code>boolean()</code>
   * default: 
@@ -5751,7 +5830,7 @@ Settings for the SSL listener.
 
 - ssl_options: <code>[broker:listener_ssl_opts](#broker-listener_ssl_opts)</code>
 
-  SSL Socket 配置
+  SSL Socket 配置。
 
 
 ## gateway:ssl_server_opts
@@ -5774,50 +5853,47 @@ SSL configuration for the server.
 - cacertfile: <code>binary()</code>
 
 
-  受信任的PEM格式CA证书捆绑文件</br>
+  受信任的PEM格式 CA  证书捆绑文件<br/>
   此文件中的证书用于验证TLS对等方的证书。
-  如果要信任新CA，请将新证书附加到文件中。
-  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）</br>
+  如果要信任新 CA，请将新证书附加到文件中。
+  无需重启EMQX即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>
   注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
 - certfile: <code>binary()</code>
 
 
-  PEM格式证书链文件</br>
-  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，然后是直接颁发者证书，依此类推。
-  虽然根CA证书是可选的，但它应该放在
-  如果要添加文件，请将其删除。
+  PEM格式证书链文件<br/>
+  此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，
+  然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。
+  根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
 - keyfile: <code>binary()</code>
 
-
   PEM格式的私钥文件。
-
 
 - verify: <code>verify_peer | verify_none</code>
   * default: 
   `verify_none`
 
-
   启用或禁用对等验证。
-
 
 - reuse_sessions: <code>boolean()</code>
   * default: 
   `true`
 
-
   启用 TLS 会话重用。
-
 
 - depth: <code>integer()</code>
   * default: 
   `10`
 
 
-  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。因此，如果深度为0，则对等方必须由受信任的根CA直接签名；如果1，路径可以是PEER、CA、ROOT-CA；如果是2，则路径可以是PEER、CA、CA、ROOT-CA等等。默认值为10。
+  在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。
+  因此，如果深度为0，则对等方必须由受信任的根 CA 直接签名；<br/>
+  如果是1，路径可以是 PEER、中间 CA、ROOT-CA；<br/>
+  如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
 - password: <code>string()</code>
@@ -5832,49 +5908,47 @@ SSL configuration for the server.
   `[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]`
 
 
-  支持所有TLS/DTLS版本</br>
+  支持所有TLS/DTLS版本<br/>
 
   注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
 - ciphers: <code>[string()]</code>
   * default: 
-  `["TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256", "TLS_AES_128_CCM_8_SHA256", "ECDHE-ECDSA-AES256-GCM-SHA384", "ECDHE-RSA-AES256-GCM-SHA384", "ECDHE-ECDSA-AES256-SHA384", "ECDHE-RSA-AES256-SHA384", "ECDH-ECDSA-AES256-GCM-SHA384", "ECDH-RSA-AES256-GCM-SHA384", "ECDH-ECDSA-AES256-SHA384", "ECDH-RSA-AES256-SHA384", "DHE-DSS-AES256-GCM-SHA384", "DHE-DSS-AES256-SHA256", "AES256-GCM-SHA384", "AES256-SHA256", "ECDHE-ECDSA-AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES128-SHA256", "ECDHE-RSA-AES128-SHA256", "ECDH-ECDSA-AES128-GCM-SHA256", "ECDH-RSA-AES128-GCM-SHA256", "ECDH-ECDSA-AES128-SHA256", "ECDH-RSA-AES128-SHA256", "DHE-DSS-AES128-GCM-SHA256", "DHE-DSS-AES128-SHA256", "AES128-GCM-SHA256", "AES128-SHA256", "ECDHE-ECDSA-AES256-SHA", "ECDHE-RSA-AES256-SHA", "DHE-DSS-AES256-SHA", "ECDH-ECDSA-AES256-SHA", "ECDH-RSA-AES256-SHA", "ECDHE-ECDSA-AES128-SHA", "ECDHE-RSA-AES128-SHA", "DHE-DSS-AES128-SHA", "ECDH-ECDSA-AES128-SHA", "ECDH-RSA-AES128-SHA", "RSA-PSK-AES256-GCM-SHA384", "RSA-PSK-AES256-CBC-SHA384", "RSA-PSK-AES128-GCM-SHA256", "RSA-PSK-AES128-CBC-SHA256", "RSA-PSK-AES256-CBC-SHA", "RSA-PSK-AES128-CBC-SHA"]`
+  `[]`
 
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
   <code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
   <code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
-  </br>
+  <br/>
   密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
   选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
   名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
-  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式</br>
+  EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
   注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
   不兼容的密码套件将被自动删除。
 
   例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
 
-  </br>
-  注：PSK 的 Ciphers 不支持 tlsv1.3</br>
+  <br/>
+  注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
   如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
 
-  </br>
+  <br/>
   PSK 密码套件：
   <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
   RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
   RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code></br>
+  RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 
 - user_lookup_fun: <code>string()</code>
   * default: 
   `"emqx_tls_psk:lookup"`
 
-
   用于查找预共享密钥（PSK）标识的 EMQX 内部回调。
-
 
 - secure_renegotiate: <code>boolean()</code>
   * default: 
@@ -5888,7 +5962,7 @@ SSL configuration for the server.
 - dhfile: <code>string()</code>
 
 
-  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数</br>
+  如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
 
   注意：TLS 1.3不支持<code>dhfile</code>选项。
 
@@ -5961,7 +6035,7 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 
 - listeners: <code>[gateway:tcp_listeners](#gateway-tcp_listeners)</code>
 
-  配置 TCP 类型的监听器
+  配置 TCP 类型的监听器。
 
 - enable: <code>boolean()</code>
   * default: 
@@ -5989,7 +6063,7 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 
 ## gateway:stomp_frame
@@ -6055,7 +6129,7 @@ Settings for the TCP listener.
 
 - tcp_options: <code>[broker:tcp_opts](#broker-tcp_opts)</code>
 
-  TCP Socket 配置
+  TCP Socket 配置。
 
 - proxy_protocol: <code>boolean()</code>
   * default: 
@@ -6093,7 +6167,7 @@ Settings for the TCP listener.
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 - enable_authn: <code>boolean()</code>
   * default: 
@@ -6267,7 +6341,7 @@ Settings for the UDP listener.
 
 - authentication: <code>[authn-builtin_db:authentication](#authn-builtin_db-authentication) | [authn-mysql:authentication](#authn-mysql-authentication) | [authn-postgresql:authentication](#authn-postgresql-authentication) | [authn-mongodb:standalone](#authn-mongodb-standalone) | [authn-mongodb:replica-set](#authn-mongodb-replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb-sharded-cluster) | [authn-redis:standalone](#authn-redis-standalone) | [authn-redis:cluster](#authn-redis-cluster) | [authn-redis:sentinel](#authn-redis-sentinel) | [authn-http:get](#authn-http-get) | [authn-http:post](#authn-http-post) | [authn-jwt:hmac-based](#authn-jwt-hmac-based) | [authn-jwt:public-key](#authn-jwt-public-key) | [authn-jwt:jwks](#authn-jwt-jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db-authentication)</code>
 
-  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段
+  网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。
 
 - enable_authn: <code>boolean()</code>
   * default: 
@@ -6378,7 +6452,7 @@ Settings for the UDP sockets.
   * default: 
   `true`
 
-  允许重用本地处于 TIME_WAIT 的端口号
+  允许重用本地处于 TIME_WAIT 的端口号。
 
 
 ## limiter:bucket_opts
@@ -6387,20 +6461,50 @@ Settings for the bucket.
 
 **Config paths**
 
- - <code>limiter.batch.bucket.$bucket_name</code>
- - <code>limiter.bytes_in.bucket.$bucket_name</code>
- - <code>limiter.connection.bucket.$bucket_name</code>
- - <code>limiter.message_in.bucket.$bucket_name</code>
- - <code>limiter.message_routing.bucket.$bucket_name</code>
+ - <code>listeners.quic.$name.limiter.bytes_in</code>
+ - <code>listeners.quic.$name.limiter.connection</code>
+ - <code>listeners.quic.$name.limiter.message_in</code>
+ - <code>listeners.quic.$name.limiter.message_routing</code>
+ - <code>listeners.ssl.$name.limiter.bytes_in</code>
+ - <code>listeners.ssl.$name.limiter.connection</code>
+ - <code>listeners.ssl.$name.limiter.message_in</code>
+ - <code>listeners.ssl.$name.limiter.message_routing</code>
+ - <code>listeners.tcp.$name.limiter.bytes_in</code>
+ - <code>listeners.tcp.$name.limiter.connection</code>
+ - <code>listeners.tcp.$name.limiter.message_in</code>
+ - <code>listeners.tcp.$name.limiter.message_routing</code>
+ - <code>listeners.ws.$name.limiter.bytes_in</code>
+ - <code>listeners.ws.$name.limiter.connection</code>
+ - <code>listeners.ws.$name.limiter.message_in</code>
+ - <code>listeners.ws.$name.limiter.message_routing</code>
+ - <code>listeners.wss.$name.limiter.bytes_in</code>
+ - <code>listeners.wss.$name.limiter.connection</code>
+ - <code>listeners.wss.$name.limiter.message_in</code>
+ - <code>listeners.wss.$name.limiter.message_routing</code>
 
 
 **Env overrides**
 
- - <code>EMQX_LIMITER__BATCH__BUCKET__$BUCKET_NAME</code>
- - <code>EMQX_LIMITER__BYTES_IN__BUCKET__$BUCKET_NAME</code>
- - <code>EMQX_LIMITER__CONNECTION__BUCKET__$BUCKET_NAME</code>
- - <code>EMQX_LIMITER__MESSAGE_IN__BUCKET__$BUCKET_NAME</code>
- - <code>EMQX_LIMITER__MESSAGE_ROUTING__BUCKET__$BUCKET_NAME</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__CONNECTION</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__CONNECTION</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__CONNECTION</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__CONNECTION</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__CONNECTION</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__MESSAGE_ROUTING</code>
 
 
 
@@ -6424,33 +6528,121 @@ Settings for the bucket.
 
   桶中的初始令牌数
 
-- per_client: <code>[limiter:client_bucket](#limiter-client_bucket)</code>
-  * default: 
-  `{}`
 
-  对桶的每个使用者的速率控制设置，这个不是必须的
-
-
-## limiter:client_bucket
-Settings for the client bucket.
+## limiter:client_fields
+Fields of the client level.
 
 
 **Config paths**
 
- - <code>limiter.batch.bucket.$bucket_name.per_client</code>
- - <code>limiter.bytes_in.bucket.$bucket_name.per_client</code>
- - <code>limiter.connection.bucket.$bucket_name.per_client</code>
- - <code>limiter.message_in.bucket.$bucket_name.per_client</code>
- - <code>limiter.message_routing.bucket.$bucket_name.per_client</code>
+ - <code>limiter.client</code>
 
 
 **Env overrides**
 
- - <code>EMQX_LIMITER__BATCH__BUCKET__$BUCKET_NAME__PER_CLIENT</code>
- - <code>EMQX_LIMITER__BYTES_IN__BUCKET__$BUCKET_NAME__PER_CLIENT</code>
- - <code>EMQX_LIMITER__CONNECTION__BUCKET__$BUCKET_NAME__PER_CLIENT</code>
- - <code>EMQX_LIMITER__MESSAGE_IN__BUCKET__$BUCKET_NAME__PER_CLIENT</code>
- - <code>EMQX_LIMITER__MESSAGE_ROUTING__BUCKET__$BUCKET_NAME__PER_CLIENT</code>
+ - <code>EMQX_LIMITER__CLIENT</code>
+
+
+
+**Fields**
+
+- bytes_in: <code>[limiter:client_opts](#limiter-client_opts)</code>
+  * default: 
+  `{}`
+
+  流入字节率控制器。
+  这个是用来控制当前节点上的数据流入的字节率，每条消息将会消耗和其二进制大小等量的令牌，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
+
+- message_in: <code>[limiter:client_opts](#limiter-client_opts)</code>
+  * default: 
+  `{}`
+
+  流入速率控制器。
+  这个用来控制当前节点上的消息流入速率，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
+
+- connection: <code>[limiter:client_opts](#limiter-client_opts)</code>
+  * default: 
+  `{}`
+
+  连接速率控制器。
+  这个用来控制当前节点上的连接速率，当达到最大速率后，新的连接将会被拒绝
+
+- message_routing: <code>[limiter:client_opts](#limiter-client_opts)</code>
+  * default: 
+  `{}`
+
+  消息派发速率控制器。
+  这个用来控制当前节点内的消息派发速率，当达到最大速率后，新的推送将会被拒绝
+
+- internal: <code>[limiter:client_opts](#limiter-client_opts)</code>
+  * default: 
+  `{}`
+
+  EMQX 内部功能所用限制器。
+
+
+## limiter:client_opts
+Settings for the client in bucket level.
+
+
+**Config paths**
+
+ - <code>limiter.client.bytes_in</code>
+ - <code>limiter.client.connection</code>
+ - <code>limiter.client.internal</code>
+ - <code>limiter.client.message_in</code>
+ - <code>limiter.client.message_routing</code>
+ - <code>listeners.quic.$name.limiter.client.bytes_in</code>
+ - <code>listeners.quic.$name.limiter.client.connection</code>
+ - <code>listeners.quic.$name.limiter.client.message_in</code>
+ - <code>listeners.quic.$name.limiter.client.message_routing</code>
+ - <code>listeners.ssl.$name.limiter.client.bytes_in</code>
+ - <code>listeners.ssl.$name.limiter.client.connection</code>
+ - <code>listeners.ssl.$name.limiter.client.message_in</code>
+ - <code>listeners.ssl.$name.limiter.client.message_routing</code>
+ - <code>listeners.tcp.$name.limiter.client.bytes_in</code>
+ - <code>listeners.tcp.$name.limiter.client.connection</code>
+ - <code>listeners.tcp.$name.limiter.client.message_in</code>
+ - <code>listeners.tcp.$name.limiter.client.message_routing</code>
+ - <code>listeners.ws.$name.limiter.client.bytes_in</code>
+ - <code>listeners.ws.$name.limiter.client.connection</code>
+ - <code>listeners.ws.$name.limiter.client.message_in</code>
+ - <code>listeners.ws.$name.limiter.client.message_routing</code>
+ - <code>listeners.wss.$name.limiter.client.bytes_in</code>
+ - <code>listeners.wss.$name.limiter.client.connection</code>
+ - <code>listeners.wss.$name.limiter.client.message_in</code>
+ - <code>listeners.wss.$name.limiter.client.message_routing</code>
+ - <code>retainer.flow_control.batch_deliver_limiter.client</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_LIMITER__CLIENT__BYTES_IN</code>
+ - <code>EMQX_LIMITER__CLIENT__CONNECTION</code>
+ - <code>EMQX_LIMITER__CLIENT__INTERNAL</code>
+ - <code>EMQX_LIMITER__CLIENT__MESSAGE_IN</code>
+ - <code>EMQX_LIMITER__CLIENT__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__CLIENT__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__CLIENT__CONNECTION</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__CLIENT__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__CLIENT__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__CLIENT__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__CLIENT__CONNECTION</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__CLIENT__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__CLIENT__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__CLIENT__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__CLIENT__CONNECTION</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__CLIENT__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__CLIENT__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__CLIENT__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__CLIENT__CONNECTION</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__CLIENT__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__CLIENT__MESSAGE_ROUTING</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__CLIENT__BYTES_IN</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__CLIENT__CONNECTION</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__CLIENT__MESSAGE_IN</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__CLIENT__MESSAGE_ROUTING</code>
+ - <code>EMQX_RETAINER__FLOW_CONTROL__BATCH_DELIVER_LIMITER__CLIENT</code>
 
 
 
@@ -6499,6 +6691,46 @@ Settings for the client bucket.
   当所有的重试都失败后的处理策略
 
 
+## limiter:internal
+Internal limiter.
+
+
+**Config paths**
+
+ - <code>retainer.flow_control.batch_deliver_limiter</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_RETAINER__FLOW_CONTROL__BATCH_DELIVER_LIMITER</code>
+
+
+
+**Fields**
+
+- rate: <code>emqx_limiter_schema:rate()</code>
+  * default: 
+  `"infinity"`
+
+  桶的令牌生成速率
+
+- capacity: <code>emqx_limiter_schema:capacity()</code>
+  * default: 
+  `"infinity"`
+
+  该令牌桶的容量
+
+- initial: <code>emqx_limiter_schema:initial()</code>
+  * default: 
+  `"0"`
+
+  桶中的初始令牌数
+
+- client: <code>[limiter:client_opts](#limiter-client_opts)</code>
+
+  对桶的每个使用者的速率控制设置
+
+
 ## limiter
 Settings for the rate limiter.
 
@@ -6516,68 +6748,170 @@ Settings for the rate limiter.
 
 **Fields**
 
-- bytes_in: <code>[limiter:limiter_opts](#limiter-limiter_opts)</code>
+- bytes_in: <code>[limiter:node_opts](#limiter-node_opts)</code>
   * default: 
   `{}`
 
-  流入字节率控制器.
+  流入字节率控制器。
   这个是用来控制当前节点上的数据流入的字节率，每条消息将会消耗和其二进制大小等量的令牌，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
 
-- message_in: <code>[limiter:limiter_opts](#limiter-limiter_opts)</code>
+- message_in: <code>[limiter:node_opts](#limiter-node_opts)</code>
   * default: 
   `{}`
 
   流入速率控制器。
   这个用来控制当前节点上的消息流入速率，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
 
-- connection: <code>[limiter:limiter_opts](#limiter-limiter_opts)</code>
+- connection: <code>[limiter:node_opts](#limiter-node_opts)</code>
   * default: 
-
-  ```
-  {
-    bucket {
-      default {capacity = 1000, rate = "1000/s"}
-    }
-    rate = "1000/s"
-  }
-  ```
+  `{}`
 
   连接速率控制器。
   这个用来控制当前节点上的连接速率，当达到最大速率后，新的连接将会被拒绝
 
-- message_routing: <code>[limiter:limiter_opts](#limiter-limiter_opts)</code>
+- message_routing: <code>[limiter:node_opts](#limiter-node_opts)</code>
   * default: 
   `{}`
 
   消息派发速率控制器。
   这个用来控制当前节点内的消息派发速率，当达到最大速率后，新的推送将会被拒绝
 
-- batch: <code>[limiter:limiter_opts](#limiter-limiter_opts)</code>
+- internal: <code>[limiter:node_opts](#limiter-node_opts)</code>
   * default: 
   `{}`
 
-  批量操作速率控制器。
-  这是给 EMQX 内部的批量操作使用的，比如用来控制保留消息的派发速率
+  EMQX 内部功能所用限制器。
+
+- client: <code>[limiter:client_fields](#limiter-client_fields)</code>
+  * default: 
+
+  ```
+  {
+    bytes_in {}
+    connection {}
+    internal {}
+    message_in {}
+    message_routing {}
+  }
+  ```
+
+  对桶的每个使用者的速率控制设置
 
 
-## limiter:limiter_opts
-Settings for the limiter.
+## limiter:listener_client_fields
+Fields of the client level of the listener.
 
 
 **Config paths**
 
- - <code>limiter.batch</code>
+ - <code>listeners.quic.$name.limiter.client</code>
+ - <code>listeners.ssl.$name.limiter.client</code>
+ - <code>listeners.tcp.$name.limiter.client</code>
+ - <code>listeners.ws.$name.limiter.client</code>
+ - <code>listeners.wss.$name.limiter.client</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER__CLIENT</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER__CLIENT</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER__CLIENT</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER__CLIENT</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER__CLIENT</code>
+
+
+
+**Fields**
+
+- bytes_in: <code>[limiter:client_opts](#limiter-client_opts)</code>
+
+  流入字节率控制器。
+  这个是用来控制当前节点上的数据流入的字节率，每条消息将会消耗和其二进制大小等量的令牌，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
+
+- message_in: <code>[limiter:client_opts](#limiter-client_opts)</code>
+
+  流入速率控制器。
+  这个用来控制当前节点上的消息流入速率，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
+
+- connection: <code>[limiter:client_opts](#limiter-client_opts)</code>
+
+  连接速率控制器。
+  这个用来控制当前节点上的连接速率，当达到最大速率后，新的连接将会被拒绝
+
+- message_routing: <code>[limiter:client_opts](#limiter-client_opts)</code>
+
+  消息派发速率控制器。
+  这个用来控制当前节点内的消息派发速率，当达到最大速率后，新的推送将会被拒绝
+
+
+## limiter:listener_fields
+Fields of the listener.
+
+
+**Config paths**
+
+ - <code>listeners.quic.$name.limiter</code>
+ - <code>listeners.ssl.$name.limiter</code>
+ - <code>listeners.tcp.$name.limiter</code>
+ - <code>listeners.ws.$name.limiter</code>
+ - <code>listeners.wss.$name.limiter</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_LISTENERS__QUIC__$NAME__LIMITER</code>
+ - <code>EMQX_LISTENERS__SSL__$NAME__LIMITER</code>
+ - <code>EMQX_LISTENERS__TCP__$NAME__LIMITER</code>
+ - <code>EMQX_LISTENERS__WS__$NAME__LIMITER</code>
+ - <code>EMQX_LISTENERS__WSS__$NAME__LIMITER</code>
+
+
+
+**Fields**
+
+- bytes_in: <code>[limiter:bucket_opts](#limiter-bucket_opts)</code>
+
+  流入字节率控制器。
+  这个是用来控制当前节点上的数据流入的字节率，每条消息将会消耗和其二进制大小等量的令牌，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
+
+- message_in: <code>[limiter:bucket_opts](#limiter-bucket_opts)</code>
+
+  流入速率控制器。
+  这个用来控制当前节点上的消息流入速率，当达到最大速率后，会话将会被限速甚至被强制挂起一小段时间
+
+- connection: <code>[limiter:bucket_opts](#limiter-bucket_opts)</code>
+
+  连接速率控制器。
+  这个用来控制当前节点上的连接速率，当达到最大速率后，新的连接将会被拒绝
+
+- message_routing: <code>[limiter:bucket_opts](#limiter-bucket_opts)</code>
+
+  消息派发速率控制器。
+  这个用来控制当前节点内的消息派发速率，当达到最大速率后，新的推送将会被拒绝
+
+- client: <code>[limiter:listener_client_fields](#limiter-listener_client_fields)</code>
+
+  对桶的每个使用者的速率控制设置
+
+
+## limiter:node_opts
+Settings for the limiter of the node level.
+
+
+**Config paths**
+
  - <code>limiter.bytes_in</code>
  - <code>limiter.connection</code>
+ - <code>limiter.internal</code>
  - <code>limiter.message_in</code>
  - <code>limiter.message_routing</code>
 
 
 **Env overrides**
 
- - <code>EMQX_LIMITER__BATCH</code>
  - <code>EMQX_LIMITER__BYTES_IN</code>
  - <code>EMQX_LIMITER__CONNECTION</code>
+ - <code>EMQX_LIMITER__INTERNAL</code>
  - <code>EMQX_LIMITER__MESSAGE_IN</code>
  - <code>EMQX_LIMITER__MESSAGE_ROUTING</code>
 
@@ -6597,17 +6931,6 @@ Settings for the limiter.
 
   突发速率。
   突发速率允许短时间内速率超过设置的速率值，突发速率 + 速率 = 当前桶能达到的最大速率值
-
-- bucket: <code>{$bucket_name -> [limiter:bucket_opts](#limiter-bucket_opts)}</code>
-  * default: 
-
-  ```
-  {
-    default {}
-  }
-  ```
-
-  桶的配置
 
 
 ## modules:delayed
@@ -6784,22 +7107,19 @@ Settings for the telemetry module.
 内置 'republish' 动作的参数。
 可以在参数中使用变量。
 变量是规则中选择的字段。 例如规则 SQL 定义如下：
-
-```
-SELECT clientid, qos, payload FROM "t/1"
-```
-
+<code>
+    SELECT clientid, qos, payload FROM "t/1"
+</code>
 然后有 3 个变量可用：<code>clientid</code>、<code>qos</code> 和 <code>payload</code>。 如果我们将参数设置为：
-
-```
-{
-    topic = "t/${clientid}"
-    qos = "${qos}"
-    payload = "msg: ${payload}"
-}
-```
-
-当收到一条 Payload 为 `hello`，QoS 为 1，Client ID 为 `Steve` 的消息时，将重新发布一条新的 MQTT 消息到主题 `t/Steve`，该消息的 Payload 为 `msg: hello`，QoS 为 1。
+<code>
+    {
+        topic = "t/${clientid}"
+        qos = "${qos}"
+        payload = "msg: ${payload}"
+    }
+</code>
+当收到一条消息 payload = `hello`, qos = 1, clientid = `Steve` 时，将重新发布一条新的 MQTT 消息到主题 `t/Steve`
+消息内容为 payload = `msg: hello`, and `qos = 1
 
 
 **Config paths**
@@ -6885,6 +7205,14 @@ SELECT clientid, qos, payload FROM "t/1"
 
   规则引擎内建函数 `jq` 默认时间限制
 
+- jq_implementation_module: <code>jq_nif | jq_port</code>
+  * default: 
+  `jq_nif`
+  * mapping: 
+  `jq.jq_implementation_module`
+
+  jq 规则引擎功能的实现模块。可用的两个选项是 jq_nif 和 jq_port。jq_nif 使用 Erlang NIF 库访问 jq 库，而 jq_port 使用基于 Erlang Port 的实现。jq_nif 方式（默认选项）是这两个选项中最快的实现，但 jq_port 方式更安全，因为这种情况下 jq 程序不会在 Erlang VM 进程中执行。
+
 
 ## rule_engine:rules
 配置规则
@@ -6940,6 +7268,10 @@ SELECT clientid, qos, payload FROM "t/1"
   `""`
 
   规则的描述
+
+- metadata: <code>map()</code>
+
+  规则的元数据，不要手动修改
 
 
 ## rule_engine:user_provided_function
@@ -6998,11 +7330,9 @@ MQTT Bridge 配置
   * default: 
   `egress`
 
-  The direction of the bridge. Can be one of 'ingress' or 'egress'.</br>
+  The direction of the bridge. Can be one of 'ingress' or 'egress'.<br/>
   The egress config defines how this bridge forwards messages from the local broker to the remote
-  broker.</br>
-  Template with variables is allowed in 'remote_topic', 'qos', 'retain', 'payload'.</br>
-  NOTE: if this bridge is used as the action of a rule (emqx rule engine), and also local_topic
+  broker.<br/>Template with variables is allowed in 'remote_topic', 'qos', 'retain', 'payload'.<br/>NOTE: if this bridge is used as the action of a rule (emqx rule engine), and also local_topic
   is configured, then both the data got from the rule and the MQTT messages that matches
   local_topic will be forwarded.
 
@@ -7016,8 +7346,8 @@ MQTT Bridge 配置
 - connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
 
 
-  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>.</br>
-  在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。</br>
+  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>。<br/>
+  在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。<br/>
 
 - local_topic: <code>binary()</code>
 
@@ -7026,28 +7356,28 @@ MQTT Bridge 配置
 - remote_topic: <code>binary()</code>
 
 
-  转发到远程broker的哪个topic。</br>
+  转发到远程broker的哪个topic。<br/>
   允许使用带有变量的模板。
 
 
 - remote_qos: <code>qos() | binary()</code>
 
 
-  待发送 MQTT 消息的 QoS。</br>
+  待发送 MQTT 消息的 QoS。<br/>
   允许使用带有变量的模板。
 
 
 - retain: <code>boolean() | binary()</code>
 
 
-  要发送的 MQTT 消息的“保留”标志。</br>
+  要发送的 MQTT 消息的“保留”标志。<br/>
   允许使用带有变量的模板。
 
 
 - payload: <code>binary()</code>
 
 
-  要发送的 MQTT 消息的负载。</br>
+  要发送的 MQTT 消息的负载。<br/>
   允许使用带有变量的模板。
 
 
@@ -7073,12 +7403,10 @@ MQTT Bridge 配置
   * default: 
   `egress`
 
-  The direction of the bridge. Can be one of 'ingress' or 'egress'.</br>
+  The direction of the bridge. Can be one of 'ingress' or 'egress'.<br/>
   The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-  send them to the local broker.</br>
-  Template with variables is allowed in 'local_topic', 'remote_qos', 'qos', 'retain',
-  'payload'.</br>
-  NOTE: if this bridge is used as the input of a rule (emqx rule engine), and also local_topic is
+  send them to the local broker.<br/>Template with variables is allowed in 'local_topic', 'remote_qos', 'qos', 'retain',
+  'payload'.<br/>NOTE: if this bridge is used as the input of a rule (emqx rule engine), and also local_topic is
   configured, then messages got from the remote broker will be sent to both the 'local_topic' and
   the rule.
 
@@ -7092,8 +7420,8 @@ MQTT Bridge 配置
 - connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
 
 
-  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>.</br>
-  在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。</br>
+  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>。<br/>
+  在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。<br/>
 
 - remote_topic: <code>binary()</code>
 
@@ -7108,7 +7436,7 @@ MQTT Bridge 配置
 - local_topic: <code>binary()</code>
 
 
-  向本地broker的哪个topic发送消息。</br>
+  向本地broker的哪个topic发送消息。<br/>
   允许使用带有变量的模板。
 
 
@@ -7117,7 +7445,7 @@ MQTT Bridge 配置
   `"${qos}"`
 
 
-  待发送 MQTT 消息的 QoS。</br>
+  待发送 MQTT 消息的 QoS。<br/>
   允许使用带有变量的模板。
 
 
@@ -7126,16 +7454,14 @@ MQTT Bridge 配置
   `"${retain}"`
 
 
-  要发送的 MQTT 消息的“保留”标志。</br>
+  要发送的 MQTT 消息的“保留”标志。<br/>
   允许使用带有变量的模板。
 
 
 - payload: <code>binary()</code>
-  * default: 
-  `"${payload}"`
 
 
-  要发送的 MQTT 消息的负载。</br>
+  要发送的 MQTT 消息的负载。<br/>
   允许使用带有变量的模板。
 
 
@@ -7200,7 +7526,7 @@ DNS SRV 记录服务发现。
   `"emqxcl"`
 
   指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
-  `v2/keys/<prefix>/<cluster.name>/<node.name>` </br>
+  v2/keys/<prefix>/<cluster.name>/<node.name> <br/>
   当 cluster.discovery_strategy 为 etcd 时，此配置项才有效。
         
 
@@ -7419,9 +7745,7 @@ UDP 组播服务发现。
   * default: 
   `ignore`
 
-
   授权检查拒绝操作时的操作。
-
 
 - cache: <code>[broker:cache](#broker-cache)</code>
 
@@ -7432,27 +7756,27 @@ UDP 组播服务发现。
   `[]`
 
 
-  授权数据源。</br>
-  授权(ACL)数据源的列表。
+  授权数据源。<br/>
+  授权（ACL）数据源的列表。
   它被设计为一个数组，而不是一个散列映射，
-  所以可以作为链式访问控制。</br>
+  所以可以作为链式访问控制。<br/>
 
   当授权一个 'publish' 或 'subscribe' 行为时，
   该配置列表中的所有数据源将按顺序进行检查。
-  如果在某个客户端未找到时(使用 ClientID 或 Username)，
-  将会移动到下一个数据源。直至得到 'allow' 或 'deny' 的结果。</br>
+  如果在某个客户端未找到时(使用 ClientID 或 Username)。
+  将会移动到下一个数据源。直至得到 'allow' 或 'deny' 的结果。<br/>
 
-  如果在任何数据源中都未找到对应的客户端信息，
-  配置的默认行为 ('authorization.no_match') 将生效。</br>
+  如果在任何数据源中都未找到对应的客户端信息。
+  配置的默认行为 ('authorization.no_match') 将生效。<br/>
 
-  注意:
+  注意：
   数据源使用 'type' 进行标识。
   使用同一类型的数据源多于一次不被允许。
 
 
 
 ## cluster
-EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了节点之间如何连接。
+EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了节点之间如何连接。
 
 
 **Config paths**
@@ -7481,12 +7805,12 @@ EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了
   `manual`
 
   集群节点发现方式。可选值为:
-  - manual: 手动加入集群</br>
-  - static: 配置静态节点。配置几个固定的节点，新节点通过连接固定节点中的某一个来加入集群。</br>
-  - mcast: 使用 UDP 多播的方式发现节点。</br>
-  - dns: 使用 DNS A 记录的方式发现节点。</br>
-  - etcd: 使用 etcd 发现节点。</br>
-  - k8s: 使用 Kubernetes 发现节点。</br>
+  - manual: 手动加入集群<br/>
+  - static: 配置静态节点。配置几个固定的节点，新节点通过连接固定节点中的某一个来加入集群。<br/>
+  - mcast: 使用 UDP 多播的方式发现节点。<br/>
+  - dns: 使用 DNS A 记录的方式发现节点。<br/>
+  - etcd: 使用 etcd 发现节点。<br/>
+  - k8s: 使用 Kubernetes 发现节点。<br/>
              
 
 - core_nodes: <code>emqx_schema:comma_separated_atoms()</code>
@@ -7495,10 +7819,10 @@ EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了
   * mapping: 
   `mria.core_nodes`
 
-  当前节点连接的核心节点列表。</br>
+  当前节点连接的核心节点列表。<br/>
   注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>
-  并且设置<code>role</code>为<code>replicant</code>时生效。</br>
-  该值需要在手动或静态集群发现机制下设置。</br>
+  并且设置<code>role</code>为<code>replicant</code>时生效。<br/>
+  该值需要在手动或静态集群发现机制下设置。<br/>
   如果使用了自动集群发现机制（如<code>etcd</code>），则不需要设置该值。
             
 
@@ -7525,9 +7849,9 @@ EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了
   `ekka.proto_dist`
 
   分布式 Erlang 集群协议类型。可选值为:
-  - inet_tcp: 使用 IPv4 </br>
-  - inet6_tcp 使用 IPv6 </br>
-  - inet_tls: 使用 TLS，需要与 node.ssl_dist_optfile 配置一起使用。</br>
+  - inet_tcp: 使用 IPv4 <br/>
+  - inet6_tcp 使用 IPv6 <br/>
+  - inet_tls: 使用 TLS，需要与 node.ssl_dist_optfile 配置一起使用。<br/>
            
 
 - static: <code>[cluster_static](#cluster_static)</code>
@@ -7636,7 +7960,10 @@ EMQX 节点可以组成一个集群，以提高总容量。</br> 这里指定了
   * default: 
   `unlimited`
 
+
   设置单个日志消息的最大长度。 如果超过此长度，则日志消息将被截断。最小可设置的长度为100。
+  注意：如果日志格式为 JSON，限制字符长度可能会导致截断不完整的 JSON 数据。
+
 
 - formatter: <code>text | json</code>
   * default: 
@@ -7838,7 +8165,10 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `unlimited`
 
+
   设置单个日志消息的最大长度。 如果超过此长度，则日志消息将被截断。最小可设置的长度为100。
+  注意：如果日志格式为 JSON，限制字符长度可能会导致截断不完整的 JSON 数据。
+
 
 - formatter: <code>text | json</code>
   * default: 
@@ -7908,7 +8238,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
 
 ## log_overload_kill
 
-日志过载终止，具有过载保护功能。当日志处理进程使用过多内存，或者缓存的日志消息过多时该功能被激活。</br>
+日志过载终止，具有过载保护功能。当日志处理进程使用过多内存，或者缓存的日志消息过多时该功能被激活。<br/>
 检测到过载时，日志处理进程将终止，并在冷却期后重新启动。
 
 
@@ -7955,7 +8285,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
 
 ## log_rotation
 
-默认情况下，日志存储在 `./log` 目录（用于从 zip 文件安装）或 `/var/log/emqx`（用于二进制安装）。</br>
+默认情况下，日志存储在 `./log` 目录（用于从 zip 文件安装）或 `/var/log/emqx`（用于二进制安装）。<br/>
 这部分配置，控制每个日志处理进程保留的文件数量。
 
 
@@ -8009,13 +8339,11 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   * default: 
   `"emqx@127.0.0.1"`
 
-  节点名。格式为 `<name>@<host>`。其中 `<host>` 可以是 IP 地址，也可以是 FQDN。
+  节点名。格式为 \<name>@\<host>。其中 <host> 可以是 IP 地址，也可以是 FQDN。
   详见 http://erlang.org/doc/reference_manual/distributed.html。
             
 
 - cookie: <code>string()</code>
-  * default: 
-  `"emqxsecretcookie"`
   * mapping: 
   `vm_args.-setcookie`
 
@@ -8064,12 +8392,12 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   `emqx.data_dir`
 
 
-  节点数据存放目录，可能会自动创建的子目录如下：</br>
-  - `mnesia/<node_name>`。EMQX的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。</br>
-  如果节点要被重新命名（例如，`emqx@10.0.1.1`）。旧目录应该首先被删除。</br>
-  - `configs`。在启动时生成的配置，以及集群/本地覆盖的配置。</br>
-  - `patches`: 热补丁文件将被放在这里。</br>
-  - `trace`: 日志跟踪文件。</br>
+  节点数据存放目录，可能会自动创建的子目录如下：<br/>
+  - `mnesia/<node_name>`。EMQX的内置数据库目录。例如，`mnesia/emqx@127.0.0.1`。<br/>
+  如果节点要被重新命名（例如，`emqx@10.0.1.1`）。旧目录应该首先被删除。<br/>
+  - `configs`。在启动时生成的配置，以及集群/本地覆盖的配置。<br/>
+  - `patches`: 热补丁文件将被放在这里。<br/>
+  - `trace`: 日志跟踪文件。<br/>
 
   **注意**: 一个数据dir不能被两个或更多的EMQX节点同时使用。
            
@@ -8141,7 +8469,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
 
 - etc_dir: <code>string()</code>
 
-  <code>etc</code> 存放目录
+  Deprecated since 5.0.8.
 
 - cluster_call: <code>[cluster_call](#cluster_call)</code>
 
@@ -8164,10 +8492,10 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
   `mria.node_role`
 
 
-  选择节点的角色。</br>
-  <code>core</code> 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。</br>
-  <code>repliant</code> 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余</br>
-  建议复制节点多于核心节点。</br>
+  选择节点的角色。<br/>
+  <code>core</code> 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。<br/>
+  <code>repliant</code> 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余<br/>
+  建议复制节点多于核心节点。<br/>
   注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>。
             
 
@@ -8189,7 +8517,7 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
 
 
 ## rpc
-EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
+EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
 大多数情况下，默认的配置应该可以工作，但如果你需要做一些性能优化或者实验，可以尝试调整这些参数。
 
 
@@ -8235,7 +8563,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   `gen_rpc.port_discovery`
 
   <code>manual</code>: 通过 <code>tcp_server_port</code> 来发现端口。
-  </br><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 <code>
+  <br/><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 <code>
   emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
            
 
@@ -8245,7 +8573,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   * mapping: 
   `gen_rpc.tcp_server_port`
 
-  RPC 本地服务使用的 TCP 端口。</br>
+  RPC 本地服务使用的 TCP 端口。<br/>
   只有当 rpc.port_discovery 设置为 manual 时，此配置才会生效。
         
 
@@ -8255,7 +8583,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   * mapping: 
   `gen_rpc.ssl_server_port`
 
-  RPC 本地服务使用的监听SSL端口。</br>
+  RPC 本地服务使用的监听SSL端口。<br/>
   只有当 rpc.port_discovery 设置为 manual 且 <code> dirver </code> 设置为 <code>ssl</code>，
   此配置才会生效。
         
@@ -8286,7 +8614,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   * mapping: 
   `gen_rpc.keyfile`
 
-  <code>rpc.certfile</code> 的私钥文件的路径。</br>
+  <code>rpc.certfile</code> 的私钥文件的路径。<br/>
   注意：此文件内容是私钥，所以需要设置权限为 600。
         
 
@@ -8294,7 +8622,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   * mapping: 
   `gen_rpc.cacertfile`
 
-  验证 <code>rpc.certfile</code> 的 CA 证书文件的路径。</br>
+  验证 <code>rpc.certfile</code> 的 CA 证书文件的路径。<br/>
   注意：集群中所有节点的证书必须使用同一个 CA 签发。
         
 
@@ -8369,6 +8697,14 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。</br>
   `gen_rpc.socket_buffer`
 
   TCP 调节参数。用户模式套接字缓冲区大小。
+
+- insecure_fallback: <code>boolean()</code>
+  * default: 
+  `true`
+  * mapping: 
+  `gen_rpc.insecure_auth_fallback_allowed`
+
+  兼容旧的无鉴权模式
 
 
 ## topology
@@ -8513,14 +8849,11 @@ and `<Username>` is the username or `unknown_user`.
 
 - enable_alarm: <code>boolean()</code>
 
-  启用或者禁用连接阻塞告警功能
+  启用或者禁用连接阻塞告警功能。
 
 - min_alarm_sustain_duration: <code>emqx_schema:duration()</code>
 
-  清除警报前的最短时间。
-
-  只有当队列中没有挂起的数据，并且连接至少被堵塞了 "min_alarm_sustain_duration" 毫秒时，
-  报警才会被清除。这是为了避免太频繁地清除和再次发出警报.
+  清除警报前的最短时间。<br/>只有当队列中没有挂起的数据，并且连接至少被堵塞了 <code>min_alarm_sustain_duration</code> 毫秒时，<br/>报警才会被清除。这是为了避免太频繁地清除和再次发出警报。
 
 
 ## zone:flapping_detect
@@ -8545,11 +8878,11 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 
 - enable: <code>boolean()</code>
 
-  启用抖动检测功能
+  启用抖动检测功能。
 
 - max_count: <code>integer()</code>
 
-  MQTT 客户端在"窗口"时间内允许的最大断开次数
+  MQTT 客户端在“窗口”时间内允许的最大断开次数。
 
 - window_time: <code>emqx_schema:duration()</code>
 
@@ -8557,7 +8890,11 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 
 - ban_time: <code>emqx_schema:duration()</code>
 
-  抖动的客户端将会被禁止登录多长时间
+  抖动的客户端将会被禁止登录多长时间。
+
+- clean_when_banned: <code>boolean()</code>
+
+  当客户端被禁时删除其保留、延迟消息注意: 这个操作开销可能较大,且只支持通过 clientid 封禁的用户数据。
 
 
 ## zone:force_gc
@@ -8580,15 +8917,15 @@ Force garbage collection in MQTT connection process after
 
 - enable: <code>boolean()</code>
 
-  启用强制垃圾回收
+  启用强制垃圾回收。
 
 - count: <code>0..inf</code>
 
-  在进程收到多少消息之后，对此进程执行垃圾回收
+  在进程收到多少消息之后，对此进程执行垃圾回收。
 
 - bytes: <code>emqx_schema:bytesize()</code>
 
-  在进程处理过多少个字节之后，对此进程执行垃圾回收
+  在进程处理过多少个字节之后，对此进程执行垃圾回收。
 
 
 ## zone:force_shutdown
@@ -8614,20 +8951,19 @@ of the Erlang process, not the `mqueue` of QoS 1 and QoS 2.
 
 - enable: <code>boolean()</code>
 
-  启用 `force_shutdown` 功能
+  启用 `force_shutdown` 功能。
 
 - max_message_queue_len: <code>0..inf</code>
 
-  消息队列的最大长度
+  消息队列的最大长度。
 
 - max_heap_size: <code>emqx_schema:wordsize()</code>
 
-  Heap 的总大小
+  Heap 的总大小。
 
 
 ## zone:mqtt
-Global MQTT configuration.</br>
-The configs here work as default values which can be overridden
+Global MQTT configuration.<br/>The configs here work as default values which can be overridden
 in <code>zone</code> configs
 
 
@@ -8686,7 +9022,7 @@ in <code>zone</code> configs
 
 - ignore_loop_deliver: <code>boolean()</code>
 
-  是否为 MQTT v3.1.1/v3.1.0 客户端忽略投递自己发布的消息，类似于 MQTT 5.0 中的 <code>No Local</code> 订阅选项
+  是否为 MQTT v3.1.1/v3.1.0 客户端忽略投递自己发布的消息，类似于 MQTT 5.0 中的 <code>No Local</code> 订阅选项。
 
 - strict_mode: <code>boolean()</code>
 
@@ -8723,11 +9059,11 @@ in <code>zone</code> configs
 
 - max_awaiting_rel: <code>integer() | infinity</code>
 
-  PUBREL (Client -> Broker) 最大等待队列长度。
+  每个发布者的会话中，都存在一个队列来处理客户端发送的 QoS 2 消息。该队列会存储 QoS 2 消息的报文 ID 直到收到客户端的 PUBREL 或超时，达到队列长度的限制后，新的 QoS 2 消息发布会被拒绝，并返回 `147(0x93)` 错误。
 
 - await_rel_timeout: <code>emqx_schema:duration()</code>
 
-  PUBREL (Client -> Broker) 最大等待时间，超时则会被丢弃。
+  客户端发布 QoS 2 消息时，服务器等待 `PUBREL` 的最长时延。超过该时长后服务器会放弃等待，该PACKET ID 会被释放，从而允许后续新的 PUBLISH 消息使用。如果超时后收到 PUBREL，服务器将会产生一条告警日志。注意，向订阅客户端转发消息的动作发生在进入等待之前。
 
 - session_expiry_interval: <code>emqx_schema:duration()</code>
 
@@ -8807,23 +9143,23 @@ disables some features (such as accepting new connections) when the load is high
 
 - enable: <code>boolean()</code>
 
-  是否对系统过载做出反应
+  是否对系统过载做出反应。
 
 - backoff_delay: <code>0..inf</code>
 
-  一些不重要的任务可能会延迟执行，以毫秒为单位设置延迟
+  高负载时，一些不重要的任务可能会延迟执行，在这里设置允许延迟的时间。单位为毫秒。
 
 - backoff_gc: <code>boolean()</code>
 
-  如有必要，跳过强制GC
+  高负载时，跳过强制 GC。
 
 - backoff_hibernation: <code>boolean()</code>
 
-  如有必要，跳过进程休眠
+  高负载时，跳过进程休眠。
 
 - backoff_new_conn: <code>boolean()</code>
 
-  如有必要，关闭新进来的连接
+  高负载时，拒绝新进来的客户端连接。
 
 
 ## zone:stats
@@ -8846,7 +9182,7 @@ Statistic data such as message receive/send count/rate etc. It provides insights
 
 - enable: <code>boolean()</code>
 
-  启用/禁用统计数据收集功能
+  启用/禁用统计数据收集功能。
 
 
 ## authn-builtin_db:authentication
@@ -9335,10 +9671,8 @@ Settings for PBKDF2 password hashing algorithm.
   正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
-  * default: 
-  `5`
 
-  请求出错时的最大重试次数。
+  Deprecated since 5.0.4.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
@@ -9354,10 +9688,8 @@ Settings for PBKDF2 password hashing algorithm.
 
 
 - retry_interval: <code>emqx_schema:duration()</code>
-  * default: 
-  `"1s"`
 
-  重试之间的间隔时间。
+  Deprecated since 5.0.4.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -9487,10 +9819,8 @@ Settings for PBKDF2 password hashing algorithm.
   正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
 
 - max_retries: <code>non_neg_integer()</code>
-  * default: 
-  `5`
 
-  请求出错时的最大重试次数。
+  Deprecated since 5.0.4.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
@@ -9506,10 +9836,8 @@ Settings for PBKDF2 password hashing algorithm.
 
 
 - retry_interval: <code>emqx_schema:duration()</code>
-  * default: 
-  `"1s"`
 
-  重试之间的间隔时间。
+  Deprecated since 5.0.4.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -9695,7 +10023,7 @@ Settings for PBKDF2 password hashing algorithm.
 
 - endpoint: <code>string()</code>
 
-  JWKS 端点，它是一个以 JWKS 格式返回服务端的公钥集的只读端点。
+  JWKS 端点， 它是一个以 JWKS 格式返回服务端的公钥集的只读端点。
 
 - pool_size: <code>pos_integer()</code>
   * default: 
@@ -9709,7 +10037,7 @@ Settings for PBKDF2 password hashing algorithm.
 
   JWKS 刷新间隔。
 
-- ssl: <code>[authn-jwt:ssl_enable](#authn-jwt-ssl_enable) | [authn-jwt:ssl_disable](#authn-jwt-ssl_disable)</code>
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
   `{enable = false}`
 
@@ -9854,156 +10182,6 @@ Settings for PBKDF2 password hashing algorithm.
   `true`
 
   设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
-
-
-## authn-jwt:ssl_disable
-SSL 配置。
-
-
-**Config paths**
-
- - <code>authentication.$INDEX.ssl</code>
- - <code>gateway.coap.authentication.ssl</code>
- - <code>gateway.coap.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.coap.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.exproto.authentication.ssl</code>
- - <code>gateway.exproto.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.exproto.listeners.ssl.$name.authentication.ssl</code>
- - <code>gateway.exproto.listeners.tcp.$name.authentication.ssl</code>
- - <code>gateway.exproto.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.lwm2m.authentication.ssl</code>
- - <code>gateway.lwm2m.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.lwm2m.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.mqttsn.authentication.ssl</code>
- - <code>gateway.mqttsn.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.mqttsn.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.stomp.authentication.ssl</code>
- - <code>gateway.stomp.listeners.ssl.$name.authentication.ssl</code>
- - <code>gateway.stomp.listeners.tcp.$name.authentication.ssl</code>
- - <code>listeners.ssl.$name.authentication.$INDEX.ssl</code>
- - <code>listeners.tcp.$name.authentication.$INDEX.ssl</code>
- - <code>listeners.ws.$name.authentication.$INDEX.ssl</code>
- - <code>listeners.wss.$name.authentication.$INDEX.ssl</code>
-
-
-**Env overrides**
-
- - <code>EMQX_AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_GATEWAY__COAP__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__COAP__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__COAP__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__SSL__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__TCP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__LWM2M__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__LWM2M__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__LWM2M__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__MQTTSN__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__MQTTSN__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__MQTTSN__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__STOMP__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__STOMP__LISTENERS__SSL__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__STOMP__LISTENERS__TCP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_LISTENERS__SSL__$NAME__AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_LISTENERS__TCP__$NAME__AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_LISTENERS__WS__$NAME__AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_LISTENERS__WSS__$NAME__AUTHENTICATION__$INDEX__SSL</code>
-
-
-
-**Fields**
-
-- enable: <code>false</code>
-
-  启用/禁用 SSL。
-
-
-## authn-jwt:ssl_enable
-SSL 配置。
-
-
-**Config paths**
-
- - <code>authentication.$INDEX.ssl</code>
- - <code>gateway.coap.authentication.ssl</code>
- - <code>gateway.coap.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.coap.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.exproto.authentication.ssl</code>
- - <code>gateway.exproto.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.exproto.listeners.ssl.$name.authentication.ssl</code>
- - <code>gateway.exproto.listeners.tcp.$name.authentication.ssl</code>
- - <code>gateway.exproto.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.lwm2m.authentication.ssl</code>
- - <code>gateway.lwm2m.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.lwm2m.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.mqttsn.authentication.ssl</code>
- - <code>gateway.mqttsn.listeners.dtls.$name.authentication.ssl</code>
- - <code>gateway.mqttsn.listeners.udp.$name.authentication.ssl</code>
- - <code>gateway.stomp.authentication.ssl</code>
- - <code>gateway.stomp.listeners.ssl.$name.authentication.ssl</code>
- - <code>gateway.stomp.listeners.tcp.$name.authentication.ssl</code>
- - <code>listeners.ssl.$name.authentication.$INDEX.ssl</code>
- - <code>listeners.tcp.$name.authentication.$INDEX.ssl</code>
- - <code>listeners.ws.$name.authentication.$INDEX.ssl</code>
- - <code>listeners.wss.$name.authentication.$INDEX.ssl</code>
-
-
-**Env overrides**
-
- - <code>EMQX_AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_GATEWAY__COAP__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__COAP__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__COAP__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__SSL__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__TCP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__EXPROTO__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__LWM2M__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__LWM2M__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__LWM2M__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__MQTTSN__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__MQTTSN__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__MQTTSN__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__STOMP__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__STOMP__LISTENERS__SSL__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_GATEWAY__STOMP__LISTENERS__TCP__$NAME__AUTHENTICATION__SSL</code>
- - <code>EMQX_LISTENERS__SSL__$NAME__AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_LISTENERS__TCP__$NAME__AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_LISTENERS__WS__$NAME__AUTHENTICATION__$INDEX__SSL</code>
- - <code>EMQX_LISTENERS__WSS__$NAME__AUTHENTICATION__$INDEX__SSL</code>
-
-
-
-**Fields**
-
-- enable: <code>true</code>
-
-  启用/禁用 SSL。
-
-- cacertfile: <code>string()</code>
-
-  包含 PEM 编码的 CA 证书的文件的路径。
-
-- certfile: <code>string()</code>
-
-  包含用户证书的文件的路径。
-
-- keyfile: <code>string()</code>
-
-  包含 PEM 编码的用户私钥的文件的路径。
-
-- verify: <code>verify_peer | verify_none</code>
-  * default: 
-  `verify_none`
-
-  指定握手过程中是否校验对端证书。
-
-- server_name_indication: <code>string()</code>
-
-  服务器名称指示（SNI）。
 
 
 ## authn-mongodb:replica-set
@@ -10478,11 +10656,11 @@ SSL 配置。
 
   Standalone模式。
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
 
 
@@ -10620,11 +10798,11 @@ SSL 配置。
 
   设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 MySQL 默认端口 3306。
 
 
@@ -10742,11 +10920,11 @@ SSL 配置。
 
   设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 PostgreSQL 默认端口 5432。
 
 
@@ -11170,11 +11348,11 @@ PSK 是 “Pre-Shared-Keys” 的缩写。
 
   设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
 
-  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
-  主机名具有以下形式：`Host[:Port]`。</br>
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
   如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
 
 
@@ -11439,17 +11617,9 @@ HTTP Bridge 配置
 
   连接HTTP服务器的超时时间。
 
-- max_retries: <code>non_neg_integer()</code>
-  * default: 
-  `5`
-
-  请求出错时的最大重试次数。
-
 - retry_interval: <code>emqx_schema:duration()</code>
-  * default: 
-  `"1s"`
 
-  重试之间的间隔时间。
+  Deprecated since 5.0.4.
 
 - pool_type: <code>emqx_connector_http:pool_type()</code>
   * default: 
@@ -11485,8 +11655,8 @@ HTTP Bridge 配置
 - url: <code>binary()</code>
 
 
-  HTTP Bridge 的 URL。</br>
-  路径中允许使用带变量的模板，但是 host， port 不允许使用变量模板。</br>
+  HTTP Bridge 的 URL。<br/>
+  路径中允许使用带变量的模板，但是 host， port 不允许使用变量模板。<br/>
   例如，<code> http://localhost:9901/${topic} </code> 是允许的，
   但是<code> http://${host}:9901/message </code>
   或 <code> http://localhost:${port}/message </code>
@@ -11496,7 +11666,7 @@ HTTP Bridge 配置
 - local_topic: <code>binary()</code>
 
 
-  发送到 'local_topic' 的消息都会转发到 HTTP 服务器。 </br>
+  发送到 'local_topic' 的消息都会转发到 HTTP 服务器。 <br/>
   注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 HTTP 服务器。
 
 
@@ -11505,8 +11675,8 @@ HTTP Bridge 配置
   `post`
 
 
-  HTTP 请求的方法。 所有可用的方法包括：post、put、get、delete。</br>
-  允许使用带有变量的模板。</br>
+  HTTP 请求的方法。 所有可用的方法包括：post、put、get、delete。<br/>
+  允许使用带有变量的模板。<br/>
 
 - headers: <code>map()</code>
   * default: 
@@ -11522,7 +11692,7 @@ HTTP Bridge 配置
   ```
 
 
-  HTTP 请求的标头。</br>
+  HTTP 请求的标头。<br/>
   允许使用带有变量的模板。
 
 
@@ -11531,8 +11701,14 @@ HTTP Bridge 配置
   `"${payload}"`
 
 
-  HTTP 请求的正文。</br>
+  HTTP 请求的正文。<br/>
   允许使用带有变量的模板。
+
+- max_retries: <code>non_neg_integer()</code>
+  * default: 
+  `2`
+
+  HTTP 请求失败最大重试次数
 
 - request_timeout: <code>emqx_schema:duration_ms()</code>
   * default: 
@@ -11620,6 +11796,10 @@ HTTP Bridge 配置
 
   HTTP 头字段列表。
 
+- max_retries: <code>non_neg_integer()</code>
+
+  请求出错时的最大重试次数。
+
 - request_timeout: <code>emqx_schema:duration_ms()</code>
 
   HTTP 请求超时。
@@ -11649,18 +11829,15 @@ HTTP Bridge 配置
   `cluster_shareload`
 
 
-  MQTT 桥的模式。 可用的类型有“cluster_singleton”，“cluster_shareload”。</br>
+  MQTT 桥的模式。 <br/>
 
-  - cluster_singleton：在 emqx 集群内创建唯一的 MQTT 连接。</br>
-  在“cluster_singleton”节点中，所有发往远程代理的消息都通过相同的MQTT 连接。</br>
-
-  - cluster_shareload：在 emqx 集群的每个节点上创建一个 MQTT 连接。</br>
-  在“cluster_shareload”模式下，来自远程代理的传入负载通过共享订阅的方式接收。</br>
-  请注意，“clientid”以节点名称为后缀，这是为了避免不同节点之间的clientid冲突。
-  而且对于入口连接的“remote_topic”，我们只能使用共享订阅主题过滤器。
+  - cluster_shareload：在 emqx 集群的每个节点上创建一个 MQTT 连接。<br/>
+  在“cluster_shareload”模式下，来自远程代理的传入负载通过共享订阅的方式接收。<br/>
+  请注意，<code>clientid</code> 以节点名称为后缀，这是为了避免不同节点之间的clientid冲突。
+  而且对于入口连接的 <code>remote_topic</code>，我们只能使用共享订阅主题过滤器。
 
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
 
   远程 MQTT Broker的主机和端口。
 
@@ -11668,12 +11845,11 @@ HTTP Bridge 配置
   * default: 
   `"15s"`
 
-  Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:</br>
-  - `ms` for milliseconds,
+  Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,
   - `h` for hours;
-  </br>or combination of whereof: `1h5m0s`
+  <br/>or combination of whereof: `1h5m0s`
 
 - proto_ver: <code>v3 | v4 | v5</code>
   * default: 
@@ -11691,14 +11867,10 @@ HTTP Bridge 配置
       
 
 - username: <code>binary()</code>
-  * default: 
-  `"emqx"`
 
   MQTT 协议的用户名
 
 - password: <code>binary()</code>
-  * default: 
-  `"emqx"`
 
   MQTT 协议的密码
 
@@ -11712,23 +11884,21 @@ HTTP Bridge 配置
   * default: 
   `"300s"`
 
-  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:</br>
-  - `ms` for milliseconds,
+  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,
   - `h` for hours;
-  </br>or combination of whereof: `1h5m0s`
+  <br/>or combination of whereof: `1h5m0s`
 
 - retry_interval: <code>string()</code>
   * default: 
   `"15s"`
 
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:</br>
-  - `ms` for milliseconds,
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
   - `s` for seconds,
   - `m` for minutes,
   - `h` for hours;
-  </br>or combination of whereof: `1h5m0s`
+  <br/>or combination of whereof: `1h5m0s`
 
 - max_inflight: <code>non_neg_integer()</code>
   * default: 
@@ -11769,7 +11939,7 @@ HTTP Bridge 配置
 - dir: <code>boolean() | string()</code>
 
 
-  replayq 文件保存的目录。</br>
+  replayq 文件保存的目录。<br/>
   设置为 'false' 会禁用 replayq 功能。
 
 
@@ -11778,7 +11948,7 @@ HTTP Bridge 配置
   `"100MB"`
 
 
-  单个段的大小（以字节为单位）。</br>
+  单个段的大小（以字节为单位）。<br/>
   一个段映射到 replayq 目录中的一个文件。 如果当前段已满，则新段（文件）将被打开写入。
 
 
@@ -11787,14 +11957,14 @@ HTTP Bridge 配置
   `false`
 
 
-  在Offload模式下，磁盘队列仅用于卸载队列尾段。</br>
+  在Offload模式下，磁盘队列仅用于卸载队列尾段。<br/>
   消息首先缓存在内存中，然后写入replayq文件。内存缓大小为“seg_bytes” 指定的值。
 
 
 
 ## plugin:plugins
-管理EMQX插件。</br>
-插件可以是EMQX安装包中的一部分，也可以是一个独立的安装包。</br>
+管理EMQX插件。<br/>
+插件可以是EMQX安装包中的一部分，也可以是一个独立的安装包。<br/>
 独立安装的插件称为“外部插件”。
            
 
@@ -11822,13 +11992,13 @@ HTTP Bridge 配置
   * default: 
   `"plugins"`
 
-  插件安装包的目录，不要自己创建，只能由emqx用户创建与修改
+  插件安装包的目录，出于安全考虑，该目录应该值允许 <code>emqx</code>，或用于运行 EMQX 服务的用户拥有写入权限。
 
 - check_interval: <code>emqx_schema:duration()</code>
   * default: 
   `"5s"`
 
-  检查间隔：检查集群中插件的状态是否一致，</br>
+  检查间隔：检查集群中插件的状态是否一致，<br/>
   如果连续3次检查结果不一致，则报警。
 
 
@@ -11852,7 +12022,7 @@ HTTP Bridge 配置
 
 - name_vsn: <code>string()</code>
 
-  插件的名称{name}-{version}。</br>
+  插件的名称{name}-{version}。<br/>
   它应该与插件的发布包名称一致，如my_plugin-0.1.0。
 
 - enable: <code>boolean()</code>
@@ -11887,7 +12057,7 @@ Prometheus 监控数据推送
   * default: 
   `"15s"`
 
-  数据推送间隔，单位 毫秒
+  数据推送间隔
 
 - enable: <code>boolean()</code>
   * default: 
@@ -11925,7 +12095,7 @@ Retainer batching and rate limiting.
 
   批量派发时每批的数量。0 代表一次性全部派发
 
-- batch_deliver_limiter: <code>emqx_limiter_schema:bucket_name()</code>
+- batch_deliver_limiter: <code>[limiter:internal](#limiter-internal)</code>
 
   批量发送的限流器的名称。
   限流器可以用来防止短时间内向客户端发送太多的消息，从而避免过多的消息导致客户端队列堵塞甚至崩溃。
@@ -11981,7 +12151,7 @@ Configuration of the internal database storing retained messages.
   ]
   ```
 
-  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.</br>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
+  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
 
 
 ## retainer
@@ -12020,6 +12190,8 @@ Configuration related to handling `PUBLISH` packets with a `retain` flag set to 
   消息清理间隔。0 代表不进行清理
 
 - flow_control: <code>[retainer:flow_control](#retainer-flow_control)</code>
+  * default: 
+  `{}`
 
   流控设置
 
@@ -12090,7 +12262,7 @@ Configuration for `slow_subs` feature.
 
 
 ## statsd
-Statsd 监控数据推送
+StatsD 指标采集与推送配置。
 
 
 **Config paths**
@@ -12110,24 +12282,24 @@ Statsd 监控数据推送
   * default: 
   `false`
 
-  开启或关闭 Statsd 数据推送
+  启用或禁用 StatsD 指标采集和推送服务。
 
-- server: <code>emqx_schema:ip_port()</code>
+- server: <code>emqx_schema:host_port()</code>
   * default: 
   `"127.0.0.1:8125"`
 
-  Statsd 服务器地址
+  StatsD 服务器地址。
 
 - sample_time_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
   `"10s"`
 
-  数据收集间隔，单位 毫秒
+  指标的采样间隔。
 
 - flush_time_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
   `"10s"`
 
-  数据推送间隔，单位 毫秒
+  指标的推送间隔。
 
 
