@@ -144,7 +144,7 @@ JWT 认证支持以三种方式配置密钥，这三种方式分别对应三种�
 该三类密钥允许同时配置。EMQX 在验证 Token 时会按 `auth.jwt.secret`，`auth.jwt.pubkey`，`auth.jwt.jwks` 顺序检查。
 
 
-::: danger
+::: tip
 JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限，使用 JWT 时建议启用 TLS 加密传输。
 JWT 使用过程中无法在过期前废止某个 Token，请妥善设置有效时长并保管好密钥等加密信息。
 :::
