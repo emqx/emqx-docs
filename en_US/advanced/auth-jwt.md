@@ -143,7 +143,7 @@ JWT authentication supports three ways to configure keys, which correspond to th
 The three types of keys are allowed to be configured simultaneously. EMQX checks the Token in the order of `auth.jwt.secret`, `auth.jwt.pubkey`, `auth.jwt.jwks`.
 
 
-::: danger
+::: tip
 JWT contains authentication information by itself. Once leaked, anyone can get all the permissions of the token. It is recommended to enable TLS encrypted transmission when using JWT.
 
 During the use of JWT, a token cannot be invalidated before it expires. Please properly set the validity time and keep the encryption information well.

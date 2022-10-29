@@ -135,7 +135,7 @@ EMQX 默认允许匿名认证客户端登录，即：任何客户端都能接入
 allow_anonymous = true
 ```
 
-::: danger
+::: tip
 
 生产环境中请禁用匿名认证。
 

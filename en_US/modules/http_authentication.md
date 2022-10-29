@@ -60,7 +60,7 @@ You can use the following placeholders in the authentication request. EMQX will 
 -%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
 -%d: TLS certificate subject, only valid when TLS connection
 
-::: danger
+::: tip
 It is recommended to use the POST and PUT methods. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
 :::
 
@@ -127,6 +127,6 @@ You can use the following placeholders in the authentication request. EMQX will 
 -%m: Mountpoint
 -%t: Subject
 
-::: danger
+::: tip
 It is recommended to use the POST and PUT methods. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
 :::
