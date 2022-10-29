@@ -116,7 +116,7 @@ By default, EMQX allows clients to connect without authentication.
 allow_anonymous = true
 ```
 
-::: danger
+::: tip
 
 Disable anonymous authentication in production environments.
 
