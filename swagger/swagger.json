@@ -7602,8 +7602,8 @@
         ],
         "properties": {
           "xml_dir": {
-            "default": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/lwm2m_xml",
             "description": "The Directory for LwM2M Resource definition.",
+            "example": "/etc/emqx/lwm2m_xml",
             "type": "string"
           },
           "lifetime_min": {
@@ -17241,8 +17241,8 @@
             "type": "string"
           },
           "xml_dir": {
-            "default": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/lwm2m_xml",
             "description": "The Directory for LwM2M Resource definition.",
+            "example": "/etc/emqx/lwm2m_xml",
             "type": "string"
           },
           "lifetime_min": {
@@ -18082,6 +18082,24 @@
         ],
         "tags": [
           "Plugins"
+        ]
+      }
+    },
+    "/status": {
+      "get": {
+        "description": "Serves as a health check for the node.  Returns a plain text response describing the status of the node.  This endpoint requires no authentication.<br/><br/>Returns status code 200 if the EMQX application is up and running, 503 otherwise.<br/>This API was introduced in v5.0.10.<br/>The GET `/status` endpoint (without the `/api/...` prefix) is also an alias to this endpoint and works in the same way.  This alias has been available since v5.0.0.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Node emqx@127.0.0.1 is started<br/>emqx is running"
+          },
+          "503": {
+            "description": "Node emqx@127.0.0.1 is stopped<br/>emqx is not_running"
+          }
+        },
+        "security": [],
+        "tags": [
+          "Status"
         ]
       }
     },
@@ -19311,10 +19329,10 @@
                 "pool_size": 8,
                 "request_timeout": "5s",
                 "ssl": {
-                  "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                  "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                  "cacertfile": "/etc/emqx/certs/cacert.pem",
+                  "certfile": "/etc/emqx/certs/cert.pem",
                   "enable": false,
-                  "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem"
                 },
                 "url": "http://127.0.0.1:8081"
               },
@@ -20660,10 +20678,10 @@
                     ],
                     "bind": "22213",
                     "dtls_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
@@ -20698,11 +20716,11 @@
                     "acceptors": 16,
                     "bind": "22214",
                     "dtls_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup",
                       "verify": "verify_none",
                       "versions": [
@@ -20781,10 +20799,10 @@
                       }
                     ],
                     "ssl_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "verify": "verify_none",
                       "versions": [
                         "tlsv1.3",
@@ -20975,10 +20993,10 @@
                     ],
                     "bind": "22213",
                     "dtls_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
@@ -21001,11 +21019,11 @@
                     "acceptors": 16,
                     "bind": "22214",
                     "dtls_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup",
                       "verify": "verify_none",
                       "versions": [
@@ -21050,10 +21068,10 @@
                     "max_connections": 1024000,
                     "name": "ssl-def",
                     "ssl_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "verify": "verify_none",
                       "versions": [
                         "tlsv1.3",
@@ -21142,10 +21160,10 @@
                       ],
                       "bind": "22213",
                       "dtls_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
@@ -21168,11 +21186,11 @@
                       "acceptors": 16,
                       "bind": "22214",
                       "dtls_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup",
                         "verify": "verify_none",
                         "versions": [
@@ -21217,10 +21235,10 @@
                       "max_connections": 1024000,
                       "name": "ssl-def",
                       "ssl_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "verify": "verify_none",
                         "versions": [
                           "tlsv1.3",
@@ -22368,83 +22386,83 @@
                   "general_client": {
                     "summary": "General Client Info",
                     "value": {
-                      "ip_address": "127.0.0.1",
-                      "proto_name": "STOMP",
-                      "recv_cnt": 1,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "disconnected_at": null,
-                      "connected": true,
-                      "awaiting_rel_max": "infinity",
-                      "is_bridge": false,
-                      "mqueue_dropped": 0,
-                      "mqueue_max": "infinity",
                       "awaiting_rel_cnt": 0,
+                      "awaiting_rel_max": "infinity",
+                      "recv_cnt": 1,
+                      "mqueue_dropped": 0,
+                      "proto_ver": "1.0",
                       "subscriptions_cnt": 0,
-                      "inflight_max": "infinity",
-                      "reductions": 72022,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "mqueue_max": "infinity",
+                      "proto_name": "STOMP",
                       "recv_msg": 0,
-                      "send_pkt": 1,
-                      "expiry_interval": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "connected": true,
+                      "inflight_max": "infinity",
+                      "recv_pkt": 1,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "reductions": 72022,
+                      "ip_address": "127.0.0.1",
                       "send_msg": 0,
                       "mailbox_len": 0,
                       "clean_start": true,
-                      "inflight_cnt": 0,
+                      "disconnected_at": null,
+                      "is_bridge": false,
+                      "expiry_interval": 0,
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "proto_ver": "1.0",
+                      "inflight_cnt": 0,
                       "keepalive": 0,
-                      "username": "guest",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "node": "emqx@127.0.0.1",
+                      "send_pkt": 1,
                       "heap_size": 4185,
-                      "port": 50675,
-                      "recv_pkt": 1,
-                      "mqueue_len": 0,
-                      "send_cnt": 1,
                       "subscriptions_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE"
+                      "port": 50675,
+                      "username": "guest",
+                      "send_cnt": 1,
+                      "mqueue_len": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M Client Info",
                     "value": {
-                      "ip_address": "127.0.0.1",
-                      "proto_name": "LwM2M",
-                      "recv_cnt": 1,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "lifetime": 86400,
-                      "disconnected_at": null,
-                      "connected": true,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "awaiting_rel_max": "infinity",
-                      "is_bridge": false,
-                      "mqueue_dropped": 0,
-                      "mqueue_max": "infinity",
                       "awaiting_rel_cnt": 0,
+                      "awaiting_rel_max": "infinity",
+                      "recv_cnt": 1,
+                      "mqueue_dropped": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "proto_ver": "1.0",
                       "subscriptions_cnt": 0,
-                      "inflight_max": "infinity",
-                      "reductions": 72022,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "mqueue_max": "infinity",
+                      "proto_name": "LwM2M",
                       "recv_msg": 0,
-                      "send_pkt": 1,
-                      "expiry_interval": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "connected": true,
+                      "inflight_max": "infinity",
+                      "recv_pkt": 1,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "reductions": 72022,
+                      "ip_address": "127.0.0.1",
                       "send_msg": 0,
                       "mailbox_len": 0,
                       "clean_start": true,
-                      "inflight_cnt": 0,
+                      "disconnected_at": null,
+                      "is_bridge": false,
+                      "expiry_interval": 0,
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "proto_ver": "1.0",
+                      "inflight_cnt": 0,
                       "keepalive": 0,
-                      "username": "guest",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "node": "emqx@127.0.0.1",
+                      "send_pkt": 1,
                       "heap_size": 4185,
-                      "port": 50675,
-                      "recv_pkt": 1,
-                      "mqueue_len": 0,
-                      "send_cnt": 1,
+                      "lifetime": 86400,
                       "subscriptions_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE"
+                      "port": 50675,
+                      "username": "guest",
+                      "send_cnt": 1,
+                      "mqueue_len": 0
                     }
                   }
                 },
@@ -23467,10 +23485,10 @@
                       ],
                       "bind": "22213",
                       "dtls_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
@@ -23493,11 +23511,11 @@
                       "acceptors": 16,
                       "bind": "22214",
                       "dtls_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup",
                         "verify": "verify_none",
                         "versions": [
@@ -23542,10 +23560,10 @@
                       "max_connections": 1024000,
                       "name": "ssl-def",
                       "ssl_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "verify": "verify_none",
                         "versions": [
                           "tlsv1.3",
@@ -23715,10 +23733,10 @@
                     ],
                     "bind": "22213",
                     "dtls_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
@@ -23741,11 +23759,11 @@
                     "acceptors": 16,
                     "bind": "22214",
                     "dtls_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "user_lookup_fun": "emqx_tls_psk:lookup",
                       "verify": "verify_none",
                       "versions": [
@@ -23790,10 +23808,10 @@
                     "max_connections": 1024000,
                     "name": "ssl-def",
                     "ssl_options": {
-                      "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                      "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                      "cacertfile": "/etc/emqx/certs/cacert.pem",
+                      "certfile": "/etc/emqx/certs/cert.pem",
                       "fail_if_no_peer_cert": false,
-                      "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                      "keyfile": "/etc/emqx/certs/key.pem",
                       "verify": "verify_none",
                       "versions": [
                         "tlsv1.3",
@@ -23882,10 +23900,10 @@
                       ],
                       "bind": "22213",
                       "dtls_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
@@ -23908,11 +23926,11 @@
                       "acceptors": 16,
                       "bind": "22214",
                       "dtls_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "user_lookup_fun": "emqx_tls_psk:lookup",
                         "verify": "verify_none",
                         "versions": [
@@ -23957,10 +23975,10 @@
                       "max_connections": 1024000,
                       "name": "ssl-def",
                       "ssl_options": {
-                        "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                        "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                        "cacertfile": "/etc/emqx/certs/cacert.pem",
+                        "certfile": "/etc/emqx/certs/cert.pem",
                         "fail_if_no_peer_cert": false,
-                        "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem",
+                        "keyfile": "/etc/emqx/certs/key.pem",
                         "verify": "verify_none",
                         "versions": [
                           "tlsv1.3",
@@ -24764,7 +24782,7 @@
                       }
                     },
                     "update_msg_publish_condition": "always",
-                    "xml_dir": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/lwm2m_xml"
+                    "xml_dir": "/etc/emqx/lwm2m_xml"
                   }
                 },
                 "mqttsn_gateway": {
@@ -24940,7 +24958,7 @@
                         }
                       },
                       "update_msg_publish_condition": "always",
-                      "xml_dir": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/lwm2m_xml"
+                      "xml_dir": "/etc/emqx/lwm2m_xml"
                     }
                   },
                   "mqttsn_gateway": {
@@ -34080,10 +34098,10 @@
                 "pool_size": 8,
                 "request_timeout": "5s",
                 "ssl": {
-                  "cacertfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cacert.pem",
-                  "certfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/cert.pem",
+                  "cacertfile": "/etc/emqx/certs/cacert.pem",
+                  "certfile": "/etc/emqx/certs/cert.pem",
                   "enable": false,
-                  "keyfile": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/certs/key.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem"
                 },
                 "url": "http://127.0.0.1:8081"
               },
@@ -34516,7 +34534,7 @@
                         }
                       },
                       "update_msg_publish_condition": "always",
-                      "xml_dir": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/lwm2m_xml"
+                      "xml_dir": "/etc/emqx/lwm2m_xml"
                     }
                   },
                   "mqttsn_gateway": {
@@ -34733,7 +34751,7 @@
                       }
                     },
                     "update_msg_publish_condition": "always",
-                    "xml_dir": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/lwm2m_xml"
+                    "xml_dir": "/etc/emqx/lwm2m_xml"
                   }
                 },
                 "mqttsn_gateway": {
@@ -34888,7 +34906,7 @@
                         }
                       },
                       "update_msg_publish_condition": "always",
-                      "xml_dir": "/mnt/code/src/emqx/0/_build/emqx/rel/emqx/etc/lwm2m_xml"
+                      "xml_dir": "/etc/emqx/lwm2m_xml"
                     }
                   },
                   "mqttsn_gateway": {
@@ -39389,41 +39407,41 @@
                     "summary": "General Client List",
                     "value": [
                       {
-                        "ip_address": "127.0.0.1",
-                        "proto_name": "STOMP",
-                        "recv_cnt": 1,
-                        "created_at": "2021-12-07T10:44:02.721+08:00",
-                        "disconnected_at": null,
-                        "connected": true,
-                        "awaiting_rel_max": "infinity",
-                        "is_bridge": false,
-                        "mqueue_dropped": 0,
-                        "mqueue_max": "infinity",
                         "awaiting_rel_cnt": 0,
+                        "awaiting_rel_max": "infinity",
+                        "recv_cnt": 1,
+                        "mqueue_dropped": 0,
+                        "proto_ver": "1.0",
                         "subscriptions_cnt": 0,
-                        "inflight_max": "infinity",
-                        "reductions": 72022,
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "mqueue_max": "infinity",
+                        "proto_name": "STOMP",
                         "recv_msg": 0,
-                        "send_pkt": 1,
-                        "expiry_interval": 0,
+                        "created_at": "2021-12-07T10:44:02.721+08:00",
+                        "connected": true,
+                        "inflight_max": "infinity",
+                        "recv_pkt": 1,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                        "reductions": 72022,
+                        "ip_address": "127.0.0.1",
                         "send_msg": 0,
                         "mailbox_len": 0,
                         "clean_start": true,
-                        "inflight_cnt": 0,
+                        "disconnected_at": null,
+                        "is_bridge": false,
+                        "expiry_interval": 0,
                         "recv_oct": 56,
                         "send_oct": 61,
-                        "proto_ver": "1.0",
+                        "inflight_cnt": 0,
                         "keepalive": 0,
-                        "username": "guest",
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
                         "node": "emqx@127.0.0.1",
+                        "send_pkt": 1,
                         "heap_size": 4185,
-                        "port": 50675,
-                        "recv_pkt": 1,
-                        "mqueue_len": 0,
-                        "send_cnt": 1,
                         "subscriptions_max": "infinity",
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE"
+                        "port": 50675,
+                        "username": "guest",
+                        "send_cnt": 1,
+                        "mqueue_len": 0
                       }
                     ]
                   },
@@ -39431,43 +39449,43 @@
                     "summary": "LwM2M Client List",
                     "value": [
                       {
-                        "ip_address": "127.0.0.1",
-                        "proto_name": "LwM2M",
-                        "recv_cnt": 1,
-                        "created_at": "2021-12-07T10:44:02.721+08:00",
-                        "lifetime": 86400,
-                        "disconnected_at": null,
-                        "connected": true,
-                        "endpoint_name": "urn:imei:154928475237123",
-                        "awaiting_rel_max": "infinity",
-                        "is_bridge": false,
-                        "mqueue_dropped": 0,
-                        "mqueue_max": "infinity",
                         "awaiting_rel_cnt": 0,
+                        "awaiting_rel_max": "infinity",
+                        "recv_cnt": 1,
+                        "mqueue_dropped": 0,
+                        "endpoint_name": "urn:imei:154928475237123",
+                        "proto_ver": "1.0",
                         "subscriptions_cnt": 0,
-                        "inflight_max": "infinity",
-                        "reductions": 72022,
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "mqueue_max": "infinity",
+                        "proto_name": "LwM2M",
                         "recv_msg": 0,
-                        "send_pkt": 1,
-                        "expiry_interval": 0,
+                        "created_at": "2021-12-07T10:44:02.721+08:00",
+                        "connected": true,
+                        "inflight_max": "infinity",
+                        "recv_pkt": 1,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                        "reductions": 72022,
+                        "ip_address": "127.0.0.1",
                         "send_msg": 0,
                         "mailbox_len": 0,
                         "clean_start": true,
-                        "inflight_cnt": 0,
+                        "disconnected_at": null,
+                        "is_bridge": false,
+                        "expiry_interval": 0,
                         "recv_oct": 56,
                         "send_oct": 61,
-                        "proto_ver": "1.0",
+                        "inflight_cnt": 0,
                         "keepalive": 0,
-                        "username": "guest",
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
                         "node": "emqx@127.0.0.1",
+                        "send_pkt": 1,
                         "heap_size": 4185,
-                        "port": 50675,
-                        "recv_pkt": 1,
-                        "mqueue_len": 0,
-                        "send_cnt": 1,
+                        "lifetime": 86400,
                         "subscriptions_max": "infinity",
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE"
+                        "port": 50675,
+                        "username": "guest",
+                        "send_cnt": 1,
+                        "mqueue_len": 0
                       }
                     ]
                   }
