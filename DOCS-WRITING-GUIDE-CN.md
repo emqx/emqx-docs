@@ -218,10 +218,32 @@ or
 contents {% endemqxee %}
 ```
 
-### OpenAPI 支持
-文档任意位置均可插入 OpenApi，path 为 OpenAPI 描述定义文件，此文件需要放到文档根目录 swagger 文件夹下，用法：
+### OpenAPI
+
+EMQX API 文档是自动生成的。
+文档其实是一个 OpenAPI 3.0 规范的 JSON 格式的描述文件。
+
+在 vue.js 插件的帮助下，OpenAPI 的文档可以像下面这个例子一样嵌入到 markdown 文档中的任意位置。
+
 ```markdown
 <ClientOnly>
   <OpenApi path="swagger.json" />
 </ClientOnly>
 ```
+
+路径（ path ） 参数用于指定使用哪个文件。
+文件必需放置在 `swagger` 这个子目录中。
+
+#### EMQX 的 API 文档
+
+EMQX 的 API 文档嵌入到了 `admin/api.md` 中。
+
+`swagger.json` 的内容最初是 EMQX 中的 HTTP 服务组件自动生成的，
+当前 git 仓库里的文件则是通过 EMQX 生成的文件做一定的改写生成的。
+
+如果需要更新 API 文档，步骤如下：
+
+* 启动最新的 EMQX v5 的节点
+* 执行当前仓库里的脚本 `./rewrite-swagger.sh`
+* 将修改后的文件提交到 git 版本中
+* 发送一个 GitHub PR
