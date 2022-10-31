@@ -204,6 +204,7 @@
     - dashboard/configuration
     - dashboard/extensions
     - dashboard/diagnose
+    - dashboard/system
 
 ## Developers & Testers
 
