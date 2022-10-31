@@ -21,13 +21,13 @@ EMQX 目前支持的操作系统:
 1.  获取 docker 镜像
 
     ```shell
-    docker pull emqx/emqx:5.0.4
+    docker pull emqx/emqx:5.0.9
     ```
 
 2.  启动 docker 容器
 
     ```shell
-    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.4
+    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.9
     ```
 
 ### 使用 docker-compose 创建简单的 static 集群
@@ -39,7 +39,7 @@ EMQX 目前支持的操作系统:
 
    services:
      emqx1:
-       image: emqx/emqx:5.0.4
+       image: emqx/emqx:5.0.9
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.io"
@@ -56,7 +56,7 @@ EMQX 目前支持的操作系统:
            - node1.emqx.io
 
      emqx2:
-       image: emqx/emqx:5.0.4
+       image: emqx/emqx:5.0.9
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
