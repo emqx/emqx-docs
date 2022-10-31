@@ -13,7 +13,7 @@ $ db.createUser({user: "root", pwd: "public", roles: [{role: "readWrite", db: "m
 $ vim /usr/local/etc/mongod.conf
 
     security:
-        authorization: enabled
+    authorization: enabled
 
 $ brew services restart mongodb
 ```
@@ -28,23 +28,17 @@ db.createCollection("t_mqtt_msg");
 
 Create a rule:
 
-Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
-
-Select "message.publish", then type in the following SQL:
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left. Then type in the following SQL:
 
 ```sql
-SELECT
-    *
-FROM
-    "message.publish"
+SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/#"
 ```
 
-![image](./assets/rule-engine/mysql_sql_1.png)
+![image](./assets/rule-engine/mongo_sql_1.png)
 
 Bind an action:
 
-Click on the "+ Add" button under "Action Handler", and then select
-"Data to MongoDB" in the pop-up dialog window.
+Click on the "+ Add action" button under the "Action" tab, and then select "Data persist" -> "Data to MongoDB" in the pop-up dialog windows.
 
 ![image](./assets/rule-engine/mongo_action_0.png)
 
@@ -54,26 +48,25 @@ Two parameters is required by action "Data to MongoDB":
 
 1). The mongodb collection. Set it to "t_mqtt_msg" we just created.
 
-2). Selector template. Selector template is the keys and values you'd
+::: tip
+From EMQX Enterprise 4.4.11 and 4.3.17, we can use placeholders in `${var}` format for the collections.
+:::
+
+2). Payload template. Payload template is the keys and values you'd
 like to insert into mongodb when the action is triggered. In this
-example we'll insert a message into mongodb, so type in the following
-sql
-template:
+example we'll insert all the available fields we got from the rule SQL in JSON format, so we just leave the payload template as empty.
 
-```sql
-msgid=${id},topic=${topic},qos=${qos},payload=${payload},retain=${retain},arrived=${timestamp}
+::: warning
+MongoDB requires a JSON string when writing, so please ensure your template is a valid JSON format after all the placeholders are placed with the values. For example, you could write this in your template:
+
 ```
-
-Before data is inserted into the table, placeholders like \${key} will
-be replaced by the corresponding values.
-
-![image](./assets/rule-engine/mongo_action_1.png)
+{"client": "${clientid}"}
+```
+:::
 
 3). Bind a resource to the action. Since the dropdown list "Resource"
 is empty for now, we create a new resource by clicking on the "New
 Resource" to the top right, and then select "MongoDB Single Mode":
-
-![image](./assets/rule-engine/mongo_action_2.png)
 
 Configure the resource:
 
@@ -87,18 +80,13 @@ button..
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/mongo_action_3.png)
-
-Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
-
-![image](./assets/rule-engine/mongo_rule_overview_0.png)
+Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list.
 
 We have finished, testing the rule by sending an MQTT message to emqx:
 
 ```bash
 Topic: "t/mongo"
 QoS: 1
-Retained: true
 Payload: "hello"
 ```
 

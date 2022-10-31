@@ -61,14 +61,25 @@ SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/
 
 点击 “新建” 按钮，完成资源的创建。
 
-2). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t_mqtt\_msg”
+2). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t_mqtt\_msg”。
 
-3). Payload Tmpl 模板。这个例子里我们向 MongoDB 插入一条数据，模板为空, 插入的数据是上面SQL语句select出来的结果用json格式写入到MongoDB中
+::: tip
+从 EMQX 企业版 4.4.11 和 4.3.17 开始，我们可以在 Collection 字段里面使用 `${var}` 格式的占位符了。
+:::
 
+3). Payload Tmpl 模板。这个例子里我们向 MongoDB 插入一条数据，模板为空，插入的数据是上面 SQL 语句 select 出来的结果，以 JSON 格式写入到 MongoDB 中：
 
 ![](./assets/rule-engine/mongodb_data_to_store3.png)
 
-在点击 “新建” 完成规则创建
+::: warning
+MongoDB 要求写入的数据必须是 JSON 格式，所以请务必保证你的模板在占位符替换之后，是一个合法的 JSON 格式。比如你可以这样写：
+
+```
+{"client": "${clientid}"}
+```
+:::
+
+再点击 “新建” 完成规则创建
 
 ![image](./assets/rule-engine/mongodb_data_to_store4.png)
 
