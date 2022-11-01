@@ -366,8 +366,7 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 [JQ](https://stedolan.github.io/jq/) is a powerful command line tool and
 programming language designed primarily for transforming and querying data
 encoded as [JavaScript Object Notation (JSON)](https://www.json.org/json-en.html).
-The rule engine's SQL language integrates JQ through two functions:
-
+The rule's SQL language integrates JQ through two functions:
 
 | Function      | Purpose | Parameters | Returned value |
 | ----------- | ----------- | ----------- | ------------|
@@ -382,21 +381,21 @@ computer, or watch [EMQX's JQ introduction video](https://www.youtube.com/watch?
 functional programming language. Typical JQ programs describe simple
 transformations or filters for JSON data, but one can also use JQ to perform
 complex computations when needed. However, it is not recommended to do
-long-running computations in the rule engine as this can significantly slow
+long-running computations in the rule as this can significantly slow
 down the rate at which EMQX can process new messages. The JQ functions have
 timeouts to prevent possibly buggy JQ programs (that may have gotten stuck in
 an infinite loop) from taking too much processing time from the rest of the
 EMQX system. JQ functions can be convenient for transformations that are
-difficult or impossible to do with only the rule engine SQL language and its
+difficult or impossible to do with only the rule SQL language and its
 simple functions. The following are some examples of simple `jq` function calls
 and their results:
 
 ```SQL
-jq('.', '{"temprature": 10}') = [json_decode('{"temprature": 10}')] 
-jq('.', json_decode('{"temprature": 10}')) = [json_decode('{"temprature": 10}')] 
-jq('.temprature', '{"temprature": 10}') = [10] 
-jq('{temprature_C:.temprature,temprature_F: (.temprature * 1.8 + 32)}', '{"temprature": 10}') = [json_decode('{"temprature_C": 10, "temprature_F": 50}')] 
-jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') = [10, 50] 
+jq('.', '{"temprature": 10}') = [json_decode('{"temprature": 10}')]
+jq('.', json_decode('{"temprature": 10}')) = [json_decode('{"temprature": 10}')]
+jq('.temprature', '{"temprature": 10}') = [10]
+jq('{temprature_C:.temprature,temprature_F: (.temprature * 1.8 + 32)}', '{"temprature": 10}') = [json_decode('{"temprature_C": 10, "temprature_F": 50}')]
+jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') = [10, 50]
 ```
 
 The above examples only scratch the surface of what can be done with JQ. The
@@ -408,11 +407,11 @@ of the `FOREACH` statement for information on how to use it.
 ```SQL
 FOREACH   jq('def rem_first: ' +
              '    if length > 2 then del(.[0]) else . end;' +
-             'def rem_last:' + 
-             '    if length > 1 then del(.[-1]) else . end;' + 
+             'def rem_last:' +
+             '    if length > 1 then del(.[-1]) else . end;' +
              '.date as $date |' +
              '.sensors[] |' +
-             '  (.data | sort | rem_first | rem_last | add / length) as $average |' + 
+             '  (.data | sort | rem_first | rem_last | add / length) as $average |' +
              '  {$average, $date}',
              payload)
 FROM    "jq_demo/complex_rule/jq/#"
@@ -441,12 +440,12 @@ Below is an example of input payload for the code above:
 
 ```
 
-The rule engine SQL snippet above will create one output message for each
+The rule SQL snippet above will create one output message for each
 sensor in the input data. Each message will be a JSON object containing
 one field for the date and one field for the average of the sensor's data field
 after the smallest and largest values have been removed (as they might be
 outliers). Thus given the payload above, the three output messages will have
-the following payloads: 
+the following payloads:
 
 Message 1:
 
