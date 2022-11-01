@@ -70,7 +70,7 @@ More about the log configuration, please refer to [Log Configuration](../admin/c
 
 ## Monitoring
 
-Clicking on Monitoring under the Configuration menu on the left will take you to the configuration page for monitoring integration. This menu page contains three tabs under.
+Clicking on Monitoring under the Configuration menu on the left will take you to the configuration page for monitoring integration. This menu page contains two tabs under.
 
 - System: Depending on the user's needs, the settings for the [Alarms](./diagnose.md#alarms) function, such as alarm thresholds, check intervals, etc., can be adjusted to a certain extent according to user needs.
 - Integration: Provides configuration for integration with third party monitoring platforms.
