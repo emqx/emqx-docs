@@ -68,7 +68,20 @@ Click the log under the configuration menu on the left to go to the log configur
 
 More about the log configuration, please refer to [Log Configuration](../admin/cfg.md#log).
 
-## Monitoring Integration
+## Monitoring
+
+Clicking on Monitoring under the Configuration menu on the left will take you to the configuration page for monitoring integration. This menu page contains three tabs under.
+
+- System: Depending on the user's needs, the settings for the [Alarms](./diagnose.md#alarms) function, such as alarm thresholds, check intervals, etc., can be adjusted to a certain extent according to user needs.
+- Integration: Provides configuration for integration with third party monitoring platforms.
+
+### System
+
+If the default value of the current alarm trigger threshold or alarm monitoring check interval does not meet the actual needs of you, you can adjust the settings on this page. The current settings are divided into two modules: `Erlang VM` and `OS`, the default values and descriptions of each configuration item can be found in [alarms](../observability/alarms.md).
+
+![image](./assets/monitoring-system.png)
+
+### Integration
 
 Click the monitoring integration under the configuration menu on the left to go to the monitoring integration configuration page. This page mainly provides integration configuration with third-party monitoring platforms. Currently, EMQX provides integration with Prometheus and StatsD. The configuration page can quickly enable this configuration and configure the URL of push gateway server and data reporting interval, etc.
 
