@@ -12,7 +12,7 @@ The Diagnose module provides some debugging tools to help users debug and locate
 
 Click on Alerts under the Diagnose menu on the left to go to the Alerts page. The alarms page allows you to view the server's current alarms and historical alarms (inactivated alarms). The alarm information includes the alarm name, the content of the alarm message, the node that triggered the alarm, the alarm level, the activate time the alarm and the duration of the alarm.
 
-On the current alarms page, you can click on the `Refresh` button in the top right corner to refresh the list and see if any new alarms have occurred. You can also click on the `Settings` button in the top right corner to set alarms for virtual machine processes, operating system CPUs, etc. On the Alarm History page, you can clear the alarm history by clicking on the `Clear History Alarms` button in the top right corner.
+On the current alarms page, you can click on the `Refresh` button in the top right corner to refresh the list and see if any new alarms have occurred. If the default value of the current alarm trigger threshold or alarm monitoring interval does not meet the actual needs of you, you can click the `Settings` button in the top right corner to jump to the [Monitoring](./configuration.md#monitoring) page for setting. On the Alarm History page, you can clear the alarm history by clicking on the `Clear History Alarms` button in the top right corner.
 
 Information on currently supported alarms and more details can be found in [alarms](../observability/alarms.md).
 
