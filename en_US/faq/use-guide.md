@@ -17,9 +17,9 @@ ref:
 ## How to use EMQX?
 
 
-EMQX Broker is free and it can be download at [https://www.emqx.com/en/downloads?product=broker](https://www.emqx.com/en/downloads?product=broker).
+EMQX Broker is free and it can be download at [https://www.emqx.com/en/try?product=broker](https://www.emqx.com/en/try?product=broker).
 
-EMQX Enterprise can be downloaded and evaluated for free.  You can download it from [https://www.emqx.com/en/downloads?product=enterprise](https://www.emqx.com/en/downloads?product=enterprise), and then apply trial license at [https://www.emqx.com/en/licenses#trial](https://www.emqx.com/en/licenses#trial).
+EMQX Enterprise can be downloaded and evaluated for free.  You can download it from [https://www.emqx.com/en/try?product=enterprise](https://www.emqx.com/en/try?product=enterprise), and then apply trial license at [https://www.emqx.com/en/apply-licenses/emqx](https://www.emqx.com/en/apply-licenses/emqx).
 
 Also you can use the EMQX enterprise version through public cloud service.
 
@@ -35,9 +35,9 @@ Also you can use the EMQX enterprise version through public cloud service.
 
 You need to two steps:
 
-1. After clicking "Download License", browse to the "license.zip" file that you downloaded.
+1. The license file will be sent by email, find the attached zip file and unzip it.
 
-2. Copy the two files (emqx.lic, emqx.key) in the zip file to the EMQX license directory.
+2. Copy the `emqx.lic` file from the zip package to the EMQX license directory.
   - If your installation package is a zip file, the licenses are under "emqx/etc/";
   - For DEB/RPM package, the licenses are under "/etc/emqx/";
   - For Docker image, the licenses are under "/opt/emqx/etc/".
