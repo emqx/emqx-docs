@@ -17,9 +17,9 @@ ref:
 ## 怎么样才能使用 EMQX？
 
 
-EMQX 开源版可免费下载使用，下载地址：[https://www.emqx.com/en/downloads?product=broker](https://www.emqx.com/en/downloads?product=broker)
+EMQX 开源版可免费下载使用，下载地址：[https://www.emqx.com/zh/try?product=broker](https://www.emqx.com/zh/try?product=broker)
 
-EMQX 企业版支持下载试用，用户可以在 [https://www.emqx.com/en/downloads?product=enterprise](https://www.emqx.com/en/downloads?product=enterprise) 下载，[申请试用 license](https://www.emqx.com/zh/licenses#trial)之后即可试用。
+EMQX 企业版支持下载试用，用户可以在 [https://www.emqx.com/zh/try?product=enterprise](https://www.emqx.com/zh/try?product=enterprise) 下载，[申请试用 license](https://www.emqx.com/zh/apply-licenses/emqx)之后即可试用。
 
 另外，还可以在公有云直接创建 EMQX 企业版：
 
@@ -34,14 +34,11 @@ EMQX 企业版支持下载试用，用户可以在 [https://www.emqx.com/en/down
 
 **标签:** [*License*](tags.md#license)
 
+[申请试用 license](https://www.emqx.com/zh/apply-licenses/emqx) 后，License 文件将通过邮件发送，找到附件里的 zip 文件并解压，复制压缩包里的 `emqx.lic` 文件到 EMQX 的 license 目录.
 
-点击 "Download License" 按钮下载 license, 然后找到您下载的 "license.zip" 文件并解压.
-
-复制压缩包里的两个文件 (emqx.lic, emqx.key) 到 EMQX 的 license 目录.
-
-如果您的 EMQX 是使用 zip 包安装的, 那么压缩包里的两个文件需要拷贝到 "emqx/etc/" 目录;
-如果是用 DEB/RPM 包安装的, 两个文件需要拷贝到 "/etc/emqx/" 目录;
-如果是用 Docker 镜像安装的, 两个文件需要拷贝到 "/opt/emqx/etc/" 目录.
+- 如果您的 EMQX 是使用 zip 包安装的, 那么压缩包里的 `emqx.lic` 需要拷贝到 "emqx/etc/" 目录;
+- 如果是用 DEB/RPM 包安装的, `emqx.lic` 文件需要拷贝到 "/etc/emqx/" 目录;
+- 如果是用 Docker 镜像安装的, `emqx.lic` 文件需要拷贝到 "/opt/emqx/etc/" 目录.
 
 拷贝完成后需要通过命令行重新加载 license 以完成更新：
 
