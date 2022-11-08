@@ -10,7 +10,8 @@ EMQX supports saving data to TDengine via **Send to Web Server**, and also provi
 Install TDengine by docker or [Huawei Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640)
 
 ```bash
-docker run --name TDengine -d -p 6030:6030 -p 6035:6035 -p 6041:6041 -p 6030-6040:6030-6040/udp tdengine/tdengine 
+# EMQX now only supports TDengine version 2.x, version 3.x is not supported yet
+docker run --name TDengine -d -p 6030-6049:6030-6049 -p 6030-6049:6030-6049/udp tdengine/tdengine:2.4.0.30
 ```
 
 Execute cmd in docker:
@@ -26,7 +27,7 @@ Create database `test`
 create database test;
 ```
 
-Create table `t_mqtt_msg`. More [docs](https://tdengine.com/docs/en/v2.0/taos-sql):
+Create table `t_mqtt_msg`. More [docs](https://docs.tdengine.com/2.6/taos-sql/):
 
 ```sql
 USE test;
@@ -102,7 +103,7 @@ Return to the rule screen and click "Create".
 
 To support development on different types of platforms, TDengine provides APIs that conform to REST design standards.
 
-The [RESTful Connector](https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector) provides the simplest way to connect, i.e. using HTTP requests carrying authentication information with the SQL operation to be performed TDengine.
+The [REST API](https://docs.tdengine.com/2.6/reference/rest-api/) provides the simplest way to connect, i.e. using HTTP requests carrying authentication information with the SQL operation to be performed TDengine.
 
 Add Action:
 

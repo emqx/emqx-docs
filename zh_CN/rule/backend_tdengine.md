@@ -7,7 +7,8 @@ EMQX 支持通过 **发送到 Web 服务** 的方式保存数据到 TDengine，�
 使用 Docker 安装 TDengine 或在 [Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) 上部署：
 
 ```bash
-docker run --name TDengine -d -p 6030:6030 -p 6035:6035 -p 6041:6041 -p 6030-6040:6030-6040/udp tdengine/tdengine 
+# EMQX 目前仅支持 TDengine 2.x 版本，3.x 版本暂不支持
+docker run --name TDengine -d -p 6030-6049:6030-6049 -p 6030-6049:6030-6049/udp tdengine/tdengine:2.4.0.30
 ```
 
 进入 Docker 容器：
@@ -21,7 +22,7 @@ taos
 ```bash
 create database test;
 ```
-创建 t_mqtt_msg 表，关于 TDengine 数据结构以及 SQL 命令参见 [TAOS SQL](https://www.taosdata.com/cn/documentation/taos-sql/#表管理)：
+创建 t_mqtt_msg 表，关于 TDengine 数据结构以及 SQL 命令参见 [TAOS SQL](https://docs.taosdata.com/taos-sql/)：
 
 ```sql
 USE test;
@@ -92,7 +93,7 @@ insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values
 
 ## 通过发送数据到 Web 服务写入
 
-为支持各种不同类型平台的开发，TDengine 提供符合 REST 设计标准的 API。通过 [RESTful Connector](https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector) 提供了最简单的连接方式，即使用 HTTP 请求携带认证信息与要执行的 SQL 操作 TDengine。
+为支持各种不同类型平台的开发，TDengine 提供符合 REST 设计标准的 API。通过 [REST API](https://docs.taosdata.com/connector/rest-api/) 提供了最简单的连接方式，即使用 HTTP 请求携带认证信息与要执行的 SQL 操作 TDengine。
 
 EMQX 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
 
