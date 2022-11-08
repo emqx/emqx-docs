@@ -151,3 +151,13 @@ Of course, in this case, we recommend that you copy the default Listener configu
 A Zone defines a set of configuration items (such as the maximum number of connections), and the Listener can specify the Zone through the configuration item `listener.<Protocol>.<Listener Name>.zone` to use all the configurations under the Zone. Multiple Listeners can share the same Zone. The naming rule of Zone is `zone.<Zone Name>.xxx`. `Zone Name` can be named at will, but it is also recommended to be all lowercase. `xxx` is a specific configuration item, you can find it in [configuration item](../configuration/configuration.md) to view all configuration items supported by Zone.
 
 At this time, there are three available values for each of our configuration items, which are the global value, the value set in Zone and the default value, and their priority order is: Zone> Global> Default.
+
+## Apply Configuration
+
+{% emqxce %}
+Configuration items are loaded when EMQX starts or when the plugin starts. EMQX Community Edition does not yet support runtime configuration updates (Enterprise Edition supports this capability), but since the plugin supports dynamic loading and unloading, it is possible to reload the plugin to apply the latest configuration after modifying the plugin configuration.
+{% endemqxce %}
+
+{% emqxee %}
+Configuration items are loaded when EMQX starts or when the plugin starts. some configurations can be updated via Dashboard and REST API, and the latest configuration can be applied by reload the plugin after modifying the plugin configuration.
+{% endemqxee %}
