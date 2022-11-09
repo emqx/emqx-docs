@@ -151,9 +151,16 @@ EMQX 可以直接部署在物理服务器或者虚拟机上。最小仅需 2 核
 - [CentOS 系统安装](./install.md#centos)
 - [Ubuntu、Debian 安装](./install.md#ubuntu、debian)
 - [MacOS、Windows、Linux ZIP 包安装](./install.md#zip-压缩包安装-linux、maxos、windows)
+
+如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，您可以参考 [源码编译安装](./install.md#源码编译安装) 或[联系我们](https://www.emqx.com/zh/contact) 获取支持。
+
 {% endemqxce %}
 
-如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，你可以{% emqxce %}参考 [源码编译安装](./install.md#源码编译安装) 或{% endemqxce %} [联系我们](https://www.emqx.com/zh/contact) 获取支持。
+{% emqxee %}
+
+如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，您可以[联系我们](https://www.emqx.com/zh/contact) 获取支持。
+
+{% endemqxee %}
 
 ## 启动 EMQX
 

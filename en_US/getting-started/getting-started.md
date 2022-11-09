@@ -92,7 +92,7 @@ maintenance, and management.
 
 ### Running EMQX in containers
 
-{% emqxe %}
+{% emqxce %}
 
 Learn more about the docker image on [Docker Hub](https://hub.docker.com/r/emqx/emqx).
 Container deployment is the quickest way to start experimenting with EMQX
@@ -169,7 +169,17 @@ as well as Debian, Ubuntu, and MacOS.
 - [CentOS installation](./install.md#centos)
 - [Ubuntu, Debian installation](./install.md#ubuntu-debian)
 - [MacOS, Windows, Linux ZIP installation](./install.md#zip-linux-macos-windows)
+
+For other platforms which are not in the prebuilt list,
+you may [build the runnables from source code](./install.md#source-code-compilation-and-installation).
+
 {% endemqxce %}
+
+{% emqxee %}
+
+For other platforms which are not in the prebuilt list,
+you may simply [contact EMQ](https://www.emqx.com/en/contact) for support.
+{% endemqxee %}
 
 For other platforms which are not in the prebuilt list,
 you may {% emqxce %}[build the runnables from source code](./install.md#source-code-compilation-and-installation) or{% endemqxce %}
