@@ -984,7 +984,7 @@ log.error.file = error.log
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
-| enum | `rfc3339`      | FORMAT  | `rfc3339`  
+| enum | `rfc3339`      | FORMAT  | `rfc3339`
 
 注意: 这个配置在 EMQX 开源版 4.3.15, 4.4.4 和 EMQX 企业版 4.3.10, 4.4.4 及之后可以使用。
 
@@ -1112,6 +1112,48 @@ ACL 检查失败后，执行的操作。
 - `disconnect`：断开连接。
 
 <br />
+
+
+
+### clientid_enrichment_module
+
+| Type    | Default  |
+| ------- | -------- |
+| string  | -        |
+
+#### 说明
+
+::: warning Warning
+这是一个非常特殊的高级选项，除非EMQ推荐，否则不应该使用。
+除非EMQ推荐。
+:::
+
+
+指定一个定义了 `enrich_clientid_alias/2` 函数的模块。
+这个函数将被用来丰富客户/通道信息
+和/或通用名称别名（或模块可能实现的其他丰富功能）。
+模块可能实现的其他丰富信息）。
+
+
+
+### special_auth_module
+
+| Type    | Default  |
+| ------- | -------- |
+| string  | -        |
+
+#### 说明
+
+::: warning Warning
+这是一个非常特殊的高级选项，除非EMQ推荐，否则不应该使用。
+除非EMQ推荐。
+:::
+
+指定一个定义`check_authn/2`函数的模块。 这个
+该函数将被用于`client.authenticate`钩子，作为一种实现自定义认证逻辑的方式。
+实现自定义的认证逻辑。
+
+
 
 ## mqtt
 

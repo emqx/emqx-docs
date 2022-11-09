@@ -1151,6 +1151,46 @@ What to do after the ACL check fails.
 
 
 
+### clientid_enrichment_module
+
+| Type    | Default  |
+| ------- | -------- |
+| string  | -        |
+
+#### Description
+
+::: warning Warning
+This is a very specific, advanced option that should not be used
+unless recommended by EMQ.
+:::
+
+Specify a module that defines the `enrich_clientid_alias/2` function.
+This function will be used to enrich the client/channel information
+with clientid and/or common name aliases (or other enrichments the
+module may implement).
+
+
+
+### special_auth_module
+
+| Type    | Default  |
+| ------- | -------- |
+| string  | -        |
+
+#### Description
+
+::: warning Warning
+This is a very specific, advanced option that should not be used
+unless recommended by EMQ.
+:::
+
+Specify a module that defines the `check_authn/2` function.  This
+function will be used in the `client.authenticate` hook as a way to
+implement custom authentication logic.
+
+
+## mqtt
+
 ### flapping_detect_policy
 
 | Type   | Default      |
@@ -4085,7 +4125,7 @@ Set a dispatch strategy for shared subscribers. Options are:
 
 - **hash_clientid**: Map (hash) publisher ClientID to subscriber.
 - **hash_topic**: Map (hash) source MQTT topic to subscriber.
-- **local**: Select a random subscriber in the group locally in the node which is processing the shared-publish request. If there is no such local subscriber, it fallbacks to `random` strategy 
+- **local**: Select a random subscriber in the group locally in the node which is processing the shared-publish request. If there is no such local subscriber, it fallbacks to `random` strategy
 - **random**: Choose randomly among all subscribers.
 - **round_robin**: Enumerate subscribers in (unsorted) order.
 - **sticky**: First dispatch is random, then stick to it for all subsequent messages until that subscriber goes disconnected or that publisher reconnects.
