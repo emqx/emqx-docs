@@ -2677,6 +2677,136 @@ when `verify` configuration is set to `verify_peer`.
 
 
 
+### listener.ssl.external.enable_ocsp_stapling
+
+| Type    | Default                |
+| ------- | ---------------------- |
+| boolean | `false`                |
+
+#### Description
+
+Whether to enable OCSP stapling for the listener.  If set to true,
+requires definining the OCSP responder URL.  Such responses will be
+cached and sent to the connecting clients as part of the TLS
+handshake.  This is only supported for TLS 1.2 and TLS 1.3.
+
+
+
+### listener.ssl.external.ocsp_responder_url
+
+| Type   | Default          |
+| ------ | ---------------- |
+| string | -                |
+
+#### Description
+
+URL for the OCSP responder to check the server certificate against
+when OCSP stapling is enabled.  This response is cached and refresh
+periodically.
+
+
+
+### listener.ssl.external.ocsp_issuer_pem
+
+| Type   | Default          |
+| ------ | ---------------- |
+| string | -                |
+
+#### Description
+
+Path to the file containing PEM-encoded certificate of the OCSP
+issuer for the server certificate.
+
+
+
+### listener.ssl.external.ocsp_refresh_interval
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 5m               |
+
+#### Description
+
+The period to refresh the OCSP response for the server.  Even if the
+response fails to be fetched during a refresh, the previously cached
+response will still be used until a newer response is successfully
+retrieved from the OCSP responder.  Cannot be shorter than 1 minute.
+
+
+
+### listener.ssl.external.ocsp_refresh_http_timeout
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 15s              |
+
+#### Description
+
+The timeout for the HTTP request when fetching OCSP responses from the
+OCSP responder.
+
+
+
+### listener.ssl.external.enable_crl_cache
+
+| Type    | Default                |
+| ------- | ---------------------- |
+| boolean | `false`                |
+
+#### Description
+
+Whether to enable CRL verification and caching for this listener.
+If set to true, requires specifying the CRL server URL(s).
+
+Note: if a client tries to connect to EMQX with an distribution point
+that is not currently cached, the server will attempt to fetch the CRL
+on the fly from the URL declared in the client certificate's
+distribution point(s).  If no corresponding CRL is cached or fetched
+successfully and CRL cache is enabled, then the client will be denied
+connection.
+
+
+
+### listener.ssl.external.crl_cache_urls
+
+| Type   | Default          |
+| ------ | ---------------- |
+| string | -                |
+
+#### Description
+
+Comma-separated URL list for CRL servers to fetch and cache CRLs from.
+Must include the path to the CRL file(s) in the paths (e.g.:
+`http://my.crl.server/intermediate.crl.pem,
+http://my.other.crl.server/another.crl.pem`).
+
+
+
+### listener.ssl.external.crl_cache_http_timeout
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 15s              |
+
+#### Description
+
+The timeout for the HTTP request when fetching CRLs.
+
+
+
+### crl_cache.refresh_interval
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 15m              |
+
+#### Description
+
+The period to refresh the CRLs from the servers.  This is global
+for all URLs and listeners.  Cannot be shorter than 1 minute.
+
+
+
 ### listener.ssl.external.dhfile
 
 | Type   | Default                   |
@@ -4085,7 +4215,7 @@ Set a dispatch strategy for shared subscribers. Options are:
 
 - **hash_clientid**: Map (hash) publisher ClientID to subscriber.
 - **hash_topic**: Map (hash) source MQTT topic to subscriber.
-- **local**: Select a random subscriber in the group locally in the node which is processing the shared-publish request. If there is no such local subscriber, it fallbacks to `random` strategy 
+- **local**: Select a random subscriber in the group locally in the node which is processing the shared-publish request. If there is no such local subscriber, it fallbacks to `random` strategy
 - **random**: Choose randomly among all subscribers.
 - **round_robin**: Enumerate subscribers in (unsorted) order.
 - **sticky**: First dispatch is random, then stick to it for all subsequent messages until that subscriber goes disconnected or that publisher reconnects.

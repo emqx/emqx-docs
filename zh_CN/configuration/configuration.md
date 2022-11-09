@@ -984,7 +984,7 @@ log.error.file = error.log
 
 | Type | Optional Value | Default |
 | ---- | -------------- | ------- |
-| enum | `rfc3339`      | FORMAT  | `rfc3339`  
+| enum | `rfc3339`      | FORMAT  | `rfc3339`
 
 注意: 这个配置在 EMQX 开源版 4.3.15, 4.4.4 和 EMQX 企业版 4.3.10, 4.4.4 及之后可以使用。
 
@@ -2645,6 +2645,137 @@ listener.ssl.external.access.2 = allow all
 该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
 
 <br />
+
+
+
+### listener.ssl.external.enable_ocsp_stapling
+
+| Type    | Default                |
+| ------- | ---------------------- |
+| boolean | `false`                |
+
+#### 说明
+
+是否为监听器启用OCSP装订功能。 如果设置为真。
+需要定义OCSP响应者的URL。 这种响应将被
+缓存并作为TLS握手的一部分发送给连接的客户端。
+握手的一部分。 这只支持TLS 1.2和TLS 1.3。
+
+
+### listener.ssl.external.ocsp_responder_url
+
+| Type   | Default          |
+| ------ | ---------------- |
+| string | -                |
+
+#### 说明
+
+启用OCSP订书机时，OCSP应答器用于检查服务器证书的URL。
+当OCSP钉书机被启用时，该URL用于检查服务器证书。 该响应被缓存并定期刷新
+定期刷新。
+
+
+
+### listener.ssl.external.ocsp_issuer_pem
+
+| Type   | Default          |
+| ------ | ---------------- |
+| string | -                |
+
+#### 说明
+
+包含服务器证书的 OCSP 发行者的 PEM 编码证书的文件的路径。
+文件的路径，该文件包含服务器证书的 PEM 编码证书。
+
+
+
+### listener.ssl.external.ocsp_refresh_interval
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 5m               |
+
+#### 说明
+
+为服务器刷新OCSP响应的周期。 即使
+响应在刷新期间未能被获取，先前缓存的
+响应仍将被使用，直到从OCSP响应者那里成功地获取一个较新的响应。
+从OCSP响应者那里成功获取较新的响应。 不能短于1分钟。
+
+
+
+### listener.ssl.external.ocsp_refresh_http_timeout
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 15s              |
+
+#### 说明
+
+从OCSP响应者处获取OCSP响应时，HTTP请求的超时。
+响应器获取OCSP响应时，HTTP请求的超时。
+
+
+
+### listener.ssl.external.enable_crl_cache
+
+| Type    | Default                |
+| ------- | ---------------------- |
+| boolean | `false`                |
+
+#### 说明
+
+是否为该监听器启用CRL验证和缓存。
+如果设置为 "true"，需要指定CRL服务器的URL（s）。
+
+注意：如果客户试图用一个目前没有缓存的分布点连接到EMQX，服务器将试图获取CRL。
+的分布点连接到EMQX，服务器将试图从在 "报告 "中声明的URL中获取CRL的信息。
+服务器将试图从客户证书的分布点中声明的URL中获取CRL。
+分发点中声明的URL中获取CRL。 如果没有相应的CRL被缓存或成功获取
+且CRL缓存已被启用，那么客户将被拒绝连接。
+连接。
+
+
+
+### listener.ssl.external.crl_cache_urls
+
+| Type   | Default          |
+| ------ | ---------------- |
+| string | -                |
+
+#### 说明
+
+以逗号分隔的URL列表，用于获取和缓存CRLs的CRL服务器。
+必须在路径中包括CRL文件的路径（例如。
+`http://my.crl.server/intermediate.crl.pem,
+http://my.other.crl.server/another.crl.pem`）。
+
+
+
+### listener.ssl.external.crl_cache_http_timeout
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 15s              |
+
+#### 说明
+
+获取CRLs时HTTP请求的超时。
+
+
+
+### crl_cache.refresh_interval
+
+| Type     | Default          |
+| -------- | ---------------- |
+| duration | 15m              |
+
+#### 说明
+
+从服务器刷新CRL的周期。 这是全球
+所有URL和监听器。 不能短于1分钟。
+
+
 
 ### listener.ssl.external.dhfile
 
