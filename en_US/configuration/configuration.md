@@ -2761,7 +2761,7 @@ If set to true, requires specifying the CRL server URL(s).
 Note: In the event of cache miss, EMQX will attempt to fetch the CRL
 on the fly from the URL declared in the client certificate's
 distribution point(s).  If no corresponding CRL is cached or fetched
-successfully and CRL cache is enabled, then the client will be denied
+successfully and CRL check is enabled, then the client will be denied
 connection.
 
 
