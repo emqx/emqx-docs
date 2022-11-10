@@ -1,6 +1,6 @@
 # Configuration Files
 
-<!--5.0.10-g4cadb86b-->
+<!--5.0.10-->
 EMQX configuration files are in [HOCON](https://github.com/emqx/hocon) format.
 HOCON, or Human-Optimized Config Object Notation is a format for human-readable data,
 and a superset of JSON.
@@ -1866,13 +1866,6 @@ After the limit is reached, successive `CONNECT` requests are forbidden
   `"5m"`
 
   How long the flapping clientid will be banned.
-
-- clean_when_banned: <code>boolean()</code>
-  * default: 
-  `false`
-
-  Clean retained/delayed messages when client is banned.
-  Note: This may be expensive and only supports users banned by clientid.
 
 
 ## broker:force_gc
@@ -5727,8 +5720,6 @@ The LwM2M protocol gateway.
 **Fields**
 
 - xml_dir: <code>binary()</code>
-  * default: 
-  `"etc/lwm2m_xml"`
 
   The Directory for LwM2M Resource definition.
 
@@ -9317,11 +9308,6 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 - ban_time: <code>emqx_schema:duration()</code>
 
   How long the flapping clientid will be banned.
-
-- clean_when_banned: <code>boolean()</code>
-
-  Clean retained/delayed messages when client is banned.
-  Note: This may be expensive and only supports users banned by clientid.
 
 
 ## zone:force_gc
