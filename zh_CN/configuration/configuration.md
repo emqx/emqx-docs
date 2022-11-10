@@ -2656,10 +2656,9 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-是否为监听器启用OCSP装订功能。 如果设置为真。
-需要定义OCSP响应者的URL。 这种响应将被
-缓存并作为TLS握手的一部分发送给连接的客户端。
-握手的一部分。 这只支持TLS 1.2和TLS 1.3。
+是否为监听器启用OCSP Stapling 功能。 如果设置为 `true`，则需要定义OCSP响应者的URL。
+这个响应将被缓存，并作为 TLS 握手的一部分发送给连接的客户端。
+注意：仅支持 TLS 1.2 和 TLS 1.3。
 
 
 ### listener.ssl.external.ocsp_responder_url
@@ -2670,9 +2669,8 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-启用OCSP订书机时，OCSP应答器用于检查服务器证书的URL。
-当OCSP钉书机被启用时，该URL用于检查服务器证书。 该响应被缓存并定期刷新
-定期刷新。
+启用 OCSP Stapling 时，用于检查服务器证书的 OCSP 应答服务 URL。
+应答的内容会被缓存，并定期刷新。
 
 
 
@@ -2684,8 +2682,8 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-包含服务器证书的 OCSP 发行者的 PEM 编码证书的文件的路径。
-文件的路径，该文件包含服务器证书的 PEM 编码证书。
+该文件用于存放 OCSP Responder 的 PEM 格式编码的证书。
+该证书用于校验 OCSP Responder 返回的内容。
 
 
 
@@ -2697,10 +2695,9 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-为服务器刷新OCSP响应的周期。 即使
-响应在刷新期间未能被获取，先前缓存的
-响应仍将被使用，直到从OCSP响应者那里成功地获取一个较新的响应。
-从OCSP响应者那里成功获取较新的响应。 不能短于1分钟。
+刷新 OCSP Stapling 的间隔。 如果响应在刷新期间未能被获取，先前缓存的
+响应仍将被使用，直到从 OCSP Responder 那里成功地获取一个较新的响应。
+该配置不能小于 1 分钟。
 
 
 
@@ -2712,8 +2709,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-从OCSP响应者处获取OCSP响应时，HTTP请求的超时。
-响应器获取OCSP响应时，HTTP请求的超时。
+从 OCSP Responder 处获取 OCSP Stapling 响应的最长时间。
 
 
 
@@ -2725,8 +2721,8 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-是否为该监听器启用CRL验证和缓存。
-如果设置为 "true"，需要指定CRL服务器的URL（s）。
+是否为该监听器启用 CRL 验证和缓存。
+如果设置为 "true"，则需要指定CRL服务器的一个或多个URL。
 
 注意：如果客户试图用一个目前没有缓存的分布点连接到EMQX，服务器将试图获取CRL。
 的分布点连接到EMQX，服务器将试图从在 "报告 "中声明的URL中获取CRL的信息。

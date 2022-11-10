@@ -2714,8 +2714,8 @@ periodically.
 
 #### Description
 
-Path to the file containing PEM-encoded certificate of the OCSP
-issuer for the server certificate.
+Path to the file containing PEM-encoded certificate of the OCSP Stapling issuer.
+This certificate is used to validate that the stapling sent by a trusted server.
 
 
 
@@ -2758,8 +2758,7 @@ OCSP responder.
 Whether to enable CRL verification and caching for this listener.
 If set to true, requires specifying the CRL server URL(s).
 
-Note: if a client tries to connect to EMQX with an distribution point
-that is not currently cached, the server will attempt to fetch the CRL
+Note: In the event of cache miss, EMQX will attempt to fetch the CRL
 on the fly from the URL declared in the client certificate's
 distribution point(s).  If no corresponding CRL is cached or fetched
 successfully and CRL cache is enabled, then the client will be denied
