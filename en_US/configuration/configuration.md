@@ -2747,7 +2747,7 @@ OCSP responder.
 
 
 
-### listener.ssl.external.enable_crl_cache
+### listener.ssl.external.enable_crl_check
 
 | Type    | Default                |
 | ------- | ---------------------- |
