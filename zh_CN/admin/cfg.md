@@ -1,6 +1,6 @@
 # 配置文件
 
-<!--5.0.10-g202e4883-->
+<!--5.0.10-->
 EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) 。
 HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常适用于易于人类读写的配置数据存储。
 
@@ -1822,12 +1822,6 @@ After the limit is reached, successive `CONNECT` requests are forbidden
   `"5m"`
 
   抖动的客户端将会被禁止登录多长时间。
-
-- clean_when_banned: <code>boolean()</code>
-  * default: 
-  `false`
-
-  当客户端被禁时删除其保留、延迟消息注意: 这个操作开销可能较大,且只支持通过 clientid 封禁的用户数据。
 
 
 ## broker:force_gc
@@ -5497,8 +5491,6 @@ The LwM2M protocol gateway.
 **Fields**
 
 - xml_dir: <code>binary()</code>
-  * default: 
-  `"etc/lwm2m_xml"`
 
   LwM2M Resource 定义的 XML 文件目录路径。
 
@@ -8891,10 +8883,6 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 - ban_time: <code>emqx_schema:duration()</code>
 
   抖动的客户端将会被禁止登录多长时间。
-
-- clean_when_banned: <code>boolean()</code>
-
-  当客户端被禁时删除其保留、延迟消息注意: 这个操作开销可能较大,且只支持通过 clientid 封禁的用户数据。
 
 
 ## zone:force_gc
