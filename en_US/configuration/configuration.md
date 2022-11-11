@@ -2781,7 +2781,7 @@ http://my.other.crl.server/another.crl.pem`).
 
 
 
-### listener.ssl.external.crl_cache_http_timeout
+### crl_cache.http_timeout
 
 | Type     | Default          |
 | -------- | ---------------- |
@@ -2789,7 +2789,8 @@ http://my.other.crl.server/another.crl.pem`).
 
 #### Description
 
-The timeout for the HTTP request when fetching CRLs.
+The timeout for the HTTP request when fetching CRLs.  This is global
+for all listeners.
 
 
 

@@ -2748,7 +2748,7 @@ http://my.other.crl.server/another.crl.pem`）。
 
 
 
-### listener.ssl.external.crl_cache_http_timeout
+### crl_cache.http_timeout
 
 | Type     | Default          |
 | -------- | ---------------- |
@@ -2756,7 +2756,7 @@ http://my.other.crl.server/another.crl.pem`）。
 
 #### 说明
 
-获取CRLs时HTTP请求的超时。
+获取CRLs时HTTP请求的超时。这对所有听众来说是全球性的。
 
 
 
