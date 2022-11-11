@@ -54,7 +54,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 - 数据安全与隐私
 - 基于 MQTT over TLS/SSL 和 QUIC 确保数据安全
 - LDAP、JWT、PSK 和 X.509 证书等多种身份认证
-- 数据隐私保护符合欧盟的 GDPR 法案
+- 丰富的管理 API 确保数据保护策略符合欧盟 GDPR 法案
 
 ### 云原生
 
@@ -128,7 +128,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 ### 可伸缩性
 
 - 多节点集群 (Cluster)
-- 支持手动、mcast、dns、etcd、k8s 集群发现方式集群
+- 支持手动、dns、etcd、k8s 集群发现方式集群
 - 多服务器节点桥接 (Bridge)
 
 ### 数据集成
