@@ -46,7 +46,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 
 - 完整的 MQTT 协议
 - 完整支持 MQTT 3.x 和 MQTT 5.0 协议标准
-- 完全支持 QoS0, 1 & 2 的 MQTT 消息传递
+- 完全支持 QoS 0, 1 & 2 的 MQTT 消息传递
 - 支持所有 MQTT 客户端和库（如 Eclipse Paho）
 
 ### 数据安全与隐私
@@ -151,7 +151,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 - Prometheus 集成
 - 自动网络分区恢复
 - 在线日志追踪(Log Trace)
-- Erlang 运行时追踪工具
+- 运行时追踪工具
 
 ### 可扩展性
 
