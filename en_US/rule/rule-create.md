@@ -75,6 +75,24 @@
 
   ![image](../assets/webhook-result-1.png)
 
+{% emqxee %}
+::: tip
+From EMQX Enterprise 4.4.11 and 4.3.17, we can use placeholders in `${var}` format for the HTTP headers.
+:::
+{% endemqxee %}
+
+{% emqxce %}
+::: tip
+From EMQX Open Source Version 4.4.11 and 4.3.22, we can use placeholders in `${var}` format for the HTTP headers.
+:::
+{% endemqxce %}
+
+::: warning
+The webhook always normalized the *keys* of the HTTP headers, replacing the underscores `_` to
+hyphens `-`, and also ensure the keys are lowercases.
+e.g. The key `Content_Type` will be replaced with `content-type`.
+:::
+
 ## Create Simple Rules using CLI
 ### Create Inspect Rules
 Create a rule for testing: print the content of the message and all the args of the action, when a MQTT message is sent to topic ‘t/a’.

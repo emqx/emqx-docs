@@ -78,6 +78,23 @@ nc 命令在部分 Linux 操作系统上有问题，无法与 EMQX 发起的 HTT
 
   ![image](../assets/webhook-result-1.png)
 
+{% emqxee %}
+::: tip
+从 EMQX 企业版 4.4.11 和 4.3.17 开始，我们可以在 HTTP 头里面使用 `${var}` 格式的占位符了。
+:::
+{% endemqxee %}
+
+{% emqxce %}
+::: tip
+从 EMQX 开源版 4.4.11 和 4.3.22 开始，我们可以在 HTTP 头里面使用 `${var}` 格式的占位符了。
+:::
+{% endemqxce %}
+
+::: warning
+Webhook 会规范化 HTTP 头里的 Key。Key 里面下划线 `_` 会被替换成连词符 `-`，并且大写字符会被转换成小写。
+举例来说，Key 如果是 `Content_Type`，将会被替换成 `content-type`。
+:::
+
 ## 通过 CLI 创建简单规则
 ### 创建 Inspect 规则
 创建一个测试规则，当有消息发送到 't/a' 主题时，打印消息内容以及动作参数细节。

@@ -6,7 +6,8 @@ We first deploy a cluster instance named Cluster0 on MongoDB Cloud as a replica 
 
 ![image-20211126152843438](./assets/rule-engine/mongo_data_to_store1.png)
 
-In this example, the cluster instance contains a master node and two slave nodes:
+    security:
+    authorization: enabled
 
 ![image-20211126153431253](./assets/rule-engine/mongo_data_to_store2.png)
 
@@ -18,26 +19,17 @@ After completing the above work, we will create MongoDB resources and rules in E
 
 First, open the EMQX Dashboard, enter the resource page of the rule engine, click the **Create** button in the upper left corner, and the **Create Resource** form will pop up. In the **Resource Type** drop-down box in the form, we can see three resource types of **MongoDB Single node mode**, **MongoDB Replica Set mode** and **MongoDB Sharded mode**, which correspond to the three deployment methods of MongoDB.
 
-![image-20211126200858453](./assets/rule-engine/mongo_data_to_store3.png)
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left. Then type in the following SQL:
 
-Here we select the **MongoDB Replica Set mode**, and then complete the configuration of the relevant parameters according to the actual situation of the MongoDB Server.
+```sql
+SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/#"
+```
 
-The following is a description of some parameters of MongoDB resources:
-
-- **SRV Record**. it determines whether to query SRV and TXT records to obtain the server list and authSource and replicaSet options.
-- **MongoDB Server**. It specifies the server list or the domain name with DNS SRV and TXT records added.
-- **Database Name**, MongoDB database name.
-- **Pool Size**, the connection process pool size, which can help obtain the best performance with reasonable configuration.
-- **Username, Password**, authentication credentials.
-- **Auth Source**. It specifies the database used for authorization, and the default is admin. If SRV records are enabled and a DNS TXT record containing the authSource option is added to your MongoDB server domain name, the authSource option in this record will be used first.
-- **Write mode** It can be set to unsafe or safe. When set to safe, it will wait for the response of MongoDB Server and return it to the caller. If not specified, the default value safe will be used.
-- **Read mode**. It can be set to master or slave_ok. When set to master, it means that the latest data will be read from the master node for each query. If not specified, the default value of master will be used.
-- **Replica Set**. If your MongoDB is deployed in replica set mode, you need to specify the corresponding replica set name. However, if the **SRV record** is set to true, and your MongoDB server domain name has a DNS TXT record with the replicaSet option, you can ignore this configuration item.
-- **Enable SSL**, whether to enable TLS connection. When set to true, more TLS related configurations will appear, please configure as needed. Note: SSL must be enabled when connecting to MongoDB Cloud.
+![image](./assets/rule-engine/mongo_sql_1.png)
 
 ![image-20211126201826084](./assets/rule-engine/mongo_data_to_store4.png)
 
-According to the status of SRV Record, we can configure MongoDB resources in the following two ways:
+Click on the "+ Add action" button under the "Action" tab, and then select "Data persist" -> "Data to MongoDB" in the pop-up dialog windows.
 
 ### Enable SRV Record
 
@@ -47,25 +39,25 @@ We can click the Connect button of the Cluster0 instance on the Databases page o
 
 ![image-20211129104759799](./assets/rule-engine/mongo_data_to_store5.png)
 
-Now, we continue to complete the configuration of MongoDB resources. Here we mainly made the following changes:
+::: tip
+From EMQX Enterprise 4.4.11 and 4.3.17, we can use placeholders in `${var}` format for the collections.
+:::
 
-1. Set **SRV Record** to true, and then set **MongoDB Server** to the domain name we just obtained.
-2. Set **Database Name** to test, which is the default database of MongoDB Cloud. You can configure it as needed.
+2). Payload template. Payload template is the keys and values you'd
+like to insert into mongodb when the action is triggered. In this
+example we'll insert all the available fields we got from the rule SQL in JSON format, so we just leave the payload template as empty.
 
-3. Configure **Username** and **Password**. You need to configure them according to the actual situation.
+::: warning
+MongoDB requires a JSON string when writing, so please ensure your template is a valid JSON format after all the placeholders are placed with the values. For example, you could write this in your template:
 
-4. **Auth Source** and **Replica Set** remain empty. EMQX will automatically query DNS TXT records.
-5. Set **Enable SSL** to true. This is the connection requirement of MongoDB Cloud. Please configure as needed when deploying in other ways.
-
-![image-20211129112203066](./assets/rule-engine/mongo_data_to_store6.png)
-
-Finally, we click the **OK** button at the bottom of the **Create Resource** form to complete the creation. At this time, a new MongoDB resource instance is successfully created in EMQX:
+```
+{"client": "${clientid}"}
+```
+:::
 
 ![image-20211129113336183](./assets/rule-engine/mongo_data_to_store7.png)
 
-### Disable SRV Record
-
-If we choose not to enable SRV Record, then in the replica set and sharded mode, we need to fill in all the node addresses of the MongoDB cluster in the **MongoDB Server** option. In the replica set mode, we must also specify the replica set name.
+Configure the resource:
 
 In order to quickly obtain the configuration information, we can use the `nslookup` command to query DNS records:
 
@@ -95,13 +87,15 @@ Then fill in the queried server list in the **MongoDB Server** option in the for
 
 ![image-20211129143723391](./assets/rule-engine/mongo_data_to_store8.png)
 
-Finally, we also click the **OK** button at the bottom of the **Create Resource** form to complete the creation.
-
-## Create rules
-
-### 1. Configure SQL
+Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list.
 
 After the resource is created, we need to create the corresponding rules. Click the **Create** button at the upper left corner of the rule page to enter the **Create Rule** page, and enter the following SQL:
+
+```bash
+Topic: "t/mongo"
+QoS: 1
+Payload: "hello"
+```
 
 ```
 SELECT

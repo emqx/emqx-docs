@@ -61,11 +61,13 @@ MongoDB Cloud 默认提供了一个已经添加了 SRV 和 TXT 记录的域名�
 
 ![image-20211129113336183](./assets/rule-engine/mongo_data_to_store7.png)
 
-### 不启用 SRV Record
+2). Collection 名称。这个例子我们向刚刚新建的 collection 插入数据，填 “t_mqtt\_msg”。
 
-如果我们选择不启用 SRV Record，那么在副本集和分片模式下我们就需要将 MongoDB 集群的所有节点地址都填写到 **MongoDB 服务器** 选项中，并且在副本集模式下还必须指定副本集名称。
+::: tip
+从 EMQX 企业版 4.4.11 和 4.3.17 开始，我们可以在 Collection 字段里面使用 `${var}` 格式的占位符了。
+:::
 
-为了快速获取这些配置信息，我们可以使用 `nslookup` 命令来查询 DNS 记录：
+3). Payload Tmpl 模板。这个例子里我们向 MongoDB 插入一条数据，模板为空，插入的数据是上面 SQL 语句 select 出来的结果，以 JSON 格式写入到 MongoDB 中：
 
 ```
 $ nslookup
@@ -89,7 +91,15 @@ Non-authoritative answer:
 cluster0.j0ehi.mongodb.net      text = "authSource=admin&replicaSet=atlas-r36spx-shard-0"
 ```
 
-然后将查询到的服务器列表按 `host[:port][,...hostN[:portN]]` 格式填写到 **MongoDB 服务器** 选项中，并且按照查询到的 TXT 记录内容来配置 **认证数据源** 和 **副本集名称**：
+::: warning
+MongoDB 要求写入的数据必须是 JSON 格式，所以请务必保证你的模板在占位符替换之后，是一个合法的 JSON 格式。比如你可以这样写：
+
+```
+{"client": "${clientid}"}
+```
+:::
+
+再点击 “新建” 完成规则创建
 
 ![image-20211129143723391](./assets/rule-engine/mongo_data_to_store8.png)
 
