@@ -29,21 +29,18 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 ### 100% MQTT Compliant
 
-- 100% MQTT Compliant
 - 100% compliant with MQTT v5.0 and v3.x standards.
-- Fully supports QoS0, 1 & 2 of MQTT message delivery.
+- Fully supports QoS 0, 1 & 2 of MQTT message delivery.
 - Works with all MQTT clients and libraries like Eclipse Paho.
 
 ### Data Security & Privacy
 
-- Data Security & Privacy
 - Ensure data security with MQTT over TLS/SSL or QUIC.
-- Authenticate with LDAP, JWT, PSK, and X.509 certificates.
-- Data privacy protection is in line with the EU’s GDPR.
+- Authenticate with LDAP, JWT, PSK, X.509 certificates, and more.
+- Rich data management APIs to help keeping your data protection policy in line with EU’s GDPR.
 
 ### Cloud-Native
 
-- Cloud-Native
 - Adopt cloud-native architecture based on Kubernetes. One-click deployment for on-premises or fully managed service.
 
 ### Run Anywhere
@@ -51,18 +48,16 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 - Run Anywhere
 - Run anywhere in private, hybrid, and public clouds like AWS, GCP, and Azure without vendor lock-in.
 
-### High ROI with Low TCO
+### High ROI (Return on Investment) with Low TCO (Total Cost of Ownership)
 
-- High ROI with Low TCO
 - Efficiently use network and server resources.
-- Pay by annual subscription, no costly one-off purchases.
+- Pay for annual subscription, no costly one-off purchases.
 - Get high ROI from your IoT solutions with low TCO.
 
 ### Global Technical Support
 
-- Global Technical Support
-- 7 branches in USA, Europe, Japan and China.
-- More than ten partners in Europe, USA and India.
+- 7 sites globally, covering USA, Europe, Japan and China.
+- More than ten business partners in Europe, USA and India.
 - 24/7 worldwide technical support service.
 
 {% endemqxee %}
@@ -95,7 +90,7 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
   - JT/T 808 (Enterprise edition)
   - OCPP (Enterprise edition)
 
-Add more features to MQTT:
+Advanced features for MQTT:
 
 - Delayed Publish
 - Auto subscription
@@ -113,15 +108,15 @@ Add more features to MQTT:
 ### Scalability
 
 - Multi-server node cluster (Cluster)
-- Support `manual`, `mcast`, `dns`, `etcd`, `k8s` cluster discovery methods
+- Support `manual`, `dns`, `etcd`, `k8s` cluster discovery methods
 - Multi-server node bridge (Bridge)
 
 ### Data Integration
 
-- SQL syntax data integrations to extract, filter, enrich, and transform MQTT message or internal events to formats expected by users and send to external data platforms
-- Supports data bridging with other brokers or IoT platforms using MQTT(such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
+- SQL syntax data integrations to extract, filter, enrich, and transform MQTT message or internal events to desired format and export them to external data platforms
+- Supports data bridging with other brokers or IoT platforms using MQTT (such as EMQX Cloud, AWS IoT Core, Azure IoT Hub)
 - Supports integration with other apps using WebHook
-- 30+ enterprise system integrations include Kafka, RDS, various SQL / NoSQL / time-series databases, and enterprise systems such as Oracle and SAP (Enterprise edition)
+- 30+ enterprise system integrations including Kafka, RDS, various SQL / NoSQL / time-series databases, and enterprise systems such as Oracle and SAP (Enterprise edition)
 
 ### Reliability
 
@@ -134,9 +129,8 @@ Add more features to MQTT:
 - Client online status query
 - Cluster status and metrics query
 - Integration with Prometheus/StatsD
-- Automatic network partition healing
 - Online log based tracing
-- Erlang runtime tracing tools
+- Runtime tracing tools
 
 ### Extensibility
 

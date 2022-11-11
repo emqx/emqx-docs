@@ -4,7 +4,7 @@ Starting from download and installation, this document is to guide you to quickl
 
 {% emqxce %}
 
-## Select EMQX Edition
+## Choose EMQX Software Edition or Service
 
 EMQX as a software is released in different editions.
 
@@ -19,9 +19,9 @@ You can customize the deployment to suit your business development plans the bes
 
 {% emqxee %}
 
-## Deployment Mode
+## Choose Your Hosting Mode
 
-EMQX as a software provides the self-managed version [EMQX Enterprise](https://www.emqx.com/en/try?product=enterprise).
+EMQX Enterprise as a software provides a free-of-charge non-expiry trail license. You are welcome to [download it](https://www.emqx.com/en/try?product=enterprise).
 
 EMQ as a company offers a fully managed MQTT cloud service [EMQX Cloud](https://www.emqx.com/en/try?product=cloud)
 which runs EMQX Enterprise.
@@ -181,9 +181,11 @@ For other platforms which are not in the prebuilt list,
 you may simply [contact EMQ](https://www.emqx.com/en/contact) for support.
 {% endemqxee %}
 
+{% emqxce %}
 For other platforms which are not in the prebuilt list,
-you may {% emqxce %}[build the runnables from source code](./install.md#source-code-compilation-and-installation) or{% endemqxce %}
+you may [build the runnables from source code](./install.md#source-code-compilation-and-installation) or
 simply [contact EMQ](https://www.emqx.com/en/contact) for support.
+{% endemqxce %}
 
 ## Start EMQX
 
