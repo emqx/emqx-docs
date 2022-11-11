@@ -35,6 +35,15 @@ The following is a description of some parameters of MongoDB resources:
 - **Replica Set**. If your MongoDB is deployed in replica set mode, you need to specify the corresponding replica set name. However, if the **SRV record** is set to true, and your MongoDB server domain name has a DNS TXT record with the replicaSet option, you can ignore this configuration item.
 - **Enable SSL**, whether to enable TLS connection. When set to true, more TLS related configurations will appear, please configure as needed. Note: SSL must be enabled when connecting to MongoDB Cloud.
 
+
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left. Then type in the following SQL:
+
+```sql
+SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/#"
+```
+
+![image](./assets/rule-engine/mongo_sql_1.png)
+
 ![image-20211126201826084](./assets/rule-engine/mongo_data_to_store4.png)
 
 According to the status of SRV Record, we can configure MongoDB resources in the following two ways:
@@ -60,6 +69,21 @@ Now, we continue to complete the configuration of MongoDB resources. Here we mai
 ![image-20211129112203066](./assets/rule-engine/mongo_data_to_store6.png)
 
 Finally, we click the **OK** button at the bottom of the **Create Resource** form to complete the creation. At this time, a new MongoDB resource instance is successfully created in EMQX:
+::: tip
+From EMQX Enterprise 4.4.11 and 4.3.17, we can use placeholders in `${var}` format for the collections.
+:::
+
+2). Payload template. Payload template is the keys and values you'd
+like to insert into mongodb when the action is triggered. In this
+example we'll insert all the available fields we got from the rule SQL in JSON format, so we just leave the payload template as empty.
+
+::: warning
+MongoDB requires a JSON string when writing, so please ensure your template is a valid JSON format after all the placeholders are placed with the values. For example, you could write this in your template:
+
+```
+{"client": "${clientid}"}
+```
+:::
 
 ![image-20211129113336183](./assets/rule-engine/mongo_data_to_store7.png)
 
@@ -100,6 +124,7 @@ Finally, we also click the **OK** button at the bottom of the **Create Resource*
 ## Create rules
 
 ### 1. Configure SQL
+Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list.
 
 After the resource is created, we need to create the corresponding rules. Click the **Create** button at the upper left corner of the rule page to enter the **Create Rule** page, and enter the following SQL:
 

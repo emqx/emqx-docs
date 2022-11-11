@@ -1,6 +1,7 @@
 # Create a cluster
 
 ## Node Discovery and Autocluster 
+
 EMQX supports Autocluster based on the Ekka library. Ekka is a cluster management library developed for Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster, Network Partition Autoheal and Autoclean.
 
 EMQX supports multiple node discovery strategies:

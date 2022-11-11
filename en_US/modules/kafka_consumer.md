@@ -45,7 +45,21 @@ Click "Select", and then select "Kafka Consumer Group":
 
 Fill in the relevant parameters:
 
-![img](./assets/kafka_consumer3.png)
+![](./assets/kafka_consumer3.png)
+
+1). Kafka server address
+
+2). Kafka consumer connection pool size
+
+3). Kafka subscription topic
+
+4). MQTT message subject
+
+5). MQTT topic service quality
+
+6). Kafka Max Bytes (the maximum number of bytes of messages consumed each time from Kafka)
+
+7). Kafka Offset Reset Policy (reset Offset policy, reset_to_latest | reset_by_subdcriber)
 
 - Kafka server address
 - Kafka consumer connection pool size

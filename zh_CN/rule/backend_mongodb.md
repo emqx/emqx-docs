@@ -91,6 +91,16 @@ cluster0.j0ehi.mongodb.net      text = "authSource=admin&replicaSet=atlas-r36spx
 
 然后将查询到的服务器列表按 `host[:port][,...hostN[:portN]]` 格式填写到 **MongoDB 服务器** 选项中，并且按照查询到的 TXT 记录内容来配置 **认证数据源** 和 **副本集名称**：
 
+::: warning
+MongoDB 要求写入的数据必须是 JSON 格式，所以请务必保证你的模板在占位符替换之后，是一个合法的 JSON 格式。比如你可以这样写：
+
+```
+{"client": "${clientid}"}
+```
+:::
+
+再点击 “新建” 完成规则创建
+
 ![image-20211129143723391](./assets/rule-engine/mongo_data_to_store8.png)
 
 最后，我们同样点击 **创建资源** 表单最下方的 **确定** 按钮以完成创建。

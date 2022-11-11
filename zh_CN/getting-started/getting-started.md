@@ -17,12 +17,25 @@ ref:
 
 本章节将指导您从下载安装开始，快速开始使用 EMQX。
 
+{% emqxce %}
+
 ## 版本选择
 
 EMQX 提供开源版和企业版下载安装，也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
 
+{% endemqxce %}
+
+{% emqxee %}
+
+## 部署方式选择
+
+EMQX 提供私有部署的企业版，也提供了全托管的 MQTT 云服务 EMQX Cloud，您可以选择合适您的部署方式，快速开始使用。
+
+{% endemqxee %}
+
 :::: tabs type:card
 
+{% emqxce %}
 ::: tab EMQX 开源版
 大规模可弹性伸缩的云原生分布式物联网 MQTT 消息服务器，高效可靠连接海量物联网设备，高性能实时处理消息与事件流数据，助力构建关键业务的物联网平台与应用。
 
@@ -34,6 +47,8 @@ EMQX 提供开源版和企业版下载安装，也提供了全托管的 MQTT 云
 
 [下载安装](https://www.emqx.io/zh/downloads)
 :::
+
+{% endemqxce %}
 
 ::: tab EMQX Cloud
 通过可靠、实时的物联网数据移动、处理和集成，连接您的海量物联网设备。加快您的物联网应用开发，免除基础设施管理维护负担。
@@ -72,6 +87,8 @@ EMQX Cloud 是全球首个全托管的 MQTT 5.0 公有云服务。在 [EMQX Clou
 
 ### 通过 Docker 容器运行
 
+{% emqxce %}
+
 EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.com/r/emqx/emqx)上了解该镜像的详细信息。通过容器化部署是快速开始体验 EMQX 的最快方式。
 
 1. 获取 Docker 镜像
@@ -87,6 +104,26 @@ docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p
 ```
 
 更多 Docker 安装、Docker Compose 快速搭建集群集群请参考[通过 Docker 运行 (包含简单的 docker-compose 集群)](./install.md#通过-docker-运行-包含简单的-docker-compose-集群)。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+EMQX 提供了一个容器镜像，您可以在 [Docker Hub](https://hub.docker.com/r/emqx/emqx-ee)上了解该镜像的详细信息。通过容器化部署是快速开始体验 EMQX 的最快方式。
+
+1. 获取 Docker 镜像
+
+```bash
+docker pull emqx/emqx-ee:latest
+```
+
+1. 启动 Docker 容器
+
+```bash
+docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+```
+
+{% endemqxee %}
 
 ### Kubernetes 安装部署
 
@@ -108,18 +145,36 @@ EMQX Kubernetes Operator 是基于 Kubernetes 原生 API 的应用编排工具�
 
 EMQX 可以直接部署在物理服务器或者虚拟机上。最小仅需 2 核 4G 的机器即可运行 EMQX 程序。可支持 CentOS, Debian, Ubuntu, MacOS 等操作系统。
 
+{% emqxce %}
+
 - [Shell 脚本一键安装 (Linux)](./install.md#shell-脚本一键安装-linux)
 - [CentOS 系统安装](./install.md#centos)
 - [Ubuntu、Debian 安装](./install.md#ubuntu、debian)
 - [MacOS、Windows、Linux ZIP 包安装](./install.md#zip-压缩包安装-linux、maxos、windows)
 
-如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](./install.md#源码编译安装) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。
+如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，您可以参考 [源码编译安装](./install.md#源码编译安装) 或[联系我们](https://www.emqx.com/zh/contact) 获取支持。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+如果您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，您可以[联系我们](https://www.emqx.com/zh/contact) 获取支持。
+
+{% endemqxee %}
 
 ## 启动 EMQX
 
 安装成功后，可通过 `systemctl` 或 `emqx` 命令来启动 EMQX，更多启动方式和注意事项参考 [启动 EMQX](./start.md)。
 
+{% emqxce %}
 EMQX 成功启动之后可以通过浏览器打开 [http://localhost:18083/](http://localhost:18083/)（将 localhost 替换为您实际 IP 地址）以访问 [EMQX Dashboard](./dashboard.md) 管理控制台，进行设备连接与相关指标监控管理。
+
+{% endemqxce %}
+
+{% emqxee %}
+EMQX 成功启动之后可以通过浏览器打开 [http://localhost:18083/](http://localhost:18083/)（将 localhost 替换为您实际 IP 地址）以访问 [EMQX Dashboard](./dashboard-ee.md) 管理控制台，进行设备连接与相关指标监控管理。
+
+{% endemqxee %}
 
 ### 后台启动 EMQX
 
