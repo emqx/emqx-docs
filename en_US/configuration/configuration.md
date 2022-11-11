@@ -2756,7 +2756,6 @@ OCSP responder.
 #### Description
 
 Whether to enable CRL verification and caching for this listener.
-If set to true, requires specifying the CRL server URL(s).
 
 Note: In the event of cache miss, EMQX will attempt to fetch the CRL
 on the fly from the URL declared in the client certificate's

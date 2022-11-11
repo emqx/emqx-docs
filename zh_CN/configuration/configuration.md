@@ -2722,7 +2722,6 @@ listener.ssl.external.access.2 = allow all
 #### 说明
 
 是否为该监听器启用 CRL 验证和缓存。
-如果设置为 "true"，则需要指定CRL服务器的一个或多个URL。
 
 注意：如果客户试图用一个目前没有缓存的分布点连接到EMQX，服务器将试图获取CRL。
 的分布点连接到EMQX，服务器将试图从在 "报告 "中声明的URL中获取CRL的信息。
