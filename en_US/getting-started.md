@@ -82,8 +82,14 @@ Container deployment is the quickest way to start experimenting with EMQX.
 Start Docker container:
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 $PWD/data:/opt/emqx/data emqx/emqx:latest
 ```
+
+If you want to persist the EMQX docker container, you need to keep the following directories:
+
+- `/opt/emqx/data`
+- `/opt/emqx/etc`
+- `/opt/emqx/log`
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
 please refer to [Running with Docker (including a simple docker-compose cluster)](./deploy/install.md#running-emqx-in-docker).

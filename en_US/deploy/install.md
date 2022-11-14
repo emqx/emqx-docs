@@ -30,7 +30,7 @@ They support plugins written in Elixir and have debug console powered with [IEx]
 2.  Start docker container
 
     ```shell
-    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:5.0.9
+    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 $PWD/data:/opt/emqx/data emqx/emqx:5.0.9
     ```
 
 ### Create a simple static cluster by docker-compose
