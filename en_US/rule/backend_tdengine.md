@@ -61,8 +61,6 @@ FROM
 
 The subsequent action creation operation can be selected flexibly depending on your EMQX version.
 
-## Native SDK (EMQX Enterprise)
-
 Add Action:
 
 Find `Action`, click `Add Action`.
@@ -98,47 +96,7 @@ Return to the action screen and click "Confirm".
 
 Return to the rule screen and click "Create".
 
-## Write by Web Server
-
-To support development on different types of platforms, TDengine provides APIs that conform to REST design standards.
-
-The [RESTful Connector](https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector) provides the simplest way to connect, i.e. using HTTP requests carrying authentication information with the SQL operation to be performed TDengine.
-
-Add Action:
-
-Find `Action`, click `Add Action`.
-
-Click `Data persist`, Choice `Data to Web Server`.
-
-`Data to Web Server` parameters:
-
-1. Using of resources: Associated Web Server resources, you can click the Create button to create new resources.
-2. Method:`POST`
-3. Path: `/rest/sql`
-4. Headers: `Authorization Basic`, "root:taosdata" base64 encode is `cm9vdDp0YW9zZGF0YQ==`
-5. Body: Request Body. In this example we are inserting a piece of data into TDengine, which should carry the INSERT SQL within the request body, noting that we should specify the database name in the SQL and the character type should be enclosed in single quotes, with the message content template as follows
-
-```sql
--- Note: the topic is added as an identifier because in this example we will have two resources written to TDengine, and the identifier distinguishes between the data written natively and by the Web Server
-insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', 'http server ${topic}', ${qos}, '${payload}', ${timestamp})
-```
-
-![image](./assets/rule-engine/TDengine/create_data_towebserver.png)
-
-Create Web Server resource:
-
-</br>
-Web Server config:
-</br>
-Request URL is http://127.0.0.1:6041.
-</br>
-Please fill in the other fields according to the server settings. If encrypted transmission is configured, please fill in the certificate information. Only the default parameters are used in the example.
-</br>
-Return to the rule screen and click "Create".
-
-![image](./assets/rule-engine/TDengine/td_create_webserver.png)
-
-## Test
+Test:
 
 In the rule list, click on the Rule ID link to preview the rule you just created.
 
