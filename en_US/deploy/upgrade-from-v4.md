@@ -170,7 +170,7 @@ authentication = [
 
 #### Remove the Anonymous Mechanism
 
-Remove the `alow_anonymous` configuration item. All client connections are allowed by default.
+Remove the `allow_anonymous` configuration item. All client connections are allowed by default.
 If **add and enable** any authenticator, EMQX will perform an authentication check for all new connections.
 
 Remove the `bypass_auth_plugins` configuration item. When a listener needs to disable authentication, it can be set through the `listeners.{type}.{name}.enable_authn = true | false` configuration item.
