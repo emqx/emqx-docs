@@ -318,6 +318,7 @@ $ docker run -d \
     -p 8883:8883 \
     -p 8084:8084 \
     -p 18083:18083 \
+    -v $PWD/data:/opt/emqx/data
     -v /path/to/emqx.lic:/opt/emqx/etc/emqx.lic \
     emqx/emqx-ee:v4.0.0
 ```

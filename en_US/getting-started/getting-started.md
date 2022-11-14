@@ -106,8 +106,14 @@ docker pull emqx/emqx:latest
 1. Start Docker container
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+docker run -d --name emqx -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 -v $PWD/data:/opt/emqx/data emqx/emqx:latest
 ```
+
+If you want to persist the EMQX docker container, you need to keep the following directories:
+
+- `/opt/emqx/data`
+- `/opt/emqx/etc`
+- `/opt/emqx/log`
 
 For more information about Docker installation and building a cluster quickly with Docker Compose,
 please refer to [Running with Docker (including a simple docker-compose cluster)](./install.md#install-emq-x-in-docker-contain-a-simple-docker-compose-cluster).
@@ -129,8 +135,14 @@ docker pull emqx/emqx-ee:latest
 1. Start Docker container
 
 ```bash
-docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+docker run -d --name emqx-ee -p 1883:1883 -p 8081:8081 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 -v $PWD/data:/opt/emqx/data emqx/emqx-ee:latest
 ```
+
+If you want to persist the EMQX docker container, you need to keep the following directories:
+
+- `/opt/emqx/data`
+- `/opt/emqx/etc`
+- `/opt/emqx/log`
 
 {% endemqxee %}
 
