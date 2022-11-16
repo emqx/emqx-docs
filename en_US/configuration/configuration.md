@@ -1151,7 +1151,7 @@ What to do after the ACL check fails.
 
 
 
-### clientid_enrichment_module
+### alias_enrichment_module
 
 | Type    | Default  |
 | ------- | -------- |
@@ -1164,7 +1164,7 @@ This is a very specific, advanced option that should not be used
 unless recommended by EMQ.
 :::
 
-Specify a module that defines the `enrich_clientid_alias/2` function.
+Specify a module that defines the `enrich_with_aliases/2` function.
 This function will be used to enrich the client/channel information
 with clientid and/or common name aliases (or other enrichments the
 module may implement).

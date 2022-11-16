@@ -1115,7 +1115,7 @@ ACL 检查失败后，执行的操作。
 
 
 
-### clientid_enrichment_module
+### alias_enrichment_module
 
 | Type    | Default  |
 | ------- | -------- |
@@ -1129,7 +1129,7 @@ ACL 检查失败后，执行的操作。
 :::
 
 
-指定一个定义了 `enrich_clientid_alias/2` 函数的模块。
+指定一个定义了 `enrich_with_aliases/2` 函数的模块。
 这个函数将被用来丰富客户/通道信息
 和/或通用名称别名（或模块可能实现的其他丰富功能）。
 模块可能实现的其他丰富信息）。
