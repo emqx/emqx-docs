@@ -4,18 +4,18 @@
 
 1. 创建一个[服务账户](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)，
    在你的GCP账户中确保服务账户有权限，可以向需要的主题发布消息。
-2. 为该账户创建一个服务账户密钥，并下载其为 JSON 格式下载。
+2. 为该账户创建一个服务账户密钥，并下载其为 JSON 格式文件。
 3. 创建一个 PubSub 主题（记住，服务账户必须有权限来发布到该主题）。
 
 ## 创建 GCP PubSub 资源
 
-转到 [EMQX 仪表板](http://127.0.0.1:18083/#/resources), 选择左边菜单上的
+转到 [EMQX 仪表板](http://127.0.0.1:18083/#/resources),
 在左边的菜单上选择“规则引擎”项目，然后选择“资源”。
 然后，点击“创建”。
 
 在对话框中，选择“GCP PubSub”类型，并点击“选择文件”。
-来选择和上传你要使用的服务账户的服务账户 JSON 文件。
-帐户的 JSON 文件。点“确认”。
+选择上传前面下载的服务账户JSON 文件。
+点击“确认”。
 
 ![创建一个 GCP PubSub 资源](./assets/gcp_pubsub_1.png)
 
