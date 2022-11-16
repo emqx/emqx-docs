@@ -2780,7 +2780,7 @@ http://my.other.crl.server/another.crl.pem`).
 
 
 
-### crl_cache.http_timeout
+### crl_cache_http_timeout
 
 | Type     | Default          |
 | -------- | ---------------- |
@@ -2793,7 +2793,7 @@ for all listeners.
 
 
 
-### crl_cache.refresh_interval
+### crl_cache_refresh_interval
 
 | Type     | Default          |
 | -------- | ---------------- |
