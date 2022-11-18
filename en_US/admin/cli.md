@@ -37,25 +37,25 @@ and issues Erlang RPC calls to get the commands executed.
 Below is a list of all supported commands without copy-pasting a lot of the
 descriptive information from the usage outputs.
 
-### status
+## status
 
 `emqx ctl status`
 
 This command is a quick inspection to see if the broker is up and running.
 
-### broker
+## broker
 
 `emqx ctl broker`
 
 This command is to inspect the local broker running status, statistics and metrics.
 
-### observer
+## observer
 
 `emqx ctl observer`
 
 This command provides Erlang virtual machine insights including a realtime view like linux's 'top' top command.
 
-### cluster_call
+## cluster_call
 
 `emqx ctl cluster_call`
 
@@ -86,13 +86,13 @@ $ emqx ctl cluster_call tnxid 2
 The `skip` and `fast_forward` commands may result in diverged configs between the nodes in the cluster.
 :::
 
-### admins
+## admins
 
 `emqx ctl admins`
 
 The `admins` command can be used to create/update/delete administrative users.
 
-### retainer
+## retainer
 
 `emqx ctl retainer`
 
@@ -101,7 +101,7 @@ It also comes with a `emqx ctl retainer reindex` command which can be used to
 create or update indices for retained messages.
 
 
-### cluster
+## cluster
 
 `emqx ctl cluster`
 
@@ -110,7 +110,7 @@ Please note that the `join` instruction is 'requesting' rather not 'inviting'.
 That is, the `emqx ctl cluster join <OneOfTheClusteredNodes>` is the be executed
 on the joining node, but not from any of the nodes in the cluster.
 
-### clients
+## clients
 
 `emqx ctl clients`
 
@@ -121,7 +121,7 @@ It may take a long time to `list` all when there is a large number of clients.
 :::
 
 
-### topics
+## topics
 
 `emqx ctl topics`
 
@@ -132,7 +132,7 @@ It's to list/describe subscribed topics (or topic filters) in the cluster.
 It may take a long time to `list` all when there is large number of topics.
 :::
 
-### subscriptions
+## subscriptions
 
 `emqx ctl subscriptions`
 
@@ -142,31 +142,31 @@ This command is to list/show/add/delete client's subscriptions.
 It may take a long time to `list` all when there is large number of subscriptions.
 :::
 
-### plugins
+## plugins
 
 `emqx ctl plugins`
 
 This command is used to manage plugin installation.
 
-### vm
+## vm
 
 `emqx ctl vm`
 
 Inspect statistic data collected from the Erlang virtual machine.
 
-### mnesia
+## mnesia
 
 `emqx ctl mnesia`
 
 Prints mnesia runtime status and metrics.
 
-### log
+## log
 
 `emqx ctl log`
 
 This command can be used to manage log handlers states, such as setting logging level etc.
 
-### trace and traces
+## trace and traces
 
 `emqx ctl trace`
 
@@ -185,7 +185,7 @@ You can also manage traces from the dashboard UI. See [tracer](../observability/
 
 This command is like the `trace` command, but applies on all nodes in the cluster.
 
-### listeners
+## listeners
 
 `emqx ctl listeners`
 
@@ -196,20 +196,20 @@ Stopping or restarting a listener causes all the connected clients to disconnect
 :::
 
 
-### authz cache-clean
+## authz cache-clean
 
 `emqx ctl authz cache-clean`
 
 This command is useful when you want to force evict cached authz (ACL) data.
 
-### pem_cache
+## pem_cache
 
 `emqx ctl pem_cache`
 
 This command is to force EMQX reload updated pem (x509 keys and certificates) files
 after for example a certificate renewal.
 
-### olp
+## olp
 
 `emqx ctl olp`
 
@@ -241,20 +241,20 @@ EMQX is designed to be plugable, so that more gateways can be installed as plugi
 and register to EMQX at runtime.
 Once registered, a gateway can be managed with management APIs and CLIs (see `gateway` command below)
 
-### gateway
+## gateway
 
 `emqx ctl gateway`
 
 This command can be used to inspect or manage gateway loading/running status.
 
 
-### gateway-metrics
+## gateway-metrics
 
 `emqx ctl gateway-metrics`
 
 Inspect gateway metrics.
 
-### rules
+## rules
 
 `emqx ctl rules`
 

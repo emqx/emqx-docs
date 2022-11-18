@@ -1,6 +1,6 @@
 # 命令行
 
-## 启动脚本
+## 启动命令
 
 EMQX 的主启动脚本也支持运行一些基本的管理命令。
 帮助信息如下：
@@ -26,7 +26,7 @@ More:
 Execute 'emqx COMMAND help' for more information
 ```
 
-## ctl 命令
+## ctl 命令介绍
 
 所有的 `ctl` 命令 `emqx ctl COMMAND ARGS ...` (或者等效地： `emqx_ctl COMMAND ARGS ...`) 
 都需要 EMQX 服务启动之后才能运行。
@@ -37,25 +37,25 @@ Execute 'emqx COMMAND help' for more information
 下面列举了所有 `ctl` 命令的子命令，和相应的简介。
 本文档旨在介绍命令的功能。命令的详细参数介绍可以用 `help` 指令查看。
 
-### status
+## status
 
 `emqx ctl status`
 
 快速查看当前运行的节点是否运行。
 
-### broker
+## broker
 
 `emqx ctl broker`
 
 查看当前节点的运行的版本状态以及运行时长。
 
-### observer
+## observer
 
 `emqx ctl observer`
 
 可以用于查看运行时状态。展示一个类似于 linux 的 `top` 命令的界面。
 
-### cluster_call
+## cluster_call
 
 `emqx ctl cluster_call`
 
@@ -89,20 +89,20 @@ $ emqx ctl cluster_call tnxid 2
 这可能会导致集群内节点之间的配置不一致。
 :::
 
-### admins
+## admins
 
 `emqx ctl admins`
 
 这个命令用于创建，修改，删除管理员账户。
 
-### retainer
+## retainer
 
 `emqx ctl retainer`
 
 这个命令可以用于查看和管理 retain 的消息。
 也可以用于为 retain 表创建索引：`emqx ctl retainer reindex` 。
 
-### cluster
+## cluster
 
 `emqx ctl cluster`
 
@@ -111,7 +111,7 @@ $ emqx ctl cluster_call tnxid 2
 也就是说，`emqx ctl cluster join <OneOfTheClusteredNodes>` 指令用于请求加入
 `OneOfTheClusteredNodes` 所在的集群，而不是让这个节点加入自己所在的集群。
 
-### clients
+## clients
 
 `emqx ctl clients`
 
@@ -121,8 +121,7 @@ $ emqx ctl cluster_call tnxid 2
 如果系统中连接了大量的客户端 `list` 指令可能会比较耗时且耗资源。
 :::
 
-
-### topics
+## topics
 
 `emqx ctl topics`
 
@@ -132,7 +131,7 @@ $ emqx ctl cluster_call tnxid 2
 如果集群中有大量的主题订阅，`list` 指令可能会比较耗时且耗资源。
 :::
 
-### subscriptions
+## subscriptions
 
 `emqx ctl subscriptions`
 
@@ -142,31 +141,31 @@ $ emqx ctl cluster_call tnxid 2
 当系统中有大量的订阅客户端时，`list` 指令可能比较耗时且耗资源。
 :::
 
-### plugins
+## plugins
 
 `emqx ctl plugins`
 
 该命令用于查看和管理插件。
 
-### vm
+## vm
 
 `emqx ctl vm`
 
 用于查看 Erlang 虚拟机的运行时状态和指标。
 
-### mnesia
+## mnesia
 
 `emqx ctl mnesia`
 
 用于查看内置数据库（Mnesia）的运行状态和指标。
 
-### log
+## log
 
 `emqx ctl log`
 
 用于管理日志参数，例如日志级别等。
 
-### trace and traces
+## trace and traces
 
 `emqx ctl trace`
 
@@ -185,7 +184,7 @@ $ emqx ctl cluster_call tnxid 2
 
 这个命令跟 `trace` 命令一样，但是会在整个集群所有节点中都开始或停止一个 tracer。
 
-### listeners
+## listeners
 
 `emqx ctl listeners`
 
@@ -196,19 +195,19 @@ $ emqx ctl cluster_call tnxid 2
 :::
 
 
-### authz cache-clean
+## authz cache-clean
 
 `emqx ctl authz cache-clean`
 
 这个命令用于强制所有客户端的授权（ACL）缓存立刻失效。
 
-### pem_cache
+## pem_cache
 
 `emqx ctl pem_cache`
 
 这个命令可以用于清除 x509 pem 证书的缓存。
 
-### olp
+## olp
 
 `emqx ctl olp`
 
@@ -238,19 +237,19 @@ OLP 是 “overload protection” 的缩写。
 EMQX 的网关设计成可插拔。所以网关应用可以在启动/运行时注册到 EMQX 系统中。
 一旦注册之后，就可以用 HTTP API 或者命令行来对网关进行管理了。
 
-### gateway
+## gateway
 
 `emqx ctl gateway`
 
 用于查看和管理网关的启停状态。
 
-### gateway-metrics
+## gateway-metrics
 
 `emqx ctl gateway-metrics`
 
 查看网关的指标。
 
-### rules
+## rules
 
 `emqx ctl rules`
 
