@@ -138,6 +138,9 @@
         - data-integration/schema-registry
 
 ## Device connectivity
+- title_en: MQTT over QUIC
+  title_cn: MQTT over QUIC
+  path: mqtt-over-quic/introduction
 
 - title_en: Gateway
   title_cn: 网关
@@ -159,7 +162,6 @@
     - advanced/auto-subscriptions
     - advanced/topic-rewrite
     - advanced/system-topic
-    - advanced/quic
 
 #- title_en: Persistence Backends
 #  title_cn: 数据持久化
