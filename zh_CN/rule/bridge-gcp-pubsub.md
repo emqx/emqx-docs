@@ -1,5 +1,9 @@
 # 桥接数据到 GCP PubSub
 
+::: tip
+在 "e4.4.11 "中引入。
+:::
+
 ## 设置
 
 1. 创建一个[服务账户](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)，

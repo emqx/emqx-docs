@@ -1,5 +1,9 @@
 # Bridge data to GCP PubSub
 
+::: tip
+Introduced in `e4.4.11`
+:::
+
 ## Setup
 
 1. Create a [Service
