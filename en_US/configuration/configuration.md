@@ -1159,7 +1159,7 @@ What to do after the ACL check fails.
 
 #### Description
 
-::: warning Warning
+::: tip Tip
 This is a very specific, advanced option that should not be used
 unless recommended by EMQ.
 :::
@@ -1179,7 +1179,7 @@ module may implement).
 
 #### Description
 
-::: warning Warning
+::: tip Tip
 This is a very specific, advanced option that should not be used
 unless recommended by EMQ.
 :::
