@@ -32,7 +32,7 @@ Body:
 }
 ```
 
-::: danger
+::: warning
 `POST` method is recommended. When using the `GET` method, some sensitive information (like plain text passwords) can be exposed through HTTP server logging.
 
 For untrusted environments, HTTPS should be used.
