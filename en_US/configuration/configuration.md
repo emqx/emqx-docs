@@ -1164,7 +1164,7 @@ This is a very specific, advanced option that should not be used
 unless recommended by EMQ.
 :::
 
-Introduced in `e4.4.11`.
+Introduced in `4.4.11`.
 
 Specify a module that defines the `enrich_with_aliases/2` function.
 This function will be used to enrich the client/channel information
@@ -1186,7 +1186,7 @@ This is a very specific, advanced option that should not be used
 unless recommended by EMQ.
 :::
 
-Introduced in `e4.4.11`.
+Introduced in `4.4.11`.
 
 Specify a module that defines the `check_authn/2` function.  This
 function will be used in the `client.authenticate` hook as a way to
