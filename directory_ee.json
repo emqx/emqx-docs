@@ -417,6 +417,10 @@
             {
               "title": "桥接数据到 EMQX",
               "path": "rule/bridge_emqx"
+            },
+            {
+              "title": "桥接数据到 GCP PubSub",
+              "path": "rule/bridge-gcp-pubsub"
             }
           ]
         },
@@ -1195,6 +1199,10 @@
             {
               "title": "Bridge data to EMQX",
               "path": "rule/bridge_emqx"
+            },
+            {
+              "title": "Bridge data to GCP PubSub",
+              "path": "rule/bridge-gcp-pubsub"
             }
           ]
         },
