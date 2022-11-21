@@ -228,7 +228,7 @@
 - title_en: Design & Implementation
   title_cn: 设计与实现
   children:
-    - design/design
+    # - design/design
     - advanced/inflight-window-and-message-queue
     - advanced/retransmission
     - title_en: SDK & Tools
