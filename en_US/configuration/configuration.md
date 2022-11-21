@@ -2685,6 +2685,8 @@ when `verify` configuration is set to `verify_peer`.
 
 #### Description
 
+Introduced in `e4.4.11`.
+
 Whether to enable OCSP stapling for the listener.  If set to true,
 requires definining the OCSP responder URL.  Such responses will be
 cached and sent to the connecting clients as part of the TLS
@@ -2700,6 +2702,8 @@ handshake.  This is only supported for TLS 1.2 and TLS 1.3.
 
 #### Description
 
+Introduced in `e4.4.11`.
+
 URL for the OCSP responder to check the server certificate against
 when OCSP stapling is enabled.  This response is cached and refresh
 periodically.
@@ -2714,6 +2718,8 @@ periodically.
 
 #### Description
 
+Introduced in `e4.4.11`.
+
 Path to the file containing PEM-encoded certificate of the OCSP Stapling issuer.
 This certificate is used to validate that the stapling sent by a trusted server.
 
@@ -2726,6 +2732,8 @@ This certificate is used to validate that the stapling sent by a trusted server.
 | duration | 5m               |
 
 #### Description
+
+Introduced in `e4.4.11`.
 
 The period to refresh the OCSP response for the server.  Even if the
 response fails to be fetched during a refresh, the previously cached
@@ -2742,6 +2750,8 @@ retrieved from the OCSP responder.  Cannot be shorter than 1 minute.
 
 #### Description
 
+Introduced in `e4.4.11`.
+
 The timeout for the HTTP request when fetching OCSP responses from the
 OCSP responder.
 
@@ -2754,6 +2764,8 @@ OCSP responder.
 | boolean | `false`                |
 
 #### Description
+
+Introduced in `e4.4.11`.
 
 Whether to enable CRL verification and caching for this listener.
 
@@ -2773,6 +2785,8 @@ connection.
 
 #### Description
 
+Introduced in `e4.4.11`.
+
 Comma-separated URL list for CRL servers to fetch and cache CRLs from.
 Must include the path to the CRL file(s) in the paths (e.g.:
 `http://my.crl.server/intermediate.crl.pem,
@@ -2788,6 +2802,8 @@ http://my.other.crl.server/another.crl.pem`).
 
 #### Description
 
+Introduced in `e4.4.11`.
+
 The timeout for the HTTP request when fetching CRLs.  This is global
 for all listeners.
 
@@ -2800,6 +2816,8 @@ for all listeners.
 | duration | 15m              |
 
 #### Description
+
+Introduced in `e4.4.11`.
 
 The period to refresh the CRLs from the servers.  This is global
 for all URLs and listeners.  Cannot be shorter than 1 minute.
