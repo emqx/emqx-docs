@@ -2723,12 +2723,8 @@ listener.ssl.external.access.2 = allow all
 
 是否为该监听器启用 CRL 验证和缓存。
 
-注意：如果客户试图用一个目前没有缓存的分布点连接到EMQX，服务器将试图获取CRL。
-的分布点连接到EMQX，服务器将试图从在 "报告 "中声明的URL中获取CRL的信息。
-服务器将试图从客户证书的分布点中声明的URL中获取CRL。
-分发点中声明的URL中获取CRL。 如果没有相应的CRL被缓存或成功获取
-且CRL缓存已被启用，那么客户将被拒绝连接。
-连接。
+注意：当缓存没有命中时，EMQX 会尝试在运行时从客户端证书中携带的 URL
+来下载最新的 CRL。如果下载失败，EMQX 会拒绝该客户端的连接。
 
 
 
@@ -2740,8 +2736,8 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-以逗号分隔的URL列表，用于获取和缓存CRLs的CRL服务器。
-必须在路径中包括CRL文件的路径（例如。
+以逗号分隔的URL列表，用于获取和缓存 CRL 列表的服务器。
+必须在路径中包括CRL文件的路径（例如：
 `http://my.crl.server/intermediate.crl.pem,
 http://my.other.crl.server/another.crl.pem`）。
 
@@ -2755,7 +2751,7 @@ http://my.other.crl.server/another.crl.pem`）。
 
 #### 说明
 
-获取CRLs时HTTP请求的超时。这对所有听众来说是全球性的。
+获取 CRL 列表时 HTTP 请求的超时。适用于所有监听器。
 
 
 
@@ -2767,8 +2763,7 @@ http://my.other.crl.server/another.crl.pem`）。
 
 #### 说明
 
-从服务器刷新CRL的周期。 这是全球
-所有URL和监听器。 不能短于1分钟。
+从服务器刷新 CRL 的周期。 适用于所有 URL 和监听器。 不能短于1分钟。
 
 
 
