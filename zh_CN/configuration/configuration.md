@@ -2656,7 +2656,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 是否为监听器启用OCSP Stapling 功能。 如果设置为 `true`，则需要定义OCSP响应者的URL。
 这个响应将被缓存，并作为 TLS 握手的一部分发送给连接的客户端。
@@ -2671,7 +2671,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 启用 OCSP Stapling 时，用于检查服务器证书的 OCSP 应答服务 URL。
 应答的内容会被缓存，并定期刷新。
@@ -2686,7 +2686,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 该文件用于存放 OCSP Responder 的 PEM 格式编码的证书。
 该证书用于校验 OCSP Responder 返回的内容。
@@ -2701,7 +2701,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 刷新 OCSP Stapling 的间隔。 如果响应在刷新期间未能被获取，先前缓存的
 响应仍将被使用，直到从 OCSP Responder 那里成功地获取一个较新的响应。
@@ -2717,7 +2717,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 从 OCSP Responder 处获取 OCSP Stapling 响应的最长时间。
 
@@ -2731,7 +2731,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 是否为该监听器启用 CRL 验证和缓存。
 
@@ -2748,7 +2748,7 @@ listener.ssl.external.access.2 = allow all
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 以逗号分隔的URL列表，用于获取和缓存 CRL 列表的服务器。
 必须在路径中包括CRL文件的路径（例如：
@@ -2765,7 +2765,7 @@ http://my.other.crl.server/another.crl.pem`）。
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 获取 CRL 列表时 HTTP 请求的超时。适用于所有监听器。
 
@@ -2779,7 +2779,7 @@ http://my.other.crl.server/another.crl.pem`）。
 
 #### 说明
 
-在 "e4.4.11 "中引入。
+在 `e4.4.11` 中引入。
 
 从服务器刷新 CRL 的周期。 适用于所有 URL 和监听器。 不能短于1分钟。
 
