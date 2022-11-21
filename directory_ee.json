@@ -639,6 +639,15 @@
       ]
     },
     {
+      "title": "安全",
+      "children": [
+        {
+          "title": "CRL/OCSP Stapling",
+          "path": "security/crl-ocsp-stapling"
+        }
+      ]
+    },
+    {
       "title": "命令行接口",
       "children": [
         {
@@ -652,8 +661,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "安装补丁包",
-       "path": "advanced/patches"
+      "title": "安装补丁包",
+      "path": "advanced/patches"
     },
     {
       "title": "FAQ 常见问题解答",
@@ -1396,6 +1405,15 @@
       "path": "advanced/http-api"
     },
     {
+      "title": "Security",
+      "children": [
+        {
+          "title": "CRL/OCSP Stapling",
+          "path": "security/crl-ocsp-stapling"
+        }
+      ]
+    },
+    {
       "title": "Configuration",
       "path": "configuration/configuration"
     },
@@ -1413,8 +1431,8 @@
       "path": "advanced/relup"
     },
     {
-       "title": "Apply Patches",
-       "path": "advanced/patches"
+      "title": "Apply Patches",
+      "path": "advanced/patches"
     },
     {
       "title": "FAQ",

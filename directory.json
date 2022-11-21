@@ -342,6 +342,15 @@
       ]
     },
     {
+      "title": "安全",
+      "children": [
+        {
+          "title": "CRL/OCSP Stapling",
+          "path": "security/crl-ocsp-stapling"
+        },
+      ]
+    },
+    {
       "title": "命令行接口",
       "children": [
         {
@@ -841,6 +850,15 @@
           "title": "Environment variables",
           "path": "configuration/environment-variable"
         }
+      ]
+    },
+    {
+      "title": "Security",
+      "children": [
+        {
+          "title": "CRL/OCSP Stapling",
+          "path": "security/crl-ocsp-stapling"
+        },
       ]
     },
     {
