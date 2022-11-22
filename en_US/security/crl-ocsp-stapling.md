@@ -15,14 +15,79 @@ Different from the browser's mechanism for using CRLs, the MQTT client does not 
 
 All operations are run by EMQX, no special scripts or adaptations to the client are required.
 
-For more details on how to use it, please refer to [Enable CRL](../configuration/configuration.md#listener-ssl-external-enable-crl-check).
+### Configuiation
+
+## CRL 配置
+
+```bash
+# Enable CRL
+listener.ssl.external.enable_crl_cache = true
+
+# Comma-separated URL list for CRL servers
+listener.ssl.external.crl_cache_urls = http://my.crl.server/intermediate.crl.pem, http://my.other.crl.server/another.crl.pem
+
+# CRL Request timeout
+listener.ssl.external.crl_cache_http_timeout = 15s
+
+
+# The period to refresh the CRLs from the servers is applied to the all listener
+crl_cache.refresh_interval = 15m
+```
+
+The list of CRL files can be requested from the CA or by the following command:
+
+```bash
+$ openssl x509 -in broker.emqx.io.crt -noout -text | grep crl
+
+URI:http://crl3.digicert.com/RapidSSLGlobalTLSRSA4096SHA2562022CA1.crl
+URI:http://crl4.digicert.com/RapidSSLGlobalTLSRSA4096SHA2562022CA1.crl
+```
+
+For more detailed configuration, please refer to [Enable CRL](../configuration/configuration.md#listener-ssl-external-enable-crl-check).
 
 ## OCSP Stapling
 
 OCSP(Online Certificate Status Protocol) is another certificate revocation solution, and OCSP Stapling is the latest improvement to OCSP technology.
 
+OCSP Stapling checks the status of certificates via EMQX without each client sending a request to the OCSP Responder.
 When OCSP Stapling is enabled, EMQX will request certificate from the OCSP server and cache the result.
 
 When the client sends an SSL handshake request to EMQX, EMQX sends the OCSP info of the certificate to the client along with the certificate chain(Stapling), and the client verifies the certificate validity.
 
-For more details on how to use it, please refer to [Enable OCSP Stapling](../configuration/configuration.md#listener-ssl-external-enable-ocsp-stapling).
+OCSP Stapling improves the speed of client-side certificate checking and reduces the load on OCSP Responder.
+
+### Configuring OCSP Stapling
+
+```bash
+# Enable OCSP Stapling
+listener.ssl.external.enable_ocsp_stapling = true
+
+# OCSP Responder URL 
+## Get from CA or with this command
+## openssl x509 -in broker.emqx.io.crt -noout -ocsp_uri
+listener.ssl.external.ocsp_responder_url = http://ocsp.digicert.com
+
+# OCSP Responder PEM
+listener.ssl.external.ocsp_issuer_pem = etc/certs/ocsp-issuer.pem
+
+# OCSP Stapling request interval and timeout
+listener.ssl.external.ocsp_refresh_interval = 5m
+listener.ssl.external.ocsp_refresh_http_timeout = 15s
+```
+
+You can use this command to verify if OCSP Stapling is successfully enabled:
+
+```bash
+$ openssl s_client -connect broker.emqx.io:8883  -status -tlsextdebug < /dev/null 2>&1 | grep -i "OCSP response"
+
+# Not enabled
+OCSP response: no response sent
+
+# Successfully enabled
+OCSP response:
+OCSP Response Data:
+    OCSP Response Status: successful (0x0)
+    Response Type: Basic OCSP Response
+```
+
+For more detailed configuration, please refer to [Enable OCSP Stapling](../configuration/configuration.md#listener-ssl-external-enable-ocsp-stapling).

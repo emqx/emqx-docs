@@ -347,7 +347,7 @@
         {
           "title": "CRL/OCSP Stapling",
           "path": "security/crl-ocsp-stapling"
-        },
+        }
       ]
     },
     {
@@ -862,7 +862,7 @@
         {
           "title": "CRL/OCSP Stapling",
           "path": "security/crl-ocsp-stapling"
-        },
+        }
       ]
     },
     {
