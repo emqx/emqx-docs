@@ -1,4 +1,8 @@
-# Bridge data to GCP PubSub
+# Bridge data to GCP Pub/Sub
+
+EMQX GCP PubSub can send MQTT messages and client events to [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=zh-cn), which can help you flexibly choose services on Google Cloud and build IoT applications more easily.
+
+The following steps will guide you to use this configuration.
 
 ## Setup
 
@@ -65,6 +69,11 @@ Retained: false
 Payload: "hello"
 ```
 
+You may check that the metrics have increase for that rule with
+the successful publishing.
+
+![GCP PubSub metrics](./assets/gcp_pubsub_4.png)
+
 By pulling the messages from the PubSub topic, you can verify that the
 data has been forwarded to GCP.
 
@@ -75,8 +84,3 @@ gcloud pubsub subscriptions create my_subscription_id --topic=mytopic
 # Pull data
 gcloud pubsub subscriptions pull my_subscription_id --auto-ack
 ```
-
-Also, you may check that the metrics have increase for that rule with
-the successful publishing.
-
-![GCP PubSub metrics](./assets/gcp_pubsub_4.png)
