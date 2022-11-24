@@ -1090,7 +1090,7 @@ What to do after the ACL check fails.
 #### Description
 
 When using multiple ACL backends, this config can be used to define their order.
-The default value `none` means no explicit ordering, in which case the order dpends on the plugin (or module) start/restart order.
+The default value `none` means no explicit ordering, in which case the order depends on the plugin (or module) start/restart order.
 Use comma to separate the names (or aliases), for example `jwt,http` means jwt authentication should be checked before http.
 Supported aliases are: `internal` (or `file`), `http`, `jwt`, `ldap`, `mnesia`, `mongo` (or `mongodb`), `mysql`, `pgsql` (or `postgres`), `redis`.
 It is not necessary to enumerate all the in-use ACL backends here,
