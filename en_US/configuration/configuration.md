@@ -1081,7 +1081,41 @@ What to do after the ACL check fails.
 - `ignore`：No operation
 - `disconnect`：disconnect.
 
+### acl_order
 
+| Type    | Default  |
+| ------- | -------- |
+| string  | `none`   |
+
+#### Description
+
+When using multiple ACL backends, this config can be used to define their order.
+The default value `none` means no explicit ordering, in which case the order dpends on the plugin (or module) start/restart order.
+Use comma to separate the names (or aliases), for example `jwt,http` means jwt authentication should be checked before http.
+Supported aliases are: `internal` (or `file`), `http`, `jwt`, `ldap`, `mnesia`, `mongo` (or `mongodb`), `mysql`, `pgsql` (or `postgres`), `redis`.
+It is not necessary to enumerate all the in-use ACL backends here,
+if only a part of the backends are listed here, the ones not listed will be ordered at the end.
+When using a thrid-party plugin, there is no alias support for it, so the has to be the specific callback module name,
+e.g. `my_auth_plugin_module`.
+
+:::tip Tip
+Unknown names are silently discarded.
+:::
+
+### auth_order
+
+| Type    | Default  |
+| ------- | -------- |
+| string  | `none`   |
+
+#### Description
+
+When using multiple authentication backends, this config can be used to define their order.
+This config is similar to `acl_order`, only there is no `internal` authentication backend.
+
+:::tip Tip
+Unknown names are silently discarded.
+:::
 
 ### flapping_detect_policy
 
