@@ -1095,7 +1095,7 @@ Use comma to separate the names (or aliases), for example `jwt,http` means jwt a
 Supported aliases are: `internal` (or `file`), `http`, `jwt`, `ldap`, `mnesia`, `mongo` (or `mongodb`), `mysql`, `pgsql` (or `postgres`), `redis`.
 It is not necessary to enumerate all the in-use ACL backends here,
 if only a part of the backends are listed here, the ones not listed will be ordered at the end.
-When using a thrid-party plugin, there is no alias support for it, so the has to be the specific callback module name,
+When using a third-party plugin, there is no alias support for it, so the has to be the specific callback module name,
 e.g. `my_auth_plugin_module`.
 
 :::tip Tip
