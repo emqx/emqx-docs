@@ -86,7 +86,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 该页面主要是提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus 与 StatsD 的集成方式。配置页面可以快速开启该配置，并配置推送数据地址与数据上报时间间隔等。
 
 ::: tip
-注意，配置页面中存在一个二选一的配置项组件，但是我们可以同时配置 `Prometheus` 与 `StatsD`。
+**注意**：该页面中我们可以同时配置 `Prometheus` 与 `StatsD`。
 :::
 
 ![image](./assets/config-data-monitor.png)
