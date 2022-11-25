@@ -85,8 +85,20 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 该页面主要是提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus 与 StatsD 的集成方式。配置页面可以快速开启该配置，并配置推送数据地址与数据上报时间间隔等。
 
+::: tip
+注意，配置页面中存在一个二选一的配置项组件，但是我们可以同时配置 `Prometheus` 与 `StatsD`。
+:::
+
 ![image](./assets/config-data-monitor.png)
 
-::: tip
-注意，配置页面中存在一个二选一的配置项组件，可以输入一个自定义值，也可以选择提供的一个固定选项，两种方式只能选择其中一种。
-:::
+当使用 `Prometheus` 第三方监控服务时我们可以直接使用 EMQX 提供的 API `/prometheus/stats` 来获取监控数据，使用该 API 时不需要认证信息，具体的 API 请参考 [Prometheus](../observability/prometheus.md)。
+
+或者可以选择配置一个 `Pushgateway` 的服务地址，来将监控数据推送到 `Pushgateway`，然后再由 `Pushgateway` 推送到 `Prometheus` 服务。通常情况下我们不需要使用 `Pushgateway` 就能监控到 EMQX 的指标数据，点击查看[何时使用 Pushgateway](https://prometheus.io/docs/practices/pushing/)。
+
+点击底部的“帮助”按钮，选择默认或使用 `Pushgateway` 的方式，根据提供的使用步骤，配置相关所需服务的地址或 API 信息，即可快速生成对应的 `Prometheus` 配置文件，最后再使用该配置文件来启动 `Prometheus` 服务即可。
+
+![image](./assets/config-data-monitor-help.png)
+
+启动 `Prometheus` 服务后，可以在帮助页面的最后，点击下载我们提供的 `Grafana` 默认的监控面板的配置文件，将该文件导入到 `Grafana` 中，我们就可以通过可视化面板来查看 EMQX 的监控数据，用户也可以根据需求在 `Grafana` 中对监控数据进行自定义修改。同时模版也可以在 [Grafana 官方网站](https://grafana.com/grafana/dashboards/17446-emqx/)中下载。
+
+![image](./assets/emqx-grafana.jpg)

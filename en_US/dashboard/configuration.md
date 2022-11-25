@@ -85,8 +85,20 @@ If the default value of the current alarm trigger threshold or alarm monitoring 
 
 Click the monitoring integration under the configuration menu on the left to go to the monitoring integration configuration page. This page mainly provides integration configuration with third-party monitoring platforms. Currently, EMQX provides integration with Prometheus and StatsD. The configuration page can quickly enable this configuration and configure the URL of push gateway server and data reporting interval, etc.
 
+::: tip
+**Note**: There is a mutually exclusive configuration item component on the configuration page, but we can configure both `Prometheus` and `StatsD` at the same time.
+:::
+
 ![image](./assets/config-data-monitor.png)
 
-::: tip
-Note: There is a component with two options in the configuration page, you can enter a custom value, or you can select one of the provided fixed options, and only one of the two ways can be used.
-:::
+When using the third-party monitoring service `Prometheus`, we can directly use the API `/prometheus/stats` provided by EMQX to get monitoring data. When using this API, no authentication information is required. Please refer to [Prometheus](../observability/prometheus.md) for specific API.
+
+In most cases, we don't need to use `Pushgateway` to monitor the metrics data of EMQX. And you can choose to configure a `Pushgateway` service address to push the monitoring data to `Pushgateway`, and then `Pushgateway` pushes the data to the `Prometheus` service. Click to view [When to use Pushgateway](https://prometheus.io/docs/practices/pushing/).
+
+On the bottom of the page, click the "Help" button, select the default or use the `Pushgateway` method, configure the address or API information of the relevant service according to the provided usage steps, and then quickly generate the corresponding `Prometheus` configuration file. Finally, use this configuration file to start the `Prometheus` service.
+
+![image](./assets/config-data-monitor-help.png)
+
+Users can customize and modify the monitoring data in `Grafana` according to their needs. After starting the `Prometheus` service, you can click the `Download Grafana Template` button at the end of the help page to download the configuration file of the default dashboard provided by us. Import the file into `Grafana`, and we can view the monitoring data of EMQX through the visualization panel. Users can also download the template from the [Grafana official website](https://grafana.com/grafana/dashboards/17446-emqx/).
+
+![image](./assets/emqx-grafana.jpg)
