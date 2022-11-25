@@ -86,7 +86,7 @@ If the default value of the current alarm trigger threshold or alarm monitoring 
 Click the monitoring integration under the configuration menu on the left to go to the monitoring integration configuration page. This page mainly provides integration configuration with third-party monitoring platforms. Currently, EMQX provides integration with Prometheus and StatsD. The configuration page can quickly enable this configuration and configure the URL of push gateway server and data reporting interval, etc.
 
 ::: tip
-**Note**: There is a mutually exclusive configuration item component on the configuration page, but we can configure both `Prometheus` and `StatsD` at the same time.
+**Note**: On this page, we can configure `Prometheus` and `StatsD` at the same time.
 :::
 
 ![image](./assets/config-data-monitor.png)
