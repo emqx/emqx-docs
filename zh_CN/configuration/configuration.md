@@ -23,7 +23,7 @@ ref:
 | ------ | -------- |
 | string | `emqxcl` |
 
-#### 说明
+**说明**
 
 集群名称。
 
@@ -35,7 +35,7 @@ ref:
 | ---- | ----------------------------------- | ---------- |
 | enum | `inet_tcp`, `inet6_tcp`, `inet_tls` | `inet_tcp` |
 
-#### 说明
+**说明**
 
 分布式 Erlang 集群协议类型。可选值为:
 
@@ -47,11 +47,15 @@ ref:
 
 ## 集群自动发现
 
+EMQX 支持多种策略的节点自动发现与集群:
+
+### cluster.discovery
+
 | Type | Optional Value                                    | Default  |
 | ---- | ------------------------------------------------- | -------- |
 | enum | `manual`, `static`, `mcast`, `dns`, `etcd`, `k8s` | `manual` |
 
-#### 说明
+**说明**
 
 集群节点发现方式。可选值为:
 
@@ -62,6 +66,8 @@ ref:
 - `etcd`: 使用 etcd 发现节点。
 - `k8s`: 使用 Kubernetes 发现节点。
 
+默认配置为手动创建集群，节点通过 `./bin/emqx_ctl join <Node>` 命令加入。
+
 <br />
 
 ### cluster.autoheal
@@ -70,7 +76,7 @@ ref:
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 启用或关闭集群网络分区自动恢复机制。
 
@@ -82,11 +88,13 @@ ref:
 | -------- | ------- |
 | duration | `5m`    |
 
-#### 说明
+**说明**
 
 指定多久之后从集群中删除离线节点。
 
 <br />
+
+### 静态列表自动集群
 
 ### cluster.static.seeds
 
@@ -94,19 +102,20 @@ ref:
 | ------ | ------- | ----------------------------------------- |
 | string | -       | `emqx1@192.168.0.100,emqx2@192.168.0.101` |
 
-#### 说明
+**说明**
 
 当使用 static 方式集群时，指定固定的节点列表，多个节点间使用逗号 `,` 分隔。
 
 <br />
 
+### mcast 组播自动集群
 ### cluster.mcast.addr
 
 | Type   | Default       |
 | ------ | ------------- |
 | ipaddr | `239.192.0.1` |
 
-#### 说明
+**说明**
 
 当使用 mcast 方式集群时，指定多播地址。
 
@@ -118,7 +127,7 @@ ref:
 | ------ | ------- |
 | string | `4369`  |
 
-#### 说明
+**说明**
 
 当使用 mcast 方式集群时，指定多播端口。如有多个端口使用逗号 `,` 分隔。
 
@@ -130,7 +139,7 @@ ref:
 | ------ | --------- |
 | ipaddr | `0.0.0.0` |
 
-#### 说明
+**说明**
 
 当使用 mcast 方式集群时，指定节点发现服务需要绑定到本地哪个 IP 地址。
 
@@ -142,7 +151,7 @@ ref:
 | ------- | ------- |
 | integer | 255     |
 
-#### 说明
+**说明**
 
 当使用 mcast 方式集群时，指定多播的 Time-To-Live 值。
 
@@ -154,11 +163,13 @@ ref:
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 当使用 mcast 方式集群时，设置多播的报文是否投递到本地回环地址。
 
 <br />
+
+### DNS A 记录自动集群
 
 ### cluster.dns.name
 
@@ -166,11 +177,11 @@ ref:
 | ------ | ------- | --------------- |
 | string | -       | `mycluster.com` |
 
-#### 说明
+**说明**
 
 当使用 dns 方式集群时，指定 DNS A 记录的名字。emqx 会通过访问这个 DNS A 记录来获取 IP 地址列表，然后拼接 `cluster.dns.app` 里指定的 APP 名得到集群中所有节点的列表。
 
-#### 示例
+**示例**
 
 设置 `cluster.dns.app = emqx`，并且配置了一个 DNS: `mycluster.com`，其指向 3 个 IP 地址:
 
@@ -196,11 +207,13 @@ emqx@192.168.0.102
 | ------ | ------- | ------- |
 | string | -       | `emqx`  |
 
-#### 说明
+**说明**
 
 当使用 dns 方式集群时，用来与从 `cluster.dns.name` 获取的 IP 列表拼接得到节点名列表。
 
 <br />
+
+### etcd 自动集群
 
 ### cluster.etcd.server
 
@@ -208,7 +221,7 @@ emqx@192.168.0.102
 | ------ | ------- | ----------------------- |
 | string | -       | `http://127.0.0.1:2379` |
 
-#### 说明
+**说明**
 
 当使用 etcd 方式集群时，指定 etcd 服务的地址。如有多个服务使用逗号 `,` 分隔。
 
@@ -220,7 +233,7 @@ emqx@192.168.0.102
 | ------ | ------- | -------- |
 | string | -       | `emqxcl` |
 
-#### 说明
+**说明**
 
 当使用 etcd 方式集群时，指定 etcd 路径的前缀。每个节点在 etcd 中都会创建一个路径:
 
@@ -236,7 +249,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 | -------- | ------- | ------- |
 | duration | -       | `1m`    |
 
-#### 说明
+**说明**
 
 当使用 etcd 方式集群时，指定 etcd 中节点路径的过期时间。
 
@@ -248,7 +261,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 | ------ | ------- | -------------------------- |
 | string | -       | `etc/certs/client-key.pem` |
 
-#### 说明
+**说明**
 
 当使用 SSL 连接 etcd 时，指定客户端的私有 Key 文件。
 
@@ -260,7 +273,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 | ------ | ------- | ---------------------- |
 | string | -       | `etc/certs/client.pem` |
 
-#### 说明
+**说明**
 
 当使用 SSL 连接 etcd 时，指定 SSL 客户端的证书文件。
 
@@ -272,19 +285,20 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 | ------ | ------- | ------------------ |
 | string | -       | `etc/certs/ca.pem` |
 
-#### 说明
+**说明**
 
 当使用 SSL 连接 etcd 时，指定 SSL 的 CA 证书文件。
 
 <br />
 
+### Kubernetes 自动集群
 ### cluster.k8s.apiserver
 
 | Type   | Default | Example                      |
 | ------ | ------- | ---------------------------- |
 | string | -       | `http://10.110.111.204:8080` |
 
-#### 说明
+**说明**
 
 当使用 k8s 方式集群时，指定 Kubernetes API Server。如有多个 Server 使用逗号 `,` 分隔。
 
@@ -296,7 +310,7 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 | ------ | ------- | ------- |
 | string | -       | `emqx`  |
 
-#### 说明
+**说明**
 
 当使用 k8s 方式集群时，指定 Kubernetes 中 EMQX 的服务名。
 
@@ -308,11 +322,11 @@ v2/keys/<prefix>/<cluster.name>/<node.name>
 | ---- | ----------------------- | ------- |
 | enum | `ip`, `dns`, `hostname` | `ip`    |
 
-#### 说明
+**说明**
 
 当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。
 
-#### 示例
+**说明**
 
 指定 `cluster.k8s.address_type` 为 `ip`，则将从 Kubernetes 接口中获取 emqx 服务的 IP 地址列表:
 
@@ -338,7 +352,7 @@ emqx@172.16.122.33
 | ------ | ------- | ------- |
 | string | -       | `emqx`  |
 
-#### 说明
+**说明**
 
 当使用 k8s 方式集群时，app_name 用来跟获取的 Host 列表拼接，得到节点列表。
 
@@ -350,7 +364,7 @@ emqx@172.16.122.33
 | ------ | ------- | ------------------- |
 | string | -       | `pod.cluster.local` |
 
-#### 说明
+**说明**
 
 当使用 k8s 方式并且 `cluster.k8s.address_type` 指定为 dns 类型时，可设置 emqx 节点名的后缀。与 `cluster.k8s.namespace` 一起使用用以拼接得到节点名列表。
 
@@ -362,11 +376,11 @@ emqx@172.16.122.33
 | ------ | ------- | --------- |
 | string | -       | `default` |
 
-#### 说明
+**说明**
 
 当使用 k8s 方式并且 `cluster.k8s.address_type` 指定为 dns 类型时，可设置 emqx 节点名的命名空间。与 `cluster.k8s.suffix` 一起使用用以拼接得到节点名列表。
 
-#### 示例
+**示例**
 
 设置 `cluster.k8s.address_type` 为 `dns`，则将从 Kubernetes 接口中获取 emqx 服务的 dns 列表:
 
@@ -386,7 +400,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 <br />
 
-## 节点参数
+## 节点与 Cookie
 
 ### node.name
 
@@ -394,7 +408,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------ | ---------------- |
 | string | `emqx@127.0.0.1` |
 
-#### 说明
+**说明**
 
 节点名。格式为 `<name>@<host>`。其中 `<host>` 可以是 IP 地址，也可以是 FQDN。详见 [http://erlang.org/doc/reference_manual/distributed.html](http://erlang.org/doc/reference_manual/distributed.html)。
 
@@ -406,9 +420,14 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------ | ------------------ |
 | string | `emqxsecretcookie` |
 
-#### 说明
+**说明**
 
 分布式 Erlang 集群使用的 cookie 值。
+
+:::tip
+Erlang/OTP 平台应用多由分布的 Erlang 节点(进程)组成，每个 Erlang 节点(进程)需指配一个节点名，用于节点间通信互访。 所有互相通信的 Erlang 节点(进程)间通过一个共用的 Cookie 进行安全认证。
+生产环境中务必更改 Cookie 为其他值。
+:::
 
 <br />
 
@@ -418,7 +437,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------ | -------- |
 | folder | `./data` |
 
-#### 说明
+**说明**
 
 节点的 data 目录，用于存放 Mnesia 数据文件等。
 
@@ -430,7 +449,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `-heart` 参数。
 
@@ -444,7 +463,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | -------------- | ------- |
 | integer | 0 - 1024       | 4       |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `+A` 参数。
 
@@ -458,7 +477,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | ---------------- | ------- |
 | integer | 1024 - 134217727 | 2097152 |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `+P` 参数。
 
@@ -472,7 +491,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | ---------------- | ------- |
 | integer | 1024 - 134217727 | 1048576 |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `+Q` 参数。
 
@@ -486,7 +505,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | -------- | -------------- | ------- |
 | bytesize | 1KB - 2GB      | `8MB`   |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `+zdbbl` 参数。
 
@@ -500,7 +519,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | ------- |
 | integer | 262144  |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `+e` 参数。
 
@@ -514,7 +533,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | -------- | ------- |
 | duration | `15m`   |
 
-#### 说明
+**说明**
 
 系统调优参数，设置 Erlang 运行多久强制进行一次全局垃圾回收。
 
@@ -526,7 +545,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | -------------- | ------- |
 | integer | 0 - 65535      | 1000    |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `-env ERL_FULLSWEEP_AFTER` 参数。
 
@@ -540,7 +559,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------ | ---------------- |
 | string | `log/crash.dump` |
 
-#### 说明
+**说明**
 
 设置 Erlang crash_dump 文件的存储路径和文件名。
 
@@ -552,7 +571,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------ | ------------------- |
 | string | `etc/ssl_dist.conf` |
 
-#### 说明
+**说明**
 
 此配置将覆盖 `vm.args` 文件里的 `-ssl_dist_optfile` 参数。
 
@@ -566,7 +585,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | ------- |
 | integer | 120     |
 
-#### 说明
+**说明**
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `-kernel net_ticktime` 参数。
 
@@ -579,7 +598,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------ | ------- |
 | ipaddr | 0.0.0.0 |
 
-#### 说明
+**说明**
 
 节点间通讯网卡，默认使用 `0.0.0.0` 指定监听所有的网卡，或在指定需要监听网卡的 IP。
 
@@ -591,7 +610,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | -------------- | ------- |
 | integer | 1024 - 65535   | 6369    |
 
-#### 说明
+**说明**
 
 与 `node.dist_listen_max` 一起设定一个 TCP 端口段，此端口段用于分配给分布式 Erlang，作为分布式通道的监听端口。注意如果在节点之间设置了防火墙，需要将此端口段放进防火墙的端口白名单里。
 
@@ -603,14 +622,13 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ------- | -------------- | ------- |
 | integer | 1024 - 65535   | 6369    |
 
-#### 说明
+**说明**
 
 与 `node.dist_listen_min` 一起设定一个 TCP 端口段，此端口段用于分配给分布式 Erlang，作为分布式通道的监听端口。注意如果在节点之间设置了防火墙，需要将此端口段放进防火墙的端口白名单里。
 
 <br />
 
-
-## Broker 参数
+## Broker 配置
 
 ### broker.sys_interval
 
@@ -618,7 +636,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | -------- | ------- |
 | duration | `1m`    |
 
-#### 说明
+**说明**
 
 设置系统主题 (`$SYS`) 消息的发布间隔。
 
@@ -630,7 +648,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | -------- | ------- |
 | duration | `30s`   |
 
-#### 说明
+**说明**
 
 设置系统心跳消息的发布间隔。系统心跳消息包括下面两个主题：
 
@@ -645,7 +663,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 启用或关闭全局会话注册。
 
@@ -657,7 +675,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | ---------------------------------- | -------- |
 | enum | `local`, `leader`, `quorum`, `all` | `quorum` |
 
-#### 说明
+**说明**
 
 设置会话集群锁的类型。会话的集群锁用来防止同一个客户端在多个不同节点上创建多个会话，常见于客户端频繁切换节点登录的情况。
 
@@ -669,7 +687,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | -------------------------------------------------------------------------- | -------- |
 | enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`, | `random` |
 
-#### 说明
+**说明**
 
 设置共享订阅的分发策略。可选值为:
 
@@ -688,7 +706,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | -------------------------------------------------------------------------- | ------- |
 | enum | `hash_clientid`, `hash_topic`, `local`, `random`, `round_robin`, `sticky`, | -       |
 
-#### 说明
+**说明**
 
 重载共享订阅组名为 `sample_group` 的派发策略。不配置则以 `broker.shared_subscription_strategy` 为准。
 
@@ -704,7 +722,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 开启或关闭共享订阅对于 qos1/qos2 消息的 ACK 检查功能。开启后，如果投递到某个订阅者但收不到ACK，将尝试投递给订阅组里的下一个订阅者。
 
@@ -716,7 +734,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 开启或关闭批量清理路由信息。批量清理路由可用在短时间内大量客户端掉线的情况，以提高清理效率。
 
@@ -771,7 +789,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 <br />
 
-## RPC 参数
+## RPC 配置
 
 ### rpc.mode
 
@@ -779,7 +797,7 @@ emqx@172-16-122-33.default.pod.cluster.local
 | ---- | --------------- | ------- |
 | enum | `sync`, `async` | `async` |
 
-#### 说明
+**说明**
 
 RPC 模式。可选同步或异步模式。
 
@@ -791,7 +809,7 @@ RPC 模式。可选同步或异步模式。
 | ------- | ------- |
 | integer | 256     |
 
-#### 说明
+**说明**
 
 异步模式下最大的批量发送消息数。注意此配置在同步模式下不起作用。
 
@@ -803,7 +821,7 @@ RPC 模式。可选同步或异步模式。
 | ---- | ---------------------- |
 | enum | `manual`, `stateless`  |
 
-#### 说明
+**说明**
 
 `manual`: 手动指定服务器客户端的端口号 `tcp_server_port` and `tcp_client_port`.
 `stateless`: discover ports in a stateless manner. If node name is `emqx<N>@127.0.0.1`, where the `<N>` is an integer,
@@ -820,7 +838,7 @@ otherwise `stateless`.
 | ------ | ------------------------------- | ------- |
 | ipaddr | [0-255].[0-255].[0-255].[0-255] | 0.0.0.0 |
 
-#### 说明
+**说明**
 
 设置 RPC 本地服务使用的监听网卡。默认使用 `0.0.0.0` 指定监听所有的网卡，或在指定需要监听网卡的 IP。
 
@@ -832,7 +850,7 @@ otherwise `stateless`.
 | ------- | -------------- | ------- |
 | integer | 1024 - 65535   | 5369    |
 
-#### 说明
+**说明**
 
 设置 RPC 本地服务使用的监听 port。
 注意，该配置仅在 `rpc.port_discovery` 设置成 `manual` 时有效
@@ -845,7 +863,7 @@ otherwise `stateless`.
 | ------- | -------------- | -------------- |
 | integer | 1 - 256        | CPU 核心数 / 2 |
 
-#### 说明
+**说明**
 
 设置由本节点发起，通往每个远程节点的 RPC 通信通道数量。设置为 1 可保证消息顺序。保持默认值（CPU 核心数的一半）可提高 RPC 的吞吐能力。
 
@@ -857,7 +875,7 @@ otherwise `stateless`.
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 建立 RPC 连接超时时间。建立连接时若远程节点无响应，多久之后放弃尝试。
 
@@ -869,7 +887,7 @@ otherwise `stateless`.
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 发送超时时间。发送消息多久之后放弃。
 
@@ -881,7 +899,7 @@ otherwise `stateless`.
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 RPC 认证超时时间。尝试认证若远程节点无响应，多久之后放弃。
 
@@ -893,7 +911,7 @@ RPC 认证超时时间。尝试认证若远程节点无响应，多久之后放�
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 RPC 同步模式的超时时间。RPC 同步调用若收不到回复，用多久之后放弃。
 
@@ -905,7 +923,7 @@ RPC 同步模式的超时时间。RPC 同步调用若收不到回复，用多久
 | -------- | ------- |
 | duration | `900s`  |
 
-#### 说明
+**说明**
 
 在最近一次数据包发送多久之后，发送 keepalive 探测报文。
 
@@ -917,7 +935,7 @@ RPC 同步模式的超时时间。RPC 同步调用若收不到回复，用多久
 | -------- | ------- |
 | duration | `75s`   |
 
-#### 说明
+**说明**
 
 发送 keepalive 探测报文的间隔。
 
@@ -929,7 +947,7 @@ RPC 同步模式的超时时间。RPC 同步调用若收不到回复，用多久
 | ------- | ------- |
 | integer | 9       |
 
-#### 说明
+**说明**
 
 连续多少次 keepalive 探测报文都收不到回复的情况下，认为 RPC 连接已丢失。
 
@@ -941,7 +959,7 @@ RPC 同步模式的超时时间。RPC 同步调用若收不到回复，用多久
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-#### 说明
+**说明**
 
 TCP 调优参数。TCP 发送缓冲区大小。
 
@@ -953,7 +971,7 @@ TCP 调优参数。TCP 发送缓冲区大小。
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-#### 说明
+**说明**
 
 TCP 调优参数。TCP 接收缓冲区大小。
 
@@ -965,7 +983,7 @@ TCP 调优参数。TCP 接收缓冲区大小。
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-#### 说明
+**说明**
 
 TCP 调优参数。用户态的 Socket 缓冲区大小。
 
@@ -980,7 +998,7 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否允许匿名用户登录系统。
 
@@ -994,9 +1012,9 @@ TCP 调优参数。用户态的 Socket 缓冲区大小。
 | ---- | --------------- | ------- |
 | enum | `allow`, `deny` | `allow` |
 
-#### 说明
+**说明**
 
-ACL 未命中时，允许或者拒绝 发布/订阅 操作。
+EMQX 支持基于内置 ACL 以及 MySQL、 PostgreSQL 等插件的 ACL，多个 ACL 插件未命中时，允许或者拒绝 发布/订阅 操作。
 
 <br />
 
@@ -1006,7 +1024,7 @@ ACL 未命中时，允许或者拒绝 发布/订阅 操作。
 | ------ | -------------- |
 | string | `etc/acl.conf` |
 
-#### 说明
+**说明**
 
 默认 ACL 文件的路径。
 
@@ -1018,7 +1036,7 @@ ACL 未命中时，允许或者拒绝 发布/订阅 操作。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 是否启用 ACL 缓存。
 
@@ -1030,7 +1048,7 @@ ACL 未命中时，允许或者拒绝 发布/订阅 操作。
 | ------- | ------- |
 | integer | 32      |
 
-#### 说明
+**说明**
 
 ACL 规则最大缓存条数。
 
@@ -1042,7 +1060,7 @@ ACL 规则最大缓存条数。
 | -------- | ------- |
 | duration | `1m`    |
 
-#### 说明
+**说明**
 
 ACL 规则最大缓存时间。
 
@@ -1054,7 +1072,7 @@ ACL 规则最大缓存时间。
 | ---- | ---------------------- | -------- |
 | enum | `ignore`, `disconnect` | `ignore` |
 
-#### 说明
+**说明**
 
 ACL 检查失败后，执行的操作。
 
@@ -1063,7 +1081,7 @@ ACL 检查失败后，执行的操作。
 
 <br />
 
-## MQTT 参数
+## MQTT 配置
 
 ### flapping_detect_policy
 
@@ -1071,7 +1089,7 @@ ACL 检查失败后，执行的操作。
 | ------ | ------------ |
 | string | `30, 1m, 5m` |
 
-#### 说明
+**说明**
 
 指定 `Flapping` 检查策略。
 
@@ -1087,7 +1105,7 @@ ACL 检查失败后，执行的操作。
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-#### 说明
+**说明**
 
 允许的 MQTT 报文最大长度。
 
@@ -1099,7 +1117,7 @@ ACL 检查失败后，执行的操作。
 | ------- | ------- |
 | integer | 65535   |
 
-#### 说明
+**说明**
 
 允许的 Client ID 串的最大长度。
 
@@ -1111,7 +1129,7 @@ ACL 检查失败后，执行的操作。
 | ------- | ------- |
 | integer | 128     |
 
-#### 说明
+**说明**
 
 允许客户端订阅主题的最大层级。0 表示不限制。
 
@@ -1127,7 +1145,7 @@ Topic层级过多可能导致订阅时的性能问题。
 | ---- | -------------- | ------- |
 | enum | `0`, `1`, `2`  | `2`     |
 
-#### 说明
+**说明**
 
 允许客户端发布的最大 QoS 等级。
 
@@ -1139,7 +1157,7 @@ Topic层级过多可能导致订阅时的性能问题。
 | ------- | ------- |
 | integer | 65535   |
 
-#### 说明
+**说明**
 
 允许最大的主题别名数。0 表示不支持主题别名。
 
@@ -1151,7 +1169,7 @@ Topic层级过多可能导致订阅时的性能问题。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否支持 Retain 消息。
 
@@ -1163,7 +1181,7 @@ Topic层级过多可能导致订阅时的性能问题。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否支持订阅通配主题。
 
@@ -1175,7 +1193,7 @@ Topic层级过多可能导致订阅时的性能问题。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否支持共享订阅。
 
@@ -1187,7 +1205,7 @@ Topic层级过多可能导致订阅时的性能问题。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否忽略自己发送的消息。如果忽略，则表明 EMQX 不会向消息的发送端投递此消息。
 
@@ -1199,442 +1217,26 @@ Topic层级过多可能导致订阅时的性能问题。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
 
 <br />
 
-## External Zone 配置
 
-### zone.external.idle_timeout
+## MQTT 监听器说明
 
-| Type     | Default |
-| -------- | ------- |
-| duration | `15s`   |
+EMQX支持 MQTT、MQTT/SSL、MQTT/WS 协议，可通过 `listener.{tcp}|{ssl}|{ws}|{wss}.*` 设置端口、最大允许连接数等参数。
 
-#### 说明
+EMQX 默认开启的 TCP 服务端口包括:
 
-TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文，则会关闭该连接。
-
-<br />
-
-### zone.external.enable_acl
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `on`, `off`    | `on`    |
-
-#### 说明
-
-是否开启 ACL 检查。
-
-<br />
-
-### zone.external.enable_ban
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `on`, `off`    | `on`    |
-
-#### 说明
-
-是否开启黑名单。
-
-<br />
-
-### zone.external.enable_stats
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `on`, `off`    | `on`    |
-
-#### 说明
-
-是否开启客户端状态统计。
-
-<br />
-
-### zone.external.acl_deny_action
-
-| Type | Optional Value         | Default  |
-| ---- | ---------------------- | -------- |
-| enum | `ignore`, `disconnect` | `ignore` |
-
-#### 说明
-
-ACL 检查失败后，执行的操作。
-
-- `ignore`：不做任何操作。
-- `disconnect`：断开连接。
-
-<br />
-
-### zone.external.force_gc_policy
-
-| Type   | Default      |
-| ------ | ------------ |
-| string | `16000|16MB` |
-
-#### 说明
-
-当收到一定数量的消息，或字节，就强制执行一次垃圾回收。
-
-格式：`<Number>|<Bytes>`。
-
-例如，`16000|16MB` 表示当收到 `16000` 条消息，或 `16MB` 的字节流入就强制执行一次垃圾回收。
-
-<br />
-
-### zone.external.force_shutdown_policy
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### 说明
-
-当进程消息队列长度，或占用的内存字节到达某值，就强制关闭该进程。
-
-这里的 `消息队列` 指的是 Erlang 进程的 `消息邮箱`，并非 QoS 1 和 QoS 2 的 `mqueue`。
-
-格式：`<Number>|<Bytes>`。
-
-例如，`32000|32MB` 表示当进程堆积了 `32000` 条消息，或进程占用内存达到 `32MB` 则关闭该进程。
-
-<br />
-
-### zone.external.max_packet_size
-
-| Type     | Default |
-| -------- | ------- |
-| bytesize | -       |
-
-#### 说明
-
-允许的 MQTT 报文最大长度。
-
-<br />
-
-### zone.external.max_clientid_len
-
-| Type    | Default |
-| ------- | ------- |
-| integer | -       |
-
-#### 说明
-
-允许的 Client ID 串的最大长度。
-
-<br />
-
-### zone.external.max_topic_levels
-
-| Type    | Default |
-| ------- | ------- |
-| integer | -       |
-
-#### 说明
-
-允许客户端订阅主题的最大层级。0 表示不限制。
-
-::: warning Warning
-Topic层级过多可能导致订阅时的性能问题。
-:::
-
-<br />
-
-### zone.external.max_qos_allowed
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `0`, `1`, `2`  | -       |
-
-#### 说明
-
-允许客户端发布的最大 QoS 等级。
-
-<br />
-
-### zone.external.max_topic_alias
-
-| Type    | Default |
-| ------- | ------- |
-| integer | -       |
-
-#### 说明
-
-允许最大的主题别名数。0 表示不支持主题别名。
-
-<br />
-
-### zone.external.retain_available
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | -       |
-
-#### 说明
-
-是否支持 Retain 消息。
-
-<br />
-
-### zone.external.wildcard_subscription
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | -       |
-
-#### 说明
-
-是否支持订阅通配主题。
-
-<br />
-
-### zone.external.shared_subscription
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | -       |
-
-#### 说明
-
-是否支持共享订阅。
-
-<br />
-
-### zone.external.server_keepalive
-
-| Type    | Default |
-| ------- | ------- |
-| integer | -       |
-
-#### 说明
-
-服务端指定的 Keepalive 时间。用于 MQTT v5.0 协议的 CONNACK 报文。
-
-<br />
-
-### zone.external.keepalive_backoff
-
-| Type  | Optional Value | Default |
-| ----- | -------------- | ------- |
-| float | > 0.5          | 0.75    |
-
-#### 说明
-
-Keepalive 退避指数。EMQX 如果在 `Keepalive * backoff * 2` 的时间内未收到客户端的任何数据报文，则认为客户端已心跳超时。
-
-<br />
-
-### zone.external.max_subscriptions
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 0       |
-
-#### 说明
-
-单个客户端允许订阅的最大主题数。`0` 表示不限制。
-
-<br />
-
-### zone.external.upgrade_qos
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `on`, `off`    | `off`   |
-
-#### 说明
-
-允许 EMQX 在投递消息时，强制升级消息的 QoS 等级为订阅的 QoS 等级。
-
-<br />
-
-### zone.external.max_inflight
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 32      |
-
-#### 说明
-
-飞行窗口大小。飞行窗口用于存储未被应答的 QoS 1 和 QoS 2 消息。
-
-<br />
-
-### zone.external.retry_interval
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `30s`   |
-
-#### 说明
-
-消息重发间隔。EMQX 在每个间隔检查是否需要进行消息重发。
-
-<br />
-
-### zone.external.max_awaiting_rel
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 100     |
-
-#### 说明
-
-QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
-
-<br />
-
-### zone.external.await_rel_timeout
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `300s`  |
-
-#### 说明
-
-QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报文，则将消息从接收窗口中丢弃。
-
-<br />
-
-### zone.external.session_expiry_interval
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `2h`    |
-
-#### 说明
-
-会话默认超时时间，主要用于 MQTT v3.1 和 v3.1.1 协议。在 MQTT v5.0 中，该值通常会携带在客户端的连接报文中。
-
-<br />
-
-### zone.external.max_mqueue_len
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 1000    |
-
-#### 说明
-
-消息队列最大长度。当飞行窗口满，或客户端离线后，消息会被存储至该队列中。0 表示不限制。
-
-<br />
-
-### zone.external.mqueue_priorities
-
-| Type   | Optional Value   | Default |
-| ------ | ---------------- | ------- |
-| string | `none`, `<Spec>` | `none`  |
-
-#### 说明
-
-队列消息优先级配置：
-
-- `none`：表示无优先级区分。
-- `<Spec>`：表示为一个消息优先表，它配置了某主题下消息的优先级。例如：
-    * `topic/1=10`：表示主题 `topic/1` 的消息优先级为 `10`。
-    * `topic/1=10,topic/2=8`：表示配置了两个主题的优先级，其分别为 `10` 和 `8`。
-    * 其中，优先级数值越高，优先等级越高。
-
-当消息队列长度有限时，会优先丢弃低优先级的消息。
-
-<br />
-
-### zone.external.mqueue_default_priority
-
-| Type | Optional Value      | Default   |
-| ---- | ------------------- | --------- |
-| enum | `highest`, `lowest` | `highest` |
-
-#### 说明
-
-消息默认的优先等级。
-
-<br />
-
-### zone.external.mqueue_store_qos0
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | `true`  |
-
-#### 说明
-
-消息队列是否存储 QoS 0 消息。
-
-<br />
-
-### zone.external.enable_flapping_detect
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `on`, `off`    | `off`   |
-
-#### 说明
-
-是否开启 `Flapping` 检查。
-
-<br />
-
-### zone.external.mountpoint
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### 说明
-
-主题挂载点。配置后，所有订阅和发布的主题在 EMQX 都会为其增加一个前缀。
-
-其中可用的占位符有：
-- `%c`：表示客户端的 Client ID。
-- `%u`：表示客户端的 Username。
-
-例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQX 中路由的主题是 `user/tom/open`。
-
-<br />
-
-### zone.external.use_username_as_clientid
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | `false` |
-
-#### 说明
-
-是否用客户端的 Username 作为其 Client ID。
-
-<br />
-
-### zone.external.ignore_loop_deliver
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | `false` |
-
-#### 说明
-
-是否忽略自己发送的消息。如果忽略，则表明 EMQX 不会向消息的发送端投递此消息。
-
-<br />
-
-
-### zone.external.strict_mode
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | `false` |
-
-#### 说明
-
-是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
-
-<br />
-
+| 端口  | 协议说明                     |
+| ----- | ---------------------------- |
+| 1883  | MQTT/TCP 端口                |
+| 8883  | MQTT/TCP SSL 端口            |
+| 8083  | MQTT/WebSocket 端口          |
+| 8084  | MQTT/WebSocket with SSL 端口 |
+| 11883 | MQTT/TCP 端口                |
 
 ## MQTT/TCP 监听器 - 1883
 
@@ -1644,11 +1246,11 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------ | -------------- |
 | string | `0.0.0.0:1883` |
 
-#### 说明
+**说明**
 
 配置名称为 `external` 的 MQTT/TCP 监听器的监听地址。
 
-#### 示例
+**说明**
 
 `1883`：表监听 IPv4 的 `0.0.0.0:1883`。
 `127.0.0.1:1883`：表监听地址为 `127.0.0.1` 网卡上的 `1883` 端口。
@@ -1662,7 +1264,7 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------- | ------- |
 | integer | 8       |
 
-#### 说明
+**说明**
 
 监听器的接收池大小。
 
@@ -1674,7 +1276,7 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------- | ------- |
 | integer | 1024000 |
 
-#### 说明
+**说明**
 
 监听器允许的最大并发连接数量。
 
@@ -1686,7 +1288,7 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 监听器允许的最大接入速率。单位：个/秒
 
@@ -1698,7 +1300,7 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------- | ------- |
 | integer | 100     |
 
-#### 说明
+**说明**
 
 监听器持续接收 TCP 报文的次数。
 
@@ -1710,7 +1312,7 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------ | ---------- |
 | string | `external` |
 
-#### 说明
+**说明**
 
 监听器所属的配置域 (Zone)。
 
@@ -1722,11 +1324,11 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 监听器的速率限制。格式为 `<limit>,<duration>`。
 
-#### 示例
+**说明**
 
 `100KB,10s`：表 *限制 10 秒内的流入字节数不超过 100 KB*。
 
@@ -1738,11 +1340,11 @@ QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报�
 | ------ | ----------- |
 | string | `allow all` |
 
-#### 说明
+**说明**
 
 监听器的 ACL 规则列表。它用于设置连接层的白/黑名单。
 
-#### 示例
+**说明**
 
 `allow all`：表允许所有的 TCP 连接接入。
 `allow 192.168.0.0/24`：表允许网络地址为 `192.168.0.0/24` 的 TCP 连接接入。
@@ -1763,7 +1365,7 @@ listener.tcp.external.access.2 = allow all
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
@@ -1779,7 +1381,7 @@ listener.tcp.external.access.2 = allow all
 | -------- | ------- |
 | duration | -       |
 
-#### 说明
+**说明**
 
 设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
@@ -1791,7 +1393,7 @@ listener.tcp.external.access.2 = allow all
 | ---- | ------------------------------- | ------- |
 | enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
-#### 说明
+**说明**
 
 使用客户端证书来覆盖 Username 字段的值。其可选值为：
 - cn：客户端证书的 Common Name 字段值
@@ -1812,7 +1414,7 @@ Proxy Protocol 将证书域的内容给发送至 EMQX。例如 HAProxy 的配置
 | ---- | ------------------------------- | ------- |
 | enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
-#### 说明
+**说明**
 
 使用客户端证书来覆盖 ClientID 字段的值。其可选值的含义同上。
 
@@ -1824,7 +1426,7 @@ Proxy Protocol 将证书域的内容给发送至 EMQX。例如 HAProxy 的配置
 | ------- | ------- |
 | integer | 1024    |
 
-#### 说明
+**说明**
 
 TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
 
@@ -1836,7 +1438,7 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时时间。
 
@@ -1848,7 +1450,7 @@ TCP 报文发送超时时间。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时后，是否关闭该连接。
 
@@ -1860,7 +1462,7 @@ TCP 报文发送超时后，是否关闭该连接。
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 接收缓存区大小（操作系统内核级参数）
 
@@ -1874,7 +1476,7 @@ TCP 接收缓存区大小（操作系统内核级参数）
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 发送缓存区大小（操作系统内核级参数）。
 
@@ -1888,7 +1490,7 @@ TCP 发送缓存区大小（操作系统内核级参数）。
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 缓冲区大小 (用户级)。
 
@@ -1904,7 +1506,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 如果打开此配置，请设置该值等于 `sndbuff` 与 `recbuff` 的最大值。
 
@@ -1916,7 +1518,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 即 `TCP_NODELAY` 参数。开启该选项即允许小的 TCP 数据报文将会立即发送。
 
@@ -1928,7 +1530,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 即 `SO_REUSEADDR` 参数。开启该选项即允许本地重用端口，无需等待 `TIME_WAIT` 状态结束。
 
@@ -1943,7 +1545,7 @@ TCP 缓冲区大小 (用户级)。
 | ------ | -------------- |
 | string | `0.0.0.0:8883` |
 
-#### 说明
+**说明**
 
 配置名称为 `external` 的 SSL 监听器。
 
@@ -1955,7 +1557,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | ------- |
 | integer | 16      |
 
-#### 说明
+**说明**
 
 监听器的接收池大小。
 
@@ -1967,7 +1569,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | ------- |
 | integer | 102400  |
 
-#### 说明
+**说明**
 
 监听器允许的最大并发连接数量。
 
@@ -1979,7 +1581,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | ------- |
 | integer | 500     |
 
-#### 说明
+**说明**
 
 监听器允许的最大接入速率。单位：个/秒。
 
@@ -1991,7 +1593,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | ------- |
 | integer | 100     |
 
-#### 说明
+**说明**
 
 监听器持续接收 TCP 报文的次数。
 
@@ -2003,7 +1605,7 @@ TCP 缓冲区大小 (用户级)。
 | ------ | ---------- |
 | string | `external` |
 
-#### 说明
+**说明**
 
 监听器所属的配置组 (Zone)。
 
@@ -2015,7 +1617,7 @@ TCP 缓冲区大小 (用户级)。
 | ------ | ----------- |
 | string | `allow all` |
 
-#### 说明
+**说明**
 
 监听器的 ACL 规则列表。它用于设置连接层的白/黑名单。
 
@@ -2039,7 +1641,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 监听器的速率限制。格式为 `<limit>,<duration>`。
 
@@ -2051,7 +1653,7 @@ listener.ssl.external.access.2 = allow all
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
@@ -2067,7 +1669,7 @@ listener.ssl.external.access.2 = allow all
 | -------- | ------- |
 | duration | -       |
 
-#### 说明
+**说明**
 
 设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
@@ -2079,7 +1681,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
-#### 说明
+**说明**
 
 指定服务端支持的 SSL 的版本列表。详情请参见 [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html)。
 
@@ -2091,7 +1693,7 @@ listener.ssl.external.access.2 = allow all
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 指定 SSL 握手过程的超时时间。
 
@@ -2103,7 +1705,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | ------- |
 | number | `10`    |
 
-#### 说明
+**说明**
 
 证书链中非自签发的中间证书的最大数量。如果该值为 0 则表示，对端证书必须是根 CA 直接授信的。
 
@@ -2115,7 +1717,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 证书密钥文件的密码。如果你的证书密钥设置了密码，则需要配置该选项。
 
@@ -2127,7 +1729,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的私钥文件 (PEM)。
 
@@ -2139,7 +1741,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的证书文件 (PEM)。
 
@@ -2151,7 +1753,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
 该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
@@ -2164,7 +1766,7 @@ listener.ssl.external.access.2 = allow all
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-#### 说明
+**说明**
 
 若使用 Ephemeral Diffie-Helman 算法，指定算法使用的 key 文件。
 
@@ -2176,7 +1778,7 @@ listener.ssl.external.access.2 = allow all
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-#### 说明
+**说明**
 
 指定握手过程中是否校验客户端。
 
@@ -2188,7 +1790,7 @@ listener.ssl.external.access.2 = allow all
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 SSL 握手过程中若客户端没有证书，是否让握手失败。
 
@@ -2200,7 +1802,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-#### 说明
+**说明**
 
 指定服务端支持的密码套件。
 
@@ -2212,7 +1814,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ------ | ------------------------------------------------------------------------ |
 | string | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
-#### 说明
+**说明**
 
 若使用 PSK 算法，指定服务端支持的 PSK Cipher 列表。注意 'listener.ssl.external.ciphers' 和 'listener.ssl.external.psk_ciphers' 只能配置一个。
 
@@ -2224,7 +1826,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 指定在客户端不遵循 RFC 5746 的情况下，是否拒绝 renegotiation 请求。
 
@@ -2236,7 +1838,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 指定是否支持 SSL session 重用。详情见 [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html)。
 
@@ -2248,7 +1850,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 指定是否使用服务端的偏好设置选择 Ciphers。
 
@@ -2260,7 +1862,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | ------------------------------- | ------- |
 | enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
-#### 说明
+**说明**
 
 使用客户端证书来覆盖 Username 字段的值。其可选值为：
 - cn：客户端证书的 Common Name 字段值
@@ -2279,7 +1881,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | ------------------------------- | ------- |
 | enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
-#### 说明
+**说明**
 
 使用客户端证书来覆盖 ClientID 字段的值。其可选值的含义同上。
 
@@ -2293,7 +1895,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ------- | ------- |
 | integer | 1024    |
 
-#### 说明
+**说明**
 
 TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
 
@@ -2305,7 +1907,7 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时时间。
 
@@ -2317,7 +1919,7 @@ TCP 报文发送超时时间。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时后，是否关闭该连接。
 
@@ -2329,7 +1931,7 @@ TCP 报文发送超时后，是否关闭该连接。
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 接收缓存区大小（操作系统内核级参数）。
 
@@ -2343,7 +1945,7 @@ TCP 接收缓存区大小（操作系统内核级参数）。
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 发送缓存区大小（操作系统内核级参数）。
 
@@ -2357,7 +1959,7 @@ TCP 发送缓存区大小（操作系统内核级参数）。
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 缓冲区大小 (用户级)。
 
@@ -2373,7 +1975,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 如果打开此配置，请设置该值等于 `sndbuff` 与 `recbuff` 的最大值。
 
@@ -2385,7 +1987,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 即 `TCP_NODELAY` 参数。开启该选项即表示禁用 Nagle 算法，小包将被立即发送。
 
@@ -2397,7 +1999,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 即 `SO_REUSEADDR` 参数。开启该选项即允许本地重用端口，无需等待 `TIME_WAIT` 状态结束。
 
@@ -2411,11 +2013,11 @@ TCP 缓冲区大小 (用户级)。
 | ------ | ------- |
 | string | `8083`  |
 
-#### 说明
+**说明**
 
 配置名称为 `external` 的 MQTT/WS 监听器的监听地址。
 
-#### 示例
+**说明**
 
 `8083`：表监听 IPv4 的 `0.0.0.0:8083`。
 `127.0.0.1:8083`：表监听地址为 `127.0.0.1` 网卡上的 `8083` 端口。
@@ -2429,7 +2031,7 @@ TCP 缓冲区大小 (用户级)。
 | ------ | ------- |
 | string | `/mqtt` |
 
-#### 说明
+**说明**
 
 WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws://{ip}:{port}/mqtt`。
 
@@ -2441,7 +2043,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------- | ------- |
 | integer | 4       |
 
-#### 说明
+**说明**
 
 监听器的接收池大小。
 
@@ -2453,7 +2055,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------- | ------- |
 | integer | 102400  |
 
-#### 说明
+**说明**
 
 监听器允许的最大并发连接数量。
 
@@ -2465,7 +2067,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 监听器允许的最大接入速率。单位：个/秒
 
@@ -2477,7 +2079,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------- | ------- |
 | integer | 100     |
 
-#### 说明
+**说明**
 
 监听器持续接收 TCP 报文的次数。
 
@@ -2489,11 +2091,11 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------ | ----------- |
 | string | `100KB,10s` |
 
-#### 说明
+**说明**
 
 监听器的速率限制。格式为 `<limit>,<duration>`。
 
-#### 示例
+**说明**
 
 `100KB,10s`：表 *限制 10 秒内的流入字节数不超过 100 KB*。
 
@@ -2505,7 +2107,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------ | ---------- |
 | string | `external` |
 
-#### 说明
+**说明**
 
 监听器所属的配置域 (Zone)。
 
@@ -2517,7 +2119,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------ | ----------- |
 | string | `allow all` |
 
-#### 说明
+**说明**
 
 监听器的 ACL 规则列表。它用于设置连接层的白/黑名单。
 
@@ -2529,7 +2131,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 如果设置为 true，则服务器将在客户端没有携带 Sec-WebSocket-Protocol 字段时返回错误。**微信小程序需关闭该验证**。
 
@@ -2541,7 +2143,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------ | ------------------------------------- |
 | string | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
 
-#### 说明
+**说明**
 
 指定支持的子协议，子协议之间以逗号分隔。
 
@@ -2553,7 +2155,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------ | ----------------- | ------- |
 | string | `X-Forwarded-For` | -       |
 
-#### 说明
+**说明**
 
 如果 EMQX 集群部署在 HAProxy 或 Nginx 后，则可打开该配置获取客户端真实的 IP 地址。
 
@@ -2565,7 +2167,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------ | ------------------ | ------- |
 | string | `X-Forwarded-Port` | -       |
 
-#### 说明
+**说明**
 
 如果 EMQX 集群部署在 HAProxy 或 Nginx 后，则可打开该配置获取客户端真实的端口。
 
@@ -2577,7 +2179,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
@@ -2593,7 +2195,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | -------- | ------- |
 | duration | -       |
 
-#### 说明
+**说明**
 
 设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
@@ -2605,7 +2207,7 @@ WebSocket 的 MQTT 协议路径。因此 EMQX 的 WebSocket 的地址是： `ws:
 | ------- | ------- |
 | integer | 1024    |
 
-#### 说明
+**说明**
 
 TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
 
@@ -2617,7 +2219,7 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时时间。
 
@@ -2629,7 +2231,7 @@ TCP 报文发送超时时间。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时后，是否关闭该连接。
 
@@ -2641,7 +2243,7 @@ TCP 报文发送超时后，是否关闭该连接。
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 接收缓存区大小（操作系统内核级参数）
 
@@ -2653,7 +2255,7 @@ TCP 接收缓存区大小（操作系统内核级参数）
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 发送缓存区大小（操作系统内核级参数）
 
@@ -2665,7 +2267,7 @@ TCP 发送缓存区大小（操作系统内核级参数）
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 缓冲区大小 (用户级)。
 
@@ -2677,7 +2279,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 如果打开此配置，请设置该值等于 `sndbuff` 与 `recbuff` 的最大值。
 
@@ -2689,7 +2291,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 即 `TCP_NODELAY` 参数。开启该选项即允许小的 TCP 数据报文将会立即发送。
 
@@ -2701,7 +2303,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-#### 说明
+**说明**
 
 是否压缩 WebSocket 消息。压缩的实现依赖 [zlib](http://www.zlib.net)。
 
@@ -2715,7 +2317,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------------------------------------------- | ------- |
 | enum | `none`, `default`, `best_compression`, `best_speed` | -       |
 
-#### 说明
+**说明**
 
 压缩等级。
 
@@ -2727,7 +2329,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | -------------- | ------- |
 | integer | 1 - 9          | -       |
 
-#### 说明
+**说明**
 
 压缩参数。内存使用限制等级，配置可开辟多少内存来参与压缩过程。
 
@@ -2744,7 +2346,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | -------------------------------------------- | ------- |
 | enum | `default`, `filtered`, `huffman_only`, `rle` | -       |
 
-#### 说明
+**说明**
 
 压缩策略，用于调优压缩率：
 
@@ -2763,7 +2365,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | ------------------------- | ------- |
 | enum | `takeover`, `no_takeover` | -       |
 
-#### 说明
+**说明**
 
 是否允许服务端的压缩上下文在帧之间传递。
 
@@ -2775,7 +2377,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | ------------------------- | ------- |
 | enum | `takeover`, `no_takeover` | -       |
 
-#### 说明
+**说明**
 
 是否允许客户端的压缩上下文在帧之间传递。
 
@@ -2787,7 +2389,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | -------------- | ------- |
 | integer | 8 - 15         | -       |
 
-#### 说明
+**说明**
 
 服务端最大窗口值。设置一个较大的值会有更好的压缩率，但会额外的消耗内存。
 
@@ -2799,7 +2401,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | -------------- | ------- |
 | integer | 8 - 15         | -       |
 
-#### 说明
+**说明**
 
 客户端最大窗口值。设置一个较大的值会有更好的压缩率，但会额外的消耗内存。
 
@@ -2811,7 +2413,7 @@ TCP 缓冲区大小 (用户级)。
 | -------- | ------- |
 | duration | -       |
 
-#### 说明
+**说明**
 
 TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文，则会关闭该连接。
 
@@ -2823,7 +2425,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ------- | ------- |
 | integer | -       |
 
-#### 说明
+**说明**
 
 允许的单个 MQTT 报文长度的最大值。
 
@@ -2837,7 +2439,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ------ | -------------- |
 | string | `0.0.0.0:8084` |
 
-#### 说明
+**说明**
 
 配置名称为 `external` 的 WSS (MQTT/WebSocket/SSL) 监听器。
 
@@ -2849,7 +2451,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ------ | ------- |
 | string | `/mqtt` |
 
-#### 说明
+**说明**
 
 WebSocket 的 URL Path。
 
@@ -2861,7 +2463,7 @@ WebSocket 的 URL Path。
 | ------- | ------- |
 | integer | 4       |
 
-#### 说明
+**说明**
 
 监听器的接收池大小。
 
@@ -2873,7 +2475,7 @@ WebSocket 的 URL Path。
 | ------- | ------- |
 | integer | 16      |
 
-#### 说明
+**说明**
 
 监听器允许的最大并发连接数量。
 
@@ -2885,7 +2487,7 @@ WebSocket 的 URL Path。
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 监听器允许的最大接入速率。单位：个/秒。
 
@@ -2897,7 +2499,7 @@ WebSocket 的 URL Path。
 | ------- | ------- |
 | integer | 100     |
 
-#### 说明
+**说明**
 
 监听器持续接收 TCP 报文的次数。
 
@@ -2909,7 +2511,7 @@ WebSocket 的 URL Path。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 监听器的速率限制。格式为 `<limit>,<duration>`。
 
@@ -2921,7 +2523,7 @@ WebSocket 的 URL Path。
 | ------ | ---------- |
 | string | `external` |
 
-#### 说明
+**说明**
 
 监听器所属的配置组 (Zone)。
 
@@ -2933,7 +2535,7 @@ WebSocket 的 URL Path。
 | ------ | ----------- |
 | string | `allow all` |
 
-#### 说明
+**说明**
 
 监听器的 ACL 规则列表。它用于设置连接层的白/黑名单。
 
@@ -2957,7 +2559,7 @@ listener.wss.external.access.2 = allow all
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 如果设置为 true，则服务器将在客户端没有携带 Sec-WebSocket-Protocol 字段时返回错误。**微信小程序需关闭该验证**。
 
@@ -2969,7 +2571,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ------------------------------------- |
 | string | `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5` |
 
-#### 说明
+**说明**
 
 指定支持的子协议，子协议之间以逗号分隔。
 
@@ -2981,7 +2583,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ----------------- |
 | string | `X-Forwarded-For` |
 
-#### 说明
+**说明**
 
 如果 EMQX 集群部署在 HAProxy 或 Nginx，则可打开该配置获取客户端真实的 IP 地址。
 
@@ -2993,7 +2595,7 @@ listener.wss.external.access.2 = allow all
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 监听器是否开启 `Proxy Protocol` 的支持。
 
@@ -3009,7 +2611,7 @@ listener.wss.external.access.2 = allow all
 | -------- | ------- |
 | duration | -       |
 
-#### 说明
+**说明**
 
 设置 Proxy Protocol 解析的超时时间。如果该时间内没收到 Proxy Protocol 的报文，EMQX 会关闭其连接。
 
@@ -3021,7 +2623,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
-#### 说明
+**说明**
 
 指定服务端支持的 SSL 的版本列表。详情请参见 [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html)。
 
@@ -3033,7 +2635,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的私钥文件 (PEM)。
 
@@ -3045,7 +2647,7 @@ listener.wss.external.access.2 = allow all
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的证书文件 (PEM)。
 
@@ -3057,7 +2659,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
 该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
@@ -3070,7 +2672,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ------- |
 | number | `10`    |
 
-#### 说明
+**说明**
 
 证书链中非自签发的中间证书的最大数量。如果该值为 0 则表示，对端证书必须是根 CA 直接授信的。
 
@@ -3082,7 +2684,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 证书密钥文件的密码。如果你的证书密钥设置了密码，则需要配置该选项。
 
@@ -3094,7 +2696,7 @@ listener.wss.external.access.2 = allow all
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-#### 说明
+**说明**
 
 若使用 Ephemeral Diffie-Helman 算法，指定算法使用的 key 文件。
 
@@ -3106,7 +2708,7 @@ listener.wss.external.access.2 = allow all
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-#### 说明
+**说明**
 
 指定握手过程中是否校验客户端。
 
@@ -3118,7 +2720,7 @@ listener.wss.external.access.2 = allow all
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 SSL 握手过程中若客户端没有证书，是否让握手失败。
 
@@ -3130,7 +2732,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-#### 说明
+**说明**
 
 指定服务器支持的密码套件。
 
@@ -3142,7 +2744,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ------ | ------------------------------------------------------------------------ |
 | string | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
-#### 说明
+**说明**
 
 若使用 PSK 算法，指定服务端支持的 PSK Cipher 列表。注意 'listener.wss.external.ciphers' 和 'listener.wss.external.psk_ciphers' 只能配置一个。
 
@@ -3154,7 +2756,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 指定在客户端不遵循 RFC 5746 的情况下，是否拒绝 renegotiation 请求。
 
@@ -3166,7 +2768,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 指定是否支持 SSL session 重用。详情见 [http://erlang.org/doc/man/ssl.html](http://erlang.org/doc/man/ssl.html)。
 
@@ -3178,7 +2780,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 指定是否使用服务端的偏好设置选择 Ciphers。
 
@@ -3190,7 +2792,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | ------------------------------- | ------- |
 | enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
-#### 说明
+**说明**
 
 使用客户端证书来覆盖 Username 字段的值。其可选值为：
 - cn：客户端证书的 Common Name 字段值
@@ -3209,7 +2811,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ---- | ------------------------------- | ------- |
 | enum | `cn`, `dn`, `crt`, `pem`, `md5` | `cn`    |
 
-#### 说明
+**说明**
 
 使用客户端证书来覆盖 ClientID 字段的值。其可选值的含义同上。
 
@@ -3223,7 +2825,7 @@ SSL 握手过程中若客户端没有证书，是否让握手失败。
 | ------- | ------- |
 | integer | 1024    |
 
-#### 说明
+**说明**
 
 TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
 
@@ -3235,7 +2837,7 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时时间。
 
@@ -3247,7 +2849,7 @@ TCP 报文发送超时时间。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 TCP 报文发送超时后，是否关闭该连接。
 
@@ -3259,7 +2861,7 @@ TCP 报文发送超时后，是否关闭该连接。
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 接收缓存区大小（操作系统内核级参数）
 
@@ -3273,7 +2875,7 @@ TCP 接收缓存区大小（操作系统内核级参数）
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 发送缓存区大小（操作系统内核级参数）
 
@@ -3287,7 +2889,7 @@ TCP 发送缓存区大小（操作系统内核级参数）
 | -------- | ------- |
 | bytesize | -       |
 
-#### 说明
+**说明**
 
 TCP 缓冲区大小 (用户级)。
 
@@ -3303,7 +2905,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | -       |
 
-#### 说明
+**说明**
 
 如果打开此配置，请设置该值等于 `sndbuff` 与 `recbuff` 的最大值。
 
@@ -3315,7 +2917,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 即 `TCP_NODELAY` 参数。开启该选项即允许小的 TCP 数据报文将会立即发送。
 
@@ -3327,7 +2929,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 该选项若设置为 true，Websocket 消息将会被压缩。
 
@@ -3339,7 +2941,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | --------------------------------------------------- | --------- |
 | enum | `none`, `default`, `best_compression`, `best_speed` | `default` |
 
-#### 说明
+**说明**
 
 压缩等级。
 
@@ -3351,7 +2953,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | -------------- | ------- |
 | integer | 1 - 9          | -       |
 
-#### 说明
+**说明**
 
 压缩参数。内存使用限制等级，配置可开辟多少内存来参与压缩过程。
 
@@ -3368,7 +2970,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | -------------------------------------------- | ------- |
 | enum | `default`, `filtered`, `huffman_only`, `rle` | -       |
 
-#### 说明
+**说明**
 
 压缩策略，用于调优压缩率：
 
@@ -3387,7 +2989,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | ------------------------- | ------- |
 | enum | `takeover`, `no_takeover` | -       |
 
-#### 说明
+**说明**
 
 是否允许服务端的压缩上下文在帧之间传递。
 
@@ -3399,7 +3001,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | ------------------------- | ------- |
 | enum | `takeover`, `no_takeover` | -       |
 
-#### 说明
+**说明**
 
 是否允许客户端的压缩上下文在帧之间传递。
 
@@ -3411,7 +3013,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | -------------- | ------- |
 | integer | 8 - 15         | -       |
 
-#### 说明
+**说明**
 
 服务端最大窗口值。设置一个较大的值会有更好的压缩率，但会额外的消耗内存。
 
@@ -3423,7 +3025,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | -------------- | ------- |
 | integer | 8 - 15         | -       |
 
-#### 说明
+**说明**
 
 客户端最大窗口值。设置一个较大的值会有更好的压缩率，但会额外的消耗内存。
 
@@ -3435,7 +3037,7 @@ TCP 缓冲区大小 (用户级)。
 | -------- | ------- |
 | duration | -       |
 
-#### 说明
+**说明**
 
 TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文，则会关闭该连接。
 
@@ -3447,11 +3049,646 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ------- | ------- |
 | integer | -       |
 
-#### 说明
+**说明**
 
 允许的单个 MQTT 报文长度的最大值。
 
 <br />
+
+## MQTT/TCP 监听器 - 11883
+
+该监听器优化了高吞吐消息订阅性能，默认仅在本地地址监听，适用于后端应用订阅。
+
+### listener.tcp.internal
+
+| Type   | Default           |
+| ------ | ----------------- |
+| string | `127.0.0.1:11883` |
+
+**说明**
+
+配置名称为 `internal` 的 MQTT/TCP 监听器的监听地址。
+
+**说明**
+
+`11883`：表监听 IPv4 的 `0.0.0.0:11883`。
+`127.0.0.1:11883`：表监听地址为 `127.0.0.1` 网卡上的 `11883` 端口。
+`::1:11883`：表监听 IPv6 地址为 `::1` 网卡上的 `11883` 端口。
+
+<br />
+
+### listener.tcp.internal.acceptors
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 4       |
+
+**说明**
+
+监听器的接收池大小。
+
+<br />
+
+### listener.tcp.internal.max_connections
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 1024000 |
+
+**说明**
+
+监听器允许的最大并发连接数量。
+
+<br />
+
+### listener.tcp.internal.max_conn_rate
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 1000    |
+
+**说明**
+
+监听器允许的最大接入速率。单位：个/秒
+
+<br />
+
+### listener.tcp.internal.active_n
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 1000    |
+
+**说明**
+
+监听器持续接收 TCP 报文的次数。
+
+<br />
+
+### listener.tcp.internal.zone
+
+| Type   | Default    |
+| ------ | ---------- |
+| string | `internal` |
+
+**说明**
+
+监听器所属的配置域 (Zone)。
+
+<br />
+
+### listener.tcp.internal.rate_limit
+
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
+
+**说明**
+
+监听器的速率限制。格式为 `<limit>,<duration>`。
+
+**说明**
+
+`100KB,10s`：表 *限制 10 秒内的流入字节数不超过 100 KB*。
+
+
+### listener.tcp.internal.backlog
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 512     |
+
+**说明**
+
+TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
+
+<br />
+
+### listener.tcp.internal.send_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+**说明**
+
+TCP 报文发送超时时间。
+
+<br />
+
+### listener.tcp.internal.send_timeout_close
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+**说明**
+
+TCP 报文发送超时后，是否关闭该连接。
+
+<br />
+
+### listener.tcp.internal.recbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `64KB`  |
+
+**说明**
+
+TCP 接收缓存区大小（操作系统内核级参数）
+
+<br />
+
+### listener.tcp.internal.sndbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `64KB`  |
+
+**说明**
+
+TCP 发送缓存区大小（操作系统内核级参数）
+
+<br />
+
+### listener.tcp.internal.buffer
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | -       |
+
+**说明**
+
+TCP 缓冲区大小 (用户级)。
+
+<br />
+
+### listener.tcp.internal.tune_buffer
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | -       |
+
+**说明**
+
+如果打开此配置，请设置该值等于 `sndbuff` 与 `recbuff` 的最大值。
+
+<br />
+
+### listener.tcp.internal.nodelay
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
+
+**说明**
+
+即 `TCP_NODELAY` 参数。开启该选项即允许小的 TCP 数据报文将会立即发送。
+
+<br />
+
+### listener.tcp.internal.reuseaddr
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
+
+**说明**
+
+即 `SO_REUSEADDR` 参数。开启该选项即允许本地重用端口，无需等待 `TIME_WAIT` 状态结束。
+
+<br />
+
+## External Zone 配置
+
+### zone.external.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `15s`   |
+
+**说明**
+
+TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文，则会关闭该连接。
+
+<br />
+
+### zone.external.enable_acl
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+**说明**
+
+是否开启 ACL 检查。
+
+<br />
+
+### zone.external.enable_ban
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+**说明**
+
+是否开启黑名单。
+
+<br />
+
+### zone.external.enable_stats
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+**说明**
+
+是否开启客户端状态统计。
+
+<br />
+
+### zone.external.acl_deny_action
+
+| Type | Optional Value         | Default  |
+| ---- | ---------------------- | -------- |
+| enum | `ignore`, `disconnect` | `ignore` |
+
+**说明**
+
+ACL 检查失败后，执行的操作。
+
+- `ignore`：不做任何操作。
+- `disconnect`：断开连接。
+
+<br />
+
+### zone.external.force_gc_policy
+
+| Type   | Default      |
+| ------ | ------------ |
+| string | `16000|16MB` |
+
+**说明**
+
+当收到一定数量的消息，或字节，就强制执行一次垃圾回收。
+
+格式：`<Number>|<Bytes>`。
+
+例如，`16000|16MB` 表示当收到 `16000` 条消息，或 `16MB` 的字节流入就强制执行一次垃圾回收。
+
+<br />
+
+### zone.external.force_shutdown_policy
+
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
+
+**说明**
+
+当进程消息队列长度，或占用的内存字节到达某值，就强制关闭该进程。
+
+这里的 `消息队列` 指的是 Erlang 进程的 `消息邮箱`，并非 QoS 1 和 QoS 2 的 `mqueue`。
+
+格式：`<Number>|<Bytes>`。
+
+例如，`32000|32MB` 表示当进程堆积了 `32000` 条消息，或进程占用内存达到 `32MB` 则关闭该进程。
+
+<br />
+
+### zone.external.max_packet_size
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | -       |
+
+**说明**
+
+允许的 MQTT 报文最大长度。
+
+<br />
+
+### zone.external.max_clientid_len
+
+| Type    | Default |
+| ------- | ------- |
+| integer | -       |
+
+**说明**
+
+允许的 Client ID 串的最大长度。
+
+<br />
+
+### zone.external.max_topic_levels
+
+| Type    | Default |
+| ------- | ------- |
+| integer | -       |
+
+**说明**
+
+允许客户端订阅主题的最大层级。0 表示不限制。
+
+::: warning Warning
+Topic层级过多可能导致订阅时的性能问题。
+:::
+
+<br />
+
+### zone.external.max_qos_allowed
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `0`, `1`, `2`  | -       |
+
+**说明**
+
+允许客户端发布的最大 QoS 等级。
+
+<br />
+
+### zone.external.max_topic_alias
+
+| Type    | Default |
+| ------- | ------- |
+| integer | -       |
+
+**说明**
+
+允许最大的主题别名数。0 表示不支持主题别名。
+
+<br />
+
+### zone.external.retain_available
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | -       |
+
+**说明**
+
+是否支持 Retain 消息。
+
+<br />
+
+### zone.external.wildcard_subscription
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | -       |
+
+**说明**
+
+是否支持订阅通配主题。
+
+<br />
+
+### zone.external.shared_subscription
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | -       |
+
+**说明**
+
+是否支持共享订阅。
+
+<br />
+
+### zone.external.server_keepalive
+
+| Type    | Default |
+| ------- | ------- |
+| integer | -       |
+
+**说明**
+
+服务端指定的 Keepalive 时间。用于 MQTT v5.0 协议的 CONNACK 报文。
+
+<br />
+
+### zone.external.keepalive_backoff
+
+| Type  | Optional Value | Default |
+| ----- | -------------- | ------- |
+| float | > 0.5          | 0.75    |
+
+**说明**
+
+Keepalive 退避指数。EMQX 如果在 `Keepalive * backoff * 2` 的时间内未收到客户端的任何数据报文，则认为客户端已心跳超时。
+
+<br />
+
+### zone.external.max_subscriptions
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 0       |
+
+**说明**
+
+单个客户端允许订阅的最大主题数。`0` 表示不限制。
+
+<br />
+
+### zone.external.upgrade_qos
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
+
+**说明**
+
+允许 EMQX 在投递消息时，强制升级消息的 QoS 等级为订阅的 QoS 等级。
+
+<br />
+
+### zone.external.max_inflight
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 32      |
+
+**说明**
+
+飞行窗口大小。飞行窗口用于存储未被应答的 QoS 1 和 QoS 2 消息。
+
+<br />
+
+### zone.external.retry_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `30s`   |
+
+**说明**
+
+消息重发间隔。EMQX 在每个间隔检查是否需要进行消息重发。
+
+<br />
+
+### zone.external.max_awaiting_rel
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 100     |
+
+**说明**
+
+QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
+
+<br />
+
+### zone.external.await_rel_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `300s`  |
+
+**说明**
+
+QoS 2 消息处理超时时间，在超时后若还未收到 QoS 的 PUBREL 报文，则将消息从接收窗口中丢弃。
+
+<br />
+
+### zone.external.session_expiry_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `2h`    |
+
+**说明**
+
+会话默认超时时间，主要用于 MQTT v3.1 和 v3.1.1 协议。在 MQTT v5.0 中，该值通常会携带在客户端的连接报文中。
+
+<br />
+
+### zone.external.max_mqueue_len
+
+| Type    | Default |
+| ------- | ------- |
+| integer | 1000    |
+
+**说明**
+
+消息队列最大长度。当飞行窗口满，或客户端离线后，消息会被存储至该队列中。0 表示不限制。
+
+<br />
+
+### zone.external.mqueue_priorities
+
+| Type   | Optional Value   | Default |
+| ------ | ---------------- | ------- |
+| string | `none`, `<Spec>` | `none`  |
+
+**说明**
+
+队列消息优先级配置：
+
+- `none`：表示无优先级区分。
+- `<Spec>`：表示为一个消息优先表，它配置了某主题下消息的优先级。例如：
+    * `topic/1=10`：表示主题 `topic/1` 的消息优先级为 `10`。
+    * `topic/1=10,topic/2=8`：表示配置了两个主题的优先级，其分别为 `10` 和 `8`。
+    * 其中，优先级数值越高，优先等级越高。
+
+当消息队列长度有限时，会优先丢弃低优先级的消息。
+
+<br />
+
+### zone.external.mqueue_default_priority
+
+| Type | Optional Value      | Default   |
+| ---- | ------------------- | --------- |
+| enum | `highest`, `lowest` | `highest` |
+
+**说明**
+
+消息默认的优先等级。
+
+<br />
+
+### zone.external.mqueue_store_qos0
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `true`  |
+
+**说明**
+
+消息队列是否存储 QoS 0 消息。
+
+<br />
+
+### zone.external.enable_flapping_detect
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `off`   |
+
+**说明**
+
+是否开启 `Flapping` 检查。
+
+<br />
+
+### zone.external.mountpoint
+
+| Type   | Default |
+| ------ | ------- |
+| string | -       |
+
+**说明**
+
+主题挂载点。配置后，所有订阅和发布的主题在 EMQX 都会为其增加一个前缀。
+
+其中可用的占位符有：
+- `%c`：表示客户端的 Client ID。
+- `%u`：表示客户端的 Username。
+
+例如，配置挂载点为 `user/%c/`。那么 Client ID 为 `tom` 的客户端在发布主题 `open` 消息时，实际在 EMQX 中路由的主题是 `user/tom/open`。
+
+<br />
+
+### zone.external.use_username_as_clientid
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
+
+**说明**
+
+是否用客户端的 Username 作为其 Client ID。
+
+<br />
+
+### zone.external.ignore_loop_deliver
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
+
+**说明**
+
+是否忽略自己发送的消息。如果忽略，则表明 EMQX 不会向消息的发送端投递此消息。
+
+<br />
+
+### zone.external.strict_mode
+
+| Type | Optional Value  | Default |
+| ---- | --------------- | ------- |
+| enum | `true`, `false` | `false` |
+
+**说明**
+
+是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
+
+<br />
+
 
 ## Internal Zone 配置
 
@@ -3461,7 +3698,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否允许匿名用户登录系统。
 
@@ -3473,7 +3710,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 是否开启客户端状态统计。
 
@@ -3485,7 +3722,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 是否开启 ACL 检查。
 
@@ -3497,7 +3734,7 @@ TCP 连接建立后的发呆时间，如果这段时间内未收到任何报文�
 | ---- | ---------------------- | -------- |
 | enum | `ignore`, `disconnect` | `ignore` |
 
-#### 说明
+**说明**
 
 ACL 检查失败后，执行的操作。
 
@@ -3512,7 +3749,7 @@ ACL 检查失败后，执行的操作。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 当收到一定数量的消息，或字节，就强制执行一次垃圾回收。
 
@@ -3528,7 +3765,7 @@ ACL 检查失败后，执行的操作。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-#### 说明
+**说明**
 
 是否支持订阅通配主题。
 
@@ -3540,7 +3777,7 @@ ACL 检查失败后，执行的操作。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | -       |
 
-#### 说明
+**说明**
 
 是否支持共享订阅。
 
@@ -3552,7 +3789,7 @@ ACL 检查失败后，执行的操作。
 | ------- | ------- |
 | integer | 0       |
 
-#### 说明
+**说明**
 
 单个客户端允许订阅的最大主题数。`0` 表示不限制。
 
@@ -3564,7 +3801,7 @@ ACL 检查失败后，执行的操作。
 | ------- | ------- |
 | integer | 128     |
 
-#### 说明
+**说明**
 
 飞行窗口大小。飞行窗口用于存储未被应答的 QoS 1 和 QoS 2 消息。
 
@@ -3576,7 +3813,7 @@ ACL 检查失败后，执行的操作。
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客户端发来的 QoS 2 消息。`0` 表示不限制。
 
@@ -3588,7 +3825,7 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ------- | ------- |
 | integer | 10000   |
 
-#### 说明
+**说明**
 
 消息队列最大长度。当飞行窗口满，或客户端离线后，消息会被存储至该队列中。`0` 表示不限制。
 
@@ -3600,7 +3837,7 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 消息队列是否存储 QoS 0 消息。
 
@@ -3612,7 +3849,7 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 是否开启 `Flapping` 检查。
 
@@ -3624,7 +3861,7 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 当进程消息队列长度，或占用的内存字节到达某值，就强制关闭该进程。
 
@@ -3642,7 +3879,7 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 主题挂载点。配置后，所有订阅和发布的主题在 EMQX 都会为其增加一个前缀。
 
@@ -3660,7 +3897,7 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否忽略自己发送的消息。如果忽略，则表明 EMQX 不会向消息的发送端投递此消息。
 
@@ -3672,7 +3909,7 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
 
@@ -3684,214 +3921,9 @@ QoS 2 消息的最大接收窗口，配置 EMQX 能够同时处理多少从客�
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否允许该 Zone 下的客户端绕过认证插件的认证步骤。
-
-<br />
-
-## MQTT/TCP 监听器 - 11883
-
-该监听器优化了高吞吐消息订阅性能，默认仅在本地地址监听，适用于后端应用订阅。
-
-### listener.tcp.internal
-
-| Type   | Default           |
-| ------ | ----------------- |
-| string | `127.0.0.1:11883` |
-
-#### 说明
-
-配置名称为 `internal` 的 MQTT/TCP 监听器的监听地址。
-
-#### 示例
-
-`11883`：表监听 IPv4 的 `0.0.0.0:11883`。
-`127.0.0.1:11883`：表监听地址为 `127.0.0.1` 网卡上的 `11883` 端口。
-`::1:11883`：表监听 IPv6 地址为 `::1` 网卡上的 `11883` 端口。
-
-<br />
-
-### listener.tcp.internal.acceptors
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 4       |
-
-#### 说明
-
-监听器的接收池大小。
-
-<br />
-
-### listener.tcp.internal.max_connections
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 1024000 |
-
-#### 说明
-
-监听器允许的最大并发连接数量。
-
-<br />
-
-### listener.tcp.internal.max_conn_rate
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 1000    |
-
-#### 说明
-
-监听器允许的最大接入速率。单位：个/秒
-
-<br />
-
-### listener.tcp.internal.active_n
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 1000    |
-
-#### 说明
-
-监听器持续接收 TCP 报文的次数。
-
-<br />
-
-### listener.tcp.internal.zone
-
-| Type   | Default    |
-| ------ | ---------- |
-| string | `internal` |
-
-#### 说明
-
-监听器所属的配置域 (Zone)。
-
-<br />
-
-### listener.tcp.internal.rate_limit
-
-| Type   | Default |
-| ------ | ------- |
-| string | -       |
-
-#### 说明
-
-监听器的速率限制。格式为 `<limit>,<duration>`。
-
-#### 示例
-
-`100KB,10s`：表 *限制 10 秒内的流入字节数不超过 100 KB*。
-
-
-### listener.tcp.internal.backlog
-
-| Type    | Default |
-| ------- | ------- |
-| integer | 512     |
-
-#### 说明
-
-TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
-
-<br />
-
-### listener.tcp.internal.send_timeout
-
-| Type     | Default |
-| -------- | ------- |
-| duration | `5s`    |
-
-#### 说明
-
-TCP 报文发送超时时间。
-
-<br />
-
-### listener.tcp.internal.send_timeout_close
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `on`, `off`    | `on`    |
-
-#### 说明
-
-TCP 报文发送超时后，是否关闭该连接。
-
-<br />
-
-### listener.tcp.internal.recbuf
-
-| Type     | Default |
-| -------- | ------- |
-| bytesize | `64KB`  |
-
-#### 说明
-
-TCP 接收缓存区大小（操作系统内核级参数）
-
-<br />
-
-### listener.tcp.internal.sndbuf
-
-| Type     | Default |
-| -------- | ------- |
-| bytesize | `64KB`  |
-
-#### 说明
-
-TCP 发送缓存区大小（操作系统内核级参数）
-
-<br />
-
-### listener.tcp.internal.buffer
-
-| Type     | Default |
-| -------- | ------- |
-| bytesize | -       |
-
-#### 说明
-
-TCP 缓冲区大小 (用户级)。
-
-<br />
-
-### listener.tcp.internal.tune_buffer
-
-| Type | Optional Value | Default |
-| ---- | -------------- | ------- |
-| enum | `on`, `off`    | -       |
-
-#### 说明
-
-如果打开此配置，请设置该值等于 `sndbuff` 与 `recbuff` 的最大值。
-
-<br />
-
-### listener.tcp.internal.nodelay
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | `false` |
-
-#### 说明
-
-即 `TCP_NODELAY` 参数。开启该选项即允许小的 TCP 数据报文将会立即发送。
-
-<br />
-
-### listener.tcp.internal.reuseaddr
-
-| Type | Optional Value  | Default |
-| ---- | --------------- | ------- |
-| enum | `true`, `false` | `true`  |
-
-#### 说明
-
-即 `SO_REUSEADDR` 参数。开启该选项即允许本地重用端口，无需等待 `TIME_WAIT` 状态结束。
 
 <br />
 
@@ -3903,7 +3935,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | -------------------------------- | ------- |
 | enum | `off`, `file`, `console`, `both` | `file`  |
 
-#### 说明
+**说明**
 
 将日志输出到什么地方。可选值为:
 
@@ -3924,7 +3956,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | ---------------------------------------------------------------------------------- | --------- |
 | enum | `debug`, `info`, `notice`, `warning`<br/>`error`, `critical`, `alert`, `emergency` | `warning` |
 
-#### 说明
+**说明**
 
 全局的日志级别。这包括 primary log level 以及所有的 log handlers。详情请参见 [日志级别和 log handlers](../getting-started/log.md#log-level-and-log-handlers)。
 
@@ -3936,7 +3968,7 @@ TCP 缓冲区大小 (用户级)。
 | ---- | ------- |
 | dir  | `./log` |
 
-#### 说明
+**说明**
 
 日志文件目录。
 
@@ -3948,7 +3980,7 @@ TCP 缓冲区大小 (用户级)。
 | ------ | ---------- |
 | string | `emqx.log` |
 
-#### 说明
+**说明**
 
 日志文件的前缀。例如，若使用默认值 (`log.file = emqx.log`)，日志文件名将为 `emqx.log.1`，`emqx.log.2`，...。
 
@@ -3960,7 +3992,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | ------- |
 | integer | -1      |
 
-#### 说明
+**说明**
 
 设置单个日志消息的最大长度。如超过此长度，日志消息将被截断。`-1` 表示无限制。
 
@@ -3985,7 +4017,7 @@ TCP 缓冲区大小 (用户级)。
 | -------- | ------- |
 | bytesize | `10MB`  |
 
-#### 说明
+**说明**
 
 设置单个日志文件大小。如超过此大小，则进行日志文件滚动，创建新的日志文件。
 
@@ -3997,7 +4029,7 @@ TCP 缓冲区大小 (用户级)。
 | ------- | ------- |
 | integer | 5       |
 
-#### 说明
+**说明**
 
 设置日志文件总个数。如超过此文件个数，则下一次日志文件滚动将会覆盖第一个文件。
 
@@ -4009,11 +4041,11 @@ TCP 缓冲区大小 (用户级)。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 针对某日志级别设置单独的日志文件。
 
-#### 示例
+**说明**
 
 将 info 及 info 以上的日志单独输出到 `info.log.N` 文件中：
 
@@ -4035,7 +4067,7 @@ log.error.file = error.log
 | ------- | ------- |
 | integer | 20      |
 
-#### 说明
+**说明**
 
 控制对大的数据结构打印日志时的最大深度。超过深度的部分将被 '...' 代替。
 
@@ -4048,7 +4080,7 @@ log.error.file = error.log
 | ------- | ------- |
 | boolean | true    |
 
-#### 说明
+**说明**
 
 设置成 `true` 时，单行打印日志。
 如果设置成 `false`, 如 crash 日志中的堆栈信息等将打印多行
@@ -4061,7 +4093,7 @@ log.error.file = error.log
 | ---- | -------------- | ------- |
 | enum | `text`, `json` | `text`  |
 
-#### 说明
+**说明**
 
 选择打印日志的格式
 
@@ -4073,7 +4105,7 @@ log.error.file = error.log
 
 注意: 这个配置在 EMQX 开源版 4.3.15, 4.4.4 和 EMQX 企业版 4.3.10, 4.4.4 及之后可以使用。
 
-#### 说明
+**说明**
 
 指定 `text` logger 的时间戳格式。可以是 `rfc3339` 或者 FORMAT 字符串。
 
@@ -4114,7 +4146,7 @@ log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 | -------- | ------- |
 | duration | `0ms`   |
 
-#### 说明
+**说明**
 
 启用垃圾回收时间监控并在回收时间超过设定值时触发告警，0 表示禁用此监控。
 
@@ -4126,7 +4158,7 @@ log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 | -------- | ------- |
 | duration | `240ms` |
 
-#### 说明
+**说明**
 
 启用进程调度时间监控并在调度时间超过设定值时触发告警，0 表示禁用此监控。
 
@@ -4138,7 +4170,7 @@ log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 | -------- | ------- |
 | bytesize | `8MB`   |
 
-#### 说明
+**说明**
 
 启用堆栈大小监控并在进程执行垃圾回收后堆栈大小仍大于设定值时触发告警，0 表示禁用此监控。
 
@@ -4150,7 +4182,7 @@ log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 指定是否启用进程间消息通道拥塞监控。
 
@@ -4162,7 +4194,7 @@ log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 指定是否启用集群 RPC 通道拥塞监控。
 
@@ -4174,7 +4206,7 @@ log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 | -------- | ------- |
 | duration | `60s`   |
 
-#### 说明
+**说明**
 
 CPU 占用率检查周期。
 
@@ -4186,7 +4218,7 @@ CPU 占用率检查周期。
 | ------- | ------- |
 | percent | `80%`   |
 
-#### 说明
+**说明**
 
 CPU 占用率超过 `os_mon.cpu_high_watermark` 时将触发告警。
 
@@ -4198,7 +4230,7 @@ CPU 占用率超过 `os_mon.cpu_high_watermark` 时将触发告警。
 | ------- | ------- |
 | percent | `60%`   |
 
-#### 说明
+**说明**
 
 CPU 占用率回落到 `os_mon.cpu_low_watermark` 以下时将清除告警。
 
@@ -4210,7 +4242,7 @@ CPU 占用率回落到 `os_mon.cpu_low_watermark` 以下时将清除告警。
 | -------- | ------- |
 | duration | `60s`   |
 
-#### 说明
+**说明**
 
 内存占用率检查周期。
 
@@ -4222,7 +4254,7 @@ CPU 占用率回落到 `os_mon.cpu_low_watermark` 以下时将清除告警。
 | ------- | ------- |
 | percent | `70%`   |
 
-#### 说明
+**说明**
 
 EMQX 为所有进程分配的内存占系统内存的百分比超过 `os_mon.sysmem_high_watermark` 时将触发告警。
 
@@ -4234,7 +4266,7 @@ EMQX 为所有进程分配的内存占系统内存的百分比超过 `os_mon.sys
 | ------- | ------- |
 | percent | `5%`    |
 
-#### 说明
+**说明**
 
 EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.procmem_high_watermark` 时将触发告警。
 
@@ -4246,7 +4278,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | -------- | ------- |
 | duration | `30s`   |
 
-#### 说明
+**说明**
 
 进程数量检查周期。
 
@@ -4258,7 +4290,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | ------- | ------- |
 | percent | `80%`   |
 
-#### 说明
+**说明**
 
 当前进程数量占进程最大数量的百分比超过 `vm_mon.process_high_watermark` 时将触发告警。进程最大数量由 `node.process_limit` 配置项决定。
 
@@ -4270,7 +4302,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | ------- | ------- |
 | percent | `60%`   |
 
-#### 说明
+**说明**
 
 当前进程数量占进程最大数量的百分比回落到 `vm_mon.process_low_watermark` 以下时将触发告警。进程最大数量由 `node.process_limit` 配置项决定。
 
@@ -4284,7 +4316,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | ------ | ------------- |
 | string | `etc/plugins` |
 
-#### 说明
+**说明**
 
 插件的配置目录。
 
@@ -4296,7 +4328,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | ------ | -------------------- |
 | string | `etc/loaded_plugins` |
 
-#### 说明
+**说明**
 
 插件启动列表的配置文件路径。
 
@@ -4308,7 +4340,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | ------ | ---------- |
 | string | `plugins/` |
 
-#### 说明
+**说明**
 
 外部插件存放目录。
 
@@ -4322,7 +4354,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | ------ | ------------------------------- |
 | string | `http://127.0.0.1:80/mqtt/auth` |
 
-#### 说明
+**说明**
 
 指定认证请求的目标 URL。
 
@@ -4334,7 +4366,7 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 | ---- | -------------- | ------- |
 | enum | `get`, `post`  | `post`  |
 
-#### 说明
+**说明**
 
 指定认证请求的请求方法。
 
@@ -4342,14 +4374,14 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 
 ### auth.http.auth_req.headers.\<Any\>
 
-#### 示例
+**说明**
 
 ```
 auth.http.auth_req.headers.content-type = application/x-www-form-urlencoded
 auth.http.auth_req.headers.accept = */*
 ```
 
-#### 说明
+**说明**
 
 指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
 
@@ -4361,7 +4393,7 @@ auth.http.auth_req.headers.accept = */*
 | ------ | -------------------------------------------------------------- | ------------------------------------- |
 | string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符 | `clientid=%c,username=%u,password=%P` |
 
-#### 说明
+**说明**
 
 指定认证请求中携带的数据。使用 GET 方法时 `auth.http.auth_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以查询字符串参数的形式发送。使用 POST 方法时 `auth.http.auth_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以 Request Body 的形式发送。所有的占位符都会被运行时数据所替换，可用的占位符如下：
 
@@ -4384,7 +4416,7 @@ auth.http.auth_req.headers.accept = */*
 | ------ | ------------------------------------ |
 | string | `http://127.0.0.1:80/mqtt/superuser` |
 
-#### 说明
+**说明**
 
 指定超级用户认证请求的目标 URL。
 
@@ -4396,7 +4428,7 @@ auth.http.auth_req.headers.accept = */*
 | ---- | -------------- | ------- |
 | enum | `get`, `post`  | `post`  |
 
-#### 说明
+**说明**
 
 指定超级用户认证请求的请求方法。
 
@@ -4404,14 +4436,14 @@ auth.http.auth_req.headers.accept = */*
 
 ### auth.http.super_req.headers.\<Any\>
 
-#### 示例
+**说明**
 
 ```
 auth.http.super_req.headers.content-type = application/x-www-form-urlencoded
 auth.http.super_req.headers.accept = */*
 ```
 
-#### 说明
+**说明**
 
 指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
 
@@ -4423,7 +4455,7 @@ auth.http.super_req.headers.accept = */*
 | ------ | -------------------------------------------------------------- | ------------------------- |
 | string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符 | `clientid=%c,username=%u` |
 
-#### 说明
+**说明**
 
 指定超级用户认证请求中携带的数据。使用 GET 方法时 `auth.http.super_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以查询字符串参数的形式发送。使用 POST 方法时 `auth.http.super_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以 Request Body 的形式发送。所有的占位符都会被运行时数据所替换，可用的占位符同 `auth.http.auth_req.params`。
 
@@ -4435,7 +4467,7 @@ auth.http.super_req.headers.accept = */*
 | ------ | -------------------------------- |
 | string | `http://127.0.0.1:8991/mqtt/acl` |
 
-#### 说明
+**说明**
 
 指定 ACL 验证请求的目标 URL。
 
@@ -4447,7 +4479,7 @@ auth.http.super_req.headers.accept = */*
 | ---- | -------------- | ------- |
 | enum | `get`, `post`  | `post`  |
 
-#### 说明
+**说明**
 
 指定 ACL 验证请求的请求方法。
 
@@ -4455,14 +4487,14 @@ auth.http.super_req.headers.accept = */*
 
 ### auth.http.acl_req.headers.\<Any\>
 
-#### 示例
+**说明**
 
 ```
 auth.http.acl_req.headers.content-type = application/x-www-form-urlencoded
 auth.http.acl_req.headers.accept = */*
 ```
 
-#### 说明
+**说明**
 
 指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
 
@@ -4474,7 +4506,7 @@ auth.http.acl_req.headers.accept = */*
 | ------ | -------------------------------------------------------------- | -------------------------------------------------------------------- |
 | string | 以 `,` 分隔的 `k=v` 键值对，`v` 可以是固定内容，也可以是占位符 | `access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m` |
 
-#### 说明
+**说明**
 
 指定 ACL 验证请求中携带的数据。使用 GET 方法时 `auth.http.acl_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以查询字符串参数的形式发送。使用 POST 方法时 `auth.http.acl_req.params` 的值将被转换为以 `&` 分隔的 `k=v` 键值对以 Request Body 的形式发送。所有的占位符都会被运行时数据所替换，可用的占位符如下：
 
@@ -4496,7 +4528,7 @@ auth.http.acl_req.headers.accept = */*
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 HTTP 请求超时时间。任何等价于 `0s` 的设定值都表示永不超时。
 
@@ -4508,7 +4540,7 @@ HTTP 请求超时时间。任何等价于 `0s` 的设定值都表示永不超时
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 HTTP 请求的连接超时时间。任何等价于 `0s` 的设定值都表示永不超时。
 
@@ -4520,7 +4552,7 @@ HTTP 请求的连接超时时间。任何等价于 `0s` 的设定值都表示永
 | ------ | ------------------ |
 | string | `etc/certs/ca.pem` |
 
-#### 说明
+**说明**
 
 CA 证书文件路径。
 
@@ -4532,7 +4564,7 @@ CA 证书文件路径。
 | ------ | --------------------------- |
 | string | `etc/certs/client-cert.pem` |
 
-#### 说明
+**说明**
 
 客户端证书文件路径。
 
@@ -4544,7 +4576,7 @@ CA 证书文件路径。
 | ------ | -------------------------- |
 | string | `etc/certs/client.key.pem` |
 
-#### 说明
+**说明**
 
 客户端私钥文件路径。
 
@@ -4558,7 +4590,7 @@ CA 证书文件路径。
 | ------ | ------------ |
 | string | `emqxsecret` |
 
-#### 说明
+**说明**
 
 设置 HMAC Secret。
 
@@ -4570,7 +4602,7 @@ CA 证书文件路径。
 | ---- | ---------------------- | ---------- |
 | enum | `username`, `password` | `password` |
 
-#### 说明
+**说明**
 
 从什么地方获取 JWT。可选值为:
 
@@ -4585,7 +4617,7 @@ CA 证书文件路径。
 | ------ | ------------------------------ |
 | string | `etc/certs/jwt_public_key.pem` |
 
-#### 说明
+**说明**
 
 若使用 RSA 或者 ECDSA 加密算法，须指定私钥文件。
 
@@ -4597,7 +4629,7 @@ CA 证书文件路径。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 启用或关闭 Claims 校验功能。
 
@@ -4609,7 +4641,7 @@ CA 证书文件路径。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 启用 Claims 校验功能时，可设置 JWT 中字段的可选值。
 
@@ -4640,7 +4672,7 @@ auth.jwt.verify_claims.sub = %u
 | ------ | ----------- |
 | string | `127.0.0.1` |
 
-#### 说明
+**说明**
 
 LDAP 服务地址。
 
@@ -4652,7 +4684,7 @@ LDAP 服务地址。
 | ------- | ------- |
 | integer | 389     |
 
-#### 说明
+**说明**
 
 LDAP 服务端口。
 
@@ -4664,7 +4696,7 @@ LDAP 服务端口。
 | ------- | -------------- | ------- |
 | integer | > 0            | 8       |
 
-#### 说明
+**说明**
 
 连接池大小。
 
@@ -4676,7 +4708,7 @@ LDAP 服务端口。
 | ------ | ----------------------- |
 | string | `cn=root,dc=emqx,dc=io` |
 
-#### 说明
+**说明**
 
 登入 LDAP 服务的 DN。
 
@@ -4688,7 +4720,7 @@ LDAP 服务端口。
 | ------ | -------- |
 | string | `public` |
 
-#### 说明
+**说明**
 
 登入 LDAP 服务的密码。
 
@@ -4700,7 +4732,7 @@ LDAP 服务端口。
 | -------- | ------- |
 | duration | `30s`   |
 
-#### 说明
+**说明**
 
 查询操作的超时时间。
 
@@ -4712,7 +4744,7 @@ LDAP 服务端口。
 | ------ | ------------------------- |
 | string | `ou=device,dc=emqx,dc=io` |
 
-#### 说明
+**说明**
 
 客户端隶属的 DN。
 
@@ -4724,7 +4756,7 @@ LDAP 服务端口。
 | ------ | ---------- |
 | string | `mqttUser` |
 
-#### 说明
+**说明**
 
 客户端对象的名称。
 
@@ -4736,7 +4768,7 @@ LDAP 服务端口。
 | ------ | ------- |
 | string | `uid`   |
 
-#### 说明
+**说明**
 
 Username 属性的数据类型。
 
@@ -4748,7 +4780,7 @@ Username 属性的数据类型。
 | ------ | -------------- |
 | string | `userPassword` |
 
-#### 说明
+**说明**
 
 Password 属性的数据类型。
 
@@ -4760,7 +4792,7 @@ Password 属性的数据类型。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否开启 SSL。
 
@@ -4772,7 +4804,7 @@ Password 属性的数据类型。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 SSL 服务端证书路径。
 
@@ -4784,7 +4816,7 @@ SSL 服务端证书路径。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 SSL 服务端秘钥文件路径。
 
@@ -4796,7 +4828,7 @@ SSL 服务端秘钥文件路径。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 CA 证书文件路径。
 
@@ -4808,7 +4840,7 @@ CA 证书文件路径。
 | ---- | ---------------------------- | ------- |
 | enum | `verify_peer`, `verify_none` | -       |
 
-#### 说明
+**说明**
 
 SSL 认证方式：
 
@@ -4823,7 +4855,7 @@ SSL 认证方式：
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 如果客户端未提供 SSL 证书，则断开连接。
 
@@ -4837,7 +4869,7 @@ SSL 认证方式：
 | ---- | ------------------------------------ | -------- |
 | enum | `single`, `unknown`, `sharded`, `rs` | `single` |
 
-#### 说明
+**说明**
 
 设置 MongoDB 的拓扑类型:
 
@@ -4858,7 +4890,7 @@ SSL 认证方式：
 | ------ | ----------------- |
 | string | `127.0.0.1:27017` |
 
-#### 说明
+**说明**
 
 设置 MongoDB 服务的地址。如有多个使用逗号 `,` 分隔。
 
@@ -4870,7 +4902,7 @@ SSL 认证方式：
 | ------- | ------- |
 | integer | 8       |
 
-#### 说明
+**说明**
 
 设置 MongoDB 连接池的进程数。
 
@@ -4882,7 +4914,7 @@ SSL 认证方式：
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 设置 MongoDB 的用户名。
 
@@ -4894,7 +4926,7 @@ SSL 认证方式：
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 设置 MongoDB 的密码。
 
@@ -4906,7 +4938,7 @@ SSL 认证方式：
 | ------ | ------- |
 | string | `mqtt`  |
 
-#### 说明
+**说明**
 
 设置 MongoDB 的认证源数据库名。
 
@@ -4918,7 +4950,7 @@ SSL 认证方式：
 | ------ | ------- |
 | string | `mqtt`  |
 
-#### 说明
+**说明**
 
 设置 MongoDB 的数据库名。
 
@@ -4930,7 +4962,7 @@ SSL 认证方式：
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 设置访问 MongoDB 超时时间。
 
@@ -4942,7 +4974,7 @@ SSL 认证方式：
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 设置是否使用 SSL 访问 MongoDB。
 
@@ -4954,7 +4986,7 @@ SSL 认证方式：
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 若使用 SSL 访问 MongoDB，设置 SSL 客户端的私钥文件。
 
@@ -4966,7 +4998,7 @@ SSL 认证方式：
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 若使用 SSL 访问 MongoDB，设置 SSL 客户端的证书文件。
 
@@ -4978,7 +5010,7 @@ SSL 认证方式：
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 若使用 SSL 访问 MongoDB，设置 SSL 的 CA 证书文件。
 
@@ -4990,7 +5022,7 @@ SSL 认证方式：
 | ---- | ------------------------- | ------- |
 | enum | `unsafe`, `safe`, `undef` | `undef` |
 
-#### 说明
+**说明**
 
 设置 MongoDB 的写入模式。
 
@@ -5002,7 +5034,7 @@ SSL 认证方式：
 | ---- | ----------------------------- | ------- |
 | enum | `master`, `slave_ok`, `undef` | `undef` |
 
-#### 说明
+**说明**
 
 设置 MongoDB 的读取模式。
 
@@ -5014,7 +5046,7 @@ SSL 认证方式：
 | ------ | ----------- |
 | string | `mqtt_user` |
 
-#### 说明
+**说明**
 
 认证过程用的 Collection 名字。
 
@@ -5026,7 +5058,7 @@ SSL 认证方式：
 | ------ | ---------- |
 | string | `password` |
 
-#### 说明
+**说明**
 
 认证过程用的主要字段。如需在密码之后加 salt，可以配置为:
 
@@ -5042,7 +5074,7 @@ auth.mongo.auth_query.password_field = password,salt
 | ---- | ----------------------------------------- | -------- |
 | enum | `plain`, `md5`, `sha`, `sha256`, `bcrypt` | `sha256` |
 
-#### 说明
+**说明**
 
 设置密码字段用的哈希算法。如需在 sha256 密码之后加 salt，可以设置为:
 
@@ -5070,7 +5102,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ------ | ------------- |
 | string | `username=%u` |
 
-#### 说明
+**说明**
 
 认证过程执行的 MongoDB 语句。命令可支持通配符:
 
@@ -5087,7 +5119,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 认证中是否使用 SuperUser。
 
@@ -5099,7 +5131,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ------ | ----------- |
 | string | `mqtt_user` |
 
-#### 说明
+**说明**
 
 若使用 SuperUser，指定 SuperUser 的 MongoDB Collection。
 
@@ -5111,7 +5143,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ------ | -------------------------- |
 | string | `username=%u, clientid=%c` |
 
-#### 说明
+**说明**
 
 若使用 SuperUser，指定查询 SuperUser 使用的 MongoDB 语句。
 
@@ -5123,7 +5155,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 是否开启 ACL 功能。
 
@@ -5135,7 +5167,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ------ | ---------- |
 | string | `mqtt_acl` |
 
-#### 说明
+**说明**
 
 若使用 ACL 功能，指定查询 ACL 规则的 MongoDB Collection。
 
@@ -5147,7 +5179,7 @@ auth.mongo.auth_query.password_hash = salt,bcrypt
 | ------ | ------------- |
 | string | `username=%u` |
 
-#### 说明
+**说明**
 
 若使用 ACL 功能，指定查询 ACL 规则使用的 MongoDB 语句。可支持多个 ACL 语句，多个语句之间使用 or 连接。
 
@@ -5172,7 +5204,7 @@ db.mqtt_acl.find({$or: [{username: "ilyas"},  {username: "$all"}]});
 | ------- | ------- |
 | integer | 1       |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，设置线程池大小。
 
@@ -5184,7 +5216,7 @@ MongoDB 拓扑参数，设置线程池大小。
 | ------- | ------- |
 | integer | 0       |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，当线程池中所有 workers 都处于忙碌状态时，允许创建多少额外的 worker 线程。
 
@@ -5196,7 +5228,7 @@ MongoDB 拓扑参数，当线程池中所有 workers 都处于忙碌状态时，
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，当有 worker 空闲时。多久之后释放额外的 worker 线程。单位: 毫秒。
 
@@ -5208,7 +5240,7 @@ MongoDB 拓扑参数，当有 worker 空闲时。多久之后释放额外的 wor
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，多长时间检查一次有无空闲线程，以释放额外的 worker。
 
@@ -5220,7 +5252,7 @@ MongoDB 拓扑参数，多长时间检查一次有无空闲线程，以释放额
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，选择用来处理用户请求的 Secondary 节点的策略。记到所有节点的 RTT 中的最小值为 LowestRTT，那么只有那些 RTT < LowestRTT + local_threshold_ms 的 Secondary 节点会被选择。
 
@@ -5232,7 +5264,7 @@ MongoDB 拓扑参数，选择用来处理用户请求的 Secondary 节点的策�
 | ------- | ------- |
 | integer | 20000   |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，MongoDB 连接超时时间，单位: 毫秒。
 
@@ -5244,7 +5276,7 @@ MongoDB 拓扑参数，MongoDB 连接超时时间，单位: 毫秒。
 | ------- | ------- |
 | integer | 100     |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，MongoDB 消息发送超时时间，单位: 毫秒。
 
@@ -5256,7 +5288,7 @@ MongoDB 拓扑参数，MongoDB 消息发送超时时间，单位: 毫秒。
 | ------- | ------- |
 | integer | 30000   |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，选择 MongoDB Server 的超时时间，单位: 毫秒。
 
@@ -5268,7 +5300,7 @@ MongoDB 拓扑参数，选择 MongoDB Server 的超时时间，单位: 毫秒。
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，从线程池中选取 worker 的等待超时时间，单位: 毫秒。
 
@@ -5280,7 +5312,7 @@ MongoDB 拓扑参数，从线程池中选取 worker 的等待超时时间，单�
 | ------- | ------- |
 | integer | 10000   |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，拓扑扫描之间的间隔时间，单位: 毫秒。
 
@@ -5292,7 +5324,7 @@ MongoDB 拓扑参数，拓扑扫描之间的间隔时间，单位: 毫秒。
 | ------- | ------- |
 | integer | 1000    |
 
-#### 说明
+**说明**
 
 MongoDB 拓扑参数，`heartbeat_frequency_ms` 允许的最小值，单位: 毫秒。
 
@@ -5306,7 +5338,7 @@ MongoDB 拓扑参数，`heartbeat_frequency_ms` 允许的最小值，单位: 毫
 | ---- | ---------------- |
 | ip   | `127.0.0.1:3306` |
 
-#### 说明
+**说明**
 
 MySQL 服务器地址。
 
@@ -5318,7 +5350,7 @@ MySQL 服务器地址。
 | ------- | ------- |
 | integer | 8       |
 
-#### 说明
+**说明**
 
 数据库连接线程池大小。
 
@@ -5330,7 +5362,7 @@ MySQL 服务器地址。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 MySQL 用户名。
 
@@ -5342,7 +5374,7 @@ MySQL 用户名。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 MySQL 密码。
 
@@ -5354,7 +5386,7 @@ MySQL 密码。
 | ------ | ------- |
 | string | `mqtt`  |
 
-#### 说明
+**说明**
 
 MySQL 数据库名称。
 
@@ -5366,7 +5398,7 @@ MySQL 数据库名称。
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 MySQL 数据查询超时时间。查询超时将等同于未找到用户数据处理。
 
@@ -5378,7 +5410,7 @@ MySQL 数据查询超时时间。查询超时将等同于未找到用户数据�
 | ------ | -------------------------------------------------------------- |
 | string | `select password from mqtt_user where username = '%u' limit 1` |
 
-#### 说明
+**说明**
 
 认证时使用的 MySQL 选取语句，选取出来的数据将与经过由 `auth.mysql.password_hash` 指定的加密方式加密的密码进行比较，比较后内容一致的客户端将被允许登录。加盐后存储的密码需要同时选取盐对应的字段，例如 `select password, salt from mqtt_user where username = '%u' limit 1`。`password` 与 `salt` 字段名不可以修改，表名与 WHERE 子句中的字段名可以视情况变化。WHERE 子句支持以下占位符：
 
@@ -5397,7 +5429,7 @@ MySQL 数据查询超时时间。查询超时将等同于未找到用户数据�
 | ------ | ------- |
 | string | `sh256` |
 
-#### 说明
+**说明**
 
 存储在数据库的密码所使用的加密方式。支持以下加密方式：
 
@@ -5417,7 +5449,7 @@ MySQL 数据查询超时时间。查询超时将等同于未找到用户数据�
 | ------ | ------------------------------------------------------------------ |
 | string | `select is_superuser from mqtt_user where username = '%u' limit 1` |
 
-#### 说明
+**说明**
 
 超级用户认证时使用的 SQL 选取语句，此语句中所有表名与字段名都可视情况修改，当且仅当选取得到字段的值为 `1` 时，该用户为超级用户。WHERE 子句中支持的占位符与 `auth.mysql.auth_query` 相同。
 
@@ -5429,7 +5461,7 @@ MySQL 数据查询超时时间。查询超时将等同于未找到用户数据�
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
-#### 说明
+**说明**
 
 ACL 校验时使用的 SQL 选取语句，此语句中所有表名与字段名都可视情况修改。WHERE 子句中支持的占位符如下：
 
@@ -5449,7 +5481,7 @@ ACL 校验时使用的 SQL 选取语句，此语句中所有表名与字段名�
 | ---- | ---------------- |
 | ip   | `127.0.0.1:5432` |
 
-#### 说明
+**说明**
 
 PostgreSQL 服务器地址。
 
@@ -5461,7 +5493,7 @@ PostgreSQL 服务器地址。
 | ------- | ------- |
 | integer | 8       |
 
-#### 说明
+**说明**
 
 数据库连接线程池大小。
 
@@ -5473,7 +5505,7 @@ PostgreSQL 服务器地址。
 | ------ | ------- |
 | string | `root`  |
 
-#### 说明
+**说明**
 
 PostgreSQL 用户名。
 
@@ -5485,7 +5517,7 @@ PostgreSQL 用户名。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 PostgreSQL 密码。
 
@@ -5497,7 +5529,7 @@ PostgreSQL 密码。
 | ------ | ------- |
 | string | `mqtt`  |
 
-#### 说明
+**说明**
 
 PostgreSQL 数据库名称。
 
@@ -5509,7 +5541,7 @@ PostgreSQL 数据库名称。
 | ------ | ------- |
 | string | `utf8`  |
 
-#### 说明
+**说明**
 
 PostgreSQL 数据库字符编码格式。
 
@@ -5521,7 +5553,7 @@ PostgreSQL 数据库字符编码格式。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否启用 TLS 连接。
 
@@ -5533,7 +5565,7 @@ PostgreSQL 数据库字符编码格式。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 客户端私钥文件路径。
 
@@ -5545,7 +5577,7 @@ PostgreSQL 数据库字符编码格式。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 客户端证书文件路径。
 
@@ -5557,7 +5589,7 @@ PostgreSQL 数据库字符编码格式。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 客户端 CA 证书文件路径。
 
@@ -5569,7 +5601,7 @@ PostgreSQL 数据库字符编码格式。
 | ------ | -------------------------------------------------------------- |
 | string | `select password from mqtt_user where username = '%u' limit 1` |
 
-#### 说明
+**说明**
 
 认证时使用的 SQL 选取语句，同 `auth.mysql.auth_query`。
 
@@ -5581,7 +5613,7 @@ PostgreSQL 数据库字符编码格式。
 | ------ | ------- |
 | string | `sh256` |
 
-#### 说明
+**说明**
 
 存储在数据库的密码所使用的加密方式，同 `auth.mysql.password_hash`。
 
@@ -5593,7 +5625,7 @@ PostgreSQL 数据库字符编码格式。
 | ------ | ------------------------------------------------------------------ |
 | string | `select is_superuser from mqtt_user where username = '%u' limit 1` |
 
-#### 说明
+**说明**
 
 超级用户认证时使用的 SQL 选取语句，同 `auth.mysql.super_query`。
 
@@ -5605,7 +5637,7 @@ PostgreSQL 数据库字符编码格式。
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | string | `select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'` |
 
-#### 说明
+**说明**
 
 ACL 校验时使用的 SQL 选取语句，同 `auth.mysql.acl_query`。
 
@@ -5619,7 +5651,7 @@ ACL 校验时使用的 SQL 选取语句，同 `auth.mysql.acl_query`。
 | ---- | ------------------------------- | -------- |
 | enum | `single`, `sentinel`, `cluster` | `single` |
 
-#### 说明
+**说明**
 
 Redis 服务集群类型：
 - `single`：单节点服务。
@@ -5634,7 +5666,7 @@ Redis 服务集群类型：
 | ------ | ---------------- |
 | string | `127.0.0.1:6379` |
 
-#### 说明
+**说明**
 
 Redis 服务地址，如果有多个则以逗号分隔。例如，`192.168.0.1:6379, 192.168.0.2:6379`。
 
@@ -5646,7 +5678,7 @@ Redis 服务地址，如果有多个则以逗号分隔。例如，`192.168.0.1:6
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 Redis sentinel 模式下的集区名称。如果非 `sentinel` 模式，则不需要配置。
 
@@ -5658,7 +5690,7 @@ Redis sentinel 模式下的集区名称。如果非 `sentinel` 模式，则不�
 | ------- | -------------- | ------- |
 | integer | > 0            | 8       |
 
-#### 说明
+**说明**
 
 连接池大小。
 
@@ -5670,7 +5702,7 @@ Redis sentinel 模式下的集区名称。如果非 `sentinel` 模式，则不�
 | ------- | ------- |
 | integer | 0       |
 
-#### 说明
+**说明**
 
 要连接的 Redis 数据库序号。
 
@@ -5682,7 +5714,7 @@ Redis sentinel 模式下的集区名称。如果非 `sentinel` 模式，则不�
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 Redis 用户密码。
 
@@ -5694,7 +5726,7 @@ Redis 用户密码。
 | -------- | ------- |
 | duration | `5s`    |
 
-#### 说明
+**说明**
 
 Redis 查询超时时间。
 
@@ -5706,7 +5738,7 @@ Redis 查询超时时间。
 | ------ | ----------------------------- |
 | string | `HMGET mqtt_user:%u password` |
 
-#### 说明
+**说明**
 
 认证查询命令，可用站位符有：
  - `%u`：客户端用户名。
@@ -5722,7 +5754,7 @@ Redis 查询超时时间。
 | ---- | ----------------------------------------- | ------- |
 | enum | `plain`, `md5`, `sha`, `sha256`, `bcrypt` | `plain` |
 
-#### 说明
+**说明**
 
 Redis 存储的 `password` 字段的编码格式。
 
@@ -5734,7 +5766,7 @@ Redis 存储的 `password` 字段的编码格式。
 | ------ | -------------------------------- |
 | string | `HGET mqtt_user:%u is_superuser` |
 
-#### 说明
+**说明**
 
 超级用户查询命令，可用的占位符有：
  - `%u`：客户端用户名。
@@ -5750,7 +5782,7 @@ Redis 存储的 `password` 字段的编码格式。
 | ------ | --------------------- |
 | string | `HGETALL mqtt_acl:%u` |
 
-#### 说明
+**说明**
 
 ACL 查询命令。可用的占位符有：
  - `%u`：客户端用户名。
@@ -5766,7 +5798,7 @@ ACL 查询命令。可用的占位符有：
 | ------ | ---------------- |
 | string | `127.0.0.1:1883` |
 
-#### 说明
+**说明**
 
 桥接地址，支持两种格式，例如：
 - `emqx@192.168.0.100`：EMQX 节点名称，它表示将该节点的消息桥接到另外一个 EMQX 节点。
@@ -5780,7 +5812,7 @@ ACL 查询命令。可用的占位符有：
 | ---- | ---------------------------- | -------- |
 | enum | `mqttv3`, `mqttv4`, `mqttv5` | `mqttv4` |
 
-#### 说明
+**说明**
 
 MQTT 桥接的客户端协议版本。
 
@@ -5792,7 +5824,7 @@ MQTT 桥接的客户端协议版本。
 | ---- | ---------------- | -------- |
 | eunm | `manual`, `auto` | `manual` |
 
-#### 说明
+**说明**
 
 启动类型：
 - `auto`：跟随插件自动启动。
@@ -5806,7 +5838,7 @@ MQTT 桥接的客户端协议版本。
 | ------- | --------------- | ------- |
 | boolean | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否开启桥接模式，仅 MQTT 桥接支持。开启后 `emqx_bridge_mqtt` 启动的 MQTT 客户端在发送连接报文时会携带一个标志位，标识这是一个桥接客户端。
 
@@ -5820,7 +5852,7 @@ MQTT 桥接的客户端协议版本。
 | ------ | ------------ |
 | string | `bridge_aws` |
 
-#### 说明
+**说明**
 
 MQTT 桥接的客户端标识。
 
@@ -5832,7 +5864,7 @@ MQTT 桥接的客户端标识。
 | ------- | --------------- | ------- |
 | boolean | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 MQTT 桥接的 `clean_start` 标志。它表示客户端是否以 `清楚会话` 的方式连接到远程 MQTT Broker。
 
@@ -5844,7 +5876,7 @@ MQTT 桥接的 `clean_start` 标志。它表示客户端是否以 `清楚会话`
 | ------ | ------- |
 | string | `user`  |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端的用户名。
 
@@ -5856,7 +5888,7 @@ MQTT 桥接客户端的用户名。
 | ------ | -------- |
 | string | `passwd` |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端的密码。
 
@@ -5868,7 +5900,7 @@ MQTT 桥接客户端的密码。
 | ------ | ------------------- |
 | string | `topic1/#,topic2/#` |
 
-#### 说明
+**说明**
 
 桥接转发规则。例如：
 - `topic1/#, topic2/#`：`emqx_bridge_mqtt` 会将 EMQX 中所以与 `topic1/#`，`topic2/#` 匹配的主题消息进行转发。
@@ -5881,7 +5913,7 @@ MQTT 桥接客户端的密码。
 | ------ | --------------------- |
 | string | `bridge/aws/${node}/` |
 
-#### 说明
+**说明**
 
 转发主题的前缀。将消息转发到目标系统时，支持给该主题添加一个统一的前缀。
 
@@ -5893,7 +5925,7 @@ MQTT 桥接客户端的密码。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 订阅对端系统的主题。
 
@@ -5905,7 +5937,7 @@ MQTT 桥接客户端的密码。
 | ---- | -------------- | ------- |
 | enum | `0`, `1`, `2`  | `1`     |
 
-#### 说明
+**说明**
 
 订阅对端系统主题的 QoS。
 
@@ -5917,7 +5949,7 @@ MQTT 桥接客户端的密码。
 | ------ | -------------- |
 | string | `receive/aws/` |
 
-#### 说明
+**说明**
 
 接收消息的主题前缀。`emqx_bridge_mqtt` 支持给来着对端的消息添加一个统一的主题前缀。
 
@@ -5929,7 +5961,7 @@ MQTT 桥接客户端的密码。
 | ------- | --------------- | ------- |
 | boolean | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端是否开启 SSL。
 
@@ -5941,7 +5973,7 @@ MQTT 桥接客户端是否开启 SSL。
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端的 CA 证书文件路径。
 
@@ -5953,7 +5985,7 @@ MQTT 桥接客户端的 CA 证书文件路径。
 | ------ | --------------------------- |
 | string | `etc/certs/client-cert.pem` |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端的 SSL 证书文件路径。
 
@@ -5965,7 +5997,7 @@ MQTT 桥接客户端的 SSL 证书文件路径。
 | ------ | -------------------------- |
 | string | `etc/certs/client-key.pem` |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端的 SSL 秘钥文件路径。
 
@@ -5977,7 +6009,7 @@ MQTT 桥接客户端的 SSL 秘钥文件路径。
 | ------ | ----------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384` |
 
-#### 说明
+**说明**
 
 SSL 握手支持的加密套件。
 
@@ -5989,7 +6021,7 @@ SSL 握手支持的加密套件。
 | ------ | ------------------------------------------------------------------------ |
 | string | `PSK-AES128-CBC-SHA,PSK-AES256-CBC-SHA,PSK-3DES-EDE-CBC-SHA,PSK-RC4-SHA` |
 
-#### 说明
+**说明**
 
 SSL PSK 握手支持的加密套件。
 
@@ -6001,7 +6033,7 @@ SSL PSK 握手支持的加密套件。
 | -------- | ------- |
 | duration | `60s`   |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端的心跳间隔。
 
@@ -6013,7 +6045,7 @@ MQTT 桥接客户端的心跳间隔。
 | ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
-#### 说明
+**说明**
 
 MQTT 桥接客户端的 SSL 版本。
 
@@ -6025,7 +6057,7 @@ MQTT 桥接客户端的 SSL 版本。
 | -------- | ------- |
 | duration | `30s`   |
 
-#### 说明
+**说明**
 
 重连间隔。
 
@@ -6037,7 +6069,7 @@ MQTT 桥接客户端的 SSL 版本。
 | -------- | ------- |
 | duration | `20s`   |
 
-#### 说明
+**说明**
 
 QoS 1/2 消息重发间隔。
 
@@ -6049,7 +6081,7 @@ QoS 1/2 消息重发间隔。
 | ------- | ------- |
 | integer | 32      |
 
-#### 说明
+**说明**
 
 EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持批量发送消息以提搞吞吐。
 
@@ -6061,7 +6093,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------- | ------- |
 | integer | 32      |
 
-#### 说明
+**说明**
 
 飞行窗口大小。
 
@@ -6073,7 +6105,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------ | ---------------------- |
 | string | `etc/emqx_aws_bridge/` |
 
-#### 说明
+**说明**
 
 设置消息队列文件路径。不配置则仅使用内存存储。
 
@@ -6085,7 +6117,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | -------- | ------- |
 | bytesize | `10MB`  |
 
-#### 说明
+**说明**
 
 消息队列存储在磁盘的单个文件大小。
 
@@ -6097,7 +6129,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | -------- | ------- |
 | bytesize | `5GB`   |
 
-#### 说明
+**说明**
 
 消息队列允许存储的最大值。
 
@@ -6111,7 +6143,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------- | ------- |
 | integer | 5683    |
 
-#### 说明
+**说明**
 
 指定 CoAP 插件的 UDP 绑定端口。
 
@@ -6123,7 +6155,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 启用或关闭 CoAP 的统计功能。
 
@@ -6135,7 +6167,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------- | ------- |
 | integer | 5684    |
 
-#### 说明
+**说明**
 
 指定 CoAP 插件的 DTLS 绑定端口。
 
@@ -6147,7 +6179,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-#### 说明
+**说明**
 
 使用 DTLS 时，指定 DTLS 握手过程中是否校验客户端。
 
@@ -6159,7 +6191,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-#### 说明
+**说明**
 
 使用 DTLS 时，指定 DTLS 的私钥文件。
 
@@ -6171,7 +6203,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-#### 说明
+**说明**
 
 使用 DTLS 时，指定 DTLS 的证书文件。
 
@@ -6183,7 +6215,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-#### 说明
+**说明**
 
 使用 DTLS 时，指定 DTLS 的 CA 证书文件。
 
@@ -6195,7 +6227,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 使用 DTLS 时，DTLS 握手过程中若客户端没有证书，是否让握手失败。
 
@@ -6207,7 +6239,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-#### 说明
+**说明**
 
 使用 DTLS 时，指定 DTLS 服务端支持的 Cipher 列表。
 
@@ -6221,7 +6253,7 @@ EMQX 桥接的批处理大小。`emqx_bridge_mqtt` 的 EMQX 桥接模式支持�
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 Dashboard 默认用户的认证数据。`dashboard.default_user.login` 与 `dashboard.default_user.password` 必须同时存在。
 
@@ -6235,7 +6267,7 @@ Dashboard 默认用户的认证数据。`dashboard.default_user.login` 与 `dash
 | string  | 0.0.0.0:18083 |
 
 
-#### 说明
+**说明**
 
 HTTP 监听器的监听端口。
 </br>
@@ -6249,7 +6281,7 @@ HTTP 监听器的监听端口。
 | ------- | ------- |
 | integer | 4       |
 
-#### 说明
+**说明**
 
 此监听器将创建的监听进程数量。
 
@@ -6261,7 +6293,7 @@ HTTP 监听器的监听端口。
 | ------- | ------- |
 | integer | 512     |
 
-#### 说明
+**说明**
 
 此监听器允许同时建立的最大连接数量限制。
 
@@ -6273,7 +6305,7 @@ HTTP 监听器的监听端口。
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否设置套接字允许 IPv6 连接。
 
@@ -6285,7 +6317,7 @@ HTTP 监听器的监听端口。
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否限制套接字仅使用 IPv6，禁止任何 IPv4 连接。仅适用于 IPv6 套接字，即仅在 `dashboard.listener.http.inet6` 被设置为 `true` 时此配置项的值有实际意义。需要注意的是，在某些操作系统上，例如 Windows，此配置项唯一允许的值为 `true`。
 
@@ -6297,7 +6329,7 @@ HTTP 监听器的监听端口。
 | ------- | ------- |
 | integer | 18084   |
 
-#### 说明
+**说明**
 
 HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 
@@ -6309,7 +6341,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------- | ------- |
 | integer | 2       |
 
-#### 说明
+**说明**
 
 同 `dashboard.listener.http.acceptors`。
 
@@ -6321,7 +6353,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------- | ------- |
 | integer | 512     |
 
-#### 说明
+**说明**
 
 同 `dashboard.listener.http.max_clients`。
 
@@ -6333,7 +6365,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-#### 说明
+**说明**
 
 同 `dashboard.listener.http.inet6`。
 
@@ -6345,7 +6377,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `false` |
 
-#### 说明
+**说明**
 
 同 `dashboard.listener.http.ipv6_v6only`。
 
@@ -6357,7 +6389,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-#### 说明
+**说明**
 
 服务端私钥文件路径。
 
@@ -6369,7 +6401,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-#### 说明
+**说明**
 
 服务端证书文件路径。
 
@@ -6381,7 +6413,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
 该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
@@ -6395,7 +6427,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-#### 说明
+**说明**
 
 如果协商使用 Diffie Hellman 密钥交换的密码套件，则可以通过此配置项指定包含 PEM 编码的 Diffie Hellman 参数的文件路径。 如果未指定，则使用默认参数。
 
@@ -6407,7 +6439,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-#### 说明
+**说明**
 
 `verify_none` 表示关闭对端证书验证，服务端不会向客户端发出证书请求。`verify_peer` 表示开启对端证书验证，服务端会向客户端发出证书请求。当此配置项被设置为 `verify_peer` 时，通常需要配合 `dashboard.listener.https.fail_if_no_peer_cert` 一起使用，以指定是否强制客户端提供证书。
 
@@ -6419,7 +6451,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 必须配合 `dashboard.listener.https.verify` 一起使用。如果设置为 `true`，则服务端向客户端请求证书时如果客户端不提供证书将导致握手失败。如果设置为 `false`，则客户端即使不提供证书也能握手成功。
 
@@ -6431,7 +6463,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | ------------------------------- |
 | string | `tlsv1.3,tlsv1.2,tlsv1.1,tlsv1` |
 
-#### 说明
+**说明**
 
 指定服务端支持的 TLS 协议版本，版本之间由 `,` 分隔，支持的 TLS 协议版本有： `tlsv1.3`, `tlsv1.2`, `tlsv1.1`, `tlsv1`, `sslv3`。
 
@@ -6443,7 +6475,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-#### 说明
+**说明**
 
 指定服务端支持的加密套件。
 
@@ -6455,7 +6487,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 指定是否启动安全重协商机制。
 
@@ -6467,7 +6499,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 指定是否启用会话复用机制。
 
@@ -6479,7 +6511,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 如果设置为 `on`，则使用服务器的首选项进行密码选择。 如果设置为 `off`，则使用客户端的首选项。
 
@@ -6493,7 +6525,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------- | ------- |
 | integer | 5683    |
 
-#### 说明
+**说明**
 
 指定 LwM2M 使用的 UDP 端口。
 
@@ -6505,7 +6537,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | -------- | ------- |
 | duration | `1s`    |
 
-#### 说明
+**说明**
 
 指定允许的 LwM2M lifetime 最小值，单位: 秒。
 
@@ -6517,7 +6549,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | -------- | -------- |
 | duration | `86400s` |
 
-#### 说明
+**说明**
 
 指定允许的 LwM2M lifetime 最大值，单位: 秒。
 
@@ -6529,7 +6561,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------- | ------- |
 | integer | 22      |
 
-#### 说明
+**说明**
 
 指定 LwM2M Q 模式使用的窗口大小，单位: 秒。
 
@@ -6543,7 +6575,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | ----------------------- | ----------- |
 | enum | `coaproxy`, `undefined` | `undefined` |
 
-#### 说明
+**说明**
 
 设置是否使用 coaproxy。设置为 `undefined` 则不使用 coaproxy。
 
@@ -6555,7 +6587,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 在设备注册后是否自动下发 observe 命令。
 
@@ -6567,7 +6599,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | ----------- |
 | string | `lwm2m/%e/` |
 
-#### 说明
+**说明**
 
 设置 LwM2M 主题的挂载点。支持以下通配符:
 
@@ -6582,7 +6614,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | ------- |
 | string | `dn/#`  |
 
-#### 说明
+**说明**
 
 设备注册完成后，需要订阅的下行命令主题。
 
@@ -6594,7 +6626,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | --------- |
 | string | `up/resp` |
 
-#### 说明
+**说明**
 
 设备的上行回复需要发布到哪个主题。
 
@@ -6606,7 +6638,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | ----------- |
 | string | `up/notify` |
 
-#### 说明
+**说明**
 
 设备的上行报告消息 (notify) 需要发布到哪个主题。
 
@@ -6618,7 +6650,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | ------ | --------- |
 | string | `up/resp` |
 
-#### 说明
+**说明**
 
 设备的上行注册消息 (register) 需要发布到哪个主题。
 
@@ -6647,7 +6679,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 - always: 总是发布
 
 
-#### 说明
+**说明**
 
 设备的上行更新消息 (update) 需要发布到哪个主题。
 
@@ -6659,7 +6691,7 @@ HTTPS 监听器的监听端口，**默认此监听器被禁用**。
 | -------- | -------- |
 | bytesize | `1024KB` |
 
-#### 说明
+**说明**
 
 UDP 调优参数，指定 UDP 用户态缓存大小。
 
@@ -6671,7 +6703,7 @@ UDP 调优参数，指定 UDP 用户态缓存大小。
 | -------- | -------- |
 | bytesize | `1024KB` |
 
-#### 说明
+**说明**
 
 UDP 调优参数，指定 UDP 接收缓存大小。
 
@@ -6683,7 +6715,7 @@ UDP 调优参数，指定 UDP 接收缓存大小。
 | -------- | -------- |
 | bytesize | `1024KB` |
 
-#### 说明
+**说明**
 
 UDP 调优参数，指定 UDP 发送缓存大小。
 
@@ -6695,7 +6727,7 @@ UDP 调优参数，指定 UDP 发送缓存大小。
 | ------- | ------- |
 | integer | 20      |
 
-#### 说明
+**说明**
 
 UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 
@@ -6707,7 +6739,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-#### 说明
+**说明**
 
 指定 UDP DTLS 使用的证书文件。
 
@@ -6719,7 +6751,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-#### 说明
+**说明**
 
 指定 UDP DTLS 使用的私钥文件。
 
@@ -6731,7 +6763,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | ---- | --------------- |
 | dir  | `etc/lwm2m_xml` |
 
-#### 说明
+**说明**
 
 指定 LwM2M Object 定义文件存放的目录。
 
@@ -6745,7 +6777,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | ------- | ------- |
 | integer | 10000   |
 
-#### 说明
+**说明**
 
 分页查询时返回的最大记录数量。
 
@@ -6757,7 +6789,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | ------ | ------- |
 | string | `admin` |
 
-#### 说明
+**说明**
 
 默认应用的 AppId。
 
@@ -6769,7 +6801,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | ------ | -------- |
 | string | `public` |
 
-#### 说明
+**说明**
 
 默认应用的 AppSecret。
 
@@ -6782,7 +6814,7 @@ UDP 调优参数，指定每次从 UDP socket 读取多少个报文。
 | integer | 8081         |
 | string  | 0.0.0.0:8081 |
 
-#### 说明
+**说明**
 
 HTTP 监听器的监听端口。
 </br>
@@ -6796,7 +6828,7 @@ HTTP 监听器的监听端口。
 | ------- | ------- |
 | integer | 2       |
 
-#### 说明
+**说明**
 
 此监听器将创建的监听进程数量。
 
@@ -6808,7 +6840,7 @@ HTTP 监听器的监听端口。
 | ------- | ------- |
 | integer | 512     |
 
-#### 说明
+**说明**
 
 此监听器允许同时建立的最大连接数量限制。
 
@@ -6820,7 +6852,7 @@ HTTP 监听器的监听端口。
 | ------- | ------- |
 | integer | 512     |
 
-#### 说明
+**说明**
 
 TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
 
@@ -6832,7 +6864,7 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 HTTP 报文发送超时时间。
 
@@ -6844,7 +6876,7 @@ HTTP 报文发送超时时间。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 HTTP 报文发送超时后，是否关闭该连接。
 
@@ -6856,7 +6888,7 @@ HTTP 报文发送超时后，是否关闭该连接。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否设置套接字允许 IPv6 连接。
 
@@ -6868,7 +6900,7 @@ HTTP 报文发送超时后，是否关闭该连接。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否限制套接字仅使用 IPv6，禁止任何 IPv4 连接。仅适用于 IPv6 套接字，即仅在 `management.listener.http.inet6` 被设置为 `true` 时此配置项的值有实际意义。需要注意的是，在某些操作系统上，例如 Windows，此配置项唯一允许的值为 `true`。
 
@@ -6882,7 +6914,7 @@ HTTP 报文发送超时后，是否关闭该连接。
 | string  | -       | 0.0.0.0:8081 |
 
 
-#### 说明
+**说明**
 
 HTTPS 监听器的监听端口。
 </br>
@@ -6894,7 +6926,7 @@ HTTPS 监听器的监听端口。
 | ------- | ------- |
 | integer | 2       |
 
-#### 说明
+**说明**
 
 此监听器将创建的监听进程数量。
 
@@ -6906,7 +6938,7 @@ HTTPS 监听器的监听端口。
 | ------- | ------- |
 | integer | 512     |
 
-#### 说明
+**说明**
 
 此监听器允许同时建立的最大连接数量限制。
 
@@ -6918,7 +6950,7 @@ HTTPS 监听器的监听端口。
 | ------- | ------- |
 | integer | 512     |
 
-#### 说明
+**说明**
 
 TCP 连接队列的最大长度。它表明了系统中允许的正在三次握手的 TCP 连接队列最大个数。
 
@@ -6930,7 +6962,7 @@ TCP 连接队列的最大长度。它表明了系统中允许的正在三次握�
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 HTTPS 报文发送超时时间。
 
@@ -6942,7 +6974,7 @@ HTTPS 报文发送超时时间。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 HTTPS 报文发送超时后，是否关闭该连接。
 
@@ -6954,7 +6986,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-#### 说明
+**说明**
 
 服务端私钥文件路径。
 
@@ -6966,7 +6998,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-#### 说明
+**说明**
 
 服务端证书文件路径。
 
@@ -6978,7 +7010,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-#### 说明
+**说明**
 
 指定 SSL 的 CA 证书文件 (PEM)。该文件应包含发布服务器证书的所有中间CA证书以及根证书。
 该文件还应包含所有受信CA的证书用以用于验证客户端的证书。
@@ -6992,7 +7024,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-#### 说明
+**说明**
 
 `verify_none` 表示关闭对端证书验证，服务端不会向客户端发出证书请求。`verify_peer` 表示开启对端证书验证，服务端会向客户端发出证书请求。当此配置项被设置为 `verify_peer` 时，通常需要配合 `management.listener.https.fail_if_no_peer_cert` 一起使用，以指定是否强制客户端提供证书。
 
@@ -7004,7 +7036,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ---- | --------------- | ------- |
 | enum | `ture`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 必须配合 `management.listener.https.verify` 一起使用。如果设置为 `true`，则服务端向客户端请求证书时如果客户端不提供证书将导致握手失败。如果设置为 `false`，则客户端即使不提供证书也能握手成功。
 
@@ -7016,7 +7048,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否设置套接字允许 IPv6 连接。
 
@@ -7028,7 +7060,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 是否限制套接字仅使用 IPv6，禁止任何 IPv4 连接。仅适用于 IPv6 套接字，即仅在 `management.listener.https.inet6` 被设置为 `true` 时此配置项的值有实际意义。需要注意的是，在某些操作系统上，例如 Windows，此配置项唯一允许的值为 `true`。
 
@@ -7042,7 +7074,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ---- | -------------------------- | ------- |
 | enum | `ram`, `disc`, `disc_only` | `ram`   |
 
-#### 说明
+**说明**
 
 保留消息的存储类型，以下选项可用：
 
@@ -7066,7 +7098,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ------- | ------- |
 | integer | 0       |
 
-#### 说明
+**说明**
 
 保留消息的存储数量限制。一旦存储数量达到限制，可以替换已存在的保留消息，但不能为新的主题存储保留消息。0 表示没有限制。
 
@@ -7078,7 +7110,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | -------- | ------- |
 | bytesize | `1MB`   |
 
-#### 说明
+**说明**
 
 允许存储的保留消息的 Payload 最大长度限制。如果 Payload 超出最大限制，该保留消息可以被正常处理，但不会存储在服务端。
 
@@ -7090,7 +7122,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | -------- | ------- |
 | duration | `0`     |
 
-#### 说明
+**说明**
 
 保留消息的过期间隔，仅对协议版本低于 MQTT v5.0 的客户端生效，MQTT v5.0 客户端的保留消息过期间隔将以 `Message Expiry Interval` 的值为准。0 表示永不过期。
 
@@ -7104,7 +7136,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 忽略系统消息 ($SYS)。启用此选项规则引擎将不会处理系统消息。
 
@@ -7116,7 +7148,7 @@ HTTPS 报文发送超时后，是否关闭该连接。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 设置是否发布事件消息。可指定事件消息的 QoS，例如:
 
@@ -7151,7 +7183,7 @@ SELECT * FROM "$events/client_connected"
 | ------ | ------- |
 | string | `1884`  |
 
-#### 说明
+**说明**
 
 `emqx_sn` 监听的 UDP 端口。
 
@@ -7163,7 +7195,7 @@ SELECT * FROM "$events/client_connected"
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 ADVERTISE 消息广播间隔，单位：秒。
 
@@ -7175,7 +7207,7 @@ ADVERTISE 消息广播间隔，单位：秒。
 | ------- | ------- |
 | integer | 1       |
 
-#### 说明
+**说明**
 
 ADVERTISE 中的 MQTT-SN 网关 ID。
 
@@ -7187,7 +7219,7 @@ ADVERTISE 中的 MQTT-SN 网关 ID。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 是否开启客户端状态统计信息。
 
@@ -7199,7 +7231,7 @@ ADVERTISE 中的 MQTT-SN 网关 ID。
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 是否处理 QoS 为 -1 的消息。
 
@@ -7211,7 +7243,7 @@ ADVERTISE 中的 MQTT-SN 网关 ID。
 | -------- | ------- |
 | duration | `30s`   |
 
-#### 说明
+**说明**
 
 建立后的发呆时间，如果这段时间内未收到任何报文，则会关闭该连接。
 
@@ -7223,7 +7255,7 @@ ADVERTISE 中的 MQTT-SN 网关 ID。
 | ------ | ---------- |
 | string | `reserved` |
 
-#### 说明
+**说明**
 
 预定义的 Topic 与 TopicId 映射。Id 为 0 的主题是保留项，固定为 `reserved`。例如，预定义主题 `foo/bar` 的 Id 为 `1`：
 ```
@@ -7238,7 +7270,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | -------------- |
 | string | `mqtt_sn_user` |
 
-#### 说明
+**说明**
 
 `emqx_sn` 连接至 EMQX 的用户名。
 
@@ -7250,7 +7282,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ------- |
 | string | `abc`   |
 
-#### 说明
+**说明**
 
 `emqx_sn` 连接至 EMQX 的密码。
 
@@ -7264,7 +7296,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ----------------------- |
 | string | `http://127.0.0.1:9091` |
 
-#### 说明
+**说明**
 
 指定 Prometheus gateway 的 URI。
 
@@ -7276,7 +7308,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------- | ------- |
 | integer | 15000   |
 
-#### 说明
+**说明**
 
 指定 Stats 数据的收集间隔，单位: 毫秒。
 
@@ -7288,7 +7320,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ----------------- |
 | string | `emqx_prometheus` |
 
-#### 说明
+**说明**
 
 指定 Prometheus 的 Collector。
 
@@ -7302,7 +7334,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------- | ------- |
 | integer | 61613   |
 
-#### 说明
+**说明**
 
 指定 Stomp 插件监听的本地端口。
 
@@ -7314,7 +7346,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------- | ------- |
 | integer | 4       |
 
-#### 说明
+**说明**
 
 指定 Stomp 服务 Acceptor 线程池的大小。
 
@@ -7326,7 +7358,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------- | ------- |
 | integer | 512     |
 
-#### 说明
+**说明**
 
 指定 Stomp 服务支持的最大连接数。
 
@@ -7338,7 +7370,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 指定是否使用 SSL。
 
@@ -7350,7 +7382,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ------------------- |
 | string | `etc/certs/key.pem` |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定 SSL 的私钥文件。
 
@@ -7362,7 +7394,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | -------------------- |
 | string | `etc/certs/cert.pem` |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定 SSL 的证书文件。
 
@@ -7374,7 +7406,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ---------------------- |
 | string | `etc/certs/cacert.pem` |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定 SSL 的 CA 证书文件。
 
@@ -7386,7 +7418,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ------------------------- |
 | string | `etc/certs/dh-params.pem` |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定 Ephemeral Diffie-Helman 算法使用的 key 文件。
 
@@ -7398,7 +7430,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ---- | ---------------------------- | ------------- |
 | enum | `verify_peer`, `verify_none` | `verify_peer` |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定握手过程中是否校验客户端。
 
@@ -7410,7 +7442,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 若使用 SSL，SSL 握手过程中若客户端没有证书，是否让握手失败。
 
@@ -7422,7 +7454,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ----------------------- |
 | string | `tlsv1.2,tlsv1.1,tlsv1` |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定服务端支持的 SSL 的版本列表。
 
@@ -7434,7 +7466,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | -------- | ------- |
 | duration | `15s`   |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定 SSL 握手过程的超时时间。
 
@@ -7446,7 +7478,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | string | `ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA` |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定服务端支持的 Cipher 列表。
 
@@ -7458,7 +7490,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `off`   |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定在客户端不遵循 RFC 5746 的情况下，是否拒绝 renegotiation 请求。
 
@@ -7470,7 +7502,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定是否支持 SSL session 重用。
 
@@ -7482,7 +7514,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ---- | -------------- | ------- |
 | enum | `on`, `off`    | `on`    |
 
-#### 说明
+**说明**
 
 若使用 SSL，指定是否使用服务端的偏好设置选择 Ciphers。
 
@@ -7494,7 +7526,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ------- |
 | string | `guest` |
 
-#### 说明
+**说明**
 
 指定 Stomp 插件登录使用的 Username。
 
@@ -7506,7 +7538,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ------- |
 | string | `guest` |
 
-#### 说明
+**说明**
 
 指定 Stomp 插件登录使用的 Password。
 
@@ -7518,7 +7550,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `true`  |
 
-#### 说明
+**说明**
 
 是否允许匿名登录。
 
@@ -7530,7 +7562,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------- | ------- |
 | integer | 10      |
 
-#### 说明
+**说明**
 
 指定 Stomp 最大报文头数量。
 
@@ -7542,7 +7574,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------- | ------- |
 | integer | 1024    |
 
-#### 说明
+**说明**
 
 指定 Stomp 最大报文头长度。
 
@@ -7554,7 +7586,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------- | ------- |
 | integer | 8192    |
 
-#### 说明
+**说明**
 
 指定 Stomp 最大报文体长度。
 
@@ -7568,7 +7600,7 @@ mqtt.sn.predefined.topic.1 = foo/bar
 | ------ | ------------------- |
 | string | http://127.0.0.1:80 |
 
-#### 说明
+**说明**
 
 Webhook 请求转发的目的 Web 服务器地址。
 
@@ -7576,14 +7608,14 @@ Webhook 请求转发的目的 Web 服务器地址。
 
 ### web.hook.headers.\<Any\>
 
-#### 示例
+**说明**
 
 ```
 web.hook.headers.content-type = application/json
 web.hook.headers.accept = */*
 ```
 
-#### 说明
+**说明**
 
 指定 HTTP 请求头部中的数据。`<Key>` 指定 HTTP 请求头部中的字段名，此配置项的值为相应的字段值。`<Key>` 可以是标准的 HTTP 请求头部字段，也可以自定义的字段，可以配置多个不同的请求头部字段。
 
@@ -7595,7 +7627,7 @@ web.hook.headers.accept = */*
 | ---- | --------------------------- | ------- |
 | enum | `plain`, `base62`, `base64` | `plain` |
 
-#### 说明
+**说明**
 
 PUBLISH 报文中 Payload 字段的编码格式。
 
@@ -7607,7 +7639,7 @@ PUBLISH 报文中 Payload 字段的编码格式。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 CA 证书文件路径。
 
@@ -7619,7 +7651,7 @@ CA 证书文件路径。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 客户端证书文件路径。
 
@@ -7631,7 +7663,7 @@ CA 证书文件路径。
 | ------ | ------- |
 | string | -       |
 
-#### 说明
+**说明**
 
 客户端私钥文件路径。
 
@@ -7643,7 +7675,7 @@ CA 证书文件路径。
 | ---- | --------------- | ------- |
 | enum | `true`, `false` | `false` |
 
-#### 说明
+**说明**
 
 指定是否校验对端证书。
 
@@ -7655,7 +7687,7 @@ CA 证书文件路径。
 | ------- | ------- |
 | integer | 32      |
 
-#### 说明
+**说明**
 
 HTTP 连接进程池大小。
 
@@ -7667,7 +7699,7 @@ HTTP 连接进程池大小。
 | ------ | --------------------------------- |
 | string | `{"action": "on_client_connect"}` |
 
-#### 说明
+**说明**
 
 转发 `收到连接报文` 事件。
 
@@ -7679,7 +7711,7 @@ HTTP 连接进程池大小。
 | ------ | --------------------------------- |
 | string | `{"action": "on_client_connack"}` |
 
-#### 说明
+**说明**
 
 转发 `下发连接应答` 事件。
 
@@ -7691,7 +7723,7 @@ HTTP 连接进程池大小。
 | ------ | ----------------------------------- |
 | string | `{"action": "on_client_connected"}` |
 
-#### 说明
+**说明**
 
 转发 `客户端成功接入` 事件。
 
@@ -7703,7 +7735,7 @@ HTTP 连接进程池大小。
 | ------ | -------------------------------------- |
 | string | `{"action": "on_client_disconnected"}` |
 
-#### 说明
+**说明**
 
 转发 `客户端已断开` 事件。
 
@@ -7715,7 +7747,7 @@ HTTP 连接进程池大小。
 | ------ | ----------------------------------- |
 | string | `{"action": "on_client_subscribe"}` |
 
-#### 说明
+**说明**
 
 转发 `将订阅` 事件。
 
@@ -7727,7 +7759,7 @@ HTTP 连接进程池大小。
 | ------ | ------------------------------------- |
 | string | `{"action": "on_client_unsubscribe"}` |
 
-#### 说明
+**说明**
 
 转发 `将取消订阅` 事件。
 
@@ -7739,7 +7771,7 @@ HTTP 连接进程池大小。
 | ------ | ------------------------------------- |
 | string | `{"action": "on_session_subscribed"}` |
 
-#### 说明
+**说明**
 
 转发 `已订阅` 事件。
 
@@ -7751,7 +7783,7 @@ HTTP 连接进程池大小。
 | ------ | --------------------------------------- |
 | string | `{"action": "on_session_unsubscribed"}` |
 
-#### 说明
+**说明**
 
 转发 `已取消订阅` 事件。
 
@@ -7763,7 +7795,7 @@ HTTP 连接进程池大小。
 | ------ | ------------------------------------- |
 | string | `{"action": "on_session_terminated"}` |
 
-#### 说明
+**说明**
 
 转发 `会话已终止` 事件。
 
@@ -7775,7 +7807,7 @@ HTTP 连接进程池大小。
 | ------ | ---------------------------------- |
 | string | `{"action": "on_message_publish"}` |
 
-#### 说明
+**说明**
 
 转发 `消息发布` 事件。
 
@@ -7787,7 +7819,7 @@ HTTP 连接进程池大小。
 | ------ | ------------------------------------ |
 | string | `{"action": "on_message_delivered"}` |
 
-#### 说明
+**说明**
 
 转发 `消息已投递` 事件。
 
@@ -7799,7 +7831,7 @@ HTTP 连接进程池大小。
 | ------ | -------------------------------- |
 | string | `{"action": "on_message_acked"}` |
 
-#### 说明
+**说明**
 
 转发 `消息已应答` 事件。
 
@@ -7811,7 +7843,7 @@ HTTP 连接进程池大小。
 | ------ | -------------- |
 | string | `etc/emqx.lic` |
 
-#### 说明
+**说明**
 
 企业版证书存放的路径。
 
@@ -7822,7 +7854,7 @@ HTTP 连接进程池大小。
 | ------- | ------- |
 | percent | 80%     |
 
-#### 说明
+**说明**
 
 连接数高水位线告警，达到企业版证书允许实时在线连接数的百分比。超出水位线时会产生告警，不影响实际使用，
 - 发生告警后，可以参照[如何更新证书？](../faq/use-guide.md#怎样更新 EMQX license?)进行热更新。
@@ -7835,7 +7867,7 @@ HTTP 连接进程池大小。
 | ------- | ------- |
 | percent | 75%     |
 
-#### 说明
+**说明**
 
 连接数低水位线告警，低于达到企业版证书允许实时在线连接数的百分比则解除告警。
 
