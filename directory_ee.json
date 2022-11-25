@@ -602,10 +602,10 @@
       "path": "advanced/http-api"
     },
     {
-      "title": "参数配置",
+      "title": "配置文件",
       "children": [
         {
-          "title": "参数配置列表",
+          "title": "配置文件",
           "path": "configuration/configuration"
         },
         {
