@@ -14,7 +14,7 @@ Among the enhancements, therer are new exciting new features worth highlighting.
 - OTP upgrade from 24.1.5-3 to 24.3.4.2-1.
 - Customizable client aliases to make it easier to when creating customized authentication and authorization.
 
-It is possible to hot-upgrade from older version v4.4 to this version.
+It is possible to hot-upgrade from older version e4.4 to this version.
 Please note though, in order to start making use of the new features such as OCSP Stapling, CRL cache,
 a node restart (and configuration change) is required.
 
