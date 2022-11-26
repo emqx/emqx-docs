@@ -1,4 +1,4 @@
-# CRL/OCSP Stapling
+# CRL and OCSP Stapling
 
 EMQX supports SSL/TLS, you can use X.509 certificate to enable client authentication and transport encryption.
 
