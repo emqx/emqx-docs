@@ -1,10 +1,10 @@
 # Releases
 
-# v4.3.22
+## v4.3.22
 
 *Release Date: 2022-11-26*
 
-## Enhancements
+### Enhancements
 
 - Make sure listener's `tls_versions` config value is one or more of `tlsv1`, `tlsv1.1`, `tlsv1.2`, `tlsv1.3` [#9260](https://github.com/emqx/emqx/pull/9260).
 
@@ -50,7 +50,7 @@
 - For Rule-Engine resource creation failure, delay before the first retry [#9313](https://github.com/emqx/emqx/pull/9313).
   Prior to this change, the retry delay was added *after* the retry failure.
 
-## Bug fixes
+### Bug fixes
 
 - Fix that after uploading a backup file with an non-ASCII filename, HTTP API `GET /data/export` fails with status code 500 [#9224](https://github.com/emqx/emqx/pull/9224).
 
