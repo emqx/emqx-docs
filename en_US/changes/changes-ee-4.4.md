@@ -41,7 +41,7 @@ a node restart (and configuration change) is required.
 - Added a new rule engine bridge and corresponding rule action for GCP
   PubSub [#1523](https://github.com/emqx/emqx-enterprise/pull/1523).
 
-- Support to use placeholders like `${var}` in the `Collection` field of rule-engine's MongoDB actions [#1503](https://github.com/emqx/emqx-enterprise/pull/1503).
+- Support to use placeholders like `${var}` in the `Collection` field of Rule-Engine's MongoDB actions [#1503](https://github.com/emqx/emqx-enterprise/pull/1503).
 
 - Add a format check to the `host` field of the InfluxDB resource in Rule-Engine [#1426](https://github.com/emqx/emqx-enterprise/pull/1426).
   The host field should be an ip/domain without scheme and port.
@@ -77,7 +77,7 @@ a node restart (and configuration change) is required.
   emqx enterprise), so that CoAP devices are able to read the missed messages from the database when
   it is online again.
 
-- Support to use placeholders like `${var}` in the HTTP `Headers` of rule-engine's Webhook actions [#9239](https://github.com/emqx/emqx/pull/9239).
+- Support to use placeholders like `${var}` in the HTTP `Headers` of Rule-Engine's Webhook actions [#9239](https://github.com/emqx/emqx/pull/9239).
 
 - Asynchronously refresh the resources and rules during emqx boot-up [#9199](https://github.com/emqx/emqx/pull/9199).
   This is to avoid slowing down the boot if some resources spend long time establishing the connection.
@@ -156,7 +156,7 @@ a node restart (and configuration change) is required.
   Before the fix, it always returned `200` even if the EMQX application was not running.  Now it returns `503` in that case.
 
 - Fix message delivery related event encoding [#9226](https://github.com/emqx/emqx/pull/9226)
-  For rule-engine's input events like `$events/message_delivered`, and `$events/message_dropped`,
+  For Rule-Engine's input events like `$events/message_delivered`, and `$events/message_dropped`,
   if the message was delivered to a shared-subscription, the encoding (to JSON) of the event will fail.
   Affected versions: `v4.3.21`, `v4.4.10`, `e4.3.16` and `e4.4.10`.
 
@@ -218,9 +218,9 @@ a node restart (and configuration change) is required.
   if we send a message to this topic, then an error will occur and the MQTT connection will crash.
   After this change QoS will be clamped into range [0, 2].
 
-- Fix rule-engine increased 'success' counter when get subscriptions from Redis failed (due to query Redis timeout).
+- Fix Rule-Engine increased 'success' counter when get subscriptions from Redis failed (due to query Redis timeout).
 
-- Fix rule-engine increased 'success' counter when saving offline messages with QoS = 0.
+- Fix Rule-Engine increased 'success' counter when saving offline messages with QoS = 0.
   We don't allow saving offline messages to backends with QoS = 0, so we need to increase the 'failed' counter instead of the 'success' counter in this case.
 
 - Fix the `verify` field is missing from the SSL settings of redis-cluster and redis-sentinel resources.
