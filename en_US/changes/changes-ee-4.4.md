@@ -5,7 +5,7 @@
 *Release Date: 2022-11-26*
 
 This release included 23 enhancements and 21 bug fixes.
-Among the enhancements, therer are new exciting new features worth highlighting.
+Among the enhancements, there are new exciting new features worth highlighting.
 
 - Google PubSub integration as a Rule-Engine data bridge.
 - OCSP (Online Certificate Status Protocol) Stapling.
@@ -14,8 +14,8 @@ Among the enhancements, therer are new exciting new features worth highlighting.
 - OTP upgrade from 24.1.5-3 to 24.3.4.2-1.
 - Customizable client aliases to make it easier to when creating customized authentication and authorization.
 
-It is possible to hot-upgrade from older version e4.4 to this version.
-Please note though, in order to start making use of the new features such as OCSP Stapling, CRL cache,
+It is possible to hot-upgrade from the older version e4.4 to this version.
+Please note though, in order to start making use of the new features such as OCSP Stapling, and CRL cache,
 a node restart (and configuration change) is required.
 
 ### Enhancements
