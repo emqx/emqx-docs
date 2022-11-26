@@ -1113,8 +1113,6 @@ ACL 检查失败后，执行的操作。
 
 <br />
 
-
-
 ### alias_enrichment_module
 
 | Type    | Default  |
@@ -1152,9 +1150,40 @@ ACL 检查失败后，执行的操作。
 指定一个实现了 `check_authn/2` 函数的模块。 这个
 该函数将被用于 `client.authenticate` 钩子，作为一种实现自定义认证逻辑的方式。
 
+### acl_order
 
+| Type    | Default  |
+| ------- | -------- |
+| string  | `none`   |
 
-## mqtt
+#### Description
+
+配置多个 ACL 后端时，可以使用该配置来指定检查的顺序。
+默认值 none 表示未定义任何顺序。使用逗号分隔多个后端名称（或别名）。
+例如 `jwt,http` 表示先检查 `jwt`，再检查 `http`。
+支持的名称有：`internal`（或 `file`）、`http`、`jwt`、`ldap`、`mnesia`、`mongo`（或 `mongodb`）、`mysql`、`pgsql`（或 `postgres`）、`redis`。
+指定顺序的后端总是排在未指定顺序的前面，例如如果使用了 `mnesia`，`jwt` 和 `http`，但是在配置中仅指定了 `jwt,http`，那么 `mnesia` 会排在最后。
+如果使用了第三方插件，则必需使用具体的回调模块名称，例如 `my_auth_plugin_module`。
+
+:::tip Tip
+无法识别的名字会被忽略。
+:::
+
+### auth_order
+
+| Type    | Default  |
+| ------- | -------- |
+| string  | `none`   |
+
+#### Description
+
+置多个认证后端时，可以使用该配置来指定检查的顺序。
+默认值 none 表示未定义任何顺序。使用逗号分隔多个后端名称（或别名）。
+配置使用与 `acl_order` 类似，只是认证没有 `internal` 这个后端。
+
+:::tip Tip
+无法识别的名字会被忽略。
+:::
 
 ### flapping_detect_policy
 
@@ -1171,6 +1200,8 @@ ACL 检查失败后，执行的操作。
 例如，`30, 1m, 5m`，它表示如果客户端在 1 分钟内断开连接 30 次，那么在后续 5 分钟内禁止登录。
 
 <br />
+
+## mqtt
 
 ### mqtt.max_packet_size
 
