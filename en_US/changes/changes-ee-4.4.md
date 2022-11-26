@@ -1,5 +1,175 @@
 # Releases
 
+## e4.4.11
+
+*Release Date: 2022-11-26*
+
+This release included 23 enhancements and 21 bug fixes.
+Among the enhancements, therer are new exciting new features worth highlighting.
+
+- Google PubSub integration as a Rule-Engine data bridge.
+- OCSP (Online Certificate Status Protocol) Stapling.
+- CRL (Certificate Revocation List) cache.
+- Pulsar data bridge supports data buffering.
+- OTP upgrade from 24.1.5-3 to 24.3.4.2-1.
+- Customizable client aliases to make it easier to when creating customized authentication and authorization.
+
+It is possible to hot-upgrade from older version v4.4 to this version.
+Please note though, in order to start making use of the new features such as OCSP Stapling, CRL cache,
+a node restart (and configuration change) is required.
+
+### Enhancements
+
+- Upgraded Pulsar client to 0.7.0.
+  Now it's possible to buffer messages to be
+  produced to Pulsar while EMQX has no connection to the Pulsar
+  broker.  Such messages will be retained for a configurable amount of
+  time.
+
+  Also, credentials such as basic auth and JWT tokens used for Pulsar
+  authentication will be censored out when a crash happens, thus
+  avoiding secret leakage to logs.
+
+  **Note**: if an older EMQX version is upgraded to a version
+  containing this update, *and then* downgraded back to the previous
+  old version, there's a risk that some messages that were sent in a
+  sync manner might be sent but regarded as a timeout error, which in
+  turn causes such clients to be disconnected.
+
+- Added hot-configuration support for OCSP stapling and CRL checking/caching. [#1528](https://github.com/emqx/emqx-enterprise/pull/1528)
+
+- Added a new rule engine bridge and corresponding rule action for GCP
+  PubSub [#1523](https://github.com/emqx/emqx-enterprise/pull/1523).
+
+- Support to use placeholders like `${var}` in the `Collection` field of rule-engine's MongoDB actions [#1503](https://github.com/emqx/emqx-enterprise/pull/1503).
+
+- Add a format check to the `host` field of the InfluxDB resource in Rule-Engine [#1426](https://github.com/emqx/emqx-enterprise/pull/1426).
+  The host field should be an ip/domain without scheme and port.
+
+- OTP upgrade from 24.1.5-3 to 24.3.4.2-1 [#9265](https://github.com/emqx/emqx/pull/9265).
+  Change highlights:
+    - Erlang/OTP [SSL library vulnerability fix](https://nvd.nist.gov/vuln/detail/CVE-2022-37026)
+    - Added support for OCSP (Online Certificate Status Protocol) Stapling
+    - Added CRL (Certificate Revocation List) cache auto refresh
+
+- Added support for OCSP stapling and CRL
+  caching [#9297](https://github.com/emqx/emqx/pull/9297).
+
+- Added support for specifying custom modules for adding clientid and common name
+  aliases [#9297](https://github.com/emqx/emqx/pull/9297).
+  Now you can implement a simple callback to enrich clients with aliases, and then use the aliases
+  in the authentication and authorization (ACL) rules' place holders (`%cida` for clientid alias
+  and `%cna` for username alias).
+
+- Added support for specifying custom modules for custom authentication [#9297](https://github.com/emqx/emqx/pull/9297).
+  To support simple authentication rules, it is no longer necessary to implement a full-blown plugin.
+
+- Added a JWT management for Rule-Engine, for creating and refreshing JWT tokens in rule engine actions [#9241](https://github.com/emqx/emqx/pull/9241).
+  This feature is so far only used in EMQX Enterprise Google PubSub integration.
+  Can be used as webhook integration's JWT authentication against the webhook service endpoint.
+
+- Make sure listener's `tls_versions` config value is one or more of `tlsv1`, `tlsv1.1`, `tlsv1.2`, `tlsv1.3` [#9260](https://github.com/emqx/emqx/pull/9260).
+
+- Remove useless information from the dashboard listener failure log [#9260](https://github.com/emqx/emqx/pull/9260).
+
+- We now trigger the `'message.acked'` hook after the CoAP gateway sends a message to the device and receives the ACK from the device [#9264](https://github.com/emqx/emqx/pull/9264).
+  With this change, the CoAP gateway can be combined with the offline message caching function (in the
+  emqx enterprise), so that CoAP devices are able to read the missed messages from the database when
+  it is online again.
+
+- Support to use placeholders like `${var}` in the HTTP `Headers` of rule-engine's Webhook actions [#9239](https://github.com/emqx/emqx/pull/9239).
+
+- Asynchronously refresh the resources and rules during emqx boot-up [#9199](https://github.com/emqx/emqx/pull/9199).
+  This is to avoid slowing down the boot if some resources spend long time establishing the connection.
+
+- Add a warning log if the ACL check failed for subscription [#9124](https://github.com/emqx/emqx/pull/9124).
+  This is to make the ACL deny logging for subscription behave the same as for publish.
+
+- JWT ACL claim supports `all` action to imply the rules applie to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
+
+- Added a log censor to avoid logging sensitive data [#9189](https://github.com/emqx/emqx/pull/9189).
+  If the data to be logged is a map or key-value list which contains sensitive key words such as `password`, the value is obfuscated as `******`.
+
+- Enhanced log security in ACL modules, sensitive data will be obscured [#9242](https://github.com/emqx/emqx/pull/9242).
+
+- Add `management.bootstrap_apps_file` configuration to bulk import default app/secret when EMQX initializes the database [#9273](https://github.com/emqx/emqx/pull/9273).
+
+- Added two new configs for deterministic order of authentication and ACL checks [#9283](https://github.com/emqx/emqx/pull/9283).
+  The two new global config names are `auth_order` and `acl_order`.
+  When multiple ACL or auth plugins (or modules) are enabled, without this config, the order (in which each backend is queried)
+  is determined by the start/restart order of the plugin (or module).
+  Meaning, if a plugin (or module) is restarted after initial boot, it may get ordered to the end of the list.
+  With this config, you may set the order with a comma-speapated ACL or auth plugin names (or aliases).
+  For example: `acl_order = jwt,http`, this will make sure `jwt` is always checked before `http`,
+  meaning if JWT is not found (or no `acl` cliam) for a client, then the ACL check will fallback to use the HTTP backend.
+
+- Added configurations to enable more `client.disconnected` events (and counter bumps) [#9267](https://github.com/emqx/emqx/pull/9267).
+  Prior to this change, the `client.disconnected` event (and counter bump) is triggered when a client
+  performs a 'normal' disconnect, or is 'kicked' by system admin, but NOT triggered when a
+  stale connection had to be 'discarded' (for clean session) or 'takeovered' (for non-clean session) by new connection.
+  Now it is possible to set configs `broker.client_disconnect_discarded` and `broker.client_disconnect_takeovered` to `on` to enable the event in these scenarios.
+
+- For Rule-Engine resource creation failure, delay before the first retry [#9313](https://github.com/emqx/emqx/pull/9313).
+  Prior to this change, the retry delay was added *after* the retry failure.
+
+### Bug fixes
+
+- Fix the default authentication mechanism of Kafka resource changed to `NONE` from `PLAIN`
+  when upgrading emqx from e4.4.5 and older versions [#1509](https://github.com/emqx/emqx-enterprise/pull/1509).
+
+- Fix an upgrade issue for JWT authentication plugin [#1558](https://github.com/emqx/emqx-enterprise/pull/1558).
+  When upgrading from e4.4.3 or earlier, an EMQX internal resource which holds the keys will have to be restarted,
+  during the restart, clients may fail to be authenticated.
+
+- Fixed the option to choose the `reset_by_subscriber` offset reset
+  policy in Kafka Consumer [#1463](https://github.com/emqx/emqx-enterprise/pull/1463).
+
+- Added the missing `tlsv1.3` option to `tls_versions` in hot-config [#1532](https://github.com/emqx/emqx-enterprise/pull/1532).
+
+- Made Rule-Engine able to connect SQL server when its listening port is not the default (`1433`) [#1464](https://github.com/emqx/emqx-enterprise/pull/1464).
+
+- Make sure Schema-Registry API supports Percent-encoding `name` in HTTP request URI [#1497](https://github.com/emqx/emqx-enterprise/issues/1497).
+  Note that the `name` in `POST /api/v4/schemas` request body should not be percent-encoded as it's a JSON field value.
+
+- Fix an upgrade issue for JWT authentication plugin [#1554](https://github.com/emqx/emqx-enterprise/pull/1554).
+  When upgrading from e4.3.9 or earlier, an EMQX internal resource which holds the keys will have to be restarted,
+  during the restart, clients may fail to be authenticated.
+
+- Fix get trace list crash when trace not initialize. [#9156](https://github.com/emqx/emqx/pull/9156)
+
+- Fix create trace sometime failed by end_at time has already passed. [#9156](https://github.com/emqx/emqx/pull/9156)
+
+- Fix that after uploading a backup file with an non-ASCII filename, HTTP API `GET /data/export` fails with status code 500 [#9224](https://github.com/emqx/emqx/pull/9224).
+
+- Improve the display of rule's 'Maximum Speed' counter to only reserve 2 decimal places [#9185](https://github.com/emqx/emqx/pull/9185).
+  This is to avoid displaying floats like `0.30000000000000004` on the dashboard.
+
+- Fix the issue that emqx prints too many error logs when connecting to mongodb but auth failed [#9184](https://github.com/emqx/emqx/pull/9184).
+
+- Fix that after receiving publish in `idle mode` the emqx-sn gateway may panic [#9024](https://github.com/emqx/emqx/pull/9024).
+
+- "Pause due to rate limit" log level demoted from warning to notice [#9134](https://github.com/emqx/emqx/pull/9134).
+
+- Restore old `emqx_auth_jwt` module API, so the hook callback functions registered in older version will not be invalidated after hot-upgrade [#9144](https://github.com/emqx/emqx/pull/9144).
+
+- Fixed the response status code for the `/status` endpoint [#9210](https://github.com/emqx/emqx/pull/9210).
+  Before the fix, it always returned `200` even if the EMQX application was not running.  Now it returns `503` in that case.
+
+- Fix message delivery related event encoding [#9226](https://github.com/emqx/emqx/pull/9226)
+  For rule-engine's input events like `$events/message_delivered`, and `$events/message_dropped`,
+  if the message was delivered to a shared-subscription, the encoding (to JSON) of the event will fail.
+  Affected versions: `v4.3.21`, `v4.4.10`, `e4.3.16` and `e4.4.10`.
+
+- Make sure Rule-Engine API supports Percent-encoding `rule_id` and `resource_id` in HTTP request path [#9190](https://github.com/emqx/emqx/pull/9190).
+  Note that the `id` in `POST /api/v4/rules` should be literals (not encoded) when creating a `rule` or `resource`.
+  See docs [Create Rule](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-rules) [Create Resource](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-resources).
+
+- Calling 'DELETE /alarms/deactivated' now deletes deactived alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
+
+- When republishing messages or bridge messages to other brokers, check the validity of the topic and make sure it does not have topic wildcards [#9291](https://github.com/emqx/emqx/pull/9291).
+
+- Disable authorization for `api/v4/emqx_prometheus` endpoint on management api listener (default 8081) [#9294](https://github.com/emqx/emqx/pull/9294).
+
 ## e4.4.10
 
 *Release Date: 2022-10-14*
