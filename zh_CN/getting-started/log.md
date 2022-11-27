@@ -35,6 +35,10 @@ log.to = file
 
 从 4.3.0 版本开始，如果使用 Docker 部署 EMQX，默认只能通过 `docker logs` 命令查看 EMQX 日志。如需继续按日志文件的方式查看，可以在启动容器时将环境变量 `EMQX_LOG__TO` 设置为 `file` 或者 `both`。
 
+:::tip
+通过 `emqx console` 命令启动时，启动脚本通过环境变量覆盖 `log.to` 将其设置为 `console`，此时日志无法输出到文件。
+:::
+
 ## 日志级别
 
 EMQX 的日志分 8 个等级 ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt))，由低到高分别为：

@@ -64,6 +64,10 @@ log.rotation.size = 10MB
 log.rotation.count = 5
 ```
 
+:::tip
+When starting with the `emqx console` command, the startup script overrides `log.to` with the environment variable to set it to `console`, and the logs are not output to file.
+:::
+
 ## Output log file for log level
 
 If you want to write logs greater than or equal to a certain level to a separate file, you can configure `log.<level>.file` in `emqx.conf`:
