@@ -199,7 +199,6 @@ stream {
 
   server {
       listen 8883 ssl;
-      status_zone tcp_server;
       proxy_pass stream_backend;
       proxy_buffer_size 4k;
       ssl_handshake_timeout 15s;
