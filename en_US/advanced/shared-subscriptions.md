@@ -15,7 +15,6 @@ where ` topic` is the real topic name they subscribed to, and `$share/g/` is a s
 
 | Example         | Prefix      | Topic Name |
 | --------------- | ----------- | ---------- |
-| $queue/t/1      | $queue/     | t/1        |
 | $share/abc/t/1  | $share/abc/ | t/1        |
 
 ## Shared subscriptions in group
@@ -43,18 +42,6 @@ When EMQX Broker publishes a message `msg1` to topic `t1`:
           ---->  "$share/g2/topic"   --  [s4]
                                      \
                                       [s5] got msg1
-```
-
-## Shared subscriptions without group
-
-Shared subscriptions prefixed with `$queue/` is a shared subscription without a group. It is a special case of a `$share` subscription, which is equivalent to having all subscribers in one  group.
-
-```txt
-                                       [s1] got msg1
-        msg1,msg2,msg3               /
-[emqx]  --------------->  "$queue/topic" - [s2] got msg2
-                                     \
-                                       [s3] got msg3
 ```
 
 ## Load Balancing Policy and Dispatch ACK Configuration
