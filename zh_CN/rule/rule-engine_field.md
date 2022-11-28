@@ -300,7 +300,7 @@ FROM
 
 |        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
-| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout: keepalive 超时<br/>not_authorized:  认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed: 对端关闭了网络连接<br/>internal_error: 畸形报文或其他未知错误<br/> |
+| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout: keepalive 超时<br/>not_authorized:  认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed: 对端关闭了网络连接<br/>discarded: 因为相同 ClientID 的客户端上线且设置 `clean_start = true`<br/>takeovered: 因为相同 ClientID 的客户端上线且设置 `clean_start = false`<br/>internal_error: 畸形报文或其他未知错误<br/> |
 | clientid        | 消息目的 Client ID                                           |
 | username        | 消息目的用户名                                               |
 | peername        | 终端的 IPAddress 和 Port                                     |
