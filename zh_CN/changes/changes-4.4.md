@@ -10,7 +10,7 @@
 - 新增 OCSP (Online Certificate Status Protocol) Stapling。
 - 新增 CRL (Certificate Revocation List) cache。
 - OTP 从 24.1.5-3 升级到了 24.3.4.2-1。
-- 新增了 客户端别名的支持，使得客制化认证和授权更加容易实现。
+- 新增了 客户端别名的支持，使得定制化认证和授权更加容易实现。
 
 该版本仍支持从老版本的 v4.4 热升级上来，
 但需要注意的是：如果需要在热升级后使用新版本提供的功能（例如 OCSP Stapling 和 CRL）
