@@ -1506,8 +1506,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -1845,6 +1850,12 @@
             "description": "<br/>The payload of the message to be re-published.<br/>Template with variables is allowed, see description of the 'republish_args'.<br/>Defaults to ${payload}. If variable ${payload} is not found from the selected result<br/>of the rule, then the string \"undefined\" is used.<br/>",
             "example": "${payload}",
             "type": "string"
+          },
+          "user_properties": {
+            "default": "${user_properties}",
+            "description": "<br/>From which variable should the MQTT message's User-Property pairs be taken from.<br/>The value must be a map.<br/>You may configure it to <code>${pub_props.'User-Property'}</code> or<br/>use <code>SELECT *,pub_props.'User-Property' as user_properties</code><br/>to forward the original user properties to the republished message.<br/>You may also call <code>map_put</code> function like<br/><code>map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties</code><br/>to inject user properties.<br/>NOTE: MQTT spec allows duplicated user property names, but EMQX Rule-Engine does not.<br/>",
+            "example": "${pub_props.'User-Property'}",
+            "type": "string"
           }
         },
         "type": "object"
@@ -2120,8 +2131,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -3619,8 +3635,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -3691,6 +3712,10 @@
             "description": "The MQTT message payload.",
             "example": "hello emqx api",
             "type": "string"
+          },
+          "properties": {
+            "description": "The Properties of the PUBLISH message.",
+            "$ref": "#/components/schemas/emqx_mgmt_api_publish.message_properties"
           },
           "retain": {
             "default": false,
@@ -4515,8 +4540,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -4674,8 +4704,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -4933,16 +4968,22 @@
             "type": "string"
           },
           "sample_time_interval": {
-            "default": "10s",
+            "default": "30s",
             "description": "The sampling interval for metrics.",
             "example": "32s",
             "type": "string"
           },
           "flush_time_interval": {
-            "default": "10s",
+            "default": "30s",
             "description": "The push interval for metrics.",
             "example": "32s",
             "type": "string"
+          },
+          "tags": {
+            "default": {},
+            "description": "The tags for metrics.",
+            "example": {},
+            "type": "object"
           }
         },
         "type": "object"
@@ -5159,8 +5200,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -6037,8 +6083,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -6115,7 +6166,7 @@
             "type": "integer"
           },
           "count": {
-            "description": "Results count.",
+            "description": "Total number of records counted.<br/>Note: this field is <code>0</code> when the queryed table is empty, or if the query can not be optimized and requires a full table scan.",
             "minimum": 0,
             "type": "integer"
           }
@@ -6816,8 +6867,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -7556,8 +7612,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -8910,8 +8971,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -9104,15 +9170,6 @@
               2
             ],
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "emqx_gateway_api.update_disable_enable_only": {
-        "properties": {
-          "enable": {
-            "description": "Enable/Disable the gateway",
-            "type": "boolean"
           }
         },
         "type": "object"
@@ -10074,8 +10131,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -10703,8 +10765,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -12828,8 +12895,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           },
           "access_rules": {
             "default": [
@@ -14252,8 +14324,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -16404,8 +16481,13 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener.<br/>When set to <code>false</code> clients will be allowed to connect without authentication.<br/>",
-            "type": "boolean"
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "enum": [
+              true,
+              false,
+              "quick_deny_anonymous"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -16883,6 +16965,43 @@
           "dk_length": {
             "description": "Derived length for PBKDF2 hashing algorithm. If not specified, calculated automatically based on `mac_fun`.",
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_publish.message_properties": {
+        "properties": {
+          "payload_format_indicator": {
+            "description": "0 (0x00) Byte Indicates that the Payload is unspecified bytes, which is equivalent to not sending a Payload Format Indicator.<br/><br/>1 (0x01) Byte Indicates that the Payload is UTF-8 Encoded Character Data. The UTF-8 data in the Payload MUST be well-formed UTF-8 as defined by the Unicode specification and restated in RFC 3629.<br/>",
+            "example": 0,
+            "maximum": 1,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "message_expiry_interval": {
+            "description": "Identifier of the Message Expiry Interval. If the Message Expiry Interval has passed and the Server has not managed to start onward delivery to a matching subscriber, then it MUST delete the copy of the message for that subscriber.",
+            "type": "integer"
+          },
+          "response_topic": {
+            "description": "Identifier of the Response Topic.The Response Topic MUST be a UTF-8 Encoded, It MUST NOT contain wildcard characters.",
+            "example": "some_other_topic",
+            "type": "string"
+          },
+          "correlation_data": {
+            "description": "Identifier of the Correlation Data. The Server MUST send the Correlation Data unaltered to all subscribers receiving the Application Message.",
+            "type": "string"
+          },
+          "user_properties": {
+            "description": "The User-Property key-value pairs. Note: in case there are duplicated keys, only the last one will be used.",
+            "example": {
+              "foo": "bar"
+            },
+            "type": "object"
+          },
+          "content_type": {
+            "description": "The Content Type MUST be a UTF-8 Encoded String.",
+            "example": "text/plain",
+            "type": "string"
           }
         },
         "type": "object"
@@ -22425,83 +22544,83 @@
                   "general_client": {
                     "summary": "General Client Info",
                     "value": {
-                      "mqueue_dropped": 0,
-                      "subscriptions_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "recv_pkt": 1,
-                      "inflight_max": "infinity",
-                      "recv_cnt": 1,
                       "send_msg": 0,
-                      "is_bridge": false,
-                      "mailbox_len": 0,
-                      "send_pkt": 1,
-                      "connected": true,
-                      "ip_address": "127.0.0.1",
+                      "recv_cnt": 1,
                       "expiry_interval": 0,
-                      "mqueue_max": "infinity",
-                      "subscriptions_cnt": 0,
-                      "recv_msg": 0,
-                      "disconnected_at": null,
-                      "reductions": 72022,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_name": "STOMP",
+                      "awaiting_rel_max": "infinity",
+                      "inflight_cnt": 0,
                       "proto_ver": "1.0",
+                      "recv_msg": 0,
+                      "username": "guest",
+                      "send_pkt": 1,
+                      "mailbox_len": 0,
+                      "connected": true,
+                      "is_bridge": false,
                       "clean_start": true,
-                      "awaiting_rel_cnt": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "reductions": 72022,
+                      "subscriptions_cnt": 0,
+                      "recv_pkt": 1,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "mqueue_len": 0,
+                      "ip_address": "127.0.0.1",
+                      "mqueue_max": "infinity",
+                      "subscriptions_max": "infinity",
                       "recv_oct": 56,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "send_oct": 61,
                       "keepalive": 0,
-                      "proto_name": "STOMP",
-                      "inflight_cnt": 0,
+                      "disconnected_at": null,
+                      "mqueue_dropped": 0,
                       "node": "emqx@127.0.0.1",
-                      "username": "guest",
                       "heap_size": 4185,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "port": 50675,
+                      "inflight_max": "infinity",
                       "send_cnt": 1,
-                      "awaiting_rel_max": "infinity"
+                      "awaiting_rel_cnt": 0
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M Client Info",
                     "value": {
-                      "mqueue_dropped": 0,
-                      "subscriptions_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "recv_pkt": 1,
-                      "inflight_max": "infinity",
-                      "lifetime": 86400,
-                      "recv_cnt": 1,
                       "send_msg": 0,
-                      "is_bridge": false,
-                      "mailbox_len": 0,
-                      "send_pkt": 1,
-                      "connected": true,
-                      "ip_address": "127.0.0.1",
+                      "recv_cnt": 1,
                       "expiry_interval": 0,
-                      "mqueue_max": "infinity",
-                      "subscriptions_cnt": 0,
-                      "recv_msg": 0,
-                      "disconnected_at": null,
-                      "reductions": 72022,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "proto_ver": "1.0",
-                      "clean_start": true,
-                      "awaiting_rel_cnt": 0,
-                      "mqueue_len": 0,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "recv_oct": 56,
-                      "send_oct": 61,
-                      "keepalive": 0,
                       "proto_name": "LwM2M",
+                      "awaiting_rel_max": "infinity",
                       "inflight_cnt": 0,
-                      "node": "emqx@127.0.0.1",
+                      "proto_ver": "1.0",
+                      "recv_msg": 0,
                       "username": "guest",
-                      "heap_size": 4185,
+                      "send_pkt": 1,
+                      "mailbox_len": 0,
+                      "connected": true,
+                      "is_bridge": false,
+                      "clean_start": true,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "reductions": 72022,
+                      "lifetime": 86400,
+                      "subscriptions_cnt": 0,
+                      "recv_pkt": 1,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "mqueue_len": 0,
+                      "ip_address": "127.0.0.1",
+                      "mqueue_max": "infinity",
+                      "subscriptions_max": "infinity",
+                      "recv_oct": 56,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_oct": 61,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "keepalive": 0,
+                      "disconnected_at": null,
+                      "mqueue_dropped": 0,
+                      "node": "emqx@127.0.0.1",
+                      "heap_size": 4185,
                       "port": 50675,
+                      "inflight_max": "infinity",
                       "send_cnt": 1,
-                      "awaiting_rel_max": "infinity"
+                      "awaiting_rel_cnt": 0
                     }
                   }
                 },
@@ -24151,6 +24270,73 @@
         ]
       }
     },
+    "/gateways/{name}/enable/{enable}": {
+      "put": {
+        "description": "Update the gateway basic configurations and running status.<br/><br/>Note: The Authentication and Listener configurations should be updated by other special APIs. ",
+        "parameters": [
+          {
+            "description": "Gateway Name.<br/><br/>It's enum with `stomp`, `mqttsn`, `coap`, `lwm2m`, `exproto`<br/>",
+            "example": "stomp",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Whether or not gateway is enabled",
+            "example": true,
+            "in": "path",
+            "name": "enable",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Gateway configuration updated"
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND",
+                        "RESOURCE_NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Not Found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Enable or disable gateway",
+        "tags": [
+          "Gateways"
+        ]
+      }
+    },
     "/rules": {
       "get": {
         "description": "List all rules",
@@ -24419,7 +24605,7 @@
               }
             }
           },
-          "400": {
+          "404": {
             "description": "",
             "content": {
               "application/json": {
@@ -24427,12 +24613,34 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "BAD_REQUEST"
+                        "NOT_FOUND"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bad Request",
+                      "description": "Not Found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal Service Error",
                       "type": "string"
                     }
                   },
@@ -24688,29 +24896,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND",
-                        "RESOURCE_NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Not Found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -24722,418 +24907,6 @@
           }
         ],
         "summary": "List All Gateways",
-        "tags": [
-          "Gateways"
-        ]
-      },
-      "post": {
-        "description": "Enable a gateway by confs.",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "examples": {
-                "coap_gateway": {
-                  "summary": "A simple CoAP gateway configs",
-                  "value": {
-                    "connection_required": false,
-                    "enable": true,
-                    "enable_stats": true,
-                    "heartbeat": "30s",
-                    "idle_timeout": "30s",
-                    "listeners": [
-                      {
-                        "bind": "5683",
-                        "max_conn_rate": 1000,
-                        "max_connections": 1024000,
-                        "name": "default",
-                        "type": "udp"
-                      }
-                    ],
-                    "mountpoint": "coap/",
-                    "name": "coap",
-                    "notify_type": "qos",
-                    "publish_qos": "coap",
-                    "subscribe_qos": "coap"
-                  }
-                },
-                "exproto_gateway": {
-                  "summary": "A simple ExProto gateway configs",
-                  "value": {
-                    "enable": true,
-                    "enable_stats": true,
-                    "handler": {
-                      "address": "http://127.0.0.1:9001"
-                    },
-                    "idle_timeout": "30s",
-                    "listeners": [
-                      {
-                        "bind": "7993",
-                        "max_conn_rate": 1000,
-                        "max_connections": 1024000,
-                        "name": "default",
-                        "type": "tcp"
-                      }
-                    ],
-                    "mountpoint": "exproto/",
-                    "name": "exproto",
-                    "server": {
-                      "bind": "9100"
-                    }
-                  }
-                },
-                "lwm2m_gateway": {
-                  "summary": "A simple LwM2M gateway configs",
-                  "value": {
-                    "auto_observe": false,
-                    "enable": true,
-                    "enable_stats": true,
-                    "idle_timeout": "30s",
-                    "lifetime_max": "86400s",
-                    "lifetime_min": "1s",
-                    "listeners": [
-                      {
-                        "bind": "5783",
-                        "max_conn_rate": 1000,
-                        "max_connections": 1024000,
-                        "name": "default",
-                        "type": "udp"
-                      }
-                    ],
-                    "mountpoint": "lwm2m/",
-                    "name": "lwm2m",
-                    "qmode_time_window": "22s",
-                    "translators": {
-                      "command": {
-                        "topic": "dn/#"
-                      },
-                      "notify": {
-                        "topic": "up/notify"
-                      },
-                      "register": {
-                        "topic": "up/resp"
-                      },
-                      "response": {
-                        "topic": "up/resp"
-                      },
-                      "update": {
-                        "topic": "up/resp"
-                      }
-                    },
-                    "update_msg_publish_condition": "always",
-                    "xml_dir": "/etc/emqx/lwm2m_xml"
-                  }
-                },
-                "mqttsn_gateway": {
-                  "summary": "A simple MQTT-SN gateway configs",
-                  "value": {
-                    "broadcast": true,
-                    "enable": true,
-                    "enable_qos3": true,
-                    "enable_stats": true,
-                    "gateway_id": 1,
-                    "idle_timeout": "30s",
-                    "listeners": [
-                      {
-                        "bind": "1884",
-                        "max_conn_rate": 1000,
-                        "max_connections": 1024000,
-                        "name": "default",
-                        "type": "udp"
-                      }
-                    ],
-                    "mountpoint": "mqttsn/",
-                    "name": "mqttsn",
-                    "predefined": [
-                      {
-                        "id": "1001",
-                        "topic": "pred/1001"
-                      },
-                      {
-                        "id": "1002",
-                        "topic": "pred/1002"
-                      }
-                    ]
-                  }
-                },
-                "stomp_gateway": {
-                  "summary": "A simple STOMP gateway configs",
-                  "value": {
-                    "enable": true,
-                    "enable_stats": true,
-                    "frame": {
-                      "max_body_length": 65535,
-                      "max_headers": 10,
-                      "max_headers_length": 1024
-                    },
-                    "idle_timeout": "30s",
-                    "listeners": [
-                      {
-                        "bind": "61613",
-                        "max_conn_rate": 1000,
-                        "max_connections": 1024000,
-                        "name": "default",
-                        "type": "tcp"
-                      }
-                    ],
-                    "mountpoint": "stomp/",
-                    "name": "stomp"
-                  }
-                }
-              },
-              "schema": {
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/emqx_gateway_api.exproto"
-                  },
-                  {
-                    "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
-                  },
-                  {
-                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
-                  },
-                  {
-                    "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
-                  },
-                  {
-                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "coap_gateway": {
-                    "summary": "A simple CoAP gateway configs",
-                    "value": {
-                      "connection_required": false,
-                      "enable": true,
-                      "enable_stats": true,
-                      "heartbeat": "30s",
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "5683",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "udp"
-                        }
-                      ],
-                      "mountpoint": "coap/",
-                      "name": "coap",
-                      "notify_type": "qos",
-                      "publish_qos": "coap",
-                      "subscribe_qos": "coap"
-                    }
-                  },
-                  "exproto_gateway": {
-                    "summary": "A simple ExProto gateway configs",
-                    "value": {
-                      "enable": true,
-                      "enable_stats": true,
-                      "handler": {
-                        "address": "http://127.0.0.1:9001"
-                      },
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "7993",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "tcp"
-                        }
-                      ],
-                      "mountpoint": "exproto/",
-                      "name": "exproto",
-                      "server": {
-                        "bind": "9100"
-                      }
-                    }
-                  },
-                  "lwm2m_gateway": {
-                    "summary": "A simple LwM2M gateway configs",
-                    "value": {
-                      "auto_observe": false,
-                      "enable": true,
-                      "enable_stats": true,
-                      "idle_timeout": "30s",
-                      "lifetime_max": "86400s",
-                      "lifetime_min": "1s",
-                      "listeners": [
-                        {
-                          "bind": "5783",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "udp"
-                        }
-                      ],
-                      "mountpoint": "lwm2m/",
-                      "name": "lwm2m",
-                      "qmode_time_window": "22s",
-                      "translators": {
-                        "command": {
-                          "topic": "dn/#"
-                        },
-                        "notify": {
-                          "topic": "up/notify"
-                        },
-                        "register": {
-                          "topic": "up/resp"
-                        },
-                        "response": {
-                          "topic": "up/resp"
-                        },
-                        "update": {
-                          "topic": "up/resp"
-                        }
-                      },
-                      "update_msg_publish_condition": "always",
-                      "xml_dir": "/etc/emqx/lwm2m_xml"
-                    }
-                  },
-                  "mqttsn_gateway": {
-                    "summary": "A simple MQTT-SN gateway configs",
-                    "value": {
-                      "broadcast": true,
-                      "enable": true,
-                      "enable_qos3": true,
-                      "enable_stats": true,
-                      "gateway_id": 1,
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "1884",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "udp"
-                        }
-                      ],
-                      "mountpoint": "mqttsn/",
-                      "name": "mqttsn",
-                      "predefined": [
-                        {
-                          "id": "1001",
-                          "topic": "pred/1001"
-                        },
-                        {
-                          "id": "1002",
-                          "topic": "pred/1002"
-                        }
-                      ]
-                    }
-                  },
-                  "stomp_gateway": {
-                    "summary": "A simple STOMP gateway configs",
-                    "value": {
-                      "enable": true,
-                      "enable_stats": true,
-                      "frame": {
-                        "max_body_length": 65535,
-                        "max_headers": 10,
-                        "max_headers_length": 1024
-                      },
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "61613",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "tcp"
-                        }
-                      ],
-                      "mountpoint": "stomp/",
-                      "name": "stomp"
-                    }
-                  }
-                },
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.exproto"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad request",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND",
-                        "RESOURCE_NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Not Found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Enable a Gateway",
         "tags": [
           "Gateways"
         ]
@@ -31085,9 +30858,10 @@
               "application/json": {
                 "example": {
                   "enable": true,
-                  "flush_time_interval": "32s",
-                  "sample_time_interval": "32s",
-                  "server": "127.0.0.1:8125"
+                  "flush_time_interval": "30s",
+                  "sample_time_interval": "30s",
+                  "server": "127.0.0.1:8125",
+                  "tags": {}
                 },
                 "schema": {
                   "$ref": "#/components/schemas/statsd.statsd"
@@ -31116,9 +30890,10 @@
             "application/json": {
               "example": {
                 "enable": true,
-                "flush_time_interval": "32s",
-                "sample_time_interval": "32s",
-                "server": "127.0.0.1:8125"
+                "flush_time_interval": "30s",
+                "sample_time_interval": "30s",
+                "server": "127.0.0.1:8125",
+                "tags": {}
               },
               "schema": {
                 "$ref": "#/components/schemas/statsd.statsd"
@@ -31133,9 +30908,10 @@
               "application/json": {
                 "example": {
                   "enable": true,
-                  "flush_time_interval": "32s",
-                  "sample_time_interval": "32s",
-                  "server": "127.0.0.1:8125"
+                  "flush_time_interval": "30s",
+                  "sample_time_interval": "30s",
+                  "server": "127.0.0.1:8125",
+                  "tags": {}
                 },
                 "schema": {
                   "$ref": "#/components/schemas/statsd.statsd"
@@ -34348,83 +34124,6 @@
       }
     },
     "/gateways/{name}": {
-      "delete": {
-        "description": "Unload the specified gateway",
-        "parameters": [
-          {
-            "description": "Gateway Name.<br/><br/>It's enum with `stomp`, `mqttsn`, `coap`, `lwm2m`, `exproto`<br/>",
-            "example": "stomp",
-            "in": "path",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad request",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND",
-                        "RESOURCE_NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Not Found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Unload the gateway",
-        "tags": [
-          "Gateways"
-        ]
-      },
       "get": {
         "description": "Get the gateway configurations",
         "parameters": [
@@ -34615,28 +34314,6 @@
               }
             }
           },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad request",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
           "404": {
             "description": "",
             "content": {
@@ -34789,9 +34466,6 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/emqx_gateway_api.update_disable_enable_only"
-                  },
-                  {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_exproto"
                   },
                   {
@@ -34805,6 +34479,21 @@
                   },
                   {
                     "$ref": "#/components/schemas/emqx_gateway_api.update_stomp"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.exproto"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.coap"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
+                  },
+                  {
+                    "$ref": "#/components/schemas/emqx_gateway_api.stomp"
                   }
                 ]
               }
@@ -34812,180 +34501,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "coap_gateway": {
-                    "summary": "A simple CoAP gateway configs",
-                    "value": {
-                      "connection_required": false,
-                      "enable": true,
-                      "enable_stats": true,
-                      "heartbeat": "30s",
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "5683",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "udp"
-                        }
-                      ],
-                      "mountpoint": "coap/",
-                      "name": "coap",
-                      "notify_type": "qos",
-                      "publish_qos": "coap",
-                      "subscribe_qos": "coap"
-                    }
-                  },
-                  "exproto_gateway": {
-                    "summary": "A simple ExProto gateway configs",
-                    "value": {
-                      "enable": true,
-                      "enable_stats": true,
-                      "handler": {
-                        "address": "http://127.0.0.1:9001"
-                      },
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "7993",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "tcp"
-                        }
-                      ],
-                      "mountpoint": "exproto/",
-                      "name": "exproto",
-                      "server": {
-                        "bind": "9100"
-                      }
-                    }
-                  },
-                  "lwm2m_gateway": {
-                    "summary": "A simple LwM2M gateway configs",
-                    "value": {
-                      "auto_observe": false,
-                      "enable": true,
-                      "enable_stats": true,
-                      "idle_timeout": "30s",
-                      "lifetime_max": "86400s",
-                      "lifetime_min": "1s",
-                      "listeners": [
-                        {
-                          "bind": "5783",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "udp"
-                        }
-                      ],
-                      "mountpoint": "lwm2m/",
-                      "name": "lwm2m",
-                      "qmode_time_window": "22s",
-                      "translators": {
-                        "command": {
-                          "topic": "dn/#"
-                        },
-                        "notify": {
-                          "topic": "up/notify"
-                        },
-                        "register": {
-                          "topic": "up/resp"
-                        },
-                        "response": {
-                          "topic": "up/resp"
-                        },
-                        "update": {
-                          "topic": "up/resp"
-                        }
-                      },
-                      "update_msg_publish_condition": "always",
-                      "xml_dir": "/etc/emqx/lwm2m_xml"
-                    }
-                  },
-                  "mqttsn_gateway": {
-                    "summary": "A simple MQTT-SN gateway configs",
-                    "value": {
-                      "broadcast": true,
-                      "enable": true,
-                      "enable_qos3": true,
-                      "enable_stats": true,
-                      "gateway_id": 1,
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "1884",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "udp"
-                        }
-                      ],
-                      "mountpoint": "mqttsn/",
-                      "name": "mqttsn",
-                      "predefined": [
-                        {
-                          "id": "1001",
-                          "topic": "pred/1001"
-                        },
-                        {
-                          "id": "1002",
-                          "topic": "pred/1002"
-                        }
-                      ]
-                    }
-                  },
-                  "stomp_gateway": {
-                    "summary": "A simple STOMP gateway configs",
-                    "value": {
-                      "enable": true,
-                      "enable_stats": true,
-                      "frame": {
-                        "max_body_length": 65535,
-                        "max_headers": 10,
-                        "max_headers_length": 1024
-                      },
-                      "idle_timeout": "30s",
-                      "listeners": [
-                        {
-                          "bind": "61613",
-                          "max_conn_rate": 1000,
-                          "max_connections": 1024000,
-                          "name": "default",
-                          "type": "tcp"
-                        }
-                      ],
-                      "mountpoint": "stomp/",
-                      "name": "stomp"
-                    }
-                  }
-                },
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.exproto"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.lwm2m"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.coap"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.mqttsn"
-                    },
-                    {
-                      "$ref": "#/components/schemas/emqx_gateway_api.stomp"
-                    }
-                  ]
-                }
-              }
-            }
+          "204": {
+            "description": "Gateway configuration updated"
           },
           "400": {
             "description": "",
@@ -35041,7 +34558,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update the gateway confs",
+        "summary": "Load or update the gateway confs",
         "tags": [
           "Gateways"
         ]
@@ -39450,41 +38967,41 @@
                     "summary": "General Client List",
                     "value": [
                       {
-                        "mqueue_dropped": 0,
-                        "subscriptions_max": "infinity",
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                        "recv_pkt": 1,
-                        "inflight_max": "infinity",
-                        "recv_cnt": 1,
                         "send_msg": 0,
-                        "is_bridge": false,
-                        "mailbox_len": 0,
-                        "send_pkt": 1,
-                        "connected": true,
-                        "ip_address": "127.0.0.1",
+                        "recv_cnt": 1,
                         "expiry_interval": 0,
-                        "mqueue_max": "infinity",
-                        "subscriptions_cnt": 0,
-                        "recv_msg": 0,
-                        "disconnected_at": null,
-                        "reductions": 72022,
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "proto_name": "STOMP",
+                        "awaiting_rel_max": "infinity",
+                        "inflight_cnt": 0,
                         "proto_ver": "1.0",
+                        "recv_msg": 0,
+                        "username": "guest",
+                        "send_pkt": 1,
+                        "mailbox_len": 0,
+                        "connected": true,
+                        "is_bridge": false,
                         "clean_start": true,
-                        "awaiting_rel_cnt": 0,
+                        "created_at": "2021-12-07T10:44:02.721+08:00",
+                        "reductions": 72022,
+                        "subscriptions_cnt": 0,
+                        "recv_pkt": 1,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                         "mqueue_len": 0,
+                        "ip_address": "127.0.0.1",
+                        "mqueue_max": "infinity",
+                        "subscriptions_max": "infinity",
                         "recv_oct": 56,
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
                         "send_oct": 61,
                         "keepalive": 0,
-                        "proto_name": "STOMP",
-                        "inflight_cnt": 0,
+                        "disconnected_at": null,
+                        "mqueue_dropped": 0,
                         "node": "emqx@127.0.0.1",
-                        "username": "guest",
                         "heap_size": 4185,
-                        "created_at": "2021-12-07T10:44:02.721+08:00",
                         "port": 50675,
+                        "inflight_max": "infinity",
                         "send_cnt": 1,
-                        "awaiting_rel_max": "infinity"
+                        "awaiting_rel_cnt": 0
                       }
                     ]
                   },
@@ -39492,43 +39009,43 @@
                     "summary": "LwM2M Client List",
                     "value": [
                       {
-                        "mqueue_dropped": 0,
-                        "subscriptions_max": "infinity",
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                        "recv_pkt": 1,
-                        "inflight_max": "infinity",
-                        "lifetime": 86400,
-                        "recv_cnt": 1,
                         "send_msg": 0,
-                        "is_bridge": false,
-                        "mailbox_len": 0,
-                        "send_pkt": 1,
-                        "connected": true,
-                        "ip_address": "127.0.0.1",
+                        "recv_cnt": 1,
                         "expiry_interval": 0,
-                        "mqueue_max": "infinity",
-                        "subscriptions_cnt": 0,
-                        "recv_msg": 0,
-                        "disconnected_at": null,
-                        "reductions": 72022,
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
-                        "proto_ver": "1.0",
-                        "clean_start": true,
-                        "awaiting_rel_cnt": 0,
-                        "mqueue_len": 0,
-                        "endpoint_name": "urn:imei:154928475237123",
-                        "recv_oct": 56,
-                        "send_oct": 61,
-                        "keepalive": 0,
                         "proto_name": "LwM2M",
+                        "awaiting_rel_max": "infinity",
                         "inflight_cnt": 0,
-                        "node": "emqx@127.0.0.1",
+                        "proto_ver": "1.0",
+                        "recv_msg": 0,
                         "username": "guest",
-                        "heap_size": 4185,
+                        "send_pkt": 1,
+                        "mailbox_len": 0,
+                        "connected": true,
+                        "is_bridge": false,
+                        "clean_start": true,
                         "created_at": "2021-12-07T10:44:02.721+08:00",
+                        "reductions": 72022,
+                        "lifetime": 86400,
+                        "subscriptions_cnt": 0,
+                        "recv_pkt": 1,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                        "mqueue_len": 0,
+                        "ip_address": "127.0.0.1",
+                        "mqueue_max": "infinity",
+                        "subscriptions_max": "infinity",
+                        "recv_oct": 56,
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "send_oct": 61,
+                        "endpoint_name": "urn:imei:154928475237123",
+                        "keepalive": 0,
+                        "disconnected_at": null,
+                        "mqueue_dropped": 0,
+                        "node": "emqx@127.0.0.1",
+                        "heap_size": 4185,
                         "port": 50675,
+                        "inflight_max": "infinity",
                         "send_cnt": 1,
-                        "awaiting_rel_max": "infinity"
+                        "awaiting_rel_cnt": 0
                       }
                     ]
                   }

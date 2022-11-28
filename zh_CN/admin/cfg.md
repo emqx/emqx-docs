@@ -1,6 +1,6 @@
 # 配置文件
 
-<!--5.0.10-->
+<!--5.0.11-->
 EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) 。
 HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常适用于易于人类读写的配置数据存储。
 
@@ -2326,7 +2326,7 @@ in <code>zone</code> configs
 
 - max_topic_levels: <code>1..65535</code>
   * default: 
-  `65535`
+  `128`
 
   允许的最大主题层级。
 
@@ -2651,13 +2651,15 @@ Settings for the MQTT over QUIC listener.
   速率限制类型
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-  配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+  配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+  配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
 
@@ -2744,13 +2746,15 @@ Settings for the MQTT over SSL listener.
   速率限制类型
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-  配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+  配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+  配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
 - access_rules: <code>[string()]</code>
@@ -2877,13 +2881,15 @@ Settings for the MQTT over TCP listener.
   速率限制类型
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-  配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+  配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+  配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
 - access_rules: <code>[string()]</code>
@@ -3006,13 +3012,15 @@ Settings for the MQTT over WebSocket listener.
   速率限制类型
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-  配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+  配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+  配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
 - access_rules: <code>[string()]</code>
@@ -3139,13 +3147,15 @@ Settings for the MQTT over WebSocket/SSL listener.
   速率限制类型
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-  配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+  配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+  配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
 - access_rules: <code>[string()]</code>
@@ -7157,8 +7167,22 @@ Settings for the telemetry module.
   `"${payload}"`
 
 
-  要重新发布的消息的有效负载。允许使用带有变量的模板，请参阅“republish_args”的描述。。
+  要重新发布的消息的有效负载。允许使用带有变量的模板，请参阅“republish_args”的描述。
   默认为 ${payload}。 如果从所选结果中未找到变量 ${payload}，则使用字符串 "undefined"。
+
+
+- user_properties: <code>binary()</code>
+  * default: 
+  `"${user_properties}"`
+
+
+  指定使用哪个变量来填充 MQTT 消息的 User-Property 列表。这个变量的值必须是一个 map 类型。
+  可以设置成 <code>${pub_props.'User-Property'}</code> 或者
+  使用 <code>SELECT *,pub_props.'User-Property' as user_properties</code> 来把源 MQTT 消息
+  的 User-Property 列表用于填充。
+  也可以使用 <code>map_put</code> 函数来添加新的 User-Property，
+  <code>map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties</code>
+  注意：MQTT 协议允许一个消息中出现多次同一个 property 名，但是 EMQX 的规则引擎不允许。
 
 
 
@@ -12280,14 +12304,20 @@ StatsD 指标采集与推送配置。
 
 - sample_time_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
-  `"10s"`
+  `"30s"`
 
   指标的采样间隔。
 
 - flush_time_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
-  `"10s"`
+  `"30s"`
 
   指标的推送间隔。
+
+- tags: <code>map()</code>
+  * default: 
+  `{}`
+
+  指标的标签。
 
 

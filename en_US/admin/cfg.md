@@ -1,6 +1,6 @@
 # Configuration Files
 
-<!--5.0.10-->
+<!--5.0.11-->
 EMQX configuration files are in [HOCON](https://github.com/emqx/hocon) format.
 HOCON, or Human-Optimized Config Object Notation is a format for human-readable data,
 and a superset of JSON.
@@ -2412,7 +2412,7 @@ in <code>zone</code> configs
 
 - max_topic_levels: <code>1..65535</code>
   * default: 
-  `65535`
+  `128`
 
   Maximum topic levels allowed.
 
@@ -2743,13 +2743,17 @@ Settings for the MQTT over QUIC listener.
   Type of the rate limit.
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener.
-  When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  process goes through the configured authentication chain.
+  When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
+  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+  anonymous clients early.
 
 
 
@@ -2839,13 +2843,17 @@ Settings for the MQTT over SSL listener.
   Type of the rate limit.
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener.
-  When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  process goes through the configured authentication chain.
+  When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
+  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+  anonymous clients early.
 
 
 - access_rules: <code>[string()]</code>
@@ -2977,13 +2985,17 @@ Settings for the MQTT over TCP listener.
   Type of the rate limit.
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener.
-  When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  process goes through the configured authentication chain.
+  When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
+  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+  anonymous clients early.
 
 
 - access_rules: <code>[string()]</code>
@@ -3111,13 +3123,17 @@ Settings for the MQTT over WebSocket listener.
   Type of the rate limit.
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener.
-  When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  process goes through the configured authentication chain.
+  When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
+  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+  anonymous clients early.
 
 
 - access_rules: <code>[string()]</code>
@@ -3249,13 +3265,17 @@ Settings for the MQTT over WebSocket/SSL listener.
   Type of the rate limit.
 
 
-- enable_authn: <code>boolean()</code>
+- enable_authn: <code>true | false | quick_deny_anonymous</code>
   * default: 
   `true`
 
 
-  Set <code>true</code> (default) to enable client authentication on this listener.
-  When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  process goes through the configured authentication chain.
+  When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
+  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+  anonymous clients early.
 
 
 - access_rules: <code>[string()]</code>
@@ -7446,6 +7466,22 @@ payload = `msg: hello`, and `qos = 1`.
   Template with variables is allowed, see description of the 'republish_args'.
   Defaults to ${payload}. If variable ${payload} is not found from the selected result
   of the rule, then the string "undefined" is used.
+
+
+- user_properties: <code>binary()</code>
+  * default: 
+  `"${user_properties}"`
+
+
+  From which variable should the MQTT message's User-Property pairs be taken from.
+  The value must be a map.
+  You may configure it to <code>${pub_props.'User-Property'}</code> or
+  use <code>SELECT *,pub_props.'User-Property' as user_properties</code>
+  to forward the original user properties to the republished message.
+  You may also call <code>map_put</code> function like
+  <code>map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties</code>
+  to inject user properties.
+  NOTE: MQTT spec allows duplicated user property names, but EMQX Rule-Engine does not.
 
 
 
@@ -12590,14 +12626,20 @@ StatsD metrics collection and push configuration.
 
 - sample_time_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
-  `"10s"`
+  `"30s"`
 
   The sampling interval for metrics.
 
 - flush_time_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
-  `"10s"`
+  `"30s"`
 
   The push interval for metrics.
+
+- tags: <code>map()</code>
+  * default: 
+  `{}`
+
+  The tags for metrics.
 
 
