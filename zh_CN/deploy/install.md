@@ -57,6 +57,7 @@ EMQX 目前支持的操作系统:
 
      emqx2:
        image: emqx/emqx:5.0.9
+       container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.io"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
