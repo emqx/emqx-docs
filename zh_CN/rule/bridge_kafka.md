@@ -1,6 +1,7 @@
 # 桥接数据到 Kafka
 
 搭建 Kafka 环境，以 MacOS X 为例:
+
 ```bash
 wget https://archive.apache.org/dist/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 
@@ -14,8 +15,7 @@ cd kafka_2.13-2.8.0
 ./bin/kafka-server-start.sh config/server.properties
 ```
 
-创建 Kafka
-​       的主题:
+创建 Kafka 的主题:
 
 ```bash
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testTopic --create
@@ -94,3 +94,52 @@ $ ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic tes
 在规则列表里，可以看到刚才创建的规则的命中次数已经增加了 1:
 
 ![image](./assets/rule-engine/kafka-rulelist-0@2x.png)
+
+## 认证
+
+这一章节讲解如何配置和使用 Kafka 资源的认证功能。
+
+EMQX Kafka 资源支持如下几种认证方式：`NONE` (无认证)，`SCRAM_SHA_256`， `SCRAM_SHA_512`，以及 `Kerberos`。
+关于如何使用这些不同的认证机制，请参考 [Kafka 文档](https://docs.confluent.io/platform/current/kafka/overview-authentication-methods.html)
+
+要使用的认证机制可以在 “认证类型” 下面选择（见下图）。选择的认证类型不同，将显示不同的字段。
+
+![image](./assets/rule-engine/kafka_resource_0_0.png)
+
+PLAIN, SCRAM_SHA_256, 和 SCRAM_SHA_512 几种认证方式需要的字段是 Kafka 用户名及密码（见下图）。
+
+![image](./assets/rule-engine/kafka_resource_0_1.png)
+
+
+Kerberos身份验证方法的配置稍微复杂一些。
+
+在使用 Kerberos 身份验证设置 Kafka 资源之前，我们假设您有一个使用 Kerberos 认证的 Kafka 实例和一个 Kerberos 主体（也称为用户）的 Keytab 文件，该主体具有访问 Kafka 示例的权限。
+
+关于如何配置 Kerberos 认证，请参考 [Kafka 文档](https://docs.confluent.io/platform/current/kafka/authentication_sasl/authentication_sasl_gssapi.html#kafka-sasl-auth-gssapi) 以及 [Kerberos](https://web.mit.edu/kerberos/krb5-latest/doc/admin/index.html)
+
+你还可以参考 [Kafka and Kerberos example from the brod_gssapi project](https://github.com/kafka4beam/brod_gssapi/tree/master/example).
+
+Here is a list of common pitfalls that is worth being aware of before proceeding:
+
+在继续之前，这里列出了一些常见的坑请您注意一下：
+
+* 要使Kerberos身份验证正常工作，必须在运行EMQX的主机上安装Kerberos库、SASL库和SASL/GSSAPI Kerberos插件。
+  EMQX的官方Docker映像包含所需的库。如果您自己构建EMQX，则必须确保在构建开始之前安装了所需的库。
+  如果构建过程未找到Kerberos身份验证所需的库，则在构建时将打印警告，并禁用对Kerberos认证的支持。
+  在 Centos 7 系统上, 需要安装以下软件包：`libsasl2`, `libsasl2-dev`, `krb5-workstation`,
+  `cyrus-sasl-devel`, `cyrus-sasl`, `cyrus-sasl-gssapi` 和 `krb5-server`.
+  在 Ubuntu 22.04 系统上, 需要安装以下软件包：`krb5-kdc`, `krb5-admin-server`, `libkrb5-dev`,
+  `libsasl2-dev` and `libsasl2-modules-gssapi-mit`。
+  关于在其他平台上需要哪些软件包，请参考 [EMQX 官方容器文件](https://github.com/emqx/emqx-builder)。
+
+* Kerberos配置文件`/etc/krb5.conf`需要在所有Kerberos客户端和服务器之间同步。
+  必须将`/etc/krb5.conf`文件复制到多节点集群中的所有节点。关于如何配置 `/etc/krb5.conf`，请参考
+  [Kerberos 文档](https://web.mit.edu/kerberos/krb5-latest/doc/admin/conf_files/krb5_conf.html?highlight=krb5%20conf).
+
+* Kerberos 是时间敏感的，因此运行 EMQX、Kerberos 密钥分发中心，以及 Kafka 的主机的时间必须同步。
+
+使用 Kerberos 认证配置 Kafka 资源时，必须设置 Kerberos 主体（下图中的（1））和相应的 Kerberos Keytab（下图中为（2）和（3））。
+有两个选项用于指定 Keytab 文件（下图中的（2））。Keytab 可以直接从配置 UI 上传到主机，也可以指定指向主机上的 Keytab 文件路径。
+标有（3）的字段的类型会根据如何设置标有（2）的字段而变化。如果指定了 Keytab 路径并将 EMQX 设置为多节点群集，则必须将 Keytab 文件上载到所有节点上指定的路径。
+
+![image](./assets/rule-engine/kafka_resource_0_2.png)
