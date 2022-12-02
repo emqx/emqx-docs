@@ -99,6 +99,10 @@ In the action bar you can also click to settings or delete the authenticator, et
 
 ![image](./assets/authn-list.png)
 
+:::warning
+Disabled authentication will not authenticate any client, all clients can connect to EMQX. Please be careful.
+:::
+
 ## Users
 
 For users using the built-in database, click `Users` to get to the user management page, where you can manage authentication information, such as adding or deleting users, or you can download a template, fill in the template with relevant authentication information, and click `Import` to create authentication data in bulk.
@@ -118,6 +122,10 @@ You can monitor the metrics data under each node from the list at the bottom of 
 Click `Settings` in the list page to modify the authentication configuration.
 
 In the settings page, you can modify the current authenticator configuration, such as when some connection information of the external database changes, when you need to modify the `UserID Type` of the built-in database as username or client ID, or modify the encryption method of the password, etc.
+
+:::warning
+When using the built-in database, updating the password `Password Hash` or `Salt Position` will cause the added authentication data to be unavailable, please be careful.
+:::
 
 ![image](./assets/authn-settings.png)
 

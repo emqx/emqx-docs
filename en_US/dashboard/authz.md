@@ -68,9 +68,13 @@ The authorization list is similar to the authentication list in that each column
 
 In the actions bar, you can also click on settings or delete the authorization, etc.
 
-## Users
+:::warning
+Disabled the authorization will affect the operation of permissions when the client publishes/subscribes. Please be careful.
+:::
 
-For users using the built-in database, click `Users` on the authorization list page to get to the users' page, where you can manage and configure authorization rules. You can distinguish clients by `Client ID` or `Username`, or add authorization rules for all users.
+## Permissions
+
+For users using the built-in database, click `Permissions` on the authorization list page to get to the users' page, where you can manage and configure authorization rules. You can distinguish clients by `Client ID` or `Username`, or add authorization rules for all users.
 
 To use it, enter a topic for which you need to configure authorization rules, and choose whether to configure its permissions to allow or deny when subscribing to this topic or when publishing payload to this topic.
 
