@@ -56,7 +56,7 @@ The retainer menu is the Retained Message related configuration items of the MQT
 
 ### System Topic
 
-The System Topic menu is the system topic related configuration items of EMQX; EMQX will periodically publish the running status, usage statistics, and instant client events to the system topic starting with `$SYS/`. When the client subscribes to this topic, EMQX will publish the relevant information on this topic. The configuration items of the system topic include the Messages publish interval, the Heartbeat interval, etc.
+The system Topic menu is the system topic related configuration items of EMQX; EMQX will periodically publish the running status, usage statistics, and instant client events to the system topic starting with `$SYS/`. The configuration items of the system topic include the Messages Publish Interval, the Heartbeat Interval, etc. When the client subscribes to this topic, EMQX will publish the relevant information on this topic.
 
 ### Extension
 
