@@ -50,11 +50,17 @@ Session menu is the session related configuration items of the MQTT protocol, in
 
 ### Retainer
 
-Retainer menu is the MQTT protocol related configuration items of the retained message, including the maximum number of retained messages, the storage type, etc. You can also view the retained messages in EMQX, view the topic, QoS, which client ID it comes from, the publish time, and click to view the specific Payload content, etc.
+The retainer menu is the Retained Message related configuration items of the MQTT protocol, including whether to enable the Retained Message function, the storage type and method of the message, the maximum number of Retained Messages, the payload size of the Retained Message, the expiration interval of the Retained Message, etc. When you need to modify the configuration of the Retained Message, you can configure it here.
 
-### Advanced
+> When the Retained Message is disabled, the existing Retained Messages will not be deleted.
 
-Advanced menu is the advanced configuration items of the MQTT protocol, including the configuration of the system topic $SYS, including the message publishing period, heartbeat period, etc. Topic rewrite, you can manually add the topic, action, original topic and target topic that needs to be rewritten. Proxy subscription, add the built-in rules of the proxy subscription. Finally, you can set the delayed publishing function.
+### System Topic
+
+The system Topic menu is the system topic related configuration items of EMQX; EMQX will periodically publish the running status, usage statistics, and instant client events to the system topic starting with `$SYS/`. The configuration items of the system topic include the Messages Publish Interval, the Heartbeat Interval, etc. When the client subscribes to this topic, EMQX will publish the relevant information on this topic.
+
+### Extension
+
+The extension menu is the extension-related configuration item of EMQX, which provides some extension functions for MQTT clients, including Topic Rewrite. You can manually add the topic to be rewritten, select the action type--publish/subscribe, enter the original topic, regular expression, and destination topic. Auto Subscribe, you can manually add a Auto Subscribe. For the already added Auto Subscribe, you can delete and edit it. Finally, you can set the Delayed Publish, view the delayed published messages, etc.
 
 More about the MQTT configuration, please refer to [MQTT Configuration](../admin/cfg.md#brokermqtt).
 

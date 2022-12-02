@@ -20,6 +20,10 @@ Before enabling the gateway, the gateway needs to setup; after setup, you can vi
 
 ![image](./assets/gateways.png)
 
+::: warning
+Disable a gateway will cause all connections under the gateway to be disconnected, and the connections need to be re-established. Please be careful.
+:::
+
 ### Gateway Setup
 
 On the Gateways page, select the protocol gateway you wish to enable and click the `Setup` button to the right of the list to enter the initialize the protocol gateway page. There are 3 steps to initialize the gateway

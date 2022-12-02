@@ -189,6 +189,7 @@
       children: 
         - dashboard/subscriptions/subscriptions
         - dashboard/subscriptions/topics
+    - dashboard/retained
     - title_en: Access Control
       title_cn: 访问控制
       children:
