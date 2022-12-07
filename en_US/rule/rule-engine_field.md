@@ -53,15 +53,16 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 
 ### Event topic available for FROM clause
 
-| Event topic name              | Explanation          |
-| ----------------------------- | :------------------- |
-| $events/message\_delivered    | message delivery     |
-| $events/message\_acked        | message acknowledged |
-| $events/message\_dropped      | Message dropped      |
-| $events/client\_connected     | Connection complete  |
-| $events/client\_disconnected  | Disconnect           |
-| $events/session\_subscribed   | Subscribe            |
-| $events/session\_unsubscribed | Unsubcribe           |
+| Event topic name              | Explanation                     |
+|-------------------------------|:--------------------------------|
+| $events/message\_delivered    | Message delivery                |
+| $events/message\_acked        | Message acknowledged            |
+| $events/message\_dropped      | Message dropped when routing    |
+| $events/delivery\_dropped     | Message dropped when delivering |
+| $events/client\_connected     | Connection complete             |
+| $events/client\_disconnected  | Disconnect                      |
+| $events/session\_subscribed   | Subscribe                       |
+| $events/session\_unsubscribed | Unsubcribe                      |
 
 
 ### $events/message_delivered
@@ -77,10 +78,10 @@ Trigger the rule when a message is put into the underlying socket
 | clientid            | Client ID of the receiver                     |
 | username            | Username of the receiver                      |
 | payload             | MQTT payload                                  |
-| peerhost            | client IPAddress                              |
+| peerhost            | Client IPAddress                              |
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
-| flags               | flags                                         |
+| flags               | Flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
 | timestamp           | Event trigger time(millisecond)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
@@ -125,7 +126,7 @@ The rule is triggered when the message is sent to the client and an ack is recei
 | peerhost            | client IPAddress                              |
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
-| flags               | flags                                         |
+| flags               | Flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
 | puback_props        | The PUBACK Properties (MQTT 5.0 only)         |
 | timestamp           | Event trigger time(millisecond)               |
@@ -164,14 +165,14 @@ Trigger rule when a message has no subscribers
 | Field               | Explanation                                   |
 | :------------------ | :-------------------------------------------- |
 | id                  | MQTT message id                               |
-| reason              | reason for dropping, possible reasons: <br/>no_subscribers: no clients subscribes the topic|
+| reason              | Reasons of dropping, possible reasons: <br/>no\_subscribers: no clients subscribes the topic<br/>receive\_maximum\_exceeded: awaiting\_rel queue is full<br/>packet\_identifier\_inuse: send a qos2 message with unreleased packet ID|
 | clientid            | Client ID of the sender                       |
 | username            | Username of the sender                        |
 | payload             | MQTT payload                                  |
 | peerhost            | Client IPAddress                              |
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
-| flags               | flags                                         |
+| flags               | Flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
 | timestamp           | Event trigger time(millisecond)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
@@ -203,20 +204,19 @@ output
 
 Trigger rule when subscriber's message queue is full
 
-
 | Field               | Explanation                                   |
 | :------------------ | :-------------------------------------------- |
-| id                  | MQTT message id                               |
-| reason              | reason for dropping, possible reasons: <br/>queue_full: the message queue is full(QoS>0)<br/>no_local: it's not allowed for the client to received messages published by themselves<br/>expired: the message or the session is expired<br/>qos0_msg: the message queue is full(QoS0)|
+| id                  | MQTT message ID                               |
+| reason              | Reasons of dropping, possible reasons: <br/>queue_full: the message queue is full(QoS>0)<br/>no_local: it's not allowed for the client to received messages published by themselves<br/>expired: the message or the session is expired<br/>qos0_msg: the message queue is full(QoS0)|
 | from\_clientid      | Client ID of the sender                       |
 | from\_username      | Username of the sender                        |
 | clientid            | Client ID of the receiver                     |
 | username            | Username of the receiver                      |
 | payload             | MQTT payload                                  |
-| peerhost            | client IPAddress                              |
+| peerhost            | Client IPAddress                              |
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
-| flags               | flags                                         |
+| flags               | Flags                                         |
 | pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
 | timestamp           | Event trigger time(millisecond)               |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
@@ -248,17 +248,17 @@ Trigger the rule when the terminal is connected successfully
 
 | Field            | Explanation                             |
 | :--------------- | :-------------------------------------- |
-| clientid         | clientid                                |
+| clientid         | Client ID                                |
 | username         | Current MQTT username                   |
 | mountpoint       | Mountpoint for bridging messages        |
 | peername         | IPAddress and Port of terminal          |
 | sockname         | IPAddress and Port listened by emqx     |
-| proto\_name      | protocol name                           |
-| proto\_ver       | protocol version                        |
+| proto\_name      | Protocol name                           |
+| proto\_ver       | Protocol version                        |
 | keepalive        | MQTT keepalive interval                 |
 | clean\_start     | MQTT clean\_start                       |
 | expiry\_interval | MQTT Session Expiration time            |
-| is\_bridge       | whether it is MQTT bridge connection    |
+| is\_bridge       | Whether it is MQTT bridge connection    |
 | connected\_at    | Terminal connection completion time (s) |
 | conn_props       | The CONNECT Properties (MQTT 5.0 only)  |
 | timestamp        | Event trigger time(millisecond)         |
@@ -290,8 +290,8 @@ Trigger rule when terminal connection is lost
 
 | Field            | Explanation                                   |
 | :--------------- | :-------------------------------------------- |
-| reason           | Reason for disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: the peer has closed the network connection<br/>discarded: another client connected with the same ClientID and set `clean_start = true`<br/>takeovered: another client connected with the same ClientID and set `clean_start = false`<br/>internal_error: malformed message or other unknown errors<br/> |
-| clientid         | client ID                                                    |
+| reason           | Reasons of disconnection of terminal<br/>normal：the client is actively disconnected <br/>kicked：the server kicks out, and it is kicked out through REST API<br/>keepalive_timeout: keepalive timeout<br/>not_authorized: auth failed，or `acl_nomatch = disconnect`, Pub/Sub without permission will disconnect the client<br/>tcp_closed: the peer has closed the network connection<br/>discarded: another client connected with the same ClientID and set `clean_start = true`<br/>takeovered: another client connected with the same ClientID and set `clean_start = false`<br/>internal_error: malformed message or other unknown errors<br/> |
+| clientid         | Client ID                                                    |
 | username         | Current MQTT username                                        |
 | peername         | IPAddress and Port of terminal                               |
 | sockname         | IPAddress and Port listened by emqx                          |
@@ -330,7 +330,7 @@ Trigger the rule when the terminal subscribes successfully
 | :-------- | :---------------------------------------- |
 | clientid  | Client ID                                 |
 | username  | Current MQTT username                     |
-| peerhost  | client IPAddress                          |
+| peerhost  | Client IPAddress                          |
 | topic     | MQTT topic                                |
 | qos       | Enumeration of message QoS 0,1,2          |
 | sub_props | The SUBSCRIBE Properties (MQTT 5.0 only)  |
@@ -361,16 +361,16 @@ output
 
 Triggered when the terminal subscription is cancelled successfully
 
-| Field     | Explanation                                 |
-| :-------- | :------------------------------------------ |
-| clientid  | Client ID                                   |
-| username  | Current MQTT username                       |
-| peerhost  | client IPAddress                            |
-| topic     | MQTT topic                                  |
-| qos       | Enumeration of message QoS 0,1,2            |
-| unsub_props | The UNSUBSCRIBE Properties (MQTT 5.0 only)  |
-| timestamp | Event trigger time(millisecond)             |
-| node      | Node name of the trigger event              |
+| Field        | Explanation                                |
+|:-------------|:-------------------------------------------|
+| clientid     | Client ID                                  |
+| username     | Current MQTT username                      |
+| peerhost     | Client IPAddress                           |
+| topic        | MQTT topic                                 |
+| qos          | Enumeration of message QoS 0,1,2           |
+| unsub\_props | The UNSUBSCRIBE Properties (MQTT 5.0 only) |
+| timestamp    | Event trigger time(millisecond)            |
+| node         | Node name of the trigger event             |
 
 
 example
