@@ -119,17 +119,18 @@ If you want emqx to publish the event message, you can configure it in the `emqx
 
 ### Event topic available for FROM clause
 
-| Event topic name              | Explanation          |
-| ----------------------------- | :------------------- |
-| $events/message\_delivered    | message delivery     |
-| $events/message\_acked        | message acknowledged |
-| $events/message\_dropped      | Message dropped      |
-| $events/client\_connected     | Connection complete  |
-| $events/client\_disconnected  | Disconnect           |
-| $events/client\_connack       | Connection ack       |
-| $events/client\_check_authz_complete | Authorization check complete |
-| $events/session\_subscribed   | Subscribe            |
-| $events/session\_unsubscribed | Unsubcribe           |
+| Event topic name                     | Explanation                     |
+|--------------------------------------|:--------------------------------|
+| $events/message\_delivered           | message delivery                |
+| $events/message\_acked               | message acknowledged            |
+| $events/message\_dropped             | Message dropped when routing    |
+| $events/delivery\_dropped            | Message dropped when delivering |
+| $events/client\_connected            | Connection complete             |
+| $events/client\_disconnected         | Disconnect                      |
+| $events/client\_connack              | Connection ack                  |
+| $events/client\_check_authz_complete | Authorization check complete    |
+| $events/session\_subscribed          | Subscribe                       |
+| $events/session\_unsubscribed        | Unsubcribe                      |
 
 
 ### "$events/message_delivered"
@@ -138,7 +139,7 @@ Trigger the rule when a message is put into the underlying socket
 
 
 | Field               | Explanation                                   |
-| :------------------ | :-------------------------------------------- |
+|:--------------------|:----------------------------------------------|
 | id                  | MQTT message ID                               |
 | from\_clientid      | Client ID of the sender                       |
 | from\_username      | Username of the sender                        |
@@ -149,8 +150,8 @@ Trigger the rule when a message is put into the underlying socket
 | topic               | MQTT topic                                    |
 | qos                 | Enumeration of message QoS 0,1,2              |
 | flags               | flags                                         |
-| pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
-| timestamp           | Event trigger time(ms)               |
+| pub\_props          | The PUBLISH Properties (MQTT 5.0 only)        |
+| timestamp           | Event trigger time(ms)                        |
 | publish_received_at | Time when PUBLISH message reaches Broker (ms) |
 | node                | Node name of the trigger event                |
 
@@ -229,21 +230,21 @@ Output:
 
 Trigger rule when a message has no subscribers
 
-| Field               | Explanation                                   |
-| :------------------ | :-------------------------------------------- |
-| id                  | MQTT message id                               |
-| reason              | reason for dropping, possible reasons: <br/>no_subscribers: no clients subscribes the topic|
-| clientid            | Client ID of the sender                       |
-| username            | Username of the sender                        |
-| payload             | MQTT payload                                  |
-| peerhost            | Client IPAddress                              |
-| topic               | MQTT topic                                    |
-| qos                 | Enumeration of message QoS 0,1,2              |
-| flags               | flags                                         |
-| pub_props           | The PUBLISH Properties (MQTT 5.0 only)        |
-| timestamp           | Event trigger time(ms)               |
-| publish_received_at | Time when PUBLISH message reaches Broker (ms) |
-| node                | Node name of the trigger event                |
+| Field                 | Explanation                                                                                                                                                                                                                           |
+|:----------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id                    | MQTT message id                                                                                                                                                                                                                       |
+| reason                | reason for dropping, possible reasons: <br/>no\_subscribers: no clients subscribes the topic<br/>receive\_maximum\_exceeded: awaiting\_rel queue is full<br/>packet\_identifier\_inuse: send a qos2 message with unreleased packet ID |
+| clientid              | Client ID of the sender                                                                                                                                                                                                               |
+| username              | Username of the sender                                                                                                                                                                                                                |
+| payload               | MQTT payload                                                                                                                                                                                                                          |
+| peerhost              | Client IPAddress                                                                                                                                                                                                                      |
+| topic                 | MQTT topic                                                                                                                                                                                                                            |
+| qos                   | Enumeration of message QoS 0,1,2                                                                                                                                                                                                      |
+| flags                 | flags                                                                                                                                                                                                                                 |
+| pub\_props            | The PUBLISH Properties (MQTT 5.0 only)                                                                                                                                                                                                |
+| timestamp             | Event trigger time(ms)                                                                                                                                                                                                                |
+| publish\_received\_at | Time when PUBLISH message reaches Broker (ms)                                                                                                                                                                                         |
+| node                  | Node name of the trigger event                                                                                                                                                                                                        |
 
 Example:
 ```sql

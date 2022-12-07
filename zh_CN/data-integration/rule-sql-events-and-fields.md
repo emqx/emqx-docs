@@ -139,17 +139,18 @@ FROM
 如果想让 emqx 将事件消息发布出来，可以在 `emqx_rule_engine.conf` 文件中配置。
 
 ### FROM 子句可用的事件主题
-| 事件主题名                    | 释义     |
-| ----------------------------- | :------- |
-| $events/message_delivered    | 消息投递 |
-| $events/message_acked        | 消息确认 |
-| $events/message_dropped      | 消息丢弃 |
-| $events/client_connected     | 连接完成 |
-| $events/client_disconnected  | 连接断开 |
-| $events/client_connack       | 连接确认 |
-| $events/client_check_authz_complete | 鉴权完成 |
-| $events/session_subscribed   | 订阅     |
-| $events/session_unsubscribed | 取消订阅 |
+| 事件主题名                             | 释义                     |
+|----------------------------------------|:-------------------------|
+| $events/message\_delivered             | 消息投递                 |
+| $events/message\_acked                 | 消息确认                 |
+| $events/message\_dropped               | 消息在转发的过程中被丢弃 |
+| $events/delivery\_dropped              | 消息在投递的过程中被丢弃 |
+| $events/client\_connected              | 连接完成                 |
+| $events/client\_disconnected           | 连接断开                 |
+| $events/client\_connack                | 连接确认                 |
+| $events/client\_check\_authz\_complete | 鉴权完成                 |
+| $events/session\_subscribed            | 订阅                     |
+| $events/session\_unsubscribed          | 取消订阅                 |
 
 ### 消息投递事件 ("$events/message_delivered")
 
@@ -245,21 +246,21 @@ FROM
 
 当一条消息无任何订阅者时触发规则
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| id                  | MQTT 消息 ID                        |
-| reason              | 消息丢弃原因，可能的原因：<br/>no_subscribers：没有订阅者|
-| clientid            | 消息来源 Client ID                  |
-| username            | 消息来源用户名                      |
-| payload             | MQTT 消息体                         |
-| peerhost            | 客户端的 IPAddress                  |
-| topic               | MQTT 主题                           |
-| qos                 | MQTT 消息的 QoS                     |
-| flags               | MQTT 消息的 Flags                   |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (单位：毫秒)                   |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒) |
-| node                | 事件触发所在节点                    |
+| 字段                  | 解释                                                                                                                                                              |
+|:----------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id                    | MQTT 消息 ID                                                                                                                                                      |
+| reason                | 消息丢弃原因，可能的原因：<br/>no\_subscribers：没有订阅者<br/>receive\_maximum\_exceeded: awaiting\_rel 队列已满<br/>packet\_identifier\_inuse: 消息 ID 已被使用 |
+| clientid              | 消息来源 Client ID                                                                                                                                                |
+| username              | 消息来源用户名                                                                                                                                                    |
+| payload               | MQTT 消息体                                                                                                                                                       |
+| peerhost              | 客户端的 IPAddress                                                                                                                                                |
+| topic                 | MQTT 主题                                                                                                                                                         |
+| qos                   | MQTT 消息的 QoS                                                                                                                                                   |
+| flags                 | MQTT 消息的 Flags                                                                                                                                                 |
+| pub\_props            | PUBLISH Properties (仅适用于 MQTT 5.0)                                                                                                                            |
+| timestamp             | 事件触发时间 (单位：毫秒)                                                                                                                                         |
+| publish\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)                                                                                                                       |
+| node                  | 事件触发所在节点                                                                                                                                                  |
 示例
 ```sql
 SELECT
