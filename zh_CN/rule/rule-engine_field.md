@@ -69,15 +69,16 @@ FROM
 
 
 ### FROM 子句可用的事件主题
-| 事件主题名                    | 释义     |
-| ----------------------------- | :------- |
-| $events/message_delivered    | 消息投递 |
-| $events/message_acked        | 消息确认 |
-| $events/message_dropped      | 消息丢弃 |
-| $events/client_connected     | 连接完成 |
-| $events/client_disconnected  | 连接断开 |
-| $events/session_subscribed   | 订阅     |
-| $events/session_unsubscribed | 取消订阅 |
+| 事件主题名                   | 释义                     |
+|------------------------------|:-------------------------|
+| $events/message_delivered    | 消息投递                 |
+| $events/message_acked        | 消息确认                 |
+| $events/message_dropped      | 消息在转发的过程中被丢弃 |
+| $events/delivery_dropped     | 消息在投递的过程中被丢弃 |
+| $events/client_connected     | 连接完成                 |
+| $events/client_disconnected  | 连接断开                 |
+| $events/session_subscribed   | 订阅                     |
+| $events/session_unsubscribed | 取消订阅                 |
 
 ### $events/message_delivered (消息投递)
 
@@ -171,12 +172,12 @@ FROM
 
 ### $events/message_dropped (消息在转发的过程中被丢弃)
 
-当一条消息无任何订阅者时触发规则
+当一条消息被丢弃时触发规则
 
 |        字段         |  解释                                 |
 | :------------------ | :------------------------------------ |
 | id                  | MQTT 消息 ID                        |
-| reason              | 消息丢弃原因，可能的原因：<br/>no_subscribers: 没有订阅者|
+| reason              | 消息丢弃原因，可能的原因：<br/>no_subscribers: 没有订阅者<br/>receive_maximum_exceeded: awaiting_rel 队列已满</br>packet_identifier_inuse: 消息 ID 已被使用|
 | clientid            | 消息来源 Client ID                  |
 | username            | 消息来源用户名                      |
 | payload             | MQTT 消息体                         |
