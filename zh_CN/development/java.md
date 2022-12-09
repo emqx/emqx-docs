@@ -115,8 +115,3 @@ public class OnMessageCallback implements MqttCallback {
     }
 }
 ```
-
-
-## Paho Java MQTT 5.0 支持
-
-目前 Paho Java 还在适配 MQTT 5.0，尚未全面支持。
