@@ -1172,30 +1172,8 @@ $ ./bin/emqx_ctl resource-types show backend_mysql
  
 resource_type(name='backend_mysql', provider='emqx_backend_mysql', title ='MySQL', description='MySQL Database')
 ```
-## Status, statistical indicators and alerts related to the rules engine
 
-### Rule status and statistical indicators
-
-![image](../assets/rule_metrics.png)
-
-- Hits: number of rule hits (match succeed for rule SQL),
-- Hit Speed: Speed of rule hits (times/second)
-- Maximum hit speed: Peak value of hit speed (times/second)
-- 5 minute average speed: Average hit speed in 5 minutes (times/second)
-
-### Action status and statistical indicators
-![image](../assets/action_metrics.png)
-
-- Success: Number of successful actions
-- Failure: Number of failed actions
-
-### Resource status and alerts
-![image](../assets/resource_status.png)
-
-- Available: Resources available
-- Unavailable: resources unavailable (e.g. database connection shutdown)
-
-## EMQX Internal DB Auth/ACL
+## EMQX Internal DB Auth/ACL command
 
 This command will only take effect when the emqx_auth_mnesia plug-in is turned on
 
