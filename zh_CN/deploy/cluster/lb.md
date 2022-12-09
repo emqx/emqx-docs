@@ -206,7 +206,6 @@ Nginx 产品作为 EMQX 集群 LB，并终结 SSL 连接:
 ```bash
 stream {
   upstream stream_backend {
-      zone tcp_servers 64k;
       hash $remote_addr;
       server 192.168.0.2:1883 max_fails=2 fail_timeout=30s;
       server 192.168.0.3:1883 max_fails=2 fail_timeout=30s;
@@ -214,7 +213,6 @@ stream {
 
   server {
       listen 8883 ssl;
-      status_zone tcp_server;
       proxy_pass stream_backend;
       proxy_buffer_size 4k;
       ssl_handshake_timeout 15s;
