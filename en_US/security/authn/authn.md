@@ -39,6 +39,11 @@ According to the authentication mechanism and backend used, there are currently 
 | JWT             |                   | [Authentication using JWT](./jwt.md)                         |
 | SCRAM           | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
 
+## Anonymous login
+
+EMQX 5.0 removes the `alow_anonymous` configuration item. All client connections are allowed by default.
+If **add and enable** any authenticator, EMQX will perform an authentication check for all new connections.
+
 ## Authentication Chain
 
 EMQX allows the creation of multiple authenticators, which will run in the order of their positions in the authentication chain. If no matching authentication information is retrieved in the current authenticator, it will switch to the next authenticator on the chain to continue the authentication process. Taking Password-Based authentication as an example, this usually results in the following 3 situations:

@@ -37,6 +37,10 @@ EMQX 中的认证器目前支持了 3 种认证机制，分别为：Passsword-Ba
 | JWT             |                   | [Authentication using JWT](./jwt.md)                         |
 | SCRAM           | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
 
+## 匿名认证
+
+EMQX 5.0 中移除了 `alow_anonymous` 配置项，默认允许所有客户端连接，**添加并启用**任意一个认证器后将对所有新连接进行认证检查。
+
 ## 认证链
 
 EMQX 允许创建多个认证器，这些认证器将按照在认证链中的位置顺序运行，如果在当前认证器中未检索到匹配的认证信息，将会切换至链上的下一个认证器继续认证过程。以 Password-Based 认证为例，通常这会产生以下 3 种情况：
