@@ -159,7 +159,7 @@ authentication = [
 
 #### 移除匿名认证机制
 
-移除 `alow_anonymous` 配置项，默认允许所有客户端连接，**添加并启用**任意一个认证器后将对所有新连接进行认证检查。
+移除 `allow_anonymous` 配置项，默认允许所有客户端连接，**添加并启用**任意一个认证器后将对所有新连接进行认证检查。
 
 移除 `bypass_auth_plugins` 配置项，某个监听器需要禁用认证时，可以通过 `listeners.{type}.{name}.enable_authn = true | false` 配置项进行设置。
 
