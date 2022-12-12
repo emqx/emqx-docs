@@ -17,17 +17,17 @@ SQL 语句使用 `FROM` 来指定数据源，在 `SELECT` 和 `WHERE` 子句中�
 
 当该 MQTT 桥接从远程 MQTT Broker 接收到消息时触发规则
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| id                  | MQTT 消息 ID                         |
-| server              | 远程 MQTT Broker 的地址，例如 "broker.emqx.io:1883" |
-| payload             | MQTT 消息体                          |
-| topic               | MQTT 主题                            |
-| qos                 | MQTT 消息的 QoS                      |
-| dup                 | MQTT 消息的 DUP Flag                 |
-| retain              | MQTT 消息的 Retain Flag              |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| message_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)  |
+| 字段                  | 解释                                                |
+|:----------------------|:----------------------------------------------------|
+| id                    | MQTT 消息 ID                                        |
+| server                | 远程 MQTT Broker 的地址，例如 "broker.emqx.io:1883" |
+| payload               | MQTT 消息体                                         |
+| topic                 | MQTT 主题                                           |
+| qos                   | MQTT 消息的 QoS                                     |
+| dup                   | MQTT 消息的 DUP Flag                                |
+| retain                | MQTT 消息的 Retain Flag                             |
+| pub\_props            | PUBLISH Properties (仅适用于 MQTT 5.0)              |
+| message\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)         |
 
 示例
 ```sql
@@ -71,20 +71,20 @@ FROM
 规则的 SQL 语句可以处理消息发布。 在一个规则语句中，用户可以用 FROM 子句指定一个或者多个主题，
 当任何消息发布到指定的主题时都会触发该规则。
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| id                  | MQTT 消息 ID                          |
-| clientid            | 消息来源 Client ID                     |
-| username            | 消息来源用户名                          |
-| payload             | MQTT 消息体                           |
-| peerhost            | 客户端的 IPAddress                    |
-| topic               | MQTT 主题                             |
-| qos                 | MQTT 消息的 QoS                       |
-| flags               | MQTT 消息的 Flags                     |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (单位：毫秒)                     |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)   |
-| node                | 事件触发所在节点                      |
+| 字段                | 解释                                        |
+|:--------------------|:--------------------------------------------|
+| id                  | MQTT 消息 ID                                |
+| clientid            | 消息来源 Client ID                          |
+| username            | 消息来源用户名                              |
+| payload             | MQTT 消息体                                 |
+| peerhost            | 客户端的 IPAddress                          |
+| topic               | MQTT 主题                                   |
+| qos                 | MQTT 消息的 QoS                             |
+| flags               | MQTT 消息的 Flags                           |
+| pub\_props          | PUBLISH Properties (仅适用于 MQTT 5.0)      |
+| timestamp           | 事件触发时间 (单位：毫秒)                   |
+| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒) |
+| node                | 事件触发所在节点                            |
 
 示例
 ```sql
@@ -156,22 +156,22 @@ FROM
 
 当消息被放入底层socket时触发规则
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| id                  | MQTT 消息 ID                         |
-| from_clientid       | 消息来源 Client ID                   |
-| from_username       | 消息来源用户名                       |
-| clientid            | 消息目的 Client ID                   |
-| username            | 消息目的用户名                       |
-| payload             | MQTT 消息体                          |
-| peerhost            | 客户端的 IPAddress                   |
-| topic               | MQTT 主题                            |
-| qos                 | MQTT 消息的 QoS                      |
-| flags               | MQTT 消息的 Flags                    |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (单位：毫秒)                    |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)  |
-| node                | 事件触发所在节点                     |
+| 字段                  | 解释                                        |
+|:----------------------|:--------------------------------------------|
+| id                    | MQTT 消息 ID                                |
+| from\_clientid        | 消息来源 Client ID                          |
+| from\_username        | 消息来源用户名                              |
+| clientid              | 消息目的 Client ID                          |
+| username              | 消息目的用户名                              |
+| payload               | MQTT 消息体                                 |
+| peerhost              | 客户端的 IPAddress                          |
+| topic                 | MQTT 主题                                   |
+| qos                   | MQTT 消息的 QoS                             |
+| flags                 | MQTT 消息的 Flags                           |
+| pub\_props            | PUBLISH Properties (仅适用于 MQTT 5.0)      |
+| timestamp             | 事件触发时间 (单位：毫秒)                   |
+| publish\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒) |
+| node                  | 事件触发所在节点                            |
 
 示例
 ```sql
@@ -200,23 +200,23 @@ FROM
 
 当消息发送到客户端，并收到客户端回复的ack时触发规则，仅QOS1，QOS2会触发
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| id                  | MQTT 消息 ID                        |
-| from_clientid       | 消息来源 Client ID                  |
-| from_username       | 消息来源用户名                      |
-| clientid            | 消息目的 Client ID                  |
-| username            | 消息目的用户名                      |
-| payload             | MQTT 消息体                         |
-| peerhost            | 客户端的 IPAddress                  |
-| topic               | MQTT 主题                           |
-| qos                 | MQTT 消息的 QoS                     |
-| flags               | MQTT 消息的 Flags                   |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| puback_props        | PUBACK Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (单位：毫秒)                   |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒) |
-| node                | 事件触发所在节点                    |
+| 字段                  | 解释                                        |
+|:----------------------|:--------------------------------------------|
+| id                    | MQTT 消息 ID                                |
+| from\_clientid        | 消息来源 Client ID                          |
+| from\_username        | 消息来源用户名                              |
+| clientid              | 消息目的 Client ID                          |
+| username              | 消息目的用户名                              |
+| payload               | MQTT 消息体                                 |
+| peerhost              | 客户端的 IPAddress                          |
+| topic                 | MQTT 主题                                   |
+| qos                   | MQTT 消息的 QoS                             |
+| flags                 | MQTT 消息的 Flags                           |
+| pub\_props            | PUBLISH Properties (仅适用于 MQTT 5.0)      |
+| puback\_props         | PUBACK Properties (仅适用于 MQTT 5.0)       |
+| timestamp             | 事件触发时间 (单位：毫秒)                   |
+| publish\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒) |
+| node                  | 事件触发所在节点                            |
 
 示例
 ```sql
@@ -287,23 +287,23 @@ FROM
 
 当订阅者的消息队列已满时触发规则
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| id                  | MQTT 消息 ID                         |
-| reason              | 消息丢弃原因，可能的原因：<br/>queue_full：消息队列已满(QoS>0)<br/>no_local：不允许客户端接收自己发布的消息<br/>expired：消息或者会话过期<br/>qos0_msg：QoS 0 的消息因为消息队列已满被丢弃|
-| from_clientid       | 消息来源 Client ID                   |
-| from_username       | 消息来源用户名                       |
-| clientid            | 消息目的 Client ID                   |
-| username            | 消息目的用户名                       |
-| payload             | MQTT 消息体                          |
-| peerhost            | 客户端的 IPAddress                   |
-| topic               | MQTT 主题                            |
-| qos                 | MQTT 消息的 QoS                      |
-| flags               | MQTT 消息的 Flags                    |
-| pub_props           | PUBLISH Properties (仅适用于 MQTT 5.0) |
-| timestamp           | 事件触发时间 (单位：毫秒)                    |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)  |
-| node                | 事件触发所在节点                     |
+| 字段                  | 解释                                                                                                                                                                                          |
+|:----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id                    | MQTT 消息 ID                                                                                                                                                                                  |
+| reason                | 消息丢弃原因，可能的原因：<br/>queue\_full：消息队列已满(QoS>0)<br/>no\_local：不允许客户端接收自己发布的消息<br/>expired：消息或者会话过期<br/>qos0\_msg：QoS 0 的消息因为消息队列已满被丢弃 |
+| from\_clientid        | 消息来源 Client ID                                                                                                                                                                            |
+| from\_username        | 消息来源用户名                                                                                                                                                                                |
+| clientid              | 消息目的 Client ID                                                                                                                                                                            |
+| username              | 消息目的用户名                                                                                                                                                                                |
+| payload               | MQTT 消息体                                                                                                                                                                                   |
+| peerhost              | 客户端的 IPAddress                                                                                                                                                                            |
+| topic                 | MQTT 主题                                                                                                                                                                                     |
+| qos                   | MQTT 消息的 QoS                                                                                                                                                                               |
+| flags                 | MQTT 消息的 Flags                                                                                                                                                                             |
+| pub\_props            | PUBLISH Properties (仅适用于 MQTT 5.0)                                                                                                                                                        |
+| timestamp             | 事件触发时间 (单位：毫秒)                                                                                                                                                                     |
+| publish\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)                                                                                                                                                   |
+| node                  | 事件触发所在节点                                                                                                                                                                              |
 
 示例
 ```sql
@@ -329,23 +329,24 @@ FROM "$events/delivery_dropped"
 
 当终端连接成功时触发规则
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| clientid        | 消息目的 Client ID                  |
-| username        | 消息目的用户名                      |
-| mountpoint      | 主题挂载点(主题前缀)                |
-| peername        | 终端的 IPAddress 和 Port            |
-| sockname        | emqx 监听的 IPAddress 和 Port       |
-| proto_name      | 协议名字                            |
-| proto_ver       | 协议版本                            |
-| keepalive       | MQTT 保活间隔                       |
-| clean_start     | MQTT clean_start                    |
-| expiry_interval | MQTT Session 过期时间               |
-| is_bridge       | 是否为 MQTT bridge 连接             |
-| connected_at    | 终端连接完成时间 (单位：毫秒)                |
-| conn_props      | CONNECT Properties (仅适用于 MQTT 5.0) |
-| timestamp       | 事件触发时间 (单位：毫秒)                   |
-| node            | 事件触发所在节点                    |
+| 字段             | 解释                                   |
+|:-----------------|:---------------------------------------|
+| clientid         | 消息目的 Client ID                     |
+| username         | 消息目的用户名                         |
+| mountpoint       | 主题挂载点(主题前缀)                   |
+| peername         | 终端的 IPAddress 和 Port               |
+| sockname         | emqx 监听的 IPAddress 和 Port          |
+| proto\_name      | 协议名字                               |
+| proto\_ver       | 协议版本                               |
+| keepalive        | MQTT 保活间隔                          |
+| clean\_start     | MQTT clean\_start                      |
+| expiry\_interval | MQTT Session 过期时间                  |
+| is\_bridge       | 是否为 MQTT bridge 连接                |
+| connected\_at    | 终端连接完成时间 (单位：毫秒)          |
+| conn\_props      | CONNECT Properties (仅适用于 MQTT 5.0) |
+| timestamp        | 事件触发时间 (单位：毫秒)              |
+| node             | 事件触发所在节点                       |
+
 
 示例
 ```sql
@@ -371,17 +372,18 @@ FROM
 
 当终端连接断开时触发规则
 
-|        字段         |  解释                                 |
-| :------------------ | :------------------------------------ |
-| reason          | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive_timeout：keepalive 超时<br/>not_authorized：认证失败，或者 acl_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp_closed：对端关闭了网络连接<br/>internal_error：畸形报文或其他未知错误<br/> |
-| clientid        | 消息目的 Client ID                                           |
-| username        | 消息目的用户名                                               |
-| peername        | 终端的 IPAddress 和 Port                                     |
-| sockname        | emqx 监听的 IPAddress 和 Port                                |
-| disconnected_at | 终端连接断开时间 (单位：毫秒)                                         |
-| disconn_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                    |
-| timestamp       | 事件触发时间 (单位：毫秒)                                            |
-| node            | 事件触发所在节点                                             |
+| 字段             | 解释                                                                                                                                                                                                                                                                                                                |
+|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| reason           | 终端连接断开原因：<br/>normal：客户端主动断开<br/>kicked：服务端踢出，通过 REST API<br/>keepalive\_timeout：keepalive 超时<br/>not\_authorized：认证失败，或者 acl\_nomatch = disconnect 时没有权限的 Pub/Sub 会主动断开客户端<br/>tcp\_closed：对端关闭了网络连接<br/>internal\_error：畸形报文或其他未知错误<br/> |
+| clientid         | 消息目的 Client ID                                                                                                                                                                                                                                                                                                  |
+| username         | 消息目的用户名                                                                                                                                                                                                                                                                                                      |
+| peername         | 终端的 IPAddress 和 Port                                                                                                                                                                                                                                                                                            |
+| sockname         | emqx 监听的 IPAddress 和 Port                                                                                                                                                                                                                                                                                       |
+| disconnected\_at | 终端连接断开时间 (单位：毫秒)                                                                                                                                                                                                                                                                                       |
+| disconn\_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                                                                                                                                                                                                                                                                           |
+| timestamp        | 事件触发时间 (单位：毫秒)                                                                                                                                                                                                                                                                                           |
+| node             | 事件触发所在节点                                                                                                                                                                                                                                                                                                    |
+
 
 示例
 ```sql
@@ -409,60 +411,62 @@ FROM
 
 当服务端向客户端发送CONNACK报文时触发规则，reason_code 包含各种错误原因代码
 
-|        字段      |  解释                                 |
-| ---------------- | :---------------------------------------------- |
-| reason_code      | 各种原因代码                                      |
-| clientid         | 消息目的 Client ID                               |
-| username         | 消息目的用户名                                   |
-| peername         | 终端的 IPAddress 和 Port                        |
-| sockname         | emqx 监听的 IPAddress 和 Port                   |
-| proto_name       | 协议名字                                        |
-| proto_ver        | 协议版本                                        |
-| keepalive        | MQTT 保活间隔                                   |
-| clean_start      | MQTT clean_start                               |
-| expiry_interval  | MQTT Session 过期时间                           |
-| conn_props       | CONNECT Properties (仅适用于 MQTT 5.0)          |
-| timestamp        | 事件触发时间 (ms)                               |
-| node             | 事件触发所在节点                                |
+| 字段             | 解释                                   |
+|------------------|:---------------------------------------|
+| reason\_code     | 各种原因代码                           |
+| clientid         | 消息目的 Client ID                     |
+| username         | 消息目的用户名                         |
+| peername         | 终端的 IPAddress 和 Port               |
+| sockname         | emqx 监听的 IPAddress 和 Port          |
+| proto\_name      | 协议名字                               |
+| proto\_ver       | 协议版本                               |
+| keepalive        | MQTT 保活间隔                          |
+| clean\_start     | MQTT clean\_start                      |
+| expiry\_interval | MQTT Session 过期时间                  |
+| conn\_props      | CONNECT Properties (仅适用于 MQTT 5.0) |
+| timestamp        | 事件触发时间 (ms)                      |
+| node             | 事件触发所在节点                       |
+
 
 
 MQTT v5.0 协议将返回码重命名为原因码，增加了一个原因码来指示更多类型的错误([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack))。
 因此reason_code 在MQTT v3.1.1与MQTT v5.0中有很大的不同。
 
 MQTT v3.1.1
-| reason_code                    | 描述      |
-| ------------------------------ | --------- |
-| connection_accepted            | 已接受连接 |
-| unacceptable_protocol_version  | 服务器不支持客户端请求的 MQTT 协议 |
-| client_identifier_not_valid    | 客户端 ID 是正确的 UTF-8 字符串，但服务器不允许 |
-| server_unavaliable             | 网络连接已建立，但 MQTT 服务不可用 |
-| malformed_username_or_password | 用户名或密码中的数据格式错误 |
-| unauthorized_client            | 客户端连接未授权 |
+| reason\_code                      | 描述                                            |
+|-----------------------------------|-------------------------------------------------|
+| connection\_accepted              | 已接受连接                                      |
+| unacceptable\_protocol\_version   | 服务器不支持客户端请求的 MQTT 协议              |
+| client\_identifier\_not\_valid    | 客户端 ID 是正确的 UTF-8 字符串，但服务器不允许 |
+| server\_unavaliable               | 网络连接已建立，但 MQTT 服务不可用              |
+| malformed\_username\_or\_password | 用户名或密码中的数据格式错误                    |
+| unauthorized\_client              | 客户端连接未授权                                |
 
 MQTT v5.0
-| reason_code                   | 描述 |
-| ----------------------------- | ----|
-| success                       | 连接成功 |
-| unspecified_error             | 未指定的错误 |
-| malformed_packet              | 畸形数据包 |
-| protocol_error                | 协议错误 |
-| implementation_specific_error | 实现特定错误 |
-| unsupported_protocol_version  | 不支持的协议版本 |
-| client_identifier_not_valid   | 客户端标识符无效 |
-| bad_username_or_password      | 错误的用户名或密码 |
-| not_authorized                | 未经授权 |
-| server_unavailable            | 服务器无法使用 |
-| server_busy                   | 服务器繁忙 |
-| banned                        | 禁止访问 |
-| bad_authentication_method     | 错误的身份验证方法 |
-| topic_name_invalid            | 主题名称无效 |
-| packet_too_large              | 数据包太大 |
-| quota_exceeded                | 超出配额 |
-| retain_not_supported          | 不支持的retain |
-| qos_not_supported             | 不支持的qos |
-| use_another_server            | 使用另一台服务器 |
-| server_moved                  | 服务器迁移了 |
-| connection_rate_exceeded      | 超出连接速率 |
+| reason\_code                    | 描述               |
+|---------------------------------|--------------------|
+| success                         | 连接成功           |
+| unspecified\_error              | 未指定的错误       |
+| malformed\_packet               | 畸形数据包         |
+| protocol\_error                 | 协议错误           |
+| implementation\_specific\_error | 实现特定错误       |
+| unsupported\_protocol\_version  | 不支持的协议版本   |
+| client\_identifier\_not\_valid  | 客户端标识符无效   |
+| bad\_username\_or\_password     | 错误的用户名或密码 |
+| not\_authorized                 | 未经授权           |
+| server\_unavailable             | 服务器无法使用     |
+| server\_busy                    | 服务器繁忙         |
+| banned                          | 禁止访问           |
+| bad\_authentication\_method     | 错误的身份验证方法 |
+| topic\_name\_invalid            | 主题名称无效       |
+| packet\_too\_large              | 数据包太大         |
+| quota\_exceeded                 | 超出配额           |
+| retain\_not\_supported          | 不支持的retain     |
+| qos\_not\_supported             | 不支持的qos        |
+| use\_another\_server            | 使用另一台服务器   |
+| server\_moved                   | 服务器迁移了       |
+| connection\_rate\_exceeded      | 超出连接速率       |
+
 
 示例
 ```sql
@@ -489,17 +493,17 @@ FROM
 
 当客户端鉴权结束时触发规则
 
-|        字段      |  解释                                 |
-| --------------- | :----------------------------------- |
-| clientid	      | 消息目的 Client ID       |
-| username	      | 消息目的用户名           |
-| peerhost	      | 客户端的 IPAddress       |
-| topic	          | MQTT 主题               |
-| action	      | publish or subscribe，发布或者订阅事件 |
-| result          | allow or deny，鉴权完成            |
-| is_cache        | true or false，鉴权时数据的来源 <br/>is_cache为true时，鉴权数据来源于cache <br/>is_cache为false时，鉴权数据来源于插件           |
-| timestamp	      | 事件触发时间 (ms)       |
-| node	          | 事件触发所在节点        |
+| 字段      | 解释                                                                                                                    |
+|-----------|:------------------------------------------------------------------------------------------------------------------------|
+| clientid  | 消息目的 Client ID                                                                                                      |
+| username  | 消息目的用户名                                                                                                          |
+| peerhost  | 客户端的 IPAddress                                                                                                      |
+| topic     | MQTT 主题                                                                                                               |
+| action    | publish or subscribe，发布或者订阅事件                                                                                  |
+| result    | allow or deny，鉴权完成                                                                                                 |
+| is\_cache | true or false，鉴权时数据的来源 <br/>is\_cache为true时，鉴权数据来源于cache <br/>is\_cache为false时，鉴权数据来源于插件 |
+| timestamp | 事件触发时间 (ms)                                                                                                       |
+| node      | 事件触发所在节点                                                                                                        |
 
 示例
 ```sql
@@ -531,16 +535,16 @@ FROM
 
 当终端订阅成功时触发规则
 
-|        字段         |  解释                       |
-| :------------------ | :--------------------------|
-| clientid  | 消息目的 Client ID                    |
-| username  | 消息目的用户名                        |
-| peerhost  | 客户端的 IPAddress                    |
-| topic     | MQTT 主题                             |
-| qos       | MQTT 消息的 QoS                       |
-| sub_props | SUBSCRIBE Properties (仅适用于 5.0)  |
-| timestamp | 事件触发时间 (单位：毫秒)                     |
-| node      | 事件触发所在节点                      |
+| 字段      | 解释                                |
+|:----------|:------------------------------------|
+| clientid  | 消息目的 Client ID                  |
+| username  | 消息目的用户名                      |
+| peerhost  | 客户端的 IPAddress                  |
+| topic     | MQTT 主题                           |
+| qos       | MQTT 消息的 QoS                     |
+| sub_props | SUBSCRIBE Properties (仅适用于 5.0) |
+| timestamp | 事件触发时间 (单位：毫秒)           |
+| node      | 事件触发所在节点                    |
 
 示例
 ```sql
@@ -566,16 +570,16 @@ FROM
 
 当取消终端订阅成功时触发规则
 
-|        字段         |  解释                         |
-| :------------------ | :---------------------------- |
-| clientid  | 消息目的 Client ID                      |
-| username  | 消息目的用户名                          |
-| peerhost  | 客户端的 IPAddress                      |
-| topic     | MQTT 主题                               |
-| qos       | MQTT 消息的 QoS                         |
-| unsub_props | UNSUBSCRIBE Properties (仅适用于 5.0)  |
-| timestamp | 事件触发时间 (单位：毫秒)                       |
-| node      | 事件触发所在节点
+| 字段        | 解释                                  |
+|:------------|:--------------------------------------|
+| clientid    | 消息目的 Client ID                    |
+| username    | 消息目的用户名                        |
+| peerhost    | 客户端的 IPAddress                    |
+| topic       | MQTT 主题                             |
+| qos         | MQTT 消息的 QoS                       |
+| unsub_props | UNSUBSCRIBE Properties (仅适用于 5.0) |
+| timestamp   | 事件触发时间 (单位：毫秒)             |
+| node        | 事件触发所在节点                      |
 
 示例
 ```sql
