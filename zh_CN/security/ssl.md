@@ -86,7 +86,7 @@ myclient2:d1e617d3b963757bfc21dad3fea169716c3a2f053f23decaea5cdfaabd04bfc4
 listeners.ssl.default {
   ...
   ssl_options.versions = ["tlsv1.2"]
-  ssl_options.ciphers = "RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,RSA-PSK-RC4-SHA,RSA-PSK-DES-CBC3-SHA"
+  ssl_options.ciphers = "PSK-AES256-GCM-SHA384,PSK-AES128-GCM-SHA256,PSK-AES256-CBC-SHA384,PSK-AES256-CBC-SHA,PSK-AES128-CBC-SHA256,PSK-AES128-CBC-SHA,RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,RSA-PSK-RC4-SHA"
   ...
 }
 ```
@@ -94,6 +94,10 @@ listeners.ssl.default {
 ::: tip
 PSK 仅支持 tlsv1.2 及以下的版本。
 :::
+
+**注意**:
+
+如果使用 `RSA-PSK` 密码套件，则仍然需要 `RSA` 证书，详见 [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4)
 
 ## 使用 SSL 连接外部资源
 
