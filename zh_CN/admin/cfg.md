@@ -1,6 +1,6 @@
 # 配置文件
 
-<!--5.0.11-->
+<!--5.0.12-->
 EMQX的配置文件格式是 [HOCON](https://github.com/emqx/hocon) 。
 HOCON（Human-Optimized Config Object Notation）是一个JSON的超集，非常适用于易于人类读写的配置数据存储。
 
@@ -466,10 +466,6 @@ ciphers = [
 
 
 - limiter: <code>[limiter](#limiter)</code>
-
-
-
-- connectors: <code>[connector:connectors](#connector-connectors)</code>
 
 
 
@@ -1249,6 +1245,8 @@ ciphers = [
 
 
 - redis_type: <code>cluster</code>
+  * default: 
+  `cluster`
 
   集群模式。
 
@@ -1261,12 +1259,6 @@ ciphers = [
 - password: <code>binary()</code>
 
   内部数据库密码。
-
-- database: <code>integer()</code>
-  * default: 
-  `0`
-
-  Redis 数据库 ID。
 
 - auto_reconnect: <code>boolean()</code>
   * default: 
@@ -1323,6 +1315,8 @@ ciphers = [
 
 
 - redis_type: <code>sentinel</code>
+  * default: 
+  `sentinel`
 
   哨兵模式。
 
@@ -1399,6 +1393,8 @@ ciphers = [
 
 
 - redis_type: <code>single</code>
+  * default: 
+  `single`
 
   单机模式。
 
@@ -2066,6 +2062,14 @@ Socket options for SSL connections.
   这可能会成为拒绝服务攻击的载体。
   SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项设置为 false，可以严格禁用客户端发起的重新协商。
   默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
+
+
+- handshake_timeout: <code>emqx_schema:duration()</code>
+  * default: 
+  `"15s"`
+
+
+  握手完成所允许的最长时间
 
 
 - gc_after_handshake: <code>boolean()</code>
@@ -3423,10 +3427,9 @@ Socket options for SSL clients.
 
  - <code>authentication.$INDEX.ssl</code>
  - <code>authorization.sources.$INDEX.ssl</code>
- - <code>bridges.mqtt.$name.connector.ssl</code>
+ - <code>bridges.mqtt.$name.ssl</code>
  - <code>bridges.webhook.$name.ssl</code>
  - <code>cluster.etcd.ssl</code>
- - <code>connectors.mqtt.$name.ssl</code>
  - <code>gateway.coap.authentication.ssl</code>
  - <code>gateway.coap.listeners.dtls.$name.authentication.ssl</code>
  - <code>gateway.coap.listeners.udp.$name.authentication.ssl</code>
@@ -3455,10 +3458,9 @@ Socket options for SSL clients.
 
  - <code>EMQX_AUTHENTICATION__$INDEX__SSL</code>
  - <code>EMQX_AUTHORIZATION__SOURCES__$INDEX__SSL</code>
- - <code>EMQX_BRIDGES__MQTT__$NAME__CONNECTOR__SSL</code>
+ - <code>EMQX_BRIDGES__MQTT__$NAME__SSL</code>
  - <code>EMQX_BRIDGES__WEBHOOK__$NAME__SSL</code>
  - <code>EMQX_CLUSTER__ETCD__SSL</code>
- - <code>EMQX_CONNECTORS__MQTT__$NAME__SSL</code>
  - <code>EMQX_GATEWAY__COAP__AUTHENTICATION__SSL</code>
  - <code>EMQX_GATEWAY__COAP__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
  - <code>EMQX_GATEWAY__COAP__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
@@ -4254,31 +4256,6 @@ All the global configs that can be overridden in zones are:
 - overload_protection: <code>[zone:overload_protection](#zone-overload_protection)</code>
 
 
-
-
-## connector:connectors
-
-EMQX 连接器的配置。<br/>
-连接器维护与外部资源相关的数据，比如 MySQL 数据库。
-
-
-
-**Config paths**
-
- - <code>connectors</code>
-
-
-**Env overrides**
-
- - <code>EMQX_CONNECTORS</code>
-
-
-
-**Fields**
-
-- mqtt: <code>{$name -> [connector-mqtt:connector](#connector-mqtt-connector)}</code>
-
-  MQTT bridges。
 
 
 ## dashboard
@@ -5314,6 +5291,14 @@ Settings for the DTLS protocol.
   这可能会成为拒绝服务攻击的载体。
   SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项设置为 false，可以严格禁用客户端发起的重新协商。
   默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
+
+
+- handshake_timeout: <code>emqx_schema:duration()</code>
+  * default: 
+  `"15s"`
+
+
+  握手完成所允许的最长时间
 
 
 - gc_after_handshake: <code>boolean()</code>
@@ -7325,163 +7310,6 @@ Settings for the telemetry module.
 
 
 
-## egress
-MQTT Bridge 配置
-
-
-**Config paths**
-
- - <code>bridges.mqtt.$name</code>
-
-
-**Env overrides**
-
- - <code>EMQX_BRIDGES__MQTT__$NAME</code>
-
-
-
-**Fields**
-
-- direction: <code>egress</code>
-  * default: 
-  `egress`
-
-  The direction of the bridge. Can be one of 'ingress' or 'egress'.<br/>
-  The egress config defines how this bridge forwards messages from the local broker to the remote
-  broker.<br/>Template with variables is allowed in 'remote_topic', 'qos', 'retain', 'payload'.<br/>NOTE: if this bridge is used as the action of a rule (emqx rule engine), and also local_topic
-  is configured, then both the data got from the rule and the MQTT messages that matches
-  local_topic will be forwarded.
-
-
-- enable: <code>boolean()</code>
-  * default: 
-  `true`
-
-  启用/禁用 Bridge
-
-- connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
-
-
-  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>。<br/>
-  在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。<br/>
-
-- local_topic: <code>binary()</code>
-
-  要转发到远程broker的本地主题
-
-- remote_topic: <code>binary()</code>
-
-
-  转发到远程broker的哪个topic。<br/>
-  允许使用带有变量的模板。
-
-
-- remote_qos: <code>qos() | binary()</code>
-
-
-  待发送 MQTT 消息的 QoS。<br/>
-  允许使用带有变量的模板。
-
-
-- retain: <code>boolean() | binary()</code>
-
-
-  要发送的 MQTT 消息的“保留”标志。<br/>
-  允许使用带有变量的模板。
-
-
-- payload: <code>binary()</code>
-
-
-  要发送的 MQTT 消息的负载。<br/>
-  允许使用带有变量的模板。
-
-
-
-## ingress
-MQTT Bridge 配置
-
-
-**Config paths**
-
- - <code>bridges.mqtt.$name</code>
-
-
-**Env overrides**
-
- - <code>EMQX_BRIDGES__MQTT__$NAME</code>
-
-
-
-**Fields**
-
-- direction: <code>ingress</code>
-  * default: 
-  `egress`
-
-  The direction of the bridge. Can be one of 'ingress' or 'egress'.<br/>
-  The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-  send them to the local broker.<br/>Template with variables is allowed in 'local_topic', 'remote_qos', 'qos', 'retain',
-  'payload'.<br/>NOTE: if this bridge is used as the input of a rule (emqx rule engine), and also local_topic is
-  configured, then messages got from the remote broker will be sent to both the 'local_topic' and
-  the rule.
-
-
-- enable: <code>boolean()</code>
-  * default: 
-  `true`
-
-  启用/禁用 Bridge
-
-- connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
-
-
-  Bridge 使用的 Connector 的 ID 或者配置。Connector ID 的格式必须为：<code>{type}:{name}</code>。<br/>
-  在配置文件中，您可以通过以下路径找到 Connector 的相应配置条目：'connector.{type}.{name}'。<br/>
-
-- remote_topic: <code>binary()</code>
-
-  从远程broker的哪个topic接收消息
-
-- remote_qos: <code>qos() | binary()</code>
-  * default: 
-  `1`
-
-  订阅远程borker时要使用的 QoS 级别
-
-- local_topic: <code>binary()</code>
-
-
-  向本地broker的哪个topic发送消息。<br/>
-  允许使用带有变量的模板。
-
-
-- local_qos: <code>qos() | binary()</code>
-  * default: 
-  `"${qos}"`
-
-
-  待发送 MQTT 消息的 QoS。<br/>
-  允许使用带有变量的模板。
-
-
-- retain: <code>boolean() | binary()</code>
-  * default: 
-  `"${retain}"`
-
-
-  要发送的 MQTT 消息的“保留”标志。<br/>
-  允许使用带有变量的模板。
-
-
-- payload: <code>binary()</code>
-
-
-  要发送的 MQTT 消息的负载。<br/>
-  允许使用带有变量的模板。
-
-
-
 ## cluster_dns
 DNS SRV 记录服务发现。
 
@@ -8424,13 +8252,13 @@ EMQX 日志记录支持日志事件的多个接收器。 每个接收器由一�
 
   启动时读取的配置文件列表。后面的配置文件项覆盖前面的文件。
 
-- global_gc_interval: <code>emqx_schema:duration()</code>
+- global_gc_interval: <code>disabled | emqx_schema:duration()</code>
   * default: 
   `"15m"`
   * mapping: 
   `emqx_machine.global_gc_interval`
 
-  系统调优参数，设置节点运行多久强制进行一次全局垃圾回收。
+  系统调优参数，设置节点运行多久强制进行一次全局垃圾回收。禁用设置为 <code>disabled</code>。
 
 - crash_dump_file: <code>emqx_conf_schema:file()</code>
   * default: 
@@ -11115,6 +10943,8 @@ PSK 是 “Pre-Shared-Keys” 的缩写。
 
 
 - redis_type: <code>cluster</code>
+  * default: 
+  `cluster`
 
   集群模式。
 
@@ -11127,12 +10957,6 @@ PSK 是 “Pre-Shared-Keys” 的缩写。
 - password: <code>binary()</code>
 
   内部数据库密码。
-
-- database: <code>integer()</code>
-  * default: 
-  `0`
-
-  Redis 数据库 ID。
 
 - auto_reconnect: <code>boolean()</code>
   * default: 
@@ -11241,6 +11065,8 @@ PSK 是 “Pre-Shared-Keys” 的缩写。
 
 
 - redis_type: <code>sentinel</code>
+  * default: 
+  `sentinel`
 
   哨兵模式。
 
@@ -11369,6 +11195,8 @@ PSK 是 “Pre-Shared-Keys” 的缩写。
 
 
 - redis_type: <code>single</code>
+  * default: 
+  `single`
 
   单机模式。
 
@@ -11585,16 +11413,208 @@ MQTT Bridge 配置
 
 **Fields**
 
-- webhook: <code>{$name -> [bridge:config](#bridge-config)}</code>
+- webhook: <code>{$name -> [bridge_webhook:config](#bridge_webhook-config)}</code>
 
   转发消息到 HTTP 服务器的 WebHook
 
-- mqtt: <code>{$name -> [ingress](#ingress) | [egress](#egress)}</code>
+- mqtt: <code>{$name -> [bridge_mqtt:config](#bridge_mqtt-config)}</code>
 
   桥接到另一个 MQTT Broker 的 MQTT Bridge
 
 
-## bridge:config
+## bridge_mqtt:config
+MQTT Bridge 的配置。
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用 Bridge
+
+- resource_opts: <code>[bridge_mqtt:creation_opts](#bridge_mqtt-creation_opts)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- mode: <code>cluster_shareload</code>
+  * default: 
+  `cluster_shareload`
+
+
+  MQTT 桥的模式。 <br/>
+
+  - cluster_shareload：在 emqx 集群的每个节点上创建一个 MQTT 连接。<br/>
+  在“cluster_shareload”模式下，来自远程代理的传入负载通过共享订阅的方式接收。<br/>
+  请注意，<code>clientid</code> 以节点名称为后缀，这是为了避免不同节点之间的 <code> clientid</code> 冲突。
+  而且对于入口连接的 <code>remote.topic</code>，我们只能使用共享订阅主题过滤器。
+
+
+- server: <code>emqx_schema:host_port()</code>
+
+  远程 MQTT Broker的主机和端口。
+
+- reconnect_interval: <code>string()</code>
+  * default: 
+  `"15s"`
+
+  Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  - `s` for seconds,
+  - `m` for minutes,
+  - `h` for hours;
+  <br/>or combination of whereof: `1h5m0s`
+
+- proto_ver: <code>v3 | v4 | v5</code>
+  * default: 
+  `v4`
+
+  MQTT 协议版本
+
+- bridge_mode: <code>boolean()</code>
+  * default: 
+  `false`
+
+
+  是否启用 Bridge Mode。
+  注意：此设置只针对 MQTT 协议版本 < 5.0 有效，并且需要远程 MQTT Broker 支持 Bridge Mode。
+      
+
+- username: <code>binary()</code>
+
+  MQTT 协议的用户名
+
+- password: <code>binary()</code>
+
+  MQTT 协议的密码
+
+- clean_start: <code>boolean()</code>
+  * default: 
+  `true`
+
+  MQTT 清除会话
+
+- keepalive: <code>string()</code>
+  * default: 
+  `"300s"`
+
+  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  - `s` for seconds,
+  - `m` for minutes,
+  - `h` for hours;
+  <br/>or combination of whereof: `1h5m0s`
+
+- retry_interval: <code>string()</code>
+  * default: 
+  `"15s"`
+
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  - `s` for seconds,
+  - `m` for minutes,
+  - `h` for hours;
+  <br/>or combination of whereof: `1h5m0s`
+
+- max_inflight: <code>non_neg_integer()</code>
+  * default: 
+  `32`
+
+  MQTT 协议的最大飞行（已发送但未确认）消息
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+- ingress: <code>[connector-mqtt:ingress](#connector-mqtt-ingress)</code>
+
+  入口配置定义了该桥接如何从远程 MQTT Broker 接收消息，然后将消息发送到本地 Broker。<br/>
+          以下字段中允许使用带有变量的模板：'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'。<br/>
+          注意：如果此桥接被用作规则的输入，并且配置了 'local.topic'，则从远程代理获取的消息将同时被发送到 'local.topic' 和规则。
+                  
+
+- egress: <code>[connector-mqtt:egress](#connector-mqtt-egress)</code>
+
+  出口配置定义了该桥接如何将消息从本地 Broker 转发到远程 Broker。
+  以下字段中允许使用带有变量的模板：'remote.topic', 'local.qos', 'local.retain', 'local.payload'。<br/>
+  注意：如果此桥接被用作规则的动作，并且配置了 'local.topic'，则从规则输出的数据以及匹配到 'local.topic' 的 MQTT 消息都会被转发。
+                  
+
+
+## bridge_mqtt:creation_opts
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>pos_integer()</code>
+  * default: 
+  `16`
+
+  资源连接池大小。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔，单位毫秒。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔，单位毫秒。
+
+- query_mode: <code>sync | async</code>
+  * default: 
+  `async`
+
+  请求模式。可选 '同步/异步'，默认为'同步'模式。
+
+- async_inflight_window: <code>pos_integer()</code>
+  * default: 
+  `100`
+
+  异步请求飞行队列窗口大小。
+
+- enable_queue: <code>boolean()</code>
+  * default: 
+  `false`
+
+  启用队列模式。
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  消息队列的最大长度。
+
+
+## bridge_webhook:config
 HTTP Bridge 配置
 
 
@@ -11617,11 +11637,11 @@ HTTP Bridge 配置
 
   启用/禁用 Bridge
 
-- direction: <code>egress</code>
+- resource_opts: <code>[bridge_webhook:creation_opts](#bridge_webhook-creation_opts)</code>
   * default: 
-  `egress`
+  `{}`
 
-  Bridge 的方向， 必须是 egress
+  资源相关的选项。
 
 - connect_timeout: <code>emqx_schema:duration_ms()</code>
   * default: 
@@ -11729,6 +11749,66 @@ HTTP Bridge 配置
   HTTP 请求超时
 
 
+## bridge_webhook:creation_opts
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.webhook.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__WEBHOOK__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>pos_integer()</code>
+  * default: 
+  `16`
+
+  资源连接池大小。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔，单位毫秒。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔，单位毫秒。
+
+- query_mode: <code>sync | async</code>
+  * default: 
+  `async`
+
+  请求模式。可选 '同步/异步'，默认为'同步'模式。
+
+- async_inflight_window: <code>pos_integer()</code>
+  * default: 
+  `100`
+
+  异步请求飞行队列窗口大小。
+
+- enable_queue: <code>boolean()</code>
+  * default: 
+  `false`
+
+  启用队列模式。
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  消息队列的最大长度。
+
+
 ## connector-http:request
 
 
@@ -11792,7 +11872,7 @@ HTTP Bridge 配置
 
 **Fields**
 
-- method: <code>post | put | get | delete</code>
+- method: <code>binary()</code>
 
   HTTP 请求方法。
 
@@ -11817,161 +11897,208 @@ HTTP Bridge 配置
   HTTP 请求超时。
 
 
-## connector-mqtt:connector
-连接器的通用配置。
+## connector-mqtt:egress
+出口配置定义了该桥接如何将消息从本地 Broker 转发到远程 Broker。
+以下字段中允许使用带有变量的模板：'remote.topic', 'local.qos', 'local.retain', 'local.payload'。<br/>
+注意：如果此桥接被用作规则的动作，并且配置了 'local.topic'，则从规则输出的数据以及匹配到 'local.topic' 的 MQTT 消息都会被转发。
+                
 
 
 **Config paths**
 
- - <code>bridges.mqtt.$name.connector</code>
- - <code>connectors.mqtt.$name</code>
+ - <code>bridges.mqtt.$name.egress</code>
 
 
 **Env overrides**
 
- - <code>EMQX_BRIDGES__MQTT__$NAME__CONNECTOR</code>
- - <code>EMQX_CONNECTORS__MQTT__$NAME</code>
+ - <code>EMQX_BRIDGES__MQTT__$NAME__EGRESS</code>
 
 
 
 **Fields**
 
-- mode: <code>cluster_shareload</code>
-  * default: 
-  `cluster_shareload`
+- local: <code>[connector-mqtt:egress_local](#connector-mqtt-egress_local)</code>
+
+  如何从本地 Broker 接收消息相关的配置。
+
+- remote: <code>[connector-mqtt:egress_remote](#connector-mqtt-egress_remote)</code>
+
+  发送消息到远程 Broker 相关的配置。
 
 
-  MQTT 桥的模式。 <br/>
-
-  - cluster_shareload：在 emqx 集群的每个节点上创建一个 MQTT 连接。<br/>
-  在“cluster_shareload”模式下，来自远程代理的传入负载通过共享订阅的方式接收。<br/>
-  请注意，<code>clientid</code> 以节点名称为后缀，这是为了避免不同节点之间的clientid冲突。
-  而且对于入口连接的 <code>remote_topic</code>，我们只能使用共享订阅主题过滤器。
-
-
-- server: <code>emqx_schema:host_port()</code>
-
-  远程 MQTT Broker的主机和端口。
-
-- reconnect_interval: <code>string()</code>
-  * default: 
-  `"15s"`
-
-  Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
-  - `s` for seconds,
-  - `m` for minutes,
-  - `h` for hours;
-  <br/>or combination of whereof: `1h5m0s`
-
-- proto_ver: <code>v3 | v4 | v5</code>
-  * default: 
-  `v4`
-
-  MQTT 协议版本
-
-- bridge_mode: <code>boolean()</code>
-  * default: 
-  `false`
-
-
-  是否启用 Bridge Mode。
-  注意：此设置只针对 MQTT 协议版本 < 5.0 有效，并且需要远程 MQTT Broker 支持 Bridge Mode。
-      
-
-- username: <code>binary()</code>
-
-  MQTT 协议的用户名
-
-- password: <code>binary()</code>
-
-  MQTT 协议的密码
-
-- clean_start: <code>boolean()</code>
-  * default: 
-  `true`
-
-  MQTT 清除会话
-
-- keepalive: <code>string()</code>
-  * default: 
-  `"300s"`
-
-  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
-  - `s` for seconds,
-  - `m` for minutes,
-  - `h` for hours;
-  <br/>or combination of whereof: `1h5m0s`
-
-- retry_interval: <code>string()</code>
-  * default: 
-  `"15s"`
-
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
-  - `s` for seconds,
-  - `m` for minutes,
-  - `h` for hours;
-  <br/>or combination of whereof: `1h5m0s`
-
-- max_inflight: <code>non_neg_integer()</code>
-  * default: 
-  `32`
-
-  MQTT 协议的最大飞行（已发送但未确认）消息
-
-- replayq: <code>[connector-mqtt:replayq](#connector-mqtt-replayq)</code>
-
-
-
-- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
-  * default: 
-  `{enable = false}`
-
-  启用 SSL 连接。
-
-
-## connector-mqtt:replayq
-本地磁盘消息队列
+## connector-mqtt:egress_local
+如何从本地 Broker 接收消息相关的配置。
 
 
 **Config paths**
 
- - <code>bridges.mqtt.$name.connector.replayq</code>
- - <code>connectors.mqtt.$name.replayq</code>
+ - <code>bridges.mqtt.$name.egress.local</code>
 
 
 **Env overrides**
 
- - <code>EMQX_BRIDGES__MQTT__$NAME__CONNECTOR__REPLAYQ</code>
- - <code>EMQX_CONNECTORS__MQTT__$NAME__REPLAYQ</code>
+ - <code>EMQX_BRIDGES__MQTT__$NAME__EGRESS__LOCAL</code>
 
 
 
 **Fields**
 
-- dir: <code>boolean() | string()</code>
+- topic: <code>binary()</code>
+
+  要转发到远程broker的本地主题
 
 
-  replayq 文件保存的目录。<br/>
-  设置为 'false' 会禁用 replayq 功能。
+## connector-mqtt:egress_remote
+发送消息到远程 Broker 相关的配置。
 
 
-- seg_bytes: <code>emqx_schema:bytesize()</code>
+**Config paths**
+
+ - <code>bridges.mqtt.$name.egress.remote</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__EGRESS__REMOTE</code>
+
+
+
+**Fields**
+
+- topic: <code>binary()</code>
+
+
+  转发到远程broker的哪个topic。<br/>
+  允许使用带有变量的模板。
+
+
+- qos: <code>qos() | binary()</code>
+
+
+  待发送 MQTT 消息的 QoS。<br/>
+  允许使用带有变量的模板。
+
+
+- retain: <code>boolean() | binary()</code>
+
+
+  要发送的 MQTT 消息的“保留”标志。<br/>
+  允许使用带有变量的模板。
+
+
+- payload: <code>binary()</code>
+
+
+  要发送的 MQTT 消息的负载。<br/>
+  允许使用带有变量的模板。
+
+
+
+## connector-mqtt:ingress
+入口配置定义了该桥接如何从远程 MQTT Broker 接收消息，然后将消息发送到本地 Broker。<br/>
+        以下字段中允许使用带有变量的模板：'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'。<br/>
+        注意：如果此桥接被用作规则的输入，并且配置了 'local.topic'，则从远程代理获取的消息将同时被发送到 'local.topic' 和规则。
+                
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.ingress</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__INGRESS</code>
+
+
+
+**Fields**
+
+- remote: <code>[connector-mqtt:ingress_remote](#connector-mqtt-ingress_remote)</code>
+
+  订阅远程 Broker 相关的配置。
+
+- local: <code>[connector-mqtt:ingress_local](#connector-mqtt-ingress_local)</code>
+
+  发送消息到本地 Broker 相关的配置。
+
+
+## connector-mqtt:ingress_local
+发送消息到本地 Broker 相关的配置。
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.ingress.local</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__INGRESS__LOCAL</code>
+
+
+
+**Fields**
+
+- topic: <code>binary()</code>
+
+
+  向本地broker的哪个topic发送消息。<br/>
+  允许使用带有变量的模板。
+
+
+- qos: <code>qos() | binary()</code>
   * default: 
-  `"100MB"`
+  `"${qos}"`
 
 
-  单个段的大小（以字节为单位）。<br/>
-  一个段映射到 replayq 目录中的一个文件。 如果当前段已满，则新段（文件）将被打开写入。
+  待发送 MQTT 消息的 QoS。<br/>
+  允许使用带有变量的模板。
 
 
-- offload: <code>boolean()</code>
+- retain: <code>boolean() | binary()</code>
   * default: 
-  `false`
+  `"${retain}"`
 
 
-  在Offload模式下，磁盘队列仅用于卸载队列尾段。<br/>
-  消息首先缓存在内存中，然后写入replayq文件。内存缓大小为“seg_bytes” 指定的值。
+  要发送的 MQTT 消息的“保留”标志。<br/>
+  允许使用带有变量的模板。
 
+
+- payload: <code>binary()</code>
+
+
+  要发送的 MQTT 消息的负载。<br/>
+  允许使用带有变量的模板。
+
+
+
+## connector-mqtt:ingress_remote
+订阅远程 Broker 相关的配置。
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.ingress.remote</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__INGRESS__REMOTE</code>
+
+
+
+**Fields**
+
+- topic: <code>binary()</code>
+
+  从远程broker的哪个topic接收消息
+
+- qos: <code>qos() | binary()</code>
+  * default: 
+  `1`
+
+  订阅远程borker时要使用的 QoS 级别
 
 
 ## plugin:plugins

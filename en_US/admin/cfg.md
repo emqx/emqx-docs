@@ -1,6 +1,6 @@
 # Configuration Files
 
-<!--5.0.11-->
+<!--5.0.12-->
 EMQX configuration files are in [HOCON](https://github.com/emqx/hocon) format.
 HOCON, or Human-Optimized Config Object Notation is a format for human-readable data,
 and a superset of JSON.
@@ -503,10 +503,6 @@ ciphers =
 
 
 - limiter: <code>[limiter](#limiter)</code>
-
-
-
-- connectors: <code>[connector:connectors](#connector-connectors)</code>
 
 
 
@@ -1287,6 +1283,8 @@ Authorization using a Redis cluster.
 
 
 - redis_type: <code>cluster</code>
+  * default: 
+  `cluster`
 
   Cluster mode
 
@@ -1299,12 +1297,6 @@ Authorization using a Redis cluster.
 - password: <code>binary()</code>
 
   EMQX's password in the external database.
-
-- database: <code>integer()</code>
-  * default: 
-  `0`
-
-  Redis database ID.
 
 - auto_reconnect: <code>boolean()</code>
   * default: 
@@ -1360,6 +1352,8 @@ Authorization using a Redis Sentinel.
 
 
 - redis_type: <code>sentinel</code>
+  * default: 
+  `sentinel`
 
   Sentinel mode
 
@@ -1436,6 +1430,8 @@ Authorization using a single Redis instance.
 
 
 - redis_type: <code>single</code>
+  * default: 
+  `single`
 
   Single mode
 
@@ -2131,6 +2127,14 @@ Socket options for SSL connections.
   The default value is true. Note that disabling renegotiation can result in
   long-lived connections becoming unusable due to limits on
   the number of messages the underlying cipher suite can encipher.
+
+
+- handshake_timeout: <code>emqx_schema:duration()</code>
+  * default: 
+  `"15s"`
+
+
+  Maximum time duration allowed for the handshake to complete
 
 
 - gc_after_handshake: <code>boolean()</code>
@@ -3562,10 +3566,9 @@ Socket options for SSL clients.
 
  - <code>authentication.$INDEX.ssl</code>
  - <code>authorization.sources.$INDEX.ssl</code>
- - <code>bridges.mqtt.$name.connector.ssl</code>
+ - <code>bridges.mqtt.$name.ssl</code>
  - <code>bridges.webhook.$name.ssl</code>
  - <code>cluster.etcd.ssl</code>
- - <code>connectors.mqtt.$name.ssl</code>
  - <code>gateway.coap.authentication.ssl</code>
  - <code>gateway.coap.listeners.dtls.$name.authentication.ssl</code>
  - <code>gateway.coap.listeners.udp.$name.authentication.ssl</code>
@@ -3594,10 +3597,9 @@ Socket options for SSL clients.
 
  - <code>EMQX_AUTHENTICATION__$INDEX__SSL</code>
  - <code>EMQX_AUTHORIZATION__SOURCES__$INDEX__SSL</code>
- - <code>EMQX_BRIDGES__MQTT__$NAME__CONNECTOR__SSL</code>
+ - <code>EMQX_BRIDGES__MQTT__$NAME__SSL</code>
  - <code>EMQX_BRIDGES__WEBHOOK__$NAME__SSL</code>
  - <code>EMQX_CLUSTER__ETCD__SSL</code>
- - <code>EMQX_CONNECTORS__MQTT__$NAME__SSL</code>
  - <code>EMQX_GATEWAY__COAP__AUTHENTICATION__SSL</code>
  - <code>EMQX_GATEWAY__COAP__LISTENERS__DTLS__$NAME__AUTHENTICATION__SSL</code>
  - <code>EMQX_GATEWAY__COAP__LISTENERS__UDP__$NAME__AUTHENTICATION__SSL</code>
@@ -4426,31 +4428,6 @@ All the global configs that can be overridden in zones are:
 - overload_protection: <code>[zone:overload_protection](#zone-overload_protection)</code>
 
 
-
-
-## connector:connectors
-
-Configuration for EMQX connectors.<br/>
-A connector maintains the data related to the external resources, such as MySQL database.
-
-
-
-**Config paths**
-
- - <code>connectors</code>
-
-
-**Env overrides**
-
- - <code>EMQX_CONNECTORS</code>
-
-
-
-**Fields**
-
-- mqtt: <code>{$name -> [connector-mqtt:connector](#connector-mqtt-connector)}</code>
-
-  MQTT bridges.
 
 
 ## dashboard
@@ -5552,6 +5529,14 @@ Settings for the DTLS protocol.
   The default value is true. Note that disabling renegotiation can result in
   long-lived connections becoming unusable due to limits on
   the number of messages the underlying cipher suite can encipher.
+
+
+- handshake_timeout: <code>emqx_schema:duration()</code>
+  * default: 
+  `"15s"`
+
+
+  Maximum time duration allowed for the handshake to complete
 
 
 - gc_after_handshake: <code>boolean()</code>
@@ -7634,8 +7619,8 @@ Configuration for a built-in action.
 
 
 
-## egress
-Configuration for MQTT bridge.
+## config
+The config for MQTT Bridges.
 
 
 **Config paths**
@@ -7650,17 +7635,6 @@ Configuration for MQTT bridge.
 
 
 **Fields**
-
-- direction: <code>egress</code>
-  * default: 
-  `egress`
-
-  The direction of the bridge. Can be one of 'ingress' or 'egress'.<br/>
-  The egress config defines how this bridge forwards messages from the local broker to the remote
-  broker.<br/>Template with variables is allowed in 'remote_topic', 'qos', 'retain', 'payload'.<br/>NOTE: if this bridge is used as the action of a rule (emqx rule engine), and also local_topic
-  is configured, then both the data got from the rule and the MQTT messages that matches
-  local_topic will be forwarded.
-
 
 - enable: <code>boolean()</code>
   * default: 
@@ -7668,133 +7642,119 @@ Configuration for MQTT bridge.
 
   Enable or disable this bridge
 
-- connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
-
-
-  The ID or the configs of the connector to be used for this bridge. Connector IDs must be of format:
-  <code>{type}:{name}</code>.<br/>
-  In config files, you can find the corresponding config entry for a connector by such path:
-  'connectors.{type}.{name}'.<br/>
-
-
-- local_topic: <code>binary()</code>
-
-  The local topic to be forwarded to the remote broker
-
-- remote_topic: <code>binary()</code>
-
-
-  Forward to which topic of the remote broker.<br/>
-  Template with variables is allowed.
-
-
-- remote_qos: <code>qos() | binary()</code>
-
-
-  The QoS of the MQTT message to be sent.<br/>
-  Template with variables is allowed.
-
-
-- retain: <code>boolean() | binary()</code>
-
-
-  The 'retain' flag of the MQTT message to be sent.<br/>
-  Template with variables is allowed.
-
-
-- payload: <code>binary()</code>
-
-
-  The payload of the MQTT message to be sent.<br/>
-  Template with variables is allowed.
-
-
-
-## ingress
-Configuration for MQTT bridge.
-
-
-**Config paths**
-
- - <code>bridges.mqtt.$name</code>
-
-
-**Env overrides**
-
- - <code>EMQX_BRIDGES__MQTT__$NAME</code>
-
-
-
-**Fields**
-
-- direction: <code>ingress</code>
+- resource_opts: <code>[bridge_mqtt:creation_opts](#bridge_mqtt-creation_opts)</code>
   * default: 
-  `egress`
+  `{}`
 
-  The direction of the bridge. Can be one of 'ingress' or 'egress'.<br/>
+  Resource options.
+
+- mode: <code>cluster_shareload</code>
+  * default: 
+  `cluster_shareload`
+
+
+  The mode of the MQTT Bridge.<br/>
+
+  - cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/>
+  In 'cluster_shareload' mode, the incoming load from the remote broker is shared by
+  using shared subscription.<br/>
+  Note that the 'clientid' is suffixed by the node name, this is to avoid
+  clientid conflicts between different nodes. And we can only use shared subscription
+  topic filters for <code>remote.topic</code> of ingress connections.
+
+
+- server: <code>emqx_schema:host_port()</code>
+
+  The host and port of the remote MQTT broker
+
+- reconnect_interval: <code>string()</code>
+  * default: 
+  `"15s"`
+
+  Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  - `s` for seconds,
+  - `m` for minutes,
+  - `h` for hours;
+  <br/>or combination of whereof: `1h5m0s`
+
+- proto_ver: <code>v3 | v4 | v5</code>
+  * default: 
+  `v4`
+
+  The MQTT protocol version
+
+- bridge_mode: <code>boolean()</code>
+  * default: 
+  `false`
+
+
+  If enable bridge mode.
+  NOTE: This setting is only for MQTT protocol version older than 5.0, and the remote MQTT
+  broker MUST support this feature.
+      
+
+- username: <code>binary()</code>
+
+  The username of the MQTT protocol
+
+- password: <code>binary()</code>
+
+  The password of the MQTT protocol
+
+- clean_start: <code>boolean()</code>
+  * default: 
+  `true`
+
+  The clean-start or the clean-session of the MQTT protocol
+
+- keepalive: <code>string()</code>
+  * default: 
+  `"300s"`
+
+  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  - `s` for seconds,
+  - `m` for minutes,
+  - `h` for hours;
+  <br/>or combination of whereof: `1h5m0s`
+
+- retry_interval: <code>string()</code>
+  * default: 
+  `"15s"`
+
+  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
+  - `s` for seconds,
+  - `m` for minutes,
+  - `h` for hours;
+  <br/>or combination of whereof: `1h5m0s`
+
+- max_inflight: <code>non_neg_integer()</code>
+  * default: 
+  `32`
+
+  Max inflight (sent, but un-acked) messages of the MQTT protocol
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  SSL connection settings.
+
+- ingress: <code>[connector-mqtt:ingress](#connector-mqtt-ingress)</code>
+
   The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
-  send them to the local broker.<br/>Template with variables is allowed in 'local_topic', 'remote_qos', 'qos', 'retain',
-  'payload'.<br/>NOTE: if this bridge is used as the input of a rule (emqx rule engine), and also local_topic is
-  configured, then messages got from the remote broker will be sent to both the 'local_topic' and
-  the rule.
+          send them to the local broker.<br/>
+          Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+          NOTE: if this bridge is used as the input of a rule, and also 'local.topic' is
+          configured, then messages got from the remote broker will be sent to both the 'local.topic' and
+          the rule.
 
+- egress: <code>[connector-mqtt:egress](#connector-mqtt-egress)</code>
 
-- enable: <code>boolean()</code>
-  * default: 
-  `true`
-
-  Enable or disable this bridge
-
-- connector: <code>binary() | [connector-mqtt:connector](#connector-mqtt-connector)</code>
-
-
-  The ID or the configs of the connector to be used for this bridge. Connector IDs must be of format:
-  <code>{type}:{name}</code>.<br/>
-  In config files, you can find the corresponding config entry for a connector by such path:
-  'connectors.{type}.{name}'.<br/>
-
-
-- remote_topic: <code>binary()</code>
-
-  Receive messages from which topic of the remote broker
-
-- remote_qos: <code>qos() | binary()</code>
-  * default: 
-  `1`
-
-  The QoS level to be used when subscribing to the remote broker
-
-- local_topic: <code>binary()</code>
-
-
-  Send messages to which topic of the local broker.<br/>
-  Template with variables is allowed.
-
-
-- local_qos: <code>qos() | binary()</code>
-  * default: 
-  `"${qos}"`
-
-
-  The QoS of the MQTT message to be sent.<br/>
-  Template with variables is allowed.
-
-
-- retain: <code>boolean() | binary()</code>
-  * default: 
-  `"${retain}"`
-
-
-  The 'retain' flag of the MQTT message to be sent.<br/>
-  Template with variables is allowed.
-
-
-- payload: <code>binary()</code>
-
-
-  The payload of the MQTT message to be sent.<br/>
-  Template with variables is allowed.
-
+  The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
+  Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+  NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
+  is configured, then both the data got from the rule and the MQTT messages that matches
+  'local.topic' will be forwarded.
 
 
 ## config
@@ -7820,11 +7780,11 @@ Configuration for an HTTP bridge.
 
   Enable or disable this bridge
 
-- direction: <code>egress</code>
+- resource_opts: <code>[bridge_webhook:creation_opts](#bridge_webhook-creation_opts)</code>
   * default: 
-  `egress`
+  `{}`
 
-  The direction of this bridge, MUST be 'egress'
+  Resource options.
 
 - connect_timeout: <code>emqx_schema:duration_ms()</code>
   * default: 
@@ -8851,13 +8811,13 @@ Node name, cookie, config & data directories and the Erlang virtual machine (BEA
   significant: later configuration files override the previous ones.
             
 
-- global_gc_interval: <code>emqx_schema:duration()</code>
+- global_gc_interval: <code>disabled | emqx_schema:duration()</code>
   * default: 
   `"15m"`
   * mapping: 
   `emqx_machine.global_gc_interval`
 
-  Periodic garbage collection interval.
+  Periodic garbage collection interval. Set to <code>disabled</code> to have it disabled.
 
 - crash_dump_file: <code>emqx_conf_schema:file()</code>
   * default: 
@@ -11552,6 +11512,8 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
 
 - redis_type: <code>cluster</code>
+  * default: 
+  `cluster`
 
   Cluster mode
 
@@ -11564,12 +11526,6 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 - password: <code>binary()</code>
 
   EMQX's password in the external database.
-
-- database: <code>integer()</code>
-  * default: 
-  `0`
-
-  Redis database ID.
 
 - auto_reconnect: <code>boolean()</code>
   * default: 
@@ -11677,6 +11633,8 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
 
 - redis_type: <code>sentinel</code>
+  * default: 
+  `sentinel`
 
   Sentinel mode
 
@@ -11805,6 +11763,8 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
 
 - redis_type: <code>single</code>
+  * default: 
+  `single`
 
   Single mode
 
@@ -12021,13 +11981,133 @@ Configuration for MQTT bridges.
 
 **Fields**
 
-- webhook: <code>{$name -> [bridge:config](#bridge-config)}</code>
+- webhook: <code>{$name -> [bridge_webhook:config](#bridge_webhook-config)}</code>
 
   WebHook to an HTTP server.
 
-- mqtt: <code>{$name -> [ingress](#ingress) | [egress](#egress)}</code>
+- mqtt: <code>{$name -> [bridge_mqtt:config](#bridge_mqtt-config)}</code>
 
   MQTT bridges to/from another MQTT broker
+
+
+## bridge_mqtt:creation_opts
+Creation options.
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>pos_integer()</code>
+  * default: 
+  `16`
+
+  Resource worker pool size.
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  Health check interval, in milliseconds.
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  The auto restart interval after the resource is disconnected, in milliseconds.
+
+- query_mode: <code>sync | async</code>
+  * default: 
+  `async`
+
+  Query mode. Optional 'sync/async', default 'sync'.
+
+- async_inflight_window: <code>pos_integer()</code>
+  * default: 
+  `100`
+
+  Async query inflight window.
+
+- enable_queue: <code>boolean()</code>
+  * default: 
+  `false`
+
+  Queue mode enabled.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  Maximum queue storage.
+
+
+## bridge_webhook:creation_opts
+Creation options.
+
+
+**Config paths**
+
+ - <code>bridges.webhook.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__WEBHOOK__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>pos_integer()</code>
+  * default: 
+  `16`
+
+  Resource worker pool size.
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  Health check interval, in milliseconds.
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  The auto restart interval after the resource is disconnected, in milliseconds.
+
+- query_mode: <code>sync | async</code>
+  * default: 
+  `async`
+
+  Query mode. Optional 'sync/async', default 'sync'.
+
+- async_inflight_window: <code>pos_integer()</code>
+  * default: 
+  `100`
+
+  Async query inflight window.
+
+- enable_queue: <code>boolean()</code>
+  * default: 
+  `false`
+
+  Queue mode enabled.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  Maximum queue storage.
 
 
 ## connector-http:request
@@ -12093,7 +12173,7 @@ Configuration for MQTT bridges.
 
 **Fields**
 
-- method: <code>post | put | get | delete</code>
+- method: <code>binary()</code>
 
   HTTP method.
 
@@ -12118,166 +12198,211 @@ Configuration for MQTT bridges.
   HTTP request timeout.
 
 
-## connector-mqtt:connector
-Generic configuration for the connector.
+## connector-mqtt:egress
+The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
+Template with variables is allowed in 'remote.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
+is configured, then both the data got from the rule and the MQTT messages that matches
+'local.topic' will be forwarded.
 
 
 **Config paths**
 
- - <code>bridges.mqtt.$name.connector</code>
- - <code>connectors.mqtt.$name</code>
+ - <code>bridges.mqtt.$name.egress</code>
 
 
 **Env overrides**
 
- - <code>EMQX_BRIDGES__MQTT__$NAME__CONNECTOR</code>
- - <code>EMQX_CONNECTORS__MQTT__$NAME</code>
+ - <code>EMQX_BRIDGES__MQTT__$NAME__EGRESS</code>
 
 
 
 **Fields**
 
-- mode: <code>cluster_shareload</code>
-  * default: 
-  `cluster_shareload`
+- local: <code>[connector-mqtt:egress_local](#connector-mqtt-egress_local)</code>
+
+  The configs about receiving messages from local broker.
+
+- remote: <code>[connector-mqtt:egress_remote](#connector-mqtt-egress_remote)</code>
+
+  The configs about sending message to the remote broker.
 
 
-  The mode of the MQTT Bridge.<br/>
-
-  - cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/>
-  In 'cluster_shareload' mode, the incoming load from the remote broker is shared by
-  using shared subscription.<br/>
-  Note that the 'clientid' is suffixed by the node name, this is to avoid
-  clientid conflicts between different nodes. And we can only use shared subscription
-  topic filters for <code>remote_topic</code> of ingress connections.
-
-
-- server: <code>emqx_schema:host_port()</code>
-
-  The host and port of the remote MQTT broker
-
-- reconnect_interval: <code>string()</code>
-  * default: 
-  `"15s"`
-
-  Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
-  - `s` for seconds,
-  - `m` for minutes,
-  - `h` for hours;
-  <br/>or combination of whereof: `1h5m0s`
-
-- proto_ver: <code>v3 | v4 | v5</code>
-  * default: 
-  `v4`
-
-  The MQTT protocol version
-
-- bridge_mode: <code>boolean()</code>
-  * default: 
-  `false`
-
-
-  If enable bridge mode.
-  NOTE: This setting is only for MQTT protocol version older than 5.0, and the remote MQTT
-  broker MUST support this feature.
-      
-
-- username: <code>binary()</code>
-
-  The username of the MQTT protocol
-
-- password: <code>binary()</code>
-
-  The password of the MQTT protocol
-
-- clean_start: <code>boolean()</code>
-  * default: 
-  `true`
-
-  The clean-start or the clean-session of the MQTT protocol
-
-- keepalive: <code>string()</code>
-  * default: 
-  `"300s"`
-
-  MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
-  - `s` for seconds,
-  - `m` for minutes,
-  - `h` for hours;
-  <br/>or combination of whereof: `1h5m0s`
-
-- retry_interval: <code>string()</code>
-  * default: 
-  `"15s"`
-
-  Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
-  - `s` for seconds,
-  - `m` for minutes,
-  - `h` for hours;
-  <br/>or combination of whereof: `1h5m0s`
-
-- max_inflight: <code>non_neg_integer()</code>
-  * default: 
-  `32`
-
-  Max inflight (sent, but un-acked) messages of the MQTT protocol
-
-- replayq: <code>[connector-mqtt:replayq](#connector-mqtt-replayq)</code>
-
-
-
-- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
-  * default: 
-  `{enable = false}`
-
-  SSL connection settings.
-
-
-## connector-mqtt:replayq
-Queue messages in disk files.
+## connector-mqtt:egress_local
+The configs about receiving messages from local broker.
 
 
 **Config paths**
 
- - <code>bridges.mqtt.$name.connector.replayq</code>
- - <code>connectors.mqtt.$name.replayq</code>
+ - <code>bridges.mqtt.$name.egress.local</code>
 
 
 **Env overrides**
 
- - <code>EMQX_BRIDGES__MQTT__$NAME__CONNECTOR__REPLAYQ</code>
- - <code>EMQX_CONNECTORS__MQTT__$NAME__REPLAYQ</code>
+ - <code>EMQX_BRIDGES__MQTT__$NAME__EGRESS__LOCAL</code>
 
 
 
 **Fields**
 
-- dir: <code>boolean() | string()</code>
+- topic: <code>binary()</code>
+
+  The local topic to be forwarded to the remote broker
 
 
-  The dir where the replayq file saved.<br/>
-  Set to 'false' disables the replayq feature.
+## connector-mqtt:egress_remote
+The configs about sending message to the remote broker.
 
 
-- seg_bytes: <code>emqx_schema:bytesize()</code>
+**Config paths**
+
+ - <code>bridges.mqtt.$name.egress.remote</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__EGRESS__REMOTE</code>
+
+
+
+**Fields**
+
+- topic: <code>binary()</code>
+
+
+  Forward to which topic of the remote broker.<br/>
+  Template with variables is allowed.
+
+
+- qos: <code>qos() | binary()</code>
+
+
+  The QoS of the MQTT message to be sent.<br/>
+  Template with variables is allowed.
+
+
+- retain: <code>boolean() | binary()</code>
+
+
+  The 'retain' flag of the MQTT message to be sent.<br/>
+  Template with variables is allowed.
+
+
+- payload: <code>binary()</code>
+
+
+  The payload of the MQTT message to be sent.<br/>
+  Template with variables is allowed.
+
+
+
+## connector-mqtt:ingress
+The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
+        send them to the local broker.<br/>
+        Template with variables is allowed in 'remote.qos', 'local.topic', 'local.qos', 'local.retain', 'local.payload'.<br/>
+        NOTE: if this bridge is used as the input of a rule, and also 'local.topic' is
+        configured, then messages got from the remote broker will be sent to both the 'local.topic' and
+        the rule.
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.ingress</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__INGRESS</code>
+
+
+
+**Fields**
+
+- remote: <code>[connector-mqtt:ingress_remote](#connector-mqtt-ingress_remote)</code>
+
+  The configs about subscribing to the remote broker.
+
+- local: <code>[connector-mqtt:ingress_local](#connector-mqtt-ingress_local)</code>
+
+  The configs about sending message to the local broker.
+
+
+## connector-mqtt:ingress_local
+The configs about sending message to the local broker.
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.ingress.local</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__INGRESS__LOCAL</code>
+
+
+
+**Fields**
+
+- topic: <code>binary()</code>
+
+
+  Send messages to which topic of the local broker.<br/>
+  Template with variables is allowed.
+
+
+- qos: <code>qos() | binary()</code>
   * default: 
-  `"100MB"`
+  `"${qos}"`
 
 
-  The size in bytes of a single segment.<br/>
-  A segment is mapping to a file in the replayq dir. If the current segment is full, a new segment
-  (file) will be opened to write.
+  The QoS of the MQTT message to be sent.<br/>
+  Template with variables is allowed.
 
 
-- offload: <code>boolean()</code>
+- retain: <code>boolean() | binary()</code>
   * default: 
-  `false`
+  `"${retain}"`
 
 
-  In offload mode, the disk queue is only used to offload queue tail segments.<br/>
-  The messages are cached in the memory first, then it writes to the replayq files after the size of
-  the memory cache reaches 'seg_bytes'.
+  The 'retain' flag of the MQTT message to be sent.<br/>
+  Template with variables is allowed.
 
+
+- payload: <code>binary()</code>
+
+
+  The payload of the MQTT message to be sent.<br/>
+  Template with variables is allowed.
+
+
+
+## connector-mqtt:ingress_remote
+The configs about subscribing to the remote broker.
+
+
+**Config paths**
+
+ - <code>bridges.mqtt.$name.ingress.remote</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MQTT__$NAME__INGRESS__REMOTE</code>
+
+
+
+**Fields**
+
+- topic: <code>binary()</code>
+
+  Receive messages from which topic of the remote broker
+
+- qos: <code>qos() | binary()</code>
+  * default: 
+  `1`
+
+  The QoS level to be used when subscribing to the remote broker
 
 
 ## plugin:plugins
