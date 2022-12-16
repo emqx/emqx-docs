@@ -28,9 +28,11 @@ More about the listener configuration, please refer to [Listener Configuration](
 
 ### Manager Listener
 
-After adding a listener, you can see the listener in the list, click the `Settings` button to modify the configuration of the listener. Note: the listener name, type and bind cannot be modified again in the settings. Click the `Delete` button to delete the listener. When deleting the listener, you need to enter the name of the listener you are currently deleting to confirm the deletion operation. In the list, we can also click the enable switch to enable or disable the listener. The number of connections under each listener can also be viewed in the list.
+After adding a listener, it can be seen in the list, and the name can be clicked to enter the edit page. On this page, the listener's configuration can be modified, or the listener can be deleted. Note that the listener name, type, and bind cannot be changed in the settings.
 
 ![image](./assets/config-listener-list.png)
+
+To delete a listener, click the "Delete" button on the edit page. When deleting a listener, you need to enter the name of the listener you are currently deleting to confirm the deletion. You can also click the enable switch to enable or disable the listener in the list. The list also allows you to view the number of connections for each listener.
 
 ::: warning
 Modify and delete listeners are operations with a certain degree of risk, which need to be operated with caution. If you update or delete a listener, the client connections on that listener will be disconnected.
