@@ -133,7 +133,7 @@ authorization {
   cache {
     enable = true
     max_size = 1024
-    duration = 1m
+    ttl = 1m
   }
 }
 ```
