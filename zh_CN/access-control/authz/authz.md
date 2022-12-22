@@ -1,38 +1,36 @@
-# 介绍
+# 简介
 
-MQTT 授权（authorization）是指对 MQTT 客户端的发布和订阅操作进行 _权限控制_。
-控制的内容主要是哪些客户端可以发布或者订阅哪些 MQTT 主题。
+EMQX 授权（authorization）是指对 MQTT 客户端的发布和订阅操作进行权限控制。
 
-EMQX 支持集中类型的授权。
-* 权限列表（亦即 _ACL_）。可以从例如 MongoDB， MySQL，PostgreSQL，Redis，或者 EMQX 的内置数据库中读取这个列表。
-* 加载一个包含全局的 ACL 的文件。
-* 动态访问一个 HTTP 后端服务，并通过该 HTTP 调用的返回值来客户端是否有访问的权限。
-* 通过提取认证过程中携带的授权数据，例如 JWT 的某个字段。
+授权机制在 EMQX 中的基本运作原理为：在客户端发布或订阅时，EMQX 将使用特定的流程或用户指定的查询语句从数据源中查询该客户端的权限列表，与当前操作进行匹配并根据匹配结果允许或拒绝当前操作。
+
+客户端权限列表需要提前存储到特定数据源（数据库、文件）中，更新对应的数据即可实现权限的运行时动态更新。
 
 ## 授权数据源
 
-_授权数据源_ （或称 _Authorizer_） 是 EMQX 中实现权限控制的一个模块。
-每个控制器都有一个类型，EMQX 内部也把它用作唯一的标识符。
+EMQX 授权支持与多种数据源集成，包括文件、MySQL、PostgreSQL、MongoDB 和 Redis。同时 EMQX 也支持权限列表存储到内置数据库（基于 Mnesia）中，这种方式提供了非常简单的配置流程和数据管理接口。用户可以通过 REST API 或 Dashboard 管理权限数据，或从 CSV 或 JSON 文件批量导入数据。
 
-EMQX 默认提供如下这些 Authorizer：
+除此之外，EMQX 还可以通过 HTTP 方式对接用户自己开发的服务，借此实现更复杂的授权逻辑。
 
-| 类型（ID）| 描述 |
-| ---- | --- |
-| built_in_database  | [使用内置数据库存授权数据](./mnesia.md) |
-| mysql              | [使用MySQL存放授权数据](./mysql.md) |
-| postgresql         | [使用PostgreSQL存放授权数据](./postgresql.md) |
-| mongodb            | [使用MongoDB存放授权数据](./mongodb.md) |
-| redis              | [使用Redis存放授权数据](./redis.md) |
-| http               | [通过访问外部HTTP服务来获取授权信息](./http.md) |
-| file               | [将授权信息存放在文件中](./file.md) |
+按照数据源来划分，EMQX 支持以下 7 种不同类型的授权检查器：
 
-每个控制器都有自己的配置。
+| 数据源                      | 描述                                            |
+| --------------------------- | ----------------------------------------------- |
+| built内置数据库_in_database | [使用内置数据库存授权数据](./mnesia.md)         |
+| MySQL                       | [使用 MySQL 存放授权数据](./mysql.md)             |
+| PostgreSQL                  | [使用 PostgreSQL 存放授权数据](./postgresql.md)   |
+| MongoDB                     | [使用 MongoDB 存放授权数据](./mongodb.md)         |
+| Redis                       | [使用 Redis 存放授权数据](./redis.md)             |
+| HTTP Server                 | [通过访问外部 HTTP 服务来获取授权信息](./http.md) |
+| File                        | [将授权信息存放在文件中](./file.md)             |
 
-例如，下面是一个 MySQL 的例子：
+每个授权检查器都有自己的配置。
 
-```
+以下是 MySQL 授权检查器的例子：
+
+```hocon
 {
-    enable => true
+    enable = true
 
     type = mysql
     database = "mqtt"
@@ -40,87 +38,96 @@ EMQX 默认提供如下这些 Authorizer：
     password = "public"
 
     query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
-    server = "10.12.43.12:3306"
+    server = "127.0.0.1:3306"
 }
 ```
 
 ## 授权链
 
-一组 Authorizer，可以组成一个授权链。当一个客户端进行发布或者订阅操作的时候，EMQX 会按顺序逐个检查，
-如果一个 Authorizer 能够找到该客户端的授权规则（ACL），那么就会对这个规则进行匹配。
-匹配的结果要么是允许（allow），要么是拒绝（deny）。如果没有找到适用于该客户端的规则，
-那么就会继续到授权链中的下一个 Authorizer 进行检查。
+EMQX 允许创建多个授权检查器构成一条认证链，授权检查器将按照在链中的位置顺序执行，如果在当前授权检查器中未检索到权限数据，将会切换至链上的下一个启用的授权检查器继续权限检查。
 
-如果整个链都没能找到适用于该客户端的规则（ACL），那么就使用默认规则。
+通常这会产生以下 3 种情况：
 
-跟[认证链](../authn/authn.md#authentication-chains)不太一样的地方是：授权链是全局唯一的。
+1. 当前授权检查器执行时检索到了客户端的权限信息，匹配当前执行的操作与客户端的权限信息：
+   1. 操作与权限匹配，根据权限允许或拒绝客户端的操作；
+   2. 操作与权限不匹配，交由下一授权检查器继续检查。
+2. 当前授权检查器执行时没有检索到了客户端的权限信息，例如数据源中没有查找到数据：
+   1. 授权链中还有授权检查器：忽略检查，交由下一授权检查器继续检查；
+   2. 当前授权检查器是链中最后一个授权检查器：根据 `no_match` 配置决定检查结果（允许或拒绝）。
 
-## 认证器提供的授权规则
-
-有些认证器的认证结果中，有携带授权数据的能力，当这个数据存在的时候，这些规则的检查会发生在全局授权链之前。
-例如，[JWT](../authn/jwt.md#jwt-authorization)。
+跟[认证链](../authn/authn.md#认证链)不太一样的地方是：授权链是全局唯一的。
 
 ## 授权数据的缓存
 
-如果一个客户端大量的发送请求，就会对授权数据后端产生访问压力。
-因此 EMQX 为授权数据引入了缓存。
+大量的客户端订阅和发布将会对授权数据后端产生访问压力，因此 EMQX 引入了缓存机制。
 
-::: tip Tip
+::: tip
 缓存的配置参数会大大影响系统性能，所以调整缓存参数变得非常重要。请参考文档下文中的配置章节。
 :::
 
-## 规则占位符
+## 授权检查优先级
 
-多数 Authorizer 支持在授权规则中使用占位符。
-占位符就像是一个模版，在运行时根据客户端信息进行替换，得到真正使用的授权规则。
+除了缓存与授权检查器之外，授权结果还可能受到认证阶段设置的[超级用户角色与权限](../authn/authn.md#超级用户与权限)影响。
 
-### Authorizer 配置中的占位符
+如果客户端在认证阶段设置了超级用户角色，则发布订阅操作不会再触发授权检查；如果设置了权限列表，则优先匹配客户端权限数据。三者匹配优先级如下：
 
-配置中的占位符会在运行时进行替换并使用在后端数据库或服务的链接或者请求中。
-下面是 EMQX 支持的占位符：
-* `${clientid}` — 客户端的 clientid。
-* `${username}` — 客户端的用户名（username）。
-* `${peerhost}` — 客户端的源 IP 地址。
-* `${cert_subject}` — 客户端 x.509 证书中的主题名（Subject）。
-* `${cert_common_name}` 客户端 x.509 证书中的通用名（Common Name）.
-
-Redis Authorizer 配置中使用占位符的例子：
-
-```
-{
-  enable = true
-  type = redis
-
-  ... other parameters ...
-
-  cmd = "HGETALL mqtt_user:${username}"
-}
+```bash
+超级用户 > 权限数据 > 授权检查
 ```
 
-::: warning
-如果该占位符的值不存在时，它最终会被替换为一个空字符串。例如，当客户端未提供用户名时：
+## 授权占位符
 
-`HMGET users:${username} password_hash salt is_superuser` 会被替换为 `HMGET users: password_hash salt is_superuser`
-:::
+EMQX 允许使用占位符动态构造授权数据查询语句、HTTP 请求，占位符会在授权检查器执行时替换为真实的客户端信息，以构造出与当前客户端匹配的查询语句或 HTTP 请求。
+
+以 MySQL 授权检查器为例，默认的查询 SQL 中使用了 `${username}` 占位符：
+
+```sql
+SELECT action, permission, topic FROM mqtt_acl where username = ${username}
+```
+
+当用户名为 `emqx_u` 的客户端触发授权检查时，实际执行权限数据查询 SQL 将被替换为：
+
+```sql
+SELECT action, permission, topic FROM mqtt_acl where username = 'emqx_u'
+```
+
+### 数据查询占位符
+
+在查询权限数据时，EMQX 支持以下占位符：
+
+- `${clientid}`: 将在运行时被替换为客户端 ID。客户端 ID 一般由客户端在 `CONNECT` 报文中显式指定，如果启用了 `use_username_as_clientid` 或 `peer_cert_as_clientid`，则会在连接时被用户名、证书中的字段或证书内容所覆盖。
+
+- `${username}`: 将在运行时被替换为用户名。用户名来自 `CONNECT` 报文中的 `Username` 字段。如果启用了 `peer_cert_as_username`，则会在连接时被证书中的字段或证书内容所覆盖。
+
+- `${password}`: 将在运行时被替换为密码。密码来自 `CONNECT` 报文中的 `Password` 字段。
+
+- `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
+
+- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
+
+- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name），仅适用于 TLS 连接。
 
 ### 主题占位符
 
-在 Authorizer 后端返回的规则中，MQTT 主题是字符串格式。这些字符串会被当作模版进行占位符的替换。
-在授权规则中可以使用的占位符如下：
+EMQX 还允许在匹配规则时将占位符用于主题，以实现动态主题。支持的占位符如下：
 
-* `${clientid}` — MQTT 客户端的 Client ID。当在规则中使用 Client ID，这个 ID 应由客户端在连接 EMQX 前就指定，而不是让 EMQX 随机生成。
-* `${username}` — 使用客户端用户名 对规则进行替换。
+- `${clientid}`
+- `${username}`
 
 占位符只能用于替换主题的整个字段，例如 `a/b/${username}/c/d`，但是不能用于替换字段的一部分，例如 `a/b${username}c/d`。
 
 为了避免占位符跟想要的主题冲突的问题，EMQX 5.0 中引入了一个 `eq` 语法，例如 `eq a/b/${username}/c/d`。
 这样规则将会不做替换，而是保持 MQTT 主题 `a/b/${username}/c/d` 不变。
 
-## 配置结构
+## 配置方式
+
+EMQX 提供了 3 种使用权限的配置方式，分别为：配置文件、HTTP API 和 Dashboard。
+
+### 配置文件
 
 授权配置结构大致如下。
 
-```
+```hocon
 authorization {
   sources = [
     { ...   },
@@ -136,41 +143,46 @@ authorization {
 }
 ```
 
-### `sources`
+#### sources
 
-带顺序的数组（非必需字段）。每个数组元素是一个 Authorizer 的数据源相关配置。
-数组中的每个元素都有一个 `enable` 字段，可用于快速启停切换。
-如果该配置项缺失，则当作空链处理。
+带顺序的数组（非必需字段），每个数组元素是一个授权检查器的数据源相关配置。授权检查器详细配置请参考相应的配置文件文档。
 
-每个 Authorizer 的详细配置，可以参考相应的配置文件文档。
+#### no_match
 
-### `no_match`
+可选值为 `allow` 或 `deny`，默认 `allow`。
 
-可选值，可以设置为 `allow` 或 `deny`。缺省值是 `allow`。
-当 EMQX 无法从认证链中为某个客户端匹配到任何规则时候，将会使用这个默认的规则。
+当当前客户端操作无法匹配到任何规则时候，将会使用这个默认的规则决定允许或拒绝操作。
 
-### `deny_action`
+此配置也是黑名单/白名单模式的开关。
 
-可选值，可以设置为 `ignore` 或 `disconnect`。默认值是 `ignore`。
-这个配置用于指定当拒绝访问发生时，应该如何对待这个客户端的 MQTT 连接。
-如果配置成 `ignore`，那么这个操作会被丢弃，例如，如果是一个发布动作，那么这消息会被丢弃；如果是一个订阅操作，那么订阅请求会被拒绝。
-如果配置成 `disconnect`，那么这个客户端将会被断开连接。
+#### deny_action
 
-### `cache`
+可选值为 `ignore` 或 `disconnect`，默认 `ignore`。
 
-ACL 缓存的配置。
+当当前客户端操作被拒绝时，应该执行的后续操作：
 
-* `cache.enable` — 默认是 `true`。为 ACL 开启缓存。如果仅使用认证 JWT 中提供 授权信息，这建议关闭缓存。
-* `cache.max_size` — 默认值 `32`。此配置规定每个客户端允许缓存的 ACL 规则数量。当超过上限时，老的记录将会被删掉。
-* `cache.ttl` — 默认 `1m`（一分钟）。 该配置规定 ACL 规则缓存有效时间。
+- `ignore`: 当前操作会被丢弃，例如，如果是一个发布动作，那么这消息会被丢弃；如果是一个订阅操作，那么订阅请求会被拒绝。
+- `disconnect`: 丢弃当前操作，并将客户端断开连接。
 
-## 使用 API 对授权参数进行配置
+#### cache
+
+授权缓存的配置：
+
+- `cache.enable`: 默认是 `true`，为授权开启缓存。如果仅使用认证中提供权限信息进行权限检查，这建议关闭缓存。
+- `cache.max_size`: 默认值 `32`，每个客户端允许缓存的授权结果数量。当超过上限时，老的记录将会被删掉。
+- `cache.ttl` — 默认 `1m`（一分钟），授权缓存有效时间。
+
+### HTTP API
 
 EMQX 为授权参数暴露如下 REST API 来支持进行运行时动态修改。
 
-* `/api/v5/authorization/settings` — 对通用授权参数进行修改，例如 `no_match`， `deny_action`，和 `cache`；
-* `/api/v5/authorization/sources` — 用于管理授权链；
-* `/api/v5/authorization/cache` — 用于强制清除授权数据缓存；
-* `/api/v5/authorization/sources/built_in_database` — 用于动态增加或删除内置数据库的条目。
+- `/api/v5/authorization/settings`: 查看、修改授权参数，例如 `no_match`， `deny_action` 和 `cache`
+- `/api/v5/authorization/sources`: 用于管理授权检查器
+- `/api/v5/authorization/cache`: 清除授权数据缓存
+- `/api/v5/authorization/sources/built_in_database`: 内饰数据库数据管理
 
-详细的 API 文档，请参考 `/api-docs/index.html`，例如本地部署时：http://localhost:18083/api-docs/index.html
+详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
+
+### Dashboard
+
+Dashboard 底层调用了 HTTP API，提供了相对更加易用的可视化操作页面。在 Dashboard 中可以方便的设置授权功能参数、查看授权检查器状态、调整认证器在认证链中的位置。

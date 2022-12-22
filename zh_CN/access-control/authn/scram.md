@@ -1,4 +1,4 @@
-# SCRAM 认证
+# 增强认证(SCRAM 认证)
 
 该认证器实现了 [SCRAM](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) 认证，并使用 EMQX 内置的 Mnesia 数据库存储客户端凭据（_users_）。
 
