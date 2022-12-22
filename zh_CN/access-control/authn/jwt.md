@@ -1,5 +1,11 @@
 # JWT 认证
 
+::: tip
+先决条件：
+
+- 了解 [EMQX 认证基本概念](../authn/authn.md)
+:::
+
 [JWT](https://jwt.io/) 是一种基于 Token 的认证机制。它不需要服务器来保留客户端的认证信息或会话信息。
 
 ## 认证原理
@@ -16,20 +22,20 @@ JWT 认证器本质上只是检查了 JWT 的签名，也就是说 JWT 认证器
 
 为了减少 JWT 泄漏和被盗取的可能，除了设置合理的有效期，我们还建议使用 TLS 来加密客户端连接。
 
-## 授权
+## 权限列表
 
-这是一个可选的功能，我们定义了一个私有的 Claim `acl`，用于在 JWT 中携带发布订阅的访问规则以控制客户端登录后的权限。
+这是一个可选的功能，允许用户在 JWT 中携带发布订阅的权限列表，以设置客户端登录后的权限。
 
 ::: tip
-通过 JWT 返回的 ACL 规则，将优先于所有 Authorizer 被检查。
+通过 JWT 认证设置的权限列表，将优先于所有授权检查器被检查，参考 [授权检查优先级](../authz/authz.md#授权检查优先级)。
 :::
 
-Claim `acl`  定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用于指定发布、订阅以及发布订阅的主题白名单列表。主题条目中允许使用主题通配符和占位符（目前仅支持 `${clientid}` 与 `${username}`）。由于可能存在主题内容与占位符语法冲突的情况，我们也提供了 `eq` 语法来取消占位符插值。示例：
+JWT 权限列表定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用于指定发布、订阅以及发布订阅的主题白名单列表。主题条目中允许使用主题通配符和占位符（目前仅支持 `${clientid}` 与 `${username}`）。由于可能存在主题内容与占位符语法冲突的情况，我们也提供了 `eq` 语法来取消占位符插值。示例：
 
 ```json
 {
   "exp": 1654254601,
-  "username": "myuser",
+  "username": "emqx_u",
   "acl": {
     "pub": [
       "testpub1/${username}",
@@ -37,7 +43,7 @@ Claim `acl`  定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用于�
     ],
     "sub": [
       "testsub1/${username}",
-      "testsub2/${clientid}",
+      "testsub2/${clientid}"
       "testsub2/#"
     ],
     "all": [
@@ -49,11 +55,15 @@ Claim `acl`  定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用于�
 }
 ```
 
-其中，`testpub1/${username}` 会在运行时被替换为 `testpub1/myuser`，而 `eq testpub2/${username}` 在运行时仍会按照 `testpub2/${username}` 处理。
+其中，`testpub1/${username}` 会在运行时被替换为 `testpub1/emqx_u`，而 `eq testpub2/${username}` 在运行时仍会按照 `testpub2/${username}` 处理。
 
-## 配置与使用
+## 配置项
 
-![](./assets/authn-jwt-1.png)
+详细配置请参考 [authn-jwt:*](../../admin/cfg.md#authn-jwt:hmac-based)。
+
+## 通过 Dashboard 配置
+
+![EMQX JWT 认证](./assets/authn-jwt-1.png)
 
 以上是 JWT 认证器的配置页面。
 
@@ -72,7 +82,7 @@ Claim `acl`  定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用于�
 
 EMQX 还支持从 JWKS Endpoint 定期获取最新的 JWKS，JWKS 本质上就是一组公钥，它们将被用于验证授权服务器颁发并使用 RSA 或者 ECDSA 算法签名的任何 JWT。如果我们想要使用这一功能，那么首先需要切换至 JWKS 的配置页面。
 
-![](./assets/authn-jwt-2.png)
+![EMQX JWT 认证 JWKS](./assets/authn-jwt-2.png)
 
 那么如上图所示，我们现在拥有两个全新的配置项：
 

@@ -1,16 +1,22 @@
 # MySQL
 
-MySQL Authorizer 支持客户端的授权规则存储在 MySQL 数据库中。
+::: tip
+先决条件：
 
-MySQL Authorizer 支持几乎任何存储模式。由用户决定如何存储 访问它们：使用一个或多个表、视图等。
+- 了解 [EMQX 授权基本概念](./authz.md)
+:::
 
-用户应该只提供一个模板化查询，该查询选择匹配的规则，并返回规则中的 `permission`、`action` 和 `topic` 列，该规则定义了当前用户对于规则中声明的主题具有什么样的操作权限，例如：允许发布、拒绝订阅等。
+MySQL Authorizer 支持客户端的权限列表存储在 MySQL 数据库中。
 
-- `permission` 用于指定操作权限，可选值有 `allow` 和 `deny`。
-- `action` 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`。
-- `topic` 用于指定当前规则适用的主题，可以使用主题过滤器和 [主题占位符](./authz.md#主题占位符)。
+## 表结构与查询语句
 
-用于存储权限规则的示例表结构：
+MySQL Authorizer 可以支持任何表结构，甚至是多个表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，且确保查询结果包含以下字段：
+
+- `permission`: 用于指定操作权限，可选值有 `allow` 和 `deny`
+- `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`
+- `topic`: 用于指定当前规则适用的主题，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)
+
+示例表结构：
 
 ```sql
 CREATE TABLE `mqtt_acl` (
@@ -24,26 +30,34 @@ CREATE TABLE `mqtt_acl` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-为用户 `user123` 添加允许发布到主题 `data/user123/#` 的权限规则的示例：
+::: tip
+上面的示例创建了一个索引，当系统中有大量权限数据时，请确保查询使用的表已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。
+:::
 
-```
-mysql> INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('user123', 'allow', 'publish', 'data/user123/#');
+在此表中使用 `username` 作为查找条件。
+
+添加用户名为 `emqx_u`、禁止发布到 `t/1` 主题的规则示例：
+
+```bash
+mysql> INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('emqx_u', 'deny', 'publish', 't/1');
 Query OK, 1 row affected (0,01 sec)
 ```
 
 对应的配置参数为：
 
-```
+```bash
 query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 ```
 
-## 配置
+## 配置项
+
+详细配置请参考 [authz:mysql](../../admin/cfg.md#authz:mysql)。
 
 MySQL authorizer 由 `type=mysql` 标识。
 
-示例：
+配置示例：
 
-```
+```hocon
 {
   type = mysql
   enable = true
@@ -56,11 +70,11 @@ MySQL authorizer 由 `type=mysql` 标识。
 }
 ```
 
-### `query`
+### query
 
-必选的字符串类型配置，用于指定 MySQL 数据库中权限规则的查询模板，支持 [占位符](./authz.md#authorizer-配置中的占位符)。
+必选的字符串类型配置，用于查询当前客户端具有的权限列表，支持[占位符](./authz.md#数据查询占位符)。
 
-出于安全原因，占位符值不是直接插入的，而是通过 MySQL 占位符插入的。
+出于安全原因占位符值不会直接拼接 SQL，而是通过 MySQL 预处理插入，能够有效预防 SQL 注入。
 
 例如，以下查询语句：
 
@@ -76,30 +90,30 @@ SELECT permission, action, topic FROM acl WHERE username = ?
 
 然后使用 `${username}` 执行查询。
 
-### `server`
+### server
 
-必选的字符串类型配置，用于指定 MySQL 服务器地址，格式为 `host:port`。
+MySQL 服务器地址 (`host:port`) ，必填项。
 
-### `database`
+### database
 
-必选的字符串类型配置，用于指定 MySQL 数据库名称。
+MySQL 数据库名称，必填项。
 
-### `username`
+### username
 
-可选的字符串类型配置，用于指定 MySQL 用户名。
+MySQL 用户，可选。
 
-### `password`
+### password
 
-可选的字符串类型配置，用于指定 MySQL 用户密码。
+MySQL 密码，可选。
 
-#### `auto_reconnect`
+#### auto_reconnect
 
-可选的布尔类型配置，用于指定 EMQX 是否会在连接断开时自动重新连接到 MySQL，默认值为 `true`。
+可选的布尔类型字段。指定连接中断时 EMQX 是否自动重新连接到 MySQL。默认值为 true。
 
-### `pool_size`
+### pool_size
 
-可选的整型配置，用于指定 EMQX 节点到 MySQL 服务器的并发连接数，默认值为 8。
+可选的整型字段。指定从 EMQX 节点到 MySQL 的并发连接数。默认值为 8。
 
-### `ssl`
+### ssl
 
-用于 [安全连接到 MySQL](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html) 的标准 [SSL 选项](../ssl.md)。
+用于 [安全连接到 MySQL](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html) 的标准 SSL 选项]。
