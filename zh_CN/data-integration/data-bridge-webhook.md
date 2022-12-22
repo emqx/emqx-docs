@@ -10,7 +10,6 @@ Webhook 是 EMQX 向 HTTP 服务发送消息的通道。通过 Webhook，用户�
 ```js
 bridges.webhook.my_webhook {
     enable = true
-    direction = egress
     url = "http://localhost:9901/${clientid}"
     local_topic = "a/#"
     method = post
