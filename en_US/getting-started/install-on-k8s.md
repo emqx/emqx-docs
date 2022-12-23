@@ -1,116 +1,152 @@
-# Install EMQX Cluster with EMQX Operator
+# Use EMQX Operator to deploy EMQX cluster
 
-For more information about latest EMQX Operator, please access [github](https://github.com/emqx/emqx-operator/blob/main/docs/en_US/getting-started/getting-started.md).
+The corresponding relationship between EMQX Operator and the applicable EMQX version is as follows:
 
-1. Use [cert-manager](https://github.com/cert-manager/cert-manager) for provisioning the certificates for the webhook server. Please follow the [cert-manager documentation](https://cert-manager.io/docs/installation/) to install it。
+|         EMQX Version   |                  EMQX Operator Version        |  APIVersion |
+|:----------------------:|:---------------------------------------------:|:-----------:|
+|   4.4.6<= EMQX < 4.4.8 |   1.2.5                                       |  v1beta3    |
+|   4.4.8 <= EMQX        | 1.2.6，1.2.7，1.2.8，2.0.0，2.0.1，2.0.2（推荐） |  v1beta3    |
 
-2. Install Operator Controller Manager service in one of the following ways：
 
-    + Install with default static files
+For the latest information about EMQX Operator, please visit [EMQX Operator](https://github.com/emqx/emqx-operator/blob/main/docs/en_US/getting-started/getting-started.md). **Note**: EMQX Operator requires Kubernetes v1.20.11 or above.
 
-    ```shell
-    curl -f -L "https://github.com/emqx/emqx-operator/releases/download/1.2.2/emqx-operator-controller.yaml" | kubectl apply -f -
-    ```
+## Deploy EMQX Operator
 
-    + Install with Helm
-      + Add the EMQX Helm repository
+### Prepare
 
-    ```shell
-    helm repo add emqx https://repos.emqx.io/charts 
-    helm repo update
-    ```
+We use [cert-manager](https://github.com/cert-manager/cert-manager) to provide certificates to EMQX Operator webhook service. For the installation tutorial of cert-manager, please refer to the document: [cert-manager document](https://cert-manager.io/docs/installation/).
 
-    + Install EMQX Operator Controller by Helm
+### Install 
 
-    ```shell
-    $ helm install emqx-operator emqx/emqx-operator \ 
-    --set installCRDs=true \ 
-    --namespace emqx-operator-system \ 
-    --create-namespace
-    ```
+1. Install EMQX Operator
 
-3. Check EMQX Operator Controller Status
+- Add EMQX helm chart repository
 
-    ```shell
-    $ kubectl get pods -l "control-plane=controller-manager" -n emqx-operator-system 
-    NAME READY STATUS RESTARTS AGE 
-    emqx-operator-controller-manager-68b866c8bf-kd4g6 1/1 Running 0 15s
-    ```
+```bash
+helm repo add emqx https://repos.emqx.io/charts
+helm repo update emqx
+```
+
+- Install EMQX Operator
+
+```bash
+helm install emqx-operator emqx/emqx-operator --namespace emqx-operator-system --create-namespace --version=2.0.2
+```
+
+**NOTE**: `--version` is used to install the specified version of EMQX Operator, if no version is specified, the latest version will be installed by default. Please install the appropriate EMQX Operator version according to the corresponding relationship table between EMQX Operator and applicable EMQX version.
+
+2. Check whether EMQX Operator is ready
+
+```bash
+kubectl get pods -l "control-plane=controller-manager" -n emqx-operator-system
+```
+
+The output is similar to:
+
+```
+NAME                                                READY   STATUS    RESTARTS   AGE
+emqx-operator-controller-manager-68b866c8bf-kd4g6   1/1     Running   0          15s
+```
+
+**NOTE**: The `NAME` field is the name of the EMQX Operator Pod, and the `READY` field indicates the number of ready Containers in the Pod. The `STATUS` field is the status of the Pod.
 
 {% emqxce %}
-4. Deploy the EMQX Broker
 
-+ Deploy EMQX Custom Resource
+## Deploy EMQX Broker
 
-    ```shell
-    $ cat << "EOF" | kubectl apply -f -
-    apiVersion: apps.emqx.io/v1beta3
-    kind: EmqxBroker
-    metadata:
-      name: emqx
-      labels:
-        "foo": "bar"
-    spec:
-      emqxTemplate:
-        image: emqx/emqx:4.4.5
-    EOF
-    ```
+1. Deploy EMQX custom resources
 
-+ Check EMQX status
+```bash
+cat << "EOF" | kubectl apply -f -
+   apiVersion: apps.emqx.io/v1beta3
+   kind: EmqxBroker
+   metadata:
+     name: emqx
+   spec:
+     emqxTemplate:
+       image: emqx/emqx:4.4.9
+EOF
+```
 
-   ```shell
-   $ kubectl get pods 
-    NAME READY STATUS RESTARTS AGE 
-    emqx-0 2/2 Running 0 22s 
-    emqx-1 2/2 Running 0 22s 
-    emqx-2 2/2 Running 0 22s 
-    $ kubectl exec -it emqx-0 -c emqx -- emqx_ctl status 
-    Node 'emqx@emqx-0.emqx-headless.default.svc.cluster.local' 4.4.5 is started
-    $ kubectl exec -it emqx-0 -c emqx -- emqx_ctl cluster status 
-    Cluster status: #{running_nodes =>
-                      ['emqx@emqx-0.emqx-headless.default.svc.cluster.local',
-                       'emqx@emqx-1.emqx-headless.default.svc.cluster.local',
-                       'emqx@emqx-2.emqx-headless.default.svc.cluster.local'],
-                  stopped_nodes => []}
-    ```
+2. Check whether the EMQX cluster is ready
+
+```bash
+kubectl get emqxbroker emqx -o json | jq ".status.conditions"
+```
+
+The output is similar to:
+
+```bash
+[
+   {
+     "lastTransitionTime": "2022-12-21T11:59:47Z",
+     "lastUpdateTime": "2022-12-21T12:00:28Z",
+     "message": "All resources are ready",
+     "reason": "ClusterReady",
+     "status": "True",
+     "type": "Running"
+   },
+   {
+     "lastTransitionTime": "2022-12-21T11:59:34Z",
+     "lastUpdateTime": "2022-12-21T11:59:34Z",
+     "message": "All default plugins initialized",
+     "reason": "PluginInitializeSuccessfully",
+     "status": "True",
+     "type": "PluginInitialized"
+   }
+]
+```
+**NOTE**: From the output, we can see that the EMQX cluster is ready.
 
 {% endemqxce %}
 
 {% emqxee %}
-4. Deploy EMQX Enterprise
 
-+ Deploy EMQX Enterprise Custom Resource
+## Deploy EMQX Enterprise
 
-    ```shell
-    $ cat << "EOF" | kubectl apply -f -
-    apiVersion: apps.emqx.io/v1beta3
-    kind: EmqxEnterprise
-    metadata:
-      name: emqx-ee
-      labels:
-        "foo": "bar"
-    spec:
-      emqxTemplate:
-        image: emqx/emqx-ee:4.4.5
-    EOF
-    ```
+1. Deploy EMQX custom resources
 
-+ Check EMQX Enterprise status
+```bash
+cat << "EOF" | kubectl apply -f -
+   apiVersion: apps.emqx.io/v1beta3
+   kind: EmqxEnterprise
+   metadata:
+     name: emqx-ee
+   spec:
+     emqxTemplate:
+       image: emqx/emqx-ee:4.4.9
+EOF
+```
 
-   ```shell
-   $ kubectl get pods 
-   NAME READY STATUS RESTARTS AGE 
-   emqx-ee-0 2/2 Running 0 22s 
-   emqx-ee-1 2/2 Running 0 22s 
-   emqx-ee-2 2/2 Running 0 22s
-   $ kubectl exec -it emqx-ee-0 -c emqx -- emqx_ctl status 
-   Node 'emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local' 4.4.5 is started
-   $ kubectl exec -it emqx-ee-0 -c emqx -- emqx_ctl cluster status 
-   Cluster status: #{running_nodes =>
-                      ['emqx-ee@emqx-ee-0.emqx-ee-headless.default.svc.cluster.local',
-                       'emqx-ee@emqx-ee-1.emqx-ee-headless.default.svc.cluster.local',
-                       'emqx-ee@emqx-ee-2.emqx-ee-headless.default.svc.cluster.local'],
-                  stopped_nodes => []}
-    ```
+2. Check whether the EMQX cluster is ready
+
+```bash
+kubectl get emqxenterprise emqx-ee -o json | jq ".status.conditions"
+```
+
+The output is similar to:
+
+```bash
+[
+   {
+     "lastTransitionTime": "2022-12-21T12:03:24Z",
+     "lastUpdateTime": "2022-12-21T12:03:24Z",
+     "message": "All resources are ready",
+     "reason": "ClusterReady",
+     "status": "True",
+     "type": "Running"
+   },
+   {
+     "lastTransitionTime": "2022-12-21T12:03:08Z",
+     "lastUpdateTime": "2022-12-21T12:03:08Z",
+     "message": "All default plugins initialized",
+     "reason": "PluginInitializeSuccessfully",
+     "status": "True",
+     "type": "PluginInitialized"
+   }
+]
+```
+
+**NOTE**: From the output, we can see that the EMQX cluster is ready.
 
 {% endemqxee %}
