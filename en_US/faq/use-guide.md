@@ -37,12 +37,9 @@ You need to two steps:
 
 1. After clicking "Download License", browse to the "license.zip" file that you downloaded.
 
-2. Copy the two files (emqx.lic, emqx.key) in the zip file to the EMQX license directory.
-  - If your installation package is a zip file, the licenses are under "emqx/etc/";
-  - For DEB/RPM package, the licenses are under "/etc/emqx/";
-  - For Docker image, the licenses are under "/opt/emqx/etc/".
+2. Extract the license file (emqx.lic) from the zip file to a directory readable by the EMQX user.
 
-After the copy is completed, the license needs to be reloaded from the command line to complete the update:
+After the extraction is complete, the license needs to be reloaded from the command line to complete the update:
 
 ```
 emqx_ctl license reload [license file path]
@@ -52,17 +49,17 @@ The update commands for different installation modes:
 
 ```
 ## zip packages
-./bin/emqx_ctl license reload etc/emqx.lic
+./bin/emqx_ctl license reload path/to/emqx.lic
 
 ## DEB/RPM
-emqx_ctl license reload /etc/emqx/emqx.lic
+emqx_ctl license reload path/to/emqx.lic
 
 ## Docker
-docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
+docker exec -it emqx-ee emqx_ctl license reload path/to/emqx.lic
 ```
 
 ::: tip
-On a multi-node cluster, the `emqx_ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members.  Each one will contain a copy of the new license under the configured data directory for EMQX.
+On a multi-node cluster, the `emqx_ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members.  Each one will contain a copy of the new license under the configured data directory for EMQX, as well as a backup of the old license, if any.
 :::
 
 
@@ -220,8 +217,8 @@ bridge.kafka.produce = sync
 
 If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
 
-- The message will be cached in memory before EMQX 2.4.3 version, if the memory is exhausted, then the EMQX server will be down. 
-- The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full. 
+- The message will be cached in memory before EMQX 2.4.3 version, if the memory is exhausted, then the EMQX server will be down.
+- The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full.
 
 So we suggest you to closely monitor Kafka server, and recover Kafka service as soon as possible when it has any questions.
 
