@@ -36,9 +36,11 @@ EMQX 企业版支持下载试用，用户可以在 [https://www.emqx.com/zh/try?
 
 [申请试用 license](https://www.emqx.com/zh/apply-licenses/emqx) 后，License 文件将通过邮件发送，找到附件里的 zip 文件并解压，复制压缩包里的 `emqx.lic` 文件到 EMQX 的 license 目录.
 
-- 如果您的 EMQX 是使用 zip 包安装的, 那么压缩包里的 `emqx.lic` 需要拷贝到 "emqx/etc/" 目录;
-- 如果是用 DEB/RPM 包安装的, `emqx.lic` 文件需要拷贝到 "/etc/emqx/" 目录;
-- 如果是用 Docker 镜像安装的, `emqx.lic` 文件需要拷贝到 "/opt/emqx/etc/" 目录.
+点击 "Download License" 按钮下载 license, 然后找到您下载的 "license.zip" 文件并解压.
+
+从压缩文件中提取许可证文件（emqx.lic）到EMQX用户可读的目录中。
+
+在提取完成后，需要从命令行重新加载许可证以完成更新。
 
 拷贝完成后需要通过命令行重新加载 license 以完成更新：
 
@@ -52,17 +54,17 @@ emqx_ctl license reload [license 文件所在路径]
 
 ```
 ## 适用于 zip 包
-./bin/emqx_ctl license reload etc/emqx.lic
+./bin/emqx_ctl license reload path/to/emqx.lic
 
 ## DEB/RPM 包安装
-emqx_ctl license reload /etc/emqx/emqx.lic
+emqx_ctl license reload path/to/emqx.lic
 
 ## Docker 镜像安装
-docker exec -it emqx-ee emqx_ctl license reload /opt/emqx/etc/emqx.lic
+docker exec -it emqx-ee emqx_ctl license reload path/to/emqx.lic
 ```
 
 ::: tip
-在一个多节点的集群中，`emqx_ctl license reload`命令只需要在其中一个节点上执行，因为许可证将被复制并应用到所有成员。 每个成员都将在为EMQX配置的数据目录下包含一份新的许可证。
+在一个多节点集群中，`emqx_ctl license reload`命令只需要在其中一个节点上执行，因为许可证将被复制并应用到所有成员。 每一个节点都会在配置好的EMQX的数据目录下包含一份新的许可证，以及一份旧的许可证的备份（如果有的话）。
 :::
 
 
