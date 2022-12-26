@@ -65,6 +65,8 @@ docker exec -it emqx-ee emqx_ctl license reload path/to/emqx.lic
 
 ::: tip
 在一个多节点集群中，`emqx_ctl license reload`命令只需要在其中一个节点上执行，因为许可证将被复制并应用到所有成员。 每一个节点都会在配置好的EMQX的数据目录下包含一份新的许可证，以及一份旧的许可证的备份（如果有的话）。
+
+注意，对于e4.3.10之前的EMQX版本，此命令只在执行命令的本地节点上生效，所以对于那些旧版本，此命令需要在集群的每个节点上执行。
 :::
 
 

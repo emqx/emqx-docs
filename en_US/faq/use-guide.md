@@ -60,6 +60,8 @@ docker exec -it emqx-ee emqx_ctl license reload path/to/emqx.lic
 
 ::: tip
 On a multi-node cluster, the `emqx_ctl license reload` command needs to be executed only on one of the nodes, as the license will be replicated and applied to all members.  Each one will contain a copy of the new license under the configured data directory for EMQX, as well as a backup of the old license, if any.
+
+Note that this command only takes effect _on the local node_ executing the command for EMQX versions prior to e4.3.10, so this command will require being executed on each node of the cluster for those older versions.
 :::
 
 
