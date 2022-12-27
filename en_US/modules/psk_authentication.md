@@ -40,3 +40,7 @@ The PSK configuration file is `psk.txt`, use a colon `:` to separate PSK ID and 
 client1:1234
 client2:abcd
 ```
+
+**Notice**:
+
+If the `RSA-PSK` cipher suites are used, the `RSA` certificate is still required, see [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4) for details.
