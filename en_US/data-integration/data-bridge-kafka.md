@@ -11,7 +11,7 @@ Being a top IOT data infrastructure provider,  EMQX currently supports authentic
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-- 无论生产者还是消费者模式，均需要预先在 Kafka 创建好对应 Topic。
+- Relevant Kafka topics should be created before creating the data bridge in Producer or Consumer mode. 
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
 
@@ -63,21 +63,28 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 These topics must be created before we create the data bridge to Kafka.
 :::
 
-### Create data bridge to Kafka
+### Create a data bridge to Kafka
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+
 2. Click **Create** on the top right corner of the page.
+
 3. In the **Create Data Bridge** page, click to select Kafka, and then click **Next**.
+
 4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
-5. Input the connection information.，主机列表填写 **127.0.0.1:9092**，其他参数根据实际情况填写。
-6. 配置生产者桥接信息：
-   1. MQTT 主题：要桥接的 MQTT 主题，此处填写 `t/#` 表示将匹配此主题的 MQTT 消息转发至 Kafka。您也可以将此项留空，新建规则在规则动作中设置将规则处理结果转发到该数据桥接。
-   2. Kafka 主题名称：填写 Kafka 中预先创建好的主题 `testtopic-in`，此处暂不支持使用变量。
-   3. Kafka 消息模板：使用变量构造消息模板，将规则或指定 MQTT 主题的消息转发到 6.2 中的 Kafka 主题中，此处使用 Dashboard 默认即可。
-7. 调优配置：根据情况配置最大批量字节数、压缩、分区选择策略等参数，详细请参考[配置配置](#配置参数)。
+
+5. Input the connection information. Input **127.0.0.1:9092** for the **Bootstrap Hosts**. For the other fields set as the actual condition. 
+
+6. Configure the data bridge in **Producer** mode. 
+   1. **Topic**: The MQTT topics to create the data bridge for. Here we will input `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a rule to specify data to be sent to Kafka. 
+   
+   1. **Kafka Topic Name**: Input the Kafka topics we created before, that is, the  `testtopic-in`. Note: Variables are not supported here.
+   2. **Kafka Message Template**: Template will specify the rule or MQTT topics with messages to be sent to the Kafka topic. You can keep the default setting or use  variables to create the template. 
+   
+7. Advanced settings (optional): Set the **Max Batch Bytes**, **Compression**, and **Partition Strategy** as your business needs. For details, see [Configuration parameters](#Configuration).
 
 ::: tip
-目前 Kafka Bridge 仅支持生产者模式。
+Currently EMQX only supports creating data bridges to Kafka in **Producer** mode. 
 :::
 
 ### Test
@@ -88,10 +95,11 @@ Use MQTTX to send messages to topic  `t/1`:
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 ```
 
-Check the running statistic of the data bridge, the 查看数据桥接运行统计，命中、发送成功次数应当 +1。
+Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
 
-Check whether messages are written into the topic`testtopic-in`  with the following Kafka command:
+Check whether messages are written into the topic `testtopic-in`  with the following Kafka command:
 
 ```bash
 bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testtopic-in --from-beginning
 ```
+
