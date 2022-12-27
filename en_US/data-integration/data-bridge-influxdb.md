@@ -2,49 +2,48 @@
 
 InfluxDB is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT).
 
-EMQX now supports connection to vairous versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise.
+EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise.
 
 
 
-## 先决条件
+## Prerequisites
 
-- 了解 [InfluxDB 行协议](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)，InfluxDB Bridge 使用行协议进行数据写入。
-- 了解 [规则](./rules.md)。
-- 了解 [数据桥接](./data-bridges.md)。
+- Knowledge about [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/), as EMQX will follow this protocol when writing data into InfluxDB
+- Knowledge about EMQX data integration [rules](./rules.md)
+- Knowledge about [data bridge](./data-bridges.md)
 
-## 特性
+## Features supported
 
 - [连接池](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [异步请求模式](./data-bridges.md#异步请求模式)
 - [批量模式](./data-bridges.md#批量模式)
 - [缓存队列](./data-bridges.md#缓存队列)
 
-## 配置参数
+## Configuration parameters
 <!-- TODO 链接到配置手册对应配置章节。 -->
 
-## 快速开始
+## Quick starts
 
-### 安装 InfluxDB
+### Install InfluxDB
 
-1. 通过 Docker 安装并启动 InfluxDB，详细步骤请参考 [Install InfluxDB](https://docs.influxdata.com/influxdb/v2.5/install/)。
+1. [Install InfluxDB](https://docs.influxdata.com/influxdb/v2.5/install/) via Docker, and then run the docker image. 
 
 ```bash
-# 启动一个 InfluxDB 容器
+# TO start the InfluxDB docker image
 docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 ```
 
-2. 访问 [http://localhost:8086.]( http://localhost:8086) 打开 InfluxDB UI，设置用户名、密码、组织名称、Bucket 名称。
+2. With InfluxDB running, visit [http://localhost:8086.]( http://localhost:8086) Set the **Username**, **Password**, **Organization Name**, and **Bucket Name**. 
+3. In the InfluxDB UI, click **Load Data** -> **API Token** and then follow the instructions to [create all-access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens). 
 
-3. 前往 InfluxDB UI Load Data -> API Token，按照 [Create All-Access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens) 指引创建 Token。
+### Connect to InfluxDB
 
-### 创建 InfluxDB Bridge
-
-1. 转到 Dashboard 数据集成 -> 数据桥接页面。
-2. 点击页面右上角的创建。
-3. 在数据桥接类型中选择 InfluxDB，点击下一步。
-4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
-5. 根据情况选择 InfluxDB 版本，默认为 V2。
-6. 输入 InfluxDB 连接信息
+1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+2. Click **Create** on the top right corner of the page.
+3. In the **Create Data Bridge** page, click to select **InfluxDB**, and then click **Next**.
+4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
+5. Select the InfluxDB version as needed, by default V2 is selected.
+6. Input the connection information.
    1. 服务器地址填写 **127.0.0.1:8086**。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 **{url}:443** 并启用 TLS 连接。
    2. 选择 Token 认证，填入先前设置的组织名称、Bucket 以及生成的 Toekn。
 7. 定义解析数据，设置数据的 Measurement，Fields，Timestamp 与 Tags，键值均支持变量，可以使用行协议进行设置。
