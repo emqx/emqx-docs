@@ -14,17 +14,17 @@ EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB 
 
 ## Features supported
 
-- [连接池](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
-- [异步请求模式](./data-bridges.md#异步请求模式)
-- [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
+- [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
+- [Async mode](./data-bridges.md#异步请求模式)
+- [Batch mode](./data-bridges.md#批量模式)
+- [Buffer queue](./data-bridges.md#缓存队列)
 
-## Configuration parameters
+## [Configuration parameters](#Configuration)
 <!-- TODO 链接到配置手册对应配置章节。 -->
 
 ## Quick starts
 
-### Install InfluxDB
+### [Install InfluxDB](#install)
 
 1. [Install InfluxDB](https://docs.influxdata.com/influxdb/v2.5/install/) via Docker, and then run the docker image. 
 
@@ -42,19 +42,19 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 2. Click **Create** on the top right corner of the page.
 3. In the **Create Data Bridge** page, click to select **InfluxDB**, and then click **Next**.
 4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
-5. Select the InfluxDB version as needed, by default V2 is selected.
+5. Select the InfluxDB version as needed, by default v2 is selected.
 6. Input the connection information.
-   1. 服务器地址填写 **127.0.0.1:8086**。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 **{url}:443** 并启用 TLS 连接。
-   2. 选择 Token 认证，填入先前设置的组织名称、Bucket 以及生成的 Toekn。
-7. 定义解析数据，设置数据的 Measurement，Fields，Timestamp 与 Tags，键值均支持变量，可以使用行协议进行设置。
-8. 调优配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置配置](#配置参数)。
-9.  点击创建按钮完成数据桥接创建。
+   1. For **Server Host**, input **127.0.0.1:8086**. If you are creating a connection to InfluxDB Cloud, use 443 as the port No., that is, input **{url}:443** and enable TLS  connection. 
+   2. Select **Token** as the **Auth Type**. Input the **Organization**, **Bucket**, and **Token** we set in the [Install InfluxDB](#install) step.
+7. Define data parsing method, including **Measurement**, **Timestamp**, **Fields** and **Tags**. Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them. 
+8. Advanced settings (optional): Choose whether to use sync or async query mode, and whether to enable queue or batch. For details, see [Configuration parameters](#Configuration).
+9.  Then click **Create** to finish the setup. 
 
-至此您已经完成数据桥接创建流程，为了指定需要写入的数据，您还需要创建一条规则并在规则中选择该数据桥接作为动作：
+We have successfully created the data bridge to InfluxDB, now we can continue to create rules to specify the data to be written into InfluxDB. 
 
-1. 转到 Dashboard 数据集成 -> 规则页面。
-2. 点击页面右上角的创建。
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 InfluxDB，请确规则选择出来的字段（SELECT 部分）包含上述数据桥接所需的字段，此处规则 SQL 如下：
+1. Go to EMQX Dashboard, click **Data Integration** -> **Data Rules**.
+2. Click **Create** on the top right corner of the page.
+3. Input `my_rule` as the rule ID, and set the rules in the SQL Editor. Here we want to save the MQTT messages under topic `t/#`  to InfluxDB, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
 
   ```sql
   SELECT 
@@ -63,19 +63,19 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
     "t/#"
   ```
 
-4. 添加动作，在动作下拉框中选择 使用数据桥接转发 选项，选择先前创建好的 InfluxDB Bridge。
-5. 点击最下方创建按钮完成规则创建。
+4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.  
+5. Click the **Add** button to finish the setup. 
 
-至此您已经完成整个创建过程，可以前往 数据集成 -> Flows 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 InfluxDB Bridge 进行存储。
+Now we have successfully created the data bridge to InfluxDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
-### 测试
+### Test
 
-使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
+Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello InfluxDB" }'
 ```
 
-分别查看两个数据桥接运行统计，命中、发送成功次数均 +1。
+Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
 
-前往 InfluxDB UI Data Explorer 查看数据是否已经写入 InfluxDB 中。
+In the InfluxDB UI, you can confirm whether the message is written into the InfluxDB via the **Data Explorer** window. 
