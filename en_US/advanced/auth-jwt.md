@@ -97,7 +97,7 @@ The field where the client carries the JWT Token, used to configure where the cl
 
 ### auth.jwt.verify_claims
 
-If you enable the `auth.jwt.verify_claims` option, EMQXwill verify the validity of the data in the Payload after verifying the validity of the JWT.
+If you enable the `auth.jwt.verify_claims` option, EMQX will verify the validity of the data in the Payload after verifying the validity of the JWT.
 
 suppose your Payload is:
 
@@ -139,9 +139,38 @@ JWT authentication supports three ways to configure keys, which correspond to th
 
 - `auth.jwt.jwks`: configured as [JWKs](http://self-issued.info/docs/draft-ietf-jose-json-web-key.html) server address to get the list of available keys from the JWKs server.
 
+::: tip
+To get a JWT be successfully verified with a key from JWKs server, both key and JWT header must have the same key id.
+:::
+
+That is, JWKs server keys must contain `kid` field, like:
+```json
+{
+    "keys": [
+        {
+            "kid": "testid@somedomain.io",
+
+            "kty": "EC",
+            "x": "m2qqiRuO04JawMAnlzXWAUlqlrpI84h6She9Aud7K_c",
+            "y": "YC6VjPOT2fIk0256ZsF5McApzJqMlFnyZFXkWrTpXRs",
+            "crv": "P-256",
+            "alg": "ES256"
+        }
+        ...
+    ]
+}
+```
+
+JWT signed with the key, must have the key's id in its header, e.g.:
+```json
+{
+  "alg": "ES256",
+  "kid": "testid@somedomain.io",
+  "typ": "JWT"
+}
+```
 
 The three types of keys are allowed to be configured simultaneously. EMQX checks the Token in the order of `auth.jwt.secret`, `auth.jwt.pubkey`, `auth.jwt.jwks`.
-
 
 ::: tip
 JWT contains authentication information by itself. Once leaked, anyone can get all the permissions of the token. It is recommended to enable TLS encrypted transmission when using JWT.
