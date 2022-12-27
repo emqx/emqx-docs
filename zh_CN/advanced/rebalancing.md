@@ -1,4 +1,4 @@
-# Cluster Load Rebalancing and Node Evacuation
+# 集群负载重平衡与节点疏散
 
 Cluster load rebalancing is the enforced process of client and session migration from a set of nodes to some others.
 Node evacuation is a particular case of rebalancing when we want to migrate all connections and sessions from
