@@ -122,7 +122,7 @@ rebalance start \
 | ---------------------- | ---------------- | ------------------------------------------------------------ |
 | `--nodes` | string | 参与负载重平衡的节点列表，以空格或逗号分隔，调度节点（即运行命令的节点）可以不在列表中。 |
 | `--wait-health-check` | positive integer | 等待 LB 将源节点从活跃的后端节点列表中移除的时间（单位为 秒），超过指定等待时间后，重平衡任务将启动。 |
-| `--conn-evict-rate`    | positive integer | 源节点每秒的连接断开率。                                     |
+| `--conn-evict-rate` | positive integer | 源节点客户端每秒断开连接速度。 |
 | `--abs-conn-threshold` | positive integer | 用于检查连接平衡的绝对阈值。                                 |
 | `--rel-conn-threshold` | number > 1.0     | 用于检查连接平衡的相对阈值。                                 |
 | `--wait-takeover`      | positive integer | 等待秒数，读秒后，将开始会话疏散任务。                       |
