@@ -133,7 +133,9 @@ rebalance start \
 当满足以下条件时，我们认为连接是平衡的：
 
 ```
-avg(DonorConns) < avg(RecipientConns) + abs_conn_threshold OR avg(DonorConns) < avg(RecipientConns) * rel_conn_threshold
+avg(源节点连接数) < avg(目标节点连接数) + abs_conn_threshold
+或 
+avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
 ```
 
 类似的规则也适用于会话的连接断开。
