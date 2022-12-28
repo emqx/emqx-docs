@@ -40,7 +40,7 @@ emqx_ctl rebalance start --evacuation \
 | `--conn-evict-rate` | positive integer | 客户端每秒断开连接速度。 |
 | `--migrate-to` | string | 目标节点列表，多个节点以逗号或空格分隔。 |
 | `--wait-takeover` | positive integer | 所有连接断开后，等待客户端重连以接管会话的时间（单位为 秒）。 |
-| `--sess-evict-rate` | positive integer | 客户端每秒的疏散率。 |
+| `--sess-evict-rate` | positive integer | `wait-takeover` 之后每秒会话疏散速度。 |
 
 示例：
 
