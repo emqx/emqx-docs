@@ -89,7 +89,7 @@ Rebalance(evacuation) stopped
 
 ## 重平衡
 
-重平衡涉及多个节点，因此比疏散操作要复杂。当基于某个节点执行重平衡操作时：
+重平衡涉及多个节点，因此比疏散任务要复杂。当基于某个节点执行重平衡任务时：
 
 * 该节点变为*调度节点*。
 * 调度节点将接入的节点分为两类，源节点和目标节点。源节点就是那些连接数超量的节点，目标节点是连接数不足的节点。
@@ -181,7 +181,7 @@ Rebalance stopped
 
 ## 集成负载均衡器
 
-在执行疏散/重平衡操作时，如使用负载均衡器，用户需自行提供相关配置信息。断开的客户端尝试重连时，负载均衡器会基于这些配置信息将其重新定向到目标节点。如果没有此类配置信息，可能出现断开连接数过多的问题。
+在执行疏散/重平衡任务时，如使用负载均衡器，用户需自行提供相关配置信息。断开的客户端尝试重连时，负载均衡器会基于这些配置信息将其重新定向到目标节点。如果没有此类配置信息，可能出现断开连接数过多的问题。
 
 为方便用户配置，EMQX 提供了健康检查功能：
 
@@ -257,7 +257,7 @@ Session eviction rate: 5 sessions/second
 
 所有的命令行操作也可通过 API 完成。在执行开始/停止命令时，需要以参数的形式传入节点信息。
 
-### 开启疏散操作
+### 开启疏散任务
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/evacuation/start' -d '{"conn_evict_rate": 5, "sess_evict_rate": 5, "migrate_to": ["emqx3@127.0.0.1", "emqx2@127.0.0.1"]}'
@@ -276,7 +276,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 
 字段含义同对应的[命令行命令](#evacuation)相同。
 
-### 停止疏散操作
+### 停止疏散任务
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/evacuation/stop'
@@ -284,7 +284,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 {"data":[],"code":0}
 ```
 
-### 开启重平衡操作
+### 开启重平衡任务
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/start' -d '{"conn_evict_rate": 5, "sess_evict_rate": 5, "nodes": ["emqx1@127.0.0.1", "emqx2@127.0.0.1"]}'
@@ -306,7 +306,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 
 字段含义同对应的[命令行命令](#evacuation)相同。
 
-### 停止重平衡操作
+### 停止重平衡任务
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/stop'
