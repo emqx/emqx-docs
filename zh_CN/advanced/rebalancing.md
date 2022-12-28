@@ -125,7 +125,7 @@ rebalance start \
 | `--conn-evict-rate` | positive integer | 源节点客户端每秒断开连接速度。 |
 | `--abs-conn-threshold` | positive integer | 用于检查连接平衡的绝对阈值。                                 |
 | `--rel-conn-threshold` | number > 1.0     | 用于检查连接平衡的相对阈值。                                 |
-| `--wait-takeover`      | positive integer | 等待秒数，读秒后，将开始会话疏散任务。                       |
+| `--wait-takeover` | positive integer | 所有连接断开后，等待客户端重连以接管会话的时间（单位为 秒）。 |
  | `--sess-evict-rate` | positive integer | `wait-takeover` 之后源节点每秒会话疏散速度。 |
 | `--abs-sess-threshold` | positive integer | 用于检查会话连接平衡的绝对阈值。                             |
 | `--rel-sess-threshold` | number > 1.0     | 用于检查会话连接平衡的相对阈值。                             |
