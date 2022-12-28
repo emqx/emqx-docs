@@ -17,7 +17,7 @@ All operations are run by EMQX, no special scripts or adaptations to the client 
 
 ### Configuiation
 
-## CRL 配置
+## CRL Configuiation
 
 ```bash
 # Enable CRL
