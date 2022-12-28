@@ -302,7 +302,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 - `abs_conn_threshold`
 - `rel_conn_threshold`
 - `abs_sess_threshold` 
--  `rel_sess_threshold`
+- `rel_sess_threshold`
 
 字段含义同对应的[命令行命令](#evacuation)相同。
 
