@@ -1,37 +1,29 @@
 # 集群负载重平衡与节点疏散
 
-Cluster load rebalancing is the enforced process of client and session migration from a set of nodes to some others.
-Node evacuation is a particular case of rebalancing when we want to migrate all connections and sessions from
-a particular node.
+集群负载重平衡是将客户端与会话从一组节点强行迁移到其他节点的行为，而节点疏散则是要将所有连接与会话从某个节点迁离的行为。
 
-## Motivation
+## 应用场景
 
-Users might want to shut down arbitrary nodes, e.g., to maintain the underlying
-software or hardware. Or move connections from higher-loaded nodes to lower.
+在以下场景中可能需要进行节点疏散或负载重平衡，比如需要关闭任意节点以便维护底层软件或硬件；或是需要将连接从高负载节点迁到低负载节点。
 
-We need to minimize data loss when a node is switched off. The aim of node evacuation
-is to minimize session data loss.
+关闭节点时，我们需要将数据损失降到最低，而节点疏散正是为了最小化会话数据的损失。
 
-Node evacuation should transfer the maximum possible amount of connections and sessions to the other nodes.
-After it's completed in one node, the node can be shut down by sysadmin (but not automatically).
+节点疏散时，应该将尽量多的连接与会话数迁移到其他节点。节点疏散完成后，系统管理员可以关闭该节点，请注意，并非自动关闭节点。
 
-Node rebalancing is generally the opposite process. It transfers a calculated (balanced among the nodes) number of connections
-and sessions from higher loaded nodes to other nodes. A typical example is introducing or restarting a node.
+节点重平衡的流程则相反。它是将经计算得到的连接和会话数从高负载节点迁移到低负载节点，从而在节点之间实现负载均衡，比如新加节点或重启节点时。
 
-## Evacuation
+## 节点疏散
 
-Evacuation is started locally on a node via CLI or with API.
+我们通常会在待疏散节点中通过命令行工具（CLI）或 API 进行节点疏散操作。
 
-* The evacuated node stops receiving connections.
-* It gradually disconnects the connected clients.
-* After all clients are disconnected, the node waits for a configured amount of time. After that, the disconnected clients
-are expected to reconnect and takeover their sessions.
-* Then, it gradually migrates the remaining (disconnected) sessions to other nodes.
+* 待疏散节点将停止接收新的连接请求。
+* 待疏散节点将逐渐断开已连接的客户端。
+* 在所有客户端的连接断开后，待疏散节点将按设定进入一段等待期。等待期后，已断开连接的客户端将尝试重连并恢复会话。
+* 剩下的（已断开）的会话将被迁移至其他节点。
 
-The evacuation state is persistent. The node remains in the evacuated state even after restart. The node should be explicitly
-returned to the normal state.
+节点疏散任务是一项长期任务，因此即使在重启后，疏散节点仍将处于疏散状态。需要重新将节点的状态设为正常。
 
-The CLI command is the following:
+您可以通过如下命令执行节点的疏散任务：
 
 ```
 emqx_ctl rebalance start --evacuation \
@@ -42,28 +34,28 @@ emqx_ctl rebalance start --evacuation \
     [--sess-evict-rate CountPerSec]
 ```
 
-| Param               | Type             | Description |
+| 配置项          | 类型           | 描述 |
 |---------------------|------------------|-------------|
-| `--redirect-to`     | string           | Server reference for [Server redirect](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255). MQTT 5 clients will receive this property when trying to connect |
-| `--conn-evict-rate` | positive integer | Client disconnection rate, count/second |
-| `--migrate-to`      | string           | Space or comma-separated list of nodes to which sessions will be evacuated
-| `--wait-takeover`   | positive integer | Amount of time in seconds to wait before starting session evacuation
-| `--sess-evict-rate` | positive integer | Client evacuation rate, count/second |
+| `--redirect-to`     | string           | 具体可参考[《MQTT 5.0 协议》中的《服务器重定向》](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255)章节。对于采用 MQTT 5.0 协议的客户端，在尝试连接时会获得该配置项。 |
+| `--conn-evict-rate` | positive integer | 客户端每秒的连接断开率 |
+| `--migrate-to`      | string           | 待疏散的会话列表，以空格或逗号区隔 |
+| `--wait-takeover`   | positive integer | 等待秒数，读秒后，将开启会话疏散任务 |
+| `--sess-evict-rate` | positive integer | 客户端每秒的疏散率 |
 
-Example:
+示例：
 
 ```
 ./bin/emqx_ctl rebalance start --evacuation --wait-takeover 200 --conn-evict-rate 30 --sess-evict-rate 30 --migrate-to "emqx2@127.0.0.1 emqx3@127.0.0.1"
 Rebalance(evacuation) started
 ```
 
-The CLI command for getting evacuation status is:
+获取疏散状态的命令如下：
 
 ```
 emqx_ctl rebalance node-status
 ```
 
-Example:
+示例：
 
 ```
 ./bin/emqx_ctl rebalance node-status
@@ -82,36 +74,35 @@ Channel statistics:
   initial_sessions: 1000
 ```
 
-The CLI command to stop evacuation is:
+停止疏散任务的命令如下：
 
 ```
 emqx_ctl rebalance stop
 ```
 
-Example:
+示例：
 
 ```
 ./bin/emqx_ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
-## Rebalancing
+## 重平衡
 
-Rebalancing is a more complicated process since it involves several nodes. When enabled on a node:
+重平衡涉及多个节点，因此比疏散操作要复杂。当基于某个节点执行重平衡操作时：
 
-* The node becomes the _coordinator_.
-* It divides passed nodes into two groups: donors and recipients. The donors are the nodes with the excess number
-of connections, and the recipients are the nodes that lack connections.
-* It makes the donor nodes stop receiving connections.
-* It waits for a configured amount of time to allow an LB to remove the donors from the active backends.
-* It gradually disconnects the connected clients from the donor nodes until their average connection count reaches that of the recipients.
-* Then, it waits for a configured amount of time. The disconnected clients are expected to reconnect and takeover their sessions.
-* Then, it gradually migrates the remaining (disconnected) sessions from the donor nodes until their average disconnection session count reaches that of the recipients.
-* Finally, the rebalancing stops, and the donor nodes are returned to their normal state.
+* 该节点变为*调度节点*。
+* 调度节点将接入的节点分为两类，源节点和目标节点。源节点就是那些连接数超量的节点，目标节点是连接数不足的节点。
+* 调度节点将告知源节点停止接收新的连接。
+* 在经过设定的等待时间后，调度节点会将源节点从活跃的后端节点列表中移除。
+* 调度节点会逐步断开已连接至源节点的客户端，直到源节点的平均连接数与目标节点相同。
+* 在经过设定的等待时间后，断开的客户端会尝试重连并恢复会话。
+* 调度节点会逐步将把剩下的（已断开）的会话从源节点迁离，直到源节点的平均连接数与目标节点相同。
+* 最后，重平衡任务结束，源节点切回正常状态。
 
-Rebalancing is ephemeral. If one of the participating nodes crashes, the whole process is aborted on all nodes.
+重平衡是一项临时性任务。如果任一节点在进行重平衡时崩溃，整个任务将结束。
 
-The CLI command is the following:
+执行重平衡任务的命令如下：
 
 ```
 rebalance start \
@@ -127,40 +118,40 @@ rebalance start \
     [--rel-sess-threshold Fraction]
 ```
 
-| Param                  | Type             | Description |
-|------------------------|------------------|-------------|
-| `--nodes`              | string           | Space or comma-separated list of nodes participating in the rebalance. It may or may not include the coordinator (node on which the command is run) |
-| `--wait-health-check`  | positive integer | Amount of time in seconds to wait before starting rebalance. During this period, an LB is supposed to remove donor nodes from the active backends |
-| `--conn-evict-rate`    | positive integer | Client disconnection rate on donor nodes, count/second |
-| `--abs-conn-threshold` | positive integer | Absolute threshold for checking connection balance |
-| `--rel-conn-threshold` | number > 1.0     | Relative threshold for checking connection balance |
-| `--wait-takeover`      | positive integer | Amount of time in seconds to wait before starting session evacuation |
-| `--sess-evict-rate`    | positive integer | Session evacuation rate on donor nodes, count/second |
-| `--abs-sess-threshold` | positive integer | Absolute threshold for checking session balance |
-| `--rel-sess-threshold` | number > 1.0     | Relative threshold for checking session balance |
+| 配置项                 | 类型             | 描述                                                         |
+| ---------------------- | ---------------- | ------------------------------------------------------------ |
+| `--nodes`              | string           | 参与负载重平衡的节点列表，以空格或逗号区隔，调度节点，即在其上运行负载重平衡命令的节点，可以不在列表中。 |
+| `--wait-health-check`  | positive integer | 等待秒数，读秒结束后，重平衡任务将启动。在此期间，负载均衡器会将源节点从活跃的后端节点列表中移除。 |
+| `--conn-evict-rate`    | positive integer | 源节点每秒的连接断开率                                       |
+| `--abs-conn-threshold` | positive integer | 用于检查连接平衡的绝对阈值                                   |
+| `--rel-conn-threshold` | number > 1.0     | 用于检查连接平衡的相对阈值                                   |
+| `--wait-takeover`      | positive integer | 等待秒数，读秒结束后，将开始会话疏散任务                     |
+| `--sess-evict-rate`    | positive integer | 源节点每秒的会话疏散率                                       |
+| `--abs-sess-threshold` | positive integer | 用于检查会话连接平衡的绝对阈值                               |
+| `--rel-sess-threshold` | number > 1.0     | 用于检查会话连接平衡的相对阈值                               |
 
-Connections are considered to be balanced when the following condition holds:
+当满足以下条件时，我们认为连接是平衡的：
 
 ```
 avg(DonorConns) < avg(RecipientConns) + abs_conn_threshold OR avg(DonorConns) < avg(RecipientConns) * rel_conn_threshold
 ```
 
-A similar rule is applied to disconnected sessions.
+类似的规则也适用于会话的连接断开。
 
-Example:
+示例：
 
 ```
 ./bin/emqx_ctl rebalance start --wait-health-check 10 --wait-takeover 60  --conn-evict-rate 5 --sess-evict-rate 5 --abs-conn-threshold 30 --abs-sess-threshold 30 --nodes "emqx1@127.0.0.1 emqx2@127.0.0.1 emqx3@127.0.0.1"
 Rebalance started
 ```
 
-The CLI command for getting rebalance status is:
+获取重平衡状态的命令如下：
 
 ```
 emqx_ctl rebalance node-status
 ```
 
-Example:
+示例：
 
 ```
 ./bin/emqx_ctl rebalance node-status
@@ -175,34 +166,32 @@ Connection goal: 0.0
 Current average donor node connection count: 300.0
 ```
 
-The CLI command to stop rebalance is:
+停止重平衡任务的命令如下：
 
 ```
 emqx_ctl rebalance stop
 ```
 
-Example:
+示例：
 
 ```
 ./bin/emqx_ctl rebalance stop
 Rebalance stopped
 ```
 
-## Load Balancer Integration
+## 集成负载均衡器
 
-During evacuation/rebalance, it is up to the user to provide the necessary configuration for the load balancer (if any).
-This configuration should help disconnected clients to be directed to the recipient nodes when they reconnect.
-Without such a configuration, there may be an excess number of disconnections.
+在执行疏散/重平衡操作时，如使用负载均衡器，用户需自行提供相关配置信息。断开的客户端尝试重连时，负载均衡器会基于这些配置信息将其重新定向到目标节点。如果没有此类配置信息，可能出现断开连接数过多的问题。
 
-To help create that configuration, EMQX provides health check endpoints:
+为方便用户配置，EMQX 提供了健康检查功能：
 
 ```
 GET /api/v4/load_rebalance/availability_check
 ```
 
-They respond with 503 HTTP code for the donor or evacuated nodes and 200 HTTP code for nodes operating normally and receiving connections.
+执行健康检查后，EMQX 会针对源节点/待疏散节点返回 HTTP 状态码 503，对于正常运行及接收连接请求的节点，返回 HTTP 状态码 200。
 
-For example, the described configuration for Haproxy and a 3-node cluster could look like this:
+比如，对于 HAProxy 和一个三节点集群，配置文件应如下所示：
 
 ```
 defaults
@@ -227,17 +216,17 @@ backend emqx_cluster
   server emqx3 127.0.0.1:3003 check port 5003 inter 1000 fall 2 rise 5 weight 1 maxconn 1000
 ```
 
-Here we have 3 nodes with MQTT listeners on ports 3001, 3002, and 3003 and HTTP listeners on ports 5001, 5002, and 5003, respectively.
+我们有三个节点，对应的 MQTT 监听器分别位于  3001、3002 和 3003 端口，HTTP 监听器则分别位于 5001、5002 和 5003 端口。
 
-## Global Status
+## 全局状态
 
-CLI command to fetch information about all evacuation/rebalance processes across the cluster:
+我们可通过如下命令获取整体集群的疏散/重平衡任务状态：
 
 ```
 emqx_ctl rebalance status
 ```
 
-Example:
+示例：
 
 ```
 ./bin/emqx_ctl rebalance status
@@ -266,10 +255,9 @@ Session eviction rate: 5 sessions/second
 
 ## API
 
-All the operations available from the CLI are also available from the API. Start/stop commands require a node
-as a parameter.
+所有的命令行操作也可通过 API 完成。在执行开始/停止命令时，需要以参数的形式传入节点信息。
 
-### Enable Evacuation
+### 开启疏散操作
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/evacuation/start' -d '{"conn_evict_rate": 5, "sess_evict_rate": 5, "migrate_to": ["emqx3@127.0.0.1", "emqx2@127.0.0.1"]}'
@@ -277,10 +265,18 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 {"data":[],"code":0}
 ```
 
-Possible body fields are `nodes`, `redirect_to`, `conn_evict_rate`, `migrate_to`, `wait_takeover`, and `sess_evict_rate`
-with the same meaning as in the corresponding [CLI command](#evacuation).
+请求体中应该以下字段：
 
-### Disable Evacuation
+-  `nodes`
+-  `redirect_to`
+- `conn_evict_rate`
+- `migrate_to`
+- `wait_takeover`
+-  `sess_evict_rate`
+
+字段含义同对应的[命令行命令](#evacuation)相同。
+
+### 停止疏散操作
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/evacuation/stop'
@@ -288,7 +284,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 {"data":[],"code":0}
 ```
 
-### Enable Rebalance
+### 开启重平衡操作
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/start' -d '{"conn_evict_rate": 5, "sess_evict_rate": 5, "nodes": ["emqx1@127.0.0.1", "emqx2@127.0.0.1"]}'
@@ -296,10 +292,21 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 {"data":[],"code":0}
 ```
 
-Possible body fields are `nodes`, `conn_evict_rate`, `sess_evict_rate`, `wait_takeover`, `wait_health_check`, `abs_conn_threshold`, `rel_conn_threshold`, `abs_sess_threshold`, and `rel_sess_threshold`
-with the same meaning as in the corresponding [CLI command](#rebalance).
+请求体中应该以下字段： 
 
-### Disable Rebalance
+- `nodes`
+- `conn_evict_rate`
+- `sess_evict_rate`
+-  `wait_takeover`
+- `wait_health_check`
+- `abs_conn_threshold`
+-  `rel_conn_threshold`
+- `abs_sess_threshold` 
+-  `rel_sess_threshold`
+
+字段含义同对应的[命令行命令](#evacuation)相同。
+
+### 停止重平衡操作
 
 ```
 curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.0.0.1:8081/api/v4/load_rebalance/emqx1@127.0.0.1/stop'
@@ -307,7 +314,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 {"data":[],"code":0}
 ```
 
-### Get Node-local Status
+### 获取本地节点的状态
 
 ```
 curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/status'
@@ -333,7 +340,7 @@ curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0
 }
 ```
 
-### Get Cluster-wide Status
+### 获取整体集群的状态
 
 ```
 curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/global_status'
@@ -361,5 +368,4 @@ curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0
   ]
 }
 ```
-
 
