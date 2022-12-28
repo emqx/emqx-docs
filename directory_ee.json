@@ -123,6 +123,10 @@
         {
           "title": "数据导入导出",
           "path": "advanced/data-import-and-export"
+        },
+        {
+          "title": "集群负载重平衡与节点疏散",
+          "path": "advanced/rebalancing"
         }
       ]
     },
@@ -922,6 +926,10 @@
         {
           "title": "Import/Export Data",
           "path": "advanced/data-import-and-export"
+        },
+        {
+          "title": "Cluster Rebalancing",
+          "path": "advanced/rebalancing"
         }
       ]
     },
