@@ -300,7 +300,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 -  `wait_takeover`
 - `wait_health_check`
 - `abs_conn_threshold`
--  `rel_conn_threshold`
+- `rel_conn_threshold`
 - `abs_sess_threshold` 
 -  `rel_sess_threshold`
 
