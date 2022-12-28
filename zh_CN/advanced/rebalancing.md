@@ -297,7 +297,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 - `nodes`
 - `conn_evict_rate`
 - `sess_evict_rate`
--  `wait_takeover`
+- `wait_takeover`
 - `wait_health_check`
 - `abs_conn_threshold`
 - `rel_conn_threshold`
