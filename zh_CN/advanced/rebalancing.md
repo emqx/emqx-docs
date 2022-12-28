@@ -272,7 +272,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 - `conn_evict_rate`
 - `migrate_to`
 - `wait_takeover`
--  `sess_evict_rate`
+- `sess_evict_rate`
 
 字段含义同对应的[命令行命令](#evacuation)相同。
 
