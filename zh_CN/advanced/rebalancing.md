@@ -36,7 +36,7 @@ emqx_ctl rebalance start --evacuation \
 
 | 配置项          | 类型           | 描述 |
 |---------------------|------------------|-------------|
-| `--redirect-to`     | string           | 具体可参考[《MQTT 5.0 协议》中的《服务器重定向》](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255)章节。对于采用 MQTT 5.0 协议的客户端，在尝试连接时会获得该配置项。 |
+| `--redirect-to` | string | 具体可参考[MQTT 5.0 协议 - 服务器重定向(Server redirection)](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255)章节。MQTT 5.0 协议的客户端使用该属性重连 |
 | `--conn-evict-rate` | positive integer | 客户端每秒的连接断开率。 |
 | `--migrate-to`      | string           | 待疏散的会话列表，以空格或逗号区隔。 |
 | `--wait-takeover`   | positive integer | 等待秒数，读秒后，将开启会话疏散任务。 |
