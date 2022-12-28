@@ -267,7 +267,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 
 请求体中应该以下字段：
 
--  `nodes`
+- `nodes`
 - `redirect_to`
 - `conn_evict_rate`
 - `migrate_to`
