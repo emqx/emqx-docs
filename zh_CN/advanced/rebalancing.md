@@ -37,10 +37,10 @@ emqx_ctl rebalance start --evacuation \
 | 配置项          | 类型           | 描述 |
 |---------------------|------------------|-------------|
 | `--redirect-to`     | string           | 具体可参考[《MQTT 5.0 协议》中的《服务器重定向》](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255)章节。对于采用 MQTT 5.0 协议的客户端，在尝试连接时会获得该配置项。 |
-| `--conn-evict-rate` | positive integer | 客户端每秒的连接断开率 |
-| `--migrate-to`      | string           | 待疏散的会话列表，以空格或逗号区隔 |
-| `--wait-takeover`   | positive integer | 等待秒数，读秒后，将开启会话疏散任务 |
-| `--sess-evict-rate` | positive integer | 客户端每秒的疏散率 |
+| `--conn-evict-rate` | positive integer | 客户端每秒的连接断开率。 |
+| `--migrate-to`      | string           | 待疏散的会话列表，以空格或逗号区隔。 |
+| `--wait-takeover`   | positive integer | 等待秒数，读秒后，将开启会话疏散任务。 |
+| `--sess-evict-rate` | positive integer | 客户端每秒的疏散率。 |
 
 示例：
 
@@ -122,13 +122,13 @@ rebalance start \
 | ---------------------- | ---------------- | ------------------------------------------------------------ |
 | `--nodes`              | string           | 参与负载重平衡的节点列表，以空格或逗号区隔，调度节点，即在其上运行负载重平衡命令的节点，可以不在列表中。 |
 | `--wait-health-check`  | positive integer | 等待秒数，读秒结束后，重平衡任务将启动。在此期间，负载均衡器会将源节点从活跃的后端节点列表中移除。 |
-| `--conn-evict-rate`    | positive integer | 源节点每秒的连接断开率                                       |
-| `--abs-conn-threshold` | positive integer | 用于检查连接平衡的绝对阈值                                   |
-| `--rel-conn-threshold` | number > 1.0     | 用于检查连接平衡的相对阈值                                   |
-| `--wait-takeover`      | positive integer | 等待秒数，读秒结束后，将开始会话疏散任务                     |
-| `--sess-evict-rate`    | positive integer | 源节点每秒的会话疏散率                                       |
-| `--abs-sess-threshold` | positive integer | 用于检查会话连接平衡的绝对阈值                               |
-| `--rel-sess-threshold` | number > 1.0     | 用于检查会话连接平衡的相对阈值                               |
+| `--conn-evict-rate`    | positive integer | 源节点每秒的连接断开率。                                     |
+| `--abs-conn-threshold` | positive integer | 用于检查连接平衡的绝对阈值。                                 |
+| `--rel-conn-threshold` | number > 1.0     | 用于检查连接平衡的相对阈值。                                 |
+| `--wait-takeover`      | positive integer | 等待秒数，读秒后，将开始会话疏散任务。                       |
+| `--sess-evict-rate`    | positive integer | 源节点每秒的会话疏散率。                                     |
+| `--abs-sess-threshold` | positive integer | 用于检查会话连接平衡的绝对阈值。                             |
+| `--rel-sess-threshold` | number > 1.0     | 用于检查会话连接平衡的相对阈值。                             |
 
 当满足以下条件时，我们认为连接是平衡的：
 
