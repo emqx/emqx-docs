@@ -50,11 +50,11 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 8. Advanced settings (optional): Choose whether to use sync or async query mode, and whether to enable queue or batch. For details, see [Configuration parameters](#Configuration).
 9.  Then click **Create** to finish the setup. 
 
-We have successfully created the data bridge to InfluxDB, now we can continue to create rules to specify the data to be written into InfluxDB. 
+We have successfully created the data bridge to InfluxDB, now we can continue to create rules to specify the data to be saved into InfluxDB. 
 
-1. Go to EMQX Dashboard, click **Data Integration** -> **Data Rules**.
+1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 2. Click **Create** on the top right corner of the page.
-3. Input `my_rule` as the rule ID, and set the rules in the SQL Editor. Here we want to save the MQTT messages under topic `t/#`  to InfluxDB, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to InfluxDB, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
 
   ```sql
   SELECT 
