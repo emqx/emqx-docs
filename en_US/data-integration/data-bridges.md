@@ -1,6 +1,6 @@
 # Introduction to Data Bridges
 
-Data bridge is a channel used to connect EMQX and external data systems, for example, databases like MySQL, MongoDBm, message brokers like Apache Kafka and RabbitMQ, or even an HTTP server.
+Data bridge is a channel used to connect EMQX and external data systems, for example, databases like MySQL, MongoDB, message brokers like Apache Kafka and RabbitMQ, or even an HTTP server.
 
 Through data bridges, users can send messages from EMQX to the external data system in real-time, or pull data from the external data system and send it to a topic in EMQX.
 
