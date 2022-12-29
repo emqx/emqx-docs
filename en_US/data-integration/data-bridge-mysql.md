@@ -41,7 +41,7 @@ use emqx_data;
 
 ### Connect to MySQL
 
-We will create 2 data bridges to MySQL for messages storage and event record respectively. 
+We will create 2 data bridges to MySQL for messages storage and event records respectively. 
 
 #### [Messages storage](#Storage)
 
@@ -49,8 +49,8 @@ We will create 2 data bridges to MySQL for messages storage and event record res
 2. Click **Create** on the top right corner of the page.
 3. In the **Create Data Bridge** page, click to select **MySQL**, and then click **Next**.
 4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
-5. Input the connection information. Input **127.0.0.1:3036** as the **Server Host**,  **emqx_data** as the **Database Name**, **root** as the **Username** and **public** as the **Password**.
-6. Configure the **SQL Template**. Use the SQL statements below to insert data. Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks and do not write a semicolon to the end of the statements. 
+5. Input the connection information. Input **127.0.0.1:3036** as the **Server Host**,  **emqx_data** as the **Database Name**, **root** as the **Username**, and **public** as the **Password**.
+6. Configure the **SQL Template**. Use the SQL statements below to insert data. Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements. 
 
   ```sql
   INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -61,7 +61,7 @@ We will create 2 data bridges to MySQL for messages storage and event record res
   )
   ```
 
-Before creating the above data bridge, please use the following SQL statements to create data table `emqx_messages` in MySQL database for storing the client ID, topic, payload, and create time of every message. 
+Before creating the above data bridge, please use the following SQL statements to create data table `emqx_messages` in MySQL database for storing the client ID, topic, payload, and creating time of every message. 
 
   ```sql
   CREATE TABLE emqx_messages (
@@ -74,7 +74,7 @@ Before creating the above data bridge, please use the following SQL statements t
   ```
 
 7. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
-8. Then click **Create** to finish the creating of the data bridge.
+8. Then click **Create** to finish the creation of the data bridge.
 
 We have successfully created the data bridge to MySQL, now we can continue to create rules to specify the data to be saved into MySQL. 
 
@@ -93,11 +93,11 @@ We have successfully created the data bridge to MySQL, now we can continue to cr
 
 Now we have successfully created the data bridge to MySQL. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
-#### Online/Offline recording
+#### Online/Offline status recording
 
-The operating steps are similar to those at the [Message storage](#Storage) part expect from the SQL template and SQL rules. 
+The operating steps are similar to those at the [Message storage](#Storage) part expect for the SQL template and SQL rules. 
 
-The SQL template for Online/Offline recording is as follows. Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks and do not write a semicolon to the end of the statements.
+The SQL template for online/offline status recording is as follows. Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
@@ -107,7 +107,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-Before creating this data bridge, please use the following SQL statements to create data table `emqx_client_events` in MySQL database for storing the client ID, event type, and create time of every event. 
+Before creating this data bridge, please use the following SQL statements to create data table `emqx_client_events` in MySQL database for storing the client ID, event type, and creating time of every event. 
 
 ```sql
 CREATE TABLE emqx_client_events (
@@ -137,7 +137,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MySQL" }'
 
 Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
 
-Check whether the data is written into the ` emqx_messages`  da ta table. 
+Check whether the data is written into the ` emqx_messages`  data table. 
 
 ```bash
 mysql> select * from emqx_messages;
@@ -149,7 +149,7 @@ mysql> select * from emqx_messages;
 1 row in set (0.01 sec)
 ```
 
-`emqx_client_events` 表：
+`emqx_client_events`  table:
 
 ```bash
 mysql> select * from emqx_client_events;
