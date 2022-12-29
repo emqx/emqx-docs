@@ -63,8 +63,8 @@ We have successfully created the data bridge to InfluxDB, now we can continue to
     "t/#"
   ```
 
-4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.  
-5. Click the **Add** button to finish the setup. 
+4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**. Then click the **Add** button. 
+4. Click **Create** at the page bottom to finish the creation. 
 
 Now we have successfully created the data bridge to InfluxDB. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
