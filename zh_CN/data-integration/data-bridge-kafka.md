@@ -71,7 +71,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 6. 配置生产者桥接信息：
    1. MQTT 主题：要桥接的 MQTT 主题，此处填写 `t/#` 表示将匹配此主题的 MQTT 消息转发至 Kafka。您也可以将此项留空，新建规则在规则动作中设置将规则处理结果转发到该数据桥接。
    2. Kafka 主题名称：填写 Kafka 中预先创建好的主题 `testtopic-in`，此处暂不支持使用变量。
-   3. Kafka 消息模板：使用变量构造消息模板，将规则或指定 MQTT 主题的消息转发到 6.2 中的 Kafka 主题中，此处使用 Dashboard 默认即可。
+模版用于将规则或指定 MQTT 主题的消息转发到我们之前创建的 Kafka 主题。此处您可以使用默认配置，或通过变量构造消息模板。
 7. 调优配置：根据情况配置最大批量字节数、压缩、分区选择策略等参数，详细请参考[配置配置](#配置参数)。
 
 ::: tip
