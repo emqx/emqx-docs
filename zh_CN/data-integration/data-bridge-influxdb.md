@@ -1,6 +1,6 @@
 # InfluxDB Bridge
 
-InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强大的数据吞吐能力以及稳定的性能表现使其非常适合物联网领域。InfluxDB Bridge 完整支持 InfluxDB Cloud、InfluxDB OSS 以及 InfluxDB Enterprise 多种软件类型以及不同版本。
+InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强大的数据吞吐能力以及稳定的性能表现使其非常适合物联网领域。EMQX 目前支持通过数据桥接的方式连接不同版本的 InfluxDB Cloud、InfluxDB OSS 以及 InfluxDB Enterprise。
 
 ## 先决条件
 
@@ -29,13 +29,13 @@ InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强�
 docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 ```
 
-2. 浏览器访问 http://localhost:8086 打开 InfluxDB UI，设置用户名、密码、组织名称、Bucket 名称。
+2. 访问 [http://localhost:8086]( http://localhost:8086) 打开 InfluxDB UI，设置用户名、密码、组织名称、Bucket 名称。
 
 3. 前往 InfluxDB UI Load Data -> API Token，按照 [Create All-Access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens) 指引创建 Token。
 
-### 创建 InfluxDB Bridge
+### 连接到 InfluxDB
 
-1. 转到 Dashboard 数据集成 -> 数据桥接页面。
+1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 2. 点击页面右上角的创建。
 3. 在数据桥接类型中选择 InfluxDB，点击下一步。
 4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
