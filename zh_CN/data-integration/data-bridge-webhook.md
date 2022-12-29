@@ -1,43 +1,24 @@
 # Webhook
 
-Webhook 是 EMQX 向 HTTP 服务发送消息的通道。通过 Webhook，用户可以选择某个本地主题，将消息
-发送到远程 HTTP 服务，也可以将规则的输出发送到 HTTP 服务。
+EMQX 支持通过 Webhook 的方式将客户端消息和事件发送到外部 HTTP 服务。
 
-## 示例：使用配置文件创建 Webhook
+## 先决条件
 
-在 `emqx.conf` 里，添加如下配置：
+- 了解 [规则](./rules.md)。
+- 了解 [数据桥接](./data-bridges.md)。
 
-```js
-bridges.webhook.my_webhook {
-    enable = true
-    direction = egress
-    url = "http://localhost:9901/${clientid}"
-    local_topic = "a/#"
-    method = post
-    body = "${payload}"
-    headers {
-        "content-type": "application/json"
-    }
-}
-```
+## 特性
 
-这个 Webhook 的作用是，将发送到本节点的、主题能匹配到 `a/#` 的消息转发到 `http://localhost:9901/${clientid}`。
-其中 `${clientid}` 是表示发送者客户端 ID 的占位符变量，
-举例来说，如果客户端 ID 为 `steve`，那么消息将发送到 `http://localhost:9901/steve`。
-
-除了 `url` 参数之外，下面几个参数都可以使用占位符：`method`，`body`，`headers`。
-但注意在 `url` 参数里只能在路径部分使用占位符，而 `scheme://host:port` 部分不能使用占位符。
-
-可用的占位符字段，详见：[规则 SQL 中的事件类型和字段](./rule-sql-events-and-fields.md#使用规则-sql-语句处理消息发布)。
+- [连接池](./data-bridges.md#连接池)
+- [缓存队列](./data-bridges.md#缓存队列)
 
 ## 快速开始
 
-我们用一个示例展示如何使用 Dashboard 创建一个简单的 Webhook，桥接到一个 HTTP 服务器。
+我们将通过示例来展示如何使用 Dashboard 创建一个简单的 Webhook，并桥接到一个 HTTP 服务器。
 
 ### 搭建简易 HTTP 服务
 
-首先我们使用 Python 搭建一个简单的 HTTP 服务。这个 HTTP 服务接收 `POST /` 请求，
-简单打印请求内容后返回 200 OK：
+首先我们使用 Python 搭建一个简单的 HTTP 服务，用来接收 `POST /` 请求，该服务打印请求内容后返回 200 OK：
 
 ```python
 from flask import Flask, json, request
@@ -54,49 +35,56 @@ if __name__ == '__main__':
   api.run()
 ```
 
-将上面的代码保存为 `http_server.py` 文件。然后启动服务：
+将上面的代码保存为 `http_server.py` 文件，文件所在目录运行如下命令：
 
 ```shell
+# 安装 flask 依赖
 pip install flask
 
+# 启动服务
 python3 http_server.py
 ```
 
-### 创建 Webhook 并关联到规则
+### 创建 Webhook
 
-现在我们访问 Dashboard，选择左边栏 “数据集成” - “数据桥接”：
-
-![image](./assets/rules/cn-data-bridge-left-tab.png)
-
-然后点击创建，选择 `Webhook`，点击 “下一步”：
+1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
+2. 点击页面右上角的创建。
+3. 在数据桥接类型中选择 Webhook，点击下一步。
 
 ![image](./assets/rules/cn-webhook-index.png)
 
-我们将 Webhook 命名为 `my_webhook`，URL 为 `http://localhost:5000`：
+4. 输入数据桥接名称，要求是大小写英文字母或数字组合，这里我们输入 `my_webhook`。
+5. 请求方法选择 POST，URL 为 `http://localhost:5000`，其他使用默认值即可。
+6. 点击最下方创建按钮完成规则创建。
 
-![image](./assets/rules/cn-webhook-conf-1.png)
+至此您已经完成数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据：
 
-点击 “创建”，然后在弹出来的对话框里选择创建关联规则：
+1. 转到 Dashboard **数据集成** -> **规则**页面。
+2. 点击页面右上角的创建。
+3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息发送到 Webhook，此处规则 SQL 如下：
 
-![image](./assets/rules/cn-webhook-create-dep-rule-1.png)
+  ```sql
+  SELECT 
+    *
+  FROM
+    "t/#"
+  ```
+4. 添加动作，在动作下拉框中选择 使用数据桥接转发 选项，选择先前创建好的 Webhook。
+5. 点击最下方创建按钮完成规则创建。
 
-在规则的创建页面，填入如下 SQL 语句，其余参数保持默认值：
+至此您已经完成整个创建过程，可以前往 **数据集成** -> **Flows** 页面查看拓扑图，此时应当看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果转发到 Webhook。
 
-```SQL
-SELECT * FROM "t/#"
+### 测试
+
+使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
+
+```bash
+mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Webhook" }'
 ```
 
-![image](./assets/rules/cn-webhook-create-dep-rule-2.png)
+查看 Webhook 运行统计，命中、发送成功次数均 +1。
 
-点击页面下方的 “创建” 按钮。
-
-### 发送数据进行测试
-
-接下来我们使用 [MQTTX](https://mqttx.app/) 发送一条数据到 `t/1`：
-
-![image](./assets/rules/cn-send-mqtt-t1-mqttx.png)
-
-然后验证消息已经被发送到了 HTTP 服务端：
+查看消息是否已经转发到 HTTP 服务：
 
 ```shell
 python3 http_server.py
@@ -107,5 +95,5 @@ python3 http_server.py
  * Debug mode: off
  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
 
-got post request:  b'eee'
+got post request:  b'hello Webhook'
 ```
