@@ -12,7 +12,7 @@
 - [连接池](./data-bridges.md#连接池)
 - [异步请求模式](./data-bridges.md#异步请求模式)
 - [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
+- [缓冲队列](./data-bridges.md#缓冲队列)
 - [SQL 预处理](./data-bridges.md#SQL-预处理)
 
 ## 配置参数

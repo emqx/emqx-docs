@@ -18,7 +18,7 @@ Apache Kafka 数据桥接实现了 EMQX 客户端消息和事件与 Apache Kafka
 - [连接池](./data-bridges.md#连接池)
 - [异步请求模式](./data-bridges.md#异步请求模式)
 - [批量模式](./data-bridges.md#批量模式)
-- [缓存队列](./data-bridges.md#缓存队列)
+- [缓冲队列](./data-bridges.md#缓冲队列)
 
 ## 配置参数
 <!-- TODO 链接到配置手册对应配置章节。 -->
