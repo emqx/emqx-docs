@@ -51,6 +51,7 @@ bridges.mysql.foo {
   enable = true
   ...
   resource_opts {
+  # sync | async
     query_mode = "async"
     ...
   }
@@ -123,17 +124,33 @@ bridges.mysql.foo {
 }
 ```
 
-### SQL preprocessing
+### Prepared statement
 
-If you are going to run SQL directly, you must use single quotes to explicitly set `topic` and `payload` as `string` and set `qos`  as `integer`. 
+[Prepared statement](https://dev.mysql.com/doc/refman/8.0/en/sql-prepared-statements.html) provides a way to run SQL with prepared statements. It simplifies the operation and maintenance and also helps to avoid SQL injection and improve security. 
+
+For data bridges supporting prepared statements, you need not explicitly specify the field variables; otherwise, you will need to explicitly specify the field variables. 
+
+For example, you will insert the following data into the database:
+
+```json
+{
+  "topic": "t/1",
+  "qos": 0,
+  "payload": "Hello EMQX"
+}
+```
+
+- topic: message topic, string
+- payload: message body, string
+- qos: message QoS, integer
+
+For data bridges not supporting prepared statements, the fields should be enclosed in quotation marks, as shown below: 
 
 ```sql
 INSERT INTO msg(topic, qos, payload) VALUES('${topic}', ${qos}, '${payload}');
 ```
 
-But for SQL databases such as MySQL and PostgreSQL, the SQL template will be preprocessed, so there is no need to explicitly specify the field variables. Besides, SQL preprocessing can help to avoid SQL injection and improve security. 
-
-So for data bridges supporting SQL preprocessing, the fields in the SQL template should **NOT** be enclosed in quotation marks, as the system will automatically deduce the field type.  
+But for data bridges supporting prepared statements, the fields in the SQL template should **NOT** be enclosed in quotation marks, as shown below:
 
 ```sql
 INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});

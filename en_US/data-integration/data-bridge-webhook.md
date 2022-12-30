@@ -3,36 +3,19 @@
 A WebHook is an HTTP callback. EMQX uses WebHooks to POST a message to HTTP services.
 Through webhooks, users can send messages to remote HTTP services from a local topic.
 
+## Prerequisites
+
+- Knowledge about EMQX data integration [rules](./rules.md)
+- Knowledge about [data bridge](./data-bridges.md)
+
+## Features supported
+
+- [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
+- [Buffer queue](./data-bridges.md#缓存队列)
+
 ## Quick Starts
 
-We will first create a webhook with the configuration file and an HTTP server. Then we will create a data bridge to connect the Webhook and the HTTP server. 
-
-### Create a Webhook via the configuration file
-
-We can create a Webhook by adding the following configs to the end of the `emqx.conf` file:
-
-```js
-bridges.webhook.my_webhook {
-    enable = true
-    direction = egress
-    url = "http://localhost:9901/${clientid}"
-    local_topic = "a/#"
-    method = post
-    body = "${payload}"
-    headers {
-        "content-type": "application/json"
-    }
-}
-```
-
-This webhook will forward messages sent to this node with topics matching `a/#` to `http://localhost:9901/${clientid}`, where `${clientid}` is a placeholder variable representing the sender's client ID.
-For example, if the client ID is `steve`, the message will be sent to `http://localhost:9901/steve`.
-
-Note: You can use placeholders in the following parameters: `method`, `body`, `headers` and `url` (only in the path part, cannot be used in the `scheme://host:port part` ). 
-
-For all the available placeholder fields, see [event types and fields in *SQL data sources and fields*](./rule-sql-events-and-fields.md#mqtt-message).
-
-Now we have finished creating the Webhook, we will continue to create an HTTP Server. 
+We will illustrate how to create an HTTP server and a Webhook, and then create a data bridge to connect the Webhook and the HTTP server. 
 
 ### Setup a Simple HTTP Server
 
@@ -61,7 +44,7 @@ pip install flask
 python3 http_server.py
 ```
 
-### Connect to the HTTP Server
+### Create a Webhook
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 
@@ -71,11 +54,11 @@ python3 http_server.py
 
 ![image](./assets/rules/en-webhook-index.png)
 
-3. Input a name for the data bridge, for example, `my_webhook`, and set **URL** to `http://localhost:5000`:
+3. Input a name for the data bridge, for example, `my_webhook`. Note: It should be a combination of upper/lower case letters or numbers. and set **URL** to `http://localhost:5000`. For the rest, you can keep the default value. 
 
 ![image](./assets/rules/en-webhook-conf-1.png)
 
-4. Then click **Create** to finish the creation of the data bridge. Now we can continue to create rules to specify the data to be saved into the HTTP server. We will click **Create Rule** in the pop-up diaglog box
+4. Then click **Create** to finish the creation of the data bridge. Now we can continue to create rules to specify the data to be saved into the HTTP server. We will click **Create Rule** in the pop-up dialog box
 
 ![image](./assets/rules/en-webhook-create-dep-rule-1.png)
 
@@ -93,11 +76,15 @@ python3 http_server.py
 
 ### Test
 
-We use [MQTTX](https://mqttx.app/) to send a message to `t/1`:
+Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
 
-![image](./assets/rules/en-send-mqtt-t1-mqttx.png)
+```bash
+mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Webhook" }'
+```
 
-Then we can verify whether the message has been sent to the HTTP server:
+Check the running status of the two data bridges, there should be one new incoming and one new outgoing message. 
+
+Verify whether the message has been sent to the HTTP server:
 
 ```
 python3 http_server.py
@@ -108,5 +95,5 @@ python3 http_server.py
  * Debug mode: off
  * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
 
-got post request:  b'eee'
+got post request:  b'hello Webhook'
 ```
