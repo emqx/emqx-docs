@@ -9,7 +9,6 @@ $SYS/brokers/emqx@127.0.0.1/version
 $SYS/brokers/emqx@127.0.0.1/uptime
 ```
 
-
 $SYS 系统消息发布周期配置项：
 
 ```bash
@@ -19,7 +18,7 @@ broker.sys_interval = 1m
 {% emqxce %}
 
 ::: tip
-EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [ACL File](../security/authz/file.md) 修改发布订阅 ACL 规则。
+EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [ACL File](../access-control/authz/file.md) 修改发布订阅 ACL 规则。
 
 {% endemqxce %}
 
