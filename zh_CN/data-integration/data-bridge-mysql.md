@@ -7,7 +7,7 @@
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
 
-## 特性
+## 支持特性
 
 - [连接池](./data-bridges.md#连接池)
 - [异步请求模式](./data-bridges.md#异步请求模式)

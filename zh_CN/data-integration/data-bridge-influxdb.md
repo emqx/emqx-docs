@@ -1,4 +1,4 @@
-# InfluxDB Bridge
+# InfluxDB
 
 InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强大的数据吞吐能力以及稳定的性能表现使其非常适合物联网领域。EMQX 目前支持通过数据桥接的方式连接不同版本的 InfluxDB Cloud、InfluxDB OSS 以及 InfluxDB Enterprise。
 
@@ -8,7 +8,7 @@ InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强�
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
 
-## 特性
+## 支持特性
 
 - [连接池](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [异步请求模式](./data-bridges.md#异步请求模式)

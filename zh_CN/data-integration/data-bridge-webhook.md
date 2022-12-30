@@ -7,7 +7,7 @@ EMQX 支持通过 Webhook 的方式将客户端消息和事件发送到外部 HT
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
 
-## 特性
+## 支持特性
 
 - [连接池](./data-bridges.md#连接池)
 - [缓存队列](./data-bridges.md#缓存队列)
