@@ -1,5 +1,80 @@
 # 版本发布
 
+## e4.4.12
+
+*发布日期: 2022-12-29*
+
+该版本包含了一个振奋人心的新功能：集群负载重平衡。
+新增的 emqx_ctl rebalance 命令可以很好的支持如下两个通用场景：
+- 如果大多数客户端都保持长连接，新加入集群，或新启重过的节点在很长一段时间内都会处于低负载状态。
+- 因为维护需要重启节点的话，直接关闭服务会导致所有连接到该节点的客户端在短时间内重连，在重连过程中这会增加集群负载，影响稳定性。而且在该节点的持久会话也会丢失。
+
+有了这个新功能之后，可以使用 rebalance 命令来触发客户端重连以达到负载均衡的目的。使用 --evacuation 选项时，则可以确保在重启服务前所有的客户端都已经迁移到了其他节点。
+请参考 [集群负载重平衡](../advanced/rebalancing.md) 了解更多详情。
+
+### 增强
+
+- 为主题重写模块增加主题合法性检查，带有通配符的目标主题不允许被发布 [#1590](https://github.com/emqx/emqx-enterprise/pull/1590)。
+
+- TDEngine 资源同时支持 TDEngine 2.x 和 3.x 两个版本的 API 返回格式 [emqx/tdengine-client-erl#7](https://github.com/emqx/tdengine-client-erl/pull/7)。
+  在 HTTP 的返回中，TDEngine 2.x 使用 `status` 字段来代表请求成功或者失败，而 TDEngine 3.x 改为使用 `code` 字段。
+
+- TDEngine 资源支持批量发送数据到 [TDEngine 子表](https://docs.taosdata.com/concept/#子表subtable) [#1583](https://github.com/emqx/emqx-enterprise/pull/1583)。
+
+- 在启用规则的时候，Clickhouse 离线消息动作打印了一行 info 级别的日志：`Destroyed .. Successfully` [#1594](https://github.com/emqx/emqx-enterprise/pull/1594)。
+
+- 现在即使对应的资源没有就绪的情况下，我们也能创建规则 [#1620](https://github.com/emqx/emqx-enterprise/pull/1620)。
+  在此改动之前，如果资源没有连接好，我们就没办法创建规则。在此改动之后可以创建了，但是新创建的规则将处于 `禁用` 状态。
+
+- 避免离线消息被重复删除 [#1522](https://github.com/emqx/emqx-enterprise/pull/1522)。
+  当订阅者回复消息 PUBACK(Qos1) 或消息 PUBREC(Qos2) 时，EMQX 会将外部数据库中的这条离线消息删除。
+  但当离线消息和保留消息功能同时启用时，一条 `retain = true` 的消息会被冗余存储两次 (Retainer 与外部数据库)。
+  那么重复的 PUBACK 或 PUBREC 将触发两次删除外部数据库中离线消息的行为，并且会使 Rule-SQL 执行成功而使 action-metrics 增加。
+  在多数情况下这不会产生任何异常或错误，仅有个别数据库在第二次删除时会报告要删除的消息不存在。
+  此更改后，将避免冗余的离线消息删除操作。
+
+- 用户可以在 EMQX Enterprise Helm Chart 中自定义 service 资源的 `externalTrafficPolicy` [#1638](https://github.com/emqx/emqx-enterprise/pull/1638)。
+
+- 当控制台创建新用户时，密码长度必须在 3-32 之间，且格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643)。
+
+### 修复
+
+- 持久会话的 MQTT 客户端重新连接 emqx 之后，未被确认过的 QoS1/QoS2 消息不再周期性重发 [#1623](https://github.com/emqx/emqx-enterprise/pull/1623)。
+  `zone.<zone-name>.retry_interval` 配置指定了没有被确认过的 QoS1/QoS2 消息的重发间隔，(默认为 30s)。在这个修复之前，
+  当持久会话的 MQTT 客户端重新连接 emqx 之后，emqx 会将队列中缓存的未被确认过的消息重发一次，但是不会按配置的时间间隔重试。
+
+- 持久会话的 MQTT 客户端断连之后，已经过期的 'awaiting_rel' 队列没有清除 [#1602](https://github.com/emqx/emqx-enterprise/pull/1602)。
+  在这个改动之前，在客户端重连并且发布 QoS2 消息的时候，如果 'awaiting_rel' 队列已满，此客户端会被服务器以
+  RC_RECEIVE_MAXIMUM_EXCEEDED(0x93) 错误码断开连接，即使这时候 'awaiting_rel' 队列里面的报文 ID 已经过期了。
+
+- RocketMQ 资源的认证功能不能正常工作 [#1561](https://github.com/emqx/emqx-enterprise/pull/1561)。
+  在这个改动里，我们把 `access_key`, `secret_key` 以及 `security_token` 三个配置项字段
+  从 `data_to_rocket` 动作挪到了 `bridge_rocket` 资源的配置中。并且我们为阿里云的 RocketMQ
+  服务新加了一个 `namespace` 字段。
+
+- 为 Kafka 动作参数增加检查，确保 Segment Bytes 不会超过 Max Bytes [#1607](https://github.com/emqx/emqx-enterprise/pull/1607)。
+
+- 为 Pulsar 动作参数增加检查，确保 Segment Bytes 不会超过 Max Bytes [#1625](https://github.com/emqx/emqx-enterprise/pull/1625)。
+
+- 解决通过 emqx oracle 资源发送数据时，报 "ORA-01000: maximum open cursors exceeded" 错误的问题 [#1556](https://github.com/emqx/emqx-enterprise/pull/1556)。
+
+- 修复了 EMQX Enterprise Helm Chart 部署的一些问题 [#1621](https://github.com/emqx/emqx-enterprise/pull/1621)
+  - 修复了 EMQX Enterprise Helm Chart 部署时出现 `Discovery error: no such service` 错误，导致集群节点发现异常。
+  - 修复了 EMQX Enterprise Helm Chart 无法配置 value 为 JSON 类型的 EMQX Enterprise 配置项。
+
+- 修正了一个问题，即导入备份配置后，配置不会在集群的所有节点上重新加载 [#1612](https://github.com/emqx/emqx-enterprise/pull/1612)。
+
+- 修正了一个问题，即当从一个不在其中的节点下载备份配置文件时，HTTP API将无法下载该文件 [#1612](https://github.com/emqx/emqx-enterprise/pull/1612)。
+
+- 为 Kafka 资源的 SSL 连接配置增加 `SNI` 字段 [#1642](https://github.com/emqx/emqx-enterprise/pull/1642)。
+
+- 修复了 MongoDB 资源在启用认证的情况下，连接过程很慢的问题 [#1655](https://github.com/emqx/emqx-enterprise/pull/1655)。
+
+- 修复了在版本热升级之后，EMQX 偶尔会出现资源已断开的告警，并且告警无法自动清除的问题 [#1652](https://github.com/emqx/emqx-enterprise/pull/1652)。
+
+- 修复仪表盘中的连接统计：将疏散后的客户端标记为断开连接 [#1680](https://github.com/emqx/emqx-enterprise/pull/1680)。
+
+
 ## e4.4.11
 
 *发布日期: 2022-11-26*
