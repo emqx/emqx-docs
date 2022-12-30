@@ -1,5 +1,84 @@
 # Releases
 
+## e4.4.12
+
+*Release Date: 2022-12-29*
+
+This version comes with an exciting new feature: cluster load rebalance.
+The newly introduced CLI command emqx_ctl rebalance provides support of the below two common scenarios:
+- Newly joined or restarted nodes may stay under-loaded for along time if the clients are mostly long-lived connections
+- For maintenance, shutting down a node will cause all connected connections to reconnect around the same time, increasing the chance to overload the cluster. Also the non-clean sessions in this node will be lost.
+
+Now it’s possible to issue the rebalance command to move some of the connections the under-loaded nodes. With the --evacuation option, we can also move all the connected MQTT clients off the node before stopping the service.
+For more information about this feature, please refer to [Cluster Rebalancing](../advanced/rebalancing.md)
+
+### Enhancements
+
+- Added topic validation for `emqx_mod_rewrite`. The dest topics contains wildcards are not allowed to publish [#1590](https://github.com/emqx/emqx-enterprise/pull/1590).
+
+- TDEngine resource support HTTP response formats of both TDEngine 2.x and 3.x [emqx/tdengine-client-erl#7](https://github.com/emqx/tdengine-client-erl/pull/7).
+  The HTTP response of TDEngine 2.x uses the `status` field to represent the success or failure,
+  while TDEngine 3.x uses the `code` field instead.
+
+- Support batch sending messages to [TDEngine SubTables](https://docs.tdengine.com/2.6/concept/#subtable) [#1583](https://github.com/emqx/emqx-enterprise/pull/1583).
+
+- The offline message clickhouse action prints an info level log: `Destroyed .. Successfully` when enabling a rule [#1594](https://github.com/emqx/emqx-enterprise/pull/1594).
+
+- Now the rules can be created even though the corresponding resources are not ready [#1620](https://github.com/emqx/emqx-enterprise/pull/1620).
+  Before this change, one cannot create rules without getting the resources connected. We made it
+  possible in this change, but the newly created rule will be in `disabled` state.
+
+- Avoid delete offline message twice [#1522](https://github.com/emqx/emqx-enterprise/pull/1522).
+  EMQX while delete offline message in external database when subscriber send a PUBACK or PUBREC packet.
+  But a message with `retain = true` will be stored twice (in retainer and external database) in case retain message and offline message are used in same time.
+  The reduplicated PUBACK and PUBREC will trigger deleted action twice. And the action-metrics will also increase caused by Rule-SQL execution suceeeed.
+  In most cases this does not generate any exceptions or errors, and only a few databases will report that the message to be deleted does not exist on the second delete.
+  This change will avoid redundant offline message deletion operations.
+
+- Users can define the `externalTrafficPolicy` of service in EMQX Enterprise Helm Chart [#1638](https://github.com/emqx/emqx-enterprise/pull/1638).
+
+- When dashboard creates a new user, the password length must match 3-32 and the format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643).
+
+### Bug fixes
+
+- After a reconnect, the unacknowledged QoS1/QoS2 messages in non-clean session were not retransmitted periodically as before the reconnect [#1623](https://github.com/emqx/emqx-enterprise/pull/1623).
+  The configuration `zone.<zone-name>.retry_interval` specifies the retransmission interval of
+  unacknowledged QoS1/QoS2 messages (defaults to 30s).
+  Prior to this fix, unacknowledged messages buffered in the session are re-sent only once after session take-over, but not retried at configured interval.
+
+- The expired 'awaiting_rel' queue is not cleared after persistent session MQTT client disconnected [#1602](https://github.com/emqx/emqx-enterprise/pull/1602).
+  Before this change, if the 'awaiting_rel' queue is full when the MQTT client reconnect
+  to the broker and publish a QoS2 message, the client will get disconnected by the broker
+  with reason code RC_RECEIVE_MAXIMUM_EXCEEDED(0x93), even if the packet IDs in the 'awaiting_rel'
+  queue have already expired.
+
+- Authentication for RocketMQ resource not working [#1561](https://github.com/emqx/emqx-enterprise/pull/1561).
+  In this change we moved the configuration fields `access_key`, `secret_key`
+  and `security_token` from the `data_to_rocket` action to the `bridge_rocket`
+  resource. And we also added a new field `namespace` for RocketMQ services in
+  Aliyun cloud.
+
+- Added validation for Kafka action parameters, Segment Bytes should not be greater than Max Bytes [#1607](https://github.com/emqx/emqx-enterprise/pull/1607).
+
+- Added validation for Pulsar action parameters, Segment Bytes should not be greater than Max Bytes [#1625](https://github.com/emqx/emqx-enterprise/pull/1625).
+
+- Fix the "ORA-01000: maximum open cursors exceeded" problem when sending data via the emqx oracle resource [#1556](https://github.com/emqx/emqx-enterprise/pull/1556).
+
+- Fixed EMQX Enterprise Helm Chart deployment error [#1621](https://github.com/emqx/emqx-enterprise/pull/1621)
+  - Fixed the `Discovery error: no such service` error occurred during helm chart deployment, resulting in an abnormal discovery of cluster nodes.
+  - Fixed EMQX Enterprise Helm Chart can not set JSON type value for EMQX Enterprise configuration items.
+
+- Fixed an issue where the configuration would not be reloaded on all nodes in a cluster after importing a backup configuration [#1612](https://github.com/emqx/emqx-enterprise/pull/1612).
+
+- Fixed an issue where the HTTP API would fail to download a backup configuration file when downloading it from a node where it does not reside in [#1612](https://github.com/emqx/emqx-enterprise/pull/1612).
+
+- Add the `SNI` field for SSL connection configuration of Kafka resource [#1642](https://github.com/emqx/emqx-enterprise/pull/1642).
+
+- Fixed the issue that the MongoDB resource connection process was slow when authentication was enabled [#1655](https://github.com/emqx/emqx-enterprise/pull/1655).
+
+- Fixed the issue that after the release hot upgrade, EMQX occasionally alarms resources down, and the alarms could not be automatically cleared [#1652](https://github.com/emqx/emqx-enterprise/pull/1652).
+
+- Fix connection statistics in the dashboard: mark evacuated clients as disconnected before they can reconnect [#1680](https://github.com/emqx/emqx-enterprise/pull/1680).
 ## e4.4.11
 
 *Release Date: 2022-11-26*
