@@ -35,7 +35,9 @@
   children:
     - mqtt/mqtt-specific
     - mqtt/mqtt-compliance
+    - mqtt/mqtt-publish-and-subscribe
     - mqtt/mqtt-session-and-message-expiry
+    - mqtt/mqtt-keepalive
     - mqtt/mqtt-qos
     - mqtt/mqtt-retained-messages
     - mqtt/mqtt-last-will-and-testament
