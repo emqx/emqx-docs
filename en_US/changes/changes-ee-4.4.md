@@ -1,5 +1,13 @@
 # Releases
 
+## e4.4.13
+
+*Release Date: 2023-01-03*
+
+### Bug Fixes
+
+- Fix an issue where testing the GCP PubSub could leak memory, and an issue where its JWT token would fail to refresh a second time. [#9640](https://github.com/emqx/emqx/pull/9640)
+
 ## e4.4.12
 
 *Release Date: 2022-12-29*
