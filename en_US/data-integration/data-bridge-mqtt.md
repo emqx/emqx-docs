@@ -1,4 +1,4 @@
-# MQTT Bridge
+# MQTT
 
 The MQTT bridge is a channel for EMQX to communicate with other MQTT services, either EMQX or other services that support the MQTT protocol. The MQTT bridge can either subscribe from the external services or publish messages to the external services. However, a single bridge only supports a one-way mode of operation: it can be either a producer or a consumer, but not both. If a bidirectional bridge is required, multiple MQTT bridges with different directions need to be created to complete the bidirectional flow of data.
 

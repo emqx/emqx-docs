@@ -5,86 +5,128 @@
 
 通过数据桥接，用户可以实时地将消息从 EMQX 发送到外部数据系统，或者从外部数据系统拉取数据并发送到 EMQX 的某个主题。
 
+{% emqxce %}
 ::: tip
 EMQX 开源版中仅支持 MQTT 桥接 和 Webhook，企业版支持的数据桥接请详见：[企业数据集成](https://www.emqx.com/zh/integrations)
 :::
+{% endemqxce %}
 
-## 数据桥接快速入门
+## 数据桥接指标
 
-我们用一个示例展示如何使用 Dashboard 创建一个简单的 Webhook，桥接到一个 HTTP 服务器。
+数据桥接提供了运行统计指标，包括：
+<!-- TODO 由于调整过 Data Bridge 结构，先前的指标设计过时了重新设计指标后补充文档 -->
+<!-- - 命中：
+- 发送成功：
+- 发送失败
+- 已发送未确认
+- 已丢弃
+- 已缓存
+- 已重试
+- 当前速率 -->
 
-### 搭建简易 HTTP 服务
+## 数据桥接特性
 
-首先我们使用 Python 搭建一个简单的 HTTP 服务。这个 HTTP 服务接收 `POST /` 请求，
-简单打印请求内容后返回 200 OK：
+数据桥接借助以下特性以增强易用性、进一步提高数据集成的性能和可靠性，并非所有数据桥接都完全实现了这些特性，具体支持情况请参照各自的说明文档。
 
-```python
-from flask import Flask, json, request
+### 连接池
 
-api = Flask(__name__)
 
-@api.route('/', methods=['POST'])
-def print_messages():
-  reply= {"result": "ok", "message": "success"}
-  print("got post request: ", request.get_data())
-  return json.dumps(reply), 200
 
-if __name__ == '__main__':
-  api.run()
+### 异步请求模式
+
+
+
+#### 异步模式配置
+
+```bash
+bridges.mysql.foo {
+  server = "localhost"
+  database = "emqx"
+  enable = true
+  ...
+  resource_opts {
+    query_mode = "async"
+    ...
+  }
+}
+```
+  
+### 批量模式
+
+批量模式可以将多条数据同时写入外部数据集成中，启用批量后 EMQX 将暂存每次请求的数据（单条），达到一定时间或累积一定数据条数（两者均可自行配置）后将暂存的整批数据写入到目标数据系统。
+
+
+- 减少网络延迟：批量写入可以减少网络传输次数，进而减少网络延迟。
+
+批量写入的缺点：
+
+- 数据写入时延较长：数据在达到设置的时间或条数之后才会被写入，时延较长。注意：您可以通过下方参数对设置时间或条数进行调整。
+- 有一定延迟：在达到设置的时间或累积数据条数之前数据不会立即写入，可通过参数进行调整。
+
+
+#### 批量模式配置
+
+```bash
+bridges.mysql.foo {
+  server = "localhost"
+  database = "emqx"
+  enable = true
+  ...
+  resource_opts {
+    enable_batch = true
+    batch_size = 100
+    batch_time = "20ms"
+    ...
+  }
+}
 ```
 
-将上面的代码保存为 `http_server.py` 文件。然后启动服务：
+### 缓存队列
 
-```shell
-pip install flask
 
-python3 http_server.py
+缓存队列为数据桥接提供了一定的容错性，建议启用该选项以提高数据安全性，可选配置如下：
+
+- 是否启用缓存队列。
+- 部分数据桥接可配置缓存存储介质，可选内存/磁盘/内存-磁盘混合。
+- 每个资源连接（此处并非 MQTT 连接）缓存队列长度（按容量大小），超出长度按照 FIFO 的原则丢弃数据。
+
+#### 缓存文件位置
+
+对于 Kafka Bridge，磁盘缓存文件位于 `data/kafka` 下，其他数据桥接磁盘缓存文件位于 `data/resource_worker` 下。
+
+实际使用中可以根据情况将 `data` 目录挂载至高性能磁盘以提高吞吐能力。
+
+#### 缓存队列配置
+
+```bash
+bridges.mysql.foo {
+  server = "localhost"
+  database = "emqx"
+  enable = true
+  ...
+  resource_opts {
+    enable_queue = true
+    max_queue_bytes = "100MB"
+    query_mode = "async"
+    ...
+  }
+}
 ```
 
-### 创建 Webhook 并关联到规则
+### SQL 预处理
 
-现在我们访问 Dashboard，选择左边栏 “数据集成” - “数据桥接”：
+在诸如 MySQL、PostgreSQL 等 SQL 数据库中，SQL 模板会进行预处理执行，无需显式的指定字段变量。
 
-![image](./assets/rules/cn-data-bridge-left-tab.png)
+直接执行 SQL 时，必须通过单引号显式设置 topic 与 payload 为字符类型，qos 为 int 类型：
 
-然后点击创建，选择 `Webhook`，点击 “下一步”：
-
-![image](./assets/rules/cn-webhook-index.png)
-
-我们将 Webhook 命名为 `my_webhook`，URL 为 `http://localhost:5000`：
-
-![image](./assets/rules/cn-webhook-conf-1.png)
-
-点击 “创建”，然后在弹出来的对话框里选择创建关联规则：
-
-![image](./assets/rules/cn-webhook-create-dep-rule-1.png)
-
-在规则的创建页面，填入如下 SQL 语句，其余参数保持默认值：
-
-```SQL
-SELECT * FROM "t/#"
+```sql
+INSERT INTO msg(topic, qos, payload) VALUES('${topic}', ${qos}, '${payload}');
 ```
 
-![image](./assets/rules/cn-webhook-create-dep-rule-2.png)
+但在支持 SQL 预处理的数据桥接中，SQL 模板**必须**使用不带引号的预处理语句：
 
-点击页面下方的 “创建” 按钮。
-
-### 发送数据进行测试
-
-接下来我们使用 [MQTTX](https://mqttx.app/) 发送一条数据到 `t/1`：
-
-![image](./assets/rules/cn-send-mqtt-t1-mqttx.png)
-
-然后验证消息已经被发送到了 HTTP 服务端：
-
-```shell
-python3 http_server.py
- * Serving Flask app 'http_server' (lazy loading)
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: off
- * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
-
-got post request:  b'eee'
+```sql
+INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 ```
+
+除了自动推到字段类型外，SQL 预处理技术还能避免 SQL 注入以提高安全性。

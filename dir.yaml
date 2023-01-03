@@ -21,90 +21,103 @@
 
 - title_en: Getting Started
   title_cn: 快速开始
-  path: getting-started
+  children:
+    - getting-started/getting-started
+    - getting-started/restrictions
+    - title_en: Try on EMQX Cloud
+      title_cn: 在 EMQX Cloud 上试用
+      path: 'https://cloud.emqx.io'
+
+# 基本概念
+
+- title_en: MQTT Specific
+  title_cn: MQTT 协议
+  children:
+    - mqtt/mqtt-specific
+    - mqtt/mqtt-compliance
+    - mqtt/mqtt-session-and-message-expiry
+    - mqtt/mqtt-qos
+    - mqtt/mqtt-retained-messages
+    - mqtt/mqtt-last-will-and-testament
+    - mqtt/mqtt-shared-subscription
+    - mqtt/mqtt-exclusive-subscription
+    - mqtt/mqtt-delayed-publish
+    - mqtt/mqtt-auto-subscription
+    - mqtt/mqtt-topic-rewrite
+    - mqtt/mqtt-system-topics
 
 ## Infrastructure
 
 - title_en: Deployment & Provisioning
   title_cn: 安装与部署
   children:
+    - deploy/system-requirements
     - deploy/install
     - deploy/dirs
-    - deploy/tune
+    - deploy/license
     - title_en: Clustering
       title_cn: 集群
       children:
-        - deploy/cluster/intro
-        - deploy/cluster/security
+        - deploy/cluster/introduction
+        - deploy/cluster/mria-introduction
+        - deploy/cluster/cluster-requirements
         - deploy/cluster/manual
         - deploy/cluster/auto
+        - deploy/cluster/security
         - deploy/cluster/lb
-        - deploy/cluster/db
-    - deploy/upgrade-from-v4
-  # - deploy/relup
+    - deploy/hot-upgrades
+    - deploy/rolling-upgrades
 
-- title_en: Configuration
-  title_cn: 配置
-  children:
-    - title_en: Configuraion Files
-      title_cn: 配置文件
-      path: admin/cfg # Configuration file
-
-- title_en: Management
-  title_cn: 管理接口
-  children:
-    - title_en: Command Line Interface
-      title_cn: 命令行接口
-      path: admin/cli
-    - admin/api # Swagger API doc
-
-- title_en: Security
-  title_cn: 安全
+- title_en: Access Control
+  title_cn: 访问控制
   children:
     - title_en: Authentication
       title_cn: 认证
       children:
-        - security/authn/authn
-        - security/authn/mnesia
-        - security/authn/mysql
-        - security/authn/postgresql
-        - security/authn/redis
-        - security/authn/mongodb
-        - security/authn/http
-        - security/authn/jwt
-        - security/authn/scram
-        - security/authn/user_management
+        - access-control/authn/authn
+        - title_en: Password Based
+          title_cn: 密码认证
+          children:
+            - access-control/authn/mnesia
+            - access-control/authn/mysql
+            - access-control/authn/postgresql
+            - access-control/authn/redis
+            - access-control/authn/mongodb
+            - access-control/authn/http
+        - access-control/authn/jwt
+        - access-control/authn/scram
+        - access-control/authn/user_management
+
     - title_en: Authorization
       title_cn: 授权
       children:
-        - security/authz/authz
-        - security/authz/file
-        - security/authz/mnesia
-        - security/authz/http
-        - security/authz/mysql
-        - security/authz/postgresql
-        - security/authz/redis
-        - security/authz/mongodb
-    - security/blacklist
-    - security/ssl
+        - access-control/authz/authz
+        - access-control/authz/file
+        - access-control/authz/mnesia
+        - access-control/authz/http
+        - access-control/authz/mysql
+        - access-control/authz/postgresql
+        - access-control/authz/redis
+        - access-control/authz/mongodb
+    - access-control/blacklist
 
-- title_en: Observability
-  title_cn: 运行监测
+- title_en: Messaging
+  title_cn: 消息通信
   children:
-    - observability/prometheus
-    - observability/statsd
-    - observability/log
-    - observability/tracer
-    - observability/alarms
-    - observability/slow_subscribers_statistics
-    - observability/metrics-and-stats
+    - messaging/introduction
+    - messaging/mqtt-publish-and-subscribe
+    - messaging/explore-mqtt
+    - messaging/nanomq
+    - messaging/neuron
 
-- title_en: Reliability
-  title_cn: 可靠性
+# MQTT over QUIC
+
+- title_en: MQTT over QUIC
+  title_cn: MQTT over QUIC
   children:
-    - reliability/rate-limit
-#    - reliability/olp
-#    - reliability/config-and-data-backup-restore
+    - mqtt-over-quic/introduction
+    - mqtt-over-quic/getting-started
+    - mqtt-over-quic/client
 
 ## Data integration
 
@@ -112,69 +125,53 @@
   title_cn: 数据集成
   children:
     - data-integration/introduction
-    - title_en: Rules
-      title_cn: 规则
+    - data-integration/rules
+    # - data-integration/rule-get-started # TODO merge to rules
+    # - data-integration/rule-actions # TODO merge to rules
+    - title_en: Rules SQL
+      title_cn: SQL 手册
       children:
-        - data-integration/rules
-        - data-integration/rule-get-started
-        - data-integration/rule-actions
-        - data-integration/rule-sql-grammar-and-examples
+        - data-integration/rule-sql-syntax
         - data-integration/rule-sql-events-and-fields
         - data-integration/rule-sql-builtin-functions
+        - data-integration/rule-sql-jq
+        - data-integration/rule-sql-user-defined-function
     - title_en: Data Bridges
       title_cn: 数据桥接
       children:
         - data-integration/data-bridges
         - data-integration/data-bridge-webhook
         - data-integration/data-bridge-mqtt
-    - title_en: Examples and Tutorials
-      title_cn: 示例和教程
-      children:
-        - data-integration/rule-configs
-    - title_en: Schema Registry
-      title_cn: Schema 注册
-      edition: ee
-      children:
-        - data-integration/schema-registry
+        - data-integration/data-bridge-kafka
+        - data-integration/data-bridge-mysql
+        - data-integration/data-bridge-influxdb
+    # TODO
+    # - title_en: Examples and Tutorials
+    #   title_cn: 示例和教程
+    #   children:
+    #     - data-integration/rule-configs
+    # - title_en: Schema Registry
+    #   title_cn: Schema 注册
+    #   edition: ee
+    #   children:
+    #     - data-integration/schema-registry
 
-## Device connectivity
-
-- title_en: Gateway
-  title_cn: 网关
+- title_en: Network and TLS
+  title_cn: 网络与 TLS
   children:
-    - gateway/gateway
-    - gateway/stomp
-    - gateway/mqttsn
-    - gateway/coap
-   #- gateway/lwm2m
-   #- gateway/jt808
-   #- gateway/tcp
+    - network/emqx-mqtt-tls
+    - network/mqtt-client-tls
+    - network/crl-and-ocsp-stapling
+    - network/gmssl
+    - network/ipv6
 
-- title_en: Advanced MQTT Features
-  title_cn: MQTT 高级特性
-  children:
-    - advanced/retained
-    - advanced/shared-subscriptions
-    - advanced/delayed-publish
-    - advanced/auto-subscriptions
-    - advanced/topic-rewrite
-    - advanced/system-topic
-    - advanced/quic
+- title_en: Command Line Interface
+  title_cn: 命令行接口
+  path: admin/cli
 
-#- title_en: Persistence Backends
-#  title_cn: 数据持久化
-#  edition: ee
-#  children:
-#    - backend/backend
-#    - backend/backend_cassandra
-#    - backend/backend_dynamodb
-#    - backend/backend_influxdb
-#    - backend/backend_mongodb
-#    - backend/backend_mysql
-#    - backend/backend_opentsdb
-#    - backend/backend_pgsql
-#    - backend/backend_redis
-#    - backend/backend_timescale
+- title_en: REST API
+  title_cn: REST API
+  path: admin/api
 
 ## Dashboard
 
@@ -207,24 +204,108 @@
     - dashboard/diagnose
     - dashboard/system
 
+# Configuration
+
+- title_en: Configuration
+  title_cn: 配置
+  children:
+    - configuration/configuration
+    - configuration/environment
+    - configuration/configuration-manual
+
+- title_en: Performance and Tuning
+  title_cn: 性能与调优
+  children:
+    - performance/tune
+    - performance/benchmark
+
+- title_en: Operations
+  title_cn: 运维操作
+  children:
+    - operations/backup-restore
+    - title_en: Hot Upgrades
+      title_cn: 版本热升级
+      path: deploy/hot-upgrades
+    - title_en: Rolling Upgrades
+      title_cn: 滚动升级
+      path: deploy/hot-upgrades
+    - operations/backup-restore
+    - operations/debug
+    - operations/diagnostic-mode
+    - operations/production-notes
+
+- title_en: Rate Limit
+  title_cn: 速率限制
+  path: rate-limit/rate-limit
+
+- title_en: Log and Observability
+  title_cn: 日志及可观测性
+  children:
+    - observability/log
+    - title_en: Metrics
+      title_cn: 指标
+      children:
+        - observability/metrics-and-stats
+        - observability/prometheus
+        - observability/statsd
+    - observability/tracer
+    - observability/alarms
+    - observability/topic-metrics
+    - observability/slow-subscribers-statistics
+
+## Device connectivity
+
+- title_en: Extended Protocol Gateway
+  title_cn: 扩展协议网关
+  children:
+    - gateway/gateway
+    - gateway/mqttsn
+   #- gateway/lwm2m
+    - gateway/coap
+    - gateway/stomp
+   #- gateway/ocpp
+   #- gateway/jt808
+   #- gateway/gbt32960
+   #- gateway/tcp
+   #- gateway/exproto
+
+# - title_en: Advanced MQTT Features
+#   title_cn: MQTT 高级特性
+#   children:
+    # - advanced/retained
+    # - advanced/shared-subscriptions
+    # - advanced/delayed-publish
+    # - advanced/auto-subscriptions
+    # - advanced/topic-rewrite
+    # - advanced/system-topic
+    # - advanced/quic
+
 ## Developers & Testers
 
 - title_en: Plugins & Extensions
   title_cn: 插件与扩展
   children:
-#     # TODO: add Introduction
-#     # TODO: add plugin development doc
-#     - advanced/plugins
-    - advanced/hooks
-    # - advanced/lang
-    - advanced/lang-exhook
-#     - advanced/lang-exproto
-#     - advanced/lang-lua
+    - extensions/introduction
+    - extensions/hooks
+    - extensions/plugins
+    - extensions/lang-lua
+    - extensions/exhook
 
 - title_en: Telemetry
   title_cn: 遥测
-  children:
-    - telemetry/telemetry
+  path: telemetry/telemetry
+
+- title_en: Migrate from V4
+  title_cn: 从 V4 迁移到 V5
+  path: upgrade/upgrade-from-v4
+
+- title_en: Migrate from Open Source
+  title_cn: 从开源版迁移
+  path: upgrade/migrate-from-open-source
+
+- title_en: FAQ
+  title_cn: 常见问题解答
+  path: faq/faq
 
 - title_en: Design & Implementation
   title_cn: 设计与实现
@@ -244,7 +325,10 @@
         - development/python
     - development/resource
 
-- title_en: Load Verification
-  title_cn: 压力验证
-  children:
-    - verif/benchmark
+- title_en: Change log
+  title_cn: 版本发布记录
+  path: changes/changes-5.0
+
+- title_en: Technical Support
+  title_cn: 技术支持
+  path: support/technical-support
