@@ -89,7 +89,7 @@ subscribers on each node, as shown in the following figure.
 ![image](../../assets/design_9.png)
 
 To achieve this, EMQX Broker maintains several data structures: subscription
-tables, routing tables, and topic trees.
+tables, routing tables, and topic tries.
 These tables are stored in the [embedded database](./db.md).
 
 ### Subscription Table: Topics-Subscribers
@@ -119,7 +119,7 @@ topic2 -> node3
 topic3 -> node2, node4
 ```
 
-### Topic tree: topic matching with wildcards
+### Topic trie: topic matching with wildcards
 
 In addition to the routing table, each node in the EMQX Broker cluster also maintains a
 backup of the **Topic Trie.**
@@ -147,7 +147,7 @@ For example, when `client1` publishes a message to the topic `t/a`.
 The routing and distribution of the message between nodes are as follows:
 
 1. Client1 publishes a message with the topic `t/a` to the `node1`.
-2. By querying the topic tree, `node1` learns that `t/a` matches two existing subscriptions
+2. By querying the topic trie, `node1` learns that `t/a` matches two existing subscriptions
    of `t/a` and `t/#`.
 3. By querying the route table, `node1` learns that topic `t/a` has subscribers only
    on `node3`, and topic `t/#` has subscribers only on `node2`.
@@ -161,7 +161,7 @@ The routing and distribution of the message between nodes are as follows:
 ### Data partition and sharing
 
 EMQX Broker's subscription table is partitioned in the cluster,
-while the topic tree and routing table are replicated.
+while the topic trie and routing table are replicated.
 
 ## EMQX Node Discovery and Autocluster
 
