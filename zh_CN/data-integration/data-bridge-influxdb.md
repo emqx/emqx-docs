@@ -1,4 +1,4 @@
-# InfluxDB Bridge
+# InfluxDB
 
 InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强大的数据吞吐能力以及稳定的性能表现使其非常适合物联网领域。EMQX 目前支持通过数据桥接的方式连接不同版本的 InfluxDB Cloud、InfluxDB OSS 以及 InfluxDB Enterprise。
 
@@ -52,6 +52,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 1. 转到 Dashboard **数据集成** -> **规则页面**。
 2. 点击页面右上角的创建。
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 InfluxDB，请确规则选择出来的字段（SELECT 部分）包含第 7 步中用到的变量，此处规则 SQL 如下：
+
 
   ```sql
   SELECT 
