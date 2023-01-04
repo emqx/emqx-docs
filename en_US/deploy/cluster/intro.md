@@ -122,7 +122,7 @@ topic3 -> node2, node4
 ### Topic tree: topic matching with wildcards
 
 In addition to the routing table, each node in the EMQX Broker cluster also maintains a
-backup of the **Topic Trie.**
+backup of the **Topic Tree.**
 
 The following topic-subscription relationship is an example:
 
@@ -132,7 +132,7 @@ The following topic-subscription relationship is an example:
 | client2 | node2 | t/#              |
 | client3 | node3 | t/+/x, t/a       |
 
-When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
+When all subscriptions are completed, EMQX Broker maintains the following Topic Tree and Route Table:
 
 ![image](./assets/cluster_2.png)
 
