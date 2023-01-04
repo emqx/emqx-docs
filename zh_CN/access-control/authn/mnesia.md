@@ -2,7 +2,7 @@
 
 
 
-EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密码认证方式。启用后，EMQX 会将内置的 Mnesia 数据库管理客户端身份凭据，并通过 REST API 与 EMQX Dashboard 实现密码认证。
+EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密码认证方式。启用后，EMQX 会将内置的 Mnesia 数据库存储客户端身份凭据，并通过 REST API 与 EMQX Dashboard 进行数据管理。
 
 ::: tip
 先决条件：
@@ -36,7 +36,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密
 
 ![EMQX 内置数据库认证](./assets/authn-mnesia-1.png)
 
-**账号类型**：为 EMQX 指定可用于客户端身份 ID 认证的字段，可选值： `username`、 `clientid`（分别对应于 MQTT 客户端 `CONNECT` 报文中的 `Username` 和 `Client Identifier` 字段）。
+**账号类型**：指定用于客户端身份 ID 认证的字段，可选值： `username`、 `clientid`（分别对应于 MQTT 客户端 `CONNECT` 报文中的 `Username` 和 `Client Identifier` 字段）。
 
 **密码加密方式**：选择存储密码时使用的散列算法，如 plain、md5、sha、bcrypt、pbkdf2 等。除 plain 算法外，如选择其他算法，还需额外进行一些配置：
 
