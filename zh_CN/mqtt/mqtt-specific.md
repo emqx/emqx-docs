@@ -19,7 +19,22 @@ MQTT v5.0 协议规范: [http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-
 6. 灵活的消息传输，不关心 Payload 数据格式
 7. 持续的会话感知能力，时刻知道设备是否在线
 
+## 核心特性
+
+以下是 MQTT 协议规范以及 EMQX 扩展的 MQTT 基本概念：
+
+- [发布订阅模式](./mqtt-publish-and-subscribe.md)
+- [会话与消息过期](./mqtt-session-and-message-expiry.md)
+- [QoS](./mqtt-qos.md)
+- [保留消息](./mqtt-retained-messages.md)
+- [遗嘱消息](./mqtt-last-will-and-testament.md)
+- [共享订阅](./mqtt-shared-subscription.md)
+- [排它订阅](./mqtt-exclusive-subscription.md)
+- [延迟发布](./mqtt-delayed-publish.md)
+- [自动订阅](./mqtt-auto-subscription.md)
+- [主题重写](./mqtt-topic-rewrite.md)
+- [系统主题](./mqtt-system-topics.md)
+
 ## 与其他协议对比
 
 由于物联网场景复杂多样，涉及到许多不同的设备、网络、应用程序和服务，因此诞生了多种物联网协议，MQTT 与其对比请参照 [主流物联网协议选择：MQTT、CoAP 还是 LwM2M](https://www.emqx.com/zh/blog/iot-protocols-mqtt-coap-lwm2m)。
-

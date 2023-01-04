@@ -24,29 +24,6 @@
   children:
     - getting-started/getting-started
     - getting-started/restrictions
-    - title_en: Try on EMQX Cloud
-      title_cn: 在 EMQX Cloud 上试用
-      path: 'https://cloud.emqx.io'
-
-# 基本概念
-
-- title_en: MQTT Specific
-  title_cn: MQTT 协议
-  children:
-    - mqtt/mqtt-specific
-    - mqtt/mqtt-compliance
-    - mqtt/mqtt-publish-and-subscribe
-    - mqtt/mqtt-session-and-message-expiry
-    - mqtt/mqtt-keepalive
-    - mqtt/mqtt-qos
-    - mqtt/mqtt-retained-messages
-    - mqtt/mqtt-last-will-and-testament
-    - mqtt/mqtt-shared-subscription
-    - mqtt/mqtt-exclusive-subscription
-    - mqtt/mqtt-delayed-publish
-    - mqtt/mqtt-auto-subscription
-    - mqtt/mqtt-topic-rewrite
-    - mqtt/mqtt-system-topics
 
 ## Infrastructure
 
@@ -292,6 +269,24 @@
     - extensions/plugins
     - extensions/lang-lua
     - extensions/exhook
+
+- title_en: MQTT Specific
+  title_cn: MQTT 协议
+  children:
+    - mqtt/mqtt-specific
+    - mqtt/mqtt-compliance
+    - mqtt/mqtt-publish-and-subscribe
+    - mqtt/mqtt-session-and-message-expiry
+    - mqtt/mqtt-keepalive
+    - mqtt/mqtt-qos
+    - mqtt/mqtt-retained-messages
+    - mqtt/mqtt-last-will-and-testament
+    - mqtt/mqtt-shared-subscription
+    - mqtt/mqtt-exclusive-subscription
+    - mqtt/mqtt-delayed-publish
+    - mqtt/mqtt-auto-subscription
+    - mqtt/mqtt-topic-rewrite
+    - mqtt/mqtt-system-topics
 
 - title_en: Telemetry
   title_cn: 遥测
