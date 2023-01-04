@@ -1,16 +1,18 @@
 # 使用 MySQL 的密码认证
 
-::: tip
-先决条件：
+作为密码认证方式的一种，EMQX 支持通过集成 MySQL 进行密码认证。
 
-- 了解 [EMQX 认证基本概念](../authn/authn.md)
+::: tip
+前置准备：
+
+- 熟悉 [EMQX 认证基本概念](../authn/authn.md)
 :::
 
-该认证器实现了密码认证，并使用 MySQL 数据库作为数据源。
+
 
 ## 表结构与查询语句
 
-MySQL 认证器可以支持任何表结构，甚至是多个表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，且确保查询结果包含以下字段：
+EMQX MySQL 认证器支持所有表结构，包括多表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，并确保查询结果包含以下字段：
 
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
@@ -32,19 +34,19 @@ CREATE TABLE `mqtt_user` (
 ```
 
 ::: tip
-上面的示例创建了一个隐式的 `UNIQUE` 索引，当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。
+以上示例创建了一个隐式的 `UNIQUE` 索引。当系统中存在大量用户时，建议预先优化查询使用的集合并为之建立有效的索引，以提升数据查询的响应速度并降低 EMQX 负载。
 :::
 
-在此表中使用 `username` 作为查找条件。
+例如我们希望增加一位用户名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` ，且超级用户标志为 `true` 的用户，即可通过如下代码实现：
 
-添加用户名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户示例：
+代码示例：
 
 ```bash
 mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', SHA2(concat('public', 'slat_foo123'), 256), 'slat_foo123', 1);
 Query OK, 1 row affected (0,01 sec)
 ```
 
-对应的查询语句和密码散列方法配置参数为：
+同时使用 `username` 作为查找条件，对应的查询语句和密码散列方法配置参数为：
 
 ```bash
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
@@ -80,6 +82,52 @@ password_hash_algorithm {
 }
 ```
 
+
+
+### 通过 Dashboard 配置
+
+在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `MySQL`，进入**配置参数**页签：
+
+![image-20230104134554003](./assets/authn-mysql.png)
+
+您可按照如下说明完成相关配置：
+
+**连接：**在此部分完成到 MySQL 数据库的连接设置。
+
+​	**服务**：填入 MySQL 服务器地址 (`host:port`) ，必填项。
+
+​	**数据库**：
+
+​	用户名：
+
+​	密码：
+
+TLS 配置：
+
+连接配置：
+
+​	Pool size：
+
+​	自动重连：
+
+​	查询超时：
+
+认证配置：
+
+​	密码加密方式：
+
+​	加盐方式
+
+### 通过配置文件配置
+
+1. 路径
+
+2. 示例代码
+
+3. 字段解释
+
+   
+
 ### password_hash_algorithm
 
 [密码散列选项](./authn.md#密码散列)。
@@ -104,9 +152,11 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ? AND p
 
 然后使用 `${username}` 和 `${peerhost}` 执行查询。
 
+
+
 ### server
 
-MySQL 服务器地址 (`host:port`) ，必填项。
+
 
 ### database
 
