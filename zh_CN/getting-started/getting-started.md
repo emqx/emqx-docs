@@ -2,7 +2,7 @@
 
 作为全球最具扩展性的 MQTT 消息服务器，EMQX 提供了高效可靠海量物联网设备连接，能够高性能实时移动与处理消息和事件流数据，帮助您快速构建关键业务的物联网平台与应用。
 
-本章节将带您从下载安装开始，带您体验从启动 EMQX 服务，到通过 Websocket 或 MQTT 客户端测试连接的完整流程，带您感受 EMQX 的强大功能。
+本章节将带您从下载安装开始，带您体验从启动 EMQX 服务，到通过 WebSocket 工具或 MQTT 客户端测试连接并进行消息发布订阅的完整流程。
 
 ::: tip
 除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.io/)页面免费试用。
@@ -87,11 +87,11 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
    <!--后续补上 dashboard的截图-->
 
-接下来我们将通过 Dashboard 自带的 Websocket 进行连接测试。
+接下来我们将通过 Dashboard 自带的 WebSocket 工具进行连接测试。
 
-## 使用 Dashboard WebSocket 快速验证
+## 使用 Dashboard WebSocket 工具快速验证
 
-EMQX 提供了标准的 MQTT 协议支持，启动后即可接入 MQTT 客户端，本节我们将演示如何通过 Dashboard 自带的 WebSocket 客户端工具接入 EMQX，从而进行消息通信验证。
+EMQX 提供了标准的 MQTT 协议包括 MQTT over WebSocket 支持，启动后即可接入 MQTT 客户端，本节我们将演示如何通过 Dashboard 自带的 WebSocket 客户端工具接入 EMQX，从而进行消息通信验证。
 
 在 Dashboard 页面，点击左侧导航栏的 **问题分析 -> WebSocket 客户端**，即可进入相关页面。您可按照如下步骤完成客户端与 EMQX 的连接、订阅相关主题，并测试消息的发送与接收情况。
 
@@ -101,7 +101,7 @@ EMQX 提供了标准的 MQTT 协议支持，启动后即可接入 MQTT 客户端
 
 
 
-![image-20230104173034300](./assets/emqx-websocket.png)
+![EMQX MQTT WebSocket 连接](./assets/emqx-websocket.png)
 
 
 
