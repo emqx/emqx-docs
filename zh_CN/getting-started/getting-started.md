@@ -67,9 +67,13 @@ EMQX 支持多种安装方式，比如[容器化部署](./deploy/install.md#通�
 
 此外，您还可通过 [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform) 在主流公有云上一键部署包含 EMQX Enterprise 集群在内的所有基础设施，如[阿里云](https://github.com/emqx/tf-alicloud)、[亚马逊云科技](https://github.com/emqx/tf-aws)。<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
-在本篇快速上手中，我们讲带您通过容器化部署的方式快速体验 EMQX。
+### 快速安装启动
 
-### 通过 Docker 容器运行
+在本篇快速上手中，我们将带您通过容器化部署或压缩包的形式快速体验 EMQX。
+
+:::: tabs type:card
+
+::: tab 通过 Docker 容器运行
 
 容器化部署是体验 EMQX 的最快方式，因此本节将以容器化部署为例，带您开始完整的 EMQX 使用旅程。 
 
@@ -79,13 +83,49 @@ EMQX 支持多种安装方式，比如[容器化部署](./deploy/install.md#通�
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
-::: tip
+
 运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
-:::
 
 2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](./dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
    <!--后续补上 dashboard的截图-->
+
+:::
+
+::: tab 通过 tgz 压缩包快速安装
+
+您也可以选择通过 tgz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。
+
+由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，不建议在生产环境中使用。
+
+
+1. 访问 [emqx.io](https://www.emqx.io/zh/downloads)或 [Github](https://github.com/emqx/emqx/releases)下载要安装的 EMQX 的 tar.gz 包。
+
+2. 运行以下命令解压程序包。
+
+   ```
+   tar -zxf emqx-full-package-name.tar.gz
+   ```
+
+3. 运行以下命令启动 EMQX。
+
+   ```
+   cd ./emqx
+   ./bin/emqx start
+   ./bin/emqx_ctl status
+   ```
+
+4. 停止 EMQX。
+
+   ```
+   ./bin/emqx stop
+   ```
+
+后续如需卸载 EMQX，您可直接删除 EMQX 目录即可完成卸载。
+
+:::
+
+::::
 
 接下来我们将通过 Dashboard 自带的 WebSocket 工具进行连接测试。
 
