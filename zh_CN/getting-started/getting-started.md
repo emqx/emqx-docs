@@ -92,33 +92,35 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 :::
 
-::: tab 通过 tgz 压缩包快速安装
+::: tab 通过 zip/tar.gz 压缩包快速安装
 
-您也可以选择通过 tgz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。
+您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.io/zh/downloads?os=macOS) (macOS11 amd64) 为例演示如何下载并安装 EMQX。
 
-由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，不建议在生产环境中使用。
+由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
 
-1. 访问 [emqx.io](https://www.emqx.io/zh/downloads)或 [Github](https://github.com/emqx/emqx/releases)下载要安装的 EMQX 的 tar.gz 包。
-
-2. 运行以下命令解压程序包。
+1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```
-   tar -zxf emqx-full-package-name.tar.gz
+   wget https://www.emqx.com/zh/downloads/broker/5.0.13/emqx-5.0.13-macos11-amd64.zip
+   ```
+
+2. 通过以下命令安装 EMQX。
+
+   ```
+   mkdir -p emqx && unzip emqx-5.0.13-macos11-amd64.zip -d emqx
    ```
 
 3. 运行以下命令启动 EMQX。
 
    ```
-   cd ./emqx
-   ./bin/emqx start
-   ./bin/emqx_ctl status
+   ./emqx/bin/emqx start
    ```
-
-4. 停止 EMQX。
+   
+4. 运行以下命令停止 EMQX。
 
    ```
-   ./bin/emqx stop
+   ./emqx/bin/emqx stop
    ```
 
 后续如需卸载 EMQX，您可直接删除 EMQX 目录即可完成卸载。
