@@ -89,7 +89,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
 
-2. Start your web browser and enter http://localhost:18083/ ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](./dashboard/introduction.md) (http://localhost:18083/), from where you can connect to your clients or check the running status. 
+2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](./dashboard/introduction.md), from where you can connect to your clients or check the running status. 
 
    <!--后续补上 dashboard的截图-->
 
