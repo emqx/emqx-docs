@@ -89,7 +89,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 接下来我们将通过 Dashboard 自带的 Websocket 进行连接测试。
 
-## 使用 Dashboard WebSocket  快速验证
+## 使用 Dashboard WebSocket 快速验证
 
 EMQX 提供了标准的 MQTT 协议支持，启动后即可接入 MQTT 客户端，本节我们将演示如何通过 Dashboard 自带的 WebSocket 客户端工具接入 EMQX，从而进行消息通信验证。
 
