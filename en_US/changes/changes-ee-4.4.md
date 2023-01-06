@@ -1,5 +1,19 @@
 # Releases
 
+## e4.4.14
+
+*Release Date: 2023-01-06*
+
+### Enhancements
+
+- Add a password complexity requirement when adding or modifying Dashboard users via the API. Now passwords must contain at least 2 of alphabetic, numeric and special characters, and must be 8 to 64 characters long.
+
+### Bug Fixes
+
+- Fix the problem that adding or importing Dashboard users via the API fails to add complex passwords due to incorrect checksum of the passwords.
+
+- Fix load bootstrap_app_file's apps is not sync when reboot.
+
 ## e4.4.13
 
 *Release Date: 2023-01-03*
@@ -45,7 +59,7 @@ For more information about this feature, please refer to [Cluster Rebalancing](.
 
 - Users can define the `externalTrafficPolicy` of service in EMQX Enterprise Helm Chart [#1638](https://github.com/emqx/emqx-enterprise/pull/1638).
 
-- When dashboard creates a new user, the password length must match 3-32 and the format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643).
+- When dashboard creates a new user, the password format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643).
 
 ### Bug fixes
 
