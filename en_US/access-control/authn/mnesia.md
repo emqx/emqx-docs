@@ -39,7 +39,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. There are some extra items to be configured based on the function you selected: 
 
 1. If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
-   - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If you choose **plain**, the **Salt Position** will be set to **disable** and cannot be changed.  
+   - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If you choose **plain**, the **Salt Position** will be set to **disable** by default.  
 2. If **bcrypt** is selected, we also need to configure:
 
    - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
