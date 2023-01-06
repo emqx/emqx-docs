@@ -2,10 +2,10 @@
 
 作为全球最具扩展性的 MQTT 消息服务器，EMQX 提供了高效可靠海量物联网设备连接，能够高性能实时移动与处理消息和事件流数据，帮助您快速构建关键业务的物联网平台与应用。
 
-本章节将带您从下载安装开始，带您体验从启动 EMQX 服务，到通过 Websocket 或 MQTT 客户端测试连接的完整流程，带您感受 EMQX 的强大功能。
+本章节将带您从下载安装开始，带您体验从启动 EMQX 服务，到通过 WebSocket 工具或 MQTT 客户端测试连接并进行消息发布订阅的完整流程。
 
 ::: tip
-除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.io/)页面免费试用。
+除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
 :::
 
 ## 版本选择
@@ -67,9 +67,13 @@ EMQX 支持多种安装方式，比如[容器化部署](./deploy/install.md#通�
 
 此外，您还可通过 [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform) 在主流公有云上一键部署包含 EMQX Enterprise 集群在内的所有基础设施，如[阿里云](https://github.com/emqx/tf-alicloud)、[亚马逊云科技](https://github.com/emqx/tf-aws)。<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
-在本篇快速上手中，我们讲带您通过容器化部署的方式快速体验 EMQX。
+### 快速安装启动
 
-### 通过 Docker 容器运行
+在本篇快速上手中，我们将带您通过容器化部署或解压安装的形式快速体验 EMQX。
+
+:::: tabs type:card
+
+::: tab 通过 Docker 容器运行
 
 容器化部署是体验 EMQX 的最快方式，因此本节将以容器化部署为例，带您开始完整的 EMQX 使用旅程。 
 
@@ -79,33 +83,81 @@ EMQX 支持多种安装方式，比如[容器化部署](./deploy/install.md#通�
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
-::: tip
+
 运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
-:::
 
 2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](./dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
+   默认用户名及密码：
+   
+   `admin`
+   
+   `public`
+   
    <!--后续补上 dashboard的截图-->
 
-接下来我们将通过 Dashboard 自带的 Websocket 进行连接测试。
+:::
 
-## 使用 Dashboard WebSocket  快速验证
+::: tab 通过 zip/tar.gz 压缩包快速安装
 
-EMQX 提供了标准的 MQTT 协议支持，启动后即可接入 MQTT 客户端，本节我们将演示如何通过 Dashboard 自带的 WebSocket 客户端工具接入 EMQX，从而进行消息通信验证。
+您也可以选择通过 zip/tar.gz 压缩包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。本节我们将以 [macOS](https://www.emqx.io/zh/downloads?os=macOS) (macOS11 amd64) 为例演示如何下载并安装 EMQX。
 
-在 Dashboard 页面，点击左侧导航栏的 **问题分析 -> WebSocket 客户端**，即可进入相关页面。您可按照如下步骤完成客户端与 EMQX 的连接、订阅相关主题，并测试消息的接受情况。
+由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
+
+
+1. 在命令行工具中输入如下命令，下载 zip 文件。
+
+   ```
+   wget https://www.emqx.com/zh/downloads/broker/5.0.13/emqx-5.0.13-macos11-amd64.zip
+   ```
+
+2. 通过以下命令安装 EMQX。
+
+   ```
+   mkdir -p emqx && unzip emqx-5.0.13-macos11-amd64.zip -d emqx
+   ```
+
+3. 运行以下命令启动 EMQX。
+
+   ```
+   ./emqx/bin/emqx start
+   ```
+   
+4. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](./dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+
+   默认用户名及密码：
+   
+   `admin`
+   
+   `public`
+   
+5. 运行以下命令停止 EMQX。
+   
+   ```
+   ./emqx/bin/emqx stop
+   ```
+
+后续如需卸载 EMQX，您可直接删除 EMQX 目录即可完成卸载。
+
+:::
+
+::::
+
+接下来我们将通过 Dashboard 自带的 WebSocket 工具进行连接测试。
+
+## 使用 Dashboard WebSocket 工具快速验证
+
+EMQX 提供了标准的 MQTT 协议包括 MQTT over WebSocket 支持，启动后即可接入 MQTT 客户端，本节我们将演示如何通过 Dashboard 自带的 WebSocket 客户端工具接入 EMQX，从而进行消息通信验证。
+
+在 Dashboard 页面，点击左侧导航栏的 **问题分析 -> WebSocket 客户端**，即可进入相关页面。您可按照如下步骤完成客户端与 EMQX 的连接、订阅相关主题，并测试消息的发送与接收情况。
 
 1. 连接客户端与 EMQX。点击页面右侧的**连接**按钮，系统将提示当前客户端已成功连接。
 2. 订阅相关主题。点击页面中部的**订阅**按钮，此时我们将订阅 `testtopic/#`主题下所有 QoS 为 0 的消息，您可以根据需要增加多个主题或测试其他 QoS 等级。
 3. 测试消息的接收。点击页面底部的**发布**按钮，此时可以看到页面底部的已发送和已接收窗格各出现了一条消息，证明连接已成成功。
 
+![EMQX MQTT WebSocket 连接](./assets/emqx-websocket.png)
 
-
-![image-20230104173034300](./assets/emqx-websocket.png)
-
-
-
-4. 此时我们通过点击左侧导航栏的**仪表盘**返回主界面，在**概览**页签，可以看到当前的连接数，主题数、以及订阅数，节点信息，以及实时的消息发送及接收情况
+4. 此时我们通过点击左侧导航栏的**仪表盘**返回主界面，在**概览**页，可以看到当前的连接数，主题数、以及订阅数，节点信息，以及实时的消息发送及接收情况。
 
 <!-- TODO @wivwiv Update screenshot -->
 
