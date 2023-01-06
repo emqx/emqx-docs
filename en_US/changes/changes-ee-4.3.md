@@ -70,7 +70,7 @@
   resource. And we also added a new field `namespace` for RocketMQ services in
   Aliyun cloud.
 
-- When dashboard creates a new user, the password length must match 3-32 and the format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1599](https://github.com/emqx/emqx-enterprise/pull/1599).
+- When dashboard creates a new user, the password format is `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1599](https://github.com/emqx/emqx-enterprise/pull/1599).
 
 - When resource creation is too slow, there may be some temporary probing connections left [#1641](https://github.com/emqx/emqx-enterprise/pull/1641).
 

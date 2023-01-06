@@ -1,5 +1,19 @@
 # 版本发布
 
+## e4.4.14
+
+*发布日期: 2023-01-06*
+
+### 增强
+
+- 通过 API 添加、修改 Dashboard 用户时，增加对密码复杂度的要求。现在密码必须包含字母、数字以及特殊字符中的至少 2 种，并且长度范围必须是 8~64 个字符。
+
+### 修复
+
+- 修复通过 API 添加或者导入 Dashboard 用户时，对密码进行了错误的校验，导致复杂密码添加失败的问题。
+
+- 修复 boostrap_apps_file 文件更新后没有同步更新至数据库,导致文件中新加 apps 未生效。
+
 ## e4.4.13
 
 *发布日期: 2023-01-03*
@@ -43,7 +57,7 @@
 
 - 用户可以在 EMQX Enterprise Helm Chart 中自定义 service 资源的 `externalTrafficPolicy` [#1638](https://github.com/emqx/emqx-enterprise/pull/1638)。
 
-- 当控制台创建新用户时，密码长度必须在 3-32 之间，且格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643)。
+- 当控制台创建新用户时，密码格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1643](https://github.com/emqx/emqx-enterprise/pull/1643)。
 
 ### 修复
 

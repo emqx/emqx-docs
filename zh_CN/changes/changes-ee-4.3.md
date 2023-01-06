@@ -66,7 +66,7 @@
   从 `data_to_rocket` 动作挪到了 `bridge_rocket` 资源的配置中。并且我们为阿里云的 RocketMQ
   服务新加了一个 `namespace` 字段。
 
-- 当控制台创建新用户时，密码长度必须在 3-32 之间，且格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1599](https://github.com/emqx/emqx-enterprise/pull/1599)。
+- 当控制台创建新用户时，密码格式为 `^[A-Za-z0-9]+[A-Za-z0-9-_]*$` [#1599](https://github.com/emqx/emqx-enterprise/pull/1599)。
 
 - 当创建资源过慢的情况下，有可能会残留一些用来探活的临时的连接 [#1641](https://github.com/emqx/emqx-enterprise/pull/1641)。
 
