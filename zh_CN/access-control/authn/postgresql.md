@@ -1,4 +1,4 @@
-# 使用 PostgreSQL 的密码认证
+# 使用 PostgreSQL 进行密码认证
 
 作为密码认证方式的一种，EMQX 支持通过集成 PostgreSQL 进行密码认证。
 
