@@ -126,8 +126,16 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
    ./emqx/bin/emqx start
    ```
 
-4. To stop EMQX, enter:
+4. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](./dashboard/introduction.md), from where you can connect to your clients or check the running status. 
 
+   Default user name and passward:
+   
+   `admin`
+   
+   `public`
+   
+5. To stop EMQX, enter:
+   
    ```
    ./emqx/bin/emqx stop
    ```

@@ -123,11 +123,23 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
    ./emqx/bin/emqx start
    ```
    
-4. 运行以下命令停止 EMQX。
+4. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](./dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
+   默认用户名及密码：
+   
+   `admin`
+   
+   `public`
+   
+5. 运行以下命令停止 EMQX。
+   
    ```
    ./emqx/bin/emqx stop
    ```
+
+
+
+
 
 后续如需卸载 EMQX，您可直接删除 EMQX 目录即可完成卸载。
 
