@@ -8,24 +8,6 @@ You can use the built-in database of EMQX as a low-cost and out-of-the-box optio
 
 :::
 
-## Configure with configuration items
-
-For detailed steps on how to configure with configuration items, see [authn-builtin_db:authentication](../../admin/cfg.md#authn-builtin_db:authentication). 
-
-Example:
-
-```hocon
-{
-   backend = "built_in_database"
-   mechanism = "password_based"
-   password_hash_algorithm {
-      name = "sha256",
-      salt_position = "suffix"
-   }
-   user_id_type = "username"
-}
-```
-
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to set the built-in database for password authentication. 
@@ -50,6 +32,26 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
    - **Derived Key Length **(optional): Specify the generated key length. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected. 
 
 Now we can click **Create** to finish the setting. 
+
+## Configure with configuration items
+
+For detailed steps on how to configure with EMQX configuration items, see [authn-builtin_db:authentication](../../admin/cfg.md#authn-builtin_db:authentication). 
+
+Example:
+
+```hocon
+{
+   backend = "built_in_database"
+   mechanism = "password_based"
+   password_hash_algorithm {
+      name = "sha256",
+      salt_position = "suffix"
+   }
+   user_id_type = "username"
+}
+```
+
+
 
 ## Migrate from external storage to EMQX built-in database
 

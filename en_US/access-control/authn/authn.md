@@ -1,6 +1,20 @@
 # Introduction
 
-Authentication is an essential part of most applications. MQTT protocol supports username/password authentication as well as enhanced authentication such as SASL/SCRAM authentication. Enabling authentication can effectively prevent illegal client connections.
+Authentication is the process of verifying the identity of a client. It is an an essential part of most applications and can help to protect our services from illegal connections. 
+
+EMQX supports several authentication mechanisms to better protect our clients, including:
+
+- Username/password authentication
+- JWT authentication
+- Enhanced authentication of MQTT 5.0, that is, the bi-directional authentication of the client and broker in query/response style
+
+EMQX also supports [TLS X.509 certificates](https://www.mongodb.com/docs/manual/core/security-x.509/) and [TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279) protocols, which offers an option for the authentication request between the client and the server side. 
+
+This section will cover the basic concepts of identity authentication and the settings. 
+
+## Authentication mechanism
+
+### Password authentication
 
 EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identity, such as username, password or client identifier. In some scenarios, users may choose to use some fields in the TLS certificate (such as the certificate common name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed form (which is also highly recommended).
 
