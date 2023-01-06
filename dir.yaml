@@ -24,27 +24,7 @@
   children:
     - getting-started/getting-started
     - getting-started/restrictions
-    - title_en: Try on EMQX Cloud
-      title_cn: 在 EMQX Cloud 上试用
-      path: 'https://cloud.emqx.io'
-
-# 基本概念
-
-- title_en: MQTT Specific
-  title_cn: MQTT 协议
-  children:
-    - mqtt/mqtt-specific
-    - mqtt/mqtt-compliance
-    - mqtt/mqtt-session-and-message-expiry
-    - mqtt/mqtt-qos
-    - mqtt/mqtt-retained-messages
-    - mqtt/mqtt-last-will-and-testament
-    - mqtt/mqtt-shared-subscription
-    - mqtt/mqtt-exclusive-subscription
-    - mqtt/mqtt-delayed-publish
-    - mqtt/mqtt-auto-subscription
-    - mqtt/mqtt-topic-rewrite
-    - mqtt/mqtt-system-topics
+    - getting-started/new-features
 
 ## Infrastructure
 
@@ -56,7 +36,7 @@
     - deploy/dirs
     - deploy/license
     - title_en: Clustering
-      title_cn: 集群
+      title_cn: 构建集群
       children:
         - deploy/cluster/introduction
         - deploy/cluster/mria-introduction
@@ -65,8 +45,21 @@
         - deploy/cluster/auto
         - deploy/cluster/security
         - deploy/cluster/lb
-    - deploy/hot-upgrades
-    - deploy/rolling-upgrades
+    - title_en: Performance and Tuning
+      title_cn: 性能与调优
+      children:
+        - performance/tune
+        - performance/benchmark
+    - title_en: Upgrade
+      title_cn: 升级
+      children:
+        - deploy/hot-upgrades
+        - deploy/rolling-upgrades
+        - deploy/upgrade-from-v4
+    - title_en: Migrate to Enterprise
+      title_cn: 迁移到企业版
+      path: deploy/migrate-to-enterprise
+   
 
 - title_en: Access Control
   title_cn: 访问控制
@@ -207,17 +200,11 @@
 # Configuration
 
 - title_en: Configuration
-  title_cn: 配置
+  title_cn: 配置文件参数
   children:
     - configuration/configuration
     - configuration/environment
     - configuration/configuration-manual
-
-- title_en: Performance and Tuning
-  title_cn: 性能与调优
-  children:
-    - performance/tune
-    - performance/benchmark
 
 - title_en: Operations
   title_cn: 运维操作
@@ -291,17 +278,27 @@
     - extensions/lang-lua
     - extensions/exhook
 
+- title_en: MQTT Specific
+  title_cn: MQTT 协议
+  children:
+    - mqtt/mqtt-specific
+    - mqtt/mqtt-compliance
+    - mqtt/mqtt-publish-and-subscribe
+    - mqtt/mqtt-session-and-message-expiry
+    - mqtt/mqtt-keepalive
+    - mqtt/mqtt-qos
+    - mqtt/mqtt-retained-messages
+    - mqtt/mqtt-last-will-and-testament
+    - mqtt/mqtt-shared-subscription
+    - mqtt/mqtt-exclusive-subscription
+    - mqtt/mqtt-delayed-publish
+    - mqtt/mqtt-auto-subscription
+    - mqtt/mqtt-topic-rewrite
+    - mqtt/mqtt-system-topics
+
 - title_en: Telemetry
   title_cn: 遥测
   path: telemetry/telemetry
-
-- title_en: Migrate from V4
-  title_cn: 从 V4 迁移到 V5
-  path: upgrade/upgrade-from-v4
-
-- title_en: Migrate from Open Source
-  title_cn: 从开源版迁移
-  path: upgrade/migrate-from-open-source
 
 - title_en: FAQ
   title_cn: 常见问题解答

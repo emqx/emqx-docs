@@ -1,7 +1,6 @@
 # 自动订阅
 
-当设备连接到 EMQX 成功之后，不需要发送额外的订阅请求（ SUBSCRIBE 报文），EMQX 为设备完成预设的订阅关系。
-此功能由 EMQX 4 版本中 `MQTT 代理订阅` 功能改进而来。
+自动订阅能够给 EMQX 设置多个规则，在设备成功连接后按照规则为其订阅指定主题，不需要额外发起订阅。
 
 ## 配置项
 
@@ -35,7 +34,7 @@
 
 将下面的配置项添加到配置文件中
 
-```
+```bash
 auto_subscribe {
     topics = [
         {
@@ -52,30 +51,30 @@ auto_subscribe {
 }
 ```
 
-```text
+```bash
 +---------------------------+             +----------------+
-| clientid: demo_client1    |             |  EMQX Broker   |
-| username: admin           |             |                |
-| local host: 192.168.1.234 |<----------->|                |
-| local port: 55678         |             |                |
+| clientid: demo_client1    |               | EMQX Broker |
+| u-----------------------n | u------------ | u---------- |
+| local host: 192.168.1.234 | <-----------> |             |
+| local port: 55678         |               |             |
 +---------------------------+             +----------------+
 ```
 
 设备使用 MQTT 5.0 以下版本时，登录成功后可以获得以下订阅：
 
-```text
+```bash
 topic: c/demo_client1
 qos: 0
 ```
 
-```text
+```bash
 topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
 qos: 1
 ```
 
 设备使用 MQTT 5.0 版本时，登录成功后可以获得以下订阅：
 
-```text
+```bash
 topic: c/demo_client1
 qos: 0
 rh: 0
@@ -83,7 +82,7 @@ rap: 0
 nl: 0
 ```
 
-```text
+```bash
 topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
 qos: 1
 rh: 0
