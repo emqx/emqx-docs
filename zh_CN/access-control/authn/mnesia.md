@@ -1,6 +1,6 @@
 # 使用内置数据库进行密码认证
 
-EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密码认证方式。启用后，EMQX 会将内置的 Mnesia 数据库存储客户端身份凭据，并通过 REST API 与 Dashboard 进行数据管理。
+EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密码认证方式。启用后，EMQX 会将内置的 Mnesia 数据库存储客户端身份凭据，并通过 REST API 与 Dashboard 进行数据管理，本节将向您介绍如何通过 Dashboard 或配置项进行相关配置。
 
 ::: tip
 前置准备：
@@ -8,27 +8,9 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密
 - 熟悉 [EMQX 认证基本概念](../authn/authn.md)
   :::
 
-## 配置项
-
-详细配置请参考 [authn-builtin_db:authentication](../../admin/cfg.md#authn-builtin_db:authentication)。
-
-示例配置：
-
-```hocon
-{
-   backend = "built_in_database"
-   mechanism = "password_based"
-   password_hash_algorithm {
-      name = "sha256",
-      salt_position = "suffix"
-   }
-   user_id_type = "username"
-}
-```
-
 ## 通过 Dashboard 配置
 
-您可以使用 Dashboard 来创建使用内置数据库的密码认证。
+您可以使用 Dashboard 来创建通过内置数据库进行密码认证。
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `Built-in Database`，进入**配置参数**页签：
 
@@ -50,6 +32,26 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密
    - **密钥长度**：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
 
 完成以上设置后，点击**创建**，EMQX 将按照设定通过内置数据库进行密码认证。
+
+## 通过配置文件配置
+
+此外，您可以通过配置项完成相关配置，具体可参考： [authn-builtin_db:authentication](../../admin/cfg.md#authn-builtin_db:authentication)。
+
+示例配置：
+
+```hocon
+{
+   backend = "built_in_database"
+   mechanism = "password_based"
+   password_hash_algorithm {
+      name = "sha256",
+      salt_position = "suffix"
+   }
+   user_id_type = "username"
+}
+```
+
+
 
 ## 迁移到内置数据库
 
