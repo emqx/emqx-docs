@@ -8,12 +8,12 @@ InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强�
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
 
-## 支持特性
+## 特性
 
 - [连接池](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [异步请求模式](./data-bridges.md#异步请求模式)
 - [批量模式](./data-bridges.md#批量模式)
-- [缓冲队列](./data-bridges.md#缓冲队列)
+- [缓存队列](./data-bridges.md#缓存队列)
 
 ## 配置参数
 <!-- TODO 链接到配置手册对应配置章节。 -->
@@ -52,6 +52,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 1. 转到 Dashboard **数据集成** -> **规则页面**。
 2. 点击页面右上角的创建。
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 InfluxDB，请确规则选择出来的字段（SELECT 部分）包含第 7 步中用到的变量，此处规则 SQL 如下：
+
 
   ```sql
   SELECT 
