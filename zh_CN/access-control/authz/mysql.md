@@ -1,12 +1,12 @@
-# MySQL
-
-::: tip
-先决条件：
-
-- 了解 [EMQX 授权基本概念](./authz.md)
-:::
+# 基于 MySQL 进行授权
 
 MySQL Authorizer 支持客户端的权限列表存储在 MySQL 数据库中。
+
+::: tip
+前置准备：
+
+- 熟悉 [EMQX 授权基本概念](./authz.md)
+  :::
 
 ## 表结构与查询语句
 

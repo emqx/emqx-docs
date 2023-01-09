@@ -1,12 +1,12 @@
-# Redis
-
-::: tip
-先决条件：
-
-- 了解 [EMQX 认证基本概念](../authn/authn.md)
-:::
+# 基于 Redis 进行授权
 
 Redis Authorizer 支持客户端的权限列表存储在 Redis 数据库中。
+
+::: tip
+前置准备：
+
+- 熟悉 [EMQX 授权基本概念](./authz.md)
+  :::
 
 ## 数据结构与查询指令
 
