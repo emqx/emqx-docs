@@ -97,11 +97,11 @@
 - title_en: Messaging
   title_cn: 消息通信
   children:
-    - messaging/introduction
+    # - messaging/introduction
     - messaging/mqtt-publish-and-subscribe
     - messaging/explore-mqtt
-    - messaging/nanomq
-    - messaging/neuron
+    # - messaging/nanomq
+    # - messaging/neuron
 
 # MQTT over QUIC
 
