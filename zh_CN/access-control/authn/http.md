@@ -12,8 +12,6 @@ EMQX 支持通过 HTTP 应用进行密码认证。启用 HTTP 认证后，EMQX �
 
 ## 通过 Dashboard 配置
 
-您可以使用 Dashboard 来创建通过 HTTP 应用进行密码认证。
-
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `HTTP Server`，进入**配置参数**页签：
 
 ![EMQX 内置数据库认证](./assets/authn-mnesia-1.png)
