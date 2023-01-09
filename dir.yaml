@@ -31,9 +31,20 @@
 - title_en: Deployment & Provisioning
   title_cn: 安装与部署
   children:
-    - deploy/system-requirements
-    - deploy/install
-    - deploy/dirs
+    - title_en: Install
+      title_cn: 安装
+      children:
+        - deploy/install-introduction
+        - deploy/install-docker
+        - deploy/install-k8s
+        - deploy/install-debian
+        - deploy/install-ubuntu
+        - deploy/install-centos
+        - deploy/install-amazon-linux
+        - deploy/install-macOS
+        - deploy/install-windows
+        - deploy/install-source
+        - deploy/install-marketplace
     - deploy/license
     - title_en: Clustering
       title_cn: 构建集群
