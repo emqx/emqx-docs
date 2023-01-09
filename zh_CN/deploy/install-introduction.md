@@ -1,0 +1,137 @@
+# 概览
+
+## 程序包下载
+
+{% emqxce %}
+EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQ 官网与 Github Release 页面提供下载。
+
+下载地址：
+
+- 官网下载: <https://www.emqx.io/zh/downloads>
+- GitHub Release: <https://github.com/emqx/emqx/releases>
+
+除了正式版外，GitHub Release 还提供 alpha、beta、rc 版本的安装包下载。
+{% endemqxce %}
+
+{% emqxee %}
+EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQ 官网提供下载。
+
+下载地址：
+
+- 官网下载：<https://www.emqx.com/zh/try?product=enterprise>
+{% endemqxee %}
+
+:::tip
+除了通过私有部署的方式，EMQX 还提供了全托管的 MQTT 消息云服务 [EMQX Cloud](https://www.emqx.com/zh/cloud)，支持一键将 EMQX 部署到 7 大主流云服务提供商多达 30+ 区域。
+:::
+
+## 支持的平台
+
+EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是支持情况：
+
+| 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64(Apple Silicon) |
+| :---------------------------------------- | :----------------------- | :----------- | :------------------- |
+| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04, Ubuntu20.04 | 是           | 是                   |
+| [Debian](./install-debian.md)             | Debian10, Debian11       | 是           | 是                   |
+| [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | 是           | 是                   |
+| [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是                   |
+| [macOS](./install-macOS.md)               | macOS11, macOS12         | 是           | 是                   |
+| [Windows](./install-windows.md)           | Windows Server 2019      | 是           | 否                   |
+
+## 硬件要求
+
+EMQX 的硬件要求根据客户端连接数、消息消息速率和消息大小以及启用的功能而异。
+下面的最低硬件规格适用于运行 EMQX 并进行简单的功能验证，推荐配置能够支撑 10 万客户端连接以及每秒 10 万条消息吞吐。
+生产环境下请根据使用场景灵活配置，不同连接与消息吞吐下的硬件规格请参考 [配置估算](https://www.emqx.com/zh/server-estimate)。
+
+| 项目         | 最低要求 | 推荐配置 |
+| ------------ | -------- | -------- |
+| **节点数**   | 1        | 2        |
+| **CPU**      | 1 核     | 16 核    |
+| **内存**     | 512 MB   | 32 GB    |
+| **磁盘空间** | 1 GB     | 50 GB    |
+
+## 文件和目录位置
+
+EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件，存储数据以及记录日志。
+
+不同安装方式得到的文件和目录位置有所不同，具体如下:
+
+| 描述              | 压缩包解压安装 | 二进制包安装             |
+| ----------------- | -------------- | ------------------------ |
+| 配置文件目录      | `./etc`        | `/etc/emqx/etc`          |
+| 数据文件          | `./data`       | `/var/lib/emqx/data`     |
+| 日志文件          | `./log`        | `/var/log/emqx`          |
+| 启动相关的脚本    | `./releases`   | `/usr/lib/emqx/releases` |
+| 可执行文件目录    | `./bin`        | `/usr/lib/emqx/bin`      |
+| Erlang 代码       | `./lib`        | `/usr/lib/emqx/lib`      |
+| Erlang 虚拟机文件 | `./erts-*`     | `/usr/lib/emqx/erts-*`   |
+| 插件              | `./plugins`    | `/usr/lib/emqx/plugins`  |
+
+::: tip
+建议将 `data` 目录挂载至高性能磁盘以获得更好的性能。
+:::
+
+### bin 目录
+
+**emqx、emqx.cmd**
+
+EMQX 的可执行文件，具体使用可以查看 [基本命令](../admin/cli.md)。
+
+**emqx_ctl、emqx_ctl.cmd**
+
+EMQX 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](../admin/cli.md)。
+
+### etc 目录
+
+存放 EMQX 配置文件，主要配置文件包括:
+
+* `emqx.conf`：EMQX 的主配置文件，默认包含常用的配置项。
+* `emqx-example-en.conf`：EMQX 示例配置文件，包含所有可选的配置项。
+* `acl.conf`：默认 ACL 规则。
+* `vm.args`：Erlang 虚拟机的运行参数。
+* `certs/`：X.509 的密钥和证书文件。这些文件被用于 EMQX 的 SSL/TLS 监听器。也被用与与外部系统集成时建立 SSL/TLS 连接。
+
+### data 目录
+
+EMQX 将运行数据存储在 `data` 目录下，请确保 EMQX 具有该目录下所有文件的读写权限。
+
+data 目录中主要的目录和文件包括:
+
+* `authz`: File authorization rules uploaded from HTTP API or dashboard.
+* `certs`: Certificate files uploaded from HTTP API or dashboard.
+* `configs`: Generated config file at boot, or config overrides when changed from API or CLI.
+* `mnesia`: The built-in database. Inside this directory, there should be one and only one subdirectory named
+   after the node, e.g., `emqx@127.0.0.1`. The old directory should be deleted or moved elsewhere if the node is renamed.
+* `patches`: Put `.beam` files here for EMQX to load as a hot patch. Handy to remedy urgent issues.
+* `trace`: Online tracing log files.
+
+生产环境中建议定期备份除 `trace` 之外的所有目录，以下是子目录和文件说明：
+
+**mnesia**
+
+Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Erlang 的各种数据结构，在文档中也被叫做内置数据库。
+
+EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、客户端认证与权限数据、Dashbaord 用户信息等数据，这些数据都存储在 `mnesia` 目录下，**一旦删除该目录，所有业务数据将丢失。**
+
+可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。
+
+**configs/app.*.config**
+
+EMQX 读取 `etc/emqx.conf` 和 `data/configs/cluster-override.conf` `data/configs/local-override.conf` 中的配置后，将其合并并转换为 Erlang 原生配置文件格式，以在运行时读取其中的配置。
+
+不要与 `etc` 目录混淆，`etc` 目录存储只读的配置文件，通过 Dashboard 以及 REST API 提交的配置将被保存到 `data/configs` 目录下，以支持在运行时更改配置。
+
+**trace**
+
+EMQX trace 输出结果，trace 可用于调试和排查错误，具体请查看 [日志追踪](../observability/tracer.md)。
+
+### log 目录
+
+**emqx.log.***
+
+EMQX 运行时产生的日志文件，具体请查看 [日志与追踪](../observability/log.md)。
+
+**erlang.log.***
+
+以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。

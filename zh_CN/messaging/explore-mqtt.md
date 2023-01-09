@@ -1,3 +1,11 @@
+- - [阿里 ACK 上部署 EMQX 集群](https://docs.emqx.com/zh/emqx-operator/latest/deployment/aliyun-ack-deployment.html)
+  - [华为 CCE 上部署 EMQX 集群](https://docs.emqx.com/zh/emqx-operator/latest/deployment/cce-deployment.html)
+  - [AWS EKS 上部署 EMQX 集群](https://docs.emqx.com/zh/emqx-operator/latest/deployment/aws-eks-deployment.html)
+  - [腾讯云 TKE 上部署 EMQX 集群](https://docs.emqx.com/zh/emqx-operator/latest/deployment/tencent-tke-deployment.html)
+  - [Azure AKS 上部署 EMQX 集群](https://docs.emqx.com/zh/emqx-operator/latest/deployment/azure-deployment.html)
+- 任务
+- FAQ 常见问题解答
+
 # MQTT 特性验证
 
 EMQX 支持完整的 MQTT 消息特性包括标准协议中的遗嘱消息、保留消息、共享订阅，这些特性满足了物联网开发中各类应用场景的需求，大大简化了开发难度和使用流程。
