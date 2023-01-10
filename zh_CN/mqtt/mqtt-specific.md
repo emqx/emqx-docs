@@ -9,7 +9,7 @@ MQTT 协议广泛应用于物联网、移动互联网、智能硬件、车联网
 MQTT v3.1.1 协议规范: [http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
 MQTT v5.0 协议规范: [http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html)
 
-## 特点
+## 主要优势
 
 1. 开放消息协议，简单易实现
 2. 发布订阅模式，一对多消息发布

@@ -50,7 +50,7 @@ For the SQL syntax and usages, see [SQL syntax](./rule-sql-grammar-and-examples.
 
 Actions are components used to process the output results of rules and determine the final destination of data. See [actions](./rule-actions.md) for details.
 
-## Examples of Typical Use Cases of Rules
+## Typical Use Cases of Rules
 
 - Action monitoring: in the development of smart home smart door locks, the door locks will be offline due to network, power failure, man-made damage and other reasons, resulting in abnormal functions. Use rule configuration to monitor offline events and push the fault information to the application service, so as to realize the ability of fault detection at the access layer at the first time;
 

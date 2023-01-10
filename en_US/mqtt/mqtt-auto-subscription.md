@@ -1,10 +1,8 @@
-# Auto Subscribe
+# Auto Subscription
 
-With Auto Subscription enabled, after a client is successfully connected to EMQX,
-it may not need to send `SUBSCRIBE` requests to EMQX,
-because EMQX will complete the pre-defined subscriptions for the client.
+With **Auto Subscription** enabled, users can set multiple EMQX rules. After a client is successfully connected to EMQX, EMQX will complete the subscription process for the client automatically, and the clients no longer need to send `SUBSCRIBE` requests. 
 
-Prior to version 5, this feature is also known as "proxy subscription".
+Before EMQX5.0, this feature is called **Proxy Subscription**.
 
 ## Configuration
 
@@ -38,7 +36,7 @@ Prior to version 5, this feature is also known as "proxy subscription".
 
 Add the following configuration items to the configuration file
 
-```
+```bash
 auto_subscribe {
     topics = [
         {
@@ -55,30 +53,30 @@ auto_subscribe {
 }
 ```
 
-```text
+```bash
 +---------------------------+             +----------------+
 | clientid: demo_client1    |             |  EMQX Broker   |
-| username: admin           |             |                |
-| local host: 192.168.1.234 |<----------->|                |
+| u-----------------------n | u---------- |  u----------   |
+| local host: 192.168.1.234 | <---------> |                |
 | local port: 55678         |             |                |
 +---------------------------+             +----------------+
 ```
 
 When the client uses versions lower than 5, the following subscriptions are available after connection.
 
-```text
+```bash
 topic: c/demo_client1
 qos: 0
 ```
 
-```text
+```bash
 topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
 qos: 1
 ```
 
 When the client uses version 5, the following subscriptions are available after connection.
 
-```text
+```bash
 topic: c/demo_client1
 qos: 0
 rh: 0
@@ -86,7 +84,7 @@ rap: 0
 nl: 0
 ```
 
-```text
+```bash
 topic: client/demo_client1/username/admin/host/192.168.1.234/port/55678
 qos: 1
 rh: 0
