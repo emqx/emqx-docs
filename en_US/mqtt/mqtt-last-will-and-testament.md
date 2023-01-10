@@ -3,7 +3,7 @@ Will message refers to the "Will" message EMQX sends to relevant subscribers if 
 
 Accidental disconnection refers to that a client being disconnected without sending the `DISCONNECT` message, for example:
 
-- The client does not send any messages within the defined Keep Live period for network failure, and EMQX closes the connection;
+- The client does not send any messages within the defined Keep alive period for network failure, and EMQX closes the connection;
 - The client is accidentally powered off;
 - The client initiated an unauthorized operation and is disconnected by EMQX, for example, subscribing to topics that it is not allowed to.
 

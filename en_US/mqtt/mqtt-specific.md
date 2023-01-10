@@ -31,7 +31,7 @@ Below is a list of MQTT protocols and the EMQX extended concepts:
 - [Shared Subscription](./mqtt-shared-subscription.md)
 - [Exclusive Subscription](./mqtt-exclusive-subscription.md)
 - [Delayed Publish](./mqtt-delayed-publish.md)
-- [Auto Subscription](./mqtt-auto-subscription.md)
+- [Auto Subscribe](./mqtt-auto-subscription.md)
 - [Topic Rewrite](./mqtt-topic-rewrite.md)
 - [System Topic](./mqtt-system-topics.md)
 

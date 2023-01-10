@@ -1,8 +1,8 @@
-# Auto Subscription
+# Auto Subscribe
 
 With **Auto Subscription** enabled, users can set multiple EMQX rules. After a client is successfully connected to EMQX, EMQX will complete the subscription process for the client automatically, and the clients no longer need to send `SUBSCRIBE` requests. 
 
-Before EMQX5.0, this feature is called **Proxy Subscription**.
+Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 ## Configuration
 
@@ -56,7 +56,7 @@ auto_subscribe {
 ```bash
 +---------------------------+             +----------------+
 | clientid: demo_client1    |             |  EMQX Broker   |
-| u-----------------------n | u---------- |  u----------   |
+| username: admin | | |
 | local host: 192.168.1.234 | <---------> |                |
 | local port: 55678         |             |                |
 +---------------------------+             +----------------+
