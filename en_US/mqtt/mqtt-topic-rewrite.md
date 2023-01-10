@@ -1,15 +1,10 @@
 # Topic Rewrite
 
-IoT devices may not be as easy to reconfigure or upgrade, as a result, if a subscriber is programmed to subscribe certain topics
-it becomes challenging to change to a new topic.
+Many IoT devices do not support reconfiguration or upgrade, so it is hard to change their subscribed topics. To solve this issue, EMQX has introduced the topic rewrite feature, that is, with relevant rules set, EMQX will rewrite the subscribed topic of the client sending a new message or subscribing to a new topic to a new topic.  
 
-EMQX's topic rewrite feature can help to make such changes easier: by giving EMQX a set of rules, it can help to alter
-topic names for subscriptions or publishes.
+You can combine the [retained message](./retained.md) and [delayed publish](./delayed-publish.md) feature with this topic rewriting. For example, when users want to use the delayed publish, they can use topic rewrite to redirect the message to the required topic.
 
-EMQX's [retained message](./retained.md) and [delayed publish](./delayed-publish.md) can be used in conjunction with topic rewriting.
-For example, when users want to use the delayed publish, they can use topic rewrite to redirect the message to a desired topic.
-
-::: warning
+::: tip
 Authorization checks are performed before the topic is rewritten.
 :::
 
@@ -86,8 +81,8 @@ rewrite = [
 
 At this time we subscribe to five topics:  `y/a/z/b`, `y/def`, `x/1/2`, `x/y/2`, and `x/y/z` :
 
-+ `y/def` does not match any of the topic filters, so it does not perform topic rewriting, and just subscribe to `y/def` topics.
-+ `y/a/z/b` matches the  `y/+/z/#` topic filter, EMQX executes the first rule, and matches the element `[a、b]` through a regular expression, bring the matched second element into `y/z/$2`, and actually subscribe to the topic `y/z/b`.
++ `y/def` does not match any of the topic filters, so it does not perform topic rewriting, and just subscribes to `y/def` topics.
++ `y/a/z/b` matches the  `y/+/z/#` topic filter, EMQX executes the first rule, and matches the element `[a、b]` through a regular expression, brings the matched second element into `y/z/$2`, and actually subscribes to the topic `y/z/b`.
 + `x/1/2` matches `x/#` topic filter, EMQX executes the second rule. It does not match elements through regular expressions, does not perform topic rewrite, and actually subscribes to the topic of `x/1/2`.
-+ `x/y/2`  matches two topic filters of `x/#` and `x/y/+` at the same time, EMQX reads the configuration in reverse order, so it matches third in priority. Through regular replacement, it actually subscribed to the `z/y/2`  topic.
-+ `x/y/z`  matches two topic filters of `x/#` and `x/y/+` at the same time, EMQX reads the configuration in reverse order, so it matches third in priority. The element is not matched through the regular expression, the topic rewrite is not performed, and it actually subscribes to the `x/y/z` topic. It should be noted that even if the regular expression matching of third fails, it will not match the rules of second again.
++ `x/y/2`  matches two topic filters of `x/#` and `x/y/+` at the same time, EMQX reads the configuration in reverse order, so it matches the third preferentially. Through regular replacement, it actually subscribed to the `z/y/2`  topic.
++ `x/y/z`  matches two topic filters of `x/#` and `x/y/+` at the same time, EMQX reads the configuration in reverse order, so it matches the third preferentially. The element is not matched through the regular expression, the topic rewrite is not performed, and it actually subscribes to the `x/y/z` topic. It should be noted that even if the regular expression matching of the third fails, it will not match the rules of the second again.
