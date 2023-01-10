@@ -1,10 +1,6 @@
 # Delayed Publish
 
-MQTT messages are usually sent to subscribers as soon as possible by the MQTT broker,
-however, in some cases, clients may wish for some delay, or even in a more organized way: to schedule publishes.
-
-The 'scheduling' is represented as the duration of delay from the PUBLISH packet is received by EMQX.
-When a client publishes a message to EMQX with the special topic prefix `$delayed/{DelayInteval}`, the delay-publish is triggered.
+When a client publishes a message to EMQX with the topic prefix `$delayed/{DelayInteval}`, it will trigger the delayed publish feature, that is, the messages will be published after the waiting period set by the user expired. 
 
 The specific format of the delay-publish topic is as below:
 
@@ -13,7 +9,7 @@ $delayed/{DelayInterval}/{TopicName}
 ```
 
 - `$delayed`: Messages prefixed with `$delay` will be treated as messages that need to be delayed. The delay interval is determined by the content of the next topic level.
-- `{DelayInterval}`: Specify the time interval for delaying the publish of this MQTT message with the unit of second. The maximum allowed interval is 4294967 seconds. If `{DelayInterval}` cannot be parsed as an integer number, EMQX Broker will discard the message and the client will not receive any information.
+- `{DelayInterval}`: Specify the time interval for delaying the publishing of this MQTT message with the unit of second. The maximum allowed interval is 4294967 seconds. If `{DelayInterval}` cannot be parsed as an integer number, EMQX Broker will discard the message and the client will not receive any information.
 - `{TopicName}`: The topic name of the MQTT message.
 
 E.g:

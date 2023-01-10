@@ -1,6 +1,15 @@
 # Shared Subscription
 
-Shared subscription is a subscription method that achieves load balancing among multiple subscribers.
+Shared subscription is a subscription mode to implement load balancing among multiple subscribers. EMQX has supported shared subscriptions since MQTT 3.1.1, and now it has become part of the MQTT 5.0 protocol.  
+
+Use cases: 
+
+1. In cluster mode: If the node where the subscriber is located malfunctions, the publisher's messages will be lost (QoS 0 messages) or accumulated in the node (QoS 1 and QoS 2 messages). Though we can solve this problem by adding subscription nodes, this may affect the performance with lots of repeated messages and increase the complexity of the business.
+2. When the publisher's production capacity is strong, the subscriber's consumption capacity may not be able to keep up in time. In this case, we have to rely on the load-balancing capability of the subscriber, which again increases the development cost.
+
+## Mechanism
+
+We can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
 
 ```txt
                                                    [subscriber1] got msg1
@@ -24,8 +33,7 @@ The group name can be any string.
 Subscribers who belong to the same group will receive messages with load balancing,
 but EMQX will broadcast messages to different groups at the same time.
 
-For example, if subscribers `s1`, `s2`, and `s3` are members of group `g1`,
-and subscribers `s4` and `s5` are members of group `g2`, and all subscribers subscribe to topic `t1`.
+For example, if subscribers `s1`, `s2`, and `s3` are members of group `g1`, subscribers `s4` and `s5` are members of group `g2`, and all subscribers subscribe to topic `t1`.
 When EMQX Broker publishes a message `msg1` to topic `t1`:
 
 - EMQX will send `msg1` to both groups `g1` and `g2`
@@ -76,25 +84,31 @@ broker.shared_dispatch_ack_enabled = false
 EMQX sends messages to subscribers' sessions.
 
 When session is persisted (clean_session=false) the subscriber can recover the data stream
-right after reconnect without losing messages.
+right after reconnecting without losing messages.
 
 This is a bit contradicting with the 'load balancing' idea, since often when shared subscription
 is in use, if a subscriber is offline, the other subscribers in the group are expected to take
 over the data stream. Otherwise if the subscriber is offline for long enough the session
 message buffer will eventually overflow and result in message loss.
 
-Due to above reasons, persisted sessions are usually not common for shared subscribers,
-but there is nothing stopping you from doing it.
+Due to the above reasons, persisted sessions are usually not common for shared subscribers, but you can still use it. 
 
 The configuration `broker.shared_dispatch_ack_enabled` is introduced to improve
-load sharing in case of persisted sessions. When set to `true`, EMQX will try to dispatch
-messages to other members in the group if one is offline.
+load sharing in case of persisted sessions. When set to `true`, EMQX will try to dispatch messages to other members in the group if one is offline.
 
 More on exceptional flows.
 
 - Once a message is dispatched to a subscriber session, the message will stay in the session
-  buffer but not re-dispatched immediately.
-- The pending messages in a session is re-dispatched to other members in the group when
+  buffer, will be not re-dispatched immediately.
+- The pending messages in a session are re-dispatched to other members of the group when
   a session terminates.
 - When all members are offline, the message is dispatched to the configured strategy
-- When there is no alive session in a shared group, the message is discarded
+- When there is no live session in a shared group, the message is discarded
+
+::: tip
+
+For more information, you may read: 
+
+- [*Shared subscription - MQTT 5.0 new features*](https://www.emqx.com/en/blog/introduction-to-mqtt5-protocol-shared-subscription)
+
+:::

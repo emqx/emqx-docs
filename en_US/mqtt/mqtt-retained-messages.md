@@ -1,29 +1,50 @@
 # Retained Messages
 
-## Introduction
+With `Retained` message, you can flag one message published under certain topic as `Retained` and save them as persistent messages on the broker. So when new clients subscribe to this topic, they will receive the messages flagged as `Retained`.
 
-When the broker receives a PUBLISH packet with a Retain flag of 1, it will treat the message as a retained message.
-In addition to being normally forwarded, the retained message will be stored on the server.
-There can only be one (and only one) retained message under each topic.
-Therefore, if there is already a retained message of the same topic, the previously retained message is replaced with the new one.
+Only one retained message can exist under each topic, if you want to flag another message as `Retained`, the existing message will be replaced by the new message. 
 
-When a client establishes a subscription, and there are retained messages with matching topics in the broker,
-these retained messages will be sent to the client immediately.
+For example, use MQTT X CLI to publish a `Retained` message to topic `a/b/c`:
 
-With retained messages, new subscribers can immediately get the latest status without waiting for an undetermined amount of time,
-which is very important in many scenarios. For instance sensors may only publish readings every few minutes, but the
-subscribers may need get the latest reading immediately after subscribed, without having to wait for the next publish.
+```bash
+mqttx pub -r -q 1 -t a/b/c -m 'hello'
+```
 
-EMQX enables the capability and service of retain messages by default. You can modify `mqtt.retain_available` to `false` in `etc/emqx.conf` to disable the ability to retain messages.
+When new MQTT clients subscribe to topic `a/b/c`, they can still receive the `Retained` message:
+
+```bash
+$ mqttx sub -t a/b/c -q 1
+payload:  hello
+```
+
+Although the retained message is stored on the broker, they are not part of the session. That is, the `Retained` message will be kept even if the session that published this message is closed.
+
+You can use either of the following methods to delete a `Retained` message:
+
+1. Use the client to publish a black message to the topic with `Retained` message:
+
+```bash
+mqttx pub -r -q 1 -t a/b/c -m ''
+```
+
+2. Number of `Retained` messages exceeds the specified maximum `Retained` messages.
+3. Use REST API to delete the `Retained` message. 
+3. For MQTT 5.0 compatible clients, set an expiration duration, then the `Retained` messages will be deleted if the duration expired. 
+
+::: tip
+
+For more information, you may read [*The Beginner's Guide to MQTT Retained Messages*](https://www.emqx.com/en/blog/mqtt5-features-retain-message).
+
+:::
+
+By default, the Retained message feature is enabled on EMQX. You can modify `mqtt.retain_available` to `false` in `etc/emqx.conf` to disable the feature.
 In this way, the client will be prohibited from sending PUBLISH packets with the Retain flag set to 1. Otherwise, the client will receive a DISCONNECT packet with a reason code of 0x9A (Retain not supported).
 
 The service stores and manages retained messages sent by clients and sends them to the corresponding subscribers.
 
-## Quick Start 
+### Configure with Dashboard
 
-### Setup
-
-Open the Dashboard, select the `MQTT` item in the `Configuration`, and then select the `Settings` in the `Retainer` page.
+Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation tree. Then click the **Retainer** tab, and you can customize the setting for Retained messages. 
 
 ![image](./assets/retainer_1.png)
 
@@ -40,16 +61,16 @@ Open the Dashboard, select the `MQTT` item in the `Configuration`, and then sele
 
 ## Flow Control
 
-The message read and deliver rate can be controlled.
+The message read and delivery rate can be controlled.
 
 When a client subscribes to a wildcard topic, it may match a large number of topics having messages retained.
-Without flow control, the all matched messages will be copied into the subscriber's process memory space,
-this may cause the subscriber Erlang process (the actor) to allocate excessive amount of RAM and risk at
-shutdown forced by the `force_shutdown` policy.
+Without flow control, all matched messages will be copied into the subscriber's process memory space,
+this may cause the subscriber Erlang process (the actor) to allocate excessive amount of RAM and bring the risk of
+forced shutdown following the `force_shutdown` policy.
 
 To make it less aggressive, `retainer.flow_control` settings can be used, e.g:
 
-```
+```bash
 # Each session subscribed to retain messages will load 10 messages and deliver 10 messages at each time, the total delivery rate of all these sessions is limited to 100/s, and the dispatch rate of each worker process in the retained module is limited to 20/s (in most cases, it is not necessary to configure the client level)
 retainer {
   enable = true
