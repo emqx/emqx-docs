@@ -51,7 +51,7 @@ Below is the workflow of how to use MQTT X to connect, publish/subscribe, and vi
 
 ::: tab MQTT X CLI
 
-[MQTT X CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command line tool provided by [EMQ](https://www.emqx.com). It is an [MQTT X](https://mqttx.app/zh) tool running on the command line tool so users test and debug MQTT services and applications with no need for a graphic interface. 
+[MQTT X CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command line tool provided by [EMQ](https://www.emqx.com). It is an [MQTT X](https://mqttx.app) tool running on the command line tool so users test and debug MQTT services and applications with no need for a graphic interface. 
 
 Besides cross-platform support, dependency-free, and support to various MQTT features, you can also use MQTT X for a quick performance test. 
 
