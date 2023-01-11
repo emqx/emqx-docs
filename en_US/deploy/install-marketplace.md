@@ -1,1 +1,1 @@
-# Install from source code
+# Install from cloud Marketplace

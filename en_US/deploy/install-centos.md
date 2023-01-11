@@ -1,26 +1,29 @@
 # CentOS/RHEL
 
-This section will guide you on how to install and start EMQX on your CentOS/RHEL system.
+This section will guide you on how to install and start EMQX on CentOS/RHEL system.
 
-Supported versions of CentOS/RHEL: CentOS 7, CentOS 8.
+Supported versions: 
 
-## rpm install
+- CentOS 7
+- CentOS 8
 
-1. Download [emqx-5.0.13-el8-amd64.rpm](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-el8-amd64.rpm)
+## Install EMQX with rpm
+
+1. To download [emqx-5.0.13-el8-amd64.rpm](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-el8-amd64.rpm), run:
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-el8-amd64.rpm
 ```
 
-2. Install
+2. To install EMQX, run:
 
 ```bash
 sudo yum install ./emqx-5.0.13-el8-amd64.rpm -y
 ```
 
-3. Run
+3. To run EMQX, run:
 
-- Quick Start
+- To start EMQX directly, run:
 
   ```bash
   $ emqx start
@@ -30,39 +33,39 @@ sudo yum install ./emqx-5.0.13-el8-amd64.rpm -y
   Node 'emqx@127.0.0.1' 5.0.13 is started
   ```
 
-- systemctl
+- To start EMQX with systemctl, run:
 
   ```bash
   sudo systemctl start emqx
   ```
 
-- Start as service
+- To start EMQX as a service, run:
 
   ```bash
   sudo service emqx start
   ```
 
-4. Uninstall
+4. To uninstall EMQX, run:
 
   ```shell
   sudo yum remove emqx
   ```
 
-## tag.gz install
+## Install EMQX with tag.gz
 
-1. Download [emqx-5.0.13-el8-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-el8-amd64.tar.gz)
+1. To download [emqx-5.0.13-el8-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-el8-amd64.tar.gz), run:
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-el8-amd64.tar.gz
 ```
 
-1. Unzip the package
+1. To unzip the package, run:
 
 ```bash
 mkdir -p emqx && tar -zxvf emqx-5.0.13-el8-amd64.tar.gz -C emqx
 ```
 
-3. Run
+3. To start EMQX, run:
 
 ```bash
 cd emqx && ./bin/emqx start

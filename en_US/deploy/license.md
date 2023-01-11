@@ -1,1 +1,1 @@
-# Enterprise License
+# Apply and configure license

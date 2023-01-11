@@ -1,26 +1,29 @@
 # Ubuntu
 
-This section will guide you on how to install and start EMQX on your Ubuntu system.
+This section will guide you on how to install and start EMQX on Ubuntu system.
 
-Supported versions of Ubuntu: Ubuntu18.04, Ubuntu20.04.
+Supported versions: 
 
-## deb install
+- Ubuntu18.04
+- Ubuntu20.04
 
-1. Download [emqx-5.0.13-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb)
+## Install EMQX with deb
+
+1. To download [emqx-5.0.13-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb), run:
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb
 ```
 
-2. Install
+2. To install EMQX, run:
 
 ```bash
 sudo apt install ./emqx-5.0.13-ubuntu20.04-amd64.deb
 ```
 
-3. Run
+3. We offered different options to start EMQX:
 
-- Quick Start
+- To start EMQX directly, run:
 
   ```bash
   $ emqx start
@@ -30,39 +33,39 @@ sudo apt install ./emqx-5.0.13-ubuntu20.04-amd64.deb
   Node 'emqx@127.0.0.1' 5.0.13 is started
   ```
 
-- systemctl
+- To start EMQX with systemctl, run:
 
   ```bash
   sudo systemctl start emqx
   ```
 
-- Start as service
+- To start EMQX as a service, run:
 
   ```bash
   sudo service emqx start
   ```
 
-4. Uninstall
+4. To uninstall EMQX, run:
 
   ```shell
   sudo apt remove --purge emqx
   ```
 
-## tag.gz install
+## Install EMQX with tag.gz
 
-1. Download [emqx-5.0.13-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.tar.gz)
+1. To download [emqx-5.0.13-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.tar.gz), run:
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.tar.gz
 ```
 
-1. Unzip the package
+1. To unzip the package, run:
 
 ```bash
 mkdir -p emqx && tar -zxvf emqx-5.0.13-ubuntu20.04-amd64.tar.gz -C emqx
 ```
 
-3. Run
+3. To start EMQX, run:
 
 ```bash
 cd emqx && ./bin/emqx start

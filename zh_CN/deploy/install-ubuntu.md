@@ -2,23 +2,26 @@
 
 本章节将指导您如何在 Ubuntu 系统中下载安装并启动 EMQX。
 
-支持的 Ubuntu 版本：Ubuntu18.04, Ubuntu20.04。
+支持的 Ubuntu 版本：
 
-## deb 安装
+- Ubuntu18.04
+- Ubuntu20.04
 
-1. 下载 [emqx-5.0.13-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb)
+## 通过 deb 安装 EMQX
+
+1. 下载 [emqx-5.0.13-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb)：
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb
 ```
 
-2. 安装
+2. 安装 EMQX：
 
 ```bash
 sudo apt install ./emqx-5.0.13-ubuntu20.04-amd64.deb
 ```
 
-3. 启动
+3. 我们提供了几种不同的方式启动 EMQX：
 
 - 直接启动：
 
@@ -30,39 +33,39 @@ sudo apt install ./emqx-5.0.13-ubuntu20.04-amd64.deb
   Node 'emqx@127.0.0.1' 5.0.13 is started
   ```
 
-- systemctl 启动：
+- 通过 systemctl 启动：
 
   ```bash
   sudo systemctl start emqx
   ```
 
-- service 启动：
+- 以 service 的形式启动：
 
   ```bash
   sudo service emqx start
   ```
 
-4. 卸载
+4. 卸载 EMQX：
 
   ```shell
   sudo apt remove --purge emqx
   ```
 
-## tag.gz 安装
+## 通过 tag.gz 安装 EMQX
 
-1. 下载 [emqx-5.0.13-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.tar.gz)
+1. 下载 [emqx-5.0.13-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.tar.gz)：
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.tar.gz
 ```
 
-1. 解压程序包
+1. 解压程序包：
 
 ```bash
 mkdir -p emqx && tar -zxvf emqx-5.0.13-ubuntu20.04-amd64.tar.gz -C emqx
 ```
 
-3. 启动
+3. 启动 EMQX：
 
 ```bash
 cd emqx && ./bin/emqx start
