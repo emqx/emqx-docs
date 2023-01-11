@@ -6,12 +6,12 @@
 
 1. 如需保留数据，请将 EMQX 数据目录 `/opt/emqx/data` 挂载在容器外部，这样即使容器被删除数据也不会丢失。
 
-2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 `host` 网络模式。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
+2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 :::
 
-## 运行单个容器
+## 通过 Docker 运行单个 EMQX 节点
 
-1. 获取 Docker 镜像
+1. 运行以下命令获取 Docker 镜像：
 
 {% emqxce %}
 
@@ -29,7 +29,7 @@ docker pull emqx/emqx-ee:5.0.0
 
 {% endemqxee %}
 
-2. 启动 Docker 容器
+2. 运行以下命令启动 Docker 容器
 
 {% emqxce %}
 
@@ -37,7 +37,7 @@ docker pull emqx/emqx-ee:5.0.0
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.13
 ```
 
-有关官方镜像更多信息请查看 [Docker Hub - emqx](https://hub.docker.com/_/emqx)。
+有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx](https://hub.docker.com/_/emqx)。
 
 {% endemqxce %}
 
@@ -47,11 +47,11 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-ee:5.0.0
 ```
 
-有关官方镜像更多信息请查看 [Docker Hub - emqx/emqx-ee](https://hub.docker.com/r/emqx/emqx-ee)。
+有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx/emqx-ee](https://hub.docker.com/r/emqx/emqx-ee)。
 
 {% endemqxee %}
 
-## Docker Compose 简单集群
+## 通过 Docker Compose 构建 EMQX 集群
 
 Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群。
 
@@ -175,7 +175,7 @@ networks:
 
 {% endemqxee %}
 
-2. 命令行切换 `docker-compose.yml` 文件所在目录，启动 EMQX 集群：
+2. 通过命令行切换 `docker-compose.yml` 文件所在目录，然后输入以下命令启动 EMQX 集群：
 
 ```bash
 docker-compose up -d

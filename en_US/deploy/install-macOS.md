@@ -1,22 +1,20 @@
 # macOS
 
-This section will guide you on how to install and start EMQX on your macOS.
+This section will guide you on how to install and start EMQX on macOS with a zip file. 
 
-## zip install
-
-1. Download [emqx-5.0.13-macos11-amd64.zip](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-macos11-amd64.zip)
+1. To download [emqx-5.0.13-macos11-amd64.zip](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-macos11-amd64.zip), run:
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-macos11-amd64.zip
 ```
 
-1. Unzip the package
+1. To unzip the package, run:
 
 ```bash
 unzip emqx-5.0.13-macos11-amd64.zip
 ```
 
-3. Run
+3. To start EMQX, run:
 
 ```bash
 cd emqx && ./bin/emqx start

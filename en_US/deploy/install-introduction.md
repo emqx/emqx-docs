@@ -129,12 +129,9 @@ EMQX 读取 `etc/emqx.conf` 和 `data/configs/cluster-override.conf` `data/confi
 
 EMQX trace 输出结果，trace 可用于调试和排查错误，具体请查看 [日志追踪](../observability/tracer.md)。
 
-log directory
+### Directory `log`
 
-**emqx.log.***
+This directory stores the operating logs of EMQX, including
 
-EMQX 运行时产生的日志文件，具体请查看 [日志与追踪](../observability/log.md)。
-
-**erlang.log.***
-
-以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。
+- ``emqx.log.*`: Operation logs of EMQX, for more information, see [logs日志与追踪](../observability/log.md)。
+- `erlang.log.*`: Copy file of the console log when EMQX is started in the background with `emqx start`
