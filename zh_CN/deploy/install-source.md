@@ -13,7 +13,7 @@ EMQX 源码编译安装需要以下环境依赖:
 
 您可以使用 EMQX 提供的 Docker 编译环境 [EMQX Builder](https://github.com/emqx/emqx-builder) 从源码编译 EMQX。
 
-您可通过如下命令创建 EMQX Builder 容器，映射 EMQX 主要端口（可选），并在编译完成后启动预览：
+您可通过如下命令创建 EMQX Builder 容器，映射 EMQX 主要端口（可选）可以在编译完成后启动预览：
 
 ```bash
 docker run -d --name emqx-builder \

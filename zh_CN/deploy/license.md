@@ -1,1 +1,1 @@
-# 企业版 License
+# 配置 License
