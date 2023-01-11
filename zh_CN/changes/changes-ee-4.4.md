@@ -41,7 +41,7 @@
 - TDEngine 资源同时支持 TDEngine 2.x 和 3.x 两个版本的 API 返回格式 [emqx/tdengine-client-erl#7](https://github.com/emqx/tdengine-client-erl/pull/7)。
   在 HTTP 的返回中，TDEngine 2.x 使用 `status` 字段来代表请求成功或者失败，而 TDEngine 3.x 改为使用 `code` 字段。
 
-- TDEngine 资源支持批量发送数据到 [TDEngine 子表](https://docs.taosdata.com/concept/#子表subtable) [#1583](https://github.com/emqx/emqx-enterprise/pull/1583)。
+- TDEngine 资源支持批量发送数据到 [TDEngine 子表](https://docs.taosdata.com/concept/#子表subtable) [#1593](https://github.com/emqx/emqx-enterprise/pull/1593)。
 
 - 在启用规则的时候，Clickhouse 离线消息动作打印了一行 info 级别的日志：`Destroyed .. Successfully` [#1594](https://github.com/emqx/emqx-enterprise/pull/1594)。
 
