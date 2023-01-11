@@ -73,11 +73,11 @@ Use MQTT X CLI to verify:
 
 4. Repeat Step 2 and no retained messages are received, indicating the retained message is cleared. 
 
-## Shared Subscribe
+## Shared Subscription
 
 **Operating steps:**
 
-1. Enable Shared Subscribe at the broker side (enabled by default on EMQX). 
+1. Enable Shared Subscription at the broker side (enabled by default on EMQX). 
 2. When multiple subscribers subscribe to the same topic (original topic), they need to add a prefix to indicate shared subscribe group `$share/{group}` (shared subscribe topic), for example,
    1. If the original topic is `t/1`, the shared subscription topic is `$share/my_group/t/1` (with `my_group` as the customized group name)
    2. If the original ancestor is `/t/1`, the shared subscription topic is `$share/my_group//t/1`.
