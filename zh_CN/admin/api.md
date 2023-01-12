@@ -14,6 +14,8 @@ EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用�
 
 EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，也可以通过如下的 API 调用来创建一个新的 API 密钥。
 
+请求示例
+
 ```bash
 curl -u 'admin:public' \
      -X 'POST' \ 'http://localhost:18083/api/v5/api_key' \
@@ -28,7 +30,7 @@ curl -u 'admin:public' \
         }'
 ```
 
-返回结果中包含认证密钥信息：
+返回示例
 
 ```bash
 {
@@ -43,7 +45,7 @@ curl -u 'admin:public' \
 }
 ```
 
-结果中的 `api_key` 和 `api_secret` 可以用于访问 REST API 时的 Basic 认证，例如：
+结果中的 `api_key` 和 `api_secret` 可用于在访问 REST API 时完成 HTTP 基本认证，例如：
 
 ```bash
 curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
@@ -87,38 +89,38 @@ HTTP 响应状态码能够直观的判断可能存在的问题，在此基础上
 }
 ```
 
-| 错误码                                         | 描述                                                                      |
-| ---------------------------------------------- | ------------------------------------------------------------------------- |
-| WRONG_USERNAME_OR_PWD                          | Wrong username or pwd <img width=200/>                                                    |
-| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | Wrong username & pwd or key & secret                                      |
-| BAD_REQUEST                                    | Request parameters are not legal                                          |
-| NOT_MATCH                                      | Conditions are not matched                                                |
-| ALREADY_EXISTS                                 | Resource already existed                                                  |
-| BAD_CONFIG_SCHEMA                              | Configuration data is not legal                                           |
-| BAD_LISTENER_ID                                | Bad listener ID                                                           |
-| BAD_NODE_NAME                                  | Bad Node Name                                                             |
-| BAD_RPC                                        | RPC Failed. Check the cluster status and the requested node status        |
-| BAD_TOPIC                                      | Topic syntax error, Topic needs to comply with the MQTT protocol standard |
-| EXCEED_LIMIT                                   | Create resources that exceed the maximum limit or minimum limit           |
-| INVALID_PARAMETER                              | Request parameters is not legal and exceeds the boundary value            |
-| CONFLICT                                       | Conflicting request resources                                             |
-| NO_DEFAULT_VALUE                               | Request parameters do not use default values                              |
-| DEPENDENCY_EXISTS                              | Resource is dependent by another resource                                 |
-| MESSAGE_ID_SCHEMA_ERROR                        | Message ID parsing error                                                  |
-| INVALID_ID                                     | Bad ID schema                                                             |
-| MESSAGE_ID_NOT_FOUND                           | Message ID does not exist                                                 |
-| NOT_FOUND                                      | Resource was not found or does not exist                                  |
-| CLIENTID_NOT_FOUND                             | Client ID was not found or does not exist                                 |
-| CLIENT_NOT_FOUND                               | Client was not found or does not exist(usually not a MQTT client)         |
-| RESOURCE_NOT_FOUND                             | Resource not found                                                        |
-| TOPIC_NOT_FOUND                                | Topic not found                                                           |
-| USER_NOT_FOUND                                 | User not found                                                            |
-| INTERNAL_ERROR                                 | Server inter error                                                        |
-| SERVICE_UNAVAILABLE                            | Service unavailable                                                       |
-| SOURCE_ERROR                                   | Source error                                                              |
-| UPDATE_FAILED                                  | Update failed                                                             |
-| REST_FAILED                                    | Reset source or config failed                                             |
-| CLIENT_NOT_RESPONSE                            | Client not responding                                                     |
+| 错误码                                         | 描述                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| WRONG_USERNAME_OR_PWD                          | Wrong username or password <img width=200/>                  |
+| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | Wrong username & password or key & secret                    |
+| BAD_REQUEST                                    | Request parameters not legal                                 |
+| NOT_MATCH                                      | Conditions not matched                                       |
+| ALREADY_EXISTS                                 | Resources already exist                                      |
+| BAD_CONFIG_SCHEMA                              | Configuration data not legal                                 |
+| BAD_LISTENER_ID                                | Bad listener ID                                              |
+| BAD_NODE_NAME                                  | Bad Node Name                                                |
+| BAD_RPC                                        | RPC Failed. Check the cluster status and the requested node status |
+| BAD_TOPIC                                      | Topic syntax error, topic needs to comply with the MQTT protocol standard |
+| EXCEED_LIMIT                                   | Resources to be created exceed the maximum limit or minimum limit |
+| INVALID_PARAMETER                              | Request parameters not legal and exceed the boundary value   |
+| CONFLICT                                       | Conflicting request resources                                |
+| NO_DEFAULT_VALUE                               | Request parameters do not use default values                 |
+| DEPENDENCY_EXISTS                              | Resource depends on other resources                          |
+| MESSAGE_ID_SCHEMA_ERROR                        | Message ID parsing error                                     |
+| INVALID_ID                                     | Bad ID schema                                                |
+| MESSAGE_ID_NOT_FOUND                           | Message ID does not exist                                    |
+| NOT_FOUND                                      | Resource not found or does not exist                         |
+| CLIENTID_NOT_FOUND                             | Client ID not found or does not exist                        |
+| CLIENT_NOT_FOUND                               | Client not found or does not exist(usually not an MQTT client) |
+| RESOURCE_NOT_FOUND                             | Resource not found                                           |
+| TOPIC_NOT_FOUND                                | Topic not found                                              |
+| USER_NOT_FOUND                                 | User not found                                               |
+| INTERNAL_ERROR                                 | Server inter error                                           |
+| SERVICE_UNAVAILABLE                            | Service unavailable                                          |
+| SOURCE_ERROR                                   | Source error                                                 |
+| UPDATE_FAILED                                  | Update fails                                                 |
+| REST_FAILED                                    | Reset source or configuration fails                          |
+| CLIENT_NOT_RESPONSE                            | Client not responding                                        |
 
 <ClientOnly>
   <OpenApi path="swagger.json" />
