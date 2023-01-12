@@ -1,8 +1,6 @@
-# 使用 HTTP 应用进行密码认证
+# 使用 HTTP 服务进行密码认证
 
-EMQX 支持通过 HTTP 应用进行密码认证。启用 HTTP 认证后，EMQX 将携带客户端信息向 HTTP 服务发起请求，并根据返回的响应状态码确认是否接受连接，从而实现复杂的认证鉴权逻辑。
-
-在 4.x 版本中，EMQX 仅会提示 HTTP API 返回的状态码，如  `200` 、`403`，内容则会被丢弃。为了向用户提供更多的信息，我们在 EMQX 5.0 版本中增加了对请求内容的返回。
+EMQX 支持通过外部 HTTP 服务进行密码认证。客户端连接时，EMQX 将使用客户端信息构造 HTTP 请求，并根据请求返回的内容判断认证结果，从而实现复杂的认证鉴权逻辑。
 
 ::: tip
 前置准备：
@@ -10,25 +8,51 @@ EMQX 支持通过 HTTP 应用进行密码认证。启用 HTTP 认证后，EMQX �
 - 熟悉 [EMQX 认证基本概念](../authn/authn.md)
 :::
 
+## 请求格式与返回结果
+
+认证过程类似一个 HTTP API 调用，EMQX 作为请求客户端需要按照 "API" 要求的格式构造并向 HTTP 服务发起请求，而 HTTP 服务需要按照 "客户端" 的要求返回结果：
+
+- 响应编码格式 `content-type` 必须是 `application/json`。
+- 认证结果通过 body 中的 `result` 标示，可选 `alow`、`deny`、`ignore`。
+- 超级用户通过 body 中的 `is_superuser` 标示，可选 `true`、`false`。
+- HTTP 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 `4xx/5xx` 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证链。
+
+响应示例：
+
+```json
+HTTP/1.1 200 OK
+Headers: Content-Type: application/json
+...
+Body:
+{
+    "result": "allow", // 可选 "allow" | "deny" | "ignore"
+    "is_superuser": true // 可选 true | false，该项为空时默认为 false
+}
+```
+
+::: tip EMQX 4.x 兼容性说明
+在 4.x 中，EMQX 仅用到了 HTTP API 返回的状态码，而内容则被丢弃。例如 `200` 表示 `allow`，`403` 表示 `deny`。
+
+因为缺乏丰富的表达能力，在 5.0 中对这一机制进行了不兼容的调整。
+:::
+
 ## 通过 Dashboard 配置
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `HTTP Server`，进入**配置参数**页签：
 
-![EMQX 内置数据库认证](./assets/authn-mnesia-1.png)
-
 您可根据如下说明完成相关配置：
 
-**HTTP**：<!--插入简要说明，这快要配置什么-->
+**HTTP**：配置请求方式与 URL。
 
 - **请求方式**：选择 HTTP 请求方式，可选值： `get` 、 `post`
 
-  ::: danger
+  :::
   推荐使用 `POST` 方法。 使用 `GET` 方法时，一些敏感信息（如纯文本密码）可能通过 HTTP 服务器日志记录暴露。此外，对于不受信任的环境，请使用 HTTPS。
   :::
 
-- **URL**：输入 HTTP 应用的 IP 地址。
+- **URL**：输入 HTTP 服务的 URL 地址。
 
-- **Headers**（可选）：完成 HTTP 请求头的配置 <!--键、值和添加这块内容需要补充下-->
+- **Headers**（可选）：HTTP 请求头配置。
 
 **连接配置**：在此部分进行并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
 
@@ -39,13 +63,11 @@ EMQX 支持通过 HTTP 应用进行密码认证。启用 HTTP 认证后，EMQX �
 
 **TLS 配置**：配置是否启用 TLS。
 
-**认证配置**：在此处完成 HTTP 请求体的配置。
+**认证配置**：
 
-<!--需要补上相关信息-->
+- **Body**：请求模板，对于 `POST` 请求，它以 JSON 形式在请求体中发送。对于 `GET` 请求，它被编码为 URL 中的查询参数（Query String）。映射键和值可以使用 [占位符](./authn.md#认证占位符)。
 
 最后点击**创建**完成相关配置。
-
-
 
 ## 通过配置文件设置
 
@@ -59,7 +81,7 @@ EMQX 支持通过 HTTP 应用进行密码认证。启用 HTTP 认证后，EMQX �
 
 ::: tab POST 请求示例
 
-```
+```hocon
 {
     mechanism = password_based
     backend = http
@@ -82,7 +104,7 @@ EMQX 支持通过 HTTP 应用进行密码认证。启用 HTTP 认证后，EMQX �
 
 ::: tab GET 请求示例
 
-```
+```hocon
 {
     mechanism = password_based
     backend = http
@@ -103,23 +125,3 @@ EMQX 支持通过 HTTP 应用进行密码认证。启用 HTTP 认证后，EMQX �
 :::
 
 ::::
-
-### 返回结果
-
-```json
-HTTP/1.1 200 OK
-Headers: Content-Type: application/json
-...
-Body:
-{
-    "result": "allow" | "deny" | "ignore", // Default `"ignore"`
-    "is_superuser": true | false // Default `false`
-}
-```
-
-其中：
-
-- 响应编码格式 `content-type` 必须是 `application/json`
-- 认证结果通过 body 中的 `result` 标示，可选 `alow`、`deny`、`ignore`
-- 超级用户通过 body 中的 `is_superuser` 标示，可选 `true`、`false`
-- 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 4xx/5xx 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证。

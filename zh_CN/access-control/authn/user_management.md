@@ -1,15 +1,11 @@
-# 通过 HTTP API 管理用户
+# 通过 HTTP API 管理认证数据
 
 <!--这篇我觉得最好也能按照用户使用的路径重写下，目前我觉得有些不知道怎么开始-->
 
-对于通过内置数据库存储认证数据的认证方式，EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作：
+EMQX 提供了 Dashboard 与 HTTP API 来创建、更新、删除和查看内置数据库中的认证数据，适用于以下认证器：
 
 - [使用内置数据库进行密码认证](./mnesia.md)
 - [MQTT 5.0 增强认证](./scram.md)
-
-::: tip
-如您增加了多种认证方式，不同认证方式之间的数据相互独立。
-:::
 
 ## REST API
 
@@ -34,7 +30,7 @@ MQTT 监听器认证数据管理 API： `/api/v5/listeners/{listener_id}/authent
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
-数据导入请求是一个类型为 `multipart/form-data` 的 POST 请求。
+数据导入 API 是一个文件上传的请求（类型为 `multipart/form-data` 的 POST 请求）。
 
 示例：
 
@@ -45,7 +41,7 @@ curl -v -u admin:public -X 'POST' \
     'http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/import_users'
 ```
 
-支持 csv 与 JSON 格式：
+支持导入 csv 与 JSON 格式文件：
 
 - `.csv`
 
