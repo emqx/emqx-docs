@@ -2,42 +2,23 @@
 
 本章节将指导您如何在 Ubuntu 系统中下载安装并启动 EMQX。
 
-<<<<<<< HEAD
-支持的 Ubuntu 版本：
-
-- Ubuntu18.04
-- Ubuntu20.04
-
-## 通过 deb 安装 EMQX
-
-1. 下载 [emqx-5.0.13-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb)：
-=======
 支持的 Ubuntu 版本：Ubuntu18.04, Ubuntu20.04。
 
 ## deb 安装
 
 1. 下载 [emqx-5.0.13-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb)
->>>>>>> 3ed60c6d5e16cae60cc1f5c27c58210ada9c4ca8
 
 ```bash
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-ubuntu20.04-amd64.deb
 ```
 
-<<<<<<< HEAD
 2. 安装 EMQX：
-=======
-2. 安装
->>>>>>> 3ed60c6d5e16cae60cc1f5c27c58210ada9c4ca8
 
 ```bash
 sudo apt install ./emqx-5.0.13-ubuntu20.04-amd64.deb
 ```
 
-<<<<<<< HEAD
 3. 我们提供了几种不同的方式启动 EMQX：
-=======
-3. 启动
->>>>>>> 3ed60c6d5e16cae60cc1f5c27c58210ada9c4ca8
 
 - 直接启动：
 
