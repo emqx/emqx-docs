@@ -7,7 +7,7 @@ to view the API document, and also execute the management APIs from this UI.
 
 The section will introduce how to work with EMQX REST API.
 
-## API Path
+## Basic Path
 
 EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start with `/api/v5`.
 
