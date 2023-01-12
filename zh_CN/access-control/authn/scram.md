@@ -18,11 +18,9 @@ SCRAM 认证仅支持使用 MQTT v5.0 的连接。
 
 ## 通过配置文件配置
 
-SCRAM 认证由 `mechanism = scram` and `backend = built_in_database` 标识，您也可以通过配置项完成相关配置，具体可参考：<!--需要添加连接文件-->
-
 配置示例如下：
 
-```
+```hocon
 {
     mechanism = scram
     backend = built_in_database
@@ -35,5 +33,5 @@ SCRAM 认证由 `mechanism = scram` and `backend = built_in_database` 标识，�
 
 其中：
 
-- `algorithm `对应 Dashboard 的密码加密方式；可选值：**sha256** 或 **sha512**
+- `algorithm`：对应 Dashboard 的密码加密方式；可选值：**sha256** 或 **sha512**
 - `iteration_count`（可选）：输入一个整数以指定迭代次数，默认值： **4096**

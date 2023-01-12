@@ -1,10 +1,14 @@
 # 简介
 
-身份认证是物联网应用的重要组成部分，可以帮助有效阻止非法客户端的连接。EMQX 支持用户在不配置任何认知机制的情况下直接连接；同时为了提供更好的安全保障，EMQX 也支持了多种认证机制，如密码认证，JWT 认证，以及基于 MQTT 5.0 协议的增强认证。
+身份认证是物联网应用的重要组成部分，可以帮助有效阻止非法客户端的连接。为了提供更好的安全保障，EMQX 支持多种认证机制，如密码认证，JWT 认证，以及基于 MQTT 5.0 协议的增强认证。
 
 此外，EMQX 还支持 TLS 的双向认证（X.509 证书认证）和基于 PSK 的 TLS/DTLS 认证，在一定程度上满足了客户端和服务端之间的身份验证要求。
 
 本章节将向您介绍 EMQX 认证的基本概念和使用方式。
+
+:::tip
+EMQX 默认未开启认证功能，即允许所有客户端链接，如在生产环境中使用，请提前配置好至少一种认证方法。
+:::
 
 ## 认证方式
 
@@ -22,19 +26,17 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 
 ### JWT 认证
 
-[Json Web Token（JWT）](https://jwt.io/) 是一种基于 Token 的认证机制，它不需要服务器来保留客户端的认证信息或会话信息。客户端可以在密码或用户名中携带 Token，EMQX 支持通过预先配置的密钥或公钥对 JWT 签名进行验证。
+[Json Web Token（JWT）](https://jwt.io/) 是一种基于 Token 的认证机制，它不需要服务器来保留客户端的认证信息或会话信息。客户端可以在密码或用户名中携带 Token，EMQX 通过预先配置的密钥或公钥对 JWT 签名进行验证。
 
 此外，如果用户配置了 JWKS 端点，EMQX 也支持通过从 JWKS 端点查询到的公钥列表对 JWT 签名进行验证，从而能够批量为客户端签发认证信息。
 
 ### MQTT 5.0 增强认证
 
-[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，它更像是一种认证框架，允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 支持基于内置数据库实现 SCRAM 认证。
+[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，它更像是一种认证框架，允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 实现了 SCRAM 认证，并支持将认证数据存储在内置数据库中。
 
+## EMQX 认证器
 
-
-## EMQX 认证机制
-
-以下为 EMQX 支持的认证机制列表，按照认证方式和数据源来划分，EMQX 支持以下 8 种不同类型的认证机制：
+按照认证方式和数据源来划分，EMQX 内置了以下 8 种认证器：
 
 | 认证方式 | 数据源      | 说明                                              |
 | -------- | ----------- | ------------------------------------------------- |
@@ -46,122 +48,6 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 | 密码认证 | HTTP Server | [使用 HTTP 的密码认证](./http.md)                 |
 | JWT      | --          | [JWT 认证](./jwt.md)                              |
 | 增强认证 | 内置数据库  | [增强认证(SCRAM 认证)](./scram.md)                |
-
-### 用户管理 API
-
-对于通过内置数据库存储认证数据的认证方式（[使用内置数据库进行密码认证](./mnesia.md)和[MQTT 5.0 增强认证](./scram.md)），EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作，具体可阅读 [通过 HTTP API 管理用户](./user_management.md)。
-
-## 配置方式
-
-EMQX 提供了 3 种使用认证的配置方式，分别为： Dashboard、配置文件和 HTTP API。
-
-### Dashboard
-
-Dashboard 底层调用了 HTTP API，提供了相对更加易用的可视化操作页面。在 Dashboard 中可以方便的查看认证器状态、调整认证器在认证链中的位置，如下图所示，我们已经成功添加了基于内置数据库和 JWT 两种认证机制。
-
-![Dashboard 认证器列表](./assets/authn-dashboard-2.png)
-
-
-
-### 配置文件
-
-EMQX 支持为 MQTT 客户端配置多个认证器以组成认证链 <!--连接到对应概念-->，如以下代码示例中的 `authentication` 字段所示，认证器在数组中的顺序便是在认证链中执行的顺序：
-
-```hocon
-# emqx.conf
-
-# Specific global authentication chain for all MQTT listeners 
-authentication = [
-  ...
-]
-
-listeners.tcp.default {
-  ...
-  enable_authn = true
-  # Specific authentication chain for the specified MQTT listener
-  authentication = [
-    ...
-  ]
-}
-
-gateway.stomp {
-  ...
-  enable_authn = true
-  # Specific global authenticator for all STOMP listeners
-  authentication = {
-    ...
-  }
-
-  listeners.tcp.default {
-    ...
-    enable_authn = true
-    # Specific authenticator for the specified STOMP listener
-    authentication = {
-      ...
-    }
-  }
-}
-```
-
-不同类型的认证器有着不同的配置项要求。关于各配置项的具体配置方法，可参考配置说明文档 <!--连接到对应文件-->，其中包含了每种认证器的所有配置字段的详细说明。
-
-### HTTP API
-
-<!--这块我不确定怎么改，是保留这么详细的说明，还是简单介绍下，然后链接到对应的文件-->
-
-与配置文件相比，HTTP API 支持运行时更新，能够自动将配置改动同步至整个集群，使用起来更加方便。
-
-EMQX 提供的认证 API 允许对认证链和认证器进行管理，例如为全局认证创建一个认证器，以及更新指定认证器的配置。
-
-- `/api/v5/authentication`: 管理 MQTT 全局认证
-
-- `/api/v5/listeners/{listener_id}/authentication`: 管理 MQTT 监听器认证
-
-- `/api/v5/gateway/{protocol}/authentication`: 管理网关的全局认证
-
-- `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 管理网关监听器认证
-
-如果想要对指定认证器进行操作，则需要在上面这些端点后面追加一个认证器 ID，例如 `/api/v5/authentication/{id}`。为了便于维护，这里的 ID 并不是 EMQX 自动生成然后由 API 返回的，而是遵循了一套预先定义的规范：
-
-```bash
-<mechanism>:<backend>
-```
-
-或者仅仅只有：
-
-```bash
-<mechanism>
-```
-
-例如：
-
-1. `password_based:built_in_database`
-2. `jwt`
-3. `scram:built_in_database`
-
-同样，对于监听器 ID，我们也有一套类似的约定，MQTT 监听器 ID 的格式为：
-
-```bash
-<transport_protocol>:<name>
-```
-
-网关监听器 ID 的格式为：
-
-```bash
-<protocol>:<transport_protocol>:<name>
-```
-
-我们可以把 MQTT 监听器 ID 看作是默认省略了最前面的协议名。
-
-注意，不管是认证器 ID，还是监听器 ID，当它们在 URL 中使用时，都需要遵循 URL 编码规范。最直接的，我们需要将 `:` 替换为 `%3A`，示例：
-
-```bash
-PUT /api/v5/authentication/password_based%3Abuilt_in_database
-```
-
-详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
-
-
 
 ## 基本概念
 
@@ -274,4 +160,118 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 - `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
 
 - `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name），仅适用于 TLS 连接。
+
+## 配置方式
+
+EMQX 提供了 3 种使用认证的配置方式，分别为： Dashboard、配置文件和 HTTP API。
+
+### Dashboard
+
+Dashboard 底层调用了 HTTP API，提供了相对更加易用的可视化操作页面。在 Dashboard 中可以方便的查看认证器状态、调整认证器在认证链中的位置，如下图所示，我们已经成功添加了基于内置数据库和 JWT 两种认证机制。
+
+![Dashboard 认证器列表](./assets/authn-dashboard-2.png)
+
+### 配置文件
+
+EMQX 支持为 MQTT 客户端配置多个认证器以组成认证链 <!--连接到对应概念-->，如以下代码示例中的 `authentication` 字段所示，认证器在数组中的顺序便是在认证链中执行的顺序：
+
+```hocon
+# emqx.conf
+
+# Specific global authentication chain for all MQTT listeners 
+authentication = [
+  ...
+]
+
+listeners.tcp.default {
+  ...
+  enable_authn = true
+  # Specific authentication chain for the specified MQTT listener
+  authentication = [
+    ...
+  ]
+}
+
+gateway.stomp {
+  ...
+  enable_authn = true
+  # Specific global authenticator for all STOMP listeners
+  authentication = {
+    ...
+  }
+
+  listeners.tcp.default {
+    ...
+    enable_authn = true
+    # Specific authenticator for the specified STOMP listener
+    authentication = {
+      ...
+    }
+  }
+}
+```
+
+不同类型的认证器有着不同的配置项要求。关于各配置项的具体配置方法，可参考配置说明文档 <!--连接到对应文件-->，其中包含了每种认证器的所有配置字段的详细说明。
+
+### HTTP API
+
+<!-- TODO 链接到 API 文档具体 API 上-->
+
+与配置文件相比，HTTP API 支持运行时更新，能够自动将配置改动同步至整个集群，使用起来更加方便。
+
+EMQX 提供的认证 API 允许对认证链和认证器进行管理，例如为全局认证创建一个认证器，以及更新指定认证器的配置。
+
+- `/api/v5/authentication`: 管理 MQTT 全局认证
+
+- `/api/v5/listeners/{listener_id}/authentication`: 管理 MQTT 监听器认证
+
+- `/api/v5/gateway/{protocol}/authentication`: 管理网关的全局认证
+
+- `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 管理网关监听器认证
+
+**认证器 ID**
+
+如果想要对指定认证器进行操作，则需要在上面这些端点后面追加一个认证器 ID，例如 `/api/v5/authentication/{id}`。为了便于维护，这里的 ID 并不是 EMQX 自动生成然后由 API 返回的，而是遵循了一套预先定义的规范：
+
+```bash
+<mechanism>:<backend>
+```
+
+或者仅仅只有：
+
+```bash
+<mechanism>
+```
+
+例如：
+
+1. `password_based:built_in_database`
+2. `jwt`
+3. `scram:built_in_database`
+
+同样，对于监听器 ID，我们也有一套类似的约定，MQTT 监听器 ID 的格式为：
+
+```bash
+<transport_protocol>:<name>
+```
+
+网关监听器 ID 的格式为：
+
+```bash
+<protocol>:<transport_protocol>:<name>
+```
+
+我们可以把 MQTT 监听器 ID 看作是默认省略了最前面的协议名。
+
+注意，不管是认证器 ID，还是监听器 ID，当它们在 URL 中使用时，都需要遵循 URL 编码规范。最直接的，我们需要将 `:` 替换为 `%3A`，示例：
+
+```bash
+PUT /api/v5/authentication/password_based%3Abuilt_in_database
+```
+
+**数据操作 API**
+
+对于通过内置数据库存储认证数据的认证方式（[使用内置数据库进行密码认证](./mnesia.md)和[MQTT 5.0 增强认证](./scram.md)），EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作，具体可阅读 [通过 HTTP API 管理用户](./user_management.md)。
+
+详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
 
