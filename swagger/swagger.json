@@ -314,12 +314,10 @@
           },
           "qos": {
             "description": "The Message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -779,7 +777,6 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The MySQL default port 3306 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "database": {
@@ -1207,7 +1204,6 @@
         "required": [
           "database",
           "servers",
-          "mongo_type",
           "collection",
           "type"
         ],
@@ -1237,7 +1233,7 @@
           },
           "mongo_type": {
             "default": "sharded",
-            "description": "Sharded cluster.",
+            "description": "Sharded cluster. Must be set to 'sharded' when MongoDB server is running in 'sharded' mode.",
             "enum": [
               "sharded"
             ],
@@ -1245,11 +1241,7 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "w_mode": {
             "default": "unsafe",
@@ -1744,12 +1736,10 @@
                 "type": "string"
               },
               {
-                "enum": [
-                  0,
-                  1,
-                  2
-                ],
-                "type": "string"
+                "example": 0,
+                "maximum": 2,
+                "minimum": 0,
+                "type": "integer"
               }
             ]
           },
@@ -1864,10 +1854,6 @@
       },
       "bridge.metrics": {
         "properties": {
-          "batching": {
-            "description": "Count of messages that are currently accumulated in memory waiting for sending in one batch.",
-            "type": "integer"
-          },
           "dropped": {
             "description": "Count of messages dropped.",
             "type": "integer"
@@ -1878,10 +1864,6 @@
           },
           "dropped.queue_full": {
             "description": "Count of messages dropped due to the queue is full.",
-            "type": "integer"
-          },
-          "dropped.queue_not_enabled": {
-            "description": "Count of messages dropped due to the queue is not enabled.",
             "type": "integer"
           },
           "dropped.resource_not_found": {
@@ -1909,7 +1891,7 @@
             "type": "integer"
           },
           "inflight": {
-            "description": "Count of messages that were sent asynchronously but ACKs are not received.",
+            "description": "Count of messages that were sent asynchronously but ACKs are not yet received.",
             "type": "integer"
           },
           "success": {
@@ -1985,12 +1967,10 @@
           },
           "qos": {
             "description": "The Message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -2164,7 +2144,6 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The PostgreSQL default port 5432 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "database": {
@@ -2616,22 +2595,8 @@
         },
         "type": "object"
       },
-      "auto_subscribe.auto_subscribe": {
-        "properties": {
-          "topics": {
-            "default": "",
-            "description": "After the device logs in successfully, the subscription is automatically completed for the device through the pre-defined subscription representation. Supports the use of placeholders.",
-            "items": {
-              "$ref": "#/components/schemas/auto_subscribe.topic"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "emqx_authz_api_schema.redis_cluster": {
         "required": [
-          "redis_type",
           "servers",
           "cmd",
           "type"
@@ -2657,15 +2622,11 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "redis_type": {
             "default": "cluster",
-            "description": "Cluster mode",
+            "description": "Cluster mode. Must be set to 'cluster' when Redis server is running in clustered mode.",
             "enum": [
               "cluster"
             ],
@@ -2808,6 +2769,23 @@
               "disconnected",
               "connecting"
             ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "limiter.node_opts": {
+        "properties": {
+          "rate": {
+            "default": "infinity",
+            "description": "Rate for this bucket.",
+            "example": "10MB",
+            "type": "string"
+          },
+          "burst": {
+            "default": 0,
+            "description": "The burst, This value is based on rate.<br/><br/> This value + rate = the maximum limit that can be achieved when limiter burst.",
+            "example": "10MB",
             "type": "string"
           }
         },
@@ -3165,8 +3143,6 @@
       },
       "connector-mqtt.egress_remote": {
         "required": [
-          "retain",
-          "qos",
           "topic"
         ],
         "properties": {
@@ -3175,22 +3151,22 @@
             "type": "string"
           },
           "qos": {
+            "default": 1,
             "description": "<br/>The QoS of the MQTT message to be sent.<br/><br/>Template with variables is allowed.<br/>",
             "oneOf": [
               {
                 "type": "string"
               },
               {
-                "enum": [
-                  0,
-                  1,
-                  2
-                ],
-                "type": "string"
+                "example": 0,
+                "maximum": 2,
+                "minimum": 0,
+                "type": "integer"
               }
             ]
           },
           "retain": {
+            "default": false,
             "description": "<br/>The 'retain' flag of the MQTT message to be sent.<br/><br/>Template with variables is allowed.<br/>",
             "oneOf": [
               {
@@ -3338,8 +3314,8 @@
         "properties": {
           "worker_pool_size": {
             "default": 16,
-            "description": "Resource worker pool size.",
-            "minimum": 1,
+            "description": "The number of buffer workers. Only applicable for egress type bridges.<br/>For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.",
+            "minimum": 0,
             "type": "integer"
           },
           "health_check_interval": {
@@ -3381,12 +3357,13 @@
           },
           "enable_queue": {
             "default": false,
-            "description": "Queue mode enabled.",
+            "deprecated": "since(\"v5.0.14\")",
+            "description": "Enable disk buffer queue (only applicable for egress bridges).<br/>When Enabled, messages will be buffered on disk when the bridge connection is down.<br/>When disabled the messages are buffered in RAM only.",
             "type": "boolean"
           },
           "max_queue_bytes": {
             "default": "100MB",
-            "description": "Maximum queue storage.",
+            "description": "Maximum number of bytes to buffer for each buffer worker.",
             "example": "32MB",
             "type": "string"
           }
@@ -3616,16 +3593,13 @@
           "qos": {
             "default": 0,
             "description": "MQTT message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "clientid": {
-            "description": "Each message can be published as if it is done on behalf of an MQTT client whos ID can be specified in this field.",
-            "example": "api_example_client",
+            "deprecated": "since(\"v5.0.14\")",
             "type": "string"
           },
           "payload": {
@@ -3646,19 +3620,21 @@
         "type": "object"
       },
       "emqx_mgmt_api_clients.subscribe": {
+        "required": [
+          "topic"
+        ],
         "properties": {
           "topic": {
             "description": "Topic",
             "type": "string"
           },
           "qos": {
+            "default": 0,
             "description": "QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "nl": {
             "default": 0,
@@ -4651,12 +4627,10 @@
           },
           "qos": {
             "description": "QoS.",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "publish_at": {
             "description": "Message publish time, RFC 3339 format.",
@@ -4801,12 +4775,10 @@
           },
           "qos": {
             "description": "The Message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -4869,12 +4841,6 @@
         "type": "object"
       },
       "statsd.statsd": {
-        "required": [
-          "flush_time_interval",
-          "sample_time_interval",
-          "server",
-          "enable"
-        ],
         "properties": {
           "enable": {
             "default": false,
@@ -4884,7 +4850,6 @@
           "server": {
             "default": "127.0.0.1:8125",
             "description": "StatsD server address.",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "sample_time_interval": {
@@ -5758,8 +5723,7 @@
             "type": "object"
           },
           "body": {
-            "default": "${payload}",
-            "description": "<br/>The body of the HTTP request.<br/><br/>Template with variables is allowed.<br/>",
+            "description": "<br/>The body of the HTTP request.<br/><br/>If not provided, the body will be a JSON object of all the available fields.<br/><br/>There, 'all the available fields' means the context of a MQTT message when<br/>this webhook is triggered by receiving a MQTT message (the `local_topic` is set),<br/>or the context of the event when this webhook is triggered by a rule (i.e. this<br/>webhook is used as an action of a rule).<br/><br/>Template with variables is allowed.<br/>",
             "type": "string"
           },
           "max_retries": {
@@ -6805,12 +6769,10 @@
           },
           "qos": {
             "description": "QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "from_clientid": {
             "description": "From ClientID",
@@ -7379,12 +7341,10 @@
           },
           "qos": {
             "description": "The Message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -7439,12 +7399,10 @@
           },
           "qos": {
             "description": "The Message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -7500,47 +7458,47 @@
             "type": "integer"
           },
           "overflow_ttl": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "Period of time before workers that exceed the configured pool size (\"overflow\") to be terminated.",
             "example": "32s",
             "type": "string"
           },
           "overflow_check_period": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "Period for checking if there are more workers than configured (\"overflow\").",
             "example": "32s",
             "type": "string"
           },
           "local_threshold_ms": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "The size of the latency window for selecting among multiple suitable MongoDB instances.",
             "example": "32s",
             "type": "string"
           },
           "connect_timeout_ms": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "The duration to attempt a connection before timing out.",
             "example": "32s",
             "type": "string"
           },
           "socket_timeout_ms": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "The duration to attempt to send or to receive on a socket before the attempt times out.",
             "example": "32s",
             "type": "string"
           },
           "server_selection_timeout_ms": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "Specifies how long to block for server selection before throwing an exception.",
             "example": "32s",
             "type": "string"
           },
           "wait_queue_timeout_ms": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "The maximum duration that a worker can wait for a connection to become available.",
             "example": "32s",
             "type": "string"
           },
           "heartbeat_frequency_ms": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "Controls when the driver checks the state of the MongoDB deployment. Specify the interval between checks, counted from the end of the previous check until the beginning of the next one.",
             "example": "32s",
             "type": "string"
           },
           "min_heartbeat_frequency_ms": {
-            "description": "Time interval, such as timeout or TTL.",
+            "description": "Controls the minimum amount of time to wait between heartbeats.",
             "example": "32s",
             "type": "string"
           }
@@ -7606,7 +7564,6 @@
       },
       "authn-redis.cluster": {
         "required": [
-          "redis_type",
           "servers",
           "cmd",
           "backend",
@@ -7656,15 +7613,11 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "redis_type": {
             "default": "cluster",
-            "description": "Cluster mode",
+            "description": "Cluster mode. Must be set to 'cluster' when Redis server is running in clustered mode.",
             "enum": [
               "cluster"
             ],
@@ -8087,7 +8040,6 @@
           "database",
           "replica_set_name",
           "servers",
-          "mongo_type",
           "collection",
           "backend",
           "mechanism"
@@ -8157,7 +8109,7 @@
           },
           "mongo_type": {
             "default": "rs",
-            "description": "Replica set.",
+            "description": "Replica set. Must be set to 'rs' when MongoDB server is running in 'replica set' mode.",
             "enum": [
               "rs"
             ],
@@ -8165,11 +8117,7 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "w_mode": {
             "default": "unsafe",
@@ -8617,7 +8565,6 @@
         "required": [
           "database",
           "sentinel",
-          "redis_type",
           "servers",
           "cmd",
           "type"
@@ -8643,15 +8590,11 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "redis_type": {
             "default": "sentinel",
-            "description": "Sentinel mode",
+            "description": "Sentinel mode. Must be set to 'sentinel' when Redis server is running in sentinel mode.",
             "enum": [
               "sentinel"
             ],
@@ -8704,12 +8647,10 @@
           "qos": {
             "default": 0,
             "description": "QoS Level",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -8741,7 +8682,6 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The MySQL default port 3306 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "database": {
@@ -8923,7 +8863,6 @@
       "authn-redis.standalone": {
         "required": [
           "database",
-          "redis_type",
           "server",
           "cmd",
           "backend",
@@ -8973,12 +8912,11 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The Redis default port 6379 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "redis_type": {
             "default": "single",
-            "description": "Single mode",
+            "description": "Single mode. Must be set to 'single' when Redis server is running in single mode.",
             "enum": [
               "single"
             ],
@@ -9193,12 +9131,10 @@
                 "type": "string"
               },
               {
-                "enum": [
-                  0,
-                  1,
-                  2
-                ],
-                "type": "string"
+                "example": 0,
+                "maximum": 2,
+                "minimum": 0,
+                "type": "integer"
               }
             ]
           }
@@ -9314,7 +9250,6 @@
         "required": [
           "database",
           "sentinel",
-          "redis_type",
           "servers",
           "cmd",
           "backend",
@@ -9364,15 +9299,11 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "redis_type": {
             "default": "sentinel",
-            "description": "Sentinel mode",
+            "description": "Sentinel mode. Must be set to 'sentinel' when Redis server is running in sentinel mode.",
             "enum": [
               "sentinel"
             ],
@@ -9898,8 +9829,8 @@
         "properties": {
           "worker_pool_size": {
             "default": 16,
-            "description": "Resource worker pool size.",
-            "minimum": 1,
+            "description": "The number of buffer workers. Only applicable for egress type bridges.<br/>For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.",
+            "minimum": 0,
             "type": "integer"
           },
           "health_check_interval": {
@@ -9941,12 +9872,13 @@
           },
           "enable_queue": {
             "default": false,
-            "description": "Queue mode enabled.",
+            "deprecated": "since(\"v5.0.14\")",
+            "description": "Enable disk buffer queue (only applicable for egress bridges).<br/>When Enabled, messages will be buffered on disk when the bridge connection is down.<br/>When disabled the messages are buffered in RAM only.",
             "type": "boolean"
           },
           "max_queue_bytes": {
             "default": "100MB",
-            "description": "Maximum queue storage.",
+            "description": "Maximum number of bytes to buffer for each buffer worker.",
             "example": "32MB",
             "type": "string"
           }
@@ -10386,7 +10318,6 @@
           "database",
           "replica_set_name",
           "servers",
-          "mongo_type",
           "collection",
           "type"
         ],
@@ -10416,7 +10347,7 @@
           },
           "mongo_type": {
             "default": "rs",
-            "description": "Replica set.",
+            "description": "Replica set. Must be set to 'rs' when MongoDB server is running in 'replica set' mode.",
             "enum": [
               "rs"
             ],
@@ -10424,11 +10355,7 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "w_mode": {
             "default": "unsafe",
@@ -10704,7 +10631,7 @@
           },
           "shared_dispatch_ack_enabled": {
             "default": false,
-            "description": "Enable/disable shared dispatch acknowledgement for QoS 1 and QoS 2 messages.<br/>This should allow messages to be dispatched to a different subscriber in the group in case the picked (based on `shared_subscription_strategy`) subscriber is offline.<br/>",
+            "description": "Deprecated, will be removed in 5.1.<br/>Enable/disable shared dispatch acknowledgement for QoS 1 and QoS 2 messages.<br/>This should allow messages to be dispatched to a different subscriber in the group in case the picked (based on `shared_subscription_strategy`) subscriber is offline.<br/>",
             "type": "boolean"
           },
           "route_batch_clean": {
@@ -10797,7 +10724,6 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The PostgreSQL default port 5432 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "database": {
@@ -11418,7 +11344,6 @@
         "required": [
           "database",
           "server",
-          "mongo_type",
           "collection",
           "backend",
           "mechanism"
@@ -11488,7 +11413,7 @@
           },
           "mongo_type": {
             "default": "single",
-            "description": "Standalone instance.",
+            "description": "Standalone instance. Must be set to 'single' when MongoDB server is running in standalone mode.",
             "enum": [
               "single"
             ],
@@ -11496,7 +11421,6 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "w_mode": {
@@ -11753,7 +11677,6 @@
       "emqx_authz_api_schema.redis_single": {
         "required": [
           "database",
-          "redis_type",
           "server",
           "cmd",
           "type"
@@ -11779,12 +11702,11 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The Redis default port 6379 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "redis_type": {
             "default": "single",
-            "description": "Single mode",
+            "description": "Single mode. Must be set to 'single' when Redis server is running in single mode.",
             "enum": [
               "single"
             ],
@@ -12108,7 +12030,10 @@
           },
           "server": {
             "description": "The host and port of the remote MQTT broker",
-            "example": "example.host.domain:80",
+            "type": "string"
+          },
+          "clientid_prefix": {
+            "description": "Optional prefix to prepend to the clientid used by egress bridges.",
             "type": "string"
           },
           "reconnect_interval": {
@@ -12509,12 +12434,10 @@
           },
           "qos": {
             "description": "QoS.",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "publish_at": {
             "description": "Message publish time, RFC 3339 format.",
@@ -13111,7 +13034,10 @@
           },
           "server": {
             "description": "The host and port of the remote MQTT broker",
-            "example": "example.host.domain:80",
+            "type": "string"
+          },
+          "clientid_prefix": {
+            "description": "Optional prefix to prepend to the clientid used by egress bridges.",
             "type": "string"
           },
           "reconnect_interval": {
@@ -13227,12 +13153,10 @@
           },
           "qos": {
             "description": "QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "nl": {
             "description": "No Local",
@@ -13502,12 +13426,10 @@
           },
           "max_qos_allowed": {
             "description": "Maximum QoS allowed.",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "max_topic_alias": {
             "description": "Maximum topic alias, 0 means no topic alias supported.",
@@ -13972,7 +13894,10 @@
           },
           "server": {
             "description": "The host and port of the remote MQTT broker",
-            "example": "example.host.domain:80",
+            "type": "string"
+          },
+          "clientid_prefix": {
+            "description": "Optional prefix to prepend to the clientid used by egress bridges.",
             "type": "string"
           },
           "reconnect_interval": {
@@ -14215,12 +14140,10 @@
           },
           "qos": {
             "description": "The Message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -14563,12 +14486,81 @@
           },
           "qos": {
             "description": "The Message QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "limiter.client_fields": {
+        "properties": {
+          "bytes_in": {
+            "default": {},
+            "description": "The bytes_in limiter.<br/>This is used to limit the inbound bytes rate for this EMQX node.<br/>Once the limit is reached, the restricted client will be slow down even be hung for a while.",
+            "$ref": "#/components/schemas/limiter.client_opts"
+          },
+          "message_in": {
+            "default": {},
+            "description": "The message in limiter.<br/>This is used to limit the inbound message numbers for this EMQX node<br/>Once the limit is reached, the restricted client will be slow down even be hung for a while.",
+            "$ref": "#/components/schemas/limiter.client_opts"
+          },
+          "connection": {
+            "default": {},
+            "description": "The connection limiter.<br/>This is used to limit the connection rate for this EMQX node.<br/>Once the limit is reached, new connections will be refused",
+            "$ref": "#/components/schemas/limiter.client_opts"
+          },
+          "message_routing": {
+            "default": {},
+            "description": "The message routing limiter.<br/>This is used to limit the forwarding rate for this EMQX node.<br/>Once the limit is reached, new publish will be refused",
+            "$ref": "#/components/schemas/limiter.client_opts"
+          },
+          "internal": {
+            "default": {},
+            "description": "Limiter for EMQX internal app.",
+            "$ref": "#/components/schemas/limiter.client_opts"
+          }
+        },
+        "type": "object"
+      },
+      "limiter.limiter": {
+        "properties": {
+          "bytes_in": {
+            "default": {},
+            "description": "The bytes_in limiter.<br/>This is used to limit the inbound bytes rate for this EMQX node.<br/>Once the limit is reached, the restricted client will be slow down even be hung for a while.",
+            "$ref": "#/components/schemas/limiter.node_opts"
+          },
+          "message_in": {
+            "default": {},
+            "description": "The message in limiter.<br/>This is used to limit the inbound message numbers for this EMQX node<br/>Once the limit is reached, the restricted client will be slow down even be hung for a while.",
+            "$ref": "#/components/schemas/limiter.node_opts"
+          },
+          "connection": {
+            "default": {},
+            "description": "The connection limiter.<br/>This is used to limit the connection rate for this EMQX node.<br/>Once the limit is reached, new connections will be refused",
+            "$ref": "#/components/schemas/limiter.node_opts"
+          },
+          "message_routing": {
+            "default": {},
+            "description": "The message routing limiter.<br/>This is used to limit the forwarding rate for this EMQX node.<br/>Once the limit is reached, new publish will be refused",
+            "$ref": "#/components/schemas/limiter.node_opts"
+          },
+          "internal": {
+            "default": {},
+            "description": "Limiter for EMQX internal app.",
+            "$ref": "#/components/schemas/limiter.node_opts"
+          },
+          "client": {
+            "default": {
+              "bytes_in": {},
+              "connection": {},
+              "internal": {},
+              "message_in": {},
+              "message_routing": {}
+            },
+            "description": "The rate limit for each user of the bucket",
+            "$ref": "#/components/schemas/limiter.client_fields"
           }
         },
         "type": "object"
@@ -14869,7 +14861,6 @@
         "required": [
           "database",
           "server",
-          "mongo_type",
           "collection",
           "type"
         ],
@@ -14899,7 +14890,7 @@
           },
           "mongo_type": {
             "default": "single",
-            "description": "Standalone instance.",
+            "description": "Standalone instance. Must be set to 'single' when MongoDB server is running in standalone mode.",
             "enum": [
               "single"
             ],
@@ -14907,7 +14898,6 @@
           },
           "server": {
             "description": "<br/>The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "example": "example.host.domain:80",
             "type": "string"
           },
           "w_mode": {
@@ -14988,12 +14978,10 @@
                 "type": "string"
               },
               {
-                "enum": [
-                  0,
-                  1,
-                  2
-                ],
-                "type": "string"
+                "example": 0,
+                "maximum": 2,
+                "minimum": 0,
+                "type": "integer"
               }
             ]
           },
@@ -15249,8 +15237,7 @@
             "type": "object"
           },
           "body": {
-            "default": "${payload}",
-            "description": "<br/>The body of the HTTP request.<br/><br/>Template with variables is allowed.<br/>",
+            "description": "<br/>The body of the HTTP request.<br/><br/>If not provided, the body will be a JSON object of all the available fields.<br/><br/>There, 'all the available fields' means the context of a MQTT message when<br/>this webhook is triggered by receiving a MQTT message (the `local_topic` is set),<br/>or the context of the event when this webhook is triggered by a rule (i.e. this<br/>webhook is used as an action of a rule).<br/><br/>Template with variables is allowed.<br/>",
             "type": "string"
           },
           "max_retries": {
@@ -15620,8 +15607,7 @@
             "type": "object"
           },
           "body": {
-            "default": "${payload}",
-            "description": "<br/>The body of the HTTP request.<br/><br/>Template with variables is allowed.<br/>",
+            "description": "<br/>The body of the HTTP request.<br/><br/>If not provided, the body will be a JSON object of all the available fields.<br/><br/>There, 'all the available fields' means the context of a MQTT message when<br/>this webhook is triggered by receiving a MQTT message (the `local_topic` is set),<br/>or the context of the event when this webhook is triggered by a rule (i.e. this<br/>webhook is used as an action of a rule).<br/><br/>Template with variables is allowed.<br/>",
             "type": "string"
           },
           "max_retries": {
@@ -15870,12 +15856,10 @@
           "qos": {
             "default": 0,
             "description": "Default value 0. Quality of service.<br/>At most once (0)<br/>At least once (1)<br/>Exactly once (2)",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "rh": {
             "default": 0,
@@ -16615,12 +16599,10 @@
           },
           "qos": {
             "description": "QoS",
-            "enum": [
-              0,
-              1,
-              2
-            ],
-            "type": "string"
+            "example": 0,
+            "maximum": 2,
+            "minimum": 0,
+            "type": "integer"
           },
           "from_clientid": {
             "description": "From ClientID",
@@ -16773,7 +16755,6 @@
         "required": [
           "database",
           "servers",
-          "mongo_type",
           "collection",
           "backend",
           "mechanism"
@@ -16843,7 +16824,7 @@
           },
           "mongo_type": {
             "default": "sharded",
-            "description": "Sharded cluster.",
+            "description": "Sharded cluster. Must be set to 'sharded' when MongoDB server is running in 'sharded' mode.",
             "enum": [
               "sharded"
             ],
@@ -16851,11 +16832,7 @@
           },
           "servers": {
             "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
-            "items": {
-              "example": "any",
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "w_mode": {
             "default": "unsafe",
@@ -17011,7 +16988,8 @@
             "type": "string"
           },
           "bootstrap_users_file": {
-            "description": "Initialize users file.",
+            "default": "",
+            "description": "Deprecated, use api_key.bootstrap_file",
             "type": "string"
           }
         },
@@ -17870,6 +17848,137 @@
         ],
         "tags": [
           "MQTT"
+        ]
+      }
+    },
+    "/configs/limiter": {
+      "get": {
+        "description": "Get the sub-configurations under *limiter*",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/limiter.limiter"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "config not found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Configs"
+        ]
+      },
+      "put": {
+        "description": "Update the sub-configurations under *limiter*",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/limiter.limiter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/limiter.limiter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UPDATE_FAILED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Error code to troubleshoot problems.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UPDATE_FAILED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Error code to troubleshoot problems.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Configs"
         ]
       }
     },
@@ -18854,146 +18963,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "jwt": {
-                    "summary": "JWT authentication",
-                    "value": {
-                      "algorithm": "hmac-based",
-                      "mechanism": "jwt",
-                      "secret": "mysecret",
-                      "secret_base64_encoded": false,
-                      "use_jwks": false,
-                      "verify_claims": {
-                        "username": "${username}"
-                      }
-                    }
-                  },
-                  "password_based:built_in_database": {
-                    "summary": "Built-in password_based authentication",
-                    "value": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256",
-                        "salt_position": "suffix"
-                      },
-                      "user_id_type": "username"
-                    }
-                  },
-                  "password_based:http": {
-                    "summary": "password_based authentication through external HTTP API",
-                    "value": {
-                      "backend": "http",
-                      "body": {
-                        "password": "${password}",
-                        "username": "${username}"
-                      },
-                      "connect_timeout": 5000,
-                      "enable_pipelining": 100,
-                      "headers": {
-                        "content-type": "application/json"
-                      },
-                      "mechanism": "password_based",
-                      "method": "post",
-                      "pool_size": 8,
-                      "request_timeout": 5000,
-                      "ssl": {
-                        "enable": false
-                      },
-                      "url": "http://127.0.0.1:18083"
-                    }
-                  },
-                  "password_based:mongodb": {
-                    "summary": "password_based authentication with MongoDB backend",
-                    "value": {
-                      "backend": "mongodb",
-                      "collection": "users",
-                      "database": "example",
-                      "filter": {
-                        "username": "${username}"
-                      },
-                      "is_superuser_field": "is_superuser",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256",
-                        "salt_position": "suffix"
-                      },
-                      "password_hash_field": "password_hash",
-                      "salt_field": "salt",
-                      "server": "127.0.0.1:27017"
-                    }
-                  },
-                  "password_based:redis": {
-                    "summary": "password_based authentication with Redis backend",
-                    "value": {
-                      "backend": "redis",
-                      "cmd": "HMGET ${username} password_hash salt",
-                      "database": 0,
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256",
-                        "salt_position": "suffix"
-                      },
-                      "redis_type": "single",
-                      "server": "127.0.0.1:6379"
-                    }
-                  }
-                },
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/authn-scram-builtin_db.authentication"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-jwt.jwks"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-jwt.public-key"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-jwt.hmac-based"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-http.post"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-http.get"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-redis.sentinel"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-redis.cluster"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-redis.standalone"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mongodb.sharded-cluster"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mongodb.replica-set"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mongodb.standalone"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-postgresql.authentication"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mysql.authentication"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-builtin_db.authentication"
-                    }
-                  ]
-                }
-              }
-            }
+          "204": {
+            "description": "Authenticator updated"
           },
           "400": {
             "description": "",
@@ -19499,11 +19470,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "",
+            "description": "After the device logs in successfully, the subscription is automatically completed for the device through the pre-defined subscription representation. Supports the use of placeholders.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/auto_subscribe.auto_subscribe"
+                  "items": {
+                    "$ref": "#/components/schemas/auto_subscribe.topic"
+                  },
+                  "type": "array"
                 }
               }
             }
@@ -19528,18 +19502,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/auto_subscribe.auto_subscribe"
+                "items": {
+                  "$ref": "#/components/schemas/auto_subscribe.topic"
+                },
+                "type": "array"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "",
+            "description": "After the device logs in successfully, the subscription is automatically completed for the device through the pre-defined subscription representation. Supports the use of placeholders.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/auto_subscribe.auto_subscribe"
+                  "items": {
+                    "$ref": "#/components/schemas/auto_subscribe.topic"
+                  },
+                  "type": "array"
                 }
               }
             }
@@ -21334,6 +21314,137 @@
         ]
       }
     },
+    "/configs/sys_topics": {
+      "get": {
+        "description": "Get the sub-configurations under *sys_topics*",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "System topics configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/broker.sys_topics"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "config not found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Configs"
+        ]
+      },
+      "put": {
+        "description": "Update the sub-configurations under *sys_topics*",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/broker.sys_topics"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "System topics configuration.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/broker.sys_topics"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UPDATE_FAILED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Error code to troubleshoot problems.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UPDATE_FAILED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Error code to troubleshoot problems.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Configs"
+        ]
+      }
+    },
     "/nodes/{node}/bridges/{id}/operation/{operation}": {
       "post": {
         "description": "Stop/Restart bridges on a specific node.<br/> NOTE: It's not allowed to disable/enable bridges on a single node.",
@@ -22158,101 +22269,6 @@
         ]
       }
     },
-    "/mqtt/sys_topics": {
-      "get": {
-        "description": "Get System Topics config",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "example": {
-                  "sys_event_messages": {
-                    "client_connected": true,
-                    "client_disconnected": true,
-                    "client_subscribed": false,
-                    "client_unsubscribed": false
-                  },
-                  "sys_heartbeat_interval": "30s",
-                  "sys_msg_interval": "1m"
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/broker.sys_topics"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "System Topics"
-        ]
-      },
-      "put": {
-        "description": "Update System Topics config",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "example": {
-                "sys_event_messages": {
-                  "client_connected": true,
-                  "client_disconnected": true,
-                  "client_subscribed": false,
-                  "client_unsubscribed": false
-                },
-                "sys_heartbeat_interval": "30s",
-                "sys_msg_interval": "1m"
-              },
-              "schema": {
-                "$ref": "#/components/schemas/broker.sys_topics"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "example": {
-                  "sys_event_messages": {
-                    "client_connected": true,
-                    "client_disconnected": true,
-                    "client_subscribed": false,
-                    "client_unsubscribed": false
-                  },
-                  "sys_heartbeat_interval": "30s",
-                  "sys_msg_interval": "1m"
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/broker.sys_topics"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "System Topics"
-        ]
-      }
-    },
     "/gateways/{name}/clients/{clientid}": {
       "delete": {
         "description": "Kick out the gateway client",
@@ -22370,83 +22386,83 @@
                   "general_client": {
                     "summary": "General Client Info",
                     "value": {
-                      "is_bridge": false,
-                      "recv_cnt": 1,
-                      "subscriptions_max": "infinity",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_pkt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "mailbox_len": 0,
-                      "mqueue_max": "infinity",
-                      "inflight_max": "infinity",
-                      "connected": true,
-                      "clean_start": true,
-                      "expiry_interval": 0,
-                      "mqueue_len": 0,
-                      "disconnected_at": null,
-                      "awaiting_rel_cnt": 0,
-                      "mqueue_dropped": 0,
-                      "reductions": 72022,
-                      "recv_msg": 0,
-                      "subscriptions_cnt": 0,
-                      "send_msg": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "proto_ver": "1.0",
                       "ip_address": "127.0.0.1",
+                      "recv_cnt": 1,
+                      "proto_ver": "1.0",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "subscriptions_max": "infinity",
+                      "is_bridge": false,
+                      "recv_msg": 0,
+                      "connected": true,
+                      "send_pkt": 1,
+                      "mailbox_len": 0,
+                      "proto_name": "STOMP",
+                      "send_msg": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "subscriptions_cnt": 0,
+                      "expiry_interval": 0,
+                      "reductions": 72022,
+                      "mqueue_max": "infinity",
+                      "clean_start": true,
+                      "mqueue_len": 0,
+                      "mqueue_dropped": 0,
+                      "disconnected_at": null,
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "proto_name": "STOMP",
-                      "keepalive": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "node": "emqx@127.0.0.1",
-                      "username": "guest",
-                      "heap_size": 4185,
-                      "port": 50675,
-                      "inflight_cnt": 0,
                       "recv_pkt": 1,
-                      "send_cnt": 1
+                      "keepalive": 0,
+                      "inflight_cnt": 0,
+                      "username": "guest",
+                      "node": "emqx@127.0.0.1",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "heap_size": 4185,
+                      "awaiting_rel_max": "infinity",
+                      "port": 50675,
+                      "awaiting_rel_cnt": 0,
+                      "send_cnt": 1,
+                      "inflight_max": "infinity"
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M Client Info",
                     "value": {
-                      "is_bridge": false,
-                      "recv_cnt": 1,
-                      "subscriptions_max": "infinity",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_pkt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "mailbox_len": 0,
-                      "mqueue_max": "infinity",
-                      "inflight_max": "infinity",
-                      "connected": true,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "clean_start": true,
-                      "expiry_interval": 0,
-                      "mqueue_len": 0,
-                      "disconnected_at": null,
-                      "awaiting_rel_cnt": 0,
-                      "lifetime": 86400,
-                      "mqueue_dropped": 0,
-                      "reductions": 72022,
-                      "recv_msg": 0,
-                      "subscriptions_cnt": 0,
-                      "send_msg": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "proto_ver": "1.0",
                       "ip_address": "127.0.0.1",
+                      "recv_cnt": 1,
+                      "proto_ver": "1.0",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "subscriptions_max": "infinity",
+                      "is_bridge": false,
+                      "recv_msg": 0,
+                      "connected": true,
+                      "send_pkt": 1,
+                      "mailbox_len": 0,
+                      "proto_name": "LwM2M",
+                      "send_msg": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "subscriptions_cnt": 0,
+                      "expiry_interval": 0,
+                      "reductions": 72022,
+                      "lifetime": 86400,
+                      "mqueue_max": "infinity",
+                      "clean_start": true,
+                      "mqueue_len": 0,
+                      "mqueue_dropped": 0,
+                      "disconnected_at": null,
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "proto_name": "LwM2M",
-                      "keepalive": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "node": "emqx@127.0.0.1",
-                      "username": "guest",
-                      "heap_size": 4185,
-                      "port": 50675,
-                      "inflight_cnt": 0,
                       "recv_pkt": 1,
-                      "send_cnt": 1
+                      "keepalive": 0,
+                      "inflight_cnt": 0,
+                      "username": "guest",
+                      "node": "emqx@127.0.0.1",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "heap_size": 4185,
+                      "awaiting_rel_max": "infinity",
+                      "port": 50675,
+                      "awaiting_rel_cnt": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "send_cnt": 1,
+                      "inflight_max": "infinity"
                     }
                   }
                 },
@@ -25057,146 +25073,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "jwt": {
-                    "summary": "JWT authentication",
-                    "value": {
-                      "algorithm": "hmac-based",
-                      "mechanism": "jwt",
-                      "secret": "mysecret",
-                      "secret_base64_encoded": false,
-                      "use_jwks": false,
-                      "verify_claims": {
-                        "username": "${username}"
-                      }
-                    }
-                  },
-                  "password_based:built_in_database": {
-                    "summary": "Built-in password_based authentication",
-                    "value": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256",
-                        "salt_position": "suffix"
-                      },
-                      "user_id_type": "username"
-                    }
-                  },
-                  "password_based:http": {
-                    "summary": "password_based authentication through external HTTP API",
-                    "value": {
-                      "backend": "http",
-                      "body": {
-                        "password": "${password}",
-                        "username": "${username}"
-                      },
-                      "connect_timeout": 5000,
-                      "enable_pipelining": 100,
-                      "headers": {
-                        "content-type": "application/json"
-                      },
-                      "mechanism": "password_based",
-                      "method": "post",
-                      "pool_size": 8,
-                      "request_timeout": 5000,
-                      "ssl": {
-                        "enable": false
-                      },
-                      "url": "http://127.0.0.1:18083"
-                    }
-                  },
-                  "password_based:mongodb": {
-                    "summary": "password_based authentication with MongoDB backend",
-                    "value": {
-                      "backend": "mongodb",
-                      "collection": "users",
-                      "database": "example",
-                      "filter": {
-                        "username": "${username}"
-                      },
-                      "is_superuser_field": "is_superuser",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256",
-                        "salt_position": "suffix"
-                      },
-                      "password_hash_field": "password_hash",
-                      "salt_field": "salt",
-                      "server": "127.0.0.1:27017"
-                    }
-                  },
-                  "password_based:redis": {
-                    "summary": "password_based authentication with Redis backend",
-                    "value": {
-                      "backend": "redis",
-                      "cmd": "HMGET ${username} password_hash salt",
-                      "database": 0,
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256",
-                        "salt_position": "suffix"
-                      },
-                      "redis_type": "single",
-                      "server": "127.0.0.1:6379"
-                    }
-                  }
-                },
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/authn-scram-builtin_db.authentication"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-jwt.jwks"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-jwt.public-key"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-jwt.hmac-based"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-http.post"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-http.get"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-redis.sentinel"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-redis.cluster"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-redis.standalone"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mongodb.sharded-cluster"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mongodb.replica-set"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mongodb.standalone"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-postgresql.authentication"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-mysql.authentication"
-                    },
-                    {
-                      "$ref": "#/components/schemas/authn-builtin_db.authentication"
-                    }
-                  ]
-                }
-              }
-            }
+          "204": {
+            "description": "Authenticator updated"
           },
           "400": {
             "description": "",
@@ -28638,6 +28516,28 @@
               }
             }
           },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bridge not found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
           "503": {
             "description": "",
             "content": {
@@ -28725,11 +28625,9 @@
                       "keepalive": "300s",
                       "max_inflight": 100,
                       "metrics": {
-                        "batching": 0,
                         "dropped": 0,
                         "dropped.other": 0,
                         "dropped.queue_full": 0,
-                        "dropped.queue_not_enabled": 0,
                         "dropped.resource_not_found": 0,
                         "dropped.resource_stopped": 0,
                         "failed": 0,
@@ -28748,11 +28646,9 @@
                       "node_metrics": [
                         {
                           "metrics": {
-                            "batching": 0,
                             "dropped": 0,
                             "dropped.other": 0,
                             "dropped.queue_full": 0,
-                            "dropped.queue_not_enabled": 0,
                             "dropped.resource_not_found": 0,
                             "dropped.resource_stopped": 0,
                             "failed": 0,
@@ -28773,7 +28669,6 @@
                       "proto_ver": "v4",
                       "resource_opts": {
                         "auto_restart_interval": "60s",
-                        "enable_queue": false,
                         "health_check_interval": "15s",
                         "max_queue_bytes": 104857600,
                         "query_mode": "sync"
@@ -28798,11 +28693,9 @@
                       "max_retries": 3,
                       "method": "post",
                       "metrics": {
-                        "batching": 0,
                         "dropped": 0,
                         "dropped.other": 0,
                         "dropped.queue_full": 0,
-                        "dropped.queue_not_enabled": 0,
                         "dropped.resource_not_found": 0,
                         "dropped.resource_stopped": 0,
                         "failed": 0,
@@ -28820,11 +28713,9 @@
                       "node_metrics": [
                         {
                           "metrics": {
-                            "batching": 0,
                             "dropped": 0,
                             "dropped.other": 0,
                             "dropped.queue_full": 0,
-                            "dropped.queue_not_enabled": 0,
                             "dropped.resource_not_found": 0,
                             "dropped.resource_stopped": 0,
                             "failed": 0,
@@ -28847,7 +28738,6 @@
                       "resource_opts": {
                         "async_inflight_window": 100,
                         "auto_restart_interval": 15000,
-                        "enable_queue": false,
                         "health_check_interval": 15000,
                         "max_queue_bytes": 104857600,
                         "query_mode": "async",
@@ -28963,7 +28853,6 @@
                     "proto_ver": "v4",
                     "resource_opts": {
                       "auto_restart_interval": "60s",
-                      "enable_queue": false,
                       "health_check_interval": "15s",
                       "max_queue_bytes": 104857600,
                       "query_mode": "sync"
@@ -28992,7 +28881,6 @@
                     "resource_opts": {
                       "async_inflight_window": 100,
                       "auto_restart_interval": 15000,
-                      "enable_queue": false,
                       "health_check_interval": 15000,
                       "max_queue_bytes": 104857600,
                       "query_mode": "async",
@@ -29055,11 +28943,9 @@
                       "keepalive": "300s",
                       "max_inflight": 100,
                       "metrics": {
-                        "batching": 0,
                         "dropped": 0,
                         "dropped.other": 0,
                         "dropped.queue_full": 0,
-                        "dropped.queue_not_enabled": 0,
                         "dropped.resource_not_found": 0,
                         "dropped.resource_stopped": 0,
                         "failed": 0,
@@ -29078,11 +28964,9 @@
                       "node_metrics": [
                         {
                           "metrics": {
-                            "batching": 0,
                             "dropped": 0,
                             "dropped.other": 0,
                             "dropped.queue_full": 0,
-                            "dropped.queue_not_enabled": 0,
                             "dropped.resource_not_found": 0,
                             "dropped.resource_stopped": 0,
                             "failed": 0,
@@ -29103,7 +28987,6 @@
                       "proto_ver": "v4",
                       "resource_opts": {
                         "auto_restart_interval": "60s",
-                        "enable_queue": false,
                         "health_check_interval": "15s",
                         "max_queue_bytes": 104857600,
                         "query_mode": "sync"
@@ -29128,11 +29011,9 @@
                       "max_retries": 3,
                       "method": "post",
                       "metrics": {
-                        "batching": 0,
                         "dropped": 0,
                         "dropped.other": 0,
                         "dropped.queue_full": 0,
-                        "dropped.queue_not_enabled": 0,
                         "dropped.resource_not_found": 0,
                         "dropped.resource_stopped": 0,
                         "failed": 0,
@@ -29150,11 +29031,9 @@
                       "node_metrics": [
                         {
                           "metrics": {
-                            "batching": 0,
                             "dropped": 0,
                             "dropped.other": 0,
                             "dropped.queue_full": 0,
-                            "dropped.queue_not_enabled": 0,
                             "dropped.resource_not_found": 0,
                             "dropped.resource_stopped": 0,
                             "failed": 0,
@@ -29177,7 +29056,6 @@
                       "resource_opts": {
                         "async_inflight_window": 100,
                         "auto_restart_interval": 15000,
-                        "enable_queue": false,
                         "health_check_interval": 15000,
                         "max_queue_bytes": 104857600,
                         "query_mode": "async",
@@ -30720,12 +30598,10 @@
             "name": "qos",
             "required": false,
             "schema": {
-              "enum": [
-                0,
-                1,
-                2
-              ],
-              "type": "string"
+              "example": 0,
+              "maximum": 2,
+              "minimum": 0,
+              "type": "integer"
             }
           },
           {
@@ -35975,11 +35851,13 @@
                 "cluster",
                 "log",
                 "broker",
+                "sys_topics",
                 "sysmon",
                 "alarm",
                 "persistent_session_store",
                 "trace",
-                "dashboard"
+                "dashboard",
+                "limiter"
               ],
               "type": "string"
             }
@@ -37298,6 +37176,10 @@
                       "description": "Message broker options.",
                       "$ref": "#/components/schemas/broker.broker"
                     },
+                    "sys_topics": {
+                      "description": "System topics configuration.",
+                      "$ref": "#/components/schemas/broker.sys_topics"
+                    },
                     "sysmon": {
                       "$ref": "#/components/schemas/broker.sysmon"
                     },
@@ -37313,6 +37195,10 @@
                     "dashboard": {
                       "description": "Configuration for EMQX dashboard.",
                       "$ref": "#/components/schemas/dashboard.dashboard"
+                    },
+                    "limiter": {
+                      "description": "Settings for the rate limiter.",
+                      "$ref": "#/components/schemas/limiter.limiter"
                     }
                   },
                   "type": "object"
@@ -37446,21 +37332,6 @@
             "required": false,
             "schema": {
               "type": "boolean"
-            }
-          },
-          {
-            "description": "Client protocol name, the possible values are MQTT,CoAP,LwM2M,MQTT-SN",
-            "in": "query",
-            "name": "proto_name",
-            "required": false,
-            "schema": {
-              "enum": [
-                "MQTT",
-                "CoAP",
-                "LwM2M",
-                "MQTT-SN"
-              ],
-              "type": "string"
             }
           },
           {
@@ -38212,7 +38083,7 @@
       }
     },
     "/users/{username}/change_pwd": {
-      "put": {
+      "post": {
         "description": "Change dashboard user password",
         "parameters": [
           {
@@ -38569,41 +38440,41 @@
                     "summary": "General Client List",
                     "value": [
                       {
-                        "is_bridge": false,
-                        "recv_cnt": 1,
-                        "subscriptions_max": "infinity",
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
-                        "send_pkt": 1,
-                        "awaiting_rel_max": "infinity",
-                        "mailbox_len": 0,
-                        "mqueue_max": "infinity",
-                        "inflight_max": "infinity",
-                        "connected": true,
-                        "clean_start": true,
-                        "expiry_interval": 0,
-                        "mqueue_len": 0,
-                        "disconnected_at": null,
-                        "awaiting_rel_cnt": 0,
-                        "mqueue_dropped": 0,
-                        "reductions": 72022,
-                        "recv_msg": 0,
-                        "subscriptions_cnt": 0,
-                        "send_msg": 0,
-                        "created_at": "2021-12-07T10:44:02.721+08:00",
-                        "proto_ver": "1.0",
                         "ip_address": "127.0.0.1",
+                        "recv_cnt": 1,
+                        "proto_ver": "1.0",
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "subscriptions_max": "infinity",
+                        "is_bridge": false,
+                        "recv_msg": 0,
+                        "connected": true,
+                        "send_pkt": 1,
+                        "mailbox_len": 0,
+                        "proto_name": "STOMP",
+                        "send_msg": 0,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                        "subscriptions_cnt": 0,
+                        "expiry_interval": 0,
+                        "reductions": 72022,
+                        "mqueue_max": "infinity",
+                        "clean_start": true,
+                        "mqueue_len": 0,
+                        "mqueue_dropped": 0,
+                        "disconnected_at": null,
                         "recv_oct": 56,
                         "send_oct": 61,
-                        "proto_name": "STOMP",
-                        "keepalive": 0,
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                        "node": "emqx@127.0.0.1",
-                        "username": "guest",
-                        "heap_size": 4185,
-                        "port": 50675,
-                        "inflight_cnt": 0,
                         "recv_pkt": 1,
-                        "send_cnt": 1
+                        "keepalive": 0,
+                        "inflight_cnt": 0,
+                        "username": "guest",
+                        "node": "emqx@127.0.0.1",
+                        "created_at": "2021-12-07T10:44:02.721+08:00",
+                        "heap_size": 4185,
+                        "awaiting_rel_max": "infinity",
+                        "port": 50675,
+                        "awaiting_rel_cnt": 0,
+                        "send_cnt": 1,
+                        "inflight_max": "infinity"
                       }
                     ]
                   },
@@ -38611,43 +38482,43 @@
                     "summary": "LwM2M Client List",
                     "value": [
                       {
-                        "is_bridge": false,
-                        "recv_cnt": 1,
-                        "subscriptions_max": "infinity",
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
-                        "send_pkt": 1,
-                        "awaiting_rel_max": "infinity",
-                        "mailbox_len": 0,
-                        "mqueue_max": "infinity",
-                        "inflight_max": "infinity",
-                        "connected": true,
-                        "endpoint_name": "urn:imei:154928475237123",
-                        "clean_start": true,
-                        "expiry_interval": 0,
-                        "mqueue_len": 0,
-                        "disconnected_at": null,
-                        "awaiting_rel_cnt": 0,
-                        "lifetime": 86400,
-                        "mqueue_dropped": 0,
-                        "reductions": 72022,
-                        "recv_msg": 0,
-                        "subscriptions_cnt": 0,
-                        "send_msg": 0,
-                        "created_at": "2021-12-07T10:44:02.721+08:00",
-                        "proto_ver": "1.0",
                         "ip_address": "127.0.0.1",
+                        "recv_cnt": 1,
+                        "proto_ver": "1.0",
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "subscriptions_max": "infinity",
+                        "is_bridge": false,
+                        "recv_msg": 0,
+                        "connected": true,
+                        "send_pkt": 1,
+                        "mailbox_len": 0,
+                        "proto_name": "LwM2M",
+                        "send_msg": 0,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                        "subscriptions_cnt": 0,
+                        "expiry_interval": 0,
+                        "reductions": 72022,
+                        "lifetime": 86400,
+                        "mqueue_max": "infinity",
+                        "clean_start": true,
+                        "mqueue_len": 0,
+                        "mqueue_dropped": 0,
+                        "disconnected_at": null,
                         "recv_oct": 56,
                         "send_oct": 61,
-                        "proto_name": "LwM2M",
-                        "keepalive": 0,
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                        "node": "emqx@127.0.0.1",
-                        "username": "guest",
-                        "heap_size": 4185,
-                        "port": 50675,
-                        "inflight_cnt": 0,
                         "recv_pkt": 1,
-                        "send_cnt": 1
+                        "keepalive": 0,
+                        "inflight_cnt": 0,
+                        "username": "guest",
+                        "node": "emqx@127.0.0.1",
+                        "created_at": "2021-12-07T10:44:02.721+08:00",
+                        "heap_size": 4185,
+                        "awaiting_rel_max": "infinity",
+                        "port": 50675,
+                        "awaiting_rel_cnt": 0,
+                        "endpoint_name": "urn:imei:154928475237123",
+                        "send_cnt": 1,
+                        "inflight_max": "infinity"
                       }
                     ]
                   }
@@ -40164,11 +40035,9 @@
                     "keepalive": "300s",
                     "max_inflight": 100,
                     "metrics": {
-                      "batching": 0,
                       "dropped": 0,
                       "dropped.other": 0,
                       "dropped.queue_full": 0,
-                      "dropped.queue_not_enabled": 0,
                       "dropped.resource_not_found": 0,
                       "dropped.resource_stopped": 0,
                       "failed": 0,
@@ -40187,11 +40056,9 @@
                     "node_metrics": [
                       {
                         "metrics": {
-                          "batching": 0,
                           "dropped": 0,
                           "dropped.other": 0,
                           "dropped.queue_full": 0,
-                          "dropped.queue_not_enabled": 0,
                           "dropped.resource_not_found": 0,
                           "dropped.resource_stopped": 0,
                           "failed": 0,
@@ -40212,7 +40079,6 @@
                     "proto_ver": "v4",
                     "resource_opts": {
                       "auto_restart_interval": "60s",
-                      "enable_queue": false,
                       "health_check_interval": "15s",
                       "max_queue_bytes": 104857600,
                       "query_mode": "sync"
@@ -40234,11 +40100,9 @@
                     "max_retries": 3,
                     "method": "post",
                     "metrics": {
-                      "batching": 0,
                       "dropped": 0,
                       "dropped.other": 0,
                       "dropped.queue_full": 0,
-                      "dropped.queue_not_enabled": 0,
                       "dropped.resource_not_found": 0,
                       "dropped.resource_stopped": 0,
                       "failed": 0,
@@ -40256,11 +40120,9 @@
                     "node_metrics": [
                       {
                         "metrics": {
-                          "batching": 0,
                           "dropped": 0,
                           "dropped.other": 0,
                           "dropped.queue_full": 0,
-                          "dropped.queue_not_enabled": 0,
                           "dropped.resource_not_found": 0,
                           "dropped.resource_stopped": 0,
                           "failed": 0,
@@ -40283,7 +40145,6 @@
                     "resource_opts": {
                       "async_inflight_window": 100,
                       "auto_restart_interval": 15000,
-                      "enable_queue": false,
                       "health_check_interval": 15000,
                       "max_queue_bytes": 104857600,
                       "query_mode": "async",
@@ -40369,7 +40230,6 @@
                     "proto_ver": "v4",
                     "resource_opts": {
                       "auto_restart_interval": "60s",
-                      "enable_queue": false,
                       "health_check_interval": "15s",
                       "max_queue_bytes": 104857600,
                       "query_mode": "sync"
@@ -40400,7 +40260,6 @@
                     "resource_opts": {
                       "async_inflight_window": 100,
                       "auto_restart_interval": 15000,
-                      "enable_queue": false,
                       "health_check_interval": 15000,
                       "max_queue_bytes": 104857600,
                       "query_mode": "async",
@@ -40464,11 +40323,9 @@
                       "keepalive": "300s",
                       "max_inflight": 100,
                       "metrics": {
-                        "batching": 0,
                         "dropped": 0,
                         "dropped.other": 0,
                         "dropped.queue_full": 0,
-                        "dropped.queue_not_enabled": 0,
                         "dropped.resource_not_found": 0,
                         "dropped.resource_stopped": 0,
                         "failed": 0,
@@ -40487,11 +40344,9 @@
                       "node_metrics": [
                         {
                           "metrics": {
-                            "batching": 0,
                             "dropped": 0,
                             "dropped.other": 0,
                             "dropped.queue_full": 0,
-                            "dropped.queue_not_enabled": 0,
                             "dropped.resource_not_found": 0,
                             "dropped.resource_stopped": 0,
                             "failed": 0,
@@ -40512,7 +40367,6 @@
                       "proto_ver": "v4",
                       "resource_opts": {
                         "auto_restart_interval": "60s",
-                        "enable_queue": false,
                         "health_check_interval": "15s",
                         "max_queue_bytes": 104857600,
                         "query_mode": "sync"
@@ -40537,11 +40391,9 @@
                       "max_retries": 3,
                       "method": "post",
                       "metrics": {
-                        "batching": 0,
                         "dropped": 0,
                         "dropped.other": 0,
                         "dropped.queue_full": 0,
-                        "dropped.queue_not_enabled": 0,
                         "dropped.resource_not_found": 0,
                         "dropped.resource_stopped": 0,
                         "failed": 0,
@@ -40559,11 +40411,9 @@
                       "node_metrics": [
                         {
                           "metrics": {
-                            "batching": 0,
                             "dropped": 0,
                             "dropped.other": 0,
                             "dropped.queue_full": 0,
-                            "dropped.queue_not_enabled": 0,
                             "dropped.resource_not_found": 0,
                             "dropped.resource_stopped": 0,
                             "failed": 0,
@@ -40586,7 +40436,6 @@
                       "resource_opts": {
                         "async_inflight_window": 100,
                         "auto_restart_interval": 15000,
-                        "enable_queue": false,
                         "health_check_interval": 15000,
                         "max_queue_bytes": 104857600,
                         "query_mode": "async",
