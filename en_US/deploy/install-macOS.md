@@ -14,7 +14,7 @@ wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-macos11-amd64.zip
 unzip emqx-5.0.13-macos11-amd64.zip
 ```
 
-3. To start EMQX, run:
+2. To start EMQX, run:
 
 ```bash
 cd emqx && ./bin/emqx start

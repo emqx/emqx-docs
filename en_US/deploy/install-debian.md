@@ -58,7 +58,7 @@ sudo apt install ./emqx-5.0.13-debian11-amd64.deb
 wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-debian11-amd64.tar.gz
 ```
 
-1. To unzip the package, run:
+2. To unzip the package, run:
 
 ```bash
 mkdir -p emqx && tar -zxvf emqx-5.0.13-debian11-amd64.tar.gz -C emqx
