@@ -18,6 +18,8 @@ MongoDB authorizer 可以将 ACL 规则存储到 MongoDB 中。
 > db.mqtt_acl.insertOne(
   {
       "username": "user123",
+      "clientid": "client123",
+      "ipaddress": "127.0.0.1",
       "permission": "allow",
       "action": "publish",
       "topics": ["data/user123/#"]
@@ -33,7 +35,7 @@ MongoDB authorizer 可以将 ACL 规则存储到 MongoDB 中。
 
 ```
 collection = "mqtt_acl"
-filter { username = "${username}" }
+filter { username = "${username}", ipaddress = "${peerhost}"}
 
 ```
 
