@@ -15,11 +15,12 @@ MySQL Authorizer 支持几乎任何存储模式。由用户决定如何存储 �
 ```sql
 CREATE TABLE `mqtt_acl` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) NOT NULL,
-  `permission` varchar(5) NOT NULL,
-  `action` varchar(9) NOT NULL,
-  `topic` varchar(100) NOT NULL,
-  INDEX username_idx(username),
+  `ipaddress` VARCHAR(60) NOT NULL DEFAULT '',
+  `username` VARCHAR(255) NOT NULL DEFAULT '',
+  `clientid` VARCHAR(255) NOT NULL DEFAULT '',
+  `action` ENUM('publish', 'subscribe', 'all') NOT NULL,
+  `permission` ENUM('allow', 'deny') NOT NULL,
+  `topic` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
@@ -27,14 +28,14 @@ CREATE TABLE `mqtt_acl` (
 为用户 `user123` 添加允许发布到主题 `data/user123/#` 的权限规则的示例：
 
 ```
-mysql> INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('user123', 'allow', 'publish', 'data/user123/#');
+mysql> INSERT INTO mqtt_acl(username, permission, action, topic, ipaddress) VALUES ('user123', 'allow', 'publish', 'data/user123/#', '127.0.0.1');
 Query OK, 1 row affected (0,01 sec)
 ```
 
 对应的配置参数为：
 
 ```
-query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+query = "SELECT action, permission, topic, ipaddress FROM mqtt_acl where username = ${username} and ipaddress = ${peerhost}"
 ```
 
 ## 配置

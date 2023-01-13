@@ -18,24 +18,25 @@ Example table structure for storing credentials:
 ```sql
 CREATE TABLE `mqtt_acl` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) NOT NULL,
-  `permission` varchar(5) NOT NULL,
-  `action` varchar(9) NOT NULL,
-  `topic` varchar(100) NOT NULL,
-  INDEX username_idx(username),
+  `ipaddress` VARCHAR(60) NOT NULL DEFAULT '',
+  `username` VARCHAR(255) NOT NULL DEFAULT '',
+  `clientid` VARCHAR(255) NOT NULL DEFAULT '',
+  `action` ENUM('publish', 'subscribe', 'all') NOT NULL,
+  `permission` ENUM('allow', 'deny') NOT NULL,
+  `topic` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 Example of adding an authorization rule for a user `user123` that allows publishing to topics `data/user123/#`:
 ```
-mysql> INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('user123', 'allow', 'publish', 'data/user123/#');
+mysql> INSERT INTO mqtt_acl(username, permission, action, topic, ipaddress) VALUES ('user123', 'allow', 'publish', 'data/user123/#', '127.0.0.1');
 Query OK, 1 row affected (0,01 sec)
 ```
 
 The corresponding config parameters are:
 ```
-query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+query = "SELECT action, permission, topic, ipaddress FROM mqtt_acl where username = ${username} and ipaddress = ${peerhost}"
 ```
 
 ## Configuration
