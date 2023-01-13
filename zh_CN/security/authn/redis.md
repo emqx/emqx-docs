@@ -4,13 +4,13 @@
 
 ## 存储架构
 
-Redis 认证器适用于存储到 Redis [hashes](https://redis.io/docs/manual/data-types/#hashes) 中的凭据，并且使用预定义的字段名称：`password_hash`、`salt`、`is_superuser`。 `password_hash` 字段是必需的，其他字段是可选的。`salt` 字段的缺失被解释为空盐（`salt = ""`）；`is_superuser` 的缺失将被设置为默认值 `false`。
+Redis 认证器适用于存储到 Redis [hashes](https://redis.io/docs/manual/data-types/#hashes) 中的凭据，并且使用预定义的字段名称：`password_hash`、`salt`、`is_superuser`。其中 `password_hash` 字段是必需的，其他字段是可选的。如果不配置 `salt` 字段，则默认为空（`salt = ""`）；如果不配置 `is_superuser` 字段，其默认值为 `false`。
 
-添加用户名为 `user123`、密码为 `secret`、盐值 `salt` 和超级用户标识为 `true` 的用户示例：
+下面是添加一个用户名为 `user123`、密码为 `secret`、前置盐为 `salt` 和超级用户标识为 `true` 的用户示例：
 
 ```
 >redis-cli
-127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash ac63a624e7074776d677dd61a003b8c803eb11db004d0ec6ae032a5d7c9c5caf
+127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35
 (integer) 3
 ```
 
@@ -26,18 +26,20 @@ cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
 ::: tip
-`password_hash` 这一名称传递了我们对存储散列密码的青睐。但是鉴于 Redis 没有类似 MySQL 的 as 语法，我们保留了对 `password` 的兼容。
+`password_hash` 这一名称表达了我们希望存储散列过的密码。但是鉴于 Redis 没有类似 MySQL 的 `AS` 语法，
+我们保留了对 `password` 的兼容。
 
 所以，我们也可以将 `cmd` 配置为 `HMGET mqtt:${username} password salt is_superuser`。
 :::
 
 ## 配置
 
-Redis 认证器由 `mechanism = password_based` 和 `backend = redis` 标识。
+EMQX 通过 `mechanism = password_based` 和 `backend = redis` 这两个关键配置项识别这
+是一个 Redis 的基于用户名密码的认证。
 
-EMQX 支持 3 种 Redis 部署方式：
+EMQX 支持 3 种 Redis 认证的部署方式：
 
-- Standalone Redis。
+- Redis 单机模式。
 
   ```
   {
@@ -60,7 +62,7 @@ EMQX 支持 3 种 Redis 部署方式：
   }
   ```
 
-- [Redis Sentinel](https://redis.io/docs/manual/sentinel/)。
+- [Redis 哨兵模式](https://redis.io/docs/manual/sentinel/)。
 
   ```
   {
@@ -84,7 +86,7 @@ EMQX 支持 3 种 Redis 部署方式：
   }
   ```
 
-- [Redis Cluster](https://redis.io/docs/manual/scaling/)。
+- [Redis 集群模式](https://redis.io/docs/manual/scaling/)。
 
   ```
   {
@@ -125,7 +127,7 @@ EMQX 支持 3 种 Redis 部署方式：
 
 用户凭据的查询命令，支持以下 Redis 命令：
 
-- `HMGET KEY_TEMPLATE ...Fields...`，其中可能的字段是 `password_hash`、`salt`、`is_superuser`。 
+- `HMGET KEY_TEMPLATE ...Fields...`，其中可能的字段是 `password_hash`、`salt`、`is_superuser`。
 - `HGET KEY_TEMPLATE password_hash`。
 
 `KEY_TEMPLATE` 支持 [placeholders](./authn.md#认证占位符)。`password_hash` 是必须的。
