@@ -63,7 +63,7 @@ Follow the instruction below on how to configure:
 
 **Connection Configuration**: In this section, we will set the concurrent connections and auto connections.
 
-- **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to a MongoDB server. Default: **8**. 
+- **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to a Redis server. Default: **8**. 
 - **Reconnect**: Specify whether EMQX automatically reconnects to Redis when the connection is broken; Options: **True** (automatic reconnection), **False** (no automatic reconnection); Default value: **True**.
 
 **Authentication configuration**: In this section, we will fill in the authentication-related settings:
