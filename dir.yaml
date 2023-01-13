@@ -168,7 +168,7 @@
   title_cn: 网络与 TLS
   children:
     - network/emqx-mqtt-tls
-    - network/mqtt-client-tls
+    # - network/mqtt-client-tls
     - network/crl-and-ocsp-stapling
     - network/gmssl
     - network/ipv6
@@ -179,7 +179,11 @@
 
 - title_en: REST API
   title_cn: REST API
-  path: admin/api
+  children:
+    - admin/api
+    - title_en: API Docs
+      title_cn: API 文档
+      path: /api-docs.html
 
 ## Dashboard
 
@@ -231,10 +235,9 @@
     - title_en: Rolling Upgrades
       title_cn: 滚动升级
       path: deploy/hot-upgrades
-    - operations/backup-restore
-    - operations/debug
-    - operations/diagnostic-mode
-    - operations/production-notes
+    # - operations/debug
+    # - operations/diagnostic-mode
+    # - operations/production-notes
 
 - title_en: Rate Limit
   title_cn: 速率限制
