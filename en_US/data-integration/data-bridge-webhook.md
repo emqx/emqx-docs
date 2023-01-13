@@ -11,7 +11,6 @@ Add following configs to the end of the `emqx.conf` file:
 ```js
 bridges.webhook.my_webhook {
     enable = true
-    direction = egress
     url = "http://localhost:9901/${clientid}"
     local_topic = "a/#"
     method = post

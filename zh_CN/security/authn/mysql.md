@@ -13,6 +13,7 @@ MySQL 认证器支持几乎任何存储模式。由用户决定如何存储凭�
 ```sql
 CREATE TABLE `mqtt_user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ipaddress` VARCHAR(60) NOT NULL DEFAULT '',
   `username` varchar(100) DEFAULT NULL,
   `password_hash` varchar(100) DEFAULT NULL,
   `salt` varchar(35) DEFAULT NULL,
@@ -33,7 +34,7 @@ CREATE TABLE `mqtt_user` (
 添加用户名为 `user123`、密码为 `secret`、盐值为 `salt` 和超级用户标志为 `true` 的用户示例：
 
 ```
-mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', 1);
+mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser, ipaddress) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', 1, '127.0.0.1');
 Query OK, 1 row affected (0,01 sec)
 ```
 
@@ -45,7 +46,7 @@ password_hash_algorithm {
     salt_position = prefix
 }
 
-query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
+query = "SELECT password_hash, salt, is_superuser, ipaddress FROM mqtt_user WHERE username = ${username} and ipaddress = ${peerhost} LIMIT 1"
 ```
 
 注意，当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引。否则连接 MQTT 客户端会对数据库和 EMQX 本身产生过多的负载。

@@ -13,27 +13,33 @@ PostgreSQL Authorizer 支持几乎任何存储模式。由用户决定如何存�
 用于存储权限规则的示例表结构：
 
 ```sql
-CREATE TABLE mqtt_acl(
-  id serial PRIMARY KEY,
-  username text NOT NULL,
-  permission text NOT NULL,
-  action text NOT NULL,
-  topic text NOT NULL
+CREATE TYPE ACTION AS ENUM('publish','subscribe','all');
+CREATE TYPE PERMISSION AS ENUM('allow','deny');
+
+CREATE TABLE mqtt_acl (
+  id SERIAL PRIMARY KEY,
+  ipaddress CHARACTER VARYING(60) NOT NULL DEFAULT '',
+  username CHARACTER VARYING(255) NOT NULL DEFAULT '',
+  clientid CHARACTER VARYING(255) NOT NULL DEFAULT '',
+  action ACTION,
+  permission PERMISSION,
+  topic CHARACTER VARYING(255) NOT NULL
 );
+
 CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
 ```
 
 为用户 `user123` 添加允许发布到主题 `data/user123/#` 的权限规则的示例：
 
 ```
-postgres=# INSERT INTO mqtt_acl(username, permission, action, topic) VALUES ('user123', 'allow', 'publish', 'data/user123/#');
+postgres=# INSERT INTO mqtt_acl(username, permission, action, topic, ipaddress) VALUES ('user123', 'allow', 'publish', 'data/user123/#', '127.0.0.1');
 INSERT 0 1
 ```
 
 对应的配置参数为：
 
 ```
-query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+query = "SELECT permission, action, topic, ipaddress FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
 ```
 
 ## 配置

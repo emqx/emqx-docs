@@ -14,6 +14,8 @@ MongoDB 密码认证器支持将凭据存储为 MongoDB 文档。用户提供集
 > db.mqtt_user.insertOne(
   {
       "username": "user123",
+      "clientid": "client123",
+      "ipaddress": "127.0.0.1",
       "s": "salt",
       "is": true,
       "ph": "bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35"
@@ -34,7 +36,7 @@ password_hash_algorithm {
 }
 
 collection = "mqtt_user"
-filter { username = "${username}" }
+filter { username = "${username}", ipaddress = "${peerhost}"}
 
 password_hash_field = "ph"
 salt_field = "s"
@@ -82,19 +84,19 @@ MongoDB 密码认证器由 `mechanism = password_based` 和 `backend = mongodb` 
     mechanism = password_based
     backend = mongodb
     enable = true
-  
+
     password_hash_algorithm {
       name = sha256
       salt_position = suffix
     }
-  
+
     collection = "mqtt_user"
     filter { username = "${username}" }
-  
+
     mongo_type = rs
     servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
     replica_set_name = "rs0"
-  
+
     database = "mqtt"
     username = "emqx"
     password = "secret"
@@ -107,18 +109,18 @@ MongoDB 密码认证器由 `mechanism = password_based` 和 `backend = mongodb` 
     mechanism = password_based
     backend = mongodb
     enable = true
-  
+
     password_hash_algorithm {
       name = sha256
       salt_position = suffix
     }
-  
+
     collection = "mqtt_user"
     filter { username = "${username}" }
-  
+
     mongo_type = sharded
     servers = "10.123.12.10:27017,10.123.12.11:27017,10.123.12.12:27017"
-  
+
     database = "mqtt"
     username = "emqx"
     password = "secret"

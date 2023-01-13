@@ -10,7 +10,7 @@ Example of adding a user with username `user123`, password `secret`, prefixed sa
 
 ```
 >redis-cli
-127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash ac63a624e7074776d677dd61a003b8c803eb11db004d0ec6ae032a5d7c9c5caf
+127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35
 (integer) 3
 ```
 
@@ -26,7 +26,7 @@ cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
 ::: tip
-The name `password_hash` conveys our preference for storing hashed passwords. But given that Redis doesn't have a MySQL-like as syntax, we keep `password` compatible.
+The name `password_hash` conveys our preference for storing hashed passwords. But given that Redis doesn't have a MySQL-like `AS` syntax, we keep `password` compatible.
 
 So, we can also configure `cmd` as `HMGET mqtt:${username} password salt is_superuser`.
 :::
