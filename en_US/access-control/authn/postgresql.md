@@ -1,12 +1,22 @@
-# Password Authentication Using PostgreSQL
+# Use PostgreSQL for password authentication
 
-This authenticator implements the password verification algorithm and uses PostgreSQL database as credential storage.
+EMQX supports integrating with PostgreSQL for password authentication. 
 
-## Storage schema
+::: tip
 
-PostgreSQL authenticator supports almost any storage schema. It is up to the user to decide how to store credentials and access them: use one or multiple tables, views, etc.
+- Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
-The user should only provide a templated query that selects credentials as a single row containing `password_hash`, `salt`, and `is_superuser` columns. `password_hash` column is required, other columns are optional. The absence of `salt` column is interpreted as empty salt (`salt = ""`); the absence of `is_superuser` is interpreted as its false value.
+:::
+
+## Data schema and query statement
+
+EMQX PostgreSQL authenticator supports almost any storage schema. You can determine how to store credentials and access them as your business needs, for example, using one or multiple tables, views, etc.
+
+Users need to provide a query statement template and ensure the following fields are included:
+
+- `password_hash`: required; password (in plain text or hashed) stored in the database; 
+- `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; 
+- `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
 
 Example table structure for storing credentials:
 
@@ -22,35 +32,77 @@ CREATE TABLE mqtt_user (
 ```
 
 ::: warning
-The above example has an implicit `UNIQUE` index created.
-When using a different schema, it is important to make sure an index is created on the column(s) used in your queries.
+The above example has created an implicit `UNIQUE` index.
+When there is a significant number of users in the system, please optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::
 
 In this table, MQTT users are identified by `username`.
 
-Example of adding a user with username `user123`, password `secret`, prefixed salt `salt`, and is_superuser `true`:
+For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, and prefixed salt `salt`, the query statement should be:
 
-```sql
+```bash
 postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
 INSERT 0 1
 ```
 
-The corresponding config parameters are:
+The corresponding configuration parameters are:
 
-```
-password_hash_algorithm {
-    name = sha256
-    salt_position = prefix
-}
+- `password_hash_algorithm`: sha256
+- `salt_position`: prefix
 
+SQL: 
+
+```sql
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
-::: warning
-When there are a significant number of users in the system make sure that the tables used by the query are optimized and that effective indexes are used. Otherwise connecting MQTT clients will produce excessive load on the database and on the EMQX itself.
-:::
 
-## Configuration
+
+## Configure with Dashboard
+
+You can use EMQX Dashboard to configure how to use PostgreSQL for password authentication. 
+
+On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **PostgreSQL** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
+
+![PostgreSQL](./assets/authn-postgresql.png)
+
+Follow the instruction below on how to configure:
+
+**Connect**: In this section, we will fill in the information needed to connect PostgreSQL.
+
+- **Server**:  Specify the server address that EMQX is to connect (`host:port`).
+- **Database**: PostgreSQL database name.
+- **Username** (optional): Specify user name. 
+- **Password** (optional): Specify user password. 
+
+**TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
+
+**Connection Configuration**: In this section, we will set the concurrent connections and auto reconnect.
+
+- **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
+- **Reconnect**: Specify whether EMQX automatically reconnects to PostgreSQL when the connection is broken; Options: **True** (automatic reconnection), **False** (no automatic reconnection); Default value: **True**.
+
+**Authentication configuration**: In this section, we will fill in the authentication-related settings:
+
+- **Password Hash Field**: Specify the field name of the password.
+- **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
+  - If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
+    - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. Note: If **plain** is selected, the **Salt Position** should be **disable**. 
+
+  - If **bcrypt** is selected, no extra configurations are needed. 
+  - If **pkbdf2** is selected, we also need to configure:
+    - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
+    - **Iteration Count**: Specify the iteration times; Default: 4096
+    - **Derived Key Length**: Specify the length of the generated password, if left blank, the password length will be determined by the pseudorandom function you selected. 
+- **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
+
+Now we can click **Create** to finish the settings. 
+
+
+
+## Configure with configuration items
+
+You can configure the EMQX PostgreSQL authenticator with EMQX configuration items. For detailed operation steps, see [authn-postgresql:authentication](../../admin/cfg.md#authn-postgresql:authentication).  
 
 PostgreSQL authentication is identified with `mechanism = password_based` and `backend = postgresql`.
 
@@ -74,52 +126,3 @@ Sample configuration:
   query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
 }
 ```
-
-### `password_hash_algorithm`
-
-Standard [password hashing options](./authn.md#password-hashing).
-
-### `query`
-
-Required string value with PostgreSQL query template for fetching credentials. Supports [placeholders](./authn.md#authentication-placeholders).
-
-For security reasons, placeholder values are not interpolated directly, but through PostgreSQL placeholders.
-I.e. a query
-```sql
-SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} AND peerhost = ${peerhost} LIMIT 1
-```
-is first translated into
-```sql
-SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = $1 AND peerhost = $2 LIMIT 1
-```
-prepared statement and then executed with `${username}` and `${peerhost}` values.
-
-### `server`
-
-Required string value with PostgreSQL server address (`host:port`).
-
-### `database`
-
-Required string value with PostgreSQL database name to use.
-
-### `username`
-
-Optional string value with PostgreSQL user.
-
-### `password`
-
-Optional string value with PostgreSQL user password.
-
-#### `auto_reconnect`
-
-Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
-PostgreSQL on client failure.
-
-### `pool_size`
-
-Optional integer value defining the number of concurrent connections from an EMQX node to a PostgreSQL server.
-The default value is 8.
-
-### `ssl`
-
-Standard [SSL options](../ssl.md) for [secure connecting to PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html).

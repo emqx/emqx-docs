@@ -1,18 +1,24 @@
-# SCRAM Authentication
+# MQTT 5.0 enhanced authentication
 
-This authenticator implements [SCRAM](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) authentication and uses the built-in Mnesia database of EMQX to store client credentials (_users_).
+EMQX also supports the MQTT 5.0 enhanced authentication. This authenticator implements [Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) authentication and uses the built-in database of EMQX to store client credentials (_users_).
 
-SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTTpackages during connection.
-
-SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
+SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTT packages during connection. SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
 
 ::: tip
-SCRAM Authentication only supports MQTT v5.0 connection.
+SCRAM authenticator only supports MQTT 5.0 connection.
 :::
 
-## Configuration
+## Configure with Dashboard
 
-SCRAM authentication is identified with `mechanism = scram` and `backend = built_in_database`.
+On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **SCRAM** as **Mechanism**, and **Built-in Database** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
+
+![SCRAM](/Users/lena/Documents/GitHub/wivwiv/未命名/en_US/access-control/authn/assets/authn-scram.png)
+
+Set **Password Hash** as **sha256** or **sha512** and click **Create** to finish the settings. 
+
+## Configure with configuration items
+
+Sample configuration:
 
 ```
 {
@@ -25,16 +31,7 @@ SCRAM authentication is identified with `mechanism = scram` and `backend = built
 }
 ```
 
-### `algorithm`
+where, 
 
-Possible values:
-* `sha256` for `SCRAM-SHA-256` method;
-* `sha512` for `SCRAM-SHA-512` method.
-
-### `iteration_count`
-
-Iteration-count parameter for SCRAM, optional. The default value is 4096.
-
-## Credential management
-
-Users can be managed through [HTTP API](./user_management.md).
+- `algorithm`: password hash algorithm, options: `sha256` and `sha512`
+- `iteration_count` (optional): Iteration-count parameter for SCRAM; Default:  4096.
