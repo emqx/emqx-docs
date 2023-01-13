@@ -13,6 +13,7 @@ PostgreSQL 认证器支持几乎任何存储模式。由用户决定如何存储
 ```sql
 CREATE TABLE mqtt_user (
     id serial PRIMARY KEY,
+    ipaddress CHARACTER VARYING(60) NOT NULL DEFAULT '',
     username text NOT NULL UNIQUE,
     password_hash  text NOT NULL,
     salt text NOT NULL,
@@ -31,7 +32,7 @@ CREATE TABLE mqtt_user (
 添加用户名为 `user123`、密码为 `secret`、盐值为 `salt`和超级用户标识为 `true` 的用户示例：
 
 ```sql
-postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
+postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser, ipaddress) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true, '127.0.0.1');
 INSERT 0 1
 ```
 
@@ -43,7 +44,7 @@ password_hash_algorithm {
     salt_position = prefix
 }
 
-query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
+query = "SELECT password_hash, salt, is_superuser, ipaddress FROM mqtt_user WHERE username = ${username} and ipaddress = ${peerhost} LIMIT 1"
 ```
 
 ::: warning
