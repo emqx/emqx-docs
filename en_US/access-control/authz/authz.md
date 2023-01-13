@@ -1,33 +1,38 @@
 # Introduction
 
-MQTT authorization refers to _permission control_ for publish/subscribe operations, i.e., authorization
-determines which clients can publish/subscribe to which topics.
+In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients.
 
-EMQX supports different kinds of authorization:
+## Authorization principle
 
-* Authorization based on access lists(_ACLs_) fetched from a database (MongoDB, MySQL, PostgreSQL, Redis, and built-in database).
-* Based on the global static access-list configured in a file.
-* Based on the result of an HTTP request to an external HTTP API.
-* Based on access lists extracted from authentication data (access lists from JWT claims).
+Here is how EMQX authentication works, when a client performs publish/subscribe operations, EMQX will query or follows the user-specified query statement to query the client's permission list from the configured data source, and then allow or reject the current operation based on the query result.
 
-## Authorization sources
+::: tip
 
-_Authorization source_ (or simply _authorizer_) is an EMQX module that implements MQTT authorization.
-Authorizers are identified by their _type_, a unique identifier.
+The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. 
 
-The following authorizers are available by default:
+:::
 
-| type               | description                                                                   |
-| ------------------ | ----------------------------------------------------------------------------- |
-| built_in_database  | [Authorization with Mnesia database as rules storage](./mnesia.md)            |
-| mysql              | [Authorization with MySQL database as rules storage](./mysql.md)              |
-| postgresql         | [Authorization with PostgreSQL database as rules storage](./postgresql.md)    |
-| mongodb            | [Authorization with MongoDB database as rules storage](./mongodb.md)          |
-| redis              | [Authorization with Redis database as rules storage](./redis.md)              |
-| http               | [Authorization using external HTTP API to determine permissions](./http.md)   |
-| file               | [Authorization using static rules configured in a file](./file.md)            |
+## Integrate with data storage objects
 
-Each authorizer has its own configuration options.
+The EMQX authorization mechanism supports integration with various data storage objects, including built-in databases, files, MySQL, PostgreSQL, MongoDB, and Redis. You can manage permission data through REST API or EMQX Dashboard, or use a CSV or JSON file to import the data in a batch.
+
+In addition, EMQX can also connect to HTTP services developed by our users to meet different authorization requirements.
+
+According to the backend data storage used, there are currently 7 different types of EMQX authorizers:
+
+| Database          | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| Built-in database | [Authorization with built-in database as rules storage](./mnesia.md) |
+| MySQL             | [Authorization with MySQL as rules storage](./mysql.md)      |
+| PostgreSQL        | [Authorization with PostgreSQL as rules storage](./postgresql.md) |
+| MongoDB           | [Authorization with MongoDB as rules storage](./mongodb.md)  |
+| Redis             | [Authorization with Redis as rules storage](./redis.md)      |
+| HTTP              | [Authorization with external HTTP service](./http.md)        |
+| File              | [Authorization with static rules configured in a file](./file.md) |
+
+Each authorizer has its own configuration options. You can click the corresponding links in the above table for more details. 
+
+Below is an example of how to configure an EMQX MySQL authorizer.
 
 Example:
 
@@ -45,80 +50,17 @@ Example:
 }
 ```
 
-## Authorization chain
 
-Configured authorizers form a global chain. When a client makes a publish/subscribe request, authorizers are
-sequentially used to find access lists for the client. If an authorizer finds authorization rules, the request is checked
-against them and gets allowed/denied. If authorization rules are not found, then the next authorizer from the chain is used.
 
-If no authorizer finds any authorization rules, then the default permission is applied.
+## Configure authorization mechanisms
 
-Unlike [authentication](../authn/authn.md#authentication-chains), authorization has only one global chain.
+EMQX provides 3 ways to use authorization, namely: Dashboard, Configuration file and HTTP API.
 
-## Implicit authorization
+### Configure with Dashboard
 
-Each _authentication_ backend can additionally provide rules as a result of the authentication. These rules, if present, are applied before any other authorizers.
+EMQX Dashboard is an intuitive way to configure EMQX authorizer, where you can configure relevant parameters, check their working status, adjust their position in the authorization chain。 
 
-See, for example, [JWT authorization](../authn/jwt.md#jwt-authorization).
-
-## Authorization Cache
-
-If a client sends requests intensively, it may be resource-consuming to fetch authorization rules for each request and match it
-against the rules. Therefore, authorization cache may be enabled to cache authorization results for a particular time.
-
-::: tip Tip
-Caching improves performance significantly, so adjusting the default values to the relevant ones is essential.
-You can find more information about cache configuration below.
-:::
-
-## Authorization placeholders
-
-Many authorizers allow using _placeholders_ in their configuration.
-Placeholders work as template variables filled with the corresponding runtime information.
-
-### Placeholders in configurations
-
-Configuration templates can be filled with client information such as client ID and user name at runtime.
-
-The following placeholders are available:
-
-* `${clientid}` — clientid of the client.
-* `${username}` — username of the client.
-* `${peerhost}` — client IP address.
-* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
-* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
-
-Example of use in Redis authorizer:
-
-```
-{
-  enable = true
-  type = redis
-
-  ... other parameters ...
-
-  cmd = "HGETALL mqtt_user:${username}"
-}
-```
-
-::: warning
-If a value for a placeholder is absent then the placeholder is rendered as an ampty string. For example, a template
-`HGETALL mqtt_user:${username}` will be rendered as `HGETALL mqtt_user:` if a username is not provided by an MQTT client.
-:::
-
-### Topic Placeholders
-
-When authentication rules are fetched from external databases, the topics are represented as string values. These values are interpreted as templates.
-The following placeholders are available:
-
-* `${clientid}` — Client ID of the connecting client, when used in authorization rules, the MQTT client should assign a client ID before connect, but not let EMQX generate and assign a random one.
-* `${username}` — `username` value used by the client for authentication.
-
-Placeholders can be used as topic segments, like `a/b/${username}/c/d`, but not `a/b${username}c/d`.
-
-To avoid placeholder interpolation, one may use special `eq` syntax: `eq a/b/${username}/c/d`. This topic will be treated as `a/b/${username}/c/d` literally, without interpolation.
-
-## Config structure
+### Configure with configuration file
 
 The general config structure is the following:
 
@@ -138,36 +80,111 @@ authorization {
 }
 ```
 
-### `sources`
+Where, 
 
-Optional list value that configures the chain of authorizers. Each authorizer can be enabled or disabled.
-Disabled authorizers are not taken into account. The absence of the value is treated as an empty chain.
+- `sources` (optional): An ordered array, with each array element defining the data source of the corresponding authorization checker. For detailed configurations, see the corresponding configuration file.
 
-For individual authorizer config formats, see the documentation for the corresponding authorizers.
+- `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers found any authorization rules; optional value: `allow` or `deny`; default:  `allow`. The setting will also trigger the enabling of black/white list. 
 
-### `no_match`
+- `deny_action`:  Determines the next step if a publish/subscribe operation was rejected; optional value: `ignore` or `disconnect`; default:  `ignore`. If set to `ignore`, the operation is silently ignored; if set to `disconnect`, the client connection is dropped.
 
-Optional value, `allow` or `deny`. The default value is `allow`. Determines the default action for a publish/subscribe
-request if none of the configured authorizers found any authorization rules.
+- `cache`: Defines the caching settings, and include:
 
-### `deny_action`
+  * `cache.enable`: Specifies whether to enable caching, default: `true`. If the authorization is solely based on the JWT packets, it is recommended to configure this field `false`.
 
-Optional value, `ignore` or `disconnect`. The default value is `ignore`. Determines what to do if a publish/subscribe operation was rejected according to the authorization checks. If set to `ignore`, the operation is silently ignored.
-If set to `disconnect`, the client connection is dropped.
+  * `cache.max_size`: Specifies the maximum number of elements in the cache; default: 32. Older records will be removed from the cache if the specified number is exceeded.
 
-### `cache`
+  * `cache.ttl`: Specifies the effective time of cached values, default: `1m` (one minute). 
 
-Optional value with caching settings.
-
-* `cache.enable` — optional boolean value, default is `true`. Specifies whether to enable caching. When authentication JWT is the only data source of authentication data, then it is recommended to configure this field `false`.
-* `cache.max_size` — optional integer value, default is 32. Specifies the maximum number of elements in the cache. Older records are evicted from the cache when the specified number is exceeded.
-* `cache.ttl` — optional duration value, default is `1m`. Specifies how long cached values are kept in the cache.
-
-## REST API
+## HTTP API
 
 There are several API endpoints for managing authorization:
 
-* `/api/v5/authorization/settings` — for general params, `no_match`, `deny_action`, and `cache`;
-* `/api/v5/authorization/sources` — for managing and arranging authorizers;
-* `/api/v5/authorization/cache` — for cleaning authorization cache;
-* `/api/v5/authorization/sources/built_in_database` — for managing authorization rules of `built_in_database` authorizer.
+* `/api/v5/authorization/settings`: for general parameters, `no_match`, `deny_action`, and `cache`;
+* `/api/v5/authorization/sources`: for managing and arranging authorizers;
+* `/api/v5/authorization/cache`: for cleaning authorization cache;
+* `/api/v5/authorization/sources/built_in_database`:  for managing authorization rules of `built_in_database` authorizer.
+
+For detailed operation steps, see [HTTP API](../../admin/api.md).
+
+## Basic concepts
+
+### Authorization chain
+
+EMQX allows the creation of authorization chain using multiple authorizers and follows the authorizers' position in the chain to perform the authorization.
+
+#### Authorize flow
+
+With authorization chain configured, EMQX will first try to retrieve the matching authentication information from the first authorizer, if fails, it will switch to the next authenticator to continue the process:
+
+1. If EMQX successfully retrieves the client's permission information and then it will match the client's operation matches the retrieved permission list:
+   1. if matches, EMQX will allow or deny the operation based on permission setting.
+   2. if not match, EMQX will switch to the next authenticator to continue the process.
+
+2. If EMQX fails to retrieve the client's permission information and then it will check if there are other authorizers configured:
+   1. if yes, EMQX will switch to the next authenticator to continue the process.
+   2. if  this is already the last authorizer,  EMQX will follow the setting of `no_match` to determine whether to allow or reject the client operation.
+
+Unlike [Authentication chain](../authn/authn.md#authentication-chains), authorization has only one global chain.
+
+### Implicit authorization
+
+Each authentication backend can additionally provide rules as a result of the authentication. These rules, if present, are applied before any other authorizers.
+
+See, for example, [JWT authorization](../authn/jwt.md#jwt-authorization).
+
+### Authorization cache
+
+To better handle the access pressure brought by a large number of publish/subscribe requests, EMQX introduces the authorization cache mechanism. 
+
+::: tip Tip
+If set properly, caching can greatly improve performance, so it is recommended to timely adjust the setting based on your system performance.
+:::
+
+### Authorization check priority
+
+Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission](../authn/authn.md#Super User and Permission) set during the authentication phase.
+
+For super users, all their operations will be skipped from authorization check; if the permission list is set, EMQX will first follow the client's permission data to run the  authorization checker. The priority is as follows:
+
+```
+Super user > permission data > authorization check
+```
+
+### Authorization placeholders
+
+EMQX authorizers allow using placeholders in their configuration. During the authorization step, these placeholders will be replaced with actual client information to construct a query or HTTP request that matches the current client.
+
+For example, in one EMQX MySQL authorizer, the default query SQL uses the placeholder `${username}`:
+
+```sql
+SELECT action, permission, topic FROM mqtt_acl where username = ${username}
+```
+
+So, when a client (name: `emqx_u`) initiates a connect request, the constructed query statement is like:
+
+```sql
+SELECT action, permission, topic FROM mqtt_acl where username = 'emqx_u'
+```
+
+#### Placeholders in data queries
+
+The following placeholders are supported in query statements:
+
+* `${clientid}`:  It will be replaced by the client ID at runtime. The client ID is normally explicitly specified by the client in the `CONNECT` packet. If `use_username_as_clientid` or `peer_cert_as_clientid` is enabled, this field will be overridden by the username, fields in the certificate, or the content of the certificate.
+* `${username}`:  It will be replaced with the username at runtime. The username comes from the `Username` field in the `CONNECT` packet. If `peer_cert_as_username` is enabled, it will be overridden by the fields or the content of the certificate.
+* `${password}`: It will be replaced with the password at runtime. The password comes from the `Password` field in the `CONNECT` packet.
+* `${peerhost}`: It will be replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
+* `${cert_subject}`:  It will be replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
+* `${cert_common_name}: It will be replaced by the Common Name of the client's TLS certificate at runtime, only applicable to TLS connections.
+
+#### Topic placeholders
+
+EMQX also allows placeholders to be used in topics to support dynamic themes. The supported placeholders are as follows:
+
+* `${clientid}`: Client ID of the connecting client, when used in authorization rules, the MQTT client should assign a client ID before connecting, but not let EMQX generate and assign a random one.
+* `${username}`: user name value used by the client for authentication.
+
+Placeholders can be used as topic segments, like `a/b/${username}/c/d`, but not `a/b${username}c/d`.
+
+To avoid placeholder interpolation, one may use special `eq` syntax: `eq a/b/${username}/c/d`. This topic will be treated as `a/b/${username}/c/d` literally, without interpolation.
