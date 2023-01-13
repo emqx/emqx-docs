@@ -12,11 +12,11 @@ EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB
 
 EMQX MongoDB authenticator supports storing authentication data as MongoDB documents. Users need to provide a query statement template and ensure the following fields are included:
 
-- `password_hash`: required; password (in plain text or hashed) stored in the database; this field supports renaming
-- `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; this field supports renaming
-- `is_superuser`: optional; flag if the current client is a superuser; default: `false`; this field supports renaming
+- `password_hash`: required; password (in plain text or hashed) stored in the database; this field supports renaming;
+- `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; this field supports renaming;
+- `is_superuser`: optional; flag if the current client is a superuser; default: `false`; this field supports renaming.
 
-For example, if we want to add a document for a superuser with username `user123`, password `secret`, prefixed salt `slat_foo123`, and password hash `sha256`, the query statement should be:
+For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, prefixed salt `slat_foo123`, and password hash `sha256`, the query statement should be:
 
 ```
 > db.mqtt_user.insertOne(
@@ -92,7 +92,7 @@ Follow the instruction below on how to configure:
   - If **pkbdf2** is selected, we also need to configure:
     - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
     - **Iteration Count**: Specify the iteration times; Default: 4096
-    - **Derived Key Length**: Specify the length of the generated password, if left blank, the password length will be specified by the setting of the **Pseudorandom Function**. 
+    - **Derived Key Length**: Specify the length of the generated password, if left blank, the password length will be determined by the pseudorandom function you selected. 
 
 - **Salt Field**: Salt field in MongoDB. 
 - **is_superuser Field**: Specify if the user is a super user. 
