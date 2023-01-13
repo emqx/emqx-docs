@@ -147,7 +147,7 @@ Assume an MQTT client is connected with clientid `id123`, username `iamuser` and
     POST /auth/id123 HTTP/1.1
     Content-Type: application/json
     ... Other headers ...
-
+    
     {"username":"iamuser","topic":"foo/bar", "action": "publish"}
     ```
 ### `headers`
