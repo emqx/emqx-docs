@@ -15,23 +15,23 @@ Different from the browser's mechanism for using CRLs, the MQTT client does not 
 
 All operations are run by EMQX, no special scripts or adaptations to the client are required.
 
-### Configuiation
+### Configuration
 
-## CRL Configuiation
+## CRL Configuration
 
 ```bash
-# Enable CRL
-listener.ssl.external.enable_crl_cache = true
+# Enable CRL check
+listener.ssl.external.enable_crl_check = true
 
 # Comma-separated URL list for CRL servers
 listener.ssl.external.crl_cache_urls = http://my.crl.server/intermediate.crl.pem, http://my.other.crl.server/another.crl.pem
 
-# CRL Request timeout
-listener.ssl.external.crl_cache_http_timeout = 15s
+# CRL Request timeout, global for all listeners
+crl_cache_http_timeout = 15s
 
 
-# The period to refresh the CRLs from the servers is applied to the all listener
-crl_cache.refresh_interval = 15m
+# The period to refresh the CRLs from the servers, global for all listeners
+crl_cache_refresh_interval = 15m
 ```
 
 The list of CRL files can be requested from the CA or by the following command:
@@ -62,7 +62,7 @@ OCSP Stapling improves the speed of client-side certificate checking and reduces
 # Enable OCSP Stapling
 listener.ssl.external.enable_ocsp_stapling = true
 
-# OCSP Responder URL 
+# OCSP Responder URL
 ## Get from CA or with this command
 ## openssl x509 -in broker.emqx.io.crt -noout -ocsp_uri
 listener.ssl.external.ocsp_responder_url = http://ocsp.digicert.com
