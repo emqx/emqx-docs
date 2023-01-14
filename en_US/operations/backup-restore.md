@@ -1,51 +1,39 @@
-# Config and data backup & restore
+# Backup and restore
 
-EMQX is highly available when clustered, and most of the data in EMQX cluster is
-fully replicated to all nodes -- However, we should still plan for the worst.
-Let's discuss data backup and restore for disaster recovery.
+EMQX adopts a distributed storage schema to replicate data among all nodes, and a cluster transfer feature to ensure the system's high availability. 
 
-## Terminologies
+As part of our "fail-safety" design, EMQX also provides data backup and restoration for disaster recovery. This chapter guides you on how to back up and restore EMQX data, which mainly includes the configuration files and the operating data. 
 
-[Mnesia](https://en.wikipedia.org/wiki/Mnesia): The name of the built-in database inside each EMQX node.
+## Configuratation files 
 
-## Files
+When EMQX is deployed with a deployment tool, the configuration center, or Git, these configurations will be automatically backed up, and no manual backup is needed. 
 
-### Config files
+However, for the manually configured items, it is recommended to run a periodic backup. The configuration files may locate at:
 
-When using modern provisioning tools for EMQX deployment, configuration changes
-are mostly managed by the tools, and even source controlled in for example a git repo.
+* `/etc/emqx`: when installed from RPM or DEB packages
+* `/opt/emqx/etc`: when running in docker container
+* `/path/to/install/dir/etc`: when directly extracted from zip package.
 
-In case manual config changes are made to the config files, it's a good idea to have them backed up.
+Besides the `etc` directory, there are also some configuration-related files in the `data` directory. For details, see [Configuration file](../configuration/configuration.md).
 
-The config files are possibly located in below places, but it differ depending on installation
+## Built-in database
 
-* Default to `/etc/emqx` when installed from RPM or DEB packages
-* Default to `/opt/emqx/etc` when running in docker container
-* In `/path/to/install/dir/etc` when directly extracted from zip package.
+By default, EMQX will use the built-in database for data storage, therefore you can back up the `mnesia` folder under `data`. 
 
-## Mnesia Database
+<!-- TODO 功能完成后提供 -->
 
-The Mnesia database can be easily backed up while the cluster is running.
+Based on the installation mode, the file path could be:
 
-### Backup 'mnesia' dir
+* `/var/lib/emqx/data`: when installed from RPM or DEB packages
+* `/opt/emqx/data`: when running in docker container
+* `./data`: when directly extracted from zip package.
 
-In EMQX Mnesia database, tables are stored in the `mnesia` sub directory in EMQX `data` directory.
-Backing up the database can be as simple as making a copy of all the files in the `mnesia` directory.
+You can also specify the `data` directory location via `node.data_dir` or the `EMQX_NODE__DATA_DIR` environment variable.
 
-The database schema (which is also stored in `mnesia` directory) is unique per EMQX node, meaning
-a backup can not be used to restore another node in the cluster.
+## Persisted sessions
 
-Depending on installation and configuration, `data` dir can be located in below possible paths.
+Before EMQX 5.0, persistent sessions were stored in memory, and for the EMQX enterprise version, they are stored in an external database, so you cannot back up persistent sessions in EMQX.
 
-* Where the environment variable `EMQX_NODE__DATA_DIR` points to
-* Where the `node.data_dir` config key points to in `emqx.conf`
-* `/opt/emqx/data` when running in docker (typically a mounted volume)
-* `<install-path>/data` when installed from zip package extraction
-* `/var/lib/emqx/data` when installed from RPM or DEB packages
+## Data restore
 
-## What about Persisted Sessions ?
-
-Prior to v5.0, EMQX nodes are rather stateless by themselves, in the sense that persistent
-session states are delegated to external databases (enterprise edition feature).
-
-So, for persisted sessions, there is nothing to backup from where the EMQX nodes are running.
+To restore the configuration file, you only need to place the backed-up configuration files and data in the corresponding directory before starting EMQX.
