@@ -228,12 +228,12 @@
   title_cn: 运维操作
   children:
     - operations/backup-restore
-    - title_en: Hot Upgrades
-      title_cn: 版本热升级
-      path: deploy/hot-upgrades
-    - title_en: Rolling Upgrades
-      title_cn: 滚动升级
-      path: deploy/hot-upgrades
+    # - title_en: Hot Upgrades
+    #   title_cn: 版本热升级
+    #   path: deploy/hot-upgrades
+    # - title_en: Rolling Upgrades
+    #   title_cn: 滚动升级
+    #   path: deploy/hot-upgrades
     # - operations/debug
     # - operations/diagnostic-mode
     # - operations/production-notes

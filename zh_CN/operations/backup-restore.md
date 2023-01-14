@@ -1,61 +1,44 @@
-# Config and data backup & restore
+# 备份与恢复
 
-EMQX is highly available when clustered, and most of the data in EMQX cluster is
-fully replicated to all nodes -- However, we should still plan for the worst.
-Let's discuss data backup and restore for disaster recovery.
+EMQX 集群提供了转移功能，能够确保系统的高可用性，并且采用分布式存储将数据复制到所有节点。
 
-## Terminologies
+尽管如此，我们仍然应当做最坏的打算来确保数据万无一失，本章节指导您如何进行 EMQX 数据备份和恢复。
 
-[Mnesia](https://en.wikipedia.org/wiki/Mnesia): The name of the built-in database inside each EMQX node.
+## 配置文件
 
-## Files
+当使用配置管理工具、配置中心或 Git 管理配置时，配置的备份恢复通常不需要手动操作。
 
-### Config files
+但如果手动修改配置文件则需要将其定期备份，由于安装方式不同，配置文件所在位置也不同：
 
-When using morden provisioning tools for EMQX deployment, configuration changes
-are mostly managed by the tools, and even source controled in for example a git repo.
+- 使用二进制包安装时默认为 `/etc/emqx`。
+- 压缩包解压安装时，默认为安装目录下的 `./etc`。
+- 在 Docker 容器中运行时，默认为 `/opt/emqx/etc`。
 
-In case manual config changes are made to the config files, it's a good idea to have them backed up.
+除了 `etc` 目录外，还有一些配置位于 `data` 目录中，请参考 [配置文件介绍](../configuration/configuration.md)。
 
-The config files are possibly located in below places, but it differ depending on installation
+## Mnesia 数据库
 
-* Default to `/etc/emqx` when installed from RPM or DEB packages
-* Default to `/opt/emqx/etc` shen running in docker container
-* In `/path/to/install/dir/etc` when directly extracted from zip package.
+EMQX 默认使用 Mnesia 数据库来存储数据，可以直接备份 Mnesia 数据文件夹。
 
-## Mnesia Database
+<!-- TODO 功能完成后提供 -->
 
-There are two approaches to create a backup of the Mnesia database.
+在 EMQX Mnesia 数据库中，数据存储 在EMQX 的 `data` 目录下的 `mnesia` 子目录。备份数据库可以简单的复制其中的所有文件。
+<!-- TODO 后续确认是否只需要备份一个节点的数据，以及每个节点的 schema.DAT 文件
+数据库模式 `schema.DAT` 在每个 EMQX 节点是唯一的，这意味着
+一个备份不能被用来恢复集群中的另一个节点。 -->
 
-### Export 'mnesia' data
+根据安装和配置的不同，`data` 目录默认在以下位置：
 
-The commands introduced in [Data import and export](./data-import-and-export.md),
-can be used backup the database to a JSON file using the export command,
-and restore whth the import command.
+- 使用二进制包安装时默认为 `/var/lib/emqx/data`。
+- 压缩包解压安装时，默认为安装目录下的 `./data`。
+- 在 Docker 容器中运行时，默认为 `/opt/emqx/data`。
 
-When recovering a EMQX cluster from the exported file, the new EMQX cluster
-should be started with at empty state, and the import command should
-repopulate the database for all nodes in the cluster.
+您也可以通过 `node.data_dir` 配置或 `EMQX_NODE__DATA_DIR` 环境变量指定 `data` 目录位置。
 
-### Backup 'mnesia' dir
+## 持久会话
 
-In EMQX Mnesia database, tables are stored in the `mnesia` sub directory in EMQX's `data` directory.
-Backing up the database can be as simple as making a copy of all the files in the `mnesia` directory.
+在 EMQX v5.0 之前，持久会话存储于内存中，对于企业版则存储到外部数据库，因此您无法在 EMQX 中备份持久会话。
 
-The database schema (which is also stored in `mnesia` directory) is unique per EMQX node, meaning
-a backup can not be used to restore another node in the cluster.
+## 数据恢复
 
-Depending on installation and configuration, `data` dir can be located in below possible paths.
-
-* Where the environment variable `EMQX_NODE__DATA_DIR` points to
-* Where the `node.data_dir` config key points to in `emqx.conf`
-* `/opt/emqx/data` when running in docker (typically a mounted volume)
-* `<install-path>/data` when installed from zip package extraction
-* `/var/lib/emqx/data` when installed from RPM or DEB packages
-
-## What about Persisted Sessions ?
-
-Prior to v5.0, EMQX nodes are rather stateless by themselves, in the sense that persistent
-session states are delegated to external databases (enterprise edition feature).
-
-So, for persisted sessions, there is nothing to backup from where the EMQX nodes are running.
+在 EMQX 启动之前，将配置文件与数据放置到对应目录即可。
