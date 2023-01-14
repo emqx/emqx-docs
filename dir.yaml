@@ -222,7 +222,6 @@
   title_cn: 配置文件参数
   children:
     - configuration/configuration
-    - configuration/environment
     - configuration/configuration-manual
 
 - title_en: Operations
