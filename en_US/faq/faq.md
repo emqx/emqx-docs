@@ -1,4 +1,4 @@
-# FQ
+# FAQ
 
 ## Which products do we offer?
 
