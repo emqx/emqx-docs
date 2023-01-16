@@ -1,6 +1,6 @@
 # Overview
 
-This chapter will walk you through the basic installtion steps for EMQX, the miminum hardware specifications, and the file and directory locations to facilitate future configuration and maintenance jobs. 
+This chapter will walk you through the basic installtion steps for EMQX, the miminum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs. 
 
 ## Download
 
@@ -76,7 +76,9 @@ The table below lists the directories created and their file path under differen
 | `plugins`  | Plugins            | `./plugins`           | `/usr/lib/emqx/plugins`  |
 
 ::: tip
-It is recommended to mount the `data` director on a high-performance hard drive for better performance.
+1. When installed with the compressed package, the directory is relative to the directory where the software is installed;
+2. When installed with Docker container,  EMQX will be installed in the `/opt/emqx` directory;
+3. The `data`, `log`, and `plugins` directories can be set through configuration files. It is recommended to mount the `data` directory to a high-performance disk for better performance.
 :::
 
 Below will introduce the files and subfolders of some directories. 
