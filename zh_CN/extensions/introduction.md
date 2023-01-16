@@ -13,3 +13,4 @@ EMQX 提供了丰富的插件开发接口，通过 Hook 函数能够接入 EMQX 
 EMQX [gRPC](https://grpc.io/) 多语言钩子与协议扩展（以下简称多语言扩展）是另外一种扩展 EMQX 的方式。
 
 多语言扩展允许用户使用 Python, Java 等语言编写服务，通过 gRPC 通道与 EMQX 集成，进行钩子(Hooks)的处理，或解析私有的 TCP/UDP 协议，实现与插件类似的功能。
+
