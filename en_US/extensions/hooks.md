@@ -1,27 +1,30 @@
 # Hooks
 
-## Definition
+[Hooks](https://reactjs.org/docs/getting-started.html) is an extension mechanism that lets you use state and other React features without writing a class.
 
-**Hooks** is a mechanism provided by EMQX Broker, which modifies or extends system functions by intercepting function calls, message passing, and event passing between modules.
+EMQX also supports using Hooks to modify or extend system functions by intercepting function calls, message passing, and event passing between modules.
 
-In simple terms, the purpose of this mechanism is to enhance the flexibility of the software system, facilitate integration with the 3rd-party systems, or change the original default behavior of the system. Such as:
+## Principles
+
+For a system without adopting the **Hooks** mechanism in their system, the entire event processing flow (from the input of the event, to the handler and the result) is invisible and cannot be modified.
+
+However, if we add a HookPoint to mount functions during the process, external plugins can mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified.
+
 
 ![Hooks-In-System](./assets/hooks_in_system.png)
 
-When the **Hooks** mechanism does not exist in the system, the entire event processing flow (from the input of the event, to the handler and the result) is invisible and cannot be modified for the external system .
+Several EMQX functions are implemented using the hook feature:
 
-In the process, if a HookPoint where a function can be mounted is added, it will allow external plugins to mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified.
-There are several functions that are implemented using the hook feature as follows.
-1. You can use the hook system to perform multi-step streaming processing (encoding/decoding, etc.) of messages when they are published. That is, the rules engine provides the message codec function.
-2. Caching of messages at message publishing time according to configuration.
-3. Delayed message publishing using the hook's blocking mechanism.
+1. Use the hook system to perform multi-step streaming processing (encoding/decoding, etc.) of messages
+2. Caching messages at message publishing time as per the configuration
+3. Use the hook blocking mechanism to postpone message publishing 
 
-The authentication/authorization commonly used in the system is implemented according to this logic. Take the [ExHook](./lang-exhook.md) as an example:
+The authentication/authorization commonly used in the system is implemented according to this logic. Take the [Multilingual extension ](./lang-exhook.md) as an example:
 
 When only the `Built-in Database` authentication is enabled, according to the processing logic of the event (see figure above), the logic of the authentication module at this time is:
 
-1. Receive user authentication request (Authenticate)
-2. Execute the hook of the authentication event with `ClientInfo` and default `AccIn`.
+1. EMQX receives the user's authentication request (Authenticate);
+2. EMQX executes the hook of the authentication event with `ClientInfo` and the default `AccIn`.
 ```erlang
 %% Default AccIn
 {ok, #{is_superuser => false}}
@@ -31,9 +34,7 @@ When only the `Built-in Database` authentication is enabled, according to the pr
 %% AuthNResult
 {ok, #{is_superuser => true}}
 ```
-4. Return **Authentication succeeded**, and successfully access the system as a superuser
-
-It is shown in the following figure:
+4. Return **Authentication succeeded**, and the client will successfully access the system as a superuser. 
 
 ```
                      EMQX Core          Hooks & Plugins
@@ -46,15 +47,15 @@ It is shown in the following figure:
                 +-----------------+--------------------------+
 ```
 
-Therefore, in EMQX Broker, the mechanism of **Hooks** greatly enhances the flexibility of the system. We can only hook a function on **HookPoint** that EMQX provided on specific location, to extend EMQX Broker with various behaviors. And no need to modify the [emqx](https://github.com/emqx/emqx) core code.
+Therefore, **Hooks** can greatly enhance the flexibility of EMQX. If we want to customize EMQX behaviors, we no longer need to modify the core code and only need to hook a function on **HookPoint** that EMQX provided on the specific location.
 
-The implementer of the plugin only needs to pay attention to:
+During this whole process, you only need to pay attention to:
 
-1. The location of **HookPoint**: Including its role, timing of execution, and how to mount and cancel mount.
+1. Location of **HookPoint**: Including its role, timing of execution, and how to mount and cancel mount.
 2. Implementation of **callback function**: including the number of input parameters, role, data structure of the callback function, and the meaning of the returned value.
-3. Understand the mechanism of callback function execution on the **chain**: including the order in which callback functions are executed, and how to terminate the execution of the chain in advance.
+3. Mechanism of callback function execution on the **chain**: including the order in which callback functions are executed, and how to terminate the execution of the chain in advance.
 
-If you used hooks in the development of extension plugin, you should be able to fully understand these three above points, **and try not to use blocking functions inside the hooks, which will affect system throughput.**
+If you used hooks in the development of the extension plugin, you should be able to fully understand these three above points, **and try not to use blocking functions inside the hooks, which will affect system throughput.**
 
 
 ## Callback Functions Chain
@@ -63,12 +64,12 @@ There may be multiple plugins on a single **HookPoint** that need to care about 
 
 We call this chain composed of multiple callback functions executed sequentially **Callback Functions Chain**.
 
- **Callback Functions Chain** is Currently implemented according to the concept of [Chain-of-Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). In order to satisfy the functionality and flexibility of the hook, it have the following attributes:
+ **Callback Functions Chain** is Currently implemented according to the concept of [Chain-of-Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). In order to satisfy the functionality and flexibility of the hook, it has the following attributes:
 
-- **Ordered**: The callback functions on the **Callback Functions Chain** must be executed in certain order.
-- **In Parameter** There must be one/some initialization parameters and, optionally, a cumulative value for modification by the **Callback Functions Chain**.
-- **Output Result** Each function in the chain must have an output, and `ok` should be used as the function return value for callback functions that do not care about the result of execution. For example, in a notification class event, "A client has successfully logged in" does not require a return value.
-- **Transitive** The result of callback functions in the chain is transitive. And to allow more flexibility in the use of hooks, we have designed **two modes** of handling the return values of callback functions in the chain.
+- **Ordered**: The callback functions on the **Callback Functions Chain** must be executed in a certain order.
+- **In Parameter**: There must be one/some initialization parameters and, optionally, a cumulative value for modification by the **Callback Functions Chain**.
+- **Output Result**: Each function in the chain must have an output, and `ok` should be used as the function return value for callback functions that do not care about the result of execution. For example, in a notification class event, "A client has successfully logged in" does not require a return value.
+- **Transitive**: The result of callback functions in the chain is transitive. And to allow more flexibility in the use of hooks, we have designed **two modes** of handling the return values of callback functions in the chain.
   - **Result Transitive**</br>
     It means that each callback function in the chain accepts the entry of the chain, and the return of the previous callback function (which can be interpreted as a cumulative value) as arguments. Until the last function, the return value of the last function is then the return value of the whole chain. Specially, the chain is called with an initial value for the cumulative value to be used by the first callback function in the chain.
   - **Result Transparent**</br>
@@ -77,13 +78,13 @@ We call this chain composed of multiple callback functions executed sequentially
     Most of notification event follows this logic. So that we provide the general **Callback Functions Chain** execution module.
 - **Callback Functions Chain** needs to allow the functions with it to *terminate the chain in advance* and *ignore this operation.*
   - **Termination in advance:** After the execution of this function is completed, the execution of the chain is directly terminated. All subsequent callback functions on the chain are ignored.</br>
-    For example, an authentication believes that such clients do not need to check other authentication plug-ins after they are allowed to log in, so they need to be terminated in advance.
+    For example, an authentication believes that such clients do not need to check other authentication plugins after they are allowed to log in, so they need to be terminated in advance.
   - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function.</br>
-    For example, when there are multiple authentication plug-ins, an authentication plug-in believes that such clients do not belong to its authentication scope, and it does not need to modify the authentication results. This operation should be ignored and the returned value of the previous function should be passed directly to the next function on the chain.
+    For example, when there are multiple authentication plugins, an authentication plugin believes that such clients do not belong to its authentication scope, and it does not need to modify the authentication results. This operation should be ignored and the returned value of the previous function should be passed directly to the next function on the chain.
 
 Therefore, we can obtain two program flow diagrams for the execution chain based on the two ways of handling the return value of the callback function on the chain.
 
-### Result Transitiv
+### Result Transitive
 ```
 Chain execution direction ===>>>
 
@@ -133,7 +134,7 @@ The above is the main design concept of the callback function chain, which regul
 In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.
 - For hooks and other language applications, Refer to: [Extension Hook](./lang-exhook.md)
 
-## HookPoint
+## HookPoint list
 
 EMQX Broker is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
 
