@@ -292,7 +292,7 @@
     - extensions/introduction
     - extensions/hooks
     - extensions/plugins
-    - extensions/lang-lua
+    # - extensions/lang-lua
     - extensions/exhook
 
 - title_en: MQTT Specific

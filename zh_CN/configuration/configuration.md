@@ -200,7 +200,7 @@ authentication.1.enable = false
 ```
 
 ::: tip
-数组（列表格式）将全量覆写而不是合并覆盖原有值，例如：
+列表格式是的数组将全量覆写而不是合并覆盖原有值，例如：
 
 ```bash
 authentication = [
