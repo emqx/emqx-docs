@@ -170,8 +170,8 @@
     - network/emqx-mqtt-tls
     # - network/mqtt-client-tls
     - network/crl-and-ocsp-stapling
-    - network/gmssl
-    - network/ipv6
+    # - network/gmssl
+    # - network/ipv6
 
 - title_en: Command Line Interface
   title_cn: 命令行接口
