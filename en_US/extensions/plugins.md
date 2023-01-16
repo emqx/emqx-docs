@@ -1,18 +1,32 @@
 # Plugins
 
-Plugins are  Erlang applications written according to the EMQX Plugin specification. By customizing them, developers can extend arbitrary functionality within EMQX.
+EMQX allow users to customize the business logic or implement other protocols using plugins. In this chapter, you will learn how to develop plugins.
 
-As long as the developer has basic Erlang development skills, it will be easy to develop plugins according to the following steps.
+The basic process of plugin development and operation is as follows:
 
-- Generate the plugin `tar.gz`  from the plugin template provided by EMQX.
-- Install the plugin package through Dashboard.
-- Start/stop/uninstall the plugin through Dashboard.
+- Generate the corresponding plugin tar.gz package through the plugin template provided by EMQX.
+- Install the plugin packages via Dashboard or CLI.
+- Start/stop/uninstall plugins via Dashboard or CLI.
 
-## Plugin development
+:::tip
+Prerequisites
 
-  [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)  is a basic EMQX plugin template that you can directly download and modify to generate a standard plugin. Next we will implement a new authentication/access control feature from scratch with the plugin.
+- Knowledge of EMQX [hooks](./hooks.md)
+  :::
 
-### Download template
+## Develop EMQX plugins
+
+EMQX offers an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), which allows you to further customize your plugins. In the section below, we will use the access control plugin as an example to give you a step-by-step guide to plugin development. 
+
+### 1. Download the plugin template
+
+To download the  [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), run: 
+
+```
+git clone https://github.com/emqx/emqx-plugin-template
+```
+
+As we can see from the directory structure, this is a standard Erlang application. 
 
 ```sh
 $ git clone https://github.com/emqx/emqx-plugin-template
@@ -22,13 +36,17 @@ Makefile                 check-vsn.sh             priv
 README.md                rebar.config             src
 ```
 
- This is a standard Erlang Application application, It is recommended to have a quick look at the readme documentation.
+### 2. Test the compile environment
 
-### Compile Template
+Run `make rel` to test whether the plugin can be successfully compiled and packed. No coding is needed. 
 
-Run `make rel` directly to make release without changing any code. The first compilation process is long because it depends on the main emqx project (to facilitate the plugin to use various functions of the main project directly), you need to download the dependencies and compile the main project.
+The plugins under development need to use the functions of the main EMQX, so the program needs first to download the dependency and then compile the main project. Therefore, the first compilation usually takes a long time to complete.
 
-### Custom the hook functions
+For the compiling environment, see [Install from Source code](../deploy/install-source.md).
+
+### 3. Mount the hook functions
+
+Below is the directory structure:
 
 ```sh
 > tree src/
@@ -40,8 +58,8 @@ src/
 └── emqx_plugin_template_sup.erl
 ```
 
-`emqx_plugins_template_app.erl` is the application initiation portal. Here you can create your own supervision tree, load the EMQX's hook functions. All hook functions are registered in this template plugin, so please remove the unnecessary hooks before using it.
-We only need to use 2 hooks for authentication and access control, so we can modify emqx_plugins_template:load/1 as follows:
+`emqx_plugins_template_app.erl` is the initiation portal of the application, where you can create your own supervision tree or load EMQX's hook functions. This template contains all hook functions, please remove the unnecessary hooks before using it.
+In this example, we only need 2 hooks for authentication and access control, so we can modify `emqx_plugins_template:load/1` as follows:
 
 ```erlang
 load(Env) ->
@@ -50,16 +68,18 @@ load(Env) ->
   ok.
 ```
 
-Note: Our custom `on_client_authenticate/3` function is executed when the client authenticates, and `on_client_authorize/5` function is executed when the client does authorize(ACL access control) checks. we also specify the order of its execution, since EMQX also mounts hook functions internally, or developers may develop multiple plugins that mount the same hook functions,  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
+We will use `on_client_authenticate/3` for client authentication and `on_client_authorize/5`  for access control. 
+
+As one hook function may be mounted both by EMQX and customized plugins, we also need to specify the execution order when mounting it to the plugin.  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
 
 ```erlang
-%% Only allow connections with clientid of [A-Za-z0-9_] characters.
+%% Only allow connections with clientID name matching any of the following characters: A-Z, a-z, 0-9, and underscore.
 on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result, _Env) ->
   case re:run(ClientId, "^[A-Za-z0-9_]+$", [{capture, none}]) of
     match -> {ok, Result};
     nomatch -> {stop, {error, banned}}
   end.
-%% Only allow topics subscribed to /room/{clientid}, but can send messages to any topic.
+%% Can only subscribe topic /room/{clientid}, but can send messages to any topics.
 on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Result, _Env) ->
   case emqx_topic:match(Topic, <<"/room/", ClientId/binary>>) of
     true -> {ok, Result};
@@ -68,28 +88,25 @@ on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Res
 on_client_authorize(_ClientInfo, _Pub, _Topic, Result, _Env) -> {ok, Result}.
 ```
 
-With the above 2 hook functions, we only let the clients whose clientid format matches the specification log in. And only subscribe to `/room/{clientid}`, so that a simple chat room feature is implemented.
-  Clients can send messages to any client, but each client can only subscribe to topics related to itself.
+In the above code example, we only allow clients with clientID matching the specification to log in. These clients can only subscribe to topic `/room/{clientid}`, thus building a simple chat room, that is, clients can send messages to any other clients, but each client can only subscribe to topics related to itself.
 
-  *TIPS*: Be sure to set `authorization.no_match` to `deny` in the configuration first, it defaults to `allow`.
+:::tip
 
-```
-authorization {
-  no_match: deny
-}
-```
+1. Be sure to set `authorization.no_match` to `deny` in the configuration first, that is, EMQX will reject any unauthorized connection requests. 
+2. In this example, we illustrate how to customize an access control plugin, you can also [set similar authorization rules based on File](../accesscontrol/../access-control/authz/file.md). 
 
-*PS*: The same rule can more commonly be implemented through [Authorization](../security/authz/authz.md).
+​	:::
 
-### Packaged plugin
-  Modify the version information of the plugin via `rebar.config` with:
+### 5. Pack the customized plugin
+
+Modify the version information of the plugin via `rebar.config`:
 
 ```erlang
 {relx, [ {release, {emqx_plugin_template, "5.0.0-rc.3"}, [emqx_plugin_template, map_sets]}
          , {dev_mode, false}
          , {include_erts, false}
          ]}.
-  %% Additional info of the plugin
+  %% Additional info about the plugin
   {emqx_plugrel,
       [ {authors, ["EMQX Team"]}
       , {builder,
@@ -106,7 +123,7 @@ authorization {
       ]
   }.
 ```
-
+Rerun the packing command:
 ```sh
 make rel
 ...
@@ -114,28 +131,24 @@ make rel
 ===> [emqx_plugrel] creating _build/default/emqx_plugrel/emqx_plugin_template-5.0.0-rc.3.tar.gz  
 ```
 
-The command will prompt to generate the plugin `name-version.tar.gz` version of the package.
+The command will prompt to generate the plugin  `pluginname-version.tar.gz`.
 
-### Install/launch plugin
+### 6. Install/launch the plugin
 
-<img src="./assets/plugins_upload.png" alt="test" style="zoom:80%;" />
+Use CLI to install the compiled package: 
 
-<img src="./assets/plugins_start.png" alt="plugins_start" style="zoom:80%;" />
+```bash
+./bin/emqx_ctl plugins install {pluginName}
+```
 
-After confirming that all information about the plugin is correct, click the start button directly.
+### 7. Uninstall the plugin
 
-<img src="./assets/plugins_start_ok.png" alt="plugins_start_ok" style="zoom:80%;" />
+When you don't need the plugin, you can easily uninstall it with CLI:
 
-Use `MQTTX` client to verify if the function is working: connection is rejected when clientId is `1$`.
+```bash
+./bin/emqx_ctl plugins uninstall {pluginName}
+```
 
-<img src="./assets/connect_failed.png" alt="connect_failed" style="zoom:80%;" />
-
-Next, you can try to send messages to each other after connecting with multiple `MQTTX` clients.
-
-### Uninstall plugin
-
-When you don't need the plugin, you can easily uninstall it from the Dashboard.
-If you are upgrading a plugin, hot upgrade plugins are not  supported currently and need to be reinstalled on the Dashboard.
-
-<img src="./assets/plugins_uninstall.png" alt="plugins_uninstall" style="zoom:80%;" />
-
+{%emqxee%}
+Note: The plugins need to be reinstalled after hot upgrades. 
+{%endemqxee%}
