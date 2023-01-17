@@ -39,6 +39,8 @@ The device online and offline status can be captured and processed in the Rule E
 
 ## Client Online and Offline Events
 
+Those events is enabled by default, please refer to `sys_topics.sys_event_messages` to turn it off.
+
 `$SYS` topic prefix: `$SYS/brokers/${node}/clients/`
 
 | Topic                    | Description                                                       |
@@ -80,6 +82,51 @@ The device online and offline status can be captured and processed in the Rule E
     "clientid": "emqtt-8348fe27a87976ad4db3"
 }
 ```
+
+## Client Subscribed and Unsubscribed Events
+
+Those events is disenabled by default, please refer to `sys_topics.sys_event_messages` to turn it on.
+
+`$SYS` topic prefix: `$SYS/brokers/${node}/clients/`
+
+| Topic                    | Description                              |
+| ------------------------ | ---------------------------------------- |
+| ${clientid}/subscribed   | Subscribed event. This message is published when a client goes online |
+| ${clientid}/unsubscribed | unsubscribed event. This message is published when a client is offline |
+
+The Payload of the `subscribed` event message can be parsed into JSON format:
+
+```bash
+{
+    "username":"foo",
+    "ts":1625572213878,
+    "topic":"/the/best/mqtt/broker/is/emqx",
+    "subopts":{
+        "sub_props":{},
+        "rh":0,
+        "rap":0,
+        "qos":0,
+        "nl":0,
+        "is_new":true
+    },
+    "protocol":"mqtt",
+    "clientid":"emqtt-8348fe27a87976ad4db3"
+}
+
+```
+
+ The Payload of the `unsubscribed` event message can be parsed into JSON format:
+
+```bash
+{
+    "username":"foo",
+    "ts":1625572213899,
+    "topic":"/the/best/mqtt/broker/is/emqx",
+    "protocol":"mqtt",
+    "clientid":"emqtt-8348fe27a87976ad4db3"
+}
+```
+
 
 ## Statistics
 

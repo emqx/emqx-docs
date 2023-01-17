@@ -41,6 +41,8 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
 
 `$SYS` 主题前缀：`$SYS/brokers/${node}/clients/`
 
+本事件默认为开启状态，关闭请参照`sys_topics.sys_event_messages`。
+
 | 主题 (Topic)              | 说明                                     |
 | ------------------------ | ---------------------------------------- |
 | ${clientid}/connected    | 上线事件。当任意客户端上线时，EMQX 就会发布该主题的消息 |
@@ -80,6 +82,51 @@ EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低
     "clientid": "emqtt-8348fe27a87976ad4db3"
 }
 ```
+
+## 客户端订阅与取消订阅事件
+
+本事件默认为关闭状态，开启请参照`sys_topics.sys_event_messages`。
+
+`$SYS` 主题前缀：`$SYS/brokers/${node}/clients/`
+
+| 主题 (Topic)              | 说明                                     |
+| ------------------------ | ---------------------------------------- |
+| ${clientid}/subscribed   | 订阅事件。当任意客户端订阅主题时，EMQX 就会发布该主题的消息 |
+| ${clientid}/unsubscribed | 取消订阅事件。当任意客户端取消订阅主题时，EMQX 就会发布该主题的消息 |
+
+`subscribed` 事件消息的 Payload 解析成 JSON 格式如下:
+
+```bash
+{
+    "username":"foo",
+    "ts":1625572213878,
+    "topic":"/the/best/mqtt/broker/is/emqx",
+    "subopts":{
+        "sub_props":{},
+        "rh":0,
+        "rap":0,
+        "qos":0,
+        "nl":0,
+        "is_new":true
+    },
+    "protocol":"mqtt",
+    "clientid":"emqtt-8348fe27a87976ad4db3"
+}
+
+```
+
+`unsubscribed` 事件消息的 Payload 解析成 JSON 格式如下:
+
+```bash
+{
+    "username":"foo",
+    "ts":1625572213899,
+    "topic":"/the/best/mqtt/broker/is/emqx",
+    "protocol":"mqtt",
+    "clientid":"emqtt-8348fe27a87976ad4db3"
+}
+```
+
 
 ## 系统统计
 
