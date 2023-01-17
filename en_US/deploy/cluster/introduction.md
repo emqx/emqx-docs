@@ -1,5 +1,11 @@
 # Introduction
 
+EMQX Cluster uses a distributed architecture, where each node in the cluster runs an instance of the EMQX broker, and each node communicates with the other nodes in the cluster to share information about client connections, subscriptions, and published messages. This allows the cluster to automatically distribute the load across the nodes and provide high availability in case of a node failure.
+
+EMQX Cluster also provides data redundancy by maintaining multiple copies of the data across different nodes in the cluster. This ensures that if a node fails, the data is still available on other nodes in the cluster.
+
+In addition, EMQX Cluster provides scalability by allowing you to add new nodes to the cluster as your MQTT application grows. This allows you to handle an increasing number of clients and messages without having to worry about the limitations of a single broker.
+
 EMQX is powered by Erlang/OTP, the highly scalable distributed platform.
 
 Before we start talking about EMQX clustering, it's necessary to familiarise
