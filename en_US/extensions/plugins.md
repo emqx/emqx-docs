@@ -72,6 +72,8 @@ We will use `on_client_authenticate/3` for client authentication and `on_client_
 
 As one hook function may be mounted both by EMQX and customized plugins, we also need to specify the execution order when mounting it to the plugin.  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
 
+### 4. Customize access control code 
+
 ```erlang
 %% Only allow connections with clientID name matching any of the following characters: A-Z, a-z, 0-9, and underscore.
 on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result, _Env) ->
@@ -95,7 +97,7 @@ In the above code example, we only allow clients with clientID matching the spec
 1. Be sure to set `authorization.no_match` to `deny` in the configuration first, that is, EMQX will reject any unauthorized connection requests. 
 2. In this example, we illustrate how to customize an access control plugin, you can also [set similar authorization rules based on File](../accesscontrol/../access-control/authz/file.md). 
 
-​	:::
+:::
 
 ### 5. Pack the customized plugin
 

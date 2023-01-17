@@ -37,7 +37,7 @@ MQTT 基于[发布订阅模式](../mqtt/mqtt-publish-and-subscribe.md)进行消�
 
 MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
-![mqttx over view](assets/mqttx-gif.gif)
+![mqttx over view](./assets/mqttx-gif.gif)
 
 > 您也可以使用浏览器打开 [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections)，无需下载与安装即可通过 MQTT over WebSocket 完成 MQTT 开发和调试操作。
 

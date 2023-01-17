@@ -37,7 +37,7 @@ Now we have successfully experienced the entire messaging services with the Dash
 
 Leveraging the easy-to-use graphic interface of MQTT X, you can connect MQTT broker or cloud with one click and test MQTT/TCP, MQTT/TLS, and MQTT/WebSocket connections. 
 
-![mqttx over view](assets/mqttx-gif.gif)
+![mqttx over view](./assets/mqttx-gif.gif)
 
 > You can also use [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to complete the development and debugging via MQTT over WebSocket, with no need to download or install any tools. 
 

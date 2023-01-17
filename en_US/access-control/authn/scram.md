@@ -12,7 +12,7 @@ SCRAM authenticator only supports MQTT 5.0 connection.
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **SCRAM** as **Mechanism**, and **Built-in Database** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
 
-![SCRAM](/Users/lena/Documents/GitHub/wivwiv/未命名/en_US/access-control/authn/assets/authn-scram.png)
+![SCRAM](./authn/assets/authn-scram.png)
 
 Set **Password Hash** as **sha256** or **sha512** and click **Create** to finish the settings. 
 
