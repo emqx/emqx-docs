@@ -51,7 +51,7 @@ query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${usern
 
 ## 配置项
 
-详细配置请参考 [authz:mysql](../../admin/cfg.md#authz:mysql)。
+详细配置请参考 [authz:mysql](../../configuration/configuration-manual.md#authz:mysql)。
 
 MySQL authorizer 由 `type=mysql` 标识。
 

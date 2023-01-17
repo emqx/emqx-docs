@@ -49,7 +49,7 @@ query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${usern
 ## 配置项
 
 
-详细配置请参考 [authz:postgresql](../../admin/cfg.md#authz:postgresql)。
+详细配置请参考 [authz:postgresql](../../configuration/configuration-manual.md#authz:postgresql)。
 
 PostgreSQL authorizer 由 `type=postgresql` 标识。
 

@@ -99,7 +99,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 ### 通过配置文件配置
 
-您也可通过配置文件完成相关配置，具体操作步骤，请参考： [authn-postgresql:authentication](../../admin/cfg.md#authn-postgresql:authentication)。
+您也可通过配置文件完成相关配置，具体操作步骤，请参考： [authn-postgresql:authentication](../../configuration/configuration-manual.md#authn-postgresql:authentication)。
 
 配置示例：
 

@@ -10,7 +10,7 @@ EMQX 提供了内置数据库（基于 Mnesia）作为授权检查数据源，�
 
 ## 配置项
 
-详细配置请参考 [authz-mnesia](../../admin/cfg.md#authz-mnesia)。
+详细配置请参考 [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia)。
 
 该 Authorizer 的配置必需有 `type = built_in_database`。
 

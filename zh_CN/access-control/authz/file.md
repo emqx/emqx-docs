@@ -20,7 +20,7 @@ EMQX 支持基于文件中存储的规则进行授权，您可通过配置文件
 
 ## 通过配置文件配置
 
-您也可通过配置文件配置文件规则，具体操作步骤可以参考 [authz:file](../../admin/cfg.md#authz:file)。
+您也可通过配置文件配置文件规则，具体操作步骤可以参考 [authz:file](../../configuration/configuration-manual.md#authz:file)。
 
 文件 Authorizer 数据源类型 `type = file`。
 

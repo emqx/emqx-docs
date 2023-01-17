@@ -24,7 +24,7 @@ Click add listener button, you can see a form for adding a listener on the right
 
 ![image](./assets/config-listener-add.png)
 
-More about the listener configuration, please refer to [Listener Configuration](../admin/cfg.md#brokerlisteners).
+More about the listener configuration, please refer to [Listener Configuration](../configuration/configuration-manual.md#brokerlisteners).
 
 ### Manager Listener
 
@@ -64,7 +64,7 @@ The system Topic menu is the system topic related configuration items of EMQX; E
 
 The extension menu is the extension-related configuration item of EMQX, which provides some extension functions for MQTT clients, including Topic Rewrite. You can manually add the topic to be rewritten, select the action type--publish/subscribe, enter the original topic, regular expression, and destination topic. Auto Subscribe, you can manually add a Auto Subscribe. For the already added Auto Subscribe, you can delete and edit it. Finally, you can set the Delayed Publish, view the delayed published messages, etc.
 
-More about the MQTT configuration, please refer to [MQTT Configuration](../admin/cfg.md#brokermqtt).
+More about the MQTT configuration, please refer to [MQTT Configuration](../configuration/configuration-manual.md#brokermqtt).
 
 ![image](./assets/config-mqtt.png)
 
@@ -74,7 +74,7 @@ Click the log under the configuration menu on the left to go to the log configur
 
 ![image](./assets/config-log.png)
 
-More about the log configuration, please refer to [Log Configuration](../admin/cfg.md#log).
+More about the log configuration, please refer to [Log Configuration](../configuration/configuration-manual.md#log).
 
 ## Monitoring
 

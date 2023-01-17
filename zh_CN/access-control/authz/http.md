@@ -80,7 +80,7 @@ Body:
 
 ## 配置项
 
-支持 HTTP `POST` 和 `GET` 请求，它们各自都有一些特定的选项。详细配置请参考  [authz:http_post](../../admin/cfg.md#authz:http_post)与 [authz:http_get](../../admin/cfg.md#authz:http_get)。
+支持 HTTP `POST` 和 `GET` 请求，它们各自都有一些特定的选项。详细配置请参考  [authz:http_post](../../configuration/configuration-manual.md#authz:http_post)与 [authz:http_get](../../configuration/configuration-manual.md#authz:http_get)。
 
 HTTP 授权必需使用 `type=http`的配置。
 

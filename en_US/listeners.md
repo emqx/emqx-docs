@@ -121,4 +121,4 @@ curl -X 'DELETE' \
      -H 'accept: */*'
 ```
 
-For more API and details, please see [API](api.md)
+For more API and details, please see [API](./admin/api.md)

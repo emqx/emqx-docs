@@ -24,7 +24,7 @@ The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows use
 - Check the PUB/SUB operation privileges for a client.
 - Bridge or Store a message
 
-See: [Extension Hook](./lang-exhook.md).
+See: [Extension Hook](./exhook.md).
 
 <!-- ### Extension Protocol -->
 

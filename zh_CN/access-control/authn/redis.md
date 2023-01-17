@@ -74,7 +74,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 ## 通过配置文件配置
 
-您可通过配置文件完成相关配置，详细配置步骤请参考 [authn-redis:standalone](../../admin/cfg.md#authn-redis:standalone)、[authn-redis:sentinel](../../admin/cfg.md#authn-redis:sentinel) 与 [authn-redis:cluster](../../admin/cfg.md#authn-redis:cluster)。
+您可通过配置文件完成相关配置，详细配置步骤请参考 [authn-redis:standalone](../../configuration/configuration-manual.md#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.md#authn-redis:sentinel) 与 [authn-redis:cluster](../../configuration/configuration-manual.md#authn-redis:cluster)。
 
 以下为各部署模式下的配置文件示例：
 

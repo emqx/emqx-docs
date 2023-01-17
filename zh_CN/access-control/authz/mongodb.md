@@ -47,7 +47,7 @@ filter { username = "${username}" }
 
 ## 配置项
 
-此认证器支持 3 种部署模式的 MongoDB，详细配置请参考 [authz:mongo_single](../../admin/cfg.md#authz:mongo_single)、[authz:mongo_sharded](../../admin/cfg.md#authz:mongo_sharded) 与 [authz:mongo_rs](../../admin/cfg.md#authz:mongo_rs)。
+此认证器支持 3 种部署模式的 MongoDB，详细配置请参考 [authz:mongo_single](../../configuration/configuration-manual.md#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.md#authz:mongo_sharded) 与 [authz:mongo_rs](../../configuration/configuration-manual.md#authz:mongo_rs)。
 
 MongoDB Authorizer 必需有 `type = mongodb`。
 

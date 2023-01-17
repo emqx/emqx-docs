@@ -64,11 +64,11 @@ gateway.mqttsn {
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
 :::
 
-The MQTT-SN gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../admin/cfg.md)
+The MQTT-SN gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.md)
 
 ## Authentication
 
-Since the connection message of MQTT-SN protocol only given the Client ID of Client, there is no Username and Password. Therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../security/authn/http.md).
+Since the connection message of MQTT-SN protocol only given the Client ID of Client, there is no Username and Password. Therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
 
 The client information generation rules are as follows:
 - Client ID: using the Client ID field of CONNECT message.
@@ -144,11 +144,11 @@ The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:
 - The SUBSCRIBE message of the MQTT-SN protocol is used as a subscribing operation, whose topic and QoS are both specified by this message.
 - The UNSUBSCRIBE message of the MQTT-SN protocol is used as an unsubscribe operation, whose topic is specified by this message.
 
-There is no special authorization configurations within MQTT-SN gateway, and its permission control for topics needs to be configured [Authorization](../security/authz/authz.md).
+There is no special authorization configurations within MQTT-SN gateway, and its permission control for topics needs to be configured [Authorization](../access-control/authz/authz.md).
 
 ## User Interfaces
 
-- Detailed confguration options: [Configuration - Stomp Gateway](../admin/cfg.md)
+- Detailed confguration options: [Configuration - Stomp Gateway](../configuration/configuration-manual.md)
 - Detailed HTTP APIs description: [HTTP API - Gateway](../admin/api.md)
 
 ## Client libraries

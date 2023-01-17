@@ -37,7 +37,7 @@ Redis Authorizer 中添加的所有规则都是**允许**规则，即 Redis Auth
 
 ## 配置项
 
-Redis Authorizer 支持 3 种部署模式的 Redis，详细配置请参考 [redis_standalone](../../admin/cfg.md#authz:redis_standalone)、[authz:redis_sentinel](../../admin/cfg.md#authz:redis_sentinel) 与 [authz:redis_cluster](../../admin/cfg.md#authz:redis_cluster)。
+Redis Authorizer 支持 3 种部署模式的 Redis，详细配置请参考 [redis_standalone](../../configuration/configuration-manual.md#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.md#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.md#authz:redis_cluster)。
 
 Redis authorizer 由 `type=redis` 标识。
 

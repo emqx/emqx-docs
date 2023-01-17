@@ -129,8 +129,8 @@ authentication {
 
 ## SSL Options
 
-Complete SSL listener option refer to: [broker:listener_ssl_opts](../admin/cfg.md#broker-listener-ssl-opts)
-SSL Client options can refer to: [broker:ssl_client_opts](../admin/cfg.md#broker-ssl-client-opts)
+Complete SSL listener option refer to: [broker:listener_ssl_opts](../configuration/configuration-manual.md#broker-listener-ssl-opts)
+SSL Client options can refer to: [broker:ssl_client_opts](../configuration/configuration-manual.md#broker-ssl-client-opts)
 
 ### Ciphers
 
