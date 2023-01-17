@@ -169,7 +169,7 @@
   children:
     - network/emqx-mqtt-tls
     # - network/mqtt-client-tls
-    - network/crl-and-ocsp-stapling
+    # - network/crl-and-ocsp-stapling
     # - network/gmssl
     # - network/ipv6
 
@@ -183,7 +183,7 @@
     - admin/api
     - title_en: API Docs
       title_cn: API 文档
-      path: /api-docs.html
+      path: https://emqxio.emqx-dev.com/docs/zh/v5.0/api.html
 
 ## Dashboard
 
@@ -337,7 +337,7 @@
         - development/erlang
         - development/javascript
         - development/python
-    - development/resource
+        - development/resource
 
 - title_en: Change log
   title_cn: 版本发布记录
