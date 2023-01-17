@@ -12,18 +12,18 @@ EMQX GCP PubSub集成可以发送MQTT消息和事件到
 在配置GCP PubSub之前，必须先在GCP方面进行一些配置步骤
 在EMQX上配置GCP PubSub桥。
 
-1. 1. 创建一个[服务
+1.  创建一个[服务
    账户](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)
    在你的GCP账户中。 确保该服务账户有
    权限，至少可以向感兴趣的主题发布消息。
-2. 2. 为该账户创建一个服务账户密钥，并以JSON格式下载它。
+2. 为该账户创建一个服务账户密钥，并以JSON格式下载它。
    JSON格式。
-3. 3. 创建一个PubSub主题（记住，服务帐户必须有
+3. 创建一个PubSub主题（记住，服务帐户必须有
    权限来发布到该主题）。
 
 ## GCP PubSub桥通过仪表盘使用的例子
 
-进入EMQX仪表板，选择左边菜单上的_"数据集成"_项目，然后选择_"数据桥"。
+进入EMQX仪表板，选择左边菜单上的_"数据集成"_项目，然后选择_"数据桥"_。
 在左边的菜单上选择_"数据集成"_，然后选择_"数据桥"_。 然后，点击_"+创建"_。
 
 在对话框中，选择_Google PubSub_桥类型，点击下一步。
@@ -32,7 +32,7 @@ EMQX GCP PubSub集成可以发送MQTT消息和事件到
 所有来自MQTT消息的可见输入都使用JSON格式，例如
 clientid, topic, payload, 等等。 否则，它将使用用户定义的
 模板，用MQTT上下文中的相应值来填充`${变量_名称}`形式的占位符。
-对应的MQTT上下文中的值。 例如，`${topic}`将被替换为`my/topic}。
+对应的MQTT上下文中的值。 例如，`${topic}`
 将被替换为`my/topic`，如果这是MQTT消息的主题。
 
 在_GCP服务账户凭证_字段中，上传你的JSON格式的服务账户凭证。
