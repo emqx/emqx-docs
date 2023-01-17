@@ -204,7 +204,7 @@ Windows 执行 `./bin/emqx console` 弹出错误窗口：
 
 ### 解决方法
 
-可以借助 EMQX 日志中的关键字来进行简单的问题排查，EMQX 日志相关内容请参考：[日志与追踪](../getting-started/log.md)。
+可以借助 EMQX 日志中的关键字来进行简单的问题排查，EMQX 日志相关内容请参考：[日志与追踪](../observability/tracer.md)。
 
 1. certificate_expired
 
