@@ -1,7 +1,7 @@
 # MongoDB
 
 This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
-MmongoDB database.
+MongoDB database.
 
 ## Storage Schema
 
