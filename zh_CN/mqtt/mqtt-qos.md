@@ -4,15 +4,15 @@ MQTT 协议中规定了消息服务质量（Quality of Service），它保证了
 
 ## QoS0 最多分发一次
 
-![MQTT QoS0](assets/mqtt-qos0.png)
+![MQTT QoS0](./assets/mqtt-qos0.png)
 
 ## QoS1 至少分发一次
 
-![MQTT QoS1](assets/mqtt-qos1.png)
+![MQTT QoS1](./assets/mqtt-qos1.png)
 
 ## QoS 2 只分发一次
 
-![MQTT QoS2](assets/mqtt-qos2.png)
+![MQTT QoS2](./assets/mqtt-qos2.png)
 
 ## 如何决定 QoS
 

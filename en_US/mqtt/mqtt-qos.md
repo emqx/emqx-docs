@@ -3,15 +3,15 @@ In MQTT protocol, Quality of Service (QoS) ensures the reliability of message de
 
 ## QoS0 - At most once (not guaranteed)
 
-![MQTT QoS0](assets/mqtt-qos0.png)
+![MQTT QoS0](./assets/mqtt-qos0.png)
 
 ## QoS1 Once - At least once (guaranteed)
 
-![MQTT QoS1](assets/mqtt-qos1.png)
+![MQTT QoS1](./assets/mqtt-qos1.png)
 
 ## QoS 2 Exactly once (guaranteed)
 
-![MQTT QoS2](assets/mqtt-qos2.png)
+![MQTT QoS2](./assets/mqtt-qos2.png)
 
 ## How to select the applicable QoS
 

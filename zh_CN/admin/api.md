@@ -12,49 +12,7 @@ EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用�
 
 ## 认证
 
-EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，也可以通过如下的 API 调用来创建一个新的 API 密钥。
-
-请求示例
-
-```bash
-curl -u 'admin:public' \
-     -X 'POST' \ 'http://localhost:18083/api/v5/api_key' \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{
-            "name": "EMQX-API-KEY-3",
-            "expired_at": "2022-12-05T02:01:34.186Z",
-            "desc": "for testing",
-            "enable": true,
-            "expired": true
-        }'
-```
-
-返回示例
-
-```bash
-{
-  "api_key": "a87465f14ca0d420",
-  "api_secret": "LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN",
-  "created_at": "2022-06-21T22:28:23+02:00",
-  "desc": "for testing",
-  "enable": true,
-  "expired": false,
-  "expired_at": "2022-12-05T03:01:34+01:00",
-  "name": "EMQX-API-KEY-3"
-}
-```
-
-结果中的 `api_key` 和 `api_secret` 可用于在访问 REST API 时完成 HTTP 基本认证，例如：
-
-```bash
-curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
-     -X 'GET' 'http://localhost:18083/api/v5/nodes' -H 'accept: application/json'
-```
-
-::: tip
-请注意 `api_secret` 仅在创建时返回一次，请及时保存。
-:::
+EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)
 
 ## HTTP 请求头
 
