@@ -169,9 +169,9 @@
   children:
     - network/emqx-mqtt-tls
     # - network/mqtt-client-tls
-    - network/crl-and-ocsp-stapling
-    - network/gmssl
-    - network/ipv6
+    # - network/crl-and-ocsp-stapling
+    # - network/gmssl
+    # - network/ipv6
 
 - title_en: Command Line Interface
   title_cn: 命令行接口
@@ -183,7 +183,7 @@
     - admin/api
     - title_en: API Docs
       title_cn: API 文档
-      path: /api-docs.html
+      path: https://emqxio.emqx-dev.com/docs/zh/v5.0/api.html
 
 ## Dashboard
 
@@ -222,19 +222,18 @@
   title_cn: 配置文件参数
   children:
     - configuration/configuration
-    - configuration/environment
     - configuration/configuration-manual
 
 - title_en: Operations
   title_cn: 运维操作
   children:
     - operations/backup-restore
-    - title_en: Hot Upgrades
-      title_cn: 版本热升级
-      path: deploy/hot-upgrades
-    - title_en: Rolling Upgrades
-      title_cn: 滚动升级
-      path: deploy/hot-upgrades
+    # - title_en: Hot Upgrades
+    #   title_cn: 版本热升级
+    #   path: deploy/hot-upgrades
+    # - title_en: Rolling Upgrades
+    #   title_cn: 滚动升级
+    #   path: deploy/hot-upgrades
     # - operations/debug
     # - operations/diagnostic-mode
     # - operations/production-notes
@@ -293,7 +292,7 @@
     - extensions/introduction
     - extensions/hooks
     - extensions/plugins
-    - extensions/lang-lua
+    # - extensions/lang-lua
     - extensions/exhook
 
 - title_en: MQTT Specific
@@ -338,7 +337,7 @@
         - development/erlang
         - development/javascript
         - development/python
-    - development/resource
+        - development/resource
 
 - title_en: Change log
   title_cn: 版本发布记录

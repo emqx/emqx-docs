@@ -1,41 +1,60 @@
-# Password Authentication Using Built-in Database 
+# Use built-in database for password authentication
 
-EMQX supports the use of the built-in database (Mnesia) as the storage medium for client identity credentials, which does not require users to deploy additional databases, and can be used out of the box. Using the built-in database is also the default recommended solution for EMQX, as it provides the best performance for authentication.
+You can use the built-in database of EMQX as a low-cost and out-of-the-box option for password authentication. After enabling, EMQX will save the client credentials in its built-in database (based on Mnesia) and manages data via REST API and Dashboard. This chapter will introduce how to use EMQX Dashboard and configuration items to configure. 
 
-## Authentication principle
+::: tip
 
-Password authentication usually requires the user to provide an identity ID and a corresponding password. The identity ID is used to identify the user's identity, which can be a username, a client identifier, or a certificate common name. The correct combination of identity ID and password is only shared between the user and the authentication system, so the authentication system can verify the authenticity of the user's stated identity by comparing the password provided by the user with the password stored in its own database.
+- Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
-### Avoid storing clear text passwords
+:::
 
-In order to complete authentication, some information, such as a password, needs to be shared between the user and the authentication system. But this means that passwords that were supposed to be kept secret are now held by multiple parties, which significantly increases the probability of password leaks, since an attacker could potentially steal the password by attacking either party.
+## Configure with Dashboard
 
-Therefore, we do not recommend storing passwords in clear text in the authentication system's database. Because once the database is dragged, these passwords will be completely exposed to the attacker. We prefer to generate a random salt, and then store this salt in the database along with the hash of the salted password. In this way, even if the attacker steals the data in the database, he can neither use the hash value to login, nor can it be difficult to deduce the real password based on the hash value.
+You can use EMQX Dashboard to set the built-in database for password authentication. 
 
-## Create password authentication using built-in database
+On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **Built-in Database** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
 
-You can use EMQX Dashboard to create password authentication using the built-in database.
+![Built-in-database](./assets/authn-built-in-database.png)
 
-Go to [Dashboard > Access Control > Authentication](http://127.0.0.1:18083/#/authentication), and click **Create**, select **Mechanism** as `Password-Based`, **Backend** as `Built-in Database`, and then enter the specific configuration page:
 
-![](./assets/authn-mnesia-1.png)
 
-**UserID Type** is used to specify which field EMQX should use as the client's identity ID for authentication. The optional values are `username` and `clientid`. For the MQTT client, it corresponds to the Username and Client Identifier fields in the CONNECT packet, respectively.
+**UserID Type**: Specify the fields for client ID authentication; Options:  `username`, `clientid`（corresponding to the  `Username` or `Client Identifier` fields in the `CONNECT` message sent by the MQTT client).
 
-**Password Hash** is used to specify the hash algorithm used when storing passwords, supports md5, sha, bcrypt, pbkdf2, etc. For different hash algorithms, the built-in database password authenticator has different configuration requirements:
+**Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. There are some extra items to be configured based on the function you selected: 
 
-1. When configured as a hash algorithm such as md5, sha, etc., the corresponding configuration will be as follows:
+1. If **plain**, **md5**, **sha**, **sha256** or **sha512** are selected, we also need to configure:
+   - **Salt Position**: Specify the way (**suffix**, **prefix**, or **disable**) to add salt (random data) to the password. You can keep the default value unless you are migrating user credentials from external storage into EMQX built-in database. Note: If you choose **plain**, the **Salt Position** should be set to **disable**.  
+2. If **bcrypt** is selected, we also need to configure:
 
-   - **Salt Position**, which is used to specify the combination method of salt and password: adding salt at the end of the password or adding salt at the head of the password. This option may need to be changed only when users need to migrate credentials from external storage to EMQX built-in database.
-2. When configured as bcrypt algorithm, the corresponding configuration will be as follows:
+   - **Salt Rounds**: Specify the calculation times of Hush function (2^Salt Rounds). Default value: **10**; Value range **4~31**. You are recommended to use a higher value for better protection. Note: Increasing the cost factor by 1 doubles the necessary time. 
+3. If **pkbdf2** is selected, we also need to configure: 
 
-   - **Salt Rounds**，also known as the cost factor, it is used to specify the number of computations required for hashing (2^Salt Rounds). Every time you add one, the time required for hashing will double. The longer it takes, the higher the difficulty of brute force cracking, but the longer it takes to verify the user accordingly, so you need to do it according to your actual situation. trade-offs.
-3. When configured as pkbdf2 algorithm, the corresponding configuration will be as follows:
+   - **Pseudorandom Function**: Specify the Hush function for generating the key, for example,  sha256. 
+   - **Iteration Count**: Specify the calculation times of Hush function. Default: **4096**.
+   - **Derived Key Length **(optional): Specify the generated key length. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected. 
 
-   - **Pseudorandom Function**, used to specify the hash function used to generate the key.
-   - **Iteration Count**, used to specify the number of hashes.
-   - **Derived Key Length**, specify the desired key length. If specified, it means that the final key length is determined by **Pseudorandom Function**.
+Now we can click **Create** to finish the setting. 
 
-## Migrating from external storage to EMQX built-in database
+## Configure with configuration items
 
-If you have stored credentials in other databases but want to migrate to EMQX's built-in database, we provide the function of bulk importing credentials from csv or json format files. To learn more, read [Import User](./user_management.md#importing-users).
+You can also configuration items for the configuration. For detailed steps, see [authn-builtin_db:authentication](../../admin/cfg.md#authn-builtin_db:authentication). 
+
+Example:
+
+```hocon
+{
+   backend = "built_in_database"
+   mechanism = "password_based"
+   password_hash_algorithm {
+      name = "sha256",
+      salt_position = "suffix"
+   }
+   user_id_type = "username"
+}
+```
+
+
+
+## Migrate from external storage to EMQX built-in database
+
+To migrate user credentials from external storage to EMQX built-in database, you can use .csv or .json files for batch import. For operating details, see [Import User](./user_management.md#importing-users).

@@ -39,11 +39,11 @@ With persistent session enabled, **during the session validity period**, the ses
 
 MQTT 3.1.1 does not give the option to specify when a Persistent Session will expire. But considering the resource consumed by sessions, EMQX offers a global configuration item for the session expiration duration, and the relation between session lifecycle and Clean Session is as follows:
 
-![MQTT v3.1.1 中会话生命周期与 Clean Session 的关系](assets/mqtt-clean-session.png)
+![MQTT 3.1.1](./assets/mqtt-clean-session.png)
 
 MQTT 5.0 gives the option to use Clean Start and Session Expiry Interval to decide whether to enable session persistence and session expiration time. The relationship between the session life cycle and the two is as follows:
 
-![MQTT v5.0 中会话生命周期与 Session Expiry Interval 的关系](assets/mqtt-clean-start.png)
+![MQTT v5.0](./assets/mqtt-clean-start.png)
 
 In the current version, EMQX's persistent session is based on memory, which can bring better performance in throughput and message latency. This also means that session data may be lost when EMQX is restarted or is unexpectedly shut down, which will have a certain impact on data reliability.
 
