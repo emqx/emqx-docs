@@ -19,7 +19,7 @@ Several EMQX functions are implemented using the hook feature:
 2. Caching messages at message publishing time as per the configuration
 3. Use the hook blocking mechanism to postpone message publishing 
 
-The authentication/authorization commonly used in the system is implemented according to this logic. Take the [Multilingual extension ](./lang-exhook.md) as an example:
+The authentication/authorization commonly used in the system is implemented according to this logic. Take the [Multilingual extension ](./exhook.md) as an example:
 
 When only the `Built-in Database` authentication is enabled, according to the processing logic of the event (see figure above), the logic of the authentication module at this time is:
 
@@ -132,7 +132,7 @@ This is equivalent to the case where the `InitAcc` value is `ok` and every callb
 The above is the main design concept of the callback function chain, which regulates the execution logic of the callback function on the hook.
 
 In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.
-- For hooks and other language applications, Refer to: [Extension Hook](./lang-exhook.md)
+- For hooks and other language applications, Refer to: [Extension Hook](./exhook.md)
 
 ## HookPoint list
 

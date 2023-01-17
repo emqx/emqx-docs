@@ -4,7 +4,7 @@ During development, we usually use compressed packages to start services in the 
 
 ::: tip
 
-If the EMQX cluster is deployed behind HAProxy or Nginx, and you need to get the real source IP address and port of the clients, you need to turn on the Proxy Protocol configuration with the following configuration item: [EMQX listener proxy_protocol](../../admin/cfg.md)
+If the EMQX cluster is deployed behind HAProxy or Nginx, and you need to get the real source IP address and port of the clients, you need to turn on the Proxy Protocol configuration with the following configuration item: [EMQX listener proxy_protocol](../../configuration/configuration-manual.md)
 
 `Proxy Protcol` Reference: [https://www.haproxy.com/blog/haproxy/proxy-protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol).
 Nginx uses Proxy Prorcol Reference: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)

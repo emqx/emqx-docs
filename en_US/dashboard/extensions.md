@@ -43,11 +43,11 @@ Each configuration item will be different depending on the protocol gateway; the
 The configuration form for the base configuration will vary depending on the protocol gateway, details of the configuration parameters for each protocol can be viewed by clicking on the jump to the configuration file description page.
 
 <!-- FIXME: -->
-- [Stomp](../admin/cfg.md#gatewaystomp)
-- [MQTT-SN](../admin/cfg.md#gatewaymqttsn)
-- [CoAP](../admin/cfg.md#gatewaycoap)
-- [ExProto](../admin/cfg.md#gatewayexproto)
-- [LwM2M](../admin/cfg.md#gatewaylwm2m)
+- [Stomp](../configuration/configuration-manual.md#gatewaystomp)
+- [MQTT-SN](../configuration/configuration-manual.md#gatewaymqttsn)
+- [CoAP](../configuration/configuration-manual.md#gatewaycoap)
+- [ExProto](../configuration/configuration-manual.md#gatewayexproto)
+- [LwM2M](../configuration/configuration-manual.md#gatewaylwm2m)
 
 #### Listener
 

@@ -138,7 +138,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 调优
 
-客户端的压力机和服务端的机器都需要执行系统参数的调优，参见：[系统调优](../deploy/tune.md)
+客户端的压力机和服务端的机器都需要执行系统参数的调优，参见：[系统调优](../performance/tune.md)
 
 ### 连接量测试
 

@@ -48,4 +48,4 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 ## 配置 Dashboard
 
-Dashboard 默认监听 HTTP 端口，端口号默认为 18083，用户可以启用 HTTPS 或更改监听器端口，更多关于 Dashboard 如何配置和修改的使用方法可参考[配置文档](../admin/cfg.md#dashboard)。
+Dashboard 默认监听 HTTP 端口，端口号默认为 18083，用户可以启用 HTTPS 或更改监听器端口，更多关于 Dashboard 如何配置和修改的使用方法可参考[配置文档](../configuration/configuration-manual.md#dashboard)。

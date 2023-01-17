@@ -71,7 +71,7 @@ Body:
 
 ## 通过配置文件设置
 
-此外，您可以通过配置项完成相关配置，具体可参考：[authn-http:post](../../admin/cfg.md#authn-http:post) 与 [authn-http:get](../../admin/cfg.md#authn-http:get)。
+此外，您可以通过配置项完成相关配置，具体可参考：[authn-http:post](../../configuration/configuration-manual.md#authn-http:post) 与 [authn-http:get](../../configuration/configuration-manual.md#authn-http:get)。
 
 以下为使用 `POST` 和 `GET` 请求配置的 HTTP 请求示例：
 

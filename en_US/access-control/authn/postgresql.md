@@ -102,7 +102,7 @@ Now we can click **Create** to finish the settings.
 
 ## Configure with configuration items
 
-You can configure the EMQX PostgreSQL authenticator with EMQX configuration items. For detailed operation steps, see [authn-postgresql:authentication](../../admin/cfg.md#authn-postgresql:authentication).  
+You can configure the EMQX PostgreSQL authenticator with EMQX configuration items. For detailed operation steps, see [authn-postgresql:authentication](../../configuration/configuration-manual.md#authn-postgresql:authentication).  
 
 PostgreSQL authentication is identified with `mechanism = password_based` and `backend = postgresql`.
 

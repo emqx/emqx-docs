@@ -35,7 +35,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密
 
 ## 通过配置文件配置
 
-此外，您可以通过配置项完成相关配置，具体可参考： [authn-builtin_db:authentication](../../admin/cfg.md#authn-builtin_db:authentication)。
+此外，您可以通过配置项完成相关配置，具体可参考： [authn-builtin_db:authentication](../../configuration/configuration-manual.md#authn-builtin_db:authentication)。
 
 示例配置：
 

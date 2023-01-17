@@ -293,7 +293,7 @@ HMGET emqx_user:${username} password_hash is_superuser
 #### MongoDB 变动
 
 1. MongoDB 数据源可用于黑/白名单模式下，此前仅支持白名单模式，要求设置 `acl_nomatch = deny`；
-2. 需要从 MongoDB 中查询出包含 `action` `permission` `topics` 字段的数据列表，使用方式详见 [AuthZ-MongoDB](../security/authz/mongodb.md)。
+2. 需要从 MongoDB 中查询出包含 `action` `permission` `topics` 字段的数据列表，使用方式详见 [AuthZ-MongoDB](../access-control/authz/mongodb.md)。
 
 如需继续使用 4.x 中的数据，请手动迁移适配。
 

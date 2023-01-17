@@ -307,7 +307,7 @@ The correspondence between 4.x integer values and 5.0 character/enumeration valu
 #### MongoDB
 
 1. MongoDB data source can be used for both allow and deny rules. Previously, only white list mode was supported, and it was required to set `acl_nomatch = deny`;
-2. You need to select documents containing the `action`, `permission` and `topics` fields from MongoDB. For details, see [AuthZ-MongoDB](../security/authz/mongodb.md).
+2. You need to select documents containing the `action`, `permission` and `topics` fields from MongoDB. For details, see [AuthZ-MongoDB](../access-control/authz/mongodb.md).
 
 If you want to continue using the data from in 4.x, please make necessary migrations manually.
 

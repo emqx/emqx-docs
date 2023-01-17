@@ -37,7 +37,7 @@ Now we can click **Create** to finish the setting.
 
 ## Configure with configuration items
 
-You can also configuration items for the configuration. For detailed steps, see [authn-builtin_db:authentication](../../admin/cfg.md#authn-builtin_db:authentication). 
+You can also configuration items for the configuration. For detailed steps, see [authn-builtin_db:authentication](../../configuration/configuration-manual.md#authn-builtin_db:authentication). 
 
 Example:
 

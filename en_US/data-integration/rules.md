@@ -44,7 +44,7 @@ In the above SQL:
 The dot (".") syntax requires that the data must be of JSON or Map type. If it is of other data types, SQL functions must be used for data type conversion.
 :::
 
-For the SQL syntax and usages, see [SQL syntax](./rule-sql-grammar-and-examples.md).
+For the SQL syntax and usages, see [SQL syntax](./rule-sql-syntax.md).
 
 ### Actions
 

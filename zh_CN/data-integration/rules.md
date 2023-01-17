@@ -41,7 +41,7 @@ WHERE
 "." 语法要求数据必须是 JSON 或者 Map 类型，如果是其他数据类型，须要使用 SQL 函数做数据类型转换。
 :::
 
-关于规则的 SQL 语句格式和用法，详见 [SQL 手册](./rule-sql-grammar-and-examples.md)。
+关于规则的 SQL 语句格式和用法，详见 [SQL 手册](./rule-sql-syntax.md)。
 
 ### 动作
 
