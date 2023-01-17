@@ -15,48 +15,7 @@ EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start wi
 
 EMQX's REST API uses [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework).
 
-To create an API key, you can click **System** -> **API Key** page on the left navigation tree of the Dashboard, or you can call the `api_key` API to create an API key. 
-
-Example Request
-
-```bash
-curl -u 'admin:public' \
-     -X 'POST' 'http://localhost:18083/api/v5/api_key' \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{
-            "name": "EMQX-API-KEY-3",
-            "expired_at": "2022-12-05T02:01:34.186Z",
-            "desc": "for testing",
-            "enable": true
-        }'
-```
-
-Example Response
-
-```bash
-{
-  "api_key": "a87465f14ca0d420",
-  "api_secret": "LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN",
-  "created_at": "2022-06-21T22:28:23+02:00",
-  "desc": "for testing",
-  "enable": true,
-  "expired": false,
-  "expired_at": "2022-12-05T03:01:34+01:00",
-  "name": "EMQX-API-KEY-3"
-}
-```
-
-Then you can use the information provided in the `api_key` and `api_secret` fields to access management APIs using HTTP basic auth. For example:
-
-```bash
-curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
-     -X 'GET' 'http://localhost:18083/api/v5/nodes'
-```
-
-::: tip
-The `api_secret` will only be returned once after it is created, please save it properly.
-:::
+To create an API key, you can click **System** -> **API Key** page on the left navigation tree of the Dashboard, Please refer to [Dashboard - API Keys](../dashboard/system.md#api-keys).
 
 ## HTTP Headers
 
