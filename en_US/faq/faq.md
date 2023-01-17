@@ -200,7 +200,7 @@ The client cannot establish an SSL connection with EMQX.
 
 ### Solution
 
-You can use the keywords in the EMQX log to perform simple troubleshooting. For the EMQX log related content, please refer to: [Log and Trace](../getting-started/log.md).
+You can use the keywords in the EMQX log to perform simple troubleshooting. For the EMQX log related content, please refer to: [Log and Trace](../observability/tracer.md).
 
 1. certificate_expired
 

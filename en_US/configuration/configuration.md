@@ -1,6 +1,6 @@
 # Configuration Files
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual]((./configuration-manual.md)).
+Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](./configuration-manual.md).
 
 ## Configuration files
 
