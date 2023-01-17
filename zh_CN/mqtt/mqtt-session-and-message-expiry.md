@@ -39,11 +39,11 @@
 
 MQTT v3.1.1 没有规定持久会话应该在什么时候过期，但在实际场景中会话会占用服务端的资源，因此 EMQX 向用户提供一个全局配置来限制会话的过期时间，会话生命周期与 Clean Session 关系如下：
 
-![MQTT v3.1.1 中会话生命周期与 Clean Session 的关系](assets/mqtt-clean-session.png)
+![MQTT v3.1.1 中会话生命周期与 Clean Session 的关系](./assets/mqtt-clean-session.png)
 
 MQTT v5.0 提供了 Clean Start 与 Session Expiry Interval 来分别决定是否启用会话持久化，以及会话的过期时间，会话生命周期与两者关系如下：
 
-![MQTT v5.0 中会话生命周期与 Session Expiry Interval 的关系](assets/mqtt-clean-start.png)
+![MQTT v5.0 中会话生命周期与 Session Expiry Interval 的关系](./assets/mqtt-clean-start.png)
 
 当前版本中，EMQX 的持久会话是基于内存的，这能够带来更出色的吞吐量和消息延迟。这也意味着在对 EMQX 进行重启操作或者 EMQX 意外宕机时也可能会导致会话数据丢失，从而对数据可靠性带来一定影响。
 

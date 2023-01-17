@@ -167,7 +167,7 @@ Below are code examples you may refer to:
 
 :::
 
-::: tab Sharding:
+::: tab Sharding
 
 ```
 {
