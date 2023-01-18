@@ -1,29 +1,27 @@
 # Log
 
-Logs provide a reliable source of information for troubleshooting and optimizing system performance. Logs can record business problems, such as login errors and abnormal access. It can also record information about events that occur in the operating system or network, including performance and fault detection.
+Logs provide a reliable source of information for troubleshooting and system performance optimization. You can find the record about the access, operating or network issues from EMQX logs. 
 
-EMQX activates the overload protection mechanism by default when the log data is too much or the log writing is too slow, which can ensure the normal business is not affected by the log.
+To minimize the impact of logs on system operation, for example, when the log data is too much or the log writing is too slow, EMQX activates the overload protection mechanism to better serve our users.
 
 ## Log level
 
-The logging of EMQX Broker is divided into 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), which are shown from low to high as follows:
+EMQX log has 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), with warning as the default level, from low to high these 8 levels are:
 
 ```bash
 debug < info < notice < warning < error < critical < alert < emergency
 ```
 
-The default logging level of EMQX is warning.
+You can change the log configuration with either of the following methods:
 
-Logging configuration updates are performed in two ways.
+1. [Recommended] Configure with EMQX Dashboard, click **Configuration** -> **Log** on the left navigation tree to configure. Save the changes and they will take effect immediately without needing to restart the node.
+1. Modify the configuration items under `log` in `emqx.conf`, which will take effect after the node restarts.
 
-1. Configure the configuration items under `log` in `emqx.conf`, which will take effect after restarting the node.
-2. Configure it in the dashboard under `Configuration/Log`, save it and it will take effect without restarting the node.
+EMQX supports outputting logs to console or log file, these are 2 independent features, you can choose the output method as needed and keep both.
 
-EMQX supports outputting logs to console or log file, outputting console and file do not affect each other, and can be set at the same time.
+## Output logs to console
 
-## Console log Handler
-
-When using the foreground start ( `. /bin/emqx console` or `/bin/emqx/foreground`), the console output of `warning` level logs is enabled and the log file output is disabled. Output to the console can make it easier for development debugging. Its configuration path is `log.console_handler`, and all configuration items are described as follows:
+After the EMQX is started with command line `./bin/emqx console` or `/bin/emqx/foreground`, EMQX will output the logs (`warning` level) to the console and disable the log file output option.You can use the console logs for development debugging. Its configuration path is `log.console_handler`, and all configuration items are described as follows:
 
 ```
 log.console_handler {
@@ -37,7 +35,7 @@ log.console_handler {
     ##   - utc: the UTC time offset
     ##   - +-[hh]:[mm]: user specified time offset, such as "-02:00" or "+00:00"
     time_offset = system
-    ## Set the maximum length of a single log message. If this length is exceeded, the log message will be truncated.
+    ## Set the maximum length of a single log message. If message length exceeds this value, the log message will be truncated.
     chars_limit = unlimited
     ## Choose log formatter. `text` for free text, and `json` for structured logging.
     formatter = text
