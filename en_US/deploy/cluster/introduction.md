@@ -1,5 +1,6 @@
 # Introduction
 
+<<<<<<< HEAD
 EMQX Cluster uses a distributed architecture, where each node in the cluster runs an instance of the EMQX broker, and each node communicates with the other nodes in the cluster to share information about client connections, subscriptions, and published messages. This allows the cluster to automatically distribute the load across the nodes and provide high availability in case of a node failure.
 
 EMQX Cluster also provides data redundancy by maintaining multiple copies of the data across different nodes in the cluster. This ensures that if a node fails, the data is still available on other nodes in the cluster.
@@ -7,34 +8,40 @@ EMQX Cluster also provides data redundancy by maintaining multiple copies of the
 In addition, EMQX Cluster provides scalability by allowing you to add new nodes to the cluster as your MQTT application grows. This allows you to handle an increasing number of clients and messages without having to worry about the limitations of a single broker.
 
 EMQX is powered by Erlang/OTP, the highly scalable distributed platform.
+=======
+EMQX cluster adopts a distributed architecture, which can handle a large number of clients and messages while ensuring high availability, fault tolerance and scalability.
+>>>>>>> ac37bc2bda45385d1edf17b0ae646093ee3439ce
 
-Before we start talking about EMQX clustering, it's necessary to familiarise
-ourselves with Erlang/OTP.
+EMQX 5.0 adopts the new [Mria cluster architecture](./mria-introduction.md) compared to the previous version's cluster design. With this Mria architecture, one EMQX node can support up to 5 million MQTT connections, and the EMQX cluster can support up to 100 million concurrent MQTT connections.
 
-## Erlang/OTP
+This chapter will introduce the distributed EMQX cluster and its working mode to help you get started. 
 
-Erlang/OTP is originally a programming language platform designed by Ericsson
-for the development of telecommunication equipment systems.
+## Working principles
 
-Telecommunication equipment (routers, access gateways) is typically a distributed system that connects the main control board and multiple business boards through
-the backplane.
+In a distributed EMQX cluster, one EMQX instance runs on each node. All nodes within the cluster communicate with each other and share information on client connections, subscriptions, and published messages. So the EMQX cluster can automatically distribute the load across the nodes, thus ensuring the system's high availability.
 
-## Distributed Erlang
+EMQX cluster provides data redundancy by maintaining multiple copies of the data across different cluster nodes. If one node malfunctions, the data is still available on other nodes.
 
-The distributed programs of the Erlang/OTP platform are composed of distributed
-interconnected Erlang runtime systems.
-Each Erlang runtime system is called a node.
-Nodes are interconnected with TCP to form a network (or a cluster in this context).
+In addition, you can continuously add new nodes to one cluster to scale up the system's capabilities, so you can better handle an increasing number of clients and messages without worrying about the limitations of a single broker.
 
-Erlang nodes are identified by a unique node name, which consists of two parts
-separated by `@`:
+EMQX is powered by [Erlang/OTP](https://www.erlang.org/), the programming language platform Ericsson developed for telecommunication equipment systems. Before we talk about EMQX clustering, let's first talk about what is Erlang/OTP. 
+
+## Erlang/OTP and Erlang node
+
+Telecom equipment, such as routers and access gateways, are usually distributed systems with the main control board and multiple business boards connected via the backplane.
+
+The distributed programs of the Erlang/OTP platform are multiple distributed yet interconnected Erlang runtime systems.
+Each Erlang runtime system is called a node. Nodes are interconnected with TCP to form a network (or a cluster).
+
+Erlang nodes are identified by a unique node name, which consists of two parts separated by `@`:
 
 ```bash
 <name>@<ip-address-or-FQDN>
 ```
 
-Communication between nodes is addressed by node name.
-For example, start four shell terminals locally and then use the `-name` parameter to start four Erlang nodes, respectively:
+Communication between nodes is addressed by node name. Next, we will illustrate how to create nodes and clusters in Erlang REPL. 
+
+1. Start four shell terminals locally and then use the `-name` parameter to start four Erlang nodes with the same `cookie`:
 
 ```bash
 erl -name node1@127.0.0.1 -setcookie my_nodes
@@ -43,12 +50,7 @@ erl -name node3@127.0.0.1 -setcookie my_nodes
 erl -name node4@127.0.0.1 -setcookie my_nodes
 ```
 
-The Erlang expression `node().` can be used to view the name of this node,
-and `nodes().` can be used to view other nodes that have established a connection
-with the current node.
-
-We now go to the console of `node1@127.0.0.1` and check the current node name and
-connected nodes:
+2. Visit the console (`node1@127.0.0.1`) and check the name of the current node and connected nodes, among which, `node().` is to check the node name and `nodes().` is to check the connected nodes.
 
 ```bash
 (node1@127.0.0.1) 4> node().
@@ -58,7 +60,7 @@ connected nodes:
 []
 ```
 
-Then we let `node1` initiate connections with other nodes:
+3. Let `node1` initiate a connection to other nodes:
 
 ```bash
 (node1@127.0.0.1) 1> net_kernel:connect_node('node2@127.0.0.1').
@@ -69,40 +71,38 @@ true
 true
 ```
 
-Now we can check other nodes that are already connected to node1:
+4. Rerun the command in step 2 and recheck the connected nodes. 
 
 ```bash
 (node1@127.0.0.1) 4> nodes().
 ['node2@127.0.0.1','node3@127.0.0.1','node4@127.0.0.1']
 ```
 
-We can see that `node2`, `node3`, and `node4` have established a distributed
-connection with `node1`, and these four nodes form a cluster.
+We can see that `node2`, `node3`, and `node4` have established a distributed connection with `node1`, and these four nodes form a cluster.
 
-Note that whenever a new node joins the cluster, it will establish a TCP
-connection with all the nodes in the cluster.
-
-At this point, the four nodes have completed the mesh structure shown in the following figure:
+Whenever a new node joins the cluster, it will establish a TCP
+connection with all the nodes in the cluster. Connection among these 4 nodes is shown below:
 
 ![image](./assets/cluster_1.png)
 
 
-## EMQX Broker Distributed cluster design
+## Distributed EMQX cluster
 
-The basic function of EMQX Broker distribution is to forward and publish messages to
-subscribers on each node, as shown in the following figure.
+The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers, as shown below.
 
 ![image](../../assets/design_9.png)
 
-To achieve this, EMQX Broker maintains several data structures: subscription
-tables, routing tables, and topic trees.
-These tables are stored in the [embedded database](./db.md).
+To achieve this, EMQX maintains several data structures in [embedded database](./mria-introduction.md):
 
-### Subscription Table: Topics-Subscribers
+- Subscription table
+- Routing table
+- Topic tree
 
-When an MQTT client subscribes to a topic, EMQX Broker maintains a **Subscription Table**
-for the Topic-\> Subscriber mapping. The subscription table only exists on
-the EMQX Broker node where the subscriber is located, for example:
+### Subscription table: topics-subscribers
+
+EMQX maintains a subscription table to store the topic-\> subscriber mapping and ensure the incoming messages are routed to the correct clients. This data is only stored on the EMQX node where the subscribers are located. The table scheme is as follows: 
+
+<!-- TODO 数据分区跟这个有关吗 -->
 
 ```bash
 node1:
@@ -115,9 +115,9 @@ node2:
     topic1 -> client4
 ```
 
-### Route Table: Topic-Node
+### Route table: topic-node
 
-All nodes in the same cluster will **copy** a topic-to-> node mapping table, for example:
+The route table stores the mapping between the topic and the node, that is, the topic list of each client on all nodes, and ensures the incoming messages are routed to the correct clients. This data will be duplicated among all nodes within the cluster. The table scheme is as follows: 
 
 ```bash
 topic1 -> node1, node2
@@ -127,10 +127,9 @@ topic3 -> node2, node4
 
 ### Topic tree: topic matching with wildcards
 
-In addition to the routing table, each node in the EMQX Broker cluster also maintains a
-backup of the **Topic Trie.**
+Topic tree has a hierarchical data structure. It stores information on topic hierarchies for matching messages to subscribed clients.
 
-The following topic-subscription relationship is an example:
+This data will be duplicated among all nodes within the cluster. Below is a topic tree example:
 
 | Client  | Node  | Subscribed topic |
 |---------|-------|------------------|
@@ -138,101 +137,98 @@ The following topic-subscription relationship is an example:
 | client2 | node2 | t/#              |
 | client3 | node3 | t/+/x, t/a       |
 
-When all subscriptions are completed, EMQX Broker maintains the following Topic Trie and Route Table:
+When all subscriptions are completed, EMQX will maintain the following topic tree table and route table:
 
 ![image](./assets/cluster_2.png)
 
-### Message Distribution Process
+### Message distribution process
 
-When an MQTT client publishes a message, the node where it is located retrieves the route table
-and forwards the message to the relevant node according to the message topic,
-and then the relevant node retrieves the local subscription table and sends the message to the
-relevant subscriber.
+When an MQTT client publishes a message, the node where it is located retrieves the route table and forwards the message to the target node according to the message topic. 
+The target node then retrieves the local subscription table and sends the message to the target subscribers.
 
-For example, when `client1` publishes a message to the topic `t/a`.
-The routing and distribution of the message between nodes are as follows:
+For example, when `client1` publishes a message to topic `t/a`, the routing and distribution of the message between nodes are as follows:
 
-1. Client1 publishes a message with the topic `t/a` to the `node1`.
-2. By querying the topic tree, `node1` learns that `t/a` matches two existing subscriptions
-   of `t/a` and `t/#`.
-3. By querying the route table, `node1` learns that topic `t/a` has subscribers only
-   on `node3`, and topic `t/#` has subscribers only on `node2`.
-   So `node1` forwards the message to `node2` and `node3`.
-4. After node2 receives the forwarded `t/a` message,
-   it queries the local subscription table to obtain the subscribers who have subscribed to
-   `t/#` on that node and distributes the message to them.
-5. After `node3` receives the forwarded `t/a` message, it queries the local subscription table to obtain the subscribers who have subscribed to `t/a` on that node and distributes the message to them.
+1. `client1` publishes a message with topic `t/a` to `node1`.
+
+2. `node1` queries the topic tree and locate `t/#` and `t/a` that match topic `t/a`. 
+
+3.  `node1` queries the route table and fins:
+   
+   1. Some clients on `node2` subscribed topic `t/#`;
+   
+   2. Some clients on `node3 `subscribed topic `t/a`;
+   
+      So `node1` will forward the message to `node2` and `node3`.
+   
+4. `node2` receives the forwarded `t/a` message, queries the local subscription table, and then distributes the message to clients subscribed to the topic.
+
+5. `node3` receives the forwarded `t/a` message, queries the local subscription table, and then distributes the message to clients subscribed to the topic.
+
 6. Message forwarding and distribution are finished.
 
 ### Data partition and sharing
 
-EMQX Broker's subscription table is partitioned in the cluster,
-while the topic tree and routing table are replicated.
+<!-- TODO 何为分区存放，用处是什么 -->
 
-## EMQX Node Discovery and Autocluster
+EMQX's subscription table is partitioned in the cluster, while the topic tree and routing table are replicated within the cluster.
 
-On top of distributed Erlang, EMQX added an abstraction layer from the
-[Ekka] (https://github.com/emqx/ekka) library.
+## EMQX cluster node discovery and autocluster
+
+EMQX added an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang. 
 
 Ekka is a cluster management library developed for
-Erlang/OTP applications, supporting Erlang Node Auto-Discovery, Autocluster,
-Network partition autoheal and autoclean.
+Erlang/OTP applications, enabling features like auto discovery of EMQX nodes, auto cluster, network partition autoheal and autoclean.
 
-EMQX supports multiple node discovery strategies:
+EMQX supports several node discovery strategies:
 
 | Strategy | Description                             |
-|----------|-----------------------------------------|
-| manual   | Create a cluster through manual command |
-| static   | Autocluster of static node list         |
-| dns      | Autocluster of DNS A record             |
+| -------- | --------------------------------------- |
+| Manual   | Manually create a cluster with commands |
+| Static   | Autocluster through static node list    |
+| DNA      | Autocluster through DNS A record        |
 | etcd     | Autocluster through etcd                |
-| k8s      | Autocluster of Kubernetes service       |
+| k8s      | Autocluster provided by Kubernetes      |
 
-Note: mcast discovery strategy has been deprecated and will be removed in the future releases.
+### EMQX cluster protocol settings
 
-### EMQX Broker Cluster protocol settings
-
-Each node in the Erlang cluster can be connected through TCP or TLS,
+Each Erlang node can be connected via TCP or TLS,
 and the connection method can be configured in `etc/emqx.conf`:
 
-| Configuration name    | Type      | Default value       | Description                                                                                                                                         |
-|-----------------------|-----------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| cluster.proto_dist    | enum      | `inet_tcp`          | Distributed protocol with optional values are as follows:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
-| node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as inet_tls, you need to configure the ` etc/ssl_dist.conf` file, and specify the TLS certificate.            |
+| Configuration item    | Type      | Default value       | Description                                                  |
+| --------------------- | --------- | ------------------- | ------------------------------------------------------------ |
+| cluster.proto_dist    | enum      | `inet_tcp`          | Distributed protocol with optional values are:<br />  - inet_tcp: use TCP IPv4<br/>  - inet6_tcp: use TCP IPv6<br/>  - inet_tls: use TLS |
+| node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as `inet_tls`, you need to configure the ` etc/ssl_dist.conf` file and specify the TLS certificate. |
 
-## Network Partition Autoheal
+## Network partition autoheal
 
-*EMQX* supports Network Partition Autoheal, which can be configured in `etc/emqx.conf`:
+EMQX supports network partition autoheal, which can be configured in `etc/emqx.conf`:
 
 ```bash
 cluster.autoheal = on
 ```
 
-Network Partition Autoheal Process:
+The work process is as follows:
 
-1. The node performs Network Partition confirmation 3 seconds after receiving the
-   `inconsistent_database` event from Mnesia;
-2. After the node confirms that the Network Partition has occurred,
-   it reports the message to the Leader node (the oldest node in the cluster by uptime);
-3. After the Leader node delays for a period of time, it creates a
+1. The node receives `inconsistent_database` from Mnesia and waits 3 seconds before starting the network partition confirmation;
+2. After the node confirms the network partition, it reports to the Leader node (the cluster node that starts first);
+3. After the Leader node delays for a while, it creates a
    SplitView when all nodes are online;
-4. The Leader node selects the self-healing Coordinator node in the majority partition;
-5. The Coordinator node restarts the minority partition node to restore the cluster.
+4. The Leader node selects the self-healing coordinator node in the majority partition;
+5. The coordinator node restarts the nodes in the minority partition to restore the cluster.
 
-## Autoclean of Cluster nodes
+## Autoclean of cluster nodes
 
-*EMQX* supports cluster Autoclean, which can be configured in `etc/emqx.conf` :
+EMQX supports cluster autoclean, which can be configured in `etc/emqx.conf` :
 
 ```bash
 cluster.autoclean = 5m
 ```
-With this enabled, the disconnected node is automatically removed from the cluster
-after the configured time interval.
+With this feature enabled, the disconnected node will be automatically removed from the cluster after the configured time interval.
 
-## What's Next
+## Further reading
 
-After some learning, it's time to start clustering EMQX nodes.
+You can continue to read the following chapters on how to cluster EMQX nodes.
 
-* Learn more about the [security](./security.md) aspects of EMQX clusters.
-* The classic [Manual clustering](./manual.md)
-* The smarter [Auto clustering](./auto.md)
+* EMQX cluster [security setting](./security.md)
+* [Manual clustering](./manual.md)
+* [Auto clustering](./auto.md)
