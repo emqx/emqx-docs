@@ -200,7 +200,14 @@ EMQX 支持集群自动清理，可以在 `etc/emqx.conf` 中进行配置。
 ```bash
 cluster.autoclean = 5m
 ```
+
 启用该功能后，断开连接的节点会在配置的时间间隔后自动从集群中移除
+
+## 跨节点会话
+
+EMQX 集群模式下，MQTT 连接的持久会话(Session) 可以跨节点专业。
+
+例如负载均衡的两台集群节点: node1 与 node2，同一 MQTT 客户端先连接 node1，node1 节点会创建持久会话；客户端断线重连到 node2 时，MQTT 的连接在 node2 节点，持久会话仍在 node1 节点。
 
 ## 拓展阅读
 

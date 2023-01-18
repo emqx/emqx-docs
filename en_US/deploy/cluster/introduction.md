@@ -213,7 +213,14 @@ EMQX supports cluster autoclean, which can be configured in `etc/emqx.conf` :
 ```bash
 cluster.autoclean = 5m
 ```
+
 With this feature enabled, the disconnected node will be automatically removed from the cluster after the configured time interval.
+
+## Session across Nodes
+
+The persistent MQTT sessions (clean session = false) are across nodes in the cluster.
+
+If a persistent MQTT client connected to node1 first, then disconnected and connects to node2, the MQTT connection and session will be located on different nodes。
 
 ## Further reading
 
