@@ -56,8 +56,8 @@
         - deploy/cluster/introduction
         - deploy/cluster/mria-introduction
         - deploy/cluster/cluster-requirements
-        - deploy/cluster/manual
-        - deploy/cluster/auto
+        # - deploy/cluster/manual
+        - deploy/cluster/create-cluster
         - deploy/cluster/security
         - deploy/cluster/lb
     - title_en: Performance and Tuning

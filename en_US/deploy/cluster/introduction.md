@@ -1,16 +1,6 @@
 # Introduction
 
-<<<<<<< HEAD
-EMQX Cluster uses a distributed architecture, where each node in the cluster runs an instance of the EMQX broker, and each node communicates with the other nodes in the cluster to share information about client connections, subscriptions, and published messages. This allows the cluster to automatically distribute the load across the nodes and provide high availability in case of a node failure.
-
-EMQX Cluster also provides data redundancy by maintaining multiple copies of the data across different nodes in the cluster. This ensures that if a node fails, the data is still available on other nodes in the cluster.
-
-In addition, EMQX Cluster provides scalability by allowing you to add new nodes to the cluster as your MQTT application grows. This allows you to handle an increasing number of clients and messages without having to worry about the limitations of a single broker.
-
-EMQX is powered by Erlang/OTP, the highly scalable distributed platform.
-=======
 EMQX cluster adopts a distributed architecture, which can handle a large number of clients and messages while ensuring high availability, fault tolerance and scalability.
->>>>>>> ac37bc2bda45385d1edf17b0ae646093ee3439ce
 
 EMQX 5.0 adopts the new [Mria cluster architecture](./mria-introduction.md) compared to the previous version's cluster design. With this Mria architecture, one EMQX node can support up to 5 million MQTT connections, and the EMQX cluster can support up to 100 million concurrent MQTT connections.
 
@@ -223,7 +213,14 @@ EMQX supports cluster autoclean, which can be configured in `etc/emqx.conf` :
 ```bash
 cluster.autoclean = 5m
 ```
+
 With this feature enabled, the disconnected node will be automatically removed from the cluster after the configured time interval.
+
+## Session across Nodes
+
+The persistent MQTT sessions (clean session = false) are across nodes in the cluster.
+
+If a persistent MQTT client connected to node1 first, then disconnected and connects to node2, the MQTT connection and session will be located on different nodes。
 
 ## Further reading
 
