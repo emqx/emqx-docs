@@ -1,98 +1,111 @@
-# Cluster Scalability - Mria
+# Deploy structure and cluster requirement
 
-EMQX uses an embedded [Mria](https://github.com/emqx/mria) database to store the following information:
+In EMQX 5.0, we redesign the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability and is also the key behind 100M MQTT connection support with a single cluster. 
 
-- routing table
-- sessions
-- configuration
-- alarms
-- etc.
+This chapter will introduce how to deploy EMQX clusters under this new architecture. You can also use [EMQX Operator](https://www.emqx.com/en/emqx-kubernetes-operator) to realize automatic cluster deployment. For details, see [Deploy with K8s](../install-k8s.md).
 
-Mria tables are replicated across all EMQX nodes.
-It also helps with the fault-tolerance: the data is safe as long as at least one node in the cluster is alive.
+:::tip
+Prerequisites:
 
-If the size of the EMQX cluster is below 5 nodes, typically, no database scalability tuning is required.
+- Knowledge of [Distributed clusters](./introduction.md)。
+  :::
 
-However, for horizontal scalability, it is recommended to split the nodes in the cluster into two groups:
+## Mria + RLOG architecute
 
-- core nodes
-- replicant nodes
+<!-- TODO 展开介绍 RLOG -->
 
-## Node roles
+[Mria](https://github.com/emqx/mria) is an open source extension to Mnesia that adds eventual consistency to clusters. With RLOG mode enabled, Mria switched from **a full mesh** topology to a **mesh+star** topology. Each node assumes one of two roles: **core node** or **replicant node**.
 
-*Core nodes* serve as a source of truth for the database: they are connected in a full mesh, and each one of them contains an up-to-date replica of the data.
-Core nodes are expected to be more or less static and persistent. That is, autoscaling the core cluster is not recommended.
+![EMQX Mria](./assets/EMQX Mria architecture.png)
 
-*Replicant nodes*, on the other hand, offload all operations mutating the tables to the core nodes.
-They connect to one of the core nodes and passively replicate the transactions from it.
-This means replicant nodes aren't allowed to perform any write operations on their own.
-They instead ask a core node to update the data on their behalf.
-At the same time, they have a full local copy of the data, so the read access is just as fast.
+### Core nodes and Replicant nodes
 
-This approach solves two problems:
+#### **Core node**
 
-- Horizontal scalability (we've tested EMQX cluster with 23 nodes)
+Core nodes serve as a data layer for the database. Core nodes form a cluster in a fully connected manner, and each node contains an up-to-date replica of the data. Therefore, the data is safe as long as one active node remains alive.
 
-- It enables autoscaling of the replicant cluster
+Core nodes are expected to be static and persistent. Autoscaling the core cluster is not recommended, including frequent node addition, removal or replacement actions. 
 
-Since replicant nodes don't participate in writes, the efficiency of table updates doesn't suffer when more replicants are added to the cluster.
-This allows the creation of larger EMQX clusters.
+#### Replicant nodes
+
+Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. Replicant nodes are not allowed to perform any write operations. Instead, they hand the write operation over to the Core node for execution. In addition, because Replicants will replicate data from Core nodes, they have a complete local copy of data to achieve the highest read operations efficiency, which helps reduce the latency of EMQX routing.
+
+### Advantages of the new architecture
+
+This data replication model is a mix of **masterless and master-slave replication**. This cluster topology solves two problems:
+
+- Horizontal scalability (as verified with tests of an EMQX cluster with 23 nodes)
+- Easier cluster auto-scaling without risk of data loss.
+
+Since Replicant nodes do not participate in write operations, the latency of write operations will not be affected when more Replicant nodes join the cluster. This allows creation of larger EMQX clusters.
+
+EMQX 4.x adopts a full mesh mode, with synchronization costs increasing with node numbers. In EMQX 5.0, since replicant nodes don't participate in writes, the efficiency of table updates doesn't suffer when more replicants are added to the cluster. This allows the creation of larger EMQX clusters.
 
 Also, replicant nodes are designed to be ephemeral.
 Adding or removing them won't change the data redundancy, so they can be placed in an autoscaling group, thus enabling better DevOps practices.
-Note that initial replication of the data from the core nodes is a relatively heavy operation, depending on the data size, so the autoscaling policy must not be very aggressive.
 
-## Configuration
+Note that initial replication of the data from the core nodes is a relatively heavy operation, depending on the data size, so the autoscaling policy must be moderate.
 
-In EMQX 5.0 all nodes assume core role by default, so without tweaks, the cluster behaves like 4.*.
+## Deploy EMQX clusters
 
-To use the new replication protocol, set `EMQX_NODE__DB_ROLE` environment variable or `node.db_role` setting in `emqx.conf` to `replicant` on some of the nodes in the cluster. This way, they will assume a replicant role. Note that there must be at least one core node in the cluster. We recommend 3 cores + N replicants setup as the starting point.
+In EMQX 5.0 all nodes assume the Core node role by default, so the cluster behaves like that in EMQX 4.x if you keep the default setting. 
 
-Core nodes may accept MQTT traffic, or they can disable all MQTT listeners to serve purely as the database server for the replicants, depending on the use case.
+The Core + Replicant mode is only recommended if you have more than 3 nodes in your cluster. 
 
-- In a small cluster (3 nodes or less in total) it doesn't make sense perfomance-wise to use replicants, so core nodes take all the traffic. This is a easy way to use EMQX.
-- In a very large cluster (10 nodes or more) it makes sense to move away traffic from the core nodes.
-- In a medium cluster it really depends on many factors, so experimentation is needed.
+<!-- TODO 确认最终的建议值，原文出现 5 个节点，3 个节点两种数值 -->
+
+To use this new replication protocol, you can set the node as a Replicant node by setting the `emqx.conf` `node.db_role` parameter or the `EMQX_NODE__DB_ROLE` environment variable, and `cluster.core_nodes` to specify the Core nodes to connect. 
+
+:::tip
+
+Note that there must be at least one core node in the cluster. We recommend starting with the 3 cores + N replicants setup.
+
+:::
+
+Core nodes may accept MQTT traffic or disable all MQTT listeners to serve as the replicants' database servers. Therefore, we suggest:
+
+- In a small cluster (3 nodes or less), it is not necessary to use the Core + Replicant replication mode, we can just let the core nodes take all the traffic.
+- In a very large cluster (10 nodes or more), moving the MQTT traffic from the Core nodes is recommended, which is more stable and horizontally scalable.
+- In a medium cluster, some tests are recommended to compare the performance under different scenarios. 
 
 ## Network and hardware
 
 ### Network
 
-The network latency between Core nodes is recommended to be below 10ms, and the cluster will not be available if it is higher than 100ms.
-Please deploy Core nodes under the same private network.
-It is also suggested to deploy under the same private network between Replicant and Core nodes, but the network requirements can be slightly lower.
+The network latency between Core nodes is recommended to be below 10ms, and the cluster will not be available if the latency is higher than 100ms. Please deploy Core nodes under the same private network. Deploying the Replicant and Core nodes under the same private network is also recommended, but the network requirements can be slightly lower.
 
-### CPU/Memory
+### CPU and memory
 
-Core nodes require more memory and have lower CPU consumption without taking over connections. Replicant nodes, consistent with 4.x, can be deployed on a total connection and message throughput basis.
+Core nodes require a large amount of memory, and the CPU consumption is low when there are no connections; the hardware specification of Replicant nodes is the same as with EMQX 4.x, and you can configure it as your connection and throughput needs.
 
-## Exception Handling
+## Exception handling
 
-Core nodes are transparent to Replicant nodes, and when a Core node is down, Replicant nodes will automatically connect to other Core nodes.
-The client is not disconnect at this mount, but may cause a delay in routing updates.
+Core nodes are transparent to Replicant nodes; when a Core node is down, the Replicant nodes can automatically connect to other Core nodes. The client connection will not be interrupted, but routing updates may be delayed.
 
-When a Replicant node is down, all clients connected to that node are disconnected. However, because Replicant is stateless, it does not affect the stability of other nodes, at which point the client can connect to another available Replicant node through the reconnect mechanism.
+When a Replicant node is down, all clients connected to that node will be disconnected. However, because Replicant is stateless, it does not affect the stability of other nodes. If the clients are configured with the reconnection mechanism available on most client libraries, the client can automatically reconnect to another Replicant node. 
 
-## Monitoring and troubleshooting
+## Monitoring and debugging
+
+<!-- TODO 后续补充数值类型 Gauge or Counter -->
 
 The Mria performance can be monitored using Prometheus metrics or Erlang console.
 
-### Prometheus metrics
+### Prometheus indicators
 
-#### Core
-- `emqx_mria_last_intercepted_trans`: Number of transactions received by the shard since the node start. Note that this value can be different on different core nodes.
-- `emqx_mria_weight`: A value used for load balancing. It changes depending on the momentary load of the core node.
+#### Core nodes
+- `emqx_mria_last_intercepted_trans`: Number of transactions received by the shard since the node started. Note that this value can be different on different Core nodes.
+- `emqx_mria_weight`: A value used for load balancing. It varies with the instantaneous load of the Core node.
 - `emqx_mria_replicants`: Number of replicants connected to the core node. Numbers are grouped per shard.
-- `emqx_mria_server_mql`: Number of unprocessed transactions waiting to be sent to the replicants. Less is better. If this metric grows, then it's probably time to add more computing resources for the exiting core nodes or even add more core nodes.
+- `emqx_mria_server_mql`: Number of pending transactions waiting to be sent to the replicants. Less is better.  If this indicator shows a growing trend, more Core nodes are needed.
 
-#### Replicant
+#### Replicant nodes
 
-- `emqx_mria_lag`: Replicant lag, indicating how far behind the upstream core node the replicant lags. Less is better.
-- `emqx_mria_bootstrap_time`: Time spent during bootstrapping of the replicant. This value doesn't change during normal operation of the replicant
-- `emqx_mria_bootstrap_num_keys`: Number of database records copied from the core node during bootstrap. This value doesn't change during normal operation of the replicant
-- `emqx_mria_message_queue_len`: Message queue length of the replica process. It should be around 0 all the time.
-- `emqx_mria_replayq_len`: Length of the internal replay queue on the replicant. Less is better.
+- `emqx_mria_lag`: Replicant lag, indicating how far the upstream Core node lags behind the Replicant nodes. Less is better.
+- `emqx_mria_bootstrap_time`: Time spent during replica startup. This value remains the same during the regular operation of the Replicant nodes. 
+- `emqx_mria_bootstrap_num_keys`: Number of database records copied from the core node during boot. This value doesn't change during the regular operation of the Replicant nodes.
+- `emqx_mria_message_queue_len`: Message queue length of the replication process. It should be around 0 all the time.
+- `emqx_mria_replayq_len`: Length of the internal replay queue on the Replicant nodes. Less is better.
 
 ### Console commands
 
-`emqx eval 'mria_rlog:status().'` command can be executed to get more extensive information about the state of the embedded database.
+Run `emqx eval 'mria_rlog:status().'` command to get more information about the running status of the embedded Mira database.
