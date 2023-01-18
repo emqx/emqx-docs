@@ -1,6 +1,6 @@
 # 告警
 
-EMQX 内置监控与告警功能，目前支持监控 CPU 占用率、系统与进程的内存占用率、进程数量、规则引擎资源状态、集群脑裂与愈合，并会在发现异常时进行告警。告警的激活与取消都将产生一条警告日志，EMQX 会同时发布一个主题 `$SYS/brokers/<Node>/alarms/activate` 或 `$SYS/brokers/<Node>/alarms/deactivate` 的 MQTT 消息，用户可以通过订阅 `$SYS/brokers/+/alarms/activate` 和 `$SYS/brokers/+/alarms/deactivate` 主题来获取告警通知。
+EMQX 内置监控与告警功能，目前支持监控 CPU 占用率、系统与进程的内存占用率、进程数量、规则引擎资源状态、集群脑裂与愈合，并会在发现异常时进行告警。告警的激活与取消都将产生一条警告日志，EMQX 会同时发布一条主题为 `$SYS/brokers/<Node>/alarms/activate` 或 `$SYS/brokers/<Node>/alarms/deactivate` 的 MQTT 消息，用户可以通过订阅对应主题来获取告警通知。
 
 告警通知消息的 Payload 为 Json 格式，包含以下字段：
 

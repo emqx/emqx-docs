@@ -15,7 +15,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 1. 【推荐】通过 EMQX Dashboard 配置。点击左侧导航栏的 **功能配置**-> **日志** 进行配置，保存后生效，无需重启节点。
 2. 在 `emqx.conf` 中修改 `log`下的配置项，重启节点后生效。
 
-EMQX 支持将日志输出到控制台或日志文件，二者互不影响，您可同时设置。
+EMQX 支持将日志输出到控制台或日志文件，二者互不影响，您可同时启用。
 
 ## 控制台输出日志
 

@@ -1,6 +1,6 @@
 # Alarm
 
-EMQX has offered a built-in monitoring and alarm functionality for monitoring the CPU occupancy, system and process memory occupancy, number of processes, rule engine resource status, cluster partition and healing, and will raise an alarm in case of system malfunctions. The activation and deactivation of alarms will generate an alarm log and EMQX will publish an MQTT message with the topic of `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate`. Users can subscribe to the topics of `$SYS/brokers/+/alarms/activate` and `$SYS/brokers/+/alarms/deactivate` to receive alarm notifications.
+EMQX has offered a built-in monitoring and alarm functionality for monitoring the CPU occupancy, system and process memory occupancy, number of processes, rule engine resource status, cluster partition and healing, and will raise an alarm in case of system malfunctions. The activation and deactivation of alarms will generate an alarm log and EMQX will publish an MQTT message with the topic of `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate`. Users can subscribe to the topic to receive alarm notifications.
 
 The payload in the alarm notification message is in JSON format and contains the following fields:
 
