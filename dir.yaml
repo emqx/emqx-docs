@@ -45,10 +45,10 @@
         - deploy/install-windows
         - deploy/install-source
         # - deploy/install-marketplace
-    # - title_en: Use license
-    #   title:cn: 配置 License
-    #   edition: ee
-    #   path: deploy/license
+    - title_en: Use license
+      title:cn: 配置 License
+      edition: ee
+      path: deploy/license
     
     - title_en: Clustering
       title_cn: 构建集群
