@@ -50,7 +50,7 @@ erl -name node4@127.0.0.1 -setcookie my_nodes
 []
 ```
 
-3. Inform `node1` to initiate a connection to other nodes:
+3. Let `node1` initiate a connection to other nodes:
 
 ```bash
 (node1@127.0.0.1) 1> net_kernel:connect_node('node2@127.0.0.1').
@@ -156,7 +156,7 @@ For example, when `client1` publishes a message to topic `t/a`, the routing and 
 
 6. Message forwarding and distribution are finished.
 
-### Data partition
+### Data partition and sharing
 
 <!-- TODO 何为分区存放，用处是什么 -->
 
