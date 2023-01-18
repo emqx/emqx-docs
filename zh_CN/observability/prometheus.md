@@ -1,11 +1,12 @@
-# Prometheus
+# Prometheus 指标集成
 
-EMQX 提供以下 Endpoint 供 Prometheus 采集系统指标：
-`http://127.0.0.1:18083/api/v5/prometheus/stats`
+Prometheus 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。
 
-EMQX 还支持向 `pushgateway` 推送指标，可以通过在 `etc/emqx.conf` 中添加以下配置来启用。默认为关闭状态。
+EMQX 提供以下 Endpoint 供 Prometheus 采集系统指标：`http://127.0.0.1:18083/api/v5/prometheus/stats`
 
-```
+EMQX 还支持向 `pushgateway` 推送指标，此功能默认为关闭状态，可以通过在 `etc/emqx.conf` 中添加以下配置来启用：
+
+```bash
 prometheus {
 
   ## Prometheus的URL
@@ -30,14 +31,18 @@ prometheus {
 }
 ```
 
-
 ## 通过 Dashboard 配置
 
 EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的 **功能配置/监控集成** 直接修改，保存后直接生效，无需重启节点。
 
-
 ## Grafana 数据模板
 
-EMQX 提供了 Grafana Dashboard 的模板文件。这些模板包含了所有 EMQX 监控数据的展示。用户可直接导入到 Grafana 中，进而显示 EMQX 的状态监控图表。
+Prometheus 通常搭配 Grafana 使用，实现指标可视化展示。
 
-模板文件位于：[Grafana Template](https://github.com/emqx/emqx/tree/master/apps/emqx_prometheus/grafana_template)。
+EMQX 提供了 Grafana 的 Dashboard 模板，可以直接导入到 Grafana 中，查看 EMQX 的指标数据图表。
+
+默认的 Dashboard 模板可以在 [EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) 中下载，也可以在 EMQX Dashboard 的 **功能设置** -> **监控** -> **监控集成** 配置页面中的帮助页面里下载。
+
+:::tip
+完整的 Prometheus Grafana 可视化展示操作步骤请参考 [EMQX+Prometheus+Grafana：MQTT 数据可视化监控实践](https://www.emqx.com/zh/blog/emqx-prometheus-grafana)。
+:::
