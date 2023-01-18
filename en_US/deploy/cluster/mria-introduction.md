@@ -1,42 +1,25 @@
 # Cluster Scalability - Mria
 
-EMQX uses an embedded [Mria](https://github.com/emqx/mria) database to store the following information:
+EMQX uses an embedded [Mria](https://github.com/emqx/mria) database to store the route table， sessions, configurations, alarms, etc. These Mria tables are replicated across all EMQX nodes, therefore the data is safe even there is only one alive node left within the cluste.
 
-- routing table
-- sessions
-- configuration
-- alarms
-- etc.
+If the EMQX cluster is composed by less than 5 nodes, no database scalability tuning is required. However, it is recommended to split the nodes in the cluster into two groups for future horizontal scalability needs:
 
-Mria tables are replicated across all EMQX nodes.
-It also helps with the fault-tolerance: the data is safe as long as at least one node in the cluster is alive.
-
-If the size of the EMQX cluster is below 5 nodes, typically, no database scalability tuning is required.
-
-However, for horizontal scalability, it is recommended to split the nodes in the cluster into two groups:
-
-- core nodes
-- replicant nodes
+- Core nodes
+- Replicant nodes
 
 ## Node roles
 
-*Core nodes* serve as a source of truth for the database: they are connected in a full mesh, and each one of them contains an up-to-date replica of the data.
-Core nodes are expected to be more or less static and persistent. That is, autoscaling the core cluster is not recommended.
+Core nodes serve as a source of truth for the database: they are connected in a full mesh, and each one of them contains an up-to-date replica of the data. Core nodes are expected to be more or less static and persistent. That is, autoscaling the core cluster is not recommended.
 
-*Replicant nodes*, on the other hand, offload all operations mutating the tables to the core nodes.
-They connect to one of the core nodes and passively replicate the transactions from it.
-This means replicant nodes aren't allowed to perform any write operations on their own.
-They instead ask a core node to update the data on their behalf.
-At the same time, they have a full local copy of the data, so the read access is just as fast.
+Replicant nodes, on the other hand, offload all operations mutating the tables to the core nodes. They connect to one of the core nodes and passively replicate the transactions from it. This means replicant nodes aren't allowed to perform any write operations on their own. They instead ask a core node to update the data on their behalf. At the same time, they have a full local copy of the data, so the read access is just as fast.
 
 This approach solves two problems:
 
-- Horizontal scalability (we've tested EMQX cluster with 23 nodes)
+- Horizontal scalability (we've tested EMQX cluster with 23 nodes). 
 
-- It enables autoscaling of the replicant cluster
+- It enables autoscaling of the replicant cluster. 
 
-Since replicant nodes don't participate in writes, the efficiency of table updates doesn't suffer when more replicants are added to the cluster.
-This allows the creation of larger EMQX clusters.
+Since replicant nodes don't participate in writes, the efficiency of table updates doesn't suffer when more replicants are added to the cluster. This allows the creation of larger EMQX clusters.
 
 Also, replicant nodes are designed to be ephemeral.
 Adding or removing them won't change the data redundancy, so they can be placed in an autoscaling group, thus enabling better DevOps practices.
