@@ -36,16 +36,7 @@ When only the `Built-in Database` authentication is enabled, according to the pr
 ```
 4. Return **Authentication succeeded**, and the client will successfully access the system as a superuser. 
 
-```
-                     EMQX Core          Hooks & Plugins
-                |<---  Scope  --->|<-------  Scope  -------->|
-                |                 |       emqx_exhook        |
-  Authenticate  |    InitAcc      |      (user's code)       |   Authenticate
- =============> > - - - - - - - - > - - - - - - - - - - - - Yes ==============> Success
-     Request    |  (Init Result)  |      authenticate?       |      Result
-                |                 |                          |
-                +-----------------+--------------------------+
-```
+![hooks_and_internal_model](assets/hooks_and_internal_model.png)
 
 Therefore, **Hooks** can greatly enhance the flexibility of EMQX. If we want to customize EMQX behaviors, we no longer need to modify the core code and only need to hook a function on **HookPoint** that EMQX provided on the specific location.
 
@@ -85,23 +76,8 @@ We call this chain composed of multiple callback functions executed sequentially
 Therefore, we can obtain two program flow diagrams for the execution chain based on the two ways of handling the return value of the callback function on the chain.
 
 ### Result Transitive
-```
-Chain execution direction ===>>>
+![hooks_return_value](assets/hooks_return_value.png)
 
-                                 ┌------ ok ------┐                 ┌------ ok ------┐                 ┌------ ok ------┐
-                                 |   (Args, Acc)  |                 |   (Args, Acc)  |                 |   (Args, Acc)  |
-(Args, InitAcc) -----> Fun1 ---->┤                ├-----> Fun2 ---->┤                ├-----> Fun3 ---->┤                ├-> [NO MORE FUNCS]
-                        |        |                |        |        |                |        |        |                |        |
-                        |        └- {ok, NewAcc} -┘        |        └- {ok, NewAcc} -┘        |        └- {ok, NewAcc} -┘        |
-                  ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐
-                  |           |                      |           |                      |           |                      |           |
-                stop     {stop, NewAcc}            stop     {stop, NewAcc}            stop     {stop, NewAcc}             ok      {ok, NewAcc}
-                  |           |                      |           |                      |           |                      |           |
-                 Acc       NewAcc                   Acc        NewAcc                  Acc        NewAcc                  Acc        NewAcc
-                  └-----┬-----┘                      └-----┬-----┘                      └-----┬-----┘                      └-----┬-----┘
-                        |                                  |                                  |                                  |
- Result <---------------┴<---------------------------------┴<---------------------------------┴<---------------------------------┘
-```
 The meaning of the figure is:
 1. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
 2. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
@@ -115,16 +91,7 @@ The meaning of the figure is:
      - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification
 
 ### Result Transparent
-```
-Chain execution direction ===>>>
-
-(Args) --------------> Fun1 -----------> ok ------------> Fun2 -----------> ok ------------> Fun3 -----------> ok --------> [NO MORE FUNCS]
-                        |              (Args)              |              (Args)              |              (Args)              |
-                       stop                               stop                               stop                               ok
-                        |                                  |                                  |                                  |
-                       ok                                 ok                                 ok                                 ok
- Result <---------------┴<---------------------------------┴<---------------------------------┴<---------------------------------┘
-```
+![hooks_multiple_value](assets/hooks_multiple_value.png)
 
 Comparing this with the first execution mode, you can see that the execution mode that ignores the return value in the chain is actually a special case of the pass return value mode.
 This is equivalent to the case where the `InitAcc` value is `ok` and every callback function mounted on the chain returns `ok | {ok, ok} | stop | {stop, ok}`.

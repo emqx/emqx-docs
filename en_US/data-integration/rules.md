@@ -13,13 +13,8 @@ The rules describe **data source**, **data processing process**, and **processin
 
 - **processing result destination**: a rule can define one or more actions to process SQL output results. If the SQL execution passes, the rules will perform corresponding actions in sequence, such as storing the processing results in the database or republishing them to another MQTT topic.
 
-```
-┌─────────────────┐           ┌────────────────────┐           ┌───────────────────────┐
-│                 │           │                    │           │                       │
-│   DATA SOURCE   ├──────────►│    DATA PROCESS    ├──────────►│ HANDLE PROCESS RESULT │
-│                 │           │       (SQL)        │           │       (Actions)       │
-└─────────────────┘           └────────────────────┘           └───────────────────────┘
-```
+
+![sql_process](assets/sql_process.png)
 
 ### Introduction to rule SQL statements
 

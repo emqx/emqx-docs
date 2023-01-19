@@ -40,16 +40,8 @@ EMQX 的认证授权就是按照该逻辑进行实现的，以 [多语言钩子�
 
 
 <!-- TODO 替换图片 -->
-```hocon
-                     EMQX Core          Hooks & Plugins
-                |<---  Scope  --->|<-------  Scope  -------->|
-                |                 |       emqx_exhook        |
-  Authenticate  |    InitAcc      |      (user's code)       |   Authenticate
- =============> > - - - - - - - - > - - - - - - - - - - - - Yes ==============> Success
-     Request    |  (Init Result)  |      authenticate?       |      Result
-                |                 |                          |
-                +-----------------+--------------------------+
-```
+
+![hooks_and_internal_model](assets/hooks_and_internal_model.png)
 
 由此可见 EMQX 中，**钩子 (Hooks)** 机制极大地方便了系统的扩展。不需要对 EMQX 核心代码进行修改，仅需要向 **挂载点 (HookPoint)** 上挂载钩子函数，便能扩展 EMQX 的各种行为。
 
@@ -90,23 +82,8 @@ EMQX 的认证授权就是按照该逻辑进行实现的，以 [多语言钩子�
 ### 传递返回值模式
 
 <!-- TODO 替换图片 -->
-```bash
-Chain execution direction ===>>>
 
-                                 ┌------ ok ------┐                 ┌------ ok ------┐                 ┌------ ok ------┐
-                                 |   (Args, Acc)  |                 |   (Args, Acc)  |                 |   (Args, Acc)  |
-(Args, InitAcc) -----> Fun1 ---->┤                ├-----> Fun2 ---->┤                ├-----> Fun3 ---->┤                ├-> [NO MORE FUNCS]
-                        |        |                |        |        |                |        |        |                |        |
-                        |        └- {ok, NewAcc} -┘        |        └- {ok, NewAcc} -┘        |        └- {ok, NewAcc} -┘        |
-                  ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐    (Args, NewAcc)    ┌-----┴-----┐
-                  |           |                      |           |                      |           |                      |           |
-                stop     {stop, NewAcc}            stop     {stop, NewAcc}            stop     {stop, NewAcc}             ok      {ok, NewAcc}
-                  |           |                      |           |                      |           |                      |           |
-                 Acc       NewAcc                   Acc        NewAcc                  Acc        NewAcc                  Acc        NewAcc
-                  └-----┬-----┘                      └-----┬-----┘                      └-----┬-----┘                      └-----┬-----┘
-                        |                                  |                                  |                                  |
- Result <---------------┴<---------------------------------┴<---------------------------------┴<---------------------------------┘
-```
+![hooks_return_value](assets/hooks_return_value.png)
 
 该图的含义是：
 
@@ -124,16 +101,8 @@ Chain execution direction ===>>>
 ### 透明返回值模式
 
 <!-- TODO 替换图片 -->
-```bash
-Chain execution direction ===>>>
 
-(Args) --------------> Fun1 -----------> ok ------------> Fun2 -----------> ok ------------> Fun3 -----------> ok --------> [NO MORE FUNCS]
-                        |              (Args)              |              (Args)              |              (Args)              |
-                       stop                               stop                               stop                               ok
-                        |                                  |                                  |                                  |
-                       ok                                 ok                                 ok                                 ok
- Result <---------------┴<---------------------------------┴<---------------------------------┴<---------------------------------┘
-```
+![hooks_multiple_value](assets/hooks_multiple_value.png)
 
 与第一种执行模式进行对比，可以看到忽略链上返回值的执行模式，实际是传递返回值模式的一种特殊情况。</br>
 等价于 `InitAcc` 值为 `ok`，并且链上挂载的每个回调函数都返回  `ok | {ok, ok} | stop | {stop, ok}` 的情形。
