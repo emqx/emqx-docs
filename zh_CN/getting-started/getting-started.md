@@ -108,13 +108,13 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```
-   wget https://www.emqx.com/zh/downloads/broker/5.0.13/emqx-5.0.13-macos11-amd64.zip
+   wget https://www.emqx.com/zh/downloads/broker/5.0.14/emqx-5.0.14-macos11-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```
-   mkdir -p emqx && unzip emqx-5.0.13-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-5.0.14-macos11-amd64.zip -d emqx
    ```
 
 3. 运行以下命令启动 EMQX。
