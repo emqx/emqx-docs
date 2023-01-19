@@ -8,7 +8,8 @@ Under the Data Integration menu on the left side, users can access the Rules pag
 
 ## Create
 
-To create a Rule, click `Create` on the upper right corner of the Rules page. You can also create a Rule quickly by using an existing data bridge on the Data Bridge page. You can check out the [Get Started with Rules](../data-integration/rule-get-started.md) to quickly create and use a rule.
+To create a Rule, click `Create` on the upper right corner of the Rules page. You can also create a Rule quickly by using an existing data bridge on the Data Bridge page. 
+<!-- You can check out the [Get Started with Rules](../data-integration/rule-get-started.md) to quickly create and use a rule. -->
 
 ### SQL Editor
 
@@ -23,7 +24,7 @@ The right side provides a selection of SQL templates, which can be used to quick
 5. CASE-WHEN returns possible results from multiple condition lists
 6. Array processing - get nested values from JSON format payload
 
-The default SQL statement is `SELECT * FROM "t/#"`, which means that when the client publish a message to the topic `t/#`, we will take out all the data under the current event. The `SELECT` keyword can get all the fields in the message, for example, if you want to get the current message's `Payload`, it can be modified to `SELECT payload from "t/#"`. The data can be processed and transformed using [built-in functions](../data-integration/rule-sql-builtin-functions.md). The `FROM` keyword followed by data source. that is, the event topic, the lower rule debug part can view all the optional data source events, using the `WHERE` keyword, you can add conditional judgment, for more detailed SQL syntax usage, please refer to [SQL syntax and examples](../data-integration/rule-sql-grammar-and-examples.md).
+The default SQL statement is `SELECT * FROM "t/#"`, which means that when the client publish a message to the topic `t/#`, we will take out all the data under the current event. The `SELECT` keyword can get all the fields in the message, for example, if you want to get the current message's `Payload`, it can be modified to `SELECT payload from "t/#"`. The data can be processed and transformed using [built-in functions](../data-integration/rule-sql-builtin-functions.md). The `FROM` keyword followed by data source. that is, the event topic, the lower rule debug part can view all the optional data source events, using the `WHERE` keyword, you can add conditional judgment, for more detailed SQL syntax usage, please refer to [SQL syntax and examples](./../data-integration/rule-sql-syntax.md).
 
 ![image](./assets/rule-sql.png)
 
@@ -68,7 +69,7 @@ After completing the editing of the SQL statement and the rule debugging, we can
 
 Using data bridging to forwarding data requires selecting an existing data bridge or creating a new data bridge on the current page. After adding a data bridge to the rule action, the output data of the rule will be forwarded to the corresponding external system resource using the data bridge. The configuration of the data bridge can be referred to [Data Bridge](./bridge.md).
 
-For more details about rule actions, please refer to [Actions](../data-integration/rule-actions.md).
+For more details about rule actions, please refer to [Actions](../data-integration/rules.md#actions).
 
 ![image](./assets/rule-create.png)
 

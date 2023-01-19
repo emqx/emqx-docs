@@ -84,7 +84,7 @@
 
 点击左侧插件扩展菜单下的 ExHook，可以来到 ExHook 页面；ExHook 提供了使用其他编程语言修改或扩展系统功能的能力。ExHook 列表页可查看当前已添加的 ExHook、每个 ExHook 挂载的钩子数量、该 ExHook 下所有钩子执行的成功和失败次数。
 
-关于 ExHook 的定义和开发指南可查阅[钩子](../advanced/hooks)。
+关于 ExHook 的定义和开发指南可查阅[钩子](../extensions/hooks.md)。
 
 ![image](./assets/exhook.png)
 

@@ -28,7 +28,7 @@ EMQX can also be configured to delegate authentication work to external services
 
 ### JWT authentication
 
-[JSON Web Token (JWT)]((https://jwt.io/)) is a token-based authentication mechanism, which does not rely on the server to retain client authentication information or session information.
+[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism, which does not rely on the server to retain client authentication information or session information.
 
 The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator will verify the JWT signature using the list of public keys queried from the JWKS endpoint.
 
@@ -267,18 +267,18 @@ For example,
 
 We have a similar set of conventions for the listener ID:
 
-````
+```bash
 <transport_protocol>:<name>
-````
+```
 
 The format of the gateway listener ID is to add the protocol name in front:
 
-````
+```bash
 <protocol>:<transport_protocol>:<name>
-````
+```
 
 Note that both authenticator IDs and listener IDs need to follow URL encoding conventions when they are used in URLs, for example, we need to replace `:` with `%3A`:
 
-````
+```bash
 PUT /api/v5/authentication/password_based%3Abuilt_in_database
-````
+```

@@ -85,7 +85,7 @@ The client list can be searched using the client ID, username and node. On the t
 
 Click ExHook under the extension menu on the left to come to the ExHook page, ExHook provides the ability to modify or expand system functions using other programming languages. The ExHook list page allows you to view the currently added ExHooks, the number of hooks mounted by each ExHook, and the number of successes and failures of all hooks executed under that ExHook.
 
-Definitions and development guidelines for ExHooks can be found in [hooks](../advanced/hooks).
+Definitions and development guidelines for ExHooks can be found in [hooks](../extensions/hooks.md).
 
 ![image](./assets/exhook.png)
 

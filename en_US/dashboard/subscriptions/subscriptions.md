@@ -10,7 +10,7 @@ The subscriptions page shows the topics and basic information about subscription
   - Retain Handling is equal to 1, if the client successfully subscribes and this subscription does not exist previously, the server sends the retained message. After all, sometimes the client re-initiate the subscription just to change the QoS, but it does not mean that it wants to receive the reserved messages again.
   - Retain Handling is equal to 2, even if the client successfully subscribes, the server does not send the retained message.
 
-By default, the search field displays three filtered search fields: Node, Client ID and Topic, where Node is a drop-down selection box that allows you to check the subscriptions of the connection of the node you need to view or do a fuzzy search of the subscription list using Client ID and Topic; clicking the arrow button on the right side of the search field will also display the QoS and Shared Name filter input boxes, [Shared Name](../mqtt/../../mqtt/mqtt-shared-subscription.md) is supported as an exact match.
+By default, the search field displays three filtered search fields: Node, Client ID and Topic, where Node is a drop-down selection box that allows you to check the subscriptions of the connection of the node you need to view or do a fuzzy search of the subscription list using Client ID and Topic; clicking the arrow button on the right side of the search field will also display the QoS and Shared Name filter input boxes, [Shared Name](../mqtt/mqtt-shared-subscription.md) is supported as an exact match.
 
 ![Subscriptions](../assets/subscriptions.png)
 

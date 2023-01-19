@@ -29,7 +29,7 @@ mqttx pub -r -q 1 -t a/b/c -m ''
 
 2. Number of `Retained` messages exceeds the specified maximum `Retained` messages.
 3. Use REST API to delete the `Retained` message. 
-3. For MQTT 5.0 compatible clients, set an expiration duration, then the `Retained` messages will be deleted if the duration expired. 
+4. For MQTT 5.0 compatible clients, set an expiration duration, then the `Retained` messages will be deleted if the duration expired. 
 
 ::: tip
 
@@ -42,7 +42,7 @@ In this way, the client will be prohibited from sending PUBLISH packets with the
 
 The service stores and manages retained messages sent by clients and sends them to the corresponding subscribers.
 
-### Configure with Dashboard
+## Configure with Dashboard
 
 Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation tree. Then click the **Retainer** tab, and you can customize the setting for Retained messages. 
 
@@ -57,7 +57,6 @@ Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation t
 | Max Payload Size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX broker will treat the retained reserved message as a normal message. |
 | Expire       | duration |                          | 0    | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
 | Clean Interval  | duration |                          | 0    | Interval to clean up expired messages. |
-
 
 ## Flow Control
 
@@ -97,4 +96,4 @@ Configuration Options:
 | batch_deliver_number  | int     | 0         | number of messages to deliver each time (0 means all)     |
 | batch_deliver_limiter | limiter | undefined | message delivery rate limiter                             |
 
-For detailed settings of rate limiter, please see the `Listener Level` and `Connection Level` in [Hierarchical Rate Limiter](../reliability/rate-limit.md)
+For detailed settings of rate limiter, please see the `Listener Level` and `Connection Level` in [Hierarchical Rate Limiter](../rate-limit/rate-limit.md)

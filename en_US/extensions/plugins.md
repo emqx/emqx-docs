@@ -95,7 +95,7 @@ In the above code example, we only allow clients with clientID matching the spec
 :::tip
 
 1. Be sure to set `authorization.no_match` to `deny` in the configuration first, that is, EMQX will reject any unauthorized connection requests. 
-2. In this example, we illustrate how to customize an access control plugin, you can also [set similar authorization rules based on File](../accesscontrol/../access-control/authz/file.md). 
+2. In this example, we illustrate how to customize an access control plugin, you can also [set similar authorization rules based on File](../access-control/authz/file.md). 
 
 :::
 

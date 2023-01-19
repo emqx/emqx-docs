@@ -217,5 +217,4 @@ EMQX 集群模式下，MQTT 连接的持久会话(Session) 可以跨节点专业
 
 - [部署架构与集群要求](./mria-introduction.md)
 - [集群安全](./security.md)
-- [手动集群](./manual.md)
-- [自动集群](./auto.md)
+- [创建集群](./create-cluster.md)

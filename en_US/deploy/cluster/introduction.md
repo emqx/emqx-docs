@@ -227,5 +227,4 @@ If a persistent MQTT client connected to node1 first, then disconnected and conn
 You can continue to read the following chapters on how to cluster EMQX nodes.
 
 * EMQX cluster [security setting](./security.md)
-* [Manual clustering](./manual.md)
-* [Auto clustering](./auto.md)
+* [Create Cluster](./create-cluster.md)

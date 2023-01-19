@@ -384,12 +384,7 @@ EMQX 可以转发消息到标准 MQTT Broker，包括其他 MQTT 实现、公有
 
 ## MQTT Broker（比如 Mosquitto）可以转发消息到 EMQX 吗？
 
-Mosquitto 可以配置转发消息到 EMQX，请参考[数据桥接](../rule/bridge_emqx.md)。
-
-::: tip
-
-> EMQX 桥接相关的使用方式请参照 [EMQX 桥接](../rule/bridge_emqx.md)
-> :::
+Mosquitto 可以配置转发消息到 EMQX，请参考[数据桥接 - MQTT](../data-integration/data-bridge-mqtt.md)。
 
 ## 我想跟踪特定消息的发布和订阅过程，应该如何做？
 

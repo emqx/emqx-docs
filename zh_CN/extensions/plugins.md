@@ -93,7 +93,7 @@ on_client_authorize(_ClientInfo, _Pub, _Topic, Result, _Env) -> {ok, Result}.
 :::tip
 
 1. 需要先把配置中的 `authorization.no_match` 设置为 `deny`，默认拒绝未经授权的操作。
-2. 要设置同样的订阅规则，无需开发插件，可以通过 EMQX 内置的 [基于文件进行授权](../accesscontrol/../access-control/authz/file.md) 来实现。
+2. 要设置同样的订阅规则，无需开发插件，可以通过 EMQX 内置的 [基于文件进行授权](../access-control/authz/file.md) 来实现。
 :::
 
 ### 5. 打包插件
