@@ -16,7 +16,7 @@ The **emqx-exhook** plugin uses [gRPC](https://www.grpc.io) as the communication
 
 The architecture is as illustrated below:
 
-![exhook_workflow](assets/exhook_workflow.png)
+![exhook_workflow](./assets/exhook_workflow.png)
 
 It indicates that EMQX acts as a gRPC client, sending hook events from EMQX to the user's gRPC server.
 

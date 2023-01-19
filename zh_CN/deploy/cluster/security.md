@@ -48,7 +48,7 @@ Docker 容器中的 EMQX 使用静态端口 `5369` 进行集群 RPC。
 
 ### 使用 TLS 为集群 RPC 传输层
 
-::: warning
+::: tip
 TLS 是以增加 CPU 负载和 RAM 使用为代价的。
 :::
 
@@ -99,7 +99,7 @@ rpc {
 
 ### 为 Erlang 分布式协议使用 TLS
 
-::: warning
+::: tip
 TLS 是以增加 CPU 负载和 RAM 使用为代价的。
 :::
 

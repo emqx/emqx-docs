@@ -37,7 +37,7 @@ filter { username = "${username}" }
 
 ```
 
-::: warning
+::: tip
 When there are a significant number of users in the system make sure that the collections used by the selector are optimized
 and that effective indexes are used. Otherwise authorization lookup will produce excessive load on the database
 and on the EMQX broker itself.

@@ -34,7 +34,7 @@ After adding a listener, it can be seen in the list, and the name can be clicked
 
 To delete a listener, click the "Delete" button on the edit page. When deleting a listener, you need to enter the name of the listener you are currently deleting to confirm the deletion. You can also click the enable switch to enable or disable the listener in the list. The list also allows you to view the number of connections for each listener.
 
-::: warning
+::: tip
 Modify and delete listeners are operations with a certain degree of risk, which need to be operated with caution. If you update or delete a listener, the client connections on that listener will be disconnected.
 :::
 

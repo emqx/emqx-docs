@@ -134,7 +134,7 @@ Note that the 5.0.0 Dashboard does not support detachment rules at this time, us
 5. The bridge client receives the subscription message and forwards the content to the local node using topic `local/topic/ingress`
 6. `Client B` receives the subscription message
 
-![bridge_igress](assets/bridge_igress.png)
+![bridge_igress](./assets/bridge_igress.png)
 
 ### The `egress bridge` message flow
 
@@ -143,7 +143,7 @@ Note that the 5.0.0 Dashboard does not support detachment rules at this time, us
 3. The bridge gets the message data and forwards it to the topic `remote/topic/egress` on the remote node
 4. `Client A` receives the message from the bridge
 
-![bridge_egerss](assets/bridge_egerss.png)
+![bridge_egerss](./assets/bridge_egerss.png)
 
 ## Works with rules
 
@@ -200,7 +200,7 @@ Click on the left side, `Add Action`, and select Console Output.
                 topic => <<"remote/topic/ingress">>}
 ```
 
-![bridge_igress_rule_link](assets/bridge_igress_rule_link.png)
+![bridge_igress_rule_link](./assets/bridge_igress_rule_link.png)
 
 ### Egress MQTT Bridge with rule
 
@@ -223,4 +223,4 @@ Click on `Add`, `Create`.
 4. The bridge forwards the message to the remote node
 5. `Client A` receives a message with topic `remote/topic/egress
 
-![bridge_egress_rule](assets/bridge_egress_rule.png)
+![bridge_egress_rule](./assets/bridge_egress_rule.png)

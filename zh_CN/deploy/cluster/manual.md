@@ -48,7 +48,7 @@ node.name = emqx@192.168.0.10
 export EMQX_NODE__NAME=emqx@s1.emqx.io && ./bin/emqx start
 ```
 
-::: warning Warning
+::: tip Warning
 节点启动加入集群后，节点名称不能变更。
 :::
 
@@ -88,7 +88,7 @@ EMQX 集群是为外部节点发送加入**请求**
 例如如果一个`s3.emqx.io`要加入`s1`和`s2`的集群，
 join 命令应该在 `s3` 上执行，但 **NOT** 在 `s1` 或 `s2` 上执行。
 
-::: warning Warning
+::: tip Warning
 加入另一个集群将导致该节点离开它属于的当前集群。
 :::
 

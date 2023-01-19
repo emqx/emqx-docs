@@ -85,6 +85,8 @@ When an error happens, the error code is returned in JSON format by the Body:
 | REST_FAILED                                    | Reset source or configuration fails                          |
 | CLIENT_NOT_RESPONSE                            | Client not responding                                        |
 
+{%emqxee%}
 <ClientOnly>
   <OpenApi path="swagger.json" />
 </ClientOnly>
+{%endemqxee%}

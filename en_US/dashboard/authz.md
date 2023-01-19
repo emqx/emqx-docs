@@ -68,7 +68,7 @@ The authorization list is similar to the authentication list in that each column
 
 In the actions bar, you can also click on settings or delete the authorization, etc.
 
-:::warning
+:::tip
 Disabled the authorization will affect the operation of permissions when the client publishes/subscribes. Please be careful.
 :::
 

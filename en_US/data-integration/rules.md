@@ -14,7 +14,7 @@ The rules describe **data source**, **data processing process**, and **processin
 - **processing result destination**: a rule can define one or more actions to process SQL output results. If the SQL execution passes, the rules will perform corresponding actions in sequence, such as storing the processing results in the database or republishing them to another MQTT topic.
 
 
-![sql_process](assets/sql_process.png)
+![sql_process](./assets/sql_process.png)
 
 ### Introduction to rule SQL statements
 
@@ -34,7 +34,7 @@ In the above SQL:
 - Data Source: the messages with topic `t/#`;
 - Data Processing: If the client ID of the message is `foo`, select the `data` field from the message content and assign it to the new variable `d`
 
-::: warning
+::: tip
 The dot (".") syntax requires that the data must be of JSON or Map type. If it is of other data types, SQL functions must be used for data type conversion.
 :::
 

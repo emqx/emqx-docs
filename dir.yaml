@@ -141,7 +141,7 @@
         - data-integration/rule-sql-events-and-fields
         - data-integration/rule-sql-builtin-functions
         - data-integration/rule-sql-jq
-        - data-integration/rule-sql-user-defined-function
+        # - data-integration/rule-sql-user-defined-function
     - title_en: Data Bridges
       title_cn: 数据桥接
       children:
@@ -181,6 +181,7 @@
     - admin/api
     - title_en: API Docs
       title_cn: API 文档
+      edition: ce
       path: https://emqxio.emqx-dev.com/docs/zh/v5.0/api.html
 
 ## Dashboard

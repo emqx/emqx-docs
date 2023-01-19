@@ -20,7 +20,7 @@
 
 ![image](./assets/gateways.png)
 
-::: warning
+::: tip
 停用一个网关，会导致该网关下的所有连接断开，需要重新建立连接。请谨慎操作。
 :::
 

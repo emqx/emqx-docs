@@ -12,7 +12,7 @@
 
 在原有主题的基础上，添加 `$share` 前缀即可为一组订阅端启用共享订阅。
 
-![shared_subscription](assets/shared_subscription.png)
+![shared_subscription](./assets/shared_subscription.png)
 
 上图中，共享 3 个 subscriber 用共享订阅的方式订阅了同一个主题 `$share/g/topic`，其中`topic` 是它们订阅的真实主题名，而  `$share/g/` 是共享订阅前缀。EMQX 支持两种格式的共享订阅前缀：
 
@@ -33,7 +33,7 @@ group-name 可以为任意字符串，属于同一个群组内部的订阅者将
 - s1，s2，s3 中只有一个会收到 msg1
 - s4，s5 中只有一个会收到 msg1
 
-![shared_subscription_group](assets/shared_subscription_group.png)
+![shared_subscription_group](./assets/shared_subscription_group.png)
 
 ## 负载均衡策略与派发 ACK 配置
 

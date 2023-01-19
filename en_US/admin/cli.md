@@ -82,7 +82,7 @@ $ emqx ctl cluster_call tnxid 2
           tnx_id => 2}}
 ```
 
-::: warning Warning
+::: tip Warning
 The `skip` and `fast_forward` commands may result in diverged configs between the nodes in the cluster.
 :::
 
@@ -116,7 +116,7 @@ on the joining node, but not from any of the nodes in the cluster.
 
 This command is to list/show/kick connected clients.
 
-:::warning
+:::tip
 It may take a long time to `list` all when there is a large number of clients.
 :::
 
@@ -128,7 +128,7 @@ It may take a long time to `list` all when there is a large number of clients.
 This command is previously (in 4.x releases) known as the `routes` command.
 It's to list/describe subscribed topics (or topic filters) in the cluster.
 
-:::warning
+:::tip
 It may take a long time to `list` all when there is large number of topics.
 :::
 
@@ -138,7 +138,7 @@ It may take a long time to `list` all when there is large number of topics.
 
 This command is to list/show/add/delete client's subscriptions.
 
-:::warning
+:::tip
 It may take a long time to `list` all when there is large number of subscriptions.
 :::
 
@@ -191,7 +191,7 @@ This command is like the `trace` command, but applies on all nodes in the cluste
 
 List or start/stop listeners
 
-::: warning
+::: tip
 Stopping or restarting a listener causes all the connected clients to disconnect.
 :::
 

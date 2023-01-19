@@ -129,7 +129,7 @@ NanoSDK 也提供 Java) 和 Python 的 binding：
 
 它能够将传统 MQTT 客户端的数据转换成 QUIC 数据包并发给云端的 EMQX，从而为无法集成或找到合适 MQTT over QUIC SDK 的端侧设备和难以修改固件的嵌入式设备提供在 IoT 场景利用 QUIC 协议优势的捷径，降低使用门槛。
 
-![NanoMQ MQTT over QUIC bridge](assets/nanomq-mqtt-bridge.png)
+![NanoMQ MQTT over QUIC bridge](./assets/nanomq-mqtt-bridge.png)
 
 ### NanoMQ 桥接示例
 

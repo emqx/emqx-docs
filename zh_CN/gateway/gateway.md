@@ -18,7 +18,7 @@
     * MQTT-SN 协议中定义了发布/订阅的概念，那么在 MQTT-SN 网关中则直接不需要预定义主题来发布/接收消息。
 - 用户层接口（User Interfaces）：定义了如何使用配置文件、HTTP API 来管理网关，客户端等。
 
-![gateway_struct](assets/gateway_struct.png)
+![gateway_struct](./assets/gateway_struct.png)
 
 ### 接入认证
 

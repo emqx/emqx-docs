@@ -20,7 +20,7 @@ Before enabling the gateway, the gateway needs to setup; after setup, you can vi
 
 ![image](./assets/gateways.png)
 
-::: warning
+::: tip
 Disable a gateway will cause all connections under the gateway to be disconnected, and the connections need to be re-established. Please be careful.
 :::
 

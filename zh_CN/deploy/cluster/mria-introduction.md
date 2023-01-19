@@ -16,7 +16,7 @@ EMQX 5.0 采用 [Mria](https://github.com/emqx/mria) + RLOG 架构，实现了�
 
 Mria 是 Mnesia 的一个开源扩展，它为集群增加了最终的一致性。启用 RLOG 模式后，EMQX 节点之间的连接模式从 Mnesia 的**全网状拓扑**结构转向 Mria 的**网状+星型**状拓扑结构，集群中节点可以按角色分为**核心节点（Core）**或**复制者节点（Replicant）**。
 
-![EMQX Mria 架构](assets/emqx-mria.png)
+![EMQX Mria 架构](./assets/emqx-mria.png)
 
 ### 节点角色介绍
 

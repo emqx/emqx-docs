@@ -134,7 +134,7 @@ bridges {
 5. 桥接客户端收到订阅消息，使用 Topic `local/topic/ingress`，将消息内容转发至 Local 节点
 6. Client B 收到订阅消息
 
-![bridge_igress](assets/bridge_igress.png)
+![bridge_igress](./assets/bridge_igress.png)
 
 ### 出方向的桥接消息流转
 
@@ -143,7 +143,7 @@ bridges {
 3. 桥接获取到消息数据，转发至 Remote 节点的 Topic `remote/topic/egress`
 4. 客户端 A 收到桥接的消息
 
-![bridge_egerss](assets/bridge_egerss.png)
+![bridge_egerss](./assets/bridge_egerss.png)
 
 ## 与规则配合使用
 
@@ -199,7 +199,7 @@ FROM
                 topic => <<"remote/topic/ingress">>}
 ```
 
-![bridge_igress_rule_link](assets/bridge_igress_rule_link.png)
+![bridge_igress_rule_link](./assets/bridge_igress_rule_link.png)
 
 ### 出方向的 MQTT Bridge 与规则配合使用
 
@@ -221,4 +221,4 @@ FROM
 4. 出方向的桥将消息转发到 Remote 节点
 5. Client A 收到 Topic 为 `remote/topic/egress` 的消息
 
-![bridge_egress_rule](assets/bridge_egress_rule.png)
+![bridge_egress_rule](./assets/bridge_egress_rule.png)

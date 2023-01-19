@@ -99,7 +99,7 @@ In the action bar you can also click to settings or delete the authenticator, et
 
 ![image](./assets/authn-list.png)
 
-:::warning
+:::tip
 Disabled authentication will not authenticate any client, all clients can connect to EMQX. Please be careful.
 :::
 
@@ -123,7 +123,7 @@ Click `Settings` in the list page to modify the authentication configuration.
 
 In the settings page, you can modify the current authenticator configuration, such as when some connection information of the external database changes, when you need to modify the `UserID Type` of the built-in database as username or client ID, or modify the encryption method of the password, etc.
 
-:::warning
+:::tip
 When using the built-in database, updating the password `Password Hash` or `Salt Position` will cause the added authentication data to be unavailable, please be careful.
 :::
 

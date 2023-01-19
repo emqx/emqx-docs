@@ -127,7 +127,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 拓扑结构如下：
 
-![benchmark_topology](assets/benchmark_topology.png)
+![benchmark_topology](./assets/benchmark_topology.png)
 
 ### 调优
 

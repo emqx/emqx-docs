@@ -127,7 +127,7 @@ A total of three 8C16G servers need to be prepared, one for EMQX Broker and two 
 
 The topology structure is as follows:
 
-![benchmark_topology](assets/benchmark_topology.png)
+![benchmark_topology](./assets/benchmark_topology.png)
 
 ### Tuning
 

@@ -40,7 +40,7 @@ authorization {
 }
 ```
 
-::: warning
+::: tip
 默认 `path` 字段指定的文件对于 EMQX 是只读的。
 如果通过 Dashboard 或 REST API 对权限进行过修改，EMQX 会把新的文件保存到 `data/authz/acl.conf`，并且之后不再读取原始配置中的文件。
 :::

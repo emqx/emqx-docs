@@ -31,7 +31,7 @@ CREATE TABLE mqtt_user (
 );
 ```
 
-::: warning
+::: tip
 The above example has created an implicit `UNIQUE` index.
 When there is a significant number of users in the system, please optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::

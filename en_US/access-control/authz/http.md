@@ -9,7 +9,7 @@ HTTP authorizer delegates authorization to a custom HTTP API.
 * Receiving a 200 or 204 HTTP status is interpreted as authorization success. Other statuses indicate authorization failure.
 * Whether Pub/Sub authorization is granted by the HTTP status code or message body returned by the server.
 
-::: warning
+::: tip
 `POST` method is recommended. When using the `GET` method, some sensitive information can be exposed through HTTP server logging.
 
 For untrusted environments, HTTPS should be used.

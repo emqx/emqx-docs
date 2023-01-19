@@ -13,7 +13,7 @@
 
 架构如下图：
 
-![exhook_workflow](assets/exhook_workflow.png)
+![exhook_workflow](./assets/exhook_workflow.png)
 
 它表明：EMQX 作为一个 gRPC 客户端，将系统中的钩子事件发送到用户的 gRPC 服务端。
 

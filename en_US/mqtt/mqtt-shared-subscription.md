@@ -11,7 +11,7 @@ Use cases:
 
 We can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
 
-![shared_subscription](assets/shared_subscription.png)
+![shared_subscription](./assets/shared_subscription.png)
 
 In the above diagram, three subscribers subscribe to the same topic `$share/g/topic` using a shared subscription method,
 where ` topic` is the real topic name they subscribed to, and `$share/g/` is a shared subscription prefix.
@@ -34,7 +34,7 @@ When EMQX Broker publishes a message `msg1` to topic `t1`:
 - Only one of `s1`, `s2`, `s3` will receive `msg1`
 - Only one of `s4` and `s5` will receive `msg1`
 
-![shared_subscription_group](assets/shared_subscription_group.png)
+![shared_subscription_group](./assets/shared_subscription_group.png)
 
 ## Load Balancing Policy and Dispatch ACK Configuration
 

@@ -78,7 +78,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 更多关于内置数据库的授权规则的配置方法，请访问[内置数据库](../access-control/authz/mnesia.md)。
 
-:::warning
+:::tip
 禁用授权将影响客户端发布/订阅时的权限操作，请谨慎操作。
 :::
 

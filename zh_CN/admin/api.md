@@ -80,6 +80,8 @@ HTTP 响应状态码能够直观的判断可能存在的问题，在此基础上
 | REST_FAILED                                    | Reset source or configuration fails                          |
 | CLIENT_NOT_RESPONSE                            | Client not responding                                        |
 
+{%emqxee%}
 <ClientOnly>
   <OpenApi path="swagger.json" />
 </ClientOnly>
+{%endemqxee%}

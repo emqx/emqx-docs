@@ -36,7 +36,7 @@ When only the `Built-in Database` authentication is enabled, according to the pr
 ```
 4. Return **Authentication succeeded**, and the client will successfully access the system as a superuser. 
 
-![hooks_and_internal_model](assets/hooks_and_internal_model.png)
+![hooks_and_internal_model](./assets/hooks_and_internal_model.png)
 
 Therefore, **Hooks** can greatly enhance the flexibility of EMQX. If we want to customize EMQX behaviors, we no longer need to modify the core code and only need to hook a function on **HookPoint** that EMQX provided on the specific location.
 
@@ -76,7 +76,7 @@ We call this chain composed of multiple callback functions executed sequentially
 Therefore, we can obtain two program flow diagrams for the execution chain based on the two ways of handling the return value of the callback function on the chain.
 
 ### Result Transitive
-![hooks_return_value](assets/hooks_return_value.png)
+![hooks_return_value](./assets/hooks_return_value.png)
 
 The meaning of the figure is:
 1. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
@@ -91,7 +91,7 @@ The meaning of the figure is:
      - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification
 
 ### Result Transparent
-![hooks_multiple_value](assets/hooks_multiple_value.png)
+![hooks_multiple_value](./assets/hooks_multiple_value.png)
 
 Comparing this with the first execution mode, you can see that the execution mode that ignores the return value in the chain is actually a special case of the pass return value mode.
 This is equivalent to the case where the `InitAcc` value is `ok` and every callback function mounted on the chain returns `ok | {ok, ok} | stop | {stop, ok}`.
