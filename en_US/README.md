@@ -21,8 +21,8 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
 
 - Full MQTT v3.1, v3.1.1 and v5.0 protocol specification support
   - [QoS 0, QoS 1, QoS 2 message support](./mqtt/mqtt-qos.md)
-  - [Persistent conversation]((./mqtt/mqtt-session-and-message-expiry.md#mqtt-会话d)) and offline message support
-  - [Retained message support]((./mqtt/mqtt-retained-messages.md))
+  - [Persistent conversation](./mqtt/mqtt-session-and-message-expiry.md#mqtt-会话d) and offline message support
+  - [Retained message support](./mqtt/mqtt-retained-messages.md)
   - [Last Will message support](./mqtt/mqtt-last-will-and-testament.md)
   - [Shared subscription support](./mqtt/mqtt-shared-subscription.md)
   - [`$SYS/` system topic support](./mqtt/mqtt-system-topics.md)
@@ -58,7 +58,7 @@ Add more features to MQTT:
 ### Scalability
 
 - [Multi-server node cluster (Cluster)](./deploy/cluster/introduction.md)
-- Support [manual](./deploy/cluster/manual.md) and [auto (dns、etcd、k8s)](./deploy/cluster/auto.md)cluster discovery methods
+- Support manual cluster and auto cluster discovery(dns、etcd、k8s), see [sreate clster](./deploy/cluster/create-cluster.md)
 - Multi-server node bridge (Bridge)
 
 ### Data Integration

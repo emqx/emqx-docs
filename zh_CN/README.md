@@ -58,7 +58,7 @@
 ### 可伸缩性
 
 - [多节点集群 (Cluster)](./deploy/cluster/introduction.md)
-- 支持[手动](./deploy/cluster/manual.md)、[自动（dns、etcd、k8s）](./deploy/cluster/auto.md)等发现方式集群
+- 支持手动、自动（dns、etcd、k8s）方式集群，参考 [创建集群](./deploy/cluster/create-cluster.md)
 - 多服务器节点桥接 (Bridge)
 
 ### 数据集成
@@ -71,7 +71,7 @@
 
 - 过载保护
 - [消息速率限制](./rate-limit/rate-limit.md)
-- [连接速率限制]((./rate-limit/rate-limit.md))
+- [连接速率限制](./rate-limit/rate-limit.md)
 
 ### 可观测性
 

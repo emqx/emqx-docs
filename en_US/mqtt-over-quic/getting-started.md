@@ -121,8 +121,8 @@ NanoSDK also provides bindings for Java) and Python:
 [NanoMQ](https://nanomq.io/) is an ultra-lightweight and blazing-fast service for IoT edge, featuring cross-platform support, multi-threading, and support to MQTT over QUIC bridging. 
 
 It can convert the data from traditional MQTT clients into QUIC packets and send them to EMQX in the cloud, thus providing an option for end-side IoT devices that are hard to integrate or lack a suitable MQTT over QUIC SDK to use the QUIC protocol. 
-
-![NanoMQ MQTT over QUIC bridge](/Users/lena/Documents/GitHub/wivwiv/未命名/zh_CN/mqtt-over-quic/assets/nanomq-mqtt-bridge.png)
+1
+![NanoMQ MQTT over QUIC bridge](./assets/nanomq-mqtt-bridge.png)
 
 ### NanoMQ bridging example
 
