@@ -55,8 +55,6 @@
       children:
         - deploy/cluster/introduction
         - deploy/cluster/mria-introduction
-        - deploy/cluster/cluster-requirements
-        # - deploy/cluster/manual
         - deploy/cluster/create-cluster
         - deploy/cluster/security
         - deploy/cluster/lb
@@ -339,9 +337,9 @@
         - development/python
         - development/resource
 
-- title_en: Change log
-  title_cn: 版本发布记录
-  path: changes/changes-5.0
+# - title_en: Change log
+#   title_cn: 版本发布记录
+#   path: changes/changes-5.0
 
 - title_en: Technical Support
   title_cn: 技术支持
