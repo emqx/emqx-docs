@@ -1,80 +1,66 @@
-# Slow subscribers statistics
+# Slow subscriptions
 
-This module ranks subscribers and topics in descending order according to the latency of message transmission
+Typically, EMQX will finish the message transmission within milliseconds, affected mainly by the network. However, there are cases where the latency of subscription messages is very high on the client side. To solve this problem, EMQX provides a Slow subscriptions feature.
 
+## Working principles
 
-<a id="org7939dfc"></a>
+EMQX will start calculating the time (delay) it takes for the message processing and transmitting since messages **arrive at EMQX**. 
 
-## Open module
+If the delay exceeds the specified threshold, EMQX will insert the corresponding **subscriber and topic** into the **slow subscriptions list** or update the existing record. 
 
-Open EMQX Dashboard, click on the `Diagnose` and select `Slow Subscriptions`, then `Enable` it.
+Slow subscriptions list:
+
+- The data in the list are in descending order by the time delay and can save up to 1000 records.
+- The list records the **subscriber-topic** data rather than the messages that exceed the threshold.
+- When a record is generated, if it is a new record, it will be inserted into the list; if not, the occurrence time of the existing record will be updated, and in both cases, the entire list will be re-ranked.
+- After the record is generated, it will be removed from the list if it is not triggered again within the effective period (default: 300 seconds).
+
+The definition of message transfer complete varies with the message QoS level:
+
+- QoS 0: The message is sent successfully.
+- QoS 1: EMQX receives the PUBACK packet from the client.
+- QoS 2: EMQX receives the PUBCOMP packet from the client.
+
+Factors affecting message latency:
+
+- The network between the publisher and EMQX is slow (will be available in future releases).
+- The execution speed of the Hooks is slow, which blocks message publishing, such as ACL checks, ExHooks, rule engines, etc. 
+- Too many messages accumulate in the queue, resulting in significant latency, for example, PUBLISH and SUBSCRIBE share the same connection, and many PUBLISH messages are accumulated in the queue. 
+- The receiving speed of the subscribers is too slow. 
+
+## Configure and enable Slow subscriptions
+
+<!-- TODO 补充配置文件配置方式，目前该方式有 BUG 暂时不在文档中提供。 -->
+
+On EMQX Dashboard, click `Diagnose` and select `Slow Subscriptions`, then `Enable` it.
 
 ![image](./assets/slow_subscribers_statistics_1.png)
 
 <a id="org417d240"></a>
 
-## Implementation note
+Follow the instruction below for configuration:
 
-With this feature enabled, EMQX will start measuring message transmission latency.
-The measurement always starts when a message is received by EMQX, and the end of the measurement is configurable.
-See more details below in configurations.
+- **Stats Threshold**:  Latency threshold for statistics, only messages information with latency exceeding the value will be collected. Minimum value: 100ms
+  **Maximum Number of Statistics**: Maximum number of records in the slow subscription statistics record table. Maximum value: 1,000
+- **Eviction Time of Record**: Eviction time of the record; will start the counting since creation of the record, and the records that are not triggered again within the specified period will be removed from the list. Default: 300s
+- **Stats Type**: Calculation methods of the latency, which are
+  - **whole**: From the time the message arrives at EMQX until the message transmission completes
+  - **internal**: From when the message arrives at EMQX until when EMQX starts delivering the message
+  - **response** : From the time EMQX starts delivering the message until the message transmission completes
 
-The per clientid-topic latency measurements are then ranked in the table view.
+## View the Slow Subscriptions list
 
-<a id="orgf0feb6e"></a>
+The Slow Subscriptions list contains the following fields:
 
-## Configuration description
+- Client ID: client with the slow subscriptions issue
 
--   threshold
-
-     *threshold* is the minimum number of milliseconds the latency has to exceed, otherwise not collected for ranking
-
--   top\_k\_num
-
-    This field determines the upper limit of the number of statistical records in the ranking table
-
--   expire\_interval
-
-    *expire interval* controls the effective time of each ranking record. If the a client-topic has no higher latency inserted for such long time, the record expires. For example if expire interval is 5 minutes, and client1-topic1 had a latency 500ms recorded (ranked top-K) at T1, and for the next 5 minutes there are no further measurements greater than 500, the ranking recorded will be deleted shortly after T1+5min
-
--   stats\_type
-
-    The ways to calculate the latency are as follows:
-
-    1.  `whole`
-
-        From the time the message arrives at EMQX until the message completes transmission
-
-    2.  `internal`
-
-        From when the message arrives at EMQX until when EMQX starts delivering the message
-
-    3.  `response`
-
-        From the time EMQX starts delivering the message, until the message completes transmission
-
-    Definition of message completion transmission:
-
-    1.  QoS 0
-
-        When EMQX starts to deliver
-
-    2.  QoS 1
-
-        When EMQX receives *PUBACK* from the client
-
-    3.  QoS 2
-
-        When EMQX receives *PUBCOMP* from the client
-
-Note: The open source version is configured in emqx.conf
-
-<a id="orga6267c1"></a>
-
-## Slow subscribers record
+- Topic: topic with the slow subscriptions issue
+- Duration: message latency
+- Node:  node with the slow subscriptions issue
+- Updated: creation/update time of the record
 
 ![image](./assets/slow_subscribers_statistics_3.png)
 
-Under this tab, the subscriber information will be displayed in descending order according to the time latency. After Clicking *Client ID*, it will display the subscriber details, where you can analyze and find the problem.
+You can click on the Client ID to view the details and troubleshoot the issue. 
 
 ![image](./assets/slow_subscribers_statistics_4.png)
