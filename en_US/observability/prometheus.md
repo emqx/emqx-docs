@@ -1,10 +1,12 @@
-# Prometheus
+# Integrate with Prometheus
 
-EMQX provides the following Endpoints for Prometheus to collect system metrics: `http://127.0.0.1:18083/api/v5/prometheus/stats`. This API is always available.
+[Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support to  multidimensional data model, flexible query language, and powerful alarm management.
 
-EMQX also supports pushing metrics to `pushgateway`, that can be enabled by adding the following configuration to `etc/emqx.conf`:
+EMQX provides the following endpoints to integrate with Prometheus to collect system metrics: `http://127.0.0.1:18083/api/v5/prometheus/stats`. 
 
-```
+EMQX also supports pushing metrics to `pushgateway`, which is disabled by default. You can enable the option by adding the following configurations to `etc/emqx.conf`:
+
+```bash
 prometheus {
 
   ## URL of Prometheus server
@@ -28,13 +30,19 @@ prometheus {
   enable: true
 }
 ```
-## Configure Through Dashboard
+## Configure with EMQX Dashboard
 
-After v5.0.4, EMQX also supports direct modification via Dashboard‘s **Configuration/Monitoring Integration**, which takes effect directly after saving, without restarting the node.
+Since EMQX 5.0.4, you can use EMQX Dashboard for configuration. In the EMQX Dashboard, click **Configuration** -> **Monitoring** on the left navigation tree, then click the **Integration** tab for the configuration, which takes effect immediately after saving without needing to restart the node.
 
 
-## Grafana Data Template
+## Use Grafana to visualize EMQX metrics
 
-EMQX provides template files for Grafana Dashboard. These templates contain the display of all EMQX monitoring data. Users can directly import them into Grafana, and then display the status monitoring chart of EMQX.
+You can also use Grafana with Prometheus to visualize EMQX metrics, which can be achieved by importing the EMQX template files into Grafana. 
 
-The template file is located at: [Grafana Template](https://github.com/emqx/emqx/tree/master/apps/emqx_prometheus/grafana_template).
+To download the template, click [EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) or click the Help button at the bottom of the **Integration** tab of the Dashboard **Monitoring** page.
+
+:::tip
+
+For detailed operating steps, see [*Monitoring MQTT broker with Prometheus and Grafana*](https://www.emqx.com/en/blog/emqx-prometheus-grafana)
+
+:::

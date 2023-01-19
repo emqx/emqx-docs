@@ -1,6 +1,6 @@
 # Prometheus 指标集成
 
-Prometheus 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。
+[Prometheus](https://prometheus.io/) 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。
 
 EMQX 提供以下 Endpoint 供 Prometheus 采集系统指标：`http://127.0.0.1:18083/api/v5/prometheus/stats`
 
@@ -35,9 +35,9 @@ prometheus {
 
 EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的 **功能配置/监控集成** 直接修改，保存后直接生效，无需重启节点。
 
-## Grafana 数据模板
+## 通过 Grafana 可视化 EMQX 指标
 
-Prometheus 通常搭配 Grafana 使用，实现指标可视化展示。
+您也可选择提供结合 Prometheus 和 Grafana 实现 EMQX 统计指标可视化。
 
 EMQX 提供了 Grafana 的 Dashboard 模板，可以直接导入到 Grafana 中，查看 EMQX 的指标数据图表。
 
