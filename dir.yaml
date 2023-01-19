@@ -127,6 +127,10 @@
         - data-integration/data-bridges
         - data-integration/data-bridge-webhook
         - data-integration/data-bridge-mqtt
+        - title_en: GCP PubSub Bridge
+          title_cn: GCP PubSub桥
+          edition: ee
+          path: data-integration/data-bridge-gcp-pubsub
     - title_en: Examples and Tutorials
       title_cn: 示例和教程
       children:
@@ -186,7 +190,7 @@
     - dashboard/connections/connections
     - title_en: Subscriptions
       title_cn: 主题订阅
-      children: 
+      children:
         - dashboard/subscriptions/subscriptions
         - dashboard/subscriptions/topics
     - dashboard/retained
