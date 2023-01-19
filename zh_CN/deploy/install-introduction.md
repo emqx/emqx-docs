@@ -77,42 +77,41 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 1. 压缩包解压安装时，目录相对于软件所在目录；
 2. Docker 容器使用压缩包解压安装的方式，软件安装于 `/opt/emqx` 目录中；
 3. `data`、`log`、`plugins` 目录可以通过配置文件设置，建议将 `data` 目录挂载至高性能磁盘以获得更好的性能。
-:::
+   :::
 
 接下来我们将详细介绍下其中的部分目录，其中包含的文件和子文件夹。
 
-### `bin` 目录
+### bin 目录
 
 存放可执行文件的目录，其中包括：
 
 - `emqx`、`emqx.cmd`：EMQX 的可执行文件，具体使用可以查看 [基本命令](../admin/cli.md)。
-- `emqx_ctl`、`emqx_ctl.cmd`：EMQX 管理命令的可执行文件，具体使用可以查看  [管理命令 CLI](../admin/cli.md)。
+- `emqx_ctl`、`emqx_ctl.cmd`：EMQX 管理命令的可执行文件，具体使用可以查看 [管理命令 CLI](../admin/cli.md)。
 
-### `etc` 目录
+### etc: 配置文件目录
 
 存放 EMQX 配置文件，其中包括:
 
-* `emqx.conf`：EMQX 的主配置文件，默认包含常用的配置项。
-* `emqx-example-en.conf`：EMQX 示例配置文件，包含所有可选的配置项。
-* `acl.conf`：默认 ACL 规则。
-* `vm.args`：Erlang 虚拟机的运行参数。
-* `certs/`：X.509 的密钥和证书文件。这些文件被用于 EMQX 的 SSL/TLS 监听器；当要与和外部系统集成时，也可用于建立 SSL/TLS 连接。
+- `emqx.conf`：EMQX 的主配置文件，默认包含常用的配置项。
+- `emqx-example-en.conf`：EMQX 示例配置文件，包含所有可选的配置项。
+- `acl.conf`：默认 ACL 规则。
+- `vm.args`：Erlang 虚拟机的运行参数。
+- `certs/`：X.509 的密钥和证书文件。这些文件被用于 EMQX 的 SSL/TLS 监听器；当要与和外部系统集成时，也可用于建立 SSL/TLS 连接。
 
-### `data` 目录
+### data: 数据库与文件目录
 
 `data` 目录用于存放 EMQX 的运行数据，请确保 EMQX 具有该目录下所有文件的读写权限。`data` 目录中主要的目录和文件包括:
 
-* `authz`: File authorization rules uploaded from HTTP API or dashboard.
-* `certs`: Certificate files uploaded from HTTP API or dashboard.
-* `configs`: Generated config file at boot, or config overrides when changed from API or CLI.
-* `mnesia`: The built-in database. Inside this directory, there should be one and only one subdirectory named
-   after the node, e.g., `emqx@127.0.0.1`. The old directory should be deleted or moved elsewhere if the node is renamed.
-* `patches`: Put `.beam` files here for EMQX to load as a hot patch. Handy to remedy urgent issues.
-* `trace`: Online tracing log files.
+- `authz`: Dashboard 或 REST API 上传的 [基于文件进行授权](../access-control/authz/file.md) 规则内容。
+- `certs`: Dashboard 或 REST API 上传的证书。
+- `configs`: 启动时生成的配置文件，或者从 Dashboard/REST API/CLI 进行功能设置时覆盖的配置文件。
+- `mnesia`: 内置数据库目录。在 `data` 目录中唯一一个以节点命名的子目录，如 `emqx@127.0.0.1`。如果节点被重新命名，应该将旧的目录删除或移动到其他地方。
+- `patches`: 将 `.beam` 文件放在这里，使其作为 EMQX 的一个热补丁加载，用于补丁修复。
+- `trace`: 在线日志追踪文件目录
 
 生产环境中建议定期备份除 `trace` 之外的所有目录，以下是子目录和文件说明：
 
-**mnesia**
+#### mnesia
 
 Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Erlang 的各种数据结构，在文档中也被叫做内置数据库。
 
@@ -120,22 +119,22 @@ EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、客�
 
 可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。
 
-**configs/app.*.config**
+#### configs/app.*.config
 
 EMQX 读取 `etc/emqx.conf` 和 `data/configs/cluster-override.conf` `data/configs/local-override.conf` 中的配置后，将其合并并转换为 Erlang 原生配置文件格式，以在运行时读取其中的配置。
 
 不要与 `etc` 目录混淆，`etc` 目录存储只读的配置文件，通过 Dashboard 以及 REST API 提交的配置将被保存到 `data/configs` 目录下，以支持在运行时更改配置。
 
-**trace**
+#### trace
 
 EMQX trace 输出结果，trace 可用于调试和排查错误，具体请查看 [日志追踪](../observability/tracer.md)。
 
 ### log 目录
 
-**emqx.log.***
+**emqx.log.\***
 
 EMQX 运行时产生的日志文件，具体请查看 [日志与追踪](../observability/log.md)。
 
-**erlang.log.***
+**erlang.log.\***
 
 以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。
