@@ -56,7 +56,7 @@ MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，�
 
 ### SSL 配置
 
-参考 [SSL](../security/ssl.md)
+参考 [SSL](../configuration/configuration.md#tls-ssl-ciphers)
 
 ## 使用 Bridge
 

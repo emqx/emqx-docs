@@ -56,7 +56,7 @@ Connector used for MQTT Bridges.
 
 ### SSL configurations
 
-Reference [SSL](../security/ssl.md)
+Reference [SSL](../configuration/configuration.md#tls-ssl-ciphers)
 
 ## MQTT Bridge Usage
 
