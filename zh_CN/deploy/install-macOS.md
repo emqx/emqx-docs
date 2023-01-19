@@ -9,7 +9,7 @@
 {%endemqxee%}
 
 :::: tabs type:card
-::: Intel Chip
+:::tab Intel Chip
 
 1. 下载 [emqx-5.0.14-macos11-amd64.zip](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos11-amd64.zip)
 
@@ -31,7 +31,7 @@ cd emqx && ./bin/emqx start
 
 :::
 
-::: Apple Silicon
+:::tab Apple Silicon
 
 1. 下载 [emqx-5.0.14-macos12-arm64.zip](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos12-arm64.zip)
 
