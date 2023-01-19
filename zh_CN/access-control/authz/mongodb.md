@@ -140,7 +140,7 @@ Standalone：
 
 ### ssl
 
-[SSL](../ssl.md)客户端参数。
+[SSL](../configuration/configuration.md#tls-ssl-ciphers)客户端参数。
 
 ### srv_record
 
