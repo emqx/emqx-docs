@@ -39,7 +39,7 @@ EMQX Operator 可以大大简化部署和管理 EMQX 集群的流程，对于管
     metadata:
       name: emqx
     spec:
-      image: emqx/emqx:5.0.13
+      image: emqx/emqx:5.0.14
   EOF
   ```
 

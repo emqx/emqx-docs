@@ -111,13 +111,13 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
 1. To download the zip file, enter:
 
    ```
-   wget https://www.emqx.com/en/downloads/broker/5.0.13/emqx-5.0.13-macos12-arm64.zip
+   wget https://www.emqx.com/en/downloads/broker/5.0.14/emqx-5.0.14-macos12-arm64.zip
    ```
 
 2. To install EMQX, enter:
 
    ```
-   mkdir -p emqx && unzip emqx-5.0.13-macos12-arm64.zip -d emqx
+   mkdir -p emqx && unzip emqx-5.0.14-macos12-arm64.zip -d emqx
    ```
 
 3. To run EMQX, enter:

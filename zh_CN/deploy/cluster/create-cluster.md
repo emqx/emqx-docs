@@ -9,33 +9,6 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
 - 了解 [部署架构与集群要求](./mria-introduction.md)。
 :::
 
-## 节点发现与自动集群
-
-节点发现是创建集群的必要过程，它允许单个 EMQX 节点发现对方并互相通信，无论其位置或 IP 地址如何。
-
-EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
-
-EMQX 支持多种节点发现策略：
-
-| 策略     | 说明                |
-| ------ | ----------------- |
-| manual | 手动命令创建集群        |
-| static | 静态节点列表自动集群        |
-| dns    | DNS A 记录自动集群      |
-| etcd   | 通过 etcd 自动集群      |
-| K8s    | Kubernetes 服务自动集群 |
-
-EMQX 默认配置为手动创建集群，您可以通过 `emqx.conf` 配置文件配置节点发现策略：
-
-```bash
-cluster {
-    ## 可选 manual | static | mcast | dns | etcd | K8s
-    discovery_strategy  =  manual
-}
-```
-
-注意：5.0 之前版本中的 mcast 发现策略已被废弃，在未来的版本中会被删除。
-
 ## 创建前的准备
 
 1. 所有节点设置唯一的节点名，节点名格式为 `name@host`，host 必须是 IP 地址或 FQDN(主机名或域名)。
@@ -122,7 +95,34 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 ./bin/emqx_ctl cluster join emqx1@127.0.0.1
 ```
 
-### 基于 static 节点列表自动集群
+## 节点发现与自动集群
+
+节点发现是创建集群的必要过程，它允许单个 EMQX 节点发现对方并互相通信，无论其位置或 IP 地址如何。
+
+EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
+
+EMQX 支持多种节点发现策略：
+
+| 策略     | 说明                |
+| ------ | ----------------- |
+| manual | 手动命令创建集群        |
+| static | 静态节点列表自动集群        |
+| dns    | DNS A 记录自动集群      |
+| etcd   | 通过 etcd 自动集群      |
+| K8s    | Kubernetes 服务自动集群 |
+
+EMQX 默认配置为手动创建集群，您可以通过 `emqx.conf` 配置文件配置节点发现策略：
+
+```bash
+cluster {
+    ## 可选 manual | static | mcast | dns | etcd | K8s
+    discovery_strategy  =  manual
+}
+```
+
+注意：5.0 之前版本中的 mcast 发现策略已被废弃，在未来的版本中会被删除。
+
+## 基于 static 节点列表自动集群
 
 静态集群的原理是在所有需要加入集群的节点中配置一个相同的节点列表，这个列表包含所有节点的节点名，在各节点启动后，会根据列表自动建立一个集群。
 
@@ -141,9 +141,9 @@ cluster {
 
 逐一启动所有节点，集群即可建立。
 
-### 基于 DNS 自动集群
+## 基于 DNS 自动集群
 
-#### 工作原理
+### 工作原理
 
 [DNS](https://tools.ietf.org/html/rfc1034) 是 Domain Name System 的缩写，即域名解析系统。一台 DNS 服务器在收到域名查询请求后，会返回这个域名对应的 IP 地址，也就是所谓的 A（Address）记录。DNS 允许一个域名有多项 A 记录，也就是多个IP地址，这样就形成了一个名字对应多个 IP 地址的映射。
 
@@ -181,7 +181,7 @@ cluster {
 
 配置完成后逐一启动所有节点即可完成集群。
 
-### 基于 etcd 自动集群
+## 基于 etcd 自动集群
 
 [etcd](https://etcd.io/) 是 CoreOS 发起的开源项目，etcd 的应用场景多间于服务发现，解决分布式系统中同一个集群的进程之间如何相互发现并建立连接的问题，这个功能正是 EMQX 自动集群所需要的。
 
@@ -214,7 +214,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 以上结果表明所有节点都正常启动并自动加入集群。
 
-### 基于 kubernetes 自动集群
+## 基于 kubernetes 自动集群
 
 [Kubernetes（K8s）](https://kubernetes.io) 是 Google 的开源容器集群管理系统，是一个完备的分布式系统支撑平台，EMQ X 可以使用 kubernetes 的服务发现功能组建集群。
 

@@ -2,7 +2,7 @@
 
 EMQX provides the [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) to automate the creation, configuration, and management of EMQX clusters on Kubernetes (K8s).
 
-EMQX Kubernetes Operator is a new way to create and manage cloud-native EMQX instances based on Kubernetes architectures. It simplifies the process and required knowledge of the deployment and management.
+EMQX Kubernetes Operator is a new way to create and manage cloud-native EMQX instances based on Kubernetes architectures, which significantly simplifies the deployment and management of EMQX.
 
 ::: tip
 Kubernetes v1.20.0 or higher version is needed.
@@ -39,7 +39,7 @@ We will use [cert-manager](https://github.com/jetstack/cert-manager) to provisio
     metadata:
       name: emqx
     spec:
-      image: emqx/emqx:5.0.13
+      image: emqx/emqx:5.0.14
   EOF
   ```
 
@@ -65,7 +65,7 @@ You can also use EMQX Kubernetes Operator to deploy EMQX cluster on Kubernetes i
 
 Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/mqtt-publish-and-subscribe.md). 
 
-Or you may click the links below to learn how to use EMQX Kubernetes Operator for common EMQX cluster configurations:
+Or you may click the links below to learn how to use EMQX Kubernetes Operator for standard EMQX cluster configurations:
 
 - [Configure EMQX logs collection](https://docs.emqx.com/en/emqx-operator/latest/tasks/configure-emqx-logs-collection.html)
 - [Configure EMQX Core and Replicant nodes](https://docs.emqx.com/en/emqx-operator/latest/tasks/configure-emqx-core-replicant.html)

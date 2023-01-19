@@ -1,6 +1,6 @@
 # Debian
 
-This section will guide you on how to install and start EMQX on Debian system.
+This section will guide you on installing and starting EMQX on the Debian system.
 
 Supported versions: 
 
@@ -9,16 +9,16 @@ Supported versions:
 
 ## Install EMQX with deb
 
-1. To download [emqx-5.0.13-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-debian11-amd64.deb), run:
+1. To download [emqx-5.0.14-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.deb), run:
 
 ```bash
-wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-debian11-amd64.deb
+wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.deb
 ```
 
 2. To install EMQX, run:
 
 ```bash
-sudo apt install ./emqx-5.0.13-debian11-amd64.deb
+sudo apt install ./emqx-5.0.14-debian11-amd64.deb
 ```
 
 3. We offered different options to start EMQX:
@@ -26,10 +26,10 @@ sudo apt install ./emqx-5.0.13-debian11-amd64.deb
 
   ```bash
   $ emqx start
-  EMQX 5.0.13 is started successfully!
+  EMQX 5.0.14 is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.13 is started
+  Node 'emqx@127.0.0.1' 5.0.14 is started
   ```
   
 - To start EMQX with systemctl, run:
@@ -52,16 +52,16 @@ sudo apt install ./emqx-5.0.13-debian11-amd64.deb
 
 ## Install EMQX with tag.gz
 
-1. To download [emqx-5.0.13-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-debian11-amd64.tar.gz), run:
+1. To download [emqx-5.0.14-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.tar.gz), run:
 
 ```bash
-wget https://www.emqx.com/downloads/broker/v5.0.13/emqx-5.0.13-debian11-amd64.tar.gz
+wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.tar.gz
 ```
 
 2. To unzip the package, run:
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-5.0.13-debian11-amd64.tar.gz -C emqx
+mkdir -p emqx && tar -zxvf emqx-5.0.14-debian11-amd64.tar.gz -C emqx
 ```
 
 3. To start EMQX, run:

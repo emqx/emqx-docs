@@ -6,7 +6,7 @@ This chapter will introduce how to use the official Docker image to install and 
 
 1. If you want to keep the data, please mount the EMQX data directory (`/opt/emqx/data`) out of the container, so that the data will persist even if the container no longer exists.
 
-2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. To access the host address, please use the host’s IP or use [host networking](https://docs.docker.com/network/host/). If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
+2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Please use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
    :::
 
@@ -17,7 +17,7 @@ This chapter will introduce how to use the official Docker image to install and 
 {% emqxce %}
 
 ```bash
-docker pull emqx:5.0.13
+docker pull emqx:5.0.14
 ```
 
 {% endemqxce %}
@@ -35,7 +35,7 @@ docker pull emqx/emqx-ee:5.0.0
 {% emqxce %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.13
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.14
 ```
 
 For more information about EMQX official docker image, see [Docker Hub - emqx](https://hub.docker.com/_/emqx). 
@@ -70,7 +70,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx:5.0.13
+    image: emqx:5.0.14
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.com"
@@ -95,7 +95,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx:5.0.13
+    image: emqx:5.0.14
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.com"

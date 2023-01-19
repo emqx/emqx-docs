@@ -73,6 +73,8 @@ true
 
 ![image](./assets/cluster_1.png)
 
+
+
 ## EMQX 分布式集群设计
 
 EMQX 分布式集群的基本功能是转发和发布消息到订阅者，如下图所示。

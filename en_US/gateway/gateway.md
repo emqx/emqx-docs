@@ -25,18 +25,7 @@ To unify the model for each access protocol, Gateway abstracts the following con
     * The concept of publish/subscribe is defined in the MQTT-SN protocol, so there is no need for predefined topics to publish/subscribe in MQTT-SN gateway.
 - **User Interfaces**: Defines how to manage gateways or clients by configurations and HTTP APIs.
 
-```
-+-----------------------------------+
-|          User Interfaces          |
-+-----------------------------------+
-+-------------------------+ +-------+
-|     PUB/SUB Adapter     | | AuthZ |
-+-------------------------+ +-------+
-|  Connection/Session     | |       |
-+------------+------------+ | AuthN |
-| Listener 1 | Listener 2 | |       |
-+------------+------------+ +-------+
-```
+![gateway_struct](assets/gateway_struct.png)
 
 ### Authentication
 

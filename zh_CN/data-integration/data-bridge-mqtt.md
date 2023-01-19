@@ -134,35 +134,7 @@ bridges {
 5. 桥接客户端收到订阅消息，使用 Topic `local/topic/ingress`，将消息内容转发至 Local 节点
 6. Client B 收到订阅消息
 
-```txt
- +-------------------------+  Publish Message
- | Remote                  |  Topic remote/topic/ingress  +----------+
- | EMQX Broker         .---|<-----------------------------| Client A |
- |                     |   |                              +----------+
- |                     V   |
- +-------------------------+
-        ^              |
-        |              |
- Subscribe             | Send to subscriber
- Topic  |              |
- remote/topic/ingress  |
-        |              |
-        |              V
-   +----------------------+
-   |  MQTT Bridge Ingress |
-   +----------------------+
-                       |
-                       | Publish to local broker
-                       | Topic local/topic/ingress
-                       |
-                       V
- +------------------------+  Subscribe
- | Local               |  |  local/topic/ingress          +----------+
- | EMQX Broker         .->|------------------------------>| Client B |
- |                        |  Send to subscriber           +----------+
- +------------------------+
-
-```
+![bridge_igress](assets/bridge_igress.png)
 
 ### 出方向的桥接消息流转
 
@@ -171,33 +143,7 @@ bridges {
 3. 桥接获取到消息数据，转发至 Remote 节点的 Topic `remote/topic/egress`
 4. 客户端 A 收到桥接的消息
 
-```txt
- +-------------------------+  Subscribe
- | Remote                  |  remote/topic/egress          +----------+
- | EMQX Broker      .----->|------------------------------>| Client A |
- |                  |      |  Send to subscriber           +----------+
- +-------------------------+
-                    ^
-                    |
-                    | Publish to remote topic
-                    | remote/topic/egress
-                    |
-   +----------------------+
-   |  MQTT Bridge Egress  |
-   +----------------------+
-                    ^
-                    |
-                    | From local topic
-                    | local/topic/egress
-                    |
- +------------------------+
- |                  ^     |  Publish
- | Local            |     |  Topic local/topic/egress    +----------+
- | EMQX Broker      .-----|<-----------------------------| Client B |
- |                        |                              +----------+
- +------------------------+
-
-```
+![bridge_egerss](assets/bridge_egerss.png)
 
 ## 与规则配合使用
 
@@ -253,39 +199,7 @@ FROM
                 topic => <<"remote/topic/ingress">>}
 ```
 
-```txt
- +-------------------------+ Publish
- | Remote                  | remote/topic/ingress  +----------+
- | EMQX Broker      .------|<----------------------| Client A |
- |                  |      |                       +----------+
- +-------------------------+
-       ^            |
-Subscribe           | Send to subscriber
-Remote Topic        |
-remote/topic/ingress|
-       |            V
-  +-----------------------+
-  | MQTT Bridge Ingress   |
-  +-----------------------+
-                    |
-                    | Publish to local topic
-                    | local/topic/ingress
-                    |
-                    V
-  +-----------------------+
-  | Rule            |     |     +---------------+
-  |                 +-----|---->| Other Actions |
-  |                 |     |     +---------------+
-  +-----------------------+
-                    |
-                    V
-  +------------------------+ Subscribe
-  | Local           |      | local/topic/ingress   +----------+
-  | EMQX Broker     .------|---------------------->| Client B |
-  |                        | Send to subscriber    +----------+
-  +------------------------+
-
-```
+![bridge_igress_rule_link](assets/bridge_igress_rule_link.png)
 
 ### 出方向的 MQTT Bridge 与规则配合使用
 
@@ -307,31 +221,4 @@ FROM
 4. 出方向的桥将消息转发到 Remote 节点
 5. Client A 收到 Topic 为 `remote/topic/egress` 的消息
 
-```txt
-+-------------------------+ Subscribe
-| Remote                  | remote/topic/egress   +----------+
-| EMQX Broker      .------|---------------------->| Client A |
-|                  |      | Send to subscriber    +----------+
-+-------------------------+
-                   ^
-                   | Publish to remote topic
-                   | remote/topic/egress
-                   |
- +-----------------------+
- | MQTT Bridge Egress    |
- +-----------------------+
-                   ^
-                   |
-           Actions |
-                   |
- +-----------------------+
- | Rule            |     |
- +-----------------------+
-                   ^
-                   |
- +------------------------+ Publish
- | Local           |      | rule/demo/local/topic +----------+
- | EMQX Broker     .------|<----------------------| Client B |
- |                        |                       +----------+
- +------------------------+
-```
+![bridge_egress_rule](assets/bridge_egress_rule.png)
