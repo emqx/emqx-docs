@@ -134,35 +134,7 @@ Note that the 5.0.0 Dashboard does not support detachment rules at this time, us
 5. The bridge client receives the subscription message and forwards the content to the local node using topic `local/topic/ingress`
 6. `Client B` receives the subscription message
 
-```txt
- +-------------------------+  Publish Message
- | Remote                  |  Topic remote/topic/ingress  +----------+
- | EMQX Broker         .---|<-----------------------------| Client A |
- |                     |   |                              +----------+
- |                     V   |
- +-------------------------+
-        ^              |
-        |              |
- Subscribe             | Send to subscriber
- Topic  |              |
- remote/topic/ingress  |
-        |              |
-        |              V
-   +----------------------+
-   |  MQTT Bridge Ingress |
-   +----------------------+
-                       |
-                       | Publish to local broker
-                       | Topic local/topic/ingress
-                       |
-                       V
- +------------------------+  Subscribe
- | Local               |  |  local/topic/ingress          +----------+
- | EMQX Broker         .->|------------------------------>| Client B |
- |                        |  Send to subscriber           +----------+
- +------------------------+
-
-```
+![bridge_igress](assets/bridge_igress.png)
 
 ### The `egress bridge` message flow
 
@@ -171,33 +143,7 @@ Note that the 5.0.0 Dashboard does not support detachment rules at this time, us
 3. The bridge gets the message data and forwards it to the topic `remote/topic/egress` on the remote node
 4. `Client A` receives the message from the bridge
 
-```txt
- +-------------------------+  Subscribe
- | Remote                  |  remote/topic/egress          +----------+
- | EMQX Broker      .----->|------------------------------>| Client A |
- |                  |      |  Send to subscriber           +----------+
- +-------------------------+
-                    ^
-                    |
-                    | Publish to remote topic
-                    | remote/topic/egress
-                    |
-   +----------------------+
-   |  MQTT Bridge Egress  |
-   +----------------------+
-                    ^
-                    |
-                    | From local topic
-                    | local/topic/egress
-                    |
- +------------------------+
- |                  ^     |  Publish
- | Local            |     |  Topic local/topic/egress    +----------+
- | EMQX Broker      .-----|<-----------------------------| Client B |
- |                        |                              +----------+
- +------------------------+
-
-```
+![bridge_egerss](assets/bridge_egerss.png)
 
 ## Works with rules
 
@@ -254,39 +200,7 @@ Click on the left side, `Add Action`, and select Console Output.
                 topic => <<"remote/topic/ingress">>}
 ```
 
-```txt
- +-------------------------+ Publish
- | Remote                  | remote/topic/ingress  +----------+
- | EMQX Broker      .------|<----------------------| Client A |
- |                  |      |                       +----------+
- +-------------------------+
-       ^            |
-Subscribe           | Send to subscriber
-Remote Topic        |
-remote/topic/ingress|
-       |            V
-  +-----------------------+
-  | MQTT Bridge Ingress   |
-  +-----------------------+
-                    |
-                    | Publish to local topic
-                    | local/topic/ingress
-                    |
-                    V
-  +-----------------------+
-  | Rule            |     |     +---------------+
-  |                 +-----|---->| Other Actions |
-  |                 |     |     +---------------+
-  +-----------------------+
-                    |
-                    V
-  +------------------------+ Subscribe
-  | Local           |      | local/topic/ingress   +----------+
-  | EMQX Broker     .------|---------------------->| Client B |
-  |                        | Send to subscriber    +----------+
-  +------------------------+
-
-```
+![bridge_igress_rule_link](assets/bridge_igress_rule_link.png)
 
 ### Egress MQTT Bridge with rule
 
@@ -309,31 +223,4 @@ Click on `Add`, `Create`.
 4. The bridge forwards the message to the remote node
 5. `Client A` receives a message with topic `remote/topic/egress
 
-```txt
-+-------------------------+ Subscribe
-| Remote                  | remote/topic/egress   +----------+
-| EMQX Broker      .------|---------------------->| Client A |
-|                  |      | Send to subscriber    +----------+
-+-------------------------+
-                   ^
-                   | Publish to remote topic
-                   | remote/topic/egress
-                   |
- +-----------------------+
- | MQTT Bridge Egress    |
- +-----------------------+
-                   ^
-                   |
-           Actions |
-                   |
- +-----------------------+
- | Rule            |     |
- +-----------------------+
-                   ^
-                   |
- +------------------------+ Publish
- | Local           |      | rule/demo/local/topic +----------+
- | EMQX Broker     .------|<----------------------| Client B |
- |                        |                       +----------+
- +------------------------+
-```
+![bridge_egress_rule](assets/bridge_egress_rule.png)
