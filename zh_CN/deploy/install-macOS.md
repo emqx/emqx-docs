@@ -2,6 +2,12 @@
 
 本章节将指导您如何通过 zip 包在 macOS 系统中下载安装并启动 EMQX。
 
+{%emqxee%}
+:::tip
+此处是 EMQX 开源版安装文档。EMQX 企业版安装文档正在准备中，在此之前请按照企业版[下载页面](https://www.emqx.com/zh/try?product=enterprise)的指引进行安装操作。
+:::
+{%endemqxee%}
+
 :::: tabs type:card
 ::: Intel Chip
 

@@ -4,6 +4,12 @@
 
 支持的 Debian 版本：Debian10, Debian11。
 
+{%emqxee%}
+:::tip
+此处是 EMQX 开源版安装文档。EMQX 企业版安装文档正在准备中，在此之前请按照企业版[下载页面](https://www.emqx.com/zh/try?product=enterprise)的指引进行安装操作。
+:::
+{%endemqxee%}
+
 ## deb 安装
 
 1. 下载 [emqx-5.0.14-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.deb)
