@@ -7,12 +7,6 @@ Supported versions:
 - Debian10
 - Debian11
 
-{%emqxee%}
-:::tip
-This is the EMQX Open source edition installation document. the EMQX Enterprise installation document is coming soon, until then please follow the guidelines on the [EMQX Enterprise download page](https://www.emqx.com/en/try?product=enterprise) to install it.
-:::
-{%endemqxee%}
-
 ## Install EMQX with deb
 
 1. To download [emqx-5.0.14-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.deb), run:

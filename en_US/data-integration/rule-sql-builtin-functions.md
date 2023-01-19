@@ -260,7 +260,7 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 | `schema_encode` | Encode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
 | `schema_decode` | Decode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
 
-For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md)
+<!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
 {% endemqxee %}
 
 ## Time and date functions
