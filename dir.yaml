@@ -326,17 +326,17 @@
     # - design/design
     - advanced/inflight-window-and-message-queue
     - advanced/retransmission
-    - title_en: SDK & Tools
-      title_cn: SDK 与工具
-      children:
-        - development/client
-        - development/c
-        - development/java
-        - development/go
-        - development/erlang
-        - development/javascript
-        - development/python
-        - development/resource
+    # - title_en: SDK & Tools
+    #   title_cn: SDK 与工具
+    #   children:
+    #     - development/client
+    #     - development/c
+    #     - development/java
+    #     - development/go
+    #     - development/erlang
+    #     - development/javascript
+    #     - development/python
+    #     - development/resource
 
 # - title_en: Change log
 #   title_cn: 版本发布记录
