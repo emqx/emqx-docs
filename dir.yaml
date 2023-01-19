@@ -298,7 +298,7 @@
   title_cn: MQTT 协议
   children:
     - mqtt/mqtt-specific
-    - mqtt/mqtt-compliance
+    # - mqtt/mqtt-compliance
     - mqtt/mqtt-publish-and-subscribe
     - mqtt/mqtt-session-and-message-expiry
     - mqtt/mqtt-keepalive
