@@ -19,7 +19,7 @@ For an EMQX cluster configured with LB, the LB will handle the incoming TCP traf
 
 It is recommended to terminate the SSL/TLS connection at LB, that is, we will use SSL/TLS to secure connection between clients and LB and TCP connection between LB and EMQX nodes, thus maximizing the performance of the EMQX cluster. The architecture is as follows:
 
-![TLS termination](/Users/lena/Documents/GitHub/wivwiv/未命名/en_US/deploy/cluster/assets/TLS_termination.png)
+![TLS termination](./assets/lb_2.png)
 
 Besides this load balancing mode, you can also use DNS polling to connect to the EMQX cluster directly, that is, all nodes are added to the DNS polling list, and the clients access the EMQX cluster via domain name or IP address list. However, this DNS polling mode is not recommended in the production environment. 
 
