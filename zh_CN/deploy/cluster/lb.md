@@ -1,27 +1,17 @@
 # 集群负载均衡
 
-在创建好集群后，通常需要使用负载均衡器将所有节点封装成一个统一的接入点，同时实现集群中的可用节点之间连接的负载平衡。
+负载均衡（Load Balancing）用于均衡多个网络组件的负载，从而优化资源的使用，避免由于组件过载造成故障。负载均衡虽然不是集群中的必备组件，但是能给集群带来一些非常有用的特性，例如当配置在在 EMQX 集群中时，将能带来如下优势：
 
-本章节将指导您为 EMQX 集群选择并启用负载器。
-
-## 负载均衡能带来什么
-
-负载均衡（Load Balancing）的最基本的功能就是均衡多个网络组件的负载，从而优化资源的使用，避免组件过载而引起的故障。
-
-<!-- The basic function of a Load Balancer (LB) is to balance the load of multiple network components, and optimize resource usage,  and avoid failures caused by overload of single or a few components.-->
-
-负载均衡虽然不是集群中的必备组件，但是能给集群带来一些非常有用的特性，所以它经常会作为集群的一部分部署在系统中。使用负载均衡部署 EMQX 的收益如下：
-
-<!-- In a cluster, a load balancer it not obligatory, but it can bring extra advantages to the entire system, thus is is a common practice to have one in front of the service providing cluster. If we have a load balancer deployed with EMQ X cluster, it brings following benefits: -->
-
-- 均衡 EMQ X 服务器的负载，避免出现单节点过载的情况；
+- 均衡 EMQX 的负载，避免出现单节点过载的情况；
 - 简化客户端配置，客户端只需连接到到负载均衡器上，无需关心集群内部伸缩变化；
 - TLS/SSL 终结，减轻 EMQX 集群的负担；
 - 提高安全性，有了负载均衡在集群前端，能够通过设置阻止不需要的流量，保护 EMQX 集群免受恶意攻击。
 
-## 负载均衡部署架构
+本章节将指导您为 EMQX 集群选择并启用负载器。
 
-使用 LB (负载均衡器) 分发设备的 MQTT 连接与消息到 EMQX 集群，LB 仅处理 TCP 连接：
+## 部署架构
+
+当在 EMQX 中部署  LB (负载均衡器) 后，LB 会负责处理 TCP 连接，并将收到的 MQTT 连接与消息分发到不同的 EMQX 集群节点，部署架构如下所示：
 
 ![EMQX TCP 负载均衡部署](./assets/lb_2.png)
 
@@ -29,7 +19,7 @@
 
 ![EMQX 负载均衡终结 TLS 部署](./assets/lb_3.png)
 
-除了负载均衡部署集群外，还可以使用 DNS 轮询直连 EMQX 集群，即将所有节点加入 DNS 轮询列表，设备通过域名或者 IP 地址列表访问集群，通常产品部署不推荐这种部署方式。
+除了负载均衡部署集群外，还可以使用 DNS 轮询直连 EMQX 集群，即将所有节点加入 DNS 轮询列表，设备通过域名或者 IP 地址列表访问集群，通常不建议在生产环境中采用 DNS 轮询直连方式。
 
 ## 选择负载均衡产品
 
@@ -58,7 +48,7 @@
 
 下面我们将以私有部署 LB 服务器为例向大家介绍如何配置并负载均衡 EMQX 集群。
 
-## HAProxy/Nginx 负载均衡操作指南
+## 配置 HAProxy/NGINX 负载均衡
 
 假设 EMQX 集群中有以下 2 个节点：
 
@@ -71,7 +61,7 @@
 
 ### 启用 Proxy Protocol
 
-如果 EMQX 集群部署在 HAProxy 或 Nginx 后，且需要拿到客户端真实的源 IP 地址与端口，则需要在对应监听器配置中打开 [Proxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol) 配置，以 1883 监听器为例：
+如希望将 EMQX 集群部署在 HAProxy 或 NGINX 后，我们将需要客户端真实的源 IP 地址与端口，随后在对应监听器配置中启用 `proxy_protocol`，以 1883 监听器为例：
 
 ```bash
 listeners.tcp.default {
@@ -82,13 +72,20 @@ listeners.tcp.default {
 }
 ```
 
-Nginx 使用 Proxy Prorcol 参考：[https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)。
+有关 HAProxy 和 NGINX 中使用的 proxy protocol，可以参考：
 
-### HAProxy 负载均衡
+- HAProxy: https://www.haproxy.com/blog/haproxy/proxy-protocol
+- NGINX: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
 
-HAProxy 作为 LB 部署 EMQX 集群，并终结 SSL 连接，有关 HAProxy 介绍及安装请参考 [HAProxy 官方网站](http://www.haproxy.org/)。
+:::: tabs type:card
 
-修改 `/etc/haproxy/haproxy.cfg` 配置，根据版本和安装环境的不同配置文件位置可能会有差异。
+::: tab 配置 HAProxy
+
+**前置准备**：HAProxy 已安装，有关 HAProxy 介绍及安装请参考 [HAProxy 官方网站](http://www.haproxy.org/)。
+
+如使用 HAProxy 作为 EMQX 集群的 LB，并终结 SSL 连接，可参照如下示例修改 `/etc/haproxy/haproxy.cfg`。
+
+注意：如您通过二进制包安装 EMQX，文件路径为：或`/etc/emqx/etc/haproxy/haproxy.cfg  `
 
 ```bash
 listen mqtt-ssl
@@ -107,11 +104,15 @@ backend emqx_cluster
   server emqx2 192.168.0.3:1883 check inter 10000 fall 2 rise 5 weight 1
 ```
 
-## Nginx 负载均衡
+:::
 
-Nginx 作为 EMQX 集群 LB，并终结 SSL 连接，有关 HAProxy 介绍及安装请参考 [Nginx 官方网站](https://www.nginx.com/)。
+::: tab 配置 NGINX
 
-修改 `/etc/nginx/nginx.conf` 配置，根据版本和安装环境的不同配置文件位置可能会有差异：
+**前置准备**：NGINX 已安装，有关 NGINX 介绍及安装请参考 [Nginx 官方网站](https://www.nginx.com/)。
+
+如使用 NGINX 作为 EMQX 集群的 LB，并终结 SSL 连接，修改 `/etc/nginx/nginx.conf` 配置
+
+注意：如您通过二进制包安装 EMQX，文件路径为：或 `/etc/emqx/etc/nginx/nginx.conf  `
 
 ```bash
 stream {
@@ -132,3 +133,7 @@ stream {
   }
 }
 ```
+
+:::
+
+::::
