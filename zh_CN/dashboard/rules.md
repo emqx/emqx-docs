@@ -24,7 +24,7 @@ EMQX 内置了一个强大且高效的数据处理功能，即规则引擎。通
 5. CASE-WHEN 从多个条件列表返回可能结果
 6. 数组处理 - 从 JSON 格式的 payload 中获取嵌套的值
 
-SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` 这个主题发送消息时，我们就取出当前事件下所有的数据信息。`SELECT` 关键词可以获取消息中的所有字段，例如可以获取当前消息的 `Payload`，则 SQL 语句可以修改为 `SELECT payload from "t/#"`，获取的内容可以使用[内置函数](../data-integration/rule-sql-builtin-functions.md)来进行处理和转化，`FROM` 关键词后面输入数据源，即事件主题，下方规则调试部分可查看到所有可选的数据源事件，使用 `WHERE` 关键词，可以添加条件判断，更多详细的 SQL 语法使用，请参考 [SQL 语法与示列](../data-integration/rule-sql-grammar-and-examples.md)。
+SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` 这个主题发送消息时，我们就取出当前事件下所有的数据信息。`SELECT` 关键词可以获取消息中的所有字段，例如可以获取当前消息的 `Payload`，则 SQL 语句可以修改为 `SELECT payload from "t/#"`，获取的内容可以使用[内置函数](../data-integration/rule-sql-builtin-functions.md)来进行处理和转化，`FROM` 关键词后面输入数据源，即事件主题，下方规则调试部分可查看到所有可选的数据源事件，使用 `WHERE` 关键词，可以添加条件判断，更多详细的 SQL 语法使用，请参考 [SQL 语法与示列](../data-integration/rule-sql-syntax.md)。
 
 ![image](./assets/rule-sql.png)
 
