@@ -137,7 +137,7 @@
     # - data-integration/rule-get-started # TODO merge to rules
     # - data-integration/rule-actions # TODO merge to rules
     - title_en: Rules SQL
-      title_cn: SQL 手册
+      title_cn: 规则 SQL
       children:
         - data-integration/rule-sql-syntax
         - data-integration/rule-sql-events-and-fields
