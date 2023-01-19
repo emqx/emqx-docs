@@ -72,7 +72,7 @@ listeners.tcp.default {
 }
 ```
 
-有关 HAProxy 的介绍和在 NGINX 中使用方式，可以参考：
+有关 Proxy Protocol 的介绍和 NGINX 中使用的 Proxy Protocol，可以参考：
 
 - [Proxy Protocol 介绍](https://www.haproxy.com/blog/haproxy/proxy-protocol)
 - [NGINX 中使用 Proxy Protocol](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)

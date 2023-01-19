@@ -68,9 +68,9 @@ listeners.tcp.default {
 }
 ```
 
-For proxy protocols used in HAProxy and Nginx, see: 
+For proxy protocols and that used in Nginx, see: 
 
-- HAProxy: https://www.haproxy.com/blog/haproxy/proxy-protocol
+- Proxy protocol: https://www.haproxy.com/blog/haproxy/proxy-protocol
 - Nginx: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
 
 :::: tabs type:card
