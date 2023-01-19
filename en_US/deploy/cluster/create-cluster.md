@@ -125,7 +125,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 ./bin/emqx_ctl cluster join emqx1@127.0.0.1
 ```
 
-### Create a cluster using a static node list
+### Autocluster by static node list
 
 The static clustering of EMQX is to use a static node list pre-configured on each node to join the cluster. After starting, the nodes will create a cluster automatically according to the node list.
 
@@ -144,7 +144,7 @@ cluster {
 
 Start all nodes one by one, and the cluster will be automatically established.
 
-### Create a cluster using DNS A records
+### Autocluster by DNS Record
 
 #### Working principles
 
@@ -190,7 +190,7 @@ cluster {
 
 Start all nodes one by one after the configuration, and the cluster will be automatically established.
 
-### Create a cluster via etcd
+### Autocluster using etcd
 
 [etcd](https://etcd.io/) is an open-source project initiated by CoreOS. It is widely used in distributed systems for service discovery and connection establishing, which is exactly what EMQX autoclustering needs. 
 
@@ -223,7 +223,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 The result shows that all nodes are started normally and joined the cluster automatically.
 
-## Create a cluster via Kubernetes service
+## Autocluster on Kubernetes
 
 [Kubernetes (K8s)](https://kubernetes.io) is Google's open source container management system. EMQ X can use kubernetes API for node discovery and auto clustering. 
 
