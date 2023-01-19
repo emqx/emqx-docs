@@ -61,7 +61,7 @@
 
 ### 启用 Proxy Protocol
 
-如希望将 EMQX 集群部署在 HAProxy 或 NGINX 后，我们将需要客户端真实的源 IP 地址与端口，随后在对应监听器配置中启用 `proxy_protocol`，以 1883 监听器为例：
+如果 EMQX 集群部署在 HAProxy 或 NGINX 后，且需要拿到客户端真实的源 IP 地址与端口，则需要在 EMQX 对应监听器打开 Proxy Protocol 配置，以 1883 监听器为例，在 `etc/emqx.conf` 中找到监听器配置并添加 `proxy_protocol` 配置项：
 
 ```bash
 listeners.tcp.default {
@@ -72,10 +72,10 @@ listeners.tcp.default {
 }
 ```
 
-有关 HAProxy 和 NGINX 中使用的 proxy protocol，可以参考：
+有关 HAProxy 的介绍和在 NGINX 中使用方式，可以参考：
 
-- HAProxy: https://www.haproxy.com/blog/haproxy/proxy-protocol
-- NGINX: [https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
+- [Proxy Protocol 介绍](https://www.haproxy.com/blog/haproxy/proxy-protocol)
+- [NGINX 中使用 Proxy Protocol](https://docs.nginx.com/nginx/admin-guide/load-balancer/using-proxy-protocol/)
 
 :::: tabs type:card
 
@@ -85,7 +85,7 @@ listeners.tcp.default {
 
 如使用 HAProxy 作为 EMQX 集群的 LB，并终结 SSL 连接，可参照如下示例修改 `/etc/haproxy/haproxy.cfg`。
 
-注意：根据您所选的安装方式，文件路径会有差异。
+注意：根据您所选的 HAProxy 安装方式，文件路径会有差异。
 
 ```bash
 listen mqtt-ssl
@@ -110,7 +110,7 @@ backend emqx_cluster
 
 **前置准备**：NGINX 已安装，有关 NGINX 介绍及安装请参考 [Nginx 官方网站](https://www.nginx.com/)。
 
-如使用 NGINX 作为 EMQX 集群的 LB，并终结 SSL 连接，修改 `/etc/nginx/nginx.conf` 配置
+如使用 NGINX 作为 EMQX 集群的 LB，并终结 SSL 连接，修改 `/etc/nginx/nginx.conf` 配置。
 
 注意：如您通过二进制包安装 EMQX，文件路径为：或 `/etc/emqx/etc/nginx/nginx.conf  `
 
