@@ -1,4 +1,4 @@
-# Trace
+# Log Trace
 
 Real-time filtering logs for the ClientID or Topic or IP for debugging.
 
