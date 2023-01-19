@@ -56,7 +56,7 @@ sudo yum install ./emqx-5.0.14-el8-amd64.rpm -y
 wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.tar.gz
 ```
 
-1. 解压程序包
+2. 解压程序包
 
 ```bash
 mkdir -p emqx && tar -zxvf emqx-5.0.14-el8-amd64.tar.gz -C emqx
