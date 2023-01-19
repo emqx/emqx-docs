@@ -92,4 +92,4 @@ retainer {
 | batch_deliver_number  | int     | 0         | 每次派发的消息数量(0 表示所有的) |
 | batch_deliver_limiter | limiter | undefined | 消息派发的速率限制器             |
 
-关于速率限制器的详细设置，请参考[分层速率控制系统](../reliability/rate-limit.md) 中的 `监听器级` 和 `连接级`
+关于速率限制器的详细设置，请参考[分层速率控制系统](../rate-limit/rate-limit.md) 中的 `监听器级` 和 `连接级`

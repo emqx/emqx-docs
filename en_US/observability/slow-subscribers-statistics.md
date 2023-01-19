@@ -36,8 +36,6 @@ On EMQX Dashboard, click `Diagnose` and select `Slow Subscriptions`, then `Enabl
 
 ![image](./assets/slow_subscribers_statistics_1.png)
 
-<a id="org417d240"></a>
-
 Follow the instruction below for configuration:
 
 - **Stats Threshold**:  Latency threshold for statistics, only messages information with latency exceeding the value will be collected. Minimum value: 100ms

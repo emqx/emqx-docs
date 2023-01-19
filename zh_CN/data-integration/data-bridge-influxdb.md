@@ -29,7 +29,7 @@ InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强�
 docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 ```
 
-2. 访问 [http://localhost:8086]( http://localhost:8086) 打开 InfluxDB UI，设置用户名、密码、组织名称、Bucket 名称。
+2. 访问 [http://localhost:8086](http://localhost:8086) 打开 InfluxDB UI，设置用户名、密码、组织名称、Bucket 名称。
 
 3. 前往 InfluxDB UI Load Data -> API Token，按照 [Create All-Access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens) 指引创建 Token。
 

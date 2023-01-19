@@ -228,5 +228,4 @@ after the configured time interval.
 After some learning, it's time to start clustering EMQX nodes.
 
 * Learn more about the [security](./security.md) aspects of EMQX clusters.
-* The classic [Manual clustering](./manual.md)
-* The smarter [Auto clustering](./auto.md)
+* Learn more about how to [Create Cluster](./create-cluster.md).

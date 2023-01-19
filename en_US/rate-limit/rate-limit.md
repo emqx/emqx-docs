@@ -37,7 +37,7 @@ The hierarchical relationship is shown in the figure:
 ### Connection Level
   The connection-level rate limit is for a single connection. Assuming that the inflow rate of each session accessed through port 1883 needs to be limited to 100 messages per second, you only need to modify the configuration of port 1883 in emqx.conf as follows:
 
-````
+```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
   max_connections = 1024000
@@ -46,7 +46,7 @@ listeners.tcp.default {
   capacity = 100
   }
 }
-````
+```
 
 All options supported at this level are as follows:
 
@@ -62,7 +62,7 @@ All options supported at this level are as follows:
 ### Listener Level
   The listener-level  limite  the total rate limit of all sessions connected through a same listener. For example, if you want the sum of  messages in  per second does not exceed 100 of all sessions that connected through port 1883,  you can modify the configuration as follows:
 
-````
+```bash
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
   max_connections = 1024000
@@ -71,7 +71,7 @@ listeners.tcp.default {
   capacity = 100
   }
 }
-````
+```
 
 All options supported at this level are as follows:
 
@@ -85,10 +85,9 @@ All options supported at this level are as follows:
 
 The node-level limit  the resource consumption speed of the current node. If you want to limit the number of messages flowing in the current node per second to no more than 100, you can add the following configuration to emqx.conf:
 
-
-````
+```bash
 limiter.message_in.rate = "100/s"
-````
+```
 
 **Note:** Only listeners with rate limiting configured will be affected by node-level settings
 

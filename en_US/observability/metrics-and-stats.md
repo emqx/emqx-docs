@@ -6,7 +6,7 @@ EMQX Broker provides users with multiple ways to view metrics and status. Most d
 
 ![Metrics in Dashboard](./assets/dashboard-metrics.jpg)
 
-If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. You can refer to [HTTP API](../admin/api.md) and [$SYS system topic](../advanced/system-topic.md#).
+If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. You can refer to [HTTP API](../admin/api.md) and [$SYS system topic](../mqtt/mqtt-system-topics.md).
 
 ## Integrate with monitor systems
 

@@ -8,11 +8,11 @@ EMQX 为用户提供了指标获取方式：
 
 ![Metrics in Dashboard](./assets/dashboard-metrics.png)
 
-如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，参见 [HTTP API](../admin/api.md) 与 [$SYS 系统主题](../advanced/system-topic.md)。
+如果不方便访问 Dashboard，你还可以通过 HTTP API 和系统主题消息来获取这些数据，参见 [HTTP API](../admin/api.md) 与 [$SYS 系统主题](../mqtt/mqtt-system-topics.md)。
 
 ## 与监控系统集成
 
-EMQX 指标支持与 [Prometheus]((./prometheus.md) ) 以及 [StatsD](./statsd.md) 集成。使用第三方监控系统对 EMQX 进行监控有如下好处：
+EMQX 指标支持与 [Prometheus](./prometheus.md) 以及 [StatsD](./statsd.md) 集成。使用第三方监控系统对 EMQX 进行监控有如下好处：
 
 - 可以将 EMQX 的监控数据与其他系统的监控数据进行整合，形成一个完整的监控系统，如监控服务器主机的相关信息；
 - 可以使用更加丰富的监控图表，更直观地展示监控数据，如使用 Grafana 的仪表盘；
