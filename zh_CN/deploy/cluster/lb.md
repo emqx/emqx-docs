@@ -85,7 +85,7 @@ listeners.tcp.default {
 
 如使用 HAProxy 作为 EMQX 集群的 LB，并终结 SSL 连接，可参照如下示例修改 `/etc/haproxy/haproxy.cfg`。
 
-注意：如您通过二进制包安装 EMQX，文件路径为：或`/etc/emqx/etc/haproxy/haproxy.cfg  `
+注意：根据您所选的安装方式，文件路径会有差异。
 
 ```bash
 listen mqtt-ssl
