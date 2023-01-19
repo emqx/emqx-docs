@@ -113,21 +113,21 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 
 #### mnesia
 
-Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Erlang 的各种数据结构，在文档中也被叫做内置数据库。
+Mnesia 数据库是 Erlang 内置的一个分布式数据库管理系统（DBMS），可以直接存储 Erlang 的各种数据结构，在文档中也被叫做内置数据库。
 
-EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、客户端认证与权限数据、Dashbaord 用户信息等数据，这些数据都存储在 `mnesia` 目录下，**一旦删除该目录，所有业务数据将丢失。**
+EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、客户端认证与权限数据、Dashboard 用户信息等数据，这些数据都存储在 `mnesia` 目录下，**一旦删除该目录，所有业务数据将丢失。**
 
 可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。
 
 #### configs/app.*.config
 
-EMQX 读取 `etc/emqx.conf` 和 `data/configs/cluster-override.conf` `data/configs/local-override.conf` 中的配置后，将其合并并转换为 Erlang 原生配置文件格式，以在运行时读取其中的配置。
+EMQX 的配置项存储在 `etc/emqx.conf`、`data/configs/cluster-override.conf`和 `data/configs/local-override.conf` 中，EMQX 会读取其中的配置并将其合并转化为Erlang 原生配置文件格式，以便在运行时应用这些配置。
 
-不要与 `etc` 目录混淆，`etc` 目录存储只读的配置文件，通过 Dashboard 以及 REST API 提交的配置将被保存到 `data/configs` 目录下，以支持在运行时更改配置。
+`data/configs` 与 `etc` 目录的主要区别是，`etc` 目录存储只读的配置文件，用户通过 Dashboard 和 REST API 提交的配置将被保存到 `data/configs` 目录下，并支持在运行时进行热更新。
 
 #### trace
 
-EMQX trace 输出结果，trace 可用于调试和排查错误，具体请查看 [日志追踪](../observability/tracer.md)。
+该文件夹用于保存 EMQX 的日志追踪结果，可用于调试和排查错误等场景，更多信息，可查看 [日志追踪](../observability/tracer.md)。
 
 ### log 目录
 

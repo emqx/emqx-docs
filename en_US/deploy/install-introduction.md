@@ -1,12 +1,12 @@
 # Overview
 
-This chapter will walk you through the basic installtion steps for EMQX, the miminum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs.
+This chapter will walk you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs.
 
 ## Download
 
 {% emqxce %}
 
-EMQX will release the installtion packages for different operating systems or platforms in each release, you may click the line below to download.
+EMQX will release the installation packages for different operating systems or platforms in each release. You may click the line below to download.
 
 - EMQX website: <https://www.emqx.io/zh/downloads>
 - GitHub Release: <https://github.com/emqx/emqx/releases>
@@ -16,19 +16,19 @@ You can also download the alpha, beta, or rc versions from our Github pages.
 
 {% emqxee %}
 
-EMQX will release the corresponding docker image and the installtion packages for different operating systems or platforms in each release, you may click the line below to download.
+EMQX will release the corresponding Docker image and the installation packages for different operating systems or platforms in each release. You may click the line below to download.
 
 EMQX website: <https://www.emqx.com/zh/try?product=enterprise>
 {% endemqxee %}
 
 :::tip
 
-Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You will only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before you can start your MQTT services and connect your IoT devices to any cloud with zero need for infrastructure maintenance.
+Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You will only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
 :::
 
 ## Supported operating systems
 
-The table below lists the operating system and versions that EMQX support.
+The table below lists the operating systems and versions that EMQX supports.
 
 | Operating system                          | Versions supported       | x86_64/amd64 | arm64 (Apple Silicon) |
 | :---------------------------------------- | :----------------------- | :----------- | :-------------------- |
@@ -41,9 +41,9 @@ The table below lists the operating system and versions that EMQX support.
 
 ## Hardware specification
 
-Depends on the number of client connections, message rate, message size, and enabled features, the minimum hardware needed to run EMQX varies.
+Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies.
 
-Here we list the minimum hardware specification for runing a simple EMQX function verification, that is, with 100,000 client connections and100,000 message throughput per second.
+Here we list the minimum hardware specification for running a simple EMQX function verification, with 100,000 client connections and 100,000 message throughput per second.
 
 | Item           | Mininum configuration | Recommended configuration |
 | -------------- | --------------------- | ------------------------- |
@@ -54,15 +54,13 @@ Here we list the minimum hardware specification for runing a simple EMQX functio
 
 ::: tip
 
-Note: In production environment, you may use our [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughputs.
+Note: In production environments, you may use our [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughputs.
 
 :::
 
-## File and directories
+## Files and directories
 
-After the installation is complete, EMQX will create some directories to store running and configuration files, data, and logs.
-
-The table below lists the directories created and their file path under different installation methods:
+After installation, EMQX will create some directories to store running and configuration files, data, and logs. The table below lists the directories created and their file path under different installation methods:
 
 | Directory  | Description        | Installed with tar.gz | Installed with RPM/DEB   |
 | ---------- | ------------------ | --------------------- | ------------------------ |
@@ -79,7 +77,7 @@ The table below lists the directories created and their file path under differen
 
 1. When installed with the compressed package, the directory is relative to the directory where the software is installed;
 2. When installed with Docker container, EMQX will be installed in the `/opt/emqx` directory;
-3. The `data`, `log`, and `plugins` directories can be set through configuration files. It is recommended to mount the `data` directory to a high-performance disk for better performance.
+3. The `data`, `log`, and `plugins` directories are configurable via the configuration files. Mounting the `data` directory to a high-performance disk is recommended for better performance.
    :::
 
 Below will introduce the files and subfolders of some directories.
@@ -91,50 +89,52 @@ Below will introduce the files and subfolders of some directories.
 - `emqx` and `emqx.cmd`: Executables of EMQX. For details, see [basic commands](../admin/cli.md).
 - `emqx_ctl` and `emqx_ctl.cmd`: Executables of EMQX administration commands. For details, see [administration CLI commands](../admin/cli.md).
 
-### etc: config files
+### etc directory
 
-This is the directory that holds all the configuration files, including:
+`etc` is the directory that holds all the configuration files, including:
 
 - `emqx.conf`: Main configuration file for EMQX, contains all the commonly-used configuration items.
 - `emqx-example-en.conf`: Demo configuration files of EMQX, contains all the configurable items;
 - `acl.conf`: Default ACl rules.
 - `vm.args`: Operating parameters of the Erlang virtual machine.
-- `certs/`: X.509 keys and certificate files for EMQX SSL listeners, may also be used in the SSL/TLS connection when intergrating with external systems.
+- `certs/`: X.509 keys and certificate files for EMQX SSL listeners, may also be used in the SSL/TLS connection when integrating with external systems.
 
-### data: database and files
+### data directory
 
-This directory is where EMQX stores its operating data, please ensure EMQX has read/write permissions for all files in this directory. This directory includes:
+`data` is where EMQX stores its operating data, please ensure EMQX has read/write permissions for all files in this directory. This directory includes:
 
 - `authz`: Stores file authorization rules uploaded by REST API or Dashboard.
 - `certs`: Stores certificate files uploaded by REST API or Dashboard.
-- `configs`: Stores Generated config file at boot, or config overrides when changed from API or CLI.
-- `mnesia`: The built-in database, one subdirectory will be generated for every node and will be named after this ndoe, e.g., `emqx@127.0.0.1`. Note: For nodes that are renamed, you should delete the subdirectory corresponding to this node or move it away from the directory.
+- `configs`: Stores generated config file at boot, or config overrides when changed from API or CLI.
+- `mnesia`: the built-in database, one subdirectory will be generated for every node and will be named after this node, e.g., `emqx@127.0.0.1`. Note: If you need to rename a node, please delete the subdirectory named with the last name or remove it from the directory.
 - `patches`: Stores the `.beam` files for EMQX to load as a hot patch. Can be used for a quick fix.
 - `trace`: Online tracing log files.
 
-生产环境中建议定期备份除 `trace` 之外的所有目录，以下是子目录和文件说明：
+In production, you should periodically backup the data directory (excluding the `trace` folder )  for data safety. Below are some key subdirectories and files within the `data` directory. 
 
 #### mnesia
 
-Mnesia 数据库是 Erlang 内置的一个分布式 DBMS，可以直接存储 Erlang 的各种数据结构。 It also often referred to as the `built-in database` in EMQX documents.
+`mnesia` is a distributed database management system (DBMS) in Erlang for storing various data structures of Erlang. In EMQX documents, it is often referred to as the built-in database.
 
-EMQX 使用 Mnesia 数据库存储自身运行数据，例如告警记录、客户端认证与权限数据、Dashbaord 用户信息等数据，这些数据都存储在 `mnesia` 目录下，**一旦删除该目录，所有业务数据将丢失。**
+EMQX uses `Mnesia` to store its operating data,including alarm records, authentication/authorization data of the cients, Dashboard user information, etc. **If the directory is deleted, all these operating data will be lost.**
 
-可以通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。
+You can query the EMQX system information from `mnesia`  through the `emqx_ctl mnesia` command. For details, please see [Management Command CLI](https://docs.emqx.com/en/enterprise/v4.4/advanced/cli.html).
 
 #### configs/app.*.config
 
-EMQX 读取 `etc/emqx.conf` 和 `data/configs/cluster-override.conf` `data/configs/local-override.conf` 中的配置后，将其合并并转换为 Erlang 原生配置文件格式，以在运行时读取其中的配置。
+EMQX reads the configuration in `etc/emqx.conf` and `etc/plugins/*.conf`, converts it to the Erlang native configuration file format, and reads the configuration at runtime.
 
-不要与 `etc` 目录混淆，`etc` 目录存储只读的配置文件，通过 Dashboard 以及 REST API 提交的配置将被保存到 `data/configs` 目录下，以支持在运行时更改配置。
+The configuration items of EMQX are stored in `etc/emqx.conf`, `data/configs/cluster-override.conf`， and `data/configs/local-override.conf`. EMQX will read the configurations and convert them to Erlang native format so the system can apply them at runtime.
+
+The main difference between the `data/configs` and the `etc` directory is that the `etc` directory stores read-only configuration files, while configuration updates from the Dashboard or REST API are saved in the `data/configs` directory to support hot configuration reloads at runtime.
 
 #### trace
 
-EMQX trace 输出结果，trace 可用于调试和排查错误，具体请查看 [日志追踪](../observability/tracer.md)。
+`trace` stores the output from the Log Trace feature for debugging and troubleshooting. For details, see [Log Trace](../observability/tracer.md).
 
 ### log directory
 
 This directory stores the operating logs of EMQX, including
 
-- ``emqx.log.*`: Operation logs of EMQX, for more information, see [logs 日志与追踪](../observability/log.md)。
+- ``emqx.log.*`: Operation logs of EMQX, for more information, see [logs](../observability/log.md).
 - `erlang.log.*`: Copy file of the console log when EMQX is started in the background with `emqx start`

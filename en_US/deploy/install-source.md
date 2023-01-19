@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-To compile and install EMQX from source code, the following dependencies are needed: 
+To compile and install EMQX from the source code, the following dependencies are needed: 
 
 - Erlang/OTP OTP 24 or 25 
 - GCC 4.8 or higher versions
