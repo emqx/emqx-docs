@@ -6,7 +6,7 @@ This chapter will introduce how to use the official Docker image to install and 
 
 1. If you want to keep the data, please mount the EMQX data directory (`/opt/emqx/data`) out of the container, so that the data will persist even if the container no longer exists.
 
-2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. To access the host address, please use the host’s IP or use [host networking](https://docs.docker.com/network/host/). If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
+2. In Docker, `localhost` or `127.0.0.1`  points to the internal address of the container. Please use the host’s IP or [host networking](https://docs.docker.com/network/host/) to access the host address. If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
    :::
 

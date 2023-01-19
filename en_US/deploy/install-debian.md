@@ -1,6 +1,6 @@
 # Debian
 
-This section will guide you on how to install and start EMQX on Debian system.
+This section will guide you on installing and starting EMQX on the Debian system.
 
 Supported versions: 
 

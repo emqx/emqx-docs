@@ -1,6 +1,6 @@
 # Amazon Linux
 
-This section will guide you on how to install and start EMQX on Amazon Linux system.
+This section will guide you on installing and starting EMQX on the Amazon Linux system.
 
 ## Install EMQX with tag.gz
 
