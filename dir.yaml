@@ -46,7 +46,7 @@
 - title_en: Configuration
   title_cn: 配置
   children:
-    - title_en: Configuraion Files
+    - title_en: Configuration Files
       title_cn: 配置文件
       path: admin/cfg # Configuration file
 
