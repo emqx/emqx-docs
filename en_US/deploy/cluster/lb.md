@@ -81,7 +81,7 @@ For proxy protocols used in HAProxy and Nginx, see:
 
 To configure HAProxy as the LB for EMQX and terminate the SSL connection, you can modify `/etc/haproxy/haproxy.cfg` as shown in the code example below. 
 
-Note: The file path should be  `/etc/emqx/etc/haproxy/haproxy.cfg` if you install EMQX with a binary package.
+Note: The file path may differ based on your installation mode.
 
 ```bash
 listen mqtt-ssl
