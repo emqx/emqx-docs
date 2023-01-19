@@ -7,12 +7,6 @@ Supported versions:
 - CentOS 7
 - CentOS 8
 
-{%emqxee%}
-:::tip
-This is the EMQX Open source edition installation document. the EMQX Enterprise installation document is coming soon, until then please follow the guidelines on the [EMQX Enterprise download page](https://www.emqx.com/en/try?product=enterprise) to install it.
-:::
-{%endemqxee%}
-
 ## Install EMQX with rpm
 
 1. To download [emqx-5.0.14-el8-amd64.rpm](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.rpm), run:

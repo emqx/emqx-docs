@@ -2,12 +2,6 @@
 
 This section will guide you on how to install and start EMQX on macOS with a zip file.
 
-{%emqxee%}
-:::tip
-This is the EMQX Open source edition installation document. the EMQX Enterprise installation document is coming soon, until then please follow the guidelines on the [EMQX Enterprise download page](https://www.emqx.com/en/try?product=enterprise) to install it.
-:::
-{%endemqxee%}
-
 :::: tabs type:card
 :::tab Intel Chip
 
