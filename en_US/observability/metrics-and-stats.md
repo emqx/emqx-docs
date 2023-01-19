@@ -1,37 +1,42 @@
 # Metrics
 
-EMQX Broker provides users with metrics monitoring functions, allowing users and operation and maintenance personnel to know the current service status based on these metrics. The metrics monitoring function cannot be disabled. This function has high performance, and users do not need to worry about affecting system performance in high-throughput scenarios.
+EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. 
 
-EMQX Broker provides users with multiple ways to view metrics and status. Most directly, users can see this data on the Overview page of EMQX Dashboard.
+EMQX Broker provides users with multiple ways to view metrics and status. Most directly, users can see this data on the **Metrics** tab of the EMQX Dashboard.
 
 ![Metrics in Dashboard](./assets/dashboard-metrics.jpg)
 
 If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. You can refer to [HTTP API](../admin/api.md) and [$SYS system topic](../advanced/system-topic.md#).
 
-::: tip
-EMQX provides integration with third-party monitoring systems, such as StatsD and Prometheus. You can refer to [Prometheus Monitoring Alarm](../observability/prometheus.md) and [StatsD](../observability/statsd.md) for an example.
-:::
+## Integrate with monitor systems
+
+EMQX supports integration with third-party monitoring systems, such as [StatsD](../observability/statsd.md) and [Prometheus](../observability/prometheus.md). Using a third-party monitoring system can bring the following advantages:
+
+- A complete monitoring system, where the monitoring data of EMQX will be integrated with that of the other systems. For example, we can get the monitoring information of the server host;
+- More intuitive monitoring report with figures and charts, such as using Grafana's dashboard;
+- Various alarm notification means, such as using Prometheus's Alertmanager.
 
 ## Metrics & Stats
 
-EMQX Broker divides metrics into Metrics and Stats. Metrics usually refer to data that will only increase monotonically, such as the number of sent bytes and the number of sent messages. Metrics currently provided by EMQX Broker covers the four dimensions of bytes, packets, messages, and events. Stats usually refers to data that appears in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscription.
+EMQX divides metrics into Metrics and Stats. 
 
-::: tip
-EMQX 5.0 supports aggregation of monitoring data for the entire cluster, as well as per-node fetching. You can refer to [HTTP API](../admin/api.md)
-:::
+- Metrics are data that increase monotonically, such as the number of sent bytes and messages. EMQX Metrics currently covers four dimensions: bytes, packets, messages, and events. 
+- Stats appear in pairs, including current values and historical maximums, such as the current number of subscriptions and the historical maximum number of subscriptions.
 
 ### Metrics
 
+In this section, we will elaborate on the four types of metrics, bytes, packets, messages, and events. 
+
 #### Bytes
 
-| Key            | Name (in Dashboard) | Data Type | Description              |
+| Key            | Name (in Dashboard) | Data type | Description              |
 | -------------- | ------------------- | --------- | ------------------------ |
 | bytes.received | Bytes/Received	   | Integer   | Number of received bytes |
 | bytes.sent     | Bytes/Sent          | Integer   | Number of send bytes     |
 
 #### Packets
 
-| Key                          | Name (in Dashboard)          | Data Type | Description                                                  |
+| Key                          | Name (in Dashboard)          | Data type | Description                                                  |
 | ---------------------------- | ---------------------------- | --------- | ------------------------------------------------------------ |
 | packets.received             | Packets/Received             | Integer   | Number of received packets                                   |
 | packets.sent                 | Packets/Sent                 | Integer   | Number of sent packets                                       |
@@ -76,13 +81,13 @@ EMQX 5.0 supports aggregation of monitoring data for the entire cluster, as well
 
 #### Message (PUBLISH packet)
 
-| Key                             | Name (in Dashboard)                    | Data Type | Description                                                  |
+| Key                             | Name (in Dashboard)                    | Data type | Description                                                  |
 | ------------------------------- | -------------------------------------- | --------- | ------------------------------------------------------------ |
-| delivery.dropped.too_large      | Delivery/Dropped Too Large Messages    | Integer   | The number of messages that were dropped because the length exceeded the limit when sending |
+| delivery.dropped.too_large      | Delivery/Dropped Too Large Messages    | Integer   | Number of messages dropped because the length exceeded the limit when sending |
 | delivery.dropped.queue_full     | Delivery/Dropped Messages (Queue Full) | Integer   | Number of messages with a non-zero QoS that were dropped because the message queue was full when sending |
 | delivery.dropped.qos0_msg       | Delivery/Dropped QoS 0 Messages        | Integer   | Number of messages with QoS of 0 that were dropped because the message queue was full when sending |
 | delivery.dropped.expired        | Delivery/Dropped Expired Messages      | Integer   | Number of messages that were dropped due to message expiration when sending |
-| delivery.dropped.no_local       | Delivery/Dropped No Local Messages     | Integer   | Number of messages that were dropped due to the `No Local` subscription option when sending |
+| delivery.dropped.no_local       | Delivery/Dropped No Local Messages     | Integer   | Number of messages dropped due to the `No Local` subscription option when sending |
 | delivery.dropped                | Delivery/Dropped                       | Integer   | Total number of messages that were dropped when sent         |
 | messages.delayed                | Messages/Delayed                       | Integer   | Number of delay-published messages stored by EMQX Broker    |
 | messages.delivered              | Messages/Delivered                     | Integer   | Number of messages forwarded to the subscription process internally by EMQX Broker |
@@ -103,38 +108,39 @@ EMQX 5.0 supports aggregation of monitoring data for the entire cluster, as well
 
 #### Event
 
-| Key                 | Name (in Dashboard)      | Data Type | Description                                |
-| ------------------- | ------------------------ | --------- | ------------------------------------------ |
-| client.connect      | Connections/Connet       | Integer   | `client.connect` hook trigger times        |
-| client.authenticate | Access/Authenticate      | Integer   | `client.authenticate` hook trigger times   |
-| client.connack      | Connections/Connack      | Integer   | `client.connack` hook trigger times        |
-| client.connected    | Connections/Connected    | Integer   | `client.connected` hook trigger times      |
-| client.disconnected | Connections/Disconnected | Integer   | `client.disconnected` hook trigger times   |
-| client.authorize    | Access/Authorize         | Integer   | `client.authorize` hook trigger times      |
-| client.subscribe    | Connections/Subscribe    | Integer   | `client.subscribe` hook trigger times      |
-| client.unsubscribe  | Connections/Unsubscribe  | Integer   | `client.unsubscribe` hook trigger times    |
-| session.created     | Sessions/Created         | Integer   | `session.created` hook trigger times       |
-| session.discarded   | Sessions/Discarded       | Integer   | `session.discarded` hook trigger times     |
-| session.resumed     | Sessions/Resumed         | Integer   | `session.resumed` hook trigger times       |
-| session.takenover   | Sessions/Takenover       | Integer   | `session.takenover` hook trigger times     |
-| session.terminated  | Sessions/Terminated      | Integer   | `session.terminated` hook trigger times    |
+| Key                 | Name (in Dashboard)      | Data type | Description                              |
+| ------------------- | ------------------------ | --------- | ---------------------------------------- |
+| client.connect      | Connections/Connet       | Integer   | `client.connect` hook trigger times      |
+| client.authenticate | Access/Authenticate      | Integer   | `client.authenticate` hook trigger times |
+| client.connack      | Connections/Connack      | Integer   | `client.connack` hook trigger times      |
+| client.connected    | Connections/Connected    | Integer   | `client.connected` hook trigger times    |
+| client.disconnected | Connections/Disconnected | Integer   | `client.disconnected` hook trigger times |
+| client.authorize    | Access/Authorize         | Integer   | `client.authorize` hook trigger times    |
+| client.subscribe    | Connections/Subscribe    | Integer   | `client.subscribe` hook trigger times    |
+| client.unsubscribe  | Connections/Unsubscribe  | Integer   | `client.unsubscribe` hook trigger times  |
+| session.created     | Sessions/Created         | Integer   | `session.created` hook trigger times     |
+| session.discarded   | Sessions/Discarded       | Integer   | `session.discarded` hook trigger times   |
+| session.resumed     | Sessions/Resumed         | Integer   | `session.resumed` hook trigger times     |
+| session.takenover   | Sessions/Takenover       | Integer   | `session.takenover` hook trigger times   |
+| session.terminated  | Sessions/Terminated      | Integer   | `session.terminated` hook trigger times  |
 
 #### Authentication & Authorization
 
-| Key                         | Name (in Dashboard)  | Data Type | Description                                                                 |
-| --------------------------- | -------------------- | --------- | --------------------------------------------------------------------------- |
-| authorization.allow         | Access/Allow         | Integer   | Number of client authorization passes                                       |
-| authorization.deny          | Access/Deny          | Integer   | Number of client authorization failures                                     |
-| authorization.matched.allow | Access/Matched Allow | Integer   | Number of client authorization passes due to authorized by some rules       |
+| Key                         | Name (in Dashboard)  | Data type | Description                                                  |
+| --------------------------- | -------------------- | --------- | ------------------------------------------------------------ |
+| authorization.allow         | Access/Allow         | Integer   | Number of client authorization passes                        |
+| authorization.deny          | Access/Deny          | Integer   | Number of client authorization failures                      |
+| authorization.matched.allow | Access/Matched Allow | Integer   | Number of client authorization passes due to authorized by some rules |
 | authorization.matched.deny  | Access/Matched Deny  | Integer   | Number of client authorization failures due to being rejected by some rules |
-| authorization.nomatch       | Access/No Match      | Integer   | Number of client authorization request not be matched any rules             |
-| authorization.cache_hit     | Access/Cache Hit     | Integer   | Number of client getting authorization result (allow or deny) by cache      |
-
+| authorization.nomatch       | Access/No Match      | Integer   | Number of client authorization request not be matched any rules |
+| authorization.cache_hit     | Access/Cache Hit     | Integer   | Number of client getting authorization result (allow or deny) by cache |
 
 ### Stats
 
+Here is the EMQX Stats list:
 
-| Key                        | Data Type | Description                                                  |
+
+| Key                        | Data type | Description                                                  |
 | -------------------------- | --------- | ------------------------------------------------------------ |
 | connections.count          | Integer   | Current connections                                          |
 | connections.max            | Integer   | Historical maximum number of connections                     |

@@ -12,21 +12,20 @@ EMQX 为用户提供了指标获取方式：
 
 ## 与监控系统集成
 
-使用第三方监控系统对 EMQX 进行监控有如下好处：
+EMQX 指标支持与 [Prometheus]((./prometheus.md) ) 以及 [StatsD](./statsd.md) 集成。使用第三方监控系统对 EMQX 进行监控有如下好处：
 
 - 可以将 EMQX 的监控数据与其他系统的监控数据进行整合，形成一个完整的监控系统，如监控服务器主机的相关信息；
 - 可以使用更加丰富的监控图表，更直观地展示监控数据，如使用 Grafana 的仪表盘；
 - 可以使用更加丰富的告警方式，更及时地发现问题，如使用 Prometheus 的 Alertmanager。
 
-EMQX 指标支持与 Prometheus 以及 StatsD 集成，参见 [Prometheus 指标集成](./prometheus.md) 和 [StatsD 指标集成](./statsd.md)。
-
 ## 指标对照手册
 
 EMQX 将指标分为了 Metrics 与 Stats 两种。
 
-Metrics 通常指那些只会单调递增的数据，例如发送字节数量、发送报文数量。EMQX 目前提供的 Metrics 覆盖了字节、报文、消息和事件四个维度。
+- Metrics 通常指那些只会单调递增的数据，例如发送字节数量、发送报文数量。EMQX 目前提供的 Metrics 覆盖了字节、报文、消息和事件四个维度。
 
-Stats 则通常指那些成对出现的数据，包括当前值和历史最大值，例如当前订阅数量和订阅历史最大数量。
+- Stats 则通常指那些成对出现的数据，包括当前值和历史最大值，例如当前订阅数量和订阅历史最大数量。
+
 
 ### Metrics
 
