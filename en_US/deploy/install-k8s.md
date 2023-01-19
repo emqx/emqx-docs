@@ -39,7 +39,7 @@ We will use [cert-manager](https://github.com/jetstack/cert-manager) to provisio
     metadata:
       name: emqx
     spec:
-      image: emqx/emqx:5.0.13
+      image: emqx/emqx:5.0.14
   EOF
   ```
 
