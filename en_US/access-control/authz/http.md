@@ -190,7 +190,7 @@ The default value is 8.
 
 ### `ssl`
 
-Standard [SSL options](../ssl.md) for connecting to the external API.
+Standard [SSL options](../configuration/configuration.md#tls-ssl-ciphers) for connecting to the external API.
 
 ### More configs
 
