@@ -2,7 +2,7 @@
 
 EMQX 支持通过 Webhook 的方式将客户端消息和事件发送到外部 HTTP 服务。
 
-:::tip 先决条件
+:::tip 前置准备
 
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。

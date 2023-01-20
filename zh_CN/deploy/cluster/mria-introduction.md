@@ -4,7 +4,7 @@ EMQX 5.0 采用 [Mria](https://github.com/emqx/mria) + RLOG 架构，实现了�
 
 本章节将向您介绍新架构下 EMQX 集群部署架构以及部署时的注意事项，您也可以通过 [EMQX Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 实现集群自动化部署，请参考 [K8s 部署指南](../install-k8s.md)。
 
-:::tip 前置条件：
+:::tip 前置准备：
 
 - 了解 [分布式集群](./introduction.md)
 :::

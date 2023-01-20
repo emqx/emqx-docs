@@ -8,7 +8,7 @@ EMQX 支持通过插件扩展自定义业务逻辑，或通过插件的协议扩
 - 通过 Dashboard 或 CLI 安装插件包，
 - 通过 Dashboard 或 CLI 启动/停止/卸载插件。
 
-:::tip 前置条件：
+:::tip 前置准备：
 
 - 了解 EMQX [钩子](./hooks.md)。
   :::
