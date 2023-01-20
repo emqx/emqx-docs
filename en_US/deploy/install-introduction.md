@@ -116,7 +116,7 @@ In production, you should periodically backup the data directory (excluding the 
 
 `mnesia` is a distributed database management system (DBMS) in Erlang for storing various data structures of Erlang. In EMQX documents, it is often referred to as the built-in database.
 
-EMQX uses `Mnesia` to store its operating data,including alarm records, authentication/authorization data of the cients, Dashboard user information, etc. **If the directory is deleted, all these operating data will be lost.**
+EMQX uses `Mnesia` to store its operating data, including alarm records, authentication/authorization data of the cients, Dashboard user information, etc. **If the directory is deleted, all these operating data will be lost.**
 
 You can query the EMQX system information from `mnesia`  through the `emqx_ctl mnesia` command. For details, please see [Management Command CLI](https://docs.emqx.com/en/enterprise/v4.4/advanced/cli.html).
 

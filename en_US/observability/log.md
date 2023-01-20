@@ -28,7 +28,7 @@ After the EMQX is started with command line `./bin/emqx console` or `/bin/emqx/f
 | log.console_handler |      | Console log handler                                          |
 | ⌞_ enable           |      | Whether to enable this log handler.                          |
 | ⌞_ level            |      | Log level, default:`warning`                                 |
-| ⌞_ time_offset      |      | Time offset to be used when formatting the timestamp：<br/><br />Options: <br />   ##   - system: the time offset used by the local system<br/>    ##   - utc: the UTC time offset<br/>    ##   - +-[hh]:[mm]: user specified time offset, such as "-02:00" or "+00:00" |
+| ⌞_ time_offset      |      | Time offset to be used when formatting the timestamp：<br/><br />Options: <br />    - system: the time offset used by the local system<br/>    - utc: the UTC time offset<br/>     - +-[hh]:[mm]: user specified time offset, such as "-02:00" or "+00:00" |
 | ⌞_ chars_limit      |      | Maximum length of a single log message. If message length exceeds this value, the log message will be truncated; Default: 100 |
 | ⌞_ formatter        |      | Log format; `text` for free text, and `json` for structured logging. |
 | ⌞_ single_line      |      | Print logs in a single line if set to `true`. Otherwise, log messages may span multiple lines. |

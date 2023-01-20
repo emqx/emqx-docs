@@ -4,7 +4,7 @@ Users can configure EMQX with configuration files or environment variables. This
 
 ## Configuration files
 
-Main configuration file
+### **Main configuration file**
 
 EMQX will create a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`. 
 

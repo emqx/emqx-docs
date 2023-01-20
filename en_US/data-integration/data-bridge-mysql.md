@@ -2,12 +2,15 @@
 
 EMQX supports integration with MySQL so you can save client messages and events to MySQL, or use events to trigger the update or removal of data to record the online status or online/offline of clients. 
 
-## Prerequisites
+::: tip Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
+
 - Knowledge about [data bridge](./data-bridges.md)
 
-## Features supported
+  :::
+
+## Feature list
 
 - [Connection pool](./data-bridges.md#连接池)
 - [Async mode](./data-bridges.md#异步请求模式)
@@ -15,8 +18,7 @@ EMQX supports integration with MySQL so you can save client messages and events 
 - [Buffer mode](./data-bridges.md#缓存队列)
 - [SQL preprocessing](./data-bridges.md#SQL-预处理)
 
-## [Configuration parameters](#Configuration)
-<!-- TODO 链接到配置手册对应配置章节。 -->
+<!-- [Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
 
 ## Quick starts
 

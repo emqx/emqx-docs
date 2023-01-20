@@ -118,12 +118,12 @@ EMQX allows the creation of authorization chain using multiple authorizers and f
 With authorization chain configured, EMQX will first try to retrieve the matching authentication information from the first authorizer, if fails, it will switch to the next authenticator to continue the process:
 
 1. If EMQX successfully retrieves the client's permission information and then it will match the client's operation matches the retrieved permission list:
-   1. if matches, EMQX will allow or deny the operation based on permission setting.
-   2. if not match, EMQX will switch to the next authenticator to continue the process.
+   - if matches, EMQX will allow or deny the operation based on permission setting.
+   - if not match, EMQX will switch to the next authenticator to continue the process.
 
 2. If EMQX fails to retrieve the client's permission information and then it will check if there are other authorizers configured:
-   1. if yes, EMQX will switch to the next authenticator to continue the process.
-   2. if  this is already the last authorizer,  EMQX will follow the setting of `no_match` to determine whether to allow or reject the client operation.
+   - if yes, EMQX will switch to the next authenticator to continue the process.
+   - if  this is already the last authorizer,  EMQX will follow the setting of `no_match` to determine whether to allow or reject the client operation.
 
 Unlike [Authentication chain](../authn/authn.md#authentication-chains), authorization has only one global chain.
 
@@ -143,7 +143,7 @@ If set properly, caching can greatly improve performance, so it is recommended t
 
 ### Authorization check priority
 
-Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission](../authn/authn.md#Super User and Permission) set during the authentication phase.
+Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission](../authn/authn.md) set during the authentication phase.
 
 For super users, all their operations will be skipped from authorization check; if the permission list is set, EMQX will first follow the client's permission data to run the  authorization checker. The priority is as follows:
 
@@ -176,7 +176,7 @@ The following placeholders are supported in query statements:
 * `${password}`: It will be replaced with the password at runtime. The password comes from the `Password` field in the `CONNECT` packet.
 * `${peerhost}`: It will be replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
 * `${cert_subject}`:  It will be replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
-* `${cert_common_name}: It will be replaced by the Common Name of the client's TLS certificate at runtime, only applicable to TLS connections.
+* `${cert_common_name}`: It will be replaced by the Common Name of the client's TLS certificate at runtime, only applicable to TLS connections.
 
 #### Topic placeholders
 

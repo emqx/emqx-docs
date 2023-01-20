@@ -145,7 +145,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 接下来我们将通过 Dashboard 自带的 WebSocket 工具进行连接测试。
 
-## 使用 Dashboard WebSocket 工具快速验证
+## 通过 WebSocket 工具快速验证
 
 EMQX 提供了标准的 MQTT 协议包括 MQTT over WebSocket 支持，启动后即可接入 MQTT 客户端，本节我们将演示如何通过 Dashboard 自带的 WebSocket 客户端工具接入 EMQX，从而进行消息通信验证。
 
@@ -161,14 +161,14 @@ EMQX 提供了标准的 MQTT 协议包括 MQTT over WebSocket 支持，启动后
 
 <!-- TODO @wivwiv Update screenshot -->
 
-如您希望进行更复杂的测试，比如单/双向 SSL 认证、通过自定义脚本模拟测试数据等，也可通过 [MQTTX 桌面客户端](https://mqttx.app/zh)进行更多测试。
+如您希望进行更复杂的测试，比如单/双向 SSL 认证、通过自定义脚本模拟测试数据等，也可通过 [MQTTX 桌面客户端 ](https://mqttx.app/zh)进行更多测试。
 
 ## 进阶操作
 
 <!-- TODO @wivwiv Update links after document is ready-->
 
-至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行访问控制、集成第三方数据系统等操作。<!--后续添加相关连接-->
+至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行 [访问控制](../access-control/authn/authn.md)、[集成第三方数据系统](../data-integration/introduction.md) 等操作。
 
 ## 常见问题解答
 
-您可以访问 [EMQ 问答社区](https://askemq.com/) 参与交流，提出、解答 EMQX 以及 EMQ 相关产品使用问题，与 EMQX 用户交流物联网相关技术的使用经验，此外也欢迎随时联系我们](https://www.emqx.com/zh/contact) 获取专业技术支持。
+您可以访问 [EMQ 问答社区](https://askemq.com/) 参与交流，提出、解答 EMQX 以及 EMQ 相关产品使用问题，与 EMQX 用户交流物联网相关技术的使用经验，此外也欢迎随时 [联系我们](https://www.emqx.com/zh/contact) 获取专业技术支持。

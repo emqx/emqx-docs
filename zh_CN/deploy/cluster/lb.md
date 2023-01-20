@@ -112,7 +112,7 @@ backend emqx_cluster
 
 如使用 NGINX 作为 EMQX 集群的 LB，并终结 SSL 连接，修改 `/etc/nginx/nginx.conf` 配置。
 
-注意：如您通过二进制包安装 EMQX，文件路径为：或 `/etc/emqx/etc/nginx/nginx.conf  `
+注意：文件夹路径会因安装方式的不同而略有差异。
 
 ```bash
 stream {

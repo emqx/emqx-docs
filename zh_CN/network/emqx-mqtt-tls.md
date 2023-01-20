@@ -23,13 +23,11 @@ SSL/TLS 加密功能会在传输层对网络连接进行加密，它能在提升
 
 ## 通过配置文件开启 SSL/TLS 连接
 
-:::tip
+:::tip 前置准备：
 
-前置准备：已具备 SSL/TLS 证书。
+已具备 SSL/TLS 证书。
 
-EMQX 随安装包提供了一组仅用于测试的 SSL/TLS 证书（位于 `etc/certs` 目录），并在 `8883` 端口启用了 SSL/TLS 连接。当应用于生产环境时，应切换至由可靠 CA 签发的证书。
-
-有关如何申请相关证书，请阅读拓展阅读 [如何获取 SSL/TLS 证书](#扩展阅读-如何获取-ssl-tls-证书)部分。
+EMQX 随安装包提供了一组仅用于测试的 SSL/TLS 证书（位于 `etc/certs` 目录），并在 `8883` 端口启用了 SSL/TLS 连接。当应用于生产环境时，应切换至由可靠 CA 签发的证书。有关如何申请相关证书，请阅读拓展阅读 [如何获取 SSL/TLS 证书](#扩展阅读-如何获取-ssl-tls-证书)部分。
 
 :::
 
@@ -82,9 +80,9 @@ listeners.ssl.default {
 
 ### 创建自签名证书
 
-:::tip
+:::tip 前置准备
 
-前置准备：已安装 [OpenSSL](https://www.openssl.org/)。
+已安装 [OpenSSL](https://www.openssl.org/)。
 
 :::
 
@@ -108,7 +106,7 @@ openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
   openssl genrsa -out server.key 2048
   ```
 
-​  3.2 运行以下命令使用 Server 密钥对制作 CSR。经 CA 根证书私钥签名后，CSR 可生成颁发给用户的证书公钥文件。该命令随即也会要求设置证书的唯一标识名称。
+  3.2 运行以下命令使用 Server 密钥对制作 CSR。经 CA 根证书私钥签名后，CSR 可生成颁发给用户的证书公钥文件。该命令随即也会要求设置证书的唯一标识名称。
 
   ```bash
   openssl req -new -key server.key -out server.csr
@@ -133,7 +131,7 @@ openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
   ...
   ```
 
-​  3.3 生成服务端证书，此时也可指定证书的有效天数，此处为 365 天：
+  3.3 生成服务端证书，此时也可指定证书的有效天数，此处为 365 天：
 
   ```bash
   openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 365

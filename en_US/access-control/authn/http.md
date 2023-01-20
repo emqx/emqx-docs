@@ -53,10 +53,10 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 
 - **Method**: Select HTTP request method, optional values: `get`, `post`
 
-  ::: 
+  :::tip 
 
   The `POST` method is recommended. When using the `GET` method, some sensitive information (such as plain text passwords) may be exposed via HTTP server logs. Also, for untrusted environments, please use HTTPS.
-    :::
+   :::
 
 - **URL**: Enter the URL address of the HTTP service.
 

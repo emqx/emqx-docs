@@ -12,6 +12,7 @@
 - GitHub Release：<https://github.com/emqx/emqx/releases>
 
 此外，您还可在我们的 GitHub Release 页面下载 alpha、beta、rc 等版本的安装包。
+
 {% endemqxce %}
 
 {% emqxee %}

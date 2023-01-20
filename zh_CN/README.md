@@ -11,7 +11,7 @@
 - **[海量连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)**：单节点支持 500 万 MQTT 设备连接，集群可扩展至 1 亿并发 MQTT 连接。
 - **高性能**：单节点支持每秒实时接收、移动、处理与分发数百万条的 MQTT 消息。
 - **低时延**：基于 Erlang/OTP 软实时的运行时系统设计，消息分发与投递时延低于 1 毫秒。
-- **高可用**：采用 Masterless 的大规模分布式集群架构，实现系统高可用和水平扩展。
+- **[高可用](./deploy/cluster/mria-introduction)**：采用 Masterless 的大规模分布式集群架构，实现系统高可用和水平扩展。
 
 ## 功能概览
 
@@ -69,16 +69,16 @@
 
 ### 可靠性
 
-- 过载保护
+- [过载保护](./deploy/cluster/lb.md)
 - [消息速率限制](./rate-limit/rate-limit.md)
 - [连接速率限制](./rate-limit/rate-limit.md)
 
 ### 可观测性
 
 - 客户端在线状态查询
-- 集群状态与指标查询
-- [Prometheus](./observability/prometheus.md)/[StatsD](./observability/statsd.md) 集成
-- 自动网络分区恢复
+- [集群状态与指标查询](./observability/metrics-and-stats.md)
+- 集成 [Prometheus](./observability/prometheus.md)/[StatsD](./observability/statsd.md) 
+- [自动网络分区恢复](./deploy/cluster/introduction.md)
 - [在线日志追踪(Log Trace)](./observability/tracer.md)
 - Erlang 运行时追踪工具
 

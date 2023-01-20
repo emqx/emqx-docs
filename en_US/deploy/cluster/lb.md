@@ -108,7 +108,7 @@ backend emqx_cluster
 
 To configure NGINX as the LB for EMQX and terminate the SSL connection, you can modify `/etc/nginx/nginx.conf` as shown in the code example below. 
 
-Note: The file path should be   `/etc/emqx/etc/nginx/nginx.conf` if you install EMQX with a binary package.
+Note: The file path may differ based on your installation mode.
 
 ```bash
 stream {

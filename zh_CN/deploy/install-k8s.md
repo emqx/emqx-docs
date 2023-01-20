@@ -4,7 +4,7 @@
 
 EMQX Operator 可以大大简化部署和管理 EMQX 集群的流程，对于管理和配置的知识要求也更低。它把部署和管理的工作变成一种低成本的、标注化的、可重复性的能力，实现滚动更新、自动化伸缩、集群和节点监控等常用功能。
 
-::: tip
+:::tip
 需要 Kubernetes v1.20.0 及以上版本。
 :::
 
@@ -56,7 +56,7 @@ EMQX Operator 可以大大简化部署和管理 EMQX 集群的流程，对于管
 
 您可访问以下链接了解如何进行集群参数配置：
 
--  {%emqxce%}[EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxBroker.html){%emqxce%}{%emqxee%}[EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html){%endemqxee%}
+-  {%emqxce%} [EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxBroker.html) {%emqxce%}{%emqxee%} [EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html) {%endemqxee%}
 
 - [配置 EMQX logs 采集](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-logs-collection.html)
 

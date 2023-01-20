@@ -2,12 +2,14 @@
 
 通过 MySQL 数据桥接可以将客户端消息和事件存储到 MySQL 中，也可以通过事件触发对 MySQL 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
-## 先决条件
+:::tip 先决条件
 
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
 
-## 特性
+:::
+
+## 功能清单
 
 - [连接池](./data-bridges.md#连接池)
 - [异步请求模式](./data-bridges.md#异步请求模式)
@@ -15,8 +17,7 @@
 - [缓存队列](./data-bridges.md#缓存队列)
 - [SQL 预处理](./data-bridges.md#SQL-预处理)
 
-## 配置参数
-<!-- TODO 链接到配置手册对应配置章节。 -->
+<!-- TODO 配置参数 需要补充链接到配置手册对应配置章节。 -->
 
 ## 快速开始
 
@@ -62,7 +63,7 @@ use emqx_data;
     FROM_UNIXTIME(${timestamp}/1000)
   )
   ```
-  
+
   请在 MySQL 中使用以下 SQL 创建存储消息的数据表 `emqx_messages`，该表存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
 
   ```sql

@@ -2,8 +2,7 @@
 
 EMQX supports creating clusters manually and automatically. This chapter will guide you through creating and managing EMQX clusters.
 
-:::tip
-Prerequisites:
+:::tip Prerequisites:
 
 - Knowledge of [Distributed Clusters](./introduction.md).
 - Knowledge of [Deployment Architecture and Cluster Requirements](./mria-introduction.md).
