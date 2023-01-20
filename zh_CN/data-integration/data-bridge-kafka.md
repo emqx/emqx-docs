@@ -5,7 +5,7 @@ Apache Kafka 数据桥接实现了 EMQX 客户端消息和事件与 Apache Kafka
 
 同时，EMQX Apache Kafka 集成提供了极高的数据吞吐能力，支持 Apache Kafka 的 SASL/SCRAM、SASL/GSSAPI 等多种安全认证方式以及 TLS 连接，是物联网数据集成首选方案之一。
 
-:::tip 先决条件
+:::tip 前置准备
 
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
 - 了解 [规则](./rules.md)。
