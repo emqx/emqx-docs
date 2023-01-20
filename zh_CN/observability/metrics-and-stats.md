@@ -2,9 +2,9 @@
 
 EMQX 为用户提供了丰富的指标来帮助用户与因为人员了解当前服务状态，监测和排除系统的性能问题。
 
-EMQX 为用户提供了指标获取方式：
+您可通过 EMQX Dashboard 或 HTTP API 和系统主题来获取 EMQX 指标信息。
 
-1. 最直接的，用户可以在 EMQX Dashboard 的 **仪表盘** -> **指标** 页面看到这些数据。
+用户可以在 EMQX Dashboard 的 **仪表盘** -> **指标** 页面看到这些数据。
 
 ![Metrics in Dashboard](./assets/dashboard-metrics.png)
 

@@ -16,7 +16,8 @@ Only data bridges to MQTT and Webhook are supported in the EMQX open-source vers
 
 EMQX will provide the running statistics of data bridges in the following categories: 
 <!-- TODO 由于调整过 Data Bridge 结构，先前的指标设计过时了重新设计指标后补充文档 -->
-<!-- - Matched
+
+- Matched
 
 - Sent Successfully
 - Sent Failed
@@ -42,7 +43,7 @@ Async mode is the data processing mode of the data bridge. By enabling the Async
 
 To improve  the data processing efficiency, EMQX has enabled the Async mode by default. You can use the following commands to disable the Async mode if your application has strict requirements on the time series. 
 
-#### Configuration
+Example code
 
 ```bash
 bridges.mysql.foo {
@@ -74,7 +75,7 @@ In batch mode, multiple pieces of data will be simultaneously written into the e
 
 The Batch mode is enabled by default, you can disable it as needed. 
 
-#### Configuration
+Example code
 
 ```bash
 bridges.mysql.foo {
@@ -107,7 +108,7 @@ For data bridges connecting to Kafka, the disk cache file is saved under `data/k
 
 In actual use, it is recommended to mount the `data` folder in a high-performance disk to improve the throughput capacity. 
 
-#### Configuration
+Example code
 
 ```bash
 bridges.mysql.foo {

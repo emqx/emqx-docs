@@ -4,23 +4,24 @@ InfluxDB is a database for storing and analyzing time series data. Its powerful 
 
 EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise.
 
-
-
-## Prerequisites
+:::tip Prerequisites
 
 - Knowledge about [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/), as EMQX will follow this protocol when writing data into InfluxDB
+
 - Knowledge about EMQX data integration [rules](./rules.md)
+
 - Knowledge about [data bridge](./data-bridges.md)
 
-## Features supported
+  :::
+
+## Feature list
 
 - [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#异步请求模式)
 - [Batch mode](./data-bridges.md#批量模式)
 - [Buffer queue](./data-bridges.md#缓存队列)
 
-## [Configuration parameters](#Configuration)
-<!-- TODO 链接到配置手册对应配置章节。 -->
+<!--[Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
 
 ## Quick starts
 
@@ -44,8 +45,8 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
 5. Select the InfluxDB version as needed, by default v2 is selected.
 6. Input the connection information.
-   1. For **Server Host**, input **127.0.0.1:8086**. If you are creating a connection to InfluxDB Cloud, use 443 as the port No., that is, input **{url}:443** and enable TLS  connection. 
-   2. Select **Token** as the **Auth Type**. Input the **Organization**, **Bucket**, and **Token** we set in the [Install InfluxDB](#install) step.
+   - For **Server Host**, input **127.0.0.1:8086**. If you are creating a connection to InfluxDB Cloud, use 443 as the port No., that is, input **{url}:443** and enable TLS  connection. 
+   - Select **Token** as the **Auth Type**. Input the **Organization**, **Bucket**, and **Token** we set in the [Install InfluxDB](#install) step.
 7. Define data parsing method, including **Measurement**, **Timestamp**, **Fields** and **Tags**. Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them. 
 8. Advanced settings (optional): Choose whether to use sync or async query mode, and whether to enable queue or batch. For details, see [Configuration parameters](#Configuration).
 9.  Then click **Create** to finish the setup. 

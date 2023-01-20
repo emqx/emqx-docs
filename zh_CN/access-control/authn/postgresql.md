@@ -2,8 +2,7 @@
 
 作为密码认证方式的一种，EMQX 支持通过集成 PostgreSQL 进行密码认证。
 
-::: tip
-前置准备：
+::: tip 前置准备：
 
 - 熟悉 [EMQX 认证基本概念](../authn/authn.md)
 :::
@@ -35,7 +34,7 @@ CREATE TABLE mqtt_user (
 
 在此表中使用 `username` 作为查找条件。
 
-添加用户名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户示例：
+例如我们希望添加一位名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户：
 
 > PostgreSQL 中使用加密函数需要启用 pgcrypto 扩展。
 
@@ -65,7 +64,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 您可按照如下说明完成相关配置：
 
-**连接：**在此部分完成到 PostgreSQL 数据库的连接设置。
+**连接**：在此部分完成到 PostgreSQL 数据库的连接设置。
 
 - **服务**：填入 PostgreSQL 服务器地址 (`host:port`) 。
 - **数据库**：填入 PostgreSQL 的数据库名称。

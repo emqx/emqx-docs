@@ -6,7 +6,7 @@ Apache Kafka is a widely-used open-source distributed event streaming platform. 
 
 Being a top IOT data infrastructure provider,  EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM, SASL/GSSAPI, or TLS.
 
-## Prerequisites
+:::tip Prerequisites
 
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
 - Knowledge about EMQX data integration [rules](./rules.md)
@@ -15,15 +15,16 @@ Being a top IOT data infrastructure provider,  EMQX currently supports authentic
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
 
-## Features supported
+:::
+
+## Feature list
 
 - [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#异步请求模式)
 - [Batch mode](./data-bridges.md#批量模式)
 - [Buffer queue](./data-bridges.md#缓存队列)
 
-## Configuration parameters
-<!-- TODO 链接到配置手册对应配置章节。 -->
+<!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
 ## Quick starts
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->

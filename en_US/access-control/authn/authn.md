@@ -74,12 +74,12 @@ With authentication chain configured, EMQX will first try to retrieve the matchi
 Taking the password-based authentication as an example, EMQX will try to retrieve the possible authentication information from the configured authenticators:
 
 1. If the username is the same,
-   1. the authentication information matches, the client will be allowed to connect.
-   2. the authentication information does not match, the client will be allowed to connect.
+   - the authentication information matches, the client will be allowed to connect.
+   - the authentication information does not match, the client will be allowed to connect.
 
 1. If multiple authenticators are configured, and EMQX fails to retrieve the information from the current authenticator, it will 
-   1. continue to retrieve the information from other authenticators
-   2. refuse the connection if this is already the last authenticator
+   - continue to retrieve the information from other authenticators
+   - refuse the connection if this is already the last authenticator
 
 
 

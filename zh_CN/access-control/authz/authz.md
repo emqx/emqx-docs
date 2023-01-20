@@ -22,7 +22,7 @@ EMQX 授权机制支持与多种数据存储方式集成，包括内置数据库
 
 | 数据存储        | 描述                                              |
 | --------------- | ------------------------------------------------- |
-| built内置数据库 | [使用内置数据库存授权数据](./mnesia.md)           |
+| built内置数据库 | [使用内置数据库存放授权数据](./mnesia.md)         |
 | MySQL           | [使用 MySQL 存放授权数据](./mysql.md)             |
 | PostgreSQL      | [使用 PostgreSQL 存放授权数据](./postgresql.md)   |
 | MongoDB         | [使用 MongoDB 存放授权数据](./mongodb.md)         |

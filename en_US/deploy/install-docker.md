@@ -195,6 +195,6 @@ Cluster status: #{running_nodes => ['emqx@node1.emqx.com','emqx@node2.emqx.com']
 
 Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/mqtt-publish-and-subscribe.md). 
 
-On how to configure EMQX parameters and other features, see [Configuration](../configuration/configuration.md).
+- On how to configure EMQX parameters and other features, see [Configuration](../configuration/configuration.md).
 
-On how to build an EMQX cluster with multiple nodes, see  [Clustering](./cluster/introduction.md).
+- On how to build an EMQX cluster with multiple nodes, see  [Clustering](./cluster/introduction.md).

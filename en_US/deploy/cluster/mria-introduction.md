@@ -4,8 +4,7 @@ In EMQX 5.0, we redesign the cluster architecture with [Mria](https://github.com
 
 This chapter will introduce how to deploy EMQX clusters under this new architecture. You can also use [EMQX Operator](https://www.emqx.com/en/emqx-kubernetes-operator) to realize automatic cluster deployment. For details, see [Deploy with K8s](../install-k8s.md).
 
-:::tip
-Prerequisites:
+:::tip Prerequisites:
 
 - Knowledge of [Distributed clusters](./introduction.md)。
   :::

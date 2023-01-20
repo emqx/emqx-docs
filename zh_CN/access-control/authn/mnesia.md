@@ -2,8 +2,7 @@
 
 EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密码认证方式。启用后，EMQX 会将内置的 Mnesia 数据库存储客户端身份凭据，并通过 REST API 与 Dashboard 进行数据管理，本节将向您介绍如何通过 Dashboard 或配置项进行相关配置。
 
-::: tip
-前置准备：
+::: tip 前置准备：
 
 - 熟悉 [EMQX 认证基本概念](../authn/authn.md)
 :::

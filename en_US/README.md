@@ -10,8 +10,8 @@ As the most scalable MQTT broker, EMQX can help you connect any device, at any s
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
 - **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - **[Fully MQTT 5.0](https://www.emqx.com/en/blog/introduction-to-mqtt-5)**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
-- **High Availability**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
-- **Cloud-Native & K8s**: Easy to deploy on-premises or in public clouds with Kubernetes Operator and Terraform.
+- **[High Availability](./deploy/cluster/mria-introduction)**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
+- **[Cloud-Native & K8s](https://www.emqx.com/en/emqx-kubernetes-operator)**: Easy to deploy on-premises or in public clouds with Kubernetes Operator and Terraform.
 
 ## Features List
 
@@ -43,7 +43,7 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
 Add more features to MQTT:
 
 - [Delayed Publish](./mqtt/mqtt-delayed-publish.md)
-- Auto subscription
+- [Auto subscription](./mqtt/mqtt-auto-subscription)
 - [Topic rewrite](./mqtt/mqtt-topic-rewrite.md)
 
 ### Security
@@ -63,23 +63,23 @@ Add more features to MQTT:
 
 ### Data Integration
 
-- [SQL syntax](./data-integration/rules.md) data integrations to extract, filter, enrich, and transform MQTT message or internal events to formats expected by users and send to external data platforms
+- [SQL syntax](./data-integration/rules.md) data integrations to extract, filter, enrich, and transform MQTT messages or internal events to formats expected by users and send them to external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT(such as [EMQX Cloud](https://www.emqx.com/zh/cloud), AWS IoT Core, Azure IoT Hub)
 - Supports integration with other apps using WebHook
 
 ### Reliability
 
-- Overload protection
+- [Overload protection](./deploy/cluster/lb.md)
 - [Message rate limit](./rate-limit/rate-limit.md)
 - [Connection rate limit](./rate-limit/rate-limit.md)
 
 ### Observability
 
 - Client online status query
-- Cluster status and metrics query
+- [Cluster status and metrics query](./observability/metrics-and-stats.md)
 - Integration with [Prometheus](./observability/prometheus.md)/[StatsD](./observability/statsd.md)
-- Automatic network partition healing
-- [Online log based tracing](./observability/tracer.md)
+- [Automatic network partition healing](./deploy/cluster/introduction.md)
+- [Online log based tracing](./observability/tracer.md)]
 - Erlang runtime tracing tools
 
 ### Extensibility

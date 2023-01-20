@@ -2,21 +2,22 @@
 
 InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强大的数据吞吐能力以及稳定的性能表现使其非常适合物联网领域。EMQX 目前支持通过数据桥接的方式连接不同版本的 InfluxDB Cloud、InfluxDB OSS 以及 InfluxDB Enterprise。
 
-## 先决条件
+:::tip 先决条件
 
 - 了解 [InfluxDB 行协议](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)，InfluxDB Bridge 使用行协议进行数据写入。
 - 了解 [规则](./rules.md)。
 - 了解 [数据桥接](./data-bridges.md)。
 
-## 特性
+:::
+
+## 功能清单
 
 - [连接池](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [异步请求模式](./data-bridges.md#异步请求模式)
 - [批量模式](./data-bridges.md#批量模式)
 - [缓存队列](./data-bridges.md#缓存队列)
 
-## 配置参数
-<!-- TODO 链接到配置手册对应配置章节。 -->
+<!-- 配置参数 需要补充 TODO 链接到配置手册对应配置章节。 -->
 
 ## 快速开始
 
@@ -41,8 +42,8 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
 5. 根据情况选择 InfluxDB 版本，默认为 V2。
 6. 输入 InfluxDB 连接信息
-   1. 服务器地址填写 **127.0.0.1:8086**。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 **{url}:443** 并启用 TLS 连接。
-   2. 选择 Token 认证，填入先前设置的组织名称、Bucket 以及生成的 Token。
+   - 服务器地址填写 **127.0.0.1:8086**。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 **{url}:443** 并启用 TLS 连接。
+   - 选择 Token 认证，填入先前设置的组织名称、Bucket 以及生成的 Token。
 7. 定义解析数据，设置数据的 Measurement，Fields，Timestamp 与 Tags，键值均支持变量，可以使用行协议进行设置。
 8. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
 9.  点击创建按钮完成数据桥接创建。

@@ -2,8 +2,7 @@
 
 作为密码认证方式的一种，EMQX 支持通过集成 Redis 进行密码认证。EMQX 支持三种 Redis 部署模式：单节点 <!--需要插入对应连接-->、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、 [Redis Cluster](https://redis.io/docs/manual/scaling/)，本节将介绍如何进行相关配置。
 
-::: tip
-前置准备：
+::: tip 前置准备：
 
 - 熟悉 [EMQX 认证基本概念](../authn/authn.md)
 :::
@@ -16,7 +15,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
 - `is_superuser`: 可选，标记当前客户端是否为超级用户，默认为 `false`
 
-添加用户名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户示例：
+添加我们希望添加一位名用户名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户：
 
 ```bash
 >redis-cli
@@ -64,9 +63,8 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 - **密码加密方式**：选择存储密码时使用的散列算法，如 plain、md5、sha、bcrypt、pbkdf2 等。
 - 选择 **plain**、**md5**、**sha**、**sha256** 或 **sha512** 算法，需配置：
   - **加盐方式**：用于指定盐和密码的组合方式，除需将访问凭据从外部存储迁移到 EMQX 内置数据库中外，一般不需要更改此选项；可选值：**suffix**（在密码尾部加盐）、**prefix**（在密码头部加盐）、**disable**（不启用）。注意：如选择 **plain**，加盐方式应设为 **disable**。
-
 - 选择 **bcrypt** 算法，无需额外配置。
-  - 选择 **pkbdf2** 算法，需配置：
+- 选择 **pkbdf2** 算法，需配置：
   - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
   - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
   - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。

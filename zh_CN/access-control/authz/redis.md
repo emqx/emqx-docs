@@ -2,8 +2,7 @@
 
 Redis Authorizer 支持客户端的权限列表存储在 Redis 数据库中。
 
-::: tip
-前置准备：
+::: tip 前置准备：
 
 - 熟悉 [EMQX 授权基本概念](./authz.md)
   :::
