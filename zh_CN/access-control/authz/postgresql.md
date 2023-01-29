@@ -63,7 +63,7 @@ PostgreSQL authorizer 由 `type=postgresql` 标识。
   username = "postgres"
   password = "public"
   server = "127.0.0.1:5432"
-  query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+  query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 }
 ```
 
@@ -76,13 +76,13 @@ PostgreSQL authorizer 由 `type=postgresql` 标识。
 例如，以下查询语句：
 
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = ${username}
+SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}
 ```
 
 将首先被转换为以下 Prepared statement：
 
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = $1
+SELECT permission, action, topic FROM mqtt_acl WHERE username = $1
 ```
 
 然后使用 `${username}` 执行查询。

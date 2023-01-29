@@ -54,7 +54,7 @@ Sample configuration:
   username = "root"
   password = "public"
   server = "127.0.0.1:3306"
-  query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+  query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 }
 ```
 
@@ -70,11 +70,11 @@ Required string value with MySQL query template for fetching authorization rules
 For security reasons, placeholder values are not interpolated directly, but through MySQL placeholders.
 I.e. a query
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = ${username}
+SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}
 ```
 is first translated into
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = ?
+SELECT permission, action, topic FROM mqtt_acl WHERE username = ?
 ```
 prepared statement and then executed with `${username}` value.
 
