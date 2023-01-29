@@ -53,20 +53,20 @@ EMQX 支持通过 MQTT 连接多个 EMQX 集群或其他 MQTT 服务，其工作
 
 6. 对 **Keep Alive**、**MQTT 协议版本**、**清除会话**等字段，可保留默认设置，您也可根据实际场景设置。
 
-7. **入口配置**（可选）：配置桥接规则，将远程 MQTT 服务上的消息转发到本地；我们希望订阅 `remote/topic/ingress ` 下的消息，并将收到的信息转发至 `local/topic/ingress` 主题，因此将进入如下配置：
+7. **入口配置**（可选）：配置桥接规则，将远程 MQTT 服务上的消息转发到本地；我们希望订阅 `remote/topic/ingress ` 下的消息，并将收到的信息转发至 `local/topic/ingress` 主题，因此将进行如下配置：
+   
+   :::tip
+   入口配置与出口配置应至少配置一个，您可打开下方的开关进行相关配置。
+   :::
    
    - **远程 MQTT 服务**：订阅主题以获取消息
-      - **主题**：在集群工作模式下，我们将通过[共享订阅](../mqtt/mqtt-shared-subscription.md)来避免消息重复，因此填入 `$share/g/remote/topic/ingress`
+      - **主题**：在集群工作模式下，我们可通过[共享订阅](../mqtt/mqtt-shared-subscription.md)来避免消息重复，因此填入 `$share/g/remote/topic/ingress`
       - QoS：选择 `0`。
    - **本地 MQTT 服务**：将订阅得到的消息发布到指定主题中，也可以留空，此时将通过规则处理后使用 [消息重发布](./rules.md#消息重发布) 动作转发。
       - **主题**：填入 `local/topic/ingress`。
       - **QoS**：选择 `0`，或 `${qos}` （跟随消息 QoS）。
       - **Retain**：通过勾选确认是否以保留消息方式发布消息。
       - **消息模版**：转发的消息 Payload 模板，支持使用 `${field}` 语法提取数据。
-   
-   :::tip
-   入口配置与出口配置应至少配置其中一个。
-   :::
    
 8. **出口配置**（可选）：将本地指定 MQTT 主题下的消息发布到远程 MQTT 服务，可以理解为入口配置的反向数据流。我们希望将 `local/topic/egress` 主题下的消息转发到远程 MQTT 服务 `remote/topic/egress` 主题中，因此将进行如下配置：
 
