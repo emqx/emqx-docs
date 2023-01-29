@@ -36,7 +36,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 
 ```bash
 collection = "mqtt_acl"
-filter { username = "${username}" }
+filter { username = "${username}", ipaddress = "${peerhost}"}
 
 ```
 

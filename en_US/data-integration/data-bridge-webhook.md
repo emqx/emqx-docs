@@ -1,7 +1,8 @@
 # Webhook
 
-A WebHook is an HTTP callback. EMQX uses WebHooks to POST a message to HTTP services.
-Through webhooks, users can send messages to remote HTTP services from a local topic.
+Webhook is the channel through which EMQX sends messages to HTTP services.
+Through webhooks, users can send to the remote HTTP service from a local topic,
+or from the output of a rule.
 
 :::tip Prerequisites
 

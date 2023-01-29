@@ -200,7 +200,7 @@
     - dashboard/connections/connections
     - title_en: Subscriptions
       title_cn: 主题订阅
-      children: 
+      children:
         - dashboard/subscriptions/subscriptions
         - dashboard/subscriptions/topics
     - dashboard/retained
