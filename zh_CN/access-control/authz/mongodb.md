@@ -20,8 +20,10 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 ```js
 > db.mqtt_acl.insertOne(
   {
-      "username": "emqx_u",
-      "permission": "deny",
+      "username": "user123",
+      "clientid": "client123",
+      "ipaddress": "127.0.0.1",
+      "permission": "allow",
       "action": "publish",
       "topics": ["t/1", "a/1"]
   }
@@ -36,7 +38,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 
 ```bash
 collection = "mqtt_acl"
-filter { username = "${username}" }
+filter { username = "${username}", ipaddress = "${peerhost}"}
 
 ```
 

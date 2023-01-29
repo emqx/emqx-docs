@@ -19,6 +19,8 @@ Example of adding an authorization rule for a user `user123` that allows publish
 > db.mqtt_acl.insertOne(
   {
       "username": "user123",
+      "clientid": "client123",
+      "ipaddress": "127.0.0.1",
       "permission": "allow",
       "action": "publish",
       "topics": ["data/user123/#"]
@@ -33,8 +35,7 @@ Example of adding an authorization rule for a user `user123` that allows publish
 The corresponding config parameters are:
 ```
 collection = "mqtt_acl"
-filter { username = "${username}" }
-
+filter { username = "${username}", ipaddress = "${peerhost}" }
 ```
 
 ::: tip
