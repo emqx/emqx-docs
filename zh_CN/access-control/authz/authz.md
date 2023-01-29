@@ -43,7 +43,7 @@ EMQX 授权机制支持与多种数据存储方式集成，包括内置数据库
     username = "root"
     password = "public"
 
-    query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+    query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
     server = "127.0.0.1:3306"
 }
 ```
@@ -72,8 +72,8 @@ authorization {
   deny_action = ignore
   cache {
     enable = true
-    max_size = 1024
-    duration = 1m
+    max_size = 32
+    ttl = 1m
   }
 }
 ```

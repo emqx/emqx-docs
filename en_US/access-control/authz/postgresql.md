@@ -58,7 +58,7 @@ Sample configuration:
   username = "postgres"
   password = "public"
   server = "127.0.0.1:5432"
-  query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+  query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 }
 ```
 
@@ -74,11 +74,11 @@ Required string value with PostgreSQL query template for fetching authorization 
 For security reasons, placeholder values are not interpolated directly, but through PostgreSQL placeholders.
 I.e. a query
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = ${username}
+SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}
 ```
 is first translated into
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = $1
+SELECT permission, action, topic FROM mqtt_acl WHERE username = $1
 ```
 prepared statement and then executed with `${username}` value.
 

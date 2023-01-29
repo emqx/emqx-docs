@@ -65,7 +65,7 @@ MySQL authorizer 由 `type=mysql` 标识。
   username = "root"
   password = "public"
   server = "127.0.0.1:3306"
-  query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+  query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 }
 ```
 
@@ -78,13 +78,13 @@ MySQL authorizer 由 `type=mysql` 标识。
 例如，以下查询语句：
 
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = ${username}
+SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}
 ```
 
 将首先被转换为以下 Prepared statement：
 
 ```sql
-SELECT permission, action, topic FROM acl WHERE username = ?
+SELECT permission, action, topic FROM mqtt_acl WHERE username = ?
 ```
 
 然后使用 `${username}` 执行查询。

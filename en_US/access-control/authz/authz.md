@@ -45,7 +45,7 @@ Example:
     username = "root"
     password = "public"
 
-    query = "SELECT permission, action, topic FROM acl WHERE username = ${username}"
+    query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
     server = "10.12.43.12:3306"
 }
 ```
@@ -74,8 +74,8 @@ authorization {
   deny_action = ignore
   cache {
     enable = true
-    max_size = 1024
-    duration = 1m
+    max_size = 32
+    ttl = 1m
   }
 }
 ```
