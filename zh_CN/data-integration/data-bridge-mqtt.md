@@ -1,224 +1,112 @@
-# MQTT Bridge
+# MQTT
 
-MQTT 桥接是 EMQX 与其他 MQTT 服务通讯的通道，既可以是 EMQX，也可以是支持 MQTT 协议的其他服务。MQTT 桥接既可以订阅外部服务的消息，也可以发布消息到外部服务。但仅支持单向的工作模式，只能成为生产者，或消费者。如果需要双向桥接，需要创建多个方向不同的 MQTT 桥接，来完成数据的双向流通。
+MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式，其所做的是：
 
-## 使用配置文件创建 MQTT Bridge
+- 按照规则把当前集群的消息转发至桥接服务器；
+- 从桥接服务器订阅主题，收到消息后在当前集群中转发该消息。
 
-### 进方向 MQTT Bridge 配置参数列表
+:::tip 前置准备
 
-从外部服务桥接消息到本地。
+- 了解 [规则](./rules.md)。
+- 了解 [数据桥接](./data-bridges.md)。
 
-| 参数名 | 描述 | 类型 | 必填 | 取值范围 |
-| -- | -- | -- | -- | -- |
-| enable | 开启或关闭桥接 | Boolean |  是 | - |
-| direction  | 桥接方向：</br>ingress 表示从外部服务订阅消息，发布到本地</br>egress 表示将消息从本地发布到外部服务 | String | 是 | ingress |
-| remote_topic | 订阅外部服务的 Topic | String | 是 |  - |
-| remote_qos | 订阅的外部服务 QoS | Integer |  是 | 0 \| 1 \| 2 |
-| local_topic | 发布到本地的 Topic，支持 ${field} 格式的占位符 | String | 是 | - |
-| local_qos | 发布到本地的 QoS，支持 ${field} 格式的占位符 | Integer |  是 | 0 \| 1 \| 2 |
-| retain | 发布到本地的 Retain 标记，支持 ${field} 格式的占位符 | Boolean |  是 | - |
-| payload | 发布到本地的 Payload，支持 ${field} 格式的占位符 | String |  是 | - |
-| connector | MQTT 连接器 | connector() |  是 | Connecter 配置参数列表 |
+:::
 
-### 出方向 MQTT Bridge 配置参数列表
+## 功能清单
 
-将本地消息桥接至外部服务。
+- [连接池](./data-bridges.md#连接池)
+- [异步请求模式](./data-bridges.md#异步请求模式)
+- [缓存队列](./data-bridges.md#缓存队列)
 
-| 参数名 | 描述 | 类型 | 必填 | 取值范围 |
-| -- | -- | -- | -- | -- |
-| enable | 开启或关闭桥接 | Boolean |  是 | - |
-| direction  | 桥接方向：</br>ingress 表示从外部服务订阅消息，发布到本地</br>egress 表示将消息从本地发布到外部服务 | String | 是 | egress |
-| remote_topic | 发布到外部服务的 Topic，支持 ${field} 格式的占位符 | String | 是 |  - |
-| remote_qos |  发布到外部服务 QoS，支持 ${field} 格式的占位符 | Integer |  是 | 0 \| 1 \| 2 |
-| retain | 发布到外部服务的 Retain 标记，支持 ${field} 格式的占位符 | Boolean |  是 | - |
-| payload | 发布到外部服务的 Payload，支持 ${field} 格式的占位符 | String |  是 | - |
-| local_topic | 获取数据的本地 Topic | String | 是 | - |
-| connector | MQTT 连接器 | connector() |  是 | 参考 Connecter 配置参数列表 |
+## 快速开始
 
-### Connector 配置参数列表
+下面将使用 EMQX 提供的 [在线 MQTT 服务器](https://www.emqx.com/zh/mqtt/public-mqtt5-broker) 作为桥接服务器，指导您如何配置连接与桥接。
 
-桥接使用的连接器。
+### 桥接规则
 
-| 参数名 | 描述 | 类型 | 必填 | 取值范围 |
-| -- | -- | -- | -- | -- |
-| server | 外部服务地址，ip:port 或者 hostname:port | String | 是 | [0-255].[0-255].[0-255].[0-255]:[0-65535] |
-| mode | cluster_shareload：集群里每个节点都建立一个 MQTT 连接与远程 Broker 相连</br>cluster_singleton：整个集群里只有一个节点建立 MQTT 连接与远程 Broker 相连 | Enum | 否 | cluster_shareload \| cluster_singleton |
-| reconnect_interval | 自动重连间隔时间 | Integer | 否 | - |
-| proto_ver | 协议版本 | String | 否 |  v3 \| v4 \| v5 |
-| bridge_mode | 桥接模式，仅在外部服务为 EMQX 时生效，可以提高订阅的并发性能 | Boolean | 否 | - |
-| username | 连接使用的用户名 | String | 否 | - |
-| password | 连接使用的密码 | String | 否 | - |
-| clean_start | 设置连接使用的 clean_session 属性 | Boolean | 否 | - |
-| keepalive | 连接心跳周期 | Integer | 否 | - |
-| retry_interval | QoS1/QoS2 消息发送失败后的重试间隔 | Integer | 否 | - |
-| max_inflight | 最大消息窗口数量，在 MQTT V5 协议中为 `Receive Maximum` | Integer | 否 | - |
-| ssl | 加密连接证书配置 | ssl() | 否 | - |
+此处使用以下主题映射配置实现本地与远程 MQTT 服务之间的消息桥接：
 
-### SSL 配置
+| 消息主题                   | 方向                       | 目标主题                  |
+| -------------------------- | -------------------------- | ------------------------- |
+| **`remote/topic/ingress`** | **ingress** (远程 -> 本地) | **`local/topic/ingress`** |
+| **`local/topic/egress`**   | **egress **(本地 -> 远程)  | **`remote/topic/egress`** |
 
-参考 [SSL](../configuration/configuration.md#tls-ssl-ciphers)
+**ingress 入口配置**
 
-## 使用 Bridge
+![MQTT 数据桥接 igress 示意图](assets/bridge_mqtt_igress.png)
 
-1. 准备两个 EMQX 节点，分别为 Local 节点和 Remote 节点，Local 节点使用本地 IP 127.0.0.1，Remote 节点使用 IP 192.168.1.234。
-2. 编辑 Local 节点的配置，打开 `emqx.conf`，添加桥接配置。下面的配置示例中，创建了一个进方向的桥 `mqtt_bridge_ingress` 和一个出方向的桥 `mqtt_bridge_egress`
-3. 启动两个 EMQX 节点，Local 节点使用 console 命令启动，因为规则集成演示中，需要使用控制台观察输出。
+**egress 出口配置**
 
-```js
-bridges {
-  mqtt {
-    mqtt_bridge_ingress {
-      connector {
-        bridge_mode = false
-        clean_start = true
-        keepalive = "60s"
-        max_inflight = 32
-        mode = "cluster_shareload"
-        password = "pwd1"
-        proto_ver = "v4"
-        reconnect_interval = "10s"
-        retry_interval = "1s"
-        server = "192.168.1.234:1883"
-        ssl {enable = false}
-        username = "user1"
-      }
-      direction = "ingress"
-      enable = true
-      local_topic = "local/topic/ingress"
-      local_qos = 0
-      remote_qos = 0
-      remote_topic = "remote/topic/ingress"
+![MQTT 数据桥接 egress 示意图](assets/bridge_mqtt_egerss.png)
+
+### 通过 Dashboard 配置
+
+1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
+2. 点击页面右上角的创建。
+3. 在数据桥接类型中选择 MQTT，点击下一步。
+4. 输入数据桥接名称，要求是大小写英文字母或数字组合，此处填写 `my_mqtt_bridge`。
+5. 输入 MQTT 服务器地址 `broker.emqx.io:1883`，由于该服务器不需要认证，此处用户名、密码留空即可。
+6. Keep Alive、协议版本、清除会话按照实际需要填写，此处使用默认值。
+
+7. 入口配置（可选）：配置桥接规则，将远程 MQTT 服务上的消息转发到本地。
+   1. 远程 MQTT 服务：订阅主题以获取消息。
+      - 主题：此处填写 `$share/g/remote/topic/ingress`。当本地 EMQX 工作在集群模式下时，应当使用[共享订阅](../mqtt/mqtt-shared-subscription.md)避免消息重复。
+      - QoS：此处选择 QoS0。
+   2. 本地 MQTT 服务：将订阅得到的消息发布到指定主题中，也可以留空，通过规则处理后使用 [消息重发布](./rules.md#消息重发布) 动作转发。
+      - 主题：此处填写 `local/topic/ingress`。
+      - QoS：此处选择 QoS0，也可以跟随消息 QoS。
+      - Retain：是否以保留消息方式发布消息。
+      - 消息模版：转发的消息 Payload 模板，支持使用 `${field}` 语法提取数据。
+
+8. 出口配置（可选）：将本地指定 MQTT 主题的消息发布到远程 MQTT 服务，可以理解为入口配置的反向数据流，此处配置将 `local/topic/egress` 的主题转发到远程 MQTT 服务 `remote/topic/egress` 主题中。
+9. 其他配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
+10. 点击创建按钮完成数据桥接创建。
+
+:::tip
+入口配置与出口配置至少配置其中一个。
+:::
+
+以上操作对应配置文件如下：
+
+```bash
+bridges.mqtt.my_mqtt_bridge {
+  enable = true
+  server = "broker.emqx.io:1883"
+  username = "emqx_u"
+  password = "public"
+  proto_ver = "v4"
+  clean_start = true
+  keepalive = "60s"
+
+  reconnect_interval = "10s"
+  egress {
+    local {topic = "local/topic/egress"}
+    remote {
       payload = "${payload}"
-      retain = false
+      qos = 1
+      retain = true
+      topic = "remote/topic/egress"
     }
-    mqtt_bridge_egress {
-      connector {
-        bridge_mode = false
-        clean_start = true
-        keepalive = "60s"
-        max_inflight = 32
-        mode = "cluster_shareload"
-        username = "emqx"
-        password = "emqx"
-        proto_ver = "v4"
-        reconnect_interval = "15s"
-        retry_interval = "15s"
-        server = "192.168.1.234:1883"
-        ssl { enable = false }
-      }
-      direction = "egress"
-      enable = true
-      local_topic = "local/topic/egress"
-      remote_qos = 0
-      remote_topic = "remote/topic/egress"
+  }
+  ingress {
+    local {
+      topic = "$share/g/remote/topic/ingress"
+      qos = 1
       payload = "${payload}"
-      retain = false
     }
+    remote {qos = 1, topic = "local/topic/ingress"}
   }
 }
 ```
 
-打开 EMQX Dashboard ，点击右侧 `数据集成` - `数据桥接`， 可以看到创建出的两个桥接。
-![image](./assets/rules/mqtt_bridge/dashboard_show_bridges.png)
-
-::: tip
-注意 5.0.0 Dashboard 暂不支持脱离规则，单独使用 MQTT Bridge。仅可使用配置文件创建
-:::
-
-### 进方向的桥接消息流转
-
-1. 进方向的桥接会在 Remote 节点上订阅 `remote/topic/ingress` 主题
-2. 创建两个连接 Client A, Client B，分别连接 Remote 节点和 Local 节点
-3. Client B 订阅 Topic `local/topic/ingress`
-4. Client A 发布一条 Topic 为 `remote/topic/ingress` 的消息
-5. 桥接客户端收到订阅消息，使用 Topic `local/topic/ingress`，将消息内容转发至 Local 节点
-6. Client B 收到订阅消息
-
-![bridge_igress](./assets/bridge_igress.png)
-
-### 出方向的桥接消息流转
-
-1. 客户端 A 订阅 Remote 节点上的 Topic `remote/topic/egress`
-2. 客户端 B 在 Local 节点上发布一条 Topic 为 `local/topic/egress` 的消息
-3. 桥接获取到消息数据，转发至 Remote 节点的 Topic `remote/topic/egress`
-4. 客户端 A 收到桥接的消息
-
-![bridge_egerss](./assets/bridge_egerss.png)
-
 ## 与规则配合使用
 
-MQTT Bridge 既可以单独使用，也可以与规则配合使用，以获取更强大、更灵活的数据处理功能。
+MQTT 数据桥接既可以单独使用，也可以与规则配合使用，以获取更强大、更灵活的数据处理功能。
 
-- 当桥接为进方向时，可以作为规则的数据源
-- 当桥接为出方向时，可以作为规则的处理动作
-
-### 进方向的 MQTT Bridge 与规则配合使用
-
-1. 使用 console 命令启动 EMQX，为了更方便的观察规则的输出，我们会使用控制台输出作为规则消息的检查。
-
-```bash
-./bin/emqx console
-```
-
-2. 登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
-
-```SQL
-SELECT
-  *
-FROM
-  "$bridges/mqtt:mqtt_bridge_ingress"
-```
-
-点击左侧，`添加动作`，选择控制台输出。
-
-![image](./assets/rules/mqtt_bridge/create_rule.png)
-
-3. Remote 节点上发布一条 Topic 为 `remote/topic/ingress` 的消息
-4. 消息通过桥接，发送到 Local 节点的规则，并打印到控制台中
-
-```erlang
-[rule action] rule_egress
-        Action Data: #{dup => false,
-                       event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
-                       id => <<"0005E40E4C3F8BE7F443000009580002">>,
-                       message_received_at => 1658124943461,
-                       metadata => #{rule_id => <<"rule_egress">>},
-                       node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
-                       pub_props => #{},qos => 0,retain => false,
-                       server => <<"192.168.1.234:1883">>,
-                       timestamp => 1658124943461,
-                       topic => <<"remote/topic/ingress">>}
-        Envs: #{dup => false,event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
-                id => <<"0005E40E4C3F8BE7F443000009580002">>,
-                message_received_at => 1658124943461,
-                metadata => #{rule_id => <<"rule_egress">>},
-                node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
-                pub_props => #{},qos => 0,retain => false,
-                server => <<"192.168.1.234:1883">>,
-                timestamp => 1658124943461,
-                topic => <<"remote/topic/ingress">>}
-```
+当桥接为进方向时，可以将远程 MQTT 服务订阅得到的消息作为规则的数据源：
 
 ![bridge_igress_rule_link](./assets/bridge_igress_rule_link.png)
 
-### 出方向的 MQTT Bridge 与规则配合使用
-
-1. 创建规则。登录 EMQX Dashboard，点击右侧`数据集成` - `规则` - `创建`，编辑 SQL：
-
-```SQL
-SELECT
-  *
-FROM
-  "rule/demo/local/topic"
-```
-
-点击左侧添加动作，选择`使用数据桥接转发`，下拉选择创建好的桥接 `mqtt:mqtt_bridge_egress`。
-点击`添加`，`创建`。
-![image](./assets/rules/mqtt_bridge/create_rule_egress.png)
-
-2. Client B 在 Local 接点上发布一条 Topic 为 `rule/demo/local/topic` 的消息
-3. 消息通过规则，发送到出方向的桥
-4. 出方向的桥将消息转发到 Remote 节点
-5. Client A 收到 Topic 为 `remote/topic/egress` 的消息
+当桥接为出方向时，可以将规则处理结果作为消息，转发到远程 MQTT 服务指定主题：
 
 ![bridge_egress_rule](./assets/bridge_egress_rule.png)
