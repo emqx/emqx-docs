@@ -172,9 +172,9 @@
   title_cn: 网络与 TLS
   children:
     - network/emqx-mqtt-tls
-    # - network/mqtt-client-tls
+    - network/mqtt-client-tls
     # - network/crl-and-ocsp-stapling
-    # - network/gmssl
+    - network/gmssl
     # - network/ipv6
 
 - title_en: Command Line Interface

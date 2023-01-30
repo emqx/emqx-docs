@@ -1,4 +1,4 @@
-# HTTP API
+# REST API
 
 EMQX 提供了管理监控 REST API，这些 API 遵循 OpenAPI (Swagger) 3.0 规范。
 
