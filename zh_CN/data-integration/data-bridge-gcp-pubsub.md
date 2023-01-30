@@ -1,4 +1,4 @@
-# GCP PubSub桥
+# GCP PubSub
 
 EMQX GCP PubSub 集成可以发送 MQTT 消息和事件到
 [Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us)，这
