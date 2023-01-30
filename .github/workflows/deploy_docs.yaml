@@ -146,19 +146,16 @@ jobs:
       run: |
         cd frontend
         yarn global add redoc-cli
-        redoc-cli bundle redoc/zh.json \ 
-            -t redoc/template.hbs --output docs/.vuepress/dist/zh/${VERSION}/admin/api.html \
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          redoc-cli bundle redoc/${lang}.json -t redoc/template.hbs \
+            --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api.html \
             --options.theme.colors.primary.main=#00b173 \
             --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
             --templateOptions.description "EMQX ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
-            --templateOptions.langZH "zh"
-        redoc-cli bundle redoc/en.json \ 
-            -t redoc/template.hbs --output docs/.vuepress/dist/en/${VERSION}/admin/api.html \
-            --options.theme.colors.primary.main=#00b173 \
-            --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
-            --templateOptions.description "EMQX ${VERSION} API Documentation" \
-            --templateOptions.version "${VERSION}"
+            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+        done
 
     - name: upload ce files
       if: env.DOCS_TYPE == 'broker'
