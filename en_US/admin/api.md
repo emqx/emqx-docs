@@ -1,4 +1,4 @@
-# HTTP APIs
+# REST API
 
 EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
 
