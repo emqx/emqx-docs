@@ -175,7 +175,10 @@
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
     # - network/crl-and-ocsp-stapling
-    - network/gmssl
+    - title_en: GMSSL
+      title_cn: 国密 SSL
+      lang: cn
+      path: network/gmssl
     # - network/ipv6
 
 - title_en: Command Line Interface
@@ -188,8 +191,14 @@
     - admin/api
     - title_en: API Docs
       title_cn: API 文档
+      lang: en
       edition: ce
       path: https://www.emqx.io/docs/en/v5.0/admin/api.html
+    - title_en: API Docs
+      title_cn: API 文档
+      lang: cn
+      edition: ce
+      path: https://www.emqx.io/docs/cn/v5.0/admin/api.html
 
 ## Dashboard
 
