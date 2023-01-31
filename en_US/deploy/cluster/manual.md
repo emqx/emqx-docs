@@ -43,7 +43,7 @@ You can also override the node name with an environment variable:
 env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
 ```
 
-::: tip Warning
+::: tip
 After the node joins the cluster, the node name must not be changed.
 :::
 
@@ -80,7 +80,7 @@ The `join` **must not** be run on the nodes inside the cluster, i.e., we can't "
 E.g. if a `s3.emqx.io` is to join the cluster of `s1` and `s2`,
 the join command should be executed on `s3` but **NOT** on `s1` or `s2`.
 
-::: tip Warning
+::: tip
 Joining another cluster will cause the node to leave any current cluster it may be part of.
 :::
 
