@@ -1,20 +1,8 @@
 # Bridge data to EMQX
 
-Setup another MQTT broker using EMQX, taking macOS X for instance:
+Create a rule
 
-```bash
-$ brew tap emqx/emqx/emqx
-
-$ brew install emqx
-
-# start emqx
-$ emqx console
-```
-
-Create a rule:
-
-Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the
-"rule" tab on the menu to the left.
+Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
 
 Select "message.publish", then type in the following SQL:
 
