@@ -1,6 +1,6 @@
-# 桥接数据到 RPC 服务
+# 桥接数据到 EMQX
 
-搭建 EMQX Broker 环境，以 MacOS X 为例:
+搭建 EMQX Broker 环境，以 macOS X 为例:
 
 ```bash
 $ brew tap emqx/emqx/emqx
@@ -31,15 +31,15 @@ SELECT * FROM "t/#"
 
 桥接数据到 MQTT Broker 动作只需要一个参数：
 
-关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 RPC Bridge 资源:
+关联资源。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 EMQX Bridge 资源:
 
 ![image](./assets/rule-engine/rpc-action-1.png)
 
-选择 RPC Bridge 资源。
+选择 EMQX Bridge 资源。
 
 填写资源配置:
 
-   填写真实的 emqx 节点名，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
+   填写真实的 EMQX 节点名，其他配置保持默认值，然后点击 “测试连接” 按钮，确保连接测试成功。
 
 最后点击 “新建” 按钮。
 
@@ -63,7 +63,7 @@ QoS: 0
 Payload: "Hello, World\!"
 ```
 
-然后通过 mqtt 客户端查看消息是否发布成功
+然后通过 MQTT 客户端查看消息是否发布成功
 
 ![image](./assets/rule-engine/rpc-result-0.png)
 
