@@ -1,16 +1,5 @@
 # 桥接数据到 EMQX
 
-搭建 EMQX Broker 环境，以 macOS X 为例:
-
-```bash
-$ brew tap emqx/emqx/emqx
-
-$ brew install emqx
-
-# 启动 emqx
-$ emqx console
-```
-
 创建规则:
 
 打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
