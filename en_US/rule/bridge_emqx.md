@@ -1,5 +1,13 @@
 # Bridge data to EMQX
 
+:::tab Prerequisites:
+
+At least 2 EMQX brokers are installed. 
+
+On how to install, see [Install EMQX](../getting-started/install-ee.md)
+
+:::
+
 Create a rule
 
 Go to [EMQX Dashboard](http://127.0.0.1:18083/#/rules), select the "rule" tab on the menu to the left.
