@@ -52,7 +52,13 @@ We will use [cert-manager](https://github.com/jetstack/cert-manager) to provisio
   kubectl get emqx emqx -o json | jq ".status.emqxNodes"
   ```
 
-Now we have completed the deployment of EMQX with EMQX Kubernetes Operator. On how to configure, see{%emqxce%}[EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxBroker.html){%emqxce%}{%emqxee%}[EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html){%endemqxee%}. 
+Now we have completed the deployment of EMQX with EMQX Kubernetes Operator. On how to configure, see
+{%emqxce%}
+[EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxBroker.html)
+{%emqxce%}
+{%emqxee%}
+[EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html)
+{%endemqxee%}.
 
 ## Deploy on Public Cloud
 

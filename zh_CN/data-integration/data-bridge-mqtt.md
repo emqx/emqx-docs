@@ -33,11 +33,11 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
 
 **ingress 模式下的消息服务流程**
 
-![MQTT 数据桥接 igress 示意图](assets/bridge_mqtt_igress.png)
+![MQTT 数据桥接 igress 示意图](./assets/bridge_mqtt_igress.png)
 
 **egress 模式下的消息服务流程**
 
-![MQTT 数据桥接 egress 示意图](assets/bridge_mqtt_egerss.png)
+![MQTT 数据桥接 egress 示意图](./assets/bridge_mqtt_egerss.png)
 
 ### 通过 Dashboard 配置
 

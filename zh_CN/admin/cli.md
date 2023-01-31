@@ -84,7 +84,7 @@ $ emqx ctl cluster_call tnxid 2
           tnx_id => 2}}
 ```
 
-::: tip Warning
+::: tip
 `skip` 指令和 `fast_forward` 指令会迫使本地节点跳过一些（失败）的操作
 这可能会导致集群内节点之间的配置不一致。
 :::

@@ -29,7 +29,7 @@ authorization {
 }
 ```
 
-::: tip Warning
+::: tip
 The initial file provided by the `path` config is not mutable to EMQX.
 If rules are updated from the dashboard UI or management API, the new rules
 will be stored in `data/authz/acl.conf`, and this original config will no longer be loaded.
