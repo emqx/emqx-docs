@@ -1,6 +1,14 @@
 # 桥接数据到 EMQX
 
-创建规则:
+:::tab 前置准备：
+
+已安装两个或以上的 EMQX 服务器。
+
+有关如何安装 EMQX，见 [安装部分](../getting-started/install-ee.md)
+
+:::
+
+创建规则
 
 打开 [EMQX Dashboard](http://127.0.0.1:18083/#/rules)，选择左侧的 “规则” 选项卡。
 
