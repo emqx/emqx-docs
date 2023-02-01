@@ -1,8 +1,10 @@
 # PostgreSQL
 
-EMQX supports integration with PostgreSQL so you can save client messages and events to PostgreSQL, or use events to trigger the update or removal of data to record the online status or online/offline of clients. 
+EMQX supports integration with PostgreSQL so you can save client messages and events to PostgreSQL, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
 
-*Note*: This documentation also applies to Timescale and MatrixDB.
+:::tip
+This section is also applicable to TimescaleDB and MatrixDB.
+:::
 
 ## Prerequisites
 
@@ -37,7 +39,7 @@ docker exec -it PostgreSQL bash
 psql -U postgres -W
 
 # Create and then select the database
-```
+
 CREATE DATABASE emqx_data;
 
 \c emqx_data;
@@ -53,7 +55,7 @@ We will create 2 data bridges to PostgreSQL for messages storage and event recor
 2. Click **Create** on the top right corner of the page.
 3. In the **Create Data Bridge** page, click to select **PostgreSQL**, and then click **Next**.
 4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
-5. Input the connection information. Input **127.0.0.1:3036** as the **Server Host**,  **emqx_data** as the **Database Name**, **root** as the **Username**, and **public** as the **Password**.
+5. Input the connection information. Input **127.0.0.1:5432** as the **Server Host**,  **emqx_data** as the **Database Name**, **root** as the **Username**, and **public** as the **Password**.
 6. Configure the **SQL Template**. Use the SQL statements below to insert data. Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements. 
 
   ```sql
@@ -97,6 +99,7 @@ We have successfully created the data bridge to PostgreSQL, now we can continue 
   FROM
     "t/#"
   ```
+
 4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.  
 5. Click the **Add** button to finish the setup. 
 

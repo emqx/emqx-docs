@@ -2,7 +2,9 @@
 
 通过 PostgreSQL 数据桥接可以将客户端消息和事件存储到 PostgreSQL 中，也可以通过事件触发对 PostgreSQL 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
-*注意*: 这个文档也适用于Timescale 以及 MatrixDB。
+:::tip
+本章节内容同样适用于 TimescaleDB 以及 MatrixDB。
+:::
 
 ## 先决条件
 
@@ -37,7 +39,7 @@ docker exec -it PostgreSQL bash
 psql -U postgres -W
 
 # 创建并选择数据库
-```
+
 CREATE DATABASE emqx_data;
 
 \c emqx_data;
@@ -55,7 +57,7 @@ CREATE DATABASE emqx_data;
 2. 点击页面右上角的创建。
 3. 在数据桥接类型中选择 PostgreSQL，点击下一步。
 4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
-5. 输入 PostgreSQL 连接信息，主机列表填写 **127.0.0.1:3306**，数据库填写 `emqx_data`，用户名为 `postgres`，密码为 `public`。
+5. 输入 PostgreSQL 连接信息，主机列表填写 **127.0.0.1:5432**，数据库填写 `emqx_data`，用户名为 `postgres`，密码为 `public`。
 6. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
 
   ```sql
@@ -99,6 +101,7 @@ CREATE DATABASE emqx_data;
   FROM
     "t/#"
   ```
+
 4. 添加动作，在动作下拉框中选择 使用数据桥接转发 选项，选择先前创建好的 PostgreSQL 数据桥接。
 5. 点击最下方创建按钮完成规则创建。
 
