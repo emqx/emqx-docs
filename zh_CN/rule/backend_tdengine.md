@@ -2,12 +2,14 @@
 
 [TDengine](https://github.com/taosdata/TDengine) 是[涛思数据](https://www.taosdata.com/cn/)推出的一款开源的专为物联网、车联网、工业互联网、IT 运维等设计和优化的大数据平台。除核心的快 10 倍以上的时序数据库功能外，还提供缓存、数据订阅、流式计算等功能，最大程度减少研发和运维的复杂度。
 
-EMQX 支持通过 **发送到 Web 服务** 的方式保存数据到 TDengine，也在企业版上提供原生的 TDengine 驱动实现直接保存。
+您可以在 [华为云](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) 上直接部署 TDengine，也可以通过 Docker 安装：
 
-使用 Docker 安装 TDengine 或在 [Cloud](https://marketplace.huaweicloud.com/product/OFFI454488918838128640) 上部署：
+:::tip
+如需使用 TDengine 3.x 版本，请使用 EMQX v4.4.12 及之后的版本。
+:::
 
 ```bash
-docker run --name TDengine -d -p 6030:6030 -p 6035:6035 -p 6041:6041 -p 6030-6040:6030-6040/udp tdengine/tdengine 
+docker run --name TDengine -d -p 6030:6030 -p 6041:6041 -p 6043-6049:6043-6049 -p 6043-6049:6043-6049/udp tdengine/tdengine
 ```
 
 进入 Docker 容器：
@@ -18,10 +20,12 @@ taos
 ```
 
 创建 “test” 数据库:
+
 ```bash
 create database test;
 ```
-创建 t_mqtt_msg 表，关于 TDengine 数据结构以及 SQL 命令参见 [TAOS SQL](https://www.taosdata.com/cn/documentation/taos-sql/#表管理)：
+
+创建 t_mqtt_msg 表，关于 TDengine 数据结构以及 SQL 命令参见 [TDengine SQL](https://docs.taosdata.com/taos-sql/)：
 
 ```sql
 USE test;
@@ -72,7 +76,7 @@ FROM
 insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
 ```
 
-2. 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 TDengine资源:
+2. 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 TDengine 资源:
 
 填写资源配置:
 
