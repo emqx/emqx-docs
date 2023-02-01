@@ -155,9 +155,9 @@ At this time, there are three available values for each of our configuration ite
 ## Apply Configuration
 
 {% emqxce %}
-Configuration items are loaded when EMQX starts or when the plugin starts. EMQX Community Edition does not yet support runtime configuration updates (Enterprise Edition supports this capability), but since the plugin supports dynamic loading and unloading, it is possible to reload the plugin to apply the latest configuration after modifying the plugin configuration.
+The EMQX open source edition does not support updating the configuration at runtime. If there is a need, you can consider migrating to EMQX Enterprise. To apply the latest settings, you can reload extension plugins as EMQX reads and loads configuration items during startup.
 {% endemqxce %}
 
 {% emqxee %}
-Configuration items are loaded when EMQX starts or when the plugin starts. some configurations can be updated via Dashboard and REST API, and the latest configuration can be applied by reload the plugin after modifying the plugin configuration.
+EMQX will read and load the configuration items during startup or when extension plugins are started. You can update the configuration at runtime through the Dashboard or REST API, or reload the plug-in after modifying the plug-in configuration to apply the latest configuration.
 {% endemqxee %}
