@@ -16,7 +16,7 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 {% emqxce %}
 
-- **Massive Scale**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster. This figure is 10m for version 4.x.
+- **Massive Scale**: Each EMQX node supports up to 2 million concurrent MQTT connections, and each EMQX cluster can support up to 10 million concurrent MQTT connections. 
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
 - **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - **Fully MQTT 5.0**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
