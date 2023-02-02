@@ -1,6 +1,6 @@
 # Redis
 
-EMQX supports integration with Redis so you can save client messages and events to Redis. By leveraging Redis' high performance and flexible data structure, EMQX provides features like message caching and statistics of published/subscribed/discarded messages. 
+EMQX supports integration with Redis so you can save client messages and events to Redis. With Redis data bridge, you can use Redis for message caching and statistics of published/subscribed/discarded messages. 
 
 <!-- TODO 确认是否支持数据发布订阅操作、消息队列等场景。 -->
 
@@ -114,7 +114,7 @@ Use [HINCRBY](https://redis.io/commands/hincrby/) command below to collect the d
 HINCRBY emqx_message_dropped_count ${topic} 1
 ```
 
-One will be added to the corresponding counter every time the command is executed.
+Each time the command is executed, the corresponding counter is incremented by 1.
 
 **Rule SQL**
 
@@ -122,8 +122,8 @@ EMQX rules define 2 message discarding events, through which the rules can be tr
 
 | Event                                    | Topic                    | Parameter                                                    |
 | ---------------------------------------- | ------------------------ | ------------------------------------------------------------ |
-| Messages are discarded during forwarding | $events/message_dropped  | [$events/message_dropped](./rule-sql-events-and-fields.md#消息在转发的过程中被丢弃事件-events-message-dropped) |
-| Messages are discarded during delivery   | $events/delivery_dropped | [$events/delivery_dropped](./rule-sql-events-and-fields.md#消息在投递的过程中被丢弃事件-events-delivery-dropped) |
+| Messages are discarded during forwarding | $events/message_dropped | [$events/message_dropped](./rule-sql-events-and-fields.md#events-message-dropped) |
+| Messages are discarded during delivery   | $events/delivery_dropped | [$events/delivery_dropped](./rule-sql-events-and-fields.md#events-delivery-dropped) |
 
 The corresponding SQL is as follows: 
 
