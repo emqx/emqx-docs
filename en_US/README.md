@@ -1,10 +1,22 @@
 # Introduction
 
+{%emqxce%}
+
 [EMQX](https://www.emqx.com/zh/products/emqx) is an Open-source [MQTT](https://mqtt.org/) broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at massive scale.
 
 As the most scalable MQTT broker, EMQX can help you connect any device, at any scale. Move and process your IoT data anywhere.
 
+{%endemqxce%}
+
+{%emqxee%}
+
+EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platform to connect, move and process your data in business-critical scenarios for the IoT era.
+
+{%endemqxee%}
+
 ## Benefits
+
+{%emqxce%}
 
 - **[Massive Scale](https://www.emqx.io)**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster.
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
@@ -12,6 +24,25 @@ As the most scalable MQTT broker, EMQX can help you connect any device, at any s
 - **[Fully MQTT 5.0](https://www.emqx.com/en/blog/introduction-to-mqtt-5)**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
 - **[High Availability](./deploy/cluster/mria-introduction)**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
 - **[Cloud-Native & K8s](https://www.emqx.com/en/emqx-kubernetes-operator)**: Easy to deploy on-premises or in public clouds with Kubernetes Operator and Terraform.
+
+{%endemqxce%}
+
+
+{%emqxee%}
+
+- **Massive Scale**: Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
+
+- **Business-Critical Reliability**: Up to 99.99% SLA. Ensure no data loss with built-in RocksDB data persistence.
+
+- **Data Security**: End-to-end data encryption and fine-grained access control to protect your data.
+
+- **High Performance**: Ingest and process millions of MQTT messages efficiently per second per node.
+
+- **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
+
+- **Complete Observability**: Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
+
+{%endemqxee%}
 
 ## Features List
 
