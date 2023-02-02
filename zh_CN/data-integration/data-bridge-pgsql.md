@@ -30,7 +30,7 @@
 
 ```bash
 # 启动一个 PostgreSQL 容器并设置密码为 public
-docker run --name PostgreSQL -e POSTGRES_PASSWORD=public -d postgres
+docker run --name PostgreSQL -p 5432:5432 -e POSTGRES_PASSWORD=public -d postgres
 
 # 进入容器
 docker exec -it PostgreSQL bash

@@ -28,7 +28,7 @@ Install MySQL via Docker, and then run the docker image.
 
 ```bash
 # To start the MySQL docker image and set the password as public
-docker run --name mysql -e MYSQL_ROOT_PASSWORD=public -d mysql
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=public -d mysql
 
 # Access the container
 docker exec -it mysql bash
