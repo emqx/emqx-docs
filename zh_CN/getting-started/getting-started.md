@@ -8,15 +8,13 @@
 除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
 :::
 
+{% emqxce %}
 ## 版本选择
 
-{% emqxce %}
 EMQX 目前提供开源和企业版两个版本，您可根据需要点击下方链接下载对应版本：
 
 - [开源版](https://www.emqx.com/zh/try?product=broker)
 - [企业版](https://www.emqx.com/zh/try?product=enterprise)
-
-{% endemqxce %}
 
 :::: tabs type:card
 
@@ -49,6 +47,8 @@ EMQX 目前提供开源和企业版两个版本，您可根据需要点击下方
 
 ::::
 
+{% endemqxce %}
+
 ## 安装 EMQX
 
 EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](../deploy/install-k8s.md) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
@@ -60,8 +60,8 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - Ubuntu
 - Debian
 - MacOS
-- Windows
 - Linux <!--后续在安装页面完成后，重新调整排序以及插入超链接-->
+- Windows (仅开源版支持)
 
 如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](../deploy/install-source.md) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。<!--后续在安装页面完成后，重新调整排序以及插入超链接-->
 
@@ -77,11 +77,25 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 容器化部署是体验 EMQX 的最快方式，因此本节将以容器化部署为例，带您开始完整的 EMQX 使用旅程。 
 
+{%emqxce%}
+
 1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
 
 ```bash
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
+
+{%endemqxce%}
+
+{%emqxee%}
+
+1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
+
+```bash
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+```
+
+{%endemqxee%}
 
 
 运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
@@ -105,6 +119,8 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
 
+{%emqxce%}
+
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```
@@ -116,6 +132,24 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
    ```
    mkdir -p emqx && unzip emqx-5.0.14-macos11-amd64.zip -d emqx
    ```
+
+{%endemqxce%}
+
+{%emqxee%}
+
+1. 在命令行工具中输入如下命令，下载 zip 文件。
+
+   ```
+      wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos11-amd64.zip
+   ```
+
+2. 通过以下命令安装 EMQX。
+
+   ```
+   mkdir -p emqx && unzip emqx-ee-5.0.0-macos11-amd64.zip -d emqx
+   ```
+
+{%endemqxee%}
 
 3. 运行以下命令启动 EMQX。
 
