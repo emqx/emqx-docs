@@ -1,23 +1,23 @@
 # 产品概览
 
-{%emqxce%}
+{% emqxce %}
 
 [EMQX](https://www.emqx.io) 是一款大规模可弹性伸缩的云原生分布式物联网 [MQTT](https://mqtt.org/) 消息服务器。
 
 作为全球最具扩展性的 MQTT 消息服务器，EMQX 提供了高效可靠海量物联网设备连接，能够高性能实时移动与处理消息和事件流数据，帮助您快速构建关键业务的物联网平台与应用。
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 [EMQX 企业版](https://www.emqx.com/zh/products/emqx)是一个「无限连接，任意集成，随处运行」大规模分布式物联网接入平台。
 
 EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规则引擎，为高可靠、高性能的物联网实时数据移动、处理和集成提供动力，助力企业快速构建关键业务的 IoT 平台与应用。
 
-{%endemqxee%}
+{% endemqxee %}
 ## 产品优势
 
-{%emqxce%}
+{% emqxce %}
 
 - **[开放源码](https://www.emqx.io/zh)**：基于 Apache 2.0 许可证完全开源，自 2013 年起 200+ 开源版本迭代。
 - **[MQTT 5.0](https://www.emqx.com/zh/blog/introduction-to-mqtt-5)**：100% 支持 MQTT 5.0 和 3.x 协议标准，更好的伸缩性、安全性和可靠性。
@@ -26,9 +26,9 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 - **低时延**：基于 Erlang/OTP 软实时的运行时系统设计，消息分发与投递时延低于 1 毫秒。
 - **[高可用](./deploy/cluster/mria-introduction)**：采用 Masterless 的大规模分布式集群架构，实现系统高可用和水平扩展。
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 - **海量连接**：单节点支持 500 万 MQTT 设备连接，集群可水平扩展至支持1亿并发的 MQTT 连接。
 
@@ -42,7 +42,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 
 - **易运维**：图形化配置、操作与管理，实时监测运行状态。支持 MQTT 跟踪进行端到端问题分析。
 
-{%endemqxee%}
+{% endemqxee %}
 
 ## 功能概览
 

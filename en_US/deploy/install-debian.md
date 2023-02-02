@@ -7,7 +7,7 @@ Supported versions:
 - Debian10
 - Debian11
 
-{%emqxce%}
+{% emqxce %}
 
 ## Install EMQX with deb
 
@@ -74,9 +74,9 @@ cd emqx && ./bin/emqx start
 
 
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ## Install EMQX with deb
 
@@ -141,4 +141,4 @@ mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-debian11-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxee%}
+{% endemqxee %}

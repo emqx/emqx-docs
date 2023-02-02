@@ -2,7 +2,7 @@
 
 This section will guide you on installing and starting EMQX on the Amazon Linux system.
 
-{%emqxce%}
+{% emqxce %}
 
 ## Install EMQX with tag.gz
 
@@ -25,9 +25,9 @@ cd emqx && ./bin/emqx start
 ```
 
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ## Install EMQX with tag.gz
 
@@ -49,4 +49,4 @@ mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-amzn2-arm64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxee%}
+{% endemqxee %}

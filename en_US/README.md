@@ -1,22 +1,22 @@
 # Introduction
 
-{%emqxce%}
+{% emqxce %}
 
 [EMQX](https://www.emqx.com/zh/products/emqx) is an Open-source [MQTT](https://mqtt.org/) broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at massive scale.
 
 As the most scalable MQTT broker, EMQX can help you connect any device, at any scale. Move and process your IoT data anywhere.
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platform to connect, move and process your data in business-critical scenarios for the IoT era.
 
-{%endemqxee%}
+{% endemqxee %}
 
 ## Benefits
 
-{%emqxce%}
+{% emqxce %}
 
 - **[Massive Scale](https://www.emqx.io)**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster.
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
@@ -25,10 +25,10 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 - **[High Availability](./deploy/cluster/mria-introduction)**: Achieve high availability and horizontal scalability through a masterless distributed architecture.
 - **[Cloud-Native & K8s](https://www.emqx.com/en/emqx-kubernetes-operator)**: Easy to deploy on-premises or in public clouds with Kubernetes Operator and Terraform.
 
-{%endemqxce%}
+{% endemqxce %}
 
 
-{%emqxee%}
+{% emqxee %}
 
 - **Massive Scale**: Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
 
@@ -42,7 +42,7 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 - **Complete Observability**: Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
 
-{%endemqxee%}
+{% endemqxee %}
 
 ## Features List
 

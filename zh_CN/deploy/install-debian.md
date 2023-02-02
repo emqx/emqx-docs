@@ -4,7 +4,7 @@
 
 支持的 Debian 版本：Debian10, Debian11。
 
-{%emqxce%}
+{% emqxce %}
 
 ## deb 安装
 
@@ -70,9 +70,9 @@ mkdir -p emqx && tar -zxvf emqx-5.0.14-debian11-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ## tag.gz 安装
 
@@ -94,4 +94,4 @@ mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-elixir-amzn2-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxee%}
+{% endemqxee %}

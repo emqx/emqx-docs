@@ -55,13 +55,13 @@ kubectl get emqx emqx -o json | jq ".status.emqxNodes"
 至此您已经通过 EMQX Kubernetes Operator 完成了 EMQX 集群的部署。
 
 您可访问以下链接了解如何进行集群参数配置：
-{%emqxce%}
+{% emqxce %}
 
 - [EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxBroker.html)
-{%emqxce%}
-{%emqxee%}
+{% emqxce %}
+{% emqxee %}
 - [EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html)
-{%endemqxee%}
+{% endemqxee %}
 
 - [配置 EMQX logs 采集](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-logs-collection.html)
 

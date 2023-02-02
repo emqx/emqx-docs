@@ -77,7 +77,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 容器化部署是体验 EMQX 的最快方式，因此本节将以容器化部署为例，带您开始完整的 EMQX 使用旅程。 
 
-{%emqxce%}
+{% emqxce %}
 
 1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
 
@@ -85,9 +85,9 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
 
@@ -95,7 +95,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
 ```
 
-{%endemqxee%}
+{% endemqxee %}
 
 
 运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
@@ -119,7 +119,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
 
-{%emqxce%}
+{% emqxce %}
 
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
@@ -133,9 +133,9 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
    mkdir -p emqx && unzip emqx-5.0.14-macos11-amd64.zip -d emqx
    ```
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
@@ -149,7 +149,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
    mkdir -p emqx && unzip emqx-ee-5.0.0-macos11-amd64.zip -d emqx
    ```
 
-{%endemqxee%}
+{% endemqxee %}
 
 3. 运行以下命令启动 EMQX。
 
