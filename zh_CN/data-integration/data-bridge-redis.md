@@ -50,7 +50,7 @@ OK
 "Hello World"
 ```
 
-至此，您已经完成 Redis 的安装并使用 `SET` `GET` 命令验证了安装结果，更多 Redis 命令请参考 [Reedis Commands](https://redis.io/commands/)。
+至此，您已经完成 Redis 的安装并使用 `SET` `GET` 命令验证了安装结果，更多 Redis 命令请参考 [Redis Commands](https://redis.io/commands/)。
 
 ### 连接到 Redis
 
@@ -70,8 +70,7 @@ OK
 本节我们将演示如何通过 Redis 暂存每个客户端的最后一条消息。
 
 1. 完成上述 **连接到 Redis** 的配置。
-2. 通过如下 [HSET](https://redis.io/commands/hset/) 命令配置 **Redis Command 模板**，即我们将暂存每个客户端最后一条消息中的 `username`、`payload`、`timestamp` 等信息，后续这些消息可通过客户端的 `clientid` 进行检索。
-   为了便于区分，我们使用 `emqx_messages:` 前缀作为 key 的命名空间，模板如下：
+2. 配置 **Redis Command 模板**：使用 Redis [HSET](https://redis.io/commands/hset/) 命令与 hash 数据结构存储消息，数据格式以 `clientid` 为 key，存储 `username`、`payload` 和`timestamp` 等字段。为了便于与 Redis 中其他 key 区分，我们使用 `emqx_messages` 前缀作为 key 的命名空间并用 `:` 分割
 
 ```bash
 # HSET key filed value [field value...]
@@ -85,7 +84,7 @@ HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp
 
 至此我们已经完成了数据桥接创建，接下来将继续创建一条规则来指定需要写入的数据：
 
-1. 转到 Dashboard **数据集成** -> **规则**页面。
+1. 转到 Dashboard **数据集成** -> **规则**页面。此外在完成数据桥接的创建后，EMQX 会弹窗询问是否创建相应规则，您也可点击弹窗中的**创建规则**按钮前往规则页面。
 2. 点击页面右上角的**创建**。
 3. 输入规则 ID `cache_to_redis`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息暂存至 Redis，请确保规则选择出来的字段（SELECT 部分）包含所有 Redis Command 模板中用到的变量，此处规则 SQL 如下：
 

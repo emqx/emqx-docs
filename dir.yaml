@@ -155,9 +155,13 @@
         - data-integration/data-bridge-webhook
         - data-integration/data-bridge-mqtt
         - data-integration/data-bridge-kafka
-        - data-integration/data-bridge-mysql
         - data-integration/data-bridge-influxdb
-        - data-integration/data-bridge-pgsql
+        - data-integration/data-bridge-mysql
+        - data-integration/data-bridge-redis
+        - data-integration/data-bridge-gcp-pubsub
+        - data-integration/data-bridge-mongodb
+        # - data-integration/data-bridge-pgsql
+
     # TODO
     # - title_en: Examples and Tutorials
     #   title_cn: 示例和教程
