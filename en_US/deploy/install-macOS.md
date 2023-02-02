@@ -2,7 +2,7 @@
 
 This section will guide you on how to install and start EMQX on macOS with a zip file.
 
-{%emqxce%}
+{% emqxce %}
 
 :::: tabs type:card
 :::tab Intel_Chip
@@ -52,9 +52,9 @@ cd emqx && ./bin/emqx start
 
 
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 :::: tabs type:card
 :::tab Intel_Chip
@@ -103,4 +103,4 @@ cd emqx && ./bin/emqx start
 ::::
 
 
-{%endemqxee%}
+{% endemqxee %}

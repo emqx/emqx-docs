@@ -4,7 +4,7 @@
 
 支持的 CentOS/RHEL 版本：CentOS 7, CentOS 8。
 
-{%emqxce%}
+{% emqxce %}
 
 ## rpm 安装
 
@@ -70,9 +70,9 @@ mkdir -p emqx && tar -zxvf emqx-5.0.14-el8-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ## rpm 安装
 
@@ -138,4 +138,4 @@ mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-el8-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxee%}
+{% endemqxee %}

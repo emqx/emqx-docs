@@ -151,6 +151,6 @@ When you don't need the plugin, you can easily uninstall it with CLI:
 ./bin/emqx_ctl plugins uninstall {pluginName}
 ```
 
-{%emqxee%}
+{% emqxee %}
 Note: The plugins need to be reinstalled after hot upgrades. 
-{%endemqxee%}
+{% endemqxee %}

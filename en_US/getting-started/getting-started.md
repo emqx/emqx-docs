@@ -83,21 +83,21 @@ Container deployment is the quickest way to start exploring EMQX. In this sectio
 
 1. To download and start the latest version of EMQX, enter:
 
-{%emqxce%}
+{% emqxce %}
 
 ```bash
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 ```
 
-{%emqxce%}
+{% emqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ```bash
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
 ```
 
-{%emqxee%}
+{% emqxee %}
 
 Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
 
@@ -116,7 +116,7 @@ Ensure [Docker](https://www.docker.com/) is installed and running before you exe
 
 ::: tab Install EMQX with zip/tar.gz files
 
-{%emqxce%}
+{% emqxce %}
 
 You can also install EMQX with zip/tar.gz files on a computer or VM, so you can easily adjust the configurations or run performance tuning. In this section, we will use [macOS](https://www.emqx.io/downloads?os=macOS) (macOS11 amd64) as an example to illustrate the operating steps. 
 
@@ -135,9 +135,9 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
    mkdir -p emqx && unzip emqx-5.0.14-macos11-amd64.zip -d emqx
    ```
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 You can also install EMQX with zip/tar.gz files on a computer or VM, so you can easily adjust the configurations or run performance tuning. In this section, we will use [macOS](https://www.emqx.com/en/try?product=enterprise) (macOS11 amd64) as an example to illustrate the operating steps. 
 
@@ -156,7 +156,7 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
    mkdir -p emqx && unzip emqx-ee-5.0.0-macos11-amd64.zip -d emqx
    ```
 
-{%endemqxee%}
+{% endemqxee %}
 
 
 3. To run EMQX, enter:
