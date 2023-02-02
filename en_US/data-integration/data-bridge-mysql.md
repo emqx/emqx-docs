@@ -131,7 +131,7 @@ FROM
 
 ### Test
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
+Use MQTT X  to send a message to topic  `t/1`  to trigger an online/offline event. 
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MySQL" }'
