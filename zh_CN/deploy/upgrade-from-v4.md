@@ -2,7 +2,7 @@
 
 本章节提供了从 EMQX 4.x 版本迁移至 5.0.0 版本的指南，尽管 EMQX 5.0 不保证向后兼容（Backward Compatibility），但绝大部分功能运行机制没有太大的变化，你仍然可以通过手动迁移的方式来实现升级。
 
-要了解我们在 EMQX 5.0 中增加的新功能，请查看 [5.0.0 Release](https://www.emqx.com/zh/changelogs/broker/5.0.0)。
+要了解我们在 EMQX 5.0 中增加的新功能，请查看 [全新功能](../getting-started/new-features.md)。
 
 ## 日志
 

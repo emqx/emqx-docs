@@ -44,7 +44,7 @@ Telemetry reports data to by encrypting HTTP requests [https://telemetry.emqx.io
 
 For telemetry data collection codes, please refer to [apps/emqx_modules/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_modules/src/emqx_telemetry.erl). If you have any questions, please click [Issues](http://github.com/emqx/emqx/issues) to contact us.
 
-Using EMQX 5.0.9 as an example, the data transferred is as follows：
+The data transferred example is as follows：
 
 ```json
 {
