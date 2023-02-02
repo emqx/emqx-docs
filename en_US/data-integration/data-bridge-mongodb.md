@@ -53,7 +53,7 @@ db.createCollection('emqx_messages')
 6. Configure the MongoDB connection information. Input **emqx_data** as the **Database Name**, **127.0.0.1:27017** as the **Server Host**, **admin** as the **Username**, **public** as the **Password**, and **emqx_messages** as **Collection to be used**. For the other fields, you can keep the default setting. 
 7. Configure the **Payload template** to save `clientid`, `topic`, `qos`,  `timestamp`, and `payload` to MongoDB. This template will be executed via the MongoDB insert command, and the sample code is as follows:
 
-```
+```json
 {
   "clientid": "${clientid}",
   "topic": "${topic}",
@@ -73,7 +73,8 @@ db.createCollection('emqx_messages')
 -  Nested objects are allowed, when value is a JSON object:
     - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;
     - Objects will be nested and stored according to their own structure;
-    - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`. :::
+    - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`. 
+:::
 
 1. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
 2. Then click **Create** to finish the creation of the data bridge. A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** or **Data Integration** -> **Rules **on EMQX dashboard to configure rules.
