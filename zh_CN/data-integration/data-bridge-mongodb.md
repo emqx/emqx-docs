@@ -130,7 +130,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MongoDB" }'
 > db.emqx_messages.find().pretty()
 {
     "_id" : ObjectId("63db7059df489d01ed000009"),
-    "clientid" : "mqttx_c9bfbe83",
+    "clientid" : "emqx_c",
     "payload" : {
       "msg" : "hello MongoDB"
     },
@@ -146,7 +146,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MongoDB" }'
 > db.emqx_messages.find().pretty()
 {
     "_id" : ObjectId("63db7535df489d01ed000013"),
-    "clientid" : "mqttx_c9bfbe83",
+    "clientid" : "emqx_c",
     "payload" : "{ \"msg\": \"hello MongoDB\" }",
     "qos" : 0,
     "timestamp" : ISODate("2023-02-02T08:33:36.715Z"),
