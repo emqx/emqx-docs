@@ -97,7 +97,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 - [SQL 语法数据集成](./data-integration/rules.md)，实时提取、过滤、丰富和转换 MQTT 消息或内部事件为用户所需格式，并将其发送到外部数据平台
 - 通过 MQTT 与其他 Broker 或物联网平台进行双向数据桥接（如 [EMQX Cloud](https://www.emqx.com/zh/cloud)，AWS IoT Core，Azure IoT Hub）
 - 通过 WebHook 与其他应用集成
-- 支持与 40 多个云服务和企业系统无缝集成，包括 Kafka、AWS RDS、MongoDB、Oracle、SAP 以及时序数据库（限企业版）
+- 支持与多个云服务和企业系统无缝集成，包括 Kafka、InfluxDB、MySQL、Redis、GCP PubSub 以及MongoDB，更多支持即将到来（限企业版）
 
 ### 可靠性
 

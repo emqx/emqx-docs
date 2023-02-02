@@ -97,7 +97,7 @@ Add more features to MQTT:
 - [SQL syntax](./data-integration/rules.md) data integrations to extract, filter, enrich, and transform MQTT messages or internal events to formats expected by users and send them to external data platforms
 - Supports data bridging with other brokers or IoT platforms using MQTT(such as [EMQX Cloud](https://www.emqx.com/zh/cloud), AWS IoT Core, Azure IoT Hub)
 - Supports integration with other apps using WebHook
-- Integrate IoT data seamlessly with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time series databases. (EMQX Enterprise only)
+- Integrate IoT data seamlessly with cloud services and enterprise systems, including Kafka, InfluxDB, MySQL, Redis, GCP PubSub and MongoDB. More integrations are coming soon (EMQX Enterprise only)
 
 ### Reliability
 
