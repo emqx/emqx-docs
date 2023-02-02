@@ -11,7 +11,7 @@ This section is also applicable to TimescaleDB and MatrixDB.
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
 
-## Features supported
+## Features list
 
 - [Connection pool](./data-bridges.md#Connection pool)
 - [Async mode](./data-bridges.md#Async mode)
@@ -101,7 +101,8 @@ We have successfully created the data bridge to PostgreSQL, now we can continue 
   ```
 
 4. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge we just created under **Data bridge**.  
-5. Click the **Add** button to finish the setup. 
+5. Then, click the **Add** button. 
+6. Then click the **Create** button to finish the setup. 
 
 Now we have successfully created the data bridge to PostgreSQL. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
