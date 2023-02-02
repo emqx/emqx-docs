@@ -17,7 +17,7 @@ If you prefer to try EMQX Enterprise before purchasing, you can apply for a tria
 
 If you wish to extend the trial period or request support for a higher number of concurrent users, please contact our sales department.
 
-::tip
+:::tip
 
 As EMQX Enterprise 5.0 uses a different license format, please ensure that the version you are applying for is compatible. For EMQX Enterprise customers who want to upgrade to version 5.0, please contact your sales representative.
 
