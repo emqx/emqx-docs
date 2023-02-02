@@ -142,7 +142,7 @@ Use MQTT X  to send a message to topic  `t/1`  to trigger a message caching even
 mqttx pub -i emqx_c -u emqx_u -t t/1 -m '{ "msg": "hello Redis" }'
 ```
 
-Check the running status of the two data bridges, there should be one new Matched and one Sent Succesfully message. 
+Check the running status of the two data bridges, there should be one new Matched and one Sent Successfully message. 
 
 Check whether the message is cached. 
 
