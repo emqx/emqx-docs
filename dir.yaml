@@ -52,7 +52,7 @@
           edition: ce
         # - deploy/install-marketplace
     - title_en: Use license
-      title:cn: 配置 License
+      title_cn: 配置 License
       edition: ee
       path: deploy/license
     

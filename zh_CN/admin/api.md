@@ -84,8 +84,6 @@ HTTP 响应状态码能够直观的判断可能存在的问题，在此基础上
 
 ## API 文档
 
-<ClientOnly>
-  <OpenApi path="swagger.json" />
-</ClientOnly>
+启动后访问 <http://localhost:18083/api-docs/> 查看。
 
 {% endemqxee %}

@@ -36,8 +36,8 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | 是           | 是                    |
 | [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是                    |
 | [macOS](./install-macOS.md)               | macOS11, macOS12         | 是           | 是                    |
-<!-- | [Windows](./install-windows.md)           | Windows Server 2019      | 是           | 否                    | -->
-<!-- TODO 在企业版中不显示 -->
+
+<!-- TODO Windows 在企业版中不显示 -->
 
 ## 硬件规格
 

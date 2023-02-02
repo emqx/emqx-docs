@@ -88,8 +88,6 @@ When an error happens, the error code is returned in JSON format by the Body:
 {% emqxee %}
 ## API Docs
 
-<ClientOnly>
-  <OpenApi path="swagger.json" />
-</ClientOnly>
+View <http://localhost:18083/api-docs/>.
 
 {% endemqxee %}

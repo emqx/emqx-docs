@@ -37,8 +37,6 @@ The table below lists the operating systems and versions that EMQX supports.
 | [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | Yes          | Yes                   |
 | [Amazon Linux](./install-amazon-linux.md) | -                        | Yes          | Yes                   |
 | [macOS](./install-macOS.md)               | macOS11, macOS12         | Yes          | Yes                   |
-<!-- | [Windows](./install-windows.md)           | Windows Server 2019      | Yes          | No                    | -->
-<!-- TODO 在企业版中不显示 -->
 
 ## Hardware specification
 
