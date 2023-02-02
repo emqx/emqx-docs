@@ -107,7 +107,7 @@ Note: Except for the Redis Command template and rules, the other settings are th
 
 **Redis Command template**
 
-Use [HINCRBY](https://redis.io/commands/hincrby/) command below to collect the discarded messages under this topic.
+Use [HINCRBY](https://redis.io/commands/hincrby/) command below to collect the discarded messages under every topic.
 
 ```bash
 # HINCRBY key field increment
