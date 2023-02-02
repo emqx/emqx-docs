@@ -2,7 +2,7 @@
 
 本章节将指导您如何通过 zip 包在 macOS 系统中下载安装并启动 EMQX。
 
-{%emqxce%}
+{% emqxce %}
 
 :::: tabs type:card
 :::tab Intel_Chip
@@ -51,9 +51,9 @@ cd emqx && ./bin/emqx start
 ::::
 
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 :::: tabs type:card
 :::tab Intel_Chip
@@ -101,4 +101,4 @@ cd emqx && ./bin/emqx start
 :::
 ::::
 
-{%endemqxee%}
+{% endemqxee %}

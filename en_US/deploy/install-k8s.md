@@ -53,12 +53,12 @@ We will use [cert-manager](https://github.com/jetstack/cert-manager) to provisio
   ```
 
 Now we have completed the deployment of EMQX with EMQX Kubernetes Operator. On how to configure, see
-{%emqxce%}
+{% emqxce %}
 [EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxBroker.html)
-{%emqxce%}
-{%emqxee%}
+{% emqxce %}
+{% emqxee %}
 [EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html)
-{%endemqxee%}.
+{% endemqxee %}.
 
 ## Deploy on Public Cloud
 

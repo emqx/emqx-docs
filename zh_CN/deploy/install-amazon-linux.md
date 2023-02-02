@@ -2,7 +2,7 @@
 
 本章节将指导您如何在 Amazon Linux 系统中下载安装并启动 EMQX。
 
-{%emqxce%}
+{% emqxce %}
 
 ## tag.gz 安装
 
@@ -24,9 +24,9 @@ mkdir -p emqx && tar -zxvf emqx-5.0.14-elixir-amzn2-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ## tag.gz 安装
 
@@ -48,4 +48,4 @@ mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-elixir-amzn2-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxee%}
+{% endemqxee %}

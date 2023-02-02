@@ -4,7 +4,7 @@
 
 支持的 Ubuntu 版本：Ubuntu18.04, Ubuntu20.04。
 
-{%emqxce%}
+{% emqxce %}
 
 ## deb 安装
 
@@ -71,9 +71,9 @@ cd emqx && ./bin/emqx start
 ```
 
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ## deb 安装
 
@@ -139,4 +139,4 @@ mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-ubuntu20.04-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxee%}
+{% endemqxee %}

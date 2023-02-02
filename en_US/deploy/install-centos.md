@@ -7,7 +7,7 @@ Supported versions:
 - CentOS 7
 - CentOS 8
 
-{%emqxce%}
+{% emqxce %}
 
 ## Install EMQX with rpm
 
@@ -74,9 +74,9 @@ cd emqx && ./bin/emqx start
 ```
 
 
-{%endemqxce%}
+{% endemqxce %}
 
-{%emqxee%}
+{% emqxee %}
 
 ## Install EMQX with rpm
 
@@ -142,4 +142,4 @@ mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-el8-amd64.tar.gz -C emqx
 cd emqx && ./bin/emqx start
 ```
 
-{%endemqxee%}
+{% endemqxee %}

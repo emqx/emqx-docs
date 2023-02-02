@@ -149,6 +149,6 @@ make rel
 ./bin/emqx_ctl plugins uninstall {pluginName}
 ```
 
-{%emqxee%}
+{% emqxee %}
 热升级后需要重新安装插件。
-{%endemqxee%}
+{% endemqxee %}
