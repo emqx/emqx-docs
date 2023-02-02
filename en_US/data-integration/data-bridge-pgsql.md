@@ -28,7 +28,7 @@ Install PostgreSQL via Docker, and then run the docker image.
 
 ```bash
 # To start the PostgreSQL docker image and set the password as public
-docker run --name PostgreSQL -e POSTGRES_PASSWORD=public -d postgres
+docker run --name PostgreSQL -p 5432:5432 -e POSTGRES_PASSWORD=public -d postgres
 
 # Access the container
 docker exec -it PostgreSQL bash

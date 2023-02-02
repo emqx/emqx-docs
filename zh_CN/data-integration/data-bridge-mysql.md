@@ -27,7 +27,7 @@
 
 ```bash
 # 启动一个 MySQL 容器并设置密码为 public
-docker run --name mysql -e MYSQL_ROOT_PASSWORD=public -d mysql
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=public -d mysql
 
 # 进入容器
 docker exec -it mysql bash
