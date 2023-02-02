@@ -55,7 +55,7 @@ db.createCollection('emqx_messages')
 4. 输入数据桥接名称，要求是大小写英文字母或数字组合。
 5. **部署模式** 与 **SRV 记录**根据情况选择，此处选择 **single** 与不启用。
 6. 输入 MongoDB 连接信息，**数据库名字**填写 **emqx_data**，**服务器地址**填写 **127.0.0.1:27017**，**用户名**填写 **admin**，**密码**填写 **public**，**集合**填写 **emqx_messages**，其余字段使用默认值即可。
-7. 配置 **有效载荷模板**，通过 MongoDB insert 操作将 `clientid`、`topic`、`qos`、`timestamp`、`payload` 字段存储到 MongoDB 中，对应模板如下：
+7. 配置 **有效载荷模板**，将 `clientid`、`topic`、`qos`、`timestamp`、`payload` 字段存储到 MongoDB 中，该模板将通过 MongoDB insert 命令执行，对应模板如下：
 
 ```json
 {
