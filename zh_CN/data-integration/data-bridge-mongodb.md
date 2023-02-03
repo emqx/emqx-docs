@@ -102,7 +102,7 @@ FROM
 SELECT
   *,
   mongo_date(timestamp) as timestamp,
-  json_decode(payload) as payload
+  json_encode(payload) as payload
 FROM
   "t/#"
 ```

@@ -94,7 +94,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 {% emqxee %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
 ```
 
 {% emqxee %}
@@ -147,13 +147,13 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
 1. To download the zip file, enter:
 
    ```
-   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos11-amd64.zip
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
    ```
 
 2. To install EMQX, enter:
 
    ```
-   mkdir -p emqx && unzip emqx-ee-5.0.0-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos11-amd64.zip -d emqx
    ```
 
 {% endemqxee %}

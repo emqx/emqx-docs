@@ -76,16 +76,16 @@ cd emqx && ./bin/emqx start
 
 ## rpm 安装
 
-1. 下载 [emqx-ee-5.0.0-el8-amd64.rpm](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-el8-amd64.rpm)
+1. 下载 [emqx-enterprise-5.0.0-el8-amd64.rpm](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.rpm)
 
 ```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-el8-amd64.rpm
+wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.rpm
 ```
 
 2. 安装
 
 ```bash
-sudo yum install ./emqx-ee-5.0.0-el8-amd64.rpm -y
+sudo yum install ./emqx-enterprise-5.0.0-el8-amd64.rpm -y
 ```
 
 3. 启动
@@ -120,16 +120,16 @@ sudo yum install ./emqx-ee-5.0.0-el8-amd64.rpm -y
 
 ## tag.gz 安装
 
-1. 下载 [emqx-ee-5.0.0-el8-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-el8-amd64.tar.gz)
+1. 下载 [emqx-enterprise-5.0.0-el8-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.tar.gz)
 
 ```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-el8-amd64.tar.gz
+wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.tar.gz
 ```
 
 2. 解压程序包
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-el8-amd64.tar.gz -C emqx
+mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-el8-amd64.tar.gz -C emqx
 ```
 
 3. 启动

@@ -30,16 +30,16 @@ cd emqx && ./bin/emqx start
 
 ## tag.gz 安装
 
-1. 下载 [emqx-ee-5.0.0-elixir-amzn2-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-elixir-amzn2-amd64.tar.gz)
+1. 下载 [emqx-enterprise-5.0.0-elixir-amzn2-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-elixir-amzn2-amd64.tar.gz)
 
 ```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-elixir-amzn2-amd64.tar.gz
+wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-elixir-amzn2-amd64.tar.gz
 ```
 
 2. 解压程序包
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-elixir-amzn2-amd64.tar.gz -C emqx
+mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-elixir-amzn2-amd64.tar.gz -C emqx
 ```
 
 3. 启动

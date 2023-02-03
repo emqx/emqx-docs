@@ -81,16 +81,16 @@ cd emqx && ./bin/emqx start
 
 ## Install EMQX with deb
 
-1. To download [emqx-ee-5.0.0-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-ubuntu20.04-amd64.deb), run:
+1. To download [emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb), run:
 
 ```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-ubuntu20.04-amd64.deb
+wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
 ```
 
 2. To install EMQX, run:
 
 ```bash
-sudo apt install ./emqx-ee-5.0.0-ubuntu20.04-amd64.deb
+sudo apt install ./emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
 ```
 
 3. We offered different options to start EMQX:
@@ -125,16 +125,16 @@ sudo apt install ./emqx-ee-5.0.0-ubuntu20.04-amd64.deb
 
 ## Install EMQX with tag.gz
 
-1. To download [emqx-ee-5.0.0-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-ubuntu20.04-amd64.tar.gz), run:
+1. To download [emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz), run:
 
 ```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-ubuntu20.04-amd64.tar.gz
+wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz
 ```
 
 2. To unzip the package, run:
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-ee-5.0.0-ubuntu20.04-amd64.tar.gz -C emqx
+mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz -C emqx
 ```
 
 3. To start EMQX, run:

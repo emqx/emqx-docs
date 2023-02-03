@@ -91,7 +91,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-ee:latest
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
 ```
 
 {% endemqxee %}
@@ -139,13 +139,13 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```
-      wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos11-amd64.zip
+      wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```
-   mkdir -p emqx && unzip emqx-ee-5.0.0-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos11-amd64.zip -d emqx
    ```
 
 {% endemqxee %}

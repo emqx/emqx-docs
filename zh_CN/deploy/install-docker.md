@@ -24,7 +24,7 @@ docker pull emqx:5.0.14
 {% emqxee %}
 
 ```bash
-docker pull emqx/emqx-ee:5.0.0
+docker pull emqx/emqx-enterprise:5.0.0
 ```
 
 {% endemqxee %}
@@ -44,10 +44,10 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 {% emqxee %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-ee:5.0.0
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:5.0.0
 ```
 
-有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx/emqx-ee](https://hub.docker.com/r/emqx/emqx-ee)。
+有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
 
 {% endemqxee %}
 
@@ -124,7 +124,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx/emqx-ee:5.0.0
+    image: emqx/emqx-enterprise:5.0.0
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.com"
@@ -149,7 +149,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx/emqx-ee:5.0.0
+    image: emqx/emqx-enterprise:5.0.0
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.com"

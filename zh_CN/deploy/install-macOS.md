@@ -58,16 +58,16 @@ cd emqx && ./bin/emqx start
 :::: tabs type:card
 :::tab Intel_Chip
 
-1. 下载 [emqx-ee-5.0.0-macos11-amd64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos11-amd64.zip)
+1. 下载 [emqx-enterprise-5.0.0-macos11-amd64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip)
 
 ```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos11-amd64.zip
+wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
 ```
 
 2. 解压程序包
 
 ```bash
-unzip emqx-ee-5.0.0-macos11-amd64.zip
+unzip emqx-enterprise-5.0.0-macos11-amd64.zip
 ```
 
 3. 启动
@@ -80,16 +80,16 @@ cd emqx && ./bin/emqx start
 
 :::tab Apple_Silicon
 
-1. 下载 [emqx-ee-5.0.0-macos12-arm64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos12-arm64.zip)
+1. 下载 [emqx-enterprise-5.0.0-macos12-arm64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip)
 
 ```bash
-wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos12-arm64.zip
+wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip
 ```
 
 2. 解压程序包
 
 ```bash
-unzip emqx-ee-5.0.0-macos12-arm64.zip
+unzip emqx-enterprise-5.0.0-macos12-arm64.zip
 ```
 
 3. 启动

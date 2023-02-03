@@ -59,16 +59,16 @@ cd emqx && ./bin/emqx start
 :::: tabs type:card
 :::tab Intel_Chip
 
-1. To download [emqx-ee-5.0.0-macos11-amd64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos11-amd64.zip), run:
+1. To download [emqx-enterprise-5.0.0-macos11-amd64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip), run:
 
 ```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos11-amd64.zip
+wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
 ```
 
 2. To unzip the package, run:
 
 ```bash
-unzip emqx-ee-5.0.0-macos11-amd64.zip
+unzip emqx-enterprise-5.0.0-macos11-amd64.zip
 ```
 
 3. To start EMQX, run:
@@ -81,16 +81,16 @@ cd emqx && ./bin/emqx start
 
 :::tab Apple_Silicon
 
-1. To download [emqx-ee-5.0.0-macos12-arm64.zip](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos12-arm64.zip), run:
+1. To download [emqx-enterprise-5.0.0-macos12-arm64.zip](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip), run:
 
 ```bash
-https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-ee-5.0.0-macos12-arm64.zip
+https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip
 ```
 
 2. To unzip the package, run:
 
 ```bash
-unzip emqx-ee-5.0.0-macos12-arm64.zip
+unzip emqx-enterprise-5.0.0-macos12-arm64.zip
 ```
 
 3. To start EMQX, run:

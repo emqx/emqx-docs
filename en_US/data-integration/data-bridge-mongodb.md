@@ -97,7 +97,7 @@ You can use the SQL below to save `timestamp` as data type and the `payload`  in
 SELECT
   *,
   mongo_date(timestamp) as timestamp,
-  json_decode(payload) as payload
+  json_encode(payload) as payload
 FROM
   "t/#"
 ```
