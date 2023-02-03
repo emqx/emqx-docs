@@ -90,8 +90,7 @@ On the "Response Action" interface, select "Add", and then select "Save Data to 
 
 Fill in the action parameters:
 
-The "Save data to SQLServer" action requires two parameters:
-1). SQL template. In this example, we insert a piece of data into SQLServer, and the SQL template is:
+The "Save data to SQLServer" action requires two parameters: resource ID and SQL template. In this example, we insert a piece of data into SQLServer, and the SQL template is:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')

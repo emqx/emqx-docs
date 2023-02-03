@@ -90,10 +90,7 @@ SELECT * FROM "t/#"
 
 填写动作参数:
 
-“保存数据到 SQLServer” 动作需要两个参数：
-4
-2). SQL 模板。这个例子里我们向 SQLServer 插入一条数据，SQL
-​    模板为:
+“保存数据到 SQLServer” 动作需要两个参数：资源 ID 与 SQL 模板。这里，我们将向 SQLServer 插入一条数据，SQL模板为:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
