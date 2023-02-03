@@ -25,6 +25,10 @@ If you choose a manually create a cluster, you will need to manually configure e
 
 Compared with automatic clustering, you can customize the network topology with manual clustering. It is especially suitable when the automatic clustering mechanism is unavailable or inappropriate.
 
+:::tip
+Manual clustering only can be only on core nodes. For core-replica deployment architecture, only auto clustering is supported.
+:::
+
 Suppose there are two nodes, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`, and we can follow the steps below to create a cluster for these two nodes manually:
 
 1. Set the cluster discovery strategy to `manual`:

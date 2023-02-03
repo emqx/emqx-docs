@@ -335,6 +335,7 @@
 - title_en: Telemetry
   title_cn: 遥测
   path: telemetry/telemetry
+  edition: ce
 
 - title_en: FAQ
   title_cn: 常见问题解答
