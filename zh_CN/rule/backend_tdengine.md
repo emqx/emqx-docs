@@ -94,7 +94,7 @@ insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values
 
 为支持各种不同类型平台的开发，TDengine 提供符合 REST 设计标准的 API。通过 [RESTful Connector](https://www.taosdata.com/cn/documentation/connector/#RESTful-Connector) 提供了最简单的连接方式，即使用 HTTP 请求携带认证信息与要执行的 SQL 操作 TDengine。
 
-EMQX 规则引擎中有功能强大的**发送数据到 Web 服务功能**，可以实现无缝实现上述操作。
+您可通过 EMQX 规则引擎中的**发送数据到 Web 服务**功能实现上述操作。
 
 关联动作:
 
@@ -111,7 +111,7 @@ EMQX 规则引擎中有功能强大的***\*发送数据到 Web 服务功能\****
 3. Path：写入数据路径 `/rest/sql`
 4. Headers：使用 `Basic` 认证，默认用户名密码 "root:taosdata" `base64` 编码 `cm9vdDp0YW9zZGF0YQ==`
 5. Body：请求体
-  这个例子里我们向 TDengine 插入一条数据，应当在请求体内拼接携带 INSERT SQL 。注意我们应当在 SQL 中指定数据库名，字符类型也要用单引号括起来，消息内容模板为：
+    这个例子里我们向 TDengine 插入一条数据，应当在请求体内拼接携带 INSERT SQL 。注意我们应当在 SQL 中指定数据库名，字符类型也要用单引号括起来，消息内容模板为：
 
 ```sql
 -- 注意：topic 处添加了作为标识，因为此示例中我们会有两个资源写入 TDengine，标识区分了原生方式与 Web Server 写入的数据
