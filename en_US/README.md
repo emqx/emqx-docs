@@ -111,7 +111,7 @@ Add more features to MQTT:
 - [Cluster status and metrics query](./observability/metrics-and-stats.md)
 - Integration with [Prometheus](./observability/prometheus.md)/[StatsD](./observability/statsd.md)
 - [Automatic network partition healing](./deploy/cluster/introduction.md)
-- [Online log based tracing](./observability/tracer.md)]
+- [Online log based tracing](./observability/tracer.md)
 - Erlang runtime tracing tools
 
 ### Extensibility
