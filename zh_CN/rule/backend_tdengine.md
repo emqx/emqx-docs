@@ -100,7 +100,7 @@ insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values
 
 在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 Web 服务“。
 
-EMQX 规则引擎中有功能强大的***\*发送数据到 Web 服务功能\****，可以实现无缝实现上述操作。
+您可以通过 EMQX 规则引擎中的**发送数据到 Web 服务功能**，实现上述操作。
 
 填写动作参数:
 
