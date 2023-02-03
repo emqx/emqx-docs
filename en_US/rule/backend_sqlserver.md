@@ -90,7 +90,9 @@ On the "Response Action" interface, select "Add", and then select "Save Data to 
 
 Fill in the action parameters:
 
-The "Save data to SQLServer" action requires two parameters: resource ID and SQL template. In this example, we insert a piece of data into SQLServer, and the SQL template is:
+The "Save data to SQLServer" action requires two parameters: SQL template and resource ID. In this example, we insert a piece of data into SQLServer, 
+
+The SQL template is:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
@@ -98,7 +100,7 @@ insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', 
 
 ![image](./assets/rule-engine/sqlserver3.png)
 
-2). The ID of the associated resource. Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQLServer resource:
+2). Resource ID: Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQLServer resource:
 
 Fill in the resource configuration:
 Fill in “mqtt” for database name, “sa” for user name, and “mqtt_public” for password
