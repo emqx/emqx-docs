@@ -5,7 +5,7 @@ This section will guide you on how to install and start EMQX on macOS with a zip
 {% emqxce %}
 
 :::: tabs type:card
-:::tab Intel_Chip
+::: tab Intel_Chip
 
 1. To download [emqx-5.0.14-macos11-amd64.zip](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos11-amd64.zip), run:
 
@@ -27,7 +27,7 @@ cd emqx && ./bin/emqx start
 
 :::
 
-:::tab Apple_Silicon
+::: tab Apple_Silicon
 
 1. To download [emqx-5.0.14-macos12-arm64.zip](https://www.emqx.com/en/downloads/broker/v5.0.14/emqx-5.0.14-macos12-arm64.zip), run:
 
@@ -57,7 +57,7 @@ cd emqx && ./bin/emqx start
 {% emqxee %}
 
 :::: tabs type:card
-:::tab Intel_Chip
+::: tab Intel_Chip
 
 1. To download [emqx-enterprise-5.0.0-macos11-amd64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip), run:
 
@@ -79,7 +79,7 @@ cd emqx && ./bin/emqx start
 
 :::
 
-:::tab Apple_Silicon
+::: tab Apple_Silicon
 
 1. To download [emqx-enterprise-5.0.0-macos12-arm64.zip](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip), run:
 

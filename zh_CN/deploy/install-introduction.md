@@ -19,6 +19,7 @@
 EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQ 官网提供下载，您可点击以下链接下载：
 
 官网下载：<https://www.emqx.com/zh/try?product=enterprise>
+
 {% endemqxee %}
 
 :::tip

@@ -19,6 +19,7 @@ You can also download the alpha, beta, or rc versions from our Github pages.
 EMQX will release the corresponding Docker image and the installation packages for different operating systems or platforms in each release. You may click the line below to download.
 
 EMQX website: <https://www.emqx.com/zh/try?product=enterprise>
+
 {% endemqxee %}
 
 :::tip

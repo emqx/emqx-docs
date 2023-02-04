@@ -5,7 +5,7 @@
 {% emqxce %}
 
 :::: tabs type:card
-:::tab Intel_Chip
+::: tab Intel_Chip
 
 1. 下载 [emqx-5.0.14-macos11-amd64.zip](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos11-amd64.zip)
 
@@ -27,7 +27,7 @@ cd emqx && ./bin/emqx start
 
 :::
 
-:::tab Apple_Silicon
+::: tab Apple_Silicon
 
 1. 下载 [emqx-5.0.14-macos12-arm64.zip](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos12-arm64.zip)
 
@@ -56,7 +56,7 @@ cd emqx && ./bin/emqx start
 {% emqxee %}
 
 :::: tabs type:card
-:::tab Intel_Chip
+::: tab Intel_Chip
 
 1. 下载 [emqx-enterprise-5.0.0-macos11-amd64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip)
 
@@ -78,7 +78,7 @@ cd emqx && ./bin/emqx start
 
 :::
 
-:::tab Apple_Silicon
+::: tab Apple_Silicon
 
 1. 下载 [emqx-enterprise-5.0.0-macos12-arm64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip)
 
