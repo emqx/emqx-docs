@@ -84,3 +84,4 @@ When an error happens, the error code is returned in JSON format by the Body:
 | UPDATE_FAILED                                  | Update fails                                                 |
 | REST_FAILED                                    | Reset source or configuration fails                          |
 | CLIENT_NOT_RESPONSE                            | Client not responding                                        |
+

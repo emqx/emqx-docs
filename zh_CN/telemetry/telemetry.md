@@ -12,7 +12,7 @@ EMQ 通过遥测收集有关 EMQX 使用情况的信息，这种功能旨在为�
 
 您可以打开配置文件 `etc/emqx.conf`，通过添加以下配置项永久性的禁用遥测：
 
-```hocon
+```
 telemetry {
  enable = false
 }

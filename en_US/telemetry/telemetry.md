@@ -12,7 +12,7 @@ Telemetry is enabled by default. Some people may feel uncomfortable collecting s
 
 You can permanently disable telemetry through the configuration file `etc/emqx.conf`.
 
-```hocon
+```
 telemetry {
  enable = false
 }
