@@ -243,7 +243,7 @@ and then downloaded into this repo with some rewrites.
 To update the file:
 
 * Start EMQX v5 node
-* Execute the script `./rewrite-swagger.sh`
+* Execute the script `./rewrite-swagger.sh ce | ee`
 * Commit the changed swagger.json file to this git repo
 * Send a pull request
 
