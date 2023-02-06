@@ -1,6 +1,6 @@
 # Configuration Files
 
-<!--5.0.12-->
+<!--5.0.16-g71f8e103-->
 EMQX configuration files are in [HOCON](https://github.com/emqx/hocon) format.
 HOCON, or Human-Optimized Config Object Notation is a format for human-readable data,
 and a superset of JSON.
@@ -317,7 +317,13 @@ ciphers =
     "RSA-PSK-AES128-GCM-SHA256",
     "RSA-PSK-AES128-CBC-SHA256",
     "RSA-PSK-AES256-CBC-SHA",
-    "RSA-PSK-AES128-CBC-SHA"
+    "RSA-PSK-AES128-CBC-SHA",
+    "PSK-AES256-GCM-SHA384",
+    "PSK-AES128-GCM-SHA256",
+    "PSK-AES256-CBC-SHA384",
+    "PSK-AES256-CBC-SHA",
+    "PSK-AES128-CBC-SHA256",
+    "PSK-AES128-CBC-SHA"
   ]
 ```
 
@@ -510,6 +516,40 @@ ciphers =
 
 
 
+- api_key: <code>[api_key](#api_key)</code>
+
+
+
+
+## api_key
+API Key, can be used to request API other than the management API key and the Dashboard user management API
+
+
+**Config paths**
+
+ - <code>api_key</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_API_KEY</code>
+
+
+
+**Fields**
+
+- bootstrap_file: <code>binary()</code>
+  * default: 
+  `""`
+
+  Bootstrap file is used to add an api_key when emqx is launched,
+        the format is:
+         ```
+         7e729ae70d23144b:2QILI9AcQ9BYlVqLDHQNWN2saIjBV4egr1CZneTNKr9CpK
+         ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL
+         ```
+
+
 
 ## authz:file
 Authorization using a static file.
@@ -617,10 +657,7 @@ Authorization using an external HTTP server (via GET requests).
 
 - request: <code>[connector-http:request](#connector-http-request)</code>
 
-
-  If the request is provided, the caller can send HTTP requests via
-  <code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code>
-
+  Configure HTTP request parameters.
 
 - retry_interval: <code>emqx_schema:duration()</code>
 
@@ -633,8 +670,6 @@ Authorization using an external HTTP server (via GET requests).
   SSL connection settings.
 
 - method: <code>get</code>
-  * default: 
-  `get`
 
   HTTP method.
 
@@ -718,10 +753,7 @@ Authorization using an external HTTP server (via POST requests).
 
 - request: <code>[connector-http:request](#connector-http-request)</code>
 
-
-  If the request is provided, the caller can send HTTP requests via
-  <code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code>
-
+  Configure HTTP request parameters.
 
 - retry_interval: <code>emqx_schema:duration()</code>
 
@@ -734,8 +766,6 @@ Authorization using an external HTTP server (via POST requests).
   SSL connection settings.
 
 - method: <code>post</code>
-  * default: 
-  `post`
 
   HTTP method.
 
@@ -829,9 +859,9 @@ Authorization using a MongoDB replica set.
   * default: 
   `rs`
 
-  Replica set.
+  Replica set. Must be set to 'rs' when MongoDB server is running in 'replica set' mode.
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -866,7 +896,7 @@ Authorization using a MongoDB replica set.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -941,9 +971,9 @@ Authorization using a sharded MongoDB cluster.
   * default: 
   `sharded`
 
-  Sharded cluster.
+  Sharded cluster. Must be set to 'sharded' when MongoDB server is running in 'sharded' mode.
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -968,7 +998,7 @@ Authorization using a sharded MongoDB cluster.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -1043,9 +1073,9 @@ Authorization using a single MongoDB instance.
   * default: 
   `single`
 
-  Standalone instance.
+  Standalone instance. Must be set to 'single' when MongoDB server is running in standalone mode.
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -1069,7 +1099,7 @@ Authorization using a single MongoDB instance.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -1125,7 +1155,7 @@ Authorization using a MySQL database.
 
   Set to <code>true</code> or <code>false</code> to disable this ACL provider
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -1141,9 +1171,11 @@ Authorization using a MySQL database.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
+  * default: 
+  `"root"`
 
   EMQX's username in the external database.
 
@@ -1152,10 +1184,8 @@ Authorization using a MySQL database.
   EMQX's password in the external database.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -1199,7 +1229,7 @@ Authorization using a PostgreSQL database.
 
   Set to <code>true</code> or <code>false</code> to disable this ACL provider
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -1215,7 +1245,7 @@ Authorization using a PostgreSQL database.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -1226,10 +1256,8 @@ Authorization using a PostgreSQL database.
   EMQX's password in the external database.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -1273,36 +1301,34 @@ Authorization using a Redis cluster.
 
   Set to <code>true</code> or <code>false</code> to disable this ACL provider
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
   For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
   A host entry has the following form: `Host[:Port]`.
-  The MongoDB default port 27017 is used if `[:Port]` is not specified.
+  The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 - redis_type: <code>cluster</code>
   * default: 
   `cluster`
 
-  Cluster mode
+  Cluster mode. Must be set to 'cluster' when Redis server is running in clustered mode.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - password: <code>binary()</code>
 
   EMQX's password in the external database.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -1342,20 +1368,20 @@ Authorization using a Redis Sentinel.
 
   Set to <code>true</code> or <code>false</code> to disable this ACL provider
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
   For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
   A host entry has the following form: `Host[:Port]`.
-  The MongoDB default port 27017 is used if `[:Port]` is not specified.
+  The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 - redis_type: <code>sentinel</code>
   * default: 
   `sentinel`
 
-  Sentinel mode
+  Sentinel mode. Must be set to 'sentinel' when Redis server is running in sentinel mode.
 
 - sentinel: <code>string()</code>
 
@@ -1365,7 +1391,7 @@ Authorization using a Redis Sentinel.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - password: <code>binary()</code>
 
@@ -1378,10 +1404,8 @@ Authorization using a Redis Sentinel.
   Redis database ID.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -1421,7 +1445,7 @@ Authorization using a single Redis instance.
 
   Set to <code>true</code> or <code>false</code> to disable this ACL provider
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -1433,13 +1457,13 @@ Authorization using a single Redis instance.
   * default: 
   `single`
 
-  Single mode
+  Single mode. Must be set to 'single' when Redis server is running in single mode.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - password: <code>binary()</code>
 
@@ -1452,10 +1476,8 @@ Authorization using a single Redis instance.
   Redis database ID.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -1511,6 +1533,42 @@ Settings for the alarms.
 
 
 
+## broker:authz_cache
+Settings for the authorization cache.
+
+
+**Config paths**
+
+ - <code>authorization.cache</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_AUTHORIZATION__CACHE</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  Enable or disable the authorization cache.
+
+- max_size: <code>1..1048576</code>
+  * default: 
+  `32`
+
+  Maximum number of cached items.
+
+- ttl: <code>emqx_schema:duration()</code>
+  * default: 
+  `"1m"`
+
+  Time to live for the cached data.  
+
+
 ## broker
 Message broker options.
 
@@ -1560,6 +1618,7 @@ Message broker options.
   * default: 
   `false`
 
+  Deprecated, will be removed in 5.1.
   Enable/disable shared dispatch acknowledgement for QoS 1 and QoS 2 messages.
   This should allow messages to be dispatched to a different subscriber in the group in case the picked (based on `shared_subscription_strategy`) subscriber is offline.
 
@@ -1623,42 +1682,6 @@ Broker performance tuning parameters.
 
   NOTE: This is a cluster-wide configuration. It requires all nodes to be stopped before changing it.
 
-
-
-## broker:cache
-Settings for the authorization cache.
-
-
-**Config paths**
-
- - <code>authorization.cache</code>
-
-
-**Env overrides**
-
- - <code>EMQX_AUTHORIZATION__CACHE</code>
-
-
-
-**Fields**
-
-- enable: <code>boolean()</code>
-  * default: 
-  `true`
-
-  Enable or disable the authorization cache.
-
-- max_size: <code>1..1048576</code>
-  * default: 
-  `32`
-
-  Maximum number of cached items.
-
-- ttl: <code>emqx_schema:duration()</code>
-  * default: 
-  `"1m"`
-
-  Time to live for the cached data.  
 
 
 ## broker:conn_congestion
@@ -2400,7 +2423,12 @@ in <code>zone</code> configs
   * default: 
   `"15s"`
 
-  After the TCP connection is established, if the MQTT CONNECT packet from the client is not received within the time specified by <code>idle_timeout</code>, the connection will be disconnected.
+  After the TCP connection is established, if the MQTT CONNECT packet from the client is
+  not received within the time specified by <code>idle_timeout</code>, the connection will be disconnected.
+  After the CONNECT packet has been accepted by EMQX, if the connection idles for this long time,
+  then the Erlang process is put to hibernation to save OS resources. Note: long <code>idle_timeout</code>
+  interval may impose risk at the system if large number of malicious clients only establish connections
+  but do not send any data.
 
 - max_packet_size: <code>emqx_schema:bytesize()</code>
   * default: 
@@ -2700,7 +2728,7 @@ Settings for the MQTT over QUIC listener.
 
 - max_connections: <code>infinity | pos_integer()</code>
   * default: 
-  `infinity`
+  `"infinity"`
 
   The maximum number of concurrent connections allowed by the listener. 
 
@@ -2755,7 +2783,7 @@ Settings for the MQTT over QUIC listener.
   Set <code>true</code> (default) to enable client authentication on this listener, the authentication
   process goes through the configured authentication chain.
   When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
   denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
   anonymous clients early.
 
@@ -2800,7 +2828,7 @@ Settings for the MQTT over SSL listener.
 
 - max_connections: <code>infinity | pos_integer()</code>
   * default: 
-  `infinity`
+  `"infinity"`
 
   The maximum number of concurrent connections allowed by the listener. 
 
@@ -2855,7 +2883,7 @@ Settings for the MQTT over SSL listener.
   Set <code>true</code> (default) to enable client authentication on this listener, the authentication
   process goes through the configured authentication chain.
   When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
   denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
   anonymous clients early.
 
@@ -2942,7 +2970,7 @@ Settings for the MQTT over TCP listener.
 
 - max_connections: <code>infinity | pos_integer()</code>
   * default: 
-  `infinity`
+  `"infinity"`
 
   The maximum number of concurrent connections allowed by the listener. 
 
@@ -2997,7 +3025,7 @@ Settings for the MQTT over TCP listener.
   Set <code>true</code> (default) to enable client authentication on this listener, the authentication
   process goes through the configured authentication chain.
   When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
   denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
   anonymous clients early.
 
@@ -3080,7 +3108,7 @@ Settings for the MQTT over WebSocket listener.
 
 - max_connections: <code>infinity | pos_integer()</code>
   * default: 
-  `infinity`
+  `"infinity"`
 
   The maximum number of concurrent connections allowed by the listener. 
 
@@ -3135,7 +3163,7 @@ Settings for the MQTT over WebSocket listener.
   Set <code>true</code> (default) to enable client authentication on this listener, the authentication
   process goes through the configured authentication chain.
   When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
   denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
   anonymous clients early.
 
@@ -3222,7 +3250,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 - max_connections: <code>infinity | pos_integer()</code>
   * default: 
-  `infinity`
+  `"infinity"`
 
   The maximum number of concurrent connections allowed by the listener. 
 
@@ -3277,7 +3305,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   Set <code>true</code> (default) to enable client authentication on this listener, the authentication
   process goes through the configured authentication chain.
   When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-  When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be
+  When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
   denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
   anonymous clients early.
 
@@ -3357,7 +3385,7 @@ disables some features (such as accepting new connections) when the load is high
   * default: 
   `1`
 
-  When at high load, some unimportant tasks could be delayed for execution, here set the duration in milliseconds precision.
+  The maximum duration of delay for background task execution during high load conditions.
 
 - backoff_gc: <code>boolean()</code>
   * default: 
@@ -4054,31 +4082,43 @@ This part of the configuration is responsible for collecting
   * default: 
   `disabled`
 
-  Enable Long GC monitoring.
+  When an Erlang process spends long time to perform garbage collection, a warning level <code>long_gc</code> log is emitted,
+  and an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</code>.
+
 
 - long_schedule: <code>disabled | emqx_schema:duration()</code>
   * default: 
   `"240ms"`
 
-  Enable Long Schedule monitoring.
+  When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,
+  and an MQTT message is published to the system topic <code>$SYS/sysmon/long_schedule</code>.
+
 
 - large_heap: <code>disabled | emqx_schema:bytesize()</code>
   * default: 
   `"32MB"`
 
-  Enable Large Heap monitoring.
+  When an Erlang process consumed a large amount of memory for its heap space,
+  the system will write a warning level <code>large_heap</code> log, and an MQTT message is published to
+  the system topic <code>$SYS/sysmon/large_heap</code>.
+
 
 - busy_dist_port: <code>boolean()</code>
   * default: 
   `true`
 
-  Enable Busy Distribution Port monitoring.
+  When the RPC connection used to communicate with other nodes in the cluster is overloaded,
+  there will be a <code>busy_dist_port</code> warning log,
+  and an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_port</code>.
+
 
 - busy_port: <code>boolean()</code>
   * default: 
   `true`
 
-  Enable Busy Port monitoring.
+  When a port (e.g. TCP socket) is overloaded, there will be a <code>busy_port</code> warning log,
+  and an MQTT message is published to the system topic <code>$SYS/sysmon/busy_port</code>.
+
 
 
 ## broker:tcp_opts
@@ -4469,19 +4509,22 @@ Configuration for EMQX dashboard.
 
   The initial default password for dashboard 'admin' user.
   For safety, it should be changed as soon as possible.
+  This value is not valid when you log in to Dashboard for the first time via the web
+  and change to a complex password as prompted.
+
 
 - sample_interval: <code>emqx_schema:duration_s()</code>
   * default: 
   `"10s"`
 
   How often to update metrics displayed in the dashboard.
-  Note: `sample_interval` should be a divisor of 60.
+  Note: `sample_interval` should be a divisor of 60, default is 10s.
 
 - token_expired_time: <code>emqx_schema:duration()</code>
   * default: 
   `"60m"`
 
-  JWT token expiration time.
+  JWT token expiration time. Default is 60 minutes
 
 - cors: <code>boolean()</code>
   * default: 
@@ -4498,8 +4541,10 @@ Configuration for EMQX dashboard.
   Internationalization language support.
 
 - bootstrap_users_file: <code>binary()</code>
+  * default: 
+  `""`
 
-  Initialize users file.
+  Deprecated, use api_key.bootstrap_file.
 
 
 ## dashboard:http
@@ -4533,9 +4578,9 @@ Configuration for the dashboard listener (plaintext).
 
 - num_acceptors: <code>integer()</code>
   * default: 
-  `4`
+  `20`
 
-  Socket acceptor pool size for TCP protocols.
+  Socket acceptor pool size for TCP protocols. Default is the number of schedulers online
 
 - max_connections: <code>integer()</code>
   * default: 
@@ -4551,7 +4596,7 @@ Configuration for the dashboard listener (plaintext).
 
 - send_timeout: <code>emqx_schema:duration()</code>
   * default: 
-  `"5s"`
+  `"10s"`
 
   Send timeout for the socket.
 
@@ -4566,6 +4611,7 @@ Configuration for the dashboard listener (plaintext).
   `false`
 
   Disable IPv4-to-IPv6 mapping for the listener.
+  The configuration is only valid when the inet6 is true.
 
 
 ## dashboard:https
@@ -4599,9 +4645,9 @@ Configuration for the dashboard listener (TLS).
 
 - num_acceptors: <code>integer()</code>
   * default: 
-  `4`
+  `20`
 
-  Socket acceptor pool size for TCP protocols.
+  Socket acceptor pool size for TCP protocols. Default is the number of schedulers online
 
 - max_connections: <code>integer()</code>
   * default: 
@@ -4617,7 +4663,7 @@ Configuration for the dashboard listener (TLS).
 
 - send_timeout: <code>emqx_schema:duration()</code>
   * default: 
-  `"5s"`
+  `"10s"`
 
   Send timeout for the socket.
 
@@ -4632,6 +4678,7 @@ Configuration for the dashboard listener (TLS).
   `false`
 
   Disable IPv4-to-IPv6 mapping for the listener.
+  The configuration is only valid when the inet6 is true.
 
 - cacertfile: <code>binary()</code>
 
@@ -7663,19 +7710,13 @@ The config for MQTT Bridges.
   topic filters for <code>remote.topic</code> of ingress connections.
 
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
   The host and port of the remote MQTT broker
 
-- reconnect_interval: <code>string()</code>
-  * default: 
-  `"15s"`
+- clientid_prefix: <code>binary()</code>
 
-  Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,
-  - `s` for seconds,
-  - `m` for minutes,
-  - `h` for hours;
-  <br/>or combination of whereof: `1h5m0s`
+  Optional prefix to prepend to the clientid used by egress bridges.
 
 - proto_ver: <code>v3 | v4 | v5</code>
   * default: 
@@ -7700,12 +7741,6 @@ The config for MQTT Bridges.
 - password: <code>binary()</code>
 
   The password of the MQTT protocol
-
-- clean_start: <code>boolean()</code>
-  * default: 
-  `true`
-
-  The clean-start or the clean-session of the MQTT protocol
 
 - keepalive: <code>string()</code>
   * default: 
@@ -7816,10 +7851,7 @@ Configuration for an HTTP bridge.
 
 - request: <code>[connector-http:request](#connector-http-request)</code>
 
-
-  If the request is provided, the caller can send HTTP requests via
-  <code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code>
-
+  Configure HTTP request parameters.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -7837,6 +7869,10 @@ Configuration for an HTTP bridge.
   <code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code>
   is not allowed.
 
+
+- direction: <code>egress</code>
+
+  Deprecated since 5.0.12.
 
 - local_topic: <code>binary()</code>
 
@@ -7876,11 +7912,14 @@ Configuration for an HTTP bridge.
 
 
 - body: <code>binary()</code>
-  * default: 
-  `"${payload}"`
 
 
   The body of the HTTP request.<br/>
+  If not provided, the body will be a JSON object of all the available fields.<br/>
+  There, 'all the available fields' means the context of a MQTT message when
+  this webhook is triggered by receiving a MQTT message (the `local_topic` is set),
+  or the context of the event when this webhook is triggered by a rule (i.e. this
+  webhook is used as an action of a rule).<br/>
   Template with variables is allowed.
 
 
@@ -8149,7 +8188,7 @@ Settings that control client authorization.
 
   The action when the authorization check rejects an operation.
 
-- cache: <code>[broker:cache](#broker-cache)</code>
+- cache: <code>[broker:authz_cache](#broker-authz_cache)</code>
 
 
 
@@ -8677,7 +8716,7 @@ When the overload is detected, the log handler is terminated and restarted after
   * default: 
   `"5s"`
 
-  If the handler is terminated, it restarts automatically after a delay specified in milliseconds. The value `infinity` prevents restarts.
+  The handler restarts automatically after a delay in the event of termination, unless the value `infinity` is set, which blocks any subsequent restarts.
 
 
 ## log_rotation
@@ -8803,14 +8842,6 @@ Node name, cookie, config & data directories and the Erlang virtual machine (BEA
   **NOTE**: One data dir cannot be shared by two or more EMQX nodes.
 
 
-- config_files: <code>[string()]</code>
-  * mapping: 
-  `emqx.config_files`
-
-  List of configuration files that are read during startup. The order is
-  significant: later configuration files override the previous ones.
-            
-
 - global_gc_interval: <code>disabled | emqx_schema:duration()</code>
   * default: 
   `"15m"`
@@ -8833,7 +8864,11 @@ Node name, cookie, config & data directories and the Erlang virtual machine (BEA
   * mapping: 
   `vm_args.-env ERL_CRASH_DUMP_SECONDS`
 
-  The number of seconds that the broker is allowed to spend writing a crash dump.
+  This variable gives the number of seconds that the emulator is allowed to spend writing a crash dump. When the given number of seconds have elapsed, the emulator is terminated.
+  - If setting to 0 seconds, the runtime system does not even attempt to write the crash dump file. It only terminates.
+  - If setting to a positive value S, wait for S seconds to complete the crash dump file and then terminates the runtime system with a SIGALRM signal.
+  - A negative value causes the termination of the runtime system to wait indefinitely until the crash dump file has been completely written.
+   
 
 - crash_dump_bytes: <code>emqx_schema:bytesize()</code>
   * default: 
@@ -8841,7 +8876,10 @@ Node name, cookie, config & data directories and the Erlang virtual machine (BEA
   * mapping: 
   `vm_args.-env ERL_CRASH_DUMP_BYTES`
 
-  The maximum size of a crash dump file in bytes.
+  This variable sets the maximum size of a crash dump file in bytes.
+  The crash dump will be truncated if this limit is exceeded.
+  If setting it to 0, the runtime system does not even attempt to write a crash dump file.
+
 
 - dist_net_ticktime: <code>emqx_schema:duration_s()</code>
   * default: 
@@ -9185,7 +9223,7 @@ Topology of MongoDB.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - max_overflow: <code>non_neg_integer()</code>
   * default: 
@@ -9195,39 +9233,39 @@ Topology of MongoDB.
 
 - overflow_ttl: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  Period of time before workers that exceed the configured pool size ("overflow") to be terminated.
 
 - overflow_check_period: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  Period for checking if there are more workers than configured ("overflow").
 
 - local_threshold_ms: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  The size of the latency window for selecting among multiple suitable MongoDB instances.
 
 - connect_timeout_ms: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  The duration to attempt a connection before timing out.
 
 - socket_timeout_ms: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  The duration to attempt to send or to receive on a socket before the attempt times out.
 
 - server_selection_timeout_ms: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  Specifies how long to block for server selection before throwing an exception.
 
 - wait_queue_timeout_ms: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  The maximum duration that a worker can wait for a connection to become available.
 
 - heartbeat_frequency_ms: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  Controls when the driver checks the state of the MongoDB deployment. Specify the interval between checks, counted from the end of the previous check until the beginning of the next one.
 
 - min_heartbeat_frequency_ms: <code>emqx_schema:duration_ms()</code>
 
-  Time interval, such as timeout or TTL.
+  Controls the minimum amount of time to wait between heartbeats.
 
 
 ## zone:conn_congestion
@@ -9391,7 +9429,12 @@ in <code>zone</code> configs
 
 - idle_timeout: <code>infinity | emqx_schema:duration()</code>
 
-  After the TCP connection is established, if the MQTT CONNECT packet from the client is not received within the time specified by <code>idle_timeout</code>, the connection will be disconnected.
+  After the TCP connection is established, if the MQTT CONNECT packet from the client is
+  not received within the time specified by <code>idle_timeout</code>, the connection will be disconnected.
+  After the CONNECT packet has been accepted by EMQX, if the connection idles for this long time,
+  then the Erlang process is put to hibernation to save OS resources. Note: long <code>idle_timeout</code>
+  interval may impose risk at the system if large number of malicious clients only establish connections
+  but do not send any data.
 
 - max_packet_size: <code>emqx_schema:bytesize()</code>
 
@@ -9556,7 +9599,7 @@ disables some features (such as accepting new connections) when the load is high
 
 - backoff_delay: <code>0..inf</code>
 
-  When at high load, some unimportant tasks could be delayed for execution, here set the duration in milliseconds precision.
+  The maximum duration of delay for background task execution during high load conditions.
 
 - backoff_gc: <code>boolean()</code>
 
@@ -10091,10 +10134,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 - request: <code>[connector-http:request](#connector-http-request)</code>
 
-
-  If the request is provided, the caller can send HTTP requests via
-  <code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code>
-
+  Configure HTTP request parameters.
 
 - retry_interval: <code>emqx_schema:duration()</code>
 
@@ -10239,10 +10279,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 - request: <code>[connector-http:request](#connector-http-request)</code>
 
-
-  If the request is provided, the caller can send HTTP requests via
-  <code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code>
-
+  Configure HTTP request parameters.
 
 - retry_interval: <code>emqx_schema:duration()</code>
 
@@ -10438,7 +10475,7 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - refresh_interval: <code>integer()</code>
   * default: 
@@ -10709,9 +10746,9 @@ Configuration of authenticator using MongoDB (Replica Set) as authentication dat
   * default: 
   `rs`
 
-  Replica set.
+  Replica set. Must be set to 'rs' when MongoDB server is running in 'replica set' mode.
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -10746,7 +10783,7 @@ Configuration of authenticator using MongoDB (Replica Set) as authentication dat
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -10891,9 +10928,9 @@ Configuration of authenticator using MongoDB (Sharded Cluster) as authentication
   * default: 
   `sharded`
 
-  Sharded cluster.
+  Sharded cluster. Must be set to 'sharded' when MongoDB server is running in 'sharded' mode.
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -10918,7 +10955,7 @@ Configuration of authenticator using MongoDB (Sharded Cluster) as authentication
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -11063,9 +11100,9 @@ Configuration of authenticator using MongoDB (Standalone) as authentication data
   * default: 
   `single`
 
-  Standalone instance.
+  Standalone instance. Must be set to 'single' when MongoDB server is running in standalone mode.
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -11089,7 +11126,7 @@ Configuration of authenticator using MongoDB (Standalone) as authentication data
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -11207,7 +11244,7 @@ Configuration of authenticator using MySQL as authentication data source.
 
   Set to <code>true</code> or <code>false</code> to disable this auth provider.
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -11223,9 +11260,11 @@ Configuration of authenticator using MySQL as authentication data source.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
+  * default: 
+  `"root"`
 
   EMQX's username in the external database.
 
@@ -11234,10 +11273,8 @@ Configuration of authenticator using MySQL as authentication data source.
   EMQX's password in the external database.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -11329,7 +11366,7 @@ Configuration of authenticator using PostgreSQL as authentication data source.
 
   Set to <code>true</code> or <code>false</code> to disable this auth provider.
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -11345,7 +11382,7 @@ Configuration of authenticator using PostgreSQL as authentication data source.
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - username: <code>binary()</code>
 
@@ -11356,10 +11393,8 @@ Configuration of authenticator using PostgreSQL as authentication data source.
   EMQX's password in the external database.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -11502,36 +11537,34 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
   Set to <code>true</code> or <code>false</code> to disable this auth provider.
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
   For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
   A host entry has the following form: `Host[:Port]`.
-  The MongoDB default port 27017 is used if `[:Port]` is not specified.
+  The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 - redis_type: <code>cluster</code>
   * default: 
   `cluster`
 
-  Cluster mode
+  Cluster mode. Must be set to 'cluster' when Redis server is running in clustered mode.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - password: <code>binary()</code>
 
   EMQX's password in the external database.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -11623,20 +11656,20 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
   Set to <code>true</code> or <code>false</code> to disable this auth provider.
 
-- servers: <code>[term()]</code>
+- servers: <code>string()</code>
 
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
   For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.
   A host entry has the following form: `Host[:Port]`.
-  The MongoDB default port 27017 is used if `[:Port]` is not specified.
+  The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 - redis_type: <code>sentinel</code>
   * default: 
   `sentinel`
 
-  Sentinel mode
+  Sentinel mode. Must be set to 'sentinel' when Redis server is running in sentinel mode.
 
 - sentinel: <code>string()</code>
 
@@ -11646,7 +11679,7 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - password: <code>binary()</code>
 
@@ -11659,10 +11692,8 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
   Redis database ID.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -11754,7 +11785,7 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
   Set to <code>true</code> or <code>false</code> to disable this auth provider.
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
 
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -11766,13 +11797,13 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
   * default: 
   `single`
 
-  Single mode
+  Single mode. Must be set to 'single' when Redis server is running in single mode.
 
 - pool_size: <code>pos_integer()</code>
   * default: 
   `8`
 
-  Size of the connection pool.
+  Size of the connection pool towards the bridge target service.
 
 - password: <code>binary()</code>
 
@@ -11785,10 +11816,8 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
   Redis database ID.
 
 - auto_reconnect: <code>boolean()</code>
-  * default: 
-  `true`
 
-  Enable automatic reconnect to the database.
+  Deprecated since v5.0.15.
 
 - ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
   * default: 
@@ -12007,29 +12036,48 @@ Creation options.
 
 **Fields**
 
-- worker_pool_size: <code>pos_integer()</code>
+- worker_pool_size: <code>non_neg_integer()</code>
   * default: 
   `16`
 
-  Resource worker pool size.
+  The number of buffer workers. Only applicable for egress type bridges.
+  For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.
 
 - health_check_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
   `"15s"`
 
-  Health check interval, in milliseconds.
+  Health check interval.
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  Whether start the resource right after created.
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.
 
 - auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
   * default: 
   `"60s"`
 
-  The auto restart interval after the resource is disconnected, in milliseconds.
+  The auto restart interval after the resource is disconnected.
 
 - query_mode: <code>sync | async</code>
   * default: 
   `async`
 
-  Query mode. Optional 'sync/async', default 'sync'.
+  Query mode. Optional 'sync/async', default 'async'.
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  Timeout for requests.  If <code>query_mode</code> is <code>sync</code>, calls to the resource will be blocked for this amount of time before timing out.
 
 - async_inflight_window: <code>pos_integer()</code>
   * default: 
@@ -12038,16 +12086,14 @@ Creation options.
   Async query inflight window.
 
 - enable_queue: <code>boolean()</code>
-  * default: 
-  `false`
 
-  Queue mode enabled.
+  Deprecated since v5.0.14.
 
 - max_queue_bytes: <code>emqx_schema:bytesize()</code>
   * default: 
   `"100MB"`
 
-  Maximum queue storage.
+  Maximum number of bytes to buffer for each buffer worker.
 
 
 ## bridge_webhook:creation_opts
@@ -12067,29 +12113,48 @@ Creation options.
 
 **Fields**
 
-- worker_pool_size: <code>pos_integer()</code>
+- worker_pool_size: <code>non_neg_integer()</code>
   * default: 
   `16`
 
-  Resource worker pool size.
+  The number of buffer workers. Only applicable for egress type bridges.
+  For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.
 
 - health_check_interval: <code>emqx_schema:duration_ms()</code>
   * default: 
   `"15s"`
 
-  Health check interval, in milliseconds.
+  Health check interval.
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  Whether start the resource right after created.
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.
 
 - auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
   * default: 
   `"60s"`
 
-  The auto restart interval after the resource is disconnected, in milliseconds.
+  The auto restart interval after the resource is disconnected.
 
 - query_mode: <code>sync | async</code>
   * default: 
   `async`
 
-  Query mode. Optional 'sync/async', default 'sync'.
+  Query mode. Optional 'sync/async', default 'async'.
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  Timeout for requests.  If <code>query_mode</code> is <code>sync</code>, calls to the resource will be blocked for this amount of time before timing out.
 
 - async_inflight_window: <code>pos_integer()</code>
   * default: 
@@ -12098,16 +12163,14 @@ Creation options.
   Async query inflight window.
 
 - enable_queue: <code>boolean()</code>
-  * default: 
-  `false`
 
-  Queue mode enabled.
+  Deprecated since v5.0.14.
 
 - max_queue_bytes: <code>emqx_schema:bytesize()</code>
   * default: 
   `"100MB"`
 
-  Maximum queue storage.
+  Maximum number of bytes to buffer for each buffer worker.
 
 
 ## connector-http:request
@@ -12275,6 +12338,8 @@ The configs about sending message to the remote broker.
 
 
 - qos: <code>qos() | binary()</code>
+  * default: 
+  `1`
 
 
   The QoS of the MQTT message to be sent.<br/>
@@ -12282,6 +12347,8 @@ The configs about sending message to the remote broker.
 
 
 - retain: <code>boolean() | binary()</code>
+  * default: 
+  `false`
 
 
   The 'retain' flag of the MQTT message to be sent.<br/>
@@ -12515,6 +12582,25 @@ Settings for reporting metrics to Prometheus
 
   Data reporting interval
 
+- headers: <code>[{string(), string()}]</code>
+  * default: 
+  `{}`
+
+  A list of HTTP Headers when pushing to Push Gateway.<br/>
+  For example, <code> { Authorization = "some-authz-tokens"}</code>
+
+- job_name: <code>binary()</code>
+  * default: 
+  `"${name}/instance/${name}~${host}"`
+
+  Job Name that is pushed to the Push Gateway. Available variables:<br/>
+  - ${name}: Name of EMQX node.<br/>
+  - ${host}: Host name of EMQX node.<br/>
+  For example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/>
+
+  Default value is: <code>${name}/instance/${name}~${host}</code>
+
+
 - enable: <code>boolean()</code>
   * default: 
   `false`
@@ -12743,7 +12829,7 @@ StatsD metrics collection and push configuration.
 
   Enable or disable StatsD metrics collection and push service.
 
-- server: <code>emqx_schema:host_port()</code>
+- server: <code>string()</code>
   * default: 
   `"127.0.0.1:8125"`
 
