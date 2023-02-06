@@ -247,3 +247,30 @@ EMQX 的 API 文档嵌入到了 `admin/api.md` 中。
 * 执行当前仓库里的脚本 `./rewrite-swagger.sh`
 * 将修改后的文件提交到 git 版本中
 * 发送一个 GitHub PR
+
+### 配置文档更新
+
+配置文档是自动生成的。下面列出了更新的步骤。
+
+
+1. 重新编译 EMQX （开源版和企业版）
+1. 复制生成的 `md` 文件到该项目 （具体命令见后续）
+1. 修改文档首行标题：
+    * Configuration Files (en_US/admin/cfg-*.md)
+    * 配置文件 (zh_CN/admin/cfg-*.md)
+
+#### Commands to copy generated markdown
+
+开源版
+
+```
+cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ce.md
+cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ce.md
+```
+
+企业版
+
+```
+cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ee.md
+cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ee.md
+```
