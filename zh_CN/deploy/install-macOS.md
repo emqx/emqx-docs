@@ -38,7 +38,7 @@ wget https://www.emqx.com/en/downloads/broker/v5.0.14/emqx-5.0.14-macos12-arm64.
 2. 解压程序包
 
 ```bash
-unzip emqx-5.0.14-macos12-arm64.zip
+mkdir -p emqx && unzip -d emqx emqx-5.0.14-macos12-arm64.zip
 ```
 
 3. 启动
@@ -83,13 +83,13 @@ cd emqx && ./bin/emqx start
 1. 下载 [emqx-enterprise-5.0.0-macos12-arm64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip)
 
 ```bash
-wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip
+wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip
 ```
 
 2. 解压程序包
 
 ```bash
-unzip emqx-enterprise-5.0.0-macos12-arm64.zip
+mkdir -p emqx && unzip -d emqx emqx-enterprise-5.0.0-macos12-arm64.zip
 ```
 
 3. 启动
