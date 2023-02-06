@@ -5,6 +5,7 @@
 set -euo pipefail
 
 PROFILE="${1:-}"
+SWAGGER_DOWNLOAD_DEFAULT_URI="http://localhost:18083/api-docs/swagger.json"
 
 case "$PROFILE" in
     ce)
@@ -14,12 +15,14 @@ case "$PROFILE" in
         TARGET_FILE='swagger/swagger-ee.json'
         ;;
     *)
-        echo "Usage $0 ce|ee"
+        echo "Usage $0 ce|ee [SWAGGER_INPUT]"
+        echo "The optional parameter SWAGGER_INPUT can be the generated json file"
+        echo "Otherwise it downloads the JSON file from $SWAGGER_DOWNLOAD_DEFAULT_URI"
         exit 1
         ;;
 esac
 
-SWAGGER_INPUT="${2:-"http://localhost:18083/api-docs/swagger.json"}"
+SWAGGER_INPUT="${2:-"$SWAGGER_DOWNLOAD_DEFAULT_URI"}"
 
 ## download swagger from EMQX api-docs
 if [ -f "$SWAGGER_INPUT" ]; then
