@@ -167,7 +167,7 @@ jobs:
         yarn global add redoc-cli
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/${lang}.json -t redoc/template.hbs \
+          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
             --output docs/.vuepress/dist/ee-${lang}/enterprise/${VERSION}/admin/api.html \
             --options.theme.colors.primary.main=#5e4eff \
             --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \

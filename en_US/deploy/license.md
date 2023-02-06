@@ -29,7 +29,7 @@ You can upload your License file with EMQX Dashboard or configuration file.
 
 ### Import with Dashboard
 
-1. On EMQX Dasboard, click **Dashboard** on the left navigation tree. You can check the current License Information at the bottom of the page, where you can check the 连接线数 and 到期时间 of the current license file. <!-- 需要界面词 -->
+1. On EMQX Dasboard, click **Dashboard** on the left navigation tree. You can check the current License Information at the bottom of the page, where you can check the **License usage** and **Expire At** of the current license file. <!-- 需要界面词 -->
 2. Click the **Update License** button, and paste your License Key in the popup dialog box, and click Submit. 
 3. The page data will automatically refresh following your submission, and please confirm that the new license file has taken effect.
 
