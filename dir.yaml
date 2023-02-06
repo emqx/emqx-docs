@@ -22,7 +22,6 @@
 - title_en: Getting Started
   title_cn: 快速开始
   children:
-    - getting-started
     - getting-started/getting-started
     - getting-started/restrictions
     - getting-started/new-features
