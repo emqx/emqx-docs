@@ -13,8 +13,7 @@ Click the `Create` button in the upper right corner of the page to go to the Cre
 Current data bridging types include:
 
 - Webhook, which uses a Webhook to forward data to an HTTP service.
-- MQTT Source, which uses an MQTT broker as a data source to fetch external MQTT data.
-- MQTT Sink, which forwards MQTT data to an external MQTT broker.
+- MQTT, which uses an MQTT broker as a data source to fetch external MQTT messages, or publish EMQX messages to an external MQTT broker.
 
 ![image](./assets/bridge-create.png)
 
@@ -28,31 +27,45 @@ The same user needs a pre-built HTTP service, we need to configure the HTTP URL,
 
 For more details about how to use of Webhook data bridge, please visit [Webhook](../data-integration/data-bridge-webhook.md)
 
-### MQTT source
+## MQTT
 
-Use MQTT Source to fetch data from an external MQTT broker. Users can use it to bridge data from an external MQTT broker to EMQX for data processing.
+For using MQTT data bridge, users can publish EMQX messages to an external MQTT broker or pull data from an external MQTT broker and publish it to an EMQX topic.
 
-On the MQTT Source configuration page, the user needs to configure the connection information of the external MQTT broker from which the data will be fetched, including the broker host, username password and MQTT protocol version, etc. The final key is the need to enter a remote topic, indicating that the data will be fetched from the topic specified in the external MQTT broker and that EMQX will be able to fetch data under that broker when a message is sent to that topic for that MQTT broker. Note: The topic supports the use of topic wildcards.
+In MQTT data bridge, users first need to configure the connection information of the MQTT broker, including the broker endpoint, port, username, password, etc.
+
+![image](./assets/bridge-mqtt-connect.png)
+
+Then, users can configure the ingress or egress of the MQTT broker as needed. The ingress configuration is manually turned on if the service is to be used as a data source. If it is a destination, the egress configuration is manually turned on. For example, if the ingress is configured, it means that the data is pulled from the external MQTT broker and published to a topic on EMQX. If the egress is configured, the EMQX MQTT message is published to the external MQTT broker.
+
+Note: when creating, at least one ingress or egress needs to be configured, or both can be configured.
+
+### Ingress
+
+When ingress config is enabled, the MQTT data bridge can be used as a data source. Users need to configure a remote MQTT broker topic and QoS level. The remote MQTT broker is the MQTT broker configured in the connection information. When users send messages to the topic of the remote broker, EMQX can receive the message. Users can use the data bridge in the **SQL statement of the rule** to receive and process the received message data.
+
+In addition to the remote MQTT broker, there is also a local MQTT broker configuration, EMQX. Users can configure the topic, QoS, retain flag, and message payload template of the service (all of which support template syntax). If the user configures the local MQTT broker topic, the user does not need to use the rule. After connecting to EMQX and subscribing to the local topic, the user can receive messages from the remote broker.
 
 ![image](./assets/bridge-mqtt-source.png)
 
-### MQTT Sink
+### Egress
 
-Using MQTT Sink, the data received and processed by EMQX can be sent to an external MQTT broker.
+When the egress config is enabled, the MQTT data bridge can be used as a destination. Users need to configure a remote MQTT broker topic and QoS level and retain flag and message payload template (all of which support template syntax). The remote MQTT broker is the MQTT broker configured in the connection information. When users use the rule to receive and process the message data, they only need to add the data bridge to the **action list of the rule**, and EMQX can send the processed message data to the remote MQTT broker.
 
-On the MQTT Sink configuration page, the user also needs to configure the connection information for the external MQTT broker that will fetch the data, including the broker host, username and password, and MQTT protocol version. Finally, you also need to enter a remote topic to send the data to the external MQTT broker, so that the remote MQTT broker can get the processed data sent by EMQX through the remote topic.
+In addition to the remote MQTT broker, there is also a local MQTT broker configuration, EMQX. Users can configure the topic of the service. If the user configures the local MQTT broker topic, the user does not need to use the rule. After connecting to EMQX and sending messages to the local topic, the user can also send messages to the remote broker.
 
 ![image](./assets/bridge-mqtt-sink.png)
 
-MQTT Source and MQTT Sink are suitable for forwarding data between multiple MQTT brokers, and once configured, both can be tested for connectivity to resources by first clicking `Test the connection`.
+The local MQTT broker is optional regardless of the ingress configuration or egress configuration. Users need to determine whether they need it according to business needs. For scenarios that require rules to process complex data, users do not need to configure the local MQTT broker and can directly use the data bridge in the rule. Otherwise, users can now subscribe to or send messages to the topic of the local MQTT broker to complete the reception of messages from the remote service or sending message data to the remote service.
 
-For more details about how to using MQTT data bridges, please visit [MQTT Bridge](../data-integration/data-bridge-mqtt.md)
+Before creating, whether you choose the type of data bridge, you can click the "Test" button next to the create button to test whether the current configuration resources are available.
+
+After creating the data bridge, you can use the data bridge to create a rule, or you can go to the rule list page to create a rule.
+
+For more details about how to use MQTT data bridge, please visit [MQTT Bridge](../data-integration/data-bridge-mqtt.md)
 
 :::tip
-Note: Each data bridge requires a custom name to be entered to identify and distinguish the current data bridge
+Note: Each data bridge must enter a name, which users can use to customize the identification and distinguish the function of the current data bridge
 :::
-
-Once created, you can return to the data bridge list or use the data bridge directly to create a rule.
 
 ## List
 
