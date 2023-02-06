@@ -244,7 +244,7 @@ EMQX 的 API 文档嵌入到了 `admin/api.md` 中。
 如果需要更新 API 文档，步骤如下：
 
 * 启动最新的 EMQX v5 的节点
-* 执行当前仓库里的脚本 `./rewrite-swagger.sh ce | ee`
+* 执行当前仓库里的脚本 `./rewrite-swagger.sh`
 * 将修改后的文件提交到 git 版本中
 * 发送一个 GitHub PR
 
