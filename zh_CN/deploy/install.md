@@ -30,15 +30,26 @@ EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜�
 
 EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是支持情况：
 
-| 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 (Apple Silicon) |
-| :---------------------------------------- | :----------------------- | :----------- | :-------------------- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04, Ubuntu20.04 | 是           | 是                    |
-| [Debian](./install-debian.md)             | Debian10, Debian11       | 是           | 是                    |
-| [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | 是           | 是                    |
-| [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是                    |
-| [macOS](./install-macOS.md)               | macOS11, macOS12         | 是           | 是                    |
+{% emqxce %}
+| 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
+| :---------------------------------------- | :----------------------- | :----------- | :---- |
+| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04, Ubuntu20.04 | 是           | 是    |
+| [Debian](./install-debian.md)             | Debian10, Debian11       | 是           | 是    |
+| [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | 是           | 是    |
+| [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是    |
+| [macOS](./install-macOS.md)               | macOS11, macOS12         | 是           | 是    |
+| [Windows](./install-windows.md)           | -                        | 是           | 是    |
+{% endemqxce %}
 
-<!-- TODO Windows 在企业版中不显示 -->
+{% emqxee %}
+| 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
+| :---------------------------------------- | :----------------------- | :----------- | :---- |
+| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04, Ubuntu20.04 | 是           | 是    |
+| [Debian](./install-debian.md)             | Debian10, Debian11       | 是           | 是    |
+| [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | 是           | 是    |
+| [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是    |
+| [macOS](./install-macOS.md)               | macOS11, macOS12         | 是           | 是    |
+{% endemqxee %}
 
 ## 硬件规格
 

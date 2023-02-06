@@ -31,13 +31,28 @@ Besides the above deployment methods, you are also welcome to try our [EMQX Clou
 
 The table below lists the operating systems and versions that EMQX supports.
 
-| Operating system                          | Versions supported       | x86_64/amd64 | arm64 (Apple Silicon) |
-| :---------------------------------------- | :----------------------- | :----------- | :-------------------- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04, Ubuntu20.04 | Yes          | Yes                   |
-| [Debian](./install-debian.md)             | Debian10, Debian11       | Yes          | Yes                   |
-| [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | Yes          | Yes                   |
-| [Amazon Linux](./install-amazon-linux.md) | -                        | Yes          | Yes                   |
-| [macOS](./install-macOS.md)               | macOS11, macOS12         | Yes          | Yes                   |
+{% emqxce %}
+| Operating system                          | Versions supported       | x86_64/amd64 | arm64 |
+| :---------------------------------------- | :----------------------- | :----------- | :---- |
+| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04, Ubuntu20.04 | Yes          | Yes   |
+| [Debian](./install-debian.md)             | Debian10, Debian11       | Yes          | Yes   |
+| [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | Yes          | Yes   |
+| [Amazon Linux](./install-amazon-linux.md) | -                        | Yes          | Yes   |
+| [macOS](./install-macOS.md)               | macOS11, macOS12         | Yes          | Yes   |
+| [Windows](./install-windows.md)           | -                        | Yes          | Yes   |
+{% endemqxce %}
+
+{% emqxee %}
+| Operating system                          | Versions supported       | x86_64/amd64 | arm64 |
+| :---------------------------------------- | :----------------------- | :----------- | :---- |
+| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04, Ubuntu20.04 | Yes          | Yes   |
+| [Debian](./install-debian.md)             | Debian10, Debian11       | Yes          | Yes   |
+| [CentOS/RHEL](./install-centos.md)        | CentOS 7, CentOS 8       | Yes          | Yes   |
+| [Amazon Linux](./install-amazon-linux.md) | -                        | Yes          | Yes   |
+| [macOS](./install-macOS.md)               | macOS11, macOS12         | Yes          | Yes   |
+{% endemqxee %}
+
+
 
 ## Hardware specification
 
