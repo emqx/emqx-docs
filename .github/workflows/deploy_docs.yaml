@@ -120,8 +120,11 @@ jobs:
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/.vuepress/public/api/
+        mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        cp -r docs-files/swagger/* frontend/docs/.vuepress/public/api/
+        cp -r docs-files/redocly/*.json frontend/redoc/
         cp docs-files/directory_ee.json frontend/docs/.vuepress/config/directory.json
 
     - name: generate version config
@@ -141,18 +144,34 @@ jobs:
         cd frontend
         yarn && yarn build
 
-    - name: build redoc
+    - name: build ce redoc
       if: env.DOCS_TYPE == 'broker'
       run: |
         cd frontend
         yarn global add redoc-cli
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/${lang}.json -t redoc/template.hbs \
+          redoc-cli bundle redoc/ce-${lang}.json -t redoc/template.hbs \
             --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api.html \
             --options.theme.colors.primary.main=#00b173 \
             --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
             --templateOptions.description "EMQX ${VERSION} API Documentation" \
+            --templateOptions.version "${VERSION}" \
+            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+        done
+
+    - name: build ee redoc
+      if: env.DOCS_TYPE == 'enterprise'
+      run: |
+        cd frontend
+        yarn global add redoc-cli
+        LANGS=(zh en)
+        for lang in "${LANGS[@]}"; do
+          redoc-cli bundle redoc/${lang}.json -t redoc/template.hbs \
+            --output docs/.vuepress/dist/ee-${lang}/enterprise/${VERSION}/admin/api.html \
+            --options.theme.colors.primary.main=#5e4eff \
+            --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
+            --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
         done
