@@ -114,7 +114,7 @@ The default value is 8.
 
 #### `ssl`
 
-Standard [SSL options](../configuration/configuration.md#tls-ciphers) for [secure connecting to Redis](https://redis.io/docs/manual/security/encryption/).
+Standard [SSL options](../../configuration/configuration.md#tls-ciphers) for [secure connecting to Redis](https://redis.io/docs/manual/security/encryption/).
 
 ### Standalone Redis options (`redis_type = single`).
 

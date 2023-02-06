@@ -110,4 +110,4 @@ The default value is 8.
 
 ### `ssl`
 
-Standard [SSL options](../configuration/configuration.md#tls-ciphers) for [secure connecting to PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html).
+Standard [SSL options](../../configuration/configuration.md#tls-ciphers) for [secure connecting to PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html).
