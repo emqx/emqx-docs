@@ -68,6 +68,24 @@ More about the MQTT configuration, please refer to [MQTT Configuration](../admin
 
 ![image](./assets/config-mqtt.png)
 
+## Limiter
+
+Click the Limiter under the configuration menu on the left to go to the configuration page of the rate limit. In this configuration page, you can limit the rate of EMQX's access to messages and distribution of messages, including:
+
+- Bytes in, the size of the bytes of the messages that flow in per second
+- Message in, the number of messages that flow in per second
+- Connection, the number of connections per second
+- Message Routing, the number of messages dispatched per second by the session
+- Internal-related rate configuration of some functions
+
+Limiter provides a series of rate limit functions to prevent excessive client requests when message data is overloaded, ensuring the system's and network's stability.
+
+EMQX supports rate limiting for nodes, listeners, and connections, but only connection and node-level rates are currently supported when configuring in Dashboard.
+
+More about the Limiter configuration, please refer to [Rate limit](../reliability/rate-limit.md).
+
+![image](./assets/config-limiter.png)
+
 ## Log
 
 Click the log under the configuration menu on the left to go to the log configuration page. The log configuration is divided into two parts, one is the Console Handler, and the other is the File Handler. In the log configuration page, you can set whether to enable the log handler, set the log level, the log formatter, text or json, and the log file can also set the path and name.
