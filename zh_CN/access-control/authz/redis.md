@@ -122,7 +122,7 @@ Standalone Redis:
 
 ### ssl
 
-用于 [安全连接至 Redis](https://redis.io/docs/manual/security/encryption/) 的标准 [SSL options](../configuration/configuration.md#tls-ssl-ciphers)。
+用于 [安全连接至 Redis](https://redis.io/docs/manual/security/encryption/) 的标准 [SSL options](../configuration/configuration.md#tls-ciphers)。
 
 ### Standalone Redis options (`redis_type = single`).
 

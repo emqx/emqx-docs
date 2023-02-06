@@ -135,7 +135,7 @@ The default value is 8.
 
 #### `ssl`
 
-Standard [SSL options](../configuration/configuration.md#tls-ssl-ciphers) for [secure connecting to MongoDB](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
+Standard [SSL options](../configuration/configuration.md#tls-ciphers) for [secure connecting to MongoDB](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
 
 #### `srv_record`
 

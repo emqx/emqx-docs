@@ -249,7 +249,7 @@ authentication=[{enable=true}]
 ```
 :::
 
-#### TLS/SSL ciphers
+#### TLS ciphers
 
 Starting from v5.0.6, EMQX no longer pre-populates the ciphers list with a default
 set of cipher suite names.

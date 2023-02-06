@@ -263,4 +263,4 @@ Content-Type: application/json
 
 ### ssl
 
-用于连接到外部 HTTP 服务器的标准 [SSL 选项](../configuration/configuration.md#tls-ssl-ciphers)。
+用于连接到外部 HTTP 服务器的标准 [SSL 选项](../configuration/configuration.md#tls-ciphers)。
