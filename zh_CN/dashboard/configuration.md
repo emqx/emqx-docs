@@ -82,7 +82,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 EMQX 支持对节点、监听器和单个连接进行速率限制，不过在 Dashboard 中进行配置时，目前仅支持对单个连接和节点级别的速率进行限制。
 
-更多关于速率限制的详细配置文档，请参考[速率限制](../reliability/rate-limit.md)。
+更多关于速率限制的详细配置文档，请参考[速率限制](../rate-limit/rate-limit.md)。
 
 ![image](./assets/config-limiter.png)
 

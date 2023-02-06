@@ -82,7 +82,7 @@ Limiter provides a series of rate limit functions to prevent excessive client re
 
 EMQX supports rate limiting for nodes, listeners, and connections, but only connection and node-level rates are currently supported when configuring in Dashboard.
 
-More about the Limiter configuration, please refer to [Rate limit](../reliability/rate-limit.md).
+More about the Limiter configuration, please refer to [Rate limit](../rate-limit/rate-limit.md).
 
 ![image](./assets/config-limiter.png)
 
