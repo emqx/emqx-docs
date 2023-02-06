@@ -26,7 +26,7 @@ EMQX 企业版 5.0 采用与之前版本不同格式的 License，申请时请�
 
 ### Dashboard
 
-1. 打开 Dasboard，进入 **仪表盘** 页面，页面最下方找到 **License 信息**。您可以看到 EMQX 当前 license 信息，包括连接线数、到期时间等信息。
+1. 打开 Dasboard，进入 **仪表盘** 页面，页面最下方找到 **License 信息**。您可以看到 EMQX 当前 license 信息，包括**License 使用情况**、**到期时间**等信息。
 2. 点击 **更新 License** 按钮，在弹出框中粘贴您的 License Key，点击提交即可。
 3. 提交完成后页面数据将刷新，请确认您是否提交了符合预期的 License 文件。
 

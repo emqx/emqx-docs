@@ -38,7 +38,7 @@ https://www.emqx.com/en/downloads/broker/v5.0.14/emqx-5.0.14-macos12-arm64.zip
 2. To unzip the package, run:
 
 ```bash
-unzip emqx-5.0.14-macos12-arm64.zip
+mkdir -p emqx && unzip -d emqx emqx-5.0.14-macos12-arm64.zip
 ```
 
 3. To start EMQX, run:
@@ -90,7 +90,7 @@ https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12
 2. To unzip the package, run:
 
 ```bash
-unzip emqx-enterprise-5.0.0-macos12-arm64.zip
+mkdir -p emqx && unzip -d emqx emqx-enterprise-5.0.0-macos12-arm64.zip
 ```
 
 3. To start EMQX, run:
