@@ -20,7 +20,7 @@ Before enabling the gateway, the gateway needs to setup; after setup, you can vi
 
 ![image](./assets/gateways.png)
 
-::: warning
+::: tip
 Disable a gateway will cause all connections under the gateway to be disconnected, and the connections need to be re-established. Please be careful.
 :::
 
@@ -43,11 +43,11 @@ Each configuration item will be different depending on the protocol gateway; the
 The configuration form for the base configuration will vary depending on the protocol gateway, details of the configuration parameters for each protocol can be viewed by clicking on the jump to the configuration file description page.
 
 <!-- FIXME: -->
-- [Stomp](../admin/cfg.md#gatewaystomp)
-- [MQTT-SN](../admin/cfg.md#gatewaymqttsn)
-- [CoAP](../admin/cfg.md#gatewaycoap)
-- [ExProto](../admin/cfg.md#gatewayexproto)
-- [LwM2M](../admin/cfg.md#gatewaylwm2m)
+- [Stomp](../configuration/configuration-manual.md#gatewaystomp)
+- [MQTT-SN](../configuration/configuration-manual.md#gatewaymqttsn)
+- [CoAP](../configuration/configuration-manual.md#gatewaycoap)
+- [ExProto](../configuration/configuration-manual.md#gatewayexproto)
+- [LwM2M](../configuration/configuration-manual.md#gatewaylwm2m)
 
 #### Listener
 
@@ -85,7 +85,7 @@ The client list can be searched using the client ID, username and node. On the t
 
 Click ExHook under the extension menu on the left to come to the ExHook page, ExHook provides the ability to modify or expand system functions using other programming languages. The ExHook list page allows you to view the currently added ExHooks, the number of hooks mounted by each ExHook, and the number of successes and failures of all hooks executed under that ExHook.
 
-Definitions and development guidelines for ExHooks can be found in [hooks](../advanced/hooks).
+Definitions and development guidelines for ExHooks can be found in [hooks](../extensions/hooks.md).
 
 ![image](./assets/exhook.png)
 

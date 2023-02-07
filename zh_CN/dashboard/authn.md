@@ -45,7 +45,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 增强认证包含质询/响应风格的认证，可以实现对客户端和服务器的双向认证，服务器可以验证连接的客户端是否是真正的客户端，客户端也可以验证连接的服务器是否是真正的服务器，从而提供了更高的安全性。
 
-更多关于 MQTT 5.0 增强认证的介绍与使用方式，请访问 [SCRAM 认证](../security/authn/scram.md)。
+更多关于 MQTT 5.0 增强认证的介绍与使用方式，请访问 [SCRAM 认证](../access-control/authn/scram.md)。
 
 ### 配置参数
 
@@ -57,7 +57,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 ![image](./assets/authn-built-db-config.png)
 
-更多关于内置数据库的配置详情，请访问 [使用内置数据库（Mnesia）的密码认证](../security/authn/mnesia.md)。
+更多关于内置数据库的配置详情，请访问 [使用内置数据库（Mnesia）的密码认证](../access-control/authn/mnesia.md)。
 
 #### 外部数据库
 
@@ -65,7 +65,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 ![image](./assets/authn-mysql-config.png)
 
-更多关于 MySQL 或其它外部数据库的配置详情，请访问 [使用 MySQL 的密码认证](../security/authn/mysql.md) 或查看使用其它数据库。
+更多关于 MySQL 或其它外部数据库的配置详情，请访问 [使用 MySQL 的密码认证](../access-control/authn/mysql.md) 或查看使用其它数据库。
 
 #### HTTP Server
 
@@ -73,7 +73,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 ![image](./assets/authn-http-config.png)
 
-更多关于 HTTP Server 的配置详情，请访问 [使用 HTTP 的密码认证](../security/authn/http.md)。
+更多关于 HTTP Server 的配置详情，请访问 [使用 HTTP 的密码认证](../access-control/authn/http.md)。
 
 #### JWT & JWKS
 
@@ -83,7 +83,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 ![image](./assets/authn-jwt-config.png)
 
-更多关于 JWT 的配置详情，请访问 [JWT 认证](../security/authn/jwt.md)。
+更多关于 JWT 的配置详情，请访问 [JWT 认证](../access-control/authn/jwt.md)。
 
 完成配置后，点击创建即可快速完成认证配置。注意：无法再次选择正在使用的认证数据源。
 
@@ -97,7 +97,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 ![image](./assets/authn-list.png)
 
-:::warning
+:::tip
 关闭认证器后，EMQ X Broker 将不再对客户端进行认证，所有客户端都可以连接到 EMQ X Broker。请谨慎操作。
 :::
 
@@ -119,10 +119,10 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 当需要修改认证配置时，可以点击列表页中的 `设置`，在设置页面可以修改当前认证器的配置信息，如当外部数据库的一些连接信息发生变化时，需要修改内置数据库的账号类型是用户名还是客户端 ID 的时候，或修改认证密码的加密方式等。
 
-:::warning
+:::tip
 当使用内置数据库时，更新密码「加密方式」或「加盐方式」将导致已添加的认证数据不可用，请谨慎操作。
 :::
 
 ![image](./assets/authn-settings.png)
 
-更多关于认证的详细解释与使用，请访问[安全认证](../security/authn/authn.md)。
+更多关于认证的详细解释与使用，请访问[安全认证](../access-control/authn/authn.md)。

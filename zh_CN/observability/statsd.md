@@ -1,8 +1,10 @@
-# StatsD
+# StatsD 指标集成
 
-EMQX 支持向 [StatsD](https://github.com/statsd/statsd) 服务器周期性推送系统指标。此功能可以通过配置文件开启：
+EMQX 支持向 [StatsD](https://github.com/statsd/statsd) 服务器周期性推送系统指标。
 
-```
+StatsD 推送功能默认为关闭状态，可以通过在 `etc/emqx.conf` 中添加以下配置来启用：
+
+```bash
 statsd {
   ## 开启或关闭 StatsD 数据推送
   enable = false
@@ -23,5 +25,4 @@ statsd {
 
 ## 通过 Dashboard 配置
 
-EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的 **功能配置/监控集成** 直接修改，保存后直接生效，无需重启节点。
-
+EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的 **功能配置** -> **监控** -> **监控集成** 直接修改，保存后直接生效，无需重启节点。

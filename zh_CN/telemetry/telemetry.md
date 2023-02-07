@@ -12,7 +12,7 @@ EMQ 通过遥测收集有关 EMQX 使用情况的信息，这种功能旨在为�
 
 您可以打开配置文件 `etc/emqx.conf`，通过添加以下配置项永久性的禁用遥测：
 
-```hocon
+```
 telemetry {
  enable = false
 }
@@ -44,7 +44,7 @@ export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx start
 
 遥测数据收集代码请参考 [apps/emqx_modules/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_modules/src/emqx_telemetry.erl)，如果您有任何疑问请通过 [Issues](http://github.com/emqx/emqx/issues)联系我们：
 
-以 EMQX 5.0.9 为例，传输的数据如下：
+传输的数据示例如下：
 
 ```json
 {

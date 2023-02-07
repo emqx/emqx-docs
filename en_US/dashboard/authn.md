@@ -45,7 +45,7 @@ The enhanced authentication feature in MQTT 5.0, if selected, currently only pro
 
 Enhanced authentication enables two-way authentication of the client and server, where the server can verify that the connected client is the real client and the client can verify that the connected server is the real server, thus providing higher security.
 
-For more details about MQTT 5.0 Enhanced Authentication, please visit [SCRAM Authentication](../security/authn/scram.md).
+For more details about MQTT 5.0 Enhanced Authentication, please visit [SCRAM Authentication](../access-control/authn/scram.md).
 
 ### Configuration
 
@@ -57,7 +57,7 @@ For example, if you use the `Built-in Database`, you need to choose whether to u
 
 ![image](./assets/authn-built-db-config.png)
 
-For more details about Built-in Database, please visit [Password Authentication Using Built-in Database](../security/authn/mnesia.md).
+For more details about Built-in Database, please visit [Password Authentication Using Built-in Database](../access-control/authn/mnesia.md).
 
 #### External Database
 
@@ -65,7 +65,7 @@ If you use an external database, you need to configure the server address of the
 
 ![image](./assets/authn-mysql-config.png)
 
-For more details about MySQL or other external databases, please visit [Password Authentication Using MySQL](../security/authn/mysql.md) or see Using other databases.
+For more details about MySQL or other external databases, please visit [Password Authentication Using MySQL](../access-control/authn/mysql.md) or see Using other databases.
 
 #### HTTP Server
 
@@ -73,7 +73,7 @@ To use HTTP Server, you need to configure the request method of the HTTP service
 
 ![image](./assets/authn-http-config.png)
 
-For more details about HTTP Server, please visit [Password Authentication Using HTTP](../security/authn/http.md).
+For more details about HTTP Server, please visit [Password Authentication Using HTTP](../access-control/authn/http.md).
 
 #### JWT & JWKS
 
@@ -83,7 +83,7 @@ You can get the latest JWKS from the `JWKS Endpoint` periodically, which is esse
 
 ![image](./assets/authn-jwt-config.png)
 
-For more details about JWT, please visit [JWT Authentication](../security/authn/jwt.md).
+For more details about JWT, please visit [JWT Authentication](../access-control/authn/jwt.md).
 
 After completing the configuration, just click `Create`. Note: It is not available to reselect a backend that has been used for authentication.
 
@@ -99,7 +99,7 @@ In the action bar you can also click to settings or delete the authenticator, et
 
 ![image](./assets/authn-list.png)
 
-:::warning
+:::tip
 Disabled authentication will not authenticate any client, all clients can connect to EMQX. Please be careful.
 :::
 
@@ -123,10 +123,10 @@ Click `Settings` in the list page to modify the authentication configuration.
 
 In the settings page, you can modify the current authenticator configuration, such as when some connection information of the external database changes, when you need to modify the `UserID Type` of the built-in database as username or client ID, or modify the encryption method of the password, etc.
 
-:::warning
+:::tip
 When using the built-in database, updating the password `Password Hash` or `Salt Position` will cause the added authentication data to be unavailable, please be careful.
 :::
 
 ![image](./assets/authn-settings.png)
 
-For more details about Authentication, please visit [Authentication Introduction](../security/authn/authn.md).
+For more details about Authentication, please visit [Authentication Introduction](../access-control/authn/authn.md).

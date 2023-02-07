@@ -625,8 +625,8 @@
             ]
           },
           "num_acceptors": {
-            "default": 4,
-            "description": "Socket acceptor pool size for TCP protocols.",
+            "default": 20,
+            "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
           "max_connections": {
@@ -640,7 +640,7 @@
             "type": "integer"
           },
           "send_timeout": {
-            "default": "5s",
+            "default": "10s",
             "description": "Send timeout for the socket.",
             "example": "12m",
             "type": "string"
@@ -652,7 +652,7 @@
           },
           "ipv6_v6only": {
             "default": false,
-            "description": "Disable IPv4-to-IPv6 mapping for the listener.",
+            "description": "Disable IPv4-to-IPv6 mapping for the listener.<br/>The configuration is only valid when the inet6 is true.",
             "type": "boolean"
           }
         },
@@ -785,11 +785,12 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
           "username": {
+            "default": "root",
             "description": "EMQX's username in the external database.",
             "type": "string"
           },
@@ -800,7 +801,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -1259,7 +1261,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -1430,7 +1432,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -2076,7 +2078,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -2152,7 +2154,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -2167,7 +2169,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -2621,7 +2624,7 @@
             "type": "string"
           },
           "servers": {
-            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
+            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.<br/>",
             "type": "string"
           },
           "redis_type": {
@@ -2634,7 +2637,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -2645,7 +2648,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -2805,32 +2809,6 @@
         },
         "type": "object"
       },
-      "broker.cache": {
-        "required": [
-          "enable"
-        ],
-        "properties": {
-          "enable": {
-            "default": true,
-            "description": "Enable or disable the authorization cache.",
-            "type": "boolean"
-          },
-          "max_size": {
-            "default": 32,
-            "description": "Maximum number of cached items.",
-            "maximum": 1048576,
-            "minimum": 1,
-            "type": "integer"
-          },
-          "ttl": {
-            "default": "1m",
-            "description": "Time to live for the cached data.  ",
-            "example": "12m",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "api_key.app": {
         "properties": {
           "name": {
@@ -2982,6 +2960,32 @@
             "maximum": 15,
             "minimum": 8,
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "broker.authz_cache": {
+        "required": [
+          "enable"
+        ],
+        "properties": {
+          "enable": {
+            "default": true,
+            "description": "Enable or disable the authorization cache.",
+            "type": "boolean"
+          },
+          "max_size": {
+            "default": 32,
+            "description": "Maximum number of cached items.",
+            "maximum": 1048576,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "ttl": {
+            "default": "1m",
+            "description": "Time to live for the cached data.  ",
+            "example": "12m",
+            "type": "string"
           }
         },
         "type": "object"
@@ -3320,13 +3324,24 @@
           },
           "health_check_interval": {
             "default": "15s",
-            "description": "Health check interval, in milliseconds.",
+            "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "start_after_created": {
+            "default": "true",
+            "description": "Whether start the resource right after created.",
+            "type": "boolean"
+          },
+          "start_timeout": {
+            "default": "5s",
+            "description": "Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.",
             "example": "32s",
             "type": "string"
           },
           "auto_restart_interval": {
             "default": "60s",
-            "description": "The auto restart interval after the resource is disconnected, in milliseconds.",
+            "description": "The auto restart interval after the resource is disconnected.",
             "oneOf": [
               {
                 "example": "32s",
@@ -3342,12 +3357,28 @@
           },
           "query_mode": {
             "default": "async",
-            "description": "Query mode. Optional 'sync/async', default 'sync'.",
+            "description": "Query mode. Optional 'sync/async', default 'async'.",
             "enum": [
               "sync",
               "async"
             ],
             "type": "string"
+          },
+          "request_timeout": {
+            "default": "15s",
+            "description": "Timeout for requests.  If <code>query_mode</code> is <code>sync</code>, calls to the resource will be blocked for this amount of time before timing out.",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "async_inflight_window": {
             "default": 100,
@@ -3532,7 +3563,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -3901,7 +3932,7 @@
             "type": "integer"
           },
           "request": {
-            "description": "<br/>If the request is provided, the caller can send HTTP requests via<br/><code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code><br/>",
+            "description": "Configure HTTP request parameters.",
             "$ref": "#/components/schemas/connector-http.request"
           },
           "retry_interval": {
@@ -4436,7 +4467,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -4600,7 +4631,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -4831,6 +4862,7 @@
           },
           "password": {
             "description": "Template for overriding password.",
+            "format": "password",
             "type": "string"
           },
           "clientid": {
@@ -5084,7 +5116,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -5402,7 +5434,7 @@
             "type": "integer"
           },
           "request": {
-            "description": "<br/>If the request is provided, the caller can send HTTP requests via<br/><code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code><br/>",
+            "description": "Configure HTTP request parameters.",
             "$ref": "#/components/schemas/connector-http.request"
           },
           "retry_interval": {
@@ -5600,17 +5632,6 @@
           "type"
         ],
         "properties": {
-          "metrics": {
-            "description": "Bridge metrics.",
-            "$ref": "#/components/schemas/bridge.metrics"
-          },
-          "node_metrics": {
-            "description": "Node metrics.",
-            "items": {
-              "$ref": "#/components/schemas/bridge.node_metrics"
-            },
-            "type": "array"
-          },
           "status": {
             "description": "The status of the bridge",
             "enum": [
@@ -5681,7 +5702,7 @@
             "type": "integer"
           },
           "request": {
-            "description": "<br/>If the request is provided, the caller can send HTTP requests via<br/><code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code><br/>",
+            "description": "Configure HTTP request parameters.",
             "$ref": "#/components/schemas/connector-http.request"
           },
           "ssl": {
@@ -5693,6 +5714,14 @@
           },
           "url": {
             "description": "<br/>The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed.<br/>",
+            "type": "string"
+          },
+          "direction": {
+            "deprecated": "since(\"5.0.12\")",
+            "description": "Deprecated, The direction of this bridge, MUST be 'egress'",
+            "enum": [
+              "egress"
+            ],
             "type": "string"
           },
           "local_topic": {
@@ -5868,7 +5897,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -5932,7 +5961,7 @@
       },
       "public.meta": {
         "required": [
-          "count"
+          "hasnext"
         ],
         "properties": {
           "page": {
@@ -5951,9 +5980,13 @@
             "type": "integer"
           },
           "count": {
-            "description": "Total number of records counted.<br/>Note: this field is <code>0</code> when the queryed table is empty, or if the query can not be optimized and requires a full table scan.",
+            "description": "Total number of records matching the query.<br/>Note: this field is present only if the query can be optimized and does not require a full table scan.",
             "minimum": 0,
             "type": "integer"
+          },
+          "hasnext": {
+            "description": "Flag indicating whether there are more results available on next pages.",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -6259,7 +6292,7 @@
             "type": "integer"
           },
           "request": {
-            "description": "<br/>If the request is provided, the caller can send HTTP requests via<br/><code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code><br/>",
+            "description": "Configure HTTP request parameters.",
             "$ref": "#/components/schemas/connector-http.request"
           },
           "retry_interval": {
@@ -6562,7 +6595,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -6637,18 +6670,18 @@
           },
           "load1": {
             "description": "CPU average load in 1 minute",
-            "example": "2.66",
-            "type": "string"
+            "example": 2.66,
+            "type": "number"
           },
           "load5": {
             "description": "CPU average load in 5 minute",
-            "example": "2.66",
-            "type": "string"
+            "example": 2.66,
+            "type": "number"
           },
           "load15": {
             "description": "CPU average load in 15 minute",
-            "example": "2.66",
-            "type": "string"
+            "example": 2.66,
+            "type": "number"
           },
           "max_fds": {
             "description": "File descriptors limit",
@@ -7186,7 +7219,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -7447,7 +7480,7 @@
         "properties": {
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -7612,7 +7645,7 @@
             "type": "boolean"
           },
           "servers": {
-            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
+            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.<br/>",
             "type": "string"
           },
           "redis_type": {
@@ -7625,7 +7658,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -7636,7 +7669,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -8148,7 +8182,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -8262,7 +8296,7 @@
           },
           "restart_after": {
             "default": "5s",
-            "description": "If the handler is terminated, it restarts automatically after a delay specified in milliseconds. The value `infinity` prevents restarts.",
+            "description": "The handler restarts automatically after a delay in the event of termination, unless the value `infinity` is set, which blocks any subsequent restarts.",
             "oneOf": [
               {
                 "enum": [
@@ -8457,7 +8491,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -8589,7 +8623,7 @@
             "type": "string"
           },
           "servers": {
-            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
+            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.<br/>",
             "type": "string"
           },
           "redis_type": {
@@ -8606,7 +8640,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -8622,7 +8656,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -8690,11 +8725,12 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
           "username": {
+            "default": "root",
             "description": "EMQX's username in the external database.",
             "type": "string"
           },
@@ -8705,7 +8741,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -8924,7 +8961,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -8940,7 +8977,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -9215,7 +9253,7 @@
             "type": "object"
           },
           "duration": {
-            "description": "Indicates how long the alarm has lasted, in milliseconds.",
+            "description": "Indicates how long the alarm has been active in milliseconds.",
             "example": 297056,
             "type": "integer"
           },
@@ -9298,7 +9336,7 @@
             "type": "boolean"
           },
           "servers": {
-            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The MongoDB default port 27017 is used if `[:Port]` is not specified.<br/>",
+            "description": "<br/>A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.<br/>",
             "type": "string"
           },
           "redis_type": {
@@ -9315,7 +9353,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -9331,7 +9369,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -9550,7 +9589,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -9592,7 +9631,7 @@
             "type": "boolean"
           },
           "backoff_delay": {
-            "description": "When at high load, some unimportant tasks could be delayed for execution, here set the duration in milliseconds precision.",
+            "description": "The maximum duration of delay for background task execution during high load conditions.",
             "minimum": 0,
             "type": "integer"
           },
@@ -9835,13 +9874,24 @@
           },
           "health_check_interval": {
             "default": "15s",
-            "description": "Health check interval, in milliseconds.",
+            "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "start_after_created": {
+            "default": "true",
+            "description": "Whether start the resource right after created.",
+            "type": "boolean"
+          },
+          "start_timeout": {
+            "default": "5s",
+            "description": "Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.",
             "example": "32s",
             "type": "string"
           },
           "auto_restart_interval": {
             "default": "60s",
-            "description": "The auto restart interval after the resource is disconnected, in milliseconds.",
+            "description": "The auto restart interval after the resource is disconnected.",
             "oneOf": [
               {
                 "example": "32s",
@@ -9857,12 +9907,28 @@
           },
           "query_mode": {
             "default": "async",
-            "description": "Query mode. Optional 'sync/async', default 'sync'.",
+            "description": "Query mode. Optional 'sync/async', default 'async'.",
             "enum": [
               "sync",
               "async"
             ],
             "type": "string"
+          },
+          "request_timeout": {
+            "default": "15s",
+            "description": "Timeout for requests.  If <code>query_mode</code> is <code>sync</code>, calls to the resource will be blocked for this amount of time before timing out.",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "async_inflight_window": {
             "default": 100,
@@ -10023,7 +10089,7 @@
           },
           "long_gc": {
             "default": "disabled",
-            "description": "Enable Long GC monitoring.",
+            "description": "When an Erlang process spends long time to perform garbage collection, a warning level <code>long_gc</code> log is emitted,<br/>and an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</code>.<br/>",
             "oneOf": [
               {
                 "example": "12m",
@@ -10039,7 +10105,7 @@
           },
           "long_schedule": {
             "default": "240ms",
-            "description": "Enable Long Schedule monitoring.",
+            "description": "When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,<br/>and an MQTT message is published to the system topic <code>$SYS/sysmon/long_schedule</code>.<br/>",
             "oneOf": [
               {
                 "example": "12m",
@@ -10055,7 +10121,7 @@
           },
           "large_heap": {
             "default": "32MB",
-            "description": "Enable Large Heap monitoring.",
+            "description": "When an Erlang process consumed a large amount of memory for its heap space,<br/>the system will write a warning level <code>large_heap</code> log, and an MQTT message is published to<br/>the system topic <code>$SYS/sysmon/large_heap</code>.<br/>",
             "oneOf": [
               {
                 "example": "32MB",
@@ -10071,12 +10137,12 @@
           },
           "busy_dist_port": {
             "default": true,
-            "description": "Enable Busy Distribution Port monitoring.",
+            "description": "When the RPC connection used to communicate with other nodes in the cluster is overloaded,<br/>there will be a <code>busy_dist_port</code> warning log,<br/>and an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_port</code>.<br/>",
             "type": "boolean"
           },
           "busy_port": {
             "default": true,
-            "description": "Enable Busy Port monitoring.",
+            "description": "When a port (e.g. TCP socket) is overloaded, there will be a <code>busy_port</code> warning log,<br/>and an MQTT message is published to the system topic <code>$SYS/sysmon/busy_port</code>.<br/>",
             "type": "boolean"
           }
         },
@@ -10244,7 +10310,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -10386,7 +10452,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -10579,7 +10645,7 @@
             "type": "integer"
           },
           "request": {
-            "description": "<br/>If the request is provided, the caller can send HTTP requests via<br/><code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code><br/>",
+            "description": "Configure HTTP request parameters.",
             "$ref": "#/components/schemas/connector-http.request"
           },
           "retry_interval": {
@@ -10732,7 +10798,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -10747,7 +10813,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -11004,7 +11071,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -11439,7 +11506,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -11714,7 +11781,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -11730,7 +11797,8 @@
           },
           "auto_reconnect": {
             "default": true,
-            "description": "Enable automatic reconnect to the database.",
+            "deprecated": "since(\"v5.0.15\")",
+            "description": "Deprecated. Enable automatic reconnect to the database.",
             "type": "boolean"
           },
           "ssl": {
@@ -11752,6 +11820,7 @@
           "mnesia_collector",
           "vm_dist_collector",
           "enable",
+          "job_name",
           "interval",
           "push_gateway_server"
         ],
@@ -11765,6 +11834,20 @@
             "default": "15s",
             "description": "Data reporting interval",
             "example": "32s",
+            "type": "string"
+          },
+          "headers": {
+            "default": {},
+            "description": "A list of HTTP Headers when pushing to Push Gateway.<br/><br/>For example, <code> { Authorization = \"some-authz-tokens\"}</code>",
+            "items": {
+              "example": {},
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "job_name": {
+            "default": "${name}/instance/${name}~${host}",
+            "description": "Job Name that is pushed to the Push Gateway. Available variables:<br/><br/>- ${name}: Name of EMQX node.<br/><br/>- ${host}: Host name of EMQX node.<br/><br/>For example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/><br/><br/>Default value is: <code>${name}/instance/${name}~${host}</code><br/>",
             "type": "string"
           },
           "enable": {
@@ -12036,11 +12119,6 @@
             "description": "Optional prefix to prepend to the clientid used by egress bridges.",
             "type": "string"
           },
-          "reconnect_interval": {
-            "default": "15s",
-            "description": "Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
-            "type": "string"
-          },
           "proto_ver": {
             "default": "v4",
             "description": "The MQTT protocol version",
@@ -12067,6 +12145,7 @@
           },
           "clean_start": {
             "default": true,
+            "deprecated": "since(\"v5.0.16\")",
             "description": "The clean-start or the clean-session of the MQTT protocol",
             "type": "boolean"
           },
@@ -12362,7 +12441,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -12987,17 +13066,6 @@
           "server"
         ],
         "properties": {
-          "metrics": {
-            "description": "Bridge metrics.",
-            "$ref": "#/components/schemas/bridge.metrics"
-          },
-          "node_metrics": {
-            "description": "Node metrics.",
-            "items": {
-              "$ref": "#/components/schemas/bridge.node_metrics"
-            },
-            "type": "array"
-          },
           "status": {
             "description": "The status of the bridge",
             "enum": [
@@ -13040,11 +13108,6 @@
             "description": "Optional prefix to prepend to the clientid used by egress bridges.",
             "type": "string"
           },
-          "reconnect_interval": {
-            "default": "15s",
-            "description": "Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
-            "type": "string"
-          },
           "proto_ver": {
             "default": "v4",
             "description": "The MQTT protocol version",
@@ -13071,6 +13134,7 @@
           },
           "clean_start": {
             "default": true,
+            "deprecated": "since(\"v5.0.16\")",
             "description": "The clean-start or the clean-session of the MQTT protocol",
             "type": "boolean"
           },
@@ -13393,7 +13457,7 @@
       "zone.mqtt": {
         "properties": {
           "idle_timeout": {
-            "description": "After the TCP connection is established, if the MQTT CONNECT packet from the client is not received within the time specified by <code>idle_timeout</code>, the connection will be disconnected.",
+            "description": "After the TCP connection is established, if the MQTT CONNECT packet from the client is<br/>not received within the time specified by <code>idle_timeout</code>, the connection will be disconnected.<br/>After the CONNECT packet has been accepted by EMQX, if the connection idles for this long time,<br/>then the Erlang process is put to hibernation to save OS resources. Note: long <code>idle_timeout</code><br/>interval may impose risk at the system if large number of malicious clients only establish connections<br/>but do not send any data.",
             "oneOf": [
               {
                 "example": "12m",
@@ -13788,7 +13852,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -13900,11 +13964,6 @@
             "description": "Optional prefix to prepend to the clientid used by egress bridges.",
             "type": "string"
           },
-          "reconnect_interval": {
-            "default": "15s",
-            "description": "Reconnect interval. Delay for the MQTT bridge to retry establishing the connection in case of transportation failure. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
-            "type": "string"
-          },
           "proto_ver": {
             "default": "v4",
             "description": "The MQTT protocol version",
@@ -13931,6 +13990,7 @@
           },
           "clean_start": {
             "default": true,
+            "deprecated": "since(\"v5.0.16\")",
             "description": "The clean-start or the clean-session of the MQTT protocol",
             "type": "boolean"
           },
@@ -14677,8 +14737,8 @@
             ]
           },
           "num_acceptors": {
-            "default": 4,
-            "description": "Socket acceptor pool size for TCP protocols.",
+            "default": 20,
+            "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
           "max_connections": {
@@ -14692,7 +14752,7 @@
             "type": "integer"
           },
           "send_timeout": {
-            "default": "5s",
+            "default": "10s",
             "description": "Send timeout for the socket.",
             "example": "12m",
             "type": "string"
@@ -14704,7 +14764,7 @@
           },
           "ipv6_v6only": {
             "default": false,
-            "description": "Disable IPv4-to-IPv6 mapping for the listener.",
+            "description": "Disable IPv4-to-IPv6 mapping for the listener.<br/>The configuration is only valid when the inet6 is true.",
             "type": "boolean"
           },
           "cacertfile": {
@@ -14916,7 +14976,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -15195,7 +15255,7 @@
             "type": "integer"
           },
           "request": {
-            "description": "<br/>If the request is provided, the caller can send HTTP requests via<br/><code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code><br/>",
+            "description": "Configure HTTP request parameters.",
             "$ref": "#/components/schemas/connector-http.request"
           },
           "ssl": {
@@ -15207,6 +15267,14 @@
           },
           "url": {
             "description": "<br/>The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed.<br/>",
+            "type": "string"
+          },
+          "direction": {
+            "deprecated": "since(\"5.0.12\")",
+            "description": "Deprecated, The direction of this bridge, MUST be 'egress'",
+            "enum": [
+              "egress"
+            ],
             "type": "string"
           },
           "local_topic": {
@@ -15565,7 +15633,7 @@
             "type": "integer"
           },
           "request": {
-            "description": "<br/>If the request is provided, the caller can send HTTP requests via<br/><code>emqx_resource:query(ResourceId, {send_message, BridgeId, Message})</code><br/>",
+            "description": "Configure HTTP request parameters.",
             "$ref": "#/components/schemas/connector-http.request"
           },
           "ssl": {
@@ -15577,6 +15645,14 @@
           },
           "url": {
             "description": "<br/>The URL of the HTTP Bridge.<br/><br/>Template with variables is allowed in the path, but variables cannot be used in the scheme, host,<br/>or port part.<br/><br/>For example, <code> http://localhost:9901/${topic} </code> is allowed, but<br/><code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code><br/>is not allowed.<br/>",
+            "type": "string"
+          },
+          "direction": {
+            "deprecated": "since(\"5.0.12\")",
+            "description": "Deprecated, The direction of this bridge, MUST be 'egress'",
+            "enum": [
+              "egress"
+            ],
             "type": "string"
           },
           "local_topic": {
@@ -15702,7 +15778,6 @@
             "type": "string"
           },
           "config_files": {
-            "description": "List of configuration files that are read during startup. The order is<br/>significant: later configuration files override the previous ones.<br/>          ",
             "items": {
               "type": "string"
             },
@@ -15735,14 +15810,14 @@
           },
           "crash_dump_seconds": {
             "default": "30s",
-            "description": "The number of seconds that the broker is allowed to spend writing a crash dump.",
+            "description": "This variable gives the number of seconds that the emulator is allowed to spend writing a crash dump. When the given number of seconds have elapsed, the emulator is terminated.<br/>- If setting to 0 seconds, the runtime system does not even attempt to write the crash dump file. It only terminates.<br/>- If setting to a positive value S, wait for S seconds to complete the crash dump file and then terminates the runtime system with a SIGALRM signal.<br/>- A negative value causes the termination of the runtime system to wait indefinitely until the crash dump file has been completely written.<br/> ",
             "example": "1h",
             "readOnly": true,
             "type": "string"
           },
           "crash_dump_bytes": {
             "default": "100MB",
-            "description": "The maximum size of a crash dump file in bytes.",
+            "description": "This variable sets the maximum size of a crash dump file in bytes.<br/>The crash dump will be truncated if this limit is exceeded.<br/>If setting it to 0, the runtime system does not even attempt to write a crash dump file.<br/>",
             "example": "32MB",
             "readOnly": true,
             "type": "string"
@@ -16283,7 +16358,7 @@
           },
           "enable_authn": {
             "default": true,
-            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous<code>, it behaves like when set to <code>true</code> but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
+            "description": "<br/>Set <code>true</code> (default) to enable client authentication on this listener, the authentication<br/>process goes through the configured authentication chain.<br/>When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.<br/>When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be<br/>denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off<br/>anonymous clients early.<br/>",
             "enum": [
               true,
               false,
@@ -16850,7 +16925,7 @@
           },
           "pool_size": {
             "default": 8,
-            "description": "Size of the connection pool.",
+            "description": "Size of the connection pool towards the bridge target service.",
             "minimum": 1,
             "type": "integer"
           },
@@ -16956,19 +17031,19 @@
           },
           "default_password": {
             "default": "public",
-            "description": "The initial default password for dashboard 'admin' user.<br/>For safety, it should be changed as soon as possible.",
+            "description": "The initial default password for dashboard 'admin' user.<br/>For safety, it should be changed as soon as possible.<br/>This value is not valid when you log in to Dashboard for the first time via the web<br/>and change to a complex password as prompted.<br/>",
             "readOnly": true,
             "type": "string"
           },
           "sample_interval": {
             "default": "10s",
-            "description": "How often to update metrics displayed in the dashboard.<br/>Note: `sample_interval` should be a divisor of 60.",
+            "description": "How often to update metrics displayed in the dashboard.<br/>Note: `sample_interval` should be a divisor of 60, default is 10s.",
             "example": "1h",
             "type": "string"
           },
           "token_expired_time": {
             "default": "60m",
-            "description": "JWT token expiration time.",
+            "description": "JWT token expiration time. Default is 60 minutes",
             "example": "12m",
             "type": "string"
           },
@@ -16989,7 +17064,7 @@
           },
           "bootstrap_users_file": {
             "default": "",
-            "description": "Deprecated, use api_key.bootstrap_file",
+            "description": "Deprecated, use api_key.bootstrap_file.",
             "type": "string"
           }
         },
@@ -17248,11 +17323,8 @@
     },
     "securitySchemes": {
       "basicAuth": {
+        "description": "Authorize with [API Keys](https://www.emqx.io/docs/en/v5.0/admin/api.html#api-keys)",
         "scheme": "basic",
-        "type": "http"
-      },
-      "bearerAuth": {
-        "scheme": "bearer",
         "type": "http"
       }
     }
@@ -18156,6 +18228,62 @@
         ]
       }
     },
+    "/bridges/{id}/metrics/reset": {
+      "put": {
+        "description": "Reset a bridge metrics by Id",
+        "parameters": [
+          {
+            "description": "The bridge Id. Must be of format {type}:{name}",
+            "example": "webhook:webhook_example",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reset success"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "RPC Call Failed",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Reset Bridge Metrics",
+        "tags": [
+          "Bridges"
+        ]
+      }
+    },
     "/status": {
       "get": {
         "description": "Serves as a health check for the node.  Returns a plain text response describing the status of the node.  This endpoint requires no authentication.<br/><br/>Returns status code 200 if the EMQX application is up and running, 503 otherwise.<br/>This API was introduced in v5.0.10.<br/>The GET `/status` endpoint (without the `/api/...` prefix) is also an alias to this endpoint and works in the same way.  This alias has been available since v5.0.0.",
@@ -18195,7 +18323,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/emqx_mgmt_api_topics.topic"
+                  "items": {
+                    "$ref": "#/components/schemas/emqx_mgmt_api_topics.topic"
+                  },
+                  "type": "array"
                 }
               }
             }
@@ -18233,234 +18364,6 @@
         ],
         "tags": [
           "Topics"
-        ]
-      }
-    },
-    "/authorization/sources/built_in_database/clientid/{clientid}": {
-      "delete": {
-        "description": "Delete one record for clientid",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/emqx_authz_api_mnesia.clientid"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad clientid",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "ClientID Not Found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      },
-      "get": {
-        "description": "Get record info for clientid",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/emqx_authz_api_mnesia.clientid"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "password_based:built_in_database": {
-                    "summary": "ClientID",
-                    "value": {
-                      "clientid": "client1",
-                      "rules": [
-                        {
-                          "action": "publish",
-                          "permission": "allow",
-                          "topic": "test/toopic/1"
-                        },
-                        {
-                          "action": "subscribe",
-                          "permission": "allow",
-                          "topic": "test/toopic/2"
-                        },
-                        {
-                          "action": "all",
-                          "permission": "deny",
-                          "topic": "eq test/#"
-                        }
-                      ]
-                    }
-                  }
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_clientid"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Not Found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      },
-      "put": {
-        "description": "Set record for clientid",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/emqx_authz_api_mnesia.clientid"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "examples": {
-                "password_based:built_in_database": {
-                  "summary": "ClientID",
-                  "value": {
-                    "clientid": "client1",
-                    "rules": [
-                      {
-                        "action": "publish",
-                        "permission": "allow",
-                        "topic": "test/toopic/1"
-                      },
-                      {
-                        "action": "subscribe",
-                        "permission": "allow",
-                        "topic": "test/toopic/2"
-                      },
-                      {
-                        "action": "all",
-                        "permission": "deny",
-                        "topic": "eq test/#"
-                      }
-                    ]
-                  }
-                }
-              },
-              "schema": {
-                "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_clientid"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Updated"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad clientid or bad rule schema",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
         ]
       }
     },
@@ -19046,6 +18949,188 @@
         ]
       }
     },
+    "/authorization/sources/built_in_database/rules/users": {
+      "get": {
+        "description": "Show the list of rules for users",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/public.page"
+          },
+          {
+            "$ref": "#/components/parameters/public.limit"
+          },
+          {
+            "description": "Fuzzy search `username` as substring",
+            "in": "query",
+            "name": "like_username",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "password_based:built_in_database": {
+                    "summary": "Username",
+                    "value": {
+                      "data": [
+                        {
+                          "rules": [
+                            {
+                              "action": "publish",
+                              "permission": "allow",
+                              "topic": "test/toopic/1"
+                            },
+                            {
+                              "action": "subscribe",
+                              "permission": "allow",
+                              "topic": "test/toopic/2"
+                            },
+                            {
+                              "action": "all",
+                              "permission": "deny",
+                              "topic": "eq test/#"
+                            }
+                          ],
+                          "username": "user1"
+                        }
+                      ],
+                      "meta": {
+                        "count": 1,
+                        "limit": 100,
+                        "page": 1
+                      }
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.username_response_data"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "post": {
+        "description": "Add new rule for 'username'",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "password_based:built_in_database": {
+                  "summary": "Username",
+                  "value": [
+                    {
+                      "rules": [
+                        {
+                          "action": "publish",
+                          "permission": "allow",
+                          "topic": "test/toopic/1"
+                        },
+                        {
+                          "action": "subscribe",
+                          "permission": "allow",
+                          "topic": "test/toopic/2"
+                        },
+                        {
+                          "action": "all",
+                          "permission": "deny",
+                          "topic": "eq test/#"
+                        }
+                      ],
+                      "username": "user1"
+                    }
+                  ]
+                }
+              },
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_username"
+                },
+                "type": "array"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad username or bad rule schema",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "ALREADY_EXISTS"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "ALREADY_EXISTS",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      }
+    },
     "/nodes/{node}/stats": {
       "get": {
         "description": "Get node stats",
@@ -19377,7 +19462,11 @@
               "application/json": {
                 "example": {
                   "enable": true,
+                  "headers": {
+                    "header-name": "header-value"
+                  },
                   "interval": "15s",
+                  "job_name": "${name}/instance/${name}~${host}",
                   "mnesia_collector": "enabled",
                   "push_gateway_server": "http://127.0.0.1:9091",
                   "vm_dist_collector": "enabled",
@@ -19413,7 +19502,11 @@
             "application/json": {
               "example": {
                 "enable": true,
+                "headers": {
+                  "header-name": "header-value"
+                },
                 "interval": "15s",
+                "job_name": "${name}/instance/${name}~${host}",
                 "mnesia_collector": "enabled",
                 "push_gateway_server": "http://127.0.0.1:9091",
                 "vm_dist_collector": "enabled",
@@ -19435,7 +19528,11 @@
               "application/json": {
                 "example": {
                   "enable": true,
+                  "headers": {
+                    "header-name": "header-value"
+                  },
                   "interval": "15s",
+                  "job_name": "${name}/instance/${name}~${host}",
                   "mnesia_collector": "enabled",
                   "push_gateway_server": "http://127.0.0.1:9091",
                   "vm_dist_collector": "enabled",
@@ -21445,48 +21542,129 @@
         ]
       }
     },
-    "/nodes/{node}/bridges/{id}/operation/{operation}": {
-      "post": {
-        "description": "Stop/Restart bridges on a specific node.<br/> NOTE: It's not allowed to disable/enable bridges on a single node.",
+    "/authorization/sources/built_in_database/rules/clients": {
+      "get": {
+        "description": "Show the list of rules for clients",
         "parameters": [
           {
-            "description": "The node name, e.g. emqx@127.0.0.1",
-            "example": "emqx@127.0.0.1",
-            "in": "path",
-            "name": "node",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/public.page"
           },
           {
-            "description": "The bridge Id. Must be of format {type}:{name}",
-            "example": "webhook:webhook_example",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/public.limit"
           },
           {
-            "description": "Operations can be one of: stop, restart",
-            "example": "start",
-            "in": "path",
-            "name": "operation",
-            "required": true,
+            "description": "Fuzzy search `clientid` as substring",
+            "in": "query",
+            "name": "like_clientid",
+            "required": false,
             "schema": {
-              "enum": [
-                "stop",
-                "restart"
-              ],
               "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Operation success"
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "password_based:built_in_database": {
+                    "summary": "ClientID",
+                    "value": {
+                      "data": [
+                        {
+                          "clientid": "client1",
+                          "rules": [
+                            {
+                              "action": "publish",
+                              "permission": "allow",
+                              "topic": "test/toopic/1"
+                            },
+                            {
+                              "action": "subscribe",
+                              "permission": "allow",
+                              "topic": "test/toopic/2"
+                            },
+                            {
+                              "action": "all",
+                              "permission": "deny",
+                              "topic": "eq test/#"
+                            }
+                          ]
+                        }
+                      ],
+                      "meta": {
+                        "count": 1,
+                        "limit": 100,
+                        "page": 1
+                      }
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.clientid_response_data"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "post": {
+        "description": "Add new rule for 'clientid'",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "password_based:built_in_database": {
+                  "summary": "ClientID",
+                  "value": [
+                    {
+                      "clientid": "client1",
+                      "rules": [
+                        {
+                          "action": "publish",
+                          "permission": "allow",
+                          "topic": "test/toopic/1"
+                        },
+                        {
+                          "action": "subscribe",
+                          "permission": "allow",
+                          "topic": "test/toopic/2"
+                        },
+                        {
+                          "action": "all",
+                          "permission": "deny",
+                          "topic": "eq test/#"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_clientid"
+                },
+                "type": "array"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Created"
           },
           "400": {
             "description": "",
@@ -21496,56 +21674,12 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "INVALID_ID"
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bad bridge ID",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "FORBIDDEN_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "forbidden operation",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "SERVICE_UNAVAILABLE"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Service unavailable",
+                      "description": "Bad clientid or bad rule schema",
                       "type": "string"
                     }
                   },
@@ -21563,9 +21697,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Stop/Restart Bridge",
         "tags": [
-          "Bridges"
+          "Authorization"
         ]
       }
     },
@@ -22118,50 +22251,6 @@
         ]
       }
     },
-    "/authorization/sources/built_in_database/purge-all": {
-      "delete": {
-        "description": "Purge all records for username/clientid/all",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad Request",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      }
-    },
     "/cluster": {
       "get": {
         "description": "Get cluster info",
@@ -22386,83 +22475,83 @@
                   "general_client": {
                     "summary": "General Client Info",
                     "value": {
-                      "ip_address": "127.0.0.1",
-                      "recv_cnt": 1,
-                      "proto_ver": "1.0",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "subscriptions_max": "infinity",
-                      "is_bridge": false,
-                      "recv_msg": 0,
-                      "connected": true,
                       "send_pkt": 1,
                       "mailbox_len": 0,
-                      "proto_name": "STOMP",
-                      "send_msg": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "subscriptions_cnt": 0,
-                      "expiry_interval": 0,
-                      "reductions": 72022,
-                      "mqueue_max": "infinity",
+                      "recv_cnt": 1,
                       "clean_start": true,
+                      "connected": true,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "subscriptions_max": "infinity",
+                      "inflight_max": "infinity",
+                      "awaiting_rel_max": "infinity",
+                      "username": "guest",
+                      "is_bridge": false,
+                      "reductions": 72022,
+                      "expiry_interval": 0,
+                      "proto_name": "STOMP",
+                      "subscriptions_cnt": 0,
+                      "send_msg": 0,
+                      "proto_ver": "1.0",
                       "mqueue_len": 0,
-                      "mqueue_dropped": 0,
+                      "inflight_cnt": 0,
+                      "awaiting_rel_cnt": 0,
                       "disconnected_at": null,
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "recv_pkt": 1,
+                      "mqueue_max": "infinity",
                       "keepalive": 0,
-                      "inflight_cnt": 0,
-                      "username": "guest",
+                      "ip_address": "127.0.0.1",
+                      "recv_pkt": 1,
                       "node": "emqx@127.0.0.1",
                       "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "mqueue_dropped": 0,
                       "heap_size": 4185,
-                      "awaiting_rel_max": "infinity",
+                      "recv_msg": 0,
                       "port": 50675,
-                      "awaiting_rel_cnt": 0,
-                      "send_cnt": 1,
-                      "inflight_max": "infinity"
+                      "send_cnt": 1
                     }
                   },
                   "lwm2m_client": {
                     "summary": "LwM2M Client Info",
                     "value": {
-                      "ip_address": "127.0.0.1",
-                      "recv_cnt": 1,
-                      "proto_ver": "1.0",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "subscriptions_max": "infinity",
-                      "is_bridge": false,
-                      "recv_msg": 0,
-                      "connected": true,
                       "send_pkt": 1,
                       "mailbox_len": 0,
-                      "proto_name": "LwM2M",
-                      "send_msg": 0,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "subscriptions_cnt": 0,
-                      "expiry_interval": 0,
-                      "reductions": 72022,
-                      "lifetime": 86400,
-                      "mqueue_max": "infinity",
+                      "recv_cnt": 1,
                       "clean_start": true,
+                      "connected": true,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "subscriptions_max": "infinity",
+                      "inflight_max": "infinity",
+                      "awaiting_rel_max": "infinity",
+                      "username": "guest",
+                      "is_bridge": false,
+                      "reductions": 72022,
+                      "expiry_interval": 0,
+                      "proto_name": "LwM2M",
+                      "subscriptions_cnt": 0,
+                      "send_msg": 0,
+                      "proto_ver": "1.0",
                       "mqueue_len": 0,
-                      "mqueue_dropped": 0,
+                      "inflight_cnt": 0,
+                      "awaiting_rel_cnt": 0,
                       "disconnected_at": null,
                       "recv_oct": 56,
                       "send_oct": 61,
-                      "recv_pkt": 1,
+                      "mqueue_max": "infinity",
                       "keepalive": 0,
-                      "inflight_cnt": 0,
-                      "username": "guest",
+                      "ip_address": "127.0.0.1",
+                      "recv_pkt": 1,
                       "node": "emqx@127.0.0.1",
                       "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "heap_size": 4185,
-                      "awaiting_rel_max": "infinity",
-                      "port": 50675,
-                      "awaiting_rel_cnt": 0,
                       "endpoint_name": "urn:imei:154928475237123",
+                      "mqueue_dropped": 0,
+                      "heap_size": 4185,
+                      "recv_msg": 0,
+                      "port": 50675,
                       "send_cnt": 1,
-                      "inflight_max": "infinity"
+                      "lifetime": 86400
                     }
                   }
                 },
@@ -22638,6 +22727,130 @@
         ]
       }
     },
+    "/nodes/{node}/bridges/{id}/{operation}": {
+      "post": {
+        "description": "Stop/Restart bridges on a specific node.",
+        "parameters": [
+          {
+            "description": "The node name, e.g. emqx@127.0.0.1",
+            "example": "emqx@127.0.0.1",
+            "in": "path",
+            "name": "node",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The bridge Id. Must be of format {type}:{name}",
+            "example": "webhook:webhook_example",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Operations can be one of: stop, restart",
+            "example": "stop",
+            "in": "path",
+            "name": "operation",
+            "required": true,
+            "schema": {
+              "enum": [
+                "stop",
+                "restart"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation success"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INVALID_ID"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad bridge ID",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "FORBIDDEN_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "forbidden operation",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Service unavailable",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Stop/Restart Bridge",
+        "tags": [
+          "Bridges"
+        ]
+      }
+    },
     "/rule_test": {
       "post": {
         "description": "Test a rule",
@@ -22711,6 +22924,234 @@
         "summary": "Test a Rule",
         "tags": [
           "Rules"
+        ]
+      }
+    },
+    "/authorization/sources/built_in_database/rules/clients/{clientid}": {
+      "delete": {
+        "description": "Delete rule for 'clientid'",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_authz_api_mnesia.clientid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad clientid",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "ClientID Not Found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "get": {
+        "description": "Get rule for 'clientid'",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_authz_api_mnesia.clientid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "password_based:built_in_database": {
+                    "summary": "ClientID",
+                    "value": {
+                      "clientid": "client1",
+                      "rules": [
+                        {
+                          "action": "publish",
+                          "permission": "allow",
+                          "topic": "test/toopic/1"
+                        },
+                        {
+                          "action": "subscribe",
+                          "permission": "allow",
+                          "topic": "test/toopic/2"
+                        },
+                        {
+                          "action": "all",
+                          "permission": "deny",
+                          "topic": "eq test/#"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_clientid"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Not Found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "put": {
+        "description": "Set rule for 'clientid'",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_authz_api_mnesia.clientid"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "password_based:built_in_database": {
+                  "summary": "ClientID",
+                  "value": {
+                    "clientid": "client1",
+                    "rules": [
+                      {
+                        "action": "publish",
+                        "permission": "allow",
+                        "topic": "test/toopic/1"
+                      },
+                      {
+                        "action": "subscribe",
+                        "permission": "allow",
+                        "topic": "test/toopic/2"
+                      },
+                      {
+                        "action": "all",
+                        "permission": "deny",
+                        "topic": "eq test/#"
+                      }
+                    ]
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_clientid"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad clientid or bad rule schema",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
         ]
       }
     },
@@ -24515,6 +24956,147 @@
         ]
       }
     },
+    "/bridges_probe": {
+      "post": {
+        "description": "<br/>Test creating a new bridge by given ID </br><br/>The ID must be of format '{type}:{name}'<br/>",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "mqtt_example": {
+                  "summary": "MQTT Bridge",
+                  "value": {
+                    "clean_start": true,
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "payload": "${payload}",
+                        "qos": "${qos}",
+                        "retain": false,
+                        "topic": "from_emqx/${topic}"
+                      }
+                    },
+                    "enable": true,
+                    "ingress": {
+                      "local": {
+                        "payload": "${payload}",
+                        "qos": "${qos}",
+                        "retain": "${retain}",
+                        "topic": "from_aws/${topic}"
+                      },
+                      "remote": {
+                        "qos": 1,
+                        "topic": "aws/#"
+                      }
+                    },
+                    "keepalive": "300s",
+                    "max_inflight": 100,
+                    "mode": "cluster_shareload",
+                    "name": "mqtt_example",
+                    "password": "bar",
+                    "proto_ver": "v4",
+                    "resource_opts": {
+                      "auto_restart_interval": "60s",
+                      "health_check_interval": "15s",
+                      "max_queue_bytes": 104857600,
+                      "query_mode": "sync"
+                    },
+                    "retry_interval": "15s",
+                    "server": "127.0.0.1:1883",
+                    "ssl": {
+                      "enable": false
+                    },
+                    "type": "mqtt",
+                    "username": "foo"
+                  }
+                },
+                "webhook_example": {
+                  "summary": "WebHook",
+                  "value": {
+                    "body": "${payload}",
+                    "connect_timeout": "15s",
+                    "enable": true,
+                    "enable_pipelining": 100,
+                    "local_topic": "emqx_webhook/#",
+                    "max_retries": 3,
+                    "method": "post",
+                    "name": "webhook_example",
+                    "pool_size": 4,
+                    "pool_type": "random",
+                    "request_timeout": "15s",
+                    "resource_opts": {
+                      "async_inflight_window": 100,
+                      "auto_restart_interval": 15000,
+                      "health_check_interval": 15000,
+                      "max_queue_bytes": 104857600,
+                      "query_mode": "async",
+                      "worker_pool_size": 1
+                    },
+                    "ssl": {
+                      "enable": false
+                    },
+                    "type": "webhook",
+                    "url": "http://localhost:9901/messages/${topic}"
+                  }
+                }
+              },
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/bridge_mqtt.post"
+                  },
+                  {
+                    "$ref": "#/components/schemas/bridge_webhook.post"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Test bridge OK"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "TEST_FAILED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "bridge test failed",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Test creating bridge",
+        "tags": [
+          "Bridges"
+        ]
+      }
+    },
     "/monitor/nodes/{node}": {
       "get": {
         "description": "List the monitor data on the node.",
@@ -25488,6 +26070,94 @@
         ]
       }
     },
+    "/bridges/{id}/enable/{enable}": {
+      "put": {
+        "description": "Enable or Disable bridges on all nodes in the cluster.",
+        "parameters": [
+          {
+            "description": "The bridge Id. Must be of format {type}:{name}",
+            "example": "webhook:webhook_example",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Whether or not the bridge is enabled",
+            "example": true,
+            "in": "path",
+            "name": "enable",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INVALID_ID"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad bridge ID",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Service unavailable",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Enable or Disable Bridge",
+        "tags": [
+          "Bridges"
+        ]
+      }
+    },
     "/configs/cluster": {
       "get": {
         "description": "Get the sub-configurations under *cluster*",
@@ -25616,6 +26286,82 @@
         ],
         "tags": [
           "Configs"
+        ]
+      }
+    },
+    "/bridges/{id}/metrics": {
+      "get": {
+        "description": "Get bridge metrics by Id",
+        "parameters": [
+          {
+            "description": "The bridge Id. Must be of format {type}:{name}",
+            "example": "webhook:webhook_example",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "metrics": {
+                      "description": "Bridge metrics.",
+                      "$ref": "#/components/schemas/bridge.metrics"
+                    },
+                    "node_metrics": {
+                      "description": "Node metrics.",
+                      "items": {
+                        "$ref": "#/components/schemas/bridge.node_metrics"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bridge not found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get Bridge Metrics",
+        "tags": [
+          "Bridges"
         ]
       }
     },
@@ -27452,188 +28198,6 @@
         ]
       }
     },
-    "/authorization/sources/built_in_database/username": {
-      "get": {
-        "description": "Show the list of record for username",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/public.page"
-          },
-          {
-            "$ref": "#/components/parameters/public.limit"
-          },
-          {
-            "description": "Fuzzy search `username` as substring",
-            "in": "query",
-            "name": "like_username",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "password_based:built_in_database": {
-                    "summary": "Username",
-                    "value": {
-                      "data": [
-                        {
-                          "rules": [
-                            {
-                              "action": "publish",
-                              "permission": "allow",
-                              "topic": "test/toopic/1"
-                            },
-                            {
-                              "action": "subscribe",
-                              "permission": "allow",
-                              "topic": "test/toopic/2"
-                            },
-                            {
-                              "action": "all",
-                              "permission": "deny",
-                              "topic": "eq test/#"
-                            }
-                          ],
-                          "username": "user1"
-                        }
-                      ],
-                      "meta": {
-                        "count": 1,
-                        "limit": 100,
-                        "page": 1
-                      }
-                    }
-                  }
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.username_response_data"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      },
-      "post": {
-        "description": "Add new records for username",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "examples": {
-                "password_based:built_in_database": {
-                  "summary": "Username",
-                  "value": [
-                    {
-                      "rules": [
-                        {
-                          "action": "publish",
-                          "permission": "allow",
-                          "topic": "test/toopic/1"
-                        },
-                        {
-                          "action": "subscribe",
-                          "permission": "allow",
-                          "topic": "test/toopic/2"
-                        },
-                        {
-                          "action": "all",
-                          "permission": "deny",
-                          "topic": "eq test/#"
-                        }
-                      ],
-                      "username": "user1"
-                    }
-                  ]
-                }
-              },
-              "schema": {
-                "items": {
-                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_username"
-                },
-                "type": "array"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad username or bad rule schema",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "ALREADY_EXISTS"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "ALREADY_EXISTS",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      }
-    },
     "/configs/alarm": {
       "get": {
         "description": "Get the sub-configurations under *alarm*",
@@ -28362,7 +28926,7 @@
     },
     "/login": {
       "post": {
-        "description": "Dashboard Auth. Get Token",
+        "description": "Get Dashboard Auth Token.",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -28431,7 +28995,7 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "WRONG_USERNAME_OR_PWD"
+                        "BAD_USERNAME_OR_PWD"
                       ],
                       "type": "string"
                     },
@@ -28624,47 +29188,8 @@
                       },
                       "keepalive": "300s",
                       "max_inflight": 100,
-                      "metrics": {
-                        "dropped": 0,
-                        "dropped.other": 0,
-                        "dropped.queue_full": 0,
-                        "dropped.resource_not_found": 0,
-                        "dropped.resource_stopped": 0,
-                        "failed": 0,
-                        "inflight": 0,
-                        "matched": 0,
-                        "queuing": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
-                        "received": 0,
-                        "retried": 0,
-                        "success": 0
-                      },
                       "mode": "cluster_shareload",
                       "name": "mqtt_example",
-                      "node_metrics": [
-                        {
-                          "metrics": {
-                            "dropped": 0,
-                            "dropped.other": 0,
-                            "dropped.queue_full": 0,
-                            "dropped.resource_not_found": 0,
-                            "dropped.resource_stopped": 0,
-                            "failed": 0,
-                            "inflight": 0,
-                            "matched": 0,
-                            "queuing": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
-                            "received": 0,
-                            "retried": 0,
-                            "success": 0
-                          },
-                          "node": "emqx@127.0.0.1"
-                        }
-                      ],
                       "password": "bar",
                       "proto_ver": "v4",
                       "resource_opts": {
@@ -28692,46 +29217,7 @@
                       "local_topic": "emqx_webhook/#",
                       "max_retries": 3,
                       "method": "post",
-                      "metrics": {
-                        "dropped": 0,
-                        "dropped.other": 0,
-                        "dropped.queue_full": 0,
-                        "dropped.resource_not_found": 0,
-                        "dropped.resource_stopped": 0,
-                        "failed": 0,
-                        "inflight": 0,
-                        "matched": 0,
-                        "queuing": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
-                        "received": 0,
-                        "retried": 0,
-                        "success": 0
-                      },
                       "name": "webhook_example",
-                      "node_metrics": [
-                        {
-                          "metrics": {
-                            "dropped": 0,
-                            "dropped.other": 0,
-                            "dropped.queue_full": 0,
-                            "dropped.resource_not_found": 0,
-                            "dropped.resource_stopped": 0,
-                            "failed": 0,
-                            "inflight": 0,
-                            "matched": 0,
-                            "queuing": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
-                            "received": 0,
-                            "retried": 0,
-                            "success": 0
-                          },
-                          "node": "emqx@127.0.0.1"
-                        }
-                      ],
                       "pool_size": 4,
                       "pool_type": "random",
                       "request_timeout": "15s",
@@ -28942,47 +29428,8 @@
                       },
                       "keepalive": "300s",
                       "max_inflight": 100,
-                      "metrics": {
-                        "dropped": 0,
-                        "dropped.other": 0,
-                        "dropped.queue_full": 0,
-                        "dropped.resource_not_found": 0,
-                        "dropped.resource_stopped": 0,
-                        "failed": 0,
-                        "inflight": 0,
-                        "matched": 0,
-                        "queuing": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
-                        "received": 0,
-                        "retried": 0,
-                        "success": 0
-                      },
                       "mode": "cluster_shareload",
                       "name": "mqtt_example",
-                      "node_metrics": [
-                        {
-                          "metrics": {
-                            "dropped": 0,
-                            "dropped.other": 0,
-                            "dropped.queue_full": 0,
-                            "dropped.resource_not_found": 0,
-                            "dropped.resource_stopped": 0,
-                            "failed": 0,
-                            "inflight": 0,
-                            "matched": 0,
-                            "queuing": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
-                            "received": 0,
-                            "retried": 0,
-                            "success": 0
-                          },
-                          "node": "emqx@127.0.0.1"
-                        }
-                      ],
                       "password": "bar",
                       "proto_ver": "v4",
                       "resource_opts": {
@@ -29010,46 +29457,7 @@
                       "local_topic": "emqx_webhook/#",
                       "max_retries": 3,
                       "method": "post",
-                      "metrics": {
-                        "dropped": 0,
-                        "dropped.other": 0,
-                        "dropped.queue_full": 0,
-                        "dropped.resource_not_found": 0,
-                        "dropped.resource_stopped": 0,
-                        "failed": 0,
-                        "inflight": 0,
-                        "matched": 0,
-                        "queuing": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
-                        "received": 0,
-                        "retried": 0,
-                        "success": 0
-                      },
                       "name": "webhook_example",
-                      "node_metrics": [
-                        {
-                          "metrics": {
-                            "dropped": 0,
-                            "dropped.other": 0,
-                            "dropped.queue_full": 0,
-                            "dropped.resource_not_found": 0,
-                            "dropped.resource_stopped": 0,
-                            "failed": 0,
-                            "inflight": 0,
-                            "matched": 0,
-                            "queuing": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
-                            "received": 0,
-                            "retried": 0,
-                            "success": 0
-                          },
-                          "node": "emqx@127.0.0.1"
-                        }
-                      ],
                       "pool_size": 4,
                       "pool_type": "random",
                       "request_timeout": "15s",
@@ -29586,166 +29994,6 @@
         ],
         "tags": [
           "Cluster"
-        ]
-      }
-    },
-    "/authorization/sources/built_in_database/clientid": {
-      "get": {
-        "description": "Show the list of record for clientid",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/public.page"
-          },
-          {
-            "$ref": "#/components/parameters/public.limit"
-          },
-          {
-            "description": "Fuzzy search `clientid` as substring",
-            "in": "query",
-            "name": "like_clientid",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "password_based:built_in_database": {
-                    "summary": "ClientID",
-                    "value": {
-                      "data": [
-                        {
-                          "clientid": "client1",
-                          "rules": [
-                            {
-                              "action": "publish",
-                              "permission": "allow",
-                              "topic": "test/toopic/1"
-                            },
-                            {
-                              "action": "subscribe",
-                              "permission": "allow",
-                              "topic": "test/toopic/2"
-                            },
-                            {
-                              "action": "all",
-                              "permission": "deny",
-                              "topic": "eq test/#"
-                            }
-                          ]
-                        }
-                      ],
-                      "meta": {
-                        "count": 1,
-                        "limit": 100,
-                        "page": 1
-                      }
-                    }
-                  }
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.clientid_response_data"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      },
-      "post": {
-        "description": "Add new records for clientid",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "examples": {
-                "password_based:built_in_database": {
-                  "summary": "ClientID",
-                  "value": [
-                    {
-                      "clientid": "client1",
-                      "rules": [
-                        {
-                          "action": "publish",
-                          "permission": "allow",
-                          "topic": "test/toopic/1"
-                        },
-                        {
-                          "action": "subscribe",
-                          "permission": "allow",
-                          "topic": "test/toopic/2"
-                        },
-                        {
-                          "action": "all",
-                          "permission": "deny",
-                          "topic": "eq test/#"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              },
-              "schema": {
-                "items": {
-                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_clientid"
-                },
-                "type": "array"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad clientid or bad rule schema",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
         ]
       }
     },
@@ -30563,6 +30811,234 @@
         ]
       }
     },
+    "/authorization/sources/built_in_database/rules/users/{username}": {
+      "delete": {
+        "description": "Delete rule for 'username'",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_authz_api_mnesia.username"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad username",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Username Not Found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "get": {
+        "description": "Get rule for 'username'",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_authz_api_mnesia.username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "password_based:built_in_database": {
+                    "summary": "Username",
+                    "value": {
+                      "rules": [
+                        {
+                          "action": "publish",
+                          "permission": "allow",
+                          "topic": "test/toopic/1"
+                        },
+                        {
+                          "action": "subscribe",
+                          "permission": "allow",
+                          "topic": "test/toopic/2"
+                        },
+                        {
+                          "action": "all",
+                          "permission": "deny",
+                          "topic": "eq test/#"
+                        }
+                      ],
+                      "username": "user1"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_username"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Not Found",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "put": {
+        "description": "Set rule for 'username'",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_authz_api_mnesia.username"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "password_based:built_in_database": {
+                  "summary": "Username",
+                  "value": {
+                    "rules": [
+                      {
+                        "action": "publish",
+                        "permission": "allow",
+                        "topic": "test/toopic/1"
+                      },
+                      {
+                        "action": "subscribe",
+                        "permission": "allow",
+                        "topic": "test/toopic/2"
+                      },
+                      {
+                        "action": "all",
+                        "permission": "deny",
+                        "topic": "eq test/#"
+                      }
+                    ],
+                    "username": "user1"
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_username"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad username or bad rule schema",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      }
+    },
     "/subscriptions": {
       "get": {
         "description": "List subscriptions",
@@ -30704,62 +31180,6 @@
         ]
       }
     },
-    "/bridges/{id}/reset_metrics": {
-      "put": {
-        "description": "Reset a bridge metrics by Id",
-        "parameters": [
-          {
-            "description": "The bridge Id. Must be of format {type}:{name}",
-            "example": "webhook:webhook_example",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Reset success"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "RPC Call Failed",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Reset Bridge Metrics",
-        "tags": [
-          "Bridges"
-        ]
-      }
-    },
     "/error_codes": {
       "get": {
         "description": "API Error Codes",
@@ -30782,6 +31202,50 @@
         "security": [],
         "tags": [
           "Error Codes"
+        ]
+      }
+    },
+    "/authorization/sources/built_in_database/rules": {
+      "delete": {
+        "description": "Delete all rules for all 'users', 'clients' and 'all'",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
         ]
       }
     },
@@ -32979,14 +33443,14 @@
         "parameters": [
           {
             "description": "API Error Codes",
-            "example": "WRONG_USERNAME_OR_PWD",
+            "example": "BAD_USERNAME_OR_PWD",
             "in": "path",
             "name": "code",
             "required": true,
             "schema": {
               "enum": [
-                "WRONG_USERNAME_OR_PWD",
-                "WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET",
+                "BAD_USERNAME_OR_PWD",
+                "BAD_API_KEY_OR_SECRET",
                 "BAD_REQUEST",
                 "NOT_MATCH",
                 "ALREADY_EXISTS",
@@ -33035,6 +33499,98 @@
         "security": [],
         "tags": [
           "Error Codes"
+        ]
+      }
+    },
+    "/bridges/{id}/{operation}": {
+      "post": {
+        "description": "Stop/Restart bridges on all nodes in the cluster.",
+        "parameters": [
+          {
+            "description": "The bridge Id. Must be of format {type}:{name}",
+            "example": "webhook:webhook_example",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Operations can be one of: stop, restart",
+            "example": "restart",
+            "in": "path",
+            "name": "operation",
+            "required": true,
+            "schema": {
+              "enum": [
+                "stop",
+                "restart"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation success"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INVALID_ID"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad bridge ID",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Service unavailable",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Stop or Restart Bridge",
+        "tags": [
+          "Bridges"
         ]
       }
     },
@@ -34195,134 +34751,6 @@
         ]
       }
     },
-    "/authorization/sources/built_in_database/all": {
-      "get": {
-        "description": "Show the list of rules for all",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "password_based:built_in_database": {
-                    "summary": "All",
-                    "value": {
-                      "rules": [
-                        {
-                          "action": "publish",
-                          "permission": "allow",
-                          "topic": "test/toopic/1"
-                        },
-                        {
-                          "action": "subscribe",
-                          "permission": "allow",
-                          "topic": "test/toopic/2"
-                        },
-                        {
-                          "action": "all",
-                          "permission": "deny",
-                          "topic": "eq test/#"
-                        }
-                      ]
-                    }
-                  }
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      },
-      "post": {
-        "description": "<br/>Create/Update the list of rules for all.<br/>Set a empty list to clean up rules<br/>",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "examples": {
-                "password_based:built_in_database": {
-                  "summary": "All",
-                  "value": {
-                    "rules": [
-                      {
-                        "action": "publish",
-                        "permission": "allow",
-                        "topic": "test/toopic/1"
-                      },
-                      {
-                        "action": "subscribe",
-                        "permission": "allow",
-                        "topic": "test/toopic/2"
-                      },
-                      {
-                        "action": "all",
-                        "permission": "deny",
-                        "topic": "eq test/#"
-                      }
-                    ]
-                  }
-                }
-              },
-              "schema": {
-                "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Updated"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad rule schema",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      }
-    },
     "/authorization/sources/{type}": {
       "delete": {
         "description": "Delete source",
@@ -35159,100 +35587,6 @@
         ],
         "tags": [
           "Trace"
-        ]
-      }
-    },
-    "/bridges/{id}/operation/{operation}": {
-      "post": {
-        "description": "Enable/Disable/Stop/Restart bridges on all nodes in the cluster.",
-        "parameters": [
-          {
-            "description": "The bridge Id. Must be of format {type}:{name}",
-            "example": "webhook:webhook_example",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Operations can be one of: enable, disable, start, stop, restart",
-            "example": "restart",
-            "in": "path",
-            "name": "operation",
-            "required": true,
-            "schema": {
-              "enum": [
-                "enable",
-                "disable",
-                "stop",
-                "restart"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Operation success"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "INVALID_ID"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad bridge ID",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "SERVICE_UNAVAILABLE"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Service unavailable",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Enable/Disable/Stop/Restart Bridge",
-        "tags": [
-          "Bridges"
         ]
       }
     },
@@ -38440,41 +38774,41 @@
                     "summary": "General Client List",
                     "value": [
                       {
-                        "ip_address": "127.0.0.1",
-                        "recv_cnt": 1,
-                        "proto_ver": "1.0",
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
-                        "subscriptions_max": "infinity",
-                        "is_bridge": false,
-                        "recv_msg": 0,
-                        "connected": true,
                         "send_pkt": 1,
                         "mailbox_len": 0,
-                        "proto_name": "STOMP",
-                        "send_msg": 0,
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                        "subscriptions_cnt": 0,
-                        "expiry_interval": 0,
-                        "reductions": 72022,
-                        "mqueue_max": "infinity",
+                        "recv_cnt": 1,
                         "clean_start": true,
+                        "connected": true,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "subscriptions_max": "infinity",
+                        "inflight_max": "infinity",
+                        "awaiting_rel_max": "infinity",
+                        "username": "guest",
+                        "is_bridge": false,
+                        "reductions": 72022,
+                        "expiry_interval": 0,
+                        "proto_name": "STOMP",
+                        "subscriptions_cnt": 0,
+                        "send_msg": 0,
+                        "proto_ver": "1.0",
                         "mqueue_len": 0,
-                        "mqueue_dropped": 0,
+                        "inflight_cnt": 0,
+                        "awaiting_rel_cnt": 0,
                         "disconnected_at": null,
                         "recv_oct": 56,
                         "send_oct": 61,
-                        "recv_pkt": 1,
+                        "mqueue_max": "infinity",
                         "keepalive": 0,
-                        "inflight_cnt": 0,
-                        "username": "guest",
+                        "ip_address": "127.0.0.1",
+                        "recv_pkt": 1,
                         "node": "emqx@127.0.0.1",
                         "created_at": "2021-12-07T10:44:02.721+08:00",
+                        "mqueue_dropped": 0,
                         "heap_size": 4185,
-                        "awaiting_rel_max": "infinity",
+                        "recv_msg": 0,
                         "port": 50675,
-                        "awaiting_rel_cnt": 0,
-                        "send_cnt": 1,
-                        "inflight_max": "infinity"
+                        "send_cnt": 1
                       }
                     ]
                   },
@@ -38482,43 +38816,43 @@
                     "summary": "LwM2M Client List",
                     "value": [
                       {
-                        "ip_address": "127.0.0.1",
-                        "recv_cnt": 1,
-                        "proto_ver": "1.0",
-                        "connected_at": "2021-12-07T10:44:02.721+08:00",
-                        "subscriptions_max": "infinity",
-                        "is_bridge": false,
-                        "recv_msg": 0,
-                        "connected": true,
                         "send_pkt": 1,
                         "mailbox_len": 0,
-                        "proto_name": "LwM2M",
-                        "send_msg": 0,
-                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                        "subscriptions_cnt": 0,
-                        "expiry_interval": 0,
-                        "reductions": 72022,
-                        "lifetime": 86400,
-                        "mqueue_max": "infinity",
+                        "recv_cnt": 1,
                         "clean_start": true,
+                        "connected": true,
+                        "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                        "connected_at": "2021-12-07T10:44:02.721+08:00",
+                        "subscriptions_max": "infinity",
+                        "inflight_max": "infinity",
+                        "awaiting_rel_max": "infinity",
+                        "username": "guest",
+                        "is_bridge": false,
+                        "reductions": 72022,
+                        "expiry_interval": 0,
+                        "proto_name": "LwM2M",
+                        "subscriptions_cnt": 0,
+                        "send_msg": 0,
+                        "proto_ver": "1.0",
                         "mqueue_len": 0,
-                        "mqueue_dropped": 0,
+                        "inflight_cnt": 0,
+                        "awaiting_rel_cnt": 0,
                         "disconnected_at": null,
                         "recv_oct": 56,
                         "send_oct": 61,
-                        "recv_pkt": 1,
+                        "mqueue_max": "infinity",
                         "keepalive": 0,
-                        "inflight_cnt": 0,
-                        "username": "guest",
+                        "ip_address": "127.0.0.1",
+                        "recv_pkt": 1,
                         "node": "emqx@127.0.0.1",
                         "created_at": "2021-12-07T10:44:02.721+08:00",
-                        "heap_size": 4185,
-                        "awaiting_rel_max": "infinity",
-                        "port": 50675,
-                        "awaiting_rel_cnt": 0,
                         "endpoint_name": "urn:imei:154928475237123",
+                        "mqueue_dropped": 0,
+                        "heap_size": 4185,
+                        "recv_msg": 0,
+                        "port": 50675,
                         "send_cnt": 1,
-                        "inflight_max": "infinity"
+                        "lifetime": 86400
                       }
                     ]
                   }
@@ -39413,7 +39747,7 @@
                       "type": "string"
                     },
                     "cache": {
-                      "$ref": "#/components/schemas/broker.cache"
+                      "$ref": "#/components/schemas/broker.authz_cache"
                     }
                   },
                   "type": "object"
@@ -39465,7 +39799,7 @@
                     "type": "string"
                   },
                   "cache": {
-                    "$ref": "#/components/schemas/broker.cache"
+                    "$ref": "#/components/schemas/broker.authz_cache"
                   }
                 },
                 "type": "object"
@@ -39503,7 +39837,7 @@
                       "type": "string"
                     },
                     "cache": {
-                      "$ref": "#/components/schemas/broker.cache"
+                      "$ref": "#/components/schemas/broker.authz_cache"
                     }
                   },
                   "type": "object"
@@ -40036,12 +40370,14 @@
                     "max_inflight": 100,
                     "metrics": {
                       "dropped": 0,
+                      "dropped.expired": 0,
                       "dropped.other": 0,
                       "dropped.queue_full": 0,
                       "dropped.resource_not_found": 0,
                       "dropped.resource_stopped": 0,
                       "failed": 0,
                       "inflight": 0,
+                      "late_reply": 0,
                       "matched": 0,
                       "queuing": 0,
                       "rate": 0,
@@ -40057,12 +40393,14 @@
                       {
                         "metrics": {
                           "dropped": 0,
+                          "dropped.expired": 0,
                           "dropped.other": 0,
                           "dropped.queue_full": 0,
                           "dropped.resource_not_found": 0,
                           "dropped.resource_stopped": 0,
                           "failed": 0,
                           "inflight": 0,
+                          "late_reply": 0,
                           "matched": 0,
                           "queuing": 0,
                           "rate": 0,
@@ -40101,12 +40439,14 @@
                     "method": "post",
                     "metrics": {
                       "dropped": 0,
+                      "dropped.expired": 0,
                       "dropped.other": 0,
                       "dropped.queue_full": 0,
                       "dropped.resource_not_found": 0,
                       "dropped.resource_stopped": 0,
                       "failed": 0,
                       "inflight": 0,
+                      "late_reply": 0,
                       "matched": 0,
                       "queuing": 0,
                       "rate": 0,
@@ -40121,12 +40461,14 @@
                       {
                         "metrics": {
                           "dropped": 0,
+                          "dropped.expired": 0,
                           "dropped.other": 0,
                           "dropped.queue_full": 0,
                           "dropped.resource_not_found": 0,
                           "dropped.resource_stopped": 0,
                           "failed": 0,
                           "inflight": 0,
+                          "late_reply": 0,
                           "matched": 0,
                           "queuing": 0,
                           "rate": 0,
@@ -40322,47 +40664,8 @@
                       },
                       "keepalive": "300s",
                       "max_inflight": 100,
-                      "metrics": {
-                        "dropped": 0,
-                        "dropped.other": 0,
-                        "dropped.queue_full": 0,
-                        "dropped.resource_not_found": 0,
-                        "dropped.resource_stopped": 0,
-                        "failed": 0,
-                        "inflight": 0,
-                        "matched": 0,
-                        "queuing": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
-                        "received": 0,
-                        "retried": 0,
-                        "success": 0
-                      },
                       "mode": "cluster_shareload",
                       "name": "mqtt_example",
-                      "node_metrics": [
-                        {
-                          "metrics": {
-                            "dropped": 0,
-                            "dropped.other": 0,
-                            "dropped.queue_full": 0,
-                            "dropped.resource_not_found": 0,
-                            "dropped.resource_stopped": 0,
-                            "failed": 0,
-                            "inflight": 0,
-                            "matched": 0,
-                            "queuing": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
-                            "received": 0,
-                            "retried": 0,
-                            "success": 0
-                          },
-                          "node": "emqx@127.0.0.1"
-                        }
-                      ],
                       "password": "bar",
                       "proto_ver": "v4",
                       "resource_opts": {
@@ -40390,46 +40693,7 @@
                       "local_topic": "emqx_webhook/#",
                       "max_retries": 3,
                       "method": "post",
-                      "metrics": {
-                        "dropped": 0,
-                        "dropped.other": 0,
-                        "dropped.queue_full": 0,
-                        "dropped.resource_not_found": 0,
-                        "dropped.resource_stopped": 0,
-                        "failed": 0,
-                        "inflight": 0,
-                        "matched": 0,
-                        "queuing": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
-                        "received": 0,
-                        "retried": 0,
-                        "success": 0
-                      },
                       "name": "webhook_example",
-                      "node_metrics": [
-                        {
-                          "metrics": {
-                            "dropped": 0,
-                            "dropped.other": 0,
-                            "dropped.queue_full": 0,
-                            "dropped.resource_not_found": 0,
-                            "dropped.resource_stopped": 0,
-                            "failed": 0,
-                            "inflight": 0,
-                            "matched": 0,
-                            "queuing": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
-                            "received": 0,
-                            "retried": 0,
-                            "success": 0
-                          },
-                          "node": "emqx@127.0.0.1"
-                        }
-                      ],
                       "pool_size": 4,
                       "pool_type": "random",
                       "request_timeout": "15s",
@@ -40496,234 +40760,6 @@
         "summary": "Create Bridge",
         "tags": [
           "Bridges"
-        ]
-      }
-    },
-    "/authorization/sources/built_in_database/username/{username}": {
-      "delete": {
-        "description": "Delete one record for username",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/emqx_authz_api_mnesia.username"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad username",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Username Not Found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      },
-      "get": {
-        "description": "Get record info for username",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/emqx_authz_api_mnesia.username"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "password_based:built_in_database": {
-                    "summary": "Username",
-                    "value": {
-                      "rules": [
-                        {
-                          "action": "publish",
-                          "permission": "allow",
-                          "topic": "test/toopic/1"
-                        },
-                        {
-                          "action": "subscribe",
-                          "permission": "allow",
-                          "topic": "test/toopic/2"
-                        },
-                        {
-                          "action": "all",
-                          "permission": "deny",
-                          "topic": "eq test/#"
-                        }
-                      ],
-                      "username": "user1"
-                    }
-                  }
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_username"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Not Found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
-        ]
-      },
-      "put": {
-        "description": "Set record for username",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/emqx_authz_api_mnesia.username"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "examples": {
-                "password_based:built_in_database": {
-                  "summary": "Username",
-                  "value": {
-                    "rules": [
-                      {
-                        "action": "publish",
-                        "permission": "allow",
-                        "topic": "test/toopic/1"
-                      },
-                      {
-                        "action": "subscribe",
-                        "permission": "allow",
-                        "topic": "test/toopic/2"
-                      },
-                      {
-                        "action": "all",
-                        "permission": "deny",
-                        "topic": "eq test/#"
-                      }
-                    ],
-                    "username": "user1"
-                  }
-                }
-              },
-              "schema": {
-                "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules_for_username"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Updated"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "BAD_REQUEST"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Bad username or bad rule schema",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "tags": [
-          "Authorization"
         ]
       }
     },
@@ -40920,7 +40956,7 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "WRONG_USERNAME_OR_PWD"
+                        "BAD_USERNAME_OR_PWD"
                       ],
                       "type": "string"
                     },
@@ -40945,6 +40981,154 @@
         ],
         "tags": [
           "Dashboard"
+        ]
+      }
+    },
+    "/authorization/sources/built_in_database/rules/all": {
+      "delete": {
+        "description": "Delete rules for 'all'",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "get": {
+        "description": "Show the list of rules for 'all'",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "password_based:built_in_database": {
+                    "summary": "All",
+                    "value": {
+                      "rules": [
+                        {
+                          "action": "publish",
+                          "permission": "allow",
+                          "topic": "test/toopic/1"
+                        },
+                        {
+                          "action": "subscribe",
+                          "permission": "allow",
+                          "topic": "test/toopic/2"
+                        },
+                        {
+                          "action": "all",
+                          "permission": "deny",
+                          "topic": "eq test/#"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
+        ]
+      },
+      "post": {
+        "description": "Create/Update the list of rules for 'all'.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "password_based:built_in_database": {
+                  "summary": "All",
+                  "value": {
+                    "rules": [
+                      {
+                        "action": "publish",
+                        "permission": "allow",
+                        "topic": "test/toopic/1"
+                      },
+                      {
+                        "action": "subscribe",
+                        "permission": "allow",
+                        "topic": "test/toopic/2"
+                      },
+                      {
+                        "action": "all",
+                        "permission": "deny",
+                        "topic": "eq test/#"
+                      }
+                    ]
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/emqx_authz_api_mnesia.rules"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad rule schema",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Authorization"
         ]
       }
     },

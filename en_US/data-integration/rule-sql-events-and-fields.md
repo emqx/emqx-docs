@@ -68,6 +68,7 @@ Output:
 ```
 
 ## MQTT Message
+
 The SQL statement of the rules engine can handle the message publishing. In a rule statement, the user can specify one or more topics with the FROM clause, and the rule will be triggered when any message is published to the specified topic.
 
 | Field                 | Explanation                                     |

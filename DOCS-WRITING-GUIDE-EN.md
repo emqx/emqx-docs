@@ -226,7 +226,7 @@ With the help of vue.js plugin, an OpenAPI specification can be inserted anywher
 
 ```markdown
 <ClientOnly>
-  <OpenApi path="swagger.json" />
+  <OpenApi path="swagger.json"/>
 </ClientOnly>
 ```
 
@@ -243,6 +243,33 @@ and then downloaded into this repo with some rewrites.
 To update the file:
 
 * Start EMQX v5 node
-* Execute the script `./rewrite-swagger.sh`
+* Execute the script `./rewrite-swagger.sh ce | ee`
 * Commit the changed swagger.json file to this git repo
 * Send a pull request
+
+### Configuration
+
+The configuration docs are generated from source code.
+Steps to  update:
+
+1. Re-build EMQX (opensource and enterprise edition)
+1. Copy the gnerated `md` files to this repo (see commands below)
+1. Rename the heading-1 of each file
+    * Configuration Files (for en_US/admin/cfg-*.md)
+    * 配置文件 (in zh_CN/admin/cfg-*.md)
+
+#### Commands to copy generated markdown
+
+For opensource edition
+
+```
+cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ce.md
+cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ce.md
+```
+
+For enterprise edition
+
+```
+cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ee.md
+cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ee.md
+```

@@ -1,339 +1,135 @@
-# MQTT Bridge
+# MQTT
 
-The MQTT bridge is a channel for EMQX to communicate with other MQTT services, either EMQX or other services that support the MQTT protocol. The MQTT bridge can either subscribe from the external services or publish messages to the external services. However, a single bridge only supports a one-way mode of operation: it can be either a producer or a consumer, but not both. If a bidirectional bridge is required, multiple MQTT bridges with different directions need to be created to complete the bidirectional flow of data.
+The MQTT data bridge is a channel for EMQX to communicate with other MQTT services, either EMQX clusters or services that support the MQTT protocol. The working principle is as follows:
 
-## Create MQTT bridge using the configuration file
+- Forwarding messages from the current cluster to the bridged brokers following the rule settings;
+- Subscribing to the topics of the bridged brokers to distribute the received messages within the current cluster.
 
-### List of `ingress` type MQTT Bridge configurations
+:::tip Prerequisites
 
-Bridges messages from external services to local.
+- Knowledge about EMQX data integration [rules](./rules.md)
 
-| Parameter Name | Description | Type | Required | Range |
-| -- | -- | -- | -- | -- |
-| enable       | Enable or disable | Boolean |  yes | - |
-| direction    | Bridging direction. </br>`ingress` means subscribe messages from external service, publish to local</br>`egress` means publish messages from local to external service | String | yes | ingress |
-| remote_topic | The topic of subscribed external services | String | yes |  - |
-| remote_qos   | The QoS of subscribed external services | Integer |  yes | 0 \| 1 \| 2 |
-| local_topic  | The topic published of local server. Support for placeholders in ${field} format       | String      | yes | - |
-| local_qos    | The QoS published of local server. Support for placeholders in ${field} format         | Integer     | yes | 0 \| 1 \| 2 |
-| retain       | The Retain flag published of local server. Support for placeholders in ${field} format | Boolean     | yes | - |
-| payload      | The payload published of local server. Support for placeholders in ${field} format     | String      | yes | - |
-| connector    | MQTT connector                                                                         | connector() | yes | MQTT Connecter configurations |
+- Knowledge about [data bridge](./data-bridges.md)
 
-### List of `egress` type MQTT Bridge configurations
+  :::
 
-Bridges local messages to external services.
+## Feature list
 
-| Parameter Name | Description | Type | Required | Range |
-| -- | -- | -- | -- | -- |
-| enable       | Enable or disable | Boolean |  yes | - |
-| direction    | Bridging direction. </br>`ingress` means subscribe messages from external service, publish to local</br>`egress` means publish messages from local to external service | String | yes | ingress |
-| remote_topic | The topic published to external service. Support for placeholders in ${field} format        | String      | yes | -           |
-| remote_qos   | The QoS published to external service. Support for placeholders in ${field} format          | Integer     | yes | 0 \| 1 \| 2 |
-| retain       | The Retain flag published to external service. Support for placeholders in ${field} format  | Boolean     | yes | -           |
-| payload      | The Payload flag published to external service. Support for placeholders in ${field} format | String      | yes | -           |
-| local_topic  | Local Topic for getting data.                                                               | String      | yes | -           |
-| connector    | MQTT Connector                                                                              | connector() | yes | MQTT Connecter configurations |
+- [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
+- [Async mode](./data-bridges.md#异步请求模式)
+- [Buffer queue](./data-bridges.md#缓存队列)
 
-### MQTT Connector configurations
+<!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
-Connector used for MQTT Bridges.
+## Quick starts
 
-| Parameter Name | Description | Type | Required | Range |
-| -- | -- | -- | -- | -- |
-| server             | External service address, ip:port or hostname:port                                                                      | String  | yes | [0-255].[0-255].[0-255].[0-255]:[0-65535] |
-| mode               | cluster_shareload: Each node in the cluster establishes an MQTT connection to the remote Broker</br>cluster_singleton: Only one node in the entire cluster establishes an MQTT connection to the remote Broker | Enum  | no  | cluster_shareload \| cluster_singleton |
-| reconnect_interval | Automatic reconnection interval                                                                                         | Integer | no  | - |
-| proto_ver          | Protocol Version                                                                                                        | String  | no  |  v3 \| v4 \| v5 |
-| bridge_mode        | Bridging mode, which works only when the external service is EMQX, improves the concurrent performance of subscriptions | Boolean | no  | - |
-| username           | Username used for connection                                                                                            | String  | no  | - |
-| password           | Password used for connection                                                                                            | String  | no  | - |
-| clean_start        | The `clean_session` used for connection                                                                                 | Boolean | no  | - |
-| keepalive          | Keepalive interval used for connection                                                                                  | Integer | no  | - |
-| retry_interval     | Retry interval after failed QoS1/QoS2 message delivery                                                                  | Integer | no  | - |
-| max_inflight       | Maximum number of message windows, `Receive Maximum` in the MQTT V5 protocol                                            | Integer | no  | - |
-| ssl                | Encrypted connection certificate configuration                                                                          | ssl()   | no  | - |
+The following section will use EMQX [public MQTT broker](https://www.emqx.com/zh/mqtt/public-mqtt5-broker) as an example to illustrate how to build a data bridge between EMQX and this public MQTT broker.
 
-### SSL configurations
+### Data bridge rules
 
-Reference [SSL](../security/ssl.md)
+The following topic mapping configuration is used here to implement message bridging between local and remote MQTT services:
 
-## MQTT Bridge Usage
+| Topic                      | Direction                       | Target topic              |
+| -------------------------- | ------------------------------- | ------------------------- |
+| **`remote/topic/ingress`** | **`ingress`** (remote -> local) | **`local/topic/ingress`** |
+| **`local/topic/egress`**   | **`egress`** (local -> remote)  | **`remote/topic/egress`** |
 
-1. Prepare two EMQX nodes: local node and remote node. The local node uses local IP 127.0.0.1 and the remote node uses IP 192.168.1.234
-2. Edit the configuration of the local node, open `emqx.conf`, and add the bridge configuration. The following configuration example creates the ingress bridge `mqtt_bridge_ingress` and the egress bridge `mqtt_bridge_egress`.
-3. Start the two EMQX nodes. The local node is started using the console command, as the rule integration demo requires the console to observe the output.
+Below is the message flow in **ingress** direction:
 
-```js
-bridges {
-  mqtt {
-    mqtt_bridge_ingress {
-      connector {
-        bridge_mode = false
-        clean_start = true
-        keepalive = "60s"
-        max_inflight = 32
-        mode = "cluster_shareload"
-        password = "pwd1"
-        proto_ver = "v4"
-        reconnect_interval = "10s"
-        retry_interval = "1s"
-        server = "192.168.1.234:1883"
-        ssl {enable = false}
-        username = "user1"
-      }
-      direction = "ingress"
-      enable = true
-      local_topic = "local/topic/ingress"
-      local_qos = 0
-      remote_qos = 0
-      remote_topic = "remote/topic/ingress"
+![bridge_igress](./assets/bridge_igress.png)
+
+And this is the message flow in **egress** direction:
+
+![bridge_egerss](./assets/bridge_egerss.png)
+
+## Create an MQTT data bridge
+
+1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
+
+2. Click **Create** on the top right corner of the page.
+
+3. In the **Create Data Bridge** page, click to select **MQTT**, and then click **Next**.
+
+4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters or numbers, for example, `my_mqtt_bridge`.
+
+5. Input the connection information. Input `broker.emqx.io:1883` for **MQTT Broker**. As no authentication is required from the server side, we can leave the **Username** and **Password** blank. For the other fields in this section, you can keep the default value or set as the actual condition.
+
+6. Set the data bridge rules with the **Ingress** or **Egress** field.
+
+   :::tip
+   You can choose to configure either the **Ingress** or **Egress** field or both fields, but at least one field should be set up. Turn on the toggle switch of the corresponding field to start the configuration.
+   :::
+
+   - **Ingress** (optional): Set the rules to forward the messages from remote MQTT brokers to local. In this example, we want to forward the messages from `remote/topic/ingress` to `local/topic/ingress`, so we will first subscribe to the remote topic and then specify the local topics to receive the messages:
+
+     - **Remote MQTT Broker**: Subscribe to the remote topics.
+
+       - **Topic**: In cluster mode, we can use the [Shared Subscription](../mqtt/mqtt-shared-subscription.md) to avoid repeated messages, therefore we will fill in `$share/g/remote/topic/ingress`
+       - QoS: Select `0`.
+
+     - **Local MQTT Broker**: Forward the received messages to specific local topics or leave blank, then these messages will first be processed by the configured rules and then forwarded with the [republish action](./rules.md).
+       - **Topic**: Input `local/topic/ingress`.
+       - **QoS**: Select `0` or `${qos}` (to use the QoS of the received messages).
+       - **Retain**: Confirm whether the message will be published as a retained message.
+       - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
+
+   - **Egress** (optional): Set the rules to publish messages from specific local MQTT topics to remote MQTT brokers. In this example, we want to publish the messages from `local/topic/ingress` to `remote/topic/ingress`:
+
+     - **Local MQTT Broker**: Specify the local message topics.
+       - **Topic**: Input `local/topic/egress`.
+     - **Remote MQTT Broker**: Specify the target topics on the remote broker.
+       - **Topic**: Input `remote/topic/egress`.
+       - **QoS**: Select `0` or `${qos}` (to use the QoS of the received messages).
+       - **Retain**: Confirm whether the message will be published as a retained message.
+       - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
+
+7. Then you can configure whether to use sync/async mode, your pool size and whether the enable queue mode as your business needs.
+
+8. Click **Create** to finish the setting.
+
+EMQX also supports to use configuration file to create an MQTT data bridge, and an example is as follows:
+
+```bash
+bridges.mqtt.my_mqtt_bridge {
+  enable = true
+  server = "broker.emqx.io:1883"
+  username = "emqx_u"
+  password = "public"
+  proto_ver = "v4"
+  clean_start = true
+  keepalive = "60s"
+
+  reconnect_interval = "10s"
+  egress {
+    local {topic = "local/topic/egress"}
+    remote {
       payload = "${payload}"
-      retain = false
+      qos = 1
+      retain = true
+      topic = "remote/topic/egress"
     }
-    mqtt_bridge_egress {
-      connector {
-        bridge_mode = false
-        clean_start = true
-        keepalive = "60s"
-        max_inflight = 32
-        mode = "cluster_shareload"
-        username = "emqx"
-        password = "emqx"
-        proto_ver = "v4"
-        reconnect_interval = "15s"
-        retry_interval = "15s"
-        server = "192.168.1.234:1883"
-        ssl { enable = false }
-      }
-      direction = "egress"
-      enable = true
-      local_topic = "local/topic/egress"
-      remote_qos = 0
-      remote_topic = "remote/topic/egress"
+  }
+  ingress {
+    local {
+      topic = "$share/g/remote/topic/ingress"
+      qos = 1
       payload = "${payload}"
-      retain = false
     }
+    remote {qos = 1, topic = "local/topic/ingress"}
   }
 }
 ```
 
-Open EMQX Dashboard and click `Data Integration` - `Data Bridges` on the right side to see the two bridges created.
-![image](./assets/rules/mqtt_bridge/dashboard_show_bridges.png)
-
-::: tip
-Note that the 5.0.0 Dashboard does not support detachment rules at this time, using the MQTT Bridge alone, which can only be created using the configuration file
-:::
-
-### The `ingress bridge` message flow
-
-1. The ingress bridge will subscribe to the `remote/topic/ingress` topic on the remote node
-2. Create two connections `Client A` to the remote node, `Client B` to the local node
-3. `Client B` subscribes the topic `local/topic/ingress`
-4. `Client A` publishes a message with topic `remote/topic/ingress`
-5. The bridge client receives the subscription message and forwards the content to the local node using topic `local/topic/ingress`
-6. `Client B` receives the subscription message
-
-```txt
- +-------------------------+  Publish Message
- | Remote                  |  Topic remote/topic/ingress  +----------+
- | EMQX Broker         .---|<-----------------------------| Client A |
- |                     |   |                              +----------+
- |                     V   |
- +-------------------------+
-        ^              |
-        |              |
- Subscribe             | Send to subscriber
- Topic  |              |
- remote/topic/ingress  |
-        |              |
-        |              V
-   +----------------------+
-   |  MQTT Bridge Ingress |
-   +----------------------+
-                       |
-                       | Publish to local broker
-                       | Topic local/topic/ingress
-                       |
-                       V
- +------------------------+  Subscribe
- | Local               |  |  local/topic/ingress          +----------+
- | EMQX Broker         .->|------------------------------>| Client B |
- |                        |  Send to subscriber           +----------+
- +------------------------+
-
-```
-
-### The `egress bridge` message flow
-
-1. `Client A` subscribes the topic `remote/topic/egress` on the remote node
-2. `Client B` publishes a message with topic `local/topic/egress` on the local node
-3. The bridge gets the message data and forwards it to the topic `remote/topic/egress` on the remote node
-4. `Client A` receives the message from the bridge
-
-```txt
- +-------------------------+  Subscribe
- | Remote                  |  remote/topic/egress          +----------+
- | EMQX Broker      .----->|------------------------------>| Client A |
- |                  |      |  Send to subscriber           +----------+
- +-------------------------+
-                    ^
-                    |
-                    | Publish to remote topic
-                    | remote/topic/egress
-                    |
-   +----------------------+
-   |  MQTT Bridge Egress  |
-   +----------------------+
-                    ^
-                    |
-                    | From local topic
-                    | local/topic/egress
-                    |
- +------------------------+
- |                  ^     |  Publish
- | Local            |     |  Topic local/topic/egress    +----------+
- | EMQX Broker      .-----|<-----------------------------| Client B |
- |                        |                              +----------+
- +------------------------+
-
-```
-
-## Works with rules
+## Work with rules
 
 MQTT Bridge can be used either alone or in conjunction with rules for more powerful and flexible data processing capabilities.
 
-- When the bridge is ingress direction, it can be used as the data source of the rule
-- When the bridge is egress direction, it can be used as the actions of the rule
+Now the message flow will be as follows:
 
-### Ingress MQTT Bridge with rule
+In **ingress** direction, it can be used as the data source of the rule:
 
-1. Use the `console` command to start EMQX. To make it easier to observe the output of the rules, we will use the console output as a check for the rule messages.
-The path to start EMQX needs to be changed according to the deployment method.
+![bridge_igress_rule_link](./assets/bridge_igress_rule_link.png)
 
-```bash
-./bin/emqx console
-```
+In **egress** direction, it can be used as the actions of the rule:
 
-2. Login to EMQX Dashboard, click `Data Integration` - `Rules` - `Create` on the right side, edit SQL.
-
-```SQL
-SELECT
-  *
-FROM
-  "$bridges/mqtt:mqtt_bridge_ingress"
-```
-
-Click on the left side, `Add Action`, and select Console Output.
-
-![image](./assets/rules/mqtt_bridge/create_rule.png)
-
-3. Publish a message with topic `remote/topic/ingress` on the external service.
-4. Looking at the EMQX console, you can see that the rule has consumed the data for the bridge.
-
-```erlang
-[rule action] rule_egress
-        Action Data: #{dup => false,
-                       event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
-                       id => <<"0005E40E4C3F8BE7F443000009580002">>,
-                       message_received_at => 1658124943461,
-                       metadata => #{rule_id => <<"rule_egress">>},
-                       node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
-                       pub_props => #{},qos => 0,retain => false,
-                       server => <<"192.168.1.234:1883">>,
-                       timestamp => 1658124943461, 
-                       topic => <<"remote/topic/ingress">>}
-        Envs: #{dup => false,event => <<"$bridges/mqtt:mqtt_bridge_ingress">>,
-                id => <<"0005E40E4C3F8BE7F443000009580002">>,
-                message_received_at => 1658124943461,
-                metadata => #{rule_id => <<"rule_egress">>},
-                node => 'emqx@127.0.0.1',payload => <<"hello! rule">>,
-                pub_props => #{},qos => 0,retain => false,
-                server => <<"192.168.1.234:1883">>,
-                timestamp => 1658124943461,
-                topic => <<"remote/topic/ingress">>}
-```
-
-```txt
- +-------------------------+ Publish
- | Remote                  | remote/topic/ingress  +----------+
- | EMQX Broker      .------|<----------------------| Client A |
- |                  |      |                       +----------+
- +-------------------------+
-       ^            |
-Subscribe           | Send to subscriber
-Remote Topic        |
-remote/topic/ingress|
-       |            V
-  +-----------------------+
-  | MQTT Bridge Ingress   |
-  +-----------------------+
-                    |
-                    | Publish to local topic
-                    | local/topic/ingress
-                    |
-                    V
-  +-----------------------+
-  | Rule            |     |     +---------------+
-  |                 +-----|---->| Other Actions |
-  |                 |     |     +---------------+
-  +-----------------------+
-                    |
-                    V
-  +------------------------+ Subscribe
-  | Local           |      | local/topic/ingress   +----------+
-  | EMQX Broker     .------|---------------------->| Client B |
-  |                        | Send to subscriber    +----------+
-  +------------------------+
-
-```
-
-### Egress MQTT Bridge with rule
-
-1. Create rule. Login to EMQX Dashboard, click `Data Integration` - `Rules` - `Create` on the right side, edit SQL.
-
-```SQL
-SELECT
-  *
-FROM
-  "rule/demo/local/topic"
-```
-
-Click Add Action on the left, select `use data bridge forwarding`, drop down and select the created bridge `mqtt:mqtt_bridge_egress`.
-Click on `Add`, `Create`.
-
-![image](./assets/rules/mqtt_bridge/create_rule_egress.png)
-
-2. `Client B` publishes a message with topic `rule/demo/local/topic` on the local node
-3. The message passes the rule and is sent to the bridge
-4. The bridge forwards the message to the remote node
-5. `Client A` receives a message with topic `remote/topic/egress
-
-```txt
-+-------------------------+ Subscribe
-| Remote                  | remote/topic/egress   +----------+
-| EMQX Broker      .------|---------------------->| Client A |
-|                  |      | Send to subscriber    +----------+
-+-------------------------+
-                   ^
-                   | Publish to remote topic
-                   | remote/topic/egress
-                   |
- +-----------------------+
- | MQTT Bridge Egress    |
- +-----------------------+
-                   ^
-                   |
-           Actions |
-                   |
- +-----------------------+
- | Rule            |     |
- +-----------------------+
-                   ^
-                   |
- +------------------------+ Publish
- | Local           |      | rule/demo/local/topic +----------+
- | EMQX Broker     .------|<----------------------| Client B |
- |                        |                       +----------+
- +------------------------+
-```
+![bridge_egress_rule](./assets/bridge_egress_rule.png)

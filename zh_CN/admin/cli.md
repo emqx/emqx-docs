@@ -84,7 +84,7 @@ $ emqx ctl cluster_call tnxid 2
           tnx_id => 2}}
 ```
 
-::: warning Warning
+::: tip
 `skip` 指令和 `fast_forward` 指令会迫使本地节点跳过一些（失败）的操作
 这可能会导致集群内节点之间的配置不一致。
 :::
@@ -117,7 +117,7 @@ $ emqx ctl cluster_call tnxid 2
 
 可以用于查看和管理客户端。
 
-::: warning
+::: tip
 如果系统中连接了大量的客户端 `list` 指令可能会比较耗时且耗资源。
 :::
 
@@ -127,7 +127,7 @@ $ emqx ctl cluster_call tnxid 2
 
 这个命令在 4.x 系列中是 `route`，可用于查看当前系统中所有订阅的主题。
 
-::: warning
+::: tip
 如果集群中有大量的主题订阅，`list` 指令可能会比较耗时且耗资源。
 :::
 
@@ -137,7 +137,7 @@ $ emqx ctl cluster_call tnxid 2
 
 这个命令可以用于查看，增加或者删除某个客户端的订阅。
 
-:::warning
+:::tip
 当系统中有大量的订阅客户端时，`list` 指令可能比较耗时且耗资源。
 :::
 
@@ -190,7 +190,7 @@ $ emqx ctl cluster_call tnxid 2
 
 管理监听器。
 
-::: warning
+::: tip
 停止监听器会导致所有通过该监听器接入的客户端都断开连接。
 :::
 

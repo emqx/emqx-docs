@@ -170,7 +170,7 @@ bridge.mqtt.aws.subscription.1.qos = 1
 
 EMQX 的 Bridge 拥有消息缓存机制，当 Bridge 连接断开时会将 forwards 主题的消息缓存，等到桥接恢复时，再把消息重新转发到远程节点上。缓存机制同时适用于 RPC 桥接和 MQTT 桥接。
 
-设置缓存队列总大小:
+设置缓冲队列总大小:
 
 ```bash
 bridge.mqtt.aws.queue.max_total_size = 5GB
