@@ -37,7 +37,7 @@ def copy_cfg_md(lang):
     else:
         dir = 'zh_CN'
     src = dir + '/admin/cfg-' + EDITION + '.md'
-    dst = dir + '/admin/cfg.md'
+    dst = dir + '/configuration/configuration-manual.md'
     shutil.copyfile(src, dst)
 
 def read_title_from_md(lang, path):
