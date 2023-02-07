@@ -13,6 +13,14 @@ if sys.argv[1] != r'ce' and sys.argv[1] != r'ee':
     print('expecting ce or ee as arg1')
     exit(2)
 
+## check if the 'lang' field matches expected input
+## when no 'lang' is defined, it matches both 'en' and 'cn'
+def is_lang_match(i, en_or_cn):
+    if 'lang' in i:
+        return i['lang'] == en_or_cn
+    else:
+        return True
+
 EDITION = sys.argv[1]
 
 ## check if the 'edition' field matches expected input
@@ -47,6 +55,8 @@ def parse(children, lang, edition):
     acc=[]
     for i in range(len(children)):
         child = children[i]
+        if not is_lang_match(child, lang):
+            continue
         if not is_edition_match(child, edition):
             continue
         if 'title_en' in child:

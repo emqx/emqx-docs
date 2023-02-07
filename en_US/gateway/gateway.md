@@ -25,18 +25,7 @@ To unify the model for each access protocol, Gateway abstracts the following con
     * The concept of publish/subscribe is defined in the MQTT-SN protocol, so there is no need for predefined topics to publish/subscribe in MQTT-SN gateway.
 - **User Interfaces**: Defines how to manage gateways or clients by configurations and HTTP APIs.
 
-```
-+-----------------------------------+
-|          User Interfaces          |
-+-----------------------------------+
-+-------------------------+ +-------+
-|     PUB/SUB Adapter     | | AuthZ |
-+-------------------------+ +-------+
-|  Connection/Session     | |       |
-+------------+------------+ | AuthN |
-| Listener 1 | Listener 2 | |       |
-+------------+------------+ +-------+
-```
+![gateway_struct](./assets/gateway_struct.png)
 
 ### Authentication
 
@@ -64,12 +53,12 @@ In order to adapt the PUB/SUB messaging model, each type of gateway has to fulfi
 
 For protocol gateways that already have a PUB/SUB concept, such as MQTT-SN, Stomp usually defines the concept of topics and message payloads.
 - The gateway is compatible with the PUB/SUB messaging model by using the topic and payload sent by client.
-- Needs to configure the topic authorization rules in [Authorization](../security/authz/authz.md).
+- Needs to configure the topic authorization rules in [Authorization](../access-control/authz/authz.md).
 
 However, for non-PUB/SUB concept protocols, it lacks the definition of topic, publish, and subscribe, so:
 - it is necessary to configure the topics of different messages. i.e, in the LwM2M gateway, we need to configure the topics for each type of message.
 - it is up to the gateway to design the format of the message content. Each type of gateway may use a different message format.
-- Needs to configure the topic authorization rules in [Authorization](../security/authz/authz.md).
+- Needs to configure the topic authorization rules in [Authorization](../access-control/authz/authz.md).
 
 ::: tip
 Authentication can be configured in gateways and is independent of each gateway itself.
@@ -134,7 +123,7 @@ gateway.stomp {
 
 Detailed reference:
 - [HTTP API - Gateway](../admin/api.md)
-- [Configuration - Gateway](../admin/cfg.md)
+- [Configuration - Gateway](../configuration/configuration-manual.md)
 
 ::: tip
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.

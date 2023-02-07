@@ -20,7 +20,7 @@
 
 ![image](./assets/gateways.png)
 
-::: warning
+::: tip
 停用一个网关，会导致该网关下的所有连接断开，需要重新建立连接。请谨慎操作。
 :::
 
@@ -42,11 +42,11 @@
 
 基础参数配置表单会因为协议网关的不同而不同，各协议配置参数的详情可点击跳转至配置文件说明页面查看。
 
-- [Stomp](../admin/cfg.md#gatewaystomp)
-- [MQTT-SN](../admin/cfg.md#gatewaymqttsn)
-- [CoAP](../admin/cfg.md#gatewaycoap)
-- [ExProto](../admin/cfg.md#gatewayexproto)
-- [LwM2M](../admin/cfg.md#gatewaylwm2m)
+- [Stomp](../configuration/configuration-manual.md#gatewaystomp)
+- [MQTT-SN](../configuration/configuration-manual.md#gatewaymqttsn)
+- [CoAP](../configuration/configuration-manual.md#gatewaycoap)
+- [ExProto](../configuration/configuration-manual.md#gatewayexproto)
+- [LwM2M](../configuration/configuration-manual.md#gatewaylwm2m)
 
 #### 监听器
 
@@ -84,7 +84,7 @@
 
 点击左侧插件扩展菜单下的 ExHook，可以来到 ExHook 页面；ExHook 提供了使用其他编程语言修改或扩展系统功能的能力。ExHook 列表页可查看当前已添加的 ExHook、每个 ExHook 挂载的钩子数量、该 ExHook 下所有钩子执行的成功和失败次数。
 
-关于 ExHook 的定义和开发指南可查阅[钩子](../advanced/hooks)。
+关于 ExHook 的定义和开发指南可查阅[钩子](../extensions/hooks.md)。
 
 ![image](./assets/exhook.png)
 

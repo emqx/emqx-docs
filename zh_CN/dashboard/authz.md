@@ -32,7 +32,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 ![image](./assets/authz-file-config.png)
 
-更多关于文件授权规则内容的编辑方法，请访问 [File](../security/authz/file.md)。
+更多关于文件授权规则内容的编辑方法，请访问 [File](../access-control/authz/file.md)。
 
 #### 内置数据库
 
@@ -44,7 +44,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 ![image](./assets/authz-mysql-config.png)
 
-更多关于 MySQL 或其它外部数据库的配置详情，请访问 [MySQL](../security/authz/mysql.md) 或查看使用其它数据库。
+更多关于 MySQL 或其它外部数据库的配置详情，请访问 [MySQL](../access-control/authz/mysql.md) 或查看使用其它数据库。
 
 #### HTTP Server
 
@@ -54,7 +54,7 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 ![image](./assets/authz-http-config.png)
 
-更多关于 HTTP Server 授权规则的配置方法，请访问 [HTTP](../security/authz/http.md)。
+更多关于 HTTP Server 授权规则的配置方法，请访问 [HTTP](../access-control/authz/http.md)。
 
 完成配置后，点击创建即可快速完成授权配置。注意：无法再次选择使用过的授权数据源。
 
@@ -76,9 +76,9 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 ![image](./assets/authz-users.png)
 
-更多关于内置数据库的授权规则的配置方法，请访问[内置数据库](../security/authz/mnesia.md)。
+更多关于内置数据库的授权规则的配置方法，请访问[内置数据库](../access-control/authz/mnesia.md)。
 
-:::warning
+:::tip
 禁用授权将影响客户端发布/订阅时的权限操作，请谨慎操作。
 :::
 
@@ -102,4 +102,4 @@ EMQX 提供了强大的权限控制能力，而 EMQX Dashboard 提供了开箱�
 
 ![image](./assets/authz-settings.png)
 
-更多关于授权的详细解释与使用，请访问[授权](../security/authz/authz.md)。
+更多关于授权的详细解释与使用，请访问[授权](../access-control/authz/authz.md)。

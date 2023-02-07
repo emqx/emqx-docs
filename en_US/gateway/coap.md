@@ -64,7 +64,7 @@ gateway.coap {
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
 :::
 
-The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../admin/cfg.md)
+The CoAP gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.md)
 
 
 ## Working Mode
@@ -104,13 +104,13 @@ Only available in `Connection Mode`.
 
 The client ID, username, and password are provided by the client's [Create Connection](#create-connection) request. The CoAP gateway supports the following authenticator types:
 
-- [Built-in Database Authentication](../security/authn/mnesia.md)
-- [MySQL Authentication](../security/authn/mysql.md)
-- [MongoDB Authentication](../security/authn/mongodb.md)
-- [PostgreSQL Authentication](../security/authn/postgresql.md)
-- [Redis Authentication](../security/authn/redis.md)
-- [HTTP Server Authentication](../security/authn/http.md)
-- [JWT Authentication](../security/authn/jwt.md)
+- [Built-in Database Authentication](../access-control/authn/mnesia.md)
+- [MySQL Authentication](../access-control/authn/mysql.md)
+- [MongoDB Authentication](../access-control/authn/mongodb.md)
+- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
+- [Redis Authentication](../access-control/authn/redis.md)
+- [HTTP Server Authentication](../access-control/authn/http.md)
+- [JWT Authentication](../access-control/authn/jwt.md)
 
 For example, to create a built-in database authentication for CoAP gateway via HTTP API, or emqx.conf:
 
@@ -160,7 +160,7 @@ gateway.coap {
 
 Unlike the MQTT protocol, **the gateway only supports the creation of an authenticator, not a list of authenticators (or an authentication chain)**. When no authenticator is enabled, it means that all CoAP clients are allowed to log in.
 
-For the configuration format of other types of authenticators refer to: [Security - Authenticator](../security/authn/authn.md)
+For the configuration format of other types of authenticators refer to: [Security - Authenticator](../access-control/authn/authn.md)
 
 
 ## Publish/Subscribe
@@ -169,12 +169,12 @@ The CoAP gateway uses the URI path and methods defined in the [Publish-Subscribe
 
 Detailed parameters refer to [Message Publish](#message-publish), [Topic Subscribe](#topic-subscribe), [Topic Unsubscribe](#topic-unsubscribe).
 
-There is no special authorization configurations within CoAP gateway, and its permission control for topics needs to be configured [Authorization](../security/authz/authz.md).
+There is no special authorization configurations within CoAP gateway, and its permission control for topics needs to be configured [Authorization](../access-control/authz/authz.md).
 
 
 ## User Interfaces
 
-- Detailed confguration options: [Configuration - CoAP Gateway](../admin/cfg.md)
+- Detailed confguration options: [Configuration - CoAP Gateway](../configuration/configuration-manual.md)
 - Detailed HTTP APIs description: [HTTP API - Gateway](../admin/api.md)
 
 

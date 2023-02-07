@@ -229,7 +229,7 @@ authentication=[{enable=true}]
 ```
 :::
 
-#### TLS/SSL ciphers
+#### TLS ciphers
 
 从 v5.0.6 开始 EMQX 不在配置文件中详细列出所有默认的密码套件名称。
 而是在配置文件中使用一个空列表，然后在运行时替换成默认的密码套件。

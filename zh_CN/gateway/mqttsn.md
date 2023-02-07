@@ -65,11 +65,11 @@ gateway.mqttsn {
 注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../admin/cfg.md)
+MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](../configuration/configuration-manual.md)
 
 ## 认证
 
-由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](../security/authn/http.md)
+由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](../access-control/authn/http.md)
 
 其客户端信息生成规则如下：
 - Client ID：为 CONNECT 报文中的 Client ID 字段。
@@ -146,11 +146,11 @@ MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行
 - MQTT-SN 协议的 SUBSCRIBE 报文，作为订阅操作，其主题和 QoS 都由该报文指定。
 - MQTT-SN 协议的 UNSUBSCRIBE 报文，作为取消订阅操作，其主题由该报文指定。
 
-网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../security/authz/authz.md) 中管理。
+网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../access-control/authz/authz.md) 中管理。
 
 ## 用户层接口
 
-- 详细配置说明参考：[网关配置 - MQTT-SN 网关](../admin/cfg.md)
+- 详细配置说明参考：[网关配置 - MQTT-SN 网关](../configuration/configuration-manual.md)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 ## 客户端库

@@ -1,95 +1,87 @@
-# Management APIs
+# REST API
 
-EMQX exposes a HTTP management API which by default listens on port 18083.
-The APIs are described by OpenAPI (Swagger) 3.0 specification.
+EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
 
-When EMQX is started in localhost, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html)
-to view the API document, and also experiment with the management APIs from the Swagger UI.
+After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html)
+to view the API document, and also execute the management APIs from this UI.
 
-The `/api-docs` endpoint does not require login, however to go further from there,
-you'll need to go through a few simple steps to setup the management API authentication.
+The section will introduce how to work with EMQX REST API.
 
-The reset of this document is to guide you through the steps.
+## Basic Path
 
-## Change default user password
+EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start with `/api/v5`.
 
-EMQX dashboard and management API comes with a default user `admin`, and the default password
-is `public`. The default password should be changed as soon as possible.
+## Authentication
 
-You may add or change `dashboard.default_password` in `emqx.conf` to bootstrap the default user.
-You also set environment variable `EMQX_DASHBOARD__DEFAULT_PASSWORD` to bootstrap the default user.
+EMQX's REST API uses [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework).
 
-::: warning
-EMQX administrative users are stored in its builtin database, once the database is bootstrapped
-changing the config or environment variable will not take effect.
-After bootstrapped, the only way to change a user's password is to use CLI command:
-`emqx ctl admins passwd admin new-password`
-:::
+To create an API key, you can click **System** -> **API Key** page on the left navigation tree of the Dashboard, Please refer to [Dashboard - API Keys](../dashboard/system.md#api-keys).
 
-## Create administrative users
+## HTTP Headers
 
-### Users
+Unless otherwise specified, most API requests require the `Accept` header to be set to `application/json`, and then the response will be returned in JSON format.
 
-Using the default user (by default `admin`), more users can be created from
-dashboard, management API or CLI.
+## HTTP Response Status Code
 
-::: warning
-Administrative users all have the privilege.
-That is, there is no role based permission management at the moment.
-For tooling and scripting purposes, you may create API Keys which
-is prohibited to login dashboard, manage users or other API Keys.
-:::
+EMQX follows the [HTTP Response Status Code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) standard, and the possible status codes are as follows:
 
-### API Keys
+| Codes | Description                                                  |
+| ----- | ------------------------------------------------------------ |
+| 200   | Request successfully, and the returned JSON data will provide more details |
+| 201   | Created successfully, and the new object will be returned in the Body |
+| 204   | Request successfully. Usually used for delete and update operations, and the returned Body will be empty |
+| 400   | Bad Request. Usually request body or parameter error         |
+| 401   | Unauthorized. API key expires or does not exist.             |
+| 403   | Forbidden. Check if the object is in use or has dependency constraints. |
+| 404   | Not Found. You can refer to the `message` field in the Body to check the reason |
+| 409   | Conflict. The object already exists or the number limit is exceeded |
+| 500   | Internal Server Error. Check the reason in the Body and logs |
 
-You may create 'app' `key:secret` pairs from the dashboard or by calling the
-`api_key` API like below:
+## Error Codes
+
+Besides the HTTP response status codes, EMQX also defines a list of error codes to identify specific errors.
+
+When an error happens, the error code is returned in JSON format by the Body:
 
 ```bash
-curl -u 'admin:public' \
-     -X 'POST' 'http://localhost:18083/api/v5/api_key' \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{
-            "name": "EMQX-API-KEY-3",
-            "expired_at": "2022-12-05T02:01:34.186Z",
-            "desc": "for testing",
-            "enable": true
-        }'
-```
+# GET /clients/foo
 
-An example response:
-
-```bash
 {
-  "api_key": "a87465f14ca0d420",
-  "api_secret": "LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN",
-  "created_at": "2022-06-21T22:28:23+02:00",
-  "desc": "for testing",
-  "enable": true,
-  "expired": false,
-  "expired_at": "2022-12-05T03:01:34+01:00",
-  "name": "EMQX-API-KEY-3"
+  "code": "RESOURCE_NOT_FOUND",
+  "reason": "Client id not found"
 }
 ```
 
-Then the `api_key` and `api_secret` can be used to access management APIs
-using HTTP basic auth. For instance:
+| Error Codes                                    | Description                                                  |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| WRONG_USERNAME_OR_PWD                          | Wrong username or password <img width=200/>                  |
+| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | Wrong username & password or key & secret                    |
+| BAD_REQUEST                                    | Request parameters not legal                                 |
+| NOT_MATCH                                      | Conditions not matched                                       |
+| ALREADY_EXISTS                                 | Resources already exist                                      |
+| BAD_CONFIG_SCHEMA                              | Configuration data not legal                                 |
+| BAD_LISTENER_ID                                | Bad listener ID                                              |
+| BAD_NODE_NAME                                  | Bad Node Name                                                |
+| BAD_RPC                                        | RPC Failed. Check the cluster status and the requested node status |
+| BAD_TOPIC                                      | Topic syntax error, topic needs to comply with the MQTT protocol standard |
+| EXCEED_LIMIT                                   | Resources to be created exceed the maximum limit or minimum limit |
+| INVALID_PARAMETER                              | Request parameters not legal and exceed the boundary value   |
+| CONFLICT                                       | Conflicting request resources                                |
+| NO_DEFAULT_VALUE                               | Request parameters do not use default values                 |
+| DEPENDENCY_EXISTS                              | Resource depends on other resources                          |
+| MESSAGE_ID_SCHEMA_ERROR                        | Message ID parsing error                                     |
+| INVALID_ID                                     | Bad ID schema                                                |
+| MESSAGE_ID_NOT_FOUND                           | Message ID does not exist                                    |
+| NOT_FOUND                                      | Resource not found or does not exist                         |
+| CLIENTID_NOT_FOUND                             | Client ID not found or does not exist                        |
+| CLIENT_NOT_FOUND                               | Client not found or does not exist(usually not an MQTT client) |
+| RESOURCE_NOT_FOUND                             | Resource not found                                           |
+| TOPIC_NOT_FOUND                                | Topic not found                                              |
+| USER_NOT_FOUND                                 | User not found                                               |
+| INTERNAL_ERROR                                 | Server inter error                                           |
+| SERVICE_UNAVAILABLE                            | Service unavailable                                          |
+| SOURCE_ERROR                                   | Source error                                                 |
+| UPDATE_FAILED                                  | Update fails                                                 |
+| REST_FAILED                                    | Reset source or configuration fails                          |
+| CLIENT_NOT_RESPONSE                            | Client not responding                                        |
 
-```bash
-curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
-     -X 'GET' 'http://localhost:18083/api/v5/nodes'
-```
-
-The `api_secret` is only returned once when it is created, please save it in time.
-
-{% emqxce %}
-<ClientOnly>
-  <OpenApi path="swagger.json"/>
-</ClientOnly>
-{% endemqxce %}
-{% emqxee %}
-<ClientOnly>
-  <OpenApi path="swagger-ee.json"/>
-</ClientOnly>
-{% endemqxee %}

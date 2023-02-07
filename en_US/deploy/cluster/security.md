@@ -43,7 +43,7 @@ EMQX in a docker container uses static port `5369` for cluster RPC.
 
 ### Using TLS for Cluster RPC Connections
 
-::: warning
+::: tip
 TLS comes at the cost of increased CPU load and RAM usage
 :::
 
@@ -94,7 +94,7 @@ Below are the steps to generate certificates and a self-signed CA.
 
 ### Using TLS for Erlang distribution
 
-::: warning
+::: tip
 TLS comes at the cost of increased CPU load and RAM usage
 :::
 

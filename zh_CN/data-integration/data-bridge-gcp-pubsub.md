@@ -1,6 +1,6 @@
-# GCP PubSub桥
+# GCP PubSub
 
-EMQX GCP PubSub集成可以发送MQTT消息和事件到
+EMQX GCP PubSub 集成可以发送 MQTT 消息和事件到
 [Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us)，这
 可以帮助你灵活地选择谷歌云上的服务并更容易地建立物联网
 应用。

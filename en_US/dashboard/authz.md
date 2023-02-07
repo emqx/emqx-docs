@@ -32,7 +32,7 @@ Using the ACL file, a text edit box is provided on the configuration parameters 
 
 ![image](./assets/authz-file-config.png)
 
-For more details about how to edit the contents of file rules, please visit [File](../security/authz/file.md).
+For more details about how to edit the contents of file rules, please visit [File](../access-control/authz/file.md).
 
 #### Built-in Database
 
@@ -44,7 +44,7 @@ If you use an external database, you need to configure the address of the databa
 
 ![image](./assets/authz-mysql-config.png)
 
-For more details on configuring MySQL or other external databases, please visit [MySQL](../security/authz/mysql.md) or see using other databases.
+For more details on configuring MySQL or other external databases, please visit [MySQL](../access-control/authz/mysql.md) or see using other databases.
 
 #### HTTP Server
 
@@ -54,7 +54,7 @@ So we need to configure the address and method of requesting the service includi
 
 ![image](./assets/authz-http-config.png)
 
-For more details about how to configure HTTP Server authorization, please visit [HTTP](../security/authz/http.md).
+For more details about how to configure HTTP Server authorization, please visit [HTTP](../access-control/authz/http.md).
 
 After completing the configuration, click `Create` to quickly complete the authorization configuration. Note: You cannot select the used authorization backend again.
 
@@ -68,7 +68,7 @@ The authorization list is similar to the authentication list in that each column
 
 In the actions bar, you can also click on settings or delete the authorization, etc.
 
-:::warning
+:::tip
 Disabled the authorization will affect the operation of permissions when the client publishes/subscribes. Please be careful.
 :::
 
@@ -80,7 +80,7 @@ To use it, enter a topic for which you need to configure authorization rules, an
 
 ![image](./assets/authz-users.png)
 
-For more details about how to configure the authorization of the built-in database, please visit [Built-in Database](../security/authz/mnesia.md).
+For more details about how to configure the authorization of the built-in database, please visit [Built-in Database](../access-control/authz/mnesia.md).
 
 ## Overview
 
@@ -102,4 +102,4 @@ Set the action when the authorization does not match, allow or deny, and whether
 
 ![image](./assets/authz-settings.png)
 
-For more details about Authorization, please visit [Authorization Introduction](../security/authz/authz.md).
+For more details about Authorization, please visit [Authorization Introduction](../access-control/authz/authz.md).

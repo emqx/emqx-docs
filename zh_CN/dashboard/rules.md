@@ -8,7 +8,8 @@ EMQX 内置了一个强大且高效的数据处理功能，即规则引擎。通
 
 ## 创建规则
 
-创建规则可以在规则页面的右上角，点击 `创建` 即可进入到创建规则页面。也可以在数据桥接页面，使用已经创建好的数据桥接，来快速创建一个包含有设置好数据桥接动作的规则。可以查看[规则快速入门](../data-integration/rule-get-started.md)，来快速创建和使用一条规则。
+创建规则可以在规则页面的右上角，点击 `创建` 即可进入到创建规则页面。也可以在数据桥接页面，使用已经创建好的数据桥接，来快速创建一个包含有设置好数据桥接动作的规则。
+<!-- 可以查看[规则快速入门](../data-integration/rule-get-started.md)，来快速创建和使用一条规则。 -->
 
 ### SQL 编辑
 
@@ -23,7 +24,7 @@ EMQX 内置了一个强大且高效的数据处理功能，即规则引擎。通
 5. CASE-WHEN 从多个条件列表返回可能结果
 6. 数组处理 - 从 JSON 格式的 payload 中获取嵌套的值
 
-SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` 这个主题发送消息时，我们就取出当前事件下所有的数据信息。`SELECT` 关键词可以获取消息中的所有字段，例如可以获取当前消息的 `Payload`，则 SQL 语句可以修改为 `SELECT payload from "t/#"`，获取的内容可以使用[内置函数](../data-integration/rule-sql-builtin-functions.md)来进行处理和转化，`FROM` 关键词后面输入数据源，即事件主题，下方规则调试部分可查看到所有可选的数据源事件，使用 `WHERE` 关键词，可以添加条件判断，更多详细的 SQL 语法使用，请参考 [SQL 语法与示列](../data-integration/rule-sql-grammar-and-examples.md)。
+SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` 这个主题发送消息时，我们就取出当前事件下所有的数据信息。`SELECT` 关键词可以获取消息中的所有字段，例如可以获取当前消息的 `Payload`，则 SQL 语句可以修改为 `SELECT payload from "t/#"`，获取的内容可以使用[内置函数](../data-integration/rule-sql-builtin-functions.md)来进行处理和转化，`FROM` 关键词后面输入数据源，即事件主题，下方规则调试部分可查看到所有可选的数据源事件，使用 `WHERE` 关键词，可以添加条件判断，更多详细的 SQL 语法使用，请参考 [SQL 语法与示列](../data-integration/rule-sql-syntax.md)。
 
 ![image](./assets/rule-sql.png)
 
@@ -68,7 +69,7 @@ SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` �
 
 选择使用数据桥接转发数据，需要选择一个已经创建好的数据桥接，也可以在当前页面重新创建一个新的数据桥接。在规则动作中添加了数据桥接后，规则的输出结果将使用数据桥接转发到对应的外部系统资源上，数据桥接的配置可参考[数据桥接](./bridge.md)部分。
 
-更多关于规则动作的详情，请参考[动作](../data-integration/rule-actions.md)。
+更多关于规则动作的详情，请参考[动作](../data-integration/rules.md#动作)。
 
 ![image](./assets/rule-create.png)
 

@@ -24,7 +24,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 ![image](./assets/config-listener-add.png)
 
-更多关于监听器配置的详情，请参考[监听器配置](../admin/cfg.md#brokerlisteners)。
+更多关于监听器配置的详情，请参考[监听器配置](../configuration/configuration-manual.md#brokerlisteners)。
 
 ### 管理监听器
 
@@ -34,7 +34,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 点击编辑页面中的`删除`按钮，可以删除该监听器。当删除监听器时，需要输入目前正在删除的监听器名称，以确认删除操作。列表中我们还可以点击启用开关来启用或者禁用该监听器。列表中还可以查看每个监听器下的连接数。
 
-::: warning
+::: tip
 修改和删除监听器是一个带有危险性的操作，需要谨慎操作。如果更新或删除了一个监听器，那么该监听器上的客户端连接将会被断开。
 :::
 
@@ -64,7 +64,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 扩展菜单下为 EMQX 内置的扩展相关配置项，为使用 MQTT 协议的客户端提供了一些扩展功能，包括：主题重写，可以手动添加需要重写的主题，选择动作类型--发布订阅，输入原始主题、正则表达式及目标主题。代理订阅，可以手动添加一个代理订阅，对于已经添加过的代理订阅，可以进行删除和编辑操作。最后，支持设置延迟发布，查看已延迟发布的消息等。
 
-更多关于 MQTT 详细的配置文档，请参考 [MQTT 配置](../admin/cfg.md#brokermqtt)。
+更多关于 MQTT 详细的配置文档，请参考 [MQTT 配置](../configuration/configuration-manual.md#brokermqtt)。
 
 ![image](./assets/config-mqtt.png)
 
@@ -82,7 +82,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 EMQX 支持对节点、监听器和单个连接进行速率限制，不过在 Dashboard 中进行配置时，目前仅支持对单个连接和节点级别的速率进行限制。
 
-更多关于速率限制的详细配置文档，请参考[速率限制](../reliability/rate-limit.md)。
+更多关于速率限制的详细配置文档，请参考[速率限制](../rate-limit/rate-limit.md)。
 
 ![image](./assets/config-limiter.png)
 
@@ -92,7 +92,7 @@ EMQX 支持对节点、监听器和单个连接进行速率限制，不过在 Da
 
 ![image](./assets/config-log.png)
 
-更多关于日志详细的配置文档，请参考[日志配置](../admin/cfg.md#log)。
+更多关于日志详细的配置文档，请参考[日志配置](../configuration/configuration-manual.md#log)。
 
 ## 监控
 

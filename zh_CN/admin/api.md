@@ -1,88 +1,81 @@
-# HTTP API
+# REST API
 
 EMQX 提供了管理监控 REST API，这些 API 遵循 OpenAPI (Swagger) 3.0 规范。
 
-EMQX 服务启动后，您可以访问 <http://localhost:18083/api-docs/index.html> 来
-查看 API 的文档。还可以直接在 Swagger UI 上尝试执行一些 API。
+EMQX 服务启动后，您可以访问 [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) 来查看 API 的文档。还可以直接在 Swagger UI 上尝试执行一些 API。
 
-`/api-docs` 端点不需要登录，如果需要进一步操作，您需要完成一些基本的配置工作。
+本章节将指导您快速开始使用 EMQX REST API。
 
-本章节指导您完成 API 调用前的准备操作。
+## 基本路径
 
-## 修改默认密码
+EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用均以 `/api/v5` 开头。
 
-EMQX 的 HTTP API 默认的访问用户名是 `admin` 密码是 `public`。
-默认密码建议您立即修改。
+## 认证
 
-修改默认密码，可以通过 emqx.conf 配置文件中加入，或修改 `dashboard.default_password`。
-这个配置项会被用于初始化默认用户的配置。
-您也可以通过配置 `EMQX_DASHBOARD__DEFAULT_PASSWORD` 来对这个参数初始化。
+EMQX 的 REST API 使用 [HTTP Basic 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#%E9%80%9A%E7%94%A8%E7%9A%84_http_%E8%AE%A4%E8%AF%81%E6%A1%86%E6%9E%B6) 携带认证凭据，您可以在 Dashboard **系统设置** -> **API 密钥** 界面中创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)
 
-::: warning
-EMQX 的管理员用户名和密码是保存在内置数据库中的。
-一旦这个数据库初始化完成之后，再去修改配置文件或环境变量中的默认密码将不会生效。
+## HTTP 请求头
 
-如果需要在初始化之后对默认用户的密码进行修改，可以使用如下命令行。
-`emqx ctl admins passwd admin new-password`
-:::
+除非有特殊说明，绝大多数 API 要求请求头中 `Accept` 值设置为 `application/json`，响应内容将以 JSON 格式返回。
 
-## 创建管理员账户
+## HTTP 响应状态码
 
-### 用户
+EMQX 遵循[HTTP 响应状态码](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)标准，可能的状态码如下：
 
-初始化了默认用户 (默认是 `admin`) 的登录密码之后，就可以创建其他的用户了。
-创建的渠道有三个，从仪表盘的用户管理界面，REST API，和命令行工具 `emqx_ctl`。
+| 状态码 | 描述                                                                          |
+| ------ | ----------------------------------------------------------------------------- |
+| 200    | 请求成功，返回的 JSON 数据将提供更多信息                                      |
+| 201    | 创建成功，新建的对象将在 Body 中返回                                          |
+| 204    | 请求成功，常用于删除与更新操作，Body 不会返回内容                             |
+| 400    | 请求无效，例如请求体或参数错误                                                |
+| 401    | 未通过服务端认证，API 密钥过期或不存在时可能会发生                            |
+| 403    | 无权操作，检查操作对象是否正在使用或有依赖约束                                |
+| 404    | 找不到请求路径或请求的对象不存在，可参照 Body 中的 `message` 字段判断具体原因 |
+| 409    | 请求的资源已存在或数量超过限制                                                |
+| 500    | 服务端处理请求时发生内部错误，可通过 Body 返回内容与日志判断具体原因          |
 
-::: warning
-所有的用户都有管理员权限。
-也就是说，EMQX现阶段不提供基于角色的权限管理能力。
+## 错误码
 
-如果需要创建一些脚本调用等用户进行 HTTP API 的访问，建议创建 API Key 。
-:::
-
-### API 密钥
-
-您可以在 Dashboard “系统设置” -> “API 密钥” 界面点击创建，
-也可以通过如下的 API 调用来创建一个新的 API 密钥。
+HTTP 响应状态码能够直观的判断可能存在的问题，在此基础上 EMQX 定义了一系列的错误码来标识具体的错误原因。当发生错误时，错误码将通过 Body 以 JSON 格式返回，您可以根据错误码 `code` 了解错误分类，根据原因 `reason` 了解具体的错误信息：
 
 ```bash
-curl -u 'admin:public' \
-     -X 'POST' \ 'http://localhost:18083/api/v5/api_key' \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{
-            "name": "EMQX-API-KEY-3",
-            "expired_at": "2022-12-05T02:01:34.186Z",
-            "desc": "for testing",
-            "enable": true,
-            "expired": true
-        }'
-```
+# GET /clients/foo
 
-返回结果中包含认证密钥信息：
-
-```bash
 {
-  "api_key": "a87465f14ca0d420",
-  "api_secret": "LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN",
-  "created_at": "2022-06-21T22:28:23+02:00",
-  "desc": "for testing",
-  "enable": true,
-  "expired": false,
-  "expired_at": "2022-12-05T03:01:34+01:00",
-  "name": "EMQX-API-KEY-3"
+  "code": "RESOURCE_NOT_FOUND",
+  "reason": "Client id not found"
 }
 ```
 
-结果中的 `api_key` 和 `api_secret` 可以用于访问 REST API 时的 Basic 认证，例如：
-
-```bash
-curl -u a87465f14ca0d420:LECuyY4VAnndsYRkjtWO2vFTi80FvohmhVgOeNeorMN \
-     -X 'GET' 'http://localhost:18083/api/v5/nodes' -H 'accept: text/plain'
-```
-
-请注意 `api_secret` 仅在创建时返回一次，请及时保存。
-
-<ClientOnly>
-  <OpenApi path="swagger.json" />
-</ClientOnly>
+| 错误码                                         | 描述                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| WRONG_USERNAME_OR_PWD                          | Wrong username or password <img width=200/>                  |
+| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | Wrong username & password or key & secret                    |
+| BAD_REQUEST                                    | Request parameters not legal                                 |
+| NOT_MATCH                                      | Conditions not matched                                       |
+| ALREADY_EXISTS                                 | Resources already exist                                      |
+| BAD_CONFIG_SCHEMA                              | Configuration data not legal                                 |
+| BAD_LISTENER_ID                                | Bad listener ID                                              |
+| BAD_NODE_NAME                                  | Bad Node Name                                                |
+| BAD_RPC                                        | RPC Failed. Check the cluster status and the requested node status |
+| BAD_TOPIC                                      | Topic syntax error, topic needs to comply with the MQTT protocol standard |
+| EXCEED_LIMIT                                   | Resources to be created exceed the maximum limit or minimum limit |
+| INVALID_PARAMETER                              | Request parameters not legal and exceed the boundary value   |
+| CONFLICT                                       | Conflicting request resources                                |
+| NO_DEFAULT_VALUE                               | Request parameters do not use default values                 |
+| DEPENDENCY_EXISTS                              | Resource depends on other resources                          |
+| MESSAGE_ID_SCHEMA_ERROR                        | Message ID parsing error                                     |
+| INVALID_ID                                     | Bad ID schema                                                |
+| MESSAGE_ID_NOT_FOUND                           | Message ID does not exist                                    |
+| NOT_FOUND                                      | Resource not found or does not exist                         |
+| CLIENTID_NOT_FOUND                             | Client ID not found or does not exist                        |
+| CLIENT_NOT_FOUND                               | Client not found or does not exist(usually not an MQTT client) |
+| RESOURCE_NOT_FOUND                             | Resource not found                                           |
+| TOPIC_NOT_FOUND                                | Topic not found                                              |
+| USER_NOT_FOUND                                 | User not found                                               |
+| INTERNAL_ERROR                                 | Server inter error                                           |
+| SERVICE_UNAVAILABLE                            | Service unavailable                                          |
+| SOURCE_ERROR                                   | Source error                                                 |
+| UPDATE_FAILED                                  | Update fails                                                 |
+| REST_FAILED                                    | Reset source or configuration fails                          |
+| CLIENT_NOT_RESPONSE                            | Client not responding                                        |

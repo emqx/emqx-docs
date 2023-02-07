@@ -116,4 +116,4 @@ curl -X 'DELETE' \
      -H 'accept: */*'
 ```
 
-更详细的监听器 API 信息，请参见 [API 文档](api.md)
+更详细的监听器 API 信息，请参见 [API 文档](./admin/api.md)

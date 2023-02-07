@@ -10,7 +10,7 @@ In terms of the design of EMQX Broker, it firstly separates the frontend and bac
 
 With Multi-core servers and modern operating system kernel, it can easily support 1 million TCP connections. The core issue is how to deal with business bottlenecks at the application level.
 
-EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: [Linux OS Tuning](../deploy/tune.md)
+EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: [Linux OS Tuning](../performance/tune.md)
 
 ### Fully asynchronous architecture
 

@@ -18,18 +18,7 @@
     * MQTT-SN 协议中定义了发布/订阅的概念，那么在 MQTT-SN 网关中则直接不需要预定义主题来发布/接收消息。
 - 用户层接口（User Interfaces）：定义了如何使用配置文件、HTTP API 来管理网关，客户端等。
 
-```
-+-----------------------------------+
-|          User Interfaces          |
-+-----------------------------------+
-+-------------------------+ +-------+
-|     PUB/SUB Adapter     | | AuthZ |
-+-------------------------+ +-------+
-|  Connection/Session     | |       |
-+------------+------------+ | AuthN |
-| Listener 1 | Listener 2 | |       |
-+------------+------------+ +-------+
-```
+![gateway_struct](./assets/gateway_struct.png)
 
 ### 接入认证
 
@@ -55,12 +44,12 @@
 
 对于 PUB/SUB 类型的协议网关，例如 MQTT-SN，Stomp 通常定义了主题和消息负载的概念；则：
 - 网关在处理其消息收发时直接使用客户端指定的主题和消息内容，即可接入到 EMQX 的消息系统。
-- 需要在 [授权（Authorization）](../security/authz/authz.md) 中为其配置主题发布订阅权限。
+- 需要在 [授权（Authorization）](../access-control/authz/authz.md) 中为其配置主题发布订阅权限。
 
 但对于非 PUB/SUB 类型的协议，它缺少对主题、发布、订阅等概念的定义；则
 - 需要为其指定消息主题。例如 LwM2M 网关，用户可以配置各个类型消息的主题。
 - 需要为其设计消息内容的格式。每种类型的网关都可能会使用不同的消息格式。
-- 需要在 [授权（Authorization）](../security/authz/authz.md) 中为其配置主题发布订阅权限。
+- 需要在 [授权（Authorization）](../access-control/authz/authz.md) 中为其配置主题发布订阅权限。
 
 ::: tip
 认证（Authentication）是可以在网关中进行配置，并且分属于每个网关自身他们之间是相互独立的；
@@ -125,7 +114,7 @@ gateway.stomp {
 
 详细参考：
 - [HTTP API - Gateway](../admin/api.md)
-- [配置文档-网关配置](../admin/cfg.md)
+- [配置文档-网关配置](../configuration/configuration-manual.md)
 
 ::: tip
 通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。

@@ -24,7 +24,7 @@ Click add listener button, you can see a form for adding a listener on the right
 
 ![image](./assets/config-listener-add.png)
 
-More about the listener configuration, please refer to [Listener Configuration](../admin/cfg.md#brokerlisteners).
+More about the listener configuration, please refer to [Listener Configuration](../configuration/configuration-manual.md#brokerlisteners).
 
 ### Manager Listener
 
@@ -34,7 +34,7 @@ After adding a listener, it can be seen in the list, and the name can be clicked
 
 To delete a listener, click the "Delete" button on the edit page. When deleting a listener, you need to enter the name of the listener you are currently deleting to confirm the deletion. You can also click the enable switch to enable or disable the listener in the list. The list also allows you to view the number of connections for each listener.
 
-::: warning
+::: tip
 Modify and delete listeners are operations with a certain degree of risk, which need to be operated with caution. If you update or delete a listener, the client connections on that listener will be disconnected.
 :::
 
@@ -64,7 +64,7 @@ The system Topic menu is the system topic related configuration items of EMQX; E
 
 The extension menu is the extension-related configuration item of EMQX, which provides some extension functions for MQTT clients, including Topic Rewrite. You can manually add the topic to be rewritten, select the action type--publish/subscribe, enter the original topic, regular expression, and destination topic. Auto Subscribe, you can manually add a Auto Subscribe. For the already added Auto Subscribe, you can delete and edit it. Finally, you can set the Delayed Publish, view the delayed published messages, etc.
 
-More about the MQTT configuration, please refer to [MQTT Configuration](../admin/cfg.md#brokermqtt).
+More about the MQTT configuration, please refer to [MQTT Configuration](../configuration/configuration-manual.md#brokermqtt).
 
 ![image](./assets/config-mqtt.png)
 
@@ -82,7 +82,7 @@ Limiter provides a series of rate limit functions to prevent excessive client re
 
 EMQX supports rate limiting for nodes, listeners, and connections, but only connection and node-level rates are currently supported when configuring in Dashboard.
 
-More about the Limiter configuration, please refer to [Rate limit](../reliability/rate-limit.md).
+More about the Limiter configuration, please refer to [Rate limit](../rate-limit/rate-limit.md).
 
 ![image](./assets/config-limiter.png)
 
@@ -92,7 +92,7 @@ Click the log under the configuration menu on the left to go to the log configur
 
 ![image](./assets/config-log.png)
 
-More about the log configuration, please refer to [Log Configuration](../admin/cfg.md#log).
+More about the log configuration, please refer to [Log Configuration](../configuration/configuration-manual.md#log).
 
 ## Monitoring
 

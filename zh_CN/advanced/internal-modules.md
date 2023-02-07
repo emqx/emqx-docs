@@ -4,14 +4,14 @@ EMQX Broker 将主题重写、代理订阅等功能通过内置模块的形式�
 
 | Module Name              | Feature                                |
 | ------------------------ | -------------------------------------- |
-| `emqx_mod_delayed`       | [延迟发布](./delayed-publish.md)         |
-| `emqx_mod_topic_metrics` | [主题指标统计](./metrics-and-stats.md) |
-| `emqx_mod_subscription`  | [代理订阅](./proxy-subscriptions.md)    |
-| `emqx_mod_acl_internal`  | [内置 ACL](../security/authz/authz.md)                |
-| `emqx_mod_rewrite`       | [主题重写](./topic-rewrite.md)         |
+| `emqx_mod_delayed`       | [延迟发布](../mqtt/mqtt-delayed-publish.md)         |
+| `emqx_mod_topic_metrics` | [主题指标统计](../observability/topic-metrics.md) |
+| `emqx_mod_subscription`  | [代理订阅](../mqtt/mqtt-auto-subscription.md)    |
+| `emqx_mod_acl_internal`  | [内置 ACL](../access-control/authz/authz.md)                |
+| `emqx_mod_rewrite`       | [主题重写](../mqtt/mqtt-topic-rewrite.md)         |
 | `emqx_mod_presence`      | 上下线通知                             |
 
-EMQX Broker 为内置模块提供了[命令行接口](./cli.md#endpoint-modules)和 [HTTP API](./http-api.md#endpoint-modules)，用户可以很轻松地通过这些接口来启停模块，例如：
+EMQX Broker 为内置模块提供了[命令行接口](../admin/cli.md#endpoint-modules)和 [HTTP API](./http-api.md#endpoint-modules)，用户可以很轻松地通过这些接口来启停模块，例如：
 
 ```bash
 $ ./emqx_ctl modules load emqx_mod_delayed

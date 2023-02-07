@@ -1,32 +1,32 @@
-# Functions available in SQL statements
+# Built-in SQL functions
 
 ## Mathematical functions
 
-|function name|Purpose|parameter|Returned value|
-|--- |--- |--- |--- |
-|abs|Absolute value|Operand|absolute value|
-|cos|Cosine|Operand|Cosine value|
-|cosh|Hyperbolic cosine|Operand|Hyperbolic cosine value|
-|acos|Inverse cosine|Operand|Inverse cosine value|
-|acosh|Inverse hyperbolic cosine|Operand|Inverse hyperbolic cosine value|
-|sin|Sine|Operand|Sine value|
-|sinh|Hyperbolic sine|Operand|Hyperbolic sine value|
-|asin|Arcsine|Operand|Arcsine value|
-|asinh|inverse hyperbolic sine|Operand|inverse hyperbolic sine value|
-|tan|tangent|Operand|tangent value|
-|tanh|Hyperbolic tangent|Operand|Hyperbolic tangent value|
-|atan|Arc tangent|Operand|Arc tangent value|
-|atanh|Inverse hyperbolic tangent|Operand|Inverse hyperbolic tangent value|
-|ceil|Round up|Operand|Integer value|
-|floor|Round down|Operand|Integer value|
-|round|rounding|Operand|Integer value|
-|exp|Exponentiation|Operand|X power of e|
-|power|Exponential operation|1. Left operand x <br />2. Right operand y|Y power of X|
-|sqrt|Square root operation|Operand|Square root|
-|fmod|Floating point modulus function|1. left Operand <br />2.right Operand|module|
-|log|Logarithm to e|Operand|value|
-|log10|Logarithm to 10|Operand|value|
-|log2|Logarithm to 2|Operand|value|
+| function name | Purpose                         | parameter                                  | Returned value                   |
+| ------------- | ------------------------------- | ------------------------------------------ | -------------------------------- |
+| abs           | Absolute value                  | Operand                                    | absolute value                   |
+| cos           | Cosine                          | Operand                                    | Cosine value                     |
+| cosh          | Hyperbolic cosine               | Operand                                    | Hyperbolic cosine value          |
+| acos          | Inverse cosine                  | Operand                                    | Inverse cosine value             |
+| acosh         | Inverse hyperbolic cosine       | Operand                                    | Inverse hyperbolic cosine value  |
+| sin           | Sine                            | Operand                                    | Sine value                       |
+| sinh          | Hyperbolic sine                 | Operand                                    | Hyperbolic sine value            |
+| asin          | Arcsine                         | Operand                                    | Arcsine value                    |
+| asinh         | inverse hyperbolic sine         | Operand                                    | inverse hyperbolic sine value    |
+| tan           | tangent                         | Operand                                    | tangent value                    |
+| tanh          | Hyperbolic tangent              | Operand                                    | Hyperbolic tangent value         |
+| atan          | Arc tangent                     | Operand                                    | Arc tangent value                |
+| atanh         | Inverse hyperbolic tangent      | Operand                                    | Inverse hyperbolic tangent value |
+| ceil          | Round up                        | Operand                                    | Integer value                    |
+| floor         | Round down                      | Operand                                    | Integer value                    |
+| round         | rounding                        | Operand                                    | Integer value                    |
+| exp           | Exponentiation                  | Operand                                    | X power of e                     |
+| power         | Exponential operation           | 1. Left operand x <br />2. Right operand y | Y power of X                     |
+| sqrt          | Square root operation           | Operand                                    | Square root                      |
+| fmod          | Floating point modulus function | 1. left Operand <br />2.right Operand      | module                           |
+| log           | Logarithm to e                  | Operand                                    | value                            |
+| log10         | Logarithm to 10                 | Operand                                    | value                            |
+| log2          | Logarithm to 2                  | Operand                                    | value                            |
 
 ```erlang
 abs(-12) = 12
@@ -56,19 +56,17 @@ log2(1024) = 10
 
 ## Data type judgment function
 
-
-|Function name|Purpose|parameter|Returned value|
-|--- |--- |--- |--- |
-|is_null|Judge if the variable is null|Data|Boolean data.if it is empty (undefined), return true, otherwise return false|
-|is_not_null|Judge if the variable is not null|Data|Boolean data.if it is empty (undefined), return false, otherwise return true|
-|is_str|Judge whether the variable is String type|Data|Boolean data.|
-|is_bool|Judge if the variable is Boolean type|Data|Boolean data.|
-|is_int|Judge whether the variable is Integer type|Data|Boolean data.|
-|is_float|Judge whether the variable is Float type|Data|Boolean data.|
-|is_num|Judge whether the variable is a numeric type, including Integer and Float types|Data|Boolean data.|
-|is_map|Judge whether the variable is Map type|Data|Boolean data.|
-|is_array|Judge whether the variable is Array type|Data|Boolean data.|
-
+| Function name | Purpose                                                                         | parameter | Returned value                                                               |
+| ------------- | ------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------- |
+| is_null       | Judge if the variable is null                                                   | Data      | Boolean data.if it is empty (undefined), return true, otherwise return false |
+| is_not_null   | Judge if the variable is not null                                               | Data      | Boolean data.if it is empty (undefined), return false, otherwise return true |
+| is_str        | Judge whether the variable is String type                                       | Data      | Boolean data.                                                                |
+| is_bool       | Judge if the variable is Boolean type                                           | Data      | Boolean data.                                                                |
+| is_int        | Judge whether the variable is Integer type                                      | Data      | Boolean data.                                                                |
+| is_float      | Judge whether the variable is Float type                                        | Data      | Boolean data.                                                                |
+| is_num        | Judge whether the variable is a numeric type, including Integer and Float types | Data      | Boolean data.                                                                |
+| is_map        | Judge whether the variable is Map type                                          | Data      | Boolean data.                                                                |
+| is_array      | Judge whether the variable is Array type                                        | Data      | Boolean data.                                                                |
 
 ```erlang
 is_null(undefined) = true
@@ -85,16 +83,15 @@ is_num('val') = false
 
 ## Data type conversion function
 
-|function name|purpose|parameter|returned value|
-|--- |--- |--- |--- |
-|str|Convert data to String type|Data|Data of type String. Failure to convert will cause SQL matching to fail|
-|str_utf8|Convert data to UTF-8 String type|Data|UTF-8 String type data. Failure to convert will cause SQL matching to fail|
-|bool|Convert data to Boolean type|Data|Boolean data. Failure to convert will cause SQL matching to fail|
-|int|Convert data to integer type|Data|Integer type data. Failure to convert will cause SQL matching to fail|
-|float|Convert data to floating type|Data|Floating type data. Failure to convert will cause SQL matching to fail|
-|float2str|Convert a float to string using the given precision|1. Float Number 2. Precision| String |
-|map|Convert data to Map type|Data|Map type data. Failure to convert will cause SQL matching to fail|
-
+| function name | purpose                                             | parameter                    | returned value                                                             |
+| ------------- | --------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------- |
+| str           | Convert data to String type                         | Data                         | Data of type String. Failure to convert will cause SQL matching to fail    |
+| str_utf8      | Convert data to UTF-8 String type                   | Data                         | UTF-8 String type data. Failure to convert will cause SQL matching to fail |
+| bool          | Convert data to Boolean type                        | Data                         | Boolean data. Failure to convert will cause SQL matching to fail           |
+| int           | Convert data to integer type                        | Data                         | Integer type data. Failure to convert will cause SQL matching to fail      |
+| float         | Convert data to floating type                       | Data                         | Floating type data. Failure to convert will cause SQL matching to fail     |
+| float2str     | Convert a float to string using the given precision | 1. Float Number 2. Precision | String                                                                     |
+| map           | Convert data to Map type                            | Data                         | Map type data. Failure to convert will cause SQL matching to fail          |
 
 ```erlang
 str(1234) = '1234'
@@ -111,21 +108,20 @@ For details, see: [floating-point-guide](https://floating-point-gui.de/)
 
 ## String functions
 
-|Function name|Purpose|parameter|returned value|
-|--- |--- |--- |--- |
-|lower|convert to lowercase|input string|Lowercase string|
-|upper|convert to uppercase|input string|uppercase string|
-|trim|Remove left and right space|input string|output string|
-|ltrim|Remove the left space|input string|output string|
-|rtrim|Remove the right space|input string|output string|
-|reverse|String inversion|input string|output string|
-|strlen|string length|input string|Integer value|
-|substr|Take a substring of characters|1. input string <br />2. Start position. Note: Subscripts start at 1|substring|
-|substring|Take a substring of characters|1. input string <br />2. Start position <br />3. End position. Note: Subscripts start at 1|substring|
-|split|String splitting|1. input string <br />2. split string|Split string array|
-|split|String splitting|1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing'|Split string array|
-|split|split string|1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing'|Split string array|
-
+| Function name | Purpose                        | parameter                                                                                                                               | returned value     |
+| ------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| lower         | convert to lowercase           | input string                                                                                                                            | Lowercase string   |
+| upper         | convert to uppercase           | input string                                                                                                                            | uppercase string   |
+| trim          | Remove left and right space    | input string                                                                                                                            | output string      |
+| ltrim         | Remove the left space          | input string                                                                                                                            | output string      |
+| rtrim         | Remove the right space         | input string                                                                                                                            | output string      |
+| reverse       | String inversion               | input string                                                                                                                            | output string      |
+| strlen        | string length                  | input string                                                                                                                            | Integer value      |
+| substr        | Take a substring of characters | 1. input string <br />2. Start position. Note: Subscripts start at 1                                                                    | substring          |
+| substring     | Take a substring of characters | 1. input string <br />2. Start position <br />3. End position. Note: Subscripts start at 1                                              | substring          |
+| split         | String splitting               | 1. input string <br />2. split string                                                                                                   | Split string array |
+| split         | String splitting               | 1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing' | Split string array |
+| split         | split string                   | 1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing' | Split string array |
 
 ```erlang
 lower('AbC') = 'abc'
@@ -154,12 +150,11 @@ split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
 
 ## Map function
 
-|function name|purpose|parameter|returned value|
-|--- |--- |--- |--- |
-|map_get|Take the value of a Key in the Map, or return a null value if failed|1. Key <br />2. Map|The value of a Key in the Map. Support nested keys, such as "a.b.c"|
-|map_get|Take the value of a Key in the Map, if failed, return the specified default value|1. Key <br />2. Map <br />3. Default Value|The value of a Key in the Map. Support nested keys, such as "a.b.c"|
-|map_put|Insert value into Map|1. Key <br />2. Value <br />3. Map|The inserted Map. Support nested keys, such as "a.b.c"|
-
+| function name | purpose                                                                           | parameter                                  | returned value                                                      |
+| ------------- | --------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------- |
+| map_get       | Take the value of a Key in the Map, or return a null value if failed              | 1. Key <br />2. Map                        | The value of a Key in the Map. Support nested keys, such as "a.b.c" |
+| map_get       | Take the value of a Key in the Map, if failed, return the specified default value | 1. Key <br />2. Map <br />3. Default Value | The value of a Key in the Map. Support nested keys, such as "a.b.c" |
+| map_put       | Insert value into Map                                                             | 1. Key <br />2. Value <br />3. Map         | The inserted Map. Support nested keys, such as "a.b.c"              |
 
 ```erlang
 map_get('a', json_decode( '{ "a" : 1 }' )) = 1
@@ -167,19 +162,17 @@ map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
 map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
 ```
 
-
 ## Array function
 
-|function name|purpose|parameter|returned value|
-|--- |--- |--- |--- |
-|nth|Take the nth element, and subscripts start at 1|Original array|Nth element|
-|length|Get the length of an array|Original array|the length of an array|
-|sublist|Take a sub-array of length len starting from the first element. Subscripts start at 1|1. length len <br />2. Original array|sub-array|
-|sublist|Take a sub-array of length len starting from the nth element. Subscripts start at 1|1. start position n <br />2. length len <br />3. Original array|sub-array|
-|first|Take the first element. Subscripts start at 1|Original array|1st element|
-|last|take the last element|Original array|the last element|
-|contains|Determine whether the data is in the array|1. data <br />2. Original array|Boolean value|
-
+| function name | purpose                                                                               | parameter                                                       | returned value         |
+| ------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------- |
+| nth           | Take the nth element, and subscripts start at 1                                       | Original array                                                  | Nth element            |
+| length        | Get the length of an array                                                            | Original array                                                  | the length of an array |
+| sublist       | Take a sub-array of length len starting from the first element. Subscripts start at 1 | 1. length len <br />2. Original array                           | sub-array              |
+| sublist       | Take a sub-array of length len starting from the nth element. Subscripts start at 1   | 1. start position n <br />2. length len <br />3. Original array | sub-array              |
+| first         | Take the first element. Subscripts start at 1                                         | Original array                                                  | 1st element            |
+| last          | take the last element                                                                 | Original array                                                  | the last element       |
+| contains      | Determine whether the data is in the array                                            | 1. data <br />2. Original array                                 | Boolean value          |
 
 ```erlang
 nth(2, [1,2,3,4]) = 2
@@ -193,12 +186,11 @@ contains(2, [1,2,3,4]) = true
 
 ## Hash function
 
-|function name|purpose|parameter|returned value|
-|--- |--- |--- |--- |
-|md5|evaluate MD5|data|MD5 value|
-|sha|evaluate SHA|data|SHA value|
-|sha256|evaluate SHA256|data|SHA256 value|
-
+| function name | purpose         | parameter | returned value |
+| ------------- | --------------- | --------- | -------------- |
+| md5           | evaluate MD5    | data      | MD5 value      |
+| sha           | evaluate SHA    | data      | SHA value      |
+| sha256        | evaluate SHA256 | data      | SHA256 value   |
 
 ```erlang
 md5('some val') = '1b68352b3e9c2de52ffd322e30bffcc4'
@@ -208,14 +200,14 @@ sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2
 
 ## Compresses and Uncompresses functions
 
-| Function | Purpose |        Parameters         | Returned value |
-| -------- | -------------- |--------------- | --------------------|
-| `gzip` | Compresses data with gz headers and checksum. | Raw binary data | Compressed binary data |
-| `gunzip` | Uncompresses data with gz headers and checksum. | Compressed binary data | Raw binary data |
-| `zip` | Compresses data without zlib headers and checksum. |  Raw binary data | Compressed binary data |
-| `unzip` | Uncompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data |
-| `zip_compress` | Compresses data with zlib headers and checksum. |  Raw binary data | Compressed binary data |
-| `zip_uncompress` | Uncompresses data with zlib headers and checksum. | Compressed binary data | Raw binary data |
+| Function         | Purpose                                              | Parameters             | Returned value         |
+| ---------------- | ---------------------------------------------------- | ---------------------- | ---------------------- |
+| `gzip`           | Compresses data with gz headers and checksum.        | Raw binary data        | Compressed binary data |
+| `gunzip`         | Uncompresses data with gz headers and checksum.      | Compressed binary data | Raw binary data        |
+| `zip`            | Compresses data without zlib headers and checksum.   | Raw binary data        | Compressed binary data |
+| `unzip`          | Uncompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data        |
+| `zip_compress`   | Compresses data with zlib headers and checksum.      | Raw binary data        | Compressed binary data |
+| `zip_uncompress` | Uncompresses data with zlib headers and checksum.    | Compressed binary data | Raw binary data        |
 
 ```erlang
 bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
@@ -230,10 +222,10 @@ zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello wo
 
 ## Bit functions
 
-| Function  | Purpose| Parameters| Returned value |
-|-----------|-------------|--------|----------------------|
-| `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).  | 1. The binary <br />2. The length of bits to get | The unsigned integer |
-| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get| The unsigned integer |
+| Function  | Purpose                                                                                                                                                                   | Parameters                                                                                                                                                                                                                                                                                      | Returned value               |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).                                                       | 1. The binary <br />2. The length of bits to get                                                                                                                                                                                                                                                | The unsigned integer         |
+| `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1.                | 1. The binary <br />2. The offset <br />3. The length of bits to get                                                                                                                                                                                                                            | The unsigned integer         |
 | `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to a data type according to the arguments provided. Offsets are start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get <br />4. Data Type, can be one of 'integer', 'float', 'bits' <br />5. Signedness, only works for integers, can be one of 'unsigned', 'signed', <br />6. Endianness, only works for integers, can be one of 'big', 'little' | The data got from the binary |
 
 ```erlang
@@ -244,17 +236,16 @@ subbits('abc', 9, 16, 'integer', 'signed', 'big') = 25187
 subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 ```
 
-
 ## Decoding and encoding functions
 
-| Function | Purpose                             |        Parameters         | Returned value    |
-| -------- | ------------------------------------|-------------------------- | --------------------------- |
-| `base64_encode` | BASE64 encode   | The binary to be encoded | The encoded base64-formatted string |
-| `base64_decode` | BASE64 decode   | The base64-formatted string to be decoded | The decoded binary |
-| `json_encode` | JSON encode   | The data to be encoded | The JSON string |
-| `json_decode` | JSON decode   | The JSON string to be decoded | The decoded data |
-| `bin2hexstr` | Binary to Hex String | The binary | The hex string |
-| `hexstr2bin` | Binary to Hex String | The hex string | The binary |
+| Function        | Purpose              | Parameters                                | Returned value                      |
+| --------------- | -------------------- | ----------------------------------------- | ----------------------------------- |
+| `base64_encode` | BASE64 encode        | The binary to be encoded                  | The encoded base64-formatted string |
+| `base64_decode` | BASE64 decode        | The base64-formatted string to be decoded | The decoded binary                  |
+| `json_encode`   | JSON encode          | The data to be encoded                    | The JSON string                     |
+| `json_decode`   | JSON decode          | The JSON string to be decoded             | The decoded data                    |
+| `bin2hexstr`    | Binary to Hex String | The binary                                | The hex string                      |
+| `hexstr2bin`    | Binary to Hex String | The hex string                            | The binary                          |
 
 ```erlang
 base64_encode('some val') = 'c29tZSB2YWw='
@@ -264,66 +255,66 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 ```
 
 {% emqxee %}
-| Function | Purpose                             |        Parameters         | Returned value |
+| Function | Purpose | Parameters | Returned value |
 | -------- | ------------------------------------|------------------------- | --------------------------- |
 | `schema_encode` | Encode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be encoded 3..N. The remaining arguments according to the schema type | The encoded data |
 | `schema_decode` | Decode according to schema. The schema should be created before using this function | 1. The Schema ID defined by schema registry 2. The data to be decoded 3..N. The remaining arguments according to the schema type | The decoded data |
 
-For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md)
+<!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
 {% endemqxee %}
 
 ## Time and date functions
 
-| Function | Purpose                             |        Parameters         | Returned value |
-| -------- | ------------------------------------|-------------------------- | --------------------------- |
-| `now_timestamp` | Return the unix epoch of now in second | - | The unix epoch |
-| `now_timestamp` | Return the unix epoch of now, in given time unit | 1. The time unit | The unix epoch |
-| `now_rfc3339` | Create a RFC3339 time string of now in second | - | The time string of format RFC3339 |
-| `now_rfc3339` | Create a RFC3339 time string of now, in given time unit | 1. The time unit | The time string of format RFC3339 |
-| `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string | 1. The unix epoch in second | The time string of format RFC3339 |
-| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch </br>2. The time unit | The time string of format RFC3339 |
-| `rfc3339_to_unix_ts` | Convert a RFC3339 time string (in second) to unix epoch | 1. The time string of format RFC3339 | The unix epoch |
-| `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit | 1. The time string of format RFC3339 </br>2. The time unit | The unix epoch |
-| `format_date` | Timestamp to formatted time | 1. The time unit (refer to The time unit)</br>2. The time offset (refer to time offset definition)</br>3. The date format (refer to time string codec format)</br>4. The timestamp (optional parameter, default is current time)| Formatted time |
-| `date_to_unix_ts` | Formatted time to timestamp | 1. The time unit (refer to the following table for definition) </br>2. The time offset (optional, when not filled, use the time offset in the formatted time string, refer to the time offset definition) </br>3. The date format (refer to time string codec format) </br>4. The formatted time string | The unix epoch |
+| Function             | Purpose                                                                 | Parameters                                                                                                                                                                                                                                                                                              | Returned value                    |
+| -------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `now_timestamp`      | Return the unix epoch of now in second                                  | -                                                                                                                                                                                                                                                                                                       | The unix epoch                    |
+| `now_timestamp`      | Return the unix epoch of now, in given time unit                        | 1. The time unit                                                                                                                                                                                                                                                                                        | The unix epoch                    |
+| `now_rfc3339`        | Create a RFC3339 time string of now in second                           | -                                                                                                                                                                                                                                                                                                       | The time string of format RFC3339 |
+| `now_rfc3339`        | Create a RFC3339 time string of now, in given time unit                 | 1. The time unit                                                                                                                                                                                                                                                                                        | The time string of format RFC3339 |
+| `unix_ts_to_rfc3339` | Convert an unix epoch (in second) to RFC3339 time string                | 1. The unix epoch in second                                                                                                                                                                                                                                                                             | The time string of format RFC3339 |
+| `unix_ts_to_rfc3339` | Convert an unix epoch to RFC3339 time string, using the given time unit | 1. The unix epoch </br>2. The time unit                                                                                                                                                                                                                                                                 | The time string of format RFC3339 |
+| `rfc3339_to_unix_ts` | Convert a RFC3339 time string (in second) to unix epoch                 | 1. The time string of format RFC3339                                                                                                                                                                                                                                                                    | The unix epoch                    |
+| `rfc3339_to_unix_ts` | Convert a RFC3339 time string to unix epoch, using the given time unit  | 1. The time string of format RFC3339 </br>2. The time unit                                                                                                                                                                                                                                              | The unix epoch                    |
+| `format_date`        | Timestamp to formatted time                                             | 1. The time unit (refer to The time unit)</br>2. The time offset (refer to time offset definition)</br>3. The date format (refer to time string codec format)</br>4. The timestamp (optional parameter, default is current time)                                                                        | Formatted time                    |
+| `date_to_unix_ts`    | Formatted time to timestamp                                             | 1. The time unit (refer to the following table for definition) </br>2. The time offset (optional, when not filled, use the time offset in the formatted time string, refer to the time offset definition) </br>3. The date format (refer to time string codec format) </br>4. The formatted time string | The unix epoch                    |
 
 The time unit
 
-| Name | Precision | Example |
-| -- | -- | -- |
-| `second` | second | 1653557821 |
-| `millisecond` | millisecond | 1653557852982 |
-| `microsecond` | microsecond | 1653557892926417 |
-| `nanosecond` | nanosecond | 1653557916474793000 |
+| Name          | Precision   | Example             |
+| ------------- | ----------- | ------------------- |
+| `second`      | second      | 1653557821          |
+| `millisecond` | millisecond | 1653557852982       |
+| `microsecond` | microsecond | 1653557892926417    |
+| `nanosecond`  | nanosecond  | 1653557916474793000 |
 
 Time string format
 
-| Placeholder | Definition | Range |
-| -- | -- | -- |
-| `%Y` | year | 0000 - 9999 |
-| `%m` | month | 01 - 12 |
-| `%d` | day | 01 - 31 |
-| `%H` | hour | 00 - 12 |
-| `%M` | minute | 00 - 59 |
-| `%S` | second | 01 - 59 |
-| `%N` | nanosecond | 000000000 - 999999999 |
-| `%3N` | millisecond | 000000 - 999999 |
-| `%6N` | microsecond | 000 - 000 |
-| `%z` | time offset [+\|-]HHMM | -1159 to +1159 |
-| `%:z` | time offset [+\|-]HH:MM | -11:59 to +11:59 |
-| `%::z` | time offset [+\|-]HH:MM:SS | -11:59:59 to +11:59:59 |
+| Placeholder | Definition                 | Range                  |
+| ----------- | -------------------------- | ---------------------- |
+| `%Y`        | year                       | 0000 - 9999            |
+| `%m`        | month                      | 01 - 12                |
+| `%d`        | day                        | 01 - 31                |
+| `%H`        | hour                       | 00 - 12                |
+| `%M`        | minute                     | 00 - 59                |
+| `%S`        | second                     | 01 - 59                |
+| `%N`        | nanosecond                 | 000000000 - 999999999  |
+| `%3N`       | millisecond                | 000000 - 999999        |
+| `%6N`       | microsecond                | 000 - 000              |
+| `%z`        | time offset [+\|-]HHMM     | -1159 to +1159         |
+| `%:z`       | time offset [+\|-]HH:MM    | -11:59 to +11:59       |
+| `%::z`      | time offset [+\|-]HH:MM:SS | -11:59:59 to +11:59:59 |
 
 The time offset
 
-| Offset | Definition | Examples |
-| -- | -- | -- |
-| `z` | UTC Zulu Time | `+00:00` |
-| `Z` | UTC Zulu Time. Same as `z` | `+00:00` |
-| `local` | System Time | Automatic </br>Beijing `+08:00`</br> Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
-| `[+\|-]HHMM` | `%z` | Beijing `+0800` </br>Zulu `+0000` </br>Stockholm, Sweden `+0200` </br>Los Angeles `-0800` |
-| `[+\|-]HH:MM` | `%:z` | Beijing `+08:00` </br>Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
-| `[+\|-]HH:MM:SS` | `%::z` | Beijing `+08:00:00` </br>Zulu `+00:00:00` </br>Stockholm, Sweden `+02:00:00` </br>Los Angeles `-08:00:00` |
-| integer() | Seconds | Beijing 28800 </br>Zulu 0 </br>Stockholm, Sweden 7200 </br>Los Angeles -28800 |
+| Offset           | Definition                 | Examples                                                                                                     |
+| ---------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `z`              | UTC Zulu Time              | `+00:00`                                                                                                     |
+| `Z`              | UTC Zulu Time. Same as `z` | `+00:00`                                                                                                     |
+| `local`          | System Time                | Automatic </br>Beijing `+08:00`</br> Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00` |
+| `[+\|-]HHMM`     | `%z`                       | Beijing `+0800` </br>Zulu `+0000` </br>Stockholm, Sweden `+0200` </br>Los Angeles `-0800`                    |
+| `[+\|-]HH:MM`    | `%:z`                      | Beijing `+08:00` </br>Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00`                |
+| `[+\|-]HH:MM:SS` | `%::z`                     | Beijing `+08:00:00` </br>Zulu `+00:00:00` </br>Stockholm, Sweden `+02:00:00` </br>Los Angeles `-08:00:00`    |
+| integer()        | Seconds                    | Beijing 28800 </br>Zulu 0 </br>Stockholm, Sweden 7200 </br>Los Angeles -28800                                |
 
 ```SQL
 now_timestamp() = 1650874276
@@ -342,10 +333,8 @@ date_to_unix_ts('second', 'local', '%Y-%m-%d %H-%M-%S', '2022-05-26 18:40:12') =
 date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 1653561612
 ```
 
-
-
 {% emqxee %}
-| Function | Purpose                             |        Parameters         | Returned value |
+| Function | Purpose | Parameters | Returned value |
 | -------- | ------------------------------------|-------------------------- | --------------------------- |
 | `mongo_date` | Create a mongodb ISODate type of now | - | the ISODate |
 | `mongo_date` | Create a mongodb ISODate type from the given unix epoch in millisecond | 1. unix epoch in millisecond | the ISODate |
@@ -363,113 +352,4 @@ mongo_date(timestamp, 'millisecond') = 'ISODate("2012-12-19T06:01:17.171Z")'
 
 ## JQ Functions for Transforming JSON Data
 
-[JQ](https://stedolan.github.io/jq/) is a powerful command line tool and
-programming language designed primarily for transforming and querying data
-encoded as [JavaScript Object Notation (JSON)](https://www.json.org/json-en.html).
-The rule's SQL language integrates JQ through two functions:
-
-| Function      | Purpose | Parameters | Returned value |
-| ----------- | ----------- | ----------- | ------------|
-| `jq`     | Transform JSON encoded string or an object with JQ | 1. string containing valid jq program 2. JSON encoded string or object 3. integer timeout value (milliseconds) | list of objects corresponding to the JSON objects generated by the given JQ program (parameter 1) when given the input provided by parameter 2. The function throws an exception if the execution did not finish before the timeout or if the jq program throws an exception. |
-| `jq`   | same as above        | Same as above except that it only takes two parameters and uses the default timeout which is configurable with the `rule_engine.jq_function_default_timeout` setting (default 10 seconds) for timeout value | same as above |
-
-The [JQ documentation](https://stedolan.github.io/jq/manual/) is a good
-resource for learning how to write JQ programs. You can also
-[try out JQ programs in this online environment](https://jqplay.org/), install it on your
-computer, or watch [EMQX's JQ introduction video](https://www.youtube.com/watch?v=_GwF8zvhNcQ). JQ is a
-[Turing-complete](https://en.wikipedia.org/wiki/Turing_completeness) high-level
-functional programming language. Typical JQ programs describe simple
-transformations or filters for JSON data, but one can also use JQ to perform
-complex computations when needed. However, it is not recommended to do
-long-running computations in the rule as this can significantly slow
-down the rate at which EMQX can process new messages. The JQ functions have
-timeouts to prevent possibly buggy JQ programs (that may have gotten stuck in
-an infinite loop) from taking too much processing time from the rest of the
-EMQX system. JQ functions can be convenient for transformations that are
-difficult or impossible to do with only the rule SQL language and its
-simple functions. The following are some examples of simple `jq` function calls
-and their results:
-
-```SQL
-jq('.', '{"temprature": 10}') = [json_decode('{"temprature": 10}')]
-jq('.', json_decode('{"temprature": 10}')) = [json_decode('{"temprature": 10}')]
-jq('.temprature', '{"temprature": 10}') = [10]
-jq('{temprature_C:.temprature,temprature_F: (.temprature * 1.8 + 32)}', '{"temprature": 10}') = [json_decode('{"temprature_C": 10, "temprature_F": 50}')]
-jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') = [10, 50]
-```
-
-The above examples only scratch the surface of what can be done with JQ. The
-below example illustrates what a more complex JQ program might look like and
-how one can combine the `jq` function with the `FOREACH` statement to divide
-JQ's output objects into multiple messages. Please refer to the documentation
-of the `FOREACH` statement for information on how to use it.
-
-```SQL
-FOREACH   jq('def rem_first: ' +
-             '    if length > 2 then del(.[0]) else . end;' +
-             'def rem_last:' +
-             '    if length > 1 then del(.[-1]) else . end;' +
-             '.date as $date |' +
-             '.sensors[] |' +
-             '  (.data | sort | rem_first | rem_last | add / length) as $average |' +
-             '  {$average, $date}',
-             payload)
-FROM    "jq_demo/complex_rule/jq/#"
-```
-
-Below is an example of input payload for the code above:
-
-```
-{
-  "date": "2020-04-24",
-  "sensors": [
-    {
-      "name": "a",
-      "data": [3,1,2,4,5,5]
-    },
-    {
-      "name": "b",
-      "data": [1,-100,2,3,4,5,2000]
-    },
-    {
-      "name": "c",
-      "data": [3, 7, 9]
-    }
-  ]
-}
-
-```
-
-The rule SQL snippet above will create one output message for each
-sensor in the input data. Each message will be a JSON object containing
-one field for the date and one field for the average of the sensor's data field
-after the smallest and largest values have been removed (as they might be
-outliers). Thus given the payload above, the three output messages will have
-the following payloads:
-
-Message 1:
-
-```
-{
-  "average": 3.5,
-  "date": "2020-04-24"
-}
-```
-
-Message 2:
-
-```
-{
-  "average": 3,
-  "date": "2020-04-24"
-}
-```
-
-Message 3:
-
-```
-{
-  "average": 7,
-  "date": "2020-04-24"
-}
-```
+In addition to the above built-in functions, EMQX also integrates JQ functions for processing JSON data, please refer to [JQ Functions](./rule-sql-jq.md).

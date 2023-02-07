@@ -61,20 +61,20 @@ gateway.stomp {
 Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
 :::
 
-The Stomp gateway only supports TCP and SSL type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../admin/cfg.md)
+The Stomp gateway only supports TCP and SSL type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.md)
 
 ## Authentication
 
 As the concept of username and password is already defined in the connection message of the Stomp protocol,
 it supports a variety of authenticator types, such as:
 
-- [Built-in Database Authentication](../security/authn/mnesia.md)
-- [MySQL Authentication](../security/authn/mysql.md)
-- [MongoDB Authentication](../security/authn/mongodb.md)
-- [PostgreSQL Authentication](../security/authn/postgresql.md)
-- [Redis Authentication](../security/authn/redis.md)
-- [HTTP Server Authentication](../security/authn/http.md)
-- [JWT Authentication](../security/authn/jwt.md)
+- [Built-in Database Authentication](../access-control/authn/mnesia.md)
+- [MySQL Authentication](../access-control/authn/mysql.md)
+- [MongoDB Authentication](../access-control/authn/mongodb.md)
+- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
+- [Redis Authentication](../access-control/authn/redis.md)
+- [HTTP Server Authentication](../access-control/authn/http.md)
+- [JWT Authentication](../access-control/authn/jwt.md)
 
 Stomp gateway uses the information in the CONNECT or STOMP message of STOMP protocol to generate the authentication fields for the client:
 
@@ -130,7 +130,7 @@ gateway.stomp {
 
 Unlike the MQTT protocol, **the gateway only supports the creation of an authenticator, not a list of authenticators (or an authentication chain)**. When no authenticator is enabled, it means that all Stomp clients are allowed to log in.
 
-For the configuration format of other types of authenticators refer to: [Security - Authenticator](../security/authn/authn.md)
+For the configuration format of other types of authenticators refer to: [Security - Authenticator](../access-control/authn/authn.md)
 
 ## Publish/Subscribe
 
@@ -139,11 +139,11 @@ The Stomp protocol is fully compatible with the PUB/SUB messaging model, and the
 - The SUBSCRIBE message of the Stomp protocol is used as a subscribing request. The topic is the `destination` field of the SUBSCRIBE message, the QoS is fixed to 0, and the wildcards defined in the MQTT protocol are supported.
 - The UNSUBSCRIBE message of the Stomp protocol is used as an unsubscribe request. The topic is the `destination` field in the UNSUBSCRIBE message.
 
-There is no special authorization configurations within Stomp gateway, and its permission control for topics needs to be configured [Authorization](../security/authz/authz.md).
+There is no special authorization configurations within Stomp gateway, and its permission control for topics needs to be configured [Authorization](../access-control/authz/authz.md).
 
 ## User Interfaces
 
-- Detailed confguration options: [Configuration - Stomp Gateway](../admin/cfg.md)
+- Detailed confguration options: [Configuration - Stomp Gateway](../configuration/configuration-manual.md)
 - Detailed HTTP APIs description: [HTTP API - Gateway](../admin/api.md)
 
 ## Client libraries

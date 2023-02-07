@@ -48,7 +48,7 @@ node.name = emqx@192.168.0.10
 export EMQX_NODE__NAME=emqx@s1.emqx.io && ./bin/emqx start
 ```
 
-::: warning Warning
+::: tip
 节点启动加入集群后，节点名称不能变更。
 :::
 
@@ -88,7 +88,7 @@ EMQX 集群是为外部节点发送加入**请求**
 例如如果一个`s3.emqx.io`要加入`s1`和`s2`的集群，
 join 命令应该在 `s3` 上执行，但 **NOT** 在 `s1` 或 `s2` 上执行。
 
-::: warning Warning
+::: tip
 加入另一个集群将导致该节点离开它属于的当前集群。
 :::
 
@@ -123,5 +123,5 @@ $ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
 
 对于只有单台服务器的用户来说，可以使用伪分布式集群。请注意，我们若要在单机上启动两个或多个 emqx 实例，为避免端口冲突，我们需要对其它节点的监听端口做出调整。
 
-基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置项](../../admin/cfg.md)。
+基本思路是复制一份 emqx 文件夹然后命名为 emqx2 ，将原先所有 emqx 节点监听的端口 port 加上一个偏移 offset 作为新的 emqx2 节点的监听端口。例如，将原先 emqx 的MQTT/TCP 监听端口由默认的 1883 改为了 2883 作为 emqx2 的 MQTT/TCP 监听端口。完成以上操作的自动化脚本可以参照 [集群脚本](https://github.com/terry-xiaoyu/one_more_emqx)，具体配置请参见 [配置项](../../configuration/configuration-manual.md)。
 

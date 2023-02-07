@@ -64,7 +64,7 @@ gateway.coap {
 通过配置文件来配置网关，需要在每个节点上手动同步配置文件；而通过 Dashboard 或者 HTTP API 管理则会自动同步至整个集群。
 :::
 
-CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](../admin/cfg.md)
+CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表请参考：[网关配置 - 监听器](../configuration/configuration-manual.md)
 
 ## 工作模式
 
@@ -102,13 +102,13 @@ gateway.coap {
 仅在 `连接模式` 下可用。
 客户端 ID、用户名、密码由客户端的 [创建连接](#创建连接) 请求提供，CoAP 网关支持以下认证器类型：
 
-- [内置数据库认证](../security/authn/mnesia.md)
-- [MySQL 认证](../security/authn/mysql.md)
-- [MongoDB 认证](../security/authn/mongodb.md)
-- [PostgreSQL 认证](../security/authn/postgresql.md)
-- [Redis 认证](../security/authn/redis.md)
-- [HTTP Server 认证](../security/authn/http.md)
-- [JWT 认证](../security/authn/jwt.md)
+- [内置数据库认证](../access-control/authn/mnesia.md)
+- [MySQL 认证](../access-control/authn/mysql.md)
+- [MongoDB 认证](../access-control/authn/mongodb.md)
+- [PostgreSQL 认证](../access-control/authn/postgresql.md)
+- [Redis 认证](../access-control/authn/redis.md)
+- [HTTP Server 认证](../access-control/authn/http.md)
+- [JWT 认证](../access-control/authn/jwt.md)
 
 例如，通过 HTTP API 或 emqx.conf 为 CoAP 网关创建一个内置数据库认证：
 
@@ -159,7 +159,7 @@ gateway.coap {
 
 与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示所有的 CoAP 客户端都具有接入的权限。
 
-其他类型的认证器的配置格式参考：[安全 - 认证器](../security/authn/authn.md)
+其他类型的认证器的配置格式参考：[安全 - 认证器](../access-control/authn/authn.md)
 
 
 ## 发布订阅
@@ -169,12 +169,12 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 详情参考下文中的 [消息发布](#消息发布)、[订阅主题](#订阅主题)、[取消订阅](#取消订阅)
 
-网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../security/authz/authz.md) 中管理。
+网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../access-control/authz/authz.md) 中管理。
 
 
 ## 用户层接口
 
-- 配置说明参考：[网关配置 - CoAP 网关](../admin/cfg.md)
+- 配置说明参考：[网关配置 - CoAP 网关](../configuration/configuration-manual.md)
 - 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
 
 
