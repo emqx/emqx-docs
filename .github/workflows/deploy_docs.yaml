@@ -152,7 +152,7 @@ jobs:
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
           redoc-cli bundle redoc/ce-${lang}.json -t redoc/template.hbs \
-            --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api.html \
+            --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api-docs.html \
             --options.theme.colors.primary.main=#00b173 \
             --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
             --templateOptions.description "EMQX ${VERSION} API Documentation" \
@@ -168,7 +168,7 @@ jobs:
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
           redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
-            --output docs/.vuepress/dist/ee-${lang}/enterprise/${VERSION}/admin/api.html \
+            --output docs/.vuepress/dist/ee-${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --options.theme.colors.primary.main=#5e4eff \
             --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
