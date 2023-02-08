@@ -197,22 +197,22 @@
       title_cn: API 文档
       lang: en
       edition: ce
-      path: https://www.emqx.io/docs/en/v5.0/admin/api.html
+      path: https://www.emqx.io/docs/en/v5.0/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: cn
       edition: ce
-      path: https://www.emqx.io/docs/zh/v5.0/admin/api.html
+      path: https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: en
       edition: ee
-      path: https://docs.emqx.com/en/enterprise/v5.0/admin/api.html
+      path: https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html
     - title_en: API Docs
       title_cn: API 文档
       lang: cn
       edition: ee
-      path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api.html
+      path: https://docs.emqx.com/zh/enterprise/v5.0/admin/api-docs.html
 
 ## Dashboard
 
