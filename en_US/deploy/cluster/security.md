@@ -98,7 +98,8 @@ Below are the steps to generate certificates and a self-signed CA.
 TLS comes at the cost of increased CPU load and RAM usage
 :::
 
-Erlang distribution is used by EMQX nodes to sync database updates and ad-hoc cluster-wide such as collecting runtime metrics etc.
+Erlang distribution is used by EMQX core nodes to sync database updates
+and control/management RPCs such as start/stop a componentk, or collecting runtime metrics etc.
 
-* Make sure to verify the ssl_dist.conf file has the right paths to keys and certificates.
+* Make sure to verify `etc/ssl_dist.conf` file has the right paths to keys and certificates.
 * Ensure config `cluster.proto_dist` is set to `inet_tls`.
