@@ -2,9 +2,46 @@
 
 [emqtt_bench](https://github.com/emqx/emqtt_bench) is a concise and powerful MQTT protocol performance testing tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization , the test service [XMeter](https://www.xmeter.net/) is recommended.
 
-## Compile and install
+## Docker image
 
-The operation of `emqtt_bench` depends on the operating environment of Erlang/OTP 21.2 and above version. The installation process is skipped. For details, please refer to the online installation tutorials.
+`emqtt_bench` docker images are pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), and `:latest` tag is updated with each new version:
+
+```bash
+docker run -it emqx/emqtt-bench:latest
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+Note that docker image name is using hyphen '-', while binary script name is with underscore '_'.
+
+## Binary package
+
+We create binary packages with each release for the following platforms:
+
+- CentOS 7
+- Rocky Linux 8
+- Debian 9
+- Debain 10
+- Ubuntu 16.04
+- Ubuntu 18.04
+- Ubuntu 20.04
+
+Please check them out on the [Releases](https://github.com/emqx/emqtt-bench/releases) page.
+
+Here is how to install `emqtt_bench` on, for example, Ubuntu 20.04:
+
+```bash
+mkdir emqtt_bench && cd emqtt_bench
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.8/emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+
+./emqtt_bench
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+## Build from source
+
+The operation of `emqtt_bench` depends on the operating environment of [Erlang/OTP](https://www.erlang.org/) 21.2 and above version. The installation process is skipped. For details, please refer to the online installation tutorials.
 
 After the Erlang environment is installed, download the latest code of `emqtt-bench` and compile it:
 
