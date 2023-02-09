@@ -1,4 +1,4 @@
-# 基于 ACL 文件进行授权检查
+# ACL 文件
 
 EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文件中配置多条授权检查规则，在收到客户端的操作请求后，EMQX 会按照从上到下的顺序进行授权规则匹配；在成功匹配到某条规则后，EMQX 将按设定允许或拒绝当前请求，并停止后续规则的匹配。
 
@@ -75,17 +75,11 @@ EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文�
 
 在 ACL 文件中配置好授权规则后，您可通过 Dashboard 或配置文件启用基于文件进行授权检查。
 
-## 通过 Dashbard 配置
+## 通过 Dashboard 配置
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航目录的 **访问控制** -> **授权** 进入**授权**页面。
 
 EMQX 已默认配置一个基于文件的授权检查器。您可点击 **File** 数据源对应的**操作**栏下的 **设置** 按钮查看或更改 ACL 文件中配置的授权规则，或点击 **更多** -> **删除**，重新创建一个基于文件的授权检查器。
-
-:::tip
-
-EMQX 仅支持添加一个基于文件的授权检查器。
-
-:::
 
 在 **授权**页面，单击**创建**，选择**数据源**为 **File**，点击**下一步**，进入**配置参数**页签：
 
@@ -121,4 +115,5 @@ authorization {
 - `enable`：是否激活该检查器，可选值：`true`、`false`
 - `path`：配置文件路径；默认为：`etc/acl.conf`；用户自定义 ACL 文件将存储至`data/authz/acl.conf`。
 
-关于 配置文件中的 `authorization` 详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.md#authz-file)。
+详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.md#authz-file)。
+

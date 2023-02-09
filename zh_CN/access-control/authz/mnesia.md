@@ -1,17 +1,21 @@
-# 基于内置数据库进行授权
+# 内置数据库
 
-EMQX 提供了内置数据库（基于 Mnesia）作为授权检查数据源，并通过 REST API 与 Dashboard 进行数管理，无需用户额外部署其他数据库，能够低成本、开箱即用的启用授权检查。
+EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授权规则存储方式。您可以通过 Dashboard 或配置文件设置使用内置数据库作为数据源，通过 Dashboard 或 HTTP API 添加相关授权检查规则。
 
 ::: tip 前置准备：
 
 - 熟悉 [EMQX 授权基本概念](./authz.md)
   :::
 
-## 配置项
+## 通过 Dashboard 配置
 
-详细配置请参考 [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia)。
+在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的 **访问控制** -> **授权**，在 **授权** 页面，添加 **Built-in Database** 作为 **数据源**， 点击**下一步 **进入 **配置参数 **页签。由于无需配置其他参数，可直接点击 **创建** 完成配置。
 
-该 Authorizer 的配置必需有 `type = built_in_database`。
+## 通过配置文件配置
+
+您也可通过配置文件中的 `authorization` 字段配置通过 EMQX 内置数据库存储授权规则。
+
+代码示例：
 
 ```hocon
 {
@@ -20,20 +24,46 @@ EMQX 提供了内置数据库（基于 Mnesia）作为授权检查数据源，�
 }
 ```
 
-## 通过 Dashboard 配置
+其中
 
-授权规则可以在 Dashboard 的 "访问控制" -> "授权" -> "Built-in Database" -> 用户管理 中管理数据。
+- `type`：授权检查器的数据源类型，此处填入 `built_in_database`
+- `enable`：是否激活该检查器，可选值：`true`、`false`
 
-也可以通过这个 API 来进行管理 `/api/v5/authorization/sources/built_in_database`。
+详细参数列表，请参考 [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia)。
 
-每条规则可以适用于：
+## 配置授权检查规则
 
-- 使用用户名对客户端进行匹配：`/api/v5/authorization/sources/built_in_database/username`
-- 使用客户端 ID 对客户端进行匹配： `/api/v5/authorization/sources/built_in_database/clientid`;
-- 所有的客户端：`/api/v5/authorization/sources/built_in_database/all`.
+您可通过 Dashboard 或 API 传入授权规则。
 
-API 文档中可以找到更多的信息和例子。
-下面是使用其中一个 API 为一个客户端（`client1`）创建规则的例子。
+### 通过 Dashboard 配置
+
+在 Dashboard 的 **授权** 页面，点击 **Built-in Database** 数据源对应的 **操作 **栏下的 **权限管理**，即可进行授权检查规则的配置。
+
+您可根据需要从客户端 ID**、**用户名或直接从主题角度设置授权检查。
+
+- **客户端 ID**：见 **客户端 ID**  页签，指定适用此条规则的客户端
+- **用户名**：见 **用户名** 页签，指定适用此条规则的用户名
+- **权限**：是否允许当前客户端/用户的某类操作请求；可选值：**Allow**、**Deny**
+- **操作**：配置该条规则对应的操作；可选值：**Publish**、**Subscribe**、**Publish & Subscribe**
+- **主题**：配置该条规则对应的主题
+
+EMQX 支持针对单个客户端或用户配置多条授权检查规则，您可通过页面的 **上移**、**下移** 调整不同规则的执行顺序和优先级。
+
+如希望同时针对多个客户端或用户配置授权检查规则，可通过 HTTP API 传入相关配置。
+
+### 通过 API 配置
+
+您可通过 API 传入以及管理授权规则：
+
+- 指定适用此条规则的客户端：
+  - `/api/v5/authorization/sources/built_in_database/clientid`
+- 指定适用此条规则的用户名：
+  - `/api/v5/authorization/sources/built_in_database/username`
+- 指定适用此条规则的主题：
+  - `/api/v5/authorization/sources/built_in_database/all`
+
+
+比如我们可通过如下代码针对 `client1` 客户端创建授权规则：
 
 ```bash
 curl -X 'POST' \
@@ -64,8 +94,8 @@ curl -X 'POST' \
 ]'
 ```
 
-每个规则需要包括如下信息：
+每条规则应包括如下信息：
 
-- permission：`allow` 或者 `deny`;
-- action：客户端执行的操作 `publish`，`subscribe`，或 `all`;
--topic：主题，主题过滤器（通配符主题），或者带[占位符](authz.md#主题占位符)的主题。
+- permission：是否允许当前客户端/用户的某类操作请求；可选值：`Allow`、`Deny`
+- action：配置该条规则对应的操作；可选值: `publish`、`subscribe`、 `all`
+- topic：配置该条规则对应的主题，支持[主题占位符](authz.md#主题占位符)
