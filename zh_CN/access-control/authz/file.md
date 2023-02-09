@@ -1,29 +1,105 @@
-# 基于文件进行授权
+# 基于 ACL 文件进行授权检查
 
-EMQX 支持基于文件中存储的规则进行授权，您可通过配置文件配置权限列表。如需配置的规则非常多，建议采用基于数据库的方式进行授权。
+EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文件中配置多条授权检查规则，在收到客户端的操作请求后，EMQX 会按照从上到下的顺序进行授权规则匹配；在成功匹配到某条规则后，EMQX 将按设定允许或拒绝当前请求，并停止后续规则的匹配。
+
+对于大量或复杂的授权检查规则配置，建议采用[基于数据库的方式](./mnesia.md)进行配置。
 
 :::tip 前置准备：
 
 - 熟悉 [EMQX 授权基本概念](./authz.md)
 :::
 
+## 文件格式
+
+基于文件进行授权检查前，您需要将授权规则以 [Erlang 元组](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) 数据列表的形式存储在文件中。
+
+基本语法和概念如下：
+
+- 元组是用花括号包起来的一个列表，各个元素用逗号分隔
+- 每条规则应以 `.` 结尾
+- 注释行以 `%%` 开头，在解析过程中会被丢弃
+
+代码示例：
+
+```erlang
+%% 允许用户名是 dashboard 的客户端订阅 "$SYS/#" 这个主题
+{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
+
+%% 允许来自127.0.0.1 的用户发布和订阅 "$SYS/#" 以及 "#"
+{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
+
+%% 拒绝其他所有用户订阅 "$SYS/#" 和 "#" 主题
+{deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
+
+%% 如果前面的规则都没有匹配到，则允许所有操作
+{allow, all}.
+```
+
+在每个元组中：
+
+第一个元素表示该条规则对应的权限；可选值：
+
+- `allow` （允许）
+- `deny`（拒绝）
+
+第二个元素用来指定适用此条规则的客户端，比如：
+
+- `{username, "dashboard"}`：用户名为 `dashboard` 的客户端；也可写作`{user, "dashboard"}`
+- `{username, {re, "^dash"}}`：用户名匹配 [正则表达式](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash` 的客户端
+- `{clientid, "dashboard"}`：客户端 ID 为 `dashboard` 的客户端，也可写作`{client, "dashboard"}`
+- `{clientid, {re, "^dash"}}`：客户端 ID 匹配 [正则表达式](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash` 的客户端
+- `{ipaddr, "127.0.0.1"}`：源地址为 `127.0.0.1` 的客户端；支持 CIDR 地址格式。注意：如果 EMQX 部署在负载均衡器后侧，建议为 EMQX 的监听器开启 `proxy_protocol` 配置 <!--这里需要一个超链接，告诉用户如何配置-->，否则 EMQX 可能会使用负载均衡器的源地址。
+- `{ipaddrs, ["127.0.0.1", ..., ]}`：来自多个源地址的客户端，不同 IP 地址之间以 `,` 区分
+- `all`：匹配所有客户端
+- `{'and', First, Second}`： **与**操作，需同时匹配 `First` 和 `Second` 两个规则
+- `{'or', First, Second}`： **或**操作，匹配 `First` 或 `Second` 的其中一个即可
+
+第三个元素用来指定该条规则对应的操作，可选值：
+
+- `publish`：发布消息
+- `subscribe`：订阅主题
+- `all`：发布消息和订阅主题
+
+第四个元素用于指定当前规则适用的 MQTT 主题，例如：
+
+- `"$SYS/#"`：模糊匹配所有以 `$SYS` 开头的主题，如 `$SYS/foo`、 `$SYS/foo/bar`；支持[主题占位符](./authz.md#主题占位符) <!--这个需要定位到主题占位符这个章节-->
+- `{eq, "foo/#"}`：精确匹配 `foo/#` 主题，比如，主题 `foo/bar` 将无法匹配
+
+另外还有 2 种特殊的规则，通常会用在 ACL 文件的末尾作为默认规则使用。
+
+- `{allow, all}`：允许所有请求
+
+- `{deny, all}`：拒绝所有请求
+
+  
+
+在 ACL 文件中配置好授权规则后，您可通过 Dashboard 或配置文件启用基于文件进行授权检查。
+
 ## 通过 Dashbard 配置
 
-在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，在随即打开的**授权**页面，单击**创建**，选择**数据源**为 `File`，点击**下一步**，进入**配置参数**页签：
+在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航目录的 **访问控制** -> **授权** 进入**授权**页面。
+
+EMQX 已默认配置一个基于文件的授权检查器。您可点击 **File** 数据源对应的**操作**栏下的 **设置** 按钮查看或更改 ACL 文件中配置的授权规则，或点击 **更多** -> **删除**，重新创建一个基于文件的授权检查器。
+
+:::tip
+
+EMQX 仅支持添加一个基于文件的授权检查器。
+
+:::
+
+在 **授权**页面，单击**创建**，选择**数据源**为 **File**，点击**下一步**，进入**配置参数**页签：
 
 ![file authentication](./assets/authz-file.png)
 
-您可在 **ACL File** 区域编辑客户端访问规则，有关文件格式和对应字段的说明，可参考文件格式部分。<!--这里需要一个锚点到文件格式部分-->
-
-<!--这里是不是可以给一段示例代码？-->
+您可在 **ACL File** 区域编辑客户端访问规则，有关文件格式和对应字段的说明，可参考[文件格式](./authz.md)<!--TODO这里需要一个锚点到文件格式部分-->部分。
 
 ## 通过配置文件配置
 
-您也可通过配置文件配置文件规则，具体操作步骤可以参考 [authz:file](../../configuration/configuration-manual.md#authz:file)。
+<!--TODO 这部分需要在配置样例修改后修改，补充关键参数的解释。-->
 
-文件 Authorizer 数据源类型 `type = file`。
+您也可通过配置文件中的 `authorization` 字段配置文件规则。
 
-示例：
+代码示例：
 
 ```hocon
 authorization {
@@ -39,69 +115,10 @@ authorization {
 }
 ```
 
-::: tip
-默认 `path` 字段指定的文件对于 EMQX 是只读的。
-如果通过 Dashboard 或 REST API 对权限进行过修改，EMQX 会把新的文件保存到 `data/authz/acl.conf`，并且之后不再读取原始配置中的文件。
-:::
+其中
 
-## 文件格式
+- `type`：授权检查器的数据源类型，此处填入 `file`
+- `enable`：是否激活该检查器，可选值：`true`、`false`
+- `path`：配置文件路径；默认为：`etc/acl.conf`；用户自定义 ACL 文件将存储至`data/authz/acl.conf`。
 
-基于文件进行授权前，您需要通过  Erlang  [元组](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) 数据列表的形式将授权规则存储在文件中。基本语法如下：
-
-- 元组是用花括号包起来的一个列表，各个元素用逗号分隔
-- 每条规则后面必需有一个点号 `.`
-- 以百分号开始的 `%` 行是注释，在解析过程中会被丢弃
-
-示例：
-
-```erlang
-%% 允许用户名是 dashboard 的客户端订阅 "$SYS/#" 这个主题
-{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
-
-%% 允许来自127.0.0.1 的用户发布和订阅 "$SYS/#" 以及 "#"
-{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
-
-%% 拒绝其他所有用户订阅 "$SYS/#" 和 "#" 主题
-{deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
-
-%% 前面的规则都没有匹配到的话，允许所有操作
-{allow, all}.
-```
-
-EMQX 将按照从上到下的顺序进行规则匹配遵，当一个规则匹配到当前客户端时，将返回允许或拒绝操作，后面的规则不再继续匹配。
-
-在规则元组中：
-
-第一个元素表示该条规则对应的权限；可选值：`allow`、`deny`
-
-第二个元素用来指定哪些客户端适用此条规则，比如在以下示例中：
-
-- `{username, "dashboard"}`：用户名是 `dashboard` 的客户端；也可写作`{user, "dashboard"}`；
-- `{username, {re, "^dash"}}`：用户名匹配到[正则表达式](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash` 的客户端
-- `{clientid, "dashboard"}`：客户端 ID 为 `dashboard` 的客户端，也可写作`{client, "dashboard"}`
-- `{clientid, {re, "^dash"}}`：客户端 ID 匹配到[正则表达式](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash` 的客户端
-- `{ipaddr, "127.0.0.1"}`：源 IP 地址是 `127.0.0.1` 的客户端。也可以使用 CIDR 地址格式。注意，如果 EMQX 部署在负载均衡器后侧，建议为 EMQX 的监听器开启 `proxy_protocol` 配置，否则 EMQX 可能会使用负载均衡器的源地址
-- `{ipaddrs, ["127.0.0.1", ..., ]}`： 同上，但支持匹配多个源地址
-- `all`：匹配所有客户端
-- `{'and', First, Second}`： **与**操作，同时匹配 `First` 和 `Second` 两个规则
-- `{'or', First, Second}`： **或**操作，匹配 `First` 或 `Second` 的其中一个即可
-
-第三个元素用来指定该条规则对应的操作：
-
-- `publish`：发布消息
-- `subscribe`：订阅主题
-- `all`：发布消息或订阅主题
-
-第四个元素用于指定当前规则适用的 MQTT 主题或主题过滤器：
-
-- `"$SYS/#"`：字符串，这是一个通用的主题过滤器（或通配符订阅），匹配规则与 [MQTT协议](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180920)一致。例如，`$SYS/#` 可以为发布动作匹配到 `$SYS/foo` 和 `$SYS/foo/bar`，也可以为订阅动作匹配到`$SYS/foo`，`$SYS/foo/#`，和`$SYS/#`。支持[主题占位符](./authz.md#主题占位符)。
-- `{eq, "foo/#"}`：表示不将该主题当作通配符来使用。该例子中，如果一个客户端订阅 `foo/#` 这个主题，这该规则匹配，而如果订阅的是主题是 `foo/bar` ，则匹配不到。
-
-另外还有 2 种特殊的规则，通常会用在 ACL 文件的末尾作为默认规则使用。
-
-- `{allow, all}`：允许所有请求
-
-- `{deny, all}`：拒绝所有请求
-
-
-
+关于 配置文件中的 `authorization` 详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.md#authz-file)。
