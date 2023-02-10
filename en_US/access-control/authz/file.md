@@ -72,8 +72,8 @@ The rules are matched from top to bottom. If a rule matches, its permission is a
     * `{ipaddr, "127.0.0.1"}` — clients connecting from IP address `127.0.0.1`. Netmasks are allowed. If EMQX is behind a TCP proxy, `proxy_protocol` should be enabled for the client's MQTT listener.
     * `{ipaddrs, ["127.0.0.1", ..., ]}` — clients connecting from one of the specified IP addresses `127.0.0.1, ..., `. Netmasks are allowed.
     * `all` — any clients.
-    * `{'and', First, Second}` — clients satisfying both `First` and `Second` specifications.
-    * `{'or', First, Second}` — clients satisfying either of `First` and `Second` specifications.
+    * `{'and', [Spec1, Spec2, ...]}` — clients satisfying _all_ of the specifications from the list.
+    * `{'or', [Spec1, Spec2, ...]}` — clients satisfying _any_ of the specifications from the list.
 - The third position of the tuple indicates the operation for which the rule is applicable.
     * `publish` — the rule applies to publish operations.
     * `subscribe` — the rule applies to subscribe operations.
