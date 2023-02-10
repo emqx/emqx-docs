@@ -2,6 +2,12 @@
 
 EMQX supports integration with MySQL so you can save client messages and events to MySQL, or use events to trigger the update or removal of data to record the online status or online/offline of clients. 
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. [Experience](https://www.emqx.com/en/try?product=enterprise) the benefits of this enterprise-ready MQTT messaging platform today.
+:::
+{% endemqxce %}
+
 ::: tip Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)

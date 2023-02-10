@@ -6,6 +6,12 @@ Apache Kafka is a widely-used open-source distributed event streaming platform. 
 
 Being a top IOT data infrastructure provider,  EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM, SASL/GSSAPI, or TLS.
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. [Experience](https://www.emqx.com/en/try?product=enterprise) the benefits of this enterprise-ready MQTT messaging platform today.
+:::
+{% endemqxce %}
+
 :::tip Prerequisites
 
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->

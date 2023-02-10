@@ -5,6 +5,12 @@ EMQX GCP PubSub 集成可以发送 MQTT 消息和事件到
 可以帮助你灵活地选择谷歌云上的服务并更容易地建立物联网
 应用。
 
+{% emqxce %}
+:::tip
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+:::
+{% endemqxce %}
+
 下面的步骤将指导你使用这个配置。
 
 ## 设置
@@ -12,8 +18,7 @@ EMQX GCP PubSub 集成可以发送 MQTT 消息和事件到
 在配置GCP PubSub之前，必须先在GCP方面进行一些配置步骤
 在EMQX上配置GCP PubSub桥。
 
-1.  创建一个[服务
-   账户](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)
+1. 创建一个[服务账户](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)
    在你的GCP账户中。 确保该服务账户有
    权限，至少可以向感兴趣的主题发布消息。
 2. 为该账户创建一个服务账户密钥，并以JSON格式下载它。
