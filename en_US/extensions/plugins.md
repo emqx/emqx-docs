@@ -42,7 +42,9 @@ Run `make rel` to test whether the plugin can be successfully compiled and packe
 
 The plugins under development need to use the functions of the main EMQX, so the program needs first to download the dependency and then compile the main project. Therefore, the first compilation usually takes a long time to complete.
 
+{% emqxce %}
 For the compiling environment, see [Install from Source code](../deploy/install-source.md).
+{% endemqxce %}
 
 ### 3. Mount the hook functions
 
@@ -152,5 +154,6 @@ When you don't need the plugin, you can easily uninstall it with CLI:
 ```
 
 {% emqxee %}
-Note: The plugins need to be reinstalled after hot upgrades. 
+Note: The plugins need to be reinstalled after hot upgrades.
+
 {% endemqxee %}

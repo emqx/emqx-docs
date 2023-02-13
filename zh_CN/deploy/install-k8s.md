@@ -55,23 +55,27 @@ kubectl get emqx emqx -o json | jq ".status.emqxNodes"
 至此您已经通过 EMQX Kubernetes Operator 完成了 EMQX 集群的部署。
 
 您可访问以下链接了解如何进行集群参数配置：
+
 {% emqxce %}
 
-- [EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxBroker.html)
-{% emqxce %}
+[EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxBroker.html)
+
+{% endemqxce %}
+
 {% emqxee %}
-- [EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html)
+[EMQX Operator - 通用配置](https://docs.emqx.com/zh/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html)
+
 {% endemqxee %}
 
-- [配置 EMQX logs 采集](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-logs-collection.html)
+[配置 EMQX logs 采集](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-logs-collection.html)
 
-  [配置 EMQX Core 和 Replicant 节点](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-core-replicant.html)
+[配置 EMQX Core 和 Replicant 节点](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-core-replicant.html)
 
-  [配置 EMQX TLS 证书](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-tls.html)
+[配置 EMQX TLS 证书](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-tls.html)
 
-  [配置 EMQX License](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-license.html)
+[配置 EMQX License](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-license.html)
 
-  [配置 EMQX 持久化](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-persistence.html)
+[配置 EMQX 持久化](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-persistence.html)
 
 ## 公有云平台上部署 EMQX 集群
 
