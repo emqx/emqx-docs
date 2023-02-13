@@ -211,7 +211,7 @@ MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 
 
 ![MQTT X Web test](./assets/MQTTXWeb-test.png)
 
-除上述测试外，您也可以通过 MQTT X Web 进行单/双向 SSL 认证、或通过自定义脚本模拟测试数据。更多消息，可访问 [MQTT X 官方网页](https://mqttx.app/zh)。
+除上述测试外，您也可以通过 MQTT X 进行单/双向 SSL 认证、或通过自定义脚本模拟测试数据。更多消息，可访问 [MQTT X 官方网页](https://mqttx.app/zh)。
 
 :::
 
