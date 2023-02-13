@@ -53,6 +53,8 @@ distributed MQTT broker and SQL-based IoT rule engine. It combines high performa
 
 EMQX can be run with [Docker](../deploy/install-docker.md), installed with [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator), or installed on a computer or virtual machine (VM) via a download package. If you choose to install EMQX with a download package, the following operating systems are currently supported: 
 
+{% emqxce %}
+
 - RedHat
 - CentOS
 - RockyLinux
@@ -60,10 +62,32 @@ EMQX can be run with [Docker](../deploy/install-docker.md), installed with [EMQX
 - Ubuntu
 - Debian
 - macOS
-- Linux <!--后续插入对应页面的链接-->
-- Windows (EMQX Open Source only)
+- Linux
+- Windows
 
+{% endemqxce %}
+
+{% emqxee %}
+
+- RedHat
+- CentOS
+- RockyLinux
+- AmazonLinux
+- Ubuntu
+- Debian
+- macOS
+- Linux
+
+{% endemqxee %}
+
+{% emqxce %}
 For other platforms not listed above, you can try to [build and install with  source code](../deploy/install-source.md) or simply [contact EMQ](https://www.emqx.com/en/contact) for support.
+{% endemqxce %}
+
+{% emqxee %}
+For other platforms not listed above, you can try to simply [contact EMQ](https://www.emqx.com/en/contact) for support.
+
+{% endemqxee %}
 
 <!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 

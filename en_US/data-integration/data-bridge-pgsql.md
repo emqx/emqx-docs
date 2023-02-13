@@ -4,7 +4,7 @@ EMQX supports integration with PostgreSQL so you can save client messages and ev
 
 {% emqxce %}
 :::tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. [Experience](https://www.emqx.com/en/try?product=enterprise) the benefits of this enterprise-ready MQTT messaging platform today.
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 :::
 {% endemqxce %}
 
