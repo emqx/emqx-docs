@@ -13,9 +13,11 @@
 
 ## 通过 rpm 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-5.0.17-el8-amd64.rpm](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm)https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.rpm)。
 
@@ -31,7 +33,7 @@ sudo yum install emqx-5.0.17-el8-amd64.rpm -y
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-5.0.17-el8-arm64.rpm](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.rpm)。
 
    ```bash
@@ -55,9 +57,11 @@ sudo yum install emqx-5.0.17-el8-amd64.rpm -y
 
 ## 通过 tar.gz 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-5.0.17-el8-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.tar.gz)。
 
@@ -72,7 +76,7 @@ sudo yum install emqx-5.0.17-el8-amd64.rpm -y
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-5.0.17-el8-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.tar.gz)。
 
    ```bash
@@ -100,9 +104,11 @@ sudo yum install emqx-5.0.17-el8-amd64.rpm -y
 
 ## 通过 rpm 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-enterprise-5.0.0-el8-amd64.rpm](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.rpm)。
 
@@ -117,7 +123,7 @@ sudo yum install emqx-5.0.17-el8-amd64.rpm -y
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-enterprise-5.0.0-el8-arm64.rpm](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-arm64.rpm)。
 
    ```bash
@@ -169,9 +175,11 @@ sudo yum install emqx-5.0.17-el8-amd64.rpm -y
 
 ## 通过 tar.gz 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-enterprise-5.0.0-debian11-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz)。
 
@@ -186,7 +194,7 @@ sudo yum install emqx-5.0.17-el8-amd64.rpm -y
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-enterprise-5.0.0-debian11-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-arm64.tar.gz)。
 
    ```bash

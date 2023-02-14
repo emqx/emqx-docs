@@ -6,9 +6,11 @@
 
 ## 通过 rpm 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-5.0.17-amzn2-amd64.rpm](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-amzn2-amd64.rpm)。
 
@@ -23,7 +25,7 @@
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-5.0.17-amzn2-arm64.rpm](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-amzn2-arm64.rpm)。
 
    ```bash
@@ -47,9 +49,11 @@
 
 ## 通过 tar.gz 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-5.0.17-elixir-amzn2-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-elixir-amzn2-amd64.tar.gz)。
 
@@ -64,7 +68,7 @@
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-5.0.17-amzn2-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-amzn2-arm64.tar.gz)。
 
    ```bash
@@ -92,9 +96,11 @@
 
 ## 通过 rpm 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-enterprise-5.0.0-amzn2-amd64.rpm](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-amzn2-amd64.rpm)。
 
@@ -109,7 +115,7 @@
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-enterprise-5.0.0-amzn2-arm64.rpm](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-amzn2-arm64.rpm)。
 
    ```bash
@@ -135,9 +141,11 @@ sudo systemctl start emqx
 
 ## 通过 tar.gz 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-enterprise-5.0.0-amzn2-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-amzn2-amd64.tar.gz)。
 
@@ -153,7 +161,7 @@ sudo systemctl start emqx
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 
 1. 下载 [emqx-enterprise-5.0.0-amzn2-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-amzn2-arm64.tar.gz)。
 

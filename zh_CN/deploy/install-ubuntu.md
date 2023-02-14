@@ -25,9 +25,11 @@
 
 ## 通过 deb 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-5.0.17-ubuntu20.04-amd64.deb](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-ubuntu20.04-amd64.deb)。
 
@@ -42,7 +44,7 @@
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-5.0.17-ubuntu20.04-arm64.deb](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-ubuntu20.04-arm64.deb)。
 
    ```bash
@@ -66,9 +68,11 @@
 
 ## 通过 tar.gz 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-5.0.17-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-ubuntu20.04-amd64.tar.gz)。
 
@@ -83,7 +87,7 @@
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-5.0.17-ubuntu20.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-ubuntu20.04-arm64.tar.gz)。
 
    ```bash
@@ -111,9 +115,11 @@
 
 ## 通过 deb 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb)。
 
@@ -128,7 +134,7 @@
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-arm64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-arm64.deb)。
 
    ```bash
@@ -180,9 +186,11 @@
 
 ## 通过 tar.gz 安装
 
+请根据 CPU 架构选择对应安装方式。
+
 :::: tabs type:card
 
-::: tab CPU 架构 amd64
+::: tab amd64
 
 1.  下载 [emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz)。
 
@@ -197,7 +205,7 @@
 
 :::
 
-::: tab CPU 架构 arm64
+::: tab arm64
 1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-arm64.tar.gz)。
 
    ```bash
@@ -217,145 +225,6 @@
 
 ```
 ./emqx/bin/emqx start
-```
-
-
-
-
-
-
-
-## deb 安装
-
-1. 下载 [emqx-5.0.14-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.deb)
-
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.deb
-```
-
-2. 安装 EMQX：
-
-```bash
-sudo apt install ./emqx-5.0.14-ubuntu20.04-amd64.deb
-```
-
-3. 我们提供了几种不同的方式启动 EMQX：
-
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX 5.0.14 is started successfully!
-
-  $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
-  ```
-
-- 通过 systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- 以 service 的形式启动：
-
-  ```bash
-  sudo service emqx start
-  ```
-
-4. 卸载 EMQX：
-
-  ```shell
-  sudo apt remove --purge emqx
-  ```
-
-## 通过 tag.gz 安装 EMQX
-
-1. 下载 [emqx-5.0.14-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.tar.gz)：
-
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.tar.gz
-```
-
-2. 解压程序包：
-
-```bash
-mkdir -p emqx && tar -zxvf emqx-5.0.14-ubuntu20.04-amd64.tar.gz -C emqx
-```
-
-3. 启动 EMQX：
-
-```bash
-cd emqx && ./bin/emqx start
-```
-
-
-{% endemqxce %}
-
-{% emqxee %}
-
-## deb 安装
-
-1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb)
-
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
-```
-
-2. 安装 EMQX：
-
-```bash
-sudo apt install ./emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
-```
-
-3. 我们提供了几种不同的方式启动 EMQX：
-
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX 5.0.14 is started successfully!
-
-  $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
-  ```
-
-- 通过 systemctl 启动：
-
-  ```bash
-  sudo systemctl start emqx
-  ```
-
-- 以 service 的形式启动：
-
-  ```bash
-  sudo service emqx start
-  ```
-
-4. 卸载 EMQX：
-
-  ```shell
-  sudo apt remove --purge emqx
-  ```
-
-## 通过 tag.gz 安装 EMQX
-
-1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz)：
-
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz
-```
-
-2. 解压程序包：
-
-```bash
-mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz -C emqx
-```
-
-3. 启动 EMQX：
-
-```bash
-cd emqx && ./bin/emqx start
 ```
 
 {% endemqxee %}
