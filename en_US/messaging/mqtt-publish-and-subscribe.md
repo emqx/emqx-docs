@@ -17,21 +17,6 @@ In the next section, we will introduce how to test the connection with different
 
 :::: tabs type:card
 
-::: tab Dashboard WebSocket 
-
-[EMQX Dashboard](../dashboard/introduction.md) provides a WebSocket client as a quick and highly effective MQTT test tool. With this MQTT over WebSocket, you can test connecting to EMQX, subscribing to topics, and publishing messages.  
-
-1. In EMQX Dashboard, click **Diagnose** -> **WebSocket Client** on the left navigation tree. 
-2. Fill in the connection information in the **Connection** section. For **Host**, fill in the corresponding IP address (Default:  `localhost`), for **Port**, keep the default  `8083`, and then fill in the user name and password if there are any, or just leave them blank. 
-3. Click the **Connect** button to establish a connection.
-4. Set the topic to subscribe in the **Subscription** section. Here we will fill in  `testtopic/#` as **Topic**, select the corresponding QoS, and then click the **Subscribe** button to finish the subscription.  `testtopic/#`  will be added to the table below. After the subscription, all messages matching the topic will be forwarded to this connection and added to the **Received** section.
-5. Set the topic for the message to be published in the **Publish** section. Fill in the topic in the **Topic** field (wildcards like `+` and `#` are not supported), here we will fill in `testtopic/1`, fill in the message body under **Payload**, select the corresponding QoS, and whether this is a retained message. Click the **Publish** button, and one record will be added to the **Published** section below.
-6. The message will be routed to all subscribers, as we have already subscribed to this topic in step 5, one new record will also be added to the **Received** section below.
-
-Now we have successfully experienced the entire messaging services with the Dashboard WebSocket client. 
-
-:::
-
 ::: tab MQTT X
 [MQTT X](https://mqttx.app) is a cross-platform MQTT desktop client open sourced by [EMQ](https://www.emqx.com). It can run on macOS, Linux, Windows, and Ubuntu. MQTT X has provided features like support for customized scripts for MQTT Pub/Sub simulation, format conversion for MQTT messages, and logging. 
 
@@ -111,6 +96,21 @@ Below is the workflow of how to use MQTT X CLI to connect, publish/subscribe, an
    - `-m`: Message body
 
    For information on more parameters, see  [MQTT X CLI - Publish](https://mqttx.app/docs/cli/get-started#publish).
+
+:::
+
+::: tab Dashboard WebSocket 
+
+[EMQX Dashboard](../dashboard/introduction.md) provides a WebSocket client as a quick and highly effective MQTT test tool. With this MQTT over WebSocket, you can test connecting to EMQX, subscribing to topics, and publishing messages.  
+
+1. In EMQX Dashboard, click **Diagnose** -> **WebSocket Client** on the left navigation tree. 
+2. Fill in the connection information in the **Connection** section. For **Host**, fill in the corresponding IP address (Default:  `localhost`), for **Port**, keep the default  `8083`, and then fill in the user name and password if there are any, or just leave them blank. 
+3. Click the **Connect** button to establish a connection.
+4. Set the topic to subscribe in the **Subscription** section. Here we will fill in  `testtopic/#` as **Topic**, select the corresponding QoS, and then click the **Subscribe** button to finish the subscription.  `testtopic/#`  will be added to the table below. After the subscription, all messages matching the topic will be forwarded to this connection and added to the **Received** section.
+5. Set the topic for the message to be published in the **Publish** section. Fill in the topic in the **Topic** field (wildcards like `+` and `#` are not supported), here we will fill in `testtopic/1`, fill in the message body under **Payload**, select the corresponding QoS, and whether this is a retained message. Click the **Publish** button, and one record will be added to the **Published** section below.
+6. The message will be routed to all subscribers, as we have already subscribed to this topic in step 5, one new record will also be added to the **Received** section below.
+
+Now we have successfully experienced the entire messaging services with the Dashboard WebSocket client. 
 
 :::
 
