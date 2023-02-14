@@ -176,7 +176,7 @@ gateway.stomp {
 | `client.authenticate`  | 支持   | 客户端认证请求，所有网关都支持       |
 | `client.connected`     | 支持   | 客户端已成功接入，所有网关都支持     |
 | `client.disconnected`  | 支持   | 客户端连接已断开，所有网关都支持     |
-| `client.authorize`     | 支持   | 客户端发布订阅授权请求，所有网兜支持 |
+| `client.authorize`     | 支持   | 客户端发布订阅授权请求，所有网关都支持 |
 | `client.subscribe`     | 可选   | 原用于 MQTT 协议；仅部分网关支持     |
 | `client.unsubscribe`   | 可选   | 原用于 MQTT 协议；仅部分网关支持     |
 
