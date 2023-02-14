@@ -73,7 +73,32 @@
 
         EMQX 收到客户端的 *pubcomp* 时
 
-注意:开源版配置在emqx.conf中
+## 配置示例
+
+在 `emqx.conf` 中修改下面的配置即可
+
+```
+## 有效时长
+##
+## 默认值: 5 分钟
+#module.slow_subs.expire_interval = 5m
+
+## 最大统计条数
+##
+## 默认值: 10
+#module.slow_subs.top_k_num = 10
+
+## 统计类型
+##
+## 默认值: whole
+#module.slow_subs.stats_type = whole
+
+## 时延阈值
+##
+## 默认值: 500 毫秒
+#module.slow_subs.threshold = 500ms
+
+```
 
 <a id="orga6267c1"></a>
 

@@ -74,7 +74,32 @@ The per clientid-topic latency measurements are then ranked in the table view.
 
         When EMQX receives *pubcomp* from the client
 
-Note: The open source version is configured in emqx.conf
+## Configuration example
+
+Modify below configuration in the `emqx.conf`:
+
+```
+## the expire time of the record which in topk
+##
+## Default: 5 minutes
+#module.slow_subs.expire_interval = 5m
+
+## maximum number of Top-K record
+##
+## Defalut: 10
+#module.slow_subs.top_k_num = 10
+
+## Stats Type
+##
+## Default: whole
+#module.slow_subs.stats_type = whole
+
+## Stats Threshold
+##
+## Default: 500ms
+#module.slow_subs.threshold = 500ms
+
+```
 
 <a id="orga6267c1"></a>
 
