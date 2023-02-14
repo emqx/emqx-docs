@@ -1,4 +1,4 @@
-# Deploy with K8s
+# Deploy with Kubernetes
 
 EMQX provides the [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) to automate the creation, configuration, and management of EMQX clusters on Kubernetes (K8s).
 
