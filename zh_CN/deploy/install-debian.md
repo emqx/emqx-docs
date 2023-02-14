@@ -7,7 +7,7 @@
 - Debian 11
 - Debian 10
 
-下文将以 Debian 11 系统为例演示如何下载最新版 EMQX。如希望在 Debian 10 系统中进行安装，只需将下方命令中的版本替换为对应版本即可，或前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise) 获取安装信息。
+下文将以 Debian 11 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装，只需将下方命令中的版本替换为对应版本即可，或前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise) 获取安装信息。
 
 {% emqxce %}
 
@@ -123,15 +123,15 @@
 :::
 
 ::: tab arm64
-1. 下载 [emqx-5.0.17-debian11-arm64.deb](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.deb)。
+1. 下载 [emqx-enterprise-5.0.0-debian11-arm64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-arm64.deb)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.deb
+   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-arm64.deb
    ```
 
 2. 安装 EMQX。
    ```bash
-   sudo apt install ./emqx-5.0.17-debian11-arm64.deb
+   sudo apt install ./emqx-enterprise-5.0.0-debian11-arm64.deb
    ```
 
 :::
