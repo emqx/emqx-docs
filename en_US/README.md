@@ -12,6 +12,8 @@ As the most scalable MQTT broker, EMQX can help you connect any device, at any s
 
 EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platform to connect, move and process your data in business-critical scenarios for the IoT era.
 
+<img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
+
 {% endemqxee %}
 
 ## Benefits
