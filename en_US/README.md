@@ -29,7 +29,6 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 {% endemqxce %}
 
-
 {% emqxee %}
 
 - **[Massive Scale](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)**: Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
@@ -46,79 +45,72 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 {% endemqxee %}
 
-## Features List
+## Feature List
 
-Below is a brief/incomplete feature list, highlighting the features EMQX provides.
+The following is a list of features of EMQX Open Source and Enterprise Edition.
 
-### Connectivity
+{% emqxce %}
 
-- Full MQTT v3.1, v3.1.1 and v5.0 protocol specification support
-  - [QoS 0, QoS 1, QoS 2 message support](./mqtt/mqtt-qos.md)
-  - [Persistent conversation](./mqtt/mqtt-session-and-message-expiry.md#mqtt-会话d) and offline message support
-  - [Retained message support](./mqtt/mqtt-retained-messages.md)
-  - [Last Will message support](./mqtt/mqtt-last-will-and-testament.md)
-  - [Shared subscription support](./mqtt/mqtt-shared-subscription.md)
-  - [`$SYS/` system topic support](./mqtt/mqtt-system-topics.md)
-- MQTT supports 4 transport protocols
-  - TCP
-  - [TLS](./network/emqx-mqtt-tls)
-  - [WebSocket](./messaging/mqtt-publish-and-subscribe.md)
-  - [QUIC (Experimental)](./mqtt-over-quic/introduction.md)
-- HTTP message publishing interface support
-- Gateways
-  - [CoAP](./gateway/coap.md)
-  - LwM2M
-  - [MQTT-SN](./gateway/mqttsn.md)
-  - [Stomp](./gateway/stomp.md)
-  - GB/T 32960 (Enterprise edition) <!--cannot use 'emqxee' macro inside list-->
-  - JT/T 808 (Enterprise edition)
+| **Items**                         | **EMQX Open Source**                                        | **EMQX Enterprise**                                         |
+| :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
+| **Positioning**                   | The world’s #1 open source MQTT broker                      | The reliable and scalable enterprise MQTT platform          |
+| **Scalability**                   | < 1M MQTT connections per cluster                           | Up to 100M MQTT connections per cluster                     |
+| **Performance**                   | < 100k MQTT messages per second                             | 5M+ MQTT messages per second                                |
+| **Reliability**                   | Data storage in memory                                      | Data persistence in RocksDB                                 |
+| **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
+| **SLA**                           | 99.99%                                                      | Up to 99.999%                                               |
+| **Integrations (Out-of-the-box)** | 3                                                           | 40+                                                         |
+| **License Model**                 | Apache Version 2.0                                          | Commercial License (Business Source License)                |
+| **Technical Support**             | Open Source Community                                       | 24/7 Global Support                                         |
+| **MQTT 5.0 Broker**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **MQTT over QUIC**                | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **MQTT Add-ons**                  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Multi-protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Multi-tenancy**                 | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Geo-replication**               | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Data Persistence**              | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Schema Registry**               | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Message Codec**                 | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Rule Engine**                   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Flow Editor**                   | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **File Transfer**                 | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Kafka Integration**             | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Enterprise Integrations**       | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Edge Computing**                | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
 
-Add more features to MQTT:
+{% endemqxce %}
 
-- [Delayed Publish](./mqtt/mqtt-delayed-publish.md)
-- [Auto subscription](./mqtt/mqtt-auto-subscription)
-- [Topic rewrite](./mqtt/mqtt-topic-rewrite.md)
+{% emqxee %}
 
-### Security
+| **Items**                         | **EMQX Open Source**                                        | **EMQX Enterprise**                                         |
+| :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
+| **Positioning**                   | The reliable and scalable enterprise MQTT platform          | The world’s #1 open source MQTT broker                      |
+| **Scalability**                   | Up to 100M MQTT connections per cluster                     | < 1M MQTT connections per cluster                           |
+| **Performance**                   | 5M+ MQTT messages per second                                | < 100k MQTT messages per second                             |
+| **Reliability**                   | Data persistence in RocksDB                                 | Data storage in memory                                      |
+| **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
+| **SLA**                           | Up to 99.999%                                               | 99.99%                                                      |
+| **Integrations (Out-of-the-box)** | 40+                                                         | 3                                                           |
+| **License Model**                 | Commercial License (Business Source License)                | Apache Version 2.0                                          |
+| **Technical Support**             | 24/7 Global Support                                         | Open Source Community                                       |
+| **MQTT 5.0 Broker**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **MQTT over QUIC**                | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **MQTT Add-ons**                  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Multi-protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Multi-tenancy**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Geo-replication**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Data Persistence**              | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Schema Registry**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Message Codec**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Rule Engine**                   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Flow Editor**                   | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **File Transfer**                 | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Kafka Integration**             | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Enterprise Integrations**       | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Troubleshooting**               | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Cloud-Native & K8s**            | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  |
+| **Edge Computing**                | <img src="./assets/check_mark_64.png" style="zoom:40%;" />  | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 
-- Authentication based on username/password supported using [built-in database](./access-control/authn/mnesia.md), [Redis](./access-control/authn/redis.md), [MySQL](./access-control/authn/mysql.md), [PostgreSQL](./access-control/authn/postgresql.md), and [MongoDB](./access-control/authn/mongodb.md) as data sources, and [HTTP Server](./access-control/authn/http.md) to provide authentication services
-- Authentication based  [JWT](./access-control/authn/jwt.md)  supported using JWKs
-- [Enhanced Authentication for MQTT 5.0](./access-control/authn/scram.md)
-- PSK authentication
-- Access control (Authorization) based on Client ID, IP address, and username supported using [built-in database](./access-control/authz/mnesia.md), [Redis](./access-control/authz/redis.md), [MySQL](./access-control/authz/mysql.md), [PostgreSQL](./access-control/authz/postgresql.md), and [MongoDB](./access-control/authz/mongodb.md) as data sources, and [HTTP Server](./access-control/authz/http.md) to provide authorization services
-- [Client blacklist](./access-control/blacklist.md)
-
-### Scalability
-
-- [Multi-server node cluster (Cluster)](./deploy/cluster/introduction.md)
-- Support manual cluster and auto cluster discovery(dns、etcd、k8s), see [sreate clster](./deploy/cluster/create-cluster.md)
-- Multi-server node bridge (Bridge)
-
-### Data Integration
-
-- [SQL syntax](./data-integration/rules.md) data integrations to extract, filter, enrich, and transform MQTT messages or internal events to formats expected by users and send them to external data platforms
-- Supports data bridging with other brokers or IoT platforms using MQTT(such as [EMQX Cloud](https://www.emqx.com/zh/cloud), AWS IoT Core, Azure IoT Hub)
-- Supports integration with other apps using WebHook
-- Integrate IoT data seamlessly with cloud services and enterprise systems, including Kafka, InfluxDB, MySQL, Redis, GCP PubSub and MongoDB. More integrations are coming soon (EMQX Enterprise only)
-
-### Reliability
-
-- [Overload protection](./deploy/cluster/lb.md)
-- [Message rate limit](./rate-limit/rate-limit.md)
-- [Connection rate limit](./rate-limit/rate-limit.md)
-
-### Observability
-
-- Client online status query
-- [Cluster status and metrics query](./observability/metrics-and-stats.md)
-- Integration with [Prometheus](./observability/prometheus.md)/[StatsD](./observability/statsd.md)
-- [Automatic network partition healing](./deploy/cluster/introduction.md)
-- [Online log based tracing](./observability/tracer.md)
-- Erlang runtime tracing tools
-
-### Extensibility
-
-- [Plugins](./extensions/plugins.md)
-- [Hooks](./extensions/hooks.md)
-- [gRPC hook extension](./extensions/exhook.md)
-- gRPC protocol extension
+{% endemqxee %}

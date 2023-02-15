@@ -1,4 +1,4 @@
-# Prometheus 指标集成
+# 集成 Prometheus
 
 [Prometheus](https://prometheus.io/) 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。
 

@@ -1,7 +1,8 @@
-# Introduction to Rules
+# Introduction to Rule Engine
 
-EMQX provides rules based on SQL syntax for processing and converting messages or events, such as converting data types, encoding or decoding messages, conditional branch judgment, etc.
-Rules are built into EMQX, and there is no overhead of message serialization and network transmission, so it runs very efficiently.
+The Rules Engine is EMQX's built-in SQL-based data processing component, which works with [data-bridges](./data-bridges.md) can be used to help extract, filter, enrich, transform and store IoT data in real-time to accelerate application integration and business innovation.
+
+![image](./assets/rules/data-integration-arch.png)
 
 ## Composition of Rules
 
