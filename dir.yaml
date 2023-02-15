@@ -55,6 +55,15 @@
       title_cn: 配置 License
       edition: ee
       path: deploy/license
+  # - title_en: Upgrade
+  #   title_cn: 升级
+  #   children:
+  #     - deploy/hot-upgrades
+  #     - deploy/rolling-upgrades
+    - deploy/upgrade-from-v4
+  # - title_en: Migrate to Enterprise
+  #   title_cn: 迁移到企业版
+  #   path: deploy/migrate-to-enterprise
     
     - title_en: Clustering
       title_cn: 构建集群
@@ -69,16 +78,6 @@
       children:
         - performance/tune
         - performance/benchmark
-    # - title_en: Upgrade
-    #   title_cn: 升级
-    #   children:
-    #     - deploy/hot-upgrades
-    #     - deploy/rolling-upgrades
-    - deploy/upgrade-from-v4
-    # - title_en: Migrate to Enterprise
-    #   title_cn: 迁移到企业版
-    #   path: deploy/migrate-to-enterprise
-   
 
 - title_en: Access Control
   title_cn: 访问控制
@@ -119,6 +118,10 @@
     # - messaging/introduction
     - messaging/mqtt-publish-and-subscribe
     - messaging/explore-mqtt
+    - mqtt/mqtt-exclusive-subscription
+    - mqtt/mqtt-delayed-publish
+    - mqtt/mqtt-auto-subscription
+    - mqtt/mqtt-topic-rewrite
     # - messaging/nanomq
     # - messaging/neuron
 
@@ -132,35 +135,31 @@
     # - mqtt-over-quic/client
 
 ## Data integration
+# - data-integration/introduction
 
-- title_en: Data Integration
-  title_cn: 数据集成
+- title_en: Rule Engine
+  title_cn: 规则引擎
   children:
-    - data-integration/introduction
     - data-integration/rules
-    # - data-integration/rule-get-started # TODO merge to rules
-    # - data-integration/rule-actions # TODO merge to rules
-    - title_en: Rules SQL
-      title_cn: 规则 SQL
-      children:
-        - data-integration/rule-sql-syntax
-        - data-integration/rule-sql-events-and-fields
-        - data-integration/rule-sql-builtin-functions
-        - data-integration/rule-sql-jq
-        # - data-integration/rule-sql-user-defined-function
-    - title_en: Data Bridges
-      title_cn: 数据桥接
-      children:
-        - data-integration/data-bridges
-        - data-integration/data-bridge-webhook
-        - data-integration/data-bridge-mqtt
-        - data-integration/data-bridge-kafka
-        - data-integration/data-bridge-influxdb
-        - data-integration/data-bridge-mysql
-        - data-integration/data-bridge-redis
-        - data-integration/data-bridge-gcp-pubsub
-        - data-integration/data-bridge-mongodb
-        # - data-integration/data-bridge-pgsql
+    - data-integration/rule-sql-syntax
+    - data-integration/rule-sql-events-and-fields
+    - data-integration/rule-sql-builtin-functions
+    - data-integration/rule-sql-jq
+    # - data-integration/rule-sql-user-defined-function
+
+- title_en: Data Bridges
+  title_cn: 数据桥接
+  children:
+    - data-integration/data-bridges
+    - data-integration/data-bridge-webhook
+    - data-integration/data-bridge-mqtt
+    - data-integration/data-bridge-kafka
+    - data-integration/data-bridge-influxdb
+    - data-integration/data-bridge-mysql
+    - data-integration/data-bridge-redis
+    - data-integration/data-bridge-gcp-pubsub
+    - data-integration/data-bridge-mongodb
+    # - data-integration/data-bridge-pgsql
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -253,10 +252,11 @@
     - configuration/configuration
     - configuration/configuration-manual
 
-- title_en: Backup and recovery
-  title_cn: 备份与恢复
-  children:
-    - operations/backup-restore
+# - title_en: Back
+#   title_cn: 运维操作
+#   children:
+# 备份与恢复
+- operations/backup-restore
     # - title_en: Hot Upgrades
     #   title_cn: 版本热升级
     #   path: deploy/hot-upgrades
@@ -275,12 +275,9 @@
   title_cn: 日志及可观测性
   children:
     - observability/log
-    - title_en: Metrics
-      title_cn: 指标
-      children:
-        - observability/metrics-and-stats
-        - observability/prometheus
-        - observability/statsd
+    - observability/metrics-and-stats
+    - observability/prometheus
+    - observability/statsd
     - observability/tracer
     - observability/alarms
     - observability/topic-metrics
@@ -336,10 +333,6 @@
     - mqtt/mqtt-retained-messages
     - mqtt/mqtt-last-will-and-testament
     - mqtt/mqtt-shared-subscription
-    - mqtt/mqtt-exclusive-subscription
-    - mqtt/mqtt-delayed-publish
-    - mqtt/mqtt-auto-subscription
-    - mqtt/mqtt-topic-rewrite
     - mqtt/mqtt-system-topics
 
 - title_en: Telemetry

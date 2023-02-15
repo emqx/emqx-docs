@@ -1,4 +1,4 @@
-# StatsD 指标集成
+# 集成 StatsD
 
 EMQX 支持向 [StatsD](https://github.com/statsd/statsd) 服务器周期性推送系统指标。
 
