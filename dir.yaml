@@ -45,11 +45,11 @@
         - title_en: Windows
           title_cn: Windows
           path: deploy/install-windows
-          # edition: ce
+          edition: ce
         - title_en: Install from Source code
           title_cn: 源码编译安装
           path: deploy/install-source
-          # edition: ce
+          edition: ce
         # - deploy/install-marketplace
     - title_en: Use license
       title_cn: 配置 License

@@ -10,7 +10,13 @@ Prerequisites:
 
 ## Environment
 
-MQTT over QUIC is an experimental function currently not supported in CentOS 6, macOS, and Windows systems. To test this listener in these systems, you can [install EMQX from the source code](../deploy/install-source.md) and specify the environment variable `BUILD_WITH_QUIC=1` before compiling. You can follow the standard procedure for the other operating systems and platforms.
+MQTT over QUIC is an experimental function currently not supported in CentOS 6, macOS, and Windows systems.
+
+{% emqxce %}
+To test this listener in these systems, you can [install EMQX from the source code](../deploy/install-source.md) and specify the environment variable `BUILD_WITH_QUIC=1` before compiling.
+{% endemqxce %}
+
+You can follow the standard procedure for the other operating systems and platforms.
 
 To test the MQTT over QUIC listener, you are recommended to use the Docker image and use the command below to  enable the listener on port 14567:
 

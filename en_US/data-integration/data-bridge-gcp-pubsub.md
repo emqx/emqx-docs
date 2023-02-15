@@ -5,6 +5,12 @@ EMQX GCP PubSub integration can send MQTT messages and events to
 can help you flexibly choose services on Google Cloud and build IoT
 applications more easily.
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
 The following steps will guide you to use this configuration.
 
 ## Setup
