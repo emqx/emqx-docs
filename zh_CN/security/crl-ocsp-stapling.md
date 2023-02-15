@@ -16,17 +16,17 @@ EMQX 允许配置 CA 的请求端点并定时刷新获取 CRL，并存储在 EMQ
 
 ```bash
 # 是否启用 CRL
-listener.ssl.external.enable_crl_cache = true
+listener.ssl.external.enable_crl_check = true
 
 # 逗号分隔的 CRL 文件列表
 listener.ssl.external.crl_cache_urls = http://my.crl.server/intermediate.crl.pem, http://my.other.crl.server/another.crl.pem
 
 # CRL 请求超时
-listener.ssl.external.crl_cache_http_timeout = 15s
+crl_cache_http_timeout = 15s
 
 
 # CRL 刷新间隔，全局配置
-crl_cache.refresh_interval = 15m
+crl_cache_refresh_interval = 15m
 ```
 
 CRL 文件列表可以咨询 CA 或通过以下命令查询：
