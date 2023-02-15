@@ -107,6 +107,7 @@ helm uninstall emqx-operator -n emqx-operator-system
   kubectl get emqx emqx -o json | jq ".status.emqxNodes"
   ```
 
+
 The output is similar to:
 
 ```
@@ -123,12 +124,16 @@ The output is similar to:
 This has completed the deployment of EMQX with EMQX Kubernetes Operator. 
 
 On how to configure, see
+
 {% emqxce %}
 [EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxBroker.html)
-{% emqxce %}
+
+{% endemqxce %}
+
 {% emqxee %}
 [EMQX Operator - Config](https://docs.emqx.com/en/emqx-operator/latest/config/v1beta3/EmqxEnterprise.html)
-{% endemqxee %}.
+
+{% endemqxee %}
 
 ## Deploy on Public Cloud
 

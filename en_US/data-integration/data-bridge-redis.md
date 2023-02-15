@@ -2,6 +2,12 @@
 
 EMQX supports integration with Redis so you can save client messages and events to Redis. With Redis data bridge, you can use Redis for message caching and statistics of published/subscribed/discarded messages. 
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
 <!-- TODO 确认是否支持数据发布订阅操作、消息队列等场景。 -->
 
 :::tip Prerequisites
