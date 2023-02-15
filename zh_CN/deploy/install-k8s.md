@@ -4,7 +4,7 @@
 
 :::tip 环境准备
 
-部署 EMQX Operator 前，请确认以下组件已经安装：
+部署前，请确认以下组件已经安装：
 
 | 软件                                     | 版本要求     |
 | ---------------------------------------- | ------------ |
@@ -17,6 +17,8 @@
 ## 部署 EMQX Operator
 
 我们使用 [cert-manager](https://github.com/cert-manager/cert-manager) 来给 Webhook 服务提供证书。有关如何安装，可参考 [cert manager 手册 - 安装部分](https://cert-manager.io/docs/installation/)。
+
+### 安装 EMQX Operator
 
 1. 通过 Helm 安装 EMQX Operator。
 
@@ -39,27 +41,27 @@
    emqx-operator-controller-manager-68b866c8bf-kd4g6   1/1     Running   0          15s
    ```
 
-3. 升级 EMQX Operator。
+### 升级 EMQX Operator
 
-   执行下面的命令可以升级 EMQX Operator，若想指定到升级版只需要增加 --version=x.x.x 参数即可。注意：不支持 1.x.x 版本升级到 2.x.x 版本。
+执行下面的命令可以升级 EMQX Operator，若想指定到升级版只需要增加 `--version=x.x.x` 参数即可。注意：不支持 1.x.x 版本升级到 2.x.x 版本。
 
-   ```bash
-   helm upgrade emqx-operator emqx/emqx-operator -n emqx-operator-system 
-   ```
+```bash
+helm upgrade emqx-operator emqx/emqx-operator -n emqx-operator-system 
+```
 
-4. 卸载 EMQX Operator。
+### 卸载 EMQX Operator
 
-   执行如下命令卸载 EMQX Operator
+执行如下命令卸载 EMQX Operator
 
-   ```bash
-   helm uninstall emqx-operator -n emqx-operator-system
-   ```
+```bash
+helm uninstall emqx-operator -n emqx-operator-system
+```
 
 ## 部署 EMQX
 
 1. 运行以下命令部署 EMQX。
 
-   您可前往 [EMQX Kubernetes Operator 的 GitHub 页面](https://github.com/emqx/emqx-operator/blob/main/config/samples/emqx/v2alpha1/emqx-full.yaml)查看完整代码示例；有关每个字段的详细解释，请参考 [EMQX Operator - API](https://docs.emqx.com/en/emqx-operator/latest/reference/v2alpha1-reference.html)。
+   {% emqxce %}
 
    ```bash
    cat << "EOF" | kubectl apply -f -
@@ -71,6 +73,23 @@
        image: emqx/emqx:5.0.14
    EOF
    ```
+
+   {% endemqxce %}
+
+   {% emqxee %}
+
+   ```bash
+   cat << "EOF" | kubectl apply -f -
+     apiVersion: apps.emqx.io/v2alpha1
+     kind: EMQX
+     metadata:
+       name: emqx
+     spec:
+       image: emqx/emqx-enterprise:5.0.0
+   EOF
+   ```
+
+   {% endemqxee %}
 
    如希望查看完整代码示例，可前往 GitHub 查看 [emqx-full.yaml 页面](https://github.com/emqx/emqx-operator/blob/main/config/samples/emqx/v2alpha1/emqx-full.yaml) ；有关每个字段的详细解释，可参考 [EMQX Operator - API](https://docs.emqx.com/en/emqx-operator/latest/reference/v2alpha1-reference.html)。
 

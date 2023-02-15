@@ -33,23 +33,26 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 {% emqxce %}
 | 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
 | :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04<br>Ubuntu20.04 | 是           | 是    |
-| [Debian](./install-debian.md)             | Debian10<br/>Debian11 | 是           | 是    |
+| [Ubuntu](./install-ubuntu.md)             | Ubuntu 18.04<br>Ubuntu 20.04<br/>Ubuntu 22.04 | 是           | 是    |
+| [Debian](./install-debian.md)             | Debian 10<br/>Debian 11 | 是           | 是    |
 | [CentOS/RHEL](./install-centos.md)        | CentOS 7<br/>CentOS 8 | 是           | 是    |
 | [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是    |
-| [macOS](./install-macOS.md)               | macOS11<br/>macOS12   | 是           | 是    |
+| [macOS](./install-macOS.md)               | macOS 11<br/>macOS 12 | 是           | 是    |
 | [Windows](./install-windows.md)           | -                        | 是           | 是    |
-|{% endemqxce %}||||
+
+{% endemqxce %}
 
 {% emqxee %}
+
 | 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
 | :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)             | Ubuntu18.04<br/>Ubuntu20.04 | 是           | 是    |
-| [Debian](./install-debian.md)             | Debian10<br/>Debian11 | 是           | 是    |
+| [Ubuntu](./install-ubuntu.md)             | Ubuntu 18.04<br/>Ubuntu 20.04 | 是           | 是    |
+| [Debian](./install-debian.md)             | Debian 10<br/>Debian 11 | 是           | 是    |
 | [CentOS/RHEL](./install-centos.md)        | CentOS 7<br/>CentOS 8 | 是           | 是    |
 | [Amazon Linux](./install-amazon-linux.md) | -                        | 是           | 是    |
-| [macOS](./install-macOS.md)               | macOS11<br/>macOS12    | 是           | 是    |
-|{% endemqxee %}||||
+| [macOS](./install-macOS.md)               | macOS 11<br/>macOS 12  | 是           | 是    |
+
+{% endemqxee %}
 
 ## 硬件规格
 
@@ -99,8 +102,8 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 | ------ | -------------------- | ---- | ------------------------------------------------------------ |
 |bin | 存放可执行文件       | 读   | `emqx`、`emqx.cmd`：EMQX 的可执行文件，具体使用可以查看 [基本命令](../admin/cli.md)。<br><br/> `emqx_ctl`、`emqx_ctl.cmd`：EMQX 管理命令的可执行文件，具体使用可以查看 [管理命令 CLI](../admin/cli.md)。 |
 |etc | 存放配置文件         | 读   |`emqx.conf`：EMQX 的主配置文件，默认包含常用的配置项。<br/><br/>`emqx-example-en.conf`：EMQX 示例配置文件，包含所有可选的配置项。<br/><br/>`acl.conf`：默认 ACL 规则。<br/><br/>`vm.args`：Erlang 虚拟机的运行参数。<br/><br/>`certs/`：X.509 的密钥和证书文件。这些文件被用于 EMQX 的 SSL/TLS 监听器；当要与和外部系统集成时，也可用于建立 SSL/TLS 连接。 |
-|data | 存放 EMQX 的运行数据 | 写   |`authz`：Dashboard 或 REST API 上传的 [基于文件进行授权](../access-control/authz/file.md) 规则内容。<br/><br/>`certs`：Dashboard 或 REST API 上传的证书。<br/><br/>`configs`：启动时生成的配置文件，或者从 Dashboard/REST API/CLI 进行功能设置时覆盖的配置文件。<br/><br/>`mnesia`：内置数据库目录，用于存储自身运行数据，例如告警记录、客户端认证与权限数据、Dashboard 用户信息等数据，**一旦删除该目录，所有业务数据将丢失。**<br/><br/>  - 可以包含以节点命名的子目录，如 `emqx@127.0.0.1`；如节点被重新命名，应手动将旧的目录删除或移走。<br/><br/>  - 可通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。<br/><br/>`patches`：用于存储热补丁 `.beam` 文件，用于补丁修复。<br/><br/>`trace`: 在线日志追踪文件目录。<br /><br/>:::tip 在生产环境中，建议定期备份该文件夹下除 `trace` 之外的所有目录。 |
-|log  | 日志文件             | 读   |`emqx.log.`：EMQX 运行时产生的日志文件，具体请查看 [日志与追踪](../observability/log.md)。<br/><br/>`erlang.log.`\：当以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。 |
+|data | 存放 EMQX 的运行数据 | 写   |`authz`：Dashboard 或 REST API 上传的 [基于文件进行授权](../access-control/authz/file.md) 规则内容。<br/><br/>`certs`：Dashboard 或 REST API 上传的证书。<br/><br/>`configs`：启动时生成的配置文件，或者从 Dashboard/REST API/CLI 进行功能设置时覆盖的配置文件。<br/><br/>`mnesia`：内置数据库目录，用于存储自身运行数据，例如告警记录、客户端认证与权限数据、Dashboard 用户信息等数据，**一旦删除该目录，所有业务数据将丢失。**<br/><br/>  —  可包含以节点命名的子目录，如 `emqx@127.0.0.1`；如节点被重新命名，应手动将旧的目录删除或移走。<br/><br/>  —  可通过 `emqx_ctl mnesia` 命令查询 EMQX 中 Mnesia 数据库的系统信息，具体请查看 [管理命令 CLI](../admin/cli.md)。<br/><br/>`patches`：用于存储热补丁 `.beam` 文件，用于补丁修复。<br/><br/>`trace`: 在线日志追踪文件目录。<br /><br/><br/>在生产环境中，建议定期备份该文件夹下除 `trace` 之外的所有目录。 |
+|log  | 日志文件             | 读   |`emqx.log.*`：EMQX 运行时产生的日志文件，具体请查看 [日志与追踪](../observability/log.md)。<br/><br/>`erlang.log.*`：当以 `emqx start` 方式后台启动 EMQX 时，控制台日志的副本文件。 |
 
 ​                                  |
 

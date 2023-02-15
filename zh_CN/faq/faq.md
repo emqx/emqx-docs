@@ -184,6 +184,8 @@ brew install openssl@1.1
 
 安装完成后，即可正常启动 EMQX。
 
+{% emqxce %}
+
 ## Windows 缺失 MSVCR120.dll
 
 ### 现象
@@ -199,6 +201,8 @@ Windows 执行 `./bin/emqx console` 弹出错误窗口：
 ### 解决方法
 
 安装 [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
+
+{% endemqxce %}
 
 ## SSL 连接失败
 

@@ -186,7 +186,7 @@
 
 2. 安装 EMQX。
    ```
-   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-debian11-amd64.tar.gz -C emqx
    ```
 
 :::

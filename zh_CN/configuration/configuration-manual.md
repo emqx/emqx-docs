@@ -178,6 +178,13 @@
 
 
 
+- license: <code>[key_license](#key_license)</code>
+
+  EMQX企业许可证。
+  EMQX 自带一个默认的试用许可证，默认试用许可允许最多接入 100 个连接，签发时间是 2023年1月9日，有效期是 5 年（1825 天）。若需要在生产环境部署，
+  请访问 https://www.emqx.com/apply-licenses/emqx 来申请。
+
+
 
 ## api_key
 API 密钥， 可用于请求除管理 API 密钥及 Dashboard 用户管理 API 的其它接口
@@ -3146,7 +3153,20 @@ Socket options for SSL clients.
 
  - <code>authentication.$INDEX.ssl</code>
  - <code>authorization.sources.$INDEX.ssl</code>
+ - <code>bridges.influxdb_api_v1.$name.ssl</code>
+ - <code>bridges.influxdb_api_v2.$name.ssl</code>
+ - <code>bridges.kafka.$name.ssl</code>
+ - <code>bridges.matrix.$name.ssl</code>
+ - <code>bridges.mongodb_rs.$name.ssl</code>
+ - <code>bridges.mongodb_sharded.$name.ssl</code>
+ - <code>bridges.mongodb_single.$name.ssl</code>
  - <code>bridges.mqtt.$name.ssl</code>
+ - <code>bridges.mysql.$name.ssl</code>
+ - <code>bridges.pgsql.$name.ssl</code>
+ - <code>bridges.redis_cluster.$name.ssl</code>
+ - <code>bridges.redis_sentinel.$name.ssl</code>
+ - <code>bridges.redis_single.$name.ssl</code>
+ - <code>bridges.timescale.$name.ssl</code>
  - <code>bridges.webhook.$name.ssl</code>
  - <code>cluster.etcd.ssl</code>
  - <code>gateway.coap.authentication.ssl</code>
@@ -3177,7 +3197,20 @@ Socket options for SSL clients.
 
  - <code>EMQX_AUTHENTICATION__$INDEX__SSL</code>
  - <code>EMQX_AUTHORIZATION__SOURCES__$INDEX__SSL</code>
+ - <code>EMQX_BRIDGES__INFLUXDB_API_V1__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__INFLUXDB_API_V2__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__MATRIX__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__MONGODB_RS__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__MONGODB_SHARDED__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__MONGODB_SINGLE__$NAME__SSL</code>
  - <code>EMQX_BRIDGES__MQTT__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__MYSQL__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__PGSQL__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__REDIS_CLUSTER__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__REDIS_SENTINEL__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__REDIS_SINGLE__$NAME__SSL</code>
+ - <code>EMQX_BRIDGES__TIMESCALE__$NAME__SSL</code>
  - <code>EMQX_BRIDGES__WEBHOOK__$NAME__SSL</code>
  - <code>EMQX_CLUSTER__ETCD__SSL</code>
  - <code>EMQX_GATEWAY__COAP__AUTHENTICATION__SSL</code>
@@ -3985,6 +4018,40 @@ All the global configs that can be overridden in zones are:
 - overload_protection: <code>[zone:overload_protection](#zone-overload_protection)</code>
 
 
+
+
+## connector_hstreamdb:config
+HStreamDB 连接配置。
+
+
+**Config paths**
+
+ - <code>bridges.hstreamdb.$name.connector</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__HSTREAMDB__$NAME__CONNECTOR</code>
+
+
+
+**Fields**
+
+- url: <code>binary()</code>
+
+  HStreamDB 服务器 URL
+
+- stream: <code>binary()</code>
+
+  HStreamDB 流名称
+
+- ordering_key: <code>binary()</code>
+
+  HStreamDB 分区键
+
+- pool_size: <code>pos_integer()</code>
+
+  HStreamDB 连接池大小
 
 
 ## dashboard
@@ -8292,6 +8359,9 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
 
  - <code>authentication.$INDEX.topology</code>
  - <code>authorization.sources.$INDEX.topology</code>
+ - <code>bridges.mongodb_rs.$name.topology</code>
+ - <code>bridges.mongodb_sharded.$name.topology</code>
+ - <code>bridges.mongodb_single.$name.topology</code>
  - <code>gateway.coap.authentication.topology</code>
  - <code>gateway.coap.listeners.dtls.$name.authentication.topology</code>
  - <code>gateway.coap.listeners.udp.$name.authentication.topology</code>
@@ -8319,6 +8389,9 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
 
  - <code>EMQX_AUTHENTICATION__$INDEX__TOPOLOGY</code>
  - <code>EMQX_AUTHORIZATION__SOURCES__$INDEX__TOPOLOGY</code>
+ - <code>EMQX_BRIDGES__MONGODB_RS__$NAME__TOPOLOGY</code>
+ - <code>EMQX_BRIDGES__MONGODB_SHARDED__$NAME__TOPOLOGY</code>
+ - <code>EMQX_BRIDGES__MONGODB_SINGLE__$NAME__TOPOLOGY</code>
  - <code>EMQX_GATEWAY__COAP__AUTHENTICATION__TOPOLOGY</code>
  - <code>EMQX_GATEWAY__COAP__LISTENERS__DTLS__$NAME__AUTHENTICATION__TOPOLOGY</code>
  - <code>EMQX_GATEWAY__COAP__LISTENERS__UDP__$NAME__AUTHENTICATION__TOPOLOGY</code>
@@ -8392,6 +8465,42 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
 - min_heartbeat_frequency_ms: <code>emqx_schema:duration_ms()</code>
 
   心跳间的最小间隙
+
+
+## key_license
+License provisioned as a string.
+
+
+**Config paths**
+
+ - <code>license</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_LICENSE</code>
+
+
+
+**Fields**
+
+- key: <code>binary()</code>
+  * default: 
+  `"MjIwMTExCjAKMTAKRXZhbHVhdGlvbgpjb250YWN0QGVtcXguaW8KZGVmYXVsdAoyMDIzMDEwOQoxODI1CjEwMAo=.MEUCIG62t8W15g05f1cKx3tA3YgJoR0dmyHOPCdbUxBGxgKKAiEAhHKh8dUwhU+OxNEaOn8mgRDtiT3R8RZooqy6dEsOmDI="`
+
+  许可证字符串
+
+- connection_low_watermark: <code>emqx_schema:percent()</code>
+  * default: 
+  `"75%"`
+
+  低水位限制，低于此水位线时系统会清除连接配额使用告警
+
+- connection_high_watermark: <code>emqx_schema:percent()</code>
+  * default: 
+  `"80%"`
+
+  高水位线，连接数超过这个水位线时，系统会触发许可证连接配额使用告警
 
 
 ## zone:conn_congestion
@@ -11142,6 +11251,1027 @@ MQTT Bridge 配置
 
   桥接到另一个 MQTT Broker 的 MQTT Bridge
 
+- kafka: <code>{$name -> [bridge_kafka:config](#bridge_kafka-config)}</code>
+
+  Kafka Bridge Config
+
+- hstreamdb: <code>{$name -> [bridge_hstreamdb:config](#bridge_hstreamdb-config)}</code>
+
+  HStreamDB Bridge Config
+
+- gcp_pubsub: <code>{$name -> [bridge_gcp_pubsub:config](#bridge_gcp_pubsub-config)}</code>
+
+  EMQX Enterprise Config
+
+- mysql: <code>{$name -> [bridge_mysql:config](#bridge_mysql-config)}</code>
+
+  MySQL Bridge Config
+
+- mongodb_rs: <code>{$name -> [bridge_mongodb:mongodb_rs](#bridge_mongodb-mongodb_rs)}</code>
+
+  MongoDB Bridge Config
+
+- mongodb_sharded: <code>{$name -> [bridge_mongodb:mongodb_sharded](#bridge_mongodb-mongodb_sharded)}</code>
+
+  MongoDB Bridge Config
+
+- mongodb_single: <code>{$name -> [bridge_mongodb:mongodb_single](#bridge_mongodb-mongodb_single)}</code>
+
+  MongoDB Bridge Config
+
+- influxdb_api_v1: <code>{$name -> [bridge_influxdb:influxdb_api_v1](#bridge_influxdb-influxdb_api_v1)}</code>
+
+  InfluxDB Bridge Config
+
+- influxdb_api_v2: <code>{$name -> [bridge_influxdb:influxdb_api_v2](#bridge_influxdb-influxdb_api_v2)}</code>
+
+  InfluxDB Bridge Config
+
+- redis_single: <code>{$name -> [bridge_redis:redis_single](#bridge_redis-redis_single)}</code>
+
+  Redis Bridge Config
+
+- redis_sentinel: <code>{$name -> [bridge_redis:redis_sentinel](#bridge_redis-redis_sentinel)}</code>
+
+  Redis Bridge Config
+
+- redis_cluster: <code>{$name -> [bridge_redis:redis_cluster](#bridge_redis-redis_cluster)}</code>
+
+  Redis Bridge Config
+
+- pgsql: <code>{$name -> [bridge_pgsql:config](#bridge_pgsql-config)}</code>
+
+  PostgreSQL Bridge Config
+
+- timescale: <code>{$name -> [bridge_pgsql:config](#bridge_pgsql-config)}</code>
+
+  Timescale Bridge Config
+
+- matrix: <code>{$name -> [bridge_pgsql:config](#bridge_pgsql-config)}</code>
+
+  Matrix Bridge Config
+
+
+## bridge_gcp_pubsub:config
+GCP PubSub 桥接配置
+
+
+**Config paths**
+
+ - <code>bridges.gcp_pubsub.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__GCP_PUBSUB__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用 Bridge
+
+- resource_opts: <code>[resource_schema:creation_opts](#resource_schema-creation_opts)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- connect_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  连接 HTTP 服务器的超时时间。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  连接池大小。
+
+- pipelining: <code>pos_integer()</code>
+  * default: 
+  `100`
+
+  正整数，设置最大可发送的异步 HTTP 请求数量。当设置为 1 时，表示每次发送完成 HTTP 请求后都需要等待服务器返回，再继续发送下一个请求。
+
+- max_retries: <code>non_neg_integer()</code>
+  * default: 
+  `2`
+
+  请求出错时的最大重试次数。
+
+- request_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  HTTP 请求超时。
+
+- payload_template: <code>binary()</code>
+  * default: 
+  `""`
+
+  用于格式化外发信息的模板。 如果未定义，将以JSON格式发送所有可用的上下文。
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 GCP PubSub。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 GCP PubSub。
+
+
+- pubsub_topic: <code>binary()</code>
+
+  要发布消息的GCP PubSub主题。
+
+- service_account_json: <code>emqx_ee_bridge_gcp_pubsub:service_account_json()</code>
+
+  包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。
+  当创建GCP服务账户时（如https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。
+
+
+## bridge_hstreamdb:config
+HStreamDB 桥接配置
+
+
+**Config paths**
+
+ - <code>bridges.hstreamdb.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__HSTREAMDB__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用桥接
+
+- direction: <code>egress</code>
+  * default: 
+  `egress`
+
+  桥接的方向， 必须是 egress
+
+- local_topic: <code>binary()</code>
+
+
+  发送到 'local_topic' 的消息都会转发到 HStreamDB。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 HStreamDB。
+
+
+- payload: <code>binary()</code>
+  * default: 
+  `"${payload}"`
+
+  要转发到 HStreamDB 的数据内容，支持占位符
+
+- connector: <code>binary() | [connector_hstreamdb:config](#connector_hstreamdb-config)</code>
+
+  连接器的通用配置。
+
+
+## bridge_influxdb:influxdb_api_v1
+InfluxDB HTTP API 协议。支持 Influxdb v1.8 以及之前的版本。
+
+
+**Config paths**
+
+ - <code>bridges.influxdb_api_v1.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__INFLUXDB_API_V1__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用 Bridge
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 InfluxDB。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。
+
+
+- write_syntax: <code>emqx_ee_bridge_influxdb:write_syntax()</code>
+
+  使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符</br>
+  参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及
+  [InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) </br>
+  TLDR: </br>
+  ```
+  <measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]
+  ```
+
+
+- resource_opts: <code>[resource_schema:creation_opts](#resource_schema-creation_opts)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- server: <code>string()</code>
+  * default: 
+  `"127.0.0.1:8086"`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
+  主机名具有以下形式：`Host[:Port]`。</br>
+  如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。
+
+
+- precision: <code>ns | us | ms | s</code>
+  * default: 
+  `ms`
+
+  InfluxDB 时间精度。
+
+- database: <code>binary()</code>
+
+  InfluxDB 数据库。
+
+- username: <code>binary()</code>
+
+  InfluxDB 用户名。
+
+- password: <code>binary()</code>
+
+  InfluxDB 密码。
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_influxdb:influxdb_api_v2
+InfluxDB HTTP API V2 协议。支持 Influxdb v2.0 以及之后的版本。
+
+
+**Config paths**
+
+ - <code>bridges.influxdb_api_v2.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__INFLUXDB_API_V2__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用 Bridge
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 InfluxDB。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 InfluxDB。
+
+
+- write_syntax: <code>emqx_ee_bridge_influxdb:write_syntax()</code>
+
+  使用 InfluxDB API Line Protocol 写入 InfluxDB 的数据，支持占位符</br>
+  参考 [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) 及
+  [InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) </br>
+  TLDR: </br>
+  ```
+  <measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]
+  ```
+
+
+- resource_opts: <code>[resource_schema:creation_opts](#resource_schema-creation_opts)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- server: <code>string()</code>
+  * default: 
+  `"127.0.0.1:8086"`
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。</br>
+  主机名具有以下形式：`Host[:Port]`。</br>
+  如果未指定 `[:Port]`，则使用 InfluxDB 默认端口 8086。
+
+
+- precision: <code>ns | us | ms | s</code>
+  * default: 
+  `ms`
+
+  InfluxDB 时间精度。
+
+- bucket: <code>binary()</code>
+
+  InfluxDB bucket 名称。
+
+- org: <code>binary()</code>
+
+  InfluxDB 组织名称。
+
+- token: <code>binary()</code>
+
+  InfluxDB token。
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_kafka:auth_gssapi_kerberos
+使用 GSSAPI/Kerberos 认证。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.authentication</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__AUTHENTICATION</code>
+
+
+
+**Fields**
+
+- kerberos_principal: <code>binary()</code>
+
+  SASL GSSAPI 认证方法的 Kerberos principal，例如 <code>client_name@MY.KERBEROS.REALM.MYDOMAIN.COM</code>注意：这里使用的 realm 需要配置在 EMQX 服务器的 /etc/krb5.conf 中
+
+- kerberos_keytab_file: <code>binary()</code>
+
+  SASL GSSAPI 认证方法的 Kerberos keytab 文件。注意：该文件需要上传到 EMQX 服务器中，且运行 EMQX 服务的系统账户需要有读取权限。
+
+
+## bridge_kafka:auth_username_password
+基于用户名密码的认证。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.authentication</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__AUTHENTICATION</code>
+
+
+
+**Fields**
+
+- mechanism: <code>plain | scram_sha_256 | scram_sha_512</code>
+
+  SASL 认证方法名称。
+
+- username: <code>binary()</code>
+
+  SASL 认证的用户名。
+
+- password: <code>binary()</code>
+
+  SASL 认证的密码。
+
+
+## bridge_kafka:kafka_message
+用于生成 Kafka 消息的模版。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.producer.kafka.message</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__PRODUCER__KAFKA__MESSAGE</code>
+
+
+
+**Fields**
+
+- key: <code>string()</code>
+  * default: 
+  `"${.clientid}"`
+
+  生成 Kafka 消息 Key 的模版。如果模版生成后为空值，则会使用 Kafka 的 <code>NULL</code> ，而非空字符串。
+
+- value: <code>string()</code>
+  * default: 
+  `"${.}"`
+
+  生成 Kafka 消息 Value 的模版。如果模版生成后为空值，则会使用 Kafka 的 <code>NULL</code>，而非空字符串。
+
+- timestamp: <code>string()</code>
+  * default: 
+  `"${.timestamp}"`
+
+  生成 Kafka 消息时间戳的模版。该时间必需是一个整型数值（可以是字符串格式）例如 <code>1661326462115</code> 或 <code>'1661326462115'</code>。当所需的输入字段不存在，或不是一个整型时，则会使用当前系统时间。
+
+
+## bridge_kafka:producer_buffer
+配置消息缓存的相关参数。
+
+当 EMQX 需要发送的消息超过 Kafka 处理能力，或者当 Kafka 临时下线时，EMQX 内部会将消息缓存起来。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.producer.kafka.buffer</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__PRODUCER__KAFKA__BUFFER</code>
+
+
+
+**Fields**
+
+- mode: <code>memory | disk | hybrid</code>
+  * default: 
+  `memory`
+
+  消息缓存模式。
+  <code>memory</code>: 所有的消息都缓存在内存里。如果 EMQX 服务重启，缓存的消息会丢失。
+  <code>disk</code>: 缓存到磁盘上。EMQX 重启后会继续发送重启前未发送完成的消息。
+  <code>hybrid</code>: 先将消息缓存在内存中，当内存中的消息堆积超过一定限制（配置项 <code>segment_bytes</code> 描述了该限制）后，后续的消息会缓存到磁盘上。与 <code>memory</code> 模式一样，如果 EMQX 服务重启，缓存的消息会丢失。
+
+- per_partition_limit: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"2GB"`
+
+  为每个 Kafka 分区设置的最大缓存字节数。当超过这个上限之后，老的消息会被丢弃，为新的消息腾出空间。
+
+- segment_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  当缓存模式是 <code>disk</code> 或 <code>hybrid</code> 时适用。该配置用于指定缓存到磁盘上的文件的大小。
+
+- memory_overload_protection: <code>boolean()</code>
+  * default: 
+  `true`
+
+  缓存模式是 <code>memory</code> 或 <code>hybrid</code> 时适用。当系统处于高内存压力时，从队列中丢弃旧的消息以减缓内存增长。内存压力值由配置项 <code>sysmon.os.sysmem_high_watermark</code> 决定。注意，该配置仅在 Linux 系统中有效。
+
+
+## bridge_kafka:producer_kafka_opts
+Kafka 生产者参数。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.producer.kafka</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__PRODUCER__KAFKA</code>
+
+
+
+**Fields**
+
+- topic: <code>string()</code>
+
+  Kafka 主题名称
+
+- message: <code>[bridge_kafka:kafka_message](#bridge_kafka-kafka_message)</code>
+
+  用于生成 Kafka 消息的模版。
+
+- max_batch_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"896KB"`
+
+  最大消息批量字节数。大多数 Kafka 环境的默认最低值是 1 MB，EMQX 的默认值比 1 MB 更小是因为需要补偿 Kafka 消息编码所需要的额外字节（尤其是当每条消息都很小的情况下）。当单个消息的大小超过该限制时，它仍然会被发送，（相当于该批量中只有单个消息）。
+
+- compression: <code>no_compression | snappy | gzip</code>
+  * default: 
+  `no_compression`
+
+  压缩方法。
+
+- partition_strategy: <code>random | key_dispatch</code>
+  * default: 
+  `random`
+
+  设置消息发布时应该如何选择 Kafka 分区。
+
+  <code>random</code>: 为每个消息随机选择一个分区。
+  <code>key_dispatch</code>: Hash Kafka message key to a partition number
+
+
+- required_acks: <code>all_isr | leader_only | none</code>
+  * default: 
+  `all_isr`
+
+  设置 Kafka leader 在返回给 EMQX 确认之前需要等待多少个 follower 的确认。
+
+  <code>all_isr</code>: 需要所有的在线复制者都确认。
+  <code>leader_only</code>: 仅需要分区 leader 确认。
+  <code>none</code>: 无需 Kafka 回复任何确认。
+
+
+- partition_count_refresh_interval: <code>emqx_schema:duration_s()</code>
+  * default: 
+  `"60s"`
+
+  配置 Kafka 刷新分区数量的时间间隔。
+  EMQX 发现 Kafka 分区数量增加后，会开始按 <code>partition_strategy<code> 配置，把消息发送到新的分区中。
+
+- max_inflight: <code>pos_integer()</code>
+  * default: 
+  `10`
+
+  设置 Kafka 生产者（每个分区一个）在收到 Kafka 的确认前最多发送多少个请求（批量）。调大这个值通常可以增加吞吐量，但是，当该值设置大于 1 时存在消息乱序的风险。
+
+- buffer: <code>[bridge_kafka:producer_buffer](#bridge_kafka-producer_buffer)</code>
+
+  配置消息缓存的相关参数。
+
+  当 EMQX 需要发送的消息超过 Kafka 处理能力，或者当 Kafka 临时下线时，EMQX 内部会将消息缓存起来。
+
+
+## bridge_kafka:producer_mqtt_opts
+需要桥接到 MQTT 源主题。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.producer.mqtt</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__PRODUCER__MQTT</code>
+
+
+
+**Fields**
+
+- topic: <code>binary()</code>
+
+  指定 MQTT 主题作为桥接的数据源
+
+
+## bridge_kafka:producer_opts
+本地 MQTT 数据源和 Kafka 桥接的配置。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.producer</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__PRODUCER</code>
+
+
+
+**Fields**
+
+- mqtt: <code>[bridge_kafka:producer_mqtt_opts](#bridge_kafka-producer_mqtt_opts)</code>
+
+  需要桥接到 MQTT 源主题。
+
+- kafka: <code>[bridge_kafka:producer_kafka_opts](#bridge_kafka-producer_kafka_opts)</code>
+
+  Kafka 生产者参数。
+
+
+## bridge_kafka:socket_opts
+更多 Socket 参数设置。
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name.socket_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME__SOCKET_OPTS</code>
+
+
+
+**Fields**
+
+- sndbuf: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"1024KB"`
+
+  TCP socket 的发送缓存调优。默认值是针对高吞吐量的一个推荐值。
+
+- recbuf: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"1024KB"`
+
+  TCP socket 的收包缓存调优。默认值是针对高吞吐量的一个推荐值。
+
+- nodelay: <code>boolean()</code>
+  * default: 
+  `true`
+
+  设置‘true’让系统内核立即发送。否则当需要发送的内容很少时，可能会有一定延迟（默认 40 毫秒）。
+
+
+## bridge_kafka:config
+Kafka 桥接配置
+
+
+**Config paths**
+
+ - <code>bridges.kafka.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__KAFKA__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用（true）或停用该（false）Kafka 数据桥接。
+
+- bootstrap_hosts: <code>binary()</code>
+
+  用逗号分隔的 <code>host[:port]</code> 主机列表。默认端口号为 9092。
+
+- connect_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  建立 TCP 连接时的最大等待时长（若启用认证，这个等待时长也包含完成认证所需时间）。
+
+- min_metadata_refresh_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"3s"`
+
+  刷新 Kafka broker 和 Kafka 主题元数据段最短时间间隔。设置太小可能会增加 Kafka 压力。
+
+- metadata_request_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  刷新元数据时最大等待时长。
+
+- authentication: <code>none | [bridge_kafka:auth_username_password](#bridge_kafka-auth_username_password) | [bridge_kafka:auth_gssapi_kerberos](#bridge_kafka-auth_gssapi_kerberos)</code>
+  * default: 
+  `none`
+
+  认证参数。
+
+- producer: <code>none | [bridge_kafka:producer_opts](#bridge_kafka-producer_opts)</code>
+
+  本地 MQTT 数据源和 Kafka 桥接的配置。
+
+- socket_opts: <code>[bridge_kafka:socket_opts](#bridge_kafka-socket_opts)</code>
+
+  更多 Socket 参数设置。
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_mongodb:mongodb_rs
+MongoDB（Replica Set）配置
+
+
+**Config paths**
+
+ - <code>bridges.mongodb_rs.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MONGODB_RS__$NAME</code>
+
+
+
+**Fields**
+
+- mongo_type: <code>rs</code>
+  * default: 
+  `rs`
+
+  Replica set模式。当 MongoDB 服务运行在 replica-set 模式下，该配置必须设置为 'rs'。
+
+- servers: <code>string()</code>
+
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+  每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+  主机名具有以下形式：`Host[:Port]`。
+  如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+- w_mode: <code>unsafe | safe</code>
+  * default: 
+  `unsafe`
+
+  写模式。
+
+- r_mode: <code>master | slave_ok</code>
+  * default: 
+  `master`
+
+  读模式。
+
+- replica_set_name: <code>binary()</code>
+
+  副本集的名称。
+
+- srv_record: <code>boolean()</code>
+  * default: 
+  `false`
+
+  使用 DNS SRV 记录。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- username: <code>binary()</code>
+
+  内部数据库的用户名。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- auth_source: <code>binary()</code>
+
+  与用户证书关联的数据库名称。
+
+- database: <code>binary()</code>
+
+  数据库名字。
+
+- topology: <code>[topology](#topology)</code>
+
+
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用或停用该MongoDB桥
+
+- collection: <code>binary()</code>
+  * default: 
+  `"mqtt"`
+
+  数据将被存储到的集合
+
+- payload_template: <code>binary()</code>
+
+  用于格式化写入 MongoDB 的消息模板。 如果未定义，规则引擎会使用 JSON 格式序列化所有的可见输入，例如 clientid, topic, payload 等。
+
+- resource_opts: <code>[resource_schema:creation_opts_sync_only](#resource_schema-creation_opts_sync_only)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+
+## bridge_mongodb:mongodb_sharded
+MongoDB (Sharded)配置
+
+
+**Config paths**
+
+ - <code>bridges.mongodb_sharded.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MONGODB_SHARDED__$NAME</code>
+
+
+
+**Fields**
+
+- mongo_type: <code>sharded</code>
+  * default: 
+  `sharded`
+
+  Sharded cluster模式。当 MongoDB 服务运行在 sharded 模式下，该配置必须设置为 'sharded'。
+
+- servers: <code>string()</code>
+
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+  每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+  主机名具有以下形式：`Host[:Port]`。
+  如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+- w_mode: <code>unsafe | safe</code>
+  * default: 
+  `unsafe`
+
+  写模式。
+
+- srv_record: <code>boolean()</code>
+  * default: 
+  `false`
+
+  使用 DNS SRV 记录。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- username: <code>binary()</code>
+
+  内部数据库的用户名。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- auth_source: <code>binary()</code>
+
+  与用户证书关联的数据库名称。
+
+- database: <code>binary()</code>
+
+  数据库名字。
+
+- topology: <code>[topology](#topology)</code>
+
+
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用或停用该MongoDB桥
+
+- collection: <code>binary()</code>
+  * default: 
+  `"mqtt"`
+
+  数据将被存储到的集合
+
+- payload_template: <code>binary()</code>
+
+  用于格式化写入 MongoDB 的消息模板。 如果未定义，规则引擎会使用 JSON 格式序列化所有的可见输入，例如 clientid, topic, payload 等。
+
+- resource_opts: <code>[resource_schema:creation_opts_sync_only](#resource_schema-creation_opts_sync_only)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+
+## bridge_mongodb:mongodb_single
+MongoDB（独立）配置
+
+
+**Config paths**
+
+ - <code>bridges.mongodb_single.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MONGODB_SINGLE__$NAME</code>
+
+
+
+**Fields**
+
+- mongo_type: <code>single</code>
+  * default: 
+  `single`
+
+  Standalone 模式。当 MongoDB 服务运行在 standalone 模式下，该配置必须设置为 'single'。 
+
+- server: <code>string()</code>
+
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
+  如果未指定 `[:Port]`，则使用 MongoDB 默认端口 27017。
+
+
+- w_mode: <code>unsafe | safe</code>
+  * default: 
+  `unsafe`
+
+  写模式。
+
+- srv_record: <code>boolean()</code>
+  * default: 
+  `false`
+
+  使用 DNS SRV 记录。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- username: <code>binary()</code>
+
+  内部数据库的用户名。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- auth_source: <code>binary()</code>
+
+  与用户证书关联的数据库名称。
+
+- database: <code>binary()</code>
+
+  数据库名字。
+
+- topology: <code>[topology](#topology)</code>
+
+
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用或停用该MongoDB桥
+
+- collection: <code>binary()</code>
+  * default: 
+  `"mqtt"`
+
+  数据将被存储到的集合
+
+- payload_template: <code>binary()</code>
+
+  用于格式化写入 MongoDB 的消息模板。 如果未定义，规则引擎会使用 JSON 格式序列化所有的可见输入，例如 clientid, topic, payload 等。
+
+- resource_opts: <code>[resource_schema:creation_opts_sync_only](#resource_schema-creation_opts_sync_only)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
 
 ## bridge_mqtt:config
 MQTT Bridge 的配置。
@@ -11327,6 +12457,834 @@ MQTT Bridge 的配置。
   `100`
 
   异步请求飞行队列窗口大小。
+
+- enable_queue: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+## bridge_mysql:config
+HStreamDB 桥接配置
+
+
+**Config paths**
+
+ - <code>bridges.mysql.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MYSQL__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用桥接
+
+- sql: <code>binary()</code>
+  * default: 
+  `"insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, FROM_UNIXTIME(${timestamp}/1000))"`
+
+  SQL 模板
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 MySQL。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+- resource_opts: <code>[bridge_mysql:creation_opts](#bridge_mysql-creation_opts)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- server: <code>string()</code>
+
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
+  如果未指定 `[:Port]`，则使用 MySQL 默认端口 3306。
+
+
+- database: <code>binary()</code>
+
+  数据库名字。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- username: <code>binary()</code>
+  * default: 
+  `"root"`
+
+  内部数据库的用户名。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- auto_reconnect: <code>boolean()</code>
+
+  Deprecated since v5.0.15.
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_mysql:creation_opts
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.mysql.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MYSQL__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>non_neg_integer()</code>
+  * default: 
+  `16`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔。
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  是否在创建资源后立即启动资源。
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔。
+
+- query_mode: <code>sync</code>
+  * default: 
+  `sync`
+
+  请求模式。目前只支持同步模式。
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  请求的超时。 如果<code>query_mode</code>是<code>sync</code>，对资源的调用将在超时前被阻断这一时间。
+
+- enable_batch: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- batch_size: <code>pos_integer()</code>
+  * default: 
+  `1`
+
+  批量请求大小。如果设为1，则无批处理。
+
+- batch_time: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"20ms"`
+
+  最大批量请求等待时间。
+
+- enable_queue: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+## bridge_pgsql:config
+PostgreSQL 桥接配置
+
+
+**Config paths**
+
+ - <code>bridges.matrix.$name</code>
+ - <code>bridges.pgsql.$name</code>
+ - <code>bridges.timescale.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MATRIX__$NAME</code>
+ - <code>EMQX_BRIDGES__PGSQL__$NAME</code>
+ - <code>EMQX_BRIDGES__TIMESCALE__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用桥接
+
+- sql: <code>binary()</code>
+  * default: 
+  `"insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, TO_TIMESTAMP((${timestamp} :: bigint)/1000))"`
+
+  SQL 模板
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 PostgreSQL。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发。
+
+
+- resource_opts: <code>[bridge_pgsql:creation_opts](#bridge_pgsql-creation_opts)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- server: <code>string()</code>
+
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
+  如果未指定 `[:Port]`，则使用 PostgreSQL 默认端口 5432。
+
+
+- database: <code>binary()</code>
+
+  数据库名字。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- username: <code>binary()</code>
+
+  内部数据库的用户名。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- auto_reconnect: <code>boolean()</code>
+
+  Deprecated since v5.0.15.
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_pgsql:creation_opts
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.matrix.$name.resource_opts</code>
+ - <code>bridges.pgsql.$name.resource_opts</code>
+ - <code>bridges.timescale.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MATRIX__$NAME__RESOURCE_OPTS</code>
+ - <code>EMQX_BRIDGES__PGSQL__$NAME__RESOURCE_OPTS</code>
+ - <code>EMQX_BRIDGES__TIMESCALE__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>non_neg_integer()</code>
+  * default: 
+  `16`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔。
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  是否在创建资源后立即启动资源。
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔。
+
+- query_mode: <code>sync</code>
+  * default: 
+  `sync`
+
+  请求模式。目前只支持同步模式。
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  请求的超时。 如果<code>query_mode</code>是<code>sync</code>，对资源的调用将在超时前被阻断这一时间。
+
+- enable_batch: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- batch_size: <code>pos_integer()</code>
+  * default: 
+  `1`
+
+  批量请求大小。如果设为1，则无批处理。
+
+- batch_time: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"20ms"`
+
+  最大批量请求等待时间。
+
+- enable_queue: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+## bridge_redis:redis_cluster
+集群模式。当 Redis 服务运行在集群模式下，该配置必须设置为 'cluster'。
+
+
+**Config paths**
+
+ - <code>bridges.redis_cluster.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__REDIS_CLUSTER__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用 Bridge
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 Redis。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。
+
+
+- command_template: <code>[binary()]</code>
+
+  用于推送数据的 Redis 命令模板。 每个列表元素代表一个命令名称或其参数。
+  例如，要通过键值 `msgs` 将消息体推送到 Redis 列表中，数组元素应该是： `rpush`, `msgs`, `${payload}`。
+
+
+- resource_opts: <code>[bridge_redis:creation_opts_redis_cluster](#bridge_redis-creation_opts_redis_cluster)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- servers: <code>string()</code>
+
+
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+  每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+  主机名具有以下形式：`Host[:Port]`。
+  如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+- redis_type: <code>cluster</code>
+  * default: 
+  `cluster`
+
+  集群模式。当 Redis 服务运行在集群模式下，该配置必须设置为 'cluster'。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- auto_reconnect: <code>boolean()</code>
+
+  Deprecated since v5.0.15.
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_redis:redis_sentinel
+哨兵模式。当 Redis 服务运行在哨兵模式下，该配置必须设置为 'sentinel'。
+
+
+**Config paths**
+
+ - <code>bridges.redis_sentinel.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__REDIS_SENTINEL__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用 Bridge
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 Redis。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。
+
+
+- command_template: <code>[binary()]</code>
+
+  用于推送数据的 Redis 命令模板。 每个列表元素代表一个命令名称或其参数。
+  例如，要通过键值 `msgs` 将消息体推送到 Redis 列表中，数组元素应该是： `rpush`, `msgs`, `${payload}`。
+
+
+- resource_opts: <code>[bridge_redis:creation_opts_redis_sentinel](#bridge_redis-creation_opts_redis_sentinel)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- servers: <code>string()</code>
+
+
+
+  集群将要连接的节点列表。 节点之间用逗号分隔，如：`Node[,Node].`
+  每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。
+  主机名具有以下形式：`Host[:Port]`。
+  如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+- redis_type: <code>sentinel</code>
+  * default: 
+  `sentinel`
+
+  哨兵模式。当 Redis 服务运行在哨兵模式下，该配置必须设置为 'sentinel'。
+
+- sentinel: <code>string()</code>
+
+  Redis 哨兵模式下的集群名称。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- database: <code>integer()</code>
+  * default: 
+  `0`
+
+  Redis 数据库 ID。
+
+- auto_reconnect: <code>boolean()</code>
+
+  Deprecated since v5.0.15.
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_redis:redis_single
+单机模式。当 Redis 服务运行在单机模式下，该配置必须设置为 'single'。
+
+
+**Config paths**
+
+ - <code>bridges.redis_single.$name</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__REDIS_SINGLE__$NAME</code>
+
+
+
+**Fields**
+
+- enable: <code>boolean()</code>
+  * default: 
+  `true`
+
+  启用/禁用 Bridge
+
+- local_topic: <code>binary()</code>
+
+  发送到 'local_topic' 的消息都会转发到 Redis。 </br>
+  注意：如果这个 Bridge 被用作规则（EMQX 规则引擎）的输出，同时也配置了 'local_topic' ，那么这两部分的消息都会被转发到 Redis。
+
+
+- command_template: <code>[binary()]</code>
+
+  用于推送数据的 Redis 命令模板。 每个列表元素代表一个命令名称或其参数。
+  例如，要通过键值 `msgs` 将消息体推送到 Redis 列表中，数组元素应该是： `rpush`, `msgs`, `${payload}`。
+
+
+- resource_opts: <code>[bridge_redis:creation_opts_redis_single](#bridge_redis-creation_opts_redis_single)</code>
+  * default: 
+  `{}`
+
+  资源相关的选项。
+
+- server: <code>string()</code>
+
+
+  将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/>
+  主机名具有以下形式：`Host[:Port]`。<br/>
+  如果未指定 `[:Port]`，则使用 Redis 默认端口 6379。
+
+
+- redis_type: <code>single</code>
+  * default: 
+  `single`
+
+  单机模式。当 Redis 服务运行在单机模式下，该配置必须设置为 'single'。
+
+- pool_size: <code>pos_integer()</code>
+  * default: 
+  `8`
+
+  桥接远端服务时使用的连接池大小。
+
+- password: <code>binary()</code>
+
+  内部数据库密码。
+
+- database: <code>integer()</code>
+  * default: 
+  `0`
+
+  Redis 数据库 ID。
+
+- auto_reconnect: <code>boolean()</code>
+
+  Deprecated since v5.0.15.
+
+- ssl: <code>[broker:ssl_client_opts](#broker-ssl_client_opts)</code>
+  * default: 
+  `{enable = false}`
+
+  启用 SSL 连接。
+
+
+## bridge_redis:creation_opts_redis_cluster
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.redis_cluster.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__REDIS_CLUSTER__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>non_neg_integer()</code>
+  * default: 
+  `16`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔。
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  是否在创建资源后立即启动资源。
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔。
+
+- query_mode: <code>sync</code>
+  * default: 
+  `sync`
+
+  请求模式。目前只支持同步模式。
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  请求的超时。 如果<code>query_mode</code>是<code>sync</code>，对资源的调用将在超时前被阻断这一时间。
+
+- enable_queue: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+## bridge_redis:creation_opts_redis_sentinel
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.redis_sentinel.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__REDIS_SENTINEL__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>non_neg_integer()</code>
+  * default: 
+  `16`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔。
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  是否在创建资源后立即启动资源。
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔。
+
+- query_mode: <code>sync</code>
+  * default: 
+  `sync`
+
+  请求模式。目前只支持同步模式。
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  请求的超时。 如果<code>query_mode</code>是<code>sync</code>，对资源的调用将在超时前被阻断这一时间。
+
+- enable_batch: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- batch_size: <code>pos_integer()</code>
+  * default: 
+  `1`
+
+  批量请求大小。如果设为1，则无批处理。
+
+- batch_time: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"20ms"`
+
+  最大批量请求等待时间。
+
+- enable_queue: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+## bridge_redis:creation_opts_redis_single
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.redis_single.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__REDIS_SINGLE__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>non_neg_integer()</code>
+  * default: 
+  `16`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔。
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  是否在创建资源后立即启动资源。
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔。
+
+- query_mode: <code>sync</code>
+  * default: 
+  `sync`
+
+  请求模式。目前只支持同步模式。
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  请求的超时。 如果<code>query_mode</code>是<code>sync</code>，对资源的调用将在超时前被阻断这一时间。
+
+- enable_batch: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- batch_size: <code>pos_integer()</code>
+  * default: 
+  `1`
+
+  批量请求大小。如果设为1，则无批处理。
+
+- batch_time: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"20ms"`
+
+  最大批量请求等待时间。
 
 - enable_queue: <code>boolean()</code>
 
@@ -11970,6 +13928,192 @@ Prometheus 监控数据推送
   `false`
 
   开启或关闭 Prometheus 数据推送
+
+
+## resource_schema:creation_opts
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.gcp_pubsub.$name.resource_opts</code>
+ - <code>bridges.influxdb_api_v1.$name.resource_opts</code>
+ - <code>bridges.influxdb_api_v2.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__GCP_PUBSUB__$NAME__RESOURCE_OPTS</code>
+ - <code>EMQX_BRIDGES__INFLUXDB_API_V1__$NAME__RESOURCE_OPTS</code>
+ - <code>EMQX_BRIDGES__INFLUXDB_API_V2__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>non_neg_integer()</code>
+  * default: 
+  `16`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔。
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  是否在创建资源后立即启动资源。
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔。
+
+- query_mode: <code>sync | async</code>
+  * default: 
+  `async`
+
+  请求模式。可选 '同步/异步'，默认为'异步'模式。
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  请求的超时。 如果<code>query_mode</code>是<code>sync</code>，对资源的调用将在超时前被阻断这一时间。
+
+- async_inflight_window: <code>pos_integer()</code>
+  * default: 
+  `100`
+
+  异步请求飞行队列窗口大小。
+
+- enable_batch: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- batch_size: <code>pos_integer()</code>
+  * default: 
+  `1`
+
+  批量请求大小。如果设为1，则无批处理。
+
+- batch_time: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"20ms"`
+
+  最大批量请求等待时间。
+
+- enable_queue: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  每个缓存 worker 允许使用的最大字节数。
+
+
+## resource_schema:creation_opts_sync_only
+资源启动相关的选项。
+
+
+**Config paths**
+
+ - <code>bridges.mongodb_rs.$name.resource_opts</code>
+ - <code>bridges.mongodb_sharded.$name.resource_opts</code>
+ - <code>bridges.mongodb_single.$name.resource_opts</code>
+
+
+**Env overrides**
+
+ - <code>EMQX_BRIDGES__MONGODB_RS__$NAME__RESOURCE_OPTS</code>
+ - <code>EMQX_BRIDGES__MONGODB_SHARDED__$NAME__RESOURCE_OPTS</code>
+ - <code>EMQX_BRIDGES__MONGODB_SINGLE__$NAME__RESOURCE_OPTS</code>
+
+
+
+**Fields**
+
+- worker_pool_size: <code>non_neg_integer()</code>
+  * default: 
+  `16`
+
+  缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
+
+- health_check_interval: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  健康检查间隔。
+
+- start_after_created: <code>boolean()</code>
+  * default: 
+  `"true"`
+
+  是否在创建资源后立即启动资源。
+
+- start_timeout: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"5s"`
+
+  在回复资源创建请求前等待资源进入健康状态的时间。
+
+- auto_restart_interval: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"60s"`
+
+  资源断开以后，自动重连的时间间隔。
+
+- query_mode: <code>sync</code>
+  * default: 
+  `sync`
+
+  请求模式。目前只支持同步模式。
+
+- request_timeout: <code>infinity | emqx_schema:duration_ms()</code>
+  * default: 
+  `"15s"`
+
+  请求的超时。 如果<code>query_mode</code>是<code>sync</code>，对资源的调用将在超时前被阻断这一时间。
+
+- enable_batch: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- batch_size: <code>pos_integer()</code>
+  * default: 
+  `1`
+
+  批量请求大小。如果设为1，则无批处理。
+
+- batch_time: <code>emqx_schema:duration_ms()</code>
+  * default: 
+  `"20ms"`
+
+  最大批量请求等待时间。
+
+- enable_queue: <code>boolean()</code>
+
+  Deprecated since v5.0.14.
+
+- max_queue_bytes: <code>emqx_schema:bytesize()</code>
+  * default: 
+  `"100MB"`
+
+  每个缓存 worker 允许使用的最大字节数。
 
 
 ## retainer:flow_control

@@ -4,36 +4,67 @@ This section will guide you on installing and starting EMQX on the Debian system
 
 Supported versions: 
 
-- Debian10
-- Debian11
+- Debian 11
+- Debian 10
+
+The section below will take Debian 11 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise). 
 
 {% emqxce %}
 
-## Install EMQX with deb
+## Install with deb
 
-1. To download [emqx-5.0.14-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.deb), run:
+EMQX has offered different installation packages for different CPU architectures. 
 
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.deb
-```
+:::: tabs type:card
 
-2. To install EMQX, run:
+::: tab amd64
 
-```bash
-sudo apt install ./emqx-5.0.14-debian11-amd64.deb
-```
+1. Download [emqx-5.0.17-debian11-amd64.deb](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-amd64.deb).
 
-3. We offered different options to start EMQX:
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-amd64.deb
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo apt install ./emqx-5.0.17-debian11-amd64.deb
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-5.0.17-debian11-arm64.deb](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.deb). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.deb
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo apt install ./emqx-5.0.17-debian11-arm64.deb
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+EMQX offers 3 different options to start EMQX:
+
 - To start EMQX directly, run:
 
   ```bash
   $ emqx start
-  EMQX 5.0.14 is started successfully!
+  EMQX 5.0.17 is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
+  Node 'emqx@127.0.0.1' 5.0.17 is started
   ```
-  
+
 - To start EMQX with systemctl, run:
 
   ```bash
@@ -46,63 +77,120 @@ sudo apt install ./emqx-5.0.14-debian11-amd64.deb
   sudo service emqx start
   ```
 
-4. To uninstall EMQX, run:
+### Uninstall EMQX
 
-  ```shell
-  sudo apt remove --purge emqx
-  ```
+To uninstall EMQX, run:
 
-## Install EMQX with tag.gz
-
-1. To download [emqx-5.0.14-debian11-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.tar.gz), run:
-
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-debian11-amd64.tar.gz
+```
+sudo apt remove --purge emqx
 ```
 
-2. To unzip the package, run:
+## Install with tar.gz
+
+EMQX has offered different installation packages for different CPU architectures. 
+
+:::: tabs type:card
+
+::: tab amd64
+
+1. Download [emqx-5.0.17-debian11-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-amd64.tar.gz). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-amd64.tar.gz
+   ```
+
+2. Install EMQX. 
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-5.0.17-debian11-amd64.tar.gz -C emqx
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-5.0.17-debian11-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.tar.gz). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.tar.gz
+   ```
+
+2. Install EMQX. 
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-5.0.17-debian11-arm64.tar.gz -C emqx
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+After the installation, run the command below to start EMQX.
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-5.0.14-debian11-amd64.tar.gz -C emqx
+./emqx/bin/emqx start
 ```
-
-3. To start EMQX, run:
-
-```bash
-cd emqx && ./bin/emqx start
-```
-
-
 
 {% endemqxce %}
 
 {% emqxee %}
 
-## Install EMQX with deb
+## Install with deb
 
-1. To download [emqx-enterprise-5.0.0-debian11-amd64.deb](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb), run:
+EMQX has offered different installation packages for different CPU architectures. 
 
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb
-```
+:::: tabs type:card
 
-2. To install EMQX, run:
+::: tab amd64
 
-```bash
-sudo apt install ./emqx-enterprise-5.0.0-debian11-amd64.deb
-```
+1. Download [emqx-enterprise-5.0.0-debian11-amd64.deb](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb). 
 
-3. We offered different options to start EMQX:
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo apt install ./emqx-enterprise-5.0.0-debian11-amd64.deb
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-enterprise-5.0.0-debian11-arm64.deb](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-arm64.deb). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-arm64.deb
+   ```
+
+2. Install EMQX. 
+
+   ```bash
+   sudo apt install ./emqx-enterprise-5.0.0-debian11-arm64.deb 
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+EMQX offers 3 different options to start EMQX:
+
 - To start EMQX directly, run:
 
   ```bash
   $ emqx start
-  EMQX 5.0.14 is started successfully!
+  EMQX 5.0.17 is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
+  Node 'emqx@127.0.0.1' 5.0.0 is started
   ```
-  
+
 - To start EMQX with systemctl, run:
 
   ```bash
@@ -115,30 +203,58 @@ sudo apt install ./emqx-enterprise-5.0.0-debian11-amd64.deb
   sudo service emqx start
   ```
 
-4. To uninstall EMQX, run:
+
+
+### Uninstall EMQX
+
+To uninstall EMQX, run:
 
   ```shell
-  sudo apt remove --purge emqx
+sudo apt remove --purge emqx
   ```
 
-## Install EMQX with tag.gz
+## Install with tar.gz
 
-1. To download [emqx-enterprise-5.0.0-debian11-amd64.deb](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz), run:
+:::: tabs type:card
 
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz
+::: tab amd64
+
+1. Download [emqx-enterprise-5.0.0-debian11-amd64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-debian11-amd64.tar.gz -C emqx
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-enterprise-5.0.0-debian11-arm64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-arm64.tar.gz)
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-arm64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-debian11-arm64.tar.gz -C emqx
+   ```
+
+:::
+
+::::
+
+After the installation, run the command below to start EMQX.
+
 ```
-
-2. To unzip the package, run:
-
-```bash
-mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-debian11-amd64.tar.gz -C emqx
-```
-
-3. To start EMQX, run:
-
-```bash
-cd emqx && ./bin/emqx start
+./emqx/bin/emqx start
 ```
 
 {% endemqxee %}
