@@ -63,7 +63,7 @@ EMQX can be run with [Docker](../deploy/install-docker.md), installed with [EMQX
 - Linux <!--后续插入对应页面的链接-->
 - Windows (EMQX Open Source only)
 
-For other platforms not listed above, you can [contact EMQ](https://www.emqx.com/en/contact) for support.
+For other platforms not listed above, you can [contact EMQX](https://www.emqx.com/en/contact) for support.
 
 <!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
@@ -83,23 +83,23 @@ Container deployment is the quickest way to start exploring EMQX. In this sectio
 
 1. To download and start the latest version of EMQX, enter:
 
-{% emqxce %}
+   {% emqxce %}
 
-```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
-```
+   ```bash
+   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 		8883:8883 -p 18083:18083 emqx/emqx:latest
+   ```
 
-{% emqxce %}
+   {% endemqxce %}
 
-{% emqxee %}
+   {% emqxee %}
 
-```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
-```
+   ```bash
+   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p    8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
+   ```
 
-{% emqxee %}
+   {% endemqxee %}
 
-Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
+   Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
 
 
 2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status. 
