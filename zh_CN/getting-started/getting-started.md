@@ -281,7 +281,7 @@ MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 
 
 ## 进阶操作
 
-至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行 [访问控制](../access-control/authn/authn.md)、[集成数据系统](../data-integration/introduction.md) 等操作。
+至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行 [访问控制](../access-control/authn/authn.md)、[规则引擎数据处理](../data-integration/rules.md) 等操作。
 
 ## 常见问题解答
 

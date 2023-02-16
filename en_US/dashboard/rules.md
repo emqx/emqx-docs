@@ -2,7 +2,7 @@
 
 EMQX provides a powerful and efficient built-in data processing feature, the Rule Engine. Get data through topics, events, or data bridges, use simple standard SQL statements to extract, filter, enrich, and transform business data in real time, and finally distribute or integrate data to external systems through actions triggered by rules, including built-in actions and data bridges. You can also republish processed data to MQTT clients or devices. For more information, please refer to [Rules Introduction](../data-integration/rules.md).
 
-The rule is a part of the powerful data integration capability of EMQX, which provides a clear and flexible business integration solution with the use of data bridging, simplifying the business development process, improving user usability, and reducing the coupling between business systems and EMQX. For more information, please refer to [Data Integration Introduction](../data-integration/introduction.md).
+The rule is a part of the powerful data integration capability of EMQX, which provides a clear and flexible business integration solution with the use of data bridging, simplifying the business development process, improving user usability, and reducing the coupling between business systems and EMQX. For more information, please refer to [Rule Engine](../data-integration/rules.md).
 
 Under the Data Integration menu on the left side, users can access the Rules page. Users can create and manage the rules created on this page.
 
