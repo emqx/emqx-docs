@@ -4,35 +4,65 @@ This section will guide you on how to install and start EMQX on CentOS/RHEL syst
 
 Supported versions: 
 
-- CentOS 7
 - CentOS 8
+- CentOS 7
+
+The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise). 
 
 {% emqxce %}
 
-## Install EMQX with rpm
+## Install with rpm
 
-1. To download [emqx-5.0.14-el8-amd64.rpm](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.rpm), run:
+EMQX has offered different installation packages for different CPU architectures. 
 
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.rpm
-```
+:::: tabs type:card
 
-2. To install EMQX, run:
+::: tab amd64
 
-```bash
-sudo yum install ./emqx-5.0.14-el8-amd64.rpm -y
-```
+1. Download [emqx-5.0.17-el8-amd64.rpm](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm). 
 
-3. To run EMQX, run:
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm
+   ```
+
+2. Install EMQX. 
+
+   ```bash
+   sudo yum install emqx-5.0.17-el8-amd64.rpm -y
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-5.0.17-el8-arm64.rpm](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.rpm). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.rpm
+   ```
+
+2. Install EMQX. 
+
+   ```bash
+   sudo yum install emqx-5.0.17-el8-arm64.rpm -y
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+EMQX offers 3 different options to start EMQX:
 
 - To start EMQX directly, run:
 
   ```bash
   $ emqx start
-  EMQX 5.0.14 is started successfully!
-
+  EMQX 5.0.17 is started successfully!
+  
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
+  Node 'emqx@127.0.0.1' 5.0.17 is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -47,61 +77,118 @@ sudo yum install ./emqx-5.0.14-el8-amd64.rpm -y
   sudo service emqx start
   ```
 
-4. To uninstall EMQX, run:
+### Uninstall EMQX
 
-  ```shell
-  sudo yum remove emqx
-  ```
+To uninstall EMQX, run:
 
-## Install EMQX with tag.gz
-
-1. To download [emqx-5.0.14-el8-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.tar.gz), run:
-
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.tar.gz
+```
+sudo apt remove --purge emqx
 ```
 
-2. To unzip the package, run:
+## Install with tar.gz
+
+EMQX has offered different installation packages for different CPU architectures. 
+
+:::: tabs type:card
+
+::: tab amd64
+
+1. Download [emqx-5.0.17-el8-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.tar.gz). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-5.0.17-el8-amd64.tar.gz -C emqx
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-5.0.17-el8-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.tar.gz). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-5.0.17-el8-arm64.tar.gz -C emqx
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+After the installation, run the command below to start EMQX.
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-5.0.14-el8-amd64.tar.gz -C emqx
+./emqx/bin/emqx start
 ```
-
-3. To start EMQX, run:
-
-```bash
-cd emqx && ./bin/emqx start
-```
-
 
 {% endemqxce %}
 
 {% emqxee %}
 
-## Install EMQX with rpm
+## Install with rpm
 
-1. To download [emqx-enterprise-5.0.0-el8-amd64.rpm](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.rpm), run:
+EMQX has offered different installation packages for different CPU architectures. 
 
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.rpm
-```
+:::: tabs type:card
 
-2. To install EMQX, run:
+::: tab amd64
 
-```bash
-sudo yum install ./emqx-enterprise-5.0.0-el8-amd64.rpm -y
-```
+1.  Download [emqx-enterprise-5.0.0-el8-amd64.rpm](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.rpm). 
 
-3. To run EMQX, run:
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.rpm
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo yum install emqx-enterprise-5.0.0-el8-amd64.rpm -y
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-enterprise-5.0.0-el8-arm64.rpm](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-arm64.rpm)
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-arm64.rpm
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo yum install emqx-enterprise-5.0.0-el8-arm64.rpm -y
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+EMQX offers 3 different options to start EMQX:
 
 - To start EMQX directly, run:
 
   ```bash
   $ emqx start
-  EMQX 5.0.14 is started successfully!
-
+  EMQX 5.0.0 is started successfully!
+  
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
+  Node 'emqx@127.0.0.1' 5.0.0 is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -116,30 +203,60 @@ sudo yum install ./emqx-enterprise-5.0.0-el8-amd64.rpm -y
   sudo service emqx start
   ```
 
-4. To uninstall EMQX, run:
+### Uninstall EMQX
 
-  ```shell
-  sudo yum remove emqx
-  ```
+To uninstall EMQX, run:
 
-## Install EMQX with tag.gz
-
-1. To download [emqx-enterprise-5.0.0-el8-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.tar.gz), run:
-
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.tar.gz
+```
+sudo apt remove --purge emqx
 ```
 
-2. To unzip the package, run:
+## Install with tar.gz
+
+EMQX has offered different installation packages for different CPU architectures. 
+
+:::: tabs type:card
+
+::: tab amd64
+
+1. Download [emqx-enterprise-5.0.0-el8-amd64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.tar.gz). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-amd64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```
+   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-enterprise-5.0.0-el8-arm64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-arm64.tar.gz). 
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-el8-arm64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-debian11-arm64.tar.gz -C emqx
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+After the installation, run the command below to start EMQX.
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-el8-amd64.tar.gz -C emqx
-```
-
-3. To start EMQX, run:
-
-```bash
-cd emqx && ./bin/emqx start
+./emqx/bin/emqx start
 ```
 
 {% endemqxee %}

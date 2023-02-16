@@ -12,13 +12,15 @@ As the most scalable MQTT broker, EMQX can help you connect any device, at any s
 
 EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platform to connect, move and process your data in business-critical scenarios for the IoT era.
 
+<img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
+
 {% endemqxee %}
 
 ## Benefits
 
 {% emqxce %}
 
-- **[Massive Scale](https://www.emqx.io)**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster.
+- **[Massive Scale](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)**: Scale to 100 million concurrent MQTT connections with a single EMQX 5.0 cluster.
 - **High Performance**: Move and process millions of MQTT messages per second in a single broker.
 - **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - **[Fully MQTT 5.0](https://www.emqx.com/en/blog/introduction-to-mqtt-5)**: 100% compliant with MQTT 5.0 and 3.x standard for better scalability, security, and reliability.
@@ -30,7 +32,7 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 {% emqxee %}
 
-- **Massive Scale**: Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
+- **[Massive Scale](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)**: Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
 
 - **Business-Critical Reliability**: Up to 99.99% SLA. Ensure no data loss with built-in RocksDB data persistence.
 

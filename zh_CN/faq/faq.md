@@ -4,9 +4,13 @@
 
 主题使用没有数量限制，主题数量增长对性能影响不大，可以放心使用。
 
+{% emqxce %}
+
 ## EMQX 开源版怎么存储数据？
 
 开源版不支持数据存储功能，可以使用企业版，或者使用外部程序订阅主题/Webhook 的方式获取数据，然后写入到数据库。
+
+{% endemqxce %}
 
 ## EMQX 与物联网应用的关系是什么？
 
@@ -180,6 +184,8 @@ brew install openssl@1.1
 
 安装完成后，即可正常启动 EMQX。
 
+{% emqxce %}
+
 ## Windows 缺失 MSVCR120.dll
 
 ### 现象
@@ -195,6 +201,8 @@ Windows 执行 `./bin/emqx console` 弹出错误窗口：
 ### 解决方法
 
 安装 [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
+
+{% endemqxce %}
 
 ## SSL 连接失败
 

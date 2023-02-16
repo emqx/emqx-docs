@@ -14,12 +14,14 @@
 
 EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规则引擎，为高可靠、高性能的物联网实时数据移动、处理和集成提供动力，助力企业快速构建关键业务的 IoT 平台与应用。
 
+<img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
+
 {% endemqxee %}
 ## 产品优势
 
 {% emqxce %}
 
-- **[开放源码](https://www.emqx.io/zh)**：基于 Apache 2.0 许可证完全开源，自 2013 年起 200+ 开源版本迭代。
+- **[开放源码](https://github.com/emqx/emqx)**：基于 Apache 2.0 许可证完全开源，自 2013 年起 200+ 开源版本迭代。
 - **[MQTT 5.0](https://www.emqx.com/zh/blog/introduction-to-mqtt-5)**：100% 支持 MQTT 5.0 和 3.x 协议标准，更好的伸缩性、安全性和可靠性。
 - **[海量连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)**：单节点支持 500 万 MQTT 设备连接，集群可扩展至 1 亿并发 MQTT 连接。
 - **高性能**：单节点支持每秒实时接收、移动、处理与分发数百万条的 MQTT 消息。
@@ -30,7 +32,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 
 {% emqxee %}
 
-- **海量连接**：单节点支持 500 万 MQTT 设备连接，集群可水平扩展至支持1亿并发的 MQTT 连接。
+- **[海量连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)**：单节点支持 500 万 MQTT 设备连接，集群可水平扩展至支持 1 亿并发的 MQTT 连接。
 
 - **高可靠**：弹性伸缩，无单点故障。内置 RocksDB 可靠地持久化 MQTT 消息，确保无数据损失。
 

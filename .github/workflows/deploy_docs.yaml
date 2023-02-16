@@ -152,7 +152,7 @@ jobs:
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
           redoc-cli bundle redoc/ce-${lang}.json -t redoc/template.hbs \
-            --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api.html \
+            --output docs/.vuepress/dist/${lang}/${VERSION}/admin/api-docs.html \
             --options.theme.colors.primary.main=#00b173 \
             --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
             --templateOptions.description "EMQX ${VERSION} API Documentation" \
@@ -168,7 +168,7 @@ jobs:
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
           redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
-            --output docs/.vuepress/dist/ee-${lang}/enterprise/${VERSION}/admin/api.html \
+            --output docs/.vuepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --options.theme.colors.primary.main=#5e4eff \
             --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
@@ -217,12 +217,20 @@ jobs:
             --UrlRedirect.Switch on \
             --UrlRedirect.PathRules.0.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.0.Pattern "/zh/enterprise/latest/*" \
-            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/${LATEST_VERSION}/\$1" \
+            --UrlRedirect.PathRules.0.RedirectUrl "/zh/enterprise/v4.4/\$1" \
             --UrlRedirect.PathRules.0.RedirectHost https://docs.emqx.com \
             --UrlRedirect.PathRules.1.RedirectStatusCode 302 \
             --UrlRedirect.PathRules.1.Pattern "/en/enterprise/latest/*" \
-            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/${LATEST_VERSION}/\$1" \
-            --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com
+            --UrlRedirect.PathRules.1.RedirectUrl "/en/enterprise/v4.4/\$1" \
+            --UrlRedirect.PathRules.1.RedirectHost https://docs.emqx.com \
+            --UrlRedirect.PathRules.2.RedirectStatusCode 302 \
+            --UrlRedirect.PathRules.2.Pattern "/en/enterprise/v5.0/getting-started.html" \
+            --UrlRedirect.PathRules.2.RedirectUrl "/en/enterprise/v5.0/getting-started/getting-started.html" \
+            --UrlRedirect.PathRules.2.RedirectHost https://docs.emqx.com \
+            --UrlRedirect.PathRules.3.RedirectStatusCode 302 \
+            --UrlRedirect.PathRules.3.Pattern "/zh/enterprise/v5.0/getting-started.html" \
+            --UrlRedirect.PathRules.3.RedirectUrl "/zh/enterprise/v5.0/getting-started/getting-started.html" \
+            --UrlRedirect.PathRules.3.RedirectHost https://docs.emqx.com
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 

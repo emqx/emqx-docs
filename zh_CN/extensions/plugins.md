@@ -38,7 +38,9 @@ README.md                rebar.config             src
 
 第一次编译过程较长，因为它依赖于 EMQX 主项目（方便插件直接使用主项目的各种函数），需要下载依赖，并编译主项目。
 
+{% emqxce %}
 编译环境请参照 [源码编译安装 EMQX](../deploy/install-source.md) 配置。
+{% endemqxce %}
 
 ### 3. 挂载钩子函数
 

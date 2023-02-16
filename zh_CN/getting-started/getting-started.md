@@ -52,6 +52,8 @@ EMQX 目前提供开源和企业版两个版本，您可根据需要点击下方
 
 EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](../deploy/install-k8s.md) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
 
+{% emqxce %}
+
 - RedHat
 - CentOS
 - RockyLinux
@@ -59,10 +61,43 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - Ubuntu
 - Debian
 - MacOS
-- Linux <!--后续在安装页面完成后，重新调整排序以及插入超链接-->
-- Windows (仅开源版支持)
+- Linux
+- Windows
 
-如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](../deploy/install-source.md) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。<!--后续在安装页面完成后，重新调整排序以及插入超链接-->
+{% endemqxce %}
+
+{% emqxee %}
+
+- RedHat
+- CentOS
+- RockyLinux
+- AmazonLinux
+- Ubuntu
+- Debian
+- MacOS
+- Linux
+
+{% endemqxee %}
+
+{% emqxce %}
+
+如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考 [源码编译安装](../deploy/install-source.md) 或 [联系我们](https://www.emqx.com/zh/contact) 获取支持。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可 [联系我们](https://www.emqx.com/zh/contact) 获取支持。
+
+{% endemqxee %}
+
+{% endemqxce %}
+
+{% emqxce %}
+
+如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可 [联系我们](https://www.emqx.com/zh/contact) 获取支持。<!--后续在安装页面完成后，重新调整排序以及插入超链接-->
+
+{% endemqxee %}
 
 此外，您还可通过 [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform) 在主流公有云上一键部署包含 EMQX Enterprise 集群在内的所有基础设施，如[阿里云](https://github.com/emqx/tf-alicloud)、[亚马逊云科技](https://github.com/emqx/tf-aws)。<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
@@ -176,11 +211,57 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 ::::
 
-接下来我们将通过 Dashboard 自带的 WebSocket 工具进行连接测试。
+## 快速验证
 
-## 通过 WebSocket 工具快速验证
+您可通过 [MQTT X](https://mqttx.app/zh) 或 EMQX 自带的 WebSocket 工具快速验证 MQTT 连接。
 
-EMQX 提供了标准的 MQTT 协议包括 MQTT over WebSocket 支持，启动后即可接入 MQTT 客户端，本节我们将演示如何通过 Dashboard 自带的 WebSocket 客户端工具接入 EMQX，从而进行消息通信验证。
+:::: tabs type:card
+
+::: tab 通过 MQTT X Web 快速验证
+
+[MQTT X](https://mqttx.app/zh) 是 EMQ 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。
+
+MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。您也可以使用浏览器打开 [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections)，无需下载与安装即可通过 MQTT over WebSocket 完成 MQTT 开发和调试操作。
+
+:::tip 前置准备
+
+通过 MQTT X Web 测试连接之前，应首先获取：
+
+- 服务器地址： 可在 EMQX Dashboard **仪表盘**的**节点信息**部分获取，即**节点名称**；
+- 端口信息：可在 EMQX Dashboard **功能配置**的**监听器**部分获取；
+
+:::
+
+1. 访问  [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) 页面。
+
+2. 配置并建立 MQTT 连接。点击 **+** **新建连接** 进入配置页面，您只需配置：
+
+   - **名称**：连接名称，如 **MQTTX_Test**；
+
+   - **服务器地址**
+
+     - 通过选择该连接的协议类型，如 WebSockets 协议，**ws://**；如希望测试 SSL/TLS 认证连接，应选择 **wss://**；
+     - 填入之前获取的 EMQX 地址，如 **emqx@127.0.0.1**
+
+   - **端口**：如 WebSockets 协议对应的 **8083** 端口
+
+     其他项目保持默认配置，你也可以根据具体业务场景修改。有关页面字段的配置说明，可参考 [MQTT 手册 - 快速建立连接](https://mqttx.app/zh/docs/get-started)。
+
+   配置完成后，点击页面右上角的**连接**按钮建立连接。
+
+3. 订阅相关主题。连接成功后即可快速订阅多个主题。点击页面中部的**添加订阅**按钮，按照默认配置，我们将订阅匹配 testtopic/# 主题的所有消息，QoS 等级为 0。您可多次重复该项操作以订阅不同主题，MQTT X Web 会通过不同颜色区分各主题。
+
+4. 测试消息的发送与接收。点击页面右下角聊天区域的发送按钮，可以在上方的聊天窗口中看到消息已成功发送。
+
+![MQTT X Web test](./assets/MQTTXWeb-test.png)
+
+除上述测试外，您也可以通过 MQTT X 进行单/双向 SSL 认证、或通过自定义脚本模拟测试数据。更多消息，可访问 [MQTT X 官方网页](https://mqttx.app/zh)。
+
+:::
+
+::: tab 通过 WebSocket 工具快速验证
+
+此外，您也可以通过 EMQX 内置的 WebSocket 客户端工具接入 EMQX，进行消息通信验证。
 
 在 Dashboard 页面，点击左侧导航栏的 **问题分析 -> WebSocket 客户端**，即可进入相关页面。您可按照如下步骤完成客户端与 EMQX 的连接、订阅相关主题，并测试消息的发送与接收情况。
 
@@ -190,17 +271,17 @@ EMQX 提供了标准的 MQTT 协议包括 MQTT over WebSocket 支持，启动后
 
 ![EMQX MQTT WebSocket 连接](./assets/emqx-websocket.png)
 
-4. 此时我们通过点击左侧导航栏的**仪表盘**返回主界面，在**概览**页，可以看到当前的连接数，主题数、以及订阅数，节点信息，以及实时的消息发送及接收情况。
+:::
 
-<!-- TODO @wivwiv Update screenshot -->
+::::
 
-如您希望进行更复杂的测试，比如单/双向 SSL 认证、通过自定义脚本模拟测试数据等，也可通过 [MQTTX 桌面客户端 ](https://mqttx.app/zh)进行更多测试。
+回到 EMQX Dashboard 的**仪表盘**部分，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
+
+![EMQX dashboard](./assets/EMQX dashboard.png)
 
 ## 进阶操作
 
-<!-- TODO @wivwiv Update links after document is ready-->
-
-至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行 [访问控制](../access-control/authn/authn.md)、[集成第三方数据系统](../data-integration/introduction.md) 等操作。
+至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行 [访问控制](../access-control/authn/authn.md)、[集成数据系统](../data-integration/introduction.md) 等操作。
 
 ## 常见问题解答
 
