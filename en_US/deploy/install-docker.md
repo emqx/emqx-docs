@@ -12,12 +12,14 @@ This chapter will introduce how to use the official Docker image to install and 
 
 ## Use Docker to run a single EMQX node
 
+This section will introduce how to use the Docker image to install the latest version of EMQX. If you want to work with other versions,  please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise).
+
 1. To get the Docker image, run: 
 
 {% emqxce %}
 
 ```bash
-docker pull emqx:5.0.14
+docker pull emqx:5.0.17
 ```
 
 {% endemqxce %}
@@ -35,7 +37,7 @@ docker pull emqx/emqx-enterprise:5.0.0
 {% emqxce %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.14
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.17
 ```
 
 For more information about EMQX official docker image, see [Docker Hub - emqx](https://hub.docker.com/_/emqx). 
@@ -70,7 +72,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx:5.0.14
+    image: emqx:5.0.17
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.com"
@@ -95,7 +97,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx:5.0.14
+    image: emqx:5.0.17
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.com"
