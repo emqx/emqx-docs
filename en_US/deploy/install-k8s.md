@@ -71,36 +71,36 @@ helm uninstall emqx-operator -n emqx-operator-system
 
    {% emqxce %}
    
-   	```bash
-   	cat << "EOF" | kubectl apply -f -
-  	   apiVersion: apps.emqx.io/v2alpha1
-  	   kind: EMQX
- 	    metadata:
- 	      name: emqx
- 	   spec:
- 	     image: emqx/emqx:5.0.14
-	  EOF
-	  ```
-  
-  {% endemqxce %}
-  
-  {% emqxee %}
-  
-	  ```bash
-	  cat << "EOF" | kubectl apply -f -
-	    apiVersion: apps.emqx.io/v2alpha1
-	    kind: EMQX
- 	   metadata:
- 	     name: emqx
- 	   spec:
- 	     image: emqx/emqx-enterprise:5.0.0
- 	 EOF
-	  ```
-  
-  {% endemqxee %}
-  
+   ```bash
+   cat << "EOF" | kubectl apply -f -
+      apiVersion: apps.emqx.io/v2alpha1
+      kind: EMQX
+       metadata:
+         name: emqx
+      spec:
+        image: emqx/emqx:5.0.14
+     EOF
+   ```
+
+   {% endemqxce %}
+
+   {% emqxee %}
+
+   ```bash
+   cat << "EOF" | kubectl apply -f -
+   	   apiVersion: apps.emqx.io/v2alpha1
+   	   kind: EMQX
+   	   metadata:
+   	      name: emqx
+   	   spec:
+   	     image: emqx/emqx-enterprise:5.0.0
+	   EOF
+   ```
+
+   {% endemqxee %}
+
   You can see a complete code example on the [GitHub page of EMQX operator](https://github.com/emqx/emqx-operator/blob/main/config/samples/emqx/v2alpha1/emqx-full.yaml). For detailed explanation of each field, see [EMQX Operator - API Reference](https://docs.emqx.com/en/emqx-operator/latest/reference/v2alpha1-reference.html).
-  
+
   2. To check the status of EMQX Custom Resource, run:
   ```bash
   kubectl get pods
