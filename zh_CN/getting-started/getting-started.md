@@ -91,14 +91,6 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 {% endemqxee %}
 
-{% endemqxce %}
-
-{% emqxce %}
-
-如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可 [联系我们](https://www.emqx.com/zh/contact) 获取支持。<!--后续在安装页面完成后，重新调整排序以及插入超链接-->
-
-{% endemqxee %}
-
 此外，您还可通过 [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform) 在主流公有云上一键部署包含 EMQX Enterprise 集群在内的所有基础设施，如[阿里云](https://github.com/emqx/tf-alicloud)、[亚马逊云科技](https://github.com/emqx/tf-aws)。<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
 ### 快速安装启动
@@ -123,7 +115,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 {% emqxee %}
 
-1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
+2. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
 
 ```bash
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
@@ -131,17 +123,16 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 {% endemqxee %}
 
-
 运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
 
-2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+3. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
    默认用户名及密码：
-   
+
    `admin`
-   
+
    `public`
-   
+
    <!--后续补上 dashboard的截图-->
 
 :::
@@ -152,18 +143,17 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
-
 {% emqxce %}
 
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
-   ```
+   ```bash
    wget https://www.emqx.com/zh/downloads/broker/5.0.14/emqx-5.0.14-macos11-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
-   ```
+   ```bash
    mkdir -p emqx && unzip emqx-5.0.14-macos11-amd64.zip -d emqx
    ```
 
@@ -173,13 +163,13 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
-   ```
+   ```bash
       wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
-   ```
+   ```bash
    mkdir -p emqx && unzip emqx-enterprise-5.0.0-macos11-amd64.zip -d emqx
    ```
 
@@ -187,21 +177,21 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 3. 运行以下命令启动 EMQX。
 
-   ```
+   ```bash
    ./emqx/bin/emqx start
    ```
-   
+
 4. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
    默认用户名及密码：
-   
+
    `admin`
-   
+
    `public`
-   
+
 5. 运行以下命令停止 EMQX。
-   
-   ```
+
+   ```bash
    ./emqx/bin/emqx stop
    ```
 
@@ -215,6 +205,15 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 您可通过 [MQTT X](https://mqttx.app/zh) 或 EMQX 自带的 WebSocket 工具快速验证 MQTT 连接。
 
+:::tip 前置准备
+
+测试连接之前，应首先获取：
+
+- 服务器地址：通常是您的服务器 IP 地址；
+- 端口信息：可在 EMQX Dashboard **功能配置**的**监听器**部分获取。
+
+:::
+
 :::: tabs type:card
 
 ::: tab 通过 MQTT X Web 快速验证
@@ -222,15 +221,6 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 [MQTT X](https://mqttx.app/zh) 是 EMQ 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。
 
 MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。您也可以使用浏览器打开 [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections)，无需下载与安装即可通过 MQTT over WebSocket 完成 MQTT 开发和调试操作。
-
-:::tip 前置准备
-
-通过 MQTT X Web 测试连接之前，应首先获取：
-
-- 服务器地址： 可在 EMQX Dashboard **仪表盘**的**节点信息**部分获取，即**节点名称**；
-- 端口信息：可在 EMQX Dashboard **功能配置**的**监听器**部分获取；
-
-:::
 
 1. 访问  [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) 页面。
 
@@ -277,7 +267,7 @@ MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 
 
 回到 EMQX Dashboard 的**仪表盘**部分，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
 
-![EMQX dashboard](./assets/EMQX dashboard.png)
+![EMQX dashboard](./assets/emqx-dashboard.png)
 
 ## 进阶操作
 
