@@ -1,5 +1,20 @@
 # Bridge data to EMQX
 
+{% emqxce %}
+
+:::tab Prerequisites:
+
+At least 2 EMQX brokers are installed. 
+
+On how to install, see [Install EMQX](../getting-started/install.md)
+
+:::
+
+{% endemqxce %}
+
+
+{% emqxee %}
+
 :::tab Prerequisites:
 
 At least 2 EMQX brokers are installed. 
@@ -7,6 +22,9 @@ At least 2 EMQX brokers are installed.
 On how to install, see [Install EMQX](../getting-started/install-ee.md)
 
 :::
+
+{% endemqxee %}
+
 
 Create a rule
 
