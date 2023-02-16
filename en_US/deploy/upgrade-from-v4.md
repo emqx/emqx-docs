@@ -373,8 +373,6 @@ Other status codes or request failure will be treated as `ignore`.
 
 ## Rule Engine
 
-The rule engine has been renamed to [Data Integration](../data-integration/introduction.md), which includes rules and data bridge.
-
 Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are split into built-in actions (republish, console) and data bridges (WebHook, MQTT Sink, MQTT Source) to provide reuse of actions.
 
 ## WebHook

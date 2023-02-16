@@ -281,7 +281,7 @@ Then you can click **Dashboard** in the left navigation tree to return to the **
 
 ## Advanced operation
 
-So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../access-control/authn/authn.md) and integration with [different data systems](../data-integration/introduction.md).
+So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../access-control/authn/authn.md) and integration with [Rule Engine](../data-integration/rules.md).
 
 ## Contact us
 
