@@ -17,12 +17,12 @@ EMQX 源码编译安装需要以下环境依赖:
 
 ```bash
 docker run -d --name emqx-builder \
-  ghcr.io/emqx/emqx-builder/5.0-17:1.13.4-24.2.1-1-ubuntu20.04 \
   # -p 1883:1883 \
   # -p 8083:8083 \
   # -p 8084:8084 \
   # -p 8883:8883 \
   # -p 18083:18083 \
+  ghcr.io/emqx/emqx-builder/5.0-17:1.13.4-24.2.1-1-ubuntu20.04 \
   bash -c "tail -f /dev/null"
 ```
 
