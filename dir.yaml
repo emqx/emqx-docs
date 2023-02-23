@@ -65,14 +65,14 @@
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
     
-    - title_en: Clustering
-      title_cn: 构建集群
-      children:
-        - deploy/cluster/introduction
-        - deploy/cluster/mria-introduction
-        - deploy/cluster/create-cluster
-        - deploy/cluster/security
-        - deploy/cluster/lb
+- title_en: Clustering
+  title_cn: 构建集群
+  children:
+    - deploy/cluster/introduction
+    - deploy/cluster/mria-introduction
+    - deploy/cluster/create-cluster
+    - deploy/cluster/security
+    - deploy/cluster/lb
     - title_en: Performance and Tuning
       title_cn: 性能与调优
       children:

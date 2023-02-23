@@ -2,7 +2,7 @@
 
 EMQX Configuration File Manual.
 
-## EMQX Node and Cookie
+## Node and Cookie
 
 The Erlang/OTP platform application is composed of distributed Erlang nodes (processes). Each Erlang node (process) needs to be assigned a node name for mutual communication between nodes. All Erlang nodes (processes) in communication are authenticated by a shared cookie.
 
@@ -819,7 +819,7 @@ Ensure that the number of completed transactions is less than the <code>max_hist
 
 ## Log
 
-配置日志输出位置、日志级别、日志文件存储路径以及日志轮换、过载保护等参数。
+Configure the log output location, log level, log file storage path, and parameters such as log rotation and overload protection.
 
 ### File Output Log
 
@@ -1518,7 +1518,7 @@ When authenticating a login (username, client ID, etc.) the authenticators are c
 
 Set the MQTT over QUIC UDP listener, which is not enabled by default. And this feature is not available in some operating systems.
 
-For details, please refer to [MQTT over QUIC Quick Start](./mqtt-over-quic/getting-started.md).
+For details, please refer to [MQTT over QUIC Quick Start](../mqtt-over-quic/getting-started.md).
 
 
 Settings for the MQTT over QUIC listener.
@@ -3147,7 +3147,7 @@ and an MQTT message is published to the system topic <code>$SYS/sysmon/busy_port
 
 EMQX rate limiting provides six rate limiters, **bytes_in**, **message_in**, **connection**, **message_routing**, **internal**, **client**, and three different levels of rate limiting functions, **node**, **listener**, and **connection**.
 
-For an introduction to rate limiting and its use, please refer to [rate limiting](... /rate-limit/rate-limit.md).
+For an introduction to rate limiting and its use, please refer to [rate limiting](../rate-limit/rate-limit.md).
 
 ### Rate limiter
 
@@ -3879,6 +3879,8 @@ Tuning options for the mria table.
 
 
 
+{% emqxce %}
+
 ## Telemetry
 
 
@@ -3893,6 +3895,8 @@ Settings for the telemetry module.
   Enable telemetry.
 
 
+
+{% endemqxce %}
 
 <!-- ## zone 配置 -->
 

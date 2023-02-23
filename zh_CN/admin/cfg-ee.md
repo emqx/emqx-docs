@@ -3956,6 +3956,8 @@ Tuning options for the mria table.
 
 
 
+{% emqxce %}
+
 ## 遥测
 
 
@@ -3970,6 +3972,8 @@ Settings for the telemetry module.
   Enable telemetry.
 
 
+
+{% endemqxce %}
 
 <!-- ## zone 配置 -->
 
