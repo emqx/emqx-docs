@@ -143,3 +143,34 @@ Here is a list of common pitfalls that is worth being aware of before proceeding
 标有（3）的字段的类型会根据如何设置标有（2）的字段而变化。如果指定了 Keytab 路径并将 EMQX 设置为多节点群集，则必须将 Keytab 文件上载到所有节点上指定的路径。
 
 ![image](./assets/rule-engine/kafka_resource_0_2.png)
+
+## Kafka Headers
+
+从 EMQX 企业版 4.4.15 开始，Kafka 动作支持了 Kafka Headers：
+
+![image](./assets/rule-engine/kafka_action_headers_zh.png)
+
+新增了图中三个字段：`Kafka Headers`，`更多的 Kafka headers`，`Kafka headers 值的编码类型`。
+
+### Kafka Headers：
+
+这个字段用来直接把规则输出的某个变量整个当做 Kafka Headers 发送。该字段为可选字段。
+
+比如我们可以填写 `${pub_props}`，这样对于监听 MQTT 消息的规则，Kafka 动作将会把该 MQTT 消息的所有 PUBLISH Properties 当做 Kafka Headers 发送。
+
+### 更多的 Kafka headers：
+
+这个字段提供了以 `键-值` 对的格式添加一个或者多个 Kafka headers 的方法。其中键和值都可以使用 `${var}` 格式的占位符。该字段为可选字段。
+
+比如我们可添加一个键值对，键为 `clientid`，值为 `${clientid}`，那么当客户端 ID 为 `foo` 的客户端触发该动作时，它会发送 `clientid: foo` 这样一个 Kafka Header 出去。
+
+### Kafka headers 值的编码类型：
+
+根据 Kafka 的[规定](https://cwiki.apache.org/confluence/display/KAFKA/KIP-82+-+Add+Record+Headers)，Kafka Headers 的键必须为字符串格式（utf8），并且其值必须为二进制或字符串格式。
+所以如果 “Kafka Headers” 和 “更多的 Kafka headers” 两个字段里，指定的键不是字符串格式，或者指定的值不是二进制或字符串格式的时候，EMQX 的 Kafka 动作需要在发送之前做一些处理。
+
+这个字段有两种可选值：`NONE` 或 `JSON`：
+
+- NONE: 仅发送键为字符串、值为二进制或字符串格式的 Headers，其他格式的 Headers 将会被丢弃。
+
+- JSON: 在发送任何 Headers 之前，都尝试将`值`编码为 JSON 字符串，如果编码成功则发送，否则丢弃。另外，Headers 的`键`必须为字符串格式，否则丢弃。
