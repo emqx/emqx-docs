@@ -172,3 +172,34 @@ specified path on all nodes.
 
 ![image](./assets/rule-engine/kafka_resource_0_2.png)
 
+## Kafka Headers
+
+Starting from EMQX Enterprise Version 4.4.15, the Kafka action supports Kafka Headers:
+
+![image](./assets/rule-engine/kafka_action_headers_en.png)
+
+Three fields are added as shown in the figure: `Kafka Headers`, `More Kafka headers`, and `Kafka headers value encode mode`.
+
+### Kafka Headers:
+
+This field is used to directly send a variable output by the rule as Kafka Headers. This field is optional.
+
+For example, we can fill in `${pub_props}`, so for the rules that handles MQTT messages, the Kafka action will send all PUBLISH Properties of the MQTT message as Kafka Headers.
+
+### More Kafka headers:
+
+This field provides a method to add one or more Kafka headers in the form of key-value pairs. The key and value can use placeholders in the format of `${var}`. This field is optional.
+
+For example, we can add a key-value pair with key `clientid` and value `${clientid}`. When a MQTT client with the client ID `foo` triggers the action, it will send out a Kafka header `clientid: foo`.
+
+### Kafka headers value encode mode:
+
+According to the [specification](https://cwiki.apache.org/confluence/display/KAFKA/KIP-82+-+Add+Record+Headers), the key of Kafka Headers must be in string format(utf8), and its value must be in binary or string format.
+
+So if the specified key in the "Kafka Headers" and "More Kafka Headers" fields is not in string format, or the specified value is not in binary or string format, the Kafka action of EMQX needs to do something before sending the headers out.
+
+There're optional values: `NONE` or `JSON`:
+
+- NONE: Only headers with a string key and a binary or string value will be sent, all headers with other key and value formats will be discarded.
+
+- JSON: Before sending any headers, try to encode the `value` to a JSON string. If the encoding is successful then send it, otherwise discard it. In addition, the `key` must be in string format, otherwise it will be discarded.
