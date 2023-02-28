@@ -115,7 +115,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 {% emqxee %}
 
-2. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
+1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
 
 ```bash
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
@@ -125,15 +125,15 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
 
-3. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
-   默认用户名及密码：
+默认用户名及密码：
 
-   `admin`
+`admin`
 
-   `public`
+`public`
 
-   <!--后续补上 dashboard的截图-->
+<!--后续补上 dashboard的截图-->
 
 :::
 
