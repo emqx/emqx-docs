@@ -1930,13 +1930,22 @@ Whether to allow clients under this zone to bypass the authentication step of th
 
 #### Description
 
-Configure the listening address of the MQTT / TCP listener named `external`.
+Configure the listening address of the MQTT / TCP listener named `external`, both IPv4 and IPv6 are supported.
 
 #### Example
 
 `1883`: monitors IPv4 `0.0.0.0: 1883`.
 `127.0.0.1: 1883`: monitor address is `1883` port on the `127.0.0.1` network card.
 `:: 1: 1883`: monitors the IPv6 address as `1883` port on the `:: 1` network card.
+
+To configure an IPv4 address, you may refer to: 
+
+- `0.0.0.0:1883`: Monitor the activities of all IPs on port  `1883`.
+- `127.0.0.1:1883`: Monitor all activities from IP `127.0.0.1` on port  `1883`.
+
+To configure an IPv6 address, you may refer to: 
+
+- `::1:1883`: Monitor all activities from IP `::1` on port  `1883`.
 
 
 
