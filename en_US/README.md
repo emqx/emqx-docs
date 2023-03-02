@@ -54,7 +54,7 @@ The following is a list of features of EMQX Open Source and Enterprise Edition.
 | **Items**                         | **EMQX Open Source**                                        | **EMQX Enterprise**                                         |
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
 | **Positioning**                   | The world’s #1 open source MQTT broker                      | The reliable and scalable enterprise MQTT platform          |
-| **Scalability**                   | < 1M MQTT connections per cluster                           | Up to 100M MQTT connections per cluster                     |
+| **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100M MQTT connections per cluster                     |
 | **Performance**                   | < 100k MQTT messages per second                             | 5M+ MQTT messages per second                                |
 | **Reliability**                   | Data storage in memory                                      | Data persistence in RocksDB                                 |
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
@@ -87,7 +87,7 @@ The following is a list of features of EMQX Open Source and Enterprise Edition.
 | **Items**                         | **EMQX Enterprise**                                         | **EMQX Open Source**                                        |
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
 | **Positioning**                   | The reliable and scalable enterprise MQTT platform          | The world’s #1 open source MQTT broker                      |
-| **Scalability**                   | Up to 100M MQTT connections per cluster                     | < 1M MQTT connections per cluster                           |
+| **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100M MQTT connections per cluster                     |
 | **Performance**                   | 5M+ MQTT messages per second                                | < 100k MQTT messages per second                             |
 | **Reliability**                   | Data persistence in RocksDB                                 | Data storage in memory                                      |
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
