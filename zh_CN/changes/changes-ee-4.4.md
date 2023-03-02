@@ -1,5 +1,101 @@
 # 版本发布
 
+## v4.4.15
+
+*发布日期: 2023-03-03*
+
+本次版本更新包含了 16 个增强和 21 个修复。比较重要的功能增强有：
+
+- 升级 EMQX 的 MongoDB 客户端库，支持 MongoDB 5.1 及以上版本。
+- Dashboard 支持 HAProxy 的 Proxy Protocol。
+- 发布 Ubuntu 22.04 安装包。
+
+### 增强
+
+- 规则引擎支持 Kafka headers [#1727](https://github.com/emqx/emqx-enterprise/pull/1727)。
+
+- 支持使用规则引擎写入数据到 IoTDB [#1691](https://github.com/emqx/emqx-enterprise/pull/1691)。
+
+- JT/T 808 兼容非标准的位置上报报文。在用户使用保留 ID 来上报位置时 EMQX 会将其按 Base64 的格式透传，而不是断开客户端连接 [#1707](https://github.com/emqx/emqx-enterprise/pull/1707)。
+
+- 在 emqx_modules 应用程序启动时，仅仅在本地创建 EMQX 模块 [#1712](https://github.com/emqx/emqx-enterprise/pull/1712)。
+  在此之前，当 emqx_modules 应用程序启动时，我们向所有节点发送 RPC 以创建或重新创建模块，因此最终我们在所有节点上创建了 N^2 次模块（每个节点上创建N次）。
+
+- 改进当 DynamoDB 动作找不到 `hash_key` 或者 `range_key` 时的错误日志打印 [#1721](https://github.com/emqx/emqx-enterprise/pull/1721)。
+
+- HStreamDB 驱动程序更新以支持 HStreamDB ~> 0.12.0 [#1674](https://github.com/emqx/emqx-enterprise/pull/1674)。
+
+- 编解码插件将作为规则引擎的可选功能默认启用 [#1737](https://github.com/emqx/emqx-enterprise/pull/1737)。
+
+- 添加了 TLS 连接 HStreamDB 支持 [#1756](https://github.com/emqx/emqx-enterprise/pull/1756)
+
+- MongoDB 库已升级至支持 MongoDB 5.1 及以上版本 [#9707](https://github.com/emqx/emqx/pull/9707)。
+
+- 现在 Dashboard 支持 HAProxy 的 Proxy Protocol 了 [9803](https://github.com/emqx/emqx/pull/9803)。
+
+- 发布 Ubuntu 22.04 安装包 [#9831](https://github.com/emqx/emqx/pull/9831)。
+
+- 增强 `封禁` 和 `延迟消息` 这两个功能的集成性 [#9790](https://github.com/emqx/emqx/pull/9790)。
+  现在发送延迟消息前，会先检查消息的来源客户端是否被封禁了，如果是，这条延迟消息将会被忽略。
+
+- 增强 `保留消息` 的安全性 [#9790](https://github.com/emqx/emqx/pull/9790)。
+  现在投递保留消息前，会先过滤掉来源客户端被封禁了的那些消息。
+
+- 现在客户端通过 `clientid` 被封禁时将会踢掉对应的会话 [#9904](https://github.com/emqx/emqx/pull/9904)。
+
+- 为认证和授权添加了更多调试日志 [#9943](https://github.com/emqx/emqx/pull/9943)。
+
+- 将统计数据 `live_connections.count` 和 `live_connections.max` 公开给 Prometheus [#9929](https://github.com/emqx/emqx/pull/9929)。
+
+### 修复
+
+- 修复 `tlsv1.3` 在模块（Stomp 网关、GB/T 32960 网关、JT/T808 网关、扩展协议、TCP 网关、MQTT 订阅者）的 `tls_versions` 标签中缺失的问题 [#1732](https://github.com/emqx/emqx-enterprise/pull/1732)。
+
+- 修复使用 Redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题 [#1739](https://github.com/emqx/emqx-enterprise/pull/1739)。
+
+- 修复 EMQX 重启之后，初始化失败的模块被禁用的问题 [#1738](https://github.com/emqx/emqx-enterprise/pull/1738)。
+
+- 修复资源和动作里的一些描述错误 [#1729](https://github.com/emqx/emqx-enterprise/pull/1729)。
+
+- 修复热升级后，Oracle 资源没有办法自动重连的问题 [#1715](https://github.com/emqx/emqx-enterprise/pull/1715)。
+
+- 修复通过规则引擎发送消息到 RocketMQ 集群失败的问题 [#1724](https://github.com/emqx/emqx-enterprise/pull/1724)。
+
+- 在集群中使用 API 创建已存在的监听器时返回失败 [#1598](https://github.com/emqx/emqx-enterprise/pull/1598)。
+
+- 在 `资源/模块/编解码` 删除时清理其文件目录以防止文件泄露 [#1754](https://github.com/emqx/emqx-enterprise/pull/1754)。
+
+- 修复使用 `消息重发布` 动作转发带 User-Property 的 MQTT 消息时出错的问题 [#9942](https://github.com/emqx/emqx/pull/9942)。
+
+- 修复资源、动作以及模块里的一些描述错误 [#9931](https://github.com/emqx/emqx/pull/9931)。
+
+- 修复请求 JWKS 服务失败的时候，没有日志打印的问题 [#9931](https://github.com/emqx/emqx/pull/9931)。
+
+- 使用 HTTP API `GET /api/v4/clients?_page=2&_limit=20` 请求客户端列表时，请求发送到不同的 EMQX 节点，返回的客户端列表可能不一致 [#9926](https://github.com/emqx/emqx/pull/9926)。
+
+- 修复版本热升级之后，新的 MQTT TLS 连接建立失败的问题 [#9810](https://github.com/emqx/emqx/pull/9810)。
+  详情见：[emqx/esockd#170](https://github.com/emqx/esockd/pull/170)
+
+- 修复 MQTT 报文的日志打印格式的问题 [#9858](https://github.com/emqx/emqx/pull/9858)。
+  在此修复之前，固定报文头的标志位（DUP）和后面的可变报文头的字段（ClientId）之间漏掉了一个逗号做分隔：
+  ```
+  2023-01-29T13:40:36.567692+08:00 [debug] 127.0.0.1:50393 [MQTT] RECV CONNECT(Q0, R0, D0ClientId=test_client, ... Password=undefined)
+  ```
+
+- 修复 CoAP 网关在收到负载均衡的心跳检查报文时产生的崩溃日志 [#9869](https://github.com/emqx/emqx/pull/9869)。
+
+- 修复会话关闭后，其持有的排他订阅主题没有被释放的问题 [#9868](https://github.com/emqx/emqx/pull/9868)。
+
+- 修复 Websocket 连接中断时日志报 `{case_clause,{error,closed}}` 错误的问题 [emqx/cowboy#8](https://github.com/emqx/cowboy/pull/8)。
+
+- 修复某些情况下，重启 EMQX 后规则无法自动启用的问题 [#9911](https://github.com/emqx/emqx/pull/9911)。
+
+- 修复停止 EMQX 的时候，日志出现 `{badarg,[{ets,lookup,[gproc,{shared, ...` 错误的问题 [#9919](https://github.com/emqx/emqx/pull/9919)。
+
+- 修复当客户端连接禁用 keepalive 时, 通过 HTTP API 更新其 keepalive 会崩溃的问题 [#9933](https://github.com/emqx/emqx/pull/9933)。
+
+- 在 `资源` 删除时清理其文件目录以防止文件泄露 [#10039](https://github.com/emqx/emqx/pull/10039)。
+
 ## e4.4.14
 
 *发布日期: 2023-01-06*
