@@ -12,22 +12,22 @@
 
 ### 增强
 
-- 规则引擎支持 Kafka headers [#1727](https://github.com/emqx/emqx-enterprise/pull/1727)。
+- 规则引擎支持 Kafka headers。
 
-- 支持使用规则引擎写入数据到 IoTDB [#1691](https://github.com/emqx/emqx-enterprise/pull/1691)。
+- 支持使用规则引擎写入数据到 IoTDB。
 
-- JT/T 808 兼容非标准的位置上报报文。在用户使用保留 ID 来上报位置时 EMQX 会将其按 Base64 的格式透传，而不是断开客户端连接 [#1707](https://github.com/emqx/emqx-enterprise/pull/1707)。
+- JT/T 808 兼容非标准的位置上报报文。在用户使用保留 ID 来上报位置时 EMQX 会将其按 Base64 的格式透传，而不是断开客户端连接。
 
-- 在 emqx_modules 应用程序启动时，仅仅在本地创建 EMQX 模块 [#1712](https://github.com/emqx/emqx-enterprise/pull/1712)。
+- 在 emqx_modules 应用程序启动时，仅仅在本地创建 EMQX 模块。
   在此之前，当 emqx_modules 应用程序启动时，我们向所有节点发送 RPC 以创建或重新创建模块，因此最终我们在所有节点上创建了 N^2 次模块（每个节点上创建N次）。
 
-- 改进当 DynamoDB 动作找不到 `hash_key` 或者 `range_key` 时的错误日志打印 [#1721](https://github.com/emqx/emqx-enterprise/pull/1721)。
+- 改进当 DynamoDB 动作找不到 `hash_key` 或者 `range_key` 时的错误日志打印。
 
-- HStreamDB 驱动程序更新以支持 HStreamDB ~> 0.12.0 [#1674](https://github.com/emqx/emqx-enterprise/pull/1674)。
+- HStreamDB 驱动程序更新以支持 HStreamDB ~> 0.12.0。
 
-- 编解码插件将作为规则引擎的可选功能默认启用 [#1737](https://github.com/emqx/emqx-enterprise/pull/1737)。
+- 编解码插件将作为规则引擎的可选功能默认启用。
 
-- 添加了 TLS 连接 HStreamDB 支持 [#1756](https://github.com/emqx/emqx-enterprise/pull/1756)
+- 添加了 TLS 连接 HStreamDB 支持。
 
 - MongoDB 库已升级至支持 MongoDB 5.1 及以上版本 [#9707](https://github.com/emqx/emqx/pull/9707)。
 
@@ -49,21 +49,21 @@
 
 ### 修复
 
-- 修复 `tlsv1.3` 在模块（Stomp 网关、GB/T 32960 网关、JT/T808 网关、扩展协议、TCP 网关、MQTT 订阅者）的 `tls_versions` 标签中缺失的问题 [#1732](https://github.com/emqx/emqx-enterprise/pull/1732)。
+- 修复 `tlsv1.3` 在模块（Stomp 网关、GB/T 32960 网关、JT/T808 网关、扩展协议、TCP 网关、MQTT 订阅者）的 `tls_versions` 标签中缺失的问题。
 
-- 修复使用 Redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题 [#1739](https://github.com/emqx/emqx-enterprise/pull/1739)。
+- 修复使用 Redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题。
 
-- 修复 EMQX 重启之后，初始化失败的模块被禁用的问题 [#1738](https://github.com/emqx/emqx-enterprise/pull/1738)。
+- 修复 EMQX 重启之后，初始化失败的模块被禁用的问题。
 
-- 修复资源和动作里的一些描述错误 [#1729](https://github.com/emqx/emqx-enterprise/pull/1729)。
+- 修复资源和动作里的一些描述错误。
 
-- 修复热升级后，Oracle 资源没有办法自动重连的问题 [#1715](https://github.com/emqx/emqx-enterprise/pull/1715)。
+- 修复热升级后，Oracle 资源没有办法自动重连的问题。
 
-- 修复通过规则引擎发送消息到 RocketMQ 集群失败的问题 [#1724](https://github.com/emqx/emqx-enterprise/pull/1724)。
+- 修复通过规则引擎发送消息到 RocketMQ 集群失败的问题。
 
-- 在集群中使用 API 创建已存在的监听器时返回失败 [#1598](https://github.com/emqx/emqx-enterprise/pull/1598)。
+- 在集群中使用 API 创建已存在的监听器时返回失败。
 
-- 在 `资源/模块/编解码` 删除时清理其文件目录以防止文件泄露 [#1754](https://github.com/emqx/emqx-enterprise/pull/1754)。
+- 在 `资源/模块/编解码` 删除时清理其文件目录以防止文件泄露。
 
 - 修复使用 `消息重发布` 动作转发带 User-Property 的 MQTT 消息时出错的问题 [#9942](https://github.com/emqx/emqx/pull/9942)。
 
@@ -198,7 +198,7 @@
 *发布日期: 2022-11-26*
 
 本次版本更新包含了 23 个增强和 21 个修复。
-在这些增强中，下面几个新功能值重点介绍：
+在这些增强中，下面几个新功能值得重点介绍：
 
 - 规则引擎的数据桥接新增 Google PubSub 的集成。
 - 新增 OCSP (Online Certificate Status Protocol) Stapling。
