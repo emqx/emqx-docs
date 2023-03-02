@@ -15,7 +15,7 @@ This chapter will introduce how to deploy EMQX clusters under this new architect
 
 [Mria](https://github.com/emqx/mria) is an open source extension to Mnesia that adds eventual consistency to clusters. With RLOG mode enabled, Mria switched from **a full mesh** topology to a **mesh+star** topology. Each node assumes one of two roles: **core node** or **replicant node**.
 
-![EMQX Mria](./assets/EMQX Mria architecture.png)
+<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 25%;" />
 
 ### Core nodes and Replicant nodes
 
