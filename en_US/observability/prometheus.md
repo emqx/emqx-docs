@@ -32,7 +32,17 @@ prometheus {
 ```
 ## Configure with EMQX Dashboard
 
+{% emqxce %}
+
 Since EMQX 5.0.4, you can use EMQX Dashboard for configuration. In the EMQX Dashboard, click **Configuration** -> **Monitoring** on the left navigation tree, then click the **Integration** tab for the configuration, which takes effect immediately after saving without needing to restart the node.
+
+{% endemqxce %}
+
+{% emqxee %}
+
+You can use EMQX Dashboard to configure mornitoring data integration to Prometheus platform. In the EMQX Dashboard, click **Configuration** -> **Monitoring** on the left navigation tree, then click the **Integration** tab for the configuration.
+
+{% endemqxee %}
 
 
 ## Use Grafana to visualize EMQX metrics
