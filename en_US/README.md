@@ -84,7 +84,7 @@ The following is a list of features of EMQX Open Source and Enterprise Edition.
 
 {% emqxee %}
 
-| **Items**                         | **EMQX Open Source**                                        | **EMQX Enterprise**                                         |
+| **Items**                         | **EMQX Enterprise**                                         | **EMQX Open Source**                                        |
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
 | **Positioning**                   | The reliable and scalable enterprise MQTT platform          | The world’s #1 open source MQTT broker                      |
 | **Scalability**                   | Up to 100M MQTT connections per cluster                     | < 1M MQTT connections per cluster                           |
