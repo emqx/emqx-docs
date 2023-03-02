@@ -55,7 +55,7 @@ The following is a list of features of EMQX Open Source and Enterprise Edition.
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
 | **Positioning**                   | The world’s #1 open source MQTT broker                      | The reliable and scalable enterprise MQTT platform          |
 | **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100M MQTT connections per cluster                     |
-| **Performance**                   | < 100k MQTT messages per second                             | 5M+ MQTT messages per second                                |
+| **Performance**                   | 5M+ MQTT messages per second                                | 5M+ MQTT messages per second                                |
 | **Reliability**                   | Data storage in memory                                      | Data persistence in RocksDB                                 |
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
 | **SLA**                           | 99.99%                                                      | Up to 99.999%                                               |
@@ -88,7 +88,7 @@ The following is a list of features of EMQX Open Source and Enterprise Edition.
 | :-------------------------------- | :---------------------------------------------------------- | :---------------------------------------------------------- |
 | **Positioning**                   | The reliable and scalable enterprise MQTT platform          | The world’s #1 open source MQTT broker                      |
 | **Scalability**                   | Up to 100M MQTT connections per cluster                     | Up to 100M MQTT connections per cluster                     |
-| **Performance**                   | 5M+ MQTT messages per second                                | < 100k MQTT messages per second                             |
+| **Performance**                   | 5M+ MQTT messages per second                                | 5M+ MQTT messages per second                                |
 | **Reliability**                   | Data persistence in RocksDB                                 | Data storage in memory                                      |
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
 | **SLA**                           | Up to 99.999%                                               | 99.99%                                                      |
