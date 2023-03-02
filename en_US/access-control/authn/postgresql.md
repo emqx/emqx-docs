@@ -64,7 +64,7 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for password authe
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **PostgreSQL** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
 
-![PostgreSQL](./assets/authn-postgresql.png)
+<!--Add snapshot later@Meggielqk-->
 
 Follow the instruction below on how to configure:
 
@@ -77,10 +77,9 @@ Follow the instruction below on how to configure:
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-**Connection Configuration**: In this section, we will set the concurrent connections and auto reconnect.
+**Connection Configuration**: In this section, we will set the concurrent connections.
 
 - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
-- **Reconnect**: Specify whether EMQX automatically reconnects to PostgreSQL when the connection is broken; Options: **True** (automatic reconnection), **False** (no automatic reconnection); Default value: **True**.
 
 **Authentication configuration**: In this section, we will fill in the authentication-related settings:
 

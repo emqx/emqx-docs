@@ -102,7 +102,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 
 节点发现是创建集群的必要过程，它允许单个 EMQX 节点发现对方并互相通信，无论其位置或 IP 地址如何。
 
-EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
+EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
 
 EMQX 支持多种节点发现策略：
 
@@ -188,7 +188,7 @@ cluster {
 
 [etcd](https://etcd.io/) 是 CoreOS 发起的开源项目，etcd 的应用场景多间于服务发现，解决分布式系统中同一个集群的进程之间如何相互发现并建立连接的问题，这个功能正是 EMQX 自动集群所需要的。
 
-当网络中存在 etcd 服务器（集群）的时候，EMQ X 集群可以使用 ectd 的方式自动建立集群。安装和配置 etcd 服务集群请参考 [etcd install](https://etcd.io/docs/latest/install/)。
+当网络中存在 etcd 服务器（集群）的时候，EMQX 集群可以使用 ectd 的方式自动建立集群。安装和配置 etcd 服务集群请参考 [etcd install](https://etcd.io/docs/latest/install/)。
 
 **配置 ectd**
 
@@ -221,7 +221,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 ## 基于 kubernetes 自动集群
 
-[Kubernetes（K8s）](https://kubernetes.io) 是 Google 的开源容器集群管理系统，是一个完备的分布式系统支撑平台，EMQ X 可以使用 kubernetes 的服务发现功能组建集群。
+[Kubernetes（K8s）](https://kubernetes.io) 是 Google 的开源容器集群管理系统，是一个完备的分布式系统支撑平台，EMQX 可以使用 kubernetes 的服务发现功能组建集群。
 
 您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 K8s 上的服务名，地址类型:
 
