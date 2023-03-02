@@ -57,7 +57,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `MySQL`，进入**配置参数**页签：
 
-<!--后续补充截图@Meggielqk-->
+![Authentication with mysql](./assets/authn-mysql.png)
 
 您可按照如下说明完成相关配置：
 
@@ -92,8 +92,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 - **SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
 
-<!-- 
-TODO 补充链接
 ### 通过配置文件配置
 
-您也可以通过配置文件完成以上配置，具体操作，请参考 xxxx -->
+您也可以通过配置文件完成以上配置，具体操作，请参考[配置手册](../../configuration/configuration-manual)。
+
+<!--后续补充示例代码 @Lena -->
