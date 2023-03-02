@@ -1,5 +1,49 @@
 # Releases
 
+## e4.3.19
+
+*Release Date: 2023-03-03*
+
+### Enhancements
+
+- Add TCP keepalive configuration for Kafka client.
+
+- Improve error messages in the dashboard when adding users to the internal auth database.
+
+- The plugin `schema_registry` will be enabled by default as an optional feature of `rule_engine`.
+
+### Bug fixes
+
+- Fix the problem that new MQTT TLS connections failed to establish after release hot upgrade.
+  For more detailed information please see: [emqx/esockd#170](https://github.com/emqx/esockd/pull/170).
+
+- fix the issue that produce messages to RocketMQ cluster using rule-engine failed.
+
+- fix some issues in descriptions of the actions, resources amd emqx-modules.
+
+- fix there's no error logs when query the JWKS server failed.
+
+- Fixed an error when forward MQTT messages with User-Property using the `republish` action.
+
+- Fix the problem of sending offline messages to clients in reverse order when using redis-offline-message feature.
+
+- Fix the problem that the same request sent to different EMQX nodes returns inconsistent results when sending the HTPT API to get the client list in paging mode.
+  Before this change, different lists of clients will be returned if one sends
+  'GET http://localhost:8081/api/v4/clients?_page=1&_limit=1000' to different
+  EMQX nodes in the cluster.
+
+- When uploading a license, now EMQX will always reload the license, to avoid the case where an user replaces the current license file with new contents.
+
+- Only create EMQX modules locally when the emqx_modules application is started.
+  Before this change, we RPC to all the nodes to create/recreate modules when emqx_modules application
+  get started, so finally we created modules N^2 times on all the nodes (N times on each node).
+
+- Password format for new dashboard users is no longer limited to ^[A-Za-z0-9]+[A-Za-z0-9-_]*$.
+
+- Returning a failure when creating an existing listener in a cluster using the API.
+
+- Delete the files directory when `resources/modules/schema_registry` were deleted to avoid files leaking.
+
 ## e4.3.18
 
 *Release Date: 2022-12-29*
