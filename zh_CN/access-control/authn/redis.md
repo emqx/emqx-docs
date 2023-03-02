@@ -39,7 +39,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `Redis`，进入**配置参数**页签：
 
-<!--后续补充图片@Meggielqk-->
+![Authentication with redis](./assets/authn-redis.png)
 
 您可按照如下说明完成相关配置：
 
