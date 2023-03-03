@@ -19,7 +19,7 @@
 
 ::: tab amd64
 
-1. 下载 [emqx-5.0.17-el8-amd64.rpm](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm)https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-el8-amd64.rpm)。
+1. 下载 [emqx-5.0.17-el8-amd64.rpm](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm)https://www.emqx.com/downloads/broker/v5.0.19/emqx-5.0.19-el8-amd64.rpm)。
 
    ```
    wget https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm

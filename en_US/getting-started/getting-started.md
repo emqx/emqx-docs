@@ -150,13 +150,13 @@ Note: Considering all the runtime dependencies, it is recommended to use zip/tar
 1. To download the zip file, enter:
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.14/emqx-5.0.14-macos11-amd64.zip
+   wget https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-macos11-amd64.zip
    ```
 
 2. To install EMQX, enter:
 
    ```bash
-   mkdir -p emqx && unzip emqx-5.0.14-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-5.0.19-macos11-amd64.zip -d emqx
    ```
 
 {% endemqxce %}
