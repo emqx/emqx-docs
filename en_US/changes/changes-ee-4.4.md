@@ -1,5 +1,104 @@
 # Releases
 
+## v4.4.15
+
+*Release Date: 2023-03-03*
+
+This version update includes 16 enhancements and 21 fixes.
+Among the enhancements, therer are new exciting new features worth highlighting:
+
+- Upgrade the MongoDB client library of EMQX to support MongoDB 5.1 and above.
+- Dashboard supports the proxy protocol of HAProxy.
+- Release the Ubuntu 22.04 installation package.
+
+### Enhancements
+
+- Support Kafka headers in rule engine.
+
+- Support storing data to IoTDB using rule-engine.
+
+- The JT/T 808 compatible non-standard location reporting messages. When a user uses a reserved ID to report a location, EMQX will pass it through in Base64 format instead of disconnecting the client.
+
+- Only create EMQX modules locally when the emqx_modules application is started.
+  Before this change, we RPC to all the nodes to create/recreate modules when emqx_modules application
+  get started, so finally we created modules N^2 times on all the nodes (N times on each node).
+
+- Improve the log message when the DynamoDB action cannot find the `hash_key` or `range_key`.
+
+- HStreamDB driver update to support HStreamDB ~> 0.12.0.
+
+- The plugin `schema_registry` will be enabled by default as an optional feature of `rule_engine`.
+
+- Add TLS connections support for HStreamDB action.
+
+- The MongoDB library has been upgraded to support MongoDB version 5.1 and greater.
+
+- Support proxy protocol of HAProxy for dashboard API [9803](https://github.com/emqx/emqx/pull/9803).
+
+- Added Ubuntu 22.04 package release [#9831](https://github.com/emqx/emqx/pull/9831).
+
+- Improve the integration of the `banned` and the `delayed` feature [#9790](https://github.com/emqx/emqx/pull/9790).
+  Now when publishing a delayed message will check first if its source client is banned, if true, this publish will be ignored.
+
+- Security enhancement for retained messages [#9790](https://github.com/emqx/emqx/pull/9790).
+  The retained messages will not be published if the publisher client is banned.
+
+- Now the corresponding session will be kicked when client is banned by `clientid` [#9904](https://github.com/emqx/emqx/pull/9904).
+
+- Add more debug logs for authentication and ACL [#9943](https://github.com/emqx/emqx/pull/9943).
+
+- Expose the stats `live_connections.count` and `live_connections.max` to Prometheus [#9929](https://github.com/emqx/emqx/pull/9929).
+
+### Bug fixes
+
+- Fixed `tlsv1.3` is missing from Module(Stomp Gateway, GB/T 32960 Gateway, JT/T808 Gateway, Extension Protocol, TCP Gateway, MQTT Subscriber) `tls_versions` tab.
+
+- Fix the problem of sending offline messages to clients in reverse order when using Redis offline message feature.
+
+- fix the emqx-modules are disabled if their initialization failed after EMQX is restarted.
+
+- fix some issues in descriptions of the actions and resources.
+
+- fix the issue that Oracle resources cannot get connected automatically after release hot upgrade.
+
+- fix the issue that produce messages to RocketMQ cluster using rule-engine failed.
+
+- Returning a failure when creating an existing listener in a cluster using the API.
+
+- Delete the files directory when `resources/modules/schema_registry` were deleted to avoid files leaking.
+
+- Fixed an error when forward MQTT messages with User-Property using the `republish` action [#9942](https://github.com/emqx/emqx/pull/9942).
+
+- fix some issues in descriptions of the actions, resources amd emqx-modules [#9931](https://github.com/emqx/emqx/pull/9931).
+
+- fix there's no error logs when query the JWKS server failed [#9931](https://github.com/emqx/emqx/pull/9931).
+
+- The returned client lists of HTTP query `GET /api/v4/clients?_page=2&_limit=20` to different nodes might be inconsistent [#9926](https://github.com/emqx/emqx/pull/9926).
+
+- Fix the problem that new MQTT TLS connections failed to establish after release hot upgrade [#9810](https://github.com/emqx/emqx/pull/9810).
+  For more detailed information please see: [emqx/esockd#170](https://github.com/emqx/esockd/pull/170).
+
+- Fix a problem in the log message format of MQTT packets [#9858](https://github.com/emqx/emqx/pull/9858).
+  Before this fix, a comma was missing between the flags (DUP) of the fixed header
+  and the fields (ClientId) of the variable header:
+  ```
+  2023-01-29T13:40:36.567692+08:00 [debug] 127.0.0.1:50393 [MQTT] RECV CONNECT(Q0, R0, D0ClientId=test_client, ... Password=undefined)
+  ```
+
+- Avoid crash logs in CoAP gateway when receiving liveness checking packets from Load Balancer [#9869](https://github.com/emqx/emqx/pull/9869).
+
+- Fix the exclusive topics aren't removed when the session has already been cleaned [#9868](https://github.com/emqx/emqx/pull/9868).
+
+- fix the EMQX reports `{case_clause,{error,closed}}` error log message when websocket connections interrupted [emqx/cowboy#8](https://github.com/emqx/cowboy/pull/8).
+
+- fix sometimes the rules cannot be enabled automatically after EMQX is restarted [#9911](https://github.com/emqx/emqx/pull/9911).
+
+- fix the `{badarg,[{ets,lookup,[gproc,{shared, ...` error logs during shutdown [#9919](https://github.com/emqx/emqx/pull/9919).
+
+- Fix crash when updating a client's keepalive via the HTTP API if it connects with keepalive disabled [#9933](https://github.com/emqx/emqx/pull/9933).
+
+- Delete the files directory when `resources` were deleted to avoid files leaking [#10039](https://github.com/emqx/emqx/pull/10039).
+
 ## e4.4.14
 
 *Release Date: 2023-01-06*
