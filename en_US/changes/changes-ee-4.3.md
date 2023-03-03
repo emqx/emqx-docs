@@ -25,7 +25,7 @@
 
 - Fixed an error when forward MQTT messages with User-Property using the `republish` action.
 
-- Fix the problem of sending offline messages to clients in reverse order when using redis-offline-message feature.
+- Fix the problem of sending offline messages to clients in reverse order when using Redis offline message feature.
 
 - Fix the problem that the same request sent to different EMQX nodes returns inconsistent results when sending the HTPT API to get the client list in paging mode.
   Before this change, different lists of clients will be returned if one sends
@@ -283,7 +283,7 @@
 - Fixed Redis resource liveness problem issue. Prior to this fix, the resource is considered alive when connection can be established.
   The fix is to perform a PING query to make sure the service is alive.
 
-- Fix the redis-cluster resource prints too many error logs when redis servers are not avaliable.
+- Fix the redis-cluster resource prints too many error logs when Redis servers are not avaliable.
 
 - Fixed an internal Redis resource ID clashing. This clashing may cause resources in use getting deleted when deleting another resource.
 
@@ -291,9 +291,9 @@
 
 - Fix HTTP client library to handle SSL socket passive signal [#9145](https://github.com/emqx/emqx/pull/9145).
 
-- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071).
-  More changes in redis client included in this release:
-  - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
+- Hide Redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071).
+  More changes in Redis client included in this release:
+  - Improve Redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
     Also added support for eredis to accept an anonymous function as password instead of
     passing around plaintext args which may get dumpped to crash logs (hard to predict where).
     This change also added `format_status` callback for `gen_server` states which hold plaintext

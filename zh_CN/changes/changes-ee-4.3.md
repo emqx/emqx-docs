@@ -25,7 +25,7 @@
 
 - 修复使用 `消息重发布` 动作转发带 User-Property 的 MQTT 消息时出错的问题。
 
-- 修复使用 redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题。
+- 修复使用 Redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题。
 
 - 修复以分页的方式获取 HTPT API 获取客户端列表时，同样的请求发送到不同的 EMQX 节点返回的结果不一致的问题。
   在此修改之前，发送 'GET http://localhost:8081/api/v4/clients?_page=1&_limit=1000' 请求
@@ -38,7 +38,7 @@
 
 - Dashboard 新用户密码格式不再限制为 ^[A-Za-z0-9]+[A-Za-z0-9-_]*$。
 
-- 在集群中使用API创建已存在的监听器时返回失败。
+- 在集群中使用 API 创建已存在的监听器时返回失败。
 
 - 在 `资源/模块/编解码` 删除时清理其文件目录以防止文件泄露。
 
@@ -262,7 +262,7 @@
   QoS 0 的消息不会被保存到后端数据库中而是会被丢弃。
   在此次修复前，消息虽然被丢弃了，但是保存成功的计数器仍然计数，已修复为失败计数。
 
-- 规则引擎增加 SSL 连接 redis 时的 “是否校验服务器证书” 选项。
+- 规则引擎增加 SSL 连接 Redis 时的 “是否校验服务器证书” 选项。
 
 - 修复 Redis 资源探活逻辑。本次修复前，Redis 资源连接成功即被认为可用。
   本次修复方法是尝试做一个 PING 查询来检查资源是否可用。
@@ -275,7 +275,7 @@
 
 - 修复 HTTP 客户端库启用 SSL 后 Socket 可能会进入 passive 状态 [#9145](https://github.com/emqx/emqx/pull/9145)。
 
-- 隐藏 redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)。
+- 隐藏 Redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)。
   也包含了如下一些改进：
   - 修复一些其他可能导致密码泄漏的隐患 [eredis#19](https://github.com/emqx/eredis/pull/19)。
   - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
