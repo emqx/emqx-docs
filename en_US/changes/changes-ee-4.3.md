@@ -27,12 +27,12 @@
 
 - Fix the problem of sending offline messages to clients in reverse order when using Redis offline message feature.
 
-- Fix the problem that the same request sent to different EMQX nodes returns inconsistent results when sending the HTPT API to get the client list in paging mode.
+- Fix the problem that the same request sent to different EMQX nodes returns inconsistent results when sending the HTTP API to get the client list in paging mode.
   Before this change, different lists of clients will be returned if one sends
   'GET http://localhost:8081/api/v4/clients?_page=1&_limit=1000' to different
   EMQX nodes in the cluster.
 
-- When uploading a license, now EMQX will always reload the license, to avoid the case where an user replaces the current license file with new contents.
+- When uploading a license, now EMQX will always reload the license, to avoid the case where a user replaces the current license file with new contents.
 
 - Only create EMQX modules locally when the emqx_modules application is started.
   Before this change, we RPC to all the nodes to create/recreate modules when emqx_modules application
