@@ -207,9 +207,13 @@ To uninstall EMQX after your testing, you only need to delete the EMQX folders.
 
 ::::
 
-Now that we have successfully started EMQX, we can continue to test the connection and message services with the built-in Dashboard WebSocket tool. 
+Now that we have successfully started EMQX, we can continue to test the connection and message services with MQTT X. 
 
-## Verify the connection
+## Use MQTT X to verify the connection
+
+[MQTT X](https://mqttx.app/zh) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
+
+This section will introduce how to verify the connection with MQTT X Web, the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
 
 ::: tip Prerequisites
 The broker address and the port information should be prepared before testing the connection:
@@ -217,14 +221,6 @@ The broker address and the port information should be prepared before testing th
 - Broker address: The IP address of your server, in general.
 - Port: Click **Configuration** -> **Listeners** on the left navigation menu to get the port number.
 :::
-
-:::: tabs type:card
-
-::: tab Use MQTT X Web to verify
-
-[MQTT X](https://mqttx.app/zh) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
-
-Besides you can also start with [MQTT X Web](https://mqttx.app/zh/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. This section will introduce how to verity the connection to EMQX with MQTT X Web.  
 
 
 1. Click [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTT X.
@@ -251,26 +247,6 @@ Besides you can also start with [MQTT X Web](https://mqttx.app/zh/web), the brow
 ![MQTT X Web test](./assets/MQTTXWeb-test.png)
 
 If you'd like to continue the testing, such as one-way/two-way SSL authentication and simulate test data with customized scripts, you can continue to explore with [MQTT X](https://mqttx.app). 
-
-:::
-
-::: tab Use Dashboard WebSocket to verify the connection
-
-EMQX supports standard MQTT protocols, including MQTT over WebSocket. After startup, you can directly connect your MQTT clients to EMQX.  This section will illustrate how to use the Dashboard WebSocket tool to connect EMQX to verify the messaging services. 
-
-In the **Dashboard** page, click **Diagnose** -> **WebSocket Client** on the left navigation bar to access the **WebSocket Client** page. Then you can connect the client with EMQX, subscribe to certain topics, and verify the messaging services. 
-
-1. Connect the client with EMQX. Click the **Connect** button on the right side of the screen, and you will be prompted that the connection is successfully established. 
-
-2. Subscribe to topics:  Click the **Subscribe** button in the middle of the screen to subscribe to all messages under topic `testtopic/#` with QoS 0. You can continue to subscribe to more topics and test other QoS levels.
-
-3. Test the messaging services: Click the **Publish** button at the bottom of the screen, and a new message will appear in both the **Received** and **Published** dialog box, indicating the connection is successfully established. 
-
-   ![EMQX MQTT WebSocket connection](./assets/emqx-websocket.png)
-
-:::
-
-::::
 
 Then you can click **Dashboard** in the left navigation tree to return to the **Dashboard** page and check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**. 
 
