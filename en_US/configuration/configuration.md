@@ -1936,12 +1936,12 @@ Configure the listening address of the MQTT / TCP listener named `external`, bot
 
 To configure an IPv4 address, you may refer to: 
 
-- `0.0.0.0:1883`: Monitor the activities of all IPs on port  `1883`.
-- `127.0.0.1:1883`: Monitor all activities from IP `127.0.0.1` on port  `1883`.
+- `0.0.0.0:1883`: Listen to activities from all IPs on port  `1883`.
+- `127.0.0.1:1883`: Listen to all activities from IP `127.0.0.1` on port  `1883`.
 
 To configure an IPv6 address, you may refer to: 
 
-- `::1:1883`: Monitor all activities from IP `::1` on port  `1883`.
+- `::1:1883`: Listen to all activities from IP `::1` on port  `1883`.
 
 
 
@@ -2238,12 +2238,12 @@ Configure the listening address of the MQTT / TCP listener named `internal`, bot
 
  To configure an IPv4 address, you may refer to: 
 
-- `0.0.0.0:11883`: Monitor the activities of all IPs on port  `11883`.
-- `127.0.0.1:11883`: Monitor all activities from IP `127.0.0.1` on port  `11883`.
+- `0.0.0.0:11883`: Listen to activities from all IPs on port  `11883`.
+- `127.0.0.1:11883`: Listen to all activities from IP `127.0.0.1` on port  `11883`.
 
 To configure an IPv6 address, you may refer to: 
 
-- `::1:11883`: Monitor all activities from IP `::1` on port  `11883`.
+- `::1:11883`: Listen to all activities from IP `::1` on port  `11883`.
 
 
 
@@ -2444,12 +2444,12 @@ Configure an SSL listener named `external`, both IPv4 and IPv6 are supported.
 
 To configure an IPv4 address, you may refer to: 
 
-- `0.0.0.0:8883`: Monitor the activities of all IPs on port  `8883`.
-- `127.0.0.1:8883`: Monitor all activities from IP `127.0.0.1` on port  `8883`.
+- `0.0.0.0:8883`: Listen to activities from all IPs on port  `8883`.
+- `127.0.0.1:8883`: Listen to all activities from IP `127.0.0.1` on port  `8883`.
 
 To configure an IPv6 address, you may refer to: 
 
-- `::1:8883`: Monitor all activities from IP `::1` on port  `8883`.
+- `::1:8883`: Listen to all activities from IP `::1` on port  `8883`.
 
 
 
@@ -2921,12 +2921,12 @@ Configure the listening address of the MQTT/WS listener named `external`, both I
 
 To configure an IPv4 address, you may refer to: 
 
-- `0.0.0.0:8083`: Monitor the activities of all IPs on port  `8083`.
-- `127.0.0.1:8083`: Monitor all activities from IP `127.0.0.1` on port  `8083`.
+- `0.0.0.0:8083`: Listen to activities from all IPs on port  `8083`.
+- `127.0.0.1:8083`: Listen to all activities from IP `127.0.0.1` on port  `8083`.
 
 To configure an IPv6 address, you may refer to: 
 
-- `::1:8083`: Monitor all activities from IP `::1` on port  `8083`.
+- `::1:8083`: Listen to all activities from IP `::1` on port  `8083`.
 
 
 
@@ -3359,12 +3359,12 @@ Configure a WSS (MQTT/WebSocket/SSL) listener named `external`, both IPv4 and IP
 
 To configure an IPv4 address, you may refer to: 
 
-- `0.0.0.0:8084`: Monitor the activities of all IPs on port `8084`.
-- `127.0.0.1:8084`: Monitor all activities from IP `127.0.0.1` on port `8084`.
+- `0.0.0.0:8084`: Listen to activities from all IPs on port `8084`.
+- `127.0.0.1:8084`: Listen to all activities from IP `127.0.0.1` on port `8084`.
 
 To configure an IPv6 address, you may refer to: 
 
-- `::1:8084`: Monitor all activities from IP `::1` on port `8084`.
+- `::1:8084`: Listen to all activities from IP `::1` on port `8084`.
 
   
 
