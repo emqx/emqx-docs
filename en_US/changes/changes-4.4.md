@@ -5,7 +5,7 @@
 *Release Date: 2023-03-03*
 
 This version update includes 8 enhancements and 13 fixes.
-Among the enhancements, therer are new exciting new features worth highlighting:
+Among the enhancements, there are new exciting new features worth highlighting:
 
 - Upgrade the MongoDB client library of EMQX to support MongoDB 5.1 and above.
 - Dashboard supports the proxy protocol of HAProxy.
@@ -35,7 +35,7 @@ Among the enhancements, therer are new exciting new features worth highlighting:
 
 - Fixed an error when forward MQTT messages with User-Property using the `republish` action [#9942](https://github.com/emqx/emqx/pull/9942).
 
-- fix some issues in descriptions of the actions, resources amd emqx-modules [#9931](https://github.com/emqx/emqx/pull/9931).
+- fix some issues in descriptions of the actions, resources and emqx-modules [#9931](https://github.com/emqx/emqx/pull/9931).
 
 - fix there's no error logs when query the JWKS server failed [#9931](https://github.com/emqx/emqx/pull/9931).
 
