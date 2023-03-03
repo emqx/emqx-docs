@@ -1527,14 +1527,14 @@ Settings for the MQTT over QUIC listener.
   
   *Type*: `string`
 
-  Path to the certificate file.
+  Path to the certificate file. Will be deprecated in 5.1, use .ssl_options.certfile instead.
 
 
 **listeners.quic.$name.keyfile**
   
   *Type*: `string`
 
-  Path to the secret key file.
+  Path to the secret key file. Will be deprecated in 5.1, use .ssl_options.keyfile instead.
 
 
 **listeners.quic.$name.ciphers**
@@ -1599,6 +1599,13 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
   *Default*: `0`
 
   How often to send PING frames to keep a connection alive. 0 means disabled.
+
+
+**listeners.quic.$name.ssl_options**
+  
+  *Type*: `broker:listener_quic_ssl_opts`
+
+  TLS options for QUIC transport
 
 
 **listeners.quic.$name.enabled**
@@ -3010,7 +3017,7 @@ in the VM exceeds this value
   
   *Type*: `string`
 
-  *Default*: `[]`
+  *Default*: `""`
 
   Hostname of the PostgreSQL database that collects the data points
 
@@ -4017,7 +4024,7 @@ Configuration for the dashboard listener (plaintext).
   
   *Type*: `integer`
 
-  *Default*: `3`
+  *Default*: `2`
 
   Socket acceptor pool size for TCP protocols. Default is the number of schedulers online
 
@@ -4103,7 +4110,7 @@ Configuration for the dashboard listener (TLS).
   
   *Type*: `integer`
 
-  *Default*: `3`
+  *Default*: `2`
 
   Socket acceptor pool size for TCP protocols. Default is the number of schedulers online
 
@@ -4300,6 +4307,15 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
+
+
+**dashboard.listeners.https.hibernate_after**
+  
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **dashboard.listeners.https.dhfile**
@@ -7836,6 +7852,8 @@ topic filters for <code>remote.topic</code> of ingress connections.
   If enable bridge mode.
 NOTE: This setting is only for MQTT protocol version older than 5.0, and the remote MQTT
 broker MUST support this feature.
+If bridge_mode is set to true, the bridge will indicate to the remote broker that it is a bridge not an ordinary client.
+This means that loop detection will be more effective and that retained messages will be propagated correctly.
 
 
 **bridges.mqtt.$name.username**
@@ -9633,6 +9651,15 @@ RFC 5746 defines a more secure way of doing this. By enabling secure renegotiati
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
+**gateway:dtls_opts.hibernate_after**
+  
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
+
+
 **gateway:dtls_opts.dhfile**
   
   *Type*: `string`
@@ -10118,6 +10145,15 @@ RFC 5746 defines a more secure way of doing this. By enabling secure renegotiati
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
+**gateway.exproto.server.ssl_options.hibernate_after**
+  
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
+
+
 **gateway.exproto.server.ssl_options.dhfile**
   
   *Type*: `string`
@@ -10508,6 +10544,15 @@ RFC 5746 defines a more secure way of doing this. By enabling secure renegotiati
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
+**exhook.servers.$INDEX.ssl.hibernate_after**
+  
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
+
+
 **exhook.servers.$INDEX.ssl.enable**
   
   *Type*: `boolean`
@@ -10681,6 +10726,15 @@ RFC 5746 defines a more secure way of doing this. By enabling secure renegotiati
 you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
+**ssl_client_opts.hibernate_after**
+  
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
+
+
 **ssl_client_opts.enable**
   
   *Type*: `boolean`
@@ -10850,6 +10904,15 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
+
+
+**listener_ssl_opts.hibernate_after**
+  
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **listener_ssl_opts.dhfile**
@@ -11290,6 +11353,15 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 to renegotiate the parameters of the SSL connection on the fly.
 RFC 5746 defines a more secure way of doing this. By enabling secure renegotiation,
 you drop support for the insecure renegotiation, prone to MitM attacks.
+
+
+**listeners.wss.$name.ssl_options.hibernate_after**
+  
+  *Type*: `duration`
+
+  *Default*: `5s`
+
+   Hibernate the SSL process after idling for amount of time reducing its memory footprint. 
 
 
 **listeners.wss.$name.ssl_options.dhfile**

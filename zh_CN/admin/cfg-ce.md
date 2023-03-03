@@ -1508,14 +1508,14 @@ Settings for the MQTT over QUIC listener.
   
   *类型*: `string`
 
-  证书文件。
+  证书文件。在 5.1 中会被废弃，使用 .ssl_options.certfile 代替。
 
 
 **listeners.quic.$name.keyfile**
   
   *类型*: `string`
 
-  私钥文件。
+  私钥文件。在 5.1 中会被废弃，使用 .ssl_options.keyfile 代替。
 
 
 **listeners.quic.$name.ciphers**
@@ -1577,6 +1577,13 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
   *默认值*: `0`
 
   发送 PING 帧的频率，以保活连接. 设为 0 表示禁用。
+
+
+**listeners.quic.$name.ssl_options**
+  
+  *类型*: `broker:listener_quic_ssl_opts`
+
+  QUIC 传输层的 TLS 选项
 
 
 **listeners.quic.$name.enabled**
@@ -2954,7 +2961,7 @@ This part of the configuration is responsible for monitoring
   
   *类型*: `string`
 
-  *默认值*: `[]`
+  *默认值*: `""`
 
   收集数据点的 PostgreSQL 数据库的主机名。
 
@@ -7707,6 +7714,8 @@ MQTT Bridge 的配置。
 
   是否启用 Bridge Mode。
 注意：此设置只针对 MQTT 协议版本 < 5.0 有效，并且需要远程 MQTT Broker 支持 Bridge Mode。
+如果设置为 true ，桥接会告诉远端服务器当前连接是一个桥接而不是一个普通的客户端。
+这意味着消息回环检测会更加高效，并且远端服务器收到的保留消息的标志位会透传给本地。
 
 
 **bridges.mqtt.$name.username**
