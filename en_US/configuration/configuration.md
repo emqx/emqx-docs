@@ -139,7 +139,7 @@ When using mcast cluster, specify which local IP address the node discovery serv
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `255`   |
+| integer | 255     |
 
 #### Description
 
@@ -439,7 +439,7 @@ Enable or disable Erlang runtime detection mechanism, and restart automatically 
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
-| integer | `0` - `1024`   | `4`     |
+| integer | 0 - 1024       | 4       |
 
 #### Description
 
@@ -451,9 +451,9 @@ Set the number of threads in the asynchronous thread pool in Erlang runtime, see
 
 ### node.process_limit
 
-| Type    | Optional Value       | Default   |
-| ------- | -------------------- | --------- |
-| integer | `1024` - `134217727` | `2097152` |
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| integer | 1024 - 134217727 | 2097152 |
 
 #### Description
 
@@ -465,9 +465,9 @@ Set the maximum number of processes allowed by Erlang, which will affect the num
 
 ### node.max_ports
 
-| Type    | Optional Value       | Default   |
-| ------- | -------------------- | --------- |
-| integer | `1024` - `134217727` | `1048576` |
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| integer | 1024 - 134217727 | 1048576 |
 
 #### Description
 
@@ -481,7 +481,7 @@ Set the maximum number of ports allowed by Erlang. See [http://erlang.org/doc/ma
 
 | Type     | Optional Value | Default |
 | -------- | -------------- | ------- |
-| bytesize | `1KB` - `2GB`  | `8MB`   |
+| bytesize | 1KB - 2GB      | `8MB`   |
 
 #### Description
 
@@ -493,9 +493,9 @@ Set the maximum cache size used by Erlang distributed communication. See [http:/
 
 ### node.max_ets_tables
 
-| Type    | Default  |
-| ------- | -------- |
-| integer | `262144` |
+| Type    | Default |
+| ------- | ------- |
+| integer | 262144  |
 
 #### Description
 
@@ -521,7 +521,7 @@ System tuning parameters, which set how often Erlang runs to force a global garb
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
-| integer | `0` - `65535`  | `1000`  |
+| integer | 0 - 65535      | 1000    |
 
 #### Description
 
@@ -561,7 +561,7 @@ If you use SSL to establish an emqx cluster, you need to specify the SSL distrib
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `120`   |
+| integer | 120     |
 
 #### Description
 
@@ -572,9 +572,9 @@ Specifying how long time when a node has been unresponsive, it is considered to 
 
 ### node.dist_use_interface
 
-| Type   | Default   |
-| ------ | --------- |
-| ipaddr | `0.0.0.0` |
+| Type   | Default |
+| ------ | ------- |
+| ipaddr | 0.0.0.0 |
 
 #### Description
 
@@ -583,9 +583,9 @@ The default is to use `0.0.0.0` to specify all network-interfaces to listen to, 
 
 ### node.dist_listen_min
 
-| Type    | Optional Value   | Default |
-| ------- | ---------------- | ------- |
-| integer | `1024` - `65535` | `6369`  |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | 1024 - 65535   | 6369    |
 
 #### Description
 
@@ -595,9 +595,9 @@ Set a TCP port range together with `node.dist_listen_max`. This port ranget is u
 
 ### node.dist_listen_max
 
-| Type    | Optional Value   | Default |
-| ------- | ---------------- | ------- |
-| integer | `1024` - `65535` | `6369`  |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | 1024 - 65535   | 6369    |
 
 #### Description
 
@@ -621,7 +621,7 @@ RPC mode. Synchronous or asynchronous mode is optional.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `256`   |
+| integer | 256     |
 
 #### Description
 
@@ -644,9 +644,9 @@ otherwise `stateless`.
 
 ### rpc.tcp_server_ip
 
-| Type   | Optional Value                    | Default   |
-| ------ | --------------------------------- | --------- |
-| ipaddr | `[0-255].[0-255].[0-255].[0-255]` | `0.0.0.0` |
+| Type   | Optional Value                  | Default |
+| ------ | ------------------------------- | ------- |
+| ipaddr | [0-255].[0-255].[0-255].[0-255] | 0.0.0.0 |
 
 #### Description
 
@@ -655,9 +655,9 @@ NOTE: this config only takes effect when `rpc.port_discovery` is set to `manual`
 
 ### rpc.tcp_server_port
 
-| Type    | Optional Value   | Default |
-| ------- | ---------------- | ------- |
-| integer | `1024` - `65535` | `5369`  |
+| Type    | Optional Value | Default |
+| ------- | -------------- | ------- |
+| integer | 1024 - 65535   | 5369    |
 
 #### Description
 
@@ -666,9 +666,9 @@ NOTE: this config only takes effect when `rpc.port_discovery` is set to `manual`
 
 ### rpc.tcp_client_num
 
-| Type    | Optional Value | Default                 |
-| ------- | -------------- | ----------------------- |
-| integer | `1` - `256`    | `CPU core number` / `2` |
+| Type    | Optional Value | Default             |
+| ------- | -------------- | ------------------- |
+| integer | 1 - 256        | CPU core number / 2 |
 
 #### Description
 
@@ -752,7 +752,7 @@ The interval between keepalive detection messages.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `9`     |
+| integer | 9       |
 
 #### Description
 
@@ -853,7 +853,7 @@ The prefix of the log file. For example, if you use the default value (`log.file
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `-1`    |
+| integer | -1      |
 
 #### Description
 
@@ -863,7 +863,7 @@ Set the maximum length of a single log message. If this length is exceeded, the 
 
 | Type                        | Default |
 | --------------------------- | ------- |
-| union(integer, 'unlimited') | `20`    |
+| union(integer, 'unlimited') | 20      |
 
 #### Description
 
@@ -886,7 +886,7 @@ Set the size of a single log file. If it exceeds this size, the log file will be
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `5`     |
+| integer | 5       |
 
 #### Description
 
@@ -922,7 +922,7 @@ log.error.file = error.log
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `20`    |
+| integer | 20      |
 
 #### Description
 
@@ -933,7 +933,7 @@ Exceeding parts will be logge as '...'.
 
 | Type    | Default |
 | ------- | ------- |
-| boolean | `true`  |
+| boolean | true    |
 
 #### Description
 
@@ -952,9 +952,9 @@ Choose log format. `text` for free text, and `json` for structured logging.
 
 ### log.formatter.text.date.format
 
-| Type | Optional Value | Default  |
-| ---- | -------------- | -------- |
-| enum | `rfc3339`      | `FORMAT` |
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `rfc3339`      | FORMAT  | `rfc3339`  
 
 NOTE: This config is available start from EMQX Opensource 4.3.15, 4.4.4 and EMQX
 Enterprise 4.3.10, 4.4.4.
@@ -1149,7 +1149,7 @@ The maximum allowed length of MQTT messages.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `65535` |
+| integer | 65535   |
 
 #### Description
 
@@ -1161,7 +1161,7 @@ The maximum allowed length of  Client ID  string.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `128`   |
+| integer | 128     |
 
 #### Description
 
@@ -1189,7 +1189,7 @@ The maximum allowed QoS level for client to publish.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `65535` |
+| integer | 65535   |
 
 #### Description
 
@@ -1470,7 +1470,7 @@ Keepalive time specified by the server, used for MQTT v5.0 CONNACK messages
 
 | Type  | Optional Value | Default |
 | ----- | -------------- | ------- |
-| float | > `0.5`        | `0.75`  |
+| float | > 0.5          | 0.75    |
 
 #### Description
 
@@ -1482,7 +1482,7 @@ Keepalive backoff index. If no data packet is received from the client within th
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `0`     |
+| integer | 0       |
 
 #### Description
 
@@ -1506,7 +1506,7 @@ Allow EMQX Broker to force the QoS level of the message upgrading to the subscri
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `32`    |
+| integer | 32      |
 
 #### Description
 
@@ -1530,7 +1530,7 @@ Message retransmission interval: EMQX Broker checks whether message retransmissi
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `100`   |
+| integer | 100     |
 
 #### Description
 
@@ -1566,7 +1566,7 @@ The default timeout period of the session, which is mainly used for MQTT v3.1 an
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -1781,7 +1781,7 @@ Whether to support shared subscriptions.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `0`     |
+| integer | 0       |
 
 #### Description
 
@@ -1793,7 +1793,7 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `128`   |
+| integer | 128     |
 
 #### Description
 
@@ -1805,7 +1805,7 @@ Inflight window size: The flight window is used to store unanswered QoS 1 and Qo
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -1817,7 +1817,7 @@ The maximum receiving window for QoS 2 messages, that configures how many QoS 2 
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `10000` |
+| integer | 10000   |
 
 #### Description
 
@@ -1930,18 +1930,13 @@ Whether to allow clients under this zone to bypass the authentication step of th
 
 #### Description
 
-Configure the listening address of the MQTT / TCP listener named `external`, both IPv4 and IPv6 are supported.
+Configure the listening address of the MQTT / TCP listener named `external`.
 
 #### Example
 
-To configure an IPv4 address, you may refer to: 
-
-- `0.0.0.0:1883`: Monitor the activities of all IPs on port  `1883`.
-- `127.0.0.1:1883`: Monitor all activities from IP `127.0.0.1` on port  `1883`.
-
-To configure an IPv6 address, you may refer to: 
-
-- `::1:1883`: Monitor all activities from IP `::1` on port  `1883`.
+`1883`: monitors IPv4 `0.0.0.0: 1883`.
+`127.0.0.1: 1883`: monitor address is `1883` port on the `127.0.0.1` network card.
+`:: 1: 1883`: monitors the IPv6 address as `1883` port on the `:: 1` network card.
 
 
 
@@ -1949,7 +1944,7 @@ To configure an IPv6 address, you may refer to:
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `8`     |
+| integer | 8       |
 
 #### Description
 
@@ -1959,9 +1954,9 @@ The size of the listener's receiving pool.
 
 ### listener.tcp.external.max_connections
 
-| Type    | Default   |
-| ------- | --------- |
-| integer | `1024000` |
+| Type    | Default |
+| ------- | ------- |
+| integer | 1024000 |
 
 #### Description
 
@@ -1973,7 +1968,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -1985,7 +1980,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `100`   |
+| integer | 100     |
 
 #### Description
 
@@ -2112,7 +2107,7 @@ Use the client certificate to override the value of the ClientID field. The mean
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1024`  |
+| integer | 1024    |
 
 #### Description
 
@@ -2232,18 +2227,13 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 
 #### Description
 
-Configure the listening address of the MQTT / TCP listener named `internal`, both IPv4 and IPv6 are supported.
+Configure the listening address of the MQTT / TCP listener named `internal`.
 
 #### Example
 
- To configure an IPv4 address, you may refer to: 
-
-- `0.0.0.0:11883`: Monitor the activities of all IPs on port  `11883`.
-- `127.0.0.1:11883`: Monitor all activities from IP `127.0.0.1` on port  `11883`.
-
-To configure an IPv6 address, you may refer to: 
-
-- `::1:11883`: Monitor all activities from IP `::1` on port  `11883`.
+`11883`: listen to `0.0.0.0: 11883` of IPv4.
+`127.0.0.1:11883`: listening address is` 11883` port on the `127.0.0.1` network card.
+`:: 1: 11883`: listen to the `11883` port on the `:: 1` network card of IPv6 address.
 
 
 
@@ -2251,7 +2241,7 @@ To configure an IPv6 address, you may refer to:
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `4`     |
+| integer | 4       |
 
 #### Description
 
@@ -2261,9 +2251,9 @@ The size of the listener's receiving pool.
 
 ### listener.tcp.internal.max_connections
 
-| Type    | Default   |
-| ------- | --------- |
-| integer | `1024000` |
+| Type    | Default |
+| ------- | ------- |
+| integer | 1024000 |
 
 #### Description
 
@@ -2275,7 +2265,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -2287,7 +2277,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -2326,7 +2316,7 @@ The rate limit of the listener. The format is `<limit>,<duration>`.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -2438,18 +2428,7 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 
 #### Description
 
-Configure an SSL listener named `external`, both IPv4 and IPv6 are supported.
-
-#### Example
-
-To configure an IPv4 address, you may refer to: 
-
-- `0.0.0.0:8883`: Monitor the activities of all IPs on port  `8883`.
-- `127.0.0.1:8883`: Monitor all activities from IP `127.0.0.1` on port  `8883`.
-
-To configure an IPv6 address, you may refer to: 
-
-- `::1:8883`: Monitor all activities from IP `::1` on port  `8883`.
+Configure an SSL listener named `external`.
 
 
 
@@ -2457,7 +2436,7 @@ To configure an IPv6 address, you may refer to:
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `16`    |
+| integer | 16      |
 
 #### Description
 
@@ -2467,9 +2446,9 @@ The size of the listener's receiving pool.
 
 ### listener.ssl.external.max_connections
 
-| Type    | Default  |
-| ------- | -------- |
-| integer | `102400` |
+| Type    | Default |
+| ------- | ------- |
+| integer | 102400  |
 
 #### Description
 
@@ -2481,7 +2460,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `500`   |
+| integer | 500     |
 
 #### Description
 
@@ -2493,7 +2472,7 @@ The maximum access rate allowed by the listener. Unit: pcs / sec.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `100`   |
+| integer | 100     |
 
 #### Description
 
@@ -2795,7 +2774,7 @@ Use the client certificate to override the value of the ClientID field. The mean
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1024`  |
+| integer | 1024    |
 
 #### Description
 
@@ -2915,18 +2894,13 @@ This is the `SO_REUSEADDR` parameter. Enabling this option allows the local port
 
 #### Description
 
-Configure the listening address of the MQTT/WS listener named `external`, both IPv4 and IPv6 are supported.
+Configure the listening address of the MQTT/WS listener named `external`.
 
 #### Example
 
-To configure an IPv4 address, you may refer to: 
-
-- `0.0.0.0:8083`: Monitor the activities of all IPs on port  `8083`.
-- `127.0.0.1:8083`: Monitor all activities from IP `127.0.0.1` on port  `8083`.
-
-To configure an IPv6 address, you may refer to: 
-
-- `::1:8083`: Monitor all activities from IP `::1` on port  `8083`.
+`8083`: Listen s to `0.0.0.0: 8083` of IPv4.
+`127.0.0.1:8083`: Listening address is `8083` port on the `127.0.0.1` network card.
+`:: 1: 8083`: Listen to the `8083` port on the network card `:: 1` of IPv6 address.
 
 
 
@@ -2946,7 +2920,7 @@ WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is: `w
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `4`     |
+| integer | 4       |
 
 #### Description
 
@@ -2956,9 +2930,9 @@ The size of the listener's receiving pool.
 
 ### listener.ws.external.max_connections
 
-| Type    | Default  |
-| ------- | -------- |
-| integer | `102400` |
+| Type    | Default |
+| ------- | ------- |
+| integer | 102400  |
 
 #### Description
 
@@ -2970,7 +2944,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -2982,7 +2956,7 @@ The maximum access rate allowed by the listener. Unit: pcs/sec
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `100`   |
+| integer | 100     |
 
 #### Description
 
@@ -3119,7 +3093,7 @@ Set the timeout for Proxy Protocol parsing. If no Proxy Protocol packet is recei
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1024`  |
+| integer | 1024    |
 
 #### Description
 
@@ -3353,20 +3327,9 @@ The maximum allowed length of a single MQTT packet.
 
 #### Description
 
-Configure a WSS (MQTT/WebSocket/SSL) listener named `external`, both IPv4 and IPv6 are supported.
+Configure a WSS (MQTT/WebSocket/SSL) listener named `external`.
 
-#### Example
 
-To configure an IPv4 address, you may refer to: 
-
-- `0.0.0.0:8084`: Monitor the activities of all IPs on port `8084`.
-- `127.0.0.1:8084`: Monitor all activities from IP `127.0.0.1` on port `8084`.
-
-To configure an IPv6 address, you may refer to: 
-
-- `::1:8084`: Monitor all activities from IP `::1` on port `8084`.
-
-  
 
 ### listener.wss.external.mqtt_path
 
@@ -3384,7 +3347,7 @@ WebSocket URL Path.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `4`     |
+| integer | 4       |
 
 #### Description
 
@@ -3396,7 +3359,7 @@ The size of the listener's receiving pool.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `16`    |
+| integer | 16      |
 
 #### Description
 
@@ -3408,7 +3371,7 @@ The maximum number of concurrent connections allowed by the listener.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -3420,7 +3383,7 @@ The maximum access rate allowed by the listener. Unit: pcs/sec.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `100`   |
+| integer | 100     |
 
 #### Description
 
@@ -3757,7 +3720,7 @@ Note that `listener.wss.external.verify` should be set to `verify_peer`.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1024`  |
+| integer | 1024    |
 
 #### Description
 
@@ -3885,7 +3848,7 @@ Compression level.
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
-| integer | `1` - `9`      | -       |
+| integer | 1 - 9          | -       |
 
 #### Description
 
@@ -3945,7 +3908,7 @@ Whether to allow the client's compression context to be passed between frames.
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
-| integer | `8` - `15`     | -       |
+| integer | 8 - 15         | -       |
 
 #### Description
 
@@ -3957,7 +3920,7 @@ Maximum window value on the server side. Setting a larger value will result in b
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
-| integer | `8` - `15`     | -       |
+| integer | 8 - 15         | -       |
 
 #### Description
 
@@ -4545,7 +4508,7 @@ Connection timeout for HTTP requests. Any setting value equivalent to `0s` means
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `32`    |
+| integer | 32      |
 
 #### Description
 
@@ -4690,7 +4653,7 @@ LDAP service address.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `389`   |
+| integer | 389     |
 
 #### Description
 
@@ -4702,7 +4665,7 @@ LDAP service port.
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
-| integer | > `0`          | `8`     |
+| integer | > 0            | 8       |
 
 #### Description
 
@@ -4902,7 +4865,7 @@ Set the address of MongoDB service. If there are multiple items, use comma `,` t
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `8`     |
+| integer | 8       |
 
 #### Description
 
@@ -5204,7 +5167,7 @@ db.mqtt_acl.find({$or: [{username: "ilyas"},  {username: "$all"}]});
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1`     |
+| integer | 1       |
 
 #### Description
 
@@ -5216,7 +5179,7 @@ MongoDB topology parameters, that set the thread pool size.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `0`     |
+| integer | 0       |
 
 #### Description
 
@@ -5228,7 +5191,7 @@ MongoDB topology parameter, which determines how many additional worker threads 
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -5240,7 +5203,7 @@ MongoDB topology parameter, which determines how long to release additional work
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -5252,7 +5215,7 @@ MongoDB topology parameters, which determines how often to check for idle thread
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -5264,7 +5227,7 @@ MongoDB topology parameters, which is to select the strategy of the secondary no
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `20000` |
+| integer | 20000   |
 
 #### Description
 
@@ -5276,7 +5239,7 @@ MongoDB topology parameter, means MongoDB connection timeout, unit: ms.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `100`   |
+| integer | 100     |
 
 #### Description
 
@@ -5288,7 +5251,7 @@ MongoDB topology parameter, that means MongoDB message sending timeout period, u
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `30000` |
+| integer | 30000   |
 
 #### Description
 
@@ -5300,7 +5263,7 @@ Specifies how long (in milliseconds) to block for server selection.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -5311,7 +5274,7 @@ The maximum time in milliseconds for a worker to wait for a connection to become
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `10000` |
+| integer | 10000   |
 
 #### Description
 
@@ -5323,7 +5286,7 @@ MongoDB topology parameters, the interval between topological scans, unit: ms.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1000`  |
+| integer | 1000    |
 
 #### Description
 
@@ -5349,7 +5312,7 @@ MySQL server address.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `8`     |
+| integer | 8       |
 
 #### Description
 
@@ -5492,7 +5455,7 @@ PostgreSQL server address.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `8`     |
+| integer | 8       |
 
 #### Description
 
@@ -5689,7 +5652,7 @@ The cluster name in Redis sentinel mode. If it is not in `sentinel` mode, no con
 
 | Type    | Optional Value | Default |
 | ------- | -------------- | ------- |
-| integer | > `0`          | `8`     |
+| integer | > 0            | 8       |
 
 #### Description
 
@@ -5701,7 +5664,7 @@ Connection pool size.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `0`     |
+| integer | 0       |
 
 #### Description
 
@@ -6082,7 +6045,7 @@ QoS 1/2 message retransmission interval.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `32`    |
+| integer | 32      |
 
 #### Description
 
@@ -6094,7 +6057,7 @@ The batch size of the EMQX bridge. The EMQX bridge mode of `emqx_bridge_mqtt` su
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `32`    |
+| integer | 32      |
 
 #### Description
 
@@ -6144,7 +6107,7 @@ The maximum allowed message queue storage.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `5683`  |
+| integer | 5683    |
 
 #### Description
 
@@ -6168,7 +6131,7 @@ Enable or disable CoAP statistics function.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `5684`  |
+| integer | 5684    |
 
 #### Description
 
@@ -6264,10 +6227,10 @@ Default user authentication data of Dashboard. `dashboard.default_user.login` an
 
 ### dashboard.listener.http
 
-| Type    | Default         |
-| ------- | --------------- |
-| integer | `18083`         |
-| string  | `0.0.0.0:18083` |
+| Type    | Default       |
+| ------- | ------------- |
+| integer | 18083         |
+| string  | 0.0.0.0:18083 |
 
 #### Description
 
@@ -6280,7 +6243,7 @@ Use the `ip:port` format to specify which network interface and port to listen t
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `4`     |
+| integer | 4       |
 
 #### Description
 
@@ -6292,7 +6255,7 @@ The number of listening processes this listener will create.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -6328,7 +6291,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `18084` |
+| integer | 18084   |
 
 #### Description
 
@@ -6340,7 +6303,7 @@ The listening port of the HTTPS listener, **which is disabled by default.**
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `2`     |
+| integer | 2       |
 
 #### Description
 
@@ -6352,7 +6315,7 @@ Same as `dashboard.listener.http.acceptors`.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -6524,7 +6487,7 @@ If set to `on`, use the server ’s preferences for password selection. If set t
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `5683`  |
+| integer | 5683    |
 
 #### Description
 
@@ -6560,7 +6523,7 @@ Specify the maximum allowed LwM2M lifetime with the unit of second.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `22`    |
+| integer | 22      |
 
 #### Description
 
@@ -6723,7 +6686,7 @@ UDP tuning parameters, specify the UDP sending buffer size.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `20`    |
+| integer | 20      |
 
 #### Description
 
@@ -6773,7 +6736,7 @@ Specify the directory where the LwM2M Object definition file is stored.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `10000` |
+| integer | 10000   |
 
 #### Description
 
@@ -6807,10 +6770,10 @@ Default AppSecret.
 
 ### management.listener.http
 
-| Type    | Default        |
-| ------- | -------------- |
-| integer | `8081`         |
-| string  | `0.0.0.0:8081` |
+| Type    | Default      |
+| ------- | ------------ |
+| integer | 8081         |
+| string  | 0.0.0.0:8081 |
 
 #### Description
 
@@ -6822,7 +6785,7 @@ Use the `ip:port` format to specify which network interface to listen to, defaul
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `2`     |
+| integer | 2       |
 
 #### Description
 
@@ -6834,7 +6797,7 @@ The number of listening processes this listener will create.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -6846,7 +6809,7 @@ The maximum number of connections allowed by this listener at the same time
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -6904,10 +6867,10 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 
 ### management.listener.https
 
-| Type    | Default | Example        |
-| ------- | ------- | -------------- |
-| integer | -       | `8081`         |
-| string  | -       | `0.0.0.0:8081` |
+| Type    | Default | Example      |
+| ------- | ------- | ------------ |
+| integer | -       | 8081         |
+| string  | -       | 0.0.0.0:8081 |
 
 #### Description
 
@@ -6919,7 +6882,7 @@ Use the `ip:port` format to specify which network interface to listen to, defaul
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `2`     |
+| integer | 2       |
 
 #### Description
 
@@ -6931,7 +6894,7 @@ The number of listening processes this listener will create.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -6943,7 +6906,7 @@ The maximum number of connections allowed by this listener at the same time.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -7091,7 +7054,7 @@ Retained  messages are only stored on disk.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `0`     |
+| integer | 0       |
 
 #### Description
 
@@ -7200,7 +7163,7 @@ ADVERTISE message broadcast interval, unit: second.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1`     |
+| integer | 1       |
 
 #### Description
 
@@ -7302,7 +7265,7 @@ Specify the URI of the Statsd gateway.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `15000` |
+| integer | 15000   |
 
 #### Description
 
@@ -7328,7 +7291,7 @@ Specify Prometheus Collector.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `61613` |
+| integer | 61613   |
 
 #### Description
 
@@ -7340,7 +7303,7 @@ Specify the local port where the Stomp plugin listens.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `4`     |
+| integer | 4       |
 
 #### Description
 
@@ -7352,7 +7315,7 @@ Specify the size of the thread pool for Stomp service Acceptor
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `512`   |
+| integer | 512     |
 
 #### Description
 
@@ -7556,7 +7519,7 @@ Whether to allow anonymous login.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `10`    |
+| integer | 10      |
 
 #### Description
 
@@ -7568,7 +7531,7 @@ Specify the maximum number of Stomp headers
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `1024`  |
+| integer | 1024    |
 
 #### Description
 
@@ -7580,7 +7543,7 @@ Specify the maximum Stomp header length
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `8192`  |
+| integer | 8192    |
 
 #### Description
 
@@ -7681,7 +7644,7 @@ Specify whether to verify the peer certificate.
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `32`    |
+| integer | 32      |
 
 #### Description
 
@@ -7848,7 +7811,7 @@ Licence file of the node.
 
 | Type    | Default |
 | ------- | ------- |
-| percent | `80%`   |
+| percent | 80%     |
 
 #### Description
 
@@ -7861,7 +7824,7 @@ The alarm is raised when this threshld is reached. As percentage of alive connec
 
 | Type    | Default |
 | ------- | ------- |
-| percent | `75%`   |
+| percent | 75%     |
 
 #### Description
 
