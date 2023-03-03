@@ -96,4 +96,20 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 您也可以通过配置文件完成以上配置，具体操作，请参考[配置手册](../../configuration/configuration-manual)。
 
-<!--后续补充示例代码 @Lena -->
+```bash
+{
+  backend = "mysql"
+  mechanism = "password_based"
+
+  server = "127.0.0.1:3306"
+  username = "root"
+  database = "mqtt_user"
+  password = ""
+  pool_size = 8
+
+  password_hash_algorithm {name = "sha256", salt_position = "suffix"}
+  query = "SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1"
+  query_timeout = "5s"
+}
+```
+
