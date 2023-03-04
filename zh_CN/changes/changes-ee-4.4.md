@@ -9,6 +9,8 @@
 - 升级 EMQX 的 MongoDB 客户端库，支持 MongoDB 5.1 及以上版本。
 - Dashboard 支持 HAProxy 的 Proxy Protocol。
 - 发布 Ubuntu 22.04 安装包。
+- 规则引擎支持 Kafka headers。
+- 支持使用规则引擎写入数据到 IoTDB。
 
 ### 增强
 

@@ -10,6 +10,8 @@ Among the enhancements, there are new exciting new features worth highlighting:
 - Upgrade the MongoDB client library of EMQX to support MongoDB 5.1 and above.
 - Dashboard supports the proxy protocol of HAProxy.
 - Release the Ubuntu 22.04 installation package.
+- Support Kafka headers in rule engine.
+- Support storing data to IoTDB using rule-engine.
 
 ### Enhancements
 
