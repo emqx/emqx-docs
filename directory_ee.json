@@ -354,6 +354,10 @@
               "path": "rule/backend_influxdb_v2"
             },
             {
+              "title": "保存数据到 IoTDB",
+              "path": "rule/backend_iotdb"
+            },
+            {
               "title": "保存数据到 TimescaleDB",
               "path": "rule/backend_timescaledb"
             },
@@ -1147,6 +1151,10 @@
             {
               "title": "Save data to InfluxDB V2",
               "path": "rule/backend_influxdb_v2"
+            },
+            {
+              "title": "Save data to IoTDB",
+              "path": "rule/backend_iotdb"
             },
             {
               "title": "Save data to TimescaleDB",
