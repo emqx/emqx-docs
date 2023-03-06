@@ -4,7 +4,7 @@
 
 *发布日期: 2023-03-03*
 
-本次版本更新包含了 16 个增强和 21 个修复。比较重要的功能增强有：
+本次版本更新包含了 16 个增强和 20 个修复。比较重要的功能增强有：
 
 - 升级 EMQX 的 MongoDB 客户端库，支持 MongoDB 5.1 及以上版本。
 - Dashboard 支持 HAProxy 的 Proxy Protocol。
@@ -88,15 +88,13 @@
 
 - 修复会话关闭后，其持有的排他订阅主题没有被释放的问题 [#9868](https://github.com/emqx/emqx/pull/9868)。
 
-- 修复 Websocket 连接中断时日志报 `{case_clause,{error,closed}}` 错误的问题 [emqx/cowboy#8](https://github.com/emqx/cowboy/pull/8)。
+- 修复 WebSocket 连接中断时日志报 `{case_clause,{error,closed}}` 错误的问题 [emqx/cowboy#8](https://github.com/emqx/cowboy/pull/8)。
 
 - 修复某些情况下，重启 EMQX 后规则无法自动启用的问题 [#9911](https://github.com/emqx/emqx/pull/9911)。
 
 - 修复停止 EMQX 的时候，日志出现 `{badarg,[{ets,lookup,[gproc,{shared, ...` 错误的问题 [#9919](https://github.com/emqx/emqx/pull/9919)。
 
-- 修复当客户端连接禁用 keepalive 时, 通过 HTTP API 更新其 keepalive 会崩溃的问题 [#9933](https://github.com/emqx/emqx/pull/9933)。
-
-- 在 `资源` 删除时清理其文件目录以防止文件泄露 [#10039](https://github.com/emqx/emqx/pull/10039)。
+- 修复当客户端连接禁用 `keepalive` 时, 通过 HTTP API 更新其 `keepalive` 会崩溃的问题 [#9933](https://github.com/emqx/emqx/pull/9933)。
 
 ## e4.4.14
 
