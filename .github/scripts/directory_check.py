@@ -16,7 +16,7 @@ def check_md_content(md_file):
         success = False
         return
 
-    md_content = open(md_file, 'r').read()
+    md_content = re.sub(r'<!--([\s\S]*?)-->', '', open(md_file, 'r').read())
 
     if 'ee' in directory_file:
         md_content = re.sub(r'{% emqxce %}([\s\S]*?){% endemqxce %}', '', md_content)
