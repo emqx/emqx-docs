@@ -7,7 +7,7 @@ Supported versions:
 - CentOS 8
 - CentOS 7
 
-The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise). 
+The section below will take CentOS 8 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
 
 {% emqxce %}
 
@@ -228,7 +228,7 @@ EMQX has offered different installation packages for different CPU architectures
 2. Install EMQX.
 
    ```
-   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.tar.gz
    ```
 
 :::

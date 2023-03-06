@@ -12,7 +12,7 @@ This chapter will introduce how to use the official Docker image to install and 
 
 ## Use Docker to run a single EMQX node
 
-This section will introduce how to use the Docker image to install the latest version of EMQX. If you want to work with other versions,  please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise).
+This section will introduce how to use the Docker image to install the latest version of EMQX. If you want to work with other versions,  please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise).
 
 1. To get the Docker image, run: 
 
