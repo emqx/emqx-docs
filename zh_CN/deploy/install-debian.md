@@ -19,29 +19,29 @@
 
 ::: tab amd64
 
-1. 下载 emqx-5.0.17-debian11-amd64.deb(https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb)。
+1. 下载 emqx-5.0.19-debian11-amd64.deb(https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-amd64.deb
+   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-amd64.deb
    ```
 
 2. 安装 EMQX。
    ```bash
-   sudo apt install ./emqx-5.0.17-debian11-amd64.deb
+   sudo apt install ./emqx-5.0.19-debian11-amd64.deb
    ```
 
 :::
 
 ::: tab arm64
-1. 下载 [emqx-5.0.17-debian11-arm64.deb](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.deb)。
+1. 下载 [emqx-5.0.19-debian11-arm64.deb](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-arm64.deb)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.deb
+   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-arm64.deb
    ```
 
 2. 安装 EMQX。
    ```bash
-   sudo apt install ./emqx-5.0.17-debian11-arm64.deb
+   sudo apt install ./emqx-5.0.19-debian11-arm64.deb
    ```
 
 :::
@@ -62,29 +62,29 @@
 
 ::: tab amd64
 
-1. 下载 [emqx-5.0.17-debian11-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-amd64.tar.gz)。
+1. 下载 [emqx-5.0.19-debian11-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-amd64.tar.gz)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-amd64.tar.gz
+   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-amd64.tar.gz
    ```
 
 2. 安装 EMQX。
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.17-debian11-amd64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-5.0.19-debian11-amd64.tar.gz -C emqx
    ```
 
 :::
 
 ::: tab arm64
-1. 下载 [emqx-5.0.17-debian11-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.tar.gz)。
+1. 下载 [emqx-5.0.19-debian11-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-arm64.tar.gz)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-debian11-arm64.tar.gz
+   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-arm64.tar.gz
    ```
 
 2. 安装 EMQX。
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.17-debian11-arm64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-5.0.19-debian11-arm64.tar.gz -C emqx
    ```
 
 :::

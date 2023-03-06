@@ -19,32 +19,32 @@ EMQX has offered different installation packages for different CPU architectures
 
 ::: tab amd64
 
-1. Download [emqx-5.0.17-el8-amd64.rpm](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm). 
+1. Download [emqx-5.0.19-el8-amd64.rpm](https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-amd64.rpm). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.rpm
+   wget https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-amd64.rpm
    ```
 
 2. Install EMQX. 
 
    ```bash
-   sudo yum install emqx-5.0.17-el8-amd64.rpm -y
+   sudo yum install emqx-5.0.19-el8-amd64.rpm -y
    ```
 
 :::
 
 ::: tab arm64
 
-1. Download [emqx-5.0.17-el8-arm64.rpm](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.rpm). 
+1. Download [emqx-5.0.19-el8-arm64.rpm](https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-arm64.rpm). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.rpm
+   wget https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-arm64.rpm
    ```
 
 2. Install EMQX. 
 
    ```bash
-   sudo yum install emqx-5.0.17-el8-arm64.rpm -y
+   sudo yum install emqx-5.0.19-el8-arm64.rpm -y
    ```
 
 :::
@@ -59,10 +59,10 @@ EMQX offers 3 different options to start EMQX:
 
   ```bash
   $ emqx start
-  EMQX 5.0.17 is started successfully!
+  EMQX 5.0.19 is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.17 is started
+  Node 'emqx@127.0.0.1' 5.0.19 is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -93,32 +93,32 @@ EMQX has offered different installation packages for different CPU architectures
 
 ::: tab amd64
 
-1. Download [emqx-5.0.17-el8-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.tar.gz). 
+1. Download [emqx-5.0.19-el8-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-amd64.tar.gz). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-amd64.tar.gz
+   wget https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-amd64.tar.gz
    ```
 
 2. Install EMQX.
 
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.17-el8-amd64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-5.0.19-el8-amd64.tar.gz -C emqx
    ```
 
 :::
 
 ::: tab arm64
 
-1. Download [emqx-5.0.17-el8-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.tar.gz). 
+1. Download [emqx-5.0.19-el8-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-arm64.tar.gz). 
 
    ```bash
-   wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-el8-arm64.tar.gz
+   wget https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-el8-arm64.tar.gz
    ```
 
 2. Install EMQX.
 
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.17-el8-arm64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-5.0.19-el8-arm64.tar.gz -C emqx
    ```
 
 :::
