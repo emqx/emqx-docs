@@ -4,7 +4,7 @@
 
 *Release Date: 2023-03-03*
 
-This version update includes 16 enhancements and 21 fixes.
+This version update includes 16 enhancements and 20 fixes.
 Among the enhancements, there are new exciting new features worth highlighting:
 
 - Upgrade the MongoDB client library of EMQX to support MongoDB 5.1 and above.
@@ -57,13 +57,13 @@ Among the enhancements, there are new exciting new features worth highlighting:
 
 - Fix the problem of sending offline messages to clients in reverse order when using Redis offline message feature.
 
-- fix the emqx-modules are disabled if their initialization failed after EMQX is restarted.
+- Fix the emqx-modules are disabled if their initialization failed after EMQX is restarted.
 
-- fix some issues in descriptions of the actions and resources.
+- Fix some issues in descriptions of the actions and resources.
 
-- fix the issue that Oracle resources cannot get connected automatically after release hot upgrade.
+- Fix the issue that Oracle resources cannot get connected automatically after release hot upgrade.
 
-- fix the issue that produce messages to RocketMQ cluster using rule-engine failed.
+- Fix the issue that produce messages to RocketMQ cluster using rule-engine failed.
 
 - Returning a failure when creating an existing listener in a cluster using the API.
 
@@ -71,9 +71,9 @@ Among the enhancements, there are new exciting new features worth highlighting:
 
 - Fixed an error when forward MQTT messages with User-Property using the `republish` action [#9942](https://github.com/emqx/emqx/pull/9942).
 
-- fix some issues in descriptions of the actions, resources and emqx-modules [#9931](https://github.com/emqx/emqx/pull/9931).
+- Fix some issues in descriptions of the actions, resources and emqx-modules [#9931](https://github.com/emqx/emqx/pull/9931).
 
-- fix there's no error logs when query the JWKS server failed [#9931](https://github.com/emqx/emqx/pull/9931).
+- Fix there's no error logs when query the JWKS server failed [#9931](https://github.com/emqx/emqx/pull/9931).
 
 - The returned client lists of HTTP query `GET /api/v4/clients?_page=2&_limit=20` to different nodes might be inconsistent [#9926](https://github.com/emqx/emqx/pull/9926).
 
@@ -91,15 +91,13 @@ Among the enhancements, there are new exciting new features worth highlighting:
 
 - Fix the exclusive topics aren't removed when the session has already been cleaned [#9868](https://github.com/emqx/emqx/pull/9868).
 
-- fix the EMQX reports `{case_clause,{error,closed}}` error log message when websocket connections interrupted [emqx/cowboy#8](https://github.com/emqx/cowboy/pull/8).
+- Fix the EMQX reports `{case_clause,{error,closed}}` error log message when WebSocket connections interrupted [emqx/cowboy#8](https://github.com/emqx/cowboy/pull/8).
 
-- fix sometimes the rules cannot be enabled automatically after EMQX is restarted [#9911](https://github.com/emqx/emqx/pull/9911).
+- Fix sometimes the rules cannot be enabled automatically after EMQX is restarted [#9911](https://github.com/emqx/emqx/pull/9911).
 
-- fix the `{badarg,[{ets,lookup,[gproc,{shared, ...` error logs during shutdown [#9919](https://github.com/emqx/emqx/pull/9919).
+- Fix the `{badarg,[{ets,lookup,[gproc,{shared, ...` error logs during shutdown [#9919](https://github.com/emqx/emqx/pull/9919).
 
-- Fix crash when updating a client's keepalive via the HTTP API if it connects with keepalive disabled [#9933](https://github.com/emqx/emqx/pull/9933).
-
-- Delete the files directory when `resources` were deleted to avoid files leaking [#10039](https://github.com/emqx/emqx/pull/10039).
+- Fix crash when updating a client's `keepalive` via the HTTP API if it connects with `keepalive` disabled [#9933](https://github.com/emqx/emqx/pull/9933).
 
 ## e4.4.14
 
