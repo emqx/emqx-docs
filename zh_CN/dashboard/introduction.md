@@ -46,6 +46,14 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 首次登录后，系统会自动检测到您正在使用默认用户名和密码登录，并会强制要求修改默认密码，这有利于访问 Dashboard 的安全性提升，注意修改的密码不能与原密码相同，且不建议再次使用 `public` 做为登录密码。
 
+## 忘记密码
+
+如果您忘记了 Dashboard 登录密码，可以通过 CLI 的 `admins` 命令进行重置，详情请参考 [命令行 - admins](../admin/cli.md#admins)：
+
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
+```
+
 ## 配置 Dashboard
 
 Dashboard 默认监听 HTTP 端口，端口号默认为 18083，用户可以启用 HTTPS 或更改监听器端口，更多关于 Dashboard 如何配置和修改的使用方法可参考[配置文档](../configuration/configuration-manual.md#dashboard)。
