@@ -16,7 +16,7 @@ def check_md_content(md_file):
         success = False
         return
 
-    md_content = open(md_file, 'r').read()
+    md_content = re.sub(r'<!--([\s\S]*?)-->', '', open(md_file, 'r').read())
 
     if 'ee' in directory_file:
         md_content = re.sub(r'{% emqxce %}([\s\S]*?){% endemqxce %}', '', md_content)
@@ -28,7 +28,7 @@ def check_md_content(md_file):
     for url in url_list:
         if url[0].endswith('!'):
             continue
-        if url[2].startswith(('http://', 'https://', '<', '#')):
+        if url[2].startswith(('http://', 'https://', '<', '#', 'mailto:', 'tel:')):
             continue
         url_path = url[2].split('.md')[0]
         ref_md_path = os.path.join(f'{"/".join(md_file.split("/")[:-1])}/', f'{url_path}.md')
