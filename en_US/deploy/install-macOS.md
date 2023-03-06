@@ -11,16 +11,16 @@ The section below will take macOS 12 as an example to illustrate how to download
 
 {% emqxce %}
 
-1. Download [emqx-5.0.17-macos12-arm64.zip](https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-macos12-arm64.zip). 
+1. Download [emqx-5.0.19-macos12-arm64.zip](https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-macos12-arm64.zip). 
 
 ```bash
-wget https://www.emqx.com/en/downloads/broker/5.0.17/emqx-5.0.17-macos12-arm64.zip
+wget https://www.emqx.com/en/downloads/broker/5.0.19/emqx-5.0.19-macos12-arm64.zip
 ```
 
 2. Install EMQX.
 
 ```bash
-mkdir -p emqx && unzip emqx-5.0.17-macos12-arm64.zip -d emqx
+mkdir -p emqx && unzip emqx-5.0.19-macos12-arm64.zip -d emqx
 ```
 
 3. Start EMQX. 

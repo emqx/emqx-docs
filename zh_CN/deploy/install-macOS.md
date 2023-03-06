@@ -11,16 +11,16 @@
 
 {% emqxce %}
 
-1. 下载 [emqx-5.0.17-macos12-arm64.zip](https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-macos12-arm64.zip)。
+1. 下载 [emqx-5.0.19-macos12-arm64.zip](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-macos12-arm64.zip)。
 
 ```bash
-wget https://www.emqx.com/zh/downloads/broker/5.0.17/emqx-5.0.17-macos12-arm64.zip
+wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-macos12-arm64.zip
 ```
 
 2. 安装 EMQX。
 
 ```bash
-mkdir -p emqx && unzip emqx-5.0.17-macos12-arm64.zip -d emqx
+mkdir -p emqx && unzip emqx-5.0.19-macos12-arm64.zip -d emqx
 ```
 
 3. 启动
