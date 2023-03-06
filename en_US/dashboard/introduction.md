@@ -48,6 +48,14 @@ For users who have installed EMQX for the first time, you can use the default us
 
 After logging in for the first time, the system will automatically detect that you are logging in with the default username and password, and will force you to change the default password, which is good for the security of accessing Dashboard, note that the changed password cannot be the same as the original password, and it is not recommended to use `public` as the login password again.
 
+## Forgot Password
+
+If you have forgotten your Dashboard login password, you can reset it via the `admins` command, see [CLI - admins](../admin/cli.md#admins).
+
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
+```
+
 ## Configure Dashboard
 
 Dashboard listens to the HTTP by default, the default port number is 18083, users can enable HTTPS or change the listener port, for more information on how to configure and modify the use of Dashboard, please refer to the [configuration document](../configuration/configuration-manual.md#dashboard).
