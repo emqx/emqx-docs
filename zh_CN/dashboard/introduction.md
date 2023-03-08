@@ -1,4 +1,4 @@
-# EMQX Dashboard 介绍
+# EMQX Dashboard
 
 EMQX 提供了一个内置的管理控制台，即 EMQX Dashboard 。方便用户通过 Web 页面就能轻松管理和监控 EMQX 集群，并配置和使用所需的各项功能。
 

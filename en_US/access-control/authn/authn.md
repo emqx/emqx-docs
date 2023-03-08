@@ -1,4 +1,4 @@
-# Introduction
+# Authentication
 
 Authentication is the process of verifying the identity of a client. It is an essential part of most applications and can help to protect our services from illegal client connections. 
 
