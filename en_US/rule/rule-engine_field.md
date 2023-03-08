@@ -248,7 +248,7 @@ Trigger the rule when the terminal is connected successfully
 
 | Field            | Explanation                             |
 | :--------------- | :-------------------------------------- |
-| clientid         | Client ID                                |
+| clientid         | Client ID                               |
 | username         | Current MQTT username                   |
 | mountpoint       | Mountpoint for bridging messages        |
 | peername         | IPAddress and Port of terminal          |
@@ -259,7 +259,7 @@ Trigger the rule when the terminal is connected successfully
 | clean\_start     | MQTT clean\_start                       |
 | expiry\_interval | MQTT Session Expiration time            |
 | is\_bridge       | Whether it is MQTT bridge connection    |
-| connected\_at    | Terminal connection completion time (s) |
+| connected\_at    | Client connected timestamp (millisecond) |
 | conn_props       | The CONNECT Properties (MQTT 5.0 only)  |
 | timestamp        | Event trigger time(millisecond)         |
 | node             | Node name of the trigger event          |
@@ -295,7 +295,7 @@ Trigger rule when terminal connection is lost
 | username         | Current MQTT username                                        |
 | peername         | IPAddress and Port of terminal                               |
 | sockname         | IPAddress and Port listened by emqx                          |
-| disconnected\_at | Terminal disconnection completion time (s)                   |
+| disconnected\_at | Client disconnected timestamp (millisecond)                  |
 | disconn_props    | The DISCONNECT Properties (MQTT 5.0 only)                    |
 | timestamp        | Event trigger time(millisecond)                              |
 | node             | Node name of the trigger event                               |
