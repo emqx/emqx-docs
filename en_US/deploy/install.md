@@ -1,6 +1,12 @@
-# Overview
+# Installation
 
 This chapter will walk you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs.
+
+{% emqxee %}
+
+This chapter will also cover how to configure a license for EMQX and how to migrate from EMQX 4.x to EMQX 5.x.
+
+{% endemqxee %}
 
 ## Download
 
