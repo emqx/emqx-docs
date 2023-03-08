@@ -48,9 +48,9 @@ For users who have installed EMQX for the first time, you can use the default us
 
 After logging in for the first time, the system will automatically detect that you are logging in with the default username and password, and will force you to change the default password, which is good for the security of accessing Dashboard, note that the changed password cannot be the same as the original password, and it is not recommended to use `public` as the login password again.
 
-## Forgot Password
+## Reset password
 
-If you have forgotten your Dashboard login password, you can reset it via the `admins` command, see [CLI - admins](../admin/cli.md#admins).
+You can reset your Dashboard login password via the `admins` command. For details, see [CLI - admins](../admin/cli.md#admins).
 
 ```bash
 ./bin/emqx ctl admins passwd <Username> <Password>
