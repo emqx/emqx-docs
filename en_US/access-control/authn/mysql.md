@@ -108,21 +108,19 @@ MySQL authentication is identified with `mechanism = password_based` and `backen
 
 Sample configuration:
 
-```
+```bash
 {
-  mechanism = password_based
-  backend = mysql
-  enable = true
+  backend = "mysql"
+  mechanism = "password_based"
 
-  password_hash_algorithm {
-    name = sha256
-    salt_position = suffix
-  }
-
-  database = mqtt
-  username = root
-  password = public
   server = "127.0.0.1:3306"
-  query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+  username = "root"
+  database = "mqtt_user"
+  password = ""
+  pool_size = 8
+
+  password_hash_algorithm {name = "sha256", salt_position = "suffix"}
+  query = "SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1"
+  query_timeout = "5s"
 }
 ```

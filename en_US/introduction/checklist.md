@@ -40,7 +40,7 @@
   - Check (debug)
   - Send data to web service
 
-<strong class="emqxce">
+<strong class="emqxee">
 The following are the unique features of EMQX Enterprise
 </strong>
 
@@ -79,7 +79,7 @@ The following are the unique features of EMQX Enterprise
 
 
 
-{% emqxce %}
+{% emqxee %}
 
 [EMQX Enterprise](https://www.emqx.com/en/products/emqx) is a powerful enterprise-level IoT MQTT messaging platform built by the people who develop the open source EMQX Broker.
 
@@ -94,21 +94,21 @@ EMQX Enterprise supports one-stop access to millions of IoT devices, MQTT&CoAP m
 Thank you for your support of EMQX Broker. If you need business services, please contact our sales staff: sales-cn@emqx.io.
 :::
 
-{% endemqxce %}
-
-
-{% emqxee %}
-
-## Function Description
-
 {% endemqxee %}
 
 
 {% emqxce %}
 
-## Function of enterprise version
+## Function Description
 
 {% endemqxce %}
+
+
+{% emqxee %}
+
+## Function of enterprise version
+
+{% endemqxee %}
 
 
 ### Message data storage

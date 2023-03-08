@@ -1,4 +1,4 @@
-# Data backup and restoration
+# Backup and restoration
 
 EMQX adopts a distributed storage schema to replicate data among all nodes, and a cluster transfer feature to ensure the system's high availability. 
 

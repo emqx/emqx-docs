@@ -46,7 +46,7 @@ SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` �
 对于其它事件，我们可以选择不同的客户端和会话事件来模拟数据，包括：
 
 - 连接完成（$events/client_connected）
-- 连接断开（$events/client_connected）
+- 连接断开（$events/client_disconnected）
 - 连接确认（$events/client_connack）
 - 鉴权完成（$events/client_check_authz_complete）
 - 订阅（$events/session_subscribed）

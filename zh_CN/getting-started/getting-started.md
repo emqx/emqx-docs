@@ -148,13 +148,13 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 1. 在命令行工具中输入如下命令，下载 zip 文件。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.14/emqx-5.0.14-macos11-amd64.zip
+   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-macos11-amd64.zip
    ```
 
 2. 通过以下命令安装 EMQX。
 
    ```bash
-   mkdir -p emqx && unzip emqx-5.0.14-macos11-amd64.zip -d emqx
+   mkdir -p emqx && unzip emqx-5.0.19-macos11-amd64.zip -d emqx
    ```
 
 {% endemqxce %}
@@ -201,9 +201,11 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 ::::
 
-## 快速验证
+## 通过 MQTT X 快速验证
 
-您可通过 [MQTT X](https://mqttx.app/zh) 或 EMQX 自带的 WebSocket 工具快速验证 MQTT 连接。
+[MQTT X](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTT X 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
+
+本节讲介绍如何通过 [MQTT X Web 端](https://mqttx.app/zh) 快速验证 MQTT 连接，无需下载或安装任何程序。
 
 :::tip 前置准备
 
@@ -213,14 +215,6 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 - 端口信息：可在 EMQX Dashboard **功能配置**的**监听器**部分获取。
 
 :::
-
-:::: tabs type:card
-
-::: tab 通过 MQTT X Web 快速验证
-
-[MQTT X](https://mqttx.app/zh) 是 EMQ 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。
-
-MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。您也可以使用浏览器打开 [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections)，无需下载与安装即可通过 MQTT over WebSocket 完成 MQTT 开发和调试操作。
 
 1. 访问  [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) 页面。
 
@@ -247,24 +241,6 @@ MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 
 
 除上述测试外，您也可以通过 MQTT X 进行单/双向 SSL 认证、或通过自定义脚本模拟测试数据。更多消息，可访问 [MQTT X 官方网页](https://mqttx.app/zh)。
 
-:::
-
-::: tab 通过 WebSocket 工具快速验证
-
-此外，您也可以通过 EMQX 内置的 WebSocket 客户端工具接入 EMQX，进行消息通信验证。
-
-在 Dashboard 页面，点击左侧导航栏的 **问题分析 -> WebSocket 客户端**，即可进入相关页面。您可按照如下步骤完成客户端与 EMQX 的连接、订阅相关主题，并测试消息的发送与接收情况。
-
-1. 连接客户端与 EMQX。点击页面右侧的**连接**按钮，系统将提示当前客户端已成功连接。
-2. 订阅相关主题。点击页面中部的**订阅**按钮，此时我们将订阅 `testtopic/#`主题下所有 QoS 为 0 的消息，您可以根据需要增加多个主题或测试其他 QoS 等级。
-3. 测试消息的接收。点击页面底部的**发布**按钮，此时可以看到页面底部的已发送和已接收窗格各出现了一条消息，证明连接已成成功。
-
-![EMQX MQTT WebSocket 连接](./assets/emqx-websocket.png)
-
-:::
-
-::::
-
 回到 EMQX Dashboard 的**仪表盘**部分，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
 
 ![EMQX dashboard](./assets/emqx-dashboard.png)
@@ -272,6 +248,13 @@ MQTT X 提供了一键式的连接方式和简洁的图形界面，能够测试 
 ## 进阶操作
 
 至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行 [访问控制](../access-control/authn/authn.md)、[规则引擎数据处理](../data-integration/rules.md) 等操作。
+
+### 更多主题
+
+本章节还包含了 EMQX 5.x 版本引入的全新功能介绍和已知的使用限制，可点击下方链接继续阅读。
+
+- [全新功能](./new-features.md)
+- [使用限制](./restrictions.md)
 
 ## 常见问题解答
 

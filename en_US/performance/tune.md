@@ -1,6 +1,6 @@
 # Linux OS Tuning
 
-This guide includes in general tuning suggestions for benckmark and deployment.
+This guide includes in general tuning suggestions for benchmark and deployment.
 
 ## Turn off Swap
 

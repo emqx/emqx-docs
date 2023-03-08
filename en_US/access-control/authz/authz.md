@@ -1,4 +1,4 @@
-# Introduction
+# Authorization
 
 In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients.
 
