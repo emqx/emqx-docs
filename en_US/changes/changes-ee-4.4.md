@@ -1,5 +1,48 @@
 # Releases
 
+## e4.4.16
+
+*Release Date: 2023-03-10*
+
+This version update includes 4 enhancements and 7 fixes.
+
+### Enhancements
+
+- Improve the log if the user configured a different `iotdb_version` from the version of installed IoTDB [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+
+- Don't print error logs when the offline-msg actions receive QoS0 messages [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+
+- Start the `emqx_schema_registry` plugin when release hot upgrade [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+  The `emqx_schema_registry` is a necessary plugin when using rules to decode serialized binary data
+  (e.g. Protobuf or Avro), we should ensure this plugin started in the EMQX enterprise.
+
+- Change "EMQ X" to "EMQX" from the outputs of CLIs and names of plugins [#10099](https://github.com/emqx/emqx/pull/10099).
+
+### Bug fixes
+
+- Fix the issue that the `Message Key` parameter of the RocketMQ action does not work [#1761](https://github.com/emqx/emqx-enterprise/pull/1761).
+
+- Fix the rule failed when processing the decoded protobuf messages [#1760](https://github.com/emqx/emqx-enterprise/pull/1760).
+  Before this fix, if the protobuf schema contains `oneof` definitions, the rule may failed when trying to parse the decoded message to JSON string.
+
+- Fix the issue that send JSON Object as Kafka Headers failed [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+
+- Fix the issue that the `message_key` of RocketMQ messages was not working [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+
+- Sometimes the `data/rules` and `data/modules` directories cannot be cleaned after the rule or `emqx-module` deleted [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+
+- Fix some problems in the descriptions of HStream resource fields [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+
+- Avoid changing the payload of MQTT messages when printing debug logs [#10091](https://github.com/emqx/emqx/pull/10091).
+  Before this fix, if EMQX receives a message with Payload "e\ne\nc\nc\n2\n\n\n", the log message will be as follows:
+  ```
+  2023-03-08T13:28:04.320622+08:00 [debug] mqttx_e34bd582@127.0.0.1:54020 [MQTT] RECV PUBLISH(Q1, R0, D0, Topic=t/1, PacketId=39467, Payload=e, e, c, c, 2, , , )
+  ```
+  This is the corresponding log message now:
+  ```
+  2023-03-08T14:26:50.935575+08:00 [debug] mqttx_e34bd582@127.0.0.1:54020 [MQTT] RECV PUBLISH(Q1, R0, D0, Topic=t/1, PacketId=39467, Payload=<<"e\ne\nc\nc\n2\n\n\n">>)
+  ```
+
 ## e4.4.15
 
 *Release Date: 2023-03-03*

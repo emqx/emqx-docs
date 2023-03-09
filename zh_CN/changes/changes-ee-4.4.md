@@ -1,5 +1,48 @@
 # 版本发布
 
+## v4.4.16
+
+*发布日期: 2023-03-10*
+
+本次版本更新包含了 4 个增强和 7 个修复。
+
+## 增强
+
+- 改进当配置的 `iotdb_version` 安装的 IoTDB 版本不一样的时候的日志输出 [#1762](https://github.com/emqx/emqx-enterprise/pull/1762)。
+
+- 在离线消息动作收到 QoS0 的消息时，不再打印错误日志 [#1762](https://github.com/emqx/emqx-enterprise/pull/1762)。
+
+- 在版本热升级的时候开启 `emqx_schema_registry` 插件 [#1762](https://github.com/emqx/emqx-enterprise/pull/1762)。
+  当使用规则解码序列化的二进制数据（比如 Protobuf 或 Avro）的时候，`emqx_schema_registry` 插件是必须的。
+  在 EMQX 企业版里，我们需要保证这个插件是启动的。
+
+- 从命令行的输出里和插件的名字中，把 "EMQ X" 改成 "EMQX" [#10099](https://github.com/emqx/emqx/pull/10099)。
+
+## 修复
+
+- 修复 RocketMQ 动作的 `Message Key` 参数不起作用的问题 [#1761](https://github.com/emqx/emqx-enterprise/pull/1761)。
+
+- 修复规则在处理解码后的 protobuf 消息时失败的问题 [#1760](https://github.com/emqx/emqx-enterprise/pull/1760)。
+  在此修复之前，如果 protobuf schema 包含 `oneof` 定义，则在尝试将解码消息解析为 JSON 字符串时，规则可能会失败。
+
+- 修复将 JSON 对象作为 Kafka Headers 发送失败的问题 [#1762](https://github.com/emqx/emqx-enterprise/pull/1762)。
+
+- 修复设置 RocketMQ 消息的 `message_key` 不起作用的问题 [#1762](https://github.com/emqx/emqx-enterprise/pull/1762)。
+
+- 有时在删除规则或模块后，无法自动清除 `data/rules` 和 `data/modules` 目录 [#1762](https://github.com/emqx/emqx-enterprise/pull/1762)。
+
+- 修复 HStream 资源字段描述中的一些问题 [#1762](https://github.com/emqx/emqx-enterprise/pull/1762)。
+
+- 避免打印 debug 日志的时候改动 MQTT 消息的 Payload 的内容 [#10091](https://github.com/emqx/emqx/pull/10091)。
+  在这个修复之前，如果 EMQX 收到一个 Payload 为 "e\ne\nc\nc\n2\n\n\n" 的消息，日志打印会变成这样：
+  ```
+  2023-03-08T13:28:04.320622+08:00 [debug] mqttx_e34bd582@127.0.0.1:54020 [MQTT] RECV PUBLISH(Q1, R0, D0, Topic=t/1, PacketId=39467, Payload=e, e, c, c, 2, , , )
+  ```
+  这是此修复之后的样子：
+  ```
+  2023-03-08T14:26:50.935575+08:00 [debug] mqttx_e34bd582@127.0.0.1:54020 [MQTT] RECV PUBLISH(Q1, R0, D0, Topic=t/1, PacketId=39467, Payload=<<"e\ne\nc\nc\n2\n\n\n">>)
+  ```
+
 ## v4.4.15
 
 *发布日期: 2023-03-03*
