@@ -258,6 +258,13 @@ Then you can click **Dashboard** in the left navigation tree to return to the **
 
 So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../access-control/authn/authn.md) and integration with [Rule Engine](../data-integration/rules.md).
 
+### More to read
+
+Besides this quickstart guide, you may also refer to the pages for the new features introduced in EMQX 5.x and known limitations:
+
+<!-- - [New Feature](./new-features.md) -->
+- [Operating limitations](./restrictions.md)
+
 ## Contact us
 
 If you have any questions on the use of EMQX or EMQ products, you are warmly welcome to [contact us](https://www.emqx.com/zh/contact) for professional support.
