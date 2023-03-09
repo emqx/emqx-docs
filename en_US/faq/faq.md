@@ -314,15 +314,7 @@ ACL can be configured in configuration file, or backend databases. Below is one 
 
 ## Can EMQX support traffic control?
 
-Yes. Currently EMQX supports to control connection rate and message publish rate. Refer to below for sample configuration.
-
-```
-## Value: Number
-listener.tcp.external.max_conn_rate = 1000
-
-## Value: rate,burst
-listener.tcp.external.rate_limit = 1024,4096
-```
+Yes. Currently EMQX supports to control connection rate and message publish rate. Please refer to [Rate limit](../rate-limit/rate-limit.md).
 
 ## How does the EMQX achieve high concurrency and high availability?
 
@@ -333,75 +325,32 @@ High concurrency and availability are design goals of EMQX. To achieve these goa
 - Layered design of connection, session, route and cluster;
 - Separated messaging and control panel;
 
-With the well design and implementation, a single EMQX cluster can handle million level connections.
+With the well design and implementation, a single EMQX node can handle 5 millions connections.
 
 EMQX supports clustering. The EMQX performance can be scale-out with the increased number of nodes in cluster, and the MQTT service will not be interrupted when a single node is down.
 
 ## Can EMQX store messages to database?
 
-The EMQX Enterprise supports data persistence. Supported databases are:
-
-- Redis
-- MongoDB
-- MySQL
-- PostgreSQL
-- Cassandra
+The EMQX Enterprise supports data persistence. Please refer to [Data Bridges](../data-integration/data-bridges.md).
 
 ## Can I disconnect an MQTT connection from EMQX server?
 
-Yes. You can do it by invoking REST API provided by EMQX, but the implementation is different in EMQX 2.x and 3.x:
+Yes. You can do it by invoking REST API provided by EMQX, but the implementation is different in EMQX 2.x and 3.0+:
 
 - EMQX customized protocol in 2.x versions.
-- Follow the process defined in MQTT 5.0 protocol after version 3.0.
-
-Refer to below for API invocation:
-
-```html
-HTTP Method: DELETE URL：api/[v2|v3]/clients/{clientid}
-<!--Please notice the 2nd section in URL, and use the correct version number according to your EMQX version. -->
-
-Returned response: { "code": 0, "result": [] }
-```
+- Follow the process defined in MQTT 5.0 protocol after EMQX 3.0.
 
 ## Can EMQX forward messages to Kafka?
 
-The EMQX Enterprise integrates a Kafka bridge, it can bridge data to Kafka.
-
-## I use Kafka bridge in EMQX enterprise, when will the MQTT Ack packet sent back to client? Is the time when message arriving EMQX or after getting Ack message from Kafka?
-
-It's up to Kafka bridge configuration, the configuration file is at `/etc/emqx/plugins/emqx_bridge_kafka.conf`
-
-```bash
-## Pick a partition producer and sync/async.
-bridge.kafka.produce = sync
-```
-
-- Sync: MQTT Ack packet will be sent back to client after receiving Ack from Kafka.
-- Async: MQTT Ack packet will be sent back to client right after EMQX receiving the message, and EMQX will not wait the Ack returned from Kafka.
-
-If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
-
-- The message will be cached in memory before EMQX 2.4.3 version, if the memory is exhausted, then the EMQX server will be down.
-- The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full.
-
-So we suggest you to closely monitor Kafka server, and recover Kafka service as soon as possible when it has any questions.
+The EMQX Enterprise integrates a Kafka bridge, it can bridge data to Kafka. Please refer to [Data Bridge - Apache Kafka](../data-integration/data-bridge-kafka.md).
 
 ## Does EMQX support cluster auto discovery? What clustering methods are supported?
 
-EMQX supports cluster auto discovery. EMQX clustering can be done manually or automatically.
-
-Currently supported clustering methods:
-
-- Manual clustering
-- Static clustering
-- Auto clustering using IP multi-cast
-- Auto clustering using DNS
-- Auto clustering using ETCD
-- Auto clustering using K8S
+EMQX supports cluster auto discovery. EMQX clustering can be done manually or automatically. Please refer to [Create Cluster](../deploy/cluster/create-cluster.md).
 
 ## Can I forward MQTT messages EMQX to other MQTT broker, like RabbitMQ?
 
-EMQX support forward messages to other MQTT broker. Using MQTT bridge, EMQX can forward messages of interested topics to other broker.
+EMQX support forward messages to other MQTT broker. Using MQTT bridge, EMQX can forward messages of interested topics to other broker. Please refer to [Data Bridges](../data-integration/data-bridges.md).
 
 ## Can I forward messages from EMQX to MQTT services hosted on public cloud?
 
@@ -409,15 +358,17 @@ EMQX can forward messages to IoT Hub hosted on public cloud, this is a feature o
 
 ## Can other MQTT broker (for example Mosquitto) forward messages to EMQX?
 
-EMQX can receive messages from other broker, but it depends also on the implementation of other brokers, Mosquitto can forward messages to EMQX, please refer to [TODO](https://www.emqx.io)。
+EMQX can receive messages from other broker, but it depends also on the implementation of other brokers, Mosquitto can forward messages to EMQX, please refer to [Data Bridge - MQTT](../data-integration/data-bridge-mqtt.md).
 
 ## What should I do if I want trace the subscription and publish of some particular message?
 
-EMQX support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx_ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to EMQX document.
+EMQX support the tracing of messages from particular client or under particular topic. You can use the command line tool `emqx_ctl` for tracing. The example below shows how to trace messages under 'topic' and save the result in 'trace_topic.log'. For more details, please refer to [Log Trace](../observability/tracer.md).
 
-```
-./bin/emqx_ctl trace topic "topic" "trace_topic.log"
-```
+## When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?
+
+When executing a stress test, besides ensuring the necessary hardware resource, it is also necessary to tune the OS and the Erlang VM to make the maximum use of the resource. The most common tuning is to modify the global limitation of file handles, the user limitation of file handles, the TCP backlog and buffer, the limitation of process number of Erlang VM and so on. You will also need to tune the client machine to ensure it has the ability and resource to handle all the subs and pubs.
+
+Different use cases require different tuning. In the EMQX document there is a chapter about tuning the system for general purpose. Please refer to [Tune](../performance/tune.md).
 
 ## Does EMQX support encrypted connection? What is the recommended deployment?
 
@@ -468,38 +419,6 @@ Execute `$ emqx console` to view the output.
 
 **Solution:** Install openssl above version 1.1.1
 
-- `License` file is missing
-
-```
-  $ emqx console
-  Exec: /usr/lib/emqx/erts-10.3.5.1/bin/erlexec -boot /usr/lib/emqx/releases/v3.2.1/emqx -mode embedded -boot_var ERTS_LIB_DIR /usr/lib/emqx/erts-10.3.5.1/../lib -mnesia dir "/var/lib/emqx/mnesia/emqx@127.0.0.1" -config /var/lib/emqx/configs/app.2019.07.23.05.52.46.config -args_file /var/lib/emqx/configs/vm.2019.07.23.05.52.46.args -vm_args /var/lib/emqx/configs/vm.2019.07.23.05.52.46.args -- console
-  Root: /usr/lib/emqx
-  /usr/lib/emqx
-  Erlang/OTP 21 [erts-10.3.5.1] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:32] [hipe]
-
-  Starting emqx on node emqx@127.0.0.1
-  Start http:management listener on 8080 successfully.
-  Start http:dashboard listener on 18083 successfully.
-  Start mqtt:tcp listener on 127.0.0.1:11883 successfully.
-  Start mqtt:tcp listener on 0.0.0.0:1883 successfully.
-  Start mqtt:ws listener on 0.0.0.0:8083 successfully.
-  Start mqtt:ssl listener on 0.0.0.0:8883 successfully.
-  Start mqtt:wss listener on 0.0.0.0:8084 successfully.
-  EMQX Broker 3.2.1 is running now!
-  "The license certificate is expired!"
-  2019-07-23 05:52:51.355 [critical] The license certificate is expired!
-  2019-07-23 05:52:51.355 [critical] The license certificate is expired! System shutdown!
-  Stop mqtt:tcp listener on 127.0.0.1:11883 successfully.
-  Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
-  Stop mqtt:ws listener on 0.0.0.0:8083 successfully.
-  Stop mqtt:ssl listener on 0.0.0.0:8883 successfully.
-  Stop mqtt:wss listener on 0.0.0.0:8084 successfully.
-  [os_mon] memory supervisor port (memsup): Erlang has closed
-  [os_mon] cpu supervisor port (cpu_sup): Erlang has closed
-```
-
-**Solution:** Go to [emqx.io](https://emqx.io) to apply for a license or install the open source version of EMQX Broker
-
 ## Use of ssl resumption session in EMQX
 
 Modify the reuse_sessions = on in the emqx.conf configuration and take effect. If the client and the server are successfully connected through SSL, when the client connection is encountered for the second time, the SSL handshake phase is skipped, the connection is directly established to save the connection time and increase the client connection speed.
@@ -531,6 +450,7 @@ Client disconnect link error code list:
 EMQX supports deployment on Linux, MacOS, ARM system, however it is recommended to deploy the product on one of the supported Linux distributions, such as CentOS, Ubuntu and Debian.
 
 Only EMQX Broker supports Windows and we don't suggestion deployment on Windows.
+
 ## How to estimate resource usage of EMQX?
 
 The following factors will have an impact on EMQX resource consumption, mainly on CPU and memory usage.
@@ -548,12 +468,6 @@ The following factors will have an impact on EMQX resource consumption, mainly o
 If client devices connect to EMQX through TLS, more CPU resource is required for encryption and decryption. Our suggested solution is to add a load balancer in front of EMQX nodes, the TLS is offloaded at load balance node, connections between load balancer and backend EMQX nodes use plain TCP connections.
 
 You can use our online calculation tool [https://www.emqx.com/en/server-estimate](https://www.emqx.com/en/server-estimate) to estimate the resource consumption.
-
-## When I was executing stress test, the connection number and throughput are lower than expected. How can I tune the system to make full use of it?
-
-When executing a stress test, besides ensuring the necessary hardware resource, it is also necessary to tune the OS and the Erlang VM to make the maximum use of the resource. The most common tuning is to modify the global limitation of file handles, the user limitation of file handles, the TCP backlog and buffer, the limitation of process number of Erlang VM and so on. You will also need to tune the client machine to ensure it has the ability and resource to handle all the subs and pubs.
-
-Different use cases require different tuning. In the EMQX document there is a chapter about tuning the system for general purpose. [TODO](https://www.emqx.io)
 
 ## My connections number is small, do I still need to deploy multiple nodes in production?
 

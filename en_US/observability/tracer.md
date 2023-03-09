@@ -56,7 +56,7 @@ You can see the Trace record after successful creation in the list, where you ca
 ### Notes
 
 1. You can create up to 30 trace logs. 
-2. Trace logs can generate a maximum of 512M logs per node. If the generated log file reaches the maximum, it will stop appending logs and give an alert in the main log file.
+2. Trace logs can generate a maximum of 512MB logs per node. If the generated log file reaches the maximum, it will stop appending logs and give an alert in the main log file.
 3. You can stop logging manually or wait until the end time to stop automatically.
 4. The log file size viewed in the list is the sum of the uncompressed file sizes.
 5. The EMQX cluster will continue an outstanding trace after the restart.
