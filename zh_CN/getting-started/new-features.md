@@ -4,7 +4,7 @@ EMQX 5.0 是 MQTT 领域的一个里程碑式的成果。它不仅是全球首�
 
 ## 可扩展性及可靠性显著提升，单集群 1 亿 MQTT 连接
 
-通过采用 Erlang 的 Mnesia 数据库的新 Mria 扩展，以及即将在后续 5.1 版本中提供的基于 RocksDB 的会话持久化，EMQX 5.0 的横向扩展能力及消息传输可靠性得到了指数级提升。
+通过采用 Erlang 的 Mnesia 数据库的新 Mria 扩展，以及即将在后续 5.x 版本中提供的基于 RocksDB 的会话持久化，EMQX 5.0 的横向扩展能力及消息传输可靠性得到了指数级提升。
 
 最新的性能测试表明，EMQX 5.0 可以轻松支持单个集群的 [1 亿 MQTT 连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0) —— 比以前的版本增加了 10 倍，这使得 EMQX 5.0 成为目前全球最具扩展性的 MQTT Broker，能够轻松承载超大规模的物联网应用。
 
