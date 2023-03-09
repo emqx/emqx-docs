@@ -262,7 +262,7 @@ So far, you have completed the installation, startup, and access test of EMQX, y
 
 Besides this quickstart guide, you may also refer to the pages for the new features introduced in EMQX 5.x and known limitations:
 
-- [New Feature](./new-features.md)
+<!-- - [New Feature](./new-features.md) -->
 - [Operating limitations](./restrictions.md)
 
 ## Contact us
