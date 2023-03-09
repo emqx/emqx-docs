@@ -56,9 +56,10 @@ For more information about EMQX official docker image, see [Docker Hub - emqx/em
 
 ## Use Docker Compose to build an EMQX cluster
 
-Docker Compose is a tool for defining and running multi-container Docker applications. This section will introduce how to use Docker Compose to create a static EMQX cluster. 
+Docker Compose is a tool for defining and running multi-container Docker applications. This section will introduce how to use Docker Compose to create a static EMQX cluster.
 
 :::tip
+
 Docker Compose is already included in Docker Desktop. If your Docker Compose still needs to be installed, you may refer to [Install Docker Compose](https://docs.docker.com/compose/install/) for detailed operating steps.
 
 :::
@@ -75,9 +76,9 @@ services:
     image: emqx:5.0.19
     container_name: emqx1
     environment:
-    - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+    - "EMQX_NODE_NAME=emqx@node1.emqx.io"
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
       interval: 5s
@@ -86,7 +87,7 @@ services:
     networks:
       emqx-bridge:
         aliases:
-        - node1.emqx.com
+        - node1.emqx.io
     ports:
       - 1883:1883
       - 8083:8083
@@ -100,9 +101,9 @@ services:
     image: emqx:5.0.19
     container_name: emqx2
     environment:
-    - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+    - "EMQX_NODE_NAME=emqx@node2.emqx.io"
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
       interval: 5s
@@ -111,7 +112,7 @@ services:
     networks:
       emqx-bridge:
         aliases:
-        - node2.emqx.com
+        - node2.emqx.io
     # volumes:
     #   - $PWD/emqx2_data:/opt/emqx/data
 

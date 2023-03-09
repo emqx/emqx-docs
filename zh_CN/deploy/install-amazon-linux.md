@@ -165,15 +165,15 @@ sudo systemctl start emqx
 
 1. 下载 [emqx-enterprise-5.0.0-amzn2-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-amzn2-arm64.tar.gz)。
 
-```bash
-wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-amzn2-arm64.tar.gz
-```
+   ```bash
+   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-amzn2-arm64.tar.gz
+   ```
 
 2. 安装 EMQX。
 
-```bash
-mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-amzn2-arm64.tar.gz -C emqx
-```
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-amzn2-arm64.tar.gz -C emqx
+   ```
 
 :::
 

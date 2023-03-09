@@ -121,7 +121,7 @@ By default, EMQX adopts a manual clustering strategy, which can be set in `emqx.
 
 ```bash
 cluster {
-    ## options: manual | static | mcast | dns | etcd | K8s
+    ## options: manual | static | dns | etcd | K8s
     discovery_strategy  =  manual
 }
 ```

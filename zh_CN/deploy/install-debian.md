@@ -19,7 +19,7 @@
 
 ::: tab amd64
 
-1. 下载 emqx-5.0.19-debian11-amd64.deb(https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb)。
+1. 下载 [emqx-5.0.19-debian11-amd64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-debian11-amd64.deb)。
 
    ```bash
    wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-debian11-amd64.deb
@@ -185,7 +185,8 @@
    ```
 
 2. 安装 EMQX。
-   ```
+
+   ```bash
    mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-debian11-amd64.tar.gz -C emqx
    ```
 

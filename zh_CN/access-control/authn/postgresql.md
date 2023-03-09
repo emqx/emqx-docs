@@ -41,8 +41,12 @@ CREATE TABLE mqtt_user (
 ```sql
 postgres=# create extension pgcrypto;
 CREATE EXTENSION
+```
 
-postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', encode(digest('public' || 'slat_foo123', 'sha256'), 'hex'), 'slat_foo123', true);
+SQL 如下：
+
+```sql
+INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', encode(digest('public' || 'slat_foo123', 'sha256'), 'hex'), 'slat_foo123', true);
 INSERT 0 1
 ```
 
