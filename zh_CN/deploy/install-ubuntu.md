@@ -68,10 +68,10 @@
 
   ```bash
   $ emqx start
-  EMQX 5.0.0 is started successfully!
+  EMQX 5.0.19 is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.0 is started
+  Node 'emqx@127.0.0.1' 5.0.19 is started
   ```
 
 - systemctl 启动：
