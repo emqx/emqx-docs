@@ -90,20 +90,16 @@ SELECT * FROM "t/#"
 
 填写动作参数:
 
-“保存数据到 SQLServer” 动作需要两个参数：
-4
-2). SQL 模板。这个例子里我们向 SQLServer 插入一条数据，SQL
-​    模板为:
+“保存数据到 SQLServer” 动作需要两个参数SQL 模板和资源 ID。
+
+这里我们希望向 SQLServer 插入一条数据，其中用到的 SQL 模版如下：
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
 ```
 
-![image](./assets/rule-engine/sqlserver3.png)
+关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 SQLServer 资源，在新弹出的**创建资源**页面，进行如下配置：
 
-1). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 SQLServer 资源:
-
-填写资源配置:
 数据库名填写 “mqtt”，用户名填写 “sa”，密码填写 “mqtt_public”
 
 ![image](./assets/rule-engine/sqlserver4.png)

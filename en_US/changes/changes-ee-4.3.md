@@ -1,5 +1,49 @@
 # Releases
 
+## e4.3.19
+
+*Release Date: 2023-03-03*
+
+### Enhancements
+
+- Add TCP keepalive configuration for Kafka client.
+
+- Improve error messages in the dashboard when adding users to the internal auth database.
+
+- The plugin `schema_registry` will be enabled by default as an optional feature of `rule_engine`.
+
+### Bug fixes
+
+- Fix the problem that new MQTT TLS connections failed to establish after release hot upgrade.
+  For more detailed information please see: [emqx/esockd#170](https://github.com/emqx/esockd/pull/170).
+
+- fix the issue that produce messages to RocketMQ cluster using rule-engine failed.
+
+- fix some issues in descriptions of the actions, resources amd emqx-modules.
+
+- fix there's no error logs when query the JWKS server failed.
+
+- Fixed an error when forward MQTT messages with User-Property using the `republish` action.
+
+- Fix the problem of sending offline messages to clients in reverse order when using Redis offline message feature.
+
+- Fix the problem that the same request sent to different EMQX nodes returns inconsistent results when sending the HTTP API to get the client list in paging mode.
+  Before this change, different lists of clients will be returned if one sends
+  'GET http://localhost:8081/api/v4/clients?_page=1&_limit=1000' to different
+  EMQX nodes in the cluster.
+
+- When uploading a license, now EMQX will always reload the license, to avoid the case where a user replaces the current license file with new contents.
+
+- Only create EMQX modules locally when the emqx_modules application is started.
+  Before this change, we RPC to all the nodes to create/recreate modules when emqx_modules application
+  get started, so finally we created modules N^2 times on all the nodes (N times on each node).
+
+- Password format for new dashboard users is no longer limited to ^[A-Za-z0-9]+[A-Za-z0-9-_]*$.
+
+- Returning a failure when creating an existing listener in a cluster using the API.
+
+- Delete the files directory when `resources/modules/schema_registry` were deleted to avoid files leaking.
+
 ## e4.3.18
 
 *Release Date: 2022-12-29*
@@ -241,7 +285,7 @@
 - Fixed Redis resource liveness problem issue. Prior to this fix, the resource is considered alive when connection can be established.
   The fix is to perform a PING query to make sure the service is alive.
 
-- Fix the redis-cluster resource prints too many error logs when redis servers are not avaliable.
+- Fix the redis-cluster resource prints too many error logs when Redis servers are not avaliable.
 
 - Fixed an internal Redis resource ID clashing. This clashing may cause resources in use getting deleted when deleting another resource.
 
@@ -249,9 +293,9 @@
 
 - Fix HTTP client library to handle SSL socket passive signal [#9145](https://github.com/emqx/emqx/pull/9145).
 
-- Hide redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071).
-  More changes in redis client included in this release:
-  - Improve redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
+- Hide Redis password in error logs [#9071](https://github.com/emqx/emqx/pull/9071).
+  More changes in Redis client included in this release:
+  - Improve Redis connection error logging [eredis#19](https://github.com/emqx/eredis/pull/19).
     Also added support for eredis to accept an anonymous function as password instead of
     passing around plaintext args which may get dumpped to crash logs (hard to predict where).
     This change also added `format_status` callback for `gen_server` states which hold plaintext
