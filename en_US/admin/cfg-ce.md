@@ -7,7 +7,7 @@ EMQX Configuration File Manual.
 The Erlang/OTP platform application is composed of distributed Erlang nodes (processes). Each Erlang node (process) needs to be assigned a node name for mutual communication between nodes. All Erlang nodes (processes) in communication are authenticated by a shared cookie.
 
 **node.name**
-  
+
   *Type*: `string`
 
   *Default*: `emqx@127.0.0.1`
@@ -17,7 +17,7 @@ The Erlang/OTP platform application is composed of distributed Erlang nodes (pro
 
 
 **node.cookie**
-  
+
   *Type*: `string`
 
   Secret cookie is a random string that should be the same on all nodes in
@@ -26,7 +26,7 @@ belong to different clusters from accidentally connecting to each other.
 
 
 **node.process_limit**
-  
+
   *Type*: `integer`
 
   *Default*: `2097152`
@@ -39,7 +39,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
 
 **node.max_ports**
-  
+
   *Type*: `integer`
 
   *Default*: `1048576`
@@ -52,7 +52,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
 
 **node.dist_buffer_size**
-  
+
   *Type*: `integer`
 
   *Default*: `8192`
@@ -63,7 +63,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
 
 **node.max_ets_tables**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `262144`
@@ -72,7 +72,7 @@ For more information, see: https://www.erlang.org/doc/man/erl.html
 
 
 **node.data_dir**
-  
+
   *Type*: `string`
 
   Path to the persistent data directory.<br/>
@@ -90,7 +90,7 @@ the old dir should be deleted first.<br/>
 
 
 **node.global_gc_interval**
-  
+
   *Type*: `disabled | duration`
 
   *Default*: `15m`
@@ -99,7 +99,7 @@ the old dir should be deleted first.<br/>
 
 
 **node.crash_dump_file**
-  
+
   *Type*: `file`
 
   *Default*: `log/erl_crash.dump`
@@ -108,7 +108,7 @@ the old dir should be deleted first.<br/>
 
 
 **node.crash_dump_seconds**
-  
+
   *Type*: `duration_s`
 
   *Default*: `30s`
@@ -120,7 +120,7 @@ the old dir should be deleted first.<br/>
 
 
 **node.crash_dump_bytes**
-  
+
   *Type*: `bytesize`
 
   *Default*: `100MB`
@@ -131,7 +131,7 @@ If setting it to 0, the runtime system does not even attempt to write a crash du
 
 
 **node.dist_net_ticktime**
-  
+
   *Type*: `duration_s`
 
   *Default*: `2m`
@@ -140,7 +140,7 @@ If setting it to 0, the runtime system does not even attempt to write a crash du
 
 
 **node.backtrace_depth**
-  
+
   *Type*: `integer`
 
   *Default*: `23`
@@ -150,28 +150,28 @@ If setting it to 0, the runtime system does not even attempt to write a crash du
 
 
 **node.applications**
-  
+
   *Type*: `comma_separated_atoms`
 
   *Default*: `[]`
 
-  List of Erlang applications that shall be rebooted when the EMQX broker joins the cluster.
+  List of Erlang applications that shall be rebooted when the EMQX joins the cluster.
 
 
 **node.etc_dir**
-  
+
   *Type*: `string`
 
   Deprecated since 5.0.8.
 
 
 **node.cluster_call**
-  
+
   *Type*: `cluster_call`
 
 
 **node.db_backend**
-  
+
   *Type*: `enum`
 
   *Default*: `rlog`
@@ -185,7 +185,7 @@ that is suitable for very large clusters.<br/>
 
 
 **node.db_role**
-  
+
   *Type*: `enum`
 
   *Default*: `core`
@@ -203,7 +203,7 @@ to <code>rlog</code>.
 
 
 **node.rpc_module**
-  
+
   *Type*: `enum`
 
   *Default*: `gen_rpc`
@@ -214,7 +214,7 @@ to <code>rlog</code>.
 
 
 **node.tlog_push_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `async`
@@ -235,7 +235,7 @@ but in case you need to do performance fine-tuning or experiment a bit,
 this is where to look.
 
 **rpc.mode**
-  
+
   *Type*: `enum`
 
   *Default*: `async`
@@ -246,7 +246,7 @@ this is where to look.
 
 
 **rpc.driver**
-  
+
   *Type*: `enum`
 
   *Default*: `tcp`
@@ -257,7 +257,7 @@ this is where to look.
 
 
 **rpc.async_batch_size**
-  
+
   *Type*: `integer`
 
   *Default*: `256`
@@ -267,7 +267,7 @@ this is where to look.
 
 
 **rpc.port_discovery**
-  
+
   *Type*: `enum`
 
   *Default*: `stateless`
@@ -281,7 +281,7 @@ then the listening port will be 5370 + N.
 
 
 **rpc.tcp_server_port**
-  
+
   *Type*: `integer`
 
   *Default*: `5369`
@@ -291,7 +291,7 @@ Note that this config only takes effect when rpc.port_discovery is set to manual
 
 
 **rpc.ssl_server_port**
-  
+
   *Type*: `integer`
 
   *Default*: `5369`
@@ -302,7 +302,7 @@ and <code>driver</code> is set to <code>ssl</code>.
 
 
 **rpc.tcp_client_num**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -313,7 +313,7 @@ and <code>driver</code> is set to <code>ssl</code>.
 
 
 **rpc.connect_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -322,7 +322,7 @@ and <code>driver</code> is set to <code>ssl</code>.
 
 
 **rpc.certfile**
-  
+
   *Type*: `file`
 
   Path to TLS certificate file used to validate identity of the cluster nodes.
@@ -330,7 +330,7 @@ Note that this config only takes effect when <code>rpc.driver</code> is set to <
 
 
 **rpc.keyfile**
-  
+
   *Type*: `file`
 
   Path to the private key file for the <code>rpc.certfile</code>.<br/>
@@ -338,7 +338,7 @@ Note: contents of this file are secret, so it's necessary to set permissions to 
 
 
 **rpc.cacertfile**
-  
+
   *Type*: `file`
 
   Path to certification authority TLS certificate file used to validate <code>rpc.certfile</code>.<br/>
@@ -346,7 +346,7 @@ Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
 **rpc.send_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -355,7 +355,7 @@ Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
 **rpc.authentication_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -364,7 +364,7 @@ Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
 **rpc.call_receive_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `15s`
@@ -373,7 +373,7 @@ Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
 **rpc.socket_keepalive_idle**
-  
+
   *Type*: `duration_s`
 
   *Default*: `15m`
@@ -382,7 +382,7 @@ Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
 **rpc.socket_keepalive_interval**
-  
+
   *Type*: `duration_s`
 
   *Default*: `75s`
@@ -391,7 +391,7 @@ Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
 **rpc.socket_keepalive_count**
-  
+
   *Type*: `integer`
 
   *Default*: `9`
@@ -401,7 +401,7 @@ until the RPC connection is considered lost.
 
 
 **rpc.socket_sndbuf**
-  
+
   *Type*: `bytesize`
 
   *Default*: `1MB`
@@ -410,7 +410,7 @@ until the RPC connection is considered lost.
 
 
 **rpc.socket_recbuf**
-  
+
   *Type*: `bytesize`
 
   *Default*: `1MB`
@@ -419,7 +419,7 @@ until the RPC connection is considered lost.
 
 
 **rpc.socket_buffer**
-  
+
   *Type*: `bytesize`
 
   *Default*: `1MB`
@@ -428,7 +428,7 @@ until the RPC connection is considered lost.
 
 
 **rpc.insecure_fallback**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -444,7 +444,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
       Here holds the configs to instruct how individual nodes can discover each other.
 
 **cluster.name**
-  
+
   *Type*: `atom`
 
   *Default*: `emqxcl`
@@ -453,7 +453,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
 
 **cluster.discovery_strategy**
-  
+
   *Type*: `enum`
 
   *Default*: `manual`
@@ -469,7 +469,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
 
 **cluster.core_nodes**
-  
+
   *Type*: `comma_separated_atoms`
 
   *Default*: `[]`
@@ -483,7 +483,7 @@ there is no need to set this value.
 
 
 **cluster.autoclean**
-  
+
   *Type*: `duration`
 
   *Default*: `5m`
@@ -492,7 +492,7 @@ there is no need to set this value.
 
 
 **cluster.autoheal**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -501,7 +501,7 @@ there is no need to set this value.
 
 
 **cluster.proto_dist**
-  
+
   *Type*: `enum`
 
   *Default*: `inet_tcp`
@@ -514,27 +514,27 @@ there is no need to set this value.
 
 
 **cluster.static**
-  
+
   *Type*: `cluster_static`
 
 
 **cluster.mcast**
-  
+
   *Type*: `cluster_mcast`
 
 
 **cluster.dns**
-  
+
   *Type*: `cluster_dns`
 
 
 **cluster.etcd**
-  
+
   *Type*: `cluster_etcd`
 
 
 **cluster.k8s**
-  
+
   *Type*: `cluster_k8s`
 
 
@@ -568,7 +568,7 @@ Service discovery via static nodes.
 The new node joins the cluster by connecting to one of the bootstrap nodes.
 
 **cluster.static.seeds**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -583,7 +583,7 @@ The new node joins the cluster by connecting to one of the bootstrap nodes.
 Service discovery via UDP multicast.
 
 **cluster.mcast.addr**
-  
+
   *Type*: `string`
 
   *Default*: `239.192.0.1`
@@ -592,7 +592,7 @@ Service discovery via UDP multicast.
 
 
 **cluster.mcast.ports**
-  
+
   *Type*: `array`
 
   *Default*: `ᄑᄒ`
@@ -602,7 +602,7 @@ Note: probe messages are broadcast to all the specified ports.
 
 
 **cluster.mcast.iface**
-  
+
   *Type*: `string`
 
   *Default*: `0.0.0.0`
@@ -611,7 +611,7 @@ Note: probe messages are broadcast to all the specified ports.
 
 
 **cluster.mcast.ttl**
-  
+
   *Type*: `integer`
 
   *Default*: `255`
@@ -622,7 +622,7 @@ Note: probe messages are broadcast to all the specified ports.
 
 
 **cluster.mcast.loop**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -631,7 +631,7 @@ Note: probe messages are broadcast to all the specified ports.
 
 
 **cluster.mcast.sndbuf**
-  
+
   *Type*: `bytesize`
 
   *Default*: `16KB`
@@ -640,7 +640,7 @@ Note: probe messages are broadcast to all the specified ports.
 
 
 **cluster.mcast.recbuf**
-  
+
   *Type*: `bytesize`
 
   *Default*: `16KB`
@@ -649,7 +649,7 @@ Note: probe messages are broadcast to all the specified ports.
 
 
 **cluster.mcast.buffer**
-  
+
   *Type*: `bytesize`
 
   *Default*: `32KB`
@@ -664,7 +664,7 @@ Note: probe messages are broadcast to all the specified ports.
 Service discovery via DNS SRV records.
 
 **cluster.dns.name**
-  
+
   *Type*: `string`
 
   *Default*: `localhost`
@@ -674,7 +674,7 @@ Applicable when <code>cluster.discovery_strategy = dns</code>
 
 
 **cluster.dns.record_type**
-  
+
   *Type*: `enum`
 
   *Default*: `a`
@@ -691,14 +691,14 @@ Applicable when <code>cluster.discovery_strategy = dns</code>
 Service discovery using 'etcd' service.
 
 **cluster.etcd.server**
-  
+
   *Type*: `comma_separated_list`
 
   List of endpoint URLs of the etcd cluster
 
 
 **cluster.etcd.prefix**
-  
+
   *Type*: `string`
 
   *Default*: `emqxcl`
@@ -707,7 +707,7 @@ Service discovery using 'etcd' service.
 
 
 **cluster.etcd.node_ttl**
-  
+
   *Type*: `duration`
 
   *Default*: `1m`
@@ -717,7 +717,7 @@ It is refreshed automatically, as long as the node is alive.
 
 
 **cluster.etcd.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   Options for the TLS connection to the etcd cluster.
@@ -730,7 +730,7 @@ It is refreshed automatically, as long as the node is alive.
 Service discovery via Kubernetes API server.
 
 **cluster.k8s.apiserver**
-  
+
   *Type*: `string`
 
   *Default*: `http://10.110.111.204:8080`
@@ -739,16 +739,16 @@ Service discovery via Kubernetes API server.
 
 
 **cluster.k8s.service_name**
-  
+
   *Type*: `string`
 
   *Default*: `emqx`
 
-  EMQX broker service name.
+  EMQX service name.
 
 
 **cluster.k8s.address_type**
-  
+
   *Type*: `enum`
 
   *Default*: `ip`
@@ -761,7 +761,7 @@ make EMQX to discover IP addresses of peer nodes from Kubernetes API.
 
 
 **cluster.k8s.namespace**
-  
+
   *Type*: `string`
 
   *Default*: `default`
@@ -770,7 +770,7 @@ make EMQX to discover IP addresses of peer nodes from Kubernetes API.
 
 
 **cluster.k8s.suffix**
-  
+
   *Type*: `string`
 
   *Default*: `pod.local`
@@ -787,7 +787,7 @@ or <code>hostname</code>.
 Options for the 'cluster call' feature that allows to execute a callback on all nodes in the cluster.
 
 **node.cluster_call.retry_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `1m`
@@ -796,7 +796,7 @@ Options for the 'cluster call' feature that allows to execute a callback on all 
 
 
 **node.cluster_call.max_history**
-  
+
   *Type*: `integer`
 
   *Default*: `100`
@@ -807,7 +807,7 @@ Options for the 'cluster call' feature that allows to execute a callback on all 
 
 
 **node.cluster_call.cleanup_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `5m`
@@ -827,19 +827,19 @@ Configure the log output location, log level, log file storage path, and paramet
 Log handler that prints log events to files.
 
 **log.file_handlers.$name.file**
-  
+
   *Type*: `file`
 
   Name the log file.
 
 
 **log.file_handlers.$name.rotation**
-  
+
   *Type*: `log_rotation`
 
 
 **log.file_handlers.$name.max_size**
-  
+
   *Type*: `infinity | bytesize`
 
   *Default*: `50MB`
@@ -848,7 +848,7 @@ Log handler that prints log events to files.
 
 
 **log.file_handlers.$name.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -857,7 +857,7 @@ Log handler that prints log events to files.
 
 
 **log.file_handlers.$name.level**
-  
+
   *Type*: `log_level`
 
   *Default*: `warning`
@@ -867,7 +867,7 @@ Defaults to warning.
 
 
 **log.file_handlers.$name.time_offset**
-  
+
   *Type*: `string`
 
   *Default*: `system`
@@ -881,7 +881,7 @@ Defaults to: <code>system</code>.
 
 
 **log.file_handlers.$name.chars_limit**
-  
+
   *Type*: `unlimited | 100..inf`
 
   *Default*: `unlimited`
@@ -891,7 +891,7 @@ NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incom
 
 
 **log.file_handlers.$name.formatter**
-  
+
   *Type*: `enum`
 
   *Default*: `text`
@@ -902,7 +902,7 @@ NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incom
 
 
 **log.file_handlers.$name.single_line**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -911,7 +911,7 @@ NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incom
 
 
 **log.file_handlers.$name.sync_mode_qlen**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `100`
@@ -929,7 +929,7 @@ asynchronous operation is resumed.
 
 
 **log.file_handlers.$name.drop_mode_qlen**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `3000`
@@ -939,7 +939,7 @@ When drop mode is activated or deactivated, a message is printed in the logs.
 
 
 **log.file_handlers.$name.flush_qlen**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8000`
@@ -949,17 +949,17 @@ To flush events, the handler discards the buffered log messages without logging.
 
 
 **log.file_handlers.$name.overload_kill**
-  
+
   *Type*: `log_overload_kill`
 
 
 **log.file_handlers.$name.burst_limit**
-  
+
   *Type*: `log_burst_limit`
 
 
 **log.file_handlers.$name.supervisor_reports**
-  
+
   *Type*: `enum`
 
   *Default*: `error`
@@ -972,7 +972,7 @@ To flush events, the handler discards the buffered log messages without logging.
 
 
 **log.file_handlers.$name.max_depth**
-  
+
   *Type*: `unlimited | non_neg_integer`
 
   *Default*: `100`
@@ -987,7 +987,7 @@ To flush events, the handler discards the buffered log messages without logging.
 Log handler that prints log events to the EMQX console.
 
 **log.console_handler.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -996,7 +996,7 @@ Log handler that prints log events to the EMQX console.
 
 
 **log.console_handler.level**
-  
+
   *Type*: `log_level`
 
   *Default*: `warning`
@@ -1006,7 +1006,7 @@ Defaults to warning.
 
 
 **log.console_handler.time_offset**
-  
+
   *Type*: `string`
 
   *Default*: `system`
@@ -1020,7 +1020,7 @@ Defaults to: <code>system</code>.
 
 
 **log.console_handler.chars_limit**
-  
+
   *Type*: `unlimited | 100..inf`
 
   *Default*: `unlimited`
@@ -1030,7 +1030,7 @@ NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incom
 
 
 **log.console_handler.formatter**
-  
+
   *Type*: `enum`
 
   *Default*: `text`
@@ -1041,7 +1041,7 @@ NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incom
 
 
 **log.console_handler.single_line**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1050,7 +1050,7 @@ NOTE: Restrict char limiter if formatter is JSON , it will get a truncated incom
 
 
 **log.console_handler.sync_mode_qlen**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `100`
@@ -1068,7 +1068,7 @@ asynchronous operation is resumed.
 
 
 **log.console_handler.drop_mode_qlen**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `3000`
@@ -1078,7 +1078,7 @@ When drop mode is activated or deactivated, a message is printed in the logs.
 
 
 **log.console_handler.flush_qlen**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8000`
@@ -1088,17 +1088,17 @@ To flush events, the handler discards the buffered log messages without logging.
 
 
 **log.console_handler.overload_kill**
-  
+
   *Type*: `log_overload_kill`
 
 
 **log.console_handler.burst_limit**
-  
+
   *Type*: `log_burst_limit`
 
 
 **log.console_handler.supervisor_reports**
-  
+
   *Type*: `enum`
 
   *Default*: `error`
@@ -1111,7 +1111,7 @@ To flush events, the handler discards the buffered log messages without logging.
 
 
 **log.console_handler.max_depth**
-  
+
   *Type*: `unlimited | non_neg_integer`
 
   *Default*: `100`
@@ -1127,7 +1127,7 @@ By default, the logs are stored in `./log` directory (for installation from zip 
 This section of the configuration controls the number of files kept for each log handler.
 
 **log.file_handlers.$name.rotation.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1136,7 +1136,7 @@ This section of the configuration controls the number of files kept for each log
 
 
 **log.file_handlers.$name.rotation.count**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -1158,7 +1158,7 @@ Large bursts of log events produced in a short time can potentially cause proble
 Log burst limit feature can temporarily disable logging to avoid these issues.
 
 **log_burst_limit.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1167,7 +1167,7 @@ Log burst limit feature can temporarily disable logging to avoid these issues.
 
 
 **log_burst_limit.max_count**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `10000`
@@ -1176,7 +1176,7 @@ Log burst limit feature can temporarily disable logging to avoid these issues.
 
 
 **log_burst_limit.window_time**
-  
+
   *Type*: `duration`
 
   *Default*: `1s`
@@ -1192,7 +1192,7 @@ Log overload kill features an overload protection that activates when the log ha
 When the overload is detected, the log handler is terminated and restarted after a cooldown period.
 
 **log_overload_kill.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1201,7 +1201,7 @@ When the overload is detected, the log handler is terminated and restarted after
 
 
 **log_overload_kill.mem_size**
-  
+
   *Type*: `bytesize`
 
   *Default*: `30MB`
@@ -1210,7 +1210,7 @@ When the overload is detected, the log handler is terminated and restarted after
 
 
 **log_overload_kill.qlen**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `20000`
@@ -1219,7 +1219,7 @@ When the overload is detected, the log handler is terminated and restarted after
 
 
 **log_overload_kill.restart_after**
-  
+
   *Type*: `duration_ms | infinity`
 
   *Default*: `5s`
@@ -1233,7 +1233,7 @@ When the overload is detected, the log handler is terminated and restarted after
 EMQX supports the creation of multiple listeners, and the default MQTT/TCP listener port is `1883`.
 
 **listeners.tcp.$name.enabled**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1242,7 +1242,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
 
 
 **listeners.tcp.$name.bind**
-  
+
   *Type*: `ip_port | integer`
 
   *Default*: `1883`
@@ -1251,7 +1251,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
 
 
 **listeners.tcp.$name.acceptors**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `16`
@@ -1260,7 +1260,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
 
 
 **listeners.tcp.$name.max_connections**
-  
+
   *Type*: `infinity | pos_integer`
 
   *Default*: `infinity`
@@ -1269,7 +1269,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
 
 
 **listeners.tcp.$name.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -1292,7 +1292,7 @@ Variables in mountpoint string:
 
 
 **listeners.tcp.$name.zone**
-  
+
   *Type*: `atom`
 
   *Default*: `default`
@@ -1301,7 +1301,7 @@ Variables in mountpoint string:
 
 
 **listeners.tcp.$name.limiter**
-  
+
   *Type*: `limiter:listener_fields`
 
   *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
@@ -1310,7 +1310,7 @@ Variables in mountpoint string:
 
 
 **listeners.tcp.$name.enable_authn**
-  
+
   *Type*: `enum`
 
   *Default*: `true`
@@ -1326,7 +1326,7 @@ anonymous clients early.
 
 
 **listeners.tcp.$name.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `["allow all"]`
@@ -1335,7 +1335,7 @@ anonymous clients early.
 
 
 **listeners.tcp.$name.proxy_protocol**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -1345,7 +1345,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.tcp.$name.proxy_protocol_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `3s`
@@ -1354,7 +1354,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.tcp.$name.authentication**
-  
+
   *Type*: `array`
 
   Per-listener authentication override.
@@ -1363,7 +1363,7 @@ When authenticating a login (username, client ID, etc.) the authenticators are c
 
 
 **listeners.tcp.$name.tcp_options**
-  
+
   *Type*: [broker:tcp_opts](#tcp_opts)
 
 
@@ -1374,7 +1374,7 @@ When authenticating a login (username, client ID, etc.) the authenticators are c
 Settings for the MQTT over SSL listener.
 
 **listeners.ssl.$name.enabled**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1383,7 +1383,7 @@ Settings for the MQTT over SSL listener.
 
 
 **listeners.ssl.$name.bind**
-  
+
   *Type*: `ip_port | integer`
 
   *Default*: `8883`
@@ -1392,7 +1392,7 @@ Settings for the MQTT over SSL listener.
 
 
 **listeners.ssl.$name.acceptors**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `16`
@@ -1401,7 +1401,7 @@ Settings for the MQTT over SSL listener.
 
 
 **listeners.ssl.$name.max_connections**
-  
+
   *Type*: `infinity | pos_integer`
 
   *Default*: `infinity`
@@ -1410,7 +1410,7 @@ Settings for the MQTT over SSL listener.
 
 
 **listeners.ssl.$name.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -1433,7 +1433,7 @@ Variables in mountpoint string:
 
 
 **listeners.ssl.$name.zone**
-  
+
   *Type*: `atom`
 
   *Default*: `default`
@@ -1442,7 +1442,7 @@ Variables in mountpoint string:
 
 
 **listeners.ssl.$name.limiter**
-  
+
   *Type*: `limiter:listener_fields`
 
   *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
@@ -1451,7 +1451,7 @@ Variables in mountpoint string:
 
 
 **listeners.ssl.$name.enable_authn**
-  
+
   *Type*: `enum`
 
   *Default*: `true`
@@ -1467,7 +1467,7 @@ anonymous clients early.
 
 
 **listeners.ssl.$name.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `["allow all"]`
@@ -1476,7 +1476,7 @@ anonymous clients early.
 
 
 **listeners.ssl.$name.proxy_protocol**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -1486,7 +1486,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.ssl.$name.proxy_protocol_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `3s`
@@ -1495,7 +1495,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.ssl.$name.authentication**
-  
+
   *Type*: `array`
 
   Per-listener authentication override.
@@ -1504,12 +1504,12 @@ When authenticating a login (username, client ID, etc.) the authenticators are c
 
 
 **listeners.ssl.$name.tcp_options**
-  
+
   *Type*: [broker:tcp_opts](#tcp_opts)
 
 
 **listeners.ssl.$name.ssl_options**
-  
+
   *Type*: [listener_ssl_opts](#ssl-tls-configuration-for-the-listener)
 
 
@@ -1524,21 +1524,21 @@ For details, please refer to [MQTT over QUIC Quick Start](../mqtt-over-quic/gett
 Settings for the MQTT over QUIC listener.
 
 **listeners.quic.$name.certfile**
-  
+
   *Type*: `string`
 
   Path to the certificate file. Will be deprecated in 5.1, use .ssl_options.certfile instead.
 
 
 **listeners.quic.$name.keyfile**
-  
+
   *Type*: `string`
 
   Path to the secret key file. Will be deprecated in 5.1, use .ssl_options.keyfile instead.
 
 
 **listeners.quic.$name.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256","TLS_CHACHA20_POLY1305_SHA256"]`
@@ -1575,7 +1575,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.idle_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `0`
@@ -1584,7 +1584,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.handshake_idle_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `10s`
@@ -1593,7 +1593,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.keep_alive_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `0`
@@ -1602,14 +1602,14 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.ssl_options**
-  
+
   *Type*: `broker:listener_quic_ssl_opts`
 
   TLS options for QUIC transport
 
 
 **listeners.quic.$name.enabled**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1618,7 +1618,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.bind**
-  
+
   *Type*: `ip_port | integer`
 
   *Default*: `14567`
@@ -1627,7 +1627,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.acceptors**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `16`
@@ -1636,7 +1636,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.max_connections**
-  
+
   *Type*: `infinity | pos_integer`
 
   *Default*: `infinity`
@@ -1645,7 +1645,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
 **listeners.quic.$name.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -1668,7 +1668,7 @@ Variables in mountpoint string:
 
 
 **listeners.quic.$name.zone**
-  
+
   *Type*: `atom`
 
   *Default*: `default`
@@ -1677,7 +1677,7 @@ Variables in mountpoint string:
 
 
 **listeners.quic.$name.limiter**
-  
+
   *Type*: `limiter:listener_fields`
 
   *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
@@ -1686,7 +1686,7 @@ Variables in mountpoint string:
 
 
 **listeners.quic.$name.enable_authn**
-  
+
   *Type*: `enum`
 
   *Default*: `true`
@@ -1708,7 +1708,7 @@ anonymous clients early.
 Settings for the MQTT over WebSocket listener.
 
 **listeners.ws.$name.enabled**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1717,7 +1717,7 @@ Settings for the MQTT over WebSocket listener.
 
 
 **listeners.ws.$name.bind**
-  
+
   *Type*: `ip_port | integer`
 
   *Default*: `8083`
@@ -1726,7 +1726,7 @@ Settings for the MQTT over WebSocket listener.
 
 
 **listeners.ws.$name.acceptors**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `16`
@@ -1735,7 +1735,7 @@ Settings for the MQTT over WebSocket listener.
 
 
 **listeners.ws.$name.max_connections**
-  
+
   *Type*: `infinity | pos_integer`
 
   *Default*: `infinity`
@@ -1744,7 +1744,7 @@ Settings for the MQTT over WebSocket listener.
 
 
 **listeners.ws.$name.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -1767,7 +1767,7 @@ Variables in mountpoint string:
 
 
 **listeners.ws.$name.zone**
-  
+
   *Type*: `atom`
 
   *Default*: `default`
@@ -1776,7 +1776,7 @@ Variables in mountpoint string:
 
 
 **listeners.ws.$name.limiter**
-  
+
   *Type*: `limiter:listener_fields`
 
   *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
@@ -1785,7 +1785,7 @@ Variables in mountpoint string:
 
 
 **listeners.ws.$name.enable_authn**
-  
+
   *Type*: `enum`
 
   *Default*: `true`
@@ -1801,7 +1801,7 @@ anonymous clients early.
 
 
 **listeners.ws.$name.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `["allow all"]`
@@ -1810,7 +1810,7 @@ anonymous clients early.
 
 
 **listeners.ws.$name.proxy_protocol**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -1820,7 +1820,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.ws.$name.proxy_protocol_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `3s`
@@ -1829,7 +1829,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.ws.$name.authentication**
-  
+
   *Type*: `array`
 
   Per-listener authentication override.
@@ -1838,12 +1838,12 @@ When authenticating a login (username, client ID, etc.) the authenticators are c
 
 
 **listeners.ws.$name.tcp_options**
-  
+
   *Type*: [broker:tcp_opts](#tcp_opts)
 
 
 **listeners.ws.$name.websocket**
-  
+
   *Type*: [broker:ws_opts](#ws_opts)
 
 
@@ -1854,7 +1854,7 @@ When authenticating a login (username, client ID, etc.) the authenticators are c
 Settings for the MQTT over WebSocket/SSL listener.
 
 **listeners.wss.$name.enabled**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -1863,7 +1863,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 
 **listeners.wss.$name.bind**
-  
+
   *Type*: `ip_port | integer`
 
   *Default*: `8084`
@@ -1872,7 +1872,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 
 **listeners.wss.$name.acceptors**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `16`
@@ -1881,7 +1881,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 
 **listeners.wss.$name.max_connections**
-  
+
   *Type*: `infinity | pos_integer`
 
   *Default*: `infinity`
@@ -1890,7 +1890,7 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 
 **listeners.wss.$name.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -1913,7 +1913,7 @@ Variables in mountpoint string:
 
 
 **listeners.wss.$name.zone**
-  
+
   *Type*: `atom`
 
   *Default*: `default`
@@ -1922,7 +1922,7 @@ Variables in mountpoint string:
 
 
 **listeners.wss.$name.limiter**
-  
+
   *Type*: `limiter:listener_fields`
 
   *Default*: `{"connection":{"capacity":1000,"rate":"1000/s"}}`
@@ -1931,7 +1931,7 @@ Variables in mountpoint string:
 
 
 **listeners.wss.$name.enable_authn**
-  
+
   *Type*: `enum`
 
   *Default*: `true`
@@ -1947,7 +1947,7 @@ anonymous clients early.
 
 
 **listeners.wss.$name.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `["allow all"]`
@@ -1956,7 +1956,7 @@ anonymous clients early.
 
 
 **listeners.wss.$name.proxy_protocol**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -1966,7 +1966,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.wss.$name.proxy_protocol_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `3s`
@@ -1975,7 +1975,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **listeners.wss.$name.authentication**
-  
+
   *Type*: `array`
 
   Per-listener authentication override.
@@ -1984,17 +1984,17 @@ When authenticating a login (username, client ID, etc.) the authenticators are c
 
 
 **listeners.wss.$name.tcp_options**
-  
+
   *Type*: [broker:tcp_opts](#tcp_opts)
 
 
 **listeners.wss.$name.ssl_options**
-  
+
   *Type*: [broker:listener_wss_opts](#listener_wss_opts)
 
 
 **listeners.wss.$name.websocket**
-  
+
   *Type*: [broker:ws_opts](#ws_opts)
 
 
@@ -2008,7 +2008,7 @@ Global MQTT configuration.<br/>The configs here work as default values which can
 in <code>zone</code> configs
 
 **mqtt.idle_timeout**
-  
+
   *Type*: `infinity | duration`
 
   *Default*: `15s`
@@ -2022,7 +2022,7 @@ but do not send any data.
 
 
 **mqtt.max_packet_size**
-  
+
   *Type*: `bytesize`
 
   *Default*: `1MB`
@@ -2031,7 +2031,7 @@ but do not send any data.
 
 
 **mqtt.max_clientid_len**
-  
+
   *Type*: `integer`
 
   *Default*: `65535`
@@ -2042,7 +2042,7 @@ but do not send any data.
 
 
 **mqtt.max_topic_levels**
-  
+
   *Type*: `integer`
 
   *Default*: `128`
@@ -2053,7 +2053,7 @@ but do not send any data.
 
 
 **mqtt.max_qos_allowed**
-  
+
   *Type*: `qos`
 
   *Default*: `2`
@@ -2062,7 +2062,7 @@ but do not send any data.
 
 
 **mqtt.max_topic_alias**
-  
+
   *Type*: `integer`
 
   *Default*: `65535`
@@ -2073,7 +2073,7 @@ but do not send any data.
 
 
 **mqtt.retain_available**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -2082,7 +2082,7 @@ but do not send any data.
 
 
 **mqtt.wildcard_subscription**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -2091,7 +2091,7 @@ but do not send any data.
 
 
 **mqtt.shared_subscription**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -2100,7 +2100,7 @@ but do not send any data.
 
 
 **mqtt.exclusive_subscription**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2109,7 +2109,7 @@ but do not send any data.
 
 
 **mqtt.ignore_loop_deliver**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2118,7 +2118,7 @@ but do not send any data.
 
 
 **mqtt.strict_mode**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2128,7 +2128,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.response_information**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -2137,7 +2137,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.server_keepalive**
-  
+
   *Type*: `integer | disabled`
 
   *Default*: `disabled`
@@ -2146,7 +2146,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.keepalive_backoff**
-  
+
   *Type*: `number`
 
   *Default*: `0.75`
@@ -2155,7 +2155,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.max_subscriptions**
-  
+
   *Type*: `1..inf | infinity`
 
   *Default*: `infinity`
@@ -2164,7 +2164,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.upgrade_qos**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2173,7 +2173,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.max_inflight**
-  
+
   *Type*: `integer`
 
   *Default*: `32`
@@ -2184,7 +2184,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.retry_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `30s`
@@ -2193,7 +2193,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.max_awaiting_rel**
-  
+
   *Type*: `integer | infinity`
 
   *Default*: `100`
@@ -2202,7 +2202,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.await_rel_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `300s`
@@ -2211,7 +2211,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.session_expiry_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `2h`
@@ -2220,7 +2220,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.max_mqueue_len**
-  
+
   *Type*: `non_neg_integer | infinity`
 
   *Default*: `1000`
@@ -2229,7 +2229,7 @@ When set to true, invalid utf8 strings in for example client ID, topic name, etc
 
 
 **mqtt.mqueue_priorities**
-  
+
   *Type*: `map | disabled`
 
   *Default*: `disabled`
@@ -2246,7 +2246,7 @@ To configure <code>"topic/1" > "topic/2"</code>:
 
 
 **mqtt.mqueue_default_priority**
-  
+
   *Type*: `enum`
 
   *Default*: `lowest`
@@ -2257,7 +2257,7 @@ To configure <code>"topic/1" > "topic/2"</code>:
 
 
 **mqtt.mqueue_store_qos0**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -2266,7 +2266,7 @@ To configure <code>"topic/1" > "topic/2"</code>:
 
 
 **mqtt.use_username_as_clientid**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2276,7 +2276,7 @@ This setting takes effect later than <code>Use Peer Certificate as Username</cod
 
 
 **mqtt.peer_cert_as_username**
-  
+
   *Type*: `enum`
 
   *Default*: `disabled`
@@ -2293,7 +2293,7 @@ Supported configurations are the following:
 
 
 **mqtt.peer_cert_as_clientid**
-  
+
   *Type*: `enum`
 
   *Default*: `disabled`
@@ -2320,7 +2320,7 @@ Supported configurations are the following:
 Configuration related to handling `PUBLISH` packets with a `retain` flag set to 1.
 
 **retainer.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -2329,7 +2329,7 @@ Configuration related to handling `PUBLISH` packets with a `retain` flag set to 
 
 
 **retainer.msg_expiry_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `0s`
@@ -2338,7 +2338,7 @@ Configuration related to handling `PUBLISH` packets with a `retain` flag set to 
 
 
 **retainer.msg_clear_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `0s`
@@ -2348,7 +2348,7 @@ Never clear if the value is 0.
 
 
 **retainer.flow_control**
-  
+
   *Type*: `retainer:flow_control`
 
   *Default*: `{}`
@@ -2357,7 +2357,7 @@ Never clear if the value is 0.
 
 
 **retainer.max_payload_size**
-  
+
   *Type*: `bytesize`
 
   *Default*: `1MB`
@@ -2366,7 +2366,7 @@ Never clear if the value is 0.
 
 
 **retainer.stop_publish_clear_msg**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2378,7 +2378,7 @@ http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718038
 
 
 **retainer.backend**
-  
+
   *Type*: `retainer:mnesia_config`
 
   Settings for the database storing the retained messages.
@@ -2389,7 +2389,7 @@ http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718038
 Retainer batching and rate limiting.
 
 **retainer.flow_control.batch_read_number**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `0`
@@ -2398,7 +2398,7 @@ Retainer batching and rate limiting.
 
 
 **retainer.flow_control.batch_deliver_number**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -2409,7 +2409,7 @@ Retainer batching and rate limiting.
 
 
 **retainer.flow_control.batch_deliver_limiter**
-  
+
   *Type*: `limiter:internal`
 
   The rate limiter name for retained messages' delivery.
@@ -2423,7 +2423,7 @@ If this field is empty, limiter is not used.
 Configuration of the internal database storing retained messages.
 
 **retainer.backend.type**
-  
+
   *Type*: `built_in_database`
 
   *Default*: `built_in_database`
@@ -2432,7 +2432,7 @@ Configuration of the internal database storing retained messages.
 
 
 **retainer.backend.storage_type**
-  
+
   *Type*: `enum`
 
   *Default*: `ram`
@@ -2443,7 +2443,7 @@ Configuration of the internal database storing retained messages.
 
 
 **retainer.backend.max_retained_messages**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `0`
@@ -2452,7 +2452,7 @@ Configuration of the internal database storing retained messages.
 
 
 **retainer.backend.index_specs**
-  
+
   *Type*: `[[integer]]`
 
   *Default*: `[[1,2,3],[1,3],[2,3],[3]]`
@@ -2469,7 +2469,7 @@ You can set to enable or disable shared subscription configuration via `mqtt.sha
 Per group dispatch strategy for shared subscription
 
 **broker.shared_subscription_group.$name.strategy**
-  
+
   *Type*: `enum`
 
   *Default*: `random`
@@ -2491,13 +2491,13 @@ subscriber was not found, send to a random subscriber cluster-wide
 ### System topics
 
 
-The EMQX Broker periodically publishes its own status, message statistics,
+The EMQX periodically publishes its own status, message statistics,
 client online and offline events to the system topic starting with `$SYS/`.
 
 The following options control the behavior of `$SYS` topics.
 
 **sys_topics.sys_msg_interval**
-  
+
   *Type*: `disabled | duration`
 
   *Default*: `1m`
@@ -2506,7 +2506,7 @@ The following options control the behavior of `$SYS` topics.
 
 
 **sys_topics.sys_heartbeat_interval**
-  
+
   *Type*: `disabled | duration`
 
   *Default*: `30s`
@@ -2517,7 +2517,7 @@ The following options control the behavior of `$SYS` topics.
 
 
 **sys_topics.sys_event_messages**
-  
+
   *Type*: `broker:event_names`
 
   Client events messages.
@@ -2532,7 +2532,7 @@ The following options control the behavior of `$SYS` topics.
 Settings for the delayed module.
 
 **delayed.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -2541,7 +2541,7 @@ Settings for the delayed module.
 
 
 **delayed.max_delayed_messages**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -2566,7 +2566,7 @@ If the regular expression in this rule does not match the subject of the MQTT me
 Therefore, users need to carefully design MQTT message topics and topic rewriting rules when using them.
 
 **rewrite.$INDEX.action**
-  
+
   *Type*: `enum`
 
   *Optional*: `subscribe | publish | all`
@@ -2578,21 +2578,21 @@ Therefore, users need to carefully design MQTT message topics and topic rewritin
 
 
 **rewrite.$INDEX.source_topic**
-  
+
   *Type*: `string`
 
   Source topic, specified by the client.
 
 
 **rewrite.$INDEX.dest_topic**
-  
+
   *Type*: `string`
 
   Destination topic.
 
 
 **rewrite.$INDEX.re**
-  
+
   *Type*: `string`
 
   Regular expressions
@@ -2605,7 +2605,7 @@ Therefore, users need to carefully design MQTT message topics and topic rewritin
 After the device logs in successfully, the subscription is automatically completed for the device through the pre-defined subscription representation. Supports the use of placeholders.
 
 **auto_subscribe.topics**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -2619,7 +2619,7 @@ Topic name, placeholders are supported. For example: client/${clientid}/username
 Required field, and cannot be empty string
 
 **auto_subscribe.topics.$INDEX.topic**
-  
+
   *Type*: `string`
 
   Topic name, placeholders are supported. For example: client/${clientid}/username/${username}/host/${host}/port/${port}
@@ -2627,7 +2627,7 @@ Required field, and cannot be empty string
 
 
 **auto_subscribe.topics.$INDEX.qos**
-  
+
   *Type*: `qos`
 
   *Default*: `0`
@@ -2639,7 +2639,7 @@ Exactly once (2)
 
 
 **auto_subscribe.topics.$INDEX.rh**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -2653,7 +2653,7 @@ Retain Handling is equal to 2, even if the client successfully subscribes, the s
 
 
 **auto_subscribe.topics.$INDEX.rap**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -2664,7 +2664,7 @@ Retain Handling is equal to 2, even if the client successfully subscribes, the s
 
 
 **auto_subscribe.topics.$INDEX.nl**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -2683,7 +2683,7 @@ MQTT v5: if you set this option as 1 when subscribing, the server will not forwa
 Real-time filtering logs for the ClientID or Topic or IP for debugging.
 
 **trace.payload_encode**
-  
+
   *Type*: `enum`
 
   *Default*: `text`
@@ -2704,7 +2704,7 @@ Real-time filtering logs for the ClientID or Topic or IP for debugging.
 Settings for reporting metrics to Prometheus
 
 **prometheus.push_gateway_server**
-  
+
   *Type*: `string`
 
   *Default*: `http://127.0.0.1:9091`
@@ -2713,7 +2713,7 @@ Settings for reporting metrics to Prometheus
 
 
 **prometheus.interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -2722,7 +2722,7 @@ Settings for reporting metrics to Prometheus
 
 
 **prometheus.headers**
-  
+
   *Type*: `[{string, string()}]`
 
   *Default*: `{}`
@@ -2732,7 +2732,7 @@ For example, <code> { Authorization = "some-authz-tokens"}</code>
 
 
 **prometheus.job_name**
-  
+
   *Type*: `string`
 
   *Default*: `${name}/instance/${name}~${host}`
@@ -2745,7 +2745,7 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 
 
 **prometheus.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2760,7 +2760,7 @@ Default value is: <code>${name}/instance/${name}~${host}</code>
 StatsD metrics collection and push configuration.
 
 **statsd.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2769,7 +2769,7 @@ StatsD metrics collection and push configuration.
 
 
 **statsd.server**
-  
+
   *Type*: `string`
 
   *Default*: `127.0.0.1:8125`
@@ -2778,7 +2778,7 @@ StatsD metrics collection and push configuration.
 
 
 **statsd.sample_time_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `30s`
@@ -2787,7 +2787,7 @@ StatsD metrics collection and push configuration.
 
 
 **statsd.flush_time_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `30s`
@@ -2796,7 +2796,7 @@ StatsD metrics collection and push configuration.
 
 
 **statsd.tags**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -2810,7 +2810,7 @@ StatsD metrics collection and push configuration.
 Slow subscription message latency threshold and statistics policy configuration.
 
 **slow_subs.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -2819,7 +2819,7 @@ Slow subscription message latency threshold and statistics policy configuration.
 
 
 **slow_subs.threshold**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `500ms`
@@ -2828,7 +2828,7 @@ Slow subscription message latency threshold and statistics policy configuration.
 
 
 **slow_subs.expire_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `300s`
@@ -2837,7 +2837,7 @@ Slow subscription message latency threshold and statistics policy configuration.
 
 
 **slow_subs.top_k_num**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `10`
@@ -2846,7 +2846,7 @@ Slow subscription message latency threshold and statistics policy configuration.
 
 
 **slow_subs.stats_type**
-  
+
   *Type*: `enum`
 
   *Default*: `whole`
@@ -2865,7 +2865,7 @@ Configure the topics that require statistics for detailed message flow data.
 
 
 **topic_metrics.$INDEX.topic**
-  
+
   *Type*: `string`
 
   Collect metrics for the topic.
@@ -2878,7 +2878,7 @@ Configure the topics that require statistics for detailed message flow data.
 Settings for the alarms.
 
 **alarm.actions**
-  
+
   *Type*: `array`
 
   *Default*: `["log","publish"]`
@@ -2891,7 +2891,7 @@ Settings for the alarms.
 
 
 **alarm.size_limit**
-  
+
   *Type*: `integer`
 
   *Default*: `1000`
@@ -2902,7 +2902,7 @@ Settings for the alarms.
 
 
 **alarm.validity_period**
-  
+
   *Type*: `duration`
 
   *Default*: `24h`
@@ -2921,7 +2921,7 @@ This part of the configuration is responsible for monitoring
  the host OS health, such as free memory, disk space, CPU load, etc.
 
 **sysmon.os.cpu_check_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `60s`
@@ -2930,7 +2930,7 @@ This part of the configuration is responsible for monitoring
 
 
 **sysmon.os.cpu_high_watermark**
-  
+
   *Type*: `percent`
 
   *Default*: `80%`
@@ -2940,7 +2940,7 @@ This part of the configuration is responsible for monitoring
 
 
 **sysmon.os.cpu_low_watermark**
-  
+
   *Type*: `percent`
 
   *Default*: `60%`
@@ -2950,7 +2950,7 @@ This part of the configuration is responsible for monitoring
 
 
 **sysmon.os.mem_check_interval**
-  
+
   *Type*: `disabled | duration`
 
   *Default*: `60s`
@@ -2959,7 +2959,7 @@ This part of the configuration is responsible for monitoring
 
 
 **sysmon.os.sysmem_high_watermark**
-  
+
   *Type*: `percent`
 
   *Default*: `70%`
@@ -2969,7 +2969,7 @@ This part of the configuration is responsible for monitoring
 
 
 **sysmon.os.procmem_high_watermark**
-  
+
   *Type*: `percent`
 
   *Default*: `5%`
@@ -2986,7 +2986,7 @@ This part of the configuration is responsible for monitoring
  PostgreSQL database. This feature is inactive unless the PostgreSQL sink is configured.
 
 **sysmon.top.num_items**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `10`
@@ -2995,7 +2995,7 @@ This part of the configuration is responsible for monitoring
 
 
 **sysmon.top.sample_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `2s`
@@ -3004,7 +3004,7 @@ This part of the configuration is responsible for monitoring
 
 
 **sysmon.top.max_procs**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `1000000`
@@ -3014,7 +3014,7 @@ in the VM exceeds this value
 
 
 **sysmon.top.db_hostname**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -3023,7 +3023,7 @@ in the VM exceeds this value
 
 
 **sysmon.top.db_port**
-  
+
   *Type*: `integer`
 
   *Default*: `5432`
@@ -3032,7 +3032,7 @@ in the VM exceeds this value
 
 
 **sysmon.top.db_username**
-  
+
   *Type*: `string`
 
   *Default*: `system_monitor`
@@ -3041,7 +3041,7 @@ in the VM exceeds this value
 
 
 **sysmon.top.db_password**
-  
+
   *Type*: `string`
 
   *Default*: `system_monitor_password`
@@ -3050,7 +3050,7 @@ in the VM exceeds this value
 
 
 **sysmon.top.db_name**
-  
+
   *Type*: `string`
 
   *Default*: `postgres`
@@ -3065,7 +3065,7 @@ This part of the configuration is responsible for collecting
  communication, etc.
 
 **sysmon.vm.process_check_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `30s`
@@ -3074,7 +3074,7 @@ This part of the configuration is responsible for collecting
 
 
 **sysmon.vm.process_high_watermark**
-  
+
   *Type*: `percent`
 
   *Default*: `80%`
@@ -3085,7 +3085,7 @@ This part of the configuration is responsible for collecting
 
 
 **sysmon.vm.process_low_watermark**
-  
+
   *Type*: `percent`
 
   *Default*: `60%`
@@ -3096,7 +3096,7 @@ This part of the configuration is responsible for collecting
 
 
 **sysmon.vm.long_gc**
-  
+
   *Type*: `disabled | duration`
 
   *Default*: `disabled`
@@ -3106,7 +3106,7 @@ and an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</
 
 
 **sysmon.vm.long_schedule**
-  
+
   *Type*: `disabled | duration`
 
   *Default*: `240ms`
@@ -3116,7 +3116,7 @@ and an MQTT message is published to the system topic <code>$SYS/sysmon/long_sche
 
 
 **sysmon.vm.large_heap**
-  
+
   *Type*: `disabled | bytesize`
 
   *Default*: `32MB`
@@ -3127,7 +3127,7 @@ the system topic <code>$SYS/sysmon/large_heap</code>.
 
 
 **sysmon.vm.busy_dist_port**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3138,7 +3138,7 @@ and an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_por
 
 
 **sysmon.vm.busy_port**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3162,7 +3162,7 @@ For an introduction to rate limiting and its use, please refer to [rate limiting
 Settings for the rate limiter.
 
 **limiter.bytes_in**
-  
+
   *Type*: `limiter:node_opts`
 
   *Default*: `{}`
@@ -3173,7 +3173,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 
 **limiter.message_in**
-  
+
   *Type*: `limiter:node_opts`
 
   *Default*: `{}`
@@ -3184,7 +3184,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 
 **limiter.connection**
-  
+
   *Type*: `limiter:node_opts`
 
   *Default*: `{}`
@@ -3195,7 +3195,7 @@ Once the limit is reached, new connections will be refused
 
 
 **limiter.message_routing**
-  
+
   *Type*: `limiter:node_opts`
 
   *Default*: `{}`
@@ -3206,7 +3206,7 @@ Once the limit is reached, new publish will be refused
 
 
 **limiter.internal**
-  
+
   *Type*: `limiter:node_opts`
 
   *Default*: `{}`
@@ -3215,7 +3215,7 @@ Once the limit is reached, new publish will be refused
 
 
 **limiter.client**
-  
+
   *Type*: `limiter:client_fields`
 
   *Default*: `{"bytes_in":{},"connection":{},"internal":{},"message_in":{},"message_routing":{}}`
@@ -3236,7 +3236,7 @@ limiter.message_in {
 ```
 
 ***.limiter.\$type.rate**
-  
+
   *Type*: `rate`
 
   *Default*: `infinity`
@@ -3245,7 +3245,7 @@ limiter.message_in {
 
 
 ***.limiter.\$type.capacity**
-  
+
   *Type*: `capacity`
 
   *Default*: `infinity`
@@ -3254,7 +3254,7 @@ limiter.message_in {
 
 
 ***.limiter.\$type.initial**
-  
+
   *Type*: `initial`
 
   *Default*: `0`
@@ -3271,7 +3271,7 @@ limiter.message_in {
 Settings for the limiter of the node level.
 
 **limiter.$type.rate**
-  
+
   *Type*: `rate`
 
   *Default*: `infinity`
@@ -3280,7 +3280,7 @@ Settings for the limiter of the node level.
 
 
 **limiter.$type.burst**
-  
+
   *Type*: `burst_rate`
 
   *Default*: `0`
@@ -3295,7 +3295,7 @@ Settings for the limiter of the node level.
 在监听器中配置中配置速率限制器。
 
 **listeners.\$type.$name.limiter.bytes_in**
-  
+
   *Type*: `limiter:bucket_opts`
 
   The bytes_in limiter.
@@ -3304,7 +3304,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 
 **listeners.\$type.$name.limiter.message_in**
-  
+
   *Type*: `limiter:bucket_opts`
 
   The message in limiter.
@@ -3313,7 +3313,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 
 **listeners.\$type.$name.limiter.connection**
-  
+
   *Type*: `limiter:bucket_opts`
 
   The connection limiter.
@@ -3322,7 +3322,7 @@ Once the limit is reached, new connections will be refused
 
 
 **listeners.\$type.$name.limiter.message_routing**
-  
+
   *Type*: `limiter:bucket_opts`
 
   The message routing limiter.
@@ -3331,7 +3331,7 @@ Once the limit is reached, new publish will be refused
 
 
 **listeners.\$type.$name.limiter.client**
-  
+
   *Type*: `limiter:listener_client_fields`
 
   The rate limit for each user of the bucket
@@ -3348,7 +3348,7 @@ Once the limit is reached, new publish will be refused
 Settings for the client in bucket level.
 
 **limiter.client.\$type.rate**
-  
+
   *Type*: `rate`
 
   *Default*: `infinity`
@@ -3357,7 +3357,7 @@ Settings for the client in bucket level.
 
 
 **limiter.client.\$type.initial**
-  
+
   *Type*: `initial`
 
   *Default*: `0`
@@ -3366,7 +3366,7 @@ Settings for the client in bucket level.
 
 
 **limiter.client.\$type.low_watermark**
-  
+
   *Type*: `initial`
 
   *Default*: `0`
@@ -3376,7 +3376,7 @@ the check/consume will succeed, but it will be forced to wait for a short period
 
 
 **limiter.client.\$type.capacity**
-  
+
   *Type*: `capacity`
 
   *Default*: `infinity`
@@ -3385,7 +3385,7 @@ the check/consume will succeed, but it will be forced to wait for a short period
 
 
 **limiter.client.\$type.divisible**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -3394,7 +3394,7 @@ the check/consume will succeed, but it will be forced to wait for a short period
 
 
 **limiter.client.\$type.max_retry_time**
-  
+
   *Type*: `duration`
 
   *Default*: `10s`
@@ -3403,7 +3403,7 @@ the check/consume will succeed, but it will be forced to wait for a short period
 
 
 **limiter.client.\$type.failure_strategy**
-  
+
   *Type*: `failure_strategy`
 
   *Default*: `force`
@@ -3418,7 +3418,7 @@ the check/consume will succeed, but it will be forced to wait for a short period
 Fields of the client level of the listener.
 
 **listeners.\$type.$name.limiter.client.bytes_in**
-  
+
   *Type*: `limiter:client_opts`
 
   The bytes_in limiter.
@@ -3427,7 +3427,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 
 **listeners.\$type.$name.limiter.client.message_in**
-  
+
   *Type*: `limiter:client_opts`
 
   The message in limiter.
@@ -3436,7 +3436,7 @@ Once the limit is reached, the restricted client will be slow down even be hung 
 
 
 **listeners.\$type.$name.limiter.client.connection**
-  
+
   *Type*: `limiter:client_opts`
 
   The connection limiter.
@@ -3445,7 +3445,7 @@ Once the limit is reached, new connections will be refused
 
 
 **listeners.\$type.$name.limiter.client.message_routing**
-  
+
   *Type*: `limiter:client_opts`
 
   The message routing limiter.
@@ -3460,7 +3460,7 @@ Once the limit is reached, new publish will be refused
 Internal limiter.
 
 **retainer.flow_control.batch_deliver_limiter.rate**
-  
+
   *Type*: `rate`
 
   *Default*: `infinity`
@@ -3469,7 +3469,7 @@ Internal limiter.
 
 
 **retainer.flow_control.batch_deliver_limiter.capacity**
-  
+
   *Type*: `capacity`
 
   *Default*: `infinity`
@@ -3478,7 +3478,7 @@ Internal limiter.
 
 
 **retainer.flow_control.batch_deliver_limiter.initial**
-  
+
   *Type*: `initial`
 
   *Default*: `0`
@@ -3487,7 +3487,7 @@ Internal limiter.
 
 
 **retainer.flow_control.batch_deliver_limiter.client**
-  
+
   *Type*: `limiter:client_opts`
 
   The rate limit for each user of the bucket
@@ -3501,7 +3501,7 @@ Overload protection mechanism monitors the load of the system and temporarily
 disables some features (such as accepting new connections) when the load is high.
 
 **overload_protection.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -3510,7 +3510,7 @@ disables some features (such as accepting new connections) when the load is high
 
 
 **overload_protection.backoff_delay**
-  
+
   *Type*: `integer`
 
   *Default*: `1`
@@ -3521,7 +3521,7 @@ disables some features (such as accepting new connections) when the load is high
 
 
 **overload_protection.backoff_gc**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -3530,7 +3530,7 @@ disables some features (such as accepting new connections) when the load is high
 
 
 **overload_protection.backoff_hibernation**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3539,7 +3539,7 @@ disables some features (such as accepting new connections) when the load is high
 
 
 **overload_protection.backoff_new_conn**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3556,7 +3556,7 @@ disables some features (such as accepting new connections) when the load is high
 Broker performance tuning parameters.
 
 **broker.perf.route_lock_type**
-  
+
   *Type*: `enum`
 
   *Default*: `key`
@@ -3573,7 +3573,7 @@ NOTE: when changing from/to `global` lock, it requires all nodes in the cluster 
 
 
 **broker.perf.trie_compaction**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3593,7 +3593,7 @@ Force garbage collection in MQTT connection process after
  they process certain number of messages or bytes of data.
 
 **force_gc.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3602,7 +3602,7 @@ Force garbage collection in MQTT connection process after
 
 
 **force_gc.count**
-  
+
   *Type*: `integer`
 
   *Default*: `16000`
@@ -3613,7 +3613,7 @@ Force garbage collection in MQTT connection process after
 
 
 **force_gc.bytes**
-  
+
   *Type*: `bytesize`
 
   *Default*: `16MB`
@@ -3632,7 +3632,7 @@ Note: "message queue" here refers to the "message mailbox"
 of the Erlang process, not the `mqueue` of QoS 1 and QoS 2.
 
 **force_shutdown.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3641,7 +3641,7 @@ of the Erlang process, not the `mqueue` of QoS 1 and QoS 2.
 
 
 **force_shutdown.max_message_queue_len**
-  
+
   *Type*: `integer`
 
   *Default*: `1000`
@@ -3652,7 +3652,7 @@ of the Erlang process, not the `mqueue` of QoS 1 and QoS 2.
 
 
 **force_shutdown.max_heap_size**
-  
+
   *Type*: `wordsize`
 
   *Default*: `32MB`
@@ -3680,7 +3680,7 @@ where the `<ClientID>` is the client ID of the congested MQTT connection,
 and `<Username>` is the username or `unknown_user`.
 
 **conn_congestion.enable_alarm**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3689,7 +3689,7 @@ and `<Username>` is the username or `unknown_user`.
 
 
 **conn_congestion.min_alarm_sustain_duration**
-  
+
   *Type*: `duration`
 
   *Default*: `1m`
@@ -3707,7 +3707,7 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 (banned) until the end of the time period defined by `ban_time`.
 
 **flapping_detect.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -3716,7 +3716,7 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 
 
 **flapping_detect.max_count**
-  
+
   *Type*: `integer`
 
   *Default*: `15`
@@ -3725,7 +3725,7 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 
 
 **flapping_detect.window_time**
-  
+
   *Type*: `duration`
 
   *Default*: `1m`
@@ -3734,7 +3734,7 @@ After the limit is reached, successive `CONNECT` requests are forbidden
 
 
 **flapping_detect.ban_time**
-  
+
   *Type*: `duration`
 
   *Default*: `5m`
@@ -3750,7 +3750,7 @@ Enable/disable statistic data collection.
 Statistic data such as message receive/send count/rate etc. It provides insights of system performance and helps to diagnose issues. You can find statistic data from the dashboard, or from the '/stats' API.
 
 **stats.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3765,7 +3765,7 @@ Statistic data such as message receive/send count/rate etc. It provides insights
 Settings for message persistence.
 
 **persistent_session_store.enabled**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -3776,7 +3776,7 @@ cluster node if a node is stopped.
 
 
 **persistent_session_store.on_disc**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3787,7 +3787,7 @@ Otherwise, all the data will be stored in RAM, and it will be lost when all the 
 
 
 **persistent_session_store.ram_cache**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -3796,7 +3796,7 @@ Otherwise, all the data will be stored in RAM, and it will be lost when all the 
 
 
 **persistent_session_store.backend**
-  
+
   *Type*: [broker:persistent_session_builtin](#broker:persistent_session_builtin)
 
   *Default*: `{"messages":{"ram_cache":"false"},"session":{"ram_cache":"true"},"session_messages":{"ram_cache":"true"},"type":"builtin"}`
@@ -3806,7 +3806,7 @@ Otherwise, all the data will be stored in RAM, and it will be lost when all the 
 
 
 **persistent_session_store.max_retain_undelivered**
-  
+
   *Type*: `duration`
 
   *Default*: `1h`
@@ -3817,7 +3817,7 @@ session was handled on restarts of is stopped.
 
 
 **persistent_session_store.message_gc_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `1h`
@@ -3828,7 +3828,7 @@ is checked for removal.
 
 
 **persistent_session_store.session_message_gc_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `1m`
@@ -3843,7 +3843,7 @@ of persistent session messages.
 Settings for the built-in storage engine of persistent messages.
 
 **persistent_session_store.backend.type**
-  
+
   *Type*: `enum`
 
   *Default*: `builtin`
@@ -3852,21 +3852,21 @@ Settings for the built-in storage engine of persistent messages.
 
 
 **persistent_session_store.backend.session**
-  
+
   *Type*: `broker:persistent_table_mria_opts`
 
   Performance tuning options for built-in session table.
 
 
 **persistent_session_store.backend.session_messages**
-  
+
   *Type*: `broker:persistent_table_mria_opts`
 
   Performance tuning options for built-in session messages table.
 
 
 **persistent_session_store.backend.messages**
-  
+
   *Type*: `broker:persistent_table_mria_opts`
 
   Performance tuning options for built-in messages table.
@@ -3877,7 +3877,7 @@ Settings for the built-in storage engine of persistent messages.
 Tuning options for the mria table.
 
 **persistent_table_mria_opts.ram_cache**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3894,7 +3894,7 @@ Tuning options for the mria table.
 Settings for the telemetry module.
 
 **telemetry.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -3915,7 +3915,7 @@ Settings for the telemetry module.
 Configuration for EMQX dashboard.
 
 **dashboard.listeners**
-  
+
   *Type*: `dashboard:listeners`
 
   HTTP(s) listeners are identified by their protocol type and are
@@ -3928,7 +3928,7 @@ but use the same port.
 
 
 **dashboard.default_username**
-  
+
   *Type*: `string`
 
   *Default*: `admin`
@@ -3937,7 +3937,7 @@ but use the same port.
 
 
 **dashboard.default_password**
-  
+
   *Type*: `string`
 
   *Default*: `public`
@@ -3949,7 +3949,7 @@ and change to a complex password as prompted.
 
 
 **dashboard.sample_interval**
-  
+
   *Type*: `duration_s`
 
   *Default*: `10s`
@@ -3959,7 +3959,7 @@ Note: `sample_interval` should be a divisor of 60, default is 10s.
 
 
 **dashboard.token_expired_time**
-  
+
   *Type*: `duration`
 
   *Default*: `60m`
@@ -3968,7 +3968,7 @@ Note: `sample_interval` should be a divisor of 60, default is 10s.
 
 
 **dashboard.cors**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -3979,7 +3979,7 @@ its own from which a browser should permit loading resources.
 
 
 **dashboard.i18n_lang**
-  
+
   *Type*: `enum`
 
   *Default*: `en`
@@ -3990,7 +3990,7 @@ its own from which a browser should permit loading resources.
 
 
 **dashboard.bootstrap_users_file**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -4003,7 +4003,7 @@ its own from which a browser should permit loading resources.
 Configuration for the dashboard listener (plaintext).
 
 **dashboard.listeners.http.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4012,7 +4012,7 @@ Configuration for the dashboard listener (plaintext).
 
 
 **dashboard.listeners.http.bind**
-  
+
   *Type*: `non_neg_integer | ip_port`
 
   *Default*: `18083`
@@ -4021,7 +4021,7 @@ Configuration for the dashboard listener (plaintext).
 
 
 **dashboard.listeners.http.num_acceptors**
-  
+
   *Type*: `integer`
 
   *Default*: `2`
@@ -4030,7 +4030,7 @@ Configuration for the dashboard listener (plaintext).
 
 
 **dashboard.listeners.http.max_connections**
-  
+
   *Type*: `integer`
 
   *Default*: `512`
@@ -4039,7 +4039,7 @@ Configuration for the dashboard listener (plaintext).
 
 
 **dashboard.listeners.http.backlog**
-  
+
   *Type*: `integer`
 
   *Default*: `1024`
@@ -4048,7 +4048,7 @@ Configuration for the dashboard listener (plaintext).
 
 
 **dashboard.listeners.http.send_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `10s`
@@ -4057,7 +4057,7 @@ Configuration for the dashboard listener (plaintext).
 
 
 **dashboard.listeners.http.inet6**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -4066,7 +4066,7 @@ Configuration for the dashboard listener (plaintext).
 
 
 **dashboard.listeners.http.ipv6_v6only**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -4076,7 +4076,7 @@ The configuration is only valid when the inet6 is true.
 
 
 **dashboard.listeners.http.proxy_header**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -4089,7 +4089,7 @@ The configuration is only valid when the inet6 is true.
 Configuration for the dashboard listener (TLS).
 
 **dashboard.listeners.https.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -4098,7 +4098,7 @@ Configuration for the dashboard listener (TLS).
 
 
 **dashboard.listeners.https.bind**
-  
+
   *Type*: `non_neg_integer | ip_port`
 
   *Default*: `18084`
@@ -4107,7 +4107,7 @@ Configuration for the dashboard listener (TLS).
 
 
 **dashboard.listeners.https.num_acceptors**
-  
+
   *Type*: `integer`
 
   *Default*: `2`
@@ -4116,7 +4116,7 @@ Configuration for the dashboard listener (TLS).
 
 
 **dashboard.listeners.https.max_connections**
-  
+
   *Type*: `integer`
 
   *Default*: `512`
@@ -4125,7 +4125,7 @@ Configuration for the dashboard listener (TLS).
 
 
 **dashboard.listeners.https.backlog**
-  
+
   *Type*: `integer`
 
   *Default*: `1024`
@@ -4134,7 +4134,7 @@ Configuration for the dashboard listener (TLS).
 
 
 **dashboard.listeners.https.send_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `10s`
@@ -4143,7 +4143,7 @@ Configuration for the dashboard listener (TLS).
 
 
 **dashboard.listeners.https.inet6**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -4152,7 +4152,7 @@ Configuration for the dashboard listener (TLS).
 
 
 **dashboard.listeners.https.ipv6_v6only**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -4162,7 +4162,7 @@ The configuration is only valid when the inet6 is true.
 
 
 **dashboard.listeners.https.proxy_header**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -4171,7 +4171,7 @@ The configuration is only valid when the inet6 is true.
 
 
 **dashboard.listeners.https.cacertfile**
-  
+
   *Type*: `string`
 
   Trusted PEM format CA certificates bundle file.<br/>
@@ -4184,7 +4184,7 @@ already established connections.
 
 
 **dashboard.listeners.https.certfile**
-  
+
   *Type*: `string`
 
   PEM format certificates chain file.<br/>
@@ -4196,14 +4196,14 @@ the file if it is to be added.
 
 
 **dashboard.listeners.https.keyfile**
-  
+
   *Type*: `string`
 
   PEM format private key file.
 
 
 **dashboard.listeners.https.verify**
-  
+
   *Type*: `enum`
 
   *Default*: `verify_none`
@@ -4214,7 +4214,7 @@ the file if it is to be added.
 
 
 **dashboard.listeners.https.reuse_sessions**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4223,7 +4223,7 @@ the file if it is to be added.
 
 
 **dashboard.listeners.https.depth**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -4235,14 +4235,14 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **dashboard.listeners.https.password**
-  
+
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
 **dashboard.listeners.https.versions**
-  
+
   *Type*: `array`
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
@@ -4254,7 +4254,7 @@ In case PSK cipher suites are intended, make sure to configure
 
 
 **dashboard.listeners.https.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -4289,7 +4289,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **dashboard.listeners.https.user_lookup_fun**
-  
+
   *Type*: `string`
 
   *Default*: `emqx_tls_psk:lookup`
@@ -4298,7 +4298,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **dashboard.listeners.https.secure_renegotiate**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4310,7 +4310,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **dashboard.listeners.https.hibernate_after**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -4319,7 +4319,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **dashboard.listeners.https.dhfile**
-  
+
   *Type*: `string`
 
   Path to a file containing PEM-encoded Diffie-Hellman parameters
@@ -4330,7 +4330,7 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
 **dashboard.listeners.https.honor_cipher_order**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4342,7 +4342,7 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
 **dashboard.listeners.https.client_renegotiation**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4358,7 +4358,7 @@ the number of messages the underlying cipher suite can encipher.
 
 
 **dashboard.listeners.https.handshake_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `15s`
@@ -4371,14 +4371,14 @@ the number of messages the underlying cipher suite can encipher.
 Configuration for the dashboard listener.
 
 **dashboard.listeners.http**
-  
+
   *Type*: `dashboard:http`
 
   TCP listeners
 
 
 **dashboard.listeners.https**
-  
+
   *Type*: `dashboard:https`
 
   SSL listeners
@@ -4391,7 +4391,7 @@ Configuration for the dashboard listener.
 API Key, can be used to request API other than the management API key and the Dashboard user management API
 
 **api_key.bootstrap_file**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -4413,21 +4413,21 @@ API Key, can be used to request API other than the management API key and the Da
 Configuration of authenticator using built-in database as data source.
 
 **authn-builtin_db:authentication.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-builtin_db:authentication.backend**
-  
+
   *Type*: `built_in_database`
 
   Backend type.
 
 
 **authn-builtin_db:authentication.user_id_type**
-  
+
   *Type*: `enum`
 
   *Default*: `username`
@@ -4438,7 +4438,7 @@ Configuration of authenticator using built-in database as data source.
 
 
 **authn-builtin_db:authentication.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt_rw](#authn-hash:bcrypt_rw) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -4447,7 +4447,7 @@ Configuration of authenticator using built-in database as data source.
 
 
 **authn-builtin_db:authentication.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4462,21 +4462,21 @@ Configuration of authenticator using built-in database as data source.
 Configuration of authenticator using MySQL as authentication data source.
 
 **authn-mysql:authentication.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-mysql:authentication.backend**
-  
+
   *Type*: `mysql`
 
   Backend type.
 
 
 **authn-mysql:authentication.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -4485,14 +4485,14 @@ Configuration of authenticator using MySQL as authentication data source.
 
 
 **authn-mysql:authentication.query**
-  
+
   *Type*: `string`
 
   SQL used to query data for authentication, such as password hash.
 
 
 **authn-mysql:authentication.query_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `5s`
@@ -4501,7 +4501,7 @@ Configuration of authenticator using MySQL as authentication data source.
 
 
 **authn-mysql:authentication.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4510,7 +4510,7 @@ Configuration of authenticator using MySQL as authentication data source.
 
 
 **authn-mysql:authentication.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -4519,14 +4519,14 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
 
 **authn-mysql:authentication.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authn-mysql:authentication.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -4535,7 +4535,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
 
 **authn-mysql:authentication.username**
-  
+
   *Type*: `string`
 
   *Default*: `root`
@@ -4544,21 +4544,21 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
 
 **authn-mysql:authentication.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-mysql:authentication.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authn-mysql:authentication.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -4575,21 +4575,21 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 Configuration of authenticator using PostgreSQL as authentication data source.
 
 **authn-postgresql:authentication.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-postgresql:authentication.backend**
-  
+
   *Type*: `postgresql`
 
   Backend type.
 
 
 **authn-postgresql:authentication.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -4598,14 +4598,14 @@ Configuration of authenticator using PostgreSQL as authentication data source.
 
 
 **authn-postgresql:authentication.query**
-  
+
   *Type*: `string`
 
   SQL used to query data for authentication, such as password hash.
 
 
 **authn-postgresql:authentication.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4614,7 +4614,7 @@ Configuration of authenticator using PostgreSQL as authentication data source.
 
 
 **authn-postgresql:authentication.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -4623,14 +4623,14 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 
 
 **authn-postgresql:authentication.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authn-postgresql:authentication.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -4639,28 +4639,28 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 
 
 **authn-postgresql:authentication.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authn-postgresql:authentication.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-postgresql:authentication.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authn-postgresql:authentication.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -4677,28 +4677,28 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 Configuration of authenticator using Redis (Standalone) as authentication data source.
 
 **authn-redis:standalone.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-redis:standalone.backend**
-  
+
   *Type*: `redis`
 
   Backend type.
 
 
 **authn-redis:standalone.cmd**
-  
+
   *Type*: `string`
 
   The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
 
 
 **authn-redis:standalone.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -4707,7 +4707,7 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
 
 **authn-redis:standalone.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4716,7 +4716,7 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
 
 **authn-redis:standalone.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -4725,7 +4725,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:standalone.redis_type**
-  
+
   *Type*: `single`
 
   *Default*: `single`
@@ -4734,7 +4734,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:standalone.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -4743,14 +4743,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:standalone.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-redis:standalone.database**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -4759,14 +4759,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:standalone.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authn-redis:standalone.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -4781,28 +4781,28 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 Configuration of authenticator using Redis (Cluster) as authentication data source.
 
 **authn-redis:cluster.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-redis:cluster.backend**
-  
+
   *Type*: `redis`
 
   Backend type.
 
 
 **authn-redis:cluster.cmd**
-  
+
   *Type*: `string`
 
   The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
 
 
 **authn-redis:cluster.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -4811,7 +4811,7 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
 
 **authn-redis:cluster.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4820,7 +4820,7 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
 
 **authn-redis:cluster.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -4830,7 +4830,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:cluster.redis_type**
-  
+
   *Type*: `cluster`
 
   *Default*: `cluster`
@@ -4839,7 +4839,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:cluster.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -4848,21 +4848,21 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:cluster.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-redis:cluster.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authn-redis:cluster.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -4877,28 +4877,28 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 Configuration of authenticator using Redis (Sentinel) as authentication data source.
 
 **authn-redis:sentinel.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-redis:sentinel.backend**
-  
+
   *Type*: `redis`
 
   Backend type.
 
 
 **authn-redis:sentinel.cmd**
-  
+
   *Type*: `string`
 
   The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
 
 
 **authn-redis:sentinel.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -4907,7 +4907,7 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
 
 **authn-redis:sentinel.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -4916,7 +4916,7 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
 
 **authn-redis:sentinel.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -4926,7 +4926,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:sentinel.redis_type**
-  
+
   *Type*: `sentinel`
 
   *Default*: `sentinel`
@@ -4935,14 +4935,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:sentinel.sentinel**
-  
+
   *Type*: `string`
 
   The cluster name in Redis sentinel mode.
 
 
 **authn-redis:sentinel.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -4951,14 +4951,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:sentinel.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-redis:sentinel.database**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -4967,14 +4967,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authn-redis:sentinel.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authn-redis:sentinel.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -4991,28 +4991,28 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 Configuration of authenticator using MongoDB (Standalone) as authentication data source.
 
 **authn-mongodb:standalone.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-mongodb:standalone.backend**
-  
+
   *Type*: `mongodb`
 
   Backend type.
 
 
 **authn-mongodb:standalone.collection**
-  
+
   *Type*: `string`
 
   Collection used to store authentication data.
 
 
 **authn-mongodb:standalone.filter**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -5024,7 +5024,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:standalone.password_hash_field**
-  
+
   *Type*: `string`
 
   *Default*: `password_hash`
@@ -5033,7 +5033,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:standalone.salt_field**
-  
+
   *Type*: `string`
 
   *Default*: `salt`
@@ -5042,7 +5042,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:standalone.is_superuser_field**
-  
+
   *Type*: `string`
 
   *Default*: `is_superuser`
@@ -5051,7 +5051,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:standalone.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -5060,7 +5060,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:standalone.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -5069,7 +5069,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:standalone.mongo_type**
-  
+
   *Type*: `single`
 
   *Default*: `single`
@@ -5078,7 +5078,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:standalone.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -5087,7 +5087,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:standalone.w_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `unsafe`
@@ -5098,7 +5098,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:standalone.srv_record**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -5107,7 +5107,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:standalone.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -5116,40 +5116,40 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:standalone.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authn-mongodb:standalone.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-mongodb:standalone.auth_source**
-  
+
   *Type*: `string`
 
   Database name associated with the user's credentials.
 
 
 **authn-mongodb:standalone.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authn-mongodb:standalone.topology**
-  
+
   *Type*: `topology`
 
 
 **authn-mongodb:standalone.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -5164,28 +5164,28 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 Configuration of authenticator using MongoDB (Replica Set) as authentication data source.
 
 **authn-mongodb:replica-set.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-mongodb:replica-set.backend**
-  
+
   *Type*: `mongodb`
 
   Backend type.
 
 
 **authn-mongodb:replica-set.collection**
-  
+
   *Type*: `string`
 
   Collection used to store authentication data.
 
 
 **authn-mongodb:replica-set.filter**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -5197,7 +5197,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:replica-set.password_hash_field**
-  
+
   *Type*: `string`
 
   *Default*: `password_hash`
@@ -5206,7 +5206,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:replica-set.salt_field**
-  
+
   *Type*: `string`
 
   *Default*: `salt`
@@ -5215,7 +5215,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:replica-set.is_superuser_field**
-  
+
   *Type*: `string`
 
   *Default*: `is_superuser`
@@ -5224,7 +5224,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:replica-set.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -5233,7 +5233,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:replica-set.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -5242,7 +5242,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:replica-set.mongo_type**
-  
+
   *Type*: `rs`
 
   *Default*: `rs`
@@ -5251,7 +5251,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:replica-set.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -5261,7 +5261,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:replica-set.w_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `unsafe`
@@ -5272,7 +5272,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:replica-set.r_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `master`
@@ -5283,14 +5283,14 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:replica-set.replica_set_name**
-  
+
   *Type*: `string`
 
   Name of the replica set.
 
 
 **authn-mongodb:replica-set.srv_record**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -5299,7 +5299,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:replica-set.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -5308,40 +5308,40 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:replica-set.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authn-mongodb:replica-set.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-mongodb:replica-set.auth_source**
-  
+
   *Type*: `string`
 
   Database name associated with the user's credentials.
 
 
 **authn-mongodb:replica-set.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authn-mongodb:replica-set.topology**
-  
+
   *Type*: `topology`
 
 
 **authn-mongodb:replica-set.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -5356,28 +5356,28 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 Configuration of authenticator using MongoDB (Sharded Cluster) as authentication data source.
 
 **authn-mongodb:sharded-cluster.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-mongodb:sharded-cluster.backend**
-  
+
   *Type*: `mongodb`
 
   Backend type.
 
 
 **authn-mongodb:sharded-cluster.collection**
-  
+
   *Type*: `string`
 
   Collection used to store authentication data.
 
 
 **authn-mongodb:sharded-cluster.filter**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -5389,7 +5389,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:sharded-cluster.password_hash_field**
-  
+
   *Type*: `string`
 
   *Default*: `password_hash`
@@ -5398,7 +5398,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:sharded-cluster.salt_field**
-  
+
   *Type*: `string`
 
   *Default*: `salt`
@@ -5407,7 +5407,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:sharded-cluster.is_superuser_field**
-  
+
   *Type*: `string`
 
   *Default*: `is_superuser`
@@ -5416,7 +5416,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:sharded-cluster.password_hash_algorithm**
-  
+
   *Type*: [authn-hash:bcrypt](#authn-hash:bcrypt) | [authn-hash:pbkdf2](#authn-hash:pbkdf2) | [authn-hash:simple](#authn-hash:simple)
 
   *Default*: `{"name":"sha256","salt_position":"prefix"}`
@@ -5425,7 +5425,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:sharded-cluster.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -5434,7 +5434,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:sharded-cluster.mongo_type**
-  
+
   *Type*: `sharded`
 
   *Default*: `sharded`
@@ -5443,7 +5443,7 @@ Filter supports the following placeholders:
 
 
 **authn-mongodb:sharded-cluster.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -5453,7 +5453,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:sharded-cluster.w_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `unsafe`
@@ -5464,7 +5464,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:sharded-cluster.srv_record**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -5473,7 +5473,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:sharded-cluster.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -5482,40 +5482,40 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authn-mongodb:sharded-cluster.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authn-mongodb:sharded-cluster.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authn-mongodb:sharded-cluster.auth_source**
-  
+
   *Type*: `string`
 
   Database name associated with the user's credentials.
 
 
 **authn-mongodb:sharded-cluster.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authn-mongodb:sharded-cluster.topology**
-  
+
   *Type*: `topology`
 
 
 **authn-mongodb:sharded-cluster.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -5532,14 +5532,14 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 Configuration of authenticator using HTTP Server as authentication service (Using GET request).
 
 **authn-http:get.method**
-  
+
   *Type*: `get`
 
   HTTP request method.
 
 
 **authn-http:get.headers**
-  
+
   *Type*: `map`
 
   *Default*: `{"accept":"application/json","cache-control":"no-cache","connection":"keep-alive","keep-alive":"timeout=30, max=1000"}`
@@ -5548,35 +5548,35 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:get.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-http:get.backend**
-  
+
   *Type*: `http`
 
   Backend type.
 
 
 **authn-http:get.url**
-  
+
   *Type*: `string`
 
   URL of the HTTP server.
 
 
 **authn-http:get.body**
-  
+
   *Type*: `#{term => binary()}`
 
   HTTP request body.
 
 
 **authn-http:get.request_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `5s`
@@ -5585,7 +5585,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:get.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -5594,7 +5594,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:get.connect_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -5603,7 +5603,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:get.enable_pipelining**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `100`
@@ -5612,14 +5612,14 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:get.max_retries**
-  
+
   *Type*: `non_neg_integer`
 
   Deprecated since 5.0.4.
 
 
 **authn-http:get.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -5628,21 +5628,21 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:get.request**
-  
+
   *Type*: `connector-http:request`
 
   Configure HTTP request parameters.
 
 
 **authn-http:get.retry_interval**
-  
+
   *Type*: `duration`
 
   Deprecated since 5.0.4.
 
 
 **authn-http:get.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -5657,14 +5657,14 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 Configuration of authenticator using HTTP Server as authentication service (Using POST request).
 
 **authn-http:post.method**
-  
+
   *Type*: `post`
 
   HTTP request method.
 
 
 **authn-http:post.headers**
-  
+
   *Type*: `map`
 
   *Default*: `{"accept":"application/json","cache-control":"no-cache","connection":"keep-alive","content-type":"application/json","keep-alive":"timeout=30, max=1000"}`
@@ -5673,35 +5673,35 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:post.mechanism**
-  
+
   *Type*: `password_based`
 
   Authentication mechanism.
 
 
 **authn-http:post.backend**
-  
+
   *Type*: `http`
 
   Backend type.
 
 
 **authn-http:post.url**
-  
+
   *Type*: `string`
 
   URL of the HTTP server.
 
 
 **authn-http:post.body**
-  
+
   *Type*: `#{term => binary()}`
 
   HTTP request body.
 
 
 **authn-http:post.request_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `5s`
@@ -5710,7 +5710,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:post.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -5719,7 +5719,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:post.connect_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -5728,7 +5728,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:post.enable_pipelining**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `100`
@@ -5737,14 +5737,14 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:post.max_retries**
-  
+
   *Type*: `non_neg_integer`
 
   Deprecated since 5.0.4.
 
 
 **authn-http:post.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -5753,21 +5753,21 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
 
 **authn-http:post.request**
-  
+
   *Type*: `connector-http:request`
 
   Configure HTTP request parameters.
 
 
 **authn-http:post.retry_interval**
-  
+
   *Type*: `duration`
 
   Deprecated since 5.0.4.
 
 
 **authn-http:post.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -5782,7 +5782,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 Configuration when the JWT for authentication is issued using the HMAC algorithm.
 
 **authn-jwt:hmac-based.use_jwks**
-  
+
   *Type*: `enum`
 
   *Optional*: `false`
@@ -5791,7 +5791,7 @@ Configuration when the JWT for authentication is issued using the HMAC algorithm
 
 
 **authn-jwt:hmac-based.algorithm**
-  
+
   *Type*: `enum`
 
   *Optional*: `hmac-based`
@@ -5800,14 +5800,14 @@ Configuration when the JWT for authentication is issued using the HMAC algorithm
 
 
 **authn-jwt:hmac-based.secret**
-  
+
   *Type*: `string`
 
   The key to verify the JWT using HMAC algorithm.
 
 
 **authn-jwt:hmac-based.secret_base64_encoded**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -5816,14 +5816,14 @@ Configuration when the JWT for authentication is issued using the HMAC algorithm
 
 
 **authn-jwt:hmac-based.mechanism**
-  
+
   *Type*: `jwt`
 
   Authentication mechanism.
 
 
 **authn-jwt:hmac-based.acl_claim_name**
-  
+
   *Type*: `string`
 
   *Default*: `acl`
@@ -5832,7 +5832,7 @@ Configuration when the JWT for authentication is issued using the HMAC algorithm
 
 
 **authn-jwt:hmac-based.verify_claims**
-  
+
   *Type*: `[term]`
 
   *Default*: `{}`
@@ -5845,7 +5845,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
 
 **authn-jwt:hmac-based.from**
-  
+
   *Type*: `enum`
 
   *Default*: `password`
@@ -5856,7 +5856,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
 
 **authn-jwt:hmac-based.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -5869,7 +5869,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 Configuration when JWTs used for authentication need to be fetched from the JWKS endpoint.
 
 **authn-jwt:jwks.use_jwks**
-  
+
   *Type*: `enum`
 
   *Optional*: `true`
@@ -5878,14 +5878,14 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
 
 
 **authn-jwt:jwks.endpoint**
-  
+
   *Type*: `string`
 
   JWKS endpoint, it's a read-only endpoint that returns the server's public key set in the JWKS format.
 
 
 **authn-jwt:jwks.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -5894,7 +5894,7 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
 
 
 **authn-jwt:jwks.refresh_interval**
-  
+
   *Type*: `integer`
 
   *Default*: `300`
@@ -5903,7 +5903,7 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
 
 
 **authn-jwt:jwks.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -5912,14 +5912,14 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
 
 
 **authn-jwt:jwks.mechanism**
-  
+
   *Type*: `jwt`
 
   Authentication mechanism.
 
 
 **authn-jwt:jwks.acl_claim_name**
-  
+
   *Type*: `string`
 
   *Default*: `acl`
@@ -5928,7 +5928,7 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
 
 
 **authn-jwt:jwks.verify_claims**
-  
+
   *Type*: `[term]`
 
   *Default*: `{}`
@@ -5941,7 +5941,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
 
 **authn-jwt:jwks.from**
-  
+
   *Type*: `enum`
 
   *Default*: `password`
@@ -5952,7 +5952,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
 
 **authn-jwt:jwks.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -5965,7 +5965,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 Configuration when the JWT for authentication is issued using RSA or ECDSA algorithm.
 
 **authn-jwt:public-key.use_jwks**
-  
+
   *Type*: `enum`
 
   *Optional*: `false`
@@ -5974,7 +5974,7 @@ Configuration when the JWT for authentication is issued using RSA or ECDSA algor
 
 
 **authn-jwt:public-key.algorithm**
-  
+
   *Type*: `enum`
 
   *Optional*: `public-key`
@@ -5983,21 +5983,21 @@ Configuration when the JWT for authentication is issued using RSA or ECDSA algor
 
 
 **authn-jwt:public-key.public_key**
-  
+
   *Type*: `string`
 
   The public key used to verify the JWT.
 
 
 **authn-jwt:public-key.mechanism**
-  
+
   *Type*: `jwt`
 
   Authentication mechanism.
 
 
 **authn-jwt:public-key.acl_claim_name**
-  
+
   *Type*: `string`
 
   *Default*: `acl`
@@ -6006,7 +6006,7 @@ Configuration when the JWT for authentication is issued using RSA or ECDSA algor
 
 
 **authn-jwt:public-key.verify_claims**
-  
+
   *Type*: `[term]`
 
   *Default*: `{}`
@@ -6019,7 +6019,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
 
 **authn-jwt:public-key.from**
-  
+
   *Type*: `enum`
 
   *Default*: `password`
@@ -6030,7 +6030,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
 
 **authn-jwt:public-key.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6046,21 +6046,21 @@ Settings for Salted Challenge Response Authentication Mechanism
 (SCRAM) authentication.
 
 **authn-scram-builtin_db:authentication.mechanism**
-  
+
   *Type*: `scram`
 
   Authentication mechanism.
 
 
 **authn-scram-builtin_db:authentication.backend**
-  
+
   *Type*: `built_in_database`
 
   Backend type.
 
 
 **authn-scram-builtin_db:authentication.algorithm**
-  
+
   *Type*: `enum`
 
   *Default*: `sha256`
@@ -6071,7 +6071,7 @@ Settings for Salted Challenge Response Authentication Mechanism
 
 
 **authn-scram-builtin_db:authentication.iteration_count**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `4096`
@@ -6080,7 +6080,7 @@ Settings for Salted Challenge Response Authentication Mechanism
 
 
 **authn-scram-builtin_db:authentication.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6103,7 +6103,7 @@ See listener SSL options config for more details.
 The IDs and secrets can be provided from a file which is configurable by the <code>init_file</code> field.
 
 **psk_authentication.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -6112,7 +6112,7 @@ The IDs and secrets can be provided from a file which is configurable by the <co
 
 
 **psk_authentication.init_file**
-  
+
   *Type*: `string`
 
   If init_file is specified, EMQX will import PSKs from the file into the built-in database at startup for use by the runtime.
@@ -6121,7 +6121,7 @@ For example: <code>mydevice1:c2VjcmV0</code>
 
 
 **psk_authentication.separator**
-  
+
   *Type*: `string`
 
   *Default*: `:`
@@ -6130,7 +6130,7 @@ For example: <code>mydevice1:c2VjcmV0</code>
 
 
 **psk_authentication.chunk_size**
-  
+
   *Type*: `integer`
 
   *Default*: `50`
@@ -6145,7 +6145,7 @@ For example: <code>mydevice1:c2VjcmV0</code>
 Settings for bcrypt password hashing algorithm.
 
 **authn-hash:bcrypt.name**
-  
+
   *Type*: `bcrypt`
 
   BCRYPT password hashing.
@@ -6156,14 +6156,14 @@ Settings for bcrypt password hashing algorithm.
 Settings for bcrypt password hashing algorithm (for DB backends with write capability).
 
 **authn-hash:bcrypt_rw.name**
-  
+
   *Type*: `bcrypt`
 
   BCRYPT password hashing.
 
 
 **authn-hash:bcrypt_rw.salt_rounds**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -6176,14 +6176,14 @@ Settings for bcrypt password hashing algorithm (for DB backends with write capab
 Settings for PBKDF2 password hashing algorithm.
 
 **authn-hash:pbkdf2.name**
-  
+
   *Type*: `pbkdf2`
 
   PBKDF2 password hashing.
 
 
 **authn-hash:pbkdf2.mac_fun**
-  
+
   *Type*: `enum`
 
   *Optional*: `md4 | md5 | ripemd160 | sha | sha224 | sha256 | sha384 | sha512`
@@ -6192,14 +6192,14 @@ Settings for PBKDF2 password hashing algorithm.
 
 
 **authn-hash:pbkdf2.iterations**
-  
+
   *Type*: `integer`
 
   Iteration count for PBKDF2 hashing algorithm.
 
 
 **authn-hash:pbkdf2.dk_length**
-  
+
   *Type*: `integer`
 
   Derived length for PBKDF2 hashing algorithm. If not specified, calculated automatically based on `mac_fun`.
@@ -6210,7 +6210,7 @@ Settings for PBKDF2 password hashing algorithm.
 Settings for simple algorithms.
 
 **authn-hash:simple.name**
-  
+
   *Type*: `enum`
 
   *Optional*: `plain | md5 | sha | sha256 | sha512`
@@ -6219,7 +6219,7 @@ Settings for simple algorithms.
 
 
 **authn-hash:simple.salt_position**
-  
+
   *Type*: `enum`
 
   *Default*: `prefix`
@@ -6238,7 +6238,7 @@ Settings for simple algorithms.
 Settings that control client authorization.
 
 **authorization.no_match**
-  
+
   *Type*: `enum`
 
   *Default*: `allow`
@@ -6252,7 +6252,7 @@ Find more details in 'authorization.sources' config.
 
 
 **authorization.deny_action**
-  
+
   *Type*: `enum`
 
   *Default*: `ignore`
@@ -6263,12 +6263,12 @@ Find more details in 'authorization.sources' config.
 
 
 **authorization.cache**
-  
+
   *Type*: `broker:authz_cache`
 
 
 **authorization.sources**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -6297,7 +6297,7 @@ It is NOT allowed to configure two or more sources of the same type.
 Settings for the authorization cache.
 
 **authorization.cache.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6306,7 +6306,7 @@ Settings for the authorization cache.
 
 
 **authorization.cache.max_size**
-  
+
   *Type*: `integer`
 
   *Default*: `32`
@@ -6317,7 +6317,7 @@ Settings for the authorization cache.
 
 
 **authorization.cache.ttl**
-  
+
   *Type*: `duration`
 
   *Default*: `1m`
@@ -6332,14 +6332,14 @@ Settings for the authorization cache.
 Authorization using a static file.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `file`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6348,7 +6348,7 @@ Authorization using a static file.
 
 
 **authorization.sources.$INDEX.path**
-  
+
   *Type*: `string`
 
   Path to the file which contains the ACL rules.
@@ -6368,14 +6368,14 @@ and the old file will not be used anymore.
 Authorization using a built-in database (mnesia).
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `built_in_database`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6390,14 +6390,14 @@ Authorization using a built-in database (mnesia).
 Authorization using a MySQL database.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `mysql`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6406,7 +6406,7 @@ Authorization using a MySQL database.
 
 
 **authorization.sources.$INDEX.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -6415,14 +6415,14 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -6431,7 +6431,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.username**
-  
+
   *Type*: `string`
 
   *Default*: `root`
@@ -6440,21 +6440,21 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -6463,14 +6463,14 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.prepare_statement**
-  
+
   *Type*: `map`
 
   Key-value list of SQL prepared statements.
 
 
 **authorization.sources.$INDEX.query**
-  
+
   *Type*: `string`
 
   Database query used to retrieve authorization data.
@@ -6483,14 +6483,14 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 Authorization using a PostgreSQL database.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `postgresql`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6499,7 +6499,7 @@ Authorization using a PostgreSQL database.
 
 
 **authorization.sources.$INDEX.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -6508,14 +6508,14 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -6524,28 +6524,28 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -6554,14 +6554,14 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.prepare_statement**
-  
+
   *Type*: `map`
 
   Key-value list of SQL prepared statements.
 
 
 **authorization.sources.$INDEX.query**
-  
+
   *Type*: `string`
 
   Database query used to retrieve authorization data.
@@ -6574,14 +6574,14 @@ The PostgreSQL default port 5432 is used if `[:Port]` is not specified.
 Authorization using a single Redis instance.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `redis`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6590,7 +6590,7 @@ Authorization using a single Redis instance.
 
 
 **authorization.sources.$INDEX.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -6599,7 +6599,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.redis_type**
-  
+
   *Type*: `single`
 
   *Default*: `single`
@@ -6608,7 +6608,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -6617,14 +6617,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.database**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -6633,14 +6633,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -6649,7 +6649,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.cmd**
-  
+
   *Type*: `string`
 
   Database query used to retrieve authorization data.
@@ -6660,14 +6660,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 Authorization using a Redis cluster.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `redis`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6676,7 +6676,7 @@ Authorization using a Redis cluster.
 
 
 **authorization.sources.$INDEX.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -6686,7 +6686,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.redis_type**
-  
+
   *Type*: `cluster`
 
   *Default*: `cluster`
@@ -6695,7 +6695,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -6704,21 +6704,21 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -6727,7 +6727,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.cmd**
-  
+
   *Type*: `string`
 
   Database query used to retrieve authorization data.
@@ -6738,14 +6738,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 Authorization using a Redis Sentinel.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `redis`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6754,7 +6754,7 @@ Authorization using a Redis Sentinel.
 
 
 **authorization.sources.$INDEX.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -6764,7 +6764,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.redis_type**
-  
+
   *Type*: `sentinel`
 
   *Default*: `sentinel`
@@ -6773,14 +6773,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.sentinel**
-  
+
   *Type*: `string`
 
   The cluster name in Redis sentinel mode.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -6789,14 +6789,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.database**
-  
+
   *Type*: `integer`
 
   *Default*: `0`
@@ -6805,14 +6805,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.auto_reconnect**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.15.
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -6821,7 +6821,7 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.cmd**
-  
+
   *Type*: `string`
 
   Database query used to retrieve authorization data.
@@ -6834,14 +6834,14 @@ The Redis default port 6379 is used if `[:Port]` is not specified.
 Authorization using a single MongoDB instance.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `mongodb`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6850,14 +6850,14 @@ Authorization using a single MongoDB instance.
 
 
 **authorization.sources.$INDEX.collection**
-  
+
   *Type*: `atom`
 
   `MongoDB` collection containing the authorization data.
 
 
 **authorization.sources.$INDEX.filter**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -6869,7 +6869,7 @@ Filter supports the following placeholders<br/>
 
 
 **authorization.sources.$INDEX.mongo_type**
-  
+
   *Type*: `single`
 
   *Default*: `single`
@@ -6878,7 +6878,7 @@ Filter supports the following placeholders<br/>
 
 
 **authorization.sources.$INDEX.server**
-  
+
   *Type*: `string`
 
   The IPv4 or IPv6 address or the hostname to connect to.<br/>
@@ -6887,7 +6887,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.w_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `unsafe`
@@ -6898,7 +6898,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.srv_record**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -6907,7 +6907,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -6916,40 +6916,40 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.auth_source**
-  
+
   *Type*: `string`
 
   Database name associated with the user's credentials.
 
 
 **authorization.sources.$INDEX.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authorization.sources.$INDEX.topology**
-  
+
   *Type*: `topology`
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -6962,14 +6962,14 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 Authorization using a MongoDB replica set.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `mongodb`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -6978,14 +6978,14 @@ Authorization using a MongoDB replica set.
 
 
 **authorization.sources.$INDEX.collection**
-  
+
   *Type*: `atom`
 
   `MongoDB` collection containing the authorization data.
 
 
 **authorization.sources.$INDEX.filter**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -6997,7 +6997,7 @@ Filter supports the following placeholders<br/>
 
 
 **authorization.sources.$INDEX.mongo_type**
-  
+
   *Type*: `rs`
 
   *Default*: `rs`
@@ -7006,7 +7006,7 @@ Filter supports the following placeholders<br/>
 
 
 **authorization.sources.$INDEX.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -7016,7 +7016,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.w_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `unsafe`
@@ -7027,7 +7027,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.r_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `master`
@@ -7038,14 +7038,14 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.replica_set_name**
-  
+
   *Type*: `string`
 
   Name of the replica set.
 
 
 **authorization.sources.$INDEX.srv_record**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -7054,7 +7054,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -7063,40 +7063,40 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.auth_source**
-  
+
   *Type*: `string`
 
   Database name associated with the user's credentials.
 
 
 **authorization.sources.$INDEX.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authorization.sources.$INDEX.topology**
-  
+
   *Type*: `topology`
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -7109,14 +7109,14 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 Authorization using a sharded MongoDB cluster.
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `mongodb`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7125,14 +7125,14 @@ Authorization using a sharded MongoDB cluster.
 
 
 **authorization.sources.$INDEX.collection**
-  
+
   *Type*: `atom`
 
   `MongoDB` collection containing the authorization data.
 
 
 **authorization.sources.$INDEX.filter**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -7144,7 +7144,7 @@ Filter supports the following placeholders<br/>
 
 
 **authorization.sources.$INDEX.mongo_type**
-  
+
   *Type*: `sharded`
 
   *Default*: `sharded`
@@ -7153,7 +7153,7 @@ Filter supports the following placeholders<br/>
 
 
 **authorization.sources.$INDEX.servers**
-  
+
   *Type*: `string`
 
   A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`
@@ -7163,7 +7163,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.w_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `unsafe`
@@ -7174,7 +7174,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.srv_record**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -7183,7 +7183,7 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -7192,40 +7192,40 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 
 
 **authorization.sources.$INDEX.username**
-  
+
   *Type*: `string`
 
   EMQX's username in the external database.
 
 
 **authorization.sources.$INDEX.password**
-  
+
   *Type*: `string`
 
   EMQX's password in the external database.
 
 
 **authorization.sources.$INDEX.auth_source**
-  
+
   *Type*: `string`
 
   Database name associated with the user's credentials.
 
 
 **authorization.sources.$INDEX.database**
-  
+
   *Type*: `string`
 
   Database name.
 
 
 **authorization.sources.$INDEX.topology**
-  
+
   *Type*: `topology`
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -7240,14 +7240,14 @@ The MongoDB default port 27017 is used if `[:Port]` is not specified.
 Authorization using an external HTTP server (via GET requests).
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `http`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7256,14 +7256,14 @@ Authorization using an external HTTP server (via GET requests).
 
 
 **authorization.sources.$INDEX.url**
-  
+
   *Type*: `string`
 
   URL of the auth server.
 
 
 **authorization.sources.$INDEX.request_timeout**
-  
+
   *Type*: `string`
 
   *Default*: `30s`
@@ -7272,14 +7272,14 @@ Authorization using an external HTTP server (via GET requests).
 
 
 **authorization.sources.$INDEX.body**
-  
+
   *Type*: `map`
 
   HTTP request body.
 
 
 **authorization.sources.$INDEX.connect_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -7288,7 +7288,7 @@ Authorization using an external HTTP server (via GET requests).
 
 
 **authorization.sources.$INDEX.enable_pipelining**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `100`
@@ -7297,14 +7297,14 @@ Authorization using an external HTTP server (via GET requests).
 
 
 **authorization.sources.$INDEX.max_retries**
-  
+
   *Type*: `non_neg_integer`
 
   Deprecated since 5.0.4.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -7313,21 +7313,21 @@ Authorization using an external HTTP server (via GET requests).
 
 
 **authorization.sources.$INDEX.request**
-  
+
   *Type*: `connector-http:request`
 
   Configure HTTP request parameters.
 
 
 **authorization.sources.$INDEX.retry_interval**
-  
+
   *Type*: `duration`
 
   Deprecated since 5.0.4.
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -7336,14 +7336,14 @@ Authorization using an external HTTP server (via GET requests).
 
 
 **authorization.sources.$INDEX.method**
-  
+
   *Type*: `get`
 
   HTTP method.
 
 
 **authorization.sources.$INDEX.headers**
-  
+
   *Type*: `[{binary, binary()}]`
 
   *Default*: `{"accept":"application/json","cache-control":"no-cache","connection":"keep-alive","keep-alive":"timeout=30, max=1000"}`
@@ -7356,14 +7356,14 @@ Authorization using an external HTTP server (via GET requests).
 Authorization using an external HTTP server (via POST requests).
 
 **authorization.sources.$INDEX.type**
-  
+
   *Type*: `http`
 
   Backend type.
 
 
 **authorization.sources.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7372,14 +7372,14 @@ Authorization using an external HTTP server (via POST requests).
 
 
 **authorization.sources.$INDEX.url**
-  
+
   *Type*: `string`
 
   URL of the auth server.
 
 
 **authorization.sources.$INDEX.request_timeout**
-  
+
   *Type*: `string`
 
   *Default*: `30s`
@@ -7388,14 +7388,14 @@ Authorization using an external HTTP server (via POST requests).
 
 
 **authorization.sources.$INDEX.body**
-  
+
   *Type*: `map`
 
   HTTP request body.
 
 
 **authorization.sources.$INDEX.connect_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -7404,7 +7404,7 @@ Authorization using an external HTTP server (via POST requests).
 
 
 **authorization.sources.$INDEX.enable_pipelining**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `100`
@@ -7413,14 +7413,14 @@ Authorization using an external HTTP server (via POST requests).
 
 
 **authorization.sources.$INDEX.max_retries**
-  
+
   *Type*: `non_neg_integer`
 
   Deprecated since 5.0.4.
 
 
 **authorization.sources.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -7429,21 +7429,21 @@ Authorization using an external HTTP server (via POST requests).
 
 
 **authorization.sources.$INDEX.request**
-  
+
   *Type*: `connector-http:request`
 
   Configure HTTP request parameters.
 
 
 **authorization.sources.$INDEX.retry_interval**
-  
+
   *Type*: `duration`
 
   Deprecated since 5.0.4.
 
 
 **authorization.sources.$INDEX.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -7452,14 +7452,14 @@ Authorization using an external HTTP server (via POST requests).
 
 
 **authorization.sources.$INDEX.method**
-  
+
   *Type*: `post`
 
   HTTP method.
 
 
 **authorization.sources.$INDEX.headers**
-  
+
   *Type*: `[{binary, binary()}]`
 
   *Default*: `{"accept":"application/json","cache-control":"no-cache","connection":"keep-alive","content-type":"application/json","keep-alive":"timeout=30, max=1000"}`
@@ -7484,7 +7484,7 @@ are distinguished by the topic prefix:
 
 
 **sys_topics.sys_event_messages.client_connected**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7493,7 +7493,7 @@ are distinguished by the topic prefix:
 
 
 **sys_topics.sys_event_messages.client_disconnected**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7502,7 +7502,7 @@ are distinguished by the topic prefix:
 
 
 **sys_topics.sys_event_messages.client_subscribed**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -7511,7 +7511,7 @@ are distinguished by the topic prefix:
 
 
 **sys_topics.sys_event_messages.client_unsubscribed**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -7526,7 +7526,7 @@ are distinguished by the topic prefix:
 Configuration for the EMQX Rule Engine.
 
 **rule_engine.ignore_sys_message**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7535,7 +7535,7 @@ Configuration for the EMQX Rule Engine.
 
 
 **rule_engine.rules**
-  
+
   *Type*: `id`
 
   *Default*: `{}`
@@ -7544,7 +7544,7 @@ Configuration for the EMQX Rule Engine.
 
 
 **rule_engine.jq_function_default_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `10s`
@@ -7553,7 +7553,7 @@ Configuration for the EMQX Rule Engine.
 
 
 **rule_engine.jq_implementation_module**
-  
+
   *Type*: `enum`
 
   *Default*: `jq_nif`
@@ -7568,7 +7568,7 @@ Configuration for the EMQX Rule Engine.
 Configuration for a rule.
 
 **rule_engine.rules.$id.name**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -7577,7 +7577,7 @@ Configuration for a rule.
 
 
 **rule_engine.rules.$id.sql**
-  
+
   *Type*: `string`
 
   SQL query to transform the messages.
@@ -7585,7 +7585,7 @@ Example: <code>SELECT * FROM "test/topic" WHERE payload.x = 1</code>
 
 
 **rule_engine.rules.$id.actions**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -7605,7 +7605,7 @@ counter of the function action or the bridge channel will increase.
 
 
 **rule_engine.rules.$id.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7614,7 +7614,7 @@ counter of the function action or the bridge channel will increase.
 
 
 **rule_engine.rules.$id.description**
-  
+
   *Type*: `string`
 
   *Default*: `""`
@@ -7623,7 +7623,7 @@ counter of the function action or the bridge channel will increase.
 
 
 **rule_engine.rules.$id.metadata**
-  
+
   *Type*: `map`
 
   Rule metadata, do not change manually
@@ -7634,7 +7634,7 @@ counter of the function action or the bridge channel will increase.
 Configuration for a built-in action.
 
 **rule_engine.rules.$id.actions.$INDEX.function**
-  
+
   *Type*: `string`
 
   The user provided function. Should be in the format: '{module}:{function}'.
@@ -7646,7 +7646,7 @@ To write your own function, checkout the function <code>console</code> and
 
 
 **rule_engine.rules.$id.actions.$INDEX.args**
-  
+
   *Type*: `map`
 
   *Default*: `{}`
@@ -7663,7 +7663,7 @@ checkout the function <code>console</code> and <code>republish</code> in the sou
 Configuration for a built-in action.
 
 **rule_engine.rules.$id.actions.$INDEX.function**
-  
+
   *Type*: `console`
 
   Print the actions to the console
@@ -7674,14 +7674,14 @@ Configuration for a built-in action.
 Configuration for a built-in action.
 
 **rule_engine.rules.$id.actions.$INDEX.function**
-  
+
   *Type*: `republish`
 
   Republish the message as a new MQTT message
 
 
 **rule_engine.rules.$id.actions.$INDEX.args**
-  
+
   *Type*: `rule_engine:republish_args`
 
   *Default*: `{}`
@@ -7708,7 +7708,7 @@ clientid = `Steve`, the rule will republish a new MQTT message to topic `t/Steve
 payload = `msg: hello`, and `qos = 1`.
 
 **rule_engine.rules.$id.actions.$INDEX.args.topic**
-  
+
   *Type*: `string`
 
   The target topic of message to be re-published.
@@ -7716,7 +7716,7 @@ Template with variables is allowed, see description of the 'republish_args'.
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.qos**
-  
+
   *Type*: `qos | string`
 
   *Default*: `${qos}`
@@ -7728,7 +7728,7 @@ Defaults to ${qos}. If variable ${qos} is not found from the selected result of 
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.retain**
-  
+
   *Type*: `boolean | string`
 
   *Default*: `${retain}`
@@ -7740,7 +7740,7 @@ of the rule, false is used.
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.payload**
-  
+
   *Type*: `string`
 
   *Default*: `${payload}`
@@ -7752,7 +7752,7 @@ of the rule, then the string "undefined" is used.
 
 
 **rule_engine.rules.$id.actions.$INDEX.args.user_properties**
-  
+
   *Type*: `string`
 
   *Default*: `${user_properties}`
@@ -7777,7 +7777,7 @@ NOTE: MQTT spec allows duplicated user property names, but EMQX Rule-Engine does
 The config for MQTT Bridges.
 
 **bridges.mqtt.$name.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7786,7 +7786,7 @@ The config for MQTT Bridges.
 
 
 **bridges.mqtt.$name.resource_opts**
-  
+
   *Type*: `bridge_mqtt:creation_opts`
 
   *Default*: `{}`
@@ -7795,7 +7795,7 @@ The config for MQTT Bridges.
 
 
 **bridges.mqtt.$name.mode**
-  
+
   *Type*: `enum`
 
   *Default*: `cluster_shareload`
@@ -7812,28 +7812,28 @@ topic filters for <code>remote.topic</code> of ingress connections.
 
 
 **bridges.mqtt.$name.server**
-  
+
   *Type*: `string`
 
   The host and port of the remote MQTT broker
 
 
 **bridges.mqtt.$name.clientid_prefix**
-  
+
   *Type*: `string`
 
   Optional prefix to prepend to the clientid used by egress bridges.
 
 
 **bridges.mqtt.$name.reconnect_interval**
-  
+
   *Type*: `string`
 
   Deprecated since v5.0.16.
 
 
 **bridges.mqtt.$name.proto_ver**
-  
+
   *Type*: `enum`
 
   *Default*: `v4`
@@ -7844,7 +7844,7 @@ topic filters for <code>remote.topic</code> of ingress connections.
 
 
 **bridges.mqtt.$name.bridge_mode**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -7857,21 +7857,21 @@ This means that loop detection will be more effective and that retained messages
 
 
 **bridges.mqtt.$name.username**
-  
+
   *Type*: `string`
 
   The username of the MQTT protocol
 
 
 **bridges.mqtt.$name.password**
-  
+
   *Type*: `string`
 
   The password of the MQTT protocol
 
 
 **bridges.mqtt.$name.clean_start**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7880,7 +7880,7 @@ This means that loop detection will be more effective and that retained messages
 
 
 **bridges.mqtt.$name.keepalive**
-  
+
   *Type*: `string`
 
   *Default*: `300s`
@@ -7893,7 +7893,7 @@ This means that loop detection will be more effective and that retained messages
 
 
 **bridges.mqtt.$name.retry_interval**
-  
+
   *Type*: `string`
 
   *Default*: `15s`
@@ -7906,7 +7906,7 @@ This means that loop detection will be more effective and that retained messages
 
 
 **bridges.mqtt.$name.max_inflight**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `32`
@@ -7915,7 +7915,7 @@ This means that loop detection will be more effective and that retained messages
 
 
 **bridges.mqtt.$name.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -7924,7 +7924,7 @@ This means that loop detection will be more effective and that retained messages
 
 
 **bridges.mqtt.$name.ingress**
-  
+
   *Type*: `connector-mqtt:ingress`
 
   The ingress config defines how this bridge receive messages from the remote MQTT broker, and then
@@ -7936,7 +7936,7 @@ This means that loop detection will be more effective and that retained messages
 
 
 **bridges.mqtt.$name.egress**
-  
+
   *Type*: `connector-mqtt:egress`
 
   The egress config defines how this bridge forwards messages from the local broker to the remote broker.<br/>
@@ -7951,7 +7951,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 Creation options.
 
 **bridges.mqtt.$name.resource_opts.worker_pool_size**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `16`
@@ -7961,7 +7961,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.health_check_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -7970,7 +7970,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.start_after_created**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -7979,7 +7979,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.start_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `5s`
@@ -7988,7 +7988,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.auto_restart_interval**
-  
+
   *Type*: `infinity | duration_ms`
 
   *Default*: `60s`
@@ -7997,7 +7997,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.query_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `async`
@@ -8008,7 +8008,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.request_timeout**
-  
+
   *Type*: `infinity | duration_ms`
 
   *Default*: `15s`
@@ -8017,7 +8017,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.async_inflight_window**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `100`
@@ -8026,14 +8026,14 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.mqtt.$name.resource_opts.enable_queue**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.14.
 
 
 **bridges.mqtt.$name.resource_opts.max_queue_bytes**
-  
+
   *Type*: `bytesize`
 
   *Default*: `100MB`
@@ -8048,7 +8048,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 Configuration for an HTTP bridge.
 
 **bridges.webhook.$name.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8057,7 +8057,7 @@ Configuration for an HTTP bridge.
 
 
 **bridges.webhook.$name.resource_opts**
-  
+
   *Type*: `bridge_webhook:creation_opts`
 
   *Default*: `{}`
@@ -8066,7 +8066,7 @@ Configuration for an HTTP bridge.
 
 
 **bridges.webhook.$name.connect_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -8075,14 +8075,14 @@ Configuration for an HTTP bridge.
 
 
 **bridges.webhook.$name.retry_interval**
-  
+
   *Type*: `duration`
 
   Deprecated since 5.0.4.
 
 
 **bridges.webhook.$name.pool_type**
-  
+
   *Type*: `emqx_connector_http:pool_type`
 
   *Default*: `random`
@@ -8091,7 +8091,7 @@ Configuration for an HTTP bridge.
 
 
 **bridges.webhook.$name.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -8100,7 +8100,7 @@ Configuration for an HTTP bridge.
 
 
 **bridges.webhook.$name.enable_pipelining**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `100`
@@ -8109,14 +8109,14 @@ Configuration for an HTTP bridge.
 
 
 **bridges.webhook.$name.request**
-  
+
   *Type*: `connector-http:request`
 
   Configure HTTP request parameters.
 
 
 **bridges.webhook.$name.ssl**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   *Default*: `{"enable":false}`
@@ -8125,7 +8125,7 @@ Configuration for an HTTP bridge.
 
 
 **bridges.webhook.$name.url**
-  
+
   *Type*: `string`
 
   The URL of the HTTP Bridge.<br/>
@@ -8137,14 +8137,14 @@ is not allowed.
 
 
 **bridges.webhook.$name.direction**
-  
+
   *Type*: `egress`
 
   Deprecated since 5.0.12.
 
 
 **bridges.webhook.$name.local_topic**
-  
+
   *Type*: `string`
 
   The MQTT topic filter to be forwarded to the HTTP server. All MQTT 'PUBLISH' messages with the topic
@@ -8155,7 +8155,7 @@ will be forwarded.
 
 
 **bridges.webhook.$name.method**
-  
+
   *Type*: `enum`
 
   *Default*: `post`
@@ -8167,7 +8167,7 @@ Template with variables is allowed.
 
 
 **bridges.webhook.$name.headers**
-  
+
   *Type*: `map`
 
   *Default*: `{"accept":"application/json","cache-control":"no-cache","connection":"keep-alive","content-type":"application/json","keep-alive":"timeout=5"}`
@@ -8177,7 +8177,7 @@ Template with variables is allowed.
 
 
 **bridges.webhook.$name.body**
-  
+
   *Type*: `string`
 
   The body of the HTTP request.<br/>
@@ -8190,7 +8190,7 @@ Template with variables is allowed.
 
 
 **bridges.webhook.$name.max_retries**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `2`
@@ -8199,7 +8199,7 @@ Template with variables is allowed.
 
 
 **bridges.webhook.$name.request_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -8212,7 +8212,7 @@ Template with variables is allowed.
 Creation options.
 
 **bridges.webhook.$name.resource_opts.worker_pool_size**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `16`
@@ -8222,7 +8222,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.health_check_interval**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `15s`
@@ -8231,7 +8231,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.start_after_created**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8240,7 +8240,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.start_timeout**
-  
+
   *Type*: `duration_ms`
 
   *Default*: `5s`
@@ -8249,7 +8249,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.auto_restart_interval**
-  
+
   *Type*: `infinity | duration_ms`
 
   *Default*: `60s`
@@ -8258,7 +8258,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.query_mode**
-  
+
   *Type*: `enum`
 
   *Default*: `async`
@@ -8269,7 +8269,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.request_timeout**
-  
+
   *Type*: `infinity | duration_ms`
 
   *Default*: `15s`
@@ -8278,7 +8278,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.async_inflight_window**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `100`
@@ -8287,14 +8287,14 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **bridges.webhook.$name.resource_opts.enable_queue**
-  
+
   *Type*: `boolean`
 
   Deprecated since v5.0.14.
 
 
 **bridges.webhook.$name.resource_opts.max_queue_bytes**
-  
+
   *Type*: `bytesize`
 
   *Default*: `100MB`
@@ -8309,42 +8309,42 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 
 **connector-http:request.method**
-  
+
   *Type*: `string`
 
   HTTP method.
 
 
 **connector-http:request.path**
-  
+
   *Type*: `string`
 
   URL path.
 
 
 **connector-http:request.body**
-  
+
   *Type*: `string`
 
   HTTP request body.
 
 
 **connector-http:request.headers**
-  
+
   *Type*: `map`
 
   List of HTTP headers.
 
 
 **connector-http:request.max_retries**
-  
+
   *Type*: `non_neg_integer`
 
   Max retry times if error on sending request.
 
 
 **connector-http:request.request_timeout**
-  
+
   *Type*: `duration_ms`
 
   HTTP request timeout.
@@ -8359,14 +8359,14 @@ is configured, then both the data got from the rule and the MQTT messages that m
 'local.topic' will be forwarded.
 
 **bridges.mqtt.$name.egress.local**
-  
+
   *Type*: `connector-mqtt:egress_local`
 
   The configs about receiving messages from local broker.
 
 
 **bridges.mqtt.$name.egress.remote**
-  
+
   *Type*: `connector-mqtt:egress_remote`
 
   The configs about sending message to the remote broker.
@@ -8377,7 +8377,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 The configs about receiving messages from local broker.
 
 **bridges.mqtt.$name.egress.local.topic**
-  
+
   *Type*: `string`
 
   The local topic to be forwarded to the remote broker
@@ -8388,7 +8388,7 @@ The configs about receiving messages from local broker.
 The configs about sending message to the remote broker.
 
 **bridges.mqtt.$name.egress.remote.topic**
-  
+
   *Type*: `string`
 
   Forward to which topic of the remote broker.<br/>
@@ -8396,7 +8396,7 @@ Template with variables is allowed.
 
 
 **bridges.mqtt.$name.egress.remote.qos**
-  
+
   *Type*: `qos | string`
 
   *Default*: `1`
@@ -8406,7 +8406,7 @@ Template with variables is allowed.
 
 
 **bridges.mqtt.$name.egress.remote.retain**
-  
+
   *Type*: `boolean | string`
 
   *Default*: `false`
@@ -8416,7 +8416,7 @@ Template with variables is allowed.
 
 
 **bridges.mqtt.$name.egress.remote.payload**
-  
+
   *Type*: `string`
 
   The payload of the MQTT message to be sent.<br/>
@@ -8433,14 +8433,14 @@ The ingress config defines how this bridge receive messages from the remote MQTT
         the rule.
 
 **bridges.mqtt.$name.ingress.remote**
-  
+
   *Type*: `connector-mqtt:ingress_remote`
 
   The configs about subscribing to the remote broker.
 
 
 **bridges.mqtt.$name.ingress.local**
-  
+
   *Type*: `connector-mqtt:ingress_local`
 
   The configs about sending message to the local broker.
@@ -8451,7 +8451,7 @@ The ingress config defines how this bridge receive messages from the remote MQTT
 The configs about sending message to the local broker.
 
 **bridges.mqtt.$name.ingress.local.topic**
-  
+
   *Type*: `string`
 
   Send messages to which topic of the local broker.<br/>
@@ -8459,7 +8459,7 @@ Template with variables is allowed.
 
 
 **bridges.mqtt.$name.ingress.local.qos**
-  
+
   *Type*: `qos | string`
 
   *Default*: `${qos}`
@@ -8469,7 +8469,7 @@ Template with variables is allowed.
 
 
 **bridges.mqtt.$name.ingress.local.retain**
-  
+
   *Type*: `boolean | string`
 
   *Default*: `${retain}`
@@ -8479,7 +8479,7 @@ Template with variables is allowed.
 
 
 **bridges.mqtt.$name.ingress.local.payload**
-  
+
   *Type*: `string`
 
   The payload of the MQTT message to be sent.<br/>
@@ -8491,14 +8491,14 @@ Template with variables is allowed.
 The configs about subscribing to the remote broker.
 
 **bridges.mqtt.$name.ingress.remote.topic**
-  
+
   *Type*: `string`
 
   Receive messages from which topic of the remote broker
 
 
 **bridges.mqtt.$name.ingress.remote.qos**
-  
+
   *Type*: `qos`
 
   *Default*: `1`
@@ -8513,7 +8513,7 @@ The configs about subscribing to the remote broker.
 EMQX Gateway configuration root.
 
 **gateway.stomp**
-  
+
   *Type*: `gateway:stomp`
 
   The Stomp Gateway configuration.
@@ -8521,7 +8521,7 @@ This gateway supports v1.2/1.1/1.0
 
 
 **gateway.mqttsn**
-  
+
   *Type*: `gateway:mqttsn`
 
   The MQTT-SN Gateway configuration.
@@ -8529,7 +8529,7 @@ This gateway only supports the v1.2 protocol
 
 
 **gateway.coap**
-  
+
   *Type*: `gateway:coap`
 
   The CoAP Gateway configuration.
@@ -8537,14 +8537,14 @@ This gateway is implemented based on RFC-7252 and https://core-wg.github.io/coap
 
 
 **gateway.lwm2m**
-  
+
   *Type*: `gateway:lwm2m`
 
   The LwM2M Gateway configuration. This gateway only supports the v1.0.1 protocol.
 
 
 **gateway.exproto**
-  
+
   *Type*: `gateway:exproto`
 
   The Extension Protocol configuration
@@ -8555,21 +8555,21 @@ This gateway is implemented based on RFC-7252 and https://core-wg.github.io/coap
 ClientInfo override.
 
 **gateway:clientinfo_override.username**
-  
+
   *Type*: `string`
 
   Template for overriding username.
 
 
 **gateway:clientinfo_override.password**
-  
+
   *Type*: `string`
 
   Template for overriding password.
 
 
 **gateway:clientinfo_override.clientid**
-  
+
   *Type*: `string`
 
   Template for overriding clientid.
@@ -8580,14 +8580,14 @@ ClientInfo override.
 MQTT topic that corresponds to a particular type of event.
 
 **gateway:translator.topic**
-  
+
   *Type*: `string`
 
   Topic Name
 
 
 **gateway:translator.qos**
-  
+
   *Type*: `qos`
 
   *Default*: `0`
@@ -8604,7 +8604,7 @@ It allows publishing, subscribing, and receiving messages to EMQX in accordance
 with a certain defined CoAP message format.
 
 **gateway.coap.heartbeat**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `30s`
@@ -8614,7 +8614,7 @@ When connection mode is enabled, this parameter is used to set the minimum heart
 
 
 **gateway.coap.connection_required**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -8624,7 +8624,7 @@ Connection mode is a feature of non-standard protocols. When connection mode is 
 
 
 **gateway.coap.notify_type**
-  
+
   *Type*: `enum`
 
   *Default*: `qos`
@@ -8639,7 +8639,7 @@ The type of delivered coap message can be set to:<br/>
 
 
 **gateway.coap.subscribe_qos**
-  
+
   *Type*: `enum`
 
   *Default*: `coap`
@@ -8655,7 +8655,7 @@ This option specifies the QoS level for the CoAP Client when establishing a subs
 
 
 **gateway.coap.publish_qos**
-  
+
   *Type*: `enum`
 
   *Default*: `coap`
@@ -8671,21 +8671,21 @@ This option specifies the QoS level for the CoAP Client when publishing a messag
 
 
 **gateway.coap.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
 
 
 **gateway.coap.listeners**
-  
+
   *Type*: `gateway:udp_listeners`
 
   Settings for the UDP listeners.
 
 
 **gateway.coap.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8694,7 +8694,7 @@ This option specifies the QoS level for the CoAP Client when publishing a messag
 
 
 **gateway.coap.enable_stats**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8703,7 +8703,7 @@ This option specifies the QoS level for the CoAP Client when publishing a messag
 
 
 **gateway.coap.idle_timeout**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `30s`
@@ -8714,14 +8714,14 @@ This option specifies the QoS level for the CoAP Client when publishing a messag
 
 
 **gateway.coap.clientinfo_override**
-  
+
   *Type*: `gateway:clientinfo_override`
 
   ClientInfo override.
 
 
 **gateway.coap.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -8735,35 +8735,35 @@ This option specifies the QoS level for the CoAP Client when publishing a messag
 Settings for EMQX extension protocol (exproto).
 
 **gateway.exproto.server**
-  
+
   *Type*: `gateway:exproto_grpc_server`
 
   Configurations for starting the <code>ConnectionAdapter</code> service
 
 
 **gateway.exproto.handler**
-  
+
   *Type*: `gateway:exproto_grpc_handler`
 
   Configurations for request to <code>ConnectionHandler</code> service
 
 
 **gateway.exproto.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
 
 
 **gateway.exproto.listeners**
-  
+
   *Type*: `gateway:tcp_udp_listeners`
 
   Settings for the listeners.
 
 
 **gateway.exproto.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8772,7 +8772,7 @@ Settings for EMQX extension protocol (exproto).
 
 
 **gateway.exproto.enable_stats**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8781,7 +8781,7 @@ Settings for EMQX extension protocol (exproto).
 
 
 **gateway.exproto.idle_timeout**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `30s`
@@ -8792,14 +8792,14 @@ Settings for EMQX extension protocol (exproto).
 
 
 **gateway.exproto.clientinfo_override**
-  
+
   *Type*: `gateway:clientinfo_override`
 
   ClientInfo override.
 
 
 **gateway.exproto.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -8811,14 +8811,14 @@ Settings for EMQX extension protocol (exproto).
 Settings for the exproto gRPC connection handler.
 
 **gateway.exproto.handler.address**
-  
+
   *Type*: `string`
 
   gRPC server address.
 
 
 **gateway.exproto.handler.ssl_options**
-  
+
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
   SSL configuration for the gRPC client.
@@ -8829,14 +8829,14 @@ Settings for the exproto gRPC connection handler.
 Settings for the exproto gRPC server.
 
 **gateway.exproto.server.bind**
-  
+
   *Type*: [emqx_gateway_schema:ip_port()](#emqx_gateway_schema:ip_port()) | integer
 
   Listening address and port for the gRPC server.
 
 
 **gateway.exproto.server.ssl_options**
-  
+
   *Type*: `gateway:ssl_server_opts`
 
   SSL configuration for the gRPC server.
@@ -8849,14 +8849,14 @@ Settings for the exproto gRPC server.
 The LwM2M protocol gateway.
 
 **gateway.lwm2m.xml_dir**
-  
+
   *Type*: `string`
 
   The Directory for LwM2M Resource definition.
 
 
 **gateway.lwm2m.lifetime_min**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `15s`
@@ -8865,7 +8865,7 @@ The LwM2M protocol gateway.
 
 
 **gateway.lwm2m.lifetime_max**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `86400s`
@@ -8874,7 +8874,7 @@ The LwM2M protocol gateway.
 
 
 **gateway.lwm2m.qmode_time_window**
-  
+
   *Type*: `emqx_gateway_schema:duration_s`
 
   *Default*: `22s`
@@ -8884,7 +8884,7 @@ For example, after receiving an update message from a client, any messages withi
 
 
 **gateway.lwm2m.auto_observe**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -8893,7 +8893,7 @@ For example, after receiving an update message from a client, any messages withi
 
 
 **gateway.lwm2m.update_msg_publish_condition**
-  
+
   *Type*: `enum`
 
   *Default*: `contains_object_list`
@@ -8906,28 +8906,28 @@ For example, after receiving an update message from a client, any messages withi
 
 
 **gateway.lwm2m.translators**
-  
+
   *Type*: `gateway:lwm2m_translators`
 
   Topic configuration for LwM2M's gateway publishing and subscription.
 
 
 **gateway.lwm2m.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `lwm2m/${endpoint_name}/`
 
 
 **gateway.lwm2m.listeners**
-  
+
   *Type*: `gateway:udp_listeners`
 
   Settings for the UDP listeners.
 
 
 **gateway.lwm2m.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8936,7 +8936,7 @@ For example, after receiving an update message from a client, any messages withi
 
 
 **gateway.lwm2m.enable_stats**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -8945,7 +8945,7 @@ For example, after receiving an update message from a client, any messages withi
 
 
 **gateway.lwm2m.idle_timeout**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `30s`
@@ -8956,14 +8956,14 @@ For example, after receiving an update message from a client, any messages withi
 
 
 **gateway.lwm2m.clientinfo_override**
-  
+
   *Type*: `gateway:clientinfo_override`
 
   ClientInfo override.
 
 
 **gateway.lwm2m.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -8975,7 +8975,7 @@ For example, after receiving an update message from a client, any messages withi
 MQTT topics that correspond to LwM2M events.
 
 **gateway.lwm2m.translators.command**
-  
+
   *Type*: `gateway:translator`
 
   The topic for receiving downstream commands.
@@ -8983,14 +8983,14 @@ For each new LwM2M client that succeeds in going online, the gateway creates a s
 
 
 **gateway.lwm2m.translators.response**
-  
+
   *Type*: `gateway:translator`
 
   The topic for gateway to publish the acknowledge events from LwM2M client
 
 
 **gateway.lwm2m.translators.notify**
-  
+
   *Type*: `gateway:translator`
 
   The topic for gateway to publish the notify events from LwM2M client.
@@ -8998,14 +8998,14 @@ After succeed observe a resource of LwM2M client, Gateway will send the notify e
 
 
 **gateway.lwm2m.translators.register**
-  
+
   *Type*: `gateway:translator`
 
   The topic for gateway to publish the register events from LwM2M client.
 
 
 **gateway.lwm2m.translators.update**
-  
+
   *Type*: `gateway:translator`
 
   The topic for gateway to publish the update events from LwM2M client
@@ -9018,7 +9018,7 @@ After succeed observe a resource of LwM2M client, Gateway will send the notify e
 The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
 
 **gateway.mqttsn.gateway_id**
-  
+
   *Type*: `integer`
 
   *Default*: `1`
@@ -9028,7 +9028,7 @@ When the <code>broadcast</code> option is enabled, the gateway will broadcast AD
 
 
 **gateway.mqttsn.broadcast**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -9037,7 +9037,7 @@ When the <code>broadcast</code> option is enabled, the gateway will broadcast AD
 
 
 **gateway.mqttsn.enable_qos3**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9047,7 +9047,7 @@ This feature is defined for very simple client implementations which do not supp
 
 
 **gateway.mqttsn.subs_resume**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -9056,7 +9056,7 @@ This feature is defined for very simple client implementations which do not supp
 
 
 **gateway.mqttsn.predefined**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -9066,21 +9066,21 @@ A 'pre-defined' topic ID is a topic ID whose mapping to a topic name is known in
 
 
 **gateway.mqttsn.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
 
 
 **gateway.mqttsn.listeners**
-  
+
   *Type*: `gateway:udp_listeners`
 
   Settings for the UDP listeners.
 
 
 **gateway.mqttsn.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9089,7 +9089,7 @@ A 'pre-defined' topic ID is a topic ID whose mapping to a topic name is known in
 
 
 **gateway.mqttsn.enable_stats**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9098,7 +9098,7 @@ A 'pre-defined' topic ID is a topic ID whose mapping to a topic name is known in
 
 
 **gateway.mqttsn.idle_timeout**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `30s`
@@ -9109,14 +9109,14 @@ A 'pre-defined' topic ID is a topic ID whose mapping to a topic name is known in
 
 
 **gateway.mqttsn.clientinfo_override**
-  
+
   *Type*: `gateway:clientinfo_override`
 
   ClientInfo override.
 
 
 **gateway.mqttsn.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -9131,14 +9131,14 @@ ID of N.
 Note: the pre-defined topic ID of 0 is reserved.
 
 **gateway.mqttsn.predefined.$INDEX.id**
-  
+
   *Type*: `integer`
 
   Topic ID. Range: 1-65535
 
 
 **gateway.mqttsn.predefined.$INDEX.topic**
-  
+
   *Type*: `string`
 
   Topic Name
@@ -9152,26 +9152,26 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 (Simple (or Streaming) Text Orientated Messaging Protocol) protocol.
 
 **gateway.stomp.frame**
-  
+
   *Type*: `gateway:stomp_frame`
 
 
 **gateway.stomp.mountpoint**
-  
+
   *Type*: `string`
 
   *Default*: `""`
 
 
 **gateway.stomp.listeners**
-  
+
   *Type*: `gateway:tcp_listeners`
 
   Settings for the TCP listeners.
 
 
 **gateway.stomp.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9180,7 +9180,7 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 
 
 **gateway.stomp.enable_stats**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9189,7 +9189,7 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 
 
 **gateway.stomp.idle_timeout**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `30s`
@@ -9200,14 +9200,14 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 
 
 **gateway.stomp.clientinfo_override**
-  
+
   *Type*: `gateway:clientinfo_override`
 
   ClientInfo override.
 
 
 **gateway.stomp.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -9219,7 +9219,7 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 Size limits for the STOMP frames.
 
 **gateway.stomp.frame.max_headers**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `10`
@@ -9228,7 +9228,7 @@ Size limits for the STOMP frames.
 
 
 **gateway.stomp.frame.max_headers_length**
-  
+
   *Type*: `non_neg_integer`
 
   *Default*: `1024`
@@ -9237,7 +9237,7 @@ Size limits for the STOMP frames.
 
 
 **gateway.stomp.frame.max_body_length**
-  
+
   *Type*: `integer`
 
   *Default*: `65536`
@@ -9252,7 +9252,7 @@ Size limits for the STOMP frames.
 Settings for the TCP listener.
 
 **gateway:tcp_listener.acceptors**
-  
+
   *Type*: `integer`
 
   *Default*: `16`
@@ -9261,14 +9261,14 @@ Settings for the TCP listener.
 
 
 **gateway:tcp_listener.tcp_options**
-  
+
   *Type*: [broker:tcp_opts](#tcp_opts)
 
   Setting the TCP socket options.
 
 
 **gateway:tcp_listener.proxy_protocol**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -9278,7 +9278,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **gateway:tcp_listener.proxy_protocol_timeout**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `15s`
@@ -9288,7 +9288,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:tcp_listener.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9297,14 +9297,14 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:tcp_listener.bind**
-  
+
   *Type*: [emqx_gateway_schema:ip_port()](#emqx_gateway_schema:ip_port()) | integer
 
   The IP address and port that the listener will bind.
 
 
 **gateway:tcp_listener.max_connections**
-  
+
   *Type*: `integer`
 
   *Default*: `1024`
@@ -9313,7 +9313,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:tcp_listener.max_conn_rate**
-  
+
   *Type*: `integer`
 
   *Default*: `1000`
@@ -9322,7 +9322,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:tcp_listener.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -9330,7 +9330,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:tcp_listener.enable_authn**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9340,7 +9340,7 @@ When set to <code>false</code> clients will be allowed to connect without authen
 
 
 **gateway:tcp_listener.mountpoint**
-  
+
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
@@ -9357,7 +9357,7 @@ Variables in mountpoint string:<br/>
 
 
 **gateway:tcp_listener.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -9371,12 +9371,12 @@ See: https://github.com/emqtt/esockd#allowdeny
 Settings for the TCP listeners.
 
 **gateway.stomp.listeners.tcp**
-  
+
   *Type*: `name`
 
 
 **gateway.stomp.listeners.ssl**
-  
+
   *Type*: `name`
 
 
@@ -9385,22 +9385,22 @@ Settings for the TCP listeners.
 Settings for the listeners.
 
 **gateway.exproto.listeners.tcp**
-  
+
   *Type*: `name`
 
 
 **gateway.exproto.listeners.ssl**
-  
+
   *Type*: `name`
 
 
 **gateway.exproto.listeners.udp**
-  
+
   *Type*: `name`
 
 
 **gateway.exproto.listeners.dtls**
-  
+
   *Type*: `name`
 
 
@@ -9409,7 +9409,7 @@ Settings for the listeners.
 Settings for the DTLS listener.
 
 **gateway:dtls_listener.acceptors**
-  
+
   *Type*: `integer`
 
   *Default*: `16`
@@ -9418,12 +9418,12 @@ Settings for the DTLS listener.
 
 
 **gateway:dtls_listener.udp_options**
-  
+
   *Type*: `gateway:udp_opts`
 
 
 **gateway:dtls_listener.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9432,14 +9432,14 @@ Settings for the DTLS listener.
 
 
 **gateway:dtls_listener.bind**
-  
+
   *Type*: [emqx_gateway_schema:ip_port()](#emqx_gateway_schema:ip_port()) | integer
 
   The IP address and port that the listener will bind.
 
 
 **gateway:dtls_listener.max_connections**
-  
+
   *Type*: `integer`
 
   *Default*: `1024`
@@ -9448,7 +9448,7 @@ Settings for the DTLS listener.
 
 
 **gateway:dtls_listener.max_conn_rate**
-  
+
   *Type*: `integer`
 
   *Default*: `1000`
@@ -9457,7 +9457,7 @@ Settings for the DTLS listener.
 
 
 **gateway:dtls_listener.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -9465,7 +9465,7 @@ Settings for the DTLS listener.
 
 
 **gateway:dtls_listener.enable_authn**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9475,7 +9475,7 @@ When set to <code>false</code> clients will be allowed to connect without authen
 
 
 **gateway:dtls_listener.mountpoint**
-  
+
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
@@ -9492,7 +9492,7 @@ Variables in mountpoint string:<br/>
 
 
 **gateway:dtls_listener.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -9502,7 +9502,7 @@ See: https://github.com/emqtt/esockd#allowdeny
 
 
 **gateway:dtls_listener.dtls_options**
-  
+
   *Type*: `gateway:dtls_opts`
 
   DTLS socket options
@@ -9513,7 +9513,7 @@ See: https://github.com/emqtt/esockd#allowdeny
 Settings for the DTLS protocol.
 
 **gateway:dtls_opts.cacertfile**
-  
+
   *Type*: `string`
 
   Trusted PEM format CA certificates bundle file.<br/>
@@ -9526,7 +9526,7 @@ already established connections.
 
 
 **gateway:dtls_opts.certfile**
-  
+
   *Type*: `string`
 
   PEM format certificates chain file.<br/>
@@ -9538,14 +9538,14 @@ the file if it is to be added.
 
 
 **gateway:dtls_opts.keyfile**
-  
+
   *Type*: `string`
 
   PEM format private key file.
 
 
 **gateway:dtls_opts.verify**
-  
+
   *Type*: `enum`
 
   *Default*: `verify_none`
@@ -9556,7 +9556,7 @@ the file if it is to be added.
 
 
 **gateway:dtls_opts.reuse_sessions**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9565,7 +9565,7 @@ the file if it is to be added.
 
 
 **gateway:dtls_opts.depth**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -9577,14 +9577,14 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **gateway:dtls_opts.password**
-  
+
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
 **gateway:dtls_opts.versions**
-  
+
   *Type*: `array`
 
   *Default*: `["dtlsv1.2","dtlsv1"]`
@@ -9596,7 +9596,7 @@ In case PSK cipher suites are intended, make sure to configure
 
 
 **gateway:dtls_opts.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -9631,7 +9631,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **gateway:dtls_opts.user_lookup_fun**
-  
+
   *Type*: `string`
 
   *Default*: `emqx_tls_psk:lookup`
@@ -9640,7 +9640,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **gateway:dtls_opts.secure_renegotiate**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9652,7 +9652,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **gateway:dtls_opts.hibernate_after**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -9661,7 +9661,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **gateway:dtls_opts.dhfile**
-  
+
   *Type*: `string`
 
   Path to a file containing PEM-encoded Diffie-Hellman parameters
@@ -9672,7 +9672,7 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
 **gateway:dtls_opts.fail_if_no_peer_cert**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -9685,7 +9685,7 @@ certificate (an empty certificate is considered valid).
 
 
 **gateway:dtls_opts.honor_cipher_order**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9697,7 +9697,7 @@ certificate (an empty certificate is considered valid).
 
 
 **gateway:dtls_opts.client_renegotiation**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9713,7 +9713,7 @@ the number of messages the underlying cipher suite can encipher.
 
 
 **gateway:dtls_opts.handshake_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `15s`
@@ -9722,7 +9722,7 @@ the number of messages the underlying cipher suite can encipher.
 
 
 **gateway:dtls_opts.gc_after_handshake**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -9735,12 +9735,12 @@ the number of messages the underlying cipher suite can encipher.
 Settings for the UDP listener.
 
 **gateway:udp_listener.udp_options**
-  
+
   *Type*: `gateway:udp_opts`
 
 
 **gateway:udp_listener.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9749,14 +9749,14 @@ Settings for the UDP listener.
 
 
 **gateway:udp_listener.bind**
-  
+
   *Type*: [emqx_gateway_schema:ip_port()](#emqx_gateway_schema:ip_port()) | integer
 
   The IP address and port that the listener will bind.
 
 
 **gateway:udp_listener.max_connections**
-  
+
   *Type*: `integer`
 
   *Default*: `1024`
@@ -9765,7 +9765,7 @@ Settings for the UDP listener.
 
 
 **gateway:udp_listener.max_conn_rate**
-  
+
   *Type*: `integer`
 
   *Default*: `1000`
@@ -9774,7 +9774,7 @@ Settings for the UDP listener.
 
 
 **gateway:udp_listener.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -9782,7 +9782,7 @@ Settings for the UDP listener.
 
 
 **gateway:udp_listener.enable_authn**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9792,7 +9792,7 @@ When set to <code>false</code> clients will be allowed to connect without authen
 
 
 **gateway:udp_listener.mountpoint**
-  
+
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
@@ -9809,7 +9809,7 @@ Variables in mountpoint string:<br/>
 
 
 **gateway:udp_listener.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -9823,12 +9823,12 @@ See: https://github.com/emqtt/esockd#allowdeny
 Settings for the UDP listeners.
 
 **gateway:udp_listeners.udp**
-  
+
   *Type*: `name`
 
 
 **gateway:udp_listeners.dtls**
-  
+
   *Type*: `name`
 
 
@@ -9837,7 +9837,7 @@ Settings for the UDP listeners.
 Settings for the UDP sockets.
 
 **gateway:udp_opts.active_n**
-  
+
   *Type*: `integer`
 
   *Default*: `100`
@@ -9847,28 +9847,28 @@ See: https://erlang.org/doc/man/inet.html#setopts-2
 
 
 **gateway:udp_opts.recbuf**
-  
+
   *Type*: `emqx_gateway_schema:bytesize`
 
   Size of the kernel-space receive buffer for the socket.
 
 
 **gateway:udp_opts.sndbuf**
-  
+
   *Type*: `emqx_gateway_schema:bytesize`
 
   Size of the kernel-space send buffer for the socket.
 
 
 **gateway:udp_opts.buffer**
-  
+
   *Type*: `emqx_gateway_schema:bytesize`
 
   Size of the user-space buffer for the socket.
 
 
 **gateway:udp_opts.reuseaddr**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9881,7 +9881,7 @@ See: https://erlang.org/doc/man/inet.html#setopts-2
 Settings for the SSL listener.
 
 **gateway:ssl_listener.acceptors**
-  
+
   *Type*: `integer`
 
   *Default*: `16`
@@ -9890,14 +9890,14 @@ Settings for the SSL listener.
 
 
 **gateway:ssl_listener.tcp_options**
-  
+
   *Type*: [broker:tcp_opts](#tcp_opts)
 
   Setting the TCP socket options.
 
 
 **gateway:ssl_listener.proxy_protocol**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -9907,7 +9907,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
 **gateway:ssl_listener.proxy_protocol_timeout**
-  
+
   *Type*: `emqx_gateway_schema:duration`
 
   *Default*: `15s`
@@ -9917,7 +9917,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:ssl_listener.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9926,14 +9926,14 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:ssl_listener.bind**
-  
+
   *Type*: [emqx_gateway_schema:ip_port()](#emqx_gateway_schema:ip_port()) | integer
 
   The IP address and port that the listener will bind.
 
 
 **gateway:ssl_listener.max_connections**
-  
+
   *Type*: `integer`
 
   *Default*: `1024`
@@ -9942,7 +9942,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:ssl_listener.max_conn_rate**
-  
+
   *Type*: `integer`
 
   *Default*: `1000`
@@ -9951,7 +9951,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:ssl_listener.authentication**
-  
+
   *Type*: [authn-builtin_db:authentication](#authn-builtin_db:authentication) | [authn-mysql:authentication](#authn-mysql:authentication) | [authn-postgresql:authentication](#authn-postgresql:authentication) | [authn-mongodb:standalone](#authn-mongodb:standalone) | [authn-mongodb:replica-set](#authn-mongodb:replica-set) | [authn-mongodb:sharded-cluster](#authn-mongodb:sharded-cluster) | [authn-redis:standalone](#authn-redis:standalone) | [authn-redis:cluster](#authn-redis:cluster) | [authn-redis:sentinel](#authn-redis:sentinel) | [authn-http:get](#authn-http:get) | [authn-http:post](#authn-http:post) | [authn-jwt:hmac-based](#authn-jwt:hmac-based) | [authn-jwt:public-key](#authn-jwt:public-key) | [authn-jwt:jwks](#authn-jwt:jwks) | [authn-scram-builtin_db:authentication](#authn-scram-builtin_db:authentication)
 
   Default authentication configs for all the gateway listeners. For per-listener overrides see <code>authentication</code>
@@ -9959,7 +9959,7 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
 
 **gateway:ssl_listener.enable_authn**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -9969,7 +9969,7 @@ When set to <code>false</code> clients will be allowed to connect without authen
 
 
 **gateway:ssl_listener.mountpoint**
-  
+
   *Type*: `string`
 
   When publishing or subscribing, prefix all topics with a mountpoint string.
@@ -9986,7 +9986,7 @@ Variables in mountpoint string:<br/>
 
 
 **gateway:ssl_listener.access_rules**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -9996,7 +9996,7 @@ See: https://github.com/emqtt/esockd#allowdeny
 
 
 **gateway:ssl_listener.ssl_options**
-  
+
   *Type*: [listener_ssl_opts](#ssl-tls-configuration-for-the-listener)
 
   SSL Socket options.
@@ -10007,7 +10007,7 @@ See: https://github.com/emqtt/esockd#allowdeny
 SSL configuration for the server.
 
 **gateway.exproto.server.ssl_options.cacertfile**
-  
+
   *Type*: `string`
 
   Trusted PEM format CA certificates bundle file.<br/>
@@ -10020,7 +10020,7 @@ already established connections.
 
 
 **gateway.exproto.server.ssl_options.certfile**
-  
+
   *Type*: `string`
 
   PEM format certificates chain file.<br/>
@@ -10032,14 +10032,14 @@ the file if it is to be added.
 
 
 **gateway.exproto.server.ssl_options.keyfile**
-  
+
   *Type*: `string`
 
   PEM format private key file.
 
 
 **gateway.exproto.server.ssl_options.verify**
-  
+
   *Type*: `enum`
 
   *Default*: `verify_none`
@@ -10050,7 +10050,7 @@ the file if it is to be added.
 
 
 **gateway.exproto.server.ssl_options.reuse_sessions**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10059,7 +10059,7 @@ the file if it is to be added.
 
 
 **gateway.exproto.server.ssl_options.depth**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -10071,14 +10071,14 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **gateway.exproto.server.ssl_options.password**
-  
+
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
 **gateway.exproto.server.ssl_options.versions**
-  
+
   *Type*: `array`
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
@@ -10090,7 +10090,7 @@ In case PSK cipher suites are intended, make sure to configure
 
 
 **gateway.exproto.server.ssl_options.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -10125,7 +10125,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **gateway.exproto.server.ssl_options.user_lookup_fun**
-  
+
   *Type*: `string`
 
   *Default*: `emqx_tls_psk:lookup`
@@ -10134,7 +10134,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **gateway.exproto.server.ssl_options.secure_renegotiate**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10146,7 +10146,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **gateway.exproto.server.ssl_options.hibernate_after**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -10155,7 +10155,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **gateway.exproto.server.ssl_options.dhfile**
-  
+
   *Type*: `string`
 
   Path to a file containing PEM-encoded Diffie-Hellman parameters
@@ -10166,7 +10166,7 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
 **gateway.exproto.server.ssl_options.fail_if_no_peer_cert**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -10179,7 +10179,7 @@ certificate (an empty certificate is considered valid).
 
 
 **gateway.exproto.server.ssl_options.honor_cipher_order**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10191,7 +10191,7 @@ certificate (an empty certificate is considered valid).
 
 
 **gateway.exproto.server.ssl_options.client_renegotiation**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10207,7 +10207,7 @@ the number of messages the underlying cipher suite can encipher.
 
 
 **gateway.exproto.server.ssl_options.handshake_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `15s`
@@ -10226,7 +10226,7 @@ or installed as a standalone package in a location specified by
 The standalone-installed plugins are referred to as 'external' plugins.
 
 **plugins.states**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -10236,7 +10236,7 @@ The plugins are started in the defined order
 
 
 **plugins.install_dir**
-  
+
   *Type*: `string`
 
   *Default*: `plugins`
@@ -10250,7 +10250,7 @@ by anyone except <code>emqx</code> (or any user which runs EMQX).
 
 
 **plugins.check_interval**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -10264,7 +10264,7 @@ if the results of 3 consecutive checks are not consistent, then alarm.
 A per-plugin config to describe the desired state of the plugin.
 
 **plugins.states.$INDEX.name_vsn**
-  
+
   *Type*: `string`
 
   The {name}-{version} of the plugin.<br/>
@@ -10273,7 +10273,7 @@ For example: my_plugin-0.1.0.
 
 
 **plugins.states.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   Set to 'true' to enable this plugin
@@ -10286,7 +10286,7 @@ For example: my_plugin-0.1.0.
 External hook (exhook) configuration.
 
 **exhook.servers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -10299,14 +10299,14 @@ External hook (exhook) configuration.
 gRPC server configuration.
 
 **exhook.servers.$INDEX.name**
-  
+
   *Type*: `string`
 
   Name of the exhook server
 
 
 **exhook.servers.$INDEX.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10315,14 +10315,14 @@ gRPC server configuration.
 
 
 **exhook.servers.$INDEX.url**
-  
+
   *Type*: `string`
 
   URL of the gRPC server
 
 
 **exhook.servers.$INDEX.request_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -10331,7 +10331,7 @@ gRPC server configuration.
 
 
 **exhook.servers.$INDEX.failed_action**
-  
+
   *Type*: `enum`
 
   *Default*: `deny`
@@ -10342,19 +10342,19 @@ gRPC server configuration.
 
 
 **exhook.servers.$INDEX.ssl**
-  
+
   *Type*: `exhook:ssl_conf`
 
 
 **exhook.servers.$INDEX.socket_options**
-  
+
   *Type*: `exhook:socket_options`
 
   *Default*: `{"keepalive":true,"nodelay":true}`
 
 
 **exhook.servers.$INDEX.auto_reconnect**
-  
+
   *Type*: `false | duration`
 
   *Default*: `60s`
@@ -10364,7 +10364,7 @@ When gRPC is not available, Exhook tries to request the gRPC service at that int
 
 
 **exhook.servers.$INDEX.pool_size**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `8`
@@ -10377,7 +10377,7 @@ When gRPC is not available, Exhook tries to request the gRPC service at that int
 Connection socket options
 
 **exhook.servers.$INDEX.socket_options.keepalive**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10387,7 +10387,7 @@ If the other end does not respond, the connection is considered broken and an er
 
 
 **exhook.servers.$INDEX.socket_options.nodelay**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10397,14 +10397,14 @@ which means that also small amounts of data are sent immediately
 
 
 **exhook.servers.$INDEX.socket_options.recbuf**
-  
+
   *Type*: `bytesize`
 
   The minimum size of receive buffer to use for the socket
 
 
 **exhook.servers.$INDEX.socket_options.sndbuf**
-  
+
   *Type*: `bytesize`
 
   The minimum size of send buffer to use for the socket
@@ -10415,7 +10415,7 @@ which means that also small amounts of data are sent immediately
 SSL client configuration.
 
 **exhook.servers.$INDEX.ssl.cacertfile**
-  
+
   *Type*: `string`
 
   Trusted PEM format CA certificates bundle file.<br/>
@@ -10428,7 +10428,7 @@ already established connections.
 
 
 **exhook.servers.$INDEX.ssl.certfile**
-  
+
   *Type*: `string`
 
   PEM format certificates chain file.<br/>
@@ -10440,14 +10440,14 @@ the file if it is to be added.
 
 
 **exhook.servers.$INDEX.ssl.keyfile**
-  
+
   *Type*: `string`
 
   PEM format private key file.
 
 
 **exhook.servers.$INDEX.ssl.verify**
-  
+
   *Type*: `enum`
 
   *Default*: `verify_none`
@@ -10458,7 +10458,7 @@ the file if it is to be added.
 
 
 **exhook.servers.$INDEX.ssl.reuse_sessions**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10467,7 +10467,7 @@ the file if it is to be added.
 
 
 **exhook.servers.$INDEX.ssl.depth**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -10479,14 +10479,14 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **exhook.servers.$INDEX.ssl.password**
-  
+
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
 **exhook.servers.$INDEX.ssl.versions**
-  
+
   *Type*: `array`
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
@@ -10498,7 +10498,7 @@ In case PSK cipher suites are intended, make sure to configure
 
 
 **exhook.servers.$INDEX.ssl.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -10533,7 +10533,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **exhook.servers.$INDEX.ssl.secure_renegotiate**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10545,7 +10545,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **exhook.servers.$INDEX.ssl.hibernate_after**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -10554,7 +10554,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **exhook.servers.$INDEX.ssl.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -10563,7 +10563,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **exhook.servers.$INDEX.ssl.server_name_indication**
-  
+
   *Type*: `disable | string`
 
   Specify the host name to be used in TLS Server Name Indication extension.<br/>
@@ -10588,7 +10588,7 @@ verification check.
 Socket options for SSL clients.
 
 **ssl_client_opts.cacertfile**
-  
+
   *Type*: `string`
 
   Trusted PEM format CA certificates bundle file.<br/>
@@ -10601,7 +10601,7 @@ already established connections.
 
 
 **ssl_client_opts.certfile**
-  
+
   *Type*: `string`
 
   PEM format certificates chain file.<br/>
@@ -10613,14 +10613,14 @@ the file if it is to be added.
 
 
 **ssl_client_opts.keyfile**
-  
+
   *Type*: `string`
 
   PEM format private key file.
 
 
 **ssl_client_opts.verify**
-  
+
   *Type*: `enum`
 
   *Default*: `verify_none`
@@ -10631,7 +10631,7 @@ the file if it is to be added.
 
 
 **ssl_client_opts.reuse_sessions**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10640,7 +10640,7 @@ the file if it is to be added.
 
 
 **ssl_client_opts.depth**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -10652,14 +10652,14 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **ssl_client_opts.password**
-  
+
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
 **ssl_client_opts.versions**
-  
+
   *Type*: `array`
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
@@ -10671,7 +10671,7 @@ In case PSK cipher suites are intended, make sure to configure
 
 
 **ssl_client_opts.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -10706,7 +10706,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **ssl_client_opts.user_lookup_fun**
-  
+
   *Type*: `string`
 
   *Default*: `emqx_tls_psk:lookup`
@@ -10715,7 +10715,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **ssl_client_opts.secure_renegotiate**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10727,7 +10727,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **ssl_client_opts.hibernate_after**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -10736,7 +10736,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **ssl_client_opts.enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -10745,7 +10745,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **ssl_client_opts.server_name_indication**
-  
+
   *Type*: `disable | string`
 
   Specify the host name to be used in TLS Server Name Indication extension.<br/>
@@ -10768,7 +10768,7 @@ verification check.
 Socket options for SSL connections.
 
 **listener_ssl_opts.cacertfile**
-  
+
   *Type*: `string`
 
   Trusted PEM format CA certificates bundle file.<br/>
@@ -10781,7 +10781,7 @@ already established connections.
 
 
 **listener_ssl_opts.certfile**
-  
+
   *Type*: `string`
 
   PEM format certificates chain file.<br/>
@@ -10793,14 +10793,14 @@ the file if it is to be added.
 
 
 **listener_ssl_opts.keyfile**
-  
+
   *Type*: `string`
 
   PEM format private key file.
 
 
 **listener_ssl_opts.verify**
-  
+
   *Type*: `enum`
 
   *Default*: `verify_none`
@@ -10811,7 +10811,7 @@ the file if it is to be added.
 
 
 **listener_ssl_opts.reuse_sessions**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10820,7 +10820,7 @@ the file if it is to be added.
 
 
 **listener_ssl_opts.depth**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -10832,14 +10832,14 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **listener_ssl_opts.password**
-  
+
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
 **listener_ssl_opts.versions**
-  
+
   *Type*: `array`
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
@@ -10851,7 +10851,7 @@ In case PSK cipher suites are intended, make sure to configure
 
 
 **listener_ssl_opts.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -10886,7 +10886,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **listener_ssl_opts.user_lookup_fun**
-  
+
   *Type*: `string`
 
   *Default*: `emqx_tls_psk:lookup`
@@ -10895,7 +10895,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **listener_ssl_opts.secure_renegotiate**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10907,7 +10907,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **listener_ssl_opts.hibernate_after**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -10916,7 +10916,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **listener_ssl_opts.dhfile**
-  
+
   *Type*: `string`
 
   Path to a file containing PEM-encoded Diffie-Hellman parameters
@@ -10927,7 +10927,7 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
 **listener_ssl_opts.fail_if_no_peer_cert**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -10940,7 +10940,7 @@ certificate (an empty certificate is considered valid).
 
 
 **listener_ssl_opts.honor_cipher_order**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10952,7 +10952,7 @@ certificate (an empty certificate is considered valid).
 
 
 **listener_ssl_opts.client_renegotiation**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -10968,7 +10968,7 @@ the number of messages the underlying cipher suite can encipher.
 
 
 **listener_ssl_opts.handshake_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `15s`
@@ -10977,7 +10977,7 @@ the number of messages the underlying cipher suite can encipher.
 
 
 **listener_ssl_opts.gc_after_handshake**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -10992,7 +10992,7 @@ the number of messages the underlying cipher suite can encipher.
 TCP listener options.
 
 **tcp_opts.active_n**
-  
+
   *Type*: `integer`
 
   *Default*: `100`
@@ -11002,7 +11002,7 @@ See: https://erlang.org/doc/man/inet.html#setopts-2
 
 
 **tcp_opts.backlog**
-  
+
   *Type*: `pos_integer`
 
   *Default*: `1024`
@@ -11012,7 +11012,7 @@ pending connections can grow to.
 
 
 **tcp_opts.send_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `15s`
@@ -11021,7 +11021,7 @@ pending connections can grow to.
 
 
 **tcp_opts.send_timeout_close**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11030,21 +11030,21 @@ pending connections can grow to.
 
 
 **tcp_opts.recbuf**
-  
+
   *Type*: `bytesize`
 
   The TCP receive buffer (OS kernel) for the connections.
 
 
 **tcp_opts.sndbuf**
-  
+
   *Type*: `bytesize`
 
   The TCP send buffer (OS kernel) for the connections.
 
 
 **tcp_opts.buffer**
-  
+
   *Type*: `bytesize`
 
   *Default*: `4KB`
@@ -11053,7 +11053,7 @@ pending connections can grow to.
 
 
 **tcp_opts.high_watermark**
-  
+
   *Type*: `bytesize`
 
   *Default*: `1MB`
@@ -11063,7 +11063,7 @@ by the VM socket implementation reaches this limit.
 
 
 **tcp_opts.nodelay**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11072,7 +11072,7 @@ by the VM socket implementation reaches this limit.
 
 
 **tcp_opts.reuseaddr**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11087,17 +11087,17 @@ by the VM socket implementation reaches this limit.
 WebSocket listener options.
 
 **ws_opts.mqtt_path**
-  
+
   *Type*: `string`
 
   *Default*: `/mqtt`
 
-  WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is:
+  WebSocket's MQTT protocol path. So the address of EMQX's WebSocket is:
 <code>ws://{ip}:{port}/mqtt</code>
 
 
 **ws_opts.mqtt_piggyback**
-  
+
   *Type*: `enum`
 
   *Default*: `multiple`
@@ -11108,7 +11108,7 @@ WebSocket listener options.
 
 
 **ws_opts.compress**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -11118,7 +11118,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.idle_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `7200s`
@@ -11127,7 +11127,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.max_frame_size**
-  
+
   *Type*: `infinity | integer`
 
   *Default*: `infinity`
@@ -11136,7 +11136,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.fail_if_no_subprotocol**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11147,7 +11147,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.supported_subprotocols**
-  
+
   *Type*: `comma_separated_list`
 
   *Default*: `mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5`
@@ -11156,7 +11156,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.check_origin_enable**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -11167,7 +11167,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.allow_origin_absence**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11178,7 +11178,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.check_origins**
-  
+
   *Type*: `comma_separated_binary`
 
   *Default*: `http://localhost:18083, http://127.0.0.1:18083`
@@ -11187,7 +11187,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
 
 **ws_opts.proxy_address_header**
-  
+
   *Type*: `string`
 
   *Default*: `x-forwarded-for`
@@ -11197,7 +11197,7 @@ Relevant when the EMQX cluster is deployed behind a load-balancer.
 
 
 **ws_opts.proxy_port_header**
-  
+
   *Type*: `string`
 
   *Default*: `x-forwarded-port`
@@ -11206,7 +11206,7 @@ Relevant when the EMQX cluster is deployed behind a load-balancer.
 
 
 **ws_opts.deflate_opts**
-  
+
   *Type*: [broker:deflate_opts](#deflate_opts)
 
 
@@ -11217,7 +11217,7 @@ Relevant when the EMQX cluster is deployed behind a load-balancer.
 Socket options for WebSocket/SSL connections.
 
 **listeners.wss.$name.ssl_options.cacertfile**
-  
+
   *Type*: `string`
 
   Trusted PEM format CA certificates bundle file.<br/>
@@ -11230,7 +11230,7 @@ already established connections.
 
 
 **listeners.wss.$name.ssl_options.certfile**
-  
+
   *Type*: `string`
 
   PEM format certificates chain file.<br/>
@@ -11242,14 +11242,14 @@ the file if it is to be added.
 
 
 **listeners.wss.$name.ssl_options.keyfile**
-  
+
   *Type*: `string`
 
   PEM format private key file.
 
 
 **listeners.wss.$name.ssl_options.verify**
-  
+
   *Type*: `enum`
 
   *Default*: `verify_none`
@@ -11260,7 +11260,7 @@ the file if it is to be added.
 
 
 **listeners.wss.$name.ssl_options.reuse_sessions**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11269,7 +11269,7 @@ the file if it is to be added.
 
 
 **listeners.wss.$name.ssl_options.depth**
-  
+
   *Type*: `integer`
 
   *Default*: `10`
@@ -11281,14 +11281,14 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
 **listeners.wss.$name.ssl_options.password**
-  
+
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
 **listeners.wss.$name.ssl_options.versions**
-  
+
   *Type*: `array`
 
   *Default*: `["tlsv1.3","tlsv1.2","tlsv1.1","tlsv1"]`
@@ -11300,7 +11300,7 @@ In case PSK cipher suites are intended, make sure to configure
 
 
 **listeners.wss.$name.ssl_options.ciphers**
-  
+
   *Type*: `array`
 
   *Default*: `[]`
@@ -11335,7 +11335,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **listeners.wss.$name.ssl_options.user_lookup_fun**
-  
+
   *Type*: `string`
 
   *Default*: `emqx_tls_psk:lookup`
@@ -11344,7 +11344,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
 **listeners.wss.$name.ssl_options.secure_renegotiate**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11356,7 +11356,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **listeners.wss.$name.ssl_options.hibernate_after**
-  
+
   *Type*: `duration`
 
   *Default*: `5s`
@@ -11365,7 +11365,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.
 
 
 **listeners.wss.$name.ssl_options.dhfile**
-  
+
   *Type*: `string`
 
   Path to a file containing PEM-encoded Diffie-Hellman parameters
@@ -11376,7 +11376,7 @@ NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
 **listeners.wss.$name.ssl_options.fail_if_no_peer_cert**
-  
+
   *Type*: `boolean`
 
   *Default*: `false`
@@ -11389,7 +11389,7 @@ certificate (an empty certificate is considered valid).
 
 
 **listeners.wss.$name.ssl_options.honor_cipher_order**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11401,7 +11401,7 @@ certificate (an empty certificate is considered valid).
 
 
 **listeners.wss.$name.ssl_options.client_renegotiation**
-  
+
   *Type*: `boolean`
 
   *Default*: `true`
@@ -11417,7 +11417,7 @@ the number of messages the underlying cipher suite can encipher.
 
 
 **listeners.wss.$name.ssl_options.handshake_timeout**
-  
+
   *Type*: `duration`
 
   *Default*: `15s`
@@ -11432,7 +11432,7 @@ the number of messages the underlying cipher suite can encipher.
 Compression options.
 
 **deflate_opts.level**
-  
+
   *Type*: `enum`
 
   *Optional*: `none | default | best_compression | best_speed`
@@ -11441,7 +11441,7 @@ Compression options.
 
 
 **deflate_opts.mem_level**
-  
+
   *Type*: `integer`
 
   *Default*: `8`
@@ -11453,7 +11453,7 @@ Lower values decrease memory usage per connection.
 
 
 **deflate_opts.strategy**
-  
+
   *Type*: `enum`
 
   *Default*: `default`
@@ -11464,7 +11464,7 @@ Lower values decrease memory usage per connection.
 
 
 **deflate_opts.server_context_takeover**
-  
+
   *Type*: `enum`
 
   *Default*: `takeover`
@@ -11475,7 +11475,7 @@ Lower values decrease memory usage per connection.
 
 
 **deflate_opts.client_context_takeover**
-  
+
   *Type*: `enum`
 
   *Default*: `takeover`
@@ -11486,7 +11486,7 @@ Lower values decrease memory usage per connection.
 
 
 **deflate_opts.server_max_window_bits**
-  
+
   *Type*: `integer`
 
   *Default*: `15`
@@ -11497,7 +11497,7 @@ Lower values decrease memory usage per connection.
 
 
 **deflate_opts.client_max_window_bits**
-  
+
   *Type*: `integer`
 
   *Default*: `15`
@@ -11505,5 +11505,4 @@ Lower values decrease memory usage per connection.
   *Optional*: `8-15`
 
   Specifies the size of the compression context for the client.
-
 

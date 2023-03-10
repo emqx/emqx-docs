@@ -109,12 +109,12 @@ Two-way certificate:
 
 We verify the use of the tool in 2 most typical scenarios:
 
-1. Connections: Use `emqtt_bench` to create millions of connections to EMQX Broker.
-2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQX Broker.
+1. Connections: Use `emqtt_bench` to create millions of connections to EMQX.
+2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQX.
 
 ### Device and deployment topology
 
-A total of three 8C16G servers need to be prepared, one for EMQX Broker and two for client presses:
+A total of three 8C16G servers need to be prepared, one for EMQX and two for client presses:
 
 - System: `CentOS Linux release 7.7.1908 (Core)`
 
@@ -159,7 +159,7 @@ Then start 50 thousand connections on each network card on `bench1`, which is a 
 
 Perform the same operation on `bench2`.
 
-After all connections are established, execute `./bin/emqx_ctl listeners` and find the following content to view the information about the number of connections in EMQX Broker:
+After all connections are established, execute `./bin/emqx_ctl listeners` and find the following content to view the information about the number of connections in EMQX:
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883

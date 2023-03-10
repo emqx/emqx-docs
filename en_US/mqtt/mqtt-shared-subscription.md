@@ -28,7 +28,7 @@ Subscribers who belong to the same group will receive messages with load balanci
 but EMQX will broadcast messages to different groups at the same time.
 
 For example, if subscribers `s1`, `s2`, and `s3` are members of group `g1`, subscribers `s4` and `s5` are members of group `g2`, and all subscribers subscribe to topic `t1`.
-When EMQX Broker publishes a message `msg1` to topic `t1`:
+When EMQX publishes a message `msg1` to topic `t1`:
 
 - EMQX will send `msg1` to both groups `g1` and `g2`
 - Only one of `s1`, `s2`, `s3` will receive `msg1`

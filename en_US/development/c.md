@@ -11,7 +11,7 @@ The client has synchronous/asynchronous APIs, which start with MQTTClient and MQ
 
 ## Paho C Usage example
 
-For detailed descriptions of the comparison, download, and usage of the two MQTT client libraries related to the C language, please move to the project homepage to view. This example contains the complete code of the Paho C  in C language connecting to the EMQX Broker, sending and receiving messages:
+For detailed descriptions of the comparison, download, and usage of the two MQTT client libraries related to the C language, please move to the project homepage to view. This example contains the complete code of the Paho C  in C language connecting to the EMQX, sending and receiving messages:
 
 ```c
 #include "stdio.h"

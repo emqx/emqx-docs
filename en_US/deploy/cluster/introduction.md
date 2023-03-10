@@ -6,7 +6,7 @@ EMQX 5.0 adopts the new [Mria cluster architecture](./mria-introduction.md) comp
 
 This chapter will introduce the distributed EMQX cluster and its working mode to help you get started. 
 
-## Working principles
+## How it works
 
 In a distributed EMQX cluster, one EMQX instance runs on each node. All nodes within the cluster communicate with each other and share information on client connections, subscriptions, and published messages. So the EMQX cluster can automatically distribute the load across the nodes, thus ensuring the system's high availability.
 
