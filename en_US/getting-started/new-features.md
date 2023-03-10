@@ -42,13 +42,13 @@ In EMQX 5.0, we have redesigned the EMQX Dashboard with a new UI design style, e
 
 **New features**
 
-- New UI/UX design: Great enhancement of real-time observability;
+- New UI/UX design: Great enhancement of real-time observability
 - Optimized menu structure: Fast and direct access to contents
 - Data monitoring and management: Important data at a glance
-- Visualized access control: Out-of-the-box authentication/authorization management;
-- Powerful data integration capabilities: Using Flow Editor in a visualized way and supporting two-way data bridging;
-- Configuration updates during runtime: Hot update that takes effect immediately;
-- Custom extension capabilities: Built-in gateways, plugins and Hooks;
+- Visualized access control: Out-of-the-box authentication/authorization management
+- Powerful data integration capabilities: Using Flow Editor in a visualized way and supporting two-way data bridging
+- Configuration updates during runtime: Hot update that takes effect immediately
+- Custom extension capabilities: Built-in gateways, plugins and Hooks
 - More comprehensive diagnosis tools: Timely problem identifying and debugging
 
 ## EMQX Operator - Welcome to the cloud-native EMQX 5.0
@@ -79,7 +79,7 @@ The new gateway framework further improves EMQX's usability by unifying access a
 
 **More Intuitive User Experience**: 
 
-Ease-of-use improvements will be the most apparent change to users of EMQX 5.0. We redesigned the EMQX Dashboard according to users behavior. The concise and easy-to-read HOCON configuration file format, the OpenAPI 3.0 compliant REST API documents, more detailed monitoring metrics, log tracking, and slow subscription diagnostic tools will also bring developers a better experience.
+Ease-of-use improvements are the most apparent changes to EMQX 5.0 users. We redesigned the EMQX Dashboard according to users behavior. The concise and easy-to-read HOCON configuration file format, the OpenAPI 3.0 compliant REST API documents, more detailed monitoring metrics, log tracking, and slow subscription diagnostic tools will also bring developers a better experience.
 
 **Improved operability and observability**
 

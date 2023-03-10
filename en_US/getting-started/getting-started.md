@@ -2,24 +2,24 @@
 
 EMQX is the world’s most scalable and reliable MQTT messaging platform that can help you to connect, move and process your business data reliably in real-time. With this all-in-one MQTT platform, you can easily build your Internet of Things (IoT) applications with significant business impacts. 
 
-This chapter will give you a tour of how to download and install EMQX and how to test the connecting and messaging services with our built-in WebSocket tool.
+This chapter gives you a tour of how to download and install EMQX and how to test the connecting and messaging services with our built-in WebSocket tool.
 
 ::: tip
-Besides the deployment methods introduced in this quickstart guide, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You will only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before you can start your MQTT services and connect your IoT devices to any cloud with zero need for infrastructure maintenance. 
+Besides the deployment methods introduced in this quickstart guide, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before you can start your MQTT services and connect your IoT devices to any cloud with zero need for infrastructure maintenance. 
 :::
 
 {% emqxce %}
 
 ## Select your EMQX edition
 
-EMQX is available in open source and Enterprise editions, you may click the link below to download the edition as your business needs. 
+EMQX is available in Open Source and Enterprise editions, you may click the link below to download the edition as your business needs. 
 
 - [Open source edition](https://www.emqx.com/en/try?product=broker)
 - [Enterprise edition](https://www.emqx.com/en/try?product=enterprise)
 
 :::: tabs type:card
 
-::: tab EMQX open source edition
+::: tab EMQX Open Source edition
 The world's most scalable distributed MQTT broker with a high-performance real-time message processing engine, powering event streaming for IoT devices at a massive scale.
 
 - Fully open-sourced under APL 2.0
@@ -106,10 +106,12 @@ In this quick start guide, we will show you the easiest ways to start or run EMQ
 
 Container deployment is the quickest way to start exploring EMQX. In this section, we will show you how to run EMQX with Docker. 
 
-1. To download and start the latest version of EMQX, enter:
+1. To download and start the latest version of EMQX, enter the command below.
+
+   Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
 
    {% emqxce %}
-
+   
    ```bash
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
    ```
@@ -117,14 +119,13 @@ Container deployment is the quickest way to start exploring EMQX. In this sectio
    {% endemqxce %}
 
    {% emqxee %}
-
+   
    ```bash
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
    ```
 
    {% endemqxee %}
-
-   Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
+   
 
 
 2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
@@ -207,13 +208,12 @@ To uninstall EMQX after your testing, you only need to delete the EMQX folders.
 
 ::::
 
-Now that we have successfully started EMQX, we can continue to test the connection and message services with MQTT X. 
-
+Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTT X
 ## Use MQTT X to verify the connection
 
 [MQTT X](https://mqttx.app/zh) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
 
-This section will introduce how to verify the connection with MQTT X Web, the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
+This section will introduce how to verify the connection with [MQTT X Web](https://mqttx.app/zh/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
 
 ::: tip Prerequisites
 The broker address and the port information should be prepared before testing the connection:
@@ -222,16 +222,15 @@ The broker address and the port information should be prepared before testing th
 - Port: Click **Configuration** -> **Listeners** on the left navigation menu to get the port number.
 :::
 
-
 1. Click [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to visit the browser-based MQTT X.
 
-2. Configure and establish the MQTT connection. Click the + New Connection button to enter the configure page: 
+2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configure page: 
 
    - **Name**: Input a connection name, for example, **MQTTX_Test**;
 
    - **Host**
 
-     - Select the protocol type via the drop-down list, for example, select **ws://** if the WebSockets protocol is adopted; to test the SSL/TLS connection, select **wss://**;
+     - Select the protocol type via the drop-down list, for example, select **ws://** if the WebSockets protocol is adopted; MQTT X Web only supports Websockets protocol, to test the SSL/TLS connection, download [MQTT X desktop client](https://mqttx.app/);
      - Fill in the EMQX address, for example, **emqx@127.0.0.1**; 
 
    - **Port**: for example, **8083** for the WebSockets protocol; 
@@ -244,11 +243,11 @@ The broker address and the port information should be prepared before testing th
 
 4. Test the publish/receive of messages: Click the send icon in the bottom right corner of the chat area, then the messages successfully sent will appear in the chat window above. 
 
-![MQTT X Web test](./assets/MQTTXWeb-test.png)
+<img src="./assets/MQTTXWeb-test.png" alt="MQTT X Web test" style="zoom: 25%;" />
 
 If you'd like to continue the testing, such as one-way/two-way SSL authentication and simulate test data with customized scripts, you can continue to explore with [MQTT X](https://mqttx.app). 
 
-Then you can click **Dashboard** in the left navigation tree to return to the **Dashboard** page and check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**. 
+Then you can click **Dashboard** in the left navigation tree to return to the **Dashboard** page and check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**.
 
 ![EMQX dashboard](./assets/emqx-dashboard.png)
 
@@ -267,4 +266,4 @@ Besides this quickstart guide, you may also refer to the pages for the new featu
 
 ## Contact us
 
-If you have any questions on the use of EMQX or EMQ products, you are warmly welcome to [contact us](https://www.emqx.com/zh/contact) for professional support.
+If you have any questions on the use of EMQX or EMQ products, you are warmly welcome to [contact us](https://www.emqx.com/en/contact) for professional support.

@@ -1,6 +1,6 @@
 # 使用 MongoDB 进行密码认证
 
-作为密码认证方式的一种，EMQX 支持通过集成 MongoDB 进行密码认证，目前 EMQX 支持**单节点**、**Replica Set**、**Sharding** <!--需要超链接--> 三种模式部署的 MongoDB 服务器。
+作为密码认证方式的一种，EMQX 支持通过集成 MongoDB 进行密码认证，目前 EMQX 支持**单节点**、**[Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/)**、**[Sharding](https://www.mongodb.com/docs/manual/sharding/)** 三种模式部署的 MongoDB 服务器。
 
 ::: tip 前置准备：
 
