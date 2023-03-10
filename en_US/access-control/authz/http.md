@@ -1,4 +1,4 @@
-# HTTP
+# Use HTTP service
 
 HTTP authorizer delegates authorization to a custom HTTP API.
 

@@ -1,4 +1,4 @@
-# Clustering
+# EMQX cluster
 
 EMQX cluster adopts a distributed architecture, which can handle a large number of clients and messages while ensuring high availability, fault tolerance and scalability.
 

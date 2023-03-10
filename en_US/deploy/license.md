@@ -1,4 +1,4 @@
-# EMQX Enterprise license
+# Work with license
 
 EMQX Enterprise is the commercial version of EMQX, which requires a license certificate (License) when using it.
 

@@ -1,4 +1,4 @@
-# MongoDB
+# Integrate with MongoDB
 
 This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 MongoDB database.
