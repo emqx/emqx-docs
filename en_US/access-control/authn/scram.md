@@ -32,4 +32,5 @@ Sample configuration:
 where, 
 
 - `algorithm`: password hash algorithm, options: `sha256` and `sha512`
-- `iteration_count` (optional): Iteration-count parameter for SCRAM; Default:  4096.
+- `iteration_count` (optional): Iteration-count parameter for SCRAM; Default:  `4096`
+

@@ -49,8 +49,6 @@ There are also more opportunities to be explored:
 - **Separate control messages into different streams:** MQTT control messages can be sent in one or two directions. For example, the client can send UNSUBSCRIBE requests asynchronously through a short-lived unidirectional stream to request the server to stop sending data that is no longer of interest.
 - **Finer-grained send and receive collaborative flow control:** Flow control is performed on a per-flow basis or across the entire connection, enabling finer-grained flow control.
 
-![MQTT over QUIC](./assets/mqtt-over-quic.png)
-
 ## QUIC vs TCP/TLS Test Comparisons
 
 In comparison with TCP/TLS testing, MQTT over QUIC performs as follows:
@@ -65,7 +63,6 @@ In comparison with TCP/TLS testing, MQTT over QUIC performs as follows:
 
 As of now, the MQTT over QUIC is ready for production, users are already testing it in depth and giving good feedback, see [Getting Started](./getting-started.md) to experience it now.
 
-Still, EMQX has not utilized all the features provided by QUIC, such as multi streams, stream prioritization, flow control and
-unreliable datagram...
+Still, EMQX has not utilized all the features provided by QUIC, such as multi streams, stream prioritization, flow control and unreliable datagram.
 
 These features will be addressed in the later releases and, hopefully, become an OASIS standard.

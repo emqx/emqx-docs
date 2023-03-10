@@ -4,7 +4,7 @@
 
 :::tip 环境准备
 
-部署前，请确认以下组件已经安装：
+部署前，确认以下组件已经安装：
 
 | 软件                                     | 版本要求     |
 | ---------------------------------------- | ------------ |
@@ -16,7 +16,7 @@
 
 ## 部署 EMQX Operator
 
-我们使用 [cert-manager](https://github.com/cert-manager/cert-manager) 来给 Webhook 服务提供证书。有关如何安装，可参考 [cert manager 手册 - 安装部分](https://cert-manager.io/docs/installation/)。
+EMQX 使用 [cert-manager](https://github.com/cert-manager/cert-manager) 来给 Webhook 服务提供证书。有关如何安装，可参考 [cert manager 手册 - 安装部分](https://cert-manager.io/docs/installation/)。
 
 ### 安装 EMQX Operator
 

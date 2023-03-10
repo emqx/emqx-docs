@@ -1,19 +1,19 @@
 # Debian
 
-This section will guide you on installing and starting EMQX on the Debian system.
+This section guides you on installing and starting EMQX on the Debian system.
 
 Supported versions: 
 
 - Debian 11
 - Debian 10
 
-The section below will take Debian 11 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise). 
+The section takes Debian 11 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise). 
 
 {% emqxce %}
 
 ## Install with deb
 
-EMQX has offered different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
@@ -87,7 +87,7 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz
 
-EMQX has offered different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
@@ -139,7 +139,7 @@ After the installation, run the command below to start EMQX.
 
 ## Install with deb
 
-EMQX has offered different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 

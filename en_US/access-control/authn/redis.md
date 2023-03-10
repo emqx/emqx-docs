@@ -1,8 +1,8 @@
 # Use Redis for password authentication
 
-EMQX supports integrating with Redis for password authentication. 
+EMQX supports integrating with Redis for password authentication. EMQX Redis authenticator currently supports connecting to running in three different modes, which are Single, [Redis Sentinel](https://redis.io/docs/manual/sentinel/) and [Redis Cluster](https://redis.io/docs/manual/scaling/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and configuration file. 
 
-::: tip
+::: tip Prerequisite:
 
 - Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 

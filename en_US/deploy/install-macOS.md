@@ -1,13 +1,13 @@
 # macOS
 
-This section will guide you on how to install and start EMQX on macOS with a zip file.
+This section guides you on installing and starting EMQX on macOS with a zip file.
 
 Supported versions:
 
 - macOS 12
 - macOS 11
 
-The section below will take macOS 12 as an example to illustrate how to download the latest version of EMQX. For other If you want to install a different version or in a different system, please visit the [EMQX Deployment page](https://www.emqx.com/zh/try?product=enterprise). 
+The section takes macOS 12 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
 
 {% emqxce %}
 

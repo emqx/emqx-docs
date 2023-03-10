@@ -179,7 +179,9 @@ mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-amzn2-arm64.tar.gz -C emqx
 
 ::::
 
-启动 EMQX。
+### 启动 EMQX
+
+安装完成后，可通过如下命令启动 EMQX。
 
 ```bash
 ./emqx/bin/emqx start

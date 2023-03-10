@@ -1,6 +1,6 @@
 # 使用 Redis 进行密码认证
 
-作为密码认证方式的一种，EMQX 支持通过集成 Redis 进行密码认证。EMQX 支持三种 Redis 部署模式：单节点 <!--需要插入对应连接-->、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、 [Redis Cluster](https://redis.io/docs/manual/scaling/)，本节将介绍如何进行相关配置。
+作为密码认证方式的一种，EMQX 支持通过集成 Redis 进行密码认证。EMQX 支持三种 Redis 部署模式：单节点、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、[Redis Cluster](https://redis.io/docs/manual/scaling/)，本节将介绍如何进行相关配置。
 
 ::: tip 前置准备：
 

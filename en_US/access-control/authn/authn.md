@@ -10,7 +10,7 @@ EMQX supports several authentication mechanisms to better protect our clients, i
 
 EMQX also supports [TLS X.509 certificates](https://www.mongodb.com/docs/manual/core/security-x.509/) and [TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279) protocols, which offers an option for the authentication request between the client and the server side. 
 
-This section will cover the basic concepts of identity authentication and the settings. 
+This section covers the basic concepts of identity authentication and the settings. 
 
 ## Authentication mechanism
 
@@ -18,7 +18,7 @@ This section will cover the basic concepts of identity authentication and the se
 
 EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identities, such as username, client ID, and the corresponding password. In some cases, users may choose to use some fields in the TLS certificate (such as the certificate's Common Name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed form.
 
-The basic working principle of password authentication in EMQX is: The client will carry the identity credentials when  initiating a connect request, EMQX will query the database for the hashed password corresponding to the identity credentials provided by the client, and will only accept the connection after the match is successful.
+The basic working principle of password authentication in EMQX is: The client carries the identity credentials when initiating a connect request. EMQX queries the database for the hashed password corresponding to the identity credentials provided by the client, and only accepts the connection after the match is successful.
 
 ![emqx-authn-flow](./assets/emqx-authn-flow.png)
 
@@ -30,7 +30,7 @@ EMQX can also be configured to delegate authentication work to external services
 
 [JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism, which does not rely on the server to retain client authentication information or session information.
 
-The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator will verify the JWT signature using the list of public keys queried from the JWKS endpoint.
+The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator verifies the JWT signature using the list of public keys queried from the JWKS endpoint.
 
 ### MQTT 5.0 enhanced authentication
 
@@ -38,7 +38,7 @@ The client carries the JWT in the connection request, and EMQX uses the pre-conf
 
 ## EMQX Authenticator
 
-EMQX supports 8 authentication methods (will be referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
+EMQX supports 8 authentication methods (referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
 
 | Mechanism       | Database          | Description                                                  |
 | --------------- | ----------------- | ------------------------------------------------------------ |
@@ -53,7 +53,7 @@ EMQX supports 8 authentication methods (will be referred to as authenticator her
 
 ## Basic Concepts
 
-The following part will introduce the basic authentication concepts we commonly referred to.
+The following part introduces the basic authentication concepts we commonly referred to.
 
 ### Authentication chain
 
@@ -69,17 +69,17 @@ Besides, the authenticators for creating the authentication chain should be of d
 
 #### Authenticate flow
 
-With authentication chain configured, EMQX will first try to retrieve the matching authentication information from the first authenticator, if fails, it will switch to the next authenticator to continue the process. 
+With authentication chain configured, EMQX first tries to retrieve the matching authentication information from the first authenticator, if fails, it switches to the next authenticator to continue the process. 
 
-Taking the password-based authentication as an example, EMQX will try to retrieve the possible authentication information from the configured authenticators:
+Taking the password-based authentication as an example, EMQX tries to retrieve the possible authentication information from the configured authenticators:
 
-1. If the username is the same,
+1. If the username is the same, and:
    - the authentication information matches, the client will be allowed to connect.
-   - the authentication information does not match, the client will be allowed to connect.
+   - the authentication information does not match, the client will not be allowed to connect.
 
-1. If multiple authenticators are configured, and EMQX fails to retrieve the information from the current authenticator, it will 
-   - continue to retrieve the information from other authenticators
-   - refuse the connection if this is already the last authenticator
+1. If multiple authenticators are configured, and EMQX fails to retrieve the information from the current authenticator, it will:
+   - continue to retrieve the information from other authenticators.
+   - refuse the connection if this is already the last authenticator.
 
 
 
@@ -87,27 +87,27 @@ Taking the password-based authentication as an example, EMQX will try to retriev
 
 #### Use case
 
-We have a large number of clients and a high connection rate, we can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved. 
+Users have a large number of clients and a high connection rate, thus users can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved. 
 
 ## Authentication of listeners
 
 By default, EMQX adopts a global authentication method for all configured listeners. But for an EMQX cluster with multiple services connected, EMQX also supports customizing authentication methods for each access mode to meet various authentication requirements, for example:
 
 - For clients connected through MQTT over WebSocket, the time-sensitive JWT authenticator rather than the permanent username/password authentication method is recommended to better protect the business security.
-- For hardware devices connected via MQTT TCP, they will have their user name and password or client certificates burned during initialization, which will not be changed throughout the life cycle, so the password authentication method can be used;
+- For hardware devices connected via MQTT TCP, their user name and password or client certificates are burned during initialization. The authentication will not be changed throughout the life cycle, so the password authentication method can be used.
 - The listeners used for backend service connections do not require authentication checks, as they usually listen to an intranet address with sufficient security assurance.
 
 ::: tip
 
-Currently, EMQX only supports creating different listener authenticators for MQTT clients, for gateway listeners, EMQX only supports the use of the default global authenticator.
+Currently, EMQX only supports creating different listener authenticators for MQTT clients. For gateway listeners, EMQX only supports the use of the default global authenticator.
 
 :::
 
-The authentication configuration of the listener takes precedence over the global authentication configuration. Only when the listener removes its own authenticator configuration and enables authentication, the listener will switch to using the global authentication configuration.
+The authentication configuration of the listener takes precedence over the global authentication configuration. Only when the listener removes its own authenticator configuration and enables authentication, the listener switches to using the global authentication configuration.
 
 ### Use case
 
-For example, for listeners with TLS mutual authentication enabled, you may not want to apply the global password authentication method; or if your clients are from multiple different vendors, you will need different authentication methods to solve the name duplication issue.
+For example, for listeners with TLS mutual authentication enabled, you may not want to apply the global password authentication method; or if your clients are from multiple different vendors, you need different authentication methods to solve the name duplication issue.
 
 ### Super User
 
@@ -125,15 +125,15 @@ You can check if a user is a superuser with the  `is_superuser` field in a datab
 
 Storing a password in plain text would mean that anyone who looked through the database would be able to just read the user’s passwords. Therefore it is recommended to use password hashing algorithms to store the password as the generated hash. EMQX supports a variety of password hashing algorithms to meet various security requirements.
 
-Besides, EMQX also supports adding salt to Hashing, the unique hash produced by adding the salt (password_hash) can protect us against different attacks. 
+Besides, EMQX also supports adding salt to hashing, the unique hash produced by adding the salt (password_hash) can protect us against different attacks. 
 
 #### Workflow
 
 The workflow of password hashing is as follows:
 
 1. EMQX authenticator uses the configured query statement to query qualified identity credentials from the database, including hashed passwords and salt values;
-2. When a client tries to connect, EMQX authenticator will hash the password provided by the client with the configured hash algorithm and the queried salt value;
-3. EMQX authenticator will compare the hash password queried from the database in step 1 with the hash value calculated in step 2. If they are matching, it will allow the permission request.
+2. When a client tries to connect, EMQX authenticator hashes the password provided by the client with the configured hash algorithm and the queried salt value;
+3. EMQX authenticator compares the hash password queried from the database in step 1 with the hash value calculated in step 2. If they match, it allows the permission request.
 
 Below is the hashing algorithms EMQX supports: 
 
@@ -189,7 +189,7 @@ EMQX provides 3 ways to use authentication, namely: Dashboard, Configuration fil
 
 ### Configure with Dashboard
 
-EMQX Dashboard is an intuitive way to configure EMQX authenticators, where you can check their status or customize the settings. For example, as shown in the screenshot below, we have configured 2 authenticators, password authentication based on built-in database and JWT authentication. 
+EMQX Dashboard is an intuitive way to configure EMQX authenticators, where you can check their status or customize the settings. For example, as shown in the screenshot below, we have configured 2 authenticators: password authentication based on built-in database and JWT authentication. 
 
 ![](./assets/authn-dashboard-2.png)
 
@@ -282,3 +282,10 @@ Note that both authenticator IDs and listener IDs need to follow URL encoding co
 ```bash
 PUT /api/v5/authentication/password_based%3Abuilt_in_database
 ```
+
+#### Data operation API
+
+For authentication using [built-in database](./mnesia.md) and [MQTT 5.0 enhanced authentication](./scram.md), EMQX provides HTTP API to manage authentication data, including the operations such as creating, updating, deleting, and listing data. For more information, see [Manage authentication data with HTTP API](./user_management.md).
+
+For more detailed API requests and parameters, see [HTTP API](../../admin/api.md).
+
