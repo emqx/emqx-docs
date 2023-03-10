@@ -8,30 +8,30 @@ This version update includes 4 enhancements and 7 fixes.
 
 ### Enhancements
 
-- Improve the log if the user configured a different `iotdb_version` from the version of installed IoTDB [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+- Improve the log if the user configured a different `iotdb_version` from the version of installed IoTDB.
 
-- Don't print error logs when the offline-msg actions receive QoS0 messages [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+- Don't print error logs when the offline-msg actions receive QoS0 messages.
 
-- Start the `emqx_schema_registry` plugin when release hot upgrade [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+- Start the `emqx_schema_registry` plugin when release hot upgrade.
   The `emqx_schema_registry` is a necessary plugin when using rules to decode serialized binary data
   (e.g. Protobuf or Avro), we should ensure this plugin started in the EMQX enterprise.
 
-- Change "EMQ X" to "EMQX" from the outputs of CLIs and names of plugins [#10099](https://github.com/emqx/emqx/pull/10099).
+- Change "EMQ X" to "EMQX" from the outputs of CLIs and names of plugins.
 
 ### Bug fixes
 
-- Fix the issue that the `Message Key` parameter of the RocketMQ action does not work [#1761](https://github.com/emqx/emqx-enterprise/pull/1761).
+- Fix the issue that the `Message Key` parameter of the RocketMQ action does not work.
 
-- Fix the rule failed when processing the decoded protobuf messages [#1760](https://github.com/emqx/emqx-enterprise/pull/1760).
+- Fix the rule failed when processing the decoded protobuf messages.
   Before this fix, if the protobuf schema contains `oneof` definitions, the rule may failed when trying to parse the decoded message to JSON string.
 
-- Fix the issue that send JSON Object as Kafka Headers failed [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+- Fix the issue that send JSON Object as Kafka Headers failed.
 
-- Fix the issue that the `message_key` of RocketMQ messages was not working [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+- Fix the issue that the `message_key` of RocketMQ messages was not working.
 
-- Sometimes the `data/rules` and `data/modules` directories cannot be cleaned after the rule or `emqx-module` deleted [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+- Sometimes the `data/rules` and `data/modules` directories cannot be cleaned after the rule or `emqx-module` deleted.
 
-- Fix some problems in the descriptions of HStream resource fields [#1762](https://github.com/emqx/emqx-enterprise/pull/1762).
+- Fix some problems in the descriptions of HStream resource fields.
 
 - Avoid changing the payload of MQTT messages when printing debug logs [#10091](https://github.com/emqx/emqx/pull/10091).
   Before this fix, if EMQX receives a message with Payload "e\ne\nc\nc\n2\n\n\n", the log message will be as follows:
