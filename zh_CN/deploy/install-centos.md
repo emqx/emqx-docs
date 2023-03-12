@@ -37,7 +37,7 @@ EMQX 支持通过 Yum 源安装，您可通过以下 Yum 命令从中自动下�
 
 EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=CentOS) 获取详细安装信息。
 
-## 通过 rpm 安装
+### 通过 rpm 安装
 
 请根据 CPU 架构选择对应安装方式。
 
@@ -109,7 +109,7 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
 sudo apt remove --purge emqx
   ```
 
-## 通过 tar.gz 安装
+### 通过 tar.gz 安装
 
 请根据 CPU 架构选择对应安装方式。
 
