@@ -1,31 +1,35 @@
-# 集群负载重平衡与节点疏散
+# 节点疏散与集群负载重平衡
 
-集群负载重平衡是将客户端与会话从一组节点强行迁移到其他节点的行为，而节点疏散则是要将所有连接与会话从某个节点迁离的行为。
-
-## 应用场景
-
-节点疏散或负载重平衡可以用于以下场景，比如需要关闭任意节点以便维护底层软件或硬件；或是需要将连接从高负载节点迁到低负载节点。
-
-关闭节点时，我们需要将数据损失降到最低，而节点疏散正是为了使会话数据的损失最小化。
-
-节点疏散时，应该将所有连接与会话数据迁移到其他节点。节点疏散完成后，节点不会自动关闭，需要系统管理员手动关闭
-
-节点重平衡的流程则相反。它将自动计算得到到达成节点平衡所需迁移的连接数量，然后将对应数量的连接和会话数从高负载节点迁移到低负载节点，从而在节点之间实现负载均衡。通常在新加入或重启一个节点后需要此操作来达成平衡。
+MQTT 是有状态的长连接接入协议，这为 EMQX 集群运维带来了一些困难，节点疏散与集群负载重平衡应运而生。
 
 ## 节点疏散
 
-可以通过命令行工具（CLI）或 API 在待疏散节点进行节点疏散操作。
+某些情况下您需要对集群中某个节点进行维护或升级操作，如果此时节点上存在连接和会话，关闭节点可能会导致数据丢失，以及短时间内大量设备下线重连，造成服务器负载过高从而影响整体业务。
 
-* 待疏散节点将停止接收新的连接请求。
-* 待疏散节点将逐渐断开已连接的客户端。
-* 在所有客户端的连接断开后，待疏散节点将等待重连的客户端接管会话，等待时间由 `wait-takeover` 指定。
-* 超过等待时间后，逐渐将剩余未被接管的会话迁移至其他节点，完成疏散。
+为此 EMQX 提供了一种优雅关闭节点的方式即节点疏散，以帮助您在关闭节点前将节点所有连接与会话数据迁移到集群其他节点。
 
-节点疏散任务是持久化的，期间即使节点重启，重启后仍将保持疏散状态。如果要停止疏散，需要重新将节点的状态设为正常。
+### 疏散流程
+
+指定需要停机维护的节点以启动节点疏散，疏散节点会执行以下流程：
+
+1. 停止接收新的连接请求；
+2. 按照预设的速度（由 `conn-evict-rate` 指定）逐渐断开当前连接的客户端，已断开的客户端会通过重连机制连接到集群其他节点，重连成功后会话将迁移到新节点上。不同协议版本重连机制不同：
+   1. 对于 MQTT v3.1/v3.1.1 客户端，通过负载均衡策略指定，需要客户端开启重连机制；
+   2. 对于 MQTT v5.0 客户端，由 `redirect-to` 参数指定重连节点。
+
+3. 由于客户端重连需要一定时间，在所有客户端连接断开后节点将继续等待一段时间（由 `wait-takeover` 指定），以等待客户端完成重连并接管会话；
+4. 超过 3 中设置的等待时间后，节点将剩余未被接管的会话迁移至其他节点：
+   1. 由 `migrate-to` 指定会话迁移到的节点；
+   2. 由 `sess-evict-rate` 指定会话迁移的速度。
+
+
+您可以随时停止疏散流程，如果节点在疏散进行中被关闭，节点启动成功后仍将继续执行疏散过程。
+
+### CLI 操作命令
 
 您可以通过如下命令执行节点的疏散任务：
 
-```
+``` bash
 emqx_ctl rebalance start --evacuation \
     [--redirect-to "Host1:Port1 Host2:Port2 ..."] \
     [--conn-evict-rate CountPerSec] \
@@ -34,30 +38,42 @@ emqx_ctl rebalance start --evacuation \
     [--sess-evict-rate CountPerSec]
 ```
 
-| 配置项          | 类型           | 描述 |
+| 配置项       | 类型           | 描述 |
 |---------------------|------------------|-------------|
-| `--redirect-to` | string | 具体可参考[MQTT 5.0 协议 - 服务器重定向(Server redirection)](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255)章节。MQTT 5.0 协议的客户端使用该属性重连 |
-| `--conn-evict-rate` | positive integer | 客户端每秒断开连接速度。 |
-| `--migrate-to` | string | 目标节点列表，多个节点以逗号或空格分隔。 |
-| `--wait-takeover` | positive integer | 所有连接断开后，等待客户端重连以接管会话的时间（单位为 秒）。 |
-| `--sess-evict-rate` | positive integer | `wait-takeover` 之后每秒会话疏散速度。 |
+| `--redirect-to` | 字符 | 具体可参考 [MQTT 5.0 协议 - 服务器重定向(Server redirection) ](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255)章节。MQTT 5.0 协议的客户端使用该属性重连 |
+| `--conn-evict-rate` | 正整数 | 客户端每秒断开连接速度。 |
+| `--migrate-to` | 字符 | 目标节点列表，多个节点以逗号或空格分隔。 |
+| `--wait-takeover` | 正整数 | 所有连接断开后，等待客户端重连以接管会话的时间（单位为 秒）。 |
+| `--sess-evict-rate` | 正整数 | `wait-takeover` 之后每秒会话疏散速度。 |
 
-示例：
+<!-- TODO 参数默认值-->
 
-```
-./bin/emqx_ctl rebalance start --evacuation --wait-takeover 200 --conn-evict-rate 30 --sess-evict-rate 30 --migrate-to "emqx2@127.0.0.1 emqx3@127.0.0.1"
+#### 示例
+
+如果您想将 `emqx@127.0.0.1` 节点的客户端迁移到 `emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 节点，需要在 `emqx@127.0.0.1` 节点执行：
+
+```bash
+./bin/emqx_ctl rebalance start --evacuation \
+	--wait-takeover 200 \
+	--conn-evict-rate 30 \
+	--sess-evict-rate 30 \
+	--migrate-to "emqx2@127.0.0.1 emqx3@127.0.0.1"
 Rebalance(evacuation) started
 ```
 
+该命令会以每秒 `30` 个连接的速度断开现有客户端，所有连接断开后将等待 `200` 秒，之后以每秒 `30` 个会话的速度迁移现有会话到 `emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 节点。
+
+
+
 获取疏散状态的命令如下：
 
-```
+```bash
 emqx_ctl rebalance node-status
 ```
 
-示例：
+执行结果：
 
-```
+```bash
 ./bin/emqx_ctl rebalance node-status
 Rebalance type: rebalance
 Rebalance state: evicting_conns
@@ -80,31 +96,52 @@ Channel statistics:
 emqx_ctl rebalance stop
 ```
 
-示例：
+执行结果：
 
 ```
 ./bin/emqx_ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
-## 重平衡
 
-重平衡涉及多个节点，因此比疏散任务要复杂。当基于某个节点执行重平衡任务时：
 
-* 该节点变为*调度节点*。
-* 调度节点将接入的节点分为两类，源节点和目标节点。源节点就是那些连接数超量的节点，目标节点是连接数不足的节点。
-* 调度节点将告知源节点停止接收新的连接。
-* 等待一段时间(由 `wait-health-check` 设置)，确保 LB 已经将源节点从活跃后端节点列表中移除。
-* 调度节点会逐步断开已连接至源节点的客户端，直到源节点的平均连接数与目标节点相同。
-* 源节点所有连接断开后将等待客户端重连并从中接管会话，等待时间由 `wait-takeover` 指定。
-* 超过等待时间后，调度节点会逐渐将剩余未被接管的会话从源节点迁移，直到源节点的平均连接数与目标节点相同。
-* 最后，重平衡任务结束，源节点切回正常状态。
+## 集群负载重平衡
 
-重平衡是一项临时性任务。如果任一参与节点在进行重平衡期间崩溃，整个任务将结束。
+MQTT 连接一旦建立就不会轻易断开，当进行节点扩容后，如果没有大量的新客户端接入，新加入的节点会长时间处于负载不足的状态。
 
-执行重平衡任务的命令如下：
+为解决这一问题，您需要手动将连接从高负载节点迁移到低负载节点，实现集群负载均衡。
 
-```
+![EMQX 节点负载重平衡示意图](assets/rebalancing.png)
+
+### 
+
+### 重平衡流程
+
+重平衡涉及多个节点，因此比节点疏散要复杂。
+
+您可以在任何节点上启动集群负载重平衡任务，任务将根据每个节点当前连接负载情况，自动计算得到达成平衡所需的连接迁移方案。然后将对应数量的连接和会话从高负载节点迁移到低负载节点，从而实现节点间的负载均衡。
+
+您可以在任意节点上启动重平衡任务，任务会执行以下流程：
+
+1. 计算迁移方案，根据方案将参与重平衡的节点（由 `--nodes` 指定）分为源节点和目标节点：
+   1. 源节点：连接数超量的节点；
+   2. 目标节点：连接数不足的节点。
+
+2. 源节点停止接收新的连接；
+3. 等待一段时间（由 `wait-health-check` 指定），确保 LB 已经将源节点从活跃后端节点列表中移除；
+4. 源节点逐步断开已连接的客户端，直到平均连接数与目标节点相同；
+5. 由于客户端重连需要一定时间，在所有客户端连接断开后，源节点将继续等待一段时间（由 `wait-takeover` 指定），以等待客户端完成重连并接管会话；
+6. 超过 5 中设置的等待时间后，源节点将剩余未被接管的会话迁移至目标节点：
+   1. 由 `sess-evict-rate` 指定会话迁移的速度。
+7. 最后，重平衡任务结束，源节点切回正常状态。
+
+重平衡是一项临时性任务，期间任一参与重平衡的节点崩溃将结束整个任务。
+
+### CLI 操作命令 
+
+您可以通过如下命令启动重平衡任务：
+
+```bash
 rebalance start \
     [--nodes "node1@host1 node2@host2"] \
     [--wait-health-check Secs] \
@@ -120,19 +157,23 @@ rebalance start \
 
 | 配置项                 | 类型             | 描述                                                         |
 | ---------------------- | ---------------- | ------------------------------------------------------------ |
-| `--nodes` | string | 参与负载重平衡的节点列表，以空格或逗号分隔，调度节点（即运行命令的节点）可以不在列表中。 |
-| `--wait-health-check` | positive integer | 等待 LB 将源节点从活跃的后端节点列表中移除的时间（单位为 秒），超过指定等待时间后，重平衡任务将启动。 |
-| `--conn-evict-rate` | positive integer | 源节点客户端每秒断开连接速度。 |
-| `--abs-conn-threshold` | positive integer | 用于检查连接平衡的绝对阈值。                                 |
-| `--rel-conn-threshold` | number > 1.0     | 用于检查连接平衡的相对阈值。                                 |
-| `--wait-takeover` | positive integer | 所有连接断开后，等待客户端重连以接管会话的时间（单位为 秒）。 |
- | `--sess-evict-rate` | positive integer | `wait-takeover` 之后源节点每秒会话疏散速度。 |
-| `--abs-sess-threshold` | positive integer | 用于检查会话连接平衡的绝对阈值。                             |
-| `--rel-sess-threshold` | number > 1.0     | 用于检查会话连接平衡的相对阈值。                             |
+| `--nodes` | 字符 | 参与负载重平衡的节点列表，以空格或逗号分隔，调度节点（即运行命令的节点）可以不在列表中。 |
+| `--wait-health-check` | 正整数 | 等待 LB 将源节点从活跃的后端节点列表中移除的时间（单位为 秒），超过指定等待时间后，重平衡任务将启动。 |
+| `--conn-evict-rate` | 正整数 | 源节点客户端每秒断开连接速度。 |
+| `--abs-conn-threshold` | 正整数 | 用于检查连接平衡的绝对阈值。                                 |
+| `--rel-conn-threshold` | 数字<br/>> 1.0 | 用于检查连接平衡的相对阈值。                                 |
+| `--wait-takeover` | 正整数 | 所有连接断开后，等待客户端重连以接管会话的时间（单位为 秒）。 |
+| `--sess-evict-rate` | 正整数 | `wait-takeover` 之后源节点每秒会话疏散速度。 |
+| `--abs-sess-threshold` | 正整数 | 用于检查会话连接平衡的绝对阈值。                             |
+| `--rel-sess-threshold` | 数字<br/>> 1.0 | 用于检查会话连接平衡的相对阈值。                             |
+
+<!-- TODO 参数默认值，*conn_threshold 对结果的影响，详细的计算过程-->
+
+### 连接平衡判断条件
 
 当满足以下条件时，我们认为连接是平衡的：
 
-```
+```bash
 avg(源节点连接数) < avg(目标节点连接数) + abs_conn_threshold
 或 
 avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
@@ -140,10 +181,19 @@ avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
 
 类似的规则也适用于会话的连接断开。
 
-示例：
+#### 示例
 
-```
-./bin/emqx_ctl rebalance start --wait-health-check 10 --wait-takeover 60  --conn-evict-rate 5 --sess-evict-rate 5 --abs-conn-threshold 30 --abs-sess-threshold 30 --nodes "emqx1@127.0.0.1 emqx2@127.0.0.1 emqx3@127.0.0.1"
+如果您想将 `emqx@127.0.0.1`、`emqx2@127.0.0.1` 与 `emqx3@127.0.0.1` 三个节点实现重平衡，可以执行：
+
+```bash
+./bin/emqx_ctl rebalance start \
+	--wait-health-check 10 \
+	--wait-takeover 60  \
+	--conn-evict-rate 5 \
+	--sess-evict-rate 5 \
+	--abs-conn-threshold 30 \
+	--abs-sess-threshold 30 \
+	--nodes "emqx1@127.0.0.1 emqx2@127.0.0.1 emqx3@127.0.0.1"
 Rebalance started
 ```
 
@@ -155,7 +205,7 @@ emqx_ctl rebalance node-status
 
 示例：
 
-```
+```bash
 ./bin/emqx_ctl rebalance node-status
 Node 'emqx1@127.0.0.1': rebalance coordinator
 Rebalance state: evicting_conns
@@ -170,16 +220,18 @@ Current average donor node connection count: 300.0
 
 停止重平衡任务的命令如下：
 
-```
+```bash
 emqx_ctl rebalance stop
 ```
 
 示例：
 
-```
+```bash
 ./bin/emqx_ctl rebalance stop
 Rebalance stopped
 ```
+
+
 
 ## 集成负载均衡器
 
@@ -220,42 +272,9 @@ backend emqx_cluster
 
 我们有三个节点，对应的 MQTT 监听器分别位于  3001、3002 和 3003 端口，HTTP 监听器则分别位于 5001、5002 和 5003 端口。
 
-## 全局状态
 
-我们可通过如下命令获取整体集群的疏散/重平衡任务状态：
 
-```
-emqx_ctl rebalance status
-```
-
-示例：
-
-```
-./bin/emqx_ctl rebalance status
---------------------------------------------------------------------
-Node 'emqx1@127.0.0.1': evacuation
-Rebalance state: waiting_takeover
-Connection eviction rate: 30 connections/second
-Session eviction rate: 30 sessions/second
-Connection goal: 0
-Session goal: 0
-Session recipient  nodes: ['emqx2@127.0.0.1']
-Channel statistics:
-  current_connected: 0
-  current_sessions: 247
-  initial_connected: 233
-  initial_sessions: 247
---------------------------------------------------------------------
-Node 'emqx2@127.0.0.1': rebalance coordinator
-Rebalance state: wait_health_check
-Coordinator node: 'emqx2@127.0.0.1'
-Donor nodes: ['emqx3@127.0.0.1']
-Recipient nodes: ['emqx2@127.0.0.1']
-Connection eviction rate: 5 connections/second
-Session eviction rate: 5 sessions/second
-```
-
-## API
+## REST API
 
 集群负载重平衡和节点疏散也可通过 API 完成，此时需要在参数中指定操作节点。
 
@@ -316,7 +335,7 @@ curl -v -u admin:public -H "Content-Type: application/json" -X POST 'http://127.
 {"data":[],"code":0}
 ```
 
-### 获取本地节点的状态
+### 获取当前请求节点状态
 
 ```
 curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/status'
@@ -342,7 +361,7 @@ curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0
 }
 ```
 
-### 获取整体集群的状态
+### 获取集群状态
 
 ```
 curl -s -u admin:public -H "Content-Type: application/json" -X GET 'http://127.0.0.1:8081/api/v4/load_rebalance/global_status'
