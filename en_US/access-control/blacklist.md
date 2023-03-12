@@ -1,6 +1,6 @@
 # Blacklist
 
-EMQX Broker provides users with a blacklisting/banning functionality.
+EMQX provides users with a blacklisting/banning functionality.
 
 Administrator can add specified clients to the blacklist by the Dashboard
 to deny access of the client.

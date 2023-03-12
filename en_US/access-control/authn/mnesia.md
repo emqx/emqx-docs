@@ -1,4 +1,4 @@
-# Use built-in database for password authentication
+# Use built-in database
 
 You can use the built-in database of EMQX as a low-cost and out-of-the-box option for password authentication. After enabling, EMQX will save the client credentials in its built-in database (based on Mnesia) and manages data via REST API and Dashboard. This chapter will introduce how to use EMQX Dashboard and configuration items to configure. 
 

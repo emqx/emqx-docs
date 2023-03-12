@@ -1,8 +1,6 @@
-# GCP PubSub Bridge
+# GCP Pub/Sub Bridge
 
-EMQX GCP PubSub integration can send MQTT messages and events to
-[Google Cloud PubSub](https://cloud.google.com/pubsub?hl=en-us), which
-can help you flexibly choose services on Google Cloud and build IoT
+EMQX GCP Pub/Sub integration can send MQTT messages and events to [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us), which can help you flexibly choose services on Google Cloud and build IoT
 applications more easily.
 
 {% emqxce %}
@@ -16,7 +14,7 @@ The following steps will guide you to use this configuration.
 ## Setup
 
 A few configuration steps on GCP's side must be performed before
-configuring the GCP PubSub Bridge on EMQX.
+configuring the GCP Pub/Sub Bridge on EMQX.
 
 1. Create a [Service
    Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)
@@ -24,15 +22,15 @@ configuring the GCP PubSub Bridge on EMQX.
    permissions to at least publish messages to the topic of interest.
 2. Create a Service Account Key for that account and download it in
    JSON format.
-3. Create a PubSub topic (remember that the Service Account must have
+3. Create a Pub/Sub topic (remember that the Service Account must have
    permissions to publish to that topic).
 
-## Example GCP PubSub Bridge Usage via Dashboard
+## Example GCP Pub/Sub Bridge Usage via Dashboard
 
 Go to the EMQX Dashboard, select the _"Data Integration"_ item on the
 menu on the left, then _"Data Bridges"_.  Then, click _"+ Create"_.
 
-In the dialog, select the _Google PubSub_ bridge type, click next.
+In the dialog, select the _Google Pub/Sub_ bridge type, click next.
 Fill the required fields for that bridge (those are marked with an
 asterisk).  The _payload template_ field, if left blank, will encode
 all visible inputs from the MQTT message using JSON format, such as
@@ -52,14 +50,14 @@ Account credentials in JSON format you exported during the setup step.
 
 Finally, after clicking _"Create"_, you'll be offered the option of
 creating an associated rule.  This will allow MQTT messages matching
-the rule to be forwarded to GCP PubSub.  Refer to the
+the rule to be forwarded to GCP Pub/Sub.  Refer to the
 [_Rules_](./rules.md) for more info on creating rules.
 
 <center>
 <img src="./assets/gcp_pubsub/setup4.png" alt="Creating a rule for GCP PubSub Bridge"></img>
 </center>
 
-## Example GCP PubSub Bridge Usage via Config File
+## Example GCP Pub/Sub Bridge Usage via Config File
 
 Add the following configuration to the end of the `emqx.conf` file,
 substituting the contents of `service_account_json` with the

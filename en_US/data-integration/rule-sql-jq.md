@@ -1,4 +1,4 @@
-# JQ Functions
+# JQ functions
 
 [JQ](https://stedolan.github.io/jq/) is a powerful command line tool and
 programming language designed primarily for transforming and querying data

@@ -1,4 +1,4 @@
-# MongoDB
+# Integrate with MongoDB
 
 This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 MongoDB database.
@@ -40,8 +40,7 @@ filter { username = "${username}", ipaddress = "${peerhost}" }
 
 ::: tip
 When there are a significant number of users in the system make sure that the collections used by the selector are optimized
-and that effective indexes are used. Otherwise authorization lookup will produce excessive load on the database
-and on the EMQX broker itself.
+and that effective indexes are used. Otherwise authorization lookup will produce excessive load on the database and on EMQX itself.
 :::
 
 ## Configuration
@@ -54,13 +53,13 @@ The authenticator supports connecting to MongoDB running in three different mode
   {
     type = mongodb
     enable = true
-
+  
     collection = "mqtt_user"
     filter { username = "${username}" }
-
+  
     mongo_type = single
     server = "127.0.0.1:27017"
-
+  
     database = "mqtt"
     username = "emqx"
     password = "secret"

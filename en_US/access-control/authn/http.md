@@ -1,4 +1,4 @@
-# Use HTTP service for password authentication
+# Use HTTP service
 
 EMQX supports using external HTTP service for password authentication. After enabling, when a client initiates a connect request, EMQX will use the received information to construct an HTTP request and determine whether to accept the request based on the query result, achieving a complex authentication logic.
 

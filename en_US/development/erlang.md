@@ -8,7 +8,7 @@ emqtt is completely implemented by Erlang. It supports MQTT v3.1.1 and MQTT v5.0
 
 ## emqtt usage example
 
-This example contains the complete code for Erlang's emqtt client library connecting to EMQX Broker, sending and receiving messages:
+This example contains the complete code for Erlang's emqtt client library connecting to EMQX, sending and receiving messages:
 
 ```erlang
 ClientId = <<"test">>.

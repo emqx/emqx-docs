@@ -1,4 +1,4 @@
-# Getting Started
+# Use MQTT over QUIC
 
 In EMQX 5.0, we introduce the MQTT over QUIC listener to help IoT users benefit from MQTT over QUIC. This section will give you a step-by-step guide on how to use MQTT over QUIC. 
 
