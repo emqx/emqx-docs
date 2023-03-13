@@ -4,16 +4,16 @@
 
 Since version 4.2.0, EMQX enterprise supports hot upgrades.
 
-By using the hot upgrade feature, users can quickly and safely upgrade the EMQX Broker in the production environment and avoid the decrease in system availability caused by restarting the service.
+By using the hot upgrade feature, users can quickly and safely upgrade EMQX in the production environment and avoid the decrease in system availability caused by restarting the service.
 
-Currently, EMQX Broker only supports hot upgrades of Patch version (Patch version is the third digit of the version number).
+Currently, EMQX only supports hot upgrades of Patch version (Patch version is the third digit of the version number).
 That is, it currently supports hot upgrades from 4.2.0 -> 4.2.1, 4.2.0 -> 4.2.2, ..., etc., but 4.2.x cannot be hot upgraded to 4.3.0 or 5.0.
 
 Currently, Windows and macOS do not support the hot upgrade feature.
 
 ## Hot Upgrade Steps
 
-1. View the currently installed version list of EMQX Broker.
+1. View the currently installed version list of EMQX.
 
 ```bash
 

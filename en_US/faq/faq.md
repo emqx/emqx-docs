@@ -22,7 +22,7 @@ Besides using the configuration file (to configure authentication), EMQX can als
 
 ## What's a mqueue? How to configure mqueues in EMQX?
 
-A mqueue is a message queue that store messages for a session. If the clean session flag is set to false in the MQTT connect packet, then EMQX would maintain the session for the client even when the client has been disconnected from EMQX. Then the session would receive messages from the subscribed topic and store these messages into the sessions mqueue. And when the client is online again, these messages would be delivered to the client instantly. Because of low priority of QOS 0 message in mqtt protocol, EMQX do not save QOS 0 message in the mqueue. However, this behavior can be overridden by setting `zone.$name.mqueue_store_qos0 = true` in `emqx.conf`. With the `zone.$name.mqueue_store_qos0 = true`, even a QOS 0 message would been saved in the mqueue. The maximum size of the mqueue can be configured with the setting `zone.external.max_mqueue_len`. Notice that the mqueue is stored in memory, so please do not set the mqueue length to 0 (0 means there is no limit for mqueue), otherwise the system would risk running out of memory.
+A mqueue is a message queue that store messages for a session. If the clean session flag is set to false in the MQTT connect packet, then EMQX would maintain the session for the client even when the client has been disconnected from EMQX. Then the session would receive messages from the subscribed topic and store these messages into the sessions mqueue. And when the client is online again, these messages would be delivered to the client instantly. Because of low priority of QOS 0 message in mqtt protocol, EMQX do not save QOS 0 message in the mqueue. However, this behavior can be overridden by setting `mqtt.mqueue_store_qos0 = true` in `emqx.conf`. With the `mqtt.mqueue_store_qos0 = true`, even a QOS 0 message would been saved in the mqueue. The maximum size of the mqueue can be configured with the setting `mqtt.max_mqueue_len`. Notice that the mqueue is stored in memory, so please do not set the mqueue length to 0 (0 means there is no limit for mqueue), otherwise the system would risk running out of memory.
 
 ## What's a WebSocket? When to use a Websocket to connect to EMQX?
 
@@ -379,7 +379,7 @@ bridge.kafka.produce = sync
 - Sync: MQTT Ack packet will be sent back to client after receiving Ack from Kafka.
 - Async: MQTT Ack packet will be sent back to client right after EMQX receiving the message, and EMQX will not wait the Ack returned from Kafka.
 
-If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
+If the backend Kafka server is not available, then the message will be accumulated in EMQX.
 
 - The message will be cached in memory before EMQX 2.4.3 version, if the memory is exhausted, then the EMQX server will be down.
 - The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full.

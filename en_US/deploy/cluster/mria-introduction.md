@@ -1,4 +1,4 @@
-# Deploy structure and cluster requirement
+# Deploy structure and requirement
 
 In EMQX 5.0, we redesign the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability and is also the key behind 100M MQTT connection support with a single cluster. 
 
@@ -15,7 +15,7 @@ This chapter will introduce how to deploy EMQX clusters under this new architect
 
 [Mria](https://github.com/emqx/mria) is an open source extension to Mnesia that adds eventual consistency to clusters. With RLOG mode enabled, Mria switched from **a full mesh** topology to a **mesh+star** topology. Each node assumes one of two roles: **core node** or **replicant node**.
 
-![EMQX Mria](./assets/EMQX Mria architecture.png)
+<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 25%;" />
 
 ### Core nodes and Replicant nodes
 

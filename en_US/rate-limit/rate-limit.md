@@ -1,6 +1,6 @@
 # Rate limit
 
-EMQX broker can specifies the limit on access speed and message speed, this is a backpressure scheme that avoids system overload from the entrance and guarantees system stability and predictable throughput.
+EMQX can specify the limit on access speed and message speed, this is a backpressure scheme that avoids system overload from the entrance and guarantees system stability and predictable throughput.
 
 In 5.0 we introduced a new rate limiter which based on the hierarchical token bucket algorithm, it can flexibly and accurately control the usage rate of the corresponding resources in the EMQX node.
 

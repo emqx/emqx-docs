@@ -57,7 +57,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `MySQL`，进入**配置参数**页签：
 
-![use-mysql-to-authenticate](./assets/authn-mysql.png)
+![Authentication with mysql](./assets/authn-mysql.png)
 
 您可按照如下说明完成相关配置：
 
@@ -70,10 +70,9 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 **TLS 配置**：配置是否启用 TLS。
 
-**连接配置**：在此部分设置并发连接、是否自动重连以及连接超时等待时间。
+**连接配置**：在此部分设置并发连接以及连接超时等待时间。
 
 - **Pool size**（可选）：填入一个整数用于指定从 EMQX 节点到 MySQL 数据库的并发连接数；默认值：**8**。
-- **自动重连**：指定连接中断时 EMQX 是否自动重新连接到 MySQL；可选值：**True**（自动重连），**False**（不自动重连）；默认值：**True**。
 - **查询超时**：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
 
 **认证配置**：在此部分进行认证加密算法相关的配置。
@@ -93,8 +92,23 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 - **SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
 
-<!-- 
-TODO 补充链接
 ### 通过配置文件配置
 
-您也可以通过配置文件完成以上配置，具体操作，请参考 xxxx -->
+您也可以通过配置文件完成以上配置，具体操作，请参考[配置手册](../../configuration/configuration-manual)。
+
+```bash
+{
+  backend = "mysql"
+  mechanism = "password_based"
+
+  server = "127.0.0.1:3306"
+  username = "root"
+  database = "mqtt_user"
+  password = ""
+  pool_size = 8
+
+  password_hash_algorithm {name = "sha256", salt_position = "suffix"}
+  query = "SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1"
+  query_timeout = "5s"
+}
+```

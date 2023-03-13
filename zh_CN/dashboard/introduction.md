@@ -1,4 +1,4 @@
-# EMQX Dashboard 介绍
+# EMQX Dashboard
 
 EMQX 提供了一个内置的管理控制台，即 EMQX Dashboard 。方便用户通过 Web 页面就能轻松管理和监控 EMQX 集群，并配置和使用所需的各项功能。
 
@@ -45,6 +45,14 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 对于首次安装和部署好 EMQX 的用户来说，浏览器打开 Dashboard 后可以使用默认用户名 `admin` 和默认密码 `public` 来进行登录使用。
 
 首次登录后，系统会自动检测到您正在使用默认用户名和密码登录，并会强制要求修改默认密码，这有利于访问 Dashboard 的安全性提升，注意修改的密码不能与原密码相同，且不建议再次使用 `public` 做为登录密码。
+
+## 忘记密码
+
+如果您忘记了 Dashboard 登录密码，可以通过 CLI 的 `admins` 命令进行重置，详情请参考 [命令行 - admins](../admin/cli.md#admins)：
+
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
+```
 
 ## 配置 Dashboard
 

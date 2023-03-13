@@ -19,76 +19,75 @@
   title_cn: 概览
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
 
-- title_en: Getting Started
+- title_en: Get started
   title_cn: 快速开始
+  path: getting-started/getting-started
   children:
-    - getting-started/getting-started
-    - getting-started/restrictions
     - getting-started/new-features
+    - getting-started/restrictions
 
 ## Infrastructure
 
 - title_en: Installation
   title_cn: 安装部署
+  path: deploy/install
   children:
-    - title_en: Install
-      title_cn: 安装
-      children:
-        - deploy/install
-        - deploy/install-docker
-        - deploy/install-k8s
-        - deploy/install-debian
-        - deploy/install-ubuntu
-        - deploy/install-centos
-        - deploy/install-amazon-linux
-        - deploy/install-macOS
-        - title_en: Windows
-          title_cn: Windows
-          path: deploy/install-windows
-          edition: ce
-        - title_en: Install from Source code
-          title_cn: 源码编译安装
-          path: deploy/install-source
-          edition: ce
-        # - deploy/install-marketplace
-    - title_en: Use license
+    - deploy/install-docker
+    - deploy/install-k8s
+    - deploy/install-debian
+    - deploy/install-ubuntu
+    - deploy/install-centos
+    - deploy/install-amazon-linux
+    - deploy/install-macOS
+    - title_en: Windows
+      title_cn: Windows
+      path: deploy/install-windows
+      edition: ce
+    - title_en: Install from Source code
+      title_cn: 源码编译安装
+      path: deploy/install-source
+      edition: ce
+    # - deploy/install-marketplace
+    - title_en: Working with license
       title_cn: 配置 License
       edition: ee
       path: deploy/license
+  # - title_en: Upgrade
+  #   title_cn: 升级
+  #   children:
+  #     - deploy/hot-upgrades
+  #     - deploy/rolling-upgrades
+    - deploy/upgrade-from-v4
+  # - title_en: Migrate to Enterprise
+  #   title_cn: 迁移到企业版
+  #   path: deploy/migrate-to-enterprise
     
-    - title_en: Clustering
-      title_cn: 构建集群
-      children:
-        - deploy/cluster/introduction
-        - deploy/cluster/mria-introduction
-        - deploy/cluster/create-cluster
-        - deploy/cluster/security
-        - deploy/cluster/lb
-    - title_en: Performance and Tuning
+- title_en: EMQX cluster
+  title_cn: 构建集群
+  path: deploy/cluster/introduction
+  children:
+    - deploy/cluster/mria-introduction
+    - deploy/cluster/create-cluster
+    - deploy/cluster/security
+    - deploy/cluster/lb
+    - title_en: Performance and tuning
       title_cn: 性能与调优
+      path: performance/overview
       children:
         - performance/tune
         - performance/benchmark
-    # - title_en: Upgrade
-    #   title_cn: 升级
-    #   children:
-    #     - deploy/hot-upgrades
-    #     - deploy/rolling-upgrades
-    - deploy/upgrade-from-v4
-    # - title_en: Migrate to Enterprise
-    #   title_cn: 迁移到企业版
-    #   path: deploy/migrate-to-enterprise
-   
 
-- title_en: Access Control
+- title_en: Access control
   title_cn: 访问控制
+  path: access-control/overview
   children:
     - title_en: Authentication
       title_cn: 认证
+      path: access-control/authn/authn
       children:
-        - access-control/authn/authn
-        - title_en: Password Based
+        - title_en: Password based
           title_cn: 密码认证
+          path: access-control/authn/pwoverview
           children:
             - access-control/authn/mnesia
             - access-control/authn/mysql
@@ -102,8 +101,8 @@
 
     - title_en: Authorization
       title_cn: 授权
+      path: access-control/authz/authz
       children:
-        - access-control/authz/authz
         - access-control/authz/file
         - access-control/authz/mnesia
         - access-control/authz/http
@@ -115,10 +114,14 @@
 
 - title_en: Publish/Subscribe
   title_cn: 发布订阅
+  path: messaging/mqtt-publish-and-subscribe
   children:
     # - messaging/introduction
-    - messaging/mqtt-publish-and-subscribe
     - messaging/explore-mqtt
+    - mqtt/mqtt-exclusive-subscription
+    - mqtt/mqtt-delayed-publish
+    - mqtt/mqtt-auto-subscription
+    - mqtt/mqtt-topic-rewrite
     # - messaging/nanomq
     # - messaging/neuron
 
@@ -126,41 +129,37 @@
 
 - title_en: MQTT over QUIC
   title_cn: MQTT over QUIC
+  path: mqtt-over-quic/introduction
   children:
-    - mqtt-over-quic/introduction
     - mqtt-over-quic/getting-started
     # - mqtt-over-quic/client
 
 ## Data integration
+# - data-integration/introduction
 
-- title_en: Data Integration
-  title_cn: 数据集成
+- title_en: Rule engine
+  title_cn: 规则引擎
+  path: data-integration/rules
   children:
-    - data-integration/introduction
-    - data-integration/rules
-    # - data-integration/rule-get-started # TODO merge to rules
-    # - data-integration/rule-actions # TODO merge to rules
-    - title_en: Rules SQL
-      title_cn: 规则 SQL
-      children:
-        - data-integration/rule-sql-syntax
-        - data-integration/rule-sql-events-and-fields
-        - data-integration/rule-sql-builtin-functions
-        - data-integration/rule-sql-jq
-        # - data-integration/rule-sql-user-defined-function
-    - title_en: Data Bridges
-      title_cn: 数据桥接
-      children:
-        - data-integration/data-bridges
-        - data-integration/data-bridge-webhook
-        - data-integration/data-bridge-mqtt
-        - data-integration/data-bridge-kafka
-        - data-integration/data-bridge-influxdb
-        - data-integration/data-bridge-mysql
-        - data-integration/data-bridge-redis
-        - data-integration/data-bridge-gcp-pubsub
-        - data-integration/data-bridge-mongodb
-        # - data-integration/data-bridge-pgsql
+    - data-integration/rule-sql-syntax
+    - data-integration/rule-sql-events-and-fields
+    - data-integration/rule-sql-builtin-functions
+    - data-integration/rule-sql-jq
+    # - data-integration/rule-sql-user-defined-function
+
+- title_en: Data bridges
+  title_cn: 数据桥接
+  path: data-integration/data-bridges
+  children:
+    - data-integration/data-bridge-webhook
+    - data-integration/data-bridge-mqtt
+    - data-integration/data-bridge-kafka
+    - data-integration/data-bridge-influxdb
+    - data-integration/data-bridge-mysql
+    - data-integration/data-bridge-redis
+    - data-integration/data-bridge-gcp-pubsub
+    - data-integration/data-bridge-mongodb
+    # - data-integration/data-bridge-pgsql
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -175,6 +174,7 @@
 
 - title_en: Network and TLS
   title_cn: 网络与 TLS
+  path: network/overview
   children:
     - network/emqx-mqtt-tls
     - network/mqtt-client-tls
@@ -191,8 +191,8 @@
 
 - title_en: REST API
   title_cn: REST API
+  path: admin/api
   children:
-    - admin/api
     - title_en: API Docs
       title_cn: API 文档
       lang: en
@@ -218,24 +218,27 @@
 
 - title_en: Dashboard
   title_cn: Dashboard
+  path: dashboard/introduction
   children:
-    - dashboard/introduction
     - dashboard/dashboard
     - dashboard/connections/connections
-    - title_en: Subscriptions
-      title_cn: 主题订阅
+    - title_en: Topics and subscription
+      title_cn: 主题与订阅
+      path: dashboard/subscriptions/overview
       children:
-        - dashboard/subscriptions/subscriptions
         - dashboard/subscriptions/topics
+        - dashboard/subscriptions/subscriptions
     - dashboard/retained
     - title_en: Access Control
       title_cn: 访问控制
+      path: dashboard/acloverview
       children:
         - dashboard/authn
         - dashboard/authz
         - dashboard/blacklist
     - title_en: Data Integration
       title_cn: 数据集成
+      path: dashboard/bridgeoverview
       children:
         - dashboard/bridge
         - dashboard/rules
@@ -249,14 +252,15 @@
 
 - title_en: Configuration
   title_cn: 配置文件参数
+  path: configuration/configuration
   children:
-    - configuration/configuration
     - configuration/configuration-manual
 
-- title_en: Backup and recovery
-  title_cn: 备份与恢复
-  children:
-    - operations/backup-restore
+# - title_en: Back
+#   title_cn: 运维操作
+#   children:
+# 备份与恢复
+- operations/backup-restore
     # - title_en: Hot Upgrades
     #   title_cn: 版本热升级
     #   path: deploy/hot-upgrades
@@ -267,20 +271,18 @@
     # - operations/diagnostic-mode
     # - operations/production-notes
 
-- title_en: Rate Limit
+- title_en: Rate limit
   title_cn: 速率限制
   path: rate-limit/rate-limit
 
-- title_en: Log and Observability
+- title_en: Log and observability
   title_cn: 日志及可观测性
+  path: observability/overview
   children:
     - observability/log
-    - title_en: Metrics
-      title_cn: 指标
-      children:
-        - observability/metrics-and-stats
-        - observability/prometheus
-        - observability/statsd
+    - observability/metrics-and-stats
+    - observability/prometheus
+    - observability/statsd
     - observability/tracer
     - observability/alarms
     - observability/topic-metrics
@@ -288,10 +290,10 @@
 
 ## Device connectivity
 
-- title_en: Extended Protocol Gateway
+- title_en: Extended protocol gateway
   title_cn: 扩展协议网关
+  path: gateway/gateway
   children:
-    - gateway/gateway
     - gateway/mqttsn
    #- gateway/lwm2m
     - gateway/coap
@@ -315,19 +317,19 @@
 
 ## Developers & Testers
 
-- title_en: Plugins and Extensions
+- title_en: Plugin and extension
   title_cn: 插件与扩展
+  path: extensions/introduction
   children:
-    - extensions/introduction
     - extensions/hooks
     - extensions/plugins
     # - extensions/lang-lua
     - extensions/exhook
 
-- title_en: MQTT Specific
+- title_en: MQTT specific
   title_cn: MQTT 协议
+  path: mqtt/mqtt-specific
   children:
-    - mqtt/mqtt-specific
     # - mqtt/mqtt-compliance
     - mqtt/mqtt-publish-and-subscribe
     - mqtt/mqtt-session-and-message-expiry
@@ -336,10 +338,6 @@
     - mqtt/mqtt-retained-messages
     - mqtt/mqtt-last-will-and-testament
     - mqtt/mqtt-shared-subscription
-    - mqtt/mqtt-exclusive-subscription
-    - mqtt/mqtt-delayed-publish
-    - mqtt/mqtt-auto-subscription
-    - mqtt/mqtt-topic-rewrite
     - mqtt/mqtt-system-topics
 
 - title_en: Telemetry
@@ -351,8 +349,9 @@
   title_cn: 常见问题解答
   path: faq/faq
 
-- title_en: Design & Implementation
+- title_en: Design and implementation
   title_cn: 设计与实现
+  path: advanced/overview
   children:
     # - design/design
     - advanced/inflight-window-and-message-queue
@@ -373,6 +372,6 @@
 #   title_cn: 版本发布记录
 #   path: changes/changes-5.0
 
-- title_en: Technical Support
+- title_en: Technical support
   title_cn: 技术支持
   path: support/technical-support

@@ -23,15 +23,22 @@ JQ 同时也是一个图灵完备的编程语言，JQ 官方文档](https://sted
 简单处理示例：
 
 ```SQL
-jq('.', '{"temprature": 10}') = [json_decode('{"temprature": 10}')]
+jq('.', '{"temprature": 10}') =
+[json_decode('{"temprature": 10}')]
 
-jq('.', json_decode('{"temprature": 10}')) = [json_decode('{"temprature": 10}')]
+jq('.', json_decode('{"temprature": 10}')) =
+[json_decode('{"temprature": 10}')]
 
-jq('.temprature', '{"temprature": 10}') = [10]
+jq('.temprature', '{"temprature": 10}') =
+[10]
 
-jq('{temprature_C:.temprature,temprature_F: (.temprature * 1.8 + 32)}', '{"temprature": 10}') = [json_decode('{"temprature_C": 10, "temprature_F": 50}')]
+jq('{temprature_C:.temprature,
+     temprature_F: (.temprature * 1.8 + 32)}',
+   '{"temprature": 10}') =
+[json_decode('{"temprature_C": 10, "temprature_F": 50}')]
 
-jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') = [10, 50]
+jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') =
+[10, 50]
 ```
 
 ### 示例 2
@@ -41,14 +48,14 @@ jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') = [10, 50]
 下面提供了一个更复杂的 JQ 程序的示例，展示了如何将 `jq` 函数与 `FOREACH` 语句结合起来，将 JQ 的输出分成多个消息：
 
 ```SQL
-FOREACH   jq('def rem_first: ' +
-             '    if length > 2 then del(.[0]) else . end;' +
-             'def rem_last:' +
-             '    if length > 1 then del(.[-1]) else . end;' +
-             '.date as $date |' +
-             '.sensors[] |' +
-             '  (.data | sort | rem_first | rem_last | add / length) as $average |' +
-             '  {$average, $date}',
+FOREACH   jq('def rem_first:
+                 if length > 2 then del(.[0]) else . end;
+              def rem_last:
+                 if length > 1 then del(.[-1]) else . end;
+              .date as $date |
+              .sensors[] |
+                (.data | sort | rem_first | rem_last | add / length) as $average |
+                {$average, $date}',
              payload)
 FROM    "jq_demo/complex_rule/jq/#"
 ```

@@ -1,4 +1,4 @@
-# Use MongoDB for password authentication
+# Integrate with MongoDB
 
 EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB authenticator currently supports connecting to MongoDB running in three different modes, which are Single, [Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/) and [Sharding](https://www.mongodb.com/docs/manual/sharding/). Below we will give detailed instruction on the data schema we supported and how to configure with EMQX Dashboard and configuration file. 
 
@@ -72,7 +72,7 @@ Follow the instruction below on how to configure:
   - **master**: Indicate each query in a sequence must only read fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. 
   - **slave_ok**: Indicate every query is allowed to read stale data from a slave/secondary (or fresh data from a master).
 
-- **Write Mode **(optional):  only needed if you set **MongoDB Mode** to **Replica Set**; Default: **unsafe**; Options: **unsafe**, **safe**.
+- **Write Mode **(optional):  only needed if you set **MongoDB Mode** to **Replica Set**; Options: **unsafe**, **safe**; Default: **safe**.
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 

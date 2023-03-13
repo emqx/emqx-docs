@@ -2,20 +2,25 @@
 
 ## 目录
 
-- [简介](#简介)
-- [左侧目录配置](#左侧目录配置)
-  - [配置文件](#配置文件)
-  - [配置示例](#配置示例)
-  - [注意事项](#注意事项)
-- [Markdown 书写规范](#markdown-书写规范)
-  - [必须有一级标题](#必须有一级标题)
-  - [标题遵守层级关系](#标题遵守层级关系)
-  - [代码块](#代码块)
-  - [特殊转义](#特殊转义)
-  - [资源引用](#资源引用)
-  - [特殊语法](#特殊语法)
-  - [差异化编译](#差异化编译)
-
+- [EMQ 文档编写指南](#emq-文档编写指南)
+  - [目录](#目录)
+  - [简介](#简介)
+  - [左侧目录配置](#左侧目录配置)
+    - [配置文件](#配置文件)
+    - [配置示例](#配置示例)
+    - [注意事项](#注意事项)
+  - [Markdown 书写规范](#markdown-书写规范)
+    - [必须有一级标题](#必须有一级标题)
+    - [标题遵守层级关系](#标题遵守层级关系)
+    - [代码块](#代码块)
+    - [特殊转义](#特殊转义)
+    - [资源引用](#资源引用)
+    - [特殊语法](#特殊语法)
+    - [差异化编译](#差异化编译)
+    - [OpenAPI](#openapi)
+      - [EMQX 的 API 文档](#emqx-的-api-文档)
+    - [配置文档更新](#配置文档更新)
+      - [Commands to copy generated markdown](#commands-to-copy-generated-markdown)
 
 ## 简介
 
@@ -36,7 +41,6 @@ EMQ 文档使用 Markdown 格式编写，并使用 [Vuepress](https://vuepress.v
   该部分将会自动显示 Markdown 文件内所有的二级标题。因此，合理的 Markdown 二级标题将能使用户更快速的了解文档内容大纲，并在页内进行跳转。
 
 ![intro](./assets/intro.jpg)
-
 
 ## 左侧目录配置
 
@@ -95,11 +99,10 @@ EMQ 文档使用 Markdown 格式编写，并使用 [Vuepress](https://vuepress.v
 
 ### 注意事项
 
-* `path` 配置项内容不能重复;
-* `path` 只需指定到 Markdown 文件即可，不能使用带锚点的路径；
-* 嵌套下一级目录使用 `children` ，支持多级嵌套；
-* 使用 `children` 时不能同时指定其 `path`（也就是如果一个目录有子目录时，不能为其本身设置 `path`）；
-
+- `path` 配置项内容不能重复;
+- `path` 只需指定到 Markdown 文件即可，不能使用带锚点的路径；
+- 嵌套下一级目录使用 `children` ，支持多级嵌套；
+- 使用 `children` 时也能同时指定其 `path`（也就是如果一个目录有子目录时，仍然能将其设置为页面）；
 
 ## Markdown 书写规范
 
@@ -132,7 +135,7 @@ EMQ 文档支持标准的 Markdown 规范语法，但是在编写文档过程中
 
 - 需要原文输出 `<xxx>` 标签，并且该标签不在代码块或行内代码时，请在标签前添加反斜杠 `\`；
 
-  使用 `### log set-level \<Level> `，而不是 `### log set-level <Level>`；
+  使用 `### log set-level \<Level>`，而不是 `### log set-level <Level>`；
 
 - 需要原文输出  `{{ xxx }}` 双大括号时，需要使用 v-pre 进行包裹（代码块内时不需要包裹）。
 
@@ -243,34 +246,33 @@ EMQX 的 API 文档嵌入到了 `admin/api.md` 中。
 
 如果需要更新 API 文档，步骤如下：
 
-* 启动最新的 EMQX v5 的节点
-* 执行当前仓库里的脚本 `./rewrite-swagger.sh ce | ee`
-* 将修改后的文件提交到 git 版本中
-* 发送一个 GitHub PR
+- 启动最新的 EMQX v5 的节点
+- 执行当前仓库里的脚本 `./rewrite-swagger.sh ce | ee`
+- 将修改后的文件提交到 git 版本中
+- 发送一个 GitHub PR
 
 ### 配置文档更新
 
 配置文档是自动生成的。下面列出了更新的步骤。
 
-
 1. 重新编译 EMQX （开源版和企业版）
 1. 复制生成的 `md` 文件到该项目 （具体命令见后续）
 1. 修改文档首行标题：
-    * Configuration Files (en_US/admin/cfg-*.md)
-    * 配置文件 (zh_CN/admin/cfg-*.md)
+    - Configuration Files (en_US/admin/cfg-*.md)
+    - 配置文件 (zh_CN/admin/cfg-*.md)
 
 #### Commands to copy generated markdown
 
 开源版
 
-```
+```shell
 cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ce.md
 cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ce.md
 ```
 
 企业版
 
-```
+```shell
 cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ee.md
 cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ee.md
 ```

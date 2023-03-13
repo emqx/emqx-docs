@@ -359,7 +359,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 ## 规则引擎
 
-规则引擎已更名为[数据集成](../data-integration/introduction.md)，包含规则与数据桥接功能。
+规则引擎已更名为数据集成，包含规则与数据桥接功能。
 
 规则 SQL 完全兼容 4.x 的语法，但规则下的动作拆分为内置动作(republish、console)与数据桥接(WebHook、MQTT Sink、MQTT Source)，以便实现"动作"的复用。
 

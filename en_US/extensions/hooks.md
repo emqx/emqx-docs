@@ -103,7 +103,7 @@ In the following two sections of [HookPoint](#hookpoint) and [callback function]
 
 ## HookPoint list
 
-EMQX Broker is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
+EMQX is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
 
 | Name                 | Description                 | Execution Timing                                                                            |
 |----------------------|-----------------------------|---------------------------------------------------------------------------------------------|
@@ -135,7 +135,7 @@ EMQX Broker is based on a client's key activities during its life cycle, and pre
 
 ### Hook and unhook
 
-EMQX Broker provides an API for the operation of hooking and unhooking.
+EMQX provides an API for the operation of hooking and unhooking.
 
 **Hook:**
 

@@ -1,9 +1,8 @@
-# CLI
+# Command Line Interface
 
 ## Main script
 
-The main boot script of EMQX is a bash script which can also be used to
-execute some of the administrative commands.
+The main boot script of EMQX is a bash script which can also be used to execute some of the administrative commands.
 
 ```bash
 $ emqx help

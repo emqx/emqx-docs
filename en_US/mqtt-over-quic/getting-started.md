@@ -1,4 +1,4 @@
-# Getting Started
+# Use MQTT over QUIC
 
 In EMQX 5.0, we introduce the MQTT over QUIC listener to help IoT users benefit from MQTT over QUIC. This section will give you a step-by-step guide on how to use MQTT over QUIC. 
 
@@ -29,7 +29,7 @@ docker run -d --name emqx \
   -e EMQX_LISTENERS__QUIC__DEFAULT__keyfile="etc/certs/key.pem" \
   -e EMQX_LISTENERS__QUIC__DEFAULT__certfile="etc/certs/cert.pem" \
   -e EMQX_LISTENERS__QUIC__DEFAULT__ENABLED=true \
-emqx/emqx:5.0.14
+emqx/emqx:5.0.19
 ```
 
 For more information on running EMQX via Docker container, see [Deploy with Docker](../deploy/install-docker.md).

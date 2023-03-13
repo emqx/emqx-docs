@@ -1,4 +1,4 @@
-# JQ Functions
+# JQ functions
 
 [JQ](https://stedolan.github.io/jq/) is a powerful command line tool and
 programming language designed primarily for transforming and querying data
@@ -33,11 +33,22 @@ and their results:
 Simple `jq` function calls example:
 
 ```SQL
-jq('.', '{"temprature": 10}') = [json_decode('{"temprature": 10}')]
-jq('.', json_decode('{"temprature": 10}')) = [json_decode('{"temprature": 10}')]
-jq('.temprature', '{"temprature": 10}') = [10]
-jq('{temprature_C:.temprature,temprature_F: (.temprature * 1.8 + 32)}', '{"temprature": 10}') = [json_decode('{"temprature_C": 10, "temprature_F": 50}')]
-jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') = [10, 50]
+jq('.', '{"temprature": 10}') =
+[json_decode('{"temprature": 10}')]
+
+jq('.', json_decode('{"temprature": 10}')) =
+[json_decode('{"temprature": 10}')]
+
+jq('.temprature', '{"temprature": 10}') =
+[10]
+
+jq('{temprature_C:.temprature,
+     temprature_F: (.temprature * 1.8 + 32)}',
+   '{"temprature": 10}') =
+[json_decode('{"temprature_C": 10, "temprature_F": 50}')]
+
+jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') =
+[10, 50]
 ```
 
 ### Example 2
@@ -48,14 +59,14 @@ how one can combine the `jq` function with the `FOREACH` statement to divide
 JQ's output objects into multiple messages.
 
 ```sql
-FOREACH   jq('def rem_first: ' +
-             '    if length > 2 then del(.[0]) else . end;' +
-             'def rem_last:' +
-             '    if length > 1 then del(.[-1]) else . end;' +
-             '.date as $date |' +
-             '.sensors[] |' +
-             '  (.data | sort | rem_first | rem_last | add / length) as $average |' +
-             '  {$average, $date}',
+FOREACH   jq('def rem_first:
+                 if length > 2 then del(.[0]) else . end;
+              def rem_last:
+                 if length > 1 then del(.[-1]) else . end;
+              .date as $date |
+              .sensors[] |
+                (.data | sort | rem_first | rem_last | add / length) as $average |
+                {$average, $date}',
              payload)
 FROM    "jq_demo/complex_rule/jq/#"
 ```
