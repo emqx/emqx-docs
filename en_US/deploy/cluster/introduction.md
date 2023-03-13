@@ -4,7 +4,7 @@ EMQX cluster adopts a distributed architecture, which can handle a large number 
 
 EMQX 5.0 adopts the new [Mria cluster architecture](./mria-introduction.md) compared to the previous version's cluster design. With this Mria architecture, one EMQX node can support up to 5 million MQTT connections, and the EMQX cluster can support up to 100 million concurrent MQTT connections.
 
-This chapter introduces the distributed EMQX cluster and its working mode to help you get started. 
+This chapter will introduce the distributed EMQX cluster and its working mode to help you get started. 
 
 ## Working principles
 
@@ -148,7 +148,7 @@ For example, when `client1` publishes a message to topic `t/a`, the routing and 
    
    2. Some clients on `node3 `subscribed topic `t/a`;
    
-      So `node1` forwards the message to `node2` and `node3`.
+      So `node1` will forward the message to `node2` and `node3`.
    
 4. `node2` receives the forwarded `t/a` message, queries the local subscription table, and then distributes the message to clients subscribed to the topic.
 
@@ -171,14 +171,13 @@ Erlang/OTP applications, enabling features like auto discovery of EMQX nodes, au
 
 EMQX supports several node discovery strategies:
 
-| Strategy  | Description                                                  |
-| --------- | ------------------------------------------------------------ |
-| manual    | Manually create a cluster with commands                      |
-| static    | Autocluster through static node list                         |
-| multicast | Autocluster through UDP multicast <br>Note: The multicast discovery strategy has been deprecated and will be removed in future releases. |
-| DNS       | Autocluster through DNS A record                             |
-| etcd      | Autocluster through etcd                                     |
-| k8s       | Autocluster provided by Kubernetes                           |
+| Strategy | Description                             |
+| -------- | --------------------------------------- |
+| Manual   | Manually create a cluster with commands |
+| Static   | Autocluster through static node list    |
+| DNA      | Autocluster through DNS A record        |
+| etcd     | Autocluster through etcd                |
+| k8s      | Autocluster provided by Kubernetes      |
 
 ### EMQX cluster protocol settings
 
@@ -217,7 +216,7 @@ cluster.autoclean = 5m
 
 With this feature enabled, the disconnected node will be automatically removed from the cluster after the configured time interval.
 
-## Session across nodes
+## Session across Nodes
 
 The persistent MQTT sessions (clean session = false) are across nodes in the cluster.
 
@@ -229,5 +228,3 @@ You can continue to read the following chapters on how to cluster EMQX nodes.
 
 * EMQX cluster [security setting](./security.md)
 * [Create Cluster](./create-cluster.md)
-* [Cluster Security](./security.md)
-

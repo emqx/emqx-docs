@@ -59,7 +59,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 | --ws              | -    | true<br />false | false      | 是否以 Websocket 的方式建立连接                                                                          |
 | --ifaddr          | -    | -               | 无         | 指定客户端连接使用的本地网卡                                                                             |
 
-例如，启动 10 个连接，分别每秒向主题 `t` 发送 100 条 Qos0 消息，其中每个消息体的大小为 `16` 字节大小：
+例如，我们启动 10 个连接，分别每秒向主题 `t` 发送 100 条 Qos0 消息，其中每个消息体的大小为 `16` 字节大小：
 
 ```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
@@ -69,7 +69,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 执行 `./emqtt_bench sub --help`可得到该子命令的所有的可用参数。它们的解释已包含在上表中，此处略过。
 
-例如，启动 500 个连接，每个都以 Qos0 订阅 `t` 主题：
+例如，我们启动 500 个连接，每个都以 Qos0 订阅 `t` 主题：
 
 ```bash
 ./emqtt_bench sub -t t -h emqx-server -c 500
@@ -79,7 +79,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 执行 `./emqtt_bench conn --help` 可得到该子命令所有可用的参数。它们的解释已包含在上表中，此处略过。
 
-例如，启动 1000 个连接：
+例如，我们启动 1000 个连接：
 
 ```bash
 ./emqtt_bench conn -h emqx-server -c 1000
@@ -107,7 +107,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 场景说明
 
-此处以 2 类最典型的场景来验证工具的使用：
+此处我们以 2 类最典型的场景来验证工具的使用：
 
 1. 连接量：使用 `emqtt_bench` 创建百万连接到 EMQX Broker。
 2. 吞吐量：使用 `emqtt_bench` 在 EMQX 中创建出 `10W/s 的 Qos0` 消息吞吐量。
@@ -123,7 +123,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 - **服务端：**`emqx-centos7-v4.0.2.zip`
 
 - **压力机：**`emqtt-bench v0.3.1`
-  - 每台压力机分别配置 10 张网卡，用于连接测试中建立大量的 MQTT 客户端连接。
+  - 每台压力机分别配置 10 张网卡，用于连接测试中建立大量的 MQTT 客户端连接
 
 拓扑结构如下：
 

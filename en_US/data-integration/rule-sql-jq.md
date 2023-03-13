@@ -4,7 +4,9 @@
 programming language designed primarily for transforming and querying data
 encoded as [JSON](https://www.json.org/json-en.html).
 
-Typical JQ programs describe simple transformations or filters for JSON data, but one can also use JQ to perform complex computations when needed.
+Typical JQ programs describe simple
+transformations or filters for JSON data, but one can also use JQ to perform
+complex computations when needed.
 
 ## How to use
 

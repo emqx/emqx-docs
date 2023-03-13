@@ -1,12 +1,12 @@
 # Amazon Linux 2
 
-This section guides you on installing and starting EMQX on Amazon Linux 2.
+This section will guide you on installing and starting EMQX on Amazon Linux 2.
 
 {% emqxce %}
 
 ## Install with rpm
 
-EMQX offers different installation packages for different CPU architectures. 
+EMQX has offered different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
@@ -132,7 +132,7 @@ After the installation, run the command below to start EMQX.
 
 ## Install with rpm
 
-EMQX offers different installation packages for different CPU architectures. 
+EMQX has offered different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 

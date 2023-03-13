@@ -1,8 +1,8 @@
 # Explore MQTT
 
-To meet the needs of various IoT application scenarios, EMQX provides full support to a complete set of MQTT messaging features, for example, Will messages, Reserved messages, and Shared Subscriptions. All these features can greatly reduce development and managing difficulties.
+To meet the needs of various IoT application scenarios， EMQX provides full support to a complete set of MQTT messaging features, for example, Will messages, Reserved messages, and Shared Subscriptions. All these features can greatly reduce development and managing difficulties.
 
-This section introduces how to use these features and how to verify them with [MQTT X CLI](https://mqttx.app/cli), to help you get familiar with the MQTT messaging services.
+This chapter will introduce how to use these features and how to verify them with [MQTT X CLI](https://mqttx.app/cli), to help you get familiar with the MQTT messaging services.
 
 :::tip Prerequisites:
 

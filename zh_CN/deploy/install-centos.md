@@ -49,41 +49,11 @@
 
 ::::
 
-### 启动 EMQX
+安装完成后，可通过如下命令启动 EMQX。
 
-您可通过如下三种方式启动 EMQX。
-
-- 直接启动：
-
-  ```bash
-  $ emqx start
-  EMQX 5.0.0 is started successfully!
-  
-  $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.0 is started
-  ```
-
-- systemctl 启动：
-
-  ```bash
+  ```shell
   sudo systemctl start emqx
   ```
-
-- service 启动：
-
-  ```bash
-  sudo service emqx start
-  ```
-
-### 卸载 EMQX
-
-服务完成后，可通过如下命令卸载 EMQX：
-
-```
-sudo apt remove --purge emqx
-```
-
-
 
 ## 通过 tar.gz 安装
 
@@ -122,11 +92,9 @@ sudo apt remove --purge emqx
 
 ::::
 
-### 启动 EMQX
-
 安装完成后，可通过如下命令启动 EMQX。
 
-```
+```bash
 ./emqx/bin/emqx start
 ```
 
@@ -173,7 +141,7 @@ sudo apt remove --purge emqx
 
 ### 启动 EMQX 
 
-您可通过如下三种方式启动 EMQX。 <!--TODO @WIVWIV这里的版本我修改了，需要确认下，另外，这些启动方式是只适用于企业版还是开源版？区别是？-->
+您可通过如下三种方式启动 EMQX <!--TODO @WIVWIV这里的版本我修改了，需要确认下，另外，这些启动方式是只适用于企业版还是开源版？区别是？-->
 
 - 直接启动：
 
@@ -241,8 +209,6 @@ sudo apt remove --purge emqx
 :::
 
 ::::
-
-### 启动 EMQX
 
 安装完成后，可通过如下命令启动 EMQX。
 

@@ -1,6 +1,6 @@
 # Migrate from V4
 
-This section provides guidelines for migrating from EMQX 4.x to 5.0.
+This document provides guidelines for migrating from EMQX 4.x to 5.0.
 EMQX 5.0 is not backward compatible with 4.x in management APIs and clustering APIs. However, most of the functionality is not significantly changed.
 
 To learn about the new features we added to EMQX 5.0, check [New Features](../getting-started/new-features.md).
@@ -19,7 +19,7 @@ Find more details in [Log & Trace](../observability/log.md).
 
 ## Default listeners
 
-By default, the following listeners are no longer provided:
+By default, the following listeners will no longer be provided:
 
 | Listeners            | Description                        |
 | -------------------- | ---------------------------------- |
@@ -63,7 +63,7 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 
 Previously, "Applications" dashboard section was used to manage API access credentials. Now "API Key" section should be used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic auth. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
 
-Port 8081 has been merged into port 18083, and the basic path of API access has been switched from `/api/v4` to `/api/v5`. Call the API through port 18083 and path `/api/v5`.
+Port 8081 has been merged into port 18083, and the basic path of API access has been switched from `/api/v4` to `/api/v5`, please call the API through this port and path.
 
 String timestamps are now in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format.
 
@@ -101,9 +101,9 @@ The API has undergone significant changes, and some APIs have been made compatib
 :::tip
 Compatibility Notes:
 
-- Compatible: Use the old API path and parameters, or keep the old API.
-- Partially compatible: The API path remains unchanged, but some API fields have changed.
-- Incompatible: API paths and fields have changed.
+- Compatible: Use the old API path and parameters, or keep the old API
+- Partially compatible: The API path remains unchanged, but some API fields have changed
+- Incompatible: API paths and fields have changed
 :::
 
 | 4.x                              | 5.0                                         | Compatibility        | Notes                        |
@@ -132,15 +132,15 @@ Compatibility Notes:
 
 ## Auth/ACL
 
-The Auth and ACL plugins (emqx_auth_*) have been removed, and the corresponding functions are built into EMQX. Users can configure them through Dashboard or configuration files.
+The Auth and ACL plugins (emqx_auth_*) have been removed, and the corresponding functions are built into EMQX, and users can configure them through Dashboard or configuration files.
 
-Auth is renamed to **Authentication**, and ACL is renamed **Authorization**. Now they are independent of each other.
+Auth was renamed to **Authentication**, and ACL was renamed **Authorization**. Now they are independent of each other.
 
 Version 5.0 supports the authentication methods and most data sources in 4.x, but there are certain adjustments in the usage.
 
 ### Fixed Order of Execution
 
-When multiple authenticators or authorization checkers are enabled simultaneously, the checks are no longer performed according to the startup order but a fixed configuration order. The execution order can be adjusted in the configuration file and Dashboard.
+When multiple authenticators or authorization checkers are enabled simultaneously, the checks are no longer performed according to the startup order but a fixed configuration order, which can be adjusted in the configuration file and Dashboard.
 
 ### Variable Interpolation Syntax
 
@@ -179,14 +179,14 @@ Remove the `bypass_auth_plugins` configuration item. When a listener needs to di
 
 1. Mnesia is renamed to the built-in database;
 2. Only two search methods are available: username-based or clientid-based;
-3. The data format and REST API have changed. For more information, refer to `POST /authentication/{id}/users`.
+3. The data format and REST API have changed. For more information, please refer to `POST /authentication/{id}/users`.
 
 Users can use the data import API to import data from older versions into EMQX 5.0, see `POST /authentication/{id}/import_users` for details.
 
 #### HTTP
 
 1. Use the JSON fields inside the response body instead of the HTTP response status codes to identify the authentication result;
-2. Remove the super user query configuration. If you need the super-user function, set it through JSON in the response body of successful authentication.
+2. Remove the super user query configuration. If you need the super-user function, please set it through JSON in the response body of successful authentication.
 
 **Success response status code:**
 
@@ -221,7 +221,7 @@ SELECT password as password_hash, salt, is_superuser FROM mqtt_user where userna
 
 #### MongoDB
 
-Remove the super-user query. If you need to give clients super-user permissions, specify the `is_superuser_field` field.
+Remove the super-user query. If you need to give clients super-user permissions, please specify the `is_superuser_field` field.
 
 ```shell
 authentication = [
@@ -377,11 +377,11 @@ Rule SQL is fully compatible with 4.x syntax, but the actions under the rule are
 
 ## WebHook
 
-The WebHook plugin (emqx_web_hook) has been removed. Use the WebHook data bridge in Data Integration instead.
+The WebHook plugin (emqx_web_hook) has been removed. Please use the WebHook data bridge in Data Integration instead.
 
 ## MQTT Bridge
 
-The MQTT bridge plugin (emqx_bridge_mqtt) has been removed. Use the MQTT Sink and MQTT Source data bridge in Data Integration instead.
+The MQTT bridge plugin (emqx_bridge_mqtt) has been removed. Please use the MQTT Sink and MQTT Source data bridge in Data Integration instead.
 
 ## Prometheus
 
@@ -389,7 +389,7 @@ Prometheus scraping endpoint is enabled by default, and no authentication is req
 
 You can use `curl` command to inspect the metrics: `curl -f "127.0.0.1:18083/api/v5/prometheus/stats"`
 
-If you want to enable push-gateway, configure it in the dashboard or through `prometheus {...}` config block.
+If you wish to enable push-gateway, configure it in the dashboard or through `prometheus {...}` config block.
 
 Changes:
 

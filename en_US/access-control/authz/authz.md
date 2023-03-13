@@ -4,7 +4,7 @@ In EMQX, authorization refers to the permission control over the publish/subscri
 
 ## Authorization principle
 
-Here is how EMQX authentication works, when a client performs publish/subscribe operations, EMQX queries or follows the user-specified query statement to query the client's permission list from the configured data source, and then allows or rejects the current operation based on the query result.
+Here is how EMQX authentication works, when a client performs publish/subscribe operations, EMQX will query or follows the user-specified query statement to query the client's permission list from the configured data source, and then allow or reject the current operation based on the query result.
 
 ::: tip
 
@@ -126,6 +126,12 @@ With authorization chain configured, EMQX will first try to retrieve the matchin
    - if  this is already the last authorizer,  EMQX will follow the setting of `no_match` to determine whether to allow or reject the client operation.
 
 Unlike [Authentication chain](../authn/authn.md#authentication-chains), authorization has only one global chain.
+
+### Implicit authorization
+
+Each authentication backend can additionally provide rules as a result of the authentication. These rules, if present, are applied before any other authorizers.
+
+See, for example, [JWT authorization](../authn/jwt.md#jwt-authorization).
 
 ### Authorization cache
 

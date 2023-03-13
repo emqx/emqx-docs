@@ -39,7 +39,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 
 - **数据安全**：端到端数据加密（支持国密），细粒度访问控制，保障数据安全，满足企业合规需求。
 
-- **[多协议](https://www.emqx.com/zh/blog/iot-protocols-mqtt-coap-lwm2m)**：支持 MQTT、HTTP、QUIC、WebSocket、LwM2M/CoAP 或专有协议连接任何设备。
+- **多协议**：支持 MQTT、HTTP、QUIC、WebSocket、LwM2M/CoAP 或专有协议连接任何设备。
 
 - **高性能**：单节点支持每秒实时接收、处理与分发数百万条的 MQTT 消息。毫秒级消息交付时延。
 
@@ -62,7 +62,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 | **延迟**                 | 1~5 毫秒                                                    | 1~5 毫秒                                                    |
 | **SLA**                  | 99.99%                                                      | 至多 99.999%                                                |
 | **数据集成（开箱即用）** | 3                                                           | 40+                                                         |
-| **License**              | Apache Version 2.0                                          | Commercial license (Business source license)                |
+| **License**              | Apache Version 2.0                                          | Commercial License (Business Source License)                |
 | **技术支持**             | 开源社区                                                    | 7x24 全球支持                                               |
 | **MQTT 5.0**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **MQTT over QUIC**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
@@ -95,12 +95,12 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 | **延迟**                 | 1~5 毫秒                                                    | 1~5 毫秒                                                    |
 | **SLA**                  | 至多 99.999%                                                | 99.99%                                                      |
 | **数据集成（开箱即用）** | 40+                                                         | 3                                                           |
-| **License**              | Commercial License (Business source license)                | Apache Version 2.0                                          |
+| **License**              | Commercial License (Business Source License)                | Apache Version 2.0                                          |
 | **技术支持**             | 7x24 全球支持                                               | 开源社区                                                    |
-| **MQTT 5.0**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT over QUIC**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT 扩展**            | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **多协议网关**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **MQTT 5.0**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **MQTT over QUIC**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **MQTT 扩展**            | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
+| **多协议网关**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" />  |
 | **多租户**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **跨地域复制**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **数据持久化**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |

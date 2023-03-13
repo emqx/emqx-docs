@@ -1,6 +1,6 @@
 # Use MongoDB for password authentication
 
-EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB authenticator currently supports connecting to MongoDB running in three different modes, which are Single, [Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/) and [Sharding](https://www.mongodb.com/docs/manual/sharding/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and configuration file. 
+EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB authenticator currently supports connecting to MongoDB running in three different modes, which are Single, [Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/) and [Sharding](https://www.mongodb.com/docs/manual/sharding/). Below we will give detailed instruction on the data schema we supported and how to configure with EMQX Dashboard and configuration file. 
 
 ::: tip
 
@@ -59,7 +59,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 
 Follow the instruction below on how to configure:
 
-**Connect**: In this section, you fill in the information needed to connect MongoDB.
+**Connect**: In this section, we will fill in the information needed to connect MongoDB.
 
 - **MongoDB Mode**: Select how MongoDB is deployed, including **Single**, **Replica Set** and **Sharding**. 
 - **Server**:  Specify the MongoDB server address that EMQX is to connect, if **MongoDB Mode** is set to **Replica Set** or **Sharding**, you will need to input all MondoDB servers (separated with a `,`) that EMQX is to connect.

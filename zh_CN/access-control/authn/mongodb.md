@@ -1,6 +1,6 @@
 # 使用 MongoDB 进行密码认证
 
-作为密码认证方式的一种，EMQX 支持通过集成 MongoDB 进行密码认证，目前 EMQX 支持**单节点**、**[Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/)**、**[Sharding](https://www.mongodb.com/docs/manual/sharding/)** 三种模式部署的 MongoDB 服务器。
+作为密码认证方式的一种，EMQX 支持通过集成 MongoDB 进行密码认证，目前 EMQX 支持**单节点**、**Replica Set**、**Sharding** <!--需要超链接--> 三种模式部署的 MongoDB 服务器。
 
 ::: tip 前置准备：
 
@@ -64,7 +64,7 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 - 用户名（可选）：填入用户名。
 - **密码**（可选）：填入认证密码。
 - **读模式**（可选）：读取模式，可选值：**master、slave_ok**；默认值：**master**；**master** 意味着序列中的每个查询都必须从主服务器读取新数据。 如果连接的服务器不是主服务器，则第一次读取将失败，其余操作将中止。**slave_ok** 表示允许每个查询从从服务器读取陈旧数据（来自主服务器的新数据也可以）；仅需在**部署模式**设置为 **Replica Set** 时设置。
-- **写模式**（可选）：写入模式，仅需在**部署模式**设置为 **Replica Set** 时设置；可选值：`unsafe`、 `safe`；默认值：`unsafe`。仅需在**部署模式**设置为 **Replica Set** 时设置。
+- **写模式**（可选）：写入模式， <!--需要补充-->可选值：`unsafe`、 `safe`；默认值：`unsafe`。仅需在**部署模式**设置为 **Replica Set** 时设置。
 
 **TLS 配置**：配置是否启用 TLS。
 

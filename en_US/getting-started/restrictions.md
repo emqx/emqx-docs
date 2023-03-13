@@ -2,23 +2,23 @@
 
 ## Background
 
-If there are no limitations on connection numbers or data transmission, users may experience reduced MQTT broker performance, such as a slow network connection or operation response, prolonged message latency, message accumulation, or even message discards, and other issues. On the other hand, the protocol limitation also specify the usage limits.  
+As well as following protocols, if there are no limitations on connection numbers or data transmission, users may experience reduced MQTT broker performance, such as a slow network connection or operation response, prolonged message latency, message accumulation, or even message discards, and other issues.
 
-EMQX has therefore specified the following quotas and usage limits for some of the major features.
+EMQX has therefore specified the following quotas and usage limits for some of our major features.
 
 ## Reference list
 
 The operating limitations can be classified into:
 
-- Broker resource limitation: Theoretically, there is no maximum limit. The actual limit varies with the server specification.
-- Hard coding or protocol limitation: EMQX has set these limitations to comply with the protocols or to ensure stable performance. In some projects, EMQX has modified the default setting (as specified in the protocol) to a more reasonable value. You can change the setting with our configuration file.
+- Broker resource limitation: Theoretically, there is no maximum limit, the actual limit varies with the server specification.
+- Hard coding or protocol limitation: EMQX has set these limitations to comply with the protocols or to ensure stable performance. Note: In some projects, EMQX has modified the default setting (as specified in the protocol) to a more reasonable value. You can change the setting with our configuration file.
 
 | **Description**                       | **Quota**                 |
 | ------------------------------------- | ------------------------- |
 | **Client Connection**                 |                           |
 | Maximum concurrent connection devices | Unlimited                 |
-| Maximum device connection rate        | Unlimited                 |
-| Maximum MQTT client ID length         | 65535                     |
+| maximum device connection rate        | Unlimited                 |
+| maximum MQTT client ID length         | 65535                     |
 | **Subscription**                      |                           |
 | Maximum subscriptions                 | Unlimited                 |
 | Maximum subscription rate             | Unlimited                 |

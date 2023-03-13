@@ -1,10 +1,10 @@
 # Benchmark
 
-[emqtt_bench](https://github.com/emqx/emqtt_bench) is a concise and powerful MQTT protocol performance testing tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization, the test service [XMeter](https://www.xmeter.net/) is recommended.
+[emqtt_bench](https://github.com/emqx/emqtt_bench) is a concise and powerful MQTT protocol performance testing tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization , the test service [XMeter](https://www.xmeter.net/) is recommended.
 
 ## Compile and install
 
-The operation of `emqtt_bench` depends on the operating environment of Erlang/OTP 21.2 and above version. The installation process is skipped. For details, refer to the online installation tutorials.
+The operation of `emqtt_bench` depends on the operating environment of Erlang/OTP 21.2 and above version. The installation process is skipped. For details, please refer to the online installation tutorials.
 
 After the Erlang environment is installed, download the latest code of `emqtt-bench` and compile it:
 
@@ -34,7 +34,7 @@ There are three subcommands of `emqtt_bench`:
 
 ### Publish
 
-When executing `./emqtt_bench pub --help`, you get the available parameter output.
+When executing `./emqtt_bench pub --help`, you will get the available parameter output.
 
 | Parameter         | abbreviation | Optional value  | Default value  | Description                                                                                                           |
 | ----------------- | ------------ | --------------- | -------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -59,7 +59,7 @@ When executing `./emqtt_bench pub --help`, you get the available parameter outpu
 | --ws              | -            | true<br />false | false          | Whether to establish a connection via WebSocket                                                                       |
 | --ifaddr          | -            | -               | None           | Specifies the local network card used by the client connection                                                        |
 
-For example, you start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is` 16` bytes:
+For example, we start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is` 16` bytes:
 
 ```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
@@ -107,7 +107,7 @@ Two-way certificate:
 
 ### Scenario description
 
-Verify the use of the tool in 2 most typical scenarios:
+We verify the use of the tool in 2 most typical scenarios:
 
 1. Connections: Use `emqtt_bench` to create millions of connections to EMQX Broker.
 2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQX Broker.
@@ -123,7 +123,7 @@ A total of three 8C16G servers need to be prepared, one for EMQX Broker and two 
 - **Server：** `emqx-centos7-v4.0.2.zip`
 
 - **Press：**`emqtt-bench v0.3.1`
-  - Each press is configured with 10 network cards, which are used to establish a large number of MQTT client connections in the connection test.
+  - Each press is configured with 10 network cards, which are used to establish a large number of MQTT client connections in the connection test
 
 The topology structure is as follows:
 

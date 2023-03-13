@@ -44,7 +44,7 @@ EMQX in a docker container uses static port `5369` for cluster RPC.
 ### Using TLS for Cluster RPC Connections
 
 ::: tip
-TLS comes at the cost of increased CPU load and RAM usage.
+TLS comes at the cost of increased CPU load and RAM usage
 :::
 
 To configure TLS for cluster RPC below configs should be set in `emqx.conf`.
@@ -98,7 +98,8 @@ Below are the steps to generate certificates and a self-signed CA.
 TLS comes at the cost of increased CPU load and RAM usage
 :::
 
-EMQX core nodes use Erlang distribution to synchronize database updates and manage nodes in the cluster, such as starting/stopping a component or collecting runtime metrics etc.
+Erlang distribution is used by EMQX core nodes to sync database updates
+and control/management RPCs such as start/stop a componentk, or collecting runtime metrics etc.
 
 * Make sure to verify `etc/ssl_dist.conf` file has the right paths to keys and certificates.
 * Ensure config `cluster.proto_dist` is set to `inet_tls`.

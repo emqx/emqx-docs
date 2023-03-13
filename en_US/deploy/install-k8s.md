@@ -6,7 +6,7 @@ EMQX Kubernetes Operator is a new way to create and manage cloud-native EMQX ins
 
 ::: tip Prerequisites
 
-Before the deployment, ensure the following software is installed. 
+Before the deployment,  please ensure the following software is installed. 
 
 | Software                                 | Version        |
 | ---------------------------------------- | -------------- |
@@ -99,7 +99,7 @@ helm uninstall emqx-operator -n emqx-operator-system
 
    {% endemqxee %}
 
-You can see a complete code example on the [GitHub page of EMQX operator](https://github.com/emqx/emqx-operator/blob/main/config/samples/emqx/v2alpha1/emqx-full.yaml). For detailed explanation      of each field, see [EMQX Operator - API Reference](https://docs.emqx.com/en/emqx-operator/latest/reference/v2alpha1-reference.html).
+  You can see a complete code example on the [GitHub page of EMQX operator](https://github.com/emqx/emqx-operator/blob/main/config/samples/emqx/v2alpha1/emqx-full.yaml). For detailed explanation of each field, see [EMQX Operator - API Reference](https://docs.emqx.com/en/emqx-operator/latest/reference/v2alpha1-reference.html).
 
   2. To check the status of EMQX Custom Resource, run:
   ```bash
@@ -121,7 +121,7 @@ The output is similar to:
 }
 ```
 
-This has completed the deployment of EMQX cluster with EMQX Kubernetes Operator. 
+This has completed the deployment of EMQX with EMQX Kubernetes Operator. 
 
 On how to configure, see
 

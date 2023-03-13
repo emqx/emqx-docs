@@ -3,17 +3,11 @@
 This authorizer implements ACL checks through matching pub/sub requests against a predefined list of rules configured in
 a file.
 
-::: tip Prerequisite
+::: tip Tip
 Starting from 5.0, file-based ACL rules can be edited and reloaded from EMQX dashboard UI.
 :::
 
 File-based ACL is simple and lightweight. It is suitable to configure generic rules. For hundreds or more per-client rules, it is recommended to use other authorization sources, and file-based ACL can be the safety guard put at the end of the authorization chain.
-
-## Configure with Dashboard
-
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. Click **Create** at the top right corner, select **File** as **Backend**, and click **Next**. The **Configuration** tab is shown as below. 
-
-![authz-file-dashboard_ee](/Users/emqx/Documents/GitHub/emqx-docs/en_US/access-control/authz/assets/authz-file-dashboard_ee.png)
 
 ## Configuration
 
@@ -43,11 +37,9 @@ will be stored in `data/authz/acl.conf`, and this original config will no longer
 
 ## ACL file format
 
-ACL configuration file is a list of Erlang [tuples](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) ending with a period. 
+ACL configuration file is a list of Erlang [tuples](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) ending with a period. A _tuple_ is a comma-separated list of expressions. The whole list is enclosed in curly braces.
 
-- A _tuple_ is a comma-separated list of expressions. The whole list is enclosed in curly braces.
-- There must be a period at the end of each rule.
-- The `%` prefix identifies comment strings.
+The `%` prefix identifies comment strings.
 
 Example:
 

@@ -15,7 +15,7 @@
 
 ![EMQX TCP 负载均衡部署](./assets/lb_2.png)
 
-推荐在 LB 终结 SSL/TLS 连接。设备与 LB 之间采用 SSL/TLS 安全连接，LB 与 EMQX 之间普通 TCP 连接，这种模式能够使 EMQX 集群性能最大化，部署架构如下所示：
+推荐在 LB 终结 SSL/TLS 连接：设备与 LB 之间采用 SSL/TLS 安全连接，LB 与 EMQX 之间普通 TCP 连接，这种模式能够使 EMQX 集群性能最大化：
 
 ![EMQX 负载均衡终结 TLS 部署](./assets/lb_3.png)
 

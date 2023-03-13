@@ -21,15 +21,15 @@ EMQX node names are immutable, as they are baked into the database schema and da
 
 ## Create clusters manually
 
-If you choose a manually create a cluster, you need to manually configure each node in the cluster, including setting up network connections among them.
+If you choose a manually create a cluster, you will need to manually configure each node in the cluster, including setting up network connections among them.
 
 Compared with automatic clustering, you can customize the network topology with manual clustering. It is especially suitable when the automatic clustering mechanism is unavailable or inappropriate.
 
 :::tip
-Manual clustering can only be on core nodes. For core-replica deployment architecture, only auto clustering is supported.
+Manual clustering only can be only on core nodes. For core-replica deployment architecture, only auto clustering is supported.
 :::
 
-Suppose there are two nodes, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`, and you can follow the steps below to create a cluster for these two nodes manually:
+Suppose there are two nodes, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`, and we can follow the steps below to create a cluster for these two nodes manually:
 
 1. Set the cluster discovery strategy to `manual`:
 
@@ -52,7 +52,7 @@ Suppose there are two nodes, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`, and you ca
    :::tip
 
    1. This command must be run on the node to join the cluster, that is, as a **request** rather than **invite**.
-   2. After `emqx@s2.emqx.io` joins `emqx@s1.emqx.io` to form a cluster, it clears the local data and synchronize the data in `emqx@s1.emqx.io`.
+   2. After `emqx@s2.emqx.io` joins `emqx@s1.emqx.io` to form a cluster, it will clear the local data and synchronize the data in `emqx@s1.emqx.io`.
    3. When a node that already joined a cluster joins another cluster, it should first leave the current cluster.
       :::
 
@@ -85,7 +85,7 @@ Suppose there are two nodes, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`, and you ca
 
 For users with only one server, you can use the pseudo-distributed cluster to test the EMQX cluster.
 
-After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, you need to adjust some listening ports:
+After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
 
 ```bash
 EMQX_NODE__NAME='emqx2@127.0.0.1' \
@@ -109,14 +109,13 @@ EMQX's autocluster feature is based on the [Ekka](https://github.com/emqx/ekka) 
 
 EMQX supports multiple autocluster strategies:
 
-| Strategy  | Description                                                  |
-| --------- | ------------------------------------------------------------ |
-| manual    | Create a cluster through manual command                      |
-| static    | Create a cluster using a static node list                    |
-| multicast | Create a cluster through UDP multicast <br/>Note: The multicast discovery strategy has been deprecated and will be removed in future releases. |
-| DNS       | Create a cluster using DNS A records                         |
-| etcd      | Create a cluster via etcd                                    |
-| k8s       | Create a cluster via Kubernetes service                      |
+| Strategy | Description                               |
+| -------- | ----------------------------------------- |
+| manual   | Create a cluster through manual command   |
+| static   | Create a cluster using a static node list |
+| dns      | Create a cluster using DNS A records      |
+| etcd     | Create a cluster via etcd                 |
+| k8s      | Create a cluster via Kubernetes service   |
 
 By default, EMQX adopts a manual clustering strategy, which can be set in `emqx.conf`:
 
@@ -126,6 +125,8 @@ cluster {
     discovery_strategy  =  manual
 }
 ```
+
+Note: The mcast discovery strategy has been deprecated and will be removed in future releases.
 
 ## Autocluster by static node list
 
@@ -213,7 +214,7 @@ cluster {
 }
 ```
 
-After completing the configuration, you can start the EMQX nodes one by one, and use the etcdctl tool to observe the changes on the etcd server:
+After completing the configuration, we can start the EMQX nodes one by one, and use the etcdctl tool to observe the changes on the etcd server:
 
 ```bash
 $ etcdctl ls /emqxcl/emqxcl --recursive
