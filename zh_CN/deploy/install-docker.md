@@ -57,7 +57,10 @@ docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8
 
 Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群。
 
-:::tip 目前 Docker Compose 已经包含在 Docker 安装包中无需单独安装，如果您的 Docker 中没有包含 Compose 请参考 [Install Docker Compos](https://docs.docker.com/compose/install/) 进行安装。
+:::tip
+
+目前 Docker Compose 已经包含在 Docker 安装包中无需单独安装，如果您的 Docker 中没有包含 Compose 请参考 [Install Docker Compos](https://docs.docker.com/compose/install/) 进行安装。
+
 :::
 
 1. 在任意目录创建 `docker-compose.yml` 文件，内容如下：
@@ -72,9 +75,9 @@ services:
     image: emqx:5.0.20
     container_name: emqx1
     environment:
-    - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+    - "EMQX_NODE_NAME=emqx@node1.emqx.io"
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
       interval: 5s
@@ -83,7 +86,7 @@ services:
     networks:
       emqx-bridge:
         aliases:
-        - node1.emqx.com
+        - node1.emqx.io
     ports:
       - 1883:1883
       - 8083:8083
@@ -97,9 +100,9 @@ services:
     image: emqx:5.0.20
     container_name: emqx2
     environment:
-    - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+    - "EMQX_NODE_NAME=emqx@node2.emqx.io"
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
       interval: 5s
@@ -108,7 +111,7 @@ services:
     networks:
       emqx-bridge:
         aliases:
-        - node2.emqx.com
+        - node2.emqx.io
     # volumes:
     #   - $PWD/emqx2_data:/opt/emqx/data
 

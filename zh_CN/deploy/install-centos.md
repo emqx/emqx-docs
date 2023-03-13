@@ -44,7 +44,6 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
 :::: tabs type:card
 
 ::: tab amd64
-
 1. 下载 [emqx-5.0.20-el8-amd64.rpm](https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-el8-amd64.rpm)。
 
    ```bash
