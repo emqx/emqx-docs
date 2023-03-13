@@ -18,7 +18,7 @@ After clicking Add, the module is added:
 
 ![](./assets/mqtt_subscriber3.png)
 
-::: warning
+:::
 If the MQTT server supports shared subscription, then we should use it. This is
 because all the emqx nodes in the cluster subscribe to the same topic, if the
 shared subscription is not used, each node will receive the same message,

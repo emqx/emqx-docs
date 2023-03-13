@@ -41,7 +41,7 @@ EMQX 集群可作为物联网接入服务（IoT Hub）部署，目前 EMQ 在青
 
 LB (负载均衡器) 负责分发设备的 MQTT 连接与消息到 EMQX 集群，LB 提高 EMQX 集群可用性、实现负载平衡以及动态扩容。
 
-部署架构推荐在 LB 终结 SSL 连接。设备与 LB 之间 TLS 安全连接，LB 与 EMQX 之间普通 TCP 连接。这种部署模式下 EMQX 单集群可轻松支持 100 万设备。
+部署架构推荐在 LB 终结 SSL 连接。设备与 LB 之间 TLS 安全连接，LB 与 EMQX 之间普通 TCP 连接。这种部署模式下 EMQX 单集群可轻松支持 1000 万设备。
 
 公有云厂商 LB 产品:
 
@@ -59,15 +59,6 @@ LB (负载均衡器) 负责分发设备的 MQTT 连接与消息到 EMQX 集群�
 | ---------------------------------- | ----------------- | ------------------------------------------------------- |
 | [HAProxy](https://www.haproxy.org) | 是                | <https://www.haproxy.com/solutions/load-balancing.html> |
 | [NGINX](https://www.nginx.com)     | 是                | <https://www.nginx.com/solutions/load-balancing/>       |
-
-
-
-::: tip
-
-国内公有云部署推荐青云 (EMQX 合作伙伴)，国外部署推荐 AWS ，私有部署推荐使用 HAProxy 作为 LB。
-
-:::
-
 
 
 ### EMQX 集群

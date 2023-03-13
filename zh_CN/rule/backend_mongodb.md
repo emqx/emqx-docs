@@ -71,7 +71,7 @@ SELECT id as msgid, topic, qos, payload, publish_received_at as arrived FROM "t/
 
 ![](./assets/rule-engine/mongodb_data_to_store3.png)
 
-::: warning
+:::
 MongoDB 要求写入的数据必须是 JSON 格式，所以请务必保证你的模板在占位符替换之后，是一个合法的 JSON 格式。比如你可以这样写：
 
 ```

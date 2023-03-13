@@ -87,7 +87,7 @@ From EMQX Open Source Version 4.4.11 and 4.3.22, we can use placeholders in `${v
 :::
 {% endemqxce %}
 
-::: warning
+:::
 The webhook always normalized the *keys* of the HTTP headers, replacing the underscores `_` to
 hyphens `-`, and also ensure the keys are lowercases.
 e.g. The key `Content_Type` will be replaced with `content-type`.

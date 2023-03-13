@@ -11,13 +11,13 @@ By using the hot upgrade feature, users can quickly and safely upgrade the EMQX 
 Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
 :::
 
-::: warning
+:::
 EMQX only allows hot upgrade between patch versions (the third digit of the version number).
 i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
 Please operate with caution.
 :::
 
-::: warning
+:::
 Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
@@ -166,13 +166,13 @@ By using the hot upgrade feature, users can quickly and safely upgrade the EMQX 
 Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
 :::
 
-::: warning
+:::
 EMQX only allows hot upgrade between patch versions (the third digit of the version number).
 i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
 Please operate with caution.
 :::
 
-::: warning
+:::
 Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
