@@ -97,12 +97,7 @@ The "Save data to SQLServer" action requires two parameters:
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
 ```
 
-![image](./assets/rule-engine/sqlserver3.png)
-
-2). The ID of the associated resource. Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQLServer resource:
-
-Fill in the resource configuration:
-Fill in “mqtt” for database name, “sa” for user name, and “mqtt_public” for password
+2). The ID of the associated resource. Now the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a SQLServer resource. In the popup dialog box, configure as instructed below: input “mqtt” for database name, “sa” for user name, and “mqtt_public” for password. 
 
 ![image](./assets/rule-engine/sqlserver4.png)
 

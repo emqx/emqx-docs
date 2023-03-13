@@ -23,8 +23,11 @@ MQTT是一个轻量的发布订阅模式消息传输协议，专门针对低带�
 
 MQTT官网: <http://mqtt.org>
 
-MQTT V3.1.1协议规范:
+MQTT v3.1.1 协议规范:
 <http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html>
+
+MQTT v5.0 协议规范:
+<https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html>
 
 ### 特点
 
