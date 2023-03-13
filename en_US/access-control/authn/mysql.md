@@ -1,4 +1,4 @@
-# Use MySQL for password authentication
+# Integrate with MySQL
 
 EMQX supports integrating with MySQL for password authentication. 
 

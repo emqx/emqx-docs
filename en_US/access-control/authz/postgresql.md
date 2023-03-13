@@ -1,4 +1,4 @@
-# PostgreSQL
+# Integrate with PostgreSQL
 
 This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 PostgreSQL database.

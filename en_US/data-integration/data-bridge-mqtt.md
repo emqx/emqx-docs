@@ -1,6 +1,6 @@
 # MQTT
 
-The MQTT data bridge is a channel for EMQX to communicate with other MQTT services, either EMQX clusters or services that support the MQTT protocol. The working principle is as follows:
+The MQTT data bridge is a channel for EMQX to communicate with other MQTT services, either EMQX clusters or services that support the MQTT protocol. Here is how it works:
 
 - Forwarding messages from the current cluster to the bridged brokers following the rule settings;
 - Subscribing to the topics of the bridged brokers to distribute the received messages within the current cluster.

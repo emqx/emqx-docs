@@ -1,4 +1,4 @@
-# MySQL
+# Integrate with MySQL
 
 This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 MySQL database.

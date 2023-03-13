@@ -55,7 +55,7 @@ auto_subscribe {
 
 ```bash
 +---------------------------+             +----------------+
-| clientid: demo_client1    |             |  EMQX Broker   |
+| clientid: demo_client1    |             |  EMQX   |
 | username: admin | | |
 | local host: 192.168.1.234 | <---------> |                |
 | local port: 55678         |             |                |

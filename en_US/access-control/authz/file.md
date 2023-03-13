@@ -1,4 +1,4 @@
-# File
+# Use ACL file
 
 This authorizer implements ACL checks through matching pub/sub requests against a predefined list of rules configured in
 a file.

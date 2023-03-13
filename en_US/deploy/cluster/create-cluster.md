@@ -149,7 +149,7 @@ Start all nodes one by one, and the cluster will be automatically established.
 
 ## Autocluster by DNS Record
 
-### Working principles
+### How it works
 
 DNS Stands for Domain Name System. A DNS server returns the IP addresses after receiving a domain query, that is, the A records. DNS system allows multiple A records for one domain name, this makes a one-to-many mapping.
 

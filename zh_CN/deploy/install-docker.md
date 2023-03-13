@@ -18,7 +18,7 @@
 {% emqxce %}
 
 ```bash
-docker pull emqx:5.0.19
+docker pull emqx/emqx:5.0.20
 ```
 
 {% endemqxce %}
@@ -26,7 +26,7 @@ docker pull emqx:5.0.19
 {% emqxee %}
 
 ```bash
-docker pull emqx/emqx-enterprise:5.0.0
+docker pull emqx/emqx-enterprise:5.0.1
 ```
 
 {% endemqxee %}
@@ -36,7 +36,7 @@ docker pull emqx/emqx-enterprise:5.0.0
 {% emqxce %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.19
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:5.0.20
 ```
 
 有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx](https://hub.docker.com/_/emqx)。
@@ -46,7 +46,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 {% emqxee %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:5.0.0
+docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:5.0.1
 ```
 
 有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
@@ -72,7 +72,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx:5.0.19
+    image: emqx:5.0.20
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.io"
@@ -97,7 +97,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx:5.0.19
+    image: emqx:5.0.20
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.io"
@@ -129,7 +129,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx/emqx-enterprise:5.0.0
+    image: emqx/emqx-enterprise:5.0.1
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.com"
@@ -154,7 +154,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx/emqx-enterprise:5.0.0
+    image: emqx/emqx-enterprise:5.0.1
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.com"
