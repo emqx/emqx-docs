@@ -13,7 +13,7 @@ File-based ACL is simple and lightweight. It is suitable to configure generic ru
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. Click **Create** at the top right corner, select **File** as **Backend**, and click **Next**. The **Configuration** tab is shown as below. 
 
-![authz-file-dashboard_ee](/Users/emqx/Documents/GitHub/emqx-docs/en_US/access-control/authz/assets/authz-file-dashboard_ee.png)
+![authz-file-dashboard_ee](./assets/authz-file-dashboard_ee.png)
 
 ## Configuration
 
