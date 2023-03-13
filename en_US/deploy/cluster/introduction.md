@@ -73,13 +73,13 @@ We can see that `node2`, `node3`, and `node4` have established a distributed con
 Whenever a new node joins the cluster, it will establish a TCP
 connection with all the nodes in the cluster. Connection among these 4 nodes is shown below:
 
-![image](./assets/cluster_1.png)
+<img src="./assets/cluster_1.png" alt="image" style="zoom:33%;" />
 
 ## Distributed EMQX cluster
 
 The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers, as shown below.
 
-![image](../../assets/design_9.png)
+<img src="../../assets/design_9.png" alt="image" style="zoom:33%;" />
 
 To achieve this, EMQX maintains several data structures in [embedded database](./mria-introduction.md):
 
@@ -128,7 +128,7 @@ This data will be duplicated among all nodes within the cluster. Below is a topi
 
 When all subscriptions are completed, EMQX will maintain the following topic tree table and route table:
 
-![image](./assets/cluster_2.png)
+<img src="./assets/cluster_2.png" alt="image" style="zoom:33%;" />
 
 ### Message distribution process
 
@@ -141,19 +141,20 @@ For example, when `client1` publishes a message to topic `t/a`, the routing and 
 
 2. `node1` queries the topic tree and locate `t/#` and `t/a` that match topic `t/a`.
 
-3. `node1` queries the route table and fins:
+3. `node1` queries the route table and finds:
 
-4. Some clients on `node2` subscribed topic `t/#`;
+   - Topic `t/#` is subscribed by some clients on `node2`;
 
-5. Some clients on `node3 `subscribed topic `t/a`;
+   - Topic `t/a` is subscribed by some clients on `node3 `;
+
 
    So `node1` will forward the message to `node2` and `node3`.
 
-6. `node2` receives the forwarded `t/a` message, queries the local subscription table, and then distributes the message to clients subscribed to the topic.
+4. `node2` receives the forwarded `t/a` message, queries the local subscription table, and then distributes the message to clients subscribed to the topic.
 
-7. `node3` receives the forwarded `t/a` message, queries the local subscription table, and then distributes the message to clients subscribed to the topic.
+5. `node3` receives the forwarded `t/a` message, queries the local subscription table, and then distributes the message to clients subscribed to the topic.
 
-8. Message forwarding and distribution are finished.
+6. Message forwarding and distribution are finished.
 
 ### Data partition and sharing
 
@@ -166,7 +167,7 @@ EMQX's subscription table is partitioned in the cluster, while the topic tree an
 EMQX added an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang.
 
 Ekka is a cluster management library developed for
-Erlang/OTP applications, enabling features like auto discovery of EMQX nodes, auto cluster, network partition autoheal and autoclean.
+Erlang/OTP applications, enabling features like auto discovery of EMQX nodes, auto cluster, network partition, autoheal, and autoclean.
 
 EMQX supports several node discovery strategies:
 
