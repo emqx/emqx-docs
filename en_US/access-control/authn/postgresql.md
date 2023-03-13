@@ -40,8 +40,17 @@ In this table, MQTT users are identified by `username`.
 
 For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, and prefixed salt `salt`, the query statement should be:
 
+> Using crypto functions in PostgreSQL requires the pgcrypto extension to be enabled.
+
+```sql
+postgres=# create extension pgcrypto;
+CREATE EXTENSION
+```
+
+SQL:
+
 ```bash
-postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
+INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'bede90386d450cea8b77b822f8887065e4e5abf132c2f9dccfcc7fbd4cba5e35', 'salt', true);
 INSERT 0 1
 ```
 

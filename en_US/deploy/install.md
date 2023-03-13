@@ -15,9 +15,8 @@ This chapter will also cover how to configure a license for EMQX and how to migr
 EMQX will release the installation packages for different operating systems or platforms in each release. You may click the line below to download.
 
 - EMQX website: <https://www.emqx.io/zh/downloads>
-- GitHub Release: <https://github.com/emqx/emqx/releases>
 
-You can also download the alpha, beta, or rc versions from our GitHub pages.
+You can also download the alpha, beta, or rc versions from our [GitHub pages](https://github.com/emqx/emqx/releases).
 {% endemqxce %}
 
 {% emqxee %}

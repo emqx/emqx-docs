@@ -15,9 +15,8 @@
 在每个 EMQX 版本中，我们都会针对不同的操作系统与平台发布不同的安装包选项，您可点击以下链接下载：
 
 - 官网下载：<https://www.emqx.io/zh/downloads>
-- GitHub Release：<https://github.com/emqx/emqx/releases>
 
-此外，您还可在我们的 GitHub Release 页面下载 alpha、beta、rc 等版本的安装包。
+此外，您还可在我们的 [GitHub Release 页面](https://github.com/emqx/emqx/releases) 下载 alpha、beta、rc 等版本的安装包。
 
 {% endemqxce %}
 
