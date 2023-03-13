@@ -61,10 +61,6 @@
           "path": "advanced/acl"
         },
         {
-          "title": "规则引擎",
-          "path": "rule/rule-engine"
-        },
-        {
           "title": "数据存储",
           "path": "backend/backend"
         },
@@ -825,10 +821,6 @@
         {
           "title": "ACL",
           "path": "advanced/acl"
-        },
-        {
-          "title": "Rule Engine",
-          "path": "rule/rule-engine"
         },
         {
           "title": "Backend",

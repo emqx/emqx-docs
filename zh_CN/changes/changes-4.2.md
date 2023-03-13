@@ -5285,7 +5285,7 @@ Bugfix: Topic has been decoded by gen-coap, no conversion needed
 
 *发布日期: 2017-07-03*
 
-::: warning Warning
+::: Warning
 2.2-rc.2版本源码编译需要Erlang/OTP R19.3+
 :::
 
@@ -5585,7 +5585,7 @@ esockd\_connection:upgrade (emqttd\#915)
 
 *EMQ* 2.1.0-beta.1版本发布。
 
-::: warning Warning
+::: Warning
 2.1.x版本源码编译需要Erlang/OTP R19+
 :::
 

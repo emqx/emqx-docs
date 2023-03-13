@@ -156,8 +156,10 @@ At this time, there are three available values for each of our configuration ite
 
 {% emqxce %}
 The EMQX open source edition does not support updating the configuration at runtime. If there is a need, you can consider migrating to EMQX Enterprise. To apply the latest settings, you can reload extension plugins as EMQX reads and loads configuration items during startup.
+
 {% endemqxce %}
 
 {% emqxee %}
 EMQX will read and load the configuration items during startup or when extension plugins are started. You can update the configuration at runtime through the Dashboard or REST API, or reload the plug-in after modifying the plug-in configuration to apply the latest configuration.
+
 {% endemqxee %}

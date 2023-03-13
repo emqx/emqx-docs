@@ -45,7 +45,6 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 ### Run Anywhere
 
-- Run Anywhere
 - Run anywhere in private, hybrid, and public clouds like AWS, GCP, and Azure without vendor lock-in.
 
 ### High ROI (Return on Investment) with Low TCO (Total Cost of Ownership)

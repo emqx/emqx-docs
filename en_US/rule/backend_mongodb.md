@@ -56,7 +56,7 @@ From EMQX Enterprise 4.4.11 and 4.3.17, we can use placeholders in `${var}` form
 like to insert into mongodb when the action is triggered. In this
 example we'll insert all the available fields we got from the rule SQL in JSON format, so we just leave the payload template as empty.
 
-::: warning
+:::
 MongoDB requires a JSON string when writing, so please ensure your template is a valid JSON format after all the placeholders are placed with the values. For example, you could write this in your template:
 
 ```
