@@ -2,7 +2,7 @@
 
 ## Foreword
 
-In terms of the design of EMQX Broker, it firstly separates the frontend and backend, and secondly separates the  Message Flow Plane and Monitor/Control Plane :
+In terms of the design of EMQX, it firstly separates the frontend and backend, and secondly separates the  Message Flow Plane and Monitor/Control Plane :
 
 ![image](../assets/design_1.png)
 
@@ -10,13 +10,13 @@ In terms of the design of EMQX Broker, it firstly separates the frontend and bac
 
 With Multi-core servers and modern operating system kernel, it can easily support 1 million TCP connections. The core issue is how to deal with business bottlenecks at the application level.
 
-EMQX Broker solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: [Linux OS Tuning](../performance/tune.md)
+EMQX solves all kinds of bottleneck problems of single node carrying 1 million connections at the business and application level. For the operating system kernel, TCP protocol stack, and Erlang virtual machine parameters of connection testing, see: [Linux OS Tuning](../performance/tune.md)
 
 ### Fully asynchronous architecture
 
-EMQX Broker is a fully asynchronous architecture based on the Erlang/OTP platform: asynchronous TCP connection processing, asynchronous Topic subscription, and asynchronous message publishing. Only for the resource load limitation part, it adopts synchronous design, such as TCP connection creation and Mnesia database transaction execution.
+EMQX is a fully asynchronous architecture based on the Erlang/OTP platform: asynchronous TCP connection processing, asynchronous Topic subscription, and asynchronous message publishing. Only for the resource load limitation part, it adopts synchronous design, such as TCP connection creation and Mnesia database transaction execution.
 
-In the EMQX 3.0 version, from the Publisher to the Subscriber, a MQTT message flows   with a series of Erlang processes Mailbox flows asynchronously inside the EMQX Broker:
+In EMQX 3.0 version, from the Publisher to the Subscriber, an MQTT message flows   with a series of Erlang processes Mailbox flows asynchronously inside EMQX:
 
 ![image](../assets/design_2.png)
 
@@ -39,13 +39,13 @@ In EMQX Enterprise Edition products, through rule engines or plugins, messages c
 
 ### Conceptual model
 
-EMQX Broker is more like a network Router or a Switch in concept, rather than the traditional enterprise-level message queue (MQ). Compared to network routers that route packets by IP address or MPLS label, EMQX Broker routes MQTT messages between cluster nodes by publish-subscribe model of Topic Trie:
+EMQX is more like a network Router or a Switch in concept, rather than the traditional enterprise-level message queue (MQ). Compared to network routers that route packets by IP address or MPLS label, EMQX routes MQTT messages between cluster nodes by publish-subscribe model of Topic Trie:
 
 ![image](../assets/design_3.png)
 
 ### Design Philosophy
 
-1. The core problem solved by the EMQX Broker is to process massive concurrent MQTT connection and routing messages.
+1. The core problem solved by EMQX is to process massive concurrent MQTT connection and routing messages.
 2. Embrace Erlang/OTP, the Soft-Realtime, Low-Latency, Concurrent and Fault-Tolerant Platform.
 3. Layered Design: Connection, Session, PubSub and Router Layers.
 4. Separate the Message Flow Plane and the Control/Management Plane.

@@ -1,4 +1,4 @@
-# Built-in Database
+# Use built-in database
 
 This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 built-id database (Mnesia).

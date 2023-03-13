@@ -379,7 +379,7 @@ bridge.kafka.produce = sync
 - Sync: MQTT Ack packet will be sent back to client after receiving Ack from Kafka.
 - Async: MQTT Ack packet will be sent back to client right after EMQX receiving the message, and EMQX will not wait the Ack returned from Kafka.
 
-If the backend Kafka server is not available, then the message will be accumulated in EMQX broker.
+If the backend Kafka server is not available, then the message will be accumulated in EMQX.
 
 - The message will be cached in memory before EMQX 2.4.3 version, if the memory is exhausted, then the EMQX server will be down.
 - The message will be cached in disk after EMQX 2.4.3 version, message will probably lost if the disk is full.

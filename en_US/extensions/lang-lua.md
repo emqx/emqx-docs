@@ -12,7 +12,7 @@ To maintain compatibility, the plug-in remains in the release version of EMQX.
 
 ## Example
 
-In the EMQX Broker distribution, user-defined Lua script files should be placed in `data/script/`.
+In the EMQX distribution, user-defined Lua script files should be placed in `data/script/`.
 
 Take the sending content of the control message as an example, and add the file `data/script/test.lua`:
 

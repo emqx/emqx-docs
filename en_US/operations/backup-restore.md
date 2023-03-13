@@ -1,8 +1,8 @@
-# Backup and restoration
+# Backup and restore
 
-EMQX adopts a distributed storage schema to replicate data among all nodes, and a cluster transfer feature to ensure the system's high availability. 
+EMQX adopts a distributed storage schema and also introduces a cluster transfer feature to ensure the system's high availability. 
 
-As part of our "fail-safety" design, EMQX also provides data backup and restoration for disaster recovery. This chapter guides you on how to back up and restore EMQX data, which mainly includes the configuration files and the operating data. 
+This chapter will discuss how to backup your operating data and configuration files to prevent data losses in case of system malfunctions. 
 
 ## Configuratation files 
 
@@ -34,6 +34,6 @@ You can also specify the `data` directory location via `node.data_dir` or the `E
 
 Before EMQX 5.0, persistent sessions were stored in memory, and for the EMQX enterprise version, they are stored in an external database, so you cannot back up persistent sessions in EMQX.
 
-## Data restoration
+## Data restore
 
 To restore the configuration file, you only need to place the backed-up configuration files and data in the corresponding directory before starting EMQX.

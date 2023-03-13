@@ -19,7 +19,7 @@
   title_cn: 概览
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
 
-- title_en: Getting started
+- title_en: Get started
   title_cn: 快速开始
   path: getting-started/getting-started
   children:
@@ -48,7 +48,7 @@
       path: deploy/install-source
       edition: ce
     # - deploy/install-marketplace
-    - title_en: Use license
+    - title_en: Working with license
       title_cn: 配置 License
       edition: ee
       path: deploy/license
@@ -62,7 +62,7 @@
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
     
-- title_en: Clustering
+- title_en: EMQX cluster
   title_cn: 构建集群
   path: deploy/cluster/introduction
   children:
@@ -317,7 +317,7 @@
 
 ## Developers & Testers
 
-- title_en: Plugins and extensions
+- title_en: Plugin and extension
   title_cn: 插件与扩展
   path: extensions/introduction
   children:

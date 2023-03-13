@@ -1,4 +1,4 @@
-# Cluster Security
+# Cluster security
 
 When it comes to the security of the EMQX cluster, there two primary
 aspects to consider.

@@ -30,7 +30,7 @@ docker run -d --name emqx-builder \
 
 EMQX 仓库位于 <https://github.com/emqx/emqx>，其中 `master` 分支为最新的 EMQX 5.0 版本，`main-*` 分支则对应不同的次要版本（如 4.4.x、5.1.x）。
 
-以下是编译并启动 EMQX 5.0 最新版本的操作步骤：
+以下是编译并启动 EMQX 5.x 最新版本的操作步骤：
 
 ```bash
 # docker exec -it emqx-builder bash

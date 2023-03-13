@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Listener is mainly used to configure listening ports and related parameters of different protocols. EMQX Broker supports configuring multiple Listeners to listen to multiple protocols or ports at the same time.
+Listener is mainly used to configure listening ports and related parameters of different protocols. EMQX supports configuring multiple Listeners to listen to multiple protocols or ports at the same time.
 
 The following are the supported Listeners:
 
@@ -14,7 +14,7 @@ The following are the supported Listeners:
 | Secure Websocket Listener | A secure listener for MQTT over secure WebSockets (TLS) |
 | QUIC Listener             | A secure listener for MQTT over secure WebSockets       |
 
-EMQX Broker provides 4 Listeners by default, and they will occupy the following ports:
+EMQX provides 4 Listeners by default, and they will occupy the following ports:
 
 | Port            | Description             |
 | ----------------| ----------------------- |
