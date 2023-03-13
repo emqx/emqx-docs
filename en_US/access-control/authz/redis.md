@@ -1,4 +1,4 @@
-# Redis
+# Integrate with Redis
 
 This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
 Redis database.
@@ -33,15 +33,15 @@ EMQX supports working with three kinds of Redis installation.
   {
       type = redis
       enable = true
-
+  
       redis_type = single
       server = "127.0.0.1:6379"
-
+  
       cmd = "HGETALL mqtt_user:${username}"
       database => 1
       password = public
       server = "127.0.0.1:6379"
-
+  
   }
   ```
 * [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
@@ -49,15 +49,15 @@ EMQX supports working with three kinds of Redis installation.
   {
       type = redis
       enable = true
-
+  
       redis_type = sentinel
       servers = "10.123.13.11:6379,10.123.13.12:6379"
       sentinel = "mymaster"
-
+  
       cmd = "HGETALL mqtt_user:${username}"
       database => 1
       password = public
-
+  
   }
   ```
 * [Redis Cluster](https://redis.io/docs/manual/scaling/).
@@ -65,10 +65,10 @@ EMQX supports working with three kinds of Redis installation.
   {
       type = redis
       enable = true
-
+  
       redis_type = cluster
       servers = "10.123.13.11:6379,10.123.13.12:6379"
-
+  
       cmd = "HGETALL mqtt_user:${username}"
       database => 1
       password = public

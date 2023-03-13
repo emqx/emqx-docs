@@ -4,26 +4,41 @@
 
 支持的 Ubuntu 版本：
 
-{% emqxce %}
-
 - Ubuntu 22.04
 - Ubuntu 20.04
 - Ubuntu 18.04
 
-{% endemqxce %}
-
-{% emqxee %}
-
-- Ubuntu 20.04
-- Ubuntu 18.04
-
-{% endemqxee %}
-
-下文将以 Ubuntu 20.04 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise) 获取安装信息。
-
 {% emqxce %}
 
-## 通过 deb 安装
+## 通过 Apt 源安装
+
+EMQX 支持通过 Apt 源安装，免除了用户需要手动处理依赖关系和更新软件包等的困扰，具有更加方便、安全和易用等优点。如希望通过 Apt 源安装 EMQX，可参考如下步骤。
+
+1. 通过以下命令配置 EMQX Apt 源：
+
+   ```bash
+   curl -s https://assets.emqx.com/scripts/install-emqx-deb.sh | sudo bash
+   ```
+
+2. 运行以下命令安装 EMQX：
+
+   ```
+   sudo apt-get install emqx
+   ```
+
+3. 运行以下命令启动 EMQX：
+
+   ```
+   sudo systemctl start emqx
+   ```
+
+   
+
+## 通过下载包安装
+
+EMQX 支持通过 deb 包或 tar.gz 包进行安装。下文将以 Ubuntu 22.04 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=Ubuntu) 获取安装信息。
+
+### 通过 deb 安装
 
 请根据 CPU 架构选择对应安装方式。
 
@@ -31,47 +46,47 @@
 
 ::: tab amd64
 
-1. 下载 [emqx-5.0.19-ubuntu20.04-amd64.deb](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-amd64.deb)。
+1. 下载 [emqx-5.0.20-ubuntu22.04-amd64.deb](https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.deb)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-amd64.deb
+   wget https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.deb
    ```
 
 2. 安装 EMQX。
    ```bash
-   sudo apt install ./emqx-5.0.19-ubuntu20.04-amd64.deb
+   sudo apt install ./emqx-5.0.20-ubuntu22.04-amd64.deb
    ```
 
 :::
 
 ::: tab arm64
-1. 下载 [emqx-5.0.19-ubuntu20.04-arm64.deb](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-arm64.deb)。
+1. 下载 [emqx-5.0.20-ubuntu22.04-arm64.deb](https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.deb)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-arm64.deb
+   wget https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.deb
    ```
 
 2. 安装 EMQX。
    ```bash
-   sudo apt install ./emqx-5.0.19-ubuntu20.04-arm64.deb
+   sudo apt install ./emqx-5.0.20-ubuntu22.04-arm64.deb
    ```
 
 :::
 
 ::::
 
-### 启动 EMQX
+#### 启动 EMQX
 
 您可通过如下三种方式启动 EMQX
 
-- 直接启动：<!--TODO @WIVWIV这里的版本我修改了，需要确认下，另外，这些启动方式是只适用于企业版还是开源版？区别是？-->
+- 直接启动：
 
   ```bash
   $ emqx start
-  EMQX 5.0.0 is started successfully!
+  EMQX 5.0.20 is started successfully!
   
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.0 is started
+  Node 'emqx@127.0.0.1' 5.0.20 is started
   ```
 
 - systemctl 启动：
@@ -86,7 +101,7 @@
   sudo service emqx start
   ```
 
-### 卸载 EMQX
+#### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：
 
@@ -94,7 +109,7 @@
 sudo apt remove --purge emqx
   ```
 
-## 通过 tar.gz 安装
+### 通过 tar.gz 安装
 
 请根据 CPU 架构选择对应安装方式。
 
@@ -102,29 +117,29 @@ sudo apt remove --purge emqx
 
 ::: tab amd64
 
-1. 下载 [emqx-5.0.19-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-amd64.tar.gz)。
+1. 下载 [emqx-5.0.20-ubuntu22.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.tar.gz)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-amd64.tar.gz
+   wget https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.tar.gz
    ```
 
 2. 安装 EMQX。
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.19-ubuntu20.04-amd64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-5.0.20-ubuntu22.04-amd64.tar.gz -C emqx
    ```
 
 :::
 
 ::: tab arm64
-1. 下载 [emqx-5.0.19-ubuntu20.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-arm64.tar.gz)。
+1. 下载 [emqx-5.0.20-ubuntu22.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.tar.gz)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/broker/5.0.19/emqx-5.0.19-ubuntu20.04-arm64.tar.gz
+   wget https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.tar.gz
    ```
 
 2. 安装 EMQX。
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-5.0.19-ubuntu20.04-arm64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-5.0.20-ubuntu22.04-arm64.tar.gz -C emqx
    ```
 
 :::
@@ -141,6 +156,8 @@ sudo apt remove --purge emqx
 
 {% emqxee %}
 
+下文将以 Ubuntu 22.04 系统为例演示如何下载最新版 EMQX。如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise) 获取安装信息。
+
 ## 通过 deb 安装
 
 请根据 CPU 架构选择对应安装方式。
@@ -149,29 +166,29 @@ sudo apt remove --purge emqx
 
 ::: tab amd64
 
-1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb)。
+1. 下载 [emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
+   wget https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb
    ```
 
 2. 安装 EMQX。
    ```bash
-   sudo apt install ./emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
+   sudo apt install ./emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb
    ```
 
 :::
 
 ::: tab arm64
-1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-arm64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-arm64.deb)。
+1. 下载 [emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb](https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-arm64.deb
+   wget https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb
    ```
 
 2. 安装 EMQX。
    ```bash
-   sudo apt install ./emqx-enterprise-5.0.0-ubuntu20.04-arm64.deb
+   sudo apt install ./emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb
    ```
 
 :::
@@ -182,14 +199,14 @@ sudo apt remove --purge emqx
 
 您可通过如下三种方式启动 EMQX
 
-- 直接启动：<!--TODO @WIVWIV这里的版本我修改了，需要确认下，另外，这些启动方式是只适用于企业版还是开源版？区别是？-->
+- 直接启动：
 
   ```bash
   $ emqx start
-  EMQX 5.0.0 is started successfully!
+  EMQX 5.0.1 is started successfully!
 
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.0 is started
+  Node 'emqx@127.0.0.1' 5.0.1 is started
   ```
 
 - systemctl 启动：
@@ -220,29 +237,31 @@ sudo apt remove --purge emqx
 
 ::: tab amd64
 
-1.  下载 [emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz)。
+1. 下载 [emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz
+   wget https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz
    ```
 
+   
+
 2. 安装 EMQX。
-   ```
-   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz -C emqx
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz -C emqx
    ```
 
 :::
 
 ::: tab arm64
-1. 下载 [emqx-enterprise-5.0.0-ubuntu20.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-arm64.tar.gz)。
+1. 下载 [emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz](https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz)。
 
    ```bash
-   wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-arm64.tar.gz
+   wget https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz
    ```
 
 2. 安装 EMQX。
    ```bash
-   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-ubuntu20.04-arm64.tar.gz -C emqx
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz -C emqx
    ```
 
 :::

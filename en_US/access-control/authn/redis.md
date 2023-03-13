@@ -1,4 +1,4 @@
-# Use Redis for password authentication
+# Integrate with Redis
 
 EMQX supports integrating with Redis for password authentication. 
 

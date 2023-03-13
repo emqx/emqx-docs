@@ -1,4 +1,4 @@
-# Introduction to Rule Engine
+# Rule Engine
 
 The Rules Engine is EMQX's built-in SQL-based data processing component, which works with [data-bridges](./data-bridges.md) can be used to help extract, filter, enrich, transform and store IoT data in real-time to accelerate application integration and business innovation.
 

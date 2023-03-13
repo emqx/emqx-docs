@@ -1,4 +1,4 @@
-# Linux OS Tuning
+# Performance tuning (Linux)
 
 This guide includes in general tuning suggestions for benchmark and deployment.
 
@@ -127,7 +127,7 @@ node.process_limit = 2097152
 node.max_ports = 2097152
 ```
 
-## EMQX Broker Tuning
+## EMQX Tuning
 
 Tune the acceptor pool size and `max_connections` limit in `etc/emqx.conf`.
 
@@ -141,7 +141,7 @@ listeners.tcp.$name.max_connections = 1024000
 
 ## Client Machine Tuning
 
-Tune the client machine to benchmark EMQX broker:
+Tune the client machine to benchmark EMQX:
 
 ```
 sysctl -w net.ipv4.ip_local_port_range="500 65535"

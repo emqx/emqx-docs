@@ -29,13 +29,13 @@ The device online and offline status can be captured and processed in the Rule E
 
 ## Cluster status information
 
-| Topic                          | Description              |
-| ------------------------------ | ------------------------ |
-| $SYS/brokers                   | cluster node list        |
-| $SYS/brokers/\${node}/version  | EMQX Broker version      |
-| $SYS/brokers/\${node}/uptime   | EMQX Broker startup time |
-| $SYS/brokers/\${node}/datetime | EMQX Broker time         |
-| $SYS/brokers/\${node}/sysdescr | EMQX Broker description  |
+| Topic                          | Description       |
+| ------------------------------ | ----------------- |
+| $SYS/brokers                   | cluster node list |
+| $SYS/brokers/\${node}/version  | EMQX  version     |
+| $SYS/brokers/\${node}/uptime   | EMQX startup time |
+| $SYS/brokers/\${node}/datetime | EMQX time         |
+| $SYS/brokers/\${node}/sysdescr | EMQX description  |
 
 ## Client Online and Offline Events
 

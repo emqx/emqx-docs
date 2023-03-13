@@ -1,4 +1,4 @@
-# Use PostgreSQL for password authentication
+# Integrate with PostgreSQL
 
 EMQX supports integrating with PostgreSQL for password authentication. 
 

@@ -78,7 +78,7 @@ helm uninstall emqx-operator -n emqx-operator-system
        metadata:
          name: emqx
       spec:
-        image: emqx/emqx:5.0.19
+        image: emqx/emqx:5.0.20
      EOF
    ```
 
@@ -93,7 +93,7 @@ helm uninstall emqx-operator -n emqx-operator-system
    	   metadata:
    	      name: emqx
    	   spec:
-   	     image: emqx/emqx-enterprise:5.0.0
+   	     image: emqx/emqx-enterprise:5.0.1
 	   EOF
    ```
 

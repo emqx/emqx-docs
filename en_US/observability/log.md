@@ -106,10 +106,10 @@ Code example:
 
 When file logging is enabled (log.to = file or both), the following files will appear in the log directory:
 
-- **emqx.log.N:** L og file prefixed with emqx.log, that contains all the log messages of EMQX Broker, such as `emqx.log.1`,` emqx.log.2` ...
+- **emqx.log.N:** L og file prefixed with emqx.log, that contains all the log messages of EMQX, such as `emqx.log.1`,` emqx.log.2` ...
 - **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information. **Do not change manually**. 
-- **run_erl.log:** System file used to record startup information when starting EMQX Broker in the background with `emqx start`.
-- **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX Broker is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
+- **run_erl.log:** System file used to record startup information when starting EMQX in the background with `emqx start`.
+- **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
 
 ## Output log file for log level
 
