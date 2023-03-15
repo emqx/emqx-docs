@@ -83,7 +83,6 @@ EMQX 同时支持通过下载包进行安装。下文将以 CentOS 8 系统为�
 
   ```bash
   $ emqx start
-  <<<<<<< HEAD
   EMQX 5.0.20 is started successfully!
   
   $ emqx_ctl status
@@ -149,7 +148,7 @@ sudo apt remove --purge emqx
 
 安装完成后，可通过如下命令启动 EMQX。
 
-```
+```bash
 ./emqx/bin/emqx start
 ```
 
