@@ -1,6 +1,6 @@
 # 基于 MongoDB 进行授权
 
-MongoDB Authorizer 支持客户端的权限列表存储在 MySQL 数据库中。
+MongoDB Authorizer 支持客户端的权限列表存储在 MySQL 数据库中。<!--MongoDB数据库？-->
 
 ::: tip 前置准备：
 
