@@ -1,4 +1,4 @@
-# Mria + RLOG Architecture
+# Architecture
 
 EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability and is also the key behind 100M MQTT connection support with a single cluster.
 
