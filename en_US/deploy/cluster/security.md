@@ -1,15 +1,26 @@
 # Cluster security
 
-When it comes to the security of the EMQX cluster, there two primary
-aspects to consider.
+When it comes to the security of the EMQX cluster, there are two primary aspects to consider.
 
 * Secure the ports each node listens on for clustering.
-* Keep the Erlang cookie secret. See` node.cookie` config.
+* Keep the Erlang cookie secret. See ` node.cookie` config.
 
 ::: tip Tip
-It's a good practice to keep the clustering ports internal by configuring
-firewall rules e.g., AWS security groups or iptables.
+It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., AWS security groups or iptables.
 :::
+
+## Network protocols
+
+Each Erlang node can be connected via TCP or TLS. 
+
+#### Set EMQX cluster protocols
+
+Each Erlang node can be connected via TCP or TLS, and the connection method can be configured in `etc/emqx.conf`:
+
+| Configuration item    | Type      | Default value       | Description                                                  |
+| --------------------- | --------- | ------------------- | ------------------------------------------------------------ |
+| cluster.proto_dist    | enum      |                     | Distributed protocol with optional values are: - inet_tcp: use TCP IPv4 - inet6_tcp: use TCP IPv6 - inet_tls: use TLS |
+| node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as `inet_tls`, you need to configure the `etc/ssl_dist.conf` file and specify the TLS certificate. |
 
 ## Intra-cluster Communication Ports
 

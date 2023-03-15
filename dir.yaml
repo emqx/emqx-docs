@@ -67,6 +67,7 @@
   path: deploy/cluster/introduction
   children:
     - deploy/cluster/mria-introduction
+    - deploy/cluster/manual
     - deploy/cluster/create-cluster
     - deploy/cluster/security
     - deploy/cluster/lb

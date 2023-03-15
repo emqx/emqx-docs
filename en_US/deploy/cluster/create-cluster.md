@@ -1,136 +1,51 @@
-# Create and manage clusters
+# Create an EMQX cluster
 
-EMQX supports creating clusters manually and automatically. This chapter will guide you through creating and managing EMQX clusters.
+EMQX supports creating clusters manually and automatically. 
 
 :::tip Prerequisites:
 
-- Knowledge of [Distributed Clusters](./introduction.md).
-- Knowledge of [Deployment Architecture and Cluster Requirements](./mria-introduction.md).
+- Knowledge of [Distributed clusters](./introduction.md).
+- Knowledge of [Architecture and deployment prerequisites](./mria-introduction.md).
   :::
 
-## Preparations before clustering
+## Node discovery
 
-1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN).
-2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
-3. All nodes use the same cookie.
+EMQX's clustering feature is based on the [Ekka](https://github.com/emqx/ekka) library, a cluster management library developed for Erlang/OTP applications.
 
-:::tip
-
-EMQX node names are immutable, as they are baked into the database schema and data files. It is strongly recommended to use static FQDNs for EMQX node names, even when the nodes have static IPs.
-:::
-
-## Create clusters manually
-
-If you choose a manually create a cluster, you will need to manually configure each node in the cluster, including setting up network connections among them.
-
-Compared with automatic clustering, you can customize the network topology with manual clustering. It is especially suitable when the automatic clustering mechanism is unavailable or inappropriate.
-
-:::tip
-Manual clustering only can be only on core nodes. For core-replica deployment architecture, only auto clustering is supported.
-:::
-
-Suppose there are two nodes, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`, and we can follow the steps below to create a cluster for these two nodes manually:
-
-1. Set the cluster discovery strategy to `manual`:
-
-   ```bash
-   cluster {
-       ## Options: manual | static | mcast | dns | etcd | K8s
-       discovery_strategy  =  manual
-   }
-   ```
-
-2. After the two nodes are started, run the join cluster command on one node:
-
-   ```bash
-   $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
-
-   Join the cluster successfully.
-   Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
-   ```
-
-   :::tip
-
-   1. This command must be run on the node to join the cluster, that is, as a **request** rather than **invite**.
-   2. After `emqx@s2.emqx.io` joins `emqx@s1.emqx.io` to form a cluster, it will clear the local data and synchronize the data in `emqx@s1.emqx.io`.
-   3. When a node that already joined a cluster joins another cluster, it should first leave the current cluster.
-      :::
-
-3. Query the cluster status on any node:
-
-   ```bash
-   $ ./bin/emqx_ctl cluster status
-
-   Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
-   ```
-
-4. You can let a node leave the cluster with leave or force-leave:
-
-   1. leave: let the node leave the cluster
-   2. force-leave: remove the node from the cluster
-
-   Run the command below on `emqx@s2.emqx.io` to let it leave the cluster:
-
-   ```bash
-   ./bin/emqx_ctl cluster leave
-   ```
-
-   Or run the command below on `emqx@s1.emqx.io` to remove `emqx@s2.emqx.io` from the cluster:
-
-   ```bash
-   ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
-   ```
-
-### Pseudo-distributed cluster
-
-For users with only one server, you can use the pseudo-distributed cluster to test the EMQX cluster.
-
-After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
-
-```bash
-EMQX_NODE__NAME='emqx2@127.0.0.1' \
-    EMQX_STATSD__SERVER='127.0.0.1:8124' \
-    EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
-    EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
-    EMQX_LISTENERS__WS__DEFAULT__BIND='0.0.0.0:8082' \
-    EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8085' \
-    EMQX_DASHBOARD__LISTENERS__HTTP__BIND='0.0.0.0:18082' \
-    EMQX_NODE__DATA_DIR="./data2" \
-./bin/emqx start
-
-./bin/emqx_ctl cluster join emqx1@127.0.0.1
-```
-
-## Node discovery and auto clustering
-
-Node discovery allows individual EMQX node with different IPs or locations to be discovered and communicated with each other, and it is a crucial step when creating EMQX clusters.
-
-EMQX's autocluster feature is based on the [Ekka](https://github.com/emqx/ekka) library, the cluster management library developed for Erlang/OTP applications, supporting features like Erlang node service discovery, autocluster, network partition autoheal, and autoclean.
-
-EMQX supports multiple autocluster strategies:
+One of the crucial step for EMQX clustering is node discovery, which enables individual EMQ X nodes with different IP addresses or locations to discover and communicate with each other. EMQX supports multiple node discovery strategies:
 
 | Strategy | Description                               |
 | -------- | ----------------------------------------- |
-| manual   | Create a cluster through manual command   |
-| static   | Create a cluster using a static node list |
-| dns      | Create a cluster using DNS A records      |
-| etcd     | Create a cluster via etcd                 |
-| k8s      | Create a cluster via Kubernetes service   |
+| `manual` | Create a cluster through manual command   |
+| `static` | Create a cluster using a static node list |
+| `mcast`* | Create a cluster through UDP multicast    |
+| `dns`    | Create a cluster using DNS A records      |
+| `etcd`   | Create a cluster via etcd                 |
+| `k8s`    | Create a cluster via Kubernetes service   |
 
-By default, EMQX adopts a manual clustering strategy, which can be set in `emqx.conf`:
+[^*]: The multicast discovery strategy has been deprecated and will be removed in future releases.
 
-```bash
-cluster {
-    ## options: manual | static | dns | etcd | K8s
-    discovery_strategy  =  manual
-}
-```
 
-Note: The mcast discovery strategy has been deprecated and will be removed in future releases.
+
+Naming
+
+
+
+## Manual clustering
+
+
+
+
+
+## Auto clustering
+
+Auto clustering in EMQX is a feature that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically. It also provides fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail.
+
+[^]: 
 
 ## Autocluster by static node list
 
-The static clustering of EMQX is to use a static node list pre-configured on each node to join the cluster. After starting, the nodes will create a cluster automatically according to the node list.
+In EMQX, autocluster by static node list is to use a pre-defined static node list on each node to join the cluster. After starting, the nodes will create a cluster automatically according to the node list.
 
 Static clustering is the easiest way to create an EMQX cluster automatically with no dependencies on other network components or services. As long as each node can communicate with each other through the TCP protocol, they can form an EMQX cluster.
 
@@ -254,3 +169,26 @@ Start all nodes one by one after the configuration, and the cluster will be auto
 
 Calico rather Fannel plugin is recommended.
 :::
+
+
+
+## Query
+
+## Leave
+
+
+
+
+
+## Configure Network protocols
+
+Each Erlang node can be connected via TCP or TLS. 
+
+#### Set EMQX cluster protocols
+
+Each Erlang node can be connected via TCP or TLS, and the connection method can be configured in `etc/emqx.conf`:
+
+| Configuration item    | Type      | Default value       | Description                                                  |
+| --------------------- | --------- | ------------------- | ------------------------------------------------------------ |
+| cluster.proto_dist    | enum      |                     | Distributed protocol with optional values are: - inet_tcp: use TCP IPv4 - inet6_tcp: use TCP IPv6 - inet_tls: use TLS |
+| node.ssl_dist_optfile | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as `inet_tls`, you need to configure the `etc/ssl_dist.conf` file and specify the TLS certificate. |
