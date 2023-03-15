@@ -41,7 +41,7 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 
 2. Click **Create** at the top right corner, then click to select **Redis** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
 
-   ![authz-Redis_ee](/Users/emqx/Documents/GitHub/emqx-docs/en_US/access-control/authz/assets/authz-Redis_ee.png)
+   ![authz-Redis_ee](./assets/authz-Redis_ee.png)
 
 3. Follow the instructions below to do the configuration.
 

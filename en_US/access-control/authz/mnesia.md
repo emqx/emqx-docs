@@ -2,19 +2,21 @@
 
 EMQX provides users with a low-cost, out-of-the-box authorization rule storage method through the built-in database. You can use the built-in database (Mnesia) as a data source by setting it up through the Dashboard or configuration files, and add relevant authorization check rules through the Dashboard or HTTP API.
 
-::: tip Prerequisite
+::: tip Tip
 
-Be familiar with the basic concepts of [Authorization](./authz.md).
+- Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
 ## Configure with dashboard
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
+1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
-Click **Create** at the top right corner, select **Built-in Database** as **Backend**, and click **Next** to enter the  **Configuration** tab. As built-in database authorization does not require configuration parameters, you can click **Create** to complete.
+2. Click **Create** at the top right corner, select **Built-in Database** as **Backend**, and click **Next**. 
 
-![authz-mnesia_ee](./assets/authz-mnesia_ee.png)
+   ![authz-mnesia_ee](./assets/authz-mnesia_ee.png)
+
+3. As built-in database authorization does not require configuration parameters, you can click **Create** to finish.
 
 ## Configure with configuration file
 
@@ -35,13 +37,15 @@ Sample configuration:
 
 For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia).
 
-## Configure authorization rules
+## Create authorization rules
 
 You can create authorization rules through Dashboard or API.
 
-### Congirue with Dashboard
+### Create with Dashboard
 
 On the **Authorization** page in Dashboard, click the **Permissions** button in the **Actions** column of the **Built-in Database** backend.
+
+![authz-config-built-in-rules_ee](./assets/authz-config-built-in-rules_ee.png)
 
 You can set authorization checks based on the client ID, username, or topic as needed.
 
@@ -55,7 +59,7 @@ EMQX supports configuring multiple authorization check rules for a single client
 
 If you want to configure authorization check rules for multiple clients or users at the same time, you can import <!--how to understand "传入规则“？--> the relevant configuration through the HTTP API.
 
-### Configure with API
+### Create with API
 
 Rules are also managed through `/api/v5/authorization/sources/built_in_database` APIs.
 

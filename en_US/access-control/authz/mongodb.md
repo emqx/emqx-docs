@@ -79,7 +79,7 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
 
    **Authentication configuration**: In this section, fill in the authorization-related settings:
 
-   - A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authentication-placeholders) are supported. 
+   - A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authorization-placeholders) are supported. 
 
 4. Click **Create** to finish the settings.
 
