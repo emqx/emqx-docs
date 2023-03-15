@@ -1,8 +1,6 @@
-# Architecture and deployment prerequisites
+# Mria + RLOG Architecture
 
 EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability and is also the key behind 100M MQTT connection support with a single cluster.
-
-
 
 <img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 18%;" />
 
@@ -11,29 +9,6 @@ EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/
 In this [Mria](https://github.com/emqx/mria) + RLOG mode, each node assumes one of two roles: Core node or Replicant node. Core nodes serve as a data layer for the database. Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. 
 
 By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. <!--需要插入4.x 的手册页面链接-->The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster. 
-
-Below section introduces the network requirements and hardware specifications to run EMQX clusters.
-
-## Network and hardware specification
-
-**Network**
-
-Network latency: < 10 ms. The cluster will not be available if the latency is higher than 100 ms. 
-
-The core nodes should be under the same private network. It is also recommended to deploy the replicant nodes in the same private network. 
-
-**CPU and memory**
-
-You can use the [Server Estimate](https://www.emqx.com/en/server-estimate) to calculate the CPU and memory resources needed under various connections and Pub&Sub TPS. It is recommended to configure a higher memory of the Core nodes. 
-
-Below is the minimum hardware specification for running a simple EMQX function verification, supporting 100,000 client connections and 100,000 message throughput per second.
-
-| Item           | Minimum configuration | Recommended configuration |
-| -------------- | --------------------- | ------------------------- |
-| **Node**       | 1                     | 2                         |
-| **CPU**        | 1 core                | 16 core                   |
-| **Memory**     | 512 MB                | 32 GB                     |
-| **Disk space** | 1 GB                  | 50 GB                     |
 
 ## Enable Core + Replicant mode 
 
@@ -51,12 +26,6 @@ cluster {
 ```
 
 <!--Configure with environment variables should also be added-->
-
-::: tip
-
-There must be at least one core node in the cluster. EMQX recommends starting with the 3 cores + N replicants setup.
-
-:::
 
 ## Monitor and debug
 

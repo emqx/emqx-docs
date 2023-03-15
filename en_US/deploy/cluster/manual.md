@@ -8,20 +8,7 @@ EMQX supports creating clusters manually and automatically. This chapter will gu
 - Knowledge of [Architecture and deployment prerequisites](./mria-introduction.md).
   :::
 
-Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`:
 
-```bash
-cluster {
-    ## options: manual | static | dns | etcd | K8s
-    discovery_strategy  =  manual
-}
-```
-
-This approach provides users with greater control and flexibility over the cluster configuration and more security as you can restrict which nodes can join the cluster. 
-
-:::tip
-Manual clustering is not supported in the Core-Replica architecture.
-:::
 
 Before manually creating a cluster, let's first get familiar with the format of node name in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or the FQDN (`myhost.example.domain`), for example:
 
