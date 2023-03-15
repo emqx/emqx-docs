@@ -8,7 +8,7 @@ The administrator can deny the access of clients by add the specified clients to
 The blacklist is only applicable to a small number of client bans. If there are a large number of clients requiring authentication management, use the [authentication](./authn/authn.md) function.
 :::
 
-## Create backlist with Dashboar
+## Create blacklist with Dashboard
 
 1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Blacklist** on the left navigation tree to enter the **Blacklist** page. 
 

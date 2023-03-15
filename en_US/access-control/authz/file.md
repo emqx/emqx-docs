@@ -2,10 +2,10 @@
 
 EMQX supports authorization checks against the predefined rules stored in ACL files. You can configure multiple authorization check rules in the file. After receiving the client's operation request, EMQX matches the authorization rules in order from top to bottom. After successfully matching a rule, EMQX allows or denies the current request according to the setting, and stops matching subsequent rules. 
 
-File-based ACL is simple and lightweight. It is suitable to configure generic rules. For hundreds or more per-client rules, it is recommended to use other authorization sources, and file-based ACL can be the safety guard put at the end of the authorization chain. <!--Should be aligned with the current Chinese?-->
+File-based ACL is simple and lightweight. It is suitable to configure generic rules. For hundreds or more per-client rules, it is recommended to use other authorization sources, and file-based ACL can be the safety guard put at the end of the authorization chain. 
 
 ::: tip Prerequisite
-Starting from 5.0, file-based ACL rules can be edited and reloaded from EMQX dashboard UI.<!--Should this note be removed?-->
+Starting from 5.0, file-based ACL rules can be edited and reloaded from EMQX dashboard UI.
 
 Be familiar with the basic concepts of [Authorization](./authz.md).
 
@@ -45,7 +45,7 @@ The rules are matched from top to bottom. If a rule matches, its permission is a
   * `{username, {re, "^dash"}}` : clients with username matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
   * `{clientid, "dashboard"}` : clients with clientid `dashboard`
   * `{clientid, {re, "^dash"}}` : clients with clientid matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
-  * `{ipaddr, "127.0.0.1"}`: clients connecting from IP address `127.0.0.1`. Netmasks are allowed. <!--中文是“支持CIDR地址格式“，有什么区别？-->If EMQX is behind a TCP proxy, `proxy_protocol` should be enabled for the client's MQTT listener. <!--这里中文里是“如果 EMQX 部署在负载均衡器后侧，建议为 EMQX 的监听器开启 `proxy_protocol` 配置 否则 EMQX 可能会使用负载均衡器的源地址。” 负载均衡器是load balance？“部署在。。。后侧”怎么理解？是否用after？-->
+  * `{ipaddr, "127.0.0.1"}`: clients connecting from IP address `127.0.0.1`. Netmasks are allowed. <!--中文是“支持CIDR地址格式“，有什么区别？-->If EMQX is behind a load balance, `proxy_protocol` should be enabled for the client's MQTT listener. 
   * `{ipaddrs, ["127.0.0.1", ..., ]}` : clients connecting from one of the specified IP addresses `127.0.0.1, ..., `. Netmasks are allowed.
   * `all` : any clients
   * `{'and', [Spec1, Spec2, ...]}` : clients satisfying _all_ of the specifications from the list
@@ -101,7 +101,7 @@ Where,
 - `enable`: Whether to activate the authorizer; optional value: `true`, `false`.
 - `path`: Configuration file path; default value: `etc/acl.conf`. If file-based authorizer is editted through Dashboard or REST API, EMQX stores the new file to `data/authz/acl.conf` and stops reading the configuration in the original file.
 
-For detailed parameter list, see [authz-file](../../configuration/configuration-manual.md#authz-file). <!--Is this link correct?-->
+<!--For detailed parameter list, see [authz-file](../../configuration/configuration-manual.md#authz-file). Need to update the link later-->
 
 ::: tip
 The initial file provided by the `path` config is not mutable to EMQX.
