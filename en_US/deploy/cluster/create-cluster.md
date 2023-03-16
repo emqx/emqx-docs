@@ -1,18 +1,19 @@
-# Create an EMQX cluster
+# Create an EMQX Cluster
 
-EMQX supports creating clusters manually and automatically. 
+EMQX supports creating clusters manually and automatically. There are 2 key concepts before creating a cluster, node names and node discovery. 
 
-:::tip Prerequisites
+**Node Names**
 
-Before create an EMQX cluster, the following 
+Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or FQDN (`myhost.example.domain`), for example:
 
-1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configurig node names, see **Configure node names**. 
-2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
-3. All nodes use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+- For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`; 
+- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`. 
 
+::: tip Tip
+EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
 :::
 
-## Node discovery
+**Node Discovery**
 
 EMQX's clustering feature is based on the [Ekka](https://github.com/emqx/ekka) library, a cluster management library developed for Erlang/OTP applications.
 
@@ -29,16 +30,21 @@ One of the crucial steps for EMQX clustering is node discovery, which enables in
 
 [^*]: The multicast discovery strategy has been deprecated and will be removed in future releases.
 
-## Configure node names
 
-Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or FQDN (`myhost.example.domain`), for example:
 
-- For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`; 
-- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`. 
+## Before You Begin
 
-::: tip Tip
-EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
+Before creating an EMQX cluster, the following prerequisites should first be met:
+
+1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configurig node names, see **Configure node names**. 
+2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
+3. All nodes use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+
 :::
+
+Now you can begin your journey to create an EMQX cluster. 
+
+## Configure Node Names
 
 Before creating a cluster, you need first to name the nodes to join the cluster. Suppose you want to create a cluster for 2 nodes deployed in `s1.emqx.io` and `s2.emqx.io` respectively, you can follow the steps below to create the cluster. 
 
@@ -58,11 +64,15 @@ env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
 
 Repeat the above step for the other node to join the cluster. 
 
-Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx2@s1.emqx.io`
+Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx2@s1.emqx.io`. You can create a cluster either manually or automatically. 
 
-## Manual clustering
+## Manual Clustering
+
+## Set Node Discovery Strategy
 
 EMQX supports creating clusters manually and automatically. This section will introduce the manual clustering feature in EMQX. 
+
+Set node discovery strategy
 
 Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`:
 
@@ -79,7 +89,7 @@ This approach provides users with greater control and flexibility over the clust
 Manual clustering is not supported in the Core-Replica architecture.
 :::
 
-### Configure nodes to join cluster
+### Configure Nodes to Join a Cluster
 
 After the nodes are started,  you can run the `cluster join` command on the node that you want to join the cluster. For example, you want `emqx@s2.emqx.io` to join  `emqx@s1.emqx.io`, run the command below on `emqx@s2.emqx.io`：
 
@@ -94,7 +104,7 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 :::tip
 
-1. This command must be run on the node to join the cluster, that is, as a **request** rather than **invite**.
+1. This command must run on the node to join the cluster, that is, as a **request** rather than **invite**.
 
 2. After `emqx@s2.emqx.io` joins `emqx@s1.emqx.io` to form a cluster, it will clear the local data and synchronize the data in `emqx@s1.emqx.io`.
 
@@ -104,7 +114,7 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 Now you have successfully created a cluster with two nodes, you can read the **Query cluster status**, **Manage cluster nodes**, and **Configure network protocols** sections on how to monitor the cluster status and how to manage the cluster. 
 
-## Auto clustering
+## Auto Clustering
 
 Auto clustering in EMQX is another feature that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically. It also provides fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail.
 
@@ -202,10 +212,10 @@ Where:
 
 - `discovery_strategy` is the node discovery strategy, set it to `etcd`
 - `cluster.etcd.server` is the server address, multiple nodes can be separated with `,`
-- `cluster.etcd.prefix` is the etcd key prefix used for EMQX service discovery <!--not sure if the   explanations is enough-->
--  `cluster.etcd.node_ttl` is a duration, indicate the expiration time of the etcd key assoicated with the node, default: `1m`
+- `cluster.etcd.prefix` is the etcd key prefix used for EMQX service discovery <!--not sure if the explanations is enough-->
+-  `cluster.etcd.node_ttl` is a duration, indicating the expiration time of the etcd key associated with the node, default: `1m`
 
-After completing the configuration, we can start the EMQX nodes one by one, and use the etcdctl tool to observe the changes on the etcd server:
+After completing the configuration, you can start the EMQX nodes one by one, and use the etcdctl tool to observe the changes on the etcd server:
 
 ```bash
 $ etcdctl ls /emqxcl/emqxcl --recursive
@@ -241,7 +251,7 @@ Where:
 - `cluster.K8s.apiserver` is the Kubernetes API endpoint URL, default: `http://10.110.111.204:8080`
 - `cluster.K8s.service_name` is the EMQX service name, default: `emqx`
 - `cluster.K8s.address_type` is the address type to connect the discovered nodes, default: `ip`, optional values: `ip`, `dns`, `hostname`
-  - [optional] `cluster.K8s.suffix` is the node name suffix, only needed when `cluster.K8s.address_type` is set to `dns`,  default: `pod.local`
+- [optional] `cluster.K8s.suffix` is the node name suffix, only needed when `cluster.K8s.address_type` is set to `dns`,  default: `pod.local`
 - `cluster.K8s.namespace` is the Kubernetes namespace, it is a string object, default: `default`
 
 Start all nodes one by one after the configuration, and the cluster will be automatically established.
@@ -251,7 +261,7 @@ Start all nodes one by one after the configuration, and the cluster will be auto
 When working EMQX autocluster on Kubernetes, [Calico](https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/calico-network-policy/) rather than Fannel plugin is recommended. 
 :::
 
-Now you have created your EMQX cluster either manually or automatically, the section below will introduce how to monitor the cluster status and how to manage cluster nodes. 
+After the cluster is succefully created, you can refer to the section below on how to monitor the cluster status and how to manage cluster nodes. 
 
 ## Query cluster status
 
