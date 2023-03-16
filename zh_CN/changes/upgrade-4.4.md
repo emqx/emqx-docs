@@ -31,7 +31,7 @@ ref:
 
 ## 数据及配置备份
 
-在升级前，应备在每个4.3版本的节点上对 `data` `etc`目录中的数据和配置进行备份。
+在升级前，应备在每个 4.3 版本的节点上对 `data` `etc`目录中的数据和配置进行备份。
 根据不同的安装方式和配置，`data` `etc` 目录可能在以下这些位置
 * 环境变量 `EMQX_NODE__DATA_DIR` 指向的位置
 * 配置文件中 `node.data_dir` 指向的位置
@@ -67,7 +67,7 @@ rpm -qa | grep emqx
 rpm -e emqx-4.3.x-x.x86_64
 ```
 
-## 安装 4.4 版本， 并导入4.3版本数据。
+## 安装 4.4 版本， 并导入 4.3 版本数据。
 
 - 以RPM默认安装为例：
 
@@ -75,7 +75,7 @@ rpm -e emqx-4.3.x-x.x86_64
 rpm -ivh emqx-ee-4.4.0-otp24.1.5-3-centos7-amd64.rpm
 ```
 
-- 导入上步已备份的4.3数据及配置。
+- 导入上步已备份的 4.3 数据及配置。
 
 ```bash
 cp -r ~/emqx-backup/etc/ /etc/emqx/
@@ -84,18 +84,17 @@ cp -r ~/emqx-backup/data/ /var/lib/emqx/
 
 ## 启动 4.4 版本
 
-如果你使用的是systemctl启动：
+如果你使用的是 systemctl 启动：
 
 ```bash
 systemctl start emqx
 systemctl status emqx
 ```
 
-- 通过emqx_ctl 查看集群状态
+- 通过 emqx_ctl 查看集群状态
 
 ```bash
 /usr/bin/emqx_ctl cluster status
-
 ```
 
 - 查看日志是否有异常
@@ -107,4 +106,9 @@ ls -htl /var/log/emqx/emqx.log.*[0-9] |head -n 1
 tail -f -n 100 /var/log/emqx/emqx.log.x
 ```
 
-- 通过dashboard查看是否有报警，本节点的状态是否正常
+- 通过 Dashboard 查看是否有报警，本节点的状态是否正常
+
+- 启用 `emqx_schema_registry` 插件。
+  如果需要使用规则引擎的编解码功能的话，`emqx_schema_registry` 插件是必须启动的。
+  在 Dashboard 的 “通用”- “插件” 页面，确保 `emqx_schema_registry` 插件已经启用。
+  在插件页面的搜索栏里输入 `emqx_schema_registry`，找到该插件并点击启用。

@@ -104,3 +104,8 @@ tail -f -n 100 /var/log/emqx/emqx.log.N
 ```
 
 - Check EMQX dashboard to see if the node is running as expected.
+
+- Ensure the `emqx_schema_registry` plugins started.
+  If you are using the `Schema Registry` feature of the rule engine, `emqx_schema_registry` is must be started.
+  On dashboard, click on "General" - "Plugin", make sure the `emqx_schema_registry` plugins is started.
+  If not, you can type in `emqx_schema_registry` in the search bar to find the plugin and then start it.

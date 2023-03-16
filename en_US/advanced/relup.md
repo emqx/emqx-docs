@@ -1,312 +1,173 @@
 
 ## Release Upgrade
 
-{% emqxce %}
+## Release Hot Upgrade
 
-Since version 4.2.0, EMQX supports hot upgrade.
+EMQX support release hot upgrade since version 4.2.0.
 
-By using the hot upgrade feature, users can quickly and safely upgrade the EMQX in the production environment, and avoid the decrease in system availability caused by restarting the service.
+With the release hot upgrade feature, users can quickly and safely upgrade the EMQX of the production environment while keeping all the clients connected, avoid reducing the system availability caused by restarting the service.
 
 ::: tip
-Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
+Currently EMQX for Windows and MacOS does not support the release hot upgrade feature.
 :::
 
 ::: warning
-EMQX only allows hot upgrade between patch versions (the third digit of the version number).
-i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
-Please operate with caution.
+EMQX only allows release hot upgrade between patch versions (the third digit of the version number). Please operate with caution.
+That is, upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
+e.g. It is OK to upgrade to 4.4.16 from 4.4.1, 4.4.2, ..., but not from 4.3.1, 4.3.2, ...
 :::
 
-::: warning
-Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
-:::
+## Download the EMQX Zip Package for Release Hot Upgrade
 
-## Hot upgrade steps
+{% emqxce %}
+Go to [Download EMQX](https://www.emqx.com/en/downloads?product=broker) for the version and the OS you want, and then select the **"zip"** in the "Install Method".
 
-1. View the currently installed version list of EMQX.
-
-```bash
-
-$ emqx versions
-
-Installed versions:
-* 4.2.0	permanent
-```
-
-2. Download the software package to be upgraded from the EMQX website.
-
-Visit [EMQX](https://www.emqx.com/en/downloads?product=broker), Select the corresponding version and operating system type, and then select the **"zip"** package type.
-
-3. Find the installation directory of EMQX:
-
-```bash
-
-$ EMQX_ROOT_DIR=$(emqx root_dir)
-
-$ echo ${EMQX_ROOT_DIR}
-"/usr/lib/emqx"
+The Zip package name format of EMQX version 4.4 is:
 
 ```
-
-4. Put the downloaded zip package in the `releases` directory under the EMQX installation directory:
-
-```bash
-
-$ cp emqx-4.2.1.zip ${EMQX_ROOT_DIR}/releases/
-
+emqx-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 ```
 
-5. Upgrade to the specified version:
+Take `emqx-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` for example:
 
-```bash
-
-$ emqx upgrade 4.2.1
-
-Release 4.2.1 not found, attempting to unpack releases/emqx-4.2.1.tar.gz
-Unpacked successfully: "4.2.1"
-Installed Release: 4.2.1
-Made release permanent: "4.2.1"
-```
-
-6. Check the version list again, and the status of the previous version will become `old`:
-
-```bash
-
-$ emqx versions
-
-Installed versions:
-* 4.2.1	permanent
-* 4.2.0	old
-```
-
-## Manually permanent after upgrade
-
-The above `emqx upgrade 4.2.1` command actually performs three actions:
-
-- `unpack`
-- `install`
-- `permanent`
-
-After permanent, this version upgrade will be fixed, which means that after the hot upgrade, if EMQX restarts, the new version after the upgrade will be used.
-
-If you don't want to persist while upgrading, you can use the `--no-permanent` parameter:
-
-```bash
-
-$ emqx upgrade --no-permanent 4.2.1
-
-Release 4.2.1 not found, attempting to unpack releases/emqx-4.2.1.tar.gz
-Unpacked successfully: "4.2.1"
-Installed Release: 4.2.1
-
-```
-
-At this time, the version has been successfully upgraded to 4.2.1. However, if you restart EMQX, it will revert to the old version 4.2.0.
-Now, if you check the version list, you will find that the state of 4.2.1 is `current`, not the permanent version:
-
-```bash
-
-$ emqx versions
-
-Installed versions:
-* 4.2.1	current
-* 4.2.0	permanent
-
-```
-
-After the system has been running stably for a period of time, if you decide to make the new version permant, you can execute the `install` command again:
-
-```bash
-
-$ emqx install 4.2.1
-
-Release 4.2.1 is already installed and current, making permanent.
-Made release permanent: "4.2.1"
-
-```
-
-## Downgrade to previous versions
-
-If you find a problem and want to roll back after the upgrade, you can execute the version downgrade command.
-For example, the following example will roll back EMQX to version 4.2.0:
-
-```bash
-
-$ emqx downgrade 4.2.0
-
-Release 4.2.0 is marked old, switching to it.
-Installed Release: 4.2.0
-Made release permanent: "4.2.0"
-
-```
-
-## Delete versions
-
-After the system has been running stably for a period of time, if you decide to delete an old version, you can execute the version uninstall command.
-For example, the following example will uninstall the old version 4.2.0:
-
-```bash
-
-$ emqx uninstall 4.2.0
-
-Release 4.2.0 is marked old, uninstalling it.
-Uninstalled Release: 4.2.0
-
-```
-
+- EMQX Version(`4.4.16`): EMQX version number. Please ensure that all the digits except the last one (here is 16) in the version number must be the same as that of the installed EMQX.
+- OTP Version(`otp24.3.4.2-1`): Erlang OTP version number. Please ensure that the first digit (here is 24) must be the same as that of the installed EMQX.
+- OS Type(`ubuntu20.04`): OS type. Please ensure that it is same as the OS Type of the installed EMQX.
+- Arch(`amd64`): Type of the architecture. Please ensure that it is the same as the arch type of the installed EMQX.
 {% endemqxce %}
 
 {% emqxee %}
+Go to [EMQX Enterprise](https://www.emqx.com/en/try?product=enterprise) for the version and the OS you want, and then select the **"zip"** in the "Install Method".
 
-Since version 4.2.0, EMQX Enterprise supports hot upgrade.
+The Zip package name format of EMQX Enterprise version 4.4 is:
 
-By using the hot upgrade feature, users can quickly and safely upgrade the EMQX Enterprise in the production environment, and avoid the decrease in system availability caused by restarting the service.
+```
+emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
+```
 
-::: tip
-Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
-:::
+Take `emqx-ee-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` for example:
 
-::: warning
-EMQX only allows hot upgrade between patch versions (the third digit of the version number).
-i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
-Please operate with caution.
-:::
+- EMQX Type(`ee`): EMQX Type. `ee` stands for EMQX Enterprise, Open source version does not have this field. Please make it is the same as the installed EMQX Type.
+- EMQX Version(`4.4.16`): EMQX version number. Please ensure that all the digits except the last one (here is 16) in the version number must be the same as that of the installed EMQX.
+- OTP Version(`otp24.3.4.2-1`): Erlang OTP version number. Please ensure that the first digit (here is 24) must be the same as that of the installed EMQX.
+- OS Type(`ubuntu20.04`): OS type. Please ensure that it is same as the OS Type of the installed EMQX.
+- Arch(`amd64`): Type of the architecture. Please ensure that it is the same as the arch type of the installed EMQX.
+{% endemqxee %}
 
-::: warning
-Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
-:::
+## Setups for Release Hot Upgrade
 
-## Hot upgrade steps
-
-1. View the currently installed version list of EMQX Enterprise.
+1. View the list of currently installed EMQX versions
 
 ```bash
-
 $ emqx versions
 
 Installed versions:
-* 4.2.0	permanent
+* 4.4.0	permanent
 ```
 
-2. Download the software package to be upgraded from the EMQX Enterprise website.
+2. Check whether the downloaded package type is the same as the currently installed one.
 
-Visit [EMQX Enterprise](https://www.emqx.com/en/downloads?product=enterprise), Select the corresponding version and operating system type, and then select the **"zip"** package type.
-
-3. Find the installation directory of EMQX Enterprise:
+3. Locate the EMQX installation directory:
 
 ```bash
-
 $ EMQX_ROOT_DIR=$(emqx root_dir)
 
 $ echo ${EMQX_ROOT_DIR}
 "/usr/lib/emqx"
-
 ```
 
-4. Put the downloaded zip package in the `releases` directory under the EMQX installation directory:
+4. Place the downloaded zip package in the `releases` directory under the EMQX installation directory:
 
 ```bash
-
-$ cp emqx-4.2.1.zip ${EMQX_ROOT_DIR}/releases/
-
+$ cp emqx-*4.4.16-*.zip ${EMQX_ROOT_DIR}/releases/
 ```
 
 5. Upgrade to the specified version:
 
 ```bash
+$ emqx upgrade 4.4.16
 
-$ emqx upgrade 4.2.1
-
-Release 4.2.1 not found, attempting to unpack releases/emqx-4.2.1.tar.gz
-Unpacked successfully: "4.2.1"
-Installed Release: 4.2.1
-Made release permanent: "4.2.1"
+Release 4.4.16 not found, attempting to unpack releases/emqx-4.4.16.tar.gz
+Unpacked successfully: "4.4.16"
+Installed Release: 4.4.16
+Made release permanent: "4.4.16"
 ```
 
-6. Check the version list again, and the status of the previous version will become `old`:
+6. View the version list again, and the status of the previous version will change to `old`:
 
 ```bash
-
 $ emqx versions
 
 Installed versions:
-* 4.2.1	permanent
-* 4.2.0	old
+* 4.4.16 permanent
+* 4.4.0	old
 ```
 
-## Manually permanent after upgrade
+::: warning
+Don't remove any files or directories under the `${EMQX_ROOT_DIR}/releases/`.
+If you want to remove the specified version, use the `emqx uninstall` command.
+:::
 
-The above `emqx upgrade 4.2.1` command actually performs three actions:
+## Permanent the Version Manually after Upgrading
 
-- `unpack`
-- `install`
-- `permanent`
+The `emqx upgrade 4.4.16` command above actually performs three actions:
 
-After permanent, this version upgrade will be fixed, which means that after the hot upgrade, if EMQX Enterprise restarts, the new version after the upgrade will be used.
+- Uncompress the Zip package (`unpack`)
+- Install it (`install`)
+- Permanent it (`permanent`)
 
-If you don't want to persist while upgrading, you can use the `--no-permanent` parameter:
+After persistence, this version upgrade will be fixed, which means that after a hot upgrade, if EMQX restarts, the new version after the upgrade will be used.
+If you do not want to persist while upgrading, you can use the `--no-permanent` parameter:
 
 ```bash
+$ emqx upgrade --no-permanent 4.4.16
 
-$ emqx upgrade --no-permanent 4.2.1
-
-Release 4.2.1 not found, attempting to unpack releases/emqx-4.2.1.tar.gz
-Unpacked successfully: "4.2.1"
-Installed Release: 4.2.1
-
+Release 4.4.16 not found, attempting to unpack releases/emqx-4.4.16.tar.gz
+Unpacked successfully: "4.4.16"
+Installed Release: 4.4.16
 ```
 
-At this time, the version has been successfully upgraded to 4.2.1. However, if you restart EMQX Enterprise, it will revert to the old version 4.2.0.
-Now, if you check the version list, you will find that the state of 4.2.1 is `current`, not the permanent version:
+At this time, the version has been successfully upgraded to 4.4.16, but if you restart EMQX, it will revert to the old version 4.4.0.
+Now if you lookup the versions, you will find that the status of 4.4.16 is "current", not the persistent version:
 
 ```bash
-
 $ emqx versions
 
 Installed versions:
-* 4.2.1	current
-* 4.2.0	permanent
-
+* 4.4.16	current
+* 4.4.0	permanent
 ```
 
-After the system has been running stably for a period of time, if you decide to make the new version permant, you can execute the `install` command again:
+After the system has been running stably for a period of time, if you decide to persist the new version, you can run the `install` command again:
 
 ```bash
+$ emqx install 4.4.16
 
-$ emqx install 4.2.1
-
-Release 4.2.1 is already installed and current, making permanent.
-Made release permanent: "4.2.1"
-
+Release 4.4.16 is already installed and current, making permanent.
+Made release permanent: "4.4.16"
 ```
 
-## Downgrade to pervious versions
+## Downgrade to a version
 
-If you find a problem and want to roll back after the upgrade, you can execute the version downgrade command.
-For example, the following example will roll back EMQX Enterprise to version 4.2.0:
+If you find a problem after upgrading and want to go back, you can run the version downgrade command.
+For example, the following example will roll back EMQX to version 4.4.0:
 
 ```bash
+$ emqx downgrade 4.4.0
 
-$ emqx downgrade 4.2.0
-
-Release 4.2.0 is marked old, switching to it.
-Installed Release: 4.2.0
-Made release permanent: "4.2.0"
-
+Release 4.4.0 is marked old, switching to it.
+Installed Release: 4.4.0
+Made release permanent: "4.4.0"
 ```
 
-## Delete versions
+## Uninstall a version
 
-After the system has been running stably for a period of time, if you decide to delete an old version, you can execute the version uninstall command.
-For example, the following example will uninstall the old version 4.2.0:
+If you decide to delete an old version after the system has been running stably for a period of time, you can do the version uninstallation.
+For example, the following example will uninstall the old version of 4.4.0:
 
 ```bash
+$ emqx uninstall 4.4.0
 
-$ emqx uninstall 4.2.0
-
-Release 4.2.0 is marked old, uninstalling it.
-Uninstalled Release: 4.2.0
-
+Release 4.4.0 is marked old, uninstalling it.
+Uninstalled Release: 4.4.0
 ```
-
-{% endemqxee %}
