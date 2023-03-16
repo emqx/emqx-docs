@@ -61,7 +61,7 @@
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
-    
+
 - title_en: EMQX Cluster
   title_cn: 构建集群
   path: deploy/cluster/introduction
@@ -352,11 +352,11 @@
 
 - title_en: Design and Implementation
   title_cn: 设计与实现
-  path: advanced/overview
+  path: design/overview
   children:
     # - design/design
-    - advanced/inflight-window-and-message-queue
-    - advanced/retransmission
+    - design/inflight-window-and-message-queue
+    - design/retransmission
     # - title_en: SDK & Tools
     #   title_cn: SDK 与工具
     #   children:
