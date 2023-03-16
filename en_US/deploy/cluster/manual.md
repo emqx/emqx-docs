@@ -33,7 +33,13 @@ In `etc/emqx.conf`:
 
 ```bash
 node.name = emqx@s1.emqx.io
-	@@ -43,84 +37,71 @@ You can also override the node name with an environment variable:
+```
+
+or
+
+You can also override the node name with an environment variable:
+
+```bash
 env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
 ```
 
