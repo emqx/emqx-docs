@@ -354,9 +354,10 @@
   title_cn: 设计与实现
   path: design/overview
   children:
-    # - design/design
+    - design/clustering
     - design/inflight-window-and-message-queue
     - design/retransmission
+    # - design/design
     # - title_en: SDK & Tools
     #   title_cn: SDK 与工具
     #   children:
