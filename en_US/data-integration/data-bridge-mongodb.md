@@ -75,12 +75,12 @@ db.createCollection('emqx_messages')
 - Auto-derivation of the data type of "value" is not supported:
   - Characters need to be wrapped with `"`, otherwise, an error will be reported;
   - Values do not need to be wrapped, otherwise, they will be recognized as characters;
-  - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](https://github.com/emqx/emqx-docs/blob/1991eaf3eb0596726e3b397f7758212742bf7a3e/zh_CN/data-integration/rule-sql-builtin-functions.md#Time and date functions). 
+  - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](https://github.com/emqx/emqx-docs/blob/1991eaf3eb0596726e3b397f7758212742bf7a3e/en_US/data-integration/rule-sql-builtin-functions.md#Time and date functions). 
 -  Nested objects are allowed, when value is a JSON object:
     - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;
     - Objects will be nested and stored according to their own structure;
     - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`. 
-:::
+    :::
 
 1. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
 2. Then click **Create** to finish the creation of the data bridge. A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** or **Data Integration** -> **Rules **on EMQX dashboard to configure rules.

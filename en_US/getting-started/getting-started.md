@@ -211,7 +211,7 @@ To uninstall EMQX after your testing, you only need to delete the EMQX folders.
 Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTT X
 ## Use MQTT X to verify the connection
 
-[MQTT X](https://mqttx.app/zh) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
+[MQTT X](https://mqttx.app/en) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
 
 This section will introduce how to verify the connection with [MQTT X Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application. 
 
