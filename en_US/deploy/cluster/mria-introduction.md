@@ -1,29 +1,29 @@
 # Architecture
 
-<!--need to add a section about how users can work with a cluster with all nodes as core nodes--> 
+<!--need to add a section about how users can work with a cluster with all nodes as core nodes-->
 
-EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster. 
+EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria), which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster. 
 
 <img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 18%;" />
 
-
-
-In this [Mria](https://github.com/emqx/mria) + RLOG mode, each node assumes one of two roles: Core node or Replicant node. Core nodes serve as a data layer for the database. Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. <!--On how core and replicant node works, you can continue to read the [EMQX clustering](../../design/clustering.md) will update when pr 1730 is merged. -->
+In this [Mria](https://github.com/emqx/mria), each node assumes one of two roles: Core node or Replicant.
+Core nodes serve as a data layer for the database.
+Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. <!--On how core and replicant node works, you can continue to read the [EMQX clustering](../../design/clustering.md) will update when pr 1730 is merged. -->
 
 By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster. 
 
-## Enable Core + Replicant Mode 
+## Enable Core + Replicant Mode
 
 To enable the  Core + Replicant mode, the backend database (`db_backend`) should be set to `rlog`, some nodes should assume the replicant role (`node.db_role`), and the core node (`core_node`) should be specified, as shown below:
 
 ```bash
 cluster {
 		## Default setting, suitable for very large backend
-		db_backend = rlog 
+		db_backend = rlog
 		##To set a node as a replicant node
-		node.db_role = replicant 
-		##List of core nodes that the replicant will connect to, different nodes can be seperated with a comma 
-		core_node = [node1, node2, ...] 
+		node.db_role = replicant
+		##List of core nodes that the replicant will connect to, different nodes can be seperated with a comma
+		core_node = [node1, node2, ...]
 }
 ```
 
