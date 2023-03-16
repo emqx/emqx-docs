@@ -18,7 +18,7 @@
 
 ## 修复
 
-- 在版本热升级的时候开启 `emqx_schema_registry` 插件。
+- 在版本热升级的时候自动开启 `emqx_schema_registry` 插件。
   当使用规则解码序列化的二进制数据（比如 protobuf 或 avro）的时候，`emqx_schema_registry` 插件是必须的。
   在 EMQX 企业版里，我们需要保证这个插件是启动的。
 

@@ -10,7 +10,7 @@ This version update includes 4 enhancements and 7 fixes.
 
 - Improve the logs for IoTDB resource.
   Before this change, if the user configured a different `iotdb_version` from the installed IoTDB
-  version, sending messages to IoTDB will fail but it is hard to known the reason just from the log
+  version, sending messages to IoTDB will fail but it is hard to know the reason just from the log
   messages.
   After this change, we will print more readable logs to prompt the user that he may have
   configured a wrong `iotdb_version`.
@@ -21,7 +21,7 @@ This version update includes 4 enhancements and 7 fixes.
 
 ### Bug fixes
 
-- Start the `emqx_schema_registry` plugin when release hot upgrade.
+- Start the `emqx_schema_registry` plugin automatically when release hot upgrade.
   The `emqx_schema_registry` is a necessary plugin when using rules to decode serialized binary data
   (e.g. Protobuf or Avro), we should ensure this plugin started in the EMQX enterprise.
 
