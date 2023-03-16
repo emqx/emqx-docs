@@ -103,7 +103,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 ./bin/emqx_ctl cluster join emqx1@127.0.0.1
 ```
 
-The above code example to create a cluster manually, you can also refer to the **auto clustering** section on how to create a cluster automatically. 
+The above code example is to create a cluster manually, you can also refer to the [auto clustering](#auto-clustering) section on how to create a cluster automatically. 
 
 ## Network and hardware specifications
 
@@ -268,11 +268,3 @@ topic3 -> node2, node4
 <!--EMQX's subscription table is partitioned in the cluster, while the topic tree and routing table are replicated within the cluster.-->
 
 ## <!---->
-
-## Further reading
-
-You can continue to read the following chapters on how to cluster EMQX nodes.
-
-- [Create Cluster](./create-cluster.md)
-- [configure load balancing](./lb.md)
--  [Configure cluster security](./security.md)

@@ -1,107 +1,118 @@
 # Manual Clustering
 
-EMQX supports creating clusters manually and automatically. This chapter will guide you through creating and managing EMQX clusters manually.
+EMQX nodes are identified by their names.
 
-:::tip Prerequisites:
+A node name consists of two parts, the node name part and the host part, separated with `@`.
 
-- Knowledge of [Distributed Clusters](./introduction.md).
-- Knowledge of [Architecture and deployment prerequisites](./mria-introduction.md).
-  :::
+The host part must either be the IP address or the FQDN, which has dots,
+for example, `myhost.example.domain`.
 
+In this document, we use two nodes to demonstrate manual clustering steps.
 
+Suppose you are going to deploy an EMQX cluster on two servers `s1.emqx.io` and `s2.emqx.io`
 
-Before manually creating a cluster, let's first get familiar with the format of node name in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or the FQDN (`myhost.example.domain`), for example:
+| FQDN       | Node name       |
+| ---------- | --------------- |
+| s1.emqx.io | emqx@s1.emqx.io |
+| s2.emqx.io | emqx@s2.emqx.io |
 
-- For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`; 
-- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`. 
+Or if you have static IP assignments for the hosts.
+
+| FQDN         | Node name         |
+| ------------ | ----------------- |
+| 192.168.0.10 | emqx@192.168.0.10 |
+| 192.168.0.20 | emqx@192.168.0.20 |
 
 ::: tip Tip
-EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
+EMQX node names are immutable, as they are baked into the database schema and data files. It is strongly recommended to use static FQDNs for EMQX node names, even when the network environment provides static IPs.
 :::
 
-To manually create a cluster, you need to configure each node in the cluster, including setting up network connections among them. Suppose you want to create a cluster for 2 nodes deployed in `s1.emqx.io` and `s2.emqx.io` respectively, you can follow the steps below to create the cluster. 
+## Configure `emqx@s1.emqx.io` Node
 
-## Configure node names
-
-Configure the node name in the `emqx.conf` configuration file of the 1st node, for example:
+In `etc/emqx.conf`:
 
 ```bash
 node.name = emqx@s1.emqx.io
-# or
-node.name = emqx@192.168.0.10
-```
-
-You can also override the node name with an environment variable:
-
-```bash
+	@@ -43,84 +37,71 @@ You can also override the node name with an environment variable:
 env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
 ```
 
-Repeat the above step for the other node to join the cluster. 
+::: tip
+After the node joins the cluster, the node name must not be changed.
+:::
 
-Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx2@s1.emqx.io`
+## Configure `emqx@s2.emqx.io` Node
 
-## Let a node join a cluster
+In `etc/emqx.conf`
 
-After the two nodes are started, run the `cluster join` command on the node that you want to join the cluster. For example, you want `emqx@s2.emqx.io` to join  `emqx@s1.emqx.io`, run the command below on `emqx@s2.emqx.io`：
+```bash
+node.name = emqx@s2.emqx.io
+# or
+node.name = emqx@192.168.0.20
+```
+
+## Node Joins the Cluster
+
+After the two nodes are started, execute the following command on `s2.emqx.io`:
 
 ```bash
 $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
-
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
-:::tip
+::: tip Tip
+After `s2.emqx.io` joins `s1.emqx.io` to form a cluster,
+its local data will be cleared, and the data from node `s1.emqx.io`
+will be synchronized over.
+:::
 
-1. This command must be run on the node to join the cluster, that is, as a **request** rather than **invite**.
+EMQX `join` command should be run on a node **outside** the cluster. The argument should be a node **inside** the cluster.
 
-2. After `emqx@s2.emqx.io` joins `emqx@s1.emqx.io` to form a cluster, it will clear the local data and synchronize the data in `emqx@s1.emqx.io`.
+The `join` **must not** be run on the nodes inside the cluster, i.e., we can't "invite" an external node to join.
 
-3. If `emqx@s2.emqx.io`  wants to join another cluster, it must first leave the current cluster. 
+E.g. if a `s3.emqx.io` is to join the cluster of `s1` and `s2`,
+the join command should be executed on `s3` but **NOT** on `s1` or `s2`.
 
-   :::
+::: tip
+Joining another cluster will cause the node to leave any current cluster it may be part of.
+:::
 
-## Query cluster running status
-
-Run the command below on any cluster node to query the cluster status:
+Query the cluster status on any node:
 
 ```bash
 $ ./bin/emqx_ctl cluster status
-
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-## Leave a cluster/Remove a node
+## Leaving a Cluster
 
-You can remove a node from a cluster with `cluster leave` or ``cluster force-leave``:
+There are two ways for a node to leave a cluster:
 
-When an EMQX node issues the `cluster leave` command, it notifies the other nodes in the cluster that it intends to leave, and it stops participating in cluster operations, it will complete any ongoing tasks before leaving.
+1. `leave` command: Make the command calling node leave the cluster
+2. `force-leave` command: Force another node to leave the cluster
 
-When an EMQX node issues the `cluster force-leave` command, a node will be forcefully removed from a cluster. This command is typically used when a node fails or becomes unresponsive. 
-
-For example, in the previously built cluster, if `emqx@s2.emqx.io` wants to leave the cluster, you can run the command below on `emqx@s2.emqx.io`:
-
-```bash
-./bin/emqx_ctl cluster leave
-```
-
-Or run the command below on `emqx@s1.emqx.io` to remove `emqx@s2.emqx.io` from the cluster:
+Make `emqx@s2.emqx.io` leave a cluster by executing the below command on `s2.emqx.io`:
 
 ```bash
-./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+$ ./bin/emqx_ctl cluster leave
 ```
 
-After the cluster is created, you can continue to set the network protocols for the nodes. EMQX supports connecting the nodes via TCP or TLS.
+Or force `emqx@s2.emqx.io` to leave cluster by executing the command on `s1.emqx.io`:
 
-## Configure network protocols
+```bash
+$ ./bin/emqx_ctl cluster force-leave emqx@s2.emqx.io
+```
 
-Each Erlang node can be connected via TCP or TLS, and the connection method can be configured in `emqx.conf`:
+### Start a Cluster on a Single Machine
 
-To use TCP IPv4 and TCP IPv6s, you can set with the `cluster.proto_dist` in `emqx.conf`. 
+For users who only have one server, the pseudo-distributed starting mode can be used.
+Please note that if we want to start two or more nodes on one machine, we must adjust
+the listening port of the other node to avoid port conflicts.
 
-- TCP IPv4: `inet_tcp ` (Default)
-- TCP IPv6: `inet6_tcp`
+The basic process is to copy another emqx folder and name it emqx2.
+After that, we offset all the listening ports of the original emqx relative to those of the emqx2 node.
+For example, we can change the MQTT/TCP listening port from the default 1883 to 2883 for emqx2.
 
-To enable SSL, you first need to set the `cluster.proto_dist` to `inet_tls`, then configure the `ssl_dist.conf` file in the `etc` folder and specify the TLS certificate. For details, see [Using TLS for Erlang Distribution](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html). 
+See a shell [script](https://github.com/terry-xiaoyu/one_more_emqx) that makes this process.
 
-<!--need some code example here-->
+Refer to [cfg](../../configuration/configuration-manual.md).

@@ -30,13 +30,11 @@ One of the crucial steps for EMQX clustering is node discovery, which enables in
 
 [^*]: The multicast discovery strategy has been deprecated and will be removed in future releases.
 
-
-
 ## Before You Begin
 
 Before creating an EMQX cluster, the following prerequisites should first be met:
 
-1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configurig node names, see **Configure node names**. 
+1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configuring node names, see [Configure Node Names](#configure-node-names). 
 2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
 3. All nodes use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
 
@@ -112,7 +110,7 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
    :::
 
-Now you have successfully created a cluster with two nodes, you can read the **Query cluster status**, **Manage cluster nodes**, and **Configure network protocols** sections on how to monitor the cluster status and how to manage the cluster. 
+Now you have successfully created a cluster with two nodes, you can read the [Query Cluster Status](#query-cluster-status), [Manage Cluster Nodes](#manage-cluster-nodes), and [Configure Network Protocols](#configure-network-protocols) sections on how to monitor the cluster status and how to manage the cluster. 
 
 ## Auto Clustering
 
@@ -120,7 +118,7 @@ Auto clustering in EMQX is another feature that allows multiple EMQX nodes to fo
 
 EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes. Continue to read to learn how to work with these features. 
 
-## Autocluster by static node list
+## Autocluster by Static Node List
 
 In EMQX, autocluster by static node list is to use a pre-defined static node list on each node to join the cluster. After starting, the nodes will create a cluster automatically according to the node list.
 
@@ -146,13 +144,13 @@ Where,
 
 After all nodes are started, the cluster will be automatically established.
 
-## Autocluster by DNS records
+## Autocluster by DNS Records
 
-Domain Name System (DNS) record is a type of record used to map domain names to IP addresses. DNS system allows multiple A records for one domain name, this makes a one-to-many mapping. EMQX can use this one-to-many mapping to find all nodes that belong to one cluster so that the nodes can join a cluster automatically.
+Domain Name System (DNS) record is a type of record used to map domain names to IP addresses. DNS SRV records allow multiple records for one domain name, this makes a one-to-many mapping. EMQX can use this one-to-many mapping to find all nodes that belong to one cluster so that the nodes can join a cluster automatically.
 
 EMQX supports auto clustering by DNS A records and DNS SRV records. <!--can we add the difference between these 2 records, what are their use cases, and it seems to me that the above parameter is only about DNS A.-->
 
-#### Configure DNS services
+#### Configure DNS Services
 
 Most public cloud services have DNS services. After assigning a domain name, you only need to add the IP address of each EMQX node to the A record of this domain to finish the configuration.
 
@@ -162,7 +160,7 @@ If EMQX is deployed in a private cloud or internal network, you will need to dep
 
 :::
 
-### Configure autocluster by DNS Records
+### Configure Autocluster by DNS Records
 
 After the DNS service is ready, you can add all nodes to join the cluster in `emqx.conf` with the `cluster.dns` configuration item:
 
@@ -187,7 +185,7 @@ Where,
 
 After all nodes are started, the cluster will be automatically established.
 
-## Autocluster using etcd
+## Autocluster Using etcd
 
 [etcd](https://etcd.io/) is an open-source project initiated by CoreOS. It is widely used in distributed systems for service discovery and connection establishing, which is exactly what EMQX auto clustering needs.
 
@@ -263,7 +261,7 @@ When working EMQX autocluster on Kubernetes, [Calico](https://kubernetes.io/docs
 
 After the cluster is succefully created, you can refer to the section below on how to monitor the cluster status and how to manage cluster nodes. 
 
-## Query cluster status
+## Query Cluster Status
 
 Run the command below on any cluster node to query the cluster status:
 
@@ -273,7 +271,7 @@ $ ./bin/emqx_ctl cluster status
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-## Manage cluster nodes
+## Manage Cluster Nodes
 
 You can remove a node from a cluster with `cluster leave` or ``cluster force-leave``:
 
@@ -295,7 +293,7 @@ Or run the command below on `emqx@s1.emqx.io` to remove `emqx@s2.emqx.io` from t
 
 After the cluster is created, you can continue to set the network protocols for the nodes. EMQX supports connecting the nodes via TCP or TLS.
 
-## Configure network protocols
+## Configure Network Protocols
 
 Each Erlang node can be connected via TCP or TLS, and the connection method can be configured in `emqx.conf`:
 
