@@ -25,11 +25,10 @@ ref:
 
 ::: warning
 EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。请谨慎操作。
-即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
 比如可以从 4.4.1，4.4.2，...，4.4.15 升级到 4.4.16，但不能从 4.3.1，4.3.2，... 升级上来。
 :::
 
-## 下载热升级使用的 Zip 格式的 EMQX 软件包
+## 下载热升级 Zip 包
 
 {% emqxce %}
 访问 [下载 EMQX](https://www.emqx.com/zh/downloads?product=broker) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
@@ -42,8 +41,8 @@ emqx-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 
 以 `emqx-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` 为例，其中：
 
-- EMQX Version(`4.4.16`): EMQX 版本号。请确保除了最后一位 (这里是 16) 之外，其他各位必须跟已安装的 EMQX 版本号均相同。
-- OTP Version(`otp24.3.4.2-1`): Erlang OTP 版本号。请确保其首位 (这里是 24) 跟已安装的 EMQX 的 OTP 版本号一致。
+- EMQX Version(`4.4.16`): EMQX 版本号。请确保已经安装的 EMQX 是 4.4.* 版本，而不是 4.3 或者 5.0 等版本。
+- OTP Version(`otp24.3.4.2-1`): Erlang OTP 版本号。请确保其首位 (例中为 24) 跟已安装的 EMQX 的 OTP 版本号一致。
 - OS Type(`ubuntu20.04`): 操作系统类型。请确保跟已安装的 EMQX 操作系统类型一致。
 - Arch(`amd64`): 架构类型。请确保跟已安装的 EMQX 架构类型一致。
 {% endemqxce %}
@@ -60,8 +59,8 @@ emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 以 `emqx-ee-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` 为例，其中：
 
 - EMQX Type(`ee`): EMQX 类型。`ee` 代表企业版，开源版没有这一字段。请确保跟已安装的 EMQX 类型。
-- EMQX Version(`4.4.16`): EMQX 版本号。请确保除了最后一位 (这里是 16) 之外，其他各位跟已安装的 EMQX 版本号均相同。
-- OTP Version(`otp24.3.4.2-1`): Erlang OTP 版本号。请确保其首位 (这里是 24) 跟已安装的 EMQX 的 OTP 版本号一致。
+- EMQX Version(`4.4.16`): EMQX 版本号。请确保已经安装的 EMQX 是 4.4.* 版本，而不是 4.3 或者 5.0 等版本。
+- OTP Version(`otp24.3.4.2-1`): Erlang OTP 版本号。请确保其首位 (例中为 24) 跟已安装的 EMQX 的 OTP 版本号一致。
 - OS Type(`ubuntu20.04`): 操作系统类型。请确保跟已安装的 EMQX 操作系统类型一致。
 - Arch(`amd64`): 架构类型。请确保跟已安装的 EMQX 架构类型一致。
 {% endemqxee %}
@@ -78,7 +77,7 @@ Installed versions:
 ```
 
 2. 检查所下载的包的类型是否跟当前已安装的 EMQX 包类型是否一致。
-   详见上面的 “下载热升级使用的 Zip 格式的 EMQX 软件包” 章节。
+   详见上面的 “下载热升级 Zip 包” 章节。
 
 3. 找到 EMQX 的安装目录：
 
@@ -129,7 +128,7 @@ Installed versions:
 - 安装 (`install`)
 - 持久化 (`permanent`)
 
-持久化之后，这次版本升级将会被固定下来，这意味着热升级后，如果 EMQX 发生重启，使用的将是升级之后的新版本。
+持久化之后，如果 EMQX 发生重启，使用的将是升级之后的新版本。
 如果不想在升级的同时持久化，可以使用 `--no-permanent` 参数：
 
 ```bash
