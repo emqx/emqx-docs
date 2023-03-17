@@ -17,7 +17,7 @@ ref:
 
 自 4.2.0 版本之后，EMQX 支持版本热升级。
 
-使用版本热升级功能，用户可以在保持客户端连接不断开的情况下，快速、安全地升级生产环境的 EMQX，并避免了因重启服务导致的系统可用性降低。
+使用版本热升级功能，用户可以在保持客户端连接不断开的情况下，快速、安全地升级生产环境中正在运行的 EMQX，并避免了因重启服务导致的系统可用性降低。
 
 ::: tip
 目前 Windows、MacOS 暂不支持热升级功能。
@@ -32,7 +32,7 @@ EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。请谨慎�
 ## 下载热升级使用的 Zip 格式的 EMQX 软件包
 
 {% emqxce %}
-访问 [下载 EMQX](https://www.emqx.com/en/downloads?product=broker) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
+访问 [下载 EMQX](https://www.emqx.com/zh/downloads?product=broker) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
 
 EMQX 4.4 版本的 Zip 包名格式为：
 
@@ -49,7 +49,7 @@ emqx-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 {% endemqxce %}
 
 {% emqxee %}
-访问 [下载 EMQX 企业版](https://www.emqx.com/en/try?product=enterprise) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
+访问 [下载 EMQX 企业版](https://www.emqx.com/zh/try?product=enterprise) 选择对应的版本和操作系统类型，然后选择 **"zip"** 包类型。
 
 EMQX 企业版 4.4 的 Zip 包名格式为：
 
@@ -78,6 +78,7 @@ Installed versions:
 ```
 
 2. 检查所下载的包的类型是否跟当前已安装的 EMQX 包类型是否一致。
+   详见上面的 “下载热升级使用的 Zip 格式的 EMQX 软件包” 章节。
 
 3. 找到 EMQX 的安装目录：
 

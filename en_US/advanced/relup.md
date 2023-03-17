@@ -1,23 +1,21 @@
 
-## Release Upgrade
+## Hot Upgrade
 
-## Release Hot Upgrade
+EMQX support hot upgrade since version 4.2.0.
 
-EMQX support release hot upgrade since version 4.2.0.
-
-With the release hot upgrade feature, users can quickly and safely upgrade the EMQX of the production environment while keeping all the clients connected, avoid reducing the system availability caused by restarting the service.
+With the hot upgrade feature, users can quickly and safely upgrade the running EMQX of the production environment while keeping all the clients connected, avoid reducing the system availability caused by restarting the service.
 
 ::: tip
-Currently EMQX for Windows and MacOS does not support the release hot upgrade feature.
+Currently EMQX for Windows and MacOS does not support the hot upgrade feature.
 :::
 
 ::: warning
-EMQX only allows release hot upgrade between patch versions (the third digit of the version number). Please operate with caution.
+EMQX only allows hot upgrade between patch versions (the third digit of the version number). Please operate with caution.
 That is, upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
 e.g. It is OK to upgrade to 4.4.16 from 4.4.1, 4.4.2, ..., but not from 4.3.1, 4.3.2, ...
 :::
 
-## Download the EMQX Zip Package for Release Hot Upgrade
+## Download the EMQX Zip Package for Hot Upgrade
 
 {% emqxce %}
 Go to [Download EMQX](https://www.emqx.com/en/downloads?product=broker) for the version and the OS you want, and then select the **"zip"** in the "Install Method".
@@ -54,7 +52,7 @@ Take `emqx-ee-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` for example:
 - Arch(`amd64`): Type of the architecture. Please ensure that it is the same as the arch type of the installed EMQX.
 {% endemqxee %}
 
-## Setups for Release Hot Upgrade
+## Setups for Hot Upgrade
 
 1. View the list of currently installed EMQX versions
 
@@ -66,6 +64,7 @@ Installed versions:
 ```
 
 2. Check whether the downloaded package type is the same as the currently installed one.
+   Please see the "Download the EMQX Zip Package for Hot Upgrade" section above.
 
 3. Locate the EMQX installation directory:
 
@@ -147,7 +146,7 @@ Release 4.4.16 is already installed and current, making permanent.
 Made release permanent: "4.4.16"
 ```
 
-## Downgrade to a version
+## Downgrade to a Version
 
 If you find a problem after upgrading and want to go back, you can run the version downgrade command.
 For example, the following example will roll back EMQX to version 4.4.0:
@@ -160,7 +159,7 @@ Installed Release: 4.4.0
 Made release permanent: "4.4.0"
 ```
 
-## Uninstall a version
+## Uninstall a Version
 
 If you decide to delete an old version after the system has been running stably for a period of time, you can do the version uninstallation.
 For example, the following example will uninstall the old version of 4.4.0:
