@@ -2,7 +2,9 @@
 
 EMQX supports creating clusters manually and automatically. There are 2 key concepts before creating a cluster, node names and node discovery. 
 
-**Node Names**
+## Concepts
+
+### Node Names
 
 Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or FQDN (`myhost.example.domain`), for example:
 
@@ -13,7 +15,7 @@ Before starting the cluster creation step, let's first get familiar with the con
 EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
 :::
 
-**Node Discovery**
+### Node Discovery
 
 EMQX's clustering feature is based on the [Ekka](https://github.com/emqx/ekka) library, a cluster management library developed for Erlang/OTP applications.
 
@@ -35,8 +37,16 @@ One of the crucial steps for EMQX clustering is node discovery, which enables in
 Before creating an EMQX cluster, the following prerequisites should first be met:
 
 1. All nodes are set with a unique node name in the format of `name@host`, where host must be an IP address or fully qualified domain name (FQDN). For more information on configuring node names, see [Configure Node Names](#configure-node-names). 
+
 2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
-3. All nodes use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+
+3. For security concerns, you should change the default cookie settings to `emqxsecretcookie` in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+
+   ```
+   node {
+     cookie = "emqxsecretcookie"
+   }
+   ```
 
 :::
 
@@ -72,7 +82,7 @@ EMQX supports creating clusters manually and automatically. This section will in
 
 Set node discovery strategy
 
-Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`:
+Manual clustering is the method to configure an EMQX cluster by manually specifying which nodes should be part of the cluster. By default, EMQX adopts a manual clustering strategy, which can also be set in `emqx.conf`. Besides, you also need to configure the default 
 
 ```bash
 cluster {

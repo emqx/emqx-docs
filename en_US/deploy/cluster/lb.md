@@ -13,19 +13,13 @@ This chapter introduces how to configure LB in EMQX.
 
 For an EMQX cluster configured with LB, the LB will handle the incoming TCP traffic and then distribute the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
 
-<div style="text-align:center">
-  <img src="./assets/lb_1.png" alt="image" style="zoom:50%;" />
- </div>
 
-  
 
-<img src="./assets/lb_1.png" alt="image" style="zoom:50%;" />
-
-</div>
+<img src="./assets/lb_1.png" alt="image" style="zoom:40%;" />
 
 If SSL/TLS is enabled, it is recommended to terminate the SSL/TLS connection at LB, that is, to use SSL/TLS to secure the connection between clients and LB and then use TCP connection between LB and EMQX nodes, maximizing the performance of the EMQX cluster. The architecture is as follows:
 
-<img src="./assets/lb_2.png" alt="TLS termination" style="zoom:50%;" />
+<img src="./assets/lb_2.png" alt="TLS termination" style="zoom:45%;" />
 
 :::tip
 
@@ -90,7 +84,7 @@ For proxy protocols and that used in Nginx, see:
 
   :::
 
-### Configure LB
+### Configure HAProxy/NGINX
 
 :::: tabs type:card
 

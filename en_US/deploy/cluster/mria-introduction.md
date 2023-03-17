@@ -1,6 +1,6 @@
 # Architecture
 
-EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability and is also the key behind 100M MQTT connection support with a single cluster.
+EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability and is also the key behind 100M MQTT connection support with a single cluster. <!--need to add a section about how users can work with a cluster with all nodes as core nodes-->
 
 <img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 18%;" />
 
@@ -48,13 +48,13 @@ You can integrate with Prometheus to monitor the cluster operations. On how to i
 
 #### Replicant nodes
 
-| Indicators                   | Description                                                  |
-| ---------------------------- | ------------------------------------------------------------ |
-| emqx_mria_lag                | Indicate how far the Replicant lags behind the upstream Core node. Less is better. |
-| emqx_mria_bootstrap_time     | Startup time of the Replica node. This value should remain stable if the system operates normally. |
-| emqx_mria_bootstrap_num_keys | Number of database records copied from the Core node during startup. This value should remain stable if the system operates normally. |
-| emqx_mria_message_queue_len  | Queue length during message replication. Should be around 0. |
-| emqx_mria_replayq_len        | Internal replay queue length on the Replicant nodes. Less is better. |
+| Indicators                     | Description                                                  |
+| ------------------------------ | ------------------------------------------------------------ |
+| `emqx_mria_lag`                | Indicate how far the Replicant lags behind the upstream Core node. Less is better. |
+| `emqx_mria_bootstrap_time`     | Startup time of the Replica node. This value should remain stable if the system operates normally. |
+| `emqx_mria_bootstrap_num_keys` | Number of database records copied from the Core node during startup. This value should remain stable if the system operates normally. |
+| `emqx_mria_message_queue_len`  | Queue length during message replication. Should be around 0. |
+| `emqx_mria_replayq_len`        | Internal replay queue length on the Replicant nodes. Less is better. |
 
 ### Console commands
 
@@ -63,3 +63,27 @@ You can also monitor the operating status of the cluster with command `emqx eval
 If EMQX cluster is operating normally, you can get a list of status information, for example, the current log level, the number of messages processed, and the number of messages dropped.
 
 <!--Here we need a query statement and the returned message, and can we link this Erlang console to https://www.erlang.org/doc/man/shell.html -->
+
+## Pseudo-distributed cluster 
+
+EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster. 
+
+After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
+
+```bash
+EMQX_NODE__NAME='emqx2@127.0.0.1' \
+    EMQX_STATSD__SERVER='127.0.0.1:8124' \
+    EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
+    EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
+    EMQX_LISTENERS__WS__DEFAULT__BIND='0.0.0.0:8082' \
+    EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8085' \
+    EMQX_DASHBOARD__LISTENERS__HTTP__BIND='0.0.0.0:18082' \
+    EMQX_NODE__DATA_DIR="./data2" \
+./bin/emqx start
+
+./bin/emqx_ctl cluster join emqx1@127.0.0.1
+```
+
+The above code example is to create a cluster manually, you can also refer to the [auto clustering](#auto-clustering) section on how to create a cluster automatically. 
+
+<!--to add a quickstart with the pseudo-distributed cluster @WIVWIV -->

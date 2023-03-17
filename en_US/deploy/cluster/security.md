@@ -1,17 +1,26 @@
 # Cluster security
 
-Security is the cornerstone of all IoT applications and platforms. EMQX adopts multiple protection mechanisms to ensure data and privacy security, for example, EMQX supports multiple [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, it also leverages the features of Port mapping and TLS/SSL encryption to ensure the data transmission security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
+Security is the cornerstone of all IoT applications and platforms. EMQX adopts multiple protection mechanisms to ensure data and privacy security, for example, EMQX supports multiple [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, it also leverages the features of Port mapping and TLS encryption to ensure the data transmission security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
 
 This section introduces port mapping in EMQX and how to configure TLS/SSL encryption. 
 
 ::: tip Tip
-It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., AWS security groups or iptables. <!--I think more content should be added about the firewall setting-->
+It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., [AWS security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) or [iptables](https://en.wikipedia.org/wiki/Iptables). 
+
+If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach. <!--I think more content should be added about the firewall setting-->
 :::
 
-|      |           |                     |                                                              |
-| ---- | --------- | ------------------- | ------------------------------------------------------------ |
-|      |           |                     |                                                              |
-|      | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as `inet_tls`, you need to configure the `etc/ssl_dist.conf` file and specify the TLS certificate. |
+## Set node cookies
+
+For security concerns, you should change the default cookie settings to `emqxsecretcookie` in `emqx.conf` on all nodes to join the cluster. 
+
+Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+
+```
+node {
+  cookie = "emqxsecretcookie"
+}
+```
 
 ## Port mapping
 
@@ -33,21 +42,17 @@ The offset is calculated based on the numeric suffix of the node's name. If the 
 - For node `emqx@192.168.0.12`, it does not have a numeric suffix, the port will be `4370` for Erlang Distribution Ports (or `5370` for Cluster RPC Ports). 
 - For node `emqx1@192.168.0.12`, the numeric suffix is 1, the port will be `4371`  (or `5371` for Cluster RPC Ports). 
 
-:::tip
 
-If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach. 
 
-:::
+## Configure TLS to Secure Cluster Connections
+
+EMQX also supports using TLS to secure the communication channel between EMQX nodes to protect the confidentiality, integrity, and authenticity of the data exchanged between them. TLS comes at the cost of increased CPU load and RAM usage, please configure as per your business needs. 
+
+This section introduces how to configure TLS for EMQX clusters. On how to obtain a SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
 
 ### Using TLS for Cluster RPC Connections
 
-::: tip
-TLS comes at the cost of increased CPU load and RAM usage
-:::
-
 To configure TLS for cluster RPC below configs should be set in `emqx.conf`.
-
-Ensure the following configs in `emqx.conf`.
 
 ```
 rpc {
@@ -57,38 +62,6 @@ rpc {
   keyfile = /path/to/cert/domain.key
 }
 ```
-
-Below are the steps to generate certificates and a self-signed CA.
-
-1. Create a root CA using `openssl` tool:
-
-   ```
-   # Create self-signed root CA:
-   openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout ca.key -out ca.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
-   ```
-
-2. Generate CA-signed certificates for the nodes using the `ca.pem` created at step 1:
-
-   ```
-   # Create a private key:
-   openssl genrsa -out domain.key 2048
-   # Create openssl extfile:
-   cat <<EOF > domain.ext
-   authorityKeyIdentifier=keyid,issuer
-   basicConstraints=CA:FALSE
-   subjectAltName = @alt_names
-   [alt_names]
-   DNS.1 = backplane
-   EOF
-   # Create a CSR:
-   openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
-   # Sign the CSR with the Root CA:
-   openssl x509 -req -CA ca.pem -CAkey ca.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
-   ```
-   All the nodes in the cluster must use certificates signed by the same CA.
-
-3. Put the generated `domain.pem`, `domain.key`, and `ca.pem` files on each cluster node.
-   Ensure the emqx user can read these files, and permissions are set to `600`.
 
 ### Using TLS for Erlang distribution
 
@@ -101,3 +74,36 @@ and control/management RPCs such as start/stop a componentk, or collecting runti
 
 * Make sure to verify `etc/ssl_dist.conf` file has the right paths to keys and certificates.
 * Ensure config `cluster.proto_dist` is set to `inet_tls`.
+
+<!--Below are the steps to generate certificates and a self-signed CA.-->
+
+<!--Create a root CA using `openssl` tool:-->
+
+```
+# Create self-signed root CA:
+openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout ca.key -out ca.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
+```
+
+<!--Generate CA-signed certificates for the nodes using the `ca.pem` created at step 1:-->
+
+```
+# Create a private key:
+openssl genrsa -out domain.key 2048
+# Create openssl extfile:
+cat <<EOF > domain.ext
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = backplane
+EOF
+# Create a CSR:
+openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
+# Sign the CSR with the Root CA:
+openssl x509 -req -CA ca.pem -CAkey ca.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
+```
+<!--All the nodes in the cluster must use certificates signed by the same CA.-->
+
+<!--Put the generated `domain.pem`, `domain.key`, and `ca.pem` files on each cluster node.-->
+<!--Ensure the emqx user can read these files, and permissions are set to `600`.-->
+
