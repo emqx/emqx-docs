@@ -26,7 +26,7 @@ EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文�
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 %% 允许来自127.0.0.1 的用户发布和订阅 "$SYS/#" 以及 "#"
-{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
+{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
 
 %% 拒绝其他所有用户订阅 "$SYS/#" 和 "#" 主题
 {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
