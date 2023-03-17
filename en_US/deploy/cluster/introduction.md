@@ -2,7 +2,7 @@
 
 Besides working with a single EMQX node, EMQX also provides the cluster feature for high availability, better scalability, data security, and centralized management. The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers, as shown below.
 
-## Reasons for clustering
+## Reasons for Clustering
 
 There are situations where you could benefit from EMQX clusters.
 
@@ -23,11 +23,11 @@ EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With 
 
 
 
-## Key features
+## Key Features
 
 EMQX added an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang, enabling features like auto discovery of EMQX nodes, auto cluster, network partition, autoheal, and autoclean.
 
-### Node discovery and auto Clustering
+### Node Discovery and Auto Clustering
 
 EMQX supports several node discovery strategies:
 
@@ -42,7 +42,7 @@ EMQX supports several node discovery strategies:
 
 [^*]: The multicast discovery strategy has been deprecated and will be removed in future releases.
 
-### Network partition autoheal
+### Network Partition Autoheal
 
 Network partition autoheal is a feature of EMQX that allows the broker to recover automatically from network partitions without requiring any manual intervention, suitable for mission-critical applications where downtime is not acceptable.
 
@@ -54,7 +54,7 @@ cluster.autoheal = on
 
 Once enabled, EMQX will continuously monitor the connectivity between nodes in the cluster. If a network partition is detected, EMQX will isolate the affected nodes and continue to operate with the remaining nodes. Once the network partition is resolved, the broker will automatically re-integrate the isolated nodes into the cluster.
 
-### Cluster node autoclean
+### Cluster Node Autoclean
 
 Cluster node autoclean feature will automatically remove the disconnected nodes from the cluster after the configured time interval. This feature helps to ensure that the cluster is running efficiently and prevent performance degradation over time.
 
@@ -64,11 +64,11 @@ This feature is enabled by default, you can customize the waiting period before 
 cluster.autoclean = 5m
 ```
 
-### Session across nodes
+### Session Across Nodes
 
 The session across nodes feature ensures the client sessions will not be lost even during client's disconnection. To use this feature, you should first set `clean session` to `false` on the client side, then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
 
-## Network and hardware specifications
+## Network and Hardware Specifications
 
 Below is the network requirements and hardware specifications recommend to run EMQX clusters.
 
@@ -78,6 +78,6 @@ Network latency: < 10 ms. The cluster will not be available if the latency is hi
 
 The core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network. 
 
-**CPU and memory**
+**CPU and Memory**
 
 You can use the [Server Estimate](https://www.emqx.com/en/server-estimate) to calculate the CPU and memory resources needed under various connections and Pub&Sub TPS. It is recommended to configure a higher memory of the Core nodes. 

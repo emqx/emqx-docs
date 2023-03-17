@@ -128,7 +128,7 @@ Auto clustering in EMQX is another feature that allows multiple EMQX nodes to fo
 
 EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes. Continue to read to learn how to work with these features. 
 
-## Autocluster by Static Node List
+### Autocluster by Static Node List
 
 In EMQX, autocluster by static node list is to use a pre-defined static node list on each node to join the cluster. After starting, the nodes will create a cluster automatically according to the node list.
 
@@ -154,7 +154,7 @@ Where,
 
 After all nodes are started, the cluster will be automatically established.
 
-## Autocluster by DNS Records
+### Autocluster by DNS Records
 
 EMQX supports auto clustering by DNS A records and DNS SRV records. Domain Name System (DNS) record is a type of record used to map domain names to IP addresses. Because multiple DNS records are allowed for one domain name, EMQX leverages this feature to implement auto clustering. <!--Do we need to add more explanations here?-->
 
@@ -193,7 +193,7 @@ Where,
 
 After all nodes are started, the cluster will be automatically established.
 
-## Autocluster Using etcd
+### Autocluster Using etcd
 
 [etcd](https://etcd.io/) is an open-source project initiated by CoreOS. It is widely used in distributed systems for service discovery and connection establishing, which is exactly what EMQX auto clustering needs.
 
@@ -233,7 +233,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 The result shows that all nodes are started normally and joined the cluster automatically.
 
-## Autocluster on Kubernetes
+### Autocluster on Kubernetes
 
 [Kubernetes (K8s)](https://kubernetes.io) is Google's open-source container management system. EMQX can use kubernetes API for node discovery and auto clustering.
 

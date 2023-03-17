@@ -10,7 +10,7 @@ It's a good practice to keep the clustering ports internal by configuring firewa
 If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach. <!--I think more content should be added about the firewall setting-->
 :::
 
-## Set node cookies
+## Set Node Cookies
 
 For security concerns, you should change the default cookie settings to `emqxsecretcookie` in `emqx.conf` on all nodes to join the cluster. 
 
@@ -22,14 +22,14 @@ node {
 }
 ```
 
-## Port mapping
+## Port Mapping
 
-EMQX uses a port mapping rule for clustering to ensure that the communication between nodes is reliable and efficient. EMQX nodes communicate with each other through two different channels, Erlang Distribution ports and Cluster RPC ports. <!--The following table and port range should be reviewed-->
+EMQX uses a port mapping rule for clustering to ensure that the communication between nodes is reliable and efficient. EMQX nodes communicate with each other through two different channels, Erlang Distribution ports and Cluster RPC ports. <!--should we also add the port range-->
 
-| Channel                       | Description                                                  | Default Port                                       | Port Range |
-| ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ---------- |
-| **Erlang Distribution Ports** | For node communications                                      | `4370`                                             | 4370-4379  |
-| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br>`5369` if EMQX is deployed via Docker | 4369, 5369 |
+| Channel                       | Description                                                  | Default Port                                       |
+| ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| **Erlang Distribution Ports** | For node communications                                      | `4370`                                             |
+| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br>`5369` if EMQX is deployed via Docker |
 
 EMQX applies the same port mapping rule for Erlang Distribution Ports and Cluster RPC Ports, which is: 
 

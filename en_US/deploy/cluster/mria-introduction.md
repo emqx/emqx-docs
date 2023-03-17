@@ -10,7 +10,7 @@ In this [Mria](https://github.com/emqx/mria) + RLOG mode, each node assumes one 
 
 By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster. 
 
-## Enable Core + Replicant mode 
+## Enable Core + Replicant Mode 
 
 To enable the  Core + Replicant mode, the backend database (`db_backend`) should be set to `rlog`, some nodes should assume the replicant role (`node.db_role`), and the core node (`core_node`) should be specified, as shown below:
 
@@ -27,17 +27,17 @@ cluster {
 
 <!--Configure with environment variables should also be added-->
 
-## Monitor and debug
+## Monitor and Debug
 
 <!-- TODO 后续补充数值类型 Gauge or Counter -->
 
 The Mria performance can be monitored using Prometheus metrics or Erlang console.
 
-### Prometheus indicators
+### Prometheus Indicators
 
 You can integrate with Prometheus to monitor the cluster operations. On how to integrate with Prometheus, see [Log and observability - Integrate with Prometheus](../../observability/prometheus.md). 
 
-#### Core nodes
+#### Core Nodes
 
 | Indicators                         | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
@@ -46,7 +46,7 @@ You can integrate with Prometheus to monitor the cluster operations. On how to i
 | `emqx_mria_replicants`             | Replicant nodes connected to the Core node Numbers are grouped per shard. |
 | `emqx_mria_server_mql`             | Pending transactions waiting to be sent to the replicant nodes. Less is optimal. <br>If this indicator shows a growing trend, more Core nodes are needed. |
 
-#### Replicant nodes
+#### Replicant Nodes
 
 | Indicators                     | Description                                                  |
 | ------------------------------ | ------------------------------------------------------------ |
@@ -56,7 +56,7 @@ You can integrate with Prometheus to monitor the cluster operations. On how to i
 | `emqx_mria_message_queue_len`  | Queue length during message replication. Should be around 0. |
 | `emqx_mria_replayq_len`        | Internal replay queue length on the Replicant nodes. Less is better. |
 
-### Console commands
+### Console Commands
 
 You can also monitor the operating status of the cluster with command `emqx eval 'mria_rlog:status().'`  on the Erlang console.
 
@@ -64,7 +64,7 @@ If EMQX cluster is operating normally, you can get a list of status information,
 
 <!--Here we need a query statement and the returned message, and can we link this Erlang console to https://www.erlang.org/doc/man/shell.html -->
 
-## Pseudo-distributed cluster 
+## Pseudo-Distributed Cluster 
 
 EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster. 
 
