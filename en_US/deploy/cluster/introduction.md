@@ -83,7 +83,7 @@ cluster.autoclean = 5m
 
 The session across nodes feature ensures the client sessions will not be lost even during client's disconnection. To use this feature, you should first set `clean session` to `false` on the client side, then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
 
-### Pseudo-distributed cluster
+### Pseudo-distributed cluster 
 
 EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster. 
 

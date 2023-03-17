@@ -1,12 +1,11 @@
 # Cluster security
 
-When it comes to the security of the EMQX cluster, there are two primary aspects to consider.
+Security is the cornerstone of all IoT applications and platforms. EMQX adopts multiple protection mechanisms to ensure data and privacy security, for example, EMQX supports multiple [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, it also leverages the features of Port mapping and TLS/SSL encryption to ensure the data transmission security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
 
-* Secure the ports each node listens on for clustering.
-* Keep the Erlang cookie secret. See ` node.cookie` config.
+This section introduces port mapping in EMQX and how to configure TLS/SSL encryption. 
 
 ::: tip Tip
-It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., AWS security groups or iptables.
+It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., AWS security groups or iptables. <!--I think more content should be added about the firewall setting-->
 :::
 
 |      |           |                     |                                                              |
@@ -14,34 +13,30 @@ It's a good practice to keep the clustering ports internal by configuring firewa
 |      |           |                     |                                                              |
 |      | file path | `etc/ssl_dist.conf` | When `cluster.proto_dist` is selected as `inet_tls`, you need to configure the `etc/ssl_dist.conf` file and specify the TLS certificate. |
 
-## Intra-cluster Communication Ports
+## Port mapping
 
-To form a cluster, EMQX nodes need to connect to each other through some conventional port numbers.
+EMQX uses a port mapping rule for clustering to ensure that the communication between nodes is reliable and efficient. EMQX nodes communicate with each other through two different channels, Erlang Distribution ports and Cluster RPC ports. <!--The following table and port range should be reviewed-->
 
-If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach.
+| Channel                       | Description                                                  | Default Port                                       | Port Range |
+| ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ---------- |
+| **Erlang Distribution Ports** | For node communications                                      | `4370`                                             | 4370-4379  |
+| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br>`5369` if EMQX is deployed via Docker | 4369, 5369 |
 
-There are two different channels for EMQX nodes to communicate with each other.
+EMQX applies the same port mapping rule for Erlang Distribution Ports and Cluster RPC Ports, which is: 
 
-### The Erlang Distribution Ports
+```
+ListeningPort = BasePort + Offset
+```
 
-::: tip Tip
-EMQX uses a conventional port mapping mechanism, but does **NOT** use [Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/doc/man/epmd.html)
-:::
+The offset is calculated based on the numeric suffix of the node's name. If the node's name does not have a numeric suffix, then the offset is set to 0. For example:
 
-Erlang distribution port: `ListeningPort = BasePort + Offset`, where `BasePort` is 4370 (which is not made configurable), and `Offset` is the numeric suffix of the node's name. If the node name does not have a numeric suffix, `Offsset` is 0.
+- For node `emqx@192.168.0.12`, it does not have a numeric suffix, the port will be `4370` for Erlang Distribution Ports (or `5370` for Cluster RPC Ports). 
+- For node `emqx1@192.168.0.12`, the numeric suffix is 1, the port will be `4371`  (or `5371` for Cluster RPC Ports). 
 
-For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
+:::tip
 
-### The Cluster RPC Port
+If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach. 
 
-By default, each emqx node also listens on a (conventional) port for the RPC channels, which should be allowed by the firewall.
-
-The port mapping rule is similar to the port mapping rules for Erlang distribution, only `BasePort` is `5370`.
-
-That is, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370`, and port `5371` for `emqx1` (or `emqx-1`), and so on.
-
-::: tip
-EMQX in a docker container uses static port `5369` for cluster RPC.
 :::
 
 ### Using TLS for Cluster RPC Connections

@@ -62,11 +62,11 @@ env EMQX_NODE__NAME='emqx@s1.emqx.io' ./bin/emqx start
 
 Repeat the above step for the other node to join the cluster. 
 
-Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx2@s1.emqx.io`. You can create a cluster either manually or automatically. 
+Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`. You can create a cluster either manually or automatically. 
 
 ## Manual Clustering
 
-## Set Node Discovery Strategy
+### Set Node Discovery Strategy
 
 EMQX supports creating clusters manually and automatically. This section will introduce the manual clustering feature in EMQX. 
 
@@ -146,9 +146,7 @@ After all nodes are started, the cluster will be automatically established.
 
 ## Autocluster by DNS Records
 
-Domain Name System (DNS) record is a type of record used to map domain names to IP addresses. DNS SRV records allow multiple records for one domain name, this makes a one-to-many mapping. EMQX can use this one-to-many mapping to find all nodes that belong to one cluster so that the nodes can join a cluster automatically.
-
-EMQX supports auto clustering by DNS A records and DNS SRV records. <!--can we add the difference between these 2 records, what are their use cases, and it seems to me that the above parameter is only about DNS A.-->
+EMQX supports auto clustering by DNS A records and DNS SRV records. Domain Name System (DNS) record is a type of record used to map domain names to IP addresses. Because multiple DNS records are allowed for one domain name, EMQX leverages this feature to implement auto clustering. <!--Do we need to add more explanations here?-->
 
 #### Configure DNS Services
 

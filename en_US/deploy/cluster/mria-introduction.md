@@ -8,7 +8,7 @@ EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/
 
 In this [Mria](https://github.com/emqx/mria) + RLOG mode, each node assumes one of two roles: Core node or Replicant node. Core nodes serve as a data layer for the database. Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. 
 
-By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. <!--需要插入4.x 的手册页面链接-->The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster. 
+By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster. 
 
 ## Enable Core + Replicant mode 
 
