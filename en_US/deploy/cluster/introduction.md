@@ -4,7 +4,7 @@ Besides working with a single EMQX node, EMQX also provides the cluster feature 
 
 ## Reasons for Clustering
 
-There are situations where you could benefit from EMQX clusters.
+EMQX clusters bring the users with the following benefits.
 
 1. **Scalability**: EMQX can be easily scaled horizontally by adding more nodes to the cluster, allowing it to handle an increasing number of MQTT messages and clients.
 2. **High Availability**: Running in a cluster provides high availability, as the cluster can continue to function even if one or more nodes fail. EMQX uses a distributed architecture that ensures no single point of failure.
@@ -25,7 +25,7 @@ EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With 
 
 ## Key Features
 
-EMQX added an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang, enabling features like auto discovery of EMQX nodes, auto cluster, network partition, autoheal, and autoclean.
+EMQX adds an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang, enabling features like auto discovery of EMQX nodes, auto cluster, network partition, autoheal, and autoclean.
 
 ### Node Discovery and Auto Clustering
 
@@ -66,7 +66,7 @@ cluster.autoclean = 5m
 
 ### Session Across Nodes
 
-The session across nodes feature ensures the client sessions will not be lost even during client's disconnection. To use this feature, you should first set `clean session` to `false` on the client side, then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
+The session across nodes feature ensures that the client sessions will not be lost even during client's disconnection. To use this feature, you should first set `clean session` to `false` on the client side, then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
 
 ## Network and Hardware Specifications
 

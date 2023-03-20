@@ -1,6 +1,6 @@
 # Configure Load Balancer
 
-Load Balancer (LB) will balance the load among multiple network components, optimize resource usage, and avoid system malfunctions caused by overload. LB is not a mandatory component in EMQX, but could bring some obvious system benefits, for example:
+Load Balancer (LB) balances the load among multiple network components and optimizes resource usage to avoid system malfunctions caused by overload. LB is not a mandatory component in EMQX, but it can bring some obvious system benefits, for example:
 
 - Balance the load of EMQX to avoid single node overload;
 - Simplify client configuration, the client only needs to connect to the LB and need not worry about the scaling within the cluster;
