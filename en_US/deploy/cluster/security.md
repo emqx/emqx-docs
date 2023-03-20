@@ -1,6 +1,6 @@
 # Cluster security
 
-Security is the cornerstone of all IoT applications and platforms. EMQX adopts multiple protection mechanisms to ensure data and privacy security, for example, EMQX supports multiple [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, it also leverages the features of Port mapping and TLS encryption to ensure the data transmission security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
+Security is the cornerstone of all IoT applications and platforms. EMQX adopts multiple protection mechanisms to ensure data and privacy security, for example, EMQX supports multiple [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level. It also leverages the features of port mapping and TLS encryption to ensure the security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
 
 This section introduces port mapping in EMQX and how to configure TLS/SSL encryption. 
 
@@ -50,7 +50,7 @@ EMQX also supports using TLS to secure the communication channel between EMQX no
 
 This section introduces how to configure TLS for EMQX clusters. On how to obtain a SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
 
-### Using TLS for Cluster RPC Connections
+### Use TLS for Cluster RPC Connections
 
 To configure TLS for cluster RPC below configs should be set in `emqx.conf`.
 
