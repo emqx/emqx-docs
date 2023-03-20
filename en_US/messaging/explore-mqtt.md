@@ -40,29 +40,89 @@ This chapter will introduce how to use these features and how to verify them wit
    payload:  A will message from MQTTX CLI
    ```
 
-## Retained message
+## Retained Message
 
-Operating steps:
+Users can flag an MQTT message as `Retain`. When a message is retained, the MQTT broker must store the message under the topic and it must store the latest message only. If a subscriber who subcribes to this topic goes offline, it can receive the retained message immediately once it reconnects to the MQTT broker and do not have to wait. The illustration below shows how a retained message is received.
 
-1. Enable Retained message at the broker side (enabled by default on EMQX). 
-2. Set `retain = true` when publishing a message, this message will be sent to the subscriber first, and remain as a retained message under the corresponding topic.
-3. When any client subscribes to the **same topic**, the retained message will be sent to the subscriber.
-4. When any client publishes an empty **retained message**  to the **same topic**, the retained message under the topic will be cleared.
+<img src="./assets/retained-message.png" alt="retained-message" style="zoom:60%;" />  
 
-Use MQTT X CLI to verify:
+The retained message feature enables the subscribers actively fetch messages from publishers. New subscribers who subscribes to the same topic also can get the latest message immediately without waiting for the next round of publishing. For more detailed information on retained message, see [The Beginner's Guide to MQTT Retained Messages](https://www.emqx.com/en/blog/mqtt5-features-retain-message?utm_source=mqttx&utm_medium=referral&utm_campaign=mqttx-help-to-blog).
 
-1. Initiate a connection request with one client, set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
+### Use MQTT X Client to Verify
+
+This section demonstrates how to verify the retained message feature using the [MQTT X Client](https://mqttx.app/). 
+
+1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection.
+
+2. Type a connection `Name`. Leave other parameters as default. Connect the **Connect** button at the upper right corner to create an MQTT connection.
+
+   - The `Host` is by default set to the name of [public MQTT Broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) provided by [EMQX Cloud](https://www.emqx.com/en/cloud).
+
+     You can also use your localhost name `127.0.0.1`.
+
+   - The `Port` must be set corresponding to the protocol selected.
+
+   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:50%;" />
+
+3. After the success connection, publish a message to the topic `sensor/t1` in the message input box.
+
+   1. Type the topic heading `sensor/t1` in the text box.
+   2. Write the message.
+   3. Click the send button.
+
+   <img src="./assets/Publish-message-1.png" alt="Publish-message-1" style="zoom:50%;" />
+
+4. Publish two retained messages to the topic `sensor/t2`. 
+
+   1. Input the topic heading and message.
+   2. Select `Retain` after you input the topic heading and message.
+   3. Click the send button.
+
+   <img src="./assets/Publish-message-2.png" alt="Publish-message-2" style="zoom:50%;" />
+
+5. Click the **New Subscription** button to create a subscription.
+
+6. Input `sensor/+` in the **Topic** text box. Click the **Confirm** button.
+
+   :::tip
+
+   With topic set to `sensor/+`, both `sensor/t1` and `sensor/t2` are subscribed. For more information on topics and wildcards, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
+
+   :::
+
+   <img src="./assets/New-subscription-parameters.png" alt="New-subscription-parameters" style="zoom:50%;" />
+
+7. Click the **Confirm** button. The subscription only receives the last retained message. 
+
+   <img src="./assets/Receive-retained-message.png" alt="Receive-retained-message" style="zoom:50%;" />
+
+   :::tip
+
+   The normal message under the topic `sensor/t1` and the first retained message under the topic `sensor/t2` are not received. The MQTT broker only stores the latest retained message for each topic. The following illustration shows the latest retained message stored in the MQTT broker.
+
+   ![Retained-message-in-borker](./assets/Retained-message-in-borker.png)
+
+   :::  
+
+8. If you want to clear the retained message from the MQTT broker, send an empty retained message  under the topic.
+
+### Use MQTT X CLI to Verify
+
+This section demonstrates how to verify the retained message feature using the command line.
+
+1. Initiate a connection request with one client. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
 
    ```bash
    mqttx pub -t 't/1' -m 'A retained message from MQTTX CLI' --retain true -h 'localhost' -p 1883
    ```
 
-2. Resubscribe to topic `t/1` with another client and it will receive the retained message, repeat this step and it will continuously receive the retained message:
+2. Subscribe to the topic `t/1` with another client. It will receive the retained message. Repeat this step and it will continuously receive the retained message:
 
    ```bash
    $ mqttx sub -t 't/1' -h 'localhost' -p 1883 -v
    topic:  t/1
    payload:  A retained message from MQTTX CLI
+   retain: true
    ```
 
 3. Publish an empty message to clear the retained message:
