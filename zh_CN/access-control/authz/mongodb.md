@@ -1,6 +1,6 @@
 # 基于 MongoDB 进行授权
 
-MongoDB Authorizer 支持客户端的权限列表存储在 MySQL 数据库中。<!--MongoDB数据库？-->
+EMQX 支持通过集成 MongoDB 进行授权验证，即可以将客户端的权限列表存储在 MongoDB 数据库中。
 
 ::: tip 前置准备：
 
