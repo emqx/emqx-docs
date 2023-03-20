@@ -15,11 +15,13 @@ For an EMQX cluster configured with LB, the LB will handle the incoming TCP traf
 
 
 
-<img src="./assets/lb_1.png" alt="image" style="zoom:40%;" />
+<img src="./assets/lb_2.png" alt="TLS termination" style="zoom:45%;" />
 
 If SSL/TLS is enabled, it is recommended to terminate the SSL/TLS connection at LB, that is, to use SSL/TLS to secure the connection between clients and LB and then use TCP connection between LB and EMQX nodes, maximizing the performance of the EMQX cluster. The architecture is as follows:
 
-<img src="./assets/lb_2.png" alt="TLS termination" style="zoom:45%;" />
+
+
+<img src="./assets/lb_3.png" alt="image" style="zoom:50%;" />
 
 :::tip
 
