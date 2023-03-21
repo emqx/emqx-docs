@@ -1,12 +1,12 @@
 # Create an EMQX Cluster
 
-EMQX supports creating clusters manually and automatically. There are 2 key concepts before creating a cluster, node names and node discovery. 
+With EMQX cluster, you can enjoy the benefits of fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail. You can create an EMQX cluster either manually or automatically. Before the actual clustering step, let's first get familiar with 2 key concepts, node names and node discovery. 
 
 ## Concepts
 
 ### Node Names
 
-Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or FQDN (`myhost.example.domain`), for example:
+Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or fully qualified domain name (FQDN), such as `myhost.example.tld`, for example:
 
 - For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`; 
 - If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`. 
@@ -61,7 +61,6 @@ Configure the node name in the `emqx.conf` configuration file of the 1st node, f
 ```bash
 node.name = emqx@s1.emqx.io
 # or
-node.name = emqx@192.168.0.10
 ```
 
 You can also override the node name with an environment variable:
@@ -91,7 +90,6 @@ cluster {
 }
 ```
 
-This approach provides users with greater control and flexibility over the cluster configuration and more security as you can restrict which nodes can join the cluster. 
 
 :::tip
 Manual clustering is not supported in the Core-Replica architecture.
@@ -285,7 +283,7 @@ You can remove a node from a cluster with `cluster leave` or ``cluster force-lea
 
 When an EMQX node issues the `cluster leave` command, it notifies the other nodes in the cluster that it intends to leave, and it stops participating in cluster operations, it will complete any ongoing tasks before leaving.
 
-When an EMQX node issues the `cluster force-leave` command, a node will be forcefully removed from a cluster. This command is typically used when a node fails or becomes unresponsive. 
+When an EMQX node issues the `cluster force-leave <node@host>` command, the target node will be forcefully removed from a cluster. This command is typically used when a node fails or becomes unresponsive. 
 
 For example, in the previously built cluster, if `emqx@s2.emqx.io` wants to leave the cluster, you can run the command below on `emqx@s2.emqx.io`:
 
