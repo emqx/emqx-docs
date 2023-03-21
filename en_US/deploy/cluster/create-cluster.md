@@ -91,9 +91,6 @@ cluster {
 ```
 
 
-:::tip
-Manual clustering is not supported in the Core-Replica architecture.
-:::
 
 ### Configure Nodes to Join a Cluster
 
