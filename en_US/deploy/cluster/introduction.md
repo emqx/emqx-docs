@@ -1,27 +1,40 @@
 # Cluster
 
-Besides working with a single EMQX node, EMQX also provides the cluster feature for high availability, better scalability, data security, and centralized management. The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers, as shown below.
+Besides working with a single EMQX node, EMQX also provides the cluster feature for high availability, better scalability, data security, and centralized management, which is why clustering is recommended for larger or mission-critical applications. 
+
+This chapter introduces the [benefits of clustering](#reasons-for-clustering), the new  [Mria and RLOG](./mria-introduction.md) architecture, how to [create a cluster manually or automatically](./create-cluster.md), how to [implement load balancing](./lb.md), and how to ensure [communication security](./security.md) within a cluster. 
 
 ## Reasons for Clustering
 
-EMQX clusters bring the users with the following benefits.
+EMQX clusters bring the users the following benefits.
 
 1. **Scalability**: EMQX can be easily scaled horizontally by adding more nodes to the cluster, allowing it to handle an increasing number of MQTT messages and clients.
 2. **High Availability**: Running in a cluster provides high availability, as the cluster can continue to function even if one or more nodes fail. EMQX uses a distributed architecture that ensures no single point of failure.
 3. **Load Balancing**: EMQX nodes in the cluster can be configured to distribute the load of handling MQTT messages, which helps to avoid overload of a single node and allows for better use of available resources.
 4. **Centralized Management**: EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages.
+4. **Data consistency**:  The cluster replicates data across all nodes in the cluster, which helps to ensure data consistency.  
 
-Overall, EMQX cluster can help improve the scalability, availability, reliability and management of IoT messaging systems, which is why clustering is recommended for larger or mission-critical applications.
+## How Clustering in EMQX works
 
-The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers, as shown below.
+The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers. In previous versions, EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. The default listening port number for this protocol is 4370. 
 
-EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With this Mria architecture, one EMQX node can support up to 5 million MQTT connections, and the EMQX cluster can support up to 100 million concurrent MQTT connections.
+
+
+<img src="./assets/mnesia-cluster.png" alt="mnesia-cluster" style="zoom: 33%;" />
+
+
+
+However, the full mesh topology imposes a practical limit on the cluster size. For EMQX versions prior to 5, it is recommended to keep the cluster size under 5 nodes. Beyond this, vertical scaling, which involves using more powerful machines, is a preferable option to maintain the cluster's performance and stability. In our benchmark environment, we managed to reach [ten million concurrent connections with EMQX Enterprise 4.3](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report).
+
+To provide our customers with a better cluster salability performance, EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With this Mria architecture, one EMQX node can support up to 5 million MQTT connections, and the EMQX cluster can support up to 100 million concurrent MQTT connections.
 
 
 
 <img src="./assets/EMQX_cluster.png" alt="EMQX_cluster" style="zoom:30%;" />
 
 
+
+<!--To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md) will update when pr 1730 is merged. -->
 
 ## Key Features
 
@@ -70,7 +83,7 @@ The session across nodes feature ensures that the client sessions will not be lo
 
 ## Network and Hardware Specifications
 
-Below is the network requirements and hardware specifications recommend to run EMQX clusters.
+Below are the network requirements and hardware specifications recommend to run EMQX clusters.
 
 **Network**
 
