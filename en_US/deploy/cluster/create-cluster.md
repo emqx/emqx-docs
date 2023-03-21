@@ -116,7 +116,7 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 2. After `emqx@s2.emqx.io` joins `emqx@s1.emqx.io` to form a cluster, it will clear the local data and synchronize the data in `emqx@s1.emqx.io`.
 
-3. If `emqx@s2.emqx.io`  wants to join another cluster, it must first leave the current cluster. 
+3. If `emqx@s2.emqx.io`  wants to join another cluster, it must first leave the current cluster. On how to leave the cluster, see  [Manage cluster nodes](#manage-cluster-nodes).
 
    :::
 

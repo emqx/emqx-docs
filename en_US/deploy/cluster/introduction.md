@@ -79,7 +79,14 @@ cluster.autoclean = 5m
 
 ### Session Across Nodes
 
-The session across nodes feature ensures that the client sessions will not be lost even during client's disconnection. To use this feature, you should first set `clean session` to `false` on the client side, then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
+The session across nodes feature ensures that the client sessions will not be lost even during the client's disconnection. 
+
+To use this feature:
+
+- for MQTT 3.x clients, set  `clean_start` to `false`
+- for MQTT 5.0 clients, set `clean_start` to `false` and set `session_expiry_interval` to be greater than 0. 
+
+Then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
 
 ## Network and Hardware Specifications
 
