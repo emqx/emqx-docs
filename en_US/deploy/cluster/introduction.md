@@ -1,8 +1,8 @@
 # Cluster
 
-Besides working with a single EMQX node, EMQX also provides the cluster feature for high availability, better scalability, data security, and centralized management, which is why clustering is recommended for larger or mission-critical applications. 
+Besides working with a single EMQX node, EMQX also provides the cluster feature for high availability, better scalability, data security, and centralized management, which is why clustering is recommended for larger or mission-critical applications.
 
-This chapter introduces the [benefits of clustering](#reasons-for-clustering), the new  [Mria and RLOG](./mria-introduction.md) architecture, how to [create a cluster manually or automatically](./create-cluster.md), how to [implement load balancing](./lb.md), and how to ensure [communication security](./security.md) within a cluster. 
+This chapter introduces the [benefits of clustering](#reasons-for-clustering), the new [Mria and RLOG](./mria-introduction.md) architecture, how to [create a cluster manually or automatically](./create-cluster.md), how to [implement load balancing](./lb.md), and how to ensure [communication security](./security.md) within a cluster.
 
 ## Reasons for Clustering
 
@@ -12,11 +12,11 @@ EMQX clusters bring the users the following benefits.
 2. **High Availability**: Running in a cluster provides high availability, as the cluster can continue to function even if one or more nodes fail. EMQX uses a distributed architecture that ensures no single point of failure.
 3. **Load Balancing**: EMQX nodes in the cluster can be configured to distribute the load of handling MQTT messages, which helps to avoid overload of a single node and allows for better use of available resources.
 4. **Centralized Management**: EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages.
-4. **Data consistency**:  The cluster replicates data across all nodes in the cluster, which helps to ensure data consistency.  
+4. **Data consistency**: The cluster replicates data across all nodes in the cluster, which helps to ensure data consistency.
 
 ## How Clustering in EMQX works
 
-The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers. In previous versions, EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. The default listening port number for this protocol is 4370. 
+The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers. In previous versions, EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. The default listening port number for this protocol is 4370.
 
 
 
@@ -83,7 +83,7 @@ The session across nodes feature ensures that the client sessions will not be lo
 
 To use this feature:
 
-- for MQTT 3.x clients, set  `clean_start` to `false`
+- for MQTT 3.x clients, set `clean_start` to `false`
 - for MQTT 5.0 clients, set `clean_start` to `false` and set `session_expiry_interval` to be greater than 0. 
 
 Then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
@@ -94,9 +94,9 @@ Below are the network requirements and hardware specifications recommend to run 
 
 **Network**
 
-Network latency: < 10 ms. The cluster will not be available if the latency is higher than 100 ms. 
+Network latency: < 10 ms. The cluster will not be available if the latency is higher than 100 ms.
 
-The core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network. 
+The core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network.
 
 **CPU and Memory**
 
