@@ -119,7 +119,7 @@ Now you have successfully created a cluster with two nodes, you can read the [Qu
 
 ## Auto Clustering
 
-Auto clustering in EMQX is another feature that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically. It also provides fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail.
+Auto clustering in EMQX is another feature that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically.
 
 EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes. Continue to read to learn how to work with these features. 
 
