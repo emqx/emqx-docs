@@ -6,7 +6,7 @@ With EMQX cluster, you can enjoy the benefits of fault tolerance and high availa
 
 ### Node Names
 
-Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or fully qualified domain name (FQDN), such as `myhost.example.tld`, for example:
+Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or a fully qualified domain name (FQDN), such as `myhost.example.tld`, for example:
 
 - For EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`; 
 - If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`. 
@@ -60,7 +60,6 @@ Configure the node name in the `emqx.conf` configuration file of the 1st node, f
 
 ```bash
 node.name = emqx@s1.emqx.io
-# or
 ```
 
 You can also override the node name with an environment variable:
