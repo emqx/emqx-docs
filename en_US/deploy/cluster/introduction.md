@@ -26,7 +26,7 @@ The basic function of a distributed EMQX cluster is to forward and publish messa
 
 However, the full mesh topology imposes a practical limit on the cluster size. For EMQX versions prior to 5, it is recommended to keep the cluster size under 5 nodes. Beyond this, vertical scaling, which involves using more powerful machines, is a preferable option to maintain the cluster's performance and stability. In our benchmark environment, we managed to reach [ten million concurrent connections with EMQX Enterprise 4.3](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report).
 
-To provide our customers with a better cluster salability performance, EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With this Mria architecture, one EMQX node can support up to 5 million MQTT connections, and the EMQX cluster can support up to 100 million concurrent MQTT connections.
+To provide our customers with a better cluster salability performance, EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With this Mria architecture, one EMQX cluster can support up to 100 million concurrent MQTT connections.
 
 
 
@@ -49,7 +49,7 @@ EMQX supports several node discovery strategies:
 | `manual` | Manually create a cluster with commands |
 | `static` | Autocluster through static node list    |
 | `mcast`* | Create a cluster through UDP multicast  |
-| `DNS`    | Autocluster through DNS A record        |
+| `DNS`    | Autocluster through DNS A and SRV records        |
 | `etcd`   | Autocluster through etcd                |
 | `k8s`    | Autocluster provided by Kubernetes      |
 
