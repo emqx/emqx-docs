@@ -1,6 +1,6 @@
 # Cluster security
 
-Security is the cornerstone of all IoT applications and platforms. EMQX adopts multiple protection mechanisms to ensure data and privacy security, for example, EMQX supports multiple [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level. It also leverages the features of port mapping and TLS encryption to ensure the security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
+Besides [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, EMQX also leverages the features of port mapping and TLS encryption to ensure the security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
 
 This section introduces port mapping in EMQX and how to configure TLS/SSL encryption for inter-cluster traffic.
 
