@@ -12,13 +12,13 @@ If there is a firewall between the cluster nodes, the conventional listening por
 
 ## Set Node Cookies
 
-For security concerns, you should change the default cookie settings to `emqxsecretcookie` in `emqx.conf` on all nodes to join the cluster. 
+For security concerns, you should change the default cookie settings to a secret cookie in `emqx.conf` on all nodes to join the cluster. 
 
 Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
 
 ```
 node {
-  cookie = "emqxsecretcookie"
+  cookie = "<a secret cookie>"
 }
 ```
 
@@ -48,7 +48,7 @@ The offset is calculated based on the numeric suffix of the node's name. If the 
 
 EMQX also supports using TLS to secure the communication channel between EMQX nodes to protect the confidentiality, integrity, and authenticity of the data exchanged between them. TLS comes at the cost of increased CPU load and RAM usage, please configure as per your business needs. 
 
-This section introduces how to configure TLS for EMQX clusters. On how to obtain a SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
+This section introduces how to configure TLS for EMQX clusters. On how to obtain an SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
 
 ### Use TLS for Cluster RPC Connections
 
@@ -74,36 +74,4 @@ and control/management RPCs such as start/stop a componentk, or collecting runti
 
 * Make sure to verify `etc/ssl_dist.conf` file has the right paths to keys and certificates.
 * Ensure config `cluster.proto_dist` is set to `inet_tls`.
-
-<!--Below are the steps to generate certificates and a self-signed CA.-->
-
-<!--Create a root CA using `openssl` tool:-->
-
-```
-# Create self-signed root CA:
-openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout ca.key -out ca.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
-```
-
-<!--Generate CA-signed certificates for the nodes using the `ca.pem` created at step 1:-->
-
-```
-# Create a private key:
-openssl genrsa -out domain.key 2048
-# Create openssl extfile:
-cat <<EOF > domain.ext
-authorityKeyIdentifier=keyid,issuer
-basicConstraints=CA:FALSE
-subjectAltName = @alt_names
-[alt_names]
-DNS.1 = backplane
-EOF
-# Create a CSR:
-openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
-# Sign the CSR with the Root CA:
-openssl x509 -req -CA ca.pem -CAkey ca.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
-```
-<!--All the nodes in the cluster must use certificates signed by the same CA.-->
-
-<!--Put the generated `domain.pem`, `domain.key`, and `ca.pem` files on each cluster node.-->
-<!--Ensure the emqx user can read these files, and permissions are set to `600`.-->
 

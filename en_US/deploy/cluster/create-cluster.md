@@ -40,11 +40,11 @@ Before creating an EMQX cluster, the following prerequisites should first be met
 
 2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
 
-3. For security concerns, you should change the default cookie settings to `emqxsecretcookie` in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+3. For security concerns, you should change the default cookie settings to a secret cookie in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
 
    ```
    node {
-     cookie = "emqxsecretcookie"
+     cookie = "<a secret cookie>"
    }
    ```
 
