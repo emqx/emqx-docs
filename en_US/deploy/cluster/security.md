@@ -2,7 +2,7 @@
 
 Security is the cornerstone of all IoT applications and platforms. EMQX adopts multiple protection mechanisms to ensure data and privacy security, for example, EMQX supports multiple [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level. It also leverages the features of port mapping and TLS encryption to ensure the security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
 
-This section introduces port mapping in EMQX and how to configure TLS/SSL encryption. 
+This section introduces port mapping in EMQX and how to configure TLS/SSL encryption for inter-cluster traffic.
 
 ::: tip Tip
 It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., [AWS security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) or [iptables](https://en.wikipedia.org/wiki/Iptables). 
@@ -63,7 +63,7 @@ rpc {
 }
 ```
 
-### Using TLS for Erlang distribution
+### Use TLS for Erlang distribution
 
 ::: tip
 TLS comes at the cost of increased CPU load and RAM usage
