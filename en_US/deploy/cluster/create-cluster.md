@@ -44,7 +44,7 @@ Before creating an EMQX cluster, the following prerequisites should first be met
 
    ```
    node {
-     cookie = "emqxsecretcookie"
+     cookie = "<a secret cookie>"
    }
    ```
 
