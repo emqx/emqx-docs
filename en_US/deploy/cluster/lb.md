@@ -48,7 +48,7 @@ LB products for public cloud:
 | [HAProxy](https://www.haproxy.org) | Yes             | <https://www.haproxy.com/solutions/load-balancing.html> |
 | [NGINX](https://www.nginx.com)     | Yes             | <https://www.nginx.com/solutions/load-balancing/>       |
 
-The following section will take the HAProxy or NGINX as an example to illustrate how to configure an LB in EMQX cluster. 
+The following section takes the HAProxy or NGINX as an example to illustrate how to configure an LB in EMQX cluster. 
 
 ## Configure HAProxy/NGINX in EMQX
 

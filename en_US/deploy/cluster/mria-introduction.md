@@ -2,7 +2,7 @@
 
 <!--need to add a section about how users can work with a cluster with all nodes as core nodes--> 
 
-EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability. The new design supports 1,000,000 MQTT connections with a single cluster. 
+EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria) + RLOG, which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster. 
 
 <img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 18%;" />
 
