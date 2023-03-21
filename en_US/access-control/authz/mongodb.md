@@ -45,12 +45,7 @@ filter { username = "${username}", ipaddress = "${peerhost}" }
 When there is a significant number of users in the system, optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::
 
-For this MongoDB data schema, the corresponding Dashboard configuration parameters are:
-
-- **Username**: `user123`
-- **Server**: `127.0.0.1`
-- **Collection**: `mqtt_acl`
-- **Filter**: `{ username = "${username}" }`
+For this MongoDB data schema, the corresponding Dashboard configuration parameter is **Filter**: `{ username = "${username}" }`.
 
 ## Configurate with Dashboard
 
