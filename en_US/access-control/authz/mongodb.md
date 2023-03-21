@@ -36,7 +36,7 @@ Example of adding an authorization rule for a user `user123` who is allowed to p
 ```
 
 The corresponding configuration parameters are:
-```
+```bash
 collection = "mqtt_acl"
 filter { username = "${username}", ipaddress = "${peerhost}" }
 ```

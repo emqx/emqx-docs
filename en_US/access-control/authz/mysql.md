@@ -15,7 +15,7 @@ MySQL authorizer supports almost any storage schema. You can determine how to st
 
 Users need to provide a query statement template and ensure the following fields are included:
 * `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
-* `action` value specifies the request for which the rule is relevant. <!--这个表述不太好理解-->Should be one of `publish`, `subscribe`, or `all`.
+* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
 
 Example table structure for storing credentials:
@@ -41,13 +41,13 @@ In this table, MQTT users are identified by `username`.
 
 For example, if you want to add an authorization rule for a user `user123` who is allowed to publish topics `data/user123/#`, the query statement should be:
 
-```
+```bash
 mysql> INSERT INTO mqtt_acl(username, permission, action, topic, ipaddress) VALUES ('user123', 'allow', 'publish', 'data/user123/#', '127.0.0.1');
 Query OK, 1 row affected (0,01 sec)
 ```
 
 The corresponding configuration parameters are:
-```
+```bash
 query = "SELECT action, permission, topic, ipaddress FROM mqtt_acl where username = ${username} and ipaddress = ${peerhost}"
 ```
 
@@ -78,7 +78,7 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
    **Authorization configuration**: Fill in the authorization-related settings:
 
-   - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
+   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement). 
 
 4. Click **Create** to finish the settings.
 

@@ -18,11 +18,9 @@ The blacklist is only applicable to a small number of client bans. If there are 
 
 3. Follow the instructions below to specify a client to be banned.
 
-   **Banned Object**: Select **Client ID**, **Username**, or **IP Address** from the dropdown menu; fill in the corresponding value.
-
-   **Expire At**: Click the clock icon to select the expiration time and date for this banning action.
-
-   **Reason**: Fill in the reason why you want to ban this client in this text box.
+   - **Banned Object**: Select **Client ID**, **Username**, or **IP Address** from the dropdown menu; fill in the corresponding value.
+- **Expire At**: Click the clock icon to select the expiration time and date for this banning action.
+   - **Reason**: Fill in the reason why you want to ban this client in this text box.
 
 2. Click **Create** to finish the setting.
 

@@ -22,7 +22,7 @@ The process of the authorization check is as follows:
    - If yes, EMQX switches to the next authenticator to continue the process.
    - If it is already the last authorizer, EMQX follows the setting of `no_match` to determine whether to allow or reject the client operation.
 
-For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage authorizers](#Manage authorizers).
+For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage authorizers](#manage-authorizers).
 
 ### Authorization Cache
 
@@ -30,19 +30,19 @@ To better handle the access pressure brought by a large number of publish/subscr
 
 <img src="./assets/Authorization-settings_ee.png" alt="Authorization-settings_ee" style="zoom:50%;" />
 
-**Enable Cache**: Setting for whether to enable cache for the authorization data.
+- **Enable Cache**: Setting for whether to enable cache for the authorization data.
 
-**Max number of cache per client**: The maximum number of cache for single client; the default setting is **32**.
+- **Max number of cache per client**: The maximum number of cache for single client; the default setting is **32**.
 
-**Cache TTL**: The living time of cache data; unit is **minute**.
+- **Cache TTL**: The living time of cache data; unit is **minute**.
 
-**No Match Action**: The action to take when all authorizers fail to retrieve authorization information; values to choose: **allow** (to operate), **deny** (to operate); default value: **allow**.
+- **No Match Action**: The action to take when all authorizers fail to retrieve authorization information; values to choose: **allow** (to operate), **deny** (to operate); default value: **allow**.
 
-**Deny Action**: The action to take when denying the operating request from the current client; values to choose: **ignore** (operating request), **disconnect** (the connection of current client); default value: **allow**.
+- **Deny Action**: The action to take when denying the operating request from the current client; values to choose: **ignore** (operating request), **disconnect** (the connection of current client); default value: **allow**.
 
-**Clear Cache**: Clear the cache of all current authorization results. 
+- **Clear Cache**: Clear the cache of all current authorization results. 
 
-You can also configure the authorization data cache through the configuration file. For more information, see [Configuration file](#Configuration file).
+You can also configure the authorization data cache through the configuration file. For more information, see [Configuration file](../../configuration/configuration.md).
 
 ::: tip
 If set properly, caching can greatly improve performance. So, it is recommended to timely adjust the setting based on your system performance.
@@ -91,7 +91,7 @@ Besides the cache and authorization checker, the authorization result may also b
 
 For super users, all their operations will be skipped from authorization check; if the permission list is set, EMQX will first follow the client's permission data to run the  authorization checker. The priority is as follows:
 
-```
+```bash
 Super user > permission data > authorization check
 ```
 
@@ -101,7 +101,7 @@ You can view and manage authorizers in the **Access Control**->**Authorization**
 
 ### Adjust Sequence of Authorizers
 
-As mentioned in [Authorization chain](#Authorization chain), authorizers are executed according to the configured sequence. You can select **Up**, **Down**, **Move to top**, and **Move to bottom** from the **More** dropdown list to move the authorizer. You can also adjust the authorizer positions in the `authorization.sources` configuration item.
+As mentioned in [Authorization chain](#authorization-chain), authorizers are executed according to the configured sequence. You can select **Up**, **Down**, **Move to top**, and **Move to bottom** from the **More** dropdown list to move the authorizer. You can also adjust the authorizer positions in the `authorization.sources` configuration item.
 
 ### Check Authorizer Status
 
@@ -117,17 +117,15 @@ You can check the connection status in the **Status** column:
 
 You can view the statistic metrics of each authorizer in the Overview page of the authorizer. The following metrics are listed:
 
-**Allow**: Number of authorizations passed
+- **Allow**: Number of authorizations passed
+- **Deny**: Number of authorizations failed
+- **No match**: Number of times client authorizations data not found
 
-**Deny**: Number of authorizations failed
-
-**No match**: Number of times client authorizations data not found
-
-**Rate(tps)**: Execution rates of authorizations
+- **Rate(tps)**: Execution rates of authorizations
 
 You can also check the authorization status and execution status on each node through **Node Status**.
 
-If you want to view the overall running metrics of authorization, see [Metrics - Authentication & Authorization](../../observability/metrics-and-stats.md#Authentication & Authorization)
+If you want to view the overall running metrics of authorization, see [Metrics - Authentication & Authorization](../../observability/metrics-and-stats.md#Authentication & Authorization).
 
 ## Integrate with Data Storage Objects
 
@@ -151,7 +149,7 @@ Below is an example of how to configure an EMQX MySQL authorizer.
 
 Example:
 
-```
+```bash
 {
     enable => true
 
@@ -179,7 +177,7 @@ EMQX Dashboard is an intuitive way to configure EMQX authorizer, where you can c
 
 You can also configure authorization in the `authorization` fields in the configuration file `emqx.conf`. The general config structure is the following:
 
-```
+```bash
 authorization {
   sources = [
     { ...   },

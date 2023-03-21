@@ -40,13 +40,13 @@ In this table, MQTT users are identified by `username`.
 
 For example, if you want to add an authorization rule for a user `user123` who is allowed to publish topics `data/user123/#`, the query statement should be:
 
-```
+```bash
 postgres=# INSERT INTO mqtt_acl(username, permission, action, topic, ipaddress) VALUES ('user123', 'allow', 'publish', 'data/user123/#', '127.0.0.1');
 INSERT 0 1
 ```
 
 The corresponding config parameters are:
-```
+```bash
 query = "SELECT permission, action, topic, ipaddress FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
 ```
 
@@ -77,7 +77,7 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
    **Authorization configuration**: Fill in the authorization-related settings:
 
-   - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
+   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement). 
 
 4. Click **Create** to finish the settings.
 

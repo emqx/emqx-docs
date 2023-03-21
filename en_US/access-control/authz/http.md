@@ -8,12 +8,6 @@ EMQX supports the authorization based on the HTTP service. The user needs to bui
 
 :::
 
-::: tip
-`POST` method is recommended. When using the `GET` method, some sensitive information can be exposed through HTTP server logging.
-
-For untrusted environments, HTTPS should be used.
-:::
-
 ## HTTP Request and Response
 
 When the client initiates a subscription or publishing operation, the HTTP Authorizer constructs and sends a request based on the configured request template. Users need to implement authorization logic in the authorization service and return the results according to the following requirements:
@@ -89,7 +83,7 @@ HTTP `POST` and `GET` requests are supported. Each of them has some specific opt
 
 Example of an HTTP authorizer configured with `POST` request:
 
-```
+```bash
 {
     type = http
     enable = true
@@ -110,7 +104,7 @@ Example of an HTTP authorizer configured with `POST` request:
 
 Example of an HTTP authorizer configured with `GET` request:
 
-```
+```bash
 {
     type = http
     enable = true

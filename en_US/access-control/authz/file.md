@@ -41,10 +41,10 @@ The rules are matched from top to bottom. If a rule matches, its permission is a
   * `allow`
   * `deny`
 - The second position of a tuple describes clients for which the rule takes effect. The following terms and their combinations can be used to specify the clients:
-  * `{username, "dashboard"}`: clients with username `dashboard`
-  * `{username, {re, "^dash"}}` : clients with username matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
-  * `{clientid, "dashboard"}` : clients with clientid `dashboard`
-  * `{clientid, {re, "^dash"}}` : clients with clientid matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
+  * `{username, "dashboard"}`: clients with user name `dashboard`; also can be `{user, "dashboard"}`
+  * `{username, {re, "^dash"}}` : clients with user name matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
+  * `{clientid, "dashboard"}` : clients with client ID `dashboard`; also can be `{client, "dashboard"}`
+  * `{clientid, {re, "^dash"}}` : clients with client ID matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
   * `{ipaddr, "127.0.0.1"}`: clients connecting from IP address `127.0.0.1`. Netmasks are allowed. If EMQX is behind a load balance, `proxy_protocol` should be enabled for the client's MQTT listener. 
   * `{ipaddrs, ["127.0.0.1", ..., ]}` : clients connecting from one of the specified IP addresses `127.0.0.1, ..., `. Netmasks are allowed.
   * `all` : any clients
@@ -71,7 +71,7 @@ Click **Create** at the top right corner, select **File** as **Backend**, and cl
 
 ![authz-file_ee](./assets/authz-file_ee.png)
 
-EMQX configures file-based authorizer by default. You can click **Settings** button in **Actions** column to view or edit the authorization rules configured in the **ACL File** area. For more information on file format and fields descriptions, see [ACL file format](#/ACL file format).
+EMQX configures file-based authorizer by default. You can click **Settings** button in **Actions** column to view or edit the authorization rules configured in the **ACL File** area. For more information on file format and fields descriptions, see [ACL file format](#acl-file-format).
 
 ![dashboard-edit-ACL-file_ee](./assets/dashboard-edit-ACL-file_ee.png)
 
@@ -81,7 +81,7 @@ The file-based authorizer is identified by type `file`.
 
 Sample configuration:
 
-```
+```bash
 authorization {
   deny_action = ignore
   no_match = allow

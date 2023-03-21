@@ -14,7 +14,7 @@ Users need to provide a templated Redis command that returns a key-value list wi
 
 For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes):
 
-```
+```bash
 >redis-cli
 127.0.0.1:6379> HSET users:someuser foo/# subscribe
 (integer) 1
@@ -23,7 +23,7 @@ For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/
 ```
 
 The corresponding config parameters are:
-```
+```bash
 cmd = "HGET users:${username}"
 ```
 

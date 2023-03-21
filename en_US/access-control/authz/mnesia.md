@@ -24,7 +24,7 @@ The built-in database authorizer is identified by type `built_in_database`.
 
 Sample configuration:
 
-```
+```bash
 {
     type = built_in_database
     enable = true
@@ -35,7 +35,7 @@ Sample configuration:
 
 - `enable`: Whether to activate this checker; optional values: `true`, `false`.
 
-For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia).
+<!--For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia).-->
 
 ## Create Authorization Rules
 
@@ -75,7 +75,7 @@ Each rule is applied to:
 
 Below is a quick example for how to create rules for a client (`client1`):
 
-```
+```bash
 curl -X 'POST' \
   'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
   -H 'accept: */*' \
@@ -105,6 +105,7 @@ curl -X 'POST' \
 ```
 
 Each rule contains:
-* permission: Whether to allow or deny a certain type of operation request from current client/user; optional values: `allow` or `deny`;
-* action: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
-* topic filter: Configure the corresponding to this rule, supporting [topic placeholders](authz.md#topic-placeholders).
+* `permission`: Whether to allow or deny a certain type of operation request from current client/user; optional values: `allow` or `deny`;
+* `action`: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
+* `topic filter`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
+
