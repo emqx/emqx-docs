@@ -26,7 +26,7 @@ One of the crucial steps for EMQX clustering is node discovery, which enables in
 | `manual` | Create a cluster through manual command   |
 | `static` | Create a cluster using a static node list |
 | `mcast`* | Create a cluster through UDP multicast    |
-| `dns`    | Create a cluster using DNS A records      |
+| `dns`    | Create a cluster using DNS A and SRV records      |
 | `etcd`   | Create a cluster via etcd                 |
 | `k8s`    | Create a cluster via Kubernetes service   |
 
