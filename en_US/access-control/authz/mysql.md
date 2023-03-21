@@ -9,7 +9,7 @@ This authorizer implements authorization checks through matching publish/subscri
 
 :::
 
-## Data schema and query statement
+## Data Schema and Query Statement
 
 MySQL authorizer supports almost any storage schema. You can determine how to store credentials and access them as your business needs, for example, using one or multiple tables, views, etc.
 
@@ -63,7 +63,7 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
 3. Follow the instructions below to do the configuration.
 
-   **Connect**: In this section, fill in the information needed to connect MySQL.
+   **Connect**: Fill in the information needed to connect MySQL.
 
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: MySQL database name.
@@ -72,21 +72,21 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-   **Connection Configuration**: In this section, set the concurrent connections and waiting time before a connection is timed out.
+   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
    - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: **8**. 
 
-   **Authentication configuration**: In this section, fill in the authorization-related settings:
+   **Authorization configuration**: Fill in the authorization-related settings:
 
    - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
 4. Click **Create** to finish the settings.
 
-## Configure with configuration items
+## Configure with Configuration Items
 
 You can configure the EMQX MySQL authorizer with EMQX configuration items.
 
-The MySQL authorizer is identified by type `mysql`. For detailed configuration, see [authz:mysql](../../configuration/configuration-manual.md#authz:mysql).
+The MySQL authorizer is identified by type `mysql`. <!--For detailed configuration, see [authz:mysql](../../configuration/configuration-manual.md#authz:mysql).-->
 
 Sample configuration:
 

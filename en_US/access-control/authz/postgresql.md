@@ -8,7 +8,7 @@ This authorizer implements authorization checks through matching publish/subscri
 
 :::
 
-## Data schema and query statement
+## Data Schema and Query Statement
 
 PostgreSQL authorizer supports almost any storage schema. It is up to the user to decide how to store acl rules and access them: using one or multiple tables, views, etc.
 
@@ -62,7 +62,7 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
 3. Follow the instructions below to do the configuration.
 
-   **Connect**: In this section, fill in the information needed to connect PostgreSQL.
+   **Connect**: Fill in the information needed to connect PostgreSQL.
 
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: PostgreSQL database name.
@@ -71,21 +71,21 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-   **Connection Configuration**: In this section, set the concurrent connections and waiting time before a connection is timed out.
+   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
    - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
 
-   **Authentication configuration**: In this section, fill in the authorization-related settings:
+   **Authorization configuration**: Fill in the authorization-related settings:
 
    - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
 4. Click **Create** to finish the settings.
 
-## Configure with configuration items
+## Configure with Configuration Items
 
 You can configure the EMQX PostgresSQL authorizer with EMQX configuration items.
 
-The PostgreSQL authorizer is identified by type `postgresql`. For detailed configuration, see [authz:postgresql](../../configuration/configuration-manual.md#authz:postgresql).
+The PostgreSQL authorizer is identified by type `postgresql`. <!--For detailed configuration, see [authz:postgresql](../../configuration/configuration-manual.md#authz:postgresql).-->
 
 Sample configuration:
 

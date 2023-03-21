@@ -6,9 +6,9 @@ The permission list of the client needs to be stored in a specific data source (
 
 An file-based authorizer is configured in EMQX by default and you can use the authorizer directly. The authorization is processed based on the predefined rules configured in the ACL file. 
 
-## How authorization works
+## How Authorization Works
 
-### Authorization chain
+### Authorization Chain
 
 EMQX allows users to create an authorization chain by configuring multiple authorizers rather than one single authorizer to make authorization more flexible. EMQX follows the authorizers' position in the chain to perform the authorization in sequence. With the authorization chain configured, when EMQX fails to retrieve the matching authentication information from the first authorizer, it switches to the next authenticator to continue the process.
 
@@ -24,7 +24,7 @@ The process of the authorization check is as follows:
 
 For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage authorizers](#Manage authorizers).
 
-### Authorization cache
+### Authorization Cache
 
 To better handle the access pressure brought by a large number of publish/subscribe requests, EMQX introduces the authorization cache mechanism. You can enable cache through the **Authorization** page in EMQX Dashboard (**Access Control**->**Authorization**->**Settings**).
 
@@ -36,9 +36,9 @@ To better handle the access pressure brought by a large number of publish/subscr
 
 **Cache TTL**: The living time of cache data; unit is **minute**.
 
-**No Match Action**: the action to take when all authorizers fail to retrieve authorization information; values to choose: **allow** (to operate), **deny** (to operate); default value: **allow**.
+**No Match Action**: The action to take when all authorizers fail to retrieve authorization information; values to choose: **allow** (to operate), **deny** (to operate); default value: **allow**.
 
-**Deny Action**: the action to take when denying the operating request from the current client; values to choose: **ignore** (operating request), **disconnect** (the connection of current client); default value: **allow**.
+**Deny Action**: The action to take when denying the operating request from the current client; values to choose: **ignore** (operating request), **disconnect** (the connection of current client); default value: **allow**.
 
 **Clear Cache**: Clear the cache of all current authorization results. 
 
@@ -48,11 +48,11 @@ You can also configure the authorization data cache through the configuration fi
 If set properly, caching can greatly improve performance. So, it is recommended to timely adjust the setting based on your system performance.
 :::
 
-### Authorization placeholders
+### Authorization Placeholders
 
 EMQX authorizers allow using placeholders in their configuration. During the authorization step, these placeholders are replaced with actual client information to construct a query or HTTP request that matches the current client.
 
-#### Placeholders in data queries
+#### Placeholders in Data Queries
 
 Placeholders are used to construct query statement. For example, in one EMQX MySQL authorizer, the default query SQL uses the placeholder `${username}`:
 
@@ -74,7 +74,7 @@ The following placeholders are supported in query statements:
 * `${cert_common_name}`: It is replaced by the Common Name of the client's TLS certificate at runtime, only applicable to TLS connections.
 * `${cert_subject}`:  It is replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
 
-#### Topic placeholders
+#### Topic Placeholders
 
 EMQX also allows placeholders to be used in topics to support dynamic themes. The supported placeholders are as follows:
 
@@ -85,7 +85,7 @@ Placeholders can be used as topic segments, like `a/b/${username}/c/d`, but not 
 
 To avoid placeholder interpolation, one may use special `eq` syntax: `eq a/b/${username}/c/d`. This topic is treated as `a/b/${username}/c/d` literally, without interpolation.
 
-### Authorization check priority
+### Authorization Check Priority
 
 Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission](../authn/authn.md) set during the authentication phase.
 
@@ -95,15 +95,15 @@ For super users, all their operations will be skipped from authorization check; 
 Super user > permission data > authorization check
 ```
 
-## Manage authorizers
+## Manage Authorizers
 
 You can view and manage authorizers in the **Access Control**->**Authorization** page in the Dashboard.
 
-### Adjust sequence of authorizers
+### Adjust Sequence of Authorizers
 
 As mentioned in [Authorization chain](#Authorization chain), authorizers are executed according to the configured sequence. You can select **Up**, **Down**, **Move to top**, and **Move to bottom** from the **More** dropdown list to move the authorizer. You can also adjust the authorizer positions in the `authorization.sources` configuration item.
 
-### Check authorizer status
+### Check Authorizer Status
 
 You can check the connection status in the **Status** column:
 
@@ -113,7 +113,7 @@ You can check the connection status in the **Status** column:
 | Disconnected | Parts of or all nodes are not connected to the data source (database, file). | Check if the data source is available; <br>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
 | Connecting   | Parts of or all nodes are reconnecting to the data source (database, file). | Check if the data source is available; <br/>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
 
-### Running metrics
+### Running Metrics
 
 You can view the statistic metrics of each authorizer in the Overview page of the authorizer. The following metrics are listed:
 
@@ -129,7 +129,7 @@ You can also check the authorization status and execution status on each node th
 
 If you want to view the overall running metrics of authorization, see [Metrics - Authentication & Authorization](../../observability/metrics-and-stats.md#Authentication & Authorization)
 
-## Integrate with data storage objects
+## Integrate with Data Storage Objects
 
 The EMQX authorization mechanism supports integration with various data storage objects, including built-in databases, files, MySQL, PostgreSQL, MongoDB, and Redis. You can manage permission data through REST API or EMQX Dashboard. <!-- Using a CSV or JSON file to import the data in a batch is currently not supported.-->.
 
@@ -165,7 +165,7 @@ Example:
 }
 ```
 
-## Configure authorization mechanisms
+## Configure Authorization Mechanisms
 
 EMQX provides 3 ways to use authorization, namely: Dashboard, Configuration file and HTTP API.
 
@@ -175,7 +175,7 @@ EMQX Dashboard is an intuitive way to configure EMQX authorizer, where you can c
 
 <img src="./assets/authentication-with-dashboard.png" alt="authentication-with-dashboard" style="zoom:80%;" />
 
-### Configure with configuration file
+### Configure with Configuration File
 
 You can also configure authorization in the `authorization` fields in the configuration file `emqx.conf`. The general config structure is the following:
 
@@ -201,7 +201,7 @@ Where,
 
 - `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers find any authorization rules; optional value: `allow` or `deny`; default:  `allow`. The setting  also triggers the enabling of black/white list. 
 
-- `deny_action`:  Determines the next step if a publish/subscribe operation is rejected; optional value: `ignore` or `disconnect`; default:  `ignore`. If set to `ignore`, the operation is silently ignored; if set to `disconnect`, the client connection is dropped.
+- `deny_action`: Determines the next step if a publish/subscribe operation is rejected; optional value: `ignore` or `disconnect`; default:  `ignore`. If set to `ignore`, the operation is silently ignored; if set to `disconnect`, the client connection is dropped.
 
 - `cache`: Defines the caching settings, including:
 * `cache.enable`: Specifies whether to enable caching, default: `true`. If the authorization is solely based on the JWT packets, it is recommended to configure this field `false`.

@@ -1,4 +1,4 @@
-# Use built-in database
+# Use Built-in Database
 
 EMQX provides users with a low-cost, out-of-the-box authorization rule storage method through the built-in database. You can use the built-in database (Mnesia) as a data source by setting it up through the Dashboard or configuration files, and add relevant authorization check rules through the Dashboard or HTTP API.
 
@@ -8,7 +8,7 @@ EMQX provides users with a low-cost, out-of-the-box authorization rule storage m
 
 :::
 
-## Configure with dashboard
+## Configure with Dashboard
 
 1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
@@ -18,7 +18,7 @@ EMQX provides users with a low-cost, out-of-the-box authorization rule storage m
 
 3. As built-in database authorization does not require configuration parameters, you can click **Create** to finish.
 
-## Configure with configuration file
+## Configure with Configuration File
 
 The built-in database authorizer is identified by type `built_in_database`.
 
@@ -37,7 +37,7 @@ Sample configuration:
 
 For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.md#authz-mnesia).
 
-## Create authorization rules
+## Create Authorization Rules
 
 You can create authorization rules through Dashboard or API.
 

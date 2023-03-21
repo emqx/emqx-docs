@@ -8,7 +8,7 @@ This authorizer implements authorization checks through matching publish/subscri
 
 :::
 
-## Data schema and query statement
+## Data Schema and Query Statement
 
 Users need to provide a templated Redis command that returns a key-value list with topic filters as keys and actions (`publish`, `subscribe`, or `all`) as values.
 
@@ -45,7 +45,7 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 
 3. Follow the instructions below to do the configuration.
 
-   **Connect**: In this section, fill in the information needed to connect Redis.
+   **Connect**: Fill in the information needed to connect Redis.
 
    - **Redis Mode**: Select how Redis is deployed, including **Single**, **Sentinel** and **Cluster**.
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
@@ -54,25 +54,21 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-   **Connection Configuration**: In this section, set the concurrent connections and waiting time before a connection is timed out.
+   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
    - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to Redis. Default: **8**. 
 
-   **Authentication configuration**: In this section, fill in the authorization-related settings:
+   **Authorization configuration**: Fill in the authorization-related settings:
 
    - **CMD**: Fill in the query command according to the data schema.
 
 4. Click **Create** to finish the settings.
 
-## Configure with configuration items
+## Configure with Configuration Items
 
 You can configure the EMQX Redis authorizer with EMQX configuration items.
 
-The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. For detailed configuration information, see:
-
--  [redis_single](../../configuration/configuration-manual.md#authz:redis_single)
-- [authz:redis_sentinel](../../configuration/configuration-manual.md#authz:redis_sentinel)
-- [authz:redis_cluster](../../configuration/configuration-manual.md#authz:redis_cluster)
+The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. <!--For detailed configuration information, see: [redis_single](../../configuration/configuration-manual.md#authz:redis_single), [authz:redis_sentinel](../../configuration/configuration-manual.md#authz:redis_sentinel), and [authz:redis_cluster](../../configuration/configuration-manual.md#authz:redis_cluster).-->
 
 Sample configuration:
 

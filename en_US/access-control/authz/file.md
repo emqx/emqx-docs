@@ -11,7 +11,7 @@ Be familiar with the basic concepts of [Authorization](./authz.md).
 
 :::
 
-## ACL file format
+## ACL File Format
 
 Before the authorization check based on ACL file, you need to store the authorization rules in the file in the form of [Erlang tuples](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) data list.
 
@@ -45,7 +45,7 @@ The rules are matched from top to bottom. If a rule matches, its permission is a
   * `{username, {re, "^dash"}}` : clients with username matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
   * `{clientid, "dashboard"}` : clients with clientid `dashboard`
   * `{clientid, {re, "^dash"}}` : clients with clientid matching the [regular expression](https://www.erlang.org/doc/man/re.html#regexp_syntax) `^dash`
-  * `{ipaddr, "127.0.0.1"}`: clients connecting from IP address `127.0.0.1`. Netmasks are allowed. <!--中文是“支持CIDR地址格式“，有什么区别？-->If EMQX is behind a load balance, `proxy_protocol` should be enabled for the client's MQTT listener. 
+  * `{ipaddr, "127.0.0.1"}`: clients connecting from IP address `127.0.0.1`. Netmasks are allowed. If EMQX is behind a load balance, `proxy_protocol` should be enabled for the client's MQTT listener. 
   * `{ipaddrs, ["127.0.0.1", ..., ]}` : clients connecting from one of the specified IP addresses `127.0.0.1, ..., `. Netmasks are allowed.
   * `all` : any clients
   * `{'and', [Spec1, Spec2, ...]}` : clients satisfying _all_ of the specifications from the list
@@ -63,7 +63,7 @@ Additionally, there are two special rules. These rules are usually used as defau
 - `{allow, all}` : allow all operations.
 - `{deny, all}` : deny all operations.
 
-## Configure with dashboard
+## Configure with Dashboard
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
@@ -75,7 +75,7 @@ EMQX configures file-based authorizer by default. You can click **Settings** but
 
 ![dashboard-edit-ACL-file_ee](./assets/dashboard-edit-ACL-file_ee.png)
 
-## Configure with configuration file
+## Configure with Configuration File
 
 The file-based authorizer is identified by type `file`.
 

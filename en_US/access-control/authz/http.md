@@ -1,8 +1,6 @@
-# Use HTTP service
+# Use HTTP Service
 
 EMQX supports the authorization based on the HTTP service. The user needs to build an external HTTP application as a data source by themselves. EMQX make requests to the HTTP service and determine the authorization result based on the data returned by the HTTP API, thus achieving complex authorization logic.
-
-In 4.x versions, EMQX only prompts the status code returned by the HTTP API, such as `200`, `403`, and discards the content. In order to provide more information to the user, we added the return of the request content in EMQX 5.0 version.
 
 ::: tip Tip
 
@@ -16,7 +14,7 @@ In 4.x versions, EMQX only prompts the status code returned by the HTTP API, suc
 For untrusted environments, HTTPS should be used.
 :::
 
-## HTTP request and response
+## HTTP Request and Response
 
 When the client initiates a subscription or publishing operation, the HTTP Authorizer constructs and sends a request based on the configured request template. Users need to implement authorization logic in the authorization service and return the results according to the following requirements:
 
@@ -43,9 +41,7 @@ Body:
 
 ::: tip EMQX 4.x compatibility statement:
 
-In version 4.x, EMQX only used the status code returned by the HTTP API, while the content is discarded. For example, `200` indicates `allow`, and `403` indicates `deny`.
-
-Due to the lack of expressive power, an incompatible adjustment is made to this mechanism in version 5.0.
+In version 4.x, EMQX only used the status code returned by the HTTP API, while the content is discarded. For example, `200` indicates `allow`, and `403` indicates `deny`. In order to provide more information to the user, we added the return of the request content in EMQX 5.0 version.
 
 :::
 
@@ -57,7 +53,7 @@ For untrusted environments, HTTPS should be used.
 
 :::
 
-## Configure with dashboard
+## Configure with Dashboard
 
 1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
@@ -67,13 +63,13 @@ For untrusted environments, HTTPS should be used.
 
 3. Follow the instructions below to do the configuration.
 
-   **HTTP** section: <!--a brief description of what is being configured here.-->
+   **HTTP**: Configure the HTTP request method, the IP address and request headers here.
 
    - **Request Method**: Select the HTTP request method, optional values: `GET`, `POST`.
    - **URL**: Enter the IP address of the HTTP application.
    - **Headers** (optional): Configure the HTTP request headers. <!--The key, value, and add of this content.-->
 
-   **Connection Configuration** section:  In this section, configure concurrent connections, connection timeout, maximum HTTP requests, and request timeout.
+   **Connection Configuration**: Configure concurrent connections, connection timeout, maximum HTTP requests, and request timeout.
 
    - **Pool size** (optional): Integer, specifies the number of concurrent connections from EMQX nodes to external HTTP servers; default value: **8**. <!--Is there a range?-->
    - **Connection Timeout** (optional): Enter the duration to wait for a connection timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
@@ -81,15 +77,15 @@ For untrusted environments, HTTPS should be used.
    - **Request Timeout** (optional): Enter the duration to wait for a request timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
    - **TLS Configuration**: Configure whether to enable TLS.
 
-   **Authorization Configuration** section: Complete the configuration of the HTTP request body here. <!--Related information needs to be added.-->
+   **Authorization Configuration**: Complete the configuration of the HTTP request body here. <!--Related information needs to be added.-->
 
 4. Click **Create** to finish the setting.
 
-## Configure with confiuration items
+## Configure with Confiuration Items
 
 The HTTP authorization requires configuration with `type=http`.
 
-HTTP `POST` and `GET` requests are supported. Each of them has some specific options. For detailed information, see [authz:http_post](../../configuration/configuration-manual.md#authz:http_post) and [authz:http_get](../../configuration/configuration-manual.md#authz:http_get).
+HTTP `POST` and `GET` requests are supported. Each of them has some specific options. <!--For detailed information, see [authz:http_post](../../configuration/configuration-manual.md#authz:http_post) and [authz:http_get](../../configuration/configuration-manual.md#authz:http_get).-->
 
 Example of an HTTP authorizer configured with `POST` request:
 

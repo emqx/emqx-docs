@@ -1,4 +1,4 @@
-# MQTT 5.0 enhanced authentication
+# MQTT 5.0 Enhanced Authentication
 
 EMQX also supports the MQTT 5.0 enhanced authentication. This authenticator implements [Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) authentication and uses the built-in database of EMQX to store client credentials (_users_).
 
@@ -14,7 +14,7 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 
 Set **Password Hash** as **sha256** or **sha512** and click **Create** to finish the settings. 
 
-## Configure with configuration items
+## Configure with Configuration Items
 
 Sample configuration:
 

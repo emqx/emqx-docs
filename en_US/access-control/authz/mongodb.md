@@ -8,7 +8,7 @@ This authorizer implements authorization checks through matching pubublish/subsc
 
 :::
 
-## Data schema and query statement
+## Data Schema and Query Statement
 
 MongoDB authorizer supports storing authorization rules as MongoDB documents. Users need to provide a query template to make sure that the result contains the following fields:
 
@@ -47,7 +47,10 @@ When there is a significant number of users in the system, optimize and index th
 
 For this MongoDB data schema, the corresponding Dashboard configuration parameters are:
 
-- <!--Needed like in the Authn?-->
+- **Username**: `user123`
+- **Server**: `127.0.0.1`
+- **Collection**: `mqtt_acl`
+- **Filter**: `{ username = "${username}" }`
 
 ## Configurate with Dashboard
 
@@ -61,7 +64,7 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
 
 3. Follow the instructions below to do the configuration.
 
-   **Connect**: In this section, fill in the information needed to connect MongDB.
+   **Connect**: Fill in the information needed to connect MongDB.
 
    - **MongoDB Mode**: Select how MongoDB is deployed, including **Single**, **Replica Set** and **Sharding**.
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
@@ -72,26 +75,22 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
 
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-   **Connection Configuration**: In this section, set the concurrent connections and waiting time before a connection is timed out.
+   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
    - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MongoDB. Default: **8**. 
    - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour.
 
-   **Authentication configuration**: In this section, fill in the authorization-related settings:
+   **Authorization configuration**: Fill in the authorization-related settings:
 
    - A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authz.md#authorization-placeholders) are supported. 
 
 4. Click **Create** to finish the settings.
 
-## Configure with configuration items
+## Configure with Configuration Items
 
 You can configure the EMQX MongoDB authorizer with EMQX configuration items.
 
-The MongoDB authorizer is identified by type `mongodb`. The authorizer supports connecting to MongoDB running in 3 types of deployment modes. For detailed configuration information, see:
-
--  [authz:mongo_single](../../configuration/configuration-manual.md#authz:mongo_single)
--  [authz:mongo_sharded](../../configuration/configuration-manual.md#authz:mongo_sharded) 
-- [authz:mongo_rs](../../configuration/configuration-manual.md#authz:mongo_rs)
+The MongoDB authorizer is identified by type `mongodb`. The authorizer supports connecting to MongoDB running in 3 types of deployment modes. <!---For detailed configuration information, see:[authz:mongo_single](../../configuration/configuration-manual.md#authz:mongo_single),[authz:mongo_sharded](../../configuration/configuration-manual.md#authz:mongo_sharded) and [authz:mongo_rs](../../configuration/configuration-manual.md#authz:mongo_rs)-->
 
 Sample configuration:
 
