@@ -1,55 +1,58 @@
 # Cluster security
 
-When it comes to the security of the EMQX cluster, there two primary
-aspects to consider.
+Besides [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, EMQX also leverages the features of port mapping and TLS encryption to ensure the security of client data transmission, message communication between cluster nodes, and enterprise system integrations.
 
-* Secure the ports each node listens on for clustering.
-* Keep the Erlang cookie secret. See` node.cookie` config.
+This section introduces port mapping in EMQX and how to configure TLS/SSL encryption for inter-cluster traffic.
 
 ::: tip Tip
-It's a good practice to keep the clustering ports internal by configuring
-firewall rules e.g., AWS security groups or iptables.
+It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., [AWS security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) or [iptables](https://en.wikipedia.org/wiki/Iptables). 
+
+If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach. <!--I think more content should be added about the firewall setting-->
 :::
 
-## Intra-cluster Communication Ports
+## Set Node Cookies
 
-To form a cluster, EMQX nodes need to connect to each other through some conventional port numbers.
+For security concerns, you should change the default cookie settings to a secret cookie in `emqx.conf` on all nodes to join the cluster. 
 
-If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach.
+Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
 
-There are two different channels for EMQX nodes to communicate with each other.
+```
+node {
+  cookie = "<a secret cookie>"
+}
+```
 
-### The Erlang Distribution Ports
+## Port Mapping
 
-::: tip Tip
-EMQX uses a conventional port mapping mechanism, but does **NOT** use [Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/doc/man/epmd.html)
-:::
+EMQX uses a port mapping rule for clustering to ensure that the communication between nodes is reliable and efficient. EMQX nodes communicate with each other through two different channels, Erlang Distribution ports and Cluster RPC ports. <!--should we also add the port range-->
 
-Erlang distribution port: `ListeningPort = BasePort + Offset`, where `BasePort` is 4370 (which is not made configurable), and `Offset` is the numeric suffix of the node's name. If the node name does not have a numeric suffix, `Offsset` is 0.
+| Channel                       | Description                                                  | Default Port                                       |
+| ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| **Erlang Distribution Ports** | For node communications                                      | `4370`                                             |
+| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br>`5369` if EMQX is deployed via Docker |
 
-For example, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `4370`, and port  `4371` for `emqx1` (or `emqx-1`), and so on.
+EMQX applies the same port mapping rule for Erlang Distribution Ports and Cluster RPC Ports, which is: 
 
-### The Cluster RPC Port
+```
+ListeningPort = BasePort + Offset
+```
 
-By default, each emqx node also listens on a (conventional) port for the RPC channels, which should be allowed by the firewall.
+The offset is calculated based on the numeric suffix of the node's name. If the node's name does not have a numeric suffix, then the offset is set to 0. For example:
 
-The port mapping rule is similar to the port mapping rules for Erlang distribution, only `BasePort` is `5370`.
+- For node `emqx@192.168.0.12`, it does not have a numeric suffix, the port will be `4370` for Erlang Distribution Ports (or `5370` for Cluster RPC Ports). 
+- For node `emqx1@192.168.0.12`, the numeric suffix is 1, the port will be `4371`  (or `5371` for Cluster RPC Ports). 
 
-That is, having `node.name = emqx@192.168.0.12` in `emqx.conf` should make the node listen on port `5370`, and port `5371` for `emqx1` (or `emqx-1`), and so on.
 
-::: tip
-EMQX in a docker container uses static port `5369` for cluster RPC.
-:::
 
-### Using TLS for Cluster RPC Connections
+## Configure TLS to Secure Cluster Connections
 
-::: tip
-TLS comes at the cost of increased CPU load and RAM usage.
-:::
+EMQX also supports using TLS to secure the communication channel between EMQX nodes to protect the confidentiality, integrity, and authenticity of the data exchanged between them. TLS comes at the cost of increased CPU load and RAM usage, please configure as per your business needs. 
+
+This section introduces how to configure TLS for EMQX clusters. On how to obtain an SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
+
+### Use TLS for Cluster RPC Connections
 
 To configure TLS for cluster RPC below configs should be set in `emqx.conf`.
-
-Ensure the following configs in `emqx.conf`.
 
 ```
 rpc {
@@ -60,39 +63,7 @@ rpc {
 }
 ```
 
-Below are the steps to generate certificates and a self-signed CA.
-
-1. Create a root CA using `openssl` tool:
-
-   ```
-   # Create self-signed root CA:
-   openssl req -nodes -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout ca.key -out ca.pem -subj "/O=LocalOrg/CN=LocalOrg-Root-CA"
-   ```
-
-2. Generate CA-signed certificates for the nodes using the `ca.pem` created at step 1:
-
-   ```
-   # Create a private key:
-   openssl genrsa -out domain.key 2048
-   # Create openssl extfile:
-   cat <<EOF > domain.ext
-   authorityKeyIdentifier=keyid,issuer
-   basicConstraints=CA:FALSE
-   subjectAltName = @alt_names
-   [alt_names]
-   DNS.1 = backplane
-   EOF
-   # Create a CSR:
-   openssl req -key domain.key -new -out domain.csr -subj "/O=LocalOrg"
-   # Sign the CSR with the Root CA:
-   openssl x509 -req -CA ca.pem -CAkey ca.key -in domain.csr -out domain.pem -days 365 -CAcreateserial -extfile domain.ext
-   ```
-   All the nodes in the cluster must use certificates signed by the same CA.
-
-3. Put the generated `domain.pem`, `domain.key`, and `ca.pem` files on each cluster node.
-   Ensure the emqx user can read these files, and permissions are set to `600`.
-
-### Using TLS for Erlang distribution
+### Use TLS for Erlang distribution
 
 ::: tip
 TLS comes at the cost of increased CPU load and RAM usage
@@ -102,3 +73,4 @@ EMQX core nodes use Erlang distribution to synchronize database updates and mana
 
 * Make sure to verify `etc/ssl_dist.conf` file has the right paths to keys and certificates.
 * Ensure config `cluster.proto_dist` is set to `inet_tls`.
+

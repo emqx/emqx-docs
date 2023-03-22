@@ -11,17 +11,17 @@ In this document, we use two nodes to demonstrate manual clustering steps.
 
 Suppose you are going to deploy an EMQX cluster on two servers `s1.emqx.io` and `s2.emqx.io`
 
-| FQDN       |   Node name       |
-| ---------- | ----------------- |
-| s1.emqx.io |  emqx@s1.emqx.io  |
-| s2.emqx.io |  emqx@s2.emqx.io  |
+| FQDN       | Node name       |
+| ---------- | --------------- |
+| s1.emqx.io | emqx@s1.emqx.io |
+| s2.emqx.io | emqx@s2.emqx.io |
 
 Or if you have static IP assignments for the hosts.
 
-| FQDN         |   Node name       |
+| FQDN         | Node name         |
 | ------------ | ----------------- |
-| 192.168.0.10 |  emqx@192.168.0.10  |
-| 192.168.0.20 |  emqx@192.168.0.20  |
+| 192.168.0.10 | emqx@192.168.0.10 |
+| 192.168.0.20 | emqx@192.168.0.20 |
 
 ::: tip Tip
 EMQX node names are immutable, as they are baked into the database schema and data files. It is strongly recommended to use static FQDNs for EMQX node names, even when the network environment provides static IPs.
@@ -33,9 +33,9 @@ In `etc/emqx.conf`:
 
 ```bash
 node.name = emqx@s1.emqx.io
-# or
-node.name = emqx@192.168.0.10
 ```
+
+or
 
 You can also override the node name with an environment variable:
 
@@ -63,7 +63,6 @@ After the two nodes are started, execute the following command on `s2.emqx.io`:
 
 ```bash
 $ ./bin/emqx_ctl cluster join emqx@s1.emqx.io
-
 Join the cluster successfully.
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
@@ -88,7 +87,6 @@ Query the cluster status on any node:
 
 ```bash
 $ ./bin/emqx_ctl cluster status
-
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
