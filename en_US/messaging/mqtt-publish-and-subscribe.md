@@ -1,46 +1,92 @@
 # Publish/Subscribe
 
-MQTT is based on a [publish/subscribe model](../mqtt/mqtt-publish-and-subscribe.md) for message communication. The client can be both a publisher (publish a message) and a subscriber (subscribe to a topic). That is, when a client publishes a message to the broker, the broker will forward the message to clients subscribed to this topic after receiving it.
+MQTT is based on a [publish/subscribe model](../mqtt/mqtt-publish-and-subscribe.md) for message communication. As an MQTT messaging platform, clients connected to the EMQX Enterprise can publish and subscribe messages. A client can be both a publisher and a subscriber. When a client publishes a message with a certain topic to the EMQX server, the server forwards the message to any clients who subscribe to this topic. 
 
-This chapter will introduce the commonly used MQTT client tools, and will walk you through the process of establishing client connections, subscribing to topics, publishing messages, as well as receiving and viewing messages.
+EMQ provides the developers with some verification tools to test the MQTT messaging services and applications. This chapter introduces the commonly used MQTT 5.0 client tools and how to use these tools to verify the following messaging services:
 
-**Messaging workflow**
+- Establish client connections
+- Subscribe to topics
+- Publish messages
+- Receive and view messages
 
-Below is the typical workflow on how a message is published and then received by the subscriber. 
+In  this chapter, it also introduces some advanced publishing and subcribing operations, such as:
 
-1. Publishers and subscribers initiate the connection request to EMQX with the correct connection URL and authentication information. Note: Both are connected to the same EMQX;
-2. The subscriber subscribes to the topic. By default, messages with no matching subscribers will be discarded immediately;
-3. The publisher publishes messages, please ensure that the topic of the message can be matched with the subscriber, and the subscriber has subscribed to the corresponding topic;
-4. The subscriber receives the message.
+- Exclusive subscription
+- Depayed publish
+- Auto subscribe
+- Topic Rewrite
 
-In the next section, we will introduce how to test the connection with different client tools, including Dashboard Websocket and MQTT X. 
+## MQTT X
 
-:::: tabs type:card
+[MQTT X](https://mqttx.app) includes 3 types of MQTT 5.0 verification tools:
 
-::: tab MQTT X
-[MQTT X](https://mqttx.app) is a cross-platform MQTT desktop client open sourced by [EMQ](https://www.emqx.com). It can run on macOS, Linux, Windows, and Ubuntu. MQTT X has provided features like support for customized scripts for MQTT Pub/Sub simulation, format conversion for MQTT messages, and logging. 
+- MQTT X Client
+- MQTT X CLI
+- MQTT Websocket
 
-Leveraging the easy-to-use graphic interface of MQTT X, you can connect MQTT broker or cloud with one click and test MQTT/TCP, MQTT/TLS, and MQTT/WebSocket connections. 
+### MQTT X Client
 
-![mqttx over view](./assets/mqttx-gif.gif)
+[MQTT X Client](https://mqttx.app) is a cross-platform MQTT desktop client tool open sourced by [EMQ](https://www.emqx.com). It provides users with an easy-to-use graphic interface to allow users to quickly create and test MQTT connections, publish and subscribe MQTT messages. 
 
-> You can also use [MQTT X Web](http://www.emqx.io/online-mqtt-client#/recent_connections) to complete the development and debugging via MQTT over WebSocket, with no need to download or install any tools. 
+Before you test, download and install the MQTT X Client:
 
-Below is the workflow of how to use MQTT X to connect, publish/subscribe, and view messages:
+1. Download the installation package from the application store or [MQTT X website](https://mqttx.app/) based on your operating system. 
+2. Install the MQTT X Client. For detailed instruction, see [MQTT X - Installation](https://mqttx.app/docs/downloading-and-installation).
 
-1. Download and install MQTT X: Download the installation package from the application store or [MQTT X website](https://mqttx.app/) based on your operating system. For detailed operation steps, see [MQTT X - Installation](https://mqttx.app/docs/downloading-and-installation).
-2. Configure the MQTT connection and message publish/subscribe services: Fill in the EMQX connection information and establish a connection. For detailed operations, see [MQTT X - Get Started](https://mqttx.app/docs/get-started#connect). For **Host**, select the `mqtt://` protocol and fill in the IP address (Default: `localhost`) of the corresponding listener, set **Port** to 1883. Fill in the username and password if there are any or just leave them blank if no access control is used. 
-3. Message publish/subscribe and view: After you are connected to EMQX, you can begin to use MQTT X to send messages. For detailed operations, see [MQTT X - Publish and subscription](https://mqttx.app/docs/get-started#publish-and-subscription).
+Follow the instructions below to use the MQTT X desktop client for a simple test:
 
-:::
+1. Start the MQTT X Client. Click the **New Connection** to create an MQTT connection.
 
-::: tab MQTT X CLI
+2. Configue the new connection. 
+
+   In **General** section, fill in the general information of the client. 
+
+   - **Name**: Type a connection `Name`. 
+   - **Client ID**: Leave it as default. It is the one and only identification of a client connection and can be automatically generated by clicking the arrow button. <!--correct name of the button?-->
+   - **Host**: Select the protocol to be used. Select `mqtt://` or `ws://` <!--ws:// is for?-->. If an `SSL/TLS` authentication connection is used, you needs to select `mqtts://` or `Wss://`. The host IP address is set to `broker.emqx.io` by default. You need to replace with the actual IP address if EMQT is deployed on a non-local machine. The localhost `127.0.0.1` is used as an example in the following screenshots.
+   - **Port**: Type the port corresponnding to the selected protocol.
+   - **User name** and **Password**: Fill in the username and password if there are any or just leave them blank if no access control is used.
+   - **SSL/TLS**: Enable the SSL/TLS by clicking the toggle button if an `SSL/TLS` authentication connection is used.
+
+   Leave the rest settings as default. Click the **Connect** button.
+
+   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:25%;" />
+
+3. After the success connection, type the topic heading `test` in the text box and compose the message as shown in the screenshot. Click the send button. A message under the topic `test` is send to the dialogue box.
+
+   <img src="./assets/Publish-test-message.png" alt="Publish-test-message" style="zoom:25%;" />
+
+4. Create another new connection following the configuration instruction in Step 4 and set the name to "Subscriber". 
+
+5. Click the **New Subscription**. 
+
+   **Topic**: Type `test` in the text box. 
+
+   **QoS**: Set as the default value.
+
+   **Color**: You can select the color to mark the description.
+
+   Leave other options empty for the general test. <!--Add details later if needed-->
+
+   Click the **Confirm** button.
+
+   <img src="./assets/Subscribe-test-topic.png" alt="Subscribe-test-topic" style="zoom:25%;" />
+
+6. Select the client "Demo" at the **Connections** pane. Publish a new message under the topic "Test". You can see the client named "Subscriber" receives a new message.
+
+   <img src="./assets/Publish-test-again.png" alt="Publish-test-again" style="zoom:25%;" />
+
+   <img src="./assets/Receive-test-again-message.png" alt="Receive-test-again-message" style="zoom:25%;" />
+
+For detailed and advanced operations, see [MQTT X - Publish and subscription](https://mqttx.app/docs/get-started#publish-and-subscription).
+
+### MQTT X CLI
 
 [MQTT X CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command line tool provided by [EMQ](https://www.emqx.com). It is an [MQTT X](https://mqttx.app) tool running on the command line tool so users test and debug MQTT services and applications with no need for a graphic interface. 
 
 Besides cross-platform support, dependency-free, and support to various MQTT features, you can also use MQTT X for a quick performance test. 
 
-Below is the workflow of how to use MQTT X CLI to connect, publish/subscribe, and view messages:
+Follow the instructions below to connect, publish/subscribe, and view messages using MQTT X CLI:
 
 1. Download and install MQTT CLI. Here we will take macOS as an example, for the other operating systems, see [MQTT X CLI - Installation](https://mqttx.app/docs/cli/downloading-and-installation). 
 
@@ -97,21 +143,43 @@ Below is the workflow of how to use MQTT X CLI to connect, publish/subscribe, an
 
    For information on more parameters, see  [MQTT X CLI - Publish](https://mqttx.app/docs/cli/get-started#publish).
 
-:::
+### MQTT X Web
 
-::: tab Dashboard WebSocket 
+[MQTT X Web](https://mqttx.app/web) is a browser-based MQTT 5.0 WebSocket client tool. You can use it to complete the development and debugging via MQTT over WebSocket, with no need to download or install any tools. The testing operations using the MQTT X Web is basically the same as using the MQTT X Client.
+
+## Dashboard WebSocket 
 
 [EMQX Dashboard](../dashboard/introduction.md) provides a WebSocket client as a quick and highly effective MQTT test tool. With this MQTT over WebSocket, you can test connecting to EMQX, subscribing to topics, and publishing messages.  
 
 1. In EMQX Dashboard, click **Diagnose** -> **WebSocket Client** on the left navigation tree. 
-2. Fill in the connection information in the **Connection** section. For **Host**, fill in the corresponding IP address (Default:  `localhost`), for **Port**, keep the default  `8083`, and then fill in the user name and password if there are any, or just leave them blank. 
+
+2. Fill in the connection information in the **Connection** section. 
+
+   - **Host**: Fill in the corresponding IP address (Default:  `localhost`).
+   - **Port**: Keep the default port `8083`, 
+   - **Username** and **Password**: Fill in the username and password if there are any or just leave them blank if no access control is used. 
+
+   Leave other settings as default.
+
 3. Click the **Connect** button to establish a connection.
-4. Set the topic to subscribe in the **Subscription** section. Here we will fill in  `testtopic/#` as **Topic**, select the corresponding QoS, and then click the **Subscribe** button to finish the subscription.  `testtopic/#`  will be added to the table below. After the subscription, all messages matching the topic will be forwarded to this connection and added to the **Received** section.
-5. Set the topic for the message to be published in the **Publish** section. Fill in the topic in the **Topic** field (wildcards like `+` and `#` are not supported), here we will fill in `testtopic/1`, fill in the message body under **Payload**, select the corresponding QoS, and whether this is a retained message. Click the **Publish** button, and one record will be added to the **Published** section below.
-6. The message will be routed to all subscribers, as we have already subscribed to this topic in step 5, one new record will also be added to the **Received** section below.
 
-Now we have successfully experienced the entire messaging services with the Dashboard WebSocket client. 
+4. Set the **topic** to subscribe as `testtopic/#` in the **Subscription** section. Click the **Subscribe** button to finish the subscription. The topic `testtopic/#`  will be added to the table below.
 
-:::
+   <img src="./assets/Dashboad-Websocket-Client.png" alt="Dashboad-Websocket-Client" style="zoom:25%;" />
 
-::::
+   After the subscription, all messages matching the topic will be forwarded to this connection and added to the **Received** section.
+
+5. Set the topic for the message to be published in the **Publish** section. 
+
+   - **Topic**: Set to `testtopic/1` (wildcards like `+` and `#` are not supported).
+   - **Payload**: Set to `{"msg": 'Hello"}`.
+   - **QoS**: Set as defatult value `0`. 
+   - **Retain**: Select the checkbox if you want to set it as a retained message. For more information on retained message, see [Retained Message](./explore-mqtt.md).
+
+   Click the **Publish** button, and one record will be added to the **Published** section below. The message will be routed to all subscribers. As the publisher is also the receiver in this test, one new record will also be added to the **Received** section below.
+
+   <img src="./assets/Dashboad-Websocket-Client-receive .png" alt="Dashboad-Websocket-Client-receive " style="zoom:25%;" />
+
+
+
+
