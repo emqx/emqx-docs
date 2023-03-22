@@ -6,7 +6,7 @@
 
 支持全新的 Mria 集群架构，在此架构下 EMQX 水平扩展性得到指数级提升，单个集群可以轻松支持 [1 亿 MQTT 连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)，这使得 EMQX 5.0 成为目前全球最具扩展性的 MQTT Broker。
 
-![100M benchmark](./assets/100m-benckmark.png)
+<img src="./assets/100m-benckmark.png" alt="100M benchmark" style="zoom:33%;" />
 
 在构建满足用户业务需求的更大规模集群的同时，Mria 架构还能够降低大规模部署下的脑裂风险以及脑裂后的影响，以提供更加稳定可靠的物联网数据接入服务。
 
@@ -36,11 +36,13 @@ QUIC 非常适用于传统 TCP/IP 网络 UDP MTU 大小能够保证的弱网环�
 
 {% endemqxee %}
 
-同时，EMQX 5.0 还提供了数据集成可视化查看能力（Flows）通过 Dashboard 页面，您可以清晰看到设备与云端之间的物联网数据处理和流转步骤。
+同时，EMQX 5.0 还提供了数据集成可视化查看能力（Flows）。通过 Dashboard 页面，您可以清晰看到设备与云端之间的物联网数据处理和流转步骤。
 
 后续版本 EMQX 还将支持在 Dashboard 上以拖拽的方式编排规则和数据桥接（Flow Editor），通过可视化操作实现数据集成配置。
 
 ![Flow Editor：通过可视化编排规则处理数据流](./assets/flow-editor.png)
+
+关于 EMQX 支持的桥接类型以及如何配置，可阅读[数据桥接章节](../data-integration/data-bridges.md)。
 
 ## 灵活多样认证授权
 
@@ -53,6 +55,8 @@ EMQX 5.0 认证授权包括以下特性：
 - 支持调整认证器与授权检查器顺序。
 - 提供执行速度与次数统计指标，实现认证授权可观测性。
 - 允许监听器单独配置认证，更灵活的接入能力。
+
+关于如何在 EMQX 进行认证和授权配置，可阅读[访问控制章节]((../access-control/overview.md))。
 
 ## 全新 EMQX Dashboard
 
