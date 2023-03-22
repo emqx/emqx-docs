@@ -1,4 +1,4 @@
-# Access control
+# Access Control
 
 This chapter will introduce how to set and manage access control policies with the EMQX Dashboard:
 

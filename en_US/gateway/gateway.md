@@ -14,7 +14,7 @@ them easier to use.
 
 Quick Start: [Stomp](./stomp.md), [MQTT-SN](./mqttsn.md), [CoAP](./coap.md)
 
-## Design
+## How It Works
 
 To unify the model for each access protocol, Gateway abstracts the following concepts:
 
@@ -25,7 +25,7 @@ To unify the model for each access protocol, Gateway abstracts the following con
     * The concept of publish/subscribe is defined in the MQTT-SN protocol, so there is no need for predefined topics to publish/subscribe in MQTT-SN gateway.
 - **User Interfaces**: Defines how to manage gateways or clients by configurations and HTTP APIs.
 
-![gateway_struct](./assets/gateway_struct.png)
+<img src="./assets/gateway_struct.png" alt="gateway_struct" style="zoom:33%;" />
 
 ### Authentication
 
@@ -169,7 +169,7 @@ gateway.stomp {
 ```
 
 ::: tip
-Applying different authenticator to each listener is only supported in the configuration file,
+Applying different authenticators to each listener is only supported in the configuration file,
 not yet supported in the HTTP API and Dashboard.
 :::
 
@@ -179,17 +179,18 @@ For better integration with external systems, the gateway also supports hooks de
 
 Due to the heterogeneity of semantics between gateways, only some of the core hooks are available.
 
-Client connection related hooks with the following supportability:
+Client connection-related hooks with the following supportability:
 
-| Name                   | Available |  Desc                                                                     |
-| ---------------------- | --------- | ------------------------------------------------------------------------- |
-| `client.connect`       | Optional  | Originally used for MQTT protocol, only supported by partial gateways     |
-| `client.connack`       | Optional  | Originally used for MQTT protocol, only supported by partial gateways     |
-| `client.authenticate`  | Required  | Client authentication request, supported by all gateways                  |
-| `client.connected`     | Required  | Client connected successfully, supported by all gateways                  |
-| `client.disconnected`  | Required  | Client disconnected, supported by all gateways                            |
-| `client.authorize`     | Required  | Client publish/subscribe authorization request, supported by all gateways |
-| `client.subscribe`     | Optional  | Originally used for MQTT protocol, only supported by partial gateways     |
-| `client.unsubscribe`   | Optional  | Originally used for MQTT protocol, only supported by partial gateways     |
+| Name                  | Available | Description                                                  |
+| --------------------- | --------- | ------------------------------------------------------------ |
+| `client.connect`      | Optional  | Originally used for MQTT protocol, only supported by partial gateways |
+| `client.connack`      | Optional  | Originally used for MQTT protocol, only supported by partial gateways |
+| `client.authenticate` | Required  | Client authentication request, supported by all gateways     |
+| `client.connected`    | Required  | Client connected successfully, supported by all gateways     |
+| `client.disconnected` | Required  | Client disconnected, supported by all gateways               |
+| `client.authorize`    | Required  | Client publish/subscribe authorization request, supported by all gateways |
+| `client.subscribe`    | Optional  | Originally used for MQTT protocol, only supported by partial gateways |
+| `client.unsubscribe`  | Optional  | Originally used for MQTT protocol, only supported by partial gateways |
 
-Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each tye of gateway.
+Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each type of gateway.
+

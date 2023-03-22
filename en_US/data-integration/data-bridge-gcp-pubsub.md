@@ -25,7 +25,7 @@ configuring the GCP Pub/Sub Bridge on EMQX.
 3. Create a Pub/Sub topic (remember that the Service Account must have
    permissions to publish to that topic).
 
-## Example GCP Pub/Sub Bridge Usage via Dashboard
+## Configure GCP Pub/Sub Bridge via Dashboard
 
 Go to the EMQX Dashboard, select the _"Data Integration"_ item on the
 menu on the left, then _"Data Bridges"_.  Then, click _"+ Create"_.
@@ -57,7 +57,7 @@ the rule to be forwarded to GCP Pub/Sub.  Refer to the
 <img src="./assets/gcp_pubsub/setup4.png" alt="Creating a rule for GCP PubSub Bridge"></img>
 </center>
 
-## Example GCP Pub/Sub Bridge Usage via Config File
+## Configure GCP Pub/Sub Bridge via Configuration File
 
 Add the following configuration to the end of the `emqx.conf` file,
 substituting the contents of `service_account_json` with the

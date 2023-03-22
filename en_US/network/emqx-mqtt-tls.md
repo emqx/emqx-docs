@@ -92,7 +92,7 @@ listeners.ssl.default {
 If the `RSA-PSK` cipher suites are used, the `RSA` certificate is still required, see [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4) for details.
 
 
-## SSL Client for external resources
+## SSL Client for External Resources
 
 Apart from allowing to receive a two-way SSL MQTT client, EMQX also provides access to external resources via SSL.
 

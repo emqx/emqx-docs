@@ -7,7 +7,7 @@ Use cases:
 1. In cluster mode: If the node where the subscriber is located malfunctions, the publisher's messages will be lost (QoS 0 messages) or accumulated in the node (QoS 1 and QoS 2 messages). Though we can solve this problem by adding subscription nodes, this may affect the performance with lots of repeated messages and increase the complexity of the business.
 2. When the publisher's production capacity is strong, the subscriber's consumption capacity may not be able to keep up in time. In this case, we have to rely on the load-balancing capability of the subscriber, which again increases the development cost.
 
-## Mechanism
+## How It Works
 
 We can add a `$share` prefix to the original topic to enable shared subscriptions for a group of subscribers.
 
@@ -20,7 +20,7 @@ where ` topic` is the real topic name they subscribed to, and `$share/g/` is a s
 | --------------- | ----------- | ---------- |
 | $share/abc/t/1  | $share/abc/ | t/1        |
 
-## Shared subscriptions in group
+## Shared Subscriptions in Group
 
 Shared subscriptions prefixed with `$share/<group-name>` are shared subscriptions with groups.
 The group name can be any string.
@@ -63,7 +63,7 @@ broker.shared_dispatch_ack_enabled = false
 | sticky       | Always send to the last selected subscriber |
 | hash         | Hash by publisher ClientID                  |
 
-### Discussion on message loss
+### Discussion on Message Loss
 
 EMQX sends messages to subscribers' sessions.
 

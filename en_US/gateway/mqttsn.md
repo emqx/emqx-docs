@@ -144,14 +144,14 @@ The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:
 - The SUBSCRIBE message of the MQTT-SN protocol is used as a subscribing operation, whose topic and QoS are both specified by this message.
 - The UNSUBSCRIBE message of the MQTT-SN protocol is used as an unsubscribe operation, whose topic is specified by this message.
 
-There is no special authorization configurations within MQTT-SN gateway, and its permission control for topics needs to be configured [Authorization](../access-control/authz/authz.md).
+There are no special authorization configurations within MQTT-SN gateway, and its permission control for topics needs to be configured [Authorization](../access-control/authz/authz.md).
 
 ## User Interfaces
 
-- Detailed confguration options: [Configuration - Stomp Gateway](../configuration/configuration-manual.md)
-- Detailed HTTP APIs description: [HTTP API - Gateway](../admin/api.md)
+- Detailed configuration options: [Configuration - Stomp Gateway](../configuration/configuration-manual.md)
+- Detailed HTTP APIs Description: [HTTP API - Gateway](../admin/api.md)
 
-## Client libraries
+## Client Libraries
 
 - [paho.mqtt-sn.embedded-c](https://github.com/eclipse/paho.mqtt-sn.embedded-c)
 - [mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)

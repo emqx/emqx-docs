@@ -94,7 +94,6 @@ cluster {
 ### Configure Nodes to Join a Cluster
 
 After the nodes are started,  you can run the `cluster join` command on the node that you want to join the cluster. For example, you want `emqx@s2.emqx.io` to join  `emqx@s1.emqx.io`, run the command below on `emqx@s2.emqx.io`：
-
 <!--should we add how to start the nodes or how to confirm the nodes are started?-->
 
 ```bash

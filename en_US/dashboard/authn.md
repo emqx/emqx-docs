@@ -12,7 +12,7 @@ When authentication is enabled, the device or MQTT client needs to carry authent
 
 Click the `Create` button to go to the page of creating authentication. To create an authentication, you need to select a mechanism and then select a backend to store or obtain authentication data (except JWT authentication). The data can be obtained from these backend, including databases or HTTP server, and finally configure the connection.
 
-### Mechanism
+### How It Works
 
 EMQX provides three mechanisms, including:
 

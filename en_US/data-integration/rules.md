@@ -17,7 +17,7 @@ The rules describe **data source**, **data processing process**, and **processin
 
 ![sql_process](./assets/sql_process.png)
 
-### Introduction to rule SQL statements
+### Introduction to Rule SQL Statements
 
 SQL statements are used to specify the data source of rules, define data processing procedures, and so on. An example of an SQL statement is given below:
 
@@ -51,7 +51,7 @@ The current rule supports the following two actions:
 
 - Data Bridges: A data bridge is a channel to the external data system. Rules can directly use the ID of data bridge as the action, sending the output of the rule to the data bridge for further processing. For details of data bridge, see [data bridges](./data-bridges.md).
 
-## The republish Action
+## Republish Action
 
 The republish action is used to publish a new MQTT message, which is applicable to the scenarios where downlink messages need to be sent to the device.
 
@@ -62,7 +62,7 @@ The republish action does not prevent the delivery of the original message. For 
 In the republish action, you can customize the payload, topic, QoS and other parameters of the message,
 and fields in the rule output can be referenced as values of these parameters in the form of `${field name}`.
 
-## The console Action
+## Console Action
 
 The console output action is used to view the output results of rules. The results will be printed to the console in the form of logs.
 

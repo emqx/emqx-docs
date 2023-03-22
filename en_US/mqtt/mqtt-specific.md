@@ -19,7 +19,7 @@ MQTT today is used in a wide variety of industries, such as IoT, mobile web, int
 6. Flexible messaging capability, with no dependency on payload data format
 7. Persistent session awareness, with timely information on whether the device is online
 
-## Core feature
+## Core Feature
 
 Below is a list of MQTT protocols and the EMQX extended concepts:
 
@@ -35,7 +35,7 @@ Below is a list of MQTT protocols and the EMQX extended concepts:
 - [Topic Rewrite](./mqtt-topic-rewrite.md)
 - [System Topic](./mqtt-system-topics.md)
 
-## Comparison with other protocols
+## Comparison With Other Protocols
 
 Typical IoT use cases are very complex, with many devices, networks, applications, and services involved, therefore a variety of IoT protocols have emerged. You may refer to the link below for a comparison between MQTT and other protocols:
 

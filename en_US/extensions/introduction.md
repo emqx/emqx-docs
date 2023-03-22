@@ -8,7 +8,7 @@ Through EMQX's plugin development interface, users can access the core process t
 
 Developing plugins requires an understanding of EMQX and Erlang.
 
-## Multilingual gRPC hooks and protocol extension
+## Multilingual gRPC Hooks and Protocol Extension
 
 EMQX offers a multilingual extension combining [general-purpose Remote Procedure Calls (gRPC)](https://grpc.io/) multilingual hooks and protocol extension.
 

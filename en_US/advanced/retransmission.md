@@ -1,10 +1,8 @@
-# Message retransmission
+# Message Retransmission
 
 Message retransmission is part of the MQTT protocol specification.
 
-The protocol stipulates that the PUBLISH packets sent to the peer
-by the **server** and **client** as communication parties must meet
-their **Quality of Service levels** requirements , such as:
+The protocol stipulates that the PUBLISH packets sent to the peer by the **server** and **client** as communication parties must meet their **Quality of Service levels** requirements , such as:
 
 - QoS 1: it means that **the message is delivered at least once;
   ** that is, the sender will always resend the message unless it receives
@@ -17,12 +15,12 @@ their **Quality of Service levels** requirements , such as:
 Although PUBLISH packets of QoS 1 and QoS 2 will be resent at the MQTT protocol
 stack layer, you must remember:
 
-- After retransmission of QoS 1 messages happens, these retransmitted PUBLISH
+- After the retransmission of QoS 1 messages happens, these retransmitted PUBLISH
   packets will also be received at the upper layer of the MQTT protocol stack.
 - No matter how QoS 2 message is retransmitted, only one PUBLISH packet will be
   received in the upper layer of the MQTT protocol stack,
 
-## Basic configuration
+## Basic Configuration
 
 There are two scenarios that will cause the message to be resent:
 
@@ -31,7 +29,7 @@ There are two scenarios that will cause the message to be resent:
 
 It can be configured in `etc/emqx.conf`:
 
-| Configuration item | Type   | Optional value | Default value | Description |
+| Configuration Item | Type   | Optional Value | Default Value | Description |
 | -------------- | --------- | ------ | ------- | -------------- |
 | retry_interval | duration  | -      | 30s     | Wait for a timeout interval and retransmit the message if no response is received |
 
@@ -39,9 +37,9 @@ Generally speaking, you only need to care about the above content.
 
 For more details on how EMQX handles the retransmission of the MQTT protocol, see the following of this article.
 
-## Protocol specification and design
+## Protocol Specification and Design
 
-### Retransmitted objects
+### Retransmitted Objects
 
 First, before understanding the retransmission mechanism design of EMQX, we need to ensure that you have understood the transmission process of QoS 1 and QoS 2 in the protocol, otherwise please refer to[MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) and [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)
 
@@ -96,7 +94,7 @@ In summary:
 When EMQX acts as the receiver of PUBLISH messages, it does not require the retransmission operation.
 
 
-### Inflight window and maximum receiving value
+### Inflight Window and Maximum Receiving Value
 
 For the definition and explanation of this concept, please refer to [Inflight Window and Message Queue](inflight-window-and-message-queue.md#)
 
@@ -108,7 +106,7 @@ The purpose of introducing these two concepts is to understand:
     - For QoS 2, EMQX will release the stored PUBLISH or PUBREL packet in the *maximum received message* queue.
 
 
-### Message sequence
+### Message Sequence
 
 Of course, the above concepts only need to be understood. What you need to care about most is the change in message order after **messages are retransmitted, especially for QoS type 1 messages**. E.g:
 
@@ -141,11 +139,11 @@ It ensures that under the same topic and QoS, messages are delivered and answere
 In addition, if the user expects that QoS 1 and QoS 2 messages under all topics are strictly ordered, the maximum length of the flight window needs to be set to 1, but it will reduce the client's throughput.
 
 
-### Related configuration
+### Related Configuration
 
 This section lists all the configurations used in the above mechanism. They are all included in `etc/emqx.conf`:
 
-| Configuration | Type  | Optional value | Default value | Description                                          |
+| Configuration | Type  | Optional Value | Default Value | Description                                          |
 | ----------------- | -------- | --------------- | ------ | ------------------------------------------------------- |
 | mqueue_store_qos0 | bool     | `true`, `false` | true   | Whether to store QoS 0 messages in the message queue |
 | max_mqueue_len    | integer  | >= 0            | 1000   | Message queue length                        |

@@ -4,20 +4,19 @@
 
 EMQX also supports using Hooks to modify or extend system functions by intercepting function calls, message passing, and event passing between modules.
 
-## Principles
+## How It Works
 
-For a system without adopting the **Hooks** mechanism in their system, the entire event processing flow (from the input of the event, to the handler and the result) is invisible and cannot be modified.
+For a system without adopting the **Hooks** mechanism in their system, the entire event processing flow (from the input of the event to the handler and the result) is invisible and cannot be modified.
 
-However, if we add a HookPoint to mount functions during the process, external plugins can mount multiple callback functions to form a call chain. Then, the internal event processing  can be extended and modified.
+However, if we add a HookPoint to mount functions during the process, external plugins can mount multiple callback functions to form a call chain. Then, the internal event processing can be extended and modified.
 
-
-![Hooks-In-System](./assets/hooks_in_system.png)
+<img src="./assets/hooks_in_system.png" alt="Hooks-In-System" style="zoom:50%;" />
 
 Several EMQX functions are implemented using the hook feature:
 
 1. Use the hook system to perform multi-step streaming processing (encoding/decoding, etc.) of messages
 2. Caching messages at message publishing time as per the configuration
-3. Use the hook blocking mechanism to postpone message publishing 
+3. Use the hook-blocking mechanism to postpone message publishing 
 
 The authentication/authorization commonly used in the system is implemented according to this logic. Take the [Multilingual extension ](./exhook.md) as an example:
 
@@ -76,13 +75,13 @@ We call this chain composed of multiple callback functions executed sequentially
 Therefore, we can obtain two program flow diagrams for the execution chain based on the two ways of handling the return value of the callback function on the chain.
 
 ### Result Transitive
-![hooks_return_value](./assets/hooks_return_value.png)
+<img src="./assets/hooks_return_value.png" alt="hooks_return_value" style="zoom:50%;" />
 
 The meaning of the figure is:
 1. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
 2. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
 3. The input parameters of the chain are read-only `Args` and the parameter `InitAcc` for function modification on the chain.
-4. Regardless of how the execution of chain is terminated, the chain always returns a value, which depends on the return form.
+4. Regardless of how the execution of the chain is terminated, the chain always returns a value, which depends on the return form.
    - The callback function returns with:
      - `ok`: ignore this operation, continue the chain execution with read-only `Args` and `Acc` returned by the previous function
      - `{ok, NewAcc}`: perform some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`
@@ -91,7 +90,7 @@ The meaning of the figure is:
      - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification
 
 ### Result Transparent
-![hooks_multiple_value](./assets/hooks_multiple_value.png)
+<img src="./assets/hooks_multiple_value.png" alt="hooks_multiple_value" style="zoom:50%;" />
 
 Comparing this with the first execution mode, you can see that the execution mode that ignores the return value in the chain is actually a special case of the pass return value mode.
 This is equivalent to the case where the `InitAcc` value is `ok` and every callback function mounted on the chain returns `ok | {ok, ok} | stop | {stop, ok}`.
@@ -101,9 +100,9 @@ The above is the main design concept of the callback function chain, which regul
 In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.
 - For hooks and other language applications, Refer to: [Extension Hook](./exhook.md)
 
-## HookPoint list
+## HookPoint List
 
-EMQX is based on a client's key activities during its life cycle, and presets a large number of **HookPoints**. The preset mount points in the system are:
+EMQX is based on a client's key activities during its life cycle and presets a large number of **HookPoints**. The preset mount points in the system are:
 
 | Name                 | Description                 | Execution Timing                                                                            |
 |----------------------|-----------------------------|---------------------------------------------------------------------------------------------|
@@ -133,7 +132,7 @@ EMQX is based on a client's key activities during its life cycle, and presets a 
 - **The Session is taken over:** When the client logs in with the method of `Reserved Session`, if the client's session already exists on the server, the old session will be taken over by the new connection
 :::
 
-### Hook and unhook
+### Hook and Unhook
 
 EMQX provides an API for the operation of hooking and unhooking.
 
@@ -157,31 +156,31 @@ emqx:unhook(Name, {Module, Function}).
 ```
 
 
-## Callback function
+## Callback Function
 The input parameters and returned value of the callback function are shown in the following table:
 
-(For parameter data structure, see:[emqx_types.erl](https://github.com/emqx/emqx/tree/master/apps/emqx/src/emqx_types.erl))
+(For parameter data structure, see [emqx_types.erl](https://github.com/emqx/emqx/tree/master/apps/emqx/src/emqx_types.erl))
 
-| Name                 | input parameter                                                                                                                                                          | Returned value     |
-|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|
-| client.connect       | `ConnInfo`：Client connection layer parameters<br>`Props`：Properties of MQTT v5.0 connection packets                                                                    | New `Props`        |
-| client.connack       | `ConnInfo`：Client connection layer parameters <br>`Rc`：returned code<br>`Props`: Properties of MQTT v5.0 connection response packets                                   | New `Props`        |
-| client.connected     | `ClientInfo`:  Client information parameters<br>`ConnInfo`： Client connection layer parameters                                                                          | -                  |
-| client.disconnected  | `ClientInfo`：Client information parameters<br>`ConnInfo`：Client connection layer parameters<br>`ReasonCode`：Reason code                                               | -                  |
-| client.authenticate  | `ClientInfo`：Client information parameters<br>`AuthNResult`：Authentication results                                                                                     | New `AuthNResult`  |
-| client.authorize     | `ClientInfo`：Client information parameters<br>`Topic`：Publish/subscribe topic<br>`PubSub`:  Publish/subscribe<br>`AuthZResult`：Authentication result                  | New `AuthZResult`  |
-| client.subscribe     | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`：List of topics of subscription      | New `TopicFilters` |
-| client.unsubscribe   | `ClientInfo`：Client information parameters<br/>`Props`：Properties parameters of MQTT v5.0 unsubscription messages<br/>`TopicFilters`：List of topics of unsubscription | New `TopicFilters` |
-| session.created      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          | -                  |
-| session.subscribed   | `ClientInfo`：Client information parameters<br/>`Topic`：subscribed topic<br>`SubOpts`：Configuration options for subscribe operations                                   | -                  |
-| session.unsubscribed | `ClientInfo`：Client information parameters<br/>`Topic`：unsubscribed topic<br/>`SubOpts`：Configuration options for unsubscribe operations                              | -                  |
-| session.resumed      | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          | -                  |
-| session.discarded    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          | -                  |
-| session.takenover    | `ClientInfo`：Client information parameters<br/>`SessInfo`：Session information                                                                                          |                    |
-| session.terminated   | `ClientInfo`：Client information parameters<br/>`Reason`：Termination reason <br>`SessInfo`：Session information                                                         | -                  |
-| message.publish      | `Message`：Message object                                                                                                                                                | New `Message`      |
-| message.delivered    | `ClientInfo`：Client information parameters<br/>`Message`：Message object                                                                                                | New `Message`      |
-| message.acked        | `ClientInfo`：Client information parameters<br/>`Message`：Message object                                                                                                | -                  |
-| message.dropped      | `Message`：Message object<br>`By`：Dropped by<br>`Reason`：Drop reason                                                                                                   | -                  |
+| Name                 | Input Parameter                                              | Returned Value     |
+| -------------------- | ------------------------------------------------------------ | ------------------ |
+| client.connect       | `ConnInfo`: Client connection layer parameters<br>`Props`: Properties of MQTT v5.0 connection packets | New `Props`        |
+| client.connack       | `ConnInfo`: Client connection layer parameters <br>`Rc`: returned code<br>`Props`: Properties of MQTT v5.0 connection response packets | New `Props`        |
+| client.connected     | `ClientInfo`: Client information parameters<br>`ConnInfo`: Client connection layer parameters | -                  |
+| client.disconnected  | `ClientInfo`: Client information parameters<br>`ConnInfo`: Client connection layer parameters<br>`ReasonCode`: Reason code | -                  |
+| client.authenticate  | `ClientInfo`: Client information parameters<br>`AuthNResult`: Authentication results | New `AuthNResult`  |
+| client.authorize     | `ClientInfo`: Client information parameters<br>`Topic`: Publish/subscribe topic<br>`PubSub`: Publish/subscribe<br>`AuthZResult`: Authentication result | New `AuthZResult`  |
+| client.subscribe     | `ClientInfo`: Client information parameters<br/>`Props`: Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`: List of topics of subscription | New `TopicFilters` |
+| client.unsubscribe   | `ClientInfo`: Client information parameters<br/>`Props`: Properties parameters of MQTT v5.0 unsubscription messages<br/>`TopicFilters`: List of topics of unsubscription | New `TopicFilters` |
+| session.created      | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information | -                  |
+| session.subscribed   | `ClientInfo`: Client information parameters<br/>`Topic`: subscribed topic<br>`SubOpts`: Configuration options for subscribe operations | -                  |
+| session.unsubscribed | `ClientInfo`: Client information parameters<br/>`Topic`: unsubscribed topic<br/>`SubOpts`: Configuration options for unsubscribe operations | -                  |
+| session.resumed      | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information | -                  |
+| session.discarded    | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information | -                  |
+| session.takenover    | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information |                    |
+| session.terminated   | `ClientInfo`: Client information parameters<br/>`Reason`: Termination reason <br>`SessInfo`: Session information | -                  |
+| message.publish      | `Message`: Message object                                    | New `Message`      |
+| message.delivered    | `ClientInfo`: Client information parameters<br/>`Message`: Message object | New `Message`      |
+| message.acked        | `ClientInfo`: Client information parameters<br/>`Message`: Message object | -                  |
+| message.dropped      | `Message`: Message object<br>`By`: Dropped by<br>`Reason`: Drop reason | -                  |
 
-For the application of these hooks, see:[emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
+For the application of these hooks, see [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)

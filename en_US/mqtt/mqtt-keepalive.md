@@ -1,4 +1,4 @@
-# Keep Alive mechanism
+# Keep Alive
 
 MQTT protocol has introduced the Keep Alive mechanism to avoid the communication issue caused by TCP half-open. The MQTT clients and broker can follow the Keep Alive mechanism to confirm the TCP connection and close the corresponding connection if there are any issues. 
 

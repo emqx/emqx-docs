@@ -19,7 +19,7 @@
   title_cn: 概览
   path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
 
-- title_en: Get started
+- title_en: Get Started
   title_cn: 快速开始
   path: getting-started/getting-started
   children:
@@ -62,7 +62,7 @@
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
     
-- title_en: EMQX cluster
+- title_en: EMQX Cluster
   title_cn: 构建集群
   path: deploy/cluster/introduction
   children:
@@ -70,14 +70,14 @@
     - deploy/cluster/create-cluster
     - deploy/cluster/security
     - deploy/cluster/lb
-    - title_en: Performance and tuning
+    - title_en: Performance and Tuning
       title_cn: 性能与调优
       path: performance/overview
       children:
         - performance/tune
         - performance/benchmark
 
-- title_en: Access control
+- title_en: Access Control
   title_cn: 访问控制
   path: access-control/overview
   children:
@@ -137,7 +137,7 @@
 ## Data integration
 # - data-integration/introduction
 
-- title_en: Rule engine
+- title_en: Rule Engine
   title_cn: 规则引擎
   path: data-integration/rules
   children:
@@ -147,7 +147,7 @@
     - data-integration/rule-sql-jq
     # - data-integration/rule-sql-user-defined-function
 
-- title_en: Data bridges
+- title_en: Data Bridges
   title_cn: 数据桥接
   path: data-integration/data-bridges
   children:
@@ -159,7 +159,8 @@
     - data-integration/data-bridge-redis
     - data-integration/data-bridge-gcp-pubsub
     - data-integration/data-bridge-mongodb
-    # - data-integration/data-bridge-pgsql
+    - data-integration/data-bridge-pgsql
+    - data-integration/data-bridge-dynamo
 
     # TODO
     # - title_en: Examples and Tutorials
@@ -271,11 +272,11 @@
     # - operations/diagnostic-mode
     # - operations/production-notes
 
-- title_en: Rate limit
+- title_en: Rate Limit
   title_cn: 速率限制
   path: rate-limit/rate-limit
 
-- title_en: Log and observability
+- title_en: Log and Observability
   title_cn: 日志及可观测性
   path: observability/overview
   children:
@@ -290,7 +291,7 @@
 
 ## Device connectivity
 
-- title_en: Extended protocol gateway
+- title_en: Extended Protocol Gateway
   title_cn: 扩展协议网关
   path: gateway/gateway
   children:
@@ -317,7 +318,7 @@
 
 ## Developers & Testers
 
-- title_en: Plugin and extension
+- title_en: Plugin and Extension
   title_cn: 插件与扩展
   path: extensions/introduction
   children:
@@ -326,7 +327,7 @@
     # - extensions/lang-lua
     - extensions/exhook
 
-- title_en: MQTT specific
+- title_en: MQTT Specific
   title_cn: MQTT 协议
   path: mqtt/mqtt-specific
   children:
@@ -349,7 +350,7 @@
   title_cn: 常见问题解答
   path: faq/faq
 
-- title_en: Design and implementation
+- title_en: Design and Implementation
   title_cn: 设计与实现
   path: advanced/overview
   children:
@@ -372,6 +373,6 @@
 #   title_cn: 版本发布记录
 #   path: changes/changes-5.0
 
-- title_en: Technical support
+- title_en: Technical Support
   title_cn: 技术支持
   path: support/technical-support

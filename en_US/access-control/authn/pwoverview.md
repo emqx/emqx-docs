@@ -1,4 +1,4 @@
-# Password-based authentication
+# Password-based Authentication
 
 EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identities, such as username, client ID, and the corresponding password.
 

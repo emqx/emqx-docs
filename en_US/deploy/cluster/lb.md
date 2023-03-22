@@ -4,15 +4,14 @@ Load Balancer (LB) balances the load among multiple network components and optim
 
 - Balance the load of EMQX to avoid single node overload;
 - Simplify client configuration, the client only needs to connect to the LB and need not worry about the scaling within the cluster;
-- TLS/SSL termination, to reduce the load of EMQX clusters;
+- Reduce the load of EMQX clusters by TLS/SSL termination;
 - Improve cluster security, with LB configured at the front end of the cluster, unwanted traffic can be blocked to protect the EMQX cluster from malicious attacks. 
 
 This chapter introduces how to configure LB in EMQX. 
 
 ## Architecture
 
-For an EMQX cluster configured with LB, the LB will handle the incoming TCP traffic and then distribute the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
-
+For an EMQX cluster configured with LB, the LB handles the incoming TCP traffic and then distributes the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
 
 
 <img src="./assets/lb_2.png" alt="TLS termination" style="zoom:45%;" />

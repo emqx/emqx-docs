@@ -1,4 +1,4 @@
-# SQL data sources and fields
+# SQL Data Sources and Fields
 
 The data sources that SQL statements can process are **MQTT Messages**, **MQTT Events**, or **Data Bridges**.
 
@@ -118,7 +118,7 @@ The SQL statements of the rule engine can handle both messages (message publishi
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
 If you want emqx to publish the event message, you can configure it in the `emqx_rule_engine.conf` file.
 
-### Event topic available for FROM clause
+### Event Topic Available for FROM Clause
 
 | Event topic name                     | Explanation                     |
 |--------------------------------------|:--------------------------------|
@@ -181,7 +181,7 @@ Output:
 ```
 ### "$events/message_acked"
 
-The rule is triggered when the message is sent to the client and an ack is received from the client. Only QOS1 and QOS2 messages will be triggered
+The rule is triggered when the message is sent to the client and an ack is received from the client. Only QOS1 and QOS2 messages will be triggered.
 
 
 | Field                 | Explanation                                   |
@@ -229,7 +229,7 @@ Output:
 
 ### "$events/message_dropped"
 
-Trigger rule when a message has no subscribers
+The rule is triggered when a message has no subscribers.
 
 | Field                 | Explanation                                                                                                                                                                                                                           |
 |:----------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -271,7 +271,7 @@ Output:
 
 ### "$events/delivery_dropped"
 
-Trigger rule when subscriber's message queue is full
+The rule is triggered when subscriber's message queue is full.
 
 
 | Field                 | Explanation                                                                                                                                                                                                                                                                             |
@@ -314,7 +314,7 @@ Output:
 ```
 ### "$events/client_connected"
 
-Trigger the rule when the terminal is connected successfully
+The rule is triggered when the terminal is connected successfully.
 
 | Field            | Explanation                              |
 |:-----------------|:-----------------------------------------|
@@ -356,7 +356,7 @@ Output:
 
 ### "$events/client_disconnected"
 
-Trigger rule when terminal connection is lost
+The rule is triggered when terminal connection is lost.
 
 | Field            | Explanation                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 |:-----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -394,7 +394,7 @@ Output:
 
 ### "$events/client_connack"
 
-The rule event is triggered when the server sends a CONNACK packet to the client. reason_code contains the error reason code.
+The rule is triggered when the server sends a CONNACK packet to the client. reason_code contains the error reason code.
 
 | Field            | Explanation                            |
 |------------------|:---------------------------------------|
@@ -416,18 +416,18 @@ The rule event is triggered when the server sends a CONNACK packet to the client
 The MQTT v5.0 protocol renames the return code to a reason code, adding a reason code to indicate more types of errors([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)).
 
 MQTT v3.1.1
-| reason\_code                      | description                                                                 |
-|-----------------------------------|-----------------------------------------------------------------------------|
-| connection\_accepted              | Connection accepted                                                         |
-| unacceptable\_protocol\_version   | The server does not support the MQTT protocol requested by the client       |
+| reason\_code                      | Description                                                  |
+| --------------------------------- | ------------------------------------------------------------ |
+| connection\_accepted              | Connection accepted                                          |
+| unacceptable\_protocol\_version   | The server does not support the MQTT protocol requested by the client |
 | client\_identifier\_not\_valid    | The client ID is the correct UTF-8 string, but is not allowed by the server |
-| server\_unavaliable               | Network connection has been established, but MQTT service is unavailable    |
-| malformed\_username\_or\_password | The data in the username or password is in the wrong format                 |
-| unauthorized\_client              | Client connection is not authorized                                         |
+| server\_unavaliable               | Network connection has been established, but MQTT service is unavailable |
+| malformed\_username\_or\_password | The data in the username or password is in the wrong format  |
+| unauthorized\_client              | Client connection is not authorized                          |
 
 MQTT v5.0
-| reason\_code                    | description                   |
-|---------------------------------|-------------------------------|
+| reason\_code                    | Description                   |
+| ------------------------------- | ----------------------------- |
 | success                         | Connect success               |
 | unspecified\_error              | Unspecified error             |
 | malformed\_packet               | Malformed Packet              |
@@ -472,7 +472,7 @@ Output:
 ```
 ### "$events/client_check_authz_complete"
 
-The rule event is triggered when the client check acl complete.
+The rule is triggered when the client check acl complete.
 
 | Field     | Explanation                                                                                                                                  |
 |-----------|:---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -514,7 +514,7 @@ Output:
 
 ### "$events/session_subscribed"
 
-Trigger the rule when the terminal subscribes successfully
+The rule is triggered when the terminal subscribes successfully.
 
 | Field     | Explanation                              |
 |:----------|:-----------------------------------------|
@@ -549,7 +549,7 @@ Output:
 
 ### "$events/session_unsubscribed"
 
-Triggered when the terminal subscription is cancelled successfully
+The rule is triggered when the terminal subscription is cancelled successfully.
 
 | Field       | Explanation                                |
 |:------------|:-------------------------------------------|

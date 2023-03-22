@@ -1,8 +1,8 @@
-# SQL syntax and examples
+# SQL Syntax and Examples
 
-## SQL syntax
+## SQL Syntax
 
-### FROM, SELECT, and WHERE clauses
+### FROM, SELECT, and WHERE Clauses
 
 The basic format of the SQL statement of the rule engine is:
 ```sql
@@ -48,7 +48,7 @@ The FROM statement is used to select the source of the event. If the message is 
 
 
 
-### FOREACH, DO, and INCASE clauses
+### FOREACH, DO, and INCASE Clauses
 
 If you want to perform some operations and actions for each element of an array data, you need to use the `FOREACH-DO-INCASE` syntax. The basic format is:
 
@@ -77,8 +77,8 @@ FROM "t/#"              ## mounts rules to a topic
 The DO and INCASE clauses are optional.
 
 
-#### Operational symbol
-| Function | Purpose                                                      | Returned value              |      |
+#### Operational Symbol
+| Function | Purpose                                                      | Returned Value              |      |
 | -------- | ------------------------------------------------------------ | --------------------------- | ---- |
 | `+`      | addition, or string concatenation                            | Sum, or concatenated string |      |
 | `-`      | Subtraction                                                  | Difference                  |      |
@@ -90,9 +90,9 @@ The DO and INCASE clauses are optional.
 | `=~`     | Compare whether the topic can match the topic filter. It can only be used for topic matching | true/false                  |      |
 
 
-### Compare symbol
+### Compare Symbol
 
-| Function | Purpose | Returned value |
+| Function | Purpose | Returned Value |
 | ------ | ------------------- | ---------- |
 | `>` | greater than | true/false |
 | `<` | less than | true/false |
@@ -102,8 +102,8 @@ The DO and INCASE clauses are optional.
 | `!=` | not equal | true/false |
 
 
-## SQL statement example:
-### Basic syntax examples
+## SQL Statement Example
+### Basic Syntax Examples
 
 -  Extract all fields from the messages with a topic of "t/a":
     ```sql
@@ -160,7 +160,7 @@ The DO and INCASE clauses are optional.
 - You can use the `"." `Symbol to nest select payloads
 - If possible, don't create alias for payload, as this would cause performance degradation.
   i.e. Do not use `SELECT payload as p`
-:::
+  :::
 
 ### Examples of FOREACH-DO-INCASE
 
@@ -327,7 +327,7 @@ FOREACH
 ...
 ```
 
-### CASE-WHEN Syntax example
+### CASE-WHEN Syntax Example
 
 **Example 1: Limit the value of the x field in the message to the range of 0 ~ 7.**
 

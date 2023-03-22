@@ -24,7 +24,7 @@ To sum up, MQTT over QUIC is suitable for services with high requirements for re
 
 In these scenarios, the low connection overhead and multi-path support of QUIC shows its strengths. After deeper exploration, we believe that MQTT over QUIC is a great solution to this dilemma - based on QUIC's 0 RTT/1 RTT reconnect/new capability and migration support, it can effectively improve user experience in weak networks and irregular network paths.
 
-## Features and implementation
+## Features and Implementation
 
 The current implementation of EMQX replaces the transport layer with a QUIC Stream, where the client initiates the connection and creates a bi-directional Stream. EMQX and the client interact on it.
 
@@ -49,8 +49,6 @@ There are also more opportunities to be explored:
 - **Separate control messages into different streams:** MQTT control messages can be sent in one or two directions. For example, the client can send UNSUBSCRIBE requests asynchronously through a short-lived unidirectional stream to request the server to stop sending data that is no longer of interest.
 - **Finer-grained send and receive collaborative flow control:** Flow control is performed on a per-flow basis or across the entire connection, enabling finer-grained flow control.
 
-![MQTT over QUIC](./assets/mqtt-over-quic.png)
-
 ## QUIC vs TCP/TLS Test Comparisons
 
 In comparison with TCP/TLS testing, MQTT over QUIC performs as follows:
@@ -61,11 +59,10 @@ In comparison with TCP/TLS testing, MQTT over QUIC performs as follows:
 4. When NAT rebinding, client reconnection response under TCP/TLS is very slow and the message transmission is broken, while QUIC handles it more smoothly and the messages are sent without any impact.
 5. In a weak network packet loss and packet transmission disorder environment, TLS shows message congestion and loss due to a poor network environment, while the QUIC server receives slightly jittery data but does not lose messages.
 
-## Future work
+## Future Work
 
 As of now, the MQTT over QUIC is ready for production, users are already testing it in depth and giving good feedback, see [Getting Started](./getting-started.md) to experience it now.
 
-Still, EMQX has not utilized all the features provided by QUIC, such as multi streams, stream prioritization, flow control and
-unreliable datagram...
+Still, EMQX has not utilized all the features provided by QUIC, such as multi streams, stream prioritization, flow control and unreliable datagram.
 
 These features will be addressed in the later releases and, hopefully, become an OASIS standard.

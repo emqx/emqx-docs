@@ -1,6 +1,6 @@
 # Plugins
 
-EMQX allow users to customize the business logic or implement other protocols using plugins. In this chapter, you will learn how to develop plugins.
+EMQX allows users to customize the business logic or implement other protocols using plugins. In this chapter, you will learn how to develop plugins.
 
 The basic process of plugin development and operation is as follows:
 
@@ -14,11 +14,11 @@ Prerequisites
 - Knowledge of EMQX [hooks](./hooks.md)
   :::
 
-## Develop EMQX plugins
+## Develop EMQX Plugins
 
 EMQX offers an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), which allows you to further customize your plugins. In the section below, we will use the access control plugin as an example to give you a step-by-step guide to plugin development. 
 
-### 1. Download the plugin template
+**Download the plugin template**
 
 To download the  [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), run: 
 
@@ -36,7 +36,7 @@ Makefile                 check-vsn.sh             priv
 README.md                rebar.config             src
 ```
 
-### 2. Test the compile environment
+**Test the compile environment**
 
 Run `make rel` to test whether the plugin can be successfully compiled and packed. No coding is needed. 
 
@@ -46,7 +46,7 @@ The plugins under development need to use the functions of the main EMQX, so the
 For the compiling environment, see [Install from Source code](../deploy/install-source.md).
 {% endemqxce %}
 
-### 3. Mount the hook functions
+**Mount the hook functions**
 
 Below is the directory structure:
 
@@ -74,7 +74,7 @@ We will use `on_client_authenticate/3` for client authentication and `on_client_
 
 As one hook function may be mounted both by EMQX and customized plugins, we also need to specify the execution order when mounting it to the plugin.  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
 
-### 4. Customize access control code 
+**Customize access control code** 
 
 ```erlang
 %% Only allow connections with clientID name matching any of the following characters: A-Z, a-z, 0-9, and underscore.
@@ -101,7 +101,7 @@ In the above code example, we only allow clients with clientID matching the spec
 
 :::
 
-### 5. Pack the customized plugin
+**Pack the customized plugin**
 
 Modify the version information of the plugin via `rebar.config`:
 
@@ -137,7 +137,7 @@ make rel
 
 The command will prompt to generate the plugin  `pluginname-version.tar.gz`.
 
-### 6. Install/launch the plugin
+**Install/launch the plugin**
 
 Use CLI to install the compiled package: 
 
@@ -145,7 +145,7 @@ Use CLI to install the compiled package:
 ./bin/emqx_ctl plugins install {pluginName}
 ```
 
-### 7. Uninstall the plugin
+**Uninstall the plugin**
 
 When you don't need the plugin, you can easily uninstall it with CLI:
 

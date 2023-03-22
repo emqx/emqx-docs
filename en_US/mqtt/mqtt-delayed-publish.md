@@ -18,7 +18,7 @@ E.g:
 - `$delayed/60/a/b`: Publish MQTT message to the topic `a/b` after 1 minute
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
 
-## Config
+## Configuration Items
 
 ```bash
 delayed {
