@@ -1,8 +1,8 @@
-# Built-in SQL functions
+# Built-in SQL Functions
 
-## Mathematical functions
+## Mathematical Functions
 
-| function name | Purpose                         | parameter                                  | Returned value                   |
+| Function Name | Purpose                         | Parameter                                  | Returned Value                   |
 | ------------- | ------------------------------- | ------------------------------------------ | -------------------------------- |
 | abs           | Absolute value                  | Operand                                    | absolute value                   |
 | cos           | Cosine                          | Operand                                    | Cosine value                     |

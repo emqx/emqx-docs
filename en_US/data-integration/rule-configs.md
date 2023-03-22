@@ -1,8 +1,8 @@
-# Use Rules with Config files
+# Use Rules with Configuration Files
 
 By modifying the configuration file `emqx.conf`, you can configure rules before EMQX starts.
 
-## Structure of Rule Configs
+## Structure of Rule Configuration
 
 Under the `rule_engine` engine namespace, one or more rules can be created using the `rules` configuration item:
 
@@ -153,7 +153,7 @@ In addition to client-side online and offline events, rules also support subscri
 
 For the event types supported by the rule and the available fields, see: [events and fields](./rule-sql-events-and-fields.md)
 
-## Configure Rules that use Data Bridges as Data Sources
+## Configure Rules With Data Bridges as Data Sources
 
 Some data bridges (such as the MQTT bridge) can also be used as the data source of rules. Rules use **data bridge topics** starting with **$bridges/** to handle events triggered by data bridge. An example of a rule that uses "MQTT bridge" as a data source is given below.
 

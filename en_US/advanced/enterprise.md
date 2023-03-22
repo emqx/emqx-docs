@@ -1,4 +1,4 @@
-# Enterprise functions
+# Enterprise Functions
 
 [EMQX Enterprise](https://www.emqx.com/en/products/emqx) is a powerful enterprise-level IoT MQTT messaging platform built by the people who develop the open source EMQX.
 
@@ -13,7 +13,7 @@ Thank you for your support of EMQX. If you need business services, please contac
 
 
 
-## Comparison of open source, enterprise and platform version
+## Open source, Enterprise and Platform Feature List
 
 ![EMQX VS EMQX Enterprise](./assets/3011583829062_.pic_hd-3829209.jpg)
 

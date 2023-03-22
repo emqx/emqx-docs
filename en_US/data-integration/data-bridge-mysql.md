@@ -16,7 +16,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
   :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#连接池)
 - [Async mode](./data-bridges.md#异步请求模式)
@@ -26,7 +26,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 <!-- [Configuration parameters](#Configuration) TODO 链接到配置手册对应配置章节。 -->
 
-## Quick starts
+## Quick Start
 
 ### Install MySQL
 
@@ -51,7 +51,7 @@ use emqx_data;
 
 We will create 2 data bridges to MySQL for messages storage and event records respectively. 
 
-#### [Messages storage](#Storage)
+#### [Messages Storage](#Storage)
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.
@@ -101,7 +101,7 @@ We have successfully created the data bridge to MySQL, now we can continue to cr
 
 Now we have successfully created the data bridge to MySQL. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
-#### Online/Offline status recording
+#### Online/Offline Status Recording
 
 The operating steps are similar to those at the [Message storage](#Storage) part expect for the SQL template and SQL rules. 
 

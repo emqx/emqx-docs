@@ -130,7 +130,7 @@ gateway.stomp {
 
 Unlike the MQTT protocol, **the gateway only supports the creation of an authenticator, not a list of authenticators (or an authentication chain)**. When no authenticator is enabled, it means that all Stomp clients are allowed to log in.
 
-For the configuration format of other types of authenticators refer to: [Security - Authenticator](../access-control/authn/authn.md)
+For the configuration format of other types of authenticators refer to [Security - Authenticator](../access-control/authn/authn.md)
 
 ## Publish/Subscribe
 
@@ -139,12 +139,12 @@ The Stomp protocol is fully compatible with the PUB/SUB messaging model, and the
 - The SUBSCRIBE message of the Stomp protocol is used as a subscribing request. The topic is the `destination` field of the SUBSCRIBE message, the QoS is fixed to 0, and the wildcards defined in the MQTT protocol are supported.
 - The UNSUBSCRIBE message of the Stomp protocol is used as an unsubscribe request. The topic is the `destination` field in the UNSUBSCRIBE message.
 
-There is no special authorization configurations within Stomp gateway, and its permission control for topics needs to be configured [Authorization](../access-control/authz/authz.md).
+There are no special authorization configurations within Stomp gateway, and its permission control for topics needs to be configured [Authorization](../access-control/authz/authz.md).
 
 ## User Interfaces
 
-- Detailed confguration options: [Configuration - Stomp Gateway](../configuration/configuration-manual.md)
-- Detailed HTTP APIs description: [HTTP API - Gateway](../admin/api.md)
+- Detailed configuration options: [Configuration - Stomp Gateway](../configuration/configuration-manual.md)
+- Detailed HTTP APIs Description: [HTTP API - Gateway](../admin/api.md)
 
 ## Client libraries
 

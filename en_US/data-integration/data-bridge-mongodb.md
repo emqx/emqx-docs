@@ -15,14 +15,14 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#连接池)
 - [Async mode](./data-bridges.md#异步请求模式)
 - [Batch mode](./data-bridges.md#批量模式)
 - [Buffer mode](./data-bridges.md#缓存队列)
 
-## Quick starts
+## Quick Start
 
 ### Install MongoDB
 
@@ -80,12 +80,12 @@ db.createCollection('emqx_messages')
     - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;
     - Objects will be nested and stored according to their own structure;
     - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`. 
-:::
+    :::
 
 1. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
 2. Then click **Create** to finish the creation of the data bridge. A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** or **Data Integration** -> **Rules **on EMQX dashboard to configure rules.
 
-#### Create rules
+#### Create Rules
 
 1. Click **Create** on the top right corner of the page.
 2. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to PostgreSQL, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 

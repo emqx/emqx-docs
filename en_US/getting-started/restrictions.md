@@ -6,7 +6,7 @@ As well as following protocols, if there are no limitations on connection number
 
 EMQX has therefore specified the following quotas and usage limits for some of our major features.
 
-## Reference list
+## Reference List
 
 The operating limitations can be classified into:
 

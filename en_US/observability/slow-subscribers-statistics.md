@@ -1,10 +1,10 @@
-# Slow subscriptions
+# Slow Subscriptions
 
 Typically, EMQX will finish the message transmission within milliseconds, affected mainly by the network. However, there are cases where the latency of subscription messages is very high on the client side. To solve this problem, EMQX provides a Slow subscriptions feature.
 
-## How it works
+## How It Works
 
-EMQX will start calculating the time (delay) it takes for the message processing and transmitting since messages **arrive at EMQX**. 
+EMQX will start calculating the time (delay) it takes for the message to be processed and transmitted since messages **arrive at EMQX**. 
 
 If the delay exceeds the specified threshold, EMQX will insert the corresponding **subscriber and topic** into the **slow subscriptions list** or update the existing record. 
 
@@ -28,7 +28,7 @@ Factors affecting message latency:
 - Too many messages accumulate in the queue, resulting in significant latency, for example, PUBLISH and SUBSCRIBE share the same connection, and many PUBLISH messages are accumulated in the queue. 
 - The receiving speed of the subscribers is too slow. 
 
-## Configure and enable Slow subscriptions
+## Configure and Enable Slow Subscriptions
 
 <!-- TODO 补充配置文件配置方式，目前该方式有 BUG 暂时不在文档中提供。 -->
 
@@ -46,7 +46,7 @@ Follow the instruction below for configuration:
   - **internal**: From when the message arrives at EMQX until when EMQX starts delivering the message
   - **response** : From the time EMQX starts delivering the message until the message transmission completes
 
-## View the Slow Subscriptions list
+## Check Slow Subscriptions List
 
 The Slow Subscriptions list contains the following fields:
 

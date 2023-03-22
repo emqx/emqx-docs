@@ -30,7 +30,7 @@ prometheus {
   enable: true
 }
 ```
-## Configure with EMQX Dashboard
+## Configure With EMQX Dashboard
 
 {% emqxce %}
 
@@ -45,7 +45,7 @@ You can use EMQX Dashboard to configure mornitoring data integration to Promethe
 {% endemqxee %}
 
 
-## Use Grafana to visualize EMQX metrics
+## Use Grafana to Visualize EMQX Metrics
 
 You can also use Grafana with Prometheus to visualize EMQX metrics, which can be achieved by importing the EMQX template files into Grafana. 
 

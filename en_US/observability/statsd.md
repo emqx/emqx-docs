@@ -23,7 +23,7 @@ statsd {
 
 You need to restart EMQX after modifying the configuration items to take effect.
 
-## Configure with EMQX Dashboard
+## Configure With EMQX Dashboard
 
 {% emqxce %}
 

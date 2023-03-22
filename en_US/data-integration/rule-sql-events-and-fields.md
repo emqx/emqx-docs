@@ -1,4 +1,4 @@
-# SQL data sources and fields
+# SQL Data Sources and Fields
 
 The data sources that SQL statements can process are **MQTT Messages**, **MQTT Events**, or **Data Bridges**.
 
@@ -118,7 +118,7 @@ The SQL statements of the rule engine can handle both messages (message publishi
 The topic of the event message starts with `"$events/"`, such as `"$events/client_connected",` `"$events/session_subscribed"`.
 If you want emqx to publish the event message, you can configure it in the `emqx_rule_engine.conf` file.
 
-### Event topic available for FROM clause
+### Event Topic Available for FROM Clause
 
 | Event topic name                     | Explanation                     |
 |--------------------------------------|:--------------------------------|
@@ -416,18 +416,18 @@ The rule event is triggered when the server sends a CONNACK packet to the client
 The MQTT v5.0 protocol renames the return code to a reason code, adding a reason code to indicate more types of errors([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)).
 
 MQTT v3.1.1
-| reason\_code                      | description                                                                 |
-|-----------------------------------|-----------------------------------------------------------------------------|
-| connection\_accepted              | Connection accepted                                                         |
-| unacceptable\_protocol\_version   | The server does not support the MQTT protocol requested by the client       |
+| reason\_code                      | Description                                                  |
+| --------------------------------- | ------------------------------------------------------------ |
+| connection\_accepted              | Connection accepted                                          |
+| unacceptable\_protocol\_version   | The server does not support the MQTT protocol requested by the client |
 | client\_identifier\_not\_valid    | The client ID is the correct UTF-8 string, but is not allowed by the server |
-| server\_unavaliable               | Network connection has been established, but MQTT service is unavailable    |
-| malformed\_username\_or\_password | The data in the username or password is in the wrong format                 |
-| unauthorized\_client              | Client connection is not authorized                                         |
+| server\_unavaliable               | Network connection has been established, but MQTT service is unavailable |
+| malformed\_username\_or\_password | The data in the username or password is in the wrong format  |
+| unauthorized\_client              | Client connection is not authorized                          |
 
 MQTT v5.0
-| reason\_code                    | description                   |
-|---------------------------------|-------------------------------|
+| reason\_code                    | Description                   |
+| ------------------------------- | ----------------------------- |
 | success                         | Connect success               |
 | unspecified\_error              | Unspecified error             |
 | malformed\_packet               | Malformed Packet              |
