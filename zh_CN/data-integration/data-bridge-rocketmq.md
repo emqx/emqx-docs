@@ -8,10 +8,6 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 :::
 {% endemqxce %}
 
-:::tip
-本章节内容同样适用于 TimescaleDB 以及 MatrixDB。
-:::
-
 ## 先决条件
 
 - 了解 [规则](./rules.md)。
@@ -25,16 +21,13 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 - [缓存队列](./data-bridges.md#缓存队列)
 - [SQL 预处理](./data-bridges.md#SQL-预处理)
 
-## 配置参数
-<!-- TODO 链接到配置手册对应配置章节。 -->
-
 ## 快速开始
 
 ### 安装 RocketMQ
 
 我们需要一份 docker compose 文件来部署 RocketMQ 
 
-```json
+```yaml
 version: '3.9'
 
 services:
@@ -47,8 +40,6 @@ services:
       - ./rocketmq/logs:/opt/logs
       - ./rocketmq/store:/opt/store
     command: ./mqnamesrv
-    networks:
-      - emqx_bridge
 
   mqbroker:
     image: apache/rocketmq:4.9.4
@@ -67,8 +58,6 @@ services:
     command: ./mqbroker -c /etc/rocketmq/broker.conf
     depends_on:
       - mqnamesrv
-    networks:
-      - emqx_bridge
 ```
 
 然后，准备运行 RocketMQ 所需的文件夹和配置文件
@@ -81,7 +70,7 @@ mkdir rocketmq/conf
 ```
 将下面的内容存入到 `rocketmq/conf/broker/conf` 中去
 
-```json
+```bash
 brokerClusterName=DefaultCluster
 brokerName=broker-a
 brokerId=0
@@ -126,7 +115,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 #### 消息转发
 
-本节我们将创建第一个 RocketMQ 数据桥接来实现对客户端发布消息的转发。
+本节我们将创建一个 RocketMQ 数据桥接来实现对客户端发布消息的转发。
 
 1. 转到 Dashboard **数据集成** -> **数据桥接**页面。
 2. 点击页面右上角的创建。
@@ -140,7 +129,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 2. 点击页面右上角的创建。
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息转发至 RocketMQ，请确规则选择出来的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
+3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息转发至 RocketMQ，请确认规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
   ```sql
   SELECT 
@@ -182,7 +171,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello RocketMQ" }'
 分别查看两个数据桥接运行统计，命中、发送成功次数均 +1。
 
 在 RocketMQ 的消费者窗口，我们将看到下面的输出:
-```json
+```bash
 ConsumeMessageThread_please_rename_unique_group_name_4_1 Receive New Messages: [MessageExt [brokerName=broker-a, queueId=3, storeSize=581, queueOffset=0, sysFlag=0, bornTimestamp=1679037578889, bornHost=/172.26.83.106:43920, storeTimestamp=1679037578891, storeHost=/172.26.83.106:10911, msgId=AC1A536A00002A9F000000000000060E, commitLogOffset=1550, bodyCRC=7414108, reconsumeTimes=0, preparedTransactionOffset=0, toString()=Message{topic='TopicTest', flag=0, properties={MIN_OFFSET=0, MAX_OFFSET=8, CONSUME_START_TIME=1679037605342, CLUSTER=DefaultCluster}, body=[...], transactionId='null'}]]
 ConsumeMessageThread_please_rename_unique_group_name_4_2 Receive New Messages: [MessageExt [brokerName=broker-a, queueId=3, storeSize=511, queueOffset=1, sysFlag=0, bornTimestamp=1679037580174, bornHost=/172.26.83.106:43920, storeTimestamp=1679037580176, storeHost=/172.26.83.106:10911, msgId=AC1A536A00002A9F0000000000000E61, commitLogOffset=3681, bodyCRC=1604860416, reconsumeTimes=0, preparedTransactionOffset=0, toString()=Message{topic='TopicTest', flag=0, properties={MIN_OFFSET=0, MAX_OFFSET=8, CONSUME_START_TIME=1679037605342, CLUSTER=DefaultCluster}, body=[...], transactionId='null'}]]
 ConsumeMessageThread_please_rename_unique_group_name_4_3 Receive New Messages: [MessageExt [brokerName=broker-a, queueId=3, storeSize=458, queueOffset=2, sysFlag=0, bornTimestamp=1679037584933, bornHost=/172.26.83.106:43920, storeTimestamp=1679037584934, storeHost=/172.26.83.106:10911, msgId=AC1A536A00002A9F000000000000166E, commitLogOffset=5742, bodyCRC=383397630, reconsumeTimes=0, preparedTransactionOffset=0, toString()=Message{topic='TopicTest', flag=0, properties={MIN_OFFSET=0, MAX_OFFSET=8, CONSUME_START_TIME=1679037605342, CLUSTER=DefaultCluster}, body=[...], transactionId='null'}]]
