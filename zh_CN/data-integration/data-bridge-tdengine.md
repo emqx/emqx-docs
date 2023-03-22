@@ -2,10 +2,6 @@
 
 通过 TDengine 数据桥接可以将客户端消息和事件存储到 TDengine 中，也可以通过事件触发对 TDengine 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
-:::tip
-本章节内容同样适用于 TimescaleDB 以及 MatrixDB。
-:::
-
 ## 先决条件
 
 - 了解 [规则](./rules.md)。
@@ -85,7 +81,7 @@ use mqtt;
 
 1. 转到 Dashboard **数据集成** -> **规则**页面。
 2. 点击页面右上角的创建。
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 TDengine，请确规则选择出来的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
+3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息存储至 TDengine，请确认规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量，此处规则 SQL 如下：
 
   ```sql
     SELECT
