@@ -1,6 +1,6 @@
 # macOS
 
-This section will guide you on how to install and start EMQX on macOS with a zip file.
+This section guides you on installing and starting EMQX on macOS with a zip file.
 
 Supported versions:
 
@@ -9,18 +9,16 @@ Supported versions:
 
 {% emqxce %}
 
-The section below will take macOS 12 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=macOS). 
+The section takes macOS 12 as an example to illustrate how to download the latest version of EMQX. If you want to install a different version or in a different system, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=macOS)
 
 ## Install EMQX
 
 1. Download [emqx-5.0.20-macos12-arm64.zip](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-macos12-arm64.zip). 
 
-   
-
    ```bash
    wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-macos11-amd64.zip
    ```
-
+   
 2. Install EMQX. 
 
    ```bash

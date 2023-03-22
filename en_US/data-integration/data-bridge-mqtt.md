@@ -23,7 +23,7 @@ The MQTT data bridge is a channel for EMQX to communicate with other MQTT servic
 
 ## Quick Start
 
-The following section will use EMQX [public MQTT broker](https://www.emqx.com/zh/mqtt/public-mqtt5-broker) as an example to illustrate how to build a data bridge between EMQX and this public MQTT broker.
+The following section will use EMQX [public MQTT broker](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example to illustrate how to build a data bridge between EMQX and this public MQTT broker.
 
 ### Data Bridge Rules
 

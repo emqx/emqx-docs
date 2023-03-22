@@ -13,11 +13,13 @@
 
 当在 EMQX 中部署  LB (负载均衡器) 后，LB 会负责处理 TCP 连接，并将收到的 MQTT 连接与消息分发到不同的 EMQX 集群节点，部署架构如下所示：
 
-![EMQX TCP 负载均衡部署](./assets/lb_2.png)
+<img src="./assets/lb_2.png" alt="EMQX TCP 负载均衡部署" style="zoom:33%;" />
 
-推荐在 LB 终结 SSL/TLS 连接：设备与 LB 之间采用 SSL/TLS 安全连接，LB 与 EMQX 之间采用 TCP 连接，这种模式能够使 EMQX 集群性能最大化：
 
-![EMQX 负载均衡终结 TLS 部署](./assets/lb_3.png)
+
+推荐在 LB 终结 SSL/TLS 连接。设备与 LB 之间采用 SSL/TLS 安全连接，LB 与 EMQX 之间普通 TCP 连接，这种模式能够使 EMQX 集群性能最大化，部署架构如下所示：
+
+<img src="./assets/lb_3.png" alt="EMQX 负载均衡终结 TLS 部署" style="zoom:33%;" />
 
 除了负载均衡部署集群外，还可以使用 DNS 轮询直连 EMQX 集群，即将所有节点加入 DNS 轮询列表，设备通过域名或者 IP 地址列表访问集群，通常不建议在生产环境中采用 DNS 轮询直连方式。
 

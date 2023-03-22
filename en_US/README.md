@@ -32,15 +32,11 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 {% emqxee %}
 
 - **[Massive Scale](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)**: Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
-
 - **Business-Critical Reliability**: Up to 99.99% SLA. Ensure no data loss with built-in RocksDB data persistence.
-
 - **Data Security**: End-to-end data encryption and fine-grained access control to protect your data.
-
+- **[Multiple protocols support](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m)**: MQTT, QUIC, CoAP, Stomp, LwM2M, and more
 - **High Performance**: Ingest and process millions of MQTT messages efficiently per second per node.
-
 - **Low Latency**: Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
-
 - **Complete Observability**: Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
 
 {% endemqxee %}
@@ -60,14 +56,14 @@ The following is a list of features of EMQX Open Source and Enterprise Edition.
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
 | **SLA**                           | 99.99%                                                      | Up to 99.999%                                               |
 | **Integrations (Out-of-the-box)** | 3                                                           | 40+                                                         |
-| **License Model**                 | Apache Version 2.0                                          | Commercial License (Business Source License)                |
-| **Technical Support**             | Open Source Community                                       | 24/7 Global Support                                         |
+| **License Model**                 | Apache Version 2.0                                          | Commercial license (Business source license)                |
+| **Technical Support**             | Open source community                                       | 24/7 Global support                                         |
 | **MQTT 5.0 Broker**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **MQTT over QUIC**                | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **MQTT Add-ons**                  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Multi-protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Multi-tenancy**                 | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Geo-replication**               | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Multi-Protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Multi-Tenancy**                 | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
+| **Geo-Replication**               | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **Data Persistence**              | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **Schema Registry**               | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **Message Codec**                 | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
@@ -93,14 +89,14 @@ The following is a list of features of EMQX Open Source and Enterprise Edition.
 | **Latency**                       | 1~5 millisecond                                             | 1~5 millisecond                                             |
 | **SLA**                           | Up to 99.999%                                               | 99.99%                                                      |
 | **Integrations (Out-of-the-box)** | 40+                                                         | 3                                                           |
-| **License Model**                 | Commercial License (Business Source License)                | Apache Version 2.0                                          |
-| **Technical Support**             | 24/7 Global Support                                         | Open Source Community                                       |
+| **License Model**                 | Commercial license (Business source license)                | Apache Version 2.0                                          |
+| **Technical Support**             | 24/7 Global support                                         | Open source community                                       |
 | **MQTT 5.0 Broker**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **MQTT over QUIC**                | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **MQTT Add-ons**                  | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
 | **Multi-protocol Gateways**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Multi-tenancy**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **Geo-replication**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Multi-Tenancy**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
+| **Geo-Replication**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Data Persistence**              | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Schema Registry**               | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
 | **Message Codec**                 | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |

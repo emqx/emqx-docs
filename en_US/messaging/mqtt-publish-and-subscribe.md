@@ -48,10 +48,10 @@ Below is the workflow of how to use MQTT X CLI to connect, publish/subscribe, an
    # Homebrew
    brew install emqx/mqttx/mqttx-cli
    # Intel Chip
-   curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-x64
+   curl -LO https://www.emqx.com/en/downloads/MQTTX/v1.9.0/mqttx-cli-macos-x64
    sudo install ./mqttx-cli-macos-x64 /usr/local/bin/mqttx
    # Apple Silicon
-   curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-arm64
+   curl -LO https://www.emqx.com/en/downloads/MQTTX/v1.9.0/mqttx-cli-macos-arm64
    sudo install ./mqttx-cli-macos-arm64 /usr/local/bin/mqttx
    ```
 
