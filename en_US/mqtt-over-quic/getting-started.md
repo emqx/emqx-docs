@@ -1,6 +1,6 @@
 # Use MQTT over QUIC
 
-In EMQX 5.0, we introduce the MQTT over QUIC listener to help IoT users benefit from MQTT over QUIC. This section will give you a step-by-step guide on how to use MQTT over QUIC. 
+In EMQX 5.0, we introduce the MQTT over QUIC listener to help IoT users benefit from MQTT over QUIC. This section gives you a step-by-step guide on how to use MQTT over QUIC. 
 
 :::tip
 Prerequisites:
@@ -127,7 +127,7 @@ NanoSDK also provides bindings for Java) and Python:
 [NanoMQ](https://nanomq.io/) is an ultra-lightweight and blazing-fast service for IoT edge, featuring cross-platform support, multi-threading, and support to MQTT over QUIC bridging. 
 
 It can convert the data from traditional MQTT clients into QUIC packets and send them to EMQX in the cloud, thus providing an option for end-side IoT devices that are hard to integrate or lack a suitable MQTT over QUIC SDK to use the QUIC protocol. 
-1
+
 ![NanoMQ MQTT over QUIC bridge](./assets/nanomq-mqtt-bridge.png)
 
 ### NanoMQ bridging example

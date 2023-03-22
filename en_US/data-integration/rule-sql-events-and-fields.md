@@ -181,7 +181,7 @@ Output:
 ```
 ### "$events/message_acked"
 
-The rule is triggered when the message is sent to the client and an ack is received from the client. Only QOS1 and QOS2 messages will be triggered
+The rule is triggered when the message is sent to the client and an ack is received from the client. Only QOS1 and QOS2 messages will be triggered.
 
 
 | Field                 | Explanation                                   |
@@ -229,7 +229,7 @@ Output:
 
 ### "$events/message_dropped"
 
-Trigger rule when a message has no subscribers
+The rule is triggered when a message has no subscribers.
 
 | Field                 | Explanation                                                                                                                                                                                                                           |
 |:----------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -271,7 +271,7 @@ Output:
 
 ### "$events/delivery_dropped"
 
-Trigger rule when subscriber's message queue is full
+The rule is triggered when subscriber's message queue is full.
 
 
 | Field                 | Explanation                                                                                                                                                                                                                                                                             |
@@ -314,7 +314,7 @@ Output:
 ```
 ### "$events/client_connected"
 
-Trigger the rule when the terminal is connected successfully
+The rule is triggered when the terminal is connected successfully.
 
 | Field            | Explanation                              |
 |:-----------------|:-----------------------------------------|
@@ -356,7 +356,7 @@ Output:
 
 ### "$events/client_disconnected"
 
-Trigger rule when terminal connection is lost
+The rule is triggered when terminal connection is lost.
 
 | Field            | Explanation                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 |:-----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -394,7 +394,7 @@ Output:
 
 ### "$events/client_connack"
 
-The rule event is triggered when the server sends a CONNACK packet to the client. reason_code contains the error reason code.
+The rule is triggered when the server sends a CONNACK packet to the client. reason_code contains the error reason code.
 
 | Field            | Explanation                            |
 |------------------|:---------------------------------------|
@@ -472,7 +472,7 @@ Output:
 ```
 ### "$events/client_check_authz_complete"
 
-The rule event is triggered when the client check acl complete.
+The rule is triggered when the client check acl complete.
 
 | Field     | Explanation                                                                                                                                  |
 |-----------|:---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -514,7 +514,7 @@ Output:
 
 ### "$events/session_subscribed"
 
-Trigger the rule when the terminal subscribes successfully
+The rule is triggered when the terminal subscribes successfully.
 
 | Field     | Explanation                              |
 |:----------|:-----------------------------------------|
@@ -549,7 +549,7 @@ Output:
 
 ### "$events/session_unsubscribed"
 
-Triggered when the terminal subscription is cancelled successfully
+The rule is triggered when the terminal subscription is cancelled successfully.
 
 | Field       | Explanation                                |
 |:------------|:-------------------------------------------|

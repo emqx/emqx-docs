@@ -1,25 +1,25 @@
 # Cluster load balancing
 
-Load Balancer (LB) will balance the load among multiple network components, optimize resource usage, and avoid system malfunctions caused by overload.-
+Load Balancer (LB) balances the load among multiple network components, optimizes resource usage, and avoids system malfunctions caused by overload.-
 
-Though not a mandatory component, it could bring some obvious system benefits, for example, when an LB is configured in EMQX:
+Though not a mandatory component, it can bring some obvious system benefits, for example, when an LB is configured in EMQX:
 
 - Balance the load of EMQX to avoid single node overload;
 - Simplify client configuration, the client only needs to connect to the LB and need not worry about the scaling within the cluster;
-- TLS/SSL termination, to reduce the load of EMQX clusters;
+- Reduce the load of EMQX clusters by TLS/SSL termination;
 - Improve cluster security, with LB configured at the front end of the cluster, unwanted traffic can be blocked to protect the EMQX cluster from malicious attacks. 
 
-This chapter will introduce the LB configuration in EMQX. 
+This chapter introduces the LB configuration in EMQX. 
 
 ## Deployment architecture
 
-For an EMQX cluster configured with LB, the LB will handle the incoming TCP traffic and then distribute the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
+For an EMQX cluster configured with LB, the LB handles the incoming TCP traffic and then distributes the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
 
-![image](./assets/lb_1.png)
+![image](./assets/lb_2.png)
 
-It is recommended to terminate the SSL/TLS connection at LB, that is, we will use SSL/TLS to secure connection between clients and LB and TCP connection between LB and EMQX nodes, thus maximizing the performance of the EMQX cluster. The architecture is as follows:
+It is recommended to terminate the TLS/SSL connection at LB, thus maximizing the performance of the EMQX cluster. The TLS/SSL secure connection is used between clients and LB. The TCP connection is used between LB and EMQX nodes. The architecture is as follows:
 
-![TLS termination](./assets/lb_2.png)
+![TLS termination](./assets/lb_3.png)
 
 Besides this load balancing mode, you can also use DNS polling to connect to the EMQX cluster directly, that is, all nodes are added to the DNS polling list, and the clients access the EMQX cluster via domain name or IP address list. However, this DNS polling mode is not recommended in the production environment. 
 
@@ -42,7 +42,7 @@ LB products for public cloud:
 | [HAProxy](https://www.haproxy.org) | Yes             | <https://www.haproxy.com/solutions/load-balancing.html> |
 | [NGINX](https://www.nginx.com)     | Yes             | <https://www.nginx.com/solutions/load-balancing/>       |
 
-In the following section, we will take the HAProxy or NGINX for private deployment as an example to illustrate how to configure an LB in the EMQX cluster. 
+In the following section, we take the HAProxy or NGINX for private deployment as an example to illustrate how to configure an LB in the EMQX cluster. 
 
 ## Configure HAProxy/NGINX in EMQX
 

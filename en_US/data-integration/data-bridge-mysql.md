@@ -51,7 +51,7 @@ use emqx_data;
 
 We will create 2 data bridges to MySQL for messages storage and event records respectively. 
 
-#### [Messages storage](#Storage)
+#### Message storage
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.

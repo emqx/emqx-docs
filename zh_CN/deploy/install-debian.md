@@ -198,8 +198,7 @@ sudo apt remove --purge emqx
 
 ### 启动 EMQX 
 
-您可通过如下三种方式启动 EMQX
-
+您可通过如下3种方式启动 EMQX 
 - 直接启动：
 
   ```bash

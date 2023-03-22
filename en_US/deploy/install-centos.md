@@ -1,13 +1,11 @@
 # CentOS/RHEL
 
-This section will guide you on how to install and start EMQX on CentOS/RHEL system.
+This section guides you on installing and starting EMQX on CentOS/RHEL system.
 
 Supported versions: 
 
 - CentOS 8
 - CentOS 7
-
-{% emqxce %}
 
 ## Install with Yum source
 
@@ -37,7 +35,7 @@ The section below will take CentOS 8 as an example to illustrate how to download
 
 ### Install with rpm
 
-EMQX has offered different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
@@ -111,7 +109,7 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz
 
-EMQX has offered different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
@@ -167,7 +165,7 @@ The section below will take CentOS 8 as an example to illustrate how to download
 
 ## Install with rpm
 
-EMQX has offered different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
@@ -243,7 +241,7 @@ sudo apt remove --purge emqx
 
 ## Install with tar.gz
 
-EMQX has offered different installation packages for different CPU architectures. 
+EMQX offers different installation packages for different CPU architectures. 
 
 :::: tabs type:card
 
