@@ -12,12 +12,12 @@ or from the output of a rule.
 
   :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [Buffer queue](./data-bridges.md#缓存队列)
 
-## Quick Starts
+## Quick Start
 
 We will illustrate how to create an HTTP server and a Webhook, and then create a data bridge to connect the Webhook and the HTTP server. 
 

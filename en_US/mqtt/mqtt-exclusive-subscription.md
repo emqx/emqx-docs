@@ -12,7 +12,7 @@ When client **A** subscribes to `$exclusive/t/1`, other clients will fail to sub
 
 **Note**: Exclusive subscriptions must be prefixed with `$exclusive/`, in the above example, other clients can still successfully subscribe via `t/1`.
 
-## Subscription error code
+## Subscription Error Code
 
 | Code            | Reason        | 
 | --------------- | ----------- | 
@@ -20,11 +20,11 @@ When client **A** subscribes to `$exclusive/t/1`, other clients will fail to sub
 | 0x97 | A client has already subscribed to this topic  |
 
 
-## Configuration settings
+## Configuration Settings
 
 Exclusive subscription is disabled by default and can be configured in `etc/emqx.conf`:
 
-|               configuration              |      type       | default |                 description                 |
+|              Configuration              |      Type      | Default |                 Description                 |
 | ----------------------------------- | --------------- | ------ | ------------------------------------ |
 | mqtt.exclusive_subscription  | boolean          | false   | default switch for exclusive subscription  |
 | zone.external.exclusive_subscription | boolean | not set | switch for exclusive subscription on external zone   |

@@ -1,21 +1,19 @@
 # MQTT QoS
 In MQTT protocol, Quality of Service (QoS) ensures the reliability of message delivery under different network conditions. The design of QoS is the focus of the MQTT protocol.
 
-## QoS0 - At most once (not guaranteed)
+## QoS0 - At Most Once (Not Guaranteed)
 
-![MQTT QoS0](./assets/mqtt-qos0.png)
+<img src="./assets/mqtt-qos0.png" alt="MQTT QoS0" style="zoom:30%;" />
 
-## QoS1 Once - At least once (guaranteed)
+## QoS1 Once - At Least Once (Guaranteed)
 
-![MQTT QoS1](./assets/mqtt-qos1.png)
+<img src="./assets/mqtt-qos1.png" alt="MQTT QoS1" style="zoom:30%;" />
 
-## QoS 2 Exactly once (guaranteed)
+## QoS 2 Exactly Once (Guaranteed)
 
-![MQTT QoS2](./assets/mqtt-qos2.png)
+<img src="./assets/mqtt-qos2.png" alt="MQTT QoS2" style="zoom:40%;" />
 
-## How to select the applicable QoS
-
-
+## Select the Applicable QoS
 
 In MQTT, the message publishing QoS is about the communication between the client and broker, rather than from end to end. The QoS level of the message that the subscriber receives depends on that of the message published and that of the topic subscribed.
 

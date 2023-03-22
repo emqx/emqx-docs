@@ -6,7 +6,7 @@ If there are no limitations on connection numbers or data transmission, users ma
 
 EMQX has therefore specified the following quotas and usage limits for some of the major features.
 
-## Reference list
+## Reference List
 
 The operating limitations can be classified into:
 

@@ -81,7 +81,7 @@ All options supported at this level are as follows:
 | initial  | int  | 0        | initial number of tokens |
 | capacity | int  | infinity | maximum number of tokens |
 
-### Node level
+### Node Level
 
 The node-level limit  the resource consumption speed of the current node. If you want to limit the number of messages flowing in the current node per second to no more than 100, you can add the following configuration to emqx.conf:
 

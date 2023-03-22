@@ -8,7 +8,7 @@ It is important to note that telemetry data cannot and will not be used to ident
 
 Telemetry is enabled by default. Some people may feel uncomfortable collecting such data. You can disable it in the simplest way before startup and during operation.
 
-### Disable before starting EMQX
+### Disable Before Starting EMQX
 
 You can permanently disable telemetry through the configuration file `etc/emqx.conf`.
 
@@ -24,7 +24,7 @@ Or to disable telemetry in this boot via environment variables at startup:
 export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx start
 ```
 
-### Disable while running EMQX
+### Disable While Running EMQX
 
 From Dashboard: Open the System -> Settings page and turn off the "Enable telemetry" option to permanently disable telemetry.
 

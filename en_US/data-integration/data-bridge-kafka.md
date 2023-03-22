@@ -23,7 +23,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#异步请求模式)
@@ -32,7 +32,7 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
-## Quick starts
+## Quick Start
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
 
 ### Install Kafka
@@ -56,7 +56,7 @@ bin/kafka-server-start.sh config/kraft/server.properties
 
 For detailed operation steps, you may refer to the [*Quick Start section in Kafka Documentation*](https://kafka.apache.org/documentation/#quickstart). 
 
-### Create Kafka topics
+### Create Kafka Topics
 
 Create two topics in Kafka:  `testtopic-in` and `testtopic-out`
 
@@ -70,7 +70,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 These topics must be created before we create the data bridge to Kafka.
 :::
 
-### Create a data bridge to Kafka
+### Configure a Data Bridge to Kafka via Dashboard
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.

@@ -10,7 +10,7 @@ Besides the deployment methods introduced in this quickstart guide, you are also
 
 {% emqxce %}
 
-## Select your EMQX edition
+## Select Your EMQX Edition
 
 EMQX is available in Open Source and Enterprise editions, you may click the link below to download the edition as your business needs. 
 
@@ -96,7 +96,7 @@ In addition, you can also deploy EMQX with one-click through [EMQX Terraform](ht
 
 <!-- TODO @wivwiv Update Terraform link when EMQX Terraform 5.0 document ready -->
 
-### Install EMQX with Docker/installation package
+### Install EMQX With Docker/Installation Package
 
 In this quick start guide, we will show you the easiest ways to start or run EMQX, that is, with Docker or with the installation package. 
 
@@ -208,8 +208,11 @@ To uninstall EMQX after your testing, you only need to delete the EMQX folders.
 
 ::::
 
+
+## Use MQTT X to Verify Connection
+
 Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTT X
-## Use MQTT X to verify the connection
+
 
 [MQTT X](https://mqttx.app/en) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. By utilizing a chat style of user interface, MQTT X allows users to quickly create connections and save multiple clients, which facilitates users to quickly test the MQTT/MQTTS connection, as well as the subscription and publication of MQTT messages.
 
@@ -253,17 +256,10 @@ Then you can click **Dashboard** in the left navigation tree to return to the **
 
 
 
-## Advanced operation
+## Advanced Operation
 
 So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../access-control/authn/authn.md) and integration with [Rule Engine](../data-integration/rules.md).
 
-### More to read
-
-Besides this quickstart guide, you may also refer to the pages for the new features introduced in EMQX 5.x and known limitations:
-
-<!-- - [New Feature](./new-features.md) -->
-- [Operating limitations](./restrictions.md)
-
-## Contact us
+## Contact Us
 
 If you have any questions on the use of EMQX or EMQ products, you are warmly welcome to [contact us](https://www.emqx.com/en/contact) for professional support.
