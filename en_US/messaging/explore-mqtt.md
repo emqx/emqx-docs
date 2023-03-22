@@ -1,6 +1,6 @@
 # Verify MQTT Features 
 
-EMQX provides full support to a complete set of MQTT messaging features, for example, will messages, retained messages, and shared subscriptions. All these features can greatly reduce development and managing difficulties.<!--How to understand it?-->
+EMQX provides full support to a complete set of MQTT messaging features, for example, will messages, retained messages, and shared subscriptions. All these features can facilitate the IoT application development and management. <!--Add a link to MQTT Specific?-->
 
 This section introduces how to use these features and verify them using [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to help you get familiar with the MQTT messaging services.
 
@@ -18,7 +18,7 @@ A will message is the last stored message that is defined in advance and is sent
 - The client closes the network connection before sending offline packets.
 - The server closes the network connection before receiving the offline packet.
 
-If a client wants to set a will message, it sets the topic and payload of the will message when it initiates the connect request. When another client subscribes to the topic of the will message, it will receive the will message if either client disconnect to the server unexpectedly. For more information, see [Will Message](../mqtt/mqtt-last-will-and-testament.md) and [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
+If a client wants to set a will message, it sets the topic and payload of the will message when it initiates the connect request. When another client subscribes to the topic of the will message, it receives the will message if the client disconnects to the server unexpectedly. For more information, see [Will Message](../mqtt/mqtt-last-will-and-testament.md) and [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
 
 ### Use MQTT X Client to Verify
 
@@ -52,19 +52,19 @@ If a client wants to set a will message, it sets the topic and payload of the wi
 
    Leave the rest settings as default. Click the **Connect** button.
 
-4. Create a new connection for another client. Type the connection name as `Subscribe`.
+4. Create a new connection for another client. Type the connection name as `Subscriber`.
 
 5. Click **+ New Subscription** in the **Subscribe** pane. Type `offline` in the **Topic ** textbox. Leave the other settings as default. Click the **Confirm** button.
 
       <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:25%;" />
 
-6. Click the client connection named "Demo" in the **Connections** pane. Send a message with the topic `Test`.
+6. Select the client connection named "Demo" in the **Connections** pane. Right click and select **New Window**. In the new window, click the **Connect** button. 
 
-   <img src="./assets/Send-test-message.png" alt="Send-test-message" style="zoom:25%;" />
+   <img src="./assets/Open-new-window.png" alt="Open-new-window" style="zoom:25%;" />
    
-   Wait for 5 seconds. The Subscriber receives a will message `I'm offline`.
-   
-   <!--Need screenshot-->
+6. Close the new window and wait for 5 seconds. The client connection "Subscriber" receive a will message `I'm offline`.
+
+   <img src="./assets/Receive-will-message.png" alt="Receive-will-message" style="zoom:25%;" />
 
 ### Use MQTT X CLI to Verify
 
