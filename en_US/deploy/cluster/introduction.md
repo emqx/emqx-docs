@@ -4,8 +4,7 @@ EMQX cluster adopts a distributed architecture, which can handle a large number 
 
 EMQX 5.0 adopts the new [Mria cluster architecture](./mria-introduction.md) compared to the previous version's cluster design. With this Mria architecture, one EMQX node can support up to 5 million MQTT connections, and the EMQX cluster can support up to 100 million concurrent MQTT connections.
 
-This chapter will introduce the distributed EMQX cluster and its working mode to help you get started.
-
+This chapter introduces the distributed EMQX cluster and its working mode to help you get started. 
 ## How it works
 
 In a distributed EMQX cluster, one EMQX instance runs on each node. All nodes within the cluster communicate with each other and share information on client connections, subscriptions, and published messages. So the EMQX cluster can automatically distribute the load across the nodes, thus ensuring the system's high availability.
@@ -173,12 +172,12 @@ EMQX supports several node discovery strategies:
 
 | Strategy  | Description                             |
 | --------- | --------------------------------------- |
-| Manual    | Manually create a cluster with commands |
-| Static    | Autocluster through static node list    |
-| DNS       | Autocluster through DNS A record        |
-| etcd      | Autocluster through etcd                |
-| k8s       | Autocluster provided by Kubernetes      |
-
+| manual    | Manually create a cluster with commands                      |
+| static    | Autocluster through static node list                         |
+| multicast | Autocluster through UDP multicast <br>Note: The multicast discovery strategy has been deprecated and will be removed in future releases. |
+| DNS       | Autocluster through DNS A record                             |
+| etcd      | Autocluster through etcd                                     |
+| k8s       | Autocluster provided by Kubernetes                           |
 ### EMQX cluster protocol settings
 
 Each Erlang node can be connected via TCP or TLS,
@@ -216,7 +215,7 @@ cluster.autoclean = 5m
 
 With this feature enabled, the disconnected node will be automatically removed from the cluster after the configured time interval.
 
-## Session across Nodes
+## Session across nodes
 
 The persistent MQTT sessions (clean session = false) are across nodes in the cluster.
 
@@ -226,5 +225,5 @@ If a persistent MQTT client connected to node1 first, then disconnected and conn
 
 You can continue to read the following chapters on how to cluster EMQX nodes.
 
-- EMQX cluster [security setting](./security.md)
-- [Create Cluster](./create-cluster.md)
+* [Create Cluster](./create-cluster.md)
+* [Cluster Security](./security.md)

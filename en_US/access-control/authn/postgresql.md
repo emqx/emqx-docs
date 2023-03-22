@@ -56,8 +56,8 @@ INSERT 0 1
 
 The corresponding configuration parameters are:
 
-- `password_hash_algorithm`: sha256
-- `salt_position`: prefix
+- password_hash_algorithm: `sha256`
+- salt_position: `prefix`
 
 SQL: 
 
@@ -98,7 +98,7 @@ Follow the instruction below on how to configure:
   - If **bcrypt** is selected, no extra configurations are needed. 
   - If **pkbdf2** is selected, we also need to configure:
     - **Pseudorandom Function**: Specify the Hush functions to generate the key, such as sha256. 
-    - **Iteration Count**: Specify the iteration times; Default: 4096
+    - **Iteration Count**: Specify the iteration times; Default: **4096**
     - **Derived Key Length**: Specify the length of the generated password, if left blank, the password length will be determined by the pseudorandom function you selected. 
 - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 

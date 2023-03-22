@@ -10,6 +10,7 @@ EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文�
 :::
 
 ## 文件格式
+基于文件的授权权限列表简单轻量，适合配置通用的规则。对于上百条或者更面向客户端的规则，推荐使用其他授权来源。基于文件的权限列表可以作为防护置于授权链末端。
 
 基于文件进行授权检查前，您需要将授权规则以 [Erlang 元组](https://www.erlang.org/doc/reference_manual/data_types.html#tuple) 数据列表的形式存储在文件中。
 
@@ -26,7 +27,7 @@ EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文�
 {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
 
 %% 允许来自127.0.0.1 的用户发布和订阅 "$SYS/#" 以及 "#"
-{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
+{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
 
 %% 拒绝其他所有用户订阅 "$SYS/#" 和 "#" 主题
 {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
@@ -72,7 +73,6 @@ EMQX 支持基于 ACL 文件中存储的规则进行授权检查。您可在文�
 
 - `{deny, all}`：拒绝所有请求
 
-  
 
 您可以通过 Dashboard 或直接编辑 `acl.conf` 文件修改规则。下面将指导您如何启用 File 授权检查器并编辑 `acl.conf` 文件。
 
