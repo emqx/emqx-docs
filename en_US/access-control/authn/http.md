@@ -1,4 +1,4 @@
-# Use HTTP service
+# Use HTTP Service
 
 EMQX supports using external HTTP service for password authentication. After enabling, when a client initiates a connect request, EMQX will use the received information to construct an HTTP request and determine whether to accept the request based on the query result, achieving a complex authentication logic.
 
@@ -8,7 +8,7 @@ EMQX supports using external HTTP service for password authentication. After ena
 
 :::
 
-## HTTP Request and response
+## HTTP Request and Response
 
 The authentication process is similar to an HTTP API call where EMQX, as the requesting client, constructs and initiates a request to the HTTP service in the format required by the "API", and the HTTP service returns the result as required by the "client".
 
@@ -77,9 +77,9 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 
 Now we can click **Create** to finish the settings. 
 
-## Configure with configuration items
+## Configure with Configuration Items
 
-You can configure the EMQX HTTP authenticator with EMQX configuration items. For details, see [authn-http:post](../../configuration/configuration-manual.md#authn-http:post) and [authn-http:get](../../configuration/configuration-manual.md#authn-http:get). 
+You can configure the EMQX HTTP authenticator with EMQX configuration items. <!--For details, see [authn-http:post](../../configuration/configuration-manual.md#authn-http:post) and [authn-http:get](../../configuration/configuration-manual.md#authn-http:get). -->
 
 Below are the HTTP `POST` and `GET` request examples:
 

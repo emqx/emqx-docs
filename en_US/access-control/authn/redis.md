@@ -8,7 +8,7 @@ EMQX supports integrating with Redis for password authentication. EMQX Redis aut
 
 :::
 
-## Data schema and query statement
+## Data Schema and Query Statement
 
 Redis authentication works with credentials stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes) with predefined field names: 
 
@@ -51,21 +51,21 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 
 Follow the instruction below on how to configure:
 
-**Connect**: In this section, we will fill in the information needed to connect Redis.
+**Connect**: Fill in the information needed to connect Redis.
 
 - **Redis Mode**: Select how Redis is deployed, including **Single**, **Sentinel** and **Cluster**. 
-- **Server(s)**:  Specify the Redis server address that EMQX is to connect, if **Redis Mode** is set to **Sentinel** or **Cluster**, you will need to input all Redis servers (separated with a `,`) that EMQX is to connect.
+- **Server(s)**: Specify the Redis server address that EMQX is to connect, if **Redis Mode** is set to **Sentinel** or **Cluster**, you will need to input all Redis servers (separated with a `,`) that EMQX is to connect.
 - **Sentinel Name**: Specify the name to use; type: strings; only needed if you set **Redis Mode** to **Sentinel**.
 - **Database**: Redis database name; Data type: strings.
 - **Password** (optional): Specify Redis user password. 
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-**Connection Configuration**: In this section, we will set the concurrent connections.
+**Connection Configuration**: Set the concurrent connections.
 
 - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to a Redis server. Default: **8**. 
 
-**Authentication configuration**: In this section, we will fill in the authentication-related settings:
+**Authentication configuration**: Fill in the authentication-related settings:
 
 - **Password Hash Field**: Specify the field name of the password.
 - **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
@@ -82,9 +82,9 @@ Follow the instruction below on how to configure:
 
 Now we can click **Create** to finish the settings. 
 
-## Configure with configuration items
+## Configure with Configuration Items
 
-You can configure the EMQX Redis authenticator with EMQX configuration items. For detailed operation steps, see  [authn-redis:standalone](../../configuration/configuration-manual.md#authn-redis:standalone), [authn-redis:sentinel](../../configuration/configuration-manual.md#authn-redis:sentinel), and  [authn-redis:cluster](../../configuration/configuration-manual.md#authn-redis:cluster). 
+You can configure the EMQX Redis authenticator with EMQX configuration items. <!--For detailed operation steps, see  [authn-redis:standalone](../../configuration/configuration-manual.md#authn-redis:standalone), [authn-redis:sentinel](../../configuration/configuration-manual.md#authn-redis:sentinel), and  [authn-redis:cluster](../../configuration/configuration-manual.md#authn-redis:cluster).-->
 
 Redis authentication is identified with `mechanism = password_based` and `backend = redis`.
 

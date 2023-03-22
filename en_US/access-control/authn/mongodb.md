@@ -8,7 +8,7 @@ EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB
 
 :::
 
-## Data schema and query statement
+## Data Schema and Query Statement
 
 EMQX MongoDB authenticator supports storing authentication data as MongoDB documents. Users need to provide a query statement template and ensure the following fields are included:
 
@@ -59,29 +59,29 @@ On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Con
 
 Follow the instruction below on how to configure:
 
-**Connect**: In this section, you fill in the information needed to connect MongoDB.
+**Connect**: Fill in the information needed to connect MongoDB.
 
 - **MongoDB Mode**: Select how MongoDB is deployed, including **Single**, **Replica Set** and **Sharding**. 
-- **Server**:  Specify the MongoDB server address that EMQX is to connect, if **MongoDB Mode** is set to **Replica Set** or **Sharding**, you will need to input all MondoDB servers (separated with a `,`) that EMQX is to connect.
+- **Server**: Specify the MongoDB server address that EMQX is to connect, if **MongoDB Mode** is set to **Replica Set** or **Sharding**, you will need to input all MondoDB servers (separated with a `,`) that EMQX is to connect.
 - **Replica Set Name**: Specify the Replica Set name to use; type: strings; only needed if you set **MongoDB Mode** to **Replica Set**.
 - **Database**: MongoDB database name; Data type: strings.
 - **Collection**: Name of MongoDB collection where authentication rules are stored; Data type: strings.
 - **Username** (optional): Specify MongoDB user name. 
 - **Password** (optional): Specify MongoDB user password. 
-- **Read Mode** (optional): only needed if you set **MongoDB Mode** to **Replica Set**; Default: **master**; Options: **master**, **slave_ok**. 
+- **Read Mode** (optional): Only needed if you set **MongoDB Mode** to **Replica Set**; Default: **master**; Options: **master**, **slave_ok**. 
   - **master**: Indicate each query in a sequence must only read fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. 
   - **slave_ok**: Indicate every query is allowed to read stale data from a slave/secondary (or fresh data from a master).
 
-- **Write Mode **(optional):  only needed if you set **MongoDB Mode** to **Replica Set**; Options: **unsafe**, **safe**; Default: **safe**.
+- **Write Mode **(optional): Only needed if you set **MongoDB Mode** to **Replica Set**; Options: **unsafe**, **safe**; Default: **safe**.
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-**Connection Configuration**: In this section, we will set the concurrent connections and waiting time before a connection is timed out.
+**Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
 - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to a MongoDB server. Default: **8**. 
 - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour. 
 
-**Authentication configuration**: In this section, we will fill in the authentication-related settings:
+**Authentication configuration**: Fill in the authentication-related settings:
 
 - **Password Hash Field**: Specify the field name of the password.
 - **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
@@ -100,13 +100,9 @@ Follow the instruction below on how to configure:
 
 Now we can click **Create** to finish the settings. 
 
-## Configure with configuration items
+## Configure with Configuration Items
 
-You can configure the EMQX MongoDB authenticator with EMQX  EMQX configuration items, for detailed operating steps, see 
-
-- [authn-mongodb:standalone](../../configuration/configuration-manual.md#authn-mongodb:standalone)
-- [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.md#authn-mongodb:sharded-cluster) 
-- [authn-mongodb:replica-set](../../configuration/configuration-manual.md#authn-mongodb:replica-set)
+You can configure the EMQX MongoDB authenticator with EMQX configuration items. <!--for detailed operating steps, see [authn-mongodb:standalone](../../configuration/configuration-manual.md#authn-mongodb:standalone), [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.md#authn-mongodb:sharded-cluster) and [authn-mongodb:replica-set](../../configuration/configuration-manual.md#authn-mongodb:replica-set).-->
 
 Below are code examples you may refer to:
 

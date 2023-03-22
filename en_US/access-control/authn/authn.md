@@ -12,9 +12,9 @@ EMQX also supports [TLS X.509 certificates](https://www.mongodb.com/docs/manual/
 
 This section covers the basic concepts of identity authentication and the settings. 
 
-## Authentication mechanism
+## Authentication Mechanism
 
-### Password authentication
+### Password Authentication
 
 EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identities, such as username, client ID, and the corresponding password. In some cases, users may choose to use some fields in the TLS certificate (such as the certificate's Common Name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed form.
 
@@ -25,13 +25,13 @@ Besides the built-in database, EMQX also supports integration with various backe
 
 EMQX can also be configured to delegate authentication work to external services, such as an HTTP server developed by our users.
 
-### JWT authentication
+### JWT Authentication
 
 [JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism, which does not rely on the server to retain client authentication information or session information.
 
 The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator verifies the JWT signature using the list of public keys queried from the JWKS endpoint.
 
-### MQTT 5.0 enhanced authentication
+### MQTT 5.0 Enhanced Authentication
 
 [MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. It is more like an authentication framework that allows the use of various more secure authentication mechanisms, such as SCRAM authentication, Kerberos authentication, etc. EMQX supports SCRAM authentication and provides support for SCRAM user management through our built-in database.
 
@@ -54,7 +54,7 @@ EMQX supports 8 authentication methods (referred to as authenticator hereafter) 
 
 The following part introduces the basic authentication concepts we commonly referred to.
 
-### Authentication chain
+### Authentication Chain
 
 EMQX allows the creation of authentication chain using multiple authenticators and follows the authenticator's position in the chain to perform the authentication. 
 
@@ -66,7 +66,7 @@ Besides, the authenticators for creating the authentication chain should be of d
 
 :::
 
-#### Authenticate flow
+#### Authenticate Flow
 
 With authentication chain configured, EMQX first tries to retrieve the matching authentication information from the first authenticator, if fails, it switches to the next authenticator to continue the process. 
 
@@ -84,11 +84,11 @@ Taking the password-based authentication as an example, EMQX tries to retrieve t
 
 ![](./assets/authn-chain.png)
 
-#### Use case
+#### Use Case
 
 Users have a large number of clients and a high connection rate, thus users can create an authentication chain with the Redis authenticator and the MySQL or PostgreSQL authenticator. With Redis as a caching layer, the query performance can be greatly improved. 
 
-## Authentication of listeners
+## Authentication of Listeners
 
 By default, EMQX adopts a global authentication method for all configured listeners. But for an EMQX cluster with multiple services connected, EMQX also supports customizing authentication methods for each access mode to meet various authentication requirements, for example:
 
@@ -104,7 +104,7 @@ Currently, EMQX only supports creating different listener authenticators for MQT
 
 The authentication configuration of the listener takes precedence over the global authentication configuration. Only when the listener removes its own authenticator configuration and enables authentication, the listener switches to using the global authentication configuration.
 
-### Use case
+### Use Case
 
 For example, for listeners with TLS mutual authentication enabled, you may not want to apply the global password authentication method; or if your clients are from multiple different vendors, you need different authentication methods to solve the name duplication issue.
 
@@ -120,7 +120,7 @@ Permission preset is currently only supported in JWT authentication. The list of
 
 You can check if a user is a superuser with the  `is_superuser` field in a database query, HTTP response, or JWT claims.
 
-### Password hashing
+### Password Hashing
 
 Storing a password in plain text would mean that anyone who looked through the database would be able to just read the user’s passwords. Therefore it is recommended to use password hashing algorithms to store the password as the generated hash. EMQX supports a variety of password hashing algorithms to meet various security requirements.
 
@@ -157,7 +157,7 @@ password_hash_algorithm {
 }
 ```
 
-## Authentication placeholders
+## Authentication Placeholders
 
 EMQX supports using placeholders in the query statements and HTTP requests. During the authentication step, these placeholders will be replaced with actual client information to construct a query or HTTP request that matches the current client.
 
@@ -182,7 +182,7 @@ EMQX currently supports the following placeholders:
 - `${cert_subject}`: It will be replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
 - `${cert_common_name}`: It will be replaced by the Common Name of the client's TLS certificate at runtime,  only applicable to TLS connections.
 
-## Configure authentication mechanism
+## Configure Authentication Mechanism
 
 EMQX provides 3 ways to use authentication, namely: Dashboard, Configuration file and HTTP API.
 
@@ -192,7 +192,7 @@ EMQX Dashboard is an intuitive way to configure EMQX authenticators, where you c
 
 ![](./assets/authn-dashboard-2.png)
 
-### Configure with configuration file
+### Configure with Configuration File
 
 You can also configure EMQX authenticators with our configuration file. 
 

@@ -175,7 +175,6 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 | MongoDB     | [使用 MongoDB 存放授权数据](./mongodb.md)         |
 | Redis       | [使用 Redis 存放授权数据](./redis.md)             |
 | HTTP 服务器 | [通过访问外部 HTTP 服务来获取授权信息](./http.md) |
-|             |                                                   |
 
 例如，MySQL 授权检查器的配置文件为：
 
@@ -201,11 +200,11 @@ EMQX 提供了 3 种使用权限的配置方式，分别为：Dashboard、配置
 
 在 Dashboard 的授权页面，您可直接完成相关授权检查器的配置，查看授权检查器状态，以及调整授权检查器在授权链中的位置。
 
-![authz dashboard](./assets/authentication with dashboard.png)
+![authz dashboard](./assets/authentication-with-dashboard.png)
 
 #### 配置文件
 
-您也可通过配置文件 `emqx.conf` 中 `authentication` 相关字段进行授权的配置。
+您也可通过配置文件 `emqx.conf` 中 `authorization` 相关字段进行授权的配置。
 
 配置结构如下：
 
@@ -244,6 +243,6 @@ EMQX 为授权参数暴露如下 REST API 来支持进行运行时动态修改�
 - `/api/v5/authorization/settings`: 查看、修改授权参数，例如 `no_match`， `deny_action` 和 `cache`
 - `/api/v5/authorization/sources`: 用于管理授权检查器
 - `/api/v5/authorization/cache`: 清除授权数据缓存
-- `/api/v5/authorization/sources/built_in_database`: 内饰数据库数据管理
+- `/api/v5/authorization/sources/built_in_database`: 内置数据库数据管理
 
 详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
