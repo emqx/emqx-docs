@@ -14,7 +14,7 @@ EMQX clusters bring the users the following benefits.
 4. **Centralized Management**: EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages.
 4. **Data consistency**: The cluster replicates data across all nodes in the cluster, which helps to ensure data consistency.
 
-## How Clustering in EMQX works
+## How Clustering in EMQX Works
 
 The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers. In previous versions, EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. The default listening port number for this protocol is 4370.
 
