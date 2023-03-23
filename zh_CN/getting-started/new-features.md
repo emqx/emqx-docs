@@ -56,7 +56,7 @@ EMQX 5.0 认证授权包括以下特性：
 - 提供执行速度与次数统计指标，实现认证授权可观测性。
 - 允许监听器单独配置认证，更灵活的接入能力。
 
-关于如何在 EMQX 进行认证和授权配置，可阅读[访问控制章节]((../access-control/overview.md))。
+关于如何在 EMQX 进行认证和授权配置，可阅读[访问控制](../access-control/overview.md)章节。
 
 ## 全新 EMQX Dashboard
 

@@ -35,7 +35,7 @@ You can further improve the performance and reliability of data integration with
 
 Connection pool is a set of reusable connection objects. With connection pooling, users no longer need to re-create connections for each request, which can help to significantly reduce resource consumption, improve connection efficiency, and achieves better support for high concurrent requests.
 
-EMQX will create a separate connection pool for each node with data bridge to be created. For example, let's say you use a cluster with 3 EMQX nodes and set the connection pool size for each data bridge to 8, then EMQX will create 3 x 8 = 24 connection pools. Note: Please ensure the number of connection pools to build should not exceed the connection limit of your resources.
+EMQX will create a separate connection pool for each node with data bridge to be created. For example, let's say you use a cluster with 3 EMQX nodes and set the connection pool size for each data bridge to 8, then EMQX will create 3 x 8 = 24 connection. Note: Please ensure the number of connection pools to build should not exceed the connection limit of your resources.
 
 ### Async Mode
 

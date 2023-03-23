@@ -1,4 +1,4 @@
-# Create an EMQX Cluster
+# Create an Cluster
 
 With EMQX cluster, you can enjoy the benefits of fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail. You can create an EMQX cluster either manually or automatically. Before the actual clustering step, let's first get familiar with 2 key concepts, node names and node discovery. 
 
@@ -40,11 +40,11 @@ Before creating an EMQX cluster, the following prerequisites should first be met
 
 2. If there is a firewall or security group between nodes, ensure the cluster communication port has been opened. For details, see [Intra-cluster communication port](./security.md).
 
-3. For security concerns, you should change the default cookie settings to a secret cookie in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+3. For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. Note: All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
 
    ```
    node {
-     cookie = "<a secret cookie>"
+     cookie = "<a Secret cookie>"
    }
    ```
 
