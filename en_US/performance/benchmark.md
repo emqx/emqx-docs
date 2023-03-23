@@ -61,7 +61,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 The output of the above content proves that `emqtt_bench` has been correctly installed on the host.
 
-## Use
+## Use Test Tool
 
 There are three subcommands of `emqtt_bench`:
 
@@ -122,7 +122,7 @@ For example, we start 1000 connections:
 ./emqtt_bench conn -h emqx-server -c 1000
 ```
 
-### SSL connection
+### SSL Connection
 
 `emqtt_bench` supports establishing a secure SSL connection and performing tests.
 
@@ -140,16 +140,16 @@ Two-way certificate:
 ./emqtt_bench pub -c 100 -i 10 -t bench/%i -s 256 -p 8883 --certfile path/to/client-cert.pem --keyfile path/to/client-key.pem
 ```
 
-## Typical stress test scenario
+## Typical Stress Test Scenario
 
-### Scenario description
+### Scenario Description
 
 We verify the use of the tool in 2 most typical scenarios:
 
 1. Connections: Use `emqtt_bench` to create millions of connections to EMQX Broker.
 2. Throughput: Use `emqtt_bench` to create `10W / s Qos0` message throughput in EMQX Broker.
 
-### Device and deployment topology
+### Device and Deployment Topology
 
 A total of three 8C16G servers need to be prepared, one for EMQX Broker and two for client presses:
 
@@ -170,7 +170,7 @@ The topology structure is as follows:
 
 Both the client's press and the server's machine need to perform system parameter tuning, refer to [Tuning guide](../performance/tune.md).
 
-### Connection test
+### Connection Test
 
 After performing system tuning, start the server:
 
@@ -206,7 +206,7 @@ listener on mqtt:tcp:0.0.0.0:1883
   shutdown_count  : []
 ```
 
-### Throughput test
+### Throughput Test
 
 Similarly, first start the server:
 
