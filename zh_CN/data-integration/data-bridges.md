@@ -134,4 +134,4 @@ INSERT INTO msg(topic, qos, payload) VALUES('${topic}', ${qos}, '${payload}');
 INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 ```
 
-除了自动推到字段类型外，SQL 预处理技术还能避免 SQL 注入以提高安全性。
+除了自动推导字段类型外，SQL 预处理技术还能避免 SQL 注入以提高安全性。
