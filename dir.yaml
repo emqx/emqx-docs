@@ -62,7 +62,7 @@
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
 
-- title_en: EMQX Cluster
+- title_en: Clustering
   title_cn: 构建集群
   path: deploy/cluster/introduction
   children:

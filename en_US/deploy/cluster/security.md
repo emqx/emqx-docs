@@ -1,6 +1,6 @@
 # Cluster Security
 
-EMQX provides several security mechanisms to ensure the confidentiality, integrity, and availability of data, including [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, [a secret cookie](#set-node-cookie) to ensure secure communication between nodes in a cluster, and [TLS/SSL encryption](#configure-tls-ssl-to-secure-cluster-connections) to provide end-to-end encryption for inter-node traffic.
+EMQX provides several security mechanisms to ensure the confidentiality, integrity, and availability of data, including [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, [a Secret cookie](#set-node-cookie) to ensure secure communication between nodes in a cluster, and [TLS/SSL encryption](#configure-tls-ssl-to-secure-cluster-connections) to provide end-to-end encryption for inter-node traffic.
 
 To help provision firewall rules, we will also touch on EMQX's inter-broker [communication port mapping rules](#port-mapping). 
 
@@ -10,7 +10,7 @@ For security concerns, you should change the default cookie settings to a secret
 
 ```
 node {
-  cookie = "<a secret cookie>"
+  cookie = "<a Secret cookie>"
 }
 ```
 

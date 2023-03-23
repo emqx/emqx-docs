@@ -34,7 +34,7 @@ To provide our customers with a better cluster salability performance, EMQX 5.0 
 
 
 
-<!--To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md) will update when pr 1730 is merged. -->
+To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md).
 
 ## Key Features
 
