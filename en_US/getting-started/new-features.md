@@ -4,7 +4,7 @@ This section lists the new features introduced in EMQX 5.0.
 
 ## Mria Cluster Architecture
 
-EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With this Mria architecture, one EMQX cluster can support up to [100 million concurrent MQTT connections](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0), making it the world’s most scalable open-source MQTT broker.
+EMQX 5.0 adopts a new [Mria cluster architecture](../deploy/cluster/mria-introduction.md). With this Mria architecture, one EMQX cluster can support up to [100 million concurrent MQTT connections](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0), making it the world’s most scalable open-source MQTT broker.
 
 <img src="./assets/100m-benckmark.png" alt="100m-benckmark" style="zoom:50%;" />
 
