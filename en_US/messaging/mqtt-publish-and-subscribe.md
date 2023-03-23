@@ -18,15 +18,15 @@ In  this chapter, it also introduces some advanced publishing and subcribing ope
 
 ## MQTT X
 
-[MQTT X](https://mqttx.app) includes 3 types of MQTT 5.0 verification tools:
+[MQTT X](https://mqttx.app) is an elegant cross-platform MQTT 5.0 verification tool open sourced by [EMQ](https://www.emqx.com). It includes 3 types of  tools:
 
 - MQTT X Client
 - MQTT X CLI
-- MQTT Websocket
+- MQTT X Web
 
 ### MQTT X Client
 
-[MQTT X Client](https://mqttx.app) is a cross-platform MQTT desktop client tool open sourced by [EMQ](https://www.emqx.com). It provides users with an easy-to-use graphic interface to allow users to quickly create and test MQTT connections, publish and subscribe MQTT messages. 
+[MQTT X Client](https://mqttx.app) is a cross-platform MQTT desktop client tool. It provides users with an easy-to-use graphic interface to allow users to quickly create and test MQTT connections, publish and subscribe MQTT messages. 
 
 Before you test, download and install the MQTT X Client:
 
@@ -179,7 +179,6 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
    Click the **Publish** button, and one record will be added to the **Published** section below. The message will be routed to all subscribers. As the publisher is also the receiver in this test, one new record will also be added to the **Received** section below.
 
    <img src="./assets/Dashboad-Websocket-Client-receive .png" alt="Dashboad-Websocket-Client-receive " style="zoom:25%;" />
-
 
 
 
