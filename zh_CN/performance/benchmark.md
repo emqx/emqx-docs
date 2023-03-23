@@ -1,8 +1,45 @@
-# 性能测试
+# 基准测试
 
 [emqtt_bench](https://github.com/emqx/emqtt_bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议性能测试工具，如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
 
-## 编译安装
+## Docker镜像
+
+`emqtt_bench` docker 镜像已推送到 [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), 且每个新版本都会更新`:latest`标签：
+
+```bash
+docker run -it emqx/emqtt-bench:latest
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+注意，Docker镜像名称使用连字符“-”，而二进制脚本名称使用下划线“_”。
+
+## 二进制包
+
+我们为以下平台创建每个版本的二进制包：
+
+- CentOS 7
+- Rocky Linux 8
+- Debian 9
+- Debain 10
+- Ubuntu 16.04
+- Ubuntu 18.04
+- Ubuntu 20.04
+
+请前往 [Releases](https://github.com/emqx/emqtt-bench/releases) 页面查看。
+
+例如，以下是如何在Ubuntu 20.04上安装 `emqtt_bench`:
+
+```bash
+mkdir emqtt_bench && cd emqtt_bench
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.8/emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+
+./emqtt_bench
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+## 从源代码构建
 
 `emqtt_bench` 的运行依赖于 Erlang/OTP 21.2 以上版本运行环境，安装过程略过，详情请参考网上各个安装教程。
 
