@@ -7,8 +7,6 @@
 - macOS 12
 - macOS 11
 
-{% emqxce %}
-
 ## 安装 EMQX
 
 下文将以 macOS 12 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=macOS) 获取详细的安装信息。

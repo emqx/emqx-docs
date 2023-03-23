@@ -42,13 +42,13 @@ In this way, the client will be prohibited from sending PUBLISH packets with the
 
 The service stores and manages retained messages sent by clients and sends them to the corresponding subscribers.
 
-## Configure with Dashboard
+## Configure With Dashboard
 
 Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation tree. Then click the **Retainer** tab, and you can customize the setting for Retained messages. 
 
 ![image](./assets/retainer_1.png)
 
-## Configuration
+## Configuration Items
 
 | Configuration item       | Type  | Optional value      | Default value | Description                                               |
 | ------------------------------ | -------- | ------------------------ | ------ | ------------------------------------------------------------ |
@@ -88,12 +88,12 @@ retainer {
 }
 ```
 
-Configuration Options:
+Configuration items:
 
-| Options               | Type    | Default   | Description                                               |
-|:----------------------|:--------|:----------|:----------------------------------------------------------|
-| batch_read_number     | int     | 0         | number of messages to read each time (0 means all)        |
-| batch_deliver_number  | int     | 0         | number of messages to deliver each time (0 means all)     |
-| batch_deliver_limiter | limiter | undefined | message delivery rate limiter                             |
+| Configuration Items   | Type    | Default   | Description                                           |
+| :-------------------- | :------ | :-------- | :---------------------------------------------------- |
+| batch_read_number     | int     | 0         | number of messages to read each time (0 means all)    |
+| batch_deliver_number  | int     | 0         | number of messages to deliver each time (0 means all) |
+| batch_deliver_limiter | limiter | undefined | message delivery rate limiter                         |
 
 For detailed settings of rate limiter, please see the `Listener Level` and `Connection Level` in [Hierarchical Rate Limiter](../rate-limit/rate-limit.md)

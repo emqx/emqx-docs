@@ -2,9 +2,9 @@
 
 Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](./configuration-manual.md).
 
-## Configuration files
+## Configuration Files
 
-### **Main configuration file**
+### **Main Configuration File**
 
 EMQX will create a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`. 
 
@@ -18,7 +18,7 @@ Depends on your installation mode, emqx.conf` is stored in:
 
 As the main configuration file, `emqx.conf` contains most of the commonly used configuration items. You can follow the example provided in the `emqx-example.conf` file (located within the same folder) to customize the settings. EMQX will use the default setting for other items to simplify your configuration work.  
 
-### Configuration rewrite file
+### Configuration Rewrite File
 
 `emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides two configuration rewrite files implicitly nested under `emqx.conf`:
 
@@ -55,7 +55,7 @@ Some configuration items cannot be overridden, for example,  `node.name`.
 
 :::
 
-## HOCON configuration format
+## HOCON Configuration Format
 
 Since EMQX 5.0, we have begun to use [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format. 
 
@@ -89,7 +89,7 @@ HOCON recommends adding quotes at both ends of the string. Strings without speci
 
 For more information about HOCON syntax, please refer to [HOCON Documentation](https://github.com/lightbend/config/blob/main/HOCON.md).
 
-## Environment variables
+## Environment Variables
 
 Besides configuration files, you can also use environment variables to configure EMQX.
 
@@ -144,7 +144,7 @@ When a known root path is set with an unknown field name, EMQX will output a `wa
 
 :::
 
-## Configure override rules
+## Configure Override Rules
 
 The value of HOCON will be overridden hierarchically, the rules are as follows:
 
@@ -179,7 +179,7 @@ zone {
 zone.zone1.mqtt.max_packet_size = 10M
 ```
 
-### List element override
+### List Element Override
 
 EMQX array has two expression ways:
 

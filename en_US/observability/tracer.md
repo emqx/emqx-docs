@@ -21,7 +21,7 @@ On EMQX Dashboard, you can click **Diagnose** -> **Log Trace**, and then click *
 
 <!-- TODO 下面的内容先凑合使用，后续更新 -->
 
-## Trace by client IDs
+## Trace by Client IDs
 
 1. Select the **Type** as `ClientID`.
 2. Fill in the Client IDs to be traced.
@@ -31,7 +31,7 @@ On EMQX Dashboard, you can click **Diagnose** -> **Log Trace**, and then click *
 
 You can see the Trace record after successful creation in the list, where you can view it or choose to download the log. The log contains the current ClientID interaction with the EMQX connection.
 
-## Trace by topics
+## Trace by Topics
 
 1. Select the **Type** as `Topic`;
 2. Fill in the topics to be traced and wildcard characters are supported;

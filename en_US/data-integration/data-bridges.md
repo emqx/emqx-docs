@@ -1,4 +1,4 @@
-# Data bridges
+# Data Bridges
 
 Data bridge is a channel used to connect EMQX and external data systems, for example, databases like MySQL, MongoDB, message brokers like Apache Kafka and RabbitMQ, or even an HTTP server.
 
@@ -12,7 +12,7 @@ Only data bridges to MQTT and Webhook are supported in the EMQX open-source vers
 
 <!-- TODO sync zh -->
 
-## Data bridge execution statistics
+## Data Bridge Execution Statistics
 
 EMQX will provide the running statistics of data bridges in the following categories: 
 <!-- TODO 由于调整过 Data Bridge 结构，先前的指标设计过时了重新设计指标后补充文档 -->
@@ -27,21 +27,21 @@ EMQX will provide the running statistics of data bridges in the following catego
 - Retried
 - Rate -->
 
-## Features supported
+## Features Supported
 
 You can further improve the performance and reliability of data integration with the following easy-to-use data bridge features. Note: Depending on the data system you are connecting to, the features supported may differ. You may refer to the document about different data systems for feature support.
 
-### Connection pool
+### Connection Pool
 
 Connection pool is a set of reusable connection objects. With connection pooling, users no longer need to re-create connections for each request, which can help to significantly reduce resource consumption, improve connection efficiency, and achieves better support for high concurrent requests.
 
-EMQX will create a separate connection pool for each node with data bridge to be created. For example, let's say you use a cluster with 3 EMQX nodes and set the connection pool size for each data bridge to 8, then EMQX will create 3 x 8 = 24 connection pools. Note: Please ensure the number of connection pools to build should not exceed the connection limit of your resources.
+EMQX will create a separate connection pool for each node with data bridge to be created. For example, let's say you use a cluster with 3 EMQX nodes and set the connection pool size for each data bridge to 8, then EMQX will create 3 x 8 = 24 connection. Note: Please ensure the number of connection pools to build should not exceed the connection limit of your resources.
 
-### Async mode
+### Async Mode
 
 Async mode is the data processing mode of the data bridge. By enabling the Async mode, we can prevent the message publishing services from being blocked by the I/O pressure. Note: The time series of the message publishing might be affected, as the data bridge may be still processing the queued messages while the client has already sent several new messages.
 
-To improve  the data processing efficiency, EMQX has enabled the Async mode by default. You can use the following commands to disable the Async mode if your application has strict requirements on the time series. 
+To improve the data processing efficiency, EMQX has enabled the Async mode by default. You can use the following commands to disable the Async mode if your application has strict requirements on the time series. 
 
 Example code
 
@@ -92,7 +92,7 @@ bridges.mysql.foo {
 }
 ```
 
-### Buffer queue
+### Buffer Queue
 
 When external resources are unavailable, for example, due to network fluctuations or service downtime, the buffer queue feature can help to save the message generated during this period as memory or disk cache and then resume the messaging after the service is restored.
 
@@ -125,7 +125,7 @@ bridges.mysql.foo {
 }
 ```
 
-### Prepared statement
+### Prepared Statement
 
 [Prepared statement](https://dev.mysql.com/doc/refman/8.0/en/sql-prepared-statements.html) provides a way to run SQL with prepared statements. It simplifies the operation and maintenance and also helps to avoid SQL injection and improve security. 
 

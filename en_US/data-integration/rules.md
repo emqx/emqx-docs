@@ -50,9 +50,7 @@ Currently rules supports the following types of actions:
 * **Console Output** - that prints the output of the rule to the console. This is mainly intended for debugging purposes.
 - **Forwarding with Data Bridges** - A data bridge is a channel to an external service (typically a database, web service or message queue). Rules can directly use the ID of data bridge as the action. Please see the [documentation for data bridges](./data-bridges.md) for more details about how to uses bridges.
 
-
-## The Republish Action
-
+## Republish Action
 
 The republish action is used to publish a new MQTT message. For example, this can be useful when one wants to send an error message back to a device. 
 
@@ -63,7 +61,7 @@ The republish action does not prevent the delivery of the original message. For 
 In the republish action, you can customize the payload, topic, QoS and other parameters of the message,
 and fields in the rule output can be referenced as values of these parameters in the form of `${field name}`.
 
-## The Console Action
+## Console Action
 
 The console output action is used to print the result message of a rule to the console or log file
 

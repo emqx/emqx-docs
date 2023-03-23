@@ -2,7 +2,7 @@
 
 作为全球最具扩展性的 MQTT 消息服务器，EMQX 提供了高效可靠海量物联网设备连接，能够高性能实时移动与处理消息和事件流数据，帮助您快速构建关键业务的物联网平台与应用。
 
-本章节将带您从下载安装开始，带您体验从启动 EMQX 服务，到通过 WebSocket 工具或 MQTT 客户端测试连接并进行消息发布订阅的完整流程。
+本章节将带您体验从下载安装开始，到启动 EMQX 服务，到通过 WebSocket 工具或 MQTT 客户端测试连接并进行消息发布订阅的完整流程。
 
 ::: tip
 除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
@@ -60,7 +60,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - AmazonLinux
 - Ubuntu
 - Debian
-- MacOS
+- macOS
 - Linux
 - Windows
 
@@ -74,7 +74,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - AmazonLinux
 - Ubuntu
 - Debian
-- MacOS
+- macOS
 - Linux
 
 {% endemqxee %}
@@ -103,37 +103,35 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 容器化部署是体验 EMQX 的最快方式，因此本节将以容器化部署为例，带您开始完整的 EMQX 使用旅程。 
 
-{% emqxce %}
+1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX。
 
-1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
+   运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
 
-```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
-```
+   {% emqxce %}
 
-{% endemqxce %}
+   ```bash
+   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
+   ```
 
-{% emqxee %}
+   {% endemqxce %}
 
-2. 在命令行工具中输入如下命令，下载并运行最新版 EMQX：
+   {% emqxee %}
 
-```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
-```
+   ```bash
+   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
+   ```
 
-{% endemqxee %}
+   {% endemqxee %}
 
-运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
+2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
-3. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+​        默认用户名及密码：
 
-   默认用户名及密码：
+​       `admin`
 
-   `admin`
+​       `public`
 
-   `public`
-
-   <!--后续补上 dashboard的截图-->
+<!--后续补上 dashboard的截图-->
 
 :::
 
@@ -202,7 +200,6 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 ::::
 
 ## 通过 MQTT X 快速验证
-
 [MQTT X](https://mqttx.app/zh) 是 EMQX 开源的一款跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux、Windows，并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTT X 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。
 
 本节讲介绍如何通过 [MQTT X Web 端](https://mqttx.app/zh) 快速验证 MQTT 连接，无需下载或安装任何程序。
@@ -224,7 +221,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
    - **服务器地址**
 
-     - 通过选择该连接的协议类型，如 WebSockets 协议，**ws://**；如希望测试 SSL/TLS 认证连接，应选择 **wss://**；
+     - 通过选择该连接的协议类型，如 WebSockets 协议，**ws://**；目前 MQTT X Web 端仅支持 WebSocket 协议，如希望测试 SSL/TLS 认证连接，请下载 [MQTT 客户端](https://mqttx.app/zh)；
      - 填入之前获取的 EMQX 地址，如 **emqx@127.0.0.1**
 
    - **端口**：如 WebSockets 协议对应的 **8083** 端口
@@ -254,8 +251,10 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 本章节还包含了 EMQX 5.x 版本引入的全新功能介绍和已知的使用限制，可点击下方链接继续阅读。
 
 <!-- - [全新功能](./new-features.md) -->
+
 - [使用限制](./restrictions.md)
 
 ## 常见问题解答
 
 您可以访问 [EMQ 问答社区](https://askemq.com/) 参与交流，提出、解答 EMQX 以及 EMQ 相关产品使用问题，与 EMQX 用户交流物联网相关技术的使用经验，此外也欢迎随时 [联系我们](https://www.emqx.com/zh/contact) 获取专业技术支持。
+

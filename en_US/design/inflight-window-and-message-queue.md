@@ -20,9 +20,9 @@ That is, the server can send subsequent PUBLISH packets to the client with diffe
 
 It is not difficult to see that `Receive Maximum` is actually the same as the Inflight Window mechanism in EMQX. However, EMQX already provided this function to the accessed MQTT client before the MQTT v5.0 protocol was released. Now, the clients using the MQTT v5.0 protocol will set the maximum length of the Inflight Window according to the specification of the Receive Maximum, while clients with earlier versions of the MQTT protocol will still set it according to the configuration.
 
-## Configuration items
+## Configuration Items
 
-| Configuration items | Type    | Optional value  | Default value                              | Description                                                  |
+| Configuration Items | Type    | Optional Value  | Default Value                              | Description                                                  |
 | ------------------- | ------- | --------------- | ------------------------------------------ | ------------------------------------------------------------ |
 | max_inflight        | integer | >= 0            | 32 *(external)*,<br /> 128 *(internal)*    | Inflight Window length limit, 0 means no limit               |
 | max_mqueue_len      | integer | >= 0            | 1000 *(external)*,<br />10000 *(internal)* | Message Queue length limit, 0 means no limit                 |
