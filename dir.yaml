@@ -23,7 +23,7 @@
   title_cn: 快速开始
   path: getting-started/getting-started
   children:
-    # - getting-started/new-features
+    - getting-started/new-features
     - getting-started/restrictions
 
 ## Infrastructure
