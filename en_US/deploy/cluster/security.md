@@ -12,13 +12,13 @@ If there is a firewall between the cluster nodes, the conventional listening por
 
 ## Set Node Cookies
 
-For security concerns, you should change the default cookie settings to a secret cookie in `emqx.conf` on all nodes to join the cluster. 
+For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. 
 
-Note: All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+Note: All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
 
 ```
 node {
-  cookie = "<a secret cookie>"
+  cookie = "<a Secret cookie>"
 }
 ```
 
