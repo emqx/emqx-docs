@@ -1,6 +1,6 @@
 # 基准测试
 
-[emqtt_bench](https://github.com/emqx/emqtt_bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议性能测试工具。如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
+[eMQTT-Bench](https://www.emqx.com/zh/try?product=emqtt-bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议基准测试工具。如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
 
 ## 安装测试工具
 
