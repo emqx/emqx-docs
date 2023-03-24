@@ -10,7 +10,7 @@
 - 下载并安装二进制包
 - 从源代码构建
 
-### 运行Docker镜像
+### 运行 Docker 镜像
 
 你可以通过运行`emqtt_bench`镜像来安装测试工具。`emqtt_bench` docker 镜像已推送到 [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), 且每个新版本都会更新`:latest`标签：
 
