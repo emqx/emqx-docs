@@ -41,7 +41,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 前往 [Releases](https://github.com/emqx/emqtt-bench/releases) 页面查看具体的`emqtt_bench`发布版本信息。
 
-例如，以下是如何在Ubuntu 20.04上安装 `emqtt_bench`:
+例如，以下是如何在 Ubuntu 20.04 上安装 `emqtt_bench`:
 
 ```bash
 mkdir emqtt_bench && cd emqtt_bench
