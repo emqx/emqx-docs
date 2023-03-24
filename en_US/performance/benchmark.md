@@ -2,7 +2,8 @@
 
 [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) is a concise and powerful MQTT protocol benchmark tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization , the test service [XMeter](https://www.xmeter.net/) is recommended.
 
-## Docker image
+## Install Test Tool
+### Run Docker Image
 
 You can install the benchmark tool by running the `emqtt_bench` docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
 
