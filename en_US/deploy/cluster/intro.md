@@ -81,22 +81,22 @@ At this point, the four nodes have completed the mesh structure shown in the fol
 ![image](./assets/cluster_1.png)
 
 
-## EMQX Broker Distributed cluster design
+## EMQX Distributed cluster design
 
-The basic function of EMQX Broker distribution is to forward and publish messages to
+The basic function of EMQX distribution is to forward and publish messages to
 subscribers on each node, as shown in the following figure.
 
 ![image](../../assets/design_9.png)
 
-To achieve this, EMQX Broker maintains several data structures: subscription
+To achieve this, EMQX maintains several data structures: subscription
 tables, routing tables, and topic trees.
 These tables are stored in the [embedded database](./db.md).
 
 ### Subscription Table: Topics-Subscribers
 
-When an MQTT client subscribes to a topic, EMQX Broker maintains a **Subscription Table**
+When an MQTT client subscribes to a topic, EMQX maintains a **Subscription Table**
 for the Topic-\> Subscriber mapping. The subscription table only exists on
-the EMQX Broker node where the subscriber is located, for example:
+the EMQX node where the subscriber is located, for example:
 
 ```bash
 node1:
@@ -121,7 +121,7 @@ topic3 -> node2, node4
 
 ### Topic tree: topic matching with wildcards
 
-In addition to the routing table, each node in the EMQX Broker cluster also maintains a
+In addition to the routing table, each node in the EMQX cluster also maintains a
 backup of the **Topic Tree.**
 
 The following topic-subscription relationship is an example:
@@ -132,7 +132,7 @@ The following topic-subscription relationship is an example:
 | client2 | node2 | t/#              |
 | client3 | node3 | t/+/x, t/a       |
 
-When all subscriptions are completed, EMQX Broker maintains the following Topic Tree and Route Table:
+When all subscriptions are completed, EMQX maintains the following Topic Tree and Route Table:
 
 ![image](./assets/cluster_2.png)
 
@@ -160,7 +160,7 @@ The routing and distribution of the message between nodes are as follows:
 
 ### Data partition and sharing
 
-EMQX Broker's subscription table is partitioned in the cluster,
+EMQX's subscription table is partitioned in the cluster,
 while the topic tree and routing table are replicated.
 
 ## EMQX Node Discovery and Autocluster
@@ -184,7 +184,7 @@ EMQX supports multiple node discovery strategies:
 
 Note: mcast discovery strategy has been deprecated and will be removed in the future releases.
 
-### EMQX Broker Cluster protocol settings
+### EMQX Cluster protocol settings
 
 Each node in the Erlang cluster can be connected through TCP or TLS,
 and the connection method can be configured in `etc/emqx.conf`:

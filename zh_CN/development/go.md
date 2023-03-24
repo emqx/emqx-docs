@@ -10,7 +10,7 @@ go get github.com/eclipse/paho.mqtt.golang
 
 ## MQTT Go 使用示例
 
-本示例包含 Go 语言的 Paho MQTT 连接 EMQX Broker，并进行消息收发完整代码：
+本示例包含 Go 语言的 Paho MQTT 连接 EMQX，并进行消息收发完整代码：
 
 ```go
 package main

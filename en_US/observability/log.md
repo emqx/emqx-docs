@@ -4,7 +4,7 @@ Logs provide a reliable source of information for troubleshooting and system per
 
 To minimize the impact of logs on system operation, for example, when the log data is too much or the log writing is too slow, EMQX activates the overload protection mechanism by default to better serve our users.
 
-## Log level
+## Log Level
 
 EMQX log has 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), with warning as the default level, from low to high these 8 levels are:
 
@@ -19,7 +19,7 @@ You can change the log configuration with either of the following methods:
 
 EMQX supports outputting logs to the console or log file. These are 2 independent features, you can choose the output method as needed or keep both.
 
-## Output logs to the console
+## Output Logs to the Console
 
 After the EMQX is started with command line `./bin/emqx console` or `/bin/emqx/foreground`, EMQX will output the logs (`warning` level) to the console and disable the log file output option. You can use the console logs for development debugging. Its configuration path is `log.console_handler`, and all configuration items are described as follows:
 
@@ -74,7 +74,7 @@ log.console_handler {
    }
 ```
 
-## File log handler
+## File Log Handler
 
 The default log file directory of EMQX is `./log` (for zip package installation) or `/var/log/emqx` (for RPM or DEB package installation). The configuration of the file  log handler is mostly the same as that of the console handler, except for the additional file write control configuration, which is listed below.
 
@@ -106,12 +106,12 @@ Code example:
 
 When file logging is enabled (log.to = file or both), the following files will appear in the log directory:
 
-- **emqx.log.N:** L og file prefixed with emqx.log, that contains all the log messages of EMQX Broker, such as `emqx.log.1`,` emqx.log.2` ...
+- **emqx.log.N:** L og file prefixed with emqx.log, that contains all the log messages of EMQX, such as `emqx.log.1`,` emqx.log.2` ...
 - **emqx.log.siz and emqx.log.idx:** System files used to record log rotation information. **Do not change manually**. 
-- **run_erl.log:** System file used to record startup information when starting EMQX Broker in the background with `emqx start`.
-- **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX Broker is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
+- **run_erl.log:** System file used to record startup information when starting EMQX in the background with `emqx start`.
+- **erlang.log.N:** Log file prefixed with erlang.log, which is a copy file of the console log when EMQX is started in the background with `emqx start`, such as `erlang.log.1`,` erlang.log.2` ...
 
-## Output log file for log level
+## Output Log Files by Log Level
 
 If you want to write logs greater than or equal to a certain level to a separate file, you can configure `emqx.conf`  as :
 
@@ -128,7 +128,7 @@ log.file_handlers.my_info_log {
  }
 ```
 
-## Log format
+## Log Format
 
 The format of the log message (with different fields separated by spaces) is as follows:
 
@@ -144,7 +144,7 @@ where,
 - **client_info (optional):** Only exists if this log message is related to a client. The format is: ClientId@Peername or ClientId or Peername
 - **msg:** Log message content. The format is arbitrary and can contain spaces.
 
-### Log message example 1:
+### Log Message Example 1:
 
 ```bash
 2022-06-30T16:07:47.689512+08:00 [debug] clientid: test, line: 792, mfa: emqx_connection:handle_incoming/2, msg: mqtt_packet_received, packet: PINGREQ(Q0, R0, D0), payload: [], peername: 127.0.0.1:64391, tag: MQTT
@@ -158,7 +158,7 @@ The fields in this log message are:
 
 This log indicates that EMQX received a `PINGREQ(Q0,R0,D0)` packet at `2022-06-30T16:07:47.689512+08:00` with clientid `test`. The IP of the client is `127.0.0.1:64391`.
 
-### Log message example 2:
+### Log Message Example 2:
 
 ```bash
 2022-06-30T16:25:32.446873+08:00 [debug] line: 150, mfa: emqx_retainer_mnesia:store_retained/2, msg: message_retained, topic: $SYS/brokers/emqx@127.0.0.1/sysdescr

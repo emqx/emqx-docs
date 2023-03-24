@@ -1,22 +1,26 @@
 # EMQ Documentation Writing Guide
 
-
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Left menu configuration](#left-menu-configuration)
-  - [Configuration files](#configuration-files)
-  - [Configuration examples](#configuration-examples)
-  - [Notes](#notes)
-- [Markdown writing specifications](#markdown-writing-specifications)
-  - [Must have a level 1 heading](#must-have-a-level-1-heading)
-  - [Headings must obey the hierarchy](#headings-must-obey-the-hierarchy)
-  - [Code block](#code-block)
-  - [Escape special characters](#escape-special-characters)
-  - [Resource reference](#resource-reference)
-  - [Special grammars](#special-grammars)
-  - [Differentiated compilation](#differentiated-compilation)
-
+- [EMQ Documentation Writing Guide](#emq-documentation-writing-guide)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Left menu configuration](#left-menu-configuration)
+    - [Configuration files](#configuration-files)
+    - [Configuration examples](#configuration-examples)
+    - [Notes](#notes)
+  - [Markdown writing specifications](#markdown-writing-specifications)
+    - [Must have a level 1 heading](#must-have-a-level-1-heading)
+    - [Headings must obey the hierarchy](#headings-must-obey-the-hierarchy)
+    - [Code block](#code-block)
+    - [Escape special characters](#escape-special-characters)
+    - [Resource reference](#resource-reference)
+    - [Special grammars](#special-grammars)
+    - [Differentiated compilation](#differentiated-compilation)
+    - [OpenAPI](#openapi)
+      - [EMQX API doc](#emqx-api-doc)
+    - [Configuration](#configuration)
+      - [Commands to copy generated markdown](#commands-to-copy-generated-markdown)
 
 ## Introduction
 
@@ -37,7 +41,6 @@ The final presentation of the documentation can be divided into three parts:
   This part will automatically display all level 2 headings within the Markdown file. Therefore, a sensible Markdown heading will allow users to quickly understand the outline of document content and jump around the page.
 
 ![intro](./assets/intro.jpg)
-
 
 ## Left menu configuration
 
@@ -96,11 +99,10 @@ The corresponding page routing of the file structure:
 
 ### Notes
 
-* The contents of the `path` configuration item must not be duplicated;
-* `path` only need to specify the Markdown file, and can not use paths with anchors;
-* Nested next-level directories using `children`, supporting multiple levels of nesting; 
-* When using `children`, you cannot also specify their `path` (i.e. if a directory has subdirectories, you cannot set  `path` for itself);
-
+- The contents of the `path` configuration item must not be duplicated;
+- `path` only need to specify the Markdown file, and can not use paths with anchors;
+- Nested next-level directories using `children`, supporting multiple levels of nesting;
+- When using `children`, you can now specify their `path` at the same time. This means that even if a directory has subdirectories, it can still be set as a page;
 
 ## Markdown writing specifications
 
@@ -131,7 +133,7 @@ The document will read the level 2 heading as the right-hand navigation, obeying
 
 - If you need the original article to output the `<xxx>` tag and this tag is not in a code block or in-line code, you need to add a backslash `\` before the tag.
 
-  Use `### log set-level \<Level> ` instead of `### log set-level <Level>`;
+  Use `### log set-level \<Level>` instead of `### log set-level <Level>`;
 
 - If you need the original article to output the double curly braces `{{ xxx }}`, you need to wrap it with v-pre (you don't need to wrap it when inside a code block).
 
@@ -242,10 +244,10 @@ and then downloaded into this repo with some rewrites.
 
 To update the file:
 
-* Start EMQX v5 node
-* Execute the script `./rewrite-swagger.sh ce | ee`
-* Commit the changed swagger.json file to this git repo
-* Send a pull request
+- Start EMQX v5 node
+- Execute the script `./rewrite-swagger.sh ce | ee`
+- Commit the changed swagger.json file to this git repo
+- Send a pull request
 
 ### Configuration
 
@@ -255,21 +257,21 @@ Steps to  update:
 1. Re-build EMQX (opensource and enterprise edition)
 1. Copy the gnerated `md` files to this repo (see commands below)
 1. Rename the heading-1 of each file
-    * Configuration Files (for en_US/admin/cfg-*.md)
-    * 配置文件 (in zh_CN/admin/cfg-*.md)
+    - Configuration Files (for en_US/admin/cfg-*.md)
+    - 配置文件 (in zh_CN/admin/cfg-*.md)
 
 #### Commands to copy generated markdown
 
 For opensource edition
 
-```
+```shell
 cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ce.md
 cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ce.md
 ```
 
 For enterprise edition
 
-```
+```shell
 cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ee.md
 cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ee.md
 ```

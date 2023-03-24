@@ -1,10 +1,10 @@
-# Data backup and restoration
+# Backup and Restore
 
-EMQX adopts a distributed storage schema to replicate data among all nodes, and a cluster transfer feature to ensure the system's high availability. 
+EMQX adopts a distributed storage schema and also introduces a cluster transfer feature to ensure the system's high availability. 
 
-As part of our "fail-safety" design, EMQX also provides data backup and restoration for disaster recovery. This chapter guides you on how to back up and restore EMQX data, which mainly includes the configuration files and the operating data. 
+This chapter will discuss how to backup your operating data and configuration files to prevent data losses in case of system malfunctions. 
 
-## Configuratation files 
+## Configuratation Files 
 
 When EMQX is deployed with a deployment tool, the configuration center, or Git, these configurations will be automatically backed up, and no manual backup is needed. 
 
@@ -16,7 +16,7 @@ However, for the manually configured items, it is recommended to run a periodic 
 
 Besides the `etc` directory, there are also some configuration-related files in the `data` directory. For details, see [Configuration file](../configuration/configuration.md).
 
-## Built-in database
+## Built-in Database
 
 By default, EMQX will use the built-in database for data storage, therefore you can back up the `mnesia` folder under `data`. 
 
@@ -30,10 +30,10 @@ Based on the installation mode, the file path could be:
 
 You can also specify the `data` directory location via `node.data_dir` or the `EMQX_NODE__DATA_DIR` environment variable.
 
-## Persisted sessions
+## Persisted Sessions
 
 Before EMQX 5.0, persistent sessions were stored in memory, and for the EMQX enterprise version, they are stored in an external database, so you cannot back up persistent sessions in EMQX.
 
-## Data restoration
+## Data Restore
 
 To restore the configuration file, you only need to place the backed-up configuration files and data in the corresponding directory before starting EMQX.

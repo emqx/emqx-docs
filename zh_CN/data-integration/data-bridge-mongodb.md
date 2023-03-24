@@ -2,6 +2,12 @@
 
 通过 MongoDB 数据桥接可以将客户端消息和事件存储到 MongoDB 中。
 
+{% emqxce %}
+:::tip
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+:::
+{% endemqxce %}
+
 :::tip 前置准备
 
 - 了解 [规则](./rules.md)。

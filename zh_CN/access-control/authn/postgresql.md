@@ -9,7 +9,7 @@
 
 ## 表结构与查询语句
 
-PostgreSQL 认证器可以支持任何表结构，甚至是多个表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，且确保查询结果包含以下字段：
+PostgreSQL 认证器可以支持任何表结构，甚至是多个表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，且确保查询结果包含以下字段：
 
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
@@ -41,8 +41,12 @@ CREATE TABLE mqtt_user (
 ```sql
 postgres=# create extension pgcrypto;
 CREATE EXTENSION
+```
 
-postgres=# INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', encode(digest('public' || 'slat_foo123', 'sha256'), 'hex'), 'slat_foo123', true);
+SQL 如下：
+
+```sql
+INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', encode(digest('public' || 'slat_foo123', 'sha256'), 'hex'), 'slat_foo123', true);
 INSERT 0 1
 ```
 
@@ -60,7 +64,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `PostgreSQL`，进入**配置参数**页签：
 
-![authn-postgresql](./assets/authn-postgresql.png)
+![Authentication with postgresql](./assets/authn-postgresql.png)
 
 您可按照如下说明完成相关配置：
 
@@ -73,28 +77,29 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 **TLS 配置**：配置是否启用 TLS。
 
-**连接配置**：在此部分设置并发连接数据以及是否自动重连。
+**连接配置**：在此部分设置并发连接数据。
 
 - **Pool size**（可选）：填入一个整数用于指定从 EMQX 节点到 PostgreSQL 数据库的并发连接数；默认值：**8**。
-- **自动重连**：指定连接中断时 EMQX 是否自动重新连接到 MySQL；可选值：**True**（自动重连），**False**（不自动重连）；默认值：**True**。
 
 **认证配置**：在此部分进行认证加密算法相关的配置。
 
-- **密码加密方式**：选择存储密码时使用的散列算法，如 plain、md5、sha、bcrypt、pbkdf2 等。
+**密码加密方式**：选择存储密码时使用的散列算法，如 plain、md5、sha、bcrypt、pbkdf2 等。
 
-  - 选择 **plain**、**md5**、**sha**、**sha256** 或 **sha512** 算法，需配置：
+- 选择 **plain**、**md5**、**sha**、**sha256** 或 **sha512** 算法，需配置：
 
-    - **加盐方式**：用于指定盐和密码的组合方式，除需将访问凭据从外部存储迁移到 EMQX 内置数据库中外，一般不需要更改此选项；可选值：**suffix**（在密码尾部加盐）、**prefix**（在密码头部加盐）、**disable**（不启用）。注意：如选择 **plain**，加盐方式应设为 **disable**。
+  - **加盐方式**：用于指定盐和密码的组合方式，除需将访问凭据从外部存储迁移到 EMQX 内置数据库中外，一般不需要更改此选项；可选值：**suffix**（在密码尾部加盐）、**prefix**（在密码头部加盐）、**disable**（不启用）。注意：如选择 **plain**，加盐方式应设为 **disable**。
 
-  - 选择 **bcrypt** 算法，无需额外配置。
+- 选择 **bcrypt** 算法，无需额外配置。
 
-  - 选择 **pkbdf2** 算法，需配置：
+- 选择 **pkbdf2** 算法，需配置：
 
-    - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
-    - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
-    - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
+  - **伪随机函数**：指定生成密钥使用的散列函数，如 sha256 等。
+  - **迭代次数**：指定散列次数，默认值：**4096**。<!--后续补充取值范围-->
+  - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
 
-- **SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
+**SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
+
+点击**创建**完成配置。
 
 ### 通过配置文件配置
 

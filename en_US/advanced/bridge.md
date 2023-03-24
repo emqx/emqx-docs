@@ -10,7 +10,7 @@ Publishers can publish messages to remote brokers via bridging:
 
 ![image](../assets/bridges_3.png)
 
-EMQX Broker distinguishes different bridges based on different names.
+EMQX distinguishes different bridges based on different names.
 Bridge can be added in `etc/emqx.conf` :
 
 ```bash
@@ -21,8 +21,8 @@ bridge.mqtt.azure.address = 54.33.120.8:1883
 
 This configuration declares two bridges with the name of `aws` and `azure`, which respectively point to the responding service address using MQTT bridging method.
 
-## MQTT bridging example
-For MQTT bridging, it makes EMQX Broker connect as a MQTT client to a remote MQTT broker.
+## MQTT Bridging Example
+For MQTT bridging, it makes EMQX connect as a MQTT client to a remote MQTT broker.
 
 First you need to configure the MQTT client parameters:
 
@@ -113,11 +113,11 @@ bridge.mqtt.aws.subscription.1.topic = cmd/topic1
 bridge.mqtt.aws.subscription.1.qos = 1
 ```
 
-### Publishing bridge message buffer
+### Publishing Bridge Message Buffer
 
-EMQX Broker's Bridge has a message buffering mechanism.
+EMQX's Bridge has a message buffering mechanism.
 When the Bridge is disconnected, the messages of the forwards topic are buffered.
-The buffered messages are (re)sent to the remote broker when connection recovers.
+The buffered messages are (re)sent to the remote broker when the connection recovers.
 
 Set the total cache queue size:
 

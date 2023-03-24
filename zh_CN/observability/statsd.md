@@ -1,4 +1,4 @@
-# StatsD 指标集成
+# 集成 StatsD
 
 EMQX 支持向 [StatsD](https://github.com/statsd/statsd) 服务器周期性推送系统指标。
 
@@ -25,4 +25,15 @@ statsd {
 
 ## 通过 Dashboard 配置
 
-EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的 **功能配置** -> **监控** -> **监控集成** 直接修改，保存后直接生效，无需重启节点。
+{% emqxce %}
+
+EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的**功能配置** -> **监控** -> **监控集成**直接修改，保存后直接生效，无需重启节点。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+您可在 EMQX Dashboard 设置集成 StatsD，点击左侧导航目录中的**功能配置** -> **监控**，在**监控集成**页签，设置启用 StatsD。
+
+{% endemqxee %}
+

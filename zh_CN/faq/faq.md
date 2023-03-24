@@ -4,9 +4,13 @@
 
 主题使用没有数量限制，主题数量增长对性能影响不大，可以放心使用。
 
+{% emqxce %}
+
 ## EMQX 开源版怎么存储数据？
 
 开源版不支持数据存储功能，可以使用企业版，或者使用外部程序订阅主题/Webhook 的方式获取数据，然后写入到数据库。
+
+{% endemqxce %}
 
 ## EMQX 与物联网应用的关系是什么？
 
@@ -40,7 +44,7 @@ HTTP 协议是一个无状态的协议，每个 HTTP 请求为 TCP 短连接，�
 
 ## 什么是 mqueue？如何配置 mqueue？
 
-mqueue 是 EMQX 在消息发布流程中保存在会话中的一个消息队列，当 MQTT 连接报文中的 clean session 设置为 false 的时候，即使是客户端断开连接的情况下，EMQX 也会为断连客户端保存一个会话，这个会话会缓存订阅关系，并代替断开连接的客户端去接收订阅主题上的消息，而这些消息会存在 EMQX 的 mqueue 中，等到客户端重新上线再将消息重新发给客户端。由于 qos0 消息在 MQTT 协议中的优先级比较低，所以 EMQX 默认不缓存 qos 0 的消息，mqueue 在 EMQX 中是可以配置的，通过配置 `zone.$name.mqueue_store_qos0 = true` 可以将 qos0 消息也存在 mqueue 中，mqueue 的大小也是有限制的，通过配置项 `zone.external.max_mqueue_len` ，可以确定每个会话缓存的消息数量。注意，这些消息是存储在内存中的，所以尽量不要将 mqueue 长度限制修改为 0（设置为 0 代表 mqueue 长度没有限制），否则在实际的业务场景中，有内存耗光的风险。
+mqueue 是 EMQX 在消息发布流程中保存在会话中的一个消息队列，当 MQTT 连接报文中的 clean session 设置为 false 的时候，即使是客户端断开连接的情况下，EMQX 也会为断连客户端保存一个会话，这个会话会缓存订阅关系，并代替断开连接的客户端去接收订阅主题上的消息，而这些消息会存在 EMQX 的 mqueue 中，等到客户端重新上线再将消息重新发给客户端。由于 qos0 消息在 MQTT 协议中的优先级比较低，所以 EMQX 默认不缓存 qos 0 的消息，mqueue 在 EMQX 中是可以配置的，通过配置 `mqtt.mqueue_store_qos0 = true` 可以将 qos0 消息也存在 mqueue 中，mqueue 的大小也是有限制的，通过配置项 `mqtt.max_mqueue_len` ，可以确定每个会话缓存的消息数量。注意，这些消息是存储在内存中的，所以尽量不要将 mqueue 长度限制修改为 0（设置为 0 代表 mqueue 长度没有限制），否则在实际的业务场景中，有内存耗光的风险。
 
 ## 什么是 WebSocket？什么情况下需要通过 WebSocket 去连接 EMQX 服务器？
 
@@ -180,6 +184,8 @@ brew install openssl@1.1
 
 安装完成后，即可正常启动 EMQX。
 
+{% emqxce %}
+
 ## Windows 缺失 MSVCR120.dll
 
 ### 现象
@@ -195,6 +201,8 @@ Windows 执行 `./bin/emqx console` 弹出错误窗口：
 ### 解决方法
 
 安装 [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
+
+{% endemqxce %}
 
 ## SSL 连接失败
 
@@ -275,15 +283,7 @@ ACL 可以配置在文件 `etc/acl.conf` 中，或者配置在后台数据库中
 
 ## EMQX 能做流量控制吗？
 
-能。目前 EMQX 支持连接速率和消息率控制。配置如下：
-
-```bash
-## Value: Number
-listener.tcp.external.max_conn_rate = 1000
-
-## Value: rate,burst
-listener.tcp.external.rate_limit = 1024,4096
-```
+能。目前 EMQX 支持连接速率和消息率控制，请参考 [速率限制](../rate-limit/rate-limit.md)。
 
 ## EMQX 是如何实现支持大规模并发和高可用的？
 
@@ -294,89 +294,34 @@ listener.tcp.external.rate_limit = 1024,4096
 - 连接、会话、路由、集群的分层设计；
 - 消息平面和控制平面的分离等。
 
-在精心设计和实现之后，单个 EMQX Enterprise 节点就可以处理百万级的连接。
+在精心设计和实现之后，单个 EMQX 节点就可以处理五百万连接。
 
 EMQX 支持多节点集群，集群下整个系统的性能会成倍高于单节点，并能在单节点故障时保证系统服务不中断。
 
 ## EMQX 能把接入的 MQTT 消息保存到数据库吗？
 
-EMQX 企业版支持消息持久化，可以将消息保存到数据库，开源版还暂时不支持。目前 EMQX 企业版消息持久化支持的数据库有：
-
-- Redis
-- MongoDB
-- MySQL
-- PostgreSQL
-- Cassandra
-- AWS DynamoDB
-- TimescaleDB
-- OpenTSDB
-- InfluxDB
-
-有关数据持久化的支持请参见 [EMQX 数据持久化概览](https://docs.emqx.io/tutorial/v3/cn/backend/whats_backend.html)。
+EMQX 企业版支持消息持久化，可以将消息保存到数据库，请参考 [数据桥接](../data-integration/data-bridges.md)。
 
 ## 在服务器端能够直接断开一个 MQTT 连接吗？
 
-可以的。EMQX 提供的 HTTP API 中包含断开 MQTT 连接，该操作在 EMQX 2.x 和 3.0 的实现方式有所不同：
+可以的。EMQX 提供的 HTTP API 中包含断开 MQTT 连接，该操作在 EMQX 2.x 和 3.0+ 的实现方式有所不同：
 
 - 在 2.x 版本中是由 EMQX 自定义扩展协议实现的
 - 在 3.0 版本之后按照 MQTT 5.0 协议对从服务器端断开连接的规范要求实现的
-
-调用的 API 如下所示：
-
-```html
-HTTP 方法：DELETE URL：api/[v2|v3]/clients/{clientid}
-<!--请注意区分 URL 中第二部分的版本号，请根据使用的版本号来决定 -->
-
-返回内容： { "code": 0, "result": [] }
-```
-
-HTTP API 使用方式参考 [管理监控 API (HTTP API)](https://docs.emqx.io/broker/v3/cn/rest.html)
 
 ## EMQX 能把接入的消息转发到 Kafka 吗？
 
 能。目前 EMQX 企业版提供了内置的 Kafka 桥接方式，支持把消息桥接至 Kafka 进行流式处理。
 
-EMQX 使用 Kafka 参照 [EMQX 到 Kafka 的桥接](https://docs.emqx.io/tutorial/v3/cn/bridge/bridge_to_kafka.html)
-
-## EMQX 企业版中桥接 Kafka，一条 MQTT 消息到达 EMQX 集群之后就回 MQTT Ack 报文还是写入 Kafka 之后才回 MQTT Ack 报文?
-
-取决于 Kafka 桥接的配置，配置文件位于`/etc/emqx/plugins/emqx_bridge_kafka.conf`
-
-```bash
-## Pick a partition producer and sync/async.
-bridge.kafka.produce = sync
-```
-
-- 同步：EMQX 在收到 Kafka 返回的 Ack 之后才会给前端返回 MQTT Ack 报文
-- 异步：MQTT 消息到达 EMQX 集群之后就回 MQTT Ack 报文，而不会等待 Kafka 返回给 EMQX 的 Ack
-
-如果运行期间，后端的 Kafka 服务不可用，则消息会被累积在 EMQX 服务器中，
-
-- EMQX 2.4.3 之前的版本会将未发送至 Kafka 的消息在内存中进行缓存，直至内存使用完毕，并且会导致 EMQX 服务不可用。
-- EMQX 2.4.3 版本开始会将未发送至 Kafka 的消息在磁盘中进行缓存，如果磁盘用完可能会导致数据丢失。
-
-因此建议做好 Kafka 服务的监控，在发现 Kafka 服务有异常情况的时候尽快恢复 Kafka 服务。
+EMQX 使用 Kafka 参照 [数据桥接 - Apache Kafka](../data-integration/data-bridge-kafka.md)。
 
 ## EMQX 支持集群自动发现吗？有哪些实现方式？
 
-EMQX 支持集群自动发现。集群可以通过手动配置或自动配置的方式实现。
-
-目前支持的自动发现方式有：
-
-- 手动集群
-- 静态集群
-- IP Multi-cast 自动集群
-- DNS 自动集群
-- ETCD 自动集群
-- K8S 自动集群
-
-有关集群概念和组建集群方式请参照 [EMQX 的集群概念](https://docs.emqx.io/tutorial/v3/cn/cluster/whats_cluster.html)
+EMQX 支持集群自动发现。集群可以通过手动配置或自动配置的方式实现，参考 [创建集群](../deploy/cluster/create-cluster.md)。
 
 ## 我可以把 MQTT 消息从 EMQX 转发其他消息中间件吗？例如 RabbitMQ？
 
-EMQX 支持转发消息到其他消息中间件，通过 EMQX 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。
-
-EMQX 桥接相关的使用方式请参照 [EMQX 桥接](https://docs.emqx.io/tutorial/v3/cn/bridge/bridge.html)
+EMQX 支持转发消息到其他消息中间件，通过 EMQX 提供的桥接方式就可以做基于主题级别的配置，从而实现主题级别的消息转发。请参考 [数据桥接](../data-integration/data-bridges.md)。
 
 ## 我可以把消息从 EMQX 转到公有云 MQTT 服务上吗？比如 AWS 或者 Azure 的 IoT Hub？
 
@@ -388,17 +333,13 @@ Mosquitto 可以配置转发消息到 EMQX，请参考[数据桥接 - MQTT](../d
 
 ## 我想跟踪特定消息的发布和订阅过程，应该如何做？
 
-EMQX 支持追踪来自某个客户端的报文或者发布到某个主题的报文。追踪消息的发布和订阅需要使用命令行工具（emqx_ctl）的 trace 命令，下面给出一个追踪‘topic’主题的消息并保存在 `trace_topic.log` 中的例子。更详细的说明请参阅 EMQX 文档的相关章节。
-
-```bash
-./bin/emqx_ctl trace topic "topic" "trace_topic.log"
-```
+EMQX 支持追踪来自某个客户端的报文或者发布到某个主题的报文。追踪消息的发布和订阅需要使用命令行工具（emqx_ctl）的 trace 命令，下面给出一个追踪‘topic’主题的消息并保存在 `trace_topic.log` 中的例子。更详细的说明请参阅 [日志追踪](../observability/tracer.md)。
 
 ## 为什么我做压力测试的时候，连接数目和吞吐量老是上不去，有系统调优指南吗？
 
 在做压力测试的时候，除了要选用有足够计算能力的硬件，也需要对软件运行环境做一定的调优。比如修改修改操作系统的全局最大文件句柄数，允许用户打开的文件句柄数，TCP 的 backlog 和 buffer，Erlang 虚拟机的进程数限制等等。甚至包括需要在客户端上做一定的调优以保证客户端可以有足够的连接资源。
 
-系统的调优在不同的需求下有不同的方式，在 EMQX 的[文档-测试调优](https://developer.emqx.io/docs/broker/v3/cn/tune.html) 中对用于普通场景的调优有较详细的说明
+系统的调优在不同的需求下有不同的方式，在 EMQX 的 [系统调优](../performance/tune.md) 中对用于普通场景的调优有较详细的说明。
 
 ## EMQX 支持加密连接吗？推荐的部署方案是什么？
 
@@ -450,39 +391,6 @@ Root: /usr/lib/emqx
 **解决办法：**
 安装 1.1.1 以上版本的 `openssl`
 
-- `License` 文件缺失
-
-```
-  $ emqx console
-  Exec: /usr/lib/emqx/erts-10.3.5.1/bin/erlexec -boot /usr/lib/emqx/releases/v3.2.1/emqx -mode embedded -boot_var ERTS_LIB_DIR /usr/lib/emqx/erts-10.3.5.1/../lib -mnesia dir "/var/lib/emqx/mnesia/emqx@127.0.0.1" -config /var/lib/emqx/configs/app.2019.07.23.05.52.46.config -args_file /var/lib/emqx/configs/vm.2019.07.23.05.52.46.args -vm_args /var/lib/emqx/configs/vm.2019.07.23.05.52.46.args -- console
-  Root: /usr/lib/emqx
-  /usr/lib/emqx
-  Erlang/OTP 21 [erts-10.3.5.1] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:32] [hipe]
-
-  Starting emqx on node emqx@127.0.0.1
-  Start http:management listener on 8080 successfully.
-  Start http:dashboard listener on 18083 successfully.
-  Start mqtt:tcp listener on 127.0.0.1:11883 successfully.
-  Start mqtt:tcp listener on 0.0.0.0:1883 successfully.
-  Start mqtt:ws listener on 0.0.0.0:8083 successfully.
-  Start mqtt:ssl listener on 0.0.0.0:8883 successfully.
-  Start mqtt:wss listener on 0.0.0.0:8084 successfully.
-  EMQX 3.2.1 is running now!
-  "The license certificate is expired!"
-  2019-07-23 05:52:51.355 [critical] The license certificate is expired!
-  2019-07-23 05:52:51.355 [critical] The license certificate is expired! System shutdown!
-  Stop mqtt:tcp listener on 127.0.0.1:11883 successfully.
-  Stop mqtt:tcp listener on 0.0.0.0:1883 successfully.
-  Stop mqtt:ws listener on 0.0.0.0:8083 successfully.
-  Stop mqtt:ssl listener on 0.0.0.0:8883 successfully.
-  Stop mqtt:wss listener on 0.0.0.0:8084 successfully.
-  [os_mon] memory supervisor port (memsup): Erlang has closed
-  [os_mon] cpu supervisor port (cpu_sup): Erlang has closed
-```
-
-**解决办法：**
-登陆[emqx.io](https://emqx.io)申请 license 或安装开源版的 EMQX Broker
-
 ## EMQX 中 ssl resumption session 的使用
 
 修改 emqx.conf 配置中的 reuse_sessions = on 并生效后。如果客户端与服务端通过 SSL 已经连接成功，当第二次遇到客户端连接时，会跳过 SSL 握手阶段，直接建立连接，节省连接时间，增加客户端连接速度。
@@ -502,6 +410,8 @@ Root: /usr/lib/emqx
 - `proto_unexpected_c`：在已经有一条 MQTT 连接的情况下重复收到了 MQTT 连接请求
 - `idle_timeout`： TCP 连接建立 15s 之后，还没收到 connect 报文
 
+{% emqxce %}
+
 ## EMQX 推荐部署的操作系统是什么？
 
 EMQX 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生产系推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
@@ -509,6 +419,8 @@ EMQX 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生�
 ## EMQX 支持 Windows 操作系统吗？
 
 仅在开源版支持，推荐用于测试而非生产部署，参考 [Windows 安装 EMQX](../deploy/install-windows.md)。
+
+{% endemqxce %}
 
 ## EMQX 如何预估资源的使用？
 
@@ -527,12 +439,6 @@ EMQX 对资源的使用主要有以下的影响因素，每个因素都会对计
 另外，如果设备通过 TLS（加密的连接）连接 EMQX，EMQX 会需要额外的资源（主要是 CPU 资源）。推荐方案是在 EMQX 前面部署负载均衡，由负载均衡节点卸载 TLS，实现职责分离。
 
 可参考 [https://www.emqx.com/zh/server-estimate](https://www.emqx.com/zh/server-estimate) 来预估计算资源的使用。
-
-## EMQX 的百万连接压力测试的场景是什么？
-
-在 EMQ 2.0 版本发布的时候，由第三方软件测试工具服务提供商 [XMeter](https://www.xmeter.net) 执行了一次百万级别连接的性能测试。测试基于开源社区中最流行的性能测试工具 [Apache JMeter](https://jmeter.apache.org/)，以及开源[性能测试插件](https://github.com/emqx/mqtt-jmeter)。该性能测试场景为测试客户端到服务器端的 MQTT 协议连接，该测试场景下除了发送 MQTT 协议的控制包和 PING 包（每 5 分钟发送一次）外，不发送用户数据，每秒新增连接数为 1000，共计运行 30 分钟。
-
-在该测试中，还执行了一些别的性能测试，主要为在为 10 万 MQTT 背景连接的情况下，执行了不同条件下的消息发送和接收的场景。具体请参见[性能测试报告](https://media.readthedocs.org/pdf/emq-xmeter-benchmark-cn/latest/emq-xmeter-benchmark-cn.pdf).
 
 ## 我的连接数目并不大，EMQX 生产环境部署需要多节点吗？
 

@@ -2,6 +2,12 @@
 
 InfluxDB 是一个用于存储和分析时间序列数据的数据库，其强大的数据吞吐能力以及稳定的性能表现使其非常适合物联网领域。EMQX 目前支持通过数据桥接的方式连接不同版本的 InfluxDB Cloud、InfluxDB OSS 以及 InfluxDB Enterprise。
 
+{% emqxce %}
+:::tip
+EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+:::
+{% endemqxce %}
+
 :::tip 前置准备
 
 - 了解 [InfluxDB 行协议](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)，InfluxDB Bridge 使用行协议进行数据写入。
@@ -45,6 +51,12 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
    - 服务器地址填写 **127.0.0.1:8086**。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 **{url}:443** 并启用 TLS 连接。
    - 选择 Token 认证，填入先前设置的组织名称、Bucket 以及生成的 Token。
 7. 定义解析数据，设置数据的 Measurement，Fields，Timestamp 与 Tags，键值均支持变量，可以使用行协议进行设置。
+
+:::tip
+- 要向 InfluxDB 1.x 或 2.x 写入带符号整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。参见 [InfluxDB 1.8 写入整型值](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)。
+- 对于仅在 InfluxDB 2.x 中支持的无符号整型值（ InfluxDB 1.x 不支持无符号整型），请在占位符后添加 `u` 作为类型标识，例如 `${payload.uint}u`。参见 [InfluxDB 2.6 无符号整型](https://docs.influxdata.com/influxdb/v2.6/reference/syntax/line-protocol/#uinteger)。
+:::
+
 8. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考[配置参数](#配置参数)。
 9.  点击创建按钮完成数据桥接创建。
 
@@ -56,7 +68,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 
   ```sql
-  SELECT 
+  SELECT
     *
   FROM
     "t/#"

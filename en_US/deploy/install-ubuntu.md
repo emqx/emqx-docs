@@ -1,38 +1,93 @@
 # Ubuntu
 
-This section will guide you on installing and starting EMQX on the Ubuntu system.
+This section guides you on installing and starting EMQX on the Ubuntu system.
 
-Supported versions: 
+Supported versions:
 
-- Ubuntu18.04
-- Ubuntu20.04
+- Ubuntu 22.04
+- Ubuntu 20.04
+- Ubuntu 18.04
 
 {% emqxce %}
 
-## Install EMQX with deb
+## Install with Apt source
 
-1. To download [emqx-5.0.14-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.deb), run:
+EMQX supports installing with Apt source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Apt source:
 
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.deb
-```
+1. Download the EMQX repository:
 
-2. To install EMQX, run:
+   ```bash
+   curl -s https://assets.emqx.com/scripts/install-emqx-deb.sh | sudo bash
+   ```
 
-```bash
-sudo apt install ./emqx-5.0.14-ubuntu20.04-amd64.deb
-```
+2. Install EMQX:
 
-3. We offered different options to start EMQX:
+   ```bash
+   sudo apt-get install emqx
+   ```
+
+3. Start EMQX:
+
+   ```bash
+   sudo systemctl start emqx
+   ```
+
+## Install with package
+
+The section below will take Ubuntu 22.04 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.io/downloads?os=Ubuntu). 
+
+## Install with deb
+
+EMQX offers different installation packages for different CPU architectures. 
+
+:::: tabs type:card
+
+::: tab amd64
+
+1. Download [emqx-5.0.20-ubuntu22.04-amd64.deb](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.deb).
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.deb
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo apt install ./emqx-5.0.20-ubuntu22.04-amd64.deb
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-5.0.20-ubuntu22.04-arm64.deb](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.deb).
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.deb
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo apt install ./emqx-5.0.20-ubuntu22.04-arm64.deb
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+EMQX offers 3 different options to start EMQX:
 
 - To start EMQX directly, run:
 
   ```bash
   $ emqx start
-  EMQX 5.0.14 is started successfully!
-
+  EMQX 5.0.20 is started successfully!
+  
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
+  Node 'emqx@127.0.0.1' 5.0.20 is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -47,62 +102,120 @@ sudo apt install ./emqx-5.0.14-ubuntu20.04-amd64.deb
   sudo service emqx start
   ```
 
-4. To uninstall EMQX, run:
+### Uninstall EMQX
 
-  ```shell
-  sudo apt remove --purge emqx
-  ```
+To uninstall EMQX, run:
 
-## Install EMQX with tag.gz
-
-1. To download [emqx-5.0.14-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.tar.gz), run:
-
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-ubuntu20.04-amd64.tar.gz
+```
+sudo apt remove --purge emqx
 ```
 
-2. To unzip the package, run:
+## Install with tar.gz 
+
+EMQX offers different installation packages for different CPU architectures. 
+
+:::: tabs type:card
+
+::: tab amd64
+
+1. Download [emqx-5.0.20-ubuntu22.04-amd64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.tar.gz).
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-amd64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-5.0.20-ubuntu22.04-amd64.tar.gz -C emqx
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-5.0.20-ubuntu22.04-arm64.tar.gz](https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.tar.gz)。
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/broker/5.0.20/emqx-5.0.20-ubuntu22.04-arm64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-5.0.20-ubuntu22.04-arm64.tar.gz -C emqx
+   ```
+
+:::
+
+::::
+
+### Start EMQX
+
+After the installation, run the command below to start EMQX.
 
 ```bash
-mkdir -p emqx && tar -zxvf emqx-5.0.14-ubuntu20.04-amd64.tar.gz -C emqx
+./emqx/bin/emqx start
 ```
-
-3. To start EMQX, run:
-
-```bash
-cd emqx && ./bin/emqx start
-```
-
-
 
 {% endemqxce %}
 
 {% emqxee %}
 
-## Install EMQX with deb
+The section below will take Ubuntu 22.04 as an example to illustrate how to download the latest version of EMQX. For other versions, please visit the [EMQX Deployment page](https://www.emqx.com/en/try?product=enterprise). 
 
-1. To download [emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb), run:
+### Install with deb
 
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
-```
+EMQX offers different installation packages for different CPU architectures. 
 
-2. To install EMQX, run:
+:::: tabs type:card
 
-```bash
-sudo apt install ./emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
-```
+::: tab amd64
 
-3. We offered different options to start EMQX:
+1. Download [emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb).
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo apt install ./emqx-enterprise-5.0.1-ubuntu22.04-amd64.deb
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb).
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   sudo apt install ./emqx-enterprise-5.0.1-ubuntu22.04-arm64.deb
+   ```
+
+:::
+
+::::
+
+#### Start EMQX
+
+EMQX offers 3 different options to start EMQX:
 
 - To start EMQX directly, run:
 
   ```bash
   $ emqx start
-  EMQX 5.0.14 is started successfully!
-
+  EMQX 5.0.1 is started successfully!
+  
   $ emqx_ctl status
-  Node 'emqx@127.0.0.1' 5.0.14 is started
+  Node 'emqx@127.0.0.1' 5.0.1 is started
   ```
 
 - To start EMQX with systemctl, run:
@@ -117,30 +230,62 @@ sudo apt install ./emqx-enterprise-5.0.0-ubuntu20.04-amd64.deb
   sudo service emqx start
   ```
 
-4. To uninstall EMQX, run:
+#### Uninstall EMQX
 
-  ```shell
-  sudo apt remove --purge emqx
-  ```
+To uninstall EMQX, run:
 
-## Install EMQX with tag.gz
-
-1. To download [emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz), run:
-
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz
+```
+sudo apt remove --purge emqx
 ```
 
-2. To unzip the package, run:
+### Install with tar.gz 
 
-```bash
-mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.0-ubuntu20.04-amd64.tar.gz -C emqx
+EMQX offers different installation packages for different CPU architectures. 
+
+:::: tabs type:card
+
+::: tab amd64
+
+1. Download [emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz).
+
+   
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.1-ubuntu22.04-amd64.tar.gz -C emqx
+   ```
+
+:::
+
+::: tab arm64
+
+1. Download [emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz](https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz)
+
+   ```bash
+   wget https://www.emqx.com/en/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz
+   ```
+
+2. Install EMQX.
+
+   ```bash
+   mkdir -p emqx && tar -zxvf emqx-enterprise-5.0.1-ubuntu22.04-arm64.tar.gz -C emqx
+   ```
+
+:::
+
+::::
+
+#### Start EMQX
+
+After the installation, run the command below to start EMQX.
+
 ```
-
-3. To start EMQX, run:
-
-```bash
-cd emqx && ./bin/emqx start
+./emqx/bin/emqx start
 ```
 
 {% endemqxee %}

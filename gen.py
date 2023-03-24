@@ -59,18 +59,26 @@ def parse(children, lang, edition):
             continue
         if not is_edition_match(child, edition):
             continue
+
         if 'title_en' in child:
             title = child['title_en']
             if lang == 'cn' and 'title_cn' in child:
                 title = child['title_cn']
-            if 'children' in child:
-                godeep = parse(child['children'], lang, edition)
-                acc.append({'title': title, 'children': godeep})
-            else:
-                acc.append({'title': title, 'path': child['path']})
         else:
             title = read_title_from_md(lang, child)
-            acc.append({'title': title, 'path': child})
+        _child = {'title': title}
+
+        if isinstance(child, str):
+            _child['path'] = child
+        else:
+            if 'path' in child:
+                _child['path'] = child['path']
+
+            if 'children' in child:
+                godeep = parse(child['children'], lang, edition)
+                _child['children'] = godeep
+
+        acc.append(_child)
     return acc
 
 copy_cfg_md('en')

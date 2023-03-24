@@ -2,6 +2,12 @@
 
 EMQX supports integration with Redis so you can save client messages and events to Redis. With Redis data bridge, you can use Redis for message caching and statistics of published/subscribed/discarded messages. 
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
 <!-- TODO 确认是否支持数据发布订阅操作、消息队列等场景。 -->
 
 :::tip Prerequisites
@@ -11,7 +17,7 @@ EMQX supports integration with Redis so you can save client messages and events 
 
 :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#Connection pool)
 - [Async mode](./data-bridges.md#Async mode)
@@ -20,7 +26,7 @@ EMQX supports integration with Redis so you can save client messages and events 
 
 <!-- TODO 配置参数 需要补充链接到配置手册对应配置章节。 -->
 
-## Quick start
+## Quick Start
 
 In this section, we will illustrate how to leverage Redis to:
 
@@ -65,7 +71,7 @@ We will create two Redis data bridges to illustrate the messaging caching and st
 
 Now we have configured the connection information, for the Redis Command template, the setting differs a little depending on the feature to use. 
 
-### Message caching
+### Message Caching
 
 This section will illustrate how to use Redis to cache the last message from every client. 
 
@@ -82,7 +88,7 @@ HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp
 3. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
 4. Then click **Create** to finish the creation of the data bridge. A confirmation dialog will appear and ask if you like to create a rule using this data bridge, you can click **Create Rule** to continue creating rules to specify the data to be saved into Redis. You can also access the Rule page by clicking **Data Integration** -> **Rules **on EMQX dashboard. 
 
-#### Create rules
+#### Create Rules
 
 1. Click **Create** on the top right corner of the page.
 2. Input `cache_to_redis` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to PostgreSQL, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
@@ -99,7 +105,7 @@ FROM
 
 Now we have successfully finished the configuration for message caching.
 
-### Message discard statistics
+### Message Discard Statistics
 
 This section will illustrate how to use Redis for message discard statistics. 
 

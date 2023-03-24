@@ -1,19 +1,22 @@
-# MongoDB
+# Integrate with MongoDB
 
-This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
-MongoDB database.
+This authorizer implements authorization checks through matching pubublish/subscription requests against lists of rules stored in the MongoDB database.
 
-## Storage Schema
+::: tip Tip
 
-MongoDB authorizer supports storing authorization rules as MongoDB documents. A user provides the collection name and a
-filter template for selecting the relevant documents.
+- Knowledge about [basic EMQX authorization concepts](./authz.md)
 
-The documents should contain `permission`, `action`, and `topics` fields.
+:::
+
+## Data Schema and Query Statement
+
+MongoDB authorizer supports storing authorization rules as MongoDB documents. Users need to provide a query template to make sure that the result contains the following fields:
+
 * `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
-* `topics` value specifies the topic filters for topics relevant to the rule. Should be a list of strings that support wildcards and [topic placeholders](./authz.md#topic-placeholders).
+* `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
 
-Example of adding an authorization rule for a user `user123` that allows publishing to topics `data/user123/#`:
+Example of adding an authorization rule for a user `user123` who is allowed to publish topics `data/user123/#`:
 
 ```js
 > db.mqtt_acl.insertOne(
@@ -32,42 +35,86 @@ Example of adding an authorization rule for a user `user123` that allows publish
 }
 ```
 
-The corresponding config parameters are:
-```
+The corresponding configuration parameters are:
+```bash
 collection = "mqtt_acl"
 filter { username = "${username}", ipaddress = "${peerhost}" }
 ```
 
 ::: tip
-When there are a significant number of users in the system make sure that the collections used by the selector are optimized
-and that effective indexes are used. Otherwise authorization lookup will produce excessive load on the database
-and on the EMQX broker itself.
+When there is a significant number of users in the system, optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
 :::
 
-## Configuration
+For this MongoDB data schema, the corresponding Dashboard configuration parameter is **Filter**: `{ username = "${username}" }`.
 
-The MongoDB authorizer is identified by type `mongodb`.
+## Configurate with Dashboard
 
-The authenticator supports connecting to MongoDB running in three different modes:
-* Standalone MongoDB server:
-  ```
-  {
-    type = mongodb
-    enable = true
+You can use EMQX Dashboard to configure how to use MongoDB for user authorization.
 
-    collection = "mqtt_user"
-    filter { username = "${username}" }
+1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
-    mongo_type = single
-    server = "127.0.0.1:27017"
+2. Click **Create** at the top right corner, then click to select **MongoDB** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
 
-    database = "mqtt"
-    username = "emqx"
-    password = "secret"
-  }
-  ```
-*  MongoDB [ReplicaSet](https://www.mongodb.com/docs/manual/reference/replica-configuration/):
+   ![authz-MongoDB_ee](./assets/authz-MongoDB_ee.png)
+
+3. Follow the instructions below to do the configuration.
+
+   **Connect**: Fill in the information needed to connect MongDB.
+
+   - **MongoDB Mode**: Select how MongoDB is deployed, including **Single**, **Replica Set** and **Sharding**.
+   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
+   - **Database**: MongoDB database name.
+   - **Collection**: Name of MongoDB collection where authorization rules are stored; Data type: strings.
+   - **Username** (optional): Specify MongoDB user name. 
+   - **Password** (optional): Specify MongDB user password. 
+
+   **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
+
+   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
+
+   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MongoDB. Default: **8**. 
+   - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour.
+
+   **Authorization configuration**: Fill in the authorization-related settings:
+
+   - A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authz.md#authorization-placeholders) are supported. 
+
+4. Click **Create** to finish the settings.
+
+## Configure with Configuration Items
+
+You can configure the EMQX MongoDB authorizer with EMQX configuration items.
+
+The MongoDB authorizer is identified by type `mongodb`. The authorizer supports connecting to MongoDB running in 3 types of deployment modes. <!---For detailed configuration information, see:[authz:mongo_single](../../configuration/configuration-manual.md#authz:mongo_single),[authz:mongo_sharded](../../configuration/configuration-manual.md#authz:mongo_sharded) and [authz:mongo_rs](../../configuration/configuration-manual.md#authz:mongo_rs)-->
+
+Sample configuration:
+
+:::: tabs type:card
+
+::: tab Single 
+
+```bash
+{
+  type = mongodb
+  enable = true
+
+  collection = "mqtt_user"
+  filter { username = "${username}" }
+
+  mongo_type = single
+  server = "127.0.0.1:27017"
+
+  database = "mqtt"
+  username = "emqx"
+  password = "secret"
+}
 ```
+
+:::
+
+::: tab Replica set
+
+```bash
 {
   type = mongodb
   enable = true
@@ -84,8 +131,11 @@ The authenticator supports connecting to MongoDB running in three different mode
   password = "secret"
 }
 ```
-*  MongoDB [Sharded Cluster](https://www.mongodb.com/docs/manual/sharding/):
-```
+:::
+
+::: tab Sharding
+
+```bash
 {
   type = mongodb
   enable = true
@@ -102,96 +152,6 @@ The authenticator supports connecting to MongoDB running in three different mode
 }
 ```
 
-### Common Configuration Options
+:::
 
-#### `collection`
-
-Required string value with the name of MongoDB collection where authorization rules are stored.
-
-#### `filter`
-
-A map interpreted as MongoDB selector for authorization rule lookup.
-Supports [placeholders](./authz.md#authentication-placeholders):
-* `${clientid}` — clientid of the client.
-* `${username}` — username of the client.
-* `${peerhost}` — client IP address.
-
-#### `database`
-
-Required string value with MongoDB database name to use.
-
-#### `username`
-
-Optional string value with MongoDB user.
-
-#### `password`
-
-Optional string value with MongoDB user password.
-
-#### `pool_size`
-
-Optional integer value defining the number of concurrent connections from an EMQX node to a MongoDB server.
-The default value is 8.
-
-#### `ssl`
-
-Standard [SSL options](../../configuration/configuration.md#tls-ciphers) for [secure connecting to MongoDB](https://dev.mysql.com/doc/refman/en/using-encrypted-connections.html).
-
-#### `srv_record`
-
-Optional boolean value, the default value is `false`. If set to `true`, EMQX will try to
-fetch information about MongoDB hosts, `replica_set_name` (for `rs` type), and `auth_source` from
-DNS records of the specified server(s). See [DNS Seed List Connection Format](https://www.mongodb.com/docs/manual/reference/connection-string/#dns-seed-list-connection-format).
-
-#### `topology`
-
-An optional map of some fine-grained MongoDB driver settings.
-
-* `pool_size` — integer value, the initial size of the internal connection pool.
-* `max_overflow` — integer value, number of overflow workers be created, when all workers from the internal pool are busy.
-* `overflow_ttl` — duration, number of milliseconds for overflow workers to stay in the internal pool before terminating.
-* `overflow_check_period` — duration, `overflow_ttl` check period for workers (in milliseconds).
-* `local_threshold_ms` — ms duration, secondaries only which RTTs fit in the window from lower RTT to lower RTT + `local_threshold_ms` could be selected for handling user's requests.
-* `connect_timeout_ms` — ms duration, timeout for establishing TCP connections.
-* `server_selection_timeout_ms` — ms duration, max time appropriate server should be selected by.
-* `wait_queue_timeout_ms` — ms duration, max time for waiting for a worker to be available in the internal pool.
-* `heartbeat_frequency_ms` — ms duration, default delay between Topology rescans.
-* `min_heartbeat_frequency_ms` — ms duration, the minimum delay between Topology rescans.
-
-### Standalone MongoDB Options
-
-#### `server`
-
-MongoDB server address to connect or to us as a seed, required.
-
-#### `w_mode`
-
-Not used in Authorizers.
-
-### MongoDB ReplicaSet Options
-
-#### `servers`
-
-MongoDB server addresses to connect or to us as seeds, required.
-
-#### `w_mode`
-
-Not used in Authorizers.
-
-#### `r_mode`
-
-Read mode, `master` (default) or `slave_ok`. `master` means that every query in a sequence must read only fresh data (from a master/primary server). If the connected server is not a master then the first read will fail, and the remaining operations will be aborted. `slave_ok` means every query is allowed to read stale data from a slave/secondary (fresh data from a master is fine too).
-
-#### `replica_set_name`
-
-Replica set name to use, required. Can be overwritten with seeds if `srv_record` is set to `true`.
-
-### MongoDB Cluster Options
-
-#### `servers`
-
-MongoDB server addresses to connect or to us as seeds, required.
-
-#### `w_mode`
-
-Not used in Authorizers.
+::::

@@ -11,12 +11,14 @@
 
 ## 通过 Docker 运行单个 EMQX 节点
 
+本节主要介绍如何通过 Docker 镜像安装最新版本的 EMQX，如希望体验其他版本，可以前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise)。
+
 1. 运行以下命令获取 Docker 镜像：
 
 {% emqxce %}
 
 ```bash
-docker pull emqx:5.0.14
+docker pull emqx/emqx:5.0.20
 ```
 
 {% endemqxce %}
@@ -24,7 +26,7 @@ docker pull emqx:5.0.14
 {% emqxee %}
 
 ```bash
-docker pull emqx/emqx-enterprise:5.0.0
+docker pull emqx/emqx-enterprise:5.0.1
 ```
 
 {% endemqxee %}
@@ -34,7 +36,7 @@ docker pull emqx/emqx-enterprise:5.0.0
 {% emqxce %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx:5.0.14
+docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:5.0.20
 ```
 
 有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx](https://hub.docker.com/_/emqx)。
@@ -44,7 +46,7 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 {% emqxee %}
 
 ```bash
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:5.0.0
+docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:5.0.1
 ```
 
 有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
@@ -55,7 +57,10 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群。
 
-:::tip 目前 Docker Compose 已经包含在 Docker 安装包中无需单独安装，如果您的 Docker 中没有包含 Compose 请参考 [Install Docker Compos](https://docs.docker.com/compose/install/) 进行安装。
+:::tip
+
+目前 Docker Compose 已经包含在 Docker 安装包中无需单独安装，如果您的 Docker 中没有包含 Compose 请参考 [Install Docker Compos](https://docs.docker.com/compose/install/) 进行安装。
+
 :::
 
 1. 在任意目录创建 `docker-compose.yml` 文件，内容如下：
@@ -67,12 +72,12 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx:5.0.14
+    image: emqx:5.0.20
     container_name: emqx1
     environment:
-    - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+    - "EMQX_NODE_NAME=emqx@node1.emqx.io"
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
       interval: 5s
@@ -81,7 +86,7 @@ services:
     networks:
       emqx-bridge:
         aliases:
-        - node1.emqx.com
+        - node1.emqx.io
     ports:
       - 1883:1883
       - 8083:8083
@@ -92,12 +97,12 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx:5.0.14
+    image: emqx:5.0.20
     container_name: emqx2
     environment:
-    - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+    - "EMQX_NODE_NAME=emqx@node2.emqx.io"
     - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx_ctl", "status"]
       interval: 5s
@@ -106,7 +111,7 @@ services:
     networks:
       emqx-bridge:
         aliases:
-        - node2.emqx.com
+        - node2.emqx.io
     # volumes:
     #   - $PWD/emqx2_data:/opt/emqx/data
 
@@ -124,7 +129,7 @@ version: '3'
 
 services:
   emqx1:
-    image: emqx/emqx-enterprise:5.0.0
+    image: emqx/emqx-enterprise:5.0.1
     container_name: emqx1
     environment:
     - "EMQX_NODE_NAME=emqx@node1.emqx.com"
@@ -149,7 +154,7 @@ services:
     #   - $PWD/emqx1_data:/opt/emqx/data
 
   emqx2:
-    image: emqx/emqx-enterprise:5.0.0
+    image: emqx/emqx-enterprise:5.0.1
     container_name: emqx2
     environment:
     - "EMQX_NODE_NAME=emqx@node2.emqx.com"

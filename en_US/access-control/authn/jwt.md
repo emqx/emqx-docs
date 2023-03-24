@@ -1,6 +1,6 @@
-# JWT authentication
+# JWT Authentication
 
-[Json Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information. EMQX supports using JWT for user authentication. 
+[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information. EMQX supports using JWT for user authentication. 
 
 ::: tip
 
@@ -14,7 +14,7 @@ The client carries the JWT in the connection request, and EMQX uses the pre-conf
 
 If the signature verification is successful, the JWT authenticator proceeds to check the claims. If there are claims such as `iat`, `nbf` or `exp`, the JWT authenticator will actively check the validity of the JWT based on these claims. In addition to this, we also allow users to specify some additional claims checks. The client is finally allowed to login only if the signature verification and claims check pass together.
 
-## Best practice
+## Best Practice
 
 The JWT authenticator essentially only checks the signature of the JWT, which means that the JWT authenticator does not guarantee the legitimacy of the client's identity.
 
@@ -28,12 +28,12 @@ To reduce the possibility of JWT leakage and theft, it is recommended to set a r
 
 :::
 
-## Authorization list (optional)
+## Authorization List (Optional)
 
 This is an optional function, we define a private Claim `acl` to carry the access rules of publish/subscribe in the JWT as to control the permissions of the client after login.
 
 ::: tip
-Authorization(ACL) rules returned by JWT will be checked before all Authorizers. For details, see [Authorization](../authz/authz.md)。
+Authorization (ACL) rules returned by JWT will be checked before all Authorizers. For details, see [Authorization](../authz/authz.md).
 :::
 
 Claim `acl` defines 3 optional fields, `pub`, `sub` and `all`, which are used to specify the whitelist of publish, subscribe and publish-subscribe topics respectively. Wildcards and placeholders  (currently only `${clientid}` and `${username}` ) are allowed in topic entries.  Since there may be cases where topic content conflicts with placeholder syntax, we also provide the `eq` syntax to cancel placeholder interpolation. 
@@ -97,6 +97,7 @@ So as shown above, we now have two brand-new configuration items:
 1. `JWKS Server`: Specify the server endpoint address for EMQX to query JWKS, the endpoint needs to support GET requests and return a JWKS that conforms to the specification.
 2. `JWKS Refresh Interval`: Specify the refresh interval of JWKS, that is, the interval for EMQX to query JWKS.
 
-## Configure with configuration items
+## <!--Configure with Configuration Items-->
 
-You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.md#authn-jwt:hmac-based). 
+<!--You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.md#authn-jwt:hmac-based). -->
+

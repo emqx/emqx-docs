@@ -21,7 +21,7 @@ On EMQX Dashboard, you can click **Diagnose** -> **Log Trace**, and then click *
 
 <!-- TODO 下面的内容先凑合使用，后续更新 -->
 
-## Trace by client IDs
+## Trace by Client IDs
 
 1. Select the **Type** as `ClientID`.
 2. Fill in the Client IDs to be traced.
@@ -31,7 +31,7 @@ On EMQX Dashboard, you can click **Diagnose** -> **Log Trace**, and then click *
 
 You can see the Trace record after successful creation in the list, where you can view it or choose to download the log. The log contains the current ClientID interaction with the EMQX connection.
 
-## Trace by topics
+## Trace by Topics
 
 1. Select the **Type** as `Topic`;
 2. Fill in the topics to be traced and wildcard characters are supported;
@@ -56,7 +56,7 @@ You can see the Trace record after successful creation in the list, where you ca
 ### Notes
 
 1. You can create up to 30 trace logs. 
-2. Trace logs can generate a maximum of 512M logs per node. If the generated log file reaches the maximum, it will stop appending logs and give an alert in the main log file.
+2. Trace logs can generate a maximum of 512MB logs per node. If the generated log file reaches the maximum, it will stop appending logs and give an alert in the main log file.
 3. You can stop logging manually or wait until the end time to stop automatically.
 4. The log file size viewed in the list is the sum of the uncompressed file sizes.
 5. The EMQX cluster will continue an outstanding trace after the restart.

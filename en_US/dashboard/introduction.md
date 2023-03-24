@@ -1,4 +1,4 @@
-# EMQX Dashboard Introduction
+# EMQX Dashboard
 
 EMQX provides a built-in Dashboard management console for users to monitor and manage EMQX clusters and configure the required features via web pages. The new Dashboard comes with a fresh new design for the dashboard, it provides the most easy-to-use MQTT broker management UI. it provides the most easy-to-use MQTT broker management UI.
 
@@ -47,6 +47,14 @@ EMQX can still be used normally without Dashboard enabled, Dashboard just provid
 For users who have installed EMQX for the first time, you can use the default username `admin` and default password `public` to login web page after opening the Dashboard in your browser.
 
 After logging in for the first time, the system will automatically detect that you are logging in with the default username and password, and will force you to change the default password, which is good for the security of accessing Dashboard, note that the changed password cannot be the same as the original password, and it is not recommended to use `public` as the login password again.
+
+## Reset password
+
+You can reset your Dashboard login password via the `admins` command. For details, see [CLI - admins](../admin/cli.md#admins).
+
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
+```
 
 ## Configure Dashboard
 

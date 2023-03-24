@@ -2,13 +2,13 @@
 
 EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. 
 
-EMQX Broker provides users with multiple ways to view metrics and status. Most directly, users can see this data on the **Metrics** tab of the EMQX Dashboard.
+EMQX provides users with multiple ways to view metrics and status. Most directly, users can see this data on the **Metrics** tab of the EMQX Dashboard.
 
 ![Metrics in Dashboard](./assets/dashboard-metrics.jpg)
 
 If it is not convenient to access the Dashboard, they can also obtain these data through HTTP API and system topic messages. You can refer to [HTTP API](../admin/api.md) and [$SYS system topic](../mqtt/mqtt-system-topics.md).
 
-## Integrate with monitor systems
+## Integrate with Monitor Systems
 
 EMQX supports integration with third-party monitoring systems, such as [StatsD](../observability/statsd.md) and [Prometheus](../observability/prometheus.md). Using a third-party monitoring system can bring the following advantages:
 
@@ -89,12 +89,12 @@ In this section, we will elaborate on the four types of metrics, bytes, packets,
 | delivery.dropped.expired        | Delivery/Dropped Expired Messages      | Integer   | Number of messages that were dropped due to message expiration when sending |
 | delivery.dropped.no_local       | Delivery/Dropped No Local Messages     | Integer   | Number of messages dropped due to the `No Local` subscription option when sending |
 | delivery.dropped                | Delivery/Dropped                       | Integer   | Total number of messages that were dropped when sent         |
-| messages.delayed                | Messages/Delayed                       | Integer   | Number of delay-published messages stored by EMQX Broker    |
-| messages.delivered              | Messages/Delivered                     | Integer   | Number of messages forwarded to the subscription process internally by EMQX Broker |
-| messages.dropped                | Messages/Dropped                       | Integer   | Total number of messages dropped by EMQX Broker before forwarding to the subscription process |
+| messages.delayed                | Messages/Delayed                       | Integer   | Number of delay-published messages stored by EMQX    |
+| messages.delivered              | Messages/Delivered                     | Integer   | Number of messages forwarded to the subscription process internally by EMQX |
+| messages.dropped                | Messages/Dropped                       | Integer   | Total number of messages dropped by EMQX before forwarding to the subscription process |
 | messages.dropped.no_subscribers | Messages/Dropped No Subscribers        | Integer   | Number of messages dropped due to no subscribers             |
 | messages.dropped.await_pubrel_timeout | Messages/Dropped Await Pubrel Timeout | Integer   | Number of messages dropped due to await PUBREL timeout |
-| messages.forward                | Messages/Forwad                        | Integer   | Number of messages forwarded to other nodes                  |
+| messages.forward                | Messages/Forward                       | Integer   | Number of messages forwarded to other nodes                  |
 | messages.publish                | Messages/Publish                       | Integer   | Number of messages published in addition to system messages  |
 | messages.qos0.received          | Messages/QoS 0 Received                | Integer   | Number of QoS 0 messages received from clients               |
 | messages.qos1.received          | Messages/QoS 1 Received                | Integer   | Number of QoS 2 messages received from clients               |

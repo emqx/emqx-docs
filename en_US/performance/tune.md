@@ -1,8 +1,8 @@
-# Linux OS Tuning
+# Performance Tuning (Linux)
 
-This guide includes in general tuning suggestions for benckmark and deployment.
+This guide includes in general tuning suggestions for benchmark and deployment.
 
-## Turn off Swap
+## Turn Off Swap
 
 Linux swap partitions may cause nondeterministic memory latency to an Erlang virtual machine, significantly affecting the system stability.
 It is recommended to turn off the swap permanently.
@@ -127,7 +127,7 @@ node.process_limit = 2097152
 node.max_ports = 2097152
 ```
 
-## EMQX Broker Tuning
+## EMQX Tuning
 
 Tune the acceptor pool size and `max_connections` limit in `etc/emqx.conf`.
 
@@ -141,7 +141,7 @@ listeners.tcp.$name.max_connections = 1024000
 
 ## Client Machine Tuning
 
-Tune the client machine to benchmark EMQX broker:
+Tune the client machine to benchmark EMQX:
 
 ```
 sysctl -w net.ipv4.ip_local_port_range="500 65535"

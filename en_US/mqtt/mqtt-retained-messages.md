@@ -42,19 +42,19 @@ In this way, the client will be prohibited from sending PUBLISH packets with the
 
 The service stores and manages retained messages sent by clients and sends them to the corresponding subscribers.
 
-## Configure with Dashboard
+## Configure With Dashboard
 
 Open the Dashboard, click **Configuration** -> **MQTT** on the left navigation tree. Then click the **Retainer** tab, and you can customize the setting for Retained messages. 
 
 ![image](./assets/retainer_1.png)
 
-## Configuration
+## Configuration Items
 
 | Configuration item       | Type  | Optional value      | Default value | Description                                               |
 | ------------------------------ | -------- | ------------------------ | ------ | ------------------------------------------------------------ |
 | Storage         | enum     | `ram`, `disc` | ram |ram: only stored in memory; <br /> disc: stored in memory and hard disk. |
 | Max Retained Messages | integer  | \>= 0                    | 0      | The maximum number of retained messages, and 0 means no limit. After the number of retained messages exceeds the maximum limit, you can replace the existing retained messages, but cannot store retained messages for new topics. |
-| Max Payload Size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX broker will treat the retained reserved message as a normal message. |
+| Max Payload Size      | bytesize |                          | 1MB    | Retain the maximum Payload value of the message. After the Payload value exceeds the maximum value, the EMQX will treat the retained reserved message as a normal message. |
 | Expire       | duration |                          | 0    | The expiration time of retaining message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
 | Clean Interval  | duration |                          | 0    | Interval to clean up expired messages. |
 
@@ -88,12 +88,12 @@ retainer {
 }
 ```
 
-Configuration Options:
+Configuration items:
 
-| Options               | Type    | Default   | Description                                               |
-|:----------------------|:--------|:----------|:----------------------------------------------------------|
-| batch_read_number     | int     | 0         | number of messages to read each time (0 means all)        |
-| batch_deliver_number  | int     | 0         | number of messages to deliver each time (0 means all)     |
-| batch_deliver_limiter | limiter | undefined | message delivery rate limiter                             |
+| Configuration Items   | Type    | Default   | Description                                           |
+| :-------------------- | :------ | :-------- | :---------------------------------------------------- |
+| batch_read_number     | int     | 0         | number of messages to read each time (0 means all)    |
+| batch_deliver_number  | int     | 0         | number of messages to deliver each time (0 means all) |
+| batch_deliver_limiter | limiter | undefined | message delivery rate limiter                         |
 
 For detailed settings of rate limiter, please see the `Listener Level` and `Connection Level` in [Hierarchical Rate Limiter](../rate-limit/rate-limit.md)

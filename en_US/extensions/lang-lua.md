@@ -1,6 +1,6 @@
 # emqx-lua-hook
 
-Before EMQX 4.1. We only provide multi-language support for Lua. Its architecture is different from the above mentioned, which will include the entire language runtime in the Erlang VM:
+Before EMQX 4.1. We only provide multi-language support for Lua. Its architecture is different from the above-mentioned, which will include the entire language runtime in the Erlang VM:
 
 ![Old Multiple Lang Arch](./assets/lua-lang-arch.png)
 
@@ -12,7 +12,7 @@ To maintain compatibility, the plug-in remains in the release version of EMQX.
 
 ## Example
 
-In the EMQX Broker distribution, user-defined Lua script files should be placed in `data/script/`.
+In the EMQX distribution, user-defined Lua script files should be placed in `data/script/`.
 
 Take the sending content of the control message as an example, and add the file `data/script/test.lua`:
 
@@ -51,7 +51,7 @@ When the execution succeeds, it means that the script has been successfully load
 
 After completion, you can start two MQTT clients, one to subscribe to any topic, and the other to publish any message to the topic that you just subscribed to. It can be found that the message content received by the subscriber is `hello` which proves that the `test.lua` script has taken effect.
 
-## Callback function
+## Callback Function
 
 Supported callback functions and parameter type: [emqx-lua-hook - README.md](https://github.com/emqx/emqx-lua-hook/tree/develop#hook-api)
 

@@ -6,8 +6,8 @@
 
 MQTT today is used in a wide variety of industries, such as IoT, mobile web, intelligent hardware, Internet of Cars, smart city, telemedicine, electricity, oil and gas, etc.
 
-MQTT 3.1.1: [http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
-MQTT 5.0: [http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html)
+- MQTT 3.1.1: [http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
+- MQTT 5.0: [http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html)
 
 ## Advantages
 
@@ -19,7 +19,7 @@ MQTT 5.0: [http://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](http:
 6. Flexible messaging capability, with no dependency on payload data format
 7. Persistent session awareness, with timely information on whether the device is online
 
-## Core feature
+## Core Feature
 
 Below is a list of MQTT protocols and the EMQX extended concepts:
 
@@ -35,7 +35,7 @@ Below is a list of MQTT protocols and the EMQX extended concepts:
 - [Topic Rewrite](./mqtt-topic-rewrite.md)
 - [System Topic](./mqtt-system-topics.md)
 
-## Comparison with other protocols
+## Comparison With Other Protocols
 
 Typical IoT use cases are very complex, with many devices, networks, applications, and services involved, therefore a variety of IoT protocols have emerged. You may refer to the link below for a comparison between MQTT and other protocols:
 

@@ -6,6 +6,12 @@ Apache Kafka is a widely-used open-source distributed event streaming platform. 
 
 Being a top IOT data infrastructure provider,  EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM, SASL/GSSAPI, or TLS.
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
 :::tip Prerequisites
 
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
@@ -17,7 +23,7 @@ Being a top IOT data infrastructure provider,  EMQX currently supports authentic
 
 :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#连接池) <!-- TODO 确认改版后知否支持-->
 - [Async mode](./data-bridges.md#异步请求模式)
@@ -26,7 +32,7 @@ Being a top IOT data infrastructure provider,  EMQX currently supports authentic
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
-## Quick starts
+## Quick Start
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
 
 ### Install Kafka
@@ -50,7 +56,7 @@ bin/kafka-server-start.sh config/kraft/server.properties
 
 For detailed operation steps, you may refer to the [*Quick Start section in Kafka Documentation*](https://kafka.apache.org/documentation/#quickstart). 
 
-### Create Kafka topics
+### Create Kafka Topics
 
 Create two topics in Kafka:  `testtopic-in` and `testtopic-out`
 
@@ -64,7 +70,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 These topics must be created before we create the data bridge to Kafka.
 :::
 
-### Create a data bridge to Kafka
+### Configure a Data Bridge to Kafka via Dashboard
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.

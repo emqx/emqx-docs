@@ -29,7 +29,7 @@ MQTT 数据桥接是一种连接多个 EMQX 集群或其他 MQTT 服务的方式
 | 消息主题                   | 方向                       | 目标主题                  |
 | -------------------------- | -------------------------- | ------------------------- |
 | **`remote/topic/ingress`** | **ingress** (远程 -> 本地) | **`local/topic/ingress`** |
-| **`local/topic/egress`**   | **egress **(本地 -> 远程)  | **`remote/topic/egress`** |
+| **`local/topic/egress`**   | **egress** (本地 -> 远程)  | **`remote/topic/egress`** |
 
 **ingress 模式下的消息服务流程**
 

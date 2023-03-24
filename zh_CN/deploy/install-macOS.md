@@ -2,103 +2,113 @@
 
 本章节将指导您如何通过 zip 包在 macOS 系统中下载安装并启动 EMQX。
 
-{% emqxce %}
+支持的操作系统：
 
-:::: tabs type:card
-::: tab Intel_Chip
+- macOS 12
+- macOS 11
 
-1. 下载 [emqx-5.0.14-macos11-amd64.zip](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos11-amd64.zip)
+## 安装 EMQX
 
-```bash
-wget https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos11-amd64.zip
-```
+下文将以 macOS 12 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装，可前往 [EMQX 下载页面](https://www.emqx.io/zh/downloads?os=macOS) 获取详细的安装信息。
 
-2. 解压程序包
+1. 下载 [emqx-5.0.20-macos12-arm64.zip](https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-macos12-arm64.zip)。
 
 ```bash
-unzip emqx-5.0.14-macos11-amd64.zip
+wget https://www.emqx.com/zh/downloads/broker/5.0.20/emqx-5.0.20-macos12-arm64.zip
 ```
 
-3. 启动
+2. 安装 EMQX。
 
 ```bash
-cd emqx && ./bin/emqx start
+mkdir -p emqx && unzip emqx-5.0.20-macos12-arm64.zip -d emqx
 ```
 
-:::
+## 启动 EMQX
 
-::: tab Apple_Silicon
+您可通过如下三种方式启动 EMQX
 
-1. 下载 [emqx-5.0.14-macos12-arm64.zip](https://www.emqx.com/downloads/broker/v5.0.14/emqx-5.0.14-macos12-arm64.zip)
+- 直接启动：
 
-```bash
-wget https://www.emqx.com/en/downloads/broker/v5.0.14/emqx-5.0.14-macos12-arm64.zip
-```
+  ```bash
+  $ emqx start
+  EMQX 5.0.20 is started successfully!
+  
+  $ emqx_ctl status
+  Node 'emqx@127.0.0.1' 5.0.20 is started
+  ```
 
-2. 解压程序包
+- systemctl 启动：
 
-```bash
-mkdir -p emqx && unzip -d emqx emqx-5.0.14-macos12-arm64.zip
-```
+  ```bash
+  sudo systemctl start emqx
+  ```
 
-3. 启动
+- service 启动：
 
-```bash
-cd emqx && ./bin/emqx start
-```
+  ```bash
+  sudo service emqx start
+  ```
 
-:::
-::::
+## 卸载 EMQX
 
+服务完成后，可通过如下命令卸载 EMQX：
+
+  ```shell
+sudo apt remove --purge emqx
+  ```
 
 {% endemqxce %}
 
 {% emqxee %}
 
-:::: tabs type:card
-::: tab Intel_Chip
+## 安装 EMQX
 
-1. 下载 [emqx-enterprise-5.0.0-macos11-amd64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip)
+下文将以 macOS 12 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装，可前往 [EMQX 下载页面](https://www.emqx.com/zh/try?product=enterprise) 获取详细的安装信息。
 
-```bash
-wget https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos11-amd64.zip
-```
-
-2. 解压程序包
+1. 下载 [emqx-enterprise-5.0.1-macos12-arm64.zip](https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-macos12-arm64.zip)。
 
 ```bash
-unzip emqx-enterprise-5.0.0-macos11-amd64.zip
+wget https://www.emqx.com/zh/downloads/enterprise/5.0.1/emqx-enterprise-5.0.1-macos12-arm64.zip
 ```
 
-3. 启动
+2. 安装 EMQX。
 
 ```bash
-cd emqx && ./bin/emqx start
+mkdir -p emqx && unzip emqx-enterprise-5.0.1-macos12-arm64.zip -d emqx
 ```
 
-:::
+## 启动 EMQX
 
-::: tab Apple_Silicon
+您可通过如下三种方式启动 EMQX
 
-1. 下载 [emqx-enterprise-5.0.0-macos12-arm64.zip](https://www.emqx.com/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip)
+- 直接启动：
 
-```bash
-wget https://www.emqx.com/zh/downloads/enterprise/5.0.0/emqx-enterprise-5.0.0-macos12-arm64.zip
-```
+  ```bash
+  $ emqx start
+  EMQX 5.0.1 is started successfully!
+  
+  $ emqx_ctl status
+  Node 'emqx@127.0.0.1' 5.0.1 is started
+  ```
 
-2. 解压程序包
+- systemctl 启动：
 
-```bash
-mkdir -p emqx && unzip -d emqx emqx-enterprise-5.0.0-macos12-arm64.zip
-```
+  ```bash
+  sudo systemctl start emqx
+  ```
 
-3. 启动
+- service 启动：
 
-```bash
-cd emqx && ./bin/emqx start
-```
+  ```bash
+  sudo service emqx start
+  ```
 
-:::
-::::
+## 卸载 EMQX
+
+服务完成后，可通过如下命令卸载 EMQX：
+
+  ```shell
+sudo apt remove --purge emqx
+  ```
 
 {% endemqxee %}

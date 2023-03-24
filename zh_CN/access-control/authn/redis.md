@@ -1,6 +1,6 @@
 # 使用 Redis 进行密码认证
 
-作为密码认证方式的一种，EMQX 支持通过集成 Redis 进行密码认证。EMQX 支持三种 Redis 部署模式：单节点 <!--需要插入对应连接-->、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、 [Redis Cluster](https://redis.io/docs/manual/scaling/)，本节将介绍如何进行相关配置。
+作为密码认证方式的一种，EMQX 支持通过集成 Redis 进行密码认证。EMQX 支持三种 Redis 部署模式：单节点、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、[Redis Cluster](https://redis.io/docs/manual/scaling/)，本节将介绍如何进行相关配置。
 
 ::: tip 前置准备：
 
@@ -39,7 +39,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)页面，点击左侧导航栏的**访问控制** -> **认证**，在随即打开的**认证**页面，单击**创建**，依次选择**认证方式**为 `Password-Based`，**数据源**为 `Redis`，进入**配置参数**页签：
 
-![use redis to authenticate](./assets/authn-redis.png)
+![Authentication with redis](./assets/authn-redis.png)
 
 您可按照如下说明完成相关配置：
 
@@ -53,10 +53,9 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 **TLS 配置**：配置是否启用 TLS。
 
-**连接配置**：在此部分设置并发连接以及是否自动重连。
+**连接配置**：在此部分设置并发连接。
 
 - **Pool size**（可选）：填入一个整数用于指定从 EMQX 节点到 MySQL 数据库的并发连接数；默认值：**8**。
-- **自动重连**：指定连接中断时 EMQX 是否自动重新连接到 Redis；可选值：**True**（自动重连），**False**（不自动重连）；默认值：**True**。
 
 **认证配置**：在此部分进行认证加密算法相关的配置。
 

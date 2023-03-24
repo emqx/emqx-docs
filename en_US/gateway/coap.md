@@ -184,7 +184,7 @@ There is no special authorization configurations within CoAP gateway, and its pe
 - [californium](https://github.com/eclipse/californium)
 
 
-## Appendix: Client side interfaces
+## Appendix: Client Side Interfaces
 
 ### Create Connection
 

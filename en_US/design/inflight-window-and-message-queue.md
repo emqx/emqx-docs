@@ -2,9 +2,9 @@
 
 ## Introduction
 
-To improve message throughput and reduce the impact of network fluctuations, EMQX Broker allows multiple unacknowledged QoS 1 and QoS 2 packets to exist on the network link at the same time. These sent but unconfirmed packets will be stored in the Inflight Window until acknowledgment is complete.
+To improve message throughput and reduce the impact of network fluctuations, EMQX allows multiple unacknowledged QoS 1 and QoS 2 packets to exist on the network link at the same time. These sent but unconfirmed packets will be stored in the Inflight Window until acknowledgment is complete.
 
-When the number of concurrently existing packets in the network exceeds the limit, that is, the length limit of Inflight Window is reached(see `max_inflight`), EMQX Broker will no longer send subsequent messages, but will store these packets in the Message Queue. Once a message is acknowledged in the Inflight Window, the message in the Message Queue will be sent in first-in, first-out order and stored in the Inflight Window.
+When the number of concurrently existing packets in the network exceeds the limit, that is, the length limit of Inflight Window is reached(see `max_inflight`), EMQX will no longer send subsequent messages, but will store these packets in the Message Queue. Once a message is acknowledged in the Inflight Window, the message in the Message Queue will be sent in first-in, first-out order and stored in the Inflight Window.
 
 When the client is offline, Message Queue is also used to store QoS 0 messages, which will be sent for the next time when the client is online. This feature is enabled by default, but you can also disable it manually. You can see `mqueue_store_qos0` for details.
 
@@ -18,12 +18,12 @@ The client uses this value to limit the maximum number of published messages wit
 
 That is, the server can send subsequent PUBLISH packets to the client with different message identifiers while waiting for acknowledgment, until the number of unacknowledged messages reaches the `Receive Maximum` limit.
 
-It is not difficult to see that `Receive Maximum` is actually the same as the Inflight Window mechanism in EMQX Broker. However, EMQX already provided this function to the accessed MQTT client before the MQTT v5.0 protocol was released. Now, the clients using the MQTT v5.0 protocol will set the maximum length of the Inflight Window according to the specification of the Receive Maximum, while clients with earlier versions of the MQTT protocol will still set it according to the configuration.
+It is not difficult to see that `Receive Maximum` is actually the same as the Inflight Window mechanism in EMQX. However, EMQX already provided this function to the accessed MQTT client before the MQTT v5.0 protocol was released. Now, the clients using the MQTT v5.0 protocol will set the maximum length of the Inflight Window according to the specification of the Receive Maximum, while clients with earlier versions of the MQTT protocol will still set it according to the configuration.
 
-## Configuration items
+## Configuration Items
 
-| Configuration items | Type    | Optional value  | Default value                              | Description                                                  |
+| Configuration Items | Type    | Optional Value  | Default Value                              | Description                                                  |
 | ------------------- | ------- | --------------- | ------------------------------------------ | ------------------------------------------------------------ |
 | max_inflight        | integer | >= 0            | 32 *(external)*,<br /> 128 *(internal)*    | Inflight Window length limit, 0 means no limit               |
 | max_mqueue_len      | integer | >= 0            | 1000 *(external)*,<br />10000 *(internal)* | Message Queue length limit, 0 means no limit                 |
-| mqueue_store_qos0   | enum    | `true`, `false` | true                                       | Whether the EMQX Broker store QoS 0 messages to the Message Queue when the client is offline |
+| mqueue_store_qos0   | enum    | `true`, `false` | true                                       | Whether EMQX store QoS 0 messages to the Message Queue when the client is offline |

@@ -1,4 +1,4 @@
-# Prometheus 指标集成
+# 集成 Prometheus
 
 [Prometheus](https://prometheus.io/) 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。
 
@@ -33,7 +33,17 @@ prometheus {
 
 ## 通过 Dashboard 配置
 
-EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的 **功能配置/监控集成** 直接修改，保存后直接生效，无需重启节点。
+{% emqxce %}
+
+EMQX 在 v5.0.4 后，也支持通过 Dashboard 中的**功能配置/监控集成**直接修改，保存后直接生效，无需重启节点。
+
+{% endemqxce %}
+
+{% emqxee %}
+
+您可在 EMQX Dashboard 设置集成 Prometheus，点击左侧导航目录中的**功能配置** -> **监控**，在**监控集成**页签，设置启用 Prometheus。
+
+{% endemqxee %}
 
 ## 通过 Grafana 可视化 EMQX 指标
 

@@ -2,7 +2,7 @@
 
 EMQX 内置了一个强大且高效的数据处理功能，即规则引擎。通过主题，事件或支持接入数据的数据桥接来获取数据，并使用简单标准的 SQL 语句来实时的提取、过滤、丰富、和转换业务数据，最后再通过触发规则后的动作，包含内置动作和数据桥接来将数据分发或集成到外部系统中，也可以将处理过的数据重新发送到 MQTT 客户端或设备。详情请查看[规则简介](../data-integration/rules.md)。
 
-规则是构成 EMQX 强大的数据集成能力的一部分，配合使用数据桥接的方式提供了清晰、灵活的业务集成方案，简化了业务开发流程，提升用户易用性，降低业务系统与 EMQX 的耦合度。详情请查看[数据集成简介](../data-integration/introduction.md)。
+规则是构成 EMQX 强大的数据集成能力的一部分，配合使用数据桥接的方式提供了清晰、灵活的业务集成方案，简化了业务开发流程，提升用户易用性，降低业务系统与 EMQX 的耦合度。详情请查看[规则引擎](../data-integration/rules.md)。
 
 在左侧的数据集成菜单下，用户可以进入到规则页面。规则页面中用户可以创建和管理创建好的规则。
 
@@ -46,7 +46,7 @@ SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` �
 对于其它事件，我们可以选择不同的客户端和会话事件来模拟数据，包括：
 
 - 连接完成（$events/client_connected）
-- 连接断开（$events/client_connected）
+- 连接断开（$events/client_disconnected）
 - 连接确认（$events/client_connack）
 - 鉴权完成（$events/client_check_authz_complete）
 - 订阅（$events/session_subscribed）

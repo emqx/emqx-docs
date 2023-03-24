@@ -1,14 +1,10 @@
-# JQ Functions
+# JQ functions
 
-[JQ](https://stedolan.github.io/jq/) is a powerful command line tool and
-programming language designed primarily for transforming and querying data
-encoded as [JSON](https://www.json.org/json-en.html).
+[JQ](https://stedolan.github.io/jq/) is a powerful command line tool and programming language designed primarily for transforming and querying data encoded as [JSON](https://www.json.org/json-en.html).
 
-Typical JQ programs describe simple
-transformations or filters for JSON data, but one can also use JQ to perform
-complex computations when needed.
+Typical JQ programs describe simple transformations or filters for JSON data, but one can also use JQ to perform complex computations when needed.
 
-## How to use
+## How It Works
 
 The rule's SQL language integrates JQ through two functions:
 
@@ -33,11 +29,22 @@ and their results:
 Simple `jq` function calls example:
 
 ```SQL
-jq('.', '{"temprature": 10}') = [json_decode('{"temprature": 10}')]
-jq('.', json_decode('{"temprature": 10}')) = [json_decode('{"temprature": 10}')]
-jq('.temprature', '{"temprature": 10}') = [10]
-jq('{temprature_C:.temprature,temprature_F: (.temprature * 1.8 + 32)}', '{"temprature": 10}') = [json_decode('{"temprature_C": 10, "temprature_F": 50}')]
-jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') = [10, 50]
+jq('.', '{"temprature": 10}') =
+[json_decode('{"temprature": 10}')]
+
+jq('.', json_decode('{"temprature": 10}')) =
+[json_decode('{"temprature": 10}')]
+
+jq('.temprature', '{"temprature": 10}') =
+[10]
+
+jq('{temprature_C:.temprature,
+     temprature_F: (.temprature * 1.8 + 32)}',
+   '{"temprature": 10}') =
+[json_decode('{"temprature_C": 10, "temprature_F": 50}')]
+
+jq('.temprature,(.temprature * 1.8 + 32)', '{"temprature": 10}') =
+[10, 50]
 ```
 
 ### Example 2
@@ -48,14 +55,14 @@ how one can combine the `jq` function with the `FOREACH` statement to divide
 JQ's output objects into multiple messages.
 
 ```sql
-FOREACH   jq('def rem_first: ' +
-             '    if length > 2 then del(.[0]) else . end;' +
-             'def rem_last:' +
-             '    if length > 1 then del(.[-1]) else . end;' +
-             '.date as $date |' +
-             '.sensors[] |' +
-             '  (.data | sort | rem_first | rem_last | add / length) as $average |' +
-             '  {$average, $date}',
+FOREACH   jq('def rem_first:
+                 if length > 2 then del(.[0]) else . end;
+              def rem_last:
+                 if length > 1 then del(.[-1]) else . end;
+              .date as $date |
+              .sensors[] |
+                (.data | sort | rem_first | rem_last | add / length) as $average |
+                {$average, $date}',
              payload)
 FROM    "jq_demo/complex_rule/jq/#"
 ```
@@ -118,12 +125,6 @@ Message 3:
 
 ## Notice
 
-JQ functions can be convenient for transformations that are
-difficult or impossible to do with only the rule SQL language and its
-simple functions.
+JQ functions can be convenient for transformations that are difficult or impossible to do with only the rule SQL language and its simple functions.
 
-It is not recommended to do long-running computations in the rule as this can significantly slow
-down the rate at which EMQX can process new messages. The JQ functions have
-timeouts to prevent possibly buggy JQ programs (that may have gotten stuck in
-an infinite loop) from taking too much processing time from the rest of the
-EMQX system.
+It is not recommended to do long-running computations in the rule as this can significantly slow down the rate at which EMQX can process new messages. The JQ functions have timeouts to prevent possibly buggy JQ programs (that may have gotten stuck in an infinite loop) from taking too much processing time from the rest of the EMQX system.

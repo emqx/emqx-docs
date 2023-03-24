@@ -27,15 +27,15 @@ Most of the data of the $SYS topic in EMQX can be obtained through other methods
 The device online and offline status can be captured and processed in the Rule Engine.
 :::
 
-## Cluster status information
+## Cluster Status Information
 
-| Topic                          | Description              |
-| ------------------------------ | ------------------------ |
-| $SYS/brokers                   | cluster node list        |
-| $SYS/brokers/\${node}/version  | EMQX Broker version      |
-| $SYS/brokers/\${node}/uptime   | EMQX Broker startup time |
-| $SYS/brokers/\${node}/datetime | EMQX Broker time         |
-| $SYS/brokers/\${node}/sysdescr | EMQX Broker description  |
+| Topic                          | Description       |
+| ------------------------------ | ----------------- |
+| $SYS/brokers                   | cluster node list |
+| $SYS/brokers/\${node}/version  | EMQX  version     |
+| $SYS/brokers/\${node}/uptime   | EMQX startup time |
+| $SYS/brokers/\${node}/datetime | EMQX time         |
+| $SYS/brokers/\${node}/sysdescr | EMQX description  |
 
 ## Client Online and Offline Events
 
@@ -132,14 +132,14 @@ The Payload of the `subscribed` event message can be parsed into JSON format:
 
 System topic prefix : `$SYS/brokers/${node}/stats/`
 
-### Client statistics
+### Client Statistics
 
 | Topic             | Description                     |
 | ----------------- | ------------------------------- |
 | connections/count | Total number of current clients |
 | connections/max   | Maximum number of clients       |
 
-### Subscription statistics
+### Subscription Statistics
 
 | Topic                      | Description                                  |
 | -------------------------- | -------------------------------------------- |
@@ -152,14 +152,14 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | subscriptions/shared/count | total number of current shared subscriptions |
 | subscriptions/shared/max   | maximum number of shared subscriptions       |
 
-### Topic statistics
+### Topic Statistics
 
 | Topic        | Description                    |
 | ------------ | ------------------------------ |
 | topics/count | total number of current topics |
 | topics/max   | maximum number of topics       |
 
-### Routes statistics
+### Routes Statistics
 
 | Topic        | Description                    |
 | ------------ | ------------------------------ |
@@ -168,18 +168,18 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 
  The topics/count and topics/max are numerically equal to routes/count and routes/max.
 
-### Throughput (bytes/packets/message) statistics
+### Throughput (Bytes/Packets/Message) Statistics
 
  System Topic Prefix : `$SYS/brokers/${node}/metrics/`
 
-### sent and received bytes statistics
+### Sent and Received Bytes Statistics
 
 | Topic          | Description                |
 | -------------- | -------------------------- |
 | bytes/received | Accumulated received bytes |
 | bytes/sent     | Accumulated sent bytes     |
 
-### sent and received MQTT packets statistics
+### Sent and Received MQTT Packets Statistics
 
 | Topic                        | Description                                      |
 | ---------------------------- | ------------------------------------------------ |
@@ -220,7 +220,7 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | packets/auth/received        | Accumulative received packets of AUTH            |
 | packets/auth/sent            | Accumulative sent packets of AUTH                |
 
-### MQTT sent and received messages statistics
+### MQTT Sent and Received Messages Statistics
 
 | Topic                           | Description                                      |
 | ------------------------------- | ------------------------------------------------ |
@@ -242,7 +242,7 @@ System topic prefix : `$SYS/brokers/${node}/stats/`
 | messages/delivered              | Accumulative delivered messages                  |
 | messages/acked                  | Accumulative acknowledged messages               |
 
-## Alarms - system alarms
+## Alarms - System Alarms
 
 System Topic Prefix: `$SYS/brokers/${node}/alarms/`
 
@@ -251,7 +251,7 @@ System Topic Prefix: `$SYS/brokers/${node}/alarms/`
 | alert       | newly generated alarm |
 | clear       | cleared alarm         |
 
-## Sysmon - system monitoring
+## Sysmon - System Monitoring
 
 System Topic Prefix: `$SYS/brokers/${node}/sysmon/`
 

@@ -8,7 +8,7 @@ You can combine the [retained message](./mqtt-retained-messages.md) and [delayed
 Authorization checks are performed before the topic is rewritten.
 :::
 
-## Configure topic rewrite rules
+## Configure Topic Rewrite Rules
 
 EMQX topic rewrite rules need to be configured.
 You may add multiple topic rewrite rules.

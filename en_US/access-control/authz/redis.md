@@ -1,13 +1,20 @@
-# Redis
+# Integrate with Redis
 
-This authorizer implements authorization checks through matching pub/sub requests against lists of rules stored in the
-Redis database.
+This authorizer implements authorization checks through matching publish/subscription requests against lists of rules stored in the Redis database.
 
-The user should provide a templated Redis command that returns a key-value list with topic filters as keys and actions(`publish`, `subscribe`, or `all`) as values.
+::: tip Tip
 
-For example, rules can be stored as Redis [hashes](https://redis.io/docs/manual/data-types/#hashes):
+- Knowledge about [basic EMQX authorization concepts](./authz.md)
 
-```
+:::
+
+## Data Schema and Query Statement
+
+Users need to provide a templated Redis command that returns a key-value list with topic filters as keys and actions (`publish`, `subscribe`, or `all`) as values.
+
+For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes):
+
+```bash
 >redis-cli
 127.0.0.1:6379> HSET users:someuser foo/# subscribe
 (integer) 1
@@ -16,124 +23,113 @@ For example, rules can be stored as Redis [hashes](https://redis.io/docs/manual/
 ```
 
 The corresponding config parameters are:
-```
+```bash
 cmd = "HGET users:${username}"
 ```
 
 Fetched rules are used as permissive ones, i.e., a request is accepted if topic filter and action match.
 
-## Configuration
+:::tip
+All rules added in Redis Authorizer are **allow** rules, which means Redis Authorizer needs to be used in whitelist mode.
+:::
 
-The Redis authorizer is identified by type `redis`.
+## Configure with Dashboard
 
-EMQX supports working with three kinds of Redis installation.
+You can use EMQX Dashboard to configure how to use Redis for user authorization.
 
-* Standalone Redis.
-  ```
-  {
-      type = redis
-      enable = true
+1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
-      redis_type = single
-      server = "127.0.0.1:6379"
+2. Click **Create** at the top right corner, then click to select **Redis** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
 
-      cmd = "HGETALL mqtt_user:${username}"
-      database => 1
-      password = public
-      server = "127.0.0.1:6379"
+   ![authz-Redis_ee](./assets/authz-Redis_ee.png)
 
-  }
-  ```
-* [Redis Sentinel](https://redis.io/docs/manual/sentinel/).
-  ```
-  {
-      type = redis
-      enable = true
+3. Follow the instructions below to do the configuration.
 
-      redis_type = sentinel
-      servers = "10.123.13.11:6379,10.123.13.12:6379"
-      sentinel = "mymaster"
+   **Connect**: Fill in the information needed to connect Redis.
 
-      cmd = "HGETALL mqtt_user:${username}"
-      database => 1
-      password = public
+   - **Redis Mode**: Select how Redis is deployed, including **Single**, **Sentinel** and **Cluster**.
+   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
+   - **Database**: Redis database name.
+   - **Password** (optional): Specify user password. 
 
-  }
-  ```
-* [Redis Cluster](https://redis.io/docs/manual/scaling/).
-  ```
-  {
-      type = redis
-      enable = true
+   **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-      redis_type = cluster
-      servers = "10.123.13.11:6379,10.123.13.12:6379"
+   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
-      cmd = "HGETALL mqtt_user:${username}"
-      database => 1
-      password = public
-  }
-  ```
+   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to Redis. Default: **8**. 
 
-### Common configuration parameters
+   **Authorization configuration**: Fill in the authorization-related settings:
 
-#### `redis_type`
+   - **CMD**: Fill in the query command according to the data schema.
 
-One of `single`, `cluster`, or `sentinel`, required. Defines Redis installation type:
-standalone Redis, [Redis Cluster](https://redis.io/docs/manual/scaling/), or
-[Redis Sentinel](https://redis.io/docs/manual/sentinel/) respectively.
+4. Click **Create** to finish the settings.
 
-#### `cmd`
+## Configure with Configuration Items
 
-Required string value with the command used for fetching authorization rules. The following placeolders are supported for `cmd` value:
-* `${clientid}` — Client ID of the client.
-* `${username}` — username of the client.
-* `${peerhost}` — client IP address.
-* `${cert_subject}` — subject of client's TLS certificate, valid only for TLS connections.
-* `${cert_common_name}` common name of client's TLS certificate, valid only for TLS connections.
+You can configure the EMQX Redis authorizer with EMQX configuration items.
 
-[Topic placeholders](./authz.md#topic-placeholders) are allowed in topic filters.
+The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. <!--For detailed configuration information, see: [redis_single](../../configuration/configuration-manual.md#authz:redis_single), [authz:redis_sentinel](../../configuration/configuration-manual.md#authz:redis_sentinel), and [authz:redis_cluster](../../configuration/configuration-manual.md#authz:redis_cluster).-->
 
-#### `database`
+Sample configuration:
 
-Redis database index to use, required.
+:::: tabs type: card
 
-#### `password`
+::: tab Single
 
-Password used for Redis [authentication](https://redis.io/docs/manual/security/#authentication), optional.
+```bash
+{
+    type = redis
+    enable = true
 
-#### `auto_reconnect`
+    redis_type = single
+    server = "127.0.0.1:6379"
 
-Optional boolean value. The default value is `true`. Specifies whether to automatically reconnect to
-Redis on client failure.
+    cmd = "HGETALL mqtt_user:${username}"
+    database => 1
+    password = public
+    server = "127.0.0.1:6379"
 
-#### `pool_size`
+}
+```
 
-Optional integer value defining the number of concurrent connections from an EMQX node to Redis.
-The default value is 8.
+:::
 
-#### `ssl`
+::: tab Sentinel
 
-Standard [SSL options](../../configuration/configuration.md#tls-ciphers) for [secure connecting to Redis](https://redis.io/docs/manual/security/encryption/).
+```bash
+{
+    type = redis
+    enable = true
 
-### Standalone Redis options (`redis_type = single`).
+    redis_type = sentinel
+    servers = "10.123.13.11:6379,10.123.13.12:6379"
+    sentinel = "mymaster"
 
-#### `server`
+    cmd = "HGETALL mqtt_user:${username}"
+    database => 1
+    password = public
 
-Required `host:port` string value, the address of the Redis server.
+}
+```
 
-### Redis Cluster options (`redis_type = cluster`).
+:::
 
-#### `servers`
+::: tab Cluster
 
-Required string value with comma-separated list of Redis Cluster endpoints: `host1:port1,host2:port2,...`.
+```bash
+{
+    type = redis
+    enable = true
 
-### Redis Sentinel options (`redis_type = sentinel`).
+    redis_type = cluster
+    servers = "10.123.13.11:6379,10.123.13.12:6379"
 
-#### `servers`
+    cmd = "HGETALL mqtt_user:${username}"
+    database => 1
+    password = public
+}
+```
 
-Required string value with comma-separated list of Redis Sentinel endpoints: `host1:port1,host2:port2,...`.
+:::
 
-#### `sentinel`
-
-Required string value with [master name](https://redis.io/docs/manual/sentinel/#configuring-sentinel) to use from Sentinel configuration.
+::::

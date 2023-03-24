@@ -18,7 +18,7 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
 集群一经创建，节点名是不可变的，因为数据数据库和数据文件都与之相关。即使网络环境提供静态 IP 的情况下，也强烈建议使用静态 FQDN 作为 EMQX 节点名。
 :::
 
-## manual 手动创建集群
+## 手动创建集群
 
 在手动集群中，您必须手动配置集群中的每个节点，包括设置节点之间的网络连接。
 
@@ -28,7 +28,7 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
 手动集群仅能用于核心节点，如果使用了核心-复制节点部署架构，请使用自动集群方式管理集群。
 :::
 
-假设有 `emqx@s1.emqx.io` 和 `emqx@s2.emqx.io` 两个节点，我们可以通过如下步骤为其手动创建集群：
+假设有 `emqx@s1.emqx.io` 和 `emqx@s2.emqx.io` 两个节点，您可以通过如下步骤为其手动创建集群：
 
 1. 将集群发现策略设置为 `manual`:
 
@@ -82,7 +82,7 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群，本章
 
 对于只有单台服务器的用户来说，如果您想在一台服务器上测试 EMQX 集群，可以使用伪分布式集群。
 
-启动第一个节点后，通过以下命令启动第二个节点并手动加入集群，为避免端口冲突，我们需要对一些监听端口做出调整：
+启动第一个节点后，通过以下命令启动第二个节点并手动加入集群，为避免端口冲突，您需要对一些监听端口做出调整：
 
 ```bash
 EMQX_NODE__NAME='emqx2@127.0.0.1' \
@@ -102,7 +102,7 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 
 节点发现是创建集群的必要过程，它允许单个 EMQX 节点发现对方并互相通信，无论其位置或 IP 地址如何。
 
-EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库的集群自动发现 (Autocluster)。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
+EMQX 支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，支持 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、脑裂自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean)。
 
 EMQX 支持多种节点发现策略：
 
@@ -110,7 +110,8 @@ EMQX 支持多种节点发现策略：
 | ------ | ----------------- |
 | manual | 手动命令创建集群        |
 | static | 静态节点列表自动集群        |
-| dns    | DNS A 记录自动集群      |
+| multicast | 采用 UDP 组播模式的自动群集<br>注意：5.0 之前版本中的组播模式发现策略已被废弃，在未来的版本中会被删除。 |
+| DNS | DNS A 记录自动集群      |
 | etcd   | 通过 etcd 自动集群      |
 | K8s    | Kubernetes 服务自动集群 |
 
@@ -122,8 +123,6 @@ cluster {
     discovery_strategy  =  manual
 }
 ```
-
-注意：5.0 之前版本中的 mcast 发现策略已被废弃，在未来的版本中会被删除。
 
 ## 基于 static 节点列表自动集群
 
@@ -188,7 +187,7 @@ cluster {
 
 [etcd](https://etcd.io/) 是 CoreOS 发起的开源项目，etcd 的应用场景多间于服务发现，解决分布式系统中同一个集群的进程之间如何相互发现并建立连接的问题，这个功能正是 EMQX 自动集群所需要的。
 
-当网络中存在 etcd 服务器（集群）的时候，EMQ X 集群可以使用 ectd 的方式自动建立集群。安装和配置 etcd 服务集群请参考 [etcd install](https://etcd.io/docs/latest/install/)。
+当网络中存在 etcd 服务器（集群）的时候，EMQX 集群可以使用 ectd 的方式自动建立集群。安装和配置 etcd 服务集群请参考 [etcd install](https://etcd.io/docs/latest/install/)。
 
 **配置 ectd**
 
@@ -207,7 +206,7 @@ cluster {
 }
 ```
 
-在完成配置以后，我们可以逐一启动 EMQX 节点，并用 etcdctl 工具观察 etcd 服务器上的变化：
+在完成配置以后，您可以逐一启动 EMQX 节点，并用 etcdctl 工具观察 etcd 服务器上的变化：
 
 ```bash
 $ etcdctl ls /emqxcl/emqxcl --recursive
@@ -221,7 +220,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 ## 基于 kubernetes 自动集群
 
-[Kubernetes（K8s）](https://kubernetes.io) 是 Google 的开源容器集群管理系统，是一个完备的分布式系统支撑平台，EMQ X 可以使用 kubernetes 的服务发现功能组建集群。
+[Kubernetes（K8s）](https://kubernetes.io) 是 Google 的开源容器集群管理系统，是一个完备的分布式系统支撑平台，EMQX 可以使用 kubernetes 的服务发现功能组建集群。
 
 您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 K8s 上的服务名，地址类型:
 

@@ -1,4 +1,4 @@
-# Use MySQL for password authentication
+# Integrate with MySQL
 
 EMQX supports integrating with MySQL for password authentication. 
 
@@ -8,7 +8,7 @@ EMQX supports integrating with MySQL for password authentication.
 
 :::
 
-## Data schema and query statement
+## Data Schema and Query Statement
 
 MySQL authenticator supports almost all MySQL storage schema. You can determine how to store credentials and access them as your business needs, for example, using one or multiple tables, views, etc.
 
@@ -64,26 +64,25 @@ You can use EMQX Dashboard to configure how to use MySQL for password authentica
 
 On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **MySQL** as **Backend**, this will lead us to the **Configuration** tab, as shown below. 
 
-![MySQL](./assets/authn-mysql.png)
+![Authentication with MySQL](./assets/authn-mysql.png)
 
 Follow the instruction below on how to configure:
 
-**Connect**: In this section, we will fill in the information needed to connect MySQL.
+**Connect**: Fill in the information needed to connect MySQL.
 
-- **Server**:  Specify the server address that EMQX is to connect (`host:port`).
+- **Server**: Specify the server address that EMQX is to connect (`host:port`).
 - **Database**: MySQL database name.
 - **Username** (optional): Specify user name. 
 - **Password** (optional): Specify user password. 
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
-**Connection Configuration**: In this section, we will set the concurrent connections, reconnection, and waiting time before a connection is timed out.
+**Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
 
 - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: **8**. 
-- **Reconnect**: Specify whether EMQX automatically reconnects to MySQL when the connection is broken; Options: **True** (automatic reconnection), **False** (no automatic reconnection); Default value: **True**.
 - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour. 
 
-**Authentication configuration**: In this section, we will fill in the authentication-related settings:
+**Authentication configuration**: Fill in the authentication-related settings:
 
 - **Password Hash Field**: Specify the field name of the password.
 - **Password Hash**: Select the Hash function for storing the password in the database, for example, plain, md5, sha, bcrypt, pbkdf2. 
@@ -99,9 +98,7 @@ Follow the instruction below on how to configure:
 
 Now we can click **Create** to finish the settings. 
 
-
-
-## Configure with configuration items
+## Configure with Configuration Items
 
 You can configure the EMQX MySQL authenticator with EMQX configuration items.<!--插入超链接-->
 
@@ -109,21 +106,19 @@ MySQL authentication is identified with `mechanism = password_based` and `backen
 
 Sample configuration:
 
-```
+```bash
 {
-  mechanism = password_based
-  backend = mysql
-  enable = true
+  backend = "mysql"
+  mechanism = "password_based"
 
-  password_hash_algorithm {
-    name = sha256
-    salt_position = suffix
-  }
-
-  database = mqtt
-  username = root
-  password = public
   server = "127.0.0.1:3306"
-  query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+  username = "root"
+  database = "mqtt_user"
+  password = ""
+  pool_size = 8
+
+  password_hash_algorithm {name = "sha256", salt_position = "suffix"}
+  query = "SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1"
+  query_timeout = "5s"
 }
 ```

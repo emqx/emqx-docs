@@ -2,6 +2,12 @@
 
 EMQX supports integration with PostgreSQL so you can save client messages and events to PostgreSQL, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
 
+{% emqxce %}
+:::tip
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+:::
+{% endemqxce %}
+
 :::tip
 This section is also applicable to TimescaleDB and MatrixDB.
 :::
@@ -11,7 +17,7 @@ This section is also applicable to TimescaleDB and MatrixDB.
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
 
-## Features list
+## Features List
 
 - [Connection pool](./data-bridges.md#Connection pool)
 - [Async mode](./data-bridges.md#Async mode)
@@ -19,10 +25,10 @@ This section is also applicable to TimescaleDB and MatrixDB.
 - [Buffer queue](./data-bridges.md#Buffer queue)
 - [SQL preprocessing](./data-bridges.md#Prepared statement)
 
-## [Configuration parameters](#Configuration)
+## [Configuration Parameters](#Configuration)
 <!-- TODO LIKN TO THE CONFIG doc。 -->
 
-## Quick starts
+## Quick Start
 
 ### Install PostgreSQL
 
@@ -106,7 +112,7 @@ We have successfully created the data bridge to PostgreSQL, now we can continue 
 
 Now we have successfully created the data bridge to PostgreSQL. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
-#### Online/Offline status recording
+#### Online/Offline Status Recording
 
 The operating steps are similar to those at the [Message storage](#Storage) part expect for the SQL template and SQL rules. 
 

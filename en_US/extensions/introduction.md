@@ -1,4 +1,4 @@
-# Introduction
+# Plugin and extension
 
 EMQX 5.0 supports extensions in the form of plugins, multilingual gRPC hooks and protocol extensions to facilitate your development workflow, and you can choose the extension method according to your needs.
 
@@ -8,7 +8,7 @@ Through EMQX's plugin development interface, users can access the core process t
 
 Developing plugins requires an understanding of EMQX and Erlang.
 
-## Multilingual gRPC hooks and protocol extension
+## Multilingual gRPC Hooks and Protocol Extension
 
 EMQX offers a multilingual extension combining [general-purpose Remote Procedure Calls (gRPC)](https://grpc.io/) multilingual hooks and protocol extension.
 
