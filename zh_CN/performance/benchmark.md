@@ -4,7 +4,7 @@
 
 ## 安装eMQTT-Bench
 
-你可以通过3种方式来安装eMQTT-Bench：
+你可以通过 3 种方式来安装 eMQTT-Bench：
 
 - 运行Docker镜像
 - 下载并安装二进制包
