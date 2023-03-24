@@ -1,6 +1,6 @@
 # Benchmark
 
-[eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) is a concise and powerful MQTT protocol benchmark testing tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization , the test service [XMeter](https://www.xmeter.net/) is recommended.
+[eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) is a concise and powerful MQTT protocol benchmark tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization , the test service [XMeter](https://www.xmeter.net/) is recommended.
 
 ## Docker image
 
