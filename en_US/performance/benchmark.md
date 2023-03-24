@@ -13,7 +13,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 Note that docker image name is using hyphen '-', while binary script name is with underscore '_'.
 
-## Binary package
+### Install Binary Package
 
 We create binary packages with each release for the following platforms:
 
