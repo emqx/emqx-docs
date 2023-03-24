@@ -25,13 +25,19 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 你可以下载`emqtt_bench`的二进制包并在以下平台上安装测试工具：
 
+- Amazon Linux 2
 - CentOS 7
 - Rocky Linux 8
+- Rocky Linux 9
 - Debian 9
 - Debain 10
+- Debain 11
 - Ubuntu 16.04
 - Ubuntu 18.04
 - Ubuntu 20.04
+- Ubuntu 22.04
+- MacOS 11
+- MacOS 12
 
 前往 [Releases](https://github.com/emqx/emqtt-bench/releases) 页面查看具体的`emqtt_bench`发布版本信息。
 
@@ -39,9 +45,9 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ```bash
 mkdir emqtt_bench && cd emqtt_bench
-wget https://github.com/emqx/emqtt-bench/releases/download/0.4.8/emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
-tar xfz emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
-rm emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.11/emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
 
 ./emqtt_bench
 Usage: emqtt_bench pub | sub | conn [--help]

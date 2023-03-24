@@ -25,13 +25,19 @@ Note that docker image name is using hyphen '-', while binary script name is wit
 
 You can download the released binary packages and install the `emqtt_bench` on the following platforms:
 
+- Amazon Linux 2
 - CentOS 7
 - Rocky Linux 8
+- Rocky Linux 9
 - Debian 9
 - Debain 10
+- Debain 11
 - Ubuntu 16.04
 - Ubuntu 18.04
 - Ubuntu 20.04
+- Ubuntu 22.04
+- MacOS 11
+- MacOS 12
 
 For detailed information on each release, see [Releases](https://github.com/emqx/emqtt-bench/releases).
 
@@ -39,9 +45,9 @@ For example, here is how to install `emqtt_bench` on Ubuntu 20.04:
 
 ```bash
 mkdir emqtt_bench && cd emqtt_bench
-wget https://github.com/emqx/emqtt-bench/releases/download/0.4.8/emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
-tar xfz emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
-rm emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.11/emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
 
 ./emqtt_bench
 Usage: emqtt_bench pub | sub | conn [--help]
