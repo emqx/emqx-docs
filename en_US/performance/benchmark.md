@@ -41,7 +41,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### Build from Source
 
-The operation of `emqtt_bench` depends on the operating environment of [Erlang/OTP](https://www.erlang.org/) 21.2 and above version. The installation process is skipped. For details, please refer to the online installation tutorials.
+`emqtt_bench` is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 21.2 and above version to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
 
 After the Erlang environment is installed, download the latest code of `emqtt-bench` and compile it:
 
