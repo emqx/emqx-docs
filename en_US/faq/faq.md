@@ -342,7 +342,7 @@ Yes. You can do it by invoking REST API provided by EMQX, but the implementation
 
 ## Can EMQX forward messages to Kafka?
 
-The EMQX Enterprise integrates a Kafka bridge, it can bridge data to Kafka. Please refer to [Data Bridge - Apache Kafka](../data-integration/data-bridge-kafka.md).
+The EMQX Enterprise integrates a Kafka bridge, it can bridge data to Kafka. Please refer to [Data Bridge - Apache Kafka Producer](../data-integration/data-bridge-kafka-producer.md).
 
 ## Does EMQX support cluster auto discovery? What clustering methods are supported?
 

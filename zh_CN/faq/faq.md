@@ -313,7 +313,7 @@ EMQX 企业版支持消息持久化，可以将消息保存到数据库，请参
 
 能。目前 EMQX 企业版提供了内置的 Kafka 桥接方式，支持把消息桥接至 Kafka 进行流式处理。
 
-EMQX 使用 Kafka 参照 [数据桥接 - Apache Kafka](../data-integration/data-bridge-kafka.md)。
+EMQX 使用 Kafka 参照 [数据桥接 - Apache Kafka Producer](../data-integration/data-bridge-kafka-producer.md)。
 
 ## EMQX 支持集群自动发现吗？有哪些实现方式？
 
