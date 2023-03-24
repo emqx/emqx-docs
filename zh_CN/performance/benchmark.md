@@ -19,7 +19,7 @@ docker run -it emqx/emqtt-bench:latest
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-注意，Docker镜像名称使用连字符“-”，而二进制脚本名称使用下划线“_”。
+注意，Docker 镜像名称使用连字符“-”，而二进制脚本名称使用下划线“_”。
 
 ### 用二进制包安装
 
