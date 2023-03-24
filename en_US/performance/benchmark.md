@@ -25,7 +25,7 @@ We create binary packages with each release for the following platforms:
 - Ubuntu 18.04
 - Ubuntu 20.04
 
-Please check them out on the [Releases](https://github.com/emqx/emqtt-bench/releases) page.
+For detailed information on each release, see [Releases](https://github.com/emqx/emqtt-bench/releases).
 
 Here is how to install `emqtt_bench` on, for example, Ubuntu 20.04:
 
