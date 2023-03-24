@@ -75,7 +75,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 输出以上内容，则证明 `emqtt_bench` 已正确安装到主机。
 
-## 用eMQTT-Bench进行性能测试
+## 用 eMQTT-Bench 进行性能测试
 
 `emqtt_bench` 共三个子命令：
 
