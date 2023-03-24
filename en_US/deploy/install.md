@@ -85,7 +85,7 @@ After installation, EMQX creates some directories to store running and configura
 
 | Directory  | Description        | Installed with tar.gz | Installed with RPM/DEB   |
 | ---------- | ------------------ | --------------------- | ------------------------ |
-| `etc`      | Config files       | `./etc`               | `/var/lib/emqx/etc`      |
+| `etc`      | Config files       | `./etc`               | `/etc/emqx`      |
 | `data`     | Database and files | `./data`              | `/var/lib/emqx/data`     |
 | `log`      | Log files          | `./log`               | `/var/log/emqx`          |
 | `releases` | Boot instructions  | `./releases`          | `/usr/lib/emqx/releases` |
