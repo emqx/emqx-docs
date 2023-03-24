@@ -15,7 +15,7 @@ Note that docker image name is using hyphen '-', while binary script name is wit
 
 ### Install Binary Package
 
-We create binary packages with each release for the following platforms:
+You can download the released binary packages and install the `emqtt_bench` on the following platforms:
 
 - CentOS 7
 - Rocky Linux 8
