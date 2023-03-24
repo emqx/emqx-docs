@@ -1,8 +1,14 @@
-# 基准测试
+# 性能测试
 
-[eMQTT-Bench](https://www.emqx.com/zh/try?product=emqtt-bench) 是基于 Erlang 编写的，一个简洁强大的 MQTT 协议基准测试工具。如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
+当你部署了单个EMQX服务器或者建立了EMQX集群，你可以进行对你的部署进行性能测试以了解系统的能力。这个章节介绍了如何安装和使用[eMQTT-Bench](https://www.emqx.com/zh/try?product=emqtt-bench) 来进行性能测试。eMQTT-Bench是基于 Erlang 编写的，一个简洁强大的 MQTT 协议基准测试工具。如需大规模场景、深度定制化的测试服务推荐使用 [XMeter](https://www.emqx.com/zh/products/xmeter) 进行测试。
 
-## 安装测试工具
+## 安装eMQTT-Bench
+
+你可以通过3种方式来安装eMQTT-Bench：
+
+- 运行Docker镜像
+- 下载并安装二进制包
+- 从源代码构建
 
 ### 运行Docker镜像
 
@@ -41,7 +47,7 @@ rm emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-### 从源代码构建
+### 源代码构建
 
 `emqtt_bench` 的运行依赖于 Erlang/OTP 21.2 以上版本运行环境，安装过程略过，详情请参考网上各个安装教程。
 
@@ -63,7 +69,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 输出以上内容，则证明 `emqtt_bench` 已正确安装到主机。
 
-## 使用测试工具
+## 用eMQTT-Bench进行性能测试
 
 `emqtt_bench` 共三个子命令：
 

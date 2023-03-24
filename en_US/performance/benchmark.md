@@ -1,9 +1,16 @@
-# Benchmark
+# Performance Test
 
-[eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) is a concise and powerful MQTT protocol benchmark tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization , the test service [XMeter](https://www.xmeter.net/) is recommended.
+After you deploy the EMQX either in a single mode or in an EMQX cluster, you can test the performance of your deployment to know the system capability. This section introduces how to install and use the [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) to do the performance test. The eMQTT-Bench is a concise and powerful MQTT protocol benchmark tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization, the test service [XMeter](https://www.xmeter.net/) is recommended.
 
-## Install Test Tool
-### Run Docker Image
+## Install eMQTT-Bench
+
+There are three options for installing the eMQTT-Bench:
+
+- Run the docker image
+- Download and install the binary package
+- Build from the source code
+
+### Docker Image
 
 You can install the benchmark tool by running the `emqtt_bench` docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
 
@@ -14,7 +21,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 Note that docker image name is using hyphen '-', while binary script name is with underscore '_'.
 
-### Install Binary Package
+### Binary Package
 
 You can download the released binary packages and install the `emqtt_bench` on the following platforms:
 
@@ -62,42 +69,42 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 The output of the above content proves that `emqtt_bench` has been correctly installed on the host.
 
-## Use Test Tool
+## Test Performance Using eMQTT-Bench
 
 There are three subcommands of `emqtt_bench`:
 
-1. `pub`: used to create a large number of clients to perform the operation of publishing messages.
-2. `sub`: Used to create a large number of clients to subscribe to topics and receive messages.
-3. `conn`: used to create a large number of connections.
+1. `pub`: Create a large number of clients to perform the operation of publishing messages.
+2. `sub`: Create a large number of clients to subscribe to topics and receive messages.
+3. `conn`: Create a large number of connections.
 
 ### Publish
 
 When executing `./emqtt_bench pub --help`, you will get the available parameter output.
 
-| Parameter         | abbreviation | Optional value  | Default value  | Description                                                                                                           |
-| ----------------- | ------------ | --------------- | -------------- | --------------------------------------------------------------------------------------------------------------------- |
-| --host            | -h           | -               | localhost      | Address of the MQTT server to connect                                                                                 |
-| --port            | -p           | -               | 1883           | MQTT service port                                                                                                     |
-| --version         | -V           | 3<br>4<br>5     | 5              | MQTT protocol version used                                                                                            |
-| --count           | -c           | -               | 200            | Total number of clients                                                                                               |
-| --startnumber     | -n           | -               | 0              | Start number of clients                                                                                               |
-| --interval        | -i           | -               | 10             | Interval to create a client; unit: ms                                                                                 |
-| --interval_of_msg | -I           | -               | 1000           | Interval to publish a message                                                                                         |
-| --username        | -u           | -               | None; optional | Client username                                                                                                       |
-| --password        | -P           | -               | None; optional | Client password                                                                                                       |
-| --topic           | -t           | -               | None; required | Published topics; support placeholders:<br />`%c`： ClientId<br />`%u`： Username<br />`%i`：Client's sequence number |
-| --size            | -s           | -               | 256            | Message Payload size; unit: bytes                                                                                     |
-| --qos             | -q           | -               | 0              | QoS level                                                                                                             |
-| --retain          | -r           | true<br />false | false          | Whether the message sets the Retain flag                                                                              |
-| --keepalive       | -k           | -               | 300            | Client keepalive time                                                                                                 |
-| --clean           | -C           | true<br />false | true           | Whether to establish a connection by cleaning the session                                                             |
-| --ssl             | -S           | true<br />false | false          | Whether to enable SSL                                                                                                 |
-| --certfile        | -            | -               | None           | Client SSL certificate                                                                                                |
-| --keyfile         | -            | -               | None           | Client SSL key file                                                                                                   |
-| --ws              | -            | true<br />false | false          | Whether to establish a connection via WebSocket                                                                       |
-| --ifaddr          | -            | -               | None           | Specifies the local network card used by the client connection                                                        |
+| Parameter         | abbreviation | Optional value  | Default value  | Description                                                  |
+| ----------------- | ------------ | --------------- | -------------- | ------------------------------------------------------------ |
+| --host            | -h           | -               | localhost      | Address of the MQTT server to connect                        |
+| --port            | -p           | -               | 1883           | MQTT service port                                            |
+| --version         | -V           | 3<br>4<br>5     | 5              | MQTT protocol version used                                   |
+| --count           | -c           | -               | 200            | Total number of clients                                      |
+| --startnumber     | -n           | -               | 0              | Start number of clients                                      |
+| --interval        | -i           | -               | 10             | Interval to create a client; unit: ms                        |
+| --interval_of_msg | -I           | -               | 1000           | Interval to publish a message                                |
+| --username        | -u           | -               | None; optional | Client username                                              |
+| --password        | -P           | -               | None; optional | Client password                                              |
+| --topic           | -t           | -               | None; required | Published topics; support placeholders:<br />`%c`: ClientId<br />`%u`: Username<br />`%i`: Client's sequence number |
+| --size            | -s           | -               | 256            | Message Payload size; unit: bytes                            |
+| --qos             | -q           | -               | 0              | QoS level                                                    |
+| --retain          | -r           | true<br />false | false          | Whether the message sets the Retain flag                     |
+| --keepalive       | -k           | -               | 300            | Client keepalive time                                        |
+| --clean           | -C           | true<br />false | true           | Whether to establish a connection by cleaning the session    |
+| --ssl             | -S           | true<br />false | false          | Whether to enable SSL                                        |
+| --certfile        | -            | -               | None           | Client SSL certificate                                       |
+| --keyfile         | -            | -               | None           | Client SSL key file                                          |
+| --ws              | -            | true<br />false | false          | Whether to establish a connection via WebSocket              |
+| --ifaddr          | -            | -               | None           | Specifies the local network card used by the client connection |
 
-For example, we start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is` 16` bytes:
+For example, we start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is ` 16` bytes:
 
 ```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
@@ -154,13 +161,13 @@ We verify the use of the tool in 2 most typical scenarios:
 
 A total of three 8C16G servers need to be prepared, one for EMQX Broker and two for client presses:
 
-- System: `CentOS Linux release 7.7.1908 (Core)`
+- **System**: `CentOS Linux release 7.7.1908 (Core)`
 
-- **CPU:** `Intel Xeon Processor (Skylake)` Main frequency: `2693.670 MHZ`
+- **CPU**: `Intel Xeon Processor (Skylake)` Main frequency: `2693.670 MHZ`
 
-- **Server：** `emqx-centos7-v4.0.2.zip`
+- **Server**: `emqx-centos7-v4.0.2.zip`
 
-- **Press：**`emqtt-bench v0.3.1`
+- **Press**: `emqtt-bench v0.3.1`
   - Each press is configured with 10 network cards, which are used to establish a large number of MQTT client connections in the connection test
 
 The topology structure is as follows:
