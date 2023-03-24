@@ -39,7 +39,7 @@ rm emqtt-bench-0.4.8-ubuntu20.04-amd64.tar.gz
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-## Build from source
+### Build from Source
 
 The operation of `emqtt_bench` depends on the operating environment of [Erlang/OTP](https://www.erlang.org/) 21.2 and above version. The installation process is skipped. For details, please refer to the online installation tutorials.
 
