@@ -1037,7 +1037,11 @@
           "path": "modules/prometheus"
         },
         {
-          "title": "Topic metrics",
+          "title": "Hot Configs",
+          "path": "modules/hot_confs"
+        },
+        {
+          "title": "Topic Metrics",
           "path": "modules/topic_metrics"
         },
         {
