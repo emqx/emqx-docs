@@ -66,7 +66,7 @@ docker exec -it cassa cqlsh "-e \
 These keyspace and tables must be created before you create the data bridge to Cassandra.
 :::
 
-### Create a data bridge to Cassandra
+### Create a Data Bridge to Cassandra
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.
