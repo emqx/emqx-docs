@@ -4,7 +4,7 @@ With the hot configuration feature, most of EMQX's configuration items can be mo
 The configuration items modified through the Dashboard will be persistently stored in the `mnesia` database file (typically under the `data/mnesia/<node-name>` directory).
 
 ::: warning
-Upon activation of hot configuration in EMQX, the only means of modifying the items is through the dashboard.
+After the hot configuration in EMQX is activated, for the configuration items included in the EMQX Dashboard, you can only modify the settings with Dashboard. 
 However, it is still possible to make changes to configuration items that are not present on the dashboard by editing the configuration file and restart the EMQX.
 :::
 
