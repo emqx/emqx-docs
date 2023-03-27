@@ -5,7 +5,7 @@ The configuration items modified through the Dashboard will be persistently stor
 
 ::: warning
 After the hot configuration in EMQX is activated, for the configuration items included in the EMQX Dashboard, you can only modify the settings with Dashboard. 
-However, it is still possible to make changes to configuration items that are not present on the dashboard by editing the configuration file and restart the EMQX.
+For the other configuration items, you can still modify with the configuration file and these changes will take effect after EMQX restarts.
 :::
 
 ## Create module
