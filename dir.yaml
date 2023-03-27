@@ -32,8 +32,15 @@
   title_cn: 安装部署
   path: deploy/install
   children:
+    - title_en: EMQX on Kubernetes
+      title_cn: EMQX on Kubernetes
+      lang: en
+      path: "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
+    - title_en: EMQX on Kubernetes
+      title_cn: EMQX on Kubernetes
+      lang: cn
+      path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
     - deploy/install-docker
-    - deploy/install-k8s
     - deploy/install-debian
     - deploy/install-ubuntu
     - deploy/install-centos

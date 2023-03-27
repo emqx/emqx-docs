@@ -2,7 +2,7 @@
 
 EMQX 5.0 采用 [Mria](https://github.com/emqx/mria) 架构，实现了新的集群架构并重构了数据复制逻辑，由此 EMQX 5.0 水平扩展能力得到了指数级提升，这也是 EMQX 5.0 单个集群支持 1 亿 MQTT 连接的关键。
 
-本章节将向您介绍新架构下 EMQX 集群部署架构以及部署时的注意事项，您也可以通过 [EMQX Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 实现集群自动化部署，请参考 [K8s 部署指南](../install-k8s.md)。
+本章节将向您介绍新架构下 EMQX 集群部署架构以及部署时的注意事项，您也可以通过 [EMQX Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 实现集群自动化部署，请参考 [配置 EMQX Core 和 Replicant 节点](https://docs.emqx.com/zh/emqx-operator/latest/tasks/configure-emqx-core-replicant.html)。
 
 :::tip 前置准备：
 
