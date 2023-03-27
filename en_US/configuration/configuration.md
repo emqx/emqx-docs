@@ -40,7 +40,12 @@ The configuration rewrite files are located in the `$data/configs/` directory, a
 | ---------------------------------- | -------------------- |
 | Installed with compression package | `./data`             |
 | Installed with binary package      | `/var/lib/emqx/data` |
+| Running in docker container        | `/opt/emqx/data`     |
 
+:::tip
+It is possible to change data directory from config `node.data_dir` or environment variable `EMQX_NODE__DATA_DIR`,
+however, when running a cluster, all nodes should have the same path.
+:::
 
 
 By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level with Dashboard, REST API or CLI, the changes will be synced with the `cluster-override.conf` as configuration files and overide the corresponding settings in `emqx.conf`. And this whole process is called hot reload.
@@ -49,7 +54,7 @@ Similarly, you can add or modify the node settings and these changes will be syn
 
 For override rules, see [Configure override rules](#Configure override rules).
 
-:::tip 
+:::tip
 
 Some configuration items cannot be overridden, for example,  `node.name`.
 
@@ -57,7 +62,7 @@ Some configuration items cannot be overridden, for example,  `node.name`.
 
 ## HOCON Configuration Format
 
-Since EMQX 5.0, we have begun to use [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format. 
+Since EMQX 5.0, we have begun to use [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format.
 
 HOCON is a format for human-readable data and a superset of JSON. With features like inheritance, combined, and quotes, HOCON further simplifies the configuration work.
 

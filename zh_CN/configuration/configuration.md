@@ -36,7 +36,11 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 | 解压缩包安装 | `./data`             |
 | Docker 容器  | `/opt/emqx/data`     |
 
-您也可以通过 `node.data_dir` 配置或 `EMQX_NODE__DATA_DIR` 环境变量指定 `data` 目录位置。
+
+:::tip
+您也可以通过 `node.data_dir` 配置或 `EMQX_NODE__DATA_DIR` 环境变量指定 `data_dir` 目录位置。
+但是在集群环境下，所有节点的 data_dir 必须保持一致。
+:::
 
 通常情况下大多数配置项都在主配置文件中定义，需要通过 REST API、CLI 与 Dashboard 配置的内容（热配置）将写入到 `cluster-override.conf` 中，一经配置将覆盖主配置文件的内容；如果需要通过修改配置文件的方式覆盖热配置的内容，可以将其写入 `local-override.conf` 中。覆盖规则参考 [配置覆盖规则](#配置覆盖规则)。
 
