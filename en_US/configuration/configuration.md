@@ -27,7 +27,7 @@ EMQX also provides a configuration rewrite file implicitly overlaying `emqx.conf
 
 **`cluster-override.conf`**
 
-Contains configuration items for entire cluster, configuration cahnges made from Dashboard, REST API, and CLI when be persisted to this file.
+Contains configuration items for the entire cluster, configuration changes made from Dashboard, REST API, and CLI will be persisted to this file.
 
 If a certain cluster node is restarted or some new nodes are added, the node will automatically copy and apply the configuration file from other nodes within the cluster, therefore there is no need nor recommended to configure it manually.
 
