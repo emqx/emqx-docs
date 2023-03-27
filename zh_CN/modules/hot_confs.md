@@ -4,7 +4,8 @@
 通过 Dashboard 修改的配置项会被持久化存储到 `mnesia` 数据库文件里（一般是 `data/mneisa/<节点名>` 目录下）。
 
 ::: warning
-在 EMQX 中激活热配置后，只能通过 Dashboard 来修改配置项。但是，那些不在 Dashboard 上的配置项，仍然可以通过编辑配置文件并重启 EMQX 来更改。
+激活热配置功能后，对于包含在 Dashboard 热配置界面上的配置，只能通过 Dashboard 来修改；
+而对于那些不包含在 Dashboard 上的配置项，仍然可以通过编辑配置文件并重启 EMQX 来更改。
 :::
 
 ## 创建模块
