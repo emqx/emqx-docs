@@ -12,7 +12,7 @@ Depends on your installation mode, emqx.conf` is stored in:
 
 | Installation                       | Path                      |
 | ---------------------------------- | ------------------------- |
-| Installed with binary package      | `/etc/emqx/etc/emqx.conf` |
+| Installed with binary package      | `/etc/emqx/emqx.conf`       |
 | Installed with compression package | `./etc/emqx.conf`         |
 | Installed with Docker              | `/opt/emqx/etc/emqx.conf` |
 
