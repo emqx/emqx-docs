@@ -20,31 +20,30 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 <!-- 根据情况编写，包含必须的前置知识点、软件版本要求、需要预先创建/初始化的操作。 -->
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
-- Relevant Cassandra keyspace should be created before creating the data bridge.
 
 <!-- 列举功能或性能方面的亮点，如支持批处理、支持异步模式、双向数据桥接，链接到对应的功能介绍章节。 -->
 
 :::
 
-## Feature list
+## Feature List
 
 - [Connection pool](./data-bridges.md#Connection pool)
 - [SQL preprocessing](./data-bridges.md#Prepared statement)
 
 <!--  Configuration parameters TODO 链接到配置手册对应配置章节。 -->
 
-## Quick starts
+## Quick Starts
 <!-- 从安装测试所需步骤，如果有不同的用法增加章节介绍。 -->
 
 ### Install Cassandra
 
-We use need to start simple Cassandra service via docker:
+Start the simple Cassandra service via docker:
 
 ```bash
 docker run --name cassa --rm -p 9042:9042 cassandra:3.11.14
 ```
 
-### Create Keyspace and table
+### Create Keyspace and Table
 
 Create a Keyspace named `mqtt`:
 ```bash
@@ -64,7 +63,7 @@ docker exec -it cassa cqlsh "-e \
 ```
 
 :::tip
-These keyspace and tables must be created before we create the data bridge to Cassandra.
+These keyspace and tables must be created before you create the data bridge to Cassandra.
 :::
 
 ### Create a data bridge to Cassandra
@@ -76,11 +75,11 @@ These keyspace and tables must be created before we create the data bridge to Ca
 5. Input the connection information. Input `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
 6. Click the **Create** button to complete the data bridge creation.
 
-We have successfully created the data bridge to Cassandra, now we can continue to create rules to specify the data to be stored to Cassandra. 
+Now you have successfully created the data bridge to Cassandra, you can continue to create rules to specify the data to be stored in Cassandra. 
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 2. Click **Create** on the top right corner of the page.
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to forward the MQTT messages under topic `t/#` to Cassandra, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to forward the MQTT messages under topic `t/#` to Cassandra, you can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
 
   ```sql
   SELECT 
@@ -93,7 +92,7 @@ We have successfully created the data bridge to Cassandra, now we can continue t
 5. Then, click the **Add** button. 
 6. Then click the **Create** button to finish the setup. 
 
-Now we have successfully created the data bridge to Cassandra. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
+After creating the data bridge to Cassandra. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by rule `my_rule`.
 
 ### Test
 
