@@ -228,48 +228,6 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
 
 For more information about EMQX Broker Docker, please visit [Docker Hub](https://hub.docker.com/r/emqx/emqx) or [Github](https://github.com/emqx/emqx-rel/tree/master/deploy/docker)
 
-## Install and cluster via Helm (K8S、K3S)
-
-1. Add helm repository
-
-  ```bash
-  $ helm repo add emqx https://repos.emqx.io/charts
-  $ helm repo update
-  ```
-
-2. Query EMQX Broker
-
-  ```bash
-  helm search repo emqx
-  NAME         CHART VERSION APP VERSION DESCRIPTION
-  emqx/emqx    v4.0.0        v4.0.0      A Helm chart for EMQX
-  emqx/emqx-ee v4.0.0        v4.0.0      A Helm chart for EMQX
-  emqx/kuiper  0.1.1         0.1.1       A lightweight IoT edge analytic software
-  ```
-
-3. Start EMQX Broker cluster
-
-  ```bash
-  $ helm install my-emqx emqx/emqx
-  ```
-
-4.  View EMQX Broker cluster situation
-
-  ```bash
-  $ kubectl get pods
-  NAME       READY  STATUS             RESTARTS  AGE
-  my-emqx-0  1/1     Running   0          56s
-  my-emqx-1  1/1     Running   0          40s
-  my-emqx-2  1/1     Running   0          21s
-
-  $ kubectl exec -it my-emqx-0 -- emqx_ctl cluster status
-  Cluster status: #{running_nodes =>
-                        ['my-emqx@my-emqx-0.my-emqx-headless.default.svc.cluster.local',
-                         'my-emqx@my-emqx-1.my-emqx-headless.default.svc.cluster.local',
-                         'my-emqx@my-emqx-2.my-emqx-headless.default.svc.cluster.local'],
-                    stopped_nodes => []}
-  ```
-
 ## Source code compilation and installation
 
 1. Get the source code
