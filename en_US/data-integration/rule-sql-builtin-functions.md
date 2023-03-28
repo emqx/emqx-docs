@@ -1,5 +1,14 @@
 # Built-in SQL Functions
 
+The EMQX rule engine's SQL like language supports a variety of built-in functions for doing basic data transformation.
+These function are described in this document.
+The most powerful build-in function is the JQ function, which is documented in a [seperate document](./rule-sql-jq.md).
+The JQ function allows you to do complex data transformation using the [JQ language](https://stedolan.github.io/jq/manual/).
+However, using JQ is not always necessary, and the built-in functions in this document can often get the job done.
+It is recommended to use the built-in functions described in this document when possible, and only use JQ if the built-in functions are not sufficient as JQ is a more complex language can therefore increase the risk of bugs.
+How to use the build-in functions in rules is described in the [rule-engine language documentation](./rule-sql-syntax.md).
+
+
 ## Mathematical Functions
 
 | Function Name | Purpose                         | Parameter                                  | Returned Value                   |
@@ -7,26 +16,28 @@
 | abs           | Absolute value                  | Operand                                    | absolute value                   |
 | cos           | Cosine                          | Operand                                    | Cosine value                     |
 | cosh          | Hyperbolic cosine               | Operand                                    | Hyperbolic cosine value          |
-| acos          | Inverse cosine                  | Operand                                    | Inverse cosine value             |
-| acosh         | Inverse hyperbolic cosine       | Operand                                    | Inverse hyperbolic cosine value  |
-| sin           | Sine                            | Operand                                    | Sine value                       |
-| sinh          | Hyperbolic sine                 | Operand                                    | Hyperbolic sine value            |
-| asin          | Arcsine                         | Operand                                    | Arcsine value                    |
-| asinh         | inverse hyperbolic sine         | Operand                                    | inverse hyperbolic sine value    |
-| tan           | tangent                         | Operand                                    | tangent value                    |
-| tanh          | Hyperbolic tangent              | Operand                                    | Hyperbolic tangent value         |
-| atan          | Arc tangent                     | Operand                                    | Arc tangent value                |
-| atanh         | Inverse hyperbolic tangent      | Operand                                    | Inverse hyperbolic tangent value |
-| ceil          | Round up                        | Operand                                    | Integer value                    |
-| floor         | Round down                      | Operand                                    | Integer value                    |
-| round         | rounding                        | Operand                                    | Integer value                    |
-| exp           | Exponentiation                  | Operand                                    | X power of e                     |
-| power         | Exponential operation           | 1. Left operand x <br />2. Right operand y | Y power of X                     |
-| sqrt          | Square root operation           | Operand                                    | Square root                      |
-| fmod          | Floating point modulus function | 1. left Operand <br />2.right Operand      | module                           |
-| log           | Logarithm to e                  | Operand                                    | value                            |
-| log10         | Logarithm to 10                 | Operand                                    | value                            |
-| log2          | Logarithm to 2                  | Operand                                    | value                            |
+| acos          | Inverse cosine                  | Operand                                    | inverse cosine value             |
+| acosh         | Inverse hyperbolic cosine       | Operand                                    | inverse hyperbolic cosine value  |
+| sin           | Sine                            | Operand                                    | sine value                       |
+| sinh          | Hyperbolic sine                 | Operand                                    | hyperbolic sine value            |
+| asin          | Arcsine                         | Operand                                    | arcsine value                    |
+| asinh         | inverse hyperbolic sine         | Operand                                    | Inverse hyperbolic sine value    |
+| tan           | tangent                         | Operand                                    | Tangent value                    |
+| tanh          | Hyperbolic tangent              | Operand                                    | hyperbolic tangent value         |
+| atan          | Arc tangent                     | Operand                                    | arc tangent value                |
+| atanh         | Inverse hyperbolic tangent      | Operand                                    | inverse hyperbolic tangent value |
+| ceil          | Round up                        | Operand                                    | integer value                    |
+| floor         | Round down                      | Operand                                    | integer value                    |
+| round         | rounding                        | Operand                                    | integer value                    |
+| exp           | Exponentiation                  | Operand                                    | x power of e                     |
+| power         | Exponential operation           | 1. Left operand x <br />2. Right operand y | y power of X                     |
+| sqrt          | Square root operation           | Operand                                    | square root                      |
+| fmod          | Floating point modulus function | 1. left Operand <br />2.right Operand      | modulo (remainder)               |
+| log           | Logarithm to e                  | Operand                                    | the natural logarithm            |
+| log10         | Logarithm to 10                 | Operand                                    | logarithm with base 10           |
+| log2          | Logarithm to 2                  | Operand                                    | logarithm with base 2            |
+
+**Examples:**
 
 ```erlang
 abs(-12) = 12
@@ -58,15 +69,19 @@ log2(1024) = 10
 
 | Function name | Purpose                                                                         | parameter | Returned value                                                               |
 | ------------- | ------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------- |
-| is_null       | Judge if the variable is null                                                   | Data      | Boolean data.if it is empty (undefined), return true, otherwise return false |
-| is_not_null   | Judge if the variable is not null                                               | Data      | Boolean data.if it is empty (undefined), return false, otherwise return true |
-| is_str        | Judge whether the variable is String type                                       | Data      | Boolean data.                                                                |
-| is_bool       | Judge if the variable is Boolean type                                           | Data      | Boolean data.                                                                |
-| is_int        | Judge whether the variable is Integer type                                      | Data      | Boolean data.                                                                |
-| is_float      | Judge whether the variable is Float type                                        | Data      | Boolean data.                                                                |
-| is_num        | Judge whether the variable is a numeric type, including Integer and Float types | Data      | Boolean data.                                                                |
-| is_map        | Judge whether the variable is Map type                                          | Data      | Boolean data.                                                                |
-| is_array      | Judge whether the variable is Array type                                        | Data      | Boolean data.                                                                |
+| is_null       | Check if a field is undefined                                                   | Data      | Boolean data.                                                                |
+| is_not_null   | Check if a field is not undefined                                               | Data      | Boolean data.                                                                |
+| is_str        | Check whether the value is of String type                                       | Data      | Boolean data.                                                                |
+| is_bool       | Check if the value is of Boolean type                                           | Data      | Boolean data.                                                                |
+| is_int        | Check if the value is of Integer type                                           | Data      | Boolean data.                                                                |
+| is_float      | Check if the value is of Float type                                        | Data      | Boolean data.                                                                |
+| is_num        | Check if the value is of numeric type, including Integer and Float types | Data      | Boolean data.                                                                |
+| is_map        | Check if the value is of Map type                                          | Data      | Boolean data.                                                                |
+| is_array      | Check if the value is of Array type                                        | Data      | Boolean data.                                                                |
+
+
+**Examples:**
+
 
 ```erlang
 is_null(undefined) = true
@@ -81,7 +96,7 @@ is_num(2.3) = true
 is_num('val') = false
 ```
 
-## Data type conversion function
+## Data Type Conversion Functions
 
 | function name | purpose                                             | parameter                    | returned value                                                             |
 | ------------- | --------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------- |
@@ -93,6 +108,8 @@ is_num('val') = false
 | float2str     | Convert a float to string using the given precision | 1. Float Number 2. Precision | String                                                                     |
 | map           | Convert data to Map type                            | Data                         | Map type data. Failure to convert will cause SQL matching to fail          |
 
+**Examples:**
+
 ```erlang
 str(1234) = '1234'
 str_utf8(1234) = '1234'
@@ -103,10 +120,10 @@ float2str(20.2, 10) = '20.2'
 float2str(20.2, 17) = '20.19999999999999928'
 ```
 
-Note that when converting a floating-point type to a string, the output result will be affected by the precision.
+Note that when converting a floating-point type to a string, the output may need to be rounded.
 For details, see: [floating-point-guide](https://floating-point-gui.de/)
 
-## String functions
+## String Functions
 
 | Function name | Purpose                        | parameter                                                                                                                               | returned value     |
 | ------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
@@ -122,6 +139,8 @@ For details, see: [floating-point-guide](https://floating-point-gui.de/)
 | split         | String splitting               | 1. input string <br />2. split string                                                                                                   | Split string array |
 | split         | String splitting               | 1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing' | Split string array |
 | split         | split string                   | 1. input string <br />2. split string <br />3. Find the first separator on the left or right, optional value is 'leading' or 'trailing' | Split string array |
+
+**Examples:**
 
 ```erlang
 lower('AbC') = 'abc'
@@ -148,7 +167,7 @@ split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
 
 ```
 
-## Map function
+## Map Functions
 
 | function name | purpose                                                                           | parameter                                  | returned value                                                      |
 | ------------- | --------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------- |
@@ -156,13 +175,15 @@ split('a/b/ c', '/', 'trailing') = ['a/b', ' c']
 | map_get       | Take the value of a Key in the Map, if failed, return the specified default value | 1. Key <br />2. Map <br />3. Default Value | The value of a Key in the Map. Support nested keys, such as "a.b.c" |
 | map_put       | Insert value into Map                                                             | 1. Key <br />2. Value <br />3. Map         | The inserted Map. Support nested keys, such as "a.b.c"              |
 
+**Examples:**
+
 ```erlang
 map_get('a', json_decode( '{ "a" : 1 }' )) = 1
 map_get('b', json_decode( '{ "a" : 1 }' ), 2) = 2
 map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
 ```
 
-## Array function
+## Array Functions
 
 | function name | purpose                                                                               | parameter                                                       | returned value         |
 | ------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------- |
@@ -174,6 +195,9 @@ map_get('a', map_put('a', 2, json_decode( '{ "a" : 1 }' ))) = 2
 | last          | take the last element                                                                 | Original array                                                  | the last element       |
 | contains      | Determine whether the data is in the array                                            | 1. data <br />2. Original array                                 | Boolean value          |
 
+
+**Examples:**
+
 ```erlang
 nth(2, [1,2,3,4]) = 2
 length([1,2,3,4]) = 4
@@ -184,7 +208,7 @@ last([1,2,3,4]) = 4
 contains(2, [1,2,3,4]) = true
 ```
 
-## Hash function
+## Hash Function
 
 | function name | purpose         | parameter | returned value |
 | ------------- | --------------- | --------- | -------------- |
@@ -192,22 +216,27 @@ contains(2, [1,2,3,4]) = true
 | sha           | evaluate SHA    | data      | SHA value      |
 | sha256        | evaluate SHA256 | data      | SHA256 value   |
 
+**Examples:**
+
 ```erlang
 md5('some val') = '1b68352b3e9c2de52ffd322e30bffcc4'
 sha('some val') = 'f85ba28ff5ea84a0cbfa118319acb0c5e58ee2b9'
 sha256('some val') = '67f97635d8a0e064f60ba6e8846a0ac0be664f18f0c1dc6445cd3542d2b71993'
 ```
 
-## Compresses and Uncompresses functions
+## Compression and Decompression Functions
 
 | Function         | Purpose                                              | Parameters             | Returned value         |
 | ---------------- | ---------------------------------------------------- | ---------------------- | ---------------------- |
 | `gzip`           | Compresses data with gz headers and checksum.        | Raw binary data        | Compressed binary data |
-| `gunzip`         | Uncompresses data with gz headers and checksum.      | Compressed binary data | Raw binary data        |
+| `gunzip`         | Decompresses data with gz headers and checksum.      | Compressed binary data | Raw binary data        |
 | `zip`            | Compresses data without zlib headers and checksum.   | Raw binary data        | Compressed binary data |
-| `unzip`          | Uncompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data        |
+| `unzip`          | Decompresses data without zlib headers and checksum. | Compressed binary data | Raw binary data        |
 | `zip_compress`   | Compresses data with zlib headers and checksum.      | Raw binary data        | Compressed binary data |
-| `zip_uncompress` | Uncompresses data with zlib headers and checksum.    | Compressed binary data | Raw binary data        |
+| `zip_uncompress` | Decompresses data with zlib headers and checksum.   | Compressed binary data | Raw binary data        |
+
+
+**Examples:**
 
 ```erlang
 bin2hexstr(gzip('hello world')) = '1F8B0800000000000003CB48CDC9C95728CF2FCA49010085114A0D0B000000'
@@ -220,13 +249,17 @@ bin2hexstr(zip_compress('hello world')) = '789CCB48CDC9C95728CF2FCA4901001A0B045
 zip_uncompress(hexstr2bin('789CCB48CDC9C95728CF2FCA4901001A0B045D')) = 'hello world'
 ```
 
-## Bit functions
+## Bit Functions
 
 | Function  | Purpose                                                                                                                                                                   | Parameters                                                                                                                                                                                                                                                                                      | Returned value               |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `subbits` | Get a given length of bits from the beginning of a binary, and then convert it to an unsigned integer (big-endian).                                                       | 1. The binary <br />2. The length of bits to get                                                                                                                                                                                                                                                | The unsigned integer         |
 | `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to an unsigned integer (big-endian). Offsets are start from 1.                | 1. The binary <br />2. The offset <br />3. The length of bits to get                                                                                                                                                                                                                            | The unsigned integer         |
 | `subbits` | Get a given length of bits start from the specified offset of a binary, and then convert it to a data type according to the arguments provided. Offsets are start from 1. | 1. The binary <br />2. The offset <br />3. The length of bits to get <br />4. Data Type, can be one of 'integer', 'float', 'bits' <br />5. Signedness, only works for integers, can be one of 'unsigned', 'signed', <br />6. Endianness, only works for integers, can be one of 'big', 'little' | The data got from the binary |
+
+
+
+**Examples:**
 
 ```erlang
 subbits('abc', 8) = 97
@@ -236,7 +269,7 @@ subbits('abc', 9, 16, 'integer', 'signed', 'big') = 25187
 subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 ```
 
-## Decoding and encoding functions
+## Decoding and Encoding Functions
 
 | Function        | Purpose              | Parameters                                | Returned value                      |
 | --------------- | -------------------- | ----------------------------------------- | ----------------------------------- |
@@ -246,6 +279,9 @@ subbits('abc', 9, 16, 'integer', 'signed', 'little') = 25442
 | `json_decode`   | JSON decode          | The JSON string to be decoded             | The decoded data                    |
 | `bin2hexstr`    | Binary to Hex String | The binary                                | The hex string                      |
 | `hexstr2bin`    | Binary to Hex String | The hex string                            | The binary                          |
+
+
+**Examples:**
 
 ```erlang
 base64_encode('some val') = 'c29tZSB2YWw='
@@ -263,7 +299,17 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 <!-- For examples of schema_encode() and schema_decode(), see [schema registry](schema-registry.md) -->
 {% endemqxee %}
 
-## Time and date functions
+## Time and Date Functions
+
+
+The following table contains the time units that are used in the functions described below. The time unit is specified as a string (for example, `now_timestamp('second')`).
+
+| Name          | Precision   | Example             |
+| ------------- | ----------- | ------------------- |
+| `second`      | second      | 1653557821          |
+| `millisecond` | millisecond | 1653557852982       |
+| `microsecond` | microsecond | 1653557892926417    |
+| `nanosecond`  | nanosecond  | 1653557916474793000 |
 
 | Function             | Purpose                                                                 | Parameters                                                                                                                                                                                                                                                                                              | Returned value                    |
 | -------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
@@ -278,16 +324,8 @@ bin2hexstr(hexstr2bin('ABEF123')) = 'ABEF123'
 | `format_date`        | Timestamp to formatted time                                             | 1. The time unit (refer to The time unit)</br>2. The time offset (refer to time offset definition)</br>3. The date format (refer to time string codec format)</br>4. The timestamp (optional parameter, default is current time)                                                                        | Formatted time                    |
 | `date_to_unix_ts`    | Formatted time to timestamp                                             | 1. The time unit (refer to the following table for definition) </br>2. The time offset (optional, when not filled, use the time offset in the formatted time string, refer to the time offset definition) </br>3. The date format (refer to time string codec format) </br>4. The formatted time string | The unix epoch                    |
 
-The time unit
 
-| Name          | Precision   | Example             |
-| ------------- | ----------- | ------------------- |
-| `second`      | second      | 1653557821          |
-| `millisecond` | millisecond | 1653557852982       |
-| `microsecond` | microsecond | 1653557892926417    |
-| `nanosecond`  | nanosecond  | 1653557916474793000 |
-
-Time string format
+**Time String Format Syntax**
 
 | Placeholder | Definition                 | Range                  |
 | ----------- | -------------------------- | ---------------------- |
@@ -304,7 +342,7 @@ Time string format
 | `%:z`       | time offset [+\|-]HH:MM    | -11:59 to +11:59       |
 | `%::z`      | time offset [+\|-]HH:MM:SS | -11:59:59 to +11:59:59 |
 
-The time offset
+**The Time Offset**
 
 | Offset           | Definition                 | Examples                                                                                                     |
 | ---------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -315,6 +353,8 @@ The time offset
 | `[+\|-]HH:MM`    | `%:z`                      | Beijing `+08:00` </br>Zulu `+00:00` </br>Stockholm, Sweden `+02:00` </br>Los Angeles `-08:00`                |
 | `[+\|-]HH:MM:SS` | `%::z`                     | Beijing `+08:00:00` </br>Zulu `+00:00:00` </br>Stockholm, Sweden `+02:00:00` </br>Los Angeles `-08:00:00`    |
 | integer()        | Seconds                    | Beijing 28800 </br>Zulu 0 </br>Stockholm, Sweden 7200 </br>Los Angeles -28800                                |
+
+**Examples:**
 
 ```SQL
 now_timestamp() = 1650874276
@@ -332,6 +372,8 @@ date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2022-05-26 18:40:12+08:00') =
 date_to_unix_ts('second', 'local', '%Y-%m-%d %H-%M-%S', '2022-05-26 18:40:12') = 1653561612
 date_to_unix_ts('second', '%Y-%m-%d %H-%M-%S', '2022-05-26 10:40:12') = 1653561612
 ```
+
+**MongoDB Time Functions**
 
 {% emqxee %}
 | Function | Purpose | Parameters | Returned value |
