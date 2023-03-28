@@ -255,6 +255,8 @@
   title_cn: 配置文件参数
   path: configuration/configuration
   children:
+    - configuration/cluster
+    - configuration/listener
     - configuration/configuration-manual
 
 # - title_en: Back
