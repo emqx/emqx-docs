@@ -108,11 +108,11 @@ MQTT-over-QUIC has two modes.
    - It send PUBLISH packets over the stream where it get the topic subscription and also expecting PUBACK for QoS1 from the same stream.
    
    
-   :::tip
+:::tip
 
-    The order of data is maintained per stream, hence, if there are two topics whose data is correlated and ordering is crucial, they should be mapped to the same stream.
+The order of data is maintained per stream, hence, if there are two topics whose data is correlated and ordering is crucial, they should be mapped to the same stream.
     
-   :::
+:::
    
    Features and usecases:
    
