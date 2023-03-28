@@ -1,10 +1,61 @@
-# Performance test (eMQTT Bench)
+# Performance Test
 
-[emqtt_bench](https://github.com/emqx/emqtt_bench) is a concise and powerful MQTT protocol performance testing tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization, the test service [XMeter](https://www.xmeter.net/) is recommended.
+After you deploy the EMQX either in a single mode or in an EMQX cluster, you can test the performance of your deployment to know the system capability. This section introduces how to install and use the [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) to do the performance test. The eMQTT-Bench is a concise and powerful MQTT protocol benchmark tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization, the test service [XMeter](https://www.xmeter.net/) is recommended.
 
-## Compile and Install
+## Install eMQTT-Bench
 
-The operation of `emqtt_bench` depends on the operating environment of Erlang/OTP 21.2 and above version. The installation process is skipped. For details, refer to the online installation tutorials.
+There are three options for installing the eMQTT-Bench:
+
+- Run the docker image
+- Download and install the binary package
+- Build from the source code
+
+### Docker Image
+
+You can install the benchmark tool by running the `emqtt_bench` docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
+
+```bash
+docker run -it emqx/emqtt-bench:latest
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+Note that docker image name is using hyphen '-', while binary script name is with underscore '_'.
+
+### Binary Package
+
+You can download the released binary packages and install the `emqtt_bench` on the following platforms:
+
+- Amazon Linux 2
+- CentOS 7
+- Rocky Linux 8
+- Rocky Linux 9
+- Debian 9
+- Debain 10
+- Debain 11
+- Ubuntu 16.04
+- Ubuntu 18.04
+- Ubuntu 20.04
+- Ubuntu 22.04
+- MacOS 11
+- MacOS 12
+
+For detailed information on each release, see [Releases](https://github.com/emqx/emqtt-bench/releases).
+
+For example, here is how to install `emqtt_bench` on Ubuntu 20.04:
+
+```bash
+mkdir emqtt_bench && cd emqtt_bench
+wget https://github.com/emqx/emqtt-bench/releases/download/0.4.11/emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+tar xfz emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+rm emqtt-bench-0.4.11-ubuntu20.04-amd64.tar.gz
+
+./emqtt_bench
+Usage: emqtt_bench pub | sub | conn [--help]
+```
+
+### Build from Source
+
+`emqtt_bench` is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 21.2 and above version to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
 
 After the Erlang environment is installed, download the latest code of `emqtt-bench` and compile it:
 
@@ -24,13 +75,13 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 The output of the above content proves that `emqtt_bench` has been correctly installed on the host.
 
-## Use
+## Test Performance Using eMQTT-Bench
 
 There are three subcommands of `emqtt_bench`:
 
-1. `pub`: used to create a large number of clients to perform the operation of publishing messages.
-2. `sub`: Used to create a large number of clients to subscribe to topics and receive messages.
-3. `conn`: used to create a large number of connections.
+1. `pub`: Create a large number of clients to perform the operation of publishing messages.
+2. `sub`: Create a large number of clients to subscribe to topics and receive messages.
+3. `conn`: Create a large number of connections.
 
 ### Publish
 
@@ -47,7 +98,7 @@ When executing `./emqtt_bench pub --help`, you get the available parameter outpu
 | --interval_of_msg | -I           | -               | 1000           | Interval to publish a message                                |
 | --username        | -u           | -               | None; optional | Client username                                              |
 | --password        | -P           | -               | None; optional | Client password                                              |
-| --topic           | -t           | -               | None; required | Published topics; support placeholders:<br />`%c`： ClientId<br />`%u`： Username<br />`%i`：Client's sequence number |
+| --topic           | -t           | -               | None; required | Published topics; support placeholders:<br />`%c`: ClientId<br />`%u`: Username<br />`%i`: Client's sequence number |
 | --size            | -s           | -               | 256            | Message Payload size; unit: bytes                            |
 | --qos             | -q           | -               | 0              | QoS level                                                    |
 | --retain          | -r           | true<br />false | false          | Whether the message sets the Retain flag                     |
@@ -59,7 +110,7 @@ When executing `./emqtt_bench pub --help`, you get the available parameter outpu
 | --ws              | -            | true<br />false | false          | Whether to establish a connection via WebSocket              |
 | --ifaddr          | -            | -               | None           | Specifies the local network card used by the client connection |
 
-For example, you start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is` 16` bytes:
+For example, we start 10 connections and send 100 Qos0 messages to the topic `t` every second, where the size of each message payload is ` 16` bytes:
 
 ```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
@@ -116,14 +167,14 @@ Verify the use of the tool in 2 most typical scenarios:
 
 A total of three 8C16G servers need to be prepared, one for EMQX and two for client presses:
 
-- System: `CentOS Linux release 7.7.1908 (Core)`
+- **System**: `CentOS Linux release 7.7.1908 (Core)`
 
-- **CPU:** `Intel Xeon Processor (Skylake)` Main frequency: `2693.670 MHZ`
+- **CPU**: `Intel Xeon Processor (Skylake)` Main frequency: `2693.670 MHZ`
 
-- **Server：** `emqx-centos7-v4.0.2.zip`
+- **Server**: `emqx-centos7-v4.0.2.zip`
 
-- **Press：**`emqtt-bench v0.3.1`
-  - Each press is configured with 10 network cards, which are used to establish a large number of MQTT client connections in the connection test.
+- **Press**: `emqtt-bench v0.3.1`
+  - Each press is configured with 10 network cards, which are used to establish a large number of MQTT client connections in the connection test
 
 The topology structure is as follows:
 

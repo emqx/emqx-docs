@@ -8,7 +8,7 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 
 | 安装方式     | 配置文件所在位置          |
 | ------------ | ------------------------- |
-| 二进制包安装 | `/etc/emqx/etc/emqx.conf` |
+| 二进制包安装 | `/etc/emqx/emqx.conf`       |
 | 解压缩包安装 | `./etc/emqx.conf`         |
 | Docker 容器  | `/opt/emqx/etc/emqx.conf` |
 
