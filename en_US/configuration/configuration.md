@@ -1,97 +1,15 @@
 # Configuration Files
 
-Users can configure EMQX with configuration files or environment variables. This chapter will introduce the EMQX configuration files. For configuration items and detailed introduction, see [Configuration Manual](./configuration-manual.md).
+After completing the installation, startup, and testing of EMQX, you can better meet your business needs by modifying the configuration options.
 
-## Configuration Files
+EMQX supports configuration modification through environment variables and configuration options, where:
 
-### **Main Configuration File**
-
-EMQX will create a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`. 
-
-Depends on your installation mode, emqx.conf` is stored in:
-
-| Installation                       | Path                      |
-| ---------------------------------- | ------------------------- |
-| Installed with binary package      | `/etc/emqx/etc/emqx.conf` |
-| Installed with compression package | `./etc/emqx.conf`         |
-| Installed with Docker              | `/opt/emqx/etc/emqx.conf` |
-
-As the main configuration file, `emqx.conf` contains most of the commonly used configuration items. You can follow the example provided in the `emqx-example.conf` file (located within the same folder) to customize the settings. EMQX will use the default setting for other items to simplify your configuration work.  
-
-### Configuration Rewrite File
-
-`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides two configuration rewrite files implicitly nested under `emqx.conf`:
-
-- `cluster-override.conf`
-
-  Contains configuration items for the EQMX cluster. You can customize the settings with Dashboard,  REST API, and CLI. Note: Configurations in this file will overwrite configuration items with the same name in `emqx.conf`.
-
-  If a certain cluster node is restarted or some new nodes are added, the node will automatically copy and apply the configuration file from other nodes within the cluster, therefore there is no need nor recommended to configure it manually. 
-
-- `local-override.conf`
-
-  Contains configuration items for a single EQMX node. Note: Configurations in this file will overwrite configuration items with the same name in `emqx.conf`.
-
-  It will only take effect on a node level, you will need to manually do the configuration if you want to apply to the cluster level. 
-
-The configuration rewrite files are located in the `$data/configs/` directory, and the path of the `data` directory varies according to the installation method:
-
-| Installation                       | Path                 |
-| ---------------------------------- | -------------------- |
-| Installed with compression package | `./data`             |
-| Installed with binary package      | `/var/lib/emqx/data` |
-
-
-
-By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level with Dashboard, REST API or CLI, the changes will be synced with the `cluster-override.conf` as configuration files and overide the corresponding settings in `emqx.conf`. And this whole process is called hot reload.
-
-Similarly, you can add or modify the node settings and these changes will be synced with the  `local-override.conf` file and override the corresponding settings in `cluster-override.conf`.  <!--后续需要修改-->
-
-For override rules, see [Configure override rules](#Configure override rules).
-
-:::tip 
-
-Some configuration items cannot be overridden, for example,  `node.name`.
-
-:::
-
-## HOCON Configuration Format
-
-Since EMQX 5.0, we have begun to use [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format. 
-
-HOCON is a format for human-readable data and a superset of JSON. With features like inheritance, combined, and quotes, HOCON further simplifies the configuration work.
-
-**HOCON syntax：**
-
-HOCON values can be represented as JSON-like objects, for example:
-
-```hocon
-node {
-  name = "emqx@127.0.0.1"
-  cookie = "mysecret"
-  cluster_call {
-    retry_interval  =  1m
-  }
-}
-```
-
-or in flattening:
-
-```bash
-node.name = "127.0.0.1"
-node.cookie = "mysecret"
-node.cluster_call.retry_interval = "1m"
-```
-
-This cuttlefish-like flattening format is backward compatible with the previous EMQX versions, but it is used differently:
-
-HOCON recommends adding quotes at both ends of the string. Strings without special characters can also be unquoted, for example  `foo`, `foo_bar`, while cuttlefish regards all characters to the right of `=` as values.
-
-For more information about HOCON syntax, please refer to [HOCON Documentation](https://github.com/lightbend/config/blob/main/HOCON.md).
+- Environment variables: Configurations for the overall operating environment and behavior of EMQX, such as listener address, log level, etc. They can be modified at the start or during the runtime of EMQX. In EMQX, environment variables usually have `EMQX_` as their prefix.
+- Configuration items: Configuration items are provided in EMQX configuration file `emqx.conf`, which can be set for specific behaviors. Users can customize the settings through the EMQX configuration file.
 
 ## Environment Variables
 
-Besides configuration files, you can also use environment variables to configure EMQX.
+Environment variables can be set by using various methods, such as setting them in the operating system's environment, passing them as command-line arguments, or setting them in a configuration file. <!--to be reviewed-->
 
 For example, environment variable  `EMQX_NODE__NAME=emqx2@127.0.0.1`  will override the following configuration:
 
@@ -119,7 +37,6 @@ export EMQX_LISTENERS__SSL__DEFAULT__BIND='"127.0.0.1:8883"'
 ## Pass the HOCON array directly by character
 export EMQX_LISTENERS__SSL__DEFAULT__AUTHENTICATION__SSL__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
 
-
 # Configuration file
 listeners.ssl.default {
   ...
@@ -144,158 +61,69 @@ When a known root path is set with an unknown field name, EMQX will output a `wa
 
 :::
 
-## Configure Override Rules
+## Configuration Files
 
-The value of HOCON will be overridden hierarchically, the rules are as follows:
 
-- In the same file, the value defined in the later section will override any previous key value. 
 
-- A higher-level value will replace that of a lower-level. 
+### **Main Configuration File**
 
-### Override
+EMQX will create a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`. 
 
-In the following configuration, the `debug` value of `level` defined in the last line will overwrite the previously defined `error`, but the `enable` field remains unchanged:
+Depending on your installation mode, `emqx.conf` is stored in:
 
-```bash
-log {
-  console_handler{
-    enable = true
-    level = error
-  }
-}
+| Installation                       | Path                      |
+| ---------------------------------- | ------------------------- |
+| Installed with binary package      | `/etc/emqx/emqx.conf`     |
+| Installed with compression package | `/opt/emqx/etc/emqx.conf` |
+| Installed with Docker              | `./etc/emqx.conf`         |
 
-## Set the console log printing level to debug, and keep the other configurations
-log.console_handler.level = debug
-```
+As the main configuration file, `emqx.conf` contains most of the commonly used configuration items. You can follow the example provided in the `emqx-example.conf` file (located within the same folder) to customize the settings. EMQX will use the default setting for other items to simplify your configuration work.  
 
-The packet size limit was first set to 1MB, then overridden to 10MB:
+### Configuration Rewrite File
 
-```bash
-zone {
-  zone1 {
-    mqtt.max_packet_size = 1M
-  }
-}
-zone.zone1.mqtt.max_packet_size = 10M
-```
+`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file implicitly overlaying `emqx.conf`:
 
-### List Element Override
+**`cluster-override.conf`**
 
-EMQX array has two expression ways:
+Contains configuration items for the entire cluster, configuration changes made from Dashboard, REST API, and CLI will be persisted to this file.
 
-- List, for example,  `[1, 2, 3]`
-- Map (subscribing), for example: `{"1"=1, "2"=2, "3"=3}`
+If a certain cluster node is restarted or some new nodes are added, the node will automatically copy and apply the configuration file from other nodes within the cluster, therefore there is no need nor recommended to configure it manually.
 
-The following 3 formats are equivalent:
+The configuration rewrite files are located in the `$data/configs/` directory, and the path of the `data` directory varies according to the installation method:
 
-```bash
-authentication.1 = {...}
-authentication = {"1": {...}}
-authentication = [{...}]
-```
+| Installation                               | Path             |
+| ------------------------------------------ | ---------------- |
+| Installed with RPM or DEB package          | `/var/lib/emqx`  |
+| Running in docker container                | `/opt/emqx/data` |
+| Extracted from portable compressed package | `./data`         |
 
-Based on this feature, we can easily override the value of an element in an array, for example:
+:::tip 
 
-```bash
-authentication  = [
-  {
-    enable = true,
-    backend = "built_in_database",
-    mechanism = "password_based"
-  }
-]
+It is possible to change data directory from config `node.data_dir` or environment variable `EMQX_NODE__DATA_DIR`, however, when running a cluster, all nodes should have the same path. 
 
-# The `enable` field of the first element can be overridden in the following way:
-authentication.1.enable = false
-```
+:::
+
+By default, most global settings are defined in the `emqx.conf` file, if you perform certain operations on the cluster level with Dashboard, REST API or CLI, the changes will be synced with the `cluster-override.conf` as configuration files and overide the corresponding settings in `emqx.conf`. And this whole process is called hot reload.
+
+For override rules, see [Configure override rules](./HOCON.md).
+
+:::tip
+
+Some configuration items cannot be overridden, for example, `node.name`.
+
+:::
+
+### Dot Syntax
+
+EMQX uses the dot syntax, also known as dot notion, to reference specific elements within a structured data type, including `Struct`, `Map`, or `Array`. For example, for `node.name`, setting the value of a property called `name` on an object or variable called `node`.
 
 ::: tip
 
-Arrays (in list format) will be fully overwritten and original value cannot be kept, for example:
-
-```bash
-authentication = [
-  {
-    enable = true
-    backend = "built_in_database"
-    mechanism="password_based"
-  }
-]
-
-## With the following method, all fields except `enable` of the first element will be lost.
-authentication = [{ enable = true }]
-```
+When accessing elements within an `Array` using dotted notation, a 1-based index should be used. This means that the first element of an Array is referred to using "1", rather than the traditional 0-based indexing. 
 
 :::
 
-
-
-<!-- Schema 沿用英文的描述 -->
-
-## Schema
-
-To make the HOCON objects type-safe, EMQX introduced a schema for it.
-The schema defines data types, and data fields' names and metadata for config value validation
-and more.
-
-::: tip Tip
-The configuration document you are reading now is generated from schema metadata.
-:::
-
-### Primitive Data Types
-
-Complex types define data 'boxes' which may contain other complex data
-or primitive values.
-There are quite some different primitive types, to name a few:
-
-- `atom()`.
-- `boolean()`.
-- `string()`.
-- `integer()`.
-- `float()`.
-- `number()`.
-- `binary()`, another format of string().
-- `emqx_schema:duration()`, time duration, another format of integer()
-- ...
-
-::: tip Tip
-The primitive types are mostly self-describing, so there is usually not a lot to document.
-For types that are not so clear by their names, the field description is to be used to find the details.
-:::
-
-### Complex Data Types
-
-There are 4 complex data types in EMQX's HOCON config:
-
-1. Struct: Named using an unquoted string, followed by a predefined list of fields.
-   Only lowercase letters and digits are allowed in struct and field names.
-   Also, only underscore can be used as a word separator.
-1. Map: Map is like Struct, however the fields are not predefined.
-1. Union: `MemberType1 | MemberType2 | ...`
-1. Array: `[ElementType]`
-
-::: tip Tip
-If map filed name is a positive integer number, it is interpreted as an alternative representation of an `Array`.
-For example:
-
-```bash
-myarray.1 = 74
-myarray.2 = 75
-```
-
-will be interpreated as `myarray = [74, 75]`, which is handy when trying to override array elements.
-:::
-
-### Config Paths
-
-If we consider the whole EMQX config as a tree,
-to reference a primitive value, we can use a dot-separated names form string for
-the path from the tree-root (always a Struct) down to the primitive values at tree-leaves.
-
-Each segment of the dotted string is a Struct filed name or Map key.
-For Array elements, 1-based index is used.
-
-below are some examples
+Below are some examples, 
 
 ```bash
 node.name = "emqx.127.0.0.1"

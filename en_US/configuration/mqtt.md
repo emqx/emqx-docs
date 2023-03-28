@@ -27,15 +27,14 @@ mqtt {
 
 Where, 
 
-| **Configuration Items**                                      | **Description**                                              | **Default value** | **Optinal Values** |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- | ------------------ |
-| **Max Packet Size <br>(**`max_packet_size`)                  | MQTT packets are used to send messages between MQTT clients and EMQX.<br> This sets the maximum MQTT packet size allowed. | `1MB`             |                    |
-| **Max Client ID Length** <br/>(`max_clientid_len`)           | This sets the maximum length of an MQTT client ID.<br/>It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` ～ `65535`    |
-| **Max Topic Levels** <br/>(`max_topic_levels`)               | MQTT topics are used to organize and categorize messages. <br/>This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` ～ `65535`     |
-| **Max QoS** <br/>(`max_qos_allowed`)                         | QoS levels determine the level of reliability and delivery assurance for messages.<br/> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                    |
-| **Max Topic Alias** <br/>(`max_topic_alias`)                 | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br/> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` ～ `65535`     |
-| **Retain Available** <br/>(`retain_available`)               | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br/> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`    |
-| **Wildcard Subscription Available**<br/>(`wildcard_subscription`) | Wildcard subscriptions allow MQTT clients to subscribe to multiple topics using a single subscription, using wildcards such as + and #. <br/>This sets whether to enable wildcard subscription in MQTT. | `true`            | `true`, `false`    |
+| **Configuration Items**                            | **Description**                                              | **Default value** | **Optinal Values** |
+| -------------------------------------------------- | ------------------------------------------------------------ | ----------------- | ------------------ |
+| **Max Packet Size <br>(**`max_packet_size`)        | MQTT packets are used to send messages between MQTT clients and EMQX.<br> This sets the maximum MQTT packet size allowed. | `1MB`             |                    |
+| **Max Client ID Length** <br/>(`max_clientid_len`) | This sets the maximum length of an MQTT client ID.<br/>It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` ～ `65535`    |
+| **Max Topic Levels** <br/>(`max_topic_levels`)     | MQTT topics are used to organize and categorize messages. <br/>This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` ～ `65535`     |
+| **Max QoS** <br/>(`max_qos_allowed`)               | QoS levels determine the level of reliability and delivery assurance for messages.<br/> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                    |
+| **Max Topic Alias** <br/>(`max_topic_alias`)       | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br/> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` ～ `65535`     |
+| **Retain Available** <br/>(`retain_available`)     | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br/> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`    |
 
 
 
@@ -65,7 +64,7 @@ Where,
 | **Shared Subscription Available** <br/>(`shared_subscription`) | Shared subscriptions allow multiple MQTT clients to share a subscription to a topic. <br/>This sets whether to enable shared subscriptions in MQTT. | `true`            | `true`, `false`                                              |
 | `shared_subscription_strategy`                               | This setting defines the strategy for distributing messages among MQTT clients that share a subscription.<br>Needed only `shared_subscription` is set to `true`. | `round_robin`     | - `random` (Dispatch the message to a random selected subscriber) <br><br/>- `round_robin` (Select the subscribers in a round-robin manner) <br><br/>-  `sticky` (Always use the last selected subscriber to dispatch, until the subscriber disconnects.)<br><br/>- `hash` (Select the subscribers by the hash of `clientIds`)<br/> |
 
-## Delayed Settings
+## Delayed Publish Settings
 
 The Delayed Publish feature allows clients to delay the publishing of a message to a topic for a specified amount of time. This feature is useful for scenarios where messages need to be published at specific times or when a certain condition is met.
 
