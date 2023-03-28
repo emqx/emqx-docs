@@ -1,11 +1,18 @@
 # Configuration Files
 
-After completing the installation, startup, and testing of EMQX, you can better meet your business needs by modifying the configuration options.
+After completing the installation, startup, and testing of EMQX, you can better meet your business needs by modifying the configuration items.
 
-EMQX supports configuration modification through environment variables and configuration options, where:
+EMQX supports configuration modification through environment variables and configuration items, where:
 
-- Environment variables: Configurations for the overall operating environment and behavior of EMQX, such as listener address, log level, etc. They can be modified at the start or during the runtime of EMQX. In EMQX, environment variables usually have `EMQX_` as their prefix.
-- Configuration items: Configuration items are provided in EMQX configuration file `emqx.conf`, which can be set for specific behaviors. Users can customize the settings through the EMQX configuration file.
+- Environment variables: Configurations for the overall operating environment and behaviour of EMQX, such as listener address, log level, etc. They can be modified at the start or during the runtime of EMQX. In EMQX, environment variables usually have `EMQX_` as their prefix.
+
+- Configuration items: For most configuration items, you can directly modify them with EMQX Dashboard; for those uncovered in the Dashboard, you can also modify them in EMQX configuration items `emqx.conf`.  <!--这里有 API 的选项吗？-->
+
+  ::: tip
+
+  Changes made to configuration settings via the Dashboard will be immediately applied without requiring a restart. The updated settings will be saved in the `emqx.conf` file, and any previous settings for the same configuration items in that file will be overridden.
+
+  :::
 
 ## Environment Variables
 
@@ -63,8 +70,6 @@ When a known root path is set with an unknown field name, EMQX will output a `wa
 
 ## Configuration Files
 
-
-
 ### **Main Configuration File**
 
 EMQX will create a group of directories after installation, among which, `etc` is the folder that keeps all the configuration files. This section will focus on the main configuration file: `emqx.conf`. 
@@ -113,30 +118,17 @@ Some configuration items cannot be overridden, for example, `node.name`.
 
 :::
 
-### Dot Syntax
+### Updated Encryption Approach
 
-EMQX uses the dot syntax, also known as dot notion, to reference specific elements within a structured data type, including `Struct`, `Map`, or `Array`. For example, for `node.name`, setting the value of a property called `name` on an object or variable called `node`.
+EMQX helps ensure devices communicate with each other securely over the Internet. One way it does this is by using encryption, which means that the information being sent is scrambled in a way that only the intended recipient can unscramble.
 
-::: tip
+In the past, EMQX used to run with a set of pre-selected encryption methods by default. But starting from version 5.0.6, EMQX only applies encryption methods when it's needed.
 
-When accessing elements within an `Array` using dotted notation, a 1-based index should be used. This means that the first element of an Array is referred to using "1", rather than the traditional 0-based indexing. 
+In the past, EMQX used to run with a set of pre-selected encryption methods by default. But starting from version 5.0.6, EMQX only applies encryption methods when it's needed.
 
-:::
+For example, when you're setting up a server to listen for incoming connections, EMQX will only use encryption methods that are needed for the specific connection. Similarly, when you're connecting to a server as a client, EMQX will only use encryption methods that are needed for that specific connection.
 
-Below are some examples, 
-
-```bash
-node.name = "emqx.127.0.0.1"
-zone.zone1.max_packet_size = "10M"
-authentication.1.enable = true
-```
-
-### TLS ciphers
-
-Starting from v5.0.6, EMQX no longer pre-populates the ciphers list with a default
-set of cipher suite names.
-Instead, the default ciphers are applied at runtime when starting the listener
-for servers, or when establishing a TLS connection as a client.
+This change makes EMQX more flexible and secure because it's only using the encryption methods that are necessary for each specific situation, instead of using a fixed set of methods that might not be the best choice in every situation.
 
 Below are the default ciphers selected by EMQX.
 

@@ -54,9 +54,25 @@ To further lower the configuration threshold, EMQX introduced a schema for HOCON
 | Union         | 表示一组可能的值，通常用于描述一个参数可以接收多种数据类型，例如字符串或整数，不同数据类型通过 \| 分隔。还可嵌套在其他数据结构中，作为一个对象的值。 | 例如，希望指定配置项 emqx_schema 可以接收字符串和整数两种数据类型：`type emqx_schema = string | int` |
 | Array         | 表示一组有序的值，每个值都有唯一的索引。可以定义 HOCON 配置文件中的数组或列表。 | `my_array = [1, 2, 3, 4, 5]`                                 |
 
+## Dot Syntax
 
+EMQX uses the dot syntax, also known as dot notion, to reference specific elements within a structured data type, including `Struct`, `Map`, or `Array`. For example, for `node.name`, setting the value of a property called `name` on an object or variable called `node`.
 
-#### 覆盖规则
+::: tip
+
+When accessing elements within an `Array` using dotted notation, a 1-based index should be used. This means that the first element of an Array is referred to using "1", rather than the traditional 0-based indexing. 
+
+:::
+
+Below are some examples, 
+
+```bash
+node.name = "emqx.127.0.0.1"
+zone.zone1.max_packet_size = "10M"
+authentication.1.enable = true
+```
+
+## 覆盖规则
 
 如果 EMQX 配置文件中的多个配置项具有相同的名称，那么后面的配置项会覆盖前面的配置项，基本规则如下：
 
@@ -95,3 +111,4 @@ authentication = [{ enable = true }]
 ```
 
 更多有关 HOCON 的语法请参考 [HOCON 文档](https://github.com/lightbend/config/blob/main/HOCON.md)。
+
