@@ -99,7 +99,6 @@ bridges.mqtt.my_mqtt_bridge {
   clean_start = true
   keepalive = "60s"
 
-  reconnect_interval = "10s"
   egress {
     local {topic = "local/topic/egress"}
     remote {
