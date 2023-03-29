@@ -12,6 +12,12 @@ debug < info < notice < warning < error < critical < alert < emergency
 
 You can configure EMQX logs with Dashboard or configuration files. To configure with EMQX Dashboard, you can click **Configuration** -> **Log** on the left navigation menu to configure. 
 
+:::tip
+
+Most configuration items listed here also can be configured with Dashboard, and their Dashboard UI fields are also introduced on this page. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::
+
 This section introduces how to configure logs with configuration items. For example, if you want to export the logs of warning levels as both a file and output with a console, you can work with the following configuration items. 
 
 ```bash

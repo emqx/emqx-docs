@@ -24,9 +24,15 @@ limiter {
 }
 ```
 
-Limiter can work on the node level or the listener level. 
+Limiter can work on the node level or the listener level, the section below will introduce how to configure the rate limiter. 
 
-### Configure Limiter on Node Level
+:::tip
+
+Most configuration items listed here also can be configured with Dashboard, and their Dashboard UI fields are also introduced on this page. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::
+
+## Configure Limiter on Node Level
 
 For example, to restrict the message received per second to 100 pieces, you can add the following configuration to `emqx.conf`:
 
@@ -34,7 +40,7 @@ For example, to restrict the message received per second to 100 pieces, you can 
 1limiter.message_in.rate = "100/s"
 ```
 
-### Confiture Limiter on Listener Level
+## Confiture Limiter on Listener Level
 
 For example, you want to configure a TCP listener on port `1883`, with a maximum 1,024,000 of concurrent connections allowed by the listener. And for this listener, if you want to restrict the message received per second to 100 pieces, you can configure it as follows:
 
@@ -49,3 +55,5 @@ listeners.tcp.default {
 ```
 
 For more information on the Limiter and how it works, see [Rate limit](../rate-limit/rate-limit.md).
+
+<!--To add configuration item explanation-->

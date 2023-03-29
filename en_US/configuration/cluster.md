@@ -12,15 +12,16 @@ Before starting the cluster creation step, let's first get familiar with the con
 When configuring nodes with `emqx.conf`, you can work with the code below:
 
 ```bash
-## Node configuration
-node.name = emqx@localhost
-node.role = core
+node {
+  name = "emqx@s1.emqx.io"
+  role = core
+}
 ```
 
 Where, 
 
-- `name` refers to the desired node name, for example, `emqx@localhost`
-- `role` refers to the function that EMQX node performs within an EMQX cluster. There are 2 types of roles: core nodes which participate in write transactions. it is recommended to place core nodes in different racks or availability zones;  replicant codes are worker nodes which keep a read-only replica of the data locally. For a detailed explanation of core nodes and replicant nodes, see [EMQX Clustering - Core and Replicant Nodes](../design/clustering.md). 
+- `name` refers to the desired node name, for example, `emqx@localhost`.
+- `role` refers to the function that EMQX node performs within an EMQX cluster. There are 2 types of roles: core nodes and replicant codes. For a detailed explanation of core nodes and replicant nodes, see [EMQX Clustering - Core and Replicant Nodes](../design/clustering.md). 
   - default value: `core` 
   - optional value: `core` or `replicant`
 
@@ -28,17 +29,59 @@ Where,
 
 In EMQX, cluster is a group of EMQX nodes that work together to provide a highly scalable and fault-tolerant MQTT messaging system. Clustering allows you to distribute the load across multiple nodes and ensure that the system can continue to operate even if one or more nodes fail.
 
-This section introduces how to configure an EMQX cluster. Note: The following configurations items can be added on both a core or replicant node, but some configuration items, for example, `core_nodes`, only take effect under certain preconditions:
+This section introduces how to configure an EMQX cluster. For example, to configure an EMQX cluster, you can add the following configurations items on one EMQX node. 
+
+either on a core or replicant node, if you are working on a replicant node, there are severl but some configuration items, for example, `core_nodes`, only take effect under certain preconditions:
 
 - `node.db_backend` of the node is set to `rlog`, indicating the node uses `rlog` as the database backend. 
 - `node.role` is set to `replicant`, indicating this code functions as a replicant node. 
 - `node.discovery_strategy` is set to `manual` or `static`, there is no need to set this configuration item if automatic cluster discovery mechanism is used. For a detailed explanation of the node discovery strategy and the corresponding configuration items, see [Create Cluster](../deploy/cluster/create-cluster.md). 
 
 ```bash
+node {
+  name = "emqx@s1.emqx.io"
+  db_backend = rlog
+  role = replicant
+  discovery_strategy =  `manual` # or `static`
+}
 cluster {
   name = emqxcl
   discovery_strategy = manual
   core_nodes = []
+  driver = tcp
+  ssl_options {
+    certfile = ""
+    keyfile = ""
+    cacertfile = ""
+  }
+}
+```
+
+
+
+```bash
+node {
+  name = "emqx@s2.emqx.io"
+  role = core
+  discovery_strategy =  `manual` # or `static`
+}
+cluster {
+  name = emqxcl
+  discovery_strategy = manual
+  driver = tcp
+  ssl_options {
+    certfile = ""
+    keyfile = ""
+    cacertfile = ""
+  }
+}
+```
+
+```bash
+cluster {
+  name = emqxcl
+  discovery_strategy = manual
+  core_nodes = [] # only needed if setting on a replicant node, with node.db_backend set to rlog,node.discovery_strategy` set to `manual` or `static`
   driver = tcp
   ssl_options {
     certfile = ""
@@ -54,6 +97,6 @@ Where,
 | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------- |
 | `name`               | This sets the name of the cluster                            | `emqxcl`      |                                                   |
 | `discovery_strategy` | This sets the node discovery strategy for the cluster.       | `manual`      | `manual`, `static`, `mcast`, `DNS`, `etcd`, `k8s` |
-| `core_nodes`         | This sets the core nodes that this replicant code will connect to.<br>Multiple nodes can be added here, separated with a `,` | --            | --                                                |
+| `core_nodes`         | This sets the core nodes that this replicant code will connect to.<br>Multiple nodes can be added here, separated with a `,`<br><br>:::tip Only needed | --            | --                                                |
 | `driver`             | This sets the transport protocol for inter-EMQX node communication. | `tcp`         | `tcp`, `SSL`                                      |
 | `ssl_options`        | This sets the SSL/TLS configuration options for the listener, it has three properties: <br/><br/> - `cacertfile`: This sets the path to the file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.<br/><br/> - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.<br/><br/>- `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate. | --            | --                                                |

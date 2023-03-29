@@ -1,4 +1,4 @@
-## Listeners
+# Listeners
 
 In EMQX, listener is configured to receive requests from MQTT clients. EMQX supports the following message transfer protocols, including:
 
@@ -7,7 +7,13 @@ In EMQX, listener is configured to receive requests from MQTT clients. EMQX supp
 - Websocket listener: `8083`
 - Secure websocket listener: `8084`
 
-### Configure TCP Listener
+:::tip
+
+Most configuration items listed here also can be configured with Dashboard, and their Dashboard UI fields are also introduced on this page. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::
+
+## Configure TCP Listener
 
 TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks. 
 
@@ -28,7 +34,7 @@ where:
   - `bind` is to set the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `1883`. 
   - `max_connection` is to set the maximum number of concurrent connections allowed by the listener; default value: `infinity`.
 
-### Configure SSL Listener
+## Configure SSL Listener
 
 SSL listener is a network service that listens for incoming SSL (Secure Sockets Layer) connections. In EMQX, it is used to secure network traffic between a client and EMQX by encrypting the data that is transmitted between them.
 
@@ -60,7 +66,7 @@ where:
 
  
 
-### Configure WebSocket Listener
+## Configure WebSocket Listener
 
 WebSocket listener is a network service that receives and processes messages over WebSocket. WebSocket support in EMQX allows clients to use the WebSocket protocol to connect to EMQX and exchange data in real-time.
 
@@ -83,7 +89,7 @@ where:
   - `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
   - `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
 
-### Configure Secure WebSocket Listener
+## Configure Secure WebSocket Listener
 
 A secure WebSocket listener is a WebSocket listener that uses the Secure Sockets Layer (SSL) or Transport Layer Security (TLS) protocol to encrypt the data exchanged between a WebSocket client and the broker. In EMQX, the secure WebSocket listener is an important security measure to protect sensitive data exchanged between WebSocket clients and EMQX> 
 
@@ -114,3 +120,7 @@ where:
       - `cacertfile`: This sets the path to the file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
       - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.
       - `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate.
+
+
+
+<!--To add QUIC-->

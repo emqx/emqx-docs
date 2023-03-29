@@ -1,6 +1,14 @@
 # Flapping
 
+
+
 Flapping in EMQX refers to a situation where an MQTT client rapidly connects and disconnects from the broker in a short period of time. The flapping mechanism is to detect flapping clients and to disconnect the client from a connection. 
+
+:::tip
+
+Most configuration items listed here also can be configured with Dashboard, and their Dashboard UI fields are also introduced in this page. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::
 
 `flapping_detect` is to enable the flapping connection detection feature, then you can continue to customize the settings with the following configuration items:
 
@@ -17,3 +25,4 @@ flapping_detect {
   ban_time  =  5m
 }
 ```
+
