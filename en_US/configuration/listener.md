@@ -7,12 +7,6 @@ In EMQX, listener is configured to receive requests from MQTT clients. EMQX supp
 - Websocket listener: `8083`
 - Secure websocket listener: `8084`
 
-:::tip
-
-Most configuration items listed here also can be configured with Dashboard, and their Dashboard UI fields are also introduced on this page. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-:::
-
 ## Configure TCP Listener
 
 TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks. 
@@ -28,7 +22,7 @@ listeners.tcp.default {
 }
 ```
 
-where:
+where, <!--did not add the dashboard UI as here is a much simplified version-->
 
 - `listeners.tcp.default` is to enable the listener. 
   - `bind` is to set the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `1883`. 
@@ -124,3 +118,11 @@ where:
 
 
 <!--To add QUIC-->
+
+:::tip
+
+To configure listeners via Dashboard,  click **Configuration** -> **Listener** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.md).
+
+:::

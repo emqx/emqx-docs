@@ -100,3 +100,9 @@ Where,
 | `core_nodes`         | This sets the core nodes that this replicant code will connect to.<br>Multiple nodes can be added here, separated with a `,`<br><br>:::tip Only needed | --            | --                                                |
 | `driver`             | This sets the transport protocol for inter-EMQX node communication. | `tcp`         | `tcp`, `SSL`                                      |
 | `ssl_options`        | This sets the SSL/TLS configuration options for the listener, it has three properties: <br/><br/> - `cacertfile`: This sets the path to the file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.<br/><br/> - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.<br/><br/>- `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate. | --            | --                                                |
+
+:::tip
+
+EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.md).
+
+:::

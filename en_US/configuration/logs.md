@@ -55,14 +55,14 @@ log {
 
  Where,
 
-| Configuration Item                         | Description                                                  | Default Value | Optional Values                                              |
-| ------------------------------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| **File Handler** (`file_handlers.default`) | This sets whether to enable using the file-based log handler for logging purposes, once enabled, it will write the log messages to a specified file on the disk (configured by `file`). | `enabled`     | `enable`, `disable`                                          |
-| **Log Level** (`level` )                   | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| **Log File Name** (`file`)                 | This sets the name of the log file, <br>By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
-| **Max Log Files Number** (`count`)         | This sets the max number of log files that can be saved.     | `10`          | `1` ~ `2,048`                                                |
-| **Rotation Size** (`max_size`)             | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` ~ `infinity`                                             |
-| **Log Formatter** (`formatted`)            | This sets the log format.                                    | `text`        | `text` for free text<br> `json` for structured logging       |
+| Configuration Item      | Dashboard UI         | Description                                                  | Default Value | Optional Values                                              |
+| ----------------------- | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
+| `file_handlers.default` | File Handler         | This sets whether to enable using the file-based log handler for logging purposes, once enabled, it will write the log messages to a specified file on the disk (configured by `file`). | `enabled`     | `enable`, `disable`                                          |
+| `level`                 | Log Level            | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `file`                  | Log File Name        | This sets the name of the log file, <br>By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
+| `count`                 | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` ~ `2,048`                                                |
+| `max_size`              | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` ~ `infinity`                                             |
+| `formatted`             | Log Formatter        | This sets the log format.                                    | `text`        | `text` for free text<br> `json` for structured logging       |
 
 ## Output log with Console
 
@@ -79,8 +79,16 @@ log {
 
 Where, 
 
-| Configuration Item                               | Description                                                  | Default Value | Optional Values                                              |
-| ------------------------------------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| **Enable Log Handler** (`file_handlers.default`) | This sets whether to enable outputting logs with the console. | `enabled`     | `enable`, `disable`                                          |
-| **Log Level** (`level` )                         | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| **Log Formatter** (`formatted`)                  | This sets the log format                                     | `text`        | `text` for free text<br> `json` for structured logging       |
+| Configuration Item      | Dashboard UI       | Description                                                  | Default Value | Optional Values                                              |
+| ----------------------- | ------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
+| `file_handlers.default` | Enable Log Handler | This sets whether to enable outputting logs with the console. | `enabled`     | `enable`, `disable`                                          |
+| `level`                 | Log Level          | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `formatted`             | Log Formatter      | This sets the log format                                     | `text`        | `text` for free text<br> `json` for structured logging       |
+
+:::tip
+
+To configure listeners via Dashboard,  click **Configuration** -> **Log** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+EMQX has offered more configuration items to better serve customized needs, you can continue to read [Configuration Manual](./configuration-manual.md).
+
+:::

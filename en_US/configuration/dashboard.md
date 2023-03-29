@@ -2,12 +2,6 @@
 
 In EMQX, Dashboard is a web-based graphic interface to manage and monitor EMQX and connected devices in real time. 
 
-:::tip
-
-Most configuration items listed here also can be configured with Dashboard, and their Dashboard UI fields are also introduced in this page. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-:::
-
 For example,  configure a listener for EMQX Dashboard for accepting all incoming connections.
 
 ```
@@ -28,4 +22,15 @@ Where,
 
 - `bind  =  "0.0.0.0:18083"`  is to set the network address and port number that the listener will bind to. In this case, the listener will bind to all available network interfaces (`0.0.0.0`) on port `18083`.
 - `max_connections  =  512` is to set the maximum number of concurrent connections that the listener will accept. In this case, the maximum number of connections is set to `512`.
-- The `ssl_options` block is to set the SSL/TLS options for the listener. SSL/TLS is a protocol used to encrypt network traffic for security. The options specified here indicate the locations of the certificate authority (CA) certificate (`cacertfile`), server certificate (`certfile`), and server private key (`keyfile`) respectively. These files are typically used to verify the identity of the server and to encrypt the network traffic between the client and server.
+- `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
+  - `cacertfile`: This sets the path to the file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
+  - `certfile`: This sets the path to the file containing the SSL/TLS certificate for the listener.
+  - `keyfile`: This sets the path to the file containing the private key corresponding to the SSL/TLS certificate.
+
+:::tip
+
+To add a listener via Dashboard, click **Configuration** -> **Listeners **on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+EMQX has offered more configuration items to better serve customized needs, For more configuration items, see [Configuration Manual](./configuration-manual.md).
+
+:::
