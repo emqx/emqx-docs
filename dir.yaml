@@ -256,7 +256,6 @@
   title_cn: 配置文件参数
   path: configuration/configuration
   children:
-    - configuration/HOCON    
     - configuration/mqtt
     - configuration/cluster
     - configuration/listener
@@ -267,7 +266,6 @@
     - configuration/dashboard
     - configuration/license
     - configuration/configuration-manual
-    
 
 # - title_en: Back
 #   title_cn: 运维操作
