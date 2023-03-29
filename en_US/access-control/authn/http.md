@@ -13,7 +13,7 @@ EMQX supports using external HTTP service for password authentication. After ena
 The authentication process is similar to an HTTP API call where EMQX, as the requesting client, constructs and initiates a request to the HTTP service in the format required by the "API", and the HTTP service returns the result as required by the "client".
 
 - The response encoding format `content-type` must be `application/json`.
-- The authentication result is marked by `result` in the body, option value: `alow`, `deny`, `ignore`.
+- The authentication result is marked by `result` in the body, option value: `allow`, `deny`, `ignore`.
 - Superuser is marked by `is_superuser` in the body, option value: `true`, `false`.
 - The HTTP response status code `Status Code` should be `200` or `204`, the `4xx/5xx` status code returned will ignore the body and determine the result to be `ignore` and continue with the authentication chain.
 
