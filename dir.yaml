@@ -291,7 +291,6 @@
     - observability/log
     - observability/metrics-and-stats
     - observability/prometheus
-    - observability/statsd
     - observability/tracer
     - observability/alarms
     - observability/topic-metrics
