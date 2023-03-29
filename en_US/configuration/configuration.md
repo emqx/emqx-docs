@@ -16,11 +16,15 @@ Depends on your installation mode, emqx.conf` is stored in:
 | Running in docker container                | `/opt/emqx/etc/emqx.conf` |
 | Extracted from portable compressed package | `./etc/emqx.conf`         |
 
-As the main configuration file, `emqx.conf` contains most of the commonly used configuration items. You can follow the example provided in the `emqx.conf.example` file (located within the same directory) to customize the settings. EMQX uses the default settings if a config item is not found in the config files.
+
+As the main configuration file, `emqx.conf` contains most of the commonly used configuration items.
+You can follow the example provided in the `emqx.conf.example` file (located within the same directory) to customize the settings.
+EMQX uses the default settings if a config item is not found in the config files.
 
 ### Configuration Rewrite File
 
-`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node, EMQX also provides a configuration rewrite file implicitly overlaying `emqx.conf`:
+`emqx.conf` defines settings at a global level, for cases where you need to customize the settings for a cluster or a node,
+EMQX also provides a configuration rewrite file implicitly overlaying `emqx.conf`:
 
 **`cluster-override.conf`**
 
@@ -30,11 +34,16 @@ If a certain cluster node is restarted or some new nodes are added, the node wil
 
 The configuration rewrite files are located in the `$data/configs/` directory, and the path of the `data` directory varies according to the installation method:
 
-| Installation                               | Path             |
-| ------------------------------------------ | ---------------- |
-| Installed with RPM or DEB package          | `/var/lib/emqx`  |
-| Running in docker container                | `/opt/emqx/data` |
-| Extracted from portable compressed package | `./data`         |
+| Installation                               | Path                 |
+| ------------------------------------------ | -------------------- |
+| Installed with RPM or DEB package          | `/var/lib/emqx`      |
+| Running in docker container                | `/opt/emqx/data`     |
+| Extracted from portable compressed package | `./data`             |
+
+:::tip
+It is possible to change data directory from config `node.data_dir` or environment variable `EMQX_NODE__DATA_DIR`,
+however, when running a cluster, all nodes should have the same path.
+:::
 
 :::tip It is possible to change data directory from config `node.data_dir` or environment variable `EMQX_NODE__DATA_DIR`, however, when running a cluster, all nodes should have the same path. :::
 

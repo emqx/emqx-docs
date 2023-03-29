@@ -109,13 +109,9 @@ EMQX 支持对节点、监听器和单个连接进行速率限制，不过在 Da
 
 ### 监控集成
 
-该页面主要是提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus 与 StatsD 的集成方式。配置页面可以快速开启该配置，并配置推送数据地址与数据上报时间间隔等。
+该页面主要是提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus 的集成方式。配置页面可以快速开启该配置，并配置推送数据地址与数据上报时间间隔等。
 
-::: tip
-**注意**：该页面中我们可以同时配置 `Prometheus` 与 `StatsD`。
-:::
-
-![image](./assets/config-data-monitor.png)
+<!--add a screenshot later-->
 
 当使用 `Prometheus` 第三方监控服务时我们可以直接使用 EMQX 提供的 API `/prometheus/stats` 来获取监控数据，使用该 API 时不需要认证信息，具体的 API 请参考 [Prometheus](../observability/prometheus.md)。
 
@@ -123,7 +119,7 @@ EMQX 支持对节点、监听器和单个连接进行速率限制，不过在 Da
 
 点击底部的“帮助”按钮，选择默认或使用 `Pushgateway` 的方式，根据提供的使用步骤，配置相关所需服务的地址或 API 信息，即可快速生成对应的 `Prometheus` 配置文件，最后再使用该配置文件来启动 `Prometheus` 服务即可。
 
-![image](./assets/config-data-monitor-help.png)
+<!--add a screenshot later-->
 
 启动 `Prometheus` 服务后，可以在帮助页面的最后，点击下载我们提供的 `Grafana` 默认的监控面板的配置文件，将该文件导入到 `Grafana` 中，我们就可以通过可视化面板来查看 EMQX 的监控数据，用户也可以根据需求在 `Grafana` 中对监控数据进行自定义修改。同时模版也可以在 [Grafana 官方网站](https://grafana.com/grafana/dashboards/17446-emqx/)中下载。
 
