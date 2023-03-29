@@ -15,9 +15,6 @@
 - [缓存队列](./data-bridges.md#缓存队列)
 - [SQL 预处理](./data-bridges.md#SQL-预处理)
 
-## 配置参数
-<!-- TODO 链接到配置手册对应配置章节。 -->
-
 ## 快速开始
 
 ### 安装 TDengine
@@ -102,7 +99,7 @@ use mqtt;
 
 注意：除 SQL 模板与规则外，其他操作步骤与[消息存储](#消息存储)章节完全相同。
 
-数据桥接的 SQL 模板如下，请注意字段不应当包含引号，SQL 末尾不要带分号 `;`:
+数据桥接的 SQL 模板如下，请注意字段不应当包含引号，SQL 末尾不要带 `;`:
 
 ```sql
     INSERT INTO emqx_client_events(ts, clientid, event) VALUES (

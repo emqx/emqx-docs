@@ -1,13 +1,13 @@
 # TDengine
 
-EMQX supports integration with TDengine so you can save client messages and events to TDengine, or use events to trigger the update or removal of data to record the online status or online/offline of clients.
+EMQX supports integration with TDengine so you can save client messages and events to TDengine, or use events to trigger the update or removal of data from TDengine to record the online status or online/offline of clients.
 
 ## Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data bridge](./data-bridges.md)
 
-## Features list
+## Features List
 
 - [Connection pool](./data-bridges.md#Connection pool)
 - [Async mode](./data-bridges.md#Async mode)
@@ -15,10 +15,7 @@ EMQX supports integration with TDengine so you can save client messages and even
 - [Buffer queue](./data-bridges.md#Buffer queue)
 - [SQL preprocessing](./data-bridges.md#Prepared statement)
 
-## [Configuration parameters](#Configuration)
-<!-- TODO LIKN TO THE CONFIG doc。 -->
-
-## Quick starts
+## Quick Starts
 
 ### Install TDengine
 
@@ -42,9 +39,9 @@ use mqtt;
 
 ### Connect to TDengine
 
-We will create 2 data bridges to TDengine for messages storage and event records respectively. 
+The following session creates 2 data bridges to TDengine for messages storage and event records respectively. 
 
-#### [Messages storage](#Storage)
+#### [Messages Storage](#Storage)
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.
@@ -71,14 +68,14 @@ Before creating the above data bridge, please use the following SQL statements t
     );
   ```
 
-7. Advanced settings (optional):  Choose whether to use sync or async query mode as needed. For details, see [Configuration parameters](#Configuration).
+7. Advanced settings (optional):  Choose whether to use sync or async query mode as needed.
 8. Then click **Create** to finish the creation of the data bridge.
 
-We have successfully created the data bridge to TDengine, now we can continue to create rules to specify the data to be saved into TDengine. 
+Now that you have successfully created the data bridge to TDengine, you can continue to create rules to specify the data to be saved into TDengine. 
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Rules**.
 2. Click **Create** on the top right corner of the page.
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to TDengine, we can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to save the MQTT messages under topic `t/#`  to TDengine, you can use the SQL syntax below. Note: If you are testing with your SQL, please ensure you have included all required fields in the `SELECT` part. 
 
   ```sql
     SELECT
@@ -92,9 +89,9 @@ We have successfully created the data bridge to TDengine, now we can continue to
 5. Then, click the **Add** button. 
 6. Then click the **Create** button to finish the setup. 
 
-Now we have successfully created the data bridge to TDengine. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
+After the creating of the data bridge to TDengine. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by rule  `my_rule`. 
 
-#### Online/Offline status recording
+#### Online/Offline Status Recording
 
 The operating steps are similar to those at the [Message storage](#Storage) part expect for the SQL template and SQL rules. 
 
