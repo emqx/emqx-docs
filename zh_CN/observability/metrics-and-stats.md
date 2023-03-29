@@ -162,4 +162,4 @@ EMQX 将指标分为了 Metrics 与 Stats 两种。
 | retained.count             | Integer   | 当前保留消息数量           |
 | retained.max               | Integer   | 保留消息的历史最大值       |
 | delayed.count              | Integer   | 当前延迟发布消息数量       |
-| delayed.max                | Integer   | 延迟发布下行哦的历史最大值 |
+| delayed.max                | Integer   | 延迟发布消息数量的历史最大值 |
