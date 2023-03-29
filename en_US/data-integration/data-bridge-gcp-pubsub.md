@@ -11,6 +11,13 @@ EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive
 
 The following steps will guide you to use this configuration.
 
+## Feature List
+
+- [Connection pool](./data-bridges.md#connection-pool)
+- [Async mode](./data-bridges.md#async-mode)
+- [Batch mode](./data-bridges.md#batch-mode)
+- [Buffer queue](./data-bridges.md#buffer-queue)
+
 ## Setup
 
 A few configuration steps on GCP's side must be performed before
