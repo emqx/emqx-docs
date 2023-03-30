@@ -1,30 +1,20 @@
 # Apache Kafka Consumer
 
-Apache Kafka is a widely-used open-source distributed event streaming
-platform. EMQX's integration with Apache Kafka/Confluent presents our
-users with reliable bi-directional data transport and processing
-capability under high-throughput scenarios.
+Apache Kafka is a widely-used open-source distributed event streaming platform. EMQX's integration with Apache Kafka/Confluent presents ourusers with reliable bi-directional data transport and processing capability under high-throughput scenarios.
 
-Being a top IoT data infrastructure provider, EMQX currently supports
-authenticating with Apache Kafka/Confluent via SASL/SCRAM or
-SASL/GSSAPI.
+Being a top IoT data infrastructure provider, EMQX currently supports authenticating with Apache Kafka/Confluent via SASL/SCRAM or SASL/GSSAPI.
 
 {% emqxce %}
 :::tip
 
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides
-comprehensive coverage of key business scenarios, rich data
-integration, product-level reliability, and 24/7 global technical
-support. Experience the benefits of this [enterprise-ready MQTT
-messaging platform](https://www.emqx.com/en/try?product=enterprise)
-today.
+EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
 
 :::
 {% endemqxce %}
 
-The following steps will guide you to use this configuration.
+## Configure Kafka Consumer Bridge via Dashboard
 
-## Setup
+The following steps guide you to create data bridge to Kafka in consumer mode.
 
 :::tip Prerequisites
 
@@ -34,79 +24,71 @@ The following steps will guide you to use this configuration.
 
 :::
 
-### Configure Kafka Consumer Bridge via Dashboard
+1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 
-Go to the EMQX Dashboard, select the _"Data Integration"_ item on the
-menu on the left, then _"Data Bridges"_.  Then, click _"+ Create"_.
+2. Click **Create** on the top right corner of the page.
 
-In the dialog, select the _Kafka_ bridge type, click next.  In the
-_Kafka Role_ field, select _Consumer_.  Fill the required fields for
-that bridge (those are marked with an asterisk).  The _Topic Mapping_
-field must contain at least one Kafka-to-MQTT topic mapping.  The
-_MQTT Payload Template_ subfield specifies the MQTT payload that
-should be used, and has the following Kafka message fields available
-for templating:
+   ![Creating a Kafka Consumer Bridge](./assets/kafka_consumer/setup1.png)
 
-| Field Name | Description                                                               |
-|------------|---------------------------------------------------------------------------|
-| `headers`  | an object containing string key-value pairs                               |
-| `key`      | Kafka message key (encoded by the chosen key encoding)                    |
-| `offset`   | offset for the message in Kafka's topic partition                         |
-| `topic`    | Originating Kafka topic                                                   |
-| `ts`       | message timestamp                                                         |
-| `ts_type`  | message timestamp type, which is one of `create`, `append` or `undefined` |
-| `value`    | Kafka message value (encoded by the chosen value encoding)                |
+3. In the **Create Data Bridge** page, click to select **Kafka**, and then click **Next**.
 
-The default value for _MQTT Payload Template_ is `${.}`, which will
-include all available data encoded as a JSON object.  For example,
-choosing `${.}` as a template would produce the following for a Kafka
-message:
+   ![Creating a Kafka Consumer Bridge](./assets/kafka_consumer/setup2.png)
 
-```json
-{
-  "value": "value",
-  "ts_type": "create",
-  "ts": 1679665968238,
-  "topic": "my-kafka-topic",
-  "offset": 2,
-  "key": "key",
-  "headers": {"header_key": "header_value"}
-}
-```
+4. In the **Bridge Role** field, select **Consumer**.  Configure the data bridge in **Consumer** mode.
 
-Subfields from the Kafka message may be accessed with dot notation.
-For example: `${.value}` will resolve to the Kafka message value, and
-`${.headers.h1}` will resolve to the value of the `h1` Kafka header,
-if present.  Absent values will be replaced by empty strings.
+   - Fill the required fields (marked with an asterisk).  
 
-:::tip
+   - Input a name for the data bridge. Note: It should be a combination of upper/lower case letters or numbers.
 
-Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic
-name.  That is, the Kafka topic must not be present in more than one
-mapping.
+   - Input the connection information. Input **127.0.0.1:9092** for the **Bootstrap Hosts**. For the other fields set as the actual condition.
 
-:::
+   - The **Topic Mapping** field must contain at least one Kafka-to-MQTT topic mapping. The **MQTT Payload Template** subfield specifies the MQTT payload that should be used, and has the following Kafka message fields available for templating:
 
-Finally, after clicking _"Create"_, you'll be offered the option of
-creating an associated rule.  This will allow Kafka messages matching
-the rule to be further transformed and filtered if needed, and then
-forwarded to other rule actions, like different bridges.  Refer to the
-[_Rules_](./rules.md) for more info on creating rules.
+     | Field Name | Description                                                  |
+     | ---------- | ------------------------------------------------------------ |
+     | `headers`  | An object containing string key-value pairs                  |
+     | `key`      | Kafka message key (encoded by the chosen key encoding)       |
+     | `offset`   | Offset for the message in Kafka's topic partition            |
+     | `topic`    | Originating Kafka topic                                      |
+     | `ts`       | Message timestamp                                            |
+     | `ts_type`  | Message timestamp type, which is one of `create`, `append` or `undefined` |
+     | `value`    | Kafka message value (encoded by the chosen value encoding)   |
 
-Note that it's not strictly necessary to create an associated rule.
-The MQTT topics defined in _Topic Mapping_ will start having messages
-published to them without further configuration.
+     The default value for **MQTT Payload Template** is `${.}`, which includes all available data encoded as a JSON object.  For example, choosing `${.}` as a template would produce the following for a Kafka message:
+     ```json
+     {
+      "value": "value",
+      "ts_type": "create",
+      "ts": 1679665968238,
+      "topic": "my-kafka-topic",
+      "offset": 2,
+      "key": "key",
+      "headers": {"header_key": "header_value"}
+     }
+     ```
+     
+     Subfields from the Kafka message may be accessed with dot notation. For example: `${.value}` will resolve to the Kafka message value, and `${.headers.h1}` will resolve to the value of the `h1` Kafka header, if present.  Absent values will be replaced by empty strings.
+     
+     :::tip
+     
+     Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name.  That is, the Kafka topic must not be present in more than one mapping.
+     
+     :::
+     
+     ![Creating a Kafka Consumer Bridge](./assets/kafka_consumer/setup3.png)
+     
 
-![Creating a Kafka Consumer Bridge](./assets/kafka_consumer/setup1.png)
+5. Click **Create**, you'll be offered the option of creating an associated rule. This will allow Kafka messages matching the rule to be further transformed and filtered if needed, and then forwarded to other rule actions, like different bridges.  Refer to the [Rules](./rules.md) for more info on creating rules.
 
-![Creating a Kafka Consumer Bridge](./assets/kafka_consumer/setup2.png)
+   :::tip Tip
 
-![Creating a Kafka Consumer Bridge](./assets/kafka_consumer/setup3.png)
+   It's not strictly necessary to create an associated rule. The MQTT topics defined in **Topic Mapping** will start having messages published to them without further configuration.
+
+   :::
 
 ## Configure Kafka Consumer Bridge via Configuration File
 
-Add the following configuration to the end of the `emqx.conf` file if
-you wish to configure this bridge using the configuration file.
+Add the following configuration to the end of the `emqx.conf` file if you wish to configure this bridge using the configuration file.
 
 ```js
 bridges.kafka_consumer.my_consumer {

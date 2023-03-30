@@ -54,7 +54,7 @@ bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properti
 bin/kafka-server-start.sh config/kraft/server.properties
 ```
 
-For detailed operation steps, you may refer to the [*Quick Start section in Kafka Documentation*](https://kafka.apache.org/documentation/#quickstart).
+For detailed operation steps, you may refer to the [Quick Start section in Kafka Documentation](https://kafka.apache.org/documentation/#quickstart).
 
 ### Create Kafka Topics
 
@@ -70,19 +70,20 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 These topics must be created before we create the data bridge to Kafka.
 :::
 
-### Configure a Data Bridge to Kafka via Dashboard
+### Configure Kafka Producder Bridge via Dashboard
+
+EMQX supports creating data bridges to Kafka in both producer and consumer mode. The following steps guides you to create data bridge to Kafka in producer mode. To create data bridge to Kafka in consumer mode, see [Apache Kafka Consumer](./data-bridge-kafka-consumer.md).
 
 1. Go to EMQX Dashboard, click **Data Integration** -> **Data Bridge**.
 2. Click **Create** on the top right corner of the page.
 3. In the **Create Data Bridge** page, click to select **Kafka**, and then click **Next**.
-
-4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters or numbers.
-5. Input the connection information. Input **127.0.0.1:9092** for the **Bootstrap Hosts**. For the other fields set as the actual condition.
-6. Configure the data bridge in **Producer** mode.
-   1. **Topic**: The MQTT topics to create the data bridge for. Here we will input `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a rule to specify data to be sent to Kafka.
-
-   1. **Kafka Topic Name**: Input the Kafka topics we created before, that is, the  `testtopic-in`. Note: Variables are not supported here.
-   2. **Kafka Message Template**: Template will specify the rule or MQTT topics with messages to be sent to the Kafka topic. You can keep the default setting or use  variables to create the template.
+6. In the **Bridge Role** field, select **Producer**. Configure the data bridge in **Producer** mode.
+   - Fill the required fields (marked with an asterisk). 
+   - Input a name for the data bridge. Note: It should be a combination of upper/lower case letters or numbers.
+   - Input the connection information. Input **127.0.0.1:9092** for the **Bootstrap Hosts**. For the other fields set as the actual condition.
+   - **Source MQTT Topic**: The MQTT topics to create the data bridge for. Here we will input `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a rule to specify data to be sent to Kafka.
+   - **Kafka Topic Name**: Input the Kafka topics we created before, that is, the  `testtopic-in`. Note: Variables are not supported here.
+   - **Kafka Message Template**: Template will specify the rule or MQTT topics with messages to be sent to the Kafka topic. You can keep the default setting or use variables to create the template.
 7. Advanced settings (optional): Set the **Max Batch Bytes**, **Compression**, and **Partition Strategy** as your business needs. For details, see [Configuration parameters](#Configuration).
 
 ### Test
