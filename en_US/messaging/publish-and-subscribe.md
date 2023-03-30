@@ -1,20 +1,13 @@
-# Publish/Subscribe
+# Publish and Subscribe with MQTT Clients
 
-MQTT is based on a [publish/subscribe model](../mqtt/mqtt-publish-and-subscribe.md) for message communication. As an MQTT messaging platform, clients connected to the EMQX Enterprise can publish and subscribe messages. A client can be both a publisher and a subscriber. When a client publishes a message with a certain topic to the EMQX server, the server forwards the message to any clients who subscribe to this topic. 
+It is more safe and efficient for the developers to test the EMQX messaging services using client tools before connecting the real-time devices to the EMQX server and developing the IoT applications. If some errors are detected during the testing, the developers can troubleshoot in test environment rather than in production. 
 
-EMQ provides the developers with some verification tools to test the MQTT messaging services and applications. This chapter introduces the commonly used MQTT 5.0 client tools and how to use these tools to verify the following messaging services:
+EMQ provides the developers with some verification tools to test the MQTT messaging services and applications. This chapter introduces the commonly used MQTT 5.0 client tools and how to use these tools to test the following messaging services:
 
 - Establish client connections
 - Subscribe to topics
 - Publish messages
 - Receive and view messages
-
-In  this chapter, it also introduces some advanced publishing and subcribing operations, such as:
-
-- Exclusive subscription
-- Depayed publish
-- Auto subscribe
-- Topic Rewrite
 
 ## MQTT X
 
@@ -50,11 +43,11 @@ Follow the instructions below to use the MQTT X desktop client for a simple test
 
    Leave the rest settings as default. Click the **Connect** button.
 
-   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:25%;" />
+   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
 
 3. After the success connection, type the topic heading `test` in the text box and compose the message as shown in the screenshot. Click the send button. A message under the topic `test` is send to the dialogue box.
 
-   <img src="./assets/Publish-test-message.png" alt="Publish-test-message" style="zoom:25%;" />
+   <img src="./assets/Publish-test-message.png" alt="Publish-test-message" style="zoom:35%;" />
 
 4. Create another new connection following the configuration instruction in Step 4 and set the name to "Subscriber". 
 
@@ -70,13 +63,13 @@ Follow the instructions below to use the MQTT X desktop client for a simple test
 
    Click the **Confirm** button.
 
-   <img src="./assets/Subscribe-test-topic.png" alt="Subscribe-test-topic" style="zoom:25%;" />
+   <img src="./assets/Subscribe-test-topic.png" alt="Subscribe-test-topic" style="zoom:35%;" />
 
 6. Select the client "Demo" at the **Connections** pane. Publish a new message under the topic "Test". You can see the client named "Subscriber" receives a new message.
 
-   <img src="./assets/Publish-test-again.png" alt="Publish-test-again" style="zoom:25%;" />
+   <img src="./assets/Publish-test-again.png" alt="Publish-test-again" style="zoom:35%;" />
 
-   <img src="./assets/Receive-test-again-message.png" alt="Receive-test-again-message" style="zoom:25%;" />
+   <img src="./assets/Receive-test-again-message.png" alt="Receive-test-again-message" style="zoom:35%;" />
 
 For detailed and advanced operations, see [MQTT X - Publish and subscription](https://mqttx.app/docs/get-started#publish-and-subscription).
 
@@ -165,7 +158,7 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
 
 4. Set the **topic** to subscribe as `testtopic/#` in the **Subscription** section. Click the **Subscribe** button to finish the subscription. The topic `testtopic/#`  will be added to the table below.
 
-   <img src="./assets/Dashboad-Websocket-Client.png" alt="Dashboad-Websocket-Client" style="zoom:25%;" />
+   <img src="./assets/Dashboad-Websocket-Client.png" alt="Dashboad-Websocket-Client" style="zoom:35%;" />
 
    After the subscription, all messages matching the topic will be forwarded to this connection and added to the **Received** section.
 
@@ -174,11 +167,11 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
    - **Topic**: Set to `testtopic/1` (wildcards like `+` and `#` are not supported).
    - **Payload**: Set to `{"msg": 'Hello"}`.
    - **QoS**: Set as defatult value `0`. 
-   - **Retain**: Select the checkbox if you want to set it as a retained message. For more information on retained message, see [Retained Message](./explore-mqtt.md).
+   - **Retain**: Select the checkbox if you want to set it as a retained message. For more information on retained message, see [Retained Message](./mqtt-concepts.md#retained-message).
 
    Click the **Publish** button, and one record will be added to the **Published** section below. The message will be routed to all subscribers. As the publisher is also the receiver in this test, one new record will also be added to the **Received** section below.
 
-   <img src="./assets/Dashboad-Websocket-Client-receive .png" alt="Dashboad-Websocket-Client-receive " style="zoom:25%;" />
+   <img src="./assets/Dashboad-Websocket-Client-receive .png" alt="Dashboad-Websocket-Client-receive " style="zoom:35%;" />
 
 
 

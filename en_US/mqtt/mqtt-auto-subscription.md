@@ -1,10 +1,12 @@
 # Auto Subscribe
 
-With **Auto Subscription** enabled, users can set multiple EMQX rules. After a client is successfully connected to EMQX, EMQX will complete the subscription process for the client automatically, and the clients no longer need to send `SUBSCRIBE` requests. 
+Auto Subscribe is an extended MQTT feature supported by EMQX. With **Auto Subscription** enabled, users can set multiple EMQX rules. After a client is successfully connected to EMQX, EMQX will complete the subscription process for the client automatically, and the clients no longer need to send `SUBSCRIBE` requests. 
 
 Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
-## Configuration
+## Configure Auto Subscribe in Dashboard
+
+
 
 ### Configuration Definition
 

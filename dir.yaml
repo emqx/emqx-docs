@@ -114,13 +114,17 @@
 
 - title_en: Publish/Subscribe
   title_cn: 发布订阅
-  path: messaging/mqtt-publish-and-subscribe
+  path: messaging/introduction
   children:
-    # - messaging/introduction
-    - messaging/explore-mqtt
-    - mqtt/mqtt-exclusive-subscription
+    - messaging/mqtt-concepts
+    - messaging/publish-and-subscribe
+    # - messaging/explore-mqtt
+    - messaging/mqtt-shared-subscription
+    - messaging/mqtt-retained-message
+    - messaging/mqtt-will-message
     - mqtt/mqtt-delayed-publish
     - mqtt/mqtt-auto-subscription
+    - mqtt/mqtt-exclusive-subscription
     - mqtt/mqtt-topic-rewrite
     # - messaging/nanomq
     # - messaging/neuron
