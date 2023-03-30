@@ -12,7 +12,7 @@ EMQX 支持通过外部 HTTP 服务进行密码认证。客户端连接时，EMQ
 认证过程类似一个 HTTP API 调用，EMQX 作为请求客户端需要按照 "API" 要求的格式构造并向 HTTP 服务发起请求，而 HTTP 服务需要按照 "客户端" 的要求返回结果：
 
 - 响应编码格式 `content-type` 必须是 `application/json`。
-- 认证结果通过 body 中的 `result` 标示，可选 `alow`、`deny`、`ignore`。
+- 认证结果通过 body 中的 `result` 标示，可选 `allow`、`deny`、`ignore`。
 - 超级用户通过 body 中的 `is_superuser` 标示，可选 `true`、`false`。
 - HTTP 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 `4xx/5xx` 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证链。
 
