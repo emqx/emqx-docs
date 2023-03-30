@@ -84,10 +84,10 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
       :::
    
-   ## 通过配置文件配置 Kafka 消费者桥接
-   
+## 通过配置文件配置 Kafka 消费者桥接
+
    想要通过配置文件配置 Kafka 消费者桥接，在 `emqx.conf` 文件的最后加入下列配置。
-   
+
    ```json
    bridges.kafka_consumer.my_consumer {
      enable = true
@@ -129,5 +129,5 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
      }
    }
    ```
-   
+
    
