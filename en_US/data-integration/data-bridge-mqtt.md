@@ -73,7 +73,7 @@ And this is the message flow in **egress** direction:
        - **Retain**: Confirm whether the message will be published as a retained message.
        - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
 
-   - **Egress** (optional): Set the rules to publish messages from specific local MQTT topics to remote MQTT brokers. In this example, we want to publish the messages from `local/topic/ingress` to `remote/topic/ingress`:
+   - **Egress** (optional): Set the rules to publish messages from specific local MQTT topics to remote MQTT brokers. In this example, we want to publish the messages from `local/topic/egress` to `remote/topic/egress`:
 
      - **Local MQTT Broker**: Specify the local message topics.
        - **Topic**: Input `local/topic/egress`.
@@ -83,7 +83,7 @@ And this is the message flow in **egress** direction:
        - **Retain**: Confirm whether the message will be published as a retained message.
        - **Payload**: Payload template for the messages to be forwarded, and Supports reading data using `${field}` syntax.
 
-7. Then you can configure whether to use sync/async mode, your pool size and whether the enable queue mode as your business needs.
+7. Then you can configure whether to use sync/async mode and your buffer pool size as your business needs.
 
 8. Click **Create** to finish the setting.
 
