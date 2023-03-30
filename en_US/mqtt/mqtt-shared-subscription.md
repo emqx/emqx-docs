@@ -56,12 +56,13 @@ broker.shared_subscription_strategy = random
 broker.shared_dispatch_ack_enabled = false
 ```
 
-| Load Balance | Description                                 |
-| :----------  | :------------------------------------------ |
-| random       | Random selection among all subscribers      |
-| round_robin  | In order of subscription                    |
-| sticky       | Always send to the last selected subscriber |
-| hash         | Hash by publisher ClientID                  |
+| Load Balance  | Description                                        |
+| :------------ | :------------------------------------------------- |
+| random        | Random selection among all subscribers             |
+| round_robin   | In order of subscription                           |
+| sticky        | Always send to the last selected subscriber        |
+| hash_clientid | Select the subscribers by hashing the `clientIds`  |
+| hash_topic    | Select the subscribers by hashing the source topic |
 
 ### Discussion on Message Loss
 

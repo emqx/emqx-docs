@@ -60,7 +60,8 @@ broker.shared_dispatch_ack_enabled = false
 | random      | 在所有订阅者中随机选择       |
 | round_robin | 按照订阅顺序                 |
 | sticky      | 一直发往上次选取的订阅者     |
-| hash        | 按照发布者 ClientID 的哈希值 |
+| hash_clientid | 通过对发送者的客户端 ID 进行 Hash 处理来选择订阅者 |
+| hash_topic | 通过对源主题进行 Hash 处理来选择订阅者 |
 
 ::: tip
 无论是单客户端订阅还是共享订阅都要注意客户端性能与消息接收速率，否则会引发消息堆积、客户端崩溃等错误。
