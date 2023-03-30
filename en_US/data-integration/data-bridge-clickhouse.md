@@ -27,7 +27,7 @@ The ClickHouse bridge is an EMQX Enterprise Edition feature. EMQX Enterprise Edi
 
 ## Quick Start Tutorial
 
-This section introduces how to use the ClickHouse bridge with a practical tutorial, covering topics like how to create a Clickouse server, how to set up a bridge, and how to set up a rule for forwarding data to the bridge and testing that it all works. 
+This section introduces how to use the ClickHouse bridge with a practical tutorial, covering topics like how to create a ClickHouse server, how to set up a bridge, and how to set up a rule for forwarding data to the bridge and testing that it all works. 
 
 This tutorial assumes that you run both EMQX and ClickHouse on the local machine. If you have ClickHouse and EMQX running remotely, please adjust the settings accordingly.
 
@@ -83,9 +83,9 @@ Then you can start to create an EMQX data bridge to ClickHouse.
    * **Username**: Input **emqx**.
    * **Password**: Input **public**
    
-7. **Batch Separator** (optional): for separate multiple items, default:  `,`  . You can customize the separate based on the data input/out format you defined in ClickHouse, for example, if [JSONCompactEachRow` format](https://clickhouse.com/docs/en/interfaces/formats#jsoncompacteachrow)  is used, should leave it blank. 
+7. **Batch Separator** (optional): In this example, you can keep the default value ",". This setting only needs to be changed if you enable [batching](./data-bridges.md) for the bridge and if you specify an alternative format with [ClickHouse's FORMAT syntax](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).
    
-7. Insert the following text in the **SQL Template** text area (You can use [Rule Engine](./rules.md)  to ensure that the specified SQL statements are escaped and not vulnerable to SQL injection attacks.):
+7. Insert the following text in the **SQL Template** text area (You can use [Rule Engine](./rules.md) to ensure that strings in the specified SQL statement are escaped so the SQL statement is not vulnerable to SQL injection attacks.):
    
    ```sql
    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
@@ -108,7 +108,7 @@ Now the ClickHouse data bridge should appear in the data bridge list (**Data Int
 
 3. Input, for example, `my_rule` as the rule ID.
 
-5. Input the following SQL statements in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#` to the newly created ClickHouse bridge. 
+5. Input the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`. 
    
    ```sql
    SELECT 
@@ -120,11 +120,12 @@ Now the ClickHouse data bridge should appear in the data bridge list (**Data Int
    
 5. Then click the **Add Action** button, select **Forwarding with Data Bridge** from the dropdown list and then select the data bridge you just created under **Data bridge**.  
 
-7. Click the **Add** button to finish the setup. Click the **Create** button at the page bottom to finish the setup. 
+7. Click the **Add** button to finish the setup. 
+8. Click the **Create** button at the page bottom to finish the setup. 
 
 Now a rule to forward data to ClickHouse via a ClickHouse bridge is created. You can click **Data Integration** -> **Flows** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to ClickHouse. 
 
-### Test Rule and Bridge
+### Test the Rule and Bridge
 
 You can use the built-in WebSocket client in the EMQX dashboard to test our rule and bridge.
 
