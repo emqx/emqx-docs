@@ -88,9 +88,9 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    * **用户名**：**emqx**
    * **密码**：**public**
    
-7. **分隔符**（可选）：用于区分多个输入项，默认  `,`  ，您可基于 ClickHouse 中定义的数据输入/输出格式选择适合的分割符，例如，对于[`JSONCompactEachRow` 格式](https://clickhouse.com/docs/en/interfaces/formats#jsoncompacteachrow) ，应留空。
+7. **分隔符**（可选）：用于区分多个输入项，本教程中可保留默认的  `,`  。注意：您只需在启用[批量模式](./data-bridges.md)、且使用其他 [ClickHouse 数据格式](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)时才需更改设置。
    
-7. 在 SQL 模版中输入以下命令（您可通过[规则引擎](./rules.md)确保输入 SQL 语句能被正确转义，以防 SQL 注入攻击）：
+7. 在 SQL 模版中输入以下命令（您可通过[规则引擎](./rules.md)确保输入 SQL 语句中的字符串能被正确转义，以防 SQL 注入攻击）：
    
    ```sql
    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
