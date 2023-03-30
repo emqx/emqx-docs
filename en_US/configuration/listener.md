@@ -24,7 +24,7 @@ listeners.tcp.default {
 
 where, <!--did not add the dashboard UI as here is a much simplified version-->
 
-- `listeners.tcp.default` is to enable the listener. 
+- `listeners.tcp.default` is to enable the listener, and here `default` is the name of the listener, you can change it to your own listener name. 
   - `bind` is to set the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `1883`. 
   - `max_connection` is to set the maximum number of concurrent connections allowed by the listener; default value: `infinity`.
 
@@ -118,6 +118,8 @@ where:
 
 
 <!--To add QUIC-->
+
+<!--To add code sample for adding multiple listeners.-->
 
 :::tip
 
