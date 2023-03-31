@@ -147,10 +147,10 @@ There are two bridge roles for Kafka data bridge: Producer (sends messages to Ka
    
       :::
    
-   ### Configure Kafka Consumer Bridge via Configration File
-   
+### Configure Kafka Consumer Bridge via Configration File
+
    Add the following configuration to the end of the `emqx.conf` file if you wish to configure this bridge using the configuration file.
-   
+
    ```js
    bridges.kafka_consumer.my_consumer {
      enable = true
@@ -192,21 +192,21 @@ There are two bridge roles for Kafka data bridge: Producer (sends messages to Ka
      }
    }
    ```
-   
-   ### Test
-   
+
+### Test
+
    Use MQTTX to send messages to topic  `t/1`:
-   
+
    ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
    ```
-   
+
    Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
-   
+
    Check whether messages are written into the topic `testtopic-in`  with the following Kafka command:
-   
+
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testtopic-in --from-beginning
    ```
-   
+
    
