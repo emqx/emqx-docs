@@ -90,7 +90,7 @@ The following steps guide you to create data bridge to Kafka in consumer mode.
 
 Add the following configuration to the end of the `emqx.conf` file if you wish to configure this bridge using the configuration file.
 
-```js
+```json
 bridges.kafka_consumer.my_consumer {
   enable = true
   bootstrap_hosts = "kafka-1.emqx.net:9092"
