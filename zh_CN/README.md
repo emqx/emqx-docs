@@ -54,7 +54,7 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
 ### 数据安全与隐私
 
 - 数据安全与隐私
-- 基于 MQTT over TLS/SSL 和 QUIC 确保数据安全
+- 基于 MQTT over TLS/SSL 确保数据安全
 - LDAP、JWT、PSK 和 X.509 证书等多种身份认证
 - 丰富的管理 API 确保数据保护策略符合欧盟 GDPR 法案
 
@@ -101,7 +101,6 @@ EMQX 企业版提供一体化的分布式 MQTT 消息服务和强大的 IoT 规�
   - TCP
   - TLS
   - WebSocket
-  - QUIC（实验性）
 - HTTP 消息发布接口
 - 网关
   - CoAP
