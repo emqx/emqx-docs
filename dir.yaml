@@ -263,9 +263,9 @@
   title_cn: 配置文件参数
   path: configuration/configuration
   children:
-    - configuration/mqtt
     - configuration/cluster
     - configuration/listener
+    - configuration/mqtt
     - configuration/flapping
     - configuration/limiter   
     - configuration/logs
