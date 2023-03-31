@@ -34,7 +34,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 }
 ```
 
-相应的链接配置参数如下：
+相应的配置参数如下：
 
 ```bash
 collection = "mqtt_acl"
