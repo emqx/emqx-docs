@@ -1,6 +1,7 @@
 # ClickHouse 
 
-EMQX 支持与 [ClickHouse](https://clickhouse.com/) 建立数据桥接从而将客户端消息和事件存储到 ClickHouse  中。
+ClickHouse 是一个高性能、列式存储的分布式数据库管理系统，专门用于处理大规模数据。它具有出色的查询性能、灵活的数据模型和可扩展的分布式架构，适用于多种数据分析场景。
+EMQX 将客户端消息和事件存储到 [ClickHouse](https://clickhouse.com/)。
 
 {% emqxce %}
 :::tip
@@ -27,7 +28,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
 
 ## 快速开始
 
-本节将带您创建一个 ClickHouse 服务器，然后在 EMQX 设置一个到 ClickHouse 的数据桥接，之后再通过创建一条规则来将数据转发至 ClickHouse，以验证该数据桥接是否正常工作。
+本节将带您创建一个 ClickHouse 服务器，然后在 EMQX 创建 ClickHouse 的数据桥接，之后再通过创建一条规则来将数据转发至 ClickHouse，以验证该数据桥接是否正常工作。
 
 :::tip 
 
@@ -46,8 +47,8 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    CREATE DATABASE IF NOT EXISTS mqtt_data;
    CREATE TABLE IF NOT EXISTS mqtt_data.messages (
        data String,
-       arrived BIGINT
-   ) ENGINE = Memory;
+       arrived UnixTimestamp
+   ) ENGINE = MergeTree();
    SQL_INIT
    ```
 
@@ -61,7 +62,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    -e CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1 \
    -e CLICKHOUSE_PASSWORD=public \
    -p 18123:8123 \
-   -p19000:9000 \
+   -p 19000:9000 \
    --ulimit nofile=262144:262144 \
    -v ./init.sql:/docker-entrypoint-initdb.d/init.sql \
    clickhouse/clickhouse-server
@@ -95,7 +96,7 @@ EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务�
    ```sql
    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
    ```
-   其中， `${payload.data}` 和 `${payload.timestamp}` 分别代表消息内容和时间戳，即稍后将在[规则](#创建数据转发规则)时进行配置的消息转发内容。EMQX 在进行消息转发前会按照设定将其替换为相应内容。
+   其中，`${data}` 和 `${timestamp}` 分别代表消息内容和时间戳，即稍后将在[规则](#创建数据转发规则)时进行配置的消息转发内容。EMQX 在进行消息转发前会按照设定将其替换为相应内容。
    
 8. 高级功能（可选）：根据情况配置同步/异步模式、批量模式，具体可阅读[数据桥接的简介部分](./data-bridges.md)。
 

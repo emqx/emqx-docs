@@ -1,6 +1,8 @@
 # ClickHouse 
 
-EMQX supports integration with [ClickHouse](https://clickhouse.com/) so you can forward messages and events to ClickHouse. 
+ClickHouse is a high-performance distributed database management system designed for processing large-scale data. It features excellent query performance, a flexible data model, and scalable distributed architecture, making it suitable for various data analytics scenarios.
+
+EMQX supports integration with [ClickHouse](https://clickhouse.com/) so you can save messages and events data to ClickHouse. 
 
 {% emqxce %}
 :::tip
@@ -42,8 +44,8 @@ This section introduces how to start a ClickHouse server using [Docker](https://
    CREATE DATABASE IF NOT EXISTS mqtt_data;
    CREATE TABLE IF NOT EXISTS mqtt_data.messages (
        data String,
-       arrived BIGINT
-   ) ENGINE = Memory;
+       arrived UnixTimestamp
+   ) ENGINE = MergeTree();
    SQL_INIT
    ```
 
@@ -57,7 +59,7 @@ This section introduces how to start a ClickHouse server using [Docker](https://
    -e CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1 \
    -e CLICKHOUSE_PASSWORD=public \
    -p 18123:8123 \
-   -p19000:9000 \
+   -p 19000:9000 \
    --ulimit nofile=262144:262144 \
    -v ./init.sql:/docker-entrypoint-initdb.d/init.sql \
    clickhouse/clickhouse-server
@@ -90,7 +92,7 @@ Then you can start to create an EMQX data bridge to ClickHouse.
    ```sql
    INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
    ```
-   The `${payload.data}` and `${payload.timestamp}` are placeholders for the data and timestamp of the message coming from the [rule](#create-a-rule-for-our-clickhouse-bridge) you will configure later. The placeholders will be replaced by the actual data before the message is sent to the ClickHouse server.
+   The `${data}` and `${timestamp}` are placeholders for the data and timestamp of the message coming from the [rule](#create-a-rule-for-our-clickhouse-bridge) you will configure later. The placeholders will be replaced by the actual data before the message is sent to the ClickHouse server.
    
 7. Advanced settings (optional):  Choose whether to use sync or async query mode etc, or batch mode. For details about these advanced features, see the [general data bridge documentation](./data-bridges.md).
 
