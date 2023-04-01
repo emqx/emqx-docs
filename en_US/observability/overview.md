@@ -1,6 +1,6 @@
 # Logs and Observability
 
-EMQX provides a series of observability related features to help with the system monitoring and tuning:
+EMQX provides a series of observability-related features to help with the system monitoring and tuning:
 
 - [Logs](./log.md)
 
@@ -13,10 +13,6 @@ EMQX provides a series of observability related features to help with the system
 - [Integrate with Prometheus](./prometheus.md)
 
   [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support to multidimensional data model, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and as well as pushing metrics to  `pushgateway`.
-
-- [Integrate with StatsD](./statsd.md)
-
-  [StatsD](https://github.com/statsd/statsd) is a network daemon that listens for statistics. EMQX supports periodic push system metrics to the StatsD server.
 
 - [Log Trace](./tracer.md)
 

@@ -168,8 +168,9 @@
     - data-integration/data-bridge-mongodb
     - data-integration/data-bridge-pgsql
     - data-integration/data-bridge-dynamo
-      # - data-integration/data-bridge-cassa
-
+    - data-integration/data-bridge-tdengine
+    # - data-integration/data-bridge-cassa
+    
     # TODO
     # - title_en: Examples and Tutorials
     #   title_cn: 示例和教程
@@ -291,7 +292,6 @@
     - observability/log
     - observability/metrics-and-stats
     - observability/prometheus
-    - observability/statsd
     - observability/tracer
     - observability/alarms
     - observability/topic-metrics

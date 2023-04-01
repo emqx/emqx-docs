@@ -6,7 +6,7 @@ Through data bridges, users can send messages from EMQX to the external data sys
 
 {% emqxce %}
 ::: tip
-Only data bridges to MQTT and Webhook are supported in the EMQX open-source version. For the data systems supported in the EMQX enterprise version, you may refer to the [Data integration page on EMQX website](https://www.emqx.com/en/integrations). 
+Only data bridges to MQTT and Webhook are supported in the EMQX open-source version. For the data systems supported in the EMQX enterprise version, you may refer to the [Data integration page on EMQX website](https://www.emqx.com/en/integrations).
 :::
 {% endemqxce %}
 
@@ -14,7 +14,7 @@ Only data bridges to MQTT and Webhook are supported in the EMQX open-source vers
 
 ## Data Bridge Execution Statistics
 
-EMQX will provide the running statistics of data bridges in the following categories: 
+EMQX will provide the running statistics of data bridges in the following categories:
 <!-- TODO 由于调整过 Data Bridge 结构，先前的指标设计过时了重新设计指标后补充文档 -->
 
 - Matched
@@ -25,7 +25,8 @@ EMQX will provide the running statistics of data bridges in the following catego
 - Dropped
 - Queuing
 - Retried
-- Rate -->
+- Rate
+- Late Reply
 
 ## Features Supported
 
@@ -41,7 +42,7 @@ EMQX will create a separate connection pool for each node with data bridge to be
 
 Async mode is the data processing mode of the data bridge. By enabling the Async mode, we can prevent the message publishing services from being blocked by the I/O pressure. Note: The time series of the message publishing might be affected, as the data bridge may be still processing the queued messages while the client has already sent several new messages.
 
-To improve the data processing efficiency, EMQX has enabled the Async mode by default. You can use the following commands to disable the Async mode if your application has strict requirements on the time series. 
+To improve the data processing efficiency, EMQX has enabled the Async mode by default. You can use the following commands to disable the Async mode if your application has strict requirements on the time series.
 
 Example code
 
@@ -61,19 +62,19 @@ bridges.mysql.foo {
 
 ### Batch mode
 
-In batch mode, multiple pieces of data will be simultaneously written into the external data integrations. After enabling the Batching mode, EMQX will temporarily store the data of each request and put the data in batches into the target data system after reaching a specified batch time or size. You can configure the batch time and batch size as needed. 
+In batch mode, multiple pieces of data will be simultaneously written into the external data integrations. After enabling the Batching mode, EMQX will temporarily store the data of each request and put the data in batches into the target data system after reaching a specified batch time or size. You can configure the batch time and batch size as needed.
 
 **Advantages**
 
-- Improve writing efficiency: Compared with the single-message writing mode, the database system will usually use techniques like caching or preprocessing to optimize the batch files before further operations, so the writing efficiency can be improved. 
+- Improve writing efficiency: Compared with the single-message writing mode, the database system will usually use techniques like caching or preprocessing to optimize the batch files before further operations, so the writing efficiency can be improved.
 - Reduce network latency: The batch mode can reduce the times of net transmissions, thereby reducing network latency.
 
 **Disadvantages**
 
 - Hard to troubleshoot data errors: If data error occurs during batch writing, the data with error or even the entire batch of data will be discarded, so it is difficult to do troubleshooting.
-- Long data writing delay: Data will be written into the target data systems only after reaching the specified batch time or batch size, so the delay is prolonged. You can configure the batch time or size to control the delay. 
+- Long data writing delay: Data will be written into the target data systems only after reaching the specified batch time or batch size, so the delay is prolonged. You can configure the batch time or size to control the delay.
 
-The Batch mode is enabled by default, you can disable it as needed. 
+The Batch mode is enabled by default, you can disable it as needed.
 
 Example code
 
@@ -96,17 +97,17 @@ bridges.mysql.foo {
 
 When external resources are unavailable, for example, due to network fluctuations or service downtime, the buffer queue feature can help to save the message generated during this period as memory or disk cache and then resume the messaging after the service is restored.
 
-It is recommended to enable this feature to improve the fault tolerance capability of the data bridge. The configuration items include: 
+It is recommended to enable this feature to improve the fault tolerance capability of the data bridge. The configuration items include:
 
 - Whether to enable Buffer Queue;
 - For data bridges connecting certain data systems, you can set the cache medium as memory, disk, or memory-disk.
-- For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule. 
+- For each resource connection (not MQTT connection), you can specify the cache queue size based on the storage size. If the cached size exceeds the limit, data will be discarded following the First In First Out (FIFO) rule.
 
 #### Configuration
 
 For data bridges connecting to Kafka, the disk cache file is saved under `data/kafka`, for other data systems, the disk cache file is saved under `data/resource_worker`.
 
-In actual use, it is recommended to mount the `data` folder in a high-performance disk to improve the throughput capacity. 
+In actual use, it is recommended to mount the `data` folder in a high-performance disk to improve the throughput capacity.
 
 Example code
 
@@ -127,9 +128,9 @@ bridges.mysql.foo {
 
 ### Prepared Statement
 
-[Prepared statement](https://dev.mysql.com/doc/refman/8.0/en/sql-prepared-statements.html) provides a way to run SQL with prepared statements. It simplifies the operation and maintenance and also helps to avoid SQL injection and improve security. 
+[Prepared statement](https://dev.mysql.com/doc/refman/8.0/en/sql-prepared-statements.html) provides a way to run SQL with prepared statements. It simplifies the operation and maintenance and also helps to avoid SQL injection and improve security.
 
-For data bridges supporting prepared statements, you need not explicitly specify the field variables; otherwise, you will need to explicitly specify the field variables. 
+For data bridges supporting prepared statements, you need not explicitly specify the field variables; otherwise, you will need to explicitly specify the field variables.
 
 For example, you will insert the following data into the database:
 
@@ -145,7 +146,7 @@ For example, you will insert the following data into the database:
 - payload: message body, string
 - qos: message QoS, integer
 
-For data bridges not supporting prepared statements, the fields should be enclosed in quotation marks, as shown below: 
+For data bridges not supporting prepared statements, the fields should be enclosed in quotation marks, as shown below:
 
 ```sql
 INSERT INTO msg(topic, qos, payload) VALUES('${topic}', ${qos}, '${payload}');
@@ -156,4 +157,3 @@ But for data bridges supporting prepared statements, the fields in the SQL templ
 ```sql
 INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 ```
-
