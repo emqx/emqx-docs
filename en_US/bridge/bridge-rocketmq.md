@@ -1,4 +1,4 @@
-# RocketMQ Bridge
+# Integrate with RocketMQ
 
 ::: tip
 

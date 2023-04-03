@@ -1,4 +1,4 @@
-# RabbitMQ 桥接
+# 集成 RabbitMQ
 
 ::: tip
 

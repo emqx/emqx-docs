@@ -1,4 +1,4 @@
-# Bridge data to Pulsar
+# Integrate with Pulsar
 
 Setup a Pulsar, taking Mac OSX for instance:
 

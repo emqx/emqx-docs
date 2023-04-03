@@ -1,4 +1,4 @@
-# Save data to TimescaleDB
+# Integrate with TimescaleDB
 
 Setup a TimescaleDB database, taking Mac OSX for instance:
 

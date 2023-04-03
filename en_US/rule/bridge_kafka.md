@@ -1,4 +1,4 @@
-# Bridge data to Kafka
+# Integrate with Kafka
 
 Setup a Kafka, taking Mac OSX for instance:
 

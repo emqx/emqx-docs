@@ -1,4 +1,4 @@
-# Bridge data to EMQX
+# Integrate with Multiple MQTT Brokers
 
 Setup another MQTT broker using emqx, taking Mac OSX for instance:
 

@@ -1,6 +1,6 @@
-# Save data to SQLServer
+# Integrate with SQLServer
 
-Set up a SQLServer database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
+Set up an SQLServer database and set the user name and password to sa/mqtt_public. Take MacOS X as an example:
 
 ```bash
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=mqtt_public' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest

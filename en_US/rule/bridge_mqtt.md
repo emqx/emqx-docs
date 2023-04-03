@@ -1,4 +1,4 @@
-# Bridge data to MQTT Broker
+# Integrate with MQTT Broker
 
 Setup another MQTT broker using mosquitto, change the port to 2883.
     Taking Mac OSX for instance:

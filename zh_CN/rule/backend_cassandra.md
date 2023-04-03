@@ -1,4 +1,4 @@
-# 保存数据到 Cassandra
+# 集成 Cassandra
 
 搭建 Cassandra 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 
