@@ -18,24 +18,24 @@ Example:
 - `$delayed/60/a/b`: Publish MQTT message to the topic `a/b` after 1 minute
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
 
-## Configure Delayed Publish in Dashboard
+## Configure Delayed Publish via Dashboard
 
-You can configure the delayed publish feature in EMQX Dashboard.
+You can configure the delayed publish feature using EMQX Dashboard.
 
-1. Select **MQTT** at the navigation menu on the left. 
+1. Open EMQX Dashboard. In the left navigation menu, click **Configuration**-> **MQTT**. 
 
 2. On the **MQTT** page, click the **Extension**. Select the **Delayed Publish** tab.
 
    - **Enable**: Enable or disable delayed publish. By default, it is enabled.
    - **Max Delayed Messages**: The max number of delayed messages. 
-     - Unlimit:<!--?-->
-     - Custom:
+     - If you select **Unlimited** from the drop-down list, you cannot specify the number.
+     - If you select **Custom** from the drop-down list, you can specify the number.
 
-   <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:35%;" />
+   <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
 
-3. Select the **Manage Date** tab.
+## Configure Delayed Message via Configuration File
 
-## Configure Delayed Message 
+Add the following configuration to the configuration file.
 
 ```bash
 delayed {
@@ -50,11 +50,9 @@ delayed {
 
 ## Try Delayed Publish with MQTT X Client
 
-You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to test this messaging service in EMQX.
-
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X](./mqtt-publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X](../messaging/publish-and-subscribe.md/#mqtt-x) 
 
 :::
 
@@ -62,11 +60,11 @@ You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqt
 
    ::: tip Tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./messaging/publish-and-subscribe.md/#mqtt-x-client).
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/messaging/assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
+   <img src="./assets/New-connection-fill-parameters.png" alt="New-connection-fill-parameters" style="zoom:35%;" />
 
 2. Create another MQTT connection. Configure it as a subscriber. 
 
@@ -88,7 +86,25 @@ You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqt
 
    <img src="./assets/receive-delayed-message.png" alt="receive-delayed-message" style="zoom:35%;" />
 
+## Try Delayed Publish with MQTT X CLI
+
+::: tip Prerequisite
+
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md) 
+
+:::
+
+1. Create a new connection as a subscriber and subscribe to the topic `t/1`.
+
+   ```bash
+   mqttx sub -t t/1 -v
+   ```
+
+2. Open a new window in terminal for the client as publisher. Use the following command to send a delayed message. The subscriber will receive the message after 5 seconds.
+
+   ```bash
+   mqttx pub -t "\$delayed/5/t/1" -m "Hello Delayed msg"
+   ```
+
    
-
-
 

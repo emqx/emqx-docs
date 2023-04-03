@@ -91,7 +91,7 @@ The default expiration time of the retained message is never expired unless the 
 
 The user can view all retained messages in the system on the **Retained Messages** list page. The list includes the topic of the retained message, the QoS of the retained message, the time when the retained message was published, and the client ID of the retained message. In the list, the user can click the **Show Payload** and **Delete** buttons to view the Payload of the retained message and delete a retained message. Click the **Refresh** button in the upper right corner of the list to refresh the current retained message list, and click the **Settings** button to jump to the retained message settings page.
 
-The default will save three types of retained messages [system topics](./mqtt-concepts/#system topic). If it is a cluster environment, it will keep different system topics' retained messages according to other node names. They are:
+The default will save three types of retained messages [system topics](./mqtt-concepts.md/#system topic). If it is a cluster environment, it will keep different system topics' retained messages according to other node names. They are:
 
 - $SYS/brokers/+/sysdescr - The system description of the current EMQX node
 - $SYS/brokers/+/version - The version number of the current EMQX node

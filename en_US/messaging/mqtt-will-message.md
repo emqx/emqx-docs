@@ -35,7 +35,7 @@ The EMQX implements the will message feature of MQTT. You can use the [MQTT X Cl
 
 2. Create a new connection for another client. Type the connection name as `Subscriber`.
 
-3. Click **+ New Subscription** in the **Subscribe** pane. Type `offline` in the **Topic ** textbox. Leave the other settings as default. Click the **Confirm** button.
+3. Click **+ New Subscription** in the **Subscribe** pane. Type `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
 
    <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
 

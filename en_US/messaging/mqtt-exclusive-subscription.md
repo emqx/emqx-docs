@@ -16,28 +16,28 @@ Exclusive subscriptions must be prefixed with `$exclusive/`, in the above exampl
 
 :::
 
-## Configure Exclusive Subscription in Dashboard
+## Configure Exclusive Subscription via Configuration File
 
+The exclusive subscription is disabled by default. You can enable this feature in `etc/emqx.conf`.
 
+:::tip Note
 
-## Subscription Error Code
+Configuration using the Dashboard is currently not supported.
 
-| Code | Reason                                                  |
-| ---- | ------------------------------------------------------- |
-| 0x8F | use `$exclusive/` without exclusive subscription enable |
-| 0x97 | A client has already subscribed to this topic           |
+:::
 
-
-
-
+```bash
+mqtt.exclusive_subscription {
+    enable = true
+}
+```
 
 ## Try Exclusive Subscription with MQTT X Client
 
-You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqttx.app/cli) to test this messaging service in EMQX.
+::: tip Prerequisites
 
-::: tip Prerequisite
-
-- Basic publishing and subscribing operations using [MQTT X](./messaging/mqtt-publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md).
+- Exclusive subscription is enabled.
 
 :::
 
@@ -45,7 +45,7 @@ You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqt
 
    ::: tip Tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./messaging/publish-and-subscribe.md/#mqtt-x-client).
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
 
    :::
 
@@ -57,11 +57,37 @@ You can use the [MQTT X Client](https://mqttx.app/) and [MQTT X CLI](https://mqt
 
    <img src="./assets/subscribe-exclusive-topic.png" alt="subscribe-exclusive-topic" style="zoom:35%;" />
 
-5. Select the connection named "Subscriber2" in the **Connections** pane. Click the **New Subscription** button to create a subscription.  Type `$exclusive/t/1` in **Topic** textbox to subscribe to this topic. Click **Confirm**.
+4. Select the connection named "Subscriber2" in the **Connections** pane. Click the **New Subscription** button to create a subscription.  Type `$exclusive/t/1` in **Topic** textbox to subscribe to this topic. Click **Confirm**.
 
    - An error message "" pops up.
 
    <img src="./assets/fail-to-exclusive-subscription.png" alt="fail-to-exclusive-subscription" style="zoom:35%;" />
 
-6. 
+## Try Exclusive Subscription with MQTT X CLI
+
+::: tip Prerequisites
+
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
+- Exclusive subscription is enabled.
+
+:::
+
+1. Use the following command to make an exclusive subscribscription.
+
+   ```bash
+   mqttx sub -t "$exclusive/t/1"
+   ```
+
+2. Use the command in step 1 again to make another subscription to the topic `$exclusive/t/1`. It will return:
+
+   ```bash
+   subscription negated to t/2 with code 135
+   ```
+
+   Subscription Error Code：
+
+   | Code | Reason                                                  |
+   | ---- | ------------------------------------------------------- |
+   | 0x8F | Use `$exclusive/` without exclusive subscription enable |
+   | 0x97 | A client has already subscribed to this topic           |
 

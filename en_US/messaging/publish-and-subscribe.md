@@ -1,4 +1,4 @@
-# Publish and Subscribe with MQTT Clients
+# Publish/Subscribe with MQTT Clients
 
 It is more safe and efficient for the developers to test the EMQX messaging services using client tools before connecting the real-time devices to the EMQX server and developing the IoT applications. If some errors are detected during the testing, the developers can troubleshoot in test environment rather than in production. 
 
@@ -138,7 +138,9 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
 
 ### MQTT X Web
 
-[MQTT X Web](https://mqttx.app/web) is a browser-based MQTT 5.0 WebSocket client tool. You can use it to complete the development and debugging via MQTT over WebSocket, with no need to download or install any tools. The testing operations using the MQTT X Web is basically the same as using the MQTT X Client.
+[MQTT X Web](https://mqttx.app/web) is a browser-based MQTT 5.0 WebSocket client tool. You can use it to complete the development and debugging via MQTT over WebSocket, with no need to download or install any tools. The testing operations using the MQTT X Web is basically the same as using the [MQTT X Client](#MQTT X Client).
+
+<img src="./assets/mqtt-x-web.png" alt="mqtt-x-web" style="zoom:35%;" />
 
 ## Dashboard WebSocket 
 

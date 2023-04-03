@@ -122,10 +122,9 @@
     - messaging/mqtt-shared-subscription
     - messaging/mqtt-retained-message
     - messaging/mqtt-will-message
-    - mqtt/mqtt-delayed-publish
-    - mqtt/mqtt-auto-subscription
-    - mqtt/mqtt-exclusive-subscription
-    - mqtt/mqtt-topic-rewrite
+    - messaging/mqtt-delayed-publish
+    - messaging/mqtt-auto-subscription
+    - messaging/mqtt-exclusive-subscription
     # - messaging/nanomq
     # - messaging/neuron
 
@@ -344,6 +343,7 @@
     - mqtt/mqtt-last-will-and-testament
     - mqtt/mqtt-shared-subscription
     - mqtt/mqtt-system-topics
+    - mqtt/mqtt-topic-rewrite
 
 - title_en: Telemetry
   title_cn: 遥测
