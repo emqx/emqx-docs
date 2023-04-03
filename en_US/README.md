@@ -35,7 +35,7 @@ EMQX Enterprise is the world’s most scalable and reliable MQTT messaging platf
 
 ### Data Security & Privacy
 
-- Ensure data security with MQTT over TLS/SSL or QUIC.
+- Ensure data security with MQTT over TLS/SSL.
 - Authenticate with LDAP, JWT, PSK, X.509 certificates, and more.
 - Rich data management APIs to help keeping your data protection policy in line with EU’s GDPR.
 
@@ -78,7 +78,6 @@ Below is a brief/incomplete feature list, highlighting the features EMQX provide
   - TCP
   - TLS
   - WebSocket
-  - QUIC (Experimental)
 - HTTP message publishing interface support
 - Gateways
   - CoAP
