@@ -2,7 +2,7 @@
 
 Many IoT devices do not support reconfiguration or upgrade, so it is hard to change their subscribed topics. To solve this issue, EMQX has introduced the topic rewrite feature, that is, with relevant rules set, EMQX will rewrite the subscribed topic of the client sending a new message or subscribing to a new topic to a new topic.  
 
-You can combine the [retained message](./mqtt-retained-messages.md) and [delayed publish](./mqtt-delayed-publish.md) feature with this topic rewriting. For example, when users want to use the delayed publish, they can use topic rewrite to redirect the message to the required topic.
+You can combine the [retained message](./mqtt-retained-messages.md) and [delayed publish](../messaging/mqtt-delayed-publish.md) feature with this topic rewriting. For example, when users want to use the delayed publish, they can use topic rewrite to redirect the message to the required topic.
 
 ::: tip
 Authorization checks are performed before the topic is rewritten.

@@ -5,7 +5,7 @@ The EMQX implements the shared subscription feature of MQTT. You can use the [MQ
 :::tip Prerequisites
 
 - Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md/#shared-subscription)
-- Basic publishing and subscribing operations using [MQTT X](./mqtt-publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
 
 :::
 

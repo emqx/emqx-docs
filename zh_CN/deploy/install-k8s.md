@@ -150,4 +150,4 @@ helm uninstall emqx-operator -n emqx-operator-system
 
 ## 下一步
 
-使用客户端连接到 EMQX，进行消息收发请参考 [发布订阅操作](../messaging/mqtt-publish-and-subscribe.md)。
+使用客户端连接到 EMQX，进行消息收发请参考 [发布订阅操作](../messaging/publish-and-subscribe.md)。

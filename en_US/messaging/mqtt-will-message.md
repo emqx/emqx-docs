@@ -5,7 +5,7 @@ The EMQX implements the will message feature of MQTT. You can use the [MQTT X Cl
 :::tip Prerequisites
 
 - Knowledge about MQTT [Will Message](./mqtt-concepts.md/#will-message)
-- Basic publishing and subscribing operations using [MQTT X](./mqtt-publish-and-subscribe.md/#mqtt-x)
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x)
 
 :::
 

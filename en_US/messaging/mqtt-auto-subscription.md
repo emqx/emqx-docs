@@ -122,7 +122,7 @@ nl: 0
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X](../messaging/publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
 
 :::
 
@@ -130,7 +130,7 @@ nl: 0
 
    ::: tip Tip
 
-   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md).
+   For detailed instructions on creating an MQTT connection, see [MQTT X Client](./publish-and-subscribe.md/#mqtt-x-client).
 
    :::
 
@@ -160,7 +160,7 @@ nl: 0
 
 :::tip Prerequisite
 
-- Basic publishing and subscribing operations using [MQTT X](../messaging/publish-and-subscribe.md/#mqtt-x) 
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x) 
 
 :::
 

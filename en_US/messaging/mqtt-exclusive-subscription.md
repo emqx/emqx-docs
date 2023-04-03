@@ -36,7 +36,7 @@ mqtt.exclusive_subscription {
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md).
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x).
 - Exclusive subscription is enabled.
 
 :::
@@ -67,7 +67,7 @@ mqtt.exclusive_subscription {
 
 ::: tip Prerequisites
 
-- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md)
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x)
 - Exclusive subscription is enabled.
 
 :::

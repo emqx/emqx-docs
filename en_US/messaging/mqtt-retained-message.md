@@ -5,7 +5,7 @@ The EMQX implements the retained message feature of MQTT. You can use the [MQTT 
 :::tip Prerequisites
 
 - Knowledge about MQTT [Retained Message](./mqtt-concepts.md/#retained-message)
-- Basic publishing and subscribing operations using [MQTT X](./mqtt-publish-and-subscribe.md/#mqtt-x)
+- Basic publishing and subscribing operations using [MQTT X](./publish-and-subscribe.md/#mqtt-x)
 
 :::
 

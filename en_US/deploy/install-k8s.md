@@ -144,7 +144,7 @@ You can also use EMQX Kubernetes Operator to deploy EMQX cluster on Kubernetes i
 
 ## Next steps
 
-Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/mqtt-publish-and-subscribe.md). 
+Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/publish-and-subscribe.md). 
 
 Or you may click the links below to learn how to use EMQX Kubernetes Operator for standard EMQX cluster configurations:
 
