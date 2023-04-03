@@ -95,7 +95,8 @@ There are two bridge roles for Kafka data bridge: Producer (sends messages to Ka
    - Input the connection information. Input **127.0.0.1:9092** for the **Bootstrap Hosts**. For the other fields set as the actual condition.
    - **Source MQTT Topic**: The MQTT topics to create the data bridge for. Here we will input `t/#`, indicating all MQTT messages matching this topic will be sent to Kafka. You can also leave it blank, and create a rule to specify data to be sent to Kafka.
    - **Kafka Topic Name**: Input the Kafka topics we created before, that is, the  `testtopic-in`. Note: Variables are not supported here.
-   - **Kafka Message Template**: Template will specify the rule or MQTT topics with messages to be sent to the Kafka topic. You can keep the default setting or use variables to create the template.
+   - **Message Key**: Kafka message key. Insert a string here, either a plain string or a string containing placeholders (${var}).
+   - **Message Value**: Kafka message value. Insert a string here, either a plain string or a string containing placeholders (${var}).
    - Advanced settings (optional): Set the **Max Batch Bytes**, **Compression**, and **Partition Strategy** as your business needs.
    
    :::
@@ -147,9 +148,62 @@ There are two bridge roles for Kafka data bridge: Producer (sends messages to Ka
    
       :::
    
-### Configure Kafka Consumer Bridge via Configration File
+### Configure Kafka Bridge via Configration File
 
-   Add the following configuration to the end of the `emqx.conf` file if you wish to configure this bridge using the configuration file.
+Add the following configuration to the end of the `emqx.conf` file if you want to configure Kafka producer bridge using the configuration file.
+
+```js
+bridges.kafka.kproducer {
+  authentication {
+    mechanism = "plain"
+    password = "******"
+    username = "emqxuser"
+  }
+  bootstrap_hosts = "kafka-1.emqx.net:9093"
+  connect_timeout = "5s"
+  enable = false
+  kafka {
+    buffer {
+      memory_overload_protection = true
+      mode = "hybrid"
+      per_partition_limit = "2GB"
+      segment_bytes = "100MB"
+    }
+    compression = "no_compression"
+    max_batch_bytes = "896KB"
+    max_inflight = 10
+    message {
+      key = "${.clientid}"
+      timestamp = "${.timestamp}"
+      value = "${.}"
+    }
+    partition_count_refresh_interval = "60s"
+    partition_strategy = "random"
+    required_acks = "all_isr"
+    topic = "test-topic-two-partitions"
+  }
+  metadata_request_timeout = "5s"
+  min_metadata_refresh_interval = "3s"
+  socket_opts {
+    nodelay = true
+    recbuf = "1024KB"
+    sndbuf = "1024KB"
+  }
+  ssl {
+    ciphers = []
+    depth = 10
+    enable = false
+    hibernate_after = "5s"
+    reuse_sessions = true
+    secure_renegotiate = true
+    user_lookup_fun = "emqx_tls_psk:lookup"
+    verify = "verify_peer"
+    versions = ["tlsv1.3", "tlsv1.2", "tlsv1.1", "tlsv1"]
+  }
+}
+```
+
+Add the following configuration to the end of the `emqx.conf` file if you wish to configure Kafka consumer bridge using the configuration file.
 
    ```js
    bridges.kafka_consumer.my_consumer {
@@ -193,17 +247,17 @@ There are two bridge roles for Kafka data bridge: Producer (sends messages to Ka
    }
    ```
 
-### Test
+### Test the Bridge
 
-   Use MQTTX to send messages to topic  `t/1`:
+ Use MQTTX to send messages to topic  `t/1`:
 
    ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
    ```
 
-   Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
+Check the running status of the two data bridges, there should be one new incoming and one new outgoing message.
 
-   Check whether messages are written into the topic `testtopic-in`  with the following Kafka command:
+Check whether messages are written into the topic `testtopic-in`  with the following Kafka command:
 
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testtopic-in --from-beginning
