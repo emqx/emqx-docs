@@ -93,7 +93,8 @@ Kafka 桥接有两种桥接角色: 生产者（将数据发送到 Kafka）和消
    - **源 MQTT 主题**：要桥接的 MQTT 主题，此处填写 `t/#` 表示将匹配此主题的 MQTT 消息转发至 Kafka。您可以选择将此项留空，通过新建规则指定发往 Kafka 的数据。
    - **Kafka 主题名称**：填写 Kafka 中预先创建好的主题 `testtopic-in`，此处暂不支持使用变量。
      模版用于将规则或指定 MQTT 主题的消息转发到我们之前创建的 Kafka 主题。此处您可以使用默认配置，或通过变量构造消息模板。
-   - **Kafka 消息模版**：模版规定了桥接规则或者将被发送到 kafka 主题的 MQTT 主题和消息。你可以保留默认设置或者使用变量创建模版。
+   - **消息键**：Kafka 消息键，此处填写字符串或者包含占位符（ ${var}）的字符串。
+   - **消息值**：Kafka 消息值，此处填写字符串或者包含占位符（ ${var}）的字符串。
    - 高级配置（可选）：根据情况配置**最大批量字节数**、**压缩**、**分区选择策略**等参数。
    
    :::
@@ -145,7 +146,60 @@ Kafka 桥接有两种桥接角色: 生产者（将数据发送到 Kafka）和消
 
    :::
 
-### 通过配置文件配置 Kafka 消费者桥接
+### 通过配置文件配置 Kafka 桥接
+
+想要通过配置文件配置 Kafka 生产者桥接，在 `emqx.conf` 文件的最后加入下列配置
+
+```js
+bridges.kafka.kproducer {
+  authentication {
+    mechanism = "plain"
+    password = "******"
+    username = "emqxuser"
+  }
+  bootstrap_hosts = "kafka-1.emqx.net:9093"
+  connect_timeout = "5s"
+  enable = false
+  kafka {
+    buffer {
+      memory_overload_protection = true
+      mode = "hybrid"
+      per_partition_limit = "2GB"
+      segment_bytes = "100MB"
+    }
+    compression = "no_compression"
+    max_batch_bytes = "896KB"
+    max_inflight = 10
+    message {
+      key = "${.clientid}"
+      timestamp = "${.timestamp}"
+      value = "${.}"
+    }
+    partition_count_refresh_interval = "60s"
+    partition_strategy = "random"
+    required_acks = "all_isr"
+    topic = "test-topic-two-partitions"
+  }
+  metadata_request_timeout = "5s"
+  min_metadata_refresh_interval = "3s"
+  socket_opts {
+    nodelay = true
+    recbuf = "1024KB"
+    sndbuf = "1024KB"
+  }
+  ssl {
+    ciphers = []
+    depth = 10
+    enable = false
+    hibernate_after = "5s"
+    reuse_sessions = true
+    secure_renegotiate = true
+    user_lookup_fun = "emqx_tls_psk:lookup"
+    verify = "verify_peer"
+    versions = ["tlsv1.3", "tlsv1.2", "tlsv1.1", "tlsv1"]
+  }
+}
+```
 
 想要通过配置文件配置 Kafka 消费者桥接，在 `emqx.conf` 文件的最后加入下列配置。
 
@@ -191,7 +245,7 @@ bridges.kafka_consumer.my_consumer {
 }
 ```
 
-### 测试
+### 测试桥接
 
 使用 MQTTX 向 `t/1` 主题发布消息：
 
