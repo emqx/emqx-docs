@@ -15,8 +15,8 @@ EMQX 5.0 中，可以通过 Dashboard 配置并启用 MQTT-SN 网关。
 ::: tab HTTP API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway' \
-  -u admin:public \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn' \
+  -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "mqttsn",
@@ -84,7 +84,7 @@ MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数�
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
-  -u admin:public \
+  -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
   "method": "post",

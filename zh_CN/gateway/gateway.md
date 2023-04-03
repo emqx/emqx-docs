@@ -5,7 +5,7 @@
 在 EMQX 5.0 之前，非 MQTT 协议的接入分别由不同的接入插件实现（例如，`emqx_lwm2m` 插件用于处理 LwM2M 的协议接入）
 这些插件之间存在设计和实现上差异，这导致使用这些接入插件会很难以理解。 在 5.0 中，EMQX 为其定义了统一的概念和操作模型以降低使用难度。
 
-常用的网关快速开始：[Stomp](./stomp.md)、[MQTT-SN](./mqttsn.md)、[CoAP](./coap.md)
+常用的网关快速开始：[Stomp](./stomp.md)、[MQTT-SN](./mqttsn.md)、[CoAP](./coap.md)、[LwM2M](./lwm2m.md)
 
 ## 设计
 
