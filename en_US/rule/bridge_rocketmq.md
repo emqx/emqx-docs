@@ -1,4 +1,4 @@
-# 桥接数据到 RocketMQ
+# Integrate with RocketMQ
 
 搭建 RocketMQ 环境，以 MacOS X
 ​       为例:

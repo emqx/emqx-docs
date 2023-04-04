@@ -443,7 +443,10 @@
           "title": "集成 RocketMQ",
           "path": "rule/bridge_rocketmq"
         },
-      
+        {
+          "title": "集成 Tablestore",
+          "path": "rule/backend_tablestore"
+        },     
         {
           "title": "集成 Lindorm",
           "path": "rule/backend_lindorm"
@@ -453,12 +456,28 @@
           "path": "rule/backend_dynamodb"
         },
         {
+          "title": "集成 GCP PubSub",
+          "path": "rule/bridge-gcp-pubsub"
+        },
+        {
           "title": "集成 TDengine",
           "path": "rule/backend_tdengine"
         },
         {
           "title": "集成 TimescaleDB",
           "path": "rule/backend_timescaledb"
+        },
+        {
+          "title": "集成 IoTDB",
+          "path": "rule/backend_iotdb"
+        },
+        {
+          "title": "集成 MatrixDB",
+          "path": "rule/backend_matrixdb"
+        },
+        {
+          "title": "集成 OpenTSDB",
+          "path": "rule/backend_opentsdb"
         },
         {
           "title": "集成 OpenTSDB",
@@ -475,6 +494,10 @@
         {
           "title": "集成 Cassandra",
           "path": "rule/backend_cassandra"
+        },
+        {
+          "title": "集成 SAP Event Mesh",
+          "path": "rule/bridge_sap_event_mesh"
         },
         {
           "title": "集成 Oracle DB",
@@ -1217,8 +1240,16 @@
           "path": "rule/backend_lindorm"
         },
         {
+          "title": "Integrate with Tablestore",
+          "path": "rule/backend_tablestore"
+        },
+        {
           "title": "Integrate with DynamoDB",
           "path": "rule/backend_dynamodb"
+        },
+        {
+          "title": "Integrate with GCP PubSub",
+          "path": "rule/bridge-gcp-pubsub"
         },
         {
           "title": "Integrate with TDengine",
@@ -1227,6 +1258,14 @@
         {
           "title": "Integrate with TimescaleDB",
           "path": "rule/backend_timescaledb"
+        },
+        {
+          "title": "Integrate with IoTDB",
+          "path": "rule/backend_iotdb"
+        },
+        {
+          "title": "Integrate with MatrixDB",
+          "path": "rule/backend_matrixdb"
         },
         {
           "title": "Integrate with OpenTSDB",
@@ -1243,6 +1282,10 @@
         {
           "title": "Integrate with Cassandra",
           "path": "rule/backend_cassandra"
+        },
+        {
+          "title": "Integrate with SAP Event Mesh",
+          "path": "rule/bridge_sap_event_mesh"
         },
         {
           "title": "Integrate with Oracle DB",

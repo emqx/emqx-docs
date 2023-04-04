@@ -1,4 +1,4 @@
-# 桥接数据到 SAP Event Mesh
+# 集成 SAP Event Mesh
 
 EMQX 规则引擎支持通过 HTTP 请求方式（`httprest`）将消息发送到 [SAP Event Mesh](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US)。
 

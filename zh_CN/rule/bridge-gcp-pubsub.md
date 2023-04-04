@@ -1,4 +1,4 @@
-# 桥接数据到 GCP PubSub
+# 集成 GCP PubSub
 从 EMQX Enterprise e4.4.11 开始，EMQX 的规则引擎支持 Google GCP PubSub 的数据桥接。
 
 EMQX GCP PubSub 可以将 MQTT 客户端消息与事件发送到 [Google Cloud PubSub](https://cloud.google.com/pubsub?hl=zh-cn)，以便您灵活选择 Google Cloud 上的各类服务，更快地构建物联网应用。

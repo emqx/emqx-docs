@@ -1,4 +1,4 @@
-# 保存数据到 MatrixDB
+# 集成 MatrixDB
 
 搭建 MatrixDB 数据库，设置用户名密码为 root/public，并创建一个名为 mqtt 的数据库。
 
