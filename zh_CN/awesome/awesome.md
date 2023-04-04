@@ -39,19 +39,6 @@ ref:
 
 欢迎你将任何 bug、问题和功能请求提交到 [emqx/emqx](https://github.com/emqx/emqx/issues)。
 
-
-## 使用 EMQX 的项目
-
-以下是提交投稿的使用 EMQX 的开源项目，未提交项目/商业项目不在此列：
-
-- [ActorCloud](https://github.com/emqx/ActorCloud) - 开源一站式物联网平台服务
-
-## 中文教程
-
-EMQX 系列教程及 Erlang/IoT 相关博客、视频站点，欢迎留言或 [Issues 投稿](https://github.com/emqx/emqx-docs-cn)。
-
-- 暂无
-
 ## MQTT 规范
 
 你可以通过以下链接了解与查阅 MQTT 协议：

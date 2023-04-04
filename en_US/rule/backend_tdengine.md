@@ -1,4 +1,4 @@
-# Save data to TDengine
+# Integrate with TDengine
 
 [TDengine](https://github.com/taosdata/TDengine)
 </br>

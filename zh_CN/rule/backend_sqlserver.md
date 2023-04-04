@@ -1,4 +1,4 @@
-# 保存数据到 SQLServer
+# 集成 SQLServer
 
 搭建 SQLServer 数据库，并设置用户名密码为 sa/mqtt_public，以 MacOS X 为例:
 

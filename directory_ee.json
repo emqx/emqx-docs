@@ -61,10 +61,6 @@
           "path": "advanced/acl"
         },
         {
-          "title": "规则引擎",
-          "path": "rule/rule-engine"
-        },
-        {
           "title": "数据存储",
           "path": "backend/backend"
         },
@@ -311,128 +307,6 @@
           "path": "rule/action_republish"
         },
         {
-          "title": "数据存储",
-          "children": [
-            {
-              "title": "保存数据到 MySQL",
-              "path": "rule/backend_mysql"
-            },
-            {
-              "title": "保存数据到 PostgreSQL",
-              "path": "rule/backend_pgsql"
-            },
-            {
-              "title": "保存数据到 MongoDB",
-              "path": "rule/backend_mongodb"
-            },
-            {
-              "title": "保存数据到 Redis",
-              "path": "rule/backend_redis"
-            },
-            {
-              "title": "保存数据到 Cassandra",
-              "path": "rule/backend_cassandra"
-            },
-            {
-              "title": "保存数据到 DynamoDB",
-              "path": "rule/backend_dynamodb"
-            },
-            {
-              "title": "保存数据到 ClickHouse",
-              "path": "rule/backend_clickhouse"
-            },
-            {
-              "title": "保存数据到 OpenTSDB",
-              "path": "rule/backend_opentsdb"
-            },
-            {
-              "title": "保存数据到 InfluxDB",
-              "path": "rule/backend_influxdb"
-            },
-            {
-              "title": "保存数据到 InfluxDB V2",
-              "path": "rule/backend_influxdb_v2"
-            },
-            {
-              "title": "保存数据到 IoTDB",
-              "path": "rule/backend_iotdb"
-            },
-            {
-              "title": "保存数据到 TimescaleDB",
-              "path": "rule/backend_timescaledb"
-            },
-            {
-              "title": "保存数据到 Oracle DB",
-              "path": "rule/backend_oracle"
-            },
-            {
-              "title": "保存数据到 SQLServer",
-              "path": "rule/backend_sqlserver"
-            },
-            {
-              "title": "保存数据到 DolphinDB",
-              "path": "rule/backend_dolphindb"
-            },
-            {
-              "title": "保存数据到 MatrixDB",
-              "path": "rule/backend_matrixdb"
-            },
-            {
-              "title": "保存数据到 TDengine",
-              "path": "rule/backend_tdengine"
-            },
-            {
-              "title": "保存数据到 Lindorm",
-              "path": "rule/backend_lindorm"
-            },
-            {
-              "title": "数据保存到 HStreamDB",
-              "path": "rule/backend_hstreamdb"
-            },
-            {
-              "title": "保存数据到 Tablestore",
-              "path": "rule/backend_tablestore"
-            }
-          ]
-        },
-        {
-          "title": "数据桥接",
-          "children": [
-            {
-              "title": "桥接数据到 Kafka",
-              "path": "rule/bridge_kafka"
-            },
-            {
-              "title": "桥接数据到 Pulsar",
-              "path": "rule/bridge_pulsar"
-            },
-            {
-              "title": "桥接数据到 RabbitMQ",
-              "path": "rule/bridge_rabbitmq"
-            },
-            {
-              "title": "桥接数据到 RocketMQ",
-              "path": "rule/bridge_rocketmq"
-            },
-            {
-              "title": "桥接数据到 SAP Event Mesh",
-              "path": "rule/bridge_sap_event_mesh"
-            },
-            {
-              "title": "桥接数据到 MQTT Broker",
-              "path": "rule/bridge_mqtt"
-            },
-            {
-              "title": "桥接数据到 EMQX",
-              "path": "rule/bridge_emqx"
-            },
-            {
-              "title": "桥接数据到 GCP PubSub",
-              "path": "rule/bridge-gcp-pubsub"
-            }
-          ]
-        },
-        {
           "title": "离线消息",
           "children": [
             {
@@ -514,6 +388,105 @@
               "path": "rule/schema-registry-examp-3rdparty-grpc"
             }
           ]
+        }
+      ]
+    },
+    {
+      "title": "数据集成",
+      "children": 
+      [
+        {
+          "title": "集成 MQTT Broker",
+          "path": "rule/bridge_mqtt"
+        },
+        {
+          "title": "集成 Kafka",
+          "path": "rule/bridge_kafka"
+        },    
+        {
+          "title": "集成 InfluxDB",
+          "path": "rule/backend_influxdb"
+        },
+        {
+          "title": "集成 InfluxDB V2",
+          "path": "rule/backend_influxdb_v2"
+        },    
+        {
+          "title": "集成 MySQL",
+          "path": "rule/backend_mysql"
+        },
+        {
+          "title": "集成 PostgreSQL",
+          "path": "rule/backend_pgsql"
+        },
+        {
+          "title": "集成 Redis",
+          "path": "rule/backend_redis"
+        },
+        {
+          "title": "集成 MongoDB",
+          "path": "rule/backend_mongodb"
+        },
+        {
+          "title": "集成 HStreamDB",
+          "path": "rule/backend_hstreamdb"
+        },
+        {
+          "title": "集成 Pulsar",
+          "path": "rule/bridge_pulsar"
+        },
+        {
+          "title": "集成 RabbitMQ",
+          "path": "rule/bridge_rabbitmq"
+        },
+        {
+          "title": "集成 RocketMQ",
+          "path": "rule/bridge_rocketmq"
+        },
+      
+        {
+          "title": "集成 Lindorm",
+          "path": "rule/backend_lindorm"
+        },
+        {
+          "title": "集成 DynamoDB",
+          "path": "rule/backend_dynamodb"
+        },
+        {
+          "title": "集成 TDengine",
+          "path": "rule/backend_tdengine"
+        },
+        {
+          "title": "集成 TimescaleDB",
+          "path": "rule/backend_timescaledb"
+        },
+        {
+          "title": "集成 OpenTSDB",
+          "path": "rule/backend_opentsdb"
+        },
+        {
+          "title": "集成 DolphinDB",
+          "path": "rule/backend_dolphindb"
+        },
+        {
+          "title": "集成 ClickHouse",
+          "path": "rule/backend_clickhouse"
+        },
+        {
+          "title": "集成 Cassandra",
+          "path": "rule/backend_cassandra"
+        },
+        {
+          "title": "集成 Oracle DB",
+          "path": "rule/backend_oracle"
+        },
+        {
+          "title": "集成 SQLServer",
+          "path": "rule/backend_sqlserver"
+        },
+        {
+          "title": "集成多个 MQTT Broker",
+          "path": "rule/bridge_emqx"
         }
       ]
     },
@@ -868,10 +841,6 @@
           "path": "advanced/acl"
         },
         {
-          "title": "Rule Engine",
-          "path": "rule/rule-engine"
-        },
-        {
           "title": "Backend",
           "path": "backend/backend"
         },
@@ -1114,128 +1083,6 @@
           "path": "rule/action_republish"
         },
         {
-          "title": "Backends",
-          "children": [
-            {
-              "title": "Save data to MySQL",
-              "path": "rule/backend_mysql"
-            },
-            {
-              "title": "Save data to PostgreSQL",
-              "path": "rule/backend_pgsql"
-            },
-            {
-              "title": "Save data to MongoDB",
-              "path": "rule/backend_mongodb"
-            },
-            {
-              "title": "Save data to Redis",
-              "path": "rule/backend_redis"
-            },
-            {
-              "title": "Save data to Cassandra",
-              "path": "rule/backend_cassandra"
-            },
-            {
-              "title": "Save data to DynamoDB",
-              "path": "rule/backend_dynamodb"
-            },
-            {
-              "title": "Save data to ClickHouse",
-              "path": "rule/backend_clickhouse"
-            },
-            {
-              "title": "Save data to OpenTSDB",
-              "path": "rule/backend_opentsdb"
-            },
-            {
-              "title": "Save data to InfluxDB",
-              "path": "rule/backend_influxdb"
-            },
-            {
-              "title": "Save data to InfluxDB V2",
-              "path": "rule/backend_influxdb_v2"
-            },
-            {
-              "title": "Save data to IoTDB",
-              "path": "rule/backend_iotdb"
-            },
-            {
-              "title": "Save data to TimescaleDB",
-              "path": "rule/backend_timescaledb"
-            },
-            {
-              "title": "Save data to Oracle DB",
-              "path": "rule/backend_oracle"
-            },
-            {
-              "title": "Save data to SQLServer",
-              "path": "rule/backend_sqlserver"
-            },
-            {
-              "title": "Save data to DolphinDB",
-              "path": "rule/backend_dolphindb"
-            },
-            {
-              "title": "Save data to MatrixDB",
-              "path": "rule/backend_matrixdb"
-            },
-            {
-              "title": "Save data to TDengine",
-              "path": "rule/backend_tdengine"
-            },
-            {
-              "title": "Save data to Lindorm",
-              "path": "rule/backend_lindorm"
-            },
-            {
-              "title": "Save data to HStreamDB",
-              "path": "rule/backend_hstreamdb"
-            },
-            {
-              "title": "Save data to Tablestore",
-              "path": "rule/backend_tablestore"
-            }
-          ]
-        },
-        {
-          "title": "Bridges",
-          "children": [
-            {
-              "title": "Bridge data to Kafka",
-              "path": "rule/bridge_kafka"
-            },
-            {
-              "title": "Bridge data to Pulsar",
-              "path": "rule/bridge_pulsar"
-            },
-            {
-              "title": "Bridge data to RabbitMQ",
-              "path": "rule/bridge_rabbitmq"
-            },
-            {
-              "title": "Bridge data to RocketMQ",
-              "path": "rule/bridge_rocketmq"
-            },
-            {
-              "title": "Bridge data to SAP Event Mesh",
-              "path": "rule/bridge_sap_event_mesh"
-            },
-            {
-              "title": "Bridge data to MQTT Broker",
-              "path": "rule/bridge_mqtt"
-            },
-            {
-              "title": "Bridge data to EMQX",
-              "path": "rule/bridge_emqx"
-            },
-            {
-              "title": "Bridge data to GCP PubSub",
-              "path": "rule/bridge-gcp-pubsub"
-            }
-          ]
-        },
-        {
           "title": "Save Offline Message",
           "children": [
             {
@@ -1309,6 +1156,105 @@
               "path": "rule/schema-registry-examp-3rdparty-grpc"
             }
           ]
+        }
+      ]
+    },
+    {
+      "title": "Data Integration",
+      "children": 
+      [
+        {
+          "title": "Integrate with MQTT Broker",
+          "path": "rule/bridge_mqtt"
+        },
+        {
+          "title": "Integrate with Kafka",
+          "path": "rule/bridge_kafka"
+        },    
+        {
+          "title": "Integrate with InfluxDB",
+          "path": "rule/backend_influxdb"
+        },
+        {
+          "title": "Integrate with InfluxDB V2",
+          "path": "rule/backend_influxdb_v2"
+        },    
+        {
+          "title": "Integrate with MySQL",
+          "path": "rule/backend_mysql"
+        },
+        {
+          "title": "Integrate with PostgreSQL",
+          "path": "rule/backend_pgsql"
+        },
+        {
+          "title": "Integrate with Redis",
+          "path": "rule/backend_redis"
+        },
+        {
+          "title": "Integrate with MongoDB",
+          "path": "rule/backend_mongodb"
+        },
+        {
+          "title": "Integrate with HStreamDB",
+          "path": "rule/backend_hstreamdb"
+        },
+        {
+          "title": "Integrate with Pulsar",
+          "path": "rule/bridge_pulsar"
+        },
+        {
+          "title": "Integrate with RabbitMQ",
+          "path": "rule/bridge_rabbitmq"
+        },
+        {
+          "title": "Integrate with RocketMQ",
+          "path": "rule/bridge_rocketmq"
+        },
+      
+        {
+          "title": "Integrate with Lindorm",
+          "path": "rule/backend_lindorm"
+        },
+        {
+          "title": "Integrate with DynamoDB",
+          "path": "rule/backend_dynamodb"
+        },
+        {
+          "title": "Integrate with TDengine",
+          "path": "rule/backend_tdengine"
+        },
+        {
+          "title": "Integrate with TimescaleDB",
+          "path": "rule/backend_timescaledb"
+        },
+        {
+          "title": "Integrate with OpenTSDB",
+          "path": "rule/backend_opentsdb"
+        },
+        {
+          "title": "Integrate with DolphinDB",
+          "path": "rule/backend_dolphindb"
+        },
+        {
+          "title": "Integrate with ClickHouse",
+          "path": "rule/backend_clickhouse"
+        },
+        {
+          "title": "Integrate with Cassandra",
+          "path": "rule/backend_cassandra"
+        },
+        {
+          "title": "Integrate with Oracle DB",
+          "path": "rule/backend_oracle"
+        },
+        {
+          "title": "Integrate with SQLServer",
+          "path": "rule/backend_sqlserver"
+        },
+        {
+          "title": "Integrate with Multiple MQTT Brokers",
+          "path": "rule/bridge_emqx"
         }
       ]
     },

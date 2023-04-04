@@ -1,4 +1,4 @@
-# Save data to PostgreSQL
+# Integrate with PostgreSQL
 
 ::: tip
 

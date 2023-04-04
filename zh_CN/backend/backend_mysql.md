@@ -1,4 +1,4 @@
-# MySQL 数据存储
+# 集成 MySQL
 
 ::: tip
 

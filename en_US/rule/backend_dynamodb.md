@@ -1,4 +1,4 @@
-# Save data to DynamoDB
+# Integrate with DynamoDB
 
 Setup a DynamoDB database, taking Mac OSX for instance:
 

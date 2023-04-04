@@ -1,4 +1,4 @@
-# Save data to Redis
+# Integrate with Redis
 
 Setup a Redis database, taking Mac OSX for instance:
 

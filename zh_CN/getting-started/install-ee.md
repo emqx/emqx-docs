@@ -4,13 +4,13 @@ EMQX 消息服务器可跨平台运行在 Linux 服务器上。
 
 ## EMQX License 文件获取
 
-联系商务或登陆 https://www.emqx.com 注册账号获取免费的试用 License 文件
+联系商务或登陆 <https://www.emqx.com> 注册账号获取免费的试用 License 文件
 
 ## EMQX 程序包下载
 
 EMQX 消息服务器每个版本会发布 CentOS、Ubuntu、Debian 平台程序包与 Docker 镜像。
 
-下载地址: https://www.emqx.com/zh/downloads
+下载地址: <https://www.emqx.com/zh/downloads>
 
 
 ## CentOS
@@ -62,7 +62,7 @@ EMQX 消息服务器每个版本会发布 CentOS、Ubuntu、Debian 平台程序�
 
 ### 使用 zip 包安装 EMQX
 
-::: warning
+:::
 ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
 :::
 
@@ -144,7 +144,7 @@ $ sudo service emqx start
 
 ### 使用 zip 包安装 EMQX
 
-::: warning
+:::
 ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
 :::
 
@@ -229,7 +229,7 @@ emqx 4.0.0 is running
 
 ### 使用 zip 包安装 EMQX
 
-::: warning
+:::
 ZIP包适用于测试和热更，如果不知道如何手动安装所有可能的运行时依赖，请勿在生产环境中使用
 :::
 
@@ -292,7 +292,7 @@ ZIP包适用于测试和热更，如果不知道如何手动安装所有可能�
 
 ## Docker
 
-::: warning
+:::
 由于 emqx 将数据存储在 `data/mnesia/<节点名>` 目录，所以在使用容器启动 emqx 的时候，
 必须使用 hostname 或者 FQDN 来组建 emqx 的节点名。否则数据存储目录将发生切换，导致数据丢失。
 :::

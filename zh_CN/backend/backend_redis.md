@@ -1,4 +1,4 @@
-# Redis 数据存储
+# 集成 Redis
 
 ::: tip
 

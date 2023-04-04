@@ -1,4 +1,4 @@
-# Cassandra 消息存储
+# 集成 Cassandra
 
 ::: tip
 

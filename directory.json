@@ -271,7 +271,7 @@
       ]
     },
     {
-      "title": "数据存储",
+      "title": "数据集成",
       "path": "backend/backend"
     },
     {
@@ -782,7 +782,7 @@
       ]
     },
     {
-      "title": "Backend",
+      "title": "Data Integration",
       "path": "backend/backend"
     },
     {

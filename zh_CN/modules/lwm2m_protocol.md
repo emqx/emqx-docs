@@ -112,7 +112,7 @@ LwM2M 设备的回复用如下 topic 传送
 
 MQTT Payload 也是一个 json 格式的字符串，更多的细节请参见 emqx-lwm2m 的文档。
 
-::: warning
+:::
 EMQX 的 LwM2M 模块只支持携带以下几种 content-format 的 CoAP 消息:
 - "text/plain"
 - "application/octet-stream"

@@ -1,8 +1,8 @@
-# MQTT Bridge
+# Integrate with MQTT Broker
 
 ::: tip
 
-After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to MQTT](../rule/bridge_mqtt.md) to setup mqtt bridges in rule engine.
+After EMQX version 3.1, a powerful rule engine is introduced to replace plug-ins. It is recommended that you use it. See [Bridge data to MQTT](../rule/bridge_mqtt.md) to set up MQTT bridges in the rule engine.
 
 :::
 

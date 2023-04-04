@@ -1,4 +1,4 @@
-# 桥接数据到 EMQX
+# 集成多个 MQTT Broker
 
 {% emqxce %}
 

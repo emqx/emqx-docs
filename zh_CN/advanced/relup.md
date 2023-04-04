@@ -20,12 +20,17 @@ ref:
 使用版本热升级功能，用户可以在保持客户端连接不断开的情况下，快速、安全地升级生产环境中正在运行的 EMQX，并避免了因重启服务导致的系统可用性降低。
 
 ::: tip
-目前 Windows、MacOS 暂不支持热升级功能。
+目前 Windows、MacOSX 暂不支持热升级功能。
 :::
 
-::: warning
-EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。请谨慎操作。
-比如可以从 4.4.1，4.4.2，...，4.4.15 升级到 4.4.16，但不能从 4.3.1，4.3.2，... 升级上来。
+:::
+EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
+即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
+请谨慎操作。
+:::
+
+:::
+不允许 EMQX (开源版) 与 EMQX Enterprise 之间的热升级，请谨慎操作。
 :::
 
 ## 下载热升级 Zip 包
@@ -56,6 +61,7 @@ EMQX 企业版 4.4 的 Zip 包名格式为：
 emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 ```
 
+<<<<<<< HEAD
 以 `emqx-ee-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` 为例，其中：
 
 - EMQX Type(`ee`): EMQX 类型。`ee` 代表企业版，开源版没有这一字段。请确保跟已安装的 EMQX 类型。
@@ -64,6 +70,17 @@ emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 - OS Type(`ubuntu20.04`): 操作系统类型。请确保跟已安装的 EMQX 操作系统类型一致。
 - Arch(`amd64`): 架构类型。请确保跟已安装的 EMQX 架构类型一致。
 {% endemqxee %}
+=======
+:::
+EMQX 仅允许 Patch 版本（版本号的第三位）的热升级。
+即允许 x.y.z 热升级到 x.y.(z+N)，但不允许 x.y 热升级到 (x+N).(y+M)。
+请谨慎操作。
+:::
+
+:::
+不允许 EMQX (开源版) 与 EMQX Enterprise 之间的热升级，请谨慎操作。
+:::
+>>>>>>> release-4.3
 
 ## 热升级步骤
 

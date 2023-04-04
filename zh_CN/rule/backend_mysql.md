@@ -1,4 +1,4 @@
-# 保存数据到 MySQL
+# 集成 MySQL
 
 搭建 MySQL 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 

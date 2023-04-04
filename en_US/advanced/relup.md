@@ -6,12 +6,17 @@ EMQX support hot upgrade since version 4.2.0.
 With the hot upgrade feature, users can quickly and safely upgrade the running EMQX in production environment while keeping all the clients connected, ensure high availability because there is no need to restart the service.
 
 ::: tip
-Currently EMQX for Windows and MacOS does not support the hot upgrade feature.
+Currently EMQX for Windows and MacOSX does not support hot upgrade feature.
 :::
 
-::: warning
-EMQX only allows hot upgrade between patch versions (the third digit of the version number). Please operate with caution.
-e.g. You can upgrade to 4.4.16 from 4.4.1, 4.4.2, ..., but not from 4.3.1, 4.3.2, ...
+:::
+EMQX only allows hot upgrade between patch versions (the third digit of the version number).
+i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
+Please operate with caution.
+:::
+
+:::
+Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
 :::
 
 ## Download the Hot Upgrade Zip Package
@@ -42,14 +47,15 @@ The Zip package name format of EMQX Enterprise version 4.4 is:
 emqx-[EMQX Type]-[EMQX Version]-[OTP Version]-[OS Type]-[Arch].zip
 ```
 
-Take `emqx-ee-4.4.16-otp24.3.4.2-1-ubuntu20.04-amd64.zip` for example:
+:::
+EMQX only allows hot upgrade between patch versions (the third digit of the version number).
+i.e. upgrading from x.y.z to x.y.(z+N) is allowed, but upgrading from x.y to (x+N).(y+M) is not allowed.
+Please operate with caution.
+:::
 
-- EMQX Type(`ee`): EMQX Type. `ee` stands for EMQX Enterprise, the package of the open source version does not have this field. You cannot upgrade the open source EMQX using a EMQX enterprise package and vice versa.
-- EMQX Version(`4.4.16`): EMQX version number. Please ensure that the running EMQX is on version 4.4.*, but not 4.3 or 5.0 etc.
-- OTP Version(`otp24.3.4.2-1`): Erlang OTP version number. Please ensure that the first digit (here is 24) must be the same as the version of the running EMQX.
-- OS Type(`ubuntu20.04`): OS type. Please ensure that it is same as the OS Type of the running EMQX.
-- Arch(`amd64`): Type of the architecture. Please ensure that it is the same as the arch type of the running EMQX.
-{% endemqxee %}
+:::
+Hot upgrade between EMQX (opensource) and EMQX Enterprise is not allowed, please operate with caution.
+:::
 
 ## Setups for Hot Upgrade
 

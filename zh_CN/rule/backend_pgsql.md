@@ -1,4 +1,4 @@
-# 保存数据到 PostgreSQL
+# 集成 PostgreSQL
 
 ::: tip
 

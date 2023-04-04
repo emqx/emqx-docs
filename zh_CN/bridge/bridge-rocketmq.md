@@ -1,4 +1,4 @@
-# RocketMQ 桥接
+# 集成 RocketMQ
 
 ::: tip
 

@@ -1,4 +1,4 @@
-# Pulsar Bridge
+# Integrate with Pulsar
 
 ::: tip
 

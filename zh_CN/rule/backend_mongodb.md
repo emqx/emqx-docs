@@ -1,4 +1,4 @@
-# 保存数据到 MongoDB
+# 集成 MongoDB
 
 为方便演示部分功能，后续内容我们将基于 MongoDB Cloud 展开，不过以其他方式部署 MongoDB 的用户依然通过本文档了解学习规则引擎 MongoDB 资源和动作的使用。
 
@@ -91,7 +91,7 @@ cluster0.j0ehi.mongodb.net      text = "authSource=admin&replicaSet=atlas-r36spx
 
 然后将查询到的服务器列表按 `host[:port][,...hostN[:portN]]` 格式填写到 **MongoDB 服务器** 选项中，并且按照查询到的 TXT 记录内容来配置 **认证数据源** 和 **副本集名称**：
 
-::: warning
+:::
 MongoDB 要求写入的数据必须是 JSON 格式，所以请务必保证你的模板在占位符替换之后，是一个合法的 JSON 格式。比如你可以这样写：
 
 ```

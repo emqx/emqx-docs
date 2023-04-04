@@ -1,4 +1,4 @@
-# RabbitMQ Bridge
+# Integrate with RabbitMQ
 
 ::: tip
 

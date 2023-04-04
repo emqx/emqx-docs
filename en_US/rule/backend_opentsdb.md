@@ -1,4 +1,4 @@
-# Save data to OpenTSDB
+# Integrate with OpenTSDB
 
 Setup a OpenTSDB database, taking Mac OSX for instance:
 

@@ -1,4 +1,4 @@
-# 保存数据到 Oracle DB
+# 集成 Oracle DB
 
 创建 t_mqtt_msg 表:
 

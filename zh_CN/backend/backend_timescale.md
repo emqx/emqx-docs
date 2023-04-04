@@ -1,4 +1,4 @@
-# Timescale 消息存储
+# 集成 Timescale
 
 ::: tip
 

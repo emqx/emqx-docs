@@ -1,4 +1,4 @@
-# Bridge data to EMQX
+# Integrate with Multiple MQTT Brokers
 
 {% emqxce %}
 

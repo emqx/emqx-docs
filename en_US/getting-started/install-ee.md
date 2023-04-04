@@ -28,7 +28,7 @@ EMQX Enterprise binary packages are released on below operating systems:
 
 ## Package Installation (Linux)
 
-1.  Download EMQX RPM package from [emqx.com](https://www.emqx.com/en/try?product=enterprise) or [Github](https://github.com/emqx/emqx/releases)
+1.  Download EMQX RPM package from [emqx.com](https://www.emqx.com/en/try?product=enterprise).
 
 2. Install EMQX Broker:
 
@@ -102,7 +102,7 @@ EMQX Enterprise binary packages are released on below operating systems:
 
 ## ZIP (Linux、MacOS)
 
-::: warning
+:::
 ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install zip packages for production unless you know how to manually resolve all the runtime dependencies.
 :::
 
@@ -138,7 +138,7 @@ ZIP packages are released for quick testing and hot-beam upgrade. Do NOT install
 
 ## Install EMQX in Docker (Contain a simple docker-compose cluster)
 
-::: warning
+:::
 Because emqx stores data in the 'data/mnesia/<node name>' directory, when using the container to start emqx,
 the hostname or FQDN must be used to form the node name of emqx. Otherwise, the data storage directory will be switched, resulting in data loss.
 :::
