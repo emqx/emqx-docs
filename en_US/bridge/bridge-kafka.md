@@ -1,4 +1,4 @@
-# Integrate with Kafka
+# Ingest Data into Kafka
 
 ::: tip
 

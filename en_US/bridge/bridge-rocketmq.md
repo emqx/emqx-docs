@@ -1,4 +1,4 @@
-# Integrate with RocketMQ
+# Ingest Data into RocketMQ
 
 ::: tip
 

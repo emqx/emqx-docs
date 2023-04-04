@@ -1,4 +1,4 @@
-# Integrate with DynamoDB
+# Ingest Data into DynamoDB
 
 Setup a DynamoDB database, taking Mac OSX for instance:
 

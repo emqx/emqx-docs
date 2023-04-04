@@ -1,4 +1,4 @@
-# Integrate with Kafka
+# Ingest Data into Kafka
 
 Setup a Kafka, taking Mac OSX for instance:
 

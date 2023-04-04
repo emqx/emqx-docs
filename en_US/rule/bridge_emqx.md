@@ -1,4 +1,4 @@
-# Integrate with Multiple MQTT Brokers
+# Ingest Data into Multiple MQTT Brokers
 
 Setup another MQTT broker using emqx, taking Mac OSX for instance:
 

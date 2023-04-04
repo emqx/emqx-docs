@@ -1,4 +1,4 @@
-# Integrate with OpenTSDB
+# Ingest Data into OpenTSDB
 
 Setup a OpenTSDB database, taking Mac OSX for instance:
 
