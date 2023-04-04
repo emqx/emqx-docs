@@ -4,9 +4,9 @@ The Rule Engine is EMQX's built-in data processing component, which works with [
 
 <img src="./assets/rule-engine.png" alt="SQL-based IoT Rule Engine" style="zoom:30%;" />
 
-The Rule Engine is particularly useful for organizations that need to process and analyze data from multiple sources, such as IoT devices or other sensor networks. By using the Rule Engine, organizations can create rules that filter out irrelevant data, perform calculations, and trigger alerts or notifications based on specific events or conditions.
+The Rule Engine is particularly useful when you need to transform or reroute incoming messages from multiple sources, for example, you can create rules that filter out irrelevant data, perform calculations, and trigger alerts or notifications based on specific events or conditions.
 
-This chapter provides an in-depth exploration of the Rule Engine and its capabilities. Readers will learn how the Rule Engine processes data in real time by defining rules, [using built-in SQL functions](./rule-sql-builtin-functions.md), and [customizing rules with SQL statements](./rule-sql-syntax.md). Additionally, readers will learn how to access and analyze data from multiple sources and leverage the power of [jq](./rule-sql-jq.md), a lightweight and flexible command-line JSON processor that is now supported with EMQX 5.x Rule Engine. 
+This chapter provides an in-depth exploration of the Rule Engine and its capabilities. A rule consists of an SQL statement (describing the data source and transformation) and a set of actions that will be triggered every time the SQL statement outputs a value. The "SQL functions" are functions that one can call from within the SQL statement to do data transformations.
 
 ## What is the Rule Engine
 
