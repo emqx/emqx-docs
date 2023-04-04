@@ -202,8 +202,8 @@ Variables:
   in LwM2M Gateway configurations.
 
 For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.register.topic` is `up/resp`, then the topic for the
-response message would be `lwm2m/<your-real-client-endpoint-name>/up/resp`.
+and the `translators.register.topic` is `up/register`, then the topic for the
+response message would be `lwm2m/<your-real-client-endpoint-name>/up/register`.
 
 
 The **Payload** format is:
@@ -479,7 +479,7 @@ It has the same format as the **Read** message:
 * Full path, which is `{ObjectID}/{InstanceID}/{ResourceID}`, e.g. `/3/0/1`, it
   means discovering all attributes of a specific resource.
 
-For example, a full MQTT Payload for Read command can be:
+For example, a full MQTT Payload for Discover command can be:
 ```json
 {
   "reqID": 2,
@@ -612,19 +612,18 @@ In request command, when the **MsgType** is `"write-attr"`, the structure of the
 }
 ```
 Variables:
-- `{?PeriodMin}`: Number, LwM2M Notification Class Attribute - Minimum Period.
-- `{?PeriodMax}`: Number, LwM2M Notification Class Attribute - Maximum Period.
-- `{?GreaterThan}`: Number, LwM2M Notification Class Attribute - Greater Than.
-- `{?LessThan}`: Number, LwM2M Notification Class Attribute - Less Than.
-- `{?Step}`: Number, LwM2M Notification Class Attribute - Step.
-
+- `{?PeriodMin}`: Number, Minimum period for notifications.
+- `{?PeriodMax}`: Number, Maximum period for notifications.
+- `{?GreaterThan}`: Number, Notification triggered when resource value is greater than this value.
+- `{?LessThan}`: Number, Notification triggered when resource value is less than this value.
+- `{?Step}`: Number, Notification triggered when the change in resource value exceeds this value.
 
 #### Execute
 
 The "Execute" operation is used by the LwM2M Server to initiate some action,
 and can only be performed on individual Resources.
 
-In request command, when the **MsgType** is `"write-attr"`, the structure of the 
+In the request command, when the **MsgType** is `"execute"`, the structure of the 
 **RequestData** should be as follows:
 ```json
 {
