@@ -18,16 +18,16 @@ EMQX uses a powerful SQL-based IoT rule engine for data processing and integrati
 
 This article discusses the composition of rules in a rule engine, which consists of data source, data transformation, and processing result destination. It also introduces the rule-engine language, which is similar to SQL and explains the different types of actions that can be taken in response to the rule engine's output. Finally, it provides some typical use cases for rules, such as action monitoring.
 
-## How It Works
+## How the Rule Engine Works
 
-Rules describe how to retrieve data from a **data source**, perform **data transformations**, and add subsequent actions to the processed results.
+Rules describe how to retrieve data from a **data source**, perform **data transformations**, and what actions should be applied to the results.
 
 <img src="./assets/sql_process.png" alt="sql_process" style="zoom:50%;" />
 
 - **Data Source**: The data source of a rule can be a message or event, or an external data system. You can use the `FROM` clause in the rule's SQL to specify the data source, and then use the `WHERE` clause to add additional constraints on which messages will be processed by the rule. 
 - **Data Transformation**: Data transformations describe how to transform an input message. You can use the `SELECT` part of the SQL to extract and transform data from the input message. You can use the embedded SQL sample statements to implement advanced transformations, for example, to add a time stamp to the output message.
 
-- **Subsequent Actions**: After the input is processed as per the rules specified, you can continue to define one or more actions to process the SQL execution results. The Rule Engine will perform corresponding actions in sequence, such as storing the processing results in a database or republishing them to another MQTT topic.
+- **Actions**: After the input is processed as per the rules specified, you can continue to define one or more actions to process the SQL execution results. The Rule Engine will perform corresponding actions in sequence, such as storing the processing results in a database or republishing them to another MQTT topic.
 
 The below section introduces how to configure a rule with the Dashboard. 
 
@@ -41,7 +41,7 @@ Specify the data source and data processing method.
 
 In the SQL Editor section, input your SQL statements based on your business needs.
 
-For example, if you want EMQX to retrieve input messages from an MQTT topic matching the pattern `t/#` and add a new field `d` only to messages with `clientid` equal to `foo`, you can try the SQL statement below: 
+For example, if you want EMQX to retrieve input messages from an MQTT topic under topic `t/#` and with `clientid` equal to `foo`, then rename the `data` field to `d`, you can try the SQL statement below: 
 
 ```sql
 SELECT
@@ -54,11 +54,11 @@ WHERE
 
 The above SQL statement specifies the following for the rule:
 
-- **Data source**: Messages with topic `t/#` and client ID as `foo`
-- **Data transformation**: Extract the `data` field from the payload and assign a new field `d`. So in the above example, the output data will have the following structure `{d: "value of the payload's data field"}`.
+- **Data source**: Messages with topic `t/#` and client ID equals to `foo`
+- **Data transformation**: Extract the `data` field from the payload and rename the field from `data` to `d`. So in the above example, the output data will have the following structure `{d: "value of the payload's data field"}`.
 
 ::: tip
-This example assumes the payload is structured data (such as JSON, avro, and protobuf), if the payload is formatted in some other way, you should convert the data type, for example, with the [jq function](./rule-sql-jq.md). 
+This example assumes the payload is structured data (such as JSON, avro, and protobuf), if the payload is formatted in some other way, you can convert the data type, for example, with the [jq function](./rule-sql-jq.md). 
 
 EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Example** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
 
@@ -142,8 +142,8 @@ For example, a rule can be used to route messages containing a temperature great
 
 ### Message Encoding and Decoding
 
-For cases where the format transform of messages is needed, rules can be used to encode and decode messages as required.
+For cases where the message format needs to be changed, rules can be used to encode and decode messages as required.
 
-For example, a rule can be used to decode a message containing binary data into a JSON format, and then forward the JSON format message to the application platform for further processing. 
+For example, a rule can be used to decode a message containing binary data into a JSON format. 
 
 If the built-in functionality is not enough for a specific encoding or decoding task, new built-in functions can be added that are implemented in Erlang. This provides great flexibility in handling message formats.
