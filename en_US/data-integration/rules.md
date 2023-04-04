@@ -112,7 +112,7 @@ Where
 The console output action should only be used for debugging. If it is used in the production environment, it may cause performance problems.
 :::
 
-### Forwarding with Data Bridge
+#### Forwarding with Data Bridge
 
 If select **Forwarding with Data Bridge**, the target message will be republished to the selected data bridge. All you need is to select the target Data bridge from the Data bridge drop-down list. 
 
