@@ -32,8 +32,15 @@
   title_cn: 安装部署
   path: deploy/install
   children:
+    - title_en: EMQX on Kubernetes
+      title_cn: EMQX on Kubernetes
+      lang: en
+      path: "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
+    - title_en: EMQX on Kubernetes
+      title_cn: EMQX on Kubernetes
+      lang: cn
+      path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
     - deploy/install-docker
-    - deploy/install-k8s
     - deploy/install-debian
     - deploy/install-ubuntu
     - deploy/install-centos
@@ -62,7 +69,7 @@
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
 
-- title_en: EMQX Cluster
+- title_en: Clustering
   title_cn: 构建集群
   path: deploy/cluster/introduction
   children:
@@ -161,7 +168,10 @@
     - data-integration/data-bridge-mongodb
     - data-integration/data-bridge-pgsql
     - data-integration/data-bridge-dynamo
-
+    - data-integration/data-bridge-cassa
+    - data-integration/data-bridge-tdengine
+    - data-integration/data-bridge-rocketmq
+    
     # TODO
     # - title_en: Examples and Tutorials
     #   title_cn: 示例和教程
@@ -283,7 +293,6 @@
     - observability/log
     - observability/metrics-and-stats
     - observability/prometheus
-    - observability/statsd
     - observability/tracer
     - observability/alarms
     - observability/topic-metrics
@@ -354,7 +363,10 @@
   title_cn: 设计与实现
   path: design/overview
   children:
-    - design/clustering
+    - title_en: EMQX Clustering
+      title_zh: EMQX 集群
+      lang: en
+      path: design/clustering
     - design/inflight-window-and-message-queue
     - design/retransmission
     # - design/design

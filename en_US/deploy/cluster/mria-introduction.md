@@ -4,11 +4,11 @@
 
 EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria), which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster. 
 
-<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 18%;" />
+<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 40%;" />
 
 In this [Mria](https://github.com/emqx/mria), each node assumes one of two roles: Core node or Replicant.
 Core nodes serve as a data layer for the database.
-Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. <!--On how core and replicant node works, you can continue to read the [EMQX clustering](../../design/clustering.md) will update when pr 1730 is merged. -->
+Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. On how core and replicant node works, you can continue to read the [EMQX clustering](../../design/clustering.md).
 
 By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster. 
 

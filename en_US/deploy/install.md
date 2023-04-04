@@ -85,8 +85,8 @@ After installation, EMQX creates some directories to store running and configura
 
 | Directory  | Description        | Installed with tar.gz | Installed with RPM/DEB   |
 | ---------- | ------------------ | --------------------- | ------------------------ |
-| `etc`      | Config files       | `./etc`               | `/etc/emqx/etc`          |
-| `data`     | Database and files | `./data`              | `/var/lib/emqx/data`     |
+| `etc`      | Config files       | `./etc`               | `/etc/emqx`      |
+| `data`     | Database and files | `./data`              | `/var/lib/emqx`     |
 | `log`      | Log files          | `./log`               | `/var/log/emqx`          |
 | `releases` | Boot instructions  | `./releases`          | `/usr/lib/emqx/releases` |
 | `bin`      | Executables        | `./bin`               | `/usr/lib/emqx/bin`      |
@@ -98,7 +98,7 @@ After installation, EMQX creates some directories to store running and configura
 
 1. When installed with the compressed package, the directory is relative to the directory where the software is installed.
 2. When installed with Docker container, EMQX is installed in the `/opt/emqx` directory.
-3. The `data`, `log`, and `plugins` directories are configurable via the configuration files. Mounting the `data` directory to a high-performance disk is recommended for better performance.
+3. The `data`, `log`, and `plugins` directories are configurable via the configuration files. Mounting the `data` directory to a high-performance disk is recommended for better performance. For nodes belonging to the same cluster, the configuration for the `data` directory should be the same. For more information about clusters, see [Cluster](./cluster/introduction.md).
    :::
 
 The table below introduces the files and subfolders of some directories.

@@ -15,7 +15,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 - `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`
 - `topics`: 用于指定当前规则适用的主题列表，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)
 
-添加用户名为 `emqx_u`、禁止发布到 `t/1`, `a/1` 主题的规则示例：
+添加允许用户名为 `user123`的客户端发布主题为 `data/user123/#` 的消息的规则示例：
 
 ```js
 > db.mqtt_acl.insertOne(
@@ -25,7 +25,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
       "ipaddress": "127.0.0.1",
       "permission": "allow",
       "action": "publish",
-      "topics": ["t/1", "a/1"]
+      "topics": ["data/user123/#"]
   }
 );
 {
@@ -34,7 +34,7 @@ MongoDB 认证器支持将权限数据存储为 MongoDB 文档。用户需要提
 }
 ```
 
-相应的链接配置参数如下：
+相应的配置参数如下：
 
 ```bash
 collection = "mqtt_acl"
