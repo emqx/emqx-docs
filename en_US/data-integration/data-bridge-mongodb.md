@@ -55,7 +55,7 @@ db.createCollection('emqx_messages')
 3. In the **Create Data Bridge** page, click to select **MongoDB**, and then click **Next**.
 4. Input a name for the data bridge. Note: It should be a combination of upper/lower case letters and numbers.
 5. Set **MongoDB Mode**  and **Srv Record** as your business needs, for example, **single** and the default deselected status. 
-6. Configure the MongoDB connection information. Input **emqx_data** as the **Database Name**, **127.0.0.1:27017** as the **Server Host**, **admin** as the **Username**, **public** as the **Password**. The **Collection to be used** field is to select the collection to store data and supports placeholder `${var_name}` syntax, which will be replaced by the value of the payload field named `var_name` in the input message. In this example, this feature is not used and can keep the default setting, the same as for the remaining fields. 
+6. Configure the MongoDB connection information. Input **emqx_data** as the **Database Name**, **127.0.0.1:27017** as the **Server Host**, **admin** as the **Username**, **public** as the **Password**. The **Collection** field is to select the collection to store data and supports placeholder `${var_name}`, in this example, it is set to `emqx_message`. For the rest field, you can keep the default settings. 
 8. Configure the **Payload template** to save `clientid`, `topic`, `qos`,  `timestamp`, and `payload` to MongoDB. This template will be executed via the MongoDB insert command, and the sample code is as follows:
 
 ```json
