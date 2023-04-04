@@ -1,4 +1,4 @@
-# Integrate with Multiple MQTT Brokers
+# Ingest Data into Multiple MQTT Brokers
 
 {% emqxce %}
 

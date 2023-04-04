@@ -1,4 +1,4 @@
-# Integrate with Oracle DB
+# Ingest Data into Oracle DB
 
 Create t_mqtt_msg table:
 
