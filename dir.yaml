@@ -132,6 +132,20 @@
     # - messaging/nanomq
     # - messaging/neuron
 
+- title_en: Use SDK to Connect Clients
+  title_cn: 使用 SDK 连接客户端
+  path: connect-emqx/introduction
+  children:
+    - connect-emqx/c
+    - connect-emqx/java
+    - connect-emqx/go
+    - connect-emqx/python
+    - connect-emqx/javascript
+    - title_en: MQTT Wechat miniprogram example
+      title_cn: MQTT 微信小程序示例
+      lang: cn
+      path: connect-emqx/wechat-miniprogram
+
 # MQTT over QUIC
 
 - title_en: MQTT over QUIC

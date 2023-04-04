@@ -1,12 +1,12 @@
-# MQTT Java 客户端库
+# MQTT Java SDK Example
 
-[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) 是用 Java 编写的 MQTT 客户端库（MQTT Java Client），可用于 JVM 或其他 Java 兼容平台（例如Android）。
+[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) is an MQTT client library written in Java(MQTT Java Client), which can be used in JVM or other Java compatible platforms (such as Android ).
 
-Eclipse Paho Java Client 提供了MqttAsyncClient 和 MqttClient 异步和同步 API。
+Eclipse Paho Java Client provides asynchronous and synchronous API of MqttAsyncClient and MqttClient .
 
-## 通过 Maven 安装 Paho Java
+## Install Paho Java via Maven
 
-通过包管理工具 Maven 可以方便地安装 Paho Java 客户端库，截止目前最新版本安装如下：
+The Paho Java client library can be easily installed through the package management tool Maven. Until now, the latest version is installed as follows:
 
 ```xml
 <dependency>
@@ -16,9 +16,9 @@ Eclipse Paho Java Client 提供了MqttAsyncClient 和 MqttClient 异步和同步
 </dependency>
 ```
 
-## Paho Java 使用示例
+## Paho Java usage example
 
-Java 体系中 Paho Java 是比较稳定、广泛应用的 MQTT 客户端库，本示例包含 Java 语言的 Paho Java 连接 EMQX Broker，并进行消息收发完整代码：
+In the Java system, Paho Java is a relatively stable and widely used MQTT client library. This example contains the complete code of Paho Java in the Java language connecting to EMQX, sending and receiving messages:
 
 **App.java**
 
@@ -45,27 +45,27 @@ public class App {
         try {
             MqttClient client = new MqttClient(broker, clientId, persistence);
 
-            // MQTT 连接选项
+            // MQTT connection option
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setUserName("emqx_test");
             connOpts.setPassword("emqx_test_password".toCharArray());
-            // 保留会话
+            // retain session
             connOpts.setCleanSession(true);
 
-            // 设置回调
+            // set callback
             client.setCallback(new PushCallback());
 
-            // 建立连接
+            // establish a connection
             System.out.println("Connecting to broker: " + broker);
             client.connect(connOpts);
 
             System.out.println("Connected");
             System.out.println("Publishing message: " + content);
 
-            // 订阅
+            // Subscribe
             client.subscribe(subTopic);
 
-            // 消息发布所需参数
+            // Required parameters for message publishing
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(qos);
             client.publish(pubTopic, message);
@@ -88,7 +88,7 @@ public class App {
 
 ```
 
-**回调消息处理类 OnMessageCallback.java**
+**Callback message processing class OnMessageCallback.java**
 
 ```java
 package io.emqx;
@@ -99,15 +99,15 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class OnMessageCallback implements MqttCallback {
     public void connectionLost(Throwable cause) {
-        // 连接丢失后，一般在这里面进行重连
-        System.out.println("连接断开，可以做重连");
+        // After the connection is lost, it usually reconnects here
+        System.out.println("disconnect, you can reconnect");
     }
 
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        // subscribe后得到的消息会执行到这里面
-        System.out.println("接收消息主题:" + topic);
-        System.out.println("接收消息Qos:" + message.getQos());
-        System.out.println("接收消息内容:" + new String(message.getPayload()));
+        // The messages obtained after subscribe will be executed here
+        System.out.println("Received message topic:" + topic);
+        System.out.println("Received message QoS:" + message.getQos());
+        System.out.println("Received message content:" + new String(message.getPayload()));
     }
 
     public void deliveryComplete(IMqttDeliveryToken token) {
@@ -117,6 +117,6 @@ public class OnMessageCallback implements MqttCallback {
 ```
 
 
-## Paho Java MQTT 5.0 支持
+## Paho Java MQTT 5.0 Support
 
-目前 Paho Java 还在适配 MQTT 5.0，尚未全面支持。
+Currently, Paho Java is still adapting to MQTT 5.0 and has not yet fully supported it .

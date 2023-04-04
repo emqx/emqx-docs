@@ -1,4 +1,4 @@
-# MQTT JavaScript client library
+# MQTT JavaScript SDK Example
 
 [MQTT.js](https://www.npmjs.com/package/mqtt) is a module written in JavaScript that implements the MQTT protocol client function and can be used in browsers and Node.js environments.
 

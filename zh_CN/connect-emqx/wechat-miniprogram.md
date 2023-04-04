@@ -1,5 +1,4 @@
-# EMQX MQTT 微信小程序接入
-
+# MQTT 微信小程序接入
 
 微信小程序支持通过 WebSocket 进行即时通信，EMQX 的 MQTT Over WebSocket 能够完全兼容使用在微信小程序上。
 
@@ -15,9 +14,7 @@
 ## 参考资料
 
 - EMQX [使用 WebSocket 连接 MQTT 服务器](https://www.emqx.com/zh/blog/connect-to-mqtt-broker-with-websocket)
-- CSDN [Nginx 反向代理 WebSocket](https://www.xncoding.com/2018/03/12/fullstack/nginx-websocket.html)
 - 微信小程序 MQTT 接入[Demo](https://github.com/iAoe444/WeChatMiniEsp8266)
-
 
 ## 详细步骤
 
