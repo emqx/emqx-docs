@@ -1,4 +1,4 @@
-# Save data to IoTDB
+# Integrate with IoTDB
 
 ## Prepare the Environment
 

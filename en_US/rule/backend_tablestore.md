@@ -1,4 +1,4 @@
-# Save data to Alibaba Tablestore
+# Integrate with Alibaba Tablestore
 
 ## Create a database instance
 

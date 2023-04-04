@@ -1,4 +1,4 @@
-# 保存数据到 Alibaba Tablestore 数据库
+# 集成 Alibaba Tablestore
 
 创建数据库实例（创建实例操作步骤请参考 Tablestore 官方文档）。
 
