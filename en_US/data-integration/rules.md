@@ -16,7 +16,6 @@ EMQX uses a powerful SQL-based IoT rule engine for data processing and integrati
 
 
 
-This article discusses the composition of rules in a rule engine, which consists of data source, data transformation, and processing result destination. It also introduces the rule-engine language, which is similar to SQL and explains the different types of actions that can be taken in response to the rule engine's output. Finally, it provides some typical use cases for rules, such as action monitoring.
 
 ## How the Rule Engine Works
 
