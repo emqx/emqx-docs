@@ -27,7 +27,7 @@ It can also be enabled via the HTTP API, and emqx.conf e.g:
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
-  -u 70c6fc592ed72c56:onRn9Ag0v3y9C9AEzLIJ1tHiLrBIEvfBRWg6FzSW5W1CfN \
+  -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
   "name": "lwm2m"
@@ -38,7 +38,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
   "auto_observe": true,
   "enable_stats": true,
   "update_msg_publish_condition": "contains_object_list",
-  "mountpoint": "lwm2m/",
+  "mountpoint": "lwm2m/${endpoint_name}/",
   "translators": {
     "command": {"topic": "dn/#", "qos": 0},
     "response": {"topic": "up/resp", "qos": 0},
@@ -69,7 +69,7 @@ gateway.lwm2m {
   idle_timeout = "30s"
   lifetime_max = "86400s"
   lifetime_min = "1s"
-  mountpoint = "lwm2m/"
+  mountpoint = "lwm2m/${endpoint_namea}/"
   qmode_time_window = "22s"
   update_msg_publish_condition = "contains_object_list"
   translators {
@@ -201,7 +201,9 @@ Variables:
 - `{?translators.register.topic}` is the value of `translators.register.topic` option
   in LwM2M Gateway configurations.
 
-i.e: `lwm2m/testclient/up/resp`.
+For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
+and the `translators.register.topic` is `up/resp`, then the topic for the
+response message would be `lwm2m/<your-real-client-endpoint-name>/up/resp`.
 
 
 The **Payload** format is:
@@ -229,7 +231,7 @@ Variables:
 - `{?ObjectList}`: Array, the list of Objects supported and Object Instances
   available on the LwM2M Client.
 
-i.e:
+For example, a full MQTT Payload for Register message can be:
 ```json
 {
   "msgType": "register",
@@ -263,13 +265,14 @@ The **Topic** format is:
 ```
 {?mountpoint}{?translators.update.topic}
 ```
-
 Variables:
 - `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
 - `{?translators.update.topic}` is the value of `translators.update.topic` option
   in LwM2M Gateway configurations.
 
-i.e: `lwm2m/testclient/up/update`.
+For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
+and the `translators.update.topic` is `up/update`, then the topic for the
+message would be `lwm2m/<your-real-client-endpoint-name>/up/update`.
 
 
 The **Payload** format is:
@@ -288,7 +291,7 @@ The **Payload** format is:
 
 Variables that are the same as the Register message.
 
-i.e:
+For example, a full MQTT Payload for Update message can be:
 ```json
 {
   "msgType": "update",
@@ -327,7 +330,10 @@ Variables:
 - `{?translators.command.topic}` is the value of `translators.command.topic` option
   in LwM2M Gateway configurations.
 
-i.e: `lwm2m/testclient/dn/cmd`.
+For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
+and the `translators.command.topic` is `dn/cmd`, then the topic for the
+message would be `lwm2m/<your-real-client-endpoint-name>/dn/cmd`.
+
 
 The **Payload** format of command request is:
 ```json
@@ -359,10 +365,13 @@ Variables:
 - `{?translators.response.topic}` is the value of `translators.response.topic` option
   in LwM2M Gateway configurations.
 
-i.e: `lwm2m/testclient/up/resp`.
+For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
+and the `translators.response.topic` is `up/resp`, then the topic for the
+message would be `lwm2m/<your-real-client-endpoint-name>/up/resp`.
+
 
 The **Payload** format of the command response is:
-```
+```json
 {
   "reqID": {?ReqID},
   "msgType": {?MsgType},
@@ -505,23 +514,9 @@ For example, a fully MQTT Payload for Discover Response can be:
     "codeMsg": "content",
     "content": [
       "</3/0>;pmin=10",
-      "</3/0/0>",
-      "</3/0/1>",
-      "</3/0/2>",
-      "</3/0/3>",
-      "</3/0/4>",
-      "</3/0/5>",
-      "</3/0/6>",
-      "</3/0/7>",
-      "</3/0/8>",
-      "</3/0/9>",
-      "</3/0/10>",
-      "</3/0/11>",
-      "</3/0/12>",
-      "</3/0/13>",
-      "</3/0/14>",
-      "</3/0/15>",
-      "</3/0/16>"
+      "</3/0/0>", "</3/0/1>", "</3/0/2>", "</3/0/3>", "</3/0/4>", "</3/0/5>",
+      "</3/0/6>", "</3/0/7>", "</3/0/8>", "</3/0/9>", "</3/0/10>", "</3/0/11>",
+      "</3/0/12>", "</3/0/13>", "</3/0/14>", "</3/0/15>", "</3/0/16>"
     ]
   }
 }
@@ -673,11 +668,11 @@ In request command, when the **MsgType** is `"create"`, the structure of the
 **RequestData** should be as follows:
 ```json
 {
-  "path": "{?ObjectID}/{?ObjectInstanceID}"
+  "path": "{?ObjectID}/{?InstanceID}"
 }
 ```
 Variables:
-- {?ObjectInstanceID}: Integer, LwM2M Object Instance ID
+- `{?InstanceID}`: Integer, LwM2M Object Instance ID
 
 ### Information Reporting Interface
 
@@ -698,7 +693,10 @@ Variables:
 - `{?translators.command.topic}` is the value of `translators.command.topic` option
   in LwM2M Gateway configurations.
 
-i.e: `lwm2m/testclient/dn/cmd`.
+For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
+and the `translators.command.topic` is `dn/cmd`, then the topic for the
+message would be `lwm2m/<your-real-client-endpoint-name>/dn/cmd`.
+
 
 The **Payload** format of observe and cancel observe request is:
 ```json
@@ -739,10 +737,13 @@ Variables:
 - `{?translators.response.topic}` is the value of `translators.response.topic` option
   in LwM2M Gateway configurations.
 
-i.e: `lwm2m/testclient/up/resp`.
+For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
+and the `translators.response.topic` is `up/resp`, then the topic for the
+message would be `lwm2m/<your-real-client-endpoint-name>/up/resp`.
+
 
 The **Payload** format of the Observe response is:
-```
+```json
 {
   "reqID": {?ReqID},
   "msgType": {?MsgType},
@@ -784,6 +785,10 @@ Variables:
 - `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
 - `{?translators.notify.topic}` is the value of `translators.notify.topic` option
   in LwM2M Gateway configurations.
+
+For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
+and the `translators.notify.topic` is `up/notify`, then the topic for the
+message would be `lwm2m/<your-real-client-endpoint-name>/up/notify`.
 
 
 The **Payload** format of the Notification message is:
