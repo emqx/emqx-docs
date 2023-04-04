@@ -8,7 +8,7 @@ The Rule Engine is particularly useful for organizations that need to process an
 
 This chapter provides an in-depth exploration of the Rule Engine and its capabilities. Readers will learn how the Rule Engine processes data in real time by defining rules, [using built-in SQL functions](./rule-sql-builtin-functions.md), and [customizing rules with SQL statements](./rule-sql-syntax.md). Additionally, readers will learn how to access and analyze data from multiple sources and leverage the power of [jq](./rule-sql-jq.md), a lightweight and flexible command-line JSON processor that is now supported with EMQX 5.x Rule Engine. 
 
-## What is Rule Engine
+## What is the Rule Engine
 
 EMQX uses a powerful SQL-based IoT rule engine for data processing and integration, where the rules are partly specified with a domain-specific SQL-like language.
 
