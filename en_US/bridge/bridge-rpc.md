@@ -1,4 +1,4 @@
-# RPC Bridge
+# Integrate with RPC
 
 ::: tip
 

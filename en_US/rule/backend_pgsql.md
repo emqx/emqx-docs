@@ -1,4 +1,4 @@
-# Save data to PostgreSQL
+# Integrate with PostgreSQL
 
 Setup a PostgreSQL database, taking Mac OSX for instance:
 

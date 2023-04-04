@@ -1,4 +1,4 @@
-# Kafka Bridge
+# Integrate with Kafka
 
 ::: tip
 

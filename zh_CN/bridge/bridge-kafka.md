@@ -1,4 +1,4 @@
-# Kafka 桥接
+# 集成 Kafka
 
 ::: tip
 

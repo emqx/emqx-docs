@@ -1,4 +1,4 @@
-# Save data to MongoDB
+# Integrate with MongoDB
 Setup a MongoDB database, and changes the username/password to root/public, taking Mac OSX for instance:
 
 ```bash

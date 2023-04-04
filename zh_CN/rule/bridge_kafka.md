@@ -1,4 +1,4 @@
-# 桥接数据到 Kafka
+# 集成 Kafka
 
 搭建 Kafka 环境，以 MacOS X 为例:
 ```bash

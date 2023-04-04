@@ -1,4 +1,4 @@
-# 保存数据到 MongoDB
+# 集成 MongoDB
 
 搭建 MongoDB 数据库，并设置用户名密码为 root/public，以 MacOS X 为例:
 

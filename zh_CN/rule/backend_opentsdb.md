@@ -1,4 +1,4 @@
-# 保存数据到 OpenTSDB
+# 集成 OpenTSDB
 
 搭建 OpenTSDB 数据库环境，以 MacOS X 为例:
 

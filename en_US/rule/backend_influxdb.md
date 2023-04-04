@@ -1,4 +1,4 @@
-# Save data to InfluxDB
+# Integrate with InfluxDB
 
 Setup a InfluxDB database, taking Mac OSX for instance:
 

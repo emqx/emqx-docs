@@ -1,4 +1,4 @@
-# Save data to ClickHouse
+# Integrate with ClickHouse
 
 Steup the ClickHouse database, and set username/password to default/public. Taking CentOS as example:
 

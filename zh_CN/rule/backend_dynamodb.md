@@ -1,4 +1,4 @@
-# 保存数据到 DynamoDB
+# 集成 DynamoDB
 
 搭建 DynamoDB 数据库，以 MacOS X 为例:
 

@@ -1,4 +1,4 @@
-# PostgreSQL 数据存储
+# 集成 PostgreSQL
 
 ::: tip
 
@@ -278,5 +278,4 @@ CREATE TABLE mqtt_acked (
 ```bash
 ./bin/emqx_ctl plugins load emqx_backend_pgsql
 ```
-
 

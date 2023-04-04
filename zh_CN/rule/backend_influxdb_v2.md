@@ -1,4 +1,4 @@
-# 数据保存到 InfluxDB V2 & InfluxDB Cloud
+# 集成 InfluxDB V2 & InfluxDB Cloud
 
  启动 InfluxDB ，或者注册 InfluxDB Cloud 账号申请开通服务。
  本文中使用 docker 部署作为演示，并使用默认端口8086，如有需要请自行替换成其他端口。
