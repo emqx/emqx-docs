@@ -1,4 +1,4 @@
-# MQTT Python client library
+# MQTT Python SDK Example
 
 [Eclipse Paho Python](https://github.com/eclipse/paho.mqtt.python) is a Python language client library under the Eclipse Paho project, which can connect to MQTT Broker to publish messages, subscribe to topics and receive Published message.
 
