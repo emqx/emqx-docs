@@ -12,7 +12,7 @@ This chapter provides an in-depth exploration of the Rule Engine and its capabil
 
 EMQX uses a powerful SQL-based IoT rule engine for data processing and integration, where the rules are partly specified with a domain-specific SQL-like language.
 
-<img src="/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/data-integration/assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
+<img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
 
 
 
