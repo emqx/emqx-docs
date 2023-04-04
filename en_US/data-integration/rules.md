@@ -22,7 +22,7 @@ This article discusses the composition of rules in a rule engine, which consists
 
 Rules describe how to retrieve data from a **data source**, perform **data transformations**, and add subsequent actions to the processed results.
 
-<img src="/Users/lena/Documents/GitHub/rebalancing/emqx-docs/en_US/data-integration/assets/sql_process.png" alt="sql_process" style="zoom:50%;" />
+<img src="./assets/sql_process.png" alt="sql_process" style="zoom:50%;" />
 
 - **Data Source**: The data source of a rule can be a message or event, or an external data system. You can use the `FROM` clause in the rule's SQL to specify the data source, and then use the `WHERE` clause to add additional constraints on which messages will be processed by the rule. 
 - **Data Transformation**: Data transformations describe how to transform an input message. You can use the `SELECT` part of the SQL to extract and transform data from the input message. You can use the embedded SQL sample statements to implement advanced transformations, for example, to add a time stamp to the output message.
