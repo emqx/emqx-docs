@@ -1,106 +1,79 @@
-# The Rule-Engine Language
 
-The rule engine's SQL-like language has two types of statements: `SELECT` and
-`FOREACH`. Each rule can have exactly one statement. The `SELECT` statement is
-the most commonly used statement and is intended for situations where the result
-of the SQL statement is a single message. The `FOREACH` statement is used to
-produce zero or more messages from a single input message. 
 
-The rule engine language also supports complex expressions that can be embedded within the
-`SELECT` and `FOREACH` statements. The expressions can be used to transform
-data, and filter messages based on conditions. Furthermore, the rule engine
-language has a rich set of built-in functions that can be called from within
-the expressions. The rule engine language also supports embedding [JQ
-programs](https://stedolan.github.io/jq/) in expressions. This allows you to do
-arbitrary complex data transformations when it is needed (JQ is a Turing
-complete programming language optimized for doing transformations of structured
-data).
+# Rule-Engine Language
 
-It is important to note that even if it is possible to do arbitrary complex
-data transformation in the rule-engine's SQL language (with the help of JQ), it
-is usually not a good idea to do computationally expensive tasks in the
-rule-engine as this may affect the performance of the EMQX message
-broker negatively. Instead, it is usually better to route expensive tasks to
-other services that can send back messages to EMQX with the results if needed.
+EMQX uses a SQL-based rule engine for data extraction, filtering, enriching, and transformation in real time. The rule engine language also supports embedding [JQ programs](https://stedolan.github.io/jq/) in expressions, which allows you to do complex data transformations when it is needed.
 
-The user interface for editing rules in the EMQX dashboard contains a test
-feature that allows you to test your rules with sample messages (can be enabled
-with an Enable Test switch). This is very convenient when one wants to try out
-what the result of different statements will be.
+EMQX has provided a rich set of built-in functions that you can access by clicking **Data Integration** -> **Rules** -> **SQL Example** on EMQX Dashboard. For more customized needs, EMQX also supports creating your own SQL-like statements. This section will introduce the SQL-like language. 
 
-We will start by looking at the `SELECT` statement and then the `FOREACH`
-statement before we move on to describe the building blocks of expressions and
-give some examples of how to use them.
+This SQL-like language has two types of statements: `SELECT` and `FOREACH`. Each rule can have exactly one statement. 
 
-## The SELECT Statement 
+| Statement | Description                                                  |
+| --------- | ------------------------------------------------------------ |
+| `SELECT`  | For situations where the result of the SQL statement is a single message. |
+| `FOREACH` | For producing zero or more messages from a single input message. |
+
+The rule engine language also supports complex expressions that can be embedded within the `SELECT` and `FOREACH` statements. 
+
+## The `SELECT` Statement 
+
+The rule engine SQL in EMQX uses a `SELECT` statement to select specific fields from an input message, rename fields, transform data, and filter messages based on conditions. 
 
 The basic format of a `SELECT` statement in the rule engine SQL is as follows:
 
 ```sql
 SELECT <fields_expressions> FROM <topic> [WHERE <conditions>]
 ```
-- The `FROM` clause attaches the rule to one or more [topic filter](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics)
-- The `SELECT` clause is used to select which fields from the input that should be included in the output message, rename fields and transform data.
-- The `WHERE` clause is used to filter messages based on conditions
 
+To use the `SELECT` statement, you need to specify which fields to include in the output message using the `SELECT` clause. You can select fields from the message's payload and metadata, and give them custom names using the `as` keyword. You can also transform data using expressions, and filter messages based on conditions using the `WHERE` clause. Below are some typical use cases regarding how to use the `SELECT` statement.
 
-Here is an example of a `SELECT` statement that will select the `a` and `b` fields (fields are separated by comma) from the input message's payload and include them in the output. All messages to topics matching the [pattern](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) `t/#` will be affected by this rule. 
+### Filter by Topics
 
-```sql
-SELECT a, b FROM "t/#"
-```
+You can use the `SELECT` clause to filter the fields to include in the output message. 
 
-You can also select field's from the message's meta data. For example, the following rule will select the `clientid` field from the message's meta data and include it in the output message's payload. 
-
-```sql
-SELECT clientid FROM "t/#"
-```
-
-In case there is a conflict between the names of fields in the message's payload and the message's meta data, you can access the `payload` fields using the `payload.field_name` syntax. 
-
-```sql
-SELECT clientid, payload.clientid as myclientid FROM "t/#"
-```
-
-The `as` syntax exemplified above is used to give a field a name. A selected
-field without an `as field_name` will be given the same name as the field in
-the input message.
-
-One can also attach rules to multiple topics by separating the topics with a comma:
+For example, if you want to defines a rule applies to all messages published to topics matching the pattern `t/#` and `my/other/topic`, you can work with the statement below:
 
 ```sql
 SELECT clientid, payload.clientid as myclientid FROM "t/#", "my/other/topic"
 ```
 
-One can not only attach rules to MQTT topics, but also to events. The following rule will be triggered when a client connects to the broker:
+This statement defines a rule applies to all messages published to topics matching the pattern `t/#` and `my/other/topic`.
+
+This `SELECT` statement retrieves the `a` and `b` fields from the message payload, along with `clientid` from both the message payload and metadata (using `payload.clientid`), and renames the `clientid` field from the payload as `myclientid` to prevent any naming conflicts. The resulting output will contain all four fields: `a`, `b`, `clientid`, and `myclientid`.
+
+::: tip
+
+You can find all available event topics in EMQX Dashboard for editing rules (**Subscriptions** -> **Topics**).
+
+:::
+
+### Filter by Events
+
+You can also attach rules to events. For example, if you want to selects the IP address and port number of when client `c1` initiates a connection request to EMQX, you can use the statement below:
 
 ```sql
 SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
 ```
 
-You can find all available event topics in the EMQX dashboard UI for editing rules (under the Events tab to the right in the dashboard UI).
+### The `WHERE` clause
 
-The `WHERE` clause is optional and can be used to filter out messages that match the topic filter specified with the `FROM` clause but do not match the conditions specified in the `WHERE` clause. For example, the following rule will only select messages that have a `username` field with a value of `eric`. The `SELECT *` clause specifies that all fields from the input message should be included in the output message.
+The `WHERE` clause provides an optional way to refine message filtering by specifying additional conditions that the messages must meet, in addition to the topic/event filter specified in the `FROM` clause.
+
+For instance, the following SQL statement filters messages under topic `t/#` that are sent by the user name `eric`:
 
 ```sql
 SELECT * FROM "t/#" WHERE username = 'eric'
 ```
 
-In the following example, only messages where the `clientid` is `'abc'` will be affected by the rule. The output message's payload has only one field named `cid`. Notice that the `cid` variable is defined in the `SELECT` statement (with the `as field_name` syntax), so it can be used in the `WHERE` clause. Although only one field is selected in the example below, all available fields in the message (such as clientid, username, etc.) can still be used in the `WHERE` clause. 
- 
-```sql
-SELECT clientid as cid FROM "t/#" WHERE cid = 'abc'
-```
+::: tip
 
-The execution of the following SQL statement will result in an error when the field `xyz` is not a field in the message's payload and is not available in the message meta data:
+The fields used in the `WHERE` clause must be one field available in the message metadata or payload, or there will be an error. 
 
-```sql
-SELECT clientid as cid FROM "#" WHERE xyz = 'abc'
-```
+:::
 
-The arguments for the `WHERE` clause is an expression that evaluates to a boolean value. The expression can be a combination of field names, constants, and operators. We will introduce expressions and the available operations in more details after we have introduced the `FOREACH` statement.
+### Work with Expressions
 
-Expressions can also be used to transform data in the `SELECT` clause. For example, in the following example the value of the `clientid` field will be transformed to use capital letters and get a suffix. The result of the transformation is named `cid` in the output.
+[Expressions](#expressions-and-operations) can also be used to transform data in the `SELECT` clause. For example, the following SQL statement formats the `clientid` field value by converting it to uppercase and adding a suffix. The result is named `cid` in the output message: 
 
 ```sql
 SELECT (upper(clientid) + '_UPPERCASE_LETTERS') as cid FROM "t/#"
@@ -118,9 +91,20 @@ You can also use dot notation to access fields in a payload with a complex struc
 SELECT payload.a.b.c.deep as my_field FROM "t/#"
 ```
 
-## The FOREACH Statement
+<!--The arguments for the `WHERE` clause is an expression that evaluates to a boolean value. The expression can be a combination of field names, constants, and operators. We will introduce expressions and the available operations in more details after we have introduced the `FOREACH` statement. do not quite see what this is about and also need some explanations about using expressions in where clause-->
 
-Now let us dive into the `FOREACH` statement. The `FOREACH` statement can be seen as a more general form of the `SELECT` statement. It can produce zero or more output messages for each input message. The basic format of the `FOREACH` statement is as follows:
+## The `FOREACH` Statement
+
+The `FOREACH` statement is to specify an array and apply filters to each element of the array.  The `FOREACH` clause is used in combination with the `SELECT` statement to transform and filter data.
+
+Besides the `FROM` and `WHERE` clause, This `FOREACH` statement has two types of clauses:
+
+| Clause   | Optional/Required | Description                                                  |
+| -------- | ----------------- | ------------------------------------------------------------ |
+| `DO`     | Optional          | To transform each element in the array selected by `FOREACH`<br><br>Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions |
+| `INCASE` | Optional          | To filter out array elements that do not match the specified conditions.<br><br>Accepts the same expressions as the `WHERE` clause |
+
+The basic format of a `FOREACH` statement in the rule engine SQL is as follows:
 
 ```sql
 FOREACH <expression_that_evaluates_to_array> [as <name>]
@@ -130,12 +114,13 @@ FROM <topic>
 [WHERE <condition>]
 ```
 
-- The `FOREACH` clause is used to specify an array. The `DO` and `INCASE` clauses will be executed for each element in the specified array. The array can either be specified as a field containing an array or as a function that returns an array. The built-in function `jq` can be combined with the `FOREACH` statement to transform data from the input message into an array that the `FOREACH` statement can process.
-- The optional `DO` clause is used to transform each element in the array selected by `FOREACH` (that is, select fields of interest and apply built-in functions to transform data). The `DO` clause corresponds to the `SELECT` clause in the `SELECT` statement and accepts the same expressions. If the `DO` clause is omitted, then the array element as a whole will be included in the payload for the message corresponding to the array element.
-- The optional `INCASE` clause can be used to filter out array elements that do not match the specified conditions. The `INCASE` clause accepts the same expressions as the `WHERE` clause. If the `INCASE` clause is omitted, then no array elements will be filtered out.
-- The `FROM` and `WHERE` clause have the same meaning as in the `SELECT` statement.
+Below are some typical use cases regarding how to use the `FOREACH` statement.
 
-As all but the `FOREACH` clause have corresponding clauses in the `SELECT` statement, the `FOREACH` statement can be seen as a generalization of the `SELECT` statement as mentioned earlier. The following two statements are equivalent:
+### Work with `jq` function
+
+The built-in function `jq` can be combined with the `FOREACH` statement to transform data from the input message into an array that the `FOREACH` statement can process. On details about using the `jq` function in EMQX, see [documentation page for the build-in `jq` function](./rule-sql-jq).
+
+For exmaple, to uses the  build-in `jq` function to wrap the payload in an array, you can work with the statement below:
 
 ```sql
 FOREACH jq('.', payload) 
@@ -143,12 +128,16 @@ DO item.field_1, item.field_2
 FROM "t/#"
 ```
 
+:::tip Note:
+
+As all but the `FOREACH` clause have corresponding clauses in the `SELECT` statement, so the above statement is the same as the statement below:
+
 ```sql
 SELECT payload.field_1, payload.field_2
 FROM "t/#"
 ```
 
-The `FOREACH` example above uses the  build-in `jq` function to wrap the payload in an array. Please see the [documentation page for the build-in `jq` function](./rule-sql-jq) for more information about how to use it and for references to the JQ programming language. 
+:::
 
 The following will give two output values. Both values contain only one field called `value`. The value of the field `value` is the value of the field `field_1` in one of the messages and the value of `field_2` in the other message:
 
@@ -160,7 +149,9 @@ FROM "t/#"
 
 All actions specified for a rule with a `FOREACH` statement will be executed for each output value produced by the `FOREACH` statement. Thus, a rule with the above statement and a single action will trigger the action two times every time a message matches the rule.
 
-Here is another example of a `FOREACH` statement that will split a message into multiple messages. The `FOREACH` clause specifies that the `sensors` field in the input message's payload should be used as the array to iterate over. The `DO` clause specifies that the `timestamp`, `clientid`, `name` and `idx` fields should be included in the output message's payload. The value for the `name` field is capitalized by the build-in function `upper`. The `INCASE` clause specifies that only array elements with an `idx` value greater than or equal to 1 should be included in the output message's payload. The `FROM` clause specifies that the rule should be applied to messages with a topic matching the [topic filter](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) `t/#`.
+### Split One Message into Multiple
+
+For example for messages published to topics `t/#`, if you want to output the timestamp, client ID, sensor name, and idx when the sensor idx is 1 or above, you can use the code below:
 
 ```sql
 FOREACH
@@ -176,7 +167,18 @@ INCASE
 FROM "t/#"
 ```
 
-The following example will also split a message into multiple messages. The `FOREACH` uses the JQ function to transform the input message's payload into an array. The `jq` function takes a JQ program as its first argument and the data to be processed by the JQ program as it's second argument. The JQ program in this example will transform the input message's payload into an array of objects with the following fields: `sensor_type`, `value`. The `DO` clause specifies that the `timestamp`, `clientid`, `sensor_type` and `value` fields should be included in the output message's payload. The `FROM` clause specifies that the rule should be applied to messages with a topic matching the [topic filter](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) `car/measurements`.
+Where,
+
+- the `FOREACH` clause specifies the `sensors` field in the input message's payload as the array to iterate over
+- the `DO` clause specifies the fields to be included in the output:
+  - `payload.timestamp` is the time stamp from the message payload
+  -  `payload.clientid` is the client ID from the message payload, 
+  - `sensor.name` will be capitalized with the build-in `upper` function and renamed as `name` with the `as` clause
+  -  `sensor.idx`  will be renamed as `idx` with the `as` clause
+- the `INCASE` clause adds another filter condition, when the sensor.idx value is 1 and above. 
+- the `FROM` clause sets where to retrieve the messages. 
+
+Then you can continue to use the `jq` function to transform the input message's payload into an array of objects with the following fields: `sensor_type`, `value`. The `DO` clause specifies that the `timestamp`, `clientid`, `sensor_type` and `value` fields should be included in the output message's payload. The `FROM` clause specifies that the rule should be applied to messages with a topic matching the [topic filter](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) `car/measurements`.
 
 ```sql
 FOREACH
@@ -248,7 +250,7 @@ FROM "car/measurements"
 
 ## Expressions and Operations 
 
-The rule engine language allows the use of expressions to transform data and specify filtering conditions (as we have already given some examples of in the previous sections). These operations can be used in the `SELECT`, `FOREACH`, `DO`, `INCASE` and `WHERE` clauses. The "SQL Statement Examples" section below provides more information about how to use these expressions. We will now list the operations that can be used to form expressions. Also remember that the there is a rich set of build in functions that can also be included in the expressions.
+The rule engine language allows using expressions to transform data and filter messages, which can be used in various clauses, including `SELECT`, `FOREACH`, `DO`, `INCASE`, and `WHERE` clauses. This section offers more information on using these expressions. The following are the operations that can be used to form expressions, and remember that there is a wide range of built-in functions that can also be used in expressions.
 
 
 ### Arithmetic Operations
@@ -303,6 +305,18 @@ Then the output will be:
 ```json
 {"x": 7}
 ```
+
+
+## Test the Rules 
+
+After creating your rules, it's always recommended testing your rules before putting into product. The Dashboard UI contains a test feature that allows you to test your rules with sample messages. 
+
+To use this feature, click Data Integration -> Rules on the left navigation menu, and tTurn on the **Enable Test** switch).
+
+![test rules](./assets/test-rules.png)
+
+
+
 ## More Examples
 
 ### Examples of SELECT Statements 
