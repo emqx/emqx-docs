@@ -8,11 +8,8 @@ The Rule Engine is particularly useful when you need to transform or reroute inc
 
 This chapter provides an in-depth exploration of the Rule Engine and its capabilities. A rule defines the data source and transformation, and a set of actions that will be triggered every time the rule outputs a value.
 
-## What is the Rule Engine
 
-EMQX uses a powerful SQL-based IoT rule engine for data processing and integration, where the rules are partly specified with a domain-specific SQL-like language.
 
-<img src="./assets/rules/data-integration-arch.png" alt="image" style="zoom:40%;" />
 
 
 
