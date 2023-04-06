@@ -6,7 +6,7 @@ The Rule Engine is EMQX's built-in data processing component, which works with [
 
 The Rule Engine is particularly useful when you need to transform or reroute incoming messages from multiple sources, for example, you can create rules that filter out irrelevant data, perform calculations, and trigger alerts or notifications based on specific events or conditions.
 
-This chapter provides an in-depth exploration of the Rule Engine and its capabilities. A rule consists of an SQL statement (describing the data source and transformation) and a set of actions that will be triggered every time the SQL statement outputs a value. The "SQL functions" are functions that one can call from within the SQL statement to do data transformations.
+This chapter provides an in-depth exploration of the Rule Engine and its capabilities. A rule defines the data source and transformation, and then a set of actions that will be triggered every time when outputting a value.
 
 ## What is the Rule Engine
 
